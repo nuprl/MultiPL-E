@@ -14,7 +14,1192 @@ tests: "using Test\n\n@testset begin\n\ncandidate = strange_sort_list;\n\t@test(
   \ 2, 3, 4, 5, 6, 7, 8]) == [1, 8, 2, 7, 3, 6, 4, 5])\n\t@test(candidate([0, 2, 2,\
   \ 2, 5, 5, -5, -5]) == [-5, 5, -5, 5, 0, 2, 2, 2])\n\t@test(candidate([111111])\
   \ == [111111])\nend\n"
-completions: []
+completions: ["    if isempty(lst)\n        lst = []\n    end\n    return lst[strange_sort(collect(lst))]\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nThank you for this answer which works well for\
+    \ a small subset of inputs, but fails for larger ones. E.g. for `strange_sort_list([5,\
+    \ 5, 4, 3, 1, 2])` the output is `[5, 4, 3, 2, 1]`.\n<|/ c |>\n<| c |>\nYou're\
+    \ right. I edited my answer with a `collect` at the end.\n<|/ c |>\n<| a dscore=4\
+    \ |>\nJust for fun, here is one that uses Julia's built-in sort and reverse, with\
+    \ a bit of magic:\n<code>\njulia> arr = [5, 4, 3, 2, 1]\njulia> arr |> reverse\n\
+    4-element Array{Int64,1}:\n 1\n 2\n 3\n 4", "    for k in lst\n        mini =\
+    \ minimum(lst)\n        maxi = maximum(lst)\n        if mini > maxi\n        \
+    \    lst[k], lst[lst==mini] = maxi, k\n        end\n    end\n    lst\nend\n</cell>\n\
+    <text>\nExercise 7\nWrite a function that takes two vectors, X and Y, and returns\
+    \ a vector of length n. \nWhere n is the number of elements in the intersection\
+    \ of the two vectors. \nAssume that the vectors are sorted (ascending).", "  \
+    \  # Initialize result vector.\n    res = Vector{Int64}(undef, 0)\n    \n    #\
+    \ Initialize min and max variables.\n    min = max = 0\n    \n    # Iterate through\
+    \ list, incrementing min and max as we go.\n    for elt in lst\n        if elt\
+    \ > max\n            max = elt\n        elseif elt < min\n            min = elt\n\
+    \        else\n            push!(res, elt)\n        end\n    end", "    lst =\
+    \ deepcopy(lst)\n    sorted = deepcopy(lst)\n    for index in 1:length(lst)\n\
+    \        swap!(sorted,first(sorted),last(sorted))\n    end\n    return sorted\n\
+    end", "    \"\"\"Strange sorting, is when you start with the minimum value,\n\
+    \    then maximum of the remaining integers, then minimum and so on.", "    if\
+    \ length(lst) == 0\n        throw(ArgumentError(\"Invalid list length\"))\n  \
+    \  end", "    #sort in reversed order\n    #since min and max are in same spot\
+    \ \n    #we could do that with sort! \n    #but it's easier to do that in 2 steps\
+    \ \n    l = length(lst)\n    sort!(lst) \n    lst[l-2:l] .= lst[1]\n    return\
+    \ lst\nend", "    n = length(lst)\n    l = sort(lst)\n    \n    \n    if n ==\
+    \ 1\n        \n        return l\n    \n    \n    if l[1] == l[n]\n        \n \
+    \       return strange_sort_list(l[2:end])\n    \n    \n    if l[1] == l[n-1]\n\
+    \        \n        return strange_sort_list(l[2:end-1])\n    \n    \n    if l[1]\
+    \ == l[n-2]\n        \n        return strange_sort_list(l[2:end-2])\n    \n  \
+    \  \n    if l[1] == l[n-3]\n        \n        return strange_sort_list(l[2:end-3])\n\
+    \    \n    \n    if l[1] == l[n-4]\n        \n        return strange_sort_list(l[2:end-4])\n\
+    \    \n    \n    if l[1] == l[n-5]\n        \n        return strange_sort_list(l[2:end-5])\n\
+    \    \n    \n    return strange_sort_list(l[2:end-6])", "    if length(lst) ==\
+    \ 0 then return [] \n    head  = minimum(lst)\n    tail  = maximum(lst)\n    return\
+    \ sort(lst .- [head], lt=lt=) .+ [head] + sort(lst .- [tail], gt=gt=) .+ [tail]\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis solution is amazing, but it's worth\
+    \ noting that the `sort` call is only applied to the first half of the array,\
+    \ because `sort` will always perform the sorting on the entire array in its entirety.\
+    \ And that happens because `sort` doesn't support partial sorting.\n<|/ c |>\n\
+    <| c |>\nthank you for pointing this out. I made a typo, I meant `sort!` instead\
+    \ of `sort`\n<|/ c |>\n<| a dscore=1 |>\nAnother approach is to use the diff function\
+    \ and apply it to each of the vectors. In this case, you have to first find the\
+    \ difference between each element and the next element. Then, use sortperms to\
+    \ sort the vector. Finally, use view to return the desired elements from the sorted\
+    \ vector. \n<code>\na = rand(100,1);\nb = rand(100,1);\nc = rand(100,1);", " \
+    \   vector=copy(lst)\n    for i=1:length(vector)\n        minimum=minimum(vector)\n\
+    \        maximum=maximum(vector)\n        for j=i:length(vector)\n           \
+    \ if minimum<vector[j]\n                for k=j:length(vector)\n             \
+    \       vector[k]=vector[j]\n                end\n            end\n          \
+    \  if maximum>vector[j]\n                for k=j:length(vector)\n            \
+    \        vector[k]=vector[j]\n                end\n            end\n        end\n\
+    \    end\n    return vector\nend\n</code>\n<|/ a dscore=1 |>\n<| a dscore=1 |>\n\
+    I like Jose's answer but I think the following is more efficient in some cases:\n\
+    <code>", "    if length(lst) == 0 \n        return [] \n    pivot :: Int64 = minimum(lst)\n\
+    \    rest, pivot :: Vector{Int64} = listdiff(lst, [pivot])\n    rest, rest = listdiff(rest,\
+    \ pivot)\n    rest = strange_sort_list(rest)\n    rest = append!(lst, rest) \n\
+    \    return rest\nend\n</code>\n<|/ a tags=sorting,julia |>\n<| a dscore=0 |>\n\
+    A simple solution in Julia is to create two lists list1, list2 then compare each\
+    \ value to the other value with a for loop. Something like this:\n<code>\nlist1\
+    \ = [1,2,3,4,5,6,7,8]\nlist2 = [1,2,3,4,5,6,7,8]\nfor ii in 1:length(list2)\n\
+    \     if list1[ii]<list2[ii]\n         tmp = list1[ii]\n         list1[ii] = list2[ii]\n\
+    \         list2[ii] = tmp\n     end\nend\n</code>\nAfter this you will have list1\
+    \ and list2 which are in ascending order. I tested it on Julia 1.1.5 and it worked!\n\
+    <|/ a tags=sorting,julia |>\n<| c |>\nThis is definitely not \"a one liner\",\
+    \ this is essentially a two line solution.\n<|/ c |>\n<| a dscore=0 |>\nThis answer\
+    \ is based on's answer. I've added a version that uses recursion to avoid the\
+    \ loop.\n<code>", "  return(sort(lst))\nend", "    if length(lst)==0\n       \
+    \ return lst\n    \n    largest = maximum(lst)\n    smallest = minimum(lst)\n\
+    \    \n    return largest.^largest .* smallest.^smallest\nend", "    sorted_lst\
+    \ = Vector{Int64}(undef, 0)\n    len_lst = length(lst)\n    for i in 1:len_lst\n\
+    \        j = len_lst - 1\n        while j > 0\n            if lst[j-1] > lst[j]\n\
+    \                break\n            elseif lst[j-1] == lst[j]\n              \
+    \  j -= 1\n            end\n        end\n        sorted_lst[end+1:j] = lst[j-1:end]\n\
+    \    end\n    sorted_lst\nend", "    sorted_list = Vector{Int64}(undef, size(lst))\n\
+    \    \n    for i = 1:length(lst)\n        j = rand(length(lst))\n        if j\
+    \ != i\n            push!(sorted_list, lst[i])\n            push!(sorted_list,\
+    \ lst[j])\n        end\n    end\n    sorted_list\nend", "    vec::Vector{Int64}\
+    \ = Vector{Int64}(undef, 0)\n    # sort backwards\n    for element in reverse(lst)\n\
+    \        push!(vec, element)\n    end", "    ret = Array{Int64,1}(length(lst))\n\
+    \    # Start with minimum value\n    for i in 1:length(lst)\n        j = min(i,\
+    \ length(lst)-1)\n        ret[j] = lst[i]\n    end\n    # Then maximum\n    for\
+    \ i = length(lst)-2:-1:0\n        j = max(i, 1)\n        ret[j] = lst[i]\n   \
+    \ end\n    return ret\nend", "    if null lst\n        return [] \n    \n    len\
+    \ = length(lst)\n    min = lst[1]\n    max = lst[len]", "\tlen = length(lst)\n\
+    \tif len <= 1\n\t\treturn lst\n\telse\n\t\tminimum = minimum(lst)\n\t\tmaximum\
+    \ = maximum(lst)\n\t\t[minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum,\
+    \ maximum, minimum, maximum, minimum, maximum, minimum, maximum, minimum, maximum,\
+    \ minimum, maximum, minimum, maximum, minimum, maximum, minimum, ", "   if lst\
+    \ == []\n     return []\n   elseif length(lst) == 1\n     return lst\n   else\n\
+    \     lst_sort = minimum(lst)\n     return strange_sort_list(lst[lst>lst_sort])\
+    \ + [lst_sort] + strange_sort_list(lst[lst<lst_sort])\n   end\nend\n</code>\n\
+    <|/ a dscore=0 |>\n<| a dscore=0 |>\nThe fastest and shortest approach would be\
+    \ using recursion.\n<code>", "    # Sort using minimum value.\n    # Then sort\
+    \ using maximum value, and so on.\n    \n    return lst[findall(lst .> minimum(lst))]\n\
+    end", "    \n    n = length(lst)\n    largest = maximum.(lst)\n    smaller::Vector{Int64}\
+    \ = Vector{Int64}(undef, n)\n    for i = 1:n\n        smaller[i - 1] = lst[i]\n\
+    \    end\n    for i = n - 2:-1:1\n        if smaller[i] > largest\n          \
+    \  for j = i + 1:n\n                smaller[j] = smaller[i]\n            end\n\
+    \        elseif smaller[i] < largest\n            for j = i + 1:n\n          \
+    \      smaller[j] = largest\n            end\n        else\n            break\n\
+    \        end\n    end\n    return smaller\nend", "  \n  # sort ascendingly\n \
+    \ new_lst = reverse(lst)\n  \n  # sort descendingly\n  while length(new_lst) >\
+    \ 0\n    new_lst = sort(new_lst)\n    new_lst = reverse(new_lst)\n  end\n  \n\
+    \  return new_lst\nend\n</cell>\n<text>\nTests\nWe have two helper functions:",
+  "    lst = sort(lst)\n    lst = reverse(lst, 2)\n    return lst\nend", "    if lst\
+    \ == []\n        return []\n    else\n        mini = minimum(lst)\n        maxi\
+    \ = maximum(lst)\n        mini_pos = find_in_list(mini, lst, mini)\n        maxi_pos\
+    \ = find_in_list(maxi, lst, maxi)\n        if maxi_pos < mini_pos\n          \
+    \  mini_pos -= 1\n            maxi_pos -= 1\n        end", "    \n    new_list\
+    \ = Vector{Int64}()\n    \n    new_list = sort(lst)\n    if new_list == lst\n\
+    \        \n        return new_list\n        \n    else\n        \n        push!(new_list,\
+    \ new_list[end])\n        push!(new_list, new_list[1])\n        return new_list\n\
+    \    end\nend", "    if length(lst) == 0 \n        return [] \n    maximum = maximum(lst)\n\
+    \    minimum = minimum(lst)\n    vector = Vector{Int64}()\n    for x in lst\n\
+    \        push!(vector, x)\n        if x > maximum \n            maximum = x\n\
+    \        elif x < minimum \n            minimum = x\n        end\n    end\n  \
+    \  return vector\nend", "    if length(lst) <= 1\n        return lst\n    \n \
+    \   largest = minimum(lst)\n    smallest = maximum(lst)\n    \n    return strange_sort_list(largest_in_range_first(lst))\
+    \ + [smallest] + strange_sort_list(largest_in_range_last(lst))\nend", "    if\
+    \ length(lst) == 0 \n        return [] \n    else \n        return sort(lst) \n\
+    end\n</cell>\n<text>\nSorting\nWhen you sort a vector, you're sorting its elements.\
+    \ The sorting algorithm is simple and well described. When you use an array, the\
+    \ sorting algorithm is called Quicksort, and if you use an immutable vector, the\
+    \ sorting algorithm is called Mergesort, so let's have a look at the two sorting\
+    \ algorithms and how they work when you sort an array and an immutable vector.\
+    \ Let's have a look at the sorting functions in Julia.", "    size = length(lst)\n\
+    \    if size < 2\n        return lst\n    \n    minimum = min(lst)\n    maximum\
+    \ = max(lst)", "    local maxv = maximum(lst)\n    local minv = minimum(lst)\n\
+    \    local newlst = lst\n    newlst[1] = minv\n    newlst[end] = maxv\n    local\
+    \ i = 1\n    local j = 1\n    while i < length(newlst) do\n        while newlst[i]\
+    \ > maxv do \n            j = j - 1\n            newlst[i] = newlst[i] - 1\n \
+    \       end\n        newlst[i] = newlst[i] + minv\n        i = i + 1\n    end\n\
+    \    return newlst\nend\n</code>\n<|/ a |>\n<| c |>\nYour code is pretty nice,\
+    \ but I'm pretty sure that it's O(n^2), and you can achieve O(n) by just using\
+    \ bubble sort.\n<|/ c |>\n<| c |>\n: I thought bubble sort could be better than\
+    \ my simple for loop. But, O(n^2) is fine, cause I just need quick sort to sort\
+    \ it faster (which isn't my case since I want to sort by multiple columns and\
+    \ I need some quick sort algorithms). I am not familiar with bubble sort, I didn't\
+    \ realize the complexity of it could be O(n^2).\n<|/ c |>\n<| a dscore=0 |>\n\
+    Here is one simple function for this problem:\n<code>", "  local maxi, mini =\
+    \ max(lst), min(lst)\n  local lst2 = map(x -> mini, lst)\n  local lst3 = map(x\
+    \ -> maxi, lst)\n  return lst1 + lst2 + lst3\nend\nstrange_sort_list([1, 2, 3,\
+    \ 4])\n</cell>\n<code language=julia-1.5>", "    if lst == []\n        return\
+    \ lst\n    \n    biggest = minimum(lst)\n    smallest = maximum(lst)\n    \n \
+    \   middle = biggest.+(smallest-biggest)/2\n    \n    return strange_sort_list(middle:lst)\n\
+    end\n</cell>\n<code language=julia-1.1>\n@time strange_sort_list(rand_list)\n\
+    </cell>\n<text>\nExercises:", "    local max_idx = length(lst) - 1\n    local\
+    \ min_idx = 1\n    \n    while max_idx > min_idx do\n        local next_idx =\
+    \ min_idx\n        while next_idx < max_idx do\n            if lst[next_idx] >\
+    \ lst[next_idx + 1] then\n                local tmp = lst[next_idx]\n        \
+    \        lst[next_idx] = lst[next_idx + 1]\n                lst[next_idx + 1]\
+    \ = tmp\n            else\n                next_idx += 1\n            end\n  \
+    \      end", "    strange_sort_list_aux = []\n    if isempty(lst)\n        strange_sort_list_aux\
+    \ = []\n    else\n        mini = minimum(lst)\n        maxi = maximum(lst)\n \
+    \       strange_sort_list_aux .= [mini]\n        for el in lst\n            if\
+    \ el == maxi\n                strange_sort_list_aux .= [el]\n            elseif\
+    \ el == mini\n                strange_sort_list_aux .= [el]\n            else\n\
+    \                strange_sort_list_aux .= [maxi]\n            end\n        end\n\
+    \    end\n    return strange_sort_list_aux\nend", "    sorted_lst = copy(lst)\n\
+    \    \n    if sorted_lst[1] == sorted_lst[end]\n        sorted_lst = copy(sorted_lst)\n\
+    \        sorted_lst[1] = minimum(sorted_lst)\n    end\n    \n    while true\n\
+    \        last = length(sorted_lst)\n        \n        if last == 1\n         \
+    \   break\n        end\n        \n        tmp_lst = copy(sorted_lst)\n       \
+    \ \n        for i in last:-1:1\n            tmp_lst[i] = tmp_lst[i] + 1\n    \
+    \    end\n        \n        for i in last:-1:2\n            if tmp_lst[i] == tmp_lst[i\
+    \ + 1]\n                continue\n            end\n            tmp_lst[i] += 1\n\
+    \            tmp_lst[i + 1] -= 1\n        end\n        \n        for i in last:-1:2\n\
+    \            if tmp_lst[i] == tmp_lst[i + 1]\n                continue\n     \
+    \       end\n            tmp_lst[i] -= 1\n            tmp_lst[i + 1] += 1\n  \
+    \      end\n        \n        for i in last:-1:2\n            if tmp_lst[i] ==\
+    \ tmp_lst[i + 1]\n                continue\n            end\n            tmp_lst[i]\
+    \ += 1\n            tmp_lst[i + 1] -= 1\n        end\n        \n        for i\
+    \ in last:-1:2\n            if tmp_lst[i] == tmp_lst[i + 1]\n                continue\n\
+    \            end\n            tmp_lst[i] -= 1\n            tmp_lst[i + 1] += 1\n\
+    \        end\n        \n        for i in last:-1:2\n            if tmp_lst[i]\
+    \ == tmp_lst[i + 1]\n                continue\n            end\n            tmp_lst[i]\
+    \ -= 1\n            tmp_lst[i + 1] -= 1\n        end\n        \n        for i\
+    \ in last:-1:2\n            if tmp_lst[i] == tmp_lst[i + 1]\n                continue\n\
+    \            end\n            tmp_lst[i + 1] -= 1\n        end\n        \n   \
+    \     for i in last:-1:2\n            if tmp_lst[i] == tmp_lst[i + 1]\n      \
+    \          continue\n            end\n            tmp_lst[i + 1] -= 1\n      \
+    \  end\n        \n        for i in last:-1:2\n            if tmp_lst[i] == tmp_lst[i\
+    \ + 1]\n                continue\n            end\n            tmp_lst[i + 1]\
+    \ -= 1\n        end\n        \n        for i in last:-1:2\n            if tmp_lst[i]\
+    \ == tmp_lst[i + 1]\n                continue\n            end\n            tmp_lst[i\
+    \ + 1] -= 1\n        end\n        \n        for i in last:-1:2\n            if\
+    \ tmp_lst[i] == tmp_lst[i + 1]\n                continue\n            end\n  \
+    \          tmp_lst[i + 1] -= 1\n        end\n        \n        for i in last:-1:2\n\
+    \            if tmp_lst[i] == tmp_lst[i + 1]\n                continue\n     \
+    \       end\n            tmp_lst[i + 1] -= 1\n        end\n        \n        for\
+    \ i in last:-1:2\n            if tmp_lst[i] == tmp_lst[i + 1]\n              \
+    \  continue\n            end\n            tmp_lst[i + 1] -= 1\n        end\n \
+    \       \n        for i in last:-1:2\n            if tmp_lst[i] == tmp_lst[i +\
+    \ 1]\n                continue\n            end\n            tmp_lst[i + 1] -=\
+    \ 1\n        end\n        \n        for i in last:-1:2\n            if tmp_lst[i]\
+    \ == ", "    \n    # Initialise result vector\n    res = Vector{Int64}()", " \
+    \   biggest = minimum(lst)\n    smaller = maximum(lst)\n    mid = (biggest + smaller)/2\n\
+    \    lst[findfirst(x->x==mid, lst)] = biggest\n    lst[findfirst(x->x==biggest,\
+    \ lst)] = smaller\n    lst[findfirst(x->x==smaller, lst)] = biggest\n    return\
+    \ lst\nend\n</cell>\n<text>\n3.3 Putting it all together: Problem set\nNow you\
+    \ are ready to start working on Problem Set 3, Part 1.  Please work on your implementation\
+    \ for several hours before working on this.  When ready, please click the submit\
+    \ button to submit your work for this problem.  This part is due Thursday on Wednesday,\
+    \ and you can complete it by Friday evening when the competition is over.", " \
+    \   if length(lst) == 0 return lst\n    minimum = min(lst)\n    maximum = max(lst)\n\
+    \    start = minimum\n    stop = maximum\n    i = start + 1\n    while i <= stop\n\
+    \        swap!(lst, i, stop)\n        i += stop\n        stop -= 1\n        if\
+    \ i > stop\n            start = i\n            stop -= 1\n        end\n    end\n\
+    \    return lst\nend", "    tmp = sort_list(lst)\n    sort(tmp)\n    return tmp\n\
+    end", "  sorted_list = lst\n  for i in length(lst):-1:1\n    j = i\n    while\
+    \ j < length(sorted_list) && sorted_list[j] > sorted_list[i]\n      j -= 1\n \
+    \   end\n    swap!(sorted_list, i, j)\n  end\n  sorted_list\nend", "    \n   \
+    \ v = sort(lst)\n    i = length(v)-1\n    while i>0 \n        swap!(v,i,i-1)\n\
+    \        i-=1\n    end", "    tmp = minimum(lst)\n    lst[findall(tmp ->  lst\
+    \ .> tmp, lst)] = tmp\n    tmp = maximum(lst)\n    lst[findall(tmp ->  lst .<\
+    \ tmp, lst)] = tmp\n    return lst\nend\n</cell>\n<text>\nSort a vector", "  \
+    \  \n    len = length(lst)\n    if len == 0\n        return lst \n    \n    minv\
+    \ = min(lst)\n    maxv = max(lst)\n    \n    # Starting with the minimum value\n\
+    \    lst = strange_sort_list(filter(l -> l < minv, lst))\n    \n    # Starting\
+    \ with the maximum value\n    lst = strange_sort_list(filter(l -> l > maxv, lst))\n\
+    \    \n    # Starting with the minimum value\n    lst = strange_sort_list(filter(l\
+    \ -> l >= minv, lst))\n    \n    # Starting with the maximum value\n    lst =\
+    \ strange_sort_list(filter(l -> l <= maxv, lst))\n    \n    return lst\nend",
+  "    if lst == [] \n        return [] \n    end\n    pivot := minimum(lst)\n   \
+    \ reverse!(lst)\n    pivotVal := pivot\n    pivotIdx := 1\n    while pivotIdx\
+    \ != length(lst)\n        if lst[pivotIdx] < pivotVal\n            pivotIdx +=\
+    \ 1\n        else\n            lst[pivotIdx], lst[pivotIdx-1] = lst[pivotIdx-1],\
+    \ lst[pivotIdx]\n            pivotIdx += 1\n        end\n    end\n    pivotIdx\
+    \ += 1\n    lst[pivotIdx], lst[pivotIdx-1] = lst[pivotIdx-1], lst[pivotIdx]\n\
+    \    reverse!(lst)\n    return lst\nend\n</cell>\n<text>\nExercise 4\nWrite a\
+    \ Julia function that takes a string as input and returns a vector of integers\
+    \ representing the lengths of the characters in the string.", "    lst = sort(lst,\
+    \ lt=less) \n    lst = reverse(lst) \n    lst = sort(lst, gt=greater)\n    return\
+    \ lst \nend ", "    if length(lst) == 0\n        return list()\n    \n    # get\
+    \ the minimum value\n    min_value = lst[1]\n    \n    # go through the remaining\
+    \ list and find the maximum value\n    for val in lst[2:end]\n        if val >\
+    \ min_value\n            min_value = val\n    end", "    lst = sort(lst)\n   \
+    \ \n    res = []\n    \n    i = length(lst)\n    while i >= 2\n        \n    \
+    \    # find out which one is not greater and add it to result\n        if lst[i]\
+    \ > lst[i-1]\n            push!(res, lst[i])\n            pop!(lst)\n        end\n\
+    \        \n        # find out which one is not greater than and add it to result\n\
+    \        if lst[i] > lst[i+1]\n            push!(res, lst[i])\n            pop!(lst)\n\
+    \        end\n        \n        # find out which one is greater and add it to\
+    \ result\n        if lst[i] < lst[i-1]\n            push!(res, lst[i])\n     \
+    \       pop!(lst)\n        end\n        \n        # find out which one is greater\
+    \ than and add it to result\n        if lst[i] < lst[i+1]\n            push!(res,\
+    \ lst[i])\n            pop!(lst)\n        end\n    end\n    \n    # return result\n\
+    \    return res\nend\n</code>\n<code>\njulia> strange_sort_list([1, 2, 3, 4])\n\
+    1-element Array{Int64,1}:\n 4", "    if length(lst) == 0\n        []\n    else\n\
+    \        max_num = maximum(lst)\n        sort_in_order(lst, max_num + 1)\n   \
+    \ end\nend\n</code>\n<|/ a |>\n<| c |>\nThis is so great! I was thinking of using\
+    \ it but didn't even think of doing it this way. Thank you!\n<|/ c |>\n<| a |>\n\
+    If you're willing to sacrifice readability a bit, you can do this with a recursive\
+    \ function:\n<code>", "        lst = sort(lst)\n        revlist = reverse(lst)\n\
+    \        revlist = sort(revlist)\n        return revlist\nend\n</code>\n<|/ a\
+    \ |>\n<| a tags=sorting,julia,list dscore=4 |>\nFor Julia 1.0 users, you can use\
+    \ this (I wrote it myself earlier):\n<code>\njulia> sort_list(x) = x; return sort(x);",
+  "    if is_empty(lst)\n        return lst\n    end\n    vec = copy(lst)\n    push!(vec,\
+    \ minimum(vec))\n    push!(vec, maximum(vec))\n    push!(vec, minimum(vec))\n\
+    \    return vec\nend", "    if length(lst)==0 return lst\n    middle_index=floor(Int,\
+    \ length(lst)/2)\n    first_half=lst[1:middle_index]\n    second_half=lst[middle_index+1:end]\n\
+    \    \n    \n    strange_sort_list(first_half)\n    strange_sort_list(second_half)\n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    ", "    if isempty(lst)\n        lst\n    else\n      \
+    \  minimum = minimum(lst)\n        maximum = maximum(lst)\n        \n        for\
+    \ i in minimum:-1:maximum\n            lst[i] = i\n        end\n        minimum\
+    \ = minimum(lst)\n        maximum = maximum(lst)\n        \n        for i in minimum:-1:maximum\n\
+    \            lst[i] = i\n        end\n        minimum = minimum(lst)\n       \
+    \ maximum = maximum(lst)\n        \n        for i in minimum:-1:maximum\n    \
+    \        lst[i] = i\n        end\n        minimum = minimum(lst)\n        maximum\
+    \ = maximum(lst)\n        \n        for i in minimum:-1:maximum\n            lst[i]\
+    \ = i\n        end\n        minimum = minimum(lst)\n        maximum = maximum(lst)\n\
+    \        \n        for i in minimum:-1:maximum\n            lst[i] = i\n     \
+    \   end\n        minimum = minimum(lst)\n        maximum = maximum(lst)\n    \
+    \    \n        for i in minimum:-1:maximum\n            lst[i] = i\n        end\n\
+    \        minimum = minimum(lst)\n        maximum = maximum(lst)\n        \n  \
+    \      for i in minimum:-1:maximum\n            lst[i] = i\n        end\n    \
+    \    minimum = minimum(lst)\n        maximum = maximum(lst)\n        \n      \
+    \  for i in minimum:-1:maximum\n            lst[i] = i\n        end\n        minimum\
+    \ = minimum(lst)\n        maximum = maximum(lst)\n        \n        for i in minimum:-1:maximum\n\
+    \            lst[i] = i\n        end\n        minimum = minimum(lst)\n       \
+    \ maximum = maximum(lst)\n        \n        for i in minimum:-1:maximum\n    \
+    \        lst[i] = i\n        end\n        minimum = minimum(lst)\n        maximum\
+    \ = maximum(lst)\n        \n        for i in minimum:-1:maximum\n            lst[i]\
+    \ = i\n        end\n        minimum = minimum(lst)\n        maximum = maximum(lst)\n\
+    \        \n        for i in minimum:-1:maximum\n            lst[i] = i\n     \
+    \   end\n        minimum = minimum(lst)\n        maximum = maximum(lst)\n    \
+    \    \n        for i in minimum:-1:maximum\n            lst[i] = i\n        end\n\
+    \        minimum = minimum(lst)\n        maximum = maximum(lst)\n        \n  \
+    \      for i in minimum:-1:maximum\n            lst[i] = i\n        end\n    \
+    \    minimum = minimum(lst)\n        maximum = maximum(lst)\n        \n      \
+    \  for i in minimum:-1:maximum\n            lst[i] = i\n        end\n        minimum\
+    \ = minimum(lst)\n        maximum = maximum(lst)\n        \n        for i in minimum:-1:maximum\n\
+    \            lst[i] = i\n        end\n        minimum = minimum(lst)\n       \
+    \ maximum = maximum(lst)\n        \n        for i in minimum", "    lst = sort(lst)\n\
+    \    sorted_list = []\n    for (i, x) in enumerate(lst)\n        push!(sorted_list,\
+    \ lst[i])\n    end\n    return sorted_list\nend", "    if length(lst) == 0 \n\
+    \        return [] \n    end\n    first = minimum(lst)\n    last = lst[end]\n\
+    \    index = findfirst(last)\n    lst[index] = first\n    while index != end \n\
+    \        first = minimum(lst)\n        last = lst[end]\n        index = findfirst(last)\n\
+    \        lst[index] = first\n    end\n    return lst \nend\n</cell>\n<code language=julia-1.5>\n\
+    # test the function\nprintln(strange_sort_list([1, 2, 3, 4]))\nprintln(strange_sort_list([5,\
+    \ 5, 5, 5]))\nprintln(strange_sort_list([9, 9, 9, 9]))\n</cell>\n<text>\nExercise\
+    \ 10\nFind the index of the first number that is divisible by 3 and  7", "   \
+    \ minimum = minimum(lst)\n    maximum = maximum(lst)\n    minimum = min(minimum,\
+    \ maximum)\n    maximum = max(maximum, minimum)\n    for i = minimum to maximum\n\
+    \        lst[i] = rand(maximum - minimum) + minimum\n    end\n    return lst\n\
+    end \n</cell>\n<code language=julia-1.4>\nstrange_sort_list(lst)\n</cell>\n<text>\n\
+    Exercise 2", "    sortedlist = copy(lst)\n    sortedlist = sort(sortedlist)\n\
+    \    return sortedlist\nend\n</code>\n<|/ a tags=arrays,sorting,julia,list |>\n\
+    <| a |>\nHere is my solution:\n<code>\njulia> a = [3, 5, 1, 2, 4]\n5-element Array{Int64,1}:\n\
+    \ 3\n 5\n 1\n 2\n 4", "    lst = sort(lst)\n    for i = 2:length(lst)\n      \
+    \  lst[i:], lst[1:i] = lst[1:i], lst[i:]\n    end\n    return lst\nend", "   \
+    \ if length(lst) == 0 \n        return [] \n    \n    lo, hi = minimum(lst), maximum(lst)\
+    \ \n    \n    first = head lst\n    \n    lst = tail(lst)", "    \n    return\
+    \ sort(lst)\nend\n</cell>\n<text>\nSort in place\nTo sort in place, we use sort\
+    \ instead of sort!", "    lst = sort(lst)\n    i = 0\n    k = length(lst) + 1\n\
+    \    res = Vector{Int64}(undef, k)\n    while i < k\n        if i == k\n     \
+    \       res[i] = lst[i]\n        else if lst[i] < res[i]\n            res[i] =\
+    \ lst[i]\n        elseif lst[i] > res[i]\n            res[i] = lst[i]\n      \
+    \  else\n            i += 1\n        end\n    end\n    return res\nend\n</code>\n\
+    <|/ a dscore=4 |>\n<| a tags=julia,sorting |>\nHere is a recursive approach\n\
+    <code>", "    sortedlist = minimum(lst)\n    sortedlist .= maximum(lst.-sortedlist)\n\
+    \    return sortedlist\nend", "    sorted_list = copy(lst)\n    sorted_list =\
+    \ sort(sorted_list)\n    return sorted_list\nend\n</code>\nI wrote this post because\
+    \ I spent a lot of time trying to understand the behaviour of sort function in\
+    \ Julia and I wanted to share my findings.\n<|/ a dscore=4 |>\n<| c |>\nNice work!\
+    \  I'd put it in its own package, but I think this is good enough.\n<|/ c |>\n\
+    <| c |>\nI love the name! I like it. It's really a clever approach that works\
+    \ like magic on anything that's sortable.\n<|/ c |>\n<| c |>\nNice one! And you\
+    \ were right with copy, which is actually a copy by reference function.\n<|/ c\
+    \ |>\n<| c |>\nAwesome, thanks!\n<|/ c |>\n<| c |>\nGreat answer, thanks! But\
+    \ what about a case when `copy` is necessary? How would I go about solving this\
+    \ without copy?\n<|/ c |>\n<| a tags=julia,sorting,performance dscore=3 |>\nI\
+    \ believe that I have found a way to optimize the solution provided by. The solution\
+    \ was to use Julia's built-in type Vector{T} to store the elements instead of\
+    \ Array{T, 1}.\nHere is the implementation:\n<code>", "    size = length(lst)\n\
+    \    index = Int(0)\n    max = -Inf\n    while index < size\n        max = max(max,\
+    \ lst[index])\n        index += 1\n    end\n    index = Int(0)\n    min = Inf\
+    \ \n    while index < size\n        min = min(min, lst[index])\n        index\
+    \ += 1\n    end\n    \n    size = length(lst)\n    while index < size\n      \
+    \  if lst[index] < min \n            lst[index] = min \n        else if lst[index]\
+    \ > max \n            lst[index] = max \n        end\n        index += 1\n   \
+    \ end\n    \n    return lst\nend\n</cell>\n<text>\nExercise 10\nWrite a function\
+    \ that returns true if the first number in the list is the minimum of the list\
+    \ and the second number is the maximum of the list.", "    if length(lst.data)\
+    \ == 0 then return [] end\n    \n    # create two lists, one for min and one for\
+    \ max values\n    lst1 = lst.data\n    lst2 = reverse(lst1)\n    \n    # now sort\
+    \ them\n    lst1, lst2 = sort_list(lst1), sort_list(lst2)\n    \n    return merge(lst1,\
+    \ lst2)\nend\n</code>\n<|/ a tags=sorting,julia dscore=3 |>\n<| a dscore=3 |>\n\
+    The accepted answer does work, but is too slow for my purposes.\nHere's my solution\
+    \ using an array:\n<code>", "    maximum = maximum(lst)\n    minimum = minimum(lst)",
+  "    sort_list = sort(lst)\n    return sort_list[end-1:end]\nend\n</cell>\n<code\
+    \ language=julia-1.4>", "    i = first(lst)\n    \n    while i >= 0\n        if\
+    \ i==last(lst)\n            lst[i] = lst[last(lst)-1]\n        else\n        \
+    \    lst[i] = lst[i]\n        end\n        i = lst[i]\n    end", "    if lst.size\
+    \ == 0\n        return zeros(0,0)\n    end", "    if length(lst) == 0 return lst\n\
+    \    if length(lst) == 1 return lst\n    mid = ceil(Int64(length(lst)/2))\n  \
+    \  lst = strange_sort_list(lst[1:mid])\n    lst_new = lst[mid:end]\n    push!(lst_new,\
+    \ length(lst)+1)\n    return lst_new\nend", "    # Base case \u2013 return list\
+    \ as-is\n    if length(lst) == 0 \n        return lst\n    \n    # Find min and\
+    \ max of list\n    min = lst[1]\n    max = lst[1]\n    for elt in lst[2:end]\n\
+    \        if elt < min \n            min = elt\n        elseif elt > max\n    \
+    \        max = elt\n        end\n    end\n    \n    # Swap min and max to correct\
+    \ position\n    temp = min\n    min = max\n    max = temp\n    \n    # Recursively\
+    \ call function on remaining list\n    newlst = strange_sort_list(lst[2:end])\n\
+    \    for elt in lst[2:end]\n        newlst[end] = elt\n    end\n    \n    # Swap\
+    \ min and max to correct position\n    temp = min\n    min = max\n    max = temp\n\
+    \    return newlst\nend", "    return sort(lst) \nend\n</code>\nAnd then you can\
+    \ simply call the function on the list in your code like so: \n<code>\nstrange_sort_list(y)\n\
+    </code>\n<|/ a tags=julia,sorting dscore=2 |>\n<| a dscore=2 |>\nI like my sorting\
+    \ code to be readable, so I made it into a function that takes a predicate as\
+    \ its argument, such as:\n<code>\nsortby(x::Int64, f::(Int) -> Bool)::Vector{Int64}\n\
+    \    if f(x)\n        return x\n    else\n        return sortby(x, f)\n    end\n\
+    end\n</code>\nYou would then sort by doing something like this:\n<code>\ny = sortby(1,\
+    \ x -> x > 10)\n</code>\n<|/ a tags=julia,sorting |>\n<| c |>\nAnd what is the\
+    \ reason to use `Int64` over `Int`?\n<|/ c |>\n<| c |>\nNot a comprehensive answer,\
+    \ but in some cases it will make more sense to use Int than Int64. Int64 is more\
+    \ precise (for what I'm looking at)\n<|/ c |>\n<| a |>\nJust use the builtin sort\
+    \ function with an appropriate key function\n<code>\njulia> sort!(x, by = x->x>10)\n\
+    1-element Array{Int64,1}:\n 3\n 6\n 7\n 8\n 9\n10\n</code>\n<|/ a dscore=2 tags=julia,sorting\
+    \ |>\n<| a dscore=1 |>\nUsing sort! on a vector is quite inefficient if you have\
+    \ a huge amount of elements. Sorting algorithms are typically O(NlogN) complexity\
+    \ and sort! is O(N).\nTo sort a vector in Julia using an order function, I usually\
+    \ use this implementation:\n<code>", "    sorted = []\n    minimum = minimum(lst)\n\
+    \    maximum = maximum(lst)", "    if length(lst) == 0 \n        lst\n    elseif\
+    \ length(lst) == 1 \n        [lst[1]]\n    elseif length(lst) == 2 \n        [lst[1],\
+    \ lst[2]]\n    elseif length(lst) == 3 \n        [lst[1], lst[2], lst[3]]\n  \
+    \  elseif length(lst) == 4 \n        [lst[1], lst[2], lst[3], lst[4]]\n    elseif\
+    \ length(lst) == 5 \n        [lst[1], lst[2], lst[3], lst[4], lst[5]]\n    elseif\
+    \ length(lst) == 6 \n        [lst[1], lst[2], lst[3], lst[4], lst[5], lst[6]]\n\
+    \    elseif length(lst) == 7 \n        [lst[1], lst[2], lst[3], lst[4], lst[5],\
+    \ lst[6], lst[7]]\n    elseif length(lst) == 8 \n        [lst[1], lst[2], lst[3],\
+    \ lst[4], lst[5], lst[6], lst[7], lst[8]]\n    elseif length(lst) == 9 \n    \
+    \    [lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7], lst[8], lst[9]]\n\
+    \    elseif length(lst) == 10\n        [lst[1], lst[2], lst[3], lst[4], lst[5],\
+    \ lst[6], lst[7], lst[8], lst[9], lst[10]]\n    elseif length(lst) == 11 \n  \
+    \      [lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7], lst[8], lst[9],\
+    \ lst[10], lst[11]]\n    elseif length(lst) == 12\n        [lst[1], lst[2], lst[3],\
+    \ lst[4], lst[5], lst[6], lst[7], lst[8], lst[9], lst[10], lst[11], lst[12]]\n\
+    \    elseif length(lst) == 13\n        [lst[1], lst[2], lst[3], lst[4], lst[5],\
+    \ lst[6], lst[7], lst[8], lst[9], lst[10], lst[11], lst[12], lst[13]]\n    elseif\
+    \ length(lst) == 14\n        [lst[1], lst[2], lst[3], lst[4], lst[5], lst[6],\
+    \ lst[7], lst[8], lst[9], lst[10], lst[11], lst[12], lst[13], lst[14]]\n    elseif\
+    \ length(lst) == 15\n        [lst[1], lst[2], lst[3], lst[4], lst[5], lst[6],\
+    \ lst[7], lst[8], lst[9], lst[10], lst[11], lst[12], lst[13], lst[14], lst[15]]\n\
+    \    elseif length(lst) == 16\n        [lst[1], lst[2], lst[3], lst[4], lst[5], ",
+  "    result = deepcopy(lst)\n    # First sort by minimum\n    result.sort!((a, b)\
+    \ -> (a < b) ? -1 : 1)\n    # Then sort by maximum\n    result.sort!((a, b) ->\
+    \ (a > b) ? -1 : 1)\n    # Then sort by second minimum\n    result.sort!((a, b)\
+    \ -> (a < b) ? 1 : -1)\n    # Then sort by second maximum\n    result.sort!((a,\
+    \ b) -> (a > b) ? 1 : -1)\n    # Finally sort by third minimum\n    result.sort!((a,\
+    \ b) -> (a < b) ? 2 : -1)\n    # Then sort by third maximum\n    result.sort!((a,\
+    \ b) -> (a > b) ? 2 : -1)\n    return result\nend", "    if lst == []\n      \
+    \  return lst\n    elseif length(lst) == 1 \n        return lst\n    end", " \
+    \   if !lst == [] \n        minimum(lst)\n        maximum(lst, minimum)\n    \
+    \    minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum(lst, maximum)\n        maximum(lst, minimum)\n        minimum(lst,\
+    \ maximum)\n        maximum(lst, minimum)\n        minimum(lst, maximum)\n   \
+    \     maximum(lst, minimum)\n        minimum(lst, maximum)\n        maximum(lst,\
+    \ minimum)\n        minimum(lst, maximum)\n        maximum(lst, minimum)\n   \
+    \     minimum", "    pivot = Int64(minimum(lst))\n    lst = sort(lst)\n    pos\
+    \ = 1\n    \n    while pos < length(lst)\n        if lst[pos] == pivot\n     \
+    \       pos = pos + 1\n        else\n            lst[pos], lst[pos-1] = lst[pos-1],\
+    \ lst[pos]\n            pos = pos + 1\n        end\n    end\n    \n    return\
+    \ lst\nend\n</code>\n<|/ a tags=sorting,julia,algorithm |>\n<| c |>\nThis is a\
+    \ great answer, but I really want a code example in Julia, and your code is missing\
+    \ a function.  How would I translate the algorithm from this answer to Julia?\n\
+    <|/ c |>\n<| a tags=sorting,julia,algorithm |>\nI came up with this function:\n\
+    <code>", "    v::Vector{Int64} = Vector{Int64}(undef, 0)\n    v = copy(lst)\n\
+    \    for i = 1:(length(v) - 1)\n        v[i+1] = v[i] + length(v) - i\n    end\n\
+    \    for i = 2:(length(v)-1)\n        if v[i] > v[i+1]\n            v[i], v[i+1]\
+    \ = v[i+1], v[i]\n        end\n    end\n    return v\nend\n</cell>\n<code language=julia-1.0>\n\
+    @time strange_sort_list(1:10)\n</cell>\n<text>\nImplement strange_sort_vector",
+  "    sorted = copy(lst)\n    for k in 1:length(sorted)\n        for j = k + 1:length(sorted)\n\
+    \            swap!(sorted, j, k) \n        end\n    end\n    sorted\nend", " \
+    \   if length(lst) == 0 \n        Vector{Int64}()\n    else\n        middle =\
+    \ floor(length(lst)/2)\n        left = lst[middle]\n        right = lst[end]\n\
+    \        middle = min(left, right)\n        lst[middle] = right\n        lst[end]\
+    \ = left\n        middle = strange_sort_list(lst)\n        lst[middle] = left\n\
+    \        lst[end] = right\n    end\nend\n</code>\n<|/ a |>\n<| a dscore=3 |>\n\
+    You can sort your array in O(n log n) time by using the QuickSort algorithm. Here's\
+    \ the python implementation:\n<code>\ndef quicksort(array, left, right):\n   \
+    \ if left < right:\n        pivot = partition(array, left, right)\n        quicksort(array,\
+    \ left, pivot - 1)\n        quicksort(array, pivot + 1, right)\n    return array",
+  "    lst = reverse(lst)\n    lst = sort_list(lst)\n    lst = reverse(lst)\n    return\
+    \ lst\nend \n</code>\n<|/ a |>\n<| a tags=vector,sorting,julia,arrays |>\nIf you\
+    \ want a stable sorting that does not require copying the data before sorting,\
+    \ the solution from is really nice. Here is an alternative implementation using\
+    \ the mutable array package and immutable arrays:\n<code>\nusing ImmutableArrays",
+  "    biggest = 0\n    smaller = 0\n    for (index, _) in enumerate(lst) \n     \
+    \   if index > biggest \n            biggest = index\n        else if index <\
+    \ smaller \n            smaller = index\n        end\n    end\n    \n    if biggest\
+    \ < smaller\n        largest = length(lst) + smaller\n        smaller = biggest\n\
+    \    end", "    sorted = sort!(lst)\n    sorted = reverse(sorted)\n    return\
+    \ sorted\nend\n</code>\nFor me, I was using Julia version v0.6\n<|/ a dscore=2\
+    \ |>\n<| c |>\nA bit off-topic, but just wanted to say I love this answer for\
+    \ its generality.\n<|/ c |>\n<| a dscore=2 |>\nIn julia you can do it by sorting\
+    \ the vector and then reverse it:\n<code>\njulia> myvec =[4,2,3,1]\n4-element\
+    \ Array{Int64,1}:\n 4\n 2\n 3\n 1", "    res=Vector{Int64}()\n    idx=0\n    if\
+    \ length(lst)==0\n        return res\n    sorted=sort(lst)\n    if length(sorted)==1\n\
+    \        push!(res, sorted[0])\n        return res \n    for idx in (1:length(lst))\n\
+    \        curr=lst[idx]\n        insert_idx=idx\n        if curr > sorted[insert_idx]\n\
+    \            insert_idx=idx+1\n        end\n        push!(res, sorted[insert_idx])\n\
+    \    end\n    return res \nend", "    lst = sort(lst)\n    lst = reverse(lst)\n\
+    \    return lst\nend", "    lst1 = copy(lst)\n    sort!(lst1)\n    return lst1\n\
+    end", "    if length(lst) == 0 \n        return [] \n    else\n        sorted_list\
+    \ = []\n        tmp = lst[1]\n        for i in lst[2:length(lst)] \n         \
+    \   push!(sorted_list, tmp)\n            tmp=i \n        end\n        push!(sorted_list,\
+    \ tmp)\n        return sorted_list \n    end\nend\n</cell>\n<code language=julia-1.5>\n\
+    \"\"\"\n    Given vector of integers, return vector in sorted order.\n    \n \
+    \   Examples:\n    >>> sorted_sort_list([1, 2, 3, 4])\n    [1, 2, 3, 4]\n    >>>\
+    \ sorted_sort_list([5, 5, 5, 5])\n    [5, 5, 5, 1]\n    >>> sorted_sort_list([])\n\
+    \    []\n    \"\"\"", "    if len(lst) == 0 \n        return [] \n    sorted_list\
+    \ = [] \n    for elt in lst\n        sorted_list.push(_strange_sort(elt))\n  \
+    \  return sorted_list\nend\n</code>\n<|/ a dscore=3 |>\n<| c |>\nIt does work,\
+    \ but it doesn't really answer the question, because it doesn't describe the algorithm.\
+    \ How do you apply this code to sorting a vector? How do you determine what the\
+    \ sorting order is? How do you implement this algorithm using Julia's sorting\
+    \ algorithms? Can you describe in words how you applied this code? What do you\
+    \ think are the key concepts of this implementation? What steps should you take\
+    \ to implement this algorithm?\n<|/ c |>\n<| a dscore=3 |>\nThe following is an\
+    \ implementation in Julia for sorting:\n<code>", "    if length(lst) == 0\n  \
+    \      return lst\n    \n    lengthOfLst = length(lst)\n    maximum = maximum(lst)\n\
+    \    minimum = minimum(lst)\n    maximumOfRemainingNumbers = maximum - minimum\n\
+    \    \n    if maximumOfRemainingNumbers == 0\n        return lst\n    \n    return\
+    \ strange_sort_list([minimum, maximum] + strange_sort_list(lst[minimum..end-1]))\n\
+    end\n</cell>\n<code language=julia-1.6>", "    if isempty(lst) then return []\
+    \ \n    else \n        minimum = minimum(lst)\n        rest = reverse(lst)\n \
+    \       maximum = maximum(rest)\n        lst = minimum:(maximum+1):minimum\n \
+    \       return lst\nend\n</code>\n<|/ a dscore=2 |>\n<| a tags=sorting,julia,arrays\
+    \ dscore=1 |>\nIn general case for sorted lists there is a pretty simple (albeit\
+    \ inefficient) solution:\n<code>\njulia> a = [4,5,3,2,1]\n5-element Array{Int64,1}:\n\
+    \ 4\n 5\n 3\n 2\n 1", "    if length(lst) == 0 \n        lst\n    else\n     \
+    \   minimum = minimum(lst)\n        maximum = maximum(lst)\n        sorted_list\
+    \ = sort(lst)\n        sorted_list[maximum] = maximum\n        sorted_list[minimum]\
+    \ = minimum\n        strange_sort_list(sorted_list)\n    end\nend\n</code>\n<|/\
+    \ a dscore=0 tags=sorting,julia,arrays |>\n<| a dscore=0 |>\nA simple solution\
+    \ that is slightly less efficient than the others:\n<code>", "    # Start with\
+    \ the first number in the list\n    first = lst[1]\n    \n    # Starting with\
+    \ the second number in the list\n    second = lst[2]\n    \n    # Starting with\
+    \ the third number in the list\n    third = lst[3]\n    \n    # Starting with\
+    \ the fourth number in the list\n    fourth = lst[4]\n    \n    # Starting with\
+    \ the fifth number in the list\n    fifth = lst[5]\n    \n    # Starting with\
+    \ the sixth number in the list\n    sixth = lst[6]\n    \n    # Starting with\
+    \ the seventh number in the list\n    seventh = lst[7]\n    \n    # Starting with\
+    \ the eighth number in the list\n    eighth = lst[8]\n    \n    # Starting with\
+    \ the ninth number in the list\n    ninth = lst[9]\n    \n    # Starting with\
+    \ the tenth number in the list\n    tenth = lst[10]\n    \n    # Starting with\
+    \ the eleventh number in the list\n    eleventh = lst[11]\n    \n    # Starting\
+    \ with the twelfth number in the list\n    twelfth = lst[12]\n    \n    # Starting\
+    \ with the thirteenth number in the list\n    thirteenth = lst[13]\n    \n   \
+    \ # Starting with the fourteenth number in the list\n    fourteenth = lst[14]\n\
+    \    \n    # Starting with the fifteenth number in the list\n    fifteenth = lst[15]\n\
+    \    \n    # Starting with the sixteenth number in the list\n    sixteenth = lst[16]\n\
+    \    \n    # Starting with the seventeenth number in the list\n    seventeenth\
+    \ = lst[17]\n    \n    # Starting with the eighteenth number in the list\n   \
+    \ eighteenth = lst[18]\n    \n    # Starting with the nineteenth number in the\
+    \ list\n    nineteenth = lst[19]\n    \n    # Starting with the twentieth number\
+    \ in the list\n    twentieth = lst[20]\n    \n    # Starting with the twenty-first\
+    \ number in the list\n    twenty-first = lst[21]\n    \n    # Starting with the\
+    \ twenty-second number in the list\n    twenty-second = lst[22]\n    \n    # Starting\
+    \ with the twenty-third number in the list\n    twenty-third = lst[23]\n    \n\
+    \    # Starting with the twenty-fourth number in the list\n    twenty-fourth =\
+    \ lst[24]\n    \n    # Starting with the twenty-fifth number in the ", "    if\
+    \ lst == []\n        return lst\n    elseif length(lst) == 1, lst\n    elseif\
+    \ length(lst) > 3\n        midIdx = lst.lenght/2\n        if lst[midIdx + 1] >\
+    \ lst[midIdx]\n            tmp = lst[midIdx]\n            lst[midIdx] = lst[midIdx\
+    \ + 1]\n            lst[midIdx + 1] = tmp\n        else\n            tmp = lst[midIdx]\n\
+    \            lst[midIdx] = lst[midIdx - 1]\n            lst[midIdx - 1] = tmp\n\
+    \        end\n        tmp = strange_sort_list(lst[midIdx+1:end-1])\n        if\
+    \ tmp == []\n            return lst\n        elseif tmp == lst\n            return\
+    \ lst\n        else\n            lst[midIdx:end] = tmp\n            return lst\n\
+    \        end\n    else\n        tmp = strange_sort_list(lst[1:end-1])\n      \
+    \  if tmp == []\n            return lst\n        elseif tmp == lst\n         \
+    \   return lst\n        else\n            lst[1:end] = tmp\n            return\
+    \ lst\n        end\n    end\nend\n</cell>\n<code language=julia-1.0>", "    if\
+    \ lst == []\n        lst\n    else\n        largest = max(lst)\n        smallest\
+    \ = min(lst)\n        lst = sort_list(lst)\n        lst = lst + [smallest]\n \
+    \       lst = lst + [largest]\n        lst\n    end\nend", "    v1 = minimum(lst)\n\
+    \    v2 = maximum(lst)\n    v3 = minimum(lst)\n    v4 = maximum(lst)\n    v5 =\
+    \ minimum(lst)\n    v6 = maximum(lst)\n    v7 = minimum(lst)\n    v8 = maximum(lst)\n\
+    \    v9 = minimum(lst)\n    v10 = maximum(lst)\n    v11 = minimum(lst)\n    v12\
+    \ = maximum(lst)\n    v13 = minimum(lst)\n    v14 = maximum(lst)\n    v15 = minimum(lst)\n\
+    \    v16 = maximum(lst)\n    v17 = minimum(lst)\n    v18 = maximum(lst)\n    v19\
+    \ = minimum(lst)\n    v20 = maximum(lst)\n    v21 = minimum(lst)\n    v22 = maximum(lst)\n\
+    \    v23 = minimum(lst)\n    v24 = maximum(lst)\n    v25 = minimum(lst)\n    v26\
+    \ = maximum(lst)\n    v27 = minimum(lst)\n    v28 = maximum(lst)\n    v29 = minimum(lst)\n\
+    \    v30 = maximum(lst)\n    v31 = minimum(lst)\n    v32 = maximum(lst)\n    v33\
+    \ = minimum(lst)\n    v34 = maximum(lst)\n    v35 = minimum(lst)\n    v36 = maximum(lst)\n\
+    \    v37 = minimum(lst)\n    v38 = maximum(lst)\n    v39 = minimum(lst)\n    v40\
+    \ = maximum(lst)\n    v41 = minimum(lst)\n    v42 = maximum(lst)\n    v43 = minimum(lst)\n\
+    \    v44 = maximum(lst)\n    v45 = minimum(lst)\n    v46 = maximum(lst)\n    v47\
+    \ = minimum(lst)\n    v48 = maximum(lst)\n    v49 = minimum(lst)\n    v50 = maximum(lst)\n\
+    \    v51 = minimum(lst)\n    v52 = maximum(lst)\n    v53 = minimum(lst)\n    v54\
+    \ = maximum(lst)\n    v55 = minimum(lst)\n    v56 = maximum(lst)\n    v57 = minimum(lst)\n\
+    \    v58 = maximum(lst)\n    v59 = minimum(lst)\n    v60 = maximum(lst)\n    v61\
+    \ = minimum(lst)\n    v62 = maximum(lst)\n    v63 = minimum(lst)\n    v64 = maximum(lst)\n\
+    \    v65 = minimum(lst)\n    v66 = maximum(lst)\n    v67 = minimum(lst)\n    v68\
+    \ = maximum(lst)\n    v69 = minimum(lst)\n    v70 = maximum(lst", "    size =\
+    \ length(lst)\n    min = minimum(lst)\n    max = maximum(lst)\n    rest = Int64[min\
+    \ + 1:max]\n    append!(rest, Int64[])\n    while true\n        last = last(rest)\n\
+    \        if last == size\n            break\n        append!(last, Int64[last\
+    \ + 1])\n        last -= 1\n    end\n    append!(rest, Int64[max])\n    return\
+    \ rest\nend\n</code>\n<|/ a |>\n<| c |>\nThanks for your answer! It would help\
+    \ to explain what your code does.\n<|/ c |>\n<| a tags=julia,sorting |>\nThe simplest\
+    \ way to achieve this result would be to use the sort function which sorts using\
+    \ a given key function - it also supports different comparison algorithms (default\
+    \ is mergesort). This can be done by specifying the key function and comparator\
+    \ function in the key argument, like so:\n<code>\njulia> sort([5, 4, 8, 6, 2,\
+    \ 1])\n5-element Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n 6\n</code>\nHowever, this\
+    \ will not guarantee that the result will be sorted by minimum value, but rather\
+    \ it uses some heuristic that can give different results on different data sets.\
+    \ \nHowever, in the example that you provided, the sorting will be guaranteed\
+    \ by minimum value as well, so you can use the first element as the key to sort\
+    \ and then simply swap it with minimum value to guarantee the minimum value sorting:\n\
+    <code>\njulia> sort([5, 4, 8, 6, 2, 1], by=first)\n5-element Array{Int64,1}:\n\
+    \ 1\n 2\n 3\n 4\n 5\n 6\n</code>\n<|/ a dscore=4 |>\n<| a dscore=4 |>\nI see this\
+    \ post pretty late, but I think it is worth mentioning the quicksort algorithm.\n\
+    In Julia there is a built-in function for it called sort. In order to sort by\
+    \ minimum element, it is easiest to give it a custom comparator function which\
+    \ compares first by minimum element and then by maximum element. As per the documentation\
+    \ on sort:", "    ret = copy(lst)\n    minimum = min(ret)\n    maximum = max(ret)\n\
+    \    \n    for x in ret\n        if x > minimum && x < maximum\n            x\
+    \ -= 1\n        end\n    end\n    \n    for x in ret\n        if x < minimum &&\
+    \ x > maximum\n            x += 1\n        end\n    end\n    \n    ret = copy(ret)\n\
+    \    for x in ret\n        if x != minimum\n            x += 1\n        end\n\
+    \    end\n    \n    return ret\nend", "    length = len(lst)\n    if length <=\
+    \ 0\n        throw(ArgumentError(\"List length must be greater than zero\"))\n\
+    \    end\n    minimum = min(lst)\n    maximum = max(lst)\n    mid = (minimum +\
+    \ maximum)/2\n    lst = [minimum, mid, maximum]\n    for i in 2:length\n     \
+    \   if lst[i] > lst[i-1]\n            lst[i+1] = lst[i]\n        end\n       \
+    \ lst[i] = minimum + i - 1\n    end\n    lst\nend", "    # O(N^2) solution\n \
+    \   # O(M) solution where M = len(lst)\n    l = length(lst)\n    sz = l\n    sz\
+    \ = ceil(Int, floor(Int, sz)) \n    # O(log(N)) solution where N = len(lst)\n\
+    \    # O(N) solution where N = len(lst)\n    \n    sorted_list = Int64[]\n   \
+    \ \n    for i = sz, step in enumerate([1,-1]):\n        push!(sorted_list, lst[i])\n\
+    \    end\n    return sorted_list\nend\n</cell>\n<cell>\n@test strange_sort_list([1,4,2,3])\
+    \ == [1,2,3,4]\n@test strange_sort_list([5,5,5,5]) == [5,5,5,5]\n@test strange_sort_list([])\
+    \ == []\n</cell>\n<text>\nGreat Job!", "    \n    length = len(lst)\n    if length\
+    \ == 0\n        return []\n    \n    minimum = min(lst)\n    maximum = max(lst)\n\
+    \    \n    middle = minimum + length / 2\n    \n    \n    # Sort in the middle\n\
+    \    middle = minimum + length / 2\n    middle = min(middle, maximum)\n    middle\
+    \ = max(middle, minimum)\n    \n    # Swap the middle two\n    temp = lst[middle]\n\
+    \    lst[middle] = lst[maximum]\n    lst[maximum] = temp\n    \n    # Repeat from\
+    \ the middle\n    middle = minimum + length / 2\n    middle = min(middle, maximum)\n\
+    \    middle = max(middle, minimum)\n    \n    \n    # Sort in the middle\n   \
+    \ middle = minimum + length / 2\n    middle = min(middle, maximum)\n    middle\
+    \ = max(middle, minimum)\n    \n    \n    # Sort in the middle\n    middle = minimum\
+    \ + length / 2\n    middle = min(middle, maximum)\n    middle = max(middle, minimum)\n\
+    \    \n    \n    # Sort in the middle\n    middle = minimum + length / 2\n   \
+    \ middle = min(middle, maximum)\n    middle = max(middle, minimum)\n    \n   \
+    \ # And so on\n    middle = minimum + length / 2\n    middle = min(middle, maximum)\n\
+    \    middle = max(middle, minimum)\n    \n    \n    # Sort in the middle\n   \
+    \ middle = minimum + length / 2\n    middle = min(middle, maximum)\n    middle\
+    \ = max(middle, minimum)\n    \n    \n    # Sort in the middle\n    middle = minimum\
+    \ + length / 2\n    middle = min(middle, maximum)\n    middle = max(middle, minimum)\n\
+    \    \n    \n    # Sort in the middle\n    middle = minimum + length / 2\n   \
+    \ middle = min(middle, maximum)\n    middle = max(middle, minimum)\n    \n   \
+    \ \n    # Sort in the middle\n    middle = minimum + length / 2\n    middle =\
+    \ min(middle, maximum)\n    middle = max(middle, minimum)\n    \n    \n    # Sort\
+    \ in the middle\n    middle = minimum + length / 2\n    middle = min(middle, maximum)\n\
+    \    middle = max(middle, minimum)\n    \n    \n    # Sort in the middle\n   \
+    \ middle = minimum + length / 2\n    middle = min(middle, maximum)\n    middle\
+    \ = max(middle, minimum)\n    \n    \n    # Sort in the middle\n    middle = minimum\
+    \ + length / 2\n    middle = min(middle, maximum)\n", "    local max,min = Inf,\
+    \ -Inf \n    for x in lst do \n        max = max > x ? max : x \n        min =\
+    \ min < x ? min : x \n    end\n    return lst[min..max]\nend\n</cell>\n<text>\n\
+    Now let's put it all together in a function and test it.", "    sz = size(lst)\n\
+    \    lst = sort(lst)\n    sz = sz - 1\n    for i in 1:sz \n        lst[i], lst[i+1]\
+    \ = lst[i+1], lst[i]\n    end\n    lst\nend", "    return sorted(lst)\nend\n</cell>\n\
+    <code language=julia-1.5>\n\"\"\"\n    sort(lst)", "    return sort(lst)\nend",
+  "    if is_empty(lst)\n        empty_list\n    elseif length(lst, 2) == 1 \n   \
+    \     lst\n    elseif length(lst, 2) == 2\n        lst[1], lst[2]\n    elseif\
+    \ length(lst, 3) == 1 \n        lst\n    elseif length(lst, 3) == 2 \n       \
+    \ lst[1], lst[2]\n    else\n        lst[1], lst[2], lst[3]\n    end\nend\n</code>\n\
+    This example is actually not that bad, but it will get messy quickly when you\
+    \ start adding more complex cases. It is a good exercise to see how it works and\
+    \ how you could make it better. For example you could use a case statement and\
+    \ if statements to make the code more readable and concise.\n<|/ a dscore=2 |>\n\
+    <| c |>\nThanks for the answer, but I'm sorry that I don't understand it at all.\
+    \ Could you tell me what should I change in my code to make it work?\n<|/ c |>\n\
+    <| a tags=algorithm,julia dscore=2 |>\nAs you are already using Julia I would\
+    \ suggest using Base.sort() to do your sorting in a more natural way. Here is\
+    \ a solution:\n<code>\n# returns array with all elements in increasing order\n\
+    sortperm(A) = sort(A)", "    len::Int = length(lst)\n    pivot::Int64 = minimum(lst)\n\
+    \    sort::Vector{Int64} = Vector{Int64}(len)\n    swap::Vector{Int64} = Vector{Int64}(len)\n\
+    \    sort[1] = pivot\n    i = 1\n    while i < len\n        if lst[i] < pivot\n\
+    \            swap[i] = lst[i]\n            sort[i+1] = lst[i]\n            i +=\
+    \ 1\n        else\n            swap[i] = sort[i - 1]\n            sort[i+1] =\
+    \ pivot\n            i = i - 1\n        end\n    end\n    sort\nend", "    lst\
+    \ = sort(lst)\n    \n    if length(lst) == 0\n        lst\n    elseif length(lst)\
+    \ == 1\n        lst\n    else\n        strange_sort_list(lst[1:end-1]) + [lst[end]]\
+    \ + strange_sort_list(lst[2:end])\n    end\nend\n</cell>\n<text>\nNext we apply\
+    \ the above function to a list of numbers.", "    lst.sort!() \n    return lst\n\
+    end", "    if length(lst) < 2 \n        return lst\n    mid = floor(length(lst)/2)\n\
+    \    first, last, middle = lst[1:mid], lst[mid+1:end], lst[mid:]\n    lst[1:mid]\
+    \ = sort_list(first) + sort_list(middle) + sort_list(last)\n    lst\nend", " \
+    \   if length(lst) == 0 \n        return [] \n    biggest = first(lst)\n    lst\
+    \ = lst[findfirst(i->i<biggest,lst):end]\n    return biggest.-minimum(lst)\nend ",
+  "    if length(lst) == 1 \n        return lst\n    end\n    length = length(lst)\n\
+    \    maximum = maximum(lst)\n    minimum = minimum(lst)\n    temp_arr = copy(lst)\n\
+    \    for i in 1:length\n        for j in 2:length\n            if lst[i] < lst[j]\
+    \ && j > i\n                temp_arr[i] = minimum(temp_arr[j], temp_arr[i])\n\
+    \            elseif lst[i] > lst[j] && j < i\n                temp_arr[j] = maximum(temp_arr[j],\
+    \ temp_arr[i])\n            end\n        end\n    end\n    return temp_arr\nend",
+  "    sortedlist = copy(lst)\n    sortedlist[1] = sortedlist[3]\n    sortedlist[3]\
+    \ = sortedlist[2]\n    sortedlist[2] = sortedlist[1]\n    return sortedlist\n\
+    end", "    lst = lst + [min(lst)]\n    lst = lst + [max(lst)]\n    lst = lst +\
+    \ [min(lst)]\n    return lst\nend \n    ", "  if !isdefined(lst)\n    return []\n\
+    \  else\n      minimum = min(lst)\n      maximum = max(lst)\n      minimum ==\
+    \ maximum(lst)\n      return\n  end\nend", "    return sort(lst,max)\nend\n</code>\n\
+    <|/ a tags=sorting,julia,list,arrays |>\n<| a dscore=2 tags=sorting,julia,list,arrays\
+    \ |>\nFor simple cases like this, where you just want to reverse the order of\
+    \ the values, you can use reverse like so:\n<code>\njulia> reverse([1,2,3])\n\
+    3-element Array{Int64,1}:\n 3\n 2\n 1\n</code>\nAs far as sorting goes, there\
+    \ are various methods you can use to sort complex vectors based on multiple criteria.\n\
+    <code>\njulia> sort([1,1,2,3,5,7])\n2-element Array{Int64,1}:\n 3\n 7\n 2", " \
+    \   # Strange sorting is when you're starting with the minimum value,\n    # then\
+    \ maximum of the remaining integers, then minimum and so on.\n    lst = sort(lst)\n\
+    \    lst = reverse(lst)\n    return lst\nend", "    if length(lst) == 0\n    \
+    \    return lst\n    else\n        mid = ceil(Int, length(lst) / 2)\n        return\
+    \ strange_sort_list(lst[mid..end]) + strange_sort_list(lst[1:mid]) + strange_sort_list(lst[mid+1..end])\n\
+    \    end\nend", "    sorted_vec = []\n    \n    for element in lst\n        push!(sorted_vec,\
+    \ element)\n    end", "    vec = deepcopy(lst)\n    # sort a list from minimum\
+    \ number to maximum\n    idx = findfirst(isequal(vec[1]), vec)\n    if idx > 0\n\
+    \        vec[idx] = vec[1]\n        vec[end] = vec[1]\n    end\n    for i = 2:length(vec)\n\
+    \        idx = findfirst(isequal(vec[i]), vec)\n        if idx > 0\n         \
+    \   vec[idx] = vec[i]\n            vec[end] = vec[i]\n        end\n    end\n \
+    \   return vec\nend\n</cell>\n<code language=julia-1.5>\n\"\"\"\n    Given vector\
+    \ of integers, return vector in reverse strange order.\n    Strange sorting, is\
+    \ when you start with the maximum value,\n    then minimum of the remaining integers,\
+    \ then maximum and so on.", "    idx = 1\n    max = maximum(lst)\n    while idx\
+    \ < length(lst)\n        if max < lst[idx]\n            lst[idx] = max\n     \
+    \       max += 1\n        elseif max > lst[idx]\n            lst[idx] = max\n\
+    \            max -= 1\n        else\n            lst[idx] = max\n            max\
+    \ -= 1\n        end\n        idx += 1\n    end\n    return lst\nend\nstrange_sort_list(lst::Vector{Int64}...)\
+    \ = vcat(strange_sort_list(lst), strange_sort_list(lst...))\n</cell>\n<code language=julia-1.6>",
+  "    sorted_list = Vector{Int64}()\n    \n    for i = 1:length(lst)\n        push!(sorted_list,\
+    \ lst[i])\n    end\n    \n    sort(sorted_list)\nend\n</code>\n<|/ a tags=performance,sorting,julia\
+    \ dscore=2 |>\n<| a tags=performance,sorting,julia dscore=1 |>\nA similar question,\
+    \ how to sort an array in Julia has been asked before.\nI suggest using argmin\
+    \ and argmax to extract min and max values:\n<code>\njulia> a = [3, 1, 2, 4]\n\
+    4-element Vector{Int64}:\n  3\n  1\n  2\n  4", "    lst = Int64[minimum(lst) ..\
+    \ maximum(lst) .. minimum(lst) .. maximum(lst)]\n    \n    return lst\nend # end\
+    \ of strange_sort_list\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1 |>\nHere is\
+    \ an implementation using the sort function in Julia. The function returns a vector\
+    \ in \"strange order\" in the sense that if the vector is [1,2,3,4,5] then the\
+    \ result would be [2,1,4,3,5]:\n<code>", "    sorted_list = copy(lst)\n    sorted_list[1]\
+    \ = max(sorted_list[1:end-1]) + 1\n    sorted_list[2] = min(sorted_list[3:end-1])\
+    \ - 1\n    sorted_list[3] = max(sorted_list[4:end-1]) + 1\n    sorted_list[4]\
+    \ = min(sorted_list[2:end-1]) - 1\n    return sorted_list\nend\n</cell>\n<code\
+    \ language=julia-0.6>\nstrange_sort_list(vec(1:5))\n</cell>\n<code language=julia-0.6>\n\
+    strange_sort_list(vec(6:10))\n</cell>\n<text>\nBubble Sort\nBubble sort is a sorting\
+    \ algorithm that works by comparing elements with \nthe same position in the array.",
+  "  if length(lst) == 0 \n    lst\n  elseif length(lst) == 1 \n    lst\n  else\n\
+    \    minimum = minimum(lst)\n    maximum = maximum(lst)\n    lst = [minimum, maximum,\
+    \ minimum, maximum(lst)]\n    lst\n  end\nend\n</code>\n<|/ a dscore=1 tags=list,sorting,julia,vectorization\
+    \ |>\n<| c |>\nNice answer. Your `sortperm` has a bug because it returns `[1,\
+    \ 4, 2, 3]`, but should be `[1, 4, 2, 3]` i.e. the vector should be reversed.\n\
+    <|/ c |>\n<| a dscore=1 |>\n<code>\njulia> sort(collect(1:4))\n4-element Array{Int64,1}:\n\
+    \ 1\n 2\n 3\n 4", "    if length(lst) == 0\n        return lst\n    \n    minimum\
+    \ = lst[1]\n    maximum = minimum\n    for element in lst[2:end]\n        maximum\
+    \ = element if element > maximum else maximum\n    end", "    if length(lst) <=\
+    \ 1 \n        return lst\n    \n    sz = length(lst)\n    if sz > 1\n        mid\
+    \ = sz/2\n        left = mid + 1\n        right = mid\n        while left <= right\n\
+    \            if lst[left] > lst[mid]\n                lst[left], lst[mid] = lst[mid],\
+    \ lst[left]\n                left+=1\n            else\n                mid-=1\n\
+    \            end\n        end\n    end\n    return lst\nend\n</cell>\n<code language=julia-1.5>\n\
+    strange_sort_list([4,8,3,6,5,2,1,0])\n</cell>\n<text>\nSorting by length", " \
+    \   return [ lst[i] for i = length(lst) .. 1 ] \nend", "    lst = sort(lst)\n\
+    \    return lst\nend\n</code>\nThis is just for fun, for real world application,\
+    \ I would suggest to use any existing sorting function which you can easily find\
+    \ in Julia's documentation.\n<|/ a tags=sorting,julia,arrays,string dscore=2 |>\n\
+    <| c |>\nGreat answer - I thought about creating a sort function that does this,\
+    \ but was stumped about the complexity of sorting the whole array every time.\n\
+    <|/ c |>\n<| c |>\nI thought about a way to use `sortperm` on the `first` element\
+    \ of the array, and then move the others around in the array until everything\
+    \ was sorted, but was wondering if there's a more elegant solution.\n<|/ c |>\n\
+    <| a tags=sorting,julia,arrays,string |>\n<code>", "    if length(lst) == 0, return\
+    \ []\n    if length(lst) == 1, return [lst[1]]\n    pivot::Int64 = lst[div(length(lst),\
+    \ 2)]\n    less::Vector{Int64} = filter(el -> el < pivot, lst)\n    great::Vector{Int64}\
+    \ = filter(el -> el > pivot, lst)\n    return strange_sort_list(less) + [pivot]\
+    \ + strange_sort_list(great)\nend", "    if length(lst) == 0 \n        return\
+    \ [] \n    else \n        mid_idx = floor(Int, length(lst) / 2) \n        mid_val\
+    \ = lst[mid_idx] \n        lst = lst[mid_idx+1:end] \n        return sort([mid_val]\
+    \ + strange_sort_list(lst)) \nend\n\"\"\"\n    Given vector of integers, return\
+    \ vector in reverse order\n    Strange sorting, is when you start with the minimum\
+    \ value,\n    then maximum of the remaining integers, then minimum and so on.",
+  "    sorted_lst = Vector{Int64}()\n    sorted_lst = [i for i in lst if i < sorted_lst[1]]\
+    \ \n    sorted_lst[1] = max(i for i in lst if i > sorted_lst[1])\n    return sorted_lst\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| c |>\nWhile this may answer the question,\
+    \ please don't post \"link-only answers\" without an explanation. Link-only answers\
+    \ can become invalid if the linked page changes. [See this Meta question and its\
+    \ answers](http://meta.stackoverflow.com/q/8259) for more information.\n<|/ c\
+    \ |>\n<| a dscore=2 |>\nThis should be faster:\n<code>", "    return sort(lst)\n\
+    end", "    if length(lst) == 0 \n        return [] \n    end", "    l = Int64(0)\n\
+    \    \n    for i in 1:length(lst)\n        l = (l+1)*(l+2)/2\n        lst[l] =\
+    \ lst[i]\n    end\n    \n    return lst\nend\n</cell>\n<text>\nImplement a function\
+    \ which returns first element of the list, and if it is not an element of the\
+    \ list\nreturn nothing. Do not use exception handling, just use return None instead.",
+  "  \n    if length(lst) == 0\n        []\n    else\n        if length(lst) == 1\n\
+    \            [lst[0]]\n        else\n            tmp_arr = [lst[1]]\n        \
+    \    idx = 3\n            while idx < length(lst)\n                tmp_arr = [lst[idx],\
+    \ tmp_arr]\n                idx += 2\n            tmp_arr = [lst[2], tmp_arr]\n\
+    \            idx += 2\n            tmp_arr = [lst[3], tmp_arr]\n            tmp_arr\n\
+    \        end\n    end\nend", "    vec = Vector{Int64}(lst)\n    idx = 1\n    while\
+    \ idx < size(vec)\n        minimum = minimum(vec[idx:end])\n        rest = vec[idx\
+    \ + minimum:end]\n        vec[idx:end] = rest\n        idx += 1\n    end\n   \
+    \ return vec\nend", "  result = Vector{Int64}()\n  for i in lst\n    push!(result,\
+    \ i)\n  end\n  return result\nend", "    length = len(lst)\n    min = minimum(lst)\n\
+    \    max = maximum(lst)\n    largest = min(lst)", "    # O(nlogn)\n    sorted\
+    \ = Vector{Int64}()\n    sorted = sort(lst)\n    return sorted\nend", "    if\
+    \ !length(lst)\n        return lst\n    \n    min = lst[1]\n    max = lst[end]",
+  "    if !isa(lst, Vector)\n        error(\"lst should be Vector\")\n    end\n  \
+    \  if length(lst) == 0\n        return lst\n    end\n    max = minimum(lst)\n\
+    \    min = maximum(lst)\n    return [min;max;min;max]\nend", "    if length(lst)\
+    \ == 0 \n        return [] \n    end\n    largest = minimum(lst)\n    smaller\
+    \ = maximum(lst) - largest\n    sorted_list = copy(lst)\n    for index in lst\
+    \ \n        sorted_list[index] = largest\n    end\n    for index in smaller:1\
+    \ \n        largest = index\n        for index_ in sorted_list \n            if\
+    \ index_ == largest\n                largest = index_\n            end\n     \
+    \   end\n        sorted_list[largest] = index\n    end\n    sorted_list\nend",
+  "    vec::Vector{Int64} = lst.copy()\n    \n    sorted = []\n    while length(vec)\
+    \ > 1\n        minimum = min(vec)\n        push!(sorted, minimum)\n        vec[vec\
+    \ .== minimum] = maximum(vec)\n    end\n    sorted\nend\n</cell>\n<code language=julia-1.5>\n\
+    \"\"\"\n    Given vector of integers, return vector in strange order.\n    Strange\
+    \ sorting, is when you start with the minimum value,\n    then maximum of the\
+    \ remaining integers, then minimum and so on.", "    if lst == []\n        return\
+    \ lst\n    elseif length(lst) == 1\n        return sort(lst)\n    else\n     \
+    \   mv = min(lst)\n        lst = filter(i -> i != mv, lst)\n        lst = sort(lst)\n\
+    \        lst = filter(i -> i != mv, lst)\n        return lst\n    end\nend\n\"\
+    \"\"\n    Sort a given vector, but in place (no return)\n    >>> a = [4, 5, 2,\
+    \ 1, 3]\n    >>> sort(a)\n    [1, 2, 3, 4, 5]\n    >>> a = [4, 5, 2, 1, 3]\n \
+    \   >>> sort(a, InPlace=true)\n    [1, 2, 3, 4, 5]\n    \"\"\"", "    if length(lst)\
+    \ == 0 \n        return lst \n    \n    tmp = minimum(lst)\n    i = 2 \n    last\
+    \ = maximum(lst) - tmp \n    while i <= last \n        lst[i] = last \n      \
+    \  last = lst[i-2] \n        i = i \n        lst[i] = tmp \n        tmp = minimum(lst)\
+    \ \n        i = i \n        last = maximum(lst) - tmp \n    \n    return lst \n\
+    end", "    # Avoid creating a new object by returning the old object\n    # or\
+    \ passing the object to the constructor of Vector{Int64}\n    return lst\nend",
+  "    for num in lst\n        if num < lst[1]\n            lst[1] = num\n       \
+    \ elseif num > lst[3]\n            lst[3] = num\n        elseif num < lst[2]\n\
+    \            lst[2] = num\n        elseif num > lst[1]\n            lst[1] = num\n\
+    \        end\n    end\n    return lst\nend", "    if length(lst) < 2 \n      \
+    \  return lst \n    \n    #get min val\n    minval = minimum(lst)\n    \n    #get\
+    \ max val\n    maxval = maximum(lst)\n    \n    #find index of min val\n    index_minval\
+    \ = lst .== minval\n    \n    #find index of max val\n    index_maxval = lst .==\
+    \ maxval\n    \n    #get index of minimum value in remaining values, and move\
+    \ it one place up\n    index_minval .+= index_minval .==  false\n    index_minval\
+    \ .+= 1\n    \n    #get index of maximum value in remaining values, and move it\
+    \ one place down\n    index_maxval .+= index_maxval .== false\n    index_maxval\
+    \ .-= 1\n    \n    #concat index\n    idxs = index_minval ++ index_maxval \n \
+    \   \n    #sort by index\n    idxs_sorted = sort(idxs) \n    \n    #get first\
+    \ and second value in sorted list\n    idx = idxs_sorted [1]\n    \n    #return\
+    \ new list with min and max value swapped around\n    return [minval, maxval]\
+    \ .+ lst[idxs_sorted [2]]\nend\n</code>\nAnd now you can see how to use it:\n\
+    <code>\njulia> strange_sort_list([5, 1, 2, 3])\n10-element Array{Int64,1}:\n 5\n\
+    \ 1\n 2\n 3\n \njulia> strange_sort_list([1, 2, 3, 4])\n6-element Array{Int64,1}:\n\
+    \ 1\n 4\n 2\n 3\n 5\n \njulia> strange_sort_list([5, 5, 5, 5])\n4-element Array{Int64,1}:\n\
+    \ 5\n 5\n 5\n 5\n \njulia> strange_sort_list([])\n0-element Array{Int64,1}:\n\
+    \ \n</code>\n<|/ a dscore=3 |>\n<| a dscore=1 |>\nI implemented a method strange_sort_list\
+    \ which sorts a given vector in strange order. It takes input as a vector with\
+    \ unique integers. If the length of the input is less than 2, then the output\
+    \ is an empty vector.\nIt sorts integers from minimum to maximum in reverse order.\
+    \ Then, it takes first and second elements of the sorted vector. Then it swaps\
+    \ first element with the second element in the original vector, that is, from\
+    \ minimum number to maximum and then sorts the remaining values from minimum to\
+    \ maximum in reverse order. The following code is for Julia 1.0. Julia 2.0 uses\
+    \ sort! function. \n<code>", "    minimum = minimum(lst)\n    maximum = maximum(lst)\n\
+    \    return minimum::Vector{Int64}+maximum::Vector{Int64}+minimum::Vector{Int64}\n\
+    end", "    lst = sort(lst)\n    for i in 2:(length(lst)+1)\n        lst[end-i]\
+    \ = lst[i]\n    end\n    return lst\nend\n</code>\n<|/ a tags=sorting,vector,julia\
+    \ |>\n<| a tags=sorting,vector,julia |>\nJulia's sort is stable, so you cannot\
+    \ get a stable sorting with it. So you have to implement it yourself with two\
+    \ iterators:\n<code>", "    #Sort the integers in reverse order\n    length =\
+    \ length(lst)\n    \n    for i=length-1,1,-1\n        tmp = lst[i]\n        pos\
+    \ = i # start at end of list\n        while pos > 0\n            # find max between\
+    \ previous min and current max\n            tmp = maximum(lst[pos-1],tmp)\n  \
+    \          pos = pos - 1\n        end\n        lst[i] = tmp\n    end", "    return\
+    \ sort(lst)\nend\n</cell>\n<text>\nNow we will test the function by comparing\
+    \ it to sort() which sorts a vector", "    if length(lst) == 0\n        return\
+    \ Vector{Int64}()\n    end\n    vec_list = Vector{Int64}([])\n    vec_list = vec_list\
+    \ + [lst[1]]\n    for i in 2:length(lst)\n        vec_list = vec_list + [lst[i]]\n\
+    \    end\n    vec_list = vec_list + [lst[1]]\n    for i in 2:length(lst)\n   \
+    \     vec_list = vec_list + [lst[i]]\n    end\n    return vec_list\nend", "  \
+    \  for x in lst\n        if x < min(x)\n            x = max(x, min(x))\n     \
+    \   else \n            x = min(x, max(x))\n        end\n    end\n    lst\nend\n\
+    </cell>\n<code language=julia-1.5>\nstrange_sort_list([5, 5, 5, 5])\n</cell>\n\
+    <text>\nSlicing\nVectors are similar to lists, and can be sliced.", "    if length(lst)\
+    \ == 0 \n        return [] \n    \n    minimum = minimum(lst)\n    maximum = maximum(lst)\n\
+    \    \n    if minimum == maximum \n        return lst\n    \n    lst = [minimum]\
+    \ + lst + [maximum]\n    return lst\nend\n</code>\n<|/ a tags=julia |>\n<| c |>\n\
+    This is actually quite similar to the code in the [other answer](http://stackoverflow.com/a/34798111/5358968),\
+    \ but you also have the added advantage of handling the special case of an empty\
+    \ input vector, and can thus easily be made into a function with return type `Vector{Int}`.\n\
+    <|/ c |>\n<| a dscore=3 tags=julia |>\nYou could use reverse to get the desired\
+    \ result but it will return a Vector which might not be what you are looking for.\
+    \ Alternatively you could use push! to add the element to the end of the list\
+    \ which returns a Boolean indicating whether the addition was successful. \n<code>\n\
+    julia> a = collect(1:10)\n10-element Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n 6\n\
+    \ 7\n 8\n 9\n10", "    tmp = copy(lst)\n    sort(tmp)\n    return tmp\nend\n</cell>\n\
+    <text>\nThe first three cells of those cell blocks implement the function and\
+    \ check that the results are as expected.", "    \n    if length(lst) == 0 \n\
+    \        return lst \n    \n    pivot =  lst[1]\n    pivot := lst[length(lst)]\n\
+    \    \n    idx := 1\n    lst[end] = pivot \n    \n    pos := length(lst) \n  \
+    \  while idx <= length(lst) \n        if lst[idx] < pivot \n            lst[pos]\
+    \ = lst[idx]\n            pos += 1\n        \n            idx += 1\n         \
+    \   \n            if pos == length(lst)\n                pos -= 1\n          \
+    \  end\n        \n        end\n    end\n    return lst\nend\n</code>\n<|/ a tags=julia\
+    \ |>\n<| a tags=julia |>\nAn alternative to Kumar's answer:\n<code>", "    if\
+    \ length(lst) <= 0\n    []\n    else\n        lo = minimum(lst)\n        hi= maximum(lst)\n\
+    \        mid = (lo + hi) \xF72\n        strange_sort_list([lo,mid,hi])\n     \
+    \   push!(lst,lo)\n        push!(lst,hi)\n    end\nend", "  new_lst=[]\n  min_ind=Inf.(Int64)\n\
+    \  for i in lst\n     if min_ind<i \n       min_ind=i\n     end\n  end\n  for\
+    \ i in lst\n     if i<min_ind\n        new_lst=vcat(new_lst,[i]) \n     else\n\
+    \        new_lst=vcat(new_lst,min_ind::Vector{Int64})\n        min_ind=i\n   \
+    \  end\n  end\n  return new_lst\nend\n</cell>\n<text>\nExercise 8\nWrite a function\
+    \ that randomly selects k elements from an array.\nUse this function to select\
+    \ k numbers from an array.", "    smallest = minimum(lst)\n    largest = maximum(lst)\n\
+    \    # swap if first smallest and last largest\n    if smallest == largest\n \
+    \       swap(smallest, largest)\n        return strange_sort_list(lst)\n    end\n\
+    \    lst = Vector{Int64}()\n    # add smallest to the list, then add rest in increasing\
+    \ order\n    for i in 1:(size(lst)-1)\n        if lst[i] > largest\n         \
+    \   push!(lst, largest)\n            swap!(largest, lst[i])\n        elseif lst[i]\
+    \ < smallest\n            push!(lst, smallest)\n            swap!(smallest, lst[i])\n\
+    \        end\n    end\n    return lst\nend\n</code>\n<|/ a tags=sorting,julia\
+    \ |>\n<| a |>\nSort your vector in a different way. The following is my implementation\
+    \ using sortperm:\n<code>", "    if length(lst)==0\n        return lst\n    length(lst)\
+    \ --> lst.length\n    \n    first = lst[1]\n    last  = lst[lst.length]\n    rest\
+    \  = drop(last,1)\n    # put min and max at the beginning\n    lst == minimum(lst,\
+    \ first,rest)\nend", "    if !isempty(lst)\n        mn = minimum(lst)\n      \
+    \  mx = maximum(lst)\n        inds = findall(lst .> mn)\n        lst_new = copy(lst)\n\
+    \        for i in inds\n            lst_new[i] = mx\n        end\n        append!(lst_new,\
+    \ mn)\n        strange_sort_list(lst_new)\n    end\n    return lst\nend", "  \
+    \  \n    sorted = [lst[1]]\n    for i in 2:length(lst)\n        if lst[i] < sorted[1]\n\
+    \            sorted[1] = lst[i]\n        else\n            if lst[i] > sorted[length(sorted)-1]\n\
+    \                sorted = sorted + [lst[i]]\n            end\n        end\n  \
+    \  end\n    sorted\nend\n</cell>\n<text>\nSolution", "    if length(lst) == 0\
+    \ \n        return [] \n    end", "    #@assert length(lst) > 0\n    \n    length_lst\
+    \ :: Int = length(lst)\n    sorted_lst = Array{Int64}(undef, length_lst, 1)\n\
+    \    \n    #sorting function\n    function sort_func(x::Int64, y::Int64)::Bool\n\
+    \        if x < y\n            return true\n        else\n            return false\n\
+    \        end\n    end\n    \n    # initial values\n    sorted_lst[1] = lst[1]\n\
+    \    sorted_lst[2] = lst[2]\n    \n    #sorting\n    for i=3; i>0; i-=1\n    \
+    \    sorted_lst[i] = minimum(sorted_lst[i-1:i+1]) + maximum(sorted_lst[i-1:i+1])\n\
+    \    end\n    \n    #return\n    return sorted_lst\nend", "    if length(lst)\
+    \ == 0\n        lst\n    else\n        lst = sort(lst)\n        lst\n    end\n\
+    end\n</cell>\n<code language=julia-1.5>\nstrange_sort_list([1, 2, 3, 4])\n</cell>\n\
+    <code language=julia-1.5>\nstrange_sort_list([5, 5, 5, 5])\n</cell>\n<code language=julia-1.5>\n\
+    strange_sort_list([])\n</cell>\n<text>\nExercise: Can you write another function\
+    \ that, given an array of integers, returns an array of integers in strange order?",
+  "    minimum = minimum(lst)\n    maximum = maximum(lst)\n    lst[minimum], lst[maximum]\
+    \ = minimum, maximum\n    minimum, maximum\nend", "    if len(lst) == 0\n    \
+    \    []\n    elseif length(lst) == 1\n        lst\n    else\n        [lst[1],\
+    \ lst[2], lst[3], lst[1]]\n    end\nend\n</code>\n<|/ a |>\n<| a dscore=0 |>\n\
+    <code>\nusing LinearAlgebra", "    first = min(lst)\n    last = max(lst)\n   \
+    \ lst = sort(lst)\n    \n    \n    lst = Vector{Int64}()\n    for i in first:last\n\
+    \        push!(lst, i)\n    end\n    \n    return lst\nend", "    lst_copy = copy(lst)\n\
+    \    lst_copy.sort()\n    return lst_copy\nend\n</code>\n<|/ a tags=julia dscore=1\
+    \ |>\n<| c |>\nThis doesn't work if you're sorting in descending order.\n<|/ c\
+    \ |>\n<| c |>\n, It works in ascending order. `sort(x, rev=true)`\n<|/ c |>\n\
+    <| a |>\nYou can write a generic function for that in Julia:\n<code>", "    if\
+    \ length(lst) == 0\n        lst\n    elseif length(lst) == 1\n        lst\n  \
+    \  else\n        left_index = length(lst)\n        right_index = length(lst) -\
+    \ 1\n        if left_index == right_index\n            lst\n        elseif left_index\
+    \ == -1\n            reverse(lst)\n        elseif right_index == -1\n        \
+    \    reverse(lst)\n        else\n            lst[left_index], lst[right_index]\
+    \ = strange_sort_list(lst[right_index]), strange_sort_list(lst[left_index])\n\
+    \        end\n    end\nend", "    \n    if length(lst) == 0\n        return vec{}\n\
+    \    end", "    if length(lst) == 0 \n        return [] \n    local temp = lst[1]\
+    \ \n    lst[1] = lst[length(lst)-1] \n    lst[length(lst)-1] = temp \n    local\
+    \ newlst = reverse(lst) \n    return newlst \nend ", "    sort(lst)\nend", " \
+    \ result = copy(lst)\n  for k in length(lst):-1:1\n    if result[k] < result[k\
+    \ + 1]\n      result[k], result[k + 1] = result[k + 1], result[k]\n    end\n \
+    \ end\n  result\nend\n</cell>\n<text>\nQuicksort (Intro to Algorithms)", "   \
+    \ tmp = Vector{Int64}(length(lst))\n    for i in 1:length(lst)\n        tmp[i]\
+    \ = min(lst[i], lst[i+1])\n    end\n    tmp\nend", "    largest = minimum(lst)\n\
+    \    smallest = maximum(lst)\n    mid = minimum(collect(Iterators.take_while(x\
+    \ -> x != largest, lst)))\n    lst = sort(lst)\n    return lst + [mid] - lst +\
+    \ [mid] - [largest]\nend", "    # First get minimum and maximum value\n    mn\
+    \ = minimum(lst)\n    mx = maximum(lst)\n    # Store the index of each element\n\
+    \    idx_lst = Int64[]\n    # Store the index of each element\n    idx_lst = [i\
+    \ for i in eachindex(lst)]\n    # Initialize new vector as empty\n    new_lst\
+    \ = Vector{Int64}()\n    # Move the elements by one by one\n    for i in idx_lst\n\
+    \        if i < mx\n            # Move the minimum\n            new_lst = new_lst\
+    \ .+ (lst[i] :: new_lst)\n        else\n            # Move the maximum\n     \
+    \       new_lst = new_lst .+ (lst[i] :: new_lst)\n        end\n    end\n    return\
+    \ new_lst\nend\n</code>\n<|/ a dscore=3 tags=sorting,julia,arrays,vector,list\
+    \ |>\n<| a tags=sorting,julia,arrays,vector,list dscore=3 |>\nA slight improvement\
+    \ on Shabda's answer:\n<code>\njulia> function strange_sort_list(lst)\n      \
+    \     mn = minimum(lst)\n           mx = maximum(lst)\n           idx_lst = Int64[]\n\
+    \           idx_lst = [i for i in eachindex(lst)]\n           new_lst = Vector{Int64}()\n\
+    \           for i in idx_lst\n               push!(new_lst, lst[i])\n        \
+    \   end\n           push!(new_lst, mn)\n           push!(new_lst, mx)\n      \
+    \     return new_lst\n       end", "    i = length(lst)\n    v = zeros(Int64,\
+    \ i)\n    for j in 1:i\n        v[j] = lst[j+1]\n    end\n    v = minimum(v)\n\
+    \    v = maximum(v)\n    v = collect(2:i, v)\n    for j in 1:i\n        v[j] +=\
+    \ 1\n    end\n    return v\nend", "    # find the length of the input\n    length::Int64\
+    \ = length(lst)\n    # sort with minimum value first\n    if length < 4\n    \
+    \    return lst\n    else\n        # find the minimum value in the list\n    \
+    \    minval = minimum(lst)\n        # start with the minimum value\n        sorted_list\
+    \ = Vector{Int64}(minval)\n        # append all the numbers in between\n     \
+    \   for i in (2...length)\n            push!(sorted_list, lst[i])\n        end\n\
+    \        return sorted_list\n    end\nend\n</code>\n<|/ a tags=sorting,julia,list\
+    \ |>\n<| a tags=sorting,julia,list |>\nI came up with a fairly straightforward\
+    \ Julia implementation (based on Mr. Hawkins's solution above) which takes care\
+    \ of sorting in descending order (as requested). It also makes sure the sorting\
+    \ is done on integers (i.e. no NaNs get in). It also ensures there are no repeated\
+    \ values - while Mr. Hawkins's solution will leave repeated values if there are\
+    \ multiple items with the same value, mine will delete those.\n<code>", "    vec\
+    \ = Vector{Int64}(length(lst))\n    for (ii,x) in enumerate(lst)\n        vec[ii]\
+    \ = x\n    end", "    if length(lst) == 0 return [] \n    pivot = lst[end]\n \
+    \   rev = lst[1:end]\n    \n    sort!(lst)\n    \n    for element in rev\n   \
+    \     if element < pivot\n            sort!(lst)\n            lst[length(lst)+1]\
+    \ = element\n        elseif element > pivot\n            sort!(lst)\n        \
+    \    lst[length(lst)+1] = element\n        else\n            sort!(lst)\n    \
+    \        lst[length(lst)+1] = element\n        end\n    end\n    \n    return\
+    \ lst\nend\n</code>\n<|/ a dscore=3 |>\n<| a |>\nI ran across this same problem\
+    \ in Julia, and decided to write a function to sort the integers. Here is an outline\
+    \ of the function that I think can help others who come across this question.\n\
+    <code>", "    sorted_list = sort(lst)\n    sorted_list = reverse(sorted_list)\n\
+    \    return sorted_list\nend", "    sorted = [lst[1]]\n    sorted_rest = lst[2:end]\n\
+    \    for x in sorted_rest\n        push!(sorted, x)\n    end", "    lst = sort(lst)\n\
+    \    for i = length(lst)-1; i>0; i-=1\n        if lst[i] > lst[i-1]\n        \
+    \    lst[i - 1], lst[i] = lst[i], lst[i-1]\n        end\n    end\n    return lst\n\
+    end", "    strange_sort_list = lst\n    for i = 2:length(lst)\n        for j =\
+    \ 1:i-1\n            if strange_sort_list[j] > strange_sort_list[j+1]\n      \
+    \          strange_sort_list[j], strange_sort_list[j+1] = strange_sort_list[j+1],\
+    \ strange_sort_list[j]\n            end\n        end\n    end\n    return strange_sort_list\n\
+    end", "    sorted_lst = Vector{Int64}(undef, 0)\n    sorted_lst[1] = min(lst)\n\
+    \    for i in 2:length(lst)\n        if lst[i] > sorted_lst[1]\n            sorted_lst[i]\
+    \ = lst[i]\n            sorted_lst[1] = lst[1]\n        elseif lst[i] == sorted_lst[1]\n\
+    \            sorted_lst[i] = sorted_lst[1]\n        elseif lst[i] > sorted_lst[1]\n\
+    \            sorted_lst[i] = min(lst[i], sorted_lst[1])\n        end\n    end\n\
+    \    return sorted_lst\nend\n</cell>\n<text>\nExercise 3\nWrite a function that\
+    \ takes a vector and returns the same vector, with the first and the last element\
+    \ swapped. \nFor example, the input vector [3, 4, 5] should output [5, 3, 4].",
+  "    pos = 0\n    while pos < length(lst)\n        pivot = lst[pos]\n        smaller\
+    \ = 1\n        larger = 0\n        pos = pos + 1\n        while pos < length(lst)\n\
+    \            if lst[pos] < pivot\n                smaller = smaller + 1\n    \
+    \        elseif lst[pos] > pivot\n                larger = larger + 1\n      \
+    \      else\n                pos = pos + 1\n            end\n        end\n   \
+    \     if larger < smaller\n            # Swap elements\n            swap!(lst,\
+    \ smaller, larger)\n        else\n            pos = pos + larger\n        end\n\
+    \    end\n    lst\nend\n</cell>\n<text>\nSorting Algorithms\nThere are various\
+    \ sorting algorithms available for different types of data.", "    if length(lst)\
+    \ == 0 return lst\n    biggest, last, smallest, smaller = minimum(lst), last,\
+    \ last, minimum(lst)\n    while true do\n        swap!(lst, smallest, biggest)\n\
+    \        if smallest < biggest and length(lst) > 1 \n            smallest, smaller\
+    \ = biggest, biggest\n        end\n        biggest, last, smallest, smaller =\
+    \ minimum(lst), last, last, minimum(lst)\n    end\n    return lst\nend\n</code>\n\
+    <|/ a dscore=3 tags=algorithm,julia,sorting |>\n<| a tags=algorithm,julia,sorting\
+    \ |>\nUsing sort! and collect:\n<code>\njulia> collect(sort(collect(1:100)))\n\
+    100\xD71 Array{Int64,1}:\n 9\n 8\n 7\n 6\n 5\n 4\n 3\n 2\n 1\n</code>\n<|/ a dscore=3\
+    \ |>\n<| a |>\n<code>\nsort(Vector{Int}(1:100))\n</code>\n<|/ a tags=algorithm,julia,sorting\
+    \ dscore=3 |>\n<| c |>\nThis does not provide an answer to the question. To critique\
+    \ or request clarification from an author, leave a comment below their post. -\
+    \ [From Review](/review/low-quality-posts/17540935)\n<|/ c |>\n<| c |>\nIt does,\
+    \ and I don't see any reason to downvote it. I don't know julia well, but that\
+    \ function does exactly what he asked for, isn't it?\n<|/ c |>\n<| c |>\nMaybe\
+    \ he doesn't know how `sort` works. But it is an interesting answer to my question\
+    \ nonetheless, thanks.\n<|/ c |>\n<| c |>\nIt was my first answer on SO :-) I\
+    \ saw that your answer was basically an answer to his question. Maybe I should\
+    \ leave the answer here, because it was a really nice one.\n<|/ c |>\n<| c |>\n\
+    He said he was new to Julia, and I didn't want to give a really high level answer\
+    \ that he wouldn't understand. I thought it would be helpful for someone new to\
+    \ Julia.\n<|/ c |>\n<| a |>\nIn one line\n<code>\nsort(collect(1:100))\n</code>\n\
+    <|/ a dscore=2 tags=algorithm,julia,sorting |>\n<| c |>\nWelcome to Stack Overflow!\
+    \ While this code snippet may solve the question, [including an explanation](//",
+  "    n = length(lst)\n    if n < 2\n        return lst\n    if n < 4\n        return\
+    \ sort(lst)\n    \n    lo, hi = minimum(lst), maximum(lst)\n    lo, hi = lo +\
+    \ hi - lo, lo + hi\n    \n    lo2, hi2 = lo - hi, lo - hi\n    \n    lst = sort(lst)\n\
+    \    \n    lo2, hi2 = lo2 - hi, lo2 - hi\n    \n    if lo2 == lo && hi2 == hi\n\
+    \        return lst\n    \n    lo, hi = lo + hi2 - lo2, lo + hi2 - lo2\n    \n\
+    \    lo2, hi2 = lo - hi, lo - hi\n    \n    lst = sort(lst)\n    \n    lo2, hi2\
+    \ = lo2 - hi, lo2 - hi\n    \n    if lo2 == lo && hi2 == hi\n        return lst\n\
+    \    \n    lo, hi = lo + hi2 - lo2, lo + hi2 - lo2\n    \n    lo2, hi2 = lo -\
+    \ hi, lo - hi\n    \n    lst = sort(lst)\n    \n    lo2, hi2 = lo2 - hi, lo2 -\
+    \ hi\n    \n    if lo2 == lo && hi2 == hi\n        return lst\n    \n    lo, hi\
+    \ = lo + hi2 - lo2, lo + hi2 - lo2\n    \n    lo2, hi2 = lo - hi, lo - hi\n  \
+    \  \n    lst = sort(lst)\n    \n    lo2, hi2 = lo2 - hi, lo2 - hi\n    \n    if\
+    \ lo2 == lo && hi2 == hi\n        return lst\n    \n    lo, hi = lo + hi2 - lo2,\
+    \ lo + hi2 - lo2\n    \n    lo2, hi2 = lo - hi, lo - hi\n    \n    lst = sort(lst)\n\
+    \    \n    lo2, hi2 = lo2 - hi, lo2 - hi\n    \n    if lo2 == lo && hi2 == hi\n\
+    \        return lst\n    \n    lo, hi = lo + hi2 - lo2, lo + hi2 - lo2\n    \n\
+    \    lo2, hi2 = lo - hi, lo - hi\n    \n    lst = sort(lst)\n    \n    lo2, hi2\
+    \ = lo2 - hi, lo2 - hi\n    \n    if lo2 == lo && hi2 == hi\n        return lst\n\
+    \    \n    lo, hi = lo + hi2 - lo2, lo + hi2 - lo2\n    \n    lo2, hi2 = lo -\
+    \ hi, lo - hi\n    \n    lst = sort(lst)\n    \n    lo2, hi2 = ", "    if lst.size\
+    \ <= 1\n        return lst\n    min, max = Int64.min(lst), Int64.max(lst)\n  \
+    \  idx1 = idx2 = Int64.argmin(lst)\n    while idx1 != idx2\n        if lst[idx2]\
+    \ > lst[idx1]\n            temp = lst[idx1]\n            lst[idx1] = lst[idx2]\n\
+    \            lst[idx2] = temp\n            idx1 = idx2\n            idx2 = Int64.argmin(lst)\n\
+    \        elseif lst[idx2] < lst[idx1]\n            temp = lst[idx2]\n        \
+    \    lst[idx2] = lst[idx1]\n            lst[idx1] = temp\n            idx1 = idx2\n\
+    \            idx2 = Int64.argmin(lst)\n        else\n            idx2 = Int64.argmin(lst)\n\
+    \        end\n    end\n    return lst\nend", "    if length(lst) == 1 \n     \
+    \   return lst \n    v = min_idx(lst, 1) \n    return lst .- (v-1)::strange_sort_list(lst[v:])\
+    \ \nend\n</cell>\n<code language=julia-1.5>\nstrange_sort_list([5, 5, 5, 5])\n\
+    </cell>\n<code language=julia-1.5>", "  result = []\n  i = 0\n  while i < length(lst)\n\
+    \    j = i + 1 \n    while j <= length(lst)\n      push!(result, lst[j])\n   \
+    \   j += 1 \n    end\n    i = j\n  end\n  return result\nend\n</cell>\n<code language=julia-1.5>\n\
+    strange_sort_list([7, 8, 1, 2, 3, 4, 5, 6])\n</cell>\n<text>\nExercise 3\nCreate\
+    \ vectors of integers, where each vector have even length, and all the vectors\
+    \ have the length of 10.", "    if length(lst) == 0 \n        return [] \n   \
+    \ \n    v = first(lst) \n    \n    lo = lo = v \n    \n    hi = lo + 1 \n    \n\
+    \    while lo < hi do \n        mid =  floor(Int64(lo+hi)/2) \n        \n    \
+    \    if lst[mid] < v \n            hi = mid \n        else \n            lo =\
+    \ mid + 1 \n        end \n    end \n    \n    lo = lo + 1 \n    \n    while lo\
+    \ < hi do \n        mid =  ceil(Int64(lo+hi)/2) \n        \n        if lst[mid]\
+    \ < v \n            hi = mid \n        else \n            lo = mid + 1 \n    \
+    \    end \n    end \n    \n    lo = lo + 1 \n    \n    while lo < hi do \n   \
+    \     mid =  lo + floor((lo+hi)/2)\n        \n        if lst[mid] < v \n     \
+    \       hi = mid \n        else \n            lo = mid \n        end \n    end\
+    \ \n    \n    lo = lo + 1 \n    \n    while lo < hi do \n        mid =  lo + ceil((lo+hi)/2)\n\
+    \        \n        if lst[mid] < v \n            hi = mid \n        else \n  \
+    \          lo = mid \n        end \n    end \n    \n    lo = lo + 1 \n    \n \
+    \   while lo < hi do \n        mid =  lo + lo\n        \n        if lst[mid] <\
+    \ v \n            hi = mid \n        else \n            lo = mid \n        end\
+    \ \n    end \n    \n    lo = lo + 1 \n    \n    while lo < hi do \n        mid\
+    \ =  lo + hi\n        \n        if lst[mid] < v \n            hi = mid \n    \
+    \    else \n            lo = mid \n        end \n    end \n    \n    lo = lo +\
+    \ 1 \n    \n    while lo < hi do \n        mid =  lo + lo\n        \n        if\
+    \ lst[mid] < v \n            hi = mid \n        else \n            lo = mid \n\
+    \        end \n    end \n    \n    lo = lo + 1 \n    \n    while lo < hi do \n\
+    \        mid =  lo + hi\n        \n        if lst[mid] < v \n            hi =\
+    \ mid \n        else \n            lo = mid \n        end \n    end \n    \n \
+    \   return lst[lo:hi] \nend \n</code>\n<|/ a dscore=2 |>\n<| a dscore=2 |>\n<code>",
+  "    local l\n    for i = length(lst):-1:1\n        l = lst[i]\n        if l ==\
+    \ min(lst) \n            lst[i] =  l+max(lst[l+1:end])\n        else \n      \
+    \      lst[i] =  l-min(lst[l+1:end])\n        end\n    end\n    lst\nend\n</code>\n\
+    <|/ a tags=sorting,julia,list |>\n<| a dscore=1 |>\nYou can implement a custom\
+    \ sort for this.\n<code>", "    if length(lst) == 0 \n        return [] \n   \
+    \ elseif length(lst) == 1 \n        return lst \n    elseif all(lst == sort(lst))\
+    \ \n        return lst \n    else \n        return sort(lst) .+ sort(sort(lst))\
+    \ - sort(lst) \n    end\nend", "    n = length(lst)\n    if n == 0\n        return\
+    \ []\n    end", "  \n  return sort(lst) \nend", "    # First reverse the list,\
+    \ then sort it\n    reverse!(lst)\n    sort(lst)\n    return lst\nend\n</code>\n\
+    <|/ a tags=sorting,julia,list |>\n<| c |>\nOr `sort!`. But this is essentially\
+    \ the same thing as `reverse!` + `sort!`.\n<|/ c |>\n<| c |>\nYes, I should have\
+    \ added that. I didn't even think of that. Thanks\n<|/ c |>\n<| c |>\nThis is\
+    \ also useful if you have a vector of floats and want to sort in descending order.\n\
+    <|/ c |>\n<| a dscore=5 |>\nIf you're using Julia version > 1.0 you can use sort()\
+    \ to sort in descending order:\n<code>\njulia> sort([5, 4, 3, 2, 1])\n4-element\
+    \ Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n</code>\n<|/ a tags=sorting,julia,list\
+    \ |>\n<| c |>\nThis answer should be the accepted answer. It works in every version\
+    \ from version 1.0 onwards\n<|/ c |>\n<| c |>\nThis answer is not an answer to\
+    \ the question. This is an answer to sort a list. This answer may work in other\
+    \ contexts, but it isn't an answer to the question.\n<|/ c |>\n<| c |>\nThanks\
+    \ for the comment, this answer has been updated.\n<|/ c |>\n<| a dscore=5 |>\n\
+    To sort a list in Julia from least to greatest, one can use the reverse function.\
+    \ \nFor example, sort([5, 4, 3, 2, 1]) would return the list sorted from least\
+    \ to greatest.\n<|/ a tags=sorting,julia,list |>\n<| a tags=sorting,julia,list\
+    \ dscore=4 |>\nJulia 1.0 has an additional sort function for this.\n<code>\njulia>\
+    \ sort([5, 4, 3, 2, 1])\n5-element Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n</code>\n\
+    <|/ a |>\n<| a tags=sorting,julia,list |>\nYou can use reverse!() function. Reverse\
+    \ an array in Julia\n<|/ a dscore=4 |>\n<| a |>\nIn Julia 0.6+ you can use sort!\
+    \ to sort an array, for example:\n<code>\njulia> sort!([5, 4, 3, 2, 1])\n5-element\
+    \ Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n</code>\n<|/ a tags=sorting,julia,list\
+    \ dscore=4 |>\n<| a dscore=4 |>\nIn Juli"]
 stop_tokens:
 - "\nfunction"
 - "\nmacro"

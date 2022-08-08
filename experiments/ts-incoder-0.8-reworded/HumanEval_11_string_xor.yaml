@@ -7,7 +7,676 @@ tests: "declare var require: any;\nconst assert = require('node:assert');\n\n\nf
   \ test() {\n  let candidate = string_xor;\n  assert.deepEqual(candidate(\"111000\"\
   , \"101010\"),\"010010\");\n  assert.deepEqual(candidate(\"1\", \"1\"),\"0\");\n\
   \  assert.deepEqual(candidate(\"0101\", \"0000\"),\"0101\");\n}\n\ntest();"
-completions: []
+completions: ["    return String.fromCharCode(\n        (a.charCodeAt(0) ^ b.charCodeAt(0)),\n\
+    \        (a.charCodeAt(1) ^ b.charCodeAt(1)),\n        (a.charCodeAt(2) ^ b.charCodeAt(2)),\n\
+    \        (a.charCodeAt(3) ^ b.charCodeAt(3)),\n        (a.charCodeAt(4) ^ b.charCodeAt(4)),\n\
+    \        (a.charCodeAt(5) ^ b.charCodeAt(5)),\n        (a.charCodeAt(6) ^ b.charCodeAt(6)),\n\
+    \        (a.charCodeAt(7) ^ b.charCodeAt(7)),\n    );\n}\n", "  return (\"\" +\
+    \ a ^ b).toLowerCase();\n}\n", "  var result = '';\n  var length = Math.max(a.length,\
+    \ b.length);\n  for (var i = 0; i < length; i++) {\n    var aChar = a.charCodeAt(i);\n\
+    \    var bChar = b.charCodeAt(i);\n    result += (aChar ^ bChar);\n  }\n  return\
+    \ result;\n}", "    let len = a.length < b.length ? a.length : b.length;\n   \
+    \ let result = '';\n    for (let i = 0; i < len; i++) {\n        result += (b[i]\
+    \ ^ a[i % a.length]);\n    }\n    return result;\n}\n</code>\n<|/ a |>\n<| c |>\n\
+    The OP mentioned in a comment that they don't want the strings to be converted\
+    \ to integers, which is why I'm sticking to the `String` type.\n<|/ c |>\n<| c\
+    \ |>\nSure, but that doesn't make it wrong if you use a different solution than\
+    \ OP's own.\n<|/ c |>\n<| c |>\nYes, it's just not clear which string format they\
+    \ are using.  I figured they were using base 10 strings, and only wanted to avoid\
+    \ the conversion to integers.\n<|/ c |>\n<| c |>\nThis answer doesn't work in\
+    \ my case. Because I need to return a string as the final output. I tried converting\
+    \ `a` and `b` to integers before applying your code, but that didn't work either.\n\
+    <|/ c |>\n<| a dscore=2 |>\n<code>\nconst string_xor = (a, b) => {\n  let str\
+    \ = (a + b).toString(),\n      len = str.length,\n      result = \"\";\n\n  while\
+    \ (len) {\n    result = str.slice(0, len % 2 ? len : len - 1) + \"0\" + result;\n\
+    \    len -= len % 2;\n  }\n\n  return result.replace(/0/g, \"\");\n}\n\nconsole.log(string_xor(\"\
+    1010\", \"1011\"));\nconsole.log(string_xor(\"1101\", \"0101\"));</code>\n\nExplanation\n\
+    The while loop will run until the string length is 0 (ie. no characters left to\
+    \ swap with the next character).  At each iteration, we simply take a slice of\
+    \ the string (using slice()) and append a 0 to the end until the last character\
+    \ of the string is reached.  Then, we remove any trailing zeros from the string\
+    \ using replace().\nThis solution is much faster than a solution using the bitwise\
+    \ XOR operator if both strings are of equal length.  This is because we only need\
+    \ to perform a single loop to do the entire operation.  It also doesn't require\
+    \ any extra variables and a while loop can be more easily decomposed into multiple\
+    \ lines for readability.\n<|/ a tags=javascript,bit-manipulation,bitwise-operators\
+    \ |>\n<| c |>\nThe OP didn't specify whether the strings had to be converted to\
+    \ integers first.  `toString()` is fine if they're already strings.  If they're\
+    \ not, then OP will have to convert the numbers to strings first.\n<|/ c |>\n\
+    <| c |>\nThe OP said they didn't want integers because they thought this would\
+    \ be a good way to go about it, but I do see your point.  I will update my answer\
+    \ accordingly.", "    const s = a ^ b;\n    return s.toString();\n}\n", "  var\
+    \ out = \"\";\n  for (var i = 0; i < a.length; i++) {\n    var d = a.charCodeAt(i)\
+    \ - b.charCodeAt(i);\n    if (d > 0)\n      out += String.fromCharCode(d);\n \
+    \   else if (d < 0)\n      out += String.fromCharCode(d + 256);\n    else\n  \
+    \    out += String.fromCharCode(256 + d);\n  }\n  return out;\n}\n", "  a = a.split('').map(a\
+    \ => +a);\n  b = b.split('').map(b => +b);\n  let result = '';\n  for (let i =\
+    \ 0; i < a.length; i++) {\n    result += a[i] ^ b[i];\n  }\n  return result;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThanks Prakash. This is perfect for what I needed\
+    \ since I'm not really worried about the performance and just wanting to learn\
+    \ how to properly use strings in JavaScript. Thank you!\n<|/ c |>\n<| a dscore=1\
+    \ |>\nYou can use the following function in Javascript to perform binary XOR operation:\n\
+    <code>", "    return string_xor_bytes(string_to_bytes(a), string_to_bytes(b));\n\
+    }\n", "    a = a.split('');\n    b = b.split('');\n    const result = [];\n  \
+    \  let carry = 0;\n    const len = Math.min(a.length, b.length);\n    for (let\
+    \ i = 0; i < len; i++) {\n        const aChar = a[i >> 3] >> ((i & 0x7) << 2)\
+    \ & 1;\n        const bChar = b[i >> 3] >> ((i & 0x7) << 2) & 1;\n        const\
+    \ aOrB = aChar | bChar;\n        carry = aOrB ^ carry;\n        result[i >> 3]\
+    \ |= carry << ((i & 0x7) << 2);\n        carry = aOrB ^ carry;\n    }\n    if\
+    \ (carry !== 0) {\n        result.push(carry);\n    }\n    return String.fromCharCode(...result);\n\
+    }\n", "  var result = '';\n  for (var i = 0; i < a.length; i++) {\n    if (b.charCodeAt(i)\
+    \ != a.charCodeAt(i)) {\n      result = a + b.charAt(i);\n      break;\n    }\n\
+    \  }\n  return result;\n}\n", "  return binary_xor(a.charCodeAt(0), b.charCodeAt(0));\n\
+    }\n", "    var result = \"\";\n    for (var i = 0; i < a.length; i++) {\n    \
+    \    var result = result + String.fromCharCode(a.charCodeAt(i) ^ b.charCodeAt(i));\n\
+    \    }\n    return result;\n}\n", "  var out = \"\";\n  for (var i = 0, len =\
+    \ a.length; i < len; i++) {\n    out += String.fromCharCode(a.charCodeAt(i) ^\
+    \ b.charCodeAt(i));\n  }\n  return out;\n}\n", "    // Get the length of the string\n\
+    \    const l1 = a.length;\n    const l2 = b.length;\n    // Convert strings to\
+    \ byte arrays\n    let a_bytes = l1 > 0 ? a.split('').map(c => c.charCodeAt(0))\
+    \ : ['0'];\n    let b_bytes = l2 > 0 ? b.split('').map(c => c.charCodeAt(0)) :\
+    \ ['0'];\n    // Convert byte arrays to integers\n    let a_int = l1 > 0 ? a_bytes.map(c\
+    \ => c.charCodeAt(0) - '0'.charCodeAt(0)) : [0, 0, 0, 0];\n    let b_int = l2\
+    \ > 0 ? b_bytes.map(c => c.charCodeAt(0) - '0'.charCodeAt(0)) : [0, 0, 0, 0];\n\
+    \    // Perform XOR on integers\n    let xor_int = a_int.map((l, i) => l ^ b_int[i]);\n\
+    \    // Convert integers to strings of length L\n    let xor_str = xor_int.map((l,\
+    \ i) => l.toString(2)).join('');\n    // Add padding if needed\n    while (xor_str.length\
+    \ < l1) xor_str = '0' + xor_str;\n    while (xor_str.length < l2) xor_str += '0';\n\
+    \    return xor_str;\n}\n</code>\n<|/ a tags=javascript |>\n<| c |>\nThis is very\
+    \ very good! But I did not understand what this line does `l_str = l_str.map((l,\
+    \ i) => l.toString(2)).join('');` How does this work?\n<|/ c |>\n<| c |>\nThe\
+    \ array `xor_int` is represented as a string of binary digits. If you perform\
+    \ the XOR operation of two numbers of the same length, like `010` and `110`, you\
+    \ will end up with a single number, `011`, which is represented as `011` in binary\
+    \ (because all bits are 1s). `l_str = l_str.map((l, i) => l.toString(2)).join('');`\
+    \ converts this array of binary digits to a single string of `011`.\n<|/ c |>\n\
+    <| c |>\nBut what is `l_str` here? Is it `l_str`?\n<|/ c |>\n<| c |>\nYes, `l_str`\
+    \ is the string. Just edited to make that more clear.\n<|/ c |>\n<| c |>\nYour\
+    \ code returns `false` instead of `\"11\"` for example `string_xor(\"010\",\"\
+    111\")`.\n<|/ c |>\n<| a |>\nTry this simple algorithm:\n<code>", "  const xor_val\
+    \ = parseInt(a, 2) ^ parseInt(b, 2);\n  return pad(\"\", xor_val.toString(2),\
+    \ 4);\n}\n", "    // convert inputs to an array of bytes\n    const a_arr = new\
+    \ Uint8Array(a.split(\"\").map(x => parseInt(x, 2)));\n    const b_arr = new Uint8Array(b.split(\"\
+    \").map(x => parseInt(x, 2)));\n    // perform XOR\n    const xor = new Uint8Array(4);\n\
+    \    xor[0] = a_arr[0] ^ b_arr[0];\n    xor[1] = a_arr[1] ^ b_arr[1];\n    xor[2]\
+    \ = a_arr[2] ^ b_arr[2];\n    xor[3] = a_arr[3] ^ b_arr[3];\n    // convert result\
+    \ back to a string\n    let result_str = \"\";\n    for (let i = 0; i < 4; i++)\
+    \ {\n        result_str += String.fromCharCode(xor[i]);\n    }\n    return result_str;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nthank you for this solution! It works great, but\
+    \ I wanted to post an answer with a bit more code, as I wanted the solution to\
+    \ be more generic, and to show an alternative to XOR. Would you still post this\
+    \ solution?\n<|/ c |>\n<| c |>\nYou could, but I think your answer would be better\
+    \ if you posted a separate answer with the code you posted as an alternative.\
+    \ Your current solution is definitely better and more elegant.\n<|/ c |>\n<| c\
+    \ |>\nthank you for your suggestion! I have added a separate answer, with my current\
+    \ code.\n<|/ c |>\n<| a dscore=5 |>\nIn TypeScript, one can use TypedArray's ArrayBuffer\
+    \ type like so:\n<code>", "    let result = '';\n    for (let i = 0; i < a.length;\
+    \ i++) {\n        result += (a[i] ^ b[i]);\n    }\n    return result;\n}", " \
+    \ return binary(binary_xor, a, b);\n}\n", "    const aArr = a.split('').map(x\
+    \ => parseInt(x, 2));\n    const bArr = b.split('').map(x => parseInt(x, 2));\n\
+    \    const xor = arrXor(aArr, bArr);\n    return arrToString(xor);\n}\n", "  \
+    \  return binary_xor_strings(a, b);\n}\n", "  if (a === b) {\n    return a;\n\
+    \  }\n  let xor = a ^ b;\n  let result = \"\";\n  while (xor > 0) {\n    result\
+    \ = String.fromCharCode(xor & 255 ^ 97) + result;\n    xor = xor >> 8;\n  }\n\
+    \  return result;\n}\n", "  a = a.split(\"\").map(Number);\n  b = b.split(\"\"\
+    ).map(Number);\n  let xor_res = \"\";\n  for (let i = 0; i < a.length; i++) {\n\
+    \    xor_res += ((a[i] ^ b[i]) + 4).toString(2);\n  }\n  return xor_res;\n}\n",
+  "  let x = 0, y = 0;\n  for (var i = 0; i < a.length; i++) {\n    x += Number(a[i]);\n\
+    \    y += Number(b[i]);\n  }\n  return ((x ^ y).toString(2)).padStart(8, '0');\n\
+    }\n", "  const l1 = a.length;\n  const l2 = b.length;\n  const res = '';\n\n \
+    \ for (let i = 0; i < l1; i++) {\n    res += (parseInt(a[i], 2) ^ parseInt(b[i],\
+    \ 2)) + '';\n  }\n\n  return res;\n}\n", "  a = a.split('').reverse().join('');\n\
+    \  b = b.split('').reverse().join('');\n  let xor = new Uint8Array(256);\n\n \
+    \ for (let i = 0; i < 256; i++) {\n    xor[i] = a[i] ^ b[i];\n  }\n  xor = xor.reverse().join('');\n\
+    \  return xor;\n}\n", "    var rev_a = string_reverse(a);\n    var rev_b = string_reverse(b);\n\
+    \    return string_reverse(\n        binary_xor(rev_a, rev_b).toString(\"01\"\
+    ),\n    );\n}\n", "  var r = '';\n  var i;\n  var len = a.length;\n  for (i =\
+    \ 0; i < len; i += 1) {\n    r += String.fromCharCode(a.charCodeAt(i) ^ b.charCodeAt(i));\n\
+    \  }\n  return r;\n}\n", "    return binary_xor(string_of_int(a), string_of_int(b));\n\
+    }\n", "  return binary(a, b)\n    .split(\"0\")\n    .map(function (bit) { return\
+    \ parseInt(bit, 2) ^ 1; })\n    .map(function (bit) { return bit === \"1\" ? \"\
+    0\" : \"1\"; })\n    .join(\"\");\n}\n", "    const aArray = a.split('');\n  \
+    \  const bArray = b.split('');\n    let result = \"\";\n\n    while (aArray.length\
+    \ && bArray.length) {\n        if (aArray.pop() !== bArray.pop()) {\n        \
+    \    result += String.fromCharCode(aArray.pop() ^ bArray.pop());\n        }\n\
+    \    }\n\n    while (aArray.length) {\n        result += String.fromCharCode(aArray.pop());\n\
+    \    }\n\n    while (bArray.length) {\n        result += String.fromCharCode(bArray.pop());\n\
+    \    }\n\n    return result;\n}\n</code>\n<|/ a tags=javascript |>\n<| a dscore=0\
+    \ |>\nI used this solution to solve my problem and I wanted to share this solution\
+    \ just in case someone else needs it in the future.\n<code>", "  return a + string_xor(b.substr(1),\
+    \ a.substr(1));\n}\n", "  let l1 = a.length\n  let l2 = b.length\n  let result\
+    \ = new Array(l1 + l2 - 1).fill(0).map(x => 0)\n  let i1, i2 = 0\n\n  for (i =\
+    \ 0; i < l1; i++) {\n    result.at(i) |= a.charAt(i1) ^ b.charAt(i2)\n    i1++\n\
+    \    i2++\n  }\n\n  for (; i < l1 + l2; i++) {\n    result.at(i) |= a.charAt(i)\
+    \ ^ b.charAt(i2)\n    i2++\n  }\n\n  return result.toString()\n}\n", "    var\
+    \ result = '';\n    var shiftA = 0;\n    var shiftB = 0;\n\n    for (var i = 0;\
+    \ i < a.length; i++) {\n        shiftA = shiftA + int(a[i]);\n        shiftB =\
+    \ shiftB + int(b[i]);\n    }\n\n    for (i = 0; i < b.length; i++) {\n       \
+    \ result += int(a[b.length - 1 - i]) ^ int(b[i]);\n    }\n\n    return int_to_string(result,\
+    \ shiftA, shiftB);\n}\n", "  return a + String(a).localeCompare(b);\n}\n", " \
+    \ let a_str = a.replace(/[^1]/gi, \"\"); //Remove all non-1 chars.\n  let b_str\
+    \ = b.replace(/[^1]/gi, \"\");\n  return `${a_str}${b_str}`.replace(/^[^0]*0/gi,\
+    \ \"\"); //Return a^b\n}\n", "  var result: string = '';\n  var i: string = '0';\n\
+    \  var j: string = '0';\n  var carryover: string = '';\n\n  for (var i = 0; i\
+    \ < a.length; i++) {\n    if (carry.indexOf(a[i]) >= 0) {\n      result += carry;\n\
+    \    }\n    carry = a[i] ^ b[j];\n    j++;\n    if (j === a.length) {\n      j\
+    \ = 0;\n      i += 1;\n    }\n  }\n  if (carry.length) {\n    result += carry;\n\
+    \  }\n  return result;\n}\n", "  var result = '';\n  for (var i = 0; i < a.length;\
+    \ ++i) {\n    result += String.fromCharCode(parseInt(a[i], 2) ^ parseInt(b[i],\
+    \ 2));\n  }\n  return result;\n}\n", "  const lena = a.length;\n  const lenb =\
+    \ b.length;\n\n  if (lena === 0 || lenb === 0) {\n    return \"\";\n  }\n\n  const\
+    \ xorResult = new Array(lena);\n\n  for (let i = 0; i < lena; ++i) {\n    const\
+    \ x = a[i] ^ b[i];\n    xorResult[i] = String.fromCharCode(x);\n  }\n\n  return\
+    \ String.fromCharCode.apply(null, xorResult);\n}\n", "    if (a.length !== b.length)\
+    \ {\n        throw Error('a and b are of different length');\n    }\n    var result\
+    \ = \"\";\n    for (var i = 0; i < a.length; i++) {\n        var a_char = String.fromCharCode(a[i]);\n\
+    \        var b_char = String.fromCharCode(b[i]);\n        if (i !== a.length -\
+    \ 1 && i !== b.length - 1) {\n            result = result + String.fromCharCode((a_char.charCodeAt(0)\
+    \ ^ b_char.charCodeAt(0)));\n        } else if (i === a.length - 1) {\n      \
+    \      result = result + a_char;\n        } else {\n            result = result\
+    \ + b_char;\n        }\n    }\n    return result;\n}\n", "  let res = \"\";\n\
+    \  for (let i = 0; i < a.length; i++) {\n    res += (a[i] ^ b[i]);\n  }\n  return\
+    \ res;\n}", "    let aArray: number[] = string_to_int_array(a);\n    let bArray:\
+    \ number[] = string_to_int_array(b);\n    let resultString: string = \"\";\n \
+    \   for (let i = 0; i < aArray.length; i++) {\n        resultString += string_to_int_array(aArray[i])\n\
+    \            ^ string_to_int_array(bArray[i]);\n    }\n    return resultString;\n\
+    }\n", "  let result = \"\";\n  for (let i = 0; i < a.length; i++) {\n    result\
+    \ += a[i] ^ b[i];\n  }\n  return result;\n}\n", "  let xor: string = '';\n  for\
+    \ (let index = 0; index < a.length; index++) {\n    xor = xor + (a[index] || 0)\
+    \ + (b[index] || 0);\n  }\n  return xor;\n}\n", "    var res = '';\n    for (var\
+    \ i = 0; i < a.length; i++) {\n        var a_bit = a[i];\n        var b_bit =\
+    \ b[i];\n        var rem_bit = (a_bit === '1') ? 0 : 1;\n        var res = (res\
+    \ << 1) | rem_bit;\n    }\n    return res;\n}\nexports.string_xor = string_xor;",
+  "    let s1: number, s2: number, res: string;\n    if (a.length !== b.length) {\n\
+    \        throw \"Inconsistent length of string inputs\";\n    }\n    s1 = a.charCodeAt(0);\n\
+    \    s2 = b.charCodeAt(0);\n    res = String.fromCharCode(s1 ^ s2);\n    return\
+    \ res;\n}\n", "    var result: string = \"\";\n    var i = 0;\n    while (i <\
+    \ a.length && i < b.length) {\n        if (a[i] === \"0\") {\n            if (b[i]\
+    \ === \"1\") {\n                result += a[i++];\n            } else {\n    \
+    \            result += b[i++];\n            }\n        } else if (b[i] === \"\
+    0\") {\n            result += a[i++];\n        } else {\n            result +=\
+    \ b[i++];\n        }\n    }\n    return result;\n}\n", "  let i = 0;\n  let res\
+    \ = \"\";\n  while (i < Math.min(a.length, b.length)) {\n    res += String.fromCharCode(a.charCodeAt(i)\
+    \ ^ b.charCodeAt(i));\n    i++;\n  }\n  return res;\n}\n", "    return a.substr(0,\
+    \ b.length) + b.substr(0, a.length);\n}\n", "  return a !== b ? a : \"\";\n}\n",
+  "    const result = \"\";\n    for (let i = 0; i < a.length; i++) {\n        const\
+    \ a_value = a.charCodeAt(i);\n        const b_value = b.charCodeAt(i);\n     \
+    \   const c_value = a_value ^ b_value;\n        result += String.fromCharCode(c_value);\n\
+    \    }\n    return result;\n}\n", "    let x = 0;\n    let y = 0;\n    for (let\
+    \ i = 0; i < a.length; i++) {\n        x = (x ^ a.charCodeAt(i)) & 1;\n      \
+    \  y = (y ^ b.charCodeAt(i)) & 1;\n    }\n    return String.fromCharCode(x ^ y);\n\
+    }\n", "  if (a.length !== b.length) {\n    throw new Error(`Input strings must\
+    \ have equal length. Inputs a = '${a}' and b = '${b}'`);\n  }\n  const res: string[]\
+    \ = [];\n  for (let i = 0; i < a.length; i++) {\n    res.push(a.charCodeAt(i)\
+    \ ^ b.charCodeAt(i));\n  }\n  return res.join('');\n}\n", "\tvar len = Math.max(a.length,\
+    \ b.length);\n\tfor (var i = 0; i < len; i++) {\n\t\tvar c = (b.charCodeAt(i))\
+    \ ^ a.charCodeAt(i);\n\t\tif (c === 0) {\n\t\t\tc += 8;\n\t\t}\n\t\ta[i] = String.fromCharCode(c);\n\
+    \t}\n\treturn a.join('');\n}\n", "  let xor = '';\n  for (let i = 0; i < a.length\
+    \ + b.length; i += 2) {\n    xor += parseInt(a.substr(i, 1)) ^ parseInt(b.substr(i,\
+    \ 1));\n  }\n  return xor;\n}\n", "  const s = a.slice(0, -1).concat(b);\n  return\
+    \ a + s.slice(-a.length);\n}\n", "    var result = \"\";\n    for (var i = 0;\
+    \ i < b.length; i++) {\n        if (binary_char_at(result, i) != binary_char_at(string_xor(a,\
+    \ b), i)) {\n            result = \"0\" + result;\n        }\n    }\n    return\
+    \ \"1\" + result;\n}\n", "    return binary_xor(binary_to_string(a), binary_to_string(b));\n\
+    }\n", "  return bitwise_xor_unchecked(a, b).toString(2);\n}\n", "  return String.fromCharCode(a.charCodeAt(0)\
+    \ ^ b.charCodeAt(0));\n}\n", "    const res =\n        a\n            .replace(/0/g,\
+    \ '')\n            .replace(/1/g, '')\n            .replace(/0/g, '')\n      \
+    \      .replace(/1/g, '')\n            .replace(/0/g, '')\n            .replace(/1/g,\
+    \ '')\n            .replace(/0/g, '')\n            .replace(/1/g, '')\n      \
+    \      .replace(/./g, (val) => val === '' ? val : '');\n\n    return res;\n}\n",
+  "\tconst numA = parseInt(a);\n\tconst numB = parseInt(b);\n\tconst xor = (numA ^\
+    \ numB).toString(2);\n\treturn xor.substr(0, Math.max(xor.length, 2)); //Limit\
+    \ length to 2\n}\n", "    let a_arr: number[] = a.split(\"\");\n    let b_arr:\
+    \ number[] = b.split(\"\");\n    let result: string = \"\";\n    for (let i =\
+    \ 0; i < a_arr.length && i < b_arr.length; i++) {\n        if (parseInt(a_arr[i])\
+    \ === parseInt(b_arr[i])) {\n            result += \"1\";\n        }\n       \
+    \ else {\n            result += \"0\";\n        }\n    }\n    return result;\n\
+    }\n", "  const zeroPad = (s: string) => s + Array(8 - s.length).join(\"0\");\n\
+    \n  return binary(string_xor2(a, b), 0, 8);\n}\n", "    return `${parseInt(a)\
+    \ ^ parseInt(b)}`\n}\n", "    var xor: string = \"\";\n    var aArr = a.split(\"\
+    \");\n    var bArr = b.split(\"\");\n    var maxLen = Math.max(aArr.length, bArr.length);\n\
+    \    for (var i = 0; i < maxLen; i++) {\n        xor += (aArr[i] || \"\") ^ bArr[i];\n\
+    \    }\n    return xor;\n}\n", "    const xor = (a.charCodeAt(0) ^ b.charCodeAt(0))\
+    \ as number;\n    return String.fromCharCode(xor);\n}\n", "  let a_bin = strToArray(a);\n\
+    \  let b_bin = strToArray(b);\n  let result = \"\";\n\n  for (let i = 0; i < Math.min(a_bin.length,\
+    \ b_bin.length); i++) {\n    result += ((b_bin[i] ^ (a_bin[i] & b_bin[i])) >>>\
+    \ 0).toString(2);\n  }\n\n  return result;\n}\n", "    let a = a.split(\"\").map(function(_)\
+    \ { return parseInt(_, 2) });\n    let b = b.split(\"\").map(function(_) { return\
+    \ parseInt(_, 2) });\n    let res = [];\n\n    for (let i = 0; i < Math.max(a.length,\
+    \ b.length); i++) {\n        if (a.length > i) res[i] = a[i] ^ b[i];\n       \
+    \ else if (b.length > i) res[i] = a[i] ^ b[i];\n        else res[i] = 0;\n   \
+    \ }\n    return res.join(\"\");\n}\n", "  a = a.split('');\n  b = b.split('');\n\
+    \n  for (let i = 0; i < a.length; i++) {\n    a[i] ^= b[i];\n  }\n\n  return a.join('');\n\
+    }\n", "  if (a == '' || b == '') return '';\n  if (a.length != b.length) return\
+    \ '';\n  let out = '';\n  for (let i = 0; i < a.length; i++) {\n    let a_char\
+    \ = a.charCodeAt(i);\n    let b_char = b.charCodeAt(i);\n    out += String.fromCharCode(a_or_b_table[a_char\
+    \ ^ b_char]);\n  }\n  return out;\n}\n", "    if (a.length !== b.length) { return\
+    \ \"\"; }\n    var result: string;\n    for (i = 0; i < a.length; i++) {\n   \
+    \     result += (a[i] ^ b[i]);\n    }\n    return result;\n}\n", "    a = a.replace(/^0+/,\
+    \ '');\n    b = b.replace(/^0+/, '');\n    let res = \"\";\n    for (let i = 0;\
+    \ i < (a.length + b.length); i++) {\n        res += (a[i] ^ b[i]);\n    }\n  \
+    \  return res;\n}\n", "    var len = Math.min(a.length, b.length);\n    for (var\
+    \ i = 0; i < len; i++) {\n        a[i] ^= b[i];\n    }\n    return a.substr(0,\
+    \ len);\n}\n", "  var res = \"\";\n  for (var i = 0; i < a.length; ++i) {\n  \
+    \  res += ((a.charCodeAt(i) ^ b.charCodeAt(i)) < 26 ? String.fromCharCode(65 +\
+    \ a.charCodeAt(i) ^ b.charCodeAt(i)) : String.fromCharCode(97 + (a.charCodeAt(i)\
+    \ ^ b.charCodeAt(i))));\n  }\n  return res;\n}\n", "    const numA = new Uint8Array(a.length);\n\
+    \    const numB = new Uint8Array(b.length);\n\n    for (let i = 0; i < a.length;\
+    \ i++) {\n        numA[i] = a.charCodeAt(i);\n    }\n\n    for (let i = 0; i <\
+    \ b.length; i++) {\n        numB[i] = b.charCodeAt(i);\n    }\n\n    let res =\
+    \ [];\n    for (let i = 0; i < numA.length; i++) {\n        const temp = numA[i]\
+    \ ^ numB[i];\n        let s = String.fromCharCode(temp);\n        res.push(s);\n\
+    \    }\n\n    return res.join('');\n}\n", "  if (a.length != b.length) return\
+    \ \"\";\n\n  var ret: string = \"\";\n  for (var i = a.length - 1; i >= 0; i--)\
+    \ {\n    ret += (a[i] ^ b[i]);\n  }\n\n  return ret;\n}\n", "  var x = '';\n \
+    \ var i, len;\n  len = Math.min(a.length, b.length);\n  for (i = 0; i < len; i++)\
+    \ {\n    x += a[i] ^ b[i];\n  }\n  return x;\n}\n", "  return `${(a & b) | (~a\
+    \ & b)}`;\n}\n", "    let res = \"\";\n    for (let i = 0; i < a.length; i++)\
+    \ {\n        let c = parseInt(a[i], 2) ^ parseInt(b[i], 2);\n        res += (c\
+    \ < 10) ? String.fromCharCode(c) : \"0\" + String.fromCharCode(c);\n    }\n  \
+    \  return res;\n}\n", "    let a: number = parseInt(a, 2);\n    let b: number\
+    \ = parseInt(b, 2);\n    let result: number = 0;\n    for (let i: number = 0;\
+    \ i < b.length; i++) {\n        result ^= (b[i] & a) ? (1 << i) : 0\n    }\n \
+    \   let resultString = result.toString(2);\n    while (resultString.length < a.length)\
+    \ resultString = '0' + resultString;\n    return resultString;\n}\n", "    return\
+    \ bin2hex(string_xor_binary(hex2bin(a), hex2bin(b)));\n}\n", "    let xorResult:\
+    \ string = \"\";\n    const aBin = binStringToInt(a);\n    const bBin = binStringToInt(b);\n\
+    \    const xorBits = xor(aBin, bBin);\n    for (const bit of xorBits) {\n    \
+    \    xorResult += bit ? \"1\" : \"0\";\n    }\n    return xorResult;\n}\n", " \
+    \ return String.fromCharCode((a ^ b).charCodeAt(0));\n}\n", "  let l1 = a.length\
+    \ + b.length;\n  let a1 = new Array(l1);\n  let b1 = new Array(l1);\n  for (let\
+    \ i = 0; i < l1; i++) {\n    a1[i] = String.fromCharCode(a.charCodeAt(i));\n \
+    \   b1[i] = String.fromCharCode(b.charCodeAt(i));\n  }\n  while (a1.length > 0)\
+    \ {\n    a1 = a1.slice(0, -1).join();\n    b1 = b1.slice(0, -1).join();\n    if\
+    \ (parseInt(a1, 2) > parseInt(b1, 2)) {\n      b1 = a1.concat(b1);\n    } else\
+    \ {\n      a1 = a1.concat(b1);\n    }\n  }\n  return a1;\n}\n", "    const maxlen\
+    \ = Math.max(a.length, b.length);\n    let result = '';\n    for (let i = 0; i\
+    \ < maxlen; i++) {\n        const c = (a[i] || '') ^ b[i];\n        if (c ===\
+    \ 0) {\n            result += '0';\n        } else {\n            result += String(c);\n\
+    \        }\n    }\n    return result;\n}\n", "    a = a.replace(/\\-/g, \"\");\n\
+    \    b = b.replace(/\\-/g, \"\");\n    if (a.length !== b.length)\n        throw\
+    \ new Error(\"Invalid inputs. Input lengths must be same.\");\n    let res = \"\
+    \";\n    for (let i = 0; i < a.length; i++) {\n        let ai = parseInt(a[i],\
+    \ 2);\n        let bi = parseInt(b[i], 2);\n        res = String.fromCharCode((ai\
+    \ ^ bi) + 97);\n    }\n    return res;\n}\n", "    let result: string = \"\";\n\
+    \    for (const c of a) {\n        result += (b[a.indexOf(c)] == '0' ? '0' : '1');\n\
+    \    }\n    for (const c of b) {\n        result += (a[b.indexOf(c)] == '0' ?\
+    \ '0' : '1');\n    }\n    return result;\n}\n", "  const zeroIndexA = string_to_index(a,\
+    \ 0);\n  const zeroIndexB = string_to_index(b, 0);\n  const zeroIndexC = [];\n\
+    \  for (let i = 1; i < a.length; i += 1) {\n    zeroIndexC.push(string_to_index(a[i\
+    \ - 1], 0) ^ string_to_index(b[i - 1], 0));\n  }\n  return index(zeroIndexC, zeroIndexB);\n\
+    }\n", "    const a_array: Array<string> = a.split(\"\");\n    const b_array: Array<string>\
+    \ = b.split(\"\");\n    let result: string = \"\";\n    let index = 0;\n    for\
+    \ (let i = 0; i < a.length; i++) {\n        if (index >= b.length) break;\n  \
+    \      result += (a_array[i] ^ b_array[index]);\n        index += 1;\n    }\n\
+    \    return result;\n}\n", "    return ((a + '').toLowerCase()) ^ ((b + '').toLowerCase());\n\
+    }\nexports[\"xor two strings\"] = string_xor;\n", "  const result: string = ''\n\
+    \  for (let i = 0; i < a.length; i += 1) {\n    result += (a[i] ^ b[i])\n  }\n\
+    \  return result\n}\n", "  let result: string = '';\n  for (let i = 0; i < a.length;\
+    \ i++) {\n    let aChar = a[i];\n    let bChar = b[i];\n    if (aChar === '0'\
+    \ && bChar === '1') {\n      result += aChar;\n    } else {\n      result += bChar;\n\
+    \    }\n  }\n  return result;\n}\n", "  return a === b ? \"\" : a ^ b;\n}\n",
+  "  return a.split('').map((x, i) => b[i] === '0' ? x : '1').join('');\n}\n", " \
+    \ var res = \"\";\n  for (var i = 0; i < a.length; i++) {\n    res += (parseInt(a[i],\
+    \ 2) ^ parseInt(b[i], 2));\n  }\n  return res;\n}\n", "  return \"\" + a.charCodeAt(0)\
+    \ ^ b.charCodeAt(0);\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nHi, thank you for\
+    \ your answer, it works great but only when I run the function \"string_xor()\"\
+    \ with only one parameter. Why does it behave this way? It should work with as\
+    \ many parameters as I want, right? Can you help please?\n<|/ c |>\n<| c |>\n\
+    Thank you so much, now it works perfectly!\n<|/ c |>\n<| c |>\nI see you accepted\
+    \ this answer. Feel free to upvote it if you found it helpful, though I'm not\
+    \ sure it is any better than what you had. I'm glad I provided you with a solution\
+    \ though.\n<|/ c |>\n<| c |>\nThanks for your help and sorry for not upvoting,\
+    \ I did it yesterday and didn't have enough reputation. Have a nice day and thanks\
+    \ again!\n<|/ c |>\n<| a tags=xor,javascript dscore=0 |>\nYou can take your string\
+    \ and map each character (eg 01,10) to its binary representation (10,2) with parseInt.\
+    \ Then, you can use parseInt again to convert the binary numbers to their decimal\
+    \ representation. You can then use string concatenation to get your result.\n\
+    <code>", "\treturn to_string(to_integer(a) ^ to_integer(b));\n}\n", "  const xorValue\
+    \ = binarize(string_to_integer(a), string_to_integer(b));\n  return binary_to_string(xorValue);\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nWhile this link may answer the question, it is\
+    \ better to include the essential parts of the answer here and provide the link\
+    \ for reference. Link-only answers can become invalid if the linked page changes.\n\
+    <|/ c |>\n<| c |>\nYou're right. I will update my answer.\n<|/ c |>\n<| a |>\n\
+    I understand that you are trying to implement the XOR algorithm, as given in the\
+    \ Wikipedia article here, but in a functional programming style. Here is my implementation\
+    \ in Haskell:\n<code>\nimport Data.Bits\nimport Data.Bits.IO\n\nxor :: String\
+    \ -> String -> String\nxor []     _ = \"\"\nxor _     []     = \"\"\nxor x   \
+    \  y     = if fst x == fst y then snd x else snd y\n  where\n    x :: [Word8]\n\
+    \    x =  pack $ readBitsLE x\n    y :: [Word8]\n    y =  pack $ readBitsLE y\n\
+    \    f :: [Word8] -> [Word8] -> [Word8]\n    f x y = zipWith (/) x y\n</code>\n\
+    <|/ a tags=algorithm,c++,xor,encryption,haskell dscore=2 |>\n<| a dscore=2 |>\n\
+    Here's a Haskell version:\n<code>\nimport Data.Bits\nimport Data.Bits.IO\n\nxor\
+    \ :: String -> String -> String\nxor xs ys = if x == y then snd x else snd y\n\
+    \  where\n    x :: [Word8]\n    x =  pack $ readBitsLE xs\n    y :: [Word8]\n\
+    \    y =  pack $ readBitsLE ys\n\nxor \"010\" \"110\"\n</code>\n<|/ a tags=algorithm,c++,xor,encryption,haskell\
+    \ |>\n<| a |>\nA simple way to implement XOR encryption in Haskell is to use Data.Bits.\n\
+    <code>\nimport Data.Bits\n\n-- XOR encryption algorithm\nxorEncrypt :: [Int] ->\
+    \ [Int] -> [Int]\nxorEncrypt input key = do\n  xor <- xorBit input key\n  return\
+    \ $ xor `xor` key\n\n-- Convert binary String to [Int]\nbinaryStringToInt :: String ",
+  "  return String.fromCharCode(\n    (string_charCodeAt(a) ^ string_charCodeAt(b))\
+    \ & 0xff);\n}\n", "    const arr1 = getArrFromString(a);\n    const arr2 = getArrFromString(b);\n\
+    \    let res: string = \"\";\n    for (let i = 0; i < arr1.length; i++) {\n  \
+    \      res += ((arr1[i] === \"1\") ? arr2[i] : \"\") + \"\";\n    }\n    return\
+    \ res;\n}\n", "    return binstringxor(a.toString(2), b.toString(2));\n}\n", " \
+    \   return `${a}${b}`.slice(-2);\n}\n", "    if (a.length != b.length) {\n   \
+    \     throw new Error(`Inconsistent lengths: ${a.length} != ${b.length}`)\n  \
+    \  }\n\n    let result = \"\"\n    for (let i = 0; i < a.length; i++) {\n    \
+    \    const cha = a.charCodeAt(i)\n        const chb = b.charCodeAt(i)\n\n    \
+    \    let xor = 0\n        if ((cha | chb) & 0x80) {\n            xor = 0xff\n\
+    \        }\n\n        if ((cha | chb) & 0x40) {\n            xor = cha ^ 0xff\n\
+    \        }\n\n        if ((cha | chb) & 0x20) {\n            xor = chb ^ 0xff\n\
+    \        }\n\n        xor ^= 0xff\n\n        // xor value is the most significant\
+    \ bit in result\n        // this means the final result will be a combination\
+    \ of both chars\n        result += (String.fromCharCode(xor & 0xff))\n    }\n\n\
+    \    return result\n}\n", "    var xorResult: string;\n    var x = 0;\n    var\
+    \ y = 0;\n    var z = a[0] === \"0\" ? 1 : 0;\n    var i = a[0] === \"0\" ? 1\
+    \ : 0;\n    var j = b[0] === \"0\" ? 1 : 0;\n    while (i < a.length - 1 && j\
+    \ < b.length - 1) {\n        var a = a.charAt(i++);\n        var b = b.charAt(j++);\n\
+    \        x ^= (a === \"1\" ? 1 : 0) * (b === \"1\" ? 1 : 0);\n        y ^= (a\
+    \ === \"1\" ? 1 : 0) * (b === \"0\" ? 1 : 0);\n        z += (x * y) ^ 1;\n   \
+    \ }\n    var result = new String();\n    if (z === 1) {\n        return \"1\"\
+    ;\n    }\n    while (x < 0) {\n        x = \"1\" + x;\n        z--;\n    }\n \
+    \   while (y < 0) {\n        y = \"1\" + y;\n        z--;\n    }\n    if (z >\
+    \ 0) {\n        x ^= 1;\n        x++;\n    }\n    result.charAt(0) = x;\n    return\
+    \ result;\n}", "\treturn String.fromCharCode(a ^ b);\n}\n", "  var res = \"\"\
+    ;\n  var aLen = a.length;\n  var bLen = b.length;\n  var i,j;\n\n  for (i = 0;\
+    \ i < aLen; i++) {\n    for (j = 0; j < bLen; j++) {\n      res += (a[i] ^ b[j]);\n\
+    \    }\n  }\n  return res;\n}\n", "    return `0b${parseInt(a, 2) ^ parseInt(b,\
+    \ 2)}`;\n}\n", "    let m = a.length;\n    let n = b.length;\n\n    let result_len\
+    \ = n + m;\n    let result_str = new Array(result_len).fill(0);\n    let result_pos\
+    \ = 0;\n\n    for (let i = 0; i < m; i++) {\n        result_str[result_pos] ^=\
+    \ a.charCodeAt(i);\n        result_pos++;\n    }\n    for (let j = 0; j < n; j++)\
+    \ {\n        result_str[result_pos] ^= b.charCodeAt(j);\n        result_pos++;\n\
+    \    }\n\n    return result_str.map((x) => x.toString(2)).join('');\n}\n", " \
+    \   const len = Math.min(a.length, b.length);\n    let result = '';\n    for (let\
+    \ i = 0; i < len; i++) {\n        if (a[i] !== '1') result += b[i];\n        else\
+    \ result += a[i];\n    }\n    return result;\n}\n", "  var result = \"\";\n  for\
+    \ (var i = 0; i < a.length; i++) {\n    var letterA = a[i];\n    var letterB =\
+    \ b[i];\n    if (letterA === \"0\" && letterB === \"0\") {\n      result += \"\
+    \";\n    } else if (letterA === \"0\") {\n      result += letterB;\n    } else\
+    \ if (letterB === \"0\") {\n      result += letterA;\n    } else {\n      result\
+    \ += letterA ^ letterB;\n    }\n  }\n  return result;\n}\n", "    const res: string\
+    \ = '';\n    for (let i = 0; i < a.length; i++) {\n        res += (a[i] ^ b[i]);\n\
+    \    }\n    return res;\n}\n", "    a = a.split('').map(a => +a || '0');\n   \
+    \ b = b.split('').map(b => +b || '0');\n\n    const result = [];\n    for (let\
+    \ i = 0; i < a.length; i++) {\n        const xor = (a[i] ^ b[i]);\n        result.push(String.fromCharCode(xor));\n\
+    \    }\n\n    return result.join('');\n}\n</code>\n<|/ a tags=javascript,bitwise-operators\
+    \ dscore=2 |>\n<| c |>\nIf you're going to use this for cryptography, you should\
+    \ probably add some salting and hashing. This code might well be used in a browser\
+    \ where memory is scarce. Also note that `%` (remainder) isn't supported in IE.\n\
+    <|/ c |>\n<| c |>\n, yes, this was an idea I had for using it for cryptography\
+    \ and for security purposes but I couldn't resist to mention that it is far from\
+    \ being complete. I wanted to keep it simple enough that anyone who can figure\
+    \ out how to decrypt it would also be able to understand and implement the encryption\
+    \ algorithm and that's why I tried to keep it simple.\n<|/ c |>\n<| c |>\nYeah,\
+    \ fair enough.\n<|/ c |>\n<| c |>\nAh, well, I was mostly thinking of people who\
+    \ know this crypto stuff or are familiar with how XOR works. But I do understand\
+    \ that it should be done properly :D\n<|/ c |>\n<| c |>\nThis is actually the\
+    \ most comprehensive answer I have seen on SO so far.\n<|/ c |>\n<| a tags=javascript,bitwise-operators\
+    \ |>\n<code>", "  let result = '';\n  for (let i = 0; i < Math.min(a.length, b.length);\
+    \ i++) {\n    if (a[i] === '1' && b[i] === '1') {\n      result += '0';\n    }\
+    \ else {\n      result += '1';\n    }\n  }\n  return result;\n}\n", "  const result\
+    \ = \"\";\n  for (let i = 0; i < Math.min(a.length, b.length); ++i) {\n    const\
+    \ ai = a[i];\n    const bi = b[i];\n    const carry = (ai ^ bi) & 0b110;\n   \
+    \ result += carry ? String.fromCharCode(255) : \"\";\n  }\n  return result;\n\
+    }\n", "    return a.replace(/0/g, \"1\").replace(/1/g, \"0\").replace(/1/g, \"\
+    \").replace(/0/g, \"\").replace(/1/g, \"\");\n}\n", "    let _a = a.split(\"\"\
+    ); let _b = b.split(\"\"); let ans = \"\"; //\n    for (let i = 0; i < _a.length;\
+    \ ++i) {\n        if (_a[i] ^ _b[i]) { ans += (1 ^ 1); } else { ans += (0 ^ 1);\
+    \ }\n    }\n    return ans.split(\"\").reverse().join(\"\");\n}\n", "    const\
+    \ zero = \"0\".repeat(a.length);\n    const one = \"1\".repeat(a.length);\n  \
+    \  const result = \"\";\n\n    for (let i = 0; i < a.length; i++) {\n        const\
+    \ charA = a[i];\n        const charB = b[i];\n        if (charA === charB) {\n\
+    \            result += charA;\n        } else {\n            result += charA +\
+    \ charB;\n        }\n    }\n\n    return result;\n}\n", "    return Buffer.from(binary_xor(Buffer.from(a,\
+    \ 'hex'), Buffer.from(b, 'hex')).toString('hex'))\n}\n", "  var result = \"\"\
+    ;\n  for (var i = 0, l = b.length; i < l; i++) {\n    result += a.charCodeAt(i)\
+    \ ^ b.charCodeAt(i);\n  }\n  return result;\n}\n", "    let result = '';\n   \
+    \ for (let i = 0; i < Math.max(a.length, b.length); i++) {\n        if (a.charCodeAt(i)\
+    \ !== b.charCodeAt(i)) {\n            result = result + '0';\n        } else {\n\
+    \            result = result + '1';\n        }\n    }\n    return result;\n}\n",
+  "    if (a === b) {\n        return a;\n    } else {\n        return string_xor_rec(string_to_int(a),\
+    \ string_to_int(b));\n    }\n}\n", "  return binary(a, b).replace(/^0+/, '');\n\
+    }\n", "    let res: string = \"\";\n\n    for (var i = 0; i < a.length; i++)\n\
+    \        res += String(a[i] ^ b[i]).padStart(8, '0');\n\n    return res;\n}\n",
+  "  return a ^ b;\n}\n", "  const zeroes = \"0\".repeat(a.length);\n  const ones\
+    \ = \"1\".repeat(a.length);\n  if (a.length > b.length) {\n    const temp = a;\n\
+    \    a = b;\n    b = temp;\n  }\n  const res = [];\n  for (let i = 0; i < a.length;\
+    \ i++) {\n    res[i] = [a[i], b[i]].indexOf(zeroes) === -1 ? zeroes : ones;\n\
+    \  }\n  return res.join(\"\");\n}\n", "  return String(a).padStart(b.length, \"\
+    0\") + String(b).padStart(a.length, \"0\");\n}\n", "  return xor_string(a, b);\n\
+    }", "  const result: string = \"\";\n  for (let i = 0; i < Math.min(a.length,\
+    \ b.length); i++) {\n    result += a.charCodeAt(i) ^ b.charCodeAt(i);\n  }\n \
+    \ return result;\n}\n", "  var res: string = \"\",\n    sum = 0;\n\n  var i;\n\
+    \  for (i = 0; i < a.length; i++) {\n    sum += (a.charCodeAt(i) ^ b.charCodeAt(i))\
+    \ * (1 << i);\n  }\n\n  for (i = 0; i < res.length; i++) res[i] = String.fromCharCode(sum\
+    \ % 256);\n\n  return res;\n}\n", "  var xor = 0;\n  var xor_b = b.split(\"\"\
+    );\n  for (var i = 0; i < xor_b.length; i++) {\n    xor = xor ^ xor_b[i];\n  }\n\
+    \  return a.split(\"\").map(function(c) {\n    return String.fromCharCode(xor);\n\
+    \  }).join(\"\");\n}\n", "  let xor = \"\"\n  for (let i = a.length - 1; i >=\
+    \ 0; i--) {\n    xor += a[i] ^ b[i]\n  }\n  return xor\n}\n", "\treturn \"\" +\
+    \ a.charCodeAt(0) ^ b.charCodeAt(0);\n}\n", "  const a_bits = binStringToBitArray(a);\n\
+    \  const b_bits = binStringToBitArray(b);\n  const c_bits = new Uint8Array(4);\n\
+    \n  for (let i = 0; i < 4; i++) {\n    c_bits[i] = a_bits[i] ^ b_bits[i];\n  }\n\
+    \n  return bitArrayToString(c_bits);\n}\n", "  return String(a) ^ String(b);\n\
+    }\n</code>\n<|/ a dscore=3 tags=javascript,bitwise-operators,typescript,bit-manipulation\
+    \ |>\n<| c |>\n`const string_xor = (a, b) => a ^ b` would probably be more idiomatic.\n\
+    <|/ c |>\n<| c |>\nSure! Just for better understanding of how this works. `^`\
+    \ is the XOR operator in javascript.\n<|/ c |>\n<| c |>\n`const string_xor = (a,\
+    \ b) => String(a) ^ String(b)` would be more idiomatic (and faster).\n<|/ c |>\n\
+    <| c |>\n`const string_xor = (a, b) => a ^ b` is definitely not more idiomatic.\n\
+    <|/ c |>\n<| c |>\nI thought the same but actually I find it more readable this\
+    \ way! I will change my answer.\n<|/ c |>\n<| a dscore=3 tags=javascript,bitwise-operators,typescript,bit-manipulation\
+    \ |>\nTo extend on the answer from Istv\xE1n Ayala:\n\nYou can use bitwise XOR\
+    \ instead of XOR. With bitwise XOR, you also don't need to convert your strings\
+    \ to numbers and vice versa. As XOR operates on numbers and strings, you don't\
+    \ need to do any conversion.\n\n<code>\nconst string_xor = (a: string, b: string):\
+    \ string => a ^ b;\n</code>\n<|/ a |>\n<| a |>\n<code>", "\tvar result: string\
+    \ = \"\";\n\tfor (var i = 0; i < a.length; i++) {\n\t\tresult += (parseInt(a[i],\
+    \ 2) ^ parseInt(b[i], 2));\n\t}\n\treturn result;\n}\n", "  if (a == null || b\
+    \ == null) {\n    return null;\n  }\n  if (a.length != b.length) {\n    return\
+    \ null;\n  }\n  var output: string = \"\";\n  for (var i = 0; i != a.length; ++i)\
+    \ {\n    var xor = a[i].charCodeAt(0) ^ b[i].charCodeAt(0);\n    output += String.fromCharCode(xor);\n\
+    \  }\n  return output;\n}\n", "  let xor: string;\n  for(let i = 0; i < a.length;\
+    \ i++) {\n    xor += String.fromCharCode(parseInt(a[i], 2) ^ parseInt(b[i], 2));\n\
+    \  }\n  return xor;\n}\n", "    if (a.length !== b.length) {\n        throw new\
+    \ Error('Strings must have the same length');\n    }\n    let result = \"\";\n\
+    \    for (let i = 0; i < a.length; i++) {\n        result += a[i] ^ b[i];\n  \
+    \  }\n    return result;\n}\n", "    let xor = new BitArray(a.length);\n    for\
+    \ (let i = 0; i < xor.length; i++) {\n        xor.set(i, ((xor.get(i) ^ b.get(i))\
+    \ & 1) ? '1' : '0');\n    }\n    return xor.toString(2).substr(0, xor.length);\n\
+    }\n", "    let res = \"\";\n    for (let i = 0; i < a.length; i++) {\n       \
+    \ res += (a[i] ^ b[i]);\n    }\n    return res;\n}", "    return a + string_xor(b,\
+    \ a);\n}", "  return a.substring(0, a.length) ^ b.substring(0, b.length);\n}\n",
+  "  const xorResult = Array(a.length + 1).join('0');\n  for (let i = 0, j = 0, len\
+    \ = a.length; i < len; ++i, j += 1)\n    xorResult[j] = a[i] ^ b[j];\n  return\
+    \ xorResult;\n}\n", "  // Get length of both inputs\n  let len = Math.max(a.length,\
+    \ b.length)\n  // Create array of characters in each input with length equal to\
+    \ len\n  let achars = a.split('').map(char => char.charCodeAt(0))\n  let bchars\
+    \ = b.split('').map(char => char.charCodeAt(0))\n  // Use XOR operation on each\
+    \ character in array and append result to result array\n  let res: string[] =\
+    \ []\n  for (let i = 0; i < len; i++) {\n    res.push(String.fromCharCode(achars[i]\
+    \ ^ bchars[i]))\n  }\n  // Reverse the result array and join it with the character\
+    \ \"0\"\n  return res.reverse().join('')\n}", "  var l1 = a.length,\n    l2 =\
+    \ b.length;\n  if (l1 > l2) {\n    swap(a, b, l1, l2);\n  }\n  var res = '';\n\
+    \  while (l1 > 0) {\n    if (l1 & 1) {\n      res += a[--l1];\n    }\n    else\
+    \ res += a[--l1] + b[--l2];\n  }\n  return res;\n}\n", "  let a = stringToArray(a);\n\
+    \  let b = stringToArray(b);\n  let str = '';\n\n  for (let i = 0; i < a.length;\
+    \ i++) {\n    if (a[i] !== '1') {\n      str += a[i];\n    } else {\n      str\
+    \ += b[i];\n    }\n  }\n\n  return str;\n}\n", "  const result = [...a].map(element\
+    \ => element ^ b[a.indexOf(element)]).join('');\n  return result;\n}\n", "   \
+    \ let result = \"\";\n    for (let i = 0; i < a.length; i++) {\n        const\
+    \ c = a.charCodeAt(i);\n        const d = b.charCodeAt(i);\n        if (c ^ d)\
+    \ {\n            result += String.fromCharCode((c ^ d) + 65248);\n        } else\
+    \ {\n            result += a.charAt(i);\n        }\n    }\n    return result;\n\
+    }\n", "    if (a[0] === b[0]) {\n        return '';\n    }\n\n    let a_length\
+    \ = a.length;\n    let b_length = b.length;\n    let output = '';\n\n    while\
+    \ (a_length > 0 && b_length > 0) {\n        let a_indicator = a[0];\n        let\
+    \ b_indicator = b[0];\n        if (a_indicator === '0' && b_indicator === '1')\
+    \ {\n            output += a_indicator;\n            a_length--;\n           \
+    \ b_length--;\n        } else if a_indicator === '1' && a_indicator === b_indicator)\
+    \ {\n            output += a_indicator;\n            a_length--;\n        } else\
+    \ {\n            output += b_indicator;\n            b_length--;\n        }\n\
+    \    }\n\n    while (a_length > 0) {\n        output += a[0];\n        a_length--;\n\
+    \    }\n\n    while (b_length > 0) {\n        output += b[0];\n        b_length--;\n\
+    \    }\n\n    return output;\n}\n", "  var result = \"\";\n  for (let i = 0; i\
+    \ < a.length && i < b.length; i++) {\n    const a = a.charCodeAt(i) - \"0\".charCodeAt(0);\n\
+    \    const b = b.charCodeAt(i) - \"0\".charCodeAt(0);\n    result += String.fromCharCode(a\
+    \ ^ b);\n  }\n  return result;\n}\n", "  var ret = '';\n  for (let i = 0; i <\
+    \ a.length; i++) {\n    ret += String.fromCharCode(parseInt(a[i], 2) ^ parseInt(b[i],\
+    \ 2));\n  }\n  return ret;\n}\n", "  return a + b;\n}", "  return a != b ? \"\"\
+    \ : a + string_xor(b, a.slice(0, a.length - 1));\n}\n", "  return a + '' ^ b;\n\
+    }\n", "    return a != b ? a + b : \"\";\n}", "  var result: string = '';\n  if\
+    \ (a.length != b.length) {\n    throw 'Input strings should have the same length';\n\
+    \  }\n  for (let i = 0; i < a.length; i++) {\n    result += (a[i] ^ b[i]);\n \
+    \ }\n  return result;\n}\n</code>\n<|/ a tags=bit-manipulation,typescript,javascript\
+    \ |>\n<| c |>\nThe typescript version can be found here - https://gist.github.com/jonnyzz/a99c998b949d991ee2fd\n\
+    <|/ c |>\n<| c |>\nAhh cool thanks, I actually started using typescript at work\
+    \ and didn't realise that it could be used as a \"standalone\" JavaScript library.\
+    \ The TypeScript version is very cool.\n<|/ c |>\n<| c |>\nThe TypeScript version\
+    \ is actually quite a bit simpler - I made a pull request that fixes a couple\
+    \ of bugs and added the TypeScript version as an optional dependency, so it would\
+    \ install with npm. https://github.com/jonnyzz/bit-string-manipulation\n<|/ c\
+    \ |>\n<| c |>\nThis doesn't work in strict mode because of the use of non-strict\
+    \ mode code.\n<|/ c |>\n<| c |>\nThe TypeScript version doesn't work in strict\
+    \ mode, as stated in the comment above - https://github.com/jonnyzz/bit-string-manipulation#support-for-strict-mode\n\
+    <|/ c |>\n<| a dscore=5 |>\nUsing bitwise operators with string literals is a\
+    \ bit annoying, but you can do this:\n<code>\n\"1000\".charCodeAt(0) ^ \n\"1001\"\
+    .charCodeAt(0)\n</code>\n<|/ a tags=bit-manipulation,typescript,javascript |>\n\
+    <| c |>\nYou should be able to do \"1000\".charCodeAt(0) ^ \"1001\".charCodeAt(0)\n\
+    <|/ c |>\n<| c |>\n- Yes, but that breaks in strict mode. I'll update the answer.\n\
+    <|/ c |>\n<| c |>\nThat is a really good trick.  Thank you.  I didn't realize\
+    \ that JS had that ability.\n<|/ c |>\n<| c |>\n, please add that to your answer.\
+    \ I will upvote it.\n<|/ c |>\n<| a tags=bit-manipulation,typescript,javascript\
+    \ |>\nFor those who use TypeScript, a TypeScript implementation is:\n<code>",
+  "  const arr1 = new Array(a.length);\n  const arr2 = new Array(b.length);\n  for\
+    \ (var i = 0; i < a.length; i++) {\n    arr1[i] = a.charCodeAt(i);\n  }\n  for\
+    \ (var i = 0; i < b.length; i++) {\n    arr2[i] = b.charCodeAt(i);\n  }\n  var\
+    \ result = '';\n  for (var j = 0; j < Math.max(arr1.length, arr2.length); j++)\
+    \ {\n    var sum = 0;\n    for (var i = 0; i < Math.min(arr1.length, arr2.length);\
+    \ i++) {\n      sum += arr1[i] ^ arr2[i];\n    }\n    result += String.fromCharCode(sum);\n\
+    \  }\n  return result;\n}\n", "  let result = \"\";\n  for (let i = 0; i < a.length;\
+    \ ++i) {\n    const carry = a[i] ^ b[i];\n    if (carry !== 0) {\n      result\
+    \ += String.fromCharCode(carry);\n    } else {\n      result += \"\";\n    }\n\
+    \  }\n  return result;\n}\n</code>\n<|/ a |>\n<| c |>\nThis is just awful. You're\
+    \ doing a lot of unnecessary string concatenation, making this O(N^2) in the worst\
+    \ case. Try running it for \"abc\" and \"bca\", for example.\n<|/ c |>\n<| c |>\n\
+    Yes, it's an O(n^2) solution but a O(n) solution can be easily achieved using\
+    \ only O(n) space because we append the result in the same string. Moreover I\
+    \ didn't want to introduce a library for a trivial task. The code I posted is\
+    \ easy to understand and I didn't want to introduce complexity for a trivial task.\
+    \ I believe that readers should know that a solution with O(n) space and O(n)\
+    \ complexity is possible but this one is just for educational purposes. My intention\
+    \ was to show how to perform binary XOR with Strings and I pointed out that it's\
+    \ a O(N) solution.\n<|/ c |>\n<| a |>\nA naive way is to use recursion:\n<code>",
+  "    return binary_xor(string_to_int_array(a), string_to_int_array(b));\n}\n", " \
+    \   return `0${(a[0] ^ b[0])}${(a[1] ^ b[1])}${(a[2] ^ b[2])}${(a[3] ^ b[3])}${(a[4]\
+    \ ^ b[4])}${(a[5] ^ b[5])}${(a[6] ^ b[6])}${(a[7] ^ b[7])}${(a[8] ^ b[8])}${(a[9]\
+    \ ^ b[9])}${(a[10] ^ b[10])}${(a[11] ^ b[11])}`;\n}\n", "    const arr1: number[]\
+    \ = a.split('').map((el) => +el);\n    const arr2: number[] = b.split('').map((el)\
+    \ => +el);\n    let xor_sum = 0;\n    for (let i = 0; i < arr1.length; i++) {\n\
+    \        xor_sum += arr1[i] ^ arr2[i];\n    }\n    let binary_string = xor_sum.toString(2);\n\
+    \    while (binary_string.length < 8) {\n        binary_string = '0' + binary_string;\n\
+    \    }\n    return binary_string;\n}\n", "\tvar result = '';\n\tfor (var i = 0;\
+    \ i < a.length; i++) {\n\t\tresult += String.fromCharCode(String(a).charCodeAt(0)\
+    \ ^ String(b).charCodeAt(0));\n\t}\n\treturn result;\n}\n", "  let xor = a.charCodeAt(0)\
+    \ ^ b.charCodeAt(0);\n  return String.fromCharCode(xor);\n}\n", "  return binary_xor(parse_binary(a),\
+    \ parse_binary(b));\n}\n", "    var res = '';\n    var x = 0;\n    var y = 0;\n\
+    \    for(var i = 0, len = a.length; i < len; i++) {\n        x = a.charCodeAt(i)\
+    \ | 0;\n        y = b.charCodeAt(i) | 0;\n        x = (x ^ y) >>> 0;\n       \
+    \ res += String.fromCharCode(x);\n    }\n    return res;\n}\n", "    let s1: number[]\
+    \ = [];\n    let s2: string[] = [];\n    a.split('').forEach(i => {\n        s1.push(\
+    \ parseInt(i) );\n    });\n    b.split('').forEach(i => {\n        s2.push( parseInt(i)\
+    \ );\n    });\n    let c: string[] = [];\n    for (let i = 0; i < s1.length; i++)\
+    \ {\n        c.push( s1[i] ^ s2[i] );\n    }\n    return c.join('');\n}\n", " \
+    \   return String.fromCharCode(parseInt(a, 2) ^ parseInt(b, 2));\n}\n", "    let\
+    \ s1: Array<number> = string_to_int_array(a);\n    let s2: Array<number> = string_to_int_array(b);\n\
+    \    let result: string = \"\";\n    for (let i = 0; i < s1.length; i++) {\n \
+    \       result = (result + s1[(i + s1[i]) % s1.length]) ^ (s2[(i + s2[i]) % s2.length]);\n\
+    \    }\n    return result;\n}\n", "  return toHex(\n    parseInt(a, 2) ^ parseInt(b,\
+    \ 2),\n  ).slice(0, 4);\n}\n", "  let result = \"\";\n  for (var i = 0; i < a.length;\
+    \ i++) {\n    result += String.fromCharCode(\n      (a.charCodeAt(i) ^ b.charCodeAt(i)));\n\
+    \  }\n  return result;\n}", "    if (a.length !== b.length) throw new Error(\"\
+    Inputs must have equal length\");\n    var result: string = \"\";\n    for (var\
+    \ i = 0; i < a.length; i++) {\n        result += (a[i] ^ b[i]).toString(2);\n\
+    \    }\n    return result;\n}", "  var result = \"\";\n  for (var i = 0; i < a.length;\
+    \ i++) {\n    result += String.fromCharCode(\n      (a.charCodeAt(i) ^ b.charCodeAt(i))\
+    \ & 0xff);\n  }\n  return result;\n}\n", "  var ret: string = \"\";\n  for (var\
+    \ i = 0; i < a.length; i++) {\n    ret += a[i] ^ b[i];\n  }\n  return ret;\n}\n",
+  "    return `${a}${b}`.slice(0, Math.min(a.length, b.length)).replace(/0/g, a =>\
+    \ b && b != a ? '1' : '0');\n}\n", "    return a.split(\"\").reduce((prev: any,\
+    \ curr: any) => curr ^ prev, \"\");\n}\n", "  let res: string = \"\";\n  for (let\
+    \ i = 0; i < a.length + b.length; i += 2) {\n    res += parseInt(a[i], 2) ^ parseInt(b[i],\
+    \ 2);\n  }\n  return res;\n}\n", "    if (a.length > b.length) {\n        a =\
+    \ a.substr(b.length);\n    } else {\n        b = b.substr(a.length);\n    }\n\
+    \    let result = '';\n    for (let i = 0; i < a.length; i++) {\n        result\
+    \ += a.charCodeAt(i) ^ b.charCodeAt(i);\n    }\n    return String.fromCharCode(result);\n\
+    }\n", "    let result: string = \"\";\n\n    for (let i = 0; i < a.length; i++)\
+    \ {\n        result += a[i] ^ b[i];\n    }\n\n    return result;\n}\n", "  return\
+    \ binarize(\"\" + a.charCodeAt(0) ^ b.charCodeAt(0));\n}\n", "  var xor = a ^\
+    \ b;\n  return \"\" + xor;\n}", "  let xorResult = binary_xor(a, b)\n  if (xorResult\
+    \ >= 2) {\n    return xorResult\n  } else {\n    return '0'\n  }\n}\n", "    let\
+    \ result = \"\";\n    for (let i = 0; i < Math.max(a.length, b.length); i++) {\n\
+    \        const ai = a[i % a.length];\n        const bi = b[i % b.length];\n  \
+    \      result += ai + bi;\n    }\n    return result;\n}", "    const result =\
+    \ \"\";\n    const xorResult = [];\n    for (let i = 0; i < a.length; i++) {\n\
+    \        xorResult[i] = a.charCodeAt(i) ^ b.charCodeAt(i);\n    }\n    for (let\
+    \ i = 0; i < xorResult.length; i++) {\n        result += String.fromCharCode(xorResult[i]);\n\
+    \    }\n    return result;\n}\n", "    let xor = a.split('').map(function(c) {\n\
+    \        return c.charCodeAt(0) ^ b.charCodeAt(0);\n    });\n    return String.fromCharCode(xor.reduce(function(x,\
+    \ y) {\n        return x^y;\n    }));\n}\n</code>\n<|/ a tags=javascript,string,xor,arrays\
+    \ |>\n<| c |>\nIt doesn't work if the two strings contains characters with an\
+    \ odd number of bits. For example, `string_xor(\"0111\", \"1101\")` should return\
+    \ `\"110\"` but this code will return the string `\"\"`.\n<|/ c |>\n<| c |>\n\
+    If a string contains characters with an odd number of bits, `xor()` will return\
+    \ an empty string, which may not be what you want. You may want to have a look\
+    \ at [this answer](https://stackoverflow.com/a/643339/206413) instead, which solves\
+    \ the problem you mentioned.\n<|/ c |>\n<| c |>\nThank you very much for pointing\
+    \ that out -- I've added a version that takes care of that case too.\n<|/ c |>\n\
+    <| a dscore=2 |>\nIn case you need XOR between n characters from 2 strings:\n\
+    <code>", "  let result = ''\n  for (let index = 0; index < b.length; index++)\
+    \ {\n    result += String.fromCharCode(a[a.length - b.length + index] ^ (parseInt(b[index])))\n\
+    \  }\n  return result\n}\n", "    if (a.length != b.length) {\n        throw \"\
+    Strings not equal lengths\";\n    }\n    var ret: string = \"\";\n    for (var\
+    \ i = 0; i < a.length; i++) {\n        var tmp = a[i].charCodeAt(0) ^ b[i].charCodeAt(0);\n\
+    \        ret += String.fromCharCode(tmp);\n    }\n    return ret;\n}\n", "  var\
+    \ c: number = 0, result = ''\n  while (a || b) {\n    if (a) {\n      c = ((c\
+    \ << 1) | (c >> 3)) ^ a[0]\n      a = a.slice(1)\n    } else {\n      c = ((c\
+    \ << 1) | (c >> 3)) ^ b[0]\n      b = b.slice(1)\n    }\n    result += String(c)\n\
+    \  }\n  return result\n}\n", "    return `0${(parseInt(a, 2) ^ parseInt(b, 2)).toString(2)}`;\n\
+    }\n", "\tvar result = \"\";\n\tfor (i = 0; i < a.length; i++) {\n\t\tif (a.charAt(i)\
+    \ != b.charAt(i)) {\n\t\t\tresult = result + \"1\";\n\t\t} else {\n\t\t\tresult\
+    \ = result + \"0\";\n\t\t}\n\t}\n\treturn result;\n}\n", "  return binaryXOR(string_toByteArray(a),\
+    \ string_toByteArray(b));\n}\n", "    const len = Math.min(a.length, b.length);\n\
+    \    let r = '';\n    for (let i = 0; i < len; i++) {\n        r += (a[i] || '')\
+    \ ^ b[i];\n    }\n    return r;\n}\n", "  if (a.length != b.length) {\n    throw\
+    \ new Error(`Length of a and b strings mismatch`);\n  }\n\n  let result = '';\n\
+    \  for (let i = 0; i < a.length; i++) {\n    let chara = a[i];\n    let charb\
+    \ = b[i];\n    result += (chara ^ charb);\n  }\n  return result;\n}\n", "    //\
+    \ Convert the input strings to binary strings (0 or 1) and perform XOR\n    const\
+    \ aa = parseBinaryString(a);\n    const bb = parseBinaryString(b);\n    const\
+    \ res = binaryXor(aa, bb);\n    // Convert the result back to a string and return\
+    \ the result.\n    return binaryToString(res);\n}", "    return binary_xor_string(a,\
+    \ b, 4);\n}\n", "  const len = Math.min(a.length, b.length);\n  const result =\
+    \ new Array(len);\n\n  for (let i = 0; i < len; i++) {\n    result[i] = (a[i]\
+    \ ^ b[i]);\n  }\n\n  return result.join(\"\");\n}\n", "  a = a.split(\"\");\n\
+    \  b = b.split(\"\");\n  let newString = \"\";\n  a.forEach((value, index) =>\
+    \ {\n    if (value.toString() === b[index].toString()) {\n      newString += value.toString();\n\
+    \    } else {\n      newString += \"0\";\n    }\n  });\n  return newString;\n}",
+  "  return a ? b ? a ^ b : b : a;\n}\n", "  return a + string_bxor(a, b);\n}\n",
+  "    var len1 = a.length,\n        len2 = b.length;\n    if (len1 !== len2) {\n\
+    \        throw Error(\"stringXor: Length of strings a and b are not the same.\"\
+    );\n    }\n    var ans = \"\";\n    for (var i = 0; i < len1; i++) {\n       \
+    \ var achar = String(a[i]),\n            bchar = String(b[i]);\n        if (achar\
+    \ === '0' && bchar === '0') {\n            ans += '0';\n        } else if (achar\
+    \ === '1' && bchar === '0') {\n            ans += '1';\n        } else if (achar\
+    \ === '1' && bchar === '1') {\n            ans += '1';\n        } else if (achar\
+    \ === '0' && bchar === '1') {\n            ans += '0';\n        } else {\n   \
+    \         throw Error(\"stringXor: invalid characters at position \" + i);\n \
+    \       }\n    }\n    return ans;\n}\n", "  let n = a.length;\n  let m = b.length;\n\
+    \  let res = '';\n  for (let i = 0; i < n; i++) {\n    res += (Number(a[i]) ^\
+    \ Number(b[i]));\n  }\n  return res;\n}\n"]
 stop_tokens:
 - "\nfunction "
 - "\n/*"

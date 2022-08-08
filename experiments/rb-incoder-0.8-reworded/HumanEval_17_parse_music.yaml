@@ -12,7 +12,1341 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 1, 1, 1], candidate.call(\".| .| .| .|\"))\n    assert_equal([2, 2, 1, 1, 4, 4,\
   \ 4, 4], candidate.call(\"o| o| .| .| o o o o\"))\n    assert_equal([2, 1, 2, 1,\
   \ 4, 2, 4, 2], candidate.call(\"o| .| o| .| o o| o o|\"))\n  end\nend\n"
-completions: []
+completions: ["  music_array = music_string.split(\"\").each_with_object([]) do |symbol,\
+    \ array|\n    note_class = case symbol\n      when \"o\" then Note.new(:note,\
+    \ :whole)\n      when \"o|\" then Note.new(:note, :half)\n      when \".|\" then\
+    \ Note.new(:note, :quarter)\n      else raise \"Incorrect symbol: '#{symbol}'\"\
+    \n    end\n    array.push(note_class.new(:beat))\n  end\n  music_array\nend",
+  "  music_string.split(\" \").map do |note|\n    case note\n    when \"o\"\n    \
+    \  4\n    when \"o|\"\n      2\n    when \".|\"\n      1\n    else\n      raise\
+    \ \"invalid music string: #{note}\"\n    end\n  end\nend\n</code>\n<|/ a tags=algorithm,ruby\
+    \ |>\n<| c |>\nI wonder whether you could generalize this to other situations:\
+    \ what if you have a string that starts with `'..'`? Or `'..o'`? Or `'..o..'`?\
+    \ Or `'..o..o'`?\n<|/ c |>\n<| c |>\nI agree with you, this code is more generic,\
+    \ however there is still the problem of how to represent musical note symbols\
+    \ and how to count them. The `o` symbol will be represented by two numbers (note\
+    \ number and octave) but the `|` symbol will be represented by one number (the\
+    \ note's base position in scale). So `o|` is represented by `[3, 1]` instead of\
+    \ `[1, 3]`.\n<|/ c |>\n<| c |>\n`'..o..' #=> [\"o..o..\"]` `'..o..o' #=> [\"o..o..o\"\
+    ]`\n<|/ c |>\n<| c |>\nI like this solution too. But the OP did not state what\
+    \ should happen if the input string starts with `.|` or `.|`, or `.|..` etc.\n\
+    <|/ c |>\n<| c |>\n, what do you mean by \"OP\"? I meant OP = Original Poster.\n\
+    <|/ c |>\n<| a tags=algorithm,ruby |>\nI would go with a simple recursive function\
+    \ which uses String#index to split music note symbols into individual notes.\n\
+    <code>", "    parsed_music = Array.new\n    music_string = music_string.split('\
+    \ ').map(&:strip).reject(&:empty?).join(' ')\n    music_string.split(/\\|/).each\
+    \ do |note|\n        note =~ /(\\d+)/g do |beats|\n            parsed_music.push((beats\
+    \ * 4).to_i)\n        end\n    end\n    parsed_music\nend", "  return music_string.scan(/(?:o|o\\\
+    |.\\|o\\|o\\|\\.\\|\\.\\|\\.\\|\\.\\|o\\|o)/).map(&:size).uniq.sort_by(&:size)\n\
+    end\n</code>\n<|/ a tags=ruby,performance,arrays |>\n<| a |>\nIn your example,\
+    \ each note has exactly the same number of beats in it.  So you can just count\
+    \ the number of time each note appears in a string, then convert it to an array\
+    \ of the positions of the notes.\nI used a combination of scan, gsub, and gsub!\
+    \ in order to make it as simple as possible:\n<code>\nnotes = note_string.gsub(/./)\
+    \ {|s| s.upcase }\nnum_beats = notes.scan(/./).size\nnotes.gsub(/./) {|s| s.upcase\
+    \ }.each_with_index.map do |note, index|\n  ((index+1)/num_beats)*12\nend\n</code>\n\
+    I tested it against your sample and it is very fast.  There are no loops in it\
+    \ so it will be fast even for large strings.\n<|/ a tags=ruby,performance,arrays\
+    \ dscore=2 |>\n<| a dscore=1 tags=ruby,performance,arrays |>\nHere is another\
+    \ solution that does not use regex or gsub!. It uses split, which returns an array.\n\
+    <code>\nnote_string.split('o').map(&:to_i).inject(0) {|sum, beat| sum + beat }\n\
+    </code>\nAnd it does the same, but faster:\n<code>\nnote_string.split('o').map.with_index\
+    \ { |beat, index| index+1 }.inject(0) {|sum, beat| sum + beat }\n</code>\n<|/\
+    \ a |>\n<| a tags=ruby,performance,arrays |>\nYou could use the following to get\
+    \ the same result:\n<code>\nmusic_string[/o|\\.\\|o\\|o\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|o|o/].size.times.map do |i| \n  [(i + 1).to_i / 12.0, (i + 1).to_i % 12]\n\
+    end\n</code>\nOr this, if you prefer to avoid the extra parentheses:\n<code>\n\
+    music_string[/o|\\.\\|o\\|o\\|\\.\\|\\.\\|\\.\\|\\.\\|o|o/].size.times.map do\
+    \ |i| \n  [(i + 1).to_i / 12.0, (i + 1).to_i % 12].map(&:to_i)\nend\n</code>\n\
+    <|/ a ", "  music_string\nend", "  music_string.split(/\\s+/).map do |note_string|\n\
+    \    note_string.chars.map do |letter|\n      letter.ord\n    end.max_by(&:last).last\n\
+    \  end\nend\n</code>\n<|/ a tags=algorithm,ruby,ruby-on-rails,arrays |>\n<| c\
+    \ |>\nI love this, but your solution is very slow. I benchmarked it and found\
+    \ that the OP's method takes about 3 seconds to run on a string of 1500 chars.\
+    \ Yours takes about 7 seconds. This is also very memory consuming, it's just not\
+    \ taking up that much.\n<|/ c |>\n<| c |>\nThanks, I'll definitely try this approach\
+    \ later today. :)\n<|/ c |>\n<| c |>\nI added a benchmark test. I ran it on my\
+    \ laptop with 8GB RAM running ruby 2.5.8. The OP's method takes about 3 seconds\
+    \ on my machine too, so it's really slow. I can't remember what exactly takes\
+    \ so long in the OP's method, it's probably the creation of the arrays that takes\
+    \ so long.\n<|/ c |>\n<| c |>\nHmm, that's interesting. That was surprising. Do\
+    \ you think that's a big memory hog?\n<|/ c |>\n<| c |>\nI added a method with\
+    \ a lower memory footprint. It takes about 7seconds on my machine too.\n<|/ c\
+    \ |>\n<| a tags=algorithm,ruby,ruby-on-rails,arrays |>\nHere is another take on\
+    \ the same problem. \n<code>", "  music_string = music_string.dup\n  parsed_music\
+    \ = music_string.scan(/\\A[o|.]|[^o|.]|\\Z/m).flatten\n  parsed_music = parsed_music.map\
+    \ do |note|\n    case note[0]\n    when 'o'\n      4\n    when 'o|'\n      2\n\
+    \    when '.|'\n      1\n    else\n      0\n    end\n  end", "    music_string\
+    \ = \"o|\" + music_string.split(\" \").map(&:strip).join(\"|\") + \"|o\"\n   \
+    \ music_string.scan(/([.o])\\|([.o])\\|/) do |note, dur, oct|\n        (oct, dur,\
+    \ note) << (note.eql?(\".\") ? \"o|\" : note.eql?(\"o\") ? \"o.|\" : \"o\")\n\
+    \    end.map(&:split).map(&:map{|s| s.split(\"|\")}.flatten)\nend\n</code>\n<|/\
+    \ a |>\n<| c |>\nI am getting the following error: `undefined method 'split' for\
+    \ nil:NilClass` on the line `music_string.scan(/([.o])\\|([.o])\\|/) do |note,\
+    \ dur, oct|`\n<|/ c |>\n<| c |>\nHmm, I guess the music string is empty. Try with\
+    \ `parse_music(\"o o| .| o| o| .| .| .| .| o o\")`\n<|/ c |>\n<| a tags=string,ruby,arrays\
+    \ |>\nI suggest you to use Regexp to match your patterns, for example:\n<code>\n\
+    music_string.scan(/([.o])\\|([.o])\\|/)\n</code>\nwill match o| and o|\n<code>\n\
+    music_string.scan(/([.o])\\|([.o])\\|/).map { |a,b| a.split('|').map(&:strip)\
+    \ }\n</code>\nwill give you an output like: [[4, 2, 1, 2, 2, 1], [3, 1, 1, 1,\
+    \ 3, 3]]\n<|/ a dscore=0 |>\n<| c |>\nWhat if `music_string` contains `o|` instead\
+    \ of `o o|`?\n<|/ c |>\n<| c |>\nI assumed that `music_string` has `o|` somewhere\
+    \ inside\n<|/ c |>\n<| a dscore=0 tags=string,ruby,arrays |>\nI'd write it like\
+    \ this:\n<code>", "  music_string.scan(/o|.|o|o|.|.|.|.|o|o|o|o|o|o/).map do |note|\
+    \ \n    note.count(\"o\").to_f / 4\n  end\nend\n</code>\nYou also can use .map\
+    \ on enumerator instead of .scan or .map, but with scan will be more effective\
+    \ for performance:\n<code>", "  music_array = music_string.split(\"\") # split\
+    \ input string into array of characters\n  music_array.map! { |element| element.chr\
+    \ } # map every character into character\n  music_array.reduce(0) { |carry, element|\
+    \ carry + element.count(\"o\") } # count number of each note\nend\n</code>\nThe\
+    \ above code could be made more concise using the each_char method of strings\
+    \ as follows:\n<code>", "  music_string\n  music_notes = music_string.split('\
+    \ ')\n  music_array = []\n  current_note = []\n  current_beat = 0\n  last_note\
+    \ = 0\n  last_beat = 0\n  while music_notes.count != 0\n    current_note = music_notes.first\n\
+    \    last_note = current_note\n    music_notes.shift\n    music_notes.shift\n\
+    \    music_notes.shift\n    music_notes.shift\n    music_notes.shift\n    music_notes.shift\n\
+    \    music_notes.shift\n    music_notes.shift\n    music_notes.shift\n    current_beat\
+    \ = 0\n    music_notes.each do |note_symbol|\n      music_note =\n        case\
+    \ note_symbol\n        when 'o'\n          [1, 4]\n        when 'o|'\n       \
+    \   [1, 2]\n        when '.|'\n          [1]\n        end\n      if music_note.count\
+    \ != 0\n        if current_note.include?('|')\n          music_note[0] = music_note[0].max\n\
+    \        end\n        music_note += current_note\n        current_beat = 0\n \
+    \       music_note.each do |note|\n          music_array += [note]\n         \
+    \ current_beat += note\n        end\n      end\n    end\n    if current_beat !=\
+    \ 0\n      music_array.last += current_beat\n    end\n    if music_notes.count\
+    \ != 0\n      music_notes.shift \n    end\n  end\n  music_array\nend\n</code>\n\
+    <|/ a tags=ruby,music-notation,ascii dscore=1 |>\n<| c |>\nNice. Didn't expect\
+    \ it to be so easy. Thanks for taking the time to write this out. :-)\n<|/ c |>\n\
+    <| a dscore=1 tags=ruby,music-notation,ascii |>\nMy first approach was to create\
+    \ a music notation class and parse it with regular expressions.  However, this\
+    \ was a bad idea.  I felt like there was too much going on in the music notation\
+    \ parser and I wanted to make the code more readable.\nI rewrote the code to use\
+    \ simple state machines (also known as finite state machines) and now it looks\
+    \ much cleaner.\nI used the State Machine gem to simplify the code and it can\
+    \ be found on rubyforge or rubygems.org.\nI also created a test case which shows\
+    \ the output of the method when given the following input.\n<code>\n'A#|Bb|C|D|E|F|G|A|Bb",
+  "  # TODO: Your code here\nend\n</cell>\n<code language=julia-1.0>", "  music_string.split(\"\
+    \").map(&:ord).each_cons(4).map { |chord| chord.rotate(chord.first) }.\n    map\
+    \ { |chord| chord.map(&:ord).reduce(:+).to_i }\nend", "  notes_to_beats = Hash.new(0)\n\
+    \  music_notes = music_string.split(\" \")\n  music_notes.each do |note|\n   \
+    \ note = note.strip\n    if note == '.' or note == 'o'\n      notes_to_beats[note]\
+    \ = 1\n    else\n      notes_to_beats[note] = notes_to_beats[note] + 1 if notes_to_beats[note].nil?\n\
+    \    end\n  end\n  notes_to_beats\nend\n</cell>\n<cell>", '  music_string = music_string.to_s',
+  "  music_string.scan(/[\\.\\|\\*](?!\\d)/).map do |chord|\n    chord.scan(/\\d/).map\
+    \ do |b|\n      if chord.last == \"o\"\n        0\n      elsif chord.last == \"\
+    o|\"\n        2\n      else\n        1\n      end\n    end\n  end\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nHow would you go about converting this into an array? I'm still\
+    \ new to ruby so this language is pretty foreign to me\n<|/ c |>\n<| c |>\n: I\
+    \ added the conversion part to the answer\n<|/ c |>\n<| c |>\n`chord.scan(/\\\
+    d/).map { |b| chord.last == 'o' ? 0 : (chord.last == 'o|' ? 2 : 1; nil } #=> [4,\
+    \ 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]` for the last line.\n<|/ c |>\n<| c |>\n`chord.scan(/\\\
+    d/).map { |b| chord.last == 'o' ? 0 : 2 }`\n<|/ c |>\n<| c |>\n: Yeah, I wanted\
+    \ to make it as clear as possible, since there are lots of people who are trying\
+    \ to learn from SO answers (me?). But you are right, for such cases you could\
+    \ have written: `chord.scan(/\\d/).map { |b| chord.last == 'o' ? 0 : chord.last\
+    \ == 'o|' ? 2 : 1; nil } #=> [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]`\n<|/ c |>\n<|\
+    \ a tags=ruby,arrays,loops |>\nHere is another solution using Enumerable#chunk_while:\n\
+    <code>\narray = []\nmusic_string.chunk_while{|c| c.match?(/\\d/)}{ |chunk| array.concat(chunk)\
+    \ }\n</code>\nThis works because chunk_while returns an Enumerator object until\
+    \ it reaches an element that does not match the block (in this case all elements\
+    \ are digits). Then it yields one element at a time until the block is satisfied.\n\
+    The only problem is that chunk_while is implemented as a loop, so it can make\
+    \ your algorithm O(n\xB2). I don't know of a way to do this with just 1 iteration\
+    \ of the input string without creating an intermediate array of all digits before\
+    \ you use chunk_while.\n<|/ a dscore=2 |>\n<| c |>\nHow could I avoid the need\
+    \ to create an array with all the characters?\n<|/ c |>\n<| c |>\nI added another ",
+  "  music_string.scan(/((?<note>o|.)\\|){2,}/ ) do |note|\n    note.scan(/(?<beats>\\\
+    d+)/) do |beats|\n      beats.to_i\n    end\n  end\nend", "  music_string.split(\"\
+    \").map do |note|\n    note.match(/[\\.\\|o]+/) ? '.' : note.match(/[\\.\\|o]+\\\
+    |/) ? 'o|' : note.match(/[\\.\\|o]+\\|o/) ? 'o' : note.match(/[\\.\\|o]+\\|.\\\
+    |/) ? '.|' : note.match(/[\\.\\|o]+\\|\\.\\|/) ? '.|.' : note.match(/[\\.\\|o]+\\\
+    |\\.\\|\\.\\|/) ? '.|.|' : note.match(/[\\.\\|o]+\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|'\
+    \ : note.match(/[\\.\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|' : note.match(/[\\\
+    .\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|.|' : note.match(/[\\.\\\
+    |o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|.|.|' : note.match(/[\\\
+    .\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|.|.|.|' : note.match(/[\\\
+    .\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|.|.|.|.|'\
+    \ : note.match(/[\\.\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|/) ? '.|.|.|.|.|.|.|.|.|' : note.match(/[\\.\\|o]+\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|/) ? '.|.|.|.|.|.|.|.|.|.' : note.match(/[\\\
+    .\\|o]+\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|/) ? '.|.|.|.|.|.|.|.|.|.|' : note", "  music_string.split.each_with_index.inject([])\
+    \ do |array, (n, index)|\n    array << case index\n            when 0 then 1\n\
+    \            when 1 then n / 4\n            when 2 then n / 2\n            when\
+    \ 3 then 1\n            else 0\n            end\n  end\nend\n</code>\n<|/ a tags=ruby,arrays,string\
+    \ |>\n<| c |>\nI appreciate your contribution, and thanks for posting your solution!\
+    \ The main thing that I struggled with was that I was confusing myself with how\
+    \ to iterate over the array in a way that made sense to me.\n<|/ c |>\n<| c |>\n\
+    It was a pleasure! The main problem was the lack of clarity in the question, that's\
+    \ why I posted my solution and got downvoted and closed as a \"not a real question\"\
+    . And your question did help to clarify what was expected as output.\n<|/ c |>\n\
+    <| a dscore=0 |>\nSo this is my take on it.\n<code>", "  music_string.scan(/^([o|.]+)/)\n\
+    end", "  music_string.scan(/./) { |m| return [m, m.count] }\n  raise \"No music\
+    \ found\" if music_string.empty?\nend", "  music_string = music_string.gsub(/o|\\\
+    |/, '|')\n  music_string = music_string.gsub(/\\.{2}/, '')\n  music_array = music_string.split('|')",
+  "  music_array.each_with_index do |note, index|\n    note = note[0]\n    beat_number\
+    \ = (index/12).ceil\n    beats_per_note = (index/12).to_i\n    if note == 'o'\n\
+    \      music_array[index] = 4 if beat_number > music_array[index-1]\n    elsif\
+    \ note == 'o|'\n      music_array[index] = 2 if beat_number > music_array[index-1]\n\
+    \    elsif note == '.|'\n      music_array[index] = 1\n    end\n  end\nend", " \
+    \ music_array = []\n  music_array = music_string.scan(/o|.|/)\n  music_array.each\
+    \ do |element|\n    if element.length == 1\n      music_array << element.length\n\
+    \    elsif element.length == 2\n      music_array << element.length * 2\n    end\n\
+    \  end\n  music_array\nend\n</code>\n<|/ a tags=arrays,ruby |>\n<| c |>\nHi, I\
+    \ updated my question to show what I'm trying to do. Also, how would I do what\
+    \ you said with my updated question?\n<|/ c |>\n<| c |>\nThank you, I understand\
+    \ it now.\n<|/ c |>\n<| c |>\nI updated my answer based on your latest edit\n\
+    <|/ c |>\n<| a tags=arrays,ruby dscore=2 |>\nHere's my take on the problem: \n\
+    <code>", "  music_array = music_string.split(\" \").map do |note|\n    if note.count(\"\
+    |\") == 1\n      note.split(\"|\").map { |e| e.to_i }.max\n    elsif note.count(\"\
+    |\") == 2\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 3\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 4\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 5\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 6\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 7\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    elsif note.count(\"\
+    |\") == 8\n      note.split(\"|\").map { |e| e.to_i }.max.floor\n    else\n  \
+    \    puts \"This note is not supported\"\n    end\n  end\n  music_array.max\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nI'm sure this could benefit from a more elegant\
+    \ solution though, but for now it works. Thanks a lot :)\n<|/ c |>\n<| c |>\n\
+    : I've updated my answer with a more elegant solution.\n<|/ c |>\n<| c |>\nI believe\
+    \ that the new version was even more elegant, thanks a lot :)\n<|/ c |>\n<| a\
+    \ dscore=1 |>\nHere's a non-regex solution, which I believe is more readable.\
+    \ Plus, it's shorter.\n<code>\nnotes = {\n    \"o\"=>4, \"o|\"=>2, \"o|\"=>2,\
+    \ \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2,\n    \"o|\"=>2, \"o|\"\
+    =>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2,\n    \"\
+    o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"=>2, \"o|\"", "  music_string.scan(/./)\
+    \ do |note|\n    note.upcase! if note.is_a?(String)\n    note.downcase! if note.is_a?(String)",
+  "  notes = music_string.split(\" \")\n  notes = notes.map {|note| note.strip}\n\
+    \  \n  note_counts = Hash.new(0)\n  notes.each {|note| \n    note_counts[note]\
+    \ += 1\n  }", "  music_array = music_string.split(\" \").map(&:to_i)\n  n = music_array.length\
+    \ - 1\n  music_array.map.with_index do |note, nth|\n    unless note.zero?\n  \
+    \    case note\n      when 0\n        music_array[nth] -= 1\n      when 1\n  \
+    \      music_array[nth] -= 2\n      when 2\n        music_array[nth] -= 4\n  \
+    \    end\n    end\n  end\n  music_array\nend\n</code>\n<|/ a |>\n<| c |>\nI added\
+    \ a description of my problem in the question. And sorry that I didn't provide\
+    \ an example with your solution.\n<|/ c |>\n<| c |>\nI added a possible solution\
+    \ to my answer, please take a look.\n<|/ c |>\n<| c |>\nThat's it. Thank you!\n\
+    <|/ c |>\n<| c |>\nThe algorithm looks okay. I would use each_with_index instead\
+    \ of map and index (so you can just subtract from it instead of mapping it).\n\
+    <|/ c |>\n<| c |>\nAnd what if the input string is not perfectly formed? E.g.\
+    \ \"o.|.\"\n<|/ c |>\n<| a tags=algorithm,ruby,arrays |>\nHere's a solution that\
+    \ uses a regular expression to find the positions for each note. \nIt uses the\
+    \ scan method with a regular expression to find the matches in the string, then\
+    \ maps them to note numbers and sums them:\n<code>", "  music_notes = music_string.split(\"\
+    \")\n  music_notes.each do |note|\n    if note.include?(\"o\")\n      note_duration\
+    \ = 4\n    elsif note.include?(\"o|\")\n      note_duration = 2\n    elsif note.include?(\"\
+    .|\")\n      note_duration = 1\n    else\n      puts \"Error! Unknown note '#{note}'.\"\
+    \n      exit(-1)\n    end\n  end\n  notes = music_notes.select {|note| !note.include?(\"\
+    o\") && !note.include?(\"o|\") && !note.include?(\".|\")}\n  notes.each_with_index\
+    \ {|note, index|\n    music_notes[index] = note.split(\"|\").inject(0) do |sum,\
+    \ duration|\n      sum + duration\n    end\n  }\n  return music_notes\nend", '  music_string
+    = music_string.strip # remove trailing and leading spaces', "  music_string.scan(/o|.|/)\
+    \ do |note|\n    note.scan(/\\d+/) do |num_beats|\n      num_beats *= 4\n    end\n\
+    \  end\nend", "  music_string.scan(/[^ ]|\\./) do |note|\n    if note == \".\"\
+    \n      note\n    else\n      case note\n      when \"o\"\n        1\n      when\
+    \ \"|\"\n        2\n      when \".\"\n        1\n      end\n    end\n  end\nend\n\
+    </code>\n<|/ a tags=ruby,regex |>\n<| c |>\n`Note.parse(\"o o| .| o| o| .| .|\
+    \ .| .| o o\").count` is `7`.\n<|/ c |>\n<| c |>\nOh, yeah, I see it now, thanks!\
+    \ I was too quick at copy paste :)\n<|/ c |>\n<| a |>\nMy first attempt would\
+    \ be to define a method that would return the note from a string given an interval\
+    \ as a fraction. Something like:\n<code>", "  music_string = music_string.strip\n\
+    \  notes = music_string.split(\" \")\n  last_beats = 0\n  notes.each do |note|\n\
+    \    if note == \"o\"\n      last_beats = 4\n    elsif note == \"o|\"\n      last_beats\
+    \ = 2\n    elsif note == \".|\"\n      last_beats = 1\n    elsif note != \"o\"\
+    \ and\n           note != \"o|\" and\n           note != \".|\" and\n        \
+    \   note != \"o|\"\n      raise \"Invalid note #{note} in #{music_string}\"\n\
+    \    end\n  end\n  return [last_beats, *notes.map { |note| parse_note(note) }]\n\
+    end", "  music_string.split(\"\\n\").each do |line|\n    notes = line.split(\"\
+    |\")\n    music_notes = []\n    notes.each do |note|\n      music_notes << Note.new(note)\n\
+    \    end\n    music_notes.flatten!\n    music_notes.each { |note| note.last_beat\
+    \ = notes.length if note.last_beat.nil? }\n  end\n  return music_notes.map { |note|\
+    \ note.beat_count }\nend\n</code>\nThe output looks like this:\n<code>\n$ ruby\
+    \ parse_music.rb\n[4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\nThe only other thing\
+    \ to note is that I'm assuming that the string you're parsing is formatted as\
+    \ you have it in the question and that each note is surrounded by an | character.\n\
+    <|/ a dscore=0 |>\n<| c |>\n\"Each note is surrounded by `|` character.\" That\
+    \ should be the correct assumption for my problem. Thank you for bringing up the\
+    \ concern about unnecessary notes that may have already been beaten. I will try\
+    \ the solution and let you know if it works.\n<|/ c |>\n<| c |>\n\"I'm assuming\
+    \ that the string you're parsing is formatted as you have it in the question and\
+    \ that each note is surrounded by an `|` character.\" That is correct. Your solution\
+    \ works perfectly for my problem.\n<|/ c |>\n<| c |>\nGreat! Glad I could help.\n\
+    <|/ c |>\n<| a dscore=0 |>\nI wrote a little program that reads music as text\
+    \ and outputs it as midi events. It's not as compact as yours, but it works.\n\
+    <code>\nrequire \"midi\"", "    music_string = music_string.gsub(\"o\", ' ').gsub(\"\
+    |\", ' ').gsub(\".\", ' ')\n    beats = music_string.split('|').map do |note|\n\
+    \        note.count(' ') + 1\n    end\n    return beats\nend\n</code>\nThe beat\
+    \ counting function will give you the result you want.\n<code>", "    music_string\
+    \ = music_string[0].to_s + music_string[1..-1]\n    music_string = music_string.split(\"\
+    |\").map { |note| note[0].to_i + note[1].to_i }\n    music_string = music_string.map\
+    \ { |note| note_length(note) }\n    return music_string\nend", "  # Write your\
+    \ code here\n  music_string = music_string.split(//).map{|m| m.split('').map(&:to_i)}\n\
+    \  music_string.map! do |n|\n    if n.size == 4\n      n.reduce(0){|sum, note|\
+    \ sum + note}\n    elsif n.size == 2\n      n.reduce(0){|sum, note| sum + note}\n\
+    \    elsif n.size == 1\n      n.reduce(0){|sum, note| sum + note}\n    else\n\
+    \      raise \"invalid music string\"\n    end\n  end\n  music_string\nend\n</code>\n\
+    <|/ a tags=ruby,arrays |>\n<| c |>\nThanks for the reply, i will try your solution\
+    \ too!\n<|/ c |>\n<| a tags=ruby,arrays dscore=0 |>\n<code>", "  music_array =\
+    \ []\n  music_string += \".\"\n  music_string[0..music_string.index(\"|\")] #chop\
+    \ off final |\n  music_string[0..music_string.rindex(\"|\")] #chop off initial\
+    \ |\n  music_string[0..music_string.index(\"|\")] #chop off final |\n  music_string.scan(/o|\\\
+    ./) { |x| music_array << 1 }\n  return music_array\nend\n</cell>\n<text>\nPractice\
+    \ Question\nHere are the three solutions to your problem above, each with their\
+    \ own print statement. You should print each solution out to the screen before\
+    \ submitting the assignment.", "  music_string.split(\" \").map { |note| note.split(\"\
+    |\").count }.compact\nend\n</cell>\n<code language=julia-1.5>\n@time parse_music(\"\
+    o o| .| o| o| .| .| .| .| o o\")\n</cell>\n<code language=julia-1.5>", "  music_string\
+    \ = music_string.split(\" \") # Splits into array\n  music_string = music_string[0]\n\
+    \  music_array = music_string.split(\"|\") # Splits into array\n  music_array\
+    \ = music_array[0]\n  music_array = music_array.split(\"o\") # Splits into array\n\
+    \  music_array = music_array[0]\n  music_array = music_array.split(\".\") # Splits\
+    \ into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"\
+    .\") # Splits into array\n  music_array = music_array[0]\n  music_array = music_array.split(\"",
+  "  music_string.scan(/(?<=\\s)(\\.|o|\\|)(?=\\s)/).map { |s| parse_note(s.strip)\
+    \ }\nend", "  beats = [0]\n  current_note = \"\"\n  notes = music_string.split(\"\
+    \ \").map do |note|\n    if note == \".\"\n      note\n    elsif note.start_with?(\"\
+    o\")\n      note\n    elsif note.start_with?(\"o|\")\n      note\n    else\n \
+    \     raise \"Invalid music note #{note}\"\n    end\n  end", "  music_notes =\
+    \ music_string.split\n  music_notes.each { |note| \n    note.tr!('o', '0')\n \
+    \   note.tr!('|', '0')\n    note.tr!('+', '0')\n    note.tr!('=', '0')\n    note.tr!('^',\
+    \ '0')\n    note.tr!('o', '1')\n    note.tr!('|', '1')\n    note.tr!('+', '1')\n\
+    \    note.tr!('=', '1')\n    note.tr!('^', '1')\n  }\n  music_notes.each_with_index\
+    \ { |note, i| \n    note.to_i(2).to_s(2).count('0') == 0 ? 0 : (note.to_i(2).to_s(2).count('0')\
+    \ - 1).to_i \n  }\nend\n</code>\n<|/ a |>\n<| a |>\nIn Ruby, a regular expression\
+    \ is used to match the input string. The matcher is then used to extract the numeric\
+    \ values from the match. \n<code>", "  music_string.downcase!\n  music_string.strip!",
+  "  music_notes = music_string.split(//)\n  music_notes.map!{|note| note == '.' ?\
+    \ 1 : note == 'o' ? 4 : note == '|' ? 2 : 0}\n  music_notes.map!{|note| note ==\
+    \ 'o' ? 4 : note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == 'o' ? 2 :\
+    \ 1}\n  music_notes.map!{|note| note == 'o' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? 2 : 1}\n  music_notes.map!{|note| note == '|' ? 1 : 4}\n  music_notes.map!{|note|\
+    \ note == '|' ? ", "  array = music_string.split(\"\").map do |char|\n    case\
+    \ char\n    when \".\" then 1\n    when \"o\" then 4\n    else 0\n    end\n  end\n\
+    \  array.inject(:+)\nend", "    notes = []\n    note = music_string[0].downcase\n\
+    \    for note in music_string[1..-1]\n        if note.start_with?(\".\") or note.start_with?(\"\
+    o\") || note.start_with?(\"+\")\n            notes.push(note)\n        else\n\
+    \            notes.push(note)\n            notes.push(note.split(\"\").count(\"\
+    o\"))\n        end\n    end\n    notes.flatten\nend", "  return music_string.split('|').inject([])\
+    \ {|memo, part| memo << parse_note(part); memo}\nend", "  music_string\n    .scan(/o|\\\
+    .\\|/)\n    .map {|m| m.length.to_i }\n    .sort\nend\n</code>\nThe trick is that\
+    \ scan returns a regex matcher with the array element as its argument, and map\
+    \ performs the transformation on the array's elements, so we end up with [4, 2,\
+    \ 1, 2, 2, 1, 1, 1, 1, 4, 4] which we sort by ascending order and then turn back\
+    \ into an array using sort.\n<|/ a |>\n<| c |>\nNice approach. Unfortunately,\
+    \ it does not work if the music string contains two consecutive dots. In that\
+    \ case, it returns `[4,2,1,1]`.\n<|/ c |>\n<| c |>\nI see what you mean now. Thanks\
+    \ for pointing that out.\n<|/ c |>\n<| c |>\nIt works with more than one dot,\
+    \ but only because it's still valid music, so it can return less than 4 beats\
+    \ for two dots. But for more than 2 dots it returns `[4,2,1,1]` because each dot\
+    \ represents one beat, right?\n<|/ c |>\n<| c |>\nYes, that's the point. Each\
+    \ dot represents one beat. The input string contains one dot (at position `1`),\
+    \ so `parseMusic` will return `[4,2,1,1]`. But there are two dots, so `parseMusic`\
+    \ will return `[4,2,1,1]`. The dot after `1` is interpreted as the end of the\
+    \ string, so it returns `[4,2,1,1]`.\n<|/ c |>\n<| c |>\nYes, that's right. I\
+    \ thought my code was working for more than 2 dots too, but it seems like it does\
+    \ not. Thanks for pointing out my mistake!\n<|/ c |>\n<| a tags=ruby,arrays,string\
+    \ dscore=0 |>\n<code>\nmusic_string = \".| .| .| .| .| .| .| .| .| o o . o o o\
+    \ o . o o o . o o o . o o o o . o o o o o . o o o . o o o o . o o o . o o o .\
+    \ o o o . o o o . o o o . o o o . o o o . o o o . o o o o . o o o o . o o o o\
+    \ . o o o . o o o . o o o . o o o o . o o o o . o o o . o o o . o o o o . o o\
+    \ o . o o o . o o o ", "  music_array = music_string.split\n  music_array.map!\
+    \ do |letter|\n    case letter\n    when 'o'\n      4\n    when 'o|'\n      2\n\
+    \    when '.|'\n      1\n    else\n      0\n    end\n  end\n  music_array\nend",
+  "  music_string.split('|').reduce(Hash.new(0)) { |note, note_string|\n    note[note_string]\
+    \ = note[note_string] + 1\n    note\n  }.values.sort_by { |note| -note }\nend\n\
+    </code>\n<|/ a |>\n<| c |>\nI appreciate your answer! It's really interesting,\
+    \ however it doesn't work for me as I need. I need to get `[4, 2, 1, 2, 2, 1,\
+    \ 1, 1, 1, 4, 4]` as an output in order to use it in my program. Do you have any\
+    \ idea how to do it?\n<|/ c |>\n<| c |>\nI've just added the output I need to\
+    \ the question\n<|/ c |>\n<| c |>\nSorry, I misunderstood what you meant at first.\
+    \ I thought you wanted the result to be sorted, but I actually thought you wanted\
+    \ the result to be sorted in order of most to least common. I've corrected my\
+    \ answer.\n<|/ c |>\n<| c |>\nThank you! I tested your answer and it works perfectly\
+    \ :) Thank you!\n<|/ c |>\n<| c |>\nNo problem. Just one more thing, I modified\
+    \ the function slightly so now it works with strings with notes more than 1 char.\
+    \ Like \"o|o\" instead of \"o| o\"\n<|/ c |>\n<| a tags=ruby,arrays,parsing,string\
+    \ |>\n<code>", '  music_array = music_string.split(" ") # split our string into
+    an array of words', "  music_string.scan(/^([o\\.|o]+)$/) do |note|\n    # Convert\
+    \ the note to note.downcase to make it case insensitive.\n    note = note[0].downcase.to_sym",
+  "  # Use split function and enumerate to generate array of strings\n  # Iterate\
+    \ over array\n  # Use regular expressions to extract note name and note length.\n\
+    \  # Use note_lenth_lookup to convert note length in beats\nend\n</pre>\n    \
+    \      </td>\n        </tr>\n        <tr>\n          <td>\n            <pre>",
+  "  music_string = music_string.gsub(/[|\\.]\\z/, '')\n  music_string.gsub!(/([oO]+)/)\
+    \ do\n    notes = $1.gsub(/\\d+/).to_i\n    case $1\n    when \"o\"\n      notes\n\
+    \    when \"o|\"\n      notes / 2\n    when \".|\"\n      notes / 4\n    end\n\
+    \  end\nend\n</code>\n<|/ a tags=ruby,algorithm dscore=2 |>\n<| c |>\nThis is\
+    \ interesting, I had not thought of using the symbols as patterns. This is really\
+    \ clever. I think the only thing I would suggest is to make the first argument\
+    \ to `to_i` a regular expression for readability and consistency, and remove `to_i`\
+    \ from the first `gsub`: `music_string.gsub(/[oO]+/).map { |s| s.gsub(/\\d+/,\
+    \ \"\").to_i }`\n<|/ c |>\n<| c |>\nThanks, I added the explanation.\n<|/ c |>\n\
+    <| c |>\nThis was amazing - thank you for such a thorough explanation and for\
+    \ doing such a great job on this problem!\n<|/ c |>\n<| a tags=ruby,algorithm\
+    \ |>\nYou will want to use the modulo operator % in conjunction with some conditional\
+    \ logic. Essentially you will want to create a hash table to map between notes\
+    \ and beats. You can read about it here.\n<|/ a dscore=1 |>\n<| a tags=ruby,algorithm\
+    \ dscore=1 |>\nThis sounds like a fun little exercise.  Here is another one, where\
+    \ I used the %w operator to help generate the array:\n<code>", "  \n  # Solution\
+    \ begins here\n  music_string = \"o o| .| o| o| .| .| .| .| o o\" \n  \n  notes\
+    \ = music_string.split(\" \")\n  notes.map {|note| note.chars.to_a}.flatten!\n\
+    \  \n  output = notes.map do |note|\n    note.first\n    note.count { |c| c ==\
+    \ note.last }\n  end", "  # Write your code here\n  music_string.split(\" \").map\
+    \ { |note| note.split(\"|\") }.flatten.map { |note| note.split(\"o\").count }.sort.uniq\n\
+    end\n</code>\nOutput:\n<code>\n[4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\n<|/\
+    \ a tags=parsing,ruby dscore=1 |>\n<| c |>\nYes, I agree, my answer is very similar,\
+    \ only that I was thinking about a more generalized version.\n<|/ c |>\n<| a |>\n\
+    This problem can be solved by using regexp. The following code does the job by\
+    \ extracting the notes and the beats.\n<code>\nmusic = \" .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .|\
+    \ .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .| .",
+  "  # Your code here\nend\n</code>\nThis code does not use any special modules or\
+    \ libraries, so it's easy to understand and modify.\n<|/ a tags=parsing,arrays,ruby,string\
+    \ dscore=1 |>\n<| c |>\nI like this implementation, but how would you get that\
+    \ array `[4, 4, 2, 1, 1]` from the string `\"o o| .| o| o| .| .| .| .| o o\"`?\n\
+    <|/ c |>\n<| c |>\nThank you so much for helping me out with this code.  I really\
+    \ appreciate it.  I will work on this code and try to understand it and apply\
+    \ it to the code I am working on right now to make sure everything works.  Thanks\
+    \ again!\n<|/ c |>\n<| c |>\n, my code returns an array of integers. If you want\
+    \ an array of strings just use `[4, 4, 2, 1, 1].map(&:to_s)` instead of `[4, 4,\
+    \ 2, 1, 1].map(&:to_i)`\n<|/ c |>\n<| c |>\nI see how you are getting the integer\
+    \ array.  However, I am unsure of how to get an array of the actual strings out\
+    \ of the integer array.  Sorry, I am very new to coding.  I really appreciate\
+    \ the help.\n<|/ c |>\n<| c |>\n, just replace `to_i` call with `to_s`\n<|/ c\
+    \ |>\n<| a tags=parsing,arrays,ruby,string |>\nYou only need to use split and\
+    \ slice!\n<code>\na = 'o o| .| o| o| .| .| .| .| o o'\na.split('| ').map(&:slice!).map(&:count).reduce(:+)",
+  "  # TODO: Write me\nend\n</cell>\n<text>\nLet's test it out on a few examples:",
+  "  music_string_split = music_string.split(\" \")\n  num_notes = len(music_string_split)\n\
+    \  music_notes_array = Array.new(num_notes)\n  music_notes_array[0] = music_string_split[0]\n\
+    \  if music_string_split.count > 1\n    music_notes_array[1] = music_string_split[1]\n\
+    \  end\n  music_notes_array[2] = music_string_split[2]\n  if music_string_split.count\
+    \ > 3\n    music_notes_array[3] = music_string_split[3]\n  end\n  if music_string_split.count\
+    \ > 4\n    music_notes_array[4] = music_string_split[4]\n  end\n  if music_string_split.count\
+    \ > 5\n    music_notes_array[5] = music_string_split[5]\n  end\n  if music_string_split.count\
+    \ > 6\n    music_notes_array[6] = music_string_split[6]\n  end\n  music_notes_array[7]\
+    \ = music_string_split[7]\n  if music_string_split.count > 8\n    music_notes_array[8]\
+    \ = music_string_split[8]\n  end\n  if music_string_split.count > 9\n    music_notes_array[9]\
+    \ = music_string_split[9]\n  end\n  return music_notes_array\nend", "  parsed_music\
+    \ = music_string.split(\" \").map do |note|\n    note.split(\"|\").map { |beats|\
+    \ note.length.to_i * beats.to_i }\n  end\n  parsed_music.flatten.uniq\nend\n</code>\n\
+    The function above uses .map to go through the string and transform each item\
+    \ into array. It then uses .flatten to collapse the resulting arrays. These will\
+    \ then be uniquified - meaning only the first occurrence of a duplicate will be\
+    \ preserved.\nThen, just call your function by passing the string.\n<code>\nparse_music(\"\
+    o o| .| o| o| .| .| .| .| o o\")\n</code>\nAnd you will get:\n<code>\n[4, 2, 1,\
+    \ 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThat is so helpful.\
+    \ I would just like to add that the number of times each note was played is included\
+    \ in the list. So you would need to add two to the number of times a note was\
+    \ played to get the correct answer for the code above.\n<|/ c |>\n<| c |>\nAh,\
+    \ yes. Didn't notice that - fixed.\n<|/ c |>\n<| a tags=ruby |>\nHere's a little\
+    \ function that parses the string and returns an array of the number of beats\
+    \ per note, with duplicates removed:\n<code>", "  # Your code here\nend", "  #\
+    \ Your code goes here\nend", "  music_string.scan(/./) do |note|\n    note_map\
+    \ = {\n      \"o\"      => 1,\n      \"o|\"     => 2,\n      \".|\"     => 1,\n\
+    \      \"o|o\"    => 4,\n      \"o|o|\"   => 8,\n      \"o|o|o\"  => 16\n    }\n\
+    \    note_map[note]\n  end\nend\n</code>\n<|/ a tags=algorithm,ruby dscore=0 |>\n\
+    <| a dscore=0 |>\nMy solution:\n<code>", "  result = []\n  i = 0\n  while i <\
+    \ music_string.length\n    note = music_string[i]\n    if note == \"o\"\n    \
+    \  result.push(0)\n      i += 1\n    elsif note == \"|\"\n      result.push(1)\n\
+    \      i += 1\n    elsif note == \".\"\n      result.push(2)\n      i += 1\n \
+    \   end\n    i += 1\n  end\n  result\nend\n</code>\n<|/ a dscore=0 tags=ruby,arrays\
+    \ |>\n<| a |>\n<code>\nnotes = input.split(//)\n</code>\nThis will split the string\
+    \ on whitespace, returning an array of strings (the notes). The argument passed\
+    \ to split is usually a regular expression, but in this case, it's nil so it uses\
+    \ /\\s+/, which means \"one or more whitespace characters\".\n<code>", "    music_string\
+    \ = music_string.upcase\n    music_string.gsub!(/\\s+/, ' ') # remove extra whitespace\n\
+    \    music_string.gsub!(/o|\\.|o|/, '|')\n    music_string.gsub!(/o/, '|') # remove\
+    \ other special notes\n    music_string.gsub!(/\\+/, '+')\n    music_string.gsub!(/\\\
+    //, '/')\n    music_string.gsub!(/\\|/, '|')\n    music_string.gsub!(/\\./, '')\n\
+    \    music_string.split('|').map(&:to_i).uniq.sort.to_a\nend", "  # Your code\
+    \ here\n  notes_arr = music_string.split('|')\n  \n  notes_count = [0]*(len(notes_arr)*4)\n\
+    \  for i in range(len(notes_arr)):\n    for j in range(int(notes_arr[i].split('/')[0])+1):\n\
+    \      notes_count[j*4+i] += 1", "    string_to_return = []\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string.replace(\"\
+    o|\", \"1\")\n    music_string.replace(\".|\", \"2\")\n    music_string.replace(\"\
+    o\", \"0\")\n    music_string.replace(\"o|\", \"1\")\n    music_string.replace(\"\
+    .|\", \"2\")\n    music_string.replace(\"o\", \"0\")\n    music_string", "  #\
+    \ Write your code here\nend\n</cell>\n<cell>", "  parsed_notes = music_string.gsub(/[^o|.|]/,\"\
+    \").split(\" \").map(&:to_i).to_h\n  parsed_notes.each do |key,value|\n    if\
+    \ value.to_i < 4 \n      parsed_notes[key] = 4\n    elsif value.to_i < 8\n   \
+    \   parsed_notes[key] = 1\n    end\n  end\n  parsed_notes\nend\n</code>\n<|/ a\
+    \ dscore=1 |>\n<| c |>\nIt would be helpful if you explained *why* your code is\
+    \ different and how it fixes the original problem.\n<|/ c |>\n<| c |>\nThis doesn't\
+    \ work for me. I tried `parse_music(\"o o| .| .| .| o| .| .| .| o\")` and I get\
+    \ `[4, 1, 1, 1, 1, 4, 4, 4, 4]`\n<|/ c |>\n<| c |>\nit shouldn't, the result is\
+    \ correct, just run it again ;)\n<|/ c |>\n<| a dscore=0 |>\nThis works and is\
+    \ super simple.\n<code>", "  music_string.split(\" \").map do |note|\n    note.to_i\n\
+    \  end.each_cons(2).select {|note1, note2| note1 < note2 }.inject(:+)\nend\n</code>\n\
+    <|/ a dscore=4 tags=arrays,ruby,string |>\n<| c |>\nThis was the most helpful\
+    \ solution that I found to parse midi tracks, thanks.\n<|/ c |>\n<| a tags=arrays,ruby,string\
+    \ dscore=3 |>\nUse regular expressions to capture your notes and then split them\
+    \ up. The following assumes that each note has a specific number of beats. You\
+    \ could also use a more advanced regular expression but this should be sufficient\
+    \ for what you are doing.\n<code>\nstring = \"o o| .| o| o| .| .| .| .| o o\"\n\
+    notes = string.scan(/(?:(\\.\\|))(\\w+)(?:\\|(\\w+))*/)\nnotes.map{|x| x.split(\"\
+    \ \").map{|y| y.to_i}}.transpose.map(&:sum)", "  music_string.split(\"| \").map{|note|\
+    \ note.split(\"o\").map{|i| i.to_i}}.flatten.each_cons(4).map{|note| note.sum}.to_a\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nWhy `flatten` at the end? Why not use `map` instead?\n\
+    <|/ c |>\n<| c |>\nThis code does not seem to work if you don't use the `each_cons`\
+    \ call.\n<|/ c |>\n<| c |>\nIf your `note` ends with \"|\", `each_cons` will yield\
+    \ an empty array and `note.flatten` will yield `[]`, which will cause `.sum` to\
+    \ return 0. The `each_cons` is needed to deal with empty arrays. If you replace\
+    \ `.each_cons(4)` with `map` it should work as expected.\n<|/ c |>\n<| c |>\n\
+    : That's not correct (at least, not in the OP's case). The `| o` sequence is still\
+    \ part of the `note` string, even if there is no `|` at the end. Your code assumes\
+    \ the `| o` sequence ends up being \"ignored\" by the `map` but this is not how\
+    \ `map` works.\n<|/ c |>\n<| c |>\nYes, I see what you mean. You are right, that\
+    \ is a better way to handle it. I updated the answer to reflect that.\n<|/ c |>\n\
+    <| a tags=string,ruby |>\nIn case you don't want to use each_cons, this could\
+    \ work too\n<code>\nstr = \"o o| .| o| o| .| .| .| .| o o\"\nstr.split(\"| \"\
+    ).map {|note| note.split(\"o\").map(&:to_i).reduce(:+)}\n=> [4, 2, 1, 2, 2, 1,\
+    \ 1, 1, 1, 4, 4]\n</code>\n<|/ a dscore=2 |>\n<| c |>\nWhy `map`? Why not just\
+    \ `reduce`?\n<|/ c |>\n<| a tags=string,ruby dscore=2 |>\nHere is a working solution:\n\
+    <code>", "    music_array = music_string.split(\" \")\n    music_array[-1] = music_array[-1].split(\"\
+    |\")[-1]\n    music_array[-3] = music_array[-3].split(\"|\")[-1]\n    music_array[-6]\
+    \ = music_array[-6].split(\"|\")[-1]\n    music_array[-9] = music_array[-9].split(\"\
+    |\")[-1]\n    music_array[-12] = music_array[-12].split(\"|\")[-1]\n    music_array[-15]\
+    \ = music_array[-15].split(\"|\")[-1]\n    music_array[-18] = music_array[-18].split(\"\
+    |\")[-1]\n    music_array[-21] = music_array[-21].split(\"|\")[-1]\n    music_array[-24]\
+    \ = music_array[-24].split(\"|\")[-1]\n    music_array[-27] = music_array[-27].split(\"\
+    |\")[-1]\n    music_array[-30] = music_array[-30].split(\"|\")[-1]\n    music_array[-33]\
+    \ = music_array[-33].split(\"|\")[-1]\n    music_array[-36] = music_array[-36].split(\"\
+    |\")[-1]\n    music_array[-39] = music_array[-39].split(\"|\")[-1]\n    music_array[-42]\
+    \ = music_array[-42].split(\"|\")[-1]\n    music_array[-45] = music_array[-45].split(\"\
+    |\")[-1]\n    music_array[-48] = music_array[-48].split(\"|\")[-1]\n    music_array[-51]\
+    \ = music_array[-51].split(\"|\")[-1]\n    music_array[-54] = music_array[-54].split(\"\
+    |\")[-1]\n    music_array[-57] = music_array[-57].split(\"|\")[-1]\n    music_array[-60]\
+    \ = music_array[-60].split(\"|\")[-1]\n    music_array[-63] = music_array[-63].split(\"\
+    |\")[-1]\n    music_array[-66] = music_array[-66].split(\"|\")[-1]\n    music_array[-69]\
+    \ = music_array[-69].split(\"|\")[-1]\n    music_array[-72] = music_array[-72].split(\"\
+    |\")[-1]\n    music_array[-75] = music_array[-75].split(\"|\")[-1]\n    music_array[-78]\
+    \ = music_array[-78].split(\"|\")[-1]\n    music_array[-81] = music_array[-81].split(\"\
+    |\")[-1]\n    music_", "  music_string.gsub!(/[^a-z]/, ' ') #replace anything\
+    \ that is not a lowercase letter\n  music_string.gsub!(/[^a-n]/, '') #replace\
+    \ anything that is not a lowercase letter", "  music_array = music_string.split(\"\
+    \ \").map(&:to_i)\n  music_array.map { |n| n.to_s.split(\"|\").map { |b| b.to_i\
+    \ if b }.map(&:to_i).reduce(:+) }\nend\n</code>\nTesting:\n<code>\n>> parse_music.call(\"\
+    o o| .| o| o| .| .| .| .| o o\")\n=> [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\n\
+    <|/ a dscore=3 |>\n<| c |>\nHow would you do that on paper?\n<|/ c |>\n<| c |>\n\
+    I just added a little explanation with examples. Hope that helps.\n<|/ c |>\n\
+    <| c |>\nI still don't get it. If I were to split \"o o| .| o| o| .| .| .| .|\
+    \ o o\" into \"o\" and \"o|\" then how would I then split those into \"|\" and\
+    \ \"|\"?\n<|/ c |>\n<| c |>\nSo the second split would be \"o\", \"o|\", \"|\"\
+    , \"|\", \"|\", \"|\", \"o\", \"o\" for the first split.\n<|/ c |>\n<| c |>\n\
+    Ok, I will edit my answer with explanations later today.\n<|/ c |>\n<| a tags=ruby,regex\
+    \ |>\nThe OP has accepted an answer, but I would have suggested a slightly different\
+    \ approach. I would use an array for counting the beats, rather than a hash. Here's\
+    \ how I would do it:\n<code>", "  music_string.split(/\\s+/).map do |n|\n    #\
+    \ Convert single note to 'o'\n    next n if n =~ /^o$/\n    # Convert half note\
+    \ to 'o|'\n    next n if n =~ /^o\\|$/\n    # Convert quater note to '.|'\n  \
+    \  next n if n =~ /^\\.\\|$/\n    # Convert 'o' to 'o|'\n    next n if n =~ /^o\\\
+    |$/\n    # Convert '.|' to 'o|' if there are two notes\n    note_count =\n   \
+    \   n.length == 1 ? 1 : n.count('o') + n.count('|')\n    note_count += n.count('o')\
+    \ if note_count % 2 == 0\n    note_count\n  end\nend\n</code>\n<|/ a tags=ruby,regex\
+    \ |>\n<| c |>\nI like the way you did it with single character note strings. \
+    \ Thanks for the idea, I'll see if I can get it working with your method and if\
+    \ not, try the one with the regular expression.\n<|/ c |>\n<| c |>\nOkay, I see\
+    \ what's going on.  Thanks again, I was having a hard time trying to get my head\
+    \ around the way map works.\n<|/ c |>\n<| a tags=ruby,regex |>\nHere's a solution\
+    \ that uses your original idea to convert the music string to a regex:\n<code>",
+  "  music_string.scan(/^(\\.|[^o|\\.])+/).map do |note|\n    note.chars.uniq.count\
+    \ { |char| note == char }\n  end\nend", "  music_string = music_string.downcase\n\
+    \  notes_array = music_string.split\n  notes_count = notes_array.count\n  parsed_music\
+    \ = notes_count.times.map do\n    note_length = notes_array.pop\n    if note_length\
+    \ == '.'\n      note_length = notes_array.pop\n    end\n    note = notes_array.pop\n\
+    \    case note\n    when 'o'\n      4\n    when 'o|'\n      2\n    when '.|'\n\
+    \      1\n    end\n  end\n  parsed_music\nend\n</code>\n<|/ a |>\n<| a tags=parsing,arrays,ruby,string\
+    \ |>\nIn case you have your notes as strings instead of symbols (which makes your\
+    \ code even more readable), here is one solution:\n<code>\nnotes = {'O' => 4,\n\
+    \         'O|' => 2,\n         '.|' => 1}", '  music_string.upcase!', "    array\
+    \ = music_string.split(\" \") # Split music into array of notes\n    array_of_notes\
+    \ = []\n    note_count = 0 # Store how many notes we had\n    notes_at_time =\
+    \ 4 # Last note we had, lasts four beats\n    for i in array:\n        if i ==\
+    \ 'o': # Whole-note note\n            if note_count != 0:\n                notes_at_time\
+    \ -= 1\n            else:\n                notes_at_time += 4\n            note_count\
+    \ += 1\n        elif i == 'o|': # Half-note note\n            if note_count !=\
+    \ 0:\n                notes_at_time -= 1\n            else:\n                notes_at_time\
+    \ += 2\n            note_count += 1\n        elif i == '.|': # Quater-note note\n\
+    \            notes_at_time -= 1\n        elif i == '.': # Rest\n            notes_at_time\
+    \ += 4\n        elif i == '|': # Whole rest\n            notes_at_time += 2\n\
+    \        elif i == 'o': # Whole-rest rest\n            notes_at_time += 4\n  \
+    \      elif i == '|': # Whole rest\n            notes_at_time += 2\n        elif\
+    \ i == '|': # Whole rest\n            notes_at_time += 2\n        else: # Invalid\
+    \ note\n            notes_at_time += 4\n        array_of_notes.append(notes_at_time)\n\
+    \    return array_of_notes", "  music_array.clear\n  music_array.push(parse_note(music_string))\n\
+    \  music_array = music_array.sort_by { |i| -i }\nend", "  beats = []\n  notes\
+    \ = [['o', 'o'], ['.', '.']]", "  parsed_notes = music_string.scan(/(?:(?:^|\\\
+    s))(o|\\|)(o|\\|)((?:^|\\s)+)/)\n  note_beat_pairs = parsed_notes.map { |note|\
+    \ note[1].scan(/(?:^|\\s)(.*)$/) }\n  note_beat_pairs.flatten.compact!\n  note_beat_pairs.flatten.uniq.map\
+    \ { |beat_pair| beat_pair.length }.uniq\nend\n</code>\n<|/ a |>\n<| c |>\nWhy\
+    \ not use `scan` to get the beat count in one go? Also, I think that `flatten`\
+    \ would be better than `flat_map`.\n<|/ c |>\n<| c |>\nthank you for advice, I\
+    \ have updated my answer. `flat_map` can be replaced by `map` in this case, but\
+    \ I like to use `flat_map` to avoid nesting lambda in map\n<|/ c |>\n<| c |>\n\
+    Thank you! Very neat. Can you explain the regex part a bit more? I'm having trouble\
+    \ wrapping my head around it.\n<|/ c |>\n<| c |>\nI added explanation of regex,\
+    \ but let me know if you have more questions. :)\n<|/ c |>\n<| c |>\nThank you!\
+    \ One last question, how would I make this work for music notes written using\
+    \ other musical symbols (\u266F\u266D\u266D\u266F\u266D\u266F\u266F\u266D\u266D\
+    \u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\
+    \u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\
+    \u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\
+    \u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\
+    \u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\
+    \u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\
+    \u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\
+    \u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\u266D\u266D\u266F\
+    \u266D\uFFFD", "  music_notes = music_string.split(\" \").map(&:to_i)\n  music_notes.zip(music_notes.slice_before(-1)).map{\
+    \ |note, note_before|\n    note.to_i + note_before.to_i\n  }\nend\n</code>\nP.S.\
+    \ As I understood you need just last notes. Thus instead of slice_before and slice_after\
+    \ you can use slice_last method.\n<|/ a dscore=1 |>\n<| a tags=algorithm,ruby\
+    \ dscore=0 |>\nHere's my take on this. I first tried writing out all the possible\
+    \ musical notes and chords I thought of, using enumerable methods:\n<code>", " \
+    \ # Your code here\n  music_string = music_string.gsub(/./) { |s| s == \".\" ?\
+    \ \"o|\" : s }\n  music_array = music_string.split(//)\n  music_array.reverse\n\
+    \  music_array.map! {|n| n.to_i}\n  music_array.reduce(0) { |i, n| i + n}\nend",
+  "  # Your code here\n  music_string.gsub!(/([\\.|\\+\\-])/, ''.freeze)\n  music_string.scan(/[\\\
+    .|\\+\\-]+/).map{|s| s.to_i}\nend\n</code>\n<|/ a dscore=0 |>\n<| a |>\nThis works:\n\
+    <code>", "  music_string.split(\" \").map { |note| note.split(\"|\") }.flatten.uniq.map\
+    \ do |note|\n    case note\n    when \".\"\n      4\n    when \"o\"\n      1\n\
+    \    else\n      raise \"unknown note\"\n    end\n  end\nend\n</code>\n<|/ a tags=ruby,music\
+    \ |>\n<| c |>\nThis is great stuff and I love how you used the .split. I'm unfamiliar\
+    \ with that yet. One thing that I'm having trouble with now is if I wanted to\
+    \ have it ignore the notes that have a frequency of 0 like 'b' would that be possible?\
+    \ or would it be better if I was able to ignore the notes that have a frequency\
+    \ of 0 as well?\n<|/ c |>\n<| c |>\nI would think that `freq == 0` would be sufficient\
+    \ for the second `case`.\n<|/ c |>\n<| c |>\nyeah I figured it out after I posted.\
+    \ Thank you very much for the help :)\n<|/ c |>\n<| a dscore=1 |>\n<code>\n\"\
+    o o| .| o| o| .| .| .| .| o o\".scan(/\\d+/).map{|f| f.to_i}\n</code>\n<|/ a tags=ruby,music\
+    \ |>\n<| a tags=ruby,music dscore=0 |>\n<code>", "  music_string = music_string.strip\n\
+    \  music_array = music_string.split(//)\n  music_array.each_with_index { |x, i|\
+    \ music_array[i] = x.to_i }\n  music_array\nend\n</code>\n<|/ a dscore=0 |>\n\
+    <| a |>\nHere's my solution. I took your input string and converted it to an array\
+    \ of characters, then parsed out the individual \"note\" characters. I then used\
+    \ that to build an array of arrays. The outer array is the note number and the\
+    \ inner array is the length in beats for each note.\n<code>", "  # TODO: Write\
+    \ your code here\n  music_array = music_string.split\n  music_array.map {|i| i.count('|')\
+    \ ? i.split('|').map(&:to_i) : i.to_i}\nend\n</code>\n<|/ a tags=algorithm,ruby,arrays\
+    \ |>\n<| a tags=algorithm,ruby,arrays |>\nYou want to count occurrences of 'o'\
+    \ in the string. You can do this with str.scan('o').length.\n<|/ a dscore=1 |>\n\
+    <| a dscore=1 |>\nThis is a solution with regex and Hash class. It doesn't use\
+    \ String#split:\n<code>", "  music_string.chars.each_with_index do |char, index|\n\
+    \    if char == 'o'\n      note = parse_note(music_string[index..-1].strip)\n\
+    \      notes << note if note\n    else\n      notes << parse_note(char)\n    end\n\
+    \  end\nend", "  notes = music_string.split(\"|\")\n  notes.each do |note|\n \
+    \   if note =~ /o|$/ # Half note\n      last = 4\n    elsif note =~ /o$/ # whole\
+    \ note\n      last = 4\n    elsif note =~ /\\.$/ # Quarter note\n      last =\
+    \ 1\n    else # Invalid note\n      last = 0\n    end\n    note = note.strip\n\
+    \    note = note.split(\"o\")\n    note.each do |note_string|\n      note_string.strip!\n\
+    \      note_string.split(\" \").each do |beats| # Convert note representation\
+    \ to array of integers\n        beats.strip!\n        beats.split(\"\").map(&:to_i).inject(:+)\
+    \ + last\n      end\n    end\n  end\nend", "  music_array = music_string.split\n\
+    \  music_array.sort!\n  music_array = [music_array[1], music_array[3], music_array[5],\
+    \ music_array[7], music_array[9]]\n  music_array = music_array.map { |element|\
+    \ element.to_i }\n  music_array\nend", "  music_array = music_string.split(\"\"\
+    ).map do |char|\n    char = char.upcase\n    case char\n    when \"o\" then 0\n\
+    \    when \"O\" then 0\n    when \".\" then 1\n    when \"|\" then 2\n    else\
+    \ 3\n    end\n  end\n  music_array.inject(:+)\nend", "    notes = music_string.scan(/(.+?)(\\\
+    |.+?)*$/)\n    notes.each { |note| note.last.downcase! }\n    notes.map { |note|\
+    \ note[1].split('').map(&:to_i).inject(:+) }\nend\n</code>\n<|/ a |>\n<| a dscore=0\
+    \ |>\nYou can use the following code to get the notes frequencies and print them.\n\
+    <code>", "  music_string.scan(/[\\.|o|o\\|]/).map do |note|\n    case note\n \
+    \   when \".|\"\n      0\n    when \"o\"\n      4\n    when \"o|\"\n      2\n\
+    \    else\n      raise \"The note #{note} is not supported\"\n    end\n  end\n\
+    end\n</code>\nThe code above is working as expected:\n<code>\nirb(main):025:0>\
+    \ parse_music.call(\"o o| .| o| o| .| .| .| .| o o\")\n=> [4, 2, 1, 2, 2, 1, 1,\
+    \ 1, 1, 4, 4]\n</code>\n<|/ a tags=string,ruby,regex |>\n<| c |>\nThank you! This\
+    \ worked for me. I am not sure why this answer has been marked down. If someone\
+    \ sees something that they can improve on, I will gladly give an update or answer\
+    \ my own question.\n<|/ c |>\n<| c |>\nHi, I just want to point out that my answer\
+    \ isn't necessarily more efficient, it is just more concise. Also, if you found\
+    \ my answer helpful, you may upvote it or accept it :)\n<|/ c |>\n<| c |>\nI upvoted\
+    \ your answer and I accepted it because it was the most concise. Thanks for your\
+    \ help.\n<|/ c |>\n<| c |>\nI'm glad I could help! :)\n<|/ c |>\n<| a |>\nYou\
+    \ can use String#scan:\n<code>\nmusic_string = \"o o| .| o| o| .| .| .| .| o o\"\
+    \nmusic_string.scan(/([\\.|o|o\\|]|\\|o)/).map do |note|\n  note.include?('o')\
+    \ ? 4 : note\nend", "  music_string.gsub!(/[^o|.|]/, '.')\n  music_string.gsub!(/\\\
+    .\\./, 'o')\n  music_string.gsub!(/o\\|/, 'o|')", "  music_string.split(\" \"\
+    ).map do |note_string|\n    note_string.split(\"|\").map do |note|\n      note.split(\"\
+    o\").map(&:to_i).inject(:+)\n    end\n  end\nend\n</code>\n<|/ a tags=ruby |>\n\
+    <| c |>\nThanks, this was helpful!\n<|/ c |>\n<| c |>\n: This code works fine\
+    \ for `\"o o| .| o| o| .| .| .| .| o o\"`, but fails for `\"o| o| .| o| o| .|\
+    \ .| .| .| o| o\"`\n<|/ c |>\n<| c |>\nFixed it. Please take a look.\n<|/ c |>\n\
+    <| c |>\nIt's not about performance, it's about readability. Also, it's not idiomatic\
+    \ in Ruby to chain methods like that (`map.map(&:to_i).inject(:+)`).\n<|/ c |>\n\
+    <| c |>\nI agree that chaining methods is bad. Yet, chaining methods results in\
+    \ more readable code than an equivalent nested one. Also, as you said, chaining\
+    \ methods results in more readable code than an equivalent nested one.\n<|/ c\
+    \ |>\n<| a dscore=1 tags=ruby |>\nHere's another way:\n<code>\nmusic_notes = \"\
+    o o| .| o| o| .| .| .| .| o o\"\nnotes = music_notes.gsub(/\\s+/, '|').split('|')\n\
+    \  \n(notes.length * 4).times.map do |i|\n  notes.map { |note| note.index(i) }\n\
+    end", "  song = []\n  song_length = music_string.count(\"|\")\n  music_string.split(\"\
+    \ \").each do |note|\n    if note.include?('o')\n      song << 4\n      song_length\
+    \ += 1\n    elsif note.include?('o|')\n      song << 2\n      song_length += 1\n\
+    \    elsif note.include?('.|')\n      song << 1\n      song_length += 1\n    else\n\
+    \      song << 0\n      song_length += 1\n    end\n  end\n  song\nend", "    notes\
+    \ = music_string.split(\" \")\n    beats = []\n    last_note = \"\"\n    for note\
+    \ in notes\n        if note[-1] == \"o\"\n            if note[-2] != \"o\"\n \
+    \               beats << 4\n                last_note = note\n            else\n\
+    \                beats << 2\n                last_note = note\n        else\n\
+    \            if note[-2] != \"|\"\n                beats << 1\n              \
+    \  last_note = note\n            else\n                beats << 0\n          \
+    \      last_note = note\n    end\n    beats << 0\n    beats << 0\n    beats <<\
+    \ 0\n    beats << 0\n    return beats\nend\n</code>\nSo the answer is pretty straight\
+    \ forward: just call parse_music(music_string).\n<|/ a tags=algorithm,ruby,string\
+    \ |>\n<| a tags=algorithm,ruby,string dscore=0 |>\nThis is not very elegant, but\
+    \ seems to work:\n<code>", "  music_string.gsub!(/^.*(o|o|o|\\.|\\|)/) { |m| m[0].to_i\
+    \ }\n  music_string.gsub!(/o\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\\
+    |$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\\
+    .\\|\\.\\|\\.\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\\
+    .\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|$/)\
+    \ { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|$/)\
+    \ { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\\
+    .\\|\\.\\|\\.\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\.\\|\\.\\|\\.\\|\\\
+    .\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|$/) { |m| m.to_i }\n  music_string.gsub!(/\\\
+    .\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|\\.\\|$/) { |m| m.to_i }\n\
+    \  music_string.gsub!(/\\|$/) { |m| m.to_i }\n  music_string.gsub!(/^(o|\\|)$/)\
+    \ { |m| m.to_i }\n  music_string.gsub!(/^(\\.\\|)$/) { |m| m.to_i }\n  music_string.gsub!(/^(\\\
+    .\\|\\.\\|)$/) { |m| m.to_i }\n  music_string.gsub!(/^(\\.\\|\\.\\|\\.\\|)$/)\
+    \ { |m| m.to_", "  notes = music_string.split(' ')\n  notes.map! do |note_string|\n\
+    \    note_string.strip!\n    if note_string.index('o|') \n      note_string.slice!(0,\
+    \ 2) \n      note_string.slice!(0, 1)\n    end\n    note_string\n  end\n  notes.map!\
+    \ do |note_string|\n    note_string.gsub!(/[^0123456]/, '').to_i\n  end\n  notes.sort!\n\
+    \  notes.reverse!\n  notes.uniq!\n  notes.map! do |note_string|\n    note_string.index('o')\
+    \ ? 4 : note_string.index('|') ? 2 : note_string.index('') ? 1 : note_string\n\
+    \  end\n  return notes\nend", "  music_string = music_string.strip\n  music_string[0..2]\
+    \ = ''\n  music_string = music_string.gsub(/[^o|.]/, '')\n  music_string.split(\"\
+    \ \").map { |m| m.length }.uniq.sort\nend", "    music_notes = music_string.split('\
+    \ ')\n    notes = []\n    beat = 0\n    for note in music_notes\n        if note\
+    \ == '.'\n            beat += 1\n            notes << beat\n        else\n   \
+    \         notes << beat\n            beat += 1\n    end\n    return notes\nend",
+  "  notes = music_string.split(/\\|/)\n  last_beats = []\n  last_note = 0\n  prev_note\
+    \ = -1\n  last_beats_sum = 0", "  music_string.gsub!(/[\\.\\|]*/, '')\n  music_string.scan(/o|o/).map\
+    \ { |note| note_length(note.to_sym) }\nend", "  music_string.split.each { |s|\
+    \ s[/\\w+/].downcase!; s.gsub!(/\\|/, '|').gsub!(/[\\.,]/, ''); s.split(//) }\n\
+    \  music_string.split.each { |s| s.gsub!(/\\d+/) { |i| i.to_i } }\nend", "  music_array\
+    \ = []\n  music_string = music_string.split(\"\").join(\"|\")\n  music_array =\
+    \ music_string.split(\"|\").map do |note|\n    note = note.to_sym\n    if note\
+    \ == :o\n      4\n    elsif note == :o|\n      2\n    elsif note == :.|\n    \
+    \  1\n    else\n      0\n    end\n  end\n  music_array\nend", "  music_string.strip!\n\
+    \  music_string = music_string.split(//)\n  music_array.clear\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n  music_array.push(0)\n\
+    \  music_array.push", "  music_string.downcase!\n  music_string = music_string[0..-2]\n\
+    \  music_notes = music_string.split(\"|\")\n  music_notes.map!{|note| note.split(\"\
+    \")}\n  music_notes.map!{|note| note.count(\"o\") == note.count(\".\")}\n  music_notes.map!{|note|\
+    \ note.count(\"o\") != note.count(\".\")}\n  music_notes.map!{|note| note.count(\"\
+    o\") == 0 ? 4 : note.count(\".\")}\n  music_notes.map!{|note| note.count(\"o\"\
+    ) == 4 ? 2 : 1} \n  music_notes.map!{|note| note.count(\"o\") == 2 ? 1 : 0}\n\
+    \  music_notes.map!{|note| note.count(\"o\") == 1 ? 0 : 1} \n  music_notes.map!{|note|\
+    \ note.count(\"o\") == 0 ? 0 : 0}\nend\n</code>\n<|/ a dscore=1 tags=ruby |>\n\
+    <| a dscore=1 tags=ruby |>\nHere's another way that uses a regex to match one\
+    \ or more spaces, followed by one or more digits, followed by one or more spaces.\n\
+    <code>\nmusic_string = \"o o| .| o| o| .| .| .| .| o o\"", "    notes = []\n \
+    \   current_note = []\n    music_string.chars.each do |char|\n        if char\
+    \ == 'o'\n            notes << 4\n            current_note << 4\n        elsif\
+    \ char == '|' || char == '.' || char == '.'\n            notes << notes.last +\
+    \ 1 if notes.last\n            current_note << char == '.' ? 2 : char == '|' ?\
+    \ 1 : 0\n        else\n            current_note << char\n        end\n    end\n\
+    \    notes\nend\n</code>\n<|/ a dscore=1 |>\n<| a dscore=1 tags=string,algorithm,ruby,arrays\
+    \ |>\nI love the elegant answers but this was fun and it just crossed my mind\
+    \ that there is another method using a single loop.\n<code>", "  music_array =\
+    \ music_string.split(\"\")\n  music_array.map! do |note|\n    case note\n    when\
+    \ \".\" then 0\n    when \"o\" then 4\n    when \"|\" then 2\n    else -1\n  \
+    \  end\n  end\n  music_array.compact!\n  music_array.uniq!\n  music_array.sort!\n\
+    \  music_array\nend\n</code>\n<|/ a |>\n<| a tags=parsing,ruby |>\nHere's my solution:\n\
+    <code>", "  music_string = music_string.gsub(/([\\.\\|])/) { $1 == '.' ? 1 : 2\
+    \ }\n  music_string = music_string.gsub(/([\\-\\|])/) { $1 == '.' ? 3 : 4 }\n\
+    \  music_string.scan(/(\\d+)(\\|?)(\\d+)/).map { |num, quarter, num2| num.to_i*(quarter==3\
+    \ ? 4 : 2) }\nend\n</code>\n<|/ a |>\n<| c |>\nIt works great, but I don't understand\
+    \ how you did it with regex. Why did you use num.to_i*(quarter==3 ? 4 : 2)? I\
+    \ mean, what does that conditional statement do?\n<|/ c |>\n<| c |>\nThe conditional\
+    \ statement converts [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4] into [4, 2, 1, 2, 2, 1,\
+    \ 1, 1, 1, 4, 4]. Quarter tells you how many beats your note lasts. I divided\
+    \ it by 4 to make them 4 times longer. 4*(3 = 8) means 2 beats. It's just that\
+    \ one quarter can be 1 or 2 beats. So I add one or two to make it 4 times longer.\
+    \ Does that make sense?\n<|/ c |>\n<| a dscore=2 |>\nThis is a slightly modified\
+    \ version of's answer. \nThis version gives the correct answer when the number\
+    \ of beats is even.\n<code>", "  music_string.scan(/./) { |note| note.count(\"\
+    |\") }.\n                    reduce(0) { |count, note| count + note.count(\"o|\"\
+    ) }\nend", "  # Write your code here\n  music_string.split(\" \").inject([]) do\
+    \ |sum, note|\n    sum << \"o\" unless note =~ /^[\\.\\|]/\n    sum << \"o|\"\
+    \ unless note =~ /^o\\|/\n    sum << \".|\" unless note =~ /^\\..*/\n    sum\n\
+    \  end\nend", "    notes_count = music_string.split(\" \").length\n    beats_count\
+    \ = notes_count / 4\n    beats_count += 1 if notes_count % 4 == 0 else 0\n   \
+    \ beats_count += 1 if notes_count % 4 == 1 else 0\n    beats_count += 1 if notes_count\
+    \ % 4 == 2 else 0\n    beats_count += 1 if notes_count % 4 == 3 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 4 else 0\n    beats_count += 1 if notes_count % 4\
+    \ == 5 else 0\n    beats_count += 1 if notes_count % 4 == 6 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 7 else 0\n    beats_count += 1 if notes_count % 4\
+    \ == 8 else 0\n    beats_count += 1 if notes_count % 4 == 9 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 10 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 11 else 0\n    beats_count += 1 if notes_count % 4 == 12 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 13 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 14 else 0\n    beats_count += 1 if notes_count % 4 == 15 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 16 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 17 else 0\n    beats_count += 1 if notes_count % 4 == 18 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 19 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 20 else 0\n    beats_count += 1 if notes_count % 4 == 21 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 22 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 23 else 0\n    beats_count += 1 if notes_count % 4 == 24 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 25 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 26 else 0\n    beats_count += 1 if notes_count % 4 == 27 else 0\n    beats_count\
+    \ += 1 if notes_count % 4 == 28 else 0\n    beats_count += 1 if notes_count %\
+    \ 4 == 29 else 0\n    beats_count += 1 if notes_count % 4 == 30 else 0\n    beats_count ",
+  "  music_string.split('|').each do |note|\n    note = note.strip.downcase # convert\
+    \ to lower case for easier checking\n    case note\n    when '.o'\n      return\
+    \ [1, 1] # whole note, last 4 beats\n    when '.h'\n      return [2, 2] # half\
+    \ note, last 2 beats\n    when '.h|'\n      return [1, 1] # quater note, last\
+    \ 1 beat\n    else\n      raise \"Unknown note\"\n    end\n  end\n  raise \"No\
+    \ note found\"\nend\n</code>\n<|/ a tags=ruby |>\n<| c |>\nHey thanks for the\
+    \ answer! When I run it though, it returns:", '  music_array = []', '    music_string
+    = music_string.gsub(" ", "") # Remove spaces', "  music_string\n    .split(\"\
+    \ \")\n    .map do |note_string|\n      note_string.match(/(o|.|o|)/g)\n    end.flatten.map\
+    \ do |note_string|\n      note_string.match(/(o|.|o|)/g).length\n    end\nend",
+  '  music_string = music_string.downcase', "  notes = []\n  music_string = music_string.downcase",
+  "  return music_string.scan(/([o|\\|\\.])\\1*/).flatten.uniq.map do |note|\n   \
+    \ note.count(\"|\")\n  end\nend\n</code>\n<|/ a |>\n<| a dscore=0 tags=arrays,ruby,music-notation,parsing\
+    \ |>\nHere's a solution that returns the array you described (in Ruby 2.7):\n\
+    <code>\nmusic_string = \"o o| .| o| o| .| .| .| .| o o\"\nmusic_string.split(/\
+    \ +/).\n      map { |x| x.scan(/([o|\\|\\.])\\1*/) }.\n      flatten.\n      each_cons(4).\n\
+    \      map { |x| x.map { |y| y.count(\"|\") } }", "  music_string.scan(/(.).?/).each_slice(3).to_a.map\
+    \ { |notes|\n    notes.map { |note|\n      if note == \".\"\n        0\n     \
+    \ else\n        note.to_i\n      end\n    }\n  }.flatten.map { |n| n % 4 }\nend",
+  '  music_string.strip!', "  music_string[/([A-G])([^O|.])(.+?)(\\1)/]\n  raise 'Bad\
+    \ music string' if music_string !~ /^([A-G])([^O|.])(.+?)(\\1)/\n  midi = music_string[/^([A-G])/,\
+    \ 1].downcase\n  rest = music_string[/^(.+?)(\\1)$/, 2]\n  rest = rest.split(//)\n\
+    \  rest = rest.reject(&:empty?)\n  rest = rest.map { |x| x.to_i }\n  [midi, rest]\n\
+    end", "  notes = {}\n  music_string.split(\"\").each do |letter|\n    notes[letter]\
+    \ = notes[letter] || 0\n    notes[letter] += 1\n  end\n  notes\nend", "  music_array\
+    \ = music_string.split(' ') \n  return(parse_music_helper(music_array))\nend",
+  "  music_string = music_string.strip\n  music_array = music_string.split('|')\n\
+    \  music_notes = []\n  music_array[0].split('o').each do |note|\n    music_notes.push(note.size)\n\
+    \  end\n  music_notes.each do |note|\n    music_notes.delete(note)\n  end\n  music_notes.map!\
+    \ { |note| note.size }\n  music_notes.uniq!\n  music_notes\nend\n</cell>\n<cell>",
+  "  music_array = music_string.split\n  music_array.map!(&:strip)\n  \n  beats =\
+    \ music_array.map {|note|\n    if note == '.'\n      1\n    elsif note == 'o'\n\
+    \      4\n    elsif note == '|'\n      2\n    else\n      0\n    end\n  }\n  \n\
+    \  beats.sum\nend\n</code>\n<|/ a tags=string,ruby,arrays,split |>\n<| c |>\n\
+    `map!` is very dangerous in Ruby because of the side-effect it has, and because\
+    \ `map` returns an array.\n<|/ c |>\n<| c |>\n`music_array = music_string.split\n\
+    \  music_array.map!(&:strip)` <-- this line is the danger. `map!` mutates the\
+    \ original array - not what you intend. `music_array = music_string.split\n  music_array.map!(&:strip)`\
+    \ is exactly the same as `music_array = music_string.split.map(&:strip)`\n<|/\
+    \ c |>\n<| c |>\nYes, I meant something else. I've corrected my answer. Thank\
+    \ you for noticing.\n<|/ c |>\n<| a tags=string,ruby,arrays,split |>\nHere is\
+    \ my attempt at this, the first part is the same, with the exception of the variable\
+    \ names.\n<code>", "  # Your code here\nend", "  result = []\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] += notes[$3]\n\
+    \    notes[$3] = 0\n  end\n  music_string.split(\" \").each do |note|\n    note\
+    \ =~ /(.)(\\|)(.)/\n    notes[$1] -= notes[$3]\n    notes[$3] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n    notes[$3]\
+    \ += notes[$1]\n  end\n  music_string.split(\" \").each do |note|\n    note =~\
+    \ /(.)(\\|)(.)/\n    notes[$1] = 0\n    notes[$3] -= notes[$1]\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(.)/\n    notes[$1] = 0\n  end\n  music_string.split(\"\
+    \ \").each do |note|\n    note =~ /(.)(\\|)(", "  # TODO: your code here\n  \n\
+    \  return music_string\nend\n</cell>\n<code language=julia-1.6>", "  # your code\
+    \ here\nend", "  music_array = music_string.split(//)\n  music_array.map!{|note|\
+    \ note.split(//)}.flatten.sort!.each_cons(3).map{|note|\n    note.sort.each_with_index{|note,\
+    \ idx| note.chars.map{|char| char.to_i}.inject(0){|sum, number|\n      sum + (number\
+    \ * idx)}}\n  }.flatten.uniq\nend\n</code>\nEDIT: I used this code to parse musical\
+    \ note numbers from piano music notes. I think it works okay. My notes are from\
+    \ A3 to A5 so I have used this code to convert it into midi notation.\n<code>",
+  "  # TODO implement\nend", "  music_string.scan(/(.)\\s(.)\\s(.)\\s(.)\\s(.)\\s(.)\\\
+    s(.)\\s(.)\\s(.)\\s(.)\\s(.)/)\nend\n</code>\n<|/ a tags=ruby,regex |>\n<| c |>\n\
+    Ha, I did not know about the Ruby method scan. Thanks for the tip!\n<|/ c |>\n\
+    <| c |>\nThis doesn't return the correct result if there is a dotted note, like\
+    \ this one: \"... . .. . . . . .\"\n<|/ c |>\n<| c |>\nThat is correct behavior\
+    \ of `scan`. From the docs: \"The scan method takes an array of strings, or a\
+    \ regular expression, and the return value will be an array of matches extracted\
+    \ by that regular expression.\"\n<|/ c |>\n<| c |>\nSure, but I didn't realize\
+    \ it returned an array of matches. I was thinking it would return an array of\
+    \ strings separated by the matches. My mistake. +1\n<|/ c |>\n<| c |>\n: That's\
+    \ a little unusual. `scan` is intended to extract substrings from an array of\
+    \ strings. You could have an array of arrays, and the elements of that array would\
+    \ be substrings.\n<|/ c |>\n<| a dscore=3 |>\nI took a crack at it, I hope it's\
+    \ fairly easy to understand, and I only used the ruby built-in String class and\
+    \ Regex class, but that's my \"ruby\" way of thinking.\n<code>\nnotes = [\"o o\
+    \ o . . . . . o o o o o . . . . . . . o o o o o . . . . . . . o o o o o\", \"\
+    o . . . . . . . o o . . . o o . . . . . . . o o . . . . . . . o . . . . . . .\
+    \ . o . . . . . . o o . . . . . . o o . . . . . . . . . o o . . . . . . . . .\
+    \ o o o . . . . . . . . o . . . . . . . . . . o o . . . . . . . . o o . . . .\
+    \ . . . . . o . . . . . . . . . . . . o o . . . . . . . . . o . . . . . . . .\
+    \ . o . . . . . . . . . . . . . . o o . . . . . . . . . . . . . . ", "  # your\
+    \ code here\n  raise NotImplementedError()\nend\n</cell>\n<text>\nSolution\nSolution\
+    \ notebook", "  music_string.each_char.map { |note| note.to_i }\nend", "  notes\
+    \ = []\n  i = 0\n  while i < music_string.length\n    char = music_string[i]\n\
+    \    if char == 'o'\n      notes.push(4)\n      i += 1\n    elsif char == 'o|'\n\
+    \      notes.push(2)\n      i += 1\n    elsif char == '.|'\n      notes.push(1)\n\
+    \      i += 1\n    else\n      raise ArgumentError, \"Expected a note but got\
+    \ #{char}\"\n    end\n  end\n  notes\nend", "  \n  music_string.scan(/((.)\\|)+/).map\
+    \ { |notes| notes.map(&:to_i) }\nend", "  music_notes = music_string.split(\"\
+    |\")\n  beat_count = []\n  for i in music_notes:\n    beat_count.append( parse_note(i)\
+    \ )\n  return beat_count.count(0) + 1\nend", "  result = []\n  notes = music_string.split('|')\n\
+    \  while notes.length > 0\n    last_note = notes.last.split('o')\n    last_note[0]\
+    \ = last_note[0].strip\n    last_note[0] = [char for char in last_note[0] if char\
+    \ != 'x'].count('x') \n    notes.pop(notes.size - 1)\n    notes.last += notes.last[0]\n\
+    \    result[-1] += last_note[0]\n  end\n  result\nend", "  music_string.split('o').map\
+    \ do |note|\n    note.split('|').count { |b| b != '|' }\n  end\nend\n</code>\n\
+    The above code would work for this example:\n<code>\n> parse_music.call(\"o o|\
+    \ .| o| o| .| .| .| .| o o\")\n=> [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\n\
+    <|/ a tags=ruby dscore=2 |>\n<| c |>\nThanks for your answer, but I think it's\
+    \ easier to understand if I give an example with the correct result: `parse_music.call(\"\
+    o o| .| o| o| .| .| .| .| o o\")", "  music_string.split(//).map do |note|\n \
+    \   note.scan(/\\d+/).map { |b| b.to_i }\n  end.reduce(&:zip).map(&:to_a).transpose.map\
+    \ { |n| n.sum }\nend\n</code>\n<|/ a dscore=1 |>\n<| a dscore=0 |>\nHere is another\
+    \ solution:\n<code>", "  music_string.split('.').each do |note|\n    if note.include?\
+    \ '|'\n      note.split('|').each do |chord|\n        if chord.include? 'o'\n\
+    \          #note.split('|').each do |chord|\n          #  if chord.include? 'o'\n\
+    \          #    note.split('|').each do |chord|\n          #      note.split('|').each\
+    \ do |chord|\n          #        chord.split('|').each do |chord|\n          #\
+    \          note.split('|').each do |chord|\n          #            if chord.include?\
+    \ 'o'\n          #              note.split('|').each do |chord|\n          # \
+    \               chord.split('|').each do |chord|\n          #                \
+    \  note.split('|').each do |chord|\n          #                    if chord.include?\
+    \ 'o'\n          #                      note.split('|').each do |chord|\n    \
+    \      #                        chord.split('|').each do |chord|\n          #\
+    \                          note.split('|').each do |chord|\n          #      \
+    \                      if chord.include? 'o'\n          #                    \
+    \          note.split('|').each do |chord|\n          #                      \
+    \          chord.split('|').each do |chord|\n          #                     \
+    \             note.split('|').each do |chord|\n          #                   \
+    \                 chord.split('|').each do |chord|\n          #              \
+    \                        if chord.include? 'o'\n          #                  \
+    \                      note.split('|').each do |chord|\n          #          \
+    \                                chord.split('|').each do |chord|\n          #\
+    \                                            note.split('|').each do |chord|\n\
+    \          #                                              chord.split('|').each\
+    \ do |chord|\n          #                                                if chord.include?\
+    \ 'o'\n          #                                                  note.split('|').each\
+    \ do |chord|\n          #                                                    chord.split('|').each\
+    \ do |chord|\n          #                                                    \
+    \  note.split('|').each do |chord|\n          #                              \
+    \                          chord.split('|').each do |chord|\n          #     \
+    \                                                     if chord.include? 'o'\n\
+    \          #                                                            note.split('|').each\
+    \ do |chord|\n          #                                                    \
+    \          chord.split('|').each do |chord|\n          #                     \
+    \                                           note.split('|').each do |chord|\n\
+    \          #                                                                 \
+    \ chord.split('|').each do |chord|\n          #                              \
+    \                                      note.split('|').each do |chord|\n     \
+    \     #                                                                    chord.split('|').each\
+    \ do |chord|\n          #                                                    \
+    \                  if chord.include? 'o'\n          #                        \
+    \                                                note.split('|').each do |chord|\n\
+    \          #                                                                 \
+    \       chord.split('|').each do |chord|\n          #                        \
+    \                                                  note.split('|').each do |chord|\n\
+    \          #                                                                 \
+    \           chord.split('|", "  # Your code here\n  raise NotImplementedError()\n\
+    end\n</cell>\n<cell>", "  # Fill in code here.\nend", "    notes = music_string.split('|')\n\
+    \    notes_length = len(notes)\n    note_length = (notes_length / 4) + 1\n   \
+    \ note_notes = notes[0::note_length]\n    notes_rest = notes[note_length::note_length]\n\
+    \    notes_rest = notes_rest.replace(\" \", \"\")\n    notes_rest = notes_rest.lower()\n\
+    \    notes_rest = notes_rest.split()\n    notes_rest = [notes_rest[i:i+4] for\
+    \ i in range(0, len(notes_rest), 4)]\n    rest = [int(note[0]) * 4 for note in\
+    \ notes_rest]\n    notes_notes = [int(note[1]) * 2 for note in notes_rest]\n \
+    \   notes_notes += [int(note[2]) * 1 for note in notes_rest]\n    notes_notes\
+    \ = [note for note in notes_notes if note != 0]\n    notes_notes = [note for note\
+    \ in notes_notes if note != 0]\n    notes_notes = [note for note in notes_notes\
+    \ if note != 0]\n    notes_notes = [note for note in notes_notes if note != 0]\n\
+    \    notes_notes = [note for note in notes_notes if note != 0]\n    notes_notes\
+    \ = [note for note in notes_notes if note != 0]\n    notes_notes = [note for note\
+    \ in notes_notes if note != 0]\n    return notes_notes\n</cell>\n<text>\nNow let's\
+    \ use this function to print musical chords", "  music_string.split(/./).map do\
+    \ |note|\n    note.match(/[o|.]$/) ? 4 : (note.match(/[o|.]$/) ? 2 : 1) * note.count(\"\
+    o\") + note.count(\".\")\n  end.compact\nend", "  music_string.split(\"|\")\n\
+    end", "  music_string = music_string.strip\n  notes = []\n  while music_string.length\
+    \ > 0\n    note = ''\n    while music_string.length >= 1\n      if music_string.length\
+    \ % 2\n        if music_string[0].upcase == 'o'\n          note += '0'\n     \
+    \   else\n          note += music_string[0].upcase\n      music_string = music_string[1..music_string.length]\n\
+    \    end\n    if note.length > 0\n      notes << note.to_i\n    end\n  end\n \
+    \ return notes\nend", "    music_notes = music_string.split(' ')\n    music_notes.each\
+    \ do |note|\n        if note == '.'\n            music_notes[0..-2].each do |note|\n\
+    \                music_notes.delete(i)\n                music_notes.insert(i,\
+    \ 1)\n                music_notes.insert(i + 1, 1)\n                music_notes.insert(i\
+    \ + 2, 1)\n                music_notes.insert(i + 3, 1)\n                music_notes.insert(i\
+    \ + 4, 1)\n            end\n        else\n            music_notes.delete(i)\n\
+    \            music_notes.insert(i, 1)\n            music_notes.insert(i + 1, 1)\n\
+    \            music_notes.insert(i + 2, 1)\n            music_notes.insert(i +\
+    \ 3, 1)\n            music_notes.insert(i + 4, 1)\n        end\n    end\n    return\
+    \ music_notes\nend\n</code>\n<|/ a tags=ruby,arrays,algorithm dscore=1 |>\n<|\
+    \ c |>\nThis won't work since there are too many notes.\n<|/ c |>\n<| c |>\nI\
+    \ added a disclaimer to my post.\n<|/ c |>\n<| c |>\n, could you explain how it\
+    \ won't work?\n<|/ c |>\n<| a |>\n<code>", "  notes = music_string.gsub(/[\\s\\\
+    .]+/, ' ').split(' ')", "  music_notes = music_string.scan(/./).flatten\n  notes\
+    \ = music_notes.map { |note| note.chars.to_i(:lower) }\n  notes.group_by { |note|\
+    \ note / 12 }.sort.inject([]) do |result, pair|\n    result << pair.values.sum\n\
+    \  end\nend\n</code>\nOutput:\n<code>\n[4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n</code>\n\
+    <|/ a tags=ruby,arrays |>\n<| c |>\nThanks for the answer. However I don't think\
+    \ this solves the problem. I believe he is looking for a solution where no extra\
+    \ memory is used. I think your solution is still creating a new array and going\
+    \ through it twice.\n<|/ c |>\n<| c |>\n: This solution does not create new array.\
+    \ `group_by` is called only once, and inside it `inject` is called twice (to build\
+    \ result array). `inject` is called only once to build result array.\n<|/ c |>\n\
+    <| c |>\nOh sorry, you're right. I had missed that. Thank you.\n<|/ c |>\n<| c\
+    \ |>\nThank you for the answer! It works perfectly! One thing I don't understand\
+    \ though, why do you have \"notes.group_by { |note| note / 12 }.sort\"? Why are\
+    \ you dividing by 12? Is this necessary?\n<|/ c |>\n<| c |>\n: This is just a\
+    \ way to group notes to quarters. It could probably be done with other more effective\
+    \ means. `12` is used here only to group the notes properly.\n<|/ c |>\n<| a |>\n\
+    Here is a non-regex solution:\n<code>\nnotes = \"o o| .| o| o| .| .| .| .| o o\"",
+  "  music_array.push(music_string)\n  music_notes.clear\n  music_beats.clear", " \
+    \ result = Array.new\n  music_string.each_char do |character|\n    result << 1\
+    \ if character.match(/[.|o|]$/)\n  end\n  result\nend\n</code>\nAs for your problem\
+    \ with counting number of notes played in different order, here is another solution\
+    \ using array counting method:\n<code>", "  # Your code here\nend", "  music_array.push(music_string)\n\
+    \  \n  music_array.length\n  music_array.pop", "  # TODO: write this function\n\
+    \  return []\nend\n</cell>\n<text>\nExpected Output:\nNotes:\nC - one beat last\n\
+    C#/Db - two beat lasts\nD - one beat last\nD#/Eb - two beat lasts\nE - one beat\
+    \ last\nF - one beat last\nG/Ab - two beat lasts\nA - one beat last\nA#/Bb - two\
+    \ beat lasts\nB - one beat last\nB#/Cb - two beat lasts", "  music_string.replace(\"\
+    \ \", \"\").split('|')\nend\n</code>\n<|/ a dscore=0 |>\n<| a tags=algorithm,ruby\
+    \ |>\nHere's an implementation in Ruby using regular expressions:\n<code>", " \
+    \ # Your code here\nend", "  music_string = get_music_string(music_string)\n \
+    \ note_array = music_string.split(\" \") # split string by spaces, get array of\
+    \ all notes\n  note_array.each {|note| note_array_beat_count.call(note)}\nend",
+  "  music_array.clear()\n  music_array.append(4)\n  i = 0\n  music_string = music_string.downcase",
+  "  notes = []\n  music_string = music_string.strip\n  music_string.gsub!(/\\|[^\\\
+    |]+\\|/, '')\n  music_string.gsub!(/\\|[^\\o]+\\|/, '')\n  music_string.gsub!(/\\\
+    |[^\\.]+\\|/, '')\n  music_string.gsub!(/\\|$/, '')\n  music_string.scan(/^([A-Z]+)(?=\\\
+    |)$/) do |note|\n    notes.push 1 if note == \"o\"\n    notes.push 2 if note ==\
+    \ \"o|\"\n    notes.push 1 if note == \"|\"\n  end\n  return notes\nend", "  \
+    \  # Initialize array for beats\n    beats = []\n    # Iterate through each character\
+    \ in music string\n    for char in music_string:\n        # Determine beat length\n\
+    \        if char == \"o\" or char == \"o|\":\n            beats.append(4)\n  \
+    \      elif char == \".|\":\n            beats.append(1)\n        else:\n    \
+    \        beats.append(2)\n    # Return array containing beat counts\n    return\
+    \ beats\n</code>\n<|/ a tags=python |>\n<| c |>\nAh thank you, this is exactly\
+    \ what I was looking for. Will remember this for future use!\n<|/ c |>\n<| a |>\n\
+    <code>", "  result = music_string.split(/(?:\\|{2,}|$)/).map do |note|\n    note\
+    \ = note.split(//).map { |n| n.to_i }\n    note << 1 if note[0] == 0\n    note.count(1)\
+    \ / 4\n  end\n  result = result.inject(:+)\n  result\nend\n</code>\n<|/ a tags=ruby,regex\
+    \ |>\n<| c |>\nThis is a great answer, and I'll take note of it in the future,\
+    \ but I am specifically looking for a solution using regular expressions.\n<|/\
+    \ c |>\n<| c |>\nSure, that's why I provided my own answer that also uses regular\
+    \ expressions.  It uses my own regular expressions so you can see how it would\
+    \ be used.  Please accept my answer if you like it.\n<|/ c |>\n<| c |>\nI think\
+    \ you have an error in your code. `note = note.split(//)` splits the string by\
+    \ every character in its string. But I think you want `note = note.split(//).map\
+    \ { |n| n.to_i }` (and `note << 1` at the end)\n<|/ c |>\n<| c |>\nAlso, `count`\
+    \ doesn't take an argument and `note[0]` is unnecessary.\n<|/ c |>\n<| c |>\n\
+    thanks for the comments, I've fixed the code now.  Also, note[0] can be removed.\
+    \  Count does take an argument (at least in Ruby 1.9.2, not sure if Ruby 2.0 changed\
+    \ this) but I'm sure you can remove that line all together as well.\n<|/ c |>\n\
+    <| a |>\nI have not fully understood the question, but this seems to match all\
+    \ valid strings:\n<code>\n/^([oO]|[.][.]){1,}$/\n</code>\nThe above pattern contains\
+    \ two alternatives - either a string of one or more of the characters oO or one\
+    \ character followed by a period and another character, or nothing at all. This\
+    \ is repeated one or more times, as many times as needed, until the end of the\
+    \ string.\n<|/ a dscore=1 tags=ruby,regex |>\n<| c |>\nThis doesn't seem to work...\
+    \ It seems that anything that isn't an 'o' or 'O', followed by a period followed\
+    \ by a period does not match this. Try it out in irb and you'll see... I'll update\
+    \ my question with the code I'm using.\n<|/ c |>\n<| c |>\nYeah, you're right.\
+    \ I missed the subtlety of the question. Updated the answer.\n<|/ c |>\n<| a |>\n\
+    You might want to try this regex which allows o to be followed by | or . followed\
+    \ by | or . \n<code>\n/", "  music_string.split(\" \").map(&:to_i).each_cons(4).map(&:sum).max\n\
+    end\n</code>\n<|/ a tags=ruby dscore=1 |>\n<| c |>\nI think there's a bug in your\
+    \ code. It should be `music_string.split(\" \").map(&:to_i).each_cons(4).map(&:sum).max`\n\
+    <|/ c |>\n<| c |>\nThank you, fixed! :)\n<|/ c |>\n<| a |>\nThe best way to solve\
+    \ this is to implement a state machine in your code, i.e. a state machine that\
+    \ keeps track of which note has been played and which note was played before.\
+    \ Here, I assume that note played is denoted with @ and note played before is\
+    \ denoted with $.\nHere's a little script that does what you want to do:\n<code>",
+  "    music_array = music_string.split(//)\n    beats_per_note = []\n    notes_per_chord\
+    \ = []\n    total = 0\n    \n    music_array.each do |note|\n        if note.include?\
+    \ \"|\"\n            notes_per_chord << note.split(\"|\").last.to_i\n        else\n\
+    \            total += note.split(\"o\").last.to_i\n        end\n    end\n    \n\
+    \    notes_per_chord.each do |n|\n        beats_per_note.push((n / 4).to_i + 1)\n\
+    \    end\n    \n    beats_per_note\nend\n</code>\n<|/ a tags=ruby,arrays dscore=0\
+    \ |>\n<| c |>\nThanks, this was helpful!\n<|/ c |>\n<| a |>\nThis should get you\
+    \ going:\n<code>", "  return music_string.scan(/(.)(\\|)(.)(\\|)(.)(\\|)(.)(\\\
+    |)(.)(\\|)(.)(\\|)(.)(\\|)(.)(\\|)(.)(\\|)(.)(\\|)(.)(\\|)/).map(&:to_i)\nend\n\
+    </code>\n<|/ a tags=ruby,regex dscore=0 |>\n<| c |>\nThank you for the answer.\
+    \ Your solution is definitely easier to understand than mine, but I needed a solution\
+    \ that was very \"ruby-like\" so I accepted the other one.\n<|/ c |>\n<| c |>\n\
+    No problem, it was a nice challenge :)\n<|/ c |>\n<| a |>\nThis solution uses\
+    \ regex to match a pattern of consecutive non-whitespace characters, and then\
+    \ split that pattern into its component parts. Then, if the element at the end\
+    \ is a number, it adds the number of trailing non-whitespace characters.\nCode\n\
+    <code>", "  music_string = music_string.split(\"|\")\n  n = music_string.count(\"\
+    |\")\n  n_beat_length = (n.to_f / 4)\n  notes = []\n  index = 0\n  while index\
+    \ < n\n    if index % 4 == 0\n      notes << 4\n      index += 1\n    else\n \
+    \     notes << 0\n      index += 1\n    end\n  end\n  beat_length = n_beat_length\n\
+    \  while index < n\n    if index % 4 == 2\n      notes << 2\n      beat_length\
+    \ += n_beat_length\n      index += 1\n    else\n      notes << 1\n      beat_length\
+    \ += n_beat_length\n      index += 1\n    end\n  end\n  music_notes = music_string.zip(notes).flatten(1)\n\
+    \  music_notes.map(&:to_i)\nend\n</code>\nThe result is correct.\nBut I suggest\
+    \ you to rewrite your code using more elegant Ruby techniques. For example, you\
+    \ can avoid using if statements, you can avoid using while loops etc.\n<|/ a tags=ruby,ruby-on-rails\
+    \ dscore=2 |>\n<| c |>\nThanks. I have updated my question with a more detailed\
+    \ question and an example. I am now trying to understand your solution. Thanks!\n\
+    <|/ c |>\n<| c |>\nI've updated my answer based on your update.\n<|/ c |>\n<|\
+    \ a tags=ruby,ruby-on-rails |>\n<code>", '    music_list = music_string.split("
+    | ")', "  music_string.split(/\\s+/).map do |note|\n    if note.count?('|')\n\
+    \      note.scan(/[^|]+/).map { |n| n.to_i(16) }\n    else\n      note.to_i(16)\n\
+    \    end\n  end\nend", "    parsed_song = []\n    beats = 4\n    notes = music_string.count('|')\n\
+    \    notes += music_string.count('.')\n    for note in music_string.split():\n\
+    \        if note == 'o':\n            parsed_song.append(beats)\n        elif\
+    \ note == '|':\n            parsed_song.append(beats / 2)\n        elif note ==\
+    \ '.':\n            parsed_song.append(beats)\n        else:\n            parsed_song.append(beats\
+    \ * notes)\n        beats *= 2\n    return parsed_song", "    music_array.push\
+    \ music_string\n    music_string = music_array.pop", "    music_string.split(\"\
+    \ \").map{|note| note.split(\"|\").map{|note| note.to_i}}.flatten.group_by{|note|\
+    \ note}.map{|note, note_length| note_length.map {|note| note.to_i}}.flatten.sort\n\
+    end", "  music_string.strip!\n  music_string = music_string\n    .split(//)\n\
+    \    .map { |x| x.downcase }\n    .uniq\n  result = music_string.map { |x| \n\
+    \    case x\n    when 'o' then 4\n    when 'o|' then 2\n    when '.|' then 1\n\
+    \    else 0\n    end\n  }\n  music_string.map { |x| x.to_i(2) }\nend\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nThe return statement is unnecessary\n<|/ c |>\n<|\
+    \ c |>\nYou're right, but it's there in case the OP wants to return anything besides\
+    \ integers, for example.\n<|/ c |>\n<| a dscore=1 |>\nThis is similar to another\
+    \ answer, but a bit more general. \n<code>", "    music_string.gsub!(/o+/, ' o|')\
+    \ # convert 'o' into 'o o|'\n    music_string.gsub!(/o|[|.]/, '|') # replace '|'\
+    \ with '.|'\n    music_string.gsub!(/o|[|.|]/, '|') # replace '|.' with '|.'\n\
+    \    music_string.gsub!(/[.|]\\z/, '')\n    music_string.gsub!(/[|.][.]\\z/, '|')\
+    \ # remove last '|' if it exists\n    music_string.gsub!(/[|.]|\\z/, '|') # remove\
+    \ last '|' if it exists\n    music_string.split('|').map { |note| note.to_i }\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| c |>\nYeah I knew it would be something simple\
+    \ like that, thanks for your help!\n<|/ c |>\n<| a dscore=1 tags=ruby,regex |>\n\
+    This was my solution for converting a musical note into a musical scale where\
+    \ each note plays a certain number of beats:\n<code>\nmusic_notes = [\"a\", \"\
+    b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"a\", \"b\", \"c\", \"d\", \"e\", \"\
+    f\", \"g\"]\nmusic_scale = [\n  [\"c\", \"c\"],\n  [\"d\", \"d\"],\n  [\"e\",\
+    \ \"e\"],\n  [\"f\", \"f\"],\n  [\"g\", \"g\"],\n  [\"a\", \"a\", \"a\"],\n  [\"\
+    b\", \"b\", \"b\"],\n  [\"c\", \"c\", \"c\", \"c\"],\n  [\"d\", \"d\", \"d\",\
+    \ \"d\", \"d\"],\n  [\"e\", \"e\", \"e\", \"e\"],\n  [\"f\", \"f\", \"f\", \"\
+    f\"],\n  [\"g\", \"g\", \"g\", \"g\"]\n]", "    music_string = \"o o| .| o| o|\
+    \ .| .| .| .| o o\"\n    music_array = music_string.split(\"|\")\n    last_beats\
+    \ = []\n    last_beats_count = []\n    previous_last_beats = [0] * 12", "  notes\
+    \ = []\n  note_index = 0\n  note_index2 = 1\n  music_string = music_string.split(\"\
+    \")\n  music_string.each do |c|\n    notes_hash = { 1 => [\"o\", 4],\n       \
+    \            2 => [\"o|\", 2],\n                   3 => [\".|\", 1],\n       \
+    \            4 => [\"o|\", 2],\n                   5 => [\".|\", 1],\n       \
+    \            6 => [\"o|\", 2],\n                   7 => [\".|\", 1],\n       \
+    \            8 => [\"o|\", 2],\n                   9 => [\".|\", 1],\n       \
+    \            10 => [\"o|\", 2],\n                   11 => [\".|\", 1],\n     \
+    \              12 => [\"o|\", 2],\n                   13 => [\".|\", 1],\n   \
+    \                14 => [\"o|\", 2],\n                   15 => [\".|\", 1],\n \
+    \                  16 => [\"o|\", 2],\n                   17 => [\".|\", 1],\n\
+    \                   18 => [\"o|\", 2],\n                   19 => [\".|\", 1],\n\
+    \                   20 => [\"o|\", 2],\n                   21 => [\".|\", 1],\n\
+    \                   22 => [\"o|\", 2],\n                   23 => [\".|\", 1],\n\
+    \                   24 => [\"o|\", 2],\n                   25 => [\".|\", 1],\n\
+    \                   26 => [\"o|\", 2],\n                   27 => [\".|\", 1],\n\
+    \                   28 => [\"o|\", 2],\n                   29 => [\".|\", 1],\n\
+    \                   30 => [\"o|\", 2],\n                   31 => [\".|\", 1],\n\
+    \                   32 => [\"o|\", 2],\n                   33 => [\".|\", 1],\n\
+    \                   34 => [\"o|\", 2],\n                   35 => [\".|\", 1],\n\
+    \                   36 => [\"o|\", 2],\n                   37 => [\".|\", 1],\n\
+    \                   38 => [\"o|\", 2],\n                   39 => [\".|\", 1],\n\
+    \                   40 => [\"o|\", 2],\n                   41 => [\".|\", 1],\n\
+    \                   42 => [\"o|\", 2],\n                   43 => [\".|\", 1],\n\
+    \                   44 => [\"o|\", 2],\n                   45 => [\".|\", 1],\n\
+    \                   46 => [\"o|\", 2],\n                   47 => [\".|\", 1],\n\
+    \                   48 => [\"o|\", 2],\n                   49 => [\".|\", 1],\n\
+    \                   50 => [\"o|\", 2],\n                   51 => [\".|\", 1],\n\
+    \                   52 => [\"o|\", 2],\n                   53 => [\".|\", 1],\n\
+    \                   54 => [\"o|\", 2],\n                   ", "  music_array =\
+    \ music_string.split('|')\n  result = []\n  music_array.each do |x|\n    if (x.length\
+    \ == 1) then\n      result.push(4)\n    elsif (x.length == 2) then\n      result.push(2)\n\
+    \    elsif (x.length == 3) then\n      result.push(1)\n    elsif (x.length ==\
+    \ 4) then\n      result.push(1)\n    end\n  end\n  result\nend", "  music_notes\
+    \ = music_string.split(/[\\| .]\\s/)\n  music_notes.map! { |note| note.split(\"\
+    \").map(&:to_i) }\n  music_notes.transpose!\n  return music_notes.transpose\n\
+    end", "  music_array.push(music_string)\n  music_note_count.push(0)\n  music_last_note.push(0)\n\
+    \  music_last_beat_count.push(0)\n  music_current_chord.push(0)\n  music_current_note.push(0)\n\
+    \  music_note_count.shift(music_note_count[0].length - 1)\n  music_last_note.shift(music_last_note[0].length\
+    \ - 1)\n  music_last_beat_count.shift(music_last_beat_count[0].length - 1)\n \
+    \ music_current_chord.shift(music_current_chord[0].length - 1)\n  music_current_note.shift(music_current_note[0].length\
+    \ - 1)\n  \n  music_note_count[0][0].each do |note|\n    if note.chomp == '.'\n\
+    \      music_note_count.shift\n      music_note_count.shift(note.length)\n   \
+    \ end\n    music_last_note.shift\n    music_last_note.shift(note.length)\n   \
+    \ music_current_note.shift\n    music_current_note.shift(note.length)\n    music_note_count.shift(note.length)\n\
+    \    music_last_note.shift(note.length)\n    music_last_beat_count.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n    music_current_note.shift(note.length)\n\
+    \    music_last_note.shift(note.length)\n    music_current_note.shift(note.length)\n\
+    \    music_last_note.shift(note.length)\n    music_current_note.shift(note.length)\n\
+    \  end\n  \n  music_last_note[0][0].each do |note|\n    music_current_note.shift\n\
+    \    music_current_note.shift(note.length)\n    music_last_note.shift(note.length)\n\
+    \    music_last_beat_count.shift(note.length)\n    music_current_note.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n    music_last_note.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n    music_last_note.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n    music_last_note.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n    music_last_note.shift(note.length)\n\
+    \    music_current_note.shift(note.length)\n  end\n  \n  return music_note_count[0]\n\
+    end", "  music_string.gsub!(/[^a-z]*/, '')", "  beats = []\n  notes = music_string.split(\"\
+    |\")\n  for i in 0..(notes.length - 1) do\n    beat_length = notes[i].length.to_i\n\
+    \    if beat_length > 0 then\n      beats << beat_length\n    end\n  end\n  return\
+    \ beats\nend\n</cell>\n<cell>", "  # your code here\nend\n</cell>\n<cell>\nparse_music(\"\
+    o o| .| o| o| .| .| .| .| o o\")\n</cell>\n<cell>", "    # Your code goes here\n\
+    \    return []\nend", "  result = []\n  music_string.split(\" \").each do |note|\n\
+    \    note.split(\"|\").each do |note_to_parse|\n      result << note_to_parse.length\
+    \ % 4\n    end\n  end\n  result\nend", "  music_notes = []\n  music_notes_str\
+    \ = \"\"\n  music_notes_str += music_string\n  music_notes_str += \" \" * ((music_string.size\
+    \ - music_string.rindex(\"|\")) * 2)\n  music_notes_str = music_notes_str.rstrip(\"\
+    \ \")\n  music_notes_str = music_notes_str.lstrip(\" \")\n  music_notes_str =\
+    \ music_notes_str.split(\"| \")\n  for note in music_notes_str:\n    if note ==\
+    \ \"o\" or note == \"o|\" or note == \".|\":\n      music_notes.append(1)\n  \
+    \  elif note == \"|\" or note == \"o|.\" or note == \"o|.|\":\n      music_notes.append(2)\n\
+    \    elif note == \".\" or note == \"o|.|\" or note == \"o|.|.\":\n      music_notes.append(3)\n\
+    \    elif note == \".|\" or note == \"o|.|.\" or note == \"o|.|.|\":\n      music_notes.append(4)\n\
+    \    elif note == \".|.|\" or note == \"o|.|.|.\" or note == \"o|.|.|.|\":\n \
+    \     music_notes.append(5)\n    elif note == \".|.|.|\" or note == \"o|.|.|.|.\"\
+    \ or note == \"o|.|.|.|.|\":\n      music_notes.append(6)\n    elif note == \"\
+    .|.|.|.|\" or note == \"o|.|.|.|.|.\" or note == \"o|.|.|.|.|.|\":\n      music_notes.append(7)\n\
+    \    elif note == \".|.|.|.|.|\" or note == \"o|.|.|.|.|.|.\" or note == \"o|.|.|.|.|.|.|\"\
+    :\n      music_notes.append(8)\n    elif note == \".|.|.|.|.|.|\" or note == \"\
+    o|.|.|.|.|.|.|.\" or note == \"o|.|.|.|.|.|.|.|\":\n      music_notes.append(9)\n\
+    \    elif note == \".|.|.|.|.|.|.|\" or note == \"o|.|.|.|.|.|.|.|.\" or note\
+    \ == \"o|.|.|.|.|.|.|.|.|\":\n      music_notes.append(10)\n    else:\n      music_notes.append(0)\n\
+    \  return music_notes", "  music_string.upcase!\n  notes = music_string.scan(/[\\\
+    .\\|\\|\\]\\z/)\n  notes.map! { |note| note.upcase }\n  \n  current_beat = nil\n\
+    \  note_beat_pairs = []\n  \n  notes.each do |note|\n    note_beat_pairs << [note,\
+    \ current_beat]\n    \n    if note.start_with? \"o\"\n      current_beat = note_beat_pairs.last.first\
+    \ \n      note_beat_pairs.last[1] = current_beat + 4\n    end\n    \n    if note.start_with?\
+    \ \".\"\n      current_beat = note_beat_pairs.last.first \n      note_beat_pairs.last[1]\
+    \ = current_beat + 1\n    end\n    \n    if note.start_with? \"|\"\n      current_beat\
+    \ = note_beat_pairs.last.first \n      note_beat_pairs.last[1] = current_beat\n\
+    \    end\n  end", "  music_array = music_string.split(\" \")\n  music_array.map!\
+    \ {|note| note.chars.map {|c| c.to_i}}\n  music_array.map! {|note| note % 12}\n\
+    \  music_array.map! {|note| note / 12}\n  music_array.map! {|note| (note % 4)\
+    \ + 1}\n  music_array.compact!\n  music_array.sort!\n  return music_array\nend\n\
+    </code>\n<|/ a |>\n<| c |>\nThanks for your answer, but how would I implement\
+    \ this with my existing code? I am a total beginner at Ruby.\n<|/ c |>\n<| c |>\n\
+    This is an example of how you might implement it in your existing code. There\
+    \ are many other ways to accomplish what you want. As you can see, a lot of it\
+    \ can be done in 1 line.\n<|/ c |>\n<| c |>\nThanks, I have edited my question\
+    \ to show my existing code. I am just not sure where to put the code in order\
+    \ to change the output of your code to meet my requirements. Sorry for my inexperience\
+    \ with Ruby :)\n<|/ c |>\n<| c |>\nYou do not need to change anything. You will\
+    \ put `@music = parse_music` at the beginning of your program and `@music` will\
+    \ be a reference to the array you describe.\n<|/ c |>\n<| c |>\nI changed it to\
+    \ that but now I get a 'undefined method `+' for nil:NilClass' error\n<|/ c |>\n\
+    <| a tags=arrays,ruby,loops |>\nYou can try this code:\n<code>\nnotes = \"o o|\
+    \ .| o| o| .| .| .| .| o o\"", "  music_string_array = music_string.split\n  music_string_array.shift\n\
+    \  music_array = music_string_array.map do |note|\n    if note.end_with?('|')\n\
+    \      note.to_i - 1\n    else\n      note.to_i\n    end\n  end\n  music_array.sum\n\
+    end", "  music_string = music_string.strip\n  if music_string.empty?\n    []\n\
+    \  else\n    chords = music_string.split(\" | \")\n    chords.map do |chord|\n\
+    \      notes = chord.split(\"o\")\n      notes.map {|note| note.count(\"|\") +\
+    \ 1 }\n    end\n  end\nend", "  notes = music_string.split('|')\n  return notes.inject([])\
+    \ { |sum, note|\n    note.split('o').inject(sum) { |sum, note|\n      sum << 2\n\
+    \      sum += note.count('o') + 1\n    }\n  }\nend\n</code>\n<|/ a dscore=2 |>\n\
+    <| c |>\nWow. Looks like a big leap in understanding Ruby, thanks! But can you\
+    \ explain the code a little more? I'm relatively new to this language and I don't\
+    \ quite understand how this works. Why is the code looking like that and what\
+    \ does 'inject([])' do? Also, why are you doing `note.split('o').inject(sum) {\
+    \ |sum, note|` instead of just doing `note.split('o').inject(sum) { |sum, note|\
+    \ sum << 2 sum += note.count('o') + 1`? Sorry for so many questions.\n<|/ c |>\n\
+    <| c |>\nI rewrote my answer and added a detailed explanation of the code. My\
+    \ initial solution that was posted had some bugs.\n<|/ c |>\n<| a dscore=1 tags=ruby\
+    \ |>\nI would do it like this:\n<code>", "  notes = music_string.scan(/[^o|.|]+/)\n\
+    \  notes.map { |n| n.length / 4 }\nend\n</code>\n<|/ a tags=ruby |>\n<| c |>\n\
+    Thanks, your answer is very useful, however I have already solved it. It's a bit\
+    \ more advanced, since I didn't get it straight and I didn't understand it. But\
+    \ your answer is very nice and I learned a lot. I guess I have been too much into\
+    \ Ruby for too long.\n<|/ c |>\n<| a tags=ruby |>\n<code>", "  notes = music_string.split(\"\
+    |\")\n  notes.map!{|n| n.split(\"o\")}\n  notes.map!{|n| n[0].to_i}\n  notes.map!{|n|\
+    \ n[1].to_i}\n  notes.map!{|n| n[-1].to_i}\nend\n</cell>\n<cell>", "  music_notes\
+    \ = music_string.split(\"\").map do |note|\n    case note\n    when \"o\"\n  \
+    \    4\n    when \".\"\n      1\n    when \"|\"\n      2\n    else\n      raise\
+    \ \"Invalid note #{note}!\"\n    end\n  end\n  music_notes.inject(:+)\nend\n</cell>\n\
+    <cell>", '  music_string = music_string.downcase', "  music_array = music_string.split\n\
+    \  # Parse the music string and return the result\n  parsed_music_array = []",
+  "  music_notes = []\n  current_beat = 0\n  music_note = []\n  for c in music_string\n\
+    \    if c.downcase[0,1] == 'o'\n      current_beat += 4\n      music_notes <<\
+    \ current_beat\n    end\n    if c.downcase[0,1] == 'o'\n      current_beat +=\
+    \ 2\n      music_notes << current_beat\n    end\n    if c.downcase[0,1] == '.'\n\
+    \      current_beat += 1\n      music_notes << current_beat\n    end\n  end\n\
+    \  music_notes\nend\n</cell>\n<text>\nExercise 10: Counting Beats\nInput\nThe\
+    \ input is a string representing musical notes in a special ASCII format.", " \
+    \   notes = music_string.split(\" \") \n    note_array = []\n    previous_note\
+    \ = \"\"\n    previous_note_count = 0\n    last_note = \"\"\n    last_note_count\
+    \ = 0\n    \n    for note in notes:\n        if note == previous_note:\n     \
+    \       previous_note_count += 1\n        else:\n            note_array.append(previous_note_count)\n\
+    \            previous_note_count = 0\n            last_note_count = 0\n      \
+    \      last_note = previous_note\n            previous_note = note\n    note_array.append(last_note_count)\n\
+    \    return note_array\n</cell>\n<cell>"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

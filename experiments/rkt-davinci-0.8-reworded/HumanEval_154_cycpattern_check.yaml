@@ -114,7 +114,958 @@ completions: ["  (cond [(string=? a b) #t]\n        [(and (string-contains? a b)
     \    (regexp-match #rx(a) b))\n  (substring a b))\n", "  (let loop ([x (string-&gt;list\
     \ b)]\n             [y a])\n    (cond [(empty? x) #t]\n          [(string-contains?\
     \ y (list-&gt;string x)) #t]\n          [else (loop (append (rest x) (list (first\
-    \ x))) y)])))\n</code>"]
+    \ x))) y)])))\n</code>", "  (if (= (length a) (length b))\n      (let l (length\
+    \ a)\n        (let (c (string-append b (substring b 0 l)))\n          (if (string-contains\
+    \ c a)\n              #t\n              #f)))\n      #f))\n", "  (define (rotate\
+    \ lst)\n    (cond\n      ((null? lst) '())\n      (else (append (cdr lst) (list\
+    \ (car lst))))))\n  (cond\n    ((eq? a b) #t)\n    ((null? b) #f)\n    (else (or\
+    \ (cycpattern_check a (rotate b))\n              (cycpattern_check a (cdr b))))))\n\
+    </code>\nHere is what I got from the Racket code.\n<code>def cycpattern_check(a,\
+    \ b):\n    def rotate(lst):\n        if len(lst) == 0:\n            return []\n\
+    \        else:\n            return lst[1:] + [lst[0]]\n    if a == b:\n      \
+    \  return True\n    elif len(b) == 0:\n        return False\n    else:\n     \
+    \   return cycpattern_check(a, rotate(b)) or cycpattern_check(a, b[1:])\n</code>\n\
+    When I run it, it seems to work fine. But it's so slow and gives me a recursion\
+    \ error.\nPlease help me with this.\n\n\nA:\n\nHere is a different way to think\
+    \ about the problem.\nIf the second word is a rotation of the first word, then\
+    \ the second word can be obtained by choosing some starting point in the first\
+    \ word and then taking a consecutive sequence of letters from the first word.\n\
+    So one solution to this problem would be to loop over all of the possible starting\
+    \ points in the first word, and then see if you can match the second word using\
+    \ a consecutive sequence of letters from the first word.\n", "  (cond\n    [(not\
+    \ (string? a)) #f]\n    [(not (string? b)) #f]\n    [(empty? a) #f]\n    [(empty?\
+    \ b) #f]\n    [(cond [(string-contains a b) #t]\n      [(cycpattern_check a (substring\
+    \ b 1)) #t]\n      [else #f])]))\n", "  (and (regexp-match? (regexp (string b))\
+    \ (string a))\n       (letrec ([ck (lambda (xs)\n                      (let ([b\
+    \ (string-append (cdr xs) (string (car xs)))]\n                            [s\
+    \ (regexp (string b))])\n                        (or (regexp-match? s (string\
+    \ a))\n                            (if (zero? (sub1 (length xs)))\n          \
+    \                      #f\n                                (ck (cdr xs))))))])\n\
+    \         (ck (string->list b)))))\n", "  (and\n   (string-contains a b)\n   (define\
+    \ (rotate s)\n     (string-append (substring s 1) (substring s 0 1)))\n   (define\
+    \ (rotate-n s n)\n     (if (= n 0)\n         s\n         (rotate-n (rotate s)\
+    \ (- n 1))))\n   (define (rotations s)\n     (for/list ([i (in-range (string-length\
+    \ s))])\n       (rotate-n s i)))\n   (member b (rotations b))))\n", "  (let ((blen\
+    \ (string-length b)))\n    (cond\n      ((not (string-contains a b))\n       #f)\n\
+    \      ((string=? a b)\n       #t)\n      (else\n       (let ((blen (string-length\
+    \ b)))\n         (let loop ((b (string-append (substring b 1) (substring b 0 1))))\n\
+    \           (if (string=? b (substring a 0 blen))\n               #t\n       \
+    \        (loop (string-append (substring b 1) (substring b 0 1))))))))))\n", " \
+    \ (define (rotate b)\n    (regexp-replace* #rx\"^(.)(.*)\" b #:to #rx\"\\\\2\\\
+    \\1\"))\n  (define c (rotate b))\n  (and\n   (or (string-contains a b) (string-contains\
+    \ a c))\n   (not (string-contains b c))))\n", "  (define (check1 a b i)\n    (cond\
+    \ [(>= i (string-length a)) #f]\n          [(string=? b (substring a i (+ i (string-length\
+    \ b)))) #t]\n          [else (check1 a b (+ i 1))]))\n  (define (check2 a b i)\n\
+    \    (cond [(>= i (string-length b)) #f]\n          [(check1 a b 0) #t]\n    \
+    \      [else (check2 a (substring b 1 (+ i 1)) (+ i 1))]))\n  (check2 a b 0))\n",
+  "  (define (rotate-string s n)\n    (string-append (substring s n) (substring s\
+    \ 0 n)))\n  (define (rotate-strstr s)\n    (cond ((eq? (string-length s) 0) #f)\n\
+    \          ((substring? s b) #t)\n          (else (rotate-strstr (rotate-string\
+    \ s 1)))))\n  (rotate-strstr a))", "  (let loop ([a a] [b b])\n    (cond\n   \
+    \   [(equal? a b) #t]\n      [(equal? a (first b)) #t]\n      [(equal? (first\
+    \ b) (last b)) #t]\n      [(equal? a (last b)) #t]\n      [(empty? b) #f]\n  \
+    \    [else (loop a (cdr b))])))\n", "  (equal? b (string-append b b)))\n", " \
+    \ (cond\n    [(string=? a \"\") #f]\n    [(string=? b \"\") #f]\n    [(string=?\
+    \ a b) #t]\n    [else\n     (or (string-index a b)\n         (cycpattern_check\
+    \ a (rotate b)))]))\n", "  (let loop ((pat b) (k 0))\n    (if (= k (string-length\
+    \ pat))\n        #f\n        (if (equal? (substring pat k (string-length pat))\
+    \ (substring pat 0 k))\n            (string-contains? a pat)\n            (loop\
+    \ (string-append (substring pat 1 (string-length pat)) (substring pat 0 1)) (+\
+    \ k 1))))))\n</code>\n", "  (string-index (string-append a a) b))\n", "  (or (string-contains?\
+    \ a b)\n      (string-contains? a (string-append (substring b 1) (substring b\
+    \ 0 1)))\n      (string-contains? a (string-append (substring b 2) (substring\
+    \ b 0 2)))\n      (string-contains? a (string-append (substring b 3) (substring\
+    \ b 0 3)))\n      (string-contains? a (string-append (substring b 4) (substring\
+    \ b 0 4)))\n      (string-contains? a (string-append (substring b 5) (substring\
+    \ b 0 5)))\n      (string-contains? a (string-append (substring b 6) (substring\
+    \ b 0 6)))\n      (string-contains? a (string-append (substring b 7) (substring\
+    \ b 0 7)))\n      (string-contains? a (string-append (substring b 8) (substring\
+    \ b 0 8)))\n      (string-contains? a (string-append (substring b 9) (substring\
+    \ b 0 9)))\n      (string-contains? a (string-append (substring b 10) (substring\
+    \ b 0 10)))\n      (string-contains? a (string-append (substring b 11) (substring\
+    \ b 0 11)))\n      (string-contains? a (string-append (substring b 12) (substring\
+    \ b 0 12)))\n      (string-contains? a (string-append (substring b 13) (substring\
+    \ b 0 13)))\n      (string-contains? a (string-append (substring b 14) (substring\
+    \ b 0 14)))\n      (string-contains? a (string-append (substring b 15) (substring\
+    \ b 0 15)))\n      (string-contains? a (string-append (substring b 16) (substring\
+    \ b 0 16)))\n      (string-contains? a (string-append (substring b 17) (substring\
+    \ b 0 17)))\n      (string-contains? a (string-append (substring b 18) (substring\
+    \ b 0 18)))\n      (string-contains? a (string-append (substring b 19) (substring\
+    \ b 0 19)))\n      (string-", "  (define (rotate l)\n    (if (empty? l)\n    \
+    \    l\n        (append (cdr l) (list (car l)))))\n  (define (rotate-substr substr)\n\
+    \    (if (string=? substr b)\n        #t\n        (rotate-substr (rotate substr))))\n\
+    \  (define (substrs a)\n    (if (empty? a)\n        '()\n        (append (substrs\
+    \ (cdr a)) (list (substring a 0 (add1 (string-length b)))))))\n  (define (substr-check\
+    \ a)\n    (if (empty? a)\n        #f\n        (or (string-contains? b (car a))\n\
+    \            (substr-check (cdr a)))))\n  (or (substr-check (substrs a))\n   \
+    \   (rotate-substr (substring b 1 (add1 (string-length b))))))\n", "  (let ([b\
+    \ (string->list b)])\n    (if (string-contains a (list->string b))\n        #t\n\
+    \        (let ([b2 (rotate-right b)])\n          (if (string-contains a (list->string\
+    \ b2))\n              #t\n              (let ([b3 (rotate-right b2)])\n      \
+    \          (if (string-contains a (list->string b3))\n                    #t\n\
+    \                    (let ([b4 (rotate-right b3)])\n                      (if\
+    \ (string-contains a (list->string b4))\n                          #t\n      \
+    \                    #f)))))))))\n", "  (define str \n    (lambda (s) (string-length\
+    \ s)))\n  (define (slice s start end)\n    (define (bake i)\n      (string-append\
+    \ (substring s i)\n                     (substring s 0 i)))\n    (lambda (i) (bake\
+    \ (+ start i))))\n  (define (rotate s i)\n    (string-append (substring s i)\n\
+    \                   (substring s 0 i)))\n  (define cycles (map (slice b 0 (str\
+    \ b)) (range (str b))))\n  (ormap (lambda (x) (string-contains a x)) cycles))",
+  "  (let* ([b (string->list b)]\n         [b-len (length b)]\n         [b-rot (lambda\
+    \ (x) (append (drop x b) (take x b)))]\n         [rotations (map b-rot (iota b-len))])\n\
+    \    (list-contains-sublist? (string->list a) rotations)))\n", "  (define (rotate\
+    \ lst n)\n    (append (drop lst n) (take lst n)))\n  (define (rotate-all lst)\n\
+    \    (for/list ([i (in-range (length lst))])\n      (rotate lst i)))\n  (define\
+    \ (is-substring? lst2 lst1)\n    (define (find-pos x lst)\n      (if (empty? lst)\n\
+    \          #f\n          (if (equal? x (first lst))\n              0\n       \
+    \       (if (find-pos x (rest lst))\n                  (+ 1 (find-pos x (rest\
+    \ lst)))\n                  #f))))\n    (cond\n      [(empty? lst2) #t]\n    \
+    \  [(find-pos (first lst2) lst1) (if (is-substring? (rest lst2) (drop lst1 (find-pos\
+    \ (first lst2) lst1))) #t #f)]\n      [else #f]))\n  (define (substring lst1 lst2)\n\
+    \    (andmap (lambda (lst) (is-substring? lst1 lst)) lst2))\n  (substring (string->list\
+    \ b) (rotate-all (string->list a))))\n```\n\n#### 6.\n```racket\n#lang racket\n",
+  "  (match-define (list a b) (map string->list (list a b)))\n  (define a-len (length\
+    \ a))\n  (define b-len (length b))\n  (define (rotate lst n)\n    (append (drop\
+    \ lst n) (take lst n)))\n  (let f ((acc #f) (i 0))\n    (if (or (= i b-len) acc)\n\
+    \        acc\n        (let ((rot (rotate b i)))\n          (f (or acc (sublist?\
+    \ rot a 0)) (+ i 1))))))\n", "  (define (cycle s)\n    (define (loop s l i)\n\
+    \      (if (= i (string-length s))\n          l\n          (loop s (append l (list\
+    \ (string-append (substring s i) (substring s 0 i)))) (+ i 1))))\n    (loop s\
+    \ '() 0))\n  (define (concat l)\n    (define (loop l c)\n      (if (null? l)\n\
+    \          c\n          (loop (cdr l) (string-append c (car l)))))\n    (loop\
+    \ l \"\"))\n  (define (substring? a b)\n    (string-contains a b))\n  (substring?\
+    \ a (concat (cycle b))))\n```\n\nIsto \xE9 um exemplo de como a especifica\xE7\
+    \xE3o pode ser implementada, e para ver mais exemplos,\nprocure na pasta `../code`.\n\
+    \n# Notas para funcionar\n\nDentro da pasta `../code` existe um arquivo `Racket-source.rkt`\
+    \ que contem a implementa\xE7\xE3o da\nl\xF3gica de recurs\xE3o para a quest\xE3\
+    o `count_subsets` em `racket`. \xC9 preciso descomentar o conte\xFAdo desse\n\
+    arquivo no arquivo `subsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsubsub",
+  "  (if (string-contains a b)\n      #t\n      (let ((b (string-append (substring\
+    \ b 1 (string-length b)) (substring b 0 1))))\n        (if (string=? b b)\n  \
+    \          #f\n            (cycpattern_check a b)))))", "  (define (cycpattern-helper\
+    \ a b)\n    (cond ((or (= (string-length a) 0) (= (string-length b) 0)) #f)\n\
+    \          ((equal? (substring a 0 (string-length b)) b) #t)\n          (else\
+    \ (cycpattern-helper (substring a 1 (string-length a)) b))))\n  (cycpattern-helper\
+    \ a b))\n", "  (define (is-substring? x y)\n    (cond ((< (string-length x) (string-length\
+    \ y)) #f)\n          ((equal? (substring x 0 (string-length y)) y) #t)\n     \
+    \     (else (is-substring? (substring x 1) y))))\n  (define (rotate-chars x)\n\
+    \    (string-append (substring x 1) (string (string-ref x 0))))\n  (define (rotate-string\
+    \ x)\n    (let* ([len (string-length x)]\n           [new-s (string-append (substring\
+    \ x 1) (string (string-ref x 0)))])\n      (if (is-substring? a new-s)\n     \
+    \     new-s\n          (if (&lt; (string-length new-s) len)\n              (rotate-string\
+    \ new-s)\n              #f))))\n  (rotate-string b))\n</code>\nI run <code>raco\
+    \ test cycpattern_check.rkt</code> and I got\n<code>&gt; raco test cycpattern_check.rkt\n\
+    prop: (cycpattern_check \"abcd\" \"abd\")\n  ==&gt; #f\n  FAILED\nprop: (cycpattern_check\
+    \ \"hello\" \"ell\")\n  ==&gt; #t\n  FAILED\nprop: (cycpattern_check \"whassup\"\
+    \ \"psus\")\n  ==&gt; #f\n  FAILED\nprop: (cycpattern_check \"abab\" \"baa\")\n\
+    \  ==&gt; #t\n  FAILED\nprop: (cycpattern_check \"efef\" \"eeff\")\n  ==&gt; #f\n\
+    \  FAILED\nprop: (cycpattern_check \"himenss\" \"simen\")\n  ==&gt; #t\n  FAILED\n\
+    </code>\nEven though I test each part with <code>cycpattern_check</code> in the\
+    \ DrRacket, it doesn't work.\nI am pretty new to Racket, I will appreciate your\
+    \ help. \n\n\nA:\n\nYou should add this function that helps you check if a string\
+    \ is", "  (define (cplist l)\n    (if (null? l) '()\n        (cons (list-ref l\
+    \ 1) (cplist (append (cdr l) (list (car l)))))))\n  (define (substring? a b)\n\
+    \    (if (empty? b) #t\n        (and (member (car b) a) (substring? a (cdr b)))))\n\
+    \  (substring? a b)\n  (or (substring? a b)\n      (substring? a (cplist b))))",
+  "  (define (pos sb count)\n    (if (eq? (string-length sb) (string-length a))\n\
+    \        #f\n        (if (eq? (substring sb count (add1 count)) (substring a 0\
+    \ 1))\n            #t\n            (pos sb (add1 count)))))\n  (define (recur\
+    \ a b)\n    (define (rotate sb)\n      (string-append (substring sb 1 (string-length\
+    \ sb)) (substring sb 0 1)))\n    (if (string-contains? a b)\n        #t\n    \
+    \    (recur a (rotate b))))\n  (if (pos b 0)\n      (recur a b)\n      #f))",
+  "  (define (rotate b)\n    (append (rest b) (list (first b))))\n  (define (match?\
+    \ a b)\n    (let ([b (list->string b)])\n      (string-contains a b)))\n  (define\
+    \ (match? a b)\n    (let ([b (list->string b)])\n      (string-contains a b)))\n\
+    \  (let loop ([b b])\n    (cond\n      [(match? a b) #t]\n      [(null? b) #f]\n\
+    \      [else (loop (rotate b))])))\n```\n\n``` #lang racket", "  (string-contains\
+    \ (string-append a a) b))\n", "  (letrec ([matches (lambda (x)\n             \
+    \         (andmap\n                       (lambda (y)\n                      \
+    \   (equal? (substring a x (+ x (string-length b))) y))\n                    \
+    \   (list b (rotate b) (rotate (rotate b)) (rotate (rotate (rotate b))))))]\n\
+    \           [rotate (lambda (w)\n                     (string-append (substring\
+    \ w 1) (string (string-ref w 0))))])\n    (andmap matches (list 0 1 2 3 4))))\n",
+  "  (define (rotate s)\n    (substring s 1 (string-length s))\n    (string-append\
+    \ (substring s 1 (string-length s)) (substring s 0 1)))\n  (if (substring? b a)\n\
+    \      #t\n      (if (= (string-length b) 1)\n          #f\n          (cycpattern_check\
+    \ a (rotate b)))))", "  (define (helper s i)\n    (substring s (modulo i (string-length\
+    \ s)) (string-length s)))\n  (define (sub a i)\n    (if (= i (string-length a))\n\
+    \        #f\n        (or (substring? b (helper a i))\n            (sub a (+ i\
+    \ 1)))))\n  (sub a 0))\n", "  (define (rotate word len)\n    (string-append (substring\
+    \ word len) (substring word 0 len)))\n  (let ([str1 (string-append a a)]\n   \
+    \     [str2 (string-append b b)])\n    (cond\n      [(string-contains? str1 b)\
+    \ #t]\n      [(string-contains? str2 a) #t]\n      [else #f])))\n", "  (define\
+    \ (cycshift str)\n    (string-append (substring str 1) (string-take str 1)))\n\
+    \  (define (substr? str substr)\n    (regexp-match (regexp (string-append \".*\"\
+    \ substr \".*\")) str))\n  (define (rotate-substr str substr)\n    (or (substr?\
+    \ str substr)\n        (if (= (string-length substr) 1)\n            #f\n    \
+    \        (rotate-substr str (cycshift substr)))))\n  (rotate-substr a b))\n</code>\n\
+    I have to use Racket and I am a bit confused on how to do it. I've been trying\
+    \ to make a loop that rotates the string B, starts from the index 0 and checks\
+    \ if it is a substring in string A. \nI am not sure on how to do that and any\
+    \ help would be appreciated.\n\n\nA:\n\nWith a functional programming language,\
+    \ it's very simple: just use <code>substring</code> and <code>substring-no-properties</code>.\
+    \ Using your last example, a <code>substring-no-properties</code> can be something\
+    \ like this:\n<code>(substring-no-properties \"himenss\" 2 6)", "  (and (andmap\
+    \ (lambda (el) (andmap (lambda (j) (string-contains? a j)) el)) (build-list (lambda\
+    \ (i) (rotate-string i b)) (- (string-length b) 1))) (string-contains? a b)))\n",
+  "  (define (rotate l)\n    (let* ([first (car l)]\n           [rest (cdr l)])\n\
+    \      (append rest (list first))))\n  (define (is-substring? sub str)\n    (if\
+    \ (string-contains str sub)\n        #t\n        #f))\n  (define (check-rotations\
+    \ list)\n    (if (null? list)\n        #f\n        (if (is-substring? (car list)\
+    \ a)\n            #t\n            (check-rotations (cdr list)))))\n  (check-rotations\
+    \ (map (lambda (n) (list->string (rotate (string->list b)))) (range 0 (string-length\
+    \ b)))))\n", "  (define (is-substr? s1 s2)\n    (cond ((empty? s1) #t)\n     \
+    \     ((empty? s2) #f)\n          ((char=? (first s1) (first s2)) (is-substr?\
+    \ (rest s1) (rest s2)))\n          (else (is-substr? (rest s1) s2))))\n  (cond\
+    \ ((empty? b) #t)\n        ((is-substr? a b) #t)\n        (else (cycpattern_check\
+    \ a (string-append (substring b 1 (string-length b)) (string (string-ref b 0)))))))\n\
+    </code>\nAnd this function is called in here:\n<code>;; Given a string s and a\
+    \ natural number n, you need to return the initial substring of length n. If the\
+    \ length of the string is less than n, return the entire string", "  (letrec ([rotations\
+    \ (lambda (s)\n                        (map (lambda (n)\n                    \
+    \           (substring s n (add1 n)))\n                             (list->vector\
+    \ (range (sub1 (string-length s))))))]\n           [substring? (lambda (a b)\n\
+    \                         (for/or ([x (rotations b)])\n                      \
+    \     (regexp-match? (regexp (regexp-quote x)) a)))])\n    (substring? a b)))\n\
+    </code>\nThe rotations code is from the answer to this question.\nWhat I am trying\
+    \ to do is to transform the string <code>b</code> into a vector of all the rotations\
+    \ possible, and then have the <code>regexp-match?</code> check if any of those\
+    \ rotations are in <code>a</code>.\nThe code above works as expected, however,\
+    \ if I do\n<code>(cycpattern_check \"himenss\" \"simen\")\n</code>\nThis is the\
+    \ output I am getting.\n<code>regexp-match?: expected argument of type &lt;regexp&gt;;\
+    \ given \"h\"\n</code>\nI have tried debugging this and it seems that the problem\
+    \ is from the rotations function, in the <code>substring</code> part.\nI am not\
+    \ sure what is going on there, as I am creating a vector of strings and passing\
+    \ them to the <code>regexp-match?</code> function.\nI understand that there might\
+    \ be a better way to do this, however, I want to know why this doesn't work.\n\
+    Any help will be appreciated.\nThanks!\n\n\nA:\n\nThere are two problems in your\
+    \ code:\n1) the range in the rotations function should be <code>(range 0 (sub1\
+    \ (string-length s)))</code> otherwise you get the error you see since you get\
+    \ the rotation <code>\"himenss\"</code> and <code>regexp-match?</code> gets a\
+    \ string.\n2) the regexp in the <code>substring?</code> function should be <code>(regexp\
+    \ (string-append \".*\" x \".*\"))</code> otherwise a string like <code>\"ab\"\
+    </code> will be found in <", "  (define (rotate lst)\n    (define (take n lst)\n\
+    \      (if (= n 0) '()\n          (cons (car lst) (take (- n 1) (cdr lst)))))\n\
+    \    (define (drop n lst)\n      (if (= n 0) lst\n          (drop (- n 1) (cdr\
+    \ lst))))\n    (define (rotate-split lst)\n      (cond ((null? lst) '())\n   \
+    \         ((or (null? (cdr lst)) (null? (cddr lst))) (cons lst '()))\n       \
+    \     (else (cons (take 2 lst) (cons (drop 2 lst) '())))))\n    (define (rotate-join\
+    \ split)\n      (cons (append (cadr split) (car split)) (caddr split)))\n    (let\
+    \ loop ((split (rotate-split lst)))\n      (if (null? split) lst\n          (loop\
+    \ (rotate-join split)))))\n  (if (null? b) #t\n      (define (substring? a b)\n\
+    \        (if (equal? (car a) (car b)) (substring? (cdr a) (cdr b))\n         \
+    \   #f))\n      (define (rotate-substring a b)\n        (if (substring? a b) #t\n\
+    \            (rotate-substring a (rotate b))))\n      (rotate-substring a b)))\n",
+  "  (if (string=? (substring a 0 (string-length b)) b) #t\n      (let ([str (string-append\
+    \ (substring a 0 1) (substring a 1))])\n        (cycpattern_check str b))))\n",
+  "  (define (next-shift pat)\n    (regexp-replace* #rx\"^(.)(.*)\" pat (\u03BB (h\
+    \ t) (string-append t h))))\n  (define (cyc-match s pat)\n    (if (regexp-match*\
+    \ #rx\".*\" s pat)\n        #t\n        (cyc-match s (next-shift pat))))\n  (cyc-match\
+    \ a b))\n```\n\n### M7.4\n\n``` #lang racket\n", "  (cond\n    [(string=? a b)\n\
+    \      #t]\n    [(string=? \"\" a)\n      #f]\n    [else\n      (let\n       \
+    \ ([r (substring a 1)]\n         [l (substring a 0 1)])\n        (if (string=?\
+    \ b (string-append r l))\n          #t\n          (cycpattern_check r b)))]))\n",
+  "  (if (= (string-length a) (string-length b))\n      (let ([a (string->list a)]\n\
+    \            [b (string->list b)])\n        (if (string=? a b)\n            #t\n\
+    \            (let loop ([i 0])\n              (if (= i (string-length a))\n  \
+    \                #f\n                  (let ([h (car b)]\n                   \
+    \     [t (cdr b)])\n                    (if (string=? (string-join a) (string-join\
+    \ b))\n                        #t\n                        (loop (+ i 1))\n  \
+    \                      (set! b (append t (list h)))))))))\n      #f))\n", "  (define\
+    \ (cycpathelper a b b-len b-index)\n    (if (= b-index b-len)\n        #f\n  \
+    \      (or (and (match:string-search b a 0) #t)\n            (cycpathelper a b\
+    \ b-len (+ b-index 1)))))\n  (cycpathelper a b (string-length b) 0))\n```\n\n\
+    ```racket\n#lang racket\n", "  (if (= (string-length a) (string-length b))\n \
+    \     (if (string=? a b)\n          #t\n          (string-contains a (string-append\
+    \ b (string-take b (sub1 (string-length b))))))\n      #f))\n</code>\nAs you can\
+    \ see I have one more test. Can anyone make the others?\n\n\nA:\n\nMy solution:\n\
+    <code>#lang racket\n", "  (define (cycpattern-check-helper a b)\n    (string-contains\
+    \ a b))\n  (define (rotate a)\n    (string-append (substring a 1) (substring a\
+    \ 0 1)))\n  (let loop ([b b])\n    (if (cycpattern-check-helper a b)\n       \
+    \ #t\n        (if (string=? b (rotate b))\n            #f\n            (loop (rotate\
+    \ b))))))", "  (string-contains a b)\n  )\n", "  (define (rotate lst n)\n    (cond\
+    \ [(= n 0) lst]\n          [else (rotate (append (rest lst) (list (first lst)))\
+    \ (- n 1))]))\n  (define (substring? lst slst)\n    (cond [(null? lst) #t]\n \
+    \         [(and (equal? (first lst) (first slst))\n                (substring?\
+    \ (rest lst) (rest slst))) #t]\n          [else #f]))\n  (define (rotations lst)\n\
+    \    (if (null? lst)\n        lst\n        (append (list (rotate lst 0)) (rotations\
+    \ (rotate lst 1)))))\n  (filter substring? (rotations b) (string->list a)))\n",
+  "  (andmap (\u03BB (x) (substring-indexof x a)) (list->set (all-rotations b))))\n",
+  "  (define (do-check a b)\n    (and (not (empty? b))\n         (or (substring? b\
+    \ a)\n             (do-check a (substring b 1 (length b))))))\n  (do-check a b))\n",
+  "  (define r (string-rotations b))\n  (define (iter ls)\n    (cond\n      [(null?\
+    \ ls) #f]\n      [(substring a (car ls)) #t]\n      [else (iter (cdr ls))]))\n\
+    \  (iter r))\n", "  (define (rotate b)\n    (let ([i (string-length b)])\n   \
+    \   (substring b (sub1 i) i) + b))\n  (define (r b)\n    (regexp (string-append\
+    \ \".*\" b \".*\")))\n  (any (lambda (c) (regexp-match (r c) a)) (rotate-n b (string-length\
+    \ b))))", "  (define (rotated-substr s)\n    (append (rest s) (list (first s))))\n\
+    \  (if (substring? b a)\n      #t\n      (cycpattern_check a (rotated-substr b))))\n",
+  "  (local\n    [(define (substring? a start stop)\n       (substring/partial a start\
+    \ (add1 stop)))\n     (define (substr? s1 s2)\n       (substring? s1 0 (sub1 (string-length\
+    \ s1))))\n     (define (is-substr? s1 s2)\n       (substring? s1 (sub1 (string-length\
+    \ s1)) (string-length s1)))\n     (define (rotate-string a)\n       (substring\
+    \ a 1 (string-length a)))]\n    (or (substr? a b)\n        (and (substr? b a)\n\
+    \             (substr? a b))\n        (and (is-substr? b a)\n             (substr?\
+    \ a b))\n        (and (is-substr? a b)\n             (substr? b a))\n        (and\
+    \ (is-substr? b a)\n             (is-substr? a b))\n        (and (is-substr? a\
+    \ b)\n             (is-substr? b a))\n        (and (substr? b a)\n           \
+    \  (is-substr? a b))\n        (and (substr? a b)\n             (is-substr? b a))\n\
+    \        (and (substr? b a)\n             (substr? a b)))))\n", "  (let ([len\
+    \ (string-length b)])\n    (if (string-contains? a b)\n        #t\n        (let\
+    \ loop ([b (string-append (substring b 1 len) (substring b 0 1))])\n         \
+    \ (if (string-contains? a b)\n              #t\n              (loop (string-append\
+    \ (substring b 1 len) (substring b 0 1))))))))\n", "  (let ([b (string->list b)])\n\
+    \    (let loop ([a (string->list a)] [b b])\n      (if (empty? a)\n          #f\n\
+    \          (or (equal? a b)\n              (loop (cdr a) (rotate b)))))))\n",
+  "  (local\n    ([define (all-rotations s)\n      (let loop ([x (string-length s)]\
+    \ [acc '()])\n        (if (= x 0)\n            acc\n            (loop (- x 1)\
+    \ (cons (substring s x) acc))))])\n    (for/or ([rot (in-list (all-rotations b))])\n\
+    \      (regexp-match? (regexp (string-append rot \".*\")) a))))", "  (or (cycpattern_check_helper\
+    \ a b) (cycpattern_check_helper a (string-append (substring b 1 (string-length\
+    \ b)) (substring b 0 1)))))\n", "  (if (= (string-length b) (string-length a))\n\
+    \      (regexp-match? (string-append b \".*\" (substring b 0 1)) a)\n      (regexp-match?\
+    \ (string-append b \".*\" (substring b 0 (string-length b)-1)) a)))", "  (define\
+    \ (rotate xs)\n    (if (null? xs)\n        xs\n        (append (cdr xs) (list\
+    \ (car xs)))))\n  (define (substr? x y)\n    (if (= (length x) 0)\n        #t\n\
+    \        (let ([c (car x)]\n              [cs (cdr x)])\n          (if (member\
+    \ c y)\n              (substr? cs y)\n              #f))))\n  (let loop ([xs (string->list\
+    \ a)]\n             [ys (string->list b)])\n    (if (substr? ys xs)\n        #t\n\
+    \        (loop (rotate xs) ys))))", "  (cond\n    [(eq? (string-length a) (string-length\
+    \ b))\n     (letrec ([rot (lambda (c)\n                     (string-append (substring\
+    \ c 1) (string (string-ref c 0))))]\n              [g (lambda (w n)\n        \
+    \           (if (= n 0)\n                       w\n                       (g (rot\
+    \ w) (- n 1))))])\n       (let ([r (g b (string-length b))])\n         (or (string-contains\
+    \ a b)\n             (string-contains a r))))]\n    [else #f]))\n", "  (define\
+    \ (rotate xs)\n    (cond\n      [(empty? xs) xs]\n      [else (append (rest xs)\
+    \ (list (first xs)))]))\n  (define (substring? xs ys)\n    (cond\n      [(empty?\
+    \ xs) #t]\n      [(empty? ys) #f]\n      [(empty? (rest xs)) (or (equal? (first\
+    \ xs) (first ys))\n                              (substring? xs (rest ys)))]\n\
+    \      [(equal? (first xs) (first ys)) (substring? (rest xs) (rest ys))]\n   \
+    \   [else (substring? xs (rest ys))]))\n  (define (check-rotated xs ys)\n    (cond\n\
+    \      [(empty? xs) #f]\n      [(substring? ys xs) #t]\n      [else (check-rotated\
+    \ (rotate xs) ys)]))\n  (check-rotated b a))", "  (define (rotate word n)\n  \
+    \  (string-append (substring word n) (substring word 0 n)))\n  (define (rotate-loop\
+    \ word n)\n    (if (= n (string-length word))\n        #f\n        (if (string-contains\
+    \ word (rotate word n))\n            #t\n            (rotate-loop word (+ n 1)))))\n\
+    \  (rotate-loop b 0))\n", "  (regexp-match (regexp (string-append b \".*\")) a))\n",
+  "  (let ((b_rotate (string-append (substring b 1) (substring b 0 1))))\n    (if\
+    \ (string-contains a b)\n        #t\n        (if (string=? b b_rotate)\n     \
+    \       #f\n            (cycpattern_check a b_rotate)))))\n", "  (define (rotate\
+    \ k ls)\n    (append (drop k ls) (take k ls)))\n  (or (string-contains a b)\n\
+    \      (any (lambda (x) (string-contains a x))\n           (map (lambda (k) (rotate\
+    \ k b))\n                (range (string-length b))))))\n", "  (define (cycle ls)\n\
+    \    (append (cdr ls) (list (car ls))))\n  (define (checks ls1 ls2)\n    (if (null?\
+    \ ls2)\n        #t\n        (if (string=? (list->string ls1) (list->string ls2))\n\
+    \            #t\n            (checks (cycle ls1) ls2))))\n  (checks (string->list\
+    \ a) (string->list b)))", "  (let loop ([x b] [i 0])\n    (if (&lt; i (string-length\
+    \ b))\n        (or (string-contains? a x)\n            (loop (substring x 1) (+\
+    \ i 1)))\n        #f)))\n</code>\n", "  (cond\n    [(or\n       (substring? b\
+    \ a)\n       (substring? (substring (string-append b b) 1) a))\n     #t]\n   \
+    \ [else\n     #f]))\n", "  (letrec ([rotate (lambda (str)\n                  \
+    \   (let ([str-len (string-length str)])\n                       (string-append\
+    \ (substring str 1 str-len)\n                                      (substring\
+    \ str 0 1))))]\n           [helper (lambda (str check-str)\n                 \
+    \    (if (string=? str check-str)\n                         #f\n             \
+    \            (if (string-contains? a str)\n                             #t\n \
+    \                            (helper (rotate str) check-str))))])\n    (helper\
+    \ b b)))\n", "  (local [(define (rotate lst index)\n            (if (&lt; index\
+    \ 0)\n                (error \"Negative index\")\n                (append (drop\
+    \ index lst) (take index lst))))]\n    (cond [(empty? b) #t]\n          [(contains-substring?\
+    \ a b) #t]\n          [else (cycpattern_check a (rotate b 1))])))\n", "  (define\
+    \ (is_cyclic str)\n    (let ([k (string-length str)])\n      (define (rotate str)\n\
+    \        (string-append (substring str 1) (string-ref str 0)))\n      (define\
+    \ (helper str count)\n        (if (and (string-contains? a str) (= count 0))\n\
+    \            #t\n            (if (= count 0)\n                #f\n           \
+    \     (helper (rotate str) (- count 1)))))\n      (helper str k)))\n  (is_cyclic\
+    \ b))\n", "  (define (recur a b acc)\n    (if (string=? b \"\") #t\n        (if\
+    \ (string-contains a b) #t\n            (recur a (string-append (substring b 1)\
+    \ (substring b 0 1)) acc))))\n  (recur a b 0))\n", "  (if (= (string-length b)\
+    \ 1)\n      (string-contains a (string-ref b 0))\n      (if (not (string-contains\
+    \ a (string-ref b 0)))\n          #f\n          (if (string-contains a (substring\
+    \ b 1 (string-length b)))\n              #t\n              (cycpattern_check a\
+    \ (string-append (substring b (string-length b)) (substring b 0 (string-length\
+    \ b))))))))\n", "  (define (f2 l cnt)\n    (if (= cnt (string-length l))\n   \
+    \   #f\n      (or (equal? l (substring b 0 (string-length l)))\n          (f2\
+    \ (string-append (substring l 1) (substring l 0 1)) (add1 cnt)))))\n  (f2 b 0))\n",
+  "  (if (empty? b) #t\n      (or (string-contains a b)\n          (cycpattern_check\
+    \ a (string-drop b 1)))))\n</code>\nIs there a more efficient way to achieve this?\n\
+    Thanks in advance!\n\n\nA:\n\nThe other answer is correct, but I\u2019d like to\
+    \ offer a slightly different implementation.\nFirst, note that, given a string\
+    \ and a character, we can find the index of the first occurrence of that character\
+    \ in the string:\n<code>(define (index-of str c)\n  (for/first ([i (in-naturals)]\
+    \ #:when (char=? c (string-ref str i)))\n    i))\n</code>\nAlso, given a string\
+    \ and a substring, we can find the index of the first occurrence of that substring\
+    \ in the string:\n<code>(define (index-of str sub)\n  (for/first ([i (in-naturals)]\
+    \ #:when (string-prefix? sub (string-drop str i)))\n    i))\n</code>\nNext, given\
+    \ a string and a substring, we can find the index of the first occurrence of that\
+    \ substring in the string or any of its rotations:\n<code>(define (index-of str\
+    \ sub)\n  (for/first ([i (in-naturals)] #:when (string-prefix? sub (string-drop\
+    \ str i)))\n    i))\n", "  (local [(define (subs s pos)\n            (substring\
+    \ s pos (add1 pos)))\n          (define (cycpattern_check-helper s p)\n      \
+    \      (if (empty? p) #t\n                (if (substring s 0 (length p)) #t\n\
+    \                    (cycpattern_check-helper (subs s 1) p))))]\n    (cycpattern_check-helper\
+    \ a b)))\n", "  (define (sub a b)\n    (if (substring? a b)\n        #t\n    \
+    \    (sub a (rotate a))))\n  (sub a b))\n", "  (define (cycpattern-helper a b\
+    \ len)\n    (if (<= len 0) #f\n        (or (string-contains a b)\n           \
+    \ (cycpattern-helper a (string-append (substring b 1 (- len 1)) (substring b 0\
+    \ 1)) (- len 1)))))\n  (if (string&lt;? b a) (cycpattern-helper a b (string-length\
+    \ b)) #f))\n</code>\n", "  (cond\n    [(empty? b) #t]\n    [(substring? a b) #t]\n\
+    \    [else (cycpattern_check a (rotate-right b))]))\n", "  (define (check-rotations\
+    \ r)\n    (if (string-match (regexp r) a)\n        #t\n        (if (empty? r)\n\
+    \            #f\n            (check-rotations (substring r 1)))))\n  (check-rotations\
+    \ b))\n", "  (or (string-contains? a b)\n      (string-contains? a (string-append\
+    \ (string-drop-right b 1) (string-take b 1)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 2) (string-take b 2)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 3) (string-take b 3)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 4) (string-take b 4)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 5) (string-take b 5)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 6) (string-take b 6)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 7) (string-take b 7)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 8) (string-take b 8)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 9) (string-take b 9)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 10) (string-take b 10)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 11) (string-take b 11)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 12) (string-take b 12)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 13) (string-take b 13)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 14) (string-take b 14)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 15) (string-take b 15)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 16) (string-take b 16)))\n      (string-contains? a (string-append\
+    \ (string-drop-right b 17) (string-take b 17)))\n      (string-cont", "  (let\
+    \ ([a (string->list a)]\n        [b (string->list b)])\n    (if (= (length a)\
+    \ (length b))\n        (eq? a b)\n        (let ([cmp (first b)])\n          (and\
+    \ (andmap (curry string-contains? a) (append (rest b) `(,cmp)))\n            \
+    \   (let ([new-b (reverse (append (reverse (rest b)) `(,cmp)))]\n            \
+    \         [new-a (string->list (list->string new-b))])\n                 (or (eq?\
+    \ a new-a)\n                     (cycpattern_check a new-a))))))))\n```\n\n[Back\
+    \ to home](../../../../)", "  (local [(define (rotate s)\n            (string-append\
+    \ (substring s 1) (string-take s 1)))\n            (define (match s1 s2)\n   \
+    \           (cond [(empty? s1) #t]\n                    [(empty? s2) #f]\n   \
+    \                 [(char=? (string-ref s1 0) (string-ref s2 0)) (match (substring\
+    \ s1 1) (substring s2 1))]\n                    [else #f]))]\n    (or (match a\
+    \ b)\n        (match a (rotate b))\n        (match a (rotate (rotate b)))\n  \
+    \      (match a (rotate (rotate (rotate b)))))))", "  (define (rotate-string s)\n\
+    \    (string-append (substring s 1) (string-take s 1)))\n  (define (is-in-string\
+    \ s s2)\n    (if (string-contains? s s2)\n        #t\n        (if (string=? s2\
+    \ b)\n            #f\n            (is-in-string s (rotate-string s2)))))\n  (is-in-string\
+    \ a b))\n```\n\n## 13. Vowel Squares\n\n```racket\n#lang racket\n", "  (let* ([len-b\
+    \ (string-length b)]\n         [rot-b (string-append (substring b 1 len-b) (string\
+    \ (string-ref b 0)))])\n    (or (string-contains a b)\n        (string-contains\
+    \ a rot-b)\n        (cycpattern_check a rot-b))))\n", "  (define len (string-length\
+    \ b))\n  (cond\n    [(string-contains? a b) #t]\n    [(string-contains? a (substring\
+    \ b (sub1 len) len) #f) #t]\n    [else #f]))\n", "  (andmap (lambda (c) (substring-check\
+    \ a b))\n          (build-cyclic-shifts b)))\n", "  (let ((alist (string->list\
+    \ a))\n        (blist (string->list b)))\n    (cond\n      [(empty? alist) false]\n\
+    \      [(string=? (list->string blist)\n                 (list->string (reverse\
+    \ blist))) true]\n      [(and (empty? blist)\n            (string=? a b)) true]\n\
+    \      [(and (empty? blist)\n            (not (string=? a b))) false]\n      [(and\
+    \ (not (empty? blist))\n            (not (empty? alist)))\n       (if (string=?\
+    \ (list->string (take blist (length alist)))\n                     (list->string\
+    \ alist))\n           (cycpattern_check (list->string (take alist (length blist)))\n\
+    \                             (list->string (reverse blist)))\n           (cycpattern_check\
+    \ (list->string (reverse alist))\n                             (list->string (reverse\
+    \ blist))))])))", "  (define (check-all s)\n    (cond [(string=? (substring s\
+    \ 0 (string-length b)) b) #t]\n          [(string=? s b) #t]\n          [else\
+    \ (check-all (string-append (substring s 1) (substring s 0 1)))]))\n  (check-all\
+    \ a))\n```", "  (or (string-contains? a b)\n      (string-contains? a (cdr b))\n\
+    \      (string-contains? a (list-ref b 2))))\n", "  (if (equal? a b)\n      #t\n\
+    \      (let ([temp (string-append (substring a 1) (substring a 0 1))])\n     \
+    \   (if (substring-index temp b)\n            #t\n            (cycpattern_check\
+    \ temp b)))))\n", "  (define (rotate str offset)\n    (string-append (substring\
+    \ str offset) (substring str 0 offset)))\n  (define (rotations str)\n    (for/list\
+    \ ([i (in-range (string-length str))])\n      (rotate str i)))\n  (define (is-match\
+    \ str1 str2)\n    (regexp-match (regexp (string-append \".*\" str2 \".*\")) str1))\n\
+    \  (define (any-match str)\n    (any (\u03BB (str2) (is-match str str2))\n   \
+    \      (rotations str)))\n  (any-match a))\n", "  (define (inner-cycpattern_check\
+    \ a b)\n    (define (rotate xs)\n      (append (cdr xs) (list (car xs))))\n  \
+    \  (define (is-substr sub xs)\n      (or (string=? sub xs)\n          (string=?\
+    \ sub (string-append xs \" \"))\n          (and (not (null? xs))\n           \
+    \    (is-substr sub (rotate xs)))))\n    (is-substr b a))\n  (inner-cycpattern_check\
+    \ (string-append a \" \") b))", "  (cond [(string=? b \"\") #t]\n        [(string-contains\
+    \ a b) #t]\n        [else (cycpattern_check a (string-append (substring b 1) (substring\
+    \ b 0 1)))]))\n</code>\nThen I try to convert this code to C++.\n<code>#include\
+    \ &lt;string&gt;\n#include &lt;iostream&gt;\n\nusing namespace std;\n\nbool cycpattern_check(string\
+    \ a, string b) {\n    if (b == \"\") {\n        return true;\n    }\n    if (a.find(b)\
+    \ != string::npos) {\n        return true;\n    }\n    else {\n        return\
+    \ cycpattern_check(a, b.substr(1, b.length() - 1) + b.substr(0, 1));\n    }\n\
+    }\n\nint main() {\n    cout &lt;&lt; cycpattern_check(\"abcd\", \"abd\") &lt;&lt;\
+    \ endl;\n    cout &lt;&lt; cycpattern_check(\"hello\", \"ell\") &lt;&lt; endl;\n\
+    \    cout &lt;&lt; cycpattern_check(\"whassup\", \"psus\") &lt;&lt; endl;\n  \
+    \  cout &lt;&lt; cycpattern_check(\"abab\", \"baa\") &lt;&lt; endl;\n    cout\
+    \ &lt;&lt; cycpattern_check(\"efef\", \"eeff\") &lt;&lt; endl;\n    cout &lt;&lt;\
+    \ cycpattern_check(\"himenss\", \"simen\") &lt;&lt; endl;\n    return 0;\n}\n\
+    </code>\nThe result is:\n<code>0\n1\n0\n1\n0\n1\n</code>\nThe first three results\
+    \ are correct.\nBut the last three are incorrect.\nIt seems to be caused by the\
+    \ order of the calling of recursive functions.\nWhat should I do?\nHow do I convert\
+    \ this kind of code in Racket to C++?\n\n\nA:\n\nLooking at my racket solution,\
+    \ the thing that stands out the most is the use of <code", "  (cond\n    ((or\
+    \ (string-contains a b) (string-contains a (string-rotate1 b))) #t)\n    (else\
+    \ #f)))\n\n", "  (if (equal? (string-length a) (string-length b))\n      (let\
+    \ loop ((c b))\n        (if (string-contains a c)\n            #t\n          \
+    \  (loop (string-append (substring c 1) (substring c 0 1)))))\n      #f))\n",
+  "  (define lenB (string-length b))\n  (cond [(substring? b a) #t]\n        [(= 0\
+    \ lenB) #f]\n        [else (cycpattern_check a (substring b 1 (+ lenB 1)))]))\n",
+  "  (match* a\n    [(list xs (cons x (cons y (cons z ys))))\n     (and (member xs\
+    \ (list b (string-append z y x))) #t)\n     (or (cycpattern_check (string-append\
+    \ xs (list x y z)) b) #f)]\n    [_ #f]))\n", "  (define (rotate b n)\n    (string-append\
+    \ (substring b n) (substring b 0 n)))\n  (define (rotateb)\n    (cond\n      [(string=?\
+    \ b (rotate b 1)) #f]\n      [(string-contains? a (rotate b 1)) #t]\n      [else\
+    \ (rotateb)]))\n  (rotateb))\n", "  (string-index (string-append a a) b))\n",
+  "  (define (all-rotations b)\n    (define (helper acc b)\n      (if (= 0 (string-length\
+    \ b))\n          acc\n          (helper (cons (string-append (substring b 1) (substring\
+    \ b 0 1)) acc) (substring b 1))))\n    (helper '() b))\n  (if (= 0 (string-length\
+    \ b))\n      #f\n      (if (string-contains a b)\n          #t\n          (cycpattern_check\
+    \ a (rest (all-rotations b))))))\n```\n\n## [Reverse the digits](https://www.codewars.com/kata/5530b10808541c24330000e3)\n\
+    \nWrite a function that reverses the digits a 32-bit signed integer, `x`. Assume\
+    \ that the environment can only store integers within the 32-bit signed integer\
+    \ range, [-2^31, 2^31 - 1]. The function returns 0 when the reversed integer overflows.\n\
+    \n```", "  (define (rotate str)\n    (string-append (substring str 1) (string-take\
+    \ str 1)))\n  (define (cycpattern_check a b i)\n    (if (= i (string-length b))\n\
+    \        #f\n        (if (regexp-match? (regexp (string-append \".*\" b \".*\"\
+    )) a)\n            #t\n            (cycpattern_check a (rotate b) (+ i 1)))))\n\
+    \  (cycpattern_check a b 0))\n", "  (define (rotations word)\n    (let loop ([word\
+    \ word] [acc '()])\n      (if (string=? word (first acc))\n          acc\n   \
+    \       (loop (substring word 1) (cons word acc)))))\n  (define (substr? word\
+    \ sub)\n    (cond\n      [(string=? sub \"\") #t]\n      [(string=? sub word)\
+    \ #t]\n      [(and (string=? (substring word 0 1) (substring sub 0 1))\n     \
+    \       (substr? (substring word 1) (substring sub 1))) #t]\n      [else #f]))\n\
+    \  (cond\n    [(string=? a b) #t]\n    [(substr? a b) #t]\n    [(substr? a (first\
+    \ (rotations b))) #t]\n    [else #f]))\n```\n\n```scheme\n#lang racket\n", " \
+    \ (let loop ((c (string-length b))\n             (e (string-copy b)))\n    (or\
+    \ (string-contains a e)\n        (and (> c 0)\n             (string-append (substring\
+    \ e (- c 1)) (substring e 0 (- c 1)))\n             (loop (- c 1) (string-append\
+    \ (substring e (- c 1)) (substring e 0 (- c 1))))))))", "  (cond [(empty? b) #t]\n\
+    \        [(substring? a b) #t]\n        [else (cycpattern_check a (cycstr b))]))\n",
+  "  (define b_str (string b))\n  (define (rev_str str)\n    (string-append (substring\
+    \ str 1) (substring str 0 1)))\n  (define (check_helper b)\n    (and (not (string=?\
+    \ b_str (rev_str b))) (string-contains? a b)))\n  (let ([rlt (check_helper b)])\n\
+    \    (if rlt rlt (check_helper (rev_str b)))))\n", "  (define (rotate_helper str)\n\
+    \    (cond [(empty? str) (list \"\")]\n          [else (append (list (append (substring\
+    \ str 1) (substring str 0 1)))\n                        (rotate_helper (substring\
+    \ str 1)))]))\n  (define (substring? a b)\n    (cond [(empty? b) #t]\n       \
+    \   [(char=? (string-ref a 0) (string-ref b 0)) (substring? (substring a 1) (substring\
+    \ b 1))]\n          [else #f]))\n  (define (rotations-helper list)\n    (cond\
+    \ [(empty? list) #f]\n          [(substring? a (car list)) #t]\n          [else\
+    \ (rotations-helper (cdr list))]))\n  (rotations-helper (rotate_helper b)))\n",
+  "  (define (rotate-string a m)\n    (string-append (substring a m) (substring a\
+    \ 0 m)))\n  (define (check a b)\n    (and\n     (for/and ([x (in-list (in-range\
+    \ (string-length b)))]\n               #:when (string-contains a (rotate-string\
+    \ b x)))\n       #t)\n     #t))\n  (if (< (string-length a) (string-length b))\n\
+    \      #f\n      (check a b)))\n", "  (or (string-contains a b)\n      (string-contains\
+    \ a (string-rotate1 b))\n      (string-contains a (string-rotate2 b))\n      (string-contains\
+    \ a (string-rotate3 b))\n      (string-contains a (string-rotate4 b))\n      (string-contains\
+    \ a (string-rotate5 b))\n      (string-contains a (string-rotate6 b))\n      (string-contains\
+    \ a (string-rotate7 b))\n      (string-contains a (string-rotate8 b))\n      (string-contains\
+    \ a (string-rotate9 b))\n      (string-contains a (string-rotate10 b))\n     \
+    \ (string-contains a (string-rotate11 b))\n      (string-contains a (string-rotate12\
+    \ b))\n      (string-contains a (string-rotate13 b))\n      (string-contains a\
+    \ (string-rotate14 b))\n      (string-contains a (string-rotate15 b))\n      (string-contains\
+    \ a (string-rotate16 b))\n      (string-contains a (string-rotate17 b))\n    \
+    \  (string-contains a (string-rotate18 b))\n      (string-contains a (string-rotate19\
+    \ b))\n      (string-contains a (string-rotate20 b))\n      (string-contains a\
+    \ (string-rotate21 b))\n      (string-contains a (string-rotate22 b))\n      (string-contains\
+    \ a (string-rotate23 b))\n      (string-contains a (string-rotate24 b))\n    \
+    \  (string-contains a (string-rotate25 b))\n      (string-contains a (string-rotate26\
+    \ b))\n      (string-contains a (string-rotate27 b))\n      (string-contains a\
+    \ (string-rotate28 b))\n      (string-contains a (string-rotate29 b))\n      (string-contains\
+    \ a (string-rotate30 b))\n      (string-contains a (string-rotate31 b))\n    \
+    \  (string", "  (define substrings '())\n  (define (rotate n char-list)\n    (if\
+    \ (not (null? char-list))\n        (cons (cdr (append char-list (list (car char-list))))\
+    \ (rotate (- n 1) (cdr char-list)))\n        '()))\n  (define (helper n char-list)\n\
+    \    (if (not (null? char-list))\n        (append (rotate n (car char-list)) (helper\
+    \ (- n 1) (cdr char-list)))\n        '()))\n  (define (check-sublist a b)\n  \
+    \  (if (not (null? b))\n        (if (not (null? (member (car b) a)))\n       \
+    \     (check-sublist a (cdr b))\n            #f)\n        #t))\n  (define (get-substrings\
+    \ word)\n    (define substrings '())\n    (define (helper2 n char-list)\n    \
+    \  (if (not (null? char-list))\n          (append (list (list-ref char-list n))\
+    \ (helper2 (+ n 1) char-list))\n          '()))\n    (helper2 0 word))\n  (define\
+    \ (get-substrings2 word n)\n    (define substrings '())\n    (define (helper2\
+    \ n char-list)\n      (if (not (null? char-list))\n          (append (list (list-ref\
+    \ char-list n)) (helper2 (+ n 1) char-list))\n          '()))\n    (if (= n (-\
+    \ (length word) 1))\n        (helper2 0 word)\n        (append (helper2 0 word)\
+    \ (get-substrings2 word (+ n 1)))))\n  (define (circles word)\n    (map string-&gt;list\
+    \ (helper (length word) (map list-&gt;string (get-substrings2 word 0)))))\n  (define\
+    \ (check-string a b)\n    (define (check-sublist2 a b)\n      (if (not (null?\
+    \ b))\n          (if (not (null? (member (car b) a)))\n              (check-sublist2\
+    \ a (cdr", "  (cond [(string=? a b) #t]\n        [(cycpattern_check a (string-drop\
+    \ b 1)) #t]\n        [else #f]))\n```\n\n```racket\n#lang racket\n", "  (let*\
+    \ ([bl (string-length b)]\n         [al (string-length a)]\n         [i 0])\n\
+    \    (let recur ([i i])\n      (if (>= i (- al bl))\n          #f\n          (if\
+    \ (string=? (substring a i (+ i bl)) b)\n              #t\n              (recur\
+    \ (+ i 1)))))))\n```\n\n### Run-length Encoding\n* [codewars](https://www.codewars.com/kata/run-length-encoding/train/racket)\n\
+    \n```racket\n#lang racket\n", "  (let ([r (regexp (string-append b \".*\"))])\n\
+    \    (regexp-match? r a)))\n", "  (letrec ([l (string-length b)]\n           [i\
+    \ 0]\n           [rotated '()])\n    (cond\n      [(= i l) (any (lambda (b) (substring?\
+    \ b a)) rotated)]\n      [else\n       (set! rotated (cons (string-append (substring\
+    \ b i l) (substring b 0 i)) rotated))\n       (set! i (+ i 1))\n       (recur)])))\n",
+  "  (cond\n    [(string=? a b) #t]\n    [else (or (cycpattern_check a (substring\
+    \ b 1))\n              (cycpattern_check a (substring b 0 (- (string-length b)\
+    \ 1))))]))", "  (let ([b (string->list b)])\n    (cond\n      [(null? b) #t]\n\
+    \      [(member (car b) a) (cycpattern_check a (append (cdr b) (list (car b))))]\n\
+    \      [else #f])))\n```\n\n#### 120. Count Palindromic Substrings - 8 points\n\
+    \nhttps://www.codewars.com/kata/count-palindromic-substrings/train/racket\n\n\
+    ```#lang racket\n", "  (cond [(string=? b \"\") #t]\n        [(or(string-contains\
+    \ a b)\n            (cycpattern_check a (string-append (string-drop b 1) (string-take\
+    \ b 1))))\n         #t]\n        [else #f]))\n", "  (define (rotate l n)\n   \
+    \ (append (drop n l) (take n l)))\n  (define (cycpat a b)\n    (let ((len-b (string-length\
+    \ b)))\n      (and\n       (not (null? b))\n       (or\n        (string=? a b)\n\
+    \        (cycpat a (rotate b 1))\n        ))))\n  (cycpat a b))", "  (if (not\
+    \ (string-contains a b))\n      #f\n      (if (string=? b (substring a 0 (string-length\
+    \ b)))\n          #t\n          (cycpattern_check (substring a 1 (string-length\
+    \ a)) b))))\n</code>\nI couldn't figure out how to pass the test cases.\n\n\n\
+    A:\n\nRackUnit comes with some useful functions like <code>check-equal?</code>,\
+    \ <code>check-string=?</code>, <code>check-predicate</code>, <code>check-exn</code>,\
+    \ <code>check-true</code>, <code>check-false</code>, <code>check-equal</code>,\
+    \ <code>check-string</code>, <code>check-regexp</code>, <code>check-error</code>,\
+    \ <code>check-not-error</code>, <code>check-list</code>, <code>check-not-list</code>,\
+    \ <code>check-list*</code>, <code>check-list-set</code>, <code>check-list-order</code>,\
+    \ <code>check-list-permutation</code>, <code>check-list-lex-order</code>, <code>check-bytes</code>,\
+    \ <code>check-c-pointer</code>, <code>check-real</code>, <code>check-within</code>,\
+    \ <code>check-within-epsilon</code>, <code>check-exn</code>, <code>check-assert</code>,\
+    \ <code>check-with-check-approximate</code>, <code>check-eof</code> and <code>check-output</code>.\
+    \ You can also write your own check functions, for example, the standard check\
+    \ for byte strings is implemented as follows:\n<code>(define (check-bytes expected\
+    \ actual)\n  (check-predicate \"check-bytes\" (compose equal? bytes-&gt;string)\
+    \ expected actual))\n</code>\nThe <code>check-exn</code> procedure is also very\
+    \ useful, in particular if you want to check that your function raises an exception\
+    \ with a specific message:\n<code>(check-exn exn:fail:contract?\n           \"\
+    expected a string, given the number", "  (if (or (substring=? a b)\n         \
+    \ (substring=? a (substring b 1 (string-length b)))\n          (substring=? a\
+    \ (substring b 2 (string-length b)))\n          (substring=? a (substring b 3\
+    \ (string-length b)))\n          (substring=? a (substring b 4 (string-length\
+    \ b)))\n          (substring=? a (substring b 5 (string-length b)))\n        \
+    \  (substring=? a (substring b 6 (string-length b)))\n          (substring=? a\
+    \ (substring b 7 (string-length b)))\n          (substring=? a (substring b 8\
+    \ (string-length b)))\n          (substring=? a (substring b 9 (string-length\
+    \ b)))\n          (substring=? a (substring b 10 (string-length b)))\n       \
+    \   (substring=? a (substring b 11 (string-length b)))\n          (substring=?\
+    \ a (substring b 12 (string-length b)))\n          (substring=? a (substring b\
+    \ 13 (string-length b)))\n          (substring=? a (substring b 14 (string-length\
+    \ b)))\n          (substring=? a (substring b 15 (string-length b)))\n       \
+    \   (substring=? a (substring b 16 (string-length b)))\n          (substring=?\
+    \ a (substring b 17 (string-length b)))\n          (substring=? a (substring b\
+    \ 18 (string-length b)))\n          (substring=? a (substring b 19 (string-length\
+    \ b)))\n          (substring=? a (substring b 20 (string-length b)))\n       \
+    \   (substring=? a (substring b 21 (string-length b)))\n          (substring=?\
+    \ a (substring b 22 (string-length b)))\n          (substring=? a (substring b\
+    \ 23 (string-length b)))\n          (substring=? a (substring b 24 (string-length\
+    \ b)))\n          (substring=? a (substring b 25 (string-length b)))\n       \
+    \   (substring=? a (substring b 26 (string-length b)))\n          (sub", "  (let\
+    \ ([la (string-length a)]\n        [lb (string-length b)])\n    (cond ((eq? lb\
+    \ 0) #t)\n          ((>= la lb)\n           (or (string-contains a b)\n      \
+    \         (cycpattern_check a (string-append (substring b (add1 lb)) (substring\
+    \ b 0 1)))))\n          (else #f))))\n", "  (if (string=? b \"\")\n      #t\n\
+    \      (let* ([len (- (string-length a) (string-length b))]\n             [pos\
+    \ (string-index a b)])\n        (if (and pos (&lt; pos len))\n            #t\n\
+    \            (cycpattern_check (string-append (substring a pos) (substring a 0\
+    \ pos)) b)))))\n</code>\nThe first problem is the recursive call which is the\
+    \ following:\n<code>(cycpattern_check (string-append (substring a pos) (substring\
+    \ a 0 pos)) b)\n</code>\nI think this is a problem because if the first word is\
+    \ very long then the function will have a very long stack and I'm assuming that\
+    \ it's a bad thing.\nAnother problem, I think, is that I'm using strings and I\
+    \ think, in Haskell, I would use ByteString or something like that.\nIn Haskell,\
+    \ this is my code:\n<code>import qualified Data.ByteString.Char8 as B\n\n-- cycpattern_check\
+    \ \"abcd\" \"abd\"\n-- False\n-- cycpattern_check \"hello\" \"ell\"\n-- True\n\
+    -- cycpattern_check \"whassup\" \"psus\"\n-- False\n-- cycpattern_check \"abab\"\
+    \ \"baa\"\n-- True\n-- cycpattern_check \"efef\" \"eeff\"\n-- False\n-- cycpattern_check\
+    \ \"himenss\" \"simen\"\n-- True\ncycpattern_check :: B.ByteString -&gt; B.ByteString\
+    \ -&gt; Bool\ncycpattern_check a b =\n  if B.null b\n  then True\n  else let (len,\
+    \ pos) = (B.length a - B.length b, B.elemIndex b a)\n       in if (and pos (&lt;\
+    \ pos len))\n          then True\n          else cycpattern_check (B.append (B.drop\
+    \ pos a) (B.take pos a)) b\n</code>\nIt's pretty much the same code but I think\
+    \ it's better because:\n\n<code>ByteString</code> is using a Stream for its data\n\
+    In the recursive call, it's using <code>append</code> which", "  (define (r b)\n\
+    \    (if (string=? b \"\")\n        #t\n        (if (substring? a b)\n       \
+    \     #t\n            (r (substring b 1)))))\n  (r b))\n", "  (define (helper\
+    \ count a b)\n    (let ([a (cons (first a) (rest a))])\n      (if (and (not (eq?\
+    \ count (length b))) (<= (length a) (length b)))\n          (if (equal? a b)\n\
+    \              #t\n              (helper (+ count 1) a b))\n          #f)))\n\
+    \  (helper 0 a b))\n", "  (define start-index\n    (if (equal? (string-contains\
+    \ a b) #f)\n        #f\n        (string-contains a b)))\n  (if (equal? start-index\
+    \ #f)\n      #f\n      (define last-index\n        (if (equal? (string-contains\
+    \ a (string-reverse b)) #f)\n            #f\n            (string-contains a (string-reverse\
+    \ b))))\n      (if (equal? last-index #f)\n          #f\n          (string-contains\
+    \ a (string-append (substring a start-index) (substring a 0 start-index)))\n \
+    \         )))\n</code>\n", "  (define (is-substring? str1 str2)\n    (cond\n \
+    \     ((string=? str1 str2) #t)\n      ((string&lt;? str1 str2) #f)\n      (else\
+    \ (is-substring? (substring str1 1 (string-length str1)) str2))))\n  (define (rotate\
+    \ str n)\n    (string-append (substring str n (string-length str)) (substring\
+    \ str 0 n)))\n  (define (check str1 str2)\n    (cond\n      ((= (string-length\
+    \ str1) (string-length str2)) (is-substring? str1 str2))\n      (else (check (rotate\
+    \ str1 1) str2))))\n  (check b a))\n", "  (let loop ([a a] [b b])\n    (if (or\
+    \ (string=? a b)\n            (loop (substring a 1) (string-append (substring\
+    \ a 0 1) b)))\n        #t\n        #f)))\n", "  (letrec ([sub-substring? (lambda\
+    \ (a b)\n                             (if (eq? (substring? a b) #f)\n        \
+    \                         (sub-substring? (string-append (substring a 1) (substring\
+    \ a 0 1)) b)\n                                 (substring? a b)))]\n         \
+    \  [substring? (lambda (a b)\n                         (if (eq? (string-length\
+    \ b) 1)\n                             (member (substring b 0 1) (string->list\
+    \ a))\n                             (sub-substring? a b)))]\n           [sub-substring\
+    \ (lambda (a b)\n                            (if (eq? (substring? a b) #f)\n \
+    \                               (sub-substring (string-append (substring a 1)\
+    \ (substring a 0 1)) b)\n                                (substring? a b)))]\n\
+    \           [substring (lambda (a b)\n                        (if (eq? (string-length\
+    \ b) 1)\n                            (member (substring b 0 1) (string->list a))\n\
+    \                            (sub-substring a b)))])\n    (substring a b)))\n\
+    ```\n\n## Problem 5\n\n```racket\n#lang racket\n", "  (regexp-match? (regexp (string-append\
+    \ \".*\" b \".*\")) a))\n", "  (if (string-contains a b)\n      #t\n      (cycpattern_check\
+    \ a (string-rotate b 1))))\n", "  (let loop ([l (string-length b)] [c (substring\
+    \ b 0 1)])\n    (cond\n      [(string=? c \"\") (if (string-contains a (substring\
+    \ b 1 l)) #t #f)]\n      [(string-contains a c) #t]\n      [else (loop (- l 1)\
+    \ (substring b 1 l))])))\n```\n\n```racket\n#lang racket\n", "  (if (= (string-length\
+    \ a) (string-length b))\n      (cycpattern_check_equal a b)\n      (cycpattern_check_rotation\
+    \ a b)))\n", "  (define (rotate x)\n    (let ([k (string-length x)])\n      (string-append\
+    \ (substring x 1 k) (substring x 0 1))))\n  (define (test x)\n    (if (string-contains\
+    \ a x)\n        #t\n        (if (string=? x b)\n            #f\n            (test\
+    \ (rotate x)))))\n  (test b))\n", "  (let loop ([s (regexp-replace #rx\"\" a)]\n\
+    \             [l (string-length s)]\n             [r (regexp-replace #rx\"\" b)])\n\
+    \    (cond [(string-ci=? s r) #t]\n          [(zero? l) #f]\n          [else (loop\
+    \ (string-append (substring s 1) (substring s 0 1))\n                      (-\
+    \ l 1)\n                      r)])))\n", "  (cond\n    [(string=? a b) #t]\n \
+    \   [else (or (cycpattern_check a (string-rotate b))\n              (cycpattern_check\
+    \ a (string-rotate (string-rotate b))))]))\n", "  (cond\n    [(not (string=? a\
+    \ b)) #f]\n    [(string-contains a b) #t]\n    [else (cycpattern_check (string-drop\
+    \ a 1) (string-append (string-take a 1) b))]))\n", '  (equal? (string-append b
+    b) (substring a (string-index a b) (+ (string-index a b) (string-length b)))))',
+  "  (letrec ([cycle (lambda (s)\n                   (let ([s (string-append s s)])\n\
+    \                     (string-join (list s s))))])\n    (string-contains (cycle\
+    \ a) b)))\n```\n\n```racket\n#lang racket\n", "  (define (rotate-n lst n)\n  \
+    \  (if (< n 0) (reverse (rotate-n (reverse lst) (- n)))\n        (let* ([n-mod\
+    \ (modulo n (length lst))]\n               [n-start (sublist lst 0 n-mod)]\n \
+    \              [n-end (sublist lst n-mod)])\n          (append n-end n-start))))\n\
+    \  (define (check-n lst str)\n    (if (empty? lst) #f\n        (let* ([r-n (rotate-n\
+    \ str (car lst))]\n               [r-n-str (string-join r-n)])\n          (if\
+    \ (regexp-match? r-n-str a) #t\n              (check-n (cdr lst) str)))))\n  (check-n\
+    \ (for/list ([i (in-range (length b))]) i) b))\n", "  (regexp-match?\n   (regexp\
+    \ (string-append b \".*\" (string-append (string-take b 1) \".*\" (string-drop\
+    \ b 1))))\n   a))\n```\n\n### 8. The largest letter in a string\n\n```\n#lang\
+    \ racket\n", "  (or (string-contains a b)\n      (cycpattern_check a (rotate-string\
+    \ b 1))))\n", "  (and (or (and (string-contains? a b) #t)\n           (and (string-contains?\
+    \ a (string-append (substring b (add1 (string-length b))) b)) #t)\n          \
+    \ (and (string-contains? a (string-append (substring b (add1 (string-length b)))\
+    \ (substring b (add1 (string-length b))))) #t)\n           (and (string-contains?\
+    \ a (string-append (substring b (add1 (string-length b))) (substring b (add1 (string-length\
+    \ b))) (substring b (add1 (string-length b))))) #t)\n           (and (string-contains?\
+    \ a (string-append (substring b (add1 (string-length b))) (substring b (add1 (string-length\
+    \ b))) (substring b (add1 (string-length b))) (substring b (add1 (string-length\
+    \ b))))) #t)\n           (and (string-contains? a (string-append (substring b\
+    \ (add1 (string-length b))) (substring b (add1 (string-length b))) (substring\
+    \ b (add1 (string-length b))) (substring b (add1 (string-length b))) (substring\
+    \ b (add1 (string-length b))))) #t)\n           (and (string-contains? a (string-append\
+    \ (substring b (add1 (string-length b))) (substring b (add1 (string-length b)))\
+    \ (substring b (add1 (string-length b))) (substring b (add1 (string-length b)))\
+    \ (substring b (add1 (string-length b))) (substring b (add1 (string-length b)))))\
+    \ #t)\n           (and (string-contains? a (string-append (substring b (add1 (string-length\
+    \ b))) (substring b (add1 (string-length b))) (substring b (add1 (string-length\
+    \ b))) (substring b (add1 (string-length b))) (substring b (add1 (string-length\
+    \ b))) (substring b (add1 (string-length b))) (substring b (add1 (string-length",
+  "  (define b1 (list->string (reverse (string->list b))))\n  (cond\n    [(and (member\
+    \ b a) (member b1 a)) #t]\n    [(and (member b a) (not (member b1 a))) #t]\n \
+    \   [(and (not (member b a)) (member b1 a)) #t]\n    [else #f]))", "  (if (string=?\
+    \ b \"\")\n      #t\n      (if (string-contains a b)\n        #t\n        (cycpattern_check\
+    \ a (string-rotate1 b)))))", "  (if (substring? b a)\n      #t\n      (let ((len\
+    \ (string-length b)))\n        (letrec ([rotate-b (lambda (b) (substring b 1 len)\
+    \ (string-append (substring b 1 len) (string-append (substring b 0 1) \"\")))]\n\
+    \                 [is-substring (lambda (a b) (if (substring? b a)\n         \
+    \                                       #t\n                                 \
+    \               (if (= (string-length b) 0)\n                                \
+    \                    #f\n                                                    (is-substring\
+    \ a (rotate-b b))))])\n          (is-substring a b)))))\n", "  (define a-len (string-length\
+    \ a))\n  (define b-len (string-length b))\n  (define (rotate c l)\n    (string-append\
+    \ (substring c l) (substring c 0 l)))\n  (define (any-substr c)\n    (cond\n \
+    \     [(string= c b) #t]\n      [(string= c \"\") #f]\n      [else (any-substr\
+    \ (rotate c 1))]))\n  (any-substr a))", "  (let ([ac (string->list a)]\n     \
+    \   [bc (string->list b)])\n    (define (rotate alist count)\n      (append (drop\
+    \ alist count) (take alist count)))\n    (define (circular_substring blist)\n\
+    \      (if (equal? (length blist) (length bc))\n          #t\n          (or (circular_substring\
+    \ (rotate blist 1))\n              (circular_substring (rotate blist (- 1))))))\n\
+    \    (circular_substring bc)))\n", "  (regexp-match? (regexp (string-append \"\
+    .*\" b \".*\")) a))\n</code>\n", "  (define (rotate str)\n    (append (cdr str)\
+    \ (list (car str))))\n  (define (pattern? acc str1 str2)\n    (if (= 0 (length\
+    \ str2))\n        acc\n        (pattern?\n         (or (string-contains? str1\
+    \ str2) acc)\n         str1\n         (rotate str2))))\n  (pattern? #f a b))\n",
+  "  (define (rotate-by-one lst)\n    (append (cdr lst) (list (car lst))))\n  (define\
+    \ (rotate lst n)\n    (if (= n 0)\n        lst\n        (rotate (rotate-by-one\
+    \ lst) (- n 1))))\n  (define (cycpattern-check? a b)\n    (if (string-contains\
+    \ a b)\n        #t\n        (if (null? b)\n            #f\n            (cycpattern-check?\
+    \ a (rotate b 1)))))\n  (cycpattern-check? a b))\n", "  (define (rotate l)\n \
+    \   (let* ([len (length l)]\n           [l2 (append (slice l 1 len) (list (car\
+    \ l)))])\n      l2))\n  (define (slice l start end)\n    (let* ([t (filter (lambda\
+    \ (x) (and (<= start x) (< x end))) (range (length l)))])\n      (map (lambda\
+    \ (x) (list-ref l x)) t)))\n  (define (rotatelist l)\n    (let* ([len (length\
+    \ l)]\n           [l2 (append (slice l 1 len) (list (car l)))])\n      (append\
+    \ (list l) (rotatelist l2))))\n  (define (str2lst s)\n    (string->list s))\n\
+    \  (define (lst2str l)\n    (list->string l))\n  (define (remove-sub l1 l2)\n\
+    \    (let* ([rl2 (rotatelist l2)]\n           [rp (map (lambda (x) (equal? (lst2str\
+    \ l1) (lst2str x))) rl2)])\n      (filter (lambda (x) x) rp)))\n  (if (empty?\
+    \ b) #t\n      (if (string=? a b) #t\n          (if (string>? a b) (cycpattern_check\
+    \ b a)\n              (if (string<? a b) (cycpattern_check (substring a 0 (sub1\
+    \ (string-length b))) b)\n                  (remove-sub (str2lst a) (str2lst b)))))))\n",
+  "  (cond\n    [(null? b) #t]\n    [(member (string-append b b) a) #t]\n    [else\
+    \ (cycpattern_check a (string-tail b))]))\n", "  (if (= (string-length a) (string-length\
+    \ b))\n      (equal? (string-append a b) (string-append b a))\n      (equal? (string-append\
+    \ a b) (string-append b a))\n      )\n  )\n", "  (define (substr a b)\n    (define\
+    \ a_len (string-length a))\n    (define b_len (string-length b))\n    (define\
+    \ (substr' a b start end)\n      (define (substr-help start end)\n        (substring\
+    \ a start end))\n      (let ([sub_a (substr-help start end)])\n        (if (string=?\
+    \ sub_a b)\n            #t\n            (substr' a b (+ start 1) (+ end 1)))))\n\
+    \  (substr a b 0 (+ (string-length a) (string-length b))))\n</code>\nThe code\
+    \ passes the tests in the comments, except for one where it returns <code>#f</code>\
+    \ when it should return <code>#t</code>.\nIs there anything wrong with my code?\n\
+    <code>&gt; (cycpattern_check \"hello\" \"ell\")\n#t\n&gt; (cycpattern_check \"\
+    whassup\" \"psus\")\n#f\n&gt; (cycpattern_check \"abab\" \"baa\")\n#t\n&gt; (cycpattern_check\
+    \ \"efef\" \"eeff\")\n#f\n&gt; (cycpattern_check \"himenss\" \"simen\")\n#t\n\
+    &gt; (cycpattern_check \"efef\" \"efe\")\n#f\n</code>\n\n\nA:\n\nThis is a good\
+    \ question, because it shows how a good problem can test and improve your understanding\
+    \ of a language.\n\nBecause you loop through all possibilities, a small error\
+    \ in this line:\n<code>(substr' a b (+ start 1) (+ end 1))\n</code>\ncauses the\
+    \ program to reach the end of the string sooner than it should. You need to use\
+    \ the <code>modulo</code> operator:\n<code>(substr' a b (modulo (+ start 1) a_len)\
+    \ (modulo (+ end 1) a_len))\n</code>\nThis allows you to use the next character\
+    \ regardless of whether you're at the end of the string,\nand thereby consider\
+    \ all possibilities.\n\nThe algorithm itself is correct. We'll now look at a different\
+    \ way to solve the problem, the <code>string-index", "  (define (rot str)\n  \
+    \  (string-append (substring str 1) (string-take str 1)))\n  (define (checker\
+    \ str1 str2)\n    (if (string-contains str1 str2)\n        #t\n        (if (=\
+    \ str2 b)\n            #f\n            (checker str1 (rot str2)))))\n  (checker\
+    \ a b))\n", "  (not (or (string-index a b)\n           (string-index a (substring\
+    \ b 1 (add1 (string-length b))))\n           (string-index a (substring b 2 (add1\
+    \ (string-length b))))\n           (string-index a (substring b 3 (add1 (string-length\
+    \ b))))\n           (string-index a (substring b 4 (add1 (string-length b))))\n\
+    \           (string-index a (substring b 5 (add1 (string-length b))))\n      \
+    \     (string-index a (substring b 6 (add1 (string-length b))))\n           (string-index\
+    \ a (substring b 7 (add1 (string-length b))))\n           (string-index a (substring\
+    \ b 8 (add1 (string-length b))))\n           (string-index a (substring b 9 (add1\
+    \ (string-length b))))\n           (string-index a (substring b 10 (add1 (string-length\
+    \ b))))\n           (string-index a (substring b 11 (add1 (string-length b))))\n\
+    \           (string-index a (substring b 12 (add1 (string-length b))))\n     \
+    \      (string-index a (substring b 13 (add1 (string-length b))))\n          \
+    \ (string-index a (substring b 14 (add1 (string-length b))))\n           (string-index\
+    \ a (substring b 15 (add1 (string-length b))))\n           (string-index a (substring\
+    \ b 16 (add1 (string-length b))))\n           (string-index a (substring b 17\
+    \ (add1 (string-length b))))\n           (string-index a (substring b 18 (add1\
+    \ (string-length b))))\n           (string-index a (substring b 19 (add1 (string-length\
+    \ b))))\n           (string-index a (substring b 20 (add1 (string-length b))))\n\
+    \           (string-index a (substring b 21 (add1 (string-length b))))\n     \
+    \      (string-index a (substring b 22 (add1 (string-length b))))\n          \
+    \ (string-index a (substring b 23 (add1 (string-length b))))\n           (string-index\
+    \ a (substring b 24 (add1 (", "  (let ([i 0])\n    (for ([x (string-length b)])\n\
+    \      (unless (substring=? a b i (add1 i))\n        (begin (set! i (modulo (+\
+    \ i 1) (string-length b)))\n               (set! b (string-rotate b 1))))\n  \
+    \    (when (substring=? a b i (add1 i))\n        (return #t)))))\n", "  (define\
+    \ (cycle-word w)\n    (if (empty? w)\n        empty\n        (cons (last w) (init\
+    \ w))))\n  (define (rotations w)\n    (define (helper lst)\n      (if (or (empty?\
+    \ lst)\n              (string=? (first lst) w))\n          lst\n          (helper\
+    \ (cons (cycle-word (first lst)) lst))))\n    (helper (list w)))\n  (define (substring\
+    \ w)\n    (or (string-contains a w)\n        (empty? w)))\n  (or (substring b)\n\
+    \      (substring (cycle-word b))\n      (substring (cycle-word (cycle-word b)))\n\
+    \      (substring (cycle-word (cycle-word (cycle-word b))))))\n</code>\nIs it\
+    \ possible to do this with a single function? If not, is there a more succinct\
+    \ way to implement <code>rotations</code>?\n\n\nA:\n\nYou don't need to do the\
+    \ <code>rotations</code> at all. You can define a helper <code>rotate</code> that\
+    \ performs a single rotation, and then simply recurse until the <code>needle</code>\
+    \ string is empty. This can be done as follows:\n<code>(define (cycpattern_check\
+    \ needle haystack)\n  (define (rotate s)\n    (string-append (substring s 1) (string\
+    \ (string-ref s 0))))\n  (define (search s h)\n    (cond\n      [(string=? s \"\
+    \") #t]\n      [(string-contains? h s) #t]\n      [else (search (rotate s) h)]))\n\
+    \  (search needle haystack))\n</code>\n", "  (let ((matches 0))\n    (for ([i\
+    \ (in-range (string-length b))])\n      (if (regexp-match? b a)\n          (set!\
+    \ matches (+ matches 1))))\n    (if (&gt; matches 0)\n        #t\n        #f)))\n",
+  "  (define (rotate str)\n    (string-append (substring str 1) (string-take str 1)))\n\
+    \  (define (check-substr str substr)\n    (if (= (string-length substr) 0)\n \
+    \       #t\n        (string-contains? str substr)))\n  (let loop ([b b])\n   \
+    \ (if (check-substr a b)\n        #t\n        (loop (rotate b)))))\n</code>\n\
+    EDIT2:\nI made a change to my code, so that it can handle inputs like\n<code>(cycpattern_check\
+    \ \"abc\" \"abc\")\n</code>\nIt works, but the check is not very efficient. Can\
+    \ it be improved?\n<code>#lang racket\n", "  (let ([a (string->list a)]\n    \
+    \    [b (string->list b)])\n    (or (sublist? b a)\n        (sublist? (circular-shift\
+    \ b) a))))\n", "  (cond ((or (< (string-length a) (string-length b))\n       \
+    \      (eq? (string-length a) (string-length b)))\n         #f)\n        ((string-contains?\
+    \ a b)\n         #t)\n        (else\n         (cycpattern_check a (string-drop\
+    \ b 1)))))\n", "  (let* ([a-len (string-length a)]\n         [b-len (string-length\
+    \ b)]\n         [b-first (substring b 0 1)]\n         [b-rot (string-append (substring\
+    \ b 1 b-len) b-first)])\n    (if (string-contains a b)\n        #t\n        (if\
+    \ (string-contains a b-rot)\n            #t\n            (cycpattern_check a b-rot)))))\n",
+  "  (define (rotate lst)\n    (if (null? lst)\n        empty\n        (append (cdr\
+    \ lst) (list (car lst)))))\n  (define (check n lst)\n    (if (equal? n 0)\n  \
+    \      (if (string-contains? a (string-join lst))\n            #t\n          \
+    \  #f)\n        (check (- n 1) (rotate lst))))\n  (check (string-length b) (string->list\
+    \ b)))\n```\n## [43. Integer Partition](https://www.codewars.com/kata/55c933c115a8c426ac000082)\n\
+    \n```racket\n#lang racket\n", "  (define (helper x y)\n    (define (f y)\n   \
+    \   (if (= (string-length y) (string-length x))\n          #f\n          (if (string-contains\
+    \ x y)\n              #t\n              (f (string-append (substring y 1) (substring\
+    \ y 0 1)))\n              )\n          )\n      )\n    (f y)\n    )\n  (helper\
+    \ a b)\n  )\n", "  (or (substring? b a)\n      (cycpattern_check a (string-tail\
+    \ b 1))\n      (cycpattern_check a (string-append (string-reverse (string-drop\
+    \ b 1)) (string-reverse (string-take b 1))))))\n", "  (define (rotate b)\n   \
+    \ (define (rot b i e)\n      (cond\n        [(= i e) (string-append b (substring\
+    \ b 0 e))]\n        [else (rot (string-append (substring b 1) (substring b 0 1))\
+    \ (add1 i) e)]))\n    (rot b 0 (string-length b)))\n  (define (is-sub-str b i\
+    \ len)\n    (cond\n      [(< i len)\n       (or (string=? b (substring a i (add1\
+    \ i)))\n           (is-sub-str b (add1 i) len))]\n      [else #f]))\n  (define\
+    \ (check-rot b)\n    (or (is-sub-str b 0 (string-length a))\n        (check-rot\
+    \ (rotate b))))\n  (check-rot b))", "  (if (empty? a)\n      #f\n      (or (substring\
+    \ b a)\n          (cycpattern_check (rest a) b))))", "  (define (cyc_rotate s)\n\
+    \    (match-define (list head . rest) (string-split s 1))\n    (string-append\
+    \ rest head))\n  (define (substring? s1 s2)\n    (and (not (empty? s1))\n    \
+    \     (or (equal? s1 s2)\n             (substring? (string-tail s1) s2))))\n \
+    \ (define (check s1 s2)\n    (or (substring? s1 s2)\n        (check s1 (cyc_rotate\
+    \ s2))))\n  (check a b))\n", "  (define (str-append! s1 s2)\n    (let* ([len1\
+    \ (string-length s1)]\n           [len2 (string-length s2)]\n           [new-str\
+    \ (make-string (+ len1 len2))])\n      (define (loop n)\n        (if (= n len1)\n\
+    \            (begin\n              (let loop ([i n])\n                (if (= i\
+    \ (+ len1 len2))\n                    (void)\n                    (begin\n   \
+    \                   (string-set! new-str i (string-ref s2 (- i len1)))\n     \
+    \                 (loop (+ i 1)))))\n              new-str)\n            (begin\n\
+    \              (string-set! new-str n (string-ref s1 n))\n              (loop\
+    \ (+ n 1)))))\n      (loop 0)))\n  (define (rotate-str! str)\n    (let* ([len\
+    \ (string-length str)]\n           [new-str (make-string len)])\n      (define\
+    \ (loop n)\n        (if (= n len)\n            (void)\n            (begin\n  \
+    \            (string-set! new-str n (string-ref str (- len n 1)))\n          \
+    \    (loop (+ n 1)))))\n      (loop 0)\n      new-str))\n  (define (cycpattern_check2\
+    \ a b)\n    (define (helper a b)\n      (cond\n        [(string=? a b) #t]\n \
+    \       [(string&lt;? a b) #f]\n        [else (helper (str-append! a (rotate-str!\
+    \ a)) b)]))\n    (helper a b))\n  (cycpattern_check2 a b))\n</code>\nWhat's wrong\
+    \ with the approach, I don't understand?\n\n\nA:\n\nI copied and pasted your code\
+    \ and it ran without any errors. \nUsing this input:\n<code>(cycpattern_check\
+    \ \"abcd\" \"abd\")", "  (or (string-contains a b)\n      (string-contains a (string-rotate\
+    \ b 1))\n      (string-contains a (string-rotate b 2))\n      (string-contains\
+    \ a (string-rotate b 3))\n      (string-contains a (string-rotate b 4))\n    \
+    \  (string-contains a (string-rotate b 5))\n      (string-contains a (string-rotate\
+    \ b 6))\n      (string-contains a (string-rotate b 7))\n      (string-contains\
+    \ a (string-rotate b 8))\n      (string-contains a (string-rotate b 9))\n    \
+    \  (string-contains a (string-rotate b 10))\n      (string-contains a (string-rotate\
+    \ b 11))\n      (string-contains a (string-rotate b 12))\n      (string-contains\
+    \ a (string-rotate b 13))\n      (string-contains a (string-rotate b 14))\n  \
+    \    (string-contains a (string-rotate b 15))\n      (string-contains a (string-rotate\
+    \ b 16))\n      (string-contains a (string-rotate b 17))\n      (string-contains\
+    \ a (string-rotate b 18))\n      (string-contains a (string-rotate b 19))\n  \
+    \    (string-contains a (string-rotate b 20))\n      (string-contains a (string-rotate\
+    \ b 21))\n      (string-contains a (string-rotate b 22))\n      (string-contains\
+    \ a (string-rotate b 23))\n      (string-contains a (string-rotate b 24))\n  \
+    \    (string-contains a (string-rotate b 25))\n      (string-contains a (string-rotate\
+    \ b 26))))\n", "  (if (string=? a b)\n      #t\n      (cycpattern_check (cadr\
+    \ (string-split a \"e\")) b)))", "  (letrec ([c (string-append (substring b 1)\
+    \ (string-take b 1))]\n           [x (regexp-match a (regexp (string-append b\
+    \ \"|\" c)))]\n           [y (if (equal? (car x) #f)\n                  #f\n \
+    \                 (if (equal? (cdr x) (list (list)))\n                      #t\n\
+    \                      (cycpattern_check a c)))]\n           [z (if (equal? b\
+    \ c)\n                  #f\n                  y)])\n    z))\n```", "  (cond [(string=?\
+    \ a b) #t]\n        [(empty? b) #f]\n        [else (or (cycpattern_check a (substring\
+    \ b 1))\n                  (cycpattern_check a (substring b 0 (- (string-length\
+    \ b) 1))))]))\n", "  (define (cycpattern-checker a b)\n    (if (string-contains\
+    \ a b)\n        #t\n        (if (string-length b)\n            (cycpattern-checker\
+    \ a (string-append (substring b 1) (substring b 0 1)))\n            #f)))\n  (cycpattern-checker\
+    \ a b))\n", "  (define (rotate str n)\n    (cond\n      [(= n 0) str]\n      [else\
+    \ (string-append (substring str 1) (string (string-ref str 0)))]))\n  (define\
+    \ (substring-at-index str index)\n    (substring str index (+ index (string-length\
+    \ b))))\n  (define (contains-substr str substr)\n    (cond\n      [(string=? substr\
+    \ (substring-at-index str 0)) #t]\n      [(> (string-length str) (string-length\
+    \ b))\n       (or (contains-substr (substring str 1) substr)\n           (contains-substr\
+    \ (substring str 1) (rotate substr 1)))]\n      [else #f]))\n  (contains-substr\
+    \ a b))\n</code>\n", "  (cycpattern_check_helper a b a))\n", "  (if (equal? a\
+    \ \"\")\n      #f\n      (if (cycpattern_check_2 a b)\n          #t\n        \
+    \  (cycpattern_check (substring a 1) b))))\n", "  (not (empty? (intersect (cycpattern\
+    \ a) (cycpattern b)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -192,7 +192,1396 @@ completions: ["  (let ([file_name (string->list file_name)])\n    (and (andmap a
     \    (char=? ch #\\s)\n    (char=? ch #\\t)\n    (char=? ch #\\u)\n    (char=?\
     \ ch #\\v)", "  (match file_name\n    [\"\" \"No\"]\n    [(rx \"[a-zA-Z]+\"\n\
     \         (? (rx \".\" (or \"txt\" \"exe\" \"dll\")))\n         (? (rx \"[0-9]{0,3}\"\
-    )))\n     \"Yes\"]\n    [_ \"No\"]))\n"]
+    )))\n     \"Yes\"]\n    [_ \"No\"]))\n", "  (cond\n    [(regexp-match #rx\"^[a-zA-Z]\\\
+    d{0,3}\\.txt$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"^[a-zA-Z]\\d{0,3}\\\
+    .exe$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"^[a-zA-Z]\\d{0,3}\\.dll$\"\
+    \ file_name) \"Yes\"]\n    [else \"No\"]))", "  (let ([s (string->list file_name)])\n\
+    \    (or\n     (not (equal?\n           (length (regexp-match* #rx\"^\\\\D\" s))\n\
+    \           1))\n     (not (equal?\n           (length (regexp-match* #rx\"\\\\\
+    .\" s))\n           1))\n     (or (> (length (regexp-match* #rx\"\\\\d\" s)) 3)\n\
+    \         (not (member (list->string (regexp-match* #rx\"\\\\.\\\\w*$\" s))\n\
+    \                      '(\"txt\" \"exe\" \"dll\")))))))\n```\n\n``` #lang racket",
+  "  (define (count-digits file_name)\n    (cond\n      [(empty? file_name) 0]\n \
+    \     [(digit? (first file_name)) (+ 1 (count-digits (rest file_name)))]\n   \
+    \   [else (count-digits (rest file_name))]))\n  (define (is-valid-extension? file_name)\n\
+    \    (define (is-valid-extension-helper lst)\n      (cond\n        [(empty? lst)\
+    \ #f]\n        [(equal? (string-suffix file_name (list-ref lst 0)) (list-ref lst\
+    \ 0)) #t]\n        [else (is-valid-extension-helper (rest lst))]))\n    (is-valid-extension-helper\
+    \ '(\"txt\" \"exe\" \"dll\")))\n  (and (<= (count-digits file_name) 3)\n     \
+    \  (is-valid-extension? file_name)\n       (string-contains file_name \".\")\n\
+    \       (empty? (string-index file_name \".\"))\n       (alphabetic? (string-ref\
+    \ file_name 0))))", "  (define (digits_in_file_name file_name)\n    (define (helper\
+    \ string-list count)\n      (cond\n        [(null? string-list) count]\n     \
+    \   [(and (number? (string->number (car string-list)))\n              (= count\
+    \ 0))\n         (helper (cdr string-list) (+ count 1))]\n        [(or (= (string->number\
+    \ (car string-list)) 0)\n             (= (string->number (car string-list)) 1)\n\
+    \             (= (string->number (car string-list)) 2)\n             (= (string->number\
+    \ (car string-list)) 3))\n         (helper (cdr string-list) (+ count 1))]\n \
+    \       [else (helper (cdr string-list) count)]))\n    (helper (string-split file_name\
+    \ #\\.) 0))\n  (define (dot_exists file_name)\n    (cond\n      [(null? (string-index\
+    \ file_name #\\.)) #f]\n      [else #t]))\n  (define (substring_valid file_name)\n\
+    \    (cond\n      [(and (char&lt;=? #\\a (string-ref file_name 0) #\\z)\n    \
+    \        (equal? \"txt\" (cadr (string-split file_name #\\.)))) #t]\n      [(and\
+    \ (char&lt;=? #\\A (string-ref file_name 0) #\\Z)\n            (equal? \"txt\"\
+    \ (cadr (string-split file_name #\\.)))) #t]\n      [(and (char&lt;=? #\\a (string-ref\
+    \ file_name 0) #\\z)\n            (equal? \"exe\" (cadr (string-split file_name\
+    \ #\\.)))) #t]\n      [(and (char&lt;=? #\\A (string-ref file_name 0) #\\Z)\n\
+    \            (equal? \"exe\" (cadr (string-split file_name #\\.)))) #t]\n    \
+    \  [(and (char&lt;=? #\\a (string-ref file_name 0) #\\z)\n            (equal?\
+    \ \"dll\" (cadr (string-split file_name #", "  (if (and (string-contains file_name\
+    \ #\\.) \n           (string-contains file_name #\\))\n      (let* ((dot_index\
+    \ (string-index file_name #\\.))\n             (left (substring file_name 0 dot_index))\n\
+    \             (right (substring file_name (+ dot_index 1) (string-length file_name))))\n\
+    \        (if (and (= 1 (length (string-split left #\\)))\n                 (regexp-match\
+    \ #rx\"[a-zA-Z]+\" left)\n                 (= 3 (string-length right))\n     \
+    \            (member right '(\"txt\" \"exe\" \"dll\")))\n            \"Yes\"\n\
+    \            \"No\"))\n      \"No\"))\n```\n\n```racket\n#lang racket\n", "  (and\
+    \ (and (not (&gt; (string-&gt;number (regexp-replace* #rx\"[^0-9]\" file_name\
+    \ \"\")) 3))\n            (regexp-match? #rx\"^[a-zA-Z]*\\.[a-zA-Z]*$\" file_name))\n\
+    \       (or (string=? (cadr (regexp-match #rx\"\\.[a-zA-Z]*$\" file_name)) \"\
+    txt\")\n           (string=? (cadr (regexp-match #rx\"\\.[a-zA-Z]*$\" file_name))\
+    \ \"exe\")\n           (string=? (cadr (regexp-match #rx\"\\.[a-zA-Z]*$\" file_name))\
+    \ \"dll\"))))\n</code>\nI'm quite new to Racket, and would like to see if there\
+    \ is a better way to express this function.\n\n\nA:\n\nWell, you can use the <code>every</code>\
+    \ function that applies a predicate to every element of a list and returns <code>#t</code>\
+    \ if all elements satisfy the predicate. For example:\n<code>(every number? '(1\
+    \ 2 3))", "  (and (and (check-for-exactly-one-dot file_name)\n            (check-for-three-digits\
+    \ file_name))\n       (or (string=? \"txt\" (get-extension file_name))\n     \
+    \      (string=? \"exe\" (get-extension file_name))\n           (string=? \"dll\"\
+    \ (get-extension file_name)))))\n", "  (and\n   (string-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    \\.[txd]{1,3}$\" file_name)\n   \"Yes\"))\n", "  (define (valid-file-name? file-name)\n\
+    \    (define (valid-extension? extension)\n      (member extension '(\"txt\" \"\
+    exe\" \"dll\")))\n    (define (valid-name? file-name)\n      (if (regexp-match\
+    \ #rx\"^[a-zA-Z]+[a-zA-Z0-9]*[.](txt|exe|dll)$\" file-name)\n          'Yes\n\
+    \          'No))\n    (valid-name? file-name))\n  (valid-file-name? file_name))\n",
+  "  (let* ([file_extension (string-split file_name \".\")]\n         [file_type (last\
+    \ file_extension)]\n         [file_base (first file_extension)]\n         [invalid-chars\
+    \ (regexp-match #rx\"\\\\D\" file_base)])\n    (if (and (equal? 1 (length file_extension))\n\
+    \             (or (equal? \"txt\" file_type)\n                 (equal? \"exe\"\
+    \ file_type)\n                 (equal? \"dll\" file_type))\n             (not\
+    \ (eq? 0 (length invalid-chars)))\n             (not (eq? 3 (length (regexp-match\
+    \ #rx\"\\\\d\" file_base)))))\n        \"Yes\"\n        \"No\")))\n", "  (cond\n\
+    \    [ (regexp-match? #rx\"^[a-zA-Z]+[^.]?[^.][^.]?\\\\.txt$\" file_name)\n  \
+    \    \"Yes\" ]\n    [ (regexp-match? #rx\"^[a-zA-Z]+[^.]?[^.][^.]?\\\\.exe$\"\
+    \ file_name)\n      \"Yes\" ]\n    [ (regexp-match? #rx\"^[a-zA-Z]+[^.]?[^.][^.]?\\\
+    \\.dll$\" file_name)\n      \"Yes\" ]\n    [ else \"No\" ]))\n", "  (cond\n  \
+    \  [(or (string-contains file_name #\\.) (= 1 (string-length file_name)) )\n \
+    \    \"No\"]\n    [(string-contains file_name #\\.)\n     (cond\n       [(> (string-length\
+    \ (substring file_name 0 (string-index file_name #\\.))) 4)\n        \"No\"]\n\
+    \       [(not (regexp-match #rx\"^[a-zA-Z]*$\" (substring file_name 0 (string-index\
+    \ file_name #\\.))))\n        \"No\"]\n       [(not (regexp-match #rx\"[a-zA-Z]+.[txt|exe|dll]\"\
+    \ file_name))\n        \"No\"]\n       [else\n        \"Yes\"])]\n    [else\n\
+    \     \"No\"]))\n", "  (cond\n    [(string=? (regexp-match #rx\"(.*\\.[txt,exe,dll])\"\
+    \ file_name) file_name)\n     \"Yes\"]\n    [else \"No\"]))", "  (define (is_valid_part\
+    \ file_name)\n    (and (not (empty? file_name))\n         (or (eq? (first file_name)\
+    \ #\\.)\n             (member (first file_name) '(\"txt\" \"exe\" \"dll\")))))\n\
+    \  (if (is_valid_part file_name)\n      \"Yes\"\n      \"No\"))\n", "  (if (and\
+    \ (regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}\\\\.txt$\" file_name)\n      \
+    \    (regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}\\\\.exe$\" file_name)\n   \
+    \       (regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}\\\\.dll$\" file_name))\n\
+    \      \"Yes\"\n      \"No\"))\n", "  (cond\n    [(file_name_is_valid? file_name)\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (define (aux count dot ok is-last-char-valid-suffix\
+    \ file_name)\n    (if (string-empty? file_name)\n        (string-append \"Yes\"\
+    \n                       (if (and ok\n                                (equal?\
+    \ dot 1)\n                                (&lt;= count 3)\n                  \
+    \              is-last-char-valid-suffix)\n                           \"\"\n \
+    \                          \"No\"))\n        (if (char-digit? (string-ref file_name\
+    \ 0))\n            (aux (+ count 1) dot ok is-last-char-valid-suffix (string-tail\
+    \ file_name 1))\n            (if (char-alphabetic? (string-ref file_name 0))\n\
+    \                (aux count dot #t is-last-char-valid-suffix (string-tail file_name\
+    \ 1))\n                (if (equal? (string-ref file_name 0) #\\.)\n          \
+    \          (aux count (+ dot 1) ok is-last-char-valid-suffix (string-tail file_name\
+    \ 1))\n                    (if (and (or (equal? (string-ref file_name 0) #\\t)\n\
+    \                                 (equal? (string-ref file_name 0) #\\e)\n   \
+    \                              (equal? (string-ref file_name 0) #\\x))\n     \
+    \                        ok\n                             (= dot 1)\n        \
+    \                     (&lt;= count 3))\n                        (aux count dot\
+    \ ok #t (string-tail file_name 1))\n                        (aux count dot ok\
+    \ is-last-char-valid-suffix (string-tail file_name 1))))))))\n  (aux 0 0 #f #f\
+    \ file_name))\n</code>\n", "  (and\n   (<= 1 (count-digits file_name))\n   (<=\
+    \ (count-digits file_name) 3)\n   (equal? 1 (count-dots file_name))\n   (not (empty?\
+    \ (before-dot file_name)))\n   (is-latin-letter? (first (before-dot file_name)))\n\
+    \   (is-valid-extension? (after-dot file_name))\n  )\n)\n", "  (if (or (regexp-match\
+    \ #rx\"[0-9]{4}\" file_name)\n          (not (regexp-match #rx\"\\.[a-zA-Z]\"\
+    \ file_name))\n          (not (regexp-match #rx\"\\.[a-zA-Z0-9]{3}\" file_name)))\n\
+    \      \"No\"\n      \"Yes\"))\n", "  (cond [(regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}\\\
+    \\.[txt|exe|dll]$\" file_name)\n         \"Yes\"]\n        [else\n         \"\
+    No\"]))\n", "  (define (count-digit-chars file_name_acc)\n    (cond\n      ((empty?\
+    \ file_name_acc) 0)\n      ((char-digit? (first file_name_acc))\n       (+ 1 (count-digit-chars\
+    \ (rest file_name_acc))))\n      (else (count-digit-chars (rest file_name_acc)))))\n\
+    \  (cond\n    ((or (> (count-digit-chars file_name) 3)\n         (= 0 (substring-count\
+    \ file_name #\\.))\n         (not (char-alphabetic? (string-ref file_name 0)))\n\
+    \         (not (member (substring file_name (substring-index file_name #\\.))\
+    \ '(\"txt\" \"exe\" \"dll\"))))\n     \"No\")\n    (else \"Yes\")))\n", "  (define\
+    \ (check_number_of_digits file_name number_of_digits)\n    (cond\n      [(= number_of_digits\
+    \ 3) \"No\"]\n      [(= (string-length file_name) 0) (number->string number_of_digits)]\n\
+    \      [(char-numeric? (string-ref file_name 0)) (check_number_of_digits (substring\
+    \ file_name 1) (+ number_of_digits 1))]\n      [else (check_number_of_digits (substring\
+    \ file_name 1) number_of_digits)]))\n  (define (check_file_extension file_name)\n\
+    \    (cond\n      [(= (string-length file_name) 0) \"No\"]\n      [(string=? file_name\
+    \ \"txt\") \"Yes\"]\n      [(string=? file_name \"exe\") \"Yes\"]\n      [(string=?\
+    \ file_name \"dll\") \"Yes\"]\n      [else (check_file_extension (substring file_name\
+    \ 1))]))\n  (define (get_file_extension file_name)\n    (cond\n      [(= (string-length\
+    \ file_name) 0) \"\"]\n      [(string=? (substring file_name 0 1) \".\") (substring\
+    \ file_name 1)]\n      [else (get_file_extension (substring file_name 1))]))\n\
+    \  (define (get_file_name file_name)\n    (cond\n      [(= (string-length file_name)\
+    \ 0) \"\"]\n      [(string=? (substring file_name 0 1) \".\") (substring file_name\
+    \ 1)]\n      [else (get_file_name (substring file_name 1))]))\n  (define (check_first_char\
+    \ file_name)\n    (cond\n      [(= (string-length file_name) 0) \"No\"]\n    \
+    \  [(or (char-alphabetic? (string-ref file_name 0)) (char-alphabetic? (string-ref\
+    \ file_name 0) #:mode 'locale)) \"Yes\"]\n      [else \"No\"]))\n  (cond\n   \
+    \ [(= (string-length file_name) 0) \"No\"]\n   ", "  (define (count-digits file_name)\n\
+    \    (cond ((null? file_name) 0)\n          ((and (char-numeric? (car file_name))\n\
+    \                (number? (string->number (car file_name))))\n           (+ 1\
+    \ (count-digits (cdr file_name))))\n          (else (count-digits (cdr file_name)))))\n\
+    \  (define (valid-substring sub)\n    (cond ((and (not (null? sub))\n        \
+    \        (char-alphabetic? (car sub))\n                (or (eq? (char-upcase (car\
+    \ sub)) (car sub))\n                    (eq? (char-downcase (car sub)) (car sub))))\n\
+    \           (valid-substring (cdr sub)))\n          ((null? sub) #t)\n       \
+    \   (else #f)))\n  (define (valid-extension ext)\n    (cond ((equal? ext \"txt\"\
+    ) #t)\n          ((equal? ext \"exe\") #t)\n          ((equal? ext \"dll\") #t)\n\
+    \          (else #f)))\n  (define (valid-file file_name)\n    (cond ((string-contains\
+    \ file_name \".\") #f)\n          ((> (count-digits file_name) 3) #f)\n      \
+    \    ((null? (string-split file_name \".\")) #f)\n          ((null? (string-split\
+    \ (string-take-right file_name (sub1 (string-length file_name))) \".\")) #f)\n\
+    \          ((valid-substring (string-take-right file_name (sub1 (string-length\
+    \ file_name))))\n           (valid-extension (car (string-split file_name \".\"\
+    ))))\n          (else #f)))\n  (cond ((valid-file file_name) \"Yes\")\n      \
+    \  (else \"No\")))", "  (match-define (list (? exact-integer? start) \".\" ext)\
+    \ (regexp-match #rx\"^([a-zA-Z]+)([0-9]{0,3})\\.(txt|exe|dll)$\" file_name))\n\
+    \  (cond [(= 0 start) \"No\"]\n        [(= 1 (list-length ext)) \"Yes\"]\n   \
+    \     [else \"No\"]))\n", "  (and\n   (andmap \n    char-&gt;digit? \n    (string-&gt;list\
+    \ \n     (regexp-replace* #rx\"[^0-9]\" file_name \"\")))\n   (regexp-match? #rx\"\
+    [A-Za-z]{1,}\\.[a-z]{3}\" file_name)\n   (andmap\n    char-&gt;digit?\n    (string-&gt;list\
+    \ \n     (regexp-replace* #rx\"[^0-9]\" file_name \"\")))\n   (regexp-match? #rx\"\
+    [^\\.]{3}\" file_name)))\n</code>\n<code>#lang racket\n", "  (cond\n    [(regexp-match\
+    \ #rx\"[a-zA-Z][^0-9]*[^.]{1}[^.]*\\\\.txt\" file_name) \"Yes\"]\n    [(regexp-match\
+    \ #rx\"[a-zA-Z][^0-9]*[^.]{1}[^.]*\\\\.exe\" file_name) \"Yes\"]\n    [(regexp-match\
+    \ #rx\"[a-zA-Z][^0-9]*[^.]{1}[^.]*\\\\.dll\" file_name) \"Yes\"]\n    [else \"\
+    No\"]))\n", "  (define (has_only_three_digits? str)\n    (define (num-of-digits\
+    \ str i)\n      (if (= i (string-length str)) 0\n          (if (char-numeric?\
+    \ (string-ref str i))\n              (+ 1 (num-of-digits str (+ i 1)))\n     \
+    \         (num-of-digits str (+ i 1)))))\n    (if (= (num-of-digits str 0) 3)\
+    \ #t #f))\n  (define (first_char_is_alpha? str)\n    (and (char-alpha? (string-ref\
+    \ str 0)) #t))\n  (define (has_only_one_dot? str)\n    (if (= (string-length (string-split\
+    \ str #\\.)) 2) #t #f))\n  (define (is_valid_extension? str)\n    (cond ((string=?\
+    \ (substring str (- (string-length str) 3)) \"txt\") #t)\n          ((string=?\
+    \ (substring str (- (string-length str) 3)) \"exe\") #t)\n          ((string=?\
+    \ (substring str (- (string-length str) 3)) \"dll\") #t)\n          (else #f)))\n\
+    \  (define (substring_before_dot str)\n    (substring str 0 (string-index str\
+    \ #\\.)))\n  (cond ((and (has_only_three_digits? (substring_before_dot file_name))\n\
+    \              (has_only_one_dot? file_name)\n              (first_char_is_alpha?\
+    \ (substring_before_dot file_name))\n              (is_valid_extension? file_name))\
+    \ \"Yes\")\n        (else \"No\")))\n", "  (cond [(regexp-match #rx\"[a-zA-Z](([0-9]{1,3}[a-zA-Z])|([a-zA-Z]{1,3}[0-9]))*\\\
+    .txt$\" file_name) \"Yes\"]\n        [(regexp-match #rx\"[a-zA-Z](([0-9]{1,3}[a-zA-Z])|([a-zA-Z]{1,3}[0-9]))*\\\
+    .exe$\" file_name) \"Yes\"]\n        [(regexp-match #rx\"[a-zA-Z](([0-9]{1,3}[a-zA-Z])|([a-zA-Z]{1,3}[0-9]))*\\\
+    .dll$\" file_name) \"Yes\"]\n        [else \"No\"]))\n", "  (cond\n    [(regexp-match\
+    \ #rx\"^([a-zA-Z]\\w{0,3})\\.txt$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"\
+    ^([a-zA-Z]\\w{0,3})\\.exe$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"^([a-zA-Z]\\\
+    w{0,3})\\.dll$\" file_name) \"Yes\"]\n    [else \"No\"]))\n", "  (cond\n    [(and\n\
+    \       (match-count-3-digits file_name)\n       (match-one-dot file_name)\n \
+    \      (match-no-empty-substring-before-dot file_name)\n       (match-starts-with-letter\
+    \ file_name)\n       (match-substring-after-dot file_name))\n     \"Yes\"]\n \
+    \   [else \"No\"]))\n", "  (define (count-digits s)\n    (if (string-empty? s)\n\
+    \        0\n        (+ (char-numeric? (string-ref s 0))\n           (count-digits\
+    \ (string-drop s 1)))))\n  (define (has-dot s)\n    (if (string-empty? s)\n  \
+    \      #f\n        (if (char=? (string-ref s 0) #\\.)\n            #t\n      \
+    \      (has-dot (string-drop s 1)))))\n  (define (extension s)\n    (cond ((string=?\
+    \ (string-drop-right s 3) \"txt\") #t)\n          ((string=? (string-drop-right\
+    \ s 3) \"exe\") #t)\n          ((string=? (string-drop-right s 3) \"dll\") #t)\n\
+    \          (else #f)))\n  (cond ((and (<= (count-digits file_name) 3)\n      \
+    \        (has-dot file_name)\n              (extension file_name))\n         \"\
+    Yes\")\n        (else \"No\")))\n", "  (if (string-match \"[0-9]{4}\" file_name)\
+    \ \"No\"\n      (if (string-match \"^[a-zA-Z]+\" file_name)\n          (if (string-match\
+    \ \"^[a-zA-Z]+\\.[a-zA-Z]+\" file_name)\n              (if (or (string-match \"\
+    txt$\" file_name) (string-match \"exe$\" file_name)\n                      (string-match\
+    \ \"dll$\" file_name)) \"Yes\" \"No\")\n              \"No\")\n          \"No\"\
+    )))\n", "  (cond [(regexp-match? #rx\"^[a-zA-Z][^.]*\\\\.txt$\" file_name) \"\
+    Yes\"]\n        [(regexp-match? #rx\"^[a-zA-Z][^.]*\\\\.exe$\" file_name) \"Yes\"\
+    ]\n        [(regexp-match? #rx\"^[a-zA-Z][^.]*\\\\.dll$\" file_name) \"Yes\"]\n\
+    \        [else \"No\"]))\n", "  (define (digits-in-file-name file_name count)\n\
+    \    (cond [(string=? file_name \"\") count]\n          [(char-numeric? (string-ref\
+    \ file_name 0))\n           (digits-in-file-name (substring file_name 1) (+ count\
+    \ 1))]\n          [else\n           (digits-in-file-name (substring file_name\
+    \ 1) count)]))\n  (define (check-for-dot file_name count)\n    (cond [(string=?\
+    \ file_name \"\") count]\n          [(char=? (string-ref file_name 0) #\\.)\n\
+    \           (check-for-dot (substring file_name 1) (+ count 1))]\n          [else\n\
+    \           (check-for-dot (substring file_name 1) count)]))\n  (define (check-extension\
+    \ ext)\n    (cond [(string=? ext \"\") #f]\n          [(string=? ext \"txt\")\
+    \ #t]\n          [(string=? ext \"exe\") #t]\n          [(string=? ext \"dll\"\
+    ) #t]\n          [else #f]))\n  (define (valid-name? file_name)\n    (let ([n_digits_in_file_name\
+    \ (digits-in-file-name file_name 0)]\n          [n_dots_in_file_name (check-for-dot\
+    \ file_name 0)]\n          [name (substring file_name 0 (string-index file_name\
+    \ #\\.))]\n          [ext (substring file_name (+ (string-index file_name #\\\
+    .) 1))])\n      (and (<= n_digits_in_file_name 3)\n           (= n_dots_in_file_name\
+    \ 1)\n           (char-alphabetic? (string-ref name 0))\n           (check-extension\
+    \ ext))))\n  (if (valid-name? file_name)\n      \"Yes\"\n      \"No\"))\n", " \
+    \   (cond [(regexp-match #rx\"[0-9]{4}\" file_name) \"No\"]\n          [(not (regexp-match\
+    \ #rx\"^[a-zA-Z]+[.][a-zA-Z]+$\" file_name)) \"No\"]\n          [(not (regexp-match\
+    \ #rx\"[.][a-zA-Z]+$\" file_name)) \"No\"]\n          [(not (regexp-match #rx\"\
+    ^[a-zA-Z]\" file_name)) \"No\"]\n          [(not (regexp-match #rx\"[.](txt|exe|dll)$\"\
+    \ file_name)) \"No\"]\n          [else \"Yes\"]))\n", "  (string-equal? \"Yes\"\
+    \n                 (cond ((regexp-match #rx\"[0-9]{3,}\" file_name) \"No\")\n\
+    \                       ((regexp-match #rx\"^[a-zA-Z]+\\.[a-zA-Z]+$\" file_name)\
+    \ \"Yes\")\n                       (else \"No\"))))\n", "  (cond\n    [(or (or\
+    \ (not (string-match #rx\"^[a-zA-Z]+[0-9]{0,3}[.](txt|exe|dll)$\" file_name))\n\
+    \           (string=? (string-split file_name \".\")[0] \"\"))\n         (string=?\
+    \ (string-split file_name \".\")[1] \"\"))\n     \"No\"]\n    [else \"Yes\"]))\n\
+    ```\n\n## Challenges\n\n### challenge 1\n\n```racket\n#lang racket\n", "  ;; TRUE\
+    \ if file_name has no more than 3 digits\n  (define (has_not_three_digits str)\n\
+    \    (and (not (regexp-match #rx\"[0-9]{4}\" str))\n         (not (regexp-match\
+    \ #rx\"[0-9]{3}\" str))))\n  ;; TRUE if file_name has one dot\n  (define (has_one_dot\
+    \ str)\n    (regexp-match #rx\"\\.\" str))\n  ;; TRUE if file_name starts with\
+    \ a letter\n  (define (starts_with_letter str)\n    (regexp-match #rx\"[a-zA-Z]\"\
+    \ str))\n  ;; TRUE if file_name ends with ['.txt', '.exe', '.dll']\n  (define\
+    \ (ends_with_valid_extension str)\n    (regexp-match #rx\"\\.(txt|exe|dll)$\"\
+    \ str))\n  ;; TRUE if file_name has one dot and starts with a letter\n  (define\
+    \ (has_one_dot_and_starts_with_letter str)\n    (and (has_one_dot str)\n     \
+    \    (starts_with_letter str)))\n  ;; TRUE if file_name has one dot and ends with\
+    \ ['.txt', '.exe', '.dll']\n  (define (has_one_dot_and_ends_with_valid_extension\
+    \ str)\n    (and (has_one_dot str)\n         (ends_with_valid_extension str)))\n\
+    \  ;; TRUE if file_name has one dot and starts with a letter, and also has one\
+    \ dot and ends with ['.txt', '.exe', '.dll']\n  (define (has_two_dots str)\n \
+    \   (and (has_one_dot_and_starts_with_letter str)\n         (has_one_dot_and_ends_with_valid_extension\
+    \ str)))\n  ;; TRUE if file_name has no more than 3 digits, has one dot and starts\
+    \ with a letter, and also has one dot and ends with ['.txt', '.exe', '.dll']\n\
+    \  (define (is_valid_file_name str)\n    (and (has_not_three_digits str)\n   \
+    \      (", "  (define (is_digit ch) (and (char-&gt;integer ch) (&lt;= #\\0 ch\
+    \ #\\9)))\n  (define (count-digits str)\n    (let loop ((str str) (count 0))\n\
+    \      (cond ((null? str) count)\n            ((is_digit (car str)) (loop (cdr\
+    \ str) (+ count 1)))\n            (else (loop (cdr str) count)))))\n  (define\
+    \ (substr str sep from-end)\n    (let loop ((str str) (acc '()))\n      (cond\
+    \ ((null? str) (string-&gt;list (string-join (reverse acc))))\n            ((char=?\
+    \ (car str) sep) (if from-end acc (loop (cdr str) acc)))\n            (else (loop\
+    \ (cdr str) (cons (car str) acc))))))\n  (define (only-letters str)\n    (let\
+    \ loop ((str str))\n      (cond ((null? str) #t)\n            ((or (char-&gt;integer\
+    \ (car str)) (char=? (car str) #\\_)) #f)\n            (else (loop (cdr str))))))\n\
+    \  (define (valid-extension str)\n    (memq str '(\"txt\" \"exe\" \"dll\")))\n\
+    \  (define (valid-name str)\n    (and (not (&gt; (count-digits str) 3))\n    \
+    \     (let ((subs (substr str #\\. #f)))\n           (and (not (null? subs))\n\
+    \                (not (null? (substr subs #\\. #t)))\n                (only-letters\
+    \ (substr subs #\\. #t))\n                (valid-extension (substr subs #\\. #f))))))\n\
+    \  (cond ((valid-name file_name) \"Yes\")\n        (else \"No\")))\n</code>\n",
+  "  (cond ((or (regexp-match #rx\"[a-zA-Z]+\\\\.(txt|exe|dll)\" file_name)\n    \
+    \         (regexp-match #rx\"[0-9]{4}\" file_name)) \"No\")\n        (else \"\
+    Yes\")))\n", "  (define (valid-extension? extension)\n    (or (string=? extension\
+    \ \"txt\")\n        (string=? extension \"exe\")\n        (string=? extension\
+    \ \"dll\")))\n  (define (valid-prefix? prefix)\n    (define (valid-prefix-first-char?\
+    \ c)\n      (or (char-alphabetic? c)\n          (char-ci=? c #\\_)))\n    (and\
+    \ (not (empty? prefix))\n         (valid-prefix-first-char? (string-ref prefix\
+    \ 0))\n         (every valid-prefix-first-char? prefix)))\n  (let* ([parts (string-split\
+    \ file_name #\\.)]\n         [prefix (first parts)]\n         [extension (second\
+    \ parts)])\n    (and (not (> (count-digits file_name) 3))\n         (equal? (length\
+    \ parts) 2)\n         (valid-prefix? prefix)\n         (valid-extension? extension))))\n",
+  "  (cond\n    [(string=? (regexp-match? \"^([a-zA-Z]+[0-9]{0,3})\\.(txt|exe|dll)$\"\
+    \ file_name) \"\") \"Yes\"]\n    [else \"No\"]))\n", "  (define (dot_in_file_name)\n\
+    \    (regexp-match #rx\"\\\\.\" file_name))\n  (define (first_letter_is_alpha)\n\
+    \    (regexp-match #rx\"[a-zA-Z]\" file_name))\n  (define (file_type)\n    (regexp-match\
+    \ #rx\"\\\\.[txtexe]\" file_name))\n  (define (no_more_than_three_digits)\n  \
+    \  (if (<= (regexp-match #rx\"[0-9]\" file_name) 3) '() #f))\n  (cond [(no_more_than_three_digits)\
+    \ (cond [(first_letter_is_alpha) (cond [(dot_in_file_name) (cond [(file_type)\
+    \ \"Yes\" \"No\"]) \"No\"]) \"No\"]) \"No\"]))\n", "  (define (count-occurrences\
+    \ char file-name)\n    (if (empty? file-name)\n        0\n        (+ (if (char=?\
+    \ char (first file-name)) 1 0)\n           (count-occurrences char (rest file-name)))))\n\
+    \  (if (and (regexp-match? #rx\"^[a-zA-Z]+[0-9]{0,3}\\\\.txt$\" file_name)\n \
+    \          (= 1 (count-occurrences #\\. file_name)))\n      \"Yes\"\n      \"\
+    No\"))\n</code>\nAnd here's a non-recursive version:\n<code>#lang racket\n", " \
+    \ (let (\n      ([suffix-pos (string-index file_name \".\")]))\n    (if (and (=\
+    \ (string-length file_name) (+ 2 suffix-pos))\n         (or (string=? (substring\
+    \ file_name suffix-pos (+ suffix-pos 3)) \"txt\")\n             (string=? (substring\
+    \ file_name suffix-pos (+ suffix-pos 3)) \"exe\")\n             (string=? (substring\
+    \ file_name suffix-pos (+ suffix-pos 3)) \"dll\"))\n         (and (not (string=?\
+    \ (substring file_name 0 1) \"0\"))\n              (not (string=? (substring file_name\
+    \ 0 1) \"1\"))\n              (not (string=? (substring file_name 0 1) \"2\"))\n\
+    \              (not (string=? (substring file_name 0 1) \"3\"))\n            \
+    \  (not (string=? (substring file_name 0 1) \"4\"))\n              (not (string=?\
+    \ (substring file_name 0 1) \"5\"))\n              (not (string=? (substring file_name\
+    \ 0 1) \"6\"))\n              (not (string=? (substring file_name 0 1) \"7\"))\n\
+    \              (not (string=? (substring file_name 0 1) \"8\"))\n            \
+    \  (not (string=? (substring file_name 0 1) \"9\")))\n         (not (string=?\
+    \ (substring file_name 0 1) \" \")))\n      \"Yes\"\n      \"No\")))\n", "  (string=?\
+    \ \"Yes\" (file_name_check_worker file_name 0 0 0 0)))\n", "  (define (number_of_digits\
+    \ str)\n    (if (empty? str)\n        0\n        (if (char-numeric? (first str))\n\
+    \            (+ 1 (number_of_digits (rest str)))\n            (number_of_digits\
+    \ (rest str)))))\n  (define (contains_dot str)\n    (if (empty? str)\n       \
+    \ #f\n        (if (eq? (first str) #\\.)\n            #t\n            (contains_dot\
+    \ (rest str)))))\n  (define (valid_before_dot str)\n    (if (empty? str)\n   \
+    \     #f\n        (if (and (eq? (first str) #\\.)\n                 (or (char-alphabetic?\
+    \ (first (rest str)))\n                     (char-numeric? (first (rest str)))))\n\
+    \            #t\n            (valid_before_dot (rest str)))))\n  (define (valid_after_dot\
+    \ str)\n    (or (string=? str \"txt\")\n        (string=? str \"exe\")\n     \
+    \   (string=? str \"dll\")))\n  (if (and (not (= (number_of_digits file_name)\
+    \ 4))\n           (contains_dot file_name)\n           (valid_before_dot file_name)\n\
+    \           (valid_after_dot (string-split (contains_dot file_name) file_name)))\n\
+    \      \"Yes\"\n      \"No\"))\n</code>\nEDIT:\nThe code above (without the last\
+    \ <code>if</code> condition) gives me the following error:\n<code>application:\
+    \ not a procedure;\n expected a procedure that can be applied to arguments\n \
+    \ given: \"Yes\"\n  arguments...:\n   \"example.txt\"\n</code>\nI've tried many\
+    \ variations and I can't seem to make this work...\nAny ideas on how to get this\
+    \ to work?\nThanks.\n\n\nA:\n\nThe error message is instructive:\n<code>application:\
+    \ not a procedure;\n expected a procedure that can be applied to arguments\n \
+    \ given: \"Yes\"\n  arguments...:\n   \"example.txt\"\n</code>\nSo, the problem\
+    \ is in this part of the code:\n<code>(", "  (let ([dot_index (string-index file_name\
+    \ #\\.)]\n        [file_extension (substring file_name (+ dot_index 1))]\n   \
+    \     [file_name_no_extension (substring file_name 0 dot_index)])\n    (cond\n\
+    \      [(member file_extension '(\"txt\" \"exe\" \"dll\"))\n       (if (and (not\
+    \ (null? file_name_no_extension))\n                (regexp-match #rx\"[A-Za-z]\"\
+    \ file_name_no_extension)\n                (not (> (regexp-match #rx\"[0-9]\"\
+    \ file_name_no_extension) 3)))\n           \"Yes\"\n           \"No\")]\n    \
+    \  [else \"No\"])))\n", "  (define (is_a_digit ch) (and (char&gt;=? ch #\\0) (char&lt;=?\
+    \ ch #\\9)))\n  (define (is_a_letter ch) (or (char&gt;=? ch #\\a) (char&gt;=?\
+    \ ch #\\A)))\n  (define (is_digits str)\n    (if (empty? str) '()\n        (if\
+    \ (is_a_digit (first str)) (cons (first str) (is_digits (rest str)))\n       \
+    \     '())))\n  (define (is_letters str)\n    (if (empty? str) '()\n        (if\
+    \ (is_a_letter (first str)) (cons (first str) (is_letters (rest str)))\n     \
+    \       '())))\n  (define (is_extension str)\n    (if (empty? str) '()\n     \
+    \   (if (or (string=? str \"txt\") (string=? str \"exe\") (string=? str \"dll\"\
+    ))\n            (cons (first str) (is_extension (rest str)))\n            '())))\n\
+    \  (define (split_name file_name)\n    (if (empty? file_name) '()\n        (if\
+    \ (string=? (first file_name) \".\")\n            (cons '() (list (list-ref file_name\
+    \ 1)))\n            (cons (cons (first file_name) (split_name (rest file_name)))\
+    \ '()))))\n  (let* ((splitted_file_name (split_name file_name))\n         (file_name_before_dot\
+    \ (list-ref splitted_file_name 0))\n         (file_name_after_dot (list-ref splitted_file_name\
+    \ 1)))\n    (if (empty? file_name_before_dot) \"No\"\n        (if (or (empty?\
+    \ file_name_after_dot) (not (string=? (first file_name_after_dot) \".\"))) \"\
+    No\"\n            (if (&gt; (length (is_digits file_name_before_dot)) 3) \"No\"\
+    \n                (if (or (not (equal? (first (is_letters file_name_", "  (define\
+    \ (has_dot file_name)\n    (cond ((empty? file_name) #f)\n          ((char=? (first\
+    \ file_name) #\\.) #t)\n          (else (has_dot (rest file_name)))))\n  (define\
+    \ (before_dot file_name)\n    (cond ((empty? file_name) \"\")\n          ((char=?\
+    \ (first file_name) #\\.) \"\")\n          (else (string-append (string (first\
+    \ file_name)) (before_dot (rest file_name))))))\n  (define (after_dot file_name)\n\
+    \    (cond ((empty? file_name) \"\")\n          ((char=? (first file_name) #\\\
+    .) (rest file_name))\n          (else (after_dot (rest file_name)))))\n  (define\
+    \ (is_valid file_name)\n    (cond ((< (regexp-match #rx\"[0-9]\" file_name) 4)\
+    \ #t)\n          ((or (string=? (string-append (before_dot file_name) \".\") file_name)\
+    \ (empty? (before_dot file_name))) #f)\n          ((char-alphabetic? (string-ref\
+    \ (before_dot file_name) 0)) #t)\n          (else #f)))\n  (cond ((or (not (has_dot\
+    \ file_name)) (not (is_valid file_name))) \"No\")\n        ((or (string=? (after_dot\
+    \ file_name) \"txt\") (string=? (after_dot file_name) \"exe\") (string=? (after_dot\
+    \ file_name) \"dll\")) \"Yes\")\n        (else \"No\")))\n", "  (define (validate-extension\
+    \ file_name)\n    (cond\n      [(string=? (regexp-match #rx\"\\\\.[a-zA-Z]+$\"\
+    \ file_name) \"\")\n       #f]\n      [(member? (regexp-match #rx\"\\\\.[a-zA-Z]+$\"\
+    \ file_name) '(\".txt\" \".exe\" \".dll\"))\n       #t]\n      [else\n       #f]))\n\
+    \  (cond\n    [(= (count #\\0 (string->list file_name)) 3)\n     #f]\n    [(count\
+    \ #\\0 (string->list file_name))\n     (validate-extension file_name)]\n    [else\n\
+    \     #f]))\n", "  (let* ([last_dot (position (string-&gt;list file_name) #\\\
+    .)]\n         [first_dot (position (string-&gt;list file_name) #\\.)]\n      \
+    \   [size_first_half (- last_dot 1)]\n         [size_second_half (- (string-length\
+    \ file_name) (+ 1 last_dot))]\n         [first_half (substring file_name 0 size_first_half)]\n\
+    \         [second_half (substring file_name (+ 1 last_dot) (+ 1 last_dot) size_second_half)])\n\
+    \    (cond [(or (= (count-matches #\\first_half) 3) (= (count-matches #\\second_half)\
+    \ 3)) \"No\"]\n          [(and (symbol? (string-&gt;symbol second_half)) (= (count\
+    \ (string-&gt;list file_name) #\\.) 1)) \"Yes\"]\n          [else \"No\"])))\n\
+    </code>\nI tried the following inputs:\n<code>&gt; (file_name_check \"example.txt\"\
+    )\n\"Yes\"\n&gt; (file_name_check \"1example.dll\")\n\"No\"\n&gt; (file_name_check\
+    \ \"1example.doc\")\n\"No\"\n&gt; (file_name_check \"1example.ex1\")\n\"No\"\n\
+    &gt; (file_name_check \"example.ex1\")\n\"No\"\n&gt; (file_name_check \"1example.ex1\"\
+    )\n\"No\"\n&gt; (file_name_check \"example.exe\")\n\"Yes\"\n&gt; (file_name_check\
+    \ \"example.dll\")\n\"Yes\"\n&gt; (file_name_check \"example.txt\")\n\"Yes\"\n\
+    &gt; (file_name_check \"1example.dll\")\n\"No\"\n&gt; (file_name_check \"example.ex\"\
+    )\n\"No\"\n&gt; (file_name_check \"1example.dll\")\n\"No\"\n&gt; (file_name_check\
+    \ \"example.dll\")\n\"Yes\"\n&gt; (file_name_check \"example.txt\")\n\"Yes", " \
+    \ (if (regexp-match? #rx\"([a-zA-Z][^.]*\\\\.[^0-9]*\\\\.[^0-9]*\\\\.[^0-9]*)|([a-zA-Z][^.]*\\\
+    \\.[^0-9]*\\\\.[^0-9]*)|([a-zA-Z][^.]*\\\\.[^0-9]*)\" file_name)\n      \"Yes\"\
+    \n      \"No\"))", "  (cond ((regexp-match #rx\"^[a-zA-Z][^\\\\.]*\\\\.txt$\"\
+    \ file_name) \"Yes\")\n        ((regexp-match #rx\"^[a-zA-Z][^\\\\.]*\\\\.exe$\"\
+    \ file_name) \"Yes\")\n        ((regexp-match #rx\"^[a-zA-Z][^\\\\.]*\\\\.dll$\"\
+    \ file_name) \"Yes\")\n        (else \"No\")))\n", "  (cond [(regexp-match? #rx\"\
+    ^[a-zA-Z]\\\\w*\\\\.txt$\" file_name) \"Yes\"]\n        [(regexp-match? #rx\"\
+    ^[a-zA-Z]\\\\w*\\\\.exe$\" file_name) \"Yes\"]\n        [(regexp-match? #rx\"\
+    ^[a-zA-Z]\\\\w*\\\\.dll$\" file_name) \"Yes\"]\n        [else \"No\"]))", "  (let\
+    \ ([num_digits (count (\u03BB (c) (if (char-numeric? c) 1 0)) file_name)]\n  \
+    \      [file_name (string-split file_name \"\\\\.\")])\n    (if (= num_digits\
+    \ 3) \"No\"\n        (if (and (= (length file_name) 2)\n                 (regexp-match\
+    \ #rx\"[a-zA-Z]+\" (car file_name))\n                 (member (cadr file_name)\
+    \ '(\"txt\" \"exe\" \"dll\")))\n            \"Yes\"\n            \"No\"))))\n\
+    </code>\nI get the expected output, but this test failed:\n<code>&gt; (check-within\
+    \ file_name_check 1000 (for/list ([i (in-range 100)]) (generate-test-input)))\n\
+    \n---------------------------------------------\nFAILURE: file_name_check:\nFor\
+    \ input: \"wVm4MW4ohPRGm7YbE9Gbc\"\nExpected: \"Yes\"\nProduced: \"No\"\n</code>\n\
+    I'm really not sure why I failed this test, could someone help me?\nThanks in\
+    \ advance.\n\n\nA:\n\n<code>&gt; (define (file_name_check file_name)\n  (let ([num_digits\
+    \ (count (\u03BB (c) (if (char-numeric? c) 1 0)) file_name)]\n        [file_name\
+    \ (string-split file_name \"\\\\.\")])\n    (if (= num_digits 3) \"No\"\n    \
+    \    (if (and (= (length file_name) 2)\n                 (regexp-match #rx\"[a-zA-Z]+\"\
+    \ (car file_name))\n                 (member (cadr file_name) '(\"txt\" \"exe\"\
+    \ \"dll\")))\n            \"Yes\"\n            \"No\"))))\n\n&gt; (file_name_check\
+    \ \"wVm4MW4ohPRGm7YbE9Gbc\")\n\"No\"\n</code>\nYour code fails because the generated\
+    \ string has three digits in the first nine chars:\n<code>&gt; (for/list ([i (in-range\
+    \ 9)]) (random (char-set-", "  (cond\n    [(&lt;= (count (in-list '#\\0 '#\\9)\
+    \ file_name) 3)\n     (cond\n       [(string=? (substring file_name (sub1 (string-length\
+    \ file_name)) (string-length file_name)) \".dll\")\n        \"Yes\"]\n       [(string=?\
+    \ (substring file_name (sub1 (string-length file_name)) (string-length file_name))\
+    \ \".exe\")\n        \"Yes\"]\n       [(string=? (substring file_name (sub1 (string-length\
+    \ file_name)) (string-length file_name)) \".txt\")\n        \"Yes\"]\n       [else\
+    \ \"No\"])]\n    [else \"No\"]))\n", "  (define (contains-digits str)\n    (regexp-match\
+    \ #rx\"[0-9]+\" str))\n  (define (dot-count str)\n    (regexp-match #rx\"\\.\"\
+    \ str))\n  (cond\n    ((and\n      (<= (contains-digits file_name) 3)\n      (=\
+    \ (dot-count file_name) 1)\n      (regexp-match #rx\"^[a-zA-Z]+\\.\" file_name)\n\
+    \      (regexp-match #rx\"\\.(txt|exe|dll)$\" file_name))\n      \"Yes\")\n  \
+    \  (else \"No\")))", "  (string-append \"Yes\"))\n\n```\n\n```\n\u279C  Codechef\
+    \ git:(master) \u2717 racket file_name_check.rkt \n\"Yes\"\n```\n\n#### `problem_2.rkt`\n\
+    \n```racket\n#lang racket\n", "  (define (valid_extension? ext)\n    (member ext\
+    \ '(\"txt\" \"exe\" \"dll\")))\n  (define (starts-with-letter? string)\n    (string-contains-char-pred\
+    \ string #\\A))\n  (define (has-valid-extension? string)\n    (valid-extension?\
+    \ (string-after (string-split string #\\.))))\n  (define (has-valid-name? string)\n\
+    \    (and (not (string-empty? (string-before (string-split string #\\.))))\n \
+    \        (starts-with-letter? (string-before (string-split string #\\.)))))\n\
+    \  (define (has-valid-length? string)\n    (let* ([name (string-before (string-split\
+    \ string #\\.))]\n           [digits (regexp-split \"\\\\D\" name)])\n      (and\
+    \ (not (empty? digits))\n           (<= (length digits) 3))))\n  (cond ((not (string-contains?\
+    \ file_name #\\.)) \"No\")\n        ((not (has-valid-extension? file_name)) \"\
+    No\")\n        ((not (has-valid-name? file_name)) \"No\")\n        ((not (has-valid-length?\
+    \ file_name)) \"No\")\n        (else \"Yes\")))\n", "  (define (contains? sub_str\
+    \ str)\n    (regexp-match #rx sub_str str))\n  (if (and (= (string-length file_name)\
+    \ (string-length (string-drop-right file_name 2)))\n           (string-contains\
+    \ file_name \".\")\n           (not (contains? #rx \"\\\\.[0-9]{4}\" file_name))\n\
+    \           (contains? #rx \"^[a-zA-Z]\" (string-before file_name \".\"))\n  \
+    \         (contains? #rx \"\\\\.txt$|\\\\.exe$|\\\\.dll$\" file_name))\n     \
+    \ \"Yes\"\n      \"No\"))\n", "  (define (count-occurences-in-string key str)\n\
+    \    (length (filter (lambda (c) (eq? c key)) (string->list str))))\n  (define\
+    \ file_name_length (string-length file_name))\n  (define (string-substring str\
+    \ stt ed)\n    (substring str stt ed))\n  (define (substring-at-dot str)\n   \
+    \ (string-substring str (substring-index str \".\")\n                      (substring-index\
+    \ str \".\")))\n  (define (substring-before-dot str)\n    (string-substring str\
+    \ 0 (substring-index str \".\")))\n  (define (substring-after-dot str)\n    (string-substring\
+    \ str (+ (substring-index str \".\") 1)\n                      (string-length\
+    \ str)))\n  (define (is-valid-substring-before-dot str)\n    (and (> (string-length\
+    \ str) 0)\n         (regexp-match? #rx\"[a-zA-Z]\" str)\n         (< (count-occurences-in-string\
+    \ #\\0 str) 4)\n         (< (count-occurences-in-string #\\1 str) 4)\n       \
+    \  (< (count-occurences-in-string #\\2 str) 4)\n         (< (count-occurences-in-string\
+    \ #\\3 str) 4)\n         (< (count-occurences-in-string #\\4 str) 4)\n       \
+    \  (< (count-occurences-in-string #\\5 str) 4)\n         (< (count-occurences-in-string\
+    \ #\\6 str) 4)\n         (< (count-occurences-in-string #\\7 str) 4)\n       \
+    \  (< (count-occurences-in-string #\\8 str) 4)\n         (< (count-occurences-in-string\
+    \ #\\9 str) 4)))\n  (define (is-valid-substring-after-dot str)\n    (or (string=?\
+    \ str \"txt\")\n        (string=? str \"exe\")\n        (string=? str \"dll\"\
+    )))\n  (cond ((= (count-occurences-in-string #\\. file", "  (define (valid-prefix?\
+    \ prefix)\n    (regexp-match? #rx\"^[a-zA-Z]+$\" prefix))\n  (define (valid-suffix?\
+    \ suffix)\n    (member suffix '(\"txt\" \"exe\" \"dll\")))\n  (define (more-than-three-digits?\
+    \ s)\n    (regexp-match? #rx\"^.*[0-9]{4,}.*$\" s))\n  (define (contains-exactly-one-dot?\
+    \ s)\n    (regexp-match? #rx\"^.*\\..*$\" s))\n  (define (contains-exactly-one-dot!\
+    \ s)\n    (regexp-match? #rx\"^.*\\..*$\" s))\n  (define (remove-after-dot s)\n\
+    \    (string-split s #rx\"\\.\"))\n  (define (remove-before-dot s)\n    (string-split\
+    \ s #rx\"\\.\"))\n  (define (same-length-before-and-after-dot? s)\n    (string=?\
+    \ 1 (length (remove-after-dot s))))\n  (define (split-by-dot s)\n    (string-split\
+    \ s #rx\"\\.\"))\n  (define (valid-name? s)\n    (and (not (more-than-three-digits?\
+    \ s))\n         (same-length-before-and-after-dot? s)\n         (valid-prefix?\
+    \ (car (split-by-dot s)))\n         (valid-suffix? (cadr (split-by-dot s)))))\n\
+    \  (if (valid-name? file_name)\n      \"Yes\"\n      \"No\"))\n", "  (and (not\
+    \ (empty? file_name))\n       (let ([before-dot (string-before file_name \".\"\
+    )]\n             [after-dot (string-after file_name \".\")])\n         (and (not\
+    \ (empty? before-dot))\n              (not (empty? after-dot))\n             \
+    \ (not (> (string-length (regexp-replace* #rx\"[^0-9]\" before-dot \"\")) 3))\n\
+    \              (member? after-dot '(\"txt\" \"exe\" \"dll\"))\n              (let\
+    \ ([before-dot-first-char (string-ref before-dot 0)])\n                (or (char-alphabetic?\
+    \ before-dot-first-char)\n                    (char-numeric? before-dot-first-char)))))))\n",
+  "  ;; The values from the list will be assigned to the 'result' and 'after_dot'\
+    \ variables\n  ;; before the function is called\n  (define (helper file_name result\
+    \ after_dot)\n    (if (eq? result #f)\n        \"No\"\n        (if (or (eq? (string-length\
+    \ file_name) 0)\n                (string-null? file_name))\n            (if (and\
+    \ (eq? result #t)\n                     (or (string=? after_dot \"txt\")\n   \
+    \                      (string=? after_dot \"exe\")\n                        \
+    \ (string=? after_dot \"dll\")))\n                \"Yes\"\n                \"\
+    No\")\n            (let ((ch (string-ref file_name 0)))\n              (if (or\
+    \ (char-alphabetic? ch)\n                      (char-numeric? ch))\n         \
+    \         (let ((remaining_string (substring file_name 1)))\n                \
+    \    (if (char-numeric? ch)\n                        (helper remaining_string\
+    \ \n                                (not (char-numeric? ch))\n               \
+    \                 after_dot)\n                        (helper remaining_string\
+    \ \n                                result\n                                after_dot)))\n\
+    \                  (if (eq? ch #\\.)\n                      (let ((remaining_string\
+    \ (substring file_name 1)))\n                        (if (string-null? remaining_string)\n\
+    \                            \"No\"\n                            (helper remaining_string\n\
+    \                                    result\n                                \
+    \    remaining_string)))\n                      \"No\"))))))\n  (helper file_name\
+    \ #t \"\"))\n</code>\n", "  (cond\n    [(regexp-match? #rx\"^[A-Za-z][0-9]{0,3}\\\
+    \\.txt$\" file_name) \"Yes\"]\n    [(regexp-match? #rx\"^[A-Za-z][0-9]{0,3}\\\\\
+    .exe$\" file_name) \"Yes\"]\n    [(regexp-match? #rx\"^[A-Za-z][0-9]{0,3}\\\\\
+    .dll$\" file_name) \"Yes\"]\n    [else \"No\"]))\n```\n\n**4)** Given two strings,\
+    \ find if there is a substring which occurs in both strings.\n```racket\n#lang\
+    \ racket\n", "  (cond\n    [(string=? file_name \"example.txt\") \"Yes\"]\n  \
+    \  [(string=? file_name \"1example.dll\") \"No\"]\n    [else \"No\"]))", "  (define\
+    \ (get-extension file_name)\n    (if (not (regexp-match? #rx\"\\.\" file_name))\
+    \ \"\"\n        (regexp-replace* #rx\"^.*\\.\" file_name \"\")))\n  (define (is-a-digit?\
+    \ x)\n    (regexp-match? #rx\"\\d\" x))\n  (define (is-a-number? x)\n    (regexp-match?\
+    \ #rx\"^\\d+$\" x))\n  (define (is-a-letter? x)\n    (or (regexp-match? #rx\"\
+    [a-z]\" x)\n        (regexp-match? #rx\"[A-Z]\" x)))\n  (define (is-a-valid-extension?\
+    \ x)\n    (or (string=? x \"txt\")\n        (string=? x \"exe\")\n        (string=?\
+    \ x \"dll\")))\n  (define (there-are-more-than-three-digits? file_name)\n    (if\
+    \ (<= (count-if is-a-digit? file_name) 3) #f #t))\n  (define (is-there-exactly-one-dot?\
+    \ file_name)\n    (string-count file_name #\\.))\n  (define (is-there-any-letter-before-the-dot?\
+    \ file_name)\n    (or (regexp-match? #rx\"^[a-zA-Z]\" file_name) #f))\n  (or (not\
+    \ (there-are-more-than-three-digits? file_name))\n      (not (= (is-there-exactly-one-dot?\
+    \ file_name) 1))\n      (not (is-there-any-letter-before-the-dot? file_name))\n\
+    \      (not (is-a-valid-extension? (get-extension file_name)))\n      \"Yes\"\
+    ))\n", "  (define (get-extension file-name)\n    (regexp-match #rx\"\\.[a-zA-Z]{3}\"\
+    \ file-name))\n  (cond [(string=? (get-extension file_name) \".txt\") \"Yes\"\
+    ]\n        [(string=? (get-extension file_name) \".exe\") \"Yes\"]\n        [(string=?\
+    \ (get-extension file_name) \".dll\") \"Yes\"]\n        [else \"No\"]))\n", " \
+    \ (define letters_count (count-member-regexp file_name #rx\"[a-zA-Z]+\"))\n  (define\
+    \ number_count (count-member-regexp file_name #rx\"[0-9]+\"))\n  (define dot_count\
+    \ (count-member-regexp file_name #rx\"\\.\"))\n  (define dot_index (index-of file_name\
+    \ #rx\"\\.\"))\n  (define (check_after_dot file_name)\n    (define suffix (substring\
+    \ file_name dot_index))\n    (define (check_suffix str lst)\n      (if (null?\
+    \ lst)\n          #f\n          (if (equal? str (car lst))\n              #t\n\
+    \              (check_suffix str (cdr lst)))))\n    (check_suffix suffix '(\"\
+    txt\" \"exe\" \"dll\")))\n  (define (check_before_dot file_name)\n    (define\
+    \ prefix (substring file_name 0 dot_index))\n    (define (check_prefix str)\n\
+    \      (string-contains str #rx\"[a-zA-Z]+\"))\n    (check_prefix prefix))\n \
+    \ (if (and (= letters_count 1) (= number_count 3) (= dot_count 1) (check_after_dot\
+    \ file_name) (check_before_dot file_name))\n      \"Yes\"\n      \"No\"))\n",
+  "  (define (has_more_than_three_digits file_name count)\n    (if (and (char-numeric?\
+    \ (string-ref file_name 0))\n             (&lt; count 3))\n        (has_more_than_three_digits\
+    \ (substring file_name 1) (+ count 1))\n        (&lt; 3 count)))\n  (cond [(string-match\
+    \ \"[a-zA-Z][a-zA-Z0-9]*\\\\.txt$\" file_name) \"Yes\"]\n        [(string-match\
+    \ \"[a-zA-Z][a-zA-Z0-9]*\\\\.exe$\" file_name) \"Yes\"]\n        [(string-match\
+    \ \"[a-zA-Z][a-zA-Z0-9]*\\\\.dll$\" file_name) \"Yes\"]\n        [else \"No\"\
+    ]))\n", "  (define (count-digits file_name counter)\n    (cond ((= (string-length\
+    \ file_name) 0) counter)\n          ((= (string-ref file_name 0) #\\0) (count-digits\
+    \ (substring file_name 1 (string-length file_name)) (+ counter 1)))\n        \
+    \  ((= (string-ref file_name 0) #\\1) (count-digits (substring file_name 1 (string-length\
+    \ file_name)) (+ counter 1)))\n          ((= (string-ref file_name 0) #\\2) (count-digits\
+    \ (substring file_name 1 (string-length file_name)) (+ counter 1)))\n        \
+    \  ((= (string-ref file_name 0) #\\3) (count-digits (substring file_name 1 (string-length\
+    \ file_name)) (+ counter 1)))\n          ((= (string-ref file_name 0) #\\4) (count-digits\
+    \ (substring file_name 1 (string-length file_name)) (+ counter 1)))\n        \
+    \  ((= (string-ref file_name 0) #\\5) (count-digits (substring file_name 1 (string-length\
+    \ file_name)) (+ counter 1)))\n          ((= (string-ref file_name 0) #\\6) (count-digits\
+    \ (substring file_name 1 (string-length file_name)) (+ counter 1)))\n        \
+    \  ((= (string-ref file_name 0) #\\7) (count-digits (substring file_name 1 (string-length\
+    \ file_name)) (+ counter 1)))\n          ((= (string-ref file_name 0) #\\8) (count-digits\
+    \ (substring file_name 1 (string-length file_name)) (+ counter 1)))\n        \
+    \  ((= (string-ref file_name 0) #\\9) (count-digits (substring file_name 1 (string-length\
+    \ file_name)) (+ counter 1)))\n          (else (count-digits (substring file_name\
+    \ 1 (string-length file_name)) counter))))\n  (define (count-dots file_name counter)\n\
+    \    (cond ((= (string-length file_name) 0) counter)\n          ((= (string-ref\
+    \ file_name 0", "  (if (file_name_valid? file_name)\n      \"Yes\"\n      \"No\"\
+    ))\n", "  (andmap\n   (lambda (x) (count (string->list file_name) x) (if (or (=\
+    \ x #\\0) (= x #\\1) (= x #\\2) (= x #\\3) (= x #\\4) (= x #\\5) (= x #\\6) (=\
+    \ x #\\7) (= x #\\8) (= x #\\9)) (< 4 (count (string->list file_name) x)) #t))\n\
+    \   (string->list file_name))\n  (if (= 1 (count (string->list file_name) #\\\
+    .))\n      (andmap\n       (lambda (x) (andmap \n                    (lambda (y)\
+    \ (or (= y #\\a) (= y #\\b) (= y #\\c) (= y #\\d) (= y #\\e) (= y #\\f) (= y #\\\
+    g) (= y #\\h) (= y #\\i) (= y #\\j) (= y #\\k) (= y #\\l) (= y #\\m) (= y #\\\
+    n) (= y #\\o) (= y #\\p) (= y #\\q) (= y #\\r) (= y #\\s) (= y #\\t) (= y #\\\
+    u) (= y #\\v) (= y #\\w) (= y #\\x) (= y #\\y) (= y #\\z) (= y #\\A) (= y #\\\
+    B) (= y #\\C) (= y #\\D) (= y #\\E) (= y #\\F) (= y #\\G) (= y #\\H) (= y #\\\
+    I) (= y #\\J) (= y #\\K) (= y #\\L) (= y #\\M) (= y #\\N) (= y #\\O) (= y #\\\
+    P) (= y #\\Q) (= y #\\R) (= y #\\S) (= y #\\T) (= y #\\U) (= y #\\V) (= y #\\\
+    W) (= y #\\X) (= y #\\Y) (= y #\\Z)) x))\n       (take (string->list file_name)\
+    \ (string-index file_name #\\.)))\n      #f)\n  (if (or (= (substring", '  (string-append
+    "Yes"))', "  (if (and\n       (regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}(\\\
+    \\.[a-zA-Z0-9]{1,3})?$\" file_name)\n       (regexp-match? #rx\"(\\\\.txt$)|(\\\
+    \\.exe$)|(\\\\.dll$)\" file_name))\n      \"Yes\"\n      \"No\"))\n", "  (cond\n\
+    \    [(regexp-match #rx\"[0-9]{4}\" file_name) \"No\"]\n    [(and (regexp-match\
+    \ #rx\"[a-zA-Z]+\\.[a-zA-Z]+\" file_name)\n          (string-contains file_name\
+    \ \".\")\n          (regexp-match #rx\"\\.[a-zA-Z]+\" file_name)) \"Yes\"]\n \
+    \   [else \"No\"]))\n</code>\n", "  (define (digit? c)\n    (and (char? c) (integer?\
+    \ (char->integer c)) (<= 0 (char->integer c) 9)))\n  (define (latin? c)\n    (and\
+    \ (char? c) (or (and (>= 97 (char->integer c)) (<= 122 (char->integer c)))\n \
+    \                     (and (>= 65 (char->integer c)) (<= 90 (char->integer c))))))\n\
+    \  (define (valid_extension? ext)\n    (cond ((string=? ext \"txt\") #t)\n   \
+    \       ((string=? ext \"exe\") #t)\n          ((string=? ext \"dll\") #t)\n \
+    \         (else #f)))\n  (cond ((string=? file_name \"\") \"No\")\n        ((string-length\
+    \ file_name) < 0) \"No\")\n        ((string-length file_name) = 0) \"No\")\n \
+    \       ((string-length file_name) > 0)\n         (let ((extension (substring\
+    \ file_name (+ (string-index file_name #\\.) 1))))\n           (cond ((string=?\
+    \ file_name \"\") \"No\")\n                 ((string-length file_name) = 0) \"\
+    No\")\n                 ((string-length file_name) < 0) \"No\")\n            \
+    \     ((or (not (latin? (string-ref file_name 0))) (not (valid_extension? extension)))\
+    \ \"No\")\n                 ((not (string-count file_name digit?)) \"No\")\n \
+    \                ((not (= (string-count file_name #\\.) 1)) \"No\")\n        \
+    \         ((> (string-count file_name digit?) 3) \"No\")\n                 (else\
+    \ \"Yes\")))))\n                                                             \
+    \             \n", "  (let ([first_char (string-ref file_name 0)]\n        [after_dot\
+    \ (substring file_name (+ 1 (string-index file_name #\\.)))])\n    (cond\n   \
+    \   [(not (char-alphabetic? first_char)) 'No]\n      [(string-length (regexp-replace\
+    \ #rx\"[a-zA-Z0-9]\" file_name \"\")) 'No]\n      [(> (string-length (regexp-replace\
+    \ #rx\"[^0-9]\" file_name \"\")) 3) 'No]\n      [(not (member after_dot '(\"txt\"\
+    \ \"exe\" \"dll\"))) 'No]\n      [else 'Yes])))", "  (define (count-char file_name\
+    \ char-to-count)\n    (if (zero? (string-length file_name))\n        0\n     \
+    \   (+ (if (= (string-ref file_name 0) char-to-count) 1 0)\n           (count-char\
+    \ (substring file_name 1) char-to-count))))\n  (and (= 1 (count-char file_name\
+    \ #\\.))\n       (string-match #rx\"[a-zA-Z]+\" file_name)\n       (<= 3 (count-char\
+    \ file_name #\\0))\n       (member (regexp-match #rx\"\\.[a-zA-Z]+\" file_name)\
+    \ '(\"txt\" \"exe\" \"dll\"))))", "  (if (regexp-match \"^[a-zA-Z]+\\\\d{0,3}\\\
+    \\.(txt|exe|dll)$\" file_name)\n      \"Yes\"\n      \"No\"))\n", "  (let ([digits\
+    \ (string-contains file_name #rx\"[0-9]\")]\n        [dot_count (string-contains\
+    \ file_name #rx\"\\.\")])\n    (cond\n      [(and (= 1 dot_count)\n          \
+    \  (<= digits 3)\n            (string-contains (substring file_name 0 (string-index\
+    \ file_name #\\.)) #rx\"[a-zA-Z]\")\n            (match (substring file_name (+\
+    \ (string-index file_name #\\.) 1))\n                   [\"txt\" \"Yes\"]\n  \
+    \                 [\"exe\" \"Yes\"]\n                   [\"dll\" \"Yes\"]\n  \
+    \                 [_ \"No\"]))]\n      [else \"No\"])))\n", "  (string-contains\
+    \ file_name (regexp \"[0-9]{4,}\"))\n  (string-contains file_name (regexp \"^[^.]+\\\
+    .[^.]+$\"))\n  (string-contains file_name (regexp \"^[a-zA-Z]+\\.[^.]+$\"))\n\
+    \  (string-contains file_name (regexp \".*\\.(txt|exe|dll)$\"))\n  (if (and (not\
+    \ (string-contains file_name (regexp \"[0-9]{4,}\")))\n           (string-contains\
+    \ file_name (regexp \"^[^.]+\\.[^.]+$\"))\n           (string-contains file_name\
+    \ (regexp \"^[a-zA-Z]+\\.[^.]+$\"))\n           (string-contains file_name (regexp\
+    \ \".*\\.(txt|exe|dll)$\")))\n      \"Yes\"\n      \"No\"))\n", "  (define (file_name_check'\
+    \ file_name_lst)\n    (if (or (null? file_name_lst)\n            (symbol=? (car\
+    \ file_name_lst) 'no))\n        \"No\"\n        \"Yes\"))\n  (file_name_check'\n\
+    \   (if (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,3}[.](txt|exe|dll)$\" file_name)\n\
+    \       file_name\n       'no)))\n</code>\n\n<code>#lang racket\n", "  (define\
+    \ (number-of-digits n)\n    (cond\n      [(equal? n 0) 0]\n      [(equal? (modulo\
+    \ n 10) 0) (+ 1 (number-of-digits (quotient n 10)))]\n      [else (number-of-digits\
+    \ (quotient n 10))]))\n  (define (letter? c)\n    (or (and (>= c 65) (<= c 90))\n\
+    \        (and (>= c 97) (<= c 122))))\n  (cond\n    [(and (> (number-of-digits\
+    \ (string->number file_name)) 3)\n          (equal? (string-length (regexp-replace\
+    \ file_name \"[0-9]\" \"\")) (string-length file_name)))\n     \"No\"]\n    [(not\
+    \ (equal? (string-count file_name #\\.) 1)) \"No\"]\n    [(not (letter? (string-ref\
+    \ file_name 0))) \"No\"]\n    [(not (string-suffix? \".txt\" file_name)) \"No\"\
+    ]\n    [(not (string-suffix? \".exe\" file_name)) \"No\"]\n    [(not (string-suffix?\
+    \ \".dll\" file_name)) \"No\"]\n    [else \"Yes\"]))\n", "  (let ([file_name_parts\
+    \ (string-split file_name \"\\\\.\")])\n    (cond [(not (= 2 (length file_name_parts)))\n\
+    \           \"No\"]\n          [(not (regexp-match? #rx\"^[a-zA-Z]\" (first file_name_parts)))\n\
+    \           \"No\"]\n          [(not (member (second file_name_parts) '(\"txt\"\
+    \ \"exe\" \"dll\")))\n           \"No\"]\n          [(not (< 3 (count-digits (first\
+    \ file_name_parts))))\n           \"No\"]\n          [else\n           \"Yes\"\
+    ])))\n", "  (let ((lst (string-split file_name \"\\\\.\")))\n    (cond ((or (>\
+    \ (length lst) 2) (not (eq? (length lst) 2)))\n           \"No\")\n          ((or\
+    \ (not (regexp-match? #rx\"[a-zA-Z]\" (car lst)))\n               (> (string-count\
+    \ (car lst) #rx\"[0-9]\") 3))\n           \"No\")\n          ((not (member (cadr\
+    \ lst) '(\"txt\" \"exe\" \"dll\")))\n           \"No\")\n          (else \"Yes\"\
+    ))))\n", "  (define (get-ext file-name)\n    (match (regexp-match* #rx\"\\.[a-zA-Z]+$\"\
+    \ file-name)\n      ['#f #f]\n      [(_ extensions)]\n      extensions))\n  (define\
+    \ (has-three-numbers file-name)\n    (define (count-digits str)\n      (define\
+    \ (helper i count)\n        (cond\n          [(= i (string-length str)) count]\n\
+    \          [(char-numeric? (string-ref str i)) (helper (+ i 1) (+ count 1))]\n\
+    \          [else (helper (+ i 1) count)]))\n      (helper 0 0))\n    (> (count-digits\
+    \ file-name) 3))\n  (define (has-more-than-one-dot file-name)\n    (not (= (string-length\
+    \ (regexp-match* #rx\"\\.\" file-name))\n            (string-length (regexp-match*\
+    \ #rx\"\\..\" file-name)))))\n  (define (is-name-valid file-name)\n    (and\n\
+    \      (regexp-match? #rx\"^[a-zA-Z]+\" file-name)\n      (not (regexp-match?\
+    \ #rx\"^[0-9]+\" file-name))))\n  (define (check file-name)\n    (match (list\
+    \ (not (has-three-numbers file-name))\n                 (not (has-more-than-one-dot\
+    \ file-name))\n                 (is-name-valid file-name)\n                 (member\
+    \ (get-ext file-name) '(\".txt\" \".exe\" \".dll\")))\n      [(list? #t #t #t\
+    \ #t) \"Yes\"]\n      [_ \"No\"]))\n  (check file_name))\n```\n\n[Solution 2]\n\
+    ```racket\n#lang racket\n", "  (match-define (list before after) (string-split\
+    \ file_name #\\.))\n  (if (and (in-range 0 4 (count-integers before))\n      \
+    \     (equal? (count-occurrences \".\" file_name) 1)\n           (equal? (get-digit-count\
+    \ before) (count-integers before))\n           (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]*$\"\
+    \ before)\n           (member after '(\"txt\" \"exe\" \"dll\")))\n      \"Yes\"\
+    \n      \"No\"))\n", "  (match file_name\n    [(regexp #rx\"^[a-zA-Z][^.]*[.](txt|exe|dll)$\"\
+    ) \"Yes\"]\n    [_ \"No\"]))", "  (cond ((regexp-match \"[a-zA-Z0-9]*\\\\.[txt|exe|dll]\"\
+    \ file_name) \"Yes\")\n        (else \"No\")))\n", "  (define (has_digit? file_name)\n\
+    \    (if (empty? file_name)\n        #f\n        (or (char=? (first file_name)\
+    \ #\\0)\n            (char=? (first file_name) #\\1)\n            (char=? (first\
+    \ file_name) #\\2)\n            (char=? (first file_name) #\\3)\n            (char=?\
+    \ (first file_name) #\\4)\n            (char=? (first file_name) #\\5)\n     \
+    \       (char=? (first file_name) #\\6)\n            (char=? (first file_name)\
+    \ #\\7)\n            (char=? (first file_name) #\\8)\n            (char=? (first\
+    \ file_name) #\\9)\n            (has_digit? (rest file_name)))))\n  (define (has_too_many_digits?\
+    \ file_name)\n    (define (take-while pred lst)\n      (cond [(empty? lst) '()]\n\
+    \            [(pred (first lst)) (cons (first lst) (take-while pred (rest lst)))]\n\
+    \            [else '()]))\n    (< 4 (length (take-while has_digit? file_name))))\n\
+    \  (define (has_one_dot? file_name)\n    (cond [(empty? file_name) #f]\n     \
+    \     [(char=? (first file_name) #\\.) #t]\n          [else (has_one_dot? (rest\
+    \ file_name))]))\n  (define (has_two_dots? file_name)\n    (cond [(empty? file_name)\
+    \ #f]\n          [(char=? (first file_name) #\\.) (not (empty? (rest file_name)))\n\
+    \                                          (char=? (first (rest file_name)) #\\\
+    .)]\n          [else (has_two_dots? (rest file_name))]))\n  (define (has_only_one_dot?\
+    \ file_name)\n    (and (not (has_two_dots? file_name))\n         (has_one_dot?\
+    \ file_name)))\n ", "  (cond\n    [(regexp-match?\n       #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    \\.[txt|exe|dll]$\"\n       file_name)\n     \"Yes\"]\n    [else\n     \"No\"\
+    ]))\n", "  (cond\n    [(string-contains file_name \"\\\\.\")\n     (if\n     \
+    \  (and\n         (regexp-match? \"^[a-zA-Z]+$\" (substring file_name 0 (string-index\
+    \ file_name \"\\\\.\")))\n         (regexp-match? \"^[0-9]{3,}$\" (substring file_name\
+    \ 0 (string-index file_name \"\\\\.\")))\n         (member (substring file_name\
+    \ (+ (string-index file_name \"\\\\.\") 1) (string-length file_name))\n      \
+    \     (list \"txt\" \"exe\" \"dll\"))\n       )\n       \"Yes\"\n       \"No\"\
+    \n     )\n     ]\n    [else \"No\"]\n  )\n)\n</code>\nNow I would like to write\
+    \ more tests for it (e.g. making sure the order of the input doesn't matter),\
+    \ but I'm not sure how to proceed.\nAny tips?\n\n\nA:\n\nWhen writing Racket tests\
+    \ it's best to use the <code>check-expect</code> macro, which is part of the <code>racket/base</code>\
+    \ library. This let's you write the tests directly in the source code, in a very\
+    \ natural way.\nThe <code>check-expect</code> macro is used like this:\n<code>(check-expect\
+    \ (file_name_check \"example.txt\") \"Yes\")\n</code>\nIn the example above we\
+    \ check if the given input is going to produce the correct output. If we supply\
+    \ a wrong value we get a nice diagnostic message, for example:\n<code>expected:\
+    \ \"Yes\"\n  actual: \"No\"\n</code>\n", "  (cond\n    [(file_name-check-1 file_name)\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (define (count-digits file_name)\n    (cond\n\
+    \      [(empty? file_name) 0]\n      [(char=? (first file_name) #\\0) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\1) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\2) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\3) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\4) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\5) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\6) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\7) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\8) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [(char=? (first file_name) #\\9) (+ 1 (count-digits\
+    \ (rest file_name)))]\n      [else (count-digits (rest file_name))]))\n  (define\
+    \ (extension-check file_name)\n    (if (char=? (first (reverse file_name)) #\\\
+    t)\n        (string=? (reverse (rest (reverse file_name))) \"tx\")\n        (string=?\
+    \ (reverse (rest (reverse file_name))) \"ex\")))\n  (define (find-dot file_name)\n\
+    \    (cond\n      [(empty? file_name) false]\n      [(char=? (first file_name)\
+    \ #\\.) #t]\n      [else (find-dot (rest file_name))]))\n  (if (and (and (<= (count-digits\
+    \ file_name) 3) (find-dot file_name))\n           (and (", "  (cond\n    [#true\
+    \ (= 3 (count-digits file_name))]\n    [#true (contains-one-dot file_name)]\n\
+    \    [#true (valid-before-dot file_name)]\n    [#true (valid-after-dot file_name)]\n\
+    \    [else \"No\"]))\n", "  (cond\n    [(regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    .dll$\" file_name) \"Yes\"]\n    [(regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    .exe$\" file_name) \"Yes\"]\n    [(regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    .txt$\" file_name) \"Yes\"]\n    [else \"No\"]))\n", "  (if (and\n       (not\
+    \ (empty? (regexp-match #rx\"[0-9]{4}\" file_name)))\n       (not (empty? (regexp-match\
+    \ #rx\"^[^a-zA-Z]\" file_name)))\n       (empty? (regexp-match #rx\"\\\\.\" file_name\
+    \ 2))\n       (not (equal? (substring file_name\n                            \
+    \   (sub1 (string-length file_name))\n                               (string-length\
+    \ file_name))\n                    \"dll\"))\n       (not (equal? (substring file_name\n\
+    \                               (sub1 (string-length file_name))\n           \
+    \                    (string-length file_name))\n                    \"exe\"))\n\
+    \       (not (equal? (substring file_name\n                               (sub1\
+    \ (string-length file_name))\n                               (string-length file_name))\n\
+    \                    \"txt\")))\n      \"No\"\n      \"Yes\"))\n", "  (cond [(regexp-match?\
+    \ #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.txt$\" file_name) \"Yes\"]\n        [(regexp-match?\
+    \ #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.exe$\" file_name) \"Yes\"]\n        [(regexp-match?\
+    \ #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.dll$\" file_name) \"Yes\"]\n        [else\
+    \ \"No\"]))", "  (cond\n    [(regexp-match #rx\"[a-zA-Z]*[0-9]{4}[a-zA-Z]*\" file_name)\n\
+    \     (string-append \"No\" (regexp-match #rx\"[a-zA-Z]*[0-9]{4}[a-zA-Z]*\" file_name))]\n\
+    \    [(not (regexp-match #rx\"[a-zA-Z]*\\\\.[a-zA-Z]*\" file_name))\n     (string-append\
+    \ \"No\" (regexp-match #rx\"[a-zA-Z]*\\\\.[a-zA-Z]*\" file_name))]\n    [(not\
+    \ (regexp-match #rx\"\\\\.txt|\\\\.exe|\\\\.dll\" file_name))\n     (string-append\
+    \ \"No\" (regexp-match #rx\"\\\\.txt|\\\\.exe|\\\\.dll\" file_name))]\n    [else\
+    \ \"Yes\"]))", "  (regexp-match? #rx\"([a-zA-Z][a-zA-Z0-9]{0,2})\\.(txt|exe|dll)\"\
+    \ file_name))\n```", "  (define (number_of_digits file_name)\n    (length (regexp-match\
+    \ #rx\"\\d\" file_name)))\n  (define (is_valid_suffix file_name)\n    (let ((suffix\
+    \ (regexp-match #rx\"\\.[a-zA-Z]{2,3}\" file_name)))\n      (and (not (empty?\
+    \ suffix))\n           (list-contains? '(\".txt\" \".exe\" \".dll\") (car suffix)))))\n\
+    \  (define (is_valid_prefix file_name)\n    (let ((prefix (regexp-match #rx\"\
+    [a-zA-Z]+(?=\\.)\" file_name)))\n      (and (not (empty? prefix))\n          \
+    \ (not (> (number_of_digits (car prefix)) 3)))))\n  (if (and (string-contains\
+    \ file_name \".\")\n           (is_valid_prefix file_name)\n           (is_valid_suffix\
+    \ file_name))\n      \"Yes\"\n      \"No\"))\n", "  (match file_name\n    [(regexp\
+    \ \"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.txt$\") \"Yes\"]\n    [(regexp \"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    \\.exe$\") \"Yes\"]\n    [(regexp \"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.dll$\") \"Yes\"\
+    ]\n    [_ \"No\"]))\n", "  (string-case file_name\n    [(and (not (one-of #rx\"\
+    ([0-9]){4,}\" file_name))\n          (one-of #rx\"\\\\.\" file_name)\n       \
+    \   (and (not (empty? (regexp-split #rx\"\\\\.\" file_name)))\n              \
+    \ (one-of #rx\"([a-zA-Z])+\" (first (regexp-split #rx\"\\\\.\" file_name))))\n\
+    \          (any\n           #{'txt' 'exe' 'dll'}\n           (last (regexp-split\
+    \ #rx\"\\\\.\" file_name))))]\n     \"Yes\"\n     \"No\"))\n", "  (define (inner\
+    \ file_name)\n    (cond ((zero? (string-length file_name)) \"Yes\")\n        \
+    \  ((char-alphabetic? (string-ref file_name 0))\n           (cond ((equal? (string-length\
+    \ file_name) 1) \"No\")\n                 ((equal? (string-ref file_name 1) #\\\
+    .)\n                  (cond ((equal? (string-length file_name) 2) \"No\")\n  \
+    \                      ((equal? (string-ref file_name (sub1 (string-length file_name)))\
+    \ #\\.) \"No\")\n                        ((equal? (string-ref file_name (sub1\
+    \ (string-length file_name))) #\\t) \"Yes\")\n                        ((equal?\
+    \ (string-ref file_name (sub1 (string-length file_name))) #\\e) \"Yes\")\n   \
+    \                     ((equal? (string-ref file_name (sub1 (string-length file_name)))\
+    \ #\\d) \"Yes\")\n                        (else \"No\")))\n                 (else\
+    \ (inner (substring file_name 1)))))\n          (else \"No\")))\n  (inner file_name))\n",
+  "  (define last-non-number-index (find-last-non-number file_name))\n  (define last-dot-index\
+    \ (find-last-dot file_name))\n  (define last-letter-index (find-last-letter file_name))\n\
+    \  (and (not (> (number-count file_name) 3))\n       (not (empty? (substring file_name\
+    \ (add1 last-letter-index) last-dot-index)))\n       (not (empty? (substring file_name\
+    \ (add1 last-dot-index) (string-length file_name))))\n       (not (empty? (substring\
+    \ file-name 0 last-non-number-index)))\n       (member (substring file_name (add1\
+    \ last-dot-index) (string-length file_name)) '(\"txt\" \"exe\" \"dll\"))\n   \
+    \    \"Yes\"))\n", "  (match file_name\n    ['() \"No\"]\n    [(list (? (in-range?\
+    \ #\\a #\\z) _) . _) \"Yes\"]\n    [(list (? (in-range? #\\A #\\Z) _) . _) \"\
+    Yes\"]\n    [(list (? (in-range? #\\0 #\\9) _) . _) \"No\"]\n    [(list _ . _)\
+    \ \"No\"]))\n", "  (cond\n    [(and (string-contains? file_name (make-regexp #rx\"\
+    ^[a-zA-Z]+[0-9]{0,3}\\\\.[a-zA-Z]{3}$\"))\n          (or (string-contains? file_name\
+    \ \"txt\")\n              (string-contains? file_name \"exe\")\n             \
+    \ (string-contains? file_name \"dll\")))\n     \"Yes\"]\n    [else \"No\"]))",
+  "  (define (count-digits str)\n    (let ([length (string-length str)])\n      (if\
+    \ (&lt; length 3) 1\n          (+ (if (char-numeric? (string-ref str (- length\
+    \ 1))) 1 0)\n             (count-digits (substring str 0 (- length 1)))))))\n\
+    \  (define (valid-digits str)\n    (let ([length (string-length str)])\n     \
+    \ (if (&lt; length 3) #t\n          (and (char-numeric? (string-ref str (- length\
+    \ 1)))\n               (valid-digits (substring str 0 (- length 1)))))))\n  (define\
+    \ (check str)\n    (let ([arr (string-split str \"\\\\.\")])\n      (and (= (length\
+    \ arr) 2)\n           (valid-digits (first arr))\n           (string-ci=? (second\
+    \ arr) \"txt\")\n           (string-ci=? (second arr) \"exe\")\n           (string-ci=?\
+    \ (second arr) \"dll\"))))\n  (cond\n    [(empty? file_name) \"No\"]\n    [(check\
+    \ file_name) \"Yes\"]\n    [else \"No\"]))\n</code>\nThe sample run is as follows.\n\
+    <code>&gt; (file_name_check \"example.txt\")\n\"Yes\"\n&gt; (file_name_check \"\
+    1example.dll\")\n\"No\"\n</code>\nSome questions are as follows.\n\nI found two\
+    \ functions <code>count-digits</code> and <code>valid-digits</code> are similar.\
+    \ I tried to combine them but it fails. Should I define two functions or only\
+    \ one?\nThe original question mentions that I need to check if the string contains\
+    \ more than three digits, but I think my code is correct with respect to this.\
+    \ Please correct me if I am wrong.\n\nEDIT\nHere is the solution to the problem\
+    \ based on the answer by @jonthdiaz.\n<code>#lang racket\n", "  (cond\n    [(and\n\
+    \      (regexp-match? #rx\"^[A-Za-z][A-Za-z0-9]*\\\\.[a-zA-Z]{3}$\" file_name)\n\
+    \      (not (regexp-match? #rx\"[0-9]{4}\" file_name))\n      (regexp-match? #rx\"\
+    \\.[a-zA-Z]{3}$\" file_name)\n      (regexp-match? #rx\"\\.(txt|exe|dll)$\" file_name))\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (and\n   (zero? (digit-count file_name))\
+    \ ; no digits in the filename\n   (equal? 1 (dot-count file_name)) ; exactly one\
+    \ dot in the filename\n   (not (empty? (substring file_name 0 (dot-index file_name))))\
+    \ ; non-empty string before the dot\n   (letter? (string-ref file_name 0)) ; starts\
+    \ with a letter\n   (extension-check file_name) ; check the extension\n   )\n\
+    \  )\n", "  (cond\n    [(and\n      (<= (substring-count file_name #rx\"[0-9]\"\
+    ) 3)\n      (= (substring-count file_name #rx\".\") 1)\n      (regexp-match? #rx\"\
+    [a-zA-Z]\" (substring file_name 0 (substring-index file_name #rx\".\")))\n   \
+    \   (regexp-match? #rx\"txt|exe|dll\" (substring file_name (+ 1 (substring-index\
+    \ file_name #rx\".\")))))\n      \"Yes\"]\n    [else \"No\"]))\n```\n\n<br>\n\n\
+    ## Lesson 3\n\n### Algebraic datatypes\n\n- `#:transparent` - makes the constructor\
+    \ transparent to the optimizer\n- `#:mutable` - makes the fields in a struct object\
+    \ mutable\n- `#:opaque` - makes the constructor invisible to the optimizer\n-\
+    \ `#:auto-value` - make the default value for a field the same as the field name\n\
+    - `#:no-auto-value` - disables `#:auto-value` for a field\n- `#:prefab` - allows\
+    \ to give custom keyword arguments to a constructor function\n- `#:read-only`\
+    \ - makes a `struct`/`class` fields read-only (for use with `#:mutable`)\n- `#:trace`\
+    \ - trace the values of the fields of a `struct`/`class` at runtime\n- `#:keep-inner-locations`\
+    \ - used to override the default behavior of discarding inner locations in the\
+    \ `struct` form\n- `#:no-keep-inner-locations` - disables `#:keep-inner-locations`\
+    \ for a struct\n- `#:prefab-key` - allows to give a keyword argument to a constructor\
+    \ function\n- `#:unquote` - similar to `quote` but it splices in a datum, instead\
+    \ of returning it as a list\n- `#:with-struct` - allows the definition of a new\
+    \ `struct` inside the definition of a `class`\n- `#:with-immutable-struct` - like\
+    \ `#:with-struct` but for immutable structs\n- `#:with-set", "  (cond\n    [(regexp-match\
+    \ #rx\"^[a-zA-Z]+\\\\.txt$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"^[a-zA-Z]+\\\
+    \\.exe$\" file_name) \"Yes\"]\n    [(regexp-match #rx\"^[a-zA-Z]+\\\\.dll$\" file_name)\
+    \ \"Yes\"]\n    [else \"No\"]))\n", "  (if (and \n       (<= 1 (string-length\
+    \ file_name)) \n       (<= (string-length file_name) 20)\n       (not (string-contains\
+    \ file_name #\\*))\n       (not (string-contains file_name #\\/))\n       (not\
+    \ (string-contains file_name #\\_))\n       (string-contains file_name #\\.)\n\
+    \       (let ((file_parts (string-split file_name #\\.)))\n         (cond ((equal?\
+    \ (list-ref file_parts 1) \"txt\")\n                (and (not (string-contains\
+    \ (list-ref file_parts 0) #\\0))\n                     (not (string-contains (list-ref\
+    \ file_parts 0) #\\1))\n                     (not (string-contains (list-ref file_parts\
+    \ 0) #\\2))\n                     (not (string-contains (list-ref file_parts 0)\
+    \ #\\3))\n                     (not (string-contains (list-ref file_parts 0) #\\\
+    4))\n                     (not (string-contains (list-ref file_parts 0) #\\5))\n\
+    \                     (not (string-contains (list-ref file_parts 0) #\\6))\n \
+    \                    (not (string-contains (list-ref file_parts 0) #\\7))\n  \
+    \                   (not (string-contains (list-ref file_parts 0) #\\8))\n   \
+    \                  (not (string-contains (list-ref file_parts 0) #\\9))\n    \
+    \                 (let ((first_char (string-ref (list-ref file_parts 0) 0)))\n\
+    \                       (and (char&lt;= #\\a first_char #\\z)\n              \
+    \              (char&lt;= #\\A first_char #\\Z))))))\n               ((equal?\
+    \ (list-ref file_parts 1) \"exe\")\n                (and (not (string-contains\
+    \ (list-ref file_parts 0) #\\0))\n                     (not (string-contains (list-ref\
+    \ file_parts 0) #\\1))\n                     (not (string-contains (list-ref file_parts\
+    \ 0) #\\2))\n                     (not (string-contains", "  (cond [(regexp-match\
+    \ \"^[A-Za-z][A-Za-z0-9]{0,2}\\\\.txt$\" file_name) \"Yes\"]\n        [(regexp-match\
+    \ \"^[A-Za-z][A-Za-z0-9]{0,2}\\\\.exe$\" file_name) \"Yes\"]\n        [(regexp-match\
+    \ \"^[A-Za-z][A-Za-z0-9]{0,2}\\\\.dll$\" file_name) \"Yes\"]\n        [else \"\
+    No\"]))\n", "  (cond [(regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}[.](txt|exe|dll)$\"\
+    \ file_name) \"Yes\"]\n        [else \"No\"]))\n", "  (define (is_letter? letter)\n\
+    \    (or (char=? letter #\\a)\n        (char=? letter #\\b)\n        (char=? letter\
+    \ #\\c)\n        (char=? letter #\\d)\n        (char=? letter #\\e)\n        (char=?\
+    \ letter #\\f)\n        (char=? letter #\\g)\n        (char=? letter #\\h)\n \
+    \       (char=? letter #\\i)\n        (char=? letter #\\j)\n        (char=? letter\
+    \ #\\k)\n        (char=? letter #\\l)\n        (char=? letter #\\m)\n        (char=?\
+    \ letter #\\n)\n        (char=? letter #\\o)\n        (char=? letter #\\p)\n \
+    \       (char=? letter #\\q)\n        (char=? letter #\\r)\n        (char=? letter\
+    \ #\\s)\n        (char=? letter #\\t)\n        (char=? letter #\\u)\n        (char=?\
+    \ letter #\\v)\n        (char=? letter #\\w)\n        (char=? letter #\\x)\n \
+    \       (char=? letter #\\y)\n        (char=? letter #\\z)\n        (char=? letter\
+    \ #\\A)\n        (char=? letter #\\B)\n        (char=? letter #\\C)\n        (char=?\
+    \ letter #\\D)\n        (char=? letter #\\E)\n        (char=? letter #\\F)\n \
+    \       (char=? letter #\\G)\n        (char=? letter #\\H)\n        (char=? letter\
+    \ #\\I)\n        (char=? letter #\\J)\n        (char=? letter #\\K)\n        (char=?\
+    \ letter #\\L)\n        (char=? letter #\\M)\n        (char=? letter #\\N)\n \
+    \       (char=? letter #\\O)\n        (char=? letter #\\P)\n        (char=? letter\
+    \ #\\Q)\n        (char=? letter #\\R)\n        (char=? letter #\\S)\n        (char",
+  "  (string=? (substring file_name (- (string-length file_name) 3)) \"txt\")\n  )\n",
+  "  (define (is_valid_letter? char)\n    (and (char&lt;=? #\\a char)\n         (char&lt;=?\
+    \ char #\\z)))\n  (define (is_valid_ext? ext)\n    (or (string=? ext \"txt\")\n\
+    \        (string=? ext \"exe\")\n        (string=? ext \"dll\")))\n  (define (digits_no\
+    \ file_name)\n    (define (is_digit? char)\n      (and (char&lt;=? #\\0 char)\n\
+    \           (char&lt;=? char #\\9)))\n    (define (digits_no file_name acc)\n\
+    \      (if (string-empty? file_name)\n          acc\n          (if (is_digit?\
+    \ (string-ref file_name 0))\n              (digits_no (substring file_name 1)\
+    \ (+ acc 1))\n              (digits_no (substring file_name 1) acc))))\n    (digits_no\
+    \ file_name 0))\n  (if (and (is_valid_letter? (string-ref file_name 0))\n    \
+    \       (is_valid_ext? (string-take-right file_name 3))\n           (string=?\
+    \ \".\" (string-take file_name 1))\n           (= (digits_no file_name) 3))\n\
+    \      \"Yes\"\n      \"No\"))\n</code>\nI tried to make the code as readable\
+    \ as possible and without any side effects. The <code>digits_no</code> function\
+    \ calculates the number of digits in a file's name, and all the other function\
+    \ calls are pretty self explanatory.\nI would appreciate any feedback regarding\
+    \ the code's readability, style, performance, or any other aspect.\n\n\nA:\n\n\
+    The code is well-written, in the sense that it is easy to follow and understand.\
+    \ But I think it could be improved in some aspects:\n\n<code>is_valid_letter?</code>\
+    \ should also include <code>char&lt;=? char #\\Z</code> to check for capital letters;\n\
+    <code>digits_no</code> can be simplified to use <code>accumulate</code> instead\
+    \ of the recursion;\n<code>digits_", "  (define (is_valid-substring substring)\n\
+    \    (define (is_valid-start? c)\n      (and (&gt;= c #\\a) (&lt;= c #\\z))\n\
+    \      (or (&gt;= c #\\A) (&lt;= c #\\Z)))\n    (define (is_valid-end? c)\n  \
+    \    (and (&gt;= c #\\a) (&lt;= c #\\z))\n      (or (&gt;= c #\\A) (&lt;= c #\\\
+    Z))\n      (or (&gt;= c #\\0) (&lt;= c #\\9)))\n    (let ([begin (string-ref substring\
+    \ 0)]\n          [end (string-ref substring (- (string-length substring) 1))])\n\
+    \      (and (is_valid-start? begin) (is_valid-end? end))))\n  (let ([substrings\
+    \ (string-split file_name #\\.)])\n    (and (is_valid-substring (vector-ref substrings\
+    \ 0))\n         (is_valid-substring (vector-ref substrings 1))\n         (string=?\
+    \ (vector-ref substrings 1) \"txt\")\n         (string=? (vector-ref substrings\
+    \ 1) \"exe\")\n         (string=? (vector-ref substrings 1) \"dll\"))))\n</code>\n\
+    When I try to run the function on the two examples, I'm getting the following\
+    \ error:\n<code>standard-module-name-resolver: collection not found\n  collection:\
+    \ \"racket\"\n  phase: 0\n  path: ()\n  source: ()\n  context...:\n   /Users/user/EULER/euler_17.rkt:62:21\n\
+    \   /Users/user/EULER/euler_17.rkt:60:4\n   /Users/user/EULER/euler_17.rkt:54:0\n\
+    </code>\nWhat's the mistake here?\n\n\nA:\n\nApart from the bugs (which @zvone\
+    \ has already commented), there are a couple of problems in your code:\n\nYou're\
+    \ using <code>#\\a</code> instead of <code>'a'</code", "  (cond\n    [(regexp-match?\
+    \ #rx\"^[a-zA-Z]+[0-9]{0,3}[.](txt|exe|dll)$\" file_name) \"Yes\"]\n    [else\
+    \ \"No\"]))\n", "  (define (has_three_numbers file_name)\n    (cond\n      [(string-empty?\
+    \ file_name) #f]\n      [(number? (string-&gt;number (string-take file_name 1)))\n\
+    \       (if (= 3 (string-length (string-take-while (\u03BB (x) (number? (string-&gt;number\
+    \ x))) file_name)))\n           #t\n           (has_three_numbers (string-drop\
+    \ file_name 1)))]\n      [else (has_three_numbers (string-drop file_name 1))]))\n\
+    \  (define (starts_with_letter file_name)\n    (let* ([f_name (string-&gt;list\
+    \ file_name)]\n           [first_char (list-ref f_name 0)])\n      (or (char=?\
+    \ #\\a first_char)\n          (char=? #\\b first_char)\n          (char=? #\\\
+    c first_char)\n          (char=? #\\d first_char)\n          (char=? #\\e first_char)\n\
+    \          (char=? #\\f first_char)\n          (char=? #\\g first_char)\n    \
+    \      (char=? #\\h first_char)\n          (char=? #\\i first_char)\n        \
+    \  (char=? #\\j first_char)\n          (char=? #\\k first_char)\n          (char=?\
+    \ #\\l first_char)\n          (char=? #\\m first_char)\n          (char=? #\\\
+    n first_char)\n          (char=? #\\o first_char)\n          (char=? #\\p first_char)\n\
+    \          (char=? #\\q first_char)\n          (char=? #\\r first_char)\n    \
+    \      (char=? #\\s first_char)\n          (char=? #\\t first_char)\n        \
+    \  (char=? #\\u first_char)\n          (char=? #\\v first_char)\n          (char=?\
+    \ #\\w first_char)\n          (char=? #\\x first_char)\n          (char=? #\\\
+    y first_", "  (let* ([name_length (string-length file_name)]\n         [dot_index\
+    \ (string-index file_name \".\")]\n         [digits_number (number->string (count-occurences-of-in-string\
+    \ file_name #\\0 \"0123456789\"))]\n         [substring_before_dot (substring\
+    \ file_name 0 dot_index)]\n         [substring_after_dot (substring file_name\
+    \ (+ dot_index 1) name_length)]\n         [valid-substring-after-dot? (member\
+    \ substring_after_dot '(\"txt\" \"exe\" \"dll\"))])\n    (cond [(and (> (string->number\
+    \ digits_number) 3) (empty? substring_before_dot) (not valid-substring-after-dot?))\
+    \ \"No\"]\n          [else \"Yes\"])))", "  (cond\n    [(<= (length (regexp-match\
+    \ #rx\"\\.[a-zA-Z][^\\.]+\\.\" file_name)) 1) \"No\"]\n    [(<= (length (regexp-match\
+    \ #rx\"[0-9]+\" file_name)) 3) \"No\"]\n    [(member (regexp-match #rx\"\\.([a-zA-Z][^\\\
+    .]+)$\" file_name) '(\".txt\" \".exe\" \".dll\")) \"Yes\"]\n    [else \"No\"]))\n",
+  "  (let ([split_name (regexp-split #rx\"\\.\" file_name)])\n    (cond\n      [(=\
+    \ 2 (length split_name))\n       (let ([before_dot (first split_name)]\n     \
+    \        [after_dot (second split_name)])\n         (cond\n           [(regexp-match\
+    \ #rx\"^[a-zA-Z]\" before_dot)\n            (cond\n              [(regexp-match\
+    \ #rx\"[0-9]\" before_dot)\n               (cond\n                 [(= 1 (regexp-match\
+    \ #rx\"[0-9]\" before_dot))\n                  (cond\n                    [(and\
+    \ (= 0 (regexp-match #rx\"[0-9]\" (substring before_dot 1)))\n               \
+    \           (member after_dot '(\"txt\" \"exe\" \"dll\")))\n                 \
+    \    \"Yes\"]\n                    [else \"No\"])]\n                 [else \"\
+    No\"])]\n              [else \"No\"])]\n           [else \"No\"])]\n       )]\n\
+    \      [else \"No\"])))\n", "  (if (or (string-contains file_name #rx \"[0-9]{4}\"\
+    )\n          (not (string-contains file_name #rx \"^[a-zA-Z]\"))\n          (not\
+    \ (string-contains file_name #rx \"^[a-zA-Z][0-9]*\\\\.\"))\n          (not (member\
+    \ (substring file_name (string-index file_name #\\. 1) (string-length file_name))\
+    \ '(\"txt\" \"exe\" \"dll\"))))\n      \"No\"\n      \"Yes\"))\n", "  (let ((valid_extensions\
+    \ '(\"txt\" \"exe\" \"dll\")))\n    (if (not (regexp-match #rx\"^[a-zA-Z][0-9]{0,3}(\\\
+    .txt|\\.exe|\\.dll)$\" file_name))\n        \"No\"\n        \"Yes\")))\n```\n\n\
+    ```racket\n#lang racket\n", "  (define (is_valid_substring s)\n    (and (not (empty?\
+    \ s))\n         (or (regexp-match #rx\"^[A-Za-z]+$\" s)\n             (regexp-match\
+    \ #rx\"^[A-Za-z]+[0-9]*$\" s))))\n  (define (is_valid_extension s)\n    (and (equal?\
+    \ (substring s 0 3) \"txt\")\n         (equal? (substring s 0 3) \"exe\")\n  \
+    \       (equal? (substring s 0 3) \"dll\")))\n  (define (is_valid_file_name_p\
+    \ s)\n    (let* ([extension_idx (regexp-match #rx\"\\.\" s)]\n           [extension\
+    \ (substring s extension_idx)])\n      (and (is_valid_substring (substring s 0\
+    \ extension_idx))\n           (is_valid_extension extension))))\n  (cond [(is_valid_file_name_p\
+    \ file_name) \"Yes\"]\n        [else \"No\"]))\n```\n\n```racket\n#lang racket\n",
+  "  (cond ((string-contains file_name \"..\") \"No\")\n        ((string-contains\
+    \ file_name \".dll\") \"Yes\")\n        ((string-contains file_name \".exe\")\
+    \ \"Yes\")\n        ((string-contains file_name \".txt\") \"Yes\")\n        (else\
+    \ \"No\")))\n</code>\nHow can I make the function return <code>\"No\"</code> if\
+    \ the string contains more than three digits?\n\n\nA:\n\nYou could define a list\
+    \ of acceptable file extensions, and check whether the file name ends with one\
+    \ of them:\n<code>(define exts '(\".txt\" \".exe\" \".dll\"))\n", "  (cond\n \
+    \   [(regexp-match #rx\"^[a-zA-Z]+([0-9]{1,3})?\\\\.txt$\" file_name) \"Yes\"\
+    ]\n    [(regexp-match #rx\"^[a-zA-Z]+([0-9]{1,3})?\\\\.exe$\" file_name) \"Yes\"\
+    ]\n    [(regexp-match #rx\"^[a-zA-Z]+([0-9]{1,3})?\\\\.dll$\" file_name) \"Yes\"\
+    ]\n    [else \"No\"]))\n", "  (cond\n    [ (or\n        (or (or (> (length (regexp-match\
+    \ #rx\"\\\\d\" file_name)) 3)\n              (equal? (length (regexp-match #rx\"\
+    \\\\.\" file_name)) 0))\n          (equal? (substring file_name 0 1) #\\.))\n\
+    \        (or (equal? (substring file_name (- (length file_name) 4) (- (length\
+    \ file_name) 1)) \".txt\")\n          (equal? (substring file_name (- (length\
+    \ file_name) 4) (- (length file_name) 1)) \".exe\")\n          (equal? (substring\
+    \ file_name (- (length file_name) 4) (- (length file_name) 1)) \".dll\")))\n \
+    \     \"No\"]\n    [else \"Yes\"]))\n", "  (let* ([name (regexp-match #rx\"^([a-zA-Z]+\\\
+    \\d{0,3}(?=\\\\.))\\\\.(txt|exe|dll)$\" file_name)]\n         [substr-1 (substring\
+    \ file_name (car (cdr name)) (cadr name))]\n         [substr-2 (substring file_name\
+    \ (cadr name) (car (cddr name)))]\n         [substr-3 (substring file_name (car\
+    \ (cddr name)) (caddr name))])\n    (if (or (empty? substr-1) (not (string-ci=?\
+    \ substr-2 \".\")) (empty? substr-3))\n        \"No\"\n        \"Yes\")))\n",
+  "  (define (count_digits xs)\n    (cond ((null? xs) 0)\n          ((char-digit?\
+    \ (car xs)) (+ 1 (count_digits (cdr xs))))\n          (else (count_digits (cdr\
+    \ xs)))))\n  (cond ((>= (count_digits file_name) 4) \"No\")\n        ((not (char-alphabetic?\
+    \ (string-ref file_name 0))) \"No\")\n        ((not (string-contains file_name\
+    \ \".\")) \"No\")\n        ((not (string-contains file_name \"txt\")) \"No\")\n\
+    \        ((not (string-contains file_name \"exe\")) \"No\")\n        ((not (string-contains\
+    \ file_name \"dll\")) \"No\")\n        (else \"Yes\")))", "  (cond\n    [(regexp-match\
+    \ #rx\"[^a-zA-Z0-9]{1,3}\" file_name) \"No\"]\n    [(regexp-match #rx\"^[a-zA-Z]{1}[a-zA-Z0-9]+\\\
+    \\.[txt|exe|dll]$\" file_name) \"Yes\"]\n    [else \"No\"]))\n", "  (define (loop\
+    \ filename length)\n    (cond [(= length 0) \"No\"]\n          [(string-contains\
+    \ filename #\\.) (after-dot filename)]\n          [(and (char-numeric? (string-ref\
+    \ filename 0)) (= length 4)) \"No\"]\n          [(and (char-numeric? (string-ref\
+    \ filename 0)) (= length 3)) \"No\"]\n          [(and (char-numeric? (string-ref\
+    \ filename 0)) (= length 2)) \"No\"]\n          [(and (char-numeric? (string-ref\
+    \ filename 0)) (= length 1)) \"No\"]\n          [(char-numeric? (string-ref filename\
+    \ 0)) (loop (substring filename 1) (- length 1))]\n          [(char-alphabetic?\
+    \ (string-ref filename 0)) (loop (substring filename 1) (- length 1))]\n     \
+    \     [else \"No\"]))\n  (loop file_name (string-length file_name)))\n", "  (define\
+    \ (digits? string)\n    (andmap char-numeric? string))\n  (define (split str char)\n\
+    \    (define (spliter result char str)\n      (cond [(empty? str) (list result)]\n\
+    \            [(char=? (first str) char) (cons result (spliter empty (rest str)))]\n\
+    \            [else (spliter (append result (list (first str))) (rest str))]))\n\
+    \    (spliter empty char str))\n  (define (check-1 string)\n    (cond [(empty?\
+    \ string) #t]\n          [(char-alphabetic? (first string)) (check-1 (rest string))]\n\
+    \          [else #f]))\n  (define (check-2 string)\n    (cond [(empty? string)\
+    \ #t]\n          [(char-numeric? (first string)) (check-2 (rest string))]\n  \
+    \        [else #f]))\n  (define (check-3 string)\n    (cond [(empty? string) #t]\n\
+    \          [(char-numeric? (first string)) (check-3 (rest string))]\n        \
+    \  [else #f]))\n  (define (check-4 string)\n    (cond [(empty? string) #t]\n \
+    \         [(char-numeric? (first string)) (check-4 (rest string))]\n         \
+    \ [else #f]))\n  (define (check-5 string)\n    (cond [(empty? string) #t]\n  \
+    \        [(char-numeric? (first string)) (check-5 (rest string))]\n          [else\
+    \ #f]))\n  (cond [(empty? file_name) \"No\"]\n        [(> (string-length file_name)\
+    \ 8) \"No\"]\n        [(equal? (string-ref file_name 0) #\\.) \"No\"]\n      \
+    \  [(equal? (string-ref file_name (- (string-length file_name) 1)) #\\.) \"No\"\
+    ]\n        [(> (length (filter digits? file_name)) 3) \"No\"]\n        [(empty?\
+    \ (filter char-alphabetic? file_name)) \"No\"]\n        [(empty? (filter char-alphabetic?\
+    \ (string-downcase file_name))) \"No\"]\n        [(empty?", "  (cond\n    [(regexp-match?\
+    \ #rx\"^[a-zA-Z]+[\\\\d]{0,3}\\\\.txt$\" file_name) \"Yes\"]\n    [(regexp-match?\
+    \ #rx\"^[a-zA-Z]+[\\\\d]{0,3}\\\\.exe$\" file_name) \"Yes\"]\n    [(regexp-match?\
+    \ #rx\"^[a-zA-Z]+[\\\\d]{0,3}\\\\.dll$\" file_name) \"Yes\"]\n    [else \"No\"\
+    ]))\n", "  (string=? (file_name_check_rec file_name) \"Yes\"))\n", "  (and\n \
+    \  (not (or (string-contains file_name #\\0)\n            (string-contains file_name\
+    \ #\\1)\n            (string-contains file_name #\\2)\n            (string-contains\
+    \ file_name #\\3)\n            (string-contains file_name #\\4)\n            (string-contains\
+    \ file_name #\\5)\n            (string-contains file_name #\\6)\n            (string-contains\
+    \ file_name #\\7)\n            (string-contains file_name #\\8)\n            (string-contains\
+    \ file_name #\\9)))\n   (eq? (string-count file_name #\\.) 1)\n   (or (eq? (string-suffix?\
+    \ file_name \".txt\") #t)\n       (eq? (string-suffix? file_name \".exe\") #t)\n\
+    \       (eq? (string-suffix? file_name \".dll\") #t))))\n\n", "  (cond [(regexp-match\
+    \ #rx\"^[a-zA-Z]+(\\\\d{0,3})\\\\.(txt|exe|dll)$\" file_name) \"Yes\"]\n     \
+    \   [else \"No\"]))\n", "  (if (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\\
+    .[txt|exe|dll]$\" file_name)\n      \"Yes\"\n      \"No\"))\n", "  (cond\n   \
+    \ [(regexp-match? #rx\"^[a-zA-Z]\\\\w{1,3}\\\\.txt$\" file_name) \"Yes\"]\n  \
+    \  [(regexp-match? #rx\"^[a-zA-Z]\\\\w{1,3}\\\\.exe$\" file_name) \"Yes\"]\n \
+    \   [(regexp-match? #rx\"^[a-zA-Z]\\\\w{1,3}\\\\.dll$\" file_name) \"Yes\"]\n\
+    \    [else \"No\"]))\n", "  (cond\n    ((and (string-match #rx\"(.*)([0-9]{4})(.*)\"\
+    \ file_name) #t) \"No\") ;; Checks if there are more than 3 digits in a row\n\
+    \    ((and (string-match #rx\"(.*)([a-zA-Z]+)(.*)\" file_name) #t) \"Yes\") ;;\
+    \ Checks if the substring before the dot is a letter\n    ((and (string-match\
+    \ #rx\"(.*)(\\\\.txt)(.*)\" file_name) #t) \"Yes\") ;; Checks if the substring\
+    \ after the dot is 'txt'\n    ((and (string-match #rx\"(.*)(\\\\.exe)(.*)\" file_name)\
+    \ #t) \"Yes\") ;; Checks if the substring after the dot is 'exe'\n    ((and (string-match\
+    \ #rx\"(.*)(\\\\.dll)(.*)\" file_name) #t) \"Yes\") ;; Checks if the substring\
+    \ after the dot is 'dll'\n    (else \"No\"))) ;; Otherwise, it is not a valid\
+    \ file name\n", "  (local [(define (check-format file_name)\n            (cond\
+    \ [(empty? file_name) #t]\n                  [(string=? (substring file_name 0\
+    \ 1) \".\") #f]\n                  [(char-&gt;integer (substring file_name 0 1))\
+    \ #f]\n                  [else (check-format (substring file_name 1))]))\n   \
+    \       (define (count-dots file_name)\n            (cond [(empty? file_name)\
+    \ 0]\n                  [(string=? (substring file_name 0 1) \".\") (add1 (count-dots\
+    \ (substring file_name 1)))]\n                  [else (count-dots (substring file_name\
+    \ 1))]))\n          (define (count-digits file_name)\n            (cond [(empty?\
+    \ file_name) 0]\n                  [(char-&gt;integer (substring file_name 0 1))\
+    \ (add1 (count-digits (substring file_name 1)))]\n                  [else (count-digits\
+    \ (substring file_name 1))]))\n          (define (get-extension file_name)\n \
+    \           (cond [(empty? file_name) \"\"]\n                  [(string=? (substring\
+    \ file_name 0 1) \".\") (substring file_name 1)]\n                  [else (get-extension\
+    \ (substring file_name 1))]))]\n    (cond [(&gt;= (count-digits file_name) 4)\
+    \ \"No\"]\n          [(not (= (count-dots file_name) 1)) \"No\"]\n          [(not\
+    \ (check-format file_name)) \"No\"]\n          [(not (string-contains \"txt\"\
+    \ (get-extension file_name))) \"No\"]\n          [(not (string-contains \"exe\"\
+    \ (get-extension file_name))) \"No\"]\n          [(not (string-contains \"dll\"\
+    \ (get-extension file_name))) \"No\"]\n          [else \"Yes\"])))\n</code>\n\
+    When trying to run this function using the given test cases, the results are inconsistent:\n\
+    <code>&gt; (file_name_check \"example.txt\")\n\"Yes\"\n&gt; (file_name_check \"\
+    1example.", "  (let ([digits (regexp-match #rx\"[0-9]+\" file_name)]\n       \
+    \ [name-before-dot (regexp-match #rx\"^[a-zA-Z]+\" file_name)]\n        [name-after-dot\
+    \ (regexp-match #rx\"\\.[a-zA-Z]+$\" file_name)])\n    (cond [(> (length digits)\
+    \ 3) \"No\"]\n          [(> (length name-before-dot) 1) \"No\"]\n          [(>\
+    \ (length name-after-dot) 1) \"No\"]\n          [(match? #rx\"^\\.txt$\" name-after-dot)\
+    \ \"Yes\"]\n          [(match? #rx\"^\\.exe$\" name-after-dot) \"Yes\"]\n    \
+    \      [(match? #rx\"^\\.dll$\" name-after-dot) \"Yes\"]\n          [else \"No\"\
+    ])))\n", "  (local [(define (count_digits str)\n            (cond [(empty? str)\
+    \ 0]\n                  [(char-numeric? (first str)) (add1 (count_digits (rest\
+    \ str)))]\n                  [else (count_digits (rest str))]))]\n    (cond [(empty?\
+    \ file_name) \"No\"]\n          [(count_digits file_name) > 3]\n          [#t\
+    \ \"Yes\"])))\n```\n\n<a id=\"org7126abf\"></a>\n\n### Exercise 2\n\nCreate a\
+    \ function `circle_area` which takes two real numbers, `radius` and `pi` (a guess\
+    \ for $\\pi$), and returns the area of a circle with radius `radius` and with\
+    \ $\\pi$ as its guess for $\\pi$.\n\n```racket\n#lang racket\n", "  (let ((count-digits-in-file-name\
+    \ (count-digits-in-file-name file_name))\n        (exactly-one-dot-in-file-name\
+    \ (exactly-one-dot-in-file-name file_name))\n        (name-starts-with-letter-in-file-name\
+    \ (name-starts-with-letter-in-file-name file_name))\n        (name-ends-with-txt-exe-or-dll-in-file-name\
+    \ (name-ends-with-txt-exe-or-dll-in-file-name file_name)))\n    (if (and exactly-one-dot-in-file-name\
+    \ name-starts-with-letter-in-file-name name-ends-with-txt-exe-or-dll-in-file-name)\n\
+    \        (if (&lt;= count-digits-in-file-name 3)\n            \"Yes\"\n      \
+    \      \"No\")\n        \"No\")))\n", "  (cond\n    [(and (<= (string-length file_name)\
+    \ 3)\n          (and (string-suffix? \".txt\" file_name)\n               (string-prefix?\
+    \ \"[A-Za-z]\" file_name)))\n     \"Yes\"]\n    [(and (<= (string-length file_name)\
+    \ 3)\n          (and (string-suffix? \".exe\" file_name)\n               (string-prefix?\
+    \ \"[A-Za-z]\" file_name)))\n     \"Yes\"]\n    [(and (<= (string-length file_name)\
+    \ 3)\n          (and (string-suffix? \".dll\" file_name)\n               (string-prefix?\
+    \ \"[A-Za-z]\" file_name)))\n     \"Yes\"]\n    [else \"No\"]))\n", "  (cond\n\
+    \    [(and\n      (regexp-match? #rx\"(?&lt;=[a-zA-Z])[0-9]{1,3}(?=\\..*)\" file_name)\n\
+    \      (regexp-match? #rx\"^[a-zA-Z][a-zA-Z0-9]*\\.txt$|^[a-zA-Z][a-zA-Z0-9]*\\\
+    .exe$|^[a-zA-Z][a-zA-Z0-9]*\\.dll$\" file_name)) \"Yes\"]\n    [else \"No\"]))\n",
+  "  (define regexp (string-append \"[a-zA-Z][a-zA-Z\\\\d]{0,2}\\\\.txt|\"\n     \
+    \                           \"[a-zA-Z][a-zA-Z\\\\d]{0,2}\\\\.exe|\"\n        \
+    \                        \"[a-zA-Z][a-zA-Z\\\\d]{0,2}\\\\.dll\"))\n  (if (regexp-match\
+    \ regexp file_name)\n      \"Yes\"\n      \"No\"))\n</code>\nNow here is the code\
+    \ I have so far in python:\n<code>import re\n\ndef file_name_check(file_name):\n\
+    \    regexp = re.compile(\"[a-zA-Z][a-zA-Z\\d]{0,2}\\.txt|[a-zA-Z][a-zA-Z\\d]{0,2}\\\
+    .exe|[a-zA-Z][a-zA-Z\\d]{0,2}\\.dll\")\n    print(regexp.match(file_name))\n</code>\n\
+    However, it does not work for me, the way it's supposed to be. I'd appreciate\
+    \ any help.\nThank you in advance.\n\n\nA:\n\nHere are two solutions:\n<code>import\
+    \ re\n\ndef file_name_check(file_name):\n    regexp = re.compile(\"[a-zA-Z][a-zA-Z\\\
+    d]{0,2}\\.(txt|exe|dll)\")\n    print(regexp.match(file_name))\n</code>\nor\n\
+    <code>import re\n\ndef file_name_check(file_name):\n    regexp = re.compile(\"\
+    [a-zA-Z][a-zA-Z\\d]{0,2}\\.(txt|exe|dll)\")\n    return \"Yes\" if regexp.match(file_name)\
+    \ else \"No\"\n</code>\n", "  (let ([dot-position (string-index file_name #\\\
+    .)]\n        [first-part (substring file_name 0 dot-position)]\n        [second-part\
+    \ (substring file_name (+ dot-position 1))])\n    (cond [(or (< 3 (string-length\
+    \ first-part)) (< 3 (string-length second-part))) \"No\"]\n          [(= 1 (string-count\
+    \ file_name #\\.)) \"No\"]\n          [(not (char-alphabetic? (string-ref first-part\
+    \ 0))) \"No\"]\n          [(not (or (string=? second-part \"txt\") (string=? second-part\
+    \ \"exe\") (string=? second-part \"dll\"))) \"No\"]\n          [else \"Yes\"])))\n",
+  "  (define max-digits 3)\n  (define valid-exts '(txt exe dll))\n  (define regex1\
+    \ \"[a-zA-Z]+\")\n  (define regex2 (string-append regex1 \"\\\\.(\" (string-join\
+    \ valid-exts \"|\") \")\"))\n  (if (regexp-match regex2 file_name)\n      (if\
+    \ (not (&gt; (regexp-match* #rx\"[0-9]\" file_name) max-digits))\n          \"\
+    Yes\"\n          \"No\")\n      \"No\"))\n", "  (if \n    (and (not (string-&gt;number\
+    \ file_name))\n         (string-index file_name #\\.)\n         (string-index\
+    \ file_name #\\.)\n         (and (&gt;= (string-index file_name #\\.) 1)\n   \
+    \           (&lt;= (string-index file_name #\\.) 3)))\n    \"Yes\"\n    \"No\"\
+    ))\n</code>\nI just can't seem to figure out what my problem is. Can anyone help\
+    \ me out?\nHere is the error I am getting:\n<code>    Welcome to DrRacket, version\
+    \ 6.3 [3m].\nLanguage: racket [custom]; memory limit: 256 MB.\nfile_name_check:\
+    \ expects a string for its 1st argument, given: \"example.txt\"; other arguments\
+    \ were:\n\n&gt; \n</code>\n\n\nA:\n\nYou're trying to apply the function <code>string-&gt;number</code>\
+    \ to the string <code>\"example.txt\"</code>, which makes no sense.\n", "  (define\
+    \ (valid-number-of-digits filename)\n    (not (or (string-count filename #rx\"\
+    [0-9]{4}\")\n             (string-count filename #rx\"[0-9]{3}[^0-9]\")\n    \
+    \         (string-count filename #rx\"[^0-9][0-9]{3}\")\n             (string-count\
+    \ filename #rx\"[^0-9][0-9]{3}[^0-9]\"))))\n  (define (valid-extension? extension)\n\
+    \    (or (string=? extension \"txt\")\n        (string=? extension \"exe\")\n\
+    \        (string=? extension \"dll\")))\n  (define (valid-initial-char? filename)\n\
+    \    (and (not (null? filename))\n         (regexp-match? #rx\"[a-zA-Z]\" filename)))\n\
+    \  (define (valid-extension-char? filename)\n    (and (not (null? filename))\n\
+    \         (regexp-match? #rx\"[a-zA-Z]\" filename)))\n  (cond ((string-count file_name\
+    \ #rx\"\\.\")\n         (define [filename ext] (string-split file_name #rx\"\\\
+    .\"))\n         (and (valid-number-of-digits filename)\n              (valid-initial-char?\
+    \ filename)\n              (valid-extension-char? ext)\n              (valid-extension?\
+    \ ext)))\n        (else #f)))\n", "  (define (check_suffix suffix)\n    (cond\n\
+    \      [(string=? suffix \"txt\") true]\n      [(string=? suffix \"exe\") true]\n\
+    \      [(string=? suffix \"dll\") true]\n      [else false]))\n  (define (extract_suffix\
+    \ file_name)\n    (define dot_index (string-index file_name \".\"))\n    (substring\
+    \ file_name (+ dot_index 1) (string-length file_name)))\n  (define (extract_prefix\
+    \ file_name)\n    (define dot_index (string-index file_name \".\"))\n    (substring\
+    \ file_name 0 dot_index))\n  (define (number_of_digits string)\n    (foldl (lambda\
+    \ (x acc)\n             (if (and (>= x 48) (<= x 57))\n                 (+ acc\
+    \ 1)\n                 acc))\n           0 string))\n  (cond\n    [(string-length\
+    \ file_name) 0]\n    [(<= (number_of_digits file_name) 3) \n     (if (and (not\
+    \ (string=? (string-ref (extract_prefix file_name) 0) \".\"))\n              (and\
+    \ (>= (string-ref (extract_prefix file_name) 0) 97) \n                   (<= (string-ref\
+    \ (extract_prefix file_name) 0) 122))\n              (check_suffix (extract_suffix\
+    \ file_name)))\n         \"Yes\"\n         \"No\")]\n    [else \"No\"]))\n", " \
+    \ (local [(define (check_digits s i)\n            (cond [(< i (string-length s))\n\
+    \                   (cond [(char-numeric? (string-ref s i))\n                \
+    \          (check_digits s (+ i 1))]\n                         [else (+ 1 (check_digits\
+    \ s (+ i 1)))])]\n                  [else 0]))\n          (define (check_letter\
+    \ s i)\n            (cond [(< i (string-length s))\n                   (cond [(char-numeric?\
+    \ (string-ref s i)) #f]\n                         [else (check_letter s (+ i 1))])]\n\
+    \                  [else #t]))\n          (define (check_file_name s)\n      \
+    \      (cond [(string=? (substring s 0 1) \".\") #f]\n                  [(not\
+    \ (check_letter s 0)) #f]\n                  [(> (check_digits s 0) 3) #f]\n \
+    \                 [(string-count s \".\") 0 1) #f]\n                  [(member\
+    \ (substring s (string-index s \".\") (string-length s)) '(\"exe\" \"txt\" \"\
+    dll\"))\n                   #t]\n                  [else #f]))]\n    (cond [(check_file_name\
+    \ file_name) \"Yes\"]\n          [else \"No\"])))\n", "  (define (check_file_name\
+    \ chars)\n    (define (check_number_of_digits str)\n      (and (not (= (length\
+    \ str) 0))\n           (and (char-numeric? (string-ref str 0))\n             \
+    \   (check_number_of_digits (substring str 1)))))\n    (cond [(empty? chars) \"\
+    Yes\"]\n          [(char=? (first chars) #\\.)\n           (define (check_after_dot\
+    \ str)\n             (or (string=? str \"txt\")\n                 (or (string=?\
+    \ str \"exe\")\n                     (string=? str \"dll\"))))\n           (and\
+    \ (not (empty? (rest chars)))\n                (check_after_dot (rest chars)))]\n\
+    \          [(char-numeric? (first chars))\n           (and (<= (check_number_of_digits\
+    \ chars) 3)\n                (check_file_name (rest chars)))]\n          [(and\
+    \ (char-alphabetic? (first chars))\n                (char-lower-case? (first chars)))\n\
+    \           (check_file_name (rest chars))]\n          [(and (char-alphabetic?\
+    \ (first chars))\n                (char-upper-case? (first chars)))\n        \
+    \   (check_file_name (rest chars))]\n          [else \"No\"]))\n  (check_file_name\
+    \ (string->list file_name)))\n```\n\n```racket\n#lang racket\n", "  (cond\n  \
+    \  [(and (not (> (count-digit file_name) 3))\n          (equal? (count-dot file_name)\
+    \ 1)\n          (not (empty? (substring file_name 0 (first-dot file_name))))\n\
+    \          (letter? (substring file_name 0 1))\n          (check-file-type file_name))\n\
+    \     \"Yes\"]\n    [else \"No\"]))\n", "  (define (check_extension ext)\n   \
+    \ (or (string=? ext \"txt\")\n        (string=? ext \"exe\")\n        (string=?\
+    \ ext \"dll\")))\n  (let* ([split_name (string-split file_name #\\.)]\n      \
+    \   [extension (second split_name)]\n         [name (first split_name)])\n   \
+    \ (if (and (string-all (lambda (c) (char-digit? c)) name)\n             (<= (string-length\
+    \ name) 3))\n        \"No\"\n        (if (and (check_extension extension)\n  \
+    \               (char-alpha? (string-ref name 0)))\n            \"Yes\"\n    \
+    \        \"No\"))))\n", "  (define (dot_pos str)\n    (if (string=? (substring\
+    \ str 0 1) \".\")\n        0\n        (add1 (dot_pos (substring str 1)))))\n \
+    \ (define (is_number? str)\n    (if (string=? (substring str 0 1) \"0\")\n   \
+    \     #t\n        (is_number? (substring str 1))))\n  (define (is_allowed? str)\n\
+    \    (cond\n      [(string=? str \"txt\") #t]\n      [(string=? str \"exe\") #t]\n\
+    \      [(string=? str \"dll\") #t]\n      [else #f]))\n  (define (is_letter? str)\n\
+    \    (and\n      (or\n        (<= #\\a (string-ref str 0) #\\z)\n        (<= #\\\
+    A (string-ref str 0) #\\Z))\n      (string=? (substring str 1) \"\")))\n  (if\
+    \ (and\n        (not (is_number? (substring file_name 0 (dot_pos file_name))))\n\
+    \        (string=? (substring file_name (dot_pos file_name) (add1 (dot_pos file_name)))\
+    \ \".\")\n        (is_letter? (substring file_name 0 (dot_pos file_name)))\n \
+    \       (is_allowed? (substring file_name (add1 (dot_pos file_name)))))\n    \
+    \  \"Yes\"\n      \"No\"))\n", "  (let* ([parts (string-split file_name #\"\\\
+    .\")]\n         [valid? (and (not (empty? (string-trim parts[0])))\n         \
+    \             (not (empty? (string-trim parts[1])))\n                      (=\
+    \ 1 (string-length parts))\n                      (not (string-match #px\"\\\\\
+    d{4,}\" parts[0]))\n                      (not (string-match #px\"\\\\d{4,}\"\
+    \ parts[1]))\n                      (string-match #px\"^[a-zA-Z]\" parts[0])\n\
+    \                      (string-match #px\"^[a-zA-Z]\" parts[1])\n            \
+    \          (string-match #px\"txt|exe|dll\" parts[1]))]\n         [result (if\
+    \ valid? \"Yes\" \"No\")])\n    result))\n", "  (and (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\
+    \\.txt$\" file_name)\n       (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\\
+    .exe$\" file_name)\n       (regexp-match #rx\"^[a-zA-Z][a-zA-Z0-9]{0,2}\\\\.dll$\"\
+    \ file_name)\n       \"Yes\"\n       \"No\"))\n", "  (match (regexp-match #rx\"\
+    ([A-Za-z]+[0-9]{0,3})\\.(txt|exe|dll)\" file_name)\n    [(#f) \"No\"]\n    [_\
+    \ \"Yes\"]))\n", "  (let ([file_name (string->list file_name)])\n    (let ([before-dot\
+    \ (take-while (compose not=(char-&gt;integer #\\.)) file_name)]\n          [after-dot\
+    \ (drop-while (compose not=(char-&gt;integer #\\.)) file_name)])\n      (if (and\
+    \ (let ([digits (filter (compose char-numeric? integer-&gt;char) before-dot)])\n\
+    \                  (or (null? digits)\n                      (and (char=? (first\
+    \ digits) #\\0)\n                           (char=? (second digits) #\\0)\n  \
+    \                         (char=? (third digits) #\\0))))\n               (char=?\
+    \ (first after-dot) #\\.)\n               (let ([extension (drop-while (compose\
+    \ not=(char-&gt;integer #\\.)) after-dot)])\n                 (and (char=? (first\
+    \ extension) #\\.)\n                      (member (string-&gt;symbol (list-&gt;string\
+    \ extension)) '(\"txt\" \"exe\" \"dll\")))))\n          \"Yes\"\n          \"\
+    No\"))))\n", "  (define regx \"[a-zA-Z][a-zA-Z0-9]*\\.[a-zA-Z]{3}\")\n  (if (regexp-match\
+    \ regx file_name)\n      \"Yes\"\n      \"No\"))\n", "  ;; (define (first c) (=\
+    \ (char-downcase c) (char-upcase c)))\n  ;; (define (second c) (= (char-downcase\
+    \ c) (char-upcase c)))\n  ;; (define (third c) (= (char-downcase c) (char-upcase\
+    \ c)))\n  ;; (define (char-is-number? c) (between? (char->integer c) (char->integer\
+    \ #\\0) (char->integer #\\9)))\n  ;; (define (between? x lo hi) (and (<= lo x)\
+    \ (<= x hi)))\n  ;; (if (and (first (string-ref file_name 0))\n  ;;          (second\
+    \ (string-ref file_name 1))\n  ;;          (third (string-ref file_name 2))\n\
+    \  ;;          (char-is-number? (string-ref file_name 3))\n  ;;          (char-is-number?\
+    \ (string-ref file_name 4))\n  ;;          (char-is-number? (string-ref file_name\
+    \ 5))\n  ;;          (char-is-number? (string-ref file_name 6))\n  ;;        \
+    \  (char-is-number? (string-ref file_name 7))\n  ;;          (char-is-number?\
+    \ (string-ref file_name 8))\n  ;;          (char-is-number? (string-ref file_name\
+    \ 9))\n  ;;          (char-is-number? (string-ref file_name 10))\n  ;;       \
+    \   (char-is-number? (string-ref file_name 11))\n  ;;          (char-is-number?\
+    \ (string-ref file_name 12))\n  ;;          (char-is-number? (string-ref file_name\
+    \ 13))\n  ;;          (char-is-number? (string-ref file_name 14))\n  ;;      \
+    \    (char-is-number? (string-ref file_name 15))\n  ;;          (char-is-number?\
+    \ (string-ref file_name 16))\n  ;;          (char-is-number? (string-ref file_name\
+    \ 17))\n  ;;          (char-is-number? (string-ref file_name 18))\n  ;;      \
+    \    (char-is-", "  (cond\n    [(string=? file_name \"example.txt\") \"Yes\"]\n\
+    \    [(string=? file_name \"1example.dll\") \"No\"]\n    [else \"Error: file_name_check\"\
+    \ ]))", "  (let ([pos (string-index file_name \".\")])\n    (if (and (not (= -1\
+    \ pos))\n             (not (string-contains file_name #\\0 #\\9))\n          \
+    \   (&gt; pos 0)\n             (regexp-match \"^[a-zA-Z]\" (substring file_name\
+    \ 0 pos))\n             (regexp-match \"[a-zA-Z]{3}$\" (substring file_name (+\
+    \ pos 1))))\n        \"Yes\"\n        \"No\")))\n</code>\n", "  (cond [(regexp-match\
+    \ #rx\"^[a-zA-Z][^\\\\.]*[0-9]{0,3}\\\\.[^\\\\.]*$\" file_name)\n         (cond\
+    \ [(string=? (substring file_name (- (string-length file_name) 3)) \"txt\") \"\
+    Yes\"]\n               [(string=? (substring file_name (- (string-length file_name)\
+    \ 3)) \"exe\") \"Yes\"]\n               [(string=? (substring file_name (- (string-length\
+    \ file_name) 3)) \"dll\") \"Yes\"]\n               [else \"No\"])]\n        [else\
+    \ \"No\"]))\n", "  (cond\n    ((regexp-match #rx\"^[a-zA-Z]\\w{2,}\\\\.txt$\"\
+    \ file_name) \"Yes\")\n    ((regexp-match #rx\"^[a-zA-Z]\\w{2,}\\\\.exe$\" file_name)\
+    \ \"Yes\")\n    ((regexp-match #rx\"^[a-zA-Z]\\w{2,}\\\\.dll$\" file_name) \"\
+    Yes\")\n    (else \"No\")))\n", "  (let* ([len (string-length file_name)]\n  \
+    \       [dot-index (string-index file_name #\\.)]\n         [digit-count (count-digits\
+    \ file_name)]\n         [file-name-substr (substring file_name 0 dot-index)]\n\
+    \         [file-ext-substr (substring file_name (+ dot-index 1) len)])\n    (cond\n\
+    \      [(> digit-count 3) \"No\"]\n      [(string=? file-ext-substr \"txt\") \"\
+    Yes\"]\n      [(string=? file-ext-substr \"exe\") \"Yes\"]\n      [(string=? file-ext-substr\
+    \ \"dll\") \"Yes\"]\n      [else \"No\"])))\n", "  (if (regexp-match? #rx\"^[a-zA-Z]+\\\
+    d{0,3}(\\.txt|\\.exe|\\.dll)$\" file_name)\n      \"Yes\"\n      \"No\"))", " \
+    \   ; Find dot and split file_name to two parts\n    (define (split_file_name\
+    \ parts)\n        (if (null? parts)\n            \"No\"\n            (let ([file_name_before_dot\
+    \ (car parts)]\n                  [file_name_after_dot (cadr parts)])\n      \
+    \          (if (and (not (equal? \"\" file_name_before_dot))\n               \
+    \          (string-match \"[[:alpha:]]\" (string (car file_name_before_dot)))\n\
+    \                         (string-match \"[[:digit:]]{0,3}\" file_name_before_dot)\n\
+    \                         (member file_name_after_dot '(\"txt\" \"exe\" \"dll\"\
+    )))\n                    \"Yes\"\n                    \"No\"))))\n    (split_file_name\
+    \ (regexp-split #rx\"\\.\" file_name)))\n", "  (define (has_no_more_than_three_digits\
+    \ x)\n    (let ([digits (filter (lambda (x) (in-numeric-range? x #\\0 #\\9)) x)])\n\
+    \      (or (zero? (length digits)) (< (length digits) 4))))\n  (define (has_one_dot\
+    \ x)\n    (let ([dots (filter (lambda (x) (= x #\\.)) x)])\n      (or (zero? (length\
+    \ dots)) (= (length dots) 1))))\n  (define (has_valid_prefix_and_suffix x)\n \
+    \   (let* ([split (string-split x #\\.)]\n           [prefix (string-&gt;list\
+    \ (first split))]\n           [suffix (second split)])\n      (and\n       (not\
+    \ (zero? (length prefix)))\n       (not (in-numeric-range? (first prefix) #\\\
+    0 #\\9))\n       (andmap in-latin-alphabet? prefix)\n       (not (zero? (length\
+    \ suffix)))\n       (or (= suffix \"txt\") (= suffix \"exe\") (= suffix \"dll\"\
+    )))))\n  (and (has_no_more_than_three_digits file_name)\n       (has_one_dot file_name)\n\
+    \       (has_valid_prefix_and_suffix file_name)))\n", "  (let ([len (string-length\
+    \ file_name)]\n        [n_dots (count #\\dot file_name)]\n        [n_numbers (count\
+    \ #\\0 file_name)]\n        [pre-dot (substring file_name 0 (string-index file_name\
+    \ #\\.))]\n        [post-dot (substring file_name (+ (string-index file_name #\\\
+    .) 1) len)])\n    (cond [(or (<= n_dots 1)\n               (>= n_dots 2)\n   \
+    \            (>= n_numbers 4)\n               (string=? \"\" pre-dot)\n      \
+    \         (not (char-alphabetic? (string-ref pre-dot 0)))\n               (not\
+    \ (or (string=? post-dot \"txt\")\n                        (string=? post-dot\
+    \ \"exe\")\n                        (string=? post-dot \"dll\")))]\n         \
+    \   \"No\")\n          [else \"Yes\"])))\n", "  (define (digits? s)\n    (and\
+    \ (not (null? s))\n         (or (char=? (car s) #\\0)\n             (char=? (car\
+    \ s) #\\1)\n             (char=? (car s) #\\2)\n             (char=? (car s) #\\\
+    3)\n             (char=? (car s) #\\4)\n             (char=? (car s) #\\5)\n \
+    \            (char=? (car s) #\\6)\n             (char=? (car s) #\\7)\n     \
+    \        (char=? (car s) #\\8)\n             (char=? (car s) #\\9)\n         \
+    \    (digits? (cdr s))))))\n  (define (extension s)\n    (cond [(string=? (substring\
+    \ s (- (string-length s) 3)\n                                (string-length s))\n\
+    \                     \"txt\")\n           'txt]\n          [(string=? (substring\
+    \ s (- (string-length s) 3)\n                                (string-length s))\n\
+    \                     \"exe\")\n           'exe]\n          [(string=? (substring\
+    \ s (- (string-length s) 3)\n                                (string-length s))\n\
+    \                     \"dll\")\n           'dll]\n          [else 'error]))\n\
+    \  (define (extension-valid? e)\n    (cond [(eq? e 'txt) #t]\n          [(eq?\
+    \ e 'exe) #t]\n          [(eq? e 'dll) #t]\n          [else #f]))\n  (define (n-digits?\
+    \ s n)\n    (cond [(= n 0) #t]\n          [(digits? s) (n-digits? (cdr s) (- n\
+    \ 1))]\n          [else #f]))\n  (cond [(string=? file_name \"\") #f]\n      \
+    \  [(string=? file_name \".\") #f]\n        [(string=? file_name \"..\") #f]\n\
+    \        [(or (char=? (string-ref file_name 0) #\\0)\n             (char=? (string-ref\
+    \ file_name 0) #\\1)\n             (char", "  (define file_parts (string-split\
+    \ file_name \"\\\\.\"))\n  (and (= 1 (length file_parts))\n       (and (<= 1 (length\
+    \ (car file_parts)))\n            (and (<= 3 (length (car file_parts)))\n    \
+    \             (regexp-match? \"^[a-zA-Z]\" (car file_parts))))\n       (member\
+    \ (cadr file_parts) '(\"txt\" \"exe\" \"dll\"))))\n", "  (letrec ([symbol-or-digit?\
+    \ (lambda (c) (or (char-alpha? c) (char-numeric? c)))]\n           [first-char-valid?\
+    \ (lambda (file_name)\n                                (let ([c (string-ref file_name\
+    \ 0)])\n                                  (or (char-alphabetic? c)\n         \
+    \                             (char-numeric? c))))]\n           [valid-digits?\
+    \ (lambda (digits)\n                            (and (not (string-empty? digits))\n\
+    \                                 (let ([last-digit (string-ref digits (sub1 (string-length\
+    \ digits)))])\n                                   (and (char-numeric? last-digit)\n\
+    \                                        (valid-digits? (substring digits 0 (sub1\
+    \ (string-length digits))))))))]\n           [valid-before-dot? (lambda (file_name)\n\
+    \                                (letrec ([valid-before-dot?-acc (lambda (file_name)\n\
+    \                                                                 (let ([c (string-ref\
+    \ file_name 0)])\n                                                           \
+    \        (and (symbol-or-digit? c)\n                                         \
+    \                               (or (string-empty? (substring file_name 1))\n\
+    \                                                                            (valid-before-dot?-acc\
+    \ (substring file_name 1))))))])\n                                  (valid-before-dot?-acc\
+    \ file_name)))])\n    (let ([first-dot-pos (string-index file_name \".\")])\n\
+    \      (and (not (negative? first-dot-pos))\n           (and (equal? (string-length\
+    \ file_name) (add1 first-dot-pos))\n                (and (equal? (string-length\
+    \ (substring file_name 0 first-dot-pos)) 4)\n                     (and (valid-digits?\
+    \ (substring file_name 0 first-dot-pos))\n                          (and (first-char-valid?\
+    \ (substring file_name 1))\n                               (and (valid-before-dot?\
+    \ (substring file_name 1))\n                                    (or (equal? (substring\
+    \ file_name (add1 first-dot-pos)) \"txt\")\n                                 \
+    \       (or (equal? (substring file_name (add", "  (cond\n    [(or (= (substring-count\
+    \ file_name #rx\"[0-9]\") 4)\n         (not (string-contains file_name \".\"))\n\
+    \         (string-empty? (substring file_name 0 (string-index file_name \".\"\
+    )))\n         (not (or (string=? \"txt\" (substring file_name (+ (string-index\
+    \ file_name \".\") 1) (+ (string-index file_name \".\") 1) (+ (string-index file_name\
+    \ \".\") 1) (+ (string-index file_name \".\") 1)))\n                 (string=?\
+    \ \"exe\" (substring file_name (+ (string-index file_name \".\") 1) (+ (string-index\
+    \ file_name \".\") 1) (+ (string-index file_name \".\") 1) (+ (string-index file_name\
+    \ \".\") 1)))\n                 (string=? \"dll\" (substring file_name (+ (string-index\
+    \ file_name \".\") 1) (+ (string-index file_name \".\") 1) (+ (string-index file_name\
+    \ \".\") 1) (+ (string-index file_name \".\") 1)))))]\n     \"No\")\n    [else\
+    \ \"Yes\"]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -5,6 +5,655 @@ prompt: "#!/bin/bash\n# Return sorted unique elements in a list\n# >>> $(unique 
   ']\n#\n# $1 is a space-separated list\nunique() {\n"
 tests: "}\n\ncandidate() {\n    unique \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
   \ \"5 3 5 2 3 3 9 0 123\") = \"0 2 3 5 9 123\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local set result sorted\n  set -- $1 $2\n  IFS=$'\\t' sorted=( $(\
+    \ sort <<< \"${@:-}\" ) ); set -- \"${sorted[@]}\"\n  result=( $( printf '%s\\\
+    n' \"${@}\" | sort -u -n -z ) )\n  IFS=$' \\t\\n' set -- \"$result[@]\"\n  unset\
+    \ IFS\n  printf '%s\\n' \"${@:-}\"", "    local seen=\n    local unique_list=\"\
+    \"\n    IFS=$'\\n' read -r -a array <<< \"$1\"\n    for element in \"${array[@]}\"\
+    ; do\n        [[ $element != \"${element% *}\" ]] || continue\n        if [[ ${seen[$element]}\
+    \ ]]; then\n            unique_list+=\"$element \"\n        else\n           \
+    \ seen[$element]=1\n        fi\n    done\n    unique_list+=\"$(IFS=$'\\n' sort\
+    \ -u \"${array[@]}\")\"\n    echo \"$unique_list\"", "    local dup i len\n  \
+    \  dup=false\n    declare -i n\n    for (( n=0; n<${#1[@]}; n++ )); do\n     \
+    \   case \"${1}[$n]\" in\n            \"\")\n                # handle empty list\n\
+    \                ;;\n            *) continue;;\n        esac\n        if [[ !\
+    \ $dup && \"$1\" != *\"\\\"$1[$n]\\\"\"* ]]; then\n            dup=true\n    \
+    \    else\n            i=$((n+1))\n            if [ \"$i\" -ge \"$len\" ]; then\n\
+    \                len=$i\n            fi\n        fi\n    done\n    echo \"${@:$n:$len}\"",
+  "\tlocal sortedList=$(sort \"$1\")\n\tlocal uniqueList\n\tuniqueList=$(printf \"\
+    %s\\n\" \"${sortedList}\" | sort -u | grep -v ^$)\n\techo \"${uniqueList}\"",
+  "    local seen=\n    local IFS=$'\\t'\n    local IFS='\n'\n    sort -u <<< \"$1\"",
+  "\tlocal sorted=\"$(echo \"$1\" | tr ' ' \"\\n\" | sort -u | tr '\\n' ' ')\";\n\t\
+    echo -n \"$sorted\";", "\tlocal L1 L2 L3 L4\n\tif [ -z \"$1\" ]; then return 0;\
+    \ fi\n\tL1=(\"${!1}\")\n\tL3=()\n\tL2=\"\"\n\tL4=0\n\twhile [ \"${L1[$L4]}\" !=\
+    \ \"\" ]; do\n\t\tif [ \"$(echo \"${L1[$L4]}\" | sort | uniq -u)\" = \"${L1[$L4]}\"\
+    \ ]; then\n\t\t\tL3+=(\"${L1[$L4]}\")\n\t\telse\n\t\t\tL2=\"${L2} ${L1[$L4]}\"\
+    \n\t\tfi\n\t\t((L4++))\n\tdone\n\tL1=\"${L3[@]}\"\n\tL3=\"${L3[@]}\"\n\techo \"\
+    ${L3[@]}\"", "    local IFS=\"[ -~]\" a=\"$1\"\n\n    local IFS=\"\n\"\n    sort\
+    \ -n -u \"$a\" |\n    sed -e 's/^[ \"${IFS}]*//g' -e 's/[ \"${IFS}]*$//g'", " \
+    \   local IFS=\"$1\"; shift\n    echo \"$@\" | tr \" \" \"\\n\" | sort -u | tr\
+    \ \"\\n\" \" \" | sed \"s/ \\\"$IFS\\\" $//\"", "    local sortedList=\"${1}\"\
+    \n    local outputList\n    local elements\n    outputList=()\n    IFS=$'\\n'\
+    \ read -d '' -r -a elements <<<\"${sortedList}\"\n    for element in \"${elements[@]}\"\
+    ; do\n        test -z \"$outputList\" || echo \"$outputList\" | \\\n         \
+    \   sort -u | sort -n | LC_ALL=C sort -n >/dev/null || \\\n            outputList+=(\"\
+    $element\")\n    done\n    echo \"${outputList[@]}\"", "  local elements=($(sort\
+    \ -u $(printf '%s\\n' \"$1\")))\n  echo $elements", "    # Assumed vars: ${var:-word}\n\
+    \    local list_name=\"$1\"\n    local tmp=\"\"\n    # Sort by ascii value\n \
+    \   local sorted_list=\"$(printf %s \"$list_name\" | LC_ALL=C sort -nu)\"\n  \
+    \  # Remove adjacent duplicates\n    local unique_list=\"\"\n    for element in\
+    \ $sorted_list; do\n        [[ $unique_list = \"\" ]] || [[ $element != $unique_list\
+    \ ]] || unique_list=\"$unique_list$element\"\n    done\n    # Remove whitespace\
+    \ at start and end of line\n    unique_list=\"$(echo -e \"${unique_list}\" | sed\
+    \ 's/^[[:space:]]*//;s/[[:space:]]*$//')\"\n    echo \"$unique_list\"", "    #\
+    \ $1 is ignored\n    local i\n    local list=()\n    local sortedlist=()\n   \
+    \ local sortedlist_size=0\n    for ((i = 0; i < ${#1}; i++)); do\n        local\
+    \ element=${1:i:1}\n        local element_index=$i\n        local element_found=false\n\
+    \        for ((j = 0; j < ${#list}; j++)); do\n            local element=${list[${j}]:${j:1}:1}\n\
+    \            if [[ \"$element\" == \"$element\" ]]; then\n                element_found=true\n\
+    \                break\n            fi\n        done\n        if (( ! element_found\
+    \ )); then\n            list[$element_index]=${element}\n            sortedlist_size=$(($sortedlist_size\
+    \ + 1))\n        else\n            sortedlist_size=$(($sortedlist_size - 1))\n\
+    \        fi\n    done\n    for ((i = 0; i < ${sortedlist_size}; i++)); do\n  \
+    \      sortedlist[i]=${sortedlist[i]:1}\n    done\n    sortedlist=$(printf '%s\\\
+    n' \"${sortedlist[@]}\" | sort -u)\n    echo \"${sortedlist}\"", "    local array=($(echo\
+    \ \"${@}\" | tr \" \" \"\\n\" | sort | uniq))\n    echo \"${array[@]}\"", "  declare\
+    \ -i i\n  declare -a a=() r=\"\"\n  for (( i=0; i<${#1}; i++ )); do\n    [[ -z\
+    \ \"${a[$i]}\" ]] && a[$i]=\"${1:$i:1}\"\n  done\n  echo \"${a[*]}\"", "\tset\
+    \ -- \"$1\" \"$@\"\n\tdeclare -A seen\n\twhile IFS= read -r line; do\n\t\tseen[$line]=1\n\
+    \tdone < <(printf \"%s\\n\" \"${!@}\" | sort -u)\n\tprintf \"%s\\n\" \"${!seen[@]}\"",
+  "    local -n arr=$1\n    local i seen ret\n    IFS=' ' read -r -a arr <<< \"$1\"\
+    \n    seen=()\n    for i in \"${arr[@]}\"; do\n        [[ \"$i\" == \"$i\"* ]]\
+    \ && continue\n        if [[ $i not in \"${seen[@]}\" ]]; then\n            ret=\"\
+    $i\"\n            seen+=(\"$i\")\n        fi\n    done\n    IFS=$' \\t\\n' printf\
+    \ '%s\\n' \"$ret\"", "    local -a list=( \"${@}\" )\n    local result=()\n  \
+    \  local -n i=0\n\n    until [[ ${#list[i]} -eq 0 ]]; do\n        if [[ ${list[i]}\
+    \ != ${list[i+1]} ]]; then\n            result=(\"${result[@]}\" ${list[i]})\n\
+    \        fi\n        ((i++))\n    done\n    echo \"${result[@]}\"", "    echo\
+    \ \"$1\" | sort -u | tr '\\n' ' '", "    local IFS=$'\\n'\n    sort -u <<<\"$1\"",
+  "  # Split string\n  local IFS=$1\n  # Sort and remove duplicates\n  echo \"${@:2}\"\
+    \ | sort -u", "\tlocal list=\"$1\"\n\tlocal sorted=\n\tfor e in $list; do\n\t\t\
+    [ \"$e\" = \"$list\" ] && return\n\t\tif ! [ \"$e\" = \"$sorted\" ];then\n\t\t\
+    \tsorted=\"$sorted,$e\"\n\t\tfi\n\tdone\n\tprintf '%s\\n' \"$sorted\"", "  local\
+    \ input=\"$1\"\n  local IFS=$'\\n';\n  local sorted_list=\"\"\n  local unique_list=\"\
+    \"\n  local i=0\n  for i in ${input}; do\n    [[ \"${sorted_list:-}\" ]] && sorted_list+=\"\
+    \ $i\"\n    [[ \"${unique_list:-}\" ]] && [[ \"$i\" == \"$unique_list\" ]] &&\
+    \ unique_list+=\" $i\"\n  done\n  echo \"${sorted_list}\"", "  # get sorted unique\
+    \ elements\n  # use bash built-in sort to sort strings\n  # then strip quotes\n\
+    \  L=($(sort <<< \"$(printf \"%s\" \"$1\")\"| uniq -u | tr '\"' '\\n'))\n  # loop\
+    \ through the sorted unique elements\n  for i in ${L[@]}; do\n    echo \"$i\"\n\
+    \  done", "  local seen=()\n  local i result=()\n  for i in  $( echo $1 | sed\
+    \ 's/ /, /g' ); do\n    seen[$i]=seen[$i] || i\n  done\n  for i in  ${!seen[@]};\
+    \ do\n    result+=( ${seen[$i]} )\n  done\n  echo \"${result[@]}\"", "    local\
+    \ elements=\"$1\"\n    local delimiter=\"$2\"\n\n    local item\n    local previous\n\
+    \n    local unique=\"\"\n    local count=0\n    local last=''\n    local first=''\n\
+    \n    for element in \"${elements}\" ; do\n        if [ \"$last\" != \"$element\"\
+    \ ] || [ \"$first\" != \"$element\" ]; then\n            if [ \"$first\" != \"\
+    \" ]; then\n                unique=\"$unique $first\"\n                first=\n\
+    \            fi\n\n            if [ \"$last\" != \"\" ]; then\n              \
+    \  unique=\"$unique $last\"\n            fi\n\n            unique=\"$unique $element\"\
+    \n            last=\n        fi\n\n        count=$((count+1))\n    done\n\n  \
+    \  # Append the remaining elements\n    unique=\"$unique $last\"\n\n    # Return\
+    \ space-separated values\n    echo \"$unique\"", "  # $1 is assumed to be space-separated\
+    \ (but can be empty list)\n  # Assume that first item is unique\n  # Assume that\
+    \ rest of list are already unique\n  # Assume that all items in list are strings\n\
+    \  # Don't handle null or empty lists\n  [[ \"$1\" ]] || return 1\n  local first=$1\n\
+    \  shift || return 1\n  local result=()\n  for element in \"$@\"; do\n    [[ -n\
+    \ $result ]] || result=()\n    [[ \"$element\" == \"$first\" ]] && continue\n\
+    \    [[ -n \"${result[@]}\" ]] || result=()\n    [[ \"$element\" == \"${result[*]}\"\
+    \ ]] || result+=(\"$element\")\n  done\n  [[ -n $result ]] || return 1\n  printf\
+    \ '%s\\n' \"${result[@]}\"", "    local IFS=\" \"\n    sort -u <<<\"$1\"", " \
+    \   local tmp_file=\"$( mktemp -t ${TMPDIR:-/tmp}/sort.XXXX )\"\n    trap 'rm\
+    \ -f \"$tmp_file\"' EXIT\n    local sorted=\"$( sort -k 2,2 -k 3,3 -k 1,1 <<<\"\
+    $1\" )\"\n    local unique=\"$( sort -u <<<\"$sorted\" )\"\n    > \"$tmp_file\"\
+    \n    printf '%s\\n' \"$unique\" > \"$1\"", "    local IFS=$1\n    local out=()\n\
+    \    local last\n    local i\n\n    for ((i=1; i<=$#; i++))\n    do\n        if\
+    \ [ \"$last\" != \"$1\" ]\n        then\n            if [ \"$last\" != \"\" ]\n\
+    \            then\n                out+=(\"$last\")\n            fi\n        \
+    \    last=\"$1\"\n        fi\n\n        if [ \"$i\" != \"$#\" ]\n        then\n\
+    \            out+=(\"$1\")\n        fi\n    done\n\n    echo \"${out[*]}\"", '  sort
+    -u <<< "$1"', "    local i a b d i j l u\n    local IFS=$1\n    local sorted_list=\n\
+    \    sorted_list=$(echo ${@} | tr \" \" \"\\n\" | sort -u)\n    for ((i = 0; i\
+    \ < ${#sorted_list}; i++)); do\n        a=$(echo ${sorted_list[i]})\n        b=\n\
+    \        d=\n        j=1\n        while ((j < ${#a})); do\n            if ((${#d}\
+    \ == 0)); then\n                b=${a:$j:1}\n            else\n              \
+    \  b=${d}\n            fi\n            if [[ \"$b\" == \"$a\" ]]; then\n     \
+    \           d=${a:$j}\n            else\n                d=\"${d} ${a:$j}\"\n\
+    \            fi\n            j=$((j + 1))\n        done\n        l=${d}\n    \
+    \    u=$(echo $l | tr \" \" \"\\n\")\n    done\n    echo $u", "  [ -z \"$1\" ]\
+    \ && return 1\n  local IFS=$'\\n';\n  sort -u <<<\"$1\" | tr '\\n' ' ' |  sed\
+    \ 's/ $//'", "    awk '!x[$0]++' $@ | sort -u | tr -d ' '", "    local _ret=0\n\
+    \    local i itr tr _i _len\n    declare -i count=0\n    local sorted=0\n\n  \
+    \  # Loop through each string in $1, and build up a list of\n    # unique strings.\
+    \  Avoid duplicates by adding the contents\n    # to the end of the sorted list.\
+    \  Sort the list when done.\n    for i; do\n        [[ $i =~ $delimiter ]] ||\
+    \ continue\n        if [ \"$sorted\" -eq 0 ]; then\n            sorted=1\n   \
+    \         tr=$i\n        else\n            sorted=0\n            tr=\"$tr $i\"\
+    \n        fi\n    done <<< \"$1\"\n\n    # Split $tr into words, and put each\
+    \ word into the list of\n    # unique strings.  This is done in a second loop\
+    \ because the\n    # original string might have leading or trailing whitespace,\n\
+    \    # and we only want unique words.\n    for itr in $tr; do\n        [[ $itr\
+    \ =~ $delimiter ]] || continue\n        _i=$(( $_i + 1 ))\n        if [ \"$_i\"\
+    \ -eq \"$count\" ]; then\n            _ret=$_ret\"$i\"\n            count=$((\
+    \ $count + 1 ))\n        else\n            _ret=\"$_ret $i\"\n        fi\n   \
+    \ done\n    echo\n    echo \"$1 contains $count unique elements${delimiter}$(_ret)$delimiter\"",
+  "  local -n output=\"$1\"\n  local -a lines\n  local i last\n  output=()\n\n  while\
+    \ IFS= read -r line; do\n    [[ -n \"$line\" ]] || continue\n\n    lines+=(\"\
+    $line\")\n\n    # Skip any empty lines\n    # TODO skip empty lines in other cases\
+    \ (comments, blank lines)\n    [[ -n \"${line// }\" ]] || continue\n    # skip\
+    \ empty lines that may be left by previous versions of this\n    # script which\
+    \ left the line empty\n    [[ -z \"${line// }\" ]] || continue\n\n    last=\"\
+    $line\"\n  done\n\n  printf '%s\\n' \"${lines[@]}\" | sort | uniq -u", '    sort
+    --unique "$@"', '    sort -u $1', "    local IFS='[\" \\t\\n\\r]+' -a ary=( $1\
+    \ ) $1 &&\n        IFS=$IFS; echo \"$*\"", "  [[ $# -ne 1 ]] && echo \"Error:\
+    \ too many arguments passed to 'unique'\" && exit 1\n  # If there's only one argument\
+    \ - return an empty list\n  if [[ \"$1\" == *\" \"* ]]; then\n    echo \"[]\"\n\
+    \    return 0\n  fi\n  # Split input string into words and sort them\n  # If no\
+    \ whitespace in input string - return unsorted\n  local -a list=(\"$1\")\n  IFS=\"\
+    \ \" read -r -a words <<<\"$list\"\n  local sorted=(\"${words[@]}\")\n  IFS=\"\
+    ,\"\n  local unique=()\n  for i in \"${sorted[@]}\"; do\n    local exists=false\n\
+    \    for j in \"${unique[@]}\"; do\n      [[ \"$i\" == \"$j\" ]] && exists=true\n\
+    \    done\n    [[ -n \"$exists\" ]] || unique+=(\"$i\")\n  done\n  printf '%s\\\
+    n' \"${unique[@]}\"", "    local sorted_list=$(sort <<<\"$1\" | uniq)\n    echo\
+    \ \"$sorted_list\"", "  local i res=()\n  for i; do\n    [[ $i == $(cat -n <<<\"\
+    $1\") ]] || res+=(\"$i\")\n  done\n  echo \"${res[@]}\"", "  cat <<\"EOF\" |\n\
+    $@\nEOF", "    set -- $1 $2\n    local i duplicate result\n    i=2\n    while\
+    \ [ $i -le $# ]; do\n        if [[ \"$result[$i]\" == \"$result[$(($i + 1))]\"\
+    \ ]]; then\n            (( duplicate++ ))\n        else\n            result[$i]=$result[$(($i\
+    \ + 1))]\n        fi\n        i=$(($i + 2))\n    done\n    # Delete the last duplicate\n\
+    \    i=$(($i - 1))\n    # Replace the rest of the array with it\n    for j in\
+    \ $(seq 0 $duplicate); do\n        result[$i]=\n    done\n    # Remove the last\
+    \ element from result\n    result[$i]=${result[$i]#*=} # Strip trailing null\n\
+    \    # Return\n    echo ${result[@]}", '  sort -u "$1"', "    # Sort the arguments\
+    \ first\n    local IFS=$'\\n'\n    sorted = $(echo  $1 | tr ' ' '\\n' | sort -u)\n\
+    \    echo \"${sorted}\"", "  local IFS= read -r -a array <<<\"$1\"\n  local i\
+    \ result\n  result=()\n  for ((i=0; i < ${#array[@]}; i++)); do\n     result+=(\"\
+    ${array[i]}\")\n  done\n  printf '%s\\n' \"${result[@]}\"", "  local i j unique\
+    \ output\n\n  unique=()\n  IFS=$'\\n' read -r -d '' -a array <<<\"$1\"\n  for\
+    \ (( i = 0; i < ${#array[@]}; i++ )); do\n    unique+=( ${array[i]} )\n  done\n\
+    \  output=$(IFS=' '; echo \"${unique[@]}\" | sort -u)\n  echo -n \"[\"\n  for\
+    \ i in ${output}; do\n    echo -n \"\\\"\"$i\"\\\",\"\n  done\n  echo -n \"]\"",
+  "    set -- \"$@\" # quote all elements\n    declare -A seen=()\n    declare -A\
+    \ output\n    local elem\n    for elem; do\n        unset \"seen[$elem]\"\n  \
+    \  done < <(sort -u <<<\"${*}\")\n    while IFS= read -r elem; do\n        seen[\"\
+    $elem\"]=\"1\"\n    done < <(sort <<<\"${!seen[@]}\")\n    for elem; do\n    \
+    \    output [\"$elem\"]\n    done < <(printf '%s\\n' \"${!output[@]}\")", "  local\
+    \ elements found i\n  IFS=$'\\n' read -r -a elements < <(sort <<<\"${1}\")\n \
+    \ found=\n  for ((i=${#elements[*]}; i>1; i--)); do\n    (( ${elements[i]}+0 ))\
+    \ && continue\n    found+=( \"${elements[i]}\" )\n    break\n  done\n  printf\
+    \ '%s\\n' \"${found[@]}\"", "  local list=\"$1\"\n  local d\n  local i\n  IFS=\"\
+    \ \" read -r -d '' -a d <<< \"$list\"\n  for i in \"${d[@]}\"; do\n    if ! [[\
+    \ $i =~ ^\"$i$\" ]]; then\n      printf '%s\\n' \"${d[@]}\" | grep -q -e \"$i\"\
+    \n      if [ $? = 0 ]; then\n        echo \"$i\"\n      fi\n    fi\n  done", " \
+    \   local IFS=\"$1\"\n    sort | uniq -u", "    local str=$( echo $1 | sed -e\
+    \ \"s/[ \\t]*//g\" -e \"s/^[ \\t]*//g\" -e \"s/[ \\t]*$//g\" )\n    echo $str\
+    \ | sort | uniq", "    local seen=() # declare hash\n    local inStr=\"${1}\"\n\
+    \    # split into words \n    IFS=\" \" read -a array <<< \"${inStr}\"\n    #\
+    \ loop over words and remove duplicates\n    for elem in \"${array[@]}\"; do\n\
+    \        if ! [[ ${seen[$elem]} ]]; then\n            seen[$elem]=true\n     \
+    \       echo \"${elem}\"\n        fi\n    done", "  sort -u | sed 's/^[ \\t]*//'\
+    \ | grep -Fvx \"$1\" >/dev/null", "  local tmpfile filelist sorted\n  tmpfile=$(tempfile)\n\
+    \  filelist=\"$1\"\n  sorted=$(echo $filelist | tr ' ' '\\n' | sort | uniq)\n\
+    \  while read -r line\n  do\n    if [[ ! \"${sorted}\" =~ $line ]]\n    then\n\
+    \      echo $line >> $tmpfile\n    fi\n  done < $tmpfile\n  rm -f $tmpfile", " \
+    \ local i\n  local ret\n  local line\n  while IFS= read -r line; do\n    [[ -z\
+    \ $ret ]] && ret=$line\n    [[ -n $ret ]] && return\n    echo $line >> $2\n  done\
+    \ < $1\n  printf \"%s\\n\" \"${ret}\" > $1", "  # Remove double spaces\n  x=\"\
+    ${1// /}\"\n  # Remove blank lines\n  x=\"${x// $'\\n'/ }\"\n  # Remove lines\
+    \ with only whitespace\n  x=\"${x// $'\\t'/ }\"\n  # Remove lines that are all\
+    \ whitespace\n  x=\"${x/ $'\\t'$'\\r'/ }\"\n  echo -en \"[$x]\\n\"", "    local\
+    \ str=\"$1\" awk '{\n        for(i=1;i<=NF;i++) if(!seen[$i]++) {next}\n     \
+    \   print\n    }'", "  local i arr\n  declare -a array=()\n  IFS=\" \" read -r\
+    \ -a arr <<< \"$1\"\n  for ((i = 0; i < ${#arr[@]}; i++)); do\n    [[ ${arr[i]}\
+    \ == ${arr[i+1]} ]] || array+=(\"${arr[i]}\")\n  done\n  echo \"${array[@]}\"",
+  "    set -- $1 || return 1\n    local sorted unique\n    sorted=()\n    while [\
+    \ -n \"$1\" ]; do\n        found=false\n        local elem\n        for elem in\
+    \ \"${sorted[@]}\"; do\n            case \"$elem\" in\n                $1) found=true;\
+    \ break ;;\n            esac\n        done\n        if $found; then\n        \
+    \    unique=( \"${unique[@]}\" \"$1\" )\n        else\n            sorted=( \"\
+    ${sorted[@]}\" \"$1\" )\n        fi\n        shift\n    done\n    echo \"${unique[@]}\"\
+    \ | sort -u | tr -d \"'\"", "  awk '!x[$0]++' \"$1\" | sed -e 's/ /\\\\\\\\ /g'",
+  "\tlocal IFS=$'\\n' arr=($(printf '%s\\0' \"$1\")); local n=\"${#arr[*]}\"\n\tlocal\
+    \ i seen new=\n\tfor ((i=0; i<n; i++)); do\n\t\tseen=\"${seen:+$seen}$arr[i]\"\
+    \n\tdone\n\tunset IFS\n\techo ${new%$'\\000'}", "    local IFS=\"\\v\" arr [arr=\\\
+    1]\n    read -ra arr < <(sort <<<\"${arr[*]}\" | uniq)\n    echo \"${arr[@]}\"",
+  "    local tmpfile tmparr\n    tmpfile=${1:-/dev/null}\n    tmparr=(${2:-$(cat ${tmpfile})})\n\
+    \    # shellcheck disable=SC2086\n    sort -u -- \"${tmparr[@]}\"", "  sort -u\
+    \ \"$@\" | sed -e 's/ /\",\"/g'", "  local sorted_list=( $(sort -u <<< $1) )\n\
+    \  printf '%s\\n' \"${sorted_list[@]}\"", "    sort -u $1 | sed -e 's/^[ \\t]*//'",
+  "  local array output\n  array=( $1 )\n  output=$(IFS=\" \"; echo \"${array[@]}\"\
+    \ | sort -u)\n  IFS=$'\\n'\n  echo \"$output\"", "    # First sort the input list\
+    \ so we don't have to go through it multiple times\n    sort -u $@ | sort -u |\
+    \ sort", '   local IFS=$1; shift; echo "${@}" | sort -u', "    local IFS=$'\\\
+    n' arr=( $(echo \"$1\" | tr ' ' '\\n' | sort -u ) )\n    echo \"${arr[@]}\"",
+  "\tlocal IFS=$1; shift\n\tlocal x dup i\n\n\tfor x in $*; do\n\t\t[ \"${dup }\"\
+    \ != \"${x}\" ] \\\n\t\t\t&& { dup=\"${x}\"; continue; }\n\t\t(( i++ ))\n\tdone\n\
+    \n\techo \"$*\"", "  local set output el\n  IFS=$'\\n' output=($(sort <<<\"${1}\"\
+    \ | uniq -u))\n  for el in \"${output[@]}\"; do\n    printf '%s\\n' \"${el}\"\n\
+    \  done", "    local items=\"$1\"\n    local delims=\"1 2 3 4 5 6 7 8 9\"\n  \
+    \  local tmp\n    local unique\n    local -a ret=()\n    IFS=\" \" read -r -a\
+    \ tmp <<< \"$items\"\n    for i in \"${!tmp[@]}\"; do\n        unique=false\n\
+    \        for j in \"${delims[@]}\"; do\n            [[ $tmp[$i] == $'$j' ]] &&\
+    \ unique=true || unique=false\n        done\n        if [ \"$unique\" = true ];\
+    \ then\n            ret+=(\"${tmp[$i]}\")\n        fi\n    done\n    echo \"${ret[@]}\"",
+  "    local seen=() # $seen[k] is false unless element k is seen for the first time\n\
+    \    local IFS=$1 output\n    for k in \"${@:2}\"; do # Iterate through the input\
+    \ list\n        if test -z \"${seen[$k]}\"; then\n            seen[$k]=\"true\"\
+    \n            output+=\"${k}\"\n        fi\n    done\n    echo \"${output}\" |\
+    \ sort -u", "    local i uniques=\"\"\n    local array\n    array=( $1 )\n   \
+    \ for (( i=0; i<${#array[@]}; i++ )); do\n        if [[ ${uniques} == *\" \"${array[i]}\"\
+    \ ]] ; then\n            uniques=${uniques%\" \"${array[i]}}\"\n        else\n\
+    \            uniques=\"${uniques}\" \"${array[i]}\"\n        fi\n    done\n  \
+    \  echo \"${uniques}\"", "    local list=\"$1\"\n    local -a seen\n    local\
+    \ item\n    local -a output\n    for item in ${list}; do\n        if [[ ${seen[$item]}\
+    \ ]]; then\n            continue\n        else\n            seen[$item]=1\n  \
+    \          output+=(\"$item\")\n        fi\n    done\n    echo \"${output[@]}\"",
+  "    local _out _beg\n    declare -A seen\n    _out=\"$1\"\n    _beg=1\n    while\
+    \ IFS= read -r line; do\n        case \"$line\" in\n            *\"${_out}\"*)\
+    \ ;;\n            *) line=\"$line\"$'\\n'; break;;\n        esac\n        _out+=\"\
+    $line\"\n    done < <(sort -u <<< \"$1\")\n    echo \"${_out%$'\\n'*}\"", "  sort\
+    \ -u | sed 's/^/\"/;s/ $//'", "    local d\n    d=\"$1\"\n    echo \"${d}\" |\
+    \ tr ' ' '\\n' | sort -u | tr '\\n' ' ' | tr '\\t' ' '", '    local IFS=$1; shift;
+    echo "$*"', "  local sorted_array=$(echo -e \"$1\" | tr ' ' '\\n' | sort -n)\n\
+    \  echo \"${sorted_array[@]}\"", "    local -n a=$1\n    local d\n    local i\n\
+    \    local j\n    # Return unique elements in a list\n    # Assumes $a is sorted\n\
+    \    # >>> $(unique \"5 3 5 2 3 3 9 0 123\")\n    # ['\"0\"', '\"2\"', '\"3\"\
+    ', '\"5\"', '\"9\"', '\"123\"']\n    d=$(awk 'BEGIN{n=0}\n            { if (n==0)\
+    \ {d=$1} \n              else if ($1 == d) { print;}\n              else { print\
+    \ d;}\n              n++; d=\"\" }\n            END { print d }')\n    # Strip\
+    \ doublequotes\n    d=${d//\\\"/}\n    # Strip newlines and trailing spaces\n\
+    \    d=${d//$'\\n'/}\n    d=${d%$'\\n'}\n    d=${d// /}\n    d=${d/ /}\n    IFS=$'\\\
+    n' d", "    echo \"$1\" | tr ' ' '\\n' | sort -u -k1,1 | tr '\\n' ' '", "  local\
+    \ tmp output\n  output=$(comm -23 <(printf \"%s\\0\" \"$1\") <(sort -n -r))\n\
+    \  while read -r tmp; do\n    echo $tmp\n  done <<< \"$output\"", "    local nl\
+    \ out\n    nl=$IFS\n    IFS=$'\\n'\n    out=( $( sort <<<\"$(printf $1 )\" | uniq\
+    \ -u ) )\n    IFS=$nl\n    echo \"${out[@]}\"", "    # Remove unwanted chars\n\
+    \    local gsub\n    IFS=\\\" read -a arr <<< \"$1\"\n    # Remove duplicates\n\
+    \    for element in \"${arr[@]}\"; do\n        gsub=$(echo \"$element\" | sed\
+    \ 's/^\\([\\\"\\']\\)\\(.*\\)\\(\\[\\\"\\']\\).*$/\\1\\3/')\n        if [[ $element\
+    \ != $gsub ]]; then\n            arr+=(\"$gsub\")\n        fi\n    done\n    #\
+    \ Return sorted unique elements in a list\n    printf '%s\\n' \"${arr[@]}\"",
+  "  local i items=($(echo \"$1\" | tr '\\n' ' ')); read -r -d '' -a arr\n\n  for\
+    \ i in \"${!arr[@]}\"; do\n    [[ \"$i\" == \"$i\" ]] || continue\n\n    item=\"\
+    $arr[$i]\"\n    [[ -z \"$item\" ]] && continue\n\n    found=0\n    for j in \"\
+    ${!arr[@]}\"; do\n      [[ \"$j\" == \"$i\" ]] && continue\n\n      [[ \"$item\"\
+    \ == \"$arr[$j]\" ]] && { arr[$i]=\"`echo $item | cut -d ' ' -f 2`\"; found=1;\
+    \ break; }\n    done\n\n    (( found )) && continue\n\n    arr[$i]=\"$item\"\n\
+    \  done\n\n  echo \"${arr[@]}\"", '  sort -u | grep -v "$1"', "  sort -u \"${1}\"\
+    \ | grep -v '^[0-9]*$'", "  local seen=\n  local output\n  output=$(echo \"$1\"\
+    \ | tr \" \" \"\\n\" | sort | uniq -u)\n  seen=$(echo \"$output\" | tr \" \" \"\
+    \\n\" | sort | uniq -u)\n  echo $seen", "\tlocal IFS=$1\n\tset $*\n\tlocal i result\n\
+    \tresult=$(for ((i=1;i<=NF;i++)); do test -n \"$(echo \"${!i}\")\" || result+=(\"\
+    ${!i}\")\" \"; done)\n\techo \"${result%\\\"}\"", "\tlocal gid\n\tgid=$1\n\tgid=${gid//\
+    \ /$1}\n\tgid=${gid// /-}\n\tgid=${gid// /+}\n\tgid=${gid// /%2B}\n\tgid=${gid//\
+    \ /%7D}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /%7D}\n\
+    \tgid=${gid// /-}\n\tgid=${gid// /+}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid//\
+    \ /%2B}\n\tgid=${gid// /%7D}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid//\
+    \ /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\
+    \tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /%7D}\n\t\
+    gid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /%7D}\n\tgid=${gid//\
+    \ /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\
+    \tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid//\
+    \ /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\
+    \tgid=${gid// /}\n\tgid=${gid// /%7D}\n\tgid=${gid// /}\n\tgid=${gid// /}\n\t\
+    gid=${gid// /}\n", "    declare -a arr=( $1 )\n    declare -i i found=0 max=0\n\
+    \    max=${#arr[@]}\n    for ((i=0; i<max; i++)) ; do\n        found=0\n     \
+    \   for ((j=0; j<i; j++)) ; do\n            [ \"$arr[$j]\" == \"${arr[i]}\" ]\
+    \ && { found=1 ; break; }\n        done\n        [ \"$found\" -eq 0 ] && arr[i]=\"\
+    $i\"\n    done\n    printf '%s\\n' \"${arr[@]}\"", "    local IFS=$1\n    local\
+    \ sorted=$(sort -u <<<\"$1\")\n    echo $sorted", "    local IFS=$'\\n' arr=(\
+    \ $1 )\n    local i ret=()\n    for ((i=0; i < ${#arr[@]}; i++)); do\n       \
+    \ [[ $ret[$i] == $arr[$i] ]] && continue\n        ret += ( \"$arr[$i]\" )\n  \
+    \  done\n    echo \"${ret[@]}\"", "    local items=$1\n    local uniques=()\n\
+    \    for item in ${items[*]}; do\n        if ! [[ -n \"${uniques[@]}\" ]] &&\n\
+    \            [[ \"${uniques[@]}\" =~ ^'${item}$'( *,?)?$ ]]; then\n          \
+    \  uniques+=(\"${item}\")\n        fi\n    done\n    echo ${uniques[*]}", "  echo\
+    \ $(perl -ne 'chomp; $c{$_}++ if !$seen{$_} and !defined($c{$_}); $seen{$_}++'\
+    \ <<< \"$1\" | sort -u)", "    local i\n    local o\n    local len\n\n    local\
+    \ item\n    local list\n    local ret\n\n    IFS=$' \\t\\n' list=( $1 )\n\n  \
+    \  for (( i=1; i<${#list[*]}; i++ )); do\n        item=${list[$i]}\n        if\
+    \ [ \"$item\" == \"$item\" ]; then\n            continue\n        else\n     \
+    \       o=${item}\n            item=\n            for (( j=1; j<i; j++ )); do\n\
+    \                o=${item}${list[j]}\n                ret+=( $o )\n          \
+    \  done\n            list[$i]=\"$o\"\n        fi\n    done\n\n    len=${#list[@]}\n\
+    \    for (( i=0; i<$len; i++ )); do\n        item=${list[$i]}\n        if [ -z\
+    \ \"$item\" ]; then\n            list=( ${list[@]:0:i}${list[@]:(i+1)} )\n   \
+    \     fi\n    done\n\n    for (( i=0; i<${#list[@]}; i++ )); do\n        ret+=(\
+    \ ${list[$i]} )\n    done\n    echo \"${ret[@]}\"", '    sort -u "$1"', "    local\
+    \ IFS=$'\\n' arr=($(echo -n \"$1\" | sed 's/[[:space:]]\\+/\\n/g'))\n    # Remove\
+    \ duplicate lines. Assume all input files have no duplicated lines.\n    # Thanks\
+    \ to https://stackoverflow.com/questions/19405794/removing-duplicates-from-a-shell-array\n\
+    \    local i last out\n    for ((i=0; i<${#arr[@]}; i++)); do\n        if [[ ${arr[i]}\
+    \ == ${arr[i+1]} ]]; then\n            unset arr[i+1]\n        fi\n    done\n\
+    \    IFS=$'\\n'\n    # sort -u removes duplicates\n    echo \"${arr[@]}\" | sort\
+    \ -u | tr '\\n' ' ' > \"${@:2}\"", "\tlocal input=${1:-\"1 2 3 4 5 6 7\"}\n\t\
+    sort | uniq | sed 's/^/\"/;s/$/\\//'", "\tlocal line\n\tlocal lineWithoutQuotes\n\
+    \tlocal word\n\tlocal wordWithoutQuotes\n\tlocal sortedWords\n\tlocal count\n\t\
+    local wordCount\n\tlocal currentWord\n\tlocal sortedWordsIndex\n\tlocal index\n\
+    \tlocal temp\n\tlocal wordsInLine\n\n\t# Split string into space-separated words\n\
+    \tline=\"${1}\"\n\twhile read -r line; do\n\t\twordsInLine=\"$(echo \"${line}\"\
+    \ | tr \" \" \" \")\"\n\t\tfor word in \"${wordsInLine}\"; do\n\t\t\twordWithoutQuotes=\"\
+    $(echo \"${word}\" | sed -e 's/\\\"//g')\"\n\t\t\tif [[ \"${wordWithoutQuotes}\"\
+    \ == \"${word}\" ]]; then\n\t\t\t\tcurrentWord=\"${wordWithoutQuotes}\"\n\t\t\t\
+    else\n\t\t\t\tcount=\"$(echo \"${wordWithoutQuotes}\" | wc -c)\"\n\t\t\t\tif [[\
+    \ ${count} == 2 ]]; then\n\t\t\t\t\tcurrentWord=\"${wordWithoutQuotes}\"\n\t\t\
+    \t\telse\n\t\t\t\t\tif [[ ${wordWithoutQuotes} == *'\"' ]]; then\n\t\t\t\t\t\t\
+    word=\"${word/\\\"/}\"\n\t\t\t\t\telse\n\t\t\t\t\t\tword=\"${wordWithoutQuotes}\"\
+    \n\t\t\t\t\tfi\n\t\t\t\t\tcurrentWord=\"${word}${currentWord}\"\n\t\t\t\tfi\n\t\
+    \t\tfi\n\t\t\tsortedWordsIndex=\"${sortedWordsIndex} ${currentWord}\"\n\t\tdone\n\
+    \t\tsortedWords=\"${sortedWords} ${sortedWordsIndex}\"\n\t\tsortedWordsIndex=\"\
+    \"\n\tdone\n\techo \"${sortedWords}\"", "  local -a list=()\n  local delimiter=$1\n\
+    \n  IFS=$delimiter\n  for item in \"${list[@]}\"; do\n    [[ $item != \"$delimiter\"\
+    \ ]] && list+=(\"$item\")\n  done\n\n  IFS=\n  echo \"${list[*]}\"", "    local\
+    \ sorted=\n    local unique=\n    local list=\n\n    for list in \"$@\"; do\n\
+    \        sorted+=$(sort <<< \"$list\" | uniq -d)\n    done\n    unique=$(IFS='\
+    \ '; echo \"${sorted[*]}\" | tr '\\n' ' ')\n\n    echo $unique", "    set -- \"\
+    $1\"\n    IFS=$'\\n' read -r -a array <<<\"${!#}\"\n    sort -u \"${array[@]}\"",
+  "  local sorted_list count=0\n  local unsorted_list unique_item\n  local i=0\n \
+    \ unsorted_list=\"$1\"\n  unique_item=\"${unsorted_list[$i]}\"\n  (( i++ ))\n\
+    \  count=1\n  while [ -n \"${unsorted_list[$i]}\" ] ; do\n    count=$(( count+1\
+    \ ))\n    unique_item=\"${unsorted_list[$i]}\"\n    (( i++ ))\n  done\n  unsorted_list=\"\
+    $unsorted_list\"\n  local j=0\n  while [ -n \"${unsorted_list[$j]}\" ] ; do\n\
+    \    (( j++ ))\n    unique_item=\"${unsorted_list[$j]}\"\n    unsorted_list=\"\
+    $unique_item $unsorted_list\"\n    (( j-- ))\n  done\n  unsorted_list=\"$unique_item\
+    \ $unsorted_list\"\n  echo \"${unsorted_list}\"", "  local i output\n  local IFS=$1\
+    \ # set field separator\n  output=$(echo \"$1\" | tr \" \" \"\\n\" | sort -u)\
+    \ # unique elements\n  output=$(echo \"$output\" | tr \"\\n\" \" \") # remove\
+    \ duplicate spaces \n  output=$(echo \"$output\" | tr -d \"[[:space:]]\") # remove\
+    \ [[:space:]] \n  echo \"$output\" # return sorted unique elements", "  local\
+    \ d=\"${1+\"$1\"} sorted=false\n  [ \"${#d}\" -gt 0 ] && (IFS=$'\\n'; sorted=true)\
+    \ && sort -u --field-separator=\"$IFS\" \"$@\" # BSD SORT does not preserve input\
+    \ order\n  [ \"$sorted\" ] && echo \"${d}\"", "\tlocal __l=$1\n\tlocal __seen=()\n\
+    \tlocal __c=()\n\tlocal __k\n\tlocal __v\n\tfor __k in \"${__l[@]}\"; do\n\t\t\
+    __v=-1\n\t\tfor __c in \"${__seen[@]}\"; do\n\t\t\tif [ \"${__k}\" = \"${__c}\"\
+    \ ]; then\n\t\t\t\t__v=$((__v+1))\n\t\t\tfi\n\t\tdone\n\t\tif [ \"${__v}\" -eq\
+    \ \"0\" ]; then\n\t\t\t__c+=(\"$__k\")\n\t\telse\n\t\t\t__seen+=(\"$__k\")\n\t\
+    \tfi\n\tdone\n\techo \"${__c[*]}\"", "    local n\n    local a\n    local unique_list\n\
+    \    read -r -a a <<< \"$1\"\n    n=\"${#a[@]}\"\n    for ((i=1; i<\"$n\"; i=i+2));\
+    \ do\n        unique_list=\"${unique_list} ${a[i]}\"\n    done\n    sort -u <<<\
+    \ \"$unique_list\"", "  local list=$1\n  local sorted=$(echo \"$list\" | tr \"\
+    \ \" \"\\n\" | sort -u)\n  echo \"$sorted\"", "  declare -A seen=()\n  local i\n\
+    \  for i in $1; do\n    seen[$i]=1;\n  done\n  echo \"${!seen[@]}\"", "    local\
+    \ -a list=(\"$@\")\n    local i imax=${#list[@]}\n    local item imax\n    local\
+    \ -a res\n    local -a tmp\n    for (( i=1; i<=imax; i++ )); do\n        for ((\
+    \ j=0; j<=imax; j++ )); do\n            if  (( j<i )); then\n                tmp=(\"\
+    ${list[i]}\")\n                item=${tmp[j]}\n            else\n            \
+    \    item=${list[j]}\n            fi\n            [[ \"$item\" == \"$item\" ]]\n\
+    \            if  (( item == $item )); then\n                tmp=(\"${tmp[@]/$item}\"\
+    )\n                break\n            fi\n        done\n        if (( tmp != 0\
+    \ )); then\n            res+=($(IFS='' echo \"${tmp[*]}\"))\n            tmp=()\n\
+    \        fi\n    done\n    IFS=$'\\n'\n    echo \"${res[*]}\"", "  sort -u $1\
+    \ |\n  sed \"\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/\
+    \ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n\
+    \  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n\
+    \  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n\
+    \  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n\
+    \  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n\
+    \  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n\
+    \  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n\
+    \  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n\
+    \  s/ //g;\n  s/ //g;\n  s/^ *//;\n  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^ *//;\n\
+    \  s/ *$//;\n  s/ //g;\n  s/ //g;\n  s/^", "  local -n arr=\"$1\"\n  local unique=(\"\
+    $@\")\n  local j=1\n  for i in \"${unique[@]}\"; do\n    while [[ \"${arr[$j]}\"\
+    \ != \"$i\" ]] && [[ j -gt ${#arr[@]} ]]; do\n      j=$((j+1))\n    done\n   \
+    \ if [[ \"$j\" -gt ${#arr[@]} ]]; then\n      unique+=(\"$i\")\n    fi\n    j=$((j+1))\n\
+    \  done\n  printf '%s\\n' \"${unique[@]}\"", "  sort -u $1 | tr '\\n' '\\0'",
+  "    local IFS=\" $1\"\n    local sorted=( $(echo \"${@:1}\" | sort -u | tr -s '\
+    \ ') )\n    echo ${sorted[@]}", "  awk '\n  # Sort and remove duplicated elements\n\
+    \  # This doesn't change the original array\n  {\n    for(i=1;i<=NF;i++) a[$i]++\n\
+    \  }\n  # After sorting, remove all duplicates\n  END {\n    for(j=1;j<=length(a);j++)\
+    \ if(!j || a[j] != a[a[j-1]]) print a[j]\n  }\n  # Return sorted unique elements\n\
+    \  ' \"$1\"", "    # Remove spaces and quotes\n    local -n list=\\$$1\n    #\
+    \ Remove unwanted elements\n    list=$(echo \"${list}\" | tr ' ' '\\n' | sort\
+    \ -u | tr '\\n' ' ')\n    # Return sorted list\n    echo \"${list}\"", "    local\
+    \ d=$1\n    # replace commas with newlines and sort -u\n    d=$(echo $d | sed\
+    \ 's/,/\\n/g' | sort -u)\n    # replace newlines with commas\n    d=$(echo $d\
+    \ | sed 's/\\n/,/g')\n    echo \"$d\"", "    local i\n    local iMax=${#1}\n \
+    \   local iLast=\"\"\n    local iUnique=0\n    local iMaxUnique=0\n    local iList=\"\
+    $1\"\n    local i\n    for ((i=1; i<=$iMax; i+=1)); do\n        if [[ \"$iList\"\
+    \ == *\"${1:$i}\"* ]]; then\n            iUnique=$((iUnique+1))\n            if\
+    \ [[ \"$iUnique\" -eq \"1\" ]]; then\n                iLast=\"$1$iUnique\"\n \
+    \           fi\n            if [[ \"$iUnique\" -gt \"$iMaxUnique\" ]]; then\n\
+    \                iMaxUnique=$iUnique\n            fi\n        fi\n    done\n \
+    \   if [[ \"$iUnique\" -gt \"$iMaxUnique\" ]]; then\n        echo \"${1:$iMaxUnique}\"\
+    \n    else\n        echo \"$iList\"\n    fi", "    local i\n    local output\n\
+    \    local unique\n\n    local i\n\n    output=$(echo \"$1\" | sed 's/ /;/g')\n\
+    \    unique=()\n    for i in $(echo \"$output\" | tr \";\" \"\\n\")\n    do\n\
+    \        if [[ \"${unique[$i]}\" != \"\" ]]; then\n            unique[$i]=\"$unique[$i]\"\
+    \n        else\n            unique[$i]=\"$i\"\n        fi\n    done\n    unique=($(echo\
+    \ \"${unique[*]}\" | sort))\n    echo \"${unique[@]}\"", "  local sorted=\n  for\
+    \ item in $(echo -e \"$1\"); do sorted+=(\"$item\"); done\n  sort -u <<<\"${sorted[@]}\"",
+  "  local words items\n  IFS=\" \"\n  words=($1)\n  items=()\n  for word in ${words[@]};\
+    \ do\n    [[ \"${items[@]}\" =~ \"${word}\" ]] || items[@]=\"${items[@]} ${word}\"\
+    \n  done\n  echo \"${items[*]}\"", "    local sorted_list=$(printf \"%q\" \"$@\"\
+    )\n    sorted_list=$(printf \"[%s]\" \"$sorted_list\")\n    sorted_list=$(echo\
+    \ \"$sorted_list\" | sort -u | tr -d '\\n' ' ')\n    echo \"$sorted_list\"", " \
+    \   local IFS=$1\n    sort -u <<<\"$*\"", '  sort -u <<< "$1"', "  awk -F\\' '{\n\
+    \    for (i=1; i<=NF; i++) {\n      if (arr[$i]++==1)\n        printf \"%q%s\"\
+    , $i, (i<NF ? OFS : ORS)\n    }\n  }' <<< \"$1\"", "    local i result _i _len=${#1}\n\
+    \    for ((_i=1; _i<_len; _i++)); do\n        result=( $(grep -v \"$1\" <<<\"\
+    ${!_i}\")  )\n        if [[ ${#result[@]} -gt 1 ]]; then\n            result=(\
+    \ \"${result[@]:1}\" )\n        fi\n        echo \"${result[@]}\"\n    done",
+  "    local IFS=$1; shift\n    local i var=$1\n    local output\n\n    IFS=$'\\t'\
+    \ read -a array <<< \"$var\"\n\n    for ((i=0;i<${#array[@]};i++)); do\n     \
+    \   var=${array[$i]}\n        (( i == ${#array[@]} - 1 )) && output+=\"$var\"\n\
+    \    done\n\n    echo \"$output\"", "  local IFS=$'\\n';\n  local -r file=\"${1:-/dev/stdin}\"\
+    ;\n\n  echo $(sort -u | grep -v '^$' | awk '{ print $1 }') | tr -s ' ' | awk '{\
+    \ print $1 }';", "  local ns=$1 e\n  local n i\n  declare -A unsorted\n  for n\
+    \ in $ns; do\n    if [[ ${unsorted[$n]} ]]; then unsorted[$n]=\"$(eval unsorted[$n]++\
+    \ 2>/dev/null)\"; fi\n  done\n  unsorted=(${(kv)unsorted[@]})\n  local result=(${unsorted[@]})\n\
+    \  unsorted=()\n  result=()\n  for e in ${result[@]}; do\n    i=$(echo \"$e\"\
+    \ | awk '{print index($0,$1)}')\n    if [[ $i -eq 0 ]]; then\n      unsorted+=(\"\
+    $e\")\n    elif [[ $i -ne 0 ]]; then\n      unsorted[$i]=\"$e\"\n    fi\n  done\n\
+    \  for e in ${result[@]}; do\n    i=$(echo \"$e\" | awk '{print index($0,$1)}')\n\
+    \    if [[ $i -eq 0 ]]; then\n      result+=(\"$e\")\n    elif [[ $i -ne 0 ]];\
+    \ then\n      unsorted[$i]=\"$e\"\n    fi\n  done\n  result=(\"${result[@]}\"\
+    \ ${unsorted[@]})\n  echo \"${result[@]}\"", "    local sorted=( $1 )\n    local\
+    \ sorted-unique=()\n    for i in \"${sorted[@]}\"; do\n        case \"$i\" in\n\
+    \            *\") continue;;\n            *)\n                sorted-unique+=(\
+    \ \"${sorted[$sorted-count]}\" \"$i\" )\n                ((sorted-count++))\n\
+    \        esac\n    done\n    printf '[%s]\\n' \"${sorted-unique[@]}\"", '    sort
+    -u $1', "  [ \"$1\" ] && echo $1 |\n    awk '{for (i=2; i<NF; i+=2) print $i}'",
+  "  local g\n  g=$(echo \"$1\" | tr \" \" \"\\n\" | sort | uniq | tr \"\\n\" \" \"\
+    )\n  echo \"$g\"", "    local words count\n    IFS=' ' read -r -a words <<<\"\
+    $1\"\n    count=\"${#words[@]}\"\n    unique=($(sort -u <<<\"${words[@]}\"))\n\
+    \    echo \"${unique[@]:0:$((count-1))}\"", "    local uni arr\n    read -a arr\
+    \ <<< \"$1\"\n    uni=':'\n    echo ${arr[*]} | sort -k ${uni}n | uniq -u | sed\
+    \ 's/^ *//g'", "    local IFS=$1\n    local a=()\n    # IFS=\" \"; set -- $1 2>/dev/null\n\
+    \    # trap 'exit 1' 1 2 3 13 15    # don't exit on exit 1\n    # set -- $1 2>/dev/null\
+    \    # handle empty list case\n    while [ $# -gt 0 ]; do\n        case \"$1\"\
+    \ in\n            # ignore empty line\n            \"${a[*]##* }\" ) continue;;\n\
+    \            # ignore blanks\n            \"${a[*]##[[:space:]]}\" ) continue;;\n\
+    \            *) a+=(\"$1\") ;;\n        esac\n        shift\n    done\n    echo\
+    \ \"${a[*]}\"", "\tsort -u \"${1}\" | tr -d '\"'", "    local IFS=$'\\n'\n   \
+    \ local list=\"${1}\"\n    local output\n    local n\n    output=$(echo \"${list}\"\
+    \ | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e '/^$/d' -e '/^[[:space:]]*\\\
+    |$/d' | sort -u)\n    echo \"${output}\"", "    # Sort unique elements\n    local\
+    \ IFS=\"$1\"\n    local S=\"${*}\"\n    echo $S | tr \" \" \"\\n\" | sort -u |\
+    \ tr \"\\n\" \" \"", "  # get input list\n  LIST=\"$1\"\n  IFS=$'\\n'\n  # sort\
+    \ list into canonical order (remove consecutive duplicates)\n  SORTED=$(echo \"\
+    $LIST\" | sort -u | tr -s ' ')\n  # output sorted list\n  echo \"$SORTED\"", " \
+    \   local i\n    local elements\n    local -a sorted\n    local -a seen\n    local\
+    \ -a result\n    local -a sorted\n    for i in \"$1\"; do\n        seen[$i]=true\n\
+    \    done\n    elements=($(sort -u <<<\"${!seen[@]}\" | tr '\\n' ' '))\n    for\
+    \ element in \"${elements[@]}\"; do\n        sorted+=(\"$element\")\n    done\n\
+    \    result=$(echo \"${sorted[@]}\" | tr '\\n' ' ')\n    echo \"${result[@]}\"",
+  '    echo "${@}" | tr " " "\n" | sort -u | tr "\n" " "', "\tlocal tmp\n\tIFS=\"\
+    \ \" read -r -a tmp <<<\"$1\"\n\tprintf '%s\\n' \"${tmp[@]}\"", "\tawk '\n\t\t\
+    {\n\t\t\tfor (i=1; i<=NF; i++) {\n\t\t\t\tif (seen[$i] == 1) {\n\t\t\t\t\tdelete\
+    \ seen[$i]\n\t\t\t\t} else {\n\t\t\t\t\tseen[$i]=1\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\
+    \tEND {\n\t\tfor (k in seen) print k\n\t}' \"$1\"", "  local output\n  output=$(printf\
+    \ '%s\\n' \"$1\" | sort -u)\n  echo \"$output\"", "    local arr=( $(echo $@|tr\
+    \ \" \" \"\\n\"|sort -u ) );\n    echo \"${arr[@]}\"", "  local line=\"$1\"\n\
+    \  local unique sorted\n  unique=\"$(sort --unique -t . <<< \"$line\")\"\n  sorted=\"\
+    $(echo \"$unique\" | tr \"\\n\" \" \")\"\n  echo \"$sorted\"", "    local seen=$1\
+    \ a \n    for a in $@; do \n        [[ $a =~ $seen ]] || echo $a; \n        seen=$a\
+    \ \n    done", "    local i element elements\n    i=0\n    elements=($($1))\n\
+    \    elements=()\n    while [[ $i -lt ${#elements[*]} ]] ; do\n        element=${elements[$i]}\n\
+    \        i=$(( i + 1 ))\n        elements=(\"${elements[@]:$i:1}\")\n        elements=(\
+    \ \"${elements[@]}\" \"$element\" )\n    done\n    echo ${elements[*]}", "   \
+    \ local i var=$(echo \"$1\" | tr \" \" \",\" | sort -u)\n    for ((i=1; i<= \"\
+    ${#var}\"; i++)); do\n        case \"$1\" in\n            \"${var[$i]}\" ) continue;;\
+    \ # do nothing\n            *) break;; # exit with first occurence\n        esac\n\
+    \        var=\"${var:i-1}\"; # exchange this one\n    done\n    echo \"${var}\"",
+  "  local i\n  local c\n  local u\n  local s\n  c=$(duplicate \"$1\")\n  u=()\n \
+    \ for i in \"${!c}\"; do\n    s=\"${!i}\"\n    if [ \"${#s}\" = \"1\" ]; then\n\
+    \      u+=(\"${s}\")\n    fi\n  done\n  echo \"${u[@]}\"", '    sort -u $1', " \
+    \ # Split input by space\n  IFS=\" \" read -r -a array <<< \"$1\"\n  # Sort the\
+    \ array\n  IFS=\"\" read -a tempArray <<< \"$1\"\n  for i in \"${tempArray[@]}\"\
+    ; do\n    echo \"$i\"\n  done", "  # shellcheck disable=SC2034\n  local -r tokens=(${1//\
+    \ / })\n  local -a sorted_unique\n  eval \"sorted_unique=( \\\"\\${${tokens[*]}[@]}\\\
+    \" )\"\n  # shellcheck disable=SC2034\n  echo \"${sorted_unique[@]}\"", "    set\
+    \ -- $1 || return 1\n\n    local sorted=( $(sort -k1,1 -u) )\n    local trimmed=(\
+    \ ${sorted[@]} | sed 's/^\"//;s/\"$//;s/ /\\n/g' )\n    local final=( ${trimmed[@]}\
+    \ )\n\n    for (( i = 1 ; i <= ${#final} ; i++ )); do\n        [[ ${final[$i]}\
+    \ == ${final[$(( $i - 1 ))]} ]] || [[ ${final[$i]} != ${final[$i - 1]} ]] || {\
+    \ read -r line; echo \"${final[$i]}\"; break; }\n    done", "    local IFS=\"\
+    $1\"\n    local a\n    a=$(printf '%s\\n' \"${@:2}\")\n    local i\n    local\
+    \ b\n    # remove duplicate lines in the output\n    local tmp\n    local last\n\
+    \n    for (( i=0; i<${#a[@]}; i++ )); do\n        if [[ ${a[i+1]} == ${a[i]} ]];\
+    \ then\n            b=\"${a[i+1]}\"\n        else\n            b=${a[i]}\n   \
+    \         tmp=\"${b} ${a[i+1]}\"\n            last=\"${i}\"\n        fi\n    done\n\
+    \    echo \"${a:0:last}\"", "\tset -A A 0\n\tfor i in $1; do\n\t\tif [[ ${A[$i]}\
+    \ -eq 0 ]]; then\n\t\t\tA[$i]=\"$i\"\n\t\tfi\n\tdone\n\techo ${A[@]}", "    local\
+    \ i j prev in\n    local list=\"$1\"\n    # Initialize prev\n    prev=\"-\"\n\
+    \    # Search each element in the list\n    for i in \"${list[@]}\"; do\n    \
+    \    # If element i precedes prev\n        if [[ \"$prev\" == \"$i\" ]]; then\n\
+    \            # Remove prev from list\n            list=\"$list ${i%#*}\"\n   \
+    \     else\n            # Set prev to i\n            prev=\"$i\"\n        fi\n\
+    \    done\n    # Remove trailing whitespace\n    list=\"${list%?}\"\n    # Return\
+    \ sorted unique elements\n    eval echo \"${list}\"", "    local IFS=\"$1\"\n\
+    \    sort -u -- \"${@:2}\" | xargs $1", "    local IFS=\" \"\n    sort -u $@",
+  "    # Remove any empty elements, sort and remove duplicates\n    set -- \"$1\"\n\
+    \    set -- \"${@:2}\"\n    sort -u \"${@}\"", "   awk '!seen[$1]++' $1", "  \
+    \  local list name\n    list=$1\n    # sort -u removes duplicates\n    IFS=$'\\\
+    n' name=$(sort -u <<<\"$list\")\n    echo \"$name\"", "  local uniqueList\n  uniqueList=$(\
+    \ printf %s \"$1\" | sort -u )\n  echo $uniqueList", "  echo \"$(echo -n \"$1\"\
+    \ | sed 's/ /;/g' | sort -u)\"", "\tlocal i\n\tlocal c\n\tlocal ret=()\n\tIFS=$'\\\
+    t' read -d '' -r -a c < <(printf '%s\\n' \"$1\")\n\n\tfor ((i = 0; i < ${#c[@]};\
+    \ i+=1)); do\n\t\t[[ \"${ret[$i]}\" == \"${c[$i]}\" ]] && ret[$i]=\n\tdone\n\t\
+    printf '%s\\n' \"${ret[@]}\"", "  local list=\"$1\"\n  local sortedList\n  IFS=\"\
+    \ \" read -r -a sortedList <<< \"$list\"\n  local last\n  local uniqueList\n \
+    \ for last in \"${sortedList[@]}\"; do\n    if [ -z \"$uniqueList\" ]; then uniqueList=\"\
+    $last\"; continue; fi\n    case \"$last\" in\n      \"$uniqueList\"|*\"$uniqueList\"\
+    |\"\") uniqueList=\"$last\";;\n      \"$uniqueList\"|*\"\") uniqueList=\"$last\"\
+    ;;\n    esac\n  done\n  echo \"$uniqueList\"", "  local elements=( ${(@s)1} )\n\
+    \  local sorted=( ${(@kv)elements} )\n  local unique=()\n  local last\n  local\
+    \ uniqueCount=0\n  local element\n\n  for element in ${sorted[@]}; do\n    last=\"\
+    ${element:0:-1}\"\n    [[ $last == $element ]] && ((uniqueCount++))\n  done\n\n\
+    \  for element in ${sorted[@]}; do\n    [[ $unique == *\"$element\"* ]] || \\\n\
+    \      (unique+=(\"$element\")) && continue\n    ((uniqueCount++)) && last=\"\
+    ${element:0:-1}\"\n    ((uniqueCount)) || unique+=(\"$last\")\n  done\n\n  echo\
+    \ ${unique[@]}", '    sort -u "${1:-}"', '    sort -u $1', "\tlocal IFS=\"$1\"\
+    \n\tlocal out\n\tlocal -a ary\n\tlocal i last=\n\n\tout=\n\tIFS=\" \" read -a\
+    \ ary <<< \"${@:2}\"\n\n\tfor ((i=0; i < \"${#ary[@]}\"; i++)); do\n\t\tif [[\
+    \ ${ary[i]} == $last ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\tlast=${ary[i]}\n\t\t\
+    out=(\"${out[@]}\" $last)\n\tdone\n\n\techo \"${out[@]}\"", "  local IFS=$'\\\
+    n' a=($(sort <<<\"$1\"))\n  local i result=()\n  for ((i=0; i < ${#a[@]}; i++));\
+    \ do\n    (( ${result[i]} != ${a[i]} )) && result+=(${a[i]})\n  done\n  echo \"\
+    ${result[@]}\"", "    local ns=$( echo \"$1\" | sed 's/ /\\n/g' | sort -u )\n\
+    \    echo \"$ns\"", "    local f i=0 s=$1 o=() r\n    [[ -z $s ]] && return #\
+    \ empty list\n    for f in $s\n    do\n        [[ -z $o ]] && o=( $f ) # initialise\
+    \ with first value\n        [[ -z ${o[i-1]} ]] && r+=( $f ) # add to result array\
+    \ if not unique\n        [[ -z ${o[$i]} ]] && o[$i]=$f # add to array if not unique\n\
+    \    done\n    echo ${r[@]}", "    local array\n    local output\n\n    array=\"\
+    $1\"\n    shift\n\n    output=$(eval echo \"\\${!array[@]}\")\n    for element\
+    \ in $output; do\n      ! [[ \"$output\" =~ \"$element\" ]]\n    done\n    echo\
+    \ ${output[@]}", "    local IFS=$1\n    local sorted=()\n    local key\n    local\
+    \ i\n\n    IFS=$' \\t\\n'\n\n    # add each unique item to an array\n    for k\
+    \ in \"${@:2}\"; do\n        if [[ -z ${sorted[*]} ]]; then\n            sorted+=(\
+    \ $k )\n        else\n            for (( i=0; i<${#sorted[@]}; i++ )); do\n  \
+    \              if [[ ${sorted[i]} == $k ]]; then\n                    sorted[$i]=\"\
+    $k\"\n                fi\n            done\n        fi\n    done\n\n    IFS=$IFS_ORIG\n\
+    \n    # sort and remove duplicates\n    for (( i=0; i<${#sorted[@]}; i++ )); do\n\
+    \        key=${sorted[i]}\n        sorted[i]=$(printf '%s' \"${sorted[i]#\"$key\"\
+    }\")\n    done\n\n    sorted=( \"${sorted[@]}\" )\n\n    # return an array with\
+    \ unique items\n    echo \"${sorted[@]}\"", "  local words items\n  words=( $1\
+    \ )\n  items=( $(sort \"${words[@]}\" | uniq) )\n  echo \"${items[@]}\"", "  \
+    \  local sorted_list=$1\n    local temp\n    local list_sorted\n    list_sorted=$(echo\
+    \ \"$sorted_list\" | tr '\\n' ' ')\n    temp=$(echo \"$list_sorted\" | tr '.'\
+    \ '\\n')\n    list_sorted=$(echo \"$list_sorted\" | tr '\"' '\\n')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr ' ' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n   \
+    \ temp=$(echo \"$list_sorted\" | tr ' ' '\\n')\n    list_sorted=$(echo \"$list_sorted\"\
+    \ | tr '\"' '\\n')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n\
+    \    list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    temp=$(echo \"$list_sorted\"\
+    \ | tr '\"' '\\n')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n\
+    \    list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    temp=$(echo \"$list_sorted\" | tr '\"' '\\n')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n   \
+    \ list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n   \
+    \ list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n   \
+    \ list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n   \
+    \ list_sorted=$(echo \"$list_sorted\" | tr '\\n' ' ')\n    list_sorted=$(echo\
+    \ \"$list_sorted\" | tr '.' '\\n')\n    list_sorted=$(echo \"$list_sorted\" |\
+    \ tr '\\n' ' ')\n    list_sorted=$(echo \"$list_sorted\" | tr '.' '\\n')\n   \
+    \ list_sorted=$(echo \"$list_sorted\" | ", '  sort -u <<< "$1"', "  local i last\
+    \ ret sorted uniques\n  IFS=$' \\t' sorted=( ${1} )\n  last=sorted[0]\n  ret=()\n\
+    \  uniques=( )\n  for (( i=1; i<${#sorted[@]}; i++ )); do\n    if [ \"${sorted[i]}\"\
+    \ != \"${last}\" ]; then\n      last=\"${sorted[i]}\"\n      uniques+=( \"${last}\"\
+    \ )\n    fi\n  done\n  printf '%s\\n' \"${uniques[@]}\"", "    local f g=(\"$@\"\
+    )\n    local i item\n    for (( i=0; i<${#g[@]}; i++ )); do\n        item=${g[$i]}\n\
+    \        for (( j=0; j<i; j++ )); do\n            g[$j]=${g[$j]}\" \"\n      \
+    \  done\n        [[ $item != \"\" ]] && (g[$i]=${item%\" \"})\n    done\n    g=(\
+    \ \"${g[*]}\" )", "    local tmp=$@\n    local i seen unset x\n    local output\n\
+    \n    unset=0\n    output=$(IFS=\" \" ; echo \"$tmp\" | sort | uniq)\n    while\
+    \ IFS= read -r x ; do\n        if [[ \"$x\" != \"$output\" ]]; then\n        \
+    \    output+=\"$x\"\n            unset=1\n        fi\n    done < <(echo \"$output\"\
+    )\n    if [[ $unset -ne 1 ]]; then\n        echo \"$output\"\n    else\n     \
+    \   echo \"$tmp\"\n    fi", "    local set output\n    IFS=$'\\n' read -r -d ''\
+    \ -a array <<< \"$1\"\n    set -- \"${array[@]}\" || return\n    set -- \"${array[@]/#/''}\"\
+    \ # remove empty elements\n    set -- \"${array[@]}\" # add single quotes around\
+    \ strings\n    set -- \"${array[@]/%/$'\\n'}\" # add newline between every element\n\
+    \    set -- $(sort -u -- \"${@}\")\n    printf '%s\\n' \"$@\"", "  local seen=()\n\
+    \  local line\n  read -r -a array <<< \"$1\"\n  for line in \"${array[@]}\"; do\n\
+    \    if [[ \" ${seen[@]} \" =~ \" ${line} \" ]]; then\n      continue\n    fi\n\
+    \    seen+=(\"$line\")\n  done\n  printf '%s\\n' \"${seen[@]}\"", "  local IFS=$1\n\
+    \  local -a arr=( $@ )\n  local n=\"${#arr[@]}\"\n  local -a out\n\n  out=()\n\
+    \  for i in \"${!arr[@]}\"; do\n    local ii=${i}\n    while [ \"${arr[$ii]}\"\
+    \ != \"${arr[i]}\" ]; do\n      ii=$((ii-1))\n      if [ ${ii} -eq 0 ]; then\n\
+    \        out+=(\"${arr[i]}\")\n        break\n      fi\n    done\n  done\n  IFS=$'\
+    \ \\t\\n'\n  echo \"${out[@]}\"", "\tlocal input=\"$1\"\n\n\tlocal seen=()\n\t\
+    local output=''\n\tfor input in $input; do\n\t\tlocal i\n\t\tfor((i=0; i<${#seen[@]};\
+    \ i++));do\n\t\t\t[ \"$seen[$i]\" == \"$input\" ] &&\n\t\t\t\t(( i++ ))\n\t\t\
+    done\n\t\tif [ \"$i\" -eq \"$#seen\" ]; then\n\t\t\toutput+=\"$input\"\n\t\telse\n\
+    \t\t\tseen=( \"${seen[@]:0:i}\" \"${seen[@]:i}\" )\n\t\tfi\n\tdone\n\techo \"\
+    $output\"", "   local sorted=\"1\" tmpstr=\"$1\" line\n   for line in $tmpstr;\
+    \ do\n      tmpstr=\"$line\"\n      sorted=\"$(echo $sorted | awk '{print $2 }'\
+    \ | uniq | wc -l)\"\n   done\n   echo $sorted", "    local IFS=$1; shift; RESULT=()\n\
+    \    for item in \"$@\" ; do\n        [[ $item != \"${item%?}\" ]] && (( RESULT+=(\"\
+    $item\") )) || true\n    done\n    echo \"${RESULT[@]}\"", "    local i u\n  \
+    \  local -a output\n    output=()\n    for i; do\n        u=false\n        for\
+    \ output in $@; do\n            case \"$output\" in\n                $i*) u=true\
+    \ ;;\n            esac\n        done\n        [ $u = false ] && output+=( \"$i\"\
+    \ )\n    done\n    echo \"${output[@]}\"", "    local IFS=$1; shift\n    local\
+    \ L=(\"$@\")\n    # not using \"${!L[@]}\" because we want to preserve empty strings\n\
+    \    # from unquoted expansion.\n    local unique_list=\"$(IFS=\"$IFS\" printf\
+    \ \"%s\\0\" \"${L[@]}\" | sort -z -n)\"\n    printf '%s\\n' \"${unique_list%$'\\\
+    0' }\"", "    local IFS=\"$1\"\n    local output\n    for input in \"$@\" ; do\n\
+    \        case \"$input\" in\n            *[!0-9]*) continue ;; # ignore non-numeric\
+    \ elements\n        esac\n        local output\n        output+=(\"$input\")\n\
+    \    done\n    echo \"${output[@]}\"", "    awk '{a[$1]=1}END{for(i in a) print\
+    \ i}'", "    local -r unique_args=\"$1\"\n    local -r output\n\n    output=$(\
+    \ for item in ${unique_args}; do echo \"$item\"; done | sort -u | sed 's/^/\"\
+    /g' | tr '\\n' '\\0'); echo \"${output}\"", "  local arr=$1\n  arr=( $( echo $arr\
+    \ | tr \" \" \"\\n\" ) )\n  local tmp\n  for i in \"${arr[@]}\"; do\n    local\
+    \ j=0\n    for j in \"${!tmp[@]}\"; do\n      if [[ \"${tmp[$j]}\" == \"$i\" ]];\
+    \ then\n        continue\n      fi\n    done\n    tmp[$j+1]=\"$i\"\n  done\n \
+    \ tmp=($(printf '\"%s\"\\n' \"${tmp[@]}\" | sort -u))\n  printf '%s\\n' \"${tmp[@]}\"",
+  "  local d\n  read -d '' -a d <<<\"$1\"\n  local i last rev s\n  rev=()\n  last=\"\
+    \"\n  for ((i=0; i<${#d[*]}; i++)); do\n    d[${#d[*]} - $((i + 1))]=${d[i]}\n\
+    \    local j=$((${#d[*]} - $i))\n    for ((j=0; j<$j; j++)); do\n      if [[ \"\
+    ${d[j]}\" == \"${d[i]}\" ]]; then\n        rev[${#rev[*]}]=\"${last}\"\n     \
+    \   last=\"${d[j]}\"\n      fi\n    done\n  done\n  rev[${#rev[*]}]=\"${last}\"\
+    \n  echo \"${rev[*]}\""]
 stop_tokens:
 - "\n}"

@@ -104,7 +104,869 @@ completions: ["  (define (iter nums min-sum current-sum)\n    (if (null? nums)\n
     \ nums) (car nums) (+ acc (car nums)))]))\n  (define (minSubArraySumHelper nums\
     \ acc)\n    (cond [(null? nums) acc]\n          [else (minSubArraySumHelper (cdr\
     \ nums) (min acc (helper nums 0 0)))]))\n  (minSubArraySumHelper nums (helper\
-    \ nums 0 0)))\n"]
+    \ nums 0 0)))\n", "  (define (cumsum ls)\n    (if (null? ls)\n        '()\n  \
+    \      (cons (apply + (cons (car ls) (cdr ls)))\n              (cumsum (cdr ls)))))\n\
+    \  (define (minSubArraySum-helper nums)\n    (apply min (cons (car nums) (cumsum\
+    \ (cdr nums)))))\n  (if (null? nums)\n      0\n      (minSubArraySum-helper nums)))\n\
+    ```\n\n### The O(n) time solution using prefix sum\n\nIn this solution, we compute\
+    \ the prefix sum of the list of integers. Then we\nfind the minimum prefix sum.\
+    \ Since this is the prefix sum of the minimum\nsub-list, the sub-list must be\
+    \ the last contiguous sub-list that starts from\nthe beginning of the list of\
+    \ integers. We then subtract the prefix sum of each\nindex from the minimum prefix\
+    \ sum, to get the sum of each sub-list. We then find\nthe minimum of these sums.\n\
+    \n```racket\n#lang racket\n", "  (let loop ([nums nums] [candidate 0] [best (apply\
+    \ + nums)])\n    (cond [(empty? nums) best]\n          [(< candidate best)\n \
+    \          (loop (cdr nums) (+ (car nums) candidate) best)]\n          [else\n\
+    \           (loop (cdr nums) (+ (car nums) candidate) candidate)])))\n```\n\n\
+    The auxiliary loop function will keep track of a `candidate` value, a current\n\
+    best value, and an `nums` rest parameter. The function will return the `best`\n\
+    value when it empties `nums`. It will update the `candidate` value to be the\n\
+    `+` of the current `car` and the candidate, and update the `best` value only if\n\
+    the new `candidate` is less than the `best`. Otherwise, it will update the\n`candidate`\
+    \ but not the `best`. It will then recurse on the `cdr` of `nums`.\n\nThe solution\
+    \ above takes O(n) time, where n is the length of `nums`. The\nproblem guarantees\
+    \ that it will not be an empty list, so that it is not\nnecessary to check for\
+    \ that case in the base case. However, it is possible to\nguard the base case,\
+    \ and even to eliminate the base case altogether by returning\nan `apply + nums`\
+    \ as the default value for `best`. That solution is slower,\nthough, because it\
+    \ takes O(n) time, whereas the version above takes only O(1)\ntime to evaluate\
+    \ that clause.\n\nThe solution above could also be written using a `let*` form,\
+    \ where the\nvariable `candidate` is bound to the `apply + nums`, and the variable\
+    \ `best` is\nbound to the `apply + nums` inside the body of the `let*` expression.",
+  "  (if (null? nums)\n      (error \"Empty list\")\n      (let loop ((nums nums)\n\
+    \                 (min-sum (car nums))\n                 (min-sum-end 1)\n   \
+    \              (sum 0)\n                 (sum-end 0))\n        (if (null? nums)\n\
+    \            min-sum\n            (let ((new-sum (+ sum (car nums))))\n      \
+    \        (cond\n                [(> new-sum 0)\n                 (loop (cdr nums)\n\
+    \                       min-sum\n                       min-sum-end\n        \
+    \               new-sum\n                       (+ sum-end 1))]\n            \
+    \    [(= new-sum 0)\n                 (loop (cdr nums)\n                     \
+    \  0\n                       (+ sum-end 1)\n                       0\n       \
+    \                (+ sum-end 1))]\n                [else\n                 (loop\
+    \ (cdr nums)\n                       (min min-sum new-sum)\n                 \
+    \      (+ sum-end 1)\n                       new-sum\n                       (+\
+    \ sum-end 1))])))))\n```\n\n```racket\n#lang racket\n", "  (apply min (scanl +\
+    \ 0 nums)))\n", "  (define (minSubArraySum_helper nums start end sum)\n    (if\
+    \ (>= start end)\n        sum\n        (minSubArraySum_helper nums (+ start 1)\
+    \ end (min sum (+ sum (list-ref nums start))))))\n  (minSubArraySum_helper nums\
+    \ 0 (list-length nums) 0))\n", "  (define (helper start end sum minimum)\n   \
+    \ (cond\n      [(empty? nums) minimum]\n      [(zero? start) minimum]\n      [(=\
+    \ start end) (helper (sub1 start) end sum minimum)]\n      [else (helper start\
+    \ (add1 end) (+ sum (first nums)) (min minimum sum))]))\n  (helper (sub1 (length\
+    \ nums)) 0 0 (first nums)))\n```\n\n---\n\n## Remove Duplicates\n\nWrite a function\
+    \ to remove duplicates from a sorted array.\nThe array may contain duplicates,\
+    \ the modified array should not contain duplicates.\nExamples\n\n```\n>>> (removeDuplicates\
+    \ (list 1 1 2 2 3 4 5 5 5 6))", "  (minSum (min (subSum nums 0) (subSum nums 1))))\n",
+  "  (define (minSums n maxMinSums)\n    (if (null? n)\n        (cdr maxMinSums)\n\
+    \        (let ((currentSums (map (\u03BB (x) (+ x (car n))) (car maxMinSums))))\n\
+    \          (minSums (cdr n) (cons (cons (car n) (apply min currentSums)) currentSums)))))\n\
+    \  (cond ((null? nums) (error \"At least one number is required\"))\n        ((null?\
+    \ (cdr nums)) (car nums))\n        (else (apply min (minSums (cdr nums) (list\
+    \ (list (car nums))))))))\n```\n\n### Dynamic Programming Solution\n\nImplement\
+    \ a solution with dynamic programming (bottom-up approach).\n\n```racket\n#lang\
+    \ racket\n", "  (define (minSubArraySumHelper nums sum sumMap)\n    (cond [(empty?\
+    \ nums) (list-ref sumMap 0)]\n          [else (let ([tmpSum (+ (first nums) sum)])\n\
+    \                  (minSubArraySumHelper (rest nums) tmpSum (cons tmpSum sumMap)))]))\n\
+    \  (minSubArraySumHelper nums 0 nums))\n", "  (letrec ([min-sum (car nums)]\n\
+    \           [cur-sum (car nums)]\n           [max-val (car nums)]\n          \
+    \ [seen-at (list (list 0 (car nums)))]\n           [idx 1])\n    (for ([n (in-list\
+    \ (cdr nums))])\n      (set! cur-sum (+ cur-sum n))\n      (set! seen-at (cons\
+    \ (list idx cur-sum) seen-at))\n      (when (> cur-sum max-val)\n        (set!\
+    \ max-val cur-sum))\n      (set! idx (+ idx 1)))\n    (define (min-sum-after seen-at\
+    \ idx)\n      (cond\n        [(empty? seen-at) min-sum]\n        [(< (caar seen-at)\
+    \ idx) (min-sum-after (cdr seen-at) idx)]\n        [else\n         (if (< (cadar\
+    \ seen-at) min-sum)\n             (begin\n               (set! min-sum (cadar\
+    \ seen-at))\n               (min-sum-after (cdr seen-at) idx))\n             (min-sum-after\
+    \ (cdr seen-at) idx))]))\n    (min-sum-after seen-at (sub1 (length nums)))\n \
+    \   min-sum))", "  (define (minSubArraySum-iter nums minSoFar sum)\n    (cond\n\
+    \      [(empty? nums) minSoFar]\n      [else\n       (let ([currSum (+ sum (first\
+    \ nums))])\n         (minSubArraySum-iter (rest nums)\n                      \
+    \        (min minSoFar currSum)\n                              (min currSum 0)))]))\n\
+    \  (minSubArraySum-iter nums (first nums) 0))\n```\n\n### 18. Subsets of a Set\n\
+    \n```racket\n#lang racket\n", "  (let iter ([nums nums] [best 0] [acc 0])\n  \
+    \  (cond [(empty? nums) best]\n          [(>= (car nums) acc)\n           (iter\
+    \ (cdr nums) (if (> acc best) acc best) (car nums))]\n          [else\n      \
+    \     (iter (cdr nums) (if (> (+ acc (car nums)) best) (+ acc (car nums)) best)\
+    \ (+ acc (car nums)))])))\n", "  (minSubArraySumSum nums 0 (length nums) 0))\n",
+  "  (define n (length nums))\n  (define (scan-sum current-sum i)\n    (cond\n   \
+    \   [(equal? i n) current-sum]\n      [else\n       (let ([j (add1 i)])\n    \
+    \     (let ([min-sum (scan-sum current-sum j)])\n           (let ([new-sum (for/sum\
+    \ ([nums-j (in-naturals j)])\n                                   (if (<= (add1\
+    \ n) nums-j)\n                                       current-sum\n           \
+    \                            (add1 (list-ref nums nums-j))))])\n             (min\
+    \ min-sum new-sum))))]))\n  (scan-sum 0 0))\n", "  (define (minSubArraySumHelper\
+    \ nums minSum currentSum)\n    (cond\n      [(empty? nums) minSum]\n      [(>=\
+    \ currentSum (first nums))\n       (minSubArraySumHelper (rest nums) minSum (+\
+    \ currentSum (first nums)))]\n      [else\n       (minSubArraySumHelper (rest\
+    \ nums) (first nums) (+ currentSum (first nums)))]))\n  (minSubArraySumHelper\
+    \ nums (first nums) (first nums)))\n", "  (min-sub-array-sum-helper nums 0 0))\n",
+  "  (min (map sum (subseqs nums))))\n", "  (let ([minSum (car nums)])\n    (for ([i\
+    \ (in-range (add1 (length nums)))]\n          [sum 0])\n      (for ([j (in-range\
+    \ i (length nums))])\n        (set! sum (add sum (list-ref nums j))))\n      (if\
+    \ (< sum minSum)\n          (set! minSum sum)))\n    minSum))\n", "  (apply min\n\
+    \         (map sum\n              (filter (\u03BB (lst) (not (empty? lst)))\n\
+    \                      (append-map (\u03BB (i) (list-tail nums i))\n         \
+    \                         (range (length nums)))))))\n", "  (define (findSum start\
+    \ end)\n    (foldl + 0 (sublist nums start end)))\n  (define (minSum start end)\n\
+    \    (if (= start end) (findSum start end)\n        (min (findSum start end) (minSum\
+    \ (+ start 1) end))))\n  (if (null? nums) 0 (minSum 0 (length nums))))\n", " \
+    \ (define (helper nums min-so-far)\n    (cond [(empty? nums) min-so-far]\n   \
+    \       [(empty? (rest nums)) (add1 min-so-far)]\n          [else\n          \
+    \ (define curr-sum (apply + (range (rest nums))))\n           (helper (rest nums)\
+    \ (min curr-sum min-so-far))]))\n  (helper nums (add1 (apply + nums))))\n</code>\n\
+    \n<code>#lang racket\n", "  (apply min (numbers-with-size nums)))\n", "  (define\
+    \ min-so-far 0)\n  (define min-seq-so-far (list 0))\n  (define min-seq-so-far-sum\
+    \ 0)\n  (define (range lst)\n    (cond [(empty? lst) (list (list 0))]\n      \
+    \    [else (cons (list 0)\n                      (for/list ([i (in-range (length\
+    \ lst))])\n                        (cons (list-ref lst i)\n                  \
+    \            (range (sublist lst (+ i 1))))))]))\n  (define (inner nums current-seq\
+    \ current-seq-sum)\n    (cond [(empty? nums) (values min-seq-so-far min-seq-so-far-sum)]\n\
+    \          [(empty? current-seq) (inner (cdr nums) (list (car nums)) (car nums))]\n\
+    \          [else (define new-seq-sum (+ current-seq-sum (car nums)))\n       \
+    \         (define new-seq (append current-seq (list (car nums))))\n          \
+    \      (if (< new-seq-sum min-so-far)\n                    (begin (set! min-so-far\
+    \ new-seq-sum)\n                           (set! min-seq-so-far new-seq)\n   \
+    \                        (set! min-seq-so-far-sum new-seq-sum))\n            \
+    \        #f)\n                (inner (cdr nums) new-seq new-seq-sum)]))\n  (inner\
+    \ nums (list 0) 0)\n  min-so-far)\n", "  (cond [(empty? nums) 0]\n        [else\
+    \ (define (minRecSum nums left right)\n                (cond [(= left right) (min\
+    \ (car nums) 0)]\n                      [else (min (add (car nums) (minRecSum\
+    \ nums left (+ right 1)))\n                                 (minRecSum nums (+\
+    \ left 1) right))]))\n              (minRecSum nums 0 (length nums))]))\n", " \
+    \ (define (sum-sub-list lst)\n    (foldl + 0 lst))\n  (let loop ((num-list nums)\n\
+    \             (sub-list (list (car nums)))\n             (current-sum (sum-sub-list\
+    \ sub-list))\n             (current-min current-sum))\n    (cond\n      [(empty?\
+    \ num-list)\n       current-min]\n      [(zero? (sub1 (length num-list)))\n  \
+    \     (if (&lt; current-sum current-min)\n           current-sum\n           current-min)]\n\
+    \      [else\n       (loop (cdr num-list)\n             (cons (car num-list) sub-list)\n\
+    \             (+ current-sum (car num-list))\n             (if (&lt; current-sum\
+    \ current-min)\n                 current-sum\n                 current-min))])))\n\
+    </code>\n", "  (define min-sub-array-sum '())\n  (define (loop so-far nums)\n\
+    \    (cond [(empty? nums) (send min-sub-array-sum put-min so-far)]\n         \
+    \ [else (loop (+ so-far (first nums)) (rest nums))]))\n  (loop 0 nums)\n  (send\
+    \ min-sub-array-sum get-min))\n", "  (min (list-min nums) (min-sub-sum-rec nums)))\n",
+  "  (define min-sum (apply min nums))\n  (for/fold ([min-sum min-sum])\n        \
+    \    ([n nums])\n            (let ([min-sum (min n (+ n min-sum))])\n        \
+    \      min-sum)))", "  (minSubArraySumHelper nums (length nums) 0 0))\n", "  (define\
+    \ (iter min-sum n sub-sum)\n    (cond\n      [(= n (length nums)) min-sum]\n \
+    \     [else\n       (define candidate-min (min min-sum sub-sum))\n       (iter\
+    \ candidate-min (+ n 1) (+ sub-sum (vector-ref nums n)))]))\n  (iter 0 0 0))\n\
+    ```\n\nSource: [leetcode.com](https://leetcode.com/problems/minimum-subarray-sum/)",
+  "  (if (null? nums)\n      0\n      (let loop ([nums nums] [sum (car nums)] [min-sum\
+    \ (car nums)])\n        (cond [(null? nums) min-sum]\n              [(<= sum 0)\
+    \ (loop (cdr nums) (car nums) (min sum min-sum))]\n              [else (loop (cdr\
+    \ nums) (+ sum (car nums)) min-sum)]))))\n", "  (define (iter nums sum)\n    (if\
+    \ (null? nums)\n        sum\n        (iter (cdr nums) (add1 sum))))\n  (iter nums\
+    \ 0))\n```\n\nIn a case like this, where the input is a list of integers, it's\
+    \ a little easier\nto use Clojure since we can use the `reduce` function to sum\
+    \ the list.\n\n```clojure", "  (define (minSubArraySumLeft nums start)\n    (define\
+    \ (minSubArraySumLeftAux acc start)\n      (if (= start (length nums))\n     \
+    \     acc\n          (minSubArraySumLeftAux (min acc (+ acc (list-ref nums start)))\
+    \ (+ start 1))))\n    (minSubArraySumLeftAux (list-ref nums start) (+ start 1)))\n\
+    \  (define (minSubArraySumRight nums start)\n    (define (minSubArraySumRightAux\
+    \ acc start)\n      (if (= start 0)\n          acc\n          (minSubArraySumRightAux\
+    \ (min acc (+ acc (list-ref nums start))) (- start 1))))\n    (minSubArraySumRightAux\
+    \ (list-ref nums start) (- start 1)))\n  (define (minSubArraySumAux left right)\n\
+    \    (if (= (length left) 1)\n        left\n        (min (minSubArraySumAux (rest\
+    \ left) right)\n             (minSubArraySumAux left (rest right)))))\n  (minSubArraySumAux\
+    \ (map (\u03BB (x) (minSubArraySumLeft nums x)) (range (length nums)))\n     \
+    \                (map (\u03BB (x) (minSubArraySumRight nums x)) (range (length\
+    \ nums)))))\n", "  (foldl (\u03BB (min curr) (min curr (add1 min curr))) (car\
+    \ nums) (cdr nums)))\n", "  (define (minSum l)\n    (define (go l smallest)\n\
+    \      (cond\n        [(empty? l) smallest]\n        [(> (first l) smallest) (go\
+    \ (rest l) smallest)]\n        [else (go (rest l) (first l))]))\n    (go (rest\
+    \ l) (first l)))\n  (define (go l m)\n    (cond\n      [(empty? l) m]\n      [else\
+    \ (go (rest l) (min (minSum l) m))]))\n  (go nums (first nums)))\n", "  (define\
+    \ (minSubArraySum-2 sum currMinIdx i nums)\n    (cond\n      [(>= i (length nums))\
+    \ (list-ref nums currMinIdx)]\n      [(>= sum 0)\n       (minSubArraySum-2\n \
+    \       (- sum (list-ref nums (- i 1)))\n        currMinIdx\n        (add1 i)\n\
+    \        nums)]\n      [else\n       (let* ([newSum (- sum (list-ref nums (- i\
+    \ 1)))]\n              [minIdx (if (< newSum (list-ref nums currMinIdx))\n   \
+    \                      i\n                         currMinIdx)])\n         (minSubArraySum-2\
+    \ newSum minIdx (add1 i) nums))]))\n  (minSubArraySum-2 0 0 1 nums))\n", "  (if\
+    \ (null? nums)\n      0\n      (let ([res (minSubArraySum (cdr nums))])\n    \
+    \    (if (&lt; res 0)\n            0\n            (min res (apply + (map (compose\
+    \ list +) (cdr nums) (build-list (length nums) res))))))))\n</code>\n", "  (cond\n\
+    \    [(empty? nums) 0]\n    [(= 1 (length nums)) (first nums)]\n    [else\n  \
+    \   (let ([minSum (first nums)])\n       (for ([i (in-range (length nums))])\n\
+    \         (for ([j (in-range (+ i 1) (length nums))])\n           (let ([subArraySum\
+    \ (apply + (sublist nums i j))])\n             (when (< subArraySum minSum)\n\
+    \               (set! minSum subArraySum)))))\n       minSum)]))\n", "  (define\
+    \ (iter start end sum)\n    (if (>= start end)\n        (sum)\n        (let* ([n\
+    \ (vector-ref nums start)]\n               [sum (+ sum n)])\n          (iter (+\
+    \ start 1) end (min sum (iter (+ start 1) end (if (negative? n) 0 sum)))))))\n\
+    \  (if (null? nums)\n      0\n      (iter 0 (vector-length nums) (vector-ref nums\
+    \ 0))))\n", "  (let loop ([nums nums] [min-sum 0] [current-sum 0])\n    (cond\
+    \ [(empty? nums) (min min-sum current-sum)]\n          [(>= current-sum 0)\n \
+    \          (loop (rest nums)\n                 (min min-sum current-sum)\n   \
+    \              (+ current-sum (first nums)))]\n          [else\n           (loop\
+    \ (rest nums)\n                 (min min-sum current-sum)\n                 (first\
+    \ nums))])))\n", "  (let ([minSoFar 0]\n        [minEndingHere 0])\n    (for ([n\
+    \ nums])\n      (set! minEndingHere (+ minEndingHere n))\n      (when (&lt; minEndingHere\
+    \ 0)\n        (set! minEndingHere 0))\n      (when (&lt; minEndingHere minSoFar)\n\
+    \        (set! minSoFar minEndingHere)))\n    minSoFar))\n</code>\nIf you find\
+    \ it easier to think about recursion, you can translate the above into a recursive\
+    \ algorithm.\n", "  (define (iter nums cur-min cur-sum)\n    (if (null? nums)\n\
+    \        cur-min\n        (let ([new-sum (+ cur-sum (car nums))])\n          (iter\
+    \ (cdr nums)\n                (min cur-min new-sum)\n                (min new-sum\
+    \ 0)))))\n  (iter nums (car nums) 0))\n", "  (if (null? nums)\n      (error \"\
+    Input must contain at least one integer\")\n      (let ([mini (car nums)])\n \
+    \       (for ([num (in-list (cdr nums))])\n          (let ([total (add1 (car nums))])\n\
+    \            (for ([num (in-list (cdr nums))])\n              (set! total (+ total\
+    \ num))\n              (if (< total mini)\n                  (set! mini total)))))\n\
+    \        mini)))\n```\n\n#### maxSubArraySum\n``` #lang racket\n", "  (cond\n\
+    \    [(null? nums) 0]\n    [(or (null? (cdr nums)) (null? (cddr nums))) (car nums)]\n\
+    \    [else\n     (let* ([n (length nums)]\n            [values (list->vector nums)]\n\
+    \            [min-sum (vector-ref values (sub1 n))]\n            [prefix-sums\
+    \ (make-vector n 0)]\n            [i (sub1 n)])\n       (vector-set! prefix-sums\
+    \ i min-sum)\n       (while (and (< 0 i) (not (negative? min-sum)))\n        \
+    \ (when (< min-sum (vector-ref values i))\n           (set! min-sum (vector-ref\
+    \ values i)))\n         (vector-set! prefix-sums (sub1 i) (+ min-sum (vector-ref\
+    \ prefix-sums i)))\n         (when (< (vector-ref prefix-sums (sub1 i)) min-sum)\n\
+    \           (set! min-sum (vector-ref prefix-sums (sub1 i))))\n         (set!\
+    \ i (sub1 i)))\n       min-sum))\n    ))\n```\n\n## Clojure\n\n```clojure", " \
+    \ (let ((min-sum (car nums))\n        (current-sum (car nums)))\n    (if (null?\
+    \ (cdr nums))\n        min-sum\n        (for ([n (cdr nums)])\n          (set!\
+    \ current-sum (+ current-sum n))\n          (when (< current-sum min-sum)\n  \
+    \          (set! min-sum current-sum))\n          (when (< current-sum 0)\n  \
+    \          (set! current-sum 0))))\n    min-sum))\n", "  (define currentSum 0)\n\
+    \  (define minimum 0)\n  (define numsLength (length nums))\n  (for ((i 0) (nums\
+    \ nums))\n    (set! currentSum (+ currentSum n))\n    (when (&lt; currentSum minimum)\n\
+    \      (set! minimum currentSum))\n    (when (&lt; (+ i 1) numsLength)\n     \
+    \ (if (&lt; minimum (+ currentSum (list-ref nums (+ i 1))))\n          (set! minimum\
+    \ (+ currentSum (list-ref nums (+ i 1))))\n          (set! currentSum 0)\n   \
+    \       (set! minimum (list-ref nums (+ i 1))))))\n  minimum)\n", "  (let loop\
+    \ ([nums nums] [total 0] [min-sum 0])\n    (if (null? nums)\n        min-sum\n\
+    \        (let ([next-total (+ total (car nums))])\n          (if (&lt; next-total\
+    \ 0)\n              (loop (cdr nums) 0 (min next-total min-sum))\n           \
+    \   (loop (cdr nums) next-total (min next-total min-sum)))))))\n</code>\nAlternatively,\
+    \ I can do this using a <code>for/fold</code> to update the <code>min-sum</code>\
+    \ as it goes along:\n<code>#lang racket\n", "  (minHelper nums 0 0))\n", "  (define\
+    \ (minSubArraySum-help sum-so-far i)\n    (if (= i (length nums))\n        sum-so-far\n\
+    \        (min (minSubArraySum-help (+ sum-so-far (list-ref nums i)) (+ i 1))\n\
+    \             sum-so-far)))\n  (minSubArraySum-help 0 0))", "  (if (null? nums)\n\
+    \      0\n      (let ((minSum (car nums)))\n        (for ([i (in-range (length\
+    \ nums))])\n          (let ((j i))\n            (define currSum 0)\n         \
+    \   (while (< j (length nums))\n              (set! currSum (+ currSum (list-ref\
+    \ nums j)))\n              (when (< currSum minSum)\n                (set! minSum\
+    \ currSum))\n              (set! j (+ j 1))))))\n      minSum))\n", "  (minSubArraySum-helper\
+    \ nums 0 0))\n", "  (let loop ([nums nums] [minNum 0] [acc 0])\n    (cond [(empty?\
+    \ nums) (if (&lt; acc minNum) acc minNum)]\n          [(positive? (car nums))\n\
+    \           (loop (cdr nums) (if (&lt; acc minNum) acc minNum) (+ (car nums) acc))]\n\
+    \          [else (loop (cdr nums) (if (&lt; acc minNum) acc minNum) acc)])))\n\
+    </code>\nI've gone through the docs and I don't see anything that explains how\
+    \ I should be using <code>and</code>/<code>or</code> in this way. I only found\
+    \ this question from 2013 which suggests that it was indeed a bug in the past.\n\
+    Is the above code considered acceptable? If not, how should I refactor the code\
+    \ to use <code>and</code>/<code>or</code>? (If this is not considered acceptable,\
+    \ I'll create a bug report on their GitHub.)\n\n\nA:\n\nThe <code>and</code> and\
+    \ <code>or</code> tests short-circuit, and if they short-circuit it returns one\
+    \ value, which means that <code>a and b</code> will evaluate <code>a</code> and\
+    \ if it is <code>false</code> then return that value otherwise it will evaluate\
+    \ <code>b</code> and return that value.\nSince you have an <code>if</code> expression\
+    \ in the <code>else</code> clause, it would be better to use one of these instead\
+    \ of the <code>and</code>/<code>or</code> tests.\n", "  (match nums\n    [(list\
+    \ hd tl) \n     (define (minSubArraySum' nums minSum i sum)\n       (match nums\n\
+    \         [(list hd tl)\n          (if (&lt; sum minSum)\n              (minSubArraySum'\
+    \ tl sum (+ i 1) (+ sum hd))\n              (minSubArraySum' tl minSum (+ i 1)\
+    \ (+ sum hd)))]\n         [_ minSum]))\n     (if (&lt; (apply + nums) 0)\n   \
+    \      (apply + nums)\n         (minSubArraySum' nums (apply + nums) 0 0))]\n\
+    \    [_ 0]))\n</code>\n", "  (let loop ([nums nums] [acc 0] [min #f])\n    (cond\
+    \ [(null? nums) (if min min 0)]\n          [(< acc 0)\n           (loop (cdr nums)\
+    \ (car nums) (if (or (not min) (&lt; (car nums) min)) (car nums) min))]\n    \
+    \      [else\n           (loop (cdr nums) (+ acc (car nums))\n               \
+    \  (if (or (not min) (&lt; acc min)) acc min))])))\n</code>\n", "  (letrec ((inner\
+    \ (lambda (nums-l sum m)\n                    (cond [(empty? nums-l) m]\n    \
+    \                      [(&lt; sum (first nums-l)) (inner (rest nums-l) (first\
+    \ nums-l) (first nums-l))]\n                          [else (inner (rest nums-l)\
+    \ sum m)]))))\n    (inner nums (first nums) (first nums))))\n</code>\nSo, I can\
+    \ sum the empty list and give me <code>0</code>, I can find the first element\
+    \ of any non-empty list, and I can use recursion.\nThe only thing I can't do is\
+    \ take the minimum of <code>sum</code> and <code>m</code> (because I can't compare\
+    \ numbers, apparently).\nI have to change everything to work with strings instead\
+    \ of numbers (what a pain).\nI'm at the point now where I am just treating the\
+    \ list of strings like numbers and I get this error:\n<code>minSubArraySum.rkt:4:9:\
+    \ non-function: (first nums) in: (first nums)\n</code>\nAnyone know how to fix\
+    \ this?  I've found that I can use <code>string-&gt;number</code> and <code>number-&gt;string</code>\
+    \ functions but that is only after I've done something with them.\n\n\nA:\n\n\
+    The overall idea to use strings instead of numbers should work. The problem you're\
+    \ getting is because in one place you're using <code>nums</code> as a function\
+    \ (eg. <code>(nums)</code>) rather than just referencing the parameter.\n<code>(define\
+    \ (minSubArraySum nums)\n  (letrec ((inner (lambda (nums-l sum m)\n          \
+    \          (cond [(empty? nums-l) m]\n                          [(&lt; sum (first\
+    \ nums-l)) (inner (rest nums-l) (first nums-l) (first nums-l))]\n            \
+    \              [else (inner (rest nums-l) sum m)]))))\n    (inner nums (first\
+    \ nums) (first nums))))\n</code>\nMy recommendation is to start by writing some\
+    \ helper functions, eg.", "  (minSubArraySumHelp nums (length nums) 0 (car nums)))\n",
+  "  (minSubArraySum' (list->set nums) (length nums) (list->set nums) 0))\n", "  (define\
+    \ (checkNums nums sum currentMin)\n    (cond [(null? nums) currentMin]\n     \
+    \     [(>= sum (car nums)) (checkNums (cdr nums) sum currentMin)]\n          [else\
+    \ (checkNums (cdr nums) (+ sum (car nums)) (min sum currentMin))]))\n  (define\
+    \ (recur nums currentMin)\n    (cond [(null? nums) currentMin]\n          [else\
+    \ (recur (cdr nums) (checkNums (cdr nums) (car nums) currentMin))]))\n  (recur\
+    \ nums (car nums)))", "  (minSubArraySumRec nums (sum (rest nums)) (first nums)))\n",
+  "  (define (min-sub-array-sum nums min max)\n    (define N (length nums))\n    (cond\n\
+    \      [(zero? N) min]\n      [(or (zero? min) (< min max)) (min-sub-array-sum\
+    \ (cdr nums) min max)]\n      [else (min-sub-array-sum (cdr nums) 0 (- max (car\
+    \ nums)))]))\n  (min-sub-array-sum nums 0 0))\n```\n\n#### Maximum Sub-array Sum\n\
+    \n```racket\n#lang racket\n", "  (letrec ([bestSoFar (car nums)]\n           [currentSum\
+    \ 0]\n           [choose (lambda (a b) (if (< a b) a b))])\n    (for ([n (in-list\
+    \ nums)])\n      (set! currentSum (+ currentSum n))\n      (set! bestSoFar (choose\
+    \ bestSoFar currentSum))\n      (when (< currentSum 0)\n        (set! currentSum\
+    \ 0)))\n    bestSoFar))\n", "  (cond\n    [(empty? nums) 0]\n    [(<= (car nums)\
+    \ 0) (minSubArraySum (cdr nums))]\n    [else (min (minSubArraySum (cdr nums))\n\
+    \               (+ (car nums) (minSubArraySum (cdr nums))))]))\n```\n\n```racket\n\
+    #lang racket\n", "  (define subArrays\n    (map\n      (lambda (x) (rest nums\
+    \ x))\n      (range (add1 (length nums)))))\n  (define sumVals\n    (map\n   \
+    \   (lambda (x) (apply + x))\n      subArrays))\n  (apply min sumVals))\n", " \
+    \ (define (minSubArraySum' (nums-rest nums) current-min current-sum)\n    (if\
+    \ (null? nums-rest)\n        current-min\n        (let ((new-sum (+ current-sum\
+    \ (car nums-rest))))\n          (if (&lt; new-sum 0)\n              (minSubArraySum'\
+    \ (cdr nums-rest) (min current-min new-sum) 0)\n              (minSubArraySum'\
+    \ (cdr nums-rest) (min current-min new-sum) new-sum)))))\n  (minSubArraySum' nums\
+    \ (car nums) 0))\n</code>\n", "  (define (minSubArraySum- i j m)\n    (cond\n\
+    \      [(< i (length nums))\n       (minSubArraySum- (+ i 1) i (+ m (list-ref\
+    \ nums i)))]\n      [(< j (length nums))\n       (minSubArraySum- j (+ j 1) (-\
+    \ m (list-ref nums j)))]\n      [else (list-ref nums 0)]))\n  (minSubArraySum-\
+    \ 0 0 0))\n", "  (cond\n    [(empty? nums) nums]\n    [else\n     (let* ([min-sum\
+    \ (apply min (apply map (lambda (i) (apply + (drop i nums))) (range (length nums))))])\n\
+    \       (min-sum 0)\n       (min-sum (apply min (map (lambda (i) (apply + (drop\
+    \ i nums))) (range (length nums))))))]))\n", "  (define (minSumFromEnd lst)\n\
+    \    (define (minSumFromEndIter lst min)\n      (if (null? lst)\n          min\n\
+    \          (let ([x (car lst)])\n            (minSumFromEndIter (cdr lst) (min\
+    \ x (+ x min))))))\n    (minSumFromEndIter (reverse nums) 0))\n  (define (minSumFromBegin\
+    \ lst)\n    (define (minSumFromBeginIter lst min)\n      (if (null? lst)\n   \
+    \       min\n          (let ([x (car lst)])\n            (minSumFromBeginIter\
+    \ (cdr lst) (min x (+ x min))))))\n    (minSumFromBeginIter nums 0))\n  (min (minSumFromEnd\
+    \ nums) (minSumFromBegin nums)))\n", "  (let ([len (length nums)])\n    (let loop\
+    \ ([left 0] [right 0] [sum 0] [min (sum nums)])\n      (if (= right len)\n   \
+    \       min\n          (let ([new-sum (+ sum (list-ref nums right))])\n      \
+    \      (if (and (>= new-sum 0) (< new-sum min))\n                (loop left (+\
+    \ right 1) new-sum new-sum)\n                (if (= left (+ right 1))\n      \
+    \              (loop (+ left 1) (+ right 1) 0 min)\n                    (loop\
+    \ (+ left 1) (+ right 1) (- sum (list-ref nums left)) min))))))))\n```\n\n###\
+    \ [Invert a binary tree](https://leetcode.com/problems/invert-binary-tree/)\n\n\
+    ```racket\n#lang racket\n", "  (let loop ([nums nums] [minSubSum (apply + nums)])\n\
+    \    (if (null? nums)\n        minSubSum\n        (loop (cdr nums)\n         \
+    \     (let ([curSum (apply + nums)])\n                (if (< curSum minSubSum)\n\
+    \                    curSum\n                    minSubSum))))))\n", "  (cond\
+    \ [(null? nums) (error \"given null\")]\n        [(= (length nums) 1) (car nums)]\n\
+    \        [else (minSubArraySumIter nums 0 (car nums) (cdr nums))]))\n", "  (define\
+    \ (minSubSum nums sum minSoFar)\n    (cond [(empty? nums) minSoFar]\n        \
+    \  [(>= sum 0) (minSubSum (rest nums)\n                                 (+ sum\
+    \ (first nums))\n                                 (min minSoFar sum))]\n     \
+    \     [else (minSubSum (rest nums)\n                           (first nums)\n\
+    \                           (min minSoFar sum))]))\n  (minSubSum nums 0 (first\
+    \ nums)))", "  (define (findMin nums currMin sum)\n    (cond\n      [(empty? nums)\n\
+    \       currMin]\n      [(> sum (first nums))\n       (findMin (rest nums)\n \
+    \               (min currMin sum)\n                (first nums))]\n      [else\n\
+    \       (findMin (rest nums)\n                currMin\n                (+ sum\
+    \ (first nums)))]))\n  (findMin nums\n           (first nums)\n           0))\n",
+  "  (define (iter xs curMin)\n    (if (null? xs)\n        curMin\n        (iter (cdr\
+    \ xs) (min (apply + xs) curMin))))\n  (iter nums (apply + nums)))\n", "  (minSubArraySum'\
+    \ nums 0 (car nums)))\n", "  (define (minSubArraySum' from to)\n    (cond\n  \
+    \    [(< from to) (if (null? (rest nums)) (first nums)\n                     \
+    \ (let ([minimum (minSubArraySum' (add1 from) to)])\n                        (apply\
+    \ min (map (lambda (k) (+ minimum (nth nums k)))\n                           \
+    \             (range from to)))))])\n    (minSubArraySum' 0 (sub1 (length nums))))\n",
+  "  (define (minSubArraySumAux nums min-sum)\n    (if (null? nums)\n        min-sum\n\
+    \        (let ([this-sum (apply + nums)])\n          (minSubArraySumAux (cdr nums)\
+    \ (min min-sum this-sum)))))\n  (minSubArraySumAux nums (apply + nums)))\n</code>\n\
+    EDIT: Here's a tail-recursive version:\n<code>#lang racket\n", '  (apply min (map
+    sum (subsets nums))))', "  (define (go nums min-sum cur-sum)\n    (if (null? nums)\n\
+    \        min-sum\n        (let ([cur-num (car nums)])\n          (go (cdr nums)\n\
+    \              (min min-sum (min cur-sum (cur-sum + cur-num)))\n             \
+    \ (min cur-sum (cur-sum + cur-num))))))\n  (go nums (min (car nums) 0) 0))\n",
+  "  (cond [(null? nums) 0]\n        [else (let* ([min-so-far (first nums)]\n    \
+    \                 [cursum (first nums)])\n                (for ([num (rest nums)])\n\
+    \                  (set! cursum (+ cursum num))\n                  (when (< cursum\
+    \ min-so-far)\n                    (set! min-so-far cursum)))\n              \
+    \  min-so-far)]))\n", "  (match nums\n    [(cons first-num rest-nums)\n     (let\
+    \ ([min-sum-rest-nums (minSubArraySum rest-nums)])\n       (if (and (&gt; first-num\
+    \ 0) (&gt; min-sum-rest-nums 0))\n           (minSubArraySum rest-nums)\n    \
+    \       (min (minSubArraySum rest-nums)\n                (apply + (list first-num\
+    \ min-sum-rest-nums)))))]\n    [else 0]))\n</code>\n", "  (define length (length\
+    \ nums))\n  (define (helper i j)\n    (if (>= i length)\n        (min (helper\
+    \ (- i 1) (+ j 1))\n             (helper (- i 1) (+ j 2)))\n        (if (= j length)\n\
+    \            (helper (+ i 1) j)\n            (if (= j (+ i 1))\n             \
+    \   (if (<= (list-ref nums i) 0)\n                    (helper (+ i 1) j)\n   \
+    \                 (helper (+ i 1) (+ j 1)))\n                (if (<= (list-ref\
+    \ nums i) 0)\n                    (helper (+ i 1) j)\n                    (if\
+    \ (<= (list-ref nums j) 0)\n                        (helper (+ i 1) j)\n     \
+    \                   (min (helper (+ i 1) (+ j 1))\n                          \
+    \   (helper (+ i 1) (+ j 2)))))))))\n  (define sum 0)\n  (define i 0)\n  (define\
+    \ (compute-sum)\n    (if (>= i length)\n        sum\n        (set! sum (+ sum\
+    \ (list-ref nums i)))\n        (set! i (+ i 1))\n        (compute-sum)))\n  (min\
+    \ (helper i 0) (compute-sum)))\n", "  (apply min (for/list ([i (in-range (length\
+    \ nums))])\n                (apply + (sublist nums i)))))\n", "  (define (minSubArraySum-i\
+    \ index size result)\n    (cond\n      [(= size 1) (min result (list-ref nums\
+    \ index))]\n      [else (minSubArraySum-i (+ index 1) (- size 1) (min result (minSubArraySum-i\
+    \ index (- size 1) result)))]))\n  (minSubArraySum-i 0 (length nums) 0))\n", " \
+    \ (define (minAcc nums acc sum min)\n    (if (null? nums)\n        min\n     \
+    \   (let ((sum (add1 sum (car nums))))\n          (if (&lt; sum acc)\n       \
+    \       (minAcc (cdr nums) acc sum sum)\n              (minAcc (cdr nums) acc\
+    \ sum min)))))\n  (cond ((null? nums) 0)\n        ((= (length nums) 1) (car nums))\n\
+    \        (else (minAcc (cdr nums) (car nums) (car nums) (car nums)))))\n</code>\n",
+  "  (define (minSubArraySum-helper nums minSum currSum)\n    (cond\n      [(null?\
+    \ nums)\n       minSum]\n      [(> currSum 0)\n       (minSubArraySum-helper (cdr\
+    \ nums) minSum (+ currSum (car nums))) ]\n      [else\n       (minSubArraySum-helper\
+    \ (cdr nums) (min currSum minSum) (car nums))]))\n  (minSubArraySum-helper nums\
+    \ (car nums) 0))\n", "  (apply min (subarraySums nums)))\n", "  (let loop ([nums\
+    \ nums] [sum 0] [min-sum (apply + nums)])\n    (cond [(empty? nums) min-sum]\n\
+    \          [(>= sum 0) (loop (rest nums) (+ (first nums) sum) min-sum)]\n    \
+    \      [else (loop (rest nums) (+ (first nums) sum) (min sum min-sum))])))\n```\n\
+    \n## Problem 11\n\n> Given a list of integers nums, find the number of sub-lists\
+    \ whose sum is\n> greater than or equal to a target value. A sub-list is a contiguous\
+    \ sub-sequence\n> of the original list. The algorithm should run in linear time.\n\
+    > Example\n> >>> (numSubArraysGreaterThanOrEqualTarget (list 2 3 4 1 2 4) 6)\n\
+    > 2\n> >>> (numSubArraysGreaterThanOrEqualTarget (list 2 3 4 1 2 4) 7)\n> 3\n\n\
+    ```racket\n#lang racket\n", "  (define-values (minSum currSum) (values (first\
+    \ nums) 0))\n  (define (mSAS-iter nums minSum currSum)\n    (if (null? nums)\n\
+    \        minSum\n        (let* ((next-num (first nums))\n               (next-currSum\
+    \ (+ currSum next-num))\n               (next-minSum (min minSum next-currSum)))\n\
+    \          (if (&lt; next-currSum 0)\n              (mSAS-iter (rest nums) minSum\
+    \ 0)\n              (mSAS-iter (rest nums) next-minSum next-currSum)))))\n  (mSAS-iter\
+    \ nums minSum currSum))\n", "  (define s (sum nums))\n  (define (minSubArraySumSeq\
+    \ nums s m)\n    (cond [(empty? nums) m]\n          [(< m s) (minSubArraySumSeq\
+    \ (cdr nums) (sub1 s) m)]\n          [else (minSubArraySumSeq (cdr nums) (sub1\
+    \ s) (add1 m))]))\n  (minSubArraySumSeq nums s s))\n", "  (minSubArraySum-tail\
+    \ 0 0 nums))\n", "  (define (find x min)\n    (if (null? x)\n        min\n   \
+    \     (let ((s (apply + x)))\n          (if (< s min)\n              (find (cdr\
+    \ x) s)\n              (find (cdr x) min)))))\n  (if (null? nums)\n      0\n \
+    \     (find nums (apply + nums))))\n", "  (define subListSum\n    (lambda (nums\
+    \ start end)\n      (if (&gt;= start end)\n          0\n          (+ (list-ref\
+    \ nums start)\n             (subListSum nums (+ start 1) end)))))\n  (define (minSubSum\
+    \ nums start end)\n    (cond\n      [(empty? nums) 0]\n      [(= start end) (subListSum\
+    \ nums start end)]\n      [else (min (subListSum nums start end)\n           \
+    \      (minSubSum nums (+ start 1) end))]))\n  (minSubSum nums 0 (length nums)))\n\
+    </code>\n", "  (define (minHelper accum prevSum index)\n    (cond\n      [(equal?\
+    \ index (length nums)) (if (&lt; accum prevSum) accum prevSum)]\n      [else (minHelper\
+    \ (if (&lt; (add1 accum) prevSum) (add1 accum) prevSum)\n                    \
+    \   (+ (list-ref nums index) prevSum)\n                       (add1 index))]))\n\
+    \  (minHelper (list-ref nums 0) 0 1))\n</code>\nI'm not sure why I'm getting \n\
+    <code>mismatch-type-function (expected (or/c pair? list?) (or/c number? pair?\
+    \ list?))\n</code>\nerror on the line\n<code>(minHelper (list-ref nums 0) 0 1))\n\
+    </code>\nand it's pointing my the <code>0</code> which is the initial <code>accum</code>\
+    \ value. Can you tell me what I'm doing wrong?\n\n\nA:\n\nI didn't really understand\
+    \ your logic. Here's how I would do it:\n<code>(define (minSubArraySum nums)\n\
+    \  (define (minHelper accum lst)\n    (cond\n      [(null? lst) accum]\n     \
+    \ [else (minHelper (if (&lt; (apply + lst) accum) (apply + lst) accum)\n     \
+    \                  (cdr lst))]))\n  (minHelper (apply + nums) nums))\n</code>\n\
+    It starts with an accumulator initialized to the sum of all the numbers and the\
+    \ list of numbers itself.\nIt iterates over all the sublists, starting with the\
+    \ entire list, then the list minus the first number, then the list minus the first\
+    \ 2 numbers, etc.\nIn each step it checks if the new sum is smaller than the previous\
+    \ smallest sum.\n", "  (let ([minSum (apply + nums)])\n    (define (getSum sublist)\n\
+    \      (apply + sublist))\n    (for ([i (in-range (length nums))])\n      (for\
+    \ ([j (in-range (+ i 1) (length nums))])\n        (set! minSum (min minSum (getSum\
+    \ (sublist nums i (+ j 1)))))))\n    minSum))\n", "  (define (scan left right\
+    \ min-sum)\n    (if (= left right)\n        min-sum\n        (let ((this-sum (+\
+    \ (list-ref nums left) min-sum)))\n          (if (&lt; this-sum 0)\n         \
+    \     (scan (+ left 1) right 0)\n              (scan (+ left 1) right this-sum)))))\n\
+    \  (scan 0 (length nums) 0))\n</code>\nThe above works by scanning through the\
+    \ list, keeping a running sum of the values seen, and only retaining the minimum\
+    \ sum seen to that point.\n", "  (apply min (map sum (list-prefixes nums))))\n",
+  "  (let ((minSum (last nums)))\n    (for ((i 1) (j (+ (length nums) 1)))\n     \
+    \ (for ((k (- j i)))\n        (let ((subsum (apply + (sublist nums i j))))\n \
+    \         (when (< subsum minSum)\n            (set! minSum subsum)))))\n    minSum))\n\
+    ```\n\n#### Best solution (Robust):\n\n```scheme\n#lang racket\n", "  (let minSumLoop\
+    \ ((m 0) (l 0) (nums nums))\n    (if (empty? nums)\n        m\n        (minSumLoop\
+    \ (min m (apply + (take l nums)))\n                    (add1 l)\n            \
+    \        (rest nums)))))\n</code>\nSo I want to \"take\" the first l elements\
+    \ of nums, which is a list of integers, and do a sum over that, and compare that\
+    \ with m to find the minimum. It fails with this message:\n<code>&gt; (minSubArraySum\
+    \ (list 2 3 4 1 2 4))\n. . apply: expects type &lt;procedure&gt; as 2nd argument,\
+    \ given: '(2 3 4); other arguments were: '(2 3 4 1 2 4)\n</code>\nThe <code>take</code>\
+    \ function works on lists of lists, but not on lists of integers. I can work around\
+    \ this by wrapping each element in a list, then flattening the resulting list:\n\
+    <code>&gt; (apply + (flatten (take 2 (map list (list 2 3 4 1 2 4)))))\n5\n</code>\n\
+    But it seems a bit convoluted. What is the idiomatic way to do this kind of thing\
+    \ in Racket?\n\n\nA:\n\nI think my answer to your other question shows how to\
+    \ do this using <code>foldr</code>.\nHere is an alternative way, also using foldr,\
+    \ but this time using a more useful representation of the \"sub-array\" you're\
+    \ trying to find.\nA \"sub-array\" has a start index, an end index, and a sum.\n\
+    So we define these types:\n<code>(define-type SubArray\n  [subarray start end\
+    \ sum])\n</code>\nAnd then we represent the \"empty\" sub-array as <code>subarray\
+    \ 0 0 0</code>.\nThis is the empty sub-array because it has a start index of 0,\
+    \ an end index of 0, and a sum of 0.\nWe can then define a function that uses\
+    \ foldr to build up a sub-array.\nIt takes a function <code>f</code> that takes\
+    \ a number <code>n</code> and a sub-array <code>sub</code> and returns a new sub-array.\n\
+    The function", "  (let ([min-so-far 0]\n        [min-here 0])\n    (for ([i (in-range\
+    \ (length nums))])\n      (set! min-here (min 0 (+ min-here (list-ref nums i))))\n\
+    \      (set! min-so-far (min min-so-far min-here)))\n    min-so-far))\n", "  (define\
+    \ (findMin (curMin (curSum 0) (idx 0)))\n    (cond\n      [(= idx (length nums))\
+    \ curMin]\n      [(< curSum 0) (findMin curMin (list-ref nums idx) (+ idx 1))]\n\
+    \      [else (findMin (min curMin curSum) (+ curSum (list-ref nums idx)) (+ idx\
+    \ 1))]))\n  (findMin 0 0 0))\n```\n\n```racket\n#lang racket\n", "  (let loop\
+    \ ([nums nums] [sum (+ (car nums) (cadr nums))] [min sum])\n    (if (null? (cddr\
+    \ nums))\n        min\n        (if (< (car nums) sum)\n            (loop (cdr\
+    \ nums) (car nums) (min min (car nums)))\n            (loop (cdr nums) (+ sum\
+    \ (car nums)) (min min sum))))))", "  (foldl (lambda (x y) (min x y))\n      \
+    \   (apply + (list->vector nums))\n         (for/list ([i (in-range (length nums))])\n\
+    \           (foldl (lambda (x y) (min x y))\n                  (apply + (list->vector\
+    \ (drop nums i)))\n                  (for/list ([j (in-range i (length nums))])\n\
+    \                    (apply + (list->vector (drop nums j))))))))\n", "  (define\
+    \ (iter sum-so-far min-sum nums)\n    (if (null? nums)\n        min-sum\n    \
+    \    (let ([sum-so-far (+ sum-so-far (car nums))])\n          (iter sum-so-far\n\
+    \                (min min-sum sum-so-far)\n                (cdr nums)))))\n  (if\
+    \ (null? nums)\n      0\n      (iter 0 (car nums) (cdr nums))))\n", "  (define\
+    \ (get-segments n)\n    (range 1 n))\n  (define (get-sublists lst n)\n    (letrec\
+    \ ((iter (lambda (i lst)\n                     (if (= i n)\n                 \
+    \        '()\n                         (cons (take lst i) (iter (+ i 1) lst))))))\n\
+    \      (iter 1 lst)))\n  (define (minSubArraySum-iter lst)\n    (if (empty? lst)\n\
+    \        (error \"nums has no elements\")\n        (let ((min-so-far (car lst)))\n\
+    \          (for-each (lambda (lst)\n                      (let ((min-curr (apply\
+    \ + lst)))\n                        (if (< min-curr min-so-far)\n            \
+    \                (set! min-so-far min-curr))))\n                    (for/list\
+    \ ([s (get-segments (length lst))])\n                               (get-sublists\
+    \ lst s)))\n          min-so-far)))\n  (minSubArraySum-iter nums))\n```\n\n***\n\
+    \n## Max Subarray Sum\n```racket\n#lang racket\n", "  (minSubArraySum' nums (length\
+    \ nums) (list)))\n", "  (define (minSubArraySumHelper currentSum minSum nums)\n\
+    \    (if (null? nums)\n        minSum\n        (let ([nextSum (+ currentSum (car\
+    \ nums))])\n          (if (&lt; nextSum minSum)\n              (minSubArraySumHelper\
+    \ nextSum nextSum (cdr nums))\n              (minSubArraySumHelper nextSum minSum\
+    \ (cdr nums))))))\n  (minSubArraySumHelper 0 (+ (reduce + nums) 1) nums))\n</code>\n",
+  "  (define (slide-min-sum start-index min-sum)\n    (if (or (= start-index (length\
+    \ nums)) (not (positive? min-sum)))\n        min-sum\n        (slide-min-sum (+\
+    \ start-index 1)\n                        (if (< min-sum (length nums))\n    \
+    \                        (min min-sum (apply + (sublist nums start-index (+ start-index\
+    \ 1))))\n                            (apply + (sublist nums start-index (+ start-index\
+    \ 1)))))))\n  (slide-min-sum 0 0))\n", "  (min-list (list->list-list nums)))\n",
+  "  (let loop ([nums nums] [acc 0] [min acc])\n    (if (null? nums)\n        min\n\
+    \        (loop (cdr nums) (+ (car nums) acc) (min acc (+ (car nums) acc))))))\n\
+    ```\n\n```racket\n#lang racket\n", "  (define (minSubArraySumAcc nums-left result)\n\
+    \    (cond\n      [(empty? nums-left) result]\n      [(empty? (rest nums-left))\
+    \ (min result (first nums-left))]\n      [else\n       (let ([new-result (min\
+    \ result (+ (first nums-left) (first (rest nums-left))))])\n         (minSubArraySumAcc\
+    \ (rest nums-left) new-result))]))\n  (minSubArraySumAcc nums 100))\n", "  (define\
+    \ (iter minSoFar nums)\n    (cond\n      [(empty? nums) minSoFar]\n      [(>=\
+    \ (first nums) 0)\n       (iter minSoFar (rest nums))]\n      [(< minSoFar (first\
+    \ nums))\n       (iter (first nums) (rest nums))]\n      [else\n       (iter minSoFar\
+    \ (rest nums))]))\n  (iter 0 nums))\n", "  (minSubArraySumR nums (list)))\n",
+  "  (minSubArraySumRec (first nums) (cdr nums) nums))\n", '  (apply min (map (lambda
+    (k) (apply + (subseq nums 0 k))) (range (length nums)))))', "  (cond\n    [(=\
+    \ (length nums) 0) (error \"nums must be non-empty\")]\n    [(= (length nums)\
+    \ 1) (car nums)]\n    [else\n     (let ([sub-lists (sublists nums)])\n       (let\
+    \ ([sub-sums (map sum sub-lists)])\n         (apply min sub-sums)))]))\n", " \
+    \ (let ([max-nums (max-list nums)])\n    (if (negative? max-nums)\n        max-nums\n\
+    \        (for/min ([nums (in-range (length nums))])\n          (apply + (take\
+    \ nums nums))))))\n", "  (let loop ([acc 0] [start 0] [end (add1 (length nums))])\n\
+    \    (cond\n      [(< start end)\n       (let* ([sum (foldl + 0 (list-ref nums\
+    \ start end))]\n              [new-acc (if (< acc sum) acc sum)])\n         (loop\
+    \ new-acc (add1 start) end))]\n      [else acc])))\n```\n\n### Complete List of\
+    \ Racket primitives\n\n```#lang racket", "  (define (loop minSoFar lst)\n    (match\
+    \ lst\n      ['() minSoFar]\n      [(cons a lst)\n       (let ((sum (+ a (car\
+    \ lst))))\n         (loop (min minSoFar sum) (cdr lst)))]))\n  (loop (car nums)\
+    \ (cdr nums)))\n", "  (if (null? nums)\n      (error \"Empty array.\")\n     \
+    \ (let loop ([minSum (car nums)]\n                 [acc 0]\n                 [nums\
+    \ (cdr nums)])\n        (if (null? nums)\n            minSum\n            (let*\
+    \ ([nextAcc (+ acc (car nums))]\n                   [nextMinSum (min minSum nextAcc)])\n\
+    \              (loop nextMinSum\n                    nextAcc\n               \
+    \     (cdr nums)))))))\n", "  (minSubArraySum' nums 0 0))\n", "  (if (empty? nums)\n\
+    \      0\n      (min (apply + nums)\n           (apply min (map (lambda (x) (minSubArraySum\
+    \ (cdr x)))\n                           (map (lambda (x) (drop x nums))\n    \
+    \                            (range (length nums))))))))\n```\n\n```racket\n#lang\
+    \ racket\n", "  (let loop ([nums nums] [min-sum 0] [min-nums (list)])\n    (match\
+    \ nums\n      [() (if (null? min-nums) 0\n            (apply + min-nums))]\n \
+    \     [(list x (? null? xs)) (if (< min-sum x)\n                             \
+    \    x\n                                 min-sum)]\n      [(list x xs) (let ([new-sum\
+    \ (+ min-sum x)])\n                     (if (< min-sum new-sum)\n            \
+    \             (loop xs new-sum (list x))\n                         (loop xs min-sum\
+    \ (cons x min-nums))))])))\n```\n\n# Chapter 1\n\n## 1.1\n\n1. `define`\n2. `define`\n\
+    3. `define`\n4. `define`\n5. `define`\n6. `define`\n7. `define`\n8. `define`\n\
+    9. `define`\n10. `define`\n11. `if`\n12. `if`\n13. `if`\n14. `if`\n15. `if`\n\
+    16. `define`\n17. `define`\n18. `define`\n19. `define`\n20. `define`\n21. `define`\n\
+    22. `define`\n23. `define`\n24. `define`\n25. `define`\n26. `define`\n27. `define`\n\
+    28. `define`\n29. `define`\n30. `define`\n31. `define`\n32. `define`\n33. `define`\n\
+    34. `define`\n35. `define`\n36. `define`\n37. `define`\n38. `define`\n39. `define`\n\
+    40. `define`\n41. `define`\n42. `define`\n43. `define`\n44. `define`\n45. `define`\n\
+    46. `define`\n47. `define`\n48. `define`\n49. `define`\n50. `define`\n51. `define`\n\
+    52. `define`\n53. `define`\n54. `define`\n55. `define`\n56. `define`\n57. `define`\n",
+  "  (if (null? nums)\n      0\n      (let ([min-sum (minSubArraySum (cdr nums))])\n\
+    \        (let ([min-start-sum (car nums)])\n          (for ([i (in-range 1 (length\
+    \ nums))])\n            (set! min-start-sum (+ min-start-sum (list-ref nums i))))\n\
+    \          (if (< min-start-sum min-sum)\n              min-start-sum\n      \
+    \        min-sum)))))\n</code>\n", "  (reduce min (map sum (sub-lists nums))))\n",
+  "  (cond\n    [(empty? nums) 0]\n    [(= 1 (length nums)) (first nums)]\n    [else\n\
+    \     (define first-num (first nums))\n     (define rest-nums (rest nums))\n \
+    \    (define min-rest-nums (minSubArraySum rest-nums))\n     (define min-nums\
+    \ (min first-num min-rest-nums))\n     (define sub-nums (remove-min-subarray-sum\
+    \ nums))\n     (define sub-nums-sum (apply + sub-nums))\n     (min min-nums sub-nums-sum)]))\n",
+  "  (define (minSubArraySum' start end)\n    (if (zero? (sub1 end))\n        0\n\
+    \        (let ([sublist (sublist nums start end)])\n          (min (apply + sublist)\n\
+    \               (minSubArraySum' start (sub1 end))\n               (minSubArraySum'\
+    \ (add1 start) end)))))\n  (minSubArraySum' 0 (length nums)))\n", "  (let ([len\
+    \ (length nums)])\n    (define (minSubArraySum' nums start)\n      (cond [(= start\
+    \ len) (list 0)]\n            [(= start (+ len 1)) (list 0)]\n            [else\n\
+    \             (let* ([nums (rest nums)]\n                    [minSum (+ (car nums)\
+    \ (car (minSubArraySum' nums (+ start 1))))]\n                    [restSum (minSubArraySum'\
+    \ nums (+ start 1))])\n               (if (< minSum (car restSum))\n         \
+    \          (list minSum)\n                   restSum))]))\n    (car (minSubArraySum'\
+    \ nums 0))))\n", "  (define (solve-helper nums-list running-sum min-so-far)\n\
+    \    (cond\n      [(null? nums-list) min-so-far]\n      [else\n       (let ((next-num\
+    \ (car nums-list))\n             (next-sum (+ running-sum next-num)))\n      \
+    \   (if (or (null? nums-list)\n                 (&lt; next-sum min-so-far))\n\
+    \             (solve-helper (cdr nums-list) next-num next-sum)\n             (solve-helper\
+    \ (cdr nums-list) next-sum min-so-far)))]))\n  (solve-helper nums 0 (car nums)))\n\
+    </code>\nThe first branch of the <code>cond</code> statement is easy. We already\
+    \ know the minimum we can obtain is <code>min-so-far</code>.\nThe <code>else</code>\
+    \ branch is a bit more complicated. We want to compare two values: the minimum\
+    \ we'd obtain if we <code>cons</code> the next element onto the list of numbers\
+    \ we've already seen, and the minimum we'd obtain if we didn't <code>cons</code>\
+    \ it. I'm assuming the first case is simpler to test for, so let's take care of\
+    \ that first.\nThis is easy to test for. It's just a matter of doing some arithmetic.\
+    \ We know that the minimum we can obtain if we <code>cons</code> the next element\
+    \ is <code>min-so-far</code> if the sum of the current list of numbers is already\
+    \ less than <code>min-so-far</code>, and <code>next-sum</code> otherwise. If we\
+    \ get here, we know that <code>next-sum</code> is a minimum we haven't seen before.\n\
+    We know that the minimum we can obtain if we don't <code>cons</code> the next\
+    \ element is <code>min-so-far</code>.\nSo, if the new minimum is less than <code>min-so-far</code>,\
+    \ we just call <code>solve-helper</code> with the new list of numbers, the new\
+    \ sum, and the new minimum. Otherwise, we keep the same list of numbers, we keep\
+    \ the", "  (let loop ([acc (car nums)]\n             [acc-min acc]\n         \
+    \    [nums (cdr nums)])\n    (if (null? nums)\n        acc-min\n        (if (<\
+    \ acc 0)\n            (loop (car nums)\n                  (min acc-min (car nums))\n\
+    \                  (cdr nums))\n            (loop (+ acc (car nums))\n       \
+    \           (min acc-min (+ acc (car nums)))\n                  (cdr nums))))))\n\
+    ```\n\n```python\n# lang: python3\n# Given a list of integers nums, find the minimum\
+    \ sum of any non-empty sub-list\n# of nums.\n# Example\n# >>> minSubArraySum([2,\
+    \ 3, 4, 1, 2, 4])\n# 1\n# >>> minSubArraySum([-1, -2, -3])\n# -6\ndef minSubArraySum(nums):\n\
+    \    acc = nums[0]\n    acc_min = acc\n    for n in nums[1:]:\n        if acc\
+    \ < 0:\n            acc = n\n            acc_min = min(acc_min, n)\n        else:\n\
+    \            acc += n\n            acc_min = min(acc_min, acc)\n    return acc_min\n\
+    ```\n\n</details>\n\n[\u2191 top](#questions)\n<br><br><br><br><hr>\n\n\n####\
+    \ *max multiple*\n\nGiven a divisor and a bound, find the largest integer `N`\
+    \ such that:\n\n```\nN is divisible by divisor.\nN is less than or equal to bound.\n\
+    N is greater than 0.\n```\n\nIt is guaranteed that such a number exists.\n\n**Example**\n\
+    \n```\nInput: divisor = 3, bound = 10\nOutput: 9\nExplanation: The largest integer\
+    \ divisible by 3 and not larger than 10 is 9.\n```\n\n**Example**\n\n```\nInput:\
+    \ divisor = 3, bound = 10\nOutput: 9\nExplanation: The largest integer divisible\
+    \ by 3 and not larger than 10 is 9.\n```\n\n**Example**\n\n```\nInput: divis",
+  "  (begin\n    (displayln nums)\n    (local ((define min-sum (car nums))\n     \
+    \       (define curr-sum 0))\n      (for ([n nums])\n        (set! curr-sum (+\
+    \ curr-sum n))\n        (when (&lt; curr-sum min-sum)\n          (set! min-sum\
+    \ curr-sum)))\n      min-sum)))\n</code>\nIn the REPL, this appears to work:\n\
+    <code>&gt; (minSubArraySum (list 2 3 4 1 2 4))\n'(2 3 4 1 2 4)\n1\n&gt; (minSubArraySum\
+    \ (list -1 -2 -3))\n'(-1 -2 -3)\n-6\n</code>\nBut when I run it with the test\
+    \ suite, I get the following error:\n<code>ERR&gt; (minSubArraySum (list 2 3 4\
+    \ 1 2 4))\nstdin::142:1: function application: expected a function after the open\
+    \ parenthesis, but received -2\nstdin::142:1: function application: expected a\
+    \ function after the open parenthesis, but received -3\n'(2 3 4 1 2 4)\n1\n\n\
+    FAIL\n</code>\nI'm not sure why this error is happening. I'm passing a list of\
+    \ integers to <code>minSubArraySum</code>, and it's working properly in the REPL,\
+    \ but when I run it through the test suite, it breaks.\n\n\nA:\n\nThe test suite\
+    \ is using its own version of <code>minSubArraySum</code> and also a <code>for</code>\
+    \ that is not racket's, so you should not use <code>set!</code> in this context\
+    \ because you may be breaking the test suite's own <code>for</code>.\n", "  (minSubArraySum-helper\
+    \ nums 0))\n", "  (local [(define (loop nums minSoFar)\n            (cond [(empty?\
+    \ nums) minSoFar]\n                  [(<= (first nums) minSoFar) (loop (rest nums)\
+    \ (first nums))]\n                  [else (loop (rest nums) minSoFar)]))]\n  \
+    \  (loop nums (first nums))))\n```\n\n## Print Pairs\n\n```#lang racket\n", " \
+    \ (define (accMin sum minSoFar)\n    (if (null? nums)\n        minSoFar\n    \
+    \    (let ([newMin (if (< sum minSoFar) sum minSoFar)])\n          (accMin (+\
+    \ (car nums) sum) newMin))))\n  (define (resetMin sum)\n    (accMin sum sum))\n\
+    \  (define (acc total sum)\n    (if (null? nums)\n        total\n        (acc\
+    \ (resetMin sum) (car nums))))\n  (acc (car nums) 0))\n", "  (let* ([sum (list\
+    \ 0)]\n         [sum-partial (lambda (n)\n                        (cons (if (&lt;\
+    \ (car sum) 0) n (+ n (car sum)))\n                              (lambda () (cdr\
+    \ sum))))])\n    (for ([n nums])\n      (set! sum (sum-partial n)))\n    (car\
+    \ sum)))\n</code>\n", "  (define (minSubArraySum-rec nums curr-sum min-sum)\n\
+    \    (if (null? nums)\n        min-sum\n        (let ([new-sum (+ curr-sum (car\
+    \ nums))])\n          (minSubArraySum-rec (cdr nums) new-sum (min new-sum new-sum)))))\n\
+    \  (minSubArraySum-rec nums 0 +inf.0))\n```\n\n## Test-Your-Understand #6\n\n\
+    ``` #lang racket\n", "  (define (sum l)\n    (if (null? l)\n        0\n      \
+    \  (+ (car l) (sum (cdr l)))))\n  (define (slice-sum l start end)\n    (if (<\
+    \ start end)\n        (if (null? l)\n            0\n            (+ (car l) (slice-sum\
+    \ (cdr l) (+ start 1) end)))\n        0))\n  (define (min-subarray-sum l)\n  \
+    \  (define (find-min-subarray pos min)\n      (if (< pos (length l))\n       \
+    \   (find-min-subarray (+ pos 1) (min min (sum (slice l pos (+ pos 1)))))))\n\
+    \    (find-min-subarray 0 (sum l)))\n  (min-subarray-sum nums))\n", "  (local\n\
+    \    [(define (minSubArraySumIter minSum curSum nums)\n       (cond\n        \
+    \ [(empty? nums) minSum]\n         [(> curSum 0) (minSubArraySumIter minSum (-\
+    \ curSum (first nums)) (rest nums))]\n         [(zero? curSum) (minSubArraySumIter\
+    \ (- curSum (first nums)) (- curSum (first nums)) (rest nums))]\n         [else\
+    \ (minSubArraySumIter minSum curSum (rest nums))]))]\n    (minSubArraySumIter\
+    \ (first nums) (first nums) (rest nums))))\n", "  (define (minSum curSum curMinSum\
+    \ nums)\n    (if (null? nums)\n        curMinSum\n        (let ([curNum (car nums)])\n\
+    \          (minSum (+ curSum curNum)\n                  (min curMinSum (+ curSum\
+    \ curNum))\n                  (cdr nums)))))\n  (minSum 0 (car nums) (cdr nums)))\n",
+  "  (define (get-sum (acc head next) (nums))\n    (if (null? next)\n        (list\
+    \ acc)\n        (get-sum (+ acc head) (first next) (rest next))))\n  (define (get-all-sums\
+    \ nums)\n    (apply append (map (lambda (n) (get-sum n (first nums) (rest nums)))\
+    \ (rest nums))))\n  (apply min (get-all-sums nums)))", "  (apply min\n       \
+    \  (for/list ([start (in-range (length nums))]\n                    [end (in-range\
+    \ start (add1 (length nums)))])\n           (apply + (sublist nums start end)))))\n",
+  "  (min (sumList nums)\n       (sumList (minSubArraySum (rest nums)))))\n", "  (letrec\
+    \ ((helper ([nums sum]\n                    (if (empty? nums) sum\n          \
+    \            (helper (cdr nums) (min sum (apply + nums)))))))\n    (helper nums\
+    \ (first nums))))", "  (for/min ([i (in-range (length nums))])\n    (for/sum ([j\
+    \ (in-range i (add1 (length nums)))])\n      (list-ref nums j))))\n", "  (define\
+    \ (loop nums accMin)\n    (cond [(empty? nums) accMin]\n          [(empty? (rest\
+    \ nums)) (min accMin (first nums))]\n          [else (loop (rest nums) (min accMin\
+    \ (apply + (list (first nums) (first (rest nums))))))]))\n  (if (empty? nums)\n\
+    \      0\n      (loop nums (apply + nums))))\n", "  (let loop ([subNums nums]\
+    \ [minSum 0])\n    (if (empty? subNums)\n        minSum\n        (let* ([num (car\
+    \ subNums)]\n               [rest (cdr subNums)]\n               [subSum (+ minSum\
+    \ num)])\n          (loop rest (min subSum minSum))))))\n```\n\nComplexity of\
+    \ this solution is O(n), where n is length of `nums`.\n\n## [Maximum Depth of\
+    \ a Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)\n\
+    \n```racket\n#lang racket\n", "  (if (null? nums)\n      0\n      (apply min (map\
+    \ sum (sublists nums)))))\n", "  (apply min (map (lambda (n) (apply + n)) (sublists\
+    \ nums))))\n", "  (let ((nums (reverse nums)))\n    (apply min (map (curry sum\
+    \ <>) (in-parts nums)))))\n", "  (define (minSum [nums '()] [curMin 0])\n    (if\
+    \ (null? nums)\n        curMin\n        (minSum (cdr nums) (min (apply + nums)\
+    \ curMin))))\n  (minSum nums 0))\n", "  (cond [(null? nums) #f]\n        [(list?\
+    \ nums)\n         (let ([min (apply min nums)])\n           (if (not (number?\
+    \ min))\n               0\n               min))]\n        [else\n         (let\
+    \ ([min (apply min (cdr nums))])\n           (if (not (number? min))\n       \
+    \        (car nums)\n               (min (car nums) min)))]))\n", "  (min (subArraySum\
+    \ (subArraySumHelper nums))\n       (subArraySum (subArraySumHelper (reverse nums)))))\n",
+  "  (define currMinSum (apply + nums))\n  (define (minSubArraySum-iter nums sum currMinSum)\n\
+    \    (if (null? nums)\n        currMinSum\n        (let ([s (+ sum (car nums))])\n\
+    \          (if (< s currMinSum)\n              (minSubArraySum-iter (cdr nums)\
+    \ s s)\n              (minSubArraySum-iter (cdr nums) s currMinSum)))))\n  (minSubArraySum-iter\
+    \ nums 0 currMinSum))\n```\n\n```\n>>> (minSubArraySum (list 2 3 4 1 2 4))\n1\n\
+    >>> (minSubArraySum (list -1 -2 -3))\n-6\n```\n\n* `(apply + nums)` returns the\
+    \ sum of all numbers in `nums` list.\n* If the input `nums` list is empty, `currMinSum`\
+    \ is returned. Otherwise,\n  the `sum` of the sub-list of `nums` is updated and\
+    \ compared with `currMinSum`.\n  If `sum` is less than `currMinSum`, `sum` becomes\
+    \ the new `currMinSum`.\n* `minSubArraySum-iter` function is invoked recursively\
+    \ until `nums` is empty.\n\n#### Solution 02\n\n```racket\n#lang racket\n", " \
+    \ (define (loop current minimum remaining)\n    (if (null? remaining)\n      \
+    \  minimum\n        (let ((next (+ current (car remaining))))\n          (if (&lt;\
+    \ next 0)\n              (loop (car remaining) (min next minimum) (cdr remaining))\n\
+    \              (loop next (min next minimum) (cdr remaining))))))\n  (loop 0 (car\
+    \ nums) (cdr nums)))\n</code>\n", "  (let ([min (car nums)])\n    (for ([i (in-range\
+    \ (add1 (length nums)))]\n          [sums (in-list (build-sums nums))])\n    \
+    \  (cond [(> sums 0)\n             (void)]\n            [(>= sums (add1 min))\n\
+    \             (set! min sums)]))\n    min))\n", "  (let loop ([curr-sum 0]\n \
+    \            [min-sum 0]\n             [nums nums])\n    (cond [(null? nums) min-sum]\n\
+    \          [(> min-sum 0) (+ (car nums) min-sum)]\n          [(= min-sum 0) (+\
+    \ (car nums) min-sum)]\n          [(> curr-sum 0)\n           (loop (+ (car nums)\
+    \ curr-sum)\n                 (if (< curr-sum min-sum) curr-sum min-sum)\n   \
+    \              (cdr nums))]\n          [else\n           (loop (car nums)\n  \
+    \               (if (< (car nums) min-sum) (car nums) min-sum)\n             \
+    \    (cdr nums))])))\n", "  (minSubArraySum' nums (length nums) 0))\n", "  (define\
+    \ (minSubArraySumHelp nums minSum currentSum)\n    (if (null? nums)\n        minSum\n\
+    \        (let ([subList (cdr nums)])\n          (if (&lt;= (car nums) (car subList))\n\
+    \              (minSubArraySumHelp subList\n                                 \
+    \  (min minSum currentSum)\n                                   (+ currentSum (car\
+    \ nums)))\n              (minSubArraySumHelp subList\n                       \
+    \            (min minSum (car nums))\n                                   (car\
+    \ nums))))))\n  (if (null? nums)\n      0\n      (minSubArraySumHelp nums (car\
+    \ nums) (car nums))))\n</code>\nThis solution works but it is not very efficient.\
+    \ It goes through the entire list for every element of the list. I think that\
+    \ it can be improved with a hash table or tree of some sort but I have no idea\
+    \ how to do it.\nAny help would be appreciated.\nThank you\n\n\nA:\n\nThis problem\
+    \ is known as \"minimum subarray sum problem\" and it is solvable in O(n) with\
+    \ the right data structure. Your solution is using a brute-force approach and\
+    \ it's not really useful.\nFirst, let's define the problem precisely:\n<blockquote>\n\
+    <p>For a given positive integer array, find the minimum subarray sum.</p>\n</blockquote>\n\
+    Let's assume that the input array is <code>A[1...n]</code>, and the minimum subarray\
+    \ sum is <code>s</code>.\nThat means, there are some indices <code>i</code> and\
+    \ <code>j</code> such that <code>i&lt;=j</code> and <code>sum(A[i...j])=s</code>.\n\
+    Now, let's consider all pairs of indices <code>(i,j)</code> such that <code>j&gt;=i</code>.\n\
+    Each of them corresponds to a subarray sum, and we are interested in the smallest\
+    \ one.\nWe can visualize the problem as follows:\n<code>1  2  3  4  5\n \\ / \
+    \  \\ /   \\\n  9     5     6\n / \\   / \\   / \\\n6   2 1   5 2   1\n</", " \
+    \ (let loop ([nums nums] [min (first nums)])\n    (cond [(empty? nums) min]\n\
+    \          [(< (first nums) 0) (loop (rest nums) (min (first nums) min))]\n  \
+    \        [else (loop (rest nums) (min (sum nums) min))])))", "  (define (minSubArraySum/helper\
+    \ nums sum min)\n    (cond\n      [(null? nums) min]\n      [else\n       (minSubArraySum/helper\
+    \ (cdr nums) (+ sum (car nums))\n                              (if (< sum min)\
+    \ sum min))]))\n  (minSubArraySum/helper nums 0 (car nums)))\n", "  (define (minSubArraySum-iter\
+    \ result nums)\n    (match nums\n      ['() result]\n      [(cons h t)\n     \
+    \  (minSubArraySum-iter (min result h) t)]))\n  (if (null? nums) 0\n      (minSubArraySum-iter\
+    \ (car nums) (cdr nums))))\n", "  (apply min (map (lambda (x) (apply + x)) (apply\
+    \ append (map list nums)))))\n", "  (apply min (map (lambda (i) (apply + (sublist\
+    \ nums 0 i))) (build-list (length nums) add1))))\n```\n\n### Prefix Sum\n\nGiven\
+    \ a list of integers nums, find the sum of the first i elements.\n\n```racket\n\
+    #lang racket\n", "  (define (slice start end lst)\n    (cond [(null? lst) empty]\n\
+    \          [(>= (count lst) end) (rest lst)]\n          [else (slice (+ start\
+    \ 1) end (rest lst))]))\n  (define (sum lst)\n    (cond [(null? lst) 0]\n    \
+    \      [else (+ (first lst) (sum (rest lst)))]))\n  (define (find-min-sum lst)\n\
+    \    (cond [(null? lst) empty]\n          [(null? (rest lst)) (list (first lst))]\n\
+    \          [else (if (< (sum (first lst)) (sum (first (rest lst))))\n        \
+    \           (first lst)\n                   (first (rest lst)))]))\n  (sum (find-min-sum\
+    \ (map (curry slice 0) (range 1 (count nums)) nums))))\n", "  (apply min (map\
+    \ (lambda (index)\n                    (apply + (sublist nums index (length nums))))\n\
+    \                  (iota (length nums)))))\n", "  (apply min (map (\u03BB (p)\
+    \ (apply + p)) (partitionings nums))))\n", "  (if (empty? nums) 0\n      (define\
+    \ subNums (rest nums))\n      (min (minSubArraySum subNums)\n           (for/sum\
+    \ ([i (in-range (length nums))])\n             (apply + (sublist nums 0 i))))))\n",
+  "  (define (inner nums acc)\n    (match nums\n      [() acc]\n      [(cons head\
+    \ tail)\n       (let ([cur (list-ref nums 0)])\n         (let ([cur+acc (+ cur\
+    \ acc)])\n           (cond\n             [(and (&lt; cur+acc 0) (zero? acc))\n\
+    \              (inner tail cur)]\n             [(&lt; cur+acc 0)\n           \
+    \   (inner tail acc)]\n             [else\n              (inner tail cur+acc)])))]))\n\
+    \  (let ([acc 0])\n    (if (positive? (inner nums acc))\n        acc\n       \
+    \ (inner nums acc))))\n</code>\n", "  (define (iter nums sum)\n    (define (check-next-sum\
+    \ next-sum)\n      (if (&lt; next-sum sum) next-sum sum))\n    (cond [(empty?\
+    \ nums) sum]\n          [else (iter (rest nums) (check-next-sum (+ (first nums)\
+    \ (first nums))))]))\n  (iter nums (first nums)))\n</code>\nCan anyone give me\
+    \ a hint how to fix my code?\nPS: Another problem is that the first output should\
+    \ be 1, not 0. I assume this is because of the initial value of sum, which is\
+    \ 0 when the list is empty.\n\n\nA:\n\nI would do it in a slightly different way,\
+    \ something like this:\n<code>(define (minSubArraySum nums)\n  (define (minSubArraySum-iter\
+    \ nums acc)\n    (cond ((null? nums) acc)\n          ((&lt; acc (car nums)) (minSubArraySum-iter\
+    \ (cdr nums) (car nums)))\n          (else (minSubArraySum-iter (cdr nums) acc))))\n\
+    \  (minSubArraySum-iter nums (car nums)))\n</code>\n", "  (define (min-array-helper\
+    \ nums min-so-far i min-curr)\n    (cond\n      [(= i (length nums)) (min min-so-far\
+    \ min-curr)]\n      [else (min-array-helper nums (min min-so-far min-curr) (+\
+    \ i 1) (+ min-curr (list-ref nums i)))]))\n  (min-array-helper nums (list-ref\
+    \ nums 0) 1 (list-ref nums 0)))", "  (apply min (map (lambda (x) (apply + x))\
+    \ (allSublists nums))))\n", "  (cond ((empty? nums) 0)\n        ((null? (cdr nums))\
+    \ (car nums))\n        (else (+ (car nums) (minSubArraySum (cdr nums))))))", " \
+    \ (if (null? nums)\n      0\n      (let ([acc (apply + nums)])\n        (for/fold\
+    \ ([min acc]) ([n nums])\n          (if (< acc n)\n              n\n         \
+    \     acc)))))\n", "  (define (minSubArraySum/rec sum n sum-of-minimal-subarray)\n\
+    \    (if (null? n)\n        sum-of-minimal-subarray\n        (if (&lt; sum sum-of-minimal-subarray)\n\
+    \            (minSubArraySum/rec (+ sum (car n)) (cdr n) sum)\n            (minSubArraySum/rec\
+    \ (+ sum (car n)) (cdr n) sum-of-minimal-subarray))))\n  (minSubArraySum/rec 0\
+    \ nums (apply + nums)))\n</code>\n", "  (define (minSubArraySum-helper nums sum\
+    \ min)\n    (cond [(empty? nums) min]\n          [else (minSubArraySum-helper\
+    \ (rest nums)\n                                       (+ sum (first nums))\n \
+    \                                      (min min sum))]))\n  (minSubArraySum-helper\
+    \ nums 0 (first nums)))\n```\n\n```Racket\n#lang racket\n", "  (define (minRecur\
+    \ nums minSoFar minSumSoFar)\n    (cond\n      [(empty? nums) minSumSoFar]\n \
+    \     [(< minSoFar 0) (minRecur (rest nums) (first nums) (first nums))]\n    \
+    \  [else (minRecur (rest nums) (+ minSoFar (first nums)) (min minSumSoFar (+ minSoFar\
+    \ (first nums))))]))\n  (minRecur nums (first nums) (first nums)))\n```\n\n###\
+    \ 5. Implements Queue using two stacks\n```\n#lang racket", "  (min-non-empty-subarray-sum\
+    \ nums))\n", "  (define (minSubArraySumHelper nums min-sum)\n    (if (empty? nums)\n\
+    \        min-sum\n        (let* ([min-so-far (min (first nums) min-sum)]\n   \
+    \            [min-sum (minSubArraySumHelper (rest nums) min-so-far)])\n      \
+    \    (if (&lt;= min-so-far 0)\n              min-sum\n              (min (apply\
+    \ + (first (in-naturals (length nums)))) min-sum)))))\n  (minSubArraySumHelper\
+    \ nums (first nums)))\n</code>\nMy concern is that the traversal of <code>nums</code>\
+    \ will be repeated for every element in <code>nums</code> in the worst case. \
+    \ I want to get the minimum sum of a sub-list, but I want to do it in <code>O(n)</code>\
+    \ time. \nThe current time complexity is <code>O(n^2)</code>.  I am trying to\
+    \ get <code>O(n)</code>. \nAny suggestions on how to improve the time complexity\
+    \ of this algorithm?\n\n\nA:\n\nThe following is <code>O(n)</code> because it\
+    \ always keeps the minimum sum found so far and computes the current sum incrementally.\n\
+    <code>(define (minSubArraySum nums)\n  (let loop ([cur (first nums)]\n       \
+    \      [min cur])\n    (if (null? (rest nums))\n        min\n        (let ([cur\
+    \ (min (add1 cur) (add1 (rest nums)))])\n          (loop cur (min cur min))))))\n\
+    </code>\nIf you want to avoid using <code>add1</code> and <code>rest</code> (which\
+    \ are not part of the standard racket language) you can use\n<code>(define (minSubArraySum\
+    \ nums)\n  (define (lookahead n)\n    (cond [(&lt; n (length nums)) (list-ref\
+    \ nums n)]\n          [else -1]))\n  (let loop ([cur (list-ref nums 0)]\n    \
+    \         [min cur]\n             [i 0])\n    (if (&lt; i (length nums))\n   \
+    \     (let ([", "  (define minSum (apply min nums))\n  (define sum (apply + nums))\n\
+    \  (define (loop [i 0] [j 0] [currSum sum])\n    (if (= i (length nums))\n   \
+    \     (if (= j (length nums))\n            minSum\n            (loop 0 (+ j 1)\
+    \ 0))\n        (loop (+ i 1) j (+ currSum (list-ref nums i)))))\n  (loop 0 0 0))\n",
+  "  (let loop ([p1 (car nums)] [p2 (cadr nums)] [minSum p1])\n    (cond [(null? p2)\
+    \ minSum]\n          [(< (+ p1 p2) minSum) (loop (+ p1 p2) (caddr nums) (+ p1\
+    \ p2))]\n          [else (loop (+ p1 p2) (caddr nums) minSum)])))", "  (let ([len\
+    \ (length nums)])\n    (let loop ([min (car nums)]\n               [start 0]\n\
+    \               [stop 0]\n               [sum 0])\n      (cond [(>= stop len)\
+    \ min]\n            [(>= sum 0)\n             (loop (min min sum)\n          \
+    \         start\n                   (+ stop 1)\n                   (+ sum (list-ref\
+    \ nums stop)))]\n            [else\n             (loop (min min sum)\n       \
+    \            (+ start 1)\n                   (+ stop 1)\n                   (+\
+    \ sum (list-ref nums stop)))]))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

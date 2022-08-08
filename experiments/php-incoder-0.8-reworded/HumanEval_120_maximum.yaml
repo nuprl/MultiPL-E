@@ -25,7 +25,1250 @@ tests: "function candidate(...$args) {\n    return maximum(...$args);\n}\n\nfunc
   \ 10)) { throw new Exception(\"Test failed!\"); }\n    if (candidate(array(1, 2,\
   \ 3, -23, 243, -400, 0), 0) !== array()) { throw new Exception(\"Test failed!\"\
   ); }\n}\n\ntest();"
-completions: []
+completions: ["    if ($k <= 0) return array(null, null);\n    if ($k == 1) return\
+    \ array($arr[0]);\n\n    $max = -9999;\n    $result = array();\n\n    for ($i\
+    \ = 1; $i < $k; $i++) {\n        if ($arr[$i] > $max) {\n            $result =\
+    \ array_slice($arr, 0, $i);\n            $max = array_pop($result);\n        }\
+    \ else {\n            $result[] = $arr[$i];\n        }\n    }\n\n    return array($result,\
+    \ $max);\n}\n</code>\n<|/ a tags=arrays,algorithm,php dscore=2 |>\n<| c |>\nThis\
+    \ algorithm is O(n^2) because of the `array_slice`s. If you remove the `array_slice`\
+    \ calls, you'll get O(n). See my answer.\n<|/ c |>\n<| c |>\nYes, that does improve\
+    \ the performance by an order of magnitude.  I wonder if there's anything I can\
+    \ do to improve it further.\n<|/ c |>\n<| c |>\nIt does indeed improve the performance,\
+    \ but only by a constant factor. Your version is O(n), my is O(n^2). I'm very\
+    \ curious how you can get it below O(n).\n<|/ c |>\n<| c |>\nOh I see. Thanks\
+    \ for pointing that out. I had not realized that `array_slice` itself would be\
+    \ O(n), but I figured it must be `array_slice` calls. I was so close to solving\
+    \ this with my solution, that I forgot about the second argument, and `array_slice`\
+    \ already has `O(n)` complexity.\n<|/ c |>\n<| c |>\nI suppose you're correct\
+    \ that my version could be improved, but it doesn't seem like it would make it\
+    \ any more efficient (it only doubles the running time). It's just not worth it.\
+    \  You're also correct, the `array_slice` calls are all O(n), but `array_slice`\
+    \ itself takes O(n). So this algorithm is O(n^2).\n<|/ c |>\n<| a tags=arrays,algorithm,php\
+    \ |>\nHere's a solution that doesn't require the use of array_slice, and is also\
+    \ faster than the others.\nIt works by storing each value in an ordered map. \
+    \ It will perform well on large data sets, because the map is sorted by value\
+    \ and therefore the values are already in order.  I tested it on ~7M arrays (each\
+    \ array was ~2K elements long) and it went from running in ~20 seconds to only\
+    \ ~6 seconds.\n<code>\n<?php\n", "  $res = array();\n  $max = $arr[0]; \n  $i\
+    \ = 1; \n  for($j = 1; $j < $k; $j++) {\n    if ($arr[$j] > $max) {\n      $max\
+    \ = $arr[$j]; \n    } \n  }\n  for($i = 0; $i < $k; $i++) {\n    $res[$i] = $max;\n\
+    \    $max = $arr[$i];\n  }\n  return $res; \n}\n", "  if ($k > count($arr)) return\
+    \ array();\n\n  $res = array();\n  $tmpMax = 0;\n  foreach ($arr as $v) {\n  \
+    \  $tmpMax = max($tmpMax, $v);\n  }\n  for ($i = 0; $i < $k; $i++) {\n    $res[$i]\
+    \ = $tmpMax;\n  }\n\n  return $res;\n}\n", "  $mn = array();\n  for ($i = 0; $i\
+    \ < $k; $i++) {\n    $tmp = $arr[$i];\n    $j = $i + 1;\n    while($j < $k) {\n\
+    \      if ($tmp > $arr[$j]) {\n        $tmp = $arr[$j];\n      }\n      $j++;\n\
+    \    }\n    $mn[$i] = $tmp;\n  }\n  return $mn;\n}\n", "    return array_slice(\n\
+    \        array_merge(\n            array_slice($arr, 0, $k),\n            array_slice($arr,\
+    \ $k, null, true)\n        ),\n        0,\n        $k\n    );\n}", "    $result\
+    \ = [];\n    \n    foreach ($arr as $value) {\n        $max_value = $value;\n\
+    \        \n        for ($i = 1; $i < $k; $i++) {\n            if ($arr[$i] < $max_value)\
+    \ {\n                $max_value = $arr[$i];\n            }\n        }\n      \
+    \  \n        $result[] = $max_value;\n    }\n    \n    return $result;\n}\n",
+  "  for ($i = 0; $i < $k; $i++) {\n    $arr[] = $arr[$i];\n  }\n  krsort($arr);\n\
+    \  return $arr;\n}", "    sort($arr);\n    $max = $arr[0];\n    for ($i = 0; $i\
+    \ < $k; $i++) {\n        if ($arr[$i] > $max) {\n            $max = $arr[$i];\n\
+    \        }\n    }\n    return $max;\n}\n</code>\n<|/ a dscore=0 tags=arrays,php\
+    \ |>\n<| c |>\nCan you please add some explanation to your code so others can\
+    \ understand it better?\n<|/ c |>\n<| a dscore=0 tags=arrays,php |>\n<code>\n\
+    \ function largest($arr, $k) {\n        $k = array_filter($arr, function($e) use\
+    \ ($k) {\n            return $e > $k;\n        });\n        return $k;\n    }\n\
+    </code>\n<|/ a |>\n<| a dscore=0 |>\n<code>\n$arr = [1,2,3,4,5,6,7,8,9,10];\n\
+    $k=6;\n", "    $arr = sort($arr);\n    if ($k > count($arr)) return array(0);\n\
+    \    $max = array(0);\n    for ($i = 0; $i < $k; $i++) $max[] = $arr[$i];\n  \
+    \  return $max;\n}", "    $result = [];\n    $heap = new \\Sieve\\MaxHeap($arr);\n\
+    \    $size = $k + 1;\n    while($size <= $heap->size()) {\n        $result[] =\
+    \ $heap->pop();\n        $size++;\n    }\n    return $result;\n}\n", "    $res\
+    \ = array();\n    if ($k > count($arr)) return $res;\n    sort($arr);\n    foreach\
+    \ ($arr as $val) {\n        $res[] = $val; \n        if (count($res) == $k) break;\n\
+    \    }\n    return $res;\n}\n", "    $m = null;\n    foreach ($arr as $value)\
+    \ {\n        if ($m === null || $value > $m) {\n            $m = $value;\n   \
+    \     }\n    }\n    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a tags=php,arrays\
+    \ |>\n<| c |>\nThis code will break after it hits the first duplicate.\n<|/ c\
+    \ |>\n<| c |>\n: No, it won't. Read the comments in the code.\n<|/ c |>\n<| c\
+    \ |>\nYes, thank you, I missed those comments. I deleted my comments because they're\
+    \ not relevant.\n<|/ c |>\n<| c |>\n: That is interesting; could you please post\
+    \ a test case where it doesn't work?\n<|/ c |>\n<| c |>\nThe test case was `array(-3,\
+    \ -4, 5), 3` which returns `array(-4, -3, 5)`.\n<|/ c |>\n<| a dscore=4 |>\n<code>\n\
+    $array = [-3, -4, 5];\n$result = array_filter($array, function($a, $b) {\n   \
+    \ return ($a > $b) ? 1 : -1;\n});\n</code>\n<|/ a tags=php,arrays |>\n<| c |>\n\
+    I think OP wants unique elements only\n<|/ c |>\n<| c |>\nI did say \"unique\"\
+    \n<|/ c |>\n<| c |>\nBut he said \"sorted\" array, and your code does not sort\
+    \ it\n<|/ c |>\n<| c |>\n: It's sorted as `$a > $b`; not sorted as `($a < $b)`.\n\
+    <|/ c |>\n<| a tags=php,arrays |>\nAnother way to do this:\n<code>\n$array = array(-3,\
+    \ -4, 5);\n$result = array_filter(\n    array_map(\n        function($item) {\
+    \ return $item; }, \n        $array\n    ), \n    function($item, $key) { return\
+    \ $item <= $key; }\n);\n</code>\nThe result will be:\n<code>\nArray\n(\n    [0]\
+    \ => -4\n    [1] => -3\n)\n</code>\n<|/ a dscore=4 |>\n<| c |>\nThis does not\
+    \ sort at all, as it is simply selecting elements by their key value, which is\
+    \ not sorted by value.  Try it with `array(-4, -4, 5)`.\n<|/ c |>\n<| c |>\nAh\
+    \ yes, I see that now, sorry.\n<|/ c |>\n<| a dscore=3 |>\nA simple loop with\
+    \ array_unique() will do the ", "  $res = array();\n  for ($i = 1; $i <= $k; $i++)\
+    \ {\n    // find the max number\n    $max = 0;\n    foreach ($arr as $key => $value)\
+    \ {\n      if ($key != $i) {\n        if ($value > $max) {\n          $max = $value;\n\
+    \        }\n      }\n    }\n    $res[] = $max;\n  }\n  return $res;\n}\n", " \
+    \   $result = [];\n    $n = count($arr);\n    $m = min($k, $n);\n    for($i =\
+    \ 0; $i < $m; ++$i) {\n        $result[] = $arr[$i];\n    }\n    for($i = 0; $i\
+    \ < $n; ++$i) {\n        $max = 0;\n        $j = 0;\n        for($j = $i; $j <\
+    \ $m; ++$j) {\n            if($arr[$j] > $arr[$i]) {\n                break;\n\
+    \            }\n            if($arr[$j] == $arr[$i]) {\n                $max =\
+    \ max($max, $j + 1);\n            }\n        }\n        if($j == $m) {\n     \
+    \       $result[] = $arr[$i];\n        }\n        for($j = $j + 1; $j < $m; ++$j)\
+    \ {\n            if($arr[$j] > $arr[$i]) {\n                break;\n         \
+    \   }\n            if($arr[$j] == $arr[$i]) {\n                $max = max($max,\
+    \ $j + 1);\n            }\n        }\n        if($j == $m) {\n            $result[]\
+    \ = $arr[$i];\n        }\n        for($j = $i; $j < $m; ++$j) {\n            if($arr[$j]\
+    \ > $arr[$i]) {\n                break;\n            }\n            if($arr[$j]\
+    \ == $arr[$i]) {\n                $max = max($max, $j + 1);\n            }\n \
+    \       }\n        if($j == $m) {\n            $result[] = $arr[$i];\n       \
+    \ }\n        for($j = $i; $j < $m; ++$j) {\n            if($arr[$j] > $arr[$i])\
+    \ {\n                break;\n            }\n            if($arr[$j] == $arr[$i])\
+    \ {\n                $max = max($max, $j + 1);\n            }\n        }\n   \
+    \     if($j == $m) {\n            $result[] = $arr[$i];\n        }\n    }\n  \
+    \  return $result;\n}\n\n$n = 5;\n$k = min($k, $n);\n$m = ($n - $k);\nfor($i =\
+    \ 0; $i < $m; ++$i) {\n    $result[] = $arr[$i];\n}\nfor($i = $n; $i >= 0; --$i)\
+    \ {\n    $max = 0;\n    $j = 0;\n    for($j = $i; $j < $m; ++$j) {\n        if($arr[$j]\
+    \ > $arr[$i]) {\n            break;\n        }\n        if($arr[$j] == $arr[$i])\
+    \ {\n            $max = max($max, $j + 1);\n        }\n    }\n    if($j == $m)\
+    \ {\n        $result[] = $arr[$i];\n    }\n    for($j", "    if ($k < 1 || $k\
+    \ > count($arr)) return [];\n    $max = array_slice($arr, 0, $k);\n    for ($i\
+    \ = 1; $i < $k; ++$i) {\n        $max[] = max($arr[$i], $max[$i - 1]);\n    }\n\
+    \    return $max;\n}", "    $n = count($arr);\n    if ($n <= 1) {\n        return\
+    \ array($arr);\n    }\n    $m = $arr[0];\n    $max = array();\n    for ($i = 1;\
+    \ $i < $k; $i++) {\n        if ($arr[$i] > $m) {\n            $m = $arr[$i];\n\
+    \        }\n        $max[$i] = $m;\n    }\n    foreach ($arr as $key => $value)\
+    \ {\n        if ($value < $m && $key < $n) {\n            $m2 = max($max, $value);\n\
+    \            if ($m2 < $m) {\n                $max[$key] = $m2;\n            }\n\
+    \        }\n    }\n    return $max;\n}", "    for($i = 0; $i < $k; $i++){\n  \
+    \      $min = PHP_INT_MIN;\n        for($j = 0; $j < count($arr); $j++){\n   \
+    \         $x = $arr[$j];\n            if($x < $min){\n                $min = $x;\n\
+    \            }\n        }\n        $arr[$i] = $min;\n    }\n\n    return $arr;\n\
+    }", "  $m = $arr;\n  for($i = $k; $i >= 0; $i--) {\n    $m = max($m, $arr[$i]);\n\
+    \  }\n  return $m;\n}\n\n/**\n * Returns the sum of two numbers.\n */", "    \n\
+    \    sort($arr);\n    \n    $res = array();\n    \n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $res[] = $arr[$i];\n    }\n    \n    return $res;\n}", "  $max =\
+    \ array_slice($arr, 0, $k);\n  $max = array_pad($max, $k, '');\n  krsort($max);\n\
+    \  return $max;\n}\n", "  for ($i = 0; $i < $k; $i++) {\n    $max = max($arr);\n\
+    \    array_splice($arr, 0, -1, array($max));\n  }\n  return $arr;\n}\n", "   \
+    \ $sorted = array_merge($arr);\n    sort($sorted);\n    return array_slice($sorted,\
+    \ 0, $k);\n}\n", "    if ($k > count($arr)) {\n        return array();\n    }\n\
+    \    // \u6309 key \u7684\u5927\u5C0F\u6392\u5E8F\n    uksort($arr, 'maximum_cmp');\n\
+    \    $max = array_slice($arr, 0, $k);\n    return $max;\n}", "    $max_arr = array();\n\
+    \    $max_value = -INF;\n    foreach ($arr as $key => $value) {\n        // get\
+    \ the max value from all k values\n        if ($max_value < $value) {\n      \
+    \      $max_value = $value;\n        }\n        // store the element in the max\
+    \ array\n        $max_arr[$key] = $value;\n    }\n    // sort the max array based\
+    \ on the key\n    ksort($max_arr);\n    // return the array that contains the\
+    \ k max values\n    return array_slice($max_arr, 0, $k);\n}\n", "    if (sizeof($arr)\
+    \ <= $k || $k <= 0) {\n        return array();\n    }\n\n    $max_arr = array();\n\
+    \    for ($i = 0; $i < $k; $i++) {\n        $max_arr[$i] = max($arr[$i], 0);\n\
+    \    }\n    return $max_arr;\n}\n", "    $result = array();\n    $len = count($arr);\n\
+    \    \n    if ($k > $len || $k <= 0) {\n        return $result;\n    }\n    \n\
+    \    $j = 0;\n    \n    for ($i = 0; $i < $k; $i++) {\n        if ($j < $len &&\
+    \ $arr[$j] > $arr[$i]) {\n            $result[] = $arr[$i];\n        }\n     \
+    \   $j++;\n    }\n    \n    return $result;\n}\n", "    $m = $n = $max = $x;\n\
+    \    foreach ($arr as $x) { $m = ($m < $x ? $m : $x); $n = ($n < $x ? $n : $x);\
+    \ $max = ($max < $x ? $max : $x); }\n    return array_slice($arr, 0, $k); \n}\n\
+    </code>\n<|/ a |>\n<| a dscore=0 |>\n<code>\npublic function arrayMax($array,\
+    \ $key)\n{\n    $highest = 0;\n    $highest_key = 0;\n\n    $maxKey = [];\n\n\
+    \    foreach($array as $item) {\n        if($item[$key] > $highest) {\n      \
+    \      $highest = $item[$key];\n            $highest_key = $key;\n        }\n\n\
+    \        $maxKey[] = $item;\n    }\n\n    return $maxKey;\n}\n</code>\n<|/ a tags=arrays,max,php\
+    \ |>\n<| a tags=arrays,max,php |>\n<code>\n<?php", "    $result = [];\n    $max\
+    \ = $arr[0];\n    foreach ($arr as $value) {\n        if ($max < $value) {\n \
+    \           $max = $value;\n        }\n    }\n    for ($i = 1; $i < $k; $i++)\
+    \ {\n        $result[] = $max;\n    }\n    return $result;\n}\n</code>\n<|/ a\
+    \ dscore=0 |>\n<| c |>\nthis was asked in an interview. he wants to know why we\
+    \ should do this way.\n<|/ c |>\n<| c |>\nthis answer is only applicable when\
+    \ you have the same elements in the array and you want the biggest k numbers.\
+    \ But when you have different elements in the array, this answer fails.\n<|/ c\
+    \ |>\n<| c |>\nYeah, so I edited the code for the case when the elements in the\
+    \ array are different. Thanks for pointing out.\n<|/ c |>\n<| c |>\nThis is not\
+    \ the best way, because you create an array with k elements and then append a\
+    \ new element at the end. This will result in k additional allocations, and the\
+    \ elements in the array will need to be moved around in the memory. Furthermore,\
+    \ using foreach to iterate over an array is not a good idea in general. You can\
+    \ read more about it [here](http://stackoverflow.com/questions/10057671/how-foreach-actually-works).\
+    \ In other words, the algorithm is very inefficient for larger arrays (like 1\
+    \ million elements).\n<|/ c |>\n<| c |>\nYou are right about the inefficiency\
+    \ of the algorithm. It was only meant for smaller arrays like 1000 elements. I\
+    \ just wanted to make it clear for beginners who are looking at this solution\
+    \ to understand the algorithm better instead of giving them the wrong answer.\
+    \ And yeah, this answer is still incorrect when k >= the number of elements in\
+    \ the array. I just added the notes into the code. Thanks for the tip.\n<|/ c\
+    \ |>\n<| a dscore=0 |>\nThis solution uses the Python built-in heapq module to\
+    \ find the k-largest elements in a list and then returns a list of those elements.\
+    \ Note that when k = len(list) this solution will return a list of k identical\
+    \ elements. \n<code>\ndef largestK(list, k):\n    from heapq import nlargest\n\
+    \    heap = [(n,i) for i,n in enumerate(list)]\n    heapq.heapify(heap)\n    result\
+    \ = [heapq.heappop(heap)[1]]\n    while len(heap) > k:\n        result.append(heapq.heappop(heap)[1])\n\
+    \    return result\n\nprint(largestK(range(9), 2))\nprint(largestK(range(9), 3))\n\
+    print(largestK(range(9), 4))\n</code>\nOutput:", "    if ($k > count($arr)) return\
+    \ array();\n    sort($arr);\n    return array_slice($arr, 0, $k);\n}\n</code>\n\
+    <|/ a dscore=0 |>\n<| a |>\nI understand that you are looking for an answer in\
+    \ python but here is a Java solution (I believe it has the same idea as the php\
+    \ code).\n<code>\npublic static List<Integer> sortMaxK(List<Integer> numbers,\
+    \ int k) {\n    Arrays.sort(numbers);\n    int max = 0;\n    int temp = 0;\n \
+    \   for(Integer num : numbers) {\n        if(num > temp) {\n            temp =\
+    \ k;\n        }\n        if(temp > max) {\n            max = temp;\n        }\n\
+    \    }\n    List<Integer> result = new ArrayList<Integer>();\n    for(int i =\
+    \ 0; i < max; i++) {\n        result.add(numbers.get(i));\n    }\n    return result;\n\
+    }\n</code>\n<|/ a tags=algorithm,php,java,sorting,arrays dscore=0 |>\n<| a dscore=0\
+    \ |>\nThe answer provided is right but it is in C++ and i think it is not very\
+    \ understandable to someone like me. For someone who started learning C++ and\
+    \ wants to learn java better, you can find similar code snippets below. Just to\
+    \ give you an idea of what is the algorithmic process. \n<code>\npublic static\
+    \ void main(String[] args) {\n\n    List<Integer> numbers = new ArrayList<Integer>();\n\
+    \    numbers.add(1);\n    numbers.add(2);\n    numbers.add(3);\n    numbers.add(4);\n\
+    \    numbers.add(5);\n    numbers.add(6);\n    numbers.add(7);\n    numbers.add(8);\n\
+    \    numbers.add(9);\n    numbers.add(10);\n    numbers.add(11);\n    numbers.add(12);\n\
+    \    numbers.add(13);\n    numbers.add(14);\n    numbers.add(15);\n\n    System.out.println(\"\
+    numbers after adding them\");\n\n    for (int i : numbers) {\n        System.out.println(i);\n\
+    \    }\n\n    System.out.println(\"The length of numbers is \" + numbers.size());\n\
+    \n    System.out.println(\"Sorting numbers array\");\n\n    Collections.sort(numbers);\n\
+    \n    System.out.println(\"Sorted numbers array\");\n\n    for (int i : numbers)\
+    \ {\n        System.out.println(i);\n    }\n\n    System.out.println(\"Maximum\
+    \ numbers are \" + maximumNumbers(numbers, 11));\n\n    System.out.println(\"\
+    Minimum numbers are \" + minimumNumbers(numbers, 11));\n\n    System.out.println(\"\
+    Minimum numbers are \" + maximumNumbers(numbers, 10));\n\n}\n\n/**\n * Returns\
+    \ maximum numbers in given array\n */\npublic static List<Integer> maximumNumbers(List<Integer>\
+    \ numbers, int k) {\n    List<Integer> maxNumbers = new ArrayList<Integer>();\n\
+    \n    for(int i = 0; i < k; i++) {\n        Collections.sort(numbers);\n     \
+    \   maxNumbers.add(numbers.get(i));\n    }\n\n", "    sort($arr);\n    $arr1 =\
+    \ array();\n    $arr2 = array();\n    for($i=0; $i<$k; $i++) {\n        $arr1[$i]\
+    \ = $arr[$i];\n    }\n    for($i = 0; $i < count($arr); $i++) {\n        $max\
+    \ = $arr[$i];\n        for($j=$i; $j<count($arr); $j++) {\n            if($arr[$j]\
+    \ > $max) {\n                $max = $arr[$j];\n            }\n        }\n    \
+    \    $arr2[$i] = $max;\n    }\n    return $arr2;\n}", "  $result = array();\n\
+    \  \n  if ($k > count($arr)) {\n    return $result;\n  }\n  \n  for ($i = 0; $i\
+    \ < $k; ++$i) {\n    $j = -1;\n    \n    for ($i = 0; $i < count($arr) && $j <=\
+    \ $arr[$i]; ++$i) {\n      if ($arr[$i] > $arr[$j]) {\n        $j = $arr[$i];\n\
+    \      }\n    }\n    \n    if ($j < 0) {\n      $j = 0;\n    }\n    \n    $result[]\
+    \ = $arr[$i];\n  }\n  \n  return $result;\n}", "    $n = sizeof($arr);\n    for\
+    \ ($i = 0; $i < $n; $i++) {\n        $temp = 0;\n        for ($j = 0; $j < $k;\
+    \ $j++) {\n            $temp = $arr[$i] > $arr[$j] ? $arr[$i] : $arr[$j];\n  \
+    \      }\n        $arr[$i] = $temp;\n    }\n    return $arr;\n}\n", "    for ($i\
+    \ = 0; $i < $k; ++$i) {\n        $max = $arr[$i];\n        $pos = $i;\n      \
+    \  for ($j = $i + 1; $j < $k; ++$j) {\n            if ($arr[$j] > $max) {\n  \
+    \              $max = $arr[$j];\n                $pos = $j;\n            }\n \
+    \       }\n        $arr[$i] = $max;\n        $arr[$pos] = $max;\n    }\n    return\
+    \ $arr;\n}", "    $arr = array_reverse($arr);\n    $res = array();\n    foreach\
+    \ ($arr as $key => $num) {\n        if ($k == $key) {\n            $res[] = $num;\n\
+    \            unset($arr[$key]);\n        } else if ($k > $key) {\n           \
+    \ $res[] = $num;\n            unset($arr[$key]);\n        } else if ($k == $key)\
+    \ {\n            $res[] = $num;\n        }\n    }\n    return array_reverse($res);\n\
+    }\n", "    if ($k > count($arr)) return $arr;\n    $arr = array_reverse($arr);\n\
+    \    $max = $arr[$k-1];\n    $i = 1;\n    foreach ($arr as $ele) {\n        if\
+    \ ( $ele > $max ) {\n            $max = $ele;\n        }\n        if ( $i == $k\
+    \ ) {\n            $arr[$k-1] = $max;\n        }\n        $i++;\n    }\n    return\
+    \ $arr;\n}\n</code>\n<|/ a |>\n<| c |>\nThis solution is very clever and should\
+    \ be the accepted answer.\n<|/ c |>\n<| a dscore=1 |>\n<code>", "    // write\
+    \ your code here\n    $result = array();\n    for($i = 0; $i < $k; $i++) {\n \
+    \       $temp = maxval($arr);\n        $result[] = $temp;\n        unset($arr[$temp]);\n\
+    \    }\n    return $result;\n}", "    $result = array();\n    foreach ($arr as\
+    \ $i => $v) {\n        if ($i >= $k) {\n            $result[] = $v;\n        \
+    \    $k = max($k, count($result));\n        }\n    }\n    return $result;\n}\n\
+    \n/**\n * Test case:\n * >>> minimum([4, -4, 4], 2)\n * array(-4, -4)\n * >>>\
+    \ minimum([3, 3, 4, 5], 2)\n * array(3, 3)\n */", "    if ($k > count($arr)) {\n\
+    \        return array();\n    }\n    return array_merge(\n        $arr[0],\n \
+    \       array_slice(\n            $arr,\n            1,\n            ceil(count($arr)\
+    \ / $k)\n        )\n    );\n}\n", "    $max = array();\n    for($i = 0; $i < $k;\
+    \ $i++) {\n        $max[$i] = max($arr[$i]);\n    }\n    return $max;\n}\n", " \
+    \   $result = [];\n    sort($arr, SORT_NUMERIC);\n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $result[] = $arr[$i];\n    }\n    return $result;\n}", "    sort($arr);\n\
+    \    return array_slice($arr, 0, $k);\n}\n", "    for ($i = 0; $i < $k; ++$i)\
+    \ {\n        $arr = array_merge(array($arr[0]), $arr);\n    }\n    return $arr;\n\
+    }\n", "    $result = [];\n    $left = $right = $max;\n    foreach ($arr as $val)\
+    \ {\n        if ($val > $max) {\n            $right = $max;\n        }\n     \
+    \   if ($val < $left) {\n            $left = $val;\n        }\n        if ($k\
+    \ > 0) {\n            if ($right - $left > $k) {\n                if ($val < $max)\
+    \ {\n                    $max = $val;\n                    $result = $max;\n \
+    \               }\n                $right = $max;\n            } else {\n    \
+    \            $max = $right;\n                $result = $max;\n               \
+    \ $right = $left;\n            }\n        } else {\n            $result = $val;\n\
+    \        }\n    }\n    return $result;\n}\n</code>\n<|/ a |>\n<| c |>\nThanks\
+    \ for the answer. Is there a way to change the code?\n<|/ c |>\n<| c |>\nThe code\
+    \ is perfect. Just need a way to solve the question with the constraints given.\
+    \ Thanks for the help though!\n<|/ c |>\n<| c |>\nIt looks like the answer given\
+    \ does not satisfy the constraints of the question.\n<|/ c |>\n<| c |>\nThis isn't\
+    \ a competition site. This is a Q&A site. Do you not want to solve this one? If\
+    \ not, please read how to create a [mcve] and edit your question. Thanks!\n<|/\
+    \ c |>\n<| c |>\nNo this isn't a competition site, this is a Q&A site. I am really\
+    \ new to PHP and don't know how to solve this one. Thanks for the help!\n<|/ c\
+    \ |>\n<| a tags=php,arrays,sorting |>\nI believe you are looking for something\
+    \ like that:\n<code>", "    if ($k > count($arr)) {\n        echo \"The length\
+    \ of the array is not in the range of [1, 1000].\";\n    }\n    if ($k > 1000)\
+    \ {\n        echo \"The value of k exceeds the range of [1, 1000].\";\n    }\n\
+    \    $k = min(max($k, 1), 1000);\n    return array_slice($arr, 0, $k);\n}", " \
+    \   $count = count($arr);\n    if ($k > $count) return array();\n    $sort = array();\n\
+    \    for ($i = 0; $i < $count; ++$i) {\n        $sort[$i] = max($arr[$i], $arr[$k\
+    \ - $i]);\n    }\n    return $sort;\n}", "    sort($arr);\n    return array_slice($arr,\
+    \ 0, $k);\n}\n", "    $arr = array_reverse($arr);\n    $n = count($arr);\n   \
+    \ $result = array();\n    for ($i = 0; $i < $k; $i++) {\n        $result[] = $arr[$i];\n\
+    \    }\n    $result = array_reverse($result);\n    for ($i = 0; $i < $n; $i++)\
+    \ {\n        $result[] = $arr[$i];\n    }\n    return $result;\n}\n", "    $max\
+    \ = array();\n    for($i = 0; $i < $k; $i++) {\n        $max[$i] = maxElement($arr);\n\
+    \    }\n    return $max;\n}\n", "    $max = array();\n    sort($arr);\n    if\
+    \ ($k > count($arr)) {\n        return $arr;\n    }\n    for ($i = 0; $i < $k;\
+    \ $i++) {\n        $max[$i] = max($arr[$i], $arr[$i]);\n    }\n    return $max;\n\
+    }\n", "    $arr = sort($arr);\n    $max = $arr[0];\n    $count = 0;\n    for ($i\
+    \ = 1; $i < $k; $i++) {\n        if ($arr[$i] > $max) {\n            $max = $arr[$i];\n\
+    \            $count = 1;\n        } else {\n            $count++;\n        }\n\
+    \    }\n    return array_merge(array($max), array_slice($arr, $k - $count, $k\
+    \ - $count + 1)); \n}\n</code>\n<|/ a |>\n<| c |>\nYes, I tested it and it works\
+    \ great on small arrays. But when I try it on large arrays it returns an empty\
+    \ array. I'm expecting to have all the numbers from the large array in the new\
+    \ array. Maybe I'm not doing this right?\n<|/ c |>\n<| c |>\nI have updated my\
+    \ answer to include a method that sorts and then slices the array.\n<|/ c |>\n\
+    <| a dscore=0 |>\nThe simplest way is to use array_slice() with negative start\
+    \ and length arguments and then sort by reversed keys (array_reverse()) which\
+    \ will keep keys (values) in order:\n<code>\n$arr = array(-3, -4, 5);\n\n$keys\
+    \ = array_slice($arr, -3, -2);\n$keys[] = max($arr);\nsort($keys);\n$result =\
+    \ array_slice($arr, -2, -3);\nsort($result);\n\nvar_dump($result);\n</code>\n\
+    The output:\n<code>\narray(3) {\n  [0]=>\n  int(-4)\n  [1]=>\n  int(-3)\n  [2]=>\n\
+    \  int(5)\n}\n</code>\n<|/ a tags=php,arrays |>\n<| a tags=php,arrays |>\nHere\
+    \ is another answer, which I find easier to read:\n<code>\n$array = array(-3,\
+    \ -4, 5);\n\n$maximums = array();\n\nforeach ($array as $i => $value) {\n    $maximums[]\
+    \ = $value;\n    if ($maximums[count($maximums) - 1] < $value) {\n        $maximums[count($maximums)\
+    \ - 1] = $value;\n    }\n}\n\n$maximums[count($maximums) - 1] = max($maximums);\n\
+    \n$maximums = array_reverse($maximums);\n\n$array = array_slice($array, 0, count($maximums)\
+    \ - 1);\n\n$array []= max($array);\n\nvar_dump($array);\n</code>\nThis will give\
+    \ you:\n<code>\narray(3) {\n  [0]=>\n  int(-4)\n  [1]=>\n  int(-3)\n  [2]=>\n\
+    \  int(5)\n}\n</code>\n<|/ a dscore=0 |>\n<| a |>\nTry this\n<code>\n", "    $m\
+    \ = array_fill(0, $k, 0);\n    $m[0] = $arr[0];\n    foreach ($arr as $key =>\
+    \ $value) {\n        if ($key > 0) {\n            if ($value < $m[$key - 1]) {\n\
+    \                $m[$key - 1] = $value;\n            }\n        }\n    }\n   \
+    \ return $m;\n}\n\n/**\n * Kth Smallest in Array\n *\n * Given an array of integers\
+    \ and an integer k, return the kth smallest element in the array.\n * If there\
+    \ are more than one such elements, then return the smallest one.\n * If k is negative\
+    \ (i.e. it is greater than or equal to the number of elements in the array), then\
+    \ return the last element in the array\n *\n * @see https://stackoverflow.com/a/1713160/8677772\n\
+    \ * @param $arr array\n * @param $k int\n * @return int\n */", "    $len = count($arr);\n\
+    \    for ($i = 0; $i < $k; $i++) {\n        $max = $arr[$i];\n        foreach\
+    \ ($arr as $j=> $val) {\n            if ($j > $i) {\n                if ($val\
+    \ > $max) {\n                    $max = $val;\n                }\n           \
+    \ }\n        }\n        $arr[$i] = $max;\n    }\n    return $arr;\n}\n", "   \
+    \ if ($k > count($arr))\n        return array();\n    $max_value = $arr[0];\n\
+    \    for ($i = 1; $i < $k; $i++)\n        if ($arr[$i] > $max_value)\n       \
+    \     $max_value = $arr[$i];\n    return array(0, $max_value);\n}\n", "  $res\
+    \ = array();\n  for ($i = 0; $i < $k; $i++) {\n    foreach ($arr as $num) {\n\
+    \      $res[] = $num;\n      if ($num > $res[0]) {\n        $res[0] = $num;\n\
+    \      }\n    }\n    $res[] = $arr[0];\n  }\n  return $res;\n}\n", "    $result\
+    \ = array();\n    $temp = $arr[0];\n    for($i = 0; $i < $k; $i++) {\n       \
+    \ if($arr[$i] > $temp) {\n            $result[] = $temp;\n            $temp =\
+    \ $arr[$i];\n        }\n    }\n    $result[] = $temp;\n    return $result;\n}\n",
+  "    // Initialize result array\n    $result = array();\n    // Initialize k to\
+    \ 1 so we don't compare 0 with itself\n    $k = 1;\n    // Initialize min to first\
+    \ element in array\n    $min = $arr[0];\n    // Iterate through array\n    foreach\
+    \ ($arr as $element) {\n        // If current element is larger than min\n   \
+    \     if ($element > $min) {\n            // Increment k\n            $k++;\n\
+    \            // If k is greater than or equal to k\n            if ($k >= $k)\
+    \ {\n                // Set min to current element\n                $min = $element;\n\
+    \            }\n        }\n        // Append current element to the result array\n\
+    \        $result[] = $element;\n    }\n    // If k is less than or equal to k,\
+    \ append the remaining elements\n    if ($k <= $k) {\n        // Append remaining\
+    \ elements to the result array\n        $result = array_merge($result, $arr);\n\
+    \    }\n    // Return the result array\n    return $result;\n}", "  $len = count($arr);\n\
+    \  $temp = array_slice($arr, 0, $k);\n  array_push($temp, max($arr));\n  sort($temp);\n\
+    \  return array_slice($temp, 0, $k);\n}\n\n/**\n * Return the minimum element\
+    \ of a non-empty array.\n *\n * Function Description:\n * Return the minimum element\
+    \ of a non-empty array. If there are no such\n * element, then return null.\n\
+    \ *\n * @param array $array - array\n * @return mixed - min value\n */", "   \
+    \ sort($arr);\n    $result = [];\n    $count = [];\n    for ($i = 0; $i < $k;\
+    \ $i++) {\n        $result[] = $arr[$i];\n        $count[] = 1;\n    }\n    for\
+    \ ($i = $k; $i < count($arr); $i++) {\n        $count[count($arr)-$i] = 1;\n \
+    \   }\n    $count[$k] = count($arr);\n    $result = array_merge(array_slice($arr,\
+    \ 0, $k+1), $result);\n    for ($i = count($arr)-count($result)-1; $i >= 0; $i--)\
+    \ {\n        if ($count[$i] < count($result)) {\n            $result[$i] = $result[$count[$i]];\n\
+    \            $count[$i] += 1;\n        } else {\n            $result[$i] = $arr[$i];\n\
+    \        }\n    }\n    return $result;\n}\n", "    if ($k > count($arr)) {\n \
+    \       $k = count($arr);\n    }\n\n    $arr = array_merge(array($k), $arr);\n\
+    \    $sort = $arr;\n    $len = count($arr);\n    $left = $k;\n    $right = count($arr)\
+    \ - 1;\n\n    while (1) {\n        if ($left == $right) {\n            if ($left)\
+    \ {\n                $sort[] = $arr[$left];\n            }\n        } else {\n\
+    \            if ($left < $right) {\n                if ($arr[$left] > $arr[$right])\
+    \ {\n                    $sort[] = $arr[$left];\n                    $left++;\n\
+    \                } else {\n                    $sort[] = $arr[$right];\n     \
+    \               $right--;\n                }\n            } else {\n         \
+    \       if ($arr[$left] > $arr[$right]) {\n                    $sort[] = $arr[$right];\n\
+    \                    $right--;\n                } else {\n                   \
+    \ $sort[] = $arr[$left];\n                    $left++;\n                }\n  \
+    \          }\n        }\n        if ($left == $right) {\n            break;\n\
+    \        }\n    }\n\n    return $sort;\n}\n\n$a = array(2, 3, 4);\n$b = array(2,\
+    \ 3, 4);\n\nvar_dump($a == $b); // false\n\nvar_dump(maximum($a, 1) == $b); //\
+    \ true\n\nvar_dump(maximum($a, 3) == $b); // false\n</code>\n<|/ a tags=algorithm,php,arrays\
+    \ |>\n<| a dscore=1 |>\nOne more solution without sorting:\n<code>", "    $result\
+    \ = array();\n    sort($arr);\n    sort($arr);\n    foreach ($arr as $i => $number)\
+    \ {\n        $result[$i] = $number;\n        if (count($result) >= $k) {\n   \
+    \         break;\n        }\n    }\n    return $result;\n}", "    if ($k > count($arr))\
+    \ {\n        $k = count($arr);\n    }\n    $res = [];\n    for ($i = 0; $i < $k;\
+    \ $i++) {\n        $res[] = max($arr[$i], 0);\n    }\n    return $res;\n}", " \
+    \   $m = max($arr);\n    \n    if ($k > $m) {\n        $n = $k;\n    }\n    elseif\
+    \ ($k == $m) {\n        $n = 0;\n    }\n    else {\n        $n = $m;\n       \
+    \ for ($i = 0; $i < $k; $i++) {\n            $n = ($arr[$i] >= $n) ? $arr[$i]\
+    \ : $n;\n        }\n    }\n    \n    return range($n, $m);\n}\n", "    $result\
+    \ = [];\n    $count = 0;\n    for ($i = 0; $i < $k; $i++) {\n        if (isset($arr[$i]))\
+    \ {\n            if ($count == 0) {\n                $result[$i] = $arr[$i];\n\
+    \            }\n            if ($arr[$i] > $result[$i]) {\n                $result[$i]\
+    \ = $arr[$i];\n            }\n            $count++;\n        } else {\n      \
+    \      if ($count > 0) {\n                $result[$i] = $count;\n            }\n\
+    \            $count = 0;\n        }\n    }\n    if ($count > 0) {\n        $result[$k]\
+    \ = $count;\n    }\n    return $result;\n}", "    // \u65B9\u6CD5\u4E00\n    $result\
+    \ = array_slice($arr, 0, $k);\n    $result[] = array_pop($arr);\n    return $result;\n\
+    \n    // \u65B9\u6CD5\u4E8C\n    // $result = array_slice($arr, 0, $k);\n    //\
+    \ $result[] = $arr[$k - 1];\n    // $result = array_merge($result, array_slice($arr,\
+    \ $k));\n}\n</code>\n<|/ a tags=arrays,php |>\n<| a dscore=0 tags=arrays,php |>\n\
+    The code you posted is exactly the algorithm I use in my PHP codebase. There might\
+    \ be a more efficient algorithm, but this one works very efficiently and doesn't\
+    \ require a loop.\n<code>\n/**\n * $arr Array to be sorted\n * $index Which value\
+    \ should be the first in $arr to return\n * array Returns the smallest value larger\
+    \ than $index\n */", "    // write your code here\n    $arr = array_filter($arr);\n\
+    \    sort($arr);\n    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a dscore=1\
+    \ |>\n<| c |>\nGreat, I added a sort so it'll work even if the array is not sorted\
+    \ already, and added `array_reverse` to make it work when the array is sorted\
+    \ in reverse order.\n<|/ c |>\n<| a dscore=1 tags=php,arrays,sorting |>\nThe shortest\
+    \ and most efficient way to do it is to use PHP's built in function array_slice().\n\
+    <code>", "  sort($arr, SORT_NUMERIC);\n  return array_slice($arr, 0, $k);\n}",
+  "    $result = array();\n    for($i = 0; $i < $k; $i++) {\n        $result[] = $arr[$i];\n\
+    \    }\n    sort($arr);\n    sort($result);\n    return $result;\n}", "    $arr\
+    \ = array_reverse($arr);\n    $max_len = count($arr);\n    $k = min($k, $max_len);\n\
+    \    \n    $result = array();\n    foreach (array_chunk($arr, $k) as $a_val) {\n\
+    \        $index = -1;\n        $value = $a_val[0];\n        for ($i = 0; $i <=\
+    \ $max_len; $i++) {\n            if ($i !== $index) {\n                $result[]\
+    \ = $value;\n                $index = $i;\n            }\n            if ($value\
+    \ == $a_val[$i]) {\n                $value = -$value;\n            }\n       \
+    \ }\n        $result[] = $value;\n    }\n    return $result;\n}\n", "    sort($arr);\n\
+    \    $max_val = count($arr) - 1;\n    $max_arr = [];\n    for ($i = 0; $i <= $k;\
+    \ $i++) {\n        $max_arr[] = $max_val;\n    }\n    for ($i = 0; $i < count($arr);\
+    \ $i++) {\n        $max_val--;\n        for ($j = 0; $j <= $k; $j++) {\n     \
+    \       if ($max_val < $arr[$i][$j]) {\n                $max_val = $arr[$i][$j];\n\
+    \            }\n        }\n        $max_arr[] = $max_val;\n    }\n    return $max_arr;\n\
+    }\n</code>\n<|/ a dscore=1 |>\n<| a tags=arrays,php,algorithm,sorting |>\nO(n)\
+    \ solution in javascript\n\n<code>\nvar arr = [-3,-4,5];\nlet max = Math.max.apply(null,\
+    \ arr);\nvar tempArr = arr.filter(function(item) {\n    return item < max;\n});\n\
+    let finalArr = [];\nfor (let i = 0; i < tempArr.length; i++) {\n    finalArr.push(tempArr[i]);\n\
+    }\n\nconsole.log(finalArr)</code>\n<|/ a dscore=0 |>\n<| a dscore=0 tags=arrays,php,algorithm,sorting\
+    \ |>\nJust use PHP's max() function.\n<code>\n$arr = [-3,-4,5];\n$k = array_pop(array_intersect($arr,\
+    \ range(0,max($arr)));\n\n$arr = [4,-4,4];\n$k = array_pop(array_intersect($arr,\
+    \ range(0,max($arr)));\n\n$arr = [-3,2,1,-2,-1,2,1];\n$k = array_pop(array_intersect($arr,\
+    \ range(0,max($arr)));\n\n$arr = [-6, -8, -12, -21];\n$k = array_pop(array_intersect($arr,\
+    \ range(0,max($arr)));\n\n$arr = [10, 12, 14, 16, 18];\n$k = array_pop(array_intersect($arr,\
+    \ range(0,max($arr)));\n</code>\nOutput:\n<code>\narray(1) {\n  [0]=>\n  int(-12)\n\
+    }\narray(1) {\n  [0]=>\n  int(-18)\n}\narray(1) {\n  [0]=>\n  int(-16)\n}\narray(1)\
+    \ {\n  [0]=>\n  int(-14)\n}\narray(1) {\n  [0]=>\n  int(-12)\n}\n</code>\n<|/\
+    \ a |>\n<| c |>\nIt seems that this solution doesn't work for different values\
+    \ of `k`.\n<|/ c |>\n<| a tags=arrays,php,algorithm,sorting |>\n<code>", "   \
+    \ $maximum = array();\n    sort($arr);\n    $size = count($arr);\n    for ($i\
+    \ = 0; $i < $k; $i++) {\n        $maximum[] = $arr[$i];\n    }\n    $maximum =\
+    \ array_reverse($maximum);\n    for ($i = 0; $i < $size; $i++) {\n        $maximum[]\
+    \ = $arr[$size - $i - 1];\n    }\n    return $maximum;\n}\n", "    $m = max($arr);\n\
+    \    sort($arr);\n    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a tags=php,python,algorithm,c++\
+    \ |>\n<| c |>\nThis looks extremely inefficient.\n<|/ c |>\n<| c |>\nWhat do you\
+    \ mean by extremely inefficient? The `for` loop takes O(n), and since you're doing\
+    \ so many things with the array (sorting it) it takes O(n*log(n)) to do the sorting.\
+    \ O(n + n*log(n)). Nothing too bad in doing this with extremely large arrays,\
+    \ especially since the original array is pre-sorted.\n<|/ c |>\n<| c |>\n`O(n\
+    \ + n*log(n))` doesn't necessarily mean that the algorithm is O(n). For example,\
+    \ `n` could be very large and `log(n)` could be very small. This is the case for\
+    \ `O(n + n*log(n))` because `log(n)` increases as `n` approaches infinity, and\
+    \ `n` grows larger, so `n` increases so fast that `log(n)` approaches `-inf` so\
+    \ quickly that `n` approaches infinity. The problem is that this is *extremely*\
+    \ inefficient. The `for` loop has `O(n)` complexity but you're calling `maximum`\
+    \ `n` times, which means `O(n + n*log(n))`.\n<|/ c |>\n<| c |>\nAh, I see. Thanks\
+    \ for the clarification. I will edit my answer to reflect this.\n<|/ c |>\n<|\
+    \ c |>\nI don't think the sorting is necessary since we know the maximum array\
+    \ length anyway. The problem is that this solution doesn't scale well. The solution\
+    \ would be better if the array was sorted in advance.\n<|/ c |>\n<| a dscore=5\
+    \ |>\nIf you're looking for a one-liner, you can use array_slice() with negative\
+    \ indices.\n<code>", "    if ($k > count($arr)) {\n        return array(NULL);\n\
+    \    }\n    $ans = array();\n    $length = count($arr);\n    for ($i = 0; $i <\
+    \ $length; $i++) {\n        $temp = $arr[$i];\n        for ($j = 0; $j < $k; $j++)\
+    \ {\n            if ($temp > $arr[$j]) {\n                $temp = $arr[$j];\n\
+    \            }\n        }\n        $ans[$i] = $temp;\n    }\n    return $ans;\n\
+    }\n</code>\n<|/ a tags=algorithm,php dscore=4 |>\n<| c |>\nI do not believe this\
+    \ is O(n), because you sort all the elements on each loop iteration, whereas you\
+    \ could just sort the array once and than find the maximum k numbers. Your algorithm\
+    \ is O(n*logn), though.\n<|/ c |>\n<| c |>\nIt looks like this is actually O(n).\
+    \ At least the PHP documentation says so: http://php.net/manual/en/function.array-merge.php\n\
+    <|/ c |>\n<| c |>\nNo, this isn't O(n), see my answer and comments on it.\n<|/\
+    \ c |>\n<| c |>\nIf there are two numbers equal, will this solution work?\n<|/\
+    \ c |>\n<| a dscore=4 |>\nI suggest you use array_reduce.\nIn PHP 7.4.\n<code>\n\
+    $sorted = [1 => 23, 2 => 7, 3 => 23, 4 => 1, 5 => 1, 6 => 1, 7 => 1, 8 => 1, 9\
+    \ => 1, 10 => 1, 11 => 1, 12 => 1, 13 => 1, 14 => 1, 15 => 1, 16 => 1, 17 => 1,\
+    \ 18 => 1, 19 => 1, 20 => 1, 21 => 1, 22 => 1, 23 => 1, 24 => 1, 25 => 1, 26 =>\
+    \ 1, 27 => 1, 28 => 1, 29 => 1, 30 => 1, 31 => 1, 32 => 1, 33 => 1, 34 => 1, 35\
+    \ => 1, 36 => 1, 37 => 1, 38 => 1, 39 => 1, 40 => 1, 41 => 1, 42 => 1, 43 => 1,\
+    \ 44 => 1, 45 => 1, 46 => 1, 47 => 1, 48 => 1, 49 => 1, 50 => 1, 51 => 1, 52 =>\
+    \ 1, 53 => 1, 54 => 1, 55 => 1, 56 => 1, 57 => 1, 58 => 1, 59 => 1, 60 => 1, 61\
+    \ => 1, 62 => 1, 63 => 1, 64 => 1, 65 => 1, 66 => 1, 67 => 1, 68 => 1, 69 ", " \
+    \   $result = array();\n    for ($i = 0; $i < $k; ++$i) {\n        $result = array_merge($result,\
+    \ array_slice($arr, $i, 1));\n    }\n    return $result;\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nThis is awesome, thank you! I tested it and it does exactly what I want.\n\
+    <|/ c |>\n<| c |>\nThis is O(n) rather than O(n log n) as the others mentioned\
+    \ in comments below\n<|/ c |>\n<| c |>\nThis is a O(n) solution, which means it's\
+    \ faster than the other solutions. Also, this solution does not change the input\
+    \ array, so it's more efficient than other solutions.\n<|/ c |>\n<| c |>\nThe\
+    \ other solutions are also O(n), but the complexity is O(k n) instead of O(kn\
+    \ n) because of the sort step. The other solutions also do not sort the array.\n\
+    <|/ c |>\n<| c |>\nI see. Thanks!\n<|/ c |>\n<| a tags=php,algorithm,sorting |>\n\
+    This one should be O(n), because it uses only n amount of memory and no sorting\
+    \ at all:\n<code>\n$arr = [ -4, -1, -10, 1, 4, 10, 5 ];\n\n$result = [];\n$i =\
+    \ 0;\n$max = PHP_INT_MAX;\n\nwhile ($i < count($arr)) {\n    $result[$i] = min($arr[$i]);\n\
+    \    if ($result[$i] > $max) {\n        $max = $result[$i];\n    }\n    $i++;\n\
+    }\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis works, but you need to use `min($arr[$i])`\
+    \ as opposed to just `$arr[$i]` in the conditional statement.\n<|/ c |>\n<| c\
+    \ |>\n: Thanks for the comment!\n<|/ c |>\n<| c |>\nYou are still sorting with\
+    \ n amount of memory. Sorting *is* O(n).\n<|/ c |>\n<| c |>\nYou mean O(n * logn),\
+    \ because of the sort part?\n<|/ c |>\n<| c |>\n: Yes, because of the sort part.\
+    \ Sorting *is* O(n).\n<|/ c |>\n<| a tags=php,algorithm,sorting dscore=1 |>\n\
+    <code>\n<?php\n\n/**\n * Find the largest value in a list\n *\n * array $arr\n\
+    \ * $k\n *\n * array $largest\n */", "    // write your code here\n    $result\
+    \ = array();\n    $length = count($arr);\n    for ($i=0; $i < $length; $i++) {\n\
+    \        $result[$i] = $arr[$i];\n    }\n    sort($result);\n    array_splice($result,\
+    \ $k);\n    return $result;\n}", "    $arr = array_reverse($arr);\n    sort($arr);\n\
+    \    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a |>\n<| a tags=algorithm,php,performance\
+    \ dscore=1 |>\nHere is an implementation with two loops - no sorts, no slicing,\
+    \ just a pair of loops and a comparison to see if the current element from the\
+    \ first array is greater than the current element from the second array. If it\
+    \ is, then swap them.\n<code>", "    $n = count($arr);\n    if ($k > $n) {\n \
+    \       return array();\n    } elseif ($k == $n) {\n        return $arr;\n   \
+    \ }\n    $result = array();\n    for ($i = 0; $i < $k; $i++) {\n        $result[]\
+    \ = array_shift($arr);\n    }\n    asort($result);\n    return $result;\n}\n</code>\n\
+    <|/ a tags=arrays,php |>\n<| a dscore=1 |>\nIf you're using PHP 7 then this can\
+    \ done simply using array_filter():\n<code>\n$arr = [1, 2, -3, 4, -5, 6, -7, 8,\
+    \ 9];\n\n$count = count($arr);\n$highestValue = max($arr);\n$highestIndex = array_search($highestValue,\
+    \ $arr);\n\n$newArr = array_slice($arr, 0, $highestIndex+1);\n", "    if ($k >\
+    \ count($arr)) return array();\n    if ($k == 0) return array(0);\n    $max =\
+    \ array();\n    foreach ($arr as $i => $val) {\n        if (!in_array($val, $max))\
+    \ {\n            $max[] = $val;\n            $k = array_sum($max) + 1;\n     \
+    \   }\n    }\n    sort($max, SORT_NUMERIC);\n    return array_slice($max, 0, $k);\n\
+    }", "    $result = [];\n    $n = count($arr);\n    for($i = 0; $i < $n; $i++)\
+    \ {\n        for($j = 0; $j < $k; $j++) {\n            $result[$j] = $arr[$i]\
+    \ > $result[$j] ? $arr[$i] : $result[$j];\n        }\n        $result[$i] = $arr[$i];\n\
+    \    }\n    return $result;\n}\n", "    if ($k > count($arr)) return array();\n\
+    \    $max = array();\n    for ($i = 0; $i < $k; $i++) {\n        $max[$i] = max($arr[$i],\
+    \ $arr[$k - 1 - $i]);\n    }\n    return $max;\n}\n</code>\n<|/ a tags=php,arrays,algorithm\
+    \ |>\n<| a dscore=2 |>\n<code>\n$array = array(\n    0 => 1,\n    1 => -2,\n \
+    \   2 => 3,\n    3 => -4,\n    4 => 5\n);\n$result = array_merge(array_slice($array,\
+    \ 1), array_reverse($array));\n</code>\n<|/ a tags=php,arrays,algorithm |>\n<|\
+    \ c |>\n+1: Nice and simple, though I wonder how it scales on large arrays with\
+    \ lots of items.\n<|/ c |>\n<| a tags=php,arrays,algorithm |>\nA simple approach:\n\
+    <code>", "    if (empty($arr) || empty($k)) {\n        return array();\n    }\n\
+    \n    // sort by value\n    $arr = array_reverse($arr);\n\n    $maximum = array();\n\
+    \n    // get the first k elements\n    for ($i = 0; $i < $k; $i++) {\n       \
+    \ $maximum[$i] = array_shift($arr);\n    }\n\n    // get others\n    for ($i =\
+    \ 0; $i < count($arr); $i++) {\n        $value = $arr[$i];\n        if ($value\
+    \ > $maximum[$i]) {\n            $maximum[$i] = $value;\n        }\n    }\n\n\
+    \    return $maximum;\n}\n", "  for ($i = 0; $i < $k; $i++) {\n    $largest =\
+    \ $i;\n    for ($j = max($i-1, 0); $j < count($arr); $j++) {\n      if ($arr[$j]\
+    \ > $arr[$largest]) {\n        $largest = $j;\n      }\n    }\n    if ($largest\
+    \ != $i) {\n      for ($j = $i; $j < $k; $j++) {\n        $arr[$j] = $arr[$j+1];\n\
+    \      }\n      $arr[$i] = $arr[$largest];\n    }\n  }\n  return $arr;\n}\n",
+  "    $max = $arr[0];\n    for ($i = 1; $i < $k; $i++) {\n        $max = $arr[$i]\
+    \ > $max ? $arr[$i] : $max;\n    }\n    return $max;\n}", "    $n = count($arr);\n\
+    \    if ($n < 1 || $k > $n) {\n        return array();\n    }\n    $max = array();\n\
+    \    for ($i = 1; $i < $k; $i++) {\n        $max[] = max($arr[$i - 1], $arr[$i]);\n\
+    \    }\n    return $max;\n}\n\n/**\n * Return the minimum element of an array\
+    \ as defined by\n * a comparison function.\n *\n * PHP version 5\n *\n * Example\
+    \ usage:\n * $minElement = minElement($arr, $comparisonFunction);\n *\n * Function\
+    \ description:\n * Return an element of an array as defined by comparison function.\
+    \ The comparison function\n * should return an integer or float value that is\
+    \ greater than, equal to, or\n * less than zero depending on whether the element\
+    \ is the first to appear\n * before the other, or is somewhere in the middle of\
+    \ the array relative to the\n * first element.\n *\n * Example usage:\n * $minElement\
+    \ = minElement($arr);\n *\n * Function description:\n * Return an element of an\
+    \ array that is greatest among all elements of the array.\n *\n * Example usage:\n\
+    \ * $minElement = minElement($arr);\n *\n * @see min()\n * @link https://php.net/manual/en/function.min.php\n\
+    \ * @param array $arr Array to be searched for minimum value.\n * @param function\
+    \ $comparisonFunction Comparison function accepts $item and $key, and should return\
+    \ an integer or float value that is greater than, equal to, or\n * less than zero\
+    \ depending on whether the element is the first to appear\n * before the other,\
+    \ or is somewhere in the middle of the array relative to the\n * first element.\
+    \ Returns less than 0 if $item is considered to be less than $key. Returns greater\
+    \ than 0 if $item is considered to be greater than\n * $key.\n *\n * @return mixed\
+    \ Array element that has the minimum value.\n */", "    $result = [];\n    $size\
+    \ = count($arr);\n    for ($i = 0; $i < $size; ++$i) {\n        $result[$i] =\
+    \ max($arr[$i], $k);\n    }\n    return array_slice($result, 0, $k);\n}\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nYes, the original problem statement also says that\
+    \ we should sort the array according to some specific condition. So this answer\
+    \ also addresses that. :)\n<|/ c |>\n<| c |>\nI agree that this is more concise\
+    \ than the accepted answer. It also addresses the specific condition required\
+    \ by the OP.\n<|/ c |>\n<| c |>\nThank you, this is really elegant.\n<|/ c |>\n\
+    <| c |>\nThis doesn't seem to work when there are multiple maximums - you get\
+    \ an array of the max values, not just a single array.\n<|/ c |>\n<| c |>\nYes,\
+    \ it returns an array of maxima.\n<|/ c |>\n<| a dscore=2 |>\nI know this is an\
+    \ old question, but I thought I should also post an answer to the problem that\
+    \ OP asked for:\n\n\"How to return a sorted array with unique elements except\
+    \ one\"\n\nThe problem can be solved using mergesort algorithm:\n\nDefine a function\
+    \ that will merge two subarrays of equal length and returns the merged array.\
+    \ \nThe function should take two arrays of equal length and return an array of\
+    \ equal length.\nThe function should return an array that contains the elements\
+    \ of the first array followed by elements of the second array in ascending order.\n\
+    \nHere is a working example in Ruby:\n<code>\ndef uniquify(arr1, arr2)\n  # define\
+    \ function that merges two subarrays of equal length\n  def merge(a, b)\n    a.zip(b).reduce(:merge)\n\
+    \  end\n\n  # use mergesort to merge the two subarrays\n  mergesort(arr1, arr2)\n\
+    \n  # remove first element from arr1\n  arr1.shift\n\n  # return arr1\n  arr1\n\
+    end\n</code>\n<|/ a tags=php,algorithm,sorting |>\n<| a dscore=1 tags=php,algorithm,sorting\
+    \ |>\nHere is a solution I came up with:\n<code>\n<?php\n\n$arr = [-3,-4,5,5,5];\n\
+    $result = [];\n\n$sorted = array_reduce($arr, function($carry, $item) {\n    return\
+    \ array_merge($carry, [max($carry, $item)]);\n});\n", "    $max = array();\n \
+    \   foreach($arr as $element) {\n        $num = $element;\n        $index = 0;\n\
+    \        do {\n            if($num > $max[$index]) {\n                $max[$index]\
+    \ = $num;\n            }\n            $index++;\n        } while($index < $k);\n\
+    \    }\n    return $max;\n}\n", "    \n    // Your code goes here\n    \n}", " \
+    \   $result = array();\n    foreach ($arr as $v) {\n        if (!in_array($v,\
+    \ $result)) {\n            $result[] = $v;\n        }\n    }\n    return array_slice($result,\
+    \ 0, $k);\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThe time complexity of this\
+    \ solution is O(n^2) and its not recommended.\n<|/ c |>\n<| c |>\nAgreed, although\
+    \ it's fast enough for small arrays (<1000).\n<|/ c |>\n<| a tags=php,arrays,sorting\
+    \ |>\n<code>\n<?php\n    function getMax($a, $b)\n    {\n        $result = array();\n\
+    \        foreach($a as $v)\n            $result[] = $v;\n        foreach($b as\
+    \ $v)\n            $result[] = $v;\n        return $result;\n    }\n\n    $array\
+    \ = array(10, 20, 30, 40, 50, 10, 30, 50);\n\n    $result = getMax($array, array_slice($array,\
+    \ 0, 4));\n    var_dump($result);", "    sort($arr);\n    return array_slice($arr,\
+    \ 0, $k);\n}\n", "  for ($i = 0; $i < $k; ++$i) {\n    $max = $arr[$i];\n    for\
+    \ ($j = $i + 1; $j < $k; ++$j) {\n      if ($arr[$j] > $max) {\n        $max =\
+    \ $arr[$j];\n      }\n    }\n    $arr[$i] = $max;\n  }\n  return $arr;\n}", " \
+    \   $n = count($arr);\n    $m = $n - 1;\n\n    $max = array();\n    for ($i =\
+    \ 0; $i < $k; $i++) {\n        $max[$i] = -1;\n    }\n\n    $tmp = 0;\n    for\
+    \ ($i = 0; $i < $k; $i++) {\n        if ($tmp < $arr[$i]) {\n            $tmp\
+    \ = $arr[$i];\n        }\n        $max[$i] = $i;\n    }\n\n    $tmp = $arr[$k];\n\
+    \    for ($i = $k; $i < $n; $i++) {\n        if ($tmp < $arr[$i]) {\n        \
+    \    $tmp = $arr[$i];\n        }\n        $max[$i] = $i;\n    }\n\n    return\
+    \ $max;\n}\n", "    if ($k > count($arr)) return array();\n    if ($k == 0) return\
+    \ array($arr[0]);\n    $maximums = array();\n    for ($i = 0; $i < $k; $i++) {\n\
+    \        $maximums[$i] = max($maximums[$i], $arr[$i]);\n    }\n    return $maximums;\n\
+    }\n", "  for ($j = 1; $j <= $k; $j++) {\n    for ($i = 0; $i <= count($arr) -\
+    \ $k; $i++) {\n      if ($arr[$i] > $arr[$i + $k])\n        continue;\n      else\
+    \ if ($arr[$i] === $arr[$i + $k])\n        continue;\n      else if ($arr[$i]\
+    \ < $arr[$i + $k])\n        return $arr;\n      else return $arr;\n    }\n  }\n\
+    \  return $arr;\n}", "    $result = [];\n    for($i = 0; $i < $k; $i++){\n   \
+    \     $result[$i] = $arr[$i];\n    }\n\n    for($i = $k; $i > 0; $i--){\n    \
+    \    $max = $arr[($i-1)];\n        for($j = $i; $j < $k; $j++){\n            if($result[$j]\
+    \ > $max){\n                $max = $result[$j];\n            }\n        }\n  \
+    \      $result[$i] = $max;\n    }\n\n    return $result;\n}\n</code>\n<|/ a dscore=1\
+    \ |>\n<| a tags=sorting,python,algorithm |>\nThis is pretty simple in Python with\
+    \ the heapq module. It works in O(n) time, O(1) space. \n<code>\n>>> from heapq\
+    \ import heappush, heappop, heapify\n>>> \n>>> def maximum(array, k):\n      \
+    \  heap = []\n        for n in array:\n            heappush(heap, -n)\n      \
+    \  if len(heap) < k:\n            return heap\n        else:\n            array[:]\
+    \ = heappop(heap)\n            return maximum(array, k)\n>>> maximum([-4, -3,\
+    \ -2, 1, 5, 6], 3)\n[-4, -3, 2]\n>>> maximum([4, -4, 4], 2)\n[4, 4]\n>>> maximum([-3,\
+    \ 2, 1, 2, -1, -2, 1], 1)\n[-2, -1]\n</code>\n<|/ a dscore=1 |>\n<| a tags=sorting,python,algorithm\
+    \ |>\nYou can use the heapq module in python. \n<code>\nimport heapq\nnums = [-4,\
+    \ -3, -2, 1, 5, 6]\nprint(heapq.nlargest(3, nums))\n</code>\nOutput: \n<code>\n\
+    [-4, -3, 2]\n</code>\n<|/ a dscore=0 |>\n<| c |>\nI think this answer does not\
+    \ address the question at all, since it only answers half of the question. Also,\
+    \ the question explicitly says it is for a sorted list.\n<|/ c |>\n<| c |>\nI\
+    \ think that this is the simplest answer and the same as the accepted one. Maybe\
+    \ you did not get the question.\n<|/ c |>\n<| c |>\nThat said, I don't have enough\
+    \ reputation points to down vote this.\n<|/ c |>\n<| c |>\nYes, I agree - it is\
+    \ the simplest answer to the question, but not an answer to the question at all.\n\
+    <|/ c |>\n<| a tags=sorting,python,algorithm |>\nIf you don't mind using numpy,\
+    \ then you can try this:\n<code>\nIn [23]: from numpy import array\n\nIn [24]:\
+    \ a = array([-4, -3, -2, 1, ", "  for ($i = 0; $i < $k; $i++) {\n    $current\
+    \ = $arr[$i];\n    \n    for ($j = $i+1; $j < $k; $j++) {\n      if ($current\
+    \ > $arr[$j]) {\n        $current = $arr[$j];\n      }\n    }\n    \n    $arr[$i]\
+    \ = $current;\n  }\n  return $arr;\n}", "    $result = array();\n    $k = 0;\n\
+    \    if ($k >= count($arr)) {\n        return $result;\n    }\n    foreach ($arr\
+    \ as $value) {\n        if ($value > $result[$k]) {\n            $result[$k] =\
+    \ $value;\n        }\n        $k++;\n    }\n    return array_slice($result, 0,\
+    \ $k);\n}\n", "    if ($k === 1) {\n        return $arr;\n    }\n    $max = array();\n\
+    \    $size = count($arr);\n    for ($i = 0; $i < $k; $i++) {\n        $tmp = max();\n\
+    \    }\n    return $max;\n}", "    if (empty($arr) || $k > count($arr))\n    \
+    \    return [];\n    sort($arr);\n    $result = [$arr[0]];\n    for ($i = 1; $i\
+    \ < $k; $i++) {\n        if ($arr[$i] < $result[$i - 1]) {\n            $result[$i]\
+    \ = $arr[$i];\n        } else {\n            $result[$i - 1] = $arr[$i];\n   \
+    \     }\n    }\n    return $result;\n}\n", "    $n = count($arr);\n    $ans =\
+    \ array();\n    $min = $arr[0];\n    $max = $arr[0];\n    for($i = 0; $i < $k;\
+    \ $i++) {\n        if($min > $arr[$i]) {\n            $min = $arr[$i];\n     \
+    \   }\n        if($max < $arr[$i]) {\n            $max = $arr[$i];\n        }\n\
+    \    }\n    for($i = 0; $i < $n; $i++) {\n        if($min > $arr[$i]) {\n    \
+    \        $min = $arr[$i];\n        }\n        if($max < $arr[$i]) {\n        \
+    \    $max = $arr[$i];\n        }\n    }\n    $ans[] = $max;\n    $ans[] = $min;\n\
+    \    return $ans;\n}\n", "    if (!is_array($arr) || count($arr) < 1) {\n    \
+    \    return array();\n    }\n    // initialize result\n    $r = array();\n   \
+    \ // set max\n    $max = -10000000;\n    foreach ($arr as $e) {\n        // Check\
+    \ if the current element of $arr is larger than the max so far\n        if ($e\
+    \ > $max) {\n            // set new max element\n            $max = $e;\n    \
+    \    }\n    }\n    // set k\n    $k = min($k, count($arr));\n    // set the first\
+    \ k elements in the result to be max\n    for ($i = 0; $i < $k; $i++) {\n    \
+    \    $r[] = $max;\n    }\n    // loop over the remaining elements\n    for ($i\
+    \ = $k; $i < count($arr); $i++) {\n        // Check if the current element is\
+    \ larger than the max so far\n        if ($arr[$i] > $max) {\n            // set\
+    \ new max element\n            $max = $arr[$i];\n        }\n        // if the\
+    \ current element is less than the max, then swap the maximum\n        // with\
+    \ the current element\n        if ($arr[$i] < $max) {\n            $temp = $max;\n\
+    \            $max = $arr[$i];\n            $arr[$i] = $temp;\n        }\n    \
+    \    // if max is now larger than the current element, append the element\n  \
+    \      // to the result\n        if ($max > $arr[$i]) {\n            $r[] = $arr[$i];\n\
+    \        }\n    }\n    // return the result\n    return $r;\n}\n", "    $count\
+    \ = count($arr);\n    for($i = 0; $i < $k; $i++) {\n        foreach ($arr as $key\
+    \ => $value) {\n            if($value > $arr[$key]) {\n                $arr[$key]\
+    \ = $value;\n            }\n        }\n    }\n    return $arr;\n}\n</code>\n<|/\
+    \ a |>\n<| c |>\nThis is still giving me an array containing only 1 element\n\
+    <|/ c |>\n<| c |>\nI modified the above code to use `for` loop and I think it\
+    \ worked. Try it now.\n<|/ c |>\n<| c |>\nThanks, this seems to work. I'll have\
+    \ to work out why it's so much faster\n<|/ c |>\n<| c |>\nPlease tell me how are\
+    \ you getting the desired output from the given input.\n<|/ c |>\n<| c |>\nThe\
+    \ input is an array containing the numbers from 0 to 1000. K is set to be 3 (which\
+    \ is the number of elements in the array that need to be kept)\n<|/ c |>\n<| a\
+    \ dscore=0 |>\nI suggest using array_slice, array_sum, array_sort and array_reverse.\n\
+    <code>\n$array = array(4, -4, 4);\n\n$result = array_reverse(array_slice(array_reverse($array),\
+    \ 0, 3));\n</code>\n<|/ a tags=php,arrays |>\n<| c |>\nI dont think that will\
+    \ work, as it returns only one number\n<|/ c |>\n<| c |>\nThen what do you expect?\n\
+    <|/ c |>\n<| a tags=php,arrays |>\n<code>\n<?php ", "  for ($i = $k; $i <= count($arr);\
+    \ $i++) {\n    $max = $arr[$i];\n    $j = 0;\n    while ($j < $i && $max < $arr[$j])\
+    \ {\n      $max = $arr[$j];\n      $j++;\n    }\n    $arr[$i] = $max;\n  }\n \
+    \ return $arr;\n}", "    // \u5148\u627E\u5230\u6700\u5927\u7684\u6570\u5B57\n\
+    \    $max_index = array_search($arr[0], $arr);\n    $temp = $arr[$max_index];\n\
+    \    // \u518D\u627E\u5230\u5927\u4E8E\u6700\u5927\u7684\u6570\u5B57\n    for\
+    \ ($i = 1; $i < $k; $i++) {\n        if ($arr[$i] > $temp) {\n            $temp\
+    \ = $arr[$i];\n            $max_index = $i;\n        }\n    }\n    // \u627E\u5230\
+    \u7684\u6700\u5927\u6570\u5B57\u4E3Aarr[$max_index]\n    $max = array();\n   \
+    \ for ($i = 0; $i < $k; $i++) {\n        $max[$i] = $arr[$max_index];\n    }\n\
+    \    return $max;\n}\n", "    $result = array();\n    for($i = 0; $i < $k; $i++)\
+    \ {\n        $result[$i] = max($arr[$i]);\n    }\n    return $result;\n}\n", " \
+    \   if ($k > count($arr)) {\n        return $arr;\n    }\n    $n = count($arr);\n\
+    \    for ($i = 0; $i < $k; $i++) {\n        $min = PHP_INT_MAX;\n        for ($j\
+    \ = $i; $j < $n; $j++) {\n            if ($arr[$j] < $min) {\n               \
+    \ $min = $arr[$j];\n            }\n        }\n        $arr[$i] = $min;\n    }\n\
+    \    return $arr;\n}\n", "    // write your code here\n    $lengths = array_count_values($arr);\n\
+    \    \n    $arr = array();\n    foreach($lengths as $k => $v) {\n        if($k\
+    \ == $k) {\n            $arr[] = $k;\n        }\n    }\n    \n    $maxs = array();\n\
+    \    foreach($arr as $i => $item) {\n        for($j = $i+1; $j < count($arr);\
+    \ $j++) {\n            if($arr[$i] > $arr[$j]) {\n                $maxs[] = $arr[$i];\n\
+    \                break;\n            }\n        }\n    }\n    \n    return $maxs;\n\
+    }\n", "    sort($arr);\n    return array_slice($arr, 0, $k);\n}", "    if (sizeof($arr)\
+    \ < $k) {\n        return array(0);\n    }\n    $max_val = 0;\n    foreach ($arr\
+    \ as $num) {\n        if ($num > $max_val) {\n            $max_val = $num;\n \
+    \       }\n    }\n    return array($max_val);\n}\n", "    $result = [];\n    $temp\
+    \ = null;\n    foreach ($arr as $element) {\n        if ($temp === null || $element\
+    \ > $temp) {\n            $temp = $element;\n        }\n        if (count($result)\
+    \ == $k) {\n            $result[] = $temp;\n            break;\n        }\n  \
+    \      $result[] = $temp;\n    }\n    return $result;\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nThanks for your answer. But can you make it work with `array(-3, -4,\
+    \ 5)` as input and `3` as k? Because your solution gives `[-4, 4, -3]`, which\
+    \ is not the correct answer for that input\n<|/ c |>\n<| a dscore=0 |>\nAnother\
+    \ approach\n<code>", "    if ($k > count($arr)) {\n        return $arr;\n    }\n\
+    \    $res = array();\n    for ($i = 0; $i < $k; $i++) {\n        $max = $i;\n\
+    \        for ($j = $i + 1; $j < count($arr); $j++) {\n            if ($arr[$j]\
+    \ > $arr[$max]) {\n                $max = $j;\n            }\n        }\n    \
+    \    $res[] = $arr[$max];\n    }\n    return $res;\n}\n", "    if ($k <= 0) {\n\
+    \        return array($arr);\n    }\n    $arr1 = $arr;\n    $resultArray = array();\n\
+    \    for ($i = 1; $i < $k; $i++) {\n        $min = min($arr1);\n        $max =\
+    \ max($arr1);\n        $arr2 = array();\n        foreach ($arr1 as $value) {\n\
+    \            if ($value >= $min && $value <= $max) {\n                $arr2[]\
+    \ = $value;\n            }\n        }\n        $resultArray[] = $arr2;\n     \
+    \   $arr1 = $arr2;\n    }\n    return $resultArray;\n}", "    if (!is_array($arr)\
+    \ || !is_int($k) || $k <= 0) return [];\n    if ($k == 1) return $arr;\n    $m\
+    \ = $arr[0];\n    $result = [];\n    for ($i = 1; $i < $k; $i++) {\n        $m\
+    \ = max($m, $arr[$i]);\n    }\n    for ($i = 1; $i < $k; $i++) {\n        $result[$i]\
+    \ = $m;\n    }\n    return $result;\n}", "    sort($arr);\n    $m = 0;\n    $n\
+    \ = count($arr) - 1;\n    for ($i = 0; $i < $k; $i++) {\n        $j = $n;\n  \
+    \      while ($j < $n && $arr[$j] >= $arr[$j + 1]) {\n            $j++;\n    \
+    \    }\n        $m = max($arr[$i], $m);\n        $n--;\n    }\n    return range($m,\
+    \ $arr[$n]);\n}\n</code>\n<|/ a tags=arrays,php |>\n<| c |>\nThe answer above\
+    \ by is great for arrays with lots of elements, however it will not work with\
+    \ arrays with less than ~100k elements (try it).\n<|/ c |>\n<| c |>\nthis answer\
+    \ was posted over 10 years ago and has only been tested with arrays that have\
+    \ a length of ~100k+. However it does run very efficiently for arrays of any size.\n\
+    <|/ c |>\n<| a dscore=5 |>\n<code>\n$array = [-100, -200, -1, 0, 1, 2, 3, 4, 5,\
+    \ 6, 7, 8, 9];\n\nrsort($array);\nprint_r($array);\n\nprint_r(array_slice($array,\
+    \ 0, 3));\n</code>\noutput:\n<code>\nArray\n(\n    [0] => -1\n    [1] => 0\n \
+    \   [2] => 1\n    [3] => 2\n    [4] => 3\n    [5] => 4\n    [6] => 5\n    [7]\
+    \ => 6\n    [8] => 7\n    [9] => 8\n    [10] => 9\n)\n\nArray\n(\n    [0] => -1\n\
+    \    [1] => 0\n    [2] => 1\n    [3] => 2\n    [4] => 3\n    [5] => 4\n    [6]\
+    \ => 5\n)\n</code>\n<|/ a tags=arrays,php |>\n<| c |>\nIt's not about sorting\
+    \ but getting a sub-array from sorted array. \nIn this example, we want to get\
+    \ array: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] which is sorted by descending order\n\
+    <|/ c |>\n<| c |>\nBut this is not the right answer, since this returns **sorted**\
+    \ array. While asker wants **sorted** array starting from a certain index, **descending**\
+    \ order and starting from beginning of the array.\n<|/ c |>\n<| a dscore=5 |>\n\
+    The answers from previous posters are good, but they do not return an array. \
+    \ They return a list of array values.  The array values are in descending order,\
+    \ but not necessarily in descending order.\nFor example if you wanted to return\
+    \ the last 3 values in an array:\n<code>", "    \n    // base case\n    if ($k\
+    \ === 1) {\n        return $arr;\n    }\n    \n    // recursion case\n    $k1\
+    \ = $k - 1;\n    \n    // return maximum of k numbers\n    return array_merge(maximum($arr,\
+    \ $k1), \n                       maximum($arr, k));\n}\n", "    // write your\
+    \ code here\n    $arr = array_map(\"intval\", $arr);\n    sort($arr, SORT_NUMERIC);\n\
+    \    return array_slice($arr, 0, $k);\n}", "  $maximum = array();\n  for ($i =\
+    \ 0; $i < $k; $i++) {\n    $maximum[$i] = max($maximum[$i], $arr[$i]);\n  }\n\
+    \  return $maximum;\n}\n", "    $max = 0;\n    \n    for ($i = 0; $i <= $k; $i++)\
+    \ {\n        if ($arr[$i] > $max) {\n            $max = $arr[$i];\n        }\n\
+    \    }\n    \n    return $max;\n}", "    $a = array_reverse($arr);\n    $n = count($a);\n\
+    \    \n    if ($n < $k) {\n        $m = $k;\n    }\n    else {\n        $m = $n;\n\
+    \    }\n    \n    $result = [];\n    \n    for ($i = 0; $i < $m; $i++) {\n   \
+    \     $result[] = $a[$i];\n    }\n    \n    for ($i = $m; $i < $k; $i++) {\n \
+    \       $result[] = $a[$i - 1];\n    }\n    \n    return $result;\n}\n$arr = [1,\
+    \ -4, 3, 6, 9, -8, -7, -2, 5, 10];\nprint_r(maximum($arr, 1));", "    $n = count($arr);\n\
+    \    if ($k > $n) {\n        return array();\n    }\n    $arr = array_merge($arr);\n\
+    \    $max = max($arr);\n    $result = array();\n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $count = 0;\n        $pos = 0;\n        for ($j = 0; $j < $n; $j++)\
+    \ {\n            if ($max == $arr[$j]) {\n                $count++;\n        \
+    \        $pos = $j;\n            }\n        }\n        if ($count > 0) {\n   \
+    \         $result[] = $arr[$pos];\n        }\n    }\n    return $result;\n}",
+  "    if ($k > count($arr)) {\n        $arr = array_reverse($arr);\n        $k =\
+    \ count($arr);\n    }\n    $max = $arr[$k-1];\n    for ($i = 1; $i <= $k; $i++)\
+    \ {\n        $tmp = $arr[$i];\n        if ($tmp > $max) {\n            $max =\
+    \ $tmp;\n        }\n    }\n    return $arr;\n}\n", "    sort($arr);\n    $result\
+    \ = [];\n    for($i = 0; $i < $k; $i++) {\n        $result[] = $arr[$i];\n   \
+    \ }\n    return $result;\n}\n", "    $n = count($arr);\n    if($k >= $n){\n  \
+    \      throw new InvalidArgumentException(\"Invalid parameter\");\n    }\n   \
+    \ $result = array();\n    for($i = 0; $i < $k; $i++){\n        $result[$i] = max($arr[$i]);\n\
+    \    }\n    return $result;\n}\n", "    $max = array();\n    \n    if (count($arr)\
+    \ < $k) {\n        return $max;\n    }\n\n    $counts = array_count_values($arr);\n\
+    \    arsort($counts);\n\n    for ($i = 0; $i < $k; $i++) {\n        $max[] = $counts[$i];\n\
+    \    }\n\n    return $max;\n}\n", "    if (empty($arr) || $k <= 0 || $k > count($arr))\
+    \ {\n        return array();\n    }\n    $result = array();\n    array_walk($arr,\
+    \ function(&$a) use (&$result, $k) {\n        if ($a > $result) {\n          \
+    \  $result = $a;\n        }\n    });\n    array_splice($result, $k);\n    return\
+    \ $result;\n}\n</code>\nAnd then, using it, you can do something like:\n<code>\n\
+    <?php\n\n$a = array(\n    array(-1, 1, 0),\n    array(1, 2, 3),\n    array(4,\
+    \ 5, 6),\n    array(7, 8, 9)\n);\n", "    $count = array_count_values($arr);\n\
+    \    ksort($count);\n    return array_slice($count, 0, $k);\n}\n</code>\n<|/ a\
+    \ |>\n<| a dscore=0 |>\n<code>", "    // write your code here\n    $len = count($arr);\n\
+    \    $max = array();\n    for ($i = 0; $i < $len; $i++) {\n        if ($i < $k)\
+    \ {\n            $max[] = $arr[$i];\n        }\n        if ($i == $k) {\n    \
+    \        $max[] = array_max($arr, $i, $len);\n        }\n    }\n    return $max;\n\
+    }\n", "    $n = count($arr);\n    if ($n < $k) $k = $n;\n    $arr[$k] = max($arr[$k],\
+    \ $arr[0]);\n    for ($i = 1; $i < $k; $i++) {\n        if ($arr[$i] > $arr[$k\
+    \ - $i - 1]) $arr[$k - $i - 1] = $arr[$i];\n    }\n    return $arr;\n}\n\n$arr\
+    \ = [-3,-4,5];\n$arr = maximum($arr,3);\n\n$arr = [4,-4,4];\n$arr = maximum($arr,2);\n\
+    \n$arr = [-3,2,1,2,-1,-2,1];\n$arr = maximum($arr,1);\n", "    $length = count($arr);\n\
+    \    if ($length === 0) {\n        return array();\n    }\n    if ($length < $k)\
+    \ {\n        return $arr;\n    }\n    $arr = array_reverse($arr);\n    $k = $length\
+    \ - $k;\n    for ($i = 0; $i < $k; $i++) {\n        $max = $arr[$i];\n       \
+    \ $lastMax = array_pop($arr);\n        if ($lastMax) {\n            $arr[] = $lastMax;\n\
+    \        }\n    }\n    return $arr;\n}\n</code>\n<|/ a tags=arrays,algorithm,php\
+    \ |>\n<| a tags=arrays,algorithm,php dscore=2 |>\nUse this solution:\n<code>\n\
+    <?php\n$arr = array(-3,-4,-5,-6,-7,-8);\n$max_arr = [];\n$max_value = 0;\nforeach($arr\
+    \ as $value) {\n    $max_value = max($max_value,$value);\n    $max_arr[] = $max_value;\n\
+    }\nvar_dump($max_arr);\n</code>\nResult:\n<code>\narray(6) {\n  [0]=>\n  int(-4)\n\
+    \  [1]=>\n  int(-3)\n  [2]=>\n  int(-6)\n  [3]=>\n  int(-7)\n  [4]=>\n  int(-8)\n\
+    \  [5]=>\n  int(-5)\n}\n</code>\n<|/ a |>\n<| a tags=arrays,algorithm,php |>\n\
+    You could use krsort for that:\n<code>\n$array = array(10, 9, 2, 7, 5, 3, 1);\n\
+    krsort($array);\nprint_r($array);\n</code>\n<|/ a dscore=2 |>\n<| a |>\n<code>\n\
+    $array = array(10, 9, 2, 7, 5, 3, 1);\n$array = array_reverse($array);\nsort($array);\n\
+    $array = array_reverse($array);\nprint_r($array);\n</code>\n<|/ a tags=arrays,algorithm,php\
+    \ dscore=2 |>\n<| a tags=arrays,algorithm,php dscore=2 |>\nTry below code\n<code>",
+  "    sort($arr);\n    $result = array();\n    for ($i = 0; $i < $k; $i++) {\n  \
+    \      $result[] = $arr[$i];\n    }\n    return $result;\n}\n</code>\n<|/ a dscore=4\
+    \ tags=php,algorithm |>\n<| c |>\nThe algorithm works but is very slow when there\
+    \ are many items in the array. With thousands of items then it is very slow. On\
+    \ my machine, for 10000 items it is about 5 seconds.\n<|/ c |>\n<| c |>\nThe sorting\
+    \ part in the above example is very slow. Try [this example](https://stackoverflow.com/a/47222532/5459839)\
+    \ and compare to the other answers on this page for 10000 items.\n<|/ c |>\n<|\
+    \ c |>\nI agree that this should be the accepted answer. This is O(n), n being\
+    \ the length of the array, which means the running time will depend on the length\
+    \ of the array - not the number of items. This is very important and should be\
+    \ mentioned in the answer. Also the accepted answer doesn't work with negative\
+    \ numbers such as `-7, -8, -1`\n<|/ c |>\n<| c |>\nI guess this would be the fastest\
+    \ solution for the problem that OP mentioned. I hope someone would come up with\
+    \ an algorithm that can do sorting faster.\n<|/ c |>\n<| c |>\nI like it, but\
+    \ note that in PHP 7, `usort()` has a \"SORT_NUMERIC\" option that makes numeric\
+    \ keys ascending instead of descending. http://php.net/manual/en/function.usort.php\n\
+    <|/ c |>\n<| a |>\nThe accepted answer is not working for negative numbers. Here\
+    \ is a working version:\n<code>", "    $result = [];\n    sort($arr);\n\n    foreach\
+    \ ($arr as $key => $value) {\n        $result[$key] = $value;\n        if (count($result)\
+    \ == $k) {\n            break;\n        }\n    }\n    return $result;\n}", " \
+    \   return array_merge(array($k), array_map(\n        function ($num) {\n    \
+    \        return $num >= $k ? $num : $k;\n        },\n        $arr));\n}\n", " \
+    \   $max = $arr[0];\n    $maxIndex = 0;\n    \n    for ($i = 1; $i < $k; $i++)\
+    \ {\n        if ($maxIndex < $k - 1) {\n            if ($max < $arr[$maxIndex])\
+    \ {\n                $max = $arr[$maxIndex];\n                $maxIndex = $maxIndex;\n\
+    \            }\n        } else {\n            if ($max < $arr[$maxIndex + 1])\
+    \ {\n                $max = $arr[$maxIndex + 1];\n                $maxIndex =\
+    \ $maxIndex + 1;\n            }\n        }\n    }\n    \n    return array_slice($arr,\
+    \ $maxIndex);\n}\n", "    if ($k > count($arr)) {\n        echo \"invalid input\
+    \ parameter\"; exit;\n    }\n\n    $maximum = array();\n    for ($i = 0; $i <\
+    \ $k; $i++) {\n        $maximum[] = $arr[$i];\n    }\n\n    foreach ($arr as $key\
+    \ => $value) {\n        if ($key >= $k) {\n            break;\n        }\n\n \
+    \       if ($value < $maximum[$key - 1]) {\n            $maximum[$key - 1] = $value;\n\
+    \        }\n    }\n\n    return $maximum;\n}\n", "    $maximums = array();\n \
+    \   foreach ($arr as $num) {\n        for ($i = 1; $i <= $k; $i++) {\n       \
+    \     if ($num > $arr[$i - 1]) {\n                $maximums[] = $num;\n      \
+    \          break;\n            }\n        }\n    }\n    return $maximums;\n}\n",
+  "    $max = array();\n    $len = count($arr);\n    if ($k <= $len) {\n        for\
+    \ ($i=0; $i<=$k; $i++) {\n            if ($arr[$i] > $arr[$i-1]) {\n         \
+    \       $arr[$i] = $arr[$i-1];\n            }\n            $max[$i] = $arr[$i];\n\
+    \        }\n        return $max;\n    } else {\n        for ($i=0; $i<=$len; $i++)\
+    \ {\n            if ($arr[$i] > $arr[$i-1]) {\n                $arr[$i] = $arr[$i-1];\n\
+    \            }\n            $max[$i] = $arr[$i];\n        }\n        return $max;\n\
+    \    }\n}", "    $n = count($arr);\n    $arr = array_map(\"intval\", $arr);\n\
+    \    $m = array();\n    $m = array_chunk($arr, $k, true);\n    array_walk($m,\
+    \ function(&$value, $i, $k) {\n        $value = max($value);\n    });\n    return\
+    \ $m;\n}\n", "    $arr = array_slice($arr, 0, $k);\n    sort($arr);\n    return\
+    \ $arr;\n}\n", "    sort($arr);\n    return array_slice($arr, $k);\n}", "    sort($arr);\n\
+    \    return array_slice($arr, 0, $k);\n}\n", "    $result = [];\n    $max = -INF;\n\
+    \    foreach ($arr as $key => $value) {\n        if ($value >= $max) {\n     \
+    \       $max = $value;\n        }\n        $result[$key] = $value;\n    }\n  \
+    \  $result[$key] = $max;\n    return array_slice($result, 0, $k);\n}\n</code>\n\
+    <|/ a dscore=0 |>\n<| a |>\nYou can do this easily with array_reduce:\n<code>\n\
+    $arr = range(1, 1000);\n$k = 3;\n$max = array_reduce($arr, 'max', $k);\n</code>\n\
+    <|/ a dscore=0 tags=php,algorithm,arrays |>\n<| a dscore=0 tags=php,algorithm,arrays\
+    \ |>\nOne liner using array_reduce:\n<code>\n$a = [1, 3, -7, 1, 4, 8, 3, 9];\n\
+    $a = array_reduce($a, 'max', $a);\nvar_dump($a); // int(9)\n</code>\n<|/ a |>\n\
+    <| a tags=php,algorithm,arrays |>\nWe can also try this approach:\n<code>\n$arr\
+    \ = [1, 3, -7, 1, 4, 8, 3, 9];\n$result = array_reduce($arr, function($a, $b)\
+    \ {\n    return $a > $b ? $a : $b;\n}, -1000);\n</code>\n<|/ a dscore=0 |>\n<|\
+    \ c |>\nThis doesn't provide an answer to the question. To critique or request\
+    \ clarification from an author, leave a comment below their post. - [From Review](/review/low-quality-posts/29840475)\n\
+    <|/ c |>\n<| c |>\nI guess I misread that as \"What is the fastest way to get\
+    \ the max array value?\" which is what this does (faster than the accepted answer).\n\
+    <|/ c |>\n<| c |>\nI guess you misread the question. OP is trying to get the k\
+    \ largest numbers in the array, so your answer is simply taking the largest value\
+    \ and then taking k elements out of the resulting array. This would take O(n)\
+    \ time whereas the accepted answer is O(log n). Yes, your answer is O(n), but\
+    \ the OP's array has a relatively small number of elements, so the speed difference\
+    \ won't make a significant difference.\n<|/ c |>\n<| c |>\nI agree. But I assumed\
+    \ the question was more about how to get the k largest numbers in an array in\
+    \ general. Nothing about \"fastest\" except for \"faster than n\". So I wanted\
+    \ to provide an answer that would be faster than O(n). I did some benchmarking\
+    \ and the accepted answer was ", "    $result = array();\n    $length = count($arr);\n\
+    \    $max = $arr[0];\n    for ($i = 1; $i < $length; $i++) {\n        if ($max\
+    \ < $arr[$i]) {\n            $max = $arr[$i];\n        }\n    }\n    for ($i =\
+    \ 0; $i < $k; $i++) {\n        $result[] = $max;\n    }\n    return $result;\n\
+    }", "    sort($arr);\n    return array_slice($arr, 0, $k);\n}\n", "    $result\
+    \ = [];\n    $counter = count($arr);\n\n    for ($i = 0; $i < $k; $i++) {\n  \
+    \      $counter--;\n        $result[$i] = $arr[$counter];\n    }\n\n    return\
+    \ $result;\n}\n</code>\n<|/ a |>\n<| a tags=php,algorithm,sorting |>\nYou can\
+    \ try below code:\n<code>\n<?php", "    $result = [];\n\n    $k2 = ceil($k * sqrt($arr));\n\
+    \n    foreach ($arr as $key => $value) {\n        if ($key <= $k2) {\n       \
+    \     $result[] = $value;\n        }\n    }\n\n    return $result;\n}\n</code>\n\
+    <|/ a |>\n<| a dscore=0 |>\n<code>\n<?php\n", "    $result = [];\n    array_walk($arr,\
+    \ function($value) use (&$result){\n        $result[$value] = max($result[$value],\
+    \ $value);\n    });\n    asort($result);\n    return array_slice($result, 0, $k);\n\
+    }\n", "    $arr = array_reverse($arr);\n    sort($arr);\n    $n = count($arr);\n\
+    \    if ($n < $k) {\n        $k = $n;\n    } elseif ($k > $n) {\n        return\
+    \ array();\n    }\n    $result = array();\n    for ($i = 0; $i < $k; $i++) {\n\
+    \        $result[] = $arr[$i];\n    }\n    return $result;\n}\n", "    $result\
+    \ = array();\n    \n    if($k > count($arr)) return array();\n    \n    $arr =\
+    \ array_reverse($arr);\n    \n    foreach($arr as $key => $value) {\n        $tmp\
+    \ = array();\n        \n        if($key == 0) $tmp[] = $value;\n        \n   \
+    \     for($i = $key-1; $i >= 0 && count($tmp) < $k; $i--) $tmp[] = $arr[$i];\n\
+    \        \n        if($k == count($tmp)) $result = $tmp;\n        \n        if(count($tmp)\
+    \ > count($result)) $result = $tmp;\n    }\n    \n    return array_reverse($result);\n\
+    }\n</code>\n<|/ a dscore=1 tags=php,algorithm,sorting |>\n<| c |>\nI really like\
+    \ this one. But I need the highest number and not the highest. Sorry I made a\
+    \ mistake in the question. So I edited my question\n<|/ c |>\n<| c |>\nI edited\
+    \ the question a little bit. Can you check again please.\n<|/ c |>\n<| c |>\n\
+    I edited my answer based on your latest edits to the question\n<|/ c |>\n<| c\
+    \ |>\nI think that the most efficient solution to this problem would be to make\
+    \ a `hashmap` with elements that are the maximum value of each possible `k` value.\
+    \ So if the array was {1,2,3,4,5} with k = 3 then the map would be {3,3,3}. Then,\
+    \ given a number `k`, you search through the map to find the element that is the\
+    \ `k`th largest value in the array and remove it from the map. This gives you\
+    \ O(1) time complexity to find the `k`th largest value. Then, you just need to\
+    \ iterate the map to get your final result.\n<|/ c |>\n<| a dscore=1 |>\nI think\
+    \ that the most efficient solution to this problem would be to make a hashmap\
+    \ with elements that are the maximum value of each possible k value. So if the\
+    \ array was {1,2,3,4,5} with k = 3 then the map would be {3,3,3}. Then, given\
+    \ a number k, and a sorted array in ascending order, you search through the map\
+    \ to find the element that is the kth largest value in the array and remove it\
+    \ from the map. This gives you O(1) time complexity to find the kth largest value.\
+    \ Then, you just need to iterate the map to get your final result.\n<code>", " \
+    \ sort($arr, SORT_NUMERIC);\n  $m = $arr[0];\n  $result = array();\n  for ($i\
+    \ = 0; $i < $k; $i++) {\n    $m = max($m, $arr[$i]);\n    $result[] = $m;\n  }\n\
+    \  return $result;\n}\n</code>\n<|/ a tags=algorithm,sorting,php |>\n<| a tags=algorithm,sorting,php\
+    \ |>\n<code>\n<?php\n\n$ar = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19);\n\
+    \n$ar1 = array_merge($ar,array());\nkrsort($ar1);\n$maxar = array_slice($ar1,\
+    \ count($ar1)-1, count($ar1));\nprint_r($maxar);\n</code>\n<|/ a dscore=1 |>\n\
+    <| c |>\nPlease add some explanation to your answer such that others can learn\
+    \ from it\n<|/ c |>\n<| a |>\n<code>\n$ar = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19);\n\
+    \n$max = max($ar);\n$ar = array_diff($ar,array($max));\nkrsort($ar);\n</code>\n\
+    <|/ a tags=algorithm,sorting,php dscore=1 |>\n<| a tags=algorithm,sorting,php\
+    \ dscore=0 |>\n<code>\n$ar = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19);\n\
+    \n$ar = array($ar);\nsort($ar, SORT_NUMERIC);\n$ar = array_merge($ar,array());\n\
+    krsort($ar);\n$maxar = array_slice($ar, count($ar)-1, count($ar));\nprint_r($maxar);\n\
+    </code>\n<|/ a |>\n<| a dscore=0 tags=algorithm,sorting,php |>\nTry this:\n<code>\n\
+    $ar = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19);\n\n$ar = array($ar);\n\
+    sort($ar, SORT_NUMERIC);\n$ar = array_merge($ar,array());\nkrsort($ar);\n$maxar\
+    \ = array_slice($ar, count($ar)-1, count($ar));\nprint_r($maxar);\n</code>\n<|/\
+    \ a |>\n<| a dscore=0 tags=algorithm,sorting,php |>\n<code>\n<?php \n$arr = array(1,\
+    \ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, ", "    sort($arr);\n  \
+    \  $result = array();\n    for($i = 0; $i < $k; $i++)\n        $result[] = $arr[$i];\n\
+    \    return $result;\n}\n</code>\n<|/ a |>\n<| c |>\nThanks, that works great.\
+    \ I was trying to do it in one line but couldn't get it to work.\n<|/ c |>\n<|\
+    \ c |>\nThe only issue is that this will require PHP 7+.  If the OP hasn't upgraded\
+    \ to PHP 7 then this will return an error.\n<|/ c |>\n<| a dscore=1 |>\nThe code\
+    \ below uses array_slice and array_sum.\nIt takes advantage of array_sum to find\
+    \ the maximum number in each sub array.\n<code>\n$arr = [\n    [1, 2, 3],\n  \
+    \  [4, 5, 6],\n    [7, 8, 9],\n    [10, 11, 12],\n];\n\n$arr = array_map('array_sum',\
+    \ $arr);\n$arr = array_map('array_slice', $arr, 0, $k);\nprint_r(array_slice($arr,\
+    \ 0, $k));\n</code>\nThe output will be:\n<code>\nArray\n(\n    [0] => 3\n   \
+    \ [1] => 6\n    [2] => 9\n    [3] => 12\n)\n</code>\nDemo\n<|/ a tags=algorithm,php\
+    \ |>\n<| a |>\n<code>\n$arr = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9],\n\
+    \    [10, 11, 12]\n];\n</code>\n<code>", "    $arr = array_reverse($arr);\n  \
+    \  $result = [];\n    for($i = 0; $i < $k; $i++) {\n        array_push($result,\
+    \ max($arr));\n        array_shift($arr);\n    }\n    return $result;\n}\n", " \
+    \   sort($arr);\n    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a |>\n\
+    <| a dscore=4 |>\n<code>\n$arr = [1, -10, 5, 8, -1];\n$arrLen = count($arr);\n\
+    $maxVal = array();\nfor($i = 0; $i < $arrLen; $i++) {\n    $maxVal[] = $arr[$i];\n\
+    }\n\n$maxVal = array_slice($maxVal, 0, $arrLen-count($maxVal));\n$maxVal = array_unique($maxVal);\n\
+    sort($maxVal);\nprint_r($maxVal);\n</code>\n<|/ a tags=sorting,php,arrays |>\n\
+    <| c |>\nYou don't need the slice to remove duplicates - you can use a foreach\
+    \ loop with array_unique() instead. Easier to read, easier to understand, and\
+    \ probably faster. Also, this code doesn't work if the array has duplicates.\n\
+    <|/ c |>\n<| a tags=sorting,php,arrays |>\nAm not sure why none of these answers\
+    \ work. but here is my answer\n<code>", "    $max = array();\n    sort($arr);\n\
+    \    $len = count($arr);\n    if ($len <= $k) {\n        for ($i = 0; $i < $len;\
+    \ ++$i) {\n            $max[] = $arr[$i];\n        }\n    } elseif ($k < $len\
+    \ - 1) {\n        for ($i = 0; $i < $k; ++$i) {\n            $max[] = $arr[$i];\n\
+    \        }\n        for ($i = 0; $i < $len - $k; ++$i) {\n            $max[] =\
+    \ $arr[$i + $k];\n        }\n    } else {\n        for ($i = 0; $i < $k; ++$i)\
+    \ {\n            $max[] = $arr[$i];\n        }\n    }\n    return $max;\n}", " \
+    \   sort($arr);\n    $result = array_slice($arr, 0, $k);\n    sort($result);\n\
+    \    return $result;\n}", "    $largest = array();\n    $len = count($arr);\n\
+    \    if ($k > $len) {\n        $k = $len;\n    }\n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $largest[$i] = $arr[$i];\n    }\n    $largest[$k] = max($arr[$k]);\n\
+    \    for ($i = $k + 1; $i < $len; $i++) {\n        $j = $i - 1;\n        if ($arr[$i]\
+    \ > $largest[$j]) {\n            $largest[$j] = $arr[$i];\n        }\n    }\n\
+    \    return $largest;\n}\n", "    if ($k > count($arr)) {\n        return array();\n\
+    \    }\n    if ($k > count($arr) / 2) {\n        $result = $arr;\n    } else {\n\
+    \        $result = array_slice($arr, 0, $k);\n        $result = array_merge(maximum($arr,\
+    \ $k - 1), array(max($arr)));\n    }\n    return $result;\n}\n", "    // write\
+    \ your code here\n    return sort($arr, $k);\n}\n</cell>\n<cell>", "    $count\
+    \ = 1;\n    $maximum = $arr[0];\n    for($i = 1; $i <= $k; $i++) {\n        if($arr[$i]\
+    \ > $arr[$maximum]) {\n            $maximum = $i;\n        }\n        $count++;\n\
+    \    }\n    return $arr[$maximum];\n}\n", "  for ($i = 0; $i < $k; $i++) {\n \
+    \   $max_key = max($arr);\n    array_push($arr, $max_key);\n  }\n  return $arr;\n\
+    }", "    sort($arr);\n    return array_slice($arr, $k, null, true);\n}\n", " \
+    \   $max = $arr[0];\n    for ($i = 1; $i < $k; $i++) {\n        if ($arr[$i] >\
+    \ $max) {\n            $max = $arr[$i];\n        }\n    }\n    return $max;\n\
+    }\n$arr = [-3, 2, 1, 2, -1, -2, 1];\n$k = 3;\n$ans = maximum($arr, $k);\necho\
+    \ \"ans: \" . $ans;\n", "  $arr_size = count($arr);\n  if ($arr_size <= $k) {\n\
+    \    return $arr;\n  }\n  $max_k = $arr_size - $k;\n  $arr = array_slice($arr,\
+    \ 0, $max_k);\n  $max_val = array_sum($arr);\n  return array_slice($arr, $max_k);\n\
+    }\n", "    $arrLen = count($arr);\n    if ($arrLen === 0) {\n        return [];\n\
+    \    }\n    if ($arrLen === 1) {\n        return $arr;\n    }\n    if ($k >= $arrLen)\
+    \ {\n        return $arr;\n    }\n    $m = new Array($arrLen - 1);\n    $m[0]\
+    \ = -PHP_INT_MAX;\n    for ($i = 1; $i <= $arrLen; $i++) {\n        $m[$i] = $i;\n\
+    \    }\n    foreach ($arr as $k => $v) {\n        for ($i = $arrLen - 1; $i >=\
+    \ 1; $i--) {\n            if ($m[$i] < $v) {\n                $m[$i] = $m[$i -\
+    \ 1];\n            }\n        }\n        $m[1] = $v;\n    }\n    return array_slice($m,\
+    \ 0, $k);\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\nIt doesn't work for this array\
+    \ : array(-3, 0, 3, -4, 1, -1, -4, -5, 3, -5);\n<|/ c |>\n<| c |>\nIt works fine\
+    \ for me with the example you provided\n<|/ c |>\n<| c |>\nThis is not working\
+    \ for this array : array(-3, 0, 3, -4, 1, -1, -4, -5, 3, -5);\n<|/ c |>\n<| c\
+    \ |>\nIt works fine for me with the example you provided. Did you copy the code\
+    \ exactly?\n<|/ c |>\n<| c |>\nyes, exactly same code... and i am using php 7.3.11.\
+    \ i will try it in php 7.3.6 and let u know.\n<|/ c |>\n<| a dscore=2 |>\nOne\
+    \ more variant which doesn't use sort function\n<code>", "    $n = count($arr);\n\
+    \    sort($arr);\n    $maxArr = [];\n    for($i = 0; $i < $k; $i++){\n       \
+    \ if(count($arr) <= $k){\n            $maxArr[] = $arr[0];\n            break;\n\
+    \        }\n        $pos = array_search($arr[$i], $arr);\n        if($pos ===\
+    \ false){\n            $maxArr[] = $arr[$i];\n        }else{\n            $maxArr[]\
+    \ = $arr[$pos];\n        }\n        $arr[$pos] = $arr[$i];\n        unset($arr[$i]);\n\
+    \    }\n    $maxArr[] = $arr[0];\n    return $maxArr;\n}", "  $a = array();\n\
+    \  for ($i = $k; $i >= 0; $i--) {\n    array_push($a, max($arr));\n  }\n  return\
+    \ $a;\n}\n\n$arr = [4,-4,4,-4,-4,4,4,-4,4,4,-4,4,-4,-4,4,-4,-4,4,-4,-4,4,-4,4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,-4,4,4,-4,-4,4,-4,-4,4,-4,4,4,4,4,-4,4,-4,-4,4,-4,4,4,-4,4,-4,4,-4,4,4,4,-4,4,4,4,-4,4,-4,4,4,4,4,-4,4,-4,4,4,-4,4,4,-4,-4,-4,-4,-4,4,-4,4,4,-4,-4,4,-4,4,4,4,4,4,4,-4,4,4,4,4,-4,-4,4,-4,4,-4,-4,-4,4,4,-4,4,4,-4,4,-4,4,-4,-4,4,-4,4,4,4,-4,-4,-4,4,4,-4,4,-4,-4,4,-4,-4,-4,-4,4,-4,-4,4,4,4,4,4,4,4,4,-4,4,4,-4,4,4,-4,-4,4,4,-4,-4,4,4,4,-4,4,4,-4,4,4,4,4,4,-4,4,4,4,4,-4,4,-4,4,-4,4,4,4,4,-4,-4,-4,4,-4,4,-4,-4,-4,-4,4,-4,4,4,-4,-4,-4,4,-4,-4,-4,-4,-4,-4,-4,4,4,4,4,4,-4,-4,4,4,-4,-4,4,-4,-4,4,-4,-4,-4,4,-4,-4,-4,-4,-4,-4,-4,4,-4,4,-4,4,-4,4,4,-4,4,4,4,-4,-4,4,-4,4,4,4,4,-4,4,4,4,-4,4,4,-4,4,4,4,4,4,-4,4,-4,-4,-4,4,-4,-4,-4,4,-4,4,-4,4,4,-4,4,4,4,4,4,4,4,-4,4,-4,-4,4,-4,-4,-4,4,4,-4,-4,4,4,4,4,-4,4,",
+  "    \n    $size = count($arr);\n    if ($k > $size) {\n        return $arr;\n \
+    \   }\n    \n    // initialize arr to largest number\n    $largest = 0;\n    \n\
+    \    \n    // loop through the array\n    for($i = 0; $i < $size; $i++) {\n  \
+    \  \n        // find the largest number in the array\n        if ($arr[$i] > $largest)\
+    \ {\n            $largest = $arr[$i];\n        }\n    }\n    \n    // initialize\
+    \ tmp array based on largest number in the array\n    $tmp = $arr;\n    \n   \
+    \ // loop through array and find largest number\n    for($i = 0; $i < $size; $i++)\
+    \ {\n    \n        // find the largest number in the array\n        if ($tmp[$i]\
+    \ > $largest) {\n            $largest = $tmp[$i];\n        }\n    }\n    \n  \
+    \  // initialize arr based on largest number in the array\n    $arr = $tmp;\n\
+    \    \n    // loop through the array and remove all elements that are bigger than\
+    \ the largest number\n    for($i = 0; $i < $size; $i++) {\n    \n        // find\
+    \ the largest number in the array\n        if ($arr[$i] > $largest) {\n      \
+    \      \n            // remove this element from the array\n            unset($arr[$i]);\n\
+    \        }\n    }\n    \n    // sort array\n    $arr = array_values($arr);\n \
+    \   \n    // return the largest number in the array\n    return $arr;\n}", " \
+    \   if ($k < 1 || $k > count($arr)) {\n        return array();\n    }\n    $m\
+    \ = array();\n    $arr = array_reverse($arr);\n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $m[] = array_pop($arr);\n    }\n    return array_reverse($m);\n}\n\
+    </code>\n<|/ a dscore=0 |>\n<| a tags=arrays,php dscore=0 |>\nThis should do it:\n\
+    <code>\n$array = array(2,3,5,1,2,8,-5,1,-3,5);\n$sortArr = sort($array);\n$largest\
+    \ = array_slice($sortArr,0,max(array_map(function($v){return $v},$array)));\n\
+    </code>\n<|/ a |>\n<| c |>\nSorry but this is not what the OP wants: he wants\
+    \ to have the largest k numbers, not necessarily the largest k elements in the\
+    \ array.\n<|/ c |>\n<| a |>\nTry this :\n<code>\n$a = array(\"a\" => 4, \"b\"\
+    \ => 5, \"c\" => 2, \"d\" => 1);\n$k = 2;\n$res = array_slice($a, count($a) -\
+    \ $k, $k);\n</code>\n<|/ a tags=arrays,php dscore=0 |>\n<| c |>\nIt's working\
+    \ fine. Why not vote it up ?\n<|/ c |>\n<| c |>\nI think I got it. It's working.\
+    \ Thanks for your help\n<|/ c |>\n<| c |>\nI still can't vote up your answer.\
+    \ It says I need reputation more than 15 to do that.\n<|/ c |>\n<| c |>\nYou are\
+    \ welcome. You should click on the checkmark under the up/down vote buttons to\
+    \ accept the answer if your problem is solved. See https://stackoverflow.com/help/someone-answers\n\
+    <|/ c |>\n<| a dscore=0 tags=arrays,php |>\nThis is my solution:\n<code>\n$array\
+    \ = array(2,3,5,1,2,8,-5,1,-3,5);\n$k = 3;\n$sort = array_slice($array, count($array)\
+    \ - $k, $k);\nsort($sort);\n$maxIndex = array_search($sort[0], $array);\n$maxValue\
+    \ = end($sort);\nunset($sort[0]);\nprint_r($sort);\necho \"<br>\";\necho \"maxIndex:\
+    \ $maxIndex<br>\";\necho \"maxValue: $maxValue\";\n</code>\n<|/ a |>\n<| c |>\n\
+    Thanks for your answer. I get an error while using this answer: Undefined ", " \
+    \   if ($k <= 0) {\n        return $arr;\n    }\n    $n = array_search($k, $arr);\n\
+    \    $max = array_slice($arr, 0, $n);\n    $max[++$n] = max($max);\n    return\
+    \ $max;\n}\n$arr1 = array(4, -4, 4);\n$arr2 = array(-3, 2, 1, 2, -1, -2, 1);\n\
+    $arr3 = array(-3);\n$arr4 = array(10, -1, 0, 20, -2);\n$arr5 = array(20, -1, 0,\
+    \ 10, -2);\n$arr6 = array(30, -1, 0, 10, 20, -2);\n$arr7 = array(30, -1, 0, 20,\
+    \ 10, -2);\n$arr8 = array(30, -1, 0, 20, 10, -4);\n$arr9 = array(30, -1, 0, 20,\
+    \ 10, -4, -8);\n$arr10 = array(30, -1, 0, 20, 10, -4, -8, -8);\n$arr11 = array(30,\
+    \ -1, 0, 20, 10, -4, -8, -8, -8);\n$arr12 = array(30, -1, 0, 20, 10, -4, -8, -8,\
+    \ -8, -8);\n$arr13 = array(30, -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8);\n$arr14\
+    \ = array(30, -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8, -8, -8);\n$arr15 = array(30,\
+    \ -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8);\n$arr16 = array(30,\
+    \ -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8,\
+    \ -8);\n$arr17 = array(30, -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8, -8, -8,\
+    \ -8, -8, -8, -8, -8, -8, -8, -8, -8, -8);\n$arr18 = array(30, -1, 0, 20, 10,\
+    \ -4, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8,\
+    \ -8, -8);\n$arr19 = array(30, -1, 0, 20, 10, -4, -8, -8, -8, -8, -8, -8, -8,\
+    \ -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -8,\
+    \ -8, -8);\n$arr20 = array(30, ", "    \n    // Your code here\n    $max_len =\
+    \ max(count($arr), 1);\n    $res = array();\n    for ($i=0; $i < $max_len; $i++)\
+    \ {\n        $res[$i] = $arr[$i];\n    }\n    array_splice($arr, 0, $max_len);\n\
+    \    \n    $temp_arr = array();\n    $n = count($arr);\n    for ($i=$k; $i > $k;\
+    \ $i--) {\n        if ($i%2 === 0) {\n            array_push($temp_arr, array_pop($res));\n\
+    \        } else {\n            $tmp = array_pop($res);\n            array_push($temp_arr,\
+    \ $tmp);\n        }\n    }\n    $temp_arr = array_merge($temp_arr, array_reverse($res));\n\
+    \    \n    return $temp_arr;\n}\n</code>\n<|/ a dscore=0 tags=php,merge,algorithm\
+    \ |>\n<| c |>\nThis code is not working fine for the example provided above. Give\
+    \ me some time to check this out\n<|/ c |>\n<| a |>\nThe best code I found so\
+    \ far (PHP):\n<code>", "    return array_slice(\n        array_slice(\n      \
+    \      array_reverse($arr), 0, $k\n        ), 1, -1\n    );\n}\n\n/**\n * Get\
+    \ the index of the maximum of the given numbers in arr\n *\n * @param array $arr\
+    \ An array of integers\n * @return integer The index of the maximum number\n */",
+  "    $k = max(1, min($k, count($arr)));\n    $result = [];\n    $counts = [];\n\
+    \    $maxLen = 0;\n    foreach ($arr as $i => $n) {\n        if (isset($counts[$n])\
+    \ && $counts[$n] >= $k) {\n            $counts[$n] -= 1;\n        } else {\n \
+    \           $counts[$n] = 1;\n            $maxLen = max($maxLen, $i - $k + 1);\n\
+    \        }\n    }\n    $len = count($arr);\n    while ($maxLen < $len) {\n   \
+    \     $maxLen += $len + 1;\n    }\n    foreach ($counts as $n => $c) {\n     \
+    \   $result[] = $n;\n    }\n    return $result;\n}\n", "    sort($arr);\n    return\
+    \ array_slice($arr, 0, $k);\n}", "    $result = [];\n    $size = count($arr);\n\
+    \    $result = array_slice($arr, 0, $k);\n    sort($arr);\n    $max = array_slice($arr,\
+    \ $k);\n    for ($i = 1; $i < $k; $i++) {\n        $result[] = max($result[$i],\
+    \ $max[$i]);\n    }\n    return $result;\n}\n", "    $result = [];\n    sort($arr);\n\
+    \    for ($i = 0; $i < $k; $i++) {\n        $result[] = $arr[$i];\n    }\n   \
+    \ return $result;\n}", "    if ($k > count($arr)) {\n        die(\"The length\
+    \ of array is out of range.\");\n    }\n\n    $arr = sort($arr);\n    $max_num\
+    \ = array_pop($arr);\n    return array_slice($arr, 0, $k);\n}\n\n/**\n * Test\
+    \ maximum function\n */", "    // Write your code here\n    $max = [];\n    foreach\
+    \ ($arr as $val) {\n        if ($val > $max) {\n            $max = $val;\n   \
+    \     }\n    }\n    $max = array_slice($arr, 0, $k);\n    return $max;\n}\n",
+  "    sort($arr);\n    if ($k > count($arr)) return [];\n    return array_slice($arr,\
+    \ 0, $k);\n}\n</code>\n<|/ a dscore=1 tags=php,arrays |>\n<| c |>\nYou should\
+    \ include an explanation of your solution. Just posting code snippets and expecting\
+    \ others to explain what they do won't help the OP or future visitors.\n<|/ c\
+    \ |>\n<| c |>\nWelcome to Stack Overflow. Code-only answers aren't particularly\
+    \ helpful to users who find this question via a search engine. Consider adding\
+    \ some explanation to your code and why it's more efficient than the other solutions.\n\
+    <|/ c |>\n<| a tags=php,arrays dscore=1 |>\nThe most efficient way would be to\
+    \ use array_slice:\n<code>\n$arr = array(5, -4, 5, -4, -5, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4,\
+    \ -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -", "    $result = array();\n\
+    \    $len = count($arr);\n    sort($arr);\n    $pos = 0;\n    \n    while ($pos\
+    \ < $k) {\n        $min = array_shift($arr);\n        if ($min < $arr[$pos]) {\n\
+    \            $result[] = $min;\n        }\n        $pos++;\n    }\n    \n    return\
+    \ $result;\n}\n</code>\n<|/ a tags=sorting,arrays,algorithm,php dscore=3 |>\n\
+    <| a |>\nI think this is what you are looking for:\n<code>", "    sort($arr);\n\
+    \    $res = array();\n    for ($i = 0; $i < $k; $i++) {\n        $res[] = $arr[$i];\n\
+    \    }\n    return $res;\n}\n", "    $len = count($arr);\n    $arr = sort($arr);\n\
+    \    $result = array();\n    for ($i = 0; $i < $k; $i++) {\n        $result[]\
+    \ = $arr[$i];\n    }\n    for ($i = 0; $i < $len; $i++) {\n        for ($j = 0;\
+    \ $j < $k; $j++) {\n            if ($result[$j] < $arr[$i]) {\n              \
+    \  $result[$j] = $arr[$i];\n            }\n        }\n    }\n    return $result;\n\
+    }\n", "    $max = array();\n    for($i = 0; $i < $k; $i++) {\n        $max[$i]\
+    \ = max($arr[$i]);\n    }\n    return $max;\n}\n", "    $max_arr = array();\n\
+    \    $k_size = $k;\n\n    if ($k_size == 0) {\n        return $max_arr;\n    }\n\
+    \n    $min_arr = array_slice($arr, 0, $k_size);\n    $max_arr = array_slice($arr,\
+    \ 0, $k_size);\n\n    foreach ($min_arr as $key => $value) {\n        if ($value\
+    \ > $max_arr[$key]) {\n            $max_arr[$key] = $value;\n        }\n    }\n\
+    \    return $max_arr;\n}\n", "    sort($arr);\n    $m = $arr[$k];\n    for ($i\
+    \ = $k; $i >= 0; $i--) {\n        if ($arr[$i] > $m) {\n            $m = $arr[$i];\n\
+    \        }\n    }\n    return $arr;\n}", "    $result = [];\n    $max = -PHP_INT_MAX;\n\
+    \    for ($i = 0; $i < $k; $i++) {\n        $max_num = $arr[$i];\n        $index_of_max\
+    \ = 0;\n        for ($j = $i + 1; $j < $k; $j++) {\n            if ($arr[$j] >\
+    \ $max_num) {\n                $max_num = $arr[$j];\n                $index_of_max\
+    \ = $j;\n            }\n        }\n        $result[] = $max_num;\n        $arr[$index_of_max]\
+    \ = $arr[$i];\n        $arr[$i] = $max_num;\n    }\n    return $result;\n}", " \
+    \   \n}\n", "    if ($k == 0) return array(array());\n\n    sort($arr, SORT_NUMERIC);\n\
+    \    $max = array_slice($arr, 0, $k);\n    $ret = array_slice($arr, $k);\n\n \
+    \   sort($max, SORT_NUMERIC);\n    sort($ret, SORT_NUMERIC);\n\n    return array_merge($max,\
+    \ $ret);\n}\n", "    // write your code here\n    $arrLength = count($arr);\n\
+    \    if ($arrLength > 0) {\n        $largest = array_slice($arr, 0, $k);\n   \
+    \     for ($i = 1; $i < $k; $i++) {\n            $current = $largest[$i - 1];\n\
+    \            $maxInd = 0;\n            for ($j = 1; $j < $arrLength; $j++) {\n\
+    \                if ($arr[$j] > $current) {\n                    $maxInd = $j;\n\
+    \                    break;\n                }\n            }\n            $largest[$i]\
+    \ = $arr[$maxInd];\n        }\n        return $largest;\n    }\n    return [];\n\
+    }\n", "    if ($k >= count($arr)) {\n        return $arr;\n    }\n    $max = $arr[0];\n\
+    \    for ($i = 1; $i < $k; $i++) {\n        if ($arr[$i] > $max) {\n         \
+    \   $max = $arr[$i];\n        }\n    }\n    return $max;\n}\n", "    if ($k ===\
+    \ 1) {\n        return $arr;\n    }\n    if ($k > count($arr)) {\n        return\
+    \ $arr;\n    }\n    $max = array_pop($arr);\n    $max = max($max, $arr[0]);\n\
+    \    foreach ($arr as $v) {\n        $v = max($v, $max);\n        if ($v < $max)\
+    \ {\n            $max = $v;\n        }\n    }\n    return array_slice($arr, 0,\
+    \ $k);\n}\n", "    $result = [];\n    $k = 0;\n    $arr = array_filter($arr);\n\
+    \    foreach ($arr as $num) {\n        if ($k > 0) {\n            $max = $num\
+    \ >= $arr[$k-1] ? $num : $arr[$k-1];\n        } else {\n            $max = $num\
+    \ >= $arr[0] ? $num : $arr[0];\n        }\n        $result[] = $max;\n       \
+    \ $k++;\n    }\n    return $result;\n}", "    if ($k > count($arr)) {\n      \
+    \  return [];\n    }\n    $result = [];\n    $pos = 0;\n    for ($i = 0; $i <\
+    \ $k; $i++) {\n        $max = 0;\n        $pos = -1;\n        for ($j = 0; $j\
+    \ < count($arr); $j++) {\n            if ($j > $pos) {\n                if ($arr[$j]\
+    \ > $max) {\n                    $max = $arr[$j];\n                    $pos =\
+    \ $j;\n                }\n            }\n        }\n        $result[] = $max;\n\
+    \    }\n    return $result;\n}\n", "    $result = [];\n    for ($i = 0; $i < $k;\
+    \ $i++) {\n        $result[] = max($arr);\n    }\n    return $result;\n}\n</code>\n\
+    <|/ a dscore=0 tags=php |>\n<| c |>\nPlease add some explanation to your answer\n\
+    <|/ c |>\n<| c |>\nSorry, I really do not know what I can do to improve my answer\
+    \ at this moment, maybe someone else can improve my answer, but I think you can\
+    \ understand the idea of O(n), O(1) or O(nlogn) in the answer, and I hope it is\
+    \ enough to solve the OP question.\n<|/ c |>\n<| a tags=php |>\nIf you're working\
+    \ with an array of strings, then this may come in handy:\n<code>", "    $result\
+    \ = [];\n    if ($k == count($arr)) {\n        $result = $arr;\n    } else {\n\
+    \        for ($i = 0; $i < count($arr); $i++) {\n            if ($i == $k) {\n\
+    \                break;\n            }\n            $result[] = max($arr[$i],\
+    \ $arr[$i - 1]);\n        }\n    }\n    return $result;\n}", "    sort($arr);\n\
+    \    return array_slice($arr, 0, $k);\n}\n</code>\n<|/ a tags=php,sorting |>\n\
+    <| c |>\nThis is not the correct answer.\n<|/ c |>\n<| a |>\nPHP 7 solution:\n\
+    <code>", "    $n = array_search($arr[0], $arr);\n    $m = array_search($arr[$k],\
+    \ $arr);\n    for($i = $k + 1; $i < $n; $i++) {\n        if($arr[$i] > $arr[$m])\n\
+    \            $m = $i;\n    }\n    return array_slice($arr, $k, $n + 1 - $k);\n\
+    }\n", "    // write your code here\n    $len = count($arr);\n    sort($arr);\n\
+    \    $result = array();\n    for($i=0;$i<=$k;$i++) {\n        array_push($result,\
+    \ $arr[$i]);\n    }\n    return $result;\n}", "    $result = [];\n    $max = 0;\n\
+    \    foreach ($arr as $v) {\n        if ($v > $max) {\n            $max = $v;\n\
+    \        }\n    }\n    for ($i = 0; $i < $k; $i++) {\n        if ($arr[$i] > $max)\
+    \ {\n            $max = $arr[$i];\n        }\n        $result[] = $max;\n    }\n\
+    \    return $result;\n}\n", "    sort($arr);\n    $n = count($arr);\n    \n  \
+    \  $max = NULL;\n    $max_index = 0;\n    $max_value = $arr[0];\n    \n    for\
+    \ ($i = 1; $i < $k; $i++) {\n        if ($arr[$i] > $max_value) {\n          \
+    \  $max_value = $arr[$i];\n            $max_index = $i;\n        }\n    }\n  \
+    \  \n    $arr = array_slice($arr, 0, $max_index + 1);\n    \n    return $arr;\n\
+    }\n", "    $result = [];\n    if (sizeof($arr) < $k) {\n        return $arr;\n\
+    \    }\n    for ($i = 0; $i < $k; $i++) {\n        $result[$i] = max($arr[$i],\
+    \ $arr[0]);\n    }\n    return $result;\n}\n", "  for ($i = 0; $i < $k; ++$i)\
+    \ {\n    $max = -10000000;\n    $pos = 0;\n    for ($j = 0; $j < $k; ++$j) {\n\
+    \      if ($arr[$j] > $max) {\n        $max = $arr[$j];\n        $pos = $j;\n\
+    \      }\n    }\n    if ($pos == $k - 1) {\n      return $max;\n    }\n    $arr[$pos]\
+    \ = $max;\n  }\n  return $arr;\n}\n", "    $n = count($arr);\n    if ($k > $n\
+    \ || $k < 0) {\n        return array();\n    }\n    if ($k === $n) {\n       \
+    \ return $arr;\n    }\n    $maximum = array();\n    for ($i = 0; $i < $k; $i++)\
+    \ {\n        $maximum[$i] = max($arr[$i], $maximum[$i]);\n    }\n    return array_slice($maximum,\
+    \ $k);\n}\n</code>\n<|/ a dscore=0 tags=arrays,php |>\n<| a |>\n<code>\n<?php\n",
+  "  $max = NULL;\n  $len  = sizeof($arr);\n\n  for ($i = 0; $i < $len; ++$i) {\n\
+    \    if ($max === NULL || $arr[$i] > $max) {\n      $max = $arr[$i];\n    }\n\
+    \  }\n\n  if ($max !== NULL) {\n    // Find the place for k numbers\n    $m =\
+    \ 0;\n    while ($len > $k) {\n      $m++;\n      --$len;\n    }\n\n    $resultArray\
+    \ = array();\n    $index = $k;\n    for ($i = 0; $i < $len; ++$i) {\n      if\
+    \ ($index < $m && $arr[$i] > $arr[$index]) {\n        $index = $m;\n      }\n\
+    \      $resultArray[$i] = $arr[$i];\n    }\n\n    return $resultArray;\n  }\n\
+    }\n"]
 stop_tokens:
 - "\nfunction"
 - "\n?>"

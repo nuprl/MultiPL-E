@@ -10,6 +10,1586 @@ tests: "}\n\nfn main() {\n    let candidate = parse_nested_parens;\n    assert_e
   (()()) ((())) () ((())()())\")), vec![2, 3, 1, 3]);\n    assert_eq!(candidate(String::from(\"\
   () (()) ((())) (((())))\")), vec![1, 2, 3, 4]);\n    assert_eq!(candidate(String::from(\"\
   (()(())((())))\")), vec![4]);\n}\n"
-completions: []
+completions: ["    let mut level = 0;\n    let mut paren_levels = vec![];\n    for\
+    \ c in paren_string {\n        if c == '(' {\n            paren_levels.push(level);\n\
+    \            level += 1;\n        } else if c == ')' {\n            level -= 1;\n\
+    \            if level == 0 {\n                paren_levels.push(level);\n    \
+    \        }\n        } else {\n            level += 1;\n        }\n    }\n    if\
+    \ paren_levels[paren_levels.len() - 1] == 0 {\n        paren_levels.pop();\n \
+    \   }\n    paren_levels", "    paren_string\n        .split_whitespace()\n   \
+    \     .filter_map(|x| x.parse::<usize>().ok())\n        .filter_map(|x| x.checked_add(1).ok())\n\
+    \        .collect()", "    let parens: Vec<_> = paren_string.chars().filter_map(|c|\
+    \ if c == '(' { Some(0) } else { None }).collect();\n    let mut paren_counts\
+    \ = parens.iter().enumerate().collect::<Vec<_>>();\n    let mut counts: Vec<_>\
+    \ = paren_counts\n        .iter()\n        .map(|(i, p)| {\n            match\
+    \ p {\n                0 => 0,\n                _ => {\n                    let\
+    \ j = i + 1;\n                    let mut i = 0;\n                    for n in\
+    \ &counts[i..] {\n                        i += n;\n                        if\
+    \ j >= i {\n                            return Some(i);\n                    \
+    \    }\n                    }\n                    None\n                }\n \
+    \           }\n        })\n        .collect();\n    let mut i = 0;\n    let mut\
+    \ result: Vec<_> = counts\n        .into_iter()\n        .map(|n| {\n        \
+    \    if *n >= i {\n                i += *n;\n                *n\n            }\
+    \ else {\n                *n\n            }\n        })\n        .collect();\n\
+    \    for i in 0..result.len() {\n        if result[i] < 2 {\n            result[i]\
+    \ = 1;\n        }\n    }\n    result", "    let mut counter: isize = 0;\n\n  \
+    \  let mut paren_levels = paren_string.chars().filter_map(|c| {\n        if c\
+    \ == '(' {\n            counter += 1;\n            Some(counter)\n        } else\
+    \ {\n            counter -= 1;\n            None\n        }\n    }).collect::<Vec<Option<usize>>>();\n\
+    \n    paren_levels.push(None);\n\n    let mut levels = paren_levels\n        .iter()\n\
+    \        .cloned()\n        .enumerate()\n        .filter_map(|(i, o)| {\n   \
+    \         match o {\n                Some(i) => i.is_some(),\n               \
+    \ None => false,\n            }\n        })\n        .collect::<Vec<usize>>();\n\
+    \n    let mut levels_vec = levels.into_iter().collect::<Vec<_>>();\n    let mut\
+    \ max_level: usize = 0;\n    loop {\n        let mut levels_iter = levels_vec.iter();\n\
+    \        if levels_iter.is_empty() {\n            break;\n        }\n        let\
+    \ level = levels_iter.next().unwrap();\n        if level == max_level {\n    \
+    \        levels_iter = levels_vec.iter();\n        }\n        if level > max_level\
+    \ {\n            max_level = level;\n        }\n    }\n    levels_vec\n      \
+    \  .into_iter()\n        .take(max_level)\n        .collect()", "    let mut level\
+    \ = 0;\n    let mut parens: Vec<isize> = Vec::new();\n\n    for char in paren_string.chars()\
+    \ {\n        if char == '(' { level += 1; }\n        if char == ')' { level -=\
+    \ 1; }\n\n        if level == 0 {\n            parens.push(level);\n        }\n\
+    \    }\n\n    parens", "    let mut paren_count = 0;\n    let mut paren_stack\
+    \ = vec![];\n\n    for (i, char) in paren_string.chars().enumerate() {\n     \
+    \   if char == ' ' {\n            paren_count += 1;\n        } else if char ==\
+    \ '(' {\n            paren_stack.push(paren_count);\n        } else if char ==\
+    \ ')' {\n            paren_stack.push(paren_stack.last());\n            if paren_stack.len()\
+    \ > 0 {\n                paren_count -= 1;\n            }\n        } else {\n\
+    \            paren_count += 1;\n        }\n\n        if paren_stack.len() > 0\
+    \ {\n            if paren_count == paren_stack.last() {\n                paren_count\
+    \ += 1;\n            }\n        } else {\n            paren_stack.push(paren_count);\n\
+    \        }\n    }\n\n    paren_stack.len()", "    let mut levels = vec![0];\n\
+    \    let mut stack = paren_string.chars().enumerate().rev();\n    while let Some((index,\
+    \ ch)) = stack.pop() {\n        if ch == ')' {\n            levels = levels.iter().cloned().chain(levels);\n\
+    \        }\n        if ch == '(' {\n            levels.push(0);\n            stack.push((index\
+    \ + 1, ch));\n        }\n    }\n    levels.iter().cloned().collect()", "    //\
+    \ Reverse the input string so it is easier to find matching\n    let paren_string\
+    \ = paren_string.chars()\n        .iter()\n        .enumerate()\n        .map(|(i,\
+    \ c)| (i, c.to_ascii_lowercase().chars().enumerate().rev().skip_while(|&(c, _)|\
+    \ c >= '(').collect::<Vec<_>>()))\n        .fold(String::new(), |mut acc, pair|\
+    \ {\n            acc.push_str(&(\n                if pair[0].chars().any(|&(_,\
+    \ c2)| c2 != '(' && c2 != ')') {\n                    String::from(\"(\")\n  \
+    \              } else {\n                    String::from(\")\")\n           \
+    \     }\n            ));\n            acc.push_str(&(\n                if pair[1].chars().any(|&(_,\
+    \ c2)| c2 != '(' && c2 != ')') {\n                    String::from(\"(\")\n  \
+    \              } else {\n                    String::from(\")\")\n           \
+    \     }\n            ));\n            acc\n        });\n    let mut result = vec![];\n\
+    \    let mut curr_level = 0;\n    for group in paren_string.chars().group_by(|&c|\
+    \ c).values() {\n        if group.next().unwrap().count() == 1 {\n           \
+    \ result.push(curr_level);\n            curr_level += 1;\n        } else {\n \
+    \           result.push(curr_level);\n            curr_level += 2;\n        }\n\
+    \    }\n    result", "    let mut paren_depth = 0;\n    let mut paren_level =\
+    \ 0;\n\n    let mut paren_level_index = 0;\n    let mut paren_level_stack = vec![0;\
+    \ MAX_NESTING_DEPTH];\n\n    for paren in paren_string.chars() {\n        if paren_level\
+    \ > MAX_NESTING_DEPTH {\n            paren_level = 0;\n            paren_level_index\
+    \ = 0;\n        }\n\n        if paren == '(' {\n            paren_level_stack[paren_level_index]\
+    \ = paren_level;\n            paren_level += 1;\n        }\n\n        if paren\
+    \ == ')' {\n            paren_level -= 1;\n            if paren_level == 0 {\n\
+    \                paren_level_index += 1;\n                paren_level_stack[paren_level_index]\
+    \ = 0;\n            }\n        }\n    }\n\n    paren_level_stack.iter()\n    \
+    \    .map(|level| {\n            let max_level = *level;\n            let max_level_index\
+    \ = paren_level_stack.iter().position(|i| {\n                *i == *level\n  \
+    \          });\n\n            if max_level_index == paren_level_stack.len() -\
+    \ 1 {\n                max_level_index\n            } else {\n               \
+    \ max_level_index + 1\n            }\n        })\n        .collect()", "    let\
+    \ paren_map = paren_string\n        .chars()\n        .map(|c| c as char)\n  \
+    \      .collect::<HashMap<u32, String>>();\n    let mut stack: Vec<isize> = vec![];\n\
+    \    for (i, c) in paren_map.iter().enumerate() {\n        if c.is_ascii_alphanumeric()\
+    \ {\n            stack.push(0);\n            continue;\n        }\n\n        let\
+    \ n = stack.len();\n        stack[n - 1] += 1;\n        if c == '(' {\n      \
+    \      stack.push(n - 1);\n        }\n        if c == ')' {\n            stack.push(n\
+    \ - 1);\n        }\n    }\n    stack", "    paren_string\n        .lines()\n \
+    \       .filter_map(|line| line.trim().to_string())\n        .filter_map(|line|\
+    \ parse_parens_group(line))\n        .max_by_key(|group| group.1)\n        .unwrap_or_else(||\
+    \ panic!(\"Cannot parse parens string {:?}\", paren_string))", "    let mut paren_count\
+    \ = 0;\n    let mut paren_chars: Vec<u8> = paren_string.chars().collect();\n \
+    \   let mut paren_count = paren_chars.iter().filter(|c| c == '(' || c == '[' ||\
+    \ c == '{').count();\n    paren_count.push(paren_count);\n    paren_chars.iter().filter(|c|\
+    \ c == ')' || c == ']' || c == '}').for_each(|c| {\n        paren_count.push(*c\
+    \ - '(');\n    });\n    paren_count.push(paren_count);\n    paren_chars.iter().filter(|c|\
+    \ c == ')' || c == ']' || c == '}' || c == '(' || c == '[').for_each(|c| {\n \
+    \       paren_count.push(*c - '(');\n    });\n    paren_count.push(paren_count);\n\
+    \    paren_chars.iter().filter(|c| c == '(' || c == '[' || c == '{' || c == ')'\
+    \ || c == ']' || c == '}' || c == ')' || c == ']' || c == '}').for_each(|c| {\n\
+    \        paren_count.push(*c - '(');\n    });\n    paren_count.push(paren_count);\n\
+    \    paren_chars.iter().filter(|c| c == ')' || c == ']' || c == '}' || c == '('\
+    \ || c == '[' || c == ']' || c == '}' || c == ')' || c == ']' || c == '}').for_each(|c|\
+    \ {\n        paren_count.push(*c - '(');\n    });\n    paren_count.push(paren_count);\n\
+    \    paren_chars.iter().filter(|c| c == ')' || c == ']' || c == '}' || c == '('\
+    \ || c == '[' || c == '{' || c == ']' || c == '}' || c == '(' || c == ']' || c\
+    \ == '}').for_each(|c| {\n        paren_count.push(*c - '(');\n    });\n    paren_count",
+  "    let mut parens = paren_string.char_indices().map(|(_, x)| x).collect();\n \
+    \   let mut paren_index = 0;\n    let mut parent_depth = 0;\n    let mut parent_end\
+    \ = 0;\n    let mut parent_level = std::u16::MAX;\n\n    let mut depth = 1;\n\
+    \    while paren_index < parens.len() {\n        let char = parens[paren_index];\n\
+    \n        if char == ')' {\n            parent_end = paren_index + 1;\n      \
+    \      let last_level = depth - 1;\n            if parent_level > last_level {\n\
+    \                parens.pop();\n            } else {\n                parens[parent_end]\
+    \ = 0;\n                parent_depth += 1;\n            }\n        } else if char\
+    \ == '(' {\n            let last_level = depth - 1;\n            if parent_level\
+    \ > last_level {\n                parens.pop();\n            } else {\n      \
+    \          parens[paren_index] = 0;\n                parent_depth += 1;\n    \
+    \            depth += 1;\n            }\n        } else {\n            parens[paren_index]\
+    \ = 0;\n            parent_depth += 1;\n        }\n\n        paren_index += 1;\n\
+    \    }\n\n    parens\n        .into_iter()\n        .map(|x| x.parse::<usize>().unwrap())\n\
+    \        .collect()", "    let mut paren_count = paren_string.chars().map(|c|\
+    \ *c).filter(|c| c != '(' || c != ')').count();\n    let mut parens = paren_count;\n\
+    \    let mut i = 0;\n    while i < paren_count {\n        let c = paren_string[i];\n\
+    \        if c == '(' {\n            parens += 1;\n            i += 1;\n      \
+    \  } else if c == ')' {\n            parens -= 1;\n            i += 1;\n     \
+    \   } else {\n            i += 1;\n        }\n    }\n    parens", "    let mut\
+    \ paren_depth: isize = 0;\n    let mut paren_depth_stack: Vec<isize> = Vec::new();\n\
+    \    let mut paren_depth_stack_append = |new_depth| paren_depth_stack.push(paren_depth);\n\
+    \    let mut paren_depth_stack_push_back = |old_depth| paren_depth = paren_depth_stack.pop();\n\
+    \    paren_depth_stack.append(paren_depth);\n    let mut group_start = 0;\n  \
+    \  let mut group_end = 0;\n\n    let mut paren_len = paren_string.len();\n   \
+    \ let mut paren_char = paren_string[paren_len - 1];\n\n    while paren_depth_stack.is_empty()\
+    \ == false {\n        let paren_depth = paren_depth_stack.pop_back();\n      \
+    \  let paren_char = paren_string[paren_end];\n        paren_end = paren_end +\
+    \ 1;\n        paren_len = paren_string.len();\n        if paren_char == ' ' {\n\
+    \            paren_len = paren_end - paren_start + 1;\n        }\n        let\
+    \ mut group_end = paren_len;\n        if paren_char == '(' { //if opening group\n\
+    \            group_end = paren_end;\n            group_start = paren_end;\n  \
+    \          paren_depth_stack.append(paren_depth);\n        }\n        if paren_char\
+    \ == ')' { //if closing group\n            group_end = paren_len + 1;\n      \
+    \      if group_end > group_start {\n                paren_depth_stack_append(paren_depth);\n\
+    \                paren_depth_stack_push_back(paren_depth);\n            }\n  \
+    \      }\n        if group_end > group_start {\n            paren_depth_stack_append(paren_depth);\n\
+    \            paren_depth_stack_push_back(paren_depth);\n        }\n    }\n\n \
+    \   if paren_depth_stack.is_empty() == false {\n        paren_depth_stack_append(paren_depth);\n\
+    \    }\n\n    paren_depth_stack", "    let mut paren_stack: Vec<isize> = vec![];\n\
+    \    for paren in paren_string.chars() {\n        if paren == ' ' || paren ==\
+    \ '(' || paren == ')' {\n            if paren_stack.len() == 0 {\n           \
+    \     return vec![];\n            }\n            paren_stack.pop();\n        \
+    \    continue;\n        }\n        if paren == '{' || paren == '}' {\n       \
+    \     paren_stack.push(paren as isize);\n            continue;\n        }\n  \
+    \      paren_stack.push(paren as isize);\n    }\n    paren_stack", "    let mut\
+    \ counter = 0;\n    let mut parens = paren_string.chars().enumerate();\n    parens.take_while(|&(_,\
+    \ c)| c != '(' && c != ')').collect::<Vec<isize>>().reverse().map(|x| {\n    \
+    \    counter = if x.0 >= counter {\n            x.0 - counter\n        } else\
+    \ {\n            counter\n        };\n        counter = x.0 + 1;\n        counter\n\
+    \    })", "    paren_string\n        .chars()\n        .filter(|c| *c != '(')\n\
+    \        .filter(|c| *c != ')')\n        .filter(|c| *c != '\\0')\n        .fold(Vec::new(),\
+    \ |mut v, c| {\n            v.push((*c - '0') as isize);\n            if *c ==\
+    \ '(' {\n                v.push(1);\n            } else if *c == ')' {\n     \
+    \           v.last().unwrap() += 1;\n            }\n            v\n        })\n\
+    \        .unwrap()", '    paren_string.split_whitespace().map(|s| s.chars().count()).collect()',
+  "    paren_string.lines()\n        .filter(|e| !e.is_empty() && e.chars().any(|c|\
+    \ c == '(' || c == '[' || c == '{'))\n        .collect::<Vec<_>>()\n        .into_iter()\n\
+    \        .enumerate()\n        .filter_map(|(idx, &line)| {\n            line.trim()\n\
+    \                .chars()\n                .enumerate()\n                .filter(|(_,\
+    \ c, _)| *c == ')')\n                .filter(|(_, c, _)| *c == ']')\n        \
+    \        .filter(|(_, c, _)| *c == '}')\n                .filter_map(|(_, c, _)|\
+    \ {\n                    if c == '(' {\n                        Some(idx)\n  \
+    \                  } else if c == ']' {\n                        Some(idx - 1)\n\
+    \                    } else if c == '}' {\n                        Some(idx)\n\
+    \                    } else {\n                        None\n                \
+    \    }\n                })\n                .collect::<Vec<_>>()\n        })\n\
+    \        .filter_map(|idx| idx.map(|idx| idx as usize))\n        .collect()",
+  "    paren_string.split_whitespace().filter_map(|x| {\n        let mut i = x.chars().position(|c|\
+    \ c == '(');\n        match i {\n            Some(start) => {\n              \
+    \  if *start == '(' {\n                    return Some(start + 1);\n         \
+    \       } else {\n                    return Some(x.len());\n                }\n\
+    \            },\n            None => None,\n        }\n    }).cloned()\n     \
+    \   .filter(|x| x != x.len())\n        .collect()", "    paren_string\n      \
+    \  .rtrim()\n        .chars()\n        .filter_map(|c| match c {\n           \
+    \ '(' => Some(1),\n            ')' => Some(-1),\n            _ => None,\n    \
+    \    })\n        .collect()", "    let mut stack: Vec<isize> = vec![];\n    for\
+    \ (i, item) in paren_string.chars().enumerate() {\n        if item == '(' {\n\
+    \            stack.push(i);\n        } else if item == ')' {\n            stack.pop();\n\
+    \        }\n    }\n    stack", "    let mut paren_count = 0\n    let mut paren_level\
+    \ = 0\n    let mut paren_char = None;\n    let mut group_stack = Vec::new();\n\
+    \    let mut group_stack_pos = 0;\n    let mut inside_group = false;\n\n    for\
+    \ c in paren_string.chars() {\n        // We are in the middle of a group\n  \
+    \      if inside_group {\n            group_stack.push(paren_char.clone());\n\
+    \        }\n\n        // If we are in a group, push the last character of the\
+    \ previous group\n        // and increment paren_level\n        if paren_char.is_some()\
+    \ {\n            paren_stack.push(*paren_char.clone());\n            paren_level\
+    \ += 1;\n        }\n\n        // Update paren count\n        if c == '(' {\n \
+    \           paren_count += 1;\n        } else if c == ')' {\n            paren_count\
+    \ -= 1;\n        }\n\n        // If we see a right paren, pop the last element\
+    \ from the stack\n        if c == '(' {\n            paren_char = group_stack.pop().unwrap();\n\
+    \        }\n\n        // If we see a left paren, push the last element to the\
+    \ stack\n        if c == ')' {\n            group_stack_pos += 1;\n          \
+    \  group_stack.push(paren_char.clone());\n        }\n\n        // If paren_count\
+    \ reaches 0, we pop the last element from the stack\n        if paren_count <=\
+    \ 0 {\n            group_stack_pos -= 1;\n            group_stack.push(paren_stack.pop().unwrap());\n\
+    \        }\n\n        inside_group = paren_count > 0;\n\n        if c == ')' {\n\
+    \            // The current level is equal to the length of the stack when the\n\
+    \            // count is zero\n            paren_level = group_stack.len();\n\
+    \        }\n\n        paren_char = None;\n    }\n\n    // The final level is equal\
+    \ to the length of the stack\n    group_stack.len()", "    let mut level_count\
+    \ = 0;\n    for paren in paren_string.chars() {\n        if paren == ('(' as char)\
+    \ {\n            level_count += 1;\n        } else if paren == ')' as char {\n\
+    \            level_count -= 1;\n        }\n\n        if level_count == 0 {\n \
+    \           return vec![level_count];\n        }\n    }\n\n    error!(\"invalid\
+    \ nested parens\");", "    let mut level: isize = 1;\n    let mut stack = vec![false;\
+    \ paren_string.len()];\n\n    for paren in paren_string.chars().filter_map(|c|\
+    \ {\n        if c == '(' || c == '[' || c == '{' {\n            stack.push(true);\n\
+    \        }\n        if c == '}' || c == ']' || c == ')' {\n            stack.pop();\n\
+    \        }\n        stack[stack.len()-1]\n    }) {\n        level = level.max(stack.iter().position(|s|\
+    \ !s).unwrap_or(0)+1);\n    }\n    level", "    paren_string\n        .rsplitn(2,\
+    \ ' ')\n        .map(|x| x.parse().unwrap())\n        .collect()", "    let mut\
+    \ paren_stack = vec![-1isize..];\n    let mut depth_stack = vec![-1isize..];\n\
+    \    let mut parentheses = vec![];\n    let mut current_parentheses = &mut paren_stack;\n\
+    \    for paren in paren_string.chars() {\n        match paren {\n            '('\
+    \ | '[' | '{' => {\n                current_parentheses.push(*paren);\n      \
+    \      }\n            ')' | '}' | ']' => {\n                current_parentheses.pop();\n\
+    \            }\n            _ => (),\n        }\n\n        match paren {\n   \
+    \         ')' => {\n                let mut last = paren_stack.last().unwrap();\n\
+    \                let mut depth = depth_stack.pop().unwrap();\n               \
+    \ if last == *paren {\n                    parentheses.push(*paren - 1 + depth);\n\
+    \                } else {\n                    parentheses.push(-depth);\n   \
+    \             }\n            }\n            _ => (),\n        }\n        depth_stack.push(*current_parentheses);\n\
+    \        current_parentheses = &mut paren_stack;\n    }\n    parentheses.reverse()",
+  "    let mut parens_stack: Vec<isize> = Vec::new();\n    let mut parens_stack_size\
+    \ = parens_stack.len();\n    let mut parens_stack_p = parens_stack.as_mut_slice();\n\
+    \    parens_stack_p\n        .extend_from_slice(paren_string.chars().filter_map(|c|\
+    \ {\n            match c {\n                '(' as c | ')' as c => Some(1),\n\
+    \                _ => None,\n            }\n        }));\n    while parens_stack_size.saturating_sub(parens_stack.len())\
+    \ > 0 {\n        let last_parens_stack_p = parens_stack_p.last().unwrap();\n \
+    \       if parens_stack_size.saturating_sub(parens_stack.len()) == 0 {\n     \
+    \       parens_stack_p = parens_stack;\n        } else {\n            let mut\
+    \ parens_stack_p_copy = parens_stack_p.clone();\n            let mut parens_stack_size_copy\
+    \ = parens_stack_size;\n            parens_stack_p_copy\n                .extend(parens_stack_p.pop().unwrap().into_iter().cloned());\n\
+    \            parens_stack_p_copy\n                .extend(parens_stack_p.pop().unwrap().into_iter().cloned());\n\
+    \            let mut last_parens_stack_p_copy = last_parens_stack_p.clone();\n\
+    \            last_parens_stack_p_copy\n                .append(parens_stack_p_copy.pop().unwrap());\n\
+    \            last_parens_stack_p_copy\n                .append(parens_stack_p_copy.pop().unwrap());\n\
+    \            parens_stack = parens_stack_p_copy;\n            parens_stack_size\
+    \ = parens_stack_size_copy;\n        }\n    }\n    parens_stack", "    let mut\
+    \ paren_stack = vec![];\n    let mut paren_depth = 0;\n\n    for paren in paren_string.chars()\
+    \ {\n        if paren == ')' {\n            paren_depth += 1;\n        }\n   \
+    \     if paren == '(' {\n            paren_depth += 1;\n        }\n        if\
+    \ paren_depth == paren.len() {\n            paren_stack.push(paren_depth);\n \
+    \           paren_depth = 0;\n        }\n    }\n\n    paren_stack.reverse();\n\
+    \    paren_stack", "    // Initialize an empty paren stack.\n    let mut paren_stack:\
+    \ Vec<isize> = Vec::new();\n\n    // Keep a record of the deepest level of parens\
+    \ we encountered.\n    let mut paren_depth = 0;\n    // Loop over the string char-by-char.\n\
+    \    for c in paren_string.chars() {\n        // If c is a left paren, push it\
+    \ to the stack.\n        if c == '(' {\n            paren_stack.push(paren_depth);\n\
+    \        }\n        // If c is a right paren, pop it from the stack.\n       \
+    \ if c == ')' {\n            paren_depth -= paren_stack.pop();\n        }\n  \
+    \  }\n\n    // Return the amount of nested parentheses encountered.\n    paren_depth",
+  "    paren_string\n        .trim()\n        .chars()\n        .enumerate()\n   \
+    \     .filter_map(|(index, ch)| {\n            match ch {\n                '('\
+    \ => Some(index),\n                '(' | ')' => Some(index - 1),\n           \
+    \     _ => None,\n            }\n        })\n        .collect::<Vec<_>>()", " \
+    \   let mut paren_level = 0;\n    let mut paren_char_count = paren_string.chars().filter(|c|\
+    \ c == '(' || c == '[' || c == '{').count();\n    let mut paren_char_level = paren_string.chars().filter(|c|\
+    \ c == '(' || c == '[' || c == '{').count();\n    let mut paren_levels = Vec::new();\n\
+    \    paren_string.chars()\n        .filter(|c| c == '(' || c == '[' || c == '{')\n\
+    \        .for_each(|c| {\n            paren_char_count = 0;\n            paren_char_level\
+    \ = 0;\n            if paren_char_level > paren_level {\n                paren_level\
+    \ = paren_char_level;\n            }\n            if paren_char_level == paren_level\
+    \ {\n                paren_levels.push(paren_level);\n            }\n        \
+    \    paren_char_level += 1;\n            paren_char_count += 1;\n        });\n\
+    \    paren_levels", "    let mut paren_depths = vec![0];\n    let mut paren_levels\
+    \ = vec![0];\n    for (i, c) in paren_string.chars().enumerate() {\n        if\
+    \ c == '(' {\n            paren_depths.push(paren_depths.last().unwrap() + 1);\n\
+    \            paren_levels.push(0);\n        } else if c == ')' {\n           \
+    \ paren_depths.push(paren_depths.last().unwrap());\n            paren_levels.push(paren_levels.last().unwrap()\
+    \ - 1);\n        } else {\n            let depth = paren_depths.last().unwrap();\n\
+    \            let level = paren_levels.last().unwrap();\n            if level >=\
+    \ depth {\n                paren_depths.push(depth);\n                paren_levels.push(level);\n\
+    \            }\n        }\n    }\n    paren_depths", "    // Parse the string\
+    \ and split it into groups of nested parentheses\n    let mut paren_groups = paren_string\n\
+    \        .chars()\n        .filter(|c| c == '(' || c == ')')\n        .collect::<Vec<_>>();\n\
+    \n    // If there are more than two parens, then the string is not valid.\n  \
+    \  if paren_groups.len() > 2 {\n        return vec![0];\n    }\n\n    // The deepest\
+    \ nesting level of parenthesis is one more than the number of groups of parens\n\
+    \    return paren_groups.iter().map(|c| paren_groups.iter().filter(c == c).count()\
+    \ as isize + 1).collect();", "    let mut levels = paren_string.chars().filter(|c|\
+    \ c != '(').count() - 1;\n    levels = match levels {\n        0 => panic!(\"\
+    Empty input\"),\n        1 => 0,\n        _ => levels,\n    };\n\n    paren_string.chars()\n\
+    \        .filter(|c| c != '(')\n        .flat_map(|c| {\n            levels -\
+    \ paren_string\n                .chars()\n                .filter(|d| d != c)\n\
+    \                .count() - 1,\n        })\n        .collect()", "    paren_string.chars().map(|c|\
+    \ {\n        match c {\n            '(' | ')' | ' ' as i => i,\n            _\
+    \ => unreachable!(\"Cannot parse paren string: {}\", paren_string),\n        }\n\
+    \    }).collect()", "    let mut nesting_level = 1;\n    let mut nesting_levels:\
+    \ Vec<isize> = Vec::new();\n    loop {\n        let mut i = paren_string.find('(');\n\
+    \        if i == paren_string.len() {\n            break;\n        }\n       \
+    \ let mut j = paren_string.rfind(')');\n        if j == paren_string.len() {\n\
+    \            break;\n        }\n        if nesting_level == 1 {\n            nesting_levels.push(0);\n\
+    \        }\n        nesting_levels.push(nesting_level);\n        while nesting_level\
+    \ > 0 && i >= 0 && i < j {\n            let j = paren_string.rfind(')', i + 1);\n\
+    \            if j == 0 {\n                break;\n            }\n            nesting_level\
+    \ = nesting_level - 1;\n            i = j;\n        }\n        if nesting_level\
+    \ == 1 {\n            nesting_levels.push(0);\n        }\n    }\n    let mut max_nesting_level\
+    \ = nesting_level;\n    for i in nesting_levels.iter() {\n        if i >= max_nesting_level\
+    \ {\n            max_nesting_level = i;\n        }\n    }\n    nesting_levels.iter().max().unwrap_or(max_nesting_level)",
+  "    let mut paren_depth = 0;\n    let mut paren_nest_level = -1;\n    let mut paren_nest_level_vec\
+    \ = Vec::new();\n    for (i, c) in paren_string.chars().enumerate() {\n      \
+    \  paren_depth = paren_depth + (c.is_whitespace() ? 0 : 1);\n        if paren_depth\
+    \ >= 0 {\n            paren_depth--;\n            paren_nest_level_vec.push(paren_nest_level);\n\
+    \        }\n        if c == '(' {\n            paren_nest_level += 1;\n      \
+    \  }\n        if c == ')' {\n            paren_nest_level -= 1;\n            if\
+    \ paren_nest_level < 0 {\n                panic!(\"Found too many unmatched parens\"\
+    );\n            }\n        }\n    }\n    paren_nest_level_vec", "    let paren_string\
+    \ = paren_string.trim();\n    paren_string.chars().filter_map(|c| c.is_ascii()).for_each(|c|\
+    \ {\n        if c != '(' && c != ')' {\n            return;\n        }\n     \
+    \   let mut index = 0;\n        for group in paren_string.split_whitespace() {\n\
+    \            let mut end = group.len();\n            if end > index {\n      \
+    \          break;\n            }\n            index = end;\n            match\
+    \ group.get(index) {\n                '(' | ')' => {}\n                ',' =>\
+    \ break,\n                _ => {\n                    index += 1;\n          \
+    \      }\n            }\n        }\n        index\n    })", "    paren_string.lines()\n\
+    \        .filter_map(|line| line.chars().count() > 0)\n        .filter(|c| c ==\
+    \ ')')\n        .enumerate()\n        .filter_map(|(idx, c)| {\n            if\
+    \ c == '(' {\n                Some(idx)\n            } else {\n              \
+    \  None\n            }\n        })\n        .max()\n        .unwrap()\n      \
+    \  .clone()\n        .into()", '    paren_string.rsplitn(2, " ").map(|elem| elem.len()).max()',
+  "    let mut max_level = 0;\n    let mut level = 0;\n    let mut paren_level = 0;\n\
+    \    for char in paren_string.chars() {\n        paren_level += 1;\n        if\
+    \ char == '(' {\n            level += 1;\n        } else if char == ')' {\n  \
+    \          level -= 1;\n            if level == 0 {\n                max_level\
+    \ = paren_level;\n            }\n        }\n    }\n    Vec::new()", "    let mut\
+    \ paren_level = 0;\n    let mut paren_stack: Vec<_> = Vec::new();\n    let mut\
+    \ paren_level_count: Vec<_> = Vec::new();\n    for (i, paren) in paren_string.char_indices().rev()\
+    \ {\n        if paren == '(' {\n            paren_stack.push(paren);\n       \
+    \     paren_level_count.push(paren_level);\n        }\n        if paren == ')'\
+    \ {\n            paren_level_count\n                .pop()\n                .unwrap_or(0)\n\
+    \                += paren_level_count\n                .pop()\n              \
+    \  .unwrap_or(0);\n            if paren_level_count.pop() == 0 {\n           \
+    \     paren_stack.pop()\n            }\n        }\n        if paren == ',' {\n\
+    \            paren_level_count\n                .pop()\n                .unwrap_or(0)\n\
+    \                += paren_level_count\n                .pop()\n              \
+    \  .unwrap_or(0);\n        }\n    }\n    paren_level", "    let mut level = 0;\n\
+    \    let mut paren_level = 0;\n    let mut opening_paren_levels = 0;\n\n    let\
+    \ mut paren_levels: Vec<_> = paren_string.split_whitespace().flat_map(|x| x.chars().filter(|x|\
+    \ *x != ',')).map(|x| {\n        if *x == ')' {\n            *x = ')';\n     \
+    \       paren_levels\n        } else {\n            *x = '(';\n            paren_levels\
+    \ += 1;\n            paren_level\n        }\n    }).collect();\n\n    while *paren_levels.last()\
+    \ == ',' {\n        *paren_levels.pop();\n        paren_level += 1;\n    }\n\n\
+    \    while *paren_levels.last() == ')' {\n        *paren_levels.pop();\n     \
+    \   paren_level -= 1;\n    }\n\n    *paren_levels", "    let mut stack = paren_string.chars().filter(|x|\
+    \ *x != '(').collect::<Vec<_>>();\n    loop {\n        let top = stack.pop().unwrap();\n\
+    \        let right = stack.last_mut().unwrap();\n        let next = right.chars().filter(|x|\
+    \ *x != '(').collect::<Vec<_>>();\n        let mut level = next.len();\n     \
+    \   while let Some(next) = next {\n            stack[level] = *next;\n       \
+    \     stack.push(top);\n            level += 1;\n        }\n        if level ==\
+    \ stack.len() {\n            stack.push(top);\n            break;\n        }\n\
+    \    }\n    stack\n        .iter()\n        .map(|x| *x as isize)\n        .collect()",
+  "    let mut levels: Vec<isize> = paren_string.split_whitespace().collect();\n \
+    \   let mut levels_sum: isize = 0;\n    for level in levels {\n        let mut\
+    \ level_sum = 0;\n        for character in level {\n            if character !=\
+    \ '(' && character != ')' {\n                level_sum += 1;\n            }\n\
+    \        }\n        levels_sum += level_sum;\n    }\n\n    levels_sum.max()",
+  "    paren_string.chars()\n        .filter_map(|c| match c {\n            '(' =>\
+    \ Some(1),\n            '[' => Some(2),\n            ']' => Some(3),\n       \
+    \     _ => None,\n        })\n        .collect()", "    let mut level = 0;\n \
+    \   let mut paren_count = 0;\n    let mut paren_string = paren_string.into_bytes();\n\
+    \    paren_string.truncate(0);\n    let mut last_char = String::new();\n    let\
+    \ mut last_end = 0;\n    while paren_string.len() != 0 {\n        let curr_char\
+    \ = paren_string.get_u8();\n        if curr_char == 0 {\n            level = 0;\n\
+    \        } else {\n            level += 1;\n        }\n        paren_count +=\
+    \ 1;\n        if level == 0 {\n            last_end = paren_string.len();\n  \
+    \          paren_string.extend(&[255]);\n        } else {\n            if level\
+    \ == 1 && paren_string.len() == 1 {\n                paren_string.extend(&[curr_char]);\n\
+    \                continue;\n            }\n            last_char = paren_string.get_u8();\n\
+    \        }\n        if paren_count >= 2 {\n            break;\n        }\n   \
+    \ }\n    level", "    let paren_map = paren_string\n        .chars()\n       \
+    \ .filter_map(|ch| {\n            if ch == b'(' || ch == b'{'\n              \
+    \  || ch == b'['\n                || ch == b'|'\n            {\n             \
+    \   Some(ch)\n            } else {\n                None\n            }\n    \
+    \    })\n        .collect::<Vec<_>>();\n    let mut paren_stack: Vec<isize> =\
+    \ paren_map.iter().cloned().collect();\n\n    let mut num_paren = paren_stack.len();\n\
+    \n    for i in 0..paren_stack.len() {\n        if paren_stack[i] != ')' {\n  \
+    \          paren_stack[i] += num_paren;\n            paren_stack[i] = paren_stack[i]\
+    \ + i;\n        }\n    }\n\n    let mut stack: Vec<isize> = paren_stack.iter().cloned().collect();\n\
+    \    let mut stack_size = 0;\n    while stack.len() > stack_size {\n        stack_size\
+    \ += stack[stack.len() - 1];\n        stack.pop();\n    }\n    stack", "    let\
+    \ mut paren_count = 0usize;\n    let mut depth = 0usize;\n    for c in paren_string.chars()\
+    \ {\n        if c == '(' {\n            paren_count += 1;\n            depth -=\
+    \ 1;\n        } else if c == ')' {\n            paren_count -= 1;\n          \
+    \  depth += 1;\n        } else {\n            if paren_count == 0 {\n        \
+    \        depth -= 1;\n            }\n        }\n\n        if depth <= 0 {\n  \
+    \          break;\n        }\n    }\n    paren_count + depth", "    let mut result:\
+    \ Vec<isize> = vec![];\n    let mut index = 0;\n    while index < paren_string.len()\
+    \ {\n        let ch = paren_string[index];\n        if ch == ')' {\n         \
+    \   result.append(index + 1);\n        }\n        index += 1;\n    }\n    result",
+  "    let mut level = 0;\n    let mut open_curlies = 0;\n    let mut close_curlies\
+    \ = 0;\n    let mut open_braces = 0;\n    let mut close_braces = 0;\n    let mut\
+    \ open_angles = 0;\n    let mut close_angles = 0;\n    let mut open_parens = 0;\n\
+    \    let mut close_parens = 0;\n    let mut open_parens_group = 0;\n    let mut\
+    \ close_parens_group = 0;\n    let mut open_angles_group = 0;\n    let mut close_angles_group\
+    \ = 0;\n    let mut open_curlies_group = 0;\n    let mut close_curlies_group =\
+    \ 0;\n    let mut open_curlies_string = \"\";\n    let mut close_curlies_string\
+    \ = \"\";\n    let mut open_angles_string = \"\";\n    let mut close_angles_string\
+    \ = \"\";\n\n    for (i, c) in paren_string.chars().enumerate() {\n        match\
+    \ c {\n            '(' {\n                if level == 0 && open_parens == 0 &&\
+    \ close_parens == 0 && open_braces == 0 && close_braces == 0 && open_angles ==\
+    \ 0 && close_angles == 0 && open_curlies == 0 && close_curlies == 0 && open_curlies_group\
+    \ == 0 && close_curlies_group == 0 {\n                    open_parens_group =\
+    \ i;\n                }\n                level += 1;\n            } else if ')'\
+    \ {\n                if level == 1 {\n                    close_parens_group =\
+    \ i;\n                    open_parens_group = 0;\n                }\n        \
+    \        level -= 1;\n            } else if '{' {\n                if level ==\
+    \ 1 && open_parens == 0 && close_parens == 0 && open_braces == 0 && close_braces\
+    \ == 0 && open_angles == 0 && close_angles == 0 && open_curlies == 0 && close_curlies\
+    \ == 0 && open_curlies_group == 0 && close_curlies_group == 0 {\n            \
+    \        open_braces = i;\n                }\n                level += 1;\n  \
+    \          } else if '}' {\n                if level == 1 {\n                \
+    \    close_braces = i;\n                    open_braces = 0;\n               \
+    \ }\n                level -= 1;\n            } else if '{' {\n              \
+    \  if level == 1 && open_parens == 0 && close_parens == 0 && open_braces == 0\
+    \ && close_braces == 0 && open_angles == 0 && close_angles == 0 && open_curlies\
+    \ == 0 && close_curlies == 0 && open_curlies_group == 0 && close_curlies_group\
+    \ == 0 {\n                    open_angles = i;\n                }\n          \
+    \      level += 1;\n            } else if '}' {\n                if level == 1\
+    \ {\n                    close_angles = i;\n                    open_angles =\
+    \ 0;\n                }\n                level -= 1;\n            } else if '{'\
+    \ {\n                if ", "    paren_string.lines()\n        .map(|s| s.as_bytes())\n\
+    \        .flatten()\n        .scan(\n            |state: &mut [isize; 4],\n  \
+    \          ch: char,\n        ) => {\n            let next = state[state.len()\
+    \ - 1];\n            if next == ch && state.len() == 3 {\n                state.pop();\n\
+    \                0\n            } else {\n                let ret = match ch {\n\
+    \                    '(' => 1,\n                    ')' => 1,\n              \
+    \      ')(' => 2,\n                    ')()' => 2,\n                    ')()('\
+    \ => 3,\n                    _ => 0,\n                };\n                state.push(ret);\n\
+    \                ret\n            }\n        }\n        .collect()", "    paren_string.chars().flat_map(|c|\
+    \ {\n        vec![paren_stack_push(c); paren_stack_pop()]\n    })", "    let paren_count\
+    \ = paren_string.count('(');\n    let mut level = 0;\n    let mut nested_parens\
+    \ = Vec::new();\n    for paren_index in 0..paren_count {\n        nested_parens.push(paren_index);\n\
+    \        level = level + 1;\n        if paren_index == paren_count - 1 {\n   \
+    \         nested_parens.push(level);\n        } else {\n            nested_parens.push(level);\n\
+    \            nested_parens.push(level + 1);\n        }\n    }\n    nested_parens",
+  "    let mut parentheses_level = 0;\n    let mut group_counter = 1;\n    let mut\
+    \ parentheses_group_counter = 0;\n    let mut paren_string = paren_string.split_whitespace();\n\
+    \    let mut max_level: isize = 0;\n    let mut max_paren_string = \"\".to_string();\n\
+    \    for s in paren_string.iter() {\n        if s == ')' {\n            parentheses_level--;\n\
+    \        }\n        if s == '(' { parentheses_level++; }\n        if s == ')'\
+    \ { parentheses_level++; }\n        if s == '(' { parentheses_group_counter++;\
+    \ }\n        if s == '(' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                parentheses_group_counter = 0;\n            }\n        }\n\
+    \        if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                parentheses_group_counter = 0;\n            }\n        }\n\
+    \        if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                max_level = parentheses_level;\n                parentheses_group_counter\
+    \ = 0;\n            }\n        }\n        if s == ')' {\n            if parentheses_level\
+    \ > parentheses_group_counter {\n                max_level = parentheses_level;\n\
+    \                parentheses_group_counter = 0;\n            }\n        }\n  \
+    \      if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                max_level = parentheses_level;\n                parentheses_group_counter\
+    \ = 0;\n            }\n        }\n        if s == ')' {\n            if parentheses_level\
+    \ > parentheses_group_counter {\n                max_level = parentheses_level;\n\
+    \                parentheses_group_counter = 0;\n            }\n        }\n  \
+    \      if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                max_level = parentheses_level;\n                parentheses_group_counter\
+    \ = 0;\n            }\n        }\n        if s == ')' {\n            if parentheses_level\
+    \ > parentheses_group_counter {\n                max_level = parentheses_level;\n\
+    \                parentheses_group_counter = 0;\n            }\n        }\n  \
+    \      if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                max_level = parentheses_level;\n                parentheses_group_counter\
+    \ = 0;\n            }\n        }\n        if s == '(' { parentheses_level++; }\n\
+    \        if s == ')' { parentheses_level++; }\n        if s == '(' { parentheses_group_counter++;\
+    \ }\n        if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                parentheses_group_counter = 0;\n            }\n        }\n\
+    \        if s == ')' {\n            if parentheses_level > parentheses_group_counter\
+    \ {\n                parentheses_group_counter = 0;\n            }\n        }\n\
+    \        if s == ')' {\n            if parentheses_level > parenthese", "    let\
+    \ mut open_parens = String::new();\n    let mut close_parens = String::new();\n\
+    \    let mut level = 0;\n    for c in paren_string.chars() {\n        match c\
+    \ {\n            ' ' => { open_parens = open_parens.clone(); close_parens = close_parens.clone();\
+    \ level += 1; },\n            '(' => { open_parens = open_parens.clone(); level\
+    \ += 1; },\n            ')' => { open_parens = open_parens.clone(); level -= 1;\
+    \ },\n            '[' => { open_parens = open_parens.clone(); level += 1; },\n\
+    \            ']' => { open_parens = open_parens.clone(); level -= 1; },\n    \
+    \        '{' => { open_parens = open_parens.clone(); level += 1; },\n        \
+    \    '}' => { open_parens = open_parens.clone(); level -= 1; },\n            _\
+    \ => (),\n        }\n    }\n    open_parens.chars().enumerate().map(|(i, c)| {\n\
+    \        if c == ')' {\n            level\n        } else {\n            level\
+    \ - 1\n        }\n    }).collect()", "    let mut paren_nestings: Vec<isize> =\
+    \ vec![1];\n    let mut stack: Vec<&str> = vec![paren_string];\n    let mut depth:\
+    \ isize = 0;\n    loop {\n        let char = match stack.last() {\n          \
+    \  Some(v) => v,\n            None => return paren_nestings.clone(),\n       \
+    \ };\n        if char == ')' {\n            depth -= 1;\n            if depth\
+    \ == 0 {\n                paren_nestings.pop();\n            } else {\n      \
+    \          paren_nestings.push(depth);\n            }\n            stack.pop();\n\
+    \        } else {\n            if char == '(' {\n                depth += 1;\n\
+    \            } else {\n                stack.append(char);\n            }\n  \
+    \      }\n    }", "    let mut result = vec![paren_string.len()];\n    let mut\
+    \ nest = 0;\n    for (i, c) in paren_string.chars().enumerate() {\n        if\
+    \ c == ')' {\n            if nest == 0 {\n                result[i] = i;\n   \
+    \             break;\n            } else {\n                nest--;\n        \
+    \    }\n        } else {\n            nest++;\n        }\n    }\n    result",
+  "    paren_string\n        .trim()\n        .split(' ').map(|x| x.parse().unwrap()).collect()",
+  "    let mut paren_depth_tracker = [0];\n\n    let mut groups: Vec<Vec<isize>> =\
+    \ paren_string.split_whitespace().collect();\n    let mut group_depth = Vec::new();\n\
+    \    for group in groups.iter() {\n        if group == String::from(\"\") {\n\
+    \            continue;\n        }\n        if group_depth.contains(group) {\n\
+    \            // the group has already been counted, so move to next group\n  \
+    \          group_depth = group_depth.clone();\n            continue;\n       \
+    \ }\n\n        // add the group to the depth\n        group_depth = group_depth.clone();\n\
+    \        group_depth.push(group_depth.len() - group.len());\n        paren_depth_tracker.push(0);\n\
+    \n        let group_str = group.to_string();\n        let mut group_paren_depth\
+    \ = group.len();\n        for paren in group_str.chars() {\n            if paren\
+    \ == ')' {\n                group_paren_depth -= 1;\n            }\n         \
+    \   paren_depth_tracker.push(group_paren_depth);\n        }\n\n        // decrement\
+    \ the depth\n        group_depth = group_depth.clone();\n        group_depth.len()\
+    \ - group.len()\n    }\n\n    paren_depth_tracker.reverse().iter().collect()",
+  "    paren_string.chars().map(|c| match c {\n        '(' | ')' => 1,\n        _\
+    \ => 0\n    }).collect()", "    let mut parentheses_level = Vec::new();\n    for\
+    \ parens in paren_string.split('(') {\n        if parens == paren_string.len()\
+    \ {\n            parentheses_level += vec![0];\n            continue;\n      \
+    \  }\n        let mut parens_level = Vec::new();\n        for paren in parens.split()\
+    \ {\n            let level: isize = 2;\n            if paren == parens.len() {\n\
+    \                parens_level += vec![level];\n                continue;\n   \
+    \         }\n            if paren != parens.chars().nth(1).unwrap() {\n      \
+    \          let char: char = \"(\".to_chars().nth(1).unwrap();\n              \
+    \  let mut i = paren;\n                while paren != parens.chars().nth(i).unwrap()\
+    \ {\n                    i += 1;\n                }\n                if paren\
+    \ == parens.len() {\n                    parens_level += vec![level];\n      \
+    \              continue;\n                }\n            }\n            parens_level\
+    \ += vec![level];\n        }\n        parentheses_level += parens_level;\n   \
+    \ }\n    parentheses_level", "    let mut stack: Vec<isize> = Vec::new();\n  \
+    \  for paren in paren_string.chars() {\n        if paren == '(' || paren == ')'\
+    \ {\n            stack.push(stack.last().unwrap());\n        } else if paren ==\
+    \ ')' {\n            while let Some(last) = stack.last() {\n                if\
+    \ last > paren {\n                    stack.pop();\n                    break;\n\
+    \                }\n            }\n        }\n    }\n    stack", "    let mut\
+    \ depth = 0;\n    let mut paren_groups: Vec<_> = paren_string.chars().take_while(|c|\
+    \ c != b'(' || c != b')(')\n        .collect();\n    while paren_groups.len()\
+    \ > 0 {\n        let mut cur_depth = 0;\n        let mut cur_group: Vec<_> = paren_groups.split_off(1);\n\
+    \        for c in cur_group {\n            match c {\n                b' ' =>\
+    \ cur_depth = cur_depth + 1,\n                b'(' | b')' => cur_depth = cur_depth\
+    \ - 1,\n                _ => (),\n            }\n        }\n        depth = std::cmp::max(depth,\
+    \ cur_depth);\n        paren_groups = paren_groups.split_off(1);\n    }\n    depth\
+    \ + 1", "    let mut stack = Vec::<isize>::new();\n    let mut level = 0;\n  \
+    \  let mut paren_count = 0;\n    for (i, c) in paren_string.chars().enumerate()\
+    \ {\n        if c == '(' {\n            stack.pop_back();\n            paren_count\
+    \ += 1;\n        }\n        if c == '{' {\n            stack.pop_back();\n   \
+    \         paren_count += 1;\n            level += 1;\n        }\n        if c\
+    \ == '}' {\n            stack.pop_back();\n            level -= 1;\n         \
+    \   paren_count -= 1;\n        }\n        if paren_count == 0 && level == 0 &&\
+    \ stack.is_empty() {\n            return vec![i as isize];\n        }\n      \
+    \  if c == '(' {\n            stack.pop_back();\n            level += 1;\n   \
+    \     }\n        if c == '{' {\n            stack.pop_back();\n            level\
+    \ += 1;\n            paren_count += 1;\n        }\n        if c == '}' {\n   \
+    \         stack.pop_back();\n            level -= 1;\n            paren_count\
+    \ -= 1;\n        }\n    }\n    vec![]", "    let mut paren_depths = vec![0; paren_string.len()];\n\
+    \    let mut paren_positions = vec![0; paren_string.len()];\n    let mut paren_level\
+    \ = 0;\n    let mut paren_start = paren_positions[0] = 0;\n    let mut paren_end\
+    \ = paren_positions[paren_string.len() - 1] = 0;\n\n    for paren_pos in paren_string.char_indices().skip_while(|&(pos:\
+    \ usize, _)| {\n        paren_start == 0\n    }) {\n        for paren_pos in paren_string.char_indices().skip_while(|&(pos:\
+    \ usize, _)| {\n            paren_end == paren_pos + 1\n        }) {\n       \
+    \     if paren_depths[paren_pos] >= paren_level {\n                paren_depths[paren_pos]\
+    \ = paren_level;\n                paren_positions[paren_pos] = paren_start;\n\
+    \            }\n            paren_depths[paren_pos] += 1;\n            paren_end\
+    \ += 1;\n        }\n        paren_level += 1;\n        paren_start = paren_end\
+    \ = paren_pos + 1;\n    }\n    let mut ret = vec![0; paren_string.len()];\n  \
+    \  for paren_pos in paren_positions.iter().rev() {\n        ret[paren_pos] = paren_depths[paren_pos];\n\
+    \    }\n    ret", "    let paren_chars = paren_string.chars().filter(|c| c ==\
+    \ '(' || c == '[' || c == '{' || c == '<').collect::<Vec<_>>();\n\n    let mut\
+    \ paren_depth = 0;\n    let mut paren_char_index = paren_chars.len();\n    let\
+    \ mut paren_char_stack = vec![];\n    loop {\n        paren_char_stack.pop_back();\n\
+    \        if paren_char_stack.len() == 0 {\n            paren_char_stack.push(paren_char_index);\n\
+    \        }\n        let paren_index = paren_char_stack.pop().unwrap();\n     \
+    \   if paren_char_stack.is_empty() {\n            paren_depth = paren_depth +\
+    \ paren_index;\n        }\n        else {\n            paren_depth = paren_depth\
+    \ + 1;\n        }\n        if paren_char_stack.len() == 0 {\n            paren_char_stack.push(paren_index);\n\
+    \            paren_char_index = paren_char_index + 1;\n        }\n        if paren_char_stack.len()\
+    \ == 1 {\n            return vec![paren_depth];\n        }\n    }", "    let mut\
+    \ vec = Vec::new();\n    let mut current_level = 1;\n    for ch in paren_string.chars()\
+    \ {\n        let level = current_level;\n        if ch == '(' {\n            vec.push(level);\n\
+    \            current_level++;\n        } else if ch == ')' {\n            vec.push(level);\n\
+    \            current_level--;\n        }\n    }\n    vec", "    let mut stack:\
+    \ Vec<isize> = Vec::new();\n    let mut open_char: char = paren_string[0];\n \
+    \   let mut level = 0;\n    for ch in paren_string.chars().filter_map(|c| {\n\
+    \        if open_char != c\n            && (open_char == ')' || open_char == '(')\n\
+    \        {\n            stack.push(level);\n            open_char = c\n      \
+    \  }\n        open_char\n    }) {\n        level = stack.last().unwrap() + 1;\n\
+    \    }\n\n    stack", "    let mut paren_levels: Vec<isize> = vec![];\n    let\
+    \ mut open_brace_index = 0;\n    let mut close_brace_index = 0;\n    let mut open_brace_count\
+    \ = 1;\n    let mut close_brace_count = 1;\n\n    for c in paren_string.chars()\
+    \ {\n        if c == '(' {\n            if open_brace_count > 1 {\n          \
+    \      paren_levels.push(open_brace_count);\n            }\n            open_brace_index\
+    \ += 1;\n            open_brace_count += 1;\n        }\n        if c == ')' {\n\
+    \            close_brace_index += 1;\n            close_brace_count += 1;\n  \
+    \      }\n        if open_brace_index == close_brace_index {\n            paren_levels.push(close_brace_count);\n\
+    \        }\n    }\n    paren_levels", "    let mut paren_counts = HashMap::new();\n\
+    \    let mut depth = 0i32;\n    let mut paren_groups = paren_string.split_whitespace().collect::<Vec<_>>();\n\
+    \    while paren_groups.len() > 0 {\n        let group = paren_groups.pop().unwrap();\n\
+    \        depth += 1;\n        if paren_counts.contains_key(&group) {\n       \
+    \     paren_counts.entry(group).or_insert(depth).clone()\n        } else {\n \
+    \           paren_counts.insert(group, depth);\n        }\n    }\n    paren_counts\n\
+    \        .iter()\n        .filter_map(|(_, depth)| depth)\n        .collect()",
+  "    let mut result: Vec<_> = vec![];\n    let mut nesting = 0;\n    paren_string.split_whitespace().for_each(|c|\n\
+    \        if c == ')' {\n            nesting--;\n        } else {\n           \
+    \ if nesting != 0 {\n                result.push(nesting);\n            }\n  \
+    \          nesting++;\n        }\n    );\n    result", "    let mut result = Vec::new();\n\
+    \    let mut paren_depth = 0;\n\n    for c in paren_string.chars() {\n       \
+    \ if paren_depth >= 0 {\n            paren_depth = paren_depth - 1;\n        }\n\
+    \n        if c == '(' {\n            paren_depth += 1;\n        }\n        if\
+    \ c == '[' {\n            paren_depth += 1;\n        }\n        if c == '{' {\n\
+    \            paren_depth += 1;\n        }\n        if c == ')' {\n           \
+    \ paren_depth -= 1;\n        }\n        if c == ']' {\n            paren_depth\
+    \ -= 1;\n        }\n        if c == '}' {\n            paren_depth -= 1;\n   \
+    \     }\n        if c == '\\\\' {\n            continue;\n        }\n        result.push(paren_depth);\n\
+    \    }\n    result", "    let paren_levels = paren_string.char_indices().map(|c|\
+    \ {\n        // get index of the '('\n        let paren_index = c.0;\n       \
+    \ let paren_level = paren_index;\n        // find the first ')' of (\n       \
+    \ let mut paren_end_index = paren_index;\n        // iterate through all ')' in\
+    \ the paren_string and find out the minimum parenthesis level of nested parenthesis\n\
+    \        while paren_end_index != paren_string.chars().last().unwrap() {\n   \
+    \         if paren_end_index == paren_string.chars().last().unwrap() {\n     \
+    \           break;\n            }\n            if paren_string[paren_end_index]\
+    \ == '(' {\n                // increase the paren_level of nested parenthesis\n\
+    \                paren_level += 1;\n            } else {\n                // increase\
+    \ the paren_level of last open parenthesis\n                paren_level += 2;\n\
+    \            }\n            // move on to the next ')'\n            paren_end_index\
+    \ += 1;\n        }\n        paren_level\n    });\n    // find the deepest level\
+    \ of parenthesis\n    let deepest_level: isize = paren_levels.iter().max().unwrap();\n\
+    \    // convert the vector (paren_levels) to a vector (deepest_level)\n    paren_levels[..deepest_level].iter().cloned().collect()",
+  "    paren_string.chars().enumerate()\n        .map(|(i, char)| {\n            if\
+    \ char == '(' {\n                return i + 1;\n            }\n            if\
+    \ char == ')' {\n                return i - 1;\n            }\n        })\n  \
+    \      .collect()", "    paren_string\n        .split_whitespace()\n        .filter_map(|c|\
+    \ c.is_ascii_alphanumeric())\n        .collect()", "    paren_string.chars()\n\
+    \        .filter_map(|c| match c {\n            '(' | ')' | ' ' => {\n       \
+    \         let len = c.len_utf8();\n                Some(len + 1)\n           \
+    \ }\n            _ => None,\n        })\n        .collect()", "    paren_string.char_indices()\n\
+    \        .filter_map(|i| {\n            let start = i.0;\n            let end\
+    \ = i.1;\n            if start == end {\n                None\n            } else\
+    \ {\n                Some(start as isize)\n            }\n        })\n       \
+    \ .skip(1)\n        .take(paren_string.len() - 2)\n        .cloned()\n       \
+    \ .collect()", "    paren_string.lines()\n        .map(|l| {\n            l.trim_end().parse().unwrap_or(0)\n\
+    \        })\n        .scan(vec![], |mut acc, c| {\n            match (c, acc.len()\
+    \ - 1) {\n                ((), _) => acc.push(acc.len() as isize),\n         \
+    \       (((), _), _) => {\n                    acc.push(acc.len() as isize);\n\
+    \                }\n                (mut c, _) => {\n                    match\
+    \ c {\n                        ')' => {\n                            acc.pop();\n\
+    \                        }\n                        ']' => {\n               \
+    \             acc.pop();\n                        }\n                        _\
+    \ => ()\n                    }\n                }\n            }\n        })\n\
+    \        .collect()", "    let paren_string = paren_string.trim();\n    if paren_string.is_empty()\
+    \ {\n        return Vec::new();\n    }\n\n    let mut levels = Vec::new();\n \
+    \   let mut level = -1;\n    let mut paren_count = 0;\n    let mut paren_start\
+    \ = paren_string.chars();\n    let mut paren_end = paren_start;\n    loop {\n\
+    \        if paren_count == 0 {\n            // If we have any parenthesis in the\
+    \ string, start at 0\n            let mut pos = 0;\n            while pos < paren_string.len()\
+    \ {\n                let char = paren_start.next().unwrap_or('(');\n         \
+    \       if char == '(' {\n                    level += 1;\n                  \
+    \  pos = 0;\n                } else if char == ')' {\n                    level\
+    \ -= 1;\n                    pos = 0;\n                } else {\n            \
+    \        pos += 1;\n                }\n            }\n        }\n        let char\
+    \ = paren_start.next().unwrap_or('(');\n        if char == '(' {\n           \
+    \ paren_count += 1;\n        } else if char == ')' {\n            paren_count\
+    \ -= 1;\n        }\n        if level == 0 && paren_count > 0 {\n            return\
+    \ levels;\n        }\n        let mut pos: Option<usize> = None;\n        while\
+    \ let Some(pos) = paren_end.next() {\n            if pos == '(' {\n          \
+    \      level += 1;\n            } else if pos == '(' && paren_count > 0 {\n  \
+    \              level += 1;\n            } else if pos == ')' {\n             \
+    \   level -= 1;\n            } else if pos == ')' && paren_count > 0 {\n     \
+    \           level -= 1;\n            }\n        }\n        if let Some(pos) =\
+    \ pos {\n            paren_end = paren_string.position(pos, pos.end());\n    \
+    \    }\n    }", "    let mut depth = 0;\n    let mut paren_depth = paren_string.len();\n\
+    \    let mut nesting_levels: Vec<isize> = Vec::new();\n\n    while paren_depth\
+    \ != 0 {\n        let paren_depth -= 1;\n        let chars_to_remove = paren_depth\
+    \ - 1;\n\n        paren_depth = paren_string.chars()\n            .enumerate()\n\
+    \            .filter(|(i, c)| c != ')' && c != '(')\n            .map(|(i, _)|\
+    \ i)\n            .count();\n\n        depth += 1;\n        nesting_levels.push(depth);\n\
+    \    }\n\n    nesting_levels.sort_unstable();\n    nesting_levels.reverse();\n\
+    \n    nesting_levels", "    let paren_groups = paren_string.chars().filter_map(|c|\
+    \ {\n        match c {\n            ')' if c != '(' | c == '\\n' => false,\n \
+    \           c => true,\n        }\n    });\n\n    let mut paren_levels = vec![1isize];\n\
+    \    let mut levels = 0;\n    for paren_group in paren_groups {\n        if paren_group\
+    \ != ')' {\n            levels += paren_levels.last_mut().unwrap() + 1;\n    \
+    \    }\n        paren_levels.push(levels);\n    }\n\n    let mut levels = paren_levels.clone();\n\
+    \    while !levels.is_empty() {\n        let curr_level = levels.pop().unwrap();\n\
+    \        if curr_level == 1 {\n            break;\n        }\n        levels.push(curr_level);\n\
+    \    }\n    levels", "    let mut parens_chars = paren_string.chars();\n    let\
+    \ mut parens_level = Vec::new();\n\n    let mut parens_level_mut = parens_level.as_mut();\n\
+    \    let mut parens_chars_mut = parens_chars.as_mut();\n\n    while parens_chars_mut.next().is_some()\
+    \ {\n        let char = parens_chars_mut.next().unwrap();\n        if char ==\
+    \ ')' {\n            if parens_level_mut.unwrap() < 2 {\n                return\
+    \ parens_level_mut;\n            }\n            parens_level_mut = parens_level.clone();\n\
+    \            parens_level_mut = parens_level_mut.push(parens_level_mut.len() -\
+    \ 1);\n            parens_level_mut = parens_level_mut.clone();\n            parens_level_mut\
+    \ = parens_level_mut.push(0);\n            parens_level_mut = parens_level_mut.clone();\n\
+    \            parens_level_mut = parens_level_mut.push(1);\n        }\n       \
+    \ if char == '(' {\n            parens_level_mut = parens_level.clone();\n   \
+    \         parens_level_mut = parens_level_mut.push(parens_level_mut.len() - 1);\n\
+    \            parens_level_mut = parens_level_mut.clone();\n            parens_level_mut\
+    \ = parens_level_mut.push(0);\n            parens_level_mut = parens_level_mut.clone();\n\
+    \            parens_level_mut = parens_level_mut.push(1);\n        }\n       \
+    \ if char == ')' || char == ')(' {\n            parens_level_mut = parens_level_mut.clone();\n\
+    \            parens_level_mut = parens_level_mut.push(0);\n            parens_level_mut\
+    \ = parens_level_mut.clone();\n            parens_level_mut = parens_level_mut.push(0);\n\
+    \            parens_level_mut = parens_level_mut.clone();\n            parens_level_mut\
+    \ = parens_level_mut.push(1);\n        }\n        if char == ')(' {\n        \
+    \    parens_level_mut = parens_level_mut.clone();\n            parens_level_mut\
+    \ = parens_level_mut.push(0);\n            parens_level_mut = parens_level_mut.clone();\n\
+    \            parens_level_mut = parens_level_mut.push(0);\n            parens_level_mut\
+    \ = parens_level_mut.clone();\n            parens_level_mut = parens_level_mut.push(2);\n\
+    \        }\n        parens_level_mut = parens_level_mut.clone();", "    paren_string.chars().filter_map(|c|\n\
+    \        if c == '(' {\n            Some(1)\n        } else if c == ')' {\n  \
+    \          Some(0)\n        } else {\n            None\n        }\n    }).collect()",
+  "    paren_string.trim().split(' ').collect::<Vec<_>>().iter().enumerate().filter_map(|(i,\
+    \ s)| {\n        if s.is_empty() {\n            Some(i)\n        } else {\n  \
+    \          let mut level = 0;\n            let mut paren_depth = 1;\n        \
+    \    for c in s.chars() {\n                if c == '(' {\n                   \
+    \ paren_depth += 1;\n                } else if c == ')' {\n                  \
+    \  paren_depth -= 1;\n                    if paren_depth == 0 {\n            \
+    \            return Some(i);\n                    }\n                }\n     \
+    \           level += 1;\n            }\n            None\n        }\n    }).collect()",
+  "    let mut paren_level: Vec<isize> = vec![0];\n    let mut nesting_parens: Vec<isize>\
+    \ = vec![0];\n    for (i, &c) in paren_string.chars().enumerate() {\n        if\
+    \ paren_level.is_empty() || paren_level[0] < i {\n            if c == '(' {\n\
+    \                paren_level.push(1);\n            } else if c == ')' {\n    \
+    \            paren_level.pop();\n            }\n        } else {\n           \
+    \ if c == '(' {\n                paren_level.push(i + 1);\n            } else\
+    \ if c == ')' {\n                paren_level.pop();\n            }\n         \
+    \   if paren_level[0] >= i {\n                nesting_parens.push(paren_level[0]);\n\
+    \                paren_level[0] = i;\n            }\n        }\n    }\n    if\
+    \ paren_level.is_empty() {\n        return vec![0];\n    }\n    nesting_parens",
+  "    paren_string\n        .chars()\n        .filter(|c| {\n            c != '('\
+    \ && c != ')' && c != '[' && c != ']' && c != '{' && c != '}'\n        })\n  \
+    \      .collect()", "    paren_string.chars().enumerate()\n        .filter_map(|(idx,\
+    \ ch)| {\n            match ch {\n                '(' | ')' => {\n           \
+    \         let level = idx + 1;\n                    if level > 0 && level < paren_string.len()\
+    \ {\n                        Some(level)\n                    } else {\n     \
+    \                   None\n                    }\n                }\n         \
+    \       _ => None,\n            }\n        })\n        .collect()", "    let mut\
+    \ levels: Vec<isize> = paren_string.chars().filter_map(|c| {\n        if c ==\
+    \ '(' {\n            Some(0)\n        } else {\n            Some(1)\n        }\n\
+    \    }).collect();\n    levels.push(paren_string.chars().filter(|c| c == '(').count());\n\
+    \    levels.into_iter().rev().collect()", "    let mut paren_stack = vec![];\n\
+    \    let mut open_index = 0;\n\n    for paren in paren_string.chars().filter_map(|c|\
+    \ *c != '(' && c != ')') {\n        match paren {\n            '(' | ')' | ' '\
+    \ => {\n                paren_stack.push(open_index);\n            }\n       \
+    \     _ => {\n                open_index = paren_stack.last().unwrap();\n    \
+    \        }\n        }\n    }\n\n    paren_stack.last().unwrap() + 1", "    let\
+    \ mut paren_stack = vec![];\n    let mut i = 0;\n    let mut group_len = 0;\n\
+    \    for c in paren_string.chars() {\n        if c == '(' {\n            paren_stack.push(group_len);\n\
+    \            group_len = 1;\n        } else if c == '{' {\n            paren_stack.push(group_len);\n\
+    \            group_len = 2;\n        } else if c == '[' {\n            paren_stack.push(group_len);\n\
+    \            group_len = 3;\n        } else if c == '}' {\n            paren_stack.pop();\n\
+    \            group_len = paren_stack[paren_stack.len() - 1];\n        } else if\
+    \ c == ']' {\n            paren_stack.pop();\n            group_len = paren_stack[paren_stack.len()\
+    \ - 1];\n        } else {\n            group_len += 1;\n        }\n        i +=\
+    \ 1;\n    }\n    paren_stack", "    paren_string\n        .chars()\n        .filter_map(|c|\
+    \ match c {\n            ' ' | '\\t' => None,\n            '(' | ')' | '+' | '-'\
+    \ | '*' | '/' | '%' => Some(c - '('),\n            _ => None,\n        })\n  \
+    \      .collect()", "    paren_string\n        .split(\"()\")\n        .map(|s|\
+    \ s.len())\n        .max()\n        .unwrap()", "    let mut parens: Vec<isize>\
+    \ = Vec::new();\n    let mut depth = 0;\n    let mut par_open = false;\n\n   \
+    \ for ch in paren_string.chars() {\n        match ch {\n            '(' | ')'\
+    \ => {\n                par_open = ch == '(';\n                parens.push(depth);\n\
+    \            }\n            _ if par_open || parens.len() == 0 => {\n        \
+    \        parens.pop();\n            }\n            _ => (),\n        }\n     \
+    \   depth += 1;\n    }\n\n    parens", "    paren_string.split_whitespace().collect::<Vec<_>>()\n\
+    \        .filter(|c| !c.is_empty())\n        .filter_map(|c| c.is_('(') || c.is_(')'))\n\
+    \        .max_by_key(|c| paren_string.chars().position(|x| x == c).unwrap())\n\
+    \        .map(|c| paren_string.chars().position(|x| x == c).unwrap() + 1)\n  \
+    \      .collect()", "    let mut level = 0;\n    let mut depth = 0;\n    let mut\
+    \ out: Vec<isize> = Vec::new();\n\n    for paren in paren_string.chars().filter(|c|\
+    \ c == '(' || c == '{' || c == '[') {\n        if paren == '(' {\n           \
+    \ level += 1;\n            depth += 1;\n        }\n        if paren == ')' {\n\
+    \            if level > 0 {\n                level -= 1;\n                depth\
+    \ += 1;\n            }\n        }\n        if paren == '}' {\n            if level\
+    \ > 0 {\n                level -= 1;\n                depth += 1;\n          \
+    \  }\n        }\n        if paren == ']' {\n            if level > 0 {\n     \
+    \           level -= 1;\n                depth += 1;\n            }\n        }\n\
+    \        if level == 0 {\n            if paren != '(' {\n                out.push(depth);\n\
+    \            }\n        }\n    }\n\n    out", "    let mut paren_count = paren_string.len();\n\
+    \    let mut depth = 0;\n    let mut opening_levels = 0;\n\n    while open_parens(&paren_count,\
+    \ &mut opening_levels, &mut depth)\n        && paren_count > 0\n    {\n      \
+    \  paren_count -= 1;\n        depth -= 1;\n    }\n\n    paren_count.into()", " \
+    \   paren_string\n        .split_whitespace()\n        .filter(|c| !c.is_ascii_letter())\n\
+    \        .filter(|c| !c.is_ascii_digit())\n        .filter(|c| c != '(' && c !=\
+    \ ')')\n        .filter(|c| c != '[' && c != ']')\n        .filter(|c| c != ']')\n\
+    \        .map(|c| c.to_ascii_lowercase().parse::<isize>())\n        .collect()",
+  "    let mut parentheses_level: usize = 1;\n    let mut parenthese_stack: Vec<isize>\
+    \ = Vec::new();\n    let mut paren_characters = paren_string.chars();\n    while\
+    \ paren_characters.next() != Some('(') {\n        if parenthese_stack.len() >\
+    \ 0 {\n            parentheses_level += 1;\n            parenthese_stack.pop();\n\
+    \        }\n        parenthese_stack.push(paren_characters.next());\n    }\n \
+    \   parenthese_stack.len()", "    let mut paren_stack = Vec::new();\n    for paren\
+    \ in paren_string.split(' ').filter_map(|x| x.chars().collect()) {\n        if\
+    \ paren == '(' {\n            paren_stack.push(paren_stack.len() as isize);\n\
+    \        } else if paren == ')' {\n            paren_stack.pop();\n        }\n\
+    \    }\n    if paren_stack.len() != 0 {\n        paren_stack.last().unwrap()\n\
+    \    } else {\n        0\n    }", "    let mut level = 1;\n    let mut i = 0;\n\
+    \    let mut cur_pos = 0;\n    let mut cur_level = 0;\n    let mut open_brackets\
+    \ = false;\n    let mut closed_brackets = false;\n    let mut cur_stack: Vec<Vec<isize>>\
+    \ = Vec::new();\n    let mut cur_stack_size = -1;\n    let mut last_brace = false;\n\
+    \n    let mut open_brackets = paren_string.chars().any(|c| c == ')');\n    let\
+    \ mut closed_brackets = paren_string.chars().any(|c| c == '(');\n\n    while i\
+    \ < paren_string.len() {\n        let cur_char = paren_string[cur_pos];\n    \
+    \    cur_pos +=1;\n        let mut new_level = cur_level;\n        if cur_level\
+    \ > level {\n            new_level = level;\n        }\n\n        if open_brackets\
+    \ && !closed_brackets {\n            new_level = level + 1;\n        }\n\n   \
+    \     if cur_char == ')' {\n            cur_stack = cur_stack.pop();\n       \
+    \     cur_stack_size = cur_stack.len();\n        }\n\n        if cur_char == '('\
+    \ {\n            if !closed_brackets {\n                open_brackets = true;\n\
+    \            }\n            else {\n                closed_brackets = false;\n\
+    \            }\n\n            if new_level < level {\n                new_level\
+    \ = level;\n            }\n        }\n\n        if closed_brackets {\n       \
+    \     closed_brackets = false;\n        }\n\n        level = new_level;\n\n  \
+    \      if open_brackets && cur_char == ')' {\n            open_brackets = false;\n\
+    \            cur_stack.push(level);\n            cur_stack_size = cur_stack_size;\n\
+    \        }\n        if closed_brackets && cur_char == '(' {\n            closed_brackets\
+    \ = false;\n            cur_stack = cur_stack.clone();\n            cur_stack_size\
+    \ = cur_stack_size;\n        }\n\n        if cur_char == ')' {\n            if\
+    \ closed_brackets {\n                closed_brackets = false;\n            }\n\
+    \            cur_stack.push(level);\n        }\n\n        if cur_char == '(' {\n\
+    \            if open_brackets {\n                open_brackets = false;\n    \
+    \        }\n            cur_stack.push(level);\n        }\n\n        i += 1;\n\
+    \    }\n\n    cur_stack", "    paren_string.chars()\n        .map(|c| *c)\n  \
+    \      .collect()\n        .iter()\n        .cloned()\n        .enumerate()\n\
+    \        .filter_map(|(i, c)| {\n            if c == '(' && paren_string[..i +\
+    \ 1].chars().any(|c| c == '(') {\n                Some(i)\n            } else\
+    \ {\n                None\n            }\n        })\n        .take_while(|&(i,\
+    \ _)| paren_string[..i + 1].chars().any(|c| c == ')'))\n        .map(|(i, _)|\
+    \ i)\n        .collect()", "    // First parse the string to get the number of\
+    \ levels of nesting.\n    let paren_level_count = paren_string\n        .chars()\n\
+    \        .filter_map(|c|\n            if c == '(' && paren_string[c.position()]\
+    \ == ')' {\n                Some(1)\n            } else {\n                None\n\
+    \            })\n        .count();\n    // The algorithm below works just fine\
+    \ with empty parenthesis string.\n    if paren_level_count == 0 {\n        return\
+    \ vec![];\n    }\n    // Initialize result list to store the levels.\n    let\
+    \ mut nested_levels = Vec::new();\n    // Start parsing the string to get the\
+    \ deepest level.\n    let mut current_level = 0;\n    let mut last_char = '\\\
+    0';\n    for index in paren_string.char_indices().rev() {\n        // If the current\
+    \ character is '(' and last_char is ')', increment the current level.\n      \
+    \  if index == paren_string.char_indices().last() && paren_string[index] == '('\
+    \ {\n            current_level += 1;\n        }\n        // If the current character\
+    \ is ')' and last_char is '(', decrement the current level.\n        if index\
+    \ == paren_string.char_indices().last() && paren_string[index] == ')' {\n    \
+    \        current_level -= 1;\n        }\n        // If the current level is 0,\
+    \ append it to the result list.\n        if current_level == 0 {\n           \
+    \ nested_levels.push(current_level);\n        }\n        // Keep track of the\
+    \ last character for the current level.\n        last_char = paren_string[index];\n\
+    \    }\n    // If the string ends with ')', add the last level.\n    if last_char\
+    \ == ')' {\n        nested_levels.push(current_level);\n    }\n    nested_levels.reverse()",
+  "    paren_string\n        .split_whitespace()\n        .map(|x| x.parse::<usize>().unwrap())\n\
+    \        .filter(|x| x > 0)\n        .collect::<Vec<_>>()", '    paren_string.split("
+    ").map(|x| x.parse().unwrap()).collect()', "    paren_string\n        .split('\\\
+    n')\n        .map(|x| x.parse::<usize>().unwrap())\n        .collect()", "   \
+    \ let mut paren_count = 0;\n    let mut paren_start = 0;\n    let mut paren_end\
+    \ = paren_string.len();\n\n    let mut paren_depth = 0;\n    let mut paren_levels\
+    \ = Vec::new();\n\n    let mut level = 0;\n    let mut levels = Vec::new();\n\
+    \    let mut paren_levels = Vec::new();\n\n    // Keep running until we encounter\
+    \ a ) without encountering a left paren.\n    while paren_start < paren_end {\n\
+    \        match paren_string[paren_start] {\n            '(' | '[' | '{' | ')'\
+    \ => {\n                paren_count = paren_count\n                    .saturating_sub(1)\n\
+    \                    .wrapping_add(1);\n                paren_end = paren_end\
+    \ - 1;\n                paren_start = paren_start + 1;\n            }\n      \
+    \      '[' => {\n                level = 1;\n            }\n            '{' =>\
+    \ {\n                level = 2;\n            }\n            _ => {\n         \
+    \       paren_count = paren_count\n                    .saturating_sub(1)\n  \
+    \                  .wrapping_add(1);\n                paren_end = paren_end -\
+    \ 1;\n                paren_start = paren_start + 1;\n            }\n        }\n\
+    \n        // If we encounter a left paren and this right paren is not the last\
+    \ character of the string,\n        // then we found a nested parentheses group.\
+    \ Add this group level to\n        // our current level of nesting.\n        match\
+    \ paren_string[paren_end] {\n            '(' | '[' | '{' | ')' => {\n        \
+    \        paren_levels.insert(0, level);\n                level += 1;\n       \
+    \     }\n            _ => {\n                level += 1;\n            }\n    \
+    \    }\n\n        // If we encounter a right paren and this left paren is not\
+    \ the first character of the string,\n        // then we found a nested parentheses\
+    \ group. Remove this group level from\n        // our current level of nesting.\n\
+    \        match paren_string[paren_start] {\n            '(' | '[' | '{' | ')'\
+    \ => {\n                paren_levels.pop();\n                level -= 1;\n   \
+    \         }\n            _ => {\n                level -= 1;\n            }\n\
+    \        }\n    }\n    paren_levels\n        .into_iter()\n        .map(|level|\
+    \ {\n            (level as isize)\n                .saturating_sub(1)\n      \
+    \          .wrapping_add(1)\n                .max(0)\n        })\n        .collect()",
+  "    let mut paren_stack = vec![None];\n    let mut nesting = 0;\n    for ch in\
+    \ paren_string.chars() {\n        if ch == ')' {\n            if paren_stack[nesting\
+    \ - 1].is_some() {\n                return vec![nesting];\n            } else\
+    \ {\n                nesting += 1;\n            }\n        }\n\n        if ch\
+    \ == '(' {\n            if paren_stack[nesting].is_none() {\n                paren_stack[nesting]\
+    \ = Some(nesting);\n            }\n        }\n    }\n\n    panic!(\"Unmatched\
+    \ parenthesis in {:?}\", paren_string);", "    let mut result = vec![0];\n   \
+    \ let mut paren_stack: Vec<Vec<usize>> = vec![vec![2]];\n\n    for paren in paren_string.chars().filter_map(|c|\
+    \ c != '(' && c != ')').collect::<Vec<_>>() {\n        // handle ( and )\n   \
+    \     if paren == '(' {\n            let mut level = paren_stack.last().unwrap().len()\
+    \ + 1;\n            paren_stack\n                .last_mut()\n               \
+    \ .unwrap()\n                .push(i);\n            if paren_stack.len() > level.min(||\
+    \ level) {\n                result = result.iter().cloned().collect();\n     \
+    \       }\n        }\n\n        // handle )\n        if paren == ')' {\n     \
+    \       let paren = paren_stack.last().unwrap().pop();\n            let mut level\
+    \ = paren_stack.last().unwrap().len();\n            paren_stack.last_mut().unwrap().push(paren);\n\
+    \            if paren_stack.len() > level.max(|| level) {\n                result\
+    \ = result.iter().cloned().collect();\n            }\n        }\n    }\n\n   \
+    \ result", "    let mut paren_levels = Vec::new();\n    let mut paren_stack =\
+    \ Vec::new();\n    let mut paren_level = 0;\n\n    for paren in paren_string.chars()\
+    \ {\n        if paren == char::parenthesis_left {\n            if paren_stack.len()\
+    \ > 0 {\n                paren_level += paren_stack.len();\n            }\n  \
+    \          paren_stack.pop();\n        } else if paren == char::parenthesis_right\
+    \ {\n            if paren_stack.len() == 0 {\n                break;\n       \
+    \     }\n            paren_stack.push(paren_level);\n            paren_level =\
+    \ 0;\n        }\n    }\n    paren_stack.reverse();\n    paren_stack", "    let\
+    \ mut paren_count = 0;\n    let mut level = 0;\n    paren_string.chars().for_each(|c|\
+    \ {\n        match c {\n            '(' | '[' => {\n                paren_count\
+    \ += 1;\n            }\n            ')' | ']' => {\n                paren_count\
+    \ -= 1;\n            }\n            _ => {\n                let current_level\
+    \ = level;\n                level += 1;\n                if paren_count == 0 {\n\
+    \                    level = current_level;\n                }\n            }\n\
+    \        }\n    });\n\n    let mut nested_parens = Vec::<isize>::new();\n    paren_string.chars().for_each(|c|\
+    \ {\n        match c {\n            '(' | '[' => {\n                nested_parens.push((level\
+    \ - 1) + (paren_count + 1));\n            }\n            ')' | ']' => {\n    \
+    \            nested_parens.pop();\n            }\n            _ => ()\n      \
+    \  }\n    });\n    nested_parens", "    paren_string\n        .chars()\n     \
+    \   .filter(|c| *c != '(' && c != ')')\n        .filter(|c| *c != '[')\n     \
+    \   .filter(|c| *c != ']')\n        .filter(|c| *c != '{')\n        .filter(|c|\
+    \ *c != '}')\n        .collect()", "    paren_string\n        .split('\\n')\n\
+    \        .filter_map(|x| x.chars().filter(|c| c == ('(' | ')' | '\"' | 't' | '|'))).collect()",
+  "    let mut level = 0;\n    paren_string\n        .trim()\n        .split_whitespace()\n\
+    \        .map(|s| {\n            if s == \"(\" || s == \")\" {\n             \
+    \   level += 1;\n            }\n            level\n        })\n        .collect()",
+  '    paren_string.split_whitespace().into_iter().map(|x| paren_nesting(x)).max_by_unstable().collect()',
+  "    paren_string\n        .split_whitespace()\n        .filter_map(|c| {\n    \
+    \        if c == '(' {\n                Some(1)\n            } else {\n      \
+    \          Some(0)\n            }\n        })\n        .max()\n        .unwrap()\n\
+    \        .clone()\n        .checked_add(-1)\n        .collect()", "    let mut\
+    \ paren_count = vec![0; paren_string.len()];\n    let mut bracket_count = 0;\n\
+    \    let mut i = 0;\n    while i < paren_string.len() {\n        if paren_string[i]\
+    \ == ')' {\n            if paren_count[i] > bracket_count {\n                bracket_count\
+    \ = paren_count[i];\n            }\n            paren_count[i] += 1;\n       \
+    \ }\n        if paren_string[i] == '(' { paren_count[i] += 1 }\n        if paren_string[i]\
+    \ == ')' {\n            if paren_count[i] > bracket_count {\n                bracket_count\
+    \ = paren_count[i];\n            }\n            paren_count[i] -= 1;\n       \
+    \ }\n        i += 1;\n    }\n    paren_count", "    let mut depth: usize = 0;\n\
+    \    let mut parens: Vec<isize> = vec![];\n    let mut parens_depth: Vec<isize>\
+    \ = vec![];\n    for paren in paren_string.chars() {\n        let paren = paren.into();\n\
+    \        if paren == '(' { parens.push(parens_depth.last().unwrap()); }\n    \
+    \    if paren == ')' {\n            depth -= 1;\n            if depth == 0 {\n\
+    \                return parens;\n            }\n        }\n        if paren ==\
+    \ ',' {\n            parens_depth.push(parens_depth.last().unwrap());\n      \
+    \  }\n    }\n    parens", "    let mut level_stack: Vec<isize> = Vec::new();\n\
+    \    let mut paren_stack: Vec<Vec<isize>> = Vec::new();\n    for (i, c) in paren_string.chars().enumerate()\
+    \ {\n        if c == '(' {\n            level_stack.push(i);\n            paren_stack.push(Vec::new());\n\
+    \        } else if c == ')' {\n            let last_level_len = level_stack.pop().unwrap();\n\
+    \            let nested_len = paren_stack.pop().unwrap().len();\n            let\
+    \ mut level = 0;\n            if nested_len > last_level_len {\n             \
+    \   level = nested_len - last_level_len;\n            } else {\n             \
+    \   while level_stack.len() > level {\n                    level_stack.pop();\n\
+    \                }\n                level = level_stack.len();\n            }\n\
+    \            paren_stack.push(paren_stack.last().push(level).collect());\n   \
+    \     }\n    }\n    paren_stack.last()", "    let mut opening_brackets = paren_string.chars().filter(|c|\
+    \ c == '(').count();\n    let mut nesting_levels = 0;\n    let mut paren_string\
+    \ = paren_string.to_owned();\n    let mut last_open_bracket = String::new();\n\
+    \    let mut last_closing_paren = String::new();\n    let mut next_open_bracket\
+    \ = String::new();\n    while opening_brackets > 0 {\n        let open_bracket\
+    \ = paren_string.chars().nth(opening_brackets).unwrap();\n        if open_bracket\
+    \ == '(' {\n            paren_string = paren_string.clone();\n            opening_brackets\
+    \ -= 1;\n            let mut opening_paren = paren_string.chars().nth(opening_brackets).unwrap();\n\
+    \            let closing_bracket = paren_string.chars().nth(opening_brackets).unwrap_or(')');\n\
+    \            next_open_bracket = String::new();\n            nesting_levels +=\
+    \ 1;\n            if opening_paren != '(' {\n                panic!(\"Unbalanced\
+    \ paranthesis.\");\n            }\n            while opening_paren != '(' {\n\
+    \                last_open_bracket = open_bracket;\n                last_closing_paren\
+    \ = closing_bracket;\n                let mut open_bracket = paren_string.chars().nth(opening_brackets).unwrap();\n\
+    \                let mut closing_paren = paren_string.chars().nth(opening_brackets\
+    \ + 1).unwrap();\n                opening_paren = paren_string.chars().nth(opening_brackets\
+    \ + 2).unwrap();\n                if open_bracket != '(' {\n                 \
+    \   break;\n                }\n                opening_brackets += 1;\n      \
+    \          if closing_bracket != '(' {\n                    break;\n         \
+    \       }\n                opening_brackets += 1;\n                last_closing_paren\
+    \ = closing_paren;\n                opening_paren = paren_string.chars().nth(opening_brackets).unwrap();\n\
+    \            }\n            if opening_brackets == 0 {\n                break;\n\
+    \            }\n            if opening_paren != ')' {\n                panic!(\"\
+    Unbalanced paranthesis.\");\n            }\n            nesting_levels -= 1;\n\
+    \            if nesting_levels <= 0 {\n                break;\n            }\n\
+    \        } else {\n            let closing_paren = paren_string.chars().nth(opening_brackets).unwrap_or(')');\n\
+    \            next_open_bracket = String", "    let mut level = 0;\n    let mut\
+    \ index = 0;\n    let mut paren_depth: usize = 0;\n    let mut groups = paren_string.split_whitespace();\n\
+    \    let mut paren_stack: Vec<isize> = Vec::new();\n\n    // Go through each group\
+    \ and count paren level\n    for group in groups {\n        paren_depth = group.len();\n\
+    \        if paren_stack.len() >= paren_depth {\n            level -= paren_stack[paren_depth\
+    \ - 1];\n        }\n        paren_stack.push(level);\n        level +=\n     \
+    \       group.len() == 1 ? (group.chars().count() as isize) : (group.chars().count()\
+    \ as isize) + 1;\n    }\n\n    // Go through each level of nesting and return\
+    \ the deepest level\n    paren_stack.iter().max_by_key(|&val| val).map(|level|\
+    \ level as isize)", "    let parens = paren_string.split(' ').collect::<Vec<String>>();\n\
+    \    let mut depth = 0;\n    for paren in parens.into_iter() {\n        if paren.len()\
+    \ > depth {\n            depth = paren.len();\n        }\n    }\n    vec![depth]",
+  "    let mut pos = 0; // position where parentheses are found\n    let mut max_level\
+    \ = 1; // level of nesting found\n    let mut level = 0; // nesting level\n  \
+    \  let mut paren_levels: Vec<isize> = Vec::new();\n    let mut paren_groups: Vec<Vec<String>>\
+    \ = Vec::new();\n    let mut paren_level = 0;\n    let mut group_level = 0;\n\
+    \    let mut group_position = 0;\n    let mut open_braces = 0;\n    let mut close_braces\
+    \ = 0;\n\n    let mut paren_levels_stack = Vec::new();\n\n    let mut string =\
+    \ paren_string.clone();\n    while pos < string.len() {\n        // parse first\
+    \ level of parentheses\n        let mut paren_level = level;\n        while paren_level\
+    \ > 0 {\n            let paren_open = paren_levels_stack[paren_level - 1];\n \
+    \           if paren_level == 1 {\n                open_braces++;\n          \
+    \  } else if paren_open > paren_level {\n                break;\n            }\
+    \ else {\n                open_braces--;\n            }\n            paren_level--;\n\
+    \        }\n        paren_levels.push(paren_level);\n\n        // parse nested\
+    \ parentheses\n        if paren_level > 0 {\n            // find first closing\
+    \ parentheses\n            let mut close_braces = 0;\n            let mut paren_groups\
+    \ = paren_groups[paren_level - 1];\n            while open_braces > close_braces\
+    \ {\n                if paren_groups[paren_group].len() > 0 {\n              \
+    \      paren_groups.push(paren_group);\n                }\n                if\
+    \ paren_levels[paren_level] > 0 {\n                    close_braces++;\n     \
+    \           }\n                paren_level--;\n            }\n        }\n\n  \
+    \      // find end of groups\n        let mut group_position = paren_groups.len();\n\
+    \        if close_braces > 0 {\n            // find first opening braces\n   \
+    \         while open_braces > 0 {\n                group_position -= 1;\n    \
+    \            open_braces--;\n            }\n        } else {\n            // find\
+    \ first closing parentheses\n            while paren_groups[group_position].len()\
+    \ > 0 {\n                group_position -= 1;\n            }\n        }\n\n  \
+    \      // if found group -> store all it's level -> decrement level of that group\
+    \ and store all levels\n        if group_position >= 0 {\n            paren_groups.push(paren_group);\n\
+    \            if paren_levels[paren_level] > 0 {\n                max_level = paren_level;\n\
+    \            }\n            group_position--;\n            group_level += 1;\n\
+    \            paren_level--;\n        } else {\n", "    paren_string\n        .chars()\n\
+    \        .enumerate()\n        .filter_map(|(i, c)| if c == '(' || c == '{' {\
+    \ Some(i) } else { None })\n        .filter_map(|(i: Option<usize>, c)| if c ==\
+    \ '{' { Some(i.unwrap()) } else { None })\n        .filter_map(|(i: Option<usize>,\
+    \ c)| if c == '(' { Some(i.unwrap()) } else { None })\n        .filter_map(|(i:\
+    \ Option<usize>, c)| if c == ')' { Some(i.unwrap()) } else { None })\n       \
+    \ .filter_map(|(i: Option<usize>, c)| if c == '}' { Some(i.unwrap()) } else {\
+    \ None })\n        .collect()", "    let mut parens_stack = paren_string.chars().collect::<Vec<char>>();\n\
+    \    let mut stack = parens_stack;\n    stack.push('(');\n    let mut count =\
+    \ 0;\n    loop {\n        count += 1;\n        match stack.pop() {\n         \
+    \   '(' | ')' | '{' | '}' | ',' => {\n                stack.push(stack.pop());\n\
+    \            }\n            _ => (),\n        }\n        if parens_stack.len()\
+    \ == 0 {\n            return vec![count];\n        }\n    }", "    let mut paren_counts\
+    \ = paren_string\n        .chars()\n        .enumerate()\n        .filter_map(|(idx,\
+    \ _)| if idx % 2 == 0 { Some(0) } else { None })\n        .collect::<Vec<_>>();\n\
+    \    let mut depth = 0;\n    let mut current_depth = 0;\n    let mut current_paren_counts\
+    \ = 0;\n    let mut paren_depth = 0;\n    for (idx, _) in paren_counts.into_iter().enumerate()\
+    \ {\n        if paren_depth < idx {\n            if paren_depth == 0 {\n     \
+    \           current_depth = idx + 1;\n            }\n            depth = current_depth;\n\
+    \            current_paren_counts = current_paren_counts;\n            current_depth\
+    \ += 1;\n            paren_depth = idx;\n        } else if paren_depth == idx\
+    \ {\n            current_paren_counts += 1;\n        }\n    }\n    depth", " \
+    \   let mut nesting = 0;\n    let mut opening_parens = 0;\n    let mut opening_parens_level:\
+    \ Vec<usize> = vec![];\n    for (i, char) in paren_string.chars().enumerate()\
+    \ {\n        if char == '(' {\n            opening_parens += 1;\n            opening_parens_level.push(nesting);\n\
+    \            nesting += 1;\n        } else if char == ')' {\n            opening_parens\
+    \ -= 1;\n            nesting -= opening_parens_level.pop();\n        } else {\n\
+    \            let opening_parens_level_index = opening_parens_level.iter().position(|level|\
+    \ *level == nesting).unwrap();\n            if opening_parens_level_index == 0\
+    \ {\n                return vec![nesting];\n            }\n            nesting\
+    \ += 1;\n        }\n    }\n    vec![nesting]", "    paren_string\n        .split_whitespace()\n\
+    \        .map(|s| {\n            if s.is_empty() {\n                Ok(-1)\n \
+    \           } else {\n                Ok(s.parse::<isize>().unwrap())\n      \
+    \      }\n        })\n        .filter_map(|i| i.ok())\n        .max_by_key(|i|\
+    \ i)\n        .unwrap()\n        .iter()\n        .map(|i| i as isize)\n     \
+    \   .collect()", "    let mut parens = paren_string.char_indices();\n    let mut\
+    \ depth = 0;\n    let mut opened_pars = 0;\n    let mut levels: Vec<isize> = Vec::new();\n\
+    \    let mut last: Vec<isize> = Vec::new();\n    parens.filter_map(|c| {\n   \
+    \     if c.index == parens.last_index() {\n            levels.push(opened_pars);\n\
+    \            opened_pars = 0;\n        }\n        if c.index == parens.len() {\n\
+    \            levels.push(opened_pars);\n            opened_pars = 0;\n       \
+    \ } else {\n            let paren_count = parens.clone().position(|c| c == c.to_string());\n\
+    \            if paren_count > 0 {\n                opened_pars += paren_count;\n\
+    \                last = parens.clone().skip(paren_count.clone()).collect();\n\
+    \                levels.push(opened_pars);\n            }\n        }\n       \
+    \ Some(c.to_owned())\n    }).collect();\n    levels.sort_unstable();\n    levels.reverse();\n\
+    \    levels.clone() + last", "    let mut levels = Vec::new();\n    let mut level\
+    \ = 0;\n    for (i, c) in paren_string.chars().enumerate() {\n        if c ==\
+    \ '(' {\n            level += 1;\n        } else if c == ')' {\n            level\
+    \ -= 1;\n        }\n        if level > 0 && level == levels.last().unwrap() {\n\
+    \            levels.push(levels.last().unwrap() + 1);\n        } else if level\
+    \ < 0 && level == levels.last().unwrap() {\n            levels.push(levels.last().unwrap()\
+    \ - 1);\n        }\n    }\n    levels.into_iter().collect()", "    let mut stack\
+    \ = vec![];\n    let mut par_level = 0;\n    let mut brace_level = 0;\n    for\
+    \ ch in paren_string.chars() {\n        match ch {\n            ')' => stack.pop().unwrap()\
+    \ += 1,\n            '(' => stack.push(par_level),\n            '{' => stack.push(brace_level),\n\
+    \            _ => (),\n        }\n        if stack.is_empty() || par_level < stack.last_mut()\
+    \ {\n            par_level = stack.last_mut() + 1;\n        }\n        if brace_level\
+    \ < stack.last_mut() {\n            brace_level = stack.last_mut() + 1;\n    \
+    \    }\n    }\n    stack", "    paren_string\n        .rsplitn(2, ' ')\n     \
+    \   .map(|x| x.parse::<usize>().unwrap())\n        .collect()", "    let mut paren_vec\
+    \ = Vec::new();\n    for paren in paren_string.chars().flat_map(|c| paren.chars())\
+    \ {\n        match c {\n            '(' => paren_vec.push(isize::max_value()),\n\
+    \            ')' => paren_vec.pop(),\n            _ => paren_vec.push(isize::max_value()\
+    \ - 1),\n        }\n    }\n    paren_vec", "    let paren_stack = paren_string.chars().map(|c|\
+    \ c as char).collect::<Vec<_>>();\n    let mut i = 0;\n    let mut paren_level\
+    \ = 0;\n    loop {\n        if paren_level == 0 && paren_stack.len() == 0 {\n\
+    \            return vec![paren_level];\n        }\n        let popped_char = paren_stack.pop().unwrap();\n\
+    \        let next_char = paren_stack.pop().unwrap();\n        if popped_char ==\
+    \ next_char {\n            paren_level += 1;\n        } else {\n            paren_level\
+    \ = 0;\n        }\n        i += 1;\n    }", "    paren_string\n        .split('\
+    \ ')\n        .iter()\n        .map(|s| s.parse().unwrap())\n        .filter(|isize|\
+    \ !isize.is_zero())\n        .filter(|isize| paren_string.starts_with(isize))\n\
+    \        .filter(|isize| paren_string.len() > isize)\n        .collect()", " \
+    \   let mut openings = vec![];\n    let mut closings = vec![];\n    let mut level\
+    \ = 0;\n    let mut level_index = 0;\n    for (i, c) in paren_string.chars().enumerate()\
+    \ {\n        if c == ')' {\n            closings.push(i);\n        }\n       \
+    \ if c == '(' {\n            openings.push(i);\n        }\n        if c == ' '\
+    \ {\n            level += 1;\n            if level == 1 {\n                level_index\
+    \ = i;\n            }\n        }\n        if c == '(' {\n            level -=\
+    \ 1;\n        }\n        if c == ')' {\n            if level == 0 {\n        \
+    \        closings.pop();\n            }\n        }\n    }\n    openings.len()",
+  "    let mut parens = paren_string.split_whitespace();\n    parens\n        .into_iter()\n\
+    \        .filter_map(|x| x.chars().count())\n        .max()\n        .collect()",
+  "    let mut stack = vec![];\n    let mut nesting = 0;\n    for (i, c) in paren_string.chars().enumerate()\
+    \ {\n        if c == '(' || c == '[' {\n            stack.push(i);\n        }\n\
+    \        if c == '(' || c == ')' {\n            if stack.len() > nesting {\n \
+    \               nesting = stack.len();\n            }\n        }\n        if c\
+    \ == ']' || c == ']' {\n            if stack.len() > nesting {\n             \
+    \   nesting = stack.len();\n            }\n            stack.pop();\n        }\n\
+    \    }\n    nesting", "    let mut vec = vec![];\n    let mut last = 0;\n    let\
+    \ mut last_level = 0;\n    let mut stack = String::from(paren_string);\n    let\
+    \ mut count = 0;\n    while count != paren_string.len() {\n        if let Some((_,\
+    \ char)) = stack.chars().next() {\n            if char == '(' {\n            \
+    \    last = 0;\n                let new_level = last;\n                vec.push(new_level);\n\
+    \                stack = stack.remove(0) + stack.remove(0);\n                last_level\
+    \ = new_level;\n                count++;\n            } else if char == ')' {\n\
+    \                let mut new_level = last;\n                while let Some((_,\
+    \ char)) = stack.chars().next() {\n                    if char == '(' {\n    \
+    \                    new_level = vec.last().unwrap_or(new_level + 1);\n      \
+    \                  break;\n                    }\n                    new_level\
+    \ = vec.last().unwrap_or(new_level + 1);\n                }\n                if\
+    \ new_level == last_level {\n                    vec.push(new_level);\n      \
+    \              stack = stack.remove(0) + stack.remove(0);\n                  \
+    \  last_level = new_level;\n                    count++;\n                } else\
+    \ {\n                    vec.push(new_level);\n                    stack = stack.remove(0)\
+    \ + stack.remove(0);\n                    last_level = new_level;\n          \
+    \          count++;\n                }\n            }\n        }\n    }\n    vec",
+  "    let mut depth = 0;\n    let mut paren_stack: Vec<&str> = vec![paren_string];\n\
+    \    let mut paren_depth: usize = 0;\n    while paren_stack.len() > 0 {\n    \
+    \    if paren_depth == 0 {\n            let mut paren_len = paren_stack.len();\n\
+    \            while paren_len > 0 {\n                let top_level_open = paren_stack.pop().unwrap();\n\
+    \                if top_level_open != ')' {\n                    let paren_depth\
+    \ = paren_depth - 1;\n                } else {\n                    break;\n \
+    \               }\n                paren_len = paren_len - 1;\n            }\n\
+    \        }\n        if paren_depth > depth {\n            depth = paren_depth;\n\
+    \        }\n        paren_depth = paren_depth + 1;\n        if paren_depth > 0\
+    \ {\n            let mut paren_len = paren_stack.len();\n            while paren_len\
+    \ > 0 {\n                let top_level_close = paren_stack.pop().unwrap();\n \
+    \               if top_level_close == '(' {\n                    let paren_depth\
+    \ = paren_depth - 1;\n                } else {\n                    break;\n \
+    \               }\n                paren_len = paren_len - 1;\n            }\n\
+    \        }\n    }\n    depth", "    let mut paren_stack: Vec<Vec<String>> = vec![vec![]];\n\
+    \    let mut level = 0;\n    for c in paren_string.chars() {\n        if c ==\
+    \ '(' { paren_stack.push(vec![\"\".to_string()]); level += 1 } else if c == ')'\
+    \ {\n            level -= 1;\n            paren_stack.pop();\n        } else {\n\
+    \            let mut paren_str = paren_stack[level]\n                .as_mut()\n\
+    \                .expect(\"Error while parsing nested parentheses\");\n      \
+    \      paren_str.push(c);\n        }\n        if level == 0 && paren_stack.len()\
+    \ == 1 {\n            return paren_stack.as_slice().map(|x| x.len()).collect();\n\
+    \        }\n    }\n    panic!(\"Error while parsing nested parentheses\");", " \
+    \   // count the number of parentheses group\n    let mut num_paren_group = 0;\n\
+    \    for group in paren_string.chars() {\n        if group == '(' {\n        \
+    \    num_paren_group += 1;\n        } else if group == ')' {\n            num_paren_group\
+    \ -= 1;\n        }\n    }\n\n    let mut num_level = 0;\n    for group in paren_string.chars()\
+    \ {\n        if group == '(' {\n            num_level += 1;\n        } else if\
+    \ group == ')' {\n            num_level -= 1;\n        }\n        if num_level\
+    \ == num_paren_group {\n            return vec![num_level];\n        }\n    }\n\
+    \n    vec![0]", "    let mut paren_string = paren_string.to_owned();\n\n    let\
+    \ mut open_brackets = 0;\n    let mut level = 0;\n\n    let mut open_parens =\
+    \ 0;\n    let mut i = 0;\n\n    while i < paren_string.len() {\n        let c\
+    \ = paren_string.chars()\n            .skip_while(|c| !c.is_ascii_letter() ||\
+    \ c.unwrap() != '(')\n            .next()\n            .unwrap();\n        open_parens\
+    \ += 1;\n        if c == ')' {\n            level += 1;\n            open_brackets\
+    \ -= 1;\n        }\n        if c == '(' {\n            open_brackets += 1;\n \
+    \       }\n        i += 1;\n    }\n\n    if open_brackets != 0 {\n        Err(format!(\n\
+    \            \"Invalid nested parenthesis found. Brackets ({}) not balanced.\"\
+    ,\n            open_brackets\n        ))\n    } else {\n        Ok(level)\n  \
+    \  }", "    paren_string\n        .trim()\n        .split_whitespace()\n     \
+    \   .map(|s| {\n            parse_paren_level(s, 0)\n        })\n        .collect()",
+  "    paren_string\n        .split(|c| match c {\n            '(' | ')' | '[' | ']'\
+    \ | '{' | '}' | '(' | ')' | '[' | ']' | '{'\n            | '\\n' => {\n      \
+    \          true\n            }\n            _ => false,\n        })\n        .map(|s|\
+    \ s.parse::<usize>().unwrap())\n        .collect()", "    let mut max_level =\
+    \ 0;\n\n    for parens in paren_string.split(\" \") {\n        if parens.starts_with(\"\
+    (\") {\n            if parens.ends_with(\")\") {\n                max_level +=\
+    \ 1;\n            } else {\n                max_level += 2;\n            }\n \
+    \       } else if parens.starts_with(\")\") {\n            max_level -= 1;\n \
+    \       } else {\n            panic!(\"Invalid parentheses\");\n        }\n  \
+    \  }\n    max_level", "    let mut paren_stack = Vec::new();\n    let mut depth\
+    \ = -1;\n\n    for paren in paren_string.chars().skip_while(|c| *c != '(') {\n\
+    \        if *paren == ')' {\n            paren_stack.pop();\n        }\n     \
+    \   if *paren == ')' && paren_stack.len() > 0 {\n            depth -= 1;\n   \
+    \     }\n        if depth == -1 || depth > paren_stack.len() {\n            depth\
+    \ = paren_stack.len();\n        }\n        paren_stack.push(paren);\n    }\n \
+    \   paren_stack", "    let mut paren_stack = Vec::new();\n    let mut i = 0;\n\
+    \n    while i < paren_string.len() {\n        if paren_stack.is_empty() {\n  \
+    \          // If the stack is empty, get the opening parenthesis\n           \
+    \ paren_stack.push(paren_string.chars().next().unwrap());\n        }\n\n     \
+    \   match paren_stack.last() {\n            '(' | ')' => paren_stack.pop(),\n\
+    \            _ => {\n                let cur_char = paren_string[i];\n\n     \
+    \           if cur_char == '(' {\n                    // If the current char is\
+    \ a left parenthesis\n                    // push it to the stack and get next\
+    \ char\n                    paren_stack.push(cur_char);\n                    i\
+    \ += 1;\n                } else if cur_char == ')' {\n                    // If\
+    \ the current char is a right parenthesis\n                    // if the stack\
+    \ is not empty then pop the stack and get next char\n                    if !paren_stack.is_empty()\
+    \ {\n                        paren_stack.pop();\n                        i +=\
+    \ 1;\n                    } else {\n                        return vec![];\n \
+    \                   }\n                } else {\n                    // If char\
+    \ is not a left or right parenthesis\n                    // push the current\
+    \ char to the stack\n                    paren_stack.push(cur_char);\n       \
+    \             i += 1;\n                }\n            }\n        }\n    }\n\n\
+    \    paren_stack", "    let mut num_levels = paren_string.chars().filter(|c| *c\
+    \ != '(').count() as isize;\n    paren_string.chars()\n        .filter(|c| *c\
+    \ == ')')\n        .enumerate()\n        .filter_map(|(i, c)| if *c == '(' {\n\
+    \            i += 1;\n            Some(paren_string.chars().enumerate().filter(|(_,\
+    \ c2)| c2 != ')').count())\n        } else {\n            None\n        })\n \
+    \       .take_while(|(_, c2)| {\n            c2 != '(' || c2 != ')'\n        })\n\
+    \        .for_each(|(_, c2)| {\n            assert!(!c2.is_whitespace(), &format!(\"\
+    Illegal character {} at position {}\", c2, i));\n            assert!(!c2.is_ascii(),\
+    \ &format!(\"Illegal character {} at position {}\", c2, i));\n        });\n  \
+    \  paren_string.chars()\n        .enumerate()\n        .filter(|(_, c2)| c2 !=\
+    \ ')')\n        .for_each(|(_, c2)| {\n            assert!(!c2.is_whitespace(),\
+    \ &format!(\"Illegal character {} at position {}\", c2, i));\n            assert!(!c2.is_ascii(),\
+    \ &format!(\"Illegal character {} at position {}\", c2, i));\n        });\n  \
+    \  paren_string.chars()\n        .enumerate()\n        .filter(|(_, c2)| c2 !=\
+    \ '(')\n        .for_each(|(_, c2)| {\n            assert!(!c2.is_whitespace(),\
+    \ &format!(\"Illegal character {} at position {}\", c2, i));\n            assert!(!c2.is_ascii(),\
+    \ &format!(\"Illegal character {} at position {}\", c2, i));\n        });\n  \
+    \  for i in 0..num_levels {\n        num_levels += paren_string.chars().filter(|c|\
+    \ *c != '(').count() as isize;\n    }\n    num_levels", "    let mut level: isize\
+    \ = 0;\n    let mut string_to_count = \"()\".repeat(paren_string.len());\n   \
+    \ let mut paren_level_string = \"\".to_owned();\n    for paren in paren_string.chars().filter(|c|\
+    \ *c == ' ') {\n        paren_level_string += &paren.to_owned();\n    }\n    for\
+    \ paren in paren_level_string.chars().filter(|c| *c == ' ') {\n        string_to_count\
+    \ -= &paren.to_owned();\n    }\n    for paren in string_to_count.chars().filter(|c|\
+    \ *c != '(' && c != ')') {\n        level += 1;\n    }\n    level", "    // Initialize\
+    \ with level of nesting 0\n    let mut paren_levels = vec![0];\n\n    // Go through\
+    \ each character in the string\n    for c in paren_string.chars() {\n        //\
+    \ If this character is an opening bracket\n        if c == '(' {\n           \
+    \ // Add 1 to level of nesting\n            paren_levels.push(paren_levels.len()\
+    \ + 1);\n        }\n\n        // If this character is a closing bracket\n    \
+    \    if c == ')' {\n            // Add 1 to level of nesting\n            paren_levels.push(paren_levels.len()\
+    \ - 1);\n        }\n    }\n\n    // Return vector with deepest level of nesting\n\
+    \    paren_levels", "    let mut level = 0;\n    let mut paren_level_stack: Vec<usize>\
+    \ = Vec::new();\n    let mut paren_level_stack_size: usize = 0;\n    for paren\
+    \ in paren_string.chars() {\n        if paren == '(' {\n            paren_level_stack.push(level);\n\
+    \            paren_level_stack_size += 1;\n        }\n        if paren == ')'\
+    \ {\n            paren_level_stack_size -= 1;\n            if paren_level_stack_size\
+    \ == 0 {\n                level -= 1;\n            }\n        }\n        level\
+    \ += 1;\n    }\n    paren_level_stack.pop()", "    let mut groups = paren_string.chars().map(|c|\
+    \ {\n        if c == '(' {\n            1\n        } else if c == ')' {\n    \
+    \        -1\n        } else {\n            0\n        }\n    }).collect::<Vec<_>>();\n\
+    \    while groups.is_empty() {\n        groups.push(0);\n    }\n    find_max_level_of_nesting(groups)",
+  "    let mut npar = 0;\n    let mut left_paren_count = 0;\n    let mut right_paren_count\
+    \ = 0;\n    let mut level = 0;\n    let mut parens = Vec::new();\n\n    for ch\
+    \ in paren_string.chars() {\n        if ch == ')' {\n            right_paren_count\
+    \ = level;\n        }\n        if ch == '(' &&\n            (level < right_paren_count\
+    \ || level < left_paren_count)\n        {\n            level += 1;\n        }\n\
+    \        if ch == ')' && level > right_paren_count && level > left_paren_count\
+    \ {\n            level -= 1;\n        }\n\n        parens.push(level);\n     \
+    \   if ch == '(' {\n            left_paren_count += 1;\n        }\n        if\
+    \ ch == ')' {\n            right_paren_count += 1;\n        }\n    }\n    parens",
+  "    let mut levels: Vec<isize> = vec![0];\n    let mut paren_level: usize = 0;\n\
+    \    let mut paranthesis_depth: usize = 0;\n    let mut paren_char: char = '(';\n\
+    \n    for ch in paren_string.chars() {\n        if paren_char != ch {\n      \
+    \      levels.push(paren_level);\n            paren_level = levels.len();\n  \
+    \          paren_char = ch;\n        }\n        levels.push(levels[levels.len()\
+    \ - 1] + 1);\n        if ch == ')' {\n            paren_level = levels[levels.len()\
+    \ - 1];\n        }\n    }\n\n    levels.push(paren_level);\n    levels.sort_unstable();\n\
+    \    levels", "    let mut npar: isize = 0;\n    let mut par_stack: Vec<Vec<usize>>\
+    \ = vec![vec![]];\n    for ch in paren_string.chars() {\n        if ch == '('\
+    \ {\n            npar += 1;\n            par_stack.push(vec![npar]);\n       \
+    \ }\n        if ch == ')' {\n            if par_stack.is_empty() {\n         \
+    \       break;\n            }\n            npar = par_stack.pop().unwrap()[par_stack.pop().unwrap().len()\
+    \ - 1];\n        }\n        if par_stack.is_empty() {\n            break;\n  \
+    \      }\n        par_stack[par_stack.len() - 1][par_stack.len() - 1] += 1;\n\
+    \    }\n    par_stack.iter().map(|vec| vec.max().unwrap()).collect()", "    let\
+    \ mut nesting_levels: Vec<isize> = vec![1];\n    let paren_string = paren_string.into_iter().filter_map(|c|\
+    \ match c {\n        ' ' => false,\n        '(' | ')' => true,\n        _ => false,\n\
+    \    }).collect::<String>();\n    let paren_string = paren_string.chars().filter(|c|\
+    \ c == '(' | c == ')').collect::<String>();\n    for i in paren_string.char_indices()\
+    \ {\n        if let Some((c, _)) = paren_string.split_first_match(i, |c| c ==\
+    \ ' ') {\n            nesting_levels.push(i);\n        }\n    }\n    nesting_levels",
+  "    let mut stack: Vec<isize> = vec![];\n    for paren in paren_string.chars()\
+    \ {\n        match paren {\n            '(' | ')' => {\n                stack.pop();\n\
+    \            }\n            _ => {\n                stack.push(paren as isize);\n\
+    \            }\n        }\n    }\n    stack", "    // The algorithm is slightly\
+    \ modified from this answer: https://stackoverflow.com/a/16606079/9888701\n  \
+    \  let mut paren_level = 0usize;\n    let mut parantheses_level = 0usize;\n  \
+    \  let mut paren_depth = 0;\n    let mut cur_pos = paren_string.len();\n    let\
+    \ mut result = Vec::new();\n    while cur_pos > 0 {\n        let start = paren_string.rfind('(',\
+    \ cur_pos);\n        let end = paren_string.rfind(')', start);\n        paren_depth\
+    \ += 1;\n        if end == -1 || paren_depth > parantheses_level {\n         \
+    \   result.push(paren_depth);\n        }\n        cur_pos = end + 1;\n       \
+    \ paren_level += 1;\n    }\n    result", "    paren_string.char_indices().filter_map(|&(_,\
+    \ index)| index >= 0).fold(\n        vec![],\n        |acc, cur| {\n         \
+    \   let mut nesting = 1;\n            let mut cur = cur;\n            let mut\
+    \ i = 0;\n            while i < cur.len() {\n                if cur[i] == '('\
+    \ && cur[i + 1] == ')' {\n                    nesting += 1;\n                \
+    \    i += 2;\n                } else if cur[i] == '(' && cur[i + 1] != ')' {\n\
+    \                    nesting += 1;\n                    i += 1;\n            \
+    \    } else {\n                    i += 1;\n                }\n            }\n\
+    \            acc.push(nesting)\n        },\n    )", "    let mut paren_count =\
+    \ 0;\n    let mut opening_count = 0;\n    for c in paren_string.chars() {\n  \
+    \      if paren_count == 0 && c == '(' {\n            opening_count++;\n     \
+    \       paren_count++;\n        } else if paren_count == 0 && c == '(' || paren_count\
+    \ == 1 && c == ')' {\n            opening_count--;\n        } else {\n       \
+    \     if opening_count == 0 {\n                paren_count--;\n            }\n\
+    \        }\n    }\n    if paren_count > 0 {\n        return Vec::new();\n    }\n\
+    \    let mut depth = 0;\n    for c in paren_string.chars() {\n        if paren_count\
+    \ == 0 && c == '(' {\n            depth++;\n        } else if paren_count == 0\
+    \ && c == '(' || paren_count == 1 && c == ')' {\n            depth--;\n      \
+    \  }\n        if depth == 0 {\n            return vec![paren_count];\n       \
+    \ }\n    }\n    vec![]", "    let mut paren_count = paren_string.chars().filter(|c|\
+    \ c == '(' || c == ')').count();\n    paren_count.push(0);\n    let mut paren_counts\
+    \ = vec![paren_count];\n    let mut paren_nesting = 1;\n    let mut paren_nesting_levels:\
+    \ Vec<isize> = Vec::new();\n    let mut parens = Vec::new();\n    let mut next_paren_char\
+    \ = None;\n    for (i, char) in paren_string.chars().enumerate() {\n        if\
+    \ char == '(' {\n            paren_nesting_levels.push(paren_nesting);\n     \
+    \       paren_counts.push(paren_count);\n            paren_nesting += 1;\n   \
+    \         next_paren_char = Some(char);\n        } else if char == ')' {\n   \
+    \         paren_nesting -= 1;\n            if paren_nesting == 0 {\n         \
+    \       paren_counts.pop();\n                paren_nesting_levels.pop();\n   \
+    \         } else {\n                paren_count += 1;\n            }\n       \
+    \     next_paren_char = None;\n        } else if paren_nesting > 0 && paren_nesting\
+    \ < paren_counts.len() {\n            paren_count = paren_counts[paren_nesting];\n\
+    \            paren_counts.push(paren_count);\n        }\n        if next_paren_char.is_some()\
+    \ {\n            parens.push(next_paren_char.unwrap());\n            next_paren_char\
+    \ = None;\n        }\n    }\n    paren_nesting_levels.reverse();\n    paren_nesting_levels\n\
+    \        .iter()\n        .map(|level| {\n            paren_counts[level - 1]\n\
+    \        })\n        .sum()", "    paren_string\n        .chars()\n        .enumerate()\n\
+    \        .filter_map(|(i, _)| {\n            if paren_string[i] == ')' {\n   \
+    \             Some(i)\n            } else {\n                None\n          \
+    \  }\n        })\n        .collect::<Vec<_>>()", '    paren_string.split(" ").map(|s|
+    s.parse().unwrap()).collect()', "    paren_string\n        .split_whitespace()\n\
+    \        .map(|s| s.parse::<isize>().unwrap())\n        .filter(|n| n > 0)\n \
+    \       .collect()", "    let mut stack: Vec<usize> = Vec::new();\n    let mut\
+    \ in_parens = false;\n\n    let mut pos = 0;\n    let mut depth = 0;\n    while\
+    \ pos < paren_string.len() {\n        match paren_string[pos] {\n            ')'\
+    \ => {\n                if stack.is_empty() {\n                    return vec![0];\n\
+    \                }\n\n                let mut res = stack.pop().unwrap_or(-1);\n\
+    \                if res == -1 {\n                    // if we are still inside\
+    \ parens, return -1\n                    pos = paren_string.len();\n         \
+    \       } else {\n                    pos += 1;\n                }\n         \
+    \   }\n            '(' if in_parens => {\n                stack.push(depth);\n\
+    \                depth += 1;\n            }\n            '[' if in_parens => {\n\
+    \                stack.push(depth);\n                depth += 1;\n           \
+    \ }\n            _ => (),\n        }\n\n        in_parens = paren_string[pos]\
+    \ == '(';\n        pos += 1;\n    }\n\n    stack", "    // The longest length\
+    \ of all parantheses in paren_string.\n    let mut max_level = 0;\n    // The\
+    \ first index of a group of parentheses in paren_string.\n    let mut current_level\
+    \ = 0;\n    let mut result = Vec::new();\n    for (index, char) in paren_string.chars().enumerate()\
+    \ {\n        let char = char as char;\n        // If the current char is a left\
+    \ parenthesis, increase the level.\n        if char == '(' {\n            current_level\
+    \ += 1;\n        // If the current char is a right parenthesis, decrease the level.\n\
+    \        } else if char == ')' {\n            current_level -= 1;\n          \
+    \  // If the current level is greater than the maximum level, update max_level.\n\
+    \            if current_level > max_level {\n                max_level = current_level;\n\
+    \            }\n        } else {\n            // If the current level is smaller\
+    \ than the maximum level, update max_level.\n            if current_level < max_level\
+    \ {\n                max_level = current_level;\n            }\n            //\
+    \ Append the index to result.\n            result.push(index);\n        }\n  \
+    \  }\n    // Return the result.\n    result", "    let mut nesting_level = 0u8;\n\
+    \    let mut groups = paren_string.split_whitespace();\n    groups.sort_unstable_by_key(|&x|\
+    \ x.len() as u8);\n    groups.dedup();\n    for group in groups {\n        let\
+    \ level_of_nesting = group.len() - group.trim_suffix(')').len();\n        if level_of_nesting\
+    \ < nesting_level {\n            nesting_level = level_of_nesting;\n        }\n\
+    \    }\n    Vec::new()", "    let mut stack = Vec::new();\n    for group in paren_string.split_whitespace()\
+    \ {\n        if group.is_empty() {\n            continue;\n        }\n       \
+    \ if group.chars().any(|c| c.is_ascii_letter()) {\n            stack.push((group.len(),\
+    \ 0));\n        } else {\n            stack.push((group.len(), stack[stack.len()\
+    \ - 1].0 + 1));\n        }\n    }\n    stack.iter().cloned().collect()", "   \
+    \ let mut paren_depth = 0usize;\n    let mut paren_depth_stack: Vec<usize> = Vec::new();\n\
+    \    let mut paren_depth_stack_len = 0usize;\n    for (i, c) in paren_string.chars().enumerate()\
+    \ {\n        if c == '(' {\n            paren_depth_stack.push(paren_depth);\n\
+    \            paren_depth += 1;\n            if paren_depth > paren_depth_stack_len\
+    \ {\n                paren_depth_stack_len += 1;\n            }\n        } else\
+    \ if c == ')' {\n            if paren_depth == paren_depth_stack[paren_depth_stack.len()\
+    \ - 1] {\n                paren_depth_stack.pop();\n            } else {\n   \
+    \             paren_depth -= 1;\n            }\n        }\n    }\n    paren_depth_stack_len",
+  '    paren_string.split("( )").filter(|x| !x.is_empty()).map(|x| x.len()).max()',
+  "    let mut levels: Vec<isize> = vec![0];\n    let mut in_brackets = false;\n \
+    \   let mut last_level = 0;\n    let mut last_group_is_empty = true;\n    for\
+    \ &c in paren_string.chars() {\n        if !in_brackets {\n            if c ==\
+    \ '(' {\n                in_brackets = true;\n            } else {\n         \
+    \       levels.push(0);\n                last_group_is_empty = false;\n      \
+    \      }\n        }\n\n        if c == ')' {\n            if !in_brackets {\n\
+    \                levels.push(0);\n            }\n            in_brackets = false;\n\
+    \        }\n\n        if c == '(' {\n            if !in_brackets {\n         \
+    \       levels.push(levels[levels.len() - 1] + 1);\n            }\n          \
+    \  last_level = levels[levels.len() - 1];\n        } else if c == ')' {\n    \
+    \        if !in_brackets {\n                levels.push(levels[levels.len() -\
+    \ 1] - 1);\n            }\n        } else {\n            if !in_brackets {\n \
+    \               levels.push(0);\n            }\n        }\n\n        if c == ')'\
+    \ {\n            last_group_is_empty = true;\n        }\n\n        if c == '('\
+    \ {\n            last_group_is_empty = false;\n        }\n    }\n\n    if !in_brackets\
+    \ {\n        levels.push(0);\n    }\n\n    levels.iter()\n        .filter(|&i|\
+    \ i != 0)\n        .collect()", "    let mut nest = 0;\n    let mut tokens = paren_string.splitn(2,\
+    \ |c| c != ')');\n    for token in tokens.iter() {\n        let mut i = 0;\n \
+    \       let mut depth = 1;\n        for _ in 0..=token.len() {\n            i\
+    \ += 1;\n            if token[i] == '(' {\n                depth += 1;\n     \
+    \       } else if token[i] == ')' {\n                depth -= 1;\n           \
+    \     if depth == 0 {\n                    break;\n                }\n       \
+    \     }\n        }\n        nest += depth;\n    }\n    nest", "    let mut nesting_depth\
+    \ = String::new();\n    let mut current_depth = 0;\n    let mut current_level\
+    \ = 0;\n\n    let mut stack = vec![];\n    let mut bracket_count = 0;\n\n    for\
+    \ ch in paren_string.chars() {\n        if ch == '(' {\n            bracket_count++;\n\
+    \            nesting_depth.push('(');\n            current_depth += 1;\n     \
+    \       stack.append(current_depth);\n            current_level += 1;\n      \
+    \  } else if ch == ')' {\n            bracket_count--;\n            nesting_depth.pop();\n\
+    \            current_depth += 1;\n            stack.append(current_depth);\n \
+    \           current_level += 1;\n            if bracket_count == 0 {\n       \
+    \         break;\n            }\n        } else if ch == ' ' {\n            if\
+    \ current_level == nesting_depth.len() {\n                nesting_depth.push('\
+    \ ');\n                current_depth += 1;\n            }\n        } else {\n\
+    \            bracket_count = 0;\n            current_depth += 1;\n           \
+    \ current_level += 1;\n            stack.append(current_depth);\n        }\n \
+    \   }\n    stack", "    let paren_string: Vec<_> = paren_string.split(|c| c ==\
+    \ '(' || c == ')').collect();\n    let mut level = 0;\n    paren_string.into_iter().take_while(|c|\
+    \ c != '(' && c != ')').for_each(|c| {\n        if c == '(' {\n            level\
+    \ += 1;\n        } else if c == ')' {\n            level -= 1;\n        }\n  \
+    \  });\n    level", "    let mut paren_depth: usize = 0;\n    let mut paren_start\
+    \ = 0;\n    let mut paren_level: usize = 0;\n\n    let mut paren_chars: Vec<Char>\
+    \ = paren_string.chars().collect();\n    paren_chars.reverse();\n\n    for paren\
+    \ in paren_chars {\n        if paren == ')' {\n            paren_depth -= 1;\n\
+    \            paren_level += 1;\n        } else if paren == '(' {\n           \
+    \ paren_depth += 1;\n            paren_level += 1;\n        }\n\n        if paren_depth\
+    \ > 0 {\n            paren_start = paren;\n        }\n    }\n\n    paren_level",
+  "    let mut stack = vec![];\n    let mut level = 0;\n    for paren in paren_string.chars()\
+    \ {\n        if paren == ' ' {\n            stack[level] = 1;\n        } else\
+    \ if paren == '(' {\n            stack[level] = 1;\n        } else if paren ==\
+    \ ')' {\n            if level == stack[level] {\n                stack[level]++;\n\
+    \            } else {\n                panic!(\"Too many open parentheses\");\n\
+    \            }\n        } else {\n            stack[level]++;\n        }\n   \
+    \     level += 1;\n    }\n    stack", "    paren_string.split(|&c| {\n       \
+    \ if c == '(' || c == '[' || c == '{' || c == '(' || c == '[' {\n            1\n\
+    \        } else {\n            -1\n        }\n    }).collect()", "    let mut\
+    \ levels = vec![0; paren_string.chars().filter(|c| *c != '(').count()];\n    let\
+    \ mut level = levels.last().unwrap();\n    for c in paren_string.chars() {\n \
+    \       if *c == '(' && *(levels.last() + 1) == level {\n            *level +=\
+    \ 1;\n        } else if *c == '(' {\n            *level = levels.last().unwrap()\
+    \ + 1;\n        } else {\n            *level = levels.last().unwrap();\n     \
+    \   }\n        levels.push(level);\n    }\n    levels.last_mut().unwrap()", " \
+    \   let mut paren_string = paren_string.to_owned();\n    paren_string.chars().for_each(|c|\
+    \ {\n        if c == '(' {\n            paren_string.push(c).unwrap();\n     \
+    \   } else {\n            if paren_string.ends_with(')') {\n                paren_string.pop();\n\
+    \            }\n        }\n    })", "    let paren_groups = paren_string.split('\
+    \ ').collect::<Vec<_>>();\n    let mut depth = 0;\n    for group in paren_groups\
+    \ {\n        if group[0] == '(' {\n            depth += 1;\n        }\n      \
+    \  if group == ')' {\n            depth -= 1;\n        }\n    }\n    depth.min(std::u32::MAX)",
+  "    let mut level = 0\n    let mut par_level = 0\n    let mut par_stack = Vec::new();\n\
+    \    for (i, c) in paren_string.chars().enumerate() {\n        if c == ' ' {\n\
+    \            if level != 0 {\n                par_stack.push(par_level);\n   \
+    \             par_level = 0;\n            }\n        } else if c == '(' {\n  \
+    \          par_level += 1;\n        } else if c == ')' {\n            par_level\
+    \ -= 1;\n            if par_level == 0 {\n                par_stack.push(par_stack.clone());\n\
+    \            }\n        }\n        if par_level == 0 {\n            par_stack.push(par_level);\n\
+    \        }\n        level += 1;\n    }\n    par_stack.push(par_level);\n    par_stack",
+  "    paren_string\n        .split_whitespace()\n        .filter_map(|x| x.chars().any(|c|\
+    \ c == '(' || c == ')'))\n        .collect::<Vec<_>>()\n        .iter()\n    \
+    \    .cloned()\n        .enumerate()\n        .filter_map(|(level, _)| {\n   \
+    \         level == 0 || paren_string.contains(paren_string[level - 1])\n     \
+    \   })\n        .map(|(level, _)| level as isize)\n        .collect()", "    let\
+    \ mut paren_counts: Vec<isize> = Vec::new();\n    let mut i = 0;\n    while i\
+    \ < paren_string.len() {\n        let mut j = i;\n        let mut paren_count\
+    \ = 0;\n        while j < paren_string.len() && paren_counts.contains(&paren_count)\
+    \ {\n            paren_count += 1;\n            j += 1\n        }\n        paren_counts.push(i);\n\
+    \        i = j;\n    }\n    paren_counts", "    // The deepest level would be\
+    \ one more than the length of the input string.\n    let mut len = 0;\n\n    let\
+    \ mut stack = Vec::new();\n    let mut open_bracket_count = false;\n    for ch\
+    \ in paren_string.chars() {\n        if ch == ')' {\n            if open_bracket_count\
+    \ {\n                stack.push(len + 1);\n            } else {\n            \
+    \    stack.push(len);\n            }\n            open_bracket_count = false;\n\
+    \        } else if ch == '(' && !open_bracket_count {\n            stack.push(len);\n\
+    \            open_bracket_count = true;\n        }\n\n        len += 1;\n    }\n\
+    \n    // Because of the way we split the string, stack[0] is always one\n    //\
+    \ more than the length of the input string.\n    stack.push(len + 1);\n\n    stack",
+  "    paren_string.lines()\n        .map(|line| {\n            let mut paren_stack:\
+    \ Vec<Vec<String>> = Vec::new();\n            let mut in_paren = false;\n    \
+    \        for c in line.chars() {\n                if in_paren {\n            \
+    \        if c == '(' || c == '{' || c == '[' {\n                        paren_stack.push(vec![String::from(c)].clone());\n\
+    \                    } else if c == '}' || c == ']' {\n                      \
+    \  paren_stack.pop().unwrap().push(String::from(c));\n                    } else\
+    \ if c == ' ' {\n                        continue;\n                    } else\
+    \ {\n                        panic!(\"Unexpected character at line {}\", line.line());\n\
+    \                    }\n                } else {\n                    if c ==\
+    \ '(' || c == '{' || c == '[' {\n                        paren_stack.push(vec![String::from(c)].clone());\n\
+    \                    } else if c == ')' || c == '}' || c == ']' {\n          \
+    \              let mut max_level = paren_stack.len() - 1;\n                  \
+    \      while paren_stack.len() > max_level {\n                            paren_stack.pop().unwrap().clear();\n\
+    \                        }\n                        let level = paren_stack.len();\n\
+    \                        paren_stack.push(vec![String::from(c)].clone());\n  \
+    \                      max_level = level;\n                    } else {\n    \
+    \                    panic!(\"Unexpected character at line {}\", line.line());\n\
+    \                    }\n                }\n                in_paren = c == '('\
+    \ || c == '{' || c == '[';\n            }\n            paren_stack\n        })\n\
+    \        .flatten()\n        .map(|mut stack| {\n            match stack.is_empty()\
+    \ {\n                true => 0,\n                false => stack.last().unwrap().len(),\n\
+    \            }\n        })\n        .collect()", "    let mut paren_depth = 1;\n\
+    \    let mut paren_stack = paren_string.chars().enumerate().filter_map(|(_, c)|\
+    \ {\n        if c == '(' {\n            paren_depth += 1;\n            None\n\
+    \        } else if c == ')' {\n            paren_depth -= 1;\n            Some(paren_depth)\n\
+    \        } else {\n            None\n        }\n    });\n    let mut current_depth\
+    \ = 0;\n    while let Some(depth) = paren_stack.pop() {\n        if depth != current_depth\
+    \ {\n            paren_stack.push(current_depth);\n            current_depth =\
+    \ depth;\n        }\n    }\n    paren_stack.last().unwrap() + 1", "    let mut\
+    \ parentheses = paren_string.chars();\n    let mut nested_level = 0;\n    loop\
+    \ {\n        let next = parentheses.next().unwrap();\n        if next == '(' ||\
+    \ next == '[' {\n            nested_level += 1;\n        } else if next == ')'\
+    \ || next == ']' {\n            nested_level -= 1;\n        }\n        if nested_level\
+    \ == 0 {\n            break;\n        }\n    }\n    parentheses.collect::<Vec<_>>().rev().reverse()",
+  "    let mut depth: isize = 0;\n    let mut opening: Vec<isize> = Vec::new();\n\
+    \    let mut parens = Vec::new();\n    let mut paren_chars: Vec<char> = paren_string.chars().collect();\n\
+    \    let mut paren_level = 0;\n    let mut i = paren_chars.len() - 1;\n    while\
+    \ i >= 0 {\n        let next_char = paren_chars[i];\n        if next_char == '('\
+    \ {\n            paren_level += 1;\n        }\n        if next_char == ')' {\n\
+    \            paren_level -= 1;\n        }\n        if paren_level == 0 {\n   \
+    \         opening.push(paren_level);\n        }\n        i -= 1;\n    }\n    opening.push(depth);\n\
+    \    parens.clone_from_slice(opening.iter().cloned().collect::<Vec<_>>());\n \
+    \   parens", "    paren_string.chars()\n        .filter_map(|c| {\n          \
+    \  if c == '(' {\n                Some(c as isize)\n            } else {\n   \
+    \             None\n            }\n        })\n        .collect::<Vec<_>>()",
+  "    let mut level = 0;\n    let mut nested_parens = Vec::new();\n\n    for parens\
+    \ in paren_string.chars().filter_map(|c| {\n        match c {\n            '('\
+    \ | '[' => {\n                let level = level + 1;\n                Some(level)\n\
+    \            }\n            ')' | '\\0' | ']' => {\n                let level\
+    \ = level - 1;\n                Some(level)\n            }\n            _ => None,\n\
+    \        }\n    }) {\n        match parens {\n            Some(level) => {\n \
+    \               nested_parens.push(level);\n                None\n           \
+    \ }\n            _ => None,\n        }\n    }\n\n    nested_parens", "    let\
+    \ mut nesting_levels = Vec::new();\n    let mut open_pcs = Vec::new();\n    let\
+    \ mut parens_levels = Vec::new();\n\n    let mut chars = paren_string.chars();\n\
+    \    let mut last_parens_level = 0;\n    let mut open_pc = 0;\n\n    while let\
+    \ Some(c) = (chars.next(), chars.next()) {\n        if c == ')' {\n          \
+    \  if parens_levels[parens_levels.len() - 1] == last_parens_level {\n        \
+    \        nesting_levels.push((parens_levels[parens_levels.len() - 1] + 1));\n\
+    \            }\n            last_parens_level = parens_levels[parens_levels.len()\
+    \ - 1];\n            open_pcs.push(open_pc);\n        } else if c == '(' {\n \
+    \           last_parens_level += 1;\n            open_pcs.push(open_pc);\n   \
+    \     }\n\n        parens_levels.push((last_parens_level + 1));\n        open_pc\
+    \ = (open_pc + 1);\n    }\n\n    if open_pcs[0] == parens_levels[0] {\n      \
+    \  nesting_levels.push((parens_levels[0] + 1));\n    }\n\n    nesting_levels",
+  "    let mut paren_levels = Vec::new();\n    let mut paren_count = 0;\n    let mut\
+    \ opening_count = 0;\n    for (i, _) in paren_string.chars().enumerate() {\n \
+    \       paren_count = paren_count + 1;\n        if paren_count == 1 {\n      \
+    \      if paren_string[i - 1] == ' ' && paren_string[i + 1] == ' ' {\n       \
+    \         paren_levels.push(opening_count + 1);\n            } else {\n      \
+    \          paren_levels.push(paren_levels.len());\n            }\n        }\n\
+    \        if paren_count == 2 {\n            opening_count += 1;\n        }\n \
+    \   }\n    paren_levels", "    let mut parentheses_stack = Vec::new();\n    let\
+    \ mut max_level_of_nesting = 0;\n    for paren in paren_string.chars().filter(|c|\
+    \ *c != '(' && c != ')').take(paren_string.len()) {\n        if parentheses_stack.last().unwrap()\
+    \ == paren {\n            parentheses_stack.pop();\n        } else {\n       \
+    \     parentheses_stack.push(paren);\n            max_level_of_nesting = match\
+    \ parentheses_stack.last() {\n                Some(n) => n,\n                None\
+    \ => 0,\n            };\n        }\n    }\n    parentheses_stack.iter().map(|e|\
+    \ e.1).collect()", "    let paren_regex = Regex::new(r\"\\(([^()]*|\\([^()]*\\\
+    ))*\\)\").unwrap();\n    let mut parens_string = paren_string;\n    while parens_string.len()\
+    \ > 0 {\n        let mut parens_string = parens_string.to_string();\n        let\
+    \ mut parens = Vec::new();\n        let mut open_brackets = 0;\n        for c\
+    \ in parens_string.chars() {\n            if c == ')' {\n                open_brackets\
+    \ -= 1;\n                if open_brackets <= 0 {\n                    parens.push(parens_string.len());\n\
+    \                }\n            } else {\n                open_brackets += 1;\n\
+    \            }\n            parens_string.clear();\n            parens_string.push(c);\n\
+    \        }\n        if parens.len() > 0 {\n            parens.push(parens.len());\n\
+    \        }\n    }\n    parens", "    paren_string\n        .lines()\n        .map(|line|\
+    \ line.rsplit(\" \").collect::<Vec<_>>().len())\n        .max()", "    let paren_string_len\
+    \ = paren_string.len();\n    if paren_string_len == 0 {\n        return vec![0];\n\
+    \    }\n    let mut paren_levels = vec![0];\n    let mut paren_level = 0;\n  \
+    \  for index in 0..paren_string_len {\n        let ch = paren_string[index];\n\
+    \        if ch == '(' {\n            paren_level += 1;\n        } else if ch ==\
+    \ ')' {\n            paren_level -= 1;\n            if paren_level == 0 && paren_levels\
+    \ <= paren_level + 1 {\n                paren_levels.push(paren_level);\n    \
+    \        }\n        }\n    }\n    paren_levels", "    let mut paren_counts = vec![0isize;\
+    \ 4];\n    let mut level = 0;\n    for paren in paren_string.chars() {\n     \
+    \   if paren == '(' {\n            paren_counts[level] = paren_counts[level] +\
+    \ 1isize;\n            level = level + 1;\n        } else if paren == ')' {\n\
+    \            paren_counts[level] = paren_counts[level] - 1isize;\n           \
+    \ level = level - 1;\n        } else if paren == ' ' {\n            level = level\
+    \ + 1;\n        }\n    }\n    paren_counts[level]"]
 stop_tokens:
 - "\n}"

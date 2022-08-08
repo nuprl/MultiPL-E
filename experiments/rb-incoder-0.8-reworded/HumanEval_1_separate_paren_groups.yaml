@@ -13,7 +13,1027 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   () (()) ((())) (((())))\"))\n    assert_equal([\"(()(())((())))\"], candidate.call(\"\
   (()(())((())))\"))\n    assert_equal([\"()\", \"(())\", \"(()())\"], candidate.call(\"\
   ( ) (( )) (( )( ))\"))\n  end\nend\n"
-completions: []
+completions: ["  # Split string into array of strings at every group of parens\n \
+    \ string_array = []\n  split_parens = paren_string.split(')')\n  last_split_paren\
+    \ = split_parens.last\n  if last_split_paren.empty?\n    string_array << last_split_paren\n\
+    \  else\n    split_parens.each do |split_paren|\n      # Check if we're at end\
+    \ of a group, if not add it separately to array\n      if split_paren.empty?\n\
+    \        string_array << last_split_paren\n      else\n        # Split up group\
+    \ by first and last index of split paren\n        string_array << split_paren[0...(last_split_paren.index(split_paren))]\
+    \ + ')'\n        string_array << split_paren[(last_split_paren.index(split_paren)+1)..-1]\n\
+    \      end\n    end\n  end\n  return string_array\nend", "  # TODO: Implement\
+    \ separate_paren_groups. Should not be too hard.\n  raise \"separate_paren_groups\
+    \ is not yet implemented\"\nend", "  string = \"\"\n  stack = []\n  paren_count\
+    \ = 0\n  for i in paren_string.split(' ')\n    if !i.empty? && !i.nil?\n     \
+    \ if paren_count > 0\n        string += i.sub!(')','').sub!('(','')\n        paren_count\
+    \ = paren_count - 1\n      else\n        stack << i\n        paren_count = 1\n\
+    \      end\n    end\n  end\n  string += stack.join(' ')\n  return string\nend",
+  "  paren_string.split(%r{\\s*(?<paren_group><\\()|(?<paren_group><\\)>)\\s*})\n\
+    end", "    paren_string.split('').reverse.each do |char|\n        if char == '('\n\
+    \            stack << char\n        else\n            char = stack.pop if char\
+    \ == '('\n            char.concat(char) if char\n        end\n    end\n    stack.reverse\n\
+    end", "  paren_string.strip!\n  paren_string.gsub!(/\\s+/, \"\")\n  paren_string.split(/\\\
+    (|\\)/).reject(&:empty?)\nend", "    paren_string = paren_string.gsub(\"(^\\\\\
+    ()|\\\\($)|\\\\()$|\\\\)$\", \"\\\\0\").gsub(\" \", \"\")\n    paren_string.scan(/([^()]*\\\
+    (.*?\\))+/)\nend", "    open_count = 0\n    closed_count = 0\n    paren_string.scan(/[^()]|{\\\
+    d+/) do |char|\n        if char == \"(\"\n            open_count += 1\n      \
+    \  else\n            if open_count > 0\n                close_parens(paren_string,\
+    \ open_count, closed_count)\n                open_count = 0\n            end\n\
+    \            closed_count += 1\n        end\n    end\n    close_parens(paren_string,\
+    \ open_count, closed_count)\nend", "\tparen_string = paren_string.gsub(\"\\n\"\
+    ,\"\")\n\tparen_string = paren_string.gsub(\"\\t\",\"\")\n\tparen_string = paren_string.gsub(\"\
+    \  \",\"\")\n\tparen_string.split(/\\(|\\)|\\[|\\]|\\{|\\}|\\,|\\|/)\nend", " \
+    \ paren_string.split(/\\(|\\)|\\[|\\]|\\{|\\}/).reject { |x| x.match?(/\\s+/)\
+    \ }\nend", "  paren_array = paren_string.chars\n  paren_array.each do |element|\n\
+    \    if element == ')'\n      paren_array.delete_at(paren_array.index(element))\n\
+    \    end\n  end\n  return paren_array.map { |x| x.to_s }\nend\n</code>\n<|/ a\
+    \ |>\n<| a tags=ruby |>\nHere's my take on it. It's probably not the most efficient\
+    \ or elegant, but it is a simple and elegant solution with the added benefit of\
+    \ working with arbitrary nested parentheses.\n<code>", "  return paren_string.gsub(/(\
+    \ )+/, '')\nend", "  paren_string.scan(/\\s+|(\\()|(\\))|(\\{)|(\\})|(\\[)|(\\\
+    ])|(\\:)|(,|\\.|;|:|=|!=)/).map { |e| e[-1] }.uniq\nend", "  result = nil\n  paren_string.each_char\
+    \ do |char|\n    case char\n    when \"(\" then result = [] # Start a new group\
+    \ of parenthesis\n    when \")\" then result << char if result # Separate current\
+    \ group\n    end\n  end\n  result\nend", "  output = []\n  open_paren = []\n \
+    \ closed_paren = []\n  paren_count = 0\n  brace_count = 0\n  \n  # iterate through\
+    \ the input string and keep track of the current open and closed parenthesis locations\n\
+    \  for i in paren_string\n    if i == '('\n      open_paren << paren_count\n \
+    \     paren_count += 1\n    elsif i == ')'\n      closed_paren << paren_count\n\
+    \      paren_count -= 1\n    elsif paren_count > 0\n      if brace_count == 0\n\
+    \        output << paren_string[open_paren[0], open_paren[1]..i-1]\n        open_paren\
+    \ = []\n        closed_paren = []\n        paren_count = 0\n        brace_count\
+    \ = 0\n      else\n        brace_count -= 1\n      end\n    end\n    output <<\
+    \ i\n  end\n  \n  # If there are unmatched open parenthesis\n  if open_paren.length\
+    \ > 0\n    output << paren_string[open_paren[0], open_paren[1]..i-1]\n  end\n\
+    \  # If there are unmatched closing parenthesis\n  if closed_paren.length > 0\n\
+    \    output << paren_string[closed_paren[0], closed_paren[1]..i-1]\n  end\n  \n\
+    \  return output\nend\n</cell>\n<text>\nQuestion 2", "    # Split each string\
+    \ by open brace and close brace and add it to the array that is returned\n   \
+    \ parentheses = [paren_string.gsub(\"\\\\(\", \"\\\\\").gsub(\"\\\\)\", \"\\\\\
+    \")]\n    # Iterate through each element of the array and remove any spaces from\
+    \ it\n    parentheses.each { |str| str.gsub!(\" \", \"\") }\n    parentheses\n\
+    end", "  paren_string.gsub!(/\\s+/, '')", "  paren_string.gsub!(/\\s+/, \"\")\
+    \ # Remove all spaces from the input string\n  paren_string.gsub!(/\\(+/, \"(\"\
+    ) # Remove all left paren from the input string\n  paren_string.gsub!(/\\(+\\\
+    )/, \"\") # Remove all right paren from the input string\n  paren_string.gsub!(/\\\
+    (+/, \"\") # Remove all left paren from the input string\n  paren_string.gsub!(/\\\
+    (+\\)/, \"\") # Remove all right paren from the input string\n  paren_string.gsub!(/\\\
+    {+/, \"(\") # Replace all left curly brace with left paren\n  paren_string.gsub!(/\\\
+    {+\\}/, \"\") # Replace all right curly brace with left paren\n  paren_string.gsub!(/\\\
+    {+/, \"\") # Remove all left curly brace from the input string\n  paren_string.gsub!(/\\\
+    {+\\}/, \"\") # Remove all right curly brace from the input string\n  paren_string.gsub!(/\\\
+    [+/, \"(\") # Replace all left square bracket with left paren\n  paren_string.gsub!(/\\\
+    ]+/, \"\") # Replace all right square bracket with left paren\n  paren_string.gsub!(/\\\
+    [+/, \"\") # Remove all left square bracket from the input string\n  paren_string.gsub!(/\\\
+    ]+/, \"\") # Remove all right square bracket from the input string\n  paren_string.gsub!(/\\\
+    \\(\\w+\\\\)/, \"\\\\1\") # Remove all single and double quotes from each paren\
+    \ group\n  paren_string.gsub!(/\\(\\w+\\)/, \"\\\\1\") # Remove all paren groups\
+    \ with single or double quotes\n  paren_string.gsub!(/\\\\(\\w+)/, \"\\\\1\")\
+    \ # Remove all paren groups with no quotes\n  paren_string.gsub!(/(\\w+)\\\\(\\\
+    w+)/, \"\\\\1\\\\2\") # Merge all paren groups with their inner parens\n  paren_string.gsub!(/\\\
+    (.*?\\)+/, \"\") # Remove all inner paren groups from the input string\n  paren_string.gsub!(/\\\
+    \\(.*?\\)+/, \"\\\\1\") # Replace all inner paren groups with single quotes\n\
+    \  paren_string.gsub!(/(.*?\\)+\\\\(.*?)\\)/, \"\\\\1\\\\2\") # Merge all paren\
+    \ groups with inner paren\n  paren_string.gsub!(/\\\\{.*?\\}/, \"{\") # Replace\
+    \ all inner curly brace ", "  group_stack = Array.new\n  paren_string.scan(/[^()]/)\
+    \ do |element|\n    if element == ')'\n      while group_stack.length > 0 and\
+    \ group_stack.last.last == ')'\n        group_stack.pop\n      end\n      if group_stack.length\
+    \ > 0\n        group_stack.last.push([element])\n      else\n        group_stack.push([element])\n\
+    \      end\n    elsif element == '('\n      while group_stack.length > 0 and group_stack.last.last\
+    \ == '('\n        group_stack.pop\n      end\n      group_stack.push([element])\n\
+    \    elsif group_stack.length > 0\n      group_stack.last.last.push(element)\n\
+    \    else\n      group_stack.push element\n    end\n  end\n  return group_stack\n\
+    end", "  paren_groups = []\n  string_array = paren_string.split(' ')\n  bracket_stack\
+    \ = []", "  paren_string.scan(/(?<=\\()|(?=\\))|(?<=\\))|(?=\\()/).map {|match|\n\
+    \    paren_string.match(match).to_s.strip\n  }\nend\n</code>\n<|/ a dscore=1 |>\n\
+    <| a tags=ruby,regex |>\nI decided to post my own solution because it is fairly\
+    \ concise and does not require any iteration. Just call get_open_parens with a\
+    \ string and you will get an array of open parenthesis locations. You can then\
+    \ use these locations to extract the strings they belong to.\n<code>", "  return\
+    \ split(paren_string, /\\(|\\)|\\)|\\)/).select do |elem|\n    elem.match(/\\\
+    (/) || elem.match(/\\)/)\n  end\nend", "    paren_string = paren_string.gsub(/\\\
+    (|\\)| /, '').gsub(/ *\\([^)]*\\) */, '').gsub(/ \\)/, '')\n    paren_string.split(\"\
+    [()]\")\nend\n</cell>\n<cell>", "  result = []\n  open_braces = false\n  open_brace_count\
+    \ = 0", "  result = []\n  stack = []\n  last_brace_depth = 0\n  open_braces =\
+    \ [\"[\", \"(\", \"]\", \"{\", \"}\"]\n  open_braces\n  close_braces = [\"[\"\
+    , \"(\", \"]\", \"{\", \"}\"]\n  close_braces\n  open_braces.each do |op|\n  \
+    \  stack << op\n  end\n  paren_string.gsub!(/\\(|\\)|\\[|\\]|\\{|\\}/, '')\n \
+    \ paren_string.split('').each do |char|\n    if open_braces.include?(char)\n \
+    \     stack.pop if open_braces.include?(last_brace_depth)\n      last_brace_depth\
+    \ = char\n      open_braces.each do |op|\n        result << stack.pop if close_braces.include?(op)\n\
+    \      end\n    else\n      result << char\n    end\n  end\n  result << stack.pop\
+    \ if close_braces.include?(last_brace_depth)\n  result\nend", "    array = []\n\
+    \    string_open = \"(\"\n    string_close = \")\"\n    bracket_open = \"{\"\n\
+    \    bracket_close = \"}\"\n    paren_open = \"(\"\n    paren_close = \")\"",
+  "  paren_string.split(//).map{|i| paren_regex.match(i) ? i : nil}.compact\nend",
+  "  open_chars = []\n  open_chars_string = \"\"\n  open_paren_chars = 0\n  open_paren_chars_string\
+    \ = \"\"", "  strings = paren_string.scan(/[^\\(]+|\\(|\\)|(\\()((?=\\()|(?=\\\
+    ))|(?=\\))\\))/).flatten\n  strings.shift if strings.empty?\n  strings\nend",
+  "  paren_string = paren_string.gsub(/\\(|\\)|\\s/, \"\")\n  paren_string.split(%r{\\\
+    s*{2,}}).map { |g| g.gsub(%r{\\s*}) {\"\"} }\nend", "  paren_string = paren_string.tr('()',\
+    \ '{}')\n  paren_string = paren_string.tr(' ', '{}')\n  paren_string.gsub!('{}',\
+    \ '()')\n  paren_string.gsub!('()', '{}')\n  paren_string.gsub!('{}', '{}')\n\
+    \  paren_string.gsub!('{}', '')\n  paren_string.scan(/\\w+|()(?!\\))/)\nend",
+  "  paren_string.split(/\\(|\\)/).map{|s| s.gsub(\" \", \"\")}\nend", "  paren_string.split(/\\\
+    (|\\)|\\s+/).select { |x| !x.empty? }.flatten\nend\n</code>\n<|/ a tags=ruby,string\
+    \ dscore=2 |>\n<| a dscore=2 tags=ruby,string |>\nIn case this is useful to someone,\
+    \ I've added a more robust solution to this problem that also detects other whitespace\
+    \ characters such as tabs and newlines.  \nThe method definition is:\n<code>",
+  "  paren_string_array = []\n  paren_string.scan(/(([^()]+))/) {paren_string_array\
+    \ << $1}\n  return paren_string_array\nend\n</code>\n<|/ a dscore=2 |>\n<| a tags=ruby,regex\
+    \ dscore=2 |>\nAnother approach is using recursive regex:\n<code>", "  paren_string.gsub!(%r{(?:\n\
+    \    (?<paren_start_group> \\( \\) )\n    |\n    (?<paren_end_group> \\) \\) )\n\
+    \  }){ |match| paren_groups.call(match.groups.first) }\n  paren_string.gsub!(%r{\n\
+    \    (?<paren_start_group> \\( )*\n    (?<paren_end_group> \\)+ )*\n  }){ |match|\
+    \ paren_groups.call(match.pre_match.dup) }\n  paren_string.split(%r{\\s*\\(\\\
+    s*\\)\\s*}) do |split|\n    if split[2] || split[3] || split.size != 3\n     \
+    \ raise ArgumentError, \"Malformed paren groups (#{split.inspect}).\"\n    end\n\
+    \    split.last.rstrip\n  end\nend", "  paren_groups = []\n  begin = 0\n  open_count\
+    \ = 0\n  closed_count = 0\n  open_parens = 0\n  close_parens = 0\n  while begin\
+    \ < paren_string.length\n    if paren_string[begin] == \"(\" && paren_string[begin+1]\
+    \ == \")\"\n      open_parens += 1\n      close_parens += 1\n      if open_parens\
+    \ == closed_count\n        paren_groups << paren_string[begin+2:begin+close_parens].gsub!(/\
+    \ /, \"\")\n        begin = begin + close_parens\n        open_parens = 0\n  \
+    \      closed_count = 0\n      else\n        begin = begin + 1\n      end\n  \
+    \  elsif paren_string[begin] == \"(\" && paren_string[begin+1] == \"(\"\n    \
+    \  open_parens += 1\n      close_parens += 1\n      begin = begin + 1\n    elsif\
+    \ paren_string[begin] == \")\" && paren_string[begin+1] == \")\"\n      closed_count\
+    \ += 1\n      begin = begin + 1\n    elsif paren_string[begin] == \")\" && paren_string[begin+1]\
+    \ == \"(\"\n      open_parens += 1\n      begin = begin + 1\n    else\n      begin\
+    \ = begin + 1\n    end\n  end\n  return paren_groups\nend\n</code>\n<|/ a tags=ruby,regex\
+    \ dscore=4 |>\n<| c |>\nNice, but I think it would be easier to use `paren_string[begin+open_parens,\
+    \ begin + open_parens + closed_count].gsub!(/ /, \"\")`\n<|/ c |>\n<| c |>\nThanks\
+    \ Niko, I'm aware of that. Although it wasn't working with my test case, I've\
+    \ posted a better version. Your way works too, though.\n<|/ c |>\n<| c |>\nThank\
+    \ you very much for taking the time to do this. It's very much appreciated. My\
+    \ problem was that I was trying to do everything with the regex, but I just wasn't\
+    \ thinking about how to do it without needing two regex's (one for parsing the\
+    \ input string and one for removing whitespace).\n<|/ c |>\n<| a tags=ruby,regex\
+    \ dscore=4 |>\nI made a quick ruby script to test this for you. \n<code>", " \
+    \ paren_string.scan(/[^()]+/) do |token|\n    next if paren_string.match(token\
+    \ + token)\n    paren_string.scan(/[()]/) do |subtoken|\n      yield(subtoken)\
+    \ if block_given?\n    end\n  end\nend", "  paren_string.scan(/^(?:[^()]|(?R))*$/).flatten\n\
+    end", '  paren_groups = []', "  return paren_string.gsub(/\\((?=\\)|[)}\\[])|(?<=\\\
+    ))\\)|\\((?=\\)|[)}\\[])/, '')\nend", "    paren_groups = []\n    current_index\
+    \ = 0\n    paren_count = 0\n    paren_open = false # Tracks whether the current\
+    \ paren is open or closed\n    paren_stack = [] # Tracks the parens open/closed\
+    \ states", "  groups = []\n  level = 0\n  paren_count = 0\n  depth = 0\n  brackets_stack\
+    \ = []", "  paren_groups = []\n  paren_count = 0\n  paren_string.scan(/#{paren_count}/)\
+    \ do |paren|\n    if paren_count == 0\n      paren_groups << paren\n    elsif\
+    \ paren_count > 0\n      paren_count -= 1\n      paren_groups << paren if paren_count\
+    \ == 0\n    end\n  end\n  paren_groups\nend", "  paren_string = paren_string.dup\n\
+    \  output = []\n  depth = 0\n  depths = []\n  paren_open = false\n  paren_closing\
+    \ = false\n  depths.each do |index|\n    if paren_open\n      paren_closing =\
+    \ false\n      output << paren_string[index]\n      paren_open = false\n     \
+    \ depth = depths[index]\n    end", "    paren_arr = paren_string.split(/\\((.+)\\\
+    )|\\{(.+)\\}/)\n    if paren_arr.length < 2 || paren_arr.length>2\n        return\
+    \ nil\n    else\n        return paren_arr\n    end\nend", "  paren_string.split(/\\\
+    (\\s*\\|\\s*\\)|\\{\\s*\\|\\s*\\}|\\(\\s*\\)|\\{\\s*\\)|\\(\\s*\\}\\s*/)\nend",
+  "  groups = []\n  current_string = \"\"\n  open_count = 0\n  close_count = 0\n \
+    \ last_open = 0\n  while i < paren_string.length\n    if paren_string[i] != \"\
+    )\" && paren_string[i] != \"(\" && (paren_string[i-1] == \"(\" || paren_string[i-1]\
+    \ == \")\")\n      current_string << paren_string[i]\n      i += 1\n    else\n\
+    \      break\n    end\n  end\n  while i < paren_string.length\n    if paren_string[i]\
+    \ != \"(\" && (paren_string[i-1] == \"(\" || paren_string[i-1] == \")\")\n   \
+    \   groups.push(current_string)\n      current_string = \"\"\n      i += 1\n \
+    \     continue\n    end\n    if paren_string[i] == \"(\"\n      open_count +=\
+    \ 1\n      if open_count == 1\n        i += 1\n        i += 1\n      end\n   \
+    \ end\n    if paren_string[i] == \")\"\n      close_count += 1\n      if close_count\
+    \ == 1\n        i += 1\n      end\n    end\n    i += 1\n  end\n  groups.push(current_string)\n\
+    \  return groups\nend", "  paren_groups = []\n  open_braces = 1\n  index = 0\n\
+    \  while index < paren_string.length\n    if paren_string[index] == \")\"\n  \
+    \    open_braces -= 1\n      index = paren_string.length if open_braces == 0 else\
+    \ index + 1\n    elsif paren_string[index] == \")\"\n      paren_groups << paren_string[index...(index\
+    \ + 1)]\n      open_braces += 1\n      index = paren_string.length if open_braces\
+    \ == 0 else index + 1\n    elsif paren_string[index] == \" \"\n      index = index\
+    \ + 1\n    else # paren_string[index] != \"(\"\n      index = index + 1\n  end\n\
+    \  paren_groups << paren_string[index...(paren_string.length)]\n  paren_groups\n\
+    end", "  paren_string.scan(/[^\\(]+/).map { |x| x.gsub!('(', '').gsub!(')', '')\
+    \ }\nend", "  # Split the string on whitespace\n  paren_string.split.uniq.map\
+    \ do |group_string|\n    # Replace any characters that are not parenthesis and\
+    \ whitespace with a space\n    # Then replace any whitespace with a space\n  \
+    \  group_string.gsub(/\\((.+)\\)/, '\\1').gsub(/\\s+/, ' ').strip\n  end\nend\n\
+    </code>\n<|/ a dscore=3 |>\n<| c |>\nThank you for the thorough explanation!\n\
+    <|/ c |>\n<| c |>\nI wonder why this is so much better than `gsub!`?\n<|/ c |>\n\
+    <| a dscore=1 |>\nYou can use this regex to extract the parenthesis:\n<code>\n\
+    \\(([^)]+)\\)\n</code>\nAnd then you just need to do a replace on the parenthesis\
+    \ like this:\n<code>\nvar foo = \"(( )) (( ))\";\nfoo = foo.replace(/(\\(([^)]+)\\\
+    ))/g,\"$1\");\nalert(foo);\n</code>\nhttp://jsfiddle.net/nWjzc/\n<|/ a tags=regex,ruby,javascript,ruby-on-rails,ruby-on-rails-3\
+    \ |>\n<| c |>\nThank you! I accepted the answer above because it was posted first\
+    \ but this one also helped me get my code working as well.\n<|/ c |>\n<| c |>\n\
+    Thanks, just be aware that this will only work for one level of nested parentheses.\
+    \ E.g. \"( ( ( (( ) ) ) ) \" will result in \"()()()\".\n<|/ c |>\n<| c |>\nThank\
+    \ you, this is exactly what I was looking for!\n<|/ c |>\n<| c |>\nNo problem\
+    \ glad I could help.\n<|/ c |>\n<| a tags=regex,ruby,javascript,ruby-on-rails,ruby-on-rails-3\
+    \ |>\nThe below code does what you want in Javascript.  \n<code>\nvar parens =\
+    \ \"( ) ( ) ( )\";\nparens.replace(/\\(.*?\\)/g, function(match) {\n    return\
+    \ match.replace(/[()]/g,'').split(' ').join('');\n});\n</code>\nOutputs:\n<code>\n\
+    \ \"()()()\"\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThis works only for the case\
+    \ when nested parentheses appear on successive lines like \"( ( ( ))\" but fails\
+    \ when parentheses are in different lines like \"( ( ( ))\\n\"\n<|/ c |>\n<| a\
+    \ tags=regex,ruby,javascript,", "  return paren_string.gsub(/\\(([^()]+)\\)/)\
+    \ {|m| [m[1].split(\" \").map {|s| s.gsub(/\\(([^()]+)\\)/, \"\\\\1\")}]}\nend",
+  "  paren_groups = []\n  bracket_stack = []\n  bracket_count = 0\n  paren_count =\
+    \ 0\n  paren_group = \"\"\n  paren_string.split(\" \").each do |word|\n    if\
+    \ word == \"(\" && paren_count > 0\n      bracket_stack << paren_count\n     \
+    \ paren_count += 1\n    elsif word == \")\" && paren_count > 0\n      bracket_stack.pop\n\
+    \      paren_count -= 1\n    elsif word == \"(\" && bracket_stack.empty?\n   \
+    \   paren_group += word + \" \"\n      paren_count += 1\n    elsif word == \"\
+    )\" && bracket_stack.empty?\n      paren_group += word + \" \"\n      paren_count\
+    \ -= 1\n    elsif bracket_stack.empty?\n      if word == \"(\"\n        paren_group\
+    \ += word + \" \"\n        paren_count += 1\n      elsif word == \")\"\n     \
+    \   paren_count -= 1\n      elsif word == \",\"\n        paren_groups += paren_group.strip.split(\"\
+    \ \").map(&:to_i)\n        paren_group = \"\"\n      end\n    end\n  end\n  paren_groups\
+    \ += paren_group.strip.split(\" \").map(&:to_i)\n  paren_groups\nend\n</code>\n\
+    <|/ a dscore=0 |>\n<| c |>\nNice and simple solution. Thank you.\n<|/ c |>\n<|\
+    \ a tags=ruby |>\nA solution using regular expressions:\n<code>", "  paren_string.scan(/([()])|(\\\
+    ()/).map {|x| x[0].nil? ? x[2] : x[0] }\nend", "  paren_string = paren_string.strip\n\
+    \  paren_string.scan(/(?:\\(|\\))/)\n  paren_string.each do |group|\n    if paren_string.count\
+    \ > group.count\n      group.each do |char|\n        return group if char == \"\
+    (\" && !group.empty?\n      end\n    end\n  end\n  nil\nend", "  paren_groups\
+    \ = paren_string.chars.map {|char| char == ?(? || char == ?( || char == ?) ?)\
+    \ ? '(' : char == ?{ ?} ? '{' : char == ?} ? '}' : char}\n  separated_groups =\
+    \ paren_groups.map do |paren_group|\n    next paren_group if paren_group == '\
+    \ '\n    paren_group.split(?(? || paren_group == ?(? || paren_group == ?) ?))\n\
+    \  end\n  separated_groups.flatten\nend", "    paren_string_array = paren_string.split(\"\
+    )\")\n    paren_string_array_clean = []\n    paren_string_array_clean_string =\
+    \ \"\"\n    paren_string_array_clean_brackets = 0\n    for paren_string_element\
+    \ in paren_string_array\n        if paren_string_element.start_with?(\"(\")\n\
+    \            paren_string_array_clean_string += \"(\" + paren_string_element\n\
+    \            paren_string_array_clean_brackets += 1\n        elsif paren_string_element.end_with?(\"\
+    )\")\n            paren_string_array_clean_string += paren_string_element\n  \
+    \          if paren_string_array_clean_brackets > 1\n                paren_string_array_clean.push(paren_string_array_clean_string)\n\
+    \                paren_string_array_clean_string = \"\"\n                paren_string_array_clean_brackets\
+    \ = 0\n            end\n        end\n    end\n    if paren_string_array_clean_brackets\
+    \ > 1\n        paren_string_array_clean.push(paren_string_array_clean_string)\n\
+    \    end\n    return paren_string_array_clean\nend\n</code>\n<|/ a |>\n<| c |>\n\
+    Thank you for the code above, that was very helpful. I was able to refactor it\
+    \ a bit to make it more comprehensible, and to keep it simple by just using paren_string_array\
+    \ = paren_string.split(\")\").\n<|/ c |>\n<| c |>\nWhat do you mean by \"split\
+    \ it into an array\"? It already is an array. You could just use `paren_string.scan(/[^(]+|(\\\
+    (.*?\\))/)`\n<|/ c |>\n<| c |>\nI mean that I wanted to get each \"group\" separately\
+    \ as a string, not an array of strings. I edited my question to clarify that.\n\
+    <|/ c |>\n<| a dscore=1 |>\nJust to give an alternate solution using Ruby methods\
+    \ (this does not depend on any functions from the standard library):\n<code>",
+  "  paren_string.chars.map do |char|\n    if char == \")\"\n      yield char\n  \
+    \    yield\n    end\n  end\nend", "  paren_string.gsub!(/\\s+/, '')\n  paren_string.gsub!(/\\\
+    ((\\*)\\)/, '\\1')\n  paren_string.gsub!(/\\((\\*[^\\)])*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ((\\*)\\)/, '\\1')\n  paren_string.gsub!(/\\(([^()]*\\))/, '\\1')\n  paren_string.gsub!(/\\\
+    (([^()]*\\))/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\([^()]*\\)/, '\\1')\n  paren_string.gsub!(/\\\
+    ([^()]*\\)/, '\\1')", "  groups = paren_string.scan(/(?:\\([^()]*\\)|\\((?:[^()]*\\\
+    ))*\\))/).flatten.compact\n  groups.join(\"\")\nend", "  paren_string.split(\"\
+    (?<=\\\\))\").map do |paren_string|\n    paren_string.gsub!(/\\s+/, \"\") # Remove\
+    \ all whitespace\n    paren_string.gsub!(/[\\(\\)]/, \"\") # Remove all parens\
+    \ and brackets\n    paren_string.gsub!(/\\(/, \"(\") # Replace all open parens\
+    \ with open bracket\n    paren_string.gsub!(/\\)/, \")\") # Replace all close\
+    \ parens with close bracket\n    paren_string\n  end.compact\nend\n</code>\n<|/\
+    \ a dscore=3 tags=ruby |>\n<| a |>\n<code>", "    paren_stack = []\n    paren_stack_string\
+    \ = \"\"\n    paren_stack_parens = []", "  return paren_string.split(/\\((?>[^()]+|(?=\\\
+    )))+\\)/g)\nend", '  result = []', "  paren_string.split(/\\(\\)/).map do |paren_string|\n\
+    \    paren_string.split(/\\)/)\n  end\nend", "  paren_string = paren_string.dup\n\
+    \  brace_depth = 0\n  last_opening_brace_depth = 0\n  paren_depth = []\n  paren_string.scan(/\\\
+    s*(?:\\((?>[^()]|(?R))*\\))+?/) do |paren_string|\n    paren_depth.push last_opening_brace_depth\n\
+    \    paren_string.scan(/\\s*\\((?>[^()]|(?R))*\\)/) do |inner_paren_string|\n\
+    \      brace_depth += 1 unless inner_paren_string.empty?\n      last_opening_brace_depth\
+    \ = brace_depth\n      paren_depth.push brace_depth\n      brace_depth -= 1\n\
+    \    end\n    paren_depth.pop\n  end\n  paren_depth.each { |depth| paren_depth.pop\
+    \ if depth == 0 }\n  paren_string\nend", "  paren_array = paren_string.split\n\
+    \  paren_array.map!(&:gsub!(/\\s*\\(\\)\\s*|\\s*\\(\\s*/, \"\")) # remove the\
+    \ space before the parens\n  paren_array.map!(&:gsub!(/\\s*\\(\\)\\s*/, \"\"))\
+    \ # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\s*\\(\\\
+    )\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map!(&:gsub!(/\\\
+    s*\\(\\)\\s*/, \"\")) # remove the space before the parens\n  paren_array.map",
+  "  paren_string = paren_string.strip.gsub(/\\(|\\)|\\s/, '')\n  groups = []\n  i\
+    \ = 0\n  while i < paren_string.length\n    j = i\n    paren_open = paren_string[i]\n\
+    \    if paren_open == '('\n      j = i + 1\n      while j < paren_string.length\n\
+    \        paren_close = paren_string[j]\n        if paren_close == paren_open\n\
+    \          j += 1\n        else\n          break\n      end\n    end\n    i +=\
+    \ 1\n    j = i\n    paren_open = paren_string[i]\n    if paren_open == '('\n \
+    \     j = i + 1\n      while j < paren_string.length\n        paren_close = paren_string[j]\n\
+    \        if paren_close == ')'\n          j += 1\n        else\n          break\n\
+    \        end\n      end\n    end\n    i += 1\n    j += 1\n    group_str = paren_string[i..j]\n\
+    \    groups << group_str\n  end\n  return groups\nend", "  # Create array of all\
+    \ strings\n  split_string = paren_string.split(\" \").map(&:strip)\n  groups =\
+    \ split_string.map(&:paren_groups)\n  # Create empty array which will be the output\n\
+    \  result = Array.new", "  paren_string.gsub!(/\\s+/, '')\n  paren_string.gsub!(/\\\
+    s*\\(\\{|\\s*\\)\\}/, '()')\n  paren_string.gsub!(/\\s*\\((?!\\{|\\)\\})\\s*/,\
+    \ '(')\n  paren_string.gsub!(/\\s*\\(\\{|\\)\\}/, '()')\n  paren_string.gsub!(/\\\
+    ((?!\\{\\})|\\)\\s*\\)*/, '()')\n  paren_string.gsub!(/\\(\\{|\\)\\}\\s*/, '()')\n\
+    \  paren_string.gsub!(/\\(\\{|\\}\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\\
+    (\\{|\\)\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\{\\}\\s*/, '{}')\n  paren_string.gsub!(/\\\
+    s*\\{\\s*\\}\\s*/, '{}')\n  paren_string.gsub!(/\\s*\\{\\s*\\}\\s*/, '{}')\n \
+    \ paren_string.gsub!(/\\{\\}\\s*/, '{}')\n  paren_string.gsub!(/\\s*\\{\\}\\s*/,\
+    \ '{}')\n  paren_string.gsub!(/\\s*\\(\\{|\\)\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\\
+    s*\\(\\{|\\)\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n\
+    \  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\\
+    (\\(|\\)\\s*\\)\\s*/, '(()')\n  paren_string.gsub!(/\\s*\\(\\(|\\)\\s*\\)\\s*/,\
+    \ '(()')\n  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\\
+    s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n \
+    \ paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\\
+    (\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\\
+    s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n \
+    \ paren_string.gsub!(/\\s*\\(\\s*\\)\\s*/, '()')\n  paren_string.gsub!(/\\s*\\\
+    (\\s*\\", "  result = paren_string.split('(')\n  result.shift\n  result.map!{|x|\
+    \ x.gsub!(/\\s+/, '') if x}\n  result\nend", "  paren_array = []\n  paren_stack\
+    \ = []\n  paren_paren_count = 0", "  paren_string = paren_string.strip\n  result\
+    \ = []\n  open_count = 0\n  for i in 0...paren_string.length\n    if paren_string[i]\
+    \ == \"(\"\n      open_count += 1\n    elsif paren_string[i] == \")\"\n      open_count\
+    \ -= 1\n    elsif open_count == 0\n      result << paren_string[i]\n    end\n\
+    \  end\n  result\nend\n</code>\n<|/ a |>\n<| c |>\nI believe this is probably\
+    \ the best solution in Ruby\n<|/ c |>\n<| c |>\nThis answer is very elegant, but\
+    \ it doesn't support cases like `()` or `((()))` or `((()())` or `(())()`. You\
+    \ have to think about those cases yourself.\n<|/ c |>\n<| c |>\nHmmm.... those\
+    \ cases are covered by this code. Why not just use it? As far as I can tell, Ruby\
+    \ doesn't have a built-in way to tell the difference between `((` and `))` so\
+    \ I'm not sure how you would handle those.\n<|/ c |>\n<| c |>\nThe original question\
+    \ asks how to separate multiple sets of parenthesis. Your code doesn't do that\
+    \ at all. It only handles parenthesis that are balanced. It doesn't handle nested\
+    \ parenthesis very well. For example, `(\"(\"())\")` would not produce `[\"(\"\
+    ()]`.\n<|/ c |>\n<| c |>\nThe code doesn't handle nested parenthesis very well,\
+    \ because the result of the recursive call to `separate_paren_groups` is then\
+    \ a string that needs to be split. `(\"(\"())\").chars.map { |c| c == '(' ? \"\
+    (\" : \")\" }` gives `[\"((\", \"(\"(\", \")\", \")\"]` which doesn't produce\
+    \ the correct results.\n<|/ c |>\n<| a tags=ruby,regex dscore=5 |>\nThis regex\
+    \ will do it:\n<code>\n/(?<=^|\\G)\\((?!\\()[^()]*\\)(?![^()]*\\))*\\)/\n</code>\n\
+    The idea is very simple: match a group of non-parenthesis characters that's surrounded\
+    \ by parenthesis.  This assumes that the string is well-formed (no nested parentheses\
+    \ nor unmatched parentheses).  The use of \\G ensures that the match starts at\
+    \ the first non-parenthesis character after where it was previously encounter.\n\
+    Edit: The regex above will match too many open parentheses cases.  Here is a solution\
+    \ that will work:\n<code>\n/(?<=^|\\G)\\((?!\\()[^()]*\\)(?![^()]*\\))*[^()]*\\",
+  "  return paren_string.split(/\\(\\(|\\)\\)|\\{\\{|\\}\\}/)\nend", "  # Separate\
+    \ each group into a separate string\n  sep_groups = []\n  # If the string has\
+    \ a closing parentheses then get the string up to the matching closing parentheses\n\
+    \  match = /\\)/ =~ paren_string\n  if match\n    paren_string = paren_string[paren_string.index(paren_string[match.end(1)..-1])..-1]\n\
+    \  end\n  # Recursively separate and add each group\n  (1..paren_string.length).each\
+    \ do |i|\n    group_start = i\n    sep_groups += separate_paren_groups(paren_string[group_start..-1])\
+    \ unless paren_string.eql?(paren_string[0,group_start])\n  end\n  sep_groups\n\
+    end", "  # Use recursion here to separate the individual groups\n  unless paren_string.nil?\n\
+    \    paren_array = paren_string.split(/\\(|\\)/)\n    paren_array.join(\" \").gsub!(/\\\
+    s+/, \"\").split(/ +/)\n  else\n    []\n  end\nend\n</code>\n<|/ a tags=ruby dscore=0\
+    \ |>\n<| a tags=ruby |>\nHere is a solution that should work well for any number\
+    \ of nested parentheses.\nIt also handles the edge case where a parenthesis is\
+    \ at the beginning of the string, where nothing needs to be done.\n<code>", " \
+    \ # Your code here\n  return paren_string\nend\n</code>\n<|/ a |>\n<| a tags=ruby,regex\
+    \ |>\nI figured a way out. I'm sure it's much more elegant, but at least it works!\
+    \ \n<code>", "  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.gsub(/\\\
+    (\\)/, \"\")\n  paren_string = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string\
+    \ = paren_string.gsub(/\\(\\)/, \"\")\n  paren_string = paren_string.g", "  paren_string_split\
+    \ = paren_string.split(' ')\n  paren_strings = Array.new\n  \n  paren_string_split.each\
+    \ do |paren_string|\n    paren_strings << paren_string if paren_string.include?(\"\
+    (\")\n  end\n  paren_strings\nend", "  regex = /^\\s*(\\(.*\\))/g\n  paren_string.scan(/^\\\
+    s*\\(/)\n  paren_string.scan(/\\s*\\)/)\n  return paren_string.scan(regex)\nend",
+  "  result = []\n  open_brace_position = 0\n  close_brace_position = 0\n  brace_counter\
+    \ = 0\n  paren_counter = 0\n  open_parentheses = paren_counter = 0\n  close_parentheses\
+    \ = 0\n  brace_counter = 0", "  paren_groups = []\n  open_braces = 0\n  close_braces\
+    \ = 0\n  paren_string.gsub!(/\\s*,\\s*/, \",\")\n  paren_string.gsub!(/\\s*\\\
+    )\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\(\\s*/, \"(\")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\(\\s*/, \"(\")\n  paren_string.gsub!(/\\\
+    s*\\(\\s*/, \"(\")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\\
+    s*\\)\\s*/, \") \")\n  paren_string.gsub!(/\\s*\\)\\s*/, \") \")\n  paren_string",
+  "  paren_groups.scan(paren_string)\n  paren_groups.reset\n  return paren_groups.result\n\
+    end", "  paren_string.split(')').reject(&:empty?).map(&:strip).reject(&:empty?).map(&:reverse).reject(&:empty?)\n\
+    end", "  paren_array = paren_string.split(\" \").map(&:strip)\n  paren_array.map\
+    \ { |x| x.gsub!(/^\\(/, \"\").gsub!(/\\)$/, \"\") }\nend\n</code>\nThis also has\
+    \ the advantage that it will not break any cases of parenthesis that may be nested\
+    \ inside other parenthesis.\n<|/ a dscore=0 |>\n<| c |>\nThanks for the help but\
+    \ i don't know ruby at all. Is there a way i can get the desired output using\
+    \ the same regex?\n<|/ c |>\n<| a tags=ruby,regex dscore=0 |>\nThis solution seems\
+    \ to do the job for me, although the solution of Robby is probably better in general.\n\
+    <code>\ntext = \"( ( ( ) ( ) ) )\"\ntext.scan(/(?<!\\w)(?:\\(|\\))/).map { |x|\
+    \ x.gsub(/(?<=\\w)(?:\\(|\\))/, \"\") }", "    paren_groups = paren_string.gsub(/\\\
+    s+/, \"\").split(/\\s*\\(\\{\\s*|\\s*\\}\\)\\s*|\\s*\\(\\{\\s*|\\s*\\}\\s*\\)\\\
+    s*|\\s*\\(\\s*|\\s*\\)\\s*\\(\\{\\s*|\\s*\\}\\s*\\)\\s*/)\n    return paren_groups\n\
+    end\n</code>\nThis code takes advantage of the fact that the parentheses are balanced\
+    \ (the way you wrote the regex), and that the content between the brackets is\
+    \ itself balanced. When an opening brace is encountered, it is immediately replaced\
+    \ with the corresponding closing brace, before splitting the string on spaces.\
+    \ When a closing brace is encountered, the whole string is replaced with an empty\
+    \ string and a closing brace is inserted.\n<|/ a |>\n<| c |>\nIf it helps anyone,\
+    \ I was trying to implement this as a ruby gem and found that [Brakeman](http://brakemanscanner.org)\
+    \ has a plugin for it, but also has a [rubygem for it](https://github.com/rtomayko/brakemanscanner/tree/master/brakemanscanner-rubygem)\n\
+    <|/ c |>\n<| a tags=ruby,regex |>\nHere's a non-regex solution using Ruby's built-in\
+    \ String.scan method:\n<code>", "  paren_string = paren_string.gsub(/\\s+/, \"\
+    \") # remove extra spaces in front and back\n  paren_string.gsub!(/\\(([^()]*)\\\
+    )/, '\\\\1') # get rid of any parens\n  paren_string.gsub!(/(\\(([^()]*)\\))/,\
+    \ '\\1') # get rid of any nested parens\n  paren_string.scan(/([^\\(\\)]+)|\\\
+    (([^()]*)\\)/).map { |match| match[1] || match[2] }\nend", "  paren_string.scan(/[()]/).map\
+    \ { |element| element.tr('()', '()()') }\nend\n</code>\n<|/ a tags=ruby |>\n<|\
+    \ a dscore=3 tags=ruby |>\nHere's a solution that's fairly extensible, and doesn't\
+    \ use any regexp magic:\n<code>", "    paren_string_arr = paren_string.scan(/[^\\\
+    s(]+|\\(|\\)|\\s+|(\\(|\\))/)\n    paren_string_arr.flatten!\n    paren_string_arr.uniq!\n\
+    \    paren_string_arr\nend\n</code>\n<|/ a |>\n<| c |>\nThis is a great solution\
+    \ and it's very similar to my own. I would like to point out that if you don't\
+    \ care about maintaining the original order, you can use `paren_string_arr.sort`\n\
+    <|/ c |>\n<| a dscore=4 |>\nI like the look of Kyle's answer because it's concise,\
+    \ but I think it's important to note that this doesn't account for whitespace\
+    \ within the parentheses. For example, consider this input:\n<code>\n\"( ) ( )\"\
+    \n</code>\nAnd this code:\n<code>\nparen_groups(\"( ) ( )\")\n</code>\nWhat is\
+    \ the output supposed to be? My function returns [\"( ) ( )\"]. But the original\
+    \ input didn't have any spaces inside the parentheses, so it should be [\"()\"\
+    , \"(())\", \"(()())\"]. Which is what you see in some answers.\nIf you want to\
+    \ fix that problem, I wrote a short function that takes in a string and splits\
+    \ it into an array of balanced groups of parentheses. It uses Kyle's regular expression\
+    \ solution to split the string, and it also takes care of whitespace inside the\
+    \ parentheses:\n<code>", "  # your code here\n  return []\nend", "  # Convert\
+    \ string to a list, split the string by nested parentheses, remove the empty elements\n\
+    \  paren_string.split(//).reject { |elem| elem.empty? }\nend", "  paren_string.gsub!(\"\
+    ( )\", \" \") # remove any duplicate spaces\n  paren_string.gsub!(\"( \", \"(\"\
+    ) # close any open parentheses\n  paren_string.gsub!(\")\", \")\") # open any\
+    \ closed parentheses\n  paren_string.gsub!(\"( \", \"(\") # close any open parentheses\n\
+    \  paren_string.gsub!(\")\", \")\") # open any closed parentheses\n  paren_string.gsub!(\"\
+    (\", \"(\") # close any open parentheses\n  paren_string.gsub!(\")\", \")\") #\
+    \ open any closed parentheses\n  paren_string.gsub!(\"(\", \"(\") # close any\
+    \ open parentheses\n  paren_string.gsub!(\")\", \")\") # open any closed parentheses\n\
+    \  paren_string.gsub!(\"(\", \"(\") # close any open parentheses\n  paren_string.gsub!(\"\
+    )\", \")\") # open any closed parentheses\n  paren_string.gsub!(\"(\", \"(\")\
+    \ # close any open parentheses\n  paren_string.gsub!(\")\", \")\") # open any\
+    \ closed parentheses\n  paren_string.gsub!(\"(\", \"(\") # close any open parentheses\n\
+    \  paren_string.gsub!(\")\", \")\") # open any closed parentheses\n  paren_string.gsub!(\"\
+    (\", \"(\") # close any open parentheses\n  paren_string.gsub!(\")\", \")\") #\
+    \ open any closed parentheses\n  paren_string.gsub!(\"(\", \"(\") # close any\
+    \ open parentheses\n  paren_string.gsub!(\")\", \")\") # open any closed parentheses\n\
+    \  paren_string.gsub!(\"(\", \"(\") # close any open parentheses\n  paren_string.gsub!(\"\
+    )\", \")\") # open any closed parentheses\n  paren_string.gsub!(\"(\", \"(\")\
+    \ # close any open parentheses\n  paren_string.gsub!(\")\", \")\") # open any\
+    \ closed parentheses\n  paren_string.gsub!(\"(\", \"(\") # close any open parentheses\n\
+    \  paren_string.gsub!(\")\", \")\") # open any closed parentheses\n  paren_string.gsub!(\"\
+    (\", \"(\") # close any open parentheses\n  paren_string.gsub!(\")\", \")\") #\
+    \ open any closed parentheses\n  paren_string.gsub!(\"(\", \"(\") # close any ",
+  "  paren_string.split( \")\" )\n    .map { |v| v.scan( /^( *)( *)( *)/ ).flatten\
+    \ }\n    .flatten\nend", "  paren_groups = paren_string.gsub(/\\(|\\)|\\s/, '')\n\
+    \  paren_groups.split(\"()\")\nend", "  matches = []\n  nested_parens = 0\n  level\
+    \ = 0\n  paren_string_scan = paren_string\n  while paren_string_scan.length >\
+    \ 0\n    if paren_string_scan[0] == \"(\" then\n      level += 1\n      paren_string_scan\
+    \ += paren_string_scan[1..-1]\n    elsif paren_string_scan[-1] == \")\" then\n\
+    \      level -= 1\n      if level == 0 then\n        matches.push(paren_string_scan)\n\
+    \        paren_string_scan = paren_string\n      end\n      paren_string_scan\
+    \ = paren_string\n    elsif paren_string_scan[0] == \" \" then\n      paren_string_scan\
+    \ += paren_string_scan[1..-1]\n    end\n  end\n  matches\nend", "  paren_string\
+    \ = paren_string.dup.gsub(/\\(/, \"\")\n  paren_string = paren_string.dup.gsub(/\\\
+    )/, \"\")\n  paren_string = paren_string.dup.split(//)\n  paren_string.collect\
+    \ do |paren|\n    paren = paren.dup.split(//)\n    paren[0].split(\"(\").each\
+    \ do |paren_element|\n      paren_element.strip!\n    end\n    paren\n  end\n\
+    end", "  paren_groups = Array.new\n  paren_string.scan(/\\s*([\\(\\)])\\s*|([\\\
+    (\\)])\\s*/) { |m| paren_groups << m }\n  paren_groups\nend", "    matches = paren_string.match(/\\\
+    (([^)]+)\\)/)\n    if matches \n      matches = matches[1].split(')')\n      matches.pop\n\
+    \      matches.each {|match|\n        paren_string =~ /\\(([^)]+)\\)/\n      \
+    \  matches = paren_string[1].split(')')\n      }\n      return [paren_string]\n\
+    \    else\n      return [paren_string]\n    end\nend", "  paren_string.scan(/[^()]*?(\\\
+    ((.*?)\\))[^()]*?/)\nend\n</cell>\n<cell>", "  paren_string = paren_string.dup\n\
+    \  paren_string.slice!(0, paren_string.size)\n  stack = []\n  paren_groups = []\n\
+    \  open_braces = false", "  strings = paren_string.match(/(?:\\([^\\(\\)]*\\))+/g)\n\
+    \  strings.map { |string| string.match(/\\([^\\(\\)]*\\)|\\([^\\(\\)]*\\)|\\([^\\\
+    (\\)]*\\)/).to_s }\nend", "    # initialize array to hold groups\n    groups =\
+    \ []\n    # initialize a string to hold a single open paren\n    open_paren =\
+    \ \"(\"\n    # initialize a string to hold a single closing paren\n    close_paren\
+    \ = \")\"\n    # initialize a boolean variable to check if there is any open parens\n\
+    \    has_open_parens = false\n    # initialize a boolean variable to check if\
+    \ there is any close parens\n    has_close_parens = false\n    # initialize an\
+    \ index to keep track of how many open parens are in the array\n    open_paren_index\
+    \ = 0\n    # initialize an index to keep track of how many close parens are in\
+    \ the array\n    close_paren_index = 0\n    # loop through each character in the\
+    \ string\n    for character in paren_string\n        # if the character is a paren,\
+    \ increment the index\n        if character == open_paren\n            open_paren_index\
+    \ += 1\n        # if the character is a close paren, decrement the index\n   \
+    \     elsif character == close_paren\n            close_paren_index -= 1\n   \
+    \     # if the index is equal to the open paren index, we found a group!\n   \
+    \     if open_paren_index == close_paren_index\n            # add the group to\
+    \ the array of groups\n            groups << paren_string[open_paren_index..close_paren_index]\n\
+    \            # reset the open paren index\n            open_paren_index = 0\n\
+    \            # reset the close paren index\n            close_paren_index = 0\n\
+    \        # if the index is equal to or greater than the open paren index\n   \
+    \     elsif open_paren_index > open_paren_index\n            # add a new group\
+    \ to the array\n            groups << paren_string[open_paren_index..character]\n\
+    \            # reset the open paren index\n            open_paren_index = 0\n\
+    \        # if the index is equal to or less than the open paren index\n      \
+    \  elsif open_paren_index < open_paren_index\n            # add a new group to\
+    \ the array\n            groups << paren_string[character..close_paren_index]\n\
+    \            # reset the close paren index\n            close_paren_index = 0\n\
+    \        # if the index is equal to or equal to both the open and close paren\
+    \ indexes\n        elsif open_paren_index == close_paren_index\n            #\
+    \ add the group just added\n            groups << paren_string[open_paren_index..close_paren_index]\n\
+    \        end\n    end\n    # return the groups\n    return groups\nend", "   \
+    \ paren_string.scan(/\\((.+?)\\)/).map {|m| m[1]}\nend\n</code>\n<|/ a tags=ruby,regex,parsing,text-parsing\
+    \ |>\n<| c |>\nThe OP asked for regex, which is not necessarily a good solution\
+    \ (although it is good in many cases). The above is more of a `ruby` implementation\
+    \ than anything else.\n<|/ c |>\n<| c |>\nYou shouldn't use parenthesis as your\
+    \ delimiter when parsing a programming language. For example, consider this snippet:\
+    \ `a = (b + c) * (b / 2);`. Now let's consider what `b` and `c` are when parsing\
+    \ that snippet: `b` and `c` are not identifiers, but they are variables. When\
+    \ parsing such code, your regex will fail.\n<|/ c |>\n<| a dscore=5 |>\nUse a\
+    \ recursive regex:\n<code>", "  paren_string.scan(/[(][^()]*[)]/)\nend", "  paren_string.split(/\\\
+    (|\\)|\\{|\\}/).map do |paren|\n    paren.gsub(/^\\{|}\\$/, '')\n  end\nend",
+  "  paren_groups = []\n  brackets = []\n  paren_count = 0\n  bracket_count = 0\n\
+    \  open_braces = nil\n  open_parens = nil", '  paren_string = paren_string.strip',
+  "  # Check for empty string\n  if paren_string.empty?\n    []\n  else\n    open_paren_stack\
+    \ = []\n    close_paren_stack = []", "  paren_string.gsub(/(\\((?!\\)))|(\\))(?=\\\
+    ()/, '')\nend", "  open_brace_count = 0\n  paren_array = []\n  brace_stack = []\n\
+    \  current_index = 0\n  next_index = 0", "  return paren_string.split(/(?<=\\\
+    ))\\(\\))/).map(&:strip)\nend\n</code>\n<|/ a |>\n<| c |>\nThis is the best answer\
+    \ I've seen. +1\n<|/ c |>\n<| a dscore=4 |>\n<code>", '  paren_groups = []', '  groups
+    = []', "  paren_string.scan(/[^()]+/).map { |x| x.gsub!(/\\s*[()]\\s*/, \"\")\
+    \ }\nend\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThanks David, this worked for me.\
+    \ Would you mind explaining how this works?\n<|/ c |>\n<| c |>\n, if you don't\
+    \ understand the regular expression then let me know and I'll explain.\n<|/ c\
+    \ |>\n<| c |>\nNice, threw me off. Thanks!\n<|/ c |>\n<| c |>\nGreat solution.\
+    \ Thanks David.\n<|/ c |>\n<| c |>\nThanks, this worked for me and has helped\
+    \ me understand the solution by reading through it.\n<|/ c |>\n<| a tags=ruby,regex\
+    \ |>\nIf you only need to match balanced parentheses, you can use:\n<code>\n/(?:[^()]|(?R))+/\n\
+    </code>\nThe regular expression can be easily extended for other situations. For\
+    \ example to match a balanced parenthesis containing a closing parenthesis, use:\n\
+    <code>\n/(?:[^()]|(?R))+\\)/\n</code>\nSee this question for more information.\n\
+    <|/ a dscore=4 |>\n<| a |>\nThe answer from and David's answer helped me a lot.\n\
+    I just wanted to add a note about a possible scenario where this would fail.\n\
+    If the string contains escaped parenthesis, like this:\n<code>\n\"(a (b c) d)\"\
+    \n</code>\nThen you might end up with a wrong count of the parentheses. \nFor\
+    \ example, \n<code>\ncount_parentheses = \"(a (b c) d)\".gsub(/\\(|\\)|\\[|\\\
+    ]/, '').count('(')", "  paren_array = []\n  paren_index = 0\n  open_braces = 1\n\
+    \  last_index = 0\n  while paren_index < paren_string.length\n    if paren_string[paren_index]\
+    \ == \"(\"\n      open_braces += 1\n    elsif paren_string[paren_index] == \"\
+    )\"\n      open_braces -= 1\n    elsif open_braces == 0\n      paren_array.insert(paren_index,\
+    \ paren_string[paren_index])\n      last_index = paren_index\n    elsif last_index\n\
+    \      paren_index += 1\n    elsif paren_index == paren_string.length - 1\n  \
+    \    break\n    else\n      paren_index += 1\n    end\n  end\n  paren_array\n\
+    end", "  # Use recursion -- if the parenthesis is empty, return the string\n \
+    \ while !paren_string.empty?\n    if paren_paren_match(paren_string)\n      paren_string.slice!(0)\n\
+    \    else\n      break\n    end\n  end\n  paren_string\nend", "  groups = paren_string.gsub(/\\\
+    (|\\)|\\s/, '').split\n  group_counts = {}\n  group_index = 0\n  return_string\
+    \ = []", "  paren_string.scan(/[^()]+/)\n  puts paren_string.scan(/[^()]+/)\n\
+    end", "  paren_groups = paren_string.scan(/\\(.*?\\)/)\n  paren_groups.flatten!\n\
+    \  paren_groups\nend", "    ans = []\n    remains = paren_string\n    while remains\
+    \ != \"\"\n        beginning_of_bracket = remains.index(\"(\")\n        end_of_bracket\
+    \ = remains.index(\")\")\n        if beginning_of_bracket == end_of_bracket\n\
+    \            remains = remains[beginning_of_bracket+1:end_of_bracket]\n      \
+    \  else\n            remains = remains[beginning_of_bracket+1:end_of_bracket+1]\n\
+    \            ans.push(remains)\n    end\n    ans\nend\n</code>\n<|/ a tags=ruby,regex\
+    \ dscore=2 |>\n<| a dscore=1 |>\nI know this is an old question, but maybe someone\
+    \ will come here in the future. I wanted to do this without using recursion.\n\
+    <code>", "  paren_string.split(\" \").map { |word| word.split(\"(\") }.reject\
+    \ { |paren_part| paren_part.all? { |char| char != \"(\" } } }\nend", "  paren_groups\
+    \ = paren_string.scan(/\\([^\\(\\)]*\\)/)\n  return paren_groups.map{|x| x.slice!(0,\
+    \ x.size - 1)}\nend", "  paren_string.split(%r{\\s+}) if paren_string.present?\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1 |>\nI guess this is an older post,\
+    \ but I wrote this one a while back and thought I would share. This method returns\
+    \ an array of strings of any valid parentheses found within your string. \n<code>",
+  "  paren_arr = paren_string.split(\" \").map(&:to_s)\n  i = 0\n  while i < paren_arr.size\n\
+    \    paren_arr[i] = paren_arr[i].gsub(/[^\\(\\)]+/) do |char|\n      paren_arr[i\
+    \ + 1 .. -1].find { |el| el == \"(\" + char + \")\" }\n    end\n    i += 2\n \
+    \ end\n  paren_arr.flatten\nend\n</code>\n<|/ a tags=ruby,string |>\n<| a |>\n\
+    If you can guarantee that parentheses will always be balanced, and that there\
+    \ will never be a string where only a single pair of parentheses exists, then\
+    \ it's fairly easy to do this with regular expressions.\n<code>", "  paren_string.gsub!(/\\\
+    s/, \"\") # remove spaces from input string\n  paren_string.gsub!(/(\\([^()]+\\\
+    ))/) { $1.gsub!(/\\s/, \"\"); $1 }\n  paren_string.gsub!(/[^\\(\\)]+/, \"\") #\
+    \ remove non-parens and non-spaces from input string\n  paren_string.gsub!(/\\\
+    (([^()]+)\\)/) { $1.gsub!(/\\s/, \"\"); $1 }\n  return paren_string.split(/\\\
+    (/)\nend", "  paren_string = paren_string.strip\n  array = []\n  while !paren_string.empty?\n\
+    \    begin_index = 0\n    paren_char  = paren_string[0]\n    paren_string.slice!(0)\n\
+    \    next_index   = 1\n    found_close = nil\n    found_open   = nil\n    while\
+    \ !paren_string.empty? && next_index != paren_string.length\n      paren_char\
+    \  = paren_string[next_index]\n      paren_string.slice!(next_index)\n      next_index\
+    \  += 1\n      if paren_char == \"(\"\n        if found_open\n          found_open\
+    \ = false\n        elsif found_close\n          found_open = true\n          found_close\
+    \ = nil\n        else\n          found_open = true\n        end\n      elsif paren_char\
+    \ == \")\"\n        if found_close\n          found_close = false\n        elsif\
+    \ found_open\n          found_open = false\n        else\n          found_close\
+    \ = true\n        end\n      else\n        found_close = nil\n        found_open\
+    \ = nil\n        array << paren_string.slice!(0)\n      end\n    end\n  end\n\
+    \  array\nend", "    paren_string = paren_string.gsub(\" \", \"\")\n    paren_groups\
+    \ = paren_string.scan(/\\(([^)]+)\\)/).flatten\nend", "  paren_string.scan(/[\\\
+    (\\)\\{\\}\\]\\)]/)\n  paren_string.scan(/[\\(\\)\\{\\}\\]\\)]/) \n  paren_string.scan(/[\\\
+    (\\)\\{\\}\\]\\)]/) \n  paren_string.scan(/[\\(\\)\\{\\}\\]\\)]/) \nend\n</code>\n\
+    <|/ a |>\n<| c |>\nThanks for your answer but I was really looking for a way to\
+    \ do it without recursion because I haven't done recursion yet. My teacher wants\
+    \ me to come up with a solution without any loops or recursion.\n<|/ c |>\n<|\
+    \ c |>\nOh okay, my teacher wants us to think like a computer programmer. Recursion\
+    \ is just a neat trick to solve problems like these. It helps us think of a program\
+    \ as a tree and helps us think through it visually. So, the function you defined\
+    \ could have a single call at the end that calls itself recursively until it reaches\
+    \ the end of the string. The only trick would be to not use recursion and instead\
+    \ use loops to iterate through the string and do your work manually.\n<|/ c |>\n\
+    <| c |>\nAhhhh I see! I guess that makes sense since recursion is a trick to solve\
+    \ problems like this. Thanks so much for taking the time to answer this!\n<|/\
+    \ c |>\n<| c |>\n- You're welcome! I'm glad I could help you out with your homework.\
+    \ Once you understand recursion, you'll have no problem doing similar problems\
+    \ again :)\n<|/ c |>\n<| c |>\n- You're welcome :) Recursion is often helpful\
+    \ for solving problems when doing them without loops. However, it can be hard\
+    \ to understand at first, but very effective once you get your head around it.\n\
+    <|/ c |>\n<| a dscore=1 |>\nThis is one way - by creating an array of strings\
+    \ representing the nested parenthesis, and a recursion which removes the last\
+    \ string in the array and returns the rest:\n<code>", "  paren_array = paren_string.scan(/([\\\
+    (\\)])/)\n  return paren_array\nend", "  paren_string.scan(/[\\(\\)]/)\nend\n\
+    </code>\n<|/ a |>\n<| a dscore=2 |>\nThis is an excellent approach and also very\
+    \ straight forward and very efficient:\n<code>", "  paren_stack = []\n  paren_stack_string\
+    \ = ''\n  paren_stack_counter = 0", "  results = []\n  paren_string.split(\" \"\
+    ).each do |i|\n    next if i.empty?\n    if i[-1] == \"[\"\n      if i[-2] ==\
+    \ \"]\"\n        results << i[0..-2]\n      else\n        results << i\n     \
+    \ end\n    elsif i[-1] == \"]\"\n      if i[-2] == \"[\"\n        results << i[0..-2]\n\
+    \      else\n        results << i\n      end\n    else\n      if i[-2] != \"[\"\
+    \n        results << i\n      end\n    end\n  end\n  results\nend", "  paren_groups\
+    \ = paren_string.scan(/[^\\(]+(\\(.*?\\))*/)\n  paren_groups.flatten\nend", " \
+    \ # Your code here\n  puts \"hi\"\nend", "  paren_string.scan(/^\\s*([(){}]+)|\\\
+    s+/).map do |group|\n    group.first.nil? ? nil : group.first\n  end\nend", '  paren_groups
+    = []', "  # TODO: Write code to accomplish this.\n  raise NotImplementedError\n\
+    end", "  output = []\n  bracket_stack = Stack.new\n  paren_stack = Stack.new\n\
+    \  bracket_stack.push paren_stack.push paren_string\n  while bracket_stack.peek\
+    \ != nil\n    char = bracket_stack.peek\n    if char == '('\n      if paren_stack.peek\
+    \ != nil\n        output << paren_stack.peek\n        paren_stack.push\n     \
+    \ else\n        output << char\n      end\n    elsif char == ')'\n      output\
+    \ << char\n      if paren_stack.peek != nil\n        paren_stack.peek\n      \
+    \  paren_stack.pop\n      end\n    elsif char == ' '\n      output << char\n \
+    \   elsif paren_stack.peek == char\n      paren_stack.pop\n    else\n      output\
+    \ << char\n    end\n  end\n  output\nend\n</code>\n<|/ a |>\n<| c |>\nThe output\
+    \ of this program is `[]`. Any idea what could be wrong here?\n<|/ c |>\n<| c\
+    \ |>\n`def separate_paren_groups(paren_string)\n  output = []\n  paren_stack =\
+    \ Stack.new\n  paren_stack.push paren_string\n  while paren_stack.peek != nil\n\
+    \    char = paren_stack.peek\n    if char == '('\n      if paren_stack.peek !=\
+    \ nil\n        output << paren_stack.peek\n        paren_stack.push\n      else\n\
+    \        output << char\n      end\n    elsif char == ')'\n      output << char\n\
+    \      if paren_stack.peek != nil\n        paren_stack.peek\n        paren_stack.pop\n\
+    \      end\n    elsif char == ' '\n      output << char\n    elsif paren_stack.peek\
+    \ == char\n      paren_stack.pop\n    else\n      output << char\n    end\n  end\n\
+    \  output\nend\n`\n<|/ c |>\n<| c |>\nI cannot reproduce the error. Have you tried\
+    \ running my code as is? It works for me.\n<|/ c |>\n<| c |>\n`def separate_paren_groups(paren_string)\n\
+    \  output = []\n  paren_stack = Stack.new\n  paren_stack.push paren_string\n \
+    \ while paren_stack.peek != nil\n    char = paren_stack.peek\n    if char == '('\n\
+    \      if paren_stack.peek != nil\n        output << paren_stack.peek\n      \
+    \  paren_stack.push\n      else\n        output << char\n      end\n    elsif\
+    \ char", "    paren_string.squeeze!(\" \")\n    groups = []\n    stack = []\n\
+    \    open_braces = nil\n    close_braces = nil\n    open_braces_count = 0\n  \
+    \  close_braces_count = 0\n    open_braces_counter = nil\n    close_braces_counter\
+    \ = nil", '  groups = []', "  return paren_string.gsub(/((?:\\([^()]*\\)|[^()])*\\\
+    ))|\\((?1)*\\)/m) do |m|\n    m == \"\" ? m : \"(\" + m.scan(/(\\([^()]*\\)|[^()])*/).join(\"\
+    , \") + \")\"\n  end\nend", "  result = []\n  stack = []", "  paren_string.split(/\\\
+    (|\\)|\\{|\\}|\\[|\\]|\\-/)\nend", "  paren_string.scan(/\\( (?<parens>.*) \\\
+    ) \\( (?<parens_end>.*) \\) \\( (?<parens_end2>.*) \\) \\( (?<parens_end3>.*)\
+    \ \\)/) do |group1, group2, group3, group4, group5, group6, group7|\n    paren_string[group1,group2,group3,group4,group5,group6,group7]\
+    \ = group1\n  end\n  paren_string\nend", "\tgroup_stack = []\n\tgroup_stack_strings\
+    \ = []\n\tparen_string_stack = []\n\tparen_string_stack_strings = []\n\tstring_stack\
+    \ = []\n\tstring_stack_strings = []", "  paren_string.split(/(\\([^\\(\\)]*\\\
+    ))+/)\nend", "  paren_string.scan(/(?!\\))( (?!\\))|(?!\\()(\\()|(\\))|(\\()\\\
+    ()/)\nend", "  groups = []\n  in_group = False\n  in_paren_group = False\n  i\
+    \ = 0\n  while i < paren_string.length\n    char = paren_string[i]\n    i += 1\n\
+    \    if char == \"(\"\n      in_group = True\n    elsif char == \")\"\n      if\
+    \ in_group\n        in_group = False\n      else\n        in_paren_group = False\n\
+    \      end\n    elsif char == \" \"\n      if in_group\n        groups << paren_string.slice!(i,\
+    \ paren_string.length)\n        i += paren_string.length\n      elsif in_paren_group\n\
+    \        in_paren_group = False\n      else\n        raise \"Input string contains\
+    \ unbalanced parenthesis: '#{paren_string}'\"\n      end\n    elsif in_group\n\
+    \      if char == \")\"\n        in_group = False\n      elsif char == \" \" #\
+    \ ignore extra spaces\n        i += 1 # ignore this space\n      elsif char ==\
+    \ \"(\"\n        in_paren_group = True\n      elsif in_paren_group\n        throw\
+    \ \"Input string contains nested parenthesis: '#{paren_string}'\"\n      else\n\
+    \        groups << paren_string.slice!(i, paren_string.length)\n        i += paren_string.length\n\
+    \      end\n    elsif in_paren_group\n      if char == \")\"\n        in_paren_group\
+    \ = False\n      elsif char == \" \" # ignore extra spaces\n        i += 1 # ignore\
+    \ this space\n      elsif char == \"(\"\n        groups << paren_string.slice!(i,\
+    \ paren_string.length)\n        i += paren_string.length\n      end\n    elsif\
+    \ !in_group and not in_paren_group\n      groups << char\n      i += 1\n    end\n\
+    \  end\n  groups\nend\n</code>\n<|/ a dscore=1 tags=ruby,algorithm,string |>\n\
+    <| c |>\nThe first answer works perfectly well, and was written by a professor.\
+    \  I've got the same question asked of her on Project Euler.  I tried to do the\
+    \ same thing but was only able to get one level of nesting.  I believe there is\
+    \ a problem with the algorithm that is causing the other problems.  I've tried\
+    \ to fix it myself but have been unsuccessful.  Any ideas?\n<|/ c |>\n<| c |>\n\
+    I added some code to the answer to handle more than one level of nesting. Let\
+    \ me know if it works for you. You may have to run it a few times to see if it\
+    \ always works properly.\n<|/ c |>\n<| c |>\nI've gotten it to work, thank you!\
+    \  Just to make sure ", "  # Your code here!\n  return []\nend", "  output = []\n\
+    \  parens = paren_string.count(\"(\")\n  braces = paren_string.count(\"{\")\n\
+    \  brackets = paren_string.count(\"[\")\n  spaces = paren_string.count(\"\\ \"\
+    )\n  newline = paren_string.count(\"\\n\")\n  spaces = paren_string.count(\"\\\
+    \ \")", "  result = \"\"\n  i = 0\n  parens = paren_string.count(\"(\")\n  while\
+    \ i < parens\n    paren_string.slice!(i..-1)\n    result << \"(\" << paren_string\
+    \ << \")\" << \" \" unless paren_string.empty?\n    i += paren_string.count(\"\
+    (\")\n  end\n  result << paren_string unless paren_string.empty?\n  result.split(\"\
+    \ \").collect{ |s| s.delete(\"(\") }\nend", "    paren_string.gsub!(/\\s+/, '')\n\
+    \    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    (/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    (/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\(/, '')\n\
+    \    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    (/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\)/, '')\n\
+    \    paren_string.gsub!(/\\(/, '')\n    paren_string.gsub!(/\\)/, '')\n    paren_string.gsub!(/\\\
+    )/, '')\n    paren_string.gsub", "  return paren_string.scan(/(\\([^\\(\\)]*\\\
+    )|\\(.*?\\))/)\nend", "  paren_stack = []\n  paren_string.scan(/[^()]+/)\n  while\
+    \ !paren_string.empty?\n    token = paren_string.slice!(0)\n    if token == \"\
+    (\"\n      paren_stack.push token\n    elsif paren_stack.last == \"(\"\n     \
+    \ paren_stack.push token\n    elsif token == \")\"\n      paren_stack.pop if paren_stack.size\
+    \ > 1\n    end\n  end\n  paren_stack.empty? ? \"nil\" : paren_stack\nend\n</code>\n\
+    It will find all nested parenthesis in the input string, and add them to an array.\
+    \ For example:\n<code>\n>> paren_string = \"( ) (( )) (( )( ))\"\n>> separate_paren_groups.call(paren_string)\n\
+    [\"()\", \"(())\", \"(()())\"]\n</code>\n<|/ a |>\n<| c |>\nAwesome! Thank you\
+    \ for the thorough explanation\n<|/ c |>\n<| a dscore=1 |>\nYou can do this with\
+    \ the help of regex and Ruby methods.\n<code>", "  groups = []\n  stack = []\n\
+    \  count = 0\n  begin = 1\n  while count < paren_string.length\n    if paren_string[count]\
+    \ == ')'\n      if stack.length == 0\n        groups.push paren_string[begin..count]\n\
+    \        begin = count+1\n      elsif stack.length != 0\n        stack.pop\n \
+    \     end\n    elsif paren_string[count] == '('\n      stack.push paren_string[begin..count]\n\
+    \      begin = count+1\n    end\n    count += 1\n  end\n  if stack.length != 0\n\
+    \    stack.pop\n  end\n  groups\nend", "  result = []\n  cur_paren_count = 0\n\
+    \  cur_paren_stack = []\n  paren_stack_count = 0\n  paren_stack_start = -1\n \
+    \ paren_stack_end = -1\n  i = 0\n  while i < paren_string.length\n    paren_stack_count\
+    \ = 0\n    paren_stack_start = -1\n    paren_stack_end = -1\n    while i < paren_string.length\n\
+    \      if paren_string[i] == \"(\"\n        paren_stack_count += 1\n        paren_stack_end\
+    \ = i\n        while i < paren_string.length and paren_string[i] != \")\"\n  \
+    \        i += 1\n      elsif paren_string[i] == \")\"\n        paren_stack_count\
+    \ -= 1\n        cur_paren_stack = paren_stack_stack if paren_stack_count > 0 else\
+    \ cur_paren_stack\n        cur_paren_stack << paren_string[paren_stack_start +\
+    \ 1: i]\n        if paren_string[paren_stack_start + 1: i] == \"()\"\n       \
+    \   result += cur_paren_stack\n          cur_paren_stack = []\n        end\n \
+    \     elsif paren_string[i] == \" \"\n        i += 1\n      else\n        i +=\
+    \ 1\n      end\n    end\n  end\n  result\nend", "  paren_string.scan(/\\(([^)]*)\\\
+    )|\\([^)]*\\)|\\[[^\\]]*\\]|\\{[^}]*\\}|\\([^)]*\\)/).map(&:first)\nend", "  paren_string.scan(/(?<=(?!\\\
+    )))/)\nend", "  result = []\n  current_group = []\n  paren_count = 0\n  open_count\
+    \ = 0\n  \n  paren_string.each do |c|\n    if c == \")\"\n      paren_count +=\
+    \ 1\n    else\n      if c == \")\" && open_count == paren_count\n        current_group.push(c)\n\
+    \      else\n        if open_count == 0 && paren_count == 0\n          result\
+    \ << current_group\n          current_group = [c]\n        else\n          if\
+    \ open_count > 0 && open_count != paren_count\n            raise \"unbalanced\
+    \ parens, count: \" + open_count.to_s + \", expected: \" + paren_count.to_s\n\
+    \          end\n          open_count = 0\n          current_group = [c]\n    \
+    \    end\n      end\n    end\n  end\n  result << current_group\n  \n  if open_count\
+    \ > 0\n    raise \"unbalanced parens, count: \" + open_count.to_s + \", expected:\
+    \ \" + paren_count.to_s\n  end\n  \n  result\nend", "  # Write your code here\n\
+    \  paren_array = paren_string.gsub(/\\(|\\)/, \"\").split(\" \").map(&:strip)\n\
+    \  paren_array.map! {|i| if i.length < 1\n                      i\n          \
+    \          else\n                      \"(#{i})\"\n                    end}\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nI agree with your analysis, however, it fails\
+    \ to handle cases like `(())()`.  Your code returns, `[[\"()\"],[\"()()\"]`. \
+    \ It needs to return `[[\"()\", \"()()\"]]`\n<|/ c |>\n<| a dscore=2 |>\nHere\
+    \ is my solution using regular expressions.\n<code>", "  raise \"Not implemented\"\
+    \nend", "  paren_groups = []\n  i = 0\n  while i < paren_string.length\n    paren_group\
+    \ = []\n    while i < paren_string.length && paren_string[i] != \"(\" && paren_string[i]\
+    \ != \")\"\n      paren_group.push paren_string[i]\n      i += 1\n      break\
+    \ if paren_string[i] == \"(\" # make sure we only look at outer parens\n     \
+    \ i += 1\n    paren_groups << paren_group if paren_group.length >= 2\n  end",
+  "  groups = []\n  paren_depth = 0\n  paren_start_pos = nil\n  bracket_depth = 0\n\
+    \  bracket_start_pos = nil\n  group = []\n  string = ''\n  paren_positions = []\n\
+    \  bracket_positions = []", '  paren_groups = []', "  paren_string.gsub(/\\s+/,\
+    \ \"\").scan(/\\([^()]+\\)/).flatten.compact\nend\n</code>\n<|/ a dscore=3 |>\n\
+    <| c |>\nThis solution is much cleaner than the accepted one and is also faster\
+    \ (~10x faster) than the other solutions listed.\n<|/ c |>\n<| a dscore=2 tags=ruby\
+    \ |>\nHere is a recursive solution that I came up with using the REXML library\
+    \ that you can download from the Ruby Package Index (1.7.10).\n<code>\nrequire\
+    \ 'rexml/document'", "  paren_string_array = paren_string.strip\n  # Remove any\
+    \ spaces from the input string\n  paren_string_array.gsub!(/^ +|\\s/,\"\")\n \
+    \ paren_string_array.gsub!(/[ ]+/,\"\")\n  # Create an array where each element\
+    \ is the string from that position in the string\n  paren_string_array.scan(/[\\\
+    (\\)]+(?=\\))/).map! {|value| value.strip}\n  paren_string_array.delete_if {|string|\
+    \ string.empty?}\n  return paren_string_array\nend", "  paren_string.gsub!(\"\\\
+    \\s+\", \"\")\n  paren_string.gsub!(\"(<[^>]+>)\", \"<group>\")\n  paren_string.gsub!(\"\
+    (</[^>]+>)\", \"</group>\")\n  paren_string.gsub!(\"<group>\", \"(\")\n  paren_string.gsub!(\"\
+    </group>\", \")\")\n  paren_string.gsub!(\"\\\\(\", \"\")\n  paren_string.gsub!(\"\
+    \\\\)\", \"\")\n  paren_string.gsub!(\"\\\\s+\", \"\")\n  paren_string.scan(/(?<=\\\
+    ()[^()]+(?=\\))/).map do |token|\n    token.scan(/[^()]+/).join(\".\")\n  end\n\
+    end", "  paren_string.gsub!(/\\(|\\)|\\s+/, '') # This removes any spaces around\
+    \ the parens\n  paren_string.gsub!(/\\(|\\)/) { |x| paren_string.split(x)[0] }\
+    \ # Split the parens into separate strings\n  paren_string.gsub!(/\\)|\\)/) {\
+    \ |x| paren_string.split(x)[1] } # Split the parens into separate strings\n  paren_string.split(paren_string).reject\
+    \ { |x| x == '' } # Remove any empty strings\nend", "  paren_string.gsub!(\" \"\
+    , \"\") # remove spaces to make searching easier\n  bracket_pairs = paren_string.chars.sort.chunk(&:last)\
+    \ # split string by char into array of pairs [\"(\", \"(\", \"(\", \"(\")]\n \
+    \ bracket_pairs.map { |bracket_pair| bracket_pair.join(\"\") } # join the pairs\
+    \ into string (\"()()()\")\nend", "  paren_string.split(/\\((.+)\\)/).flatten.compact\n\
+    end", "  paren_string = paren_string.gsub(\" \", \"\")\n  paren_string_array =\
+    \ paren_string.gsub(\"(\",\"( \").gsub(\")\",\" )\") + paren_string.gsub(\"),\"\
+    ,\" ),\").gsub(\" )\",\" )\") + paren_string.gsub(\"),\",\" ),\")\n  paren_string_array\
+    \ = paren_string_array.split(\" \").map { |x| x.gsub(\"(\",\"\").gsub(\")\",\"\
+    \") }\n  paren_string_array\nend", "  # Write your code here\nend", "  paren_string_arr\
+    \ = paren_string.gsub(/\\(\\)/, \"\").gsub(/\\)/, \"\").split(/\\(|\\)/)\n  paren_string_arr.delete_if\
+    \ { |x| x.empty? }\n  paren_string_arr.delete_if { |x| x.empty? }\n  paren_string_arr.delete_if\
+    \ { |x| x.empty? }\n  paren_string_arr\nend", "  open_braces = paren_string.scan(/\\\
+    (/)\n  closed_braces = paren_string.scan(/\\)/)\n  return open_braces + closed_braces\n\
+    end\n</code>\n<|/ a dscore=4 tags=ruby,regex |>\n<| a dscore=4 |>\nHere's my simple\
+    \ implementation:\n<code>", "  paren_groups = paren_string.scan(/(?:\\([^\\(\\\
+    )]*\\)|\\(.*?\\)|\\((?:[^()]|\\([^)]*\\))*\\))*/)\n  return paren_groups\nend\n\
+    </code>\n<|/ a tags=ruby,regex |>\n<| c |>\nThe second solution works for me and\
+    \ is really easy to understand and modify. Thank you!\n<|/ c |>\n<| c |>\nGreat\
+    \ to hear! Glad I could help!\n<|/ c |>\n<| a |>\nYou could use\n<code>\n(?:(?<=^|\\\
+    G)( (?! \\1 ))+|(?<=\\1 )(?!.*\\1)\\1|(?<=\\1\\1)\\1)+\n</code>\nReplace the match\
+    \ with an empty string. See a demo on regex101.com.", "  return paren_string.scan(/\\\
+    ((?:[^()]|\\([^()]*\\))*\\)/).flatten.compact\nend", "  result = []\n  last_group_open\
+    \ = false\n  group_count = 0\n  open_braces = []\n  closed_braces = []", "  paren_string\
+    \ = paren_string.gsub(/\\s\\s/, '').gsub(/[^\\)]/, '').gsub(/\\(/, '').gsub(/\\\
+    )/, '')\n  paren_string.scan(/[^\\(\\)]+/) do |group|\n    return group if paren_string.start_with?\
+    \ group\n  end\n  nil\nend", "  regex = /\\((?!\\))*\\)|\\((?!\\))*\\)/\n  paren_groups\
+    \ = paren_string.scan(regex)\n  return paren_groups\nend", "  # Separate each\
+    \ parenthesis group\n  group_array = paren_string.gsub(/\\(|\\)|\\s+/, \"\").split(\"\
+    \ \") # Split on any whitespace (including newlines), removing them from the resulting\
+    \ array\n  # Remove any leading or trailing parenthesis groups (this allows us\
+    \ to filter out the empty groups)\n  group_array.shift\n  group_array.pop\n  #\
+    \ Remove any empty groups (this allows us to filter out the groups of just whitespace)\n\
+    \  group_array.delete_if { |x| x.empty? }\n  return group_array\nend", "  paren_string\
+    \ = paren_string.downcase if paren_string.respond_to?(:downcase)\n  return paren_string.gsub!(/\\\
+    (|\\)/, '').split(/\\((.+?)\\)/).map { |e| e.strip }\nend", "  paren_string.dup.gsub!(/\\\
+    (\\s*\\)/, '') # remove opening and closing parens\n  paren_string.dup.gsub!(/\\\
+    s*\\)\\s*\\)/, '') # remove any spaces surrounding closing parens\n  paren_string.scan(/(\\\
+    ([^()]*\\))|(\\(([^()]*\\))\\))|(\\{([^{}]*\\})\\})/).map {|m| m[0] ? m[0] : m[1]}\n\
+    end", "  paren_array = paren_string.split(\")\")\n  new_array = []\n  paren_stack.groups\
+    \ = []\n  for i in 0..paren_array.length - 1\n    if paren_array[i].strip == \"\
+    \" and paren_stack.length > 0\n      paren_stack.groups.push(paren_stack.last)\n\
+    \      paren_stack.pop\n    else\n      paren_stack.push(paren_array[i])\n   \
+    \   paren_stack.groups.push(paren_stack.last)\n  end\n  paren_stack.groups.push(paren_array[-1])\n\
+    \  new_array.push(paren_stack.groups.join)\n  return new_array\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nI didn't even think of using recursion, thank you for answering\
+    \ my question. As far as the language goes, I believe this works great for the\
+    \ problem. I will give it a test and see if I can make it work and I'll accept\
+    \ the answer. I also appreciate the explanation!\n<|/ c |>\n<| c |>\nIt works\
+    \ great! I implemented this into my program and it works great! I am going to\
+    \ take some time to read through it to understand it better and modify it to suit\
+    \ my needs. Thank you for this!\n<|/ c |>\n<| c |>\nI am having trouble understanding\
+    \ how this would work for the problem I posted, but thank you for your answer.\n\
+    <|/ c |>\n<| c |>\nMy apologies, I did not make my example super clear. The problem\
+    \ I was working on is one that has more than one set of parentheses. It turns\
+    \ out this program only works if there is just one set of parentheses. For example,\
+    \ the string \"(()()())\" returns ['()()']. I think I will have to modify it to\
+    \ work with more than one set of parentheses.\n<|/ c |>\n<| a tags=ruby,algorithm,regex\
+    \ dscore=0 |>\nI wrote this answer to help you with your specific problem. I'm\
+    \ sure this can be made more elegant, but since you asked for a recursive solution,\
+    \ here it is. I hope it helps. I tested it with the input you provided, and it\
+    \ works. \n<code>", "  paren_array = []\n  paren_count = 0\n  while ((paren_count\
+    \ < paren_string.length) and ((paren_count > 0) and ((paren_string[paren_count\
+    \ - 1] == paren_string[paren_count - 2])) ) )\n    paren_array << paren_string[paren_count]\n\
+    \    paren_count += 1\n  while ((paren_count > 0) and ((paren_count < paren_string.length)\
+    \ and (paren_string[paren_count - 1] != paren_string[paren_count - 2])) )\n  \
+    \  paren_array << paren_string[paren_count]\n    paren_count += 1\n  while ((paren_count\
+    \ > 0) and (paren_string[paren_count - 1] == paren_string[paren_count - 2])) and\
+    \ (paren_string[paren_count - 1] == paren_string[paren_count - 2])) \n    paren_array\
+    \ << paren_string[paren_count]\n    paren_count += 1\n  return paren_array\nend",
+  "  result = []\n  paren_string_stack = Stack.new\n  paren_string_stack.push(paren_string)",
+  "  matches = paren_string.scan(/\\(.*?\\)/).flatten\n  paren_groups = matches.select\
+    \ do |m|\n    if m = /\\(.*?\\)/\n      !m.gsub(/\\(.*?\\)/, '').empty?\n    else\n\
+    \      true\n    end\n  end\n  paren_groups\nend\n</code>\n<|/ a dscore=1 |>\n\
+    <| a dscore=0 |>\nHere's a solution for those using Ruby 2.0.\nThe regular expression\
+    \ matches balanced parentheses pairs, but only if the previous matched pair is\
+    \ a balanced one. Here's an example with the string \"(ab)(b)c\". Note that it\
+    \ matches twice for \"ab(b)c\".\n<code>\nirb> \"(ab)(b)c\".scan(/(([^()]*)\\1)+/)\n\
+    => [[\"ab(b)c\", \"ab(b)c\"]]\n</code>\nThe regex also matches a pair of parentheses\
+    \ with only one element (like \"ab\") which might not be what you want. It can\
+    \ be fixed by adding a ? after the *:\n<code>\nirb> \"(ab)(b)c\".scan(/(([^()]*?)\\\
+    1)+/)\n=> [[\"ab\", \"ab\"]]\n</code>\n<|/ a tags=ruby,regex |>\n<| a dscore=0\
+    \ |>\nHere's my solution (it works even if the string is \"(ab)\" since it just\
+    \ removes the first character if it is a closing bracket or opening it if it's\
+    \ an opening bracket)\n<code>", "  paren_string_split = paren_string.split(/\\\
+    )|\\(|\\s/).map { |e| e.gsub(/^\\s+|\\s+$/,'') }\n  paren_string_split.each_with_index\
+    \ do |e,i|\n    if i % 2 == 0 \n      paren_string_split[i] = paren_string_split[i].gsub(/\\\
+    s*\\)/,'').gsub(/\\s*\\()/,'').gsub(/\\s*\\)/,'')\n      paren_string_split[i\
+    \ + 1] = ''\n    end\n  end\n  return paren_string_split\nend", "  res = []\n\
+    \  input_string = paren_string.strip\n  paren_depth = 0\n  in_paren = nil\n  paren_char\
+    \ = \"(\"\n  char_stack = []\n  char_stack.push input_string[0]\n  while char_stack.count\
+    \ > 0\n    current_char = char_stack.pop\n    if in_paren != nil\n      char_stack.push\
+    \ current_char\n      if current_char == paren_char\n        paren_depth += 1\n\
+    \      end\n      if current_char == paren_char && paren_depth > 0\n        paren_depth\
+    \ -= 1\n      end\n    end\n    if current_char == char_stack.pop\n      char_stack.push\
+    \ current_char\n    end\n    if paren_depth == 0\n      res.push(char_stack.join)\n\
+    \      char_stack = input_string.slice!(0, 1)\n    end\n  end\n  return res\n\
+    end", "  paren_string.scan(/\\s*(?:\\(([^\\)]*)\\))*[^\\(\\)]*\\s*/)\nend", " \
+    \ paren_stack = []\n  paren_stack_string = \"\"\n  i = 0\n  paren_count = 0\n\
+    \  while i < paren_string.length\n    if paren_string[i] == \"(\" then\n     \
+    \ paren_count += 1\n      paren_stack_string += paren_string[i]\n      if paren_count\
+    \ % 2 == 1 then\n        paren_stack[paren_stack.length] = paren_stack_string\n\
+    \        paren_stack_string = \"\"\n      end\n    elsif paren_string[i] == \"\
+    (\" then\n      paren_count += 1\n      paren_stack_string += paren_string[i]\n\
+    \      if paren_count % 2 == 1 then\n        paren_stack[paren_stack.length] =\
+    \ paren_stack_string\n        paren_stack_string = \"\"\n      end\n    elsif\
+    \ paren_string[i] == \")\" then\n      paren_count -= 1\n      if paren_count\
+    \ % 2 == 1 then\n        paren_stack[paren_stack.length] = paren_stack_string\n\
+    \        paren_stack_string = \"\"\n      end\n    elsif paren_string[i] == \"\
+    )\" then\n      paren_count -= 1\n      if paren_count % 2 == 1 then\n       \
+    \ paren_stack[paren_stack.length] = paren_stack_string\n        paren_stack_string\
+    \ = \"\"\n      end\n    else\n      paren_stack_string += paren_string[i]\n \
+    \   end\n    i += 1\n  end\n  return paren_stack\nend", "  open_paren = 0\n  arr\
+    \ = []\n  while open_paren != -1 do\n    if paren_string[open_paren] != '('\n\
+    \      arr << paren_string[open_paren]\n      open_paren += 1\n    else\n    \
+    \  open_paren += 1\n    end\n    if paren_string[open_paren] == '('\n      while\
+    \ paren_string[open_paren] != '('\n        open_paren += 1\n      end\n    end\n\
+    \  end\n  arr\nend", "  array = []\n  index = 0\n  while index < paren_string.length\n\
+    \    char = paren_string[index]\n    if char == ')' && !(array.length > 0 && array[-1].include?(')'))\
+    \ && array.length > 1\n      array.pop\n    elsif char == ')' && array.length\
+    \ > 0 && array[-1].include?(')')\n      array << array[-1][0...-1]\n    elsif\
+    \ char == ')'\n      array << array[-1][0...-1]\n    elsif char == '('\n     \
+    \ array << paren_string[index + 0...index].strip\n      index += 2\n    end\n\
+    \    index += 1\n  end\n  array\nend\n</code>\nThe code is self-explanatory. It\
+    \ goes through the string character by character and finds all the parentheses\
+    \ pairs. If the last element in the array is unbalanced or parenthesis pair is\
+    \ missing, we simply pop the last element. If the last element is unbalanced,\
+    \ we push all the elements before the current index which makes a parenthesis\
+    \ pair. After that we append the remaining string. \nThe return statement returns\
+    \ the array containing the separated groups.\n<|/ a dscore=1 tags=ruby,string,regex\
+    \ |>\n<| a tags=ruby,string,regex |>\nYou do not need a regex, just a simple recursive\
+    \ function like this:\n<code>", "  # Initialize an empty array to store the results.\n\
+    \  result = []\n  # Initialize a list to contain groups of parens.\n  paren_groups\
+    \ = []\n  # Initialize a counter which will hold the current index in the paren_groups\
+    \ list.\n  current_index = 0\n  # Loop through the paren groups from the previous\
+    \ index to the end of the array.\n  while current_index < paren_string.length\n\
+    \    # If the current paren group contains a closing paren, add it to the current\
+    \ group and increment the index.\n    if paren_groups[current_index + 1] =~ /^\\\
+    )/\n      # Add the closing paren group to the list of paren groups and increment\
+    \ the index.\n      paren_groups << paren_groups[current_index + 1]\n      current_index\
+    \ += 1\n    # If the current paren group contains a opening paren, add it to the\
+    \ current group and increment the index.\n    elsif paren_groups[current_index\
+    \ + 1] =~ /^\\((/\n      # Add the opening paren group to the list of paren groups\
+    \ and increment the index.\n      paren_groups << paren_groups[current_index +\
+    \ 1]\n      current_index += 1\n    # If the current paren group does not contain\
+    \ an opening or closing paren, increment the index.\n    else\n      current_index\
+    \ += 1\n    end\n  end\n  # If the paren_groups list is not empty\n  if !paren_groups.empty?\n\
+    \    # Loop through the paren groups and separate the parens from each other by\
+    \ adding them to the\n    # result string.\n    paren_groups.each do |paren_group|\n\
+    \      # If the current paren group contains at least two characters\n      if\
+    \ paren_group.length >= 2\n        # Remove the first character of the paren_group\
+    \ and add it to the result string.\n        result << paren_group[0..1]\n    \
+    \  # If the current paren group contains one character or less\n      else\n \
+    \       result << paren_group\n      end\n    end\n  end\n  # Return the result\
+    \ array.\n  result\nend\n</code>\n<|/ a tags=ruby,algorithm |>\n<| a |>\n<code>",
+  "  result = []\n  i = 0\n  while i < paren_string.length\n    open_count = 0\n \
+    \   closed_count = 0\n    current = paren_string[i]\n    i += 1\n    while i <\
+    \ paren_string.length\n      if paren_string[i] == \"(\"\n        open_count +=\
+    \ 1\n      elsif paren_string[i] == \")\"\n        closed_count += 1\n      elsif\
+    \ paren_string[i] == \" \" and open_count == closed_count\n        result << current\
+    \ if open_count > closed_count\n        break\n      elsif paren_string[i] !=\
+    \ \" \" and open_count < closed_count\n        result << current\n      end\n\
+    \      i += 1\n    end\n    i += 1\n  end\n  return result\nend", "\tparen_string.scan(/([^()]+|\\\
+    ((?1)\\))|(?<=[)])(?=\\()|(?<=\\s)\\((?1)\\)/).map { |x| x.to_s }\nend", "  paren_string_array\
+    \ = paren_string.split(\"\").map(&:to_i)\n  paren_string_array.group_by{|i| paren_string_array.index(i)}.values\n\
+    end\n</code>\n<|/ a tags=ruby,regex dscore=2 |>\n<| a tags=ruby,regex |>\n<code>",
+  "  matches = /^(\\((?!.*\\))[^(])*$/.match(paren_string)\n  matches[2] ? matches[2].split(/\\\
+    )$/) : \"\"\nend", "  paren_string.strip!\n  return paren_string.split(')').reject\
+    \ { |str| str.empty? }\nend", "  groups = []\n  paren_string = paren_string.strip",
+  "  paren_string.scan(/[(,)]+/).map { |i| i.to_s }\nend", "    stack = []\n    paren_groups\
+    \ = []"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

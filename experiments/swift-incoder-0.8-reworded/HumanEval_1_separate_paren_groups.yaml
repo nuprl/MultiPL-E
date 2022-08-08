@@ -16,6 +16,2068 @@ tests: "}\n\n\nfunc ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {\n    i
   , \"(())\", \"((()))\", \"(((())))\"])\nassert(separate_paren_groups(paren_string:\
   \ \"(()(())((())))\") == [\"(()(())((())))\"])\nassert(separate_paren_groups(paren_string:\
   \ \"( ) (( )) (( )( ))\") == [\"()\", \"(())\", \"(()())\"])"
-completions: []
+completions: ["    // The first character in each group should be the same as the\
+    \ last character in that group\n    let groups = paren_string.characters.map {\
+    \ String($0) }\n    var paren_groups = groups.map { String($0) }\n\n    while\
+    \ paren_groups[paren_groups.count - 1] == paren_groups[paren_groups.count - 2]\
+    \ {\n        paren_groups.remove(at: paren_groups.count - 1)\n    }\n    paren_groups.append(\"\
+    \")\n    return paren_groups", "    return paren_string.components(separatedBy:\
+    \ \"(\" )\n        .map { ($0).trim() }\n        .map { $0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())\
+    \  }\n        .map { $0.stringByReplacingOccurrencesOfString(\"(?<=\\\\))\", withString:\
+    \ \"\", options: NSStringCompareOptions.RegularExpressionSearch, range: nil) }\n\
+    \        .map { $0.stringByReplacingOccurrencesOfString(\"(?=\\\\()\", withString:\
+    \ \"\", options: NSStringCompareOptions.RegularExpressionSearch, range: nil) }",
+  "    var return_strings: [String] = []\n    var current_index = 0\n    var current_char\
+    \ = \"\"\n    for char in paren_string {\n        current_char = char\n      \
+    \  // If we already have a group, add the char to it\n        if current_index\
+    \ > 0 {\n            return_strings[current_index] = current_char\n        }\n\
+    \        // Otherwise, add it to the beginning of the string\n        else {\n\
+    \            return_strings.insert(current_index, current_char)\n        }\n \
+    \       // Increment the index\n        current_index++\n    }\n    return return_strings",
+  "\tvar result = [String]()\n\tvar paren_count = 0\n\tvar open_brace_count = 0\n\t\
+    var open_brace_is_nested = false\n\tfor c in paren_string {\n\t\tif c == '(' {\n\
+    \t\t\tparen_count += 1\n\t\t} else if c == ')' {\n\t\t\tparen_count -= 1\n\t\t\
+    \tif paren_count == 0 {\n\t\t\t\tif open_brace_is_nested && paren_count == 0 {\n\
+    \t\t\t\t\t// ignore nested brackets inside of other brackets\n\t\t\t\t\tcontinue\n\
+    \t\t\t\t}\n\t\t\t\topen_brace_count += 1\n\t\t\t\topen_brace_is_nested = false\n\
+    \t\t\t}\n\t\t} else if c == '{' {\n\t\t\topen_brace_is_nested = true\n\t\t}\n\t\
+    \t\n\t\tif paren_count == 0 && open_brace_count == 0 {\n\t\t\t// we're inside\
+    \ an already-closed brace without an open paren\n\t\t\tresult.append(c)\n\t\t\
+    }\n\t}\n\treturn result", '    separate_paren_groups([paren_string]())', '    return
+    paren_string.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).filter
+    { $0 != "" }.map { $0.stringByReplacingOccurrencesOfString("(", withString: "").stringByReplacingOccurrencesOfString(")",
+    withString: "") }', "    var result = [String]()\n    var inParen = true\n   \
+    \ var lastParen = \"\"\n    for c in paren_string.characters {\n        if c ==\
+    \ \" \" {\n            result.append(c)\n        } else {\n            if inParen\
+    \ {\n                lastParen += c\n            } else {\n                inParen\
+    \ = true\n                result.appendContentsOf(lastParen.characters.map(String.init))\n\
+    \                lastParen = \"\"\n                result.append(c)\n        \
+    \    }\n        }\n    }\n    return result", "    var output = [String]()\n \
+    \   \n    for i in 1..paren_string.characters.count {\n        if paren_string.characters.count\
+    \ - i >= 2 {\n            if paren_string.characters.count - i == 1 {\n      \
+    \          output += [String(paren_string.characters[i-1]), String(paren_string.characters[i])]\n\
+    \            } else {\n                output += [String(paren_string.characters[i-1]),\
+    \ String(paren_string.characters[i])]\n            }\n        }\n    }\n    return\
+    \ output", "    if paren_string.isEmpty {\n        return []\n    }\n\n    //\
+    \ Keep track of the index into paren_string\n    var paren_count = 0\n\n    //\
+    \ Initialize a stack\n    var stack_of_parens = [String]()\n\n    // Initialize\
+    \ a stack of unbalanced parens\n    var paren_stacks = [String]()\n\n    // Initialize\
+    \ an empty list of strings\n    var results = [String]()\n\n    var i = paren_string.startIndex\n\
+    \    while i != paren_string.endIndex {\n        let char = paren_string[i]\n\
+    \        if char == \")\" {\n            if paren_count > 0 {\n              \
+    \  // Pop the stack one level\n                stack_of_parens.removeLast()\n\n\
+    \                // If there are no more unbalanced parens, add an extra stack\
+    \ level\n                if paren_stacks.count == 0 {\n                    paren_stacks.append(\"\
+    \")\n                }\n\n                paren_count--\n            } else {\n\
+    \                // If we see a right paren, add a new stack level\n         \
+    \       paren_count++\n                paren_stacks.append(\"\")\n           \
+    \ }\n        } else if char == \"(\" {\n            // If the right paren is on\
+    \ a different stack level, ignore it\n            if paren_stacks.count != paren_count\
+    \ {\n                paren_stacks[paren_stacks.count - 1] += char\n          \
+    \  } else {\n                paren_count++\n                paren_stacks.append(char)\n\
+    \            }\n        } else {\n            // Add the char to the current stack\n\
+    \            if paren_count > 0 {\n                stack_of_parens[paren_count\
+    \ - 1] += char\n            } else {\n                paren_count++\n        \
+    \        stack_of_parens.append(char)\n            }\n        }\n        i +=\
+    \ 1 // Move to the next char\n    }\n\n    // Process all the unbalanced parens\n\
+    \    if paren_count > 0 {\n        var stack_of_unbalanced = [String]()\n    \
+    \    for index in 0..<paren_stacks.count {\n            if paren_stacks[index]\
+    \ == \"\" {\n                stack_of_unbalanced.append(\"\")\n            } else\
+    \ {\n                stack_of_unbalanced.append(paren_stacks[index])\n       \
+    \     }\n        }\n\n        // Recurse on the unbalanced parens\n        results\
+    \ += separate_paren_groups(paren_string: paren_string)\n        results += separate_paren_groups(paren_string:\
+    \ paren_string, unbalanced: stack_of_unbalanced)\n    }\n\n    return results",
+  "    \n    var paren_groups = [String]()\n    var paren_count = 0\n    var paren_start\
+    \ = -1\n    var paren_end = -1\n    \n    if paren_string != \"\" {\n        \n\
+    \        for char in paren_string {\n            \n            if char == \")\"\
+    \ {\n                \n                if paren_start == -1 {\n              \
+    \      \n                    paren_count = 0\n                    paren_start\
+    \ = paren_end\n                }\n                \n                paren_count\
+    \ += 1\n                \n                if paren_count == 2 {\n            \
+    \        \n                    paren_groups.append(paren_string[paren_start...paren_end])\n\
+    \                    \n                    paren_count = 0\n                 \
+    \   paren_start = -1\n                    paren_end = -1\n                }\n\
+    \            }\n            else if char == \"(\" {\n                \n      \
+    \          if paren_end == -1 {\n                    \n                    paren_count\
+    \ = 0\n                    paren_start = paren_end\n                }\n      \
+    \          \n                paren_count += 1\n                \n            \
+    \    if paren_count == 2 {\n                    \n                    paren_groups.append(paren_string[paren_start...paren_end])\n\
+    \                    \n                    paren_count = 0\n                 \
+    \   paren_start = -1\n                    paren_end = -1\n                }\n\
+    \            }\n            else {\n                \n                paren_start\
+    \ = -1\n                paren_end = -1\n            }\n        }\n    }\n    \n\
+    \    return paren_groups", "\tvar str = [String]()\n\n\tvar openingBraceCount\
+    \ = 0\n\tvar openingBracketCount = 0\n\tvar insideBrace = false\n\tvar insideBracket\
+    \ = false\n\n\tfor i in 0..<paren_string.characters.count {\n\t\tswitch paren_string.characters.characters.first!\
+    \ {\n\t\tcase \"(\":\n\t\t\tif insideBracket {\n\t\t\t\topeningBracketCount--\n\
+    \t\t\t\tif openingBracketCount == 0 {\n\t\t\t\t\tinsideBracket = false\n\t\t\t\
+    \t\tstr.append(\"(\")\n\t\t\t\t}\n\t\t\t} else if openingBraceCount > 0 {\n\t\t\
+    \t\topeningBraceCount--\n\t\t\t\tif openingBraceCount == 0 {\n\t\t\t\t\tinsideBrace\
+    \ = false\n\t\t\t\t\tstr.append(String(Character(\" \")))\n\t\t\t\t}\n\t\t\t}\n\
+    \t\t\tinsideBracket = false\n\t\t\topeningBracketCount++\n\t\tcase \"\\\"\":\n\
+    \t\t\tinsideBracket = false\n\t\tcase \"[\":\n\t\t\tif !insideBracket {\n\t\t\t\
+    \topeningBracketCount++\n\t\t\t\tinsideBracket = true\n\t\t\t}\n\t\tcase \")\"\
+    :\n\t\t\tif !insideBracket {\n\t\t\t\topeningBracketCount--\n\t\t\t\tif openingBracketCount\
+    \ == 0 {\n\t\t\t\t\tinsideBracket = false\n\t\t\t\t\tstr.append(\")\")\n\t\t\t\
+    \t}\n\t\t\t} else if openingBracketCount == 0 {\n\t\t\t\tinsideBrace = false\n\
+    \t\t\t\tstr.append(String(Character(\" \")))\n\t\t\t}\n\t\tcase \"\\\"\":\n\t\t\
+    \tinsideBracket = false\n\t\tdefault:\n\t\t\tif insideBrace {\n\t\t\t\tif paren_string.characters.characters.first!\
+    \ == Character(\" \") {\n\t\t\t\t\tstr.append(\")\")\n\t\t\t\t\topeningBraceCount--\n\
+    \t\t\t\t}\n\t\t\t\tstr.append(String(paren_string.characters.characters.first!))\n\
+    \t\t\t\topeningBraceCount++\n\t\t\t}\n\t\t}\n\t}\n\treturn str", "    // Initialize\
+    \ the new output array\n    var output = [String]()\n\n    // Initialize the index\
+    \ of the last open bracket\n    var lastOpenBracketIndex = 0\n\n    // Iterate\
+    \ through the input string\n    for currentCharacter in paren_string.characters\
+    \ {\n        // Check if the current character is open or not\n        if currentCharacter\
+    \ == \"(\" {\n            // If it's an open bracket, copy its value to our new\
+    \ output array\n            output.append(paren_string[lastOpenBracketIndex..<currentCharacter])\n\
+    \            // Increment our index to the next open bracket\n            lastOpenBracketIndex\
+    \ += 1\n        }\n        // If it's a close bracket\n        else if currentCharacter\
+    \ == \")\" {\n            // If it's the last open bracket index, copy its value\
+    \ to our new output array\n            output.append(paren_string[lastOpenBracketIndex..<currentCharacter])\n\
+    \            // If it's the last open bracket index, decrement our index to the\
+    \ previous close bracket\n            if lastOpenBracketIndex > 0 {\n        \
+    \        lastOpenBracketIndex -= 1\n            }\n            // We don't care\
+    \ what happens if we encounter the previous close bracket in the next iteration\n\
+    \        }\n        // If we encounter a space, ignore it and continue with the\
+    \ next character in the loop\n        else if currentCharacter == \" \" {\n  \
+    \          continue\n        }\n    }\n\n    // Return the new output array\n\
+    \    return output", "    if paren_string.isEmpty {\n        return []\n    }\n\
+    \n    var currentBracketLevel = 0\n    var bracketGroups = [String]()\n    var\
+    \ lastBracketGroup = \"\"\n    var brackets = [String]()\n    var isFirstBracket\
+    \ = true\n    for s in paren_string.characters {\n        if isFirstBracket {\n\
+    \            bracketGroups.append(String(s))\n            lastBracketGroup = \"\
+    \"\n            isFirstBracket = false\n        } else {\n            if lastBracketGroup\
+    \ != \"\" {\n                brackets.append(String(s))\n            } else {\n\
+    \                lastBracketGroup = String(s)\n            }\n        }\n\n  \
+    \      if currentBracketLevel == 0 && lastBracketGroup != \"\" {\n           \
+    \ bracketGroups.append(lastBracketGroup)\n        }\n\n        currentBracketLevel\
+    \ += 1\n    }\n    return bracketGroups", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"\\\\(|\\\\)|\\\\s|\\\\)|\\\\)|\\\\s)\")\n    let range = NSRange(location:\
+    \ 0, length: paren_string.utf16.count)\n    let mutableString = paren_string.mutableCopy()\
+    \ as! NSString\n    regex.enumerateMatchesInString(mutableString, options: [])\
+    \ { (match, range) -> Void in\n        if let match = match {\n            mutableString.replaceCharactersInRange(range,\
+    \ withString: \"\")\n        }\n    }\n    let matches = regex.matchesInString(mutableString\
+    \ as String, options: [], range: NSMakeRange(0, mutableString.length))\n    var\
+    \ ret = [String]()\n    for match in matches {\n        let range = match.rangeAtIndex(0)\n\
+    \        ret.append(mutableString.substringWithRange(range))\n    }\n    return\
+    \ ret", "    var input_string = paren_string.components(separatedBy: CharacterSet.whitespacesAndNewlines)\n\
+    \n    var paren_array = [String]()\n\n    let open_braces = \"([{[\"\n    let\
+    \ close_braces = \"])}]\"\n\n    var open_brace_counts = [Int]()\n\n    for i\
+    \ in 0..<input_string.count {\n        let open_brace_count = input_string[i].characters.filter({\
+    \ open_braces.contains($0) }).count\n        open_brace_counts.append(open_brace_count)\n\
+    \    }\n\n    for j in 0..<open_brace_counts.count {\n        if open_brace_counts[j]\
+    \ == 0 {\n            paren_array.append(input_string[j])\n        }\n    }\n\n\
+    \    return paren_array", "    var result = [String]()\n    var stack = [String]()\n\
+    \    var opening = false\n    var closing = false\n    var i = -1\n    while i\
+    \ < paren_string.characters.count {\n        i += 1\n        let character = paren_string.characters[i]\n\
+    \        if opening {\n            switch character {\n            case '(':\n\
+    \                stack.append(character)\n                opening = false\n  \
+    \              break\n            case ')':\n                if stack.isEmpty\
+    \ {\n                    throw SwiftError(code: .syntaxError, msg: \"Unmatched\
+    \ closing parentheses in \\(paren_string)\", line: -1, col: -1)\n            \
+    \    }\n                let char = stack.removeLast()\n                if char\
+    \ != '(' {\n                    throw SwiftError(code: .syntaxError, msg: \"Unmatched\
+    \ closing parentheses in \\(paren_string)\", line: -1, col: -1)\n            \
+    \    }\n                opening = false\n                break\n            case\
+    \ ' ':\n                break\n            default:\n                throw SwiftError(code:\
+    \ .syntaxError, msg: \"Unrecognized character \\(character) in \\(paren_string)\"\
+    , line: -1, col: -1)\n            }\n        } else if closing {\n           \
+    \ switch character {\n            case ')':\n                if stack.isEmpty\
+    \ {\n                    throw SwiftError(code: .syntaxError, msg: \"Unmatched\
+    \ opening parentheses in \\(paren_string)\", line: -1, col: -1)\n            \
+    \    }\n                let char = stack.removeLast()\n                if char\
+    \ != '(' {\n                    throw SwiftError(code: .syntaxError, msg: \"Unmatched\
+    \ opening parentheses in \\(paren_string)\", line: -1, col: -1)\n            \
+    \    }\n                closing = false\n                break\n            case\
+    \ ' ':\n                break\n            default:\n                throw SwiftError(code:\
+    \ .syntaxError, msg: \"Unrecognized character \\(character) in \\(paren_string)\"\
+    , line: -1, col: -1)\n            }\n        } else if character == ' ' {\n  \
+    \          if !opening && !closing {\n                opening = true\n       \
+    \     }\n        } else {\n            switch character {\n            case '(':\n\
+    \                opening = true\n                break\n            case ')':\n\
+    \                closing = true\n                break\n            case ' ':\n\
+    \                break\n            default:\n                result.append(String(character))\n\
+    \            }\n        }\n    }\n    return result", "    var groups: [String]\
+    \ = []\n\n    for parens in paren_string.components(separatedBy: CharacterSet(charactersIn:\
+    \ \"()\")) as! [String] {\n        let currentGroup: String = parens\n\n     \
+    \   var isClosed = false\n        while !isClosed {\n            let openParenIndex\
+    \ = parens.firstIndex(of: CharacterSet(charactersIn: \"()\"))\n            if\
+    \ openParenIndex == -1 {\n                break\n            }\n            let\
+    \ nextOpenBraceIndex = parens.index(openParenIndex + 1, offsetBy: 1)\n\n     \
+    \       isClosed = (nextOpenBraceIndex < parens.endIndex)\n\n            if nextOpenBraceIndex\
+    \ < parens.endIndex {\n                currentGroup = parens[nextOpenBraceIndex..<parens.endIndex]\n\
+    \            } else {\n                currentGroup = parens[nextOpenBraceIndex..<parens.endIndex]\
+    \ + currentGroup\n            }\n            groups.append(currentGroup)\n   \
+    \     }\n    }\n\n    return groups", "    if paren_string == \"\" || paren_string.count\
+    \ < 1 {\n        return []\n    }\n\n    var paren_strings: [String] = []\n  \
+    \  var opening_parens = 0\n    var bracket_count = 0\n    var paren_open = false\n\
+    \    var i = -1\n    var paren_level = 0\n    var chr = paren_string.characterAtIndex(0)\n\
+    \    var group_begin = false\n    var group_end = false;\n\n    while i != paren_string.endIndex\
+    \ {\n        i += 1\n        chr = paren_string.characterAtIndex(i)\n        if\
+    \ chr == \")\" {\n            paren_level -= 1\n            if paren_level ==\
+    \ 0 {\n                if opening_parens == 0 {\n                    paren_strings.append(paren_string.substringWithRange(NSMakeRange(i,\
+    \ paren_string.length - i)))\n                    paren_open = false\n       \
+    \             opening_parens = 0\n                    group_begin = false\n  \
+    \                  group_end = false\n                }\n            }\n     \
+    \   } else if chr == \"(\" {\n            paren_level += 1\n            if paren_level\
+    \ == 0 {\n                if opening_parens == 0 {\n                    paren_strings.append(paren_string.substringWithRange(NSMakeRange(i,\
+    \ paren_string.length - i)))\n                    paren_open = false\n       \
+    \             opening_parens = 0\n                    group_begin = false\n  \
+    \                  group_end = false\n                }\n            }\n     \
+    \   } else if chr == \")\" && paren_open && paren_level == 0 {\n            opening_parens\
+    \ -= 1\n            if paren_open == false && paren_string.characterAtIndex(i\
+    \ - 1) == \")\" {\n                opening_parens += 1\n            }\n      \
+    \  } else if chr == \"(\" && paren_open && paren_level == 0 {\n            opening_parens\
+    \ += 1\n            if paren_open == false && paren_string.characterAtIndex(i\
+    \ + 1) == \"(\" {\n                opening_parens -= 1\n            }\n      \
+    \  } else if chr == \"(\" && paren_level == 0 {\n            opening_parens +=\
+    \ 1\n            group_begin = true\n        } else if chr == \")\" && paren_level\
+    \ == 0 {\n            opening_parens -= 1\n            group_end = true\n    \
+    \    }\n    }\n    return paren_strings", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"\\\\(|\\\\)|\\\\s+\", options: [])\n    let matches = regex.matches(in: paren_string,\
+    \ range: NSRange(location: 0, length: paren_string.count))\n    return matches.compactMap({\
+    \ matchRange -> String? in\n        return paren_string.substring(with: matchRange)\n\
+    \    })", "    var result = Array(paren_string.characters)\n    var openBraceIndex\
+    \ = result.count\n    var bracketDepth = 0\n    var currentBracketType: BracketType?\n\
+    \    var currentBracketOpening: BracketType?\n    for index in 0..<result.count\
+    \ {\n        let character = result[index]\n        if character == \"{\" {\n\
+    \            bracketDepth++\n            currentBracketOpening = bracketType\n\
+    \        } else if character == \"}\" {\n            bracketDepth--\n        \
+    \    currentBracketOpening = nil\n        } else if character == \" \" || character\
+    \ == \"\\t\" {\n            if bracketDepth == 0 {\n                result.remove(at:\
+    \ index)\n            } else {\n                result.remove(at: index)\n   \
+    \         }\n        } else if character == \"(\" {\n            currentBracketType\
+    \ = bracketType\n        } else if character == \")\" {\n            if bracketDepth\
+    \ == 0 {\n                result.insert(openBraceIndex, \"(\")\n             \
+    \   openBraceIndex++\n            }\n            currentBracketType = nil\n  \
+    \      }\n    }\n    return Array(reversed(result))", "    let parenRegex = try!\
+    \ NSRegularExpression(pattern: \"\\\\(|\\\\)|()\", options: [])\n    return parenRegex.matches(in:\
+    \ paren_string, range: NSMakeRange(0, paren_string.characters.count)).map { result\
+    \ in\n        var resultString = \"\"\n        for match in result.ranges.sorted(by:\
+    \ { $0.location! < $1.location! }) {\n            resultString += paren_string[Range(result.range(at:\
+    \ result.range(at: match.range.lowerBound)), in: paren_string)!]\n        }\n\
+    \        return resultString.trimmingCharacters(in: .whitespacesAndNewlines)\n\
+    \    }", "    let regex = try! NSRegularExpression(pattern: \"(([^\\s()]+|\\\\\
+    ([^()]*\\\\))*[^\\s()]+)+\", options: [])\n    return regex.matches(in: paren_string,\
+    \ range: NSRange(location: 0, length: paren_string.utf16.count)).compactMap({\n\
+    \        (subrange, substring) -> String\n        switch substring{\n        case\
+    \ \"(\" : return \"(\"\n        case \")\" : return \")\"\n        case \" \"\
+    \ : return \"\"\n        default : return substring\n        }\n    })", "   \
+    \ if paren_string.isEmpty {\n        return []\n    }\n\n    var output = [String]()\n\
+    \n    var open_braces = [0]\n    var depth = 0\n    var depth_is_even = true\n\
+    \n    for char in paren_string.unicodeScalars {\n        switch char {\n     \
+    \   case .Whitespace:\n            continue // ignore whitespace\n        case\
+    \ .DecimalDigit:\n            if depth == 0 {\n                continue // ignore\
+    \ non-nested digits\n            } else if depth_is_even {\n                depth_is_even\
+    \ = false\n            } else {\n                depth_is_even = true\n      \
+    \      }\n        case .OpenBrace:\n            open_braces.append(1)\n      \
+    \  case .CloseBrace:\n            open_braces.removeLast()\n            if open_braces.isEmpty\
+    \ {\n                if depth == 0 {\n                    continue // ignore unbalanced\
+    \ braces\n                }\n                depth -= 1\n            } else {\n\
+    \                depth += 1\n            }\n        }\n    }\n    \n    if depth\
+    \ == 0 {\n        open_braces.removeLast()\n    }\n\n    for _ in 0..<open_braces.count\
+    \ {\n        output.append(\"\")\n    }\n    \n    for char in paren_string.unicodeScalars\
+    \ {\n        switch char {\n        case .OpenBrace:\n            for _ in 1...depth\
+    \ {\n                output.append(\"\")\n            }\n        case .CloseBrace:\n\
+    \            for _ in 0..<depth {\n                output.removeLast()\n     \
+    \       }\n        }\n        output[depth] += String(char)\n    }\n    \n   \
+    \ return output", "    var paren_groups: [String] = [\"()\"]\n    for i in paren_string.characters.reverse()\
+    \ {\n        if paren_groups.isEmpty {\n            paren_groups.append(String(i))\n\
+    \        } else if paren_groups[paren_groups.count - 1] != \"()\" {\n        \
+    \    paren_groups[paren_groups.count - 1] += String(i)\n        } else {\n   \
+    \         paren_groups.append(String(i))\n        }\n    }\n    return paren_groups",
+  "    func parenGroup(parens_counter: Int, _: String) -> String {\n        let group\
+    \ = \"\"\n        if parens_counter > 1 {\n            group = \"(\" + parenGroup(parens_counter\
+    \ - 1, _) + \")\"\n        }\n        return group\n    }\n    \n    let paren_count\
+    \ = paren_string.characters.count\n    if paren_count < 2 {\n        return [paren_string]\n\
+    \    }\n    \n    var results = [String]()\n    let group_count = paren_count\
+    \ - 1\n    var last_group = \"\"\n    for i in 0..<group_count {\n        let\
+    \ current_group = parenGroup(i + 1, paren_string)\n        if current_group !=\
+    \ last_group {\n            results.append(current_group)\n            last_group\
+    \ = current_group\n        }\n    }\n    return results", "    \n    let pattern\
+    \ = \"\\\\(([^()]+|\\\\([^()]*\\\\))*\\\\)\".toRegex()\n    let result = pattern.matches(paren_string).map\
+    \ { $0.string }\n    \n    return result", '    return paren_string.trimmingCharacters(in:
+    CharacterSet.whitespacesAndNewlines).components(separatedBy: CharacterSet(charactersIn:
+    " (")).map({ String($0) })', "    var groups = [String]()\n    var group = []\n\
+    \    var i = 0\n    while i < paren_string.characters.count {\n        let c =\
+    \ paren_string.characters[i]\n        if c == '(' {\n            if group.isEmpty\
+    \ {\n                groups.append(String(describing: group.joined()))\n     \
+    \           group = []\n            } else {\n                group.append(String(describing:\
+    \ group.joined()))\n            }\n        } else if c == ')' {\n            group.append(String(describing:\
+    \ group.joined()))\n            groups = groups.filter({ $0 != \"(\" })\n    \
+    \        if group.isEmpty {\n                groups.append(String(describing:\
+    \ group.joined()))\n            }\n        } else {\n            group.append(String(describing:\
+    \ c))\n        }\n        i += 1\n    }\n    if group.isEmpty {\n        groups.append(String(describing:\
+    \ group.joined()))\n    }\n    return groups", "    var paren_groups = [String]()\n\
+    \n    for paren in paren_string.characters.reversed().enumerated() {\n       \
+    \ if paren.value == 0 {\n            let group = String(paren.element)\n     \
+    \       if paren_groups.contains(group) {\n                continue\n        \
+    \    }\n            paren_groups.append(group)\n        }\n    }\n\n    return\
+    \ paren_groups", "    var group_strings = [String]()\n    var paren_count = paren_string.characters.count\n\
+    \    for i in 0 ..< paren_count {\n        if paren_count > 1 {\n            paren_count\
+    \ -= 1 // this brace group was closed\n        } else {\n            if paren_count\
+    \ == 1 {\n                group_strings += [paren_string]\n            } else\
+    \ {\n                group_strings += [paren_string.substringToIndex(advance(paren_string,\
+    \ i))]\n            }\n        }\n    }\n    return group_strings", "    let pattern\
+    \ = #\"\\([^\\(]*\\(.*\\)\\)\"#\n    return paren_string.components(separatedBy:\
+    \ pattern)", "    // Your code here\n    \n    return []", "    var strings: [String]\
+    \ = []\n    var current: String = paren_string\n\n    while current.count > 0\
+    \ {\n        if current.characters.last == ')' && current.count > 0 {\n      \
+    \      strings.append(current.substring(from: current.index(before: current.index(before:\
+    \ current.index(before: current.characters.index(before: 1)))))) // remove everything\
+    \ between last open and last close brace\n        }\n        current = current.substring(to:\
+    \ current.characters.index(before: current.index(before: current.characters.index(before:\
+    \ 1))))\n    }\n    return strings", "    var groups = [String]()\n    var index\
+    \ = 0\n\n    while index < paren_string.characters.count {\n        var openCount\
+    \ = 0\n        var closeCount = 0\n\n        while index < paren_string.characters.count\
+    \ {\n            let character = paren_string.characters[index]\n            if\
+    \ character == \"(\" {\n                openCount += 1\n            } else if\
+    \ character == \")\" {\n                closeCount += 1\n            }\n\n   \
+    \         index += 1\n        }\n\n        if openCount != closeCount {\n    \
+    \        groups.append(paren_string.substringWithRange(Range<String.Index>(start:\
+    \ index, end: paren_string.characters.count)))\n            index = 0\n      \
+    \  } else {\n            index += 1\n        }\n    }\n\n    return groups", " \
+    \   return paren_string.components(separatedBy: Optional<Characters>(\" ()\")).map\
+    \ {\n        $0.replacingOccurrences(of: \"(?<=(\\\\s)|(\\\\))(?!\\\\s))\", with:\
+    \ \"\")\n    }", "    // TODO: Add your own code here\n    return []", "    if\
+    \ paren_string.isEmpty {\n        return []\n    }\n\n    var stack = [String]()\n\
+    \    var groups = [String]()\n    var group_start = 0\n\n    for c in paren_string.unicodeScalars\
+    \ {\n        if c == unicode.openParenthesisCodeUnit || c == unicode.closeParenthesisCodeUnit\
+    \ {\n            if !stack.isEmpty {\n                stack.removeLast()\n   \
+    \         }\n\n            if group_start != stack.count {\n                groups.append(String(UnicodeScalar(parenthesisCodeUnitString)))\n\
+    \                group_start = stack.count\n            }\n\n            stack.append(String(c))\n\
+    \        } else if c == unicode.openSquareBracketCodeUnit || c == unicode.closeSquareBracketCodeUnit\
+    \ {\n            if !stack.isEmpty {\n                stack.removeLast()\n   \
+    \         }\n\n            if group_start != stack.count {\n                groups.append(String(UnicodeScalar(squareBracketCodeUnitString)))\n\
+    \                group_start = stack.count\n            }\n\n            stack.append(String(c))\n\
+    \        } else {\n            stack.append(String(c))\n        }\n    }\n\n \
+    \   if !stack.isEmpty {\n        groups.append(String(UnicodeScalar(parenthesisCodeUnitString)))\n\
+    \    }\n\n    return groups", "    // Convert string into a mutable character\
+    \ array\n    let input_char_array = input_char_array(paren_string)\n    var current_char\
+    \ = input_char_array.first!\n    var paren_groups = [String]()\n    var paren_stack\
+    \ = [String]()\n    var open_brace_index = -1\n    // While there is still input\
+    \ to be processed\n    while let input_char = input_char_array.last {\n      \
+    \  switch input_char {\n        case \"(\":\n            // If the previous character\
+    \ was a left parenthesis\n            if open_brace_index != -1 {\n          \
+    \      // Pop the left parenthesis off the stack\n                paren_stack.removeLast()\n\
+    \                // If the stack is empty, pop it off too\n                if\
+    \ paren_stack.count == 0 {\n                    paren_stack.removeLast()\n   \
+    \             }\n                // Append all the left parenthesis\n        \
+    \        paren_groups.append(paren_stack.joined(separator: \"(\"))\n         \
+    \       // Reset the stack\n                paren_stack = [String]()\n       \
+    \     }\n            // Push the current character onto the stack\n          \
+    \  paren_stack.append(current_char)\n            // Increment the index of the\
+    \ left parenthesis\n            open_brace_index += 1\n        case \"(\":\n \
+    \           // If the previous character was a left parenthesis\n            if\
+    \ open_brace_index != -1 {\n                // Pop the left parenthesis off the\
+    \ stack\n                paren_stack.removeLast()\n                // If the stack\
+    \ is empty, pop it off too\n                if paren_stack.count == 0 {\n    \
+    \                paren_stack.removeLast()\n                }\n               \
+    \ // Append all the left parenthesis\n                paren_groups.append(paren_stack.joined(separator:\
+    \ \"(\"))\n                // Reset the stack\n                paren_stack = [String]()\n\
+    \            }\n            // Add the current character to the stack\n      \
+    \      paren_stack.append(current_char)\n        default:\n            // If the\
+    \ previous character was a left parenthesis\n            if open_brace_index !=\
+    \ -1 {\n                // Pop the left parenthesis off the stack\n          \
+    \      paren_stack.removeLast()\n                // If the stack is empty, pop\
+    \ it off too\n                if paren_stack.count == 0 {\n                  \
+    \  paren_stack.removeLast()\n                }\n                // Append all\
+    \ the left parenthesis\n                paren_groups.append(paren_stack.joined(separator:\
+    \ \"(\"))\n                // Reset the stack\n                paren_stack = [String]()\n\
+    \            }\n            // Add the current character to the stack\n      \
+    \      paren_stack.append(current_char)\n        }\n        // Move on to the\
+    \ next character\n        current_char = input_char_array.next()!\n    }\n   \
+    \ // If there are any left parenthesis left in the stack\n    if open_brace_index\
+    \ != -1 {\n        // Pop the left parenthesis off the stack\n", "    var stringArray\
+    \ = [String]()\n    let regex = try! NSRegularExpression(pattern: \"(\\\\()|\\\
+    \\))\", options: [])\n    \n    let nsString = paren_string.unicodeScalars\n \
+    \   regex.enumerateMatchesInString(paren_string, options: [], range: NSRange(location:\
+    \ 0, length: paren_string.length)) { result, flags, stop in\n        let match\
+    \ = result?.rangeAtIndex(1)\n        let substring = nsString!.substringWithRange(match!)\n\
+    \        stringArray.append(substring)\n    }\n    return stringArray", "    let\
+    \ regex = try! NSRegularExpression(pattern: \"((?<!\\\\))\\\\)\", options: [])\n\
+    \n    var groups: [String] = []\n    do {\n        let matches = regex.matches(in:\
+    \ paren_string, options: [], range: NSMakeRange(0, paren_string.characters.count))\n\
+    \        for match in matches {\n            groups.append(paren_string.substring(with:\
+    \ Range(match.range, in: paren_string)))\n        }\n    } catch let error as\
+    \ NSError {\n        print(error.localizedDescription)\n    }\n\n    return groups",
+  "    guard paren_string.isEmpty == false else { return [] }\n    var group_strings\
+    \ = [String]()\n    var current_group: String = paren_string\n    while !current_group.isEmpty\
+    \ {\n        let current_group_string = current_group\n        do {\n        \
+    \    group_strings.append(current_group_string)\n            current_group = paren_string.characters.dropLast().prefix(1).reduce(0,\
+    \ {$0 + ($1 < $0 ? 1 : 0)})\n        } while !current_group.isEmpty\n    }\n \
+    \   return group_strings", "    var result = [String]()\n    var bracketOpen =\
+    \ 0\n    var bracketClosed = false\n    var parenOpen = 0\n    var parenClosed\
+    \ = false\n    var parenCount = 0\n    var inParen = false\n\n    for char in\
+    \ paren_string {\n        switch char {\n        case \"(\":\n            if parenOpen\
+    \ == 0 {\n                bracketOpen = parenOpen + 1\n            } else {\n\
+    \                bracketClosed = true\n            }\n        case \"[\":\n  \
+    \          parenOpen = parenOpen + 1\n        case \"(\":\n            parenClosed\
+    \ = true\n        case \"\\\\\":\n            if parenOpen == 0 {\n          \
+    \      bracketOpen = parenOpen + 1\n            }\n        case \"}\":\n     \
+    \       parenOpen = parenOpen - 1\n        default:\n            if parenClosed\
+    \ {\n                bracketClosed = false\n                if inParen {\n   \
+    \                 bracketOpen = parenOpen\n                }\n               \
+    \ parenOpen = 0\n                parenClosed = false\n                parenCount\
+    \ = 0\n                inParen = false\n            } else if bracketOpen > 0\
+    \ {\n                if bracketOpen == 1 {\n                    bracketOpen =\
+    \ 0\n                }\n                parenCount = (parenCount + 1)\n      \
+    \          if parenCount == 2 {\n                    parenOpen = 0\n         \
+    \           parenClosed = false\n                    inParen = true\n        \
+    \        } else {\n                    parenOpen = bracketOpen\n             \
+    \   }\n            } else {\n                if parenCount == 2 {\n          \
+    \          parenOpen = 0\n                    parenClosed = false\n          \
+    \          inParen = true\n                }\n            }\n        }\n     \
+    \   result.append(char)\n    }\n    return result", "    var return_strings =\
+    \ [String]()\n    \n    func recurse(string : String, var return_strings : [String],\
+    \ depth : Int) -> [String] {\n        if depth > 0 {\n            return_strings.append(string)\n\
+    \        }\n        \n        let regex = \"\\\\)|(\\\\()\"\n        \n      \
+    \  if let match = paren_string.range(of: regex, options: .regularExpression) {\n\
+    \            let range = match.upperBound..<paren_string.count\n            \n\
+    \            let sub_paren_string = paren_string.substring(from: range)\n    \
+    \        \n            return_strings = recurse(sub_paren_string, return_strings:\
+    \ return_strings, depth: depth - 1)\n        }\n        \n        return return_strings\n\
+    \    }\n    \n    return_strings = recurse(paren_string, return_strings: return_strings,\
+    \ depth: 0)\n    \n    return return_strings", "    var paren_groups = [String]()\n\
+    \    for parens in paren_string.characters {\n        guard parens == ' ' || parens\
+    \ == '\\t' || parens == '\\r' || parens == '\\n' || parens == '\\0' else { continue\
+    \ }\n        guard parens.isBalance else { continue }\n        guard parens.isNotNested\
+    \ else { continue }\n        paren_groups.append(parens)\n    }\n    return paren_groups",
+  "    var paren_array = [String]()\n    var stack = [String]()\n\n    for char in\
+    \ paren_string {\n        if char == \")\" {\n            if !stack.isEmpty {\n\
+    \                paren_array.append(String(stack))\n            }\n          \
+    \  stack.removeLast()\n        } else if char == \"(\" {\n            stack.append(char)\n\
+    \        } else {\n            stack.append(char)\n        }\n    }\n\n    if\
+    \ !stack.isEmpty {\n        paren_array.append(String(stack))\n    }\n\n    return\
+    \ paren_array", "    let pattern = \"(?<=\"\n        + \"\\\\{|\"\n        + \"\
+    \\\\)|\"\n        + \"\\\\()\"\n        + \"\\\\)\"\n        + \"|\"\n       \
+    \ + \"\\\\})\"\n        + \"(?=\\\\()\"\n\n    let regex = try! NSRegularExpression(pattern:\
+    \ pattern, options: [])\n    return regex.matches(in: paren_string, range: NSMakeRange(0,\
+    \ paren_string.utf16.count)).map { _ in paren_string.substring(with: $0.range(at:\
+    \ 1)!) }", "    let paren_groups = paren_string\n        .characters.split(separator:\
+    \ \"(?<=\")\n        .map { String($0) }\n        .filter { !is_parenthesized_group(group:\
+    \ $0) }\n\n    let paren_groups_results: [String] = paren_groups\n        .map\
+    \ { parenthesis_group_to_string($0) }\n        .map { parenthesis_group_to_string(string:\
+    \ $0) }\n    return paren_groups_results", "    guard let open_braces_count =\
+    \ paren_string.countOccurrencesOfString(\"(\", options: .LiteralSearch),\n   \
+    \     open_braces_count > 0 else {\n            return []\n    }\n\n    var groups:\
+    \ [String] = []\n    var index = -1\n\n    for _ in 0..<open_braces_count {\n\
+    \        index += open_braces_count\n        guard paren_string.hasPrefix(\"(\"\
+    , range: NSMakeRange(index, 1)) else {\n            return []\n        }\n   \
+    \     groups.append(paren_string.substringWithRange(NSMakeRange(index, 1)))\n\
+    \    }\n\n    return groups", "    \n    let regex: NSRegularExpression = try!\
+    \ NSRegularExpression(pattern: \"[^\\\\(]+\")\n    let splitResult: NSArray =\
+    \ regex.split(in: paren_string, options: [], range: NSRange(location: 0, length:\
+    \ paren_string.utf16.count))\n    return splitResult.map { String($0) }", "  \
+    \  \n    let regex = try! NSRegularExpression(pattern: \"(\\\\(|\\\\))+\", options:\
+    \ .caseInsensitive)\n    let matches = regex.matches(in: paren_string, options:\
+    \ [], range: NSRange(location: 0, length: paren_string.utf16.count))\n    \n \
+    \   var result = [String]()\n    \n    for match in matches {\n        let range\
+    \ = match.range\n        \n        let firstIndex = range.lowerBound\n       \
+    \ \n        var newRange = range\n        \n        // If open brace is at the\
+    \ start of the string, re-adjust range to account for it\n        if firstIndex\
+    \ == range.lowerBound {\n            newRange.location -= 1\n        }\n     \
+    \   \n        // If last character is a closing brace, re-adjust range to account\
+    \ for it\n        if paren_string[range.upperBound] == '}' {\n            newRange.location\
+    \ += 1\n        }\n        \n        let subString = paren_string.substring(with:\
+    \ newRange)\n        \n        guard !subString.isEmpty else { continue }\n  \
+    \      \n        result.append(subString)\n    }\n    \n    return result", " \
+    \   // Only return an array if it has more than one element\n    if paren_string.count\
+    \ < 2 {\n        return []\n    }\n\n    // Initialize a stack\n    var stack\
+    \ = ArrayStack()\n\n    // Loop through the entire string and process all groups\
+    \ of parentheses\n    for index in 0..<paren_string.count {\n        if paren_string[index]\
+    \ == '(' {\n            stack.push('(')\n        } else if paren_string[index]\
+    \ == ')' {\n            stack.pop()\n        } else if stack.isEmpty() {\n   \
+    \         // This means we've found a group without matching an open brace\n \
+    \           // This also happens when we hit the end of the string\n         \
+    \   // Add the group to the return array\n            stack.push(paren_string[index])\n\
+    \        }\n    }\n\n    // Return the array of groups that are found\n    return\
+    \ stack.asArray()", "    var parenGroups: [String] = []\n    let regex = try!\
+    \ NSRegularExpression(pattern: \"[^\\\\(]+|\\\\(|\\\\)\\\\s*|\\\\)\\\\s*\", options:\
+    \ .caseInsensitive)\n    let range = NSMakeRange(0, paren_string.utf16.count)\n\
+    \    while let match = regex.firstMatch(in: paren_string, options: .anchored,\
+    \ range: range) {\n        let start = match.rangeAt(0)\n        let end = match.rangeAt(match.numberOfRanges)\n\
+    \        let subString = paren_string[start..<end]\n        parenGroups.append(subString)\n\
+    \        paren_string = paren_string.substring(with: range.lowerBound..<range.upperBound)\n\
+    \    }\n    return parenGroups", "    var parenGroups = [String]()\n    var groupString\
+    \ = \"\"\n    var openBraceIndex = 0\n\n    for _ in paren_string.characters {\n\
+    \        // Find next open brace\n        let nextOpenBraceIndex = paren_string.index(paren_string.startIndex,\
+    \ offsetBy: openBraceIndex)\n\n        // If current character is the closing\
+    \ brace for current open brace, append the characters to the group\n        if\
+    \ paren_string[nextOpenBraceIndex] == \"]\" {\n            parenGroups.append(groupString)\n\
+    \            groupString = \"\"\n            openBraceIndex = 0\n        } else\
+    \ {\n            // Append character to the group\n            groupString +=\
+    \ paren_string[nextOpenBraceIndex]\n        }\n\n        // Increment index to\
+    \ current open brace index\n        openBraceIndex += 1\n    }\n\n    parenGroups.append(groupString)\n\
+    \    return parenGroups", "    let regex_paren = try! NSRegularExpression(pattern:\
+    \ \"\\\\(|\\\\)\", options: [])\n    let regex_groups = try! NSRegularExpression(pattern:\
+    \ \"\\\\([^)]+\\\\)\", options: [])\n\n    let results = regex_paren.matches(in:\
+    \ paren_string, range: NSRange(location: 0, length: paren_string.count))\n\n \
+    \   let matches = regex_groups.matches(in: paren_string, range: NSRange(location:\
+    \ 0, length: paren_string.count))\n\n    var results: [String] = []\n\n    for\
+    \ i in 0..<matches.count {\n        if results[i] != nil {\n            if results[i].firstIndex\
+    \ == paren_string.count {\n                results.append(nil)\n            }\
+    \ else {\n                results.append(paren_string[results[i].range.upperBound..<paren_string.count])\n\
+    \            }\n        } else {\n            results.append(paren_string[matches[i].range.upperBound..<paren_string.count])\n\
+    \        }\n    }\n\n    return results", "    var groups = [String]()\n    var\
+    \ stringIndex = 0\n    loop:\n    while stringIndex < paren_string.characters.count\
+    \ {\n        let c = paren_string[stringIndex]\n        switch c {\n        case\
+    \ \" \", \"\\n\", \"\\t\":\n            stringIndex += 1\n        case \"]\":\n\
+    \            if strings.startWith(strings[stringIndex+1], c){\n              \
+    \  stringIndex += 1\n                break loop\n            } else {\n      \
+    \          stringIndex = stringIndex + 1\n            }\n        default:\n  \
+    \          groups.append(String(c))\n            stringIndex = stringIndex + 1\n\
+    \        }\n    }\n    return groups", "    guard let opening_brace = paren_string.characters.contains(\"\
+    (\", options: .literal) else { return [] }\n    var bracket_count = 0\n    var\
+    \ bracket_group = [String]()\n    \n    for char in paren_string.characters {\n\
+    \        \n        switch char {\n            case \"(\":\n                bracket_count\
+    \ += 1\n                if bracket_count == 1 {\n                    bracket_group.append(\"\
+    \")\n                }\n            case \"(\":\n                bracket_count\
+    \ += 1\n            case \"[\":\n                bracket_group.append(\"\")\n\
+    \            case \"{\":\n                bracket_group.append(\"\")\n       \
+    \     case \"<\":\n                bracket_group.append(\"\")\n            case\
+    \ \"(\":\n                bracket_group.append(\"\")\n            case \"}\":\n\
+    \                bracket_count -= 1\n            default:\n                if\
+    \ bracket_count == 0 {\n                    bracket_group.append(char)\n     \
+    \           }\n        }\n    }\n    return bracket_group", "    guard paren_string.count\
+    \ > 0 else { return [] }\n    var tokens = [String]()\n    let intial_count =\
+    \ paren_string.count\n    let scanner = Scanner(string: paren_string)\n    var\
+    \ open = false\n    var depth = 0\n    repeat {\n        switch scanner.scanUp()\
+    \ {\n        case .EOF:\n            break\n        case .String(\")\"):\n   \
+    \         depth -= 1\n            open = false\n        case .String(\"(\"):\n\
+    \            depth += 1\n            open = true\n        case .Number(let char):\n\
+    \            tokens.append(String(char))\n        default:\n            break\n\
+    \        }\n    } while scanner.isAtEOF || scanner.isAtStart()\n    guard intial_count\
+    \ == tokens.count else {\n        return nil\n    }\n    return tokens", "   \
+    \ var groups: [String] = []\n    var depth = 0\n\n    for i in 0..<paren_string.characters.count\
+    \ {\n        var current: String = paren_string.substringWithRange(NSMakeRange(0,\
+    \ i))\n        if depth == 0 {\n            var start = i\n            while current.characters.count\
+    \ > start && current.characters.first == \" \" {\n                start += 1\n\
+    \            }\n            groups += [paren_string.substringWithRange(NSMakeRange(start,\
+    \ current.characters.count - start))]\n        }\n        depth += 1\n       \
+    \ if depth > 2 {\n            depth -= 1\n            if depth > 3 {\n       \
+    \         depth -= 1\n            }\n        }\n        if depth < 2 {\n     \
+    \       depth += 1\n        }\n    }\n    return groups", "    let regex = try!\
+    \ NSRegularExpression(pattern: \"\\\\((?!\\\\))\", options: [])\n    let matches\
+    \ = regex.matches(in: paren_string, options: [], range: NSMakeRange(0, paren_string.utf16.count))\n\
+    \    return matches.map { range -> String in\n        let start = paren_string.substring(with:\
+    \ range).range(of: \"(\")?.lowerBound ?? 0\n        let end = paren_string.substring(with:\
+    \ range).range(of: \")\")?.upperBound ?? paren_string.utf16.count\n        return\
+    \ paren_string.substring(from: start ..< end)\n    }", "    if paren_string.isEmpty\
+    \ {\n        return []\n    }\n\n    guard let index = paren_string.rangeOfCharacter(from:\
+    \ Character(\" \"), options: .backwards)?.upperBound else {\n        return []\n\
+    \    }\n\n    var output = [String]()\n    var groupStartIndex = index\n\n   \
+    \ while index != paren_string.endIndex {\n        if paren_string[index] != \"\
+    \ \" {\n            let group = paren_string.substring(from: groupStartIndex,\
+    \ to: index)\n\n            output.append(group)\n\n            groupStartIndex\
+    \ = index\n        }\n\n        index = paren_string.rangeOfCharacter(from: paren_string[paren_string.index(before:\
+    \ index)], options: .backwards)?.lowerBound?.successor()\n    }\n\n    if groupStartIndex\
+    \ == index {\n        output.append(paren_string.substring(from: groupStartIndex,\
+    \ to: paren_string.endIndex))\n    }\n\n    return output", "    var paren_groups\
+    \ = [String]()\n    var open_braces = [0]\n    var open_parens = [0]\n    var\
+    \ open_brace_pairs = []\n    var open_paren_pairs = []\n    var open_brace_pairs_idx\
+    \ = 0\n    var open_paren_pairs_idx = 0\n    var open_brace_pair = [String]()\n\
+    \    var open_paren_pair = [String]()\n    var open_brace_pair_len = -1\n    var\
+    \ open_paren_pair_len = -1\n    var paren_string_size = paren_string.characters.count\n\
+    \    var paren_string_idx = -1\n    var paren_group = \"\"\n    var i = -1\n \
+    \   var j = -1\n\n    for paren_string_idx = paren_string.characters.count - 2;\
+    \ paren_string_idx >= 0; paren_string_idx += 2 {\n        if paren_string[paren_string_idx]\
+    \ != \"(\" || paren_string[paren_string_idx + 1] != \"(\" {\n            continue\n\
+    \        }\n\n        open_brace_pair = open_brace_pairs[open_brace_pairs_idx..<open_brace_pairs_idx\
+    \ + 1]\n        open_paren_pair = open_paren_pairs[open_paren_pairs_idx..<open_paren_pairs_idx\
+    \ + 1]\n        open_brace_pairs_idx += 1\n        open_paren_pairs_idx += 1\n\
+    \n        if paren_string == paren_group {\n            open_braces.lastValue\
+    \ = open_brace_pairs.count\n            open_parens.lastValue = open_paren_pairs.count\n\
+    \        } else {\n            if paren_groups.count == paren_string_idx - 1 {\n\
+    \                if paren_group.isEmpty {\n                    paren_groups.append(paren_group)\n\
+    \                }\n            } else {\n                paren_group = paren_string[paren_string_idx..<paren_string_idx\
+    \ + 1]\n                if paren_group != \" \" && paren_group != \"\" {\n   \
+    \                 paren_groups.append(paren_group)\n                }\n      \
+    \      }\n        }\n    }\n\n    return paren_groups", "    \n    var results\
+    \ = [String]()\n    \n    paren_string = paren_string.trimmingCharacters(in: .whitespacesAndNewlines)\n\
+    \    \n    if paren_string.isEmpty {\n        return results\n    }\n    \n  \
+    \  var depth = 0\n    \n    for char in paren_string.unicodeScalars {\n      \
+    \  \n        depth += 1\n        \n        if char == .left {\n            \n\
+    \            if depth == 1 {\n                results.append(\"\")\n         \
+    \   }\n            \n            results[depth] += String(char)\n            \n\
+    \        } else if char == .right {\n            \n            if depth == 0 {\n\
+    \                results.append(\"\")\n            }\n            \n         \
+    \   results[depth] += String(char)\n            \n        } else if char == .backslash\
+    \ {\n            \n            if depth == 1 {\n                results.append(\"\
+    \")\n            }\n            \n            results[depth] += String(char)\n\
+    \            \n        } else if char == .newline {\n            \n          \
+    \  if depth == 0 {\n                results.append(\"\")\n            }\n    \
+    \        \n            results[depth] += String(char)\n            \n        }\
+    \ else {\n            \n            if depth == 0 {\n                results.append(\"\
+    \")\n            }\n            \n            results[depth] += String(char)\n\
+    \            \n        }\n        \n    }\n    \n    return results", "    if\
+    \ paren_string.isEmpty {\n        return []\n    }\n    \n    // initialize our\
+    \ results to empty array\n    var results = [String]()\n    \n    // initialize\
+    \ our result index\n    var resultIndex = -1\n    \n    // initialize our open\
+    \ brace count\n    var openBraceCount = 0\n    \n    // loop through the string\n\
+    \    for character in paren_string.characters {\n        \n        // if we see\
+    \ a closing brace, add it to the result array\n        if character == \"(\" {\n\
+    \            \n            // if we are at the end of the string yet\n       \
+    \     if resultIndex == -1 {\n                resultIndex = results.count\n  \
+    \          }\n            \n            results[resultIndex] = \"\\(openBraceCount)\"\
+    \n            \n            // increment our count and add it to the results\n\
+    \            openBraceCount++\n        }\n        \n        // if we see a closing\
+    \ brace, add it to the result array\n        else if character == \")\" {\n  \
+    \          \n            // if we are at the end of the string yet\n         \
+    \   if resultIndex == -1 {\n                resultIndex = results.count\n    \
+    \        }\n            \n            // if this is the last open brace and we\
+    \ haven't found one yet\n            if openBraceCount == 1 {\n              \
+    \  results[resultIndex] = \"\\(openBraceCount)\"\n            }\n            \n\
+    \            // increment our count and add it to the results\n            openBraceCount--\n\
+    \        }\n        \n        // if we see a space, or the start of a new group\n\
+    \        else {\n            \n            // if this is the last open brace and\
+    \ we haven't found one yet\n            if openBraceCount == 0 {\n           \
+    \     results[resultIndex] = \"\\(character)\"\n            }\n            \n\
+    \            // increment our result index\n            resultIndex++\n      \
+    \  }\n    }\n    \n    // return our results\n    return results", "    // Separate\
+    \ the parens into separate groups\n    var groups: [String] = []\n    var group_open_index\
+    \ = 0\n    for index in 0..<paren_string.characters.count {\n        // Keep track\
+    \ of where the next group should start\n        let group_size = 1\n        //\
+    \ Check if we are at the beginning of a group\n        if paren_string.characters.count\
+    \ - index < 3 {\n            continue\n        }\n\n        // Check if we are\
+    \ in the middle of a group\n        if paren_string.characters.count - index <\
+    \ 3 {\n            continue\n        }\n\n        // Check if we are at the end\
+    \ of a group\n        if paren_string.characters.count - index < 3 {\n       \
+    \     continue\n        }\n\n        if paren_string[index] == '(' {\n       \
+    \     // Started a new group\n            groups.append(paren_string[group_open_index..<index])\n\
+    \            group_open_index = index\n            group_size = paren_string[index]\
+    \ - '(' + 1\n        } else {\n            // Check if this is the end of a group\n\
+    \            if index == paren_string.characters.count - 1 {\n               \
+    \ // We ended a group\n                groups.append(paren_string[group_open_index..<index])\n\
+    \            } else {\n                // Check if this is the end of the string\n\
+    \                if paren_string[index] == '(' {\n                    // We were\
+    \ at the end of the string and not part of a group\n                    groups.append(paren_string[group_open_index..<index])\n\
+    \                } else {\n                    // We were not in the middle of\
+    \ a group\n                    if group_size == paren_string[index] - '(' + 1\
+    \ {\n                        // We were not at the beginning of a group\n    \
+    \                    groups.append(paren_string[group_open_index..<index])\n \
+    \                   }\n                }\n            }\n        }\n    }\n\n\
+    \    return groups", "    var group_array_string = [String]()\n    if paren_string\
+    \ == \"\" {\n        return group_array_string\n    }\n    var open_parentheses\
+    \ = [Bool]()\n    var closed_parentheses = [Bool]()\n    var current_group = [String]()\n\
+    \    for i in 0..<paren_string.count {\n        switch paren_string[i] {\n   \
+    \     case \" \":\n        case \"\\t\":\n        case \"\\r\":\n        case\
+    \ \"\\n\":\n            current_group.append(paren_string[i])\n        case \"\
+    )\":\n            if !open_parentheses[paren_string[i]] {\n                open_parentheses[paren_string[i]]\
+    \ = true\n                current_group.append(paren_string[i])\n            }\
+    \ else {\n                closed_parentheses[paren_string[i]] = true\n       \
+    \     }\n        default:\n            current_group.append(paren_string[i])\n\
+    \        }\n    }\n    if open_parentheses.count == closed_parentheses.count &&\
+    \ open_parentheses.count == current_group.count {\n        for i in 0..<current_group.count\
+    \ {\n            group_array_string.append(current_group[i])\n        }\n    }\
+    \ else {\n        for i in 0..<open_parentheses.count {\n            group_array_string.append(paren_string[i])\n\
+    \        }\n    }\n    return group_array_string", "    paren_string = paren_string.trimmingCharacters(in:\
+    \ .whitespacesAndNewlines)\n    return paren_string\n        .components(separatedBy:\
+    \ CharacterSet.init(charactersIn: \"()\"))\n        .flatMap { $0 }\n        .filter\
+    \ { ($0 != \"(\") || ($0 != \")\") }", "    let paren_regex = try! NSRegularExpression(pattern:\
+    \ \"\\(paren_bracket)\\\\s*\\\\(\\\\s*(\\\\{[^\\\\(]*\\\\}|[^\\\\(]*)\\\\s*\\\\\
+    ))\\\\s*\\\\(\\\\s*(\\\\{[^\\\\(]*\\\\}|[^\\\\(]*)\\\\s*\\\\))\", options: .CaseInsensitive)\n\
+    \n    let matches = paren_regex.matches(in: paren_string, options: .anchored)\n\
+    \n    return matches.map { match in\n        let string_between_brackets = paren_string.substring(with:\
+    \ NSRange(location: match.range, length: match.range.length))\n        return\
+    \ string_between_brackets.trimmingCharacters(in: .whitespacesAndNewlines)\n  \
+    \  }.compactMap { $0 }", "    debugLog(\"separate_paren_groups()\")\n    let paren_count\
+    \ = paren_string.characters.count\n\n    if paren_count <= 0 {\n        return\
+    \ []\n    }\n\n    var parens = [String]()\n    var groups = [String]()\n    var\
+    \ lastGroup = \"\"\n    var index = paren_string.startIndex\n\n    while index\
+    \ < paren_string.endIndex {\n        let char = paren_string[index] as String\n\
+    \        debugLog(\"char=\\(char)\")\n\n        // Skip over spaces.\n       \
+    \ if char == \" \" {\n            index += 1\n            continue\n        }\n\
+    \n        // End of group, add previous group if it exists.\n        if char ==\
+    \ \"}\" {\n            if lastGroup != \"\" {\n                parens.append(lastGroup)\n\
+    \            }\n\n            // Close last group\n            if parens.count\
+    \ > 0 {\n                debugLog(\"Adding \\(parens.last!) to groups array\"\
+    )\n                groups.append(parens.last!)\n            }\n\n            lastGroup\
+    \ = \"\"\n            index += 1 // Skip over brace\n            continue\n  \
+    \      }\n\n        // Open group, add it to groups and set the last group.\n\
+    \        if char == \"{\" {\n            debugLog(\"Adding \\(lastGroup) to groups\
+    \ array\")\n            groups.append(lastGroup)\n            lastGroup = \"\"\
+    \n            index += 1 // Skip over brace\n            continue\n        }\n\
+    \n        // Keep track of last group\n        lastGroup = lastGroup + char\n\
+    \        index += 1 // Skip over char\n    }\n\n    // Close last group\n    if\
+    \ lastGroup != \"\" {\n        debugLog(\"Adding \\(lastGroup) to groups array\"\
+    )\n        groups.append(lastGroup)\n    }\n\n    // Return array of groups\n\
+    \    return groups", "    paren_string = paren_string.trimmingCharacters(in: .whitespacesAndNewlines)\n\
+    \    guard paren_string.count > 0 else { return [] }\n    var brackets = 0..<paren_string.count\n\
+    \    var result = [String]()\n    for char in paren_string.unicodeScalars {\n\
+    \        switch char {\n        case \".\", \"(\": brackets += 1 // opening bracket\n\
+    \        case \")\": brackets -= 1 // closing bracket\n        default:\n    \
+    \        guard brackets > 0 else { continue }\n            result.append(String(char))\n\
+    \        }\n    }\n    return result", '    return separateParenGroupsInternal(paren_string,
+    "", 0).suffixArray', "    var result = [String]()\n    for char in paren_string\
+    \ {\n        if char == \" \" {\n            continue\n        }\n        let\
+    \ indexOpenBrace = paren_string.index(of: char) ?? paren_string.endIndex\n   \
+    \     let subString = paren_string.suffixFrom(indexOpenBrace)\n        result.append(subString)\n\
+    \    }\n    return result", "    let regex = try! NSRegularExpression(pattern:\
+    \ paren_string, options: [])\n    var output: [String] = []\n    var lastOutput:\
+    \ String?\n    let matches = regex.matches(in: paren_string, range: NSMakeRange(0,\
+    \ paren_string.utf16.count))\n\n    for match in matches {\n        if lastOutput\
+    \ != nil {\n            output.append(lastOutput!)\n        }\n        if match.numberOfRanges\
+    \ == 3 {\n            output.append(paren_string[Range(match.rangeAt(1), in: paren_string)!])\n\
+    \        } else {\n            lastOutput = paren_string[Range(match.rangeAt(1),\
+    \ in: paren_string)!]\n        }\n    }\n    return output", '    return paren_string.components(separatedBy:
+    NSCharacterSet.openingParenthesis)', "    guard paren_string.contains(\"()\")\
+    \ && paren_string.contains(\")\") else {\n        return [:]\n    }\n    var result\
+    \ = [String]()\n    var open_braces = 0\n    for c in paren_string.unicodeScalars\
+    \ {\n        let uni_scalar = c\n        switch uni_scalar {\n        case .OpenSquare:\n\
+    \            open_braces += 1\n        case .CloseSquare, .CloseBracket, .CloseParen,\
+    \ .End:\n            open_braces -= 1\n            guard open_braces > 0 else\
+    \ {\n                break\n            }\n        case .OpenParen:\n        \
+    \    open_braces += 1\n        default:\n            if open_braces > 0 {\n  \
+    \              guard c == .CloseBracket else {\n                    result.append(\"\
+    \\(uni_scalar)\")\n                }\n            }\n        }\n    }\n    return\
+    \ result", "    var paren_groups = [String]()\n\n    var open_count = 0\n    var\
+    \ closing_braces = 0\n    var open_paren_count = 0\n    var brace_count = 0\n\n\
+    \    for c in paren_string {\n        if c == '(' {\n            if open_paren_count\
+    \ < 1 { // If open paren count is less than 1, its a group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            } else if open_paren_count == 1 { // If open paren count is\
+    \ 1, its a group, but not a nested group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            } else if open_paren_count == 2 { // If open paren count is\
+    \ 2, its a nested group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            } else if open_paren_count == 3 { // If open paren count is\
+    \ 3, its a nested group, but not a nested group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            } else if open_paren_count == 4 { // If open paren count is\
+    \ 4, its a nested group and a nested group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            } else if open_paren_count == 5 { // If open paren count is\
+    \ 5, its a nested group and a nested group\n                paren_groups.append(String(open_count,\
+    \ closing_braces))\n                open_paren_count++\n                brace_count\
+    \ = 0\n            }\n\n            open_count++\n        } else if c == ')' {\n\
+    \            if closing_braces > 0 { // If closing braces is greater than 0, its\
+    \ a group\n                paren_groups.append(String(open_count, closing_braces))\n\
+    \                open_count++\n                closing_braces--\n            }\
+    \ else if closing_braces == 0 { // If closing braces is 0, its a group\n     \
+    \           paren_groups.append(String(open_count, closing_braces))\n        \
+    \        open_count++\n                closing_braces--\n            } else if\
+    \ closing_braces == 1 { // If closing braces is 1, its a nested group\n      \
+    \          paren_groups.append(String(open_count, closing_braces))\n         \
+    \       open_count++\n                closing_braces--\n            }\n      \
+    \  } else if c == '{' {\n            brace_count++\n        } else if c == '}' ",
+  "    return paren_string\n        .components(separatedBy: CharacterSet(charactersIn:\
+    \ \"()\"))\n        .compactMap {\n            parens -> String? in\n        \
+    \    if parens.hasPrefix(\"(\") {\n                return parens.dropFirst()\n\
+    \            } else if parens.hasPrefix(\")\") {\n                return parens.dropLast()\n\
+    \            }\n            return nil\n        }.filter { $0 != nil }", '    return
+    separate_paren_groups(paren_string, 0).toArray()', "    var groups = [String]()\n\
+    \    var depth = 0\n    var brackets = [Character.UnicodeScalarView]()\n    for\
+    \ ch in paren_string.unicodeScalars {\n        // We're in brackets\n        brackets.append(ch)\n\
+    \    }\n    repeatWhile {\n        let ch = brackets.remove(at: 0)!\n        switch\
+    \ ch {\n        case Character.UnicodeScalarView(ascii: \"(\"): depth += 1\n \
+    \       case Character.UnicodeScalarView(ascii: \")\"): depth -= 1\n        default:\
+    \ break\n        }\n        if depth == 0 {\n            groups.append(String(cString:\
+    \ String.fromUnichars(brackets)))\n        }\n    }\n    return groups", "   \
+    \ \n    var result_strings: [String] = []\n    var current_string: String = \"\
+    \"\n    \n    for c in paren_string.characters {\n        if c == \")\" {\n  \
+    \          if current_string.characters.last == \"(\" {\n                result_strings.append(current_string)\n\
+    \                current_string = \"\"\n            } else {\n               \
+    \ result_strings.append(current_string)\n                current_string = \"\"\
+    \n            }\n        } else {\n            if c != \" \" {\n             \
+    \   current_string += String(format: \"%c\", c)\n            } else {\n      \
+    \          result_strings.append(current_string)\n                current_string\
+    \ = \"\"\n            }\n        }\n    }\n    \n    if current_string != \"\"\
+    \ {\n        result_strings.append(current_string)\n    }\n    \n    return result_strings",
+  "    let pattern = \"[(]*\\\\((?!\\\\))[)]*\"\n    let regex = try! NSRegularExpression(pattern:\
+    \ pattern, options: [])\n    return regex.matches(in: paren_string, range: NSRange(location:\
+    \ 0, length: paren_string.utf16.count)).map { match in\n        return paren_string.substring(with:\
+    \ Range<String.Index>(start: match.range, length: match.range.count))\n    }",
+  "    var brackets: [String] = []\n    var bracket_count = 0\n    for char in paren_string.characters\
+    \ {\n        // if the next character is another open/close paren\n        if\
+    \ char == \")\" {\n            if bracket_count == 0 {\n                // we're\
+    \ starting a new group\n                brackets.append(String(char))\n      \
+    \      } else {\n                // we're starting a new group\n             \
+    \   brackets[bracket_count-1] += String(char)\n            }\n            bracket_count\
+    \ += 1\n        } else if char == \"(\" {\n            if bracket_count == 0 {\n\
+    \                // we're starting a new group\n                brackets.append(String(char))\n\
+    \            } else {\n                // we're starting a new group\n       \
+    \         brackets[bracket_count-1] += String(char)\n            }\n         \
+    \   bracket_count += 1\n        } else {\n            // we're closing a group\n\
+    \            if bracket_count == 0 {\n                // we're starting a new\
+    \ group\n                brackets.append(String(char))\n            } else {\n\
+    \                // we're already in a group\n                brackets[bracket_count-1]\
+    \ += String(char)\n            }\n            bracket_count -= 1\n        }\n\
+    \    }\n    return brackets", "    var groups = [String]()\n    let regex = try!\
+    \ NSRegularExpression(pattern: \",(?=([^()]*\\\\([^()]*\\\\))*[^()]*$)\")\n  \
+    \  guard let matches = regex.matches(in: paren_string, range: NSMakeRange(0, paren_string.characters.count))\
+    \ else { return groups }\n    for i in 0..<matches.count {\n        let matchRange\
+    \ = matches[i].range\n        let stringRange = paren_string.rangeOfString(paren_string[matchRange],\
+    \ options: .RegularExpressionSearch)!\n        let substring = paren_string.substringWithRange(NSMakeRange(stringRange.location,\
+    \ stringRange.length))\n        groups.append(substring)\n    }\n    return groups",
+  "    let input_string = paren_string.trimmingCharacters(in: .whitespacesAndNewlines)\n\
+    \    return input_string.components(separatedBy: characterSet)", "    var groups:\
+    \ [String] = [String]()\n\n    // Create a stack to track paren nesting.\n   \
+    \ var stack: [(Int, String)] = []\n    stack.push((0, \"(\"))\n\n    // Iterate\
+    \ through the input string looking for open parens\n    for (i, value) in paren_string.enumerated()\
+    \ {\n        // Pop the last stack entry and add the value to the groups array\n\
+    \        let last_stack_entry = stack.pop()\n        groups.append(String(last_stack_entry.1))\n\
+    \n        // Push a new entry onto the stack if the current character is a close\
+    \ paren\n        if value == \")\" {\n            let new_stack_entry = (i + 1,\
+    \ String(value))\n            stack.append(new_stack_entry)\n        }\n\n   \
+    \     // Push the current character on the stack\n        else {\n           \
+    \ let new_stack_entry = (i + 1, String(value))\n            stack.append(new_stack_entry)\n\
+    \        }\n    }\n\n    return groups", "    // Your code here\n    let regex\
+    \ = try! NSRegularExpression(pattern: \"\\\\((?!<\\\\))\", options: [])\n    let\
+    \ matches = regex.matches(in: paren_string, options: [], range: NSMakeRange(0,\
+    \ paren_string.utf16.count))\n    return paren_string.components(separatedBy:\
+    \ \"\", matchingPolicy: .byParagraphs).filter({ matches.contains(where: { $0.range.location\
+    \ == $0.range.location }) }).map({ $0.range.length == 0 ? ($0.range.length, \"\
+    \") : $0.range.length })", '    return paren_string.split(Character(" ")).filter
+    { $0.count > 0 }', "    if paren_string == \"\" {\n        return []\n    }\n\
+    \    var arr: [String] = []\n    var prev_brace_char = \"\"\n    var brace_count\
+    \ = 0\n    for c in paren_string.characters {\n        if c == \"(\" {\n     \
+    \       brace_count += 1\n            arr.append(prev_brace_char)\n        } else\
+    \ if c == \")\" {\n            if brace_count == 1 {\n                arr.append(prev_brace_char)\n\
+    \            } else {\n                brace_count -= 1\n            }\n     \
+    \   } else if c == \" \" {\n            if brace_count == 0 && prev_brace_char\
+    \ != \" \" {\n                arr.append(prev_brace_char)\n            }\n   \
+    \     }\n        prev_brace_char = c\n    }\n    if brace_count != 0 {\n     \
+    \   return arr\n    }\n    return []", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"([()])\\\\1+\", options: [])\n    let matches = regex.matches(in: paren_string,\
+    \ range: NSMakeRange(0, paren_string.characters.count))\n    let matches: [NSTextCheckingResult]\
+    \ = matches.map { result in\n        return result.range\n    }\n    let results\
+    \ = matches.map { match in\n        return paren_string[Range(match.range, in:\
+    \ paren_string)!]\n    }\n    return results", "    var groups: [String] = []\n\
+    \    var index: Int = 0\n    var inside_brace: Bool = false\n    var brace_level\
+    \ = 0\n    var inside_paren: Bool = false\n\n    for ch in paren_string.characters\
+    \ {\n        switch ch {\n        case '(':\n            inside_paren = true\n\
+    \            brace_level++\n            inside_brace = false\n        case '\\\
+    n':\n            inside_brace = false\n        case ')':\n            inside_brace\
+    \ = false\n            inside_paren = false\n            groups.append(paren_string.substringWithRange(NSRange(location:\
+    \ index, length: ch.count)))\n            index = NSMaxRange(NSRange.init(location:\
+    \ index, length: ch.count))\n            brace_level--\n            if brace_level\
+    \ == 0 {\n                groups.append(paren_string.substringWithRange(NSRange(location:\
+    \ index, length: ch.count)))\n            }\n        }\n        if !inside_paren\
+    \ && !inside_brace && ch.isWhitespace {\n            index = NSMaxRange(NSRange.init(location:\
+    \ index, length: ch.count))\n        }\n    }\n    return groups", "    var groups\
+    \ = [String]()\n    var inGroup = false\n    var current: String = \"\"\n    var\
+    \ inParens: Bool = false\n    for char in paren_string {\n        switch char\
+    \ {\n        case \"(\":\n            if !inGroup {\n                inGroup =\
+    \ true\n            }\n            if inGroup {\n                groups.append(current)\n\
+    \            }\n            inParens = true\n        case \"(\":\n           \
+    \ if !inGroup {\n                inGroup = true\n            }\n            if\
+    \ inGroup {\n                groups.append(current)\n            }\n         \
+    \   inParens = false\n        case \"(\":\n            if inParens {\n       \
+    \         inGroup = true\n            }\n            if inGroup {\n          \
+    \      groups.append(current)\n            }\n        case \"(\":\n          \
+    \  if !inGroup {\n                inGroup = true\n            }\n            if\
+    \ inGroup {\n                groups.append(current)\n            }\n         \
+    \   inParens = false\n        default:\n            if inGroup {\n           \
+    \     inGroup = false\n                groups.append(current)\n              \
+    \  current = \"\"\n            } else {\n                current = current + String(char)\n\
+    \            }\n        }\n    }\n    if !inGroup {\n        groups.append(current)\n\
+    \    }\n    return groups", "    var paren_strings = paren_string.components(separatedBy:\
+    \ Character(\" \"))\n    var result = [String]()\n    while paren_strings.count\
+    \ > 0 {\n        let first_paren = paren_strings.first!\n        let last_paren\
+    \ = paren_strings.last!\n        if first_paren == \"(\" {\n            let count\
+    \ = paren_strings.index(last_paren, offsetBy: 1)\n            let end_index =\
+    \ paren_strings.index(last_paren, offsetBy: count + 1)\n            let sub_str\
+    \ = paren_strings[0..<end_index].joined(separator: \"\")\n            result.append(sub_str)\n\
+    \            paren_strings = paren_strings[end_index..<paren_strings.count]\n\
+    \        } else {\n            result.append(first_paren)\n            paren_strings\
+    \ = paren_strings[1..<paren_strings.count]\n        }\n    }\n    return result",
+  "    \n    var group_count = [String: Int]()\n    var groups = [String]()\n    var\
+    \ depth = 0\n    \n    for character in paren_string.characters {\n        \n\
+    \        guard character == \"(\" else {\n            depth -= 1\n           \
+    \ continue\n        }\n        \n        let group = paren_string.substringWithRange(NSRange(location:\
+    \ depth+2, length: 1))\n        groups.append(group)\n        depth = depth+1\n\
+    \        \n        guard character == \")\" else {\n            depth -= 1\n \
+    \           continue\n        }\n        \n        if depth == 0 {\n         \
+    \   groups.append(group) //first time encountering this paren, add this paren\n\
+    \            group_count[group] = groups.count\n        }\n        \n        guard\
+    \ !groups.isEmpty else {\n            //if groups is empty, add this paren group\n\
+    \            groups.append(group)\n            group_count[group] = groups.count\n\
+    \        }\n    }\n    \n    return groups.map({ (g) -> String in return group_count[g]\
+    \ }).sorted()", "    var groups = [String]()\n    var last = 0\n    var open =\
+    \ paren_string.startIndex\n\n    while last < paren_string.endIndex {\n      \
+    \  var index = paren_string.index(paren_string.startIndex, offsetBy: last)\n\n\
+    \        var char = paren_string[last]\n        if char == \" \" {\n         \
+    \   groups.append(paren_string[last...index])\n            last = index\n    \
+    \    } else {\n            if char == \"(\" {\n                groups.append(paren_string[last...index])\n\
+    \                last = index + 1\n            }\n        }\n    }\n    groups.append(paren_string[last...])\n\
+    \    return groups", "    let regex = try! NSRegularExpression(pattern: \"\\\\\
+    )\\\\)\\\\)|\\\\)\\\\)|\\\\(|\\\\(|\\\\{|\\\\{|\\\\}|\\\\}|\\\\{|\\\\}\")\n  \
+    \  let matches = regex.matches(in: paren_string, range: NSRange(location: 0, length:\
+    \ paren_string.utf16.count))\n    var paren_groups: [String] = []\n    for match\
+    \ in matches {\n        let range = Range(match.range, in: paren_string)\n   \
+    \     var paren_group_start = paren_string.index(paren_string.startIndex, offsetBy:\
+    \ range.lowerBound)\n        var paren_group_end = paren_string.index(paren_string.endIndex,\
+    \ offsetBy: range.upperBound)\n        paren_group_end = paren_string.index(paren_group_end,\
+    \ offsetBy: 1)\n        if paren_group_start == paren_group_end {\n          \
+    \  paren_group_start = paren_string.index(paren_group_start, offsetBy: 1)\n  \
+    \      }\n        let paren_group = paren_string[paren_group_start..<paren_group_end]\n\
+    \        if paren_group.count > 1 {\n            paren_groups.append(paren_group)\n\
+    \        }\n    }\n    return paren_groups", "    var groups = [String]()\n  \
+    \  var subStrings = [String]()\n    let regex = try! NSRegularExpression(pattern:\
+    \ \"[(\\\\)]\", options: [])\n    if paren_string.contains(\"(\") {\n        do\
+    \ {\n            let matches = regex.matches(in: paren_string, range: NSMakeRange(0,\
+    \ paren_string.characters.count))\n            guard let match = matches.first\
+    \ else {\n                return groups\n            }\n            let group\
+    \ = paren_string.substring(with: match.range)\n            groups.append(group)\n\
+    \            paren_string.remove(at: match.range)\n        } while paren_string.contains(\"\
+    (\")\n    }\n\n    do {\n        let matches = regex.matches(in: paren_string,\
+    \ range: NSMakeRange(0, paren_string.characters.count))\n        guard let match\
+    \ = matches.first else {\n            return groups\n        }\n        let group\
+    \ = paren_string.substring(with: match.range)\n        groups.append(group)\n\
+    \        paren_string.remove(at: match.range)\n    } while paren_string.contains(\"\
+    )\")\n\n    while paren_string.contains(\"(\") {\n        let group = paren_string.removeFirst()\n\
+    \        subStrings.append(group)\n        let range = NSMakeRange(0, paren_string.characters.count)\n\
+    \        do {\n            let matches = regex.matches(in: paren_string, range:\
+    \ range)\n            guard let match = matches.first else {\n               \
+    \ break\n            }\n            let group = paren_string.substring(with: match.range)\n\
+    \            groups.append(group)\n            paren_string.remove(at: match.range)\n\
+    \        } while paren_string.contains(\"(\")\n    }\n    subStrings.append(paren_string)\n\
+    \n    return subStrings", "    return paren_string\n        .componentsSeparatedByCharactersInSet(\
+    \ NSCharacterSet.whitespaceCharacterSet() )\n        .filter( { paren_string.rangeOfString(\
+    \ $0 ) == nil } )", "    let expressions = paren_string.characters\n        .filter\
+    \ { $0 != \"(\" && $0 != \")\" }\n        .map(String.init)\n        .filter {\
+    \ !$0.isEmpty() }\n\n    return expressions\n        .enumerated()\n        .flatMap\
+    \ { case (index, character) -> [String] in\n            var group: [String] =\
+    \ []\n            var lastChar: Character?\n            var balance = 1\n\n  \
+    \          for (index, char) in expressions.enumerated() {\n                if\
+    \ char == \")\" && balance > 1 {\n                    balance -= 1\n         \
+    \       } else if char == \"(\" && balance < 0 {\n                    balance\
+    \ += 1\n                } else {\n                    if lastChar == \")\" ||\
+    \ lastChar == \"]\" {\n                        group.insert(String(char), at:\
+    \ index)\n                    }\n                    lastChar = char\n       \
+    \         }\n            }\n\n            return group\n        }\n        .flatMap\
+    \ { $0.map(String.init) }", "    var paren_groups = [String]()\n    for group_string:\
+    \ String in paren_string.components(separatedBy: NSCharacterSet.whitespacesAndNewlines)\
+    \ {\n        // ignore any whitespace in the group string\n        let group_string:\
+    \ String = group_string.trimmingCharacters(in: NSCharacterSet.whitespaces)\n \
+    \       if group_string.isEmpty {\n            continue\n        }\n        let\
+    \ open_paren_index = group_string.rangeOfString(NSCharacterSet.openParenthesis)\n\
+    \        if open_paren_index == nil || open_paren_index!.end < open_paren_index!.start\
+    \ {\n            paren_groups.append(group_string)\n            continue\n   \
+    \     }\n        // need to add this group to the current paren groups\n     \
+    \   let open_paren_start = open_paren_index!.start\n        let close_paren_start\
+    \ = open_paren_index!.end\n        let open_paren_end = open_paren_start + group_string.count\n\
+    \        let close_paren_end = open_paren_end - 1\n        let open_paren_string\
+    \ = group_string.substringToIndex(open_paren_start)\n        let close_paren_string\
+    \ = group_string.substringFromIndex(close_paren_start)\n        paren_groups.append(open_paren_string)\n\
+    \        while close_paren_end < paren_string.endIndex {\n            let close_paren_string\
+    \ = paren_string.substring(from: close_paren_end)\n            paren_groups.append(close_paren_string)\n\
+    \            close_paren_end += 1\n        }\n        paren_groups.append(group_string)\n\
+    \    }\n    return paren_groups", "    \n    let split_string = paren_string.split(\"\
+    \ \").map(String.init)\n    var result_array: [String] = []\n\n    for string\
+    \ in split_string {\n        let first_char = string.first\n        let last_char\
+    \ = string.last\n        let is_open_paren = is_open_paren(first_char: first_char,\
+    \ last_char: last_char)\n        if is_open_paren == true {\n            result_array.append(string)\n\
+    \        } else if is_open_paren == false {\n            result_array.removeFirst()\n\
+    \        }\n    }\n    \n    return result_array", "    return paren_string.components(separatedBy:\
+    \ CharacterSet.whitespacesAndNewlines)\n        .map { String($0) }\n        .filter({\
+    \ !$0.isEmpty}) ", "    var result = [String]()\n    if paren_string.isEmpty {\
+    \ return result }\n    \n    guard let start = paren_string.rangeOfString(\"^\\\
+    \\s*\\\\(\", options: .regularExpression) else { return result }\n    guard let\
+    \ end = paren_string.rangeOfString(\"^\\\\s*\\\\)\\\\s*$\", options: .regularExpression)\
+    \ else { return result }\n    \n    let startRange = start..<end\n    let endRange\
+    \ = start..<paren_string.endIndex\n    \n    var currentString = \"\"\n    var\
+    \ currentRange = startRange\n    var isNested = false\n    \n    for i in startRange..<endRange\
+    \ {\n        if paren_string[i] == \"(\" {\n            currentString = String(currentRange)\n\
+    \            currentRange = i + 1\n            isNested = true\n        } else\
+    \ if paren_string[i] == \")\" {\n            isNested = false\n            if\
+    \ currentString.characters.count > 0 {\n                result.append(currentString)\n\
+    \                currentString = \"\"\n            }\n        } else {\n     \
+    \       currentString += String(currentRange)\n            currentRange = i +\
+    \ 1\n        }\n    }\n    \n    if currentString.characters.count > 0 {\n   \
+    \     result.append(currentString)\n    }\n    \n    return result", "    var\
+    \ paren_groups: [String] = []\n    var current_paren_group: String = \"\"\n  \
+    \  var in_paren_group = false\n\n    for character in paren_string.characters\
+    \ {\n        switch character {\n        case \",\":\n            if current_paren_group\
+    \ != \"\" {\n                paren_groups.append(current_paren_group)\n      \
+    \          current_paren_group = \"\"\n            }\n        case \")\":\n  \
+    \          in_paren_group = false\n        case \"(\":\n            in_paren_group\
+    \ = true\n        case \" \":\n            if in_paren_group {\n             \
+    \   current_paren_group += \" \"\n            } else {\n                if current_paren_group\
+    \ != \"\" {\n                    paren_groups.append(current_paren_group)\n  \
+    \              }\n                current_paren_group = String(character)\n  \
+    \          }\n        default:\n            current_paren_group += String(character)\n\
+    \        }\n    }\n\n    if current_paren_group != \"\" {\n        paren_groups.append(current_paren_group)\n\
+    \    }\n\n    return paren_groups", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"((?<=\\\\()|(?<=\\\\))|[^()])+\", options: [])\n    let matches = regex.matches(in:\
+    \ paren_string, options: [], range: NSRange(location: 0, length: paren_string.utf16.count))\n\
+    \    let matches = matches.map { String(substringWithRange: $0.range)}\n    return\
+    \ matches", "    if paren_string == \"\" {\n        return nil\n    }\n\n    guard\
+    \ let parens_str = paren_string.asASCIIString() else {\n        return nil\n \
+    \   }\n\n    // Separate paren groups with space to array elements\n    var elems\
+    \ = parens_str.components(separatedBy: \" \")\n\n    // Ignore space if any\n\
+    \    if let lastSpaceIndex = elems.lastIndex(where: { $0 != \" \" }), lastSpaceIndex\
+    \ != elems.count - 1 {\n        elems.remove(at: lastSpaceIndex + 1)\n    }\n\n\
+    \    var groups = [String]()\n    var openingGroupCount = 0\n    var openingGroups\
+    \ = Array<String>()\n\n    for elem in elems {\n        // Open the paren group\n\
+    \        if elem.hasPrefix(\"(\") {\n            openingGroups.append(elem)\n\
+    \            openingGroupCount += 1\n        }\n\n        // Close the paren group\n\
+    \        if elem.hasSuffix(\")\") {\n            if openingGroups.count > openingGroupCount\
+    \ {\n                groups.append(openingGroups)\n                openingGroups\
+    \ = Array<String>()\n                openingGroupCount = 0\n            }\n  \
+    \      }\n\n        // Ignore space if any\n        if openingGroupCount != 0\
+    \ && elem.isEmpty {\n            continue\n        }\n\n        // Ignore space\
+    \ if any\n        if elem.hasPrefix(\" \") {\n            continue\n        }\n\
+    \    }\n\n    return groups", "    var result = [String]()\n    for parenthesis_group_string_index\
+    \ in 0..<paren_string.characters.count {\n        let parenthesis_group_string\
+    \ = paren_string[parenthesis_group_string_index..<paren_string.characters.count]\n\
+    \        let is_open = parenthesis_group_string.characters.count == 1 && parenthesis_group_string.characters.first\
+    \ == \"(\"\n        let is_closed = parenthesis_group_string.characters.count\
+    \ == 1 && parenthesis_group_string.characters.first == \")\"\n        let is_balanced\
+    \ = parenthesis_group_string.characters.count == 1 && (parenthesis_group_string.characters.first\
+    \ == \"(\" || parenthesis_group_string.characters.first == \")\")\n        let\
+    \ is_nested = parenthesis_group_string.characters.count > 1 && parenthesis_group_string_index\
+    \ > 0 && parenthesis_group_string_index < paren_string.characters.count\n    \
+    \    if !is_nested && !is_closed && !is_open && !is_balanced {\n            result.append(parenthesis_group_string)\n\
+    \        } else if is_nested {\n            let nested_parenthesis_group_string\
+    \ = paren_string[parenthesis_group_string_index..<paren_string.characters.count-1]\n\
+    \            let is_balanced_nested = nested_parenthesis_group_string.characters.count\
+    \ == 1 && (nested_parenthesis_group_string.characters.first == \"(\" || nested_parenthesis_group_string.characters.first\
+    \ == \")\")\n            let is_nested_closed = nested_parenthesis_group_string.characters.count\
+    \ == 1 && nested_parenthesis_group_string.characters.first == \")\"\n        \
+    \    if is_balanced_nested {\n                result.append(parenthesis_group_string)\n\
+    \            } else {\n                result.append(nested_parenthesis_group_string)\n\
+    \            }\n        } else {\n            // If we are still inside the group\
+    \ append the rest of string to the group we already had.\n            result.append(parenthesis_group_string)\n\
+    \        }\n    }\n    return result", "\tvar parens = paren_string.characters\n\
+    \tparens.withUnsafeBufferPointer { (chars: UnsafeBufferPointer<unichar>) in\n\t\
+    \tvar groups = [String]()\n\t\tvar balanced = false\n\t\tfor char in chars {\n\
+    \t\t\tswitch char {\n\t\t\tcase UnicodeScalar(parenOpenBrace):\n\t\t\t\tif balanced\
+    \ {\n\t\t\t\t\tgroups.append(String(chars))\n\t\t\t\t\tbalanced = false\n\t\t\t\
+    \t\tcontinue\n\t\t\t\t}\n\t\t\t\tbalanced = true\n\t\t\t\tgroups.append(String(chars))\n\
+    \t\t\t\tbreak\n\t\t\tcase UnicodeScalar(parenCloseBrace):\n\t\t\t\tif !balanced\
+    \ {\n\t\t\t\t\tgroups.append(String(chars))\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t\
+    \tbalanced = false\n\t\t\t\tgroups.append(String(chars))\n\t\t\t\tbreak\n\t\t\t\
+    case UnicodeScalar(parenOpenBracket):\n\t\t\t\tif balanced {\n\t\t\t\t\tgroups.append(String(chars))\n\
+    \t\t\t\t\tbalanced = false\n\t\t\t\t\tcontinue\n\t\t\t\t}\n\t\t\t\tbalanced =\
+    \ true\n\t\t\t\tgroups.append(String(chars))\n\t\t\t\tbreak\n\t\t\tcase UnicodeScalar(parenCloseBracket):\n\
+    \t\t\t\tif !balanced {\n\t\t\t\t\tgroups.append(String(chars))\n\t\t\t\t\tbreak\n\
+    \t\t\t\t}\n\t\t\t\tbalanced = false\n\t\t\t\tgroups.append(String(chars))\n\t\t\
+    \t\tbreak\n\t\t\t}\n\t\t}\n\t\tgroups.append(String(chars))\n\t}\n\treturn groups",
+  "    if paren_string == \"\" {\n        return []\n    }\n    var current_group\
+    \ = [String]()\n    var current_group_open = 0\n    for letter in paren_string\
+    \ {\n        switch letter {\n        case \"(\":\n            current_group_open++\n\
+    \        case \"(\":\n            if current_group_open > 0 {\n              \
+    \  current_group.append(letter)\n                current_group_open--\n      \
+    \      }\n        default:\n            if current_group_open > 0 {\n        \
+    \        current_group.append(letter)\n            } else {\n                current_group_open\
+    \ = 1\n                current_group.append(letter)\n            }\n        }\n\
+    \    }\n    return current_group", "    if paren_string == \"\" {\n        return\
+    \ []\n    }\n\n    var result: [String] = []\n    var stack: [String] = []\n \
+    \   var paren_count = 0\n    for character in paren_string {\n        switch character\
+    \ {\n        case \")\":\n            if paren_count == 0 {\n                result.append(String(stack))\n\
+    \                stack = []\n                paren_count = 0\n            } else\
+    \ {\n                paren_count--\n            }\n        case \" \":\n     \
+    \       if paren_count == 0 {\n                result.append(String(stack))\n\
+    \                stack = []\n                paren_count = 0\n            } else\
+    \ {\n                paren_count++\n            }\n        default:\n        \
+    \    stack.append(String(character))\n            paren_count++\n        }\n \
+    \   }\n    result.append(String(stack))\n    return result", "    var groups:\
+    \ [String] = []\n    var string_to_add = \"\"\n\n    paren_string = paren_string.trimmingCharacters(in:\
+    \ .whitespacesAndNewlines)\n\n    var open_braces: Int = 0\n    var close_braces:\
+    \ Int = 0\n    var open_brace_counter: Int = 0\n    var close_brace_counter: Int\
+    \ = 0\n\n    for character in paren_string.unicodeScalars {\n        let unicodeScalar\
+    \ = character.value\n        let unicodeScalarAsInt = Int(unicodeScalar)\n   \
+    \     switch unicodeScalarAsInt {\n        case 91: // '('\n            open_brace_counter\
+    \ += 1\n            open_braces += 1\n            open_brace_counter = (open_brace_counter\
+    \ % 5) + 1\n        case 123:\n            // ')'\n            close_brace_counter\
+    \ += 1\n            close_braces += 1\n            close_brace_counter = (close_brace_counter\
+    \ % 5) + 1\n        case 94: // '+'\n            // Don't add the + sign to the\
+    \ list\n        case 110: // '-'\n            // Don't add the - sign to the list\n\
+    \        case 133:\n            // ';'\n            // Don't add the ; sign to\
+    \ the list\n        case 125:\n            // '\\\\n'\n            // Don't add\
+    \ the \\n sign to the list\n        default:\n            // If it's a normal\
+    \ character we add the character to the list of groups and increment\n       \
+    \     // the counters\n            string_to_add += String(Character(unicodeScalar))\n\
+    \            groups.append(string_to_add)\n            string_to_add = \"\"\n\
+    \            open_brace_counter = close_brace_counter = 0\n        }\n    }\n\n\
+    \    if open_braces == 0 {\n        return groups\n    }\n    if open_brace_counter\
+    \ % 5 == 0 {\n        string_to_add += String(Character(UnicodeScalar(94)))\n\
+    \    }\n    if close_brace_counter % 5 == 0 {\n        string_to_add += String(Character(UnicodeScalar(94)))\n\
+    \    }\n    if close_braces > 0 {\n        string_to_add += String(Character(UnicodeScalar(123)))\n\
+    \    }\n    if open_braces > 0 {\n        string_to_add += String(Character(UnicodeScalar(110)))\n\
+    \    }\n    if open_braces > 1 {\n        string_to_add += String(Character(UnicodeScalar(133)))\n\
+    \    }\n    if open_braces > 2 {\n        string_to_add += String(Character(UnicodeScalar(125)))\n\
+    \    }\n    if open_braces > 3 {\n        string_to_add += String(Character(UnicodeScalar(94)))\n\
+    \    }\n    if close_braces > 0 {\n        string_to_add += String(Character(UnicodeScalar(123)))\n\
+    \    }\n    if close_braces > 1 {\n        string_to_", "    \n    let opening_braces\
+    \ = [\"{\", \"(\", \"[\"]\n    let closing_braces = [\"}\", \")\", \"]\"]\n  \
+    \  \n    let pattern = \"(?<opening_paren>\\(\\?<opening_brace>\\(.*?\\)\\?<closing_brace>\\\
+    ))\"\n    \n    var paren_groups = [String]()\n    \n    if paren_string.isEmpty\
+    \ {\n        return paren_groups\n    }\n    \n    let regex_match = paren_string.range(of:\
+    \ pattern)\n    \n    if regex_match == nil || paren_string[regex_match!.lowerBound..<regex_match!.upperBound].isEmpty\
+    \ {\n        return paren_groups\n    }\n    \n    var regex_range = 0\n    while\
+    \ regex_range.upperBound != paren_string.characters.count {\n        let regex_range\
+    \ = paren_string.range(of: pattern, options: .byLines, range: regex_match!.upperBound)\n\
+    \        \n        guard let opening_paren = paren_string[regex_range!.lowerBound..<regex_range!.upperBound].lowercased()\
+    \ else {\n            return paren_groups\n        }\n        \n        if opening_braces.contains(opening_paren)\
+    \ {\n            let closing_paren = paren_string[regex_range.upperBound..<paren_string.characters.count].lowercased()\n\
+    \            \n            if closing_braces.contains(closing_paren) {\n     \
+    \           let brace = paren_string[regex_range!.lowerBound..<regex_range!.upperBound].lowercased()\n\
+    \                \n                let index = paren_groups.index(of: brace)\n\
+    \                \n                if index != nil {\n                    paren_groups[index!]\
+    \ = \"\\(paren_groups[index!]) \\(closing_paren)\"\n                } else {\n\
+    \                    paren_groups.append(\"\\(paren_groups[paren_groups.count-1])\
+    \ \\(closing_paren)\")\n                }\n            } else {\n            \
+    \    paren_groups.append(\"\\(opening_paren)\")\n            }\n        } else\
+    \ {\n            paren_groups.append(\"\\(opening_paren)\")\n        }\n    }\n\
+    \    \n    return paren_groups", "    let paren_groups = [String]()\n    let open_brace_count\
+    \ = paren_string.count(Character(\"(\"))\n    for open_brace_counter in 0..<open_brace_count\
+    \ {\n        let open_brace_start = paren_string.index(paren_string.startIndex,\
+    \ offsetBy: open_brace_counter)\n        let open_brace_end = paren_string.index(open_brace_start,\
+    \ offsetBy: 1)\n        let open_brace_string = paren_string[open_brace_start..<open_brace_end]\n\
+    \        paren_groups.append(open_brace_string)\n    }\n    return paren_groups",
+  "    var paren_groups = [String]()\n    let regex = try! NSRegularExpression(pattern:\
+    \ \"(\\\\(\\\\w+\\\\))\", options: [])\n    paren_string.enumerateLines(using:\
+    \ String.EnumerationOptions.byWords) { line, stop in\n        let match = regex.firstMatch(in:\
+    \ line)\n        guard let substring = match?.range(at: 1) else { return }\n \
+    \       paren_groups.append(String(line.substring(to: substring)))\n    }\n  \
+    \  return paren_groups", "\tlet paren_string = paren_string.trimmingCharacters(in:\
+    \ .whitespacesAndNewlines)\n\tlet paren_string = paren_string.components(separatedBy:\
+    \ CharacterSet(charactersIn: \" \"))\n\tlet paren_string = paren_string.map {\
+    \ String($0) }\n\tvar result = [String]()\n\tfor (index, element) in paren_string.enumerated()\
+    \ {\n\t\tif index == 0 || element != paren_string[index-1] {\n\t\t\tresult.append(element)\n\
+    \t\t}\n\t}\n\treturn result", "    if paren_string == \"\" { return [] }\n   \
+    \ \n    var parts = [String]()\n    var start = paren_string.startIndex\n    let\
+    \ open_paren = paren_string.unicodeScalars.first!.value - start\n    \n    if\
+    \ paren_string.unicodeScalars.count > 1 {\n        for index in 1..<paren_string.unicodeScalars.count\
+    \ {\n            if paren_string[index].value == open_paren &&\n             \
+    \  paren_string[index-1].value != open_paren {\n                parts.append(paren_string.substring(start,\
+    \ index))\n                start = index\n            } else {\n             \
+    \   start = index\n            }\n        }\n        \n        parts.append(paren_string.substring(start,\
+    \ paren_string.count))\n    } else {\n        parts.append(paren_string)\n   \
+    \ }\n    \n    return parts", "    var ret = [String]()\n    var parenDepth =\
+    \ [0]\n    var openingBraceIndex = -1\n\n    for index in 0..<paren_string.characters.count\
+    \ {\n        switch paren_string[index] {\n        case '(':\n            parenDepth.append(0)\n\
+    \            if openingBraceIndex == -1 {\n                openingBraceIndex =\
+    \ index\n            }\n        case ')':\n            parenDepth.removeLast()\n\
+    \            if parenDepth.isEmpty() && openingBraceIndex != -1 {\n          \
+    \      let start = openingBraceIndex\n                let end = paren_string.index(after:\
+    \ index)\n                let substr = paren_string.substring(from: start, to:\
+    \ end)\n                ret.append(substr)\n                openingBraceIndex\
+    \ = -1\n            }\n        default:\n            if parenDepth.isEmpty ||\
+    \ openingBraceIndex == -1 {\n                continue\n            }\n       \
+    \     let parenDepthIndex: Int = parenDepth.last!\n            if paren_string[index]\
+    \ == '{' {\n                openingBraceIndex = index\n            } else if paren_string[index]\
+    \ == '}' {\n                if openingBraceIndex == parenDepthIndex {\n      \
+    \              let start = openingBraceIndex\n                    let end = paren_string.index(after:\
+    \ index)\n                    let substr = paren_string.substring(from: start,\
+    \ to: end)\n                    ret.append(substr)\n                    openingBraceIndex\
+    \ = -1\n                } else {\n                    openingBraceIndex = -1\n\
+    \                }\n            }\n        }\n    }\n    return ret", "    guard\
+    \ let opening_brackets = paren_string.components(separatedBy: \"((\") else {\n\
+    \        return []\n    }\n    let opening_brackets_index = opening_brackets.startIndex\n\
+    \    let closing_brackets_index = opening_brackets.lastIndex(of: \")\")!\n   \
+    \ let balanced_opening_brackets = Array(opening_brackets[opening_brackets_index..<closing_brackets_index])\n\
+    \    let balanced_closing_brackets = Array(opening_brackets[closing_brackets_index..<opening_brackets_index])\n\
+    \    let balanced_closing_brackets_index = balanced_closing_brackets.endIndex\n\
+    \    let balanced_opening_brackets_index = balanced_opening_brackets.startIndex\n\
+    \    guard balanced_closing_brackets_index == balanced_opening_brackets_index\
+    \ else {\n        return []\n    }\n    let balanced_closing_brackets = balanced_closing_brackets[balanced_opening_brackets_index..<balanced_closing_brackets_index]\n\
+    \    let balanced_opening_brackets = balanced_opening_brackets[balanced_opening_brackets_index..<balanced_closing_brackets_index]\n\
+    \    let balanced_opening_brackets_strings = balanced_opening_brackets.map { $0.trimmingCharacters(in:\
+    \ .whitespacesAndNewlines) }\n    let balanced_closing_brackets_strings = balanced_closing_brackets.map\
+    \ { $0.trimmingCharacters(in: .whitespacesAndNewlines) }\n    return balanced_opening_brackets_strings\
+    \ + balanced_closing_brackets_strings", "    var paren_groups: [String] = []\n\
+    \    var group_count: Int = 0\n    var current_group: String = \"\"\n\n    for(_,\
+    \ char) in paren_string.enumerated() {\n        switch char {\n        case '(':\n\
+    \            if group_count == 0 {\n                group_count++\n          \
+    \      current_group += String(char)\n            }\n            else {\n    \
+    \            paren_groups.append(current_group)\n                group_count =\
+    \ 0\n                current_group = \"\"\n            }\n        default:\n \
+    \           if group_count == 0 {\n                group_count++\n           \
+    \     current_group += String(char)\n            }\n            else {\n     \
+    \           current_group += String(char)\n            }\n        }\n    }\n \
+    \   paren_groups.append(current_group)\n    return paren_groups", "    let expression\
+    \ = \"\\(paren_string)\".components(separatedBy: CharacterSet.whitespacesAndNewlines).filter\
+    \ { !$0.isEmpty }\n    let openingBrackets = \"\\(expression[1..<expression.count])\"\
+    .components(separatedBy: CharacterSet.whitespacesAndNewlines)\n    let closingBrackets\
+    \ = \"\\(expression[expression.count - 1..<expression.count - 2])\".components(separatedBy:\
+    \ CharacterSet.whitespacesAndNewlines)\n\n    return openingBrackets.map { $0\
+    \ ++ \"(\" + closingBrackets.filter{ !$0.contains(\"(\") }.reduce(\"\") { $0 +\
+    \ $1 } + \")\" }", '    // Your code here', "    // Add parentheses and remove\
+    \ spaces and commas in string before returning.\n    let paren_string_sanitized\
+    \ = paren_string\n        .replacingOccurrences(of: \"\\\\s+\", with: \"\")\n\
+    \        .replacingOccurrences(of: \"\\\\s+|,\", with: \"\")\n    let result =\
+    \ [String]()\n    let scanner = Scanner(string: paren_string_sanitized)\n    while\
+    \ scanner.hasNextGroup() {\n        scanner.skipWhitespace()\n        if scanner.skipPunctuation(forCharacter:\
+    \ \"(\") {\n            scanner.skipWhitespace()\n            while (scanner.skipPunctuation(forCharacter:\
+    \ \"(\")) {\n                scanner.skipWhitespace()\n                result.append(scanner.nextGroup())\n\
+    \                scanner.skipWhitespace()\n            }\n        } else {\n \
+    \           result.append(scanner.nextGroup())\n        }\n    }\n    return result",
+  "    var paren_string = paren_string\n    \n    var paren_strings = paren_string.components(separatedBy:\
+    \ paren_chars)\n    \n    for paren_string in paren_strings {\n        let index\
+    \ = paren_string.index(paren_chars.endIndex, offsetBy: paren_chars.count)\n  \
+    \      paren_string = paren_string.substring(from: index)\n    }\n    \n    return\
+    \ paren_strings", "    \n    var output: [String] = []\n    \n    let stack =\
+    \ [String]()\n    \n    for char in paren_string {\n        \n        if char\
+    \ == \"(\" {\n            stack.append(char)\n        } else if char == \")\"\
+    \ {\n            \n            if stack.isEmpty {\n                \n        \
+    \        // Error case\n                \n                output.append(\"Error!\
+    \ Invalid parenthesis group.\")\n                \n            } else {\n    \
+    \            \n                let top_level_group = stack.removeLast()\n    \
+    \            \n                if top_level_group != \"(\" {\n               \
+    \     output.append(\"Error! Mismatched parenthesis groups.\")\n             \
+    \   }\n                \n                stack.append(top_level_group)\n     \
+    \       }\n        }\n    }\n    \n    return output", "    // Use a map to store\
+    \ a key value pair of open and closed parens.\n    var paren_pairs: [String: Bool]\
+    \ = [:]\n    var paren_strings: [String] = []\n    var open_parens: [Int] = []\n\
+    \    var close_parens: [Int] = []\n    var open_paren_pairs: [String: Bool] =\
+    \ [:]\n\n    // Iterate over all the chars in the string.\n    for char in paren_string.characters\
+    \ {\n        // If open paren pair, add to pairs.\n        if open_paren_pairs[String(char)]\
+    \ {\n            paren_pairs[String(char)] = true\n        }\n        // If close\
+    \ paren pair, add to pairs.\n        if close_paren_pairs[String(char)] {\n  \
+    \          // If open paren pair, remove from pairs.\n            if open_paren_pairs[String(char)]\
+    \ {\n                paren_pairs[String(char)] = false\n            }\n      \
+    \  }\n\n        // If open paren, add to the paren_strings.\n        if paren_pairs[String(char)]\
+    \ {\n            paren_strings.append(String(char))\n            open_parens.append(Int(char))\n\
+    \        }\n        // If close paren, add to close_parens.\n        if paren_pairs[String(char)]\
+    \ {\n            close_parens.append(Int(char))\n        }\n    }\n\n    // Add\
+    \ the remaining open parens to the open_paren_pairs map.\n    for i in open_parens.reverse()\
+    \ {\n        open_paren_pairs[String(String(Array(i)...))] = true\n    }\n\n \
+    \   // Add the remaining close parens to the close_parens map.\n    for i in close_parens.reverse()\
+    \ {\n        close_paren_pairs[String(String(Array(i)...))] = true\n    }\n\n\
+    \    // Return a array of strings with all the parens.\n    return paren_strings",
+  "    let paren_open = \"(\\\\(\\\\s?)\"\n    let paren_close = \"\\\\)\" + paren_open\n\
+    \    let group_re = \"\\\\(\\\\?\\(.*?\\)\\\\)\"\n    let open_brace_re = paren_open\
+    \ + \"|\" + group_re\n    let close_brace_re = group_re + \"|\" + paren_close\n\
+    \    let re = open_brace_re + \"|\" + close_brace_re\n    let matcher = NSRegularExpression.init(pattern:\
+    \ re,\n                                            options: .CaseInsensitive,\n\
+    \                                            error: nil)\n    if let match = matcher.firstMatchInString(paren_string,\n\
+    \                                              options: NSRegularExpressionSearch,\n\
+    \                                              range: NSMakeRange(0, paren_string.count))\
+    \ {\n        var matched_range: NSRange?\n        do {\n            matched_range\
+    \ = match.rangeAtIndex(0)\n        } catch let error as NSError {\n          \
+    \  print(\"Couldn't initialize regex: \\(error.description)\")\n        }\n  \
+    \      let group_count: Int = matched_range?.location == NSNotFound ? 0 : Int(match.numberOfRanges)\n\
+    \        var open_braces: [String] = []\n        var groups: [String] = []\n \
+    \       let open_brace_count = Int(paren_string.rangeOfString(paren_open, options:\
+    \ .BackwardsSearch)?.location ?? -1)\n        var close_braces: [String] = []\n\
+    \        guard open_brace_count + 1 == group_count else {\n            return\
+    \ []\n        }\n        for i in 0..<open_brace_count {\n            let group_string\
+    \ = paren_string.substringWithRange(NSMakeRange(i, open_brace_count - i))\n  \
+    \          open_braces.append(group_string)\n        }\n        for i in 0..<group_count\
+    \ {\n            let group_match = matcher.rangeOfFirstMatchInStringSubmatch(paren_string,\n\
+    \                                                                           options:\
+    \ NSRegularExpressionSearch,\n                                               \
+    \                            range: NSMakeRange(0, paren_string.count),\n    \
+    \                                                                       captures:\
+    \ nil)\n            if group_match != nil {\n                let group_string\
+    \ = paren_string.substringWithRange(group_match!.range)\n                groups.append(group_string)\n\
+    \            }\n        }\n        for i in 0..<close_brace_count {\n        \
+    \    let group_string = paren_string.substringWithRange(NSMakeRange(i, close_brace_count\
+    \ - i))\n            close_braces.append(group_string)\n        }\n        if\
+    \ groups.count == open_braces.count {\n            return open_braces\n      \
+    \  } else if groups.count == close_braces.count {\n            return close_braces\n\
+    \        } else {\n            return []\n        }\n    } else {\n        return\
+    \ []\n    }", "    // The basic idea is to keep track of the previous char in\
+    \ the group (opening or closing).\n    // When a closing brace is found, we can\
+    \ check if it is the next char to the left or right\n    // and if it is, we can\
+    \ pop the last element off the array and put a parenthesis in its place\n    var\
+    \ paren_strings = Array<String>()\n    var opening_brace_count = 0\n\n    for\
+    \ c in paren_string.characters {\n        // if opening paren, increment count\
+    \ and push it onto the stack\n        if c == \"(\" {\n            paren_strings.append(String())\n\
+    \            paren_strings[paren_strings.count-1] += c\n            opening_brace_count++\n\
+    \        }\n        // if closing paren, decrement count and check if it matches\
+    \ an opening paren\n        else if c == \")\" {\n            paren_strings[paren_strings.count-1].removeLast()\n\
+    \            if paren_strings[paren_strings.count-1] == c {\n                paren_strings[paren_strings.count-1]\
+    \ += c\n                opening_brace_count--\n                if opening_brace_count\
+    \ == 0 {\n                    // if all parens are closed, then add the opening\
+    \ paren back into the array\n                    paren_strings.append(String())\n\
+    \                    paren_strings[paren_strings.count-1] += c\n             \
+    \   }\n            }\n        }\n        // otherwise, just add it into the array\n\
+    \        else {\n            paren_strings[paren_strings.count-1] += c\n     \
+    \   }\n    }\n    return paren_strings", "    let opening_brackets_reg = try!\
+    \ NSRegularExpression(pattern: \"\\\\(|\\\\)\", options: [])\n    let regexResult\
+    \ = opening_brackets_reg.matches(in: paren_string, options: [], range: NSMakeRange(0,\
+    \ paren_string.utf16.count))\n    var parenGroups = [String]()\n    for match\
+    \ in regexResult {\n        let range = match.range(at: 1)\n        let strRange\
+    \ = Range(range, in: paren_string)\n        let parenString = paren_string[strRange]\n\
+    \        parenGroups.append(parenString)\n    }\n    return parenGroups", "  \
+    \  var groups: [String] = []\n    var inGroup = false\n    var group = \"\"\n\
+    \    let parens = \"()\"\n    let chars = paren_string.characters.map({ $0 })\n\
+    \    for i in 0..<chars.count {\n        if chars[i] == parens {\n           \
+    \ inGroup = !inGroup\n        }\n        if chars[i] == \" \" {\n            if\
+    \ inGroup {\n                group += chars[i]\n            } else {\n       \
+    \         groups.append(group)\n                group = \"\"\n            }\n\
+    \        }\n    }\n    if group != \"\" {\n        groups.append(group)\n    }\n\
+    \    return groups", "    var open_brace_index = 0\n    var closed_groups = [String]()\n\
+    \    for c in paren_string {\n        // This should handle both single and double\
+    \ parens, since we assume that they are\n        // balanced. So we do not need\
+    \ to worry about it being either single or double.\n        switch c {\n     \
+    \   case '(':\n            // Open a new group\n            if open_brace_index\
+    \ == 0 {\n                // First open brace, so add the string\n           \
+    \     closed_groups.append(String(c))\n            } else {\n                //\
+    \ Close the previous group and add the string from the first open brace on\n \
+    \               closed_groups[open_brace_index - 1] += String(c)\n           \
+    \ }\n            open_brace_index += 1\n        case ')':\n            // Close\
+    \ a group\n            if open_brace_index == closed_groups.count {\n        \
+    \        // No more opened groups, so add the last string from the open brace\
+    \ on\n                closed_groups.append(String(c))\n            } else {\n\
+    \                // Close the group\n                closed_groups[open_brace_index]\
+    \ += String(c)\n            }\n            open_brace_index -= 1\n        default:\n\
+    \            // Anything else means we should add the string to the current group\n\
+    \            closed_groups[open_brace_index] += String(c)\n        }\n    }\n\
+    \    return closed_groups", "    var arrayOfStrings = [String]()\n    var currentString\
+    \ = \"\"\n    let openParenIndex = paren_string.characters.indexOf(\"(\")\n  \
+    \  let closeParenIndex = paren_string.characters.indexOf(\")\")\n    \n    for\
+    \ char in paren_string.characters {\n        \n        if char == \" \" {\n  \
+    \          arrayOfStrings.append(currentString)\n            currentString = \"\
+    \"\n            continue\n        }\n\n        if char == \"(\" {\n          \
+    \  currentString += \"(\"\n        } else {\n            if char == \")\" {\n\
+    \                currentString += \")\"\n            } else {\n              \
+    \  currentString += char\n            }\n        }\n    }\n    arrayOfStrings.append(currentString)\n\
+    \    \n    return arrayOfStrings", "    var results = [String]()\n\n    for paren\
+    \ in paren_string.split(\" \") {\n        var current_subgroup = String()\n  \
+    \      var open_groups = 1\n        var balance = 0\n\n        for char in paren\
+    \ {\n            if open_groups == 0 {\n                current_subgroup += char\n\
+    \                continue\n            }\n\n            if char == \"(\" {\n \
+    \               open_groups += 1\n                balance += 1\n             \
+    \   if balance > 1 {\n                    current_subgroup += char\n         \
+    \       }\n            } else if char == \")\" {\n                open_groups\
+    \ -= 1\n                balance -= 1\n                if balance < 0 {\n     \
+    \               current_subgroup += char\n                }\n            } else\
+    \ if char == \")\" {\n                if open_groups == 0 {\n                \
+    \    current_subgroup += char\n                }\n            } else {\n     \
+    \           current_subgroup += char\n            }\n        }\n\n        results.append(current_subgroup)\n\
+    \    }\n\n    return results", '    // Your code goes here', "    let open_parens\
+    \ = [String]()\n    let close_parens = [String]()\n\n    let paren_groups = [paren_string.components(separatedBy:\
+    \ \"(\")].map { components in\n        components\n            .map { $0 }\n \
+    \           .flatMap { $0 != \"(\" }\n            .map { String($0) }\n    }\n\
+    \    // Find all close parens\n    for parens in paren_groups {\n        if parens\
+    \ == \"\" {\n            continue\n        }\n        if parens[parens.startIndex]\
+    \ == \"(\" {\n            open_parens.append(parens)\n        } else {\n     \
+    \       close_parens.append(parens)\n        }\n    }\n    // Return an array\
+    \ of open and close parens\n    return open_parens + close_parens", "    // TODO:\
+    \ Write your implementation here.\n    return []", "    var groups: [String] =\
+    \ []\n    var depth = 0\n    for char in paren_string {\n        switch char {\n\
+    \        case '(':\n            depth += 1\n            if depth == 1 {\n    \
+    \            groups.append(char)\n            } else {\n                depth--\n\
+    \            }\n        case ')':\n            depth--\n            if depth ==\
+    \ 0 {\n                groups.append(char)\n            } else {\n           \
+    \     depth++\n            }\n        default:\n            continue\n       \
+    \ }\n    }\n    return groups", "    return paren_string\n        .characters(in:\
+    \ NSMakeRange(0, paren_string.length))\n        .filter { character in\n     \
+    \       return character == \"(\" || character == \")\"\n        }\n        .reduce(into:\
+    \ []) { $0.append(contentsOf: $1) }", "    var paren_array = [String]()\n    var\
+    \ current_group = [String]()\n    paren_string.enumerateSubstrings(in: NSMakeRange(0,\
+    \ paren_string.characters.count)) { substring, _, _, _ in\n        let range =\
+    \ (substring as NSString).range(of: \" \")\n        guard range != nil else {\
+    \ return }\n        let start = substring?.startIndex\n        let end = substring?.endIndex\n\
+    \        let sub_range = substring?.range(of: \"(\")\n        guard sub_range\
+    \ != nil else {\n            paren_array.append(current_group)\n            current_group.removeAll()\n\
+    \            return\n        }\n        guard (end - start + 1) == sub_range?.count\
+    \ else {\n            paren_array.append(current_group)\n            current_group.removeAll()\n\
+    \            return\n        }\n        current_group.append(substring!.substring(to:\
+    \ sub_range!.end))\n    }\n    paren_array.append(current_group)\n    return paren_array",
+  "    // Your code here\n    let regex = try! NSRegularExpression(pattern: \"[(\\\
+    \\)]\")\n    var result = [String]()\n    let matches = regex.matches(in: paren_string,\
+    \ range: NSMakeRange(0, paren_string.characters.count))\n    for match in matches\
+    \ {\n        let string = paren_string[Range(match.range, in: paren_string)!]\n\
+    \        if string.characters.count > 0 {\n            if string[string.startIndex]\
+    \ == \" \" && string[string.startIndex+1] == \"(\" {\n                string.removeSubrange(NSRange(location:\
+    \ match.range.lowerBound, length: match.range.count))\n                result.append(\"\
+    \\(String(string))\")\n            } else if string[string.startIndex] == \")\"\
+    \ && string[string.startIndex+1] == \" \" {\n                string.removeSubrange(NSRange(location:\
+    \ match.range.lowerBound, length: match.range.count))\n                result.append(\"\
+    \\(String(string))\")\n            }\n        }\n    }\n    return result", " \
+    \   var groups = [String]()\n\n    var level = 0\n    var in_a_group = 0\n   \
+    \ var in_a_bracket = 0\n    var i = 0\n\n    while i < paren_string.characters.count\
+    \ {\n        let ch = paren_string.characters[i]\n\n        switch ch {\n    \
+    \    case \")\":\n            if in_a_bracket {\n                in_a_group--\n\
+    \            }\n            if level == 0 {\n                groups.append(String(paren_string.substringWithRange(Range(i,\
+    \ paren_string.characters.count))))\n                level = in_a_group + 1\n\
+    \            }\n        case \" \":\n            if !in_a_group {\n          \
+    \      in_a_group++\n            }\n            level--\n        default:\n  \
+    \          if !in_a_group {\n                in_a_group = 1\n                in_a_bracket\
+    \ = 1\n                level++\n            }\n        }\n\n        i += 1\n \
+    \   }\n\n    return groups", "    guard paren_string.count > 0 else { return []\
+    \ }\n    var open_brackets = [String]()\n    var strings_separated_by_open_parentheses\
+    \ = [String]()\n    \n    let open_brace_regex = #\"\\{\\{\\(\" // A sequence\
+    \ of { followed by an opening parenthesis { and an opening bracket\n    let close_brace_regex\
+    \ = #\"\\}\\}\\)\" // A sequence of } followed by a closing parenthesis } and\
+    \ closing bracket\n    let separator_regex = #\"\\{\\{\\/\" // A sequence of {\
+    \ followed by an opening parenthesis { and an closing bracket\n    \n    var last_char\
+    \ = paren_string.characters.last\n    for char in paren_string.characters {\n\
+    \        \n        if char == last_char {\n            if let open_bracket = open_brace_regex.firstIndex(of:\
+    \ char) {\n                if open_bracket.first != open_bracket.last {\n    \
+    \                open_brackets.append(paren_string[open_bracket.first...])\n \
+    \               } else {\n                    open_brackets.append(\"\")\n   \
+    \             }\n            } else {\n                strings_separated_by_open_parentheses.append(String(char))\n\
+    \            }\n        } else if let open_bracket = open_brace_regex.firstIndex(of:\
+    \ char) {\n            if open_bracket.first != open_bracket.last {\n        \
+    \        open_brackets.append(paren_string[open_bracket.first...])\n         \
+    \   } else {\n                strings_separated_by_open_parentheses.append(String(char))\n\
+    \            }\n        } else if let close_bracket = close_brace_regex.firstIndex(of:\
+    \ char) {\n            if close_bracket.first != close_bracket.last {\n      \
+    \          open_brackets.append(paren_string[close_bracket.first...])\n      \
+    \      } else {\n                strings_separated_by_open_parentheses.append(String(char))\n\
+    \            }\n        } else if let separator = separator_regex.firstIndex(of:\
+    \ char) {\n            if separator.first != separator.last {\n              \
+    \  open_brackets.append(paren_string[separator.first...])\n            } else\
+    \ {\n                strings_separated_by_open_parentheses.append(String(char))\n\
+    \            }\n        } else {\n            strings_separated_by_open_parentheses.append(String(char))\n\
+    \        }\n        last_char = char\n    }\n    \n    return open_brackets\n\
+    \        .filter { open_brackets.contains($0) }\n        .map { open_brackets[$0]\
+    \ }\n        .sorted(by: >)\n        .map { String($0) }\n        .reduce(into:\
+    \ [String]()) {", "    let paren_regexp = try NSRegularExpression(pattern: \"\\\
+    \\(([^\\\\(\\\\)]+)\\\\)\", options: NSRegularExpressionOptions.CaseInsensitive)\n\
+    \    let result = paren_regexp.matchesInString(paren_string, options: [], range:\
+    \ NSMakeRange(0, paren_string.characters.count)).map { result in\n        paren_regexp.substringWithRange(result.range)\n\
+    \    }\n\n    return result", "    // Create an array of characters representing\
+    \ each group.\n    let groups: [String] = []\n    // Create a stack to track the\
+    \ last open paren brace that hasn't been closed yet.\n    var bracketStack = [Int]()\n\
+    \    // For each character in the string\n    for currentChar in paren_string.characters\
+    \ {\n        // If the character is a left paren, then push it onto the stack.\n\
+    \        if currentChar == Character('(') {\n            bracketStack.append(0)\n\
+    \        }\n        // If the character is a right paren, then pop the stack\n\
+    \        // up to the previous left paren.\n        else if currentChar == Character(')')\
+    \ {\n            if bracketStack.count > 0 {\n                bracketStack.removeLast()\n\
+    \            }\n        }\n        // If the character is a left paren, check\
+    \ if it's right before the top\n        // left paren. If it is, remove the left\
+    \ paren and add the right paren.\n        else if bracketStack.count > 0 && currentChar\
+    \ == Character('(') {\n            let previousBracket = bracketStack[bracketStack.count\
+    \ - 1]\n            if bracketStack.contains(previousBracket) {\n            \
+    \    bracketStack.removeLast()\n                bracketStack.insert(previousBracket,\
+    \ 1)\n            }\n        }\n        // If the character is a left paren, check\
+    \ if it's right after the top\n        // left paren. If it is, add the right\
+    \ paren onto the stack.\n        else if bracketStack.count > 0 && currentChar\
+    \ == Character(')') {\n            bracketStack.insert(bracketStack.last!, 1)\n\
+    \        }\n        // If the character is a space, then add it to groups.\n \
+    \       else if currentChar == Character(' ') {\n            groups.append(String())\n\
+    \        }\n        // If the character is a left paren, check if it's right before\
+    \ the top\n        // left paren. If it is, add the left paren onto the stack.\n\
+    \        else if bracketStack.count > 0 && currentChar == Character('(') {\n \
+    \           bracketStack.insert(bracketStack.last!, 0)\n        }\n        //\
+    \ If the character is a left paren, check if it's right after the top\n      \
+    \  // left paren. If it is, remove the left paren from the stack.\n        else\
+    \ if bracketStack.count > 0 && currentChar == Character(')') {\n            bracketStack.removeLast()\n\
+    \        }\n        // If there's a left paren without a right paren after it,\
+    \ add it\n        // to the current group (if it doesn't exist already)\n    \
+    \    else if bracketStack.count > 0 {\n            groups[groups.count - 1] +=\
+    \ String(currentChar)\n        }\n    }\n    return groups", "    let opening_brace_pattern\
+    \ = \"\\\\(+\";\n    let closing_brace_pattern = \"\\\\)\";\n    let opening_paren_pattern\
+    \ = \"\\\\(+\";\n    let closing_paren_pattern = \"\\\\)+\";\n    let whitespaces\
+    \ = \" \";\n    var paren_brace_groups = [String]()\n    var paren_groups = [String]()\n\
+    \    var last_paren_group = \"\"\n    for char in paren_string.unicodeScalars\
+    \ {\n        guard char.value == opening_brace_pattern || char.value == closing_brace_pattern\
+    \ || char.value == opening_paren_pattern || char.value == closing_paren_pattern\
+    \ else {\n            paren_brace_groups.append(last_paren_group)\n          \
+    \  paren_groups.append(last_paren_group)\n            last_paren_group = nil\n\
+    \            continue\n        }\n        if char.value == closing_brace_pattern\
+    \ {\n            last_paren_group = paren_groups[paren_groups.count - 1]\n   \
+    \         paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n            continue\n        }\n        if char.value == opening_paren_pattern\
+    \ {\n            last_paren_group = paren_groups[paren_groups.count - 1]\n   \
+    \         paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n            continue\n        }\n        switch char.value {\n      \
+    \  case whitespaces:\n            paren_brace_groups.append(last_paren_group)\n\
+    \            paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n        case opening_brace_pattern:\n            paren_brace_groups.append(last_paren_group)\n\
+    \            paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n        case closing_brace_pattern:\n            paren_brace_groups.append(last_paren_group)\n\
+    \            paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n        case opening_paren_pattern:\n            last_paren_group = paren_groups[paren_groups.count\
+    \ - 1]\n            paren_groups.append(last_paren_group)\n            last_paren_group\
+    \ = nil\n        default:\n            last_paren_group = last_paren_group + String(char)\n\
+    \        }\n    }\n    paren_brace_groups.append(last_paren_group)\n    paren_groups.append(last_paren_group)\n\
+    \    return paren_brace_groups", "    let paren_groups = paren_string.components(separatedBy:\
+    \ \"( )\")\n    let result = paren_groups[0..<paren_groups.count-1].flatMap {\
+    \ string -> [String] in\n        string.components(separatedBy: \"( )\")\n   \
+    \ }\n\n    return result", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"[(][)]+\", options: .caseInsensitive)\n    return regex.matches(in: paren_string,\
+    \ range: NSRange(location: 0, length: paren_string.characters.count))\n      \
+    \  .compactMap {\n            (range) -> Range<String.Index> in\n            return\
+    \ Range(range, in: paren_string)\n        }.flatMap {\n            paren_string[$0]\n\
+    \        }.map {\n            String($0)\n        }", "    \n    guard let openParenString\
+    \ = paren_string.characters.filter { !$0.isWhitespace}.filter({ !$0.isOpeningParenthesis\
+    \ }).filter({ !$0.isClosingParenthesis }) else {\n        return []\n    }\n \
+    \   \n    var outputArray: [String] = []\n    \n    for openParenCharacter in\
+    \ openParenString {\n        \n        if paren_string.contains(openParenCharacter)\
+    \ {\n            \n            if paren_string.contains('(') {\n             \
+    \   \n                if paren_string.contains(openParenCharacter) {\n       \
+    \             \n                    let closingParenIndex = paren_string.index(paren_string,\
+    \ offsetBy: paren_string.index(openParenCharacter, offsetBy: 1))\n           \
+    \         \n                    if closingParenIndex != paren_string.endIndex\
+    \ {\n                        \n                        outputArray.append(paren_string[paren_string.index(openParenCharacter,\
+    \ offsetBy: 1)...closingParenIndex])\n                    }\n                \
+    \    else {\n                        \n                        outputArray.append(paren_string[paren_string.index(openParenCharacter,\
+    \ offsetBy: 1)...paren_string.index(openParenCharacter, offsetBy: 2)])\n     \
+    \               }\n                }\n                else {\n               \
+    \     \n                    let closingParenIndex = paren_string.index(paren_string,\
+    \ offsetBy: paren_string.index(openParenCharacter, offsetBy: 1))\n           \
+    \         \n                    if closingParenIndex != paren_string.endIndex\
+    \ {\n                        \n                        outputArray.append(paren_string[paren_string.index(openParenCharacter,\
+    \ offsetBy: 1)...closingParenIndex])\n                    }\n                \
+    \    else {\n                        \n                        outputArray.append(paren_string[paren_string.index(openParenCharacter,\
+    \ offsetBy: 1)...paren_string.index(openParenCharacter, offsetBy: 2)])\n     \
+    \               }\n                }\n                \n            }\n      \
+    \      else {\n                \n                outputArray.append(paren_string[paren_string.index(openParenCharacter,\
+    \ offsetBy: 1)...paren_string.index(openParenCharacter, offsetBy: 2)])\n     \
+    \       }\n            \n        }\n        else {\n            \n           \
+    \ outputArray.append(paren_string[paren_string.index(openParenCharacter, offsetBy:\
+    \ 1)...paren_string.index(openParenCharacter, offsetBy: 2)])\n        }\n    }\n\
+    \    \n    return outputArray", "    var output: [String] = []\n    \n    func\
+    \ _separate_paren_groups(paren_string: String, output: [String], cur_index: Int\
+    \ = 0) {\n        var index = paren_string.startIndex\n        \n        loop:\
+    \ while true {\n            \n            let start = paren_string[index]\n  \
+    \          \n            if start == \"(\" {\n                \n             \
+    \   var closed = false\n                \n                let index = paren_string.index(after:\
+    \ index)\n                \n                while paren_string[index] != \")\"\
+    \ {\n                    \n                    index = (paren_string.index(index,\
+    \ offsetBy: 1))!\n                    \n                    if paren_string[index]\
+    \ == \")\" {\n                        closed = true\n                        break\n\
+    \                    }\n                    \n                    if paren_string[index]\
+    \ == \" \" {\n                        break\n                    }\n         \
+    \           \n                }\n                \n                if !closed\
+    \ {\n                    break\n                }\n                \n        \
+    \        var new_string = paren_string[index...(paren_string.index(after: index)!)]\n\
+    \                \n                if paren_string[index] != \")\" {\n       \
+    \             new_string = \"(\" + new_string\n                }\n           \
+    \     \n                output.append(\"(\\(\" + new_string + \")\")\n       \
+    \         \n                cur_index += 1\n                \n               \
+    \ index = paren_string.index(after: index)\n                \n               \
+    \ continue loop\n            }\n            \n            index += 1\n       \
+    \     \n            switch paren_string[index] {\n            case \",\":\n  \
+    \              \n                index += 1\n                \n              \
+    \  continue loop\n            default:\n                break\n            }\n\
+    \        }\n        \n        output.append(paren_string[cur_index...paren_string.index(before:\
+    \ paren_string.endIndex)])\n        \n        return output\n    }\n    \n   \
+    \ return _separate_paren_groups(paren_string: paren_string, output: &output, cur_index:\
+    \ 0)", "    var paren_groups: [String] = []\n\n    let regex = try! NSRegularExpression(pattern:\
+    \ \"\\\\(|\\\\)|\\\\s+\", options: [])\n\n    // Find all groups and separate\
+    \ them by space\n    let matches = regex.matches(in: paren_string, options: [],\
+    \ range: NSMakeRange(0, paren_string.characters.count))\n    for i in 0..<matches.count\
+    \ {\n        let group = paren_string.substring(with: matches[i].range)\n    \
+    \    paren_groups.append(group)\n    }\n\n    return paren_groups", "    guard\
+    \ paren_string.count > 0 else {\n        return []\n    }\n    // Find all the\
+    \ pairs of ( and ) in the string\n    var paren_pairs = paren_string.components(separatedBy:\
+    \ parenRegex)\n\n    // Find all the balanced groups in the string\n    var balanced_groups\
+    \ = paren_pairs.filter({ $0[0] != \"(\" && $0[0] != \")\" })\n\n    // Get the\
+    \ substrings between each balanced group\n    let substrings = balanced_groups.map({\
+    \ $0.dropFirst() })\n\n    // Return an array of the substrings\n    return substrings",
+  "    let split_paren_string = paren_string.characters.split(character: \"()\", omittingEmptySubsequences:\
+    \ false)\n    var result: [String] = []\n    for paren_strings in split_paren_string\
+    \ {\n        let paren_strings_to_remove = paren_strings.characters.split(character:\
+    \ \"(\", omittingEmptySubsequences: false)\n        for paren_string_to_remove\
+    \ in paren_strings_to_remove {\n            let index = paren_strings.characters.index(of:\
+    \ paren_string_to_remove)\n            let result = paren_strings[index...paren_strings.characters.count]\n\
+    \            result.append(result)\n        }\n    }\n    return result", "  \
+    \  let scanner = NSScanner(string: paren_string)\n    var output = [String]()\n\
+    \    var openingBraceCounter = 1\n    var openingBracketCounter = 1\n    var closingBracketCounter\
+    \ = 1\n    var nextToken: String?\n    scanner.scanUpToString(\" \", intoString:\
+    \ &nextToken)\n    while (nextToken != nil) {\n        if scanner.scanString(\"\
+    <\", intoString: nil) {\n            if openingBracketCounter == 1 {\n       \
+    \         output.append(scanner.scanString(\">\", intoString: nil))\n        \
+    \        scanner.scanUpToString(\")\", intoString: &nextToken)\n             \
+    \   openingBracketCounter = 0\n            } else {\n                openingBracketCounter\
+    \ += 1\n            }\n        } else if scanner.scanString(\"(\", intoString:\
+    \ nil) {\n            if openingBraceCounter == 1 {\n                output.append(scanner.scanString(\"\
+    )\", intoString: nil))\n                scanner.scanUpToString(\")\", intoString:\
+    \ &nextToken)\n                openingBraceCounter = 0\n            } else {\n\
+    \                openingBraceCounter += 1\n            }\n        } else if scanner.scanString(\"\
+    <\", intoString: nil) {\n            openingBracketCounter += 1\n        } else\
+    \ if scanner.scanString(\")\", intoString: nil) {\n            if closingBracketCounter\
+    \ == 1 {\n                output.append(scanner.scanString(\">\", intoString:\
+    \ nil))\n                scanner.scanUpToString(\")\", intoString: &nextToken)\n\
+    \                closingBracketCounter = 0\n            } else {\n           \
+    \     closingBracketCounter += 1\n            }\n        } else {\n          \
+    \  if closingBracketCounter == 0 && openingBraceCounter == 0 && openingBracketCounter\
+    \ == 0 {\n                output.append(scanner.scanString(\" \", intoString:\
+    \ nil))\n            }\n            scanner.scanUpToString(\")\", intoString:\
+    \ &nextToken)\n        }\n    }\n    return output", '    return paren_string.components(separatedBy:
+    " ").filter({ !$0.isEmpty })', "    var parenGroups = [String]()\n    var openingBraceCount\
+    \ = 0\n\n    for paren in paren_string.characters {\n        switch (paren) {\n\
+    \        case let openingBrace where openingBraceCount == 0:\n            parenGroups.append(String())\n\
+    \            openingBraceCount += 1\n        case let closingBrace where closingBraceCount\
+    \ == 0:\n            parenGroups[parenGroups.count - 1].append(String())\n   \
+    \         openingBraceCount -= 1\n        case let closing where closing == \"\
+    (\" and closingBraceCount > openingBraceCount:\n            parenGroups[parenGroups.count\
+    \ - 1].append(String())\n            openingBraceCount -= 1\n        case let\
+    \ opening where opening == \"(\" and closingBraceCount == openingBraceCount:\n\
+    \            parenGroups.append(String())\n            openingBraceCount += 1\n\
+    \        default:\n            parenGroups[parenGroups.count - 1].append(paren)\n\
+    \        }\n    }\n\n    return parenGroups", "    var groups = [String]()\n \
+    \   \n    var currentOpeningBrace = 0\n    var openingBraceCount = 0\n    var\
+    \ currentClosingBrace = 0\n    var closingBraceCount = 0\n    var currentOpeningParen\
+    \ = 0\n    \n    // Split string into array of strings containing multiple nested\
+    \ parens\n    for i in 0..<paren_string.count {\n        let char = paren_string[i]\n\
+    \        \n        switch char {\n        case \"(\":\n            openingBraceCount\
+    \ += 1\n        case \"(\":\n            currentOpeningParen += 1\n        case\
+    \ \"(\":\n            currentOpeningParen += 1\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"(\":\n            currentOpeningBrace += 1\n        case\
+    \ \"(\":\n            currentOpeningBrace += 1\n        case \"(\":\n        \
+    \    currentOpeningBrace += 1\n        case \"(\":\n            currentOpeningBrace\
+    \ += 1\n        case \"", "    var result: [String] = []\n    var open_braces\
+    \ = 1\n    for character in paren_string.unicodeScalars {\n        let unicodeScalar\
+    \ = character\n        if unicodeScalar == Character(UnicodeScalar(\" \")) {\n\
+    \            continue\n        }\n        if unicodeScalar == Character(UnicodeScalar(\"\
+    (\")) {\n            open_braces++\n        } else if unicodeScalar == Character(UnicodeScalar(\"\
+    )\")) {\n            open_braces--\n        }\n        if open_braces == 0 {\n\
+    \            result.append(String(character.value))\n        }\n    }\n    return\
+    \ result", "    return paren_string.components(separatedBy: NSCharacterSet.whitespacesAndNewlines)\n\
+    \        .flatMap { paren_groups -> [String] in\n            return paren_groups\n\
+    \                .components(separatedBy: CharacterSet.bracketsExcept(\"()\"))\n\
+    \                .flatMap { paren_string in\n                    return paren_string.components(separatedBy:\
+    \ CharacterSet.parens())\n                }\n        }", "    var result: [String]\
+    \ = []\n    var parenCount = 0\n\n    for i in paren_string.characters {\n   \
+    \     if parenCount > 0 && parenCount % 2 == 0 {\n            result.append(\"\
+    \ \")\n        }\n\n        if parenCount % 2 == 0 {\n            if i == \" \"\
+    \ {\n                result.append(\" \")\n                parenCount++\n    \
+    \        } else {\n                result.append(i)\n                parenCount++\n\
+    \            }\n        } else {\n            if i == \" \" {\n              \
+    \  result.append(\" \")\n            } else {\n                result.append(i)\n\
+    \            }\n        }\n    }\n\n    return result", "    var groups = [String]()\n\
+    \    var open_brace_index = 0\n    for character in paren_string.characters {\n\
+    \        switch character {\n        case \" \":\n            if open_brace_index\
+    \ != 0 {\n                groups.append(String(Character(character)))\n      \
+    \      }\n            open_brace_index++\n        case \")\", \"}\", \"]\", \"\
+    }\", \")\", \">\", \">=\", \"<=\":\n            if open_brace_index == 0 {\n \
+    \               return nil\n            }\n            open_brace_index--\n  \
+    \      default:\n            if open_brace_index == 0 {\n                groups.append(String(Character(character)))\n\
+    \            } else {\n                return nil\n            }\n        }\n\
+    \    }\n    return groups", "    var output: [String] = []\n    var outputString\
+    \ = \"\"\n    \n    for letter in paren_string.characters {\n        if letter\
+    \ == \"(\" {\n            outputString.append(\"(\")\n        } else if letter\
+    \ == \")\" {\n            outputString.append(\")\")\n        } else if letter\
+    \ != \" \" {\n            outputString.append(letter)\n        }\n    }\n    \n\
+    \    // If there's nothing left in the paren group, add it to the output\n   \
+    \ if outputString.characters.count == 0 {\n        output.append(outputString)\n\
+    \        return output\n    }\n    \n    // If there's more than one space between\
+    \ each paren group, add them to the output\n    var isFirst = true\n    for letter\
+    \ in outputString.characters {\n        if letter == \" \" {\n            if isFirst\
+    \ {\n                output.append(outputString)\n            } else {\n     \
+    \           outputString = outputString.substringToIndex(0)\n            }\n \
+    \           isFirst = false\n        }\n    }\n    if isFirst {\n        output.append(outputString)\n\
+    \    } else {\n        outputString = outputString.substringToIndex(0)\n     \
+    \   output.append(outputString)\n    }\n    \n    // Recursively call the function\
+    \ to separate any nested parens\n    output = separate_paren_groups(outputString:\
+    \ outputString)\n    return output", "    var result: [String] = []\n    var open_paren_count\
+    \ = 0\n    for symbol in paren_string.characters {\n        switch symbol {\n\
+    \        case '(':\n            open_paren_count += 1\n        case ')':\n   \
+    \         if open_paren_count == 0 {\n                fatalError(\"Unbalanced\
+    \ Parenthesis\")\n            }\n            open_paren_count -= 1\n        case\
+    \ ' ':\n        default:\n            result.append(String(symbol))\n        }\n\
+    \    }\n    return result", "    let paren_groups = paren_string\n        .components(separatedBy:\
+    \ \"(?<=\\\\()(?=\\\\()\")\n        .flatMap { $0.components(separatedBy: \"(?=\\\
+    \\))\") }\n        .flatMap { $0.components(separatedBy: \" \") }\n        .filter\
+    \ { $0 != \"\" }\n\n    return paren_groups.map { $0.trimmingCharacters(in: CharacterSet(charactersIn:\
+    \ \" \")) }", "    precondition(paren_string.count(\"()\") == paren_string.count(\"\
+    )\") == 0, \"paren string is not balanced\")\n\n    let paren_array = paren_string.characters.split{$0\
+    \ == \" \"}\n    var paren_strings = Array<String>()\n\n    for paren in paren_array\
+    \ {\n        paren_strings.append(paren)\n    }\n\n    return paren_strings",
+  "    var groups = [String]()\n    \n    for groupStr in paren_string.components(separatedBy:\
+    \ \" \")\n    {\n        let group = groupStr.characters.dropFirst()\n       \
+    \ let innerGroups = groupStr.characters.dropLast()\n        \n        if group\
+    \ != \"\" && group! == \"(\" && innerGroups == \"()\" {\n            groups.append(group!)\n\
+    \            groups.append(innerGroups)\n        }\n        \n    }\n    \n  \
+    \  return groups", "    let regex = try! NSRegularExpression(pattern: \"((?!^\\\
+    \\))\\\\((?!^\\\\))*\")\n    let nsString = paren_string as NSString\n    let\
+    \ results = regex.matches(in: paren_string, range: NSRange(location: 0, length:\
+    \ nsString.length))\n\n    var groups: [String] = []\n    results.forEach() {\
+    \ match, _ in\n        let range = (paren_string.index(match.range, in: paren_string)\
+    \ ?? NSNotFound)\n        let range2 = paren_string.range(of: \"\\\\(\", range:\
+    \ range)\n        groups.append(paren_string.substring(with: range2!))\n    }\n\
+    \    return groups.map { String($0) }", "    guard paren_string.characters.count\
+    \ > 0 else { return [] }\n    \n    var paren_groups = [String]()\n    var paren_group\
+    \ = \"\"\n    var open_braces = 0\n    var open_paren = 0\n    var open_brackets\
+    \ = 0\n    var open_squares = 0\n    \n    for char in paren_string.characters\
+    \ {\n        if open_braces == 0 && open_paren == 0 && open_brackets == 0 && open_squares\
+    \ == 0 && char == \" \" {\n            // Ignore spaces within parens\n      \
+    \      continue\n        }\n        \n        if char == \"{\" {\n           \
+    \ open_braces++\n        }\n        if char == \"}\" {\n            open_braces--\n\
+    \        }\n        if char == \"(\" {\n            open_paren++\n        }\n\
+    \        if char == \")\" {\n            open_paren--\n        }\n        if char\
+    \ == \"[\" {\n            open_brackets++\n        }\n        if char == \"]\"\
+    \ {\n            open_brackets--\n        }\n        if char == \"(\" {\n    \
+    \        open_squares++\n        }\n        if char == \")\" {\n            open_squares--\n\
+    \        }\n        \n        if open_braces != 0 || open_paren != 0 || open_brackets\
+    \ != 0 || open_squares != 0 {\n            // Unbalanced group\n            paren_groups.append(paren_group)\n\
+    \            paren_group = \"\"\n        }\n        \n        if open_paren ==\
+    \ 0 && open_brackets == 0 && open_squares == 0 && char == \" \" {\n          \
+    \  // Ignore spaces within parens\n            continue\n        }\n        \n\
+    \        paren_group += String(char)\n    }\n    \n    paren_groups.append(paren_group)\n\
+    \    return paren_groups", "    if paren_string == \"\" {\n        return []\n\
+    \    }\n\n    let paren_groups = paren_string\n        .components(separatedBy:\
+    \ CharacterSet.whitespacesAndNewlines)\n        .map { String($0) }\n\n    let\
+    \ open_paren_groups = paren_groups.filter({ $0 == \"(\" })\n    let close_paren_groups\
+    \ = paren_groups.filter({ $0 == \")\" })\n\n    return open_paren_groups\n   \
+    \     .map { String($0.dropFirst()) }\n        + close_paren_groups\n        .map\
+    \ { String($0.dropFirst()) }", "    // Your code here\n    var result = [String]()\n\
+    \    var inside_braces = [String]()\n    \n    for character in paren_string.characters\
+    \ {\n        if character == \")\" {\n            if inside_braces.count > 0 {\n\
+    \                inside_braces.removeLast()\n                inside_braces.insert(0,\
+    \ \"(\")\n            }\n        } else if character == \"(\" {\n            if\
+    \ inside_braces.count > 0 {\n                inside_braces.removeLast()\n    \
+    \            inside_braces.insert(0, \"(\")\n            }\n        } else {\n\
+    \            if inside_braces.count > 0 {\n                inside_braces.insert(0,\
+    \ \"(\")\n            }\n            result.append(String(character))\n      \
+    \  }\n    }\n\n    return result", "    if paren_string == \"\" {\n        return\
+    \ []\n    }\n\n    var group_stack: [String] = []\n    var groups: [String] =\
+    \ []\n    var next_group: String = \"\"\n\n    for c in paren_string.unicodeScalars\
+    \ {\n        guard c != \" \" else {\n            group_stack.append(groups[groups.count\
+    \ - 1])\n            next_group = groups[groups.count - 1]\n            groups\
+    \ = []\n            continue\n        }\n\n        if c == \"(\" {\n         \
+    \   groups.append(next_group)\n            next_group = \"\"\n        } else {\n\
+    \            groups.append(c)\n        }\n    }\n\n    if groups != nil {\n  \
+    \      group_stack.append(groups[groups.count - 1])\n    }\n    return group_stack",
+  "    guard paren_string.count > 0 else {\n        return []\n    }\n    var group_1\
+    \ = \"\"\n    var group_2 = \"\"\n    var group_3 = \"\"\n\n    var i = 0\n  \
+    \  for char in paren_string.characters {\n        if char == \"{\" {\n       \
+    \     group_1 += char\n            i += 1\n        } else if char == \"}\" {\n\
+    \            group_2 += char\n            group_3 += char\n            i += 1\n\
+    \        } else if char == \")\" {\n            group_2 += char\n            if\
+    \ group_3 != \"\" {\n                group_3.removeLast()\n                group_3\
+    \ += \"(\"\n            }\n            i += 1\n        } else if char == \")\"\
+    \ {\n            group_1 += char\n            i += 1\n        } else {\n     \
+    \       group_1 += char\n        }\n    }\n    return []", "    let regex = try!\
+    \ NSRegularExpression(pattern: paren_regex, options: .caseInsensitive)\n    var\
+    \ strings: [String] = []\n\n    for match in regex.matches(in: paren_string, options:\
+    \ [], range: NSMakeRange(0, paren_string.count)) {\n        let match = match.group\n\
+    \        if paren_string[Range(match.rangeOfString(\"(\", options: .anchorsOnly,\
+    \ range: match.range), in: paren_string)!.endIndex] == \"(\" {\n            if\
+    \ strings[strings.count - 1].characters.count > 0 {\n                strings.append(strings[strings.count\
+    \ - 1])\n            }\n            strings.append(paren_string[Range(match.rangeOfString(\"\
+    (\", options: .anchorsOnly, range: match.range), in: paren_string)!.endIndex])\n\
+    \        } else {\n            strings.append(paren_string[Range(match.rangeOfString(\"\
+    )\", options: .anchorsOnly, range: match.range), in: paren_string)!.endIndex])\n\
+    \        }\n    }\n\n    return strings", "    var groups = [String]()\n    var\
+    \ currentGroup = String()\n    for char in paren_string {\n        switch char\
+    \ {\n        case '(':\n            currentGroup = \"\"\n            groups.append(currentGroup)\n\
+    \        case '[':\n            currentGroup += char\n        case '(':\n    \
+    \        currentGroup += char\n        default:\n            currentGroup += char\n\
+    \        }\n    }\n    return groups", "    var result_array = [String]()\n\n\
+    \    var open_brace_count = 0\n    var open_brace_last_position = 0\n    var close_brace_count\
+    \ = 0\n    var close_brace_last_position = 0\n\n    for index in 0..<paren_string.characters.count\
+    \ {\n        let char = paren_string[index] ?? \"_\"\n\n        // If this character\
+    \ is a left or right parentheses, we open a new group.\n        if (char == \"\
+    >\" || char == \"<\") {\n            if char == \"<\" {\n                if open_brace_count\
+    \ > close_brace_count {\n                    result_array.append(String(paren_string[open_brace_last_position\
+    \ ..< index]))\n                    open_brace_last_position = index\n       \
+    \             open_brace_count = 1\n                } else {\n               \
+    \     open_brace_last_position = index\n                    open_brace_count +=\
+    \ 1\n                }\n            } else {\n                close_brace_last_position\
+    \ = index\n                close_brace_count += 1\n            }\n        } else\
+    \ {\n            // If this character is a right parenthesis then we close the\
+    \ last group.\n            if (char == \")\") {\n                if open_brace_count\
+    \ > close_brace_count {\n                    result_array.append(String(paren_string[open_brace_last_position\
+    \ ..< index]))\n                    open_brace_last_position = index\n       \
+    \             open_brace_count = 1\n                } else {\n               \
+    \     open_brace_last_position = index\n                    open_brace_count +=\
+    \ 1\n                }\n            } else {\n                // If this character\
+    \ is a left parenthesis then we close the last group.\n                if (char\
+    \ == \">\") {\n                    open_brace_last_position = index\n        \
+    \            open_brace_count = 0\n                }\n            }\n        }\n\
+    \    }\n\n    return result_array", "    var groups = [String]()\n    var index\
+    \ = 0\n    var openBracketCount = 0\n    var openBraceCount = 0\n    for char\
+    \ in paren_string {\n        switch char {\n        case \"(\":\n            if\
+    \ openBracketCount == 0 {\n                groups.append(String(stringInterpolationSegments:\
+    \ [\"(\"], from: index, to: index))\n            }\n            openBracketCount\
+    \ += 1\n        case \"(\":\n            if openBracketCount != 0 {\n        \
+    \        openBracketCount -= 1\n            }\n        case \"{\":\n         \
+    \   if openBraceCount == 0 {\n                groups.append(String(stringInterpolationSegments:\
+    \ [\"{\"], from: index, to: index))\n            }\n            openBraceCount\
+    \ += 1\n        case \"}\":\n            if openBraceCount != 0 {\n          \
+    \      openBraceCount -= 1\n            }\n        default:\n            if openBracketCount\
+    \ != 0 {\n                openBracketCount -= 1\n            }\n            if\
+    \ openBraceCount != 0 {\n                openBraceCount -= 1\n            }\n\
+    \        }\n        index = index + 1\n    }\n    if openBracketCount != 0 {\n\
+    \        openBracketCount -= 1\n    }\n    if openBraceCount != 0 {\n        openBraceCount\
+    \ -= 1\n    }\n    return groups", "    let pattern = \"(\\\\()\"\n    var parens\
+    \ = [String]()\n    let re = try! NSRegularExpression(pattern: pattern)\n    let\
+    \ matches = re.matches(in: paren_string, range: NSRange(location: 0, length: paren_string.utf16.count))\n\
+    \    for match in matches {\n        let range = NSRange(match.range, in: paren_string)\n\
+    \        let paren_group = paren_string.substring(with: range)\n        parens.append(paren_group)\n\
+    \    }\n    return parens", "    var paren_strings: [String] = []\n    var current_paren_string:\
+    \ String = \"\"\n    let opening_paren_start = paren_string.rangeOfString(\"(\"\
+    , options: .RegularExpressionSearch, range: nil, locale: nil)\n    let opening_paren_end\
+    \ = paren_string.rangeOfString(\")\", options: .RegularExpressionSearch, range:\
+    \ opening_paren_start.range, locale: nil)\n    let closing_brace_start = paren_string.rangeOfString(\"\
+    )\", options: .BackwardsSearch, range: nil, locale: nil)\n\n    if opening_paren_end.location\
+    \ == NSNotFound {\n        return paren_strings\n    }\n\n    for i in opening_paren_start..<opening_paren_end\
+    \ {\n        current_paren_string = paren_string.substringWithRange(i)\n     \
+    \   if current_paren_string.rangeOfString(\")\", options: .RegularExpressionSearch,\
+    \ range: nil, locale: nil) == nil {\n            paren_strings.append(current_paren_string)\n\
+    \        } else {\n            return paren_strings\n        }\n    }\n\n    paren_strings.append(paren_string.substringWithRange(closing_brace_start))\n\
+    \    return paren_strings", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"\\\\((?!\\\\))\")\n    return regex.matches(in: paren_string, range: NSMakeRange(0,\
+    \ paren_string.utf16.count)).map {\n        let range = $0.range\n        let\
+    \ start = paren_string.index(paren_string.startIndex, offsetBy: range.location)\n\
+    \        let end = paren_string.index(paren_string.startIndex, offsetBy: range.location\
+    \ + range.length)\n        return paren_string.substring(with: NSMakeRange(start,\
+    \ end))\n    }", '    return paren_string.components(separatedBy: NSCharacterSet.bracketsCharacterSet())',
+  "    var groups = [[String]]()\n    for paren in paren_string.unicodeScalars.filter({\
+    \ $0.value > 0 }) {\n        guard paren.value > 0 else { return [] }\n      \
+    \  let group = [[String]]()\n        let last = 0\n        for _, bracket in paren.unicodeScalars.enumerated()\
+    \ {\n            guard bracket.value > 0 else { return [] }\n            let diff\
+    \ = bracket.value - last\n            group.append(paren_string[last...bracket.value])\n\
+    \            last = bracket.value\n            if diff > 0 {\n               \
+    \ groups.append(group)\n                group = .init()\n            }\n     \
+    \   }\n        groups.append(group)\n    }\n    return groups", '    // Your code
+    here', "    // Your code here\n    var parenGroups = [String]()\n\n    var start\
+    \ = 0\n    var openCount = 0\n    var closeCount = 0\n    var openingBrace = false\n\
+    \n    var currentString: String = paren_string\n    var nextString: String = \"\
+    \"\n    var currentBrace: String = \" \"\n\n    repeat {\n        nextString =\
+    \ currentString[start]\n\n        if nextString == \"(\" {\n            if currentBrace\
+    \ == \" \" {\n                openingBrace = true\n                openCount++\n\
+    \            } else {\n                openCount++\n            }\n          \
+    \  currentBrace = \"(\"\n        }\n\n        if nextString == \")\" {\n     \
+    \       if currentBrace == \" \" {\n                openingBrace = false\n   \
+    \             closeCount++\n            } else {\n                closeCount++\n\
+    \            }\n            currentBrace = \")\"\n        }\n\n        if nextString\
+    \ == \" \" {\n            if openCount == 0 && closeCount == 0 {\n           \
+    \     parenGroups.append(String(currentString[start...]))\n            }\n   \
+    \     }\n\n        start = start + 1\n    } while (start < currentString.count)\n\
+    \n    return parenGroups", "  var groups = [String]()\n  var currentGroup = String()\n\
+    \n  for symbol in paren_string.unicodeScalars {\n    if symbol == UnicodeScalar(parenthesisOpening)\
+    \ {\n      // Create a new group with the previous group's contents\n      if\
+    \ !groups.isEmpty {\n        groups.append(currentGroup)\n      }\n      currentGroup\
+    \ = \"\"\n    } else if symbol == UnicodeScalar(parenthesisClosing) {\n      //\
+    \ If the current group isn't empty, add the current group\n      if !currentGroup.isEmpty\
+    \ {\n        groups.append(currentGroup)\n      }\n      currentGroup = \"\"\n\
+    \    } else if symbol == UnicodeScalar(space) {\n      // Ignore any spaces\n\
+    \    } else if symbol == UnicodeScalar(quote) {\n      // If the current group\
+    \ isn't empty\n      if !currentGroup.isEmpty {\n        // If there is a previous\
+    \ group, add it to the array\n        groups.append(currentGroup)\n      }\n \
+    \     // Set the current group equal to the next character in the string\n   \
+    \   currentGroup = String(symbol.value) + String(symbol.value)\n    } else {\n\
+    \      // Add the character to the current group\n      currentGroup += String(symbol.value)\n\
+    \    }\n  }\n  // If the last group is not empty, add it\n  if !currentGroup.isEmpty\
+    \ {\n    groups.append(currentGroup)\n  }\n  return groups", "    var group_arr\
+    \ = [String]()\n    if paren_string == \"\" {\n        return group_arr\n    }\n\
+    \    var opening_char = \"(\"\n    var closing_char = \")\"\n    var opening_counter\
+    \ = 0\n    var closing_counter = 0\n    var opening_brace_count = 0\n    var closing_brace_count\
+    \ = 0\n    for i in paren_string.characters {\n        if opening_char == i {\n\
+    \            opening_counter += 1\n            opening_brace_count += 1\n    \
+    \        if opening_counter == 1 {\n                opening_char = \" \"\n   \
+    \         } else {\n                opening_char = \",\"\n            }\n    \
+    \    } else if closing_char == i {\n            closing_counter += 1\n       \
+    \     closing_brace_count += 1\n            if closing_brace_count == opening_brace_count\
+    \ {\n                closing_char = \" \"\n            } else {\n            \
+    \    closing_char = \",\"\n            }\n        } else {\n            group_arr.append(String(Character(i)))\n\
+    \        }\n    }\n    return group_arr", "    let regex = try! NSRegularExpression(pattern:\
+    \ \"\\\\s+|(?=(\\\\()|\\\\))|\\\\)|\\\\(|\\\\(|\\\\)|\\\\{|\\\\}|$|\\\\{|(|)|,\"\
+    , options: .CaseInsensitive)\n    let matches = regex.matches(in: paren_string,\
+    \ options: [], range: NSRange(location: 0, length: paren_string.utf16.count))\n\
+    \    return matches.map({ paren_string[$0.range(at: 1)!] })", "    // Your code\
+    \ here\n    if paren_string.characters.count == 0 {\n        return []\n    }\n\
+    \    let open_brace_strings = paren_string.components(separatedBy: \"(\")\n  \
+    \  let close_brace_strings = paren_string.components(separatedBy: \")\")\n   \
+    \ let open_brace_strings_count = open_brace_strings.count\n    let close_brace_strings_count\
+    \ = close_brace_strings.count\n    if open_brace_strings_count > close_brace_strings_count\
+    \ {\n        let close_brace_strings_start = close_brace_strings.count - close_brace_strings_count\n\
+    \        open_brace_strings.removeFirst(close_brace_strings_start)\n    }\n  \
+    \  let open_brace_strings_count = open_brace_strings.count\n    let close_brace_strings_count\
+    \ = close_brace_strings.count\n    let strings: [String] = []\n    for open_brace_string\
+    \ in open_brace_strings {\n        let open_brace_string_components = open_brace_string.components(separatedBy:\
+    \ \" \")\n        if open_brace_string_components.count == 1 {\n            strings.append(open_brace_string)\n\
+    \        } else {\n            strings.append(\"(\" + open_brace_string_components.joined(separator:\
+    \ \" \") + \")\")\n        }\n    }\n    for close_brace_string in close_brace_strings\
+    \ {\n        let close_brace_string_components = close_brace_string.components(separatedBy:\
+    \ \" \")\n        if close_brace_string_components.count == 1 {\n            strings.append(close_brace_string)\n\
+    \        } else {\n            strings.insert(0, \"(\" + close_brace_string_components.joined(separator:\
+    \ \" \") + \")\")\n        }\n    }\n    return strings", "    var group_strings:\
+    \ [String] = []\n    var open_brace_index = -1\n\n    for i in 0..<paren_string.characters.count\
+    \ {\n        if paren_string.characters[i] == '(' {\n            open_brace_index\
+    \ += 1\n            if open_brace_index == 0 {\n                group_strings.append(paren_string.substring(open_brace_index\
+    \ + 1, i))\n            } else {\n                group_strings.append(paren_string.substring(open_brace_index\
+    \ + 1, i).replacingOccurrences(of: \"\\\\s+\") { $0 })\n            }\n      \
+    \  } else if paren_string.characters[i] == ')' {\n            open_brace_index\
+    \ -= 1\n        }\n    }\n\n    return group_strings", "    \n    // Initialize\
+    \ the array with the empty string\n    var groups = [String]()\n    \n    // Split\
+    \ the input string into the different groups\n    let group_strings = paren_string.characters.split(separator:\
+    \ NSCharacterSet.whitespacesAndNewlines).map(String.init)\n    \n    // Loop through\
+    \ all groups and add them to the array if they are different from the previous\
+    \ one\n    for group_string in group_strings {\n        if group_string.count\
+    \ > 0 {\n            if !group_string.contains(\"(\") {\n                groups.append(group_string)\n\
+    \            } else {\n                if group_string.last! == \"(\" {\n    \
+    \                groups.append(group_string)\n                } else {\n     \
+    \               if group_string.last == \")\" {\n                        groups.append(group_string)\n\
+    \                    }\n                }\n            }\n        }\n    }\n \
+    \   return groups", "    // Your code here\n    let regex = try! NSRegularExpression(pattern:\
+    \ \"(\\\\()(\\\\))(\\\\(\\\\d+\\\\))\", options: [])\n    let range = NSMakeRange(0,\
+    \ paren_string.utf16.count)\n    \n    let matches = regex.matches(in: paren_string,\
+    \ options: [], range: range)\n    var matches_array: [String] = []\n    for match\
+    \ in matches {\n        let range = match.range\n        let string = paren_string.substring(with:\
+    \ range)\n        \n        matches_array.append(string)\n    }\n    return matches_array",
+  "    return paren_string\n        .split(pattern: r\"\\s\")\n        .flatMap {\
+    \ stringArray in\n            return stringArray\n                .map { string\
+    \ in separate_paren_groups(string) }\n        }", '    return paren_string.components(separatedBy:
+    NIL).filter { !$0.isEmpty}', "    \n    // Initialize an empty array to store\
+    \ the results\n    var results = [String]()\n    \n    // Initialize a stack of\
+    \ open parens\n    var openParens = Set<String>()\n    \n    // Iterate over the\
+    \ input string char-by-char\n    for char in paren_string.characters {\n     \
+    \   \n        // Add char to stack of open parens\n        openParens.insert(String(char))\n\
+    \        \n        // Check if the current open paren is properly closed\n   \
+    \     if openParens.count == 1 {\n            // If so, add current char to result\
+    \ array\n            results.append(String(char))\n            // Remove the open\
+    \ paren from stack of open parens\n            openParens.remove(String(char))\n\
+    \        }\n    }\n    \n    // Return results\n    return results", "    guard\
+    \ let paren_string = paren_string.addingPercentEncoding(withAllowedCharacters:\
+    \ .urlFragmentAllowed) else {\n        return []\n    }\n    var results = [String]()\n\
+    \    \n    var currentGroup: String?\n    var isOpenBrace = false\n    var isCloseBrace\
+    \ = false\n    \n    for ch in paren_string.unicodeScalars {\n        if let ch\
+    \ = ch,\n            ch.value > 0x7F {\n            // The character is outside\
+    \ of the basic multilingual plane. Append it to currentGroup and reset isOpenBrace\
+    \ and isCloseBrace to false and continue.\n            guard let currentGroup\
+    \ = currentGroup, !currentGroup.isEmpty else {\n                results.append(currentGroup)\n\
+    \                continue\n            }\n            currentGroup.append(String(UnicodeScalar(ch.value)))\n\
+    \            isOpenBrace = false\n            isCloseBrace = false\n         \
+    \   continue\n        }\n        \n        if ch.value == 0x00 {\n           \
+    \ // A space is a separate group\n            guard let currentGroup = currentGroup\
+    \ else {\n                results.append(currentGroup)\n                continue\n\
+    \            }\n            currentGroup.removeLast()\n            if currentGroup.isEmpty\
+    \ {\n                results.append(currentGroup)\n                continue\n\
+    \            }\n            continue\n        }\n        \n        // At this\
+    \ point, either currentGroup is non-nil, or ch is neither a space nor a backslash.\
+    \ Both cases mean either that currentGroup needs to be\n        // reinitialized\
+    \ or that currentGroup is an empty string. In the second case, the currentGroup\
+    \ variable will be reset to an empty string and the loop will be re-run\n    \
+    \    \n        if isOpenBrace {\n            // currentGroup is open, so append\
+    \ ch to it and continue\n            currentGroup.append(String(UnicodeScalar(ch.value)))\n\
+    \            continue\n        }\n        \n        if ch.value == 0x5B {\n  \
+    \          // A closing parenthesis is encountered. Check if currentGroup is non-nil\
+    \ and if so, append its contents and reset currentGroup\n            guard let\
+    \ currentGroup = currentGroup else {\n                results.append(currentGroup)\n\
+    \                continue\n            }\n            if currentGroup.last ==\
+    \ 0x5D {\n                currentGroup.removeLast()\n                results.append(currentGroup)\n\
+    \                continue\n            }\n            results.append(currentGroup)\n\
+    \            currentGroup = \"\"\n            continue\n        }\n        \n\
+    \        if ch.value == 0x5D {\n            // A closing bracket is encountered.\
+    \ Check if currentGroup is non-nil and if so, append its contents and reset currentGroup\n\
+    \            guard let currentGroup = currentGroup else {\n                results.append(currentGroup)\n\
+    \                continue\n            }\n            if currentGroup.last ==\
+    \ 0x5D {\n                currentGroup.removeLast()\n                results.append(currentGroup",
+  '    // Your code here', "    var paren_groups = [String]()\n\n    // Use a stack\
+    \ to hold the paren groups to avoid an infinite loop when parsing the input string.\n\
+    \    var paren_stack_storage = [String]()\n\n    // Add the first paren group\
+    \ to the stack storage.\n    paren_stack_storage.append(paren_string)\n\n    var\
+    \ paren_stack_pointer = 1\n\n    // Keep parsing the input string until there\
+    \ are no more paren groups to add and no more paren groups\n    // are in the\
+    \ stack storage.\n    while paren_stack_pointer < paren_stack_storage.count &&\
+    \ paren_stack_storage.count > 0 {\n        // Increment the pointer to the next\
+    \ paren group.\n        paren_stack_pointer += 1\n\n        // Grab the next item\
+    \ in the paren stack and add it to the array to be returned.\n        let temp_str\
+    \ = paren_stack_storage[paren_stack_pointer]\n        paren_groups.append(temp_str)\n\
+    \n        // Check to see if we have any more groups in the stack storage.\n \
+    \       if paren_stack_pointer < paren_stack_storage.count {\n            // Grab\
+    \ the next item in the stack storage and add it to the array to be returned.\n\
+    \            let temp_str = paren_stack_storage[paren_stack_pointer]\n       \
+    \     paren_groups.append(temp_str)\n        }\n\n        // Check to see if we\
+    \ have any more groups in the stack storage.\n        if paren_stack_pointer <\
+    \ paren_stack_storage.count {\n            // Grab the next item in the stack\
+    \ storage and add it to the array to be returned.\n            let temp_str =\
+    \ paren_stack_storage[paren_stack_pointer]\n            paren_groups.append(temp_str)\n\
+    \        }\n    }\n\n    return paren_groups", "    guard let open_brace = paren_string.range(of:\
+    \ \"\\\\(\") else {\n        return [\"\"]\n    }\n    guard let close_brace =\
+    \ paren_string.range(of: \"\\\\)\") else {\n        return [\"\"]\n    }\n   \
+    \ let first_match = paren_string.index(of: \"(\", offsetBy: open_brace.lowerBound)\n\
+    \    let last_match = paren_string.index(of: \")\", offsetBy: close_brace.upperBound)\n\
+    \    guard last_match == first_match else {\n        return [\"\"]\n    }\n  \
+    \  let start = paren_string.index(paren_string, offsetBy: open_brace.upperBound)\n\
+    \    let end = paren_string.index(paren_string, offsetBy: close_brace.lowerBound)\n\
+    \    let start = paren_string.index(paren_string, offsetBy: open_brace.upperBound)\n\
+    \    let end = paren_string.index(paren_string, offsetBy: close_brace.lowerBound)\n\
+    \    guard last_match != end else {\n        return [\"\"]\n    }\n    let first\
+    \ = (paren_string[start..<first_match]).trim()\n    let last = (paren_string[last_match..<end]).trim()\n\
+    \    return [first, last]", "    // Your code here\n    let pattern = try! NSRegularExpression(pattern:\
+    \ \"\\\\(|\\\\)|\\\\{|\\\\}|[\\\\(\\\\)]\", options: [])\n    var components =\
+    \ pattern.matches(in: paren_string, range: NSMakeRange(0, paren_string.utf16.count))\n\
+    \    var balancedGroups = [String]()\n    while !components.isEmpty {\n      \
+    \  if components.first!.numberOfRanges == 2 {\n            let startRange = components.first!.rangeAt(0)\n\
+    \            let endRange = components.first!.rangeAt(1)\n            let currentGroupString\
+    \ = paren_string.substring(with: startRange..<endRange)\n            balancedGroups.append(currentGroupString)\n\
+    \            components = pattern.matches(in: currentGroupString, range: NSMakeRange(startRange.endIndex,\
+    \ endRange.endIndex - startRange.endIndex))\n        }\n        else if components.first!.numberOfRanges\
+    \ == 1 {\n            let startRange = components.first!.rangeAt(0)\n        \
+    \    let endRange = components.first!.rangeAt(1)\n            let currentGroupString\
+    \ = paren_string.substring(with: startRange..<endRange)\n            balancedGroups.append(currentGroupString)\n\
+    \            components = pattern.matches(in: currentGroupString, range: NSMakeRange(startRange.endIndex,\
+    \ endRange.endIndex - startRange.endIndex))\n        }\n        else {\n     \
+    \       let currentGroupString = paren_string.substring(with: components.first!.rangeAt(1)..<components.first!.rangeAt(2))\n\
+    \            balancedGroups.append(currentGroupString)\n            components\
+    \ = pattern.matches(in: currentGroupString, range: NSMakeRange(components.first!.rangeAt(1)!.endIndex,\
+    \ components.first!.rangeAt(2)!.endIndex - components.first!.rangeAt(1)!.endIndex))\n\
+    \        }\n    }\n    return balancedGroups", "    var arr:[String] = []\n  \
+    \  for index in 0..<paren_string.characters.count {\n        let char = paren_string.character(at:\
+    \ index)\n        if char == \"(\" {\n            var startIndex = index\n   \
+    \         while startIndex < paren_string.characters.count && paren_string.character(at:\
+    \ startIndex) != \")\" {\n                startIndex += 1\n            }\n   \
+    \         arr.append(paren_string.substring(to: startIndex))\n            startIndex\
+    \ = index\n            while startIndex < paren_string.characters.count && paren_string.character(at:\
+    \ startIndex) != \")\" {\n                startIndex += 1\n            }\n   \
+    \         arr.append(paren_string.substring(from: startIndex))\n        } else\
+    \ if char == \")\" {\n            arr.append(\"()\")\n        }\n    }\n    return\
+    \ arr", '    return split_string_into_substrings(paren_string, r"\(|[^\(\)]+\)")',
+  '    return paren_string.split(regex: "[(](?=\\()")', "    var result: [String]\
+    \ = []\n\n    guard paren_string.characters.count > 0 else { return result }\n\
+    \n    let opening_parens = paren_string.range(of: \"(\")\n    let closing_braces\
+    \ = paren_string.range(of: \")\")\n\n    // Find the first open brace and stop\
+    \ searching for the first closing brace.\n    // This will allow us to check for\
+    \ any remaining braces in the string.\n    guard opening_parens.endIndex == closing_braces.startIndex\
+    \ else { return result }\n\n    for index in opening_parens.indices {\n      \
+    \  result.append(paren_string[index...])\n    }\n\n    return result", "    let\
+    \ strings = paren_string.components(separatedBy: \"(\")\n    // Ignore any spaces\
+    \ in input string and create an array of single paren grouping\n    var groups:\
+    \ [String] = []\n    for string in strings {\n        if string.characters.count\
+    \ > 0 && string.characters.last! == \")\" {\n            let group = string.replacingOccurrences(of:\
+    \ \" \", with: \"\")\n            groups.append(group)\n        } else {\n   \
+    \         groups.append(string)\n        }\n    }\n    return groups", "    precondition(paren_string.count\
+    \ > 0 && paren_string.count % 2 == 0, \"Your paren_string is an empty string or\
+    \ the number of characters in the string is odd.\")\n    \n    var open_brackets:\
+    \ [Int] = [0]\n    var open_brace_counter: Int = 0\n    var open_brace_open =\
+    \ false\n    \n    var paren_brackets: [Int] = [0]\n    var paren_brace_counter:\
+    \ Int = 0\n    var paren_brace_open = false\n    \n    var result: [String] =\
+    \ []\n    \n    var current_char: Char\n    for current_char in paren_string.characters\
+    \ {\n        if open_brace_open && current_char == ' ' {\n            // If we\
+    \ are just beginning a new group and there is a space in front of the bracket,\
+    \ add a space between the last character of the previous group and the opening\
+    \ bracket\n            if paren_brace_counter == 0 {\n                result.append(String(current_char))\n\
+    \            }\n            // If we are in between groups, add a space between\
+    \ the opening bracket and the last character of the previous group\n         \
+    \   else if (paren_brace_counter == open_brackets.count - 1) {\n             \
+    \   result.append(String(current_char))\n            }\n            else {\n \
+    \               // Add the space between the closing bracket and the last character\
+    \ of the current group\n                result.append(String(current_char))\n\
+    \            }\n            \n            open_brace_open = false\n          \
+    \  open_brace_counter = paren_brace_counter\n            paren_brace_open = false\n\
+    \            paren_brace_counter = paren_brackets.count\n            open_brackets[open_brackets.count\
+    \ - 1] = paren_brace_counter\n        }\n        else if current_char == '(' {\n\
+    \            open_brace_counter = paren_brace_counter\n            open_brace_open\
+    \ = true\n            paren_brace_open = true\n            paren_brackets[paren_brackets.count]\
+    \ = paren_brace_counter\n        }\n        else if current_char == ')' {\n  \
+    \          // If there are not enough characters in the current group to close\
+    \ it off and the last character of the previous group is either not an opening\
+    \ brace or there is a space between the last character of the previous group and\
+    \ a closing bracket, then add the closing brace and decrement the counter by one.\n\
+    \            if paren_brace_open && (paren_brace_counter < (open_brackets.count\
+    \ - 1)) && (paren_brace_counter + open_brackets[paren_brace_counter + 1] != (paren_brace_counter\
+    \ + 1)) {\n                result.append(String(current_char))\n             \
+    \   paren_brace_open = false\n                paren_brace_counter = paren_brackets.count\n\
+    \                open_b"]
 stop_tokens:
 - "\n}"

@@ -150,7 +150,1211 @@ completions: ["  (cond [(empty? operator) (first operand)]\n        [else (letre
     \ operand 1))\n        (if (eq? operator '// )\n          (// (list-ref operand\
     \ 0) (list-ref operand 1))\n          (if (eq? operator '** )\n            (**\
     \ (list-ref operand 0) (list-ref operand 1))\n            (string-append \"Unknown\
-    \ operation: \" operator)))))))\n"]
+    \ operation: \" operator)))))))\n", "  (cond\n    [(null? operator) (car operand)]\n\
+    \    [(null? operand) 'error]\n    [else (eval (list (car operator)\n        \
+    \              (car operand)\n                      (do_algebra (cdr operator)\
+    \ (cdr operand))))]))\n", "  (foldl (lambda (x y) (apply x y)) (first operand)\
+    \ (map (lambda (x y) (list y x)) operator (rest operand))))\n", "  (let loop ([x\
+    \ (first operand)]\n             [xs (rest operand)]\n             [ops (reverse\
+    \ operator)])\n    (cond [(null? ops) x]\n          [(null? xs) x]\n         \
+    \ [else (loop (apply (symbol->string (first ops)) x (list (first xs)))\n     \
+    \                 (rest xs)\n                      (rest ops))])))\n", "  (local\
+    \ [(define (inner opand operand)\n            (cond\n              [(= (length\
+    \ operand) 1) (first operand)]\n              [(= (length operand) 2) (case (first\
+    \ opand)\n                                         ((+) (+ (first operand) (second\
+    \ operand)))\n                                         ((-) (- (first operand)\
+    \ (second operand)))\n                                         ((*) (* (first\
+    \ operand) (second operand)))\n                                         ((//)\
+    \ (quotient (first operand) (second operand)))\n                             \
+    \            ((**) (expt (first operand) (second operand))))]\n              [else\
+    \ (case (first opand)\n                       ((+) (+ (first operand) (inner (rest\
+    \ opand) (rest operand))))\n                       ((-) (- (first operand) (inner\
+    \ (rest opand) (rest operand))))\n                       ((*) (* (first operand)\
+    \ (inner (rest opand) (rest operand))))\n                       ((//) (quotient\
+    \ (first operand) (inner (rest opand) (rest operand))))\n                    \
+    \   ((**) (expt (first operand) (inner (rest opand) (rest operand)))))]))]\n \
+    \   (inner operator operand)))\n", "  (for/fold ([res (first operand)])\n    \
+    \        ([op (in-list operator)])\n            (cond\n              [(= op '+)\
+    \ (apply + res (second operand))]\n              [(= op '-) (apply - res (second\
+    \ operand))]\n              [(= op '*) (apply * res (second operand))]\n     \
+    \         [(= op '//) (apply / res (second operand))]\n              [(= op '**)\
+    \ (apply expt res (second operand))])))", "  (apply (eval (string->symbol (string-append\
+    \ \"(\" (string-join operator) \")\"))) operand))\n", "  (receive (operator operand)\n\
+    \    (for ([o operator] [n operand])\n      (cond\n        [(empty? operator)\
+    \ n]\n        [(equal? o '+) (+ n (do_algebra (rest operator) (rest operand)))]\n\
+    \        [(equal? o '-) (- n (do_algebra (rest operator) (rest operand)))]\n \
+    \       [(equal? o '*) (* n (do_algebra (rest operator) (rest operand)))]\n  \
+    \      [(equal? o '//) (floor (/ n (do_algebra (rest operator) (rest operand))))]\n\
+    \        [(equal? o '**) (expt n (do_algebra (rest operator) (rest operand)))]\n\
+    \        [(equal? o '^) (expt n (do_algebra (rest operator) (rest operand)))])))))\n\
+    </code>\n", "  (if (null? operand)\n      0\n      (if (null? (cdr operand))\n\
+    \          (car operand)\n          (let* ([op (car operator)]\n             \
+    \    [n1 (car operand)]\n                 [n2 (car (cdr operand))])\n        \
+    \    (cond\n              ((equal? op '+) (+ n1 n2))\n              ((equal? op\
+    \ '-) (- n1 n2))\n              ((equal? op '*) (* n1 n2))\n              ((equal?\
+    \ op '//) (quotient n1 n2))\n              ((equal? op '**) (expt n1 n2))\n  \
+    \            (else 0))))))\n", "  (apply (lambda (x y) (for/fold ([sum 0]) ([i\
+    \ (in-range 0 (add1 (length y)))])\n                                  (let ([op\
+    \ (vector-ref x i)])\n                                    (cond [(string=? op\
+    \ \"+\") (+ sum (vector-ref y i))]\n                                         \
+    \ [(string=? op \"-\") (- sum (vector-ref y i))]\n                           \
+    \               [(string=? op \"*\") (* sum (vector-ref y i))]\n             \
+    \                             [(string=? op \"//\") (quotient sum (vector-ref\
+    \ y i))]\n                                          [(string=? op \"**\") (expt\
+    \ sum (vector-ref y i))]))))\n          operator operand))\n</code>\nHere is the\
+    \ output of the function:\n<code>&gt; (do_algebra (vector \"+\" \"*\" \"-\") (vector\
+    \ 2 3 4 5))\n", "  (if (or (null? operator) (empty? operand))\n      (car operand)\n\
+    \      (do_algebra (cdr operator) (cons (eval-algebra-step (car operator) (take\
+    \ operand 2)) (drop operand 2)))))", "  (let* ([nums (reverse operand)]\n    \
+    \     [ops (reverse operator)]\n         [stack '()])\n    (for ([op ops]\n  \
+    \        [num nums])\n      (cond\n        [(and (eq? op '+) (not (empty? stack)))\n\
+    \         (push (+ (pop stack) num) stack)]\n        [(and (eq? op '-) (not (empty?\
+    \ stack)))\n         (push (- (pop stack) num) stack)]\n        [(and (eq? op\
+    \ '*) (not (empty? stack)))\n         (push (* (pop stack) num) stack)]\n    \
+    \    [(and (eq? op '//) (not (empty? stack)))\n         (push (floor (/ (pop stack)\
+    \ num)) stack)]\n        [(and (eq? op '**) (not (empty? stack)))\n         (push\
+    \ (expt (pop stack) num) stack)]\n        [else\n         (push num stack)]))\n\
+    \    (pop stack)))\n", "  (match operator\n    ('() (car operand))\n    ((cons\
+    \ '+ _) (+ (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((cons\
+    \ '- _) (- (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((cons\
+    \ '* _) (* (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((cons\
+    \ '// _) (quotient (car operand) (do_algebra (cdr operator) (cdr operand))))\n\
+    \    ((cons '** _) (expt (car operand) (do_algebra (cdr operator) (cdr operand))))))\n",
+  "  (let ((result (car operand)))\n    (for ((operator operator)\n          (operand\
+    \ (cdr operand)))\n      (set! result\n            (cond [(eq? '+ operator) (+\
+    \ result operand)]\n                  [(eq? '- operator) (- result operand)]\n\
+    \                  [(eq? '* operator) (* result operand)]\n                  [(eq?\
+    \ '// operator) (quotient result operand)]\n                  [(eq? '** operator)\
+    \ (expt result operand)])))\n    result))\n", "  (foldl (lambda (x y)\n      \
+    \     (call-with-values\n            (lambda () (car x))\n            (lambda\
+    \ (oper)\n              (match (operand)\n                [(list a . b)\n    \
+    \             (match oper\n                   [('+ ...) (+ a y)]\n           \
+    \        [('- ...) (- a y)]\n                   [('* ...) (* a y)]\n         \
+    \          [('// ...) (quotient a y)]\n                   [('** ...) (expt a y)]\n\
+    \                   [else y])]\n                [else y]))))\n          (car operand)\n\
+    \          (cdr operator)))\n", "  (local [(define (eval-op op rands)\n      \
+    \      (cond\n              [(and (equal? op '+)(list? rands)) (+ (car rands)\
+    \ (cadr rands))]\n              [(and (equal? op '-)(list? rands)) (- (car rands)\
+    \ (cadr rands))]\n              [(and (equal? op '*)(list? rands)) (* (car rands)\
+    \ (cadr rands))]\n              [(and (equal? op '//)(list? rands)) (// (car rands)\
+    \ (cadr rands))]\n              [(and (equal? op '**)(list? rands)) (expt (car\
+    \ rands) (cadr rands))]))]\n    (if (equal? (length operator) 0)\n        (car\
+    \ operand)\n        (eval-op (car operator) operand))))", "  (cond\n    [(empty?\
+    \ operator) operand]\n    [(equal? (car operator) '+ ) \n     (do_algebra (cdr\
+    \ operator) (+ (car operand) (second operand)) (cddr operand))]\n    [(equal?\
+    \ (car operator) '- ) \n     (do_algebra (cdr operator) (- (car operand) (second\
+    \ operand)) (cddr operand))]\n    [(equal? (car operator) '* ) \n     (do_algebra\
+    \ (cdr operator) (* (car operand) (second operand)) (cddr operand))]\n    [(equal?\
+    \ (car operator) '// ) \n     (do_algebra (cdr operator) (// (car operand) (second\
+    \ operand)) (cddr operand))]\n    [(equal? (car operator) '** ) \n     (do_algebra\
+    \ (cdr operator) (expt (car operand) (second operand)) (cddr operand))]))\n</code>\n\
+    My code is correct, but I'm failing to pass the \"Test Cases\"\n\n\nA:\n\nThe\
+    \ arguments of <code>do_algebra</code> are incorrect. And I think the function\
+    \ should return the last result instead of the first operand. \n<code>(define\
+    \ (do_algebra operator operand)\n  (cond\n    [(empty? operator) (car operand)]\n\
+    \    [(equal? (car operator) '+ ) \n     (do_algebra (cdr operator) (cons (+ (car\
+    \ operand) (second operand)) (cddr operand)))]\n    [(equal? (car operator) '-\
+    \ ) \n     (do_algebra (cdr operator) (cons (- (car operand) (second operand))\
+    \ (cddr operand)))]\n    [(equal? (car operator) '* ) \n     (do_algebra (cdr\
+    \ operator) (cons (* (car operand) (second operand)) (cddr operand)))]\n    [(equal?\
+    \ (car operator) '// ) \n     (do_algebra (cdr operator) (cons (// (car operand)\
+    \ (second operand)) (cddr operand", "  (let ([op (car operator)]\n        [opnd\
+    \ (car operand)])\n    (cond\n      [(eq? op '+ ) (+ opnd (do_algebra (cdr operator)\
+    \ (cdr operand)))]\n      [(eq? op '- ) (- opnd (do_algebra (cdr operator) (cdr\
+    \ operand)))]\n      [(eq? op '* ) (* opnd (do_algebra (cdr operator) (cdr operand)))]\n\
+    \      [(eq? op '// ) (quotient opnd (do_algebra (cdr operator) (cdr operand)))]\n\
+    \      [(eq? op '** ) (expt opnd (do_algebra (cdr operator) (cdr operand)))])))\n",
+  "  (apply eval (eval (for/list ([op (in-list operator)]\n                      \
+    \         [num (in-list operand)])\n                      (string-append num (symbol->string\
+    \ op)))))\n  )\n", "  (for/fold ([sum 0]) ([op operator] [num operand])\n    (if\
+    \ (equal? op '+)\n        (+ sum num)\n        (if (equal? op '-)\n          \
+    \  (- sum num)\n            (if (equal? op '*)\n                (* sum num)\n\
+    \                (if (equal? op '//)\n                    (quotient sum num)\n\
+    \                    (if (equal? op '**)\n                        (expt sum num)\n\
+    \                        (error \"unknown operator\"))))))))\n", "  (match operator\
+    \ operand\n    ((list '+ '* '- '(a b c d)) (apply - (list (+ a (* b c)) d)))\n\
+    \    ((list '+ '* '+ '(a b c d)) (apply + (list (+ a (* b c)) d)))\n    (else\
+    \ (error \"Invalid operator/operand combination. It is unsupported!\"))))\n",
+  "  (define (op-function op)\n    (cond\n      [(eq? op '+) +]\n      [(eq? op '-)\
+    \ -]\n      [(eq? op '*) *]\n      [(eq? op '//) quotient]\n      [(eq? op '**)\
+    \ expt]))\n  (define (do-calc current operator operand)\n    (if (eq? '+ (vector-ref\
+    \ operator 0))\n        (begin (vector-set! operator 0 (vector-ref operator 1))\n\
+    \               (vector-set! operand 1 (apply (op-function (vector-ref operator\
+    \ 0))\n                                             (list (vector-ref operand\
+    \ 0) (vector-ref operand 1))))\n               (vector-set! operand 0 (vector-ref\
+    \ operand 1))\n               (vector-set! operand 1 (vector-ref operand 2))\n\
+    \               (vector-set! operand 2 (vector-ref operand 3))\n             \
+    \  (vector-set! operator 1 (vector-ref operator 2))\n               (vector-set!\
+    \ operator 2 (vector-ref operator 3))\n               (vector-set! operator 3\
+    \ (vector-ref operator 4))\n               (do-calc (vector-ref operand 0) operator\
+    \ operand))\n        (begin (vector-set! operand 1 (apply (op-function (vector-ref\
+    \ operator 0))\n                                             (list (vector-ref\
+    \ operand 0) (vector-ref operand 1))))\n               (vector-set! operand 0\
+    \ (vector-ref operand 1))\n               (vector-set! operand 1 (vector-ref operand\
+    \ 2))\n               (vector-set! operator 0 (vector-ref operator 1))\n     \
+    \          (vector-set! operator 1 (vector-ref operator 2))\n               (vector-set!\
+    \ operator 2 (vector-ref operator 3))\n               (do-calc (vector-ref operand\
+    \ 0) operator operand))))\n  (let ((operator (vector->list operator))\n      \
+    \  (operand (vector->list operand)))\n    (do-calc (vector-ref operand 0)\n  \
+    \           (vector (vector-ref operator 0) (vector-ref operator 1) (vector-ref\
+    \ operator 2) (vector-ref operator 3))\n             (vector (vector-ref", " \
+    \ (define (revAppend lst new)\n    (if (null? lst)\n        new\n        (revAppend\
+    \ (cdr lst) (cons (car lst) new))))\n  (define (applyop f x y)\n    (cond\n  \
+    \    ((= f 0) (+ x y))\n      ((= f 1) (- x y))\n      ((= f 2) (* x y))\n   \
+    \   ((= f 3) (quotient x y))\n      ((= f 4) (expt x y))))\n  (define (filter\
+    \ op)\n    (if (null? op)\n        '()\n        (cons (car op) (filter (cdr op)))))\n\
+    \  (define (helper opr lst)\n    (define (worker oprd l)\n      (cond\n      \
+    \  ((null? oprd) (car l))\n        ((null? (cdr l)) (car l))\n        (else (worker\
+    \ (cdr oprd) (cons (applyop (car oprd) (car l) (cadr l)) (cddr l))))))\n    (worker\
+    \ opr lst))\n  (helper (filter operator) (revAppend operand '())))", "  (foldl\
+    \ (\u03BB (x y)\n           (cond\n             [(string=? \"+\" x) (+ y (cadr\
+    \ y))]\n             [(string=? \"-\" x) (- y (cadr y))]\n             [(string=?\
+    \ \"*\" x) (* y (cadr y))]\n             [(string=? \"//\" x) (quotient y (cadr\
+    \ y))]\n             [(string=? \"**\" x) (expt y (cadr y))]))\n         (car\
+    \ operand)\n         (zip operator (cdr operand))))\n", "  (eval-string (string-append\
+    \ \"(\" (apply string-append (map (lambda (op)\n                             \
+    \                                 (cond ((= op '+) \"+\")\n                  \
+    \                                                  ((= op '-) \"-\")\n       \
+    \                                                             ((= op '*) \"*\"\
+    )\n                                                                    ((= op\
+    \ '//) \"//\")\n                                                             \
+    \       ((= op '**) \"**\")))\n                                              \
+    \              operator))\n                                                 \"\
+    )\"\n                             (apply string-append (map number->string operand)))))",
+  "  (define lst (list-to-vector operator))\n  (apply define lst operand)\n  (eval\
+    \ (string-append (list-ref lst 0) \" \" (list-ref lst 1) \" \" (list-ref lst 2)\
+    \ \" \" (list-ref lst 3))))\n", "  (define (expr e1 e2 e3)\n    (cond\n      [(equal?\
+    \ e1 '+) (+ e2 e3)]\n      [(equal? e1 '-) (- e2 e3)]\n      [(equal? e1 '*) (*\
+    \ e2 e3)]\n      [(equal? e1 '//) (quotient e2 e3)]\n      [(equal? e1 '**) (expt\
+    \ e2 e3)]))\n  (define (solve opers ops)\n    (cond\n      [(empty? ops) '()]\n\
+    \      [(empty? (rest ops)) (first ops)]\n      [else (expr (first opers) (first\
+    \ ops) (solve (rest opers) (rest ops)))]))\n  (solve operator operand))\n", " \
+    \ (define (nth-op n)\n    (cond [(equal? (list-ref operator n) '+) +]\n      \
+    \    [(equal? (list-ref operator n) '-) -]\n          [(equal? (list-ref operator\
+    \ n) '*) *]\n          [(equal? (list-ref operator n) '//) /]\n          [(equal?\
+    \ (list-ref operator n) '**) expt]))\n  (define (nth-operand n)\n    (list-ref\
+    \ operand n))\n  (define (recur n)\n    (cond [(= n 0) (nth-operand 0)]\n    \
+    \      [else ((nth-op n) (recur (- n 1)) (nth-operand (+ n 1)))]))\n  (recur (-\
+    \ (length operator) 1)))\n", "  (let loop ((result (car operand))\n          \
+    \   (op-list (cdr operator))\n             (op-list (cdr operand)))\n    (if (null?\
+    \ op-list)\n        result\n        (let* ((op (car op-list))\n              \
+    \ (n (car op-list)))\n          (loop (cond [(equal? op '+) (result + n)]\n  \
+    \                    [(equal? op '-) (result - n)]\n                      [(equal?\
+    \ op '*) (result * n)]\n                      [(equal? op '//) (result // n)]\n\
+    \                      [(equal? op '**) (result ** n)])\n                (cdr\
+    \ op-list)\n                (cdr op-list))))))\n", "  (let loop ([operator operator]\
+    \ [operand operand] [expr null])\n    (cond [(empty? operator) (foldl (lambda\
+    \ (e a) (+ a e)) 0 operand)]\n          [(and (pair? operator) (pair? operand))\n\
+    \           (cond [ (equal? (car operator) '+)\n                   (loop (cdr\
+    \ operator) (cdr operand)\n                         (cons (cons '+ (cons (car\
+    \ operand) (car expr))) expr)) ]\n                 [ (equal? (car operator) '-)\n\
+    \                   (loop (cdr operator) (cdr operand)\n                     \
+    \    (cons (cons '- (cons (car operand) (car expr))) expr)) ]\n              \
+    \   [ (equal? (car operator) '*)\n                   (loop (cdr operator) (cdr\
+    \ operand)\n                         (cons (cons '* (cons (car operand) (car expr)))\
+    \ expr)) ]\n                 [ (equal? (car operator) '//)\n                 \
+    \  (loop (cdr operator) (cdr operand)\n                         (cons (cons '//\
+    \ (cons (car operand) (car expr))) expr)) ]\n                 [ (equal? (car operator)\
+    \ '**)\n                   (loop (cdr operator) (cdr operand)\n              \
+    \           (cons (cons '** (cons (car operand) (car expr))) expr)) ]\n      \
+    \           [else (loop (cdr operator) (cdr operand)\n                       \
+    \      (cons (cons '+ (cons (car operand) (car expr))) expr))])]\n          [else\
+    \ (foldl (lambda (e a) (+ a e)) 0 operand)])))\n", "  (define (m-dots lst)\n \
+    \   (if (null? (cdr lst))\n        (car lst)\n        (string-append (car lst)\
+    \ \".\" (m-dots (cdr lst)))))\n  (eval (m-dots (append (list '(lambda (a b) a))\n\
+    \                        (map (lambda (x y) (list (string->symbol (string-append\
+    \ \"a\" (string x))) y)) \n                             operator operand)))))\n",
+  "    (letrec ([eval (lambda (s operand)\n                    (cond [(empty? s) (first\
+    \ operand)]\n                          [(cons? (first s)) (do_algebra (first s)\
+    \ operand)]\n                          [else ((first s) (eval (rest s) operand)\
+    \ (eval (rest (rest s)) operand))]))])\n        (eval operator operand)))\n",
+  "  (cond [(null? operator) (car operand)]\n        [(and (not (null? operator))\
+    \ (not (null? operand)))\n         (match (car operator)\n           [\"+\" (+\
+    \ (car operand) (do_algebra (cdr operator) (cdr operand)))]\n           [\"-\"\
+    \ (- (car operand) (do_algebra (cdr operator) (cdr operand)))]\n           [\"\
+    *\" (* (car operand) (do_algebra (cdr operator) (cdr operand)))]\n           [\"\
+    //\" (quotient (car operand) (do_algebra (cdr operator) (cdr operand)))]\n   \
+    \        [\"**\" (expt (car operand) (do_algebra (cdr operator) (cdr operand))))])\n\
+    \        [else \"Something went wrong, go back to the drawing board.\"]))\n",
+  "  (define (do_help op opd)\n    (cond [(empty? op) 0]\n          [(and (empty?\
+    \ opd) (not (empty? op))) (error \"invalid expression\")]\n          [(and (not\
+    \ (empty? opd)) (empty? op)) (error \"invalid expression\")]\n          [else\
+    \ (do_help (rest op) (list (list-ref opd 0) (list-ref op 0) (list-ref opd 1)))]))\n\
+    \  (do_help operator operand))\n", "  (cond [(empty? operator)\n         (car\
+    \ operand)]\n        [(= 1 (length operator))\n         (eval (list (car operator)\
+    \ (car operand) (cadr operand)))]\n        [else (eval (list (car operator) (car\
+    \ operand)\n                          (do_algebra (cdr operator) (cdr operand))))]))\n",
+  "  (if (empty? operator)\n      (car operand)\n      (let* ([op (car operator)]\n\
+    \             [op1 (car operand)]\n             [op2 (car (cdr operand))])\n \
+    \       (cond\n         ((eq? op '+) (+ op1 op2))\n         ((eq? op '-) (- op1\
+    \ op2))\n         ((eq? op '*) (* op1 op2))\n         ((eq? op '//) (quotient\
+    \ op1 op2))\n         ((eq? op '**) (expt op1 op2))))))\n", "  (let* ([op (first\
+    \ operator)]\n         [a (first operand)]\n         [b (second operand)])\n \
+    \   (cond\n      ((eq? op '+) (+ a b))\n      ((eq? op '-) (- a b))\n      ((eq?\
+    \ op '*) (* a b))\n      ((eq? op '//) (quotient a b))\n      ((eq? op '**) (expt\
+    \ a b)))))\n", "  (define (rec list operand)\n    (cond [(empty? list) (car operand)]\n\
+    \          [(empty? (cdr list)) (car operand)]\n          [else (let* ([a (car\
+    \ operand)] [b (car (cdr operand))] [op (car list)])\n                   (rec\
+    \ (cdr list) (append (cdr (cdr operand)) (list (case op \n                   \
+    \                                                   ((+) (+ a b))\n          \
+    \                                                            ((-) (- a b))\n \
+    \                                                                     ((*) (*\
+    \ a b))\n                                                                    \
+    \  ((//) (floor (/ a b)))\n                                                  \
+    \                    ((**) (expt a b))))))]))\n  (rec operator operand))\n</code>\n\
+    This is a pretty straightforward recursive function. It's just taking the first\
+    \ item of the <code>operand</code> list and the first item of the <code>operator</code>\
+    \ list and doing the appropriate operation with the two and building a new list\
+    \ of those two processed items and the rest of the <code>operand</code> list.\n",
+  "  (let loop ([i 0] [op (car operator)] [result (car operand)])\n    (if (null?\
+    \ operator)\n        result\n        (let* ([op (car operator)]\n            \
+    \   [num (cadr operand)])\n          (loop (add1 i) (car (cdr operator)) (match\
+    \ op\n                                                ['+ (add result num)]\n\
+    \                                                ['* (mul result num)]\n     \
+    \                                           ['^ (expt result num)]\n         \
+    \                                       ['/ (truncate result num)]\n         \
+    \                                       ['- (sub result num)])))))\n  )", "  (let\
+    \ ((result (car operand)))\n    (for ([op (in-list operator)][opd (in-list (cdr\
+    \ operand))])\n      (set! result (eval `(,op ,result ,opd))))\n    result))\n",
+  "  (let loop ([op operator] [ops operand])\n    (match op\n      [(list) (first\
+    \ ops)]\n      [(list o op ...)\n       (loop op (cons (match o\n            \
+    \            [('+) (+ (first ops) (second ops))]\n                        [('-)\
+    \ (- (first ops) (second ops))]\n                        [('*) (* (first ops)\
+    \ (second ops))]\n                        [('/) (/ (first ops) (second ops))]\n\
+    \                        [('**) (expt (first ops) (second ops))])\n          \
+    \            (cdr ops)))])))\n", "  (define (sum L)\n    (if (null? L)\n     \
+    \   0\n        (+ (car L) (sum (cdr L)))))\n  (define (sub L)\n    (if (null?\
+    \ L)\n        0\n        (- (car L) (sub (cdr L)))))\n  (define (mul L)\n    (if\
+    \ (null? L)\n        1\n        (* (car L) (mul (cdr L)))))\n  (define (div L)\n\
+    \    (if (null? L)\n        0\n        (// (car L) (div (cdr L)))))\n  (define\
+    \ (exp L)\n    (if (null? L)\n        1\n        (expt (car L) (exp (cdr L)))))\n\
+    \  (cond ((= (length operator) 1)\n         (cond ((equal? (car operator) \"+\"\
+    ) (sum operand))\n               ((equal? (car operator) \"-\") (sub operand))\n\
+    \               ((equal? (car operator) \"*\") (mul operand))\n              \
+    \ ((equal? (car operator) \"//\") (div operand))\n               ((equal? (car\
+    \ operator) \"**\") (exp operand))))\n        ((+ (length operator) 1) (list (list\
+    \ operator operand)))))\n", "  (eval (car (foldl (lambda (op acc)\n          \
+    \            (list (list op (first acc) (second acc))))\n                    operand\n\
+    \                    operator))))", "  (eval (string-append (string-join (map\
+    \ number->string operand) \" \") \" \" (string-join operator \" \"))))\n", " \
+    \ (let ([num1 (first operand)] [num2 (second operand)])\n    (match operator\n\
+    \          [(\"+\") (+ num1 num2)]\n          [(\"-\") (- num1 num2)]\n      \
+    \    [(\"*\") (* num1 num2)]\n          [(\"//\") (floor (/ num1 num2))]\n   \
+    \       [(\"**\") (expt num1 num2)])))", "  (cond [(empty? operator) (first operand)]\n\
+    \        [(empty? operand) (error \"Too many operators\")]\n        [else\n  \
+    \       (apply (first operator) (map (lambda (x) (do_algebra (rest operator) x))\n\
+    \                                      (map list operand))) ]))\n", "  (cond\n\
+    \    [(null? operator) (car operand)]\n    [(equal? (car operator) '+) (+ (car\
+    \ operand) (do_algebra (cdr operator) (cdr operand)))]\n    [(equal? (car operator)\
+    \ '-) (- (car operand) (do_algebra (cdr operator) (cdr operand)))]\n    [(equal?\
+    \ (car operator) '*) (* (car operand) (do_algebra (cdr operator) (cdr operand)))]\n\
+    \    [(equal? (car operator) '//) (// (car operand) (do_algebra (cdr operator)\
+    \ (cdr operand)))]\n    [(equal? (car operator) '**) (expt (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand)))]))\n", "  (foldl (lambda (op x y)\n         \
+    \   (cond\n              [(equal? op \"+\") (+ x y)]\n              [(equal? op\
+    \ \"-\") (- x y)]\n              [(equal? op \"*\") (* x y)]\n              [(equal?\
+    \ op \"//\") (floor x y)]\n              [(equal? op \"**\") (expt x y)]))\n \
+    \         (second operand) operator operand))\n", "  (let ([result (car operand)])\n\
+    \    (for ([oper (in-list operator)\n            val (in-list (cdr operand))])\n\
+    \      (set! result\n            (cond [(equal? oper '+)\n                   (+\
+    \ result val)]\n                  [(equal? oper '-)\n                   (- result\
+    \ val)]\n                  [(equal? oper '*)\n                   (* result val)]\n\
+    \                  [(equal? oper '//)\n                   (floor (/ result val))]\n\
+    \                  [(equal? oper '**)\n                   (expt result val)])))\n\
+    \    result))\n", "  (define (helper operator operand result)\n    (cond [(empty?\
+    \ operator) result]\n          [(= (first operator) '+) (helper (rest operator)\
+    \ (rest operand) (+ result (first operand)))]\n          [(= (first operator)\
+    \ '-) (helper (rest operator) (rest operand) (- result (first operand)))]\n  \
+    \        [(= (first operator) '*) (helper (rest operator) (rest operand) (* result\
+    \ (first operand)))]\n          [(= (first operator) '//) (helper (rest operator)\
+    \ (rest operand) (floor (/ result (first operand))))]\n          [(= (first operator)\
+    \ '**) (helper (rest operator) (rest operand) (expt result (first operand)))]))\n\
+    \  (helper operator operand (first operand)))\n", "  (let loop ((res (car operand))\n\
+    \             (operands (cdr operand))\n             (operators operator))\n \
+    \   (cond [(null? operators) res]\n          [else (loop (eval (cons res (cons\
+    \ (car operators) operands)))\n                      (cdr operands)\n        \
+    \              (cdr operators))])))\n", "  (let ([op0 (car operator)]\n      \
+    \  [op1 (cadr operator)]\n        [op2 (caddr operator)]\n        [num0 (car operand)]\n\
+    \        [num1 (cadr operand)]\n        [num2 (caddr operand)]\n        [num3\
+    \ (cadddr operand)])\n    (if (not (string=? op2 \"\"))\n        (cond\n     \
+    \    ((string=? op0 \"+\") (+ num0 num1 num2 num3))\n         ((string=? op0 \"\
+    -\") (- num0 num1 num2 num3))\n         ((string=? op0 \"*\") (* num0 num1 num2\
+    \ num3))\n         ((string=? op0 \"//\") (quotient num0 num1 num2 num3))\n  \
+    \       ((string=? op0 \"**\") (expt num0 num1 num2 num3)))\n        (cond\n \
+    \        ((string=? op0 \"+\") (+ num0 num1))\n         ((string=? op0 \"-\")\
+    \ (- num0 num1))\n         ((string=? op0 \"*\") (* num0 num1))\n         ((string=?\
+    \ op0 \"//\") (quotient num0 num1))\n         ((string=? op0 \"**\") (expt num0\
+    \ num1))))))\n", "  (define (eval op)\n    (cond\n      [(eq? op '+)(+ (first\
+    \ operand) (second operand))]\n      [(eq? op '-)(- (first operand) (second operand))]\n\
+    \      [(eq? op '*)(* (first operand) (second operand))]\n      [(eq? op '//)(floor\
+    \ (/ (first operand) (second operand)))]\n      [(eq? op '**)(expt (first operand)\
+    \ (second operand))]))\n  (let loop ([ops (rest operator)] [args (rest operand)])\n\
+    \    (if (null? ops)\n        (first args)\n        (loop (rest ops) (cons (eval\
+    \ (first ops)) args)))))\n", "  (apply eval \n         (cons (cons '+ (cons (car\
+    \ operand) \n                              (cons (car operator) \n           \
+    \                         (cons (car (cdr operand)) \n                       \
+    \                   (cdr (cdr operand)))))) \n               (cdr (cdr operator)))))\n",
+  "  (cond\n    [(null? operator) (car operand)]\n    [(null? operand) 0]\n    [else\n\
+    \     (let ([first-operand (car operand)]\n           [second-operand (car (cdr\
+    \ operand))]\n           [rest-operand (cdr (cdr operand))]\n           [rest-operator\
+    \ (cdr operator)])\n       (cond\n         [(eq? (car operator) '+) (+ first-operand\
+    \ (do_algebra rest-operator rest-operand))]\n         [(eq? (car operator) '-)\
+    \ (- first-operand (do_algebra rest-operator rest-operand))]\n         [(eq? (car\
+    \ operator) '*) (* first-operand (do_algebra rest-operator rest-operand))]\n \
+    \        [(eq? (car operator) '//) (quotient first-operand (do_algebra rest-operator\
+    \ rest-operand))]\n         [(eq? (car operator) '**) (expt first-operand (do_algebra\
+    \ rest-operator rest-operand))]\n         [else 0]))]))\n", "  (match (reverse\
+    \ operator)\n         ((first . rest)\n          (let loop ([operand (reverse\
+    \ operand)]\n                     [result '()])\n            (match (reverse operand)\n\
+    \                   ((first . rest)\n                    (loop rest\n        \
+    \                  (append result\n                                  (list (apply\
+    \ first first\n                                               (cons (car rest)\n\
+    \                                                     (map (lambda (op) (apply\
+    \ op (car rest) (cadr rest))) rest)))))))\n                   (else result))))))\n",
+  "  (let/cc escape\n    (for/fold ([r (first operand)]) ([o (in-list operator)] [i\
+    \ (in-list (rest operand))])\n      (match o\n        [\"+\" (+ r i)]\n      \
+    \  [\"-\" (- r i)]\n        [\"*\" (* r i)]\n        [\"//\" (quotient r i)]\n\
+    \        [\"**\" (expt r i)]\n        [else (escape \"Please use a valid operator\"\
+    )]))))\n</code>\n", "  (cond ((null? operator) (car operand))\n        ((eq? (car\
+    \ operator) '+ ) (+ (car operand) (do_algebra (cdr operator) (cdr operand))))\n\
+    \        ((eq? (car operator) '- ) (- (car operand) (do_algebra (cdr operator)\
+    \ (cdr operand))))\n        ((eq? (car operator) '* ) (* (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand))))\n        ((eq? (car operator) '// ) (quotient\
+    \ (car operand) (do_algebra (cdr operator) (cdr operand))))\n        ((eq? (car\
+    \ operator) '** ) (expt (car operand) (do_algebra (cdr operator) (cdr operand))))))\n",
+  "  (cond [(null? operator) (car operand)]\n        [(null? (cdr operator)) (first\
+    \ operand)]\n        [else (let ([op (car operator)]\n                    [op2\
+    \ (cadr operator)]\n                    [operand2 (cadr operand)])\n         \
+    \       (cond [(eq? op #\\+) (do_algebra (cdr operator) (cons (+ (car operand)\
+    \ operand2) (cddr operand)))]\n                      [(eq? op #\\-) (do_algebra\
+    \ (cdr operator) (cons (- (car operand) operand2) (cddr operand)))]\n        \
+    \              [(eq? op #\\*) (do_algebra (cdr operator) (cons (* (car operand)\
+    \ operand2) (cddr operand)))]\n                      [(eq? op #\\\\) (do_algebra\
+    \ (cdr operator) (cons (quotient (car operand) operand2) (cddr operand)))]\n \
+    \                     [(eq? op #\\^) (do_algebra (cdr operator) (cons (expt (car\
+    \ operand) operand2) (cddr operand)))]\n                      [(and (eq? op #\\\
+    +) (eq? op2 #\\*)) (do_algebra (cdr operator) (cons (+ (car operand) (* (cadr\
+    \ operand) (caddr operand))) (cdddr operand)))]\n                      [(and (eq?\
+    \ op #\\+) (eq? op2 #\\^)) (do_algebra (cdr operator) (cons (+ (car operand) (expt\
+    \ (cadr operand) (caddr operand))) (cdddr operand)))]\n                      [(and\
+    \ (eq? op #\\+) (eq? op2 #\\\\)) (do_algebra (cdr operator) (cons (+ (car operand)\
+    \ (quotient (cadr operand) (caddr operand))) (cdddr operand)))]\n            \
+    \          [(and (eq? op #\\-) (eq? op2 #\\*)) (do_algebra (cdr operator) (cons\
+    \ (- (car operand) (* (cadr operand) (caddr operand))) (cdddr operand)))]\n  \
+    \                    [(and (", "  (let loop ([first-operand (car operand)] [rest-operand\
+    \ (cdr operand)] [result first-operand])\n    (if (null? rest-operand)\n     \
+    \   result\n        (loop (car rest-operand) (cdr rest-operand)\n            \
+    \  (match (car operator)\n                     [\"+\" (+ result (car rest-operand))]\n\
+    \                     [\"-\" (- result (car rest-operand))]\n                \
+    \     [\"*\" (* result (car rest-operand))]\n                     [\"/\" (/ result\
+    \ (car rest-operand))]\n                     [\"**\" (expt result (car rest-operand))])))))\n\
+    </code>\n", "  (apply - \n         (cond \n           [(= (length operator) (length\
+    \ operand)) (cond [(= (length operator) 1) (apply - operand)]\n              \
+    \                                            [(= (length operator) 2) (apply (do_algebra\
+    \ (list (list-ref operator 0)) (list (list-ref operand 0) (list-ref operand 1)))\
+    \ (list (list-ref operand 1) (list-ref operand 2)))]\n                       \
+    \                                   [(> (length operator) 2) (apply (do_algebra\
+    \ (list (list-ref operator 0)) (list (list-ref operand 0) (list-ref operand 1)))\
+    \ (list (do_algebra (list-tail operator) (list-tail operand)) (list-ref operand\
+    \ (- (length operand) 1))))])]\n           [(< (length operator) (length operand))\
+    \ (apply - operand)])))\n", "    (if (= 0 (length operator))\n        (car operand)\n\
+    \        (let ([op (car operator)]\n              [opd (car operand)])\n     \
+    \       (do_algebra (cdr operator)\n                        (cons (cond [(= op\
+    \ '+) (+ opd (car (cdr operand)))]\n                                    [(= op\
+    \ '-) (- opd (car (cdr operand)))]\n                                    [(= op\
+    \ '*) (* opd (car (cdr operand)))]\n                                    [(= op\
+    \ '//) (quotient opd (car (cdr operand)))]\n                                 \
+    \   [(= op '**) (expt opd (car (cdr operand)))])\n                           \
+    \   (cdr (cdr operand)))))))\n", "  (define result\n    (let loop ((operators\
+    \ operator)\n               (operands operand)\n               (acc (car operands)))\n\
+    \      (if (null? operators)\n          acc\n          (loop (cdr operators)\n\
+    \                (cdr operands)\n                (case (car operators)\n     \
+    \             ((+ - * // **)\n                   (apply (car operators) (list\
+    \ acc (car operands)))))))))\n  result)\n", "  (let ((op (map (lambda (x) (cond\
+    \ ((equal? x \"+\") +)\n                                   ((equal? x \"-\") -)\n\
+    \                                   ((equal? x \"*\") *)\n                   \
+    \                ((equal? x \"//\") /)\n                                   ((equal?\
+    \ x \"**\") expt)))\n                  operator)))\n    (let lp ((op op) (opd\
+    \ operand) (result (car opd)))\n      (if (null? op)\n          result\n     \
+    \     (lp (cdr op) (cdr opd) (apply (car op) result (car opd)))))))\n", "  (if\
+    \ (= (length operator) 1)\n      (do_op (first operator) (first operand) (second\
+    \ operand))\n      (do_op (first operator) (first operand) (do_algebra (rest operator)\
+    \ (rest operand)))))\n", "  (define first-elem (car operand))\n  (define (recur-expr\
+    \ operator operand)\n    (if (= 1 (length operand))\n        first-elem\n    \
+    \    (begin\n          (cond \n            ((string=? \"+\" (car operator))\n\
+    \             (set! first-elem (+ first-elem (car (cdr operand)))))\n        \
+    \    ((string=? \"-\" (car operator))\n             (set! first-elem (- first-elem\
+    \ (car (cdr operand)))))\n            ((string=? \"*\" (car operator))\n     \
+    \        (set! first-elem (* first-elem (car (cdr operand)))))\n            ((string=?\
+    \ \"//\" (car operator))\n             (set! first-elem (quotient first-elem (car\
+    \ (cdr operand)))))\n            ((string=? \"**\" (car operator))\n         \
+    \    (set! first-elem (expt first-elem (car (cdr operand))))))\n          (recur-expr\
+    \ (cdr operator) (cdr operand)))))\n  (recur-expr operator operand))\n", "  (define\
+    \ (add a b)\n    (+ a b))\n  (define (sub a b)\n    (- a b))\n  (define (mul a\
+    \ b)\n    (* a b))\n  (define (div a b)\n    (quotient a b))\n  (define (pow a\
+    \ b)\n    (expt a b))\n  (define (evaluate op l)\n    (define (f op l)\n     \
+    \ (if (null? l)\n        0\n        (if (null? (cdr l))\n          (car l)\n \
+    \         (if (equal? op '+)\n            (add (car l) (f op (cdr l)))\n     \
+    \       (if (equal? op '-)\n              (sub (car l) (f op (cdr l)))\n     \
+    \         (if (equal? op '*)\n                (mul (car l) (f op (cdr l)))\n \
+    \               (if (equal? op '//)\n                  (div (car l) (f op (cdr\
+    \ l)))\n                  (if (equal? op '**)\n                    (pow (car l)\
+    \ (f op (cdr l)))\n                    (error \"unknown operator\")))))))))\n\
+    \      (f op l))\n  (evaluate (car operator) operand))\n", "  (define (convert-op\
+    \ op)\n    (cond [(equal? op \"+\") (lambda (a b) (+ a b))]\n          [(equal?\
+    \ op \"-\") (lambda (a b) (- a b))]\n          [(equal? op \"*\") (lambda (a b)\
+    \ (* a b))]\n          [(equal? op \"//\") (lambda (a b) (quotient a b))]\n  \
+    \        [(equal? op \"**\") (lambda (a b) (expt a b))]))\n  (letrec ([op-len\
+    \ (length operator)]\n           [opd-len (length operand)]\n           [recur\
+    \ (lambda (i)\n                    (if (= i 0)\n                        (list-ref\
+    \ operand 0)\n                        (let* ([op-act (convert-op (list-ref operator\
+    \ (- i)))]\n                               [opd-act (list-ref operand (- i))]\n\
+    \                               [opd-prev (recur (- i 1))])\n                \
+    \          (op-act opd-act opd-prev))))])\n    (recur op-len)))\n", "  (let loop\
+    \ ((op operator) (opr operand) (result (car opr)))\n    (cond [(empty? op) result]\n\
+    \          [else\n           (loop (cdr op) (cdr opr) (apply (car op) result (car\
+    \ opr)))])))\n", "  (cond\n    [(empty? operator) (first operand)]\n    [else\
+    \ (apply (first operator) operand)]))\n", "  (apply-(operator(car operator))\n\
+    \         (map(lambda(x) (apply-(operator(car operator)) x))\n             (cdr\
+    \ operator)\n             (cdr operand))))", "  (let loop ([accum 0] [operators\
+    \ operator] [operands operand])\n    (cond [(empty? operators) accum]\n      \
+    \    [(empty? operands) (error \"do_algebra: not enough operands\")]\n       \
+    \   [else\n           (let ([next-operator (first operators)]\n              \
+    \   [next-operand (first operands)])\n             (cond [(equal? '+ next-operator)\n\
+    \                    (loop (+ accum next-operand) (rest operators) (rest operands))]\n\
+    \                   [(equal? '- next-operator)\n                    (loop (- accum\
+    \ next-operand) (rest operators) (rest operands))]\n                   [(equal?\
+    \ '* next-operator)\n                    (loop (* accum next-operand) (rest operators)\
+    \ (rest operands))]\n                   [(equal? '// next-operator)\n        \
+    \            (loop (quotient accum next-operand) (rest operators) (rest operands))]\n\
+    \                   [(equal? '** next-operator)\n                    (loop (expt\
+    \ accum next-operand) (rest operators) (rest operands))]\n                   [else\
+    \ (error \"do_algebra: unknown operator\")]))))))\n", "  (let loop ((operator\
+    \ operator)\n             (operand operand)\n             (ans (car operand)))\n\
+    \    (if (null? operator)\n        ans\n        (loop (cdr operator)\n       \
+    \       (cdr operand)\n              (match (car operator)\n                 \
+    \    [('+ . _) (+ ans (car operand))]\n                     [('- . _) (- ans (car\
+    \ operand))]\n                     [('* . _) (* ans (car operand))]\n        \
+    \             [('/ . _) (quotient ans (car operand))]\n                     [('**\
+    \ . _) (expt ans (car operand))])))))\n</code>\n... and ...\n<code>#lang racket\n",
+  "  (let loop ([operator (reverse operator)]\n             [operand (reverse operand)])\n\
+    \    (if (or (null? operator) (null? operand))\n        (car operand)\n      \
+    \  (let ([op (car operator)]\n              [x (car operand)]\n              [y\
+    \ (cadr operand)])\n          (cond ((string=? op \"+\") (+ x y))\n          \
+    \      ((string=? op \"-\") (- x y))\n                ((string=? op \"*\") (*\
+    \ x y))\n                ((string=? op \"//\") (inexact->exact (floor x y)))\n\
+    \                ((string=? op \"**\") (expt x y))\n                (else 0))))))\n",
+  "  (define (int? x)\n    (and (integer? x)\n         (&gt;= x 0)))\n  (define (op?\
+    \ x)\n    (cond ((eq? x '+) '+)\n          ((eq? x '-) '-)\n          ((eq? x\
+    \ '*) '*)\n          ((eq? x '//) 'quotient)\n          ((eq? x '**) 'expt)\n\
+    \          (else (error \"Bad operator\"))))\n  (foldl (lambda (op oper)\n   \
+    \        (match-define (list op oper)\n             (map op? oper))\n        \
+    \   (op oper))\n         (car operand)\n         (zip operator (cdr operand))))\n\
+    </code>\nI wanted to use foldl to iterate through the list of operators and operands\
+    \ and perform the operations. Then I looked at the zip function, and it seemed\
+    \ like I could use it to step through the operators and operands simultaneously.\
+    \ Then I used match-define to remove the multiple calls to map. But I'm still\
+    \ not sure if this is a good way to do it.\n\n\nA:\n\nI don't see how <code>foldl</code>\
+    \ is supposed to help you here. It's not that simple. You need to split your list\
+    \ into two parts, a list of <code>op</code>s and a list of <code>oper</code>s.\
+    \ Then you need to iterate the <code>op</code>s, and calculate the result by applying\
+    \ them to the <code>oper</code>s. This is done using <code>apply</code>, e.g.\
+    \ <code>(apply * [1 2 3])</code> is equal to <code>(* 1 2 3)</code>.\n<code>(define\
+    \ (do-algebra ops operands)\n  (match (foldl (lambda (op [result ops operands])\n\
+    \                  (if (empty? ops)\n                      result\n          \
+    \            (list (op result (first operands))\n                            (rest\
+    \ ops)\n                            (rest operands))))\n                (first\
+    \ operands)\n                (zip ops operands))\n    [result ops operands] result))\n\
+    </code>\nAs you can see, it's not as simple as <code>(foldl * 1 ops)</code>.\n",
+  "  (let loop ([i 0] [op operator] [lst operand] [acc (car lst)])\n    (if (null?\
+    \ op)\n        acc\n        (loop (add1 i) (cdr op) (cdr lst) (apply (list-ref\
+    \ op i) acc (list-ref lst i))))))\n</code>\nHere's an example in Racket:\n<code>&gt;\
+    \ (do_algebra (list '+ '* '- '+ '//) (list 2 3 4 5 6))\n11\n</code>\n<code>do_algebra</code>\
+    \ takes two lists, the first is a list of operations, the second a list of integers.\
+    \ The trick is to use <code>apply</code> to apply the operator to the two operands.\
+    \ \nThis is a tail-recursive function. The helper function <code>loop</code> takes\
+    \ four arguments: an index <code>i</code> into the list of operators, the list\
+    \ of operators itself, the list of operands, and an accumulator <code>acc</code>\
+    \ that holds the current result. The first time through the loop, <code>acc</code>\
+    \ is the first element of the list of operands. \nThe loop terminates when the\
+    \ list of operators is empty. At that point, <code>acc</code> holds the final\
+    \ result of the computation.\n", "  (cond [(empty? operator)\n         (car operand)]\n\
+    \        [(empty? (cdr operator))\n         (cons (car operator) (cons (car operand)\
+    \ (cons (cadr operand) '())))]\n        [else\n         (cons (car operator) (cons\
+    \ (car operand) (cons (do_algebra (cdr operator) (cdr operand)) '())))]))\n",
+  "  (let loop ([op '()] [opnd operand])\n    (cond\n      [(null? op) (car opnd)]\n\
+    \      [(list-ref operator 0) (loop (cdr operator) (cons (+ (car opnd) (cadr opnd))\
+    \ (cddr opnd)))]\n      [(list-ref operator 1) (loop (cdr operator) (cons (* (car\
+    \ opnd) (cadr opnd)) (cddr opnd)))]\n      [(list-ref operator 2) (loop (cdr operator)\
+    \ (cons (- (car opnd) (cadr opnd)) (cddr opnd)))]\n      [(list-ref operator 3)\
+    \ (loop (cdr operator) (cons (quotient (car opnd) (cadr opnd)) (cddr opnd)))]\n\
+    \      [(list-ref operator 4) (loop (cdr operator) (cons (expt (car opnd) (cadr\
+    \ opnd)) (cddr opnd)))])))\n", "  (for/fold ([result (first operand)])\n     \
+    \       ([op (in-list operator)\n              next-op (in-list (rest operand))])\n\
+    \    (cond [(equal? op '+)\n           (+ result next-op)]\n          [(equal?\
+    \ op '-)\n           (- result next-op)]\n          [(equal? op '*)\n        \
+    \   (* result next-op)]\n          [(equal? op '//)\n           (quotient result\
+    \ next-op)]\n          [(equal? op '**)\n           (expt result next-op)])))\n",
+  "  (define (do-operate op1 op2 op)\n    (cond [(string=? op \"+\") (+ op1 op2)]\n\
+    \          [(string=? op \"-\") (- op1 op2)]\n          [(string=? op \"*\") (*\
+    \ op1 op2)]\n          [(string=? op \"//\") (quotient op1 op2)]\n          [(string=?\
+    \ op \"**\") (expt op1 op2)]))\n  (define (do-algebra-help operator operand result)\n\
+    \    (cond [(null? operator) (car operand)]\n          [(null? operand) 0]\n \
+    \         [else (do-algebra-help (cdr operator) (cdr operand) (do-operate result\
+    \ (car operand) (car operator)))]))\n  (do-algebra-help operator operand 0))\n",
+  "  (match (list operator operand)\n    [(list '(+ -) '(a b))\n     (- a b)]\n  \
+    \  [(list '(+ - * // **) '(a b c))\n     (if (or (eq? (first operator) '+)(eq?\
+    \ (first operator) '-))\n\t (+ (* a b) c)\n\t (if (or (eq? (first operator) '*)(eq?\
+    \ (first operator) '//))\n\t     (* (+ a b) c)\n\t     (if (eq? (first operator)\
+    \ '**)\n\t\t (expt (+ a b) c)\n\t\t #f)))]\n    [(list '(+ - * // **) '(a b c\
+    \ d))\n     (if (or (eq? (first operator) '+)(eq? (first operator) '-))\n\t (+\
+    \ (* (+ a b) c) d)\n\t (if (or (eq? (first operator) '*)(eq? (first operator)\
+    \ '//))\n\t     (* (+ (* a b) c) d)\n\t     (if (eq? (first operator) '**)\n\t\
+    \t (expt (+ (* a b) c) d)\n\t\t #f)))]\n    [(list '(+ - * // **) '(a b c d e))\n\
+    \     (if (or (eq? (first operator) '+)(eq? (first operator) '-))\n\t (+ (* (+\
+    \ (* a b) c) d) e)\n\t (if (or (eq? (first operator) '*)(eq? (first operator)\
+    \ '//))\n\t     (* (+ (* (+ a b) c) d) e)\n\t     (if (eq? (first operator) '**)\n\
+    \t\t (expt (+ (* (+ a b) c) d) e)\n\t\t #f))))))\n", "  (foldl (\u03BB (expr oper)\n\
+    \           (cond\n             [(equal? (first operator) '+')\n             \
+    \ (+ expr oper)]\n             [(equal? (first operator) '-')\n              (-\
+    \ expr oper)]\n             [(equal? (first operator) '*')\n              (* expr\
+    \ oper)]\n             [(equal? (first operator) '//')\n              (quotient\
+    \ expr oper)]\n             [(equal? (first operator) '**')\n              (expt\
+    \ expr oper)]))\n         (second operand)\n         (cddr operand)))\n</code>\n",
+  "  (define (add op-1 op-2)\n    (+ op-1 op-2))\n  (define (sub op-1 op-2)\n    (-\
+    \ op-1 op-2))\n  (define (mul op-1 op-2)\n    (* op-1 op-2))\n  (define (div op-1\
+    \ op-2)\n    (quotient op-1 op-2))\n  (define (exp op-1 op-2)\n    (expt op-1\
+    \ op-2))\n  (define operators\n    (list 'add 'sub 'mul 'div 'exp))\n  (define\
+    \ ops\n    (list '+ '- '* '// '**))\n  (define (do-op op oper)\n    (cond\n  \
+    \    [(= '+ op)\n       (add (first oper) (second oper))]\n      [(= '- op)\n\
+    \       (sub (first oper) (second oper))]\n      [(= '* op)\n       (mul (first\
+    \ oper) (second oper))]\n      [(= '// op)\n       (div (first oper) (second oper))]\n\
+    \      [(= '** op)\n       (exp (first oper) (second oper))]))\n  (define (convert-op\
+    \ op)\n    (cond\n      [(= '+ op) 'add]\n      [(= '- op) 'sub]\n      [(= '*\
+    \ op) 'mul]\n      [(= '// op) 'div]\n      [(= '** op) 'exp]))\n  (define (get-op\
+    \ op)\n    (if (or (eq? op '+)(eq? op '-)(eq? op '*)(eq? op '//)(eq? op '**))\n\
+    \      op\n      (error \"Invalid Operator\")))\n  (define (get-oper oper)\n \
+    \   (if (integer? oper)\n      oper\n      (error \"Invalid Operand\")))\n  (define\
+    \ (do-exp exp)\n    (let ([op (get-op (first exp))]\n          [oper (map get-oper\
+    \ (rest exp))])\n      (do-op op oper)))\n  (define ops-to-do\n    (map convert-op\
+    \ operator", "  (if (= (length operator) 0) \n    (car operand)\n    (let* ([op\
+    \ (first operator)]\n           [op1 (first operand)]\n           [op2 (second\
+    \ operand)])\n      (cond \n        ((= op (char->integer #\\+)) (+ op1 op2))\n\
+    \        ((= op (char->integer #\\-)) (- op1 op2))\n        ((= op (char->integer\
+    \ #\\*)) (* op1 op2))\n        ((= op (char->integer #\\/)) (quotient op1 op2))\n\
+    \        ((= op (char->integer #\\^)) (expt op1 op2))))))\n", "  (let ((op (car\
+    \ operator))\n        (op2 (cadr operator))\n        (op1 (car operand))\n   \
+    \     (op2 (cadr operand)))\n    (cond ((equal? op '+) (+ op1 op2))\n        \
+    \  ((equal? op '-) (- op1 op2))\n          ((equal? op '*) (* op1 op2))\n    \
+    \      ((equal? op '//) (quotient op1 op2))\n          ((equal? op '**) (expt\
+    \ op1 op2)))))\n", "  (define (my-fold-left op-fn zero lst)\n    (if (null? lst)\n\
+    \        zero\n        (my-fold-left op-fn (op-fn zero (car lst)) (cdr lst))))\n\
+    \  (if (null? operator)\n      (car operand)\n      (let* ([op (car operator)]\n\
+    \             [op-fn (if (equal? op '+')\n                        +\n        \
+    \                (if (equal? op '-')\n                            -\n        \
+    \                    (if (equal? op '*')\n                                *\n\
+    \                                (if (equal? op '/')\n                       \
+    \             /\n                                    (if (equal? op '//')\n  \
+    \                                      quotient\n                            \
+    \            (if (equal? op '**')\n                                          \
+    \  expt\n                                            (error \"no such operator\"\
+    )))))))]\n             [new-opr (cdr operator)]\n             [new-opd (cdr operand)])\n\
+    \        (my-fold-left op-fn (car operand) (map (lambda (x) (do_algebra new-opr\
+    \ x)) new-opd)))))\n```\n\n```racket\n#lang racket\n", "  (cond\n    [(and (=\
+    \ 0 (length operator)) (= 0 (length operand))) (car operand)]\n    [(and (not\
+    \ (null? operator)) (not (null? operand))) (eval `(,(car operator) ,(car operand)\
+    \ ,(do_algebra (cdr operator) (cdr operand))))]\n    [else \"Invalid Input\"]))\n",
+  "  (do ((result (first operand)\n               (cond\n                 ((equal?\
+    \ (first operator) '+) (add1 result))\n                 ((equal? (first operator)\
+    \ '-) (sub1 result))\n                 ((equal? (first operator) '*) (add1 result))\n\
+    \                 ((equal? (first operator) '//) (add1 result))\n            \
+    \     ((equal? (first operator) '**) (add1 result)))))\n      ((null? operator)\
+    \ result)\n    (set! operator (rest operator))\n    (set! operand (rest operand))))\n",
+  "  (cond ((null? operator) (car operand))\n        ((eq? (car operator) '+)\n  \
+    \       (+ (car operand) (do_algebra (cdr operator) (cdr operand))))\n       \
+    \ ((eq? (car operator) '-)\n         (- (car operand) (do_algebra (cdr operator)\
+    \ (cdr operand))))\n        ((eq? (car operator) '*)\n         (* (car operand)\
+    \ (do_algebra (cdr operator) (cdr operand))))\n        ((eq? (car operator) '//)\n\
+    \         (// (car operand) (do_algebra (cdr operator) (cdr operand))))\n    \
+    \    ((eq? (car operator) '**)\n         (expt (car operand) (do_algebra (cdr\
+    \ operator) (cdr operand))))))\n", "  (define (do-op oprnd1 oprnd2 operator)\n\
+    \    (cond ((eq? operator '+) (+ oprnd1 oprnd2))\n          ((eq? operator '-)\
+    \ (- oprnd1 oprnd2))\n          ((eq? operator '*) (* oprnd1 oprnd2))\n      \
+    \    ((eq? operator '//) (quotient oprnd1 oprnd2))\n          ((eq? operator '**)\
+    \ (expt oprnd1 oprnd2))))\n  (if (empty? operator) (car operand)\n      (do-op\
+    \ (car operand) (do_algebra (cdr operator) (cdr operand)) (car operator))))",
+  "  (define (evaluate operator operand)\n    (if (empty? operator)\n        (car\
+    \ operand)\n        (define new_operand (eval (car operator) (cadr operand) (car\
+    \ operand)))\n        (if (empty? (cdr operator))\n            new_operand\n \
+    \           (evaluate (cdr operator) (cons new_operand (cddr operand))))))\n \
+    \ (define (eval op1 op2 op3)\n    (cond [(eq? op1 '+) (+ op2 op3)]\n         \
+    \ [(eq? op1 '-) (- op2 op3)]\n          [(eq? op1 '*) (* op2 op3)]\n         \
+    \ [(eq? op1 '//) (quotient op2 op3)]\n          [(eq? op1 '**) (expt op2 op3)]))\n\
+    \  (evaluate operator operand))\n", "  (let* ((operator-symbols (map string->symbol\
+    \ operator))\n         (expression (apply build-list operator-symbols operand)))\n\
+    \    (eval expression)))", "  (define (dop (+ - * / **) x y) (cond [(eq? + '+)\
+    \ (+ x y)] [(eq? - '-) (- x y)] [(eq? * '*) (* x y)] [(eq? / '/) (quotient x y)]\
+    \ [(eq? ** '**) (expt x y)]))\n  (foldl dop (car operand) (zip operator (cdr operand))))",
+  "  (define (do_op op n1 n2)\n    (cond ((equal? op '+) (+ n1 n2))\n          ((equal?\
+    \ op '-) (- n1 n2))\n          ((equal? op '*) (* n1 n2))\n          ((equal?\
+    \ op '//) (truncate (/ n1 n2)))\n          ((equal? op '**) (expt n1 n2))))\n\
+    \  (let loop ([result (car operand)]\n             [ops (cdr operator)]\n    \
+    \         [opsd (cdr operand)])\n    (if (null? ops)\n        result\n       \
+    \ (loop (do_op (car ops) result (car opsd))\n              (cdr ops)\n       \
+    \       (cdr opsd)))))\n", "  (define (find-operation op)\n    (cond ((equal?\
+    \ op '+) +)\n          ((equal? op '-) -)\n          ((equal? op '*) *)\n    \
+    \      ((equal? op '//) quotient)\n          ((equal? op '**) expt)))\n  (define\
+    \ (loop result ops opd)\n    (if (empty? ops)\n        result\n        (loop (find-operation\
+    \ (first ops))\n              (rest ops)\n              (rest opd))))\n  (loop\
+    \ (first operand)\n        operator\n        (rest operand)))\n", "  (define (loop\
+    \ result opnd)\n    (cond [(empty? opnd) result]\n          [(empty? operator)\
+    \ (car opnd)]\n          [else (loop (apply (car operator) result (car opnd))\
+    \ (cdr opnd))]))\n  (loop (car operand) (cdr operand)))\n", "  (define (do_algebra-inner\
+    \ operator operand)\n    (if (empty? operator)\n        (first operand)\n    \
+    \    (match operator\n          [('+ . rest) (do_algebra-inner rest (cons (+ (first\
+    \ operand) (second operand)) (rest (rest operand))))]\n          [('- . rest)\
+    \ (do_algebra-inner rest (cons (- (first operand) (second operand)) (rest (rest\
+    \ operand))))]\n          [('* . rest) (do_algebra-inner rest (cons (* (first\
+    \ operand) (second operand)) (rest (rest operand))))]\n          [('// . rest)\
+    \ (do_algebra-inner rest (cons (quotient (first operand) (second operand)) (rest\
+    \ (rest operand))))]\n          [('** . rest) (do_algebra-inner rest (cons (expt\
+    \ (first operand) (second operand)) (rest (rest operand))))])))\n  (do_algebra-inner\
+    \ operator operand))\n</code>\n", "  (if (empty? operator)\n      (car operand)\n\
+    \      (apply-operator operator operand)))\n", "  (let* ((list (-list operand))\n\
+    \         (first (first list))\n         (rest (rest list)))\n    (cond\n    \
+    \  [(empty? rest) first]\n      [(empty? (rest operator)) (apply (first operator)\
+    \ (cons first rest))]\n      [else\n       (let ((sign (first operator))\n   \
+    \          (last (last list)))\n         (cond\n           [(eq? sign '+) (do_algebra\
+    \ (rest operator) (append (butlast list) (list (+ first last))))]\n          \
+    \ [(eq? sign '-) (do_algebra (rest operator) (append (butlast list) (list (- first\
+    \ last))))]\n           [(eq? sign '*) (do_algebra (rest operator) (append (butlast\
+    \ list) (list (* first last))))]\n           [(eq? sign '//) (do_algebra (rest\
+    \ operator) (append (butlast list) (list (quotient first last))))]\n         \
+    \  [(eq? sign '**) (do_algebra (rest operator) (append (butlast list) (list (expt\
+    \ first last))))]\n           [else (error 'do_algebra \"No such operation ~a\"\
+    \ sign)]))])))\n", "  (cond\n    [(empty? operator) (first operand)]\n    [else\n\
+    \     (cond\n       [(= (first operator) '+) (do_algebra (rest operator) (+ (first\
+    \ operand) (second operand) (rest (rest operand))))]\n       [(= (first operator)\
+    \ '-) (do_algebra (rest operator) (- (first operand) (second operand) (rest (rest\
+    \ operand))))]\n       [(= (first operator) '*) (do_algebra (rest operator) (*\
+    \ (first operand) (second operand) (rest (rest operand))))]\n       [(= (first\
+    \ operator) '//) (do_algebra (rest operator) (// (first operand) (second operand)\
+    \ (rest (rest operand))))]\n       [(= (first operator) '**) (do_algebra (rest\
+    \ operator) (** (first operand) (second operand) (rest (rest operand))))]\n  \
+    \     )]\n     )\n    )\n)\n</code>\nHowever, when I ran\n<code>(do_algebra '(+\
+    \ *) (-) (-)) '(1 2 3 4 5)\n</code>\nI got an unexpected result: -1\nI checked\
+    \ the result by running:\n<code>(do_algebra '(+ *) (-) (-)) '(1 2 3 4 5)", " \
+    \ (match (list operator operand)\n         ([(list '+ '* '-)] (apply - (apply\
+    \ * (cons (car operand) (cdr operand)))))\n         ([(list '+ '- '*)] (apply\
+    \ * (apply - (cons (car operand) (cdr operand)))))\n         ([(list '* '+ '-)]\
+    \ (- (* (car operand) (apply + (cdr operand))) (last operand)))\n         ([(list\
+    \ '* '- '+)] (+ (* (car operand) (apply - (cdr operand))) (last operand)))\n \
+    \        ([(list '- '+ '*)] (* (- (car operand) (apply + (cdr operand))) (last\
+    \ operand)))\n         ([(list '- '* '+)] (/ (- (car operand) (* (cadr operand)\
+    \ (caddr operand))) (last operand)))\n         ([(list '// '+ '-)] (- (quotient\
+    \ (car operand) (apply + (cdr operand))) (last operand)))\n         ([(list '//\
+    \ '- '+)] (+ (quotient (car operand) (apply - (cdr operand))) (last operand)))\n\
+    \         ([(list '** '+ '-)] (- (expt (car operand) (apply + (cdr operand)))\
+    \ (last operand)))\n         ([(list '** '- '+)] (+ (expt (car operand) (apply\
+    \ - (cdr operand))) (last operand)))\n         ))", "  (define (helper op opd)\n\
+    \    (if (null? op)\n        opd\n        (helper (cdr op)\n                (list\
+    \ (list-ref operator (car op)) (list-ref operand (car op)) (list-ref operand (+\
+    \ (car op) 1))))))\n  (eval (helper (build-list (sub1 (length operand)) (lambda\
+    \ (i) i)) '(first))))\n", "  (define (iter op ln result)\n    (if (null? op) result\n\
+    \      (iter (cdr op) (cdr ln) (\n         (if (eq? (car op) '+) (+ result (car\
+    \ ln))\n             (if (eq? (car op) '-) (- result (car ln))\n             \
+    \    (if (eq? (car op) '*) (* result (car ln))\n                     (if (eq?\
+    \ (car op) '//) (quotient result (car ln))\n                         (if (eq?\
+    \ (car op) '**) (expt result (car ln))\n                             0))))))))\n\
+    \  (iter operator operand (car operand)))", "  (cond\n    ((empty? operator) (first\
+    \ operand))\n    (else (match operator\n             (cons (first operator) (do_algebra\
+    \ (rest operator) operand))\n             (eq? (first operator) '+)\n        \
+    \     (+ (first operand) (do_algebra (rest operator) (rest operand)))\n      \
+    \       (eq? (first operator) '-)\n             (- (first operand) (do_algebra\
+    \ (rest operator) (rest operand)))\n             (eq? (first operator) '*)\n \
+    \            (* (first operand) (do_algebra (rest operator) (rest operand)))\n\
+    \             (eq? (first operator) '//)\n             (floor (/ (first operand)\
+    \ (do_algebra (rest operator) (rest operand))))\n             (eq? (first operator)\
+    \ '**)\n             (expt (first operand) (do_algebra (rest operator) (rest operand)))))))\n",
+  "    (define (do_op op num-1 num-2)\n        (cond\n            [(equal? op '+')\
+    \ (+ num-1 num-2)]\n            [(equal? op '-') (- num-1 num-2)]\n          \
+    \  [(equal? op '*') (* num-1 num-2)]\n            [(equal? op '//') (quotient\
+    \ num-1 num-2)]\n            [(equal? op '**') (expt num-1 num-2)]\n         \
+    \   [else 0]))\n    (define (do_ops ops nums)\n        (cond\n            [(null?\
+    \ ops) (car nums)]\n            [(not (null? nums)) (do_ops (cdr ops)\n      \
+    \                                  (cons (do_op (car ops) (car nums) (cadr nums))\n\
+    \                                              (cddr nums)))]\n            [else\
+    \ 0]))\n    (do_ops operator operand))", "  (let loop ([operator operator] [operand\
+    \ operand] [acc (car operand)])\n    (if (null? operator)\n        acc\n     \
+    \   (loop (cdr operator) (cdr operand) (match (car operator)\n               \
+    \                                   [(\"+\") (+ acc (car operand))]\n        \
+    \                                          [(\"-\") (- acc (car operand))]\n \
+    \                                                 [(\"*\") (* acc (car operand))]\n\
+    \                                                  [(\"//\") (quotient acc (car\
+    \ operand))]\n                                                  [(\"**\") (expt\
+    \ acc (car operand))])))))\n", "  (foldl (\u03BB (i a b) (eval (format \"(~a ~a\
+    \ ~a)\" a (vector-ref operator i) b)))\n         (vector-ref operand 0)\n    \
+    \     (range 1 (vector-length operand))))\n", "  (define (eval_algebra op op1\
+    \ op2)\n    (cond\n      [(string=? op \"+\") (+ op1 op2)]\n      [(string=? op\
+    \ \"-\") (- op1 op2)]\n      [(string=? op \"*\") (* op1 op2)]\n      [(string=?\
+    \ op \"//\") (quotient op1 op2)]\n      [(string=? op \"**\") (expt op1 op2)]))\n\
+    \  (if (string=? (car operator) \"**\")\n      (apply eval_algebra (list (car\
+    \ operator) (car operand) (do_algebra (cdr operator) (cdr operand))))\n      (apply\
+    \ eval_algebra (list (car operator) (do_algebra (cdr operator) operand) (car operand)))))\n\
+    </code>\nIt works as expected:\n<code>&gt; (do_algebra '(\"+\" \"*\" \"-\") '(2\
+    \ 3 4 5))\n9\n&gt; (do_algebra '(\"*\" \"*\" \"//\" \"**\") '(3 3 2 3))\n81\n\
+    </code>\nBut if we use those pesky floating point numbers:\n<code>&gt; (do_algebra\
+    \ '(\"+\" \"*\" \"-\") '(2.0 3.0 4.0 5.0))\n9.0\n&gt; (do_algebra '(\"*\" \"*\"\
+    \ \"//\" \"**\") '(3.0 3.0 2.0 3.0))\n81.0\n</code>\nNow let's look at what <code>do_algebra</code>\
+    \ really is doing with those floating point numbers:\n<code>&gt; (cdr operator)\n\
+    '(\"*\" \"//\" \"**\")\n&gt; operand\n'(3.0 3.0 2.0 3.0)\n&gt; (do_algebra (cdr\
+    \ operator) operand)\n81.0\n</code>\nThat's not what we want.\nYes, we know that\
+    \ the <code>operator</code> list is not empty so why is the result <code>81.0</code>\
+    \ and not <code>81</code>?\nHow could this code be re-written to work with integers",
+  "  (match operator\n    ((list) (match operand\n                ((list _) 0)\n \
+    \               (_ (do_algebra (cdr operator) (cdr operand)))))\n    ((list '+\
+    \ _) (+ (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((list\
+    \ '- _) (- (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((list\
+    \ '* _) (* (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((list\
+    \ '// _) (// (car operand) (do_algebra (cdr operator) (cdr operand))))\n    ((list\
+    \ '** _) (expt (car operand) (do_algebra (cdr operator) (cdr operand))))))\n",
+  "  (for/fold ([result (car operand)])\n    ([oper (in-list operator)\n         \
+    \  val (in-list (cdr operand))])\n    (cond\n      [(equal? oper '+) (+ result\
+    \ val)]\n      [(equal? oper '-) (- result val)]\n      [(equal? oper '*) (* result\
+    \ val)]\n      [(equal? oper '//) (quotient result val)]\n      [(equal? oper\
+    \ '**) (expt result val)])))\n", "  (define (helper operator operand result)\n\
+    \    (if (null? operator)\n        result\n        (helper (cdr operator) (cdr\
+    \ operand)\n                (match (car operator)\n                  [(+ _ _)\
+    \ (+ result (apply + operand))]\n                  [(- _ _) (- result (apply -\
+    \ operand))]\n                  [(* _ _) (* result (apply * operand))]\n     \
+    \             [(// _ _) (// result (apply // operand))]\n                  [(**\
+    \ _ _) (** result (apply ** operand))]))))\n  (helper operator operand (car operand)))\n",
+  "  (do_algebra-helper operator operand -1))\n", "  (letrec ([folded-op (in-fold\
+    \ (\u03BB (op acc opnd)\n                                (cond [(equal? op '+\
+    \ ) (+ acc opnd)]\n                                      [(equal? op '- ) (- acc\
+    \ opnd)]\n                                      [(equal? op '* ) (* acc opnd)]\n\
+    \                                      [(equal? op '// ) (quotient acc opnd)]\n\
+    \                                      [(equal? op '** ) (expt acc opnd)]))\n\
+    \                              (first operator)\n                            \
+    \  (rest operand))])\n    folded-op))\n</code>\n", "  (apply (lambda (a b c) (+\
+    \ a (* b (- c)))) operand))\n", "  (define (algebra-eval-helper op lst)\n    (define\
+    \ (aux ops ls)\n      (cond\n        [(empty? ops) (first ls)]\n        [(symbol=?\
+    \ (first ops) '+) (+ (first ls) (algebra-eval-helper (rest ops) (rest ls)))]\n\
+    \        [(symbol=? (first ops) '-) (- (first ls) (algebra-eval-helper (rest ops)\
+    \ (rest ls)))]\n        [(symbol=? (first ops) '*) (* (first ls) (algebra-eval-helper\
+    \ (rest ops) (rest ls)))]\n        [(symbol=? (first ops) '//) (quotient (first\
+    \ ls) (algebra-eval-helper (rest ops) (rest ls)))]\n        [(symbol=? (first\
+    \ ops) '**) (expt (first ls) (algebra-eval-helper (rest ops) (rest ls)))]))\n\
+    \    (aux op lst))\n  (algebra-eval-helper operator operand))\n</code>\n", " \
+    \ (cond [(and (= 1 (length operator)) (= 2 (length operand)))\n         (apply\
+    \ (car operator) operand)]\n        [(and (= 1 (length operator)) (> (length operand)\
+    \ 2))\n         (do_algebra (cons (car operator) '()) (cons (apply (car operator)\
+    \ (take (length operand) (cdr operand))) (drop (length operand) (cdr operand))))]\n\
+    \        [else (do_algebra (cdr operator) (cons (apply (car operator) (take 2\
+    \ operand)) (drop 2 operand)))]))\n", "    (eval (foldr (lambda (op acc)\n   \
+    \                (list op (first acc) (second acc)))\n                 operand\n\
+    \                 operator)))\n", "  (apply (lambda (f x)\n           (foldl (lambda\
+    \ (x y) (f x y)) x operand))\n         (map (lambda (s)\n                (cond\n\
+    \                  [(eq? s '+) +]\n                  [(eq? s '-) -]\n        \
+    \          [(eq? s '*) *]\n                  [(eq? s '//) //]\n              \
+    \    [(eq? s '**) expt]))\n              operator)))\n", "  (cond\n    [(empty?\
+    \ operator) (first operand)]\n    [else (define (helper operator operand result)\n\
+    \            (cond\n              [(and (empty? (rest operator)) (empty? (rest\
+    \ operand)))\n               (case (first operator)\n                 ['+ (+ result\
+    \ (first operand))]\n                 ['* (* result (first operand))]\n      \
+    \           ['- (- result (first operand))]\n                 ['// (// result\
+    \ (first operand))]\n                 ['** (expt result (first operand))]\n  \
+    \               [else (printf \"Invalid operator: ~a\" (first operator))])]\n\
+    \              [else (case (first operator)\n                      ['+ (helper\
+    \ (rest operator) (rest operand) (+ result (first operand)))]\n              \
+    \        ['* (helper (rest operator) (rest operand) (* result (first operand)))]\n\
+    \                      ['- (helper (rest operator) (rest operand) (- result (first\
+    \ operand)))]\n                      ['// (helper (rest operator) (rest operand)\
+    \ (// result (first operand)))]\n                      ['** (helper (rest operator)\
+    \ (rest operand) (expt result (first operand)))]\n                      [else\
+    \ (printf \"Invalid operator: ~a\" (first operator))])]))\n      (helper operator\
+    \ operand (first operand))]))\n</code>\n", "  (if (null? operator)\n      (car\
+    \ operand)\n      (if (eq? (car operator) '+)\n          (+ (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand)))\n          (if (eq? (car operator) '-)\n    \
+    \          (- (car operand) (do_algebra (cdr operator) (cdr operand)))\n     \
+    \         (if (eq? (car operator) '*)\n                  (* (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand)))\n                  (if (eq? (car operator) '//)\n\
+    \                      (quotient (car operand) (do_algebra (cdr operator) (cdr\
+    \ operand)))\n                      (if (eq? (car operator) '**)\n           \
+    \               (expt (car operand) (do_algebra (cdr operator) (cdr operand)))\n\
+    \                          (error \"bad operator\"))))))))\n</code>\nTests:\n\
+    <code>(test-assert \"test 1\" \n             (do_algebra '(+ //) '(1 2 3))\n \
+    \            1)", "  (let ([op0 (car operator)]\n        [rest (cdr operator)]\n\
+    \        [op1 (car operand)]\n        [rest2 (cdr operand)])\n    (if (null? rest)\n\
+    \        (case op0\n          (('+ rest2))\n          (('- rest2))\n         \
+    \ (('* rest2))\n          (('/ rest2))\n          (('^ rest2)))\n        (case\
+    \ op0\n          (('+ op1 (do_algebra rest rest2)))\n          (('- op1 (do_algebra\
+    \ rest rest2)))\n          (('* op1 (do_algebra rest rest2)))\n          (('/\
+    \ op1 (do_algebra rest rest2)))\n          (('^ op1 (do_algebra rest rest2)))))))\n",
+  "  (for/fold ([final (car operand)])\n            ([op (in-list operator) d (in-list\
+    \ (cdr operand))])\n    (match op\n      [`+ (+ final d)]\n      [`- (- final\
+    \ d)]\n      [`* (* final d)]\n      [`// (quotient final d)]\n      [`** (expt\
+    \ final d)])))\n", "  (define (process-op operand op)\n    (match op\n      ['+\
+    \ (apply + operand)]\n      ['* (apply * operand)]\n      ['** (apply expt operand)]\n\
+    \      ['// (car operand) (apply quotient (cdr operand))]\n      ['- (car operand)\
+    \ (apply - (cdr operand))]))\n  (define (process-op-list operator operand)\n \
+    \   (if (empty? operator)\n        (car operand)\n        (process-op (cons (car\
+    \ operand) (process-op-list (cdr operator) (cdr operand))) (car operator))))\n\
+    \  (process-op-list operator operand))", "  (foldl\n   (lambda (op acc)\n    \
+    \ (cond\n       [(= op '+) (add1 acc)]\n       [(= op '-) (sub1 acc)]\n      \
+    \ [(= op '*) (mul1 acc)]\n       [(= op '//) (int-div1 acc)]\n       [(= op '**)\
+    \ (exp1 acc)]))\n   (car operand)\n   (map (lambda (o) (list-ref operator o))\
+    \ (range 1 (length operator)))))\n", "  (let ([x (car operand)])\n    (cond [(null?\
+    \ operator) x]\n          [(null? (cdr operand)) x]\n          [else (do_algebra\
+    \ (cdr operator)\n                            (cons (call-with-values (lambda\
+    \ () (case (car operator)\n                                                  \
+    \              ((+) (+ x (cadr operand)))\n                                  \
+    \                              ((-) (- x (cadr operand)))\n                  \
+    \                                              ((*) (* x (cadr operand)))\n  \
+    \                                                              ((//) (quotient\
+    \ x (cadr operand)))\n                                                       \
+    \         ((**) (expt x (cadr operand)))))\n                                 \
+    \                    (lambda (x) x))\n                                  (cddr\
+    \ operand)))])\n    ))\n</code>\n", "  (let loop ((r 0) (op operator) (l operand))\n\
+    \    (cond\n      [(empty? op) (car l)]\n      [(eq? '+ (car op)) (loop (+ r (car\
+    \ l)) (cdr op) (cdr l))]\n      [(eq? '- (car op)) (loop (- r (car l)) (cdr op)\
+    \ (cdr l))]\n      [(eq? '* (car op)) (loop (* r (car l)) (cdr op) (cdr l))]\n\
+    \      [(eq? '// (car op)) (loop (floor (/ r (car l))) (cdr op) (cdr l))]\n  \
+    \    [(eq? '** (car op)) (loop (expt r (car l)) (cdr op) (cdr l))])))\n</code>\n\
+    I have solved the question but I am not sure if it's the best solution for it.\n\
+    \n\nA:\n\nIf you wanted to use the <code>racket/contract</code> library, you can\
+    \ validate that the lengths of the two lists are compatible, and that the <code>operand</code>\
+    \ is a list of integers:\n<code>(define/contract\n  (do-algebra (operator (listof\
+    \ symbol?)) (operand (listof integer?)))\n  (unless (eq? (sub1 (length operator))\
+    \ (length operand))\n    (error 'do-algebra \"length mismatch in operator and\
+    \ operand\"))\n  (let loop ((r 0) (op operator) (l operand))\n    (cond\n    \
+    \  [(empty? op) (car l)]\n      [(eq? '+ (car op)) (loop (+ r (car l)) (cdr op)\
+    \ (cdr l))]\n      [(eq? '- (car op)) (loop (- r (car l)) (cdr op) (cdr l))]\n\
+    \      [(eq? '* (car op)) (loop (* r (car l)) (cdr op) (cdr l))]\n      [(eq?\
+    \ '// (car op)) (loop (floor (/ r (car l))) (cdr op) (cdr l))]\n      [(eq? '**\
+    \ (car op)) (loop (expt r (car l)) (c", "  (match operator\n    ['() '()]\n  \
+    \  [operator `(,(car operator) ,(car operand) ,@(do_algebra (cdr operator) (cdr\
+    \ operand)))]))", "  (if (null? operator)\n      (car operand)\n      (let ([op-result\
+    \ (do_algebra (cdr operator) (cdr operand))])\n        (cond\n         [(eq? (car\
+    \ operator) '+) (+ (car operand) op-result)]\n         [(eq? (car operator) '-)\
+    \ (- (car operand) op-result)]\n         [(eq? (car operator) '*) (* (car operand)\
+    \ op-result)]\n         [(eq? (car operator) '//) (quotient (car operand) op-result)]\n\
+    \         [(eq? (car operator) '**) (expt (car operand) op-result)]))))\n", " \
+    \ (begin\n    (foldl (lambda (x y) (eval (list \"y\" operator \"x\"))) (car operand)\
+    \ (cdr operand))))\n", "  (define (do_operation op1 op2 opr)\n    (cond ((= opr\
+    \ 0) (+ op1 op2))\n          ((= opr 1) (* op1 op2))\n          ((= opr 2) (-\
+    \ op1 op2))\n          ((= opr 3) (quotient op1 op2))\n          ((= opr 4) (expt\
+    \ op1 op2))))\n  (let loop ([op (car operator)]\n             [o1 (car operand)]\n\
+    \             [o2 (cadr operand)]\n             [operators (cdr operator)]\n \
+    \            [operands (cddr operand)])\n    (if (null? operators)\n        (do_operation\
+    \ o1 o2 op)\n        (loop (car operators) (do_operation o1 o2 op) (car operands)\
+    \ (cdr operators) (cdr operands)))))", "  (apply - \n         (apply *\n     \
+    \           (apply +\n                       operand))))\n", "  (cond [(empty?\
+    \ operator) (first operand)]\n        [else (foldl (lambda (op x y)\n        \
+    \               (cond [(= op +) (+ x y)]\n                             [(= op\
+    \ -) (- x y)]\n                             [(= op *) (* x y)]\n             \
+    \                [(= op //) (quotient x y)]\n                             [(=\
+    \ op **) (expt x y)]))\n                     (first operand)\n               \
+    \      (rest operand)\n                     (map (lambda (x) (char->integer x))\n\
+    \                          operator))]))\n</code>\n", "  (foldl (lambda (op acc\
+    \ opd)\n           (cond [(symbol=? op '+) (+ acc opd)]\n                 [(symbol=?\
+    \ op '-) (- acc opd)]\n                 [(symbol=? op '*) (* acc opd)]\n     \
+    \            [(symbol=? op '//) (quotient acc opd)]\n                 [(symbol=?\
+    \ op '**) (expt acc opd)]))\n         (car operand)\n         (cdr operand)\n\
+    \         operator))\n", "  (define result 0)\n  (cond [(empty? operator) (list->string\
+    \ (car operand))]\n        [else\n         (cond [(equal? (first operator) '+)\
+    \ (set! result (+ (string->number (do_algebra (rest operator) (rest operand)))\
+    \ (string->number (do_algebra (rest operator) (rest operand)))))])\n         \
+    \      [(equal? (first operator) '-) (set! result (- (string->number (do_algebra\
+    \ (rest operator) (rest operand))) (string->number (do_algebra (rest operator)\
+    \ (rest operand)))))])\n               [(equal? (first operator) '*) (set! result\
+    \ (* (string->number (do_algebra (rest operator) (rest operand))) (string->number\
+    \ (do_algebra (rest operator) (rest operand)))))])\n               [(equal? (first\
+    \ operator) '//) (set! result (quotient (string->number (do_algebra (rest operator)\
+    \ (rest operand))) (string->number (do_algebra (rest operator) (rest operand)))))])\n\
+    \               [(equal? (first operator) '**) (set! result (expt (string->number\
+    \ (do_algebra (rest operator) (rest operand))) (string->number (do_algebra (rest\
+    \ operator) (rest operand)))))])]\n         (number->string result)]))", "  (define\
+    \ (operate op)\n    (cond ((equal? op '+) +)\n          ((equal? op '-) -)\n \
+    \         ((equal? op '*) *)\n          ((equal? op '//) exact-floor/)\n     \
+    \     ((equal? op '**) expt)))\n  (cond ((null? operator) (car operand))\n   \
+    \     ((equal? '+ (car operator))\n         (+ (car operand) (do_algebra (cdr\
+    \ operator) (cdr operand))))\n        ((equal? '- (car operator))\n         (-\
+    \ (car operand) (do_algebra (cdr operator) (cdr operand))))\n        ((equal?\
+    \ '* (car operator))\n         (* (car operand) (do_algebra (cdr operator) (cdr\
+    \ operand))))\n        ((equal? '// (car operator))\n         (exact-floor/ (car\
+    \ operand) (do_algebra (cdr operator) (cdr operand))))\n        ((equal? '** (car\
+    \ operator))\n         (expt (car operand) (do_algebra (cdr operator) (cdr operand))))))\n\
+    </code>\n", "  (for/fold ([acc (car operand)]) ([op (in-list operator)] [opd (in-list\
+    \ (cdr operand))])\n    (cond\n      [(equal? op '+) (+ acc opd)]\n      [(equal?\
+    \ op '-) (- acc opd)]\n      [(equal? op '*) (* acc opd)]\n      [(equal? op '//)\
+    \ (// acc opd)]\n      [(equal? op '**) (expt acc opd)])))\n</code>\n", "  (let\
+    \ ([expr (cons (first operand) (map (lambda (op operand) `(,op ,operand)) operator\
+    \ (rest operand)))])\n    (eval expr)))\n", "  (define (multiply x y) (* x y))\n\
+    \  (define (add x y) (+ x y))\n  (define (subtract x y) (- x y))\n  (define (divide\
+    \ x y) (quotient x y))\n  (define (power x y) (expt x y))\n  (define (op x y op)\n\
+    \    (cond\n      [(= op '+') (add x y)]\n      [(= op '-') (subtract x y)]\n\
+    \      [(= op '*') (multiply x y)]\n      [(= op '/') (divide x y)]\n      [(=\
+    \ op '**') (power x y)]))\n  (foldl op (first operand) (rest operand) operator))\n",
+  "  (cond\n    [(empty? operator) (first operand)]\n    [else (define (f op o1 o2)\n\
+    \            (cond\n              [(= op +) (+ o1 o2)]\n              [(= op -)\
+    \ (- o1 o2)]\n              [(= op *) (* o1 o2)]\n              [(= op /) (quotient\
+    \ o1 o2)]\n              [(= op ^) (expt o1 o2)]))\n     (f (first operator) (first\
+    \ operand) (do_algebra (rest operator) (rest operand)))]))\n", "  (define (calc\
+    \ a b c)\n    (if (eq? c '+) (+ a b)\n        (if (eq? c '-) (- a b)\n       \
+    \     (if (eq? c '*) (* a b)\n                (if (eq? c '//) (quotient a b)\n\
+    \                    (if (eq? c '**) (expt a b)\n                        (error\
+    \ \"not an algebra operator!\")))))))\n  (calc (list-ref operand 0) (list-ref\
+    \ operand 1) (list-ref operator 0)))\n", "  (apply (vector-ref operator 0) (list\
+    \ (car operand) (do_algebra (cdr operator) (cdr operand)))))\n", "  (let loop\
+    \ ([operator (reverse operator)] [operand (reverse operand)])\n    (if (and (not\
+    \ (null? operator)) (not (null? operand)))\n        (loop (cdr operator) (cons\
+    \ (eval (list (car operator) (car operand) (car (cdr operand)))) (cdr (cdr operand))))\n\
+    \        (car operand))))\n", "  (let loop ([operators operator] [operands operand]\
+    \ [current 0])\n    (cond [(empty? operators) (car operands)]\n          [(= current\
+    \ 0)\n           (loop (cdr operators) (cdr operands)\n                 (apply-in-underlying-racket\
+    \ operator (car operands) (cadr operands)))]\n          [else\n           (loop\
+    \ (cdr operators) (cons current (cdr operands))\n                 (apply-in-underlying-racket\
+    \ operator current (car operands)))])))", "    (for/fold ([total 0]) ([o (in-list\
+    \ operator)] [op (in-list operand)])\n      (cond\n        [(equal? o '+) (+ total\
+    \ op)]\n        [(equal? o '-) (- total op)]\n        [(equal? o '*) (* total\
+    \ op)]\n        [(equal? o '//) (quotient total op)]\n        [(equal? o '**)\
+    \ (expt total op)]\n        [else 0])))\n", "  (let* ([head (car operator)]\n\
+    \         [tail (cdr operator)]\n         [head-operand (car operand)]\n     \
+    \    [tail-operand (cdr operand)])\n    (if (null? tail)\n        (begin\n   \
+    \       (cond\n            [(equal? head \"+\") (+ head-operand (car tail-operand))]\n\
+    \            [(equal? head \"-\") (- head-operand (car tail-operand))]\n     \
+    \       [(equal? head \"*\") (* head-operand (car tail-operand))]\n          \
+    \  [(equal? head \"//\") (quotient head-operand (car tail-operand))]\n       \
+    \     [(equal? head \"**\") (expt head-operand (car tail-operand))]))\n      \
+    \  (cond\n          [(equal? head \"+\") (do_algebra tail (cons (+ head-operand\
+    \ (car tail-operand)) (cdr tail-operand)))]\n          [(equal? head \"-\") (do_algebra\
+    \ tail (cons (- head-operand (car tail-operand)) (cdr tail-operand)))]\n     \
+    \     [(equal? head \"*\") (do_algebra tail (cons (* head-operand (car tail-operand))\
+    \ (cdr tail-operand)))]\n          [(equal? head \"//\") (do_algebra tail (cons\
+    \ (quotient head-operand (car tail-operand)) (cdr tail-operand)))]\n         \
+    \ [(equal? head \"**\") (do_algebra tail (cons (expt head-operand (car tail-operand))\
+    \ (cdr tail-operand))))]))))\n", "  (foldl (lambda (op acc)\n           (cond\
+    \ [(equal? op '+)(+ acc (car operand))]\n                 [(equal? op '-)(- acc\
+    \ (car operand))]\n                 [(equal? op '*)(* acc (car operand))]\n  \
+    \               [(equal? op '//)(quotient acc (car operand))]\n              \
+    \   [(equal? op '**)(expt acc (car operand))]))\n         (car operand)\n    \
+    \     (reverse operator)))\n", "  (cond [(empty? operator) (first operand)]\n\
+    \        [else (cond [(eq? (first operator) '+) (+ (first operand) (do_algebra\
+    \ (rest operator) (rest operand)))]\n                   [(eq? (first operator)\
+    \ '-) (- (first operand) (do_algebra (rest operator) (rest operand)))]\n     \
+    \              [(eq? (first operator) '*) (* (first operand) (do_algebra (rest\
+    \ operator) (rest operand)))]\n                   [(eq? (first operator) '//)\
+    \ (quotient (first operand) (do_algebra (rest operator) (rest operand)))]\n  \
+    \                 [(eq? (first operator) '**) (expt (first operand) (do_algebra\
+    \ (rest operator) (rest operand)))]\n                   [else (error \"Invalid\
+    \ operator\")])])\n  )\n", "  (define (helper op lst acc)\n    (if (null? op)\n\
+    \        acc\n        (helper (cdr op)\n                (cdr lst)\n          \
+    \      (if (string=? (car op) \"+\")\n                    (+ acc (car lst))\n\
+    \                    (if (string=? (car op) \"-\")\n                        (-\
+    \ acc (car lst))\n                        (if (string=? (car op) \"*\")\n    \
+    \                        (* acc (car lst))\n                            (if (string=?\
+    \ (car op) \"//\")\n                                (quotient acc (car lst))\n\
+    \                                (if (string=? (car op) \"**\")\n            \
+    \                        (expt acc (car lst))\n                              \
+    \      0))))))))\n  (helper operator operand (car operand)))\n</code>\nAnd the\
+    \ tests:\n<code>#lang racket\n", "  (cond ((null? operator) (car operand))\n \
+    \       ((null? operand) 0)\n        (else \n         (cond ((equal? (car operator)\
+    \ '+') (+ (car operand) (do_algebra (cdr operator) (cdr operand))))\n        \
+    \       ((equal? (car operator) '-') (- (car operand) (do_algebra (cdr operator)\
+    \ (cdr operand))))\n               ((equal? (car operator) '*') (* (car operand)\
+    \ (do_algebra (cdr operator) (cdr operand))))\n               ((equal? (car operator)\
+    \ '//') (quotient (car operand) (do_algebra (cdr operator) (cdr operand))))\n\
+    \               ((equal? (car operator) '**') (expt (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand))))\n               (else 'error)))))\n</code>\n",
+  "  (let*\n    ([op (car operator)]\n     [operands (cons (car operand) (cons (car\
+    \ (cdr operand)) '()))])\n    (case op\n      [(+ _) (apply + operands)]\n   \
+    \   [(- _) (apply - operands)]\n      [* _] (apply * operands)\n      [// _] (apply\
+    \ / operands)\n      [^ _] (apply expt operands)\n      [else 0])))\n", "  (define\
+    \ (list_reduce_left op lst initial)\n    (if (null? lst)\n        initial\n  \
+    \      (op (car lst) (list_reduce_left op (cdr lst) initial))))\n  (list_reduce_left\
+    \ (lambda (operator operand)\n                      (eval (list-&gt;string (string-&gt;list\
+    \ (format \"~a~a~a\" (car operand) operator (cadr operand))))))\n            \
+    \        operator\n                    (cddr operand)))\n</code>\n", "  (let*\
+    \ ([result (first operand)]\n         [step (lambda ([op opd] [rest-op rest-opd])\n\
+    \                 (cond [(and (empty? rest-op) (empty? rest-opd)) (list result)]\n\
+    \                       [else (match-define (list ht tl) rest-opd)\n         \
+    \                    (apply step (list (list (first rest-op) ht tl) (rest rest-opd)))]))])\n\
+    \    (apply step (list (list (first operator) (first operand) (second operand))\
+    \ (rest operand)))))", "  (define (helper operator operand result)\n    (cond\n\
+    \      [(empty? operator) (car operand)]\n      [(= (length operator) 1)\n   \
+    \    (apply (car operator) result (car operand))]\n      [else\n       (helper\
+    \ (cdr operator) (cdr operand)\n               (apply (car operator) result (car\
+    \ operand)))]))\n  (helper operator operand (car operand)))\n", "  (define (fold-lst\
+    \ alg e lst)\n    (if (empty? lst)\n        e\n        (fold-lst alg (alg e (first\
+    \ lst)) (rest lst))))\n  (define (alg lst)\n    (if (empty? lst)\n        0\n\
+    \        (let* ([ops (first lst)]\n               [i1 (second lst)]\n        \
+    \       [i2 (third lst)])\n          (cond [(equal? ops '+) (add1 i1 i2)]\n  \
+    \              [(equal? ops '-) (sub1 i1 i2)]\n                [(equal? ops '*)\
+    \ (mul1 i1 i2)]\n                [(equal? ops '//) (div1 i1 i2)]\n           \
+    \     [(equal? ops '**) (exp1 i1 i2)]))))\n  (let* ([lst (interleave operator\
+    \ operand)])\n    (fold-lst alg (first lst) (rest lst))))\n</code>\nTest cases\n\
+    <code>;; Addition", "  (cond\n    [(empty? operator) (first operand)]\n    [else\
+    \ \n     (apply (symbol (first operator)) (cons (do_algebra (rest operator) operand)\
+    \ (cons (first operand) '())))\n     ]))\n", "  (define (do-it opers ops)\n  \
+    \  (if (null? ops)\n        ops\n        (cond\n         ((eq? (car opers) '+)\
+    \ (cons (+ (car ops) (cadr ops)) (do-it (cdr opers) (cdr ops))))\n         ((eq?\
+    \ (car opers) '-) (cons (- (car ops) (cadr ops)) (do-it (cdr opers) (cdr ops))))\n\
+    \         ((eq? (car opers) '*) (cons (* (car ops) (cadr ops)) (do-it (cdr opers)\
+    \ (cdr ops))))\n         ((eq? (car opers) '//) (cons (quotient (car ops) (cadr\
+    \ ops)) (do-it (cdr opers) (cdr ops))))\n         ((eq? (car opers) '**) (cons\
+    \ (expt (car ops) (cadr ops)) (do-it (cdr opers) (cdr ops)))))))\n  (car (do-it\
+    \ operator operand)))\n</code>\n", "  (if (empty? operator)\n      (first operand)\n\
+    \      (eval (string-append (number->string (first operand)) (first operator)\
+    \ (number->string (do_algebra (rest operator) (rest operand)))))))", "  (let loop\
+    \ ([operator operator] [operand operand] [acc (car operand)])\n    (if (null?\
+    \ operator)\n        acc\n        (loop (cdr operator) (cdr operand)\n       \
+    \       (cond\n                [(string=? \"+\" (car operator))\n            \
+    \     (+ acc (car operand))]\n                [(string=? \"-\" (car operator))\n\
+    \                 (- acc (car operand))]\n                [(string=? \"*\" (car\
+    \ operator))\n                 (* acc (car operand))]\n                [(string=?\
+    \ \"//\" (car operator))\n                 (quotient acc (car operand))]\n   \
+    \             [(string=? \"**\" (car operator))\n                 (expt acc (car\
+    \ operand))])))))\n\n", "  (foldl (lambda (x y) (x y)) (car operand) (zip operator\
+    \ (cdr operand))))\n", "  (apply (lambda (oper operands ...)\n           (let\
+    \ ((op (car oper))\n                 (rest (cdr oper))\n                 (ops\
+    \ (cdr operands)))\n             (case op\n               [(+) (do_algebra rest\
+    \ (list (+ (car operands) (car ops)) ...))]\n               [(-) (do_algebra rest\
+    \ (list (- (car operands) (car ops)) ...))]\n               [(*) (do_algebra rest\
+    \ (list (* (car operands) (car ops)) ...))]\n               [(//) (do_algebra\
+    \ rest (list (quotient (car operands) (car ops)) ...))]\n               [(**)\
+    \ (do_algebra rest (list (expt (car operands) (car ops)) ...))])))\n       operator\
+    \ operand))", "  (cond [(empty? operator) (first operand)]\n        [else (cond\
+    \ [(eq? (first operator) '+) (+ (first operand) (do_algebra (rest operator) (rest\
+    \ operand)))]\n                   [(eq? (first operator) '-) (- (first operand)\
+    \ (do_algebra (rest operator) (rest operand)))]\n                   [(eq? (first\
+    \ operator) '*) (* (first operand) (do_algebra (rest operator) (rest operand)))]\n\
+    \                   [(eq? (first operator) '//) (quotient (first operand) (do_algebra\
+    \ (rest operator) (rest operand)))]\n                   [(eq? (first operator)\
+    \ '**) (expt (first operand) (do_algebra (rest operator) (rest operand)))]\n \
+    \                  [else 'ERROR]\n                   )\n             ]\n     \
+    \   )\n  )\n", "  (define (helper operator operand result)\n    (cond ((empty?\
+    \ operator) (car operand))\n          ((= (length operator) 1) (apply (car operator)\
+    \ result))\n          (else (helper (cdr operator) (cdr operand) (apply (car operator)\
+    \ result (car operand))))))\n  (helper operator operand (car operand)))\n", " \
+    \ (let loop ([op operator] [value (car operand)])\n    (if (null? op)\n      \
+    \  value\n        (loop (cdr op) (match-define (list op next) (car op))\n    \
+    \          (apply-operator value op next)))))\n", "  (define (calculate op1 op2\
+    \ op)\n    (cond ((= op '+) (+ op1 op2))\n          ((= op '-) (- op1 op2))\n\
+    \          ((= op '*) (* op1 op2))\n          ((= op '//) (quotient op1 op2))\n\
+    \          ((= op '**) (expt op1 op2))))\n  (apply calculate (map (cut first operand\
+    \ <>)\n                        (list->vector operator)\n                     \
+    \   (list->vector (cdr operand)))))\n", "  (if (null? operator)\n      (car operand)\n\
+    \      (if (eq? (car operator) '+)\n          (+ (car operand) (do_algebra (cdr\
+    \ operator) (cdr operand)))\n          (if (eq? (car operator) '-)\n         \
+    \     (- (car operand) (do_algebra (cdr operator) (cdr operand)))\n          \
+    \    (if (eq? (car operator) '*)\n                  (* (car operand) (do_algebra\
+    \ (cdr operator) (cdr operand)))\n                  (if (eq? (car operator) '//)\n\
+    \                      (quotient (car operand) (do_algebra (cdr operator) (cdr\
+    \ operand)))\n                      (if (eq? (car operator) '**)\n           \
+    \               (expt (car operand) (do_algebra (cdr operator) (cdr operand)))\n\
+    \                          \"Invalid operator\")))))))\n</code>\nRunning the test\
+    \ cases in the original post\n<code>&gt; (do_algebra '(+ - * // **) '(2 3 4 5))\n\
+    9\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6))\n7\n&gt; (do_algebra '(+ - *\
+    \ // **) '(2 3 4 5 6 7))\n3\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6 7 8))\n\
+    18\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6 7 8 9))\n18\n&gt; (do_algebra\
+    \ '(+ - * // **) '(2 3 4 5 6 7 8 9 10))\n119\n&gt; (do_algebra '(+ - * // **)\
+    \ '(2 3 4 5 6 7 8 9 10 11))\n115\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6\
+    \ 7 8 9 10 11 12))\n1150\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6 7 8 9 10\
+    \ 11 12 13))\n1164\n&gt; (do_algebra '(+ - * // **) '(2 3 4 5 6 7 8", "  (define\
+    \ (operate x y op)\n    (cond ((eq? op '+) (+ x y))\n          ((eq? op '-) (-\
+    \ x y))\n          ((eq? op '*) (* x y))\n          ((eq? op '//) (floor (/ x\
+    \ y)))\n          ((eq? op '**) (expt x y))))\n  (define (recur list1 list2 acc)\n\
+    \    (if (null? list1) acc\n        (recur (cdr list1) (cdr list2)\n         \
+    \      (operate (car list2) (car (cdr list2)) (car list1)))))\n  (recur operator\
+    \ operand (car operand)))\n", "  (let loop ([result (car operand)] [rest-operand\
+    \ (cdr operand)] [rest-operator operator])\n    (if (empty? rest-operand)\n  \
+    \      result\n        (match (car rest-operator)\n          ['+ (loop (+ result\
+    \ (car rest-operand)) (cdr rest-operand) (cdr rest-operator))]\n          ['*\
+    \ (loop (* result (car rest-operand)) (cdr rest-operand) (cdr rest-operator))]\n\
+    \          ['- (loop (- result (car rest-operand)) (cdr rest-operand) (cdr rest-operator))]\n\
+    \          ['// (loop (quotient result (car rest-operand)) (cdr rest-operand)\
+    \ (cdr rest-operator))]\n          ['** (loop (expt result (car rest-operand))\
+    \ (cdr rest-operand) (cdr rest-operator))]\n          [_ (loop result (cdr rest-operand)\
+    \ (cdr rest-operator))])))\n  )\n", "    (apply - \n            (apply * \n  \
+    \                  (apply + \n                            (car operand)\n    \
+    \                        (cadr operand))\n                    (apply // \n   \
+    \                         (caddr operand)\n                            (cadddr\
+    \ operand)))\n            (apply ** \n                    (cadr operand)\n   \
+    \                 (caddr operand))))\n</code>\nI have a few questions about my\
+    \ solution:\n\nI write this code with a bottom-up approach, and I feel like I\
+    \ go against the very idea of functional programming, in which I should be able\
+    \ to build a program in a top-down manner, where I define the whole program first\
+    \ and then I break it down into smaller parts. Is there a way to write this program\
+    \ in a top-down way?\nWhat is the best way to write the use of <code>apply</code>?\
+    \ Should I write it as many <code>apply</code> as the nesting of the functions\
+    \ or should I write as little as possible, like what I did above?\nHow can I make\
+    \ this code more \"functional\"?\n\n\n\nA:\n\nIf you know you will have exactly\
+    \ two operators, then you can use the approach of using two <code>let</code> expressions\
+    \ to separate the two cases:\n<code>(define (do-algebra operators operands)\n\
+    \  (match operators\n    [(list (? string=? '+) (? string=? '-))\n     (let* ([(list\
+    \ x y) operands]\n            [result (+ x y)])\n       (- result (last operands)))]\n\
+    \    [(list (? string=? '*) (? string=? '/))\n     (let* ([(list x y) operands]\n\
+    \            [result (* x y)])\n       (/ result (last operands)))]\n    [else\
+    \ 'not-implemented]))\n</code>\nNote that you don't need the first <code>apply</code>\
+    \ if you do it this way, since this is essentially the same thing.\n", "  (cond\
+    \ [(and (list? operator) (list? operand))\n         (let loop ([operator operator]\
+    \ [operand operand] [result 0])\n           (cond [(empty? operator) (car operand)]\n\
+    \                 [(and (list? operator) (list? operand))\n                  (loop\
+    \ (cdr operator) (cdr operand) (+ result (* (car operand) (car operator))))]))]\n\
+    \        [else (error 'do_algebra \"Invalid params\")]))", "  (let ([n(length\
+    \ operand)])\n    (define (rec i res acc)\n      (cond \n        [(= i n) res]\n\
+    \        [(= i 0) (rec (+ i 1) (apply (list (car operator) acc (list-ref operand\
+    \ i)) null) (list-ref operand i))]\n        [else (rec (+ i 1) (apply (list (car\
+    \ operator) acc (list-ref operand i)) null) (list-ref operand i))]))\n    (rec\
+    \ 0 0 0)))\n", "  (list-ref operand 0))\n", "  (let ((op (-&gt;string operator))\n\
+    \        (opnd (apply * operand)))\n    (cond\n      [(equal? op \"+\") (apply\
+    \ + opnd)]\n      [(equal? op \"-\") (apply - opnd)]\n      [(equal? op \"*\"\
+    ) (apply * opnd)]\n      [(equal? op \"/\") (apply / opnd)]\n      [(equal? op\
+    \ \"**\") (apply expt opnd)])))\n", "  (let1 a (list-ref operand 0)\n\t(let1 b\
+    \ (list-ref operand 1)\n\t  (define (calculate op a b)\n\t    (cond\n\t      [(equal?\
+    \ op '+ ) (+ a b)]\n\t      [(equal? op '- ) (- a b)]\n\t      [(equal? op '*\
+    \ ) (* a b)]\n\t      [(equal? op '// ) (floor (/ a b))]\n\t      [(equal? op\
+    \ '** ) (expt a b)]\n\t      [else (error \"invalid operator\")]))\n\t  (for/fold\
+    \ ([out a]) ([op (in-list operator)]\n\t\t\t       [arg (in-list (cdr operand))])\n\
+    \t    (calculate op out arg))))))", "  (match (list operator operand)\n    [(list\
+    \ '(+) '(a b)) (+ a b)]\n    [(list '(-) '(a b)) (- a b)]\n    [(list '(*) '(a\
+    \ b)) (* a b)]\n    [(list '(//) '(a b)) (quotient a b)]\n    [(list '(**) '(a\
+    \ b)) (expt a b)]\n    [else (display \"error\")]))\n", '    (apply (string->symbol
+    (car operator)) operand))', "  (define (eval rest)\n    (cond\n      [(null? rest)\
+    \ 0]\n      [(equal? (first rest) '+) (+ (first operand) (eval (rest (rest rest))))]\n\
+    \      [(equal? (first rest) '-) (- (first operand) (eval (rest (rest rest))))]\n\
+    \      [(equal? (first rest) '*) (* (first operand) (eval (rest (rest rest))))]\n\
+    \      [(equal? (first rest) '//) (quotient (first operand) (eval (rest (rest\
+    \ rest))))]\n      [(equal? (first rest) '**) (expt (first operand) (eval (rest\
+    \ (rest rest))))]))\n  (eval operator))", "  (define (eval-expr acc operator operand)\n\
+    \    (match operator\n      ('() (car acc))\n      ('(+ . xs) (eval-expr (append\
+    \ acc (list (+ (car acc) (car operand)))) xs (cdr operand)))\n      ('(- . xs)\
+    \ (eval-expr (append acc (list (- (car acc) (car operand)))) xs (cdr operand)))\n\
+    \      ('(* . xs) (eval-expr (append acc (list (* (car acc) (car operand)))) xs\
+    \ (cdr operand)))\n      ('(// . xs) (eval-expr (append acc (list (floor (/ (car\
+    \ acc) (car operand)))))) xs (cdr operand))\n      ('(** . xs) (eval-expr (append\
+    \ acc (list (expt (car acc) (car operand)))) xs (cdr operand)))))\n  (eval-expr\
+    \ (list (car operand)) operator (cdr operand)))\n", "  (local [(define (op_appl\
+    \ op-type x)\n            (case op-type\n              [(+ - * // **) (apply op-type\
+    \ x)]\n              [else (error 'do_algebra \"op_appl: Invalid operator\" op-type)]))]\n\
+    \    (foldl op_appl (car operand) (zip operator (cdr operand)))))", "  (define\
+    \ (helper operator operand result)\n    (if (null? operator)\n        result\n\
+    \        (helper (cdr operator) (cdr operand)\n                (match-define (list\
+    \ op num) (list (car operator) (car operand)))\n                (cond\n      \
+    \            [(eq? op '+) (+ result num)]\n                  [(eq? op '-) (- result\
+    \ num)]\n                  [(eq? op '*) (* result num)]\n                  [(eq?\
+    \ op '//) (quotient result num)]\n                  [(eq? op '**) (expt result\
+    \ num)]))))\n  (helper operator operand (car operand)))\n", "  (let loop ((op\
+    \ (car operator)) (ops (cdr operator)) (operands (cdr operand)))\n    (cond\n\
+    \      [(empty? ops) (apply op operands)]\n      [else\n       (loop (car ops)\
+    \ (cdr ops) (cons (apply op (cons (car operands) (cons (car (cdr operands)) null)))\
+    \ (cdr (cdr operands))))])))\n", "  (foldl (lambda (oper operand)\n          \
+    \ (cond ((equal? oper '+) (apply + operand))\n                 ((equal? oper '-)\
+    \ (apply - operand))\n                 ((equal? oper '*) (apply * operand))\n\
+    \                 ((equal? oper '//) (apply quotient operand))\n             \
+    \    ((equal? oper '**) (apply expt operand))))\n         (car operand)\n    \
+    \     (cdr operator)))\n</code>\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

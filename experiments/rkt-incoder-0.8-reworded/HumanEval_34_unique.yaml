@@ -5,7 +5,523 @@ prompt: "#lang racket\n\n;; Return sorted unique elements in a list\n;; >>> (uni
 tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate unique))\n\
   \    (check-equal? (candidate (list 5 3 5 2 3 3 9 0 123)) (list 0 2 3 5 9 123))\n\
   ))\n\n(test-humaneval)"
-completions: []
+completions: ["  (let loop ((i 0) (x l) (acc '()) (seen '()))\n    (cond ((null? x)\
+    \ (reverse acc))\n          ((equal? (car x) (car seen)) (reverse acc))\n    \
+    \      (else (loop (+ i 1) (cdr x) (cdr acc) (cons (car x) seen))))))\n", "  (sort\n\
+    \   (remove-duplicates \n    (hash-table-count \n     (hash-table-fold \n    \
+    \  (lambda (k v) \n       (cond ((> v 0) (list k))\n             ((= v 0) (list\
+    \ 0))\n             :else (cons (car v) \n                         (lambda ()\
+    \ (hash-table-remove k v)))))))\n    l))\n", "  (define (helper l seen)\n    (cond\
+    \ ((null? l) l)\n          ((member (car l) seen) l)\n          (else (helper\
+    \ (cdr l) (cons (car l) seen)))))\n  (helper l '()))\n", "  (if (null? l)\n  \
+    \    '()\n      (cons (first l)\n            (unique (filter (\u03BB (x) (equal?\
+    \ x first (rest l))) (rest l)))))", "  ; Make it easier to iterate over (using\
+    \ 'cons)\n  (define (aux l sofar)\n    (cond ((null? l) sofar)\n          ((null?\
+    \ sofar) l)\n          (else (aux (cdr l) \n                    (cons (car l)\
+    \ sofar))))))\n  (aux l '()))\n</code>\n<|/ a tags=scheme,list,racket |>\n<| c\
+    \ |>\nI like this one because it's shorter and easier to read/understand. Though\
+    \ I believe it should be `'()` in its last line, since `sofar` has been assigned\
+    \ the empty list in the first line of the function.\n<|/ c |>\n<| a dscore=1 tags=scheme,list,racket\
+    \ |>\nHere is a solution, using foldl, which should be efficient enough:\n<code>",
+  "  (cond [(null? l) (list)] [(member item l) (cons item (unique (rest l)))]\n  \
+    \      [else (cons (first l) (unique (rest l)))]))\n", "  (cond ((null? l) '())\n\
+    \        ((equal? (first l) '()) (list '()))\n        (else (append (uniquify\
+    \ (first (first l))) (uniquify (rest (first l)))))))\n", "  (cond\n    ((null?\
+    \ l) '())\n    ((not (member l '())) (cons l '()))\n    (else (if (< (first l)\
+    \ (first '())) (cons (first l) (unique (cons (first l) '()))) (unique (cons l\
+    \ (unique '())))))))\n", "  ;; Use hash-table for lookup instead of array\n  (define\
+    \ (unique-hash table)(hash-table-values table))\n  (define (unique-sort table)\n\
+    \    (sorted-unique-values table))\n  (sort (unique-sort (hash-table (hash-table-count\
+    \ table))))\n  )\n", "  (cond\n    [(empty? l) empty]\n    [else (if (null? (first\
+    \ l))\n               (append (first l) \n                        (unique (rest\
+    \ l)))\n               (if (equal? (first l) (first (rest l)))\n             \
+    \      (unique (rest l))\n                   (first l)))]))\n", "  (cond [(empty?\
+    \ l) nil]\n        [(equal? (first l) (first (rest l))) (unique (rest l))]\n \
+    \       [else (cons (first l) (unique (rest l)))]))\n", "  (let loop ((l l) (seen\
+    \ #{}))\n    (cond\n      [(null? l) (empty)]\n      [else (let ((next (first\
+    \ l)))\n              (cond [(not (member? next seen)) (cons next seen)] \n  \
+    \                  [(member? next seen) (loop (rest l) (cons next seen))]\n  \
+    \                  [else (loop (rest l) (cons next seen))])])]))\n", "  (sort\
+    \ (remove-duplicates l) <))\n", "  (if (null? l)\n      l\n      (let loop ((cat\
+    \ '()) (cur (car l)))\n        (if (null? (cdr l))\n            (cons cur cat)\n\
+    \            (loop (cons cur (car cat)) (cdr cat)))))) \n", "  (sort (remove-duplicates\
+    \ (append (cdr l)\n                                  (list* '() l))) <))\n", " \
+    \ (sort (remove (\u03BB (a b) (equal? (car a) (car b)) #f) l)))\n</code>\n<|/\
+    \ a dscore=1 |>\n<| c |>\nThe only thing that seems to work here is `remove` --\
+    \ `(sort (remove... (list 5 3 5 2 3 3 9 0 123)))` -- but I'm not sure why this\
+    \ solution wouldn't be better as far as performance goes\n<|/ c |>\n<| c |>\n\
+    , it's probably because `(unique)` has O(n\xB2) worst case performance. You're\
+    \ right that if you want a purely functional solution `remove` isn't the right\
+    \ choice. But if you want an O(n) solution then `(unique)` is fine.\n<|/ c |>\n\
+    <| c |>\nWhat about `(remove (\u03BB (a b) (equal? (car a) (car b)) #f) l)`?\n\
+    <|/ c |>\n<| a tags=racket,list,scheme dscore=1 |>\nSince Racket has (set) and\
+    \ (remove) and (add1) and so forth we should be able to make this function more\
+    \ concise.\n<code>", "  (cond ((null? l) '())\n        ((equal? (car l) (cadr\
+    \ l)) (unique (cdr l)))\n        (else (cons (car l) (unique (cdr l)))\n     \
+    \          (unique (cdr l)))))\n", "  (cond\n    [(null? l) (list null)]\n   \
+    \ [(member (car l)\n               (uniq (cdr l)))\n     (cons (car l)\n     \
+    \      (unique (cdr l)))]\n    [else (unique (cdr l))]))\n", "  (cond\n    ((null?\
+    \ l) '())\n    ((null? (rest l))\n     (cons (first l) (unique (rest l))))\n \
+    \   (else (cons (first l) (unique (rest l))))))\n", "  (remove-duplicates l))\n",
+  "  (cond [(null? l) l]\n        [(null? (cdr l)) (car l)]\n        [else (append\
+    \ (unique (car l)) (unique (cdr l)))]))\n", "  (remove-duplicates l (\u03BB (x\
+    \ y) (< (x y) y) :key #'first)))\n  ;; >>> > (unique '(1 2 3 4 5 6))\n  ;; (1\
+    \ 2 3 4)\n</code>\n<|/ a dscore=1 |>\n<| a dscore=1 |>\nWith my solution it's\
+    \ possible to remove duplicates even with duplicate elements.\n<code>", "  (define\
+    \ (helper x acc seen)\n    (cond\n      [(null? x) acc]\n      [(member (car x)\
+    \ seen) (helper (cdr x) (cdr acc) seen)]\n      [else (helper (cdr x) (cdr acc)\
+    \ (cons (car x) seen))]))\n  (helper l '() (set l)))\n", "  (remove-duplicates\
+    \ l))\n", "  (if (null? (rest l))\n      (first l)\n      (let ((x (first l))\n\
+    \            (y (unique (rest l))) (list (first y))))\n        (if (equal? x y)\n\
+    \            (list (first x))\n            (cons x y)))))\n", "  (cond\n    [(empty?\
+    \ l)\n     (list l)]\n    [(equal? (first l) (first (rest l)))\n     (unique (rest\
+    \ l))]\n    [else\n     (cons (first l)\n           (unique (rest l)))]))\n",
+  "  (cond [(empty? l) (empty)]\n        [(member (first l) (rest (first l))) (unique\
+    \ (rest (first l)))]\n        [else (cons (first l) (unique (rest (first l))))]))\n",
+  "  (sort (remove-duplicates l)))\n", "  (fold-left (lambda (a b)\n             \
+    \ (if (eq? (car a) (car b)) a b))\n             (list empty)\n             l))",
+  "  (let loop ((lst '()))\n    (if (null? lst)\n        (list lst)\n        (let\
+    \ ((current (first lst)))\n          (if (equal? current (first lst))\n      \
+    \        (loop (rest lst))\n              (if (less? current (first lst))\n  \
+    \                (cons current lst)\n                  (loop (rest lst)))\n  \
+    \            (loop (rest lst)))))\n  ))\n", "  (cond\n    ((null? l) '())\n  \
+    \  ((equal? (car l) (cadr l)) (unique (cdr l)))\n    (else (cons (car l) (unique\
+    \ (cdr l))))))\n", "  (cond [(empty? l) l]\n        [(equal? (first l) (first\
+    \ (rest l))) (unique (rest l))]\n        [else (cons (first (rest l)) (unique\
+    \ (rest l)))]))\n", "  (sort (remove-duplicates l) < (< (length l))))\n", "  (let\
+    \ ((seen (hash-set #{}))\n        (result (list)))\n    (for ([i (in-range 1 (length\
+    \ l))])\n      (when (not (empty? (remove #(hash-ref seen %) result)))\n     \
+    \   (set! seen (cons i seen))\n        (set! result (cons (first result) (rest\
+    \ result))))))\n  (sort (distinct result)))\n", "  (sort (remove (lambda (x) (null?\
+    \ x)) (sort l))\n        (< \n         (lambda (x) (first x))\n         (lambda\
+    \ (y) (second y)))))\n", "  (cdr (remove-duplicates l)))\n</cell>\n<code language=racket-student-html>\n\
+    #lang racket\n", "  (sort (append (map car l)\n                 (map cdr l))\n\
+    \        >\n        (comparing car)\n        >\n        (reverse >\n         \
+    \     (map car l))))\n", "  (sort l\n        (lambda (x y)\n          (< (first\
+    \ x) (y) (first y))))\n  )\n", "  (let loop ((l l) (acc '()))\n    (if (empty?\
+    \ l)\n        (reverse acc)\n        (loop (cdr l) (cons (car l) acc)))))\n",
+  "  (cond [(empty? l) empty]\n        [(equal? (first l) (first l)) l]\n        [else\
+    \ (append (unique (rest l)) (list (first l)))]))\n", "  (remove-duplicates l))\n",
+  "  (define (compare x y)\n    (< (expt x 2) (expt y 2)))\n  (define (compare-keys\
+    \ x y)\n    (< (expt x 2) (expt y 2)))\n  (sort l (compare (lambda (x) (first\
+    \ x)) (lambda (x) (first y))))\n  (sort (filter (lambda (x) (not (member x l)))\
+    \ l)\n         (compare-keys compare compare)))\n</code>\n<|/ a dscore=2 |>\n\
+    <| a dscore=1 tags=racket,algorithm |>\nI wrote this in scheme, but it's probably\
+    \ easy to translate. I'll post it here for those that want to know how I did it.\n\
+    <code>", "  (define (helper lst lst-empty)\n    (cond [(null? lst) lst-empty]\n\
+    \          [(equal? (car lst) (car (cdr lst))) (helper (cdr lst) (cons (car lst)\
+    \ lst-empty))]\n          [else (helper (cdr lst) (cons (car lst) lst-empty))]))\n\
+    \  (helper (reverse l) '()))\n", "  (filter (lambda (x) (not (member x l)))\n\
+    \          l))\n", "  (cond [(null? l) (list '())]\n        [(member (car l) unique)\
+    \ (cons (car l) (unique (cdr l)))]\n        [else (unique (cdr l))]))\n", "  (remove-duplicates\
+    \ l))\n", "  (cond\n    ((null? l) l)\n    ((equal? (first l) (rest (first l)))\
+    \ (rest (first l)))\n    (else (cons (first l) (unique (rest (first l)))))\n \
+    \ )\n)\n", "  (define (aux l seen)\n    (cond\n      [(empty? l) seen]\n     \
+    \ [(equal? (first l) (first seen)) (aux l (cons (first l) seen))]\n      [else\
+    \ (aux (rest l) (cons (first l) seen))]))\n  (aux (reverse l) '()))\n", "  (cond\n\
+    \    [(empty? l) empty]\n    [(member (first l) l) (unique (rest l))]\n    [else\
+    \ (cons (first l) (unique (rest l)))]))\n", "  (nth (sort (remove-duplicates l))\
+    \ (length l)))\n</code>\n<|/ a tags=scheme,lisp |>\n<| a dscore=2 |>\nUsing Racket's\
+    \ data structures:\n<code>\n#lang racket\n", "  (sort (remove (setq seen (make-hash\
+    \ (list '()))) l) <))\n", "  (cond [(empty? l) (list l)]\n        [(member (car\
+    \ l) (distinct (cdr l)))\n         (cons (car l) (unique (cdr l)))]\n        [else\
+    \ (cons (car l) (unique (cdr l)))]))\n", "  (let ((seen (make-hash (length l)))\
+    \ ; hash table of seen elements for quick-check\n        (result (make-list length\
+    \ l)))\n    (loop [i 0 l l seen result '()]\n      (if (null? l)\n          result\n\
+    \          (let ((elt (gethash i seen)))\n            (if (not (equal? elt (car\
+    \ l)))\n                (recur (+ i 1) (cdr l) seen result)\n                (set!\
+    \ seen (cons (car l) seen)))))\n    result))\n", "  (sort-unique (append l l)))\n",
+  "  (sort (remove-duplicates l) < (< (length l))))\n</code>\nremove-duplicates removes\
+    \ duplicates from a list, and since sort is stable it will always return the original\
+    \ list without any duplicates. Since length is a constant time operation, we get\
+    \ the best performance here. We could probably do even better by adding an extra\
+    \ check to see if there is already a duplicate in the list, which is O(n) but\
+    \ that's beyond the scope of our question and for this problem, it doesn't matter.\n\
+    <|/ a tags=racket,lisp,scheme,functional-programming |>\n<| c |>\nI think `length`\
+    \ is O(n). Am I wrong?\n<|/ c |>\n<| c |>\nIt's not O(n) because it requires traversing\
+    \ the list once to get the length of the list, but then it does n^2 comparisons\
+    \ (n is the length of the list minus 1). Since n is proportional to the length\
+    \ of the list, it's O(n^2).\n<|/ c |>\n<| a tags=racket,lisp,scheme,functional-programming\
+    \ dscore=1 |>\nHere's a very simple solution using sets! (this is more like an\
+    \ exercise than a solution):\n<code>", "  (let loop ((l l) (seen '()))\n    (cond\n\
+    \      [(empty? l) (cons l seen)]\n      [(member l seen) (loop l (cons l seen))]\n\
+    \      [(not (member l seen)) (loop l (cons l seen))]\n      [(list? (car l))\
+    \ (loop (cdr l) (cons (car l) seen))]\n      [(atom? (car l)) (loop l (cons (car\
+    \ l) seen))]\n      [(null? (car l)) (loop (cdr l) seen)]\n      [else (loop l\
+    \ (cons (car l) (cons (car l) seen)))))\n  (define (member x seen)\n    (cond\n\
+    \      [(empty? seen) false]\n      [(eq? x (car seen)) true]\n      [else (member\
+    \ x (cdr seen))]))\n  (define (empty? seen)\n    (cond\n      [(null? seen) true]\n\
+    \      [else false]))\n  (define (list? x)\n    (cond\n      [(atom? x) false]\n\
+    \      [else (atom? (car x))]))\n  (loop l '()))\n", "  (cond ((null? l) '())\n\
+    \        ((equal? (car l) (cadr l)) (unique (cdr l)))\n        (else (cons (car\
+    \ l)\n                    (unique (cdr l))))))\n", "  (cond\n    [(empty? l) nil]\n\
+    \    [else (cons (first l) (unique (rest l)))]))\n", "  (cond [(empty? l) empty]\n\
+    \        [(equal? (first l) (first rest)) (unique rest)]\n        [else (cons\
+    \ (first l) (unique (first rest)))]))\n", "  (define (helper l seen)\n    (if\
+    \ (empty? l)\n        seen\n        (let ([e (first l)])\n          (if (equal?\
+    \ (first l) e)\n              (helper (rest l) seen)\n              (helper (rest\
+    \ l) (cons e seen))))))\n  (helper l '()))", "  (if (null? l)\n      (list)\n\
+    \      (let ([not-found #f])\n        (let loop ((lst lst)\n                 \
+    \  (acc '()))\n          (cond [(null? lst) acc]\n                [else (let ([ele\
+    \ (first lst)])\n                       (if (not (= ele not-found))\n        \
+    \                   (set! not-found ele)\n                           (loop (rest\
+    \ lst)\n                                 (cons ele acc))))]))))\n", "  (cond ((null?\
+    \ l) '())\n        ((not (member l (sort (cons (first l) '()))))\n         (cons\
+    \ l (first l)))\n        (else (unique (cons (first l) l))))\n  ", "  (if (empty?\
+    \ l) (list nil)\n      (let ([head (car l)])\n        (if (list? (cdr l))\n  \
+    \          (if (null? (member head (cdr l)))\n                (cons head (unique\
+    \ (cdr l)))\n                (unique (cdr l))\n            )\n            (if\
+    \ (null? (member head (car l)))\n                (cons head (unique (cdr l)))\n\
+    \                (unique (cdr l))\n            )\n        )\n      )\n  )\n)",
+  "  (cond ((empty? l) (list))\n        ((cons? l) (cons (first (first l)) (unique\
+    \ (filter (\u03BB (x) (not (equal? x (first l)))) (rest l))))\n        (else (unique\
+    \ (filter (\u03BB (x) (not (equal? x (first l)))) (rest l))))))\n</code>\n<|/\
+    \ a tags=racket,scheme dscore=2 |>\n<| c |>\nThis is just wrong, for both of the\
+    \ cases. Try your program with `(unique '(a b c))`.\n<|/ c |>\n<| a dscore=2 tags=racket,scheme\
+    \ |>\nThis should work too\n<code>", "  (sort (remove (lambda (x) (equal? (first\
+    \ l) x))\n                (append (list '()) (list l)))))\n", "  (cond [(null?\
+    \ l) empty]\n        [(member (first l) (filter (lambda (x) (not (null? (filter\
+    \ x l))))\n                                  (sort (sort l))))\n         (cons\
+    \ (first l) (unique (filter (lambda (x) (not (null? (filter x l))))\n        \
+    \                          (sort (sort l))))]\n        [else (unique (filter (lambda\
+    \ (x) (not (null? (filter x l))))\n                             (sort (sort l)))])\n\
+    \  )\n)\n", "  ;; using hash table\n  (let [hash-table (make-hash)]\n    (for\
+    \ ([i l])\n      (hash-table-insert hash-table i i))\n    (hash-table '()))\n\
+    \  ;; (hash-table '())\n  ;; using sets\n  (set! hash-table (set l))\n  (for-each\n\
+    \    (lambda (i hash-table)\n      (hash-table-remove hash-table i)))\n  l)\n",
+  "  (if (null? (cdr l))\n      l\n      (let ((v (car l)))\n        (if (equal? (car\
+    \ l) v)\n            (unique\n             (cdr l)\n            )\n          \
+    \  (cons v (unique (cdr l)))))))\n", "  (remove #(if (equal? %1 %2) #t (hash %1\
+    \ %2)) l))\n", "  (apply append (remove (lambda (x) (equal? (first l) x))\n  \
+    \                      (sort l))))\n", '  (sort (subseq l 0 (length l) <) <))',
+  "  (sort l (lambda (a b) (< (first a) (first b)))))\n</code>\n<|/ a tags=racket,sorting\
+    \ |>\n<| c |>\nAwesome solution ! Thank you very much !\n<|/ c |>\n<| c |>\nNice\
+    \ solution! Thanks for posting it here.\n<|/ c |>\n<| a tags=racket,sorting |>\n\
+    Just in case someone needs to sort a list of numbers and also count the number\
+    \ of duplicates. Here's the solution I came up with:\n<code>\n#lang racket\n",
+  "  (cond [(empty? l) '()]\n        [else (append (sort (cdr l)) (unique (cdr l)))]))\n",
+  "  (reverse (sort l #'(< < >))))\n", "  (cond\n    [(null? l) l]\n    [(null? (rest\
+    \ l)) (first l)]\n    [else (cons (first (rest l))\n                (unique (remove\
+    \ (first l) l)))]))\n", "  (cond\n    [(empty? l) empty]\n    [else (cons (first\
+    \ l) (unique (rest l)))]))\n", "  (cond\n    ((empty? l) '())\n    ((equal? (first\
+    \ l) (rest (first l))) (unique (rest (first l))))\n    (else (cons (first l)\n\
+    \                (unique (rest (first l)))))\n  )\n)\n\n#lang racket\n", "  (nth-sort\
+    \ (lambda (x) x) l))\n</cell>\n<text>\nWe don't need a hash table since we are\
+    \ not doing a full sort, we only need to store unique values.  Using sets is an\
+    \ important data structure because it has O(1) time insertion and retrieval. \
+    \ A hash table would be O(n).\n\n\n</text>\n<code language=racket-lang>", "  (sort\
+    \ (remove-duplicates l) <))\n", "  (let ((u (make-hash-table)))\n    (let loop\
+    \ ((ls l) (hash u))\n      (if (null? ls)\n          (hash-values u)\n       \
+    \   (let ((v (car ls)))\n            (hash-set hash v v)\n            (loop (cdr\
+    \ ls) (hash-ref hash v)))))))\n", "  (let ([h (make-hash (hash-key l) '())])\n\
+    \    (for-each (lambda (x) (hash-set! h x true)) l\n              [(cdr h)]))\n\
+    \  (reverse (hash-keys h)))\n", "  (sort (remove-duplicates l) (lambda (x y)\n\
+    \                           (< (first x) (rest x))\n                         \
+    \  (> (first y) (rest y))))))\n</code>\n<|/ a tags=racket,list |>\n<| a dscore=3\
+    \ |>\nSince Racket's sort is stable, we can use it to remove duplicates in a stable\
+    \ way:\n<code>", "  (let ([h (hash-table)])\n    (if (null? l)\n        (list*\
+    \ '() (hash-keys h))\n        (let ([e (car l)])\n          (cond [(hash-contains?\n\
+    \                    (hash-ref h e)\n                    (hash-keys h)) (cons\
+    \ e (cdr l))]\n                [else (let ([h' (hash-table e)])\n            \
+    \           (if (not (hash-contains?\n                                (hash-ref\
+    \ h e)\n                                (hash-keys h')))\n                   \
+    \       (cons e (cdr l))\n                          (let ([x (cdr l)])\n     \
+    \                       (hash-table (cons e (cons x h')))\n                  \
+    \          (unique x))))]))))\n", "  (if (empty? l) l\n      (if (equal? (first\
+    \ l) (first (rest l)))\n          (unique (rest l))\n          (cons (first l)\
+    \ (unique (rest l)))))\n  )", "  (define (unique acc lst)\n    (if (null? lst)\n\
+    \        acc\n        (unique (if (equal? (first lst) acc) acc (first acc)) (rest\
+    \ lst))))\n  (unique '() (sort l)))\n", "  (cond ((null? l) (list l))\n      \
+    \  ((equal? (car l) (cadr l))\n         (unique (cddr l)))\n        (else (append\
+    \ (list (car l))\n                      (unique (cdr l))))))\n", "  (let ([h (make-hash\
+    \ l)])\n    (map-indexed (fn [i e]\n                  (hash-value h e))\n    \
+    \            (hash-keys h))\n    l))\n", "  (cond [(empty? l) '()]\n        [(equal?\
+    \ (first l) (first (rest l)))\n         (unique (rest (rest l)))]\n        [else\n\
+    \         (cons (first l) (unique (rest (rest l))))]))\n", "  (sort l (lambda\
+    \ (x y) (< (length y) 1) (> (length x) 1))))\n", "  (let loop ((lst l) (unique\
+    \ '()))\n    (cond [(empty? lst) unique]\n          [else (loop (rest lst) (append\
+    \ unique (first lst)))]\n          )))\n", "  (sort\n   (\u03BB (x)\n      (if\
+    \ (eq? x (first l)) x (cons x (unique (rest l)))))\n   l))\n", "  (cond\n    [(null?\
+    \ l) '()]\n    [(member (car l) (car (filter (\u03BB (x) (not (equal? (car l)\
+    \ x)) (cdr l))))\n          (unique (cdr l))) (car l)]\n    [else (unique (cdr\
+    \ l))]))\n", "  (sort (remove (lambda (e) (equal? (first e) (first l))) l)))\n",
+  "  (sort (remove-duplicates l) < (< (length l) 2)))\n", "  (cond [(null? l) nil]\n\
+    \        [(member (car l)\n                 (filter (lambda (x) (not (equal? x\
+    \ l)))\n                         (cdr l))) \n         (unique (cdr l))]))\n",
+  "  (sort (remove (lambda (x) (member x l)) l)))\n", "  (cond ((null? l) l)\n   \
+    \     ((equal? (first l) (first l))\n         (unique (rest l)))\n        (else\
+    \ (cons (first l)\n                    (unique (rest l)))))) ; tail recursion\n\
+    </cell>\n<cell>\n#lang racket\n", "  (cond\n    ((null? l) '())\n    ((equal?\
+    \ (car l) (first l)) (unique  (cons (car l) (cdr l)))) (cons (car l) (cdr l))\n\
+    \    (else (cons (first l) (unique (cdr l))))))", "  ;; Sort the list\n  (sort\
+    \ l (lambda (x y) (< (first x) y) (< (first y) x))\n        ;; Now remove duplicate\
+    \ values\n        (lambda (x y)\n          (< (second x) y) (< (second y) x))))\n",
+  "  (cond\n    [(empty? l) empty]\n    [(member (first l) l) (unique (sub1 l))]\n\
+    \    [else (cons (first l) (unique (sub1 l)))]))\n", "  (cond ((empty? l) l)\n\
+    \        ((equal? (first l) (rest (first l))) (unique (rest l)))\n        (else\
+    \ (cons (first l)\n                    (unique (filter (fn (x) x) (rest l)))))))\n",
+  "  (cond\n    ((null? l) nil)\n    ((equal? (first l) (car l)) (unique (rest l)))\n\
+    \    (else (cons (car l) (unique (rest l))))))\n", "  (sort\n   (\u03BB ((x y)\
+    \ (equal? (x y) (first y)))\n       (cons (first y) (rest (rest y)))\n       (unique\
+    \ (rest y)))))\n", "  (cond\n    ((null? l) '())\n    ((cons (car l) (unique (cdr\
+    \ l)))\n     (cons (car l) (unique (cdr l))))))\n", "  (remove-duplicates l))\n",
+  "  (define (compare-key key)\n    (let ([l (cdr l)])\n      (when (eq? key (car\
+    \ l))\n        (reverse l))\n      (when (null? l)\n        (reverse l))))\n \
+    \ (apply append\n         (map (lambda (key)\n                 (remove-if (lambda\
+    \ (n)\n                              (let ([l (cdr l)])\n                    \
+    \            (when (eq? key (car l))\n                                  (return\
+    \ (cons (car l) n)))\n                                (when (null? l)\n      \
+    \                            (return (cons (car l) n))))) l))\n           (sort\
+    \ (sort (append l l) compare-key))\n         ))\n", "  (sort (remove-duplicates\
+    \ l)))\n", "  (cond\n    [(empty? l) empty]\n    [else (cond\n            [(=\
+    \ (first l) null) (cons null l)] \n            [else (cons (first l) (unique (rest\
+    \ l)))]))]))\n", "  (remove-duplicates l))\n", "  (let loop ((l l) (seen '()))\n\
+    \    (cond ((null? l) seen)\n          ((eq? seen (car l))\n           (loop (cdr\
+    \ l) (cons (car l) (cons seen seen)))) \n          (else (loop (cdr l) seen))))))\n",
+  "  (let loop ((seen (make-hash)))\n    (cond ((empty? l) l)\n          ((not (hash-table-contains?\
+    \ seen c)) (cons (car l) (loop (hash-table+ (car l) (seen c))))\n          (else\
+    \ (loop (hash-table+ (car l) (seen c)))))))\n", "  (remove-duplicates l))\n",
+  "  (sort (remove-duplicates l) (< )))\n", "  ;; We need to sort before taking the\
+    \ unique elements, and we don't know how\n  ;; to sort a list. So we convert it\
+    \ to a list of pairs [x y] and sort that.\n  ;; This gives us [x y] pairs that\
+    \ we can sort.\n  (define (list-of-pairs lst)\n    (if (null? lst) empty-list\
+    \ \n        ;; If the first element is the same as the last, we have already seen\n\
+    \        ;; this element. Otherwise, the new pair is [first current-value]\n \
+    \       ;; and the tail of the list is the tail of the rest of the list.\n   \
+    \     ;; Then we recurse on the tail list to get the pairs for the tail.\n   \
+    \     ;; Finally we return the list of pairs.\n        (cons (cons (first lst)\
+    \ (first lst))\n              (list-of-pairs (rest lst))))\n    (list-of-pairs\
+    \ l))\n\n  ;; Now we just need to convert the list of pairs back into a list.\n\
+    \  ;; This gives us the unique elements.\n  (define (list-of pairs)\n    (if (null?\
+    \ pairs) empty-list \n        ;; We have already seen this element from the unique-list\
+    \ procedure.\n        ;; So we just add this value to the result.\n        (cons\
+    \ (first pairs)\n              (list-of (rest pairs))))\n\n  (list-of (list-of-pairs\
+    \ l)))\n</code>\n<|/ a tags=racket,scheme |>\n<| c |>\nThanks a lot for your answer.\
+    \ This is really helpful.\n<|/ c |>\n<| c |>\nI got it working, thanks for your\
+    \ help. I had to remove the recursion and do it manually. See my answer. Do you\
+    \ think you could explain what was wrong with my approach?\n<|/ c |>\n<| c |>\n\
+    I got it working, thanks for your help. I had to remove the recursion and do it\
+    \ manually. See my answer. Do you think you could explain what was wrong with\
+    \ my approach?\n<|/ c |>\n<| c |>\n: I updated my answer with some explanation.\
+    \ I also renamed some of your procedures to make it easier to follow along.\n\
+    <|/ c |>\n<| a |>\nI got it working, thanks for your help. I had to remove the\
+    \ recursion and do it manually. See my answer. Do you think you could explain\
+    \ what was wrong with my approach?\n<code>\n#lang racket\n", "  (cond ((null?\
+    \ l) '())\n        ((equal? (car l) (cadr l)) (unique (cddr l)))\n        (else\
+    \ (cons (car l) (unique (cddr l)))))\n  )\n)\n", "  (if (null? l)\n      (list)\n\
+    \      (append (uniq (car l)) (unique (cdr l)))))\n", '  (remove-duplicates l
+    (lambda (x) (< x #f))))', "  (apply append (remove-duplicates (sort-by (lambda\
+    \ (x) (equal? (first x) (first l))) l))))\n", "  (remove (lambda (x) (memberx\
+    \ x l)) l))\n", "  (remove-duplicates l))\n", "  (sort\n   (set\n    (\u03BB (a\
+    \ b c d e) (if (eq? a b) (cons a (unique-helper (cons a b)) (cons a c)) (unique-helper\
+    \ a (cons a b) (cons a c d) (cons a e b)))) l)))\n", "  ;; We keep track of the\
+    \ last seen element while we're iterating\n  ;; in an accumulator to keep the\
+    \ list sorted.\n  (let loop ((l l) (acc '()))\n    (cond ((null? l) acc)\n   \
+    \       ((> (car l) (cadr l)) (cons (car l) acc))\n          (else (loop (cdr\
+    \ l) (cons (car l) acc))))))\n", "  (let loop ((l l) (seen (hash-set)))\n    (cond\
+    \ ((empty? l) l)\n          ((not (hash-member? seen l)) (cons l (loop (rest l)\
+    \ (cons l seen))))\n          (else (loop (rest l) (cons l seen)))))\n  ", " \
+    \ (cond\n    [(empty? l) (list '())]\n    [(member (first l) (rest (rest l)) false)\
+    \ (unique (rest l))]\n    [else (append (first (first l)) (unique (rest (rest\
+    \ l))))]))\n", "  (sort (remove-duplicates l)))\n", "  (let ([s (atom l)]\n  \
+    \      [seen (hash-set '())]\n        [result (hash-table '())])\n    (cond\n\
+    \      [(empty? l) result]\n      [(contains? s seen) (set-difference (set-difference\
+    \ result seen) s)\n        (set-difference (set-difference result seen) seen)]\n\
+    \      [(not (empty? s)) (union-set result (cons (first s) seen))]\n      [(not\
+    \ (empty? s)) (in-order-set result (cons (first s) seen))]\n      [else (in-order-set\
+    \ result (cons (first s) seen))]))))\n", "  (let loop ([x '()]\n             [y\
+    \ '()])\n    (cond [(null? l) x]\n          [(not (member x y)) (cons x y)]\n\
+    \          [else (loop (rest x) (rest y))]))))\n", "  (cond\n    [(null? l)\n\
+    \     '()]\n    [(equal? (first l) (first l))\n     (unique (rest l))]\n    [else\n\
+    \     (cons (first l)\n           (unique (rest l)))]))\n", "  (let ((seen (make-hash\
+    \ (hash-table (list* (car l) (car l))))))\n    (map #(hash-table-delete seen %)\
+    \ l)))\n", "  (if (null? l)\n      '()\n      (append (sort (remove-duplicates\
+    \ l (lambda (x) (< x y)))) '())))\n", "  (let ([t (sort l)]) ;; O(n*log(n))\n\
+    \    (append (remove-duplicates t t '())\n            (remove-duplicates t (sort\
+    \ l) '()))))\n", "  (cond ((null? l) '())\n        ((not (member (car l) (car\
+    \ ls))) (car l))\n        (else (unique (cdr l)))))\n", "  (cond [(empty? l) empty]\n\
+    \        [(member (head l) (rest l)) (unique (rest l))]\n        [else (cons (head\
+    \ l)\n                   (unique (filter (\u03BB (x) (not (member x l)) (rest\
+    \ l))))])))\n", "  (sort (remove-duplicates l) (< #:transparent (< #:key length)))\n\
+    )\n", "  (let ([result (make-list 0)])\n    (for/fold ([result (make-list 0)])\n\
+    \              ([elt l])\n              (if (not (member elt result))\n      \
+    \            (set! result (cons elt result))\n                  (set! result (cons\
+    \ (car result) (sort (cdr result))))))\n    result))\n", "  (cond [(empty? l)\
+    \ (empty)]\n        [(list? (car l)) (unique (cdr l))]\n        [else (cons (car\
+    \ l) (unique (cdr l)))]))\n", "  (sort (remove (lambda (x) (equal? x (first l)))\
+    \ l) <))\n", "  (sort l :key (lambda (x) (not (member x l))))\n)\n", "  (if (null?\
+    \ l)\n      '()\n      (cons (first l)\n            (filter (lambda (x) (not (member\
+    \ x l))) (rest l)))))\n", "  (cond [(empty? l) l]\n        [else (append\n   \
+    \             (filter (lambda (x) (not (equal? (first l) x))\n               \
+    \            (rest l))\n                     (sort l)))]))\n", "  (cond [(empty?\
+    \ l) '()]\n        [(member head (sort l)) (unique (remove head l))]\n       \
+    \ [else (cons head (unique (remove head l)))]))\n", "  (fold-right (\u03BB (x\
+    \ y)\n                  (if (equal? (caar x) y)\n                      (cons (car\
+    \ x) y)\n                      y))\n              '()\n              l))\n", " \
+    \ (cond\n    [(empty? l) empty]\n    [else (let ([s (sort (map cons l (remove-duplicates\
+    \ l))) \n                  u (remove-duplicates l)])\n            (if (empty?\
+    \ s) l\n                (unique s))))]))\n", "  (sort (remove-duplicates (list\
+    \ l))))\n", "  (cond [(empty? l) nil]\n        [else (append (unique-helper (first\
+    \ l) nil l) (unique-helper (rest l) (first l) l))]))\n", "  (if (null? l)\n  \
+    \    '()\n      (let ((head-elem (car l)))\n        (if (member (car l) (cdr l))\n\
+    \            (unique (cdr l))\n            (cons head-elem (unique (cdr l)))))\n\
+    \      )\n    )\n  )\n", "  (if (null? l)\n      '()\n      (let loop ((seen (hash-table-new\
+    \ #f))\n                 (l l))\n        (if (hash-table-count seen)\n       \
+    \     (loop (hash-table-delete seen l) (first l))\n            (cons (first l)\
+    \ (loop (hash-table-update seen l #t) (rest l))))))\n", "  (sort l (lambda (a\
+    \ b) (< (car a) (car b))))\n)\n", "  (remove #(<= %1 %2) (sort l)))\n", "  (sort\
+    \ (remove-duplicates l) '<))\n</code>\n<|/ a dscore=1 tags=scheme |>\n<| c |>\n\
+    \"No need to reinvent the wheel.\"  -- That is good to hear, though I'm not sure\
+    \ how this answers the question.  It does provide a different solution to the\
+    \ problem.\n<|/ c |>\n<| c |>\nThe solution provided in my answer does not require\
+    \ any extra libraries. It uses sort and remove-duplicates, which are already available\
+    \ in the Racket language. It also provides a more general solution to any problem.\
+    \ By using this method, you can do all the things that are possible with 'unique\
+    \ (list)', but also do more complex things.\n<|/ c |>\n<| c |>\n\"It does not\
+    \ require any extra libraries\"  -- No, it does.  `remove-duplicates` is a standard\
+    \ function defined in Racket (and many other dialects).  (In fact, Racket has\
+    \ two `unique` functions; one in PLT and one in SICP.)  As for 'more complex things',\
+    \ it provides the ability to do things like \"find all the pairs of distinct elements\
+    \ in an input list\" -- but also \"find the smallest element in a list\" or \"\
+    find the largest element in a list\".  There are other common use cases for `unique`\
+    \ as well.\n<|/ c |>\n<| c |>\nThanks for the clarification. Racket also has two\
+    \ `unique` functions. I guess my point is that, while my solution is shorter,\
+    \ it does use extra libraries (sort and remove-duplicates). Anyway, thanks for\
+    \ the clarification. I will update my answer to reflect that.\n<|/ c |>\n<| a\
+    \ tags=scheme dscore=0 |>\nThis could be done using an association list and a\
+    \ hash table to store all the elements and a helper function.\n<code>", "  (sort\
+    \ (remove-duplicates l)))\n", "  (cond\n    [(empty? l) '()]\n    [(member (first\
+    \ l) (cdr l)) (unique-helper l)]\n    [else (unique-helper (append (unique (cdr\
+    \ l)) l))]\n  ))\n", "  (let loop ((lst '())\n             (seen '()))\n    (cond\
+    \ ((empty? lst) (list lst))\n          ((not (member lst (reverse seen))) (loop\
+    \ (rest lst) (cons (first lst) seen)))\n          (else\n           (loop (rest\
+    \ lst)\n                 (cons (first lst) (cons (first seen) (first lst)))))))\n\
+    </code>\n<|/ a tags=racket,sorting |>\n<| a dscore=0 tags=racket,sorting |>\n\
+    This is a solution that is O(n log n), which may or may not be the fastest solution.\n\
+    <code>", "  (remove-duplicates l (lambda (x y) (< x y))))\n</code>\n<|/ a tags=scheme,racket,lisp,list\
+    \ |>\n<| c |>\nThe first `map` can be replaced by `unique`.\n<|/ c |>\n<| c |>\n\
+    Thank you for your answer, but I found the solution by myself.\n<|/ c |>\n<| a\
+    \ dscore=1 tags=scheme,racket,lisp,list |>\nFor those who want to learn Lisp and\
+    \ Scheme at the same time :\nI used the Rackets function 'unique' to remove duplicates\
+    \ from a list and remove-duplicates to remove duplicates from a list. \nHere is\
+    \ an example: \n<code>", "  ;; use hash for fast lookups\n  (define hash (make-hash\
+    \ (hash-map identity\n                             (lambda (x y) (not (equal?\
+    \ x y))))))\n  (cond [(empty? l) '()]\n        [else (cons (first l)\n       \
+    \           (hash (first l) (first l)))]\n        (hash (first l) (first l)))\n\
+    \  ;;; use hash for fast lookups\n  (define hash (make-hash (hash-map identity\n\
+    \                             (lambda (x y) (not (equal? x y))))))\n  (cond [(empty?\
+    \ l) '()]\n        [else (cons (first l)\n                  (hash (first l) (first\
+    \ l)))]\n        (hash (first l) (first l)))\n", "  (cond\n    ((null? l)\n  \
+    \   '())\n    ((not (pair? (car l)))\n     (cons (car l) (unique (cdr l))))\n\
+    \    ((equal? (car l) (unique-key (car l) l))\n     (unique-key (cdr l) l))\n\
+    \    (else\n     (unique-key (car l) (append (cdr l) (unique (cdr l)))))))\n",
+  "  (let loop ((l l) (unique '()))\n    (cond ((null? l)\n           unique)\n  \
+    \        ((equal? (car l) (cadr l))\n           (loop (cdr l) unique))\n     \
+    \     (else\n           (loop (cdr l) (cons (car l) unique)))))\n", "  (sort (remove-duplicates\
+    \ l)))\n", "  (if (null? l)\n      l\n      (if (equal? (car l) (cadr l))\n  \
+    \        (unique (cdr l))\n          (cons (car l) (unique (cdr l))))))\n", " \
+    \ (if (empty? l)\n      '()\n      (let ((head (first l))\n            (tail (rest\
+    \ l)))\n        (cond (empty? (rest tail))\n              (cond ((null? tail)\
+    \ (list head))\n                    (else (cons (head tail) (unique tail))))))))\n",
+  "  ;; TODO: remove duplicates here\n  (remove-duplicates l))\n", "  (cond\n    [(empty?\
+    \ l) empty]\n    [(member #(first l) (cdr l)) (unique (remove #(first l) (cdr\
+    \ l)))]\n    [else (cons #(first (first l))\n                  (unique (remove\
+    \ #(first (first l)) (cdr l))))]))\n", "  (cond\n    [(empty? l) empty]\n    [(member?\
+    \ (car l) (cadr l)) (unique (cdr l))]\n    [else (cons (car l) (unique (cdr l)))]))\n",
+  "  (sort l (lambda (x y) (< (first x) y))\n\t   '()))\n", "  (let loop ((seen '())\
+    \ (l l))\n    (cond ((null? l) '())\n          ((null? (cdr l)) l)\n         \
+    \ (else\n           (let ((el (car l))\n                 (next (loop (conj seen\
+    \ el) (cdr l))))\n             (if (member el seen)\n                 (cons el\
+    \ next)\n                 (cons el (cons next seen)))))))\n", "  (sort\n   (\u03BB\
+    \ (x y) \n     (equal? (first x) \n               (first y))\n     (unique (rest\
+    \ x))\n     (unique (rest y)))))\n", "  (sort (remove (lambda (x) (equal? (car\
+    \ x) (car l))) l) (> 'first)))\n</code>\n<|/ a tags=racket,scheme |>\n<| c |>\n\
+    Thanks for your answer!\n<|/ c |>\n<| c |>\nThanks for your answer!\n<|/ c |>\n\
+    <| a |>\n<code>", "  (sort l (\u03BB (x y) (equal? (car x) (car y)) 0)))\n", " \
+    \ (sort (remove-duplicates l) (lambda (x y) (< x y))))\n", "  (remove-duplicates\
+    \ l))\n", "  (if (null? l)\n      '()\n      (let ([h (car l)]\n            [t\
+    \ (remove h l)]\n            [u (append (sort t) h)]) \n        (if (null? u)\n\
+    \            (unique t)\n            (append u (unique t))))))\n", "  (let ([seen\
+    \ (make-hash (hash-set (apply hash-set l))\n                            (lambda\
+    \ (x y) (equal? (car x) (car y))))])\n    (cond [(empty? l) empty]\n         \
+    \ [else (cons (first l) (unique (rest l) (hash-set->list seen (first l))))]\n\
+    \          [else (hash-set->list (hash-set->list seen (first l))\n           \
+    \                 (lambda (x y)\n                              (not (equal? (car\
+    \ x) (car y))))))))\n", "  (cond\n    [(null? l)\n     (list nil)]\n    [(list?\
+    \ (car l))\n     (list\n      (cons (car l)\n            (unique (cdr l))))]\n\
+    \    [(equal? (car l) (car (cdr l)))\n     (cons (car l)\n            (unique\
+    \ (cdr l)))]\n    [else\n     (unique (cdr l))]))\n", "  (if (null? l)\n     \
+    \ '()\n      (append\n       (map #(hash-table-key (hash-table-for list %) %)\
+    \ l)\n       (unique (map hash-table-remove (hash-table-for list %) l))))\n",
+  "  (remove (lambda (x) (equal? (car l) x)) (sort l)))\n", "  (let sorted ((xs l)\
+    \ (unique '()))\n    (cond\n      [(null? xs) (list xs)]\n      [(member (car\
+    \ xs) unique) (cons (car xs) unique)]\n      [else (cons (car xs) (sorted (cdr\
+    \ xs) unique))])))\n", "  (if (empty? l)\n      '()\n      (let ((i (ref (car\
+    \ l))))\n        (cond\n          [(not (null? i)) (cons (car i) (unique (rest\
+    \ l)))]\n          [else (append (cons (car l) '() (unique (rest l))))])))\n",
+  "  (cond\n    [(empty? l) empty]\n    [(= (car l) (car (cdr l))) (unique (cdr l))]\n\
+    \    [else (cons (car l) (unique (cdr l)))]))\n", "  (let ((seen (make-hash)))\n\
+    \    (define (iter seen)\n      (cond ((empty? l) '())\n            ((not (hash-ref?\
+    \ seen car seen)) (car l))\n            (else (iter (hash-set! seen car seen)\
+    \ (cdr l)))))\n    (iter seen)))\n", "  (cond\n    [(empty? l) empty]\n    [else\
+    \ (let ([last (first l)]\n               [last-1 (first l)]\n               [last-2\
+    \ (first l)]\n               [temp (first l)])\n            (cond [(< last last-1)\
+    \ (cons last-1 l)]\n                  [(< last last-2) (cons last-2 l)]\n    \
+    \              [(< last temp) (cons temp l)]\n                  [else (cons last\
+    \ l)]))]))\n", "  (if (null l)\n      '()\n      (let ((next (first l))\n    \
+    \        (seen #f)\n            (aux #f)\n            (acc (sort l)))\n      \
+    \  (if (not seen)\n            (if (equal? (first acc) next)\n               \
+    \ aux\n                (if (equal? (first acc) next)\n                    acc\n\
+    \                    (if (equal? (first acc) (first next))\n                 \
+    \       (unique (cons next acc))\n                        (unique (cons next (unique\
+    \ acc))))))\n            (if (equal? (first acc) next)\n                (unique\
+    \ (cons next acc))\n                (unique (cons next (unique acc))))))))\n",
+  "  (let unique ([l l] [i (length l)] [f #f])\n    (cond [(empty? l) [empty]]\n \
+    \         [(= i 0)\n           (cond [(equal? f #f) (cons l (unique nil (cdr l)\
+    \ #f))]\n                 [(not (equal? f #f)) (unique nil (cdr l) (equal? f #f))]\n\
+    \                 [else (cons l (unique nil (cdr l) (equal? f #f)))]))]\n    \
+    \      [else\n           (let ([x (first l)]\n                  [l (rest l)])\n\
+    \             (if (equal? x (first l))\n                 (unique nil (rest l)\
+    \ f)\n                 (unique l (rest l) (equal? (first l) x))))])))\n", "  (cond\
+    \ [(empty? l) empty]\n        [(equal? (first l) (first (rest l))) (unique (rest\
+    \ l))]\n        [else (cons (first l) (unique (rest l)))]))\n", "  (define (helper\
+    \ x acc)\n    (cond\n      [(null? x)\n       acc]\n      [(equal? (car x) (cadr\
+    \ x)) (helper (cdr x) (car acc))]\n      [(equal? (car x) (cadr x)) (helper (cdr\
+    \ x) (cdr acc))]\n      [else (helper (cdr x) (cdr acc))]\n      ))\n  (helper\
+    \ l '()))\n", "  (cond\n    [(empty? l) (empty)]\n    [(equal? (first l) (first\
+    \ (rest l))) (cons (first l) (unique (rest l)))]\n    [else (unique (rest l))]))\n",
+  "  (let ([s (reverse (append (map cadr l) (map cddr l) l))])\n    (sort s (< (<\
+    \ (car s) (cadr s)) 0))))\n", "  (if (empty? l)\n      '()\n      (append (remove\
+    \ (first l) (unique (rest l)))\n              (list (first l)))))\n", "  (sort\
+    \ l (lambda (x y) (< (first x) (y) (first y))))\n)\n", "  (cond\n    ((null? l)\
+    \ '())\n    ((not (member? (first l) (second l)))\n     (cons (first l) (unique\
+    \ (cons (first l) (second l))))))\n  (unique (cons (first l) (unique (cons (first\
+    \ l) (second l)))))\n)\n", "  (cond [(null? l) nil]\n        [(equal? (first l)\
+    \ (first (rest l)))\n         (unique (rest l))]\n        [else (cons (first l)\
+    \ (unique (rest l)))]))\n", "  (cond ((null? l) '())\n        ((equal? (first\
+    \ l) (first l)) (unique (drop 1 l)))\n        (else (cons (first l) (unique (drop\
+    \ 1 (rest l)))))))\n", "  (cond [(empty? l) empty]\n        [(equal? (first l)\
+    \ (first <(uniq (rest l))))\n         (uniq (rest l))]\n        [else (uniq (rest\
+    \ l))]))\n", "  (cond\n    ((null? l) '())\n    ((equal? (car l) (first l)) (unique\
+    \ (rest l)))\n    (else (cons (first l) (unique (rest l))))))\n", "  (cond ((null?\
+    \ l) '())\n        ((equal? (first l) (car l)) (unique (rest l)))\n        (else\
+    \ (cons (car l) (unique (rest l))))))\n", "  (sort (map car l) (lambda (x y)\n\
+    \t\t(< (car y) (car x)))\n\t:key car))\n", "  (cond ((null? l)\n         ())\n\
+    \        ((null? (cdr l))\n         (cons (car l) ()))\n        (else (if (< (car\
+    \ l) (car (cdr l)))\n                  (cons (car l) ())\n                  (cons\
+    \ (car l) (unique\n                                (cdr (cdr l))))))))\n", " \
+    \ (cond [(empty? l) '()]\n        [(equal? (first l) (first (rest l))) (unique\
+    \ (rest l))]\n        [else (cons (first l) (unique (rest l)))]))\n", "  (if (null?\
+    \ l)\n      (list)\n      (append (sort l\n                   (\u03BB ((x y) (<\
+    \ (first x) (first y)))\n                     (\u03BB ((x y) (= (first x) (first\
+    \ y)))\n                      (\u03BB ((x y) (> (first x) (first y)))\n      \
+    \                  x)))\n                (unique (sort (rest l)\n            \
+    \                 (\u03BB ((x y) (< (first x) (first y)))\n                  \
+    \             (\u03BB ((x y) (= (first x) (first y)))\n                      \
+    \          (\u03BB ((x y) (> (first x) (first y)))\n                         \
+    \         y)))))))\n", "  (sort (remove-duplicates l) <))\n", "  (foldl (lambda\
+    \ (x y)\n           (if (eq? x y)\n             (list x)\n             (cons x\
+    \ y)))\n         '()\n         l))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

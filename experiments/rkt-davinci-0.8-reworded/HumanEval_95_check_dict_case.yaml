@@ -109,7 +109,948 @@ completions: ["  (hash-for-each (lambda (k v)\n                   (match k\n    
     \ (hash-values dict)]\n             [val-type (val-type-check val-list)])\n  \
     \      (if (and (or (equal? key-type \"symbol\") (equal? key-type \"string\"))\n\
     \                 (or (equal? val-type \"number\") (equal? val-type \"string\"\
-    )))\n            #t\n            #f))))\n"]
+    )))\n            #t\n            #f))))\n", "  (define (low-case? dict)\n    (andmap\
+    \ string-ci=? dict))\n  (define (up-case? dict)\n    (andmap string-ci=? dict))\n\
+    \  (or (low-case? dict) (up-case? dict)))\n", "  ;; TODO: implement this function\n\
+    \  (if (empty? dict)\n      #f\n      (let* ([keys (hash-keys dict)]\n       \
+    \      [all-lower? (every symbol? keys)]\n             [all-upper? (every (lambda\
+    \ (x) (string-upcase x)) keys)])\n        (or all-lower? all-upper?))))\n", " \
+    \ (match dict\n    ['() #f]\n    [(cons (cons key value) dict)\n     (if (or (string?\
+    \ key) (symbol? key))\n         (if (or (symbol=? (string-upcase key) key) (symbol=?\
+    \ (string-downcase key) key))\n             (check_dict_case dict)\n         \
+    \    #f)\n         #f)]))\n\n", "  ;; Use `hash-for-each` to iterate through the\
+    \ keys in the hash table\n  ;; Use `string-ci>=?` to check if all the keys are\
+    \ upper case\n  ;; Return true if all keys are upper case and return false otherwise\n\
+    \  (let ([upper-case? #t])\n    (hash-for-each (lambda (k v)\n               \
+    \      (unless (string-ci>=? k #\\A)\n                       (set! upper-case?\
+    \ #f)))\n                   dict)\n    upper-case?))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(hash-has-key? dict \"a\")\n     (andmap string-lower-case?\
+    \ (hash-keys dict))]\n    [(hash-has-key? dict \"A\")\n     (andmap string-upper-case?\
+    \ (hash-keys dict))]\n    [else #f]))\n", "  (cond ((hash-empty? dict) #f)\n \
+    \       ((andmap string? (hash-keys dict)) #t)\n        ((andmap string-upcase?\
+    \ (hash-keys dict)) #t)\n        (else #f)))\n", "  (cond\n    [(equal? dict (make-hash))\
+    \ #f]\n    [(and (string? (hash-ref dict (hash-keys dict 0))) (not (string? (hash-ref\
+    \ dict (hash-keys dict 1))))) #t]\n    [(and (string? (hash-ref dict (hash-keys\
+    \ dict 1))) (not (string? (hash-ref dict (hash-keys dict 0))))) #t]\n    [else\
+    \ #f]))\n\n```", "  (define (check-case key)\n    (if (string? key)\n        (if\
+    \ (string-ci=? key (string-upcase key))\n            #t\n            #f)\n   \
+    \     #f))\n  (define (all-check-case key)\n    (if (not (check-case key))\n \
+    \       #f\n        (if (not (hash-has-key? dict key))\n            #t\n     \
+    \       (all-check-case (hash-ref dict key)))))\n  (if (hash-empty? dict)\n  \
+    \    #f\n      (all-check-case (hash-first dict))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(= (length (filter string? (keys dict))) (length (keys dict)))\
+    \ #t]\n    [(= (length (filter string? (keys dict))) (length (keys dict))) #t]\n\
+    \    [else #f]))\n", "  (and (hash-has-keys? dict)\n       (or (for/and ([(k .\
+    \ v) (in-hash dict)]) (string-lowercase? k))\n           (for/and ([(k . v) (in-hash\
+    \ dict)]) (string-uppercase? k)))))\n", "  (check-dict-case-helper dict #f))\n",
+  "  (cond ((empty? dict) #f)\n        ((and (string? (first (keys dict)))\n     \
+    \         (or (string-upcase? (first (keys dict)))\n                  (string-downcase?\
+    \ (first (keys dict)))))\n         (check_dict_case (rest dict)))\n        (else\
+    \ #f)))\n", "  (cond\n    [(empty? dict) #f]\n    [(or (even? (hash-count dict))\
+    \ (odd? (hash-count dict))) #f]\n    [(not (all-keys-are-strings? dict)) #f]\n\
+    \    [(not (all-values-are-strings? dict)) #f]\n    [(equal? (check-all-keys-upper?\
+    \ dict) (check-all-keys-lower? dict)) #f]\n    [else #t]))\n", "  (if (not (hash-empty?\
+    \ dict))\n      (let ((chk-lower #f)\n            (chk-upper #f))\n        (for\
+    \ ([key (in-hash dict)])\n          (if (string? key)\n              (if (string-ci=?\
+    \ (string-normalize-nfc (string-downcase key)) key)\n                  (set! chk-lower\
+    \ #t)\n                  (set! chk-upper #t))\n          #f))\n        (if (and\
+    \ chk-lower chk-upper)\n            #f\n            #t))\n      #f))\n", "  (define\
+    \ (get-key-string key)\n    (cond\n      [(hash-has-key? dict key)\n       (hash-ref\
+    \ dict key)]\n      [else\n       (error \"Hash does not have given key\")]))\n\
+    \  (define (check-all-vals-string)\n    (hash-map (lambda (key val)\n        \
+    \        (cond [(string? val) #t]\n                      [else #f]))\n       \
+    \       dict))\n  (define (check-all-keys-string)\n    (hash-map (lambda (key\
+    \ val)\n                (cond [(string? key) #t]\n                      [else\
+    \ #f]))\n              dict))\n  (cond\n    [(> (hash-count dict) 0)\n     (cond\n\
+    \       [(and (check-all-vals-string) (check-all-keys-string))\n        (cond\n\
+    \          [(string=? (string-upcase (get-key-string (hash-keys dict)))\n    \
+    \                 (get-key-string (hash-keys dict)))\n           #t]\n       \
+    \   [(string=? (string-downcase (get-key-string (hash-keys dict)))\n         \
+    \            (get-key-string (hash-keys dict)))\n           #t]\n          [else\n\
+    \           #f])]\n       [else\n        #f])]\n    [else\n     #f]))\n", "  (define\
+    \ (lookup key)\n    (dict-ref dict key))\n  (define (case key)\n    (let ([value\
+    \ (lookup key)])\n      (if (string? value)\n          (if (not (char-upcase?\
+    \ (string-ref value 0)))\n              'lower\n              'upper)\n      \
+    \    (error \"not a string\" value))))\n  (let ([key-list (dict-keys dict)])\n\
+    \    (if (null? key-list)\n        #f\n        (let ([kase (case (car key-list))])\n\
+    \          (andmap (lambda (key) (equal? kase (case key))) key-list)))))\n", " \
+    \ (let loop ((pairs (hash-pairs dict))\n             (lower-case? #t)\n      \
+    \       (upper-case? #t))\n    (cond [(null? pairs)\n           (or lower-case?\
+    \ upper-case?)]\n          [(and (string? (car (car pairs)))\n               \
+    \ (string-ci=? (car (car pairs))\n                             (string-downcase\
+    \ (car (car pairs)))))\n           (loop (cdr pairs)\n                 lower-case?\n\
+    \                 (and upper-case?\n                      (string-ci=? (car (car\
+    \ pairs))\n                                   (string-upcase (car (car pairs))))))]\n\
+    \          [(and (string? (car (car pairs)))\n                (string-ci=? (car\
+    \ (car pairs))\n                             (string-upcase (car (car pairs)))))\n\
+    \           (loop (cdr pairs)\n                 (and lower-case?\n           \
+    \           (string-ci=? (car (car pairs))\n                                 \
+    \  (string-downcase (car (car pairs)))))\n                 upper-case?)]\n   \
+    \       [else #f])))\n", "  (cond ((empty? dict) #f)\n        ((and (or (string-lowercase?\
+    \ (car (hash-keys dict)))\n                  (string-uppercase? (car (hash-keys\
+    \ dict))))\n              (check_dict_case (hash-remove (car (hash-keys dict))\
+    \ dict)))\n         #t)\n        (else #f)))\n", "  (cond ((hash-empty? dict)\
+    \ #f)\n        ((every string? (map hash-key dict))\n         (or (every string-upper-case?\
+    \ (map hash-key dict))\n             (every string-lower-case? (map hash-key dict))))\n\
+    \        (else #f)))\n", "  (cond\n    [(empty? dict) #f]\n    [(or (string-locale-ci=?\
+    \ (hash-ref dict (hash-key dict)) (hash-ref dict (hash-key dict)))\n         (string-locale-ci=?\
+    \ (hash-ref dict (hash-key dict)) (hash-ref dict (hash-key dict))))\n     (check_dict_case\
+    \ (hash-remove dict (hash-key dict)))]\n    [else #f]))\n</code>\nHowever, it\
+    \ doesn't work with <code>(\"Name\" .  \"John\")</code> and <code>(\"Age\" . \
+    \ \"36\")</code> in <code>#hash((\"Name\" .  \"John\") (\"Age\" .  \"36\") (\"\
+    City\" .  \"Houston\"))</code>\n", "  (cond ((hash-empty? dict) #f)\n        ((hash-has-key?\
+    \ dict (hash-keys dict)) #t)\n        (else #f)))\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(hash-map-values dict) #t]\n    [(not (string? (car (hash-map-keys\
+    \ dict)))) #f]\n    [(not (string? (cadr (hash-map-keys dict)))) #f]\n    [(and\
+    \ (string-ci=? (car (hash-map-keys dict)) (cadr (hash-map-keys dict))) (string-upper-case?\
+    \ (car (hash-map-keys dict)))) (check_dict_case (hash-rest dict))]\n    [(and\
+    \ (string-ci=? (car (hash-map-keys dict)) (cadr (hash-map-keys dict))) (string-lower-case?\
+    \ (car (hash-map-keys dict)))) (check_dict_case (hash-rest dict))]\n    [else\
+    \ #f]))\n", "  (cond\n    [(hash-empty? dict) #f]\n    [(or (hash-every (\u03BB\
+    \ (key value) (symbol? key)) dict)\n         (hash-every (\u03BB (key value) (string?\
+    \ key)) dict))\n     (let ([lower? (hash-every (\u03BB (key value) (string-lowercase?\
+    \ key)) dict)])\n       (hash-every (\u03BB (key value)\n                    \
+    \ (equal? (if lower? (string-lowercase key) (string-uppercase key))\n        \
+    \                     key))\n                   dict))]\n    [else #f]))\n</code>\n",
+  "  (if (hash-empty? dict)\n      #f\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'a) (hash-ref dict 'A))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'A) (hash-ref dict 'b))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'A) (hash-ref dict 'B))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'b) (hash-ref dict 'B))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'B) (hash-ref dict 'A))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'A) (hash-ref dict 'b))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'b) (hash-ref dict 'A))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'B) (hash-ref dict 'b))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'b) (hash-ref dict 'B))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'B) (hash-ref dict 'A))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'A) (hash-ref dict 'b))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'b) (hash-ref dict 'A))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'B) (hash-ref dict 'b))\n      (hash-keys dict)\n      (string-ci&lt;=?\
+    \ (hash-ref dict 'b) (hash-ref dict 'B))\n      (hash-keys dict", "  (let ([dict-list\
+    \ (hash-map-to-list dict)])\n    (cond\n      [(= (hash-map-size dict) 0) #f]\n\
+    \      [(and (string? (car (car dict-list))) \n            (string? (car (car\
+    \ (cdr dict-list))))\n            (or (string-upper-case? (car (car dict-list)))\n\
+    \                (string-lower-case? (car (car dict-list)))))\n       (string-upper-case?\
+    \ (car (car dict-list)))]\n      [else #f])))\n", "  (if (empty? dict) #f\n  \
+    \    (let ([k (hash-keys dict)])\n        (if (andmap string? k)\n           \
+    \ (if (andmap (\u03BB (c) (char-downcase c)) (first k)) #t #f)\n            #f))))\n",
+  "  (match dict\n    [#hash() #f]\n    [dict (and (check-keys-lowercase (hash-keys\
+    \ dict))\n               (check-keys-uppercase (hash-keys dict)))]))\n", "  (if\
+    \ (empty? dict)\n      #f\n      (let ([key (hash-keys dict)])\n        (if (string?\
+    \ key)\n            (cond ((equal? (string-downcase key) key)\n              \
+    \     (cond ((equal? (string-upcase key) key)\n                          #f)\n\
+    \                          #t))\n                  #f)))))\n</code>\n", "  (if\
+    \ (equal? (hash-keys dict) null)\n      #f\n      (let ([first (car (hash-keys\
+    \ dict))])\n\t(and (string? first)\n\t     (or (and (string-locale-ci<? \"a\"\
+    \ first)\n\t\t      (string-locale-ci<= first \"z\"))\n\t\t (and (string-locale-ci<?\
+    \ \"A\" first)\n\t\t      (string-locale-ci<= first \"Z\")))\n\t     (for/and\
+    \ ([k (in-hash dict)])\n\t       (string? k)\n\t       (or (and (string-locale-ci<?\
+    \ \"a\" k)\n\t\t\t(string-locale-ci<= k \"z\"))\n\t\t   (and (string-locale-ci<?\
+    \ \"A\" k)\n\t\t\t(string-locale-ci<= k \"Z\")))))))))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(symbol=? (hash-ref dict (hash-key dict))\n               (hash-ref\
+    \ dict (hash-key (hash-rest dict)))) #t]\n    [else #f]))\n</code>\n", "  (let\
+    \ loop ([dict dict]\n             [lower #t]\n             [upper #t])\n    (if\
+    \ (null? dict)\n        (or lower upper)\n        (match (first dict)\n      \
+    \    [(key . value)\n           (if (symbol? key)\n               (loop (rest\
+    \ dict)\n                     lower\n                     (and upper (string-upcase?\
+    \ key)))\n               (loop (rest dict)\n                     (and lower (string-downcase?\
+    \ key))\n                     upper))]))))\n</code>\n", "  (if (hash-empty? dict)\
+    \ #f\n      (let ([first_key (hash-first-key dict)])\n        (if (symbol? first_key)\
+    \ #f\n            (if (string-ci=? first_key (string-upcase first_key)) (check_dict_case\
+    \ (hash-rest dict))\n                (if (string-ci=? first_key (string-downcase\
+    \ first_key)) (check_dict_case (hash-rest dict))\n                    #f))))))\n",
+  "  (define (check_string str)\n    (or (eq? (char-upcase (string-ref str 0)) (string-ref\
+    \ str 0))\n        (eq? (char-downcase (string-ref str 0)) (string-ref str 0))))\n\
+    \  (define (all? pred xs)\n    (cond\n      [(empty? xs) #t]\n      [(pred (first\
+    \ xs)) (all? pred (rest xs))]\n      [else #f]))\n  (cond\n    [(empty? dict)\
+    \ #f]\n    [(all? check_string (hash-keys dict)) #t]\n    [else #f]))", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(andmap string? (hash-map->list dict)) #t]\n   \
+    \ [else #f]))\n", "  (define (loop counter)\n    (let ((key (hash-ref dict counter)))\n\
+    \      (if (and (string? key)\n               (string-ci=? key key))\n       \
+    \   (if (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and\
+    \ (and (and (and (and (and (and (and (and (and (and (", "  (cond ((hash-keys dict)\
+    \ #t)\n        ((hash-keys dict) #f)\n        (else (check_dict_case (cdr dict)))))\n\
+    </code>\nhow can I get this to compile, the error I'm getting is \n<code>; hash-keys:\
+    \ contract violation", "  (let loop ((dict dict)\n             (flag 0))\n   \
+    \ (if (hash-empty? dict)\n        (if (= flag 1)\n            #t\n           \
+    \ #f)\n        (let ((key (hash-key (hash-first dict)))\n              (val (hash-value\
+    \ (hash-first dict))))\n          (cond ((and (string? key) \n               \
+    \       (string-ci<? key (string-upcase key)))\n                 (loop (hash-remove\
+    \ dict key)\n                       1))\n                ((and (string? key) \n\
+    \                      (string-ci>? key (string-upcase key)))\n              \
+    \   (loop (hash-remove dict key)\n                       2))\n               \
+    \ (else\n                 #f))))))\n", "  (if (empty? dict)\n      #f\n      (define\
+    \ is-lower? (lambda (key) (and (string? key) (not (member (char-upcase (string-ref\
+    \ key 0)) key)))))\n      (define is-upper? (lambda (key) (and (string? key) (not\
+    \ (member (char-downcase (string-ref key 0)) key)))))\n      (hash-for-each (lambda\
+    \ (key val) (if (not (or (is-lower? key) (is-upper? key)))\n                 \
+    \                          (error 'check_dict_case \"Not all keys are strings\
+    \ in lower or upper case.\")))\n                     dict)\n      (begin\n   \
+    \     (define has-lower? (lambda (key) (and (string? key) (member (char-upcase\
+    \ (string-ref key 0)) key))))\n        (define has-upper? (lambda (key) (and (string?\
+    \ key) (member (char-downcase (string-ref key 0)) key))))\n        (hash-for-each\
+    \ (lambda (key val) (if (not (or (has-lower? key) (has-upper? key)))\n       \
+    \                                      (error 'check_dict_case \"Not all keys\
+    \ are strings in lower or upper case.\")))\n                       dict)\n   \
+    \     (if (or (is-lower? (hash-ref dict (hash-keys dict) 0))\n               \
+    \ (is-upper? (hash-ref dict (hash-keys dict) 0)))\n            #t\n          \
+    \  #f))))\n", "  (cond\n    [(empty? dict) #f]\n    [(equal? 'upper (str_case\
+    \ (first (dict-keys dict)))) #t]\n    [(equal? 'lower (str_case (first (dict-keys\
+    \ dict)))) #t]\n    [else #f]))\n", "  (let ([keys (hash-keys dict)])\n    (if\
+    \ (empty? keys)\n        #f\n        (let ([chk (member (string-ref (first keys)\
+    \ 0) '(\"A\" \"a\"))])\n          (andmap (lambda (k) (and (string? k) (equal?\
+    \ (string-ref k 0) (string-ref (first keys) 0)))) keys)))))\n", "    (cond\n \
+    \       [(empty? dict) #f]\n        [(symbol? (hash-ref dict (hash-key dict)))\
+    \ #t]\n        [else #f]))\n", "  (cond\n    [(= (hash-count dict) 0) #f]\n  \
+    \  [(andmap string? (hash-keys dict)) #t]\n    [(andmap symbol? (hash-keys dict))\
+    \ #t]\n    [else #f]))\n", "  (cond\n    [(empty? dict) #f]\n    [(hash-has-key?\
+    \ dict (hash-keys dict)) #t]\n    [else #f]))\n", "  (if (empty? dict)\n     \
+    \ #f\n      (let ([keys (hash-keys dict)])\n        (if (or (string-ci<=? (first\
+    \ keys) (last keys))\n                (string-ci>=? (first keys) (last keys)))\n\
+    \            #t\n            #f))))\n", "  (if (equal? (hash-count dict) 0)\n\
+    \      #f\n      (define keys (hash-keys dict))\n      (if (andmap (lambda (key)\
+    \ (string-upper-case? key)) keys)\n          #t\n          (andmap (lambda (key)\
+    \ (string-lower-case? key)) keys))))\n", "  (define (iter lst)\n    (cond\n  \
+    \    [(empty? lst) #t]\n      [(or (symbol? (first lst))\n           (string-ci=?\
+    \ (first lst) (symbol->string (first lst))))\n       (iter (rest lst))]\n    \
+    \  [else #f]))\n  (iter (hash-keys dict)))\n", "  (cond\n    [(empty? dict) #f]\n\
+    \    [(string? (car (keys dict))) #t]\n    [(string? (car (keys dict))) #t]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? dict) false]\n    [(string? (car (first\
+    \ dict)))\n     (let \n         ([keys (hash-keys dict)])\n       (cond\n    \
+    \     [(string-ci=? (car keys) (car keys)) true]\n         [else false]))]\n \
+    \   [else false]))\n", "  (define (mixed-case dict)\n    (let ([lower (number->string\
+    \ (char-downcase #\\a))]\n          [upper (number->string (char-upcase #\\a))])\n\
+    \      (and (eq? (hash-ref dict lower) (hash-ref dict upper))\n           (mixed-case\
+    \ (hash-remove dict lower))\n           (mixed-case (hash-remove dict upper)))))\n\
+    \  (hash-empty? dict))\n", "  (let ([first (dict-ref dict (hash-keys dict))])\n\
+    \    (and\n     (hash-values? dict)\n     (string? first)\n     (not (empty? dict))\n\
+    \     (for/and\n      ([key (in-dict dict)] #:when (string? key))\n      (or (string-ci=?\
+    \ key first)\n          (string-ci=? key (string-upcase first)))))))\n```\n\n\
+    ```racket\n#lang racket\n", "  (and\n   dict\n   (let ([found-lower #f]\n    \
+    \     [found-upper #f])\n     (for-each\n      (lambda (key)\n        (cond\n\
+    \         ((string-lowercase? key) (set! found-lower #t))\n         ((string-uppercase?\
+    \ key) (set! found-upper #t))))\n      (hash-keys dict))\n     (and\n      (or\
+    \ found-lower found-upper)\n      (not (and found-lower found-upper))))))", " \
+    \ (define (is-lower? str)\n    (andmap (lambda (ch) (char-lower-case? ch)) (string->list\
+    \ str)))\n  (define (is-upper? str)\n    (andmap (lambda (ch) (char-upper-case?\
+    \ ch)) (string->list str)))\n  (define (check-case? dict)\n    (hash-for-each\n\
+    \     (lambda (key val)\n       (cond\n         [(hash-has-key? dict key) #f]\n\
+    \         [(and (string? key) (is-lower? key)) #t]\n         [(and (string? key)\
+    \ (is-upper? key)) #t]\n         [else #f]))\n     dict))\n  (if (hash-empty?\
+    \ dict)\n      #f\n      (check-case? dict)))\n", "  (cond\n    [(empty? dict)\
+    \ #f]\n    [(and (string? (hash-key dict))\n         (check_dict_case (hash-rest\
+    \ dict)))\n     (or (string-ci=? (hash-key dict) (string-upper-case (hash-key\
+    \ dict)))\n         (string-ci=? (hash-key dict) (string-lower-case (hash-key\
+    \ dict))))]\n    [else #f]))\n", "  (if (hash-empty? dict)\n      #f\n      (check-case\
+    \ (hash-keys dict))))\n", "  (or (for/and ([(k v) (in-hash dict)])\n        (and\
+    \ (string? k) (or (string-ci=? k \"hello\") (string-ci=? k \"world\"))))\n   \
+    \   (for/and ([(k v) (in-hash dict)])\n        (and (string? k) (or (string-ci=?\
+    \ k \"HELLO\") (string-ci=? k \"WORLD\"))))))\n", "  (hash-for-each (lambda (k\
+    \ v)\n                   (cond\n                     ((or (hash-has-key? dict\
+    \ (string-upcase k)) (hash-has-key? dict (string-downcase k)))\n             \
+    \         (return #f))\n                     (else (void))))\n               \
+    \  dict)\n  #t)\n", "  (cond\n    [(empty? dict) #f]\n    [(not (hash-has-key?\
+    \ dict (car (hash-keys dict))))\n     (check_dict_case (hash-remove dict (car\
+    \ (hash-keys dict))))]\n    [(not (string? (car (hash-keys dict)))) #f]\n    [(string-ci=?\
+    \ (car (hash-keys dict)) (string-upcase (car (hash-keys dict))))\n     (check_dict_case\
+    \ (hash-remove dict (car (hash-keys dict))))]\n    [(string-ci=? (car (hash-keys\
+    \ dict)) (string-downcase (car (hash-keys dict))))\n     (check_dict_case (hash-remove\
+    \ dict (car (hash-keys dict))))]\n    [else #f]))\n", "  (let ((keys (hash-keys\
+    \ dict)))\n    (cond\n      [(null? keys) #f]\n      [(string-lowercase? (car\
+    \ keys)) (check_dict_case dict #:keys (cdr keys))]\n      [(string-uppercase?\
+    \ (car keys)) (check_dict_case dict #:keys (cdr keys))]\n      [else #f])))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(and (lower-case? (dict-key-list dict))\n\
+    \t  (not (upper-case? (dict-key-list dict)))) #t]\n    [(and (upper-case? (dict-key-list\
+    \ dict))\n\t  (not (lower-case? (dict-key-list dict)))) #t]\n    [else #f]))\n",
+  "  (cond\n    [(hash-empty? dict) #f]\n    [(hash-has-key? dict (hash-keys dict\
+    \ 0)) #t]\n    [else #f]))", "  (let* ([dict-v (hash-values dict)]\n         [str-v\
+    \ (filter string? dict-v)]\n         [str-k (filter string? (hash-keys dict))]\n\
+    \         [upper-k (filter string-upcase? str-k)]\n         [lower-k (filter string-downcase?\
+    \ str-k)])\n    (cond\n      [(or (zero? (length str-v))\n           (not (equal?\
+    \ str-v dict-v)))\n       #f]\n      [(and (equal? upper-k str-k)\n          \
+    \  (equal? str-k (hash-keys dict)))\n       #t]\n      [(and (equal? lower-k str-k)\n\
+    \            (equal? str-k (hash-keys dict)))\n       #t]\n      [else\n     \
+    \  #f])))\n```\n## Problem 8:\n```#lang racket\n", "  (if (hash-empty? dict)\n\
+    \      #f\n      (let* ([first-key (hash-first-key dict)]\n             [rest-dict\
+    \ (hash-rest dict)]\n             [not-all-keys-upper? (find-key-not-all-upper\
+    \ rest-dict)]\n             [not-all-keys-lower? (find-key-not-all-lower rest-dict)])\n\
+    \        (cond [(symbol? first-key)\n               (not-all-keys-upper?)]\n \
+    \             [(string? first-key)\n               (if (string-upper-case? first-key)\n\
+    \                   (not-all-keys-upper?)\n                   (not-all-keys-lower?))]\n\
+    \              [else\n               #f]))))\n", "  (define (helper dict first-char)\n\
+    \    (cond [(hash-empty? dict) #t]\n          [(hash-has-key? dict (hash-keys\
+    \ dict)) \n           (if (char-ci=? first-char (hash-ref dict (hash-keys dict)))\n\
+    \               (helper (hash-remove (hash-keys dict) dict) first-char)\n    \
+    \           #f)]\n          [else #f]))\n  (if (hash-empty? dict) #f\n      (if\
+    \ (hash-has-key? dict (hash-keys dict))\n          (helper (hash-remove (hash-keys\
+    \ dict) dict) (hash-ref dict (hash-keys dict)))\n          #f)))\n", "  (let*\
+    \ ([keys (hash-keys dict)]\n         [key (car keys)])\n    (cond\n      [(empty?\
+    \ keys) #f]\n      [(string? key) (check-keys dict #t)]\n      [(string? (symbol->string\
+    \ key)) (check-keys dict #f)]\n      [else #f])))\n", "  (cond\n    [(and (not\
+    \ (hash-empty? dict)) (string? (hash-ref dict (hash-keys dict 0)))) #t]\n    [(and\
+    \ (not (hash-empty? dict)) (string? (hash-ref dict (hash-keys dict 0))) (string-upper-case?\
+    \ (hash-ref dict (hash-keys dict 0)))) #t]\n    [else #f]))\n", "  (cond\n   \
+    \ [(empty? dict) #f]\n    [(string-ci=? (hash-keys dict) (hash-keys dict)) #t]\n\
+    \    [else #f]))\n", "  (if (empty? dict)\n      #f\n      (let* ([key (hash-keys\
+    \ dict)]\n             [value (hash-values dict)]\n             [first-key (car\
+    \ key)]\n             [first-value (car value)]\n             [rest-keys (cdr\
+    \ key)]\n             [rest-values (cdr value)])\n        (cond ((equal? first-key\
+    \ (string-downcase first-key))\n               (if (or (null? rest-keys)\n   \
+    \                    (and (string? (car rest-keys))\n                        \
+    \    (equal? (car rest-keys) (string-downcase (car rest-keys)))))\n          \
+    \         (if (and (equal? first-value (car rest-values))\n                  \
+    \          (equal? (cdr rest-values) (cdr rest-values)))\n                   \
+    \    #f\n                       #t)\n                   #f))\n              ((equal?\
+    \ first-key (string-upcase first-key))\n               (if (or (null? rest-keys)\n\
+    \                       (and (string? (car rest-keys))\n                     \
+    \       (equal? (car rest-keys) (string-upcase (car rest-keys)))))\n         \
+    \          (if (and (equal? first-value (car rest-values))\n                 \
+    \           (equal? (cdr rest-values) (cdr rest-values)))\n                  \
+    \     #f\n                       #t)\n                   #f))\n              (else\
+    \ #f)))))\n", "  (if (empty? dict)\n      #f\n      (let* ([keys (hash-keys dict)]\n\
+    \             [first-key (car keys)]\n             [first-string (string? first-key)]\n\
+    \             [all-strings (for/and ([key keys]) (string? key))]\n           \
+    \  [all-lower (for/and ([key keys]) (string-ci=? key (string-downcase key)))])\n\
+    \        (if (and first-string all-strings)\n            (if (string-ci=? first-key\
+    \ (string-downcase first-key))\n                all-lower\n                (for/and\
+    \ ([key keys]) (string-ci=? key (string-upcase key))))\n            #f))))\n",
+  "  (or (every string? (map hash-keys dict))\n      (every string-upper-case? (map\
+    \ hash-keys dict))))\n", "  (define (is-alpha x)\n    (char-alphabetic? (char-downcase\
+    \ x)))\n  (define (is-lower x)\n    (char-lower-case? x))\n  (define (is-upper\
+    \ x)\n    (char-upper-case? x))\n  (cond\n    [(empty? dict) #f]\n    [(andmap\
+    \ is-alpha (hash-keys dict))\n     (if (andmap is-lower (hash-keys dict))\n  \
+    \       #t\n         #f)]\n    [(andmap is-alpha (hash-keys dict))\n     (if (andmap\
+    \ is-upper (hash-keys dict))\n         #t\n         #f)]\n    [else #f]))", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(and (string? (hash-ref dict (hash-key dict\
+    \ 0)))\n          (string-ci=? (hash-ref dict (hash-key dict 0)) (string-upcase\
+    \ (hash-ref dict (hash-key dict 0)))))\n     (check-dict-case-iter dict 1)]\n\
+    \    [(and (string? (hash-ref dict (hash-key dict 0)))\n          (string-ci=?\
+    \ (hash-ref dict (hash-key dict 0)) (string-downcase (hash-ref dict (hash-key\
+    \ dict 0)))))\n     (check-dict-case-iter dict 1)]\n    [else #f]))\n", "  (cond\
+    \ ((empty? dict) #f)\n        ((andmap string? (keys dict)) #t)\n        (else\
+    \ #f)))\n```\n## Problem 10 - Same-length Strings\n\nWrite a function ```check_length```\
+    \ that given a list of strings returns #t if they all have the same length. Else\
+    \ return #f. The function should return #f if the given list is empty.\n\n## Solution\n\
+    \n```racket\n#lang racket\n", "  (let loop ([check-keys (hash-keys dict)]\n  \
+    \           [check-vals (hash-values dict)])\n    (if (hash-empty? dict)\n   \
+    \     #f\n        (if (null? check-keys)\n            #t\n            (let ([key\
+    \ (first check-keys)]\n                  [val (first check-vals)])\n         \
+    \     (if (and (string? key) (string? val))\n                  (if (and (string-upper-case?\
+    \ key) (string-upper-case? val))\n                      (loop (rest check-keys)\
+    \ (rest check-vals))\n                      (if (and (string-lower-case? key)\
+    \ (string-lower-case? val))\n                          (loop (rest check-keys)\
+    \ (rest check-vals))\n                          #f))\n                  #f))))))\n\
+    </code>\n", "  (define (all-upper? lst)\n    (andmap string-upper-case? lst))\n\
+    \  (define (all-lower? lst)\n    (andmap string-lower-case? lst))\n  (define (hash->keys\
+    \ hash)\n    (hash-keys hash))\n  (define (hash->vals hash)\n    (hash-values\
+    \ hash))\n  (cond\n    [(empty? dict) #f]\n    [(not (all-upper? (hash->keys dict)))\
+    \ #f]\n    [(not (all-lower? (hash->keys dict))) #f]\n    [else #t]))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(or\n      (andmap string? (keys dict))\n      (andmap\
+    \ symbol? (keys dict)))\n      #t]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(andmap string? (map car dict)) (all-lowercase? (map car dict))]\n\
+    \    [(andmap string? (map car dict)) (all-uppercase? (map car dict))]\n    [else\
+    \ #f]))\n", "  (if (empty? dict) #f\n      (let* ([keys (hash-keys dict)]\n  \
+    \           [key-strs (for/list ([key keys]) (string? key))]\n             [key-strs-lower\
+    \ (for/list ([key keys]) (string-ci&lt;=? key key))]\n             [key-strs-upper\
+    \ (for/list ([key keys]) (string-ci&gt;=? key key))])\n        (or (and (apply\
+    \ and key-strs) (apply and key-strs-lower))\n            (and (apply and key-strs)\
+    \ (apply and key-strs-upper))))))\n</code>\nThis should be a good exercise to\
+    \ use a generator in some way, but I am not sure how.\nAny advice?\n\n\nA:\n\n\
+    Not sure why you're using <code>for/list</code> since you're not using the results\
+    \ for anything.\n<code>(define (check-dict-case dict)\n  (unless (empty? dict)\n\
+    \    (let ([keys (hash-keys dict)])\n      (let loop ([keys keys])\n        (if\
+    \ (null? keys)\n            #t\n            (let ([next (car keys)])\n       \
+    \       (cond\n                [(not (string? next)) #f]\n                [(and\
+    \ (not (string-ci&lt;=? next next))\n                      (not (string-ci&gt;=?\
+    \ next next))) #f]\n                [else (loop (cdr keys))])))))))\n</code>\n",
+  "  (cond\n    [(hash-empty? dict) #f]\n    [(or (all-string-lower? dict) (all-string-upper?\
+    \ dict)) #t]\n    [else #f]))\n", "  (letrec ([check-key (lambda (key)\n     \
+    \                  (cond [(string? key) (and (string-contains key #\\A) (string-contains\
+    \ key #\\a))]\n                             [else false]))]\n           [check-dict\
+    \ (lambda (dict)\n                         (cond [(hash-empty? dict) false]\n\
+    \                               [(hash-for-each (lambda (key val) (check-key key))\
+    \ dict) true]\n                               [else false]))])\n    (check-dict\
+    \ dict)))", "  (hash-for-each dict (lambda (k v) (if (not (string? k)) \"false\"\
+    ))))\n", "  (cond\n    [(empty? dict) #f]\n    [(string-ci=? (string-join\n  \
+    \                 (map symbol->string (hash-keys dict)) \"\")\n              \
+    \    (string-join\n                   (map symbol->string (hash-keys dict)) \"\
+    \"))\n     #t]\n    [else #f]))\n", "  ;; YOUR CODE HERE\n  )\n\n```\n\n### Problem\
+    \ 3\n\n```scheme\n#lang racket\n", "  (cond\n    [(empty? dict) #f]\n    [(hash-has-key?\
+    \ dict (first (hash-keys dict)))\n      (if (or (string-ci&lt;=? (first (hash-keys\
+    \ dict)) \"z\")\n          (string-ci&lt;=? \"a\" (first (hash-keys dict))))\n\
+    \        (check_dict_case (hash-remove dict (first (hash-keys dict))))\n     \
+    \   #f)]\n    [else #f]))\n</code>\nI'm stuck at how I can remove the keys from\
+    \ the hash once I've tested them and still work with the hash. Is there a better\
+    \ way to do this? I haven't been able to get recursion to work like this before.\
+    \ \n\n\nA:\n\nI'm not exactly sure what's wrong with the code, but I think this\
+    \ should do the trick:\n<code>(define (check-dict-case ht)\n  (let f ([ht ht]\
+    \ [up? #f] [lw? #f])\n    (if (empty? ht)\n        (and up? lw?)\n        (let\
+    \ ([k (first (hash-keys ht))])\n          (if (string? k)\n              (if (string-ci&lt;=?\
+    \ \"a\" k)\n                  (f (hash-remove ht k) up? #t)\n                \
+    \  (f (hash-remove ht k) #t lw?))\n              #f)))))\n</code>\nHere's the\
+    \ idea: The procedure keeps track of two flags, one that's true if the keys seen\
+    \ so far are all lower-case, and one that's true if the keys seen so far are all\
+    \ upper-case. It sets these flags when the first key is seen, and it checks them\
+    \ when the second key is seen. If they contradict each other, then the function\
+    \ returns <code>#f</code>. If they agree or they are both <code>#f</code>, then\
+    \ the function checks the next key. If the hash is empty then we return the result\
+    \ of the conjunction of the two flags.\nOne caveat: I don't think this is guaranteed\
+    \ to return <code>#t</code> for a hash with a single key because I'm not sure\
+    \ how the procedure would know if the first key was upper", "  (define (all_keys_upper_case?\
+    \ dict)\n    (for/and ([(k . v) (in-hash dict)])\n      (string-ci=? (string-upcase\
+    \ k) k)))\n  (define (all_keys_lower_case? dict)\n    (for/and ([(k . v) (in-hash\
+    \ dict)])\n      (string-ci=? (string-downcase k) k)))\n  (cond [(hash-empty?\
+    \ dict) #f]\n        [(all_keys_upper_case? dict) #t]\n        [(all_keys_lower_case?\
+    \ dict) #t]\n        [else #f]))\n", "  (let ([keys (hash-keys dict)])\n    (cond\
+    \ [(empty? keys) #f]\n          [(not (string? (first keys))) #f]\n          [(all-lower-case?\
+    \ keys) #t]\n          [(all-upper-case? keys) #t]\n          [else #f])))\n",
+  "  (define (helper lc uc)\n    (cond [(empty? dict) (and lc uc)]\n          [(not\
+    \ (string? (hash-key dict)))\n           (helper lc uc)]\n          [(and lc (string-upper-case?\
+    \ (hash-key dict)))\n           (helper lc #t)]\n          [(and uc (string-lower-case?\
+    \ (hash-key dict)))\n           (helper #t uc)]\n          [else #f]))\n  (helper\
+    \ #t #t))\n", "    (define (all-keys-upper-case dict)\n        (for/and ([key\
+    \ (in-dict dict)] #:when (string? key))\n            (equal? (string-upcase key)\
+    \ key)))\n    (define (all-keys-lower-case dict)\n        (for/and ([key (in-dict\
+    \ dict)] #:when (string? key))\n            (equal? (string-downcase key) key)))\n\
+    \    (if (dict-empty? dict)\n        #f\n        (or (all-keys-upper-case dict)\
+    \ (all-keys-lower-case dict))))\n", "  (if (hash-empty? dict)\n      #f\n    \
+    \  (let ((keys (hash-keys dict)))\n        (cond\n         ((all-string-lower-case?\
+    \ keys) #t)\n         ((all-string-upper-case? keys) #t)\n         (else #f)))))\n",
+  "  (define (isupper? str)\n    (every char-upper-case? (string->list str)))\n  (define\
+    \ (islower? str)\n    (every char-lower-case? (string->list str)))\n  (define\
+    \ (isalpha? str)\n    (every char-alphabetic? (string->list str)))\n  (define\
+    \ (are_all_upper? d)\n    (for/and ([(k v) (in-hash d)])\n      (isupper? k)))\n\
+    \  (define (are_all_lower? d)\n    (for/and ([(k v) (in-hash d)])\n      (islower?\
+    \ k)))\n  (if (equal? (hash-count dict) 0)\n      #f\n      (if (equal? (hash-count\
+    \ dict) 1)\n          (if (are_all_upper? dict)\n              #t\n          \
+    \    #f)\n          (if (are_all_upper? dict)\n              #t\n            \
+    \  (if (are_all_lower? dict)\n                  #t\n                  #f)))))\n",
+  "  (and (not (hash-empty? dict))\n       (let loop ([remaining-keys (hash-keys dict)])\n\
+    \         (cond [(null? remaining-keys) #t]\n               [(string? (car remaining-keys))\n\
+    \                (let ([lower-case? (string-ci=? (car remaining-keys) (car remaining-keys))])\n\
+    \                  (and lower-case?\n                       (loop (cdr remaining-keys))))]\n\
+    \               [else #f]))))\n", "  (define (check-all-upper-case lst)\n    (cond\
+    \ ((null? lst) #t)\n          ((or (symbol? (car lst)) (eq? (string-upcase (car\
+    \ lst)) (car lst))) (check-all-upper-case (cdr lst)))\n          (else #f)))\n\
+    \  (define (check-all-lower-case lst)\n    (cond ((null? lst) #t)\n          ((or\
+    \ (symbol? (car lst)) (eq? (string-downcase (car lst)) (car lst))) (check-all-lower-case\
+    \ (cdr lst)))\n          (else #f)))\n  (let ([keys (hash-keys dict)])\n    (cond\
+    \ ((null? keys) #f)\n          ((or (check-all-upper-case keys) (check-all-lower-case\
+    \ keys)) #t)\n          (else #f))))\n", "  (define (check-key key)\n    (or (string-upper-case?\
+    \ key) (string-lower-case? key)))\n  (define (check-keys keys)\n    (cond ((null?\
+    \ keys) #t)\n          ((check-key (car keys)) (check-keys (cdr keys)))\n    \
+    \      (else #f)))\n  (check-keys (hash-keys dict)))\n", "  (if (hash-empty? dict)\n\
+    \      #f\n      (let ([keys (hash-keys dict)])\n        (if (andmap string? keys)\n\
+    \            (or (for/or ([key keys])\n                       (string-ci=? key\
+    \ key))\n                (for/or ([key keys])\n                       (string-ci=?\
+    \ key key)))\n            #f))))\n", "  (define (is-upper? str)\n    (eq? #\\\
+    A (string-ref str 0)))\n  (define (is-lower? str)\n    (eq? #\\a (string-ref str\
+    \ 0)))\n  (define (is-key-lower-case? dict)\n    (for/and ([key (in-dict dict)])\n\
+    \      (is-lower? key)))\n  (define (is-key-upper-case? dict)\n    (for/and ([key\
+    \ (in-dict dict)])\n      (is-upper? key)))\n  (cond\n    [(is-key-lower-case?\
+    \ dict) true]\n    [(is-key-upper-case? dict) true]\n    [else false]))\n", " \
+    \ (cond\n    [(empty? dict) #f]\n    [(string? (hash-ref dict (hash-key dict)))\n\
+    \     (hash-key dict)]\n    [else #f]))\n", "  (cond [(or (empty? dict) (empty?\
+    \ (hash-keys dict))) #f]\n        [else (if (or (hash-keys-all-lower? dict) (hash-keys-all-upper?\
+    \ dict))\n                 #t\n                 #f)]))\n", "  (or \n   (check_dict_case_helper\
+    \ dict)\n   (check_dict_case_helper (hash-map dict string-upcase))))\n", "  (define\
+    \ (check-string? str)\n    (cond\n      [(equal? (string-upcase str) str)\n  \
+    \     'upcase]\n      [(equal? (string-downcase str) str)\n       'downcase]\n\
+    \      [else\n       'mixedcase]))\n  (define (check-case key-case key-list)\n\
+    \    (cond\n      [(null? key-list) #t]\n      [(eq? (check-string? (car key-list))\
+    \ key-case)\n       (check-case key-case (cdr key-list))]\n      [else #f]))\n\
+    \  (define (check-mixed-case key-list)\n    (cond\n      [(null? key-list) #t]\n\
+    \      [(string? (car key-list))\n       (check-mixed-case (cdr key-list))]\n\
+    \      [else #f]))\n  (define (get-keys)\n    (cond\n      [(empty? dict) #f]\n\
+    \      [(string? (car (hash-keys dict)))\n       (check-case (check-string? (car\
+    \ (hash-keys dict))) (hash-keys dict))]\n      [else\n       (check-mixed-case\
+    \ (hash-keys dict))]))\n  (get-keys))", "  (match dict\n    ['() #f]\n    [(hash\
+    \ '() ...) #f]\n    [(hash (list key val) ...)\n     (cond [(hash-has-key? dict\
+    \ key)\n            (match (string-downcase key)\n              [(and (s (and\
+    \ (? number? c) ...)) ...) #f]\n              [(and (s (and (? number? c) ...))\
+    \ ...) #f]\n              [(and (s (and c ...)) ...) (check_dict_case dict)]\n\
+    \              [(and (s (and c ...)) ...) (check_dict_case dict)]\n          \
+    \    [_ #f])]\n            [else #f])]]))\n", "  (if (not (hash-empty? dict))\n\
+    \      (let* ([keys (hash-keys dict)]\n             [check-fn (lambda (s)\n  \
+    \                       (string-ci=? s (string-upcase s)))])\n        (if (filter\
+    \ check-fn keys)\n            (apply-and map check-fn keys)\n            (apply-and\
+    \ map (lambda (s)\n                             (string-ci=? s (string-downcase\
+    \ s))) keys)))\n      #f))\n", "  (cond [(hash-empty? dict) #f]\n        [(every\
+    \ symbol? (hash-keys dict)) #t]\n        [(every string? (hash-keys dict))\n \
+    \        (every string-contains-ci? (hash-keys dict) \"abcdefghijklmnopqrstuvwxyz\"\
+    )]\n        [else #f]))\n", "  (and dict\n       (hash-empty? dict #f)\n     \
+    \  (or (and (string-ci=? #\"LOWERCASE\" (hash-key-case dict))\n              \
+    \  (check-all-keys-lower dict))\n           (and (string-ci=? #\"UPPERCASE\" (hash-key-case\
+    \ dict))\n                (check-all-keys-upper dict)))))", "    (cond [(empty?\
+    \ dict) #f]\n            [(and (string? (car (dict-keys dict)))\n            \
+    \      (string? (car (dict-keys (cdr dict))))\n                  (or (string-ci=?\
+    \ (car (dict-keys dict)) (car (dict-keys (cdr dict))))\n                     \
+    \ (string-ci=? (car (dict-keys dict)) (car (dict-keys (cdr dict)))))\n       \
+    \           (check_dict_case (cdr dict))) #t]\n            [else #f]))\n", " \
+    \ ;; all keys are upper?\n  (let ([dict-keys (hash-keys dict)])\n    (cond [(empty?\
+    \ dict-keys) #f]\n          [(every string-upper? dict-keys) #t]\n          [(every\
+    \ string-lower? dict-keys) #t]\n          [else #f])))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(or\n      (equal? (key->string (first (keys dict))) (string-upcase\
+    \ (key->string (first (keys dict)))))\n      (equal? (key->string (first (keys\
+    \ dict))) (string-downcase (key->string (first (keys dict))))))\n     (check_dict_case\
+    \ (rest (keys dict)))]\n    [else #f]))", "  (match dict\n    [(hash)\n     (cond\n\
+    \       [(or (hash-empty? dict) (= (hash-count dict) 1))\n        #f]\n      \
+    \ [(and (not (string? (hash-ref dict \"a\" #f))) (not (string? (hash-ref dict\
+    \ \"A\" #f))))\n        #f]\n       [else\n        (match (hash-keys dict)\n \
+    \         [(list key ...)\n           (if (and (string? key) (string-lowercase?\
+    \ key))\n               (if (all-string-lowercase? (hash-keys dict))\n       \
+    \            #t\n                   #f)\n               (if (all-string-uppercase?\
+    \ (hash-keys dict))\n                   #t\n                   #f))])])])])\n",
+  "  (define (is-upper-str str)\n    (char-upcase? (string-ref str 0)))\n  (define\
+    \ (is-lower-str str)\n    (char-lower-case? (string-ref str 0)))\n  (let ([keys\
+    \ (hash-keys dict)])\n    (if (and (not (empty? keys)) (string? (first keys)))\n\
+    \        (if (is-upper-str (first keys))\n            (every (lambda (k) (is-upper-str\
+    \ k)) keys)\n            (every (lambda (k) (is-lower-str k)) keys))\n       \
+    \ #f)))\n", "  (let* ([all-upper-keys (remove (lambda (k) (string-lowercase? k))\
+    \ (hash-keys dict))]\n         [all-lower-keys (remove (lambda (k) (string-uppercase?\
+    \ k)) (hash-keys dict))])\n    (and (not (empty? dict)) (empty? all-upper-keys)\
+    \ (empty? all-lower-keys))))\n\n", "  (if (hash-empty? dict)\n      #f\n     \
+    \ (let ((base-key (car (hash-keys dict))))\n        (hash-for-each (lambda (k\
+    \ v)\n                         (if (string? k)\n                             (if\
+    \ (or (string-ci=? base-key k)\n                                     (string-ci=?\
+    \ base-key (string-upcase k)))\n                                 #t\n        \
+    \                         (error 'check_dict_case \"not all keys are the same\
+    \ case\")))\n                         (error 'check_dict_case \"not all keys are\
+    \ strings\"))\n                       dict)\n        #t)))\n", "  (cond ((empty?\
+    \ dict) #f)\n        ((string-contains? (symbol->string (car (dict-keys dict)))\
+    \ #\\A) (check_dict_upper_case dict))\n        ((string-contains? (symbol->string\
+    \ (car (dict-keys dict))) #\\a) (check_dict_lower_case dict))\n        (else #f)))\n",
+  "  (let ([lower? (hash-has-key? dict \"a\")]\n        [upper? (hash-has-key? dict\
+    \ \"A\")])\n    (and \n     (not (empty? dict))\n     (or (and lower? (not upper?))\n\
+    \         (and upper? (not lower?))))))\n", "  (cond [(empty? dict) #f]\n    \
+    \    [(not (string? (key (first dict)))) #f]\n        [(not (string? (key (first\
+    \ dict)))) #f]\n        [(or (lower-case? (key (first dict)))\n             (upper-case?\
+    \ (key (first dict))))\n         (check_dict_case (rest dict))]\n        [else\
+    \ #f]))", "  (define (dict-keys dict)\n    (let loop ([current-item (dict-first\
+    \ dict)]\n               [acc '()])\n      (if (dict-empty? dict)\n          acc\n\
+    \          (loop (dict-next dict current-item)\n                (cons (car current-item)\
+    \ acc)))))\n  (define (dict-vals dict)\n    (let loop ([current-item (dict-first\
+    \ dict)]\n               [acc '()])\n      (if (dict-empty? dict)\n          acc\n\
+    \          (loop (dict-next dict current-item)\n                (cons (cdr current-item)\
+    \ acc)))))\n  (define (str-is-upper str)\n    (equal? (string-upcase str) str))\n\
+    \  (define (str-is-lower str)\n    (equal? (string-downcase str) str))\n  (define\
+    \ (all-strs? strs)\n    (andmap string? strs))\n  (define (all-upper-strs? strs)\n\
+    \    (andmap str-is-upper strs))\n  (define (all-lower-strs? strs)\n    (andmap\
+    \ str-is-lower strs))\n  (if (dict-empty? dict)\n      #f\n      (let ([keys (dict-keys\
+    \ dict)]\n            [vals (dict-vals dict)])\n        (if (not (all-strs? keys))\n\
+    \            #f\n            (or (and (all-upper-strs? keys)\n               \
+    \      (all-strs? vals))\n                (and (all-lower-strs? keys)\n      \
+    \               (all-strs? vals)))))))\n", "  (if (hash-empty? dict)\n      #f\n\
+    \      (letrec ([get-first-key (lambda () (hash-ref dict (hash-first dict)))]\n\
+    \               [get-keys (lambda () (cons (hash-ref dict (hash-first dict))\n\
+    \                                          (get-keys (hash-rest dict))))])\n \
+    \       (if (char-upcase? (char-upcase (get-first-key)))\n            (if (string-upcase?\
+    \ (get-keys))\n                #t\n                #f)\n            (if (string-lowercase?\
+    \ (get-keys))\n                #t\n                #f)))))\n</code>\nThe above\
+    \ checks the case of the key-value pairs based on the case of the first key in\
+    \ the hash. If the first key is lowercase, it checks whether all keys are lowercase\
+    \ and then, if true, returns #t. Otherwise, it checks if all keys are uppercase.\n\
+    I could've also checked the case of each key, one at a time. I'm curious to know\
+    \ how to do this, though I was able to figure out how to create a list of the\
+    \ keys and pass that to the built-in string-lowercase? and string-uppercase? functions.\
+    \ \nSo, is there a simple way to check the case of each character in a string,\
+    \ one at a time?\n\n\nA:\n\nTo check case of characters in a string, use <code>char-upcase?</code>,\
+    \ <code>char-lowercase?</code>, and/or <code>char-titlecase?</code>. \nTo check\
+    \ case of each key in a hash, use <code>hash-map</code> (in Racket) and <code>hash-each</code>\
+    \ (in Gauche).\nFor example:\n<code>#lang racket\n", "  (if (hash-empty? dict)\n\
+    \      #f\n      (let* ([keys (hash-keys dict)]\n             [values (hash-values\
+    \ dict)]\n             [key-0 (car keys)]\n             [value-0 (car values)])\n\
+    \        (if (and (hash-table? dict) (symbol? key-0) (symbol? value-0))\n    \
+    \        (let* ([rest-keys (cdr keys)]\n                   [all-keys (cons key-0\
+    \ rest-keys)]\n                   [rest-values (cdr values)]\n               \
+    \    [all-values (cons value-0 rest-values)])\n              (if (and (every symbol?\
+    \ all-keys) (every symbol? all-values))\n                  (if (or (every symbol=?\
+    \ all-keys) (every string-ci=? all-keys))\n                      #t\n        \
+    \              #f)\n                  #f))\n            #f))))\n", "  (define\
+    \ (get-keys dict)\n    (let ((keys (hash-keys dict)))\n      (cond ((null? keys)\
+    \ '())\n            (else (cons (car keys) (get-keys dict))))))\n  (define (check-case?\
+    \ keys)\n    (let ((key (car keys)))\n      (cond ((null? keys) #t)\n        \
+    \    ((and (string? key) (not (char-ci=? (string-ref key 0) (string-ref key 0))))\n\
+    \             (check-case? (cdr keys)))\n            (else #f))))\n  (check-case?\
+    \ (get-keys dict)))\n", "  (letrec ([upper? (lambda (key)\n                  \
+    \   (string-upper-case? key))]\n           [lower? (lambda (key)\n           \
+    \          (string-lower-case? key))]\n           [is_dict_case? (lambda (key)\n\
+    \                            (or (upper? key)\n                              \
+    \  (lower? key)))])\n    (cond [(empty? dict) #f]\n          [(is_dict_case? (car\
+    \ (keys dict)))\n           (and (is_dict_case? (car (keys dict)))\n         \
+    \       (is_dict_case? (cadr (keys dict))))]\n          [else #f])))\n", "  (cond\
+    \ ((hash-empty? dict) #f)\n        ((hash-keys dict) (cons-dictionary dict))\n\
+    \        (else '())))\n", "  (cond\n    [(not (hash? dict)) #f]\n    [(empty?\
+    \ dict) #f]\n    [(not (every (lambda (key) (or (string? key) (symbol? key)))\
+    \ (hash-keys dict))) #f]\n    [(= (length (hash-keys dict)) (length (hash-ref\
+    \ dict (hash-keys dict 'first) '()))) #t]\n    [else #f]))\n", "  ;; Auxiliary\
+    \ function that checks whether a string is\n  ;; lower or upper case\n  (define\
+    \ (string_case? str)\n    (if (string=? (string-upcase str) str)\n        'upper-case\n\
+    \        'lower-case))\n  ;; Auxiliary function that maps over all the keys in\
+    \ the\n  ;; dictionary and returns their string case\n  (define (map-string-case\
+    \ dict)\n    (map string_case? (hash-keys dict)))\n  ;; Returning the result for\
+    \ the main function\n  (if (empty? dict)\n      #f\n      (not (member #f (map-string-case\
+    \ dict)))))\n", "  (if (hash-empty? dict)\n      #f\n      (let ([key-type (hash-key-type\
+    \ dict)])\n        (if (or (equal? key-type 'string/ci) (equal? key-type 'string/ci))\n\
+    \            #t\n            #f))))\n```\n\n```racket\n#lang racket\n", "  (define\
+    \ (check-keys-str dict)\n    (for/and ([key (in-hash dict)]) (string? key)))\n\
+    \  (and dict (check-keys-str dict)\n       (define upper? (for/or ([key (in-hash\
+    \ dict)]) (string-upper-case? key)))\n       (define lower? (for/or ([key (in-hash\
+    \ dict)]) (string-lower-case? key)))\n       (or (and (not upper?) (not lower?))\n\
+    \           (and upper? (not lower?))\n           (and lower? (not upper?)))))\n",
+  "  ;; your code here\n  )\n", "    (cond\n        [(empty? dict) #f]\n        [(=\
+    \ (length (filter-map symbol? (keys dict))) (length (keys dict))) #t]\n      \
+    \  [else #f]))\n", "  (define (check-keys keys)\n    (cond ((empty? keys) #t)\n\
+    \          ((and (string? (first keys))\n                (let ([c (string-ref\
+    \ (first keys) 0)])\n                  (or (char-alphabetic? c) (char-numeric?\
+    \ c))))\n           (check-keys (rest keys)))\n          (else #f)))\n  (if (hash-empty?\
+    \ dict)\n      #f\n      (check-keys (hash-keys dict))))\n```\n\n## Extension\n\
+    \n```racket\n#lang racket\n", "  (define (check_dict_case-helper dict key-case)\n\
+    \    (if (empty? dict)\n        key-case\n        (if (or (string-ci=? (hash-ref\
+    \ dict (hash-key (car dict))) (hash-ref dict (hash-key (car dict)))\n        \
+    \        )\n                (not (string? (hash-ref dict (hash-key (car dict)))))\n\
+    \                )\n            #f\n            (check_dict_case-helper (hash-remove\
+    \ dict (hash-key (car dict))) (string-upcase? (hash-ref dict (hash-key (car dict)))))\n\
+    \        )\n    )\n  )\n  (check_dict_case-helper dict #t)\n)\n</code>\nMy code\
+    \ does not give me an error, but I do not know why it does not work.\nOutput:\n\
+    <code>&gt; (check_dict_case #hash((\"a\" .  \"apple\") (\"b\" .  \"banana\")))\n\
+    \n#t\n\n&gt; (check_dict_case #hash((\"a\" .  \"apple\") (\"A\" .  \"banana\"\
+    ) (\"B\" .  \"banana\")))\n\n#f\n\n&gt; (check_dict_case #hash((\"a\" .  \"apple\"\
+    ) (8 .  \"banana\") (\"a\" .  \"apple\")))\n\n#f\n\n&gt; (check_dict_case #hash((\"\
+    Name\" .  \"John\") (\"Age\" .  \"36\") (\"City\" .  \"Houston\")))\n\n#f\n\n\
+    &gt; (check_dict_case #hash((\"STATE\" .  \"NC\") (\"ZIP\" .  \"12345\")))\n\n\
+    #t\n</code>\nI also tried this code:\n<code>#lang racket\n", "  (if (equal? dict\
+    \ '())\n      #f\n      (if (not (equal? (hash-has-key? dict (hash-keys dict))\
+    \ #t))\n          #f\n          (if (equal? (string-upper-case? (hash-ref dict\
+    \ (hash-keys dict) #f)) #t)\n              #t\n              #f))))\n", "  (hash-for-each\n\
+    \   (lambda (k v)\n     (if (not (or (string? k) (symbol? k)))\n         (error\
+    \ 'check_dict_case \"Keys must be strings or symbols\")))\n   dict)\n  (define\
+    \ (helper-list l)\n    (or (null? l)\n        (and (string? (car l))\n       \
+    \      (helper-list (cdr l)))))\n  (define (helper-dict)\n    (let* ([keys (hash-keys\
+    \ dict)]\n           [key (car keys)]\n           [keycase (if (string? key)\n\
+    \                        (string-upcase key)\n                        (symbol->string\
+    \ key))])\n      (or (null? keys)\n          (and (equal? key keycase)\n     \
+    \          (helper-dict)))))\n  (or (helper-list (hash-keys dict))\n      (helper-dict)))\n\
+    \n", "  (let ((keys (hash-keys dict)))\n    (cond\n      [(empty? keys) #f]\n\
+    \      [(symbol? (car keys)) #f]\n      [(string-contains (symbol->string (car\
+    \ keys)) #\\#)(check_dict_case (hash-remove dict (car keys)))]\n      [(empty?\
+    \ (cdr keys)) #t]\n      [(string-ci<? (symbol->string (car keys)) (symbol->string\
+    \ (cadr keys))) (check_dict_case (hash-remove dict (car keys)))]\n      [else\
+    \ #f])))\n", "  (match dict\n    [(hash []) false]\n    [(hash [x ...])\n    \
+    \ (let ([is-upper #t]\n           [is-lower #t])\n       (for-each (lambda (x)\
+    \ (or (string-upper-case? (car x)) (set! is-upper #f))) (hash-keys dict))\n  \
+    \     (for-each (lambda (x) (or (string-lower-case? (car x)) (set! is-lower #f)))\
+    \ (hash-keys dict))\n       (or is-upper is-lower))]))\n", "  (define (all_or_none?\
+    \ p lst)\n    (cond ((null? lst) #t)\n          ((p (car lst)) (all_or-none? p\
+    \ (cdr lst)))\n          (else #f)))\n  (define (all-lower? lst)\n    (all_or_none?\
+    \ string-lower-case? lst))\n  (define (all-upper? lst)\n    (all_or_none? string-upper-case?\
+    \ lst))\n  (if (null? dict) #f\n      (let ([keys (hash-keys dict)])\n       \
+    \ (or (all-lower? keys) (all-upper? keys)))))\n```\n\n### [13-4]\n\n```racket\n\
+    #lang racket\n", "  (hash-for-each dict (lambda (key value)\n                \
+    \        (if (not (or (string? key) (symbol? key)))\n                        \
+    \    (error \"Not all keys are strings!\"))))\n  (hash-for-each dict (lambda (key\
+    \ value)\n                        (cond ((or (string-ci=? key \"a\") (string-ci=?\
+    \ key \"b\"))\n                               (display \"lower\"))\n         \
+    \                     ((or (string-ci=? key \"A\") (string-ci=? key \"B\"))\n\
+    \                               (display \"upper\"))\n                       \
+    \       (else (display \"no\")))))\n  (hash-for-each dict (lambda (key value)\n\
+    \                        (cond ((or (string-ci=? key \"a\") (string-ci=? key \"\
+    b\"))\n                               (display \"lower\"))\n                 \
+    \             ((or (string-ci=? key \"A\") (string-ci=? key \"B\"))\n        \
+    \                       (display \"upper\"))\n                              (else\
+    \ (display \"no\")))))\n  (hash-for-each dict (lambda (key value)\n          \
+    \              (cond ((or (string-ci=? key \"a\") (string-ci=? key \"b\"))\n \
+    \                              (display \"lower\"))\n                        \
+    \      ((or (string-ci=? key \"A\") (string-ci=? key \"B\"))\n               \
+    \                (display \"upper\"))\n                              (else (display\
+    \ \"no\")))))\n  (hash-for-each dict (lambda (key value)\n                   \
+    \     (cond ((or (string-ci=? key \"a\") (string-ci=? key \"b\"))\n          \
+    \                     (display \"lower\"))\n                              ((or\
+    \ (string-ci=? key \"A\") (string-ci=? key \"B\"))\n                         \
+    \      (display \"upper\"))\n                              (else (display \"no\"\
+    )))))\n  (hash-for-each dict (lambda (key value)\n                        (cond\
+    \ ((or (string-ci=? key \"a\") (string-ci=? key \"b\"))\n                    \
+    \           (display \"lower\"))\n                              ((or (string-ci=?\
+    \ key \"A\") (string-ci=? key \"B\"))\n                               (display\
+    \ \"upper\"))\n                              (else (display \"no\")))))", "  (hash-keys\
+    \ dict))\n", "  (if (equal? (hash-count dict) 0)\n      #f\n      (let* ((keys\
+    \ (hash-keys dict))\n             (first-char (string-ref (car keys) 0))\n   \
+    \          (is-upper (char-upper-case? first-char)))\n        (define (check-rest\
+    \ l)\n          (cond\n            [(null? l) #t]\n            [(char-upper-case?\
+    \ (string-ref (car l) 0))\n             (and (check-rest (cdr l)) (equal? #t is-upper))]\n\
+    \            [(char-lower-case? (string-ref (car l) 0))\n             (and (check-rest\
+    \ (cdr l)) (equal? #f is-upper))]\n            [else #f]))\n        (check-rest\
+    \ (cdr keys)))))\n```\n\n### Question 8\n\n```scheme\n#lang racket\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(and (string? (hash-ref dict (hash-key dict)))\n\
+    \          (string-ci=? (hash-ref dict (hash-key dict)) (string-upper-case (hash-ref\
+    \ dict (hash-key dict))))) #t]\n    [(and (string? (hash-ref dict (hash-key dict)))\n\
+    \          (string-ci=? (hash-ref dict (hash-key dict)) (string-lower-case (hash-ref\
+    \ dict (hash-key dict))))) #t]\n    [else #f]))\n", "  ;; Returns a list of keys\
+    \ from hash dictionary\n  (define (keys h)\n    (map (lambda (l) (car l)) (hash-keys\
+    \ h)))\n  ;; Returns a list of values from hash dictionary\n  (define (values\
+    \ h)\n    (map (lambda (l) (cdr l)) (hash-keys h)))\n  ;; Returns true if all\
+    \ list elements are strings, false otherwise\n  (define (all-strings? ls)\n  \
+    \  (cond\n      [(equal? ls '()) #t]\n      [(string? (car ls)) (all-strings?\
+    \ (cdr ls))]\n      [else #f]))\n  ;; Returns true if all strings in a list are\
+    \ lower case, false otherwise\n  (define (all-lower? ls)\n    (cond\n      [(equal?\
+    \ ls '()) #t]\n      [(string-ci=? (car ls) (string-downcase (car ls))) (all-lower?\
+    \ (cdr ls))]\n      [else #f]))\n  ;; Returns true if all strings in a list are\
+    \ upper case, false otherwise\n  (define (all-upper? ls)\n    (cond\n      [(equal?\
+    \ ls '()) #t]\n      [(string-ci=? (car ls) (string-upcase (car ls))) (all-upper?\
+    \ (cdr ls))]\n      [else #f]))\n  ;; Main function\n  (cond\n    [(empty? dict)\
+    \ #f]\n    [(and (all-strings? (keys dict)) (all-lower? (keys dict))) #t]\n  \
+    \  [(and (all-strings? (keys dict)) (all-upper? (keys dict))) #t]\n    [else #f]))\n",
+  "  (define (check-helper dict all-keys)\n    (if (null? dict)\n        (if (null?\
+    \ all-keys)\n            #t\n            (if (symbol=? (symbol->string (car all-keys))\
+    \ (symbol->string (car all-keys) 'capitalize))\n                #t\n         \
+    \       #f))\n        (let ([current-pair (car dict)])\n          (if (symbol=?\
+    \ (symbol->string (hash-ref current-pair 0)) (symbol->string (hash-ref current-pair\
+    \ 0) 'capitalize))\n              (check-helper (cdr dict) (cons (hash-ref current-pair\
+    \ 0) all-keys))\n              #f))))\n  (check-helper dict '()))\n</code>\nThis\
+    \ is a little bit better, but still not the most efficient.\n<code>#lang racket\n",
+  "  (cond ((or (hash-empty? dict) (not (hash-has-key? dict \"a\")))\n         #f)\n\
+    \        ((string-ci=? (string-downcase (hash-ref dict \"a\"))\n             \
+    \         (hash-ref dict \"a\"))\n         #t)\n        (else #f)))\n", "  (cond\n\
+    \    [(empty? dict) #f]\n    [(hash-has-key? dict (hash-keys dict)) #t]\n    [else\
+    \ #f]))\n</code>\nThis is the test I wrote to check it:\n<code>;;; Dictionary\
+    \ test suite.", "  (cond\n    [(hash-empty? dict) #f]\n    [(every string? (hash-keys\
+    \ dict)) #t]\n    [(every symbol? (hash-keys dict)) #t]\n    [else #f]))", " \
+    \ (cond ((not (empty? dict)) #f)\n        ((= (length dict) 1) #t)\n        ((>\
+    \ (length dict) 1) (if (and (string? (hash-ref dict (first (hash-keys dict))))\
+    \ (string? (hash-ref dict (last (hash-keys dict)))))\n                       \
+    \          (if (and (string-ci=? (hash-ref dict (first (hash-keys dict))) (hash-ref\
+    \ dict (last (hash-keys dict)))) (string-ci=? (first (hash-keys dict)) (last (hash-keys\
+    \ dict))))\n                                     #t\n                        \
+    \             #f)\n                                 #f))\n        (else #f)))\n\
+    \n", "  (define lower-key-vals (filter (lambda (key-val)\n                   \
+    \                (string-ci=? (car key-val) (car key-val)))\n                \
+    \                 (hash-&gt;list dict)))\n  (define upper-key-vals (filter (lambda\
+    \ (key-val)\n                                   (string-ci=? (car key-val) (car\
+    \ key-val)))\n                                 (hash-&gt;list dict)))\n  (or (and\
+    \ (hash-empty? dict) #f)\n      (and (hash-empty? lower-key-vals) #f)\n      (and\
+    \ (hash-empty? upper-key-vals) #f)\n      #t))\n</code>\nIt seems like this should\
+    \ work and it has the expected behavior on REPL but when I submit the code, I\
+    \ get the following error:\n<code>(\"hash-map\" \"parameterize\" \"list\" \"string-ci=?\"\
+    \ \"filter\" \"hash-&gt;list\" \"hash-empty?\" \"or\" \"and\" \"not\" \"car\"\
+    \ \"cdr\" \"&gt;=\" \"&lt;\" \"=\" \"&gt;\")\n</code>\nI am a little confused\
+    \ and any help is appreciated.\n\n\nA:\n\nI assume the error message is \"Unsupported\
+    \ built-in function\".\nThe error message is quite accurate: some functions are\
+    \ supported, and some are not.\nHash-map is not one of the supported functions.\n\
+    So use <code>map</code> instead.\n<code>(map (lambda (key-val)\n       (string-ci=?\
+    \ (car key-val) (car key-val)))\n     (hash-&gt;list dict))\n</code>\n", "  (cond\
+    \ ((empty? dict) #f)\n        ((hash-table-for-each \n          (lambda (k v)\
+    \ \n            (cond ((eq? (string-upper-case k) k) #t)\n                  ((eq?\
+    \ (string-lower-case k) k) #t)\n                  (else #f)))\n          dict)\n\
+    \         #t)\n        (else #f)))\n", "  (cond [(empty? dict) false]\n      \
+    \  [(andmap string? (hash-map dict)) (cond [(check_all_uppercase? dict) true]\n\
+    \                                                [(check_all_lowercase? dict)\
+    \ true]\n                                                [else false])]\n    \
+    \    [else false]))\n", "  (cond\n    [(null? dict) #f]\n    [(and (string? (car\
+    \ (dict-keys dict)))\n          (string-ci=? (car (dict-keys dict)) (string-upper-case\
+    \ (car (dict-keys dict)))))\n     (check_dict_case (subdict dict 1))]\n    [(and\
+    \ (string? (car (dict-keys dict)))\n          (string-ci=? (car (dict-keys dict))\
+    \ (string-lower-case (car (dict-keys dict)))))\n     (check_dict_case (subdict\
+    \ dict 1))]\n    [else #f]))\n", "  (if (not (hash-has-key? dict (hash-keys dict)))\n\
+    \      #f\n      (if (and (not (hash-has-key? dict (map string-downcase (hash-keys\
+    \ dict))))\n               (not (hash-has-key? dict (map string-upcase (hash-keys\
+    \ dict)))))\n          #f\n          #t)))\n", "    (define (is-upper? c) (char-upper-case?\
+    \ c))\n    (define (is-lower? c) (char-lower-case? c))\n    (define (is-string-all-lower?\
+    \ s)\n        (for/and ([ch (in-string s)])\n            (is-lower? ch)))\n  \
+    \  (define (is-string-all-upper? s)\n        (for/and ([ch (in-string s)])\n \
+    \           (is-upper? ch)))\n    (define (same-upper-lower? dict)\n        (for/and\
+    \ ([key (in-dict dict)]\n                  [val (in-dict dict key)])\n       \
+    \     (or (is-string-all-lower? key) (is-string-all-upper? key))))\n    (define\
+    \ (same-upper-upper? dict)\n        (for/and ([key (in-dict dict)]\n         \
+    \         [val (in-dict dict key)])\n            (is-string-all-upper? key)))\n\
+    \    (define (same-lower-lower? dict)\n        (for/and ([key (in-dict dict)]\n\
+    \                  [val (in-dict dict key)])\n            (is-string-all-lower?\
+    \ key)))\n    (cond\n        [(or (same-upper-lower? dict) (same-upper-upper?\
+    \ dict) (same-lower-lower? dict)) #t]\n        [else #f]))\n", "  (let ([dict_keys\
+    \ (hash-keys dict)])\n    (cond [(empty? dict_keys) #f]\n          [(andmap string?\
+    \ dict_keys) #t]\n          [(andmap (compose not string?) dict_keys) #t]\n  \
+    \        [else #f])))\n", "  (hash-empty? dict)\n  (define (check-dict-case hash)\n\
+    \    (hash-for-each\n     (lambda (key val)\n       (string-downcase key))\n \
+    \    dict))\n  (check-dict-case dict))", "  (define (aux dict case)\n    (if (hash-empty?\
+    \ dict)\n        #t\n        (if (string? (hash-ref dict (hash-first dict)))\n\
+    \            (if (eq? (string-upcase (hash-ref dict (hash-first dict)))\n    \
+    \                (hash-ref dict (hash-first dict)))\n                (aux (hash-remove\
+    \ dict (hash-first dict)) \"upper\")\n                (aux (hash-remove dict (hash-first\
+    \ dict)) \"lower\"))\n            #f)))\n  (aux dict \"any\"))\n", "  (hash-for-each\
+    \ (lambda (k v)\n                   (if (string? k)\n                       (if\
+    \ (or (string-ci=? (string-upcase k) k)\n                               (string-ci=?\
+    \ (string-downcase k) k))\n                           (void)\n               \
+    \            (error 'check_dict_case \"not uniform case\"))))\n              \
+    \   dict)\n  #t)\n", "   (cond\n       [(empty? dict) #f]\n       [(eq? (gethash\
+    \ 'a dict) (string-upper-case (gethash 'a dict))) #t]\n       [(eq? (gethash 'a\
+    \ dict) (string-lower-case (gethash 'a dict))) #t]\n       [else #f]))\n", " \
+    \ (if (empty? dict)\n      #f\n      (let ([keys (hash-keys dict)])\n        (cond\n\
+    \         [(string-contains? (car keys) (regexp \"[A-Z]\"))\n          (let loop\
+    \ ([keys (cdr keys)])\n            (if (empty? keys)\n                #t\n   \
+    \             (if (string-contains? (car keys) (regexp \"[a-z]\"))\n         \
+    \           #f\n                    (loop (cdr keys)))))\n          ]\n      \
+    \   [(string-contains? (car keys) (regexp \"[a-z]\"))\n          (let loop ([keys\
+    \ (cdr keys)])\n            (if (empty? keys)\n                #t\n          \
+    \      (if (string-contains? (car keys) (regexp \"[A-Z]\"))\n                \
+    \    #f\n                    (loop (cdr keys)))))\n          ]\n         [else\
+    \ #f]\n         ))))\n\n", "  (cond ((empty? dict) #f)\n        ((string-upper-case?\
+    \ (key-of dict)) #t)\n        ((string-lower-case? (key-of dict)) #t)\n      \
+    \  (else #f)))\n", "  (cond\n    [(empty? dict) #f]\n    [(string? (first (car\
+    \ dict))) (if (or (all-lower? (dict-keys dict))\n                            \
+    \              (all-upper? (dict-keys dict)))\n                              \
+    \       #t\n                                     #f)]\n    [else #f]))", "  (cond\
+    \ ((empty? dict) #f)\n        ((equal? (hash-ref dict (hash-keys dict 0)) \"\"\
+    ) #f)\n        ((equal? (hash-ref dict (hash-keys dict 0)) 0) #f)\n        ((not\
+    \ (char-alphabetic? (string-ref (hash-ref dict (hash-keys dict 0)) 0))) #f)\n\
+    \        ((equal? (hash-ref dict (hash-keys dict 0)) '()) #f)\n        ((check_dict_case_helper\
+    \ dict) #t)\n        (else #f)))\n", "  (cond\n    [(empty? dict) #f]\n    [(eq?\
+    \ (hash-ref dict (hash-keys dict 0) #f) #f) #f]\n    [(symbol=? (symbol->string\
+    \ (hash-ref dict (hash-keys dict 0) #f)) (string-upcase (symbol->string (hash-ref\
+    \ dict (hash-keys dict 0) #f)))) (check_dict_case (remove (hash-keys dict 0) dict))]\n\
+    \    [(symbol=? (symbol->string (hash-ref dict (hash-keys dict 0) #f)) (string-downcase\
+    \ (symbol->string (hash-ref dict (hash-keys dict 0) #f)))) (check_dict_case (remove\
+    \ (hash-keys dict 0) dict))]\n    [else #f]))\n", "  (cond ((empty? dict) #f)\n\
+    \        ((dict-every-key dict (lambda (s) (string-ci=? s (string-downcase s))))\
+    \ #t)\n        ((dict-every-key dict (lambda (s) (string-ci=? s (string-upcase\
+    \ s)))) #t)\n        (else #f)))\n", "  (cond\n    [(empty? dict) #f]\n    [(string?\
+    \ (key (car dict))) (check_dict_case (cdr dict))]\n    [else #f]))\n</code>\n\
+    Does anyone have an idea?\n\n\nA:\n\nAs pointed out in my comment, you're asking\
+    \ several questions in a single one, so let's split them:\n<blockquote>\n<p>The\
+    \ problem I'm having is that my check_dict_case function returns #f even when\
+    \ the dictionary contains all keys are strings in lower case</p>\n</blockquote>\n\
+    This one is easy to solve, it's just a matter of fixing your function:\n<code>(define\
+    \ (check-dict-case dict)\n  (cond\n    [(empty? dict) #t]\n    [(string? (key\
+    \ (car dict)))\n     (and (lower-case? (key (car dict)))\n          (check-dict-case\
+    \ (cdr dict)))]\n    [else #f]))\n</code>\nWhere <code>lower-case?</code> is a\
+    \ predicate that checks if a given string contains only lowercase letters.\n<blockquote>\n\
+    <p>I also need it to check if all keys are strings in upper case but can't figure\
+    \ out how to do this</p>\n</blockquote>\nThis part is left as an exercise - try\
+    \ again!\n<blockquote>\n<p>how do I get it to return true is the keys are all\
+    \ string in lower case or upper case</p>\n</blockquote>\nThis is similar to what\
+    \ you did for the first part of the question.\n<blockquote>\n<p>and how do I get\
+    \ it to return false if the keys are of different cases or if the hash is empty</p>\n\
+    </blockquote>\nOnce again, similar as before - you already know how to do it!\n\
+    <blockquote>\n<p>do I need separate functions for these different situations or\
+    \ can I accomplish this all with one function</p>\n</blockquote>\nThe answer to\
+    \ this question is the same as the answer to the question \"how do I implement\
+    \ such a function?\" - you already did it yourself! You may need to tweak it a\
+    \ little bit to fix some mistakes, but you have a working solution in your own\
+    \ answer!\n", "  (let ((values (hash-keys dict)))\n    (cond\n      [(empty? values)\
+    \ #f]\n      [(all-lower-case? values) #t]\n      [(all-upper-case? values) #t]\n\
+    \      [else #f])))\n", "  (cond\n    [(eq? (hash-keys dict) '()) #f]\n    [(andmap\
+    \ string? (hash-keys dict)) #t]\n    [(andmap symbol? (hash-keys dict)) #t]\n\
+    \    [else #f]))", "  (define (check-dict helper keys)\n    (if (empty? keys)\n\
+    \        helper\n        (let ((key (car keys)))\n          (if (and (string?\
+    \ key)\n                   (or (and (helper #t)\n                            (and\
+    \ (string-ci=? key key)\n                                 (check-dict #t (cdr\
+    \ keys))))\n                       (and (helper #f)\n                        \
+    \    (and (string-ci=? key key)\n                                 (check-dict\
+    \ #f (cdr keys))))))\n              helper\n              #f))))\n  (check-dict\
+    \ #t (hash-keys dict)))\n", "  (dict-case-helper dict 0 0))\n", "  (define (get-key\
+    \ h)\n    (hash-keys h))\n  (define (all-strings? list)\n    (for/and ([item list])\n\
+    \      (string? item)))\n  (define (all-lower? list)\n    (for/and ([item list])\n\
+    \      (string-locale-ci=? item (string-downcase item))))\n  (define (all-upper?\
+    \ list)\n    (for/and ([item list])\n      (string-locale-ci=? item (string-upcase\
+    \ item))))\n  (define (empty? dict)\n    (hash-empty? dict))\n  (if (empty? dict)\n\
+    \      #f\n      (if (and (all-strings? (get-key dict))\n               (or (all-lower?\
+    \ (get-key dict))\n                   (all-upper? (get-key dict))))\n        \
+    \  #t\n          #f)))\n", "  (define (check-keys-are-lower-case keys)\n    (cond\
+    \ ((empty? keys) #t)\n          ((string-ci=? (car keys) (downcase (car keys)))\n\
+    \           (check-keys-are-lower-case (cdr keys)))\n          (else #f)))\n \
+    \ (define (check-keys-are-upper-case keys)\n    (cond ((empty? keys) #t)\n   \
+    \       ((string-ci=? (car keys) (upcase (car keys)))\n           (check-keys-are-upper-case\
+    \ (cdr keys)))\n          (else #f)))\n  (cond ((empty? dict) #f)\n        ((check-keys-are-lower-case\
+    \ (hash-keys dict)) #t)\n        ((check-keys-are-upper-case (hash-keys dict))\
+    \ #t)\n        (else #f)))", "  (cond\n    [(or (empty? dict) (not (hash? dict)))\
+    \ #f]\n    [(equal? (string-upper-case (hash-keys dict)) (hash-keys dict)) #t]\n\
+    \    [(equal? (string-lower-case (hash-keys dict)) (hash-keys dict)) #t]\n   \
+    \ [else #f]))\n</code>\nBut I am having the error <code>hash-keys: contract violation,\
+    \ expected: hash? given: #&lt;void&gt;</code>\nWhat is causing the error?\n\n\n\
+    A:\n\n<code>hash-keys</code> is a procedure, you need to add a <code>()</code>\
+    \ after it:\n<code>(hash-keys dict)\n</code>\n", "  (if (equal? (hash-count dict)\
+    \ 0)\n      #f\n      (let ((is-lower-case #t)\n            (is-upper-case #t))\n\
+    \        (hash-for-each\n         (lambda (k v)\n           (set! is-lower-case\
+    \ (and is-lower-case (symbol? k)))\n           (set! is-upper-case (and is-upper-case\
+    \ (string? k))))\n         dict)\n        (or is-lower-case is-upper-case))))\n",
+  "  (cond\n    [(empty? dict) #f]\n    [(not (hash-has-key? dict (hash-keys dict)))\
+    \ #t]\n    [else #f]))\n", "  (let* ([keys (hash-keys dict)]\n         [all-lower?\
+    \ (for/and ([key keys]) (string-ci&lt;=? \"a\" key \"z\"))]\n         [all-upper?\
+    \ (for/and ([key keys]) (string-ci&lt;=? \"A\" key \"Z\"))])\n    (cond\n    \
+    \  [(and all-lower? (not all-upper?)) #t]\n      [(and all-upper? (not all-lower?))\
+    \ #t]\n      [else #f])))\n</code>\n", "  (if (empty? dict)\n      #f\n      (let\
+    \ ([upper (hash-has-key? dict (hash-keys dict))])\n        (if (hash-has-key?\
+    \ dict (map string-upcase (hash-keys dict)))\n            #t\n            #f))))\n",
+  "  (and (not (hash-empty? dict))\n       (or (hash-for-each (lambda (key val)\n\
+    \                            (and (string? key) (not (char-upcase? (string-ref\
+    \ key 0)))))\n                          dict)\n           (hash-for-each (lambda\
+    \ (key val)\n                            (and (string? key) (char-upcase? (string-ref\
+    \ key 0))))\n                          dict))))\n", "    (cond\n        [(hash-empty?\
+    \ dict)\n         #f]\n        [(hash-has-key? dict \"b\") #t]\n        [else\
+    \ #f]))\n```\n\n```java\n@Test\npublic void testCheckDictCase() {\n    HashDict\
+    \ dict = null;\n    assertFalse(Main.checkDictCase(dict));\n\n    dict = new HashDict();\n\
+    \    assertFalse(Main.checkDictCase(dict));\n\n    dict = new HashDict();\n  \
+    \  dict.put(\"a\", \"apple\");\n    dict.put(\"b\", \"banana\");\n    assertTrue(Main.checkDictCase(dict));\n\
+    \n    dict = new HashDict();\n    dict.put(\"a\", \"apple\");\n    dict.put(\"\
+    A\", \"banana\");\n    dict.put(\"B\", \"banana\");\n    assertFalse(Main.checkDictCase(dict));\n\
+    \n    dict = new HashDict();\n    dict.put(\"a\", \"apple\");\n    dict.put(8,\
+    \ \"banana\");\n    dict.put(\"a\", \"apple\");\n    assertFalse(Main.checkDictCase(dict));\n\
+    \n    dict = new HashDict();\n    dict.put(\"Name\", \"John\");\n    dict.put(\"\
+    Age\", \"36\");\n    dict.put(\"City\", \"Houston\");\n    assertFalse(Main.checkDictCase(dict));\n\
+    \n    dict = new HashDict();\n    dict.put(\"STATE\", \"NC\");\n    dict.put(\"\
+    ZIP\", \"12345\");\n    assertTrue(Main.checkDictCase(dict));\n}\n```\n\n## Problem\
+    \ 6\n\n```racket\n#lang racket\n", "  (cond [(empty? dict) #f]\n        [(hash-keys-all-string?\
+    \ dict)\n         (cond [(hash-keys-all-string-upper? dict) #t]\n            \
+    \   [(hash-keys-all-string-lower? dict) #t]\n               [else #f])]\n    \
+    \    [else #f]))\n", "  (hash-for-each (lambda (k v)\n                   (cond\
+    \ ((string? k)\n                          (hash-set! dict k (string-upcase k)))\n\
+    \                         ((number? k)\n                          (hash-set! dict\
+    \ k (string-downcase (number->string k))))))\n                 dict)\n  (let ((keys\
+    \ (hash-keys dict)))\n    (cond ((hash-empty? dict) #f)\n          ((list-mem?\
+    \ (string-downcase (first keys)) keys) #t)\n          (else #f))))\n", "  (cond\
+    \ ((hash-empty? dict) #f)\n        ((hash-has-keys? dict '(a)) #t)\n        (else\
+    \ (cond ((hash-has-keys? dict '(a A)) #f)\n                    (else #t)))))",
+  "  ;; check if all keys are strings\n  (define (is-string-keys keys)\n    (cond\
+    \ [(empty? keys) #t]\n          [(string? (first keys)) (is-string-keys (rest\
+    \ keys))]\n          [else #f]))\n  ;; check if all keys are upper case\n  (define\
+    \ (is-upper-keys keys)\n    (cond [(empty? keys) #t]\n          [(string-upcase?\
+    \ (first keys)) (is-upper-keys (rest keys))]\n          [else #f]))\n  ;; check\
+    \ if all keys are lower case\n  (define (is-lower-keys keys)\n    (cond [(empty?\
+    \ keys) #t]\n          [(string-lowercase? (first keys)) (is-lower-keys (rest\
+    \ keys))]\n          [else #f]))\n  ;; check if dict is empty\n  (cond [(hash-empty?\
+    \ dict) #f]\n        [(and (is-string-keys (hash-keys dict)) (is-upper-keys (hash-keys\
+    \ dict))) #t]\n        [(and (is-string-keys (hash-keys dict)) (is-lower-keys\
+    \ (hash-keys dict))) #t]\n        [else #f]))\n", "  (if (hash-empty? dict)\n\
+    \      #f\n      (cond ((hash-has-key? dict (string-upcase (hash-keys dict)))\
+    \ #f)\n            ((hash-has-key? dict (string-downcase (hash-keys dict))) #t)\n\
+    \            (else #f))))\n", "  (define (check-keys lst)\n    (cond [(empty?\
+    \ lst) #t]\n          [(and (symbol? (car lst)) (equal? (string-upcase (symbol->string\
+    \ (car lst))) (symbol->string (car lst))))\n           (check-keys (cdr lst))]\n\
+    \          [(and (symbol? (car lst)) (equal? (string-downcase (symbol->string\
+    \ (car lst))) (symbol->string (car lst))))\n           (check-keys (cdr lst))]\n\
+    \          [else #f]))\n  (check-keys (hash-keys dict)))\n", "  (cond\n    [(empty?\
+    \ dict) #f]\n    [(hash-has-key? dict \"a\")\n     (andmap\n      (lambda (key)\
+    \ (and (symbol? key) (string=? (symbol->string key) (symbol->string (string->symbol\
+    \ (string-downcase (symbol->string key)))))))\n      (hash-keys dict))]\n    [(hash-has-key?\
+    \ dict \"A\")\n     (andmap\n      (lambda (key) (and (symbol? key) (string=?\
+    \ (symbol->string key) (symbol->string (string->symbol (string-upcase (symbol->string\
+    \ key)))))))\n      (hash-keys dict))]\n    [else #f]))\n", "  (let ([first-key\
+    \ (car (hash-keys dict))])\n    (cond [(= (hash-count dict) 0) false]\n      \
+    \    [(string-ci=? first-key (string-upcase first-key))\n           (check-all-keys-eq-to-a-string?\
+    \ dict (string-upcase first-key))]\n          [(string-ci=? first-key (string-downcase\
+    \ first-key))\n           (check-all-keys-eq-to-a-string? dict (string-downcase\
+    \ first-key))]\n          [else false])))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

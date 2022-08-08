@@ -217,7 +217,1446 @@ completions: ["  (let ((best-extension \"\")\n        (best-strength 0))\n    (f
     \ extensions)))\n                                  (extensions-strength (cdr extensions)))]))))\n\
     \      (let ((str (sort (extensions-strength extensions)\n                   \
     \    (lambda (x y) (> (cdr x) (cdr y))))))\n        (string-append class_name\
-    \ \".\" (car (car str)))))))\n"]
+    \ \".\" (car (car str)))))))\n", "  (Strongest_Extension_iter class_name extensions\
+    \ (list 0 \"\")))\n", "  ;; get the strength of the extension\n  (define (strength\
+    \ e)\n    (- (length (regexp-match #rx\"[A-Z]\" e))\n       (length (regexp-match\
+    \ #rx\"[a-z]\" e))))\n  ;; sort the extensions by their strength\n  (define (sort-extensions)\n\
+    \    (sort extensions (\u03BB (x y) (> (strength x) (strength y)))))\n  ;; combine\
+    \ class name and extension name\n  (string-append class_name \".\" (first (sort-extensions))))\n",
+  "  (local [\n      (define (strength ext)\n          (apply - (map (lambda (c) (if\
+    \ (char-upper-case? c) 1 0)) ext)))\n      (define (strongest-extension extensions)\n\
+    \        (if (null? extensions)\n            \"\"\n            (if (> (strength\
+    \ (car extensions)) (strength (cadr extensions)))\n                (car extensions)\n\
+    \                (cadr extensions))))\n    ]\n    (string-append class_name \"\
+    .\" (strongest-extension extensions))))\n", "  (let ((extensions-with-strength\
+    \ (map strongest-extension-strength extensions)))\n    (list-ref\n     (sort extensions-with-strength\
+    \ >)\n     0)))", "  (string-append class_name \".\" (car (sort (map (lambda (x)\n\
+    \                                                 (string-append x \"|\"\n   \
+    \                                                              (number->string\n\
+    \                                                                  (/ (- (count-upper\
+    \ x)\n                                                                       \
+    \ (count-lower x))\n                                                         \
+    \            (string-length x)))))\n                                         \
+    \      extensions)\n                                           < :key car))))\n",
+  "  (define (count_capital str)\n    (cond [(empty? str) 0]\n          [(upper-case?\
+    \ (first str)) (+ 1 (count_capital (rest str)))]\n          [else (count_capital\
+    \ (rest str))]))\n  (define (count_small str)\n    (cond [(empty? str) 0]\n  \
+    \        [(lower-case? (first str)) (+ 1 (count_small (rest str)))]\n        \
+    \  [else (count_small (rest str))]))\n  (define (get_strength str)\n    (- (count_capital\
+    \ str) (count_small str)))\n  (define (strongest lst)\n    (cond [(empty? lst)\
+    \ \"\"]\n          [(empty? (rest lst)) (first lst)]\n          [(< (get_strength\
+    \ (first lst)) (get_strength (first (rest lst))))\n           (strongest (rest\
+    \ lst))]\n          [else (strongest lst)]))\n  (string-append class_name \".\"\
+    \ (strongest extensions)))\n", "  (define (str-strength str)\n    (let ((l (string->list\
+    \ str))\n          (CAP 0)\n          (SM 0))\n      (for ((c l))\n        (cond\n\
+    \          ((char-alphabetic? c)\n           (if (char-upper-case? c)\n      \
+    \         (set! CAP (+ CAP 1))\n               (set! SM (+ SM 1))))))\n      (-\
+    \ CAP SM)))\n  (if (empty? extensions)\n      class_name\n      (let ((max-strength\
+    \ -10000)\n            (max-strength-extension-name \"\"))\n        (for ((extn\
+    \ extensions))\n          (if (> (str-strength extn) max-strength)\n         \
+    \     (begin\n                (set! max-strength (str-strength extn))\n      \
+    \          (set! max-strength-extension-name extn))))\n        (string-append\
+    \ class_name \".\" max-strength-extension-name))))", "  (cond [(empty? extensions)\
+    \ \"\"]\n        [else\n         (let* ([extensions extensions]\n            \
+    \    [c (find_strongest_extension class_name extensions)]\n                [c\
+    \ (car c)]\n                [c (string-append (string-append class_name \".\"\
+    ) c)])\n           c)]))\n", "  (Strongest_Extension_Aux class_name extensions\
+    \ (length extensions)))\n", "  (let ([ex-st (map (lambda (ex)\n              \
+    \        (cons ex (if (string=? \"\" ex)\n                                   0\n\
+    \                                   (let ([uppercase-char (lambda (c) (member\
+    \ c '(\"A\" \"B\" \"C\" \"D\" \"E\" \"F\" \"G\" \"H\" \"I\" \"J\" \"K\" \"L\"\
+    \ \"M\" \"N\" \"O\" \"P\" \"Q\" \"R\" \"S\" \"T\" \"U\" \"V\" \"W\" \"X\" \"Y\"\
+    \ \"Z\")))])\n                                     (let ([count-uppercase (lambda\
+    \ (s) (apply + (map (lambda (c) (if (uppercase-char c) 1 0)) s)))])\n        \
+    \                               (/ (- (count-uppercase ex) (count-uppercase (string->symbol/locale\
+    \ ex)))\n                                          (length ex))))))\n        \
+    \            extensions)])\n    (let ([st (apply max (map (lambda (ex-st) (cdr\
+    \ ex-st)) ex-st))])\n      (string-append class_name \".\" (car (filter (lambda\
+    \ (ex-st) (= (cdr ex-st) st)) ex-st))))))\n", "  (display class_name)\n  (display\
+    \ \".\")\n  (display (define (strongest list)\n             (define (compare a\
+    \ b)\n               (if (< (abs (- (count-upper a) (count-lower a)))\n      \
+    \                (abs (- (count-upper b) (count-lower b))))\n                \
+    \   b\n                   a))\n             (cond ((null? (cdr list))\n      \
+    \              (car list))\n                   (else (compare (car list) (strongest\
+    \ (cdr list)))))))\n  (display (strongest extensions))\n  (display \"\\n\"))\n",
+  "  (define (strength name)\n    (define (count_upper s)\n      (if (empty? s)\n\
+    \          0\n          (if (char-upper-case? (first s))\n              (+ 1 (count_upper\
+    \ (rest s)))\n              (count_upper (rest s)))))\n    (define (count_lower\
+    \ s)\n      (if (empty? s)\n          0\n          (if (char-lower-case? (first\
+    \ s))\n              (+ 1 (count_lower (rest s)))\n              (count_lower\
+    \ (rest s)))))\n    (- (count_upper name) (count_lower name)))\n  (define (extensions-with-strength\
+    \ my-extensions)\n    (if (empty? my-extensions)\n        empty\n        (cons\
+    \ (cons (first my-extensions)\n                    (strength (first my-extensions)))\n\
+    \              (extensions-with-strength (rest my-extensions)))))\n  (define (strongest-extension\
+    \ my-extensions)\n    (if (empty? my-extensions)\n        empty\n        (if (>\
+    \ (strength (caar my-extensions))\n               (strength (caar (rest my-extensions))))\n\
+    \            (caar my-extensions)\n            (strongest-extension (rest my-extensions)))))\n\
+    \  (string-append class_name \".\" (strongest-extension (extensions-with-strength\
+    \ extensions))))\n", "  (define (Uppercase? c) (and (char-alphabetic? c) (char-upper-case?\
+    \ c)))\n  (define (Lowercase? c) (and (char-alphabetic? c) (char-lower-case? c)))\n\
+    \  (define (strength s)\n    (let loop ([i 0] [upper 0] [lower 0])\n      (if\
+    \ (= i (string-length s))\n          (- upper lower)\n          (if (Uppercase?\
+    \ (string-ref s i))\n              (loop (+ i 1) (+ upper 1) lower)\n        \
+    \      (loop (+ i 1) upper (+ lower 1))))))\n  (string-append class_name \".\"\
+    \ (apply max-by string<? (map strength extensions))))\n</code>\n", "  (define\
+    \ (alphanum extension)\n    (define (uppercase? letter)\n      (if (or (= letter\
+    \ #\\a) (= letter #\\e) (= letter #\\i) (= letter #\\o) (= letter #\\u))\n   \
+    \       #f\n          #t))\n    (if (uppercase? (string-ref extension 0))\n  \
+    \      (list (string-ref extension 0) #\\A)\n        (list (string-ref extension\
+    \ 0) #\\a)))\n  (for/list ([extension extensions])\n    (let* ([extension (string-append\
+    \ class_name \".\" extension)]\n           [upper-lower (map alphanum extension)]\n\
+    \           [uppercase (filter (lambda (element) (= #\\A (cdr element))) upper-lower)]\n\
+    \           [lowercase (filter (lambda (element) (= #\\a (cdr element))) upper-lower)]\n\
+    \           [strength (/ (length uppercase) (length lowercase))])\n      (list\
+    \ extension strength)))\n  (string-append (cadr (apply max (for/list ([extension\
+    \ extensions])\n                             (let* ([extension (string-append\
+    \ class_name \".\" extension)]\n                                    [upper-lower\
+    \ (map alphanum extension)]\n                                    [uppercase (filter\
+    \ (lambda (element) (= #\\A (cdr element))) upper-lower)]\n                  \
+    \                  [lowercase (filter (lambda (element) (= #\\a (cdr element)))\
+    \ upper-lower)]\n                                    [strength (/ (length uppercase)\
+    \ (length lowercase))])\n                               (list extension strength))))))",
+  "  (define (strength s)\n    (- (count-lower s) (count-upper s)))\n  (define (count-lower\
+    \ s)\n    (length (regexp-match #rx\"[a-z]\" s)))\n  (define (count-upper s)\n\
+    \    (length (regexp-match #rx\"[A-Z]\" s)))\n  (define (extension-strength ext)\n\
+    \    (strength ext))\n  (define (strongest-extension lst)\n    (if (null? lst)\
+    \ #f\n        (let* ([strongest (strongest-extension (cdr lst))]\n           \
+    \    [strength (extension-strength (car lst))])\n          (if (and (string? strongest)\
+    \ (> (extension-strength strongest) strength))\n              strongest\n    \
+    \          (car lst)))))\n  (if (null? extensions) class_name\n      (string-append\
+    \ class_name \".\" (strongest-extension extensions))))\n", "  (let ([get_ext_strength\
+    \ (lambda (extension)\n                            (/ (- (length (filter char-upper-case?\
+    \ (string->list extension)))\n                                  (length (filter\
+    \ char-lower-case? (string->list extension))))\n                             \
+    \  (length extension)))])\n    (let ([strengths (map get_ext_strength extensions)])\n\
+    \      (string-append class_name \".\"\n                     (list-ref extensions\n\
+    \                               (argmax strengths))))))\n", "  (define (num-uppercase-letters\
+    \ string)\n    (length (filter (lambda (c) (char-upcase? c)) string)))\n  (define\
+    \ (num-lowercase-letters string)\n    (length (filter (lambda (c) (char-lowercase?\
+    \ c)) string)))\n  (define (diff string)\n    (- (num-uppercase-letters string)\
+    \ (num-lowercase-letters string)))\n  (define (strengths lst)\n    (map diff lst))\n\
+    \  (define (strengths-combined lst)\n    (map (lambda (x) (cons x lst)) (strengths\
+    \ lst)))\n  (define (max-index lst)\n    (apply max-index-helper lst -1 0))\n\
+    \  (define (max-index-helper lst max index)\n    (cond [(null? lst) index]\n \
+    \         [(> (car lst) max) (max-index-helper (cdr lst) (car lst) index)]\n \
+    \         [else (max-index-helper (cdr lst) max (+ index 1))]))\n  (string-append\
+    \ class_name \".\" (list-ref (cdr (list-ref (strengths-combined extensions) (max-index\
+    \ (strengths extensions)))) (max-index (strengths extensions)))))", "  (define\
+    \ (total_upper str)\n    (let ((tot 0))\n      (for/fold ([i 0]) ([c (in-string\
+    \ str)])\n        (if (char-upper-case? c)\n            (add1 tot)\n         \
+    \   tot))\n      tot))\n  (define (total_lower str)\n    (let ((tot 0))\n    \
+    \  (for/fold ([i 0]) ([c (in-string str)])\n        (if (char-lower-case? c)\n\
+    \            (add1 tot)\n            tot))\n      tot))\n  (define (strength str)\n\
+    \    (/ (- (total_upper str) (total_lower str)) 1.0))\n  (define (find_strongest_ext_name\
+    \ exts)\n    (apply max exts))\n  (define (find_name_of_strongest_ext ext_list)\n\
+    \    (list-ref ext_list\n              (list-index (find_strongest_ext_name\n\
+    \                           (map strength ext_list))\n                       \
+    \   (map strength ext_list))))\n  (format \"~a.~a\" class_name (find_name_of_strongest_ext\
+    \ extensions)))\n```\n\n## Python Decorators 2 - Name Directory\n\n[Python Decorators\
+    \ 2 - Name Directory](https://www.codewars.com/kata/python-decorators-2-name-directory/python)\n\
+    \n```python\n# https://www.codewars.com/kata/python-decorators-2-name-directory/train/python\n\
+    # ==============================================================================\n\
+    # Python Decorators 2 - Name Directory\n# \n# Let's make a decorator that will\
+    \ make functions print \"DONE!\" at the end.\n# \n# To make a decorator you need\
+    \ to define a function that will decorate another\n# function. Whatever function\
+    \ will be passed to it, it should execute it and\n# print \"DONE!\" at the end.\n\
+    # \n# For example, if you will pass to it a function that adds two numbers, it\n\
+    # should execute it and print: DONE!\n# \n# A function that sums two numbers is\
+    \ already defined for you.\n# ==============================================================================\n\
+    def done_or_not", "  (cond\n    [(empty? extensions) \"No extensions!\"]\n   \
+    \ [else\n     (define-values (exts_cap exts_sm)\n       (let loop ([extensions\
+    \ extensions] [caps 0] [sms 0])\n         (cond\n           [(empty? extensions)\
+    \ (values caps sms)]\n           [else\n            (let ([ext (first extensions)])\n\
+    \              (if (char-upper-case? (string-ref ext 0))\n                  (loop\
+    \ (rest extensions) (+ caps 1) sms)\n                  (loop (rest extensions)\
+    \ caps (+ sms 1))))])))\n     (define (strength e)\n       (define (char-upper-case?\
+    \ c)\n         (regexp-match? #rx\"[A-Z]\" (string c)))\n       (define (char-lower-case?\
+    \ c)\n         (regexp-match? #rx\"[a-z]\" (string c)))\n       (define-values\
+    \ (caps sms)\n         (let loop ([ext e] [caps 0] [sms 0])\n           (cond\n\
+    \             [(empty? ext) (values caps sms)]\n             [else\n         \
+    \     (let ([c (first ext)])\n                (if (char-upper-case? c)\n     \
+    \               (loop (rest ext) (+ caps 1) sms)\n                    (loop (rest\
+    \ ext) caps (+ sms 1))))])))\n       (- caps sms))\n     (define (strongest_extension\
+    \ e)\n       (if (empty? (rest e))\n           (car e)\n           (let ([e1 (car\
+    \ e)] [e2 (cadr e)])\n             (if (> (strength e1) (strength e2))\n     \
+    \            (strongest_extension (cons e1 (cddr e)))\n                 (strongest_extension\
+    \ (cons e2 (cddr e)))))))\n     (string-append class_name \".\" (strongest_extension\
+    \ extensions))]])", "  (match (determine-strength-extensions extensions)\n   \
+    \ [((strongest_name _) _) (string-append class_name \".\" strongest_name)]))\n",
+  "  (let* ([chars (string->list class_name)]\n         [caps (list->string (filter\
+    \ char-upper-case? chars))]\n         [smalls (list->string (filter char-lower-case?\
+    \ chars))]\n         [num-caps (string-length caps)]\n         [num-smalls (string-length\
+    \ smalls)]\n         [strength (/ num-caps num-smalls)])\n    (for/fold ([strongest-extension\
+    \ \"\"])\n              ([extension extensions])\n      (let* ([ext-chars (string->list\
+    \ extension)]\n             [ext-caps (list->string (filter char-upper-case? ext-chars))]\n\
+    \             [ext-smalls (list->string (filter char-lower-case? ext-chars))]\n\
+    \             [ext-num-caps (string-length ext-caps)]\n             [ext-num-smalls\
+    \ (string-length ext-smalls)]\n             [ext-strength (/ ext-num-caps ext-num-smalls)])\n\
+    \        (if (> ext-strength strength)\n            extension\n            strongest-extension)))))\n",
+  "  (define (cap_sm extension)\n    (let* ([caps (regexp-match #rx\"A-Z\" extension)]\n\
+    \           [sm (regexp-match #rx\"a-z\" extension)])\n      (cons (length caps)\
+    \ (length sm))))\n  (let ([strongest (argmax (compose list cap_sm) extensions)])\n\
+    \    (string-append class_name \".\" strongest)))", "  (define (count_cap name)\n\
+    \    (cond ((null? name) 0)\n          ((char-numeric? (car name)) (count_cap\
+    \ (cdr name)))\n          ((char-alphabetic? (car name)) (count_cap (cdr name)))\n\
+    \          ((char-upper-case? (car name)) (+ 1 (count_cap (cdr name))))\n    \
+    \      (else (count_cap (cdr name)))))\n  (define (count_small name)\n    (cond\
+    \ ((null? name) 0)\n          ((char-numeric? (car name)) (count_small (cdr name)))\n\
+    \          ((char-alphabetic? (car name)) (count_small (cdr name)))\n        \
+    \  ((char-lower-case? (car name)) (+ 1 (count_small (cdr name))))\n          (else\
+    \ (count_small (cdr name)))))\n  (define (max_extension ext_list)\n    (define\
+    \ (iter_extension remaining_extensions max_ext)\n      (cond ((null? remaining_extensions)\
+    \ max_ext)\n            ((> (- (count_cap (car remaining_extensions))\n      \
+    \             (count_small (car remaining_extensions)))\n                (- (count_cap\
+    \ max_ext)\n                   (count_small max_ext)))\n             (iter_extension\
+    \ (cdr remaining_extensions)\n                             (car remaining_extensions)))\n\
+    \            (else (iter_extension (cdr remaining_extensions) max_ext))))\n  \
+    \  (cond ((null? ext_list) \"\")\n          (else (iter_extension (cdr ext_list)\
+    \ (car ext_list)))))\n  (string-append class_name \".\" (max_extension extensions)))\n",
+  "  (define (capcount str)\n    (apply + (map char-upcase? (string->list str))))\n\
+    \  (define (smcount str)\n    (apply + (map char-lower-case? (string->list str))))\n\
+    \  (define (str_extension str)\n    (let ((cap (capcount str))\n          (sm\
+    \ (smcount str)))\n      (string-append class_name \".\" str)))\n  (string-append\
+    \ (car (sort (map str_extension extensions) (\u03BB (a b) (> (abs (- (capcount\
+    \ (car (string-split (car (string-split a \".\"))))) (capcount (car (string-split\
+    \ (car (string-split b \".\"))))))) (abs (- (capcount (car (string-split (car\
+    \ (string-split a \".\"))))) (capcount (car (string-split (car (string-split b\
+    \ \".\")))))))))) \".\" (car (string-split (car (string-split (string-append class_name\
+    \ \".\" (car (sort (map str_extension extensions) (\u03BB (a b) (> (abs (- (capcount\
+    \ (car (string-split (car (string-split a \".\"))))) (capcount (car (string-split\
+    \ (car (string-split b \".\"))))))) (abs (- (capcount (car (string-split (car\
+    \ (string-split a \".\"))))) (capcount (car (string-split (car (string-split b\
+    \ \".\"))))))))))) \".\")) \".\")))\n", "  (let* ([zipped (zip extensions (map\
+    \ string-cap-sm extensions))]\n         [sorted (sort (lambda (a b)\n        \
+    \                 (let ([a-strength (- (cadr a) (caddr a))]\n                \
+    \               [b-strength (- (cadr b) (caddr b))])\n                       \
+    \    (if (< a-strength b-strength) #t #f)))\n                       zipped)]\n\
+    \         [strongest (car sorted)])\n    (string-append class_name \".\" (car\
+    \ strongest))))\n", "  (cond ((null? extensions) class_name)\n        (else\n\
+    \         (define weakest_extension\n           (apply min (map\n            \
+    \          (lambda (extension)\n                        (define cap-strength\n\
+    \                          (length (filter char-upcase? extension)))\n       \
+    \                 (define sm-strength\n                          (length (filter\
+    \ char-lower-case? extension)))\n                        (/ (- cap-strength sm-strength)\
+    \ 1.0))\n                      extensions)))\n         (define weakest_extension_name\n\
+    \           (car (filter (lambda (extension)\n                          (= weakest_extension\n\
+    \                             (define cap-strength\n                         \
+    \      (length (filter char-upcase? extension)))\n                           \
+    \  (define sm-strength\n                               (length (filter char-lower-case?\
+    \ extension)))\n                             (/ (- cap-strength sm-strength) 1.0)))\n\
+    \                        extensions)))\n         (define new_class_name\n    \
+    \       (string-append class_name \".\" weakest_extension_name))\n         (Strongest_Extension\
+    \ new_class_name\n                              (filter (lambda (extension)\n\
+    \                                        (not (= extension weakest_extension_name)))\n\
+    \                                      extensions)))))", "  (let loop ([curr-exts\
+    \ extensions]\n             [strongest-ext \"\"]\n             [strongest-ext-strength\
+    \ 0])\n    (if (null? curr-exts)\n        (format \"~a.~a\" class_name strongest-ext)\n\
+    \        (let ([curr-ext (car curr-exts)]\n              [curr-ext-cap (let loop\
+    \ ([curr-chars (string->list curr-ext)]\n                                    \
+    \   [curr-strength 0])\n                                (if (null? curr-chars)\n\
+    \                                    curr-strength\n                         \
+    \           (let ([curr-char (car curr-chars)])\n                            \
+    \          (if (char-numeric? curr-char)\n                                   \
+    \       (loop (cdr curr-chars) curr-strength)\n                              \
+    \            (if (char-alphabetic? curr-char)\n                              \
+    \                (if (char-upper-case? curr-char)\n                          \
+    \                        (loop (cdr curr-chars) (+ curr-strength 1))\n       \
+    \                                           (loop (cdr curr-chars) curr-strength))\n\
+    \                                              (loop (cdr curr-chars) curr-strength)))))))\n\
+    \              [curr-ext-sm (let loop ([curr-chars (string->list curr-ext)]\n\
+    \                                      [curr-strength 0])\n                  \
+    \           (if (null? curr-chars)\n                                 curr-strength\n\
+    \                                 (let ([curr-char (car curr-chars)])\n      \
+    \                             (if (char-numeric? curr-char)\n                \
+    \                       (loop (cdr curr-chars) curr-strength)\n              \
+    \                         (if (char-alphabetic? curr-char)\n                 \
+    \                          (if (char-lower-case? curr-char)\n                \
+    \                               (loop (cdr curr-chars) (+ curr-strength 1))\n\
+    \                                               (loop (cdr curr-chars) curr-strength))\n\
+    \                                           (loop (cdr curr-chars) curr-strength)))))))\n\
+    \              [curr-ext-strength (/ cur", "  (string-append class_name \".\"\
+    \ (list-ref extensions 0)))\n", "  (define strength-of-extension\n    (lambda\
+    \ (extension)\n      (let ([upc-count (count (lambda (ch) (char-upper-case? ch))\
+    \ extension)]\n            [low-count (count (lambda (ch) (char-lower-case? ch))\
+    \ extension)])\n        (/ (- upc-count low-count) 1.0))))\n  (define (max-extension\
+    \ list-of-extensions)\n    (let ([sorted-exts (sort list-of-extensions strength-of-extension\
+    \ <)])\n      (first sorted-exts)))\n  (string-append class_name \".\" (max-extension\
+    \ extensions)))\n```\n\n```racket\n#lang racket\n", "  (let* ([str-fn (lambda\
+    \ (s) (let ([cap (count (regexp-match #rx\"[A-Z]+\" s)\n                     \
+    \                    s)]\n                                  [sm (count (regexp-match\
+    \ #rx\"[a-z]+\" s)\n                                              s)])\n     \
+    \                         (- cap sm)))])\n    (string-append class_name \".\"\n\
+    \                   (car (argmax extensions str-fn)))))\n", "  (define (trim_ext\
+    \ str)\n    (string-upcase (regexp-replace #rx\"[^A-Z]\" str \"\")))\n  (define\
+    \ (count_lower_ext str)\n    (string-count str #rx\"[a-z]\"))\n  (define (count_upper_ext\
+    \ str)\n    (string-count str #rx\"[A-Z]\"))\n  (define (strength str)\n    (/\
+    \ (- (count_upper_ext str) (count_lower_ext str)) 1.0))\n  (define (get_strongest_ext\
+    \ lst)\n    (define (strongest_ext lst str_max str_name)\n      (cond [(null?\
+    \ lst) str_name]\n            [(<= (strength (car lst)) str_max) (strongest_ext\
+    \ (cdr lst) str_max str_name)]\n            [else (strongest_ext (cdr lst) (strength\
+    \ (car lst)) (car lst))]))\n    (string-append class_name \".\" (trim_ext (strongest_ext\
+    \ extensions -2147483647 \"\"))))\n  (get_strongest_ext extensions))", "  (let\
+    \ ([sorted_exts (sort extensions <\n                            (\u03BB (a b)\n\
+    \                              (cond\n                                [(>= (count-upper\
+    \ a) (count-upper b)) true]\n                                [(>= (count-lower\
+    \ a) (count-lower b)) false]\n                                [else (string<?\
+    \ a b)])))])\n    (printf \"~~~ sorted_exts: ~a\\n\" sorted_exts)\n    (string-append\
+    \ class_name \".\" (first sorted_exts))))\n", "  (cond [(empty? extensions) (error\
+    \ \"No extensions\")]\n        [else (strongest_extension_helper class_name extensions\
+    \ #f)]))\n", "  (define (strength s)\n    (define (cap? c)\n      (char-upper-case?\
+    \ c))\n    (define (sm? c)\n      (char-lower-case? c))\n    (define (count_func\
+    \ str func)\n      (foldl (lambda (c acc)\n               (if (func c)\n     \
+    \              (+ acc 1)\n                   acc))\n             0 str))\n   \
+    \ (/ (- (count_func s cap?) (count_func s sm?))\n       (string-length s)))\n\
+    \  (define (str_ext str_strength)\n    (string-append class_name\n           \
+    \        \".\"\n                   (car str_strength)))\n  (str_ext (argmax extensions\
+    \ strength)))", "  (define (upper-chars s)\n    (length (filter char-uppercase?\
+    \ (string->list s))))\n  (define (lower-chars s)\n    (length (filter char-lower-case?\
+    \ (string->list s))))\n  (define (strength s)\n    (/ (- (upper-chars s) (lower-chars\
+    \ s)) 1.0))\n  (string-append class_name \".\" (list-ref\n    (sort (map (lambda\
+    \ (x) (list x (strength x))) extensions)\n      (lambda (x y) (< (cadr x) (cadr\
+    \ y)))) 0)))\n", "  (define (cap-count lst)\n    (apply + (map char-upcase? lst)))\n\
+    \  (define (sm-count lst)\n    (apply + (map char-lower-case? lst)))\n  (define\
+    \ (ext-strength ext)\n    (- (cap-count ext) (sm-count ext)))\n  (define (ext-sort\
+    \ extension_list)\n    (sort extension_list > (lambda (a b)\n                \
+    \             (ext-strength a b))))\n  (string-append class_name \".\"\n     \
+    \            (string-join (ext-sort extensions) \".\")))", "  (let* ([extension-strength\
+    \ (lambda (extension)\n                               (let ([cap (length (regexp-match*\
+    \ #rx\"[A-Z]\" extension))]\n                                     [sm (length\
+    \ (regexp-match* #rx\"[a-z]\" extension))])\n                                \
+    \ (- cap sm)))])\n    (string-append class_name \".\" (list-ref (sort extensions\
+    \ extension-strength) 0))))\n```\n\nThe example of using this function:\n\n```racket",
+  "  (cond\n    [(null? extensions)\n     (string-append class_name \".\")]\n    [else\n\
+    \     (let*\n         ((extension (car extensions))\n          (extension-strength\
+    \ (count-upper-lower extension)))\n       (if (< extension-strength (count-upper-lower\
+    \ (Strongest_Extension class_name (cdr extensions))))\n           (string-append\
+    \ class_name \".\" extension)\n           (string-append class_name \".\" (Strongest_Extension\
+    \ class_name (cdr extensions)))))]))\n", "  (cond\n    [(null? extensions) \"\
+    Error: no extension has been found\"]\n    [(string=? class_name (car extensions))\
+    \ (Strongest_Extension class_name (cdr extensions))]\n    [else (best-strength-extension\
+    \ class_name (cdr extensions) (car extensions))]))\n", "  (letrec ([name-cap (lambda\
+    \ (name) (length (regexp-match* #rx\"[A-Z]\" name)))]\n           [name-sm (lambda\
+    \ (name) (length (regexp-match* #rx\"[a-z]\" name)))]\n           [class-strength\
+    \ (lambda (name)\n                             (/ (- (name-cap name) (name-sm\
+    \ name)) 2))]\n           [max-class (lambda (classes)\n                     \
+    \   (let* ([max-extension (list-ref (sort classes class-strength >) 0)]\n    \
+    \                           [max-strength (class-strength max-extension)])\n \
+    \                         (list max-extension max-strength)))])\n    (string-append\
+    \ class_name \".\" (car (max-class extensions)))))\n", "  (cond\n    [(null? extensions)\n\
+    \     \"\"\n    ]\n    [else\n     (let* ([(strongest_extensio_n strength)\n \
+    \            (reduce\n              (lambda (strongest_so_far extension)\n   \
+    \             (let* ([extension_strength\n                        (round\n   \
+    \                      (/\n                          (-\n                    \
+    \       (for/sum\n                            ([c (in-string extension)])\n  \
+    \                          (if (char-upper-case? c) 1 0))\n                  \
+    \         (for/sum\n                            ([c (in-string extension)])\n\
+    \                            (if (char-lower-case? c) 1 0)))\n               \
+    \           100.0))\n                       ])\n                  (if (< extension_strength\
+    \ strength)\n                      strongest_so_far\n                      (values\
+    \ extension extension_strength)\n                      )))\n              '((\"\
+    \" -999999))\n              extensions)]\n            )\n      (string-append\
+    \ class_name \".\" strongest_extensio_n)\n      )\n    ]\n    )\n  )", "  (match-define\
+    \ (list first_strongest second_strongest)\n                (sort (map (lambda\
+    \ (extension)\n                             (cons extension\n                \
+    \                   (cons (- (length (regexp-match* #rx\"[A-Z]\" extension))\n\
+    \                                            (length (regexp-match* #rx\"[a-z]\"\
+    \ extension)))\n                                         (length extension))))\n\
+    \                           extensions)\n                      < #:key cdr))\n\
+    \  (cond [(string=? (car first_strongest) (car second_strongest))\n         (string-append\
+    \ class_name \".\" (car first_strongest))]\n        [else\n         (string-append\
+    \ class_name \".\" (car first_strongest))]))\n", "  (if (null? extensions)\n \
+    \     \"There is no extension\"\n      (define (class-extension class_name strength)\n\
+    \        (if (null? class_name)\n            strength\n            (if (char-upper-case?\
+    \ (string-ref class_name 0))\n                (class-extension (substring class_name\
+    \ 1) (+ strength 1))\n                (class-extension (substring class_name 1)\
+    \ (- strength 1)))))\n      (define (highest-strength extension)\n        (class-extension\
+    \ extension 0))\n      (define (get-strongest extensions)\n        (if (null?\
+    \ extensions)\n            (list 0 \"\")\n            (let* ((list1 (get-strongest\
+    \ (cdr extensions)))\n                   (list2 (list (highest-strength (car extensions))\
+    \ (car extensions))))\n              (if (< (car list1) (car list2))\n       \
+    \           list2\n                  list1))))\n      (define (class-extension_s\
+    \ class_name strength)\n        (cond ((null? class_name) strength)\n        \
+    \      ((char-upper-case? (string-ref class_name 0))\n               (class-extension_s\
+    \ (substring class_name 1) (+ strength 1)))\n              (else (class-extension_s\
+    \ (substring class_name 1) (- strength 1)))))\n      (define (highest-strength_s\
+    \ extension)\n        (class-extension_s extension 0))\n      (define (get-strongest_s\
+    \ extensions)\n        (cond ((null? extensions) (list 0 \"\"))\n            \
+    \  (else (let* ((list1 (get-strongest_s (cdr extensions)))\n                 \
+    \          (list2 (list (highest-strength_s (car extensions)) (car extensions))))\n\
+    \                     (if (< (car list1) (car list2))\n                      \
+    \   list2\n                         list1)))))\n      (define (ext-strength class_name\
+    \ extensions)\n        (list->string (list class_name \".\" (cadr (get-strongest\
+    \ extensions)))))\n      (define (ext-strength_s class_name extensions)\n    \
+    \    (list->string (list class_name \".\" (cadr (get-strongest_s extensions)))))\n\
+    \      (ext-strength class_name extensions", "  (define (upper-count str) (for/sum\
+    \ ([char (in-string str)]) (char-upper-case? char)))\n  (define (lower-count str)\
+    \ (for/sum ([char (in-string str)]) (char-lower-case? char)))\n  (define (strength\
+    \ str) (- (upper-count str) (lower-count str)))\n  (define (strongest_ext_name\
+    \ lst)\n    (list-ref lst (for/first ([i (in-range (length lst))]) (and (= (strength\
+    \ (list-ref lst i))\n                                                        \
+    \            (max (map strength lst)))\n                                     \
+    \                           i))))\n  (format \"~a.~a\" class_name (strongest_ext_name\
+    \ extensions)))\n", "  (define (strong extension)\n    (let loop ([n (- (string-length\
+    \ extension) 1)] [cap 0] [sm 0])\n      (cond\n       [(= n -1) (/ cap (- sm))]\n\
+    \       [(char-upper-case? (string-ref extension n))\n        (loop (- n 1) (+\
+    \ cap 1) sm)]\n       [else (loop (- n 1) cap (+ sm 1))])))\n  (define (strength-compare\
+    \ s1 s2)\n    (if (< s1 s2) #t\n        (if (= s1 s2) #f\n            #f)))\n\
+    \  (define (return-first-extension extensions)\n    (define (extension-compare\
+    \ e1 e2)\n      (if (string<? e1 e2) #t\n          #f))\n    (if (empty? extensions)\
+    \ '()\n        (if (null? (cdr extensions)) (car extensions)\n            (if\
+    \ (extension-compare (car extensions) (car (cdr extensions)))\n              \
+    \  (car extensions)\n                (return-first-extension (cdr extensions))))))\n\
+    \  (define (f extension-list)\n    (let loop ([list extension-list] [best (list\
+    \ (list (car extension-list) (strong (car extension_list))))])\n      (cond\n\
+    \       [(null? list) (return-first-extension (map (\u03BB (x) (car x)) best))]\n\
+    \       [(strength-compare (strong (car list)) (strong (car (car best))))\n  \
+    \      (loop (cdr list) (list (list (car list) (strong (car list)))))\n      \
+    \  ]\n       [else (loop (cdr list) best)])))\n  (string-append class_name \"\
+    .\" (f extensions)))", "  (define (cap sm s)\n    (cond\n      [(empty? s) (list\
+    \ sm cap)]\n      [(char-upper-case? (car s)) (cap (+ sm 1) cap)]\n      [(char-lower-case?\
+    \ (car s)) (cap sm (+ cap 1))]\n      [else (cap sm cap)]))\n  (define (strongest\
+    \ s)\n    (cond\n      [(empty? s) '()]\n      [(empty? (cdr s)) (car s)]\n  \
+    \    [(> (abs (/ (first (cap 0 0 (car s))) (first (cap 0 0 (car (cdr s)))))) 1)\
+    \ (car s)]\n      [else (strongest (cdr s))]))\n  (string-append class_name \"\
+    .\" (strongest extensions)))\n```\n\n```racket\n#lang racket\n", "  (if (null?\
+    \ extensions)\n      \"\"\n      (let* ((ext (car extensions))\n             (next\
+    \ (Strongest_Extension class_name (cdr extensions)))\n             (next_st\n\
+    \              (if (string=? \"\" next)\n                  0\n               \
+    \   (let* ((next_st_list (regexp-match #rx\"\\.(.*)\\.\" next))\n            \
+    \             (ext_of_next (cadr next_st_list)))\n                    (- (length\
+    \ (regexp-match #rx\"[A-Z]\" ext_of_next))\n                       (length (regexp-match\
+    \ #rx\"[a-z]\" ext_of_next)))))))\n        (let* ((st (- (length (regexp-match\
+    \ #rx\"[A-Z]\" ext))\n                      (length (regexp-match #rx\"[a-z]\"\
+    \ ext))))\n               (result\n                (if (> st next_st)\n      \
+    \              (string-append class_name \".\" ext)\n                    next)))\n\
+    \          result))))\n", "  (define (extension-strength e)\n    (let ([caps (count-upper-cases\
+    \ e)]\n          [smalls (count-lower-cases e)])\n      (- caps smalls)))\n  (define\
+    \ (count-upper-cases str)\n    (length (regexp-match* #rx\"[A-Z]\" str)))\n  (define\
+    \ (count-lower-cases str)\n    (length (regexp-match* #rx\"[a-z]\" str)))\n  (let\
+    \ ([max-strength (apply max (map extension-strength extensions))])\n    (string-append\
+    \ class_name \".\"\n                   (first (filter (lambda (e) (= (extension-strength\
+    \ e) max-strength))\n                                  extensions)))))", "  (define-values\
+    \ (class ext) (string-split class_name \".\"))\n  (define strength-of-extension\n\
+    \    (lambda (ext)\n      (define number-of-uppercase-letters\n        (lambda\
+    \ (str)\n          (for/fold ([count 0]) ([char (in-string str)])\n          \
+    \  (if (char-upper-case? char)\n                (+ count 1)\n                count))))\n\
+    \      (define number-of-lowercase-letters\n        (lambda (str)\n          (for/fold\
+    \ ([count 0]) ([char (in-string str)])\n            (if (char-lower-case? char)\n\
+    \                (+ count 1)\n                count))))\n      (- (number-of-uppercase-letters\
+    \ ext)\n         (number-of-lowercase-letters ext))))\n  (string-append class\
+    \ \".\"\n                 (apply max-key strength-of-extension extensions)))\n",
+  "  (local [(define (process_extension extension)\n            (define (is_lowercase?\
+    \ c) (and (char-lower-case? c) (not (char-upper-case? c))))\n            (define\
+    \ (is_uppercase? c) (and (char-upper-case? c) (not (char-lower-case? c))))\n \
+    \           (define (letter_count pred lst) (apply + (map pred lst)))\n      \
+    \      (let* ([chars (string->list extension)]\n                   [lc (letter_count\
+    \ is_lowercase? chars)]\n                   [uc (letter_count is_uppercase? chars)])\n\
+    \              (/ (- uc lc) 1.0)))\n           (define (find_strongest extensions)\n\
+    \             (apply max (map process_extension extensions)))\n           (define\
+    \ (find_strongest_extension extensions)\n             (apply first (filter (lambda\
+    \ (x) (= (process_extension x) (find_strongest extensions))) extensions)))\n \
+    \          (define (format_string class_name extension)\n             (format\
+    \ \"~a.~a\" class_name extension))]\n    (format_string class_name (find_strongest_extension\
+    \ extensions))))\n", "  (let ((best (foldl\n               (lambda (e lst)\n \
+    \                (let ((class-number (for/sum\n                              \
+    \        ([c (in-string e)]\n                                       #:when (char-alphabetic?\
+    \ c)\n                                       #:when (char-upper-case? c)))\n \
+    \                                    1))\n                       (ext-number (for/sum\n\
+    \                                    ([c (in-string e)]\n                    \
+    \                 #:when (char-alphabetic? c)\n                              \
+    \       #:when (char-lower-case? c)))\n                                   1)))\n\
+    \                   (let ((strenght (/ class-number ext-number)))\n          \
+    \           (if (not (null? lst))\n                         (if (> strenght (cadr\
+    \ lst))\n                             (list strenght e)\n                    \
+    \         lst)\n                         (list strenght e)))))\n             \
+    \  (list -1 \"my_class\")\n               extensions)))\n    (format \"~a.~a\"\
+    \ class_name (cadr best))))", "  (match-define\n    (list class_name (list (list\
+    \ ext_name (list (list cap_count sm_count)\n                                 \
+    \               (list ext_strength _)))))\n    (list class_name (map (\u03BB (ext)\
+    \ (list ext (Strength ext))) extensions)))\n  (string-append class_name \".\"\
+    \ ext_name))\n", "  (let ((extension-name\n         (apply max (map (lambda (extension)\n\
+    \                           (let ((CAP (length (regexp-match* #rx\"[A-Z]\" extension)))\n\
+    \                                 (SM (length (regexp-match* #rx\"[a-z]\" extension))))\n\
+    \                             (if (zero? CAP)\n                              \
+    \   (string->number extension)\n                                 (/ (- CAP SM)\
+    \ CAP))))\n                         extensions))))\n    (string-append class_name\
+    \ \".\" extension-name)))\n", "  (cond ((null? extensions)\n         \"\")\n \
+    \       ((= (count-strongest-strength class_name extensions)\n            (count-strength\
+    \ (first extensions)))\n         (string-append class_name \".\" (first extensions)))\n\
+    \        (else\n         (Strongest_Extension class_name (rest extensions)))))\n",
+  "  (for/fold ([max_extension_strength 0]\n             [max_extension \"\"])\n \
+    \           ([extension extensions])\n    (let* ([extension_strength (extension-strength\
+    \ extension)]\n           [max_extension (if (> extension_strength max_extension_strength)\n\
+    \                              extension\n                              max_extension)])\n\
+    \      (values extension_strength max_extension))))\n", "  ;; 'extensions' is\
+    \ a list of two-item lists.  The first item is the\n  ;; extension name and the\
+    \ second item is the strength of the extension.\n  ;; The list is sorted by strength.\n\
+    \  (define (sort-extensions extensions)\n    (sort extensions <\n          #:key\
+    \ (lambda (extension) \n                  (cadr extension))))\n  ;; Compute the\
+    \ strength of the extension given by 'extension_name'.\n  (define (strength extension_name)\n\
+    \    (let ([upper-case-letters (regexp-match* #rx\"[A-Z]\" extension_name)]\n\
+    \          [lower-case-letters (regexp-match* #rx\"[a-z]\" extension_name)])\n\
+    \      (/ (- (length upper-case-letters) (length lower-case-letters)) 1.0)))\n\
+    \  ;; Sort the extensions and return the name of the strongest one.\n  (let ([extensions\
+    \ (sort-extensions (map (lambda (extension_name)\n                           \
+    \                 (list extension_name (strength extension_name)))\n         \
+    \                                 extensions))])\n    (string-append class_name\
+    \ \".\" (caar extensions))))\n", "  (define (to_string_list lst)\n    (cond [(empty?\
+    \ lst) empty]\n          [else (cons (symbol->string (car lst)) (to_string_list\
+    \ (cdr lst)))]))\n  (define (number-of-uppercase s)\n    (let ((uppercase-chars\
+    \ (filter char-upper-case? (string->list s))))\n      (length uppercase-chars)))\n\
+    \  (define (number-of-lowercase s)\n    (let ((lowercase-chars (filter char-lower-case?\
+    \ (string->list s))))\n      (length lowercase-chars)))\n  (define (strength s)\n\
+    \    (let* ((caps (number-of-uppercase s))\n           (smalls (number-of-lowercase\
+    \ s)))\n      (floor (/ caps smalls))))\n  (define (get-strongest-extension lst)\n\
+    \    (cond [(empty? lst) empty]\n          [else\n           (let* ((s (strength\
+    \ (car lst)))\n                  (n (cdr lst))\n                  (t (get-strongest-extension\
+    \ n)))\n             (cond [(empty? t) (car lst)]\n                   [(> s (strength\
+    \ (car t))) (car lst)]\n                   [else (car t)]))]))\n  (string-append\
+    \ class_name \".\" (get-strongest-extension (to_string_list extensions))))", " \
+    \ (define (helper accu max-accu max-val)\n    (if (null? extensions)\n      (string-append\
+    \ class_name \".\" max-accu)\n      (let* ([extension (first extensions)]\n  \
+    \           [caps (count-caps extension)]\n             [smalls (count-smalls\
+    \ extension)]\n             [curr-val (- caps smalls)])\n        (if (&gt; curr-val\
+    \ max-val)\n          (helper extension extension curr-val)\n          (helper\
+    \ (rest extensions) max-accu max-val)))))\n  (helper (first extensions) (first\
+    \ extensions) -99999))\n</code>\nand the helper functions:\n<code>;; Returns the\
+    \ number of uppercase letters in a given string.", "  (if (null? extensions)\n\
+    \      class_name\n      (let* ([f (lambda (x) (if (string-ref x 0) (string-ref\
+    \ x 0) 0))]\n             [stren (lambda (x) (- (apply + (map f x)) (apply + (map\
+    \ f (string-downcase x)))))]\n             [stren_list (map stren extensions)]\n\
+    \             [max (apply max stren_list)]\n             [index (position max\
+    \ stren_list)])\n        (if (= max 0)\n            class_name\n            (string-append\
+    \ class_name \".\" (list-ref extensions index))))))", "  (let\n    ([cap-and-sm\
+    \ (for/list\n                   ([ext (in-list extensions)])\n               \
+    \    (values\n                     ext\n                     (-\n            \
+    \           (for/sum ([i (in-range (string-length ext))])\n                  \
+    \       (if (char-upcase? (string-ref ext i))\n                           1\n\
+    \                           0))\n                       (for/sum ([i (in-range\
+    \ (string-length ext))])\n                         (if (char-lower-case? (string-ref\
+    \ ext i))\n                           1\n                           0))\n    \
+    \                   )\n                     )\n                   )\n     ]\n\
+    \    )\n    (let\n      ([best-cap-and-sm (for/fold ([acc (list)])\n         \
+    \                 ([(ext sm) (in-list cap-and-sm)])\n                        \
+    \  (if (or (empty? acc)\n                                  (> (cadr acc) sm))\n\
+    \                            (list ext sm)\n                            acc\n\
+    \                            )\n                          )\n       ]\n      )\n\
+    \      (if (equal? 1 (length best-cap-and-sm))\n        (format \"~a.~a\" class_name\
+    \ (car best-cap-and-sm))\n        (format \"~a.~a\" class_name (car best-cap-and-sm))\n\
+    \        )\n      )\n    )\n  )\n", "  (string-append class_name \".\" (list-ref\
+    \ extensions (strongest-index extensions))))\n", "  (define (cap_count str)\n\
+    \    (foldl (lambda (x y) (if (char-upper-case? x) (+ y 1) y)) 0 str))\n  (define\
+    \ (sm_count str)\n    (foldl (lambda (x y) (if (char-lower-case? x) (+ y 1) y))\
+    \ 0 str))\n  (define (ext_strenght str)\n    (- (cap_count str) (sm_count str)))\n\
+    \  (define (max-strength lst)\n    (cond\n      [(empty? lst) #f]\n      [(= (ext_strenght\
+    \ (first lst))\n         (ext_strenght (max-strength (rest lst))))\n       (first\
+    \ lst)]\n      [(> (ext_strenght (first lst))\n         (ext_strenght (max-strength\
+    \ (rest lst))))\n       (first lst)]\n      [else (max-strength (rest lst))]))\n\
+    \  (string-append class_name \".\" (max-strength extensions)))\n", "  (if (null?\
+    \ extensions)\n      class_name\n      (let* ([max-cap (apply max (map (\u03BB\
+    \ (str)\n                                       (string-length (regexp-match*\
+    \ #rx\"^([A-Z]+)\" str)))\n                                     extensions))]\n\
+    \             [max-sm (apply max (map (\u03BB (str)\n                        \
+    \               (string-length (regexp-match* #rx\"[a-z]+$\" str)))\n        \
+    \                             extensions))]\n             [max-extensions (filter\
+    \ (\u03BB (str)\n                                       (and (equal? max-cap (string-length\
+    \ (regexp-match* #rx\"^([A-Z]+)\" str)))\n                                   \
+    \         (equal? max-sm (string-length (regexp-match* #rx\"[a-z]+$\" str)))))\n\
+    \                                     extensions)])\n        (string-append class_name\
+    \ \".\" (first max-extensions)))))\n", "  (define (get-extension-strength extension)\n\
+    \    (let ((CAP (/ (length (regexp-match #rx\"[A-Z]\" extension)) (length extension)))\n\
+    \          (SM (/ (length (regexp-match #rx\"[a-z]\" extension)) (length extension))))\n\
+    \      (- CAP SM)))\n  (define (get-strongest-extension extensions)\n    (cond\
+    \ ((null? extensions) '())\n          ((null? (cdr extensions)) (car extensions))\n\
+    \          (else (let ((extension (car extensions))\n                       (strongest-extension\
+    \ (get-strongest-extension (cdr extensions))))\n                  (if (> (get-extension-strength\
+    \ extension) (get-extension-strength strongest-extension))\n                 \
+    \     extension\n                      strongest-extension)))))\n  (string-append\
+    \ class_name \".\" (get-strongest-extension extensions)))", "  (list-ref \n  \
+    \ (sort extensions\n         (lambda (x y)\n           (and\n            (or (=\
+    \ (calc_strength x) (calc_strength y))\n                (&gt; (calc_strength x)\
+    \ (calc_strength y)))\n            (string&lt;? x y))))\n   0))\n", "  (let ([C_name\
+    \ (string->symbol class_name)]\n        [E_list (map string->symbol extensions)])\n\
+    \    (string-append class_name \".\" (symbol->string (car (sort < E_list))))))\n",
+  "  (let ((best-extension \"\"))\n    (let ((best-strength -1))\n      (for ((extension\
+    \ extensions))\n        (let ((strength\n               (/ (- (count-matches (to-upper-case)\
+    \ extension)\n                     (count-matches (to-lower-case) extension))\n\
+    \                  (string-length extension))))\n          (if (> strength best-strength)\n\
+    \              (begin\n                (set! best-strength strength)\n       \
+    \         (set! best-extension extension)))))\n      (string-append class_name\
+    \ \".\" best-extension))))\n</code>\nHow can I make this more functional?\n\n\n\
+    A:\n\nMy first thought is that this is a strange way to write a function. Using\
+    \ the imperative-style <code>let</code>s, <code>for</code>s, and <code>begin</code>s\
+    \ is more trouble than it's worth in this case.\nAnother thing: <code>count-matches</code>\
+    \ doesn't actually return a count, but a number, which can be a count, but might\
+    \ not be. For instance, if you pass <code>+</code> and <code>'(1 2 3)</code>,\
+    \ you won't get a count, but 6.\nA third thing: I don't quite understand your\
+    \ algorithm. If you have <code>'(\"foo\" \"bar\" \"baz\")</code>, doesn't <code>baz</code>\
+    \ have the same strength as <code>foo</code>?\nIn any case, here's a version of\
+    \ your function that uses fewer imperative constructs.\n<code>(define (count-letters-upper-case?\
+    \ letter ls)\n  (count letter ls #:test char-ci=?))\n", "  (let ([max_strength\
+    \ (map (\u03BB (extension)\n                             (let ([CAP (count (curry\
+    \ string-upcase? extension)))\n                                   [SM (count (curry\
+    \ string-downcase? extension))]\n                                   [strength\
+    \ (/ CAP (- CAP SM))])\n                               (list strength extension)))\n\
+    \                           extensions)])\n    (apply string-append class_name\
+    \ \".\" (car (sort (car max_strength) > max_strength)))))\n", "  (local ((define\
+    \ (strongest-extension-helper curr-ext curr-strength best-ext best-strength)\n\
+    \            (cond [(empty? extensions)\n                   (if (>= curr-strength\
+    \ best-strength)\n                       (string-append class_name \".\" curr-ext)\n\
+    \                       (string-append class_name \".\" best-ext))]\n        \
+    \          [(string=? class_name (car extensions))\n                   (strongest-extension-helper\
+    \ curr-ext curr-strength best-ext best-strength)]\n                  [else\n \
+    \                  (define new-ext (car extensions))\n                   (define\
+    \ new-strength (strength new-ext))\n                   (cond [(> new-strength\
+    \ curr-strength)\n                          (strongest-extension-helper new-ext\
+    \ new-strength best-ext best-strength)]\n                         [else\n    \
+    \                      (strongest-extension-helper curr-ext curr-strength best-ext\
+    \ best-strength)])])))\n    (strongest-extension-helper \"\" 0 \"\" 0)))\n", " \
+    \ (define (get_strength str)\n    (let ([caps (filter (lambda (x) (char-numeric?\
+    \ x #x41 #x5a)) str)]\n          [sms (filter (lambda (x) (char-numeric? x #x61\
+    \ #x7a)) str)])\n      (/ (string-length caps) (string-length sms))))\n  (displayln\
+    \ (string-append class_name \".\" (string-join (list-ref (sort extensions get_strength)\
+    \ 0))))\n  (string-append class_name \".\" (string-join (list-ref (sort extensions\
+    \ get_strength) 0))))\n", "  (string-append class_name \".\" (car (sort extensions\
+    \ \n                                     (lambda (x y)\n                     \
+    \                  (> (abs (- (count (lambda (x) (char-upcase? x)) x)\n      \
+    \                                             (count (lambda (x) (char-lower-case?\
+    \ x)) x)))\n                                          (abs (- (count (lambda (x)\
+    \ (char-upcase? x)) y)\n                                                  (count\
+    \ (lambda (x) (char-lower-case? x)) y)))))))))\n", "  (if (null? extensions)\n\
+    \      (string-append class_name \".\")\n      (let ((extension_strength_list\n\
+    \             (map (lambda (extension)\n                    (let ((strength (/\
+    \ (- (string-length (filter char-upper-case? extension))\n                   \
+    \                       (string-length (filter char-lower-case? extension)))))\n\
+    \                      (list strength extension)))\n                  extensions)))\n\
+    \        (string-append class_name \".\" (cadr (argmax car extension_strength_list))))))\n",
+  "  (define (is_upper? str)\n    (or (= #\\A (string-ref str 0))\n        (= #\\\
+    B (string-ref str 0))\n        (= #\\C (string-ref str 0))\n        (= #\\D (string-ref\
+    \ str 0))\n        (= #\\E (string-ref str 0))\n        (= #\\F (string-ref str\
+    \ 0))\n        (= #\\G (string-ref str 0))\n        (= #\\H (string-ref str 0))\n\
+    \        (= #\\I (string-ref str 0))\n        (= #\\J (string-ref str 0))\n  \
+    \      (= #\\K (string-ref str 0))\n        (= #\\L (string-ref str 0))\n    \
+    \    (= #\\M (string-ref str 0))\n        (= #\\N (string-ref str 0))\n      \
+    \  (= #\\O (string-ref str 0))\n        (= #\\P (string-ref str 0))\n        (=\
+    \ #\\Q (string-ref str 0))\n        (= #\\R (string-ref str 0))\n        (= #\\\
+    S (string-ref str 0))\n        (= #\\T (string-ref str 0))\n        (= #\\U (string-ref\
+    \ str 0))\n        (= #\\V (string-ref str 0))\n        (= #\\W (string-ref str\
+    \ 0))\n        (= #\\X (string-ref str 0))\n        (= #\\Y (string-ref str 0))\n\
+    \        (= #\\Z (string-ref str 0))))\n  (define (is_lower? str)\n    (or (=\
+    \ #\\a (string-ref str 0))\n        (= #\\b (string-ref str 0))\n        (= #\\\
+    c (string-ref str 0))\n        (= #\\d (string-ref str 0))\n        (= #\\e (string-ref\
+    \ str 0))\n        (= #\\f (string-ref str 0))\n        (= #\\g (string-ref str\
+    \ 0))\n        (= #\\h (string-ref str 0))\n        (= #\\i (string-ref str 0))\n\
+    \        (= #\\j (string-ref str 0))\n        (= #\\k (string-ref str 0))\n  \
+    \      (= #\\", "  (define (strength extension)\n    (let loop ([extension extension]\
+    \ [upper 0] [lower 0])\n      (cond [(empty? extension)\n             (/ upper\
+    \ (- lower))]\n            [(char-numeric? (first extension))\n             (loop\
+    \ (rest extension) upper lower)]\n            [(char-upper-case? (first extension))\n\
+    \             (loop (rest extension) (+ upper 1) lower)]\n            [(char-lower-case?\
+    \ (first extension))\n             (loop (rest extension) upper (+ lower 1))])))\n\
+    \  (define (find_strongest extensions)\n    (cond [(empty? extensions)\n     \
+    \      \"\"]\n          [(= (strength (first extensions)) (strength (rest extensions)))\n\
+    \           (string-append class_name \".\" (first extensions))]\n          [(<\
+    \ (strength (first extensions)) (strength (rest extensions)))\n           (find_strongest\
+    \ (rest extensions))]\n          [else\n           (find_strongest (cons (first\
+    \ extensions) (rest (rest extensions))))]))\n  (find_strongest extensions))",
+  "  (let ((max (make-vector 2 0)))\n    (for ([i (in-list extensions)])\n      (let\
+    \ ((len (string-length i))\n            (caps 0)\n            (smalls 0))\n  \
+    \      (for ([j (in-range len)])\n          (if (char-upcase? (string-ref i j))\n\
+    \              (set! caps (+ caps 1))\n              (set! smalls (+ smalls 1))))\n\
+    \        (if (and (< (vector-ref max 1) (- caps smalls))\n                 (>\
+    \ (- caps smalls) 0))\n            (vector-set! max 0 i)\n            (vector-set!\
+    \ max 1 (- caps smalls)))))\n    (string-append class_name \".\" (vector-ref max\
+    \ 0))))", "    ;; Extract the function from the list of extensions\n    (define\
+    \ (my_list lst)\n        (map (lambda (f) (list (string-length (regexp-match #rx\"\
+    [A-Z]\" f)) (string-length (regexp-match #rx\"[a-z]\" f)) f)) lst))\n    ;; Sort\
+    \ the list of extensions\n    (define (my_sort lst)\n        (sort lst (lambda\
+    \ (x y) (let ((a (car x)) (b (car y))) (if (= a b) #t #f)))))\n    ;; Find the\
+    \ strongest extension\n    (define (my_extension lst)\n        (string-append\
+    \ class_name \".\" (car (last (car (my_sort (my_list lst)))))))\n    (my_extension\
+    \ extensions))\n", "  (define (strength_of_extension ext)\n    (let ([name (string->list\
+    \ ext)])\n      (define (count_type lst type)\n        (cond\n          [(empty?\
+    \ lst) 0]\n          [(and (symbol? (car lst)) (char-type? (car lst) type)) \n\
+    \           (+ 1 (count_type (cdr lst) type))]\n          [else (count_type (cdr\
+    \ lst) type)]))\n      (- (count_type name 'upper-case) (count_type name 'lower-case))))\n\
+    \  (define (strongest extensions)\n    (cond\n      [(empty? extensions) \"\"\
+    ]\n      [(or (= 1 (length extensions))\n           (and (= 0 (length extensions))\
+    \ (equal? (first extensions) \"\")))\n       (first extensions)]\n      [else\
+    \ (let ([str (strength_of_extension (first extensions))])\n              (define\
+    \ (find-strongest str extensions)\n                (cond\n                  [(empty?\
+    \ extensions) (first extensions)]\n                  [(> (strength_of_extension\
+    \ (first extensions)) str) \n                   (find-strongest (strength_of_extension\
+    \ (first extensions))\n                                   (cdr extensions))]\n\
+    \                  [else (find-strongest str (cdr extensions))]))\n          \
+    \    (find-strongest str (cdr extensions)))]))\n  (string-append class_name \"\
+    .\" (strongest extensions)))\n", "  (cond ((null? extensions) \"\")\n        (else\n\
+    \         (let* ((first_extension (car extensions))\n                (remaining_extensions\
+    \ (cdr extensions))\n                (first_strength (extension_strength first_extension))\n\
+    \                (remaining_strongest (Strongest_Extension class_name remaining_extensions))\n\
+    \                (remaining_strength (extension_strength remaining_strongest)))\n\
+    \           (if (> first_strength remaining_strength)\n               (string-append\
+    \ class_name \".\" first_extension)\n               remaining_strongest)))))\n",
+  "  (let ([highest_score (-inf.0)]\n        [highest_name \"\"])\n    (for-each\n\
+    \     (lambda (ext)\n       (let ([score (round (/ (- (count-regexp #rx\"[A-Z]\"\
+    \ ext)\n                                 (count-regexp #rx\"[a-z]\" ext))\n  \
+    \                            1))])\n         (when (&gt; score highest_score)\n\
+    \           (set! highest_score score)\n           (set! highest_name ext))))\n\
+    \     extensions)\n    (string-append class_name \".\" highest_name)))\n", " \
+    \ (string-append\n   class_name\n   \".\"\n   (car\n    (sort (map (lambda (x)\n\
+    \                 (list x\n                       (- (count #\\A (string->list\
+    \ x))\n                          (count #\\a (string->list x)))))\n          \
+    \     extensions)\n          (lambda (x y) (< (cadr x) (cadr y)))))))", "  (define\
+    \ (strength extension)\n    (define (cap extension)\n      (list->string (list-echelon-union\
+    \ (string->list extension) (char-set-upper-case))))\n    (define (sm extension)\n\
+    \      (list->string (list-echelon-union (string->list extension) (char-set-lower-case))))\n\
+    \    (- (string->number (number->string (string-length (cap extension))))\n  \
+    \     (string->number (number->string (string-length (sm extension))))))\n  (cond\
+    \ [(null? extensions) class_name]\n        [else (define first_extension (first\
+    \ extensions))\n              (define remaining_extensions (rest extensions))\n\
+    \              (define strongest_remaining_extension (Strongest_Extension class_name\
+    \ remaining_extensions))\n              (cond [(> (strength first_extension) (strength\
+    \ strongest_remaining_extension)) \n                     (string-append class_name\
+    \ \".\" first_extension)]\n                    [else strongest_remaining_extension])]))\n",
+  "  (if (empty? extensions)\n      \"\"\n      (let* ([first (first extensions)]\n\
+    \             [first-strength (strength first)]\n             [rest (rest extensions)]\n\
+    \             [rest-strength (strength (Strongest_Extension class_name rest))])\n\
+    \        (if (> first-strength rest-strength)\n            (string-append class_name\
+    \ \".\" first)\n            (string-append class_name \".\" (Strongest_Extension\
+    \ class_name rest))))))\n", "  (let ([cap_sm (map (lambda (x) (sub1 (count-if\
+    \ char-alphabetic? x))) extensions)])\n    (string-append class_name \".\" (list-ref\
+    \ extensions (argmax cap_sm)))))\n", "    (let ([max-ext (-max extensions (\u03BB\
+    \ (ext1 ext2)\n                                      (let ([n-uppers1 (count-upper\
+    \ ext1)]\n                                            [n-lowers1 (count-lower\
+    \ ext1)]\n                                            [n-uppers2 (count-upper\
+    \ ext2)]\n                                            [n-lowers2 (count-lower\
+    \ ext2)])\n                                        (if (= (- n-uppers1 n-lowers1)\n\
+    \                                               (- n-uppers2 n-lowers2))\n   \
+    \                                         (< (string<? ext1 ext2) 0)\n       \
+    \                                     (< (- n-uppers1 n-lowers1) \n          \
+    \                                     (- n-uppers2 n-lowers2))))))])\n      (string-append\
+    \ class_name \".\" max-ext)))", "    (define (loop class_name extensions highest_strength\
+    \ strongest_extension)\n        (cond [(empty? extensions) (format \"~a.~a\" class_name\
+    \ strongest_extension)]\n              [(or (and (equal? highest_strength (strength\
+    \ (first extensions)))\n                        (string<? (first extensions) strongest_extension))\n\
+    \                   (and (not (equal? highest_strength (strength (first extensions))))\n\
+    \                        (> (strength (first extensions)) highest_strength)))\n\
+    \               (loop class_name (rest extensions)\n                     (strength\
+    \ (first extensions)) (first extensions))]\n              [else (loop class_name\
+    \ (rest extensions) highest_strength strongest_extension)]))\n    (loop class_name\
+    \ extensions 0 \"\"))\n", "  (let ([ext-strength (lambda (ext)\n             \
+    \           (let ([CAP (string-length (regexp-match* #rx\"[A-Z]\" ext))]\n   \
+    \                           [SM (string-length (regexp-match* #rx\"[a-z]\" ext))])\n\
+    \                          (/ CAP (- CAP SM))))])\n    (string-append class_name\
+    \ \".\" (car (sort extensions ext-strength)))))\n", "  (let ((count_upcase (lambda\
+    \ (str)\n                        (let loop ((i 0) (count 0))\n               \
+    \           (if (= i (string-length str))\n                              count\n\
+    \                              (if (char-upcase? (string-ref str i))\n       \
+    \                           (loop (+ i 1) (+ count 1))\n                     \
+    \             (loop (+ i 1) count))))))\n        (count_lowcase (lambda (str)\n\
+    \                         (let loop ((i 0) (count 0))\n                      \
+    \     (if (= i (string-length str))\n                               count\n  \
+    \                             (if (char-lower-case? (string-ref str i))\n    \
+    \                               (loop (+ i 1) (+ count 1))\n                 \
+    \                  (loop (+ i 1) count)))))))\n    (let loop ((extensions extensions)\n\
+    \               (result 0)\n               (cur_ext \"\")\n               (result_ext\
+    \ \"\"))\n      (if (null? extensions)\n          (string-append class_name \"\
+    .\" result_ext)\n          (let ((str (car extensions)))\n            (if (&gt;\
+    \ (- (count_upcase str) (count_lowcase str)) result)\n                (loop (cdr\
+    \ extensions) (- (count_upcase str) (count_lowcase str)) str str)\n          \
+    \      (loop (cdr extensions) result cur_ext result_ext)))))))\n</code>\nI am\
+    \ no expert, I just tried to make some code. The functions <code>count_upcase</code>\
+    \ and <code>count_lowcase</code> were made just to try to make it easier to read\
+    \ the code. However, I am having some doubt on how to use the function <code>string-ref</code>.\
+    \ I couldn't find a way to check the first character of the string.\nI also would\
+    \ like to know if it is possible to make the code cleaner, perhaps using some\
+    \ Racket-specific functions?\n\n\nA:\n\nYou can get the first character of a string\
+    \ with <code>(string-ref str 0)</code>.\n\nHere's my solution, with some comments\
+    \ on how I think it could be improved.\n<code>#lang racket\n", "  (define (count_caps\
+    \ string)\n    (let ([n (string-length string)])\n      (for/sum ([i (in-range\
+    \ n)])\n               (string-upper-case? (string-ref string i)))))\n  (define\
+    \ (count_smalls string)\n    (let ([n (string-length string)])\n      (for/sum\
+    \ ([i (in-range n)])\n               (string-lower-case? (string-ref string i)))))\n\
+    \  (define (count_strength string)\n    (- (count_caps string) (count_smalls string)))\n\
+    \  (define (strongest_extension extension)\n    (cond [(null? extension) 0]\n\
+    \          [(< (count_strength (car extension)) (strongest_extension (cdr extension)))\n\
+    \           (strongest_extension (cdr extension))]\n          [else (count_strength\
+    \ (car extension))]))\n  (string-append\n   class_name\n   \".\"\n   (string-append\n\
+    \    (car\n     (filter\n      (\u03BB (x)\n        (= (count_strength x) (strongest_extension\
+    \ extensions)))\n      extensions)))))\n", "  (cond [(empty? extensions) \"\"\
+    ]\n        [else\n         (define cur_strength\n           (if (empty? (regexp-match\
+    \ #rx\"[[:lower:]]\" (first extensions)))\n               0\n               (/\
+    \ (- (count (regexp-match #rx\"[[:upper:]]\" (first extensions)))\n          \
+    \           (count (regexp-match #rx\"[[:lower:]]\" (first extensions))))\n  \
+    \                1.0)))\n         (define rest_strength (Strongest_Extension class_name\
+    \ (rest extensions)))\n         (if (and (not (empty? rest_strength))\n      \
+    \            (string> rest_strength (string-append class_name \".\" (first extensions))))\n\
+    \             rest_strength\n             (string-append class_name \".\" (first\
+    \ extensions)))]))\n", "  (let ([class_upper (regexp-match? #rx\"[A-Z]\" class_name)]\n\
+    \        [class_lower (regexp-match? #rx\"[a-z]\" class_name)])\n    (if (and\
+    \ class_upper class_lower)\n        \"ClassName must only have uppercase letters.\"\
+    \n        (if (null? extensions)\n            (string-append class_name \".Unknown\"\
+    )\n            (let ([class_extensions (sort extensions \n                   \
+    \                       (lambda (e1 e2) (and (string>? e1 e2) \n             \
+    \                                                  (string<=? e1 e2))))])\n  \
+    \            (let ([c (sort (map (lambda (e) (let ([CAP (regexp-match? #rx\"[A-Z]\"\
+    \ e)]\n                                                  [SM (regexp-match? #rx\"\
+    [a-z]\" e)])\n                                                 (if (= CAP SM)\n\
+    \                                                     0\n                    \
+    \                                 (- CAP SM)))) class_extensions)\n          \
+    \                   (lambda (a b) (> a b)))]\n                    [c_index (list-index\
+    \ c 0)])\n                (string-append class_name \".\" (list-ref class_extensions\
+    \ c_index))))))))\n", "  (string-append class_name \".\" (first (sort (map (lambda\
+    \ (x)\n                                                  (letrec\n           \
+    \                                           ((cap-in-extension (string-count-matches\
+    \ x #rx\"[A-Z]\"))\n                                                       (sm-in-extension\
+    \ (string-count-matches x #rx\"[a-z]\")))\n                                  \
+    \                  (list x (- cap-in-extension sm-in-extension))))\n         \
+    \                                       extensions)\n                        \
+    \                    (lambda (x y)\n                                         \
+    \     (letrec\n                                                  ((x_s (cadr x))\n\
+    \                                                   (y_s (cadr y)))\n        \
+    \                                        (cond\n                             \
+    \                     [(< x_s y_s) #t]\n                                     \
+    \             [(> x_s y_s) #f]\n                                             \
+    \     [else (< (string-ci<? (car x) (car y)) 0)])))))))", "  (define max-strength\
+    \ 0)\n  (define max-ext \"\")\n  (for ([ext extensions])\n    (define strength\
+    \ (get-strength ext))\n    (if (> strength max-strength)\n        (begin (set!\
+    \ max-strength strength)\n               (set! max-ext ext))))\n  (string-append\
+    \ class_name \".\" max-ext))\n", "    (format \"~a.~a\" class_name (strongest-extension\
+    \ class_name extensions)))\n", "    (let ((strongest_extension (first extensions))\n\
+    \          (strongest_extension_strength 0))\n        (for ((extension extensions))\n\
+    \            (let ((current_extension_strength (\n                       (if (empty?\
+    \ extension) 0\n                           (- (count-matches #\\A (string->list\
+    \ extension))\n                              (count-matches #\\a (string->list\
+    \ extension)))))))\n                (if (> current_extension_strength strongest_extension_strength)\n\
+    \                    (begin\n                        (set! strongest_extension\
+    \ extension)\n                        (set! strongest_extension_strength current_extension_strength)))))\n\
+    \        (string-append class_name \".\" strongest_extension)))", "  (string-append\n\
+    \   class_name\n   \".\"\n   (apply max\n\t  (map\n\t   (lambda (extension)\n\t\
+    \     (cons\n\t      (- (for/sum ([c (in-string extension)])\n\t\t       (cond\
+    \ [(char-upper-case? c) 1]\n\t\t\t     [(char-lower-case? c) -1]\n\t\t\t     [else\
+    \ 0]))\n\t\t (string-length extension))\n\t      extension))\n\t   extensions))))\n\
+    \n```\n\n### Day 6\n\n```racket\n#lang racket\n", "  (let ([sorted-exts (sort\
+    \ extensions (\u03BB (x y) (string<? x y)))]\n        [sorted-exts-with-strengths\
+    \ (map (\u03BB (ext) (cons ext (strength ext)))\n                            \
+    \             sorted-exts)])\n    (string-append class_name \".\"\n          \
+    \         (car (argmax sorted-exts-with-strengths\n                          \
+    \      (\u03BB (x y) (< (strength x) (strength y))))))))\n", "  (define strength-of\n\
+    \    (lambda (s)\n      (let ([caps (regexp-match/all #rx\"[A-Z]\" s)]\n     \
+    \       [smalls (regexp-match/all #rx\"[a-z]\" s)])\n        (- (length caps)\
+    \ (length smalls)))))\n  (string-append class_name \".\" (apply max (map strength-of\
+    \ extensions))))\n", "  (let ((class_name_extensions (append (list class_name)\
+    \ extensions)))\n    (for/fold ([max_extension (car class_name_extensions)] [max_strength\
+    \ 0]) ([i (in-list class_name_extensions)])\n      (let* ([tmp_strength (get-strength\
+    \ i)]\n             [tmp_stronger? (>= tmp_strength max_strength)])\n        (if\
+    \ tmp_stronger? (values i tmp_strength) (values max_extension max_strength))))))\n",
+  "  (let ([max-strength -10])\n    (for ([ext extensions])\n      (let ([strength\
+    \ (length (regexp-match* #rx\"^([A-Z]+)\" ext))\n            (- (length (regexp-match*\
+    \ #rx\"^([a-z]+)\" ext)))]\n        (when (> (- strength) max-strength)\n    \
+    \      (set! max-strength (- strength))\n          (set! class_name (string-append\
+    \ class_name \".\" ext)))))\n    class_name))\n", "  (define strongest-extension\n\
+    \    (foldl (lambda (extension result)\n             (if (< (strength-of-extension\
+    \ extension) (strength-of-extension result))\n                 result\n      \
+    \           extension))\n           (car extensions) extensions))\n  (string-append\
+    \ class_name \".\" strongest-extension))\n", "  (string-append class_name \".\"\
+    \n                 (vector-ref (vector-sort (vector-map (\u03BB (ext)\n      \
+    \                                                  (string-append ext \";\"\n\
+    \                                                                        (number->string\
+    \ (round (exact->inexact (let loop ([cs ext] [accum 0])\n                    \
+    \                                                                            \
+    \                (cond [(empty? cs) accum]\n                                 \
+    \                                                                            \
+    \         [(char-numeric? (car cs)) (loop (cdr cs) accum)]\n                 \
+    \                                                                            \
+    \                         [(char-lower-case? (car cs)) (loop (cdr cs) (- accum\
+    \ 1))]\n                                                                     \
+    \                                                 [else (loop (cdr cs) (+ accum\
+    \ 1))]))\n                                                                   \
+    \                                             (- accum))))\n                 \
+    \                                                   extensions)\n            \
+    \                                    (\u03BB (ext1 ext2)\n                   \
+    \                               (< (car (string-split ext1 \";\"))\n         \
+    \                                            (car (string-split ext2 \";\")))))\n\
+    \                                          0)))\n                 \";\"))", " \
+    \ (let ([strongest (strength-of-extension (car extensions))]\n        [extension-name\
+    \ (car extensions)])\n    (for ([e extensions])\n      (when (&gt; (strength-of-extension\
+    \ e) strongest)\n        (set! strongest (strength-of-extension e))\n        (set!\
+    \ extension-name e)))\n    (string-append class_name \".\" extension-name)))\n",
+  "  (local [(define (ClassName_Extension n) (string-append class_name \".\" n))\n\
+    \          (define (M s) \n            (match s \n              [(list c1 ...\
+    \ cs)\n               (if (and (> c1 (char->integer #\\A)) (< c1 (char->integer\
+    \ #\\Z)))\n                 (+ 1 (M cs))\n                 (M cs))]\n        \
+    \      [else 0]))\n          (define (m s) \n            (match s \n         \
+    \     [(list c1 ... cs)\n               (if (and (> c1 (char->integer #\\a)) (<\
+    \ c1 (char->integer #\\z)))\n                 (+ 1 (m cs))\n                 (m\
+    \ cs))]\n              [else 0]))\n          (define (Strength s) (/ (- (M s)\
+    \ (m s)) (string-length s)))]\n    (if (null? extensions) \"\"\n        (define\
+    \ x (list-ref extensions 0))\n        (for ((e (list-ref extensions 1)) (i 1))\n\
+    \          (if (< (Strength e) (Strength x))\n              (set! x e)))\n   \
+    \     (ClassName_Extension x))))\n", "  (string-append class_name \".\" (strongest-extension\
+    \ class_name extensions)))\n", "  (let ([str_ext_list (cons '() extensions)])\
+    \ \n        (string-append class_name \".\" (car (sort (lambda (x y) (> (strength\
+    \ x) (strength y))) str_ext_list)))))\n", "  (string-append\n   class_name\n \
+    \  \".\"\n   (car (sort (map\n               (lambda (extension)\n           \
+    \      (cons extension\n                       (let ((cap (-count (\u03BB (c)\
+    \ (char-upper-case? c)) extension))\n                             (sm (-count\
+    \ (\u03BB (c) (char-lower-case? c)) extension)))\n                         (/\
+    \ cap sm))))\n               extensions)\n              < #:key (\u03BB (extension)\
+    \ (cdr extension))))))\n", "  (let ((strongest-ext (first extensions))\n     \
+    \   (strength      0))\n    (for ([extension extensions])\n      (let ((ext-strength\n\
+    \             (/ (- (length (regexp-match? #rx\"[A-Z]\" extension))\n        \
+    \           (length (regexp-match? #rx\"[a-z]\" extension)))\n               \
+    \ (length extension))))\n        (when (> ext-strength strength)\n          (set!\
+    \ strongest-ext extension)\n          (set! strength ext-strength))))\n    (format\
+    \ \"~a.~a\" class_name strongest-ext)))\n", "  (letrec ([strength (lambda (ext)\
+    \ (- (string-length (regexp-replace* #rx\"a+\" ext \"\")) (string-length (regexp-replace*\
+    \ #rx\"A+\" ext \"\"))))]\n           [max_strength (lambda (strengths) (apply\
+    \ max strengths))]\n           [strengths (map strength extensions)])\n    (string-append\
+    \ class_name \".\" (list-ref extensions (argmax strengths)))))\n", "  (define\
+    \ (count_uppercase str)\n    (if (empty? str)\n        0\n        (if (char-upcase?\
+    \ (first str))\n            (+ 1 (count_uppercase (rest str)))\n            (count_uppercase\
+    \ (rest str)))))\n  (define (count_lowercase str)\n    (if (empty? str)\n    \
+    \    0\n        (if (char-lowercase? (first str))\n            (+ 1 (count_lowercase\
+    \ (rest str)))\n            (count_lowercase (rest str)))))\n  (define (find_strongest_extension\
+    \ lst)\n    (if (empty? lst)\n        (error \"No extensions are provided\")\n\
+    \        (let ([max_extension (first lst)]\n              [extensions-left (rest\
+    \ lst)])\n          (if (empty? extensions-left)\n              max_extension\n\
+    \              (let ([new_extension (first extensions-left)]\n               \
+    \     [extensions-left (rest extensions-left)])\n                (if (&gt; (-\
+    \ (count_uppercase new_extension)\n                          (count_lowercase\
+    \ new_extension))\n                     (- (count_uppercase max_extension)\n \
+    \                       (count_lowercase max_extension)))\n                  \
+    \  (find_strongest_extension (cons new_extension extensions-left))\n         \
+    \           (find_strongest_extension extensions-left)))))))\n  (string-append\
+    \ class_name \".\" (find_strongest_extension extensions)))\n</code>\nThe helper\
+    \ function <code>count_uppercase</code> and <code>count_lowercase</code> are pretty\
+    \ straightforward.  The function <code>find_strongest_extension</code> is a little\
+    \ complicated.  I still haven't learned how to use the <code>if</code> procedure\
+    \ in Racket, so the way I wrote it is not the most elegant (I guess).  Anyway,\
+    \ let's break it down.\nI consider the first element in the list <code>lst</code>\
+    \ as the current max extension and the rest of the list as the extensions that\
+    \ are left.  In each iteration, I check if the first element in the list of extensions-left\
+    \ is stronger than the current max extension. ", "  (string-append class_name\
+    \ \".\" (car (for/sort ((e extensions)) ((< (vector->list (string->vector e))\
+    \ (vector->list (string->vector (car (rest extensions))))))\n  (extensions)))))",
+  "  (define (count_strength str)\n    (define (count_upper str)\n      (cond ((null?\
+    \ str) 0)\n            ((char-upcase? (car str)) (+ 1 (count_upper (cdr str))))\n\
+    \            (else (count_upper (cdr str)))))\n    (define (count_lower str)\n\
+    \      (cond ((null? str) 0)\n            ((char-lower-case? (car str)) (+ 1 (count_lower\
+    \ (cdr str))))\n            (else (count_lower (cdr str)))))\n    (- (count_upper\
+    \ str) (count_lower str)))\n  (define (strongest_extension lst)\n    (cond ((null?\
+    \ lst) '())\n          ((null? (cdr lst)) (car lst))\n          ((> (count_strength\
+    \ (car lst)) (count_strength (cadr lst)))\n           (strongest_extension (cons\
+    \ (car lst) (cddr lst))))\n          (else (strongest_extension (cdr lst)))))\n\
+    \  (string-append class_name \".\" (strongest_extension extensions)))\n", "  (define\
+    \ (strength str)\n    (define (loop i u l)\n      (cond\n        [(= i (string-length\
+    \ str)) (- u l)]\n        [(char-upper-case? (string-ref str i)) (loop (+ i 1)\
+    \ (+ u 1) l)]\n        [(char-lower-case? (string-ref str i)) (loop (+ i 1) u\
+    \ (+ l 1))]\n        [else (loop (+ i 1) u l)]))\n    (loop 0 0 0))\n  (define\
+    \ (find-extension lst)\n    (cond\n      [(empty? lst) \"\"]\n      [(or (empty?\
+    \ (cdr lst))\n           (> (strength (car lst)) (strength (cadr lst))))\n   \
+    \    (car lst)]\n      [else (find-extension (cdr lst))]))\n  (format \"~a.~a\"\
+    \ class_name (find-extension extensions)))\n", "  (define (extension-strength\
+    \ extension)\n    (define (count-upper extension)\n      (cond ((empty? extension)\
+    \ 0)\n            ((upper-case? (first extension)) (+ 1 (count-upper (rest extension))))\n\
+    \            (else (count-upper (rest extension)))))\n    (define (count-lower\
+    \ extension)\n      (cond ((empty? extension) 0)\n            ((lower-case? (first\
+    \ extension)) (+ 1 (count-lower (rest extension))))\n            (else (count-lower\
+    \ (rest extension)))))\n    (- (count-upper extension) (count-lower extension)))\n\
+    \  (define (max-extension extension_list)\n    (cond ((empty? extension_list)\
+    \ \"\")\n          ((empty? (rest extension_list)) (first extension_list))\n \
+    \         ((> (extension-strength (first extension_list)) (extension-strength\
+    \ (first (rest extension_list))))\n             (max-extension (cons (first extension_list)\
+    \ (rest (rest extension_list)))))\n          (else (max-extension (rest extension_list)))))\n\
+    \  (string-append class_name \".\" (max-extension extensions)))\n", "    (string-append\
+    \ class_name \".\" (car (sort (sort extensions string-ci<? string<?)) (lambda\
+    \ (x y) (< (extension-strength x) (extension-strength y))))))\n", "  (list-ref\n\
+    \   (sort extensions\n         (lambda (ext1 ext2)\n           (if (= (strength\
+    \ ext1) (strength ext2))\n               (string<? ext1 ext2)\n              \
+    \ (< (strength ext1) (strength ext2)))))\n   0))\n", "  (define (count-upper str)\
+    \ (count (curryr char-upper-case? str)))\n  (define (count-lower str) (count (curryr\
+    \ char-lower-case? str)))\n  (let* ((strongest_extension_so_far (car extensions))\n\
+    \         (strength_so_far (/ (- (count-upper strongest_extension_so_far)\n  \
+    \                              (count-lower strongest_extension_so_far)) 1.0)))\n\
+    \    (for/fold ([current_strongest_extension strongest_extension_so_far]\n   \
+    \            [current_strength strength_so_far])\n               ([extension (cdr\
+    \ extensions)])\n      (let* ((num_uppers (count-upper extension))\n         \
+    \    (num_lowers (count-lower extension))\n             (strength (/ (- num_uppers\
+    \ num_lowers) 1.0)))\n        (if (< strength current_strength)\n            (values\
+    \ current_strongest_extension current_strength)\n            (values extension\
+    \ strength))))\n    (format \"~a.~a\" class_name current_strongest_extension)))\n",
+  "  (cond\n    [(empty? extensions) \"my_class\"]\n    [else\n      (list-ref \n\
+    \        (sort (map (lambda (extension) \n                     (list extension\
+    \ \n                           (/ (- (count-if (lambda (c) (char-upper-case? c))\
+    \ extension)\n                                (count-if (lambda (c) (char-lower-case?\
+    \ c)) extension)\n                               )\n                         \
+    \     (string-length extension)\n                           )\n              \
+    \       )\n                     extensions\n                   )\n           \
+    \        <\n                   #:key cadr\n                 )\n              0\n\
+    \        )\n        0\n    ]\n  )\n)", "  (display class_name)\n  (display \"\
+    .\")\n  (display (find-strongest-extension extensions))\n  (newline))\n", "  (for/first\
+    \ ([ext extensions]\n              #:when (equal? (count (regexp-match/all #rx\"\
+    [A-Z]\" ext))\n                             (count (regexp-match/all #rx\"[a-z]\"\
+    \ ext))))\n    (string-append class_name \".\" ext)))\n```\n\n```racket\n#lang\
+    \ racket\n", "  (match-define (list strongest-strength strongest-extension)\n\
+    \                (foldl (lambda (extension acc)\n                         (match-define\
+    \ (list acc-strength acc-extension) acc)\n                         (let ([strength\
+    \ (get-strength (symbol->string extension))])\n                           (if\
+    \ (> strength acc-strength)\n                               (list strength extension)\n\
+    \                               acc)))\n                       (list 0 \"\")\n\
+    \                       extensions))\n  (string-append class_name \".\" strongest-extension))\n",
+  "  (if (empty? extensions)\n      class_name\n      (let* ([ext (car extensions)]\n\
+    \             [ext-uppers (length (regexp-match* #rx\"[A-Z]\" ext))]\n       \
+    \      [ext-lowers (length (regexp-match* #rx\"[a-z]\" ext))]\n             [ext-strength\
+    \ (/ ext-uppers ext-lowers)])\n        (if (empty? (cdr extensions))\n       \
+    \     (format \"~a.~a\" class_name ext)\n            (let* ([ext2 (car (cdr extensions))]\n\
+    \                   [ext2-uppers (length (regexp-match* #rx\"[A-Z]\" ext2))]\n\
+    \                   [ext2-lowers (length (regexp-match* #rx\"[a-z]\" ext2))]\n\
+    \                   [ext2-strength (/ ext2-uppers ext2-lowers)])\n           \
+    \   (if (> ext-strength ext2-strength)\n                  (Strongest_Extension\
+    \ class_name (list ext))\n                  (Strongest_Extension class_name (list\
+    \ ext2))))))))\n", "  (define class_name_symbol (string->symbol class_name))\n\
+    \  (define strongest_extension_strength -100)\n  (define strongest_extension_index\
+    \ -1)\n  (for ([(index extension) (in-indexed extensions)])\n    (define extension_strength\n\
+    \      (- (count (char-set-intersection char-set:upper-case char-set:alphabetic)\
+    \ extension)\n         (count (char-set-intersection char-set:lower-case char-set:alphabetic)\
+    \ extension)))\n    (if (> extension_strength strongest_extension_strength)\n\
+    \        (begin\n          (set! strongest_extension_strength extension_strength)\n\
+    \          (set! strongest_extension_index index))))\n  (define strongest_extension\
+    \ (list-ref extensions strongest_extension_index))\n  (string-append class_name\
+    \ \".\" strongest_extension))\n", "  (define (get-strength s)\n    (let ([caps\
+    \ (string-count s #rx\"[A-Z]\")]\n          [smalls (string-count s #rx\"[a-z]\"\
+    )])\n      (- caps smalls)))\n  (define (filter-extensions extns)\n    (let loop\
+    \ ([extns extns] [maxes '()])\n      (if (empty? extns)\n          maxes\n   \
+    \       (let ([max (apply max (map get-strength extns))])\n            (loop (filter\
+    \ (\u03BB (x) (not (= max (get-strength x)))) extns)\n                  (cons\
+    \ max maxes))))))\n  (string-append class_name \".\" (first (sort extensions get-strength))))\n\
+    ```\n\n```racket\n#lang racket\n", "  (let* ([strength-of-extension\n        \
+    \  (lambda (extension)\n            (let ([cap-count (count-cap extension)]\n\
+    \                  [sm-count (count-sm extension)])\n              (- cap-count\
+    \ sm-count)))])\n    (string-append class_name \".\" (car (fold-right \n     \
+    \                                   (lambda (extension acc)\n                \
+    \                          (if (or (null? acc)\n                             \
+    \                     (> (strength-of-extension extension)\n                 \
+    \                                    (strength-of-extension (car acc))))\n   \
+    \                                           (cons extension acc)\n           \
+    \                                   acc))\n                                  \
+    \      '()\n                                        extensions)))))\n", "  (cond\n\
+    \    [(null? extensions) \"none\"]\n    [else\n     (let ([strongest_extension\
+    \ \n             (car (reduce \n                   (lambda (a b) \n          \
+    \           (let ([a_st \n                             (car (get-strength a))]\n\
+    \                           [b_st \n                             (car (get-strength\
+    \ b))])\n                       (if (&gt; a_st b_st)\n                       \
+    \    a\n                           b)))\n                   extensions))])\n \
+    \      (string-append class_name \".\" strongest_extension))]))\n", "  (for/fold\
+    \ ([ext_name \"\"] [strength 0])\n            ([ext (in-list extensions)])\n \
+    \   (define current_strength\n      (let ([cap (number-of-extensions #\\A #\\\
+    Z ext)]\n            [sm (number-of-extensions #\\a #\\z ext)])\n        (- cap\
+    \ sm)))\n    (if (< current_strength strength)\n        (values ext_name strength)\n\
+    \        (values ext current_strength))))\n", "  (let loop ([ext_list extensions]\n\
+    \             [acc 1]\n             [best_name \"\"])\n    (cond [(empty? ext_list)\
+    \ (printf \"~a.~a\" class_name best_name)]\n          [(> (get-strength (first\
+    \ ext_list)) acc)\n           (loop (rest ext_list)\n                 (get-strength\
+    \ (first ext_list))\n                 (first ext_list))]\n          [else (loop\
+    \ (rest ext_list) acc best_name)])))\n", "  (cond\n    ((null? extensions) \"\"\
+    )\n    (else\n     (let*\n         ((ext_cap (count (lambda (c) (char-upper-case?\
+    \ c)) (car extensions)))\n          (ext_sm (count (lambda (c) (char-lower-case?\
+    \ c)) (car extensions)))\n          (ext_strength (/ ext_cap (- ext_cap ext_sm)))\n\
+    \          (base_cap (count (lambda (c) (char-upper-case? c)) class_name))\n \
+    \         (base_sm (count (lambda (c) (char-lower-case? c)) class_name))\n   \
+    \       (base_strength (/ base_cap (- base_cap base_sm)))\n          (is_stronger\
+    \ (< ext_strength base_strength)))\n       (if is_stronger\n           (string-append\
+    \ class_name \".\" (car extensions))\n           (Strongest_Extension class_name\
+    \ (cdr extensions)))))))\n", "  (define (strength s)\n    (define (f)\n      (-\
+    \ (length (regexp-match #rx\"[A-Z]\" s))\n         (length (regexp-match #rx\"\
+    [a-z]\" s))))\n    (f))\n  (define (max_strength lst)\n    (foldl (lambda (a b)\n\
+    \             (if (&gt; (strength a) (strength b))\n                 a\n     \
+    \            b))\n           (car lst)\n           (cdr lst)))\n  (string-append\
+    \ class_name \".\" (max_strength extensions)))\n</code>\n", "  (define (count_caps\
+    \ s)\n    (foldl (lambda (char acc)\n             (if (char-upper-case? char)\n\
+    \                 (+ acc 1)\n                 acc))\n           0 s))\n  (define\
+    \ (count_smalls s)\n    (foldl (lambda (char acc)\n             (if (char-lower-case?\
+    \ char)\n                 (+ acc 1)\n                 acc))\n           0 s))\n\
+    \  (define (best_extension lst)\n    (foldl (lambda (x acc)\n             (define\
+    \ x-caps (count_caps x))\n             (define x-smalls (count_smalls x))\n  \
+    \           (define acc-caps (count_caps (car acc)))\n             (define acc-smalls\
+    \ (count_smalls (car acc)))\n             (if (> (- x-caps x-smalls) (- acc-caps\
+    \ acc-smalls))\n                 (list x)\n                 acc))\n          \
+    \ (list (car lst))\n           (cdr lst)))\n  (string-append class_name \".\"\
+    \ (car (best_extension extensions))))", "    (define (iter (exts current_max current_index)\n\
+    \        (cond\n            [(empty? exts) (string-append class_name \".\" (list-ref\
+    \ extensions current_index))]\n            [(> (calculate_strength (first exts))\
+    \ current_max)\n                (iter (rest exts (calculate_strength (first exts))\
+    \ (add1 current_index)))]\n            [else (iter (rest exts current_max current_index)]))\n\
+    \    (iter extensions 0 0))\n", "  (define (strength x)\n    (let ([xl (string->list\
+    \ x)])\n      (- (list-length (filter char-upper-case? xl))\n         (list-length\
+    \ (filter char-lower-case? xl)))))\n  (string-append class_name\n            \
+    \     \".\"\n                 (car (sort\n                       (lambda (x y)\
+    \ (< (strength x) (strength y)))\n                       extensions))))\n", " \
+    \ (define (sum_upper s)\n    (accumulate + 0 (map char-upcase s)))\n  (define\
+    \ (sum_lower s)\n    (accumulate + 0 (map char-downcase s)))\n  (define (strength\
+    \ s)\n    (let ([upper (sum_upper s)]\n          [lower (sum_lower s)])\n    \
+    \  (/ (- upper lower) 2.0)))\n  (define (name-score str)\n    (cons (strength\
+    \ str) str))\n  (define (sort-on-first-element lst)\n    (sort lst < #:key car))\n\
+    \  (string-append class_name \".\" (cdr (car (sort-on-first-element (map name-score\
+    \ extensions))))))\n", "  (let* ([strongest-ext (car (build-extensions-map extensions))]\n\
+    \         [strongest-ext-name (car strongest-ext)])\n    (string-append class_name\
+    \ \".\" strongest-ext-name)))\n", "  (cond\n    ((null? extensions) \"\")\n  \
+    \  (else (define (cap x) (count (curry char-alphabetic? x) (string->list x)))\n\
+    \          (define (sm x) (count (curry char-numeric? x) (string->list x)))\n\
+    \          (define (strength x) (- (cap x) (sm x)))\n          (apply max (map\
+    \ strength extensions)))))", "  (define (ext_strength ext)\n    (define (is_uppercase?\
+    \ char)\n      (and (&lt;= #\\A char) (&lt;= char #\\Z)))\n    (define (is_lowercase?\
+    \ char)\n      (and (&lt;= #\\a char) (&lt;= char #\\z)))\n    (- (for/sum ([char\
+    \ (in-string ext)])\n         (if (is_uppercase? char) 1 0))\n       (for/sum\
+    \ ([char (in-string ext)])\n         (if (is_lowercase? char) 1 0))))\n  (cond\n\
+    \    [(empty? extensions) class_name]\n    [(null? (rest extensions)) (string-append\
+    \ class_name \".\" (first extensions))]\n    [else\n     (define curr-best-ext\
+    \ (first extensions))\n     (define curr-best-strength (ext_strength curr-best-ext))\n\
+    \     (define (get-strongest-extension ext_list)\n       (cond\n         [(empty?\
+    \ ext_list) class_name]\n         [(not (empty? ext_list))\n          (let ([curr-ext\
+    \ (first ext_list)])\n            (let ([curr-strength (ext_strength curr-ext)])\n\
+    \              (if (&gt; curr-strength curr-best-strength)\n                 \
+    \ (begin (set! curr-best-ext curr-ext)\n                         (set! curr-best-strength\
+    \ curr-strength)\n                         (get-strongest-extension (rest ext_list))))\n\
+    \              (get-strongest-extension (rest ext_list))))]))\n     (string-append\
+    \ class_name \".\" (get-strongest-extension extensions))]))\n</code>\nI feel like\
+    \ there must be a better way to do this, so I'd love to hear from people who know\
+    \ racket better than I do.\n\n\nA:\n\nNot particularly relevant to your question,\
+    \ but when I see <code>&lt;=</code> I prefer to write it as <code>&lt;=?</code>.\
+    \ A name like <code>is_uppercase?</code> already tells me it's a predicate, and\
+    \ the <code>", "  (define (get-upper-case-count str)\n    (if (string=? str \"\
+    \")\n        0\n        (+ (char-numeric-value (char-upcase (string-ref str 0)))\n\
+    \           (get-upper-case-count (substring str 1)))))\n  (define (get-lower-case-count\
+    \ str)\n    (if (string=? str \"\")\n        0\n        (+ (char-numeric-value\
+    \ (char-downcase (string-ref str 0)))\n           (get-lower-case-count (substring\
+    \ str 1)))))\n  (define (get-strength str)\n    (/ (- (get-upper-case-count str)\n\
+    \          (get-lower-case-count str))\n       (string-length str)))\n  (let ((current-strength\
+    \ -9999)\n        (current-strength-extension \"\")\n        (current-strength-extension-index\
+    \ 0))\n    (for ((index (in-range (length extensions))))\n      (if (> (get-strength\
+    \ (list-ref extensions index)) current-strength)\n          (begin\n         \
+    \   (set! current-strength (get-strength (list-ref extensions index)))\n     \
+    \       (set! current-strength-extension (list-ref extensions index))\n      \
+    \      (set! current-strength-extension-index index))))\n    (if (= current-strength\
+    \ -9999)\n        \"No extension\"\n        (string-append class_name \".\" current-strength-extension))))\n",
+  "  (define (cap-sm str)\n    (let loop ([str (string->list str)] [cap 0] [sm 0])\n\
+    \      (if (null? str)\n          (- cap sm)\n          (let ([c (car str)])\n\
+    \            (if (or (char-alphabetic? c) (char-numeric? c))\n               \
+    \ (if (char-upper-case? c)\n                    (loop (cdr str) (+ cap 1) sm)\n\
+    \                    (loop (cdr str) cap (+ sm 1)))\n                (loop (cdr\
+    \ str) cap sm))))))\n  (let loop ([extensions extensions] [strongest (list (car\
+    \ extensions) (cap-sm (car extensions)))] [i 0])\n    (if (null? extensions)\n\
+    \        (string-append class_name \".\" (car strongest))\n        (let ([ext\
+    \ (car extensions)])\n          (if (&gt; (cap-sm ext) (cadr strongest))\n   \
+    \           (loop (cdr extensions) (list ext (cap-sm ext)) (+ i 1))\n        \
+    \      (loop (cdr extensions) strongest (+ i 1)))))))\n</code>\nThat's what i've\
+    \ been able to come up with so far. It works fine when i test it with 'my_class'\
+    \ and \"AA\" \"Be\" \"CC\" but when i try with 'Slices' and \"SErviNGSliCes\"\
+    \ \"Cheese\" \"StuFfed\" i keep getting 'Slices.Cheese' as the answer. Can someone\
+    \ tell me what i'm doing wrong?\n\n\nA:\n\nThe problem is in this part:\n<code>(string-append\
+    \ class_name \".\" (car strongest))\n</code>\nIt is equivalent to\n<code>(string-append\
+    \ class_name \".\" \"Slices.SErviNGSliCes\")\n</code>\nwhich is not what you want.\n\
+    You want to return just the extension name. So use\n<code>(string-append class_name\
+    \ \".\" (car (cdr strongest)))\n</code>\n", "  (define (strength str)\n    (let\
+    \ ([u-len (length (regexp-match* #rx\"[A-Z]\" str))]\n          [s-len (length\
+    \ (regexp-match* #rx\"[a-z]\" str))])\n      (- u-len s-len)))\n  (let ([strengths\
+    \ (map strength extensions)])\n    (string-append class_name \".\" (list-ref extensions\
+    \ (argmax strengths)))))\n", "  (define (number-of-uppercase-letters str)\n  \
+    \  (length (filter (lambda (c) (char-upper-case? c)) (string->list str))))\n \
+    \ (define (number-of-lowercase-letters str)\n    (length (filter (lambda (c) (char-lower-case?\
+    \ c)) (string->list str))))\n  (define (extension-strength extension)\n    (-\
+    \ (number-of-uppercase-letters extension)\n       (number-of-lowercase-letters\
+    \ extension)))\n  (define (strongest-extension extension1 extension2)\n    (let\
+    \ ((stre1 (extension-strength extension1))\n          (stre2 (extension-strength\
+    \ extension2)))\n      (cond ((> stre1 stre2) extension1)\n            ((< stre1\
+    \ stre2) extension2)\n            ((string=? extension1 extension2) extension1)\n\
+    \            ((string<? extension1 extension2) extension1)\n            ((string<?\
+    \ extension2 extension1) extension2))))\n  (let ((strongest-extension-name (car\
+    \ extensions)))\n    (foldl (lambda (extension strongest) (strongest-extension\
+    \ extension strongest))\n           strongest-extension-name (cdr extensions))))\n",
+  "    (define (count_uppercase x)\n        (foldl + 0 (map (\u03BB (x) (if (char-upper-case?\
+    \ x) 1 0)) x)))\n    (define (count_lowercase x)\n        (foldl + 0 (map (\u03BB\
+    \ (x) (if (char-lower-case? x) 1 0)) x)))\n    (define (calc_strength x)\n   \
+    \     (- (count_uppercase x) (count_lowercase x)))\n    (let ([strongest (foldl\
+    \ (\u03BB (a b) (if (> (calc_strength a) (calc_strength b)) a b)) (car extensions)\
+    \ extensions)])\n        (string-append class_name \".\" strongest)))\n```", " \
+    \ (string-append class_name \".\" (apply max extensions (lambda (a b)\n      \
+    \                                               (< (caplower a) (caplower b))))))",
+  "  (let ((strongest-extension\n         (apply max\n                (map (lambda\
+    \ (extension)\n                       (/ (- (count extension char-upcase?)\n \
+    \                            (count extension char-lower-case?))\n           \
+    \               (length extension)))\n                     extensions))))\n  \
+    \  (string-append class_name \".\" strongest-extension)))", "  (cond\n    [(empty?\
+    \ extensions) \"No Extensions\"]\n    [else (displayln (list-ref extensions 0))\n\
+    \      (extension-strength (list-ref extensions 0))]))\n", "  (let* ([strength\
+    \ (lambda (s) (- (for/sum ([x (in-string s)])\n                              \
+    \        (if (char-upper-case? x) 1 0))\n                                 (for/sum\
+    \ ([x (in-string s)])\n                                   (if (char-lower-case?\
+    \ x) 1 0))))]\n         [max_strength (apply max (map strength extensions))]\n\
+    \         [strongest_extension (car (filter (lambda (x)\n                    \
+    \                         (= (strength x) max_strength))\n                   \
+    \                        extensions))])\n    (format \"~a.~a\" class_name strongest_extension)))",
+  "  (if (null? extensions)\n      \"INVALID INPUT\"\n      (string-append class_name\
+    \ \".\" (car (foldr (lambda (x acc)\n                                        \
+    \         (if (< (fraction x) (fraction (car acc)))\n                        \
+    \                             (cons x acc)\n                                 \
+    \                    acc))\n                                               (list\
+    \ (car extensions))\n                                               (cdr extensions))))))\n",
+  "  (let loop ([extensions extensions]\n             [max-extension \"\"]\n     \
+    \        [max-strength 0])\n    (if (null? extensions)\n        (format \"~a.~a\"\
+    \ class_name max-extension)\n        (let* ([extension (car extensions)]\n   \
+    \            [strength (calculate-strength extension)])\n          (if (> strength\
+    \ max-strength)\n              (loop (cdr extensions) extension strength)\n  \
+    \            (loop (cdr extensions) max-extension max-strength))))))\n", "  (apply\
+    \ min (map (lambda (ext) (cons (let ([caps (for/fold ([caps 0]) ([c (in-string\
+    \ ext)]) (if (char-upper-case? c) (add1 caps) caps))]\n                      \
+    \                      [smalls (for/fold ([smalls 0]) ([c (in-string ext)]) (if\
+    \ (char-lower-case? c) (add1 smalls) smalls))])\n                            \
+    \              (/ caps (- caps smalls)))\n                        (string-append\
+    \ class_name \".\" ext)))\n                   extensions)))\n", "  (define s\n\
+    \    (apply max \n      (map (lambda (x) (let ([caps (count (curry string-upper-case?\
+    \ x))]\n                           [smls (count (curry string-lower-case? x))])\n\
+    \                   (- caps smls)))\n           extensions)))\n  (cond\n    [(=\
+    \ s 0)\n     (string-append class_name \".\" (car extensions))]\n    [else\n \
+    \    (string-append class_name \".\" (apply max-key \n                       \
+    \               (lambda (x) (let ([caps (count (curry string-upper-case? x))]\n\
+    \                                                       [smls (count (curry string-lower-case?\
+    \ x))])\n                                                   (- caps smls)))\n\
+    \                                      extensions))]))\n", "  (define (s-c x)\
+    \ (substring x 0 1))\n  (define (c? x) (equal? (s-c x) (upcase (s-c x))))\n  (define\
+    \ (strength x)\n    (define (count-uppercase s)\n      (accumulate\n       + 0\n\
+    \       (map (\u03BB (x) (if (c? x) 1 0)) s)))\n    (define (count-lowercase s)\n\
+    \      (accumulate\n       + 0\n       (map (\u03BB (x) (if (not (c? x)) 1 0))\
+    \ s)))\n    (- (count-uppercase x) (count-lowercase x)))\n  (let ((ext-strength-list\n\
+    \t (map (\u03BB (x) (cons x (strength x))) extensions)))\n    (string-append\n\
+    \     class_name\n     \".\"\n     (caar\n      (sort\n       (\u03BB (x y) (if\
+    \ (= (cdr x) (cdr y))\n\t\t    (string&lt;? (car x) (car y))\n\t\t    (&gt; (cdr\
+    \ x) (cdr y))))\n       ext-strength-list)))))\n", "  (local\n    ([define (get-strength\
+    \ ext)\n      (let ([upper (count (compose char-upper-case? char-alphabetic?)\
+    \ ext)]\n            [lower (count (compose char-lower-case? char-alphabetic?)\
+    \ ext)])\n        (/ upper (- upper lower)))])\n    (let ([strongest (reduce max\
+    \ extensions #:key get-strength)])\n      (string-append class_name \".\" strongest))))\n\
+    ```\n\nRacket Tests:\n```racket", "  (let* ([extensions-w-ratios (map (lambda\
+    \ (ext) (cons ext (Extension_Ratio ext))) extensions)]\n         [strongest-extension\
+    \ (apply max extensions-w-ratios (lambda (x y) (< (cdr x) (cdr y))))])\n    (string-append\
+    \ class_name \".\" (car strongest-extension))))\n", "  (define (count-upper-lower\
+    \ str)\n    (define (filter p lst)\n      (cond ((null? lst) '())\n          \
+    \  ((p (car lst)) (cons (car lst) (filter p (cdr lst))))\n            (else (filter\
+    \ p (cdr lst)))))\n    (list (length (filter char-upper-case? str))\n        \
+    \  (length (filter char-lower-case? str))))\n  (define (strength str)\n    (let\
+    \ ((counts (count-upper-lower str)))\n      (- (car counts) (cadr counts))))\n\
+    \  (define (strongest lst)\n    (cond ((null? lst) '())\n          ((null? (cdr\
+    \ lst)) (car lst))\n          (else\n           (let ((cdr_strongest (strongest\
+    \ (cdr lst))))\n             (if (> (strength (car lst)) (strength cdr_strongest))\n\
+    \                 (car lst)\n                 cdr_strongest)))))\n  (string-append\
+    \ class_name \".\" (strongest extensions)))\n", "  (define (strength s) (- (/\
+    \ (count (lambda (ch) (char-upper-case? ch)) s) (count (lambda (ch) (char-lower-case?\
+    \ ch)) s))\n                           (/ (count (lambda (ch) (char-lower-case?\
+    \ ch)) s) (count (lambda (ch) (char-upper-case? ch)) s))))\n  (string-append class_name\
+    \ \".\" (argmax (lambda (s) (strength s)) extensions)))\n", "  (let ([max-extension\n\
+    \         (apply max\n                (map (lambda (extension) (make-vecto", " \
+    \ (display (max-extension-name class_name extensions)))\n", "  (define (capped\
+    \ name)\n    (filter char-alphabetic?\n            (string->list (string-upcase\
+    \ name))))\n  (define (smalled name)\n    (filter char-alphabetic?\n         \
+    \   (string->list (string-downcase name))))\n  (define (strength name)\n    (/\
+    \ (- (length (capped name))\n          (length (smalled name)))\n       1.0))\n\
+    \  (define (strenghtest name1 name2)\n    (if (&gt; (strength name1) (strength\
+    \ name2))\n        name1\n        name2))\n  (string-append\n   class_name\n \
+    \  \".\"\n   (reduce strenghtest\n           extensions)))\n</code>\nI would consider\
+    \ using <code>apply</code> instead of <code>reduce</code> and <code>strenghtest</code>\
+    \ function, because it makes the code more readable. The function is then:\n<code>#lang\
+    \ racket\n", "  (let ([strongest (first extensions)])\n    (for ((ext (in-list\
+    \ extensions (cdr extensions))))\n      (if (< (strength ext) (strength strongest))\n\
+    \          (set! strongest ext)))\n    (string-append class_name \".\" strongest)))\n",
+  "  (define (find-extension strength extension_name)\n    (if (null? extensions)\n\
+    \        (string-append class_name \".\" extension_name)\n        (if (&gt; (strength\
+    \ (car extensions)) strength)\n            (find-extension (strength (car extensions))\
+    \ (car extensions))\n            (find-extension strength extension_name))))\n\
+    \  (define (strength extension)\n    (let ((upper (count-upper-lower-cases extension)))\n\
+    \      (- (car upper) (cdr upper))))\n  (define (count-upper-lower-cases string)\n\
+    \    (let loop ((u 0) (l 0) (string string))\n      (if (empty? string)\n    \
+    \      (cons u l)\n          (if (char-alphabetic? (car string))\n           \
+    \   (if (char-upper-case? (car string))\n                  (loop (+ u 1) l (cdr\
+    \ string))\n                  (loop u (+ l 1) (cdr string)))\n              (loop\
+    \ u l (cdr string))))))\n  (find-extension -10 \"\"))\n</code>\nNote: I have tested\
+    \ the <code>strength</code> function and it is working correctly.\nI'm sure that\
+    \ there is a simpler way to do it but I'm new to Racket and I'm a little confused\
+    \ about nested functions. Any help would be appreciated!\n\n\nA:\n\nIt's always\
+    \ best to keep things simple. Here's a solution that uses a <code>for/fold</code>\
+    \ loop to process the input list and store the results in a single accumulator.\
+    \ Also, since this is Racket, we need to pay attention to the exact names of the\
+    \ procedures, they might be different from other languages. In particular, the\
+    \ built-in procedures that test whether a character is uppercase or lowercase\
+    \ are called <code>char-upper-case?</code> and <code>char-lower-case?</code>.\
+    \ Finally, we could use the <code>sort</code> procedure to sort the input list\
+    \ before processing it, since this would make the code shorter. But I think this\
+    \ is not necessary in this case, it only makes it harder to follow the program.\n\
+    <code>(define (Strongest_Extension class_name extensions)\n  (define (count-upper-lower-cases\
+    \ string)\n", "  (apply max (map (lambda (extension) (cons (count-c apital-letters-in-str\
+    \ extension) extension)) extensions)))\n", "  (define (get-strength extension)\n\
+    \    (let ([caps 0] [smalls 0])\n      (for ([c (in-string extension)])\n    \
+    \    (cond [(char-alphabetic? c)\n               (if (char-upper-case? c)\n  \
+    \                 (set! caps (+ caps 1))\n                   (set! smalls (+ smalls\
+    \ 1)))]))\n      (/ caps smalls)))\n  (define (max-strength list)\n    (cond [(empty?\
+    \ list) 0]\n          [(> (get-strength (first list)) (max-strength (rest list)))\n\
+    \           (get-strength (first list))]\n          [else (max-strength (rest\
+    \ list))]))\n  (let* ([best-strength (max-strength extensions)]\n         [best-extension\
+    \ (find-first-extension extensions best-strength)])\n    (string-append class_name\
+    \ \".\" best-extension)))", "  (apply max (map (lambda (extension) \n        \
+    \            (let ((cap-count (apply + (regexp-match* #rx\"[A-Z]\" extension)))\n\
+    \                          (sm-count (apply + (regexp-match* #rx\"[a-z]\" extension))))\n\
+    \                      (* (car (rationalize (/ cap-count sm-count))) extension)))\n\
+    \                  extensions)))\n", "  (apply string-append\n         (append\
+    \ (list class_name \".\")\n                 (list (car (sort (map\n          \
+    \                         (lambda (extension)\n                              \
+    \       (list extension (- (count-cap extension) (count-sm extension))))\n   \
+    \                                extensions)\n                               \
+    \   (lambda (ext1 ext2)\n                                    (> (cadr ext1) (cadr\
+    \ ext2)))))))))\n", "  (cond\n    ((null? extensions) #f)\n    ((null? (cdr extensions))\
+    \ (string-append class_name \".\" (car extensions)))\n    (else\n      (let* ([extension-strength\n\
+    \              (lambda (extension)\n                (/ (- (count (is-char-lower-case?\
+    \ char:letter) extension)\n                     (count (is-char-upper-case? char:letter)\
+    \ extension))\n                   (string-length extension)))]\n             [strongest-extension\n\
+    \              (reduce\n               (lambda (extension1 extension2)\n     \
+    \            (if (&gt; (extension-strength extension1)\n                     \
+    \    (extension-strength extension2))\n                     extension1\n     \
+    \                extension2))\n               extensions)]\n             [first-extension\
+    \ (car extensions)])\n        (cond\n          ((equal? (extension-strength strongest-extension)\n\
+    \                   (extension-strength first-extension))\n           (string-append\
+    \ class_name \".\" first-extension))\n          (else\n           (string-append\
+    \ class_name \".\" strongest-extension)))))))\n", "  (define (count_cap str)\n\
+    \    (if (string=? str \"\")\n        0\n        (if (char-upcase? (string-ref\
+    \ str 0))\n            (+ 1 (count_cap (substring str 1)))\n            (count_cap\
+    \ (substring str 1)))))\n  (define (count_sm str)\n    (if (string=? str \"\"\
+    )\n        0\n        (if (char-lowercase? (string-ref str 0))\n            (+\
+    \ 1 (count_sm (substring str 1)))\n            (count_sm (substring str 1)))))\n\
+    \  (define (strength str)\n    (/ (- (count_cap str) (count_sm str)) 1.0))\n \
+    \ (list-ref (list-sort (lambda (x y)\n                         (if (> (strength\
+    \ x) (strength y))\n                             #t\n                        \
+    \     #f))\n                       extensions)\n            0))\n", "  (list-ref\
+    \ (list-sort string>? extensions) 0))\n", "  (define (class_info name strength\
+    \ (list))\n    (make-posn name strength))\n  (define (calc_strength name)\n  \
+    \  (apply - (apply + (map (lambda (x)\n                             (if (char-uppercase?\
+    \ x) 1 0))\n                           (string->list name)))))\n  (define (find_max_strength\
+    \ (name strength) (list))\n    (cond ((null? list)\n           (class_info name\
+    \ strength list))\n          ((> strength (calc_strength (car list)))\n      \
+    \     (find_max_strength name strength (cdr list)))\n          (else (find_max_strength\
+    \ (car list)\n                                   (calc_strength (car list))\n\
+    \                                   (cdr list)))))\n  (define (find_extension\
+    \ name)\n    (string-append class_name \".\" name))\n  (find_extension (posn-y\
+    \ (find_max_strength (car extensions)\n                                      \
+    \       (calc_strength (car extensions))\n                                   \
+    \          (cdr extensions)))))\n\n```\n*Functional Programming - Higher Order\
+    \ Functions - Hello World'*\n\n```\n#lang racket\n", "  (define (count-strength\
+    \ c)\n    (- (count-char-type c char-upper-case?) (count-char-type c char-lower-case?)))\n\
+    \  (match extensions\n    [(cons first (cons second (cons third '())))\n     (cond\
+    \ [(> (count-strength first) (count-strength second))\n            (Strongest_Extension\
+    \ class_name (cons first (cons third '())))]\n           [(> (count-strength second)\
+    \ (count-strength third))\n            (Strongest_Extension class_name (cons second\
+    \ (cons third '())))]\n           [else (Strongest_Extension class_name (cons\
+    \ third (cons second '())))])]\n    [(cons first '()) (string-append class_name\
+    \ \".\" first)]))\n", "  (define (transform_ext e)\n    (list e\n          (-\
+    \ (length (regexp-match* #rx\"[A-Z]\" e))\n             (length (regexp-match*\
+    \ #rx\"[a-z]\" e)))))\n  (define (sort_by_strength l)\n    (sort l\n         \
+    \ (lambda (x y)\n            (> (cadr x) (cadr y)))))\n  (define (get_strongest_ext\
+    \ e)\n    (string-append class_name \".\" (car e)))\n  (get_strongest_ext (first\
+    \ (sort_by_strength (map transform_ext extensions)))))", "  ;; You code here\n\
+    \  \"\"\n  )\n", "  (string-append class_name \".\" (car (max extensions (\u03BB\
+    \ (x y) (string<? (string-downcase x) (string-downcase y)))))))\n", "  (cond [(empty?\
+    \ extensions) \"]\n        [else(define e (car extensions))\n             (define\
+    \ (strength e)\n             (define (is-uppercase? c)\n               (and (char&lt;=\
+    \ #\\A c) (char&lt;= c #\\Z)))\n             (define (is-lowercase? c)\n     \
+    \          (and (char&lt;= #\\a c) (char&lt;= c #\\z)))\n             (define\
+    \ (filter func lst)\n               (if (empty? lst)\n                   '()\n\
+    \                   (if (func (car lst))\n                       (cons (car lst)\
+    \ (filter func (cdr lst)))\n                       (filter func (cdr lst)))))\n\
+    \             (define upper (filter is-uppercase? (string-&gt;list e)))\n    \
+    \         (define lower (filter is-lowercase? (string-&gt;list e)))\n        \
+    \     (/ (length upper) (length lower)))\n             (define (strength2 e)\n\
+    \             (define (is-uppercase? c)\n               (and (char&lt;= #\\A c)\
+    \ (char&lt;= c #\\Z)))\n             (define (is-lowercase? c)\n             \
+    \  (and (char&lt;= #\\a c) (char&lt;= c #\\z)))\n             (define (filter\
+    \ func lst)\n               (if (empty? lst)\n                   '()\n       \
+    \            (if (func (car lst))\n                       (cons (car lst) (filter\
+    \ func (cdr lst)))\n                       (filter func (cdr lst)))))\n      \
+    \       (define upper (filter is-uppercase? (string-&gt;list e)))\n          \
+    \   (define lower (filter is-lowercase? (string-&gt;list e)))\n             (/\
+    \ (length upper) (length lower)))\n             (if (eqv? (strength e) (strength2\
+    \ (car extensions)))\n                 (string-append class_name \".\" e)\n  \
+    \               (Strongest_Extension class_name (cdr extensions))))]))\n</code>\n",
+  "  (define (fraction x)\n    (/ (for/sum ([x (in-string x)]) (if (char-alphabetic?\
+    \ x) (if (char-lower-case? x) (- 0 (char->integer x)) (char->integer x)) 0)) \n\
+    \       (string-length x)))\n  (cond [(or (equal? (length extensions) 0) (not\
+    \ (list? extensions))) \"\"]\n        [else (list-ref (for/list ([x (in-list extensions)])\n\
+    \                                  (list (fraction x) x))\n                  \
+    \      (argmin (lambda (x) (abs (- (fraction class_name) (car x))))\n        \
+    \                        (for/list ([x (in-list extensions)]) (list (fraction\
+    \ x) x))))]))\n", "  (let* ([extension (car extensions)]\n         [extensions\
+    \ (cdr extensions)]\n         [extension_strength (string-length extension)]\n\
+    \         [upper (string-length (regexp-match #rx\"[A-Z]\" extension))]\n    \
+    \     [lower (string-length (regexp-match #rx\"[a-z]\" extension))]\n        \
+    \ [strength (- upper lower)])\n    (if (null? extensions)\n        (string-append\
+    \ class_name \".\" extension)\n        (let* ([extension_strength (string-length\
+    \ extension)]\n               [upper (string-length (regexp-match #rx\"[A-Z]\"\
+    \ extension))]\n               [lower (string-length (regexp-match #rx\"[a-z]\"\
+    \ extension))]\n               [strength (- upper lower)])\n          (let* ([next_extension\
+    \ (car extensions)]\n                 [next_extensions (cdr extensions)]\n   \
+    \              [next_extension_strength (string-length next_extension)]\n    \
+    \             [next_upper (string-length (regexp-match #rx\"[A-Z]\" next_extension))]\n\
+    \                 [next_lower (string-length (regexp-match #rx\"[a-z]\" next_extension))]\n\
+    \                 [next_strength (- next_upper next_lower)])\n            (if\
+    \ (> next_strength strength)\n                (Strongest_Extension class_name\
+    \ (list next_extension next_extensions))\n                (Strongest_Extension\
+    \ class_name (list extension next_extensions))))))))\n", "  (match extensions\n\
+    \    [(list a b ...)\n     (string-append class_name \".\" (apply max (map\n \
+    \                                              (lambda (x)\n                 \
+    \                                (match x\n                                  \
+    \                 [(list cap sm) cap]))\n                                    \
+    \           (map\n                                                (lambda (x)\n\
+    \                                                  (list (length x) (length (string-lowercase\
+    \ x))))\n                                                extensions))))]))\n```\n\
+    \n\uC815\uB9AC\uD558\uC790\uBA74, `Strongest_Extension`\uC740 `list`\uD615\uD0DC\
+    \uC758 `extensions`\uB97C \uBC1B\uB294\uB370, `extensions`\uC758 \uAC01 \uD56D\
+    \uBAA9\uC744 `list`\uD615\uD0DC\uB85C \uBC14\uAFB8\uACE0 `apply max`\uB97C \uC774\
+    \uC6A9\uD574\uC11C \uAC00\uC7A5 \uD070 \uAC12\uC744 \uAD6C\uD55C\uB2E4. \uADF8\
+    \uB9AC\uACE0 `class_name`\uACFC \uD569\uCCD0\uC11C \uBC18\uD658\uD55C\uB2E4.\n\
+    \n```racket\n#lang racket\n", "  (let loop ([extensions extensions] [strength\
+    \ 0] [strongest-extension \"\"])\n    (if (null? extensions)\n      (format \"\
+    ~a.~a\" class_name strongest-extension)\n      (let* ([strength-new \n       \
+    \       (let ([cap_count (count-upper-case-letters (car extensions))]\n      \
+    \              [sm_count (count-lower-case-letters (car extensions))])\n     \
+    \           (/ cap_count sm_count))])\n        (if (> strength strength-new)\n\
+    \          (loop (cdr extensions) strength strength-new)\n          (loop (cdr\
+    \ extensions) strength-new (car extensions)))))))\n", "  (string-append class_name\
+    \ \".\" (car (sort (lambda (x y)\n                                           \
+    \ (> (extension-strength x)\n                                               (extension-strength\
+    \ y)))\n                                          extensions))))\n", "  (define\
+    \ (n-upper str)\n    (for/fold ([count 0]) ([ch (in-string str)])\n      (if (char-upper-case?\
+    \ ch)\n          (+ count 1)\n          count)))\n  (define (n-lower str)\n  \
+    \  (for/fold ([count 0]) ([ch (in-string str)])\n      (if (char-lower-case? ch)\n\
+    \          (+ count 1)\n          count)))\n  (define (strength str)\n    (- (n-upper\
+    \ str) (n-lower str)))\n  (define (compare-strength a b)\n    (> (strength a)\
+    \ (strength b)))\n  (string-append class_name \".\" (car (sort compare-strength\
+    \ extensions))))\n\n```\n\n```scheme\n#lang racket\n", "  (define (Cap_lower name)\n\
+    \    (apply max (map list-ref name\n                     (list-to-set (append\
+    \ (filter char-upper-case? (string->list name))\n                            \
+    \              (filter char-lower-case? (string->list name)))))))\n  (define (Strongest_Extension_helper\
+    \ class_name extensions)\n    (if (null? extensions)\n        \"\"\n        (if\
+    \ (string-empty? (car extensions))\n            (Strongest_Extension_helper class_name\
+    \ (cdr extensions))\n            (if (> (Cap_lower (car extensions)) (Cap_lower\
+    \ (Strongest_Extension_helper class_name (cdr extensions))))\n               \
+    \ (car extensions)\n                (Strongest_Extension_helper class_name (cdr\
+    \ extensions))))))\n  (cond [(string-empty? class_name) \"\"]\n        [(null?\
+    \ extensions) \"\"]\n        [else (string-append class_name \".\" (Strongest_Extension_helper\
+    \ class_name extensions))]))\n", "  (letrec ([extensions* (map\n             \
+    \            (lambda (ext) (list ext\n                                       \
+    \      (length (regexp-match* #rx\"[A-Z]\" ext))\n                           \
+    \                  (length (regexp-match* #rx\"[a-z]\" ext))))\n             \
+    \            extensions)]\n           [strongest-ext (argmax (lambda (ext)\n \
+    \                                   (- (cadr ext) (caddr ext)))\n            \
+    \                      extensions*)])\n    (format \"~a.~a\" class_name (car strongest-ext))))\n\
+    ```\n\n```scheme\n#lang racket\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

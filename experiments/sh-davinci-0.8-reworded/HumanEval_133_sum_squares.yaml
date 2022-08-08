@@ -64,6 +64,410 @@ completions: ["    local sum=0\n    for i in $1; do\n        sum=$(($sum + $((ce
     \    #for i in $(cut_comma $1); do\n    #    result=$(($result + $(pow_squares\
     \ $i)))\n    #done\n    #echo $result\n    #\n    #\n    #\n    #\n    #\n   \
     \ #\n\n    printf \"%s\" \"$1\" | awk '{\n        for (i = 1; i <= NF; i++) {\n\
-    \            sum += int(ceil($i) ^ 2)\n        }\n        print sum\n    }'"]
+    \            sum += int(ceil($i) ^ 2)\n        }\n        print sum\n    }'",
+  "\tIFS=' ' read -r -a lst <<< \"$1\"\n\tsum=0\n\tfor i in \"${lst[@]}\"; do\n\t\t\
+    # sum of squares\n\t\tsum=$((sum + $(echo \"($i + 0.5) / 1\" | bc)))\n\tdone\n\
+    \techo \"$sum\"", "    declare -a arr=()\n    for i in $(echo $1 | sed 's/[^ ]*/\\\
+    U&/g'); do\n        arr+=($i)\n    done\n    sum=0\n    for i in ${arr[@]}; do\n\
+    \        square=$(awk -v num=\"$i\" 'BEGIN { print (num*num) }')\n        sum=$(awk\
+    \ -v num1=\"$sum\" -v num2=\"$square\" 'BEGIN { print (num1+num2) }')\n    done\n\
+    \    echo $sum", "\t# Awk multiplies by 100, rounds, and then divides by 100 to\
+    \ avoid floating point issues.\n\t# This doesn't have the same issue as multiply_by_n.sh\
+    \ because it's just a wrapper around bc.\n\techo \"$1\" | awk '{for (i=1; i<=NF;\
+    \ i++) print int(($i*$i)*100)/100}' | paste -sd+ - | bc", "  printf \"%0.f\\n\"\
+    \ $(($(printf \"%s\\n\" $@ | tr ' ' '\\n' | \n    awk '{printf \"%s \", int($1\
+    \ + 0.5) * int($1 + 0.5);}') | \n    tr ' ' '+'))", "  # Let's change the input\
+    \ in a such way that we can use only integers\n  # 0.4 -> 1  -0.4 -> 0  1.6 ->\
+    \ 2  0.0 -> 0  -0.0 -> 0  -1.6 -> -2\n  local in=$(echo $1 | sed -e 's/\\([-]*[0-9.]*\\\
+    )0*\\([1-9]\\)/\\1.\\2/g' -e 's/0./-0./g' -e 's/\\.0\\([1-9]\\)/\\.\\1/g' -e 's/\\\
+    ([0-9.]\\)\\./\\1/g' -e 's/\\([0-9.]\\)$/\\1.0/g')\n  # Calculate\n  echo $(awk\
+    \ '{sum=0; for (i=1; i<=NF; i++) {sum += ($i>0)?($i+0.5):($i-0.5) } print sum}'\
+    \ <<< \"$in\")", "    local _ceil\n    local _sum\n    _sum=0\n    _ceil=${1//\
+    \ / }\n    while read -r num; do\n        num=$(echo \"$num\" | bc -l)\n     \
+    \   _sum=$(echo \"$_sum + ($num * $num)\" | bc -l)\n    done <<< \"$_ceil\"\n\
+    \    printf \"%d\" \"$(echo \"ceil($_sum)\" | bc -l)\"", "  local total=0\n  for\
+    \ x in $1; do\n    ((total += $(bc <<< \"ceil($x)^2\")))\n  done\n  echo $total",
+  "    local _sum=0.0\n    local _num=0.0\n    local _upper_num=0.0\n    for _num\
+    \ in $1; do\n        _upper_num=${_num/.*};\n        let _upper_num++\n      \
+    \  let _sum+=$_upper_num*$_upper_num\n    done\n    echo $_sum", "  local result=0\n\
+    \  for i in $1; do\n    result=$(echo \"scale=0; $result + ${i%.*}*${i%.*}\" |\
+    \ bc)\n  done\n  echo $result", "    str=${1// /+}\n    result=$(bc -l <<< \"\
+    scale=0; ($str)^2\")\n    echo $result", "  echo \"$@\" | tr \" \" \"\\n\" | while\
+    \ read num; do\n    printf \"%d\" $(echo \"ceil($num)^2\" | bc)\n  done | paste\
+    \ -sd+ | bc", "    local lst=\"$1\"\n    if [[ \"$lst\" == \"\" ]]; then\n   \
+    \     echo 0\n    else\n        local lst_s=$(echo \"$lst\" | sed -e 's/[^ ]*\
+    \ //' | tr ' ' '+')\n        local num=$(echo \"$lst\" | sed -e 's/^[^ ]* //')\n\
+    \        echo $(( $(echo \"$lst_s\" | bc) + $(echo \"scale=4;($num)^2\" | bc)\
+    \ ))\n    fi", "  echo \"$1\" | awk '{for(i=1;i<=NF;i++)s+=(int($i)^2)}END{print\
+    \ s}'", "  echo \"$1\" | tr ' ' '\\n' | awk '{ print \"scale=0; a=\"$1\"^2; if(a>=0)\
+    \ {print int(a+0.5);} else {print int(a-0.5);}\"; }' | bc", "    declare -a A=(\"\
+    $@\")\n    local sum=0\n    for i in \"${A[@]}\"; do\n        sum=$((sum + (ceil\
+    \ $i) * (ceil $i)))\n    done\n    echo $sum", "    local sum=0\n    local lst=($1)\n\
+    \    for num in ${lst[@]}; do\n        sum=$(echo \"$sum + ($num + 0.5) ** 2\"\
+    \ | bc)\n    done\n    echo $sum", "    local S=0\n    for n in $1; do\n     \
+    \   n=${n%.*}\n        S=$((S + n*n))\n    done\n    echo $S", "    local lst=$1\n\
+    \    local sum=0\n    for n in $lst; do\n        local upper=$(echo \"($n + 1)/1\"\
+    \ | bc)\n        local square=$(echo \"$upper * $upper\" | bc)\n        let sum+=$square\n\
+    \    done\n    echo $sum", "    arr=($1)\n\n    echo ${arr[@]} | awk '{for(i=1;i<=NF;i++)\
+    \ printf(\"%d \", ($i>0)?(int($i)+1):(int($i)))}' | tr ' ' '\\n' | awk '{sum+=$1;\
+    \ print sum}' | tail -n 1", "    # Write your solution between the following comments\n\
+    \    # //START\n    # //END", "    local lst=($1)\n    local i\n    local res=0\n\
+    \    for i in \"${lst[@]}\"; do\n        local num=$(echo \"scale=0; $i + 1/2\"\
+    \ | bc)\n        res=$(echo \"scale=0; $res + $num * $num\" | bc)\n    done\n\
+    \    echo \"$res\"", "  local list\n  list=$(echo \"$1\" | tr ' ' '\\n' | awk\
+    \ '{printf \"%.0f\\n\", $1*$1}' | paste -sd '+' - | bc)\n  echo $list", "    local\
+    \ l=\n    local n=\n    local sum=0\n    for l in $1; do\n        n=$(echo $l\
+    \ | bc -l)\n        n=$(printf \"%.0f\" $(echo \"scale=1; $n + 0.5\" | bc -l))\n\
+    \        n=$(expr $n \\* $n)\n        sum=$(expr $sum + $n)\n    done\n    echo\
+    \ $sum", "    total=0\n    for i in $1; do\n        ((total += ceil(i)**2))\n\
+    \    done\n    echo $total", "\tarr=( $1 )\n\tsum=0\n\tfor (( i=0; i<${#arr[@]};\
+    \ i++ ))\n\tdo\n\t\tsquared=$(echo \"scale=2; ${arr[$i]} * ${arr[$i]}\" | bc)\n\
+    \t\trounded=$(printf \"%d\" $squared)\n\t\tsum=$(( $sum + $rounded ))\n\tdone\n\
+    \techo $sum", "\tlocal sum=0\n\tfor i in $1; do\n\t\tsum=$(echo \"$sum + $(($(printf\
+    \ \"%.0f\" $i) * $(printf \"%.0f\" $i)))\" | bc)\n\tdone\n\techo $sum", "    local\
+    \ res=0\n    local tmp=0\n    for i in $1; do\n        tmp=$(echo \"$i * $i\"\
+    \ | bc -l)\n        tmp=$(echo \"scale=0;($tmp+0.5)/1\" | bc)\n        res=$(($res\
+    \ + $tmp))\n    done\n    echo $res", "    local lst=\"$1\"\n    local sum=0\n\
+    \    local var=0\n    for i in $lst; do\n        # ceiling and round\n       \
+    \ var=${i%.*}\n        if [ $var -ne $i ]; then\n            (( var++ ))\n   \
+    \     fi\n        sum=$((sum + var * var))\n    done\n    echo $sum", "  # perform\
+    \ ceil and sum of squares\n  ceil() {\n    echo \"${1%.*} + 1\" | bc\n  }\n  sum()\
+    \ {\n    ceil $1 && ceil $2 && echo \"($1 + $2)^2\" | bc\n  }\n  # loop through\
+    \ all numbers\n  for i in $1; do\n    # note that $i is a string, need to convert\
+    \ it to float\n    ans=$(sum $ans $(ceil $i))\n  done\n  echo $ans", "  local\
+    \ lst=$1\n  local int_sum=0\n  local square=0\n  for i in $lst; do\n    int_sum=$(echo\
+    \ \"$int_sum + $(($(echo \"$i + 1\" | bc -l | sed 's/\\..*//g' )))^2\" | bc -l)\n\
+    \  done\n  echo $int_sum | sed 's/\\..*//g'", "    list=$(echo $1 | sed 's/[ ]/,/g')\n\
+    \    sum=0\n    for x in $(echo $list | tr \",\" \"\\n\")\n    do\n        sum=$(echo\
+    \ \"$sum + ($x*$x)\" | bc)\n    done\n    echo $sum", "  lst=$1\n  echo $lst |\
+    \ xargs | tr ' ' '\\n' | awk '{printf \"%.0f\\n\", $1 * $1}' | paste -sd+ | bc",
+  "    local lst=($1)\n    local res\n    local x\n    for x in ${lst[@]}; do\n  \
+    \      res+=$(( ${x/.*} ** 2 ))\n    done\n    echo \"$res\"", "    local l\n\
+    \    local f1=0.0\n    local f2=0.0\n    local f3=0.0\n    local f4=0.0\n    local\
+    \ f5=0.0\n    local f6=0.0\n    local f7=0.0\n    local f8=0.0\n    local f9=0.0\n\
+    \    local f10=0.0\n    local f11=0.0\n    local f12=0.0\n    local f13=0.0\n\
+    \    local f14=0.0\n    local f15=0.0\n    local f16=0.0\n    local f17=0.0\n\
+    \    local f18=0.0\n    local f19=0.0\n    local f20=0.0\n    local f21=0.0\n\
+    \    local f22=0.0\n    local f23=0.0\n    local f24=0.0\n    local f25=0.0\n\
+    \    local f26=0.0\n    local f27=0.0\n    local f28=0.0\n    local f29=0.0\n\
+    \    local f30=0.0\n    local f31=0.0\n    local f32=0.0\n    local f33=0.0\n\
+    \    local f34=0.0\n    local f35=0.0\n    local f36=0.0\n    local f37=0.0\n\
+    \    local f38=0.0\n    local f39=0.0\n    local f40=0.0\n    local f41=0.0\n\
+    \    local f42=0.0\n    local f43=0.0\n    local f44=0.0\n    local f45=0.0\n\
+    \    local f46=0.0\n    local f47=0.0\n    local f48=0.0\n    local f49=0.0\n\
+    \    local f50=0.0\n    local f51=0.0\n    local f52=0.0\n    local f53=0.0\n\
+    \    local f54=0.0\n    local f55=0.0\n    local f56=0.0\n    local f", "    local\
+    \ result=0\n    while IFS= read -r n; do\n        result=$((result + n * n))\n\
+    \    done < <(printf \"%s\\n\" $1 | tr ' ' '\\n' | cut -d. -f1 | sort -nr)\n \
+    \   echo $result", '  echo "";', "    echo \"$1\" | tr ' ' '\\n' | cut -d '.'\
+    \ -f 1 |\n    awk '{s+=$1*$1} END {print s}'", "    set -f; IFS=' '\n    local\
+    \ numbers=($1)\n    set +f; unset IFS\n    local sum=0\n    for num in \"${numbers[@]}\"\
+    ; do\n        local ceil=$(ceil \"$num\")\n        sum=$(( sum + ceil * ceil ))\n\
+    \    done\n    echo \"$sum\"", "    # return 0 if $1 is empty\n    [[ -z \"$1\"\
+    \ ]] && echo \"0\" && return 0\n    # if $1 is not empty, split it by spaces and\
+    \ raise each element to the power of 2\n    sum=0\n    for i in $(echo \"$1\"\
+    \ | tr ' ' '\\n'); do\n        # round each element to the upper int\n       \
+    \ # square it and add to the sum\n        sum=$(( sum + ($(echo \"$i + 0.5\" |\
+    \ bc) ** 2) ))\n    done\n    echo \"$sum\"", "\t# declare -a n=($1)\n\t# n=(\"\
+    $@\")\n\t# local s=0; for i in \"${n[@]}\"; do s=$(echo \"$s+$i^2\" | bc); done\n\
+    \tlocal s=0; while [ $# -gt 0 ]; do s=$(echo \"$s+$1^2\" | bc); shift; done\n\t\
+    echo \"$s\"", "  local rv=0\n  while read -r line; do\n    rv=$((rv + line**2))\n\
+    \  done <<< \"$1\"\n  echo \"$rv\"", "    local lst=\"$1\"\n    local sum=0\n\
+    \    local num\n    for num in ${lst}; do\n        sum=$(echo \"${sum} + (${num}^2)\"\
+    \ | bc -l)\n    done\n    printf \"%d\" \"${sum}\"", "  local a=$(printf '%s\\\
+    n' \"$1\" | awk '{ for (i=1; i<=NF; i++) { sum += ($i > 0) ? int($i+0.5) : int($i-0.5)\
+    \ } print sum*sum }')\n  echo $a", "\tlocal sum=0\n\tlocal s\n\tfor s in $1; do\n\
+    \t\tsum=$(echo \"$sum + $s^2\" | bc)\n\tdone\n\techo \"$sum\"", "\tlst=\"$1\"\n\
+    \tresult=0\n\tfor i in $lst; do\n\t\tresult=$(echo $result+\\($i\\)^2 | bc -l)\n\
+    \tdone\n\techo $result", "    local i\n    local sum\n\n    sum=0\n    for i in\
+    \ $1; do\n        (( sum += ceil(i) ** 2 ))\n    done\n    echo $sum", "  # your\
+    \ solution here\n  sum=0\n  for i in $1; do\n    sum=$(echo $sum + ${i/./}^2 |\
+    \ bc -l)\n  done\n  echo $sum", "    local total=0\n    local list=$(echo $1 |\
+    \ tr ' ' '\\n')\n    for i in $list; do\n        ((total+=($(printf \"%.0f\" $i)**2)))\n\
+    \    done\n    echo $total", "    local acc=0\n    for i in $1; do\n        acc=$(echo\
+    \ $acc + $i^2 | bc)\n    done\n    echo $acc", "    declare -a elems=($1)\n  \
+    \  result=0\n    for i in \"${elems[@]}\"; do\n        result=$(echo \"$result\
+    \ + ceil($i)**2\" | bc -l)\n    done\n    echo \"$result\"", "    declare -a nums\n\
+    \    nums=($1)\n    local res=0\n    for i in ${nums[@]}; do\n        res=$(echo\
+    \ \"$res + ($i^2)\" | bc)\n    done\n    echo \"$res\"", "    local IFS=$' '\n\
+    \    local sum=0\n    for num in $1; do\n        sum=$(($sum + $(((${num/.*} +\
+    \ 1) * (${num/.*} + 1)))))\n    done\n    echo $sum", "    local sum=0\n    while\
+    \ read -r n; do\n        sum=$(( sum + n*n ))\n    done <<< \"$1\"\n    echo \"\
+    $sum\"", "  IFS=' ' read -r -a arr <<< \"$1\"\n  sum=0\n  for x in \"${arr[@]}\"\
+    ; do\n    sum=$((sum + ceil($x)**2))\n  done\n  echo \"$sum\"", "    local lst=(${1})\n\
+    \    local res=0\n    for i in ${lst[@]}; do\n        res=$(($res + $(python -c\
+    \ \"print(int(int($i)**2))\")))\n    done\n    echo $res", "   local arg=\"$1\"\
+    \n   local array=($arg)\n   local sum=0\n   for i in \"${array[@]}\"\n   do\n\
+    \       sum=$(bc <<<\"$sum + ($i * $i)\")\n   done\n   printf '%d' \"$sum\"",
+  "    echo $1 | sed 's/\\([0-9.-]*\\)/\\1^2/g' | paste -sd+ | bc", "    bc -l <<<\
+    \ \"$(echo $1 | sed 's/ /^2 + /g')^2\"", "    list=(\"$@\")\n    squares=()\n\
+    \    for num in \"${list[@]}\"; do\n        if [[ $num =~ ^-?[0-9]+\\.[0-9]+$\
+    \ ]]; then\n            squares+=($(echo \"scale=0; ($num + 0.5) / 1\" | bc))\n\
+    \        else\n            squares+=($num)\n        fi\n    done\n    echo \"\
+    ${squares[@]}\" | tr ' ' '+' | bc", "  local list=$1\n  if [[ \"${list}\" == \"\
+    \" ]]; then\n    echo 0\n  else\n    local sum=0\n    for a in ${list}; do\n \
+    \     (( sum += $(printf \"%.0f\" \"${a}\") ** 2 ))\n    done\n    echo ${sum}\n\
+    \  fi", "  local lst=\"$1\"\n  local sum=0\n  for x in $lst; do\n    sum=$(echo\
+    \ \"$sum + ($x)^2\" | bc -l)\n  done\n  echo \"$sum\" | bc", "    local sum=0\n\
+    \    for n in $1; do\n        sum=$(bc <<< \"$sum + ($n+0.5)^2\")\n    done\n\
+    \    echo \"$sum\"", "    local sum=0\n    for num in $1; do\n        let \"sum\
+    \ += $(ceil $num) ** 2\"\n    done\n    echo $sum", "  echo \"$@\" | awk '{\n\
+    \    for (i = 1; i <= NF; i++) {\n      if ($i ~ /^[0-9]+[.][0-9]+$/) {\n    \
+    \    n = n + $i*$i\n      }\n    }\n    printf(\"%.0f\", n)\n  }'", "  local lst=$1\n\
+    \n  # your code here\n  echo $lst | awk '{for(i=1;i<=NF;i++) { print $i*$i }}'\
+    \ | awk '{sum+=$1} END {print sum}'", "  # Write your code here\n  # Use echo\
+    \ to print the result\n  # For example:\n  # echo $((1 + 1))", "    local lst=$(echo\
+    \ $1 | tr ' ' '\\n' |\n        # Round to upper int\n        awk '{print ceil($1)}'\
+    \ |\n        # Squared\n        awk '{print $1*$1}' |\n        # Sum\n       \
+    \ awk '{s+=$1} END {print s}')\n    echo $lst", '    echo $(lst "$@") | tr " "
+    "+" | bc', "  local IFS=\" \"\n  local sum=0\n  for i in $1; do\n    i=$(echo\
+    \ \"$i\" | cut -d \".\" -f 1)\n    sum=$((sum + (i * i)))\n  done\n  echo \"$sum\"",
+  "  local lst=\"$1\"\n  local sum=0\n  for i in $lst; do\n    local i=$(echo \"$i\"\
+    \ | tr ',' '.')\n    sum=$(echo \"$sum + $i^2\" | bc -l)\n  done\n  printf \"\
+    %.0f\" \"$sum\"", "    local sum=0\n    for i in $1; do\n        sum=$(echo \"\
+    $sum + ($i * $i)\" | bc -l)\n    done\n    printf \"%d\" $sum", "    echo $1 |\
+    \ tr \" \" \"\\n\" | while read num; do\n        echo \"($num)^2\" | bc\n    done\
+    \ | awk '{s+=$1} END {print s}'", "  # <YOUR CODE>\n  SUM=0\n  for i in $1\n \
+    \ do\n    i=$(echo $i | awk '{print int($1+0.5)}')\n    SUM=$(($SUM+$i*$i))\n\
+    \  done\n  echo $SUM", "    local sq_sum=0\n    for x in ${@}\n    do\n      \
+    \  sq_sum=$(echo \"$sq_sum + ($x**2)\" | bc -l)\n    done\n    printf \"%d\" $sq_sum",
+  "    arg=\"$1\"\n    sum=0\n    for i in $arg; do\n        sum=$(echo \"$sum + ($i\
+    \ * $i)\" | bc -l)\n    done\n    echo $(printf \"%.0f\" $sum)", "    local lst=$1\n\
+    \    local sum=0\n    for el in $lst; do\n        local val=$(printf %.0f $(echo\
+    \ \"$el\" | bc -l))\n        local square=$(echo \"$val * $val\" | bc -l)\n  \
+    \      sum=$(echo \"$sum + $square\" | bc -l)\n    done\n    echo $sum", "   \
+    \ local nums=( $1 )\n    for (( i=0; i<${#nums[@]}; i++ )); do\n        nums[$i]=$(echo\
+    \ \"ceil(${nums[$i]})\" | bc)\n    done\n    printf '%s ' \"${nums[@]}\" | awk\
+    \ '{for(x=1;$x;++x)s+=$x*$x}END{print s}'", "  local line=$@\n  local result=0\n\
+    \  for i in $line; do\n    ((result += ceil(i) ** 2))\n  done\n  echo $result",
+  "  local acc=0\n  for i in $@; do\n    local i_ceil=${i%.*}\n    ((acc+=i_ceil*i_ceil))\n\
+    \  done\n  echo $acc", "    sum=0\n    for i in $1; do\n        sum=$(($sum +\
+    \ $(( $(printf \"%.0f\" $i) * $(printf \"%.0f\" $i) )) ))\n    done\n    echo\
+    \ $sum", "  local result\n  for i in $(echo $1 | sed 's/ /\\n/g'); do\n    result=$((\
+    \ $result + $(echo \"($i+0.5)/1\" | bc)**2 ))\n  done\n  echo $result", "  local\
+    \ sum=0\n  local number=0\n  for number in $1; do\n    sum=$(echo \"$sum + $number\
+    \ * $number\" | bc -l)\n  done\n  echo $sum | cut -d \".\" -f 1", "  local sum=0\n\
+    \  for num in $1; do\n    num=$(printf \"%.0f\" \"$num\")\n    local pow=$((num\
+    \ * num))\n    sum=$((sum + pow))\n  done\n  echo \"$sum\"", "    awk '{s=0;for(i=1;i<=NF;i++)s+=(int($i+0.5))^2;print\
+    \ s}' <<< \"$*\"", "  # Write your code here\n  echo $@", "  local lst=\"$1\"\n\
+    \  echo \"${lst}\" | awk '{s=0; for (i=1; i<=NF; i++) {s=s+ceil($i)^2}; print\
+    \ s}'", "\tlocal arr=( $1 )\n\tlocal sum=0\n\tfor i in \"${arr[@]}\"; do\n\t\t\
+    sum=$((sum + $(echo \"$i^2\" | bc | awk '{ printf \"%0.f\", $0 }')))\n\tdone\n\
+    \techo \"$sum\"", "\tlocal nums=($1)\n\tlocal total=0\n\tfor n in \"${nums[@]}\"\
+    ; do\n\t\ttotal=$((total + $(ceil $n)**2))\n\tdone\n\techo $total", "    local\
+    \ lst=\"$*\"\n    local res=0\n    for i in ${lst}; do\n        res=$((${res}\
+    \ + $(echo \"ceil(${i}^2)\" | bc -l)))\n    done\n    echo ${res}", "    lst=\"\
+    $@\"\n    lst=${lst// /,}\n    lst=${lst//,/\\\\\\\\n}\n    echo $(awk -v lst=\"\
+    $lst\" 'BEGIN{print int(sqrt(lst))}')", "    local lst=(\"$@\")\n    local result=0\n\
+    \    for v in \"${lst[@]}\"; do\n        result=$((result + ($(printf %.0f \"\
+    $v\")**2)))\n    done\n    echo \"$result\"", "    # declare a \"local\" variable\
+    \ with the appropriate type\n    local n value=0\n    # convert $1 to an array,\
+    \ $a\n    IFS=' ' read -r -a a <<< \"$1\"\n    # use @ to iterate over the whole\
+    \ array\n    for n in \"${a[@]}\"; do\n        # bc is a calculator language\n\
+    \        # a ^ b = a to the power of b\n        # 0.5 is the square root (because\
+    \ b = 2)\n        # scale=0 means no decimals\n        # / 1 is a trick to round\
+    \ the result up, and print it\n        # for example:\n        # 1.4 is sqrt(1.4^2)\
+    \ is sqrt(1.96) is 1.4, but we want 2\n        # 1.6 is sqrt(1.6^2) is sqrt(2.56)\
+    \ is 1.6, but we want 2\n        # 1.5 is sqrt(1.5^2) is sqrt(2.25) is 1.5, but\
+    \ we want 2\n        # 1.7 is sqrt(1.7^2) is sqrt(2.89) is 1.7, but we want 2\n\
+    \        # value is the current sum\n        value=$(echo \"$value + $(bc <<<\
+    \ \"scale=0; sqrt($n ^ 2) / 1\")\" | bc)\n    done\n    # print the result\n \
+    \   echo \"$value\"", "  echo $@ | tr \" \" \"\\n\" | awk '{a+=($1>0?$1:0-($1))**2}END{print\
+    \ a}'", "    local sum=0\n    for i in $(echo $1); do\n        sum=$(echo \"$sum\
+    \ + $i^2\" | bc)\n    done\n    echo \"$sum\"", "  local args=\"$1\"\n  local\
+    \ result=0\n  for arg in $args; do\n    arg=${arg%.*}\n    result=$((result +\
+    \ arg ** 2))\n  done\n  echo $result", "  local list=($(echo \"$1\" | tr ' ' '\\\
+    n'))\n  local sum=0\n  for x in \"${list[@]}\"; do\n    sum=$(($sum + ($(python\
+    \ -c \"print(int(ceil($x)))\") ** 2)))\n  done\n  echo \"$sum\"", "  if [[ $#\
+    \ -eq 0 ]]; then\n    echo 0\n  else\n    echo \"$1\" | bc -l | sed 's/^\\./0./'\
+    \ | \\\n      awk '{ printf \"%.0f\", ($1 + 0.5) * ($1 + 0.5) }'\n  fi", "   \
+    \ local sum=0\n    for v in $1; do\n        sum=$(echo \"$sum + ($v * $v)\" |\
+    \ bc -l)\n    done\n    echo \"$sum\"", "  read -r -a arr <<< \"$1\"\n  local\
+    \ n=0\n  local sum=0\n  while [ $n -lt ${#arr[@]} ]; do\n    local number=$(awk\
+    \ -v n=\"${arr[$n]}\" 'BEGIN {printf \"%d\\n\",n+0.99}')\n    sum=$(( $sum + $number*$number\
+    \ ))\n    n=$(( $n + 1 ))\n  done\n  echo \"$sum\"", "  local result=0\n  for\
+    \ n in $1; do\n    result=$(echo \"$result + ((${n%%.*} + 1)^2)\" | bc)\n  done\n\
+    \  echo $result", "  for x in ${1}; do\n    let res+=($(python -c \"import math;\
+    \ print(math.ceil(${x}))**2)\" | bc -l)\n  done\n  echo ${res}", "  local result=0\n\
+    \  for num in $1; do\n    result=$(echo \"$result + (${num%.*} ^ 2)\" | bc)\n\
+    \  done\n  echo $result", "    for i in $1; do\n        i=${i%.*}\n        i=$((i+1))\n\
+    \        ((sum+=i*i))\n    done\n    echo $sum", "    local total=0\n    for number\
+    \ in $1; do\n        local n=$(awk -v n=$number 'BEGIN {printf(\"%.0f\",n+0.5)}')\n\
+    \        total=$((total + n*n))\n    done\n    echo $total", "    echo \"$*\"\
+    \ | awk '{s = 0; for (i = 1; i <= NF; i++) s += int(ceil($i)) ^ 2} END {print\
+    \ s}'", "  # convert to space-separated list, removing leading and trailing spaces\n\
+    \  s=\"$(echo \"$1\" | tr ',' ' ' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\"\
+    \n  # initialize variable to hold sum of squares\n  sumsq=0\n  # loop through\
+    \ space-separated list, adding the square of each item to sumsq\n  for item in\
+    \ $s; do\n    # convert item to upper int (ceiling) and assign to variable\n \
+    \   upper_int=$(($(printf \"%.0f\" \"$item\")))\n    # add square of each item\
+    \ to sumsq\n    sumsq=$(($sumsq + ($upper_int * $upper_int)))\n  done\n  # print\
+    \ final result (sum of squares)\n  echo \"$sumsq\"", "    local SUM=0\n    while\
+    \ read -r N; do\n        SUM=$((SUM + (N ** 2)))\n    done < <(printf '%s\\n'\
+    \ \"$1\" | bc -l | xargs printf '%.0f\\n')\n    echo \"$SUM\"", "    local sum=0\n\
+    \    for i in $1; do\n        local rounded=$(echo \"$i + 0.5\" | bc | awk '{printf\
+    \ \"%d\", $0}')\n        let sum+=rounded**2\n    done\n    echo $sum", "  local\
+    \ lst=($1)\n  local sum=0\n\n  for elem in ${lst[@]}; do\n    sum=$(($sum + $(($(ceil\
+    \ $elem) * $(ceil $elem)))))\n  done\n\n  echo $sum", "    local sum=0\n\n   \
+    \ for num in $1; do\n        sum=$(echo \"$sum + ($num + 0.5) ^ 2\" | bc -l)\n\
+    \    done\n\n    echo $sum | cut -d'.' -f1", "    read -ra arr <<< \"$1\"\n\n\
+    \    sum=0\n    for i in \"${arr[@]}\"; do\n        if (( $(echo \"$i <= 0\" |\
+    \ bc -l) )); then\n            sum=$(( sum + ${i%%.*}**2 ))\n        else\n  \
+    \          sum=$(( sum + ${i%%.*}**2 ))\n        fi\n    done\n\n    echo \"$sum\"",
+  "    local arg_str=$1\n    local arg_arr=(${arg_str// / })\n    local sum=0\n  \
+    \  for arg in ${arg_arr[@]}; do\n        sum=$(echo $sum + $arg*$arg | bc)\n \
+    \   done\n    echo $sum", "  a=( $1 )\n  b=0\n  for n in \"${a[@]}\"; do\n   \
+    \ n=$(echo \"scale=0; $n+0.5\" | bc)\n    b=$(echo \"scale=0; $b+$n^2\" | bc)\n\
+    \  done\n  echo $b", "    local sum=0\n    local num\n    for num in $1; do\n\
+    \        # -l option means to round up, so that it is same as int(ceiling)\n \
+    \       num=$(awk -v n=$num 'BEGIN { print int(n + 0.5); }')\n        sum=$((sum\
+    \ + num * num))\n    done\n    echo $sum", "  # In Bash, every variable's value\
+    \ is a string.\n  # As a workaround, we can use external tool `python` to do math.\n\
+    \  local arr=($1)\n  local sum=0\n  for i in \"${arr[@]}\"; do\n    sum=$(python\
+    \ -c \"print(int(round($i))**2 + $sum)\")\n  done\n  echo $sum", "  echo $1 |\
+    \ sed 's/ / + /g' | bc -l | sed 's/\\.[0-9]*//g' | bc -l", "    local list=$1\n\
+    \    local sum=0\n    for num in ${list[@]}; do\n        sum=$(python -c \"print($sum\
+    \ + int(round($num,0))**2)\")\n    done\n    echo $sum", "  local tmp_float_tmp\n\
+    \  tmp_float_tmp=\"$(echo \"$1\" | tr ' ' '\\n' | sed -e '/^$/d' | awk '{print\
+    \ $1*$1}' | paste -sd+ | bc -l | awk '{printf(\"%.0f\\n\", $1)}')\"\n  echo \"\
+    $tmp_float_tmp\"", "  local sum=0\n  for i in $1; do\n    sum=$(bc <<< \"scale=1;\
+    \ ($sum + ceil($i) ^ 2)\")\n  done\n  echo \"$sum\"", "    tr ' ' '\\n' <<< \"\
+    $1\" | awk '{ s += ($1 < 0 ? -$1 : $1)^2 } END { print s }'", "  # return $(echo\
+    \ $1 | awk '{\n  #     for (i = 1; i <= NF; i++)\n  #         sum += (i-int(i))^2\n\
+    \  #     } END { print sum }')\n  return $(echo $1 | awk '{\n      for (i = 1;\
+    \ i <= NF; i++)\n          sum += (i-int(i))^2\n      } END { print sum }')",
+  "    local res=0\n    for i in $1; do\n        res=$(echo $res + $(echo $i^2 | bc\
+    \ -l) | bc -l)\n    done\n    echo $res | awk '{ printf \"%.0f\", $1 }'", "  \
+    \  local num\n\n    while read -r num; do\n        ((sum += num*num))\n    done\
+    \ <<< \"${1// /$'\\n'}\"\n\n    echo \"$sum\"", "\tlocal t l v res=0\n\tIFS='\
+    \ ' read -ra t <<< \"$1\"\n\tfor v in \"${t[@]}\"; do\n\t\tl=$(echo \"$v + 0.5\"\
+    \ | bc -l)\n\t\tres=$(echo \"$res + $l ^ 2\" | bc -l)\n\tdone\n\techo \"$res\"",
+  "  local res=0\n  for i in $1; do\n    local a=$(printf %.0f $(echo $i | bc -l))\n\
+    \    res=$(echo \"$res + $a^2\" | bc -l)\n  done\n  echo $res", "    declare -A\
+    \ _numbers=($(echo $@ | sed 's/\\s/\\n/g' | awk '{printf(\"%s %.0f \", $1, $1)}'))\n\
+    \    declare -i sum=0\n    for i in ${_numbers[@]}; do\n        ((sum+=i*i))\n\
+    \    done\n    echo $sum", "  # your solution here\n  echo \"$1\"", "  local nums=$1\n\
+    \  local num_nums=$(echo $nums | wc -w)\n  local sum=0\n  for ((i=1; i<=$num_nums;\
+    \ i++)); do\n    local num=$(echo $nums | cut -d' ' -f$i)\n    local num_sq=$(echo\
+    \ $num*$num | bc -l)\n    sum=$(echo $sum+$num_sq | bc -l)\n  done\n  echo $sum\
+    \ | awk '{printf \"%.0f\", $0}'", "    list=$@\n    lst=($list)\n    l=${#lst[@]}\n\
+    \    sum=0\n    for ((i=0; i<$l; i++)); do\n        v=${lst[$i]}\n        v2=$(echo\
+    \ \"$v * $v\" | bc -l)\n        sum=$(echo \"$sum + $v2\" | bc -l)\n    done\n\
+    \    echo \"$sum\"", "    local sum=0\n    for el in $1; do\n        sum=$(echo\
+    \ $sum + $el*$el | bc)\n    done\n    echo $sum", "    local list=$@\n    declare\
+    \ -a arr=($list)\n    local n=${#arr[@]}\n    local sum=0\n    #echo \"$n elements\
+    \ in the array\"\n    for ((i=0; i<n; i++)); do\n        arr[$i]=$(echo ${arr[$i]}\
+    \ | awk '{printf \"%.0f\", $1+0.5}')\n        local square=$(echo \"scale=0; ${arr[$i]}^2\"\
+    \ | bc)\n        let sum+=$square\n    done\n    echo $sum", "    local -a arr=()\n\
+    \    local  i=0\n    IFS=' ' read -r -a arr <<< \"$1\"\n    for i in \"${arr[@]}\"\
+    ; do\n        arr[$i]=$(bc <<< \"scale=2; ${arr[$i]}^2\")\n    done\n    echo\
+    \ \"${arr[@]}\" | tr ' ' '+' | bc", "  # Use regex to match integers and floats\n\
+    \  regex='^-?[0-9]+([.][0-9]+)?$'\n  # Get the list of numbers from a space-separated\
+    \ string\n  local total=0\n  for i in $1; do\n    if [[ $i =~ $regex ]]; then\n\
+    \      # Use bc to perform floating point calculations\n      local ceiling=`echo\
+    \ \"$i+1\" | bc`\n      # echo \"Number: $i, Ceiling: $ceiling\"\n      # Use\
+    \ bc to perform floating point calculations\n      local ceiling_squared=`echo\
+    \ \"$ceiling*$ceiling\" | bc`\n      # echo \"Ceiling Squared: $ceiling_squared\"\
+    \n      # Use bc to perform floating point calculations\n      local total=`echo\
+    \ \"$total+$ceiling_squared\" | bc`\n      # echo \"Total: $total\"\n    fi\n\
+    \  done\n  echo $total", "  local list=\"$1\"\n  local result=0\n  for i in $list;\
+    \ do\n    let result+=(ceil $i)**2\n  done\n  echo $result", "  (($#)) || return\
+    \ 1\n  local num\n  local sum=0\n  for num in $*; do\n    ((sum += ceil(num)**2))\n\
+    \  done\n  echo \"$sum\"", "  local a=($1)\n  local sum=0\n  for i in \"${a[@]}\"\
+    ; do\n    sum=$(echo \"$sum + $i*$i\" | bc -l)\n  done\n  echo $sum | bc -l |\
+    \ cut -d. -f1", "    local nums=$(echo $1 | tr ' ' '\\n' | \\\n              \
+    \   awk '{print ceil($1)}' | \\\n                 tr '\\n' ' ')\n    echo $nums\
+    \ | awk '{sum=0; for (i=1; i<=NF; i++) {sum+=$i^2}; print sum}'", "  local sum=0\n\
+    \  for num in $1; do\n    ((sum+=(${num%%.*} ** 2)))\n  done\n  echo $sum", " \
+    \   IFS=' ' read -r -a array <<< \"$1\"\n    for (( i=0; i<${#array[@]}; i++ ));\
+    \ do\n        array[$i]=$(printf %.0f $(echo \"${array[$i]}+0.5\" | bc -l))\n\
+    \    done\n    printf %s \"${array[@]}\" | awk '{a+=$1;b+=$1^2}END{print b-a^2/NR}'",
+  "  sum=0\n  for num in $1; do\n    sum=$(echo \"$sum + ${num/./,} * ${num/./,}\"\
+    \ | bc -l)\n  done\n  printf \"%d\" $(echo \"$sum\" | awk '{printf(\"%d\\n\",$1\
+    \ + 0.5)}')", "  total=0\n  for num in $1; do\n    total=$(echo \"$total + $num\
+    \ * $num\" | bc -l)\n  done\n  echo \"$total\" | awk '{ printf(\"%.0f\", $1) }'",
+  "    local s=0\n    for n in $1; do\n        n=${n%%.*}\n        s=$(( s + n*n ))\n\
+    \    done\n    echo $s", "    local _sum=0\n    for arg in $1; do\n        local\
+    \ _arg=${arg#-}\n        local _pow=$(echo \"ceil($_arg)\" | bc)\n        local\
+    \ _arg_sq=$(echo \"$_pow*$_pow\" | bc)\n        local _sum=$(echo \"$_sum+$_arg_sq\"\
+    \ | bc)\n    done\n    echo $_sum", "  local l=\"$1\"\n  local sum=0\n  for item\
+    \ in ${l}\n  do\n    sum=$(python -c \"print ${sum} + ${item}**2\")\n  done\n\
+    \  echo ${sum}", "  # $1 is a space-separated list\n  # lst() { \n  #   echo \"\
+    $1\" | tr ' ' '\\n' | while read x; do \n  #   echo $(printf \"%0.f\" $(echo \"\
+    $x\" | sed -r 's/[a-z]//g'))\n  #   done | awk '{sum+=$1} END {print sum}'\n \
+    \ # }\n\n  # echo \"$1\" | tr ' ' '\\n' | while read x; do echo $(printf \"%0.f\"\
+    \ $(echo \"$x\" | sed -r 's/[a-z]//g')); done | awk '{sum+=$1^2} END {print sum}'\n\
+    \  echo \"$1\" | tr ' ' '\\n' | while read x; do echo $(echo \"$x\" | sed -r 's/[a-z]//g'\
+    \ | xargs printf \"%0.f\"); done | awk '{sum+=$1^2} END {print sum}'", "    local\
+    \ lst=\"$1\"\n    local item\n    local sum=0\n    for item in $lst; do\n    \
+    \    local squared\n        squared=$(printf \"%.0f\" $(echo \"$item * $item\"\
+    \ | bc -l))\n        sum=$(($sum + $squared))\n    done\n    echo $sum", "  local\
+    \ lst=\"$*\"\n  lst=$(echo \"$lst\" | tr ' ' '\\n' | awk '{printf(\"%d \", ceil($1))}')\n\
+    \  local sum=0\n  for item in $lst; do\n    let sum+=item*item\n  done\n  echo\
+    \ \"$sum\"", "    declare -A squares\n    square_lst=\n    sum=0\n    for x in\
+    \ $1; do\n        val=$(echo \"scale=0; ($x + 0.5) / 1\" | bc -l)\n        if\
+    \ [ -z \"${squares[$val]}\" ]; then\n            squares[$val]=$(echo \"scale=0;\
+    \ $val * $val\" | bc -l)\n        fi\n        square_lst=\"$square_lst ${squares[$val]}\"\
+    \n    done\n    for x in $square_lst; do\n        sum=$(echo \"scale=0; $sum +\
+    \ $x\" | bc -l)\n    done\n    echo $sum", "  local s=0\n  for i in $1; do\n \
+    \   s=$(bc <<< \"$s + ($i + 0.5)^2\")\n  done\n  echo $s", "    local sum=0\n\
+    \    local num\n    for num in $1; do\n        sum=$(echo \"${sum} + (${num%.*}^2)\"\
+    \ | bc)\n    done\n    echo $sum", "  for i in $1; do\n    c=$(awk \"BEGIN {printf\
+    \ \\\"%.1f\\\", ceil($i)}\")\n    s=$(( $s + ( $c * $c ) ))\n  done\n  echo $s",
+  "    local lst=$1\n    echo $lst | awk '{s=0; for (i=1; i<=NF; i++) {s=s+ceil($i)*ceil($i)};\
+    \ print s}'", "    local sum=0;\n    for i in $1; do\n        sum=$(echo \"$sum\
+    \ + ceil($i)*ceil($i)\" | bc -l);\n    done\n    echo $sum;", "    local sum=0\n\
+    \    for i in $1; do\n        sum=$(($sum + $(((${i/.*} + 1) ** 2))))\n    done\n\
+    \    echo $sum", "    for i in $1; do\n        ((sum_square+=(${i%.*}+1)**2))\n\
+    \    done\n    echo $sum_square", "    arr=($1)\n    total=0\n    for i in \"\
+    ${arr[@]}\"; do\n        x=$(echo \"scale=2; sqrt($i)\" | bc)\n        sum_number=$(echo\
+    \ \"scale=2; $x^2\" | bc)\n        total=$(echo \"scale=2; $total+$sum_number\"\
+    \ | bc)\n    done\n    printf \"%.0f\" \"$total\"", "  local c lst result num\n\
+    \n  lst=\"$1\"\n  # remove the last space from the list\n  lst=\"${lst% }\"\n\
+    \  # split the list with IFS space\n  IFS=\" \" read -r -a lst <<< \"$lst\"\n\
+    \  for c in \"${lst[@]}\"; do\n    # round the number to int\n    num=$(printf\
+    \ \"%.0f\" \"$c\")\n    # calculate the power of 2\n    num=$((num*num))\n   \
+    \ # add to the result\n    result=$((result+num))\n  done\n  echo \"$result\"",
+  "    local total=0\n    for i in $1; do\n        total=$(($total + $(($i * $i))))\n\
+    \    done\n    echo $total", "    lst=($1)\n    lst_sums=()\n    for i in \"${lst[@]}\"\
+    ; do\n        lst_sums+=($(echo \"$i*$i\" | bc -l))\n    done\n    echo ${lst_sums[@]}\
+    \ | tr ' ' '+' | bc -l", "  local _sum=0\n  for i in $1; do\n    _sum=$(echo \"\
+    $_sum + $(echo \"$i*$i\" | bc -l)\" | bc -l)\n  done\n  echo $_sum | bc -l | awk\
+    \ '{print int($1+0.5)}'", "    local list=$1\n    local sum=0\n    for number\
+    \ in $list; do\n        sum=$(echo $sum + \\($number \\* $number\\) | bc -l)\n\
+    \    done\n    echo $sum", "  local lst=$1\n  echo $lst |\n    tr ' ' '\\n' |\n\
+    \    awk '{x=int($1+0.5);print x*x}' |\n    tr '\\n' '+' |\n    sed 's/+$//' |\n\
+    \    bc", "  numbers=$(echo $1 | tr ' ' '\\n' | while read number; do echo $number\
+    \ | cut -d '.' -f 1; done)\n  echo $numbers | tr ' ' '+' | bc", "    echo $1 |\
+    \ awk '{ sum=0; for (i=1; i<=NF; i++) {sum += ($i>0?int($i):int($i-1))^2;} print\
+    \ sum;}'", "  local sum=0\n  for num in $1; do\n    sum=$(echo \"$sum + $(bc <<<\
+    \ \"scale=0; $num*$num\")\" | bc)\n  done\n  echo $sum", "  local list=($1)\n\
+    \  local sum=0\n  for i in \"${list[@]}\"; do\n    sum=$((sum + (i ** 2)))\n \
+    \ done\n  echo $sum", "  local n\n  local n_squared\n  local sum=0\n  for n in\
+    \ $(echo \"$1\" | tr ' ' '\\n'); do\n    n_squared=$(echo \"scale=0; $n^2/1\"\
+    \ | bc)\n    sum=$(echo \"$sum + $n_squared\" | bc)\n  done\n  echo \"$sum\"",
+  "  local sum=0\n  while read i; do\n    i=$(echo \"$i\" | bc -l)\n    ((sum += (int(i+0.5))**2))\n\
+    \  done < <(echo \"$@\")\n  echo \"$sum\"", "    local sum=0\n    for x in $1;\
+    \ do\n        sum=$(echo \"$sum + ($x*$x+0.5) / 1\" | bc)\n    done\n    echo\
+    \ $sum", "  local l=($1)\n  local out=0\n  for i in \"${l[@]}\"; do\n    ((out\
+    \ += ${i/\\./} * ${i/\\./}))\n  done\n  echo $out", "  local lst=$1\n  # your\
+    \ code here\n  echo $lst | awk '{for(i=1;i<=NF;i++) print $i+0;}' | xargs printf\
+    \ \"%d\\n\" | awk '{sum+=$1*$1} END {print sum}'", "    local SUM\n    for ELEMENT\
+    \ in $1; do\n        let ELEMENT=$(echo \"c($ELEMENT^2)\" | bc -l)\n        let\
+    \ SUM+=$ELEMENT\n    done\n    echo $SUM", "    local -a array=($1)\n    local\
+    \ -i sum=0\n    for ((i=0; i<${#array[@]}; i++)); do\n        sum=$((sum + ${array[i]}**2))\n\
+    \    done\n    echo \"$sum\"", "  declare -a arr\n  arr=($1)\n  sum=0\n  for i\
+    \ in \"${arr[@]}\"; do\n    sum=$(echo $sum+$(echo $i*$i | bc -l) | bc -l)\n \
+    \ done\n  sum=$(printf \"%.0f\" $sum)\n  echo $sum", "    local n\n    for n in\
+    \ $1; do\n        n=$(awk -v n=\"$n\" 'BEGIN { printf(\"%.0f\\n\", (n < 0.0) ?\
+    \ n-0.5 : n+0.5) }')\n        echo $(( n * n ))\n    done | paste -sd+ - | bc",
+  "    lst=$(echo $1 | tr ' ' '\\n' | \\\n    awk '{printf(\"%d\\n\", $1+0.5)}' |\
+    \ \\\n    awk '{printf(\"%d\\n\", $1^2)}' | \\\n    paste -sd+ - | bc)\n    echo\
+    \ $lst", "  local y=\"0\"\n  while read x\n  do\n    y=$(echo \"$y + $(printf\
+    \ %.0f $(echo \"($x * $x)\" | bc -l))\" | bc -l)\n  done <<< \"$1\"\n  echo \"\
+    $y\"", "\tlocal sum=0\n\n\tfor num in $1; do\n\t\tsum=$(($sum + $(( ${num/.*}\
+    \ ** 2 ))))\n\tdone\n\n\techo $sum", "  local sum=0\n  local num\n  for num in\
+    \ $1; do\n    ((sum += ceil($num) ** 2))\n  done\n  echo $sum", "  sum=0\n  for\
+    \ i in $1; do\n    sum=$(($sum + (int $(echo $i | bc -l))))\n  done\n  echo $sum"]
 stop_tokens:
 - "\n}"

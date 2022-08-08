@@ -69,6 +69,576 @@ completions: ["    if [[ $1 == *$2* ]]; then\n\techo -n 1\n\thow_many_times ${1#
     \  local i=0\n  while true\n  do\n    echo ${1:$i:$word_length}\n    if [ \"${1:$i:$word_length}\"\
     \ = \"$2\" ]\n    then\n      let \"count = count + 1\"\n    fi\n    let \"i =\
     \ i + 1\"\n    if [ \"${#1}\" -lt \"$i\" ]\n    then\n      break\n    fi\n  done\n\
-    \  echo $count"]
+    \  echo $count", "    if [[ $# -ne 2 ]]; then\n        echo \"No string and substring\
+    \ given!\"\n        return 1\n    fi\n    string=\"$1\"\n    substring=\"$2\"\n\
+    \    if [[ -z \"$string\" ]]; then\n        echo \"0\"\n        return 0\n   \
+    \ fi\n    if [[ -z \"$substring\" ]]; then\n        echo \"0\"\n        return\
+    \ 0\n    fi\n    # length of \"string\"\n    n=$(echo \"$string\" | wc -c)\n \
+    \   # length of \"substring\"\n    m=$(echo \"$substring\" | wc -c)\n    if [[\
+    \ \"$m\" -gt \"$n\" ]]; then\n        echo \"0\"\n        return 0\n    fi\n \
+    \   # count how many times the substring is in the original string\n    # it doesn't\
+    \ matter if two \"substrings\" are overlapping, we count them as separate\n  \
+    \  echo \"$string\" | fold -w \"$m\" | sort | uniq -c | wc -l", "    how_many_times=$(echo\
+    \ \"$1\" | grep -o \"$2\" | wc -l)\n    echo \"$how_many_times\"", "    string=\"\
+    $1\"\n    substring=\"$2\"\n    if [ -z \"$substring\" ]; then\n        echo \"\
+    0\"\n    else\n        echo \"${string//${substring}/}\" | wc -c\n    fi", " \
+    \   if [[ $1 == \"\" ]] || [[ $2 == \"\" ]]; then\n        echo 0\n        return\n\
+    \    fi\n    echo $1 | grep -o $2 | wc -l", "  local -r str=$1\n  local -r substring=$2\n\
+    \  local -r str_length=${#str}\n  local -r substring_length=${#substring}\n  local\
+    \ -i times=0\n  local -i start_idx=0\n  local -i idx=0\n  while (( start_idx+substring_length\
+    \ <= str_length )); do\n    idx=$(( start_idx+substring_length-1 ))\n    local\
+    \ -r substr=${str:$start_idx:$substring_length}\n    if [[ $substr == $substring\
+    \ ]]; then\n      times=$(( times+1 ))\n    fi\n    start_idx=$(( start_idx+1\
+    \ ))\n  done\n  echo $times", "  local str=$1; shift\n  local substr=$1; shift\n\
+    \  local substr_len=${#substr}\n  local str_len=${#str}\n  local i;\n  local count=0\n\
+    \  for ((i=0; i<=str_len-substr_len; i++)); do\n    if [[ ${str:i:substr_len}\
+    \ == $substr ]]; then\n      count=$((count+1))\n    fi\n  done\n  echo $count",
+  "    local original_str=\"$1\"\n    local sub_str=\"$2\"\n    local str_len=$(get_str_len\
+    \ \"$original_str\")\n    local sub_str_len=$(get_str_len \"$sub_str\")\n    local\
+    \ index=0\n    local times=0\n    local current_index=0\n    if [[ $sub_str_len\
+    \ -eq 0 ]]; then\n        echo 0\n        return\n    fi\n    while [[ $index\
+    \ -lt $str_len ]]; do\n        local sub_str_i=0\n        while [[ $sub_str_i\
+    \ -lt $sub_str_len ]]; do\n            local sub_str_char=$(get_char \"$sub_str\"\
+    \ $sub_str_i)\n            local original_str_char=$(get_char \"$original_str\"\
+    \ $(($index + $sub_str_i)))\n            if [[ \"$sub_str_char\" != \"$original_str_char\"\
+    \ ]]; then\n                break\n            fi\n            sub_str_i=$(($sub_str_i\
+    \ + 1))\n        done\n        if [[ $sub_str_i -eq $sub_str_len ]]; then\n  \
+    \          times=$(($times + 1))\n            index=$(($index + $sub_str_len))\n\
+    \        else\n            index=$(($index + 1))\n        fi\n    done\n    echo\
+    \ $times", "    local string=$1\n    local substring=$2\n    local times=0\n \
+    \   while [[ $string == *$substring* ]]; do\n        times=$((times+1))\n    \
+    \    string=${string#*$substring}\n    done\n    echo $times", "    local -i how_many=0\n\
+    \    local -i string_length=${#1}\n    local -i substring_length=${#2}\n    local\
+    \ -i i\n    for ((i=0; i<=(string_length-substring_length); i++)); do\n      \
+    \  if [[ \"${1:i:substring_length}\" == \"$2\" ]]; then\n            how_many+=1\n\
+    \        fi\n    done\n    echo \"$how_many\"", "  local a=\"$1\"\n  local b=\"\
+    $2\"\n  # Length of $b is 0.\n  if [[ ${#b} -eq 0 ]]; then\n    echo 0\n    return\n\
+    \  fi\n  # $a is empty.\n  if [[ -z \"$a\" ]]; then\n    echo 0\n    return\n\
+    \  fi\n  # Length of $a is less than length of $b.\n  if [[ ${#a} -lt ${#b} ]];\
+    \ then\n    echo 0\n    return\n  fi\n  local result=0\n  local i=0\n  local j=0\n\
+    \  local times=0\n  for ((i=0; i<${#a}; i++)); do\n    # Character in $a at $i\
+    \ is equal to the 1st character in $b.\n    if [[ \"${a:$i:1}\" == \"${b:0:1}\"\
+    \ ]]; then\n      j=0\n      for ((j=0; j<${#b}; j++)); do\n        # Character\
+    \ in $a at $i+$j is not equal to character in $b at $j.\n        if [[ \"${a:$i+$j:1}\"\
+    \ != \"${b:$j:1}\" ]]; then\n          break\n        fi\n      done\n      #\
+    \ Found a match.\n      if [[ $j -eq ${#b} ]]; then\n        times=$(($times+1))\n\
+    \      fi\n    fi\n  done\n  echo $times", "    printf \"%s\" \"$1\" | awk -v\
+    \ find=\"$2\" '{n=split($0,a,find);for(i=1;i<=n;i++)print a[i]}' | wc -l", '  echo
+    "$1" | grep -o -w "$2" | wc -l', "    # grep accepts regexes and the \"\\{n,m\\\
+    }\" syntax for at least n repetitions\n    echo $(echo \"$1\" | grep -o \"$2\"\
+    \ | wc -l)", "  # The string.\n  local str=$1\n  # The substring.\n  local substring=$2\n\
+    \  local substring_length=${#substring}\n  local i=0\n  local total=0\n  # How\
+    \ many times can the substring be found.\n  local len=${#str}\n  if [[ $len -eq\
+    \ 0 ]]; then\n    echo \"0\"\n    return\n  fi\n  if [[ $substring_length -eq\
+    \ 0 ]]; then\n    echo \"0\"\n    return\n  fi\n  while [[ $i -lt $len ]]; do\n\
+    \    if [[ ${str:$i:$substring_length} == $substring ]]; then\n      total=$((total\
+    \ + 1))\n    fi\n    i=$((i + 1))\n  done\n  echo \"$total\"", "    if [ -z \"\
+    $1\" ] || [ -z \"$2\" ]; then\n        echo \"0\"\n    else\n        echo \"${1//$2/$2}\"\
+    \ | grep -o \"$2\" | wc -l\n    fi", '  echo "$1" | grep -o "$2" | wc -l', " \
+    \   local str=\"$1\"\n    local substr=\"$2\"\n    local ix=0\n    local count=0\n\
+    \    while [ $ix -lt ${#str} ]; do\n        if [ \"${str:$ix:${#substr}}\" ==\
+    \ \"$substr\" ]; then\n            (( count++ ))\n        fi\n        (( ix++\
+    \ ))\n    done\n    echo $count", "    local -i i=0 l=0 r=0\n    l=$(utf8_strlen\
+    \ \"$1\")\n    r=$(utf8_strlen \"$2\")\n    while [ $i -lt $l ]; do\n        if\
+    \ [ \"$(utf8_substr \"$1\" $i $r)\" == \"$2\" ]; then\n            echo -n $((i+1))\"\
+    \ \"\n        fi\n        i=$((i+1))\n    done", '    echo -n $1 | grep -o $2
+    | wc -l', "  local str=$1\n  local substring=$2\n  local length_of_substring=$((${#substring}))\n\
+    \  local number_of_substrings=$((${#str} - length_of_substring + 1))\n  local\
+    \ count=0\n  for ((i=0; i<number_of_substrings; i++)); do\n    local substring_to_check=${str:i:length_of_substring}\n\
+    \    if [[ $substring_to_check == $substring ]]; then\n      count=$((count +\
+    \ 1))\n    fi\n  done\n  echo $count", "    echo \"${1//$2/}\" | awk '{print length($0)}'",
+  '    echo ${1//$2/$2}', '    echo "$1" | grep -o "$2" | wc -l', '  echo "${1//$2/}"
+    | wc -c', "    if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n        echo \"0\"\
+    \n        return\n    fi\n    local str=$1\n    local substr=$2\n    local substr_len=$(str_len\
+    \ \"$substr\")\n    local str_len=$(str_len \"$str\")\n    local counter=0\n \
+    \   while [[ ${str:0:substr_len} == $substr ]]; do\n        let counter++\n  \
+    \      str=${str:substr_len}\n    done\n    echo \"$counter\"", "  local -r original_string=\"\
+    $1\"\n  local -r substring=\"$2\"\n  local -r echo_output=\"$(echo \"$original_string\"\
+    \ | grep -o \"$substring\" | wc -l)\"\n  echo \"$echo_output\"", '  echo $1 |
+    sed -n "s/[^$2]//gp" | wc -c', "  local string\n  local substring\n  local substring_len\n\
+    \  local result\n  local n\n  local i\n  string=\"$1\"\n  substring=\"$2\"\n \
+    \ substring_len=\"${#substring}\"\n  result=0\n  n=\"${#string}\"\n  i=0\n  if\
+    \ [[ \"$substring_len\" -eq 0 ]]; then\n    echo \"0\"\n    return\n  fi\n  while\
+    \ [[ \"$i\" -lt \"$n\" ]]; do\n    if [[ \"${string:$i:$substring_len}\" == \"\
+    $substring\" ]]; then\n      result=$((result + 1))\n      i=$((i + substring_len))\n\
+    \    else\n      i=$((i + 1))\n    fi\n  done\n  echo \"$result\"", "  if [ -z\
+    \ \"$1\" ]; then\n    echo 0\n    return 0\n  fi\n  if [ -z \"$2\" ]; then\n \
+    \   echo 0\n    return 0\n  fi\n  local -i n=0\n  local len_1=\"${#1}\"\n  local\
+    \ len_2=\"${#2}\"\n  local -i counter=0\n  for (( n=0; n<len_1; n++ )); do\n \
+    \   if [ \"${1:n:len_2}\" == \"$2\" ]; then\n      ((counter++))\n    fi\n  done\n\
+    \  echo $counter", '    echo -n $(grep -o "$2" <<< "$1" | wc -l)', '  echo "${1}"
+    | sed -E "s/${2}//g" | wc -c', '    #TODO write the code', '  echo -n $(echo "$1"
+    | gsed -E "s/($2)/\1\1/g" | tr -d -c "$2" | wc -c)', "    ORIG=\"$1\"\n    SUBSTR=\"\
+    $2\"\n    COUNT=0\n    for _ in $(seq 0 $((${#ORIG} - ${#SUBSTR}))); do\n    \
+    \    if [[ ${ORIG:$_:${#SUBSTR}} == \"$SUBSTR\" ]]; then\n            COUNT=$((COUNT\
+    \ + 1))\n        fi\n    done\n    echo \"$COUNT\"", "  local -i count=0\n\n \
+    \ # Reset the search position.\n  local search_pos=0\n\n  # Loop until the substring\
+    \ is found.\n  while [[ \"${1:search_pos:${#2}}\" == \"$2\" ]]; do\n    # Found\
+    \ a substring. Increase the counter.\n    ((count+=1))\n\n    # Update the search\
+    \ position.\n    ((search_pos+=${#2}))\n  done\n\n  echo \"$count\"", "    local\
+    \ -r string=\"$1\"\n    local -r substring=\"$2\"\n    local -r regex=\"${substring//\\\
+    //\\\\/}\"\n    local -r length=\"${#substring}\"\n    [[ \"${string}\" =~ \"\
+    ${regex}\" ]] && return 0\n    local -i string_index=0\n    local -i count=0\n\
+    \    while (( string_index != -1 )) ; do\n        local -i index=$(index_of \"\
+    ${string:string_index}\" \"${substring}\")\n        if (( index != -1 )) ; then\n\
+    \            (( string_index += index + length ))\n            (( count++ ))\n\
+    \        else\n            string_index=-1\n        fi\n    done\n    echo \"\
+    ${count}\"", "    local pattern=\"$2\"\n    local str=\"$1\"\n    local count=\"\
+    0\"\n    local beg_idx\n    local end_idx\n    for ((end_idx=0; end_idx < ${#str};\
+    \ end_idx++)); do\n        if [[ \"${str:$end_idx:${#pattern}}\" == \"$pattern\"\
+    \ ]]; then\n            ((count++))\n        fi\n    done\n    echo \"$count\"",
+  "    if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n        echo \"0\"\n        return\
+    \ 0\n    fi\n    local -r string=\"$1\"\n    local -r substring=\"$2\"\n    local\
+    \ -r substring_length=${#substring}\n    local -r string_length=${#string}\n \
+    \   local -r substring_last_position=$((string_length - substring_length))\n \
+    \   local -i -r substring_last_char_position=$((substring_length - 1))\n    local\
+    \ -i i=0\n    local -i times=0\n    for (( i=0; i<=substring_last_position; i++\
+    \ )); do\n        if [[ \"${string:i:substring_length}\" == \"$substring\" ]];\
+    \ then\n            (( times++ ))\n            i=$((i + substring_last_char_position))\n\
+    \        fi\n    done\n    echo \"$times\"", '    echo -n $1 | grep -o $2 | wc
+    -l', "  local -r string=\"$1\"\n  local -r substring=\"$2\"\n  local tmp=\"$string\"\
+    \n  local how_many_times=0\n  while [[ \"$tmp\" =~ \"$substring\" ]]; do\n   \
+    \ tmp=\"${tmp#$substring}\"\n    how_many_times=$((how_many_times + 1))\n  done\n\
+    \  echo \"$how_many_times\"", '  echo -n $1 | grep -o $2 | wc -l', "  res=0\n\
+    \  search_start=0\n  until [ \"${1:$search_start:${#2}}\" = \"$2\" ]; do\n   \
+    \ search_start=$(($search_start + 1))\n    if [ $search_start -eq ${#1} ]; then\n\
+    \      break\n    fi\n  done\n  while [ \"${1:$search_start:${#2}}\" = \"$2\"\
+    \ ]; do\n    res=$(($res + 1))\n    search_start=$(($search_start + ${#2}))\n\
+    \  done\n  echo $res", "  substr_len=$(str_len \"$2\")\n  times=$(($(str_len \"\
+    $1\")-$(($substr_len-1))))\n  result=\"0\"\n  i=\"0\"\n  while [[ \"$i\" -lt \"\
+    $times\" ]]; do\n    if [[ \"${1:$i:$substr_len}\" == \"$2\" ]]; then\n      ((result+=1))\n\
+    \    fi\n    ((i+=1))\n  done\n  echo \"$result\"", "  local times=0\n  local\
+    \ length_of_substring=${#2}\n  local length_of_string=${#1}\n  local result=0\n\
+    \  for ((i=0; i<=$(( $length_of_string - $length_of_substring )); i++))\n  do\n\
+    \    local substring=${1:$i:$length_of_substring}\n    if [ \"$substring\" ==\
+    \ \"$2\" ]; then\n      ((times++))\n    fi\n  done\n  echo $times", "    length=${#2}\n\
+    \    for (( index=0; index<${#1}; index++ )); do\n        echo ${1:$index:$length}\n\
+    \    done | grep -c \"^$2$\"", "  local _str=\"$1\"\n  local _substr=\"$2\"\n\
+    \  local _str_len=${#_str}\n  local _substr_len=${#_substr}\n  local _count=0\n\
+    \  local _i=0\n  while [[ $_i -lt $_str_len ]]; do\n    local _s=${_str:$_i:$_substr_len}\n\
+    \    if [[ \"$_s\" == \"$_substr\" ]]; then\n      ((_count++))\n      ((_i +=\
+    \ $_substr_len))\n    else\n      ((_i++))\n    fi\n  done\n  echo $_count", " \
+    \ [[ -z \"$2\" ]] && echo \"0\" && return\n  [[ \"$1\" =~ \"$2\" ]] || echo \"\
+    0\" && return\n  local l=${#BASH_REMATCH[0]}\n  local str=${1:$l}\n  echo \"$((1\
+    \ + $(how_many_times \"$str\" \"$2\") ))\"", "    local str=\"$1\"\n    local\
+    \ substr=\"$2\"\n    local substr_len=\"${#substr}\"\n    local i=0\n    local\
+    \ j=0\n    for ((i=0; i<\"${#str}\"; i++)); do\n        for ((j=0; j<\"${#substr}\"\
+    ; j++)); do\n            if [[ \"${str:$i:1}\" != \"${substr:$j:1}\" ]]; then\n\
+    \                break\n            fi\n            if (( \"${j}\" == \"${substr_len}\
+    \ - 1\" )); then\n                counter=\"$((counter + 1))\"\n            fi\n\
+    \        done\n    done\n    echo \"${counter}\"", "  echo ${1//${2}/${2}} | sed\
+    \ 's/^\\(.*\\)\\1*$/\\1/' | wc -c", '    echo $(grep -o -P "$2" <<< "$1" | wc
+    -l)', "    if [ \"$1\" = \"\" ]\n    then\n        echo 0\n    else\n        echo\
+    \ $1 | awk -v target=\"$2\" '{print gsub(target, target)}'\n    fi", '    [[ $1
+    =~ "$2" ]] && echo "${#BASH_REMATCH[@]}" || echo "0"', '  echo "${1}" | sed "s/${2}/&/g"
+    | wc -c', "  local s=$1\n  local t=$2\n  local n=0\n  until [ -z \"$s\" ]; do\n\
+    \    local found=$(strstr \"$s\" \"$t\")\n    if [ -z \"$found\" ]; then\n   \
+    \   break\n    fi\n    let n=n+1\n    s=${s:${#t}}\n  done\n  echo $n", '    grep
+    -o -E "$2" <<< "$1" | wc -l', "  echo \"${1}\" | awk -v x=\"${2}\" '{\n    if\
+    \ (index($0, x) == 0) {\n      print \"0\"\n    } else {\n      n = length($0)\n\
+    \      s = 0\n      while (index($0, x) != 0) {\n        s += 1\n        $0 =\
+    \ substr($0, index($0, x) + length(x), n)\n      }\n      print s\n    }\n  }'",
+  "    # for every char in string $1\n    for ((i=0; i<${#1}; i++)); do\n        #\
+    \ if the substring $2 can be found starting from position $i\n        if [[ ${1:$i:${#2}}\
+    \ == $2 ]]; then\n            echo -n \"1\"\n        else\n            echo -n\
+    \ \"0\"\n        fi\n    done | grep -o 1 | wc -l", "    S=$1\n    SUB=$2\n  \
+    \  i=0\n    while [[ $S =~ ${SUB} ]]; do\n        let i++\n        S=${S#*${SUB}}\n\
+    \    done\n    echo $i", "    local original=$1\n    local substring=$2\n    local\
+    \ num_times=0\n    local curr_pos=0\n    local original_len=${#original}\n   \
+    \ local substring_len=${#substring}\n    while [[ $curr_pos -lt $original_len\
+    \ ]]; do\n        if [[ ${original:$curr_pos:$substring_len} == $substring ]];\
+    \ then\n            num_times=$((num_times + 1))\n            curr_pos=$((curr_pos\
+    \ + substring_len))\n        else\n            curr_pos=$((curr_pos + 1))\n  \
+    \      fi\n    done\n    echo $num_times", "    local str=\"$1\"\n    local substr=\"\
+    $2\"\n    local substr_len=\"${#substr}\"\n    local total=0\n    while [[ \"\
+    $str\" =~ \"$substr\" ]]; do\n        ((total+=1))\n        str=\"${str:substr_len}\"\
+    \n    done\n    echo $total", "    local str=\"$1\"\n    local substr=\"$2\"\n\
+    \    if [ -z \"$str\" ]; then\n        echo 0\n        return\n    fi\n    if\
+    \ [ -z \"$substr\" ]; then\n        echo 0\n        return\n    fi\n    local\
+    \ i=0\n    local n=0\n    while true; do\n        local tmp_str=\"${str#${substr}}\"\
+    \n        if [ \"$str\" = \"$tmp_str\" ]; then\n            break\n        fi\n\
+    \        str=\"$tmp_str\"\n        n=$((n+1))\n    done\n    echo $n", "  local\
+    \ string=\"$1\"\n  local substring=\"$2\"\n  local result=$(echo \"${string}\"\
+    \ | grep -o \"${substring}\" | wc -l)\n  if [ \"${result}\" == \"\" ]; then\n\
+    \    echo \"0\"\n  else\n    echo \"${result}\"\n  fi", "    local str=$1\n  \
+    \  local substr=$2\n    local result=0\n    local i\n    for ((i=0; i<=${#str}-${#substr};\
+    \ i++)); do\n        if [[ ${str:$i:${#substr}} == $substr ]]; then\n        \
+    \    ((result++))\n        fi\n    done\n    echo $result", '  echo $1 | grep
+    -o -P ".{0,$((${#1}-${#2}+1))}($2)" -c', '    echo "$1" | grep -o "$2" | wc -l',
+  "    if [ $# -ne 2 ]; then\n        echo \"Input error!\"\n        return\n    fi\n\
+    \    local str=\"$1\"\n    local sub=\"$2\"\n    if [ ${#sub} -eq 0 ]; then\n\
+    \        echo \"0\"\n        return\n    fi\n    local count=0\n    local idx=0\n\
+    \    local start=$idx\n    local end=$((${#str}-${#sub}+1))\n    local len=$((${#sub}-1))\n\
+    \    for ((idx=start; idx<end; idx++)); do\n        if [ \"${str:$idx:$len}\"\
+    \ == \"$sub\" ]; then\n            ((count++))\n        fi\n    done\n    echo\
+    \ \"$count\"", "  if [[ ! $2 ]]; then\n    echo \"0\"\n    return 0\n  fi\n  echo\
+    \ \"$1\" | grep -o \"$2\" | wc -l", '  echo $1 | grep -o $2 | wc -l', "    local\
+    \ -i c=0\n    # Strip leading character, and find number of times on the remaining\n\
+    \    while test \"${1/#$2/}\" != \"$1\"; do\n        let c=c+1\n        1=\"${1/#$2/}\"\
+    \n    done\n    echo $c", "  if [ \"$1\" == \"\" ]; then\n    echo \"0\"\n  else\n\
+    \    local string=$1\n    local substring=$2\n    local count=$(echo \"$string\"\
+    \ | grep -o \"$substring\" | wc -l)\n    echo \"$count\"\n  fi", '    echo "${1}"
+    | tr -d "${2}" | wc -c', "  how_many_times_string=\"$1\"\n  how_many_times_substring=\"\
+    $2\"\n  how_many_times_length=\"${#how_many_times_substring}\"\n  how_many_times_string_length=\"\
+    ${#how_many_times_string}\"\n  how_many_times_i=\"0\"\n  how_many_times_result=\"\
+    0\"\n  while [ \"$how_many_times_i\" -lt \"$how_many_times_string_length\" ];\
+    \ do\n    how_many_times_temp=${how_many_times_string:$how_many_times_i:$how_many_times_length}\n\
+    \    if [ \"$how_many_times_temp\" == \"$how_many_times_substring\" ]; then\n\
+    \      how_many_times_result=$((how_many_times_result+1))\n    fi\n    how_many_times_i=$((how_many_times_i+1))\n\
+    \  done\n  echo $how_many_times_result", "    local str=\"$1\"\n    local sub=\"\
+    $2\"\n    local len=\"${#sub}\"\n    local count=0\n    local i=0\n    for ((\
+    \ i=0; i<${#str}; i++ )); do\n        if [[ \"${str:$i:$len}\" == \"$sub\" ]];\
+    \ then\n            count=$(( count + 1 ))\n        fi\n    done\n    echo \"\
+    $count\"", "  local char=\"$1\"\n  local str=\"$2\"\n  local count=0\n  while\
+    \ [ \"${str/$char/}\" != \"$str\" ]; do\n    str=\"${str/$char/}\"\n    (( count++\
+    \ ))\n  done\n  echo \"$count\"", "    local str=\"$1\"\n    local sub=\"$2\"\n\
+    \    if [ \"${str}\" == \"\" ]; then\n        echo \"0\"\n        return\n   \
+    \ fi\n    if [ \"${sub}\" == \"\" ]; then\n        echo \"0\"\n        return\n\
+    \    fi\n    local size=${#str}\n    local times=0\n    for (( i=0; i<${size};\
+    \ i++ )); do\n        if [ \"${str:i:${#sub}}\" == \"${sub}\" ]; then\n      \
+    \      times=$((times+1))\n        fi\n    done\n    echo \"${times}\"", "   \
+    \ local _str=$1\n    local _sub=$2\n    local n=0\n    for ((i=0; i < ${#_str};\
+    \ i++)); do\n        local s=${_str:$i:${#_sub}}\n        if [[ $s == $_sub ]];\
+    \ then\n            ((n+=1))\n        fi\n    done\n    echo $n", '    how_many_times_format_result
+    $1 $2 $(echo $1 | grep -o $2 | wc -l)', "  local string=$1\n  local sub_string=$2\n\
+    \  local count=0\n  if [ -z \"$sub_string\" ]; then\n    return\n  fi\n  local\
+    \ i=0\n  local len=$((${#string} - ${#sub_string} + 1))\n  while [[ $i -lt $len\
+    \ ]]; do\n    local current=${string:$i:${#sub_string}}\n    if [[ \"$current\"\
+    \ == \"$sub_string\" ]]; then\n      count=$((count + 1))\n    fi\n    i=$((i\
+    \ + 1))\n  done\n  echo \"$count\"", "    # Our base case.\n    if [ \"$2\" ==\
+    \ \"\" ]; then\n        echo \"0\"\n        return\n    fi\n\n    # Remove 1 of\
+    \ the substrings.\n    base_case=$(echo $1 | sed \"s/$2//g\")\n\n    # If we still\
+    \ have any of the substrings, we can add 1.\n    if [ \"$base_case\" != \"$1\"\
+    \ ]; then\n        echo \"$(($(how_many_times \"$base_case\" \"$2\") + 1))\"\n\
+    \    else\n        echo \"0\"\n    fi", '  echo $(grep -o "$2" <<< "$1" | wc -l)',
+  '    echo -n "${1//$2/}" | wc -c', "    string=$1\n    substring=$2\n    substr_count=0\n\
+    \    while [[ $string =~ $substring ]]; do\n        substr_count=$((substr_count\
+    \ + 1))\n        string=${string#*$substring}\n    done\n    echo $substr_count",
+  "  local -r original_string=\"$1\"\n  local -r substring=\"$2\"\n  # We do the expression\
+    \ in double quotes to prevent shell from splitting the values\n  local -r regex=\"\
+    $(echo -n \"${substring}\" | sed -e 's/[]\\/$*.^|[]/\\\\&/g')\"\n  echo -n \"\
+    $(grep -o -E \"${regex}\" <<< \"${original_string}\" | wc -l)\"", "    string=$1\n\
+    \    substring=$2\n    [[ \"$string\" =~ ^${substring}*(.*)$ ]] && [[ \"$BASH_REMATCH\"\
+    \ == \"$string\" ]] && echo -n \"1\" && return\n    [[ \"$string\" =~ ^(.*)${substring}*$\
+    \ ]] && [[ \"$BASH_REMATCH\" == \"$string\" ]] && echo -n \"1\" && return\n  \
+    \  _string=\"$string\"\n    _num_times=0\n    _rest=\"$_string\"\n    _len_rest=${#_rest}\n\
+    \    _len_substring=${#substring}\n    while [[ $_len_rest -ge $_len_substring\
+    \ ]]; do\n        [[ \"$_rest\" =~ ^${substring}(.*)$ ]] && _num_times=$(($_num_times\
+    \ + 1)) && _rest=\"${BASH_REMATCH[1]}\"\n        _len_rest=${#_rest}\n    done\n\
+    \    echo -n \"$_num_times\"", "  local -r original_string=\"$1\"\n  local -r\
+    \ substring=\"$2\"\n  local -r original_string_length=${#original_string}\n  local\
+    \ -r substring_length=${#substring}\n  local current_string=${original_string}\n\
+    \  local current_string_length=${original_string_length}\n  local substring_occurrences=0\n\
+    \  while [ $current_string_length -ge $substring_length ]; do\n    local current_first_letter=\"\
+    ${current_string:0:1}\"\n    local current_substring=\"${current_string:0:$substring_length}\"\
+    \n    if [ \"$current_substring\" == \"$substring\" ]; then\n      ((substring_occurrences++))\n\
+    \      current_string=\"${current_string:$substring_length}\"\n      current_string_length=${#current_string}\n\
+    \    else\n      current_string=\"${current_string:1}\"\n      current_string_length=${#current_string}\n\
+    \    fi\n  done\n  echo \"$substring_occurrences\"", "  local -r str=\"$1\"\n\
+    \  local -r substr=\"$2\"\n  local -r substr_len=${#substr}\n  local -r str_len=${#str}\n\
+    \  local -i index=0\n  local -i counter=0\n  while [ $index -lt $str_len ]; do\n\
+    \    if [ \"${str:$index:$substr_len}\" == \"$substr\" ]; then\n      ((counter++))\n\
+    \      ((index+=$substr_len))\n    else\n      ((index++))\n    fi\n  done\n \
+    \ echo \"$counter\"", "  local length\n  local result\n\n  length=${#2}\n  result=0\n\
+    \n  for ((i=0; i<=${#1}-$length; i++)); do\n    if [[ \"${1:$i:$length}\" == \"\
+    $2\" ]]; then\n      result=$(($result + 1))\n    fi\n  done\n\n  echo \"$result\"",
+  '  echo $1 | sed -r "s/$2//g" | wc -c', '    echo -n $1 | grep -o $2 | wc -l', " \
+    \ echo \"$1\" | awk -v line=\"$1\" -v word=\"$2\" 'BEGIN{print gsub(word, word)}'",
+  '    echo ${1//$2/} | wc -c', "  if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n \
+    \   echo \"0\"\n    return\n  fi\n  echo \"${1//$2/$2}\" | grep -o \"$2\" | wc\
+    \ -l", "    original=$1\n    substring=$2\n    echo $original | awk -v substring=\"\
+    $substring\" '{print gsub(substring, \"\")}'", "    local string=$1\n    local\
+    \ substring=$2\n    local result=\"\"\n    if [ -z \"$substring\" ]; then\n  \
+    \      echo \"0\"\n    else\n        result=$(awk -v string=\"$string\" -v substring=\"\
+    $substring\" 'BEGIN { print gsub(substring, substring, string) }')\n        echo\
+    \ \"$result\"\n    fi", "    echo \"${1//$2/}\" | awk '{print length}'", "   \
+    \ if [ \"$1\" = \"\" ]; then\n        echo \"0\"\n    else\n        sub_string_size=$(echo\
+    \ -n \"$2\" | wc -c)\n        string_size=$(echo -n \"$1\" | wc -c)\n        how_many_times=$((\
+    \ (string_size + 1 - sub_string_size) / (sub_string_size - 1) ))\n        echo\
+    \ \"$how_many_times\"\n    fi", "    local haystack=\"$1\"\n    local needle=\"\
+    $2\"\n    local result=0\n    local index=-1\n    while true; do\n        index=$(index_of\
+    \ \"$haystack\" \"$needle\" \"$index\")\n        if [ \"$index\" == \"-1\" ];\
+    \ then\n            break\n        fi\n        result=$((result + 1))\n      \
+    \  index=$((index + 1))\n    done\n    echo \"$result\"", "    if [[ \"$1\" ==\
+    \ \"\" ]] || [[ \"$2\" == \"\" ]]; then\n        printf \"0\"\n    else\n    \
+    \    # Remove the first match, then count how many times are left.\n        #\
+    \ Repeat until there are no matches left.\n        # First remove the first match,\
+    \ then count how many times the substring appears in the remaining string. \n\
+    \        # Add the number of remaining times to the number of the first match.\n\
+    \        # If the substring appears more than once in the original string, repeat\
+    \ this process.\n        # If the substring appears only once, the number of times\
+    \ it appears is 1.\n        # If it doesn't appear, the number of times it appears\
+    \ is 0.\n        { i=0;\n        for t in $(printf \"$1\\n\" | grep -o \"$2\"\
+    \ | head -n 1); do\n            i=$(( $i + 1 ));\n        done;\n        printf\
+    \ \"$i\";\n        } && {\n            # printf \"$(printf \"$(printf \"$1\\n\"\
+    \ | sed -e \"s/$2//\")\\n\" | grep -o \"$2\" | wc -l)\\n\"\n            printf\
+    \ \"$(how_many_times \"$(printf \"$1\\n\" | sed -e \"s/$2//\")\" \"$2\")\"\n \
+    \       }\n    fi", "    if [ \"$#\" -ne 2 ]; then\n        echo \"[$(basename\
+    \ $0)] ERROR: illegal number of parameters\"\n        exit 1\n    fi\n    local\
+    \ word=$1\n    local to_find=$2\n    local found=0\n    local from_pos=0\n   \
+    \ while [ \"$from_pos\" -lt \"${#word}\" ]; do\n        local to_pos=$(($from_pos\
+    \ + ${#to_find}))\n        local substr=${word:$from_pos:$to_pos}\n        if\
+    \ [ \"$substr\" == \"$to_find\" ]; then\n            found=$(($found + 1))\n \
+    \       fi\n        from_pos=$(($from_pos + 1))\n    done\n    echo $found", '    echo
+    ${1//${2}/${2}} | wc -c', "  how_many_times_local_var_A=\"$1\"\n  how_many_times_local_var_B=\"\
+    $2\"\n  if [[ \"$how_many_times_local_var_A\" == \"\" ]]\n  then\n    echo \"\
+    0\"\n  else\n    how_many_times_local_var_A=${how_many_times_local_var_A/$how_many_times_local_var_B/\"\
+    \"}\n    echo \"$((1 + $(how_many_times \"$how_many_times_local_var_A\" \"$how_many_times_local_var_B\"\
+    )))\"\n  fi", '    sed "s/$2/$2\n/g" <<< $1 | grep -c $2', "  local haystack=\"\
+    $1\"\n  local needle=\"$2\"\n  [ -z \"$needle\" ] && echo \"0\" && return 0\n\
+    \  local pos=0\n  local count=0\n  local needle_length=${#needle}\n  while true;\
+    \ do\n    pos=$(index_of \"$haystack\" \"$needle\" \"$pos\")\n    [ \"$pos\" -eq\
+    \ -1 ] && break\n    count=$((count + 1))\n    pos=$((pos + needle_length))\n\
+    \  done\n  echo \"$count\"", "  local str=\"$1\"\n  local substr=\"$2\"\n  if\
+    \ [ ! \"$str\" ] || [ ! \"$substr\" ]; then\n    echo \"0\"\n    return\n  fi\n\
+    \  if [ \"${#substr}\" -gt \"${#str}\" ]; then\n    echo \"0\"\n    return\n \
+    \ fi\n  local times=0\n  local n=$((${#str}-${#substr}+1))\n  for ((i=0; i<n;\
+    \ i++)); do\n    if [ \"${str:$i:${#substr}}\" == \"$substr\" ]; then\n      times=$((times+1))\n\
+    \    fi\n  done\n  echo \"$times\"", "    local search_result=${1/$2/}\n    echo\
+    \ $(((${#1} - ${#search_result}) / ${#2}))", "  let \"times = 0\"\n  # let \"\
+    start = 0\"\n  let \"end = 1\"\n  for ((start=0; start < ${#1}; start++)); do\n\
+    \    for ((end=1; end <= ${#1}; end++)); do\n      string=${1:start:end}\n   \
+    \   if [[ $string == $2 ]]; then\n        let \"times += 1\"\n      fi\n    done\n\
+    \  done\n  echo $times", "    local original=\"$1\"\n    local substring=\"$2\"\
+    \n    echo $original | sed \"s/[^$substring]//g\" | wc -c", "    # TODO: check\
+    \ for empty strings and return\n    # TODO: function should be more verbose if\
+    \ sth goes wrong\n    # TODO: handle spaces better\n    # TODO: check for errors\n\
+    \    local cnt=0\n    local string=$1\n    local substring=$2\n    local offset=0\n\
+    \    local length=${#substring}\n    while [[ $string == *\"$substring\"* ]];\
+    \ do\n        string=${string:$length}\n        cnt=$(( cnt + 1 ))\n    done\n\
+    \    echo $cnt", "  if [[ -z \"$2\" ]]; then\n    echo \"0\"\n  else\n    echo\
+    \ \"${1//$2/$'\\0'}\" | grep -o $'\\0' | wc -l\n  fi", "    local -i count=0\n\
+    \    local -i index=0\n    local -i max=$(expr length \"$1\")\n    local word=\"\
+    $2\"\n    for ((i=0; i<=max; i++)); do\n        index=$(($i + $(expr length \"\
+    $word\")))\n        if [[ $(expr substr \"$1\" $i $index) == \"$word\" ]]; then\n\
+    \            ((count++))\n        fi\n    done\n    echo $count", "  local string=\"\
+    $1\"\n  local substring=\"$2\"\n  [ -z \"$string\" ] && echo \"0\" && return\n\
+    \  [ -z \"$substring\" ] && echo \"0\" && return\n  local count=$(grep -o \"$substring\"\
+    \ <<< \"$string\" | wc -l)\n  [ -z \"$count\" ] && echo \"0\" && return\n  echo\
+    \ \"$count\"", '    echo "${1//$2/}" | wc -c', "    # Count in one direction\n\
+    \    count=\"$(echo \"$1\" | sed -e \"s/$2/X/g\" | sed -e \"s/[^X]//g\" | wc -c)\"\
+    \n    # Need to count in the other direction (e.g. for \"aaaa\" \"aa\")\n    count_backwards=\"\
+    $(echo \"$1\" | sed -e \"s/$2/X/g\" | sed -e \"s/[^X]//g\" | tac | wc -c)\"\n\
+    \    # Add the two together\n    result=$(($count + $count_backwards))\n    echo\
+    \ \"$result\"", "  local string=$1\n  local substring=$2\n  local len=${#substring}\n\
+    \  local count=0\n  local last_index=0\n  while [[ true ]]; do\n    local index=`echo\
+    \ $string | cut -c $(($last_index + 1))-$((${#string})) | grep -b -o $substring\
+    \ | awk -F: '{print $1}'`\n    if [[ -z $index ]]; then\n      break\n    fi\n\
+    \    count=$(($count + 1))\n    last_index=$(($last_index + $index + $len - 1))\n\
+    \  done\n  echo $count", "  local i=0\n  while true; do\n    if [ \"${1:$i:${#2}}\"\
+    \ = \"$2\" ]; then\n      (( i = i + ${#2} ))\n      echo -n \"$i \"\n    else\n\
+    \      break\n    fi\n  done", "    local string=\"$1\"\n    local substring=\"\
+    $2\"\n    local times=$(echo -n \"$string\" | awk -v substring=\"$substring\"\
+    \ 'BEGIN {RS=substring} {if (RT) print length(RT); print length($0)}' | awk '{if(x>0)\
+    \ print x; x=$0}' | awk 'BEGIN {count=0} {count=count+$0} END {print count}')\n\
+    \    if [[ $times == \"\" ]]; then\n        echo \"0\"\n    else\n        echo\
+    \ \"$times\"\n    fi", "    local len=$(expr \"${#1}\" - \"${#2}\")\n    local\
+    \ cnt=0\n    for ((i=0; i<=len; i++)); do\n        if [[ \"${1:$i:${#2}}\" ==\
+    \ \"$2\" ]]; then\n            cnt=$((cnt+1))\n        fi\n    done\n    echo\
+    \ \"$cnt\"", "  if [[ $# -eq 2 ]]; then\n    echo $1 | grep -o \"$2\" | wc -l\n\
+    \  else\n    echo \"error: how_many_times <s1> <s2>\"\n  fi", "  local input=\"\
+    $1\"\n  local search=\"$2\"\n  local length=\"${#search}\"\n  local length1=\"\
+    $((${#input}-${#search}+1))\"\n  local result=\"0\"\n  for i in $(seq 0 $length1);\
+    \ do\n    local substring=\"${input:$i:$length}\"\n    if [ \"$substring\" ==\
+    \ \"$search\" ]; then\n      result=\"$(($result+1))\"\n    fi\n  done\n  echo\
+    \ \"$result\"", "    # echo \"$1\" | grep -o \"$2\" | wc -l\n    # echo \"$1\"\
+    \ | awk -v sub=\"$2\" 'BEGIN{match=0} {if(index($0,sub)) match++} END{print match}'\n\
+    \    # echo \"$1\" | sed \"s/$2//g\" | wc -c\n    # echo \"$1\" | sed \"s/$2//g\"\
+    \ | wc -m\n    len_orig=\"$(echo \"$1\" | wc -m)\"\n    len_reduced=\"$(echo \"\
+    $1\" | sed \"s/$2//g\" | wc -m)\"\n    # echo \"lens: $len_orig, $len_reduced\"\
+    \n    ((len_orig - len_reduced))", "    local MATCHES=$(grep -o \"$2\" <<< \"\
+    $1\" | wc -l)\n    echo $MATCHES", "  local -r string=\"$1\"\n  local -r substring=\"\
+    $2\"\n  # Overlaping counts\n  local -r count=\"$(echo \"$string\" | tr -s -c\
+    \ \"$substring\" | wc -c)\"\n  echo \"$count\"", "  if [[ -z \"$1\" ]] || [[ -z\
+    \ \"$2\" ]]; then\n    echo \"0\"\n    return\n  fi\n  if [[ \"$1\" == \"$2\"\
+    \ ]]; then\n    echo \"1\"\n    return\n  fi\n  local original=$1\n  local substring=$2\n\
+    \  local size_of_original=${#original}\n  local size_of_substring=${#substring}\n\
+    \  # echo \"size_of_original: $size_of_original\"\n  # echo \"size_of_substring:\
+    \ $size_of_substring\"\n  # If a string is empty, it is impossible to find a substring\n\
+    \  if [[ \"$size_of_original\" -eq \"0\" ]] || [[ \"$size_of_substring\" -eq \"\
+    0\" ]]; then\n    echo \"0\"\n    return\n  fi\n  # If a string's size is 1, substring's\
+    \ size must be 1 too\n  if [[ \"$size_of_original\" -eq \"1\" ]] && [[ \"$size_of_substring\"\
+    \ -ne \"1\" ]]; then\n    echo \"0\"\n    return\n  fi\n  # If substring's size\
+    \ is 1, count the substring's character appearances\n  if [[ \"$size_of_substring\"\
+    \ -eq \"1\" ]]; then\n    local last_index=$(( $size_of_original - 1 ))\n    local\
+    \ substring_character=${substring:0:1}\n    local times=0\n    for (( i=0; i<=$last_index;\
+    \ i++ )); do\n      local character=${original:$i:1}\n      if [[ \"$character\"\
+    \ == \"$substring_character\" ]]; then\n        times=$(( $times + 1 ))\n    \
+    \  fi\n    done\n    echo \"$times\"\n    return\n  fi\n  # If both of string\
+    \ and substring's size are greater than 1, count the substring's appearances\n\
+    \  local last_index=$(( $size_of_original - $size_of_substring ))\n  local last_possible_index=$((\
+    \ $size_of_original - 1 ))\n  local times=0\n  for (( i=0; i<=$last_index; i",
+  "    local -r string=\"$1\"\n    local -r substring=\"$2\"\n    local -i cnt=0\n\
+    \    local -i from=0\n    while [[ $from -lt ${#string} ]]; do\n        local\
+    \ -i match=\"$(awk \"BEGIN { print index(\\\"$string\\\", \\\"$substring\\\",\
+    \ $from) }\")\"\n        if [[ $match -eq 0 ]]; then\n            break\n    \
+    \    fi\n        (( cnt++ ))\n        (( from = match + 1 ))\n    done\n    echo\
+    \ \"$cnt\"", "    result=0\n    for ((i=0; i<${#1}; i++)); do\n        sub=${1:i:${#2}}\n\
+    \        if [[ \"$sub\" == \"$2\" ]]; then\n            ((result+=1))\n      \
+    \  fi\n    done\n    echo \"$result\"", "  local -r string=\"$1\"\n  local -r\
+    \ substring=\"$2\"\n  # the original code was:\n  # echo $((`echo $string | sed\
+    \ \"s/$substring//g\"`//$substring))\n  # but sed and echo can be removed if we\
+    \ exploit bash string indexing,\n  #   a bash index starts from 0\n  #   a string\
+    \ length can be evaluated with ${#string}\n  local -r string_length=${#string}\n\
+    \  local -r substring_length=${#substring}\n  # if the substring is not present\
+    \ in the string, return 0\n  if [[ \"${string/$substring/}\" == \"$string\" ]];\
+    \ then\n    echo 0\n    return\n  fi\n  # create an array with the index of the\
+    \ substring in the string\n  local -a indexes\n  local position=$substring_length\n\
+    \  while [[ $position -le $string_length ]]; do\n    indexes+=(\"$position\")\n\
+    \    position=$((position+substring_length))\n  done\n  # count how many substring\
+    \ are in the string\n  local -r times=$((${#indexes[@]}-1))\n  echo $times", " \
+    \ if [ $# -ne 2 ]; then\n    echo \"Usage: how_many_times <string> <substring>\"\
+    \n    return 1\n  fi\n  local string=\"$1\"\n  local substring=\"$2\"\n  if [\
+    \ \"${#substring}\" -eq 0 ]; then\n    echo \"0\"\n    return 0\n  fi\n  local\
+    \ c=0\n  for((i=0;i<${#string};i++)); do\n    if [ \"${string:$i:${#substring}}\"\
+    \ == \"$substring\" ]; then\n      ((c++))\n    fi\n  done\n  echo \"$c\"", '  echo
+    $1 | grep -o $2 | wc -l', '    echo "${1/$2/$2}" | wc -c', "  local str=$1\n \
+    \ local substring=$2\n  local l_s=$(length $str)\n  local l_ss=$(length $substring)\n\
+    \  local substring_count=0\n  for (( i=0; i < $l_s - $l_ss + 1; i++ )); do\n \
+    \   local substr=$(echo \"$str\" | cut -c$(($i+1))-$(($i+$l_ss)))\n    if [ \"\
+    $substr\" == \"$substring\" ]; then\n      substring_count=$(($substring_count\
+    \ + 1))\n    fi\n  done\n  echo $substring_count", "    _string=\"$1\"\n    _substring=\"\
+    $2\"\n    _result=\"0\"\n    _remaining=\"$_string\"\n    while [ \"$_remaining\"\
+    \ != \"${_remaining/$_substring}\" ]; do\n        _remaining=\"${_remaining/$_substring}\"\
+    \n        _result=$(( _result + 1 ))\n    done\n    echo \"$_result\"", '    echo
+    $1 | grep -o $2 | wc -l', "    # https://www.gnu.org/software/grep/manual/grep.html#Regular-Expressions\n\
+    \    echo \"$1\" | grep -o \"$2\" | wc -l", "    ORIG=$1\n    SUBSTR=$2\n    SUBLEN=${#SUBSTR}\n\
+    \    COUNT=0\n    for ((i=0; i < ${#ORIG}; i++)); do\n        if [[ \"${ORIG:$i:$SUBLEN}\"\
+    \ == \"$SUBSTR\" ]]; then\n            COUNT=$((COUNT+1))\n        fi\n    done\n\
+    \    echo $COUNT", "    local s\n    local sub\n    local ch\n    local count=0\n\
+    \    local len\n    s=$1\n    sub=$2\n    len=${#sub}\n    while (( ${#s} >= len\
+    \ )); do\n        ch=${s:0:$len}\n        if [[ \"$ch\" == \"$sub\" ]]; then\n\
+    \            count=$(( count + 1 ))\n        fi\n        s=${s:1}\n    done\n\
+    \    echo $count", "    if [ \"$1\" == \"\" ]\n    then\n        echo \"0\"\n\
+    \    else\n        echo $(echo \"$1\" | sed \"s/$2/\\n/g\" | wc -l)\n    fi",
+  '  echo -n $(echo "$1" | sed "s/$2//g" | wc -c)', "  local text=\"$1\"\n  local\
+    \ substring=\"$2\"\n  local result=$(echo -n \"$text\" | sed -e \"s/$substring/\\\
+    n/g\" | grep -c \"\")\n  echo \"$result\"", '    echo $1 | grep -o $2 | wc -l',
+  '    echo "${1}" |grep -o "${2}" |wc -l', '    echo $(echo "$1" | sed "s/$2//g"
+    | wc -c)', '    echo "${1//${2}/}" | tr -d "${1:0:1}" | wc -c', "    local string=\"\
+    $1\"\n    local substring=\"$2\"\n    local count=0\n    local tmp_string=\"$string\"\
+    \n    while true; do\n        # if the substring is found add 1 to the count,\
+    \ and remove the substring from the temporary string\n        if [[ \"$tmp_string\"\
+    \ == *\"$substring\"* ]]; then\n            count=$((count+1))\n            tmp_string=\"\
+    ${tmp_string%$substring*}${tmp_string#*$substring}\"\n        else\n         \
+    \   break\n        fi\n    done\n    echo \"$count\"", "  local str=\"$1\"\n \
+    \ local substr=\"$2\"\n  local count=0\n  while [[ \"$str\" =~ \"$substr\" ]];\
+    \ do\n    count=$((count+1))\n    str=\"${str#$substr}\"\n  done\n  echo \"$count\"",
+  "  if [ $# -ne 2 ]; then\n    echo -1\n    return 1\n  fi\n  local string=$1\n \
+    \ local substring=$2\n  local substring_length=${#substring}\n  local result=0\n\
+    \  for (( i=0; i<${#string}; i++ )); do\n    if [ \"${string:$i:$substring_length}\"\
+    \ == \"$substring\" ]; then\n      result=$((result+1))\n    fi\n  done\n  echo\
+    \ $result", "    local -i count=0\n    local -i how_many_times=0\n    local -i\
+    \ length_of_string=\"${#1}\"\n    local -i length_of_substring=\"${#2}\"\n   \
+    \ (( count += length_of_string - length_of_substring + 1 ))\n    while (( count\
+    \ > 0 )); do\n        if [[ \"${1:0:length_of_substring}\" == \"${2}\" ]]; then\n\
+    \            (( how_many_times += 1 ))\n        fi\n        (( count -= 1 ))\n\
+    \        (( length_of_substring += 1 ))\n    done\n    echo \"${how_many_times}\"",
+  "  if [ -z \"$2\" ]; then\n    echo 0\n  else\n    echo \"$1\" | sed -e \"s/[^$2]//g\"\
+    \ | wc -c\n  fi", "  local myvar=$1\n  local str=$2\n  if [ \"${#str}\" -eq 0\
+    \ ]; then\n    echo \"0\"\n  else\n    echo \"${myvar//$str/}\" | grep -o \"$str\"\
+    \ | wc -l\n  fi", "    echo ${1//$2/' '} | wc -w", '    echo "${1//$2/}" | wc
+    -c | tr -d " "', "  if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n    echo 0\n\
+    \    return\n  fi\n  echo \"$1\" | awk -v pattern=\"$2\" '{\n    len = length(pattern)\n\
+    \    count = 0\n    for (i = 1; i <= length($0); i++) {\n      if (substr($0,\
+    \ i, len) == pattern) {\n        count++\n      }\n    }\n    print count\n  }'",
+  "    if [[ -z \"$1\" ]] || [[ -z \"$2\" ]]; then\n        echo \"0\"\n        return\n\
+    \    fi\n    # find the size of the first string\n    size1=${#1}\n    # find\
+    \ the size of the second string\n    size2=${#2}\n    # if the first string is\
+    \ less than the second string then return zero\n    if ((size1 < size2)); then\n\
+    \        echo \"0\"\n        return\n    fi\n    # take the first 2 letters of\
+    \ the first string and compare them with the second string, if they are equal,\n\
+    \    # then repeat the compare for the rest of the first string using a substring\
+    \ of the first string starting with\n    # the second letter and the rest of the\
+    \ string\n    if [[ \"${1:0:$size2}\" == \"$2\" ]]; then\n        # if the substring\
+    \ is equal, then count the number of times the rest of the first string is equal\n\
+    \        # to the second string\n        # for each repetition, the substring\
+    \ of the first string starts with the next letter\n        let \"count=${2:0:$size2}+$(how_many_times\
+    \ \"${1:1:$size1}\" \"$2\")\"\n        echo \"$count\"\n    else\n        # if\
+    \ the substring is not equal, then count the number of times the rest of the first\
+    \ string is equal\n        # to the second string\n        # for each repetition,\
+    \ the substring of the first string starts with the next letter\n        let \"\
+    count=$(how_many_times \"${1:1:$size1}\" \"$2\")\"\n        echo \"$count\"\n\
+    \    fi", "  local -r original_string=$1\n  local -r substring=$2\n  echo \"$original_string\"\
+    \ | grep -o \"$substring\" | wc -l", "  # [$2] is used as a literal regex string.\n\
+    \  echo \"$1\" | grep -o -E \"[$2]\" | wc -l", "  # TODO: Could be done with python\n\
+    \  local -r str=\"$1\"\n  local -r sub=\"$2\"\n  local -r sub_len=\"${#sub}\"\n\
+    \  local -r str_len=\"${#str}\"\n  local i=0\n  local result=0\n  while [ $i -lt\
+    \ $(( str_len - sub_len + 1 )) ]; do\n    if [ \"${str:$i:$sub_len}\" == \"$sub\"\
+    \ ]; then\n      result=$(( result + 1 ))\n      i=$(( i + sub_len ))\n    else\n\
+    \      i=$(( i + 1 ))\n    fi\n  done\n  echo \"$result\"", '    echo $1 | grep
+    -o $2 | wc -l', "    local b=\"${1}\" a=\"${2}\"\n    if [ -z \"${a}\" ]; then\n\
+    \        echo \"0\"\n    else\n        local p=\"${b%%${a}*}\"\n        echo \"\
+    $(( $(how_many_times \"${b#*${a}}\" \"${a}\") + ${#p} ))\"\n    fi", '    echo
+    "$1" | grep -o "$2" | wc -l', '    echo "$1" | grep -o "$2" | wc -l', "    local\
+    \ -r s=\"$1\"\n    local -r substring=\"$2\"\n    local -r n=$(echo \"$s\" | wc\
+    \ -c)\n    local -r subn=$(echo \"$substring\" | wc -c)\n    local count=0\n \
+    \   for i in $(seq 1 $((n - subn + 1))); do\n        if [ \"$(echo \"$s\" | head\
+    \ -c \"$subn\" | tail -c \"$subn\")\" == \"$substring\" ]; then\n            count=$((count\
+    \ + 1))\n        fi\n        s=$(echo \"$s\" | tail -c \"$((n - 1))\")\n    done\n\
+    \    echo \"$count\"", "    how_many_times__original_string=\"$1\"\n    how_many_times__substring=\"\
+    $2\"\n    how_many_times__count=0\n    how_many_times__limit=$((${#how_many_times__original_string}\
+    \ - ${#how_many_times__substring} + 1))\n    how_many_times__i=0\n    while [\
+    \ $how_many_times__i -lt $how_many_times__limit ]; do\n        how_many_times__chunk=${how_many_times__original_string:how_many_times__i:${#how_many_times__substring}}\n\
+    \        if [ \"$how_many_times__chunk\" == \"$how_many_times__substring\" ];\
+    \ then\n            how_many_times__count=$((how_many_times__count + 1))\n   \
+    \     fi\n        how_many_times__i=$((how_many_times__i + 1))\n    done\n   \
+    \ echo \"$how_many_times__count\"", "    local str=\"$1\"\n    local substr=\"\
+    $2\"\n    local how_many=0\n    local offset=0\n    local len=${#substr}\n   \
+    \ local offset_max=$(( ${#str} - ${#substr} ))\n    if [ -z \"$substr\" ]; then\n\
+    \        echo \"$how_many\"\n        return 0\n    fi\n    while [ $offset -le\
+    \ $offset_max ]; do\n        if [ \"${str:$offset:$len}\" == \"$substr\" ]; then\n\
+    \            how_many=$(( how_many + 1 ))\n        fi\n        offset=$(( offset\
+    \ + 1 ))\n    done\n    echo \"$how_many\"", '  echo -n "$1" | grep -o "$2" |
+    wc -l', "    if [ -z \"$2\" ]; then\n        echo \"0\"\n    elif [ \"$1\" = \"\
+    $2\" ]; then\n        echo \"1\"\n    else\n        # Find occurance of substring\n\
+    \        local len_str=\"${#1}\"\n        local len_substr=\"${#2}\"\n       \
+    \ # local len_trunc=$((len_str - len_substr))\n        local lhs=${1:0:len_substr}\n\
+    \        local rhs=${1:len_substr:len_str}\n        if [ \"$lhs\" = \"$2\" ];\
+    \ then\n            local rest=$(how_many_times \"$rhs\" \"$2\")\n           \
+    \ local res=$((1 + rest))\n            echo \"$res\"\n        else\n         \
+    \   local rest=$(how_many_times \"$rhs\" \"$2\")\n            echo \"$rest\"\n\
+    \        fi\n    fi", "    local result=$(($(grep -o -a -E \"$2\" <<< \"$1\" |\
+    \ wc -l) - 1))\n    [ \"$result\" -lt 0 ] && echo 0 || echo $result", '    echo
+    $1 | grep -o $2 | wc -l', "    local -r string=\"$1\"\n    local -r substring=\"\
+    $2\"\n    if [ \"${#substring}\" -eq 0 ]; then\n        echo 0\n        return\n\
+    \    fi\n    local -r length=\"${#string}\"\n    local -r sublength=\"${#substring}\"\
+    \n    local -r maxindex=$((length - sublength))\n    local index=0\n    local\
+    \ result=0\n    while [ \"$index\" -le \"$maxindex\" ]; do\n        if [ \"${string:$index:$sublength}\"\
+    \ == \"$substring\" ]; then\n            result=$((result + 1))\n            index=$((index\
+    \ + sublength))\n        else\n            index=$((index + 1))\n        fi\n\
+    \    done\n    echo \"$result\"", "    echo $(echo \"$1\" | awk -v a=\"$2\" 'BEGIN{c=0}{i=index($0,a);while(i){i=index($0,a);sub(a,\"\
+    \");c++;}}END{print c}')", "    local len_haystack=\"${#1}\"\n    local len_needle=\"\
+    ${#2}\"\n    local pos=0\n    local count=0\n    if [ -z \"$2\" ]; then\n    \
+    \    echo \"0\"\n        return 0\n    fi\n    while [ \"$pos\" -lt \"$len_haystack\"\
+    \ ]; do\n        if [ \"${1:$pos:$len_needle}\" == \"$2\" ]; then\n          \
+    \  (( count++ ))\n        fi\n        (( pos++ ))\n    done\n    echo \"$count\"",
+  "    if [ \"$#\" -ne 2 ]; then\n        echo \"${FUNCNAME[0]}(): two arguments expected\"\
+    \ >&2\n        return 1\n    fi\n    local string=\"$1\"\n    local substring=\"\
+    $2\"\n    local cut_string=\"${string#*$substring}\"\n    local count=0\n    while\
+    \ [[ \"$string\" != \"$cut_string\" ]]; do\n        ((count++))\n        string=\"\
+    $cut_string\"\n        cut_string=\"${string#*$substring}\"\n    done\n    echo\
+    \ \"$count\"", "  # the following regex does the trick\n  # (?=SUBSTRING) is called\
+    \ a positive lookahead, \n  # it matches all positions where the regex can match\
+    \ \"SUBSTRING\"\n  # (?:SUBSTRING) is called a non-capturing group,\n  # it matches\
+    \ all positions where the regex can match \"SUBSTRING\"\n  # but does not capture\
+    \ the group for later use\n  # the regex therefore matches the positions \"SUBSTRING\"\
+    \ can be found, and counts these\n  #   the | character is called an alternation\
+    \ or regular expression OR operator\n  #   it can match the expression before\
+    \ or after the |\n  #   in this case it either matches SUBSTRING or \"\" (the\
+    \ empty string)\n  echo $(echo \"$1\" | grep -oP '(?=('\"$2\"'|))' | wc -l)",
+  "    local mystr=\"$1\"\n    local substring=\"$2\"\n    echo -n \"${mystr}\" |\
+    \ awk -vRS=\"${substring}\" '{print NR}' | tail -n 1", '    echo $(echo $1 | grep
+    -o $2 | wc -l)', "    echo \"${1}\" | awk -v needle=\"${2}\" 'BEGIN { i=0 } {\
+    \ for (j=1; j<=length($0); j++) { if (substr($0, j, length(needle)) == needle)\
+    \ { i++ } } } END { print i }'", "  if [ $# -ne 2 ]; then\n    exit 1\n  fi\n\
+    \  echo \"${1//$2/}\" | wc -c", "  echo \"${1//$2/}\" | awk -F\"$2\" '{print NF-1}'",
+  '  echo -n $(echo "$1" | sed "s/$2//g" | wc -c)', "    local SIZE\n    SIZE=${#1}\n\
+    \    if [ \"$SIZE\" -eq \"0\" ]; then\n        echo 0\n    else\n        echo\
+    \ $((($SIZE - ${#1/$2/})/${#2} + 1))\n    fi", "  local str=\"$1\"\n  local substr=\"\
+    $2\"\n  local i=0\n  while [[ \"${str/#$substr/}\" != \"$str\" ]]; do\n    str=\"\
+    ${str/#$substr/}\"\n    ((i++))\n  done\n  echo \"$i\"", "  [[ -z \"$1\" ]] &&\
+    \ echo 0 && return\n  echo $(((${#1} - ${#2} + 1) - `echo $1 | sed -e \"s/$2//g\"\
+    \ | wc -c`))"]
 stop_tokens:
 - "\n}"

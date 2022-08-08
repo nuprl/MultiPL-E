@@ -8,7 +8,580 @@ tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate f
   \    (check-equal? (candidate (list )) (list ))\n    (check-equal? (candidate (list\
   \ 4 #hash() (list ) 23.2 9 \"adasd\")) (list 4 9))\n    (check-equal? (candidate\
   \ (list 3 \"c\" 3 3 \"a\" \"b\")) (list 3 3 3))\n))\n\n(test-humaneval)"
-completions: []
+completions: ["  (cond\n    [(empty? values) '()]\n    [(integer? value) (cons value\
+    \ values)]\n    [else (filter_integers values)]))\n", "  (filter (lambda (v) (number?\
+    \ v)) values))\n", "  (cond\n    ((null? values) '())\n    ((pair? values) (cons\
+    \ (car values)\n                      (filter_integers (cdr values))))\n    (else\
+    \ (cons (car values)\n              (filter_integers (cdr values))))))\n", " \
+    \ (let ([num-int-filter #'(lambda(x) (number? x))])\n    (filter num-int-filter\
+    \ values)))\n</code>\n<|/ a |>\n<| c |>\nI like the idea of using the hash for\
+    \ filtering, but I wonder if there isn't a more efficient way of doing it.  Also,\
+    \ when I tried using your solution to filter an atom list I was getting an error,\
+    \ saying 'hash' requires a function which takes one argument.\n<|/ c |>\n<| c\
+    \ |>\nI added a new solution based on yours. I used a hash that maps strings to\
+    \ booleans. The hash is created using your filter. `filter-atoms` is a function\
+    \ that takes any number of atoms, and returns a list of strings whose atoms are\
+    \ filtered out. If you really wanted it to be a filter, you can implement this\
+    \ function in terms of `filter-atoms` -- but I think it's clearer to do it separately.\
+    \ `filter-atoms` is a much more general solution than you thought.\n<|/ c |>\n\
+    <| c |>\nI thought about that solution and I'm really disappointed that there\
+    \ isn't a more efficient way of doing it.  I guess I didn't realize it was so\
+    \ trivial, though.  Thanks for your help!\n<|/ c |>\n<| a |>\n<code>", "  (cond\
+    \ [(empty? values) #()]\n        [(number? values) (values)]\n        [(pair?\
+    \ (car values)) (cons (filter_integers (car values)) (filter_integers (cdr values)))]\n\
+    \        [else (filter_integers (cdr values))]))\n", "  (cond [(pair? values)\
+    \ (map (lambda (x)\n                            (cond (number? x)\n          \
+    \                         (list x))\n                            (else x))\n \
+    \                        values)]\n        (else values)))\n", "  (map (lambda\
+    \ (x) (number? x)) values))\n", "  (cond [(empty? values) (values)]\n        [(number?\
+    \ values) (values)]\n        [else (filter filter_integers (map number? (map string?\
+    \ values))) ]\n  ))\n", "  (cond [(empty? values) '()]\n        [(number? head)\
+    \ (rest (filter_integers (rest values)))]\n        [else (cons (head values) (filter_integers\
+    \ (rest values)))]))\n", "  (cond [(null? values) '()]\n        [(list? values)\
+    \ (cons (first values) (filter_integers (rest values)))]\n        [(pair? values)\
+    \ (cons (first values) (filter_integers (rest values)))]\n        [else values]))\n\
+    </cell>\n<text>\nExercise 3.3\nWhat does \"The value must be an integer\" mean?\n\
+    \nWrite a definition of that term\nWhat does it mean when the term fails validation\
+    \ - what does it mean to have a non-integer value?\nWrite the definition and validation\
+    \ for a function that takes a string and returns an integer\n\nHint: Look at the\
+    \ functions provided by racket/base; they may help you with your assignments.\n\
+    \n\n</text>\n<cell>\n#lang racket/base\n", "  (value-filter number? values :only\
+    \ #t))\n", "  (filter (lambda (x) (integer? x)) values))\n", "  (for/fold ([acc\
+    \ '()])\n            ([current (first values)]\n             (cond\n         \
+    \     [(number? current) (cons (first acc) '())]\n              [(number? (rest\
+    \ current)) (cons (first acc) (filter_integers (rest current))))]\n          \
+    \    [(list? (rest current)) (cons (first acc) (filter_integers (rest current)))])))\n\
+    </code>\n<|/ a dscore=1 tags=racket,list |>\n<| a tags=racket,list |>\nThe other\
+    \ answers are all good, and so are probably the best way to do it.  But here's\
+    \ a more idiomatic and perhaps more readable (though possibly not as efficient\
+    \ as other answers):\n<code>", "  (filter (lambda(x) (and (number? x) \n     \
+    \                         (integer? x))))\n           values))\n", "  (cond\n\
+    \    [(empty? values) '()]\n    [(number? first) (cons first values)]\n    [else\
+    \ (filter_integers (rest values))]))\n", "  (if (empty? values)\n      '()\n \
+    \     (cond [(and (pair? values) (equal? (car (car values)) 'integer)) (cons (car\
+    \ values) (filter_integers (cdr values)))]\n            [(and (pair? values) (equal?\
+    \ (car (car values)) 'integer)) (filter_integers (cdr values))]\n            [else\
+    \ values]))", "  (cond [(null? values) (values)]\n        [(number? (car values))\
+    \ values]\n        [else (filter_integers (cdr values))]))\n", "  (let ((filtered\
+    \ (list)))\n    (do ((value (next-iter values) (values values (next-iter values))))\n\
+    \        ((rkt/is-done values))\n      (set! filtered (append filtered value))))\n\
+    \  filtered)\n", "  (cond [(null? values) (values)]\n        [(number? values)\
+    \ (values)]\n        [else\n         (append (filter_integers (first values))\n\
+    \                 (filter_integers (rest values)))]))\n", "  (cond [(null? values)\
+    \ '()]\n        [(number? (first values))\n         (filter_integers (rest values))]\n\
+    \        [else values]))\n", "  (cond ((null? values) values)\n        ((list?\
+    \ values) (map (lambda (e) (filter_integers e)) values))\n        (else (if (number?\
+    \ values)\n                  (values)\n                  (error \"expected list\
+    \ with only integers, got ~a\" values)))))\n", "  (define integer-predicate (lambda\
+    \ (v) (and (integer? v) (number? v))))\n  (cond [(empty? values) #()]\n      \
+    \  [(number? values) values]\n        [else (cons (first values) (filter_integers\
+    \ (rest values)))]))\n", "  (if (null? values) (values)\n      (let ((current\
+    \ (car values))\n            (next (cadr values)))\n        (if (number? current)\n\
+    \            (if (number? next)\n                (cons next current)\n       \
+    \         (cons current next))\n            (cons current (filter_integers next))))))\n",
+  "  (cond\n    [(empty? values) '()]\n    [(equal? (car values) '#hash) '()]\n  \
+    \  [(number? values) values]\n    [else (cons (car values) (filter_integers (cdr\
+    \ values)))]))\n", "  (filter\n   (lambda (value) (integer? value))\n   values))\n",
+  "  (cond [(empty? values) '()]\n        [(number? values) (list values)]\n     \
+    \   [(pair? values) (filter_integers (cdr values))]\n        [else (filter integer?\
+    \ values)]))\n", "  (cond [(null? values) '()]\n        [(number? values) values]\n\
+    \        [else (filter_integers (cdr values))]))\n", "  (cond (null? values)\n\
+    \        '()\n        (number? (car values))\n        (cons (car values) (filter_integers\
+    \ (cdr values))))\n  (else (filter_integers (cdr values))))\n", "  (cond\n   \
+    \ ((null? values) values)\n    ((number? values) values)\n    ((not (pair? values))\
+    \ values)\n    (else (let ((filtered-integers (filter integer? values))) \n  \
+    \         (if (empty? filtered-integers) values\n               (cons (car filtered-integers)\
+    \ (filter_integers (cdr filtered-integers))))))))\n", "  (let ([x (car values)])\n\
+    \    (cond\n      [(number? x) (list x)]\n      [else (append (filter_integers\
+    \ x)\n                    (filter_integers (cdr values)))]\n      )))", "  (cond\
+    \ ((null? values) values)\n        ((list? values) (filter_integers (cdr values)))\n\
+    \        (else (cons (car values)\n                    (filter_integers (cdr values))))))\n",
+  "  (filter integer? values))\n", "  (filter (lambda (x) (and (number? x) (integer?\
+    \ x))) values))\n", "  (cond\n    ((null? values) '())\n    ((or (number? first)\
+    \ (boolean? first)) (values))\n    ((number? first) (filter_integers rest))\n\
+    \    ((boolean? first) (filter_integers rest))\n    (else (filter_integers rest\
+    \ first))))\n", "  (cond ((null? values) values)\n        ((list? values) (cons\
+    \ (filter_integers values)\n                           (filter_integers (rest\
+    \ values))))\n        (else (cons (number? values)\n                    (filter_integers\
+    \ (rest values))))))\n", "  (filter integer? values))\n", "  (filter integer?\
+    \ values))\n", "  (cond\n    ((null? values) '())\n    ((atom? values) (if (integer?\
+    \ values) (values) '()))\n    (else (cons (car values) (filter_integers (cdr values))))))\n",
+  "  (cond [(null? values) (values)]\n        [(or (number? first) (symbol? first))\
+    \ \n         (filter_integers rest)]\n        [(number? first) \n         (if\
+    \ (= 0 (remainder first 10) 0) (values) first)]\n        [else (filter_integers\
+    \ rest)]\n        [else (filter values integer?)]))\n", "  (filter integer? values))\n",
+  "  (cond [(number? values) values]\n        [else\n         (filter number? (map\
+    \ integer? values))]))\n", "  (filter (lambda (v) (and (number? v) (integer? v)))\n\
+    \         values))\n", "  (cond ((or (pair? values)\n             (list? values))\n\
+    \         (filter (\u03BB (x) (integer? x)) values))\n        ((atom? values)\n\
+    \         (list values))\n        (else\n         (\u03BB (x) (and (list? values)\n\
+    \                       (every (\u03BB (x) (integer? x)) values))))\n        ))\n",
+  "  (filter (lambda (value) (integer? value)) values))\n", "  (cond (<???>\n    \
+    \     <???>)\n        (else\n         (apply append (map (\u03BB (e) (number?\
+    \ e)) values)))))\n", "  (cond [(list? values) (map (\u03BB (x) (filter_integers\
+    \ x)) values)]\n        [(number? values) values]\n        [else values]))\n",
+  "  (filter #(integer? %) values))\n", "  (filter (lambda (val) (or (number? val)\
+    \ (number? val)))\n         values))\n", "  (for/list [(v values) (lambda (v acc)\n\
+    \                         (cond\n                          [(number? v) (cons\
+    \ v acc)]\n                          [else (cons (car v) acc)]))])\n  (cons (car\
+    \ values) (filter_integers (cdr values))))\n", "  (cond ((empty? values) values)\n\
+    \        ((not (integer? (car values))) (cons values))\n        (else (filter_integers\
+    \ (cdr values)))))\n", "  (cond [(empty? values) '()]\n        [(number? values)\n\
+    \         (cons (first values) (filter_integers (rest values)))]\n        [else\
+    \ (filter_integers (rest values))]))\n", "  (cond [(not (list? values)) (empty?\
+    \ values)] \n        [(number? values)\n         (cond\n           [(not (positive?\
+    \ values)) (empty? values)]\n           [(positive? values) values]\n        \
+    \   [(negative? values) (filter_integers (rest values))]))]\n        [(cons? values)\n\
+    \         (filter_integers (rest values))]\n        [else values]))\n", "  (cond\n\
+    \    [(empty? values)\n     #()]\n    [(and (pair? values) (pair? (first values)))\n\
+    \     (filter-integers (rest values))]\n    [(and (integer? (first values))\n\
+    \          (integer? (second values)))\n     (cons (first values)\n          \
+    \ (filter-integers (rest values)))]\n    [#t values]))\n", "  (filter integer?\
+    \ values))\n</code>\n<|/ a tags=racket,python,scheme,rkt,r5rs |>\n<| a |>\nIn\
+    \ Racket you can use the filter-map function to filter out any non-integer values.\n\
+    <code>", "  (filter (lambda (value) (number? value)) values))\n", "  (cond ((empty?\
+    \ values) values)\n        ((pair? values) (map (lambda (x) (filter_integers x))\
+    \ values))\n        (else (append (filter-int values)))))\n", "  (filter (lambda\
+    \ (x)\n            (and (integer? x) x))\n          values))\n", "  (filter (lambda\
+    \ (n) (and (number? n) (integer? n)))\n         values))\n", "  (cond\n    [(empty?\
+    \ values)\n     empty]\n    [(list? (car values))\n     (filter_integers (cdr\
+    \ values))]\n    [(number? values) values]\n    [else values]))\n", "  (filter\
+    \ integer? (reverse values))\n  )\n", "  (cond\n    ((empty? values) '())\n  \
+    \  ((cons? values) (cons (first values) (filter_integers (rest values))))\n  \
+    \  (else values)))\n", "  (cond [(not (number? values))\n         values]\n  \
+    \      [(number? values)\n         (remove-if (lambda (element)\n            \
+    \          (and (integer? element)\n                          (= element values))\n\
+    \                      values)]\n        [else values]))\n", "  (let ((new-list\
+    \ '()))\n    (for ((x values)) (if (number? x) (cons x new-list) (cons nil new-list))))\n\
+    \  (if (< (length new-list) 1) new-list))\n", "  (let ([values (append values\
+    \ (list (list (list (list '()))))])\n        (result (list '()))\n        (i (length\
+    \ values))\n        (values (cdr values))])\n    (if (= i 0)\n        result\n\
+    \        (let ([value (first values))\n              next-values (filter_integers\
+    \ (rest values))])\n          (if (number? value)\n              (cond\n     \
+    \           [(> (number? value) (number? (first next-values)))\n             \
+    \    (append result value)]\n                [else (append result (list value))]\n\
+    \                )\n              (append result value)\n              )\n   \
+    \         )\n          )\n        )\n    )\n  )\n", "  (if (list? values)\n  \
+    \    (let ([f1 (lambda (a b) \n                   (equal? a #(integer 0 infinity)))\
+    \ \n            f2 (lambda (a b) \n                   (equal? a #(integer 0 infinity)))])\n\
+    \        (if (all? values f1)\n            (values f1)\n            (if (all?\
+    \ values f2)\n                (values f2)\n                (filter values f1))))\n\
+    \      (values)))\n", "  (cond [(not (pair? values))\n         values]\n     \
+    \   [(pair? values)\n         (filter_integers (values 1))]\n        [else\n \
+    \        (let ([value (first values)])\n           (if (number? value)\n     \
+    \          (cons (first values)\n                     (filter_integers (rest values)))\n\
+    \               (filter_integers (rest values))))]))\n", "  (cond [(null? values)\
+    \ '()]\n        [(number? values) values]\n        [(pair? (car values)) (cons\
+    \ (filter_integers (car values)) \n                              (filter_integers\
+    \ (cdr values)))]\n        [else (filter_integers (car values))]))\n", "  (for/list\
+    \ ([item (in-list values)])\n    (if (number? item)\n        item\n        (error\
+    \ \"Expected integer, found ~a\" item))))\n", "  (cond\n    ((null? values) values)\n\
+    \    ((pair? values) (apply filter_integers (cdr values)))\n    ((atom values)\
+    \ values)\n    ((number? values) (cond ((< 0 values) (list 0))\n             \
+    \                   ((< 0 (car values) values) (list 0))\n                   \
+    \             ((>= (car values) 0) (cons (car values) (filter_integers (cdr values))))\n\
+    \                                ((>= 0 values) (list 0))\n                  \
+    \              (else (cons (car values) (filter_integers (cdr values))))))))\n\
+    </code>\n<|/ a dscore=2 |>\n<| a |>\nSince you seem to use Racket (I guess based\
+    \ on your code that it's written in Racket), you can use the filter function,\
+    \ which takes a predicate and returns a new list with all elements for which the\
+    \ predicate is true.\n<code>", "  (filter (lambda (v) (integer? v)) values))\n",
+  "  (define (test x)\n    (and (number? x) (not (integer? x))))\n  (cond ((null?\
+    \ values) values)\n        ((test (car values)) (filter_integers (cdr values)))\n\
+    \        (else (cons (car values) (filter_integers (cdr values))))))\n", "  (let\
+    \ ([new-values (cons #f values)])\n    (if (not (null? values))\n        (let*\
+    \ ([curr-value (first values)])\n          (cond\n            ((not (integer?\
+    \ curr-value)) new-values)\n            ((not (null? (rest values))) (filter_integers\
+    \ (rest values)))\n            (else (cons curr-value (filter_integers (rest values)))))))\n\
+    \      new-values\n    )\n  )\n", "  (cond [(empty? values) empty]\n        [(number?\
+    \ (first values)) (first values)]\n        [else (cons (first values)\n      \
+    \              (filter_integers (rest values)))]))\n", "  (cond\n    [(empty?\
+    \ values) '()]\n    [(number? (car values)) (list car values)]\n    [else    \
+    \           (filter_integers (cdr values))]))\n", "  (let ([f (lambda (x) (number?\
+    \ x)) (gt (lambda (x) (number? (car x))))])\n    (cond [(empty? values) (empty?)]\n\
+    \          [(f (car values)) (cons (car values) (filter_integers (cdr values)))]\n\
+    \          [else (filter_integers (filter (f values) (filter (gt values) (cdr\
+    \ values))))])))\n", "  (let ([ints (for/list ([x (in-list values) y (in-list\
+    \ values)])\n                (number? x y)))])\n    (when ints\n      (cons null\
+    \ (filter-integers ints)))))\n", "  (cond [(null? values) '()]\n        [(number?\
+    \ first)\n         (if (member (first values) '(#() nil)) (first values) (filter_integers\
+    \ (rest values)))]\n        [else (cons first values)]))\n", "  (map number? values))\n",
+  "  (cond\n    [(empty? values)\n     '()]\n    [(pair? values) ; rktthon returns\
+    \ pairs as lists\n     (cond\n       [(list? (first values)) (map 'first values)]\
+    \ \n       [(number? (first values)) (list values)]\n       [(pair? (first values))\
+    \ (cons (filter_integers (first values)) (filter_integers (rest values)))]\n \
+    \      [(symbol? (first values)) (error \"Unknown list type for value: \" (repr\
+    \ first))]\n       [(boolean? (first values)) (list values)]\n       [(symbol?\
+    \ (rest values)) (error \"Unknown list type for value: \" (repr first))]\n   \
+    \    [else (error \"Unknown list type: \" (repr first))]\n       )]\n    [else\
+    \ (error \"Unknown type: \" (repr values))]\n    )\n  )\n  )\n", "  (cond\n  \
+    \  ((empty? values) '())\n    ((boolean? (car values)) (filter_integers (cdr values)))\n\
+    \    ((list? values)\n     (let ((result (filter_integers (car values))))\n  \
+    \     (if (null? result)\n           (cons (car values) (filter_integers (cdr\
+    \ values))))\n       result))\n    ((number? values) (cons (car values) (filter_integers\
+    \ (cdr values))))\n    ((string? values) (filter_integers (cdr values)))))\n",
+  "  (let loop ([values values]\n             [result '()])\n    (cond\n      [(empty?\
+    \ values) result]\n      [(type? (first values)) (loop (rest values)\n       \
+    \                       (cons (first (first values)) result))]\n      [else (loop\
+    \ (rest values)\n                 (cons (first values) result))]))))\n", "  (cond\n\
+    \    ((null? values) '())\n    ((not (list? values))\n     (cons values '()))\n\
+    \    ((list? (car values)) (cons (filter_integers (car values)) (filter_integers\
+    \ (cdr values))))\n    ((not (pair? (car values)))\n     (cons values (filter_integers\
+    \ (cdr values))))\n    ((number? (car values))\n     (cons (car values) (filter_integers\
+    \ (cdr values))))\n    ((integer? (car values))\n     (cons (car values) (filter_integers\
+    \ (cdr values))))\n    ((null? values) (cons values '()))\n    ((not (symbol?\
+    \ (car values)))\n     (cons values (filter_integers (cdr values))))\n    ((not\
+    \ (symbol? (cdr values)))\n     (cons (filter_integers (car values)) '()))\n \
+    \   ((symbol? (car values)) (cons (filter_integers (cdr values)) (filter_integers\
+    \ (car values))))\n    ((not (pair? (cdr values)))\n     (cons (filter_integers\
+    \ (car values)) '()))\n    ((pair? (cdr values)) (cons (filter_integers (car values))\
+    \ (filter_integers (cdr values))))\n    ((not (pair? (car values))) (cons (car\
+    \ values) (filter_integers (cdr values))))\n    ((null? (cdr values)) (cons (car\
+    \ values) '()))\n    ((not (pair? (car values)) (cons (car values) '()))\n   \
+    \ ((pair? (car values)) (cons (filter_integers (car values)) (filter_integers\
+    \ (cdr values))))\n    ((null? (car values)) (cons '() (filter_integers (cdr values))))\n\
+    \    ((not (number? (car values))) (cons (car values) '()))\n    ((not (integer?\
+    \ (car values))) (cons (car values) '()))\n    ((not (number? (cdr values))) (cons\
+    \ (filter_integers (car values)) '()))\n    ((not (integer? (cdr values))) (cons\
+    \ (filter_integers (car values)) '()))\n    ((not (pair? (cdr values))) (cons\
+    \ (filter_integers (car values)) '()))\n    ((not (pair? (car values))) (cons\
+    \ (car values) '()))\n    ((pair? (car values)) (cons (filter_integ", "  (cond\
+    \ [(null? values)\n         #t]\n        [(pair? values)\n         (let ([i (first\
+    \ values))]\n           (filter_integers (rest values)))]\n        [(not (number?\
+    \ i))\n         (not (pair? values))]\n        [else (cons i values)]))\n", " \
+    \ (let ([found '()])\n    (for/fold ([i 0])\n      ([v values])\n    (if (number?\
+    \ v)\n      (let ([found (cons v found)])\n        (set! i (+ i 1))\n        (when\
+    \ (< i 2)\n          found)))))\n", "  (if (empty? values)\n      '()\n      (if\
+    \ (number? (car values))\n          (cons (car values) (filter_integers (cdr values)))\n\
+    \          (filter_integers (cdr values)))))\n</code>\n<|/ a |>\n<| a dscore=0\
+    \ |>\nTo make it work in the racket language, I had to change it a bit:\n<code>",
+  "  (filter (lambda (x) (or (string? x) (number? x)))\n          values))\n", " \
+    \ (let loop ((accumulator '())\n             (values values))\n    (cond ((null?\
+    \ values) accumulator)\n          ((number? values) (cons values accumulator))\n\
+    \          (else\n           (loop\n             ;; We only want to add these\
+    \ values\n             ;; which aren't the empty list or null\n             (cond\
+    \ ((empty? values) accumulator)\n                   ((null? (car values)) accumulator)\n\
+    \                   (else (loop (cons (car values) accumulator)\n            \
+    \                  (cdr values)))))\n           (set! accumulator '())))))\n",
+  "  (map (\u03BB (x)\n         (and (number? x)\n               (not (list? x))\n\
+    \               (not (symbol? x))))\n       values))\n", "  (cond\n    [(empty?\
+    \ values) (values)]\n    [(number? values) (values)]\n    [else (cons (first values)\
+    \ (filter_integers (rest values)))]))\n", "  (cond [(pair? values) (values (filter-integer\
+    \ values))]\n        [(null? values) '()]))\n", "  (cond\n    ((null? values)\
+    \ values)\n    ((list? (car values)) (filter_integers (cdr values)))\n    ((number?\
+    \ values)\n     (cond\n       ((< (car values) 0)\n        (cons (car values)\n\
+    \              (filter_integers (cdr values))))\n       ((> (car values) 0)\n\
+    \        (filter_integers (cdr values)))))\n    ((symbol? values)\n     (cond\n\
+    \       ((> (length values) 1)\n        (cons (car values)\n              (filter_integers\
+    \ (cdr values))))\n       ((and (<= (string-length values) 4)\n              (string=?\
+    \ (substring values 0 (string-length values))\n                         \"-inf\"\
+    )\n              (string=? (substring values 4 (string-length values))\n     \
+    \                    \"+inf\")\n              (string=? (substring values 8 (string-length\
+    \ values))\n                         \"-inf\")\n              (string=? (substring\
+    \ values 12 (string-length values))\n                         \"+inf\"))\n   \
+    \    ((< 4 (length values))\n        (filter_integers (cdr values)))))\n    ((boolean?\
+    \ values)\n     (cond\n       ((and (number? (car values)) (number? (cdr values)))\n\
+    \        (filter_integers (cdr values))))\n    ((vector? values)\n     (filter-vector\
+    \ (car values))))\n", "  (cond (<???>                 ;; Empty list\n        \
+    \ <???>)\n         ;; Non-empty list\n         (cond (<???>                 ;;\
+    \ Empty list\n                 <???>)\n               ;; Non-empty list\n    \
+    \           (<???>\n               (<???>\n                (<???>\n          \
+    \       (<???>\n                  <???>\n                  <???>))))))))\n</textarea></form>\n\
+    \n    <script>\n      var editor = CodeMirror.fromTextArea(document.getElementById(\"\
+    code\"), {\n        lineNumbers: true,\n        matchBrackets: true,\n       \
+    \ theme: \"racket\"\n      });\n    </script>\n\n    <p><strong>MIME types defined:</strong>\
+    \ <code>text/x-racket</code>.</p>\n\n    <p>Development of the CodeMirror Racket\
+    \ mode was sponsored by \n    <a href=\"https://racket-lang.org\">Racket Project</a>.</p>\n\
+    \    \n    <p><strong>Parsing/Highlighting Tests:</strong> <a href=\"../../test/index.html#?r=%2Fdocs%2F%2Fracket%2Findex.html&amp;mode=racket&amp;code=#lang%28racket%29%0A(define%2C%20even%29%0A(even%2C%20(odd%2C%20(even%2C%20even%29))%0A%0Adefn%20even%2F1%28x%29%0A%20%20%28defn%20even%2F2%28x%29%20%3D%3E%20%0A%20%20%20%28defn%20even%2F3%28x%29%20%3D%3E%20x%0A%20%20%29%0Aeven%2F1%281%29%0Aeven%2F2%281%29%0Aeven%2F3%281%29%0Aeven%2F1%282%29%0Aeven%2F2%282%29%0Aeven%2F3%282%29%0Aeven%2F1%283%29%0Aeven%2F2%283%29%0Aeven%2F3%283%29%0A%0Aeven%2F1%284%29%0Aeven%2F2%284%29%0Aeven%2F3%284%29%0Aeven%2F1%285%29%0Aeven%2F2%285%29%0Aeven%2F3%285%29%0A%0A%28%29%0Adef%20even%2Feven%29%28x%29%20%3D%3E%20%28even%2F1%28x%29%20%7C%20even%2F2%28x",
+  "  (cond ((null? values) values)\n        ((number? values) values)\n        (else\
+    \ (cons (car values)\n                   (filter_integers (cdr values))))))\n",
+  "  (cond ((null? values)\n         #t)\n        ((number? values)\n         (cons\
+    \ (first values) (filter_integers (rest values))))\n        (else\n         (filter_integers\
+    \ (list values (first values)) #t))))\n</cell>\n<cell>\n#lang racket", "  (filter\n\
+    \   (\u03BB (x)\n     (or (number? x)\n         (number? x)))\n   values))\n",
+  "  (let ([integers (filter number?)]\n        [others (filter other?)]\n       \
+    \ [hashes (filter hash?)]\n        [other-lists (filter list?)])\n    (if hashes\n\
+    \        (cons (hash-ref hashes 0) (filter_integers hashes))\n        (if integers\n\
+    \            (cons (car integers) (filter_integers integers))\n            (if\
+    \ others\n                (cons (car others) (filter_integers others))\n     \
+    \           (filter_integers '())))))\n", "  (define (filter predicate)\n    (lambda\
+    \ (x)\n      (if (predicate)\n          (cons x '())\n          x)))\n\n  (apply\
+    \ filter values (map string? (map string->symbol values)))\n  (apply filter values\
+    \ (map number? (map number->symbol values))))\n", "  (cond [(empty? values) '()]\n\
+    \        [(number? car (first values))\n         (cons car (filter_integers rest\
+    \ (rest values)))]\n        [else (cons (first values) (filter_integers values\
+    \ (rest values)))]))\n", "  (cond\n    [(null? values) '()]\n    [(atom? values)\
+    \ (list values)]\n    [(cons? values) (append (filter_integers (car values)) (filter_integers\
+    \ (cdr values)))]\n    [(= 1 (length values)) (list values)]))\n", "  (cond\n\
+    \    ((null? values)\n      empty)\n    ((not (list? (first values)))\n      values)\n\
+    \    ((list? (first values))\n      (cons (first values) (filter_integers (rest\
+    \ values)))\n    (else (cons (first values) (filter_integers (rest values))))))",
+  "  (cond [(empty? values) empty]\n        [(integer? (car values)) (list values)]\n\
+    \        [else (append (filter_integers (cdr values)) (list (car values))]))",
+  "  (cond ((empty? values)\n         values)\n        ((number? values)\n       \
+    \  (remove values number?))\n        (else\n         (append values '(#\\a #b\
+    \ #c))))) ;#lang racket\n", "  (cond [(null? values) '()]\n        [(number? (car\
+    \ values)) (list values)]\n        [else (filter_integers (cdr values))]))\n</code>\n\
+    <|/ a tags=racket,rkt,racket-student-languages dscore=1 |>\n<| a dscore=1 |>\n\
+    The question is tagged rkt. Here is the solution using rkt. \n<code>\n#lang racket\n",
+  "  (cond\n    ((null? values)\n      '())\n    ((list? (car values))\n     (cons\
+    \ (car values) (filter_integers (cdr values))))\n    ((number? (car values)) (cons\
+    \ (car values) '()))\n    (else (filter_integers (cdr values)))))\n", "  (cond\n\
+    \    ((null? values) '())\n    ((not (integer? values)) '())\n    (else (cons\
+    \ (car values) (filter_integers (cdr values))))))\n", "  (let ([integers (filter\
+    \ number?)]\n        [integer (first integers)])\n    (if (null? integers)\n \
+    \       '()\n        (cons integer (filter_integers integers)))))\n\n#lang racket\n",
+  "  (cond [(empty? values) values]\n        [(symbol? values) values]\n        [(number?\
+    \ values) values]\n        [(list? values) (filter integer? (values ))]\n    \
+    \    [else values]))", "  (map (fn [x] \n         (and (number? x)\n         \
+    \     (number? (cadr x)))\n         )\n       values\n      )\n  )\n", "  (cond\
+    \ [(empty? values)\n         (empty?)\n         values]\n        [(number? values)\
+    \ (list values)]\n        [(symbol? values) (list values)]\n        [else (filter_integers\
+    \ (rest values))]))\n", "  (map (lambda (x) (rkt::coerce-value x 'integer)) values))\n",
+  "  (cond [(null? values) '()]\n        [(integer? (car values))\n         (filter_integers\
+    \ (cdr values))]\n        [else\n         (cons (car values) (filter_integers\
+    \ (cdr values)))]))\n", "  (let ((result '()))\n    (for/fold ((value values))\n\
+    \              (index 0)\n              (result)\n              (lambda (value\
+    \ index result)\n                (if (number? value)\n                    (cons\
+    \ value result)\n                    (filter-values result (+ index 1)))))))\n",
+  "  (filter (lambda (v) (number? v))\n         values))\n", "  (filter (lambda (val)\
+    \ (or (integer? val) (number? val)))\n         values))\n", "  (cond ((empty?\
+    \ values) '())\n        ((number? values) values)\n        (else (append\n   \
+    \         (filter_integers (cdr values))\n            (list (car values))))))\n",
+  "  (cond (empty? values)\n        '()\n        (integer? (first values))\n     \
+    \   (cons (first values) (filter_integers (rest values)))))\n", "  (if (empty?\
+    \ values)\n      '()\n      (if (number? first)\n          (cons first\n     \
+    \           (filter_integers (rest values)))\n          (cons (first values)\n\
+    \                (filter_integers (rest values))))))\n", "  (cond [(empty? values)\
+    \ '()]\n        [(type? first values) (cons (first values) (filter_integers (rest\
+    \ values)))]\n        [(number? first values) (cons first \n                 \
+    \                    (filter_integers (rest values)))]\n        [else (filter_integers\
+    \ values)]))\n", "  (cond (<???> values)\n        <???>))\n", "  (values-filter\n\
+    \   (lambda (value) (not (list? value)))\n   (lambda (value) (integer? value))\n\
+    \   values))\n", "  (cond\n    [(null? values) '()]\n    [(number? values) values]\n\
+    \    [else (cons (car values) (filter_integers (cdr values)))]))\n", "  (let ([vals\
+    \ (for/list [(i values)] #(listof (number? %))\n                      #:from-end\
+    \ t\n                      #:key (lambda (e)\n                              (if\
+    \ (and (integer? (car e))\n                                       (< (car e) 0))\n\
+    \                                  '(zero?)\n                                \
+    \  '(integer? e))))])\n    (if (or (empty? vals)\n            (null? vals))\n\
+    \        '()\n        (cons (first vals)\n              (filter_integers (rest\
+    \ vals))))\n    (values values)))\n</code>\nIn Racket:\n<code>\n> (filter-integers\
+    \ (list \"a\" 3.14 5))\n'(5)\n> (filter-integers (list 1 2 3 \"abc\" #hash() (list\
+    \ )))\n'(1 2 3)\n</code>\n<|/ a dscore=2 |>\n<| c |>\nYeah, this should work fine,\
+    \ but it's so clunky it's hard to read and debug. I know it's not idiomatic Racket\
+    \ ;-)\n<|/ c |>\n<| c |>\n: This was my first attempt at an Racket version of\
+    \ `filter-integers`. I was trying to rework `filter` so that it could take any\
+    \ predicate that accepted `number?` as argument, but it didn't work out well,\
+    \ either. I'd really like to write something like `filter-integers`, because I\
+    \ think it could help to understand what's going on. But I suspect that it's too\
+    \ late to revisit this now.\n<|/ c |>\n<| c |>\n: I added a version that doesn't\
+    \ use any \"advanced\" functions, just simple iteration.\n<|/ c |>\n<| c |>\n\
+    I like this solution. I'm surprised `filter` isn't provided in the standard library.\n\
+    <|/ c |>\n<| c |>\n: Yeah, `filter` should be on Racket core, but it's only there\
+    \ in the `collections` module. Unfortunately, you can't get it in `racket/base`,\
+    \ but maybe someday it will be.\n<|/ c |>\n<| a tags=lisp,racket,scheme |>\nThis\
+    \ might help:\n<code>", "  (for/list ([x (in-range (values length) -1)]\n    \
+    \         #:when (number? values))\n    (set! values (remove value values)))\n\
+    \  (values))\n", "  (cond [(null? values) (values)]\n        [(number? values)\
+    \ (values)]\n        [(cons? values) (cons (first values) (filter_integers (rest\
+    \ values)))]\n        [else (error \"not an rktpython value\" values)]\n))\n",
+  "  (cond ((null? values) values)\n        ((list? values) (filter_integers (cdr\
+    \ values)))\n        (else (and (integer? (car values)) (filter_integers (cdr\
+    \ values))))))\n", "  (cond ((null? values) values)\n        ((not (list? (car\
+    \ values)))\n         (if (= (caar values) #\\digit)\n             (cons (car\
+    \ (cdr values)) (filter_integers (cdr values)))\n             (filter_integers\
+    \ (cdr values)))) ; recur on number\n        (else ; recur on char\n         (if\
+    \ (= (caar values) #\\digit)\n             (cons (car (cdr values)) (filter_integers\
+    \ (cdr values)))\n             (filter_integers (cdr values))))) ; recur on string\n\
+    </code>\n<|/ a dscore=4 |>\n<| a tags=racket,lisp,functional-programming |>\n\
+    This doesn't quite do what you want, but may help get you in the right direction.\n\
+    <code>", "  (map \n   (lambda (x)\n     (if (string? x)\n         (list x)\n \
+    \        (if (integer? x)\n             (list x)\n             #f))) \n   (reverse\
+    \ values))) \n", "  (cond ((null? values) values)\n        ((list? values) (cons\
+    \ (filter_integers (car values)) (filter_integers (cdr values)))) \n        ((number?\
+    \ values) (if (< (car values) 0) (cons (car values) (filter_integers (cdr values)))\
+    \ (filter_integers (cdr values)))))\n  )\n", "  (cond [(empty? values) '()]\n\
+    \        [(not (number? first values))\n         (filter_integers (rest values))]\n\
+    \        [(number? first values)\n         (cons (first values) (filter_integers\
+    \ (rest values)))]\n        [else\n         (filter_integers (rest values))]))\n",
+  "  (let ([result (list)]) \n    (cond [(empty? values) result]\n          [else\
+    \ (let ([value (first values))]\n                    (cond [(integer? value) (cons\
+    \ value result)]\n                          [else (filter_integers values))])]))\n",
+  "  (apply append (filter (lambda (x) (and (number? x) x)) values)))\n", "  (filter\
+    \ (lambda (v) (number? v))\n          values))\n", "  (filter integer? values))\n",
+  "  (let ([integers (rkt::lst->rkt::rkt::value->list values)])\n    (let ([integer-values\
+    \ (map #(integer %)\n                               (filter (lambda (x)\n    \
+    \                                      (and (integer? x) (not (number? x)))) integers))])\n\
+    \      (cond [(not (empty? integer-values)) (cons empty-list integer-values)]\n\
+    \            [else (cons integer-values empty-list)]))))\n", "  (cond\n    [(null?\
+    \ values) '()]\n    [(number? values) values]\n    [else (append (filter_integers\
+    \ (cdr values))\n                  (filter_integers (cdr values)))]))\n", "  (cond\
+    \ [(null? values) '()]\n        [(number? values) values]\n        [else (append\n\
+    \               (filter_integers (first values))\n               (filter_integers\
+    \ (rest values)))]))\n</code>\n<|/ a tags=racket,scheme,lisp |>\n<| a tags=racket,scheme,lisp\
+    \ |>\nThis should work in Racket:\n<code>\n#lang racket\n", "  (filter integer?\
+    \ values))\n", "  (filter (lambda (v) (and (number? v) (integer? v))) values))\n\
+    </code>\n<|/ a tags=scheme,racket,r6rs dscore=2 |>\n<| a tags=scheme,racket,r6rs\
+    \ |>\nAs pointed out in a previous answer, one way to do it would be to simply\
+    \ use filter:\n<code>", "  (cond\n    [(null? values) '()]\n    [(number? values)\
+    \ values])\n  )\n", "  (map #(and (number? (car %)) (not (number? (car %))))\n\
+    \       values))\n", "  (map (lambda (value) (number? value))\n       (filter\
+    \ (lambda (value) (number? value))\n              values)))\n", "  (map number->list\
+    \ \n       (filter (lambda (v) (number? v)) values))\n  )\n", "  (cond ((null?\
+    \ values) values)\n        ((number? (car values)) (if (number? (car values))\
+    \ (car values) values))\n        (else (filter_integers (cdr values)))))\n", " \
+    \ (filter #(integer? (car %)) values))\n", "  (filter integer? values))\n", " \
+    \ (if (null? values)\n      (list values)\n      (let ((head (car values))\n \
+    \           (tail (cdr values)))\n        (if (integer? head)\n            (if\
+    \ (null? tail)\n                (list head)\n                (cons (car values)\
+    \ (filter_integers tail)))\n            (if (list? head)\n                (list\
+    \ (filter_integers head) (filter_integers tail))\n                (filter_integers\
+    \ tail)))))\n", "  (filter (lambda (x) (number? x))\n          values))\n", " \
+    \ (filter #(and (integer? %)\n               (not (pair? %))) values))", "  (filter\
+    \ integer? values))\n", "  (cond [(empty? values) empty]\n        [(number? (car\
+    \ values)) (cons (car values) (filter_integers (cdr values)))]\n        [else\
+    \ (cons (car values)\n                    (filter_integers (cdr values)))]))\n",
+  "  (cond [(empty? values) '()]\n        [(number? (car values))\n         (cons\
+    \ (car values) (filter_integers (cdr values)))]\n        [else (filter_integers\
+    \ (cdr values))]))\n", "  (let loop ((result '())\n             (values2 (copy\
+    \ values))\n             (counter 0))\n    (cond\n      [(empty? values2)\n  \
+    \     (reverse result)]\n      [(integer? (first values2))\n       (loop (cons\
+    \ (first values2) result) (rest values2) (+ counter))\n        ]\n      [else\n\
+    \       (loop (cons (first values2) result) (rest values2) counter)]\n      ))\n\
+    \  )\n", "  (cond [(empty? values) values]\n        [(number? head) (filter_integers\
+    \ tail)]\n        [else (cons (head values) (filter_integers tail))]))\n</code>\n\
+    <|/ a tags=racket,racket-student-languages |>\n<| a |>\nA slight variation on\
+    \ the filter function by Daniel Fischer that works on more types than just integers:\n\
+    <code>", "  (if (null? values)\n      '()\n      (cond\n        ((atom? values)\
+    \ values)\n        ((and (number? values) (< 1 (apply max (map atom? (values .\
+    \ ())))))\n         (cond ((number? values) values)\n              ((and (number?\
+    \ values) (= 0 (apply min (map atom? (values . ())))))\n               (cons 0\
+    \ (filter_integers (cdr values))))\n              ((and (number? values) (= 1\
+    \ (apply max (map atom? (values . ())))))\n               (cons 1 (filter_integers\
+    \ (cdr values))))\n              ((and (number? values) (= 2 (apply max (map atom?\
+    \ (values . ())))))\n               (cons 2 (filter_integers (cdr values))))\n\
+    \              ((and (number? values) (= 3 (apply max (map atom? (values . ())))))\n\
+    \               (cons 3 (filter_integers (cdr values))))\n              ((and\
+    \ (number? values) (= 4 (apply max (map atom? (values . ())))))\n            \
+    \   (cons 4 (filter_integers (cdr values))))\n              ((and (number? values)\
+    \ (= 5 (apply max (map atom? (values . ())))))\n               (cons 5 (filter_integers\
+    \ (cdr values))))\n              ((and (number? values) (= 6 (apply max (map atom?\
+    \ (values . ())))))\n               (cons 6 (filter_integers (cdr values))))\n\
+    \              ((and (number? values) (= 7 (apply max (map atom? (values . ())))))\n\
+    \               (cons 7 (filter_integers (cdr values))))\n              ((and\
+    \ (number? values) (= 8 (apply max (map atom? (values . ())))))\n            \
+    \   (cons 8 (filter_integers (cdr values))))\n              ((and (number? values)\
+    \ (= 9 (apply max (map atom? (values . ())))))\n               (cons 9 (filter_integers\
+    \ (cdr values))))\n              ((and (number? values) (= 10 (apply max (map\
+    \ atom? (values . ())))))\n               (cons 10 (filter_integers (cdr values))))\n\
+    \              ((and (number? values) (= 11 (apply max (map atom? (values . ())))))\n\
+    \               (cons 11 (filter_integers (cdr values))))\n              ((and\
+    \ (number? values) (= 12 (apply max", "  (filter (lambda (item)\n            (not\
+    \ (number? item)))\n          values))\n", "  (filter (lambda (x) (integer? x))\n\
+    \         values))\n", "  (cond ((null? values) '())\n        ((equal? (car values)\
+    \ (integer? values))\n         (filter_integers (cdr values)))\n        (else\
+    \ (values (cdr values)))))\n</cell>\n<cell>\n#lang racket\n", "  (filter \n  \
+    \  (lambda (x) (and (number? x) (integer? x))) \n    values))\n", "  (if (empty?\
+    \ values) values\n      (let ([next (car values)])\n        (cond [(number? next)\
+    \ (list next)]\n              [else (filter_integers (cdr values))])))) ;; []\
+    \ and #hash() are filtered out\n", "  (filter number? values))\n", "  (if (empty?\
+    \ values)\n      '()\n      (if (number? values)\n          (cons (car values)\
+    \ (filter_integers (cdr values)))\n          (filter_integers (cdr values)))))\n",
+  "  (cond\n    [(null? values) #()]\n    [(number? values) values]\n    [else (cons\
+    \ value (filter_integers (values . value)))]))\n", "  (let ([result (filter (lambda\
+    \ (x) (and (number? x) (integer? x))) values)])\n    (if (null? result) '() result)))\n",
+  "  (filter (lambda (x) (integer? x))\n         values))\n", "  (let ([results (list)])\
+    \ ; Use this to accumulate list of integers\n    (for ([i (in-range (length values))])\n\
+    \      (if (is-integer values[i])\n        (set! results conj values[i]]) ; Add\
+    \ to results if integer found\n        results)))\n", "  (cond\n    [(empty? values)\
+    \ (values)]\n    [(equal? (first values) 'list) (values)]\n    [else (append (filter_integers\
+    \ (rest values))\n                  (if (integer? (first values)) (list first)\
+    \ values)))]))\n</cell>\n<code language=conda-root-py>\n#lang racket\n", "  (cond\
+    \ ((or (not (list? values))\n             (not (pair? (car values))))\n      \
+    \   values)\n        ((and (number? (car values))\n             (not (pair? (car\
+    \ values))))\n         values)\n        (else (cons (car values) (filter_integers\
+    \ (cdr values))))))\n", "  (if (empty? values)\n      '()\n      (cons (first\
+    \ values)\n            (filter_integers (rest values)))))\n", "  (cond [(not (number?\
+    \ values))\n         values]\n        [else (for ([value (map number? (rest values))])\n\
+    \               (cond [(number? value)\n                       (list value)]\n\
+    \                         [else values]))]))\n</cell>\n<code language=ocaml-jupyter>\n\
+    #lang racket\n", "  (filter-values values integerp))\n", "  (values-for values\
+    \ integer?)\n  )\n", "  (if (empty? values)\n      '()\n      (if (number? (car\
+    \ values))\n          (values)\n          (cons (car values)\n               \
+    \ (filter_integers (cdr values)))))))\n", "  (map (\u03BB (v) (if (number? v)\
+    \ (list v) v)) values))\n", "  (cond\n    ((null? values) values)\n    ((not (integer?\
+    \ (car values))) (filter_integers (cdr values)))\n    ((boolean? (car values))\
+    \ (filter_integers (cdr values)))\n    ((integer? (car values)) (cons (car values)\
+    \ (filter_integers (cdr values))))\n    (else (filter_integers (cdr values)))))\n",
+  "  (cond\n    [(empty? values) '()]\n    [(or (not (integer? (first values))) (not\
+    \ (integer? (rest (first values))))) (filter_integers (rest values))]\n    [(or\
+    \ (integer? (first values))\n          (not (integer? (rest (first values))))\n\
+    \          (integer? (rest (first values)))\n          (not (integer? (rest (rest\
+    \ (first values)))))) (cons (first values) (filter_integers (rest values)))]))\n",
+  "  (if (null? values)\n      '()\n      (cons (car values)\n            (filter_integers\
+    \ (cdr values)))))\n", "  (let ((filtered (apply filter integers? values)))\n\
+    \    (if (null filtered)\n        '()\n        (cons (car filtered) (filter_integers\
+    \ (cdr filtered))))))\n", "  (let loop ((values values) (retlist '()))\n    (if\
+    \ (empty? values)\n        retlist\n        (begin\n          (if (number? first)\n\
+    \              (loop (rest values) (cons first retlist))\n              (loop\
+    \ (rest values) retlist)))\n        retlist)))\n", "  (filter number? (map number?\
+    \ values)))\n", "  (filter integer? values))\n", "  (let ([new-values '()])\n\
+    \    (labels ([(next [value new-values]\n                 (cond [(number? value)\
+    \ (append new-values value)]\n                       [(cons-list '(integer? .\
+    \ #hash()) (append new-values value))]))]\n              [(end? values)\n    \
+    \           (append new-values (list '()))]\n              [else\n           \
+    \    (let ([new-value (first values)])\n                 (next (rest values) (cons\
+    \ new-value new-values))]))])\n      (next values new-values))))\n", "  (if (null?\
+    \ values)\n      values\n      (cons (integer? (first values)) (filter_integers\
+    \ (rest values)))))\n", "  (filter integer? values))\n", "  (let ([integers (for\
+    \ ([e (in-list values)])\n                   (cond ((number? e) (number? e)) \n\
+    \                         ((vector? e) (vector? e)))\n                   (else\
+    \ #f))))\n    (unless integers\n      (return values)))", "  (define (helper value)\n\
+    \    (and (integer? value)\n         (not (null? values))))\n  (define (inner-helper)\n\
+    \    (let ([value (first values)])\n      (if (or (null? values)\n           \
+    \   (null? value))\n          (values)\n          (if (helper (first value))\n\
+    \              (inner-helper)\n              (values)))))\n  (inner-helper))\n",
+  "  (cond [(empty? values) empty]\n        [(number? values)\n         (cons (first\
+    \ values) (filter_integers (rest values)))]\n        [else\n         (filter_integers\
+    \ (rest values))]))\n</cell>\n<text>\nExercise 3\nWrite a procedure filter-odds\
+    \ which applies filter-integers to all elements of list but only those that are\
+    \ odd. It should raise an error if none of the elements are integers.\n\n\n</text>\n\
+    <code language=dyalog-kernel>\n#lang racket\n", "  (for/list ([item values]\n\
+    \             #:unless (number? item))\n    (if (number? item)\n        item)))\n",
+  "  (filter integer? values))\n", "  (cond\n    [(null? values) '()]\n    [(not (pair?\
+    \ values))\n     (and (not (boolean? values))\n          (equal? values integer?\
+    \ values))]\n    [(and (pair? values)\n           (boolean? values)\n        \
+    \   (not (pair? (cdr values)))\n           (not (boolean? (cdr values)))\n   \
+    \        (equal? (caar values) integer?)\n           (equal? (cdar values) integer?))\n\
+    \     (cons (car values)\n           (filter_integers (cdr values)))]\n    [else\
+    \ values]))\n", "  (cond [(number? values) values]\n        [(pair? values) (filter_integers\
+    \ (values cdr))]))\n", "  (let ([integers (list values)])\n    (filter integer?\
+    \ values)))\n", "  \n  (define (loop values acc)\n    (if (null? values)\n   \
+    \     acc\n        (loop (rest values) (cons (car values) acc)))))\n  \n  (loop\n\
+    \   (concat values (list (car values))) '())\n  )\n", "  (let ((filtered (filter\
+    \ integer? values)))\n    (if (null? filtered)\n        '()\n        (reverse\
+    \ filtered))))", "  (cond ((empty? values) '())\n        ((not (pair? values))\n\
+    \         (append values (rtkpython::make-value 'integer)))\n        ((and (pair?\
+    \ values) (and (number? first (first values)) (number? second (first values))))\n\
+    \         (filter_integers (rest values)))\n        (else (append values (first\
+    \ values)))))\n</cell>\n<code language=ocaml-jupyter>\n#lang racket\n", "  (cond\
+    \ [(empty? values) '()]\n        [(type? first values) '(first values)]\n    \
+    \    [(and (type? first values) (integer? first)) (cons (first values) (filter_integers\
+    \ (rest values)))]\n        [else (filter_integers (rest values))]))\n", "  (let\
+    \ ([keep (lambda (x)\n                 (cond\n                  [(number? x) x]\n\
+    \                  [else false]))])\n    (filter keep values)))\n", "  (filter\n\
+    \   (lambda (x)\n     (and (integer? x)\n          (not (list? x))))\n   values))\n",
+  "  (cond [(empty? values) '()]\n        [(integer? (car values)) (car values)]))\n",
+  "  (cond\n    ((or (null? values) (list? values))\n     values)\n    ((list? values)\
+    \ \n     (map (lambda (x) (filter_integers x))\n           (filter-values values\
+    \ 'integer?)))\n    ((symbol? values) \n     (filter-values values 'integer?))\n\
+    \    ((number? values) \n     (cons (car values) (filter-values values 'integer?)))\n\
+    \    ((boolean? values) \n     (filter-values values 'integer?))\n    ((list?\
+    \ (car values)) \n     (filter-values values 'integer?))\n    ((null? (car values))\
+    \ \n     (filter-values values 'integer?))\n    ((atom (car values)) (filter-values\
+    \ values 'integer?))\n    (else (error \"unknown type\"))))\n", "  (filter integer?\
+    \ values))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

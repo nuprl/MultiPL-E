@@ -18,6 +18,1182 @@ tests: "}\n\ncandidate() {\n    is_sorted \"$@\"\n}\n\nset -e\nrun_test() {\n   
   3 2 1\") = \"false\" ]]\n    [[ $(candidate \"1 2 2 2 3 4\") = \"false\" ]]\n  \
   \  [[ $(candidate \"1 2 3 3 3 4\") = \"false\" ]]\n    [[ $(candidate \"1 2 2 3\
   \ 3 4\") = \"true\" ]]\n    [[ $(candidate \"1 2 3 4\") = \"true\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["\tlocal x=\"$1\"\n\tlocal sorted=false\n\t# sort -n removes duplicates\n\
+    \tunsorted \"$x\" | sort -n | while read x; do\n\t\tcase \"$x\" in\n\t\t\t\"$x\"\
+    \ ) sorted=true;;\n\t\t\t*)\n\t\t\t\techo \"$x\"\n\t\t\t\tbreak;;\n\t\tesac\n\t\
+    done\n\techo \"$sorted\"", "  if [ \"$#\" -eq 1 ]; then # 1 argument\n    local\
+    \ x=$1 \n    local count=`echo \"$x\" | sort -u | wc -l`\n    echo $(( $(echo\
+    \ \"$count\" | cut -d' ' -f 1) ))\n  fi\n  \n  if [ \"$#\" -eq 2 ]; then # 2 arguments\n\
+    \    if [ \"$1\" -ne \"$2\" ]; then # arguments differ\n      echo \"$1\"\n  \
+    \    echo \"$2\"\n      exit 1\n    fi\n    local x=\"$1\" \n    local y=\"$2\"\
+    \n    local count=`echo \"$x\" | sort -u | wc -l`\n    echo $(( $(echo \"$count\"\
+    \ | cut -d' ' -f 1) ))\n    echo $(( $(echo \"$x\" | sort -u | wc -l) - $(echo\
+    \ \"$y\" | sort -u | wc -l) ))\n  fi", "\tlocal list_to_test =\"${1}\"\n\tlocal\
+    \ is_sorted=false\n\n\tlist_to_test=${list_to_test//$'\\n'/ }\n\tfor e in $list_to_test;\
+    \ do\n\t\tif [[ ${list_to_test} =~ $e  ]]; then\n\t\t\tif [[ ${list_to_test} =~\
+    \ ([0-9]+) ]]; then\n\t\t\t\tif [[ $((${BASH_REMATCH[1]}+1)) -ge ${BASH_REMATCH[1]}\
+    \ ]]; then\n\t\t\t\t\tis_sorted=true\n\t\t\t\tfi\n\t\t\tfi\n\t\tfi\n\tdone\n\n\
+    \techo \"${is_sorted}\"", "    local list=$1; shift\n    local unique=0\n    local\
+    \ sorted=0\n    for i in $list; do\n        if [[ $i -gt $list[-1] ]]; then\n\
+    \            sorted=1\n        else\n            unique=1\n        fi\n    done\n\
+    \    echo \"${sorted} ${unique}\"", "    local list=\"${1}\"\n    local temp\n\
+    \    local sorted\n    local count\n\n    # Convert the string list into a list\
+    \ of numbers. If the list has a\n    # space-separated set of numbers, each number\
+    \ is converted to an int.\n    # Otherwise, the input string is in the form of\
+    \ a list.\n    IFS=' ' read -a list <<<\"$list\"\n\n    # Sort the list by checking\
+    \ if the numbers are ascending.\n    sorted=()\n    count=0\n    for num in \"\
+    ${list[@]}\"; do\n        if [ \"$num\" -lt \"$(( ${list[$count]} + 1 ))\" ];\
+    \ then\n            sorted+=($num)\n        else\n            sorted+=(\"$num\"\
+    )\n        fi\n        count=$(( ${count} + 1 ))\n    done\n\n    if [[ ${#sorted[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local numbers=$1\n    local sorted=false\n    local count=1\n   \
+    \ local lastNumber=\"\"\n    for i in $numbers; do\n        if [ \"$lastNumber\"\
+    \ == \"$i\" ]; then\n            ((count++))\n        else\n            if [ \"\
+    $count\" -gt 1 ]; then\n                sorted=false\n                break\n\
+    \            fi\n            sorted=true\n            lastNumber=$i\n        \
+    \    count=1\n        fi\n    done\n    return $sorted", "  local n=$1\n  # If\
+    \ list is 1 word long, it isn't sorted\n  if [[ \"${#n}\" -eq 1 ]]; then\n   \
+    \ echo \"false\"\n  else\n    # Split the number string into an array and sort\
+    \ it.\n    # The -k option is used because the array is sorted, but we\n    #\
+    \ want the original order (-k prints the original order first)\n    local sorted=$(sort\
+    \ -k${#n} <<<\"${n}\")\n    local j=$((${#sorted} - 1))\n    while [[ ${sorted[0]}\
+    \ -eq ${sorted[j]} ]]; do\n      # If the first element of the sorted array is\
+    \ equal to the last\n      # element of the sorted array, then the list is sorted.\n\
+    \      # If not, then the list is not sorted.\n      if [[ \"${sorted[0]}\" -eq\
+    \ \"${sorted[j]}\" ]]; then\n        echo \"true\"\n        break\n      else\n\
+    \        echo \"false\"\n      fi\n      j=$((${j} - 1))\n    done\n  fi", "\t\
+    local line=`echo $1 | sed -e 's/ /\" \"/g' -e 's/$/ /g'`\n\tlocal sorted=`echo\
+    \ $line | tr \" \" \"\\n\" | sort -n | uniq`\n\tif [ \"x$sorted\" != \"x$line\"\
+    \ ]; then\n\t\treturn false\n\telse\n\t\treturn true\n\tfi", "    local list_name=\"\
+    $1\"\n    local sorted=false\n    local count=1\n    local number\n    local prev\n\
+    \    local output\n\n    list=($list_name)\n    length=${#list[@]}\n\n    if [\
+    \ $(echo $length | bc) -gt 1 ]; then\n        echo \"Error: cannot sort a list\
+    \ of more than 1 duplicate\"\n        return 1\n    fi\n    if [ $(echo $length\
+    \ | bc) -eq 0 ]; then\n        echo \"Error: list cannot be empty\"\n        return\
+    \ 1\n    fi\n    for number in \"${list[@]}\"; do\n        if [[ $(echo $number\
+    \ | bc) -gt $count ]]; then\n            sorted=true\n            break\n    \
+    \    fi\n    done\n\n    if $sorted; then\n        echo \"The list contains no\
+    \ duplicates\"\n        return 0\n    else\n        for number in \"${list[@]}\"\
+    ; do\n            if [[ $(echo $number | bc) -eq 1 ]]; then\n                sorted=true\n\
+    \                break\n            fi\n        done\n\n        if $sorted; then\n\
+    \            echo \"The list contains no duplicates\"\n            return 0\n\
+    \        else\n            echo \"The list contains duplicates\"\n           \
+    \ return 1\n        fi\n    fi", "    local list_to_check # a space-separated\
+    \ list that is passed to our function\n    local checking_var # a variable for\
+    \ our current check\n    local i # an iterator for our current position in the\
+    \ list we will be checking against, starts at zero\n\n    list_to_check=\"$1\"\
+    \n\n    # Iterate over the list\n    for i in $(seq 0 $((${#list_to_check} - 1)));\
+    \ do\n        # Check if the current element is the same as the variable checking_var\n\
+    \        if [[ $list_to_check = *\" $checking_var \"* ]]; then\n            #\
+    \ If the element is the same, we are not sorted\n            return false\n  \
+    \      fi\n        ((checking_var++))\n    done\n\n    # If we got here, we are\
+    \ sorted\n    return true", "    local sorted=0\n    local list=(\"$@\")\n   \
+    \ local i=0\n    local item\n    local tmp\n    while [ $i -lt ${#list} ]; do\n\
+    \        sorted=0\n        i=$(( i + 1 ))\n        item=\"${list[$i]}\"\n    \
+    \    tmp=\"$(sort \"$item\" <<< \"$item\")\"\n        if [[ $tmp == $item ]];\
+    \ then\n            sorted=1\n        fi\n    done\n    echo ((${sorted} == 0))",
+  "  local sorted_list=\"$1\"\n  local unique_nums=\"\"\n  for i in $(echo \"$sorted_list\"\
+    \ | sort -u)\n  do\n    unique_nums=\"$unique_nums $i\"\n  done\n  test -z \"\
+    $unique_nums\" && return 1 || return 0", "  local var\n  local arr=( $1 )\n  local\
+    \ len=${#arr[@]}\n\n  for (( i=0; i < len; i++ )); do\n    var=${arr[$i]}\n  \
+    \  [ $(( var < arr[$(( i+1 ))] )) -eq $(( 0 )) + $(( 1 )) ]\n  done", "  local\
+    \ list=\"$1\"\n  local sorted=0\n  local item\n\n  for item in $list; do\n   \
+    \ local i=$(( $sorted + 1 ))\n    while [[ $i -lt $sorted ]]; do\n      if [[\
+    \ $item -gt ${list[$i]} ]]; then\n        sorted=$i\n        break\n      fi\n\
+    \      i=$(( i + 1 ))\n    done\n  done\n  [[ $sorted -eq $# ]] && return 0\n\
+    \  return 1", "  local sorted=0\n  local items=\"\"\n  local i=1\n  while [ $i\
+    \ -le $# ]; do\n    if [ $(echo \"$1\" | grep -c \"^$i$\") -eq 1 ]; then\n   \
+    \   sorted=1\n      items=\"$items $1\"\n      i=$((i + 1))\n    else\n      items=\"\
+    $items $1\"\n      i=$((i + 1))\n    fi\n  done\n  if [ \"$sorted\" -eq 1 ]; then\n\
+    \    return 0\n  else\n    return 1\n  fi", "    declare -a sorted=();\n    declare\
+    \ -i i\n\n    for ((i=0; i<\"${#1[@]}\"; i++)); do\n        sorted+=( \"${1:$i:1}\"\
+    \ )\n    done\n    sorted=( \"${sorted[@]}\" )\n\n    if [[ ${#sorted[@]} -eq\
+    \ 1 ]]; then\n        echo true\n        return\n    fi\n\n    if [[ ${#sorted[@]}\
+    \ -gt 1 ]]; then\n        echo false\n        return\n    fi\n\n    echo true",
+  "  local numbers=\"$1\"\n\n  local sorted=false\n  local count=0\n\n  while read\
+    \ -r line; do\n    ((count++))\n    if [ \"$line\" == \"$numbers\" ]; then\n \
+    \     sorted=true\n      break\n    fi\n  done < <(sort -n \"$numbers\" | uniq\
+    \ -u) # use uniq to count dups\n\n  printf \"$sorted\"", "    local list_to_check=\"\
+    $1\"\n    local sorted_list_count\n    local list_item\n    local num_found\n\
+    \    local num_check\n    local duplicate\n    sorted_list_count=$(echo \"$list_to_check\"\
+    \ | awk '{print length($0)}')\n    num_found=$(echo \"$list_to_check\" | grep\
+    \ -c \"$list_to_check\")\n    if [[ $num_found -gt 0 ]]; then\n        return\
+    \ False\n    fi\n    num_check=$(echo \"$list_to_check\" | awk '{print $1}' |\
+    \ sort | uniq | wc -l)\n    if [[ $num_check -gt 0 ]]; then\n        return False\n\
+    \    fi\n    for list_item in $list_to_check\n    do\n        duplicate=$(echo\
+    \ \"$list_to_check\" | grep -F \"$list_item\" &> /dev/null | wc -l)\n        if\
+    \ [[ $duplicate -gt 0 ]]; then\n            return False\n        fi\n    done\n\
+    \    return True", "  [[ $1 =~ ^[0-9.]+$ ]] || return 1\n  declare -A seen=(\"\
+    \")\n  declare -i cnt=0\n  for i in $1;do\n    [[ -z ${seen[$i]} ]] && cnt=0\n\
+    \    ((cnt++))\n    seen[$i]=1\n  done\n  [[ $cnt -gt 1 ]] || return 0\n  return\
+    \ 1", "\tlocal sorted_list=$(sort -n \"$1\")\n\n\t[[ -z \"$sorted_list\" ]] ||\
+    \ return\n\n\tlocal sorted_list=($sorted_list)\n\tlocal last_num=\"$(head -1 <<<\"\
+    $sorted_list\")\"\n\tlocal i=0\n\n\twhile [ $i -lt ${#sorted_list[*]} ]; do\n\t\
+    \tif [[ \"${sorted_list[$i]}\" == \"$last_num\" ]]; then\n\t\t\t(( i++ ))\n\t\t\
+    else\n\t\t\tbreak\n\t\tfi\n\tdone\n\n\t[ \"$i\" -eq ${#sorted_list[*]} ]", " \
+    \ local arg\n  local count\n  local prev\n  local sorted\n\n  if (( ${#} != 1\
+    \ )); then\n    echo >&2 \"Usage: $(basename \"${BASH_SOURCE[0]}\") <list>\"\n\
+    \    return 1\n  fi\n\n  arg=\"${1}\"\n  shift\n\n  sorted=0\n  count=1\n  prev=${arg}\n\
+    \  while (( ${#} > 0 )); do\n    (( count++ ))\n    prev=${arg}\n    prev=\"${prev}\
+    \ ${prev}\"\n    arg=\"${prev}\"\n    (( ${sorted} ))\n  done\n  echo -n \"${sorted}\"\
+    \n  return 0", "\tlocal L=\"$1\"\n\tlocal N=\"${#L}\"\n\tlocal A=()\n\tlocal B=()\n\
+    \tlocal C=\"-1 -1\"\n\tlocal I=\"0\"\n\twhile [ \"${N}\" -gt \"${#A}\" ]; do\n\
+    \t\tlocal N=\"${N} - 1\"\n\t\tlocal I=\"${I} + 1\"\n\t\tif [ \"x${A[I]}x\" = \"\
+    x${L}x\" ]; then\n\t\t\techo \"true\"\n\t\t\treturn 0\n\t\tfi\n\t\tlocal P=${A[I]}\n\
+    \t\tlocal Q=${L}\n\t\twhile [ \"${N}\" -gt \"0\" ]; do\n\t\t\tlocal P=${P:0:1}\n\
+    \t\t\tlocal Q=${Q:0:1}\n\t\t\tif [ \"x${P}x\" = \"x${Q}x\" ]; then\n\t\t\t\tlocal\
+    \ J=\"${I}\"\n\t\t\t\tlocal K=\"${J}\"\n\t\t\t\twhile [ \"x${J}\" -lt \"${K}\"\
+    \ ]; do\n\t\t\t\t\tlocal J=\"${J} + 1\"\n\t\t\t\t\tlocal K=\"${K} - 1\"\n\t\t\t\
+    \tdone\n\t\t\t\tA[${J}]=\"${P}\"\n\t\t\t\tB[${J}]=\"${Q}\"\n\t\t\t\tC=${P}${C}\n\
+    \t\t\t\tI=${J}\n\t\t\t\tbreak\n\t\t\tfi\n\t\t\tlocal I=\"${I + 1}\"\n\t\tdone\n\
+    \tdone\n\tif [ \"${N}\" -eq \"0\" ]; then\n\t\techo \"true\"\n\t\treturn 0\n\t\
+    fi\n\techo \"false\"\n\treturn 1", "    local list=$1\n    local num_sorted=\n\
+    \    local num_unique=0\n\n    # Sort and uniq the list\n    echo \"$list\" |\
+    \ tr \" \" \"\\n\" | sort | uniq\n\n    # Find the number of unique numbers in\
+    \ sorted list\n    for var in $list; do\n        if [ \"$num_sorted\" == 0 ];\
+    \ then\n            num_sorted=\n        fi\n        if [ \"$var\" != \"$num_sorted\"\
+    \ ]; then\n            num_sorted=$var\n        fi\n        num_unique=$(( num_unique\
+    \ + 1 ))\n    done\n\n    # Check if all numbers in the list are unique\n    if\
+    \ [ \"$num_unique\" == \"$list\" ]; then return 1; fi\n\n    return 0", "    local\
+    \ list_array=($1)\n    echo \"${list_array[@]}\" | sort -n --stable", "\tlocal\
+    \ sorted_list=\"$1\"\n\tlocal num_unique_items=$(( ${sorted_list} | sort -u |\
+    \ wc -l ))\n\tif [ \"${num_unique_items}\" -gt 1 ]; then\n\t\treturn 1\n\tfi\n\
+    \treturn 0", "\tlocal i=1\n\tlocal last=$1\n\tlocal sorted=\"false\"\n\twhile\
+    \ [ \"$i\" -le \"$#\" ]\n\tdo\n\t\tlocal j=$((i+1))\n\t\tlocal tmp=\"$j $last\"\
+    \n\t\tif [ \"$tmp\" = \"$last\" ]\n\t\tthen\n\t\t\tsorted=\"true\"\n\t\telse\n\
+    \t\t\tlocal tmp2=$(( $(echo \"$j-$i\" | bc) ))\n\t\t\tif [ \"$tmp2\" = \"0\" ]\n\
+    \t\t\tthen\n\t\t\t\tsorted=\"true\"\n\t\t\telse\n\t\t\t\tsorted=\"false\"\n\t\t\
+    \t\tlast=$tmp\n\t\t\tfi\n\t\tfi\n\t\ti=$j\n\tdone\n\techo $sorted", "    local\
+    \ sorted_list=\"$(echo \"$1\" | tr ' ' ',' | sort -n | tr -d ',')\"\n    local\
+    \ unique_count=\"$(echo \"$sorted_list\" | uniq | wc -l)\"\n    if [[ \"$unique_count\"\
+    \ -gt 1 ]]; then\n        return \"false\"\n    else\n        return \"true\"\n\
+    \    fi", "    local list=\"$1\"\n    local count\n    local value\n    local\
+    \ i\n    local sorted=true\n    local tmp\n    IFS=$'\\n' read -r line || exit\
+    \ 1\n    for ((i = 0; i < ${#list}; i++)); do\n        value=${line[i]}\n    \
+    \    if ((count <= 1)); then\n            if ((${value} >= ${list[i - 1]})); then\n\
+    \                sorted=false\n                break\n            fi\n       \
+    \ fi\n        tmp=${list[i - 1]}\n        count=${tmp}\n        list=$(echo $list\
+    \ | sed -e 's/'$value'/ /g')\n        if ((count > 1)); then\n            sorted=false\n\
+    \            break\n        fi\n    done\n    echo \"$sorted\"", "  if [ \"$#\"\
+    \ -lt 1 ]; then\n    echo \"is_sorted: expected 1 argument\"\n    echo \"is_sorted:\
+    \ usage: $(basename $0) <space-separated list>\"\n    return 1\n  fi\n\n  # This\
+    \ awk is from http://en.wikipedia.org/wiki/Schwartzian_transform\n  # Awesome\
+    \ thanks to Dan Davidson for this algorithm.\n\n  local i j k k2 i k1 k2 j\n\n\
+    \  # count the number of times each item appears in input\n  for i in $@; do\n\
+    \    (( k[$i]++ ))\n  done\n\n  # build k1, k2, the running totals of number of\
+    \ times each item appears\n  for i in $@; do\n    (( k1[i] ))\n    (( k2[i] ))\n\
+    \  done\n\n  # sort from greatest to least\n  k1=$(for i in $@; do echo $((k1[i-1]+k[$i])));\
+    \ done)\n  k2=$(for i in $@; do echo $((k2[i-1]+1))); done)\n\n  # return true\
+    \ if k1 is sorted\n  [ $k1 -le $k2 ]", "    local -n arr=$1\n    local i i2 count\
+    \ first_value prev_value\n    # Count the number of occurrences of each number\n\
+    \    for i=1; i<=$#; do\n        count=$(echo \"$arr[$i]\" | tr ' ' '\\n' | sort\
+    \ | uniq -c | wc -l)\n        if (( count>1 )); then\n            # More than\
+    \ 1 occurrences, it's not sorted\n            return false\n        fi\n     \
+    \   first_value=$(echo \"$arr[$i]\" | tr ' ' '\\n' | sort | head -1)\n       \
+    \ prev_value=$(echo \"$arr[$((i-1))]\" | tr ' ' '\\n' | sort | head -1)\n    \
+    \    if [[ \"$first_value\" -gt \"$prev_value\" ]]; then\n            # More than\
+    \ 1 occurrences of the same number, it's not sorted\n            return false\n\
+    \        fi\n    done\n    # All checks passed, return true\n    return true",
+  "    # Check for empty input\n    [[ ! \"$1\" ]] && return 1\n    # Convert input\
+    \ to array\n    read -a nums < <( echo \"$1\" )\n    # Check for duplicate entries\n\
+    \    [[ ${#nums[@]} -eq 1 ]] || return 1\n    # Compare arrays\n    [[ ${nums[0]}\
+    \ -gt ${nums[1]} ]] || return 0\n    return 1", "    local IFS=' '\n    local\
+    \ n\n    for n in \"$@\"; do\n\t(( n > 0 ))\n\tif [ \"$n\" -lt \"$sorted\" ];\
+    \ then\n\t    return 0\n\tfi\n    done\n    return 1", "  if [ -z \"$1\" ] ||\
+    \ [ \"$1\" = \"--help\" ]; then\n    echo \"Checks whether a list is sorted in\
+    \ ascending order.\"\n    echo \"Usage: $0 LIST [...]\"\n    exit 1\n  fi\n  uniq\
+    \ --check-order \"$@\" || exit 1", "  # If list is empty, return true\n  [[ -z\
+    \ \"$1\" ]] && return 0\n\n  local n=$1\n  [[ \"$n\" =~ ^[0-9]+$ ]] && n=\"$(echo\
+    \ \"$n\" | sed 's/ /+/g')\"\n  [[ -z \"$n\" ]] && return 1\n\n  # Count how many\
+    \ of the same number are in the list\n  local c=0\n  local n=\"$n\"\n  while [[\
+    \ \"$n\" =~ (^[0-9]+)\\1$ ]]; do\n    ((c++))\n    n=\"$(echo \"$n\" | sed 's/^\\\
+    ([0-9][0-9]*\\)$/\\1/')\"\n  done\n\n  # If the count is equal to or more than\
+    \ 1, return false\n  [[ ${c} -gt 1 ]] && return 0\n\n  # If the list is sorted\n\
+    \  [[ \"$n\" = \"$n\" ]]", "    local IFS=\" $\"\n    local a b c d last\n   \
+    \ local sorted=$1\n    if ! echo ${sorted} | grep -q ^$1; then\n        echo \"\
+    $1 is NOT sorted\"\n        echo \"$sorted\"\n        return 1\n    fi\n    for\
+    \ b in $(seq 1 $((${#sorted}-1))); do\n        d=$(echo $sorted | sed -n \"${b}p\"\
+    )\n        a=$(echo $sorted | sed -n \"1~${b}p\")\n        c=$(echo $sorted |\
+    \ sed -n \"${b}~1p\")\n        if [[ ${sorted} == *\"($d $a $c)\"* ]]; then\n\
+    \            # Duplicates found, can't sort\n            echo \"$1 is NOT sorted\"\
+    \n            echo \"$sorted\"\n            return 1\n        fi\n    done\n \
+    \   last=$(echo $sorted | tail -1)\n    if [[ ${sorted} == *\"($last $a $c)\"\
+    * ]]; then\n        # Duplicates found, can't sort\n        echo \"$1 is NOT sorted\"\
+    \n        echo \"$sorted\"\n        return 1\n    fi\n    return 0", "  if [[\
+    \ ${#$1} -eq 1 ]]; then\n    local sorted\n    sorted=(\"${!1}\")\n    local i=0\n\
+    \    local j=0\n    local unique\n    while (( i < ${#sorted[@]} )) || (( j <\
+    \ ${#sorted[@]} ))) {\n      unique=0\n      (( j == ${#sorted[@]} )) || return\
+    \ 1\n      if [[ ${sorted[j]} == ${sorted[i]} ]]; then\n        (( ++unique ))\n\
+    \      else\n        return\n      fi\n      (( ++i ))\n      (( j++ ))\n    }\n\
+    \    (( unique == ${#sorted[@]} )) && return 1\n  else\n    return\n  fi", " \
+    \ local i=1\n  local sorted=\"yes\"\n  while [[ \"$1\" =~ (\\([0-9]*\\)) ]]; do\n\
+    \    sorted=\"$(expr $(sort -n$1 <<<\"$1\") + 0)\"\n    i=$((i + 1))\n  done\n\
+    \  [[ \"$sorted\" = \"$1\" ]] && return 0\n  return 1", "    local numbers=$1\n\
+    \    local sortedNumbers=$2\n    local count=0\n    for i in $numbers ; do\n \
+    \       ((count++))\n    done\n    for i in $numbers ; do\n        for j in $numbers\
+    \ ; do\n            ((count--))\n            if [ $i == \"$j\" ] && [ $count -eq\
+    \ 0 ] ; then\n                sortedNumbers=$sortedNumbers \"$i\"\n          \
+    \      break\n            fi\n        done\n    done\n    if [ \"$sortedNumbers\"\
+    \ != \"$numbers\" ] ; then\n        return 0\n    else\n        return 1\n   \
+    \ fi", '  sort -g <<<"$1"', "\tlocal a b\n\tlocal -i i\n\ta=${1// /}\n\ta=( \"\
+    ${a//,/ }\" )\n\tfor (( i=1; i<${#a[@]}; i++ )); do\n\t\tfor (( j=0; j<${#a[@]};\
+    \ j++ )); do\n\t\t\tb=${b// /}\n\t\t\tif [ \"$i\" -eq \"$j\" ]; then\n\t\t\t\t\
+    b=\"$b$i\"\n\t\t\telse\n\t\t\t\tb=\"$b$j\"\n\t\t\t\tbreak\n\t\t\tfi\n\t\tdone\n\
+    \t\tb=${b// /}\n\t\tif [ \"$b\" -ge \"$a\" ] && [ \"$b\" -lt \"$a\" ]; then\n\t\
+    \t\tbreak\n\t\tfi\n\tdone\n\t[ \"$b\" -ge \"$a\" ] && [ \"$b\" -lt \"$a\"]", " \
+    \ local sorted=${1}\n  local unique_nums=()\n  local n\n  local i\n\n  for i in\
+    \ $(seq 1 ${#sorted}); do\n    unique_nums+=(${sorted:$i:1})\n  done\n\n  if [\
+    \ ${#unique_nums} -gt 1 ]; then\n    echo \"false\"\n    return 1\n  fi\n\n  local\
+    \ j\n  for j in $(seq 0 $((${#unique_nums}-1)) );\n  do\n    local k=${unique_nums[j]}\n\
+    \    unique_nums[j]=${unique_nums[j+1]}\n    unique_nums[j+1]=$k\n  done\n\n \
+    \ local i=${#unique_nums}-1\n  while [ $i -ge 1 ]; do\n    if [[ ${unique_nums[i]}\
+    \ == ${unique_nums[i - 1]} ]]; then\n      echo \"false\"\n      return 1\n  \
+    \  fi\n    i=$(( i - 1 ))\n  done\n\n  echo \"true\"\n  return 0", "\tlocal sorted=\"\
+    $(sort -n -k 1 \"$@\")\"\n\t[[ \"$sorted\" == \"\" ]] && return 1 || return 0",
+  "  # check if list has more than 1 duplicate\n  local numbers=$1\n  echo \"$numbers\"\
+    \ | tr ' ' ',' | sort -u | grep -q \"$numbers\"", "    local num_sorted=false\n\
+    \    local num_non_sorted=0\n    local i=0 j=0\n    local array=($*)\n    while\
+    \ [ $i -lt ${#array[@]} ]; do\n        local element=${array[$i]}\n        if\
+    \ [ $element -gt $((${#array[@]} - ${i})) ]; then\n            num_non_sorted=$((num_non_sort\
+    \ + 1))\n        fi\n        if [ $element -eq $i ]; then\n            num_sorted=true\n\
+    \        fi\n        ((i+=1))\n    done\n    if [ $num_non_sorted -eq 0 ]; then\n\
+    \        echo $num_sorted\n    else\n        echo $num_non_sorted\n    fi", " \
+    \   local input=\"$1\"\n    local lines=$(echo \"${input}\" | tr ' ' '\\n' | sort\
+    \ -n | wc -l)\n    local uniques=$(echo \"${input}\" | tr ' ' '\\n' | sort -n\
+    \ | uniq | wc -l)\n    ((${uniques} > 1))", "\tlist=\"$1\"\n\tlistSize=`echo $list\
+    \ | wc -w`\n\tlistSize=$((listSize-1))\n\tuniqSize=`echo $list | sort | uniq |\
+    \ wc -w`\n\tuniqSize=$((uniqSize-1))\n\t\n\tif [ \"$listSize\" -lt \"$uniqSize\"\
+    \ ]; then\n\t\treturn \"true\"\n\telse\n\t\treturn \"false\"\n\tfi", "\tlocal\
+    \ arr=( \"$@\" )\n\tlocal num_seen=()\n\tlocal sorted=\"false\"\n\tlocal num\n\
+    \n\tfor num in \"${arr[@]}\"; do\n\t\t((num_seen[$num]))\n\tdone\n\tfor num in\
+    \ \"${arr[@]}\"; do\n\t\tif (( ${num_seen[$num]} )) && \\\n\t\t\t(( \"${num}\"\
+    \ > \"${num_seen[$num]}\" )) ; then\n\t\t\tsorted=\"true\"\n\t\t\tbreak\n\t\t\
+    fi\n\tdone\n\techo \"$sorted\"", "    local i\n    local len=${#1}\n    local\
+    \ list=$1\n\n    if [ $len -gt 1 ]\n    then\n        for ((i = 1; i < len; i++))\n\
+    \        do\n            local value\n            value=${list[i]}\n         \
+    \   for ((j = i - 1; j >= 0; j--))\n            do\n                local prev=${list[j]}\n\
+    \                if [ \"$value\" = \"$prev\" ]\n                then\n       \
+    \             return 0\n                fi\n            done\n        done\n \
+    \       return 1\n    fi\n    return 0", "    local IFS=\" \" set -- \"$1\"\n\
+    \    local -i n=0\n    local sorted\n    for sorted; do\n        ((n++))\n   \
+    \     if [[ ${sorted} -gt ${sorted} ]]; then\n            return 1\n        fi\n\
+    \    done\n    return 0", "    local input=\"$1\"\n    local sorted=\"1\"\n  \
+    \  local x\n    local i\n\n    for x in $input; do\n        if [ $sorted -eq 1\
+    \ ] && [ \"$x\" == \"$x\" ];then\n            sorted=\"0\"\n        elif [ \"\
+    $x\" == \"$x\" ];then\n            sorted=\"1\"\n        else\n            sorted=\"\
+    1\"\n        fi\n    done\n    echo \"$sorted\"", "    local numbers=$1\n    local\
+    \ sorted=1\n    local numbers_size=$((${#numbers} / 2))\n    local first_number=$numbers\n\
+    \    local last_number=$(( ${#numbers} - 1 ))\n    local first_number_size=$((\
+    \ ${#first_number} ))\n    local last_number_size=$(( ${#last_number} ))\n   \
+    \ while [[ $sorted -eq 1 ]]; do\n        local i=0\n        local number=$(( ${#numbers}\
+    \ / 2 ))\n        while [[ $i -lt $numbers_size ]]; do\n            local j=$((\
+    \ ${#first_number} ))\n            while [[ $j -lt $first_number_size ]]; do\n\
+    \                local k=$(( ${#last_number} ))\n                while [[ $k -lt\
+    \ $last_number_size ]]; do\n                    if [[ ${first_number[$i]} -gt\
+    \ ${last_number[$k]} ]]; then\n                        sorted=0\n            \
+    \            echo \"true\"\n                        break\n                  \
+    \  else\n                        k=$(( ${#last_number} ))\n                  \
+    \  fi\n                done\n                j=$(( ${#first_number} ))\n     \
+    \       done\n            i=$(( ${#numbers} / 2 ))\n        done\n        first_number=$((\
+    \ ${#first_number} + 1 ))\n        last_number=$(( ${#last_number} - 1 ))\n  \
+    \      first_number_size=$(( ${#first_number} ))\n        last_number_size=$((\
+    \ ${#last_number} ))\n    done\n    echo \"false\"", "  local list=\"$1\"\n  #\
+    \ echo \"$list\" | tr ' ' '\\n' | sort -n | uniq\n  echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | uniq -c", "  # convert argument to array\n  local IFS=\" \"\n \
+    \ local array=$1\n  # sort array\n  sort -u <<<\"$array\"\n  # check if array\
+    \ has duplicate numbers\n  [[ ${#array[@]} -gt 1 ]] || return 1\n  # if array\
+    \ contains only 1 unique number, return true\n  [[ ${array[0]} -eq ${array[1]}\
+    \ ]] || return 0", "  declare -i num_list=$((${#1}-1))\n  if [[ ${#1} -eq 0 ]];\
+    \ then\n    echo \"true\"\n    return 0\n  fi\n  declare -a array\n  declare -i\
+    \ num_unique\n  array=($(sort <<<${1} | uniq | sort -n))\n  num_unique=(\"${#array[@]}\"\
+    )\n  for (( i=0; i < num_list; i++ )); do\n    if [[ \"${array[i+1]}\" != \"${array[i]}\"\
+    \ ]]; then\n      echo \"false\"\n      return 1\n    fi\n  done\n  echo \"true\"\
+    \n  return 0", "    local list=$1\n    local sorted #=false\n    for number in\
+    \ $list; do\n        ((sorted=$list==$number))\n    done\n    return $sorted",
+  "    local arr=( \"${@}\" )\n    local i\n    for i in \"${!arr[@]}\"; do\n    \
+    \    [[ \"${arr[i]}\" -ge \"${arr[i+1]}\" ]] || return 0\n    done\n    return\
+    \ 1", "\tlocal list=\"$1\"\n\tlocal count=$(echo \"$list\" | tr ' ' ',' | sort\
+    \ | uniq | wc -w)\n\t[ \"$count\" -eq \"$list\" ] && return 1 || return 0", " \
+    \ local list=\"$1\"\n  local dups=0\n  local last=${list[0]}\n  local sorted=false\n\
+    \  local i\n  for ((i=0; i < ${#list}-1; i++)); do\n    [ \"${list[i]}\" -gt \"\
+    ${list[i+1]}\" ] && return 0\n  done\n  for ((i=0; i < ${#list}; i++)); do\n \
+    \   [ \"${list[i]}\" == \"$last\" ] && return 0\n    dups=$((dups+1)) && continue\n\
+    \    [ \"${list[i]}\" -eq \"${list[i+1]}\" ] && return 1\n    sorted=true && break\n\
+    \  done\n  return \"$sorted\" || return 0", "    local tmplist=\"${1}\"\n    #\
+    \ First split $tmplist on spaces and remove spaces\n    local sorted_list=(${tmplist//[[:space:]]/})\n\
+    \    local sorted=\"null\"\n    # Iterate through the sorted list and see if it\
+    \ matches the input\n    # list until there are no more matches.\n    local match=0\n\
+    \    for element in \"${sorted_list[@]}\"; do\n        if [ \"$element\" == \"\
+    $tmplist\" ]; then\n            # No more matches\n            match=0\n     \
+    \       break\n        fi\n        if [ \"$element\" > \"$tmplist\" ]; then\n\
+    \            # Element is greater\n            sorted=\"greater\"\n          \
+    \  break\n        fi\n        if [ \"$element\" < \"$tmplist\" ]; then\n     \
+    \       # Element is smaller\n            sorted=\"smaller\"\n            break\n\
+    \        fi\n        (( match+=1 ))\n    done\n    # Return true or false depending\
+    \ on whether the list has more than\n    # one match of the same number\n    if\
+    \ [ \"$match\" -gt 1 ]; then\n        return true\n    else\n        return false\n\
+    \    fi", "  local numlist=\"$1\"\n  local i\n  local num_count\n  local curr\n\
+    \  local prev\n  local flag=false\n  local curr_count\n\n  # Sort the list numerically\n\
+    \  printf -v sorted_list \"%q \" \"${numlist}\"\n  IFS=' ' sorted_list=( $(sort\
+    \ -n ${sorted_list}))\n\n  # If there are more than 1 duplicate numbers in the\
+    \ list, return false\n  num_count=$(echo \"${sorted_list[*]}\" | sort -k 1,1 -k\
+    \ 2,2 | uniq -u | wc -c)\n  if [[ $num_count -gt 1 ]]; then\n    return 0\n  else\n\
+    \    # Look through every item and compare it to the previous one\n    prev=\"\
+    ${sorted_list[1]}\"\n    curr_count=1\n    for i in \"${sorted_list[@]:2}\"; do\n\
+    \      curr=\"${i}\"\n      if [[ $curr -gt $prev ]]; then\n        flag=true\n\
+    \        break\n      fi\n      prev=$curr\n      curr_count=$((curr_count+1))\n\
+    \    done\n  fi\n\n  if [[ $flag -eq false ]]; then\n    return 1\n  else\n  \
+    \  return 0\n  fi", "    local line\n    local n\n    local found\n    local dup\
+    \ num\n    local sorted\n\n    read -r -a arr <<< \"$1\"\n\n    # Check for duplicate\
+    \ numbers and exit early if found\n    found=0\n    for ((i=0; i < ${#arr[@]};\
+    \ i++)); do\n        dup=0\n        num=${arr[i]}\n        for ((j=0; j < i; j++));\
+    \ do\n            if [[ $num == ${arr[j]} ]]; then\n                dup=1\n  \
+    \              break\n            fi\n        done\n        if [[ $found -eq 0\
+    \ ]]; then\n            if [[ $dup -eq 1 ]]; then\n                found=1\n \
+    \           fi\n        fi\n    done\n\n    # Check for sorted case\n    if [[\
+    \ $found -eq 0 ]]; then\n        sorted=1\n        for ((i=0; i < ${#arr[@]};\
+    \ i++)); do\n            if [[ ${arr[i]} -gt ${arr[i+1]} ]]; then\n          \
+    \      sorted=0\n                break\n            fi\n        done\n    fi\n\
+    \    echo \"$sorted\"", "  local list=$1; shift\n  local sorted_list\n  local\
+    \ i\n  sorted_list=$(sort $list)\n  for ((i=1; i<${#sorted_list}; i++)) ; do\n\
+    \    if [[ ${sorted_list[$i]} -gt ${sorted_list[$((i-1))]} ]] ; then\n      echo\
+    \ \"false\"\n      return 1\n    fi\n  done\n  echo \"true\"\n  return 0", " \
+    \ local numbers=$@\n  local length=${#numbers}\n  local sorted=0\n  local i\n\
+    \  for (( i = 0; i < length-1; i++ )); do\n    if [[ ${numbers[i]} -gt ${numbers[i+1]}\
+    \ ]]; then\n      sorted=true\n      break\n    fi\n  done\n  if [[ $sorted ==\
+    \ 1 ]]; then\n    return 0\n  else\n    return 1\n  fi", "    local item\n   \
+    \ local items=$1\n    local last\n    local sorted_items=${items:+${items}}\n\
+    \    local duplicates=\"\"\n    local sorted\n    local i\n    local count\n\n\
+    \    for i in \"${sorted_items:-$sorted_items[-1]}\"; do\n        [[ -z $i ]]\
+    \ && continue\n        [[ -z $duplicates ]] && [[ \"$sorted_items\" = \"$i $i\
+    \ $sorted_items\" ]] ||\n            ((duplicates=$duplicates$i)\n        done\n\
+    \    last=${sorted_items:-$sorted_items[-1]}\n    sorted=true\n    for i in \"\
+    ${sorted_items:-$last}\"; do\n        [[ -z $i ]] && continue\n        [[ \"$i\"\
+    \ != \"$last\" ]] && sorted ||\n            ((count=$count+1))\n    done\n   \
+    \ [[ -z $sorted ]] && return 0\n    ((count <= 1)) && return 1\n    return 0",
+  "    declare -i i\n    for ((i = 0; i < ${#1}; i++)); do\n        if [[ ${#1} -eq\
+    \ 1 ]]; then\n            [[ \"${1}\" -eq \"${1}\" ]] && return 1\n        elif\
+    \ [[ ${#1} == 1 ]]; then\n            [[ \"${1}\" -gt \"${1}\" ]] && return 1\n\
+    \        fi\n    done\n    return 0", "\tlocal numbers=( \"$1\" )\n\t# Sort the\
+    \ numbers and compare the first and last\n\tlocal i prev dups\n\tprintf \"is_sorted:\
+    \ numbers = %s\\n\" \"${numbers[@]}\"\n\t# Sort $numbers and remove duplicates\n\
+    \tIFS=$'\\n' read -r -d '' -a numbers <<<\"${numbers[@]}\" | sort | uniq -d\n\t\
+    # Return false if there are duplicate numbers, true if no duplicates\n\t# or if\
+    \ there are duplicates\n\t[[ ${#numbers[@]} -gt 1 ]] && return 0 || return 1",
+  "    # $1 is space separated list of numbers\n    local sorted=\n    local -i i\n\
+    \n    # Split $1 into array and sort it\n    sorted=($(echo \"$1\" | tr ' ' '\
+    \ '))\n    sort <<< \"${sorted[@]}\"\n    for i in \"${sorted[@]}\"; do\n    \
+    \    if [ \"$i\" == \"$1\" ]; then \n            false\n            break\n  \
+    \      elif [ \"$i\" > \"$1\" ]; then\n            false\n            break\n\
+    \        fi\n    done\n    true", "    local sorted=0\n    local line=\n    for\
+    \ number in \"$@\"; do\n        if [ \"$sorted\" -eq 1 ]; then\n            echo\
+    \ \"false\"\n            return\n        fi\n        if [ \"$number\" -gt \"$sorted_number\"\
+    \ ]; then\n            sorted=1\n        fi\n        line=\"$line $number\"\n\
+    \    done\n    echo -n \"$line\"\n    echo \"true\"", "  if [ \"$#\" -lt 2 ];\
+    \ then\n    echo \"Usage: $(basename $0) [number]\" >&2\n    echo \"e.g. $(basename\
+    \ $0) 5\" >&2\n    echo \"e.g. $(basename $0) 1 2 3 4 5\" >&2\n    exit 1\n  fi\n\
+    \  local arr=( $1 )\n  local prev=$2 || 0\n  for (( i=1; i<${#arr[@]}; i++ ));\
+    \ do\n    (( arr[$i] > arr[$prev] )) && return 0\n    (( arr[$i] < arr[$prev]\
+    \ )) && return 1\n    prev=$i\n  done\n  return 1", "  local sorted_list=\"${@}\"\
+    \n\n  if [[ ${#sorted_list} -eq 1 ]]; then\n    local sorted_list=\"${sorted_list}\
+    \ \"\n  fi\n\n  echo \"${sorted_list}\" | sort -n | uniq -c | grep -q \"^1 \"\
+    \ && echo \"true\" || echo \"false\"", "    local n=\"$1\"\n    local i j temp\n\
+    \    local sorted=\"false\"\n    # check if list contains only unique elements\n\
+    \    for i in \"$n\"; do\n        local count=0\n        for j in \"$n\"; do\n\
+    \            if [ \"$i\" == \"$j\" ]; then count=$((count+1)); else break; fi\n\
+    \        done\n        if [ \"$count\" -gt 1 ]; then sorted=\"false\"; break;\
+    \ fi\n    done\n    echo \"$sorted\"", "  local sorted_list=$(sort -n \"$1\")\
+    \ || return 1\n  [ \"$sorted_list\" = \"$1\" ] && return 0\n  echo \"false\"",
+  "  local l\n  l=\"$1\"\n  local i k tmp\n  k=1\n  while [ $l ]; do\n    [ ! \"$l\"\
+    \ == \"$k\" ] && tmp=\"$(echo $l | sed -n \"${k}p\")\"\n    i=$(echo $l | sed\
+    \ -n \"${k}q;p\")\n    [ \"$i\" == \"$l\" ] && [ -n \"$tmp\" ] && echo \"false\"\
+    \n    [ \"$i\" == \"$tmp\" ] && echo \"true\"\n    k=$((k+1))\n    shift\n  done",
+  "  local _all_numbers=$1\n  echo \"$(_is_sorted \"$_all_numbers\").\"", "    local\
+    \ -r line=$1\n    local -r ncount=$(echo \"$line\" |grep -c \"^[0-9]+$\")\n  \
+    \  local -r nitems=$(echo \"$line\" |grep -c \"^[0-9][0-9]*$\")\n\n    # ncount\
+    \ and nitems are always positive\n    if (( ncount > 0 && nitems > 0 ))\n    then\n\
+    \        local -r nlist=\"$2\"\n        local -r is_sorted=\"false\"\n       \
+    \ # First check to see if list has duplicates\n        for (( i=0; i < ${#nlist[@]};\
+    \ i++ ))\n        do\n            local -r line=$(echo \"${nlist}\" |cut -d' '\
+    \ -f${i})\n            if [[ \"$line\" == \"${nlist[$i]}\" ]]\n            then\n\
+    \                is_sorted=\"true\"\n                break\n            fi\n \
+    \       done\n        # Second check to see if list has unsorted duplicates\n\
+    \        if [[ \"$is_sorted\" == \"false\" ]]\n        then\n            for ((\
+    \ i=0; i < ${#nlist[@]}; i++ ))\n            do\n                local -r line=$(echo\
+    \ \"${nlist}\" |cut -d' ' -f${i})\n                if [[ \"$line\" != \"${nlist[$i]}\"\
+    \ ]]\n                then\n                    is_sorted=\"true\"\n         \
+    \           break\n                fi\n            done\n        fi\n        echo\
+    \ \"$is_sorted\"\n    else\n        echo \"false\"\n    fi", "\tlocal sorted_list=\"\
+    $1\"\n\tlocal sorted_list_length=`echo $sorted_list | wc -w`\n\tlocal sorted_list_count=1\n\
+    \tlocal sorted_list_elements=\"\"\n\tlocal sorted_list_elements_count=$(echo $sorted_list\
+    \ | tr ' ' '\\n' | sort | wc -l)\n\tlocal sorted_list_elements_number=0\n\tlocal\
+    \ sorted_list_elements_number_in_sorted_list=0\n\tlocal sorted_list_elements_number_temp=0\n\
+    \tlocal sorted_list_elements_number_last\n\tlocal sorted_list_elements_number_temp\n\
+    \tlocal sorted_list_elements_number_last\n\tfor element in $sorted_list; do\n\t\
+    \tif [ \"$sorted_list_elements_number\" -eq \"$sorted_list_count\" ]; then\n\t\
+    \t\tsorted_list_elements=\"$sorted_list_elements $element\"\n\t\t\tsorted_list_elements_number_in_sorted_list=\"\
+    $sorted_list_elements_number_in_sorted_list $sorted_list_elements_number\"\n\t\
+    \t\tsorted_list_elements_number_temp=$sorted_list_elements_number\n\t\t\tsorted_list_elements_number_last=`expr\
+    \ $sorted_list_elements_number_temp + 1`\n\t\telse\n\t\t\tif [ \"$sorted_list_elements_number_in_sorted_list\"\
+    \ -gt \"$sorted_list_count\" ]; then\n\t\t\t\tsorted_list_elements=\"$sorted_list_elements\
+    \ $sorted_list_elements_number_last\"\n\t\t\t\tsorted_list_elements_number_in_sorted_list=\"\
+    $sorted_list_elements_number_in_sorted_list $sorted_list_elements_number_last\"\
+    \n\t\t\t\tsorted_list_elements_number_temp=$sorted_list_elements_number\n\t\t\t\
+    \tsorted_list_elements_number_last=`expr $sorted_list_elements_number_temp + 1`\n\
+    \t\t\telse\n\t\t\t\tsorted_list_elements=\"$sorted_list_elements $sorted_list_elements_number\"\
+    \n\t\t\t\tsorted_list_elements_number_in_sorted_list=\"$sorted_list_elements_number_in_sorted_list\
+    \ $sorted_list_elements_number\"\n\t\t\t\tsorted_list_elements_number_temp=$sorted_list_elements_number\n\
+    \t\t\t\tsorted_list_elements_number_last=`expr $sorted_list_elements_number_temp\
+    \ + 1`\n\t\t\tfi\n\t\tfi\n\t\tsorted_list_count=$(( $sorted_list_count + 1 ))\n\
+    \t\tsorted_list_elements_number=$(( $sorted_list_elements_number + 1 ))\n\tdone\n\
+    \t[ \"$sorted_list_elements_number\" -eq \"$sorted_list_length\" ] && return 0\n\
+    \t[ \"$sorted_list_elements_number\" -eq \"$sorted_list_count\" ] && return 1",
+  "  local nums=\"${@#*=} \"\n  local sorted=\"false\"\n  local n=0\n  for i in $nums;\
+    \ do\n    ((n++))\n    [[ \"$i\" -gt \"$sorted\" ]] && sorted=\"true\" || sorted=\"\
+    false\"\n  done\n  [ \"$n\" == \"${#nums}\" ] && echo \"true\" || echo \"false\"",
+  "    # Return true or false to indicate whether list is sorted or not.\n    # Each\
+    \ element in list is treated as one distinct number.\n    # For example, if there\
+    \ are 2 2s, each number is treated as\n    # 2 distinct numbers.\n    #\n    #\
+    \ $1 is the list to be sorted\n    for ((i=1; i<=$#;i++)); do\n        if [[ ${list[$i]}\
+    \ -le ${list[$((i-1))]} ]]; then\n            echo \"false\"\n            return\
+    \ 1\n        fi\n    done\n    echo \"true\"\n    return 0", "    local list_1=\"\
+    $1\"\n    local num_1=\"${list_1// }\" # remove spaces and replace with nothing\n\
+    \    # use sort to get a sorted list of numbers (remove duplicates)\n    local\
+    \ list_2=\"$(echo \"$num_1\" | sort | uniq -u)\"\n    local num_2=\"${list_2//\
+    \ }\" # remove spaces and replace with nothing\n    # check to see if the list\
+    \ was sorted\n    [ \"$num_1\" -eq \"$num_2\" ] || return 1\n    return 0", " \
+    \   # Check if $1 is a space-separated list and not empty.\n    # Return false\
+    \ if $1 isn't a space-separated list or empty.\n    if [[ $1 =~ (^| )(.*)($ )$\
+    \ ]]; then\n      local string=\"$1 $2\"\n      local sorted=()\n      local i=1\n\
+    \      while [[ $i -le $((${#string}-1)) ]]; do\n          # Remove trailing space\
+    \ from string\n          local element=${string[${i}]}\n          local rest=${string[${i}+1:]}\n\
+    \          # Remove trailing space from rest\n          local rest_element=${rest[${#rest}-1]}\n\
+    \          # Remove trailing space from element\n          local element_element=${element[${#element}-1]}\n\
+    \          # Check if element is the same and in sorted position\n          if\
+    \ [[ $element -eq $rest_element ]]; then\n              local sorted_pos=\"${sorted_pos[@]}\"\
+    \n              # Check position already in sorted position\n              if\
+    \ [[ -z ${sorted_pos[@]} || ${sorted_pos[$((${#sorted_pos[@]}-1))]} -eq $i ]];\
+    \ then\n                  sorted+=(\"$element_element\")\n              fi\n \
+    \             # Remove element from sorted list\n              local sorted_pos+=(\"\
+    $i\")\n              # Increment i to iterate through remaining elements\n   \
+    \           (( i++ ))\n          else\n              # Increment i to iterate\
+    \ through remaining elements\n              (( i++ ))\n          fi\n      done\n\
+    \      # Sort array by ascending values\n      local sorted_pos=(${sorted_pos[@]})\n\
+    \      local sorted_pos2=(${sorted_pos[@]})\n      for i in $(seq 0 $((${#sorted_pos[@]}-1)));\
+    \ do\n          local j=$((${#sorted_pos[@]} - 1))\n          while (( ${j} >=\
+    \ 0 )); do\n              # Check position is smaller than the one before it\n\
+    \              if (( ${sorted_pos2[$j]} > ${sorted_pos2[$((j - 1))]} )); then\n\
+    \                  # Remove element at position (j) from sorted position\n   \
+    \               local sorted_pos2[$j]=\"${sorted_pos2[$((j - 1))]}\"\n       \
+    \           local sorted_pos2[$((j - 1))]=\"${sorted_pos2[$j]}\"\n           \
+    \       # Remove element at position (j) from sorted position\n              \
+    \    local sorted_pos2[$j]=\"${sorted_pos2[$((j - 1))]}\"\n              fi\n\
+    \              # Check position is smaller than the one before it\n          \
+    \    if (( ${sorted_pos[$j]} > ${sorted_pos[", "    # check if list is empty\n\
+    \    if [[ ! -z \"$1\" ]]; then\n        # check if the list contains multiple\
+    \ of the same number\n        if [[ $(echo $1 | tr ' ' '+' | sort | uniq | wc\
+    \ -l) -gt 1 ]]; then\n            return false\n        fi\n        # sort the\
+    \ list\n        echo $(echo $1 | tr ' ' '+' | sort -n)\n    else\n        echo\
+    \ \"Error: is_sorted requires list argument\"\n    fi", "    local list=\"${1}\"\
+    \n    # Don't sort the empty list\n    [ ! -z \"$list\" ] && echo \"${list}\"\
+    \ | sort -n -k 1 > /dev/null\n    return $?", "    local -a arr\n    local n\n\
+    \    local -a seen\n    local first\n    local sorted\n\n    # Split $1 into an\
+    \ array on whitespace\n    IFS=' ' read -r -a arr <<<\"$1\"\n\n    # Sort the\
+    \ array to make sure we test every possible permutation\n    # of list\n    local\
+    \ -a sorted=($(sort <<<\"${arr[*]}\"))\n    local c\n    for ((i=0; i<${#sorted[@]};\
+    \ i++)); do\n        if (( sorted[i] == \"${sorted[i+1]}\" )); then\n        \
+    \    (( n++ ))\n        fi\n    done\n    # Check that we have every possible\
+    \ permutation\n    if (( n!=$((${#arr[@]} - 1)) ));then\n        return 0\n  \
+    \  fi\n    # Check that every element in $1 appears at least once\n    for ((i=0;\
+    \ i<${#arr[@]}; i++)); do\n        if (( seen[arr[i]]==0 )); then\n          \
+    \  return 0\n        fi\n    done\n    # Check that every element in $1 is sorted\
+    \ ascending\n    for ((i=0; i<${#arr[@]}; i++)); do\n        if (( first<arr[i]\
+    \ )); then\n            first=arr[i]\n        fi\n    done\n    # All tests have\
+    \ passed, so return true\n    return 1", "    set -e # Be careful when doing set\
+    \ -e as this will make your script exit with a non-zero status when an error is\
+    \ encountered\n    local sorted=0\n    local list=( $@ )\n    local i\n    for\
+    \ i in \"${!list[@]}\"; do\n        if [[ ${list[$i]} == ${list[$(($i - 1))]}\
+    \ ]]; then\n            ((sorted=1))\n        else\n            ((sorted=0))\n\
+    \            break\n        fi\n    done\n    echo \"$sorted\"", "    local numbers=\"\
+    $1\"\n    local i=0;\n    while IFS= read -r line; do\n        if [ \"$line\"\
+    \ == \"$numbers\" ]; then\n            echo $line\n            return\n      \
+    \  fi\n        ((i++))\n    done\n    echo $line", "  local IFS=$'\\n' sorted=()\n\
+    \  local last=$1; shift\n  for (( i=1; $i; i++ )); do\n    sorted+=( \"${last}\"\
+    \ )\n    last=$1\n  done\n  (( ${#sorted[@]} <= 1 ))", "\tlocal list=\"$1\"\n\t\
+    local element\n\tlocal first\n\tlocal last\n\tlocal elementCount\n\tlocal duplicateCount\n\
+    \tlocal previousElement\n\tlocal currentElement\n\tlocal currentElementCount\n\
+    \n\t# If there are no elements, return true\n\tif [[ -z \"$list\" ]]; then\n\t\
+    \treturn true\n\tfi\n\n\t# Loop through each element in the list\n\tfor element\
+    \ in $list; do\n\t\telementCount=\"$((elementCount+1))\"\n\t\tpreviousElement=\"\
+    $element\"\n\n\t\t# Loop through each element in the list again to count duplications\n\
+    \t\tfor element in $list; do\n\t\t\tcurrentElement=\"$element\"\n\t\t\tcurrentElementCount=\"\
+    $((currentElementCount+1))\"\n\n\t\t\t# If current element matches previousElement,\
+    \ duplicate found\n\t\t\tif [[ \"$element\" == \"$previousElement\" ]]; then\n\
+    \t\t\t\tduplicateCount=\"$((duplicateCount+1))\"\n\t\t\tfi\n\n\t\t\t# Update previousElement\
+    \ for next element loop\n\t\t\tpreviousElement=\"$currentElement\"\n\t\tdone\n\
+    \n\t\t# If this element was duplicated at least once, return false\n\t\tif [[\
+    \ \"$elementCount\" -gt \"$duplicateCount\" ]]; then\n\t\t\treturn false\n\t\t\
+    fi\n\n\t\t# Otherwise just increment elementCount and repeat\n\tdone\n\n\t# We\
+    \ have looped through all the elements in the list without duplicates,\n\t# so\
+    \ return true unless it has more than 1 duplicate\n\tif [[ \"$elementCount\" -eq\
+    \ \"$duplicateCount\" ]]; then\n\t\treturn true\n\tfi\n\n\t# Return false if there\
+    \ are duplicate elements (more than 1)\n\treturn false", "    local list=\"$1\"\
+    \n    local n\n    for n in \"$list\"; do\n        if [ \"$n\" != \"${list##*\
+    \ }\" ]; then\n            echo \"false\"\n            return 0\n        fi\n\
+    \    done\n    echo \"true\"\n    return 0", "  # Check if $1 is numeric\n  [\
+    \ \"$1\" ] &&\n  # Convert $1 into an array\n  read -r -a array <<< \"$1\" &&\n\
+    \  # Sort $1 with uniq\n  is_sorted=\"$(uniq -u <<<\"${array[@]}\")\"\n  # Output\
+    \ $is_sorted as either \"true\" or \"false\"\n  [ \"$is_sorted\" = \"true\" ]\
+    \ || [ \"$is_sorted\" = \"false\" ]", "    local IFS=$'\\n'\n    local x\n   \
+    \ local sorted=()\n    local duplicates\n    local count\n    local i j\n    local\
+    \ out\n    local len\n\n    # read in list into x\n    local x=$@\n\n    # store\
+    \ length of x\n    len=$#\n\n    # check to see if there are duplicates\n    duplicates=$(x=\"\
+    ${x#*}\")\n    if [[ -n $duplicates ]]; then\n        echo \"Duplicate found!\"\
+    \n        return 0\n    fi\n\n    # check each x element against all other elements\
+    \ in sorted list\n    # and store them into sorted array\n    for ((i=0; i<${len};\
+    \ i++)); do\n        duplicates=$(x=\"${x#*}\")\n        if [[ -n $duplicates\
+    \ ]]; then\n            sorted+=(\"$i\")\n        fi\n    done\n\n    # if length\
+    \ of list is one, no need to sort\n    if [[ ${#sorted[@]} -eq 1 ]]; then\n  \
+    \      echo \"true\"\n        return 0\n    fi\n\n    sorted=(${sorted[@]})\n\
+    \    sorted=(${sorted[@]})\n    sorted=(${sorted[@]})\n    sorted=(${sorted[@]})\n\
+    \    sorted=(${sorted[@]})\n    sorted=(${sorted[@]})\n    sorted=(${sorted[@]})\n\
+    \    sorted=(${sorted[@]})\n    sorted=(${sorted[@]})\n\n    # check to see if\
+    \ there are duplicates\n    duplicates=$(x=\"${x#*}\")\n    if [[ -n $duplicates\
+    \ ]]; then\n        echo \"false\"\n        return 0\n    fi\n\n    # check to\
+    \ see if length of sorted list is same as length of x\n    if [[ ${#sorted[@]}\
+    \ -eq ${len} ]]; then\n        echo \"true\"\n        return 0\n    fi\n\n   \
+    \ # now x has duplicates\n\n    # set array to length of x\n    sorted=(${x})\n\
+    \n    # set array to length of x with duplicates\n    sorted=(${sorted[@]})\n\n\
+    \    # loop through all elements and check if they are in sorted list\n    for\
+    \ ((i=0; i<${#sorted[@]}; i++)); do\n        if [[ ${sorted[$i]} -ge ${sorted[0]}\
+    \ && ${sorted[$i]} -le ${sorted[${#sorted[@]}-1]} ]]; then\n            count=0\n\
+    \            for ((j=0; j<${len}; j++)); do\n                if [[ ${sorted[$j]}\
+    \ -eq ${sorted[$i]} ]]; then\n                    ((count=count+1))\n        \
+    \        fi\n            done\n            if (( $count > 1 )); then\n       \
+    \         echo \"true\"\n                return 0\n", "    local string=\"$1\"\
+    \n    local string_count=\"$(echo \"$string\" | wc -c)\"\n    if [ \"$string_count\"\
+    \ -eq \"1\" ]; then\n        echo \"true\"\n    elif [ \"$string_count\" -gt \"\
+    2\" ]; then\n        echo \"false\"\n    else\n        local temp\n        local\
+    \ string_array=($string)\n        local index\n        local length=\"${#string_array[@]}\"\
+    \n        local string_temp\n        local string_temp2\n        local string_index\n\
+    \        local count\n        for (( index = 0; index < length; index++ )); do\n\
+    \            string_temp=\"${string_array[index]}\"\n            for (( count\
+    \ = 0; count < index; count++ )); do\n                string_index=\"$string_array[$count]\"\
+    \n                if [ \"$(echo \"$string_temp\" < \"$string_index\")\" == \"\
+    $string_temp\" ]; then\n                    string_temp2=\"${string_array[$count]}\"\
+    \n                    if [ \"$(echo \"$string_temp\" < \"$string_temp2\")\" ==\
+    \ \"$string_temp\" ]; then\n                        string_temp=\"${string_array[$count]}\"\
+    \n                        string_temp2=\"\"\n                    fi\n        \
+    \        fi\n            done\n            if [ \"$(echo \"$string_temp\" < \"\
+    1\")\" == \"$string_temp\" ]; then\n                echo \"true\"\n          \
+    \  else\n                echo \"false\"\n                break\n            fi\n\
+    \        done\n    fi", '  echo "$1" | grep -c "^[[:space:]]*$1" || return 1',
+  "    local sorted_list=\"$1\"\n    local sorted_items=`echo $sorted_list | tr '\
+    \ ' ','`\n    if [[ \"$sorted_items\" =~ (^|.*,.*),(.*) ]]; then\n        local\
+    \ left_part=\"${BASH_REMATCH[1]}\"\n        local right_part=\"${BASH_REMATCH[2]}\"\
+    \n        local left_part=${left_part%,}\n        local right_part=${right_part%,}\n\
+    \        local sorted_list=\"$left_part,$right_part\"\n        local sorted_items=`echo\
+    \ $sorted_list | tr ' ' ','`\n        if [[ $sorted_items != \"1,2\" ]] ; then\n\
+    \            return 0\n        fi\n    fi\n    return 1", "  local list=\"$1\"\
+    \n  local first=1\n  local last=${#list}\n  local done\n  local check\n\n  for\
+    \ (( i=0; i<last; i++ )); do\n    check=${list[i]}\n    done=1\n    while [ $done\
+    \ -eq 1 ]; do\n      done=0\n      first=$(( $first + 1 ))\n      if [ \"${list[$first]}\"\
+    \ -ne \"$check\" ]; then\n        done=1\n      fi\n    done\n  echo \"$check\"\
+    \n  return 0", "    local list=\"$1\"\n    local temp\n\n    for (( i=1; i\"$list\"\
+    \ >$i; i++ )); do\n        if [[ \"$list\" =~ ^[0-9]+$\" ]]; then\n          \
+    \  list=${list#*$i}\n            temp=$(echo \"$list\" | tr -s ' ')\n        \
+    \    list=\"$temp\"\n        elif [[ \"$list\" =~ ^[0-9]+\\s\\s* ]]; then\n  \
+    \          list=${list#*$i}\n            temp=$(echo \"$list\" | tr -s ' ')\n\
+    \            list=\"$temp\"\n        fi\n    done\n    if [ \"$list\" = \"$list\"\
+    \ ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", " \
+    \ local numbers=\"$@\"\n  # Count how many times each number appears\n  local\
+    \ counts=()\n  for number in $numbers; do\n    ((counts[$number]+=1))\n  done\n\
+    \n  # If each number appears twice, return false\n  if (( \"${#counts[@]}\" >\
+    \ 1 )); then\n    return 1\n  fi\n\n  # If all numbers appear once, sort them\
+    \ and return true\n  if (( \"${#counts[@]}\" == 1 )); then\n    local sorted_numbers=()\n\
+    \    local index=0\n    for number in $numbers; do\n      ((index++))\n      if\
+    \ (( \"${index}\" < \"${#counts[@]}\" )); then\n        sorted_numbers[$index]=${number}\n\
+    \      fi\n    done\n    local sorted_numbers_length=${#sorted_numbers[@]}\n \
+    \   (( \"${#sorted_numbers[@]}\" > 1 ))\n    (( \"${#sorted_numbers[@]}\" < \"\
+    ${#counts[@]}\" ))\n    if (( \"${#sorted_numbers[@]}\" > \"${#counts[@]}\" ));\
+    \ then\n      return 1\n    fi\n    for (( i=1; i <= \"${#sorted_numbers[@]}\"\
+    ; i++ )); do\n      if (( \"${sorted_numbers[$i]}\" != \"${sorted_numbers[$((\
+    \ i-1 ))]}\" )); then\n        return 1\n      fi\n    done\n    return 0\n  fi\n\
+    \n  # Return false if list contains duplicate numbers\n  # (but return true if\
+    \ list contains 1 or more duplicates\n  # of any number\n  # Return false if list\
+    \ contains negative numbers\n  local index=0\n  local number_seen\n  local duplicates=0\n\
+    \  for number in $numbers; do\n    ((index++))\n    number_seen=$number\n    ((\
+    \ \"${index}\" < \"${#counts[@]}\" ))\n    duplicates=$(( $duplicates + $number_seen\
+    \ ))\n  done\n\n  (( \"${#counts[@]}\" >= \"${duplicates}\" ))", "    local list=\"\
+    $1\"\n    local sorted=true\n    local count=$(echo \"$list\" | tr \" \" \"\\\
+    n\" | sort | uniq | wc -l)\n    if [ \"$count\" -lt 1 ]; then\n        sorted=false\n\
+    \    elif [ \"$count\" -gt 1 ]; then\n        sorted=false\n    elif [ \"$list\"\
+    \ = \"$list\" ]; then\n        sorted=false\n    fi\n    echo \"$sorted\"", "\t\
+    set -euo pipefail\n\tlocal numbers=$1\n\tlocal count\n\tlocal i\n\tlocal last\n\
+    \tlocal sorted\n\tlocal duplicate\n\tlast=\"$numbers\" || return\n\tsorted=0\n\
+    \tduplicates=0\n\tfor ((i=1; i<${#last}; i++)); do\n\t\tcount=$(echo \"$last |\
+    \ sort -u | wc -l\" | bc)\n\t\tif [[ $count -gt 0 ]]; then\n\t\t\tsorted=1\n\t\
+    \t\tbreak\n\t\tfi\n\t\tlast=${last%,}\n\t\tduplicate=$((duplicates+1))\n\t\tif\
+    \ ((duplicates>1)); then\n\t\t\tsorted=0\n\t\t\tbreak\n\t\tfi\n\tdone\n\techo\
+    \ \"$sorted\"", "  local list=\"$1\"\n  # sort by each number\n  local sortedlist=\"\
+    ${list}:\"\n  local -a numbers=( $list )\n  local -a sortednumbers=( $list )\n\
+    \  for number in ${numbers[@]}; do\n    local dups=0\n    for sortednumber in\
+    \ ${sortednumbers[@]}; do\n      [ \"$number\" = \"$sortednumber\" ] && continue\n\
+    \      if [ \"$number\" == \"$sortednumber\" ]; then\n        dups=$((dups+1))\n\
+    \      fi\n    done\n    if [ \"$dups\" -eq 1 ]; then\n      sortedlist+=\"$number\"\
+    \n    fi\n  done\n  # remove duplicates\n  printf \"${sortedlist[@]}\"", "  local\
+    \ numbers=$1\n  local n\n  local i count=0\n  local sorted=false\n  local test\n\
+    \  for ((i=0;i<${#numbers};i++)); do\n    count=$((count+1))\n    test=\"${numbers[i]}\"\
+    \n    if [[ $test == ${numbers[0]} ]]; then\n      sorted=true\n      break\n\
+    \    elif [[ $test -gt ${numbers[0]} ]]; then\n      sorted=false\n      break\n\
+    \    else\n      if ((count > 1)); then\n        sorted=false\n        break\n\
+    \      else\n        n=$((n-$i))\n      fi\n    fi\n  done\n  return $sorted",
+  "  local list=\"$1\"\n  local count=1\n  local last_num=\"${list}\"\n  for ((i=1;i<${#list};i++))\n\
+    \  do\n    local num=\"${list}\"\n    local prevnum=\"${list}\"\n    local issorted=\"\
+    false\"\n    if [ \"$last_num\" != \"$num\" ];\n    then\n      prevnum=\"${last_num}\"\
+    \n    fi\n    if [ \"$count\" -gt 1 ];\n    then\n      issorted=\"true\"\n  \
+    \  fi\n    last_num=\"$num\"\n    ((count++))\n  done\n  if [ \"$issorted\" =\
+    \ \"true\" ];\n  then\n    echo \"true\"\n  else\n    echo \"false\"\n  fi", " \
+    \   local list=\"$1\"\n    # Check if list is empty\n    if [ ${#list} -eq 0 ];\
+    \ then\n        echo \"\"\n        return 1\n    fi\n    # Initialize array\n\
+    \    declare -A count\n    for n in \"${list[@]}\"; do\n        echo \"$n\"\n\
+    \        (( count[$n]++ ))\n    done\n    # Check for duplicates\n    for i in\
+    \ \"${!count[@]}\"; do\n        # Skip duplicates\n        if [ ${count[$i]} -eq\
+    \ 1 ]; then\n            echo \"\"\n            return 1\n        fi\n    done\n\
+    \    # All good\n    echo \"\"\n    return 0", "    local num_list=$1\n\n    echo\
+    \ \"$num_list\" | tr ' ' ',' | sort -n", "    local arr=$1\n    local i=1\n  \
+    \  local count\n    local first\n    local last\n    local sorted\n\n    # sort\
+    \ the array and check if first and last elements are equal\n    arr=($(sort <<<\"\
+    $arr\"))\n    sorted=$((${arr[0]} == ${arr[-1]}))\n\n    # if the first and last\
+    \ element are equal\n    # or the list is empty, return true\n    if [ \"$sorted\"\
+    \ == \"true\" ] || [ \"${#arr[@]}\" == \"0\" ]; then \n        sorted=\"true\"\
+    \n        echo \"$sorted\"\n        return 0\n    else\n        echo \"$sorted\"\
+    \n        return 1\n    fi", '    sort -n -t: <(echo "$1" | tr " " "\n")', '    echo
+    $1 | sort | uniq | wc -l', "  local sorted_list=\"$1\"\n  local sorted_list=$(echo\
+    \ \"$sorted_list\" | sed 's/ /\",\"/g')\n  echo \"$sorted_list\" | sort | uniq\
+    \ -d | wc -l", '  [[ ! -z "$1" ]] && echo "$1" | tr " " "\n" | sort | uniq -c
+    | sort -n | wc -l', "    local x=\"$1\"\n    local y=\"$2\"\n    local n\n   \
+    \ for (( n=0; n<${#x}; n++ )); do\n        if [[ ${x[$n]} -gt ${y[$n]} ]]; then\n\
+    \            # Swap them\n            local tmp=\"$y\"\n            local y=\"\
+    $x\"\n            local x=\"$tmp\"\n        fi\n    done\n    \n    local i\n\
+    \    for (( i=0; i<${#x}; i++ )); do\n        if [[ ${x[$i]} == ${y[$i]} ]]; then\n\
+    \            x=$(x[$i])\n            y=$(y[$i])\n        fi\n    done\n\n    echo\
+    \ $((${x} > ${y} ))", "    echo \"is_sorted: $1\"\n    local _sorted _count\n\
+    \    _sorted=false\n    _count=0\n    local _element _i _len\n    _i=$((${#1})-1)\n\
+    \    while ((${_i} >= 0)); do\n        _element=${1:${_i}}\n        if ((${_element}\
+    \ < ${1:${_i}}) && (${_sorted} == false)); then\n            _sorted=true\n  \
+    \      elif ((${_element} > ${1:${_i}}) && (${_sorted} == true)); then\n     \
+    \       _sorted=false\n        fi\n        _i=$((${_i} -1))\n    done\n    echo\
+    \ \"_sorted: $_sorted\"\n    echo \"\"\n    return _sorted", "    local i\n  \
+    \  local j\n    local list\n    list=\"$1\"\n    list=${list//[[:space:]]/}\n\
+    \    for ((i=1; i<${#list}; i++)); do\n        local element=${list[i]}\n    \
+    \    for ((j=i+1; j<${#list}; j++)); do\n            local element2=${list[j]}\n\
+    \            if [ \"$element\" -gt \"$element2\" ]; then\n                break\n\
+    \            else\n                if [ \"$i\" -eq \"$j\" ]; then\n          \
+    \          return 0\n                else\n                    return 1\n    \
+    \            fi\n            fi\n        done\n    done\n    return 1", "  local\
+    \ list_as_string=$1\n  local sorted_list=\"$(echo $list_as_string | tr '[:upper:]'\
+    \ '[:lower:]')\"\n  local sorted_list_length=$(echo $sorted_list | wc -c)\n  local\
+    \ duplicate_count=$(echo $sorted_list | sort -u | wc -c)\n  local sorted_list_sorted=$(echo\
+    \ $sorted_list | sort)\n  if [ \"$sorted_list_length\" = \"$duplicate_count\"\
+    \ ]; then\n    echo 0\n  else\n    echo 1\n  fi", "    local list seen\n    local\
+    \ i ii dup\n    IFS=\" \" list=$1\n\n    seen=()\n    for ii in $(seq 0 $((${#list}-1)))\n\
+    \    do\n        case \"${list}[${ii}]\" in\n            *[!0-9]* )\n        \
+    \        echo \"$1 is not a sorted number\"\n                return 0\n      \
+    \          ;;\n            *)\n                seen+=(\"${list}[${ii}]\")\n  \
+    \              ;;\n        esac\n    done\n    seen=( \"${seen[@]}\" )\n    dup=0\n\
+    \    for ii in \"${!seen[@]}\"\n    do\n        for ii in \"${!seen[@]}\"\n  \
+    \      do\n            if [ \"$ii\" -eq \"$ii\" ] || [ \"$ii\" -eq \"${seen[$ii]}\"\
+    \ ]\n            then\n                dup=1\n                break\n        \
+    \    fi\n        done\n    done\n    if [ \"$dup\" -eq 1 ]\n    then\n       \
+    \ echo \"$1 is already sorted\"\n        return 0\n    else\n        echo \"$1\
+    \ sorted\"\n        return 1\n    fi", "  local -n arr=$1\n  local count found\n\
+    \  found=0\n  for i in $arr; do\n    if [[ $found -eq 0 ]]; then\n      count=$i\n\
+    \      continue\n    fi\n    if [[ $i == $count ]]; then\n      count=$((count+1))\n\
+    \      continue\n    fi\n    found=1\n    break\n  done\n  echo \"$((found))\"",
+  "  local list=(\"$@\")\n  local length=${#list[@]}\n  local i=0 # Index of current\
+    \ item\n\n  local first=0 # First element in the current list\n  local last=0\
+    \ # Last element in the current list\n  local sort-first=0 # First element sorted\n\
+    \  local sort-last=0 # Last element sorted\n\n  # Check for duplicate numbers\
+    \ in the list\n  while (( i < length )); do\n    current=${list[$i]}\n    prev=${list[i\
+    \ - 1]}\n    if (( prev != current )); then\n      return 0 # Not in order\n \
+    \   fi\n    (( i++))\n  done\n\n  # Check if list has more than 1 duplicate of\
+    \ same number\n  while (( i < length )); do\n    current=${list[$i]}\n    if ((\
+    \ $first == $current )); then\n      return 0 # Not sorted\n    fi\n    (( i++))\n\
+    \    (( last++))\n    (( first = $current ))\n  done\n\n  # Check if last number\
+    \ is different than first number\n  current=${list[$i]}\n  if (( $last != $current\
+    \ )); then\n    return 0 # Not sorted\n  fi\n\n  # Check if list is sorted\n \
+    \ (( i = 1 ; i <= last )); do\n    current=${list[$i]}\n    if (( $sort-first\
+    \ > $current )); then\n      return 0 # Not sorted\n    fi\n    (( i++))\n   \
+    \ (( sort-first = $current ))\n  done\n\n  # Check if first number is different\
+    \ than last number\n  current=${list[$i]}\n  if (( $first != $current )); then\n\
+    \    return 0 # Not sorted\n  fi\n\n  return 1 # Sorted", "  local sorted=0\n\
+    \  local items=$*\n\n  IFS=' ' read -r -a array <<< \"$items\"\n  for i in \"\
+    ${!array[@]}\"; do\n    sorted=1\n    for j in \"${!array[@]}\"; do\n      if\
+    \ [ \"$i\" -gt \"$j\" ]; then\n        sorted=0\n        break\n      fi\n   \
+    \ done\n  done\n\n  echo $sorted", "    local numbers=$1\n    local sorted=\"\
+    false\"\n    # Find unique numbers\n    local unique=$(uniq -u \"$numbers\")\n\
+    \    # For each unique number...\n    for number in $unique; do\n        # If\
+    \ it's in the list, then the list is sorted\n        if [[ \" $numbers \" = *\"\
+    \ \"$number \" ]]; then\n            sorted=\"true\"\n            break\n    \
+    \    fi\n    done\n    echo \"$sorted\"", "    local sorted_list=( \"${@}\" )\n\
+    \    local sorted_list_len=${#sorted_list[@]}\n    local count=0\n    for (( i=0;\
+    \ i<${sorted_list_len}-1; i++ )); do\n        if [ \"${sorted_list[i]}\" -gt \"\
+    ${sorted_list[i+1]}\" ]; then\n            count=$(( count+1 ))\n        fi\n\
+    \    done\n    return $(( $count == 0 ))", "  local sorted_list=\"$1\"\n  local\
+    \ sorted\n  local i count result\n\n  count=$(echo $sorted_list | tr ' ' '\\n'\
+    \ | sort | uniq -u  | wc -l)\n  if [ \"$count\" -eq 1 ]; then\n    sorted=$(echo\
+    \ \"$sorted_list\" | tr ' ' '\\n' | sort | uniq -u  | head -1 | head -c 1)\n \
+    \ else\n    sorted=$(echo \"$sorted_list\" | tr ' ' '\\n' | sort | uniq -u  |\
+    \ head -1)\n  fi\n\n  sorted=$(echo \"$sorted\" | sed -e 's/ //g')\n  result=$(echo\
+    \ $sorted_list | tr ' ' '\\n' | grep \"^$sorted\")\n\n  if [ \"$result\" == \"\
+    \" ]; then\n    echo \"false\"\n  else\n    echo \"true\"\n  fi", "\tlocal list_name=$1\n\
+    \tlocal list=$(eval \"$list_name\")\n\tlocal count=1\n\tlocal last_value\n\tlocal\
+    \ last_index\n\tlocal current_value\n\n\twhile [ \"$list\" ]; do\n\t\tcurrent_value=${list}\n\
+    \t\tlast_value=$current_value\n\t\tlast_index=$count\n\t\tcount=$((count+1))\n\
+    \n\t\tlist_name=$1\n\t\tlist=$(eval \"$list_name\")\n\tdone\n\n\tif [ \"$count\"\
+    \ -gt 1 ]; then\n\t\treturn false\n\tfi\n\n\tif [ \"$last_value\" != \"$current_value\"\
+    \ ]; then\n\t\treturn true\n\tfi\n\n\tif [ \"$count\" -eq 1 ]; then\n\t\treturn\
+    \ false\n\tfi\n\n\treturn true", "    local NUMBERS=$1\n    # count the number\
+    \ of consecutive elements that are the same\n    local COUNT=0\n    for NUMBER\
+    \ in ${NUMBERS}; do\n        if [[ ${COUNT} -gt 0 ]]; then\n            if [[\
+    \ ${COUNT} == 1 ]]; then\n                echo \"false\"\n                return\
+    \ 1\n            fi\n        fi\n        if [[ ${NUMBER} == $NUMBER ]]; then\n\
+    \            COUNT=$(( ${COUNT} + 1 ))\n        else\n            COUNT=0\n  \
+    \      fi\n    done\n    echo \"true\"", "  local numbers=\"$1\"\n\n  local unique_numbers=$(sort\
+    \ <<< \"$numbers\" | uniq -d)\n\n  [[ $unique_numbers ]] || return 1\n  [[ \"\
+    $numbers\" == *\"$unique_numbers\"* ]] || return 0", "  local numbers=$@\n  local\
+    \ i imax count=0\n  imax=${#numbers} # find the highest index\n  for i in $(seq\
+    \ 0 $imax); do\n    count=0\n    for j in $(seq 0 $imax); do\n      if [[ ${numbers[$j]}\
+    \ -eq \"${numbers[$i]}\" ]]; then\n        count=$((count+1))\n      fi\n    done\n\
+    \    if [[ $count -gt 1 ]]; then\n      return 0\n    fi\n  done\n  return 1",
+  "    local list=\n    local item\n    for item in $@; do\n        local index=\n\
+    \        index=0\n        while [ $index -lt ${#list} ] && [ \"${list[$index]}\"\
+    \ = \"${item}\" ]; do\n            index=$((index+1))\n        done\n        list=$(expr\
+    \ $list $index)\n    done\n    echo $list", "  local sorted=1\n  local list=\"\
+    $1\"\n\n  # remove all spaces\n  list=$(echo \"$list\" | sed 's/ //g')\n\n  #\
+    \ convert to array\n  IFS=' ' read -a array <<< \"$list\"\n\n  # sort it\n  for\
+    \ i in \"${array[@]}\"; do\n    ((sorted == 1 && i == sorted)) && return 0\n \
+    \   ((sorted == 0 && i < sorted)) && return 1\n  done\n  return 0", "    local\
+    \ num_list sorted=false\n    local i num nums tmp is_sorted\n\n    # Split the\
+    \ input string into its individual numbers\n    nums=($1)\n\n    # Scan through\
+    \ each number in the list\n    for ((i=1; i<${#nums[@]}; i++)); do\n        #\
+    \ Scan through numbers from index 1 until current number\n        for num in \"\
+    ${nums[@]:1}\"; do\n            # If the current number is the same as last number\n\
+    \            if [ \"${num}\" == \"${nums[$i]}\" ]; then\n                # If\
+    \ the current number is smaller than last number\n                if [ \"$num\"\
+    \ -lt \"$nums[$((i-1))]\" ]; then\n                    # If we are at the end\
+    \ of the list and it is sorted already\n                    if [ \"$sorted\" ==\
+    \ \"true\" ]; then\n                        # If all numbers have been sorted,\
+    \ return true\n                        sorted=true\n                        break\n\
+    \                    else\n                        # If we aren't at the end of\
+    \ the list\n                        # and we are still sorted, return false\n\
+    \                        sorted=false\n                        break\n       \
+    \             fi\n                fi\n                # If we reach here, the\
+    \ current number is larger than last number\n                if [ \"$num\" -gt\
+    \ \"$nums[$((i-1))]\" ]; then\n                    # If we are at the end of the\
+    \ list and it is sorted already\n                    if [ \"$sorted\" == \"true\"\
+    \ ]; then\n                        # If all numbers have been sorted, return true\n\
+    \                        sorted=true\n                        break\n        \
+    \            else\n                        # If we aren't at the end of the list\n\
+    \                        # and we are still sorted, return false\n           \
+    \             sorted=false\n                        break\n                  \
+    \  fi\n                fi\n            fi\n        done\n    done\n\n    # Return\
+    \ whether the numbers are sorted\n    echo \"$sorted\"", "  local sorted_list=\"\
+    $1\"\n  # $sorted_list may contain multiple occurrences of the same number\n \
+    \ # (e.g. \"1 2 2 3 3 4\"). We only care about unique numbers.\n  # If there are\
+    \ multiple occurrences, we don't know if the list is\n  # sorted until we find\
+    \ out which one has the smallest number.\n  local sorted_list_sorted=\"$(is_sorted_with_unique\
+    \ \"$sorted_list\")\"\n  [[ \"$sorted_list_sorted\" == \"true\" ]] || return 1\n\
+    \  [[ \"$sorted_list_sorted\" == \"false\" ]] || return 0", "    local list=\"\
+    $1\"\n\n    local sorted_list=()\n    # sort numbers in list\n    for x in \"\
+    $list\"; do\n        [[ $x =~ ([0-9]+) ]] || continue\n        sorted_list+=(\"\
+    $x\")\n    done\n\n    # return true if list is sorted\n    [[ ${#sorted_list[@]}\
+    \ -eq ${#list} ]] || return 0\n\n    # sort list again\n    sorted_list=($(sort\
+    \ <<< \"${sorted_list[@]}\"))\n\n    # return true if list is sorted\n    [[ ${#sorted_list[@]}\
+    \ -eq ${#list} ]] || return 0\n\n    return 0", "    local sorted=false\n    local\
+    \ list=\"$1\"\n    local nums=$list\n\n    local i duplicates\n    # Remove duplicates\n\
+    \    local sorted_list=\"$list\"\n    for ((i=1;i<$#nums;i++)); do\n        duplicates=\"\
+    $sorted_list\"\n        for ((j=$i;j<$#nums;j++)); do\n            local j=$((j+i))\n\
+    \            [[ \"$nums\" != \"${duplicates}\" ]] && duplicates=\"$duplicates,$nums[j]\"\
+    \n        done\n        sorted_list=\"${sorted_list},$nums[$i]\"\n    done\n \
+    \   sorted=\"$(echo \"$sorted_list\" | sort -n)\"\n    if [[ $sorted =~ ^[0-9]+\
+    \ ]]; then\n        sorted=true\n    fi\n    echo \"$sorted\"", "  local NUMBERS=\"\
+    $1\"\n  local i=$((${#NUMBERS[@]} - 1))\n  local COUNT=1\n  local VALUE\n  while\
+    \ [ $i -gt 0 ] && [ $COUNT -gt 0 ]; do\n    VALUE=${NUMBERS[$i]}\n    COUNT=$(echo\
+    \ \"${COUNT} * ${#VALUE}\" | bc -l)\n    (( --i ))\n  done\n  echo \"${COUNT}\"\
+    \ | bc -l > \"$TEMP/NUMBER_OF_ITERS\"\n  echo \"$VALUE\" \"$NUMBERS\" \"$TEMP/NUMBER_OF_ITERS\"\
+    \n  sort \"$NUMBERS\" \"$TEMP/NUMBER_OF_ITERS\" \"$TEMP/SORTED\"\n  if [ $? -eq\
+    \ 0 ]; then\n    if diff -q /dev/null \"$TEMP/SORTED\"; then\n      echo \"true\"\
+    \n    else\n      echo \"false\"\n    fi\n  else\n    echo \"false\"\n  fi", " \
+    \   IFS=\" \" read -a array <<< \"$1\"\n    [[ $#array -gt 0 ]] || return 1\n\
+    \    for i in ${array[@]};\n    do\n        [[ \"${i}\" -gt \"${array[0]}\" ]]\
+    \ || return 1\n    done\n    return 0", "  local list=\"$1\"\n  local sorted=\"\
+    1 2 3 4 5\"\n  for i in \"${list[@]}\"\n  do\n    local last=$sorted\n    local\
+    \ first=$(( ${#last} - 1 ))\n    for j in $(seq 0 \"$first\")\n    do\n      local\
+    \ tmp=${last:j:1}\n      if [ \"$tmp\" < \"$i\" ]; then\n        sorted=\"$i\"\
+    \n        break\n      fi\n    done\n  done\n  echo $sorted", '    sort --reverse
+    "$1" >/dev/null 2>&1', "  if [[ ! $1 =~ \\ ]] ; then\n    echo >&2 \"Usage: `basename\
+    \ $0` list_of_numbers\"\n    exit 1\n  fi\n  local IFS=$'\\n' sorted_list=()\n\
+    \  local sorted\n  local number_sorted\n\n  while read -r value; do\n    sorted=false\n\
+    \    for number_sorted in $sorted_list; do\n      if [[ $value == $number_sorted\
+    \ ]]; then\n        sorted=true\n        break\n      fi\n    done\n    if $sorted;\
+    \ then\n      continue\n    fi\n    sorted_list+=(\"$value\")\n  done < <(sort\
+    \ -n \"$1\")\n  echo $sorted_list | wc -l", "\tunset num\n\tlocal tmp\n\ttmp=$1\n\
+    \tnum=0\n\tfor n in ${tmp//,/ }; do\n\t\t(( num++ ))\n\t\tif [[ ${num} == ${#tmp}\
+    \ ]]; then\n\t\t\treturn 0\n\t\tfi\n\tdone\n\treturn 1", "    local IFS=\" $1\"\
+    \n    local sorted=1\n    while read -r number; do\n        [[ $number < $sort\
+    \ ]] || sorted=0\n        sort=$number\n    done\n    [[ \"$sorted\" == \"1\"\
+    \ ]] || return 1", "    local list=\"$1\"\n    local sorted_list=$(tr \" \" \"\
+    \\n\" <<< $list|sort -n|tr \"\\n\" \" \")\n    local length=\"${#list}\"\n   \
+    \ if [ \"$length\" -eq \"1\" ]; then\n        [ \"$list\" == \"$sorted_list\"\
+    \ ] && return 1 || return 0\n    fi\n    for i in $(seq 0 \"$(($length-1))\");\
+    \ do\n        [[ \"$sorted_list\" == \"$list\" ]] && return 0 || return 1\n  \
+    \  done", "  local numbers=$1\n  local sorted_numbers=$2\n  local count\n  local\
+    \ element\n\n  echo \"$sorted_numbers\"\n  for count in \"${!numbers[@]}\"; do\n\
+    \    if [ \"${sorted_numbers}\" != \"${numbers}\" ]; then\n      element=\"${sorted_numbers}\"\
+    \n      sorted_numbers=$element\n      element=\"${numbers}\"\n      numbers=$element\n\
+    \      break\n    fi\n  done\n\n  if [[ \"$sorted_numbers\" = \"$numbers\" ]];\
+    \ then\n    return 1\n  else\n    return 0\n  fi", "  local sorted_list\n  sorted_list=$(\
+    \ tr '[:lower:]' '[:upper:]' <<< \"$1\" | sort --unique )\n  [[ $sorted_list =\
+    \ *\"$1\"* ]] || return 1\n  echo true", "\tis_sorted=\"n\"\n\tdeclare -n line=\"\
+    ${1// / }\"\n\twhile IFS=$'\\n' read -r line; do\n\t\tif [[ $line =~ ^([[:digit:]]+)$((\
+    \ $(sort -k 1 -n <<< \"$line\") - $line )) ]]; then\n\t\t\tis_sorted=\"y\"\n\t\
+    \t\tbreak\n\t\tfi\n\tdone\n\t[[ \"$is_sorted\" == \"y\" ]]", "    local str=$1\n\
+    \    local arr=$(echo \"$str\" | tr ' ' ',')\n    local count\n    local i\n \
+    \   local last\n    local first_time=1\n    local first_value\n    local second\n\
+    \    local second_value\n    for i in $arr; do\n        count=$(echo $arr | tr\
+    \ \" \" \"\\n\" | sort | uniq | wc -l)\n        if [ \"$count\" -eq 1 ]; then\n\
+    \            if [ \"$i\" == \"$arr\" ]; then\n                first_time=1\n \
+    \               first_value=1\n            else\n                if [ \"$count\"\
+    \ -eq 2 ]; then\n                    if [ \"$first_time\" -eq 1 ]; then\n    \
+    \                    first=${arr[$first_value]}\n                        second=${arr[$second_value]}\n\
+    \                        if [ \"$first\" -gt \"$second\" ]; then\n           \
+    \                 return 1\n                        fi\n                    fi\n\
+    \                fi\n                first_time=0\n            fi\n        else\n\
+    \            first_time=0\n            first_value=0\n        fi\n    done\n \
+    \   return 0", "    set -- $1 #set variables from command line\n    local n=$#\
+    \  ## number of arguments\n    local i a  ## counters\n    local temp\n\n    #\
+    \ count number of duplicates\n    for ((i=1;i<n;i++)); do\n        [[ ${!i} !=\
+    \ ${!i} ]] && let \"a += $i\"\n    done\n    # exit if there are too few numbers\n\
+    \    [[ $a -gt 2 ]] && return 0;\n    # count number of digits per number\n  \
+    \  for ((i=1;i<n;i++)); do\n        [[ -z ${!i} ]] && let \"b += ${#${!i}}\"\n\
+    \    done\n    # exit if there are too many digits\n    [[ $b -gt 10 ]] && return\
+    \ 0;\n    # exit if numbers are the same\n    [[ $a -eq $n ]] && return 0;\n \
+    \   # exit if numbers are in order\n    [[ \"$2\" != \"$3\" ]] && return 0;\n\
+    \    # exit if numbers are in decreasing order\n    [[ \"$2\" > \"$3\" ]] && return\
+    \ 0;\n\n    # exit if all numbers are in order\n    [[ \"$2\" == \"$3\" ]] &&\
+    \ return 0;\n\n    # return true if numbers are sorted\n    return 1", "    local\
+    \ arr=( \"${@}\" )\n    local count=0\n    local sorted=false\n\n    for element\
+    \ in \"${arr[@]}\"; do\n        (( count++ ))\n        if [[ $element -gt $arr[0]\
+    \ || $element -lt $arr[-1] ]]; then\n            sorted=true\n            break\n\
+    \        fi\n    done\n\n    echo \"$sorted\"", "  local nums=\"$1\"\n\n  # Sort\
+    \ numbers in list to determine if list is in ascending order.\n  local IFS=\"\
+    \ \" sorted=\"$(sort -n <<<\"$nums\")\"\n\n  # Count how many numbers we have\
+    \ that are equal.\n  # If we have more than one duplicate, return false.\n  #\
+    \ If we have one duplicate and it's less than the count of sorted,\n  # then we\
+    \ have duplicates and it's sorted. Return true.\n  # If we have one duplicate\
+    \ and it's more than the count of sorted,\n  # then we have duplicates and it's\
+    \ not sorted. Return true.\n  # If we have no duplicates, return true.\n  local\
+    \ num_equal=\"$(awk '{count[$1]++}\n    END { for (i in count) if (count[i] >\
+    \ 1) return 0; else return 1 }' <<< \"$sorted\")\"\n\n  # The count of duplicates\
+    \ should be greater than zero.\n  if [ \"$num_equal\" -eq \"0\" ]\n  then\n  \
+    \  return 1\n  else\n    return 0\n  fi", "\tlocal numbers=$(echo \"$1\" | tr\
+    \ ' ' '\\n')\n\tlocal is_sorted=true\n\tlocal is_unique=true\n\tlocal i\n\tlocal\
+    \ current_number\n\tlocal duplicated_number\n\n\tfor i in \"${numbers[@]}\"; do\n\
+    \t\tif [ \"$i\" == \"$current_number\" ]; then\n\t\t\tis_unique=false\n\t\telse\n\
+    \t\t\tis_sorted=false\n\t\t\tbreak\n\t\tfi\n\tdone\n\n\tif [ \"$is_unique\" ==\
+    \ \"true\" ]; then\n\t\techo \"true\"\n\telse\n\t\tif [ \"$is_sorted\" == \"true\"\
+    \ ]; then\n\t\t\techo \"true\"\n\t\telse\n\t\t\tif [ \"$#\" -eq 1 ]; then\n\t\t\
+    \t\techo \"false\"\n\t\t\telse\n\t\t\t\techo \"true\"\n\t\t\tfi\n\t\tfi\n\tfi",
+  "\tlocal sorted_list=$1\n\t# Remove commas from list, then remove duplicates\n\t\
+    # and sort the list\n\tsorted_list=$(echo $sorted_list | tr -d '\\n' | sort |\
+    \ tr '\\n' ' ')\n\tis_sorted=$(echo $sorted_list | grep -w \"^$1$\")\n\techo $is_sorted",
+  "    local array=\"$1\"\n    local sorted=false\n    local i=0\n    for element\
+    \ in $array; do\n        if [ $(( i == 0 )) ]; then\n            sorted=true\n\
+    \        fi\n        if [ $sorted == true ]; then\n            sorted=false\n\
+    \        fi\n        if [ $element -gt $array[i] ]; then\n            sorted=true\n\
+    \        fi\n        i=$(( $i + 1 ))\n    done\n    return $sorted", "    local\
+    \ n=$1 # number of items to look for\n    local x=$2 # input list\n    local sorted=0\n\
+    \    local count=0\n    local i=0\n    local temp\n    while [ $i -lt $n ]; do\n\
+    \        if [ $i -eq $n ]; then\n            if [ $sorted -eq 1 ]; then\n    \
+    \            return 0\n            else\n                return 1\n          \
+    \  fi\n        fi\n        if [ $count -gt 1 ]; then\n            return 0\n \
+    \       fi\n        if [ $i -eq $n ]; then\n            count=$(( count + 1 ))\n\
+    \            continue\n        fi\n        if [[ $x -eq ${x[$i]} ]]; then\n  \
+    \          count=$(( count + 1 ))\n            continue\n        fi\n        if\
+    \ [[ $x -ge ${x[$i]} ]]; then\n            count=$(( count + 1 ))\n          \
+    \  sorted=1\n        fi\n        i=$(( i + 1 ))\n    done\n    if [ $count -eq\
+    \ 1 ]; then\n        if [ $sorted -eq 1 ]; then\n            return 1\n      \
+    \  else\n            return 0\n        fi\n    fi\n    return 0", "    local input_numbers=$1\n\
+    \    local sorted=\"true\"\n    local sorted_number\n    local duplicate_number\n\
+    \    local i\n    local number_of_elements\n    local number_of_duplicates\n \
+    \   local j\n\n    number_of_elements=${#input_numbers}\n\n    for (( i=0; i<${number_of_elements};\
+    \ i++ )); do\n        if [ ${input_numbers[i]} -gt ${sorted_number} ]; then\n\
+    \            sorted_number=${input_numbers[i]}\n        elif [ ${input_numbers[i]}\
+    \ -eq ${sorted_number} ]; then\n            duplicate_number=${input_numbers[i]}\n\
+    \            number_of_duplicates=$(( number_of_duplicates + 1 ))\n        fi\n\
+    \    done\n\n    if [ ${number_of_duplicates} -gt 1 ]; then\n        sorted=\"\
+    false\"\n    fi\n\n    echo \"${sorted}\"", "  local list=$(join \" \" \"$@\"\
+    )\n  [[ $list =~ ^[0-9]+[[:space:]] ]] || return 1\n  is_sorted=$(echo $list |\
+    \ sort --check-order --key \"$list\")\n  [[ $is_sorted != $list ]] \\\n    &&\
+    \ return 1 \\\n    || return 0", "\tlocal list result\n\tlist=\"${1// /$'\\n'}\"\
+    \n\tset -- $list\n\tresult=\"0\"\n\tfor i in $(seq 1 $(($#-1)))\n\tdo\n\t\tif\
+    \ [ $(($i)) -gt $(($#)) ]\n\t\tthen\n\t\t\tresult=$(($result))\n\t\tfi\n\t\tif\
+    \ [ \"$($(is_unique \"$2\"))\" != \"false\" ]\n\t\tthen\n\t\t\tresult=$(($result))\n\
+    \t\tfi\n\tdone\n\tif [ \"$result\" != \"0\" ]\n\tthen\n\t\treturn 1\n\telse\n\t\
+    \treturn 0\n\tfi", "  local list=$1\n  [[ -z \"$list\" ]] && return 1\n  local\
+    \ sorted=()\n  local i=$((${#list} + 1))\n  while [[ ${#sorted[*]} -lt $i ]];\
+    \ do\n    local item=${list[$((i-1))]}\n    local found\n    for ((j=0; j<$((i-1));\
+    \ j++)); do\n      [[ -z ${sorted[$j]} ]] && continue\n      found=false\n   \
+    \   [[ \"$item\" -eq \"${sorted[$j]}\" ]] || found=true\n      [[ \"$item\" -gt\
+    \ \"${sorted[$j]}\" ]] \\\n        && [[ \"$found\" = true ]] || break\n    done\n\
+    \    [[ \"$found\" = true ]] && continue\n    sorted+=(\"$item\")\n  done\n  [[\
+    \ \"$sorted\" -eq \"$list\" ]] || return 0", "    local list=\"$1\"\n    local\
+    \ sorted_list=\"$(sort \"$list\")\"\n    local is_sorted=\"false\"\n    local\
+    \ count=0\n    local num_items=$(wc -l <<< \"$sorted_list\")\n    for element\
+    \ in $sorted_list; do\n        if [[ \"$element\" == \"$list\" ]]; then\n    \
+    \        ((count++))\n        elif [[ \"$element\" < \"$list\" ]]; then\n    \
+    \        is_sorted=\"true\"\n            break\n        fi\n    done\n    if [[\
+    \ $num_items != $count ]]; then\n        is_sorted=\"true\"\n    fi\n    echo\
+    \ \"$is_sorted\"", "    local L=$1\n    if [[ $L =~ \"[^0-9]\" ]]; then\n    \
+    \    echo \"false\"\n        return\n    fi\n    local numbers=$((L+1))\n    local\
+    \ sorted=0\n    local i=${#L}\n    while ((i>0)); do\n        local number=$L[${i}-1]\n\
+    \        if [[ \"$number\" -ne \"$sorted\"* ]]; then\n            sorted=1\n \
+    \       else\n            ((i--))\n        fi\n    done\n    echo \"$sorted\"",
+  "  local sorted\n  local list\n  local number\n  local tmp\n  list=$($@)\n  sorted=false\n\
+    \  for number in $list; do\n    for (( i = 0; i < $((${#list} - 1)); i++ )); do\n\
+    \      tmp=${list[i]}\n      list[i]=${list[i+1]}\n      list[i+1]=$tmp\n    done\n\
+    \    sorted=$((${sorted} == true && ${number} < ${list[0]}))\n  done\n  echo $sorted",
+  "    local sorted=1\n    local list=\"$1\"\n    # find out if sorted or not\n  \
+    \  for element in $list; do\n        local test=$(echo \"$element $list\" | sort\
+    \ -nr -k 1,1); if [ \"$element\" = \"$test\" ]; then sorted=0; break; fi\n   \
+    \ done\n    echo $sorted", "    local LIST i ii sorted result\n\n    LIST=$1\n\
+    \    sorted=false\n    for ((i=1; i<${#LIST}; i++)); do\n        sorted=false\n\
+    \        for ((ii=1; ii<${#LIST}; ii++)); do\n            if [[ \"${LIST[i]}\"\
+    \ == \"${LIST[ii]}\" ]]; then\n                sorted=true\n                break\n\
+    \            fi\n        done\n        if [[ ${sorted} = true ]]; then\n     \
+    \       result=$result$LIST[i]\n            sorted=false\n        fi\n    done\n\
+    \    echo \"${result}\"", "  # Redirect standard output to /dev/null\n  echo -n\
+    \ \"$(echo \"$1\" | tr \" \" \"\\n\" | sort -n | uniq -u)\"", "    local string=\"\
+    $1\";\n\n    local sorted_string=\" $1 \";\n    local sorted_numbers=();\n\n \
+    \   for number in $string\n    do\n        local i=0;\n\n        while [ $(( $i\
+    \ + 1 )) -le ${#sorted_numbers} ]\n        do \n            local element=${sorted_numbers[$i]}\n\
+    \n            # Don't compare against itself (could have unintended results if\n\
+    \            # the first element is the one being compared)\n            element=${element}${element}\n\
+    \n            if [ \"$number\" -eq \"$element\" ]\n            then\n        \
+    \        sorted_numbers[$i]=\"${sorted_numbers[$(( i + 1 ))]}\";\n           \
+    \ else\n                sorted_numbers[$i]=$element;\n                break;\n\
+    \            fi\n            (( i++ ));\n        done\n\n        sorted_string=\"\
+    ${sorted_string} ${sorted_numbers[*]} \";\n    done\n\n    local i=0;\n    local\
+    \ j=0;\n    local k=0\n\n    while [ $(( $i + 1 )) -le ${#sorted_numbers} ]\n\
+    \    do\n        local element=${sorted_numbers[$i]}\n\n        local number=${sorted_numbers[$((\
+    \ $i + 1 ))]}\n\n        # Don't compare against itself (could have unintended\
+    \ results if\n        # the first element is the one being compared)\n       \
+    \ element=${element}${element}\n\n        if [ \"$number\" -eq \"$element\" ]\n\
+    \        then\n            sorted_numbers[$i]=\"${sorted_numbers[$(( i + 1 ))]}\"\
+    ;\n        else\n            sorted_numbers[$i]=$element;\n            break;\n\
+    \        fi\n        (( i++ ));\n\n        sorted_string=\"${sorted_string} ${sorted_numbers[*]}\
+    \ \";\n\n        if [ $(( $j + 1 )) -ge $(( $k + 1 )) ]\n        then\n      \
+    \      break;\n        fi\n        (( j++ ));\n        (( k++ ));\n    done\n\n\
+    \    echo $sorted_string", "    local n=0\n    local ndup=0\n    local str=\"\
+    $1\"\n    local sorted=0\n    local firstnum=\"1000\"\n    local lastnum=\"2000\"\
+    \n\n    IFS=' ' read -r -a nums <<< \"$str\"\n\n    for num in \"${nums[@]}\"\
+    ; do\n        if [ -z \"$firstnum\" ] ; then firstnum=$num ; fi\n        if [\
+    \ \"$num\" -gt \"$lastnum\" ] ; then lastnum=$num ; fi\n        ((n++))\n    done\n\
+    \n    if [ \"$n\" -gt 1 ] ; then\n        sorted=1\n        ndup=\"$n\"\n    else\n\
+    \        sorted=0\n    fi\n\n    if [ \"$sorted\" -eq 1 ] ; then\n        true\n\
+    \    else\n        false\n    fi", "    set -- $1 \n    set -- $1 $1 $1 $1 $1\
+    \ $1 $1 $1\n\n    while [ -n \"$1\" ]\n    do\n        set -- $1 $1 $1 $1 $1 $1\
+    \ $1 $1\n        declare -n curr=$1\n        declare -n prev=$1\n        if [\
+    \ \"$prev\" -gt \"$curr\" ]\n        then\n            echo \"false\"\n      \
+    \      exit 0\n        fi\n        prev=$curr\n    done\n    echo \"true\"", " \
+    \ local numbers=$1\n  local sorted_numbers=$2\n\n  local i=0\n  while (( $i <\
+    \ ${#numbers} )); do\n    local j=0\n    while (( $j < ${#sorted_numbers} ));\
+    \ do\n      if [[ ${sorted_numbers[$j]} -gt ${numbers[$i]} ]]; then\n        echo\
+    \ \"false\"\n        return 1\n      fi\n      (( j++ ))\n    done\n    (( i++\
+    \ ))\n  done\n  echo \"true\"\n  return 0", "  local numbers=\"${@}\"\n  local\
+    \ n1=${#numbers}\n  local n2=0\n  local n3=1\n  while [ $n2 -lt $n1 ]; do\n  \
+    \  local num=\"${numbers[$n2]}\"\n    while [ -z \"$num\" ]; do\n      ((n2++))\n\
+    \      num=\"${numbers[$n2]}\"\n    done\n    if [ \"$num\" -gt \"$numbers[$n3]\"\
+    \ ]; then\n      return 0\n    elif [ \"$num\" -lt \"$numbers[$n3]\" ]; then\n\
+    \      return 1\n    else\n      ((n3++))\n    fi\n  done\n  return 1", "  local\
+    \ sorted=0\n  local i sorted\n  for (( i=0; i<${#1}; i++ )); do\n    (( sorted\
+    \ == 1 )) || [[ $sorted[$i] -gt $i ]]\n    sorted[$i]=$i\n  done\n  [[ $sorted\
+    \ == *[!-] ]] || return 1\n  return 0", "  local arr=$1\n  declare -i cnt\n  cnt=0\n\
+    \  local sorted=false\n  for ((i=0; i < ${#arr[@]}; i++)); do\n    local this=${arr[i]}\n\
+    \    declare -i cnt2=0\n    for ((j=0; j < ${#arr[@]}; j++)); do\n      if [[\
+    \ \"${arr[j]}\" == \"$this\" ]] && [ \"$cnt2\" -eq $i ]; then\n        cnt2=$((cnt2+1))\n\
+    \      fi\n    done\n    if [ \"$cnt2\" -eq \"$i\" ]; then\n      sorted=true\n\
+    \      break\n    fi\n    ((cnt++))\n  done\n  if [ \"$sorted\" = true ]; then\n\
+    \    return true\n  else\n    return false\n  fi", "  echo \"$1\" | tr ' ' '\\\
+    n' | sort -n | uniq -c | grep -q 1 || return 1", "  local input=\"$1\"\n\n  local\
+    \ line\n  local numbers=$(input)\n\n  # remove trailing newline\n  lines+=( ${lines##*$'\\\
+    n'} )\n  local sorted=true\n  local counter\n  local length\n  local i\n\n  length=${#lines[@]}\n\
+    \n  for ((i=length-1;i>=0;i--));\n  do\n    ((counter=i))\n    for ((i=1;i<length;i++));\n\
+    \    do\n      ((counter++))\n      if [[ ${lines[i]} -gt ${lines[counter]} ]];\
+    \ then\n        sorted=false\n        break\n      fi\n    done\n    if [[ \"\
+    $sorted\" = true ]]; then\n      break\n    fi\n  done\n  if [[ \"$sorted\" =\
+    \ true ]]; then\n    echo true\n  else\n    echo false\n  fi", '    sort -n "$1"
+    | uniq -c | sort -nr > /dev/null', "  local arr=$1\n  local i\n  for i in ${arr};\
+    \ do\n    [[ ${arr} == *\" $i \"* ]] && return 0\n  done\n  return 1", "  local\
+    \ list=\"$1\"\n  local element\n\n  list=($list)\n  element=$(echo \"$list\" |\
+    \ head -n 1)\n  for i in \"${!list[@]}\"; do\n    if [ \"$i\" != 0 ] && [ \"$i\"\
+    \ != \"$(( $i - 1 ))\" ]; then\n      if [ \"$list[i]\" -lt \"$element\" ]; then\n\
+    \        false\n      else\n        true\n      fi\n    fi\n    element=$(echo\
+    \ \"$list\" | sed -n \"$i p\")\n  done", "    # Remove blanks first to make sure\n\
+    \    local list_in=($(printf %s \"$1\" | tr -d ' '))\n    local list_out=($(printf\
+    \ %s \"$@\" | tr -d ' '))\n    echo \"${list_in[*]}\" | sort -n -u >/dev/null\
+    \ 2>&1", "    set -A nums\n    local tmp val\n    local count=0\n    local i\n\
+    \    local list=\"$1\"\n    shift\n    for (( i = 0; i < ${#list}; i++ )); do\n\
+    \        val=\"${list[i]}\"\n        if [[ $i -eq 0 ]]; then\n            if ((\
+    \ val > \"${list[0]}\" )); then\n                return 0\n            fi\n  \
+    \      else\n            if (( val > \"${list[i - 1]}\" )); then\n           \
+    \     return 0\n            fi\n        fi\n        (( count++ ))\n        nums[$i]=\"\
+    $val\"\n    done\n    if (( count > 1 )); then\n        return 0\n    fi\n   \
+    \ return 1", "\tlocal string=\"$1\"\n\tlocal sorted_list=$(sort -u <<< \"$string\"\
+    )\n\tlocal last=\n\tfor item in $sorted_list; do\n\t\t[[ \"$item\" = \"$last\"\
+    \ ]] || return 1\n\t\tlast=\"$item\"\n\tdone\n\treturn 0", "  local numbers=\"\
+    ${1}\"\n\n  local sorted dups seen\n  unset dups\n  unset seen\n  sorted=false\n\
+    \  for n in \"${numbers}\" ; do\n    if [ \"$n\" = \"$n$n\" ] || [ \"$n\" = \"\
+    $n$n$n\" ]; then\n      dups=\"$dups $n\"\n      continue\n    fi\n    seen=\"\
+    $seen $n\"\n  done\n  if [ \"$dups\" = \"$seen\" ]; then\n    return 0\n  else\n\
+    \    return 1\n  fi", "  local list=\"$1\"\n  local dups=0\n  local sorted=true\n\
+    \  for elem in $list; do\n    local tmp\n    for tmp in \"${list[@]}\"; do\n \
+    \     if [ \"$elem\" -gt \"$tmp\" ]; then\n        dups+=1\n        break\n  \
+    \    fi\n    done\n    if [ \"$tmp\" -eq \"$elem\" ]; then\n      sorted=false\n\
+    \      break\n    fi\n  done\n  if [ \"$dups\" -gt 1 ]; then\n    return false\n\
+    \  else\n    return $sorted\n  fi", "  local IFS=$' \\t\\n'\n  local sorted=$(is_sorted\
+    \ \"$1\" | sort -n -s)\n  [ -z \"$sorted\" ] && return 1 || return 0", "  # Split\
+    \ $1 into words\n  local num_words=\"$1\"\n  local i\n  local num\n  local num_word\n\
+    \  local sorted\n  local result\n\n  # If the list has no numbers, return true\n\
+    \  if [ -z \"$num_words\" ]; then\n    return 0\n  fi\n\n  # Store the result\n\
+    \  result=0\n\n  # Iterate over each number\n  for ((i = 0; i < ${#num_words};\
+    \ i++)); do\n    num_word=\"${num_words[i]}\"\n\n    # If the number has already\
+    \ been seen, return false\n    for ((j = 0; j < i; j++)); do\n      num=\"${num_words[j]}\"\
+    \n\n      # If the numbers are equal, return false\n      if [ \"${num}\" == \"\
+    ${num_word}\" ]; then\n        result=1\n        break\n      fi\n    done\n \
+    \ done\n\n  # If the result was true, return true\n  sorted=$((result == 1))\n\
+    \n  return \"$sorted\"", "    set -- $1\n    local unique\n    local count=1\n\
+    \    for number in \"$@\" ; do\n        if [[ ! -z \"$unique\" ]] ; then\n   \
+    \         if [ \"$count\" -eq \"$unique\" ] ; then\n                return 0\n\
+    \            else\n                return 1\n            fi\n        fi\n    \
+    \    unique=$count\n        count=$(( count+1 ))\n    done\n    return 0", " \
+    \ local list_name=$1\n  local list=$( echo $list_name | tr \" \" \"\\n\" )\n \
+    \ echo $list | grep -q -e \"$list\" | grep -v -e \"$list \"", "  declare -A seen=()\n\
+    \  for i in $@; do\n    seen[$i]=\n  done\n  for k in \"${!seen[@]}\"; do\n  \
+    \  [[ ${seen[$k]} ]] && ((${#seen[@]} > 1)) && return\n  done\n  [[ ${#seen[@]}\
+    \ -eq 1 ]] && return 0\n  return", "  if [ `expr ${#1} -gt 1 ]; then return 1;\
+    \ fi\n  local numbers=`echo $1 | tr ' ' ',' | sort -n -k 2`;\n  local uniques=`echo\
+    \ $numbers | tr ' ' ',' | sort | uniq -d | wc -l`;\n  if [ $uniques -eq 1 ]; then\
+    \ return 0; fi\n  echo 0;", "    local list=\"$1\"\n    local sorted=\"$(echo\
+    \ \"$list\" | sed 's/ /\\n/g' | sort -n | uniq)\"\n    [ -n \"$sorted\" ] || return\
+    \ 1\n    local first=\"$(echo \"$list\" | sed -n '1p')\"\n    [ \"$list\" == \"\
+    $first\" ] && return 1\n    [ \"$list\" == \"$sorted\" ] && return 0\n    return\
+    \ 1", "    local list=$1\n    local num_list=\"\"\n    local num_list2=\"\"\n\
+    \    local i\n    local c=0\n\n    for i in $list; do\n        if [ \"$c\" -eq\
+    \ 0 ] ; then\n            num_list=\"$num_list $i\"\n            ((c++))\n   \
+    \     elif [ \"$c\" -eq 1 ] ; then\n            num_list2=\"$num_list2 $i\"\n\
+    \            ((c++))\n        elif [ \"$num_list\" != \"$num_list2\" ] ; then\n\
+    \            echo \"false\"\n            return 0\n        fi\n    done\n\n  \
+    \  echo \"true\"\n    return 0", "  local lines=$(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -n | uniq -d)\n  [ \"$lines\" = \"\" ]", "  if [[ ! -z $1 ]]; then\n  \
+    \  local sorted\n    sorted=false\n    local item\n    for item in  $1; do\n \
+    \     if [[ \"$item\" -eq \"$item\" ]]; then\n        sorted=true\n        break\n\
+    \      else\n        sorted=false\n      fi\n    done\n    return $sorted\n  else\n\
+    \    return false\n  fi", "  is_sorted=\"$(\n    awk '{\n      sorted = $1\n \
+    \     num = $2\n      nums[sorted] = num\n      if (num != sorted) {\n       \
+    \ for (i in nums)\n          num = nums[i]\n        if (num != sorted) {\n   \
+    \       print \"false\"\n          exit\n        }\n      }\n      delete nums[sorted]\n\
+    \      print $1\n      exit\n    }' <<< \"$1 |\n      sort -u |\n      sort |\
+    \ uniq -d\"\n)\"\n\n  [ -z \"$is_sorted\" ] && echo \"false\" || echo \"true\"",
+  "    local array\n    array=($@)\n    local temp\n    local prev\n    local first\n\
+    \    local last\n\n    first=${array[0]}\n    last=${array[0]}\n    for ((i=1;\
+    \ i<${#array[@]}; i++)); do\n        temp=${array[i]}\n        if [[ \"$temp\"\
+    \ -gt \"$last\" ]]; then\n            first=${array[i]}\n        fi\n        if\
+    \ [[ \"$temp\" -gt \"$first\" ]]; then\n            array[$i-1]=${array[i]}\n\
+    \        fi\n        prev=${array[i]}\n    done\n\n    local ret=0\n    for ((i=${#array[@]};\
+    \ i>0; i--)); do\n        if [[ \"$array[$i-1]\" -eq \"$prev\" ]]; then\n    \
+    \        ret=1\n            break\n        fi\n    done\n\n    echo \"$ret\"",
+  "    local sorted_list=$(sort -n $1 | awk '{print $1}')\n    local all_same=$(echo\
+    \ \"${sorted_list}\" | tr \" \" \"\\n\" | sort -n | uniq -c)\n    (( \"${all_same}\"\
+    \ ))", "    local sorted_list=$1\n    local sorted_number_array=()\n\n    # Sort\
+    \ list of numbers in ascending order\n    for i in $sorted_list; do\n        sorted_number_array+=($i)\n\
+    \    done\n\n    # Count number of duplicate numbers in list\n    num_duplicates=$(echo\
+    \ \"${sorted_number_array[@]}\" | uniq -c | wc -l)\n\n    # Return true if there\
+    \ are duplicates\n    # and return false if there are none or only one number\n\
+    \    if [ \"$num_duplicates\" -gt \"1\" ]; then\n        echo true\n    else\n\
+    \        echo false\n    fi", "    local sorted_list=\"$(sort \"$1\") \"\n   \
+    \ [[ \"$sorted_list\" == \"$1\" ]] || return 1", "    local numbers=\"$@\"\n \
+    \   local sorted=\"yes\"\n    local dups=\"$((${#numbers} > 1))\"\n    local negatives=\"\
+    false\"\n    local integers=\"false\"\n    for number in $numbers; do\n      \
+    \  if [[ $number =~ ^[+-]?[0-9]+$ ]]; then\n            if [[ $number =~ ^-?[0-9]+$\
+    \ ]]; then\n                negatives=\"$(( ${#negatives} + 1 ))\"\n         \
+    \   else\n                integers=\"$(( ${#integers} + 1 ))\"\n            fi\n\
+    \        fi\n    done\n    if [[ $dups != \"0\" ]]; then\n        sorted=\"false\"\
+    \n        negatives=\"$(( $negatives + 1 ))\"\n    fi\n    if [[ $integers !=\
+    \ \"0\" ]]; then\n        sorted=\"false\"\n    fi\n    if [[ $negative == \"\
+    true\" ]]; then\n        sorted=\"false\"\n    fi\n    echo \"$sorted\"", "  local\
+    \ sorted=0\n  local counts=()\n  local line\n  IFS=' ' read -r -a numbers <<<\"\
+    $1\"\n  for number in \"${numbers[@]}\"; do\n    counts[$number]+=1\n  done\n\
+    \  for number in \"${numbers[@]}\"; do\n    (( sorted++ ))\n    if [ ${counts[$number]}\
+    \ -gt 1 ]; then\n      return 0\n    fi\n  done\n  return 1", "  local list=\"\
+    $1\"\n  # Split the list into words.\n  local list_words=$( IFS=' ' read -r -a\
+    \ list_words <<< \"$list\" )\n  # Sort the words.\n  sort -u <<<\"$list_words\"\
+    \ | wc -l # Count number of unique words.\n  return", "   local numlist=\"$1\"\
+    ;\n   local countlist=\"$(echo \"${numlist}\" | tr \" \" \"\\n\" | sort | uniq\
+    \ | wc -l)\";\n   if [[ \"${countlist}\" -gt 1 ]]; then\n      return 0;\n   fi\n\
+    \   local sortedlist=\"$(echo \"${numlist}\" | tr \" \" \"\\n\" | sort --numeric-sort\
+    \ | uniq)\";\n   echo \"${sortedlist}\" | grep -qFx \"^${sortedlist}\"", "   \
+    \ local LIST=\"$1\"\n    local T\n\n    T=\"$(sort --version)\"\n\n    # Only\
+    \ use \"sort\" for newer versions and \"gsort\" for older versions.\n    if test\
+    \ \"$T\" -ge \"200000\" -a \"$T\" -le \"1000010\" ; then\n        echo \"$LIST\"\
+    \ | gsort --version\n    else\n        echo \"$LIST\" | sort --version\n    fi\n\
+    \    return $?", "  local i result=true\n  for ((i=0; i<${#1}; i++)); do\n   \
+    \ [[ \"$result\" =~ ^$((++i))$ ]] && break\n    [[ \"$result\" != \"true\" ]]\
+    \ && result=false\n  done\n  [[ \"$result\" = \"true\" ]] || result=false\n  echo\
+    \ \"$result\"", "    local tmp\n    local i j\n    local count\n\n    IFS=$'\\\
+    n' read -r -a numbers <<< \"$1\"\n    local max=$((${#numbers[@]} - 1))\n\n  \
+    \  for ((i = 1, j = 0, count = 0; i < max; i++, j++))\n    do\n        if [ \"\
+    ${numbers[i]}\" -gt \"${numbers[j-1]}\" ]\n        then\n            count=$((count\
+    \ + 1))\n            numbers[i]=${numbers[$j]}\n            numbers[$j]=${numbers[i]}\n\
+    \        else\n            count=$((count - 1))\n            numbers[i]=${numbers[$j]}\n\
+    \            numbers[$j]=${numbers[i]}\n        fi\n    done\n    if [ \"$count\"\
+    \ -eq 0 ]\n    then\n        return 0\n    else\n        return 1\n    fi", " \
+    \   local list=$(echo \"$1\" | tr ' ' ' ')\n    local first=$(echo \"$list\" |\
+    \ head -1)\n    local last=$(echo \"$list\" | tail -1)\n    echo \"$first\" >\
+    \ \"$1\"\n    for num in $(echo \"$list\" | uniq); do\n        if [ \"${num}\"\
+    \ == \"$first\" ]; then\n            echo \"false\"\n        fi\n    done", " \
+    \   local LIST=\"$1\"\n    local i\n    local j\n    local k\n    local l\n  \
+    \  local length\n\n    length=$(echo \"$LIST\" | wc -w)\n\n    # No duplicate\
+    \ of same number\n    for i in $(seq 1 $((length - 1)))\n    do\n        j=$((i\
+    \ + 1))\n        for (( j; j <= $length; j++ ))\n        do\n            k=$((j\
+    \ - 1))\n            if [ \"$LIST\" = \"$LIST\" ] ||\n               [ \"$LIST\"\
+    \ = \"$LIST\" \"$LIST\" ] ||\n               [ \"$LIST\" = \"$LIST\" \"$LIST\"\
+    \ \"$LIST\" ]\n            then\n                return \"false\"\n          \
+    \  fi\n            if [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" ] ||\n     \
+    \          [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" ] ||\n      \
+    \         [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" ]\n\
+    \            then\n                return \"false\"\n            fi\n        \
+    \    if [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" ] ||\n\
+    \               [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\"\
+    \ \"$LIST\" ] ||\n               [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"\
+    $LIST\" \"$LIST\" \"$LIST\" \"$LIST\" ]\n            then\n                return\
+    \ \"false\"\n            fi\n        done\n    done\n    # No duplicate of same\
+    \ number\n    for i in $(seq 1 $length)\n    do\n        j=$((i + 1))\n      \
+    \  for (( j; j <= $length; j++ ))\n        do\n            k=$((j - 1))\n    \
+    \        if [ \"$LIST\" = \"$LIST\" ] ||\n               [ \"$LIST\" = \"$LIST\"\
+    \ \"$LIST\" ] ||\n               [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" ]\n\
+    \            then\n                return \"false\"\n            fi\n        \
+    \    if [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" ] ||\n               [ \"\
+    $LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"$LIST\" ]\n            then\n      \
+    \          return \"false\"\n            fi\n            if [ \"$LIST\" = \"$LIST\"\
+    \ \"$LIST\" \"$LIST\" \"$LIST\" ]\n            then\n                return \"\
+    false\"\n            fi\n            if [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\"\
+    \ \"$LIST\" ] ||\n               [ \"$LIST\" = \"$LIST\" \"$LIST\" \"$LIST\" \"\
+    $LIST\" \"$LIST\" ]\n            then\n                return \"false", "  local\
+    \ list_=\"$1\"\n  local sorted_list\n  local i\n  sorted_list=\"$(echo \"$list_\"\
+    \ | sort | uniq)\"\n  if (( $(echo \"$sorted_list\" | wc -l) -gt 1 )); then\n\
+    \    return 1\n  else\n    return 0\n  fi"]
 stop_tokens:
 - "\n}"

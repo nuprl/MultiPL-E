@@ -7,7 +7,1041 @@ tests: "test_humaneval <- function() {\ncandidate <- filter_integers\n    if(!id
   \ c())){quit('no', 1)}\n    if(!identical(candidate(c(4, list(), c(), 23.2, 9, 'adasd')),\
   \ c(4, 9))){quit('no', 1)}\n    if(!identical(candidate(c(3, 'c', 3, 3, 'a', 'b')),\
   \ c(3, 3, 3))){quit('no', 1)}\n}\ntest_humaneval()"
-completions: []
+completions: ["\n  v <- sapply(values, is.integer)\n  values <- values[v]\n  return(values)\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThank you for this answer, and for the very thorough\
+    \ explanation.\n<|/ c |>\n<| c |>\nThis does work, but I have just realized that\
+    \ your function doesn't filter out empty values. So if you have a list like `c('abc',\
+    \ c(1, 2), c(), list())`, then it will output `c(1, 2, c(), list())`. This will\
+    \ cause problems when trying to use that list as input to another function.\n\
+    <|/ c |>\n<| c |>\nI see. I think the problem is that empty elements are treated\
+    \ as false. I'll try to fix it now.\n<|/ c |>\n<| c |>\nThank you, this works\
+    \ now, but I think I may have worded my question poorly initially. The thing I\
+    \ don't understand is why `filter_integers` doesn't have a `filter_strings` function.\
+    \ Why do we need this `filter_strings` function? Isn't there already a `filter_integers`\
+    \ function?\n<|/ c |>\n<| c |>\nYou need an `is.string` function to filter for\
+    \ strings and an `is.integer` function to filter for integers. But I agree that\
+    \ it would be better to have a function that does the same thing for all types.\n\
+    <|/ c |>\n<| a dscore=1 tags=list,r |>\nThis solution worked for me using rrapply.\
+    \ \n<code>\nlibrary(rrapply)\n\nrrapply(df, \n         function(x) length(x)>1,\
+    \ \n         how=\"replace\", \n         how=\"all\", \n         .verbose = FALSE)\n\
+    </code>\n<|/ a |>\n<| c |>\nrrapply has some issues with `list` objects when `how=\"\
+    all\"`, so I used `how=\"replace\"`\n<|/ c |>\n<| a tags=list,r dscore=1 |>\n\
+    The way I see it, you have two ways of doing this.\n<code>", "\n    values <-\
+    \ as.list(values)\n    filter <- function(value) {\n        return(is.integer(value)\
+    \ && length(value) == 1)\n    }\n    unlist(sapply(values, filter))\n}\n</code>\n\
+    <|/ a tags=r dscore=2 |>\n<| a tags=r |>\nIn case of positive integers following\
+    \ solution might help. \n<code>\nf <- function(x){\n  res <- 0\n  while(x <= 0){\n\
+    \    res <- c(res,x)\n    x <- x + 1\n  }\n  return(res)\n}\n\nf(12)\n[1]   12\
+    \  123 1234 12345 123457 1234575 123456 1234560 12345610 123456110 123456111\n\
+    f(1234567)\n[1]   12  123 1234 12345 123457 1234575 123456 1234560 12345610 123456110\
+    \ 123456111\nf(12345678)\n[1]   12  123 1234 12345 123457 1234575 123456 1234560\
+    \ 12345610 123456110 123456111\nf(123456789)\n[1]   12  123 1234 12345 123457\
+    \ 1234575 123456 1234560 12345610 123456110 123456111\nf(1234567890)\n[1]   12\
+    \  123 1234 12345 123457 1234575 123456 1234560 12345610 123456110 123456111\n\
+    f(12345678901)\n[1]   12  123 1234 12345 123457 1234575 123456 1234560 12345610\
+    \ 123456110 123456111\nf(12345678902)\n[1]   12  123 1234 12345 123457 1234575\
+    \ 123456 1234560 12345610 123456110 123456111\n</code>\n<|/ a dscore=1 |>\n<|\
+    \ a dscore=1 |>\nHere is one approach using recursion and sapply (since there\
+    \ are a lot of possibilities for output).\n<code>\nf <- function(x, base = 1000)\
+    \ {\n  # if x is negative, we need to find all integers less than x and add them\
+    \ up\n  if(x < 0){\n    x <- abs(x)\n    out <- sapply(x, function(i) {\n    \
+    \  sapply(0:i, function(j) x + base * (j + 1))\n    })\n    # this removes the\
+    \ negative sign from x since it has been added by the previous step\n    return(out[[1]][-1])\n\
+    \  }\n  # x is an integer - just add it up and return\n  return(x + base)\n}\n\
+    </code>\nThis takes advantage of the fact that in R, integer division rounds towards\
+    \ zero.\n<|/ a tags=r ", "\n  if (!is.vector(values))\n    stop(\"values must\
+    \ be vector\")\n\n  if (!is.integer(values))\n    stop(\"values must be integers\"\
+    )\n\n  return(values[values > 0])\n}\n</code>\n<|/ a |>\n<| a |>\nI agree with\
+    \ the answers given above, but for the sake of completeness, here is a \"dplyr\"\
+    \ solution:\n<code>", "\n  if(length(values) <= 0) return NULL\n  if(!is.vector(values)\
+    \ || length(values) == 1) return values\n  if(!all(is.numeric(values))) {\n  \
+    \  stop(\"values must be numerical\")\n  }\n  if(!all(unique(values)[[1]] < 0))\
+    \ stop(\"values cannot be negative\")\n  values <- values[names(values) != 'NA']\n\
+    \  values\n}\n", "\n  # Remove lists from values\n  values <- as.list(values)\n\
+    \  # Filter out any rthon values which are not integers\n  values <- values[sapply(values,\
+    \ is.integer)]\n  # Return the filtered list of integers\n  return(values)\n}\n",
+  "\n  if (is.null(values)) values <- NA_integer_\n  values <- as.integer(values)\n\
+    \  return(values)\n}\n", "\n  if (is.atomic(values) && all(sapply(values, is.integer)))\
+    \ {\n    values <- sapply(values, as.integer)\n  }\n  values\n}\n", "\n  vals\
+    \ <- values\n  # If all values are integers, return that vector as is.\n  if(all(is.integer(vals)))\n\
+    \    return(values)\n  # If there are no integers, return all values.\n  if(!any(is.integer(vals)))\n\
+    \    return(vals)\n  # Otherwise, return the values that only are integers.\n\
+    \  return(vals[sapply(vals, is.integer)])\n}\n", "\n  values <- lapply(values,\
+    \ as.integer)\n  if (is.null(values))\n    return(NULL)\n  if (is.atomic(values))\n\
+    \    return(values)\n  if (length(values) == 1)\n    return(list(values))\n  values\
+    \ <- list(values)\n  values[[1]]\n}\n", "\n  values <- Filter(is.integer, values)\n\
+    \  return(values)\n}\n</code>\n<|/ a tags=r,python,dataframe,list,pandas |>\n\
+    <| c |>\nThanks your answer did work to filter the numeric but I am still not\
+    \ able to get the rest of the columns to retain their data type i.e. integer,\
+    \ character. I have attached the output from str(df) on the end of my question\
+    \ to illustrate what I am trying to achieve. Thanks again\n<|/ c |>\n<| c |>\n\
+    Apologies I should have mentioned, I have tried the following: df[] <- lapply(df,\
+    \ function(x) {ifelse(is.na(as.numeric(x)), NA, x)}) but I still get all the columns\
+    \ as factors\n<|/ c |>\n<| c |>\nApologies I should have mentioned, I have tried\
+    \ the following: df[] <- lapply(df, function(x) {ifelse(is.na(as.numeric(x)),\
+    \ NA, x)}) but I still get all the columns as factors\n<|/ c |>\n<| c |>\nI get\
+    \ the following when I type str(df) on my dataframe. str(df) \n'data.frame': 5\
+    \ obs. of  12 variables:\n $ Date             : Date, format: \"2013-09-25\" \"\
+    2013-10-24\" \"2013-10-25\" \"2013-10-26\" ...\n $ Time             : Time  \n\
+    \ $ Situation Report: chr  \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive\"\
+    \ \"Non Sensitive\" ...\n $ Situation Source: chr  \"Non Sensitive\" \"Non Sensitive\"\
+    \ \"Non Sensitive\" \"Non Sensitive\" ...\n $ Situation Report: chr  \"Non Sensitive\"\
+    \ \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive\" ...\n $ Situation Source:\
+    \ chr  \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive\"\
+    \ ...\n $ Situation Report: chr  \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive\"\
+    \ \"Non Sensitive\" ...\n $ Situation Source: chr  \"Non Sensitive\" \"Non Sensitive\"\
+    \ \"Non Sensitive\" \"Non Sensitive\" ...\n $ Situation Report: chr  \"Non Sensitive\"\
+    \ \"Non Sensitive\" \"Non Sensitive\" \"Non Sensitive", "\n  is.integer <- Vectorize(is.integer,\
+    \ \"any\")\n  filter(is.integer, values)\n}\n</cell>\n<cell>", "\n    values <-\
+    \ unlist(values)\n    values <- values[!is.na(values)]\n    values <- values[grepl(\"\
+    ^[0-9]+$\", values)]\n    values <- unique(values)\n    values <- values[values[order(values)]==values]\n\
+    \    return(values)\n}\n", "\n    values <- as.list(c(values))\n    values <-\
+    \ filter(values, is.numeric)\n    values <- c(values)\n    return(values)\n}\n\
+    </code>\n<|/ a dscore=2 |>\n<| c |>\nNice! One thing I should mention is that\
+    \ the first argument to `lapply` should be a function that takes one input and\
+    \ returns one output. This means that if one wanted to replace `c()`'s with some\
+    \ other function, you would have to write a function that does that.\n<|/ c |>\n\
+    <| a tags=list,r,filter dscore=2 |>\nI wrote a function, which uses purrr package\
+    \ to do what others already mentioned\n<code>\nremove_lists <- function(x) { \n\
+    \    x %>% map(~ replace(.x, is.na(.x), \"\")) %>% \n        reduce(`+`) %>% \n\
+    \        map_chr(~ if (.x == \"\") .else .x[!is.na(.x)]) %>% \n        map_chr(~\
+    \ if(.x == \"\") NA else .x)\n}\n</code>\n<|/ a |>\n<| a |>\nHere's a solution\
+    \ that uses purrr, tidyr, dplyr, and stringr.  This solution uses purrr::map()\
+    \ and purrr::reduce() in order to achieve the desired outcome.  \n<code>\nlibrary(dplyr)\n\
+    library(purrr)\nlibrary(stringr)\n", "\n  stopifnot(is.numeric(values))\n  values\
+    \ <- as.list(values)\n  values[values==NA] <- 0\n  values <- as.integer(values)\n\
+    \  values\n}\n", "\n    lapply(values, is.integer)\n}\n", "\n  values <- unlist(values)\n\
+    \  is_integer <- lapply(values, is.integer)\n  is_integer(values) & !all(is_integer)\n\
+    }\n", "\n  values[sapply(values, is.integer)]\n}\n", "\n  values <- lapply(values,\
+    \ is.numeric)\n  return(values[values])\n}\n", "\n  stopifnot(all(sapply(values,\
+    \ is.integer)))\n  return(Filter(is.integer, values))\n}\n", "\n  if (!is.list(values))\
+    \ values <- list(values)\n  lapply(values, is.integer) %>%\n    Reduce(f = `&`,\
+    \ init = TRUE) %>%\n    which()\n}\n", "\n  sapply(values, is.integer)\n}\n",
+  "\n  if(all(is.na(values))) {\n    return(NA)\n  } \n  if(all(is.na(as.character(values)))){\n\
+    \    return(NA)\n  }\n  if(all(is.na(as.numeric(values)))){\n    return(NA)\n\
+    \  }\n  if(all(is.na(as.logical(values)))){\n    return(NA)\n  }\n  if(all(is.na(as.raw(values)))){\n\
+    \    return(NA)\n  }\n  if(all(is.na(as.integer(values)))){\n    return(NA)\n\
+    \  }\n  if(all(is.na(as.double(values)))){\n    return(NA)\n  }\n  if(all(is.na(as.complex(values)))){\n\
+    \    return(NA)\n  }\n  if(all(is.na(as.vector(values)))){\n    return(NA)\n \
+    \ }\n  if(all(is.na(as.double(as.vector(values))))){\n    return(NA)\n  }\n  if(all(is.na(as.logical(as.vector(values))))){\n\
+    \    return(NA)\n  }\n  if(all(is.na(as.character(as.vector(values))))){\n   \
+    \ return(NA)\n  }\n  if(all(is.na(as.raw(as.vector(values))))){\n    return(NA)\n\
+    \  }\n  if(all(is.na(as.logical(as.vector(values))))){\n    return(NA)\n  }\n\
+    \  if(all(is.na(as.integer(as.vector(values))))){\n    return(NA)\n  }\n  if(all(is.na(as.double(as.vector(values))))){\n\
+    \    return(NA)\n  }\n  if(all(is.na(as.complex(as.vector(values))))){\n    return(NA)\n\
+    \  }\n  return(values)\n}\n</code>\n<|/ a |>\n<| a tags=filter,r |>\nTry this:\n\
+    <code>\ndf <- data.frame(a = c(1,2,3,NA), b = c(4,5,6,NA), c = c(7,8,9,NA))\n\n\
+    df[c(which(!is.na(df$a)),which(!is.na(df$b)),which(!is.na(df$c))),]\n</code>\n\
+    <|/ a dscore=0 |>\n<| a |>\nUsing the tidyverse you could do:\n<code>\nlibrary(tidyverse)\n\
+    df <- data.frame(a = c(1,2,3,NA), b = c(4,5,6,NA), c = c(7,8,9,NA))\ndf %>% rowwise()\
+    \ %>% mutate_all(funs(filter(., !is.", "\n  if (is.numeric(values)) {\n    values\
+    \ <- as.integer(values)\n  }\n  values\n}\n</code>\nAnd now for filtering:\n<code>",
+  "\n  values <- unlist(values)\n  is_integer    <- !is.na(as.integer(values))\n \
+    \ values[is_integer]\n}\n</cell>\n<cell>\nfilter_integers(c('abc', 3.14, 3.14159,\
+    \ c()))\n</cell>\n<text>\nFilter given list of any rthon values only for integers\
+    \ and return their index values\nFiltering is performed in place\n\n</text>\n\
+    <cell>\nfilter_integers_index <- function(values) {\n  values <- unlist(values)\n\
+    \  is_integer    <- !is.na(as.integer(values))\n  return(which(is_integer))\n\
+    }\n</cell>\n<cell>\nfilter_integers_index(c('abc', 3.14, 3.14159, c()))\n</cell>\n\
+    <text>\nConvert given rthon value to python native value\nA list value is converted\
+    \ into an rpython list and the first element of the list is returned.\n\n</text>\n\
+    <cell>\nconvert_list_to_rpython <- function(value) {\n  return(as.rpylist(as.list(value)))[0]\n\
+    }\n</cell>\n<cell>\nconvert_list_to_rpython(c('abc', 3.14, 3.14159, c()))\n</cell>\n\
+    <text>\nConvert given rpython value to python native value and extract first element\
+    \ of the value\nA list value is converted into an rpython list and the first element\
+    \ of the list is returned.\n\n</text>\n<cell>\nconvert_list_to_python_and_extract\
+    \ <- function(value) {\n  return(as.list(rpy(convert_list_to_rpython(value), envir\
+    \ = parent.frame()))[0])\n}\n</cell>\n<cell>\nconvert_list_to_python_and_extract(c('abc',\
+    \ 3.14, 3.14159, c()))\n</cell>\n<text>\nConvert given rpython value to python\
+    \ native value and extract all elements of the value\nA list value is converted\
+    \ into an rpython list and the first element of the list is returned.\n\n</text>\n\
+    <cell>\nconvert_list_to_python_and_extract_all <- function(value) {\n  return(as.list(rpy(convert_list_to_rpython(value),\
+    \ envir = parent.frame()))[-1])\n}\n</cell>\n<cell>\nconvert_list_to_python_and_extract_all(c('abc',\
+    \ 3.14, 3.14159, c()))\n</cell>\n<text>\nFilter given list of any rthon values\
+    \ only for integers and extract all elements of the value\nFiltering is performed\
+    \ in place\n\n</text>\n<cell>\nfilter_and_extract_all <- function(values) {\n\
+    \  values <- unlist(values)\n  is_integer    <- !is.na(as.integer(", "\n  values\
+    \ = Filter(is.numeric, values)\n  return(values)\n}\n", "\n    is.integer <- !is.complex(values)\
+    \ && !is.list(values) && !is.atomic(values) && !is.numeric(values)\n    values\
+    \ <- values[is.integer]\n    return(values)\n}\n", "\n  values <- rlang::as_name(values)\n\
+    \  values <- rlang::as_string(values)\n  values <- rlang::parse_expr(values)\n\
+    \  values <- rlang::parse_quosure(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- rlang::eval_tidy(values)\n\
+    \  values <- rlang::eval_tidy(values)\n  values <- r", "\n  if (!is.null(values))\
+    \ {\n    v <- Filter(is.numeric, values)\n    if (length(v)==0) return(NULL) \n\
+    \    else return(v)\n  } else {\n    return(NULL)\n  }\n}\n\n", "\n  values <-\
+    \ unlist(values)\n  values <- grep(\"^[0-9]+$\", values)\n  if(!is.na(values)\
+    \ && length(values) > 0) {\n    values\n  } else {\n    values\n  }\n}\n", "\n\
+    \  values\n  values <- Filter(function(x) is.integer(x), values)\n  return(values)\n\
+    }\n", "\n  return(\n    as.integer(\n      sapply(values,\n             function(v)\
+    \ v[!is.na(v)],\n             SIMPLIFY=FALSE)\n    )\n  )\n}\n", "\n  values <-\
+    \ unlist(values)\n  is.integer(values) || stop(\"values must be integers\")\n\
+    \  values\n}\n", "\n  values <- as.list(values)\n  values <- c(values, list())\n\
+    \  values <- unique(values[sapply(values, is.integer)])\n  values <- values[!(values\
+    \ %in% c(list(integer(0)), list(integer(0)), list(integer(0))))]\n  return(values)\n\
+    }\n</cell>\n<code language=conda-env-py3_physeq-r>", "\n  \n  values <- as.vector(values)\n\
+    \  \n  is_integer <- sapply(values, function(x) is.integer(x))\n  \n  values <-\
+    \ values[is_integer]\n  \n  return(values)\n  \n}\n", "\n  values <- lapply(values,\
+    \ as.integer)\n  return(values[!is.na(values)])\n}\n", "\n  filter(function(x)\
+    \ is.integer(x) && is.finite(x), values)\n}\n", "\n  values <- rlang::enquo(values)\n\
+    \  values <- rlang::quo_sort(values)\n  values <- values[sapply(values, is.integer)]\n\
+    \  values\n}\n</code>\n<|/ a dscore=4 |>\n<| c |>\nI believe this solution is\
+    \ better than the `filter_integers` method in the accepted answer. `filter_integers`\
+    \ returns an object of length 1, whereas the accepted answer will return a vector\
+    \ of length zero (an empty data frame).\n<|/ c |>\n<| a tags=r,list,dplyr,filter\
+    \ |>\nThis doesn't appear to work on tibbles, but here's a more generic solution\
+    \ that works for most objects.\n<code>\nfoo <- tibble(x = 1:5, y = 6:10)\nfoo\n\
+    \n   x  y\n1 1  6\n2 2  7\n3 3  8\n4 4  9\n5 5 10\n\nfilter_foo <- function(foo)\
+    \ {\n  foo %>% mutate(\n    z = if_else(\n      is.na(x),\n      y,\n      if_else(\n\
+    \        is.na(y),\n        x,\n        if_else(\n          x < y,\n         \
+    \ x,\n          y\n        )\n      )\n    )\n  )\n}\n\nfilter_foo(foo)\n", "\n\
+    \  values <- lapply(values, as.integer)\n  na.omit(values)\n}\n", "\n  values\
+    \ <- Filter(is.integer, values)\n  length(values)\n}\n", "\n    values <- as.list(c(values))\n\
+    \    values <- values[!is.na(values)]\n    values <- values[values != c(NA, 0L)]\n\
+    \    values <- values[values != c(0L, 0L)]\n    values <- values[values != c(0L,\
+    \ NA)]\n    values <- values[!is.na(values)]\n    values <- values[values != c(0L,\
+    \ 0L)]\n    values <- values[values != c(NA, NA)]\n    values <- values[values\
+    \ != c(NA, NA)]\n    values <- values[!is.na(values)]\n    values <- values[values\
+    \ != c(0, 0L)]\n    values <- values[values != c(0L, 0L)]\n    values <- values[values\
+    \ != c(0L, NA)]\n    values <- values[values != c(NA, NA)]\n    values <- values[values\
+    \ != c(NA, NA)]\n    values <- values[!is.na(values)]\n    values <- values[values\
+    \ != c(0L, 0L)]\n    values <- values[values != c(NA, NA)]\n    values <- values[values\
+    \ != c(NA, NA)]\n    values <- values[!is.na(values)]\n    values <- values[values\
+    \ != c(0L, 0L)]\n    values <- values[values != c(NA, NA)]\n    values <- values[values\
+    \ != c(NA, NA)]\n    values <- values[!is.na(values)]\n    values <- values[values\
+    \ != c(NA, NA)]\n    values <- values[values != c(NA, NA)]\n    values <- values[!is.na(values)]\n\
+    \    values <- values[values != c(NA, NA)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[!is.na(values)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[values != c(NA, NA)]\n    values <- values[!is.na(values)]\n\
+    \    values <- values[values != c(NA, NA)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[!is.na(values)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[values != c(NA, NA)]\n    values <- values[!is.na(values)]\n\
+    \    values <- values[values != c(NA, NA)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[!is.na(values)]\n    values <- values[values != c(NA,\
+    \ NA)]\n    values <- values[values != c(NA, NA)]\n    values <- values[!is.na(values)]\n\
+    \    values <- values[values != c(NA, NA)]\n    values <- values[values != ",
+  "\n  # Check for numeric or character values\n  # and ignore other types\n  values\
+    \ <- as.numeric(unlist(values))\n  if(is.numeric(values)) values else values\n\
+    }\n", "\n  sapply(values, is.integer)\n}\n</cell>\n<code language=conda-env-Anaconda3-py>\n\
+    filter_integers(c(1, 2, 3, 'abc', list(), c()))\n</cell>\n<text>\nFilter given\
+    \ list of any rthon values only for floats", "\n  return(values[sapply(values,\
+    \ is.integer)]) \n}\n", "\n  v <- unlist(values)\n  is.integer(v[!is.na(v)])\n\
+    }\n", "\n  values <- as.character(values)\n  values <- grep(\"^[0-9]$\", values,\
+    \ value = TRUE, invert = TRUE)\n  values <- as.integer(values)\n  values\n}\n",
+  "\n  new_values <- NULL\n  for(i in seq_along(values)){\n    stopifnot(is.integer(values[i]))\n\
+    \    new_values <- c(new_values, values[i])\n  }\n  new_values\n}\n", "\n  values\
+    \ <- as(values, list())\n  values <- values[sapply(values, is.integer)] # remove\
+    \ non-integers\n  values <- values[!duplicated(values)] # remove duplicates\n\
+    \  return(values)\n}", "\n  \n  # Convert any list to string\n  values <- unlist(lapply(values,\
+    \ as.character))\n  \n  values <- values[!(values %in% c(\"\\\\N\", \"\"))]\n\
+    \  \n  # Check if values are not integer\n  values <- values[!(values %in% as.integer(values))]\n\
+    \  \n  # Return values\n  values\n}\n", "\n  if (is.list(values)) {\n    values\
+    \ <- Filter(is.integer, values)\n  } else {\n    values <- Filter(is.integer,\
+    \ as.list(values))\n  }\n  if (!is.null(values)) {\n    values <- lapply(values,\
+    \ as.numeric)\n  } else {\n    values <- list()\n  }\n  return(values)\n}\n",
+  "\n  values <- c(values, 0)\n  idx <- which(values != 0)\n  values <- c(1, values[!is.na(values)])\n\
+    \  values <- values[idx]\n  values\n}\n", "\n  return(as.logical(lapply(values,\
+    \ function(x) is.integer(x))))\n}\nfilter_integers(c(3.14, 5, 'a', list(), c()))",
+  "\n  values <- lapply(values, is.integer)\n  if(length(values)) as.list(c(values))\
+    \ else as.list()\n}\n", "\n  for(i in seq_along(values)) {\n    if(is.na(values[i]))\
+    \ values[i] <- 0\n    if(!is.na(values[i])) {\n      if(is.integer(values[i]))\
+    \ values[i] <- values[i]\n    }\n  }\n  values\n}", "\n  values <- enquo(values)\n\
+    \  values <- filter(values, is.integer)\n  return(values)\n}\n", "\n    values\
+    \ <- lapply(values, as.character)\n    out <- as.integer(values)\n    names(out)\
+    \ <- gsub(\"\\\\W+\", \"\", names(out))\n    return(out)\n}\n", "\n  as.vector(Filter(is.integer,\
+    \ values))\n}\n", "\n  stopifnot(is.list(values))\n  values <- lapply(values,\
+    \ is.integer) %>% unlist\n  values\n}\n", "\n    values[sapply(values, is.integer)]\
+    \ \n}\n</code>\n<|/ a |>\n<| c |>\nVery helpful! Thanks.\n<|/ c |>\n<| c |>\n\
+    Why not just `Filter(is.integer, values)`?\n<|/ c |>\n<| a dscore=1 tags=r,list,filtering\
+    \ |>\nThe answer from is perfect, however it's still possible to do the filtering\
+    \ using the pipe operator %>%\n<code>", "\n  values <- as.vector(values)\n  if\
+    \ (length(values)==0)\n    return()\n  else\n    values <- lapply(values, function(x)\
+    \ as.integer(x))\n  values\n}\n", "\n  values <- as.list(values)\n  as.integer(sapply(values,\
+    \ is.integer))\n}\n</cell>\n<code language=conda-env-py3_physeq-r>\nlibrary(ggplot2)\n\
+    library(repr)\n\nplot_data <- read.csv('../supplementary_material/figS10B_branins_data.csv')\n\
+    p <- ggplot(plot_data, aes(x = factor(method), y = log2FoldChange, color = factor(species)))\n\
+    p + geom_boxplot() + theme_bw() + xlab('Method') + ylab('Log2 fold change') +\
+    \ \n    scale_color_discrete('Species') + theme_classic()\n</cell>\n<text>\nWe\
+    \ cannot see any difference between the two methods of Branins. Lets compare their\
+    \ performance with a more traditional two-sample t-test on their data\n\n\n</text>\n\
+    <code language=conda-env-py3_physeq-r>", "\n  as.integer(unlist(lapply(values,\
+    \ is.integer)))\n}\n", "\n  if (is.integer(values)) {\n    values\n  } else {\n\
+    \    lapply(values, function(x) if (is.integer(x)) x else NA)\n  }\n}\n", "\n\
+    \  return(lapply(values, function(x) {\n    is.integer(x)\n  }))\n}\n", "\n  values\
+    \ <- as.list(c(values))\n  values <- Filter(is.integer, values)\n  return(unname(values))\n\
+    }\n</code>\n<|/ a dscore=0 |>\n<| a tags=r,tidyverse,data-wrangling,dplyr |>\n\
+    <code>\nlibrary(dplyr)\n\ndf %>% \n  # convert it to list using deparse\n  unnest_wider(c(value,\
+    \ value))  %>% \n  # filter out `NA` rows\n  filter(!is.na(value))  %>% \n  #\
+    \ use str_detect to filter values other than integers\n  filter(str_detect(value,\
+    \ '^[0-9]+$')) %>% \n  # get rid of those rows with `NA`\n  na.omit() %>% \n \
+    \ arrange(id)\n", "\n  values <- as.character(values)\n  values <- grepl(\"[a-z_0-9]\"\
+    , values)\n  values <- as.integer(values)\n  values\n}\n", "\n  lapply(values,\
+    \ is.integer)\n}\n", "\n  values <- values == NULL\n  if (all(is.na(values)))\
+    \ return(NULL)\n  na.values <- is.na(values)\n  values <- values == 0\n  values\
+    \ <- values | values\n  values <- is.finite(values)\n  values <- na.values[values]\n\
+    \  values\n}\n</code>\n<|/ a |>\n<| c |>\nI see what you mean about `values` being\
+    \ an atomic vector. I had tried it using `sapply` but it didn't work. Good to\
+    \ know about `grepl` for that though. I do have a question though as to why you\
+    \ used `grepl` instead of `grep`.\n<|/ c |>\n<| c |>\n`grepl` works better with\
+    \ regular expressions than `grep`, so I figured it would be the most versatile\
+    \ method. `grep` doesn't allow for regular expressions.\n<|/ c |>\n<| a |>\nAs\
+    \ an alternative to my other answer you can use gsubfn package which allow to\
+    \ define a function to extract some values from each element of list\n<code>\n\
+    library(gsubfn)\n\nf1 <- function(x, pattern) {\n  s <- strsplit(x, pattern)[[1]]\n\
+    \  unlist(s)\n}\n\n> as.numeric(lapply(list(a, b, c), f1, pattern = \"[[:digit:]]+\"\
+    ))\n[1]  1  2 NA\n</code>\n<|/ a dscore=1 tags=list,r,type-conversion,type-coercion\
+    \ |>\n<| a dscore=1 tags=list,r,type-conversion,type-coercion |>\nJust for fun,\
+    \ I thought I'd take a crack at an answer using purrr. I'm still very new to R\
+    \ so I hope I didn't break anything by not using purrr.\n<code>\nlibrary(purrr)\n",
+  "\n    values <- as.numeric(values)\n    values <- values[!is.na(values)]\n    values\
+    \ <- values[!(values %in% c(Inf, -Inf))]\n    values\n}\n</cell>\n<cell>", "\n\t\
+    stopifnot(is.integer(values))\n\tunlist(lapply(values, is.integer))\n}\n", "\n\
+    \  return(Filter(function(v) is.integer(v), values))\n}\n</cell>\n<text>\nNow\
+    \ that we've defined all our functions and helper functions, let's go ahead and\
+    \ run our functions again and make sure they return what we expect.\n\n\n</text>\n\
+    <cell>", "\n  if(is.list(values)) {\n    lapply(values, filter_integers)\n  }\
+    \ else {\n    values <- as.integer(values)\n    if(is.numeric(values)) {\n   \
+    \   values \n    } else {\n      NULL\n    }\n  }\n}\n", "\n    if (is.vector(values))\
+    \ {\n        values <- as.integer(values)\n    } else {\n        values <- lapply(values,\
+    \ as.integer)\n    }\n    values\n}\n", "\n    values <- enquo(values)\n    values\
+    \ <- as_symbol(quo_name(values))\n    values <- values[!is.na(values)]\n    if(!all(vapply(values,\
+    \ is.integer, c('integer', 'numeric'))))\n        return(values)\n    return(filter(values,\
+    \ is.integer))\n}\n", "\n  values <- as.character(values)\n  if(is.na(values))\
+    \ NA_integer_\n  if(grepl('[a-zA-Z]', values)) NA_integer_\n  values <- as.integer(values)\n\
+    \  if(is.na(values)) NA_integer_\n  values\n}\n", "\n    values <- unique(values)\n\
+    \    values <- values[is.integer(values)]\n    values\n}\n", "\n  values <- unlist(values)\n\
+    \  if(is.integer(values)) values else NULL\n}\n", "\n  values = values %>% \n\
+    \    lapply(as.integer) %>%\n    unlist()\n  return(values)\n}\n", "\n  lapply(values,\
+    \ is.integer) %>% \n    Reduce(function(x, y) c(x, y), .init = c(FALSE, FALSE))\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThis is not what the question asked for. Using\
+    \ your function and `c('a', 'b', c(1, 2, 3))` I would expect `c(TRUE, FALSE, FALSE)`\
+    \ as return.\n<|/ c |>\n<| c |>\nI see... It was a small example from the description\
+    \ of the problem. I will see if I can think of something better.\n<|/ c |>\n<|\
+    \ c |>\nI have changed it to use `Filter` from `dplyr` instead of `Filter2`. The\
+    \ result is still the same though, only `c` instead of `c(1, 2)`\n<|/ c |>\n<|\
+    \ c |>\nNo it isn't.\n<|/ c |>\n<| c |>\nI updated my answer based on your latest\
+    \ comment. I hope it better reflects the question.\n<|/ c |>\n<| a tags=r |>\n\
+    The answer given by is correct. \nBut to answer your question specifically, you\
+    \ can use grep to get a character vector that contains the indices of all elements\
+    \ in your vector that are integers \n<code>\nx <- c(\"abc\",5,\"def\",2,4,6,8,9,10,'jkl','mno')\n\
+    \ as.character(grep(\" [0-9]\",x))\n</code>\nWhich gives you:\n<code>\n [1] \"\
+    4\"  \"6\"  \"10\" \"6\"  \"8\"  \"9\" \n</code>\n<|/ a dscore=2 |>\n<| c |>\n\
+    `grep` will do it, but I agree that it's more straightforward to write it manually\
+    \ as well.\n<|/ c |>\n<| c |>\n, I would have used `grep`, too, but I didn't know\
+    \ about the `pattern` argument of grep. I knew that `grepl` was the way to go,\
+    \ but I forgot that there is a pattern argument in `grep`.\n<|/ c |>\n<| c |>\n\
+    Yeah. grepl does the job too, but I forgot it could be used with a pattern. Just\
+    \ found out about it today after seeing your answer. Thanks.\n<|/ c |>\n<| a dscore=2\
+    \ |>\nUsing stringi package:\n<code>\nx <- c(\"abc\",5,\"def\",2,4,6,8,9,10,'jkl','mno')\n\
+    library(stringi)\n\nstri_match_all_regex(x, '\\\\d(?:\\\\d)*')[,-1]\n\n", "\n\
+    \  values <- as.integer(values)\n  values <- values[values == 1]\n  values\n}\n",
+  "\n  values <- purrr::keep(value, is.integer)\n  values <- purrr::keep(value, !is.na(value))\n\
+    \  values <- purrr::keep(value, !is.na(trim(value)))\n  return(values)\n}\n",
+  "\n    values <- c( values )\n    \n    # Only keep integers\n    values <- values[\
+    \ !( is.na( values ) ) & \n                           sapply( values, is.integer\
+    \ ) ]\n    \n    # Only keep values that had at least one valid number in them\n\
+    \    values <- values[ !( is.na( values ) ) & \n                           sapply(\
+    \ values, function( x ) {\n                               sum( x != 0 ) == length(\
+    \ x )\n                           }) ]\n    \n    return( values )\n}\n\nfilter_integers(\
+    \ c('a') )", "\n  if(is.integer(values)) {\n    values\n  } else {\n    stop(\"\
+    Only integers are allowed in the expression of filter_integers()\")\n  }\n}\n",
+  "\n  values <- as.list(values)\n  integer <- sapply(values, is.integer)\n  values[integer]\n\
+    }\n</code>\n<|/ a tags=dataframe,filter,r |>\n<| c |>\nNice and short!\n<|/ c\
+    \ |>\n<| a |>\nI like using filter from dplyr as it is simple:\n<code>\nlibrary(dplyr)\n\
+    \ndf %>% filter(is.integer(x))\n</code>\nThe benefit of this is that you can also\
+    \ include multiple conditions, including logical operators (i.e. &, |, !), etc.\
+    \ \n<code>\ndf %>% filter(x > 30 & x < 40)\n</code>\n<|/ a dscore=5 tags=dataframe,filter,r\
+    \ |>\n<| c |>\nI like `filter` too, because it's clear. But I'm a bit concerned\
+    \ about the speed of logical operators. Do you know if there are any benchmarks\
+    \ done on the speed of logical operators?\n<|/ c |>\n<| c |>\nI'm not sure what\
+    \ you're asking. `filter` will always be a logical operation, so it will always\
+    \ be slower no matter how you do it.  However, it also has more flexibility with\
+    \ multiple conditions than `subset` so you can do some really interesting things.\n\
+    <|/ c |>\n<| c |>\nThis is more of a question about coding style than an R benchmark.\
+    \ While I agree that it is more flexible `dplyr` has it's own idiosyncrasies such\
+    \ as `NA` handling as `!is.na()`.\n<|/ c |>\n<| c |>\nThe speed issue can be solved\
+    \ by using `is.integer` instead of `is.numeric`.\n<|/ c |>\n<| a dscore=5 |>\n\
+    There are a few things to keep in mind when working with data.frames:\n\nColumns\
+    \ of a data.frame are vectors, so you can access them by their column name, e.g.\
+    \ df$x. So you can filter a data.frame directly with df[which(df[,'x'] > 5), ].\n\
+    You can subset a data.frame with the subsetting operators. In this case, subset\
+    \ with logical expressions usually yields a vector that can be used as an index\
+    \ into the original data.frame. For example, df[1:4, ] will return the row numbers\
+    \ of the data.frame where the logical condition is satisfied.\n\nUsing subsetting\
+    \ with logical expressions is especially useful if you want to use multiple columns\
+    \ as criteria in a logical expression together, e.g. df$x <= df$y and df$z <=\
+    \ df$w or df$x > df$z or df$x < df$z and so on.\nFiltering by logical expressions\
+    \ works with subsetted ", "\n    if(is.null(values)) return(NULL)\n    values\
+    \ <- c(as.character(values))\n    values <- values[!is.na(values)]\n    values\
+    \ <- values[!is.na(values)]\n    values <- values[!is.na(values)]\n    if(all(is.na(values)))\
+    \ return(NULL)\n    if(all(is.na(values))) return(NULL)\n    if(all(is.na(values)))\
+    \ return(NULL)\n    if(all(is.na(values))) return(NULL)\n    if(all(is.na(values)))\
+    \ return(NULL)\n    values <- as.integer(values)\n    return(values)\n}\n", "\n\
+    \  values <- lapply(values, as.integer)\n  length(values[lengths(values) == 1])\n\
+    }\n", "\n\tvalues <- as.list(values)\n\tvalues <- lapply(values, as.numeric)\n\
+    \tvalues <- lapply(values, is.finite)\n\tvalues <- lapply(values, is.integer)\n\
+    \tvalues <- lapply(values, Negate(is.infinite))\n\tvalues <- lapply(values, Negate(is.nan))\n\
+    \tvalues <- lapply(values, Negate(is.na))\n\tvalues <- lapply(values, Negate(is.character))\n\
+    \tvalues <- lapply(values, Negate(is.list))\n\tvalues <- lapply(values, Negate(is.integer))\n\
+    \tvalues <- lapply(values, Negate(is.numeric))\n\tvalues <- lapply(values, Negate(is.complex))\n\
+    \tvalues <- lapply(values, Negate(is.logical))\n\tvalues <- lapply(values, Negate(is.raw))\n\
+    \tvalues <- lapply(values, Negate(is.complex))\n\tvalues <- lapply(values, Negate(is.array))\n\
+    \tvalues <- lapply(values, Negate(is.is.arraylike))\n\tvalues <- lapply(values,\
+    \ Negate(is.listlike))\n\tvalues <- lapply(values, Negate(is.atomic))\n\tvalues\
+    \ <- lapply(values, Negate(is.na))\n\tvalues <- lapply(values, Negate(is.logical))\n\
+    \tvalues <- lapply(values, Negate(is.logical))\n\tvalues <- lapply(values, Negate(is.numeric))\n\
+    \tvalues <- lapply(values, Negate(is.integer))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.numeric))\n\
+    \tvalues <- lapply(values, Negate(is.integer))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \tvalues <- lapply(values, Negate(is.finite))\n\tvalues <- lapply(values, Negate(is.finite))\n\
+    \t", "\n  is_integer <- sapply(values, is.integer)\n  values[is_integer]\n}\n",
+  "\n  values <- as.vector(values)\n  if (any(is.na(values))) return(NA)\n  \n  values\
+    \ <- as.integer(values)\n  return(values[!is.na(values)])\n}\n", "\n  if (! is.atomic(values))\
+    \ return(NULL)\n  values <- unlist(values)\n  return(values[values!='']) \n}\n",
+  "\n  if(!is.list(values)) values <- list(values)\n  out <- list()\n  for(i in seq_along(values))\
+    \ {\n    out <- c(out, as.integer(grep(\"^[+-]?[0-9]+$\", values[i])))\n  }\n\
+    \  return(out)\n}\nfilter_integers(c('a3', c(1, 2, 3, 5)))\n</code>\n<|/ a dscore=3\
+    \ |>\n<| c |>\n`lapply(x, is.integer)` should be faster than `grep('\\\\d', x)`\n\
+    <|/ c |>\n<| c |>\nThat is very interesting. I didn't know that. I actually went\
+    \ through the benchmarking before posting, and found that `grep` is faster, but\
+    \ did not try `lapply`. I don't know why. Thank you for bringing it up.\n<|/ c\
+    \ |>\n<| c |>\nI really appreciate your answer but this is way more complex than\
+    \ I expected. I'd like to understand and implement your solution in my own way,\
+    \ but I cannot understand how it works. Could you please point me in the right\
+    \ direction how I can learn more about this problem?\n<|/ c |>\n<| c |>\nThe `apply`\
+    \ family can take a function. If you give it `grep` it will return the values\
+    \ that satisfy the regex in the function and then feed them to the function. In\
+    \ my answer, I use `grep` to return the indices of values that satisfy the regex\
+    \ but then feed these indices to the function. `lapply` is much like `apply` except\
+    \ `lapply` returns values not indices. `lapply` also works with vectors. `grep`\
+    \ returns values but `grep` takes a vector as input. My `lapply` returns the indices\
+    \ of values that satisfy the regex. If I wanted to change my answer to return\
+    \ the values, I'd simply replace the function `grep` with your `filter_integers`.\n\
+    <|/ c |>\n<| c |>\nI understand that `lapply` returns the indices, but I still\
+    \ don't understand how to use `lapply` correctly in this problem. I don't understand\
+    \ how to pass values to the function. I think I'm getting lost in the whole picture.\n\
+    <|/ c |>\n<| a tags=r |>\nYou could try:\n<code>\nx <- c('3.14', '3.14a', '3a',\
+    \ '2a', '5', '3', 'a')\n</code>\nwhich returns\n<code>\n[1] 1 2 3 5 3\n</code>\n\
+    You can use grepl to find indices of integers:\n<code>\nwhich(grepl('\\\\d', x))\n\
+    \n[1] 1 2 3 5 3\n</code>\nThen use these indices to subset x:\n<code>\nx[", "\n\
+    \  values <- unlist(values)\n  values <- values[values != c(NA, NA_integer_, NA_real_,\
+    \ NA_complex_)]\n  values <- values[values != c(NA_character_, NA_complex_)]\n\
+    \  values <- c(values, 0)\n  values <- values[values == 0]\n  values\n}\n", "\n\
+    \  values <- values if length(values) > 0\n  values <- as.numeric(values)\n  values\
+    \ <- unique(values)\n  values\n}\n", "\n  values <- lapply(values, as.integer)\n\
+    \  if (is.null(values)) {\n    return(c())\n  } else {\n    return(values)\n \
+    \ }\n}\n", "\n  values <- values if is.null(values) else values\n  values <- as.vector(values)\n\
+    \  values <- values[!is.na(values)]\n  if (length(values) <= 0) {\n    return(values)\n\
+    \  }\n  return(filter(values, function(x) is.integer(x)))\n}\n", "\n  vec <- as.vector(values)\n\
+    \  return(ifelse(is.integer(vec), vec, NA))\n}\n", "\n  values <- unlist(values)\n\
+    \  values[!is.integer(values)]\n}\n", "\n  if (!is.vector(values) || !length(values))\
+    \ \n    return(values)\n  \n  values <- as.list(values)\n  \n  # Remove NA values\
+    \ from values\n  values <- lapply(values, is.numeric)\n  \n  # Remove non-integer\
+    \ values from values\n  values <- lapply(values, function(x) {\n    return(if\
+    \ (is.na(x)) FALSE else x > 0)\n  })\n  \n  # Return only values\n  return(values[values])\n\
+    }\n</cell>\n<text>\nFunctional programming is very often used in R programming.\
+    \ Reproducible and readable code can be obtained by writing functions. Functions\
+    \ in R are reusable blocks of code that can be called and used multiple times\
+    \ to perform a particular task. Functional programming is a style of programming\
+    \ that avoids the need for loops and often makes code easier to read and maintain.\n\
+    \n\n</text>\n<cell>", "\n  values <- rlang::enexpr(values)\n  values <- rlang::parse_exprs(values,\
+    \ keep_default_na = FALSE)\n  values <- rlang::eval_tidy(values)\n  values <-\
+    \ rlang::expr_filter(values, rlang::is_integer)\n  rlang::enexpr(values)\n}\n",
+  "\n  Filter(function(x) is.integer(x), values)\n}\n", "\n  values <- lapply(values,\
+    \ as.integer)\n  values <- unique(values[!is.na(values)])\n  if (is.na(values))\
+    \ NA_integer_ else values\n}\n", "\n  Filter(function(x) is(x, integer()), values)\n\
+    }\n", "\n  values <- rbind(values, -1)\n  values <- rbind(values, -Inf)\n  values\
+    \ <- rbind(values, NaN)\n  values <- rbind(values, 0)\n  values <- rbind(values,\
+    \ Inf)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- rbind(values, values)\n  values <- rbind(values, values)\n  values\
+    \ <- rbind(values, values)\n  values <- rbind(values, values)\n  values <- rbind(values,\
+    \ values)\n  values <- rbind(values, values)\n  values <- rbind(values, values)\n\
+    \  values <- ", "\n  values[sapply(values, is.integer)]\n}\n</code>\n<|/ a tags=r,python\
+    \ |>\n<| c |>\nThanks for your answer. I am still trying to understand the logic\
+    \ behind why this works and what was happening.\n<|/ c |>\n<| c |>\nIt's not exactly\
+    \ a logical explanation, so I guess it's easier to just try to explain it by thinking\
+    \ about it. `c` creates empty vectors of its arguments and then returns the first\
+    \ argument. `sapply` loops over the vector and returns the first argument for\
+    \ each element of the vector. Since `sapply` returns a `list`, we only want the\
+    \ first argument, so we extract it with `[1]`.\n<|/ c |>\n<| c |>\n`sapply` is\
+    \ vectorized function. It works with every type of variable and with any number\
+    \ of arguments. `apply` is for one argument only. In your case, you are using\
+    \ `sapply` with one argument so it returns a vector, while `apply` expects one\
+    \ argument and returns a matrix. `sapply` also works with `data.frame` while `apply`\
+    \ works with matrices and data.frames. So, `sapply` works only on vectors, while\
+    \ `apply` works only on vectors.\n<|/ c |>\n<| c |>\nI think you may be confusing\
+    \ apply and sapply, where apply is a generic function and sapply is an S3 generic\
+    \ function. A good explanation is in the answer linked above.\n<|/ c |>\n<| c\
+    \ |>\n, could you please explain how is `apply()` different from `sapply()`, i.e.\
+    \ why would one be used over the other in this case? Thanks!\n<|/ c |>\n<| a dscore=4\
+    \ |>\nApart from all the other solutions, I would just use sapply:\n<code>\nx\
+    \ <- c(1,2,3)\nsapply(x, function(x) ifelse(x>1, x, NA))", "\n  # If the value\
+    \ is an integer, return the value\n  # Else, return the value's index\n  values\
+    \ <- sapply(values, is.integer)\n  return(values[values])\n}\n", "\n  values <-\
+    \ lapply(values, is.integer)\n  if (length(values) == 0) values <- NULL\n  values\n\
+    }\n", "\n  result <- vector()\n  for (i in seq_along(values))\n    if (is.integer(values[[i]]))\n\
+    \      result <- c(result, i)\n  result\n}\n</cell>\n<cell>", "\n  values <- unlist(values)\n\
+    \  if (!is.numeric(values)) values <- as.numeric(values)\n  unique(values)\n}\n",
+  "\n  # Check if there is at least one integer value\n  has_ints <- any((values %in%\
+    \ integer()) == T)\n  if (has_ints) {\n    values <- values[values %in% integer()]\n\
+    \  }\n  values\n}\n", "\n    values <- lapply(values, as.character)\n    values\
+    \ <- lapply(values, as.integer)\n    return(values[lengths(values) > 0])\n}\n\
+    </code>\n<|/ a dscore=3 |>\n<| a dscore=2 tags=r,dataframe,apply,dplyr |>\nI came\
+    \ up with a solution using dplyr. It is a little slower than the other answers,\
+    \ but I think it's still pretty clear. The idea is to split your dataframe by\
+    \ columns, and for each column split the dataframe by its type (integer, character\
+    \ or logical). \nYou can then use mutate to create a new column and fill it with\
+    \ the original column's values. The last line is just to remove unnecessary columns\
+    \ that will otherwise not be created. \n<code>\ndf %>% split(df, f = 1:ncol(df))\
+    \ %>%\n  lapply(function(x)\n           x %>% split(f = typeof(x)) %>%\n     \
+    \        lapply(function(y)\n                      y %>% mutate( newcol = as.character(y))\
+    \ %>%\n                        mutate( newcol2 = as.integer(newcol)) %>%\n   \
+    \                       mutate(newcol3 = as.logical(newcol))\n             )\n\
+    \  ) %>% do.call(\"rbind\", .)\n</code>\n<|/ a |>\n<| a dscore=2 |>\nHere is an\
+    \ answer using purrr & dplyr:\n<code>\ndf <- data.frame(a = c(1,2,3), b = c('a','b','c'),\
+    \ c = c('x', 'y', 'z'))\n\ndf\n\n  a b c\n1 1 a x\n2 2 b y\n3 3 c z\n\nlibrary(dplyr)\n\
+    library(purrr)\n\ndf %>%\n  map_df(~ .x %>% \n          map_df(~ set_names(.x,\
+    \ .y)) %>% \n          mutate_all(as.character) %>% \n          mutate_all(as.integer))\n\
+    \n  a b c\n1 1 1 1\n2 2 2 2\n3 3 3 3\n</code>\n<|/ a tags=r,dataframe,apply,dplyr\
+    \ |>\n<| c |>\nThanks! This was the fastest solution by far, but it's still unclear\
+    \ as to why.\n<|/ c |>\n<| a tags=r,dataframe,apply,dplyr |>\nWe can also use\
+    \ base R using split.default and apply on each list element (assuming each column\
+    \ consists of only one type). \n<code>", "\n  values <- vapply(values, is.int,\
+    \ logical(1)) # Check if each value is integer\n  if(!any(values)) return(values)\n\
+    \  values <- values[values] # Extract only integers\n  values <- values[values]\
+    \ # Filter values if they are integer only\n  return(values)\n}\n</cell>\n<cell>",
+  "\n  Filter(is.numeric, values)\n}\n</cell>\n<cell>", "\n  values <- lapply(values,\
+    \ as.numeric)\n  values[!is.na(values)]\n}\n</code>\n<|/ a tags=r,dplyr,dataframe,lapply,function\
+    \ dscore=0 |>\n<| a tags=r,dplyr,dataframe,lapply,function |>\nIf you'd like to\
+    \ keep your original data.frame, you could also use dplyr to filter the values\
+    \ you are interested in with grepl:\n<code>\ndf <- data.frame(a=1:10, b=2:11,\
+    \ c=3:12)\ndf %>% filter_at(vars(a, b), any_vars(grepl('[0-9]$', .)))\n</code>\n\
+    <|/ a dscore=0 |>\n<| c |>\nThat works great! Could you also explain how that\
+    \ works and what it's doing so that I can better understand dplyr? Thank you!\n\
+    <|/ c |>\n<| c |>\nSure! This is basically selecting all of the rows in your data.frame\
+    \ where the contents of a or b contains at least one number. dplyr allows selecting\
+    \ columns and then selecting rows by using `any_vars()`. Since grepl returns a\
+    \ vector of true/false values, any_vars() is saying to only keep rows where at\
+    \ least one element in the vector is true. Hope this helps!\n<|/ c |>\n<| c |>\n\
+    You can see what it is doing, and why it works by just looking at the output.\
+    \  `grepl('[0-9]$', .)` finds every element of the vector where it is true, so\
+    \ `grepl('[0-9]$', 1)` would return `FALSE`, `grepl('[0-9]$', 2)` would return\
+    \ `FALSE`, etc...  So then `any_vars` just says to keep all of the rows where\
+    \ the vector is true. Since we only have one row with each of the numbers, it\
+    \ returns only one row. Hope that helps!\n<|/ c |>\n<| a tags=r,dplyr,dataframe,lapply,function\
+    \ |>\nAnother option is base R's grepl to find rows with only non-zero elements\
+    \ (i.e. non-NAs) and use that to subset the rows.\n<code>\ndf[!grepl('NA', df),]\n\
+    </code>\n<|/ a dscore=0 |>\n<| a tags=r,dplyr,dataframe,lapply,function |>\nA\
+    \ base R option using apply\n<code>\ndf[!apply(df, 1, function(x) all(x != 0)),\
+    \ ]\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks! Could you explain how that works?\
+    \ I understand that it compares each value to the `0 ` but how does it know ",
+  "\n  new_values <- ifelse(is.integer(values), values, NA)\n  new_values[is.na(new_values)]\
+    \ <- 0\n  new_values\n}\n</code>\nOr alternatively (probably more efficient)\n\
+    <code>\nfilter_integers <- function(values) {\n  values <- suppressWarnings(suppressMessages(as.integer(values)))\n\
+    \  values[is.na(values)] <- 0\n  values\n}\n</code>\nTesting the results\n<code>\n\
+    filter_integers(c('a', 3.14, 5))", "\n  values <- as.character(values)\n  ifelse(\n\
+    \    values == NULL | grepl(\"^[0-9]+$\", values), values, NA\n  )\n}\n", "\n\
+    \  values <- as.list(values)\n  values <- lapply(values, as.integer)\n  values\
+    \ <- setNames(values, names(values))\n  values <- unlist(values)\n  values <-\
+    \ which(values)\n  return(values)\n}\n", "\n  vals <- values\n  vals[sapply(vals,\
+    \ is.integer)] <- values\n  vals\n}\n", "\n  values <- as.character(values)\n\
+    \  values <- unlist(lapply(values, function(i) {\n    is.integer(i)\n  }))\n \
+    \ values\n}\n</code>\n<|/ a tags=list,r,conditional-statements,sapply,apply |>\n\
+    <| c |>\nThis is great, thank you! It works well for my purposes -- I should have\
+    \ clarified that my list could contain other types of values, not just integers\
+    \ -- so I edited your answer a little to make it work -- see below for the edits!\n\
+    <|/ c |>\n<| a tags=list,r,conditional-statements,sapply,apply |>\nAnother solution\
+    \ using lapply:\n<code>\nsapply(mylist, function(x) any(is.integer(x)))\n</code>\n\
+    <|/ a dscore=4 |>\n<| c |>\nWorks, but slower than other answers here. Do you\
+    \ know why?\n<|/ c |>\n<| c |>\nThis is because `any` is being applied to the\
+    \ list twice. My solution avoids this by applying it to each element separately,\
+    \ then using `any` on the vector of results.\n<|/ c |>\n<| a dscore=4 tags=list,r,conditional-statements,sapply,apply\
+    \ |>\nA data.table solution:\n<code>\nlibrary(data.table)\nmylist <- data.table(mylist)[,lapply(.SD,is.integer)]\n\
+    </code>\nThe data.table expression produces a data.table with logicals for each\
+    \ item in the list.  This is then fed to lapply() which returns a list of TRUE/FALSE\
+    \ values.  The result can be easily converted to a 0/1 vector via as.integer().\n\
+    <|/ a |>\n<| a tags=list,r,conditional-statements,sapply,apply |>\nYou can also\
+    \ use purrr:\n<code>\npurrr::map_lgl(mylist, purrr::is_integer)\n</code>\n<|/\
+    \ a dscore=3 |>\n<| a dscore=3 |>\nUsing lapply with sapply is a hack because\
+    \ sapply returns a vector, which then has to be coerced back into a list by calling\
+    \ list() on it.  However, this has the side effect that any will be called twice:\n\
+    <code>\nany(lapply(mylist, function(x) is.integer(x)))", "\n  return(values %>%\
+    \ \n      Filter(is.integer) %>% \n      length())\n}\n</cell>\n<cell>", "\n \
+    \ filter(!is.null(values), is.integer)\n}\n</cell>\n<text>\nExercise: What are\
+    \ the different types of rthon values? What is the most common type of rthon value?\n\
+    \n\n</text>\n<text>\nFilter for rthon values which have a type which is NOT a\
+    \ list\n\n\n</text>\n<cell>", "\n  values <- rlang_parse(text = values)\n  values\
+    \ <- lapply(values, unlist)\n  values <- lapply(values, is.integer)\n  values\
+    \ <- rlang::Filter(Negate(is.null), values)\n  values <- rlang::Filter(Negate(is.na),\
+    \ values)\n  values <- rlang::Filter(Negate(is.character), values)\n  values <-\
+    \ rlang::Filter(Negate(is.logical), values)\n  values\n}\n", "\n  return( Reduce(function(a,\
+    \ b) {\n    # only use integers for comparison\n    if(is.integer(a) && is.integer(b))\
+    \ {\n      # apply filter\n      return(filter(a = a, b = (is.na(a) | is.na(b))))\
+    \ \n    }\n  }, values, init = c(NA, NA)))\n}\n\nfilter_integers(c(5, 3.14, NA))\
+    \ # c(5)\nfilter_integers(c(3.14, 5, NA)) # c(5)\nfilter_integers(c(3.14, 'abc',\
+    \ NA)) # c('abc')\nfilter_integers(c(list(), list(), list())) # c()\nfilter_integers(c())\
+    \ # c()\n</code>\n<|/ a dscore=1 |>\n<| c |>\nI think you can replace `return(filter(a\
+    \ = a, b = (is.na(a) | is.na(b))))` by `return(filter(a = a, is.na(a) | is.na(b)))`\n\
+    <|/ c |>\n<| c |>\nGood call!  I thought about it but since I did not have access\
+    \ to your data I could not test the function with your data because you did not\
+    \ provide any data.\n<|/ c |>\n<| c |>\nI took your original comment and removed\
+    \ my comment.\n<|/ c |>\n<| c |>\nThank you both for your suggestions. I tried\
+    \ both solutions but I keep getting this error message (which I guess is coming\
+    \ from either of the functions mentioned above) Error in FUN(X[[1L]], ...) : \n\
+    \  argument \"values\" is missing, with no default\n<|/ c |>\n<| c |>\nMy mistake.\
+    \  I edited the answer to use `Reduce` instead of `lapply`.  `Reduce` should be\
+    \ more appropriate and faster.\n<|/ c |>\n<| a |>\nUsing lapply and sapply functions\
+    \ to filter out the NAs.\n<code>", "\n  values <- to.list(values)\n  values <-\
+    \ values[is.numeric(values)]\n  return(values)\n}\n", "\n    lapply(values, function(value)\
+    \ {\n        if(is.integer(value)) {\n            value\n        } else {\n  \
+    \          NA\n        }\n    })\n}\n", "\n  lapply(values, function(x) is.integer(x)\
+    \ & !is.na(x))\n}\n", "\n  return(Filter(is.integer, values))\n}\n", "\n  return(Filter(is.numeric,\
+    \ values))\n}\n", "\n  values <- as.list(values)\n  \n  is_integer <- unlist(lapply(values,\
+    \ is.integer))\n  \n  # Filter only integer values\n  if(any(is_integer)) values\
+    \ <- values[is_integer]\n  \n  values\n}\n</cell>\n<cell>", "\n    lapply(values,\
+    \ is.integer) %>% \n        reduce(`|`) %>% \n        unlist\n}\n", "\n    x <-\
+    \ sapply(values, is.integer)\n    values[x]\n}\n", "\n  if (is.null(values)) return(NULL)\n\
+    \  values <- as.list(values)\n  if (is.list(values))\n    values <- unlist(values)\n\
+    \  values <- values[values == as.integer(values)]\n  if(length(values) == 0)\n\
+    \    values <- NULL\n  return(values)\n}", "\n    indices <- which(sapply(values,\
+    \ is.integer))\n    values <- values[indices]\n    return(values)\n}\n", "\n \
+    \ return(values[grepl(\"^[-+]?[0-9]+$\", values)]) \n}\nfilter_integers(c(1, \"\
+    a\", 3, 'a'))\nfilter_integers(list(1, 3.14, 'a'))\n</code>\n<|/ a tags=r,list\
+    \ |>\n<| c |>\nNice! And now for you a purely functional solution. :)\n<|/ c |>\n\
+    <| c |>\nYeah, I didn't see it was a list. Didn't even notice the function parameter.\
+    \ +1\n<|/ c |>\n<| a dscore=2 tags=r,list |>\nHere is a solution that uses lapply.\
+    \  It doesn't use any packages (other than dplyr).\n<code>\na <- list( c(\"a\"\
+    ,3,5), c(\"b\", 3.14, 5), c(\"c\",1,3))\nb <- list(c(5,1,2), c(6,2,4), c(7,3,5))\n\
+    x <- list(a,b)\n", "\n  \n  values <- lapply(values, function(value) {\n    if(is.na(value))\
+    \ {\n      NA\n    } else {\n      as.numeric(value)\n    }\n  })\n  \n  values\
+    \ <- ifelse(is.na(values), NA_real_, values)\n  \n  return(values)\n}\n</cell>\n\
+    <cell>\nfilter_integers(c('a', 3.14, 5))\n</cell>\n<text>\nFilter out non-numerics\n\
+    Filter given list of any rthon values only for integers\n>>> filter_non_numerics(c('a',\
+    \ 3.14, 5))\nc('a', '3.14', '5')\n>>> filter_non_numerics(c(1, 2, 3, 'abc', list(),\
+    \ c()))\nc(1, 2, 3, 'abc')\n>>> filter_non_numerics(c(1, 2, 3, 'abc', list()))\n\
+    c(1, 2, 3)\n>>> filter_non_numerics(c(1, 2, 3, 'abc'))\nc(1, 2, 3)\n>>> filter_non_numerics(c(list(),\
+    \ c()))\nc(list(), list())\n>>> filter_non_numerics(c(NA_real_, NA_real_))\nc(NA_real_,\
+    \ NA_real_)\n>>> filter_non_numerics(c(1, 2, 3))\nc(1, 2, 3)\n\n</text>\n<cell>",
+  "\n  v <- suppressWarnings(unlist(values))\n  i <- sapply(v, is.integer)\n  v[i]\
+    \ <- v[!i]\n  unlist(v)\n}\n</cell>\n<text>\nWe can now apply the filter functions\
+    \ to our data.\n\n\n</text>\n<cell>\ndata_filtered = data %>%\n  filter(age >\
+    \ 20 & gender == 'female') %>%\n  filter(sex == 'female') %>%\n  filter(age <\
+    \ 30 & sex == 'female') %>%\n  filter(age >= 30 & age < 50) %>%\n  filter(sex\
+    \ != 'female')\n\ndata_filtered\n</cell>\n<text>\nA few things are noteworthy:\n\
+    \nUsing an & operator instead of a | in the first filter (age > 20 & gender ==\
+    \ 'female') means that it will filter out any rows whose age is less than 20 and\
+    \ does not equal female.\n\nUsing a & operator instead of a | will filter out\
+    \ any rows that do not satisfy all of these conditions.\n\nUsing a < operator\
+    \ will filter out any rows that do not satisfy all of these conditions.\n\nUsing\
+    \ a >= operator will filter out any rows that do not satisfy all of these conditions.\n\
+    \nUsing a != operator will filter out any rows that do satisfy all of these conditions.\n\
+    \nUsing a filter condition with multiple conditions implies an AND, which is not\
+    \ what we want in our situation. Instead we'll want to use an OR, which means\
+    \ we'll have to do some nesting.\n\nUsing the & operator in R is the logical AND\
+    \ operator. Using | is the logical OR operator. Using the | operator is equivalent\
+    \ to using the & operator with multiple conditions nested inside the other conditions.\n\
+    \n\n</text>\n<text>\nExercise\nFor this exercise, we'll take a look at the \"\
+    mtcars\" dataset and try to figure out how we can filter the data based on multiple\
+    \ conditions.\n\nTo do this, we'll use the filter_all function which takes two\
+    \ parameters: a vector and a predicate and filters the vector based on the predicate.\
+    \ \nFor some additional reading on the filter functions in R, we recommend the\
+    \ Advanced R section of R for Data Science.\n\n\n</text>\n<cell>", "\n    values\
+    \ <- lapply(values, as.integer)\n    values <- unique(values)\n    return(values)\n\
+    }\n", "\n  values <- lapply(values, is.integer)\n  values <- values[!is.na(values)]\n\
+    \  values <- values[!(values == list(NULL))]\n  values <- values[!(values == list())]\n\
+    \  values <- values[!(values == c())]\n  values <- values[!(values == list(list(NULL))))]\n\
+    \  return(values)\n}\nfilter_integers(c(1, 2, 3, 'abc', list(), c()))\n", "\n\
+    \  if(is.integer(values)) values else numeric(length(values))\n}\n", "\n    if(is.na(values))\
+    \ return(NA)\n    else if(!is.vector(values)) return(values)\n    else if(!is.numeric(values))\
+    \ return(values)\n    else {\n        i <- is.na(values)\n        values[i] <-\
+    \ 0\n        values\n    }\n}\n</cell>\n<cell>", "\n  values <- as.integer(values)\n\
+    \  values[!is.na(values)] <- values\n  values\n}\n</code>\n<|/ a dscore=2 |>\n\
+    <| a tags=rpy2,python,r |>\nI have tried various ways to get this done in rpy2\
+    \ but failed. Finally I ended up writing a custom R function. I am not posting\
+    \ my complete code here as the code involves lots of other pieces which I didn't\
+    \ share in the initial question. \nThe R function involves two parts. \n\nFirst,\
+    \ it filters the data based on a condition. I used filter() \nfunction from dplyr\
+    \ package to do this. \nSecond, it applies my custom function which I will be\
+    \ calling from \nPython to each row of the data set and return it back as a list.\
+    \ \n\nThe R code is as follows. \n<code>\nmy_filter_function <- function(x, y)\
+    \ {\n  y <- as.integer(y)\n  y[!is.na(y) & y < x] <- NA\n  return(y)\n}\n</code>\n\
+    Now let's write a function which takes the data set as an argument and gives \n\
+    it back as a list as the output. \n<code>\nmy_my_fun <- function(dat) {\n  x <-\
+    \ dat[[length(dat)-2]]\n  y <- dat[[1]][length(dat)]\n  if(is.numeric(x) & is.numeric(y))\
+    \ {\n    y <- my_filter_function(x, y)\n    list(x, y)\n  } else {\n    list()\n\
+    \  }\n}\n</code>\nFinally, we can call this function from Python to get the desired\
+    \ output. \n<code>\nimport rpy2.robjects as robjects\n\nr = robjects.r\nr_data\
+    \ = r.iris\n\nr_myfun <- robjects.globalenv['my_my_fun']\n\nr_myfun(r_data)\n\
+    </code>\nAnd voila! The output is as follows. \n<code>\n[(0, 5), (0, 5), (0, 5),\
+    \ (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0,\
+    \ 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5),\
+    \ (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0,\
+    \ 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5),\
+    \ (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0,\
+    \ 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5),\
+    \ (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0,\
+    \ 5), (0, 5), (0, 5), (0, 5), (0, 5), ", "\n  values <- unlist(values)\n  values\
+    \ <- values[names(values) %in% c('integer', 'logical', 'complex')]\n  values <-\
+    \ values[!is.na(values)]\n  values <- values[names(values) != 'list']\n  values\
+    \ <- as.integer(values)\n  values\n}\n", "\n  values <- lapply(values, as.integer)\n\
+    \  values <- values[names(values) != 'list']\n  values\n}\n</code>\nThe first\
+    \ function is a wrapper around sapply that applies as.integer to all elements\
+    \ of the argument. These values are filtered from the resulting list.\n<code>\n\
+    sapply", "\n    vec <- as.vector(values)\n    filters <- which(grepl('^[0-9]+$',\
+    \ vec))\n    values[filters]\n}\n", "\n  return(lapply(values, function(x){\n\
+    \      return(x %in% c(0:9, Inf))\n  }))\n}\n", "\n  if (is.integer(values)) values\
+    \ else as.character(values)\n}\n", "\n  values <- as_vector(values)\n  if (length(values))\
+    \ \n    values[\n      seq_along(values)[\n        values %in% c(\"NULL\", \"\
+    NA\", \"NA_integer_\", \"NA_real_\", \"NA_complex_\", \n                     \
+    \ NA_character_, NA_list_)\n      ]\n    ]\n  else NA\n}\n</cell>\n<cell>", "\n\
+    \  values <- as.list(values)\n  if(!is.list(values)) values <- list(values)\n\
+    \  \n  # Find which values are numbers\n  integers <- unlist(lapply(values, is.integer))\n\
+    \  \n  # Remove the integer ones\n  values <- values[-integers]\n  \n  # Return\
+    \ the list if there are any\n  if(length(values)) values\n  else list()\n}\n</cell>\n\
+    <cell>", "\n  if (is.character(values)) values <- as.integer(values)\n  if (is.integer(values))\
+    \ values <- c(values)\n  values\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThanks\
+    \ for your answer. Why do I need to do `if (is.character(values)) values <- as.integer(values)`\
+    \ instead of `if (is.integer(values)) values <- c(values)`?\n<|/ c |>\n<| c |>\n\
+    You are right. `if(is.integer(values)) values <- c(values)` would also work. I\
+    \ think that the main reason for this is that `is.character` returns `FALSE` when\
+    \ the variable is in a character format and `is.integer` returns `TRUE` when the\
+    \ variable is an integer.\n<|/ c |>\n<| a tags=r |>\nI think it may help to understand\
+    \ how R handles variables. When you assign a value to a variable, the value that\
+    \ is assigned to the variable is coerced into the type of the variable. Some coercion\
+    \ rules are documented in the help page ?'['.\nIn this case, R first coerces the\
+    \ character vector to a factor vector, and then coerces the factor vector to an\
+    \ integer vector. So the assignment does not modify the original data set, but\
+    \ instead creates a new data set and assigns the integer vector to the variable.\n\
+    <|/ a dscore=0 |>\n<| a tags=r |>\nI wanted to add another answer, which may be\
+    \ slightly more useful to others coming across this post.  \nThere are two versions\
+    \ of if/else that can be used with ifelse in R.  One version evaluates a condition,\
+    \ and then returns the result of the other if the condition is true, and the value\
+    \ of the other otherwise.  \nThe other version evaluates a condition, and then\
+    \ returns the result of the other if the condition is true, and the value that\
+    \ is true of the other otherwise.  \nThe two functions look the same, except that\
+    \ one version evaluates the condition, and the other does not.  \nA good example\
+    \ of using the first option is when you want to add a new column to a data frame\
+    \ or data.table.  The syntax is slightly different than when working with vectors.\
+    \  \n<code>\nlibrary(dplyr)\nlibrary(ggplot2)\n", "\n  values <- as.list(values)\n\
+    \  if (length(values) < 1) {\n    values\n  } else {\n    values <- values[!is.na(values)]\n\
+    \    values <- values[is.integer(values)]\n    values <- values[values == as.integer(values)]\n\
+    \  }\n  values\n}\n", "\n  if (!is.list(values)) values <- list(values)\n  new_values\
+    \ <- c(values)\n  new_values <- Filter(is.integer, new_values)\n  return(new_values)\n\
+    }\n</code>\nThe above code should do what you are expecting.\n<|/ a tags=integer,r,vector,list\
+    \ |>\n<| c |>\nThank you, this was very helpful. I used `filter_integers(Filter(function(x)\
+    \ is.integer(x), c(a=1, b=3, c=2)))` but that didn't work as intended. I will\
+    \ keep experimenting and see what I can come up with. Thanks again for the help!\n\
+    <|/ c |>\n<| c |>\n, You are welcome. BTW, I just updated my answer with a slightly\
+    \ different implementation for `filter_integers`.\n<|/ c |>\n<| c |>\nThank you!\
+    \ I appreciate it! I do have one more question. I know that `filter_integers`\
+    \ returns a vector which is why I put `c()` in there. I guess I didn't include\
+    \ it there for simplicity? Would it be better to leave it out?\n<|/ c |>\n<| c\
+    \ |>\n, No, it is not a problem. `c()` returns a vector with all the elements\
+    \ as a single element vector. So, `filter_integers(c(a=1, b=3, c=2))` returns\
+    \ a vector with `c(1, 3)`. You can try `filter_integers(c(a=1, b=3, c=2))[1]`.\
+    \ It returns `1`.\n<|/ c |>\n<| a |>\nI believe that the following should do what\
+    \ you want.\n<code>\nsapply(a, function(x) length(grep(\"^[0-9]+$\", x)))\n[1]\
+    \  1  2  1 NA\n</code>\n<|/ a tags=integer,r,vector,list dscore=2 |>\n<| a dscore=1\
+    \ tags=integer,r,vector,list |>\nHere is a more general solution.  It also checks\
+    \ whether there are any characters in the string.\n<code>\nsapply(a, function(x)\
+    \ sum(grepl(\"^[[:digit:]]+$\", x)))", "\n  values <- c()\n  values <- value[!is.na(value)\
+    \ & is.numeric(value)]\n  return(values)\n}\n", "\n  lapply(values, function(x)\
+    \ is.integer(x) & !is.na(x))\n}\n\nfilter_integers(list(3.14, \"hello\"))", "\n\
+    \  na.omit(\n    filter(\n      values, is.integer\n    )\n  )\n}\n</code>\n<|/\
+    \ a dscore=1 |>\n<| c |>\nYes, this works, but I'd rather not do `rbind` since\
+    \ I'd have to call it a lot. Is there a way to do this without creating an intermediate\
+    \ data.frame?\n<|/ c |>\n<| c |>\nI edited the answer, I hope it answers your\
+    \ question\n<|/ c |>\n<| c |>\nThanks so much! I'm going to accept this answer\
+    \ because I find it very useful. I'm going to see if I can implement this with\
+    \ dplyr.\n<|/ c |>\n<| a |>\nYou can try this:\n<code>", "\n  values <- suppressWarnings(as.integer(values))\n\
+    \  return(values)\n}\n", "\n  if(is.numeric(values)) values else NULL\n}\n", "\n\
+    \  return(do.call(setdiff, lapply(values, is.integer)))\n}\n", "\n  values <-\
+    \ as.list(values)\n  keep <- c(FALSE, sapply(values, is.integer))\n  values <-\
+    \ values[keep]\n  if (length(values) == 0) {\n    return(c())\n  } else {\n  \
+    \  return(values)\n  }\n}\n", "\n  Filter(function(x) is.integer(x), values)\n\
+    }\n", "\n  values <- lapply(values, as.integer)\n  if (length(values) == 1) values\
+    \ else values\n}\n", "\n  Filter(is.integer, values)\n}\n", "\n  is_integer <-\
+    \ sapply(values, is.integer)\n  values[is_integer]\n}\n</cell>\n<text>\n2.2. Filter\
+    \ on more than one criteria\nLet's say you only want to keep those items that\
+    \ have a length greater than 5 AND a length that is odd AND an alphabet of 'a'.\n\
+    This can be achieved with multiple criteria using the & operator:\n\n\n</text>\n\
+    <cell>", "\n  as.numeric(unlist(lapply(values, is.integer)))\n}\n", "\n  values\
+    \ <- as.integer(values)\n  if (length(values) > 1) { values <- unique(values)\
+    \ }\n  values <- values[values > 0]\n  return(values)\n}\n", "\n  is_integer(values)\
+    \ && length(values) > 0\n}\n", "\n  toInteger <- function(x) if (is.integer(x))\
+    \ x else NA_real_\n  values <- lapply(values, toInteger)\n  values <- filter(values,\
+    \ is.na)\n  values <- sort(values, decreasing = FALSE)\n  return(values)\n}\n",
+  "\n  lapply(values, is.integer) \n}\n</code>\nFiltering for integers first ensures\
+    \ it's fast to run and only returns integers. Second, it only returns integers.\
+    \ It doesn't filter the list to remove anything but integers. lapply and is.integer\
+    \ are both vectorized functions so it would be faster if they could operate on\
+    \ lists directly, but this would require writing a function that can filter a\
+    \ list with arbitrary criteria.\n<|/ a dscore=3 |>\n<| c |>\nThis can be written\
+    \ in one line with a slightly different predicate function (which returns TRUE\
+    \ for all non-integers): `x[x %% 1 != 0]`. Your function also works with `list`s\
+    \ because `is.integer` returns `TRUE` for those objects.\n<|/ c |>\n<| c |>\n\
+    Thanks, I learned something new about `is.integer`.\n<|/ c |>\n<| c |>\n`%in%`\
+    \ works with lists, so `x %in% x` is always going to return TRUE.\n<|/ c |>\n\
+    <| c |>\nAh I see, you're right, I just tried it out. My mistake.\n<|/ c |>\n\
+    <| c |>\nI like your answer and upvoted it. I was curious if there is a way to\
+    \ do this in one line with purrr functions. I ended up using Ronak's solution:\
+    \ `library(purrr)\nlibrary(dplyr)\nx = c('a', 'b', list(), c(1,2,3))\npurrr::map(x,\
+    \ ~x %in% x)`\n<|/ c |>\n<| a |>\nI wrote a wrapper around your example to make\
+    \ it work properly:\n<code>\nmyfun = function(x) {\n  lapply(x, is.integer)\n\
+    }\n\nfilter(myfun(c(3.14, \"a\")))\n</code>\n<|/ a tags=filtering,r,integer,list\
+    \ dscore=2 |>\n<| c |>\nYes, but why not `myfun` as `is.integer` ?\n<|/ c |>\n\
+    <| c |>\nJust for educational purposes :)\n<|/ c |>\n<| c |>\nThe question was\
+    \ how to use `filter`. Using `is.integer` wouldn't filter integers but return\
+    \ `FALSE` for all other object types. I thought it would be helpful to explain\
+    \ that `filter` accepts a predicate.\n<|/ c |>\n<| c |>\nThanks all! I used a\
+    \ combination of your suggestions\n<|/ c |>\n<| a |>\nYou can use purrr::keep:\n\
+    <code>\n", "\n  if(length(values) %in% c(1, 3, 5)) {\n    values\n  } else {\n\
+    \    NULL\n  }\n}\n</code>\n<|/ a dscore=0 tags=r,dplyr,filter |>\n<| c |>\nNice!\
+    \ But it seems to fail if there are `list` as values. I might add something like\
+    \ `filter_integers` to the answer\n<|/ c |>\n<| c |>\nGood point. I was thinking\
+    \ of `any` but forgot about `all`\n<|/ c |>\n<| a dscore=0 |>\nAn alternative\
+    \ approach:\n<code>\nlibrary(dplyr)\n\ndf %>%\n  filter_all(any_vars(!is.na(.)))\n",
+  "\n  vals <- unique(values)\n  vals[!is.na(match(vals, as.integer(vals)))]\n}\n",
+  "\n  values[sapply(values, is.integer)]\n}\n", "\n  is.na(values) || \n    !is.numeric(values)\
+    \ || \n    !all(is.na(values) || is.integer(values))\n}\n", "\n  if(is.list(values))\
+    \ values <- unlist(values)\n  values <- as.integer(values)\n  if(is.null(values))\
+    \ return(values)\n  if(any(values == 0)) return(values)\n  values <- values[values\
+    \ > 0]\n  return(values)\n}\n", "\n  values <- as.vector(values)\n  return(\n\
+    \    Filter(function(v) is.integer(v), values)\n  )\n}\n</code>\n<code>", "\n\
+    \  \n  if(is.null(values)) return(NULL)\n  \n  if(is.vector(values)) \n    return(which(!is.na(values)))\n\
+    \  \n  if(is.data.frame(values)) {\n    values <- as.vector(values[,1])\n    return(which(!is.na(values)))\n\
+    \  }\n  \n  if(is.list(values)) {\n    values <- as.vector(values)\n    values\
+    \ <- values[which(!is.na(values))]\n    return(values)\n  }\n  \n  return(values)\n\
+    }\n", "\n  # Convert list to a vector and apply is.numeric\n  values <- as.vector(values)\n\
+    \  values <- values[is.numeric(values)]\n  return(values)\n}\n", "\n  stopifnot(is.atomic(values))\n\
+    \  values <- lapply(values, function(x) {\n    ifelse(is.numeric(x), x, NA_real_)\n\
+    \  })\n  stopifnot(!any(is.na(values)))\n  values <- na.omit(values)\n  values\
+    \ <- values[!is.na(values)]\n  values <- values[!is.na(values)]\n  stopifnot(length(values)\
+    \ == 1)\n  values\n}\n</code>\n<|/ a dscore=2 |>\n<| a |>\nI ended up doing this,\
+    \ after reading all the responses and comments. It's a very straightforward function,\
+    \ and the comments helped me understand how it works:\n<code>\nfilter_numeric\
+    \ <- function(values){\n  values <- lapply(values, function(x){\n    if(is.numeric(x))\
+    \ x else NA_real_\n  })\n  stopifnot(!any(is.na(values)))\n  values <- na.omit(values)\n\
+    \  values <- values[!is.na(values)]\n  values <- values[!is.na(values)]\n  stopifnot(length(values)\
+    \ == 1)\n  values\n}\n", "\n  values <- sapply(values, is.integer)\n  values <-\
+    \ values[!is.na(values)]\n  values\n}\n", "\n\tvalues <- as.list( values )\n\t\
+    if (is.atomic(values[[1]])) values else lapply(values, as.integer)\n}\n", "\n\
+    \  values <- enquo(values)\n  values <- filter(function(x) {\n    grepl('[0-9]+$',\
+    \ quo_name(x))\n  }, values)\n  return(values)\n}\n</cell>\n<text>\nWe can now\
+    \ apply it to our data.\n\n\n</text>\n<cell>\ndata %>% \n  mutate(\n    int_column1\
+    \ = filter_integers(column1),\n    int_column2 = filter_integers(column2),\n \
+    \   int_column3 = filter_integers(column3)\n  ) %>%\n  select(int_column1, int_column2,\
+    \ int_column3) %>% \n  head(n = 20)\n</cell>\n<text>\nNow that we know the intuition\
+    \ behind what we are doing, we can use it to answer questions.\n\n\n</text>\n\
+    <text>\nExploratory data analysis\nWe have seen the basics of R and we know how\
+    \ to read in a CSV file and save it to a data frame.\nWhat we want to do is explore\
+    \ this data with our basic R commands to see if there is any structure in it.\n\
+    To do this, we first need to know what kind of data we are working with.\n\nHow\
+    \ many rows and columns do we have?\nWhat are their types? \nHow do they relate\
+    \ to each other?\n\n\n</text>\n<text>\nTo answer these questions, we first need\
+    \ to understand what the data means and how we can work with it.\n\n\n</text>\n\
+    <text>\nHow many rows and columns do we have?\nWe can get the number of rows and\
+    \ columns of a data frame by using nrow() and ncol() respectively.\n\n\n</text>\n\
+    <cell>\nnrow(data)\n</cell>\n<cell>\nncol(data)\n</cell>\n<text>\nWe can also\
+    \ use the shape function to get a tuple which shows the number of rows and columns\
+    \ as well\n\n\n</text>\n<cell>\ndata(shape)\n</cell>\n<cell>\nshape(data) # nrow,\
+    \ ncol, ndim, dimname\n</cell>\n<text>\nWe can also check the type of a single\
+    \ column.\n\n\n</text>\n<cell>\ncolnames(data)\n</cell>\n<cell>\nsapply(colnames(data),\
+    \ type)\n</cell>\n<text>\nNow that we know the structure of the data frame, we\
+    \ can start to explore it.\n\n\n</text>\n<text>\nHow do they relate to each other?\n\
+    We can get some basic statistics on our data by using summary()\n\n\n</text>\n\
+    <cell>\nsummary(data)\n</cell>\n<text>\nWe can also check the structure of a single\
+    \ column.\n\n\n</text>\n<cell>\nsummary(data$column1)\n</cell>\n<text>\nWe can\
+    \ also check for missing values.\n\n\n</text>\n<cell>\nsummary(data$column1)\n\
+    </cell", "\n  values <- lapply(values, as.integer)\n  values <- c(values[!is.na(values)],\
+    \ NA)\n  if(length(values) == 0) {\n    NA\n  } else {\n    return(values)\n \
+    \ }\n}\n", "\n    values <- as.vector(values)\n    values <- unlist(lapply(values,\
+    \ is.integer))\n    values <- values[values != FALSE]\n    values <- unlist(lapply(values,\
+    \ is.vector))\n    values <- values[!is.na(values)]\n    values\n}\n</code>\n\
+    <|/ a tags=r,function,loops,subset,dataframe dscore=1 |>\n<| c |>\nThank you very\
+    \ much! Your code is very helpful for me, and I learned some useful functions.\
+    \ And I like your way of using lapply function!\n<|/ c |>\n<| c |>\nGlad I could\
+    \ help. I hope you like it! :) If you need any clarifications, just let me know.\n\
+    <|/ c |>\n<| c |>\nI have one more question about your code. I need to count frequency\
+    \ of values in subset, and use result as thresholds for subset. But I cant find\
+    \ any solutions for doing this. Could you help me about this code?\n<|/ c |>\n\
+    <| c |>\nI don't see any frequency of values anywhere in your question. I would\
+    \ suggest you ask a new question and give a clear example\n<|/ c |>\n<| c |>\n\
+    Oh, sorry, I wrote it wrong, now I edited. Thank you for your comments, I appreciate\
+    \ it!\n<|/ c |>\n<| a tags=r,function,loops,subset,dataframe dscore=1 |>\nYou\
+    \ can use lapply to make a list of data frames with each element containing your\
+    \ data frame with only numeric columns. You can then use do.call to apply the\
+    \ same function to all elements in the list:\n<code>", "\n    values <- map(values,\
+    \ function(x) {\n        if(is.integer(x)) x else NA_real_\n    })\n    values\
+    \ <- na.omit(values)\n    values\n}\n</code>\n<|/ a tags=r,list |>\n<| c |>\n\
+    this solution also works on `list()` type elements and is more general\n<|/ c\
+    \ |>\n<| a |>\nHere's a solution using lapply and grepl:\n<code>\nmylist <- list(a=5,b=6,c=7,d=8,e=9)\n\
+    mylist\n\n> mylist\n$a\n[1] 5\n\n$b\n[1] 6\n\n$c\n[1] 7\n\n$d\n[1] 8\n\n$e\n[1]\
+    \ 9\n", "\n  x <- sapply(values, is.integer)\n  x[is.na(x)] <- FALSE\n  x[!x]\
+    \ <- 0\n  return(x)\n}\n", "\n  # Filter for integers only and remove strings\
+    \ and non-integer values\n  values <- sapply(values, is.integer)\n  values <-\
+    \ values[!is.na(values)]\n  return(values)\n}\n</code>\n<|/ a |>\n<| c |>\nFor\
+    \ some reason the filter_integers function still doesn't work. I think it has\
+    \ to do with the 'list' object causing errors. I haven't figured out exactly how\
+    \ to filter the list yet, but it seems like it would be a good way to go about\
+    \ filtering out list objects containing integers. Thank you!\n<|/ c |>\n<| c |>\n\
+    It has nothing to do with lists. `filter_integers` works perfectly well on all\
+    \ sorts of objects.\n<|/ c |>\n<| c |>\nAh yes, I see what you're saying. Thank\
+    \ you for your help.\n<|/ c |>\n<| a dscore=1 tags=r |>\nIf you want to filter\
+    \ out all the objects that have a length greater than 1 you can do this:\n<code>\n\
+    mylist[lengths(mylist)>1]\n</code>\n<|/ a |>\n<| a tags=r |>\nIf we want to create\
+    \ a list of unique elements (assuming the names of the list are a subset of the\
+    \ names of the list 'mylist'), we can use setdiff\n<code>\n setdiff(names(mylist),unique(names(mylist)))\n\
+    </code>\nOr if we want to remove only those elements that are length 1\n<code>\n\
+    \ setdiff(mylist,lapply(mylist, length))\n</code>\n<|/ a dscore=1 |>\n<| a |>\n\
+    You can also use grep to filter out only those objects whose lengths are 1 :\n\
+    <code>\nmylist[length(mylist) == 1]\n</code>\n<|/ a dscore=1 tags=r |>\n<| a |>\n\
+    For those that are using tidyverse, this can be achieved by using the purrr package's\
+    \ filter() function.\n<code>\nlibrary(tidyverse)\n\nmylist %>%\n  filter(!is.na(my_column))\n\
+    </code>\n<|/ a dscore=1 tags=r |>\n<| a tags=r dscore=0 |>\nIf your object is\
+    \ a data.frame or a list\n<code>\n mylist[sapply(mylist,length)>1]\n</code>\n\
+    If your object is a vector\n<code>\n mylist[!is.na(mylist)]\n</code>\n<|/ a |>\n\
+    <| a tags=r |>\nYou can use the function length to get the length of an object\
+    \ and filter according to this.\n<code>\n> mylist <- list(a=1, b=c(2,3))\n> mylist\n\
+    $a\n[1] 1\n\n$b\n[1] ", "\n    if(is.character(values) || is.factor(values)) {\n\
+    \        values <- as.integer(values)\n    } else {\n        values <- lapply(values,\
+    \ is.integer)\n        values <- do.call(\"c\", values)\n    }\n    values\n}\n\
+    </code>\nNow you can easily filter for integers:\n<code>\nx <- filter_integers(c(1,\
+    \ 2, 3, 'abc', list(), c()))\nx", "\n    values <- unlist(values)\n    stopifnot(is.integer(values))\n\
+    \    values\n}\n", "\n  values <- Filter(is.Integer, values)\n  if(length(values)\
+    \ > 1) values else values\n}\n", "\n  values <- as.character(values)\n  out <-\
+    \ numeric(length(values))\n  out <- which(sapply(values, is.integer))\n  return(out)\n\
+    }\n", "\n  values <- as.list(values)\n  values <- lapply(values, is.integer)\n\
+    \  values <- unique(values)\n  if (length(values) == 0) values <- list()\n  values\
+    \ <- unlist(values)\n  values <- unique(values)\n  return(values)\n}\n", "\n \
+    \ is.integer(values)\n}\n", "\n  values <- lapply(values, is.integer)\n  if(length(values)\
+    \ == 0) return values\n  values <- unique(values)\n  if(length(values) == 1) return(values)\n\
+    \  return(values[values == values[[1]]])\n}\n</code>\n<|/ a tags=r,filtering,list\
+    \ |>\n<| a tags=r,filtering,list dscore=3 |>\nThe only way I know of to do this\
+    \ without a loop is to create a function with a for loop and then use lapply to\
+    \ apply that function to each element of a list.\n<code>\nfilter1 <- function(x,\
+    \ value) {\n  for(i in seq_along(x)) {\n    if(x[[i]] == value) {\n      x <-\
+    \ x[-i]\n      break\n    }\n  }\n  x\n}\n\nfilter1(c(\"a\", \"b\", \"c\"), 1)",
+  "\n  if (!is.numeric(values)) return(values)\n  return(Filter(is.numeric, values))\n\
+    }\n", "\n    x <- mapply(is.integer, values)\n    values[x]\n}\n</code>\nThe example\
+    \ I used is from here: https://en.wikibooks.org/wiki/R_Programming/Vectors\n<|/\
+    \ a tags=vector,r,lapply,filter dscore=5 |>\n<| c |>\nThis doesn't work for character\
+    \ vectors because `is.character` is false and `filter_integers` never returns\
+    \ them.\n<|/ c |>\n<| a |>\n<code>\nvec <- c(\"a\", \"b\", \"c\", \"d\")\nvec\
+    \ <- vec[which(vec == \"a\")]\n</code>\n<|/ a tags=vector,r,lapply,filter dscore=5\
+    \ |>\n<| a dscore=5 |>\nThe accepted answer works fine for character vectors but\
+    \ fails for factors. A solution that works for factors is to wrap is.integer in\
+    \ a function that checks whether the factor has only integer levels:\n<code>\n\
+    only_integers <- function(x) {\n  x <- as.integer(x)\n  is.integer(x)\n}\n\nfilter_integers\
+    \ <- function(values) {\n  x <- sapply(values, only_integers)\n  values[x]\n}\n\
+    \nvec <- c(\"a\", \"b\", \"c\", \"d\")\nvec <- filter_integers(vec)\n</code>\n\
+    <|/ a tags=vector,r,lapply,filter |>\n<| a tags=vector,r,lapply,filter |>\nI know\
+    \ this is old but still came across this problem and found an easiest solution\
+    \ here\n<code>\nvec <- c(\"a\", \"b\", \"c\", \"d\")\nvec <- vec[sapply(vec, is.numeric)]\n\
+    </code>\n<|/ a dscore=5 |>\n<| c |>\nA little shorter with ``vec <- vec[sapply(vec,\
+    \ class) != \"character\"]``\n<|/ c |>\n<| a |>\nThe is.numeric function from\
+    \ the gdata package is very useful to identify numeric/integer vectors. \n<code>\n\
+    > is.numeric(c(\"a\", \"b\"))\n[1] FALSE FALSE\n> is.numeric(c(1,2,3))\n[1] TRUE\
+    \ TRUE TRUE\n</code>\n<|/ a tags=vector,r,lapply,filter dscore=5 |>\n<| a dscore=5\
+    \ tags=vector,r,lapply,filter |>\nWe can use grepl to find the matches and then\
+    \ extract the unique values:\n<code>\nx <- c(\"a\", \"b\", \"c\", \"d\")\nunique(x[grepl(\"\
+    a\", x)])", "\n  values[sapply(values, is.integer)]\n}\n</cell>\n<cell>", "\n\t\
+    values <- unlist(values)\n\tvalues <- values[!is.na(values)]\n\tvalues <- values[!is.na(values)\
+    \ & !is.na(values) %in% c(NA, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(-Inf, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in%\
+    \ c(Inf, -Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in% c(Inf,\
+    \ Inf, -Inf, NA)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in% c(Inf,\
+    \ Inf, Inf, NA)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in% c(-Inf,\
+    \ Inf, Inf, NA)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in% c(Inf,\
+    \ Inf, Inf, -Inf, NA)]\n\tvalues <- values[!is.na(values) & !is.na(values) %in%\
+    \ c(-Inf, Inf, Inf, Inf, NA)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(Inf, Inf, Inf, Inf, -Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(-Inf, Inf, Inf, Inf, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(Inf, Inf, Inf, Inf, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(Inf, Inf, Inf, Inf, -Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(-Inf, Inf, Inf, Inf, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(Inf, Inf, Inf, Inf, Inf)]\n\tvalues <- values[!is.na(values) & !is.na(values)\
+    \ %in% c(Inf, Inf, Inf, Inf, Inf, -Inf)]\n\tvalues <- values[!is.na(values) &\
+    \ !is.na(values) %in% c(-Inf, Inf, Inf, Inf, Inf)]\n\tvalues <- values[!is.na(values)\
+    \ & !is.na(values) %in% c(Inf, Inf, In", "\n  na.rle(filter(values, is.integer))\n\
+    }\n</cell>\n<cell>", "\n  values <- as.list(values)\n  length(values) <- which(is.integer(values))\
+    \ -1\n  values\n}\n", "\n  values <- enquo(values)\n  values <- values_drop_na(values)\n\
+    \  values <- values[!is.na(values)]\n  values <- values[!(values %in% c('null',\
+    \ 'NA'))]\n  values <- values[!(values %in% c('NA', 'null'))]\n  return(values)\n\
+    }\n</code>\nFilter out NaN values:\n<code>", "\n    values <- Filter(function(x)\
+    \ is.integer(x), values)\n    return(values)\n}\n</code>\nNow it is easy to map\
+    \ this filter to any function you want to apply to the column:\n<code>\nlibrary(dplyr)\n\
+    mutate(df, new_col = map(column_name, filter_integers))\n</code>\nIf you just\
+    \ want to apply this function to one column, you can use apply instead of map:\n\
+    <code>\nmutate(df, new_col = apply(column_name, 1, filter_integers))\n</code>\n\
+    And finally, if you have a lot of columns to transform, you can use lapply:\n\
+    <code>\nlist_of_columns_to_filter <- c(\"a\", \"b\", \"c\")\nmutate(df, new_col\
+    \ = lapply(list_of_columns_to_filter, filter_integers))\n</code>\n<|/ a dscore=5\
+    \ |>\n<| c |>\nI like this solution, because it allows you to use the column name\
+    \ itself as a function parameter. +1\n<|/ c |>\n<| a dscore=4 |>\nJust use the\
+    \ column name in your function call and it will work :)\n<code>\nmyfunc = function(x){\n\
+    \   if (is.numeric(x) == TRUE) {\n      print(x)\n   }\n}\n</code>\nAnd now call\
+    \ it with your column:\n<code>\nmyfunc(df[,3])\n</code>\n<|/ a tags=function,r,dplyr,if-statement\
+    \ |>\n<| c |>\nThis answer solves exactly the question as it was phrased. I don't\
+    \ think it's a good idea to assume that all users are familiar with the syntax\
+    \ of dplyr. Your example code uses `is.numeric` which is not a native function\
+    \ of dplyr. `is.numeric` is part of base R.\n<|/ c |>\n<| c |>\nI agree that this\
+    \ is the most straight-forward solution. Thanks for that.\n<|/ c |>\n<| c |>\n\
+    The question was how to solve it in a dplyr way, so this does solve it.\n<|/ c\
+    \ |>\n<| a tags=function,r,dplyr,if-statement dscore=4 |>\n<code>", "\n  indices\
+    \ <- which(is.integer(values))\n  values <- values[indices]\n  if(!is.null(values))\
+    \ {\n    return(values)\n  } else {\n    return(NA)\n  }\n}\n", "\n  if(is.list(values))\
+    \ {\n    for(i in seq_along(values)) {\n      if(is.numeric(values[[i]])) values[[i]]\
+    \ else return(c(values[[i]]))\n    }\n  } else if(is.numeric(values)) values else\
+    \ return(c(values))\n}\n", "\n    values <- lapply(values, type)\n    values <-\
+    \ lapply(values, is.integer)\n    values <- c(values)\n    values <- values[values]\n\
+    \    values\n}\n"]
 stop_tokens:
 - "\n#"
 - "\n```"

@@ -20,6 +20,2030 @@ tests: "}\n\ncandidate() {\n    intersection \"$@\"\n}\n\nset -e\nrun_test() {\n
   \ -1\") = \"NO\" ]]\n    [[ $(candidate \"1 2\" \"3 5\") = \"NO\" ]]\n    [[ $(candidate\
   \ \"1 2\" \"1 2\") = \"NO\" ]]\n    [[ $(candidate \"-2 -2\" \"-3 -2\") = \"NO\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  A=$1\n  B=$2\n  for i in $(echo $A $B | tr \" \" \"\\n\");do\n  \
+    \  if [ $i -lt $B ] || [ $i -gt $A ]; then\n      echo NO\n      exit\n    fi\n\
+    \  done\n  echo YES", "    local x y\n    read -r x y <<< \"${@:2}\"\n    [[ $x\
+    \ == \"-\" || $y == \"-\" ]]\n    echo \"${x} ${y}\" | xargs -n1 -I '{}' test\
+    \ \"${x}\" \"${y}\" > /dev/null", "  declare -i a=$1\n  declare -i b=$2\n  declare\
+    \ -i aStart=$1\n  declare -i aEnd=$2\n  declare -i bStart=$3\n  declare -i bEnd=$4\n\
+    \  \n  if [ \"$aStart\" -gt \"$aEnd\" ] || [ \"$bStart\" -gt \"$bEnd\" ] ||\n\
+    \     [ $aStart -gt $bStart ] || [ $aEnd -eq $bEnd ]\n  then\n    echo NO\n  else\n\
+    \    local i\n    \n    for i in {2..$bStart} \n    do\n      if [[ $a -ge $i\
+    \ && $a -le $((i+$bStart)) ]]; then\n        break\n      fi\n    done\n    \n\
+    \    echo $(( ($bEnd - $i)/bStart ))\n  fi", "    local i j l r\n    # Write your\
+    \ code here\n    i=$(echo $1 | awk '{print $1}')\n    j=$(echo $2 | awk '{print\
+    \ $1}')\n    l=$(echo $1 | awk '{print $2}')\n    r=$(echo $2 | awk '{print $2}')\n\
+    \    if [ \"$i\" > \"$j\" ]; then\n        echo \"NO\"\n    elif [ \"$i\" == \"\
+    $j\" ]; then\n        echo \"YES\"\n    elif [ \"$i\" == \"$l\" ]; then\n    \
+    \    echo \"NO\"\n    elif [ \"$i\" == \"$r\" ]; then\n        echo \"YES\"\n\
+    \    elif [ \"$j\" > \"$l\" ]; then\n        echo \"NO\"\n    elif [ \"$j\" ==\
+    \ \"$l\" ]; then\n        echo \"YES\"\n    elif [ \"$j\" == \"$r\" ]; then\n\
+    \        echo \"NO\"\n    elif [ \"$l\" > \"$r\" ]; then\n        echo \"NO\"\n\
+    \    elif [ \"$l\" == \"$r\" ]; then\n        echo \"YES\"\n    else\n       \
+    \ echo \"NO\"\n    fi", "    local a=$1\n    local b=$2\n    local len1\n    local\
+    \ len2\n    local c\n    local i\n    local j\n    len1=${#a[@]}\n    len2=${#b[@]}\n\
+    \    \n    for ((i=0; i<${#a[@]}; i++)); do\n        a=${a[i]}\n        b=${b[i]}\n\
+    \    done\n    for ((j=0; j<${#b[@]}; j++)); do\n        b=${b[j]}\n    done\n\
+    \    if [[ $len1 == 0 || $len2 == 0 ]]; then\n        return \"NO\"\n    fi\n\
+    \    c=$((len1 < len2) ? len1 : len2)\n    for ((i=0; i<c; i++)); do\n       \
+    \ if [[ ${a[i]} > ${b[j]} ]]; then\n            a=${a[$((i-1))]}\n        fi\n\
+    \        if [[ ${a[i]} < ${b[j]} ]]; then\n            b=${b[$((j-1))]}\n    \
+    \    fi\n        if [[ ${a[i]} == ${b[j]} ]]; then\n            a=${a[$((i-1))]}\n\
+    \            b=${b[$((j-1))]}\n        fi\n    done\n    if [[ $((${#a[@]} - 1))\
+    \ == $((${#b[@]} - 1)) ]]; then\n        return \"YES\"\n    fi\n    \n    ",
+  "    # Convert input into list\n    a=( ${1//,/ } )\n    b=( ${2//,/ } )\n    #\
+    \ Iterate over the list\n    i=0\n    res=\"\"\n    for (( i=0; i<${#a[@]}; i++\
+    \ ));\n    do\n        # Check the intervals\n        if (( \"${a[i]}\" <= \"\
+    ${b[i]}\" ));\n        then\n            start=$(expr \"${a[i]}\" + 1)\n     \
+    \   elif (( \"${a[i]}\" >= \"${b[i]}\" ));\n        then\n            end=$(expr\
+    \ \"${b[i]}\" - 1)\n        else\n            echo \"${a[i]} and ${b[i]} are equal\"\
+    \n            echo \"Nothing to do\"\n            exit 1;\n        fi\n      \
+    \  len=$(( end - start + 1 ))\n        echo \"Checking interval (${a[i]}, ${b[i]})\"\
+    \n        echo \"${len} elements\"\n        echo \"${start}-${end}\"\n       \
+    \ # Find the intersection of two intervals\n        intersec=`awk -v start=\"\
+    ${start}\" -v end=\"${end}\" 'BEGIN{\n             for (j=start+1;j<=end;j++){\n\
+    \                 for (i in  a){\n                     for (k in b){\n       \
+    \                  if ($i ~= k){\n                             if (j==k){\n  \
+    \                               if ($i == $j){\n                             \
+    \        res=res\"0\"\n                                 }\n                  \
+    \           } else {\n                                 if ($i == k){\n       \
+    \                              res=res\"1\"\n                                \
+    \ }\n                             }\n                         }\n            \
+    \         }\n                 }\n             }\n             print res\n    \
+    \         }' ${a} ${b}`\n        # Check if the intersection is prime\n      \
+    \  prime=\"YES\"\n        if (( \"${#intersec}\" == 1 ));\n        then\n    \
+    \        if (( \"${intersec}\" == 0 ));\n            then\n                prime=\"\
+    NO\"\n            fi\n        fi\n        echo \"${prime}\"\n        echo \"${res}\"\
+    \n        res=`expr \"${res}\" + \"${prime}\"`\n    done\n    \n    echo $res",
+  "  local intersect_start=$1\n  local intersect_end=$2\n  local length=$(( $intersect_end\
+    \ - $intersect_start + 1 ))\n  local intersect_str=$(printf \" %d\" $(( $intersect_end\
+    \ - $intersect_start + 1 )))\n\n  local intersect_num=$(echo $intersect_str |awk\
+    \ '{print $1}')\n\n  local count=1\n  while [ $count -lt $length ]\n  do\n   \
+    \ local intersect_num1=$(echo $intersect_str |awk '{print $1}')\n    if [[ $((\
+    \ $intersect_num % $intersect_num1 )) == 0 ]]\n    then\n      intersect_num=$intersect_num\n\
+    \    else\n      intersect_num=$(( $intersect_num + 1 ))\n      intersect_num1=$(echo\
+    \ $intersect_str |awk '{print $1}')\n      if [[ $(( $intersect_num1 % $intersect_num\
+    \ )) == 0 ]]\n      then\n        intersect_num=$intersect_num\n      else\n \
+    \       intersect_num=$(( $intersect_num + 1 ))\n        intersect_num1=$(echo\
+    \ $intersect_str |awk '{print $1}')\n      fi\n    fi\n    count=$(( $count +\
+    \ 1 ))\n  done\n\n  if [[ $intersect_num == 1 ]]\n  then\n    echo \"$intersect_str\"\
+    \n  else\n    echo \"$intersect_str\"\n  fi", "    local -i i1=\"$1\"\n    local\
+    \ -i i2=\"$2\"\n    local -i i1len\n    local -i i2len\n    local i\n    local\
+    \ -n ret\n    local -r interval\n    local -i prime\n\n    # i1 = \"1 2\"\n  \
+    \  # i2 = \"2 3\"\n    # i1len = 1\n    # i2len = 1\n    # prime = 0\n\n    IFS=\"\
+    \ \" read -a intervals <<< \"$i1\"\n\n    for ((i=0; i<${#intervals[@]}; i++));\
+    \ do\n        interval=\"${intervals[${i}]}\"\n\n        IFS=\" \" read -a intervals\
+    \ <<< \"$i2\"\n\n        if [[ \"${intervals[$i]}\" == \"${intervals[$((i+1))]}\"\
+    \ ]]; then\n            prime=1\n            break\n        fi\n    done\n\n \
+    \   [[ \"${prime}\" = 1 ]] || return 1\n\n    for ((i=0; i<${#intervals[@]}; i++));\
+    \ do\n        interval=\"${intervals[${i}]}\"\n        IFS=\" \" read -a intervals\
+    \ <<< \"$i2\"\n\n        if [[ \"${intervals[$i]}\" == \"${intervals[$((i+1))]}\"\
+    \ ]]; then\n            prime=0\n            break\n        fi\n    done\n\n \
+    \   [[ \"${prime}\" = 1 ]] || return 1\n\n    IFS=\" \" read -a intervals <<<\
+    \ \"$i1\"\n\n    for ((i=0; i<${#intervals[@]}; i++)); do\n        interval=\"\
+    ${intervals[${i}]}\"\n        IFS=\" \" read -a intervals <<< \"$i2\"\n\n    \
+    \    if [[ \"${intervals[$i]}\" == \"${intervals[$((i+1))]}\" ]]; then\n     \
+    \       ret[${#ret[@]}]=\"YES\"\n            break\n        fi\n    done\n\n \
+    \   [[ \"${#ret[@]}\" -eq 0 ]] || return 0\n\n    echo \"${ret[@]}\"", "    #\
+    \ Initialize variables \n    intersect=0\n    len1=${#1}\n    len2=${#2}\n   \
+    \ \n    # Iterate through both lists and store their length in variables\n   \
+    \ for (( i=0; i<${len1}; i++ )); do\n        for (( j=0; j<${len2}; j++ )); do\n\
+    \            ((intersect++))\n        done\n    done\n    \n    # Return the result\
+    \ \n    if [[ ${intersect} -eq 0 ]]; then\n        echo \"NO\"\n    else\n   \
+    \     echo \"YES\"\n    fi", "    while read interval; do\n        case \"${interval}\"\
+    \ in\n        *[!0-9]*|*[!0-9]*[!0-9]*|*[!0-9]*[!0-9]*[!0-9]*|*[!0-9]*[!0-9]*[!0-9]*[!0-9]*)\
+    \ echo \"NO\" ;;\n        *) echo \"YES\" ;;\n        esac\n    done", "    declare\
+    \ -i start end start end i j count result num\n\n    # Initialize variables\n\
+    \    num=0 start=0 end=0 count=0\n    \n    # Convert them to integers\n    for\
+    \ ((i = 0; i < ${#1[@]}; i++)) do\n        ((start+=${1[i]}))\n        ((end+=${2[i]}))\n\
+    \    done\n\n    # Search intersection points\n    for ((i = 0; i < end; i++))\
+    \ do\n        for ((j = 0; j < start; j++)) do\n            if [[ ${1[i]} -eq\
+    \ ${2[j]} ]]; then\n                ((count++))\n            fi\n        done\n\
+    \    done\n    if [ $count -ne 0 ]; then\n        result=YES\n    else\n     \
+    \   result=NO\n    fi\n    \n    # Print the result\n    printf '%s\\n' \"$result\"",
+  "\tlocal interval1 interval2\n\tinterval1=\"${1% *}\"\n\tinterval2=\"${2% *}\"\n\
+    \tlocal result\n\tlocal i\n\n\t# Check if interval1 is a single integer\n\t[[\
+    \ ${interval1:0:1} == -* ]] && interval1=\"${interval1#-}\"\n\t[[ ${interval1:0:1}\
+    \ == +* ]] && interval1=\"${interval1%%+}\"\n\t[[ ${interval1:0:1} == +* ]] &&\
+    \ interval1=\"${interval1#+}\"\n\t[[ ${interval1:0:1} == -* ]] && interval1=\"\
+    ${interval1#-}\"\n\t[[ ${interval1:0:1} == -* ]] && interval1=\"${interval1%%+}\"\
+    \n\n\t# Check if interval2 is a single integer\n\t[[ ${interval2:0:1} == -* ]]\
+    \ && interval2=\"${interval2#-}\"\n\t[[ ${interval2:0:1} == +* ]] && interval2=\"\
+    ${interval2%%+}\"\n\t[[ ${interval2:0:1} == +* ]] && interval2=\"${interval2#+}\"\
+    \n\t[[ ${interval2:0:1} == -* ]] && interval2=\"${interval2#-}\"\n\t[[ ${interval2:0:1}\
+    \ == -* ]] && interval2=\"${interval2%%+}\"\n\n\tfor (( i=1; i<${#interval1};\
+    \ i++ )); do\n\t\t[[ ${interval1:${i}:1} -le ${interval2:${i}:1} ]] && result=\"\
+    YES\" && break\n\tdone\n\techo $result", "    set -A interval\n    set -A prime\
+    \ interval\n    IFS=' ' read -a interval <<< \"$1\"\n    IFS=' ' read -a prime\
+    \ <<< \"$2\"\n    for interval in \"${interval[@]}\"; do\n        if (( ${interval[0]}\
+    \ <= ${interval[1]} )); then\n            prime[${interval[0]}+1]=true\n     \
+    \       prime[${interval[1]}+1]=true\n        fi\n    done\n    for prime in \"\
+    ${prime[@]}\"; do\n        echo -n \"${prime}\" | wc -w\n    done", "    local\
+    \ i\n    local a\n    local b\n    local len\n    local res\n    local count\n\
+    \    local interval\n    local prime\n    local count2\n    local count3\n   \
+    \ local count4\n    local count5\n    local count6\n    local count7\n    local\
+    \ count8\n    local count9\n    local count10\n    local count11\n    local count12\n\
+    \    local count13\n    local count14\n    local count15\n    local count16\n\
+    \    local count17\n    local count18\n    local count19\n    local count20\n\
+    \    local count21\n    local count22\n    local count23\n    local count24\n\
+    \    local count25\n    local count26\n    local count27\n    local count28\n\
+    \    local count29\n    local count30\n    local count31\n    local count32\n\
+    \    local count33\n    local count34\n    local count35\n    local count36\n\
+    \    local count37\n    local count38\n    local count39\n    local count40\n\
+    \    local count41\n    local count42\n    local count43\n    local count44\n\
+    \    local count45\n    local count46\n    local count47\n    local count48\n\
+    \    local count49\n    local count50\n    local count51\n    local count52\n\
+    \    local count53\n    local count54\n    local count55\n    local count56\n\
+    \    local count57\n    local count58\n    local count59\n    local count60\n\
+    \    local count61\n    local count62\n    local count63\n    local count64\n\
+    \    local count65\n    local count66\n    local count67\n    local count68\n\
+    \    local count69\n    local count70\n    local count71\n    local count72\n\
+    \    local count73\n    local count74\n    local count75\n    local count76\n\
+    \    local count77\n    local count78\n    local count79\n    local count80\n\
+    \    local count81\n    local count82\n    local count83\n    local count84\n\
+    \    local count85\n    local count86\n    local count87\n    local count88\n\
+    \    local count89\n    local count90\n    local count91\n    local count92\n\
+    \    local count93\n    local count94\n    local count95\n    local count96\n\
+    \    local count97\n", "    local -i j=1\n    local -a i\n    local -a j\n   \
+    \ local -i len1\n    local -i len2\n    local -i ret\n    local -a l\n    local\
+    \ -a l2\n    local -i prime\n    local -i prime2\n    local -i num\n    local\
+    \ -i num2\n    local -i num3\n    local -a res\n    local -a res2\n    local -a\
+    \ len\n    local -a len2\n    \n    num=\"${1}\"\n    len=${#num}\n    num2=\"\
+    ${num%*}\" && num2=\"${num2#*(-)}\" && len2=$((len-num2))\n    num=$(expr ${num%-*}\
+    \ + 1)\n    \n    num3=\"${num%*}\" && num3=\"${num3#*(-)}\" && len=$((len-num3))\n\
+    \    \n    i=()\n    i=(\"${@:$j}\") && j=$((j+${#i[@]}))\n    \n    l=()\n  \
+    \  l=$(echo \"${!i[@]}\"|sed \"s/^\\([^-]\\) \\([^-]\\)/\\2 \\1/\")\n    \n  \
+    \  l2=()\n    l2=$(echo \"${!i[@]}\"|sed \"s/^\\([^-]\\) \\([^-]\\)/\\1 \\2/\"\
+    )\n    \n    ret=0\n    prime=0\n    prime2=0\n    for (( i = 0; i < ${#l[@]};\
+    \ i++ )); do\n        num=${l[i]}\n        num2=\"${num%*}\" && num2=\"${num2#*(-)}\"\
+    \ && len2=$((len-num2))\n        num=$(expr ${num%-*} + 1)\n        \n       \
+    \ num3=\"${num%*}\" && num3=\"${num3#*(-)}\" && len=$((len-num3))\n        \n\
+    \        if [ \"$i\" -le \"$j\" ]; then\n            prime2=$((prime2+1))\n  \
+    \          prime=$((prime+1))\n        fi\n        \n        if [ \"$prime2\"\
+    \ -eq \"$prime\" ]; then \n            prime2=0\n            if [ \"$num\" -eq\
+    \ \"$num2\" ]; then\n                ret=$((ret+1))\n            fi\n        fi\n\
+    \    done\n    \n    if [ \"$prime2\" -eq \"$prime\" ]; then\n        echo \"\
+    $ret\"\n    else\n        echo \"NO\"\n    fi", "    local i j\n    local A=$1\n\
+    \    local B=$2\n    local a=$A\n    local b=$B\n    \n    for i in $(seq 1 $((${#A}-1))\
+    \ )\n    do\n        if [ $i == $((${#A}-1)) ]; then\n            echo $a\n  \
+    \      fi\n        \n        for j in $(seq 1 $((${#B}-1)) )\n        do\n   \
+    \         if [ $j == $((${#B}-1)) ]; then\n                echo $b\n         \
+    \   fi\n            \n            local i1=$i\n            local j1=$j\n     \
+    \       \n            local i2=$(echo $i | bc)\n            local j2=$(echo $j\
+    \ | bc)\n            \n            (( i1++ ))\n            (( j1++ ))\n      \
+    \      \n            if [ $i2 -eq $i1 ]; then\n                if [ $j2 -eq $j1\
+    \ ]; then\n                    echo $(($i2 + $j2))\n                fi\n     \
+    \       fi\n            \n        done\n    done\n    \n    echo $(( $(( ${#a}*${#b}\
+    \ - $(echo $a | bc | wc -c) )) ))", "    local -a arr1 arr2 len\n    local -i\
+    \ len1=$1 len2=$2\n\n    arr1=(${@:3})\n    arr2=(${@:4})\n    len1=$((${#arr1[@]}))\n\
+    \    len2=$((${#arr2[@]}))\n\n    for (( i=0; i<len1; i++ )); do\n        local\
+    \ -i i1=$i i2=$(expr $i + 1)\n        local j=0\n        while [ $((j+i2)) <=\
+    \ $len2 ]; do\n            if [[ ${arr1[i]} == ${arr2[j]} ]]; then\n         \
+    \       (( i1=0 )); break\n            fi\n            (( j++ ))\n        done\n\
+    \        if [ $i1 -eq 0 ]; then\n            len1=$(( $len1 - 1 ))\n        else\n\
+    \            len2=$(( $len2 - 1 ))\n        fi\n    done\n\n    if [ $len1 -eq\
+    \ $len2 ]; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n    fi",
+  "  interval1=\"$1\"\n  interval2=\"$2\"\n  interval1arr=($interval1)\n  interval2arr=($interval2)\n\
+    \  len=$((${#interval1arr[@]}${#interval2arr[@]} - 1))\n  index=0\n  index2=0\n\
+    \  while ((index < ${#interval1arr[@]}) && (index2 < ${#interval2arr[@]}))\n \
+    \ do\n    if [ ${interval1arr[$index]} -gt ${interval2arr[$index2]} ]\n    then\n\
+    \      ((index++))\n    else\n      ((index2++))\n    fi\n  done\n  if ((index\
+    \ == ${#interval1arr[@]}) && (index2 == ${#interval2arr[@]}))\n  then\n    echo\
+    \ $((${#interval1arr[@]} == ${#interval2arr[@]}))\n  else\n    echo $((${#interval1arr[@]}\
+    \ == ${#interval2arr[@]})|($(echo \"${interval1arr[@]}\" \"${interval2arr[@]}\"\
+    | sort -u | wc -l)))\n  fi", "    while read -r line; do\n    \n    # input check\n\
+    \    if [[ -z \"$line\" || -z \"$2\" ]]; then\n        echo \"$0: missing arguments\"\
+    \ >&2\n        exit 1\n    fi\n    \n    # convert line\n    interval_start=$(echo\
+    \ $line | awk '{print $1}')\n    interval_end=$(echo $line | awk '{print $2}')\n\
+    \    \n    # check\n    if (( interval_start <= interval_end )); then\n      \
+    \  echo \"$0: invalid interval for interval $interval_start <= $interval_end\"\
+    \ >&2\n        exit 1\n    fi\n    \n    # compute intersection\n    intersection_start=$(echo\
+    \ $interval_start | awk '{print $1 - $2}')\n    intersection_end=$(echo $interval_end\
+    \ | awk '{print $1 - $2}')\n    \n    # check\n    if (( ! $(( $intersection_start\
+    \ < 0 )) )); then\n        echo \"$0: negative interval\" >&2\n        exit 1\n\
+    \    fi\n    if (( ! $(( $intersection_end < 0 )) )); then\n        echo \"$0:\
+    \ negative interval\" >&2\n        exit 1\n    fi\n    \n    # compute length\
+    \ of intersection\n    intersection_length=$(( $intersection_end - $intersection_start\
+    \ + 1 ))\n    \n    # check length\n    if (( ! $(( $intersection_length == 2\
+    \ )) )); then\n        echo \"$0: invalid interval\" >&2\n        exit 1\n   \
+    \ fi\n    \n    # check if length is prime\n    if (( $(expr $intersection_length\
+    \ \\% $(( $(expr $(( $2 \\* $2 )) )) )) == 0 )); then\n        echo \"$0: interval\
+    \ $interval_start <= $interval_end does not intersect with interval $interval_start\
+    \ <= $interval_end\" >&2\n        exit 1\n    fi\n    \n    # success\n    echo\
+    \ \"YES\"\n    \n    done < <(sort --field-separator=' ' $1 | paste -s -d' ')",
+  "  local i j\n  local length\n  local prime\n  local intervals\n  intervals=$1\n\
+    \  intervals2=$2\n  prime=0\n  for ((i=0; i<${#intervals[@]}; i++)); do\n    #\
+    \ get the first interval (start) \n    start=${intervals[$i]}\n    # get the end\
+    \ interval (end)\n    end=${intervals2[$i]}\n    # get the length of the first\
+    \ interval (start)\n    length=${#start}\n    # check if the end interval (end)\
+    \ includes the start interval (start) \n    if [ $end -ge $start ]; then\n   \
+    \   prime=1\n      break\n    else\n      prime=0\n      break\n    fi\n  done\n\
+    \  if [ $prime -eq 1 ]; then\n    echo \"YES\"\n  else\n    echo \"NO\"\n  fi",
+  "    local i1=$1\n    local i2=$2\n    local len=$((i1[0]>i2[0])?i1[0]:i2[0])\n\
+    \    local a=$((i1[1]>i2[1])?i1[1]:i2[1])\n    local b=$((i1[2]>i2[2])?i1[2]:i2[2])\n\
+    \    local c=$((b > a && b < len))\n    local d=$((c && ((len-a) % b == 0)))\n\
+    \    echo $((c && d))", "    if [ $# -ne 2 ]\n    then\n        echo \"Usage:\
+    \ $(basename $0) <interval_1> <interval_2>\"\n        return 1\n    fi\n    \n\
+    \    interval_1=$(echo $1 | tr '[:upper:]' '[:lower:]')\n    interval_2=$(echo\
+    \ $2 | tr '[:upper:]' '[:lower:]')\n    \n    local i1=0\n    local i2=0\n   \
+    \ local len1=0\n    local len2=0\n    local i1len=0\n    local i2len=0\n    local\
+    \ flag=0\n    local flag2=0\n    \n    while read -r line; do\n        # line\
+    \ format: \"<start> <end>\"\n        line=$(echo $line | tr '[:upper:]' '[:lower:]')\n\
+    \        \n        if [ $flag -eq 0 ]; then\n            flag=1\n            len1=$(expr\
+    \ $len1 + $i)\n        else\n            flag=0\n            len2=$(expr $len2\
+    \ + $i)\n        fi\n        \n        if [ $len1 -eq $len2 ]; then\n        \
+    \    i1len=$i\n        fi\n        \n        if [ $flag2 -eq 0 ]; then\n     \
+    \       flag2=1\n            i2len=$(expr $i2len + $i)\n        else\n       \
+    \     flag2=0\n            i2len=$(expr $i2len + $i)\n        fi\n        \n \
+    \       i=$((i+1))\n    done < <(echo \"$interval_1\")\n    \n    while read -r\
+    \ line; do\n        # line format: \"<start> <end>\"\n        line=$(echo $line\
+    \ | tr '[:upper:]' '[:lower:]')\n        \n        if [ $flag -eq 0 ]; then\n\
+    \            flag=1\n            len1=$(expr $len1 + $i)\n        else\n     \
+    \       flag=0\n            len2=$(expr $len2 + $i)\n        fi\n        \n  \
+    \      if [ $len1 -eq $len2 ]; then\n            i1len=$i\n        fi\n      \
+    \  \n        if [ $flag2 -eq 0 ]; then\n            flag2=1\n            i2len=$(expr\
+    \ $i2len + $i)\n        else\n            flag2=0\n            i2len=$(expr $i2len\
+    \ + $i)\n        fi\n        \n        i=$((i+1))\n    done < <(echo \"$interval_2\"\
+    )\n    \n    if [ $i1len -eq $i2len ]; then\n        echo \"$interval_1\" \"$interval_2\"\
+    \n    elif [ $i1len -gt $i2len ]; then\n        echo \"YES\" \"$interval_1", " \
+    \   local start end len\n    IFS=$'\\n' read -r -a arr <<< \"$1\"\n    IFS=$'\\\
+    n' read -r -a arr2 <<< \"$2\"\n\n    for ((i = 0; i < ${#arr[@]}; i++)); do\n\
+    \        start=${arr[$i]}\n        end=${arr2[$i]}\n        len=$((end - start\
+    \ + 1))\n        for ((j = 0; j < len; j++)); do\n            if [ ${arr[$i]}\
+    \ -gt ${arr2[$j]} ]; then\n                arr[$i]=$((start + (j + 1)));\n   \
+    \             break;\n            fi\n        done\n    done\n\n    if [ \"${#arr[@]}\"\
+    \ -eq \"${#arr2[@]}\" ]; then\n        echo \"NO\"\n    else\n        echo \"\
+    YES\"\n    fi", "\tintersect=()\n\tintersect_start=$(echo $1 | cut -d ' ' -f 1)\n\
+    \tintersect_end=$(echo $2 | cut -d ' ' -f 1)\n\tintersect_len=$(echo $3 | cut\
+    \ -d ' ' -f 1)\n\tintersect_start=$((intersect_start-1))\n\tintersect_end=$((intersect_end-1))\n\
+    \tfor i in $(seq 1 $intersect_len); do\n\t\t((intersect_diff=$intersect_end-$intersect_start))\n\
+    \t\tif ((intersect_diff >= i)); then\n\t\t\tintersect[$i]=true\n\t\telse\n\t\t\
+    \tintersect[$i]=false\n\t\tfi\n\tdone\n\tif [[ ${#intersect[@]} -gt 1 ]]; then\n\
+    \t\tprime=false\n\t\tfor element in $(seq 0 $((${#intersect[@]}-1))); do\n\t\t\
+    \tif [[ $((${intersect[element]})) -eq 0 ]]; then\n\t\t\t\tprime=true\n\t\t\t\t\
+    break\n\t\t\tfi\n\t\tdone\n\t\tif [[ $prime == true ]]; then\n\t\t\techo \"YES\"\
+    \n\t\telse\n\t\t\techo \"NO\"\n\t\tfi\n\telse\n\t\techo \"NO\"\n\tfi", "    local\
+    \ a=$1\n    local b=$2\n    local c=$(awk 'BEGIN{ for(i=1;i<=NF;i++){ a[i]=$i;\
+    \ } for(i=1;i<=NF;i++){ b[i]=$i; } }'<<<${a} ${b})\n    local result=$(echo \"\
+    $c\" | sort -u | wc -l)\n    if [[ $result -eq 1 ]]\n    then\n        if [[ \"\
+    ${c[0]}\" -le \"${c[1]}\" ]]\n        then\n            echo \"NO\"\n        else\n\
+    \            echo \"YES\"\n        fi\n    else\n        echo \"NO\"\n    fi",
+  "    local l1 l2\n    l1=(${#1})\n    l2=(${#2})\n    echo \"${l1[@]:0:$((l1 - 1))}\"\
+    \ \\\n          \"${l1[@]:$((l1 - 1)):$l2}\" \\\n          | grep -vE '^$'", " \
+    \   local interval_1=\"$1\"\n    local interval_2=\"$2\"\n\n    local intersection_1=$(echo\
+    \ $interval_1 | sed 's/ //g')\n    local intersection_2=$(echo $interval_2 | sed\
+    \ 's/ //g')\n\n    local length_1=$(echo $interval_1 | awk '{print length}' |\
+    \ xargs | wc -c)\n    local length_2=$(echo $interval_2 | awk '{print length}'\
+    \ | xargs | wc -c)\n\n    if [ $length_1 == $length_2 ]; then\n        if [ $intersection_1\
+    \ > $intersection_2 ]; then\n            echo \"NO\"\n        else\n         \
+    \   echo \"YES\"\n        fi\n    else\n        echo \"NO\"\n    fi", "    local\
+    \ a b i j len flag=0 found\n    local interval=\"$(echo \"${1}\" | sed -e 's/^[[:space:]]*//'\
+    \ -e 's/[[:space:]]*$//')\"\n    local intersect=\"$(echo \"${2}\" | sed -e 's/^[[:space:]]*//'\
+    \ -e 's/[[:space:]]*$//')\"\n\n    interval=\"$(echo \"${interval}\" | sed -e\
+    \ 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\"\n    intersect=\"$(echo \"${intersect}\"\
+    \ | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\"\n\n    len=\"${#interval}\"\
+    \n    len=\"${#intersect}\"\n\n    for ((i = 0; i < len; i++)) ; do\n        a=\"\
+    ${interval[i]}\"\n        b=\"${intersect[i]}\"\n        if ((a <= b)) ; then\n\
+    \            flag=1\n            break\n        fi\n    done\n\n    if [[ \"${flag}\"\
+    \ == 0 ]]; then\n        echo \"NO\"\n        return\n    else\n        if ((len\
+    \ % 2)) ; then\n            echo \"YES\"\n            return\n        fi\n   \
+    \     \n        flag=0\n        for ((j = 1; j < len; j++)) ; do\n           \
+    \ if ((interval[j]==intersect[j]))  ; then\n                flag=0\n         \
+    \       break\n            fi\n        done\n        \n        if [[ \"${flag}\"\
+    \ == 1 ]]; then\n            echo \"YES\"\n            return\n        else\n\
+    \            echo \"NO\"\n            return\n        fi\n    fi", "    local\
+    \ a b i iend\n    local i1 i2 o1 o2 o3 o4 o5 o6 o7 o8\n\n    [[ \"$#\" -lt 2 ]]\
+    \ && return 1\n\n    a=$(eval \"echo \\\"$*\\\")\n    b=$(eval \"echo \\\"$*\\\
+    \")\n    [[ \"$a\" != \"$b\" ]] && return 0\n\n    for ((i=0; i<${#a}; i++));\
+    \ do\n      i1=${a%$i}\n      i2=${b%$i}\n      o1=${i1} ${i2} ${#i1}\n      o2=${i1}\
+    \ ${i2} ${#i2}\n      o3=${i1} ${i2} ${#i1}\n      o4=${i1} ${i2} ${#i2}\n   \
+    \   o5=${i1} ${i2} ${#i1}\n      o6=${i1} ${i2} ${#i1}\n      o7=${i1} ${i2} ${#i1}\n\
+    \      o8=${i1} ${i2} ${#i1}\n      [[ \"$i1\" -gt \"$i2\" ]] && o3=$o5\n    \
+    \  [[ \"$i1\" -gt \"$i2\" ]] && o4=$o6\n      [[ \"$i1\" -gt \"$i2\" ]] && o5=$o7\n\
+    \      [[ \"$i1\" -gt \"$i2\" ]] && o6=$o8\n      [[ \"$i1\" -gt \"$i2\" ]] &&\
+    \ o7=$o8\n      [[ \"$i1\" -gt \"$i2\" ]] && o8=$o8\n      [[ \"$o1\" -gt \"$o2\"\
+    \ ]] && o5=$o7\n      [[ \"$o1\" -gt \"$o2\" ]] && o6=$o8\n      [[ \"$o1\" -gt\
+    \ \"$o2\" ]] && o7=$o8\n      [[ \"$o1\" -gt \"$o2\" ]] && o8=$o8\n      [[ \"\
+    $o3\" -gt \"$o4\" ]] && o7=$o8\n      [[ \"$o3\" -gt \"$o4\" ]] && o8=$o8\n  \
+    \    [[ \"$o3\" -gt \"$o4\" ]] && o5=$o7\n      [[ \"$o3\" -gt \"$o4\" ]] && o6=$o8\n\
+    \      [[ \"$o3\" -gt \"$o4\" ]] && o5=$o7\n      [[ \"$o3\" -gt \"$o4\" ]] &&\
+    \ o8=$o8\n      [[ \"$o", "\t# Convert the two intervals to two sets of numbers\n\
+    \ts1=($(echo \"$1\" | sed 's/,/\\n/g' | xargs -n1 echo \"$2\" | sed 's/,/\\n/g'\
+    \ | xargs -n1))\n\ts2=($(echo \"$2\" | sed 's/,/\\n/g' | xargs -n1 echo \"$1\"\
+    \ | sed 's/,/\\n/g' | xargs -n1))\n\n\t# Sort the sets\n\ts1=$(echo \"$s1 | xargs\
+    \ -n 1 sort -n | uniq\")\n\ts2=$(echo \"$s2 | xargs -n 1 sort -n | uniq\")\n\n\
+    \t# Traverse the sets and find the intersection between the intervals\n\tfor i\
+    \ in $(seq 0 $((${#s1[@]} - 1)); do\n\t\t[[ ${s1[$i]} > ${s2[$i]} ]] || break\n\
+    \tdone\n\t\n\t[ \"$i\" != \"${#s1[@]}\" ] && return 0\n\t[ \"$i\" -eq \"${#s1[@]}\"\
+    \ ] && return 1", "    local -i intervals=$#\n    local -i j=0\n    local -i k=0\n\
+    \    local -i result=0 \n    local interval\n    local start\n    local end\n\
+    \    while [ $k -le $intervals ] ; do\n        interval=$(expr $intervals + $k\
+    \ - 1 )\n        start=$(expr $interval + 1 )\n        end=$(expr $interval +\
+    \ 2 )\n        (( j = 0 ))\n        while [ $j -le $intervals ] ; do\n       \
+    \     if [ $j -ne $k ] ; then\n                (( result = 0 ))\n            \
+    \    if [ $start -le $intervals[$j] ] ; then\n                    if [ $end -le\
+    \ $intervals[$j] ] ; then\n                        (( result = 1 ))\n        \
+    \            else\n                        (( result = 1 ))\n                \
+    \    fi\n                else\n                    (( result = 0 ))\n        \
+    \        fi\n            fi\n            j=$(( $j + 1 ))\n        done\n     \
+    \   if [ $result -eq 0 ] ; then\n            result=\"NO\"\n        elif [ $result\
+    \ -eq 1 ] ; then\n            result=\"YES\"\n        fi\n        k=$(( $k + 1\
+    \ ))\n    done\n    echo \"$result\"", "  local start=$1\n  local end=$2\n  local\
+    \ len1=$((end - start + 1))\n  local len2=$((end - start + 1))\n  local index=$((len1\
+    \ - len2 + 1))\n\n  for ((i=0; i<index; i++))\n  do\n      if (( $((len1-i)) <=\
+    \ $((len2-i)) && [ $((len1-i)) -eq $((len2-i)) ])\n      then\n          echo\
+    \ \"$((len1-i)) $((len2-i))\"\n          break\n      fi\n  done", "    local\
+    \ interval_a=$1\n    local interval_b=$2\n    local intersect=\"NO\"\n    local\
+    \ length_intersect=\"1\"\n    if [[ \"$interval_a\" < \"$interval_b\" ]]; then\n\
+    \        intersect=\"YES\"\n        length_intersect=$((length_intersect + 1))\n\
+    \    fi\n\n    local i_intersection\n    i_intersection=$(intersect \"$interval_a\"\
+    \ \"$interval_b\")\n\n    if [ \"$i_intersection\" == \"YES\" ]; then\n      \
+    \  intersect=\"YES\"\n        length_intersect=$((length_intersect + 1))\n   \
+    \ fi\n    \n    if [ \"$i_intersection\" == \"NO\" ]; then\n        intersect=\"\
+    NO\"\n        length_intersect=$((length_intersect + 1))\n    fi\n\n    echo \"\
+    $intersect\"\n    echo \"$length_intersect\"", "    local intervals=$1\n    local\
+    \ intervals2=$2\n\n    local length=${#intervals[@]}\n    local length2=${#intervals2[@]}\n\
+    \    local j=1\n    local result=0\n    local start1=1\n    local end1=1\n   \
+    \ local start2=1\n    local end2=1\n\n    while [ $j -le $length ]; do\n     \
+    \   if [ ${intervals[$j]} == ${intervals2[$j]}  ]; then\n            let result=$((result\
+    \ | 1 << ($j - 1)));\n            let j=$j + 1;\n            continue;\n     \
+    \   fi\n        if [ $j -eq $length2 ]; then\n            let result=$((result\
+    \ | 1));\n            let j=$j + 1;\n            continue;\n        fi\n     \
+    \   if [ $start1 -ge $end2 ]; then\n            let start2=$start1 + 1;\n    \
+    \        let end2=$end1 + 1;\n            let start1=$start2;\n            let\
+    \ end1=$end2;\n        fi\n\n        let start2=$start1 + 1;\n        let end2=$end1\
+    \ + 1;\n        let start1=$start2;\n        let end1=$end2;\n    done\n    echo\
+    \ $result;", "\t# Write your code here.", "    local interval_list interval_list_1\
+    \ interval_list_2 result i\n\n    interval_list=$1\n    interval_list_1=$2\n \
+    \   interval_list_2=$3\n\n    # Convert interval_list to array\n    IFS=' ' read\
+    \ -ra interval_list_array <<< \"$interval_list\"\n\n    # Convert interval_list_1\
+    \ to array\n    IFS=' ' read -ra interval_list_array_1 <<< \"$interval_list_1\"\
+    \n\n    # Convert interval_list_2 to array\n    IFS=' ' read -ra interval_list_array_2\
+    \ <<< \"$interval_list_2\"\n\n    for (( i = 0; i < ${#interval_list_array[@]};\
+    \ i++ )); do\n        result=0\n        for (( j = 0; ( j < ${#interval_list_array_1[@]};\
+    \ j++ )); do\n            result=$((result+${interval_list_array[$i]}-${interval_list_array_1[j]}))\n\
+    \        done\n        result=$((result+${interval_list_array_2[i]}))\n      \
+    \  if [ $result -ge 0 ]; then\n            echo \"YES\"\n            exit 0\n\
+    \        fi\n    done\n    echo \"NO\"", "    interval1=$(echo \"$1\" | tr ' '\
+    \ ',')\n    interval2=$(echo \"$2\" | tr ' ' ',')\n    length1=$(echo \"${#interval1}\"\
+    )\n    length2=$(echo \"${#interval2}\")\n    interval1[0]=$((interval1[0]+interval2[0]))\n\
+    \    interval1[1]=$((interval1[1]+interval2[1]))\n    length1=$((length1+1))\n\
+    \    if [ \"$length1\" -eq \"$length2\" ]; then\n        if [ $interval1[0] -le\
+    \ \"$interval1[1]\" ] && [ $interval2[0] -le \"$interval2[1]\" ]; then\n     \
+    \       echo \"$interval1[0]\" \"$interval1[1]\"\n        else\n            echo\
+    \ \"NO\"\n        fi\n    else\n        echo \"NO\"\n    fi", "    set -- $((\
+    \ $1 - 1 ))\n    set -- $(( $2 - 1 ))\n\n    if [ ${#} -gt 2 ] || [[ ${#} -lt\
+    \ 2 ]]; then\n        echo \"NO\"\n        return 0\n    elif [ \"$2\" -gt \"\
+    $1\" ]; then\n        echo \"NO\"\n        return 0\n    else\n        echo \"\
+    YES\"\n        return 1\n    fi", "    local first\n    local last\n    local\
+    \ i i2 result\n    first=\"${1}\"; last=\"${2}\"\n    # $first has space-separated\
+    \ integers\n    # $last has space-separated integers\n    # Check if first's length\
+    \ is greater than or equal to last's length\n    if [ $first -gt $last ]; then\
+    \ echo \"NO\"; else echo \"YES\"; fi\n    \n    # Iterate through the first list,\
+    \ and start iterating through last list\n    for ((i=1; i<=$first; i++ )); do\n\
+    \        # Iterate through the last list\n        for ((i2=$first; i2<=$last;\
+    \ i2++ )); do\n            # If the ith number from the first list exists in the\
+    \ ith number from the last list,\n            # then it is a possible intersection\
+    \ point and can be considered a prime\n            # For example if first list\
+    \ is (1,3), the ith number from first list in the ith number from last list exists\
+    \ at (1, 3)\n            # which means both 2 and 3 are in the intersection and\
+    \ so they are prime numbers\n            if [ $i -ge $i2 ]; then\n           \
+    \     # If both numbers are equal, then the intersection cannot be prime because\
+    \ the length will be zero\n                if [ $i -eq $i2 ]; then\n         \
+    \           result=\"NO\"\n                else\n                    result=\"\
+    YES\"\n                fi\n                break\n            fi\n        done\n\
+    \    done", "    # Your code here\n    \n    first=${1% *}\n    second=${2% *}\n\
+    \    first=${first#* }\n    second=${second#* }\n    first=${first%,*}\n    second=${second%,*}\n\
+    \    first=${first#* }\n    second=${second#* }\n    \n    if [ $first -gt $second\
+    \ ] ; then\n        echo \"NO\"\n    else\n        echo \"YES\"\n    fi", "  \
+    \      local interval_1=$1\n        local interval_2=$2\n    \n        local length_interval=`expr\
+    \ ${interval_1[1]} - ${interval_1[0]} + ${interval_2[1]} - ${interval_2[0]}`\n\
+    \        \n        if [ ${length_interval} == 2 ]; then\n            echo \"${interval_1}\"\
+    \n        elif [ ${length_interval} -eq 1 ]; then\n            echo \"NO\"\n \
+    \       elif [ ${length_interval} -gt 1 ] && [ ${length_interval} -eq ${length_interval}\
+    \ ]; then\n            echo \"NO\"\n        else\n            echo \"YES\"\n \
+    \       fi", "  echo $1 $2 | tr ' ' '\\n' | sort | uniq -c | sort -nr | tail -n1\
+    \ | grep -Eq \"^ *1 \" -a | head -n1", "    local a b c x y z\n    a=$1\n    b=$2\n\
+    \    [[ -z $a ]] && echo \"Not valid\" && exit 1\n    [[ -z $b ]] && echo \"Not\
+    \ valid\" && exit 1\n    [[ -z $c ]] && echo \"Not valid\" && exit 1\n    [[ -z\
+    \ $x ]] && x=$a\n    [[ -z $y ]] && y=$b\n    [[ -z $z ]] && z=$c\n    while read\
+    \ x; do\n        while read y; do\n            while read z; do\n            \
+    \    if [[ $x == $y && $z == $a ]] ; then\n                    echo \"$a\"\n \
+    \                   exit 0\n                elif [[ $x == $y && $z == $b ]] ;\
+    \ then\n                    echo \"$b\"\n                    exit 0\n        \
+    \        elif [[ $x == $b && $y == $c ]] ; then\n                    echo \"$c\"\
+    \n                    exit 0\n                elif [[ $x == $b && $y == $a ]]\
+    \ ; then\n                    echo \"$a\"\n                    exit 0\n      \
+    \          elif [[ $x == $c && $y == $b ]] ; then\n                    echo \"\
+    $b\"\n                    exit 0\n                elif [[ $x == $c && $y == $a\
+    \ ]] ; then\n                    echo \"$a\"\n                    exit 0\n   \
+    \             elif [[ $x == $a && $y == $b ]] ; then\n                    echo\
+    \ \"$b\"\n                    exit 0\n                elif [[ $x == $a && $y ==\
+    \ $c ]] ; then\n                    echo \"$c\"\n                    exit 0\n\
+    \                elif [[ $x == $b && $y == $a ]] ; then\n                    echo\
+    \ \"$a\"\n                    exit 0\n                elif [[ $x == $b && $y ==\
+    \ $c ]] ; then\n                    echo \"$c\"\n                    exit 0\n\
+    \                elif [[ $y == $b && $z == $c ]] ; then\n                    echo\
+    \ \"$c\"\n                    exit 0\n                elif [[ $y == $b && $z ==\
+    \ $a ]] ; then\n                    echo \"$a\"\n                    exit 0\n\
+    \                elif [[ $y == $c && $z == $b ]] ; then\n                    echo\
+    \ \"$b\"\n                    exit 0\n                elif [[ $y == $c && $z ==\
+    \ $a ]] ; then\n                    echo \"$a\"\n                    exit 0\n\
+    \                elif [[ $y == $a && $z == $b ]] ; then\n                    echo\
+    \ \"$b\"\n                    exit 0\n                elif [[ $y == $a && $z ==\
+    \ $c ]] ; then\n                    echo \"$c\"\n                    exit 0\n\
+    \                elif [[ $", "    local -r input=\"${1}\"\n    local -r result=\"\
+    ${2}\"\n    local -r prime=\"${3:-NO}\"\n    local -r intervals=\"${4}\"\n   \
+    \ local -r intervals_count=$(echo \"${intervals}\" | wc -w)\n    local -r interval_start=\"\
+    ${5}\"\n    local -r interval_end=\"${6}\"\n    local -r count=0\n    local -r\
+    \ start=0\n    local -r end=0\n    local -r flag=0\n    local -r result=\"${result}\"\
+    \n    local -r prime=\"${prime}\"\n    local -r output=\"${output}\"\n\n    while\
+    \ read -r line; do\n        (( count++ ))\n        start=$(echo \"${line}\" |\
+    \ cut -d \" \" -f 1)\n        end=$(echo \"${line}\" | cut -d \" \" -f 2)\n  \
+    \      if [ \"$start\" == \"$end\" ]; then\n            continue\n        fi\n\
+    \        if [[ \"$intervals_count\" -gt \"$count\" ]]; then\n            (( flag++\
+    \ ))\n            echo \"NO\"\n            return\n        fi\n        local -r\
+    \ count=$(( count + 1 ))\n        local -r interval_start=$(( interval_start ))\n\
+    \        local -r interval_end=$(( interval_end ))\n        if (( $(echo \"$start\
+    \ < $end\" | bc -l) )) ; then\n            (( start=$start ))\n            ((\
+    \ end=$end ))\n            local -r flag=0\n        fi\n    done <<< \"$input\"\
+    \n\n    if [ \"$flag\" -gt \"0\" ]; then\n        echo \"NO\"\n        return\n\
+    \    fi\n    if [[ \"$count\" -gt \"$intervals_count\" ]]; then\n        echo\
+    \ \"NO\"\n        return\n    fi\n    echo \"YES\"", "    local -r start1=$1;\
+    \ shift\n    local -r end1=$1; shift\n\n    local -r start2=$1; shift\n    local\
+    \ -r end2=$1; shift\n\n    echo \"$start1 $end1 $start2 $end2\"", "    local IFS=$'\\\
+    n';\n    local a=$1\n    local b=$2\n    local len=0\n    while read line; do\n\
+    \        a=${line%,*}\n        b=${line#*,}\n        len=$((${#a}+${#b}))\n  \
+    \      ((len >= 1))\n    done\n\n    for ((i = 0; i <= $len; i+=1)); do\n    \
+    \    (( i < ${#a} )) && [[ $((${a#*,}+${b#*,})) -ge $((${a#*,}+${b#*,})) ]]\n\
+    \    done\n    echo \"${#a} + ${#b}\"", "    interval1=$1\n    interval2=$2\n\
+    \    if [[ -z \"$interval1\" || -z \"$interval2\" ]]\n    then\n        echo \"\
+    Please provide intervals\"\n    else\n        len1=$(echo \"$interval1\" | wc\
+    \ -w)\n        len2=$(echo \"$interval2\" | wc -w)\n        len_intersect=$((len1\
+    \ + len2))\n        intersect=$(echo \"$interval1 $interval2\" | tr ' ' '\\n'\
+    \ | sort -u | tr '\\n' ' ')\n        intersect2=$(echo \"$interval2 $interval1\"\
+    \ | tr ' ' '\\n' | sort -u | tr '\\n' ' ')\n        if [[ $len_intersect -eq 1\
+    \ ]]\n        then\n            if [[ $len1 == $len2 ]]\n            then\n  \
+    \              if [[ $(echo \"$intersect\" | grep -Fw \"$interval1\") && $(echo\
+    \ \"$intersect\" | grep -Fw \"$interval2\") ]]\n                then\n       \
+    \             echo \"YES\"\n                elif [[ $(echo \"$intersect2\" | grep\
+    \ -Fw \"$interval1\") && $(echo \"$intersect2\" | grep -Fw \"$interval2\") ]]\n\
+    \                then\n                    echo \"YES\"\n                elif\
+    \ [[ $(echo \"$intersect\" | grep -Fw \"$interval1\") || $(echo \"$intersect\"\
+    \ | grep -Fw \"$interval2\") ]]\n                then\n                    echo\
+    \ \"NO\"\n                elif [[ $(echo \"$intersect2\" | grep -Fw \"$interval1\"\
+    ) || $(echo \"$intersect2\" | grep -Fw \"$interval2\") ]]\n                then\n\
+    \                    echo \"NO\"\n                else\n                    echo\
+    \ \"NO\"\n                fi\n            else\n                echo \"NO\"\n\
+    \            fi\n        else\n            echo \"NO\"\n        fi\n    fi", " \
+    \   local intervals=$(echo \"$1\" | tr \" \" \"\\n\")\n    local intervals2=$(echo\
+    \ \"$2\" | tr \" \" \"\\n\")\n    local i1=0\n    local i2=0\n    while [ $i1\
+    \ < ${#intervals[*]} ]; do\n        while [ $i2 < ${#intervals2[*]} ]; do\n  \
+    \          if [ \"$i1\" -le \"$i2\" ]; then\n                if [ \"$intervals[$i1]\"\
+    \ == \"$intervals2[$i2]\" ]; then\n                    let i1+=1\n           \
+    \         let i2+=1\n                else\n                    let i1+=1\n   \
+    \             fi\n            else\n                let i2+=1\n            fi\n\
+    \        done\n    done\n    if [ \"$i1\" -le \"$i2\" ]; then\n        echo \"\
+    NO\"\n    else\n        echo \"YES\"\n    fi", "    local intervals\n    intervals=$(echo\
+    \ \"$1\" | sed 's/ /\",\"/g' | tr \"\\n\" \",\" | sed 's/^/[/' | sed 's/$/]/'\
+    \ | sed 's/,$//')\n    echo \"$intervals\"\n    echo \"$2\"\n    local intervals2\n\
+    \    intervals2=$(echo \"$2\" | sed 's/ /\",\"/g' | tr \"\\n\" \",\" | sed 's/^/[/'\
+    \ | sed 's/$/]/' | sed 's/,$//')\n    echo \"$intervals2\"\n    local length\n\
+    \    length=$(echo \"$intervals\" | tr \"[\" \"\\n\" | sed 's/^/[/' | sed 's/$/]/'\
+    \ | wc -l | sed 's/^/[/' | sed 's/$/]/' | sed 's/,$//')\n    length2=$((length+1))\n\
+    \    local p\n    if [[ $length -lt $length2 ]]; then\n        local intervals3\n\
+    \        intervals3=$(echo \"$intervals\" | tr \"[\" \"\\n\" | sed 's/^/[/' |\
+    \ sed 's/$/]/' | sed 's/,$//' | sed 's/$/]/'| sed 's/,$//')\n        local length3\n\
+    \        length3=$(echo \"$intervals3\" | tr \"[\" \"\\n\" | wc -l | sed 's/^/[/'\
+    \ | sed 's/$/]/' | sed 's/,$//')\n        local count\n        count=0\n     \
+    \   while [[ $count -lt $length3 ]]\n        do\n            p=$(echo \"$intervals\"\
+    \ | sed 's/^/[/' | sed 's/$/]/' | sed 's/,$//' | sed 's/$/]/'| sed 's/,$//' |\
+    \ grep -n \"$count\" | sed 's/^/[/' | sed 's/$/]/' | sed 's/,$//' | grep \"$count\"\
+    \ | sed 's/^/[/' | sed 's/$/]/' | sed 's/,$//' | wc -l | sed 's/^/[/' | sed 's/$/]/'\
+    \ | sed 's/,$//' | sed \"s/$count/${count}/g\")\n            if [[ $p -ne 0 ]];\
+    \ then\n                local prime\n                prime=\"YES\"\n         \
+    \       break;\n            else\n                count=$((count+1))\n       \
+    \     fi\n        done\n        echo \"$prime\"\n    else\n        local intervals4\n\
+    \        intervals4=$(echo \"$intervals2\" | ", "  awk -F\"[() ]\" '\n    BEGIN\
+    \ {\n      a[0] = 0\n      a[1] = 0\n      b[0] = 0\n      b[1] = 0\n      l =\
+    \ 0\n      s = 0\n      u = 0\n      t = 0\n    }\n    {\n      if (a[1] < $1)\
+    \ {\n        a[1] = $1\n      }\n      if (b[1] < $1) {\n        b[1] = $1\n \
+    \     }\n      s = max(a,b)\n      l = min(max(a,b), l)\n      t = t + 1\n   \
+    \   if (s == l) {\n        if (s == t) {\n          u = 1\n        }\n      }\n\
+    \      a[s] = $1\n      b[s] = $1\n    }\n    END{\n      if (u) {\n        print\
+    \ \"NO\"\n      } else {\n        print \"YES\"\n      }\n    }\n  ' \"$2\"",
+  "    local a b\n    local len1=0\n    local len2=0\n    local ret\n    for (( i=0;\
+    \ i<${#1}; i++ )); do\n        a=${!i}\n        [[ \"$a\" =~ ^(-?[[:digit:]]+)$\
+    \ ]] || {\n            printf \"%s: invalid interval \\\"%s\\\" at position %d\\\
+    n\" \"$FUNCNAME\" \"$a\" \"$i\"\n            return 1\n        }\n        for\
+    \ (( j=0; j<${#2}; j++ )); do\n            b=${!j}\n            [[ \"$b\" =~ ^(-?[[:digit:]]+)$\
+    \ ]] || {\n                printf \"%s: invalid interval \\\"%s\\\" at position\
+    \ %d\\n\" \"$FUNCNAME\" \"$b\" \"$j\"\n                return 1\n            }\n\
+    \            len1=$((len1+a))\n            len2=$((len2+b))\n        done\n  \
+    \  done\n    len1=$((len1-1))\n    len2=$((len2-1))\n    if (( len1 > len2 ));\
+    \ then\n        echo \"YES\"\n    else\n        echo \"NO\"\n    fi", "  local\
+    \ i1=$1\n  local i2=$2\n  local i1l=`echo $i1 | awk '{print length}'`\n  local\
+    \ i2l=`echo $i2 | awk '{print length}'`\n  local result=0\n  local j=0\n  for\
+    \ i in `seq 0 $(($i1l-1))`\n  do\n    for j in `seq 0 $(($i2l-1))`\n    do\n \
+    \     if [ $i1 -ge 0 ] && [ $i2 -ge 0 ]\n      then\n        if [ $i1 -le $i2\
+    \ ]\n        then\n          if [ $j -ge $(($i2l-1)) ]\n          then\n     \
+    \       if [ $j -le $(($i1l-1)) ]\n            then\n              if (( $i1 >\
+    \ $i2 ))\n              then\n                result=$(( $result + 1 ))\n    \
+    \          else\n                if (($i1 == $i2) || (( $i1 < $i2) ))\n      \
+    \          then\n                  result=$(( $result + 1 ))\n               \
+    \ fi\n              fi\n            fi\n          fi\n        fi\n      fi\n \
+    \   done\n  done\n  echo ${result}", "    IFS=' ' read -r -a A <<< \"$1\"\n  \
+    \  IFS=' ' read -r -a B <<< \"$2\"\n    local i\n    for ((i=0; i < ${#A[@]};\
+    \ i++)); do\n        if [[ \"${B[$i]}\" -gt \"${A[$i]}\" ]]; then\n          \
+    \  (( i++))\n        elif [[ \"${B[$i]}\" -lt \"${A[$i]}\" ]]; then\n        \
+    \    (( i-- ))\n        fi\n    done\n    local len=${#A[@]}\n    local j\n  \
+    \  for ((j=0; j < ${#B[@]}; j++)); do\n        if [[ \"${B[j]}\" -gt \"${A[j]}\"\
+    \ ]]; then\n            (( j++))\n        elif [[ \"${B[j]}\" -lt \"${A[j]}\"\
+    \ ]]; then\n            (( j-- ))\n        fi\n    done\n    if [[ ${len} -eq\
+    \ ${#B[@]} ]]; then\n        echo \"${B[@]}\"\n    else\n        echo \"NO\"\n\
+    \    fi", "    local -r interval=\"$(IFS=,; echo \"$1\")\"\n    local -r interval2=\"\
+    $(IFS=,; echo \"$2\")\"\n    \n    local -a arr\n    local -a interval_arr\n \
+    \   local -a interval2_arr\n    local -i len_intersection=0\n    local -i i\n\
+    \    \n    arr=($interval)\n    interval_arr=($interval2)\n    interval2_arr=($interval2)\n\
+    \    \n    for i in \"${!interval_arr[@]}\"; do\n        if [ \"$i\" -ne \"${!interval_arr[$i]}\"\
+    \ ]; then\n            interval_arr[$i]=\"NO\"\n        fi\n    done\n    for\
+    \ i in \"${!interval2_arr[@]}\"; do\n        if [ \"$i\" -ne \"${!interval2_arr[$i]}\"\
+    \ ]; then\n            interval2_arr[$i]=\"NO\"\n        fi\n    done\n    for\
+    \ i in \"${!interval_arr[@]}\"; do\n        for j in \"${!interval2_arr[@]}\"\
+    ; do\n            if [ \"$i\" -eq \"$j\" ]; then\n                if [ \"$interval_arr[$i]\"\
+    \ == \"NO\" ] && [ \"$interval2_arr[$j]\" == \"NO\" ]; then\n                \
+    \    interval_arr[$i]=\"NO\"\n                    interval2_arr[$j]=\"NO\"\n \
+    \               elif [ \"$interval_arr[$i]\" == \"NO\" ] || [ \"$interval2_arr[$j]\"\
+    \ == \"NO\" ]; then\n                    interval_arr[$i]=\"NO\"\n           \
+    \         interval2_arr[$j]=\"NO\"\n                elif [ \"$interval_arr[$i]\"\
+    \ == \"NO\" ]; then\n                    interval_arr[$i]=\"NO\"\n           \
+    \     elif [ \"$interval2_arr[$j]\" == \"NO\" ]; then\n                    interval2_arr[$j]=\"\
+    NO\"\n                fi\n            elif [ \"$interval_arr[$i]\" == \"NO\" ]\
+    \ || [ \"$interval2_arr[$j]\" == \"NO\" ]; then\n                interval_arr[$i]=\"\
+    NO\"\n                interval2_arr[$j]=\"NO\"\n            fi\n        done\n\
+    \    done\n    \n    for i in \"${!interval_arr[@]}\"; do\n        if [ \"$i\"\
+    \ -ne \"${!interval_arr[$i]}\" ]; then\n            interval_arr[$i]=\"NO\"\n\
+    \        fi\n    done\n    for i in \"${!interval2_arr[@]}\"; do\n        if [\
+    \ \"$i\" -ne \"${!interval2_arr[$i]}\" ]; then\n            interval2_arr[$i]=\"\
+    NO\"\n        fi\n    done\n    \n    for i in \"${!interval_arr[@]}\"; do\n \
+    \       if ", "    local intersect_a=$1\n    local intersect_b=$2\n    local length=$(intersect\
+    \ $intersect_a $intersect_b)\n    if [[ $length -eq 0 ]]; then\n        echo \"\
+    NO\"\n    else\n        echo \"YES\"\n    fi", "    local interval1\n    local\
+    \ interval2\n    local length\n    \n    interval1=$1\n    interval2=$2\n    \n\
+    \    length=\"${#interval1[@]}\"\n    \n    local i\n    for i in $(seq 0 \"$((length-1)\"\
+    )); do\n        local intersect\n        intersect=\"${interval1[$i]} ${interval2[$i]}\"\
+    \n        \n        if [[ ${#intersect} -eq 2 ]]; then\n            local l\n\
+    \            l=$(echo \"${intersect}\" | awk '{print $1}')\n            local\
+    \ r\n            r=$(echo \"${intersect}\" | awk '{print $2}')\n            local\
+    \ len\n            len=${#l}\n            len=${#r}\n            \n          \
+    \  if [[ $len -eq 1 ]]; then\n                if [[ $l -eq $r ]]; then\n     \
+    \               echo \"YES\"\n                    break\n                else\n\
+    \                    echo \"NO\"\n                    break\n                fi\n\
+    \            elif [[ $len -eq 2 ]]; then\n                local len2\n       \
+    \         len2=$(echo \"${intersect}\" | awk '{print $1}')\n                len2=$(echo\
+    \ \"${intersect}\" | awk '{print $2}')\n                if [[ ${#len2} -eq 1 ]];\
+    \ then\n                    if [[ ${#len} -eq 1 ]]; then\n                   \
+    \     echo \"YES\"\n                        break\n                    else\n\
+    \                        if [[ ${#len2} -eq 2 ]]; then\n                     \
+    \       if [[ $l -le $len2 ]]; then\n                                echo \"YES\"\
+    \n                                break\n                            else\n  \
+    \                              echo \"NO\"\n                                break\n\
+    \                            fi\n                        else\n              \
+    \              echo \"NO\"\n                            break\n              \
+    \          fi\n                    fi\n                else\n                \
+    \    echo \"NO\"\n                    break\n                fi\n            else\n\
+    \                echo \"NO\"\n                break\n            fi\n        else\n\
+    \            echo \"NO\"\n            break\n        fi\n    done", "    local\
+    \ start=$1\n    local end=$2\n    local len1=${#start}\n    local len2=${#end}\n\
+    \    local i1=0\n    local i2=0\n    local flag=0\n    local sum=0\n    local\
+    \ result=\"NO\"\n    local length\n\n    for ((i=0;i<=len1;i++)); do\n       \
+    \ sum=$((start+sum))\n        if ((sum<=0)); then\n            flag=1\n      \
+    \      sum=1\n        fi\n        ((sum%=$((len1-1))))\n    done\n    \n    for\
+    \ ((j=0;j<=len2;j++)); do\n        sum=$((end+sum))\n        if ((sum<=0)); then\n\
+    \            flag=1\n            sum=1\n        fi\n        ((sum%=$((len2-1))))\n\
+    \    done\n    \n    for ((k=0;k<=len1;k++)); do\n        for ((l=0;l<=len2;l++));\
+    \ do\n            if ((start+k==end+l)); then\n                if ((k==len1));\
+    \ then\n                    ((length=$len2))\n                else\n         \
+    \           ((length=$k+$l))\n                fi\n                if ((length%2==0));\
+    \ then\n                    ((length=length+1))\n                else\n      \
+    \              ((length=length-1))\n                fi\n                if ((length==2));\
+    \ then\n                    ((result=\"YES\"))\n                    break\n  \
+    \              else\n                    ((result=\"NO\"))\n                fi\n\
+    \            fi\n        done\n    done\n    echo \"$result\"", "    local interval1=$1\n\
+    \    local interval2=$2\n    local start1=$((interval1[0]))\n    local end1=$((interval1[1]))\n\
+    \    local start2=$((interval2[0]))\n    local end2=$((interval2[1]))\n    if\
+    \ [[ \"$start1\" -eq \"$end1\" || \"$start2\" -eq \"$end2\" ]]; then\n       \
+    \ return false\n    else\n        start1=$((start2+1))\n        end1=$((end2+1))\n\
+    \        local length=$((end1-start1))\n        if [[ ${#length} -eq 0 ]]; then\n\
+    \            return false\n        elif [[ ${#length} -eq 1 ]]; then\n       \
+    \     if (( ${interval1[0]} <= ${interval2[0]} && ${interval1[1]} >= ${interval2[1]}\
+    \ )) ; then\n                return true\n            else\n                return\
+    \ false\n            fi\n        fi\n    fi", "  local interval_1 interval_2 length\
+    \ prime\n  interval_1=$1\n  interval_2=$2\n  length=$((${#interval_1} + ${#interval_2}\
+    \ - 1))\n  prime=\"YES\"\n  for i in $(seq 0 $length); do\n    if [[ $((${interval_1:$i:1}+${interval_2:$i:1}))\
+    \ -eq \"${interval_1:$i:1}${interval_2:$i:1}\" ]]; then\n      prime=\"NO\"\n\
+    \      break\n    fi\n  done\n  echo \"${prime}\"", '  echo "${@:2}"', "    local\
+    \ interval1=$1\n    local interval2=$2\n    local len1=$((${interval1//,/ }))\n\
+    \    local len2=$((${interval2//,/ }))\n    if [[ \"${len1}\" < \"${len2}\" ]];\
+    \ then\n        echo \"${interval1}\" > \"$1\"\n        echo \"${interval2}\"\
+    \ > \"$2\"\n    fi\n    local count=0\n    local interval\n    for interval in\
+    \ \"${interval1}\" \"${interval2}\"; do\n        [[ \"$interval\" == \"$interval1\"\
+    \ ]] && { count=$((count+1)) ; continue; }\n        [[ \"$interval\" == \"$interval2\"\
+    \ ]] && { count=$((count+1)) ; continue; }\n    done\n    if [[ $((${count} %\
+    \ 2)) == 0 ]]; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n   \
+    \ fi", "    local a1=${1%|}\n    local a2=${2%|}\n    local b1=${1#|}\n    local\
+    \ b2=${2#|}\n    local ret1=${#a1}\n    local ret2=${#a2}\n    local ret\n   \
+    \ local i\n    local j\n    local cnt\n    local a\n    local b\n    local len\n\
+    \    local res\n    res=\"YES\"\n    for ((i=0;i<ret1;i++)); do\n        a=${a1:$i:1}\n\
+    \        b=${b1:$i:1}\n        for ((j=0;j<ret2;j++)); do\n            if [ \"\
+    $a\" == \"$b\" ]; then\n                cnt=$(echo $a | wc -c)\n             \
+    \   if [ \"$cnt\" == \"1\" ]; then\n                    ret=true\n           \
+    \     elif [ \"$cnt\" == \"2\" ]; then\n                    ret=false\n      \
+    \              break\n                else\n                    ret=false\n  \
+    \                  break\n                fi\n            else\n             \
+    \   cnt=$(echo $a | wc -c)\n                if [ \"$cnt\" == \"2\" ]; then\n \
+    \                   ret=false\n                    break\n                else\n\
+    \                    ret=true\n                    break\n                fi\n\
+    \            fi\n        done\n        if [ $ret == \"YES\" ]; then\n        \
+    \    break\n        fi\n    done\n    echo \"$res\"", "    local interval1=\"\
+    $1\"\n    local interval2=\"$2\"\n    local start1=\"${interval1% *}\"\n    local\
+    \ end1=\"${interval1#* }\"\n    local start2=\"${interval2% *}\"\n    local end2=\"\
+    ${interval2#* }\"\n    if [ \"$start1\" -lt \"$start2\" ]\n    then\n        start1=\"\
+    $start2\"\n    end1=\"$end2\"\n    else\n        start2=\"$start1\"\n    end2=\"\
+    $end1\"\n    fi\n    local length=\"$(( (end2-start1)+1 ))\"\n    if [ \"$length\"\
+    \ -gt 2 ]\n    then\n        echo \"NO\"\n    else\n        local counter1=0\n\
+    \        local counter2=0\n        for (( i=\"$start1\"; i<=\"$end1\"; i++ ))\n\
+    \        do\n            for (( j=\"$start2\"; j<=\"$end2\"; j++ ))\n        \
+    \    do\n                local a=\"$i\"\n                local b=\"$j\"\n    \
+    \            if [ \"$i\" -eq \"$j\" ]\n                then\n                \
+    \    continue\n                elif [ \"$a\" -gt \"$j\" ]\n                then\n\
+    \                    a=\"$j\"\n                    b=\"$i\"\n                fi\n\
+    \                local aint=\"$(awk \"$a\" <<< \"$counter1\")\"\n            \
+    \    local bint=\"$(awk \"$b\" <<< \"$counter2\")\"\n                if [ \"$aint\"\
+    \ -eq \"$bint\" ]\n                then\n                    continue\n      \
+    \          elif [ \"$aint\" -gt \"$bint\" ]\n                then\n          \
+    \          aint=\"$(bwt --bits $aint --sign $counter1)\"\n                   \
+    \ bint=\"$(bwt --bits $bint --sign $counter2)\"\n                fi\n        \
+    \        if [ \"$aint\" -eq \"$counter1\" ]\n                then\n          \
+    \          echo \"YES\"\n                else\n                    echo \"NO\"\
+    \n                fi\n            done\n        done\n    fi", "    local _a _b\
+    \ _intersect; local _result; \n    local _len_1 _len_2;\n    _len_1=${#${1//[[:blank:]]/}}\n\
+    \    _len_2=${#${2//[[:blank:]]/}}\n    _intersect=($(IFS=: ; echo \"${1//[[:blank:]]/}\"\
+    \ \"${2//[[:blank:]]/}\"))\n    if [[ ${#_intersect[@]} -gt 0 ]]; then\n     \
+    \   _a=${_intersect[0]}\n        _b=${_intersect[1]}\n        if [[ $_a -le $_b\
+    \ ]]; then\n            if (( (_a <= $_b) &&  (${#_intersect[@]} > 2) )); then\n\
+    \                _result=YES\n            else\n                _result=NO\n \
+    \           fi\n        else\n            _result=NO\n        fi\n    else\n \
+    \       _result=NO\n    fi\n    echo $_result", "    local interval1=$1\n    local\
+    \ interval2=$2\n\n    local count1=0\n    local count2=0\n\n    # traverse both\
+    \ intervals\n    for (( i = 0; i < ${#interval1}; i++ )); do\n        local interval1_element=${interval1:$i:1}\n\
+    \        for (( j=0; j < ${#interval2}; j++ )); do\n            local interval2_element=${interval2:$j:1}\n\
+    \            if [[ ${interval1_element} == ${interval2_element} ]]; then\n   \
+    \             ((count1+=1))\n            else\n                ((count2+=1))\n\
+    \            fi\n        done\n    done\n\n    local prime=$(( count1 > count2\
+    \ ))\n    echo \"${prime}\"", "    local start=$1\n    local end=$2\n    local\
+    \ intersect\n    local length=0;\n    \n    for (( i=1; i<=$start; i++ )); do\n\
+    \        for (( j=1; j<=$end; j++ )); do\n            intersect=$(( $intersect\
+    \ + $(( $i == $j )) ))\n        done\n    done\n\n    length=${#intersect}\n \
+    \   intersect=$(( $intersect % $length ))\n    \n    if [ $intersect -eq 0 ];\
+    \ then\n        echo YES\n    else\n        echo NO\n    fi", "    local a=($1)\n\
+    \    local b=($2)\n    local i\n    local j\n    local length\n\n    for ((i =\
+    \ 0; i < ${#a[@]}-${#b[@]}; i++)); do\n        if [ $((${a[i]} < ${b[i]})) -eq\
+    \ 0 ]; then\n            (( ${a[i]} > ${b[i]} )) && return 1\n            (( ${b[i]}\
+    \ > ${a[i]} )) && return 1\n        fi\n    done\n\n    for ((i = 0; i < ${#a[@]};\
+    \ i++)); do\n        length=${#a[@]}\n        for ((j = (i + 1); j < ${#a[@]};\
+    \ j++)); do\n            if [ $((${a[i]} < ${a[j]})) -eq 0 ]; then\n         \
+    \       (( ${a[i]} > ${a[j]} )) && return 1\n            fi\n        done\n  \
+    \  done\n\n    for ((i = 0; ${#b[@]} > i; i++)); do\n        length=${#b[@]}\n\
+    \        for ((j = (i + 1); j < ${#b[@]}; j++)); do\n            if [ $((${b[i]}\
+    \ < ${b[j]})) -eq 0 ]; then\n                (( ${b[i]} > ${b[j]} )) && return\
+    \ 1\n            fi\n        done\n    done", "  local interval1=$1 interval2=$2\n\
+    \  local start1 end1=$(awk '{print $1}' <<< ${interval1} |awk '{$1=$1*1} {print\
+    \ $0}') start2 end2=$(awk '{print $1}' <<< ${interval2} |awk '{$1=$1*1} {print\
+    \ $0}') \n  if (( ${start1} <= ${start2} )) || (( ${start2} <= ${end1} )) || ((\
+    \ ${end1} <= ${end2} ))\n  then\n    echo \"NO\"\n  else\n    length1=$(expr ${start1}\
+    \ - ${end1})\n    length2=$(expr ${start2} - ${end2})\n    intersection_length=$(awk\
+    \ '{print $1}' <<< ${length1}|awk '{$1=$1*1} {print $0}') intersectoin1_length=$(awk\
+    \ '{print $1}' <<< ${length2}|awk '{$1=$1*1} {print $0}') \n    if [[ ${intersection_length}\
+    \ == 1 ]]; then\n      if [[ ${intersectoin1_length} == 1 ]]; then\n        echo\
+    \ \"YES\"\n      else\n        echo \"NO\"\n      fi\n    else\n      echo \"\
+    NO\"\n    fi\n  fi", "    local i\n    local len1\n    local len2\n    local result\n\
+    \    local prime\n    prime=\"false\"\n    len1=${#$1#* }\n    len2=${#${#2#*\
+    \ }#* }\n    for i in $(seq 0 $len1); do\n        result=$(($len1$len2|cut -d\
+    \ \" \" -f $i))\n        echo $result\n        if [[ $(eval echo $prime) == \"\
+    false\" ]] && [ $(($len2%$result)) == 0 ]; then\n            prime=\"true\"\n\
+    \        fi\n    done\n    echo $prime", "  IFS=' ' read -r -a x <<< \"$1\"\n\
+    \  IFS=' ' read -r -a y <<< \"$2\"\n\n  IFS=' ' read -r -a z\n  for i in \"${!x[@]}\"\
+    ; do\n      [[ \"${x[$i]}\" > \"${y[$i]}\" ]] &&\n      z+=(${y[$i]})\n  done\n\
+    \n  [[ \"${#z[@]}\" -eq 0 ]] && return\n\n  for i in \"${!z[@]}\"; do\n      if\
+    \ [[ ${z[i]} -gt 0 ]]; then\n          echo \"NO\"\n          return\n      fi\n\
+    \  done\n\n  echo \"YES\"", "    local interval_1 interval_2\n    local intersection\
+    \ len\n\n    interval_1=( $1 )\n    interval_2=( $2 )\n    interval_1_len=( $(len\
+    \ ${interval_1[@]} ))\n    interval_2_len=( $(len ${interval_2[@]} ))\n\n    intersection=$(\
+    \ (( ${interval_1_len} <= ${interval_2_len} )) && \\\n    ( ( ${interval_2_len}\
+    \ <= ${interval_1_len} )) && \\\n    ( $( expr $( expr $(( ${interval_1_len} -\
+    \ ${interval_2_len} )) \\* $(( ${interval_2_len} - ${interval_1_len} )) \\* $((\
+    \ ${interval_2_len} - ${interval_1_len} )) \\* $(( ${interval_2_len} - ${interval_1_len}\
+    \ )) \\* $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_1_len}\
+    \ - ${interval_2_len} )) \\* $(( ${interval_2_len} - ${interval_1_len} )) \\*\
+    \ $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_2_len} - ${interval_1_len}\
+    \ )) \\* $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_2_len}\
+    \ - ${interval_1_len} )) \\* $(( ${interval_1_len} - ${interval_2_len} )) \\*\
+    \ $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_2_len} - ${interval_1_len}\
+    \ )) \\* $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_2_len}\
+    \ - ${interval_1_len} )) \\* $(( ${interval_2_len} - ${interval_1_len} )) \\*\
+    \ $(( ${interval_1_len} - ${interval_2_len} )) \\* $(( ${interval_1_len} - ${interval_2_len}\
+    \ )) \\* $(( ${interval_2_len} - ${interval_1_len} )) \\* $(( ${interval_1_len}\
+    \ - ${interval_2_len} )) \\* $(( ${interval_1_len} - ${interval_2_len} )) \\*\
+    \ $((", "    local a b\n    local lenA\n    local lenB\n    local result\n   \
+    \ local i\n    local j\n    \n    # Read each interval\n    IFS=' ' read -ra A\
+    \ <<< \"$1\"\n    IFS=' ' read -ra b <<< \"$2\"\n    \n    # Determine which interval\
+    \ is longer\n    lenA=${#A[@]}\n    lenB=${#b[@]}\n    if [ \"$lenA\" -lt \"$lenB\"\
+    \ ] ; then\n        lenA=$lenB\n    fi\n    \n    # Determine each interval's\
+    \ start and end points\n    for ((i=0; i<lenA; i++)); do\n        a[i]=${A[i]}\n\
+    \        if (( $(a[i]) -lt $(a[i+1]) )) ; then\n            a[i]=$(a[i]+1)\n \
+    \       fi\n    done\n    for ((j=0; j<lenB; j++)); do\n        b[j]=${b[j]}\n\
+    \        if (( $(b[j]) -lt $(b[j+1]) )) ; then\n            b[j]=$(b[j]+1)\n \
+    \       fi\n    done\n    \n    # Determine whether they intersect\n    result=false\n\
+    \    for ((i=0; i<lenA; i++)); do\n        for ((j=0; j<lenB; j++)); do\n    \
+    \        if (( $(a[i]) <= $(b[j]) )) ; then\n                if (( $(echo \"$(a[i])\
+    \ $(b[j]) $(a[i]) $b[j]\" | sort -n | uniq | wc -l) -gt 1 )) ; then\n        \
+    \            result=true\n                    break\n                fi\n    \
+    \        fi\n        done\n    done\n    \n    # Print the result\n    if [ $result\
+    \ -eq true ] ; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n   \
+    \ fi", "  mapfile -t array1 < <(sort <<<\"$1\") && \\\n  mapfile -t array2 < <(sort\
+    \ <<<\"$2\") && \\\n  echo \"${#array1[@]} ${#array2[@]}\"\n  unset -v tmp array1\
+    \ array2\n  for (( i = 0; i < ${#array1[@]}; i++ )); do\n    if [[ \"${array1[$i]}\"\
+    \ == \"${array2[$i]}\" ]]; then\n      continue\n    fi\n    tmp=\"${array1[$i]}\
+    \ ${array2[$i]}\"\n  done\n  echo \"${#tmp[@]}\"", "    local a b start\n    local\
+    \ length=$(echo \"$1\"|wc -c)\n    local length2\n    local result\n    local\
+    \ isPrime\n    \n    for ((i = 0; i < $length; i=i+1)); do\n        a=\"${1:$i:1}\"\
+    \n        b=\"${2:$i:1}\"\n        if (( \"${a:0:1}\" == \"-\" )) && [ \"$a\"\
+    \ -gt \"$b\" ]; then\n            a=\"$(b:$((${#b}-1)))\"\n        else\n    \
+    \        a=\"$a\"\n            b=\"$b\"\n        fi\n        \n        if (( \"\
+    ${a:0:1}\" == \"-\" )) && [ \"$a\" -gt \"$b\" ]; then\n            a=\"$(b:$((${#b}-1)))\"\
+    \n        else\n            a=\"$a\"\n            b=\"$b\"\n        fi\n\n   \
+    \     if [ \"$a\" -gt \"$b\" ]; then\n            echo \"$a|$b\"\n        else\n\
+    \            echo \"$b|$a\"\n        fi\n    done", "    local interval1=\"${1}\"\
+    \n    local interval2=\"${2}\"\n    local intersec\n    local i1=\"${interval1//\
+    \ *}\"\n    local i2=\"${interval2// *}\"\n\n    for i1 in \"${i1//[( )]}\"; do\n\
+    \tcase \"$i1\" in\n\t    (-*)\n\t\tintersec=\"YES\"\n\t\tbreak\n\t    ;;\n\tesac\n\
+    \    done\n    for i2 in \"${i2//[( )]}\"; do\n\tcase \"$i2\" in\n\t    (-*)\n\
+    \t\tintersec=\"YES\"\n\t\tbreak\n\t    ;;\n\tesac\n    done\n\n    if [[ ${#intersec}\
+    \ -gt 2 ]]; then\n\tif [[ ${#intersec} -eq 1 ]]; then\n\t    echo \"NO\"\n\telse\n\
+    \t    echo \"YES\"\n\tfi\n    else\n\techo \"NO\"\n    fi", "    local interval1=(\
+    \ ${1//;/ } )\n    local interval2=( ${2//;/ } )\n    local interval1_len=${#interval1[@]}\n\
+    \    local interval2_len=${#interval2[@]}\n    local interval_1_end=${interval1[$interval1_len-1]}\n\
+    \    local interval_2_end=${interval2[$interval2_len-1]}\n\n    for (( i=1; i<interval1_len-1;\
+    \ i++ )); do\n        for (( j=1; j<interval2_len-1; j++ )); do\n            if\
+    \ [ $interval_1[ $i -eq $j ] -le $interval_2_[ $j -eq $i ] ]; then\n         \
+    \       echo \"$i is less than $j\"\n            fi\n        done\n    done\n\n\
+    \    for (( i=1; i<interval1_len-1; i++ )); do\n        for (( j=1; j<interval2_len-1;\
+    \ j++ )); do\n            if [ $interval_1[ $i -eq $j ] -ge $interval_2_[ $j -eq\
+    \ $i ] ]; then\n                echo \"$i is less than or equal to $j\"\n    \
+    \        fi\n        done\n    done\n", "    local list_1 list_2\n    list_1=($1)\n\
+    \    list_2=($2)\n\n    local length\n    length=${#list_1[@]}\n    length=${#list_2[@]}\n\
+    \n    local i\n    for (( i = 0; i < length; ++i )); do\n        if [ $list_1[$i]\
+    \ -gt $list_2[$i] ] ; then\n            list_1[$i]=$list_1[$i]\n        else\n\
+    \            list_1[$i]=$list_2[$i]\n        fi\n    done\n\n    if [ ${#list_1[@]}\
+    \ -gt $((length-1)) ] ; then\n        echo \"NO\"\n    else\n        echo \"YES\"\
+    \n    fi", "  local interval1=$1\n  local interval2=$2\n  local length=$(intersect\
+    \ $interval1 $interval2)\n  local prime=true\n  if [[ $length -ne 0 ]]; then\n\
+    \    prime=false\n  fi\n  echo \"$prime\"", "\tlocal start end\n\tstart=$(echo\
+    \ $1 | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')\n\tend=$(echo $2 | tr '[:upper:]'\
+    \ '[:lower:]' | sed 's/ /-/g')\n\n\tlocal len\n\tlen=$((${#start} + ${#end}))\n\
+    \tlocal i\n\tfor (( i=1; i<=len; i++ )); do\n\t\tif[[ $start -le $end ]]; then\n\
+    \t\t\tif[[ $start -eq $(( ${start}+${end} )) ]]; then\n\t\t\t\techo \"YES\"\n\t\
+    \t\t\tbreak\n\t\t\telse\n\t\t\t\techo \"NO\"\n\t\t\t\tbreak\n\t\t\tfi\n\t\telse\n\
+    \t\t\techo \"NO\"\n\t\t\tbreak\n\t\tfi\n\tdone", "  echo \"$1\" \"$2\" |\n  sort\
+    \ -nt | cut -d' ' -f 2 | sort -nt | uniq -u | wc -l && echo \"YES\" || echo \"\
+    NO\"", "    local a b\n    local a b\n    a=${1% *}\n    b=${2% *}\n    if [ $a\
+    \ -le $b ]; then\n        local a2 b2\n        a2=$((${a}+1))\n        b2=$((${b}+1))\n\
+    \        if [ $a2 -le $b2 ]; then\n            if [ \"$a\" -eq \"$b\" ] || [ \"\
+    $a\" -eq \"$a2\" ] || [ \"$b\" -eq \"$b2\" ] || [ \"$b\" -eq \"$a\" ]; then\n\
+    \                return 0\n            else\n                return 1\n      \
+    \      fi\n        else\n            return 1\n        fi\n    else\n        return\
+    \ 1\n    fi", "\tlocal interval_1=$(echo $1 | sed 's/ /\",\"/g');\n\tlocal interval_2=$(echo\
+    \ $2 | sed 's/ /\",\"/g');\n\tlocal output=\"NO\";\n\tlocal intersect;\n\n\tlocal\
+    \ intersect=$(comm -2 -3 <<< $interval_1 $interval_2);\n\tlet intersect=$(echo\
+    \ \"$intersect\" | wc -w)\n\tlet intersect-=2;\n\n\tif [[ $intersect -eq 0 ]];\
+    \ then \n\t\toutput=\"NO\"; \n\telse\n\t\toutput=\"YES\";\n\tfi\n\n\techo $output;",
+  "    local i j length result\n    local intervals \n    intervals=\"${1}\"\n   \
+    \ intervals=\"${intervals// /, }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n  \
+    \  intervals=\"${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"\
+    ${intervals% }\"\n    intervals=\"${intervals% }\"\n    intervals=\"${intervals%\
+    \ }\"\n    intervals=\"${interval", "\techo \"${#@}\"\n\techo \"${#1}\"\n\techo\
+    \ \"${#2}\"\n\tif [[ ${#1} != ${#2} ]]; then\n\t\techo \"NO\"\n\telse\n\t\techo\
+    \ \"${1}\" \"$2\" \"$((${1}${2}))\" \"$((${1}${2}))\" \"$((${1}${2}))\" \"$((${1}${2}))\"\
+    \ \"$((${1}${2}))\"\n\t\techo \"${1}\" \"$2\" \"$((${1}${2}))\" \"$((${1}${2}))\"\
+    \ \"$((${1}${2}))\" \"$((${1}${2}))\" \"$((${1}${2}))\"\n\t\tif [[ (($((${1}${2})+1)))\
+    \ % ${3} -ne 0 ]]; then\n\t\t\techo \"NO\"\n\t\telse\n\t\t\tif [[ (($((${1}${2})))\
+    \ == 0 ]]; then\n\t\t\t\techo \"NO\"\n\t\t\telse\n\t\t\t\tif [[ (($((${1}${2})))\
+    \ -ne 0 ]]; then\n\t\t\t\t\techo \"YES\"\n\t\t\t\telse\n\t\t\t\t\techo \"YES\"\
+    \n\t\t\t\tfi\n\t\t\tfi\n\t\tfi\n\tfi", "        local interval1 interval2\n  \
+    \      interval1=$1\n        interval2=$2\n        if [ \"$#\" -ne 2 ] ; then\n\
+    \                return 1\n        fi\n        local length1\n        local length2\n\
+    \        length1=$(awk -F\"[,]\" '{print $1}' <<< \"$interval1\")\n        length2=$(awk\
+    \ -F\"[,]\" '{print $1}' <<< \"$interval2\")\n        if [ \"$length1\" -ne \"\
+    $length2\" ] ; then\n                return 1\n        fi\n        local length3\n\
+    \        length3=$(awk -F\"[,]\" '{print $2}' <<< \"$interval1\")\n        length3=$(awk\
+    \ -F\"[,]\" '{print $2}' <<< \"$interval2\")\n        local x\n        x=$((awk\
+    \ '{if(NR%2==0) print $1}' <<< \"$interval1\"))\n        if [ \"$length3\" -eq\
+    \ \"1\" ] ; then\n                return 1\n        else\n                local\
+    \ y\n                y=$((awk '{if(NR%2==0) print $2}' <<< \"$interval1\"))\n\
+    \                local z\n                z=$((awk '{if(NR%2==0) print $2}' <<<\
+    \ \"$interval2\"))\n                local m\n                m=$((awk '{if(NR%2==0)\
+    \ print $1}' <<< \"$interval1\"))\n                if [ \"$z\" -le \"$x\" ] &&\
+    \ [ \"$y\" -ge \"$x\" ] ; then\n                        local i\n            \
+    \            i=$((awk '{if(NR%2==0) print $2}' <<< \"$interval2\"))\n        \
+    \                if [ \"$z\" -ge \"$i\" ] && [ \"$y\" -lt \"$i\" ] ; then\n  \
+    \                              return \"YES\"\n                        else\n\
+    \                                return \"NO\"\n                        fi\n \
+    \               else\n                        if [ \"$y\" -le \"$x\" ] && [ \"\
+    $z\" -ge \"$x\" ] ; then\n                                return \"NO\"\n    \
+    \                    else\n                                return \"NO\"\n   \
+    \                     fi\n                fi\n        fi", "    while IFS=\" \"\
+    \ read -r a1 a2; do\n        [[ $a1 -gt $a2 ]] || [[ $a1 -eq $a2 ]]\n    done\
+    \ < <(paste <(echo \"$1\" | tr ' ' '\\n' ) <(echo \"$2\" | tr ' ' '\\n' ))", " \
+    \ local intersect_start=$1; shift\n  local intersect_end=$1; shift\n  local length_intersect=$(\n\
+    \    awk '{\n      if ($1>$2) print $1;\n      if ($2<$1) print $2;\n    }'\n\
+    \  ); shift\n  \n  if [ $length_intersect -eq 1 ]; then\n    echo \"NO\"\n  else\n\
+    \    echo \"YES\"\n  fi", "    local interval=$1\n    local intervals=$2\n   \
+    \ echo \"$(awk '{ for (i = 2; i <= NF; i++) {\n        if ($i != $(i-1)) {\n \
+    \           split($i, a, \" \");\n            if (a[2] == a[1]) {\n          \
+    \      printf(\"%d\\t\", a[0]);\n            }\n        }\n    } }' <<< \"$intervals\"\
+    )\"", "    local a b\n    read -r -a a <<< \"$1\"\n    read -r -a b <<< \"$2\"\
+    \n    local start end l\n    start=${a[*]}\n    end=${b[*]}\n    IFS=\" \"\n \
+    \   local temp\n    for l in \"$@\"; do\n        a=\"${a// /$l}\"\n        b=\"\
+    ${b// /$l}\"\n    done\n    a=\"${a// /$start}\"\n    b=\"${b// /$end}\"\n   \
+    \ temp=\"$(echo \"$a\" | bc -l)\"\n    temp=\"$(bc -l <<< \"$temp\")\"\n    temp=\"\
+    $(( (temp | cut -d '.' -f 1) ))\"\n    temp=\"$(( (temp | cut -d '.' -f 3) ))\"\
+    \n    IFS=$'\\n'\n    echo \"$(( ((temp % 2) != 0) ))\"", "    local -i i=0 j=0\
+    \ l=0 max=0\n    local -r a=$1\n    local -r b=$2\n    local -r res=()\n    local\
+    \ -r maxl=${#a}\n    local -r minl=${#b}\n    local -i min=$(( ${minl:-0} < ${maxl:-0}\
+    \ ? ${minl:-0} : ${maxl:-0}))\n    local -i max=$(( ${maxl:-0} > ${minl:-0} ?\
+    \ ${maxl:-0} : ${minl:-0}))\n    for (( i=min; i<max; i++ )); do\n        [[ ${a[$i]}\
+    \ -gt ${b[$j]} ]] && res+=(\"${a[$i]}\" \"${b[$j]}\") && let j=$(( j+1 ))\n  \
+    \      [[ ${a[$i]} -lt ${b[$j]} ]] && let l=$(( l+1 ))\n    done\n    [[ \"$l\"\
+    \ = \"$maxl\" ]] && return 0\n    [[ \"$l\" = \"$minl\" ]] && return 1\n    local\
+    \ -i cnt=${#res[@]}\n    for (( i=0; i<$cnt; i++ )); do\n        local -r x=${res[$i]}\n\
+    \        [[ \"${#a}\" -gt \"${#x}\" ]] && return 1\n        [[ \"${#b}\" -gt \"\
+    ${#x}\" ]] && return 1\n    done\n    if [[ $cnt -eq 0 ]] || [[ $cnt -lt 2 ]]\
+    \ || [[ ${#a[@]} = \"$cnt\" || ${#b[@]} = \"$cnt\" ]]; then\n        return 0\n\
+    \    fi\n    local -i cnt=${#res[@]}\n    for (( i=0; i<$cnt; i++ )); do\n   \
+    \     local -r x=${res[$i]}\n        local -i i=$(( ${i} + 1 ))\n        [[ \"\
+    ${a[$i]}\" -eq \"${x}\" ]] && let i=$(( i + 1 ))\n        [[ \"${b[$i]}\" -eq\
+    \ \"${x}\" ]] && let i=$(( i + 1 ))\n    done\n    if [[ $cnt -eq 0 ]]; then\n\
+    \        return 0\n    elif [[ $cnt -lt 2 ]]; then\n        return 1\n    elif\
+    \ [[ ${#a[@]} = \"$cnt\" || ${#b[@]} = \"$cnt\" ]]; then\n        return 1\n \
+    \   fi\n    return 0", "\tlocal i j\n\tlocal length1=\"${1}\"\n\tlocal length2=\"\
+    ${2}\"\n\tlocal num1=$(echo \"${length1}\" | sed 's/ //g')\n\tlocal num2=$(echo\
+    \ \"${length2}\" | sed 's/ //g')\n\t\n\tlet \"num1=num1+1\"\n\tlet \"num2=num2+1\"\
+    \n\t\n\tfor i in $(seq 1 \"${num1}\"); do\n\t\tlet \"num1=num1-1\"\n\t\t\n\t\t\
+    for j in $(seq 1 \"${num2}\"); do\n\t\t\tlet \"num2=num2-1\"\n\t\t\t\n\t\t\tif\
+    \ [ \"${i}\" -ge \"${j}\" ]; then\n\t\t\t\tlet \"num=num+1\"\n\t\t\t\tlet \"num=num-1\"\
+    \n\t\t\t\t\n\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\t\tlet \"num=num+1\"\
+    \n\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\t\n\t\t\t\t\tif [[ \"${num}\" -eq 0 ]];\
+    \ then\n\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\
+    \t\t\n\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\t\t\t\tlet \"num=num+1\"\
+    \n\t\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\tif [ \"${num}\"\
+    \ -eq \"0\" ]; then\n\t\t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\tlet \"\
+    num=num-1\"\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\
+    \t\t\t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\
+    \t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\t\t\
+    \t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\t\
+    \t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\t\t\t\
+    \t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\
+    \t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\
+    \t\t\t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\
+    \n\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\"\
+    \ ]; then\n\t\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\t\t\t\
+    \t\tlet \"num=num-1\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\
+    if [[ \"${num}\" -eq 0 ]]; then\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num+1\"\
+    \n\t\t\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\
+    \t\t\t\t\t\t\t\t\t\t\t\t\t\tif [ \"${num}\" -eq \"0\" ]; then\n\t\t\t\t\t\t\t\t\
+    \t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num-1\"\
+    \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tif [ \"${num}\"\
+    \ -eq \"0\" ]; then\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tlet \"num=num+1\"\n\t\t\t\
+    \t\t\t\t\t\t\t\t\t\t\t\t\t", "    local a b\n\n    for a in \"$@\"; do\n     \
+    \   if ! [[ $a =~ ^(-?[0-9]+)(\\s*(-?[0-9]+))* ]]; then\n            echo \"Error\
+    \ the 1st parameter ($a) isn't a list\"\n            return 1\n        fi\n\n\
+    \        for b in \"$@\"; do\n            if ! [[ $b =~ ^(-?[0-9]+)(\\s*(-?[0-9]+))*\
+    \ ]]; then\n                echo \"Error the 2nd parameter ($b) isn't a list\"\
+    \n                return 1\n            fi\n        done\n        break\n    done\n\
+    \    if ! [[ \"$a\" =~ ^(-?[0-9]+)$ ]]; then\n        echo \"Error the 1st parameter\
+    \ ($a) isn't a list\"\n        return 1\n    fi\n    if ! [[ \"$b\" =~ ^(-?[0-9]+)$\
+    \ ]]; then\n        echo \"Error the 2nd parameter ($b) isn't a list\"\n     \
+    \   return 1\n    fi\n    local len1=$(( ${#a} - 1 ))\n    local len2=$(( ${#b}\
+    \ - 1 ))\n    for (( i = 0; i <= len1; i++ )); do\n        if [[ \"$a\" =~ ^(-?[0-9]+)($i\\\
+    s*(-?[0-9]+))* ]]; then\n            if [[ \"$a\" =~ ^(-?[0-9]+)($i)$ ]]; then\n\
+    \                if [[ \"$a\" =~ ^(-?[0-9]+)($i)\\s+(-?[0-9]+)($i)$ ]]; then\n\
+    \                    local start1=$(( $i + 1 ))\n                    local end1=$((\
+    \ ${#b} ))\n                    local start2=$(( ${#a} - 1 ))\n              \
+    \      local end2=$(( ${#b} - 1 ))\n                    start1=$(( $start1 + 1\
+    \ ))\n                    end1=$(( $start1 ))\n                    start2=$((\
+    \ ${#a} - 1 ))\n                    end2=$(( $start2 ))\n                    echo\
+    \ \"$start1...\"$end1\n                    echo \"$start2...\"$end2\n        \
+    \            echo \"$start1...\"$end2\n                    if [ \"$start2\" -lt\
+    \ \"$start1\" ]; then\n                        echo \"OK\"\n                 \
+    \       return\n                    else\n                        echo \"Error\
+    \ the interval ($start1...\"$end1) isn't intersect\"\n                       \
+    \ return 1\n                    fi\n                fi\n            fi\n     \
+    \   fi\n    done\n    if [ \"$len2\" -lt \"$len1\" ]; then\n        echo \"OK\"\
+    \n        return\n    else\n        echo \"Error the interval ($a...\"$b) isn't\
+    \ intersect\"\n        return 1\n    fi", "\tdeclare -i i1 i2 i1t i2t s1 s2 s1\
+    \ i2t len\n\ti1=$1\n\ti2=$2\n\ti1t=$i1\n\ti2t=$i2\n\ts1=$i1\n\ts2=$i2\n\twhile\
+    \ [ \"${i1t}\" -le \"${i2t}\" ]\n\tdo\n\t\tif [ \"${s1}\" -le \"${s2}\" ]; then\n\
+    \t\t\ti1=$i1t\n\t\t\ti2=$i2t\n\t\t\ti1t=$i1\n\t\t\ti2t=$i2\n\t\t\ts1=$s1\n\t\t\
+    \ts2=$s2\n\t\telse\n\t\t\ts1=$s1\n\t\t\ts2=$s2\n\t\tfi\n\tdone\n\t\n\t[ \"${i1t}\"\
+    \ -le \"${i2t}\" ] || return 1\n\t\n\twhile [ \"${i1t}\" -le \"${i2t}\" ]\n\t\
+    do\n\t\tif [ \"${s1}\" -le \"${s2}\" ]; then\n\t\t\ti1=$i1t\n\t\t\ti2=$i2t\n\t\
+    \t\ti1t=$i1\n\t\t\ti2t=$i2\n\t\t\ts1=$s1\n\t\t\ts2=$s2\n\t\telse\n\t\t\ts1=$s1\n\
+    \t\t\ts2=$s2\n\t\tfi\n\tdone\n\t\n\tlen=$(( i2-i1 ))\n\t\n\techo \"${len}\"\n\t\
+    \n\t\n\t\n\t\n\tif [ \"${len}\" -eq 1 ]; then\n\t\techo \"NO\"\n\telse\n\t\techo\
+    \ \"YES\"\n\tfi", "\tlocal _a _b _c _d \n\tlocal _f _g _h \n\t_a=$1; _b=$2; \n\
+    \t_c=`echo \"$_b - $_a\" | bc -l`; \n\t_d=`echo \"$_b - $_c\" | bc -l`; \n\tif\
+    \ [ ${#_a} -eq 0 -o ${#_b} -eq 0 ] ; then \n\t\techo \"NO\"; \n\t\treturn 0; \n\
+    \tfi; \n\t_f=`echo \"$_g - $_h\" | bc -l`; \n\tif [ ${#_f} -eq 0 ] ; then \n\t\
+    \techo \"NO\"; \n\t\treturn 0; \n\tfi; \n\tif [ ${#_a} -gt ${#_b} ] ; then \n\t\
+    \techo \"NO\"; \n\t\treturn 0; \n\tfi; \n\t_g=`echo \"$_c - $_a\" | bc -l`; \n\
+    \t_h=`echo \"$_d - $_c\" | bc -l`; \n\techo \"$_f\"", "  local INTERVAL1=$(echo\
+    \ $1 | tr -d ' ')\n  local INTERVAL2=$(echo $2 | tr -d ' ')\n  if [ -z \"$INTERVAL1\"\
+    \ -o -z \"$INTERVAL2\" ]; then\n    echo \"NO\"\n  else\n    local INTERSECTION=$(comm\
+    \ -12 <(echo $INTERVAL1) <(echo $INTERVAL2) | wc -l)\n    if [ $INTERSECTION -eq\
+    \ 2 ]; then\n      echo \"YES\"\n    elif [ $INTERSECTION -eq 1 ]; then\n    \
+    \  echo \"NO\"\n    else\n      echo \"NO\"\n    fi\n  fi", "    local start\n\
+    \    local end\n    local a=($1)\n    local b=($2)\n    local length=$(echo \"\
+    ${#a[@]}\" \"${#b[@]}\" | bc)\n    if [ \"$length\" -gt \"2\" ] || [ \"$length\"\
+    \ -lt \"2\" ]; then\n        return\n    fi\n    for i in $(seq 0 $((length -\
+    \ 1))); do\n        start=$(expr \"${a[i]}\" + ${b[i]})\n        end=$(expr \"\
+    ${a[i]}\"  + ${b[i]})\n        if [ \"${start}\" -gt \"${end}\" ]; then\n    \
+    \        echo \"NO\"\n            break\n        fi\n    done\n    echo \"YES\"",
+  "  local i j x y n m\n  local interval\n  local str1\n  local str2\n\n  str1=$1\n\
+    \  str2=$2\n  n=$(awk -F\"[,]\" '{print NF}' <<< $str1)\n  m=$(awk -F\"[,]\" '{print\
+    \ NF}' <<< $str2)\n\n  interval=\"\"\n  for((i=1;i<=n;i++)); do\n    interval=\"\
+    ${interval} $i\"\n  done\n  interval=\"${interval} ${n}\"\n  interval=\"${interval}\
+    \ ${m}\"\n  for i in $(seq 1 $n); do\n    for j in $(seq 1 $m); do\n      x=\"\
+    ${interval:$((i*$m+j)):$((m*$n+i-1))}\"\n      if [[ $x =~ (^|[,])[3,]([^|]|$)\
+    \ ]]; then\n        y=$((${BASH_REMATCH[1]}*${BASH_REMATCH[2]}+${BASH_REMATCH[3]}))\n\
+    \        (( ${#y} == 2 )) && continue\n      fi\n      (( ${#y} == 1 )) && continue\n\
+    \      (( ${y} == 1 )) && continue\n      interval=\"${interval} ${y}\"\n    done\n\
+    \  done\n  echo $interval", "    local -n interval1=$1\n    local -n interval2=$2\n\
+    \    if [[ \"$interval1\" == \"$interval2\" ]]; then\n        echo \"NO\"\n  \
+    \      return\n    fi\n\n    local -n start=$(echo \"${interval1} ${interval2}\"\
+    \ | sort -n | uniq -c | sort -nr | head -1)\n    local -n end=$(echo \"${interval1}\
+    \ ${interval2}\" | sort -n | uniq -c | sort -nr | tail -1)\n    local -n length1=$((${start}-1))\n\
+    \    local -n length2=$((${end}-1))\n    if [[ $length1 -lt 0 || $length2 -lt\
+    \ 0 ]]; then\n        echo \"NO\"\n        return\n    fi\n\n    if [[ $length1\
+    \ -eq $length2 ]]; then\n        echo \"YES\"\n        return\n    fi\n\n    if\
+    \ [[ $((length1 + length2)) -eq 2 ]]; then\n        if [[ ${start} -eq ${end}\
+    \ ]]; then\n            echo \"YES\"\n            return\n        fi\n    fi\n\
+    \    echo \"NO\"", "    awk '{for(i=1;i<=NF;i++)b[i]=1;for(i=1;i<=NF;i++)if(a[i]<b[i]){a[i]=b[i]}};END\
+    \ {for(i=1;i<=NF;i++)if(a[i]==1){printf \"%s\",\"YES\"}else{printf \"%s\",\"NO\"\
+    }}' \"$1\" \"$2\"", "    local interval1 interval2\n    interval1=$1\n    interval2=$2\n\
+    \    # echo \"$interval1 $interval2\"\n    if [[ ${interval1} -gt ${interval2}\
+    \ ]]; then\n        echo \"${interval1} - ${interval2}\"\n    else\n        echo\
+    \ \"${interval2} - ${interval1}\"\n    fi\n    # for i in $interval1; do\n   \
+    \ #     if [ $i -gt $interval2 ]; then\n    #         echo \"$i\"\n    #     fi\n\
+    \    # done\n    # for i in $interval2; do\n    #     if [ $i -gt $interval1 ];\
+    \ then\n    #         echo \"$i\"\n    #     fi\n    # done", "\tlocal i\n\tlocal\
+    \ a b j k length prime\n\tlocal length1 length2 prime1 prime2\n\ta=${1% *}\n\t\
+    b=${2% *}\n\tprime1=$(isPrime \"$a\")\n\tprime2=$(isPrime \"$b\")\n\tlength=$(echo\
+    \ \"$a $b\"|wc -w)\n\tlength1=$(echo \"$a $b\"|awk '{print length=$1-$2}')\n\t\
+    length2=$(echo \"$a $b\"|awk '{print length=$2-$1}')\n\tif [ \"$prime1\" -eq \"\
+    1\" -a \"$prime2\" -eq \"1\" ]; then\n\t\tif [ \"$length\" -eq \"1\" ]; then\n\
+    \t\t\techo \"NO\"\n\t\telse\n\t\t\techo \"YES\"\n\t\tfi\n\telse\n\t\tif [ \"$length\"\
+    \ -eq \"1\" ]; then\n\t\t\techo \"NO\"\n\t\telse\n\t\t\tif [ \"$prime1\" -eq \"\
+    0\" -o \"$prime2\" -eq \"0\" ]; then\n\t\t\t\techo \"NO\"\n\t\t\telse\n\t\t\t\t\
+    for (( j=1; \"$j\" <= \"$length\"; j=j+1 )); do\n\t\t\t\t\tif (( $j < \"$length1\"\
+    \ )); then\n\t\t\t\t\t\tj=$j+1\n\t\t\t\t\telse\n\t\t\t\t\t\tfor (( k=1; \"$k\"\
+    \ <= \"$length\"; k=k+1 )); do\n\t\t\t\t\t\t\tif (( $k < \"$length2\" )); then\n\
+    \t\t\t\t\t\t\t\tk=$k+1\n\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\tif [ \"$prime1\" -eq\
+    \ \"1\" -a \"$prime2\" -eq \"1\" ]; then\n\t\t\t\t\t\t\t\t\tif [ \"$length\" -eq\
+    \ \"1\" ]; then\n\t\t\t\t\t\t\t\t\t\techo \"NO\"\n\t\t\t\t\t\t\t\t\telse\n\t\t\
+    \t\t\t\t\t\t\t\techo \"YES\"\n\t\t\t\t\t\t\t\t\tfi\n\t\t\t\t\t\t\t\telse\n\t\t\
+    \t\t\t\t\t\t\tif [ $j -eq $k ]; then\n\t\t\t\t\t\t\t\t\t\techo \"YES\"\n\t\t\t\
+    \t\t\t\t\t\telse\n\t\t\t\t\t\t\t\t\t\tif [ \"$prime1\" -eq \"0\" -o \"$prime2\"\
+    \ -eq \"0\" ]; then\n\t\t\t\t\t\t\t\t\t\t\techo \"NO\"\n\t\t\t\t\t\t\t\t\t\telse\n\
+    \t\t\t\t\t\t\t\t\t\t\tfor (( prime1=1; prime1<=\"$prime1\"; prime1=prime1+1 ));\
+    \ do\n\t\t\t\t\t\t\t\t\t\t\t\tif [ $j -eq $prime1 ]; then\n\t\t\t\t\t\t\t\t\t\t\
+    \t\t\tif [ \"$prime2\" -eq \"1\" ]; then\n\t\t\t\t\t\t\t\t\t\t\t\t\t\techo \"\
+    YES\"\n\t\t\t\t\t\t\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tfor (( prime2=1;\
+    \ prime2<=\"$prime2\"; prime2=prime2+1 )); do\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\
+    if (( $prime2 -eq $k )); then\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\techo \"YES\"\n\t\
+    \t\t\t\t\t\t\t\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tif [ \"$prime2\"\
+    \ -eq \"0\" -o \"$prime1\" -eq \"0\" ]; then", "    echo \"$1\" \"$2\" |\n   \
+    \ grep -E -v '^$'| sort -n | uniq -c | sort -nr | head -1", "    local start_end\n\
+    \    local interval\n    local length\n    local count\n    local prime\n\n  \
+    \  start_end=$1\n    interval=$2\n    length=$(\n        awk '\n        BEGIN\
+    \ {\n            print \"YES\";\n        }\n        /${interval%,},${interval%,}/,$1,$2\
+    \ {\n            print length\n        }\n        END {\n            print \"\
+    NO\"\n        }\n        ' <<< \"$start_end\"\n    )\n    count=$(\n        awk\
+    \ '\n        BEGIN {\n            print \"YES\";\n        }\n        /${interval%,},${interval%,}/,$1,$2\
+    \ {\n            print $3\n        }\n        END {\n            print \"NO\"\n\
+    \        }\n        ' <<< \"$start_end\"\n    )\n    if [[ $length == $count ]];\
+    \ then\n        prime=\"YES\"\n    else\n        prime=\"NO\"\n    fi\n    echo\
+    \ \"$prime\"", "    local interval1 interval2\n    IFS=$' \\t\\n' read -r -a interval1\
+    \ <<< \"$1\"\n    IFS=$' \\t\\n' read -r -a interval2 <<< \"$2\"\n    local len1\
+    \ len2\n    len1=\"${#interval1[@]}\"\n    len2=\"${#interval2[@]}\"\n    local\
+    \ i\n    for i in $(seq 0 \"$((len1 - 1))\"); do\n        if [[ \"${interval1[$i]}\"\
+    \ -gt \"${interval2[$((i + 1))]}\" ]]; then\n            echo \"NO\"\n       \
+    \     return\n        fi\n    done\n    for i in $(seq 0 \"$((len2 - 1))\"); do\n\
+    \        if [[ \"${interval2[$i]}\" -gt \"${interval1[$((i + 1))]}\" ]]; then\n\
+    \            echo \"NO\"\n            return\n        fi\n    done\n    local\
+    \ i\n    for ((i = 0; i <= len1; i++)); do\n        for ((j = 0; j <= len2; j++));\
+    \ do\n            [[ \"$i\" -eq \"$j\" && \"$interval1[$i]\" -gt \"$interval2[$j]\"\
+    \ ] ] &&\n                (( i <= len1 )) || return 1\n        done\n    done\n\
+    \    echo \"YES\"", "\tlocal l1 l2\n\tl1=$(cat \"$1\" | sed 's/ //g')\n\tl2=$(cat\
+    \ \"$2\" | sed 's/ //g')\n\t\n\tlet i1=\"${l1#* }\"\n\tlet i2=\"${l2#* }\"\n\t\
+    \n\tlet i1=\"${i1%% *}\"\n\tlet i2=\"${i2%% *}\"\n\t\n\t[[ \"$i1\" -lt \"$i2\"\
+    \ ]] && echo no || \\\n\t\t[[ \"$i1\" -eq \"$i2\" ]] && echo yes || \\\n\t\t[[\
+    \ \"$i1\" -gt \"$i2\" ]] && echo no || \\\n\t\t[[ \"$i1\" -lt \"$i2\" ]] && echo\
+    \ yes || \\\n\t\t[[ \"$i1\" -gt \"$i2\" ]] && echo yes || \\\n\t\t[[ \"$i1\" -eq\
+    \ \"$i2\" ]] && echo yes || \\\n\t\t[[ \"$i1\" -lt \"$i2\" ]] && echo yes || \\\
+    \n\t\techo \"NO\"", "    local a=$1\n    local b=$2\n    local length=$(($(awk\
+    \ -F'[- ]' '{ print $1 } { print $2 }' <<< $a | sort | uniq | wc -l)-1)\n    local\
+    \ count\n    local i\n    for (( i=1; i<=$length; i++ )); do\n        count=$(awk\
+    \ -v s=$i '{ print (s == $1 ? $1 : (s == $2 ? $2 : \"NO\")) }' <<< $a | sort |\
+    \ uniq | wc -l)\n        if [ $count -ne \"2\" ]; then\n            echo \"NO\"\
+    \n            return\n        fi\n    done\n    echo \"YES\"", "    interval_1=\"\
+    ${@:1}\"\n    interval_2=\"${@:2}\"\n    intersection=\"$(\n        sort ${interval_1}\
+    \ |\n        uniq | \n        sort | \n        uniq | \n        awk '{if($1<$2)\
+    \ print $0}' | \n        wc -l \n    )\"\n    echo $((intersection % 2 != 0))",
+  "    local -r interval=$1\n    local -r interval2=$2\n\n    if [[ ${interval} ==\
+    \ ${interval2}]]\n    then\n        return ${interval}\n    else\n        local\
+    \ -r interval1=$(interval ${interval})\n        local -r interval2=$(interval\
+    \ ${interval2})\n        local -r length=$(( (${interval2}-${interval1}+1)*2 ))\n\
+    \        local -r prime=0\n        local -r found=\"\"\n        while [ ${length}\
+    \ -gt 0 ]\n        do\n            prime=1\n            local -r interval1=$((\
+    \ ${interval1} + 2 ))\n            local -r interval2=$(( ${interval2} + 2 ))\n\
+    \            local -r interval3=$(interval ${interval1})\n            local -r\
+    \ interval4=$(interval ${interval2})\n            if [[ ${interval3} == ${interval4}\
+    \ ]]\n            then\n                local -r i1=$(interval ${interval1})\n\
+    \                local -r i2=$(interval ${interval2})\n                if [[ ${i1}\
+    \ == ${i2} ]]\n                then\n                    found=\"${found} ${interval1}\"\
+    \n                fi\n            fi\n            (( ${length}-- ))\n        done\n\
+    \        if [[ ${#found} -gt 0 ]]\n        then\n            echo \"${found}\"\
+    \n        else\n            echo \"NO\"\n        fi\n    fi", "  local -i i1 i2\
+    \ j1 j2\n  local -a a=()\n  local -a b=()\n  \n  read -r -a a <<< \"$1\"\n  read\
+    \ -r -a b <<< \"$2\"\n  \n  [[ \"${#a[@]}\" == \"${#b[@]}\" ]] || return 0\n\n\
+    \  for ((i1=0; i1<${#a[@]}; i1++)); do\n    ((i2=i1))\n    ((j1=$i1+1))\n    ((j2=$i2+1))\n\
+    \    ((j2<${#b[@]}) && continue)\n    ((j1<${#b[@]}) && continue)\n    [[ ${a[$i1]}\
+    \ -le ${b[$j1]} ]] && [[ ${a[$i2]} -ge ${b[$j2]} ]] && return 0\n  done\n  \n\
+    \  return 1", "    local -i i j len\n    local -a arr1 arr2\n    IFS=$'\\n' arr1=($1)\
+    \ arr2=($2)\n    for i in ${!arr1[*]}; do\n        j=$((i + 1))\n        len=$((${#arr1[*]}))\n\
+    \        if (( ${arr1[$i]} <= ${arr2[$j]} )) && (( ${arr1[$i]} < $((${arr2[$j]}+len))\
+    \ )) ; then\n            echo \"NO\"\n            return 1\n        fi\n    done\n\
+    \    len=$((${#arr1[*]} - ${#arr2[*]}))\n    if (( ${arr1[$((${#arr1[*]} - ${#arr2[*]})+${#arr1[*]})]}\
+    \ > 0 )) && (( ${arr1[$((${#arr1[*]} - ${#arr2[*]})+${#arr1[*]})]} < ${#arr1[*]}\
+    \ )) ; then\n        echo \"NO\"\n        return 1\n    fi\n    echo \"YES\"\n\
+    \    return 0", "  local start end intrvl\n  # If no intervals given\n  if [ -z\
+    \ \"$1\" ] || [ -z \"$2\" ]; then\n    echo \"Usage: $(basename $0) <start> <end>\"\
+    \n    return\n  fi\n\n  # Split the intervals\n  start=$1\n  end=$2\n  while [\
+    \ \"$start\" != \"\" ]; do\n    intrvl=${start% *}\n    start=${start#* }\n  \
+    \  if [ \"$intrvl\" != \"\" ]; then\n      intrvls=( ${intrvls[@]} $intrvl )\n\
+    \    fi\n  done\n  while [ \"$end\" != \"\" ]; do\n    intrvl=${end% *}\n    end=${end#*\
+    \ }\n    if [ \"$intrvl\" != \"\" ]; then\n      intrvls=( ${intrvls[@]} $intrvl\
+    \ )\n    fi\n  done\n  # Get the intersection of the intervals\n  intersect=(\
+    \ \"${intrvls[@]}\" )\n\n  # Check for the length of the intersection\n  length=${#intersect[@]}\n\
+    \  for i in ${!intersect[@]}; do\n    if [ \"${intersect[$i]}\" -gt \"${end}\"\
+    \ ]; then\n      length=${#intersect[@]}\n      break\n    fi\n  done\n\n  if\
+    \ [ \"$length\" -eq \"0\" ]; then\n    echo \"NO\"\n    return\n  fi\n\n  # Check\
+    \ the length of the intersection\n  for i in $(seq 0 $((length-1)) ); do\n   \
+    \ if [ \"$i\" -gt \"$((length-2))\" ]; then\n      if [ \"${intersect[$i]}\" -gt\
+    \ \"${intersect[$((i+1))]}\" ]; then\n        echo \"NO\"\n        return\n  \
+    \    fi\n    fi\n  done\n  echo \"YES\"", "    local a=$1; shift\n    local b=$1;\
+    \ shift\n\n    local len=$1; shift\n\n    local i\n    local j\n\n    for i in\
+    \ $(seq 1 $len); do\n        for j in $(seq 0 $len); do\n            if [[ \"\
+    ${a[$i]}\" -le \"${b[$j]}\" ]]; then\n                if [[ \"${b[$j]}\" -le \"\
+    ${a[$i]}\" ]]; then\n                    let \"a[$i]+=1;b[$j]+=1;len=$len-1;continue\"\
+    \n                fi\n            fi\n        done\n    done\n\n    if [[ \"${len}\"\
+    \ -eq 0 ]]; then\n        echo \"NO\"\n    elif [[ $len -eq 1 ]]; then\n     \
+    \   echo \"YES\"\n    else\n        echo \"NO\"\n    fi", "  local interval1=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n)\n  local interval2=$(echo \"$2\" | tr ' ' '\\\
+    n' | sort -n)\n  local length1=$(( ${#interval1} - 1))\n  local length2=$(( ${#interval2}\
+    \ - 1))\n  local intersect=0\n  local start1=$(echo \"$interval1\" | head -n \"\
+    ${length1}\")\n  local end1=$(echo \"$interval1\" | tail -n 1)\n  local start2=$(echo\
+    \ \"$interval2\" | head -n \"${length2}\")\n  local end2=$(echo \"$interval2\"\
+    \ | tail -n 1)\n  \n  if [[ $((start1 < end2)) -eq $((end1 < start2)) ]]; then\n\
+    \    if [[ $((start1 < start2)) -eq $((end1 < end2)) ]]; then\n      intersect=$((\
+    \ ${start1} + ${end2} - ${start2} - ${end1} ))\n      if [[ $(( $intersect % $((\
+    \ ${#interval1} + ${#interval2} )) )) -eq 0 ]]; then\n        if [[ $(( $intersect\
+    \ < $(( ${#interval1} + ${#interval2} )) )) -eq 1 ]]; then\n          echo \"\
+    YES\"\n        else\n          echo \"NO\"\n        fi\n      else\n        echo\
+    \ \"NO\"\n      fi\n    else\n      echo \"NO\"\n    fi\n  else\n    echo \"NO\"\
+    \n  fi", "    local start1 end1\n    local start2 end2\n    local length result\n\
+    \n    start1=$1\n    end1=$2\n    start2=$3\n    end2=$4\n\n    length=${#start1}\
+    \ ${#end1} ${#start2} ${#end2}\n\n    for (( i = 0; i <= length; ++i )); do\n\
+    \        if [[ $i -eq 0 ]]; then\n            start1=$start1$((end1 + 1))\n  \
+    \      else\n            start1=$start1$((start1 + 1))\n        end1=$end1$((end1\
+    \ + 1))\n        if [[ $i -eq $length ]]; then\n            start2=$start2$((end2\
+    \ + 1))\n        else\n            start2=$start2$((start2 + 1))\n        end2=$end2$((end2\
+    \ + 1))\n    done\n\n    if [ \"$start1\" -gt \"$end2\" ] || [ \"$start2\" -gt\
+    \ \"$end1\" ]; then\n        result=\"NO\"\n    else\n        result=\"YES\"\n\
+    \    fi\n    echo \"$result\"", "    local a=$1\n    local b=$2\n    local length\
+    \ \n    local answer\n\n    for i in $(seq 1 $(($(($#a)-1)) ));\n    do\n    \
+    \    length=$(expr $(expr ${a[$i]} - ${a[$(($i+1))]}) $(expr ${b[$i]} - ${b[$(($i+1))]}))\n\
+    \        answer=$(expr $length / 2)\n        if [ $answer -eq 0 ]\n        then\n\
+    \            answer=\"NO\"\n            break\n        fi\n    done\n    echo\
+    \ $answer", "    local interval_1 interval_2\n    local len_intersection\n   \
+    \ local i\n    local j\n    local interval_count\n    local prime_number\n   \
+    \ local flag\n    interval_1=( $1 )\n    interval_2=( $2 )\n    len_intersection=$((\
+    \ ${#interval_1[@]} - ${#interval_2[@]} ))\n    interval_count=( $(( ${#interval_1[@]}\
+    \ + ${#interval_2[@]} - 1 )) )\n    prime_number=0 \n    for (( i = 0; i < ${#interval_1[@]};\
+    \ i++ )); do\n        for (( j = 0;  j < ${#interval_2[@]}; j++ )); do\n     \
+    \       if [[ ${interval_1[$i]} -eq ${interval_2[$j]} ]]; then\n             \
+    \   prime_number=$(( $prime_number + 1 ))\n            fi\n        done\n    done\n\
+    \    prime_number=$(( $prime_number - 1 ))\n    prime_number=$(( $prime_number\
+    \ - 1 ))\n    flag=0\n    for (( i = 0; i < ${#interval_1[@]}; i++ )); do\n  \
+    \      if [[ ${interval_1[$i]} -ge ${interval_2[$len_intersection]} ]]; then\n\
+    \            if [[ ${interval_1[$i]} -le ${interval_2[$len_intersection+1]} ]];\
+    \ then\n                flag=1\n                break\n            fi\n      \
+    \  fi\n    done\n    if [[ $flag = 0 ]]; then\n        echo \"NO\"\n    else\n\
+    \        if [[ $prime_number -eq 1 ]]; then\n            echo \"YES\"\n      \
+    \  else\n            echo \"NO\"\n        fi\n    fi", "    local a b\n    local\
+    \ a2 b2\n    local p len\n\n    a=$1\n    b=$2\n\n    local x\n    local y\n \
+    \   local len2\n\n    x=$(expr \"${a}\" \\* \"${b}\" \\+ 1)\n    y=$(expr \"${a}\"\
+    \ \\* \"${b}\" \\+ 1)\n\n    len2=$(expr \"$a\" \"+\" \"$b\" \"+\" \"1\")\n\n\
+    \    if [ \"${len}\" -eq \"$x\" ] || [ \"${len}\" -eq \"$y\" ] ; then\n      \
+    \  echo \"NO\"\n    else\n        for x in $(seq 0 \"$len2\") ; do\n         \
+    \   if [ $x -eq \"$y\" ] ; then\n                break\n            fi\n     \
+    \   done\n        \n        if [ \"${x}\" = \"0\" ] ; then\n            echo \"\
+    NO\"\n        else\n            if [ ${a} -gt ${b} ] ; then\n                echo\
+    \ \"YES\"\n            else\n                echo \"NO\"\n            fi\n   \
+    \     fi\n    fi", "    local start1=${1:-$(pwd)};\n    local end1=${2:-$(pwd)};\n\
+    \    local start2=${3:-$(pwd)};\n    local end2=${4:-$(pwd)};\n    local start3=${5:-$(pwd)};\n\
+    \    local end3=${6:-$(pwd)};\n    local start4=${7:-$(pwd)};\n    local end4=${8:-$(pwd)};\n\
+    \    local start5=${9:-$(pwd)};\n    local end5=${10:-$(pwd)};\n\n    local starts=$(echo\
+    \ $start1 $start2 $start3 $start4 $start5 | sed 's/ /, /g' | awk '{print $1}');\n\
+    \    local ends=$(echo $end1 $end2 $end3 $end4 $end5 | sed 's/ /, /g' | awk '{print\
+    \ $1}');\n\n    local len1=$(echo $starts | awk '{print $1}');\n    local len2=$(echo\
+    \ $ends | awk '{print $1}');\n    local len3=$(echo $starts | awk '{print $1}');\n\
+    \    local len4=$(echo $ends | awk '{print $1}');\n    local len5=$(echo $starts\
+    \ | awk '{print $1}');\n\n    local len1s=$(echo $starts | awk '{print $2}');\n\
+    \    local len2s=$(echo $ends | awk '{print $2}');\n    local len3s=$(echo $starts\
+    \ | awk '{print $2}');\n    local len4s=$(echo $ends | awk '{print $2}');\n  \
+    \  local len5s=$(echo $starts | awk '{print $2}');\n\n    local inter=0;\n   \
+    \ for (( i=0; i<${#starts}; i++ )); do\n        inter=$(( (inter*10 + ${starts[i]})*10\
+    \ + ${ends[i]} ));\n    done\n\n    if [[ $((${len1} - $inter)) -ne 0 ]] || [[\
+    \ $((${len1} - $inter)) -eq 0 ]] || [[ $((${len2} - $inter)) -ne 0 ]] || [[ $((${len2}\
+    \ - $inter)) -eq 0 ]] || [[ $((${len3} - $inter)) -ne 0 ]] || [[ $((${len3} -\
+    \ $inter)) -eq 0 ]] || [[ $((${len4} - $inter)) -ne 0 ]] || [[ $", "    declare\
+    \ -i start1 end1 start2 end2 len1 len2 ans=0\n    \n    echo \"$1 $2\"\n    shift\n\
+    \    shift\n    \n    while [ -n \"$1\" ] ; do\n        start1=$1\n        len1=${#start1}\n\
+    \        end1=$(( start1 + len1 ))\n        \n        while [ -n \"$2\" ] ; do\n\
+    \            start2=$2\n            len2=${#start2}\n            end2=$(( start2\
+    \ + len2 ))\n            \n            if [ $len1 -ge $len2 ]; then\n        \
+    \        ans=$(( ans + 1 ))\n                echo \"$start1 $start2\"\n      \
+    \      fi\n            \n            shift\n            shift\n        done\n\
+    \        \n        shift\n    done\n    \n    echo $ans", "  local start end length\
+    \ intersect_length res\n  IFS=\" \" read start end <<< \"$1\"\n  IFS=\" \" read\
+    \ length intersect_length <<< \"$2\"\n  res=$(echo \"$start $end\" | sort | uniq\
+    \ -c | sort -r)\n  if [[ ${res[*]:1} == \"1\" ]]; then\n    echo \"NO\"\n    return\
+    \ 1\n  elif [[ ${res[*]:1} == \"2\" ]]; then\n    echo \"YES\"\n    return 0\n\
+    \  else\n    echo \"NO\"\n    return 1\n  fi", "    local a=$1\n    local b=$2\n\
+    \    local i\n\n    for i in $(seq 0 $((${#b} - ${#a} - 1))); do\n        if [[\
+    \ $a == *\"${b: $i + 1}\"* ]]; then\n            echo ${a: $i + 1}\n         \
+    \   return\n        fi\n    done", "  local -r interval1=$1\n  local -r interval2=$2\n\
+    \  [[ \"$interval1\" =~ (^|,)([^,]*)$ ]] || exit 1\n  [[ \"$interval2\" =~ (^|,)([^,]*)$\
+    \ ]] || exit 1\n\n  local -r interval1start=${BASH_REMATCH[2]}\n  local -r interval1end=${BASH_REMATCH[3]}\n\
+    \  [[ \"$interval1start\" -le \"$interval1end\" ]] || exit 1\n  [[ \"$interval2start\"\
+    \ -le \"$interval2end\" ]] || exit 1\n\n  local interval1_length=$(compute_interval_length\
+    \ interval1start interval1end)\n  local interval2_length=$(compute_interval_length\
+    \ interval2start interval2end)\n\n  [[ \"$interval1_length\" -eq \"$interval2_length\"\
+    \ ]] || exit 1\n\n  [[ $(( $interval1_length == $interval2_length )) -eq $(( 2\
+    \ )) ]] || exit 1\n\n  local intersect=$(( $interval1end - $interval2start ))\n\
+    \  [[ $(( $intersect % $(( $interval1end % $interval2end )) )) -eq 0 ]] || exit\
+    \ 1\n\n  local prime_number=$(( $(( $intersect / $(( $interval1end % $interval2end\
+    \ )) )) ))\n\n  if [[ $prime_number -eq 0 ]]; then\n    echo NO\n  else\n    echo\
+    \ YES\n  fi", "        local start1 end1\n        local start2 end2\n\n      \
+    \  start1=$1\n        end1=$2\n        start2=$3\n        end2=$4\n\n        if\
+    \ [[ \"$start1\" == \"-\" ]]\n        then\n                start1=$(expr $(expr\
+    \ ${start1} + 1))\n        fi\n        if [[ \"$end1\" == \"-\" ]]\n        then\n\
+    \                end1=$(expr $(expr ${end1} + 1))\n        fi\n        if [[ \"\
+    $start2\" == \"-\" ]]\n        then\n                start2=$(expr $(expr ${start2}\
+    \ + 1))\n        fi\n        if [[ \"$end2\" == \"-\" ]]\n        then\n     \
+    \           end2=$(expr $(expr ${end2} + 1))\n        fi\n        \n        local\
+    \ length=$(expr $(expr ${end1} - ${start1}) + $(expr ${end2} - ${start2}))\n \
+    \       local prime=true\n\n        for i in $(seq 0 $((${length} - 1)))\n   \
+    \     do\n                if [[ ${start2} <= ${end1} && ${start2} <= ${end2} ]]\n\
+    \                then\n                        prime=false\n                 \
+    \       break\n                fi\n        done\n\n        if [[ $prime == true\
+    \ ]]\n        then\n                echo \"YES\"\n        else\n             \
+    \   echo \"NO\"\n        fi", "    local i j\n    local length=0\n    local prime_number=\"\
+    YES\"\n    for ((i=0; i<${#1}; i++))\n    do\n        prime_number=\"NO\"\n  \
+    \      for ((j=0; j<${#2}; j++))\n        do\n            [[ ${1}[$i]<=${2}[$j]\
+    \ ]] && length=$((length+1))\n        done\n        if [[ $length -eq 1 ]]; then\n\
+    \            prime_number=\"YES\"\n            break\n        fi\n    done\n \
+    \   echo \"$prime_number\"", "  local a b c d e f\n  a=$(echo $1 | tr ' ' ',')\n\
+    \  b=$(echo $2 | tr ' ' ',')\n  c=$((${#a} + ${#b}))\n  echo \"$c\"\n  c=$((${#a}\
+    \ + ${#b}))\n  e=$((${#a} - ${#b}))\n  f=$((${#b} - ${#a}))\n  if [ $c -gt $e\
+    \ ] ; then\n    if [ $c -gt $f ] ; then\n      echo \"YES\"\n    else\n      echo\
+    \ \"NO\"\n    fi\n  else\n    echo \"NO\"\n  fi", "  local a=$1\n  local b=$2\n\
+    \  local len\n  local count\n  local n\n  \n  len=${#a}\n  count=1\n  for (( n=0;\
+    \ n<len; n++ )); do\n    if [ ${a:$n:1} = $${b:$n:1} ]; then\n      count=`expr\
+    \ $count + 1`\n    fi\n  done\n\n  if [ \"${count}\" = \"${#a}\" ]; then\n   \
+    \ echo \"YES\"\n  else\n    echo \"NO\"\n  fi", "    local -a interval=$1 interval2=$2\n\
+    \    local start=$(( interval[1] < interval2[1] ? interval[1] : interval2[1] ))\n\
+    \    local end=$(( interval[1] < interval2[1] ? interval2[1] : interval[1] ))\n\
+    \    local length=$(echo $(($end - $start))|bc)\n    local result=$(echo $(( length\
+    \ - $(($end - $start))%$length ))|bc)\n    (( result < 0 )) && result=$(($length\
+    \ + $result))\n    [[ $result -eq 0 ]] && result=1 || result=0\n    echo $result",
+  "    declare -a arr1=(\"${1//,/ }\" )\n    declare -a arr2=(\"${2//,/ }\" )\n  \
+    \  length=$((${#arr1[*]}+${#arr2[*]}))\n    for ((i=0; i<${#arr1[*]}; i++)); do\n\
+    \        for ((j=0; j<${#arr2[*]}; j++)); do\n            if [[ ${arr1[i]} -ge\
+    \ ${arr2[j]} ]]; then\n                let \"min=${arr1[i]}<${arr2[j]} ? ${arr1[i]}\
+    \ : ${arr2[j]}\"\n                if [[ ${arr1[i]} -ge ${arr2[j]} ]]; then\n \
+    \                   let \"max=${arr1[i]}<${arr2[j]} ? ${arr2[j]} : ${arr1[i]}\"\
+    \n                    (( min = max ))\n                else\n                \
+    \    let \"max=${arr1[i]}<${arr2[j]} ? ${arr1[i]} : ${arr2[j]}\"\n           \
+    \         (( max = min ))\n                fi\n                let \"cnt=$((${min}+${max}-2))\"\
+    \n                if [[ \"${cnt}\" -eq 0 ]]; then\n                    echo \"\
+    NO\"\n                    return\n                fi\n                let \"cnt=$((${min}+${max}-${cnt}))\"\
+    \n                if [[ \"${cnt}\" -eq 0 ]]; then\n                    echo \"\
+    NO\"\n                    return\n                fi\n                if [[ ${cnt}\
+    \ -ne 1 ]]; then\n                    echo \"NO\"\n                    return\n\
+    \                fi\n                if [[ \"${arr1[$((i-1))]}\" == ${arr2[$((j-1))]}\
+    \ ]]; then\n                    echo \"NO\"\n                    return\n    \
+    \            fi\n                if [[ ${arr1[$((i-1))]} -le ${arr2[$((j-1))]}\
+    \ ]]; then\n                    let \"cnt=min\"\n                elif [[ ${arr2[$((j-1))]}\
+    \ -le ${arr1[$((i-1))]} ]]; then\n                    let \"cnt=max\"\n      \
+    \          fi\n                if [[ \"${arr1[$((i-1))]}\" == ${arr2[$((j-1))]}\
+    \ ]]; then\n                    echo \"NO\"\n                    return\n    \
+    \            fi\n                let \"cnt=$((${min}+${max}-${cnt}))\"\n     \
+    \           if [[ \"${cnt}\" -eq 0 ]]; then\n                    echo \"NO\"\n\
+    \                    return\n                fi\n                if [[ ${cnt}\
+    \ -ne 1 ]]; then\n                    echo \"NO\"\n                    return\n\
+    \                fi\n                if ", "    local L1 L2 intersect\n    intersect=\"\
+    NO\"\n    if [[ \"$#\" -ne 2 ]]; then\n        echo \"Usage: $(basename $0) L1\
+    \ L2\"\n        return 1\n    fi\n    L1=\"$1\"\n    L2=\"$2\"\n    for I in \"\
+    ${!L1}\"; do\n        if [[ \"${I}\" != \"$I\" ]]; then\n            intersect=\"\
+    YES\"\n        fi\n    done\n    echo \"$intersect\"", "    local first=$1\n \
+    \   local second=$2\n    local length=$(( (${#first}+1) * (${#second}+1) - ${#first}\
+    \ * ${#second} ))\n    echo \"${first[@]} ${second[@]} $length\"\n    for (( i=0;\
+    \ i<${#first[@]}; i++ )); do\n        for (( j=0; j<${#second[@]}; j++ )); do\n\
+    \            local first_element=${first[$i]}\n            local second_element=${second[$j]}\n\
+    \            if [[ $first_element -gt $second_element ]]; then\n             \
+    \   if [ $(($length - ((${#first_element}+1))*(${#second_element}+1)) == 1 ]];\
+    \ then\n                    echo \"$first_element $second_element 1\"\n      \
+    \          else\n                    echo \"$first_element $second_element 0\"\
+    \n                fi\n            fi\n        done\n    done", "    local -n a=$1\n\
+    \    local -n b=$2\n    local len\n    local i j\n    local iPrime jPrime isPrime\n\
+    \n    len=\"${#a[@]}\"\n    if [ \"${#b[@]}\" -ne \"${len}\" ]; then\n       \
+    \ echo \"Error: different length of parameter list\"\n        exit 1\n    fi\n\
+    \    \n    if [[ \"$len\" -eq 0 ]]; then\n        echo \"Error: empty parameter\
+    \ list\"\n        exit 1\n    fi\n\n    if [[ \"$len\" -gt \"2\" ]]; then\n  \
+    \      echo \"Error: invalid parameter list\"\n        exit 1\n    fi\n\n    iPrime=1\n\
+    \    jPrime=1\n    isPrime=1\n    for ((i = 0; i < ${len}; ++i)); do\n       \
+    \ ((iPrime++))\n        if [ \"${a[i]}\" -gt \"${b[i]}\" ]; then\n           \
+    \ ((jPrime++))\n            if [ \"${a[j]}\" -lt \"${b[j]}\" ]; then\n       \
+    \         isPrime=0\n                break\n            else\n               \
+    \ isPrime=1\n                break\n            fi\n        else\n           \
+    \ ((jPrime++))\n            if [ \"${b[j]}\" -lt \"${a[i]}\" ]; then\n       \
+    \         isPrime=0\n                break\n            else\n               \
+    \ isPrime=1\n                break\n            fi\n        fi\n    done\n   \
+    \ \n    if [ \"${isPrime}\" = \"1\" ]; then\n        echo \"YES\"\n    else\n\
+    \        echo \"NO\"\n    fi", "    local INTERVAL_STR_1 INTERVAL_STR_2\n    local\
+    \ interval_1 interval_2\n    INTERVAL_STR_1=${1// /}\n    INTERVAL_STR_2=${2//\
+    \ /}\n    interval_1=$(echo \"$INTERVAL_STR_1\" | sed 's/^[0-9]*\\([0-9]*\\)$/\\\
+    1/')\n    interval_2=$(echo \"$INTERVAL_STR_2\" | sed 's/^[0-9]*\\([0-9]*\\)$/\\\
+    1/')\n    if [ \"$interval_1\" -gt \"$interval_2\" ]; then\n        echo \"$interval_1\"\
+    \ > interval_1.txt\n        echo \"$interval_2\" >> interval_1.txt\n    else\n\
+    \        echo \"$interval_2\" >> interval_1.txt\n        echo \"$interval_1\"\
+    \ > interval_1.txt\n    fi\n    diff interval_1.txt interval_2.txt\n    if [ $?\
+    \ -eq 0 ]; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n    fi",
+  "    read -r -a arr1 <<< \"$1\"\n    read -r -a arr2 <<< \"$2\"\n    local start\
+    \ end len\n    local num\n    for start in \"${arr1[@]}\"; do\n        for end\
+    \ in \"${arr2[@]}\"; do\n            if [ $start -le $end ]; then\n          \
+    \      len=$(( end - start ))\n            else\n                len=$(( end -\
+    \ start + 1 ))\n            fi\n            num=$(echo \"$len\" | bc)\n      \
+    \      if [ $num -ge \"2\" ]; then\n                (( num-- ))\n            fi\n\
+    \            if [ $(( len % 2 )) -eq 0 ] && [ $num -eq 1 ]; then\n           \
+    \     echo \"YES\"\n                break\n            fi\n        done\n    done\n\
+    \    echo \"NO\"", "    local arr1=( ${1//,/ } )\n    local arr2=( ${2//,/ } )\n\
+    \    local len1=${#arr1[@]}\n    local len2=${#arr2[@]}\n    local i\n    local\
+    \ j\n    local len\n    \n    if [ $len1 -eq $len2 ]\n    then\n        if [ \"\
+    $len1\" -gt \"0\" ]\n        then\n            echo \"NO\"\n            return\n\
+    \        fi\n        for i in $(seq 0 $(( $len1 - 1 ))); do\n            for j\
+    \ in $(seq 0 $(( $len2 - 1 ))); do\n                if [ \"${arr1[$i]}\" -gt \"\
+    ${arr2[$j]}\" ]\n                then\n                    len=$(( len + 1 ))\n\
+    \                fi\n            done\n        done\n        if [ \"$len\" -eq\
+    \ \"$len1\" ]\n        then\n            echo \"YES\"\n            return\n  \
+    \      else\n            echo \"NO\"\n            return\n        fi\n    else\n\
+    \        echo \"NO\"\n        return\n    fi", "\tlocal start end start2 end2\n\
+    \twhile read -r start end; do\n\t\twhile read -r start2 end2; do\n\t\t\t(( $start\
+    \ <= $end2 ))\n\t\t\t[ \"$start2\" == \"$end2\" ] || continue\n\t\t\t[[ $(( $end\
+    \ - $start2 )) -eq 0 ]] || continue\n\t\t\t[ \"$start\" -gt $start2 ] && [ \"\
+    $start\" -le $end2 ] || continue\n\t\t\t[ \"$end\" -gt $start2 ] && [ \"$end\"\
+    \ -le $end2 ] || continue\n\t\t\techo \"YES\"\n\t\t\tbreak\n\t\tdone < <(echo\
+    \ \"$start\" \"$end\")\n\tdone < <(echo \"$1\" \"$2\")", "    local interval=$1\n\
+    \    local interval2=$2\n    local length\n    local result\n\n    result=\"NO\"\
+    \n\n    if [ -z \"$interval\" ]\n    then\n        echo \"The given interval is\
+    \ empty.\"\n    else\n        if [ -z \"$interval2\" ]\n        then\n       \
+    \     echo \"The given interval2 is empty.\"\n        else\n            length=$(expr\
+    \ ${interval[0]} - ${interval[1]})\n            length=$(expr ${interval2[0]}\
+    \ - ${interval2[1]})\n\n            if [ \"$length\" -eq \"0\" ]\n           \
+    \ then\n                echo \"The given intervals do not intersect.\"\n     \
+    \       else\n                if [ \"$length\" -ge \"$((length-1))\" ]\n     \
+    \           then\n                    echo \"The length of the intersection of\
+    \ these two intervals $interval & $interval2 is $length\"\n                  \
+    \  if [[ ${length} -eq $((length-1)) ]]\n                    then\n          \
+    \              echo \"The length of intersection is prime.\"\n               \
+    \         result=\"YES\"\n                    else\n                        echo\
+    \ \"The length of the intersection is not prime.\"\n                        result=\"\
+    NO\"\n                    fi\n                else\n                    echo \"\
+    The length of the intersection is not prime.\"\n                    result=\"\
+    NO\"\n                fi\n            fi\n        fi\n    fi\n    echo \"$result\"",
+  "    local start\n    local end\n    local length\n    local prime\n    local num\n\
+    \n    start=$1\n    end=$2\n\n    # check if the start is less than or equal to\
+    \ the end\n    if [ $start -le $end ]\n    then\n        # if the start and end\
+    \ are equal, they can't intersect\n        if [ $start -eq $end ]\n        then\n\
+    \            echo \"NO\"\n        else\n            length=$(subtract \"$start\"\
+    \ \"$end\")\n            prime=$(is_prime \"$length\")\n            if [ $prime\
+    \ -eq 1 ]\n            then\n                echo \"NO\"\n            else\n \
+    \               echo \"YES\"\n            fi\n        fi\n    else\n        echo\
+    \ \"NO\"\n    fi", "    local l1 l2 len\n    \n    l1=$(echo $1 | tr -s \" \"\
+    )\n    l2=$(echo $2 | tr -s \" \")\n    \n    len1=0\n    len2=0\n    \n    for\
+    \ i in $l1; do\n        len1=$(echo $i | wc -c)\n    done\n    \n    for i in\
+    \ $l2; do\n        len2=$(echo $i | wc -c)\n    done\n    \n    if [ $(expr $len1\
+    \ \\* $len2) -ne 0 ]; then \n        echo \"NO\"\n        return\n    fi\n   \
+    \ \n    for i in $l1; do\n        for j in $l2; do\n            if [[ $i -le $j\
+    \ ]]; then\n                if [[ $((i - j)) -eq $((j - i)) ]]; then\n       \
+    \             if [[ $((j - i)) -eq 1 ]]; then\n                        echo \"\
+    NO\"\n                        return\n                    fi\n               \
+    \ fi\n            fi\n        done\n    done\n    \n    echo \"YES\"", "  local\
+    \ inter count\n  inter=${1}\n  inter=${inter// / }\n  inter=${inter// /-}\n  inter=${inter//-/\
+    \ }\n  inter=${inter//,/ }\n  inter=${inter//,/-}\n  inter=${inter//-/ }\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n  inter=${inter//-/}\n\
+    \  inter=${inter//-", "    local -i int_1=$1 int_2=$2 len_intersection=0\n   \
+    \ local -a int_1 int_2 int_intersection int_length is_prime prime_is_prime=0\n\
+    \n    # [/1] check whether the given intervals are valid\n    [[ $int_1 == *(-)*\
+    \ || $int_1 == *\\(* ]] && \\\n        [[ $int_2 == *(-)* || $int_2 == *\\(* ]]\
+    \ && return\n\n    # [/2] check if int_1 contains any negative number\n    [[\
+    \ ${int_1} =~ (^|)-[0-9]+(|$) ]] || return\n\n    # [/3] check if int_2 contains\
+    \ any negative number\n    [[ ${int_2} =~ (^|)-[0-9]+(|$) ]] || return\n\n   \
+    \ # [/4] get the intersection length\n    int_length=$(echo \"${int_1} ${int_2}\"\
+    \ | tr -d -c '-' | wc -c)\n    int_length=$((int_length - 2))\n    len_intersection=$((int_length\
+    \ - 2))\n\n    # [/5] check if it's prime or not\n    is_prime=\n    for ((i =\
+    \ 3; i <= int_length; i+= 2)); do\n        int_intersection=$(echo \"${int_1}\
+    \ ${int_2}\" | tr \" \" \"\\n\")\n        int_intersection=${int_intersection//\
+    \ /}\n        is_prime=$(echo \"${int_intersection}\" | grep -c \"^$i$\")\n  \
+    \      if [[ \"$is_prime\" -eq \"1\" ]]; then\n            prime_is_prime=1\n\
+    \            break\n        fi\n    done\n\n    if [[ \"$prime_is_prime\" -eq\
+    \ \"1\" ]]; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n    fi",
+  "    local start end\n    local len\n    local prime\n    \n    local x\n    local\
+    \ y\n    local primes\n    \n    local i\n    local j\n    local length\n\n  \
+    \  x=\"${1}\"\n    y=\"${2}\"\n    primes=\"$(cut -d \" \" -f1 <<<\"$1\")\"\n\
+    \    length=\"${#primes}\"\n\n    length=\"${length}\"\n    \n    for i in \"\
+    ${!primes[@]}\"; do\n        j=\"${i}\"\n        if [[ $(( $(expr \"${primes[$i]}\"\
+    \ + 1 )) == ${primes[$j]} )) -eq 0 ]]; then\n            ((j++))\n           \
+    \ prime=\"${primes[$i]}\"\n            break\n        fi\n    done\n\n    if [\
+    \ \"$prime\" -ne \"2\" ]; then\n        echo \"NO\"\n        exit 0\n    fi\n\n\
+    \    if [ \"$x\" -gt \"$y\" ]; then\n        for i in \"${!primes[@]}\"; do\n\
+    \            j=\"${i}\"\n            if [[ $(( $(expr \"${primes[$i]}\" + 1 ))\
+    \ == ${primes[$j]} )) -eq 0 ]]; then\n                ((j++))\n              \
+    \  prime=\"${primes[$i]}\"\n                break\n            fi\n        done\n\
+    \        \n        ((start=$start+1))\n    else\n        ((end=$end+1))\n    fi\n\
+    \    \n    if [ -z \"$x\" ] || [ -z \"$y\" ]; then\n        echo \"NO\"\n    \
+    \    exit 0\n    fi\n    \n    length=\"$((length*2))\"\n    length=\"$((length+1))\"\
+    \n    \n    for i in $(seq 1 $length); do\n        x=\"$(($(expr \"$x\" + 1 )))\"\
+    \n        y=\"$(($(expr \"$y\" + 1 )))\"\n    done\n\n    if [ \"$x\" -ne \"$y\"\
+    \ ]; then\n        echo \"NO\"\n        exit 0\n    fi\n\n    length=\"$((length*2))\"\
+    \n    length=\"$((length+1))\"\n    \n    for i in $(seq 1 $length); do\n    \
+    \    x=\"$(($(expr \"$x\" + 1 )))\"\n        y=\"$(($(expr \"$y\" + 1 )))\"\n\
+    \    done\n\n    if [ \"$x\" -eq \"$y\" ]; then\n        echo \"YES\"\n      \
+    \  exit 0\n    fi\n\n    echo \"NO\"\n    exit 0", "    local interval1 interval2\
+    \ len1 len2\n    interval1=$1\n    interval2=$2\n    len1=\"${#interval1[@]}\"\
+    \n    len2=\"${#interval2[@]}\"\n    if [[ \"${len1}\" -eq 0 ]]; then\n      \
+    \  return 0\n    elif [[ \"${len2}\" -eq 0 ]]; then\n        return 0\n    elif\
+    \ [[ \"${len1}\" -gt \"${len2}\" ]]; then\n        return 0\n    elif [[ \"${interval1}[0]\"\
+    \ -gt \"${interval2}[0]\" ]]; then\n        return 0\n    elif [[ \"${interval1}[1]\"\
+    \ -gt \"${interval2}[1]\" ]]; then\n        return 0\n    else\n        for ((i=0;i<${len1};i++));\
+    \ do\n            if [[ ${interval1[i]} -gt ${interval2[i]} ]]; then\n       \
+    \         return 0\n            fi\n        done\n        for ((i=0;i<${len1};i++));\
+    \ do\n            if [[ ${interval1[i]} -lt ${interval2[i]} ]]; then\n       \
+    \         return 0\n            fi\n        done\n        for ((i=0;i<${len2};i++));\
+    \ do\n            if [[ ${interval1[i]} -gt ${interval2[i]} ]]; then\n       \
+    \         return 0\n            fi\n        done\n        for ((i=0;i<${len2};i++));\
+    \ do\n            if [[ ${interval1[i]} -lt ${interval2[i]} ]]; then\n       \
+    \         return 0\n            fi\n        done\n        echo \"YES\"\n    fi",
+  "    set -- $1 $2\n    local len1=$((${#1} - 1))\n    local len2=$((${#2} - 1))\n\
+    \    local i j\n    while (( i < len1 && j < len2 )); do\n        [[ \"${i:$((j+1))}\"\
+    \ -gt \"${j+1}\" ]]\n        [[ \"${j+1:$((i+1))}\" -gt \"${i+1}\" ]]\n      \
+    \  if [[ \"${i:$((j+1))}\" -le \"${j+1}\" ]]\n        then\n            i=$(expr\
+    \ $i + 1)\n        else\n            [[ \"${j+1:$((i+1))}\" -le \"${i+1}\" ]]\n\
+    \            j=$(expr $j + 1)\n        fi\n    done\n    echo ${i} ${j}\n    [[\
+    \ ${i} -gt ${j} ]]", "  local start=$1\n  local end=$2\n  local len=$((end - start\
+    \ + 1))\n  local bool=false\n  local result=$((len%2))\n  local flag\n  local\
+    \ number\n  \n  for flag in $(echo $(($end - $start + 1)) | tr ' ' '\\n'); do\n\
+    \    number=$(echo $flag | awk '{print $1}')\n    if [ \"$result\" == \"0\" ];\
+    \ then\n      if [[ $number -eq $((number + 1)) ]]; then\n        bool=true\n\
+    \      else\n        break\n      fi\n    else\n      if [[ $((number + 1)) ==\
+    \ $number ]]; then\n        bool=true\n      else\n        break\n      fi\n \
+    \   fi\n  done\n  \n  if [ \"$bool\" == \"true\" ]; then\n    echo \"YES\"\n \
+    \ else\n    echo \"NO\"\n  fi", "    local interval_1 interval_2\n    interval_1=$1\n\
+    \    interval_2=$2\n    local len_intersection_1 len_intersection_2\n    len_intersection_1=$(expr\
+    \ $interval_1 \\* $interval_2)\n    len_intersection_2=$(expr $interval_2 \\*\
+    \ $interval_1)\n    if [ $len_intersection_1 -eq 0 ]\n    then\n        return\
+    \ $len_intersection_2\n    elif [ $len_intersection_2 -eq 0 ]\n    then\n    \
+    \    return $len_intersection_1\n    else\n        if [ $(expr $len_intersection_1\
+    \ \\> $len_intersection_2) == \"TRUE\" ]\n        then\n            echo \"YES\"\
+    \n        else\n            echo \"NO\"\n        fi\n    fi", "    local interval=\"\
+    $1\"; shift; local interval=\"$1\"; shift;\n    local first=${interval%%[()]};\
+    \ local last=${interval##*[()]};\n    local start=$(expr $first - $last);\n  \
+    \  local end=$(expr $first + $last - 1);\n    local length=$(expr $end - $start\
+    \ + 1);\n    if [ $length -gt 1 ]; then\n        if [ $length -eq $((length/2))\
+    \ ]; then\n            if [ $((start%2)) -eq 0 ]; then\n                if [ $end\
+    \ -gt $((start+1)) ]; then\n                    echo $(($end-start))\n       \
+    \         else\n                    echo \"YES\"\n                fi\n       \
+    \     else\n                echo \"NO\"\n            fi\n        else\n      \
+    \      echo \"NO\"\n        fi\n    else\n        echo \"NO\"\n    fi", "\tread\
+    \ -r -p \"The two intervals are $1 and $2. \"\n\tread -r -p \"Enter the starts\
+    \ of these two intervals. \"\n\tread -r -p \"Enter the ends of these two intervals.\
+    \ \"\n\tread -r -p \"Enter the length of these two intervals. \"\n\n\tlet interval_length=$3\n\
+    \n\tif [ \"$interval_length\" -le \"$(( $end1 - $start1 ))\" ] || [ \"$interval_length\"\
+    \ -le \"$(( $end2 - $start2 ))\" ]\n\tthen\n\t\tlet interval_length_prime=1\n\t\
+    else\n\t\tlet interval_length_prime=0\n\tfi\n\n\tlet interval_length_prime=$((\
+    \ $interval_length_prime * $interval_length ))\n\n\tlet start1_prime=$(( $start1\
+    \ + $interval_length_prime ))\n\tlet end1_prime=$(( $end1 - $interval_length_prime\
+    \ ))\n\tlet start2_prime=$(( $start2 + $interval_length_prime ))\n\tlet end2_prime=$((\
+    \ $end2 - $interval_length_prime ))\n\n\tlet start1_prime=$(( $start1 + $interval_length_prime\
+    \ ))\n\tlet end1_prime=$(( $end1 - $interval_length_prime ))\n\tlet start2_prime=$((\
+    \ $start2 + $interval_length_prime ))\n\tlet end2_prime=$(( $end2 - $interval_length_prime\
+    \ ))\n\n\tif [ $start1_prime -le $start2_prime ] && [ $start2_prime -le $end1_prime\
+    \ ] && [ $end1_prime -le $end2_prime ]\n\tthen\n\t\tif [ $start1_prime -eq $start2_prime\
+    \ -a $end1_prime -eq $end2_prime ]\n\t\tthen\n\t\t\techo \"YES\"\n\t\telse\n\t\
+    \t\techo \"NO\"\n\t\tfi\n\telse\n\t\techo \"NO\"\n\tfi", "    local i1=$1; shift\
+    \ # first argument\n    local i2=$2; shift # second argument\n    local s1=${!i1};\
+    \ shift # first argument\n    local s2=${!i2}; shift # second argument\n    local\
+    \ i1s i1e i2s i2e i1n i2n sin se min max diff p i1\n    # read each two items\
+    \ in the two lists\n    read -r i1s i1e <<< \"$i1\"\n    read -r i2s i2e <<< \"\
+    $i2\"\n    # convert each item in the two lists to an integer number\n    i1s=$(echo\
+    \ \"$i1s\" | bc)\n    i1e=$(echo \"$i1e\" | bc)\n    i2s=$(echo \"$i2s\" | bc)\n\
+    \    i2e=$(echo \"$i2e\" | bc)\n    # compare each number in the two lists and\
+    \ output the smallest one that \n    # is a common factor\n    min=$(expr \"$i1s\"\
+    \ \"$i2s\")\n    max=$(expr \"$i1e\" \"$i2e\")\n    while [ \"$min\" -le \"$max\"\
+    \ ]; do\n        i=$(expr \"$min\" \"+\" 1)\n        diff $min $max > p\n    \
+    \    if [ $p -ge 1 ]; then\n            min=$i\n        fi\n        i=$(expr \"\
+    $max\" \"+\" 1)\n        diff $min $max > p\n        if [ $p -ge 1 ]; then\n \
+    \           diff=$i\n        fi\n    done\n    # if the smallest number is a common\
+    \ factor of both numbers, then output\n    # the smallest one that is a common\
+    \ factor\n    i1n=$(expr \"$min\" \"+\" 1)\n    i2n=$(expr \"$max\" \"+\" 1)\n\
+    \    diff $i1n $i2n\n    [[ \"$p\" = 2 ]] && return \"YES\" || return \"NO\"",
+  "    local interval1=( ${@:2} ) interval2=( ${@:3} )\n    local start1=${interval1[1]}\n\
+    \    local end1=${interval1[2]}\n    local start2=${interval2[1]}\n    local end2=${interval2[2]}\n\
+    \n    if [ $start1 -le $end2 ] && [ $start2 -le $end1 ]; then\n        local length1=(\
+    \ $(expr $end1 - $start1 + 1 ) ) \n        local length2=( $(expr $end2 - $start2\
+    \ + 1 ) )\n        if [ $length1 -eq $length2 ]; then\n            if [ $length1\
+    \ -eq 1 ]; then\n                return 0\n            else\n                return\
+    \ 1\n            fi\n        else\n            return 0\n        fi\n    else\n\
+    \        return 0\n    fi", "    interval1=$1\n    interval2=$2\n    interval1_interval2=$(echo\
+    \ $interval1 | tr ' ' ',')\n    interval2_interval1=$(echo $interval2 | tr ' '\
+    \ ',')\n    interval1_interval1_interval2_interval2_interval2_interval2_array=(${interval1_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_array})\n\
+    \    interval1_interval1_length=$(echo $interval1 | tr ' ' ',')\n    interval2_interval2_length=$(echo\
+    \ $interval2 | tr ' ' ',')\n    interval1_interval1_length=$(echo $interval1_interval1_length\
+    \ | tr ' ' ',')\n    interval2_interval2_length=$(echo $interval2_interval2_length\
+    \ | tr ' ' ',')\n    interval1_interval1_length_interval2_interval2_length=$(echo\
+    \ $((${interval1_interval1_length}*${interval2_interval2_length})) | tr ' ' ',')\n\
+    \    prime_check=\"1\"\n    for (( i=${interval1_interval1_length}; i<= ${interval1_interval1_length}+${interval2_interval2_length};\
+    \ i++ ));\n    do\n        echo $((${interval1_interval1_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_array[@][i]}))\n\
+    \        if [ $(echo $((${interval1_interval1_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_interval2_array[@][i]})))\
+    \ -eq 0 ]; then\n            prime_check=\"0\"\n            break\n        fi\n\
+    \    done\n    if [ \"$prime_check\" == \"1\" ]; then\n        echo \"NO\"\n \
+    \   else\n        echo \"YES\"\n    fi", "    [[ $# -ne 2 ]] && echo \"Wrong usage.\"\
+    \ && exit 1\n    local -i i1 i2 len\n    [[ $1 == \"$1\" ]] || echo \"Wrong input.\"\
+    \ && exit 1\n    [[ ${#1} != ${#2} ]] && echo \"Wrong input.\" && exit 1\n\n \
+    \   # Intersection: (i1,i2) \\in (i1,i2) -> (i1,i2)\n    i1=1\n    i2=$(( ${#1}\
+    \ + 1 ))\n    while [[ $i2 < ${#2} ]]; do\n        if [[ \"$1\" == \"$2\" ]];\
+    \ then\n            echo \"NO\"\n            return\n        fi\n        [[ $i1\
+    \ -le $i2 ]] && [[ $i1 < $i2 ]] || [[ $i1 > $i2 ]] || echo \"Wrong input.\" &&\
+    \ exit 1\n        len=$(( ${#1} + 1 ))\n        if [[ $len -gt $(( ${#1} + ${#2}\
+    \ ))  ]]; then\n            echo \"NO\"\n            return\n        fi\n    \
+    \    [[ \"$1\" = \" \" ]] && echo \"Wrong input.\" && exit 1\n        [[ \"$2\"\
+    \ = \" \" ]] && echo \"Wrong input.\" && exit 1\n        [[ -z \"$3\" ]] && echo\
+    \ \"Wrong input.\" && exit 1\n        if [[ $(( ${#1} + ${#2} )) -eq $len ]];\
+    \ then\n            echo \"NO\"\n            return\n        fi\n        (( i1\
+    \ += 1 ))\n        (( i2 += 1 ))\n    done\n\n    # Find out whether the length\
+    \ of intersection is prime.\n    # [[ $len -lt $(( ${#1} + ${#2} )) ]] && echo\
+    \ \"NO\" || echo \"YES\"\n    [[ \"$len\" -lt \"$(( ${#1} + ${#2} ))\" ]] && echo\
+    \ \"NO\" || echo \"YES\"", "\tlocal interval1=($(echo \"$1\" | tr '\\n' ' '))\n\
+    \tlocal interval2=($(echo \"$2\" | tr '\\n' ' '))\n\tlocal len1\n\tlocal len2\n\
+    \tlocal start\n\tlocal end\n\tlen1=$((${#interval1[*]} - 1))\n\tlen2=$((${#interval2[*]}\
+    \ - 1))\n\tif [ ${len1} -eq 0 -o ${len2} -eq 0 ]; then\n\t\treturn \"NO\"\n\t\
+    fi\n\tstart=0\n\tend=$((len1 >= len2 ? len2 : len1))\n\twhile [ $start -le $end\
+    \ ]; do\n\t\tif [ ${interval1[$start]} == ${interval2[$start]} ]; then\n\t\t\t\
+    ((start++))\n\t\telif [ ${interval1[$start]} -le ${interval2[$end]} ]; then\n\t\
+    \t\tend=$((end - 1))\n\t\telse\n\t\t\techo \"Interval $interval1 & $interval2\
+    \ don't intersect\"\n\t\t\texit 1\n\t\tfi\n\tdone\n\tif [ $len1 -gt $len2 ]; then\n\
+    \t\treturn \"YES\"\n\telse\n\t\treturn \"NO\"\n\tfi", "    local start end\n \
+    \   local i j x y z\n    local len\n    declare -i len\n    local prime\n    prime=\"\
+    YES\"\n    local -i a b c d\n    a=$1\n    b=$2\n    while [ \"$a\" != \"\" ];\
+    \ do\n        start=`expr $a \\- 1`\n        end=$a\n        echo \"$start,$end\"\
+    \n        echo $start > $x\n        echo $end > $y\n        echo $start > $d\n\
+    \        echo $end > $z\n        (( len-=`expr $x - $y` ))\n        (( len-=`expr\
+    \ $d - $z` ))\n        echo $len\n        prime=\"NO\"\n        for (( i=1; i<=$len;\
+    \ i++ )); do\n            if [ $(($start%$i)) -eq 0 ] && [ $(($end%$i)) -eq 0\
+    \ ]; then\n                prime=\"YES\"\n                break\n            fi\n\
+    \        done\n        a=$(( $a +1 ))\n        b=$(( $b +1 ))\n    done\n    echo\
+    \ $prime", "\tlocal start1=$1\n\tlocal end1=$2\n\tlocal start2=$3\n\tlocal end2=$4\n\
+    \tlocal length\n\n\t# For checking whether the length is not prime\n\tlocal prime=true\n\
+    \n\t(( length=$(((end1<=start2)?(end1-start1):(end2-start2))) )\n\n\tfor (( i=length;\
+    \ i<0; i++ )); do\n\t\t(( start1 > start2 )) && { start2=$start1; start1=$end1;\
+    \ }\n\t\t(( end1 < end2 )) && { end2=$end1; end1=$start1; }\n\t\t(( length=$(((end1<=start2)?(end1-start1):(end2-start2)))\
+    \ ))\n\tdone\n\n\t(( prime == false )) && echo \"NO\"", "    IFS=' ' read -r -a\
+    \ a <<< \"$1\"\n    IFS=' ' read -r -a b <<< \"$2\"\n    len=${#a[@]}\n    i=0\n\
+    \    for k in \"${!a[@]}\"\n    do\n        j=$((i + 1))\n        if [[ $k !=\
+    \ $j ]]\n        then\n            a[$i]=$k\n        else\n            a[$i]=$j\n\
+    \        fi\n        i=$((i + 1))\n    done\n    len=$((len + 1))\n    len=$((len\
+    \ % 2))\n    echo \"$len\"\n    if [ $len -eq 0 ]\n    then\n        echo \"$b\"\
+    \n        echo \"$a\"\n    else\n        echo \"NO\"\n    fi", "    # local start=$1;\
+    \ shift\n    # local end=$1; shift\n    local intervals \n    intervals=$( echo\
+    \ \"$1\"| tr ' ' '\\n' )\n    intervals=$( echo \"$intervals\"| awk '{print $1}'|\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| awk '{print $2}')\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| uniq | sort -n)\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| sort -n)\n    intervals=$( echo\
+    \ \"$intervals\"| uniq | sort -n)\n    intervals=$( echo \"$intervals\"| sort\
+    \ -n)\n    intervals=$( echo \"$intervals\"| uniq | sort -n)\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| sort -n)\n    intervals=$( echo\
+    \ \"$intervals\"| uniq | sort -n)\n    intervals=$( echo \"$intervals\"| sort\
+    \ -n)\n    intervals=$( echo \"$intervals\"| uniq | sort -n)\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| sort -n)\n    intervals=$( echo\
+    \ \"$intervals\"| uniq | sort -n)\n    intervals=$( echo \"$intervals\"| sort\
+    \ -n)\n    intervals=$( echo \"$intervals\"| uniq | sort -n)\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$( echo \"$intervals\"| sort -n)\n    intervals=$( echo\
+    \ \"$intervals\"| uniq | sort -n)\n    intervals=$( echo \"$intervals\"| sort\
+    \ -n)\n    intervals=$( echo \"$intervals\"| uniq | sort -n)\n    intervals=$(\
+    \ echo \"$intervals\"| sort -n)\n    intervals=$( echo \"$intervals\"| uniq |\
+    \ sort -n)\n    intervals=$", "    local intervals=( \"$@\" )\n    local start=\"\
+    ${intervals[0]}\"\n    local end=\"${intervals[1]}\"\n    local len1=\"${#start}\"\
+    \n    local len2=\"${#end}\"\n    local len=\"${len1}${len2}\"\n    for (( i=0;\
+    \ i<${#intervals[@]}; i++ )); do\n        local start2=\"${intervals[$((i+1))]}\"\
+    \n        local end2=\"${intervals[$((i+2))]}\"\n        local len2=\"${#start2}\"\
+    \n        local len2=\"${#end2}\"\n        if (( len < len2 )); then\n       \
+    \     len=\"${len2}\"\n            intervals=( \"${intervals[@]:0:i}\" \"${intervals[@]:i+1}\"\
+    \ )\n        fi\n    done\n    local prime=\"YES\"\n    if [[ ${len} -eq 1 ]];\
+    \ then\n        prime=\"NO\"\n    fi\n    local start=\"${intervals[0]}\"\n  \
+    \  local end=\"${intervals[1]}\"\n    local len=\"${#start}\"\n    local len=\"\
+    ${#end}\"\n    local prime=\"NO\"\n    for (( i=0; i<${#intervals[@]}; i++ ));\
+    \ do\n        if [[ ${intervals[$((i+1))]} -ge ${intervals[$i]} ]]; then\n   \
+    \         prime=\"YES\"\n        fi\n    done\n    echo \"$prime\"", "    local\
+    \ first_interval=$1\n    local second_interval=$2\n    local length=$(( ${#first_interval[@]}\
+    \ * ${#second_interval[@]} ))\n    local first_interval_length=$(( ${#first_interval[@]}\
+    \ - 1 ))\n    local second_interval_length=$(( ${#second_interval[@]} - 1 ))\n\
+    \    local first_start_index=$(( $first_interval_length + 1 ))\n    local second_start_index=$((\
+    \ $second_interval_length + 1 ))\n    while [ $first_start_index -lt $first_interval_length\
+    \ ] || [ $second_start_index -lt $second_interval_length ]\n    do\n        if\
+    \ [ $first_interval[$first_start_index] -le $second_interval[$second_start_index]\
+    \ ]\n        then\n            first_interval[$first_start_index]=${first_interval[$first_start_index]}\
+    \ - 1;\n            first_start_index=$(( $first_start_index + 1 ))\n        fi\n\
+    \        if [ $second_interval[$second_start_index] -le $first_interval[$first_start_index]\
+    \ ]\n        then\n            second_interval[$second_start_index]=${second_interval[$second_start_index]}\
+    \ - 1;\n            second_start_index=$(( $second_start_index + 1 ))\n      \
+    \  fi\n    done\n    local first_end_index=$(( $first_interval_length - 1 ))\n\
+    \    local second_end_index=$(( $second_interval_length - 1 ))\n    while [ $first_end_index\
+    \ -lt $first_interval_length ] || [ $second_end_index -lt $second_interval_length\
+    \ ]\n    do\n        if [ $first_interval[$first_end_index] -le $second_interval[$second_end_index]\
+    \ ]\n        then\n            first_interval[$first_end_index]=${first_interval[$first_end_index]}\
+    \ + 1;\n            first_end_index=$(( $first_end_index - 1 ))\n        fi\n\
+    \        if [ $second_interval[$second_end_index] -le $first_interval[$first_end_index]\
+    \ ]\n        then\n            second_interval[$second_end_index]=${second_interval[$second_end_index]}\
+    \ + 1;\n            second_end_index=$(( $second_end_index - 1 ))\n        fi\n\
+    \    done\n    if [ $length -lt ${#first_interval[@]} ]\n    then\n        return\
+    \ \"NO\";\n    else\n        local first_interval_prime_numbers=$( ( for (( i\
+    \ = 0; i < ${#first_interval[@]} - ${#first_interval[@]} % 2; i++ )) ; do echo\
+    \ \"YES\" ; done ))\n        local second_interval_prime_numbers=$( ( for ((",
+  "\tlocal a=\"$1\"\n\tlocal b=\"$2\"\n\tlocal length=\"\"\n\tlocal prime=\"\"\n\n\
+    \techo \"$length\"\n\techo \"$prime\"\n\techo \"$length\"\n\techo \"$prime\"",
+  "    local -a a\n    local i j\n    local ret=\"NO\"\n    a=( $1 )\n    b=( $2 )\n\
+    \n    for i in \"${!a[@]}\"; do\n        j=\"${i}\"\n        if [[ \"${a[j]}\"\
+    \ -lt \"${b[i]}\" ]]; then\n            ret=\"YES\"\n            break\n     \
+    \   fi\n    done\n    echo $ret", "    declare -a intervalA\n    declare -a intervalB\n\
+    \    intervalA=(\"$@\")\n    intervalB=(\"$@\")\n\n    # check if intervals intersect\n\
+    \    intersect_check=`expr \"${intervalA[1]} < ${intervalB[0]}\" || expr \"${intervalB[1]}\
+    \ < ${intervalA[0]}\"`\n    if [ $intersect_check == \"True\" ] ; then\n     \
+    \   return 0;\n    else\n        # find the length of the intersection\n     \
+    \   intersectLength=`expr \"$((${intervalB[1]} - ${intervalA[0]}))\" \"$((${intervalB[0]}\
+    \ - ${intervalA[1]}))\"`\n        if [ $intersectLength == 1 ] ; then\n      \
+    \      return 0;\n        else\n            return 1;\n        fi\n    fi", " \
+    \   local start=\"$1\"\n    local end=\"$2\"\n    \n    # get the lengths of both\
+    \ intervals\n    local len1=\"$((end - start + 1))\"\n    local len2=\"$((end\
+    \ - start + 1))\"\n    \n    # calculate the length of intersection\n    local\
+    \ len_intersection=\"$((len1 + len2 - 2 * $((len1 ^ len2))))\"\n    \n    # if\
+    \ the intersection is not a prime number\n    if [ \"$len_intersection\" -eq \"\
+    $((len_intersection >> 1))\" ]\n    then\n        return \"NO\"\n    fi\n    \n\
+    \    # if the intersection is prime\n    if [ \"$len_intersection\" -eq \"$len_intersection\"\
+    \ ]\n    then\n        return \"YES\"\n    fi", "    local starts=$1\n    local\
+    \ ends=$2\n    \n    local starts_arr=()\n    local ends_arr=()\n    local length_intersection=0\n\
+    \n    for s in $starts; do\n        (( length_intersection+=(ends_arr[$((ends_arr\
+    \ -1) + $((ends_arr -1) + 1))]-starts_arr[$((ends_arr -1) + $((ends_arr -1) +\
+    \ 1))]) ))\n    done\n\n    if (( length_intersection == 1 )); then\n        if\
+    \ (( length_intersection % 2 == 0 )); then\n            echo \"NO\"\n        else\n\
+    \            echo \"YES\"\n        fi\n    else\n        echo \"NO\"\n    fi",
+  "    local interval1 interval2 intersection_length i\n    IFS=' ' read -r -a interval1\
+    \ <<< \"$1\"\n    IFS=' ' read -r -a interval2 <<< \"$2\"\n    local len_interval1=\"\
+    ${#interval1[@]}\"\n    local len_interval2=\"${#interval2[@]}\"\n    for i in\
+    \ $(seq 0 $((len_interval1 - 1))); do\n        [[ \"${interval1[$i]}\" -gt \"\
+    ${interval2[$((i + 1))]}\" ]] &&\n            (( intersection_length += 1 ))\n\
+    \    done\n    for i in $(seq 0 $((len_interval2 - 1))); do\n        [[ \"${interval2[$i]}\"\
+    \ -gt \"${interval1[$((i + 1))]}\" ]] &&\n            (( intersection_length +=\
+    \ 1 ))\n    done\n    if [[ $len_interval1 -eq $len_interval2 ]]; then\n     \
+    \   if (( $len_interval1 % 2 == 0 )) && [ \"$len_interval1\" -eq \"$len_interval2\"\
+    \ ]; then\n            local is_prime=false\n            local prime_number=1\n\
+    \            for i in $(seq 0 $((len_interval1 - 1))); do\n                if\
+    \ [[ $((${interval1[$i]} - ${interval2[$((i + 1))]})) = 2 ]]; then\n         \
+    \           is_prime=true\n                    break\n                fi\n   \
+    \         done\n            if [[ \"$is_prime\" = true ]]; then\n            \
+    \    prime_number=$((prime_number + 1))\n            fi\n            for i in\
+    \ $(seq 0 $((len_interval2 - 1))); do\n                if [[ $((${interval2[$i]}\
+    \ - ${interval1[$((i + 1))]})) = 2 ]]; then\n                    is_prime=true\n\
+    \                    break\n                fi\n            done\n           \
+    \ if [[ \"$is_prime\" = true ]]; then\n                prime_number=$((prime_number\
+    \ + 1))\n            fi\n            if [[ \"$prime_number\" = \"$len_interval1\"\
+    \ ]]; then\n                echo \"YES\"\n            else\n                echo\
+    \ \"NO\"\n            fi\n        else\n            echo \"NO\"\n        fi\n\
+    \    else\n        echo \"NO\"\n    fi", "    local a=\"$1\"\n    local b=\"$2\"\
+    \n    local lenA=\"${#a}\"\n    local lenB=\"${#b}\"\n    local inter=\"NO 0\"\
+    \n    local test\n    for ((i=0;i<=lenA-1;i++))\n    do\n        test=\"${a[i]:${#a[i]}=}\"\
+    \n        if [[ \"$test\" == \"$test\" ]]; then\n            inter=\"${inter}\"\
+    \n        fi\n    done\n    for ((i=0;i<=lenB-1;i++))\n    do\n        test=\"\
+    ${b[i]:${#b[i]}=}\"\n        if [[ \"$test\" == \"$test\" ]]; then\n         \
+    \   inter=\"${inter}\"\n        fi\n    done\n    [[ \"$inter\" == \"NO 0\" ]]\
+    \ && return \"NO\" || return \"YES\"", "    interval1=$1\n    interval2=$2\n \
+    \   arr=( `echo $interval1 | tr ' ' '\\n'` )\n    arr1=( `echo $interval2 | tr\
+    \ ' ' '\\n'` )\n    length=`echo $(( (${#arr[@]}) - ${#arr1[@]} )) | bc`\n   \
+    \ intersect=0\n    length=`echo $length | bc`\n    for i in `seq 0 $(($length-1))`;\
+    \ do\n        for j in `seq 0 $(($length-1))`; do\n            if [ ${arr[$i]}\
+    \ -eq ${arr1[$j]} ]; then\n                intersect=$(($intersect+1))\n     \
+    \           break\n            fi\n        done\n    done\n    if [ $intersect\
+    \ -eq $length ]; then\n        echo \"YES\"\n    else\n        echo \"NO\"\n \
+    \   fi", "  local interval1=\"${1}\"\n  local interval2=\"${2}\"\n  local length=\"\
+    ${length}\"\n  local isPrime=\"${isPrime}\"\n  local interval1Interval1=\"${interval1Interval1}\"\
+    \n  local interval1Interval2=\"${interval1Interval2}\"\n  local interval2Interval1=\"\
+    ${interval2Interval1}\"\n  local interval2Interval2=\"${interval2Interval2}\"\n\
+    \  local lengthInterval1=\"${lengthInterval1}\"\n  local lengthInterval2=\"${lengthInterval2}\"\
+    \n  local interval1Interval1Start=\"${interval1Interval1Start}\"\n  local interval1Interval1End=\"\
+    ${interval1Interval1End}\"\n  local interval1Interval2Start=\"${interval1Interval2Start}\"\
+    \n  local interval1Interval2End=\"${interval1Interval2End}\"\n  local interval2Interval1Start=\"\
+    ${interval2Interval1Start}\"\n  local interval2Interval1End=\"${interval2Interval1End}\"\
+    \n  local interval2Interval2Start=\"${interval2Interval2Start}\"\n  local interval2Interval2End=\"\
+    ${interval2Interval2End}\"\n\n  local maxEnd=\"${maxEnd}\"\n  local maxStart=\"\
+    ${maxStart}\"\n  local interval1Start=\"${interval1Start}\"\n  local interval1End=\"\
+    ${interval1End}\"\n  local interval2Start=\"${interval2Start}\"\n  local interval2End=\"\
+    ${interval2End}\"\n  local length=\"${length}\"\n\n  while IFS= read -r line;\
+    \ do\n    IFS=' ' read -r interval1Interval1Start interval1Interval1End interval1Interval2Start\
+    \ interval1Interval2End interval2Interval1Start interval2Interval1End interval2Interval2Start\
+    \ interval2Interval2End lengthInterval1 lengthInterval2 <<<\"${line}\"\n    lengthInterval1=\"\
+    ${lengthInterval1}\"\n    lengthInterval2=\"${lengthInterval2}\"\n    length=\"\
+    ${length}\"\n    if [[ \"${interval1Interval1End}\" -gt \"${interval2Interval1Start}\"\
+    \ ]]; then\n      interval1Interval1Start=\"${interval1Interval1End}\"\n    fi\n\
+    \    if [[ \"${interval2Interval1End}\" -gt \"${interval1Interval1Start}\" ]];\
+    \ then\n      interval2Interval1Start=\"${interval2Interval1End}\"\n    fi\n \
+    \   if [[ \"${interval2Interval1End}\" -gt \"${interval1Interval2Start}\" ]];\
+    \ then\n      interval2Interval1End=\"${interval2Interval1End}\"\n    fi\n   \
+    \ if [[ \"${interval1Interval2End}\" -g", "    local interval_1=$1\n    local\
+    \ interval_2=$2\n    # Get the start point of interval_1\n    local start_point=$(echo\
+    \ $interval_1 |  awk '{print $1}')\n    # Get the end point of interval_1\n  \
+    \  local end_point=$(echo $interval_1 |  awk '{print $2}')\n    # Get the start\
+    \ point of interval_2\n    local start_point_2=$(echo $interval_2 |  awk '{print\
+    \ $1}')\n    # Get the end point of interval_2\n    local end_point_2=$(echo $interval_2\
+    \ |  awk '{print $2}')\n    # Check the length of the intersection\n    local\
+    \ intersection_length=$(expr $(expr $end_point - $start_point) \\\n    $(expr\
+    \ $end_point_2 - $start_point_2))\n    # Check if the length of intersection is\
+    \ prime\n    local is_prime_number=$(( $intersection_length == 2 ))\n    # Return\
+    \ either \"YES\" or \"NO\"\n    if [ \"$is_prime_number\" -eq 1 ]; then \n   \
+    \     echo \"YES\"\n    else\n        echo \"NO\"\n    fi", "    local intersec_len=\"\
+    $(echo \"${1}\" | cut -d'(' -f2 | cut -d' ' -f1 | cut -d'-' -f2 | sed 's/^0/0/'\
+    \ | sed 's/^0/1/g' | sed 's/^1/1/g')\"\n    local int1=\"$(echo \"${2}\" | cut\
+    \ -d'(' -f2 | cut -d' ' -f1 | cut -d'-' -f2 | sed 's/^0/0/' | sed 's/^0/1/g' |\
+    \ sed 's/^1/1/g')\"\n    if [ ${intersec_len} -ge ${int1} ]\n    then\n      \
+    \  echo \"YES\"\n    else\n        echo \"NO\"\n    fi", "    # Write your code\
+    \ here\n    \n    intervals=`echo $2 | sed 's/ /\",\"/g'`;\n    \n    first=$1\n\
+    \    second=$2\n    \n    length=`echo $first $second | awk '{print length}'`\n\
+    \    \n    inter=`echo $first $second | awk '{print \"(\"$1\"-\"$2\")\"}'`\n \
+    \   \n    for (( i = 0; i < ${#intervals[@]} ; i++))\n    do\n        if [[ ${first}\
+    \ -gt ${second} ]]\n        then\n            if [ ${#inter} -lt 2 ]\n       \
+    \     then\n                first=$(($first - ${second}))\n                second=$(($second\
+    \ - ${second}))\n                inter=`echo $first $second | awk '{print \"(\"\
+    $1\"-\"$2\")\"}'`\n            else\n                first=$(($first - ${second}))\n\
+    \                second=$(($second - ${second}))\n                inter=`echo\
+    \ $first $second | awk '{print \"(\"$1\"-\"$2\")\"}'`\n                break\n\
+    \            fi\n        fi\n    done\n    \n    \n    if [[ ${first} -gt ${second}\
+    \ ]]\n    then\n        if [ ${#inter} -lt 2 ]\n        then\n            first=$(($first\
+    \ - ${second}))\n            second=$(($second - ${second}))\n            inter=`echo\
+    \ $first $second | awk '{print \"(\"$1\"-\"$2\")\"}'`\n        fi\n    else \n\
+    \        if [ ${#inter} -lt 2 ]\n        then\n            second=$(($second -\
+    \ ${second}))\n            inter=`echo $first $second | awk '{print \"(\"$1\"\
+    -\"$2\")\"}'`\n        fi\n    fi\n    \n    for (( i = 0; i < ${#intervals[@]}\
+    \ ; i++))\n    do\n        if [[ ${inter} -gt ${intervals[i]} ]]\n        then\n\
+    \            inter=`echo $first $second | awk '{print \"(\"$1\"-\"$2\")\"}'`\n\
+    \            break\n        fi\n    done\n    \n    length_inter=`echo $length\
+    \ - ${#inter}`\n    \n    if [[ ${length_inter} -eq 1 ]]\n    then\n        echo\
+    \ $inter\n    else\n        echo $inter\n    fi", "\tlocal -r arr1=$1\n\tlocal\
+    \ -r arr2=$2\n\n\tlocal -r i1=1\n\tlocal -r i2=1\n\n\twhile [ \"$i1\" -lt \"$arr1\"\
+    \ ] && [ \"$i2\" -lt \"$arr2\" ]; do\n\t\tif [ \"$i1\" -eq \"$i2\" ]\n\t\tthen\n\
+    \t\t\t[ \"$i1\" -eq \"$arr1\" ] && echo \"NO\"\n\t\t\treturn\n\t\tfi\n\t\tlet\
+    \ \"i1+=1 && i2+=1\"\n\tdone\n\n\techo \"NO\"", "  IFS=\" \" read -a arr $1\n\
+    \  IFS=\" \" read -a arr2 $2\n  length=${#arr[@]}\n  ((length=length>0?length:1))\n\
+    \  for ((i=0; i<$length; i++))\n  do\n    [[ ${arr[$i]} -le ${arr2[$i]} ]] ||\
+    \ break\n  done\n  [[ \"$i\" = \"$length\" ]] && echo \"YES\" || echo \"NO\"",
+  "    local a b\n    local a1 b1\n    local len\n    local c\n    local i\n    local\
+    \ j\n    local k\n    local len1\n    local len2\n    \n    a=$1\n    b=$2\n\n\
+    \    len1=$(echo \"$a\" | wc -c)\n    len2=$(echo \"$b\" | wc -c)\n\n    c=0\n\
+    \    for ((i=0; i<$len1; i++));\n    do\n        c=$((c+1))\n        ((c%2==0))\
+    \ && echo \"\"\n    done\n\n    for ((j=0; j<$len2; j++));\n    do\n        c=$((c+1))\n\
+    \        ((c%2==0)) && echo \"\"\n    done\n\n    for ((k=0; k<$len1; k++));\n\
+    \    do\n        a1=$((k+1))\n        b1=$((k+2))\n\n        for ((l=0; l<$len2;\
+    \ l++));\n        do\n            a1=$((a1-1))\n            b1=$((b1-1))\n\n \
+    \           ((b1>$len1)) && echo \"\"\n\n            if [ $(a1 -gt $len1) -a $b1\
+    \ -gt $len2 ]; then\n                c=$(echo \"$a\" | sed -n \"$a1,$b1 p\")\n\
+    \            else\n                c=$(echo \"$a\" | sed -n \"$a1,$(b1-1)p \"\
+    )\n            fi\n\n            if [ $(echo \"$c\" | wc -c) -eq 0 ]; then\n \
+    \               break\n            fi\n\n            if [ $(($(echo \"$c\" | wc\
+    \ -c)) % 2) -eq 0 ]; then\n                echo \"\"\n            else\n     \
+    \           if [ \"$c\" = \"$a\" ]; then\n                    echo \"NO\"\n  \
+    \                  break\n                else\n                    echo \"YES\"\
+    \n                    break\n                fi\n            fi\n\n        done\n\
+    \    done", "    local a b i j k res cnt\n    a=$(echo $1 |tr -s ' ' ,) \n   \
+    \ b=$(echo $2 |tr -s ' ' ,) \n    res=$(eval echo $(a|tr ' ' '\\n' | sort | uniq\
+    \ | sort -u) $(b|tr ' ' '\\n' | sort | uniq | sort -u))\n    cnt=$(echo $(a|tr\
+    \ ' ' '\\n' | sort | uniq | sort -u) $(b|tr ' ' '\\n' | sort | uniq | sort -u))\n\
+    \    for ((i=0; i<${#res[@]}; i++)); do\n        if [[ ${res[$i]} == ${cnt[$i]}\
+    \ ]]; then\n            echo $((${cnt[$i]})-1)\n            return\n        fi\n\
+    \    done\n    echo NO", "    local interval_a\n    local interval_b\n    \n \
+    \   interval_a=$( echo \"$1\" | cut -d\\\" -f1 | sed 's/^-/-/g' | sed 's/ /-/g'\
+    \ | sed 's/^/-/g' | sed 's/$//g' )\n    interval_b=$( echo \"$2\" | cut -d\\\"\
+    \ -f1 | sed 's/^-/-/g' | sed 's/ /-/g' | sed 's/^/-/g' | sed 's/$//g' )\n    \n\
+    \    local interval_a_start\n    local interval_a_end\n    local interval_b_start\n\
+    \    local interval_b_end\n    \n    interval_a_start=$(echo \"$interval_a\" |\
+    \ cut -d \"-\" -f1)\n    interval_a_end=$(echo \"$interval_a\" | cut -d \"-\"\
+    \ -f2)\n    interval_b_start=$(echo \"$interval_b\" | cut -d \"-\" -f1)\n    interval_b_end=$(echo\
+    \ \"$interval_b\" | cut -d \"-\" -f2)\n    \n    local interval_a_length\n   \
+    \ local interval_b_length\n    \n    interval_a_length=$(echo \"$interval_a_end\
+    \ - $interval_a_start + 1\" | bc)\n    interval_b_length=$(echo \"$interval_b_end\
+    \ - $interval_b_start + 1\" | bc)\n    \n    if [ \"$interval_a_length\" -eq \"\
+    $interval_b_length\" ]\n    then\n        echo \"NO\"\n    else\n        echo\
+    \ \"YES\"\n    fi", "\tIFS=' ' read -r -a a <<< \"$1\"\n\tIFS=' ' read -r -a b\
+    \ <<< \"$2\"\n\tlen1=${#a[@]}\n\tlen2=${#b[@]}\n\tif [ $len1 -gt $len2 ]; then\n\
+    \t\tfor i in $(seq 1 $len2); do\n\t\t\ta[i]=$b[$i]\n\t\tdone\n\tfi\n\tif (( len1\
+    \ > len2 )); then\n\t\tfor i in $(seq 1 $len1); do\n\t\t\tb[i]=$a[$i]\n\t\tdone\n\
+    \tfi\n\tlen1=${#a[@]}\n\tlen2=${#b[@]}\n\tfor i in $(seq 0 $((len1 - len2)));\
+    \ do\n\t\tif [[ \"${a[$((i + len1))]}\" -gt \"${b[$i]}\" ]]; then\n\t\t\tlen2=${#a[@]}\n\
+    \t\t\tbreak\n\t\tfi\n\tdone\n\t(( len2 == len1 ))", "\tdeclare -A interval\n\t\
+    interval=($1)\n\tinterval_max=${#interval[*]}\n\tfor i in $(seq 0 $((${interval_max}-1)))\n\
+    \tdo\n\t\tinterval_start=${interval[i]}\n\t\tinterval_end=${interval[i+1]}\n\t\
+    \tinterval_max_start=$((${interval_end}+1))\n\t\tinterval_max_end=$((${interval_start}-1))\n\
+    \t\tfor j in $(seq 0 $((${interval_max}-1)))\n\t\tdo\n\t\t\tif [ $((${interval_start}\
+    \ <= ${interval[j]}) && (${interval[j]} <= ${interval_max_end})) -eq 1 ]; then\n\
+    \t\t\t\tinterval[$j]=\"${interval_start} ${interval[j]}\"\n\t\t\t\tinterval[$((${interval_start}+1))]=\"\
+    ${interval[j]} ${interval_max_end}\"\n\t\t\t\tinterval[$((${interval_max_start}+1))]=\"\
+    ${interval[j]} ${interval_end}\"\n\t\t\t\tinterval[$((${interval_max_start}+2))]=\"\
+    ${interval[j]} ${interval_max_end}\"\n\t\t\t\tbreak\n\t\t\tfi\n\t\tdone\n\tdone\n\
+    \tinterval_length=${#interval[*]}\n\tif [[ $interval_length -eq 1 ]]; then\n\t\
+    \tinterval_length=${interval_length}\n\t\techo \"YES\"\n\telse\n\t\techo \"NO\"\
+    \n\tfi", "    local _line_1=$1\n    local _line_2=$2\n\n    while read line; do\n\
+    \        local _element1=${line%% *}\n        local _element2=${line##* }\n  \
+    \      local _count=0\n        for (( _i=${_element1}; (_i <= ${_element2}); _i++\
+    \ )); do\n            (( _count++ ))\n        done\n        echo -n ${_count}\n\
+    \    done", "    interval1=$1\n    interval2=$2\n    echo \"$interval1\" | awk\
+    \ '{print \"(\"$1\"-\"$2\")\"}'", "\tlocal -i a b i j i1 j1 len\n\tlocal -n arr1=(\"\
+    $1\")\n\tlocal -n arr2=(\"$2\")\n\tlocal -n arr3=({[0]=\"${#arr1[@]}\"})\n\tlocal\
+    \ -n arr4=({[0]=\"${#arr2[@]}\"})\n\t\n\tfor (( i1=0; i1 < arr3[0]; i1++ )); do\n\
+    \t\ta=arr1[i1]\n\t\tfor (( j1=0; j1 < arr4[0]; j1++ )); do\n\t\t\tb=arr2[j1]\n\
+    \t\t\tif [ \"$a\" -le \"$b\" ] && [ \"$b\" -le \"$a\" ]; then\n\t\t\t\tfor ((\
+    \ j=0; j < (len=${#arr3[@]}-1); j++ )); do\n\t\t\t\t\tif [ \"${arr3[$j]}\" -eq\
+    \ \"$i\" ]; then\n\t\t\t\t\t\tbreak\n\t\t\t\t\tfi\n\t\t\t\tdone\n\t\t\telse\n\t\
+    \t\t\tfor (( i=1; i< (len=${#arr4[@]}-1); i++ )); do\n\t\t\t\t\tif [ \"${arr4[$i]}\"\
+    \ -eq \"$j\" ]; then\n\t\t\t\t\t\tbreak\n\t\t\t\t\tfi\n\t\t\t\tdone\n\t\t\tfi\n\
+    \t\t\tif [ \"$i\" -eq \"$j\" ]; then\n\t\t\t\tarr3[$i]=$i\n\t\t\t\tbreak\n\t\t\
+    \tfi\n\t\tdone\n\tdone\n\tif [ \"$i\" -eq \"$j\" ]; then\n\t\techo \"NO\"\n\t\
+    else\n\t\techo \"YES\"\n\tfi", "  local interval1=\"${1}\"\n  local interval2=\"\
+    ${2}\"\n  local length=\"${#interval1##* }\"\n  local x\n  for x in $(seq 0 $((\
+    \ ${length} - 1 ))); do\n    local start=\"${interval1:$x:2}\"\n    local end=\"\
+    ${interval2:$((x + 1)):2}\"\n    if [ \"$start\" -ge \"$end\" ]; then\n      ((\
+    \ start < end )) || return 1\n      (( end - start + 1 < length )) || return 1\n\
+    \    fi\n  done\n  echo \"NO\"", "    local -i n num_intervals interval1 interval2\
+    \ interval_length\n    [[ -z \"$2\" ]] && return 1\n    [[ -z \"$1\" ]] && return\
+    \ 1\n    IFS=' ' read -a intervals <<< \"$1\"\n    IFS=' ' read -a intervals <<<\
+    \ \"$2\"\n    num_intervals=${#intervals[@]}\n    for (( n = 0; n < num_intervals;\
+    \ n++ )); do\n        interval1=${intervals[$n]%:}\n        interval2=${intervals[$n]#*:}\n\
+    \        ((interval_length=$(expr $interval2 - $interval1 + 1))\n        if ((\
+    \ $interval_length == 1 )); then\n            if [ $(( $interval1 > $interval2\
+    \ )) -eq 0 ]; then\n                echo \"$interval1\" \"$interval2\"\n     \
+    \           echo \"$interval1 $interval2\"\n                echo \"$interval1\"\
+    \ \"$interval2\"\n                echo \"$interval1 $interval2\"\n           \
+    \     echo \"$interval1 $interval2\"\n                echo \"$interval1 $interval2\"\
+    \n            fi\n        fi\n    done", "  read -r -a arr1 <<< \"$1\"\n  read\
+    \ -r -a arr2 <<< \"$2\"\n  \n  for i in \"${arr1[@]}\"; do\n    \n    flag=false\n\
+    \    for j in \"${arr2[@]}\"; do\n      if [ \"$i\" -le \"$j\" ]; then\n     \
+    \   if [ \"$i\" -le \"$j\" ]; then\n          flag=true\n        fi\n      fi\n\
+    \    done\n    if [ \"$flag\" != true ]; then\n      echo \"NO\"\n      return\n\
+    \    fi\n  done\n  echo \"YES\"", "  local start\n  local end\n  local intersect\n\
+    \n  for ((i=0; i<${#1}; i++))\n  do\n    start=$(echo $1 | cut -d' ' -f$i)\n \
+    \   end=$(echo $2 | cut -d' ' -f$i)\n\n    if [ $start -le $end ]\n    then\n\
+    \      intersect=$(( $start + $end - $start ))\n    else\n      intersect=$((\
+    \ $end - $start ))\n    fi\n  done\n\n  if [ $intersect -eq 1 ]\n  then\n    echo\
+    \ \"YES\"\n  else\n    echo \"NO\"\n  fi", "    local interval_1=$(echo \"$1\"\
+    \ | sed -e 's/^[^0-9]*\\([0-9]\\+\\).*/\\1/')\n    local interval_2=$(echo \"\
+    $2\" | sed -e 's/^[^0-9]*\\([0-9]\\+\\).*/\\1/')\n    local start_1=\"${interval_1%,*}\"\
+    \n    local end_1=\"${interval_1#*,}\"\n    local start_2=\"${interval_2%,*}\"\
+    \n    local end_2=\"${interval_2#*,}\"\n    if [ $start_1 -ge $end_2 ]; then\n\
+    \        echo \"NO\"\n    elif [ $start_1 -le $end_2 ]; then\n        echo \"\
+    NO\"\n    else\n        local length1=\"${#start_1}\"\n        local length2=\"\
+    ${#end_2}\"\n        local a=\"${interval_1}\"\n        local b=\"${interval_2}\"\
+    \n        if [[ $a =~ ([0-9]*,?[0-9]+) ]] ; then\n            a=${BASH_REMATCH[1]}\n\
+    \        else\n            a=${start_1}\n        fi\n        if [[ $b =~ ([0-9]*,?[0-9]+)\
+    \ ]] ; then\n            b=${BASH_REMATCH[1]}\n        else\n            b=${start_2}\n\
+    \        fi\n        if [ \"$b\" -gt \"$a\" ]; then\n            echo \"YES\"\n\
+    \        else\n            local t=\"$(( (($end_2 - $start_2) + $length1) - (($end_1\
+    \ - $start_1) + $length2) ))\"\n            local m=\"$(( (($end_2 - $start_2)\
+    \ + $length1) - (($end_1 - $start_1) + $length2) ))\"\n            local j=\"\
+    $(( ($t - $m) + 1 ))\"\n            local a=\"$(( $t + $m - $j))\"\n         \
+    \   if [ \"$a\" -eq \"0\" ]; then\n                echo \"YES\"\n            elif\
+    \ [ \"$a\" -le \"$j\" ]; then\n                echo \"YES\"\n            elif\
+    \ [ \"$a\" -ge \"$m\" ]; then\n                echo \"YES\"\n            else\n\
+    \                echo \"NO\"\n            fi\n        fi\n    fi", "  echo \"\
+    $1\" \"$2\" | sort -n | grep -Ev \"^[+-]$\" | tr -s ' ' | sort -n | grep -Ev \"\
+    ^[+-]$\" | wc -l", "    local start=$(echo $1 | cut -d \" \" -f1)\n    local end=$(echo\
+    \ $2 | cut -d \" \" -f1)\n    local start=$(echo $1 | cut -d \" \" -f2)\n    local\
+    \ end=$(echo $2 | cut -d \" \" -f2)\n    \n    if [[ $start -gt $end ]]; then\n\
+    \        echo \"NO\"\n    else\n        local inter=$(($end - $start + 1))\n \
+    \       if [ $(( $inter % $start )) -ne 0 ]; then\n            echo \"NO\"\n \
+    \       else\n            if [ $(( $inter % $end )) -eq 0 ]; then\n          \
+    \      echo \"YES\"\n            else\n                echo \"NO\"\n         \
+    \   fi\n        fi\n    fi", "    local interval1=($1 \"$2\")\n    local interval2=($2\
+    \ \"$3\")\n    local i1=0\n    local i2=0\n    local i3=0\n    local len=0\n \
+    \   local prime1=\"YES\"\n    local prime2=\"YES\"\n    local prime3=\"YES\"\n\
+    \    local prime4=\"YES\"\n    local prime5=\"YES\"\n    local prime6=\"YES\"\n\
+    \    local prime7=\"YES\"\n    local prime8=\"YES\"\n    local prime9=\"YES\"\n\
+    \    local prime10=\"YES\"\n    local prime11=\"YES\"\n    local prime12=\"YES\"\
+    \n    local prime13=\"YES\"\n    local prime14=\"YES\"\n    local prime15=\"YES\"\
+    \n    local prime16=\"YES\"\n    local prime17=\"YES\"\n    local prime18=\"YES\"\
+    \n    local prime19=\"YES\"\n    local prime20=\"YES\"\n\n    for (( i = 0; i\
+    \ < ${#interval1[@]}; i++ ));\n    do\n        for (( j=0; j < ${#interval2[@]};\
+    \ j++ ));\n        do\n            if [[ ${interval1[i]} -le ${interval2[j]} &&\
+    \ ${interval1[i]} -ge ${interval2[j]} && ${interval1[j]} -le ${interval2[i]} &&\
+    \ ${interval1[j]} -ge ${interval2[i]} ]]; then\n                len=$((len+1))\n\
+    \                if [[ ${interval1[i]} -eq ${interval1[j]} ]]; then\n        \
+    \            if [[ ${interval2[i]} -eq ${interval2[j]} ]]; then\n            \
+    \            i1=$((i1+1))\n                        i2=$((i2+1))\n            \
+    \        else\n                        i2=$((i2+1))\n                        i3=$((i3+1))\n\
+    \                    fi\n                elif [[ ${interval1[j]} -eq ${interval1[i]}\
+    \ ]]; then\n                    if [[ ${interval2[j]} -eq ${interval2[i]} ]];\
+    \ then\n                        i3=$((i3+1))\n                        i1=$((i1+1))\n\
+    \                    else\n                        i1=$((i1+1))\n            \
+    \            i2=$((i2+1))\n                    fi\n                elif [[ ${interval1[i]}\
+    \ -gt ${interval1[j]} && ${interval2[j]} -gt ${interval2[i]} ]]; then\n      \
+    \              if [[ ${interval1[i]} -le ${interval2[j]} && ${interval2[j]} -le\
+    \ ${interval2[i]} ]]; then", "    read -r interval1 interval2 < <(python -c \"\
+    print(','.join(map(' '.join, zip(\\\"$1 $2\\\")).split(\\\" \\\")));\")\n    echo\
+    \ $(( (${interval1[1]} <= ${interval2[0]}) and (${interval2[1]} <= ${interval1[0]})\
+    \ or \\\n        (${interval1[0]} <= ${interval2[1]}) and (${interval2[0]} <=\
+    \ ${interval1[1]})))", "  interval1=$1\n  interval2=$2\n  \n  intersected=$(echo\
+    \ $interval1 | $awk '{print $2,$1}' | sort | uniq )\n  intersected=$(echo $intersected\
+    \ | $awk '{print $1,$1}' | sort | uniq )\n  \n  echo \"$intersected\" \n  length=$(echo\
+    \ $intersected | $awk '{print $1,$2}' | sort | uniq | wc -l )\n  \n  if [ \"$length\"\
+    \ -eq 1 ]; then\n    echo \"NO\"\n  elif [ \"$length\" -gt 1 ]; then\n    echo\
+    \ \"YES\"\n  else\n    echo \"NO\"\n  fi", "\tlocal -r interval=\"${1}\"\n\tlocal\
+    \ -r interval2=\"${2}\"\n\tlocal -r intersect=$(echo \"${interval}${interval2}\"\
+    \ | sort -n | uniq -c | wc -l)\n\t\n\tif [[ \"${intersect}\" -gt 1 ]]; then\n\t\
+    \techo \"NO\"\n\telse\n\t\techo \"YES\"\n\tfi", "    local a=$1\n    local b=$2\n\
+    \    local len\n    local ans=$(echo \"$a\" | tr ' ' ',')\n    local bns=$(echo\
+    \ \"$b\" | tr ' ' ',')\n    len=${#ans[*]}\n    len=${#bns[*]}\n    if [ \"$len\"\
+    \ -eq \"$(($len - 1))\" ]; then\n        echo \"NO\"\n    else\n        local\
+    \ i\n        for (( i=0; i<$len; i++ )); do\n            [[ $ans[i] == $bns[i]\
+    \ ]] && break\n        done\n        if [ \"$i\" -eq \"$len\" ]; then\n      \
+    \      local j\n            for (( j=0; j<$len; j++ )); do\n                [[\
+    \ ${ans[j]} -ge ${ans[$i]} ]] && break\n            done\n            if [ \"\
+    $j\" -eq \"$len\" ]; then\n                local k\n                for (( k=0;\
+    \ k<$len; k++ )); do\n                    [[ ${bns[k]} -ge ${bns[$i]} ]] && break\n\
+    \                done\n                if [ \"$k\" -eq \"$len\" ]; then\n    \
+    \                local l\n                    for (( l=0; l<$len; l++ )); do\n\
+    \                        [[ ${bns[l]} -ge ${bns[$i]} ]] && break\n           \
+    \         done\n                    if [ \"$l\" -eq \"$len\" ]; then\n       \
+    \                 echo \"YES\"\n                    else\n                   \
+    \     echo \"NO\"\n                    fi\n                else\n            \
+    \        echo \"NO\"\n                fi\n            else\n                echo\
+    \ \"NO\"\n            fi\n        else\n            echo \"NO\"\n        fi\n\
+    \    fi", "    local i j k\n    for ((i=0; i<$#; i++)); do\n        k=\"${1:$i:1}\"\
+    \n        j=\"${2:$i:1}\"\n        if [ $i -lt $((${#k}-1)) ] && [ $j -lt $((${#j}-1))\
+    \ ]; then\n            if [ \"$k\" != \"$j\" ]; then\n                if (( \"\
+    $k\" < \"$j\" )); then\n                    k=$((k+1))\n                else\n\
+    \                    j=$((j+1))\n                fi\n            fi\n        fi\n\
+    \    done\n    echo $k", "\tlocal L1 L2\n\tread -r L1 L2 <<< \"$*\"\n\t\n\techo\
+    \ \"${L1:$(expr index \"$L1\" \"$\")} ${L2:$(expr index \"$L2\" \"$\")}\"\n\t\n\
+    \t# read only from STDIN\n\tread -r -t 1 -u 3 <<< \"$(echo \"${L1:$(expr index\
+    \ \"$L1\" \"$\")} ${L2:$(expr index \"$L2\" \"$\")}\" | cut -f1 -d' ')\"", " \
+    \   local -r interval1=$1\n    local -r interval2=$2\n    local start\n    local\
+    \ end\n    local length \n    \n    length=$(expr $(expr ${interval1[1]} + ${interval1[2]}\
+    \ - ${interval2[1]} + ${interval2[2]}) /2) \n    \n    if (( ${interval1[1]} <\
+    \ ${interval2[1]} ) || ( ${interval1[2]} > ${interval2[2]}))\n    then return\
+    \ \"NO\" \n    else return \"YES\"\n    fi", "    local interval1_start=$1\n \
+    \   local interval1_end=$2\n    local interval2_start=$3\n    local interval2_end=$4\n\
+    \    # echo \"interval1: $interval1_start - $interval1_end\"\n    # echo \"interval2:\
+    \ $interval2_start - $interval2_end\"\n    # echo \"interval1: $interval1_start,\
+    \ $interval1_end\"\n    # echo \"interval2: $interval2_start, $interval2_end\"\
+    \n    local interval1_length=$((${#interval1_start[@]} - 1))\n    local interval2_length=$((${#interval2_start[@]}\
+    \ - 1))\n    local interval1_start_array=(\"${interval1_start[@]}\")\n    local\
+    \ interval1_end_array=(\"${interval1_end[@]}\")\n    local interval2_start_array=(\"\
+    ${interval2_start[@]}\")\n    local interval2_end_array=(\"${interval2_end[@]}\"\
+    )\n    # echo \"array1 length: $interval1_length\"\n    # echo \"array2 length:\
+    \ $interval2_length\"\n    # echo \"array1 starts: ${interval1_start_array[@]}\"\
+    \n    # echo \"array1 ends: ${interval1_end_array[@]}\"\n    # echo \"array2 starts:\
+    \ ${interval2_start_array[@]}\"\n    # echo \"array2 ends: ${interval2_end_array[@]}\"\
+    \n    local interval1_start_idx=0\n    local interval1_end_idx=0\n    local interval2_start_idx=0\n\
+    \    local interval2_end_idx=0\n    # echo \"interval1: $interval1_start, $interval1_end\"\
+    \n    # echo \"interval2: $interval2_start, $interval2_end\"\n    while [ $interval1_start_idx\
+    \ -lt $interval1_length ] && [ $interval1_end_idx -lt $interval1_length ] \\\n\
+    \    && [ $interval2_start_idx -lt $interval2_length ] && [ $interval2_end_idx\
+    \ -lt $interval2_length ] \\\n    && [ $interval1_start_idx -eq $interval1_length\
+    \ ] && [ $interval1_end_idx -eq $interval1_length ] \\\n    && [ $interval2_start_idx\
+    \ -eq $interval2_length ] && [ $interval2_end_idx -eq $interval2_length ] \\\n\
+    \    && [ $interval1_start_idx -ge 0 ] && [ $interval1_end_idx -ge 0 ] \\\n  \
+    \  && [ $interval2_start_idx -ge 0 ] && [ $interval2_end_idx -ge 0 ] \\\n    &&\
+    \ [ $interval1_start_idx -lt $interval1_end ] && [ $interval1_end_idx -ge $interval1_end\
+    \ ] \\", "    local start1=${1%% *}\n    local start2=${2%% *}\n    local end1=${1##*\
+    \ }\n    local end2=${2##* }\n    local len1=$(echo \"$start2 - $start1 + 1\"\
+    \ | bc -l)\n    local len2=$(echo \"$end2 - $end1 + 1\" | bc -l)\n    if [[ $len1\
+    \ == 0 || $len2 == 0 ]]; then\n        echo \"NO\"\n        return\n    elif [[\
+    \ $len1 -gt 1 ]]; then\n        echo \"YES\"\n        return\n    fi\n    local\
+    \ i=$((start1 - start2 + 1))\n    local j=$((end1 - end2 + 1))\n    if [[ $(echo\
+    \ \"$i $j\" | bc -l) -eq 1 ]]; then\n        echo \"YES\"\n        return\n  \
+    \  fi\n    local prime=\n    for k in $(seq 0 \"$len1 / 2\"); do\n        local\
+    \ b=$(($i*$k + $j*$k))\n        if [[ $(($b * $b) mod $len1) == 0 ]]; then\n \
+    \           prime=\"YES\"\n            echo \"$prime\"\n            return\n \
+    \       fi\n    done\n    echo \"NO\"", "   local start_1 end_1\n   local start_2\
+    \ end_2\n\n   read -r -p \"[$(head -n 1 <<< \"$1\")] \" start_1 end_1\n   read\
+    \ -r -p \"[$(head -n 1 <<< \"$2\")] \" start_2 end_2\n\n   # If the length of\
+    \ intersection is zero, return \"NO\".\n   if [[ $((end_1 - start_1)) == 0 ]];\
+    \ then\n      return \"NO\"\n   fi\n   if [[ $((end_2 - start_2)) == 0 ]]; then\n\
+    \      return \"NO\"\n   fi\n   if [[ $((end_1 - start_2)) == 0 ]]; then\n   \
+    \   return \"NO\"\n   fi\n\n   local result=\"\"\n   for i in $(seq 1 $((end_1\
+    \ - start_1 + 1)) $((end_2 - start_2 + 1))); do\n      if [[ $(expr $start_1 -\
+    \ $i \\le $end_2 \\le $start_2 + $i - 1) ]]; then\n         result=$((result+1))\n\
+    \      fi\n   done\n   \n   if [[ \"$result\" -eq \"2\" ]]; then\n      echo \"\
+    $((result+1))\"\n   else\n      echo \"$result\"\n   fi", "\tlocal start1 start2\
+    \ end1 end2 length\n\tstart1=$(echo \"$1\" | tr '[:upper:]' '[:lower:]')\n\tstart2=$(echo\
+    \ \"$2\" | tr '[:upper:]' '[:lower:]')\n\tend1=$(echo \"$3\" | tr '[:upper:]'\
+    \ '[:lower:]')\n\tend2=$(echo \"$4\" | tr '[:upper:]' '[:lower:]')\n\tlength=$((end1\
+    \ - start1 + 1))\n\t((start1 <= start2 && start1 >= end2) || start1 >= start2\
+    \ && end1 <= end2)\n\tstart1=$(echo \"$1\" | tr '[:upper:]' '[:lower:]')\n\tstart2=$(echo\
+    \ \"$2\" | tr '[:upper:]' '[:lower:]')\n\tend1=$(echo \"$3\" | tr '[:upper:]'\
+    \ '[:lower:]')\n\tend2=$(echo \"$4\" | tr '[:upper:]' '[:lower:]')\n\t((start1\
+    \ <= start2 && start1 >= end2) || start1 >= start2 && end1 <= end2)\n\t((length\
+    \ != 2 || start1 == end1) || (length != 2 || start1 == start2))\n\t((length !=\
+    \ 2 || start1 == end2) || (length != 2 || start1 == start2))\n\t((length != 2\
+    \ || start1 == start2) || (length != 2 || start1 == end1))\n\t((length == 2) &&\
+    \ start1 == start2)\n\t((length == 2) && end1 == end2)\n\t((length == 2) && start1\
+    \ < end1)\n\t((length == 2) && start1 > end1)\n\t((length == 2) && start2 < end2)\n\
+    \t((length == 2) && start2 > end2)", "    local interval1=$1 interval2=$2\n  \
+    \  local start1 end1 start2 end2\n    local len1\n    local len2\n    local intersect=\"\
+    NO\"\n    local all_intersect\n    local prime\n    \n    start1=$(expr ${interval1}\
+    \ : \"\\(.*\\)\")\n    end1=$(expr ${interval1} : \"\\(.*\\)$\")\n    start2=$(expr\
+    \ ${interval2} : \"\\(.*\\)\")\n    end2=$(expr ${interval2} : \"\\(.*\\)$\")\n\
+    \n    if [ $start1 > $end2 ]; then\n        all_intersect=( \"${interval1}\" \"\
+    ${interval2}\" )\n        intersect=\"YES\"\n    else\n        all_intersect=(\
+    \ \"${interval2}\" \"${interval1}\" )\n        intersect=\"YES\"\n    fi\n\n \
+    \   len1=$(expr ${#all_intersect[@]} : \"\\(.*\\)\")\n    len2=$(expr ${#all_intersect[@]}\
+    \ : \"\\(.*\\)$\")\n\n    for (( i=0; i<${#all_intersect[@]}; i++ )); do\n   \
+    \     if [ \"${all_intersect[$i]}\" != \"${all_intersect[$((i+1))]}\" ]; then\n\
+    \            if [ ${start1} -gt ${start2} ]; then\n                prime=\"YES\"\
+    \n            else\n                prime=\"NO\"\n            fi\n           \
+    \ break\n        fi\n    done\n\n    echo \"$intersect\"\n    echo \"$prime\""]
 stop_tokens:
 - "\n}"

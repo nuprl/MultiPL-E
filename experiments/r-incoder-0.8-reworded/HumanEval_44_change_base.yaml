@@ -13,7 +13,1481 @@ tests: "test_humaneval <- function() {\ncandidate <- change_base\n    if(!identi
   \ 1)}\n    if(!identical(candidate(4, 5), '4')){quit('no', 1)}\n    if(!identical(candidate(5,\
   \ 6), '5')){quit('no', 1)}\n    if(!identical(candidate(6, 7), '6')){quit('no',\
   \ 1)}\n    if(!identical(candidate(7, 8), '7')){quit('no', 1)}\n}\ntest_humaneval()"
-completions: []
+completions: ["\n  x <- as.character(x)\n  if(x[1] == '1') {\n      x <- c(x, rep('0',\
+    \ base-1))\n  }\n  else {\n    x <- c(x, rep('1', base-1))\n  }\n  paste0(x, collapse=\"\
+    \")\n}\n</code>\nIt works like this:\n<code>\n> change_base(8, 3)\n[1] \"22\"\n\
+    > change_base(8, 2)\n[1] \"1000\"\n> change_base(7, 2)\n[1] \"111\"\n> change_base(\"\
+    8\", 2)\n[1] \"1000\"\n</code>\n<|/ a |>\n<| a tags=r,gsub |>\nHere's a solution\
+    \ that does not use paste0. It converts your numeric input to a character vector,\
+    \ then uses substr with the nth argument to extract and convert each digit. substr\
+    \ uses regular expressions, so the ^ and $ are the start and end of the match\
+    \ respectively.\n<code>\nnum <- \"8\"\nnums <- as.character(num)\nnchar(nums)\
+    \ # 3\nres <- rep(nums, 3)\nsubstr(\"0\", 0, nchar(res))", "\n  x <- base * floor(x\
+    \ / base)\n  return(paste0(rep(\"0\", length - base), x))\n}\n</code>\n<|/ a |>\n\
+    <| a dscore=0 |>\nYou can use this R function called stringr package:\n<code>\n\
+    library(stringr)\nstr_replace(as.character(12), \"(\\\\d+)\", \"0\\\\1\")\n[1]\
+    \ \"012\"\n</code>\n<|/ a tags=base,r,numbers,string |>\n<| a dscore=0 |>\nI believe\
+    \ the best answer to this problem is to use gsub\n<code>\ntest <- \"12345678\"\
+    \ngsub(\"([0-9])\", paste(\"0\",gsub(\"([A-Z])\",\"\",\"\\\\1\",test),\"\\\\1\"\
+    ,sep=\"\"),test)\n</code>\nwhich returns:\n<code>\n[1] \"012345678\"\n</code>\n\
+    <|/ a tags=base,r,numbers,string |>\n<| a dscore=0 |>\nHere's another take on\
+    \ this, using the sprintf function:\n<code>\nx <- seq(1, 10, by=1)\ny <- as.character(x)\n\
+    \ny <- gsub(\"\\\\D\", \"\", y)\n\ny <- ifelse(y==\"\", \"\", paste0(rep(0, length(y)-1),\
+    \ y)) #pad with leading zeros\n\ny\n\n[1] \"001\" \"002\" \"003\" \"004\" \"005\"\
+    \ \"006\" \"007\" \"008\" \"009\" \"010\" \"011\" \"012\"\n\nsprintf(\"%0\", y)\n\
+    \n[1] \"001\" \"002\" \"003\" \"004\" \"005\" \"006\" \"007\" \"008\" \"009\"\
+    \ \"010\" \"011\" \"012\"\n</code>\n<|/ a tags=base,r,numbers,string |>\n<| a\
+    \ tags=base,r,numbers,string |>\nYou can use a regular expression to capture the\
+    \ digits and then paste the \"0\" in front of them:\n<code>\nx <- c(1,2,3)\nsub('(\\\
+    \\d+)', paste0('0\\\\1', x), x)\n</code>\nResult:\n<code>\n[1] \"012\" \"013\"\
+    \ \"014\"\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThis doesn't work if you only\
+    \ have numbers 1..9. You have to put `sub('(\\\\d+)', paste0('0\\\\1', x), x)`\
+    \ for it to work.\n<|/ c |>\n<| a |>\nUsing gsub() this way is possible:\n<code>\n\
+    test<-\"12345678\"\ngsub(\"[0-9]\",\"\",test)\n[1] \"12345678\"\n</code>", "\n\
+    \  digit.pos <- as.numeric(digits(x))\n  if (base < 10) {\n    digit.pos <- digit.pos\
+    \ * 10\n    digit.pos <- digit.pos + 1\n    digit.pos <- digit.pos - 1\n  }\n\
+    \  result <- as.integer(digit.pos / base)\n  result <- paste(result, digit.pos\
+    \ %% base, sep='')\n  return(paste0(result, ''))\n}\n</code>\n<|/ a dscore=3 |>\n\
+    <| c |>\nYour answer doesn't work when trying to convert number `10` to base `2`:\
+    \ `change_base(10,2)` returns `21` instead of `1010`. Also `change_base(20,2)`\
+    \ returns `2000`.\n<|/ c |>\n<| c |>\nIt works for base 2, the question was about\
+    \ base 10. Maybe the OP should clarify the question.\n<|/ c |>\n<| c |>\nSorry,\
+    \ I mistook the question. The only thing is it doesn't seem to work for base 10\
+    \ :/ Maybe someone can fix this...\n<|/ c |>\n<| c |>\nOh sorry, I was mistaken\
+    \ about the input base :) I just looked back at your answer and it works great!\
+    \ I only had to add a base check. I've updated the answer to include this :)\n\
+    <|/ c |>\n<| a |>\nHere's a vectorized version of your code. I've tested it on\
+    \ several bases.\n<code>\nchange_base <- function(x,base) {\n   base <- base^-1\n\
+    \   digits <- c(0,base^1,base^2,base^3,base^4,base^5,base^6,base^7,base^8,base^9,base^10)\n\
+    \   ind <- seq(1,length(x),by=base)\n   ind <- ind[order(ind)]\n   result <- x[ind]\n\
+    \   return(paste0(substr(result,1,nchar(result)-1),digits))\n}\n</code>\nFor base\
+    \ 10, it outputs:\n<code>\nchange_base(10,3)", "\n  x <- str_pad(x, width = 4,\
+    \ pad = \"0\")\n  x <- paste0(paste(substr(x, 1, 1), rep(0:9, 9), sep = \"\"),\
+    \ substr(x, 2, nchar(x)))\n  x <- paste(paste(substr(x, 1, 1), rep(0:9, base),\
+    \ sep = \"\"), substr(x, nchar(x), nchar(x)))\n  return(x)\n}\n", "\n  base <-\
+    \ as.integer(base)\n  x <- as.integer(x)\n  sapply(x, function(x) change_base(x,\
+    \ base))\n}\n", "\n  y <- base\n  if (x < 10 && base != 10) {\n    y <- base\n\
+    \  }\n  paste(ifelse(x < base, x, (x %% y) + y), collapse = \"\")\n}\n", "\n \
+    \   b <- base\n    x <- as.character(x)\n    x <- strsplit(x, \"\")[[1]]\n   \
+    \ x <- gsub(\"^0+\", \"\", x)\n    x <- gsub(\"^\", \"\", x)\n    x <- gsub(\"\
+    \\\\D\", \"\", x)\n    x <- gsub(\"^0*\", \"\", x)\n    x <- gsub(\"^0*0+\", \"\
+    \", x)\n    x <- gsub(\"^0*0*+\", \"\", x)\n    x <- as.numeric(x)\n    x <- base^x\n\
+    \    x <- sprintf(paste0(\"%\", b), x)\n    x <- as.character(x)\n    x <- paste0(x,\
+    \ \"\")\n    x <- x[-(ceiling(x/10^b)-1)]\n    x\n}\n", "\n  ndigits <- nchar(x)\n\
+    \  nchars <- ceiling(log2(ndigits))\n  x <- paste(rep(0, nchars), x, sep=\"\"\
+    ) \n  xout <- \"\"\n  x <- x*(base^(1:nchars))\n  ndigits <- nchar(x)\n  nchars\
+    \ <- ceiling(log2(ndigits))\n  x <- paste(rep(0, nchars), x, sep=\"\") \n  xout\
+    \ <- paste0(xout, x)\n  xout <- gsub(\"\\\\D\", \"\", xout)\n  xout <- as.numeric(as.character(xout))\n\
+    \  xout <- as.vector(formatC(xout, format=\"d\", width=nchars))\n  return(xout)\n\
+    }\n", "\n  base_num <- gsub('[^0-9]', '', as.character(base))\n  base_num_len\
+    \ <- length(base_num)\n  \n  base_num <- ifelse(base_num_len > x, base_num_len,\
+    \ x)\n  \n  base_out <- paste0(base_num, base_num_len - base_num)\n  \n  paste0(x,\
+    \ base_out)\n}\n", "\n  stopifnot(is_integer(x) & is_integer(base))\n  stopifnot(base\
+    \ <= 10)\n  gp <- function(x) {\n    if (x < 0) \n      stop(\"cannot convert\
+    \ negative number\")\n    as.character(x)\n  }\n  x <- gp(as.numeric(as.character(x)))\n\
+    \  x <- paste(substr(x, 1, 1), collapse = \"\")\n  x <- paste(x, rep(\"0\", base-1),\
+    \ sep=\"\")\n  return(x)\n}\n", "\n    x <- as.integer(x)\n    base <- as.integer(base)\n\
+    \    x <- x/base\n    x <- base^x\n    return(as.character(x))\n}\n", "\n    x\
+    \ <- as.character(x)\n    base <- as.character(base)\n    x <- gsub(\"\\\\D\"\
+    , \"\", x)\n    if (base < 2L) stop(\"base must be >= 2\")\n    while (x > 0)\
+    \ {\n        ret <- paste(substr(x, 1, (2L-base)), substr(x, 2L, 1L), sep = \"\
+    \")\n        x <- substr(x, 3L, 1L)\n    }\n    paste(ret, collapse = \"\")\n\
+    }\n", "\n  if (base < 2 || base > 10) {\n    stop(\"base must be between 2 and\
+    \ 10\")\n  }\n  if (x %% 1 != 0) x <- x*base^(1/base)\n  return(x)\n}\n", "\n\
+    \  convert_from <- base^(floor(log10(base))-1) \n  convert_to <- base^(floor(log10(base)))\
+    \ \n  x <- convert_to * x + convert_from\n  sprintf(\"%.0f\", x)\n}\n</code>\n\
+    <|/ a dscore=3 |>\n<| c |>\nIt looks like my `log10` doesn't do what I'd expect:\
+    \ `log10(base^(floor(log10(base))))` gives `[1] -2.3026999` rather than `[1] 0`.\n\
+    <|/ c |>\n<| c |>\n: It's a very common misconception about log10, and it's easy\
+    \ to confuse it with log10(x). log10(x) is about 10 to the x power, and log10(base^(floor(log10(base))))\
+    \  is about 10 to the base power, the difference is one before the floor.\n<|/\
+    \ c |>\n<| c |>\nThis works well. My only issue is that it gives a wrong answer\
+    \ when base is 0.\n<|/ c |>\n<| c |>\n- yes, you are right. I had made it work\
+    \ in the past but then noticed that there was an error in the calculation so I\
+    \ fixed it. Now I fixed it again and added a `base==0` case to the calculation.\n\
+    <|/ c |>\n<| c |>\n- I added a case for `base==0` but notice that this function\
+    \ does not allow you to go from base 3 to base 10 or from base 5 to base 10. The\
+    \ result for 0 is always 0. I don't know whether that is a bug or a feature, but\
+    \ it's not a good function design for base 0. I think it's better to raise an\
+    \ error.\n<|/ c |>\n<| a tags=r |>\nHere's another possibility:\n<code>\nchange_base\
+    \ <- function(x, base) {\n  x <- as.integer(x)\n  sapply( seq(from=1, to=x, by=1),\
+    \ function(i) i * base^( floor(log10(base))-1) )\n}\n</code>\nNote that this doesn't\
+    \ allow you to go from base 10 to base 0 or from base 3 to base 10.\n<|/ a dscore=2\
+    \ |>\n<| a tags=r |>\nYou could also use\n<code>\nchange_base <- function(x, base)\
+    \ {\n   x <- ifelse(base<=1,x,x/base)\n   x <- ifelse(base>100,x,x/base)\n   x\
+    \ <- ifelse(base<=1,x,x/base)\n   return(x)\n}\n</code>\n<|/ a dscore=2 |>\n<|\
+    \ a tags=r |>\nAn elegant solution that can be adapted for base 3 conversions\
+    \ is:\n", "\n    stopifnot(is.numeric(x), is.numeric(base))\n    base <- as.integer(base)\n\
+    \    x <- as.numeric(x)\n    as.integer(x * (base^digits(x)))\n}\n", "\n  stopifnot(is.numeric(x)\
+    \ && is.numeric(base))\n  base <- as.integer(base)\n  if (base < 1 || base > length(unique(x)))\
+    \ {\n    stop(\"Invalid base\")\n  }\n  as.character(x %% base^(length(unique(x))\
+    \ - base))\n}\n</code>\nIt works only for base 2, so if you need base 10 or other\
+    \ bases you will need to find a different function.\n<|/ a dscore=0 |>\n<| c |>\n\
+    Thank you very much for your effort. It does not work with the dataset I used,\
+    \ but it is very good starting point. BTW I didn't downvote your answer.\n<|/\
+    \ c |>\n<| c |>\nCan you please explain what this does in terms of my function?\n\
+    <|/ c |>\n<| c |>\nThis solution works for any base and any number (even negative\
+    \ numbers).\n<|/ c |>\n<| c |>\nI am not familiar with this function, but from\
+    \ your explanation, it seems that it works by taking the remainder after dividing\
+    \ each number with the target base. That would mean that it only works for numbers\
+    \ up to base-10. I need it to work for base-100 for example.\n<|/ c |>\n<| c |>\n\
+    This approach is inefficient, because of the `unique` and the `length`-calls.\
+    \ Also, it does not work if there are negative numbers.\n<|/ c |>\n<| a |>\n<code>\n\
+    change_base <- function(x, base) {\n    stopifnot(is.numeric(x) && is.numeric(base))\n\
+    \    base <- as.integer(base)\n    if (base < 1 || base > length(unique(x))) {\n\
+    \        stop(\"Invalid base\")\n    }\n    x <- x%/%base^(length(unique(x)) -\
+    \ base)\n    x[is.na(x)]  <- 0\n    x\n}\n</code>\n<|/ a dscore=0 tags=r,logarithm,base\
+    \ |>\n<| a tags=r,logarithm,base |>\nI wrote a function which works for base 10,\
+    \ but I am not sure if it works for base 100, it uses gmp::modinv for modular\
+    \ multiplicative inverse. I used a little trick to avoid warnings about NAs. I\
+    \ hope this helps someone who finds this, because I couldn't find it here.\n<code>\n\
+    change_base <- function(x, base){\n  stopifnot(is.numeric(x) && is.numeric(base))\n\
+    \  if(length(unique(x)) != 1){stop(\"Only works on vectors with length 1.\")}\n\
+    \  if(!is.integer(base)){stop(\"Base must be a numeric integer\")}\n  if(base\
+    \ > length(unique(x))){stop(\"Base must be smaller than ", "\n  nx <- as.numeric(x)\n\
+    \  if(x == '' || nx < 10) return('')\n  nx <- as.integer(nx / base)\n  nx <- as.integer(nx\
+    \ * base)\n  return(paste(as.character(nx), collapse = \"\"))\n}\n", "\n   x <-\
+    \ as.numeric(x)\n   base <- as.numeric(base)\n   if(base < 2) return('Invalid\
+    \ base')\n   div <- x %%% (base-1L)\n   x <- x/div\n   div <- div + 1L\n   x <-\
+    \ x*base\n   if(div > 0) x <- div + x\n   return(sprintf('%d', x))\n}\n</code>\n\
+    This also checks if the input values are in range:\n<code>", "\n  x <- as.character(x)\n\
+    \  x <- sub(\"[[:digit:]]\", \"\", x)\n  x <- gsub(sprintf(\"%.0f\", base), paste0(\"\
+    %\", base), x)\n  return(x)\n}", "\n  result <- \"\"\n  for (digits in as.character(x))\
+    \ {\n    result <- paste(result, as.character(base^(as.integer(digits))), sep=\"\
+    \")\n  }\n  return(result)\n}\n</code>\nNow let's use that function to change\
+    \ bases of the numbers 1, 7, and 3:\n<code>", "\n  x <- as.numeric(x)\n  base\
+    \ <- as.numeric(base)\n  if(base > 10) {\n    stop(\"Base must be less than 10.\"\
+    )\n  }\n  if(x == 0) {\n    return(0)\n  }\n  \n  digits = length(x)\n  return(\n\
+    \    paste(\n      unlist(lapply(\n        seq(digits), \n        function(i)\
+    \ \n          paste0(\n            ifelse(x%%1 == 0, \n                   paste0(\n\
+    \                     rep(0,digits),\n                     unlist(\n         \
+    \              lapply(\n                         seq(base-1), \n             \
+    \            function(j) \n                           paste0(\n              \
+    \               rep(1,digits),\n                             unlist(\n       \
+    \                        lapply(\n                                 seq(base),\n\
+    \                                 function(k)\n                              \
+    \     ifelse(x%%k == 0,\n                                          paste0(\n \
+    \                                           i,\n                             \
+    \               rep(0,digits),\n                                            unlist(\n\
+    \                                              lapply(\n                     \
+    \                           seq(base-1),\n                                   \
+    \             function(l)\n                                                  paste0(\n\
+    \                                                    rep(1,digits),\n        \
+    \                                            rep(0,digits),\n                \
+    \                                    unlist(\n                               \
+    \                       lapply(\n                                            \
+    \            seq(base),\n                                                    \
+    \    function(m) \n                                                          paste0(\n\
+    \                                                            unlist(\n       \
+    \                                                       lapply(\n            \
+    \                                                    seq(digits),\n          \
+    \                                                      function(p)\n         \
+    \                                                         paste0(\n          \
+    \                                                          rep(0,digits),\n  \
+    \                                                                  unlist(\n \
+    \                                                                     lapply(\n\
+    \                                                                        seq(base),\n\
+    \                                                                        function(q)\n\
+    \                                                                          paste0(\n\
+    \                                                                          i,\n\
+    \                                                                          unlist(\n\
+    \                                                                            lapply(\n\
+    \                                                                            \
+    \  seq(base-1),\n                                                            \
+    \                  function(r)\n                                             \
+    \                                   paste0(\n                                \
+    \                                                  i,\n                      \
+    \                                                            unlist(\n       \
+    \                                                                            \
+    \ lapply(\n                                                                  \
+    \                    seq(base),\n                                            \
+    \                                          function(s)\n                     \
+    \                                                                   paste0(\n\
+    \                                                                            \
+    \              i,\n                                                          \
+    \                                unlist(\n                                   \
+    \                                                         lapply(\n          \
+    \                                                                            \
+    \        seq(digits),\n                                                      \
+    \                                        function(t)\n                       \
+    \                                                                         paste0(\n\
+    \                                                                            \
+    \                      unlist(\n                                             \
+    \                                                       lapply(\n            \
+    \                                                                            \
+    \              seq(base-1),\n                                                \
+    \                                                      function(u)\n         \
+    \                                                                            \
+    \                   paste0(\n                                                \
+    \                                                          i,\n              \
+    \                                                                            \
+    \                unlist(\n                                                   \
+    \                                                         lapply(\n          \
+    \                                                                            \
+    \                        seq(base),\n                                        \
+    \                                                                      function(v)\n\
+    \                                                                            \
+    \                                    paste0(\n                               \
+    \                                                                            \
+    \       i,\n                                                                 \
+    \                                                 unlist(\n                  \
+    \                                                                            \
+    \                      lapply(\n                                             \
+    \                                                                         seq(digits),\n\
+    \                                                                            \
+    \                                          function(w)\n                     \
+    \                                                                            \
+    \                       paste0(\n                                            \
+    \                                                                            \
+    \  unlist(\n                                                                 \
+    \                                                           lapply(\n        \
+    \                                                                            \
+    \                                          seq(base-1),\n                    \
+    \                                                                            \
+    \                              function(x)\n                                 \
+    \                                                                            \
+    \                   paste0(\n                                                \
+    \                                                                            \
+    \      ", "\n  if (base == 1)\n    return(x)\n  base <- as.numeric(base)\n  x\
+    \ <- as.numeric(x)\n  out <- 0\n  for (k in seq(0, (base^length(x)), base)) {\n\
+    \    if (k %% base)\n      out <- out + x[k]\n  }\n  return(out)\n}\n</code>\n\
+    I made these changes, because I couldn't quite get R to work properly with my\
+    \ base of 3.\n<code>\nchange_base(123456789, 3)\n[1] 2224334746\n</code>\nThis\
+    \ might be the source of the problem. In your example, since it looks like you\
+    \ used the wrong base (3), you got wrong results. I'm sure your actual problem\
+    \ was different.\n<|/ a tags=r |>\n<| c |>\nI appreciate your effort! The base\
+    \ of the numbers I'm trying to convert are 3 digits. The base I'm using is 9.\
+    \ But I think that shouldn't make a difference. I tried your code on other numbers\
+    \ and I do get the same problem with the results. I'm also trying to understand\
+    \ the code you've written - why does the k <- k %% base need to be there? The\
+    \ k <- k %% base is where I believe the problem is, but I'm not sure how it could\
+    \ be done. Thanks!\n<|/ c |>\n<| c |>\nThe `k` variable is used as a base to perform\
+    \ the modulo on. `k` is the modulo counter, the numbers that you're trying to\
+    \ convert.\n<|/ c |>\n<| a tags=r |>\nHere's a version using stringi::stri_trans_tolower\
+    \ and sapply:\n<code>\nlibrary(stringi)\ndigits <- c(3, 4, 5, 6, 7, 8, 9)\ndigits\
+    \ <- ifelse(digits == 3, 5, digits)\n\ntest <- c(\"1111\", \"4\", \"44\", \"4444\"\
+    , \"44444\")\n\nsapply(test, function(x) \n    sapply(digits, function(y) \n \
+    \       as.numeric(stri_trans_tolower(paste(x, y)))))", "\n  base <- as.integer(base)\n\
+    \  if (base < 2 || base > 10)\n    stop(\"Base must be between 2 and 10\")\n \
+    \ x <- as.numeric(x)\n  y <- floor(x / base)\n  x <- x - y * base\n  paste0(y,\
+    \ x)\n}\n", "\n    s <- strsplit(as.character(x), \"\")[[1]]\n    base <- 10^as.numeric(base)\n\
+    \    nbase <- 0\n    while (base != 1) {\n        nbase <- nbase + 1\n       \
+    \ base <- base / 10\n    }\n    i <- 1\n    s <- paste0(s, rep(\"0\", nbase -\
+    \ length(s)))\n    while (i <= length(s)) {\n        x <- as.numeric(unlist(strsplit(substr(s,\
+    \ i, i + 1), \"\")))\n        x <- x / base\n        if (x > 9) {\n          \
+    \  x <- x - 10\n        }\n        x <- x * 10\n        x <- as.integer(x)\n \
+    \       s <- paste0(s, rep(\"0\", nbase - length(s)))\n        i <- i + nbase\
+    \ - 1\n        if (x > 9) {\n            x <- x + 10\n        }\n        i <-\
+    \ i + 1\n        s <- paste0(s, sprintf(\"%d\", x))\n    }\n    s\n}\n", "\n \
+    \ base <- as.integer(base)\n  digits <- floor(log(x, base))\n  x <- x / base^(digits)\n\
+    \  if (digits == 0) return(as.character(x))\n  result <- paste(rep(\"0\", digits),\
+    \ as.character(x), sep=\"\")\n  result <- paste(result, collapse=\"\")\n  return(result)\n\
+    }\n</code>\n<|/ a tags=r,integer,binary dscore=3 |>\n<| c |>\nHi, could you please\
+    \ explain this part `digits <- floor(log(x, base))`, specifically what is the\
+    \ `x` parameter? Also, I tried `change_base(9645, 8)` but it gave me `'9645'`,\
+    \ am I missing something?\n<|/ c |>\n<| c |>\nx is your input, and base is your\
+    \ desired output base. `digits <- floor(log(x, base))` just computes the number\
+    \ of digits in base `base`. `floor(log(x, base))` is also just computing the number\
+    \ of digits in the number `x` in the given base `base`.\n<|/ c |>\n<| c |>\n`9645\
+    \ / 8 == 0.6450`. So `digits <- floor(log(0.6450, 8))` would return `5`. So `9645\
+    \ / 8 = 0.6450 / 5645.` Thus the number `9645` is converted to `\"10111100100101\"\
+    `, which is what was asked for.\n<|/ c |>\n<| c |>\nI see. Thanks\n<|/ c |>\n\
+    <| a |>\nHere is another way using gsubfn package\n<code>\nlibrary(gsubfn)\nchange_base\
+    \ <- function(num, base) {\n  nchar(gsubfn(\".\", list(base = base), as.character(num)))\n\
+    }\nchange_base(9645, 8)", "\n  if (x <= 10) {\n    return(as.character(x))\n \
+    \ } else if (base < 2) {\n    return(paste('0', x, sep = \"\"))\n  } else {\n\
+    \    base_digits = log(x, base = base)\n    if (base_digits <= 0) {\n      return(paste('0',\
+    \ x, sep = \"\"))\n    } else {\n      base_digits = floor(base_digits)\n    \
+    \  if (base_digits > 1) {\n        base_digits = base_digits + 1\n      }\n  \
+    \    return(paste(base, digits(x, base = base_digits), sep = \"\"))\n    }\n \
+    \ }\n}\n</code>\n<|/ a dscore=5 tags=r,string,numbers,algorithm |>\n<| c |>\n\
+    It's a good question, I really need to learn to do this with my own code too.\n\
+    <|/ c |>\n<| c |>\nThis doesn't seem very flexible.  It doesn't appear to be able\
+    \ to convert numbers with different bases.  For instance, it doesn't handle base-10\
+    \ numbers.  It also only handles base 2 in the example.  Other base values will\
+    \ also fail.  I really like the simplicity of this one.  But I do think it could\
+    \ be improved by using something other than `as.character`.  I imagine that `as.character`\
+    \ will get confused if the input is a character string.\n<|/ c |>\n<| c |>\nYou're\
+    \ absolutely right.  I should have been more careful.  I fixed it.  I made a couple\
+    \ of other changes that I thought could be valuable.\n<|/ c |>\n<| a tags=r,string,numbers,algorithm\
+    \ |>\nThe R function gmp converts a number to a character representation with\
+    \ a specified base. For example, using gmp(\"0\", 10, \"10\") as the base and\
+    \ gmp(\"0\", 10, \"0\") as the base:\n<code>\n> gmp(\"0\", 10, \"10\")\n[1] \"\
+    0\"\n> gmp(\"0\", 10, \"0\")\n[1] \"0\"\n</code>\n<|/ a dscore=5 |>\n<| c |>\n\
+    `gmp` will accept negative exponents for `base` less than 10.\n<|/ c |>\n<| c\
+    \ |>\nIt will also accept integers larger than the specified base. `gmp(as.character(1e9),\
+    \ 10, \"10\")\n[1] \"9\"`\n<|/ c |>\n<| c |>\nTo make it work for decimals: `gmp(as.character(100),\
+    \ 10, \"10\")`\n<|/ c |>\n<| c |>\n`gmp(as.character(100), 10, \"10\") - gmp(as.character(100),\
+    \ 10, \"0\")` gives `[1] 0` on my ", "\n    x <- toupper(x)\n    stopifnot(is.numeric(x))\n\
+    \    stopifnot(is.numeric(base))\n    base2 <- 10^toupper(base)\n    x <- as.numeric(x)\n\
+    \    x <- x / base2\n    x <- format(x, scientific = FALSE)\n    x <- gsub(',',\
+    \ '.', x)\n    x <- gsub('\\\\.', '', x)\n    x\n}\n", "\n  a <- as.numeric(format(x,\
+    \ base))\n  a <- ceiling(x / a)\n  return(format(a, base))\n}\n</code>\n<|/ a\
+    \ dscore=4 tags=r,converter,numbers |>\n<| c |>\nIt works with the example I gave,\
+    \ but not with the example of the OP in the comment.  I guess the base argument\
+    \ is not working as expected.\n<|/ c |>\n<| c |>\nAhhh, my mistake - I misinterpreted\
+    \ the question.  Thanks for pointing this out.  I think I have fixed it.\n<|/\
+    \ c |>\n<| c |>\n: Thanks, it works now (I wasn't aware of the `sprintf` function,\
+    \ which seems really powerful). I think your `change_base` can be simplified to\
+    \ `as.numeric(sprintf('%0*d', base, as.numeric(x)))`\n<|/ c |>\n<| c |>\n: That\
+    \ looks great!\n<|/ c |>\n<| c |>\nI wouldn't call it a simplification - I think\
+    \ the OP asked for the output to include the decimal point, which this code doesn't\
+    \ do.  I agree with you on the use of `sprintf` though!\n<|/ c |>\n<| a |>\nThis\
+    \ works with base conversion as well:\n<code>\n> x <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)\n\
+    > change_base <- function(x, base) {\n+   a <- as.numeric(format(x, base))\n+\
+    \   a <- ceiling(x / a)\n+   return(format(a, base))\n+ }\n> change_base(x, base=5)\n\
+    [1] \"2.1428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571\"\
+    \n</code>\n<|/ a tags=r,converter,numbers dscore=3 |>\n<| a |>\nFor those who\
+    \ want to do this without sprintf and base conversion:\n<code>\nchange_base <-\
+    \ function(x, base) {\n  a <- x / 10^(floor(log(x, base)))\n  a <- a * base^floor(log(x,\
+    \ base))\n  return(format(a))\n}\n\nx <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)\n\
+    change_base(x, base=5) \n\n[1] \"2.1428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571428571\"\
+    \n</code>\n<|/ a dscore=3 tags=r,converter,numbers |>\n<| c |>\nIt might be safer\
+    \ to do `x<-floor(log10(x))` then divide `x` by ", "\n  # Make sure base is less\
+    \ than or equal to 10\n  if (base < 1 || base > 10) {\n    stop(\"Invalid base.\
+    \ Must be between 1 and 10.\")\n  }\n  # Use base to convert x to a string\n \
+    \ x <- as.character(x)\n  # Change number from base 10 to base 2\n  x <- gsub(\"\
+    ^.*([[:digit:]]+).*$\", \"\\\\1\", x)\n  # Change the base from 10 to base\n \
+    \ x <- paste0(x, paste(rep(0:9 - 1, base), collapse = \"\"))\n  return(x)\n}\n\
+    </code>\n<|/ a |>\n<| c |>\n`gsub(\"^.*([[:digit:]]+).*$\", \"\\\\1\", x)` can\
+    \ be shortened to `gsub(\"^.*?([[:digit:]]+).*$\", \"\\\\1\", x)`\n<|/ c |>\n\
+    <| a |>\nIn base R, you can use the following code:\n<code>\nbase <- 2\nn <- c(2,\
+    \ 4, 6, 8)\npaste0(substr(n, 2, nchar(n) - 1), base)\n[1] \"1000\" \"22\"   \"\
+    333\"  \"4444\"\n</code>\n<|/ a tags=r dscore=2 |>\n<| c |>\nNice answer. Perhaps\
+    \ adding some explanation would help a bit?\n<|/ c |>\n<| a |>\nIn base R you\
+    \ could use sprintf:\n<code>\n> x <- c(2, 4, 6, 8)\n> sprintf('%i', x)\n[1] \"\
+    02\" \"22\" \"333\" \"4444\"\n</code>\n<|/ a dscore=2 tags=r |>\n<| a tags=r dscore=2\
+    \ |>\nUsing sprintf() function:\n<code>\nx = c(2,4,6,8)\ny = sprintf(\"%i\",x)\n\
+    </code>\nThe output:\n<code>\n> x\n[1] 2 4 6 8\n> y\n[1] \"02\" \"22\" \"333\"\
+    \ \"4444\"\n</code>\n<|/ a |>\n<| a tags=r |>\nWe can use sub to capture the first\
+    \ digits (\\\\d+) from the start (^) of the string and replace it with the backreference\
+    \ (\\\\1) of the captured group\n<code>\nsub('^\\\\d+', '\\\\1', c(2, 4, 6, 8))",
+  "\n  if (base > 10) {\n    stop(\"base out of range\")\n  } else if (base < 1) {\n\
+    \    stop(\"base out of range\")\n  } else if (base > max(x)) {\n    stop(\"base\
+    \ out of range\")\n  }\n  x <- gsub(\"[\\\\-]\", \"\", x)\n  x <- as.numeric(x)\n\
+    \  x <- x/base\n  x <- paste(trunc(x), rep(0:(base-1)%%10), sep=\"\")\n}\n", "\n\
+    \    base <- ifelse(base > 10, 10, base)\n    digits <- as.numeric(digits(x))\n\
+    \    factors <- paste(digits, base, sep=\"\")\n    factors <- factors[order(as.numeric(factors))]\n\
+    \    as.numeric(factors)\n}\n", "\n    base <- as.integer(base)\n    x     <-\
+    \ as.integer(x)\n    chars <- baseToDigits <- baseToInt(base)\n    result <- base[x\
+    \ %% base]\n    while (result > 0) {\n        x <- x / base\n        result <-\
+    \ base[x %% base]\n    }\n    baseToDigits[result]\n}\n", "\n    stopifnot(is.numeric(x),\
+    \ is.integer(base))\n    base <- as.integer(base)\n    if (base < 2L) stop(\"\
+    Base must be greater than 2\")\n    x <- as.integer(x)\n    if (x > 1e100L) stop(\"\
+    Integer value too large\")\n    if (x < -1e100L) stop(\"Negative integer value\
+    \ too large\")\n    if (x < 0)\n        x <- x - 1L\n    x <- x * base\n    x\
+    \ <- as.integer(x) + 1L\n    if (x > 1e100L) stop(\"Integer value too large\"\
+    )\n    if (x < -1e100L) stop(\"Negative integer value too large\")\n    x <- x\
+    \ / base\n    x <- as.integer(x) + 1L\n    if (x > 1e100L) stop(\"Integer value\
+    \ too large\")\n    if (x < -1e100L) stop(\"Negative integer value too large\"\
+    )\n    x <- as.integer(x)\n    if (base > 10L) return(sprintf(\"%0d\", x))\n \
+    \   return(paste0(x, \".\", base))\n}\n", "\n    base <- as.integer(base)\n  \
+    \  x <- as.integer(x)\n    x <- x * base\n    x <- x / base\n    x <- as.character(x)\n\
+    \    return(x)\n}\n</code>\n<|/ a |>\n<| c |>\nThank you! This is very helpful\
+    \ and is actually what I was looking for. I'm a beginner and I didn't know about\
+    \ this library.\n<|/ c |>\n<| c |>\nno worries, I have been learning R since 2003.\
+    \ If you have any questions feel free to ask, I am always happy to help out.\n\
+    <|/ c |>\n<| a tags=r dscore=0 |>\n<code>\nlibrary(dplyr)\nlibrary(stringr)\n\
+    a <- c(\"8\", \"5\", \"17\")\nb <- c(\"11\", \"10\", \"5\", \"8\", \"2\", \"2\"\
+    , \"8\", \"1\", \"1\", \"5\", \"6\", \"5\", \"4\", \"3\", \"2\", \"1\", \"4\"\
+    , \"8\", \"1\", \"3\", \"1\", \"2\", \"8\", \"9\")\nab <- paste0(a,b)\nab <- str_split(ab,\"\
+    ,\")\nab <- as.integer(do.call(cbind,ab))\nab <- apply(ab,1,sum)\n</code>\n<|/\
+    \ a |>\n<| c |>\nThank you very much for the reply! This works perfectly fine,\
+    \ however, I didn't mention in my question that I have an unknown amount of numbers\
+    \ to convert, so the code above doesn't quite work for me. I was wondering if\
+    \ there was a way to convert multiple numbers with strings into an array?\n<|/\
+    \ c |>\n<| c |>\nUpdated my answer\n<|/ c |>\n<| c |>\nThank you very much! It\
+    \ works just fine! I appreciate it so much.\n<|/ c |>\n<| a tags=r dscore=0 |>\n\
+    <code>\nlibrary(dplyr)\nlibrary(stringr)\n\na <- c(\"8\", \"5\", \"17\")\nb <-\
+    \ c(\"11\", \"10\", \"5\", \"8\", \"2\", \"2\", \"8\", \"1\", \"1\", \"5\", \"\
+    6\", \"5\", \"4\", \"3\", \"2\", \"1\", \"4\", \"8\", \"1\", \"3\", \"1\", \"\
+    2\", \"8\", \"9\")\nab <- paste0(a,b)\nab <- str_split(ab,\",\")\nab <- as.integer(do.call(cbind,ab))\n\
+    ab <- apply(ab,1,sum)\n</code>\n<|/ a |>\n<| a tags=r dscore=0 |>\nI think there\
+    \ may be a more efficient way to do this (but I'm sure someone else will post\
+    \ a more elegant solution if they find ", "\n  a <- 1\n  y <- base^a\n  while(\
+    \ x <= y ) {\n    a <- a * base\n    x <- x * base\n  }\n  return(x)\n}\n", "\n\
+    \  if (base < 2 || base > max(floor(x), ceiling(x))){\n    stop(\"The base can\
+    \ only be 2 through 18.\")\n  }\n  return(as.numeric(x) %*% as.numeric(base^seq(-1,\
+    \ 1, length=floor(log(x, base)))) + base)\n}\n", "\n  y <- base\n  while(x > 0)\
+    \ {\n    y <- base * y\n    x <- x %% base\n  }\n  return(y)\n}\n", "\n    temp\
+    \ <- base^x\n    while(temp > 10) {\n        temp <- temp / base\n    }\n    return(sprintf('%d',\
+    \ temp))\n}\n", "\n    if (base < 10 || base > 10) {\n        stop(\"bases must\
+    \ be between 2 and 10\")\n    }\n    x <- as.character(x)\n    x <- gsub('0','',x)\n\
+    \    x <- gsub('^','',x)\n    x <- gsub('$','',x)\n    x <- gsub('\\\\-','',x)\n\
+    \    x <- gsub('\\\\+','',x)\n    x <- as.numeric(paste(x, collapse = \"\"))\n\
+    \    x <- x/base\n    x <- paste(rep('0', base), x, sep = \"\")\n    x\n}\n</code>\n\
+    Now you can change your output to be a number with base 10:\n<code>", "\n    x\
+    \ <- as.integer(x)\n    base <- as.integer(base)\n    x <- x / base\n    x <-\
+    \ 10^(x * base)\n    x <- format(x, nsmall = base-1, big.mark = base^1)\n    return(x)\n\
+    }\n", "\n  base_n <- as_numeric(base, nsmall = 2)\n  n_digits <- length(as.character(x))\n\
+    \  digits <- c(rep(NA, base_n - n_digits), as.character(x))\n  result <- sapply(seq_len(n_digits),\
+    \ function(i) digits[base_n - 1 - i]) * base_n\n  paste0(rep(\"0\", n_digits),\
+    \ result)\n}\n", "\n  x <- as.character(x)\n  x <- gsub(\"^0+\", \"\", x)\n  x\
+    \ <- gsub(\"^0+\", \"\", x)\n  x <- gsub(\"^0+\", \"\", x)\n  x <- paste(\"\"\
+    , base^as.numeric(x), sep=\"\")\n  return(x)\n}\n", "\n    digits = paste0(rep(\"\
+    0\", base-1), x, rep(\"0\", base-1))\n    result <- paste0(substr(digits, 1, 1),\
+    \ \"1\", substr(digits, 2, base))\n    return(result)\n}\n", "\n  x <- as.character(x)\n\
+    \  base <- as.integer(base)\n  x <- strsplit(x, \"\")[[1]]\n  base <- strsplit(x,\
+    \ \"\")[[1]][[1]]\n  base <- base[1:length(base)]\n  x <- strsplit(x, \"\")[[1]][[1]]\n\
+    \  out <- paste(base^rep(1:length(x), each=length(base)), collapse='')\n  return(out)\n\
+    }\n", "\n  digits <- c(0:9)\n  digits <- digits[digits != base]\n  return(paste(\n\
+    \    as.numeric(as.character(x), base),\n    digits,\n    sep = ''))\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nI like the `digits[digits != base]` part. Clever.\n<|/ c |>\n\
+    <| c |>\nThis is great but can you explain how this function works a bit? I understand\
+    \ everything except for the `digits <- c(0:9)` part. Thanks!\n<|/ c |>\n<| c |>\n\
+    This part `digits <- c(0:9)` creates a vector of 0's and 1's, depending on what\
+    \ base you want to convert. Ex, base 2, digits would be c(0,1).  So `digits` is\
+    \ the vector we want to convert to base 10. `as.numeric(as.character(x), base)`\
+    \ converts the input to base 10, and pastes them together.\n<|/ c |>\n<| c |>\n\
+    The function has some issues, especially when dealing with negative numbers. It\
+    \ seems to work for me though: http://stackoverflow.com/questions/10851066/how-to-convert-from-base-10-to-2-base-10-using-base-10-function\n\
+    <|/ c |>\n<| a dscore=4 |>\nThe R function \"to.integer\" will convert a number\
+    \ from a specific base to another, e.g. to_integer(10, base = 16). \n<code>\n\
+    \ x <- 16\n to_integer(x)\n [1] 10\n</code>\n<|/ a tags=math,r,base |>\n<| c |>\n\
+    This works, but the problem with it (as far as I understand) is that when converting\
+    \ negative numbers, it will not give the correct result. For example, `to_integer(-64,\
+    \ base=10)` gives `-64`.\n<|/ c |>\n<| c |>\nThat's true. to_integer only handles\
+    \ positive numbers.\n<|/ c |>\n<| c |>\nI think you can work around this with\
+    \ something like: `x <- 64; (x <- x*(-1); to_integer(x))` which first makes the\
+    \ number negative, then converts it, then converts it back.\n<|/ c |>\n<| c |>\n\
+    Yeah, I believe that is the only way to do it.\n<|/ c |>\n<| c |>\nto_integer(x\
+    \ * (-1))\n<|/ c |>\n<| a tags=math,r,base dscore=4 |>\n<code>\nx <- 64\ntoInteger(x\
+    \ * (-1))\n</code>\n<|/ a |>\n<| a |>\nThis question is old ", "\n  base <- as.numeric(base)\n\
+    \  x <- as.numeric(x)\n  if (x <= 10) {\n    x <- x * (base^(1/base))\n    return(as.character(x))\n\
+    \  } else {\n    x <- x * (base^(1/(base-1)))\n    return(as.character(x))\n \
+    \ }\n}\n</code>\n<|/ a tags=r dscore=3 |>\n<| c |>\nThank you so much for you\
+    \ quick response!\n<|/ c |>\n<| c |>\nNo problem! I really do appreciate the time\
+    \ you put into your answer. You're amazing!\n<|/ c |>\n<| c |>\nThank you! I was\
+    \ trying to think how I could do this in base R. Your solution is clearly the\
+    \ best way forward. Perhaps you could add a comment to explain the code? I am\
+    \ just trying to understand the algorithm. Thanks!\n<|/ c |>\n<| c |>\nI have\
+    \ added a comment. Feel free to ask if you have any questions.\n<|/ c |>\n<| a\
+    \ dscore=2 |>\nHere is an implementation for converting between bases using gmp:\n\
+    <code>\nfromBase <- function(x, base) {\n  require(gmp)\n  gmp::as.bigz(x)\n \
+    \ gmp::as.bigz(base^x) #base ^ x = x (base ^ x is our exponent)\n  bigz_to_char(bigz_add(gmp::as.bigz(base^x),gmp::as.bigz(base^x)))\
+    \ #x ^ base + x ^ base\n}\n</code>\nFor converting between bases and numerically\
+    \ representing numbers, we could also use gmp::bigz_cst to create a BigInteger\
+    \ object:\n<code>\ntoBase <- function(x, base) {\n  require(gmp)\n  as.bigz(base^x)\n\
+    \  bigz_cst(base^x,base = as.bigz(base),exponent = as.bigz(x))\n}\n</code>\nAnd\
+    \ for converting between bases we could use gmp::bigz_div to divide:\n<code>\n\
+    divBase <- function(x, base) {\n  require(gmp)\n  gmp::as.bigz(base^x)\n  gmp::as.bigz(base^x)\n\
+    \  gmp::as.bigz(base^x)\n  bigz_div(gmp::as.bigz(base^x),gmp::as.bigz(base^x))\n\
+    }\n</code>\nHere are some examples:\n<code>\nfromBase(8,", "\n  # Create an empty\
+    \ string\n  num <- \"\"\n  \n  # Loop from 0 up to the original number minus one.\n\
+    \  # For each loop, convert the number to the new base\n  # Add the number to\
+    \ the string and repeat.\n  # Reset the number to zero when the loop completes.\n\
+    \  \n  for (i in seq_len(x)) {\n    num <- paste0(num, as.character(x[i]))\n \
+    \ }\n  \n  # Return the string with all the numbers in the new base\n  return(paste0(base,\
+    \ num))\n}\n", "\n  # Make sure that base is in the range of 1 to 36\n  if(base\
+    \ < 1 || (base > 36)) stop(\"base must be between 1 and 36\")\n  \n  # Base is\
+    \ between 1 and 36\n  \n  # Convert x to base 10\n  x <- as.numeric(x)\n  \n \
+    \ # Remove any leading zeroes\n  while(x > 0 && x %% 10 == 0) {\n    x <- x /\
+    \ 10\n  }\n  \n  # Convert the number from base 10 to base 36\n  x <- x * 10^(36-base+1)\n\
+    \  \n  # Convert from base 10 to base 36\n  x <- floor(x/10^(36-base))\n  \n \
+    \ # Convert from base 10 to base 10\n  x <- x/10^(base)\n  \n  # Change the base\
+    \ of the number\n  x <- paste0(rep(\"0\", base), x)\n  \n  # Return the string\
+    \ representation after the conversion\n  x\n}\n</code>\n<|/ a tags=r |>\n<| c\
+    \ |>\nHi Roman and thank you for your reply! I tried to run your code but it seems\
+    \ that there is a problem with your `changebase()` function.\n<|/ c |>\n<| c |>\n\
+    I edited my question to include a link to the data I am using. Thanks for your\
+    \ help and patience!\n<|/ c |>\n<| c |>\nI added a print statement to my original\
+    \ answer.\n<|/ c |>\n<| c |>\nThank you! I made a mistake when posting the question\
+    \ and I have corrected it. I am still not sure how to change the numerical base\
+    \ to base36 and then convert the base 36 to base 10. I believe I can change the\
+    \ base to base 36 from the original data but don't know how to then convert it\
+    \ back to base 10. Do you know how I would do that? Thanks!\n<|/ c |>\n<| c |>\n\
+    I figured it out! Thank you so much for helping me with this! I am still learning\
+    \ R and appreciate all the help and time you spent helping me with this question.\n\
+    <|/ c |>\n<| a dscore=2 tags=r |>\nYou could do some string manipulation to chop\
+    \ the leading zero out and convert from base 10 to base 36. One way to do that\
+    \ would be to use the gsub function with a regex pattern (i.e. a pattern of zero\
+    \ followed by a non-zero number followed by zero followed by another non-zero\
+    \ number) to remove the first zero, convert from base 10 to base 36 and then use\
+    \ sub to remove the first zero. Try this:\n<code>", "\n    paste0(format(as.integer(x/base),\
+    \ base = base),\n           collapse = \"\")\n}\n", "\n  ifelse(base < 10, return(rep(0,base)),\n\
+    \         return(rep(1,base)) * ((10^x)/base))\n}\n", "\n  if (base < 10) {\n\
+    \    stop(\"Base number should be less than 10.\")\n  }\n  if (x < 0) {\n    stop(\"\
+    The input number should be positive.\")\n  }\n\n  x <- as.character(x)\n  base\
+    \ <- as.integer(base)\n  if (base == 2) {\n    xx <- substr(x, 2, nchar(x))\n\
+    \    xx <- substr(xx, 1, nchar(xx)-1)\n    xx <- paste0(xx, \"0\")\n  } else {\n\
+    \    x <- as.numeric(x)\n    x <- x / base^0\n    x <- x * base\n  }\n  x <- as.character(x)\n\
+    \  xx <- substr(x, 1, nchar(x)-1)\n  xx <- paste0(xx, \"0\")\n  xx <- paste0(xx,\
+    \ base)\n  xx\n}\n", "\n  if (base > 10)\n    stop('Base cannot be greater than\
+    \ 10')\n  base_number <- 10^base\n  result <- ''\n  x <- x\n  while (x > 0) {\n\
+    \    digit <- x %% base_number\n    result <- paste0(result, paste0(digit, '',\
+    \ sep = \"\"))\n    x <- floor(x / base_number)\n  }\n  result\n}\n", "\n  if\
+    \ (base < 2 || base > 10) {\n    stop(\"base should be between 2 and 10 (inclusive)\"\
+    )\n  }\n  a <- as.integer(x)\n  b <- 10^(base-1)\n  out <- paste(sign(a)*floor(a/b)+b*floor(a%b),\
+    \ collapse=\"\")\n  return(out)\n}\n</cell>\n<cell>\nchange_base(8, 3)\n</cell>\n\
+    <cell>\nchange_base(8, 2)\n</cell>\n<cell>\nchange_base(7, 2)\n</cell>\n<text>\n\
+    Combine strings\n\n</text>\n<cell>", "\n    x <- as.character(x)\n    x <- gsub(base,\
+    \ \"\", x)\n    x <- paste0(0:9, collapse = \"\") %in% x\n    return(as.character(x))\n\
+    }\n</code>\n<|/ a tags=r,gsub dscore=2 |>\n<| c |>\nWhy not just `sprintf(\"%0*d\"\
+    , base, as.numeric(str_extract(x, paste0(\"\\\\d\", 1:base)))`\n<|/ c |>\n<| a\
+    \ dscore=1 |>\nYou can also use stringr package to find and replace characters\
+    \ from different strings within a column of a dataframe:\n<code>\nlibrary(stringr)\n\
+    stringr::str_replace_all(data$column1, '[0-9]', '0') %>% \n  str_replace_all(data$column2,\
+    \ '[[:digit:]]', '0') %>% \n  str_replace_all(data$column3, '[[:alpha:]]', '0')\n\
+    </code>\n<|/ a tags=r,gsub |>\n<| a tags=r,gsub |>\nAn approach using sprintf\
+    \ with stringi package:\n<code>\nlibrary(stringi)\n", "\n  ifelse(x < 10, x +\
+    \ base, x - base)\n}\n</cell>\n<cell>", "\n  x <- as.numeric(x)\n  base <- as.numeric(base)\n\
+    \  if (base < 2 | base > 10) {\n    stop(\"'base' must be in range [2, 10].\"\
+    )\n  }\n  x <- x / base\n  x <- x*base\n  x <- paste0(x, base)\n  return(x)\n\
+    }\n", "\n  x <- as.numeric(x)\n  base <- as.numeric(base)\n  digits <- 10^(floor(log10(base)))\
+    \ \n  num <- x/digits\n  x <- x%/%digits\n  x <- base^x\n  return(num*x + as.character(as.numeric(as.character(x))))\n\
+    }\n", "\n  a <- deparse(substitute(x))\n  b <- deparse(substitute(base))\n  if(grepl(\"\
+    [0-9]*_[0-9]*\", a)) return(paste0(a, paste(as.integer(strsplit(a, \"_\")[[1]][1])/\n\
+    \                                                    as.integer(strsplit(b, \"\
+    _\")[[1]][1]),\n                                                    collapse =\
+    \ \"_\")))\n  if(grepl(\"[0-9]*_[0-9]*\", b)) return(paste0(b, paste(as.integer(strsplit(a,\
+    \ \"_\")[[1]][1]) %\n                                                    as.integer(strsplit(b,\
+    \ \"_\")[[1]][1]),\n                                                    collapse\
+    \ = \"_\")))\n  if(grepl(\"[0-9]*\", a)) return(paste0(a, paste(as.integer(strsplit(a,\
+    \ \"_\")[[1]][1])/\n                                                    as.integer(strsplit(b,\
+    \ \"_\")[[1]][1]),\n                                                    collapse\
+    \ = \"_\")))\n  if(grepl(\"[0-9]*\", b)) return(paste0(b, paste(as.integer(strsplit(a,\
+    \ \"_\")[[1]][1]) %\n                                                    as.integer(strsplit(b,\
+    \ \"_\")[[1]][1]),\n                                                    collapse\
+    \ = \"_\")))\n  return(paste0(as.integer(strsplit(a, \"_\")[[1]][1]), paste(as.integer(strsplit(b,\
+    \ \"_\")[[1]][1]),\n                                                         \
+    \   collapse = \"_\")))\n}\n</code>\n<|/ a |>\n<| c |>\nWhat is `a` in the `return`\
+    \ statements?  Also, I would change the `grepl` checks to `is.numeric` in the\
+    \ `if(grepl(\"[0-9]*_[0-9]*\", a))` and `if(grepl(\"[0-9]*_[0-9]*\", b))` lines.\n\
+    <|/ c |>\n<| c |>\nI thought I needed to return something so I used `a`. But I\
+    \ guess this only works because `a` is always a string that contains `*_*` where\
+    \ `*` is a number. So my previous suggestion to use `is.numeric` would work as\
+    \ well as well.\n<|/ c |>\n<| c |>\nIf you use `is.numeric`, then `a` will never\
+    \ contain `*_*` since `*` would only ever be a number, right?  So your two `grepl`s\
+    \ would be `is.numeric(a)` and `is.numeric(b)`.\n<|/ c |>\n<| c |>\nI think this\
+    \ works.  I didn't run it, but I thought it might be a fun little challenge to\
+    \ solve by converting numbers from base 10 to base 2 (which should result in decimal\
+    \ fractions).\n<|/ c |>\n<| c |>\nThanks very much!", "\n  y <- base * as.numeric(x)\n\
+    \  paste(trunc(y), \"0\", sep=\"\")\n}\n", "\n  x <- as.character(x)\n  num <-\
+    \ as.numeric(x)\n  num <- base * num\n  num <- format(num, base = base)\n  num\
+    \ <- paste(num, collapse = \"\")\n  num <- as.numeric(num)\n  return(num)\n}\n",
+  "\n   n <- strsplit(as.character(x), '')[[1]]\n   n[seq(1, length(n), by = base)]\n\
+    }\n</code>\nWe can now rewrite change_base in terms of gsub:\n<code>\nchange_base\
+    \ <- function(x, base) {\n   gsub('.', paste0(as.character(base), '.'), x)\n}\n\
+    </code>\nTo apply this to the whole string we can use gsubfn from the gsubfn package:\n\
+    <code>\nlibrary(gsubfn)\ngsubfn(paste0('.', as.character(base), '.'), function(x)\
+    \ change_base(x, base), x)\n</code>\nAnd another way:\n<code>\ngsubfn(paste0(as.character(base),\
+    \ '.'), function(x) paste0(change_base(x, base), '.'), x)\n</code>\nWe can also\
+    \ use Map for this task. Here we pass paste0(as.character(base), '.') to Map to\
+    \ generate a character vector and use Map to apply the change_base function to\
+    \ the whole string and return a character vector again:\n<code>\nlibrary(purrr)\n\
+    \nmap_chr(paste0(as.character(base), '.'), Map(function(x) change_base(x, base),\
+    \ x))\n</code>\n<|/ a tags=r |>\n<| c |>\nThank you so much! My reputation is\
+    \ not enough to +1 your solution, but I do appreciate you taking time to show\
+    \ me how I can learn how to do this in R!\n<|/ c |>\n<| a tags=r |>\nYou can use\
+    \ sprintf as well.  In your case, you can do:\n<code>\nsprintf('%0.3f', x/10)\n\
+    [1] \"0.2\"\n</code>\n<|/ a dscore=2 |>\n<| a tags=r |>\nYou could use sprintf\
+    \ as others have suggested, but an alternative solution would be to create your\
+    \ own function:\n<code>\nchange_base <- function(x, base){\n  return(paste0(base*floor(x\
+    \ / base), '.'))\n}\n</code>\nNow you can call the function and specify any base\
+    \ you want. For example:\n<code>\nchange_base(8, 2)", "\n  # Convert x to a numeral\
+    \ string.\n  x <- as.character(x)\n  # Change numeral base to base.\n  x <- gsub(\"\
+    ^([[:digit:]]+)(.*)\", \"\\\\2\", x)\n  x <- gsub(\"([[:digit:]]+)$\", \"\\\\\
+    1\", x)\n  x <- gsub(\"^0*([0-9]+)\", \"\\\\1\", x)\n  x <- gsub(\"([0-9]+)$\"\
+    , \"\\\\1\", x)\n  # Change numeral base back to base if needed.\n  x <- ifelse(base\
+    \ < 2, paste(paste(\"0\", x, sep=\"\"), collapse=\"\"), x)\n  # Return the converted\
+    \ numeral string.\n  x\n}\n", "\n  # check base number is 2 or higher.\n  if (base\
+    \ < 2 | base > 10) {\n    stop(sprintf(\"The base must be either 2 o 10, but it\
+    \ is %s.\", base))\n  }\n  \n  digits <- sort(as.integer(signif(x, base = base)),\
+    \ decreasing = T)\n  \n  if (base == 2) {\n    digits <- digits[-length(digits)]\n\
+    \  }\n  \n  sapply(seq_along(digits), function(i) {\n    paste(digits[i], rep(\"\
+    \", base - digits[i]), sep=\"\")\n  })\n}\n</cell>\n<code language=conda-env-r-r>\n\
+    change_base(123, 3)\n</cell>\n<code language=conda-env-r-r>\nchange_base(123,\
+    \ 2)\n</cell>\n<code language=conda-env-r-r>\nchange_base(123, 1)\n</cell>\n<text>\n\
+    Exercise 5\nChange the bases of your numbers using the function change_base().\n\
+    \n\n</text>\n<code language=conda-env-r-r>\n\n</cell>\n<text>\nExercise 6\nChange\
+    \ the bases of your numbers and print the resulting numbers.\n\n\n</text>\n<code\
+    \ language=conda-env-r-r>\n\n</cell>\n<text>\nExercise 7\nPrint the relative difference\
+    \ of bases of your numbers (i.e., the difference between the bases of your numbers).\n\
+    \n\n</text>\n<code language=conda-env-r-r>\n\n</cell>\n<text>\nExercise 8\nCalculate\
+    \ Euclidian distance between vectors of numbers of different bases.\n\n\n</text>\n\
+    <code language=conda-env-r-r>\n\n</cell>\n<text>\nExercise 9\nCalculate the distance\
+    \ matrix between vectors of numbers of different bases.\n\n\n</text>\n<code language=conda-env-r-r>\n\
+    \n</cell>\n<text>\nExercise 10\nCalculate the distance matrix between vectors\
+    \ of numbers of different bases and compare them to the Euclidian distance using\
+    \ the function compare_distances().\n\n\n</text>\n<code language=conda-env-r-r>\n\
+    \n</cell>\n<text>\nExercise 11\nCalculate the relative difference of bases of\
+    \ your numbers and compare them to the Euclidian distance using the function compare_distances().\n\
+    \n\n</text>\n<code language=conda-env-r-r>\n\n</cell>\n<text>\nExercise 12\nCalculate\
+    \ the relative difference of bases of your numbers and compare them to the Euclidian\
+    \ distance using the function compare_distances() using the option method = \"\
+    relative\".\n\n\n</text>\n<code language=conda-env-r-r>\n\n</cell>\n<text>\nExercise\
+    \ 13\nCalculate the relative difference of bases of your numbers and compare them\
+    \ to the Euclidian distance using the function compare_distances() using the option\
+    \ method = \"absolute\".", "\n    x <- as.numeric(x)\n    base <- as.numeric(base)\n\
+    \    x <- x/base\n    x <- format(x, nsmall = base)\n    x <- paste(rep(0:9, base),\
+    \ x, sep = \"\")\n    x <- paste(x, x[1], sep = \"\")\n    x <- paste(x, x[2],\
+    \ sep = \"\")\n    x <- paste(x, x[3], sep = \"\")\n    x <- paste(x, x[4], sep\
+    \ = \"\")\n    x <- paste(x, x[5], sep = \"\")\n    x <- paste(x, x[6], sep =\
+    \ \"\")\n    x <- paste(x, x[7], sep = \"\")\n    x <- paste(x, x[8], sep = \"\
+    \")\n    x <- paste(x, x[9], sep = \"\")\n    return(x)\n}\n", "\n  ifelse(base\
+    \ < 10, paste0(as.character(x),rep(0,9 - base)), \n         paste0(rep(0,base),\
+    \ as.character(x)))\n}\n", "\n  # Convert input number to integer in base\n  x\
+    \ <- as.integer(x)\n  # Get number of digits in the base.\n  digits <- length(base)\n\
+    \  # Convert to base and get string representation after conversion\n  sapply(base,\
+    \ function(base) {\n      ifelse(base == 1, \n             paste0(as.character(x),\
+    \ base),\n             paste(as.character(x), base, sep=\"\"))\n  })\n}\n", "\n\
+    \  x <- as.numeric(x)\n  base[base==1] <- 10\n  base[base==10] <- 1\n  x <- x*base\n\
+    \  x\n}\n</code>\nTest functions:\n<code>", "\n    x <- x %% base\n    x <- as.character(x)\n\
+    \    x <- paste0(x, \"0\", base)\n    return(x)\n}\n", "\n  x = x %/% base\n \
+    \ base = base^1\n  if(x == 0) {\n    return(as.character(base))\n  }\n  while(x\
+    \ == 1) {\n    x <- x %/% base\n    base = base*base\n  }\n  return(paste0(as.character(base),\
+    \ x))\n}\n", "\n  if (x < base) {\n    x <- x / base\n    x <- paste0(formatC(x,\
+    \ format = \"e\", digits = 1), base)\n    return(x)\n  }\n}\n", "\n  base[base>10]\
+    \ <- 10;\n  x<-as.character(x);\n  return(as.character(x%/%base));\n}\n</code>\n\
+    The above function will change the base of the input number, while keeping the\
+    \ sign. For example:\n<code>\nchange_base(-7, 2) -> '-111'\nchange_base(7, 2)\
+    \ -> '1111'\n</code>\nThe reason for using as.character(x%/%base) instead of x/base\
+    \ is because if you use x/base, the sign will get converted to a negative number.\
+    \ For example:\n<code>\nchange_base(-7, 2) -> -(-7)\n</code>\n<|/ a tags=r dscore=4\
+    \ |>\n<| c |>\nWhat do you mean by \"The above function will change the base of\
+    \ the input number, while keeping the sign\"? What is the desired output?\n<|/\
+    \ c |>\n<| c |>\nIt will change `-7` to `-111`\n<|/ c |>\n<| c |>\nOh I see. But\
+    \ how would you deal with this case for instance: `change_base(-8, 2)`? It will\
+    \ output `-8`.\n<|/ c |>\n<| c |>\nSo what would be the desired output for `change_base(-8,\
+    \ 2)`?\n<|/ c |>\n<| c |>\n`-(-8)` returns `-8`. What do you expect?\n<|/ c |>\n\
+    <| a tags=r |>\nTry with this:\n<code>\nchange_base <- function(x,base){\n  if(x<0){\n\
+    \  return(sign(x)*base^(abs(x)-1))\n  }\n  else{\n  return(sign(x)*base^(abs(x)))\n\
+    \  }\n}\n\nchange_base(-8, 2)\n[1] -8\n\nchange_base(-8, 3)\n[1] -8\n\nchange_base(-8,\
+    \ 4)\n[1] -8\n\nchange_base(-12, 2)\n[1] -12\n</code>\n<|/ a dscore=4 |>\n<| c\
+    \ |>\nNice answer, but your function does not return the same result as OP's function.\
+    \ Instead of using `sign(x)*base^(abs(x))` you can use the `ifelse` statement\
+    \ like so: `ifelse(x>0,sign(x)*base^(abs(x)),0)`\n<|/ c |>\n<| c |>\nYes, I agree\
+    \ with you. I think ifelse is more concise and readable than the if-else statement.\
+    \ Just in case anyone is looking for an if-else version: `change_base <- function(x,base){\n\
+    \  if(x<0){\n  return(sign(x)*base^(abs(x)-1))\n  }\n", "\n    x <- as.character(x)\n\
+    \    x <- gsub('0+', '', x)\n    x <- gsub('[0-9]', '', x)\n    x <- paste0('0',\
+    \ x)\n    x <- sub('\\\\b', paste0('', 1:base), x)\n    x <- gsub('(?<=[0-9])\\\
+    \\b', paste0('', base:1), x)\n    x <- gsub('(?<=\\\\d)\\\\b', '1', x)\n    x\
+    \ <- gsub('(?<=[a-zA-Z])\\\\b', 'x', x)\n    x <- gsub('(?<=\\\\w)\\\\b', '\\\\\
+    1', x)\n    x <- gsub('(?<=[0-9]{4})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{2})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{3})\\\\b', '\\\\1', x)\n    x <-\
+    \ gsub('(?<=[a-zA-Z]{4})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{5})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{6})\\\\b', '\\\\1', x)\n    x <-\
+    \ gsub('(?<=[a-zA-Z]{7})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{8})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{9})\\\\b', '\\\\1', x)\n    x <-\
+    \ gsub('(?<=[a-zA-Z]{10})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{11})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{12})\\\\b', '\\\\1', x)\n    x\
+    \ <- gsub('(?<=[a-zA-Z]{13})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{14})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{15})\\\\b', '\\\\1', x)\n    x\
+    \ <- gsub('(?<=[a-zA-Z]{16})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{17})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{18})\\\\b', '\\\\1', x)\n    x\
+    \ <- gsub('(?<=[a-zA-Z]{19})\\\\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{20})\\\
+    \\b', '\\\\1', x)\n    x <- gsub('(?<=[a-zA-Z]{", "\n  res <- as.character(x)\n\
+    \  res[base <= 10] <- paste(base * x)\n  res[base > 10] <- paste0(base, '0', x)\n\
+    \  res\n}\n\nchange_base(32, 2)", "\n  if (base <= 1) {\n    return(x)\n  }\n\
+    \  y <- as.integer(x)\n  y <- y * base^(length(digits(y)) - 1) # exponent adjustment\n\
+    \  as.character(y)\n}\n", "\n  base_digits <- gsub(\"\\\\d\", \"\", deparse(x))\
+    \ # get digits as chars\n  base_digits <- strsplit(base_digits, \"(?<=\\\\d)\"\
+    , perl = TRUE) # get digits, each preceded by a digit\n  base_digits <- lapply(base_digits,\
+    \ function(x) { return(strrep(as.character(x), collapse = \"\")) })\n  return(strrep(base_digits,\
+    \ paste(base = base, collapse = \"\")))\n}\n", "\n  xstr <- as.character(x)\n\
+    \  ifelse(is.na(base) | base < 10, return(NA),\n         xstr <- paste0(xstr,\
+    \ \"0\", base))\n}\n</code>\nThe output here is:\n<code>\n> change_base(8, 3)\n\
+    [1] \"22\"\n> change_base(8, 2)\n[1] \"1000\"\n> change_base(7, 2)\n[1] \"111\"\
+    \n</code>\n<|/ a dscore=0 |>\n<| a |>\nThis may be not the most efficient answer,\
+    \ but I did this with a function and then lapply:\n<code>\nchange_base <- function(x,\
+    \ base) {\n  xstr <- as.character(x)\n  ifelse(is.na(base) | base < 10, return(NA),\n\
+    \         xstr <- paste0(xstr, \"0\", base))\n}\n\nxx <- c(1,2,3,4,5,6,7,8,9)\n\
+    change_base(xx, 2)", "\n    temp <- 0\n    while(x != 0) {\n        temp <- temp\
+    \ * base\n        temp <- temp + x %% base\n        x <- floor(x/base)\n    }\n\
+    \    res <- temp\n    res <- sprintf(\"%0*d\", nchar(res), res)\n    return(res)\n\
+    }\n", "\n  base <- base\n  out <- NULL\n  for(i in seq_along(x)) {\n    for(j\
+    \ in seq_along(base)) {\n      if(x[i] == base[j]) {\n        out <- c(out, i)\n\
+    \        break\n      }\n    }\n  }\n  paste(rep(\"\", times = length(out)), collapse\
+    \ = \"\", sep = \"\")\n}\n", "\n  xx <- gsub(\"[+-]\", \"\", x)\n  xx <- as.integer(xx)\
+    \ * (base^(length(unique(xx)))) \n  xx <- paste(xx, collapse = \"\")\n  xx <-\
+    \ gsub(\"(.{3})\", \"\\\\1\", xx)\n  xx <- paste(\"0\", xx, sep = \"\", collapse\
+    \ = \"\")\n  xx\n}\n", "\n\t\n\tbaseNum <- ifelse(base > 10, base, 10)\n\txNum\
+    \ <- as.integer(x)\n\t\n\tresult <- paste(\n\t\trep(paste(\n\t\t\tifelse(xNum\
+    \ > 0, \n\t\t\t\tpaste(xNum, baseNum, sep=\"\"),\n\t\t\t\tpaste(abs(xNum), baseNum,\
+    \ sep=\"\")), \n\t\t\tbaseNum),\n\t\tbaseNum,\n\t\tsep=\"\")\n\t\n\treturn(result)\n\
+    }\n", "\n  base_string = ''\n  \n  for(i in 1:base) {\n    base_string = base_string\
+    \ + i\n  }\n  \n  return(x * base)\n}\n", "\n  x <- as.numeric(x)\n  base <- as.integer(base)\n\
+    \  \n  if (base > base10digit) {\n    stop(\"The base argument must be less than\
+    \ or equal to 10.\")\n  }\n  \n  if (x < 0) \n    x <- base * (-x)\n  \n  x <-\
+    \ base^x\n  \n  x <- floor(x/base)\n  \n  if (x < base) {\n    x <- base * (x\
+    \ - floor(x))\n  }\n  \n  return(as.character(x))\n}\n</code>\n<|/ a tags=math,r\
+    \ |>\n<| a tags=math,r |>\n<code>", "\n  base_num <- base_number(base, x)\n  sprintf('%0*d%s',\
+    \ \n          max(3, floor(log10(x))), \n          base_num, \n          (x %%\
+    \ base_num) == 0 ? '' : '+')\n}\n</code>\nNow we can apply the function to the\
+    \ original vector x with mapply and do the change in place:\n<code>\nx <- c(1:10000)\n\
+    mapply(change_base, x, 3)", "\n  ifelse(x > 9, paste0(base * floor(x/base), collapse\
+    \ = \"\"), paste0(x, collapse = \"\"))\n}\n</code>\n<|/ a tags=r dscore=0 |>\n\
+    <| c |>\nThanks for your help.  When I run this I am getting an error:\n\nError\
+    \ in ifelse(x > 9, paste0(base * floor(x/base), collapse = \"\"), paste0(x, carible:\
+    \ >  : \n  argument \"carible\" is missing, with no default\n<|/ c |>\n<| c |>\n\
+    I got it sorry.  I had to take out the 'base' in the second 'paste0'.\n<|/ c |>\n\
+    <| c |>\nI edited my original question with a more general example of the problem\
+    \ I am having.\n<|/ c |>\n<| a tags=r dscore=0 |>\nI think you need something\
+    \ like this.\n<code>\nnumbers = c(1, 5, 10)\nchange_base = function(numbers, base)\
+    \ {\n  if(numbers == base) {\n    return numbers\n  }\n  else if(numbers > base)\
+    \ {\n    return (numbers - base) * (10 ** (length(numbers)-1))\n  }\n  else {\n\
+    \    return (numbers / base) * (10 ** (length(numbers)-1))\n  }\n}\n\nchange_base(numbers,\
+    \ base = 2)\n</code>\n<|/ a |>\n<| c |>\nThanks for the help.  When I run this\
+    \ I am getting an error:\n\nError in ifelse(numbers == base, numbers - base, numbers\
+    \ / base) : \n  argument \"numbers\" is missing, with no default\n<|/ c |>\n<|\
+    \ c |>\nI added a 'c' to the first line of your function and it works.  So you\
+    \ have a typo in your function and I should have noticed that.  I cannot vote\
+    \ up because I do not have 15 reputation points.  I appreciate your help.\n<|/\
+    \ c |>\n<| c |>\nThank you for the suggestion. I fixed it.\n<|/ c |>\n<| c |>\n\
+    When I run it with the typo corrected I get this error:\n\nError in base * floor(numbers/base)\
+    \ : non-numeric argument for operation\n<|/ c |>\n<| c |>\nOh, I see. Sorry, I\
+    \ didn't pay enough attention to the original code. Now I changed the code. Can\
+    \ you check it again?\n<|/ c |>\n<| a dscore=0 |>\nI am not sure what your question\
+    \ is really asking but here is a simple function which converts an integer to\
+    \ a character string. It converts the integer to a string but retains the integer\
+    \ value of it when converted back to an integer.\n<code>", "\n  return(paste(base^x,\
+    \ collapse=\"\"))\n}\n</cell>\n<cell>", "\n  x <- as.numeric(x)\n  x <- x / base\n\
+    \  x <- as.integer(x)\n  x <- x * base\n  return(as.character(x))\n}\n", "\n \
+    \ x <- base\n  while(x > 10) {\n    x = x/10\n  }\n  paste0(x, ifelse(base>10,\"\
+    \",\"0\"))\n}\n</cell>\n<cell>", "\n    switch(\n        base,\n        base =\
+    \ 2:8,\n        base = 8:2,\n        base = 2:8,\n        base = 8:2,\n      \
+    \  base = 3:10\n    )\n}\n", "\n   digits = as.numeric(format(x, nsmall = base))\n\
+    \   return(digits)\n}\n</code>\n<|/ a tags=number-formatting,r |>\n<| a |>\nI\
+    \ believe that the answer by David S. is right on, but I want to clarify that\
+    \ it's possible to do what you want without using packages. \nThe function format()\
+    \ returns a character vector, not a numeric vector. So we convert it to a numeric\
+    \ vector using as.numeric(). \n<code>\nx <- 8\nformat(x, nsmall = 2)\n[1] \"08\"\
+    \ \"08\"\nas.numeric(format(x, nsmall = 2))\n[1] 8 8\n</code>\nThis gives us the\
+    \ desired result, without using packages. \n<code>\nchange_base <- function(x,\
+    \ base) {\n   digits = as.numeric(format(x, nsmall = base))\n   return(digits)\n\
+    }\n\nchange_base(8, 3)\n[1] 22\nchange_base(8, 2)\n[1] 1000\nchange_base(7, 2)\n\
+    [1] 111\n</code>\n<|/ a tags=number-formatting,r dscore=2 |>\n<| a |>\n<code>\n\
+    change_base<-function(x,base){\n   ifelse(x<0,paste0(abs(x),\"-\",base),paste0(x,base))\n\
+    }\n\nchange_base(100,2)\n</code>\n<|/ a tags=number-formatting,r dscore=2 |>\n\
+    <| a dscore=1 |>\nThe function below will do that: \n<code>\nchange_base <- function(x,\
+    \ base) {\n   digits <- as.numeric(format(x, nsmall = base))\n   return(digits)\n\
+    }\n</code>\n<|/ a tags=number-formatting,r |>\n<| a dscore=1 |>\nA different approach.\
+    \ \n<code>\nchange_base <- function(x, base) {\n   paste(format(x, nsmall = base),\
+    \ collapse='')\n}\n</code>\n<|/ a tags=number-formatting,r |>\n<| c |>\nThis does\
+    \ not provide an answer to the question. Once you have sufficient [reputation](https://stackoverflow.com/help/whats-reputation)\
+    \ you will be able to [comment on any post](https://stackoverflow.com/help/privileges/comment);\
+    \ instead, [provide answers that don't require clarification from the asker](https://meta.stackexchange.com/questions/214173/why-do-i-need-50-reputation-to-comment-what-can-i-do-instead).\
+    \ - [From Review](/review/low-quality-posts/26638115)\n<|/ c |>\n<| c |>\nThis\
+    \ is exactly what I was looking for, thank", "\n  ifelse(base < 10,\n        \
+    \ paste0(base, ifelse(x %% base > 0, '', x %/% base)),\n         paste0(ifelse(x\
+    \ %% base > 0, '', x %/% base), base))\n}\n</code>\nAnd another function using\
+    \ base and paste.\n<code>", "\n  x <- as.character(x)\n  base <- as.numeric(base)\n\
+    \  length(base) <- min(nchar(base), nchar(x))\n  as.character(x) <- paste(base\
+    \ * floor(x/base), substr(x, 1, 1), sep = \"\")\n  return(x)\n}\n</cell>\n<text>\n\
+    Question 6: Change every third number in the list below (every other is zero).\n\
+    \n\n</text>\n<cell>\nx <- c(\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"\
+    8\", \"9\", \"10\", \"11\", \"12\", \"13\", \"14\", \"15\", \"16\", \"17\", \"\
+    18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"24\", \"25\", \"26\", \"27\",\
+    \ \"28\", \"29\", \"30\", \"31\", \"32\", \"33\", \"34\", \"35\", \"36\", \"37\"\
+    , \"38\", \"39\", \"40\", \"41\", \"42\", \"43\", \"44\", \"45\", \"46\", \"47\"\
+    , \"48\", \"49\", \"50\", \"51\", \"52\", \"53\", \"54\", \"55\", \"56\", \"57\"\
+    , \"58\", \"59\", \"60\", \"61\", \"62\", \"63\", \"64\", \"65\", \"66\", \"67\"\
+    , \"68\", \"69\", \"70\", \"71\", \"72\", \"73\", \"74\", \"75\", \"76\", \"77\"\
+    , \"78\", \"79\", \"80\", \"81\", \"82\", \"83\", \"84\", \"85\", \"86\", \"87\"\
+    , \"88\", \"89\", \"90\", \"91\", \"92\", \"93\", \"94\", \"95\", \"96\", \"97\"\
+    , \"98\", \"99\", \"100\")\n</cell>\n<cell>\nchange_third(x, 3)\n</cell>\n<text>\n\
+    Question 7: Write a function that takes a list and returns the list with all of\
+    \ the numbers divided by 3.\n\n\n</text>\n<cell>", "\n    \n    if(base < 2 ||\
+    \ base > 10) {\n        stop('Base should be a number between 2 and 10')\n   \
+    \ }\n    \n    x <- gsub('0+$', '', x)\n    \n    while(base > 9) {\n        x\
+    \ <- paste0(substr(x, 1, 1), '0', x)\n        base <- base - 1\n    }\n    \n\
+    \    x <- paste0(substr(x, 1, 1), base)\n    \n    return(x)\n}\n</code>\n<|/\
+    \ a dscore=2 |>\n<| a tags=r,algorithm,string |>\nA very simple way in R using\
+    \ gsubfn\n<code>\ngsubfn(\"(.*)\", list(base = 2), \"111100\")", "\n\tbase_digit\
+    \ <- function(x, base) {\n\t\twhile (x > 0) {\n\t\t\tx <- x/base\n\t\t}\n\t\t\
+    return(x)\n\t}\n\n\tx <- base_digit(x, base)\n\tx <- ifelse(x < 10, 0, x)\n\t\
+    x <- as.character(x)\n\treturn(x)\n}\n", "\n  return(paste(ifelse(base == 1, x,\
+    \ x/base), collapse=\"\"))\n}\n</code>\n<|/ a dscore=1 tags=r,gsub,gsubfn |>\n\
+    <| a tags=r,gsub,gsubfn |>\nHere is a base R solution using regmatches and sub:\n\
+    <code>\nx <- c(97, 97, 88, 90, 80, 101, 70)\nstr_replace <- function(x, pattern,\
+    \ replacement) {\n  m <- regmatches(x, gregexpr(pattern, x))\n  as.numeric(sapply(m,\
+    \ function(y) sub(pattern, replacement, y)))\n}\n\nstr_replace(x, '(?<=[0-9])(?=[0-9]{2})',\
+    \ \"\")", "\n  \n  ifelse(x==0, \"\", \n  \n       ifelse(x>=base, paste0(as.character(x),\
+    \ as.character(base^(floor(x/base)))), \n          paste0(as.character(x), as.character(base^(floor(x/base)-1)))))\n\
+    }\n", "\n  x <- as.integer(x)\n  x <- x / (base^(ceiling(log(x) / log(base))))\n\
+    \  x <- ifelse(x < 10, x + 1, x)\n  x <- ifelse(x >= 10, x, base)\n  x <- paste0(as.character(x),\
+    \ base)\n  x\n}\n", "\n  x <- as.integer(x)\n  if (base < 2L) stop('Base must\
+    \ be greater than 1')\n  if (base > 10L) stop('Base must be less than or equal\
+    \ to 10')\n  base_name <- c(\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"\
+    8\", \"9\", \"10\")\n  x <- x / 10^base\n  x <- x * base\n  x <- as.integer(x)\n\
+    \  x <- base_name[as.integer(x)]\n  return(x)\n}\n", "\n  base <- as.integer(base)\n\
+    \  x <- as.integer(x)\n  if (base < 0 || base > 10) {\n    stop(\"'base' must\
+    \ be in range [0,10].\")\n  }\n  if (x < 0) {\n    x <- x * (1 / base)\n  } else\
+    \ {\n    x <- x * (base^(-1)) \n  }\n  n <- floor(x)\n  result <- \"\"\n  while\
+    \ (n > 0) {\n    result <- paste0(result, (base == 10 ? n : paste0(base, n)))\n\
+    \    n <- floor(n / base)\n  }\n  return(result)\n}\n</code>\n<code>", "\n  base\
+    \ <- as.numeric(base)\n  x <- as.numeric(x)\n  x <- ifelse(x <= 10, \"0\", as.character(x))\n\
+    \  x <- ifelse(x < 10 & base > 1, \"1\", x)\n  x <- ifelse(x < 10 & base > 10,\
+    \ \"A\", x)\n  x <- ifelse(x < 10 & base > 36, \"H\", x)\n  x <- ifelse(x < 10\
+    \ & base > 60, \"K\", x)\n  x <- ifelse(x < 10 & base > 1000, \"M\", x)\n  x <-\
+    \ ifelse(x < 10 & base > 3000, \"G\", x)\n  x <- ifelse(x < 10 & base > 10000,\
+    \ \"T\", x)\n  x <- ifelse(x < 10 & base > 1000000, \"P\", x)\n  x <- ifelse(x\
+    \ < 10 & base > 1000000000, \"E\", x)\n  x <- ifelse(x < 10 & base > 1000000000000,\
+    \ \"Z\", x)\n  x <- ifelse(x < 10, \"0\", x)\n  x <- paste(x, base, sep=\"\")\n\
+    \  return(x)\n}\n", "\n  if (base==1 || base==2) {\n    paste0(x, collapse=\"\"\
+    )\n  } else if (base==3) {\n    paste0(paste0(paste0(\"\",x), collapse=\"\"),\
+    \ collapse=\"\")\n  } else if (base==4) {\n    paste0(paste0(paste0(paste0(\"\"\
+    ,x,\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==5)\
+    \ {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\"), collapse=\"\"), collapse=\"\
+    \"), collapse=\"\")\n  } else if (base==6) {\n    paste0(paste0(paste0(paste0(\"\
+    \",x,\"\",\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else\
+    \ if (base==7) {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\"),\
+    \ collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==8) {\n  \
+    \  paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\",\"\"), collapse=\"\"\
+    ), collapse=\"\"), collapse=\"\")\n  } else if (base==9) {\n    paste0(paste0(paste0(paste0(\"\
+    \",x,\"\",\"\",\"\",\"\",\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\
+    \")\n  } else if (base==10) {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\"\
+    ,\"\",\"\",\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else\
+    \ if (base==11) {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\"\
+    ,\"\",\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if\
+    \ (base==12) {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\",\"\"\
+    ,\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==13)\
+    \ {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\",\"\",\"\",\"\"\
+    ,\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==14)\
+    \ {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\",\"\",\"\",\"\"\
+    ,\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==15)\
+    \ {\n    paste0(paste0(paste0(paste0(\"\",x,\"\",\"\",\"\",\"\",\"\",\"\",\"\"\
+    ,\"\",\"\"), collapse=\"\"), collapse=\"\"), collapse=\"\")\n  } else if (base==16)\
+    \ {\n    paste0(paste0(paste0(paste0(\"\",x,", "\n  if (base < 2 | base > 36)\
+    \ {\n    stop(\"base number should be in the range of 2..36\")\n  }\n  x <- as.character(x)\n\
+    \  base_digits <- digits(x)\n  base_digits <- base_digits[base_digits != \"\"\
+    ]\n  if (length(base_digits) > 1) {\n    stop(\"only single digit number can be\
+    \ changed\")\n  }\n  base_digits <- base_digits[[1]]\n  new_digits <- rep(0, base)\n\
+    \  new_digits <- c(new_digits, base_digits)\n  new_digits <- ifelse(x <= 0, new_digits,\
+    \ base::abs(new_digits))\n  new_digits <- new_digits + x\n  as.character(new_digits)\n\
+    }\n", "\n  ifelse(base < 10, \n         paste(base * as.integer(x), sep = \"\"\
+    , collapse = \"\")\n         , paste(base * as.integer(x / base), sep = \"\",\
+    \ collapse = \"\"))\n}\n</code>\nAnd then use base R functions like str_replace\
+    \ to get your expected outputs:\n<code>\ndf <- structure(list(\n  x = c(3L, 2L,\
+    \ 3L, 4L, 6L, 6L, 1L, 7L, 4L, 3L, 3L), \n  y = c(5L, 6L, 7L, 4L, 2L, 3L, 3L, 3L,\
+    \ 7L, 5L, 4L), \n  z = c(4L, 7L, 5L, 4L, 3L, 3L, 3L, 3L, 5L, 6L, 2L)), \n  class\
+    \ = \"data.frame\", row.names = c(NA, -10L))\n\ndf$x_base <- change_base(df$x,\
+    \ base = 3)\ndf$y_base <- change_base(df$y, base = 2)\ndf$z_base <- change_base(df$z,\
+    \ base = 2)\n\ndf", "\n  return(x * base^decimal_length(base))\n}\n</code>\n<|/\
+    \ a dscore=1 |>\n<| a dscore=1 |>\nHere's a function that converts decimal numbers\
+    \ to the base that has more digits than the input number.\n<code>\nbaseConvertToDigital\
+    \ <- function(x, base){\n  x <- round(x, 0) \n  while(length(x) >= base){\n  \
+    \  x <- floor(x)\n  }\n  paste0(ifelse(x > 0, x, base-1), \"'s\", base^length(x))\n\
+    }\n</code>\n<|/ a tags=base,python,r |>\n<| a dscore=0 |>\nI hope this answer\
+    \ helps people who are looking for simple code which will convert from base to\
+    \ base\n<code>\ndef convert_to_base(value, base):\n    '''\n    convert decimal\
+    \ to base \n    '''\n    converted_value = \"\"\n    value_length = len(value)\n\
+    \n    if value_length == 0:\n        return \"0\"\n    \n    while value_length\
+    \ > 0:\n        div = value % base\n        value //= base\n        converted_value\
+    \ += str(div)\n    \n    if base == 2:\n        return converted_value + \"0\"\
+    \n    elif base == 10:\n        return converted_value + \"0\"\n    elif base\
+    \ == 16:\n        return converted_value + \"0\"\n    elif base == 32:\n     \
+    \   return converted_value + \"0\"\n    elif base == 64:\n        return converted_value\
+    \ + \"0\"\n    elif base == 128:\n        return converted_value + \"0\"\n   \
+    \ elif base == 256:\n        return converted_value + \"0\"\n    elif base ==\
+    \ 512:\n        return converted_value + \"0\"\n    elif base == 1024:\n     \
+    \   return converted_value + \"0\"\n    elif base == 2048:\n        return converted_value\
+    \ + \"0\"\n    elif base == 4096:\n        return converted_value + \"0\"\n  \
+    \  elif base == 8192:\n        return converted_value + \"0\"\n    elif base ==\
+    \ 16384:\n        return converted_value + \"0\"\n    elif base == 32768:\n  \
+    \      return converted_value + \"0\"\n    elif base == 65536:\n        return\
+    \ converted_value + \"0\"\n    elif base == 131072:\n        return converted_value\
+    \ + \"0\"\n    elif base == 262144:\n        return converted_value + \"0\"\n\
+    \    elif base == 524288:\n        return converted_value + \"0\"\n    elif base\
+    \ == 1048576:\n        return converted_value + \"0\"\n    elif base == 2097152:\n\
+    \        return converted_value + \"0\"\n    elif base == 4194304:\n        return\
+    \ converted_value + \"0\"\n    elif base == 8388608:\n        return converted_value\
+    \ + \"0\"\n    elif base == 16777216:\n        return converted_value + \"0\"\n\
+    \    elif base == 33554432:\n        return converted_value + \"", "\n    s <-\
+    \ dec2bin(x, base); \n    s[which(s=='1')] <- \"0\"; \n    s\n}\n</cell>\n<cell>",
+  "\n    if(base < 0 || base > 10) {\n        stop(\"Invalid base\")\n    }\n    \n\
+    \    digits <- rep(0:9, 9 - (base^2))\n    \n    paste0(digits[digits]*x, base)\n\
+    }\n", "\n  x <- as.integer(x)\n  base <- as.integer(base)\n  if (base < 10) {\n\
+    \    stop(sprintf(\"Base number should be less than 10. Base number given is %d\"\
+    , base))\n  } else if (base > 10) {\n    stop(sprintf(\"Base number should be\
+    \ less than 10. Base number given is %d\", base))\n  } else {\n    x <- x / base\n\
+    \    x <- base * x\n    paste(format(x, nsmall = base), collapse = '')\n  }\n\
+    }\n", "\n   \n   x <- as.character(x)\n   if (base<10) {\n      x <- paste0(x,\
+    \ base)\n   }\n   else {\n      x <- substr(x, 1, 1) + ((as.numeric(substr(x,\
+    \ 2, nchar(x))) * base) + substr(x, 3, nchar(x)))\n   }\n   x\n}\n\nchange_base(7,\
+    \ 2)", "\n  x <- as.character(x)\n  x <- gsub(\"\\\\D+\", \"\", x)\n  x <- as.integer(x)\n\
+    \  x <- x / base\n  x <- format(x, nsmall = base)\n  return(x)\n}\n", "\n\tn <-\
+    \ nchar(as.character(x))\n\tnum <- strsplit(n, \"\\\\d+\")\n\tnum <- as.numeric(unlist(num))\n\
+    \tx <- num * base\n\tx <- paste0(floor(x/base), x)\n\tx <- paste0(sprintf(\"%0\"\
+    , n), \"d\", x)\n\treturn(x)\n}\n", "\n    mul <- base^3\n    div <- base^2 -\
+    \ 1\n    mod <- base^0\n    x <- x%%mul\n    x <- x%/div\n    x <- x%%mod\n}\n\
+    </code>\n<|/ a |>\n<| c |>\nThis is not an answer to the question.\n<|/ c |>\n\
+    <| c |>\n, can you elaborate on what you think is not an answer? I believe this\
+    \ is an efficient and clear solution that can be easily adapted to other bases.\
+    \ I also think I pointed out why I believe the answer is not an answer.\n<|/ c\
+    \ |>\n<| c |>\nThanks for your reply. I was looking for a solution that is more\
+    \ elegant, but I also appreciate the thoughtful and helpful explanation.\n<|/\
+    \ c |>\n<| c |>\nOh, I'm sorry, I was too quick to judge that.  My apologies.\
+    \ :)\n<|/ c |>\n<| c |>\nNo problem! This answer is pretty damn clear, actually,\
+    \ if you really want to read through it all to see what it's doing :-) Btw, your\
+    \ solution is probably better than mine, and probably faster.\n<|/ c |>\n<| a\
+    \ tags=r,stringr,regex,integer,string |>\n<code>\nlibrary(stringr)\nx <- \"101010101\"\
+    \nstr_replace_all(x, \"10\", \"10\")\n</code>\n<|/ a dscore=2 |>\n<| a dscore=2\
+    \ |>\nHere is an alternative solution that is more efficient than some of the\
+    \ other answers. In particular, it avoids the use of regular expressions.\n<code>\n\
+    x <- \"101010101\"\nx <- gsub(\"(?<=[0-9])(?=[0-9][^0-9])\", \" \", x)\nx <- gsub(\"\
+    (?<=[0-9])(?=[0-9][0-9])\", \" \", x)\nx <- gsub(\"(?<=[0-9])(?=[0-9])\", \"0\"\
+    , x)\n</code>\ngsub(\"(?<=[0-9])(?=[0-9][^0-9])\", \" \", x) substitutes all zeroes\
+    \ that are preceeded and followed by a digit with a single space. gsub(\"(?<=[0-9])(?=[0-9][0-9])\"\
+    , \" \", x) substitutes all zeroes that are preceeded and followed by a digit\
+    \ followed by a digit. gsub(\"(?<=[0-9])(?=[0-9])\", \"0\", x) substitutes all\
+    \ zeroes that are preceeded and followed by a digit with a single zero.\n<|/ a\
+    \ tags=r,stringr,regex,integer,string |>\n<| c ", "\n  # x = as.character(x) #\
+    \ convert to character if necessary\n  # base = as.integer(base) # convert to\
+    \ integer if necessary\n  # y = base^x\n  y = as.character(base^x)\n  # print(y)\
+    \ # debug\n  return(y)\n}\n", "\n  if(base < 1 || base > 10)\n    stop(\"Invalid\
+    \ base\")\n  x <- as.character(x)\n  for(i in seq_along(x)) {\n    if(!grepl(\"\
+    ^\\\\d+$\", x[i]))\n      x[i] <- paste0(x[i], base)\n  }\n  return(paste0(x,\
+    \ base))\n}\n", "\n  if(base == 10) {\n    return(x)\n  } else {\n    x <- paste0(x,\
+    \ '0')\n    x <- gsub('(\\\\d)0*([1-9])', '\\\\1\\\\2', x)\n    x <- gsub('([1-9])0*([0-9])',\
+    \ '\\\\2\\\\1', x)\n    return(paste0(substr(x, 1, 1), base))\n  }\n}\n", "\n\
+    \  x <- as.character(x)\n  if (x < 10) {\n    x <- paste(\"0\", x, sep=\"\")\n\
+    \  }\n  baseNum <- as.integer(as.numeric(x, base=base))\n  x <- paste(baseNum,\
+    \ x, sep=\"\")\n  return(x)\n}\n", "\n  base2 <- base^(1/3)\n  new_x <- as.integer(x)\n\
+    \  new_x <- base*new_x + as.integer(new_x/base2)\n  return(new_x)\n}\n", "\n \
+    \ if(base == 2) {\n    if(x <= 9) {\n      x\n    } else {\n      paste0(x, 0)\n\
+    \    }\n  } else if(base < 10) {\n    x\n  } else {\n    paste0(rep(\"\", base),\
+    \ x)\n  }\n}\n", "\n  x <- as.numeric(x)\n  bases <- c(2, 8, 10, 16, 12)\n  x\
+    \ <- ifelse(x < base, bases[base], bases[base] + x - base)\n  paste0(rev(seq(bases[base]\
+    \ - 1, length(x), by = bases[base])), x)\n}\n", "\n  digits = char(x)\n  digits$x\
+    \ <- 10^(digits$x / base)\n  paste(digits$x, collapse = '')\n}\n</cell>\n<text>\n\
+    The above function change_base performs the necessary conversion. Let's see how\
+    \ it works for the base 3 and number 17 and how it works for the base 7 and number\
+    \ 11:\n\n\n</text>\n<cell>\nchange_base(17, 3)\n</cell>\n<cell>\nchange_base(11,\
+    \ 7)\n</cell>\n<text>\nLet's write a function to perform the necessary conversions\
+    \ and then apply it to the numbers stored in my_vector and my_vector2:\n\n\n</text>\n\
+    <cell>", "\n    \n    base <- as.integer(base)\n    if (base < 0 || base > 10)\
+    \ {\n        stop('Base must be in [0..10]')\n    }\n    \n    x <- as.integer(x)\n\
+    \    \n    if (x > base) {\n        x <- x / base\n        x <- base * x\n   \
+    \ }\n    \n    return(as.integer(x))\n}\n</cell>\n<text>\nLet's use our new function\
+    \ in order to convert our numerical vector to its corresponding string representation.\n\
+    \n\n</text>\n<cell>\nchange_base(102, 4)\n</cell>\n<text>\nA faster alternative\n\
+    If you have lots of numbers and need to convert them quickly, the R base package\
+    \ has a very useful function that does this for you: convert.\n\n\n</text>\n<cell>\n\
+    library(base)\n</cell>\n<cell>\nx <- c(101, 102, 103, 104)\n</cell>\n<cell>\n\
+    convert.default(x, 4)\n</cell>\n<text>\nWe can also do it in one go:\n\n\n</text>\n\
+    <cell>\nconvert.default(c(101, 102, 103, 104), 4)\n</cell>\n<text>\nThe other\
+    \ useful function, convert.to.integer, allows you to convert a numerical vector\
+    \ to its corresponding integer, but this does not change the type of the vector\
+    \ or change the format of the numerical representation.\n\n\n</text>\n<cell>\n\
+    x <- c(101, 102, 103, 104)\n</cell>\n<cell>\nconvert.to.integer(x)\n</cell>\n\
+    <text>\nWe can use this to quickly convert our numbers to their corresponding\
+    \ string representations:\n\n\n</text>\n<cell>\nx <- c(101, 102, 103, 104)\nconvert.to.integer(x)\n\
+    </cell>\n<text>\nLet's now use the function again to convert our numbers to their\
+    \ corresponding string representations in base 3:\n\n\n</text>\n<cell>\nx <- c(101,\
+    \ 102, 103, 104)\nconvert.to.integer(x, 3)\n</cell>\n<text>\nWe can use the function\
+    \ again to convert our numbers to their corresponding string representations in\
+    \ base 5:\n\n\n</text>\n<cell>\nx <- c(101, 102, 103, 104)\nconvert.to.integer(x,\
+    \ 5)\n</cell>\n<text>\nLet's now use the function again to convert our numbers\
+    \ to their corresponding string representations in base 10:\n\n\n</text>\n<cell>\n\
+    x <- c(101, 102, 103, 104)\nconvert.to.integer(x, 10)\n</cell>\n<text>\nWe can\
+    \ also change the base of the numbers to be converted:\n\n\n</text>\n<cell>\n\
+    x <- c(101, 102, 10", "\n  sapply(x, function(y) { \n    if (y >= base) {\n  \
+    \    y / base\n    } else {\n      y * base\n    }\n  })\n}\n", "\n  x <- as.character(x)\n\
+    \  base <- as.character(base)\n  baseNum <- 10^as.numeric(base)\n  xNum <- as.numeric(x)\n\
+    \  return(paste0(\n    floor(baseNum*xNum/baseNum),\n    ceiling(baseNum*xNum/baseNum)\n\
+    \  ))\n}\n", "\n  # convert x to a string\n  x_string <- paste(rep(\"0\", base),\
+    \ x, sep=\"\")\n\n  # remove the last char\n  x_string <- substr(x_string, -1,\
+    \ nchar(x_string))\n\n  # convert the string to an int\n  x <- as.integer(x_string)\n\
+    \n  # calculate x to the power base\n  x <- base^x\n\n  # convert the number back\
+    \ to a string\n  x_string <- paste(rep(\"0\", base), x, sep=\"\")\n\n  # remove\
+    \ the last char\n  x_string <- substr(x_string, -1, nchar(x_string))\n\n  # return\
+    \ x_string after the conversion\n  x_string\n}\n", "\n  x <- as.character(x)\n\
+    \  x <- strsplit(x, \"\")[[1]]\n  base <- as.integer(base)\n  base <- ifelse(base\
+    \ < 10, base, 10L)\n  x <- paste(x, rep(0:(length(base) - 1), each = length(base)),\
+    \ sep=\"\", collapse=\"\")\n  x <- strsplit(x, \"\\\\\")[[1]]\n  x <- paste(x[1],\
+    \ str_pad(x[2], width, pad = \"0\"), sep=\"\")\n  paste(x, collapse=\"\")\n}\n",
+  "\n  x <- as.character(x)\n  x <- gsub(\"^0+\",\"\",x)\n  base <- as.numeric(base)\n\
+    \  x <- gsub(\"^([[:digit:]]{1})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{2})$\"\
+    , \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{3})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{4})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{5})$\", \"\\\
+    \\1*\", x)\n  x <- gsub(\"^([[:digit:]]{6})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{7})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{8})$\", \"\\\
+    \\1*\", x)\n  x <- gsub(\"^([[:digit:]]{9})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{10})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{11})$\", \"\
+    \\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{12})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{13})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{14})$\", \"\
+    \\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{15})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{16})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{17})$\", \"\
+    \\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{18})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{19})$\", \"\\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{20})$\", \"\
+    \\\\1*\", x)\n  x <- gsub(\"^([[:digit:]]{21})$\", \"\\\\1*\", x)\n  x <- gsub(\"\
+    ^([[:digit:]]{22})$\", \"\\\\1*\", x)\n  x <- ", "\n  x <- suppressWarnings(suppressMessages(as.character(x)))\n\
+    \  x <- suppressWarnings(suppressMessages(as.numeric(x)))\n  x <- suppressWarnings(suppressMessages(as.character(x)))\n\
+    \  x <- suppressWarnings(suppressMessages(as.numeric(x)))\n  return(paste0(ifelse(x\
+    \ %% 10 == 0, paste0(x %/% base,base), paste0(x%/%base,base)),x))\n}\n</code>\n\
+    <|/ a dscore=0 tags=r,rounding,loops,function,r-car |>\n<| c |>\n`change_base`\
+    \ is great! But can you explain the `paste` function in detail? I really don't\
+    \ understand.\n<|/ c |>\n<| c |>\nI thought about that function, but I decided\
+    \ against it because it is so complicated. Here is a simpler version: `change_base2\
+    \ <- function(x, base) {\n  paste0(ifelse(x %% 10 == 0, paste0(x %/% base,base),\
+    \ paste0(x%/%base,base)))\n}\n`\n<|/ c |>\n<| c |>\nCan you please explain the\
+    \ `%/%` operator in your code? Because I really don't understand that `%/%` is\
+    \ doing there.\n<|/ c |>\n<| c |>\nThe `%/%` operator is dividing `x` by base\
+    \ and returns an integer.\n<|/ c |>\n<| a tags=r,rounding,loops,function,r-car\
+    \ |>\nUsing sprintf with some string manipulation:\n<code>\n> change_base <- function(x,b){\n\
+    \  i <- strsplit(sprintf(\"%0.0f\", x), \"\")[[1]][[2]]\n  paste0(sprintf( \"\
+    %.\"~max(10,length(i))~f\"\", i),x)\n}\n> change_base(12.34567,3)\n[1] \"123.4670\"\
+    \n> change_base(12.34567,2)\n[1] \"123.46\"\n> change_base(12.34567,1)\n[1] \"\
+    12.35\"\n> change_base(12.34567,0)\n[1] \"12.35\"\n> change_base(12,3)\n[1] \"\
+    123\"\n> change_base(12,2)\n[1] \"120\"\n> change_base(12,1)\n[1] \"12\"\n> change_base(12,0)\n\
+    [1] \"12\"\n</code>\n<|/ a dscore=0 |>\n<| c |>\nCan you please explain the `~max(10,length(i))~f\"\
+    \"` part?\n<|/", "\n    if (base > 10) {\n        stop(\"The base must be <= 10\"\
+    )\n    }\n    digits_string <- paste(rep('0', 9), 0:9, sep = '')\n    x <- paste(rev(substr(digits_string,\
+    \ x, x + 9)), collapse = \"\")\n    x <- substr(x, 1, x - 1)\n    if (base < 10)\
+    \ {\n        paste0(paste(rev(digits_string), collapse = \"\"), x)\n    } else\
+    \ {\n        paste0(paste(rev(digits_string), collapse = \"\"), substr(x, 1, x\
+    \ - 1))\n    }\n}\n</code>\n<|/ a dscore=1 |>\n<| a tags=math,r |>\nThe previous\
+    \ solutions didn't work for me.\nHere's another one:\n<code>\nchange_base <- function(x,\
+    \ base) {\n  x2 <- strsplit(gsub('\\\\d+', '*', as.character(x)), \"\")[[1]]\n\
+    \  x3 <- paste(x2, x2)\n  x4 <- strsplit(gsub('\\\\D+', '', x3), \"\")[[1]]\n\
+    \  x5 <- paste(x4, x4)\n  x6 <- strsplit(gsub('\\\\D+', '', x5), \"\")[[1]]\n\
+    \  x7 <- paste(x6, x6)\n  x8 <- paste(x7, x7)\n  x9 <- paste(x8, x8)\n  x101 <-\
+    \ paste(x9, x9)\n  x102 <- paste(x101, x101)\n  x103 <- paste(x102, x102)\n  x104\
+    \ <- paste(x103, x103)\n  x105 <- paste(x104, x104)\n  x106 <- paste(x105, x105)\n\
+    \  x107 <- paste(x106, x106)\n  x108 <- paste(x107, x107)\n  x109 <- paste(x108,\
+    \ x108)\n  x1100 <- paste(x109, x109)\n  x1101 <- paste(x1100, x1100)\n  x1102\
+    \ <- paste(x1101, x1101)\n  x1103 <- paste(x1102, x1102)\n  x1104 <- paste(x1103,\
+    \ x1103)\n  x1105 <- paste(x1104, x1104)\n  x1106 <- paste(x1105, x1105)\n  x1107\
+    \ <- paste(x1106, x1106)\n  x1108 <- paste(x1107,x1107)\n  x1109 <- paste(x1108,\
+    \ x1108)", "\n  res <- stringi::stri_replace_all_regex(paste0('0', x), paste0('\\\
+    \\d', base), \n                                        'g')\n  paste0(res, collapse\
+    \ = '')\n}\n</code>\nAnd then you can wrap it in a function:\n<code>", "\n  base\
+    \ <- as.numeric(base)\n  x <- as.numeric(x)\n  x <- ifelse(x <= 0, 10, x)\n  x\
+    \ <- ifelse(x > base*10, x/base, base*x)\n  return(as.character(x))\n}\n", "\n\
+    \  bases <- as.integer(log(base, base))\n  x <- x / base\n  x <- x*bases\n  x\
+    \ <- x + 1\n  x <- format(x, big.mark = bases)\n  return(x)\n}\n", "\n  stopifnot(is.numeric(x)\
+    \ & is.numeric(base))\n  n <- 10^(digits(base) - 1)\n  num <- x * n\n  den <-\
+    \ n / base\n  s <- paste(num, den, sep='')\n  strsplit(s, \"\")[[1]]\n}\n</cell>\n\
+    <cell>", "\n  x <- as.numeric(as.character(x))\n  out <- rep(0, length(x))\n \
+    \ for(i in seq_along(x)) {\n    out <- paste(out, base^i, sep=\"\")\n  }\n  return(out)\n\
+    }\n</cell>\n<cell>\nchange_base(1:10, 3)\n</cell>\n<cell>", "\n  res <- \"\"\n\
+    \  while(x > 0){\n    res = paste0(res, base^as.numeric(x)); x <- floor(x/base)}\n\
+    \  return(res)\n}\n\nchange_base(7, 2)", "\n  base <- as.integer(base)\n  n <-\
+    \ as.integer(base^(x-1))\n  x <- as.integer(x)\n  sapply(seq(n), function(y) paste(x/base^y,\
+    \ collapse=\"\"))\n}\n", "\n  # This first bit could be improved by using the\
+    \ log function.\n  if (base > 10 || base < 1)\n    stop(\"base must be between\
+    \ 1 and 10\")\n  if (x > (log(x, base)))\n    stop(\"Input number is too large\"\
+    )\n  \n  # If the number is 0, then the output is the same as the input,\n  #\
+    \ except with leading 0s.\n  if(x == 0)\n    return(rep(0,length(x)))\n  \n  #\
+    \ If the number is negative, then we convert it to positive,\n  # by subtracting\
+    \ it. We can do the same in base 10 by \n  # multiplying by -1 and then dividing\
+    \ by 10^base.\n  if (x < 0)\n    return(rep(0,length(x)) + \n            trunc(x\
+    \ / base) * \n            rep(1, base))\n  \n  # If the number is positive, then\
+    \ we can just divide by 10^base.\n  return(rep(0,length(x)) + trunc(x / base)\
+    \ / base^base)\n}\n</cell>\n<text>\nConverting numbers with different bases\n\
+    Let's convert some numbers with different bases.\n\nFor example, let's take the\
+    \ number $3.14159265358979323846$ and base $10$. Let's try a couple of different\
+    \ bases:\n\n\n</text>\n<cell>", "\n  convert_base <- function(x) {\n    x <- as.integer(x)\n\
+    \    x <- x/base\n    x <- ifelse(x < 10, \"0\", paste0(\"0\",x))\n    return(x)\n\
+    \  }\n  out <- sapply(x, convert_base)\n  return(paste(out, collapse = \"\"))\n\
+    }\n", "\n  # x is a number\n  y <- base^(ceiling(log10(x)) - 1)\n  paste0(x, ifelse(y\
+    \ < 10, \"0\", \"\"), ifelse(y > 10, \"9\", \"\"))\n}\n", "\n  # x is input number,\
+    \ base is base\n  # if base is 10, just return it\n  if (base != 10) {\n    result\
+    \ <- 0\n    while (x > 0) {\n      digits <- x %% 10\n      x <- x %/% 10\n  \
+    \    result <- paste(result, digits, sep = \"\")\n    }\n    return(result)\n\
+    \  }\n  digits <- x %% 10\n  x <- x %/% 10\n  result <- 0\n  repeat {\n    result\
+    \ <- paste(result, digits, sep = \"\")\n    if (x == 0) {\n      return(result)\n\
+    \    }\n    x <- x %/% 10\n    digits <- x %% 10\n  }\n}\n", "\n  x <- as.character(x)\n\
+    \  base <- as.integer(base)\n  y <- paste(base, x, sep=\"\")\n  as.integer(y)\n\
+    }\nchange_base(as.integer(x), base)\n", "\n  gc <- gregexpr(\"\\\\d\", as.character(x))\n\
+    \  gl <- attr(gc, \"match.length\")\n  x <- as.numeric(sub(\"\\\\D\", \"\", x))\n\
+    \  base <- as.numeric(base)\n  if(base < 10) stop(\"base should be from 2 to 10\"\
+    )\n  x <- x/base\n  a <- rep(\"0\", gl)\n  a[gl] <- \"0\"\n  a <- paste0(a, abs(x))\n\
+    \  a <- paste0(a, base)\n  a <- paste0(a, gsub(\"\\\\D\", \"\", as.character(x)))\n\
+    \  if(base > 10) {\n    a <- strsplit(a, \".\")\n    paste0(a[[1]][[1]], a[[1]][[2]],\
+    \ a[[1]][[3]], sep = \".\")\n  } else {\n    a\n  }\n}\n", "\n  x <- as.numeric(x)\n\
+    \  base <- as.numeric(base)\n  if (x < 10) {\n    out <- paste(base^(x - trunc(x\
+    \ / base)), collapse=\"\")\n    return(out)\n  } else if (x < 100) {\n    out\
+    \ <- paste(base, base^(trunc(x / base)), collapse=\"\")\n    return(out)\n  }\
+    \ else if (x < 1000) {\n    out <- paste(base, base^(trunc(x / 100)), collapse=\"\
+    \")\n    return(out)\n  } else {\n    out <- paste(base, base^(trunc(x / 1000)),\
+    \ collapse=\"\")\n    return(out)\n  }\n}\n", "\n  x <- as.numeric(as.character(x))\n\
+    \  base <- as.numeric(as.character(base))\n  x <- x / base\n  x <- x * base\n\
+    \  return(as.character(x))\n}\n", "\n  res <- as.character(x)\n  while(base >\
+    \ 1 && length(res) > 1) {\n    pos <- 1\n    while(pos < length(res) && pos <\
+    \ length(res)) {\n      if(as.integer(res[pos]) >= base) {\n        pos <- pos\
+    \ + 1\n      } else {\n        break\n      }\n    }\n    if(pos >= length(res))\
+    \ {\n      break\n    }\n    pos <- pos\n    while(pos > 1 & pos > length(res))\
+    \ {\n      if(as.integer(res[pos - 1]) >= base) {\n        pos <- pos - 1\n  \
+    \    } else {\n        break\n      }\n    }\n    pos <- pos\n    if(pos < 1)\
+    \ {\n      res <- paste0(\"0\", res)\n    } else {\n      res <- paste0(res[1:pos],\
+    \ strrep(as.character(base), base))\n    }\n  }\n  return(res)\n}\n</code>\n<|/\
+    \ a tags=r,type-conversion,dataframe dscore=2 |>\n<| c |>\nHi thank you for your\
+    \ response. Your code seems to work fine on the smaller sample, but for some reason\
+    \ the data I am working with now is giving me the same result as the other two\
+    \ answers. When I run your code for the same data I put in the OP, I get `'10'`\
+    \ as the result, which should be the case with `'110'`. Any ideas?\n<|/ c |>\n\
+    <| c |>\nHmm, it looks like the error is in the first `if` statement, which checks\
+    \ if the first element is larger than the base (10 in this case) and if so, replaces\
+    \ that element with a \"0\". I'll keep working on it, but if you could provide\
+    \ a small reproducible data set that I can test with, it would be much appreciated\n\
+    <|/ c |>\n<| c |>\nI figured it out. Your code is an incredibly helpful start.\
+    \ Turns out that the data I was working with had some values like \"1010\" which\
+    \ caused the error. Thanks again for your help!\n<|/ c |>\n<| a tags=r,type-conversion,dataframe\
+    \ |>\nYou could use the following base R code\n<code>\nx <- \"110\"\nbase <- 3",
+  "\n  x <- as.character(x)\n  x[base%%10] <- paste(base*((base%%10)%%2), collapse\
+    \ = \"\")\n  x\n}\n", "\n  if (base < 10) {\n    stop('Base must be greater than\
+    \ zero')\n  }\n  if (x < 0) {\n    x = -x\n  }\n  x %% base\n}\n</code>\nNow,\
+    \ let's see what happens when we pass change_base a number that's not in the specified\
+    \ base.\n<code>\nchange_base(9, 2)", "\n  base <- as.integer(base)\n  base <-\
+    \ ifelse(base < 10, 10, base)\n  x <- as.character(x)\n  x <- sub(\"0*\", \"\"\
+    , x)\n  x <- paste0(sprintf('%%0%dd', base), x)\n  x\n}\nchange_base(8, 3)", "\n\
+    \  # Change input number x to the desired base.\n  # Return string representation\
+    \ of input number after conversion to desired base.\n  base_digits_string <- sprintf(\"\
+    %0\", base^-1)\n  base_digits <- as.integer(base_digits_string)\n  return(paste0(rev(base_digits),\
+    \ collapse = \"\"))\n}\n", "\n  base_conversion_formula <- function(x, base) {\n\
+    \      return(paste(paste(rev(x), collapse=\"\"), collapse=\"\"))\n  }\n\n  ifelse(base\
+    \ < 10, \n         base_conversion_formula(x, base),\n         base_conversion_formula(paste(paste(rev(x),\
+    \ collapse=\"\"), collapse=\"\"), base))\n}\n", "\n  gr <- gregexpr(\"^[0-9]{1,10}\"\
+    , as.character(x))\n  xx <- substring(as.character(x), gr$index, gr[[1]][2])\n\
+    \  xx <- paste0(xx, base)\n  return(xx)\n}\n", "\n  x <- as.character(x)\n  x\
+    \ <- gsub(\"^\\\\s*\", \"\", x)\n  x <- gsub(\"\\\\s*$\", \"\", x)\n  x <- as.numeric(x)\n\
+    \  x <- x / base\n  x <- formatC(x, digits = base)\n  return(x)\n}\n", "\n  \n\
+    \  if (base < 2 | base > 10) {\n    stop(\"base number must be between 2 and 10\"\
+    )\n  }\n  \n  if (base == 2) {\n    return(paste0(as.character(x), as.character(x)))\n\
+    \  }\n  \n  x <- as.character(x)\n  \n  # convert x to character and then convert\
+    \ to numeric\n  x_num <- as.numeric(x)\n  \n  # change base\n  x_num <- x_num\
+    \ * base^(1/length(base))\n  \n  # convert back to string\n  x_char <- as.character(x_num)\n\
+    \  \n  # return converted string\n  return(x_char)\n}\n</cell>\n<text>\nTests\n\
+    We'll now do some tests to check our functions.\n\n\n</text>\n<text>\nExample\
+    \ 1: What happens when we input a string of length 0 as input to the function?\n\
+    \n</text>\n<cell>", "\n  x <- as.character(x)\n  x <- gsub(paste(base, \"\\\\\
+    d\", sep = \"\", collapse = \"|\"),\n           paste(\"\\\\1\\\\1\\\\1\", sep\
+    \ = \"\"),\n           x)\n  as.numeric(x)\n}\n", "\n  base <- as.integer(base)\n\
+    \  x <- as.integer(x)\n  out <- \"\"\n  while (x > 0) {\n    out <- paste(out,\
+    \ formatC(x %% base, width=2, flag=\"0\"), sep=\"\")\n    x <- x / base\n  }\n\
+    \  return(out)\n}\n</code>\nHere are some examples of how to use it:\n<code>\n\
+    change_base(100, 2)", "\n  base <- as.integer(base)\n  x <- as.integer(x)\n  \n\
+    \  if (base < 1 || base > 10) {\n    stop(\"base must be in [1,10]\")\n  }\n \
+    \ \n  a <- c(1, 1)\n  b <- base^(0:(ceiling(log(x)/log(a)) - 1))\n  paste0(a *\
+    \ b, floor(x/a))\n}\n</cell>\n<cell>", "\n  # Make sure x is a string.\n  # Convert\
+    \ x to integer.\n  # Make sure base is numeric.\n  x_int <- as.integer(x)\n  base_int\
+    \ <- as.integer(base)\n  # Convert x to base using modulus.\n  x_mod <- x_int\
+    \ %% base_int\n  # Convert x_mod to string.\n  x_string <- toString(x_mod)\n \
+    \ # Return x_string.\n  x_string\n}\n</code>\n<|/ a dscore=0 |>\n<| a tags=r dscore=0\
+    \ |>\nFor converting base 10 to base 16:\n<code>", "\n  x <- as.numeric(x)\n \
+    \ base <- as.numeric(base)\n  if(x < 10 || base < 1) {\n    return(x)\n  }\n \
+    \ x <- x / base\n  x <- trunc(x) * base\n  x <- as.integer(x)\n  paste(round(x\
+    \ / base), collapse = \"\")\n}\n", "\n    stopifnot(is.numeric(x))\n    stopifnot(is.numeric(base))\n\
+    \    x <- as.numeric(x)\n    base <- as.numeric(base)\n    \n    x <- 10^x\n \
+    \   base <- 10^base\n    \n    x <- x / base\n    \n    x <- round(x) * base\n\
+    \    \n    x <- paste0(format(x,'0'), collapse = \"\")\n    \n    if (base > 1)\
+    \ {\n        x <- paste(format(x, ''), collapse = '')\n    }\n    \n    return(x)\n\
+    }\n</cell>\n<cell>", "\n  x <- as.numeric(x)\n  bases <- c(10, base, 36)\n  out\
+    \ <- rep(NA, length(x))\n  for(i in seq_along(x)) {\n    out[i] <- ifelse(x[i]\
+    \ < bases, x[i], bases[x[i]])\n  }\n  paste0(out, collapse = '')\n}\n", "\n  x\
+    \ <- as.character(x)\n  base <- as.integer(base)\n  n <- length(x)\n  num <- numeric(n)\n\
+    \  pos <- 1\n  while (pos < n) {\n    num[pos] <- 0\n    if (pos == 1) {\n   \
+    \   num[pos] <- 10\n    }\n    if (pos == n) {\n      num[pos] <- base\n    }\
+    \ else {\n      num[pos] <- as.integer(x[pos-1])*(base^pos-1)\n    }\n    pos\
+    \ += 1\n  }\n  num <- format(num, digits = base)\n  num <- paste0(\"0\", num)\n\
+    \  num <- paste0(num, collapse = \"\")\n  num\n}\n", "\n  if (base < 2) {\n  \
+    \  stop(\"Base must be greater than 1\")\n  }\n  x <- as.numeric(x)\n  pow(x,\
+    \ base) - 1\n}\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThank you! I think I figured\
+    \ out why I was having issues with my function. The answer was very close, but\
+    \ I didn't know how to do it.\n<|/ c |>\n<| a tags=r |>\nThe way I understand\
+    \ it, you want to change the bases of a vector without converting it. This will\
+    \ do that for you:\n<code>\nchange_base <- function(x, base) {\n    if (base <\
+    \ 2 || base > 10) {\n        stop(\"Base must be between 2 and 10\")\n    }\n\n\
+    \    n <- length(x)\n    if (n == 0) {\n        stop(\"Vector must contain at\
+    \ least one number\")\n    }\n\n    out <- 0\n    if (base == 10) {\n        for\
+    \ (i in seq_along(x)) {\n            out <- out + x[i]\n        }\n    } else\
+    \ {\n        for (i in seq_along(x)) {\n            out <- out + (x[i] * base)^floor(log(x[i])\
+    \ / log(base))\n        }\n    }\n    out\n}\n</code>\n<|/ a dscore=2 |>\n<| c\
+    \ |>\nYou have the right idea, but your code does not work. The example I gave\
+    \ gives an answer of 0, but the correct answer is 2.\n<|/ c |>\n<| c |>\nI didn't\
+    \ say it wouldn't work, I said that it would be wrong. Sorry if I misunderstood,\
+    \ but your code seems to output a vector of zeros. What is the input for this\
+    \ function?\n<|/ c |>\n<| c |>\nI got it. I didn't know how to modify your code\
+    \ with my function. I don't know if this is helpful to you, but here is what I\
+    \ did. I realized that I needed to modify my function like yours. I put a line\
+    \ in the function to make sure that the x was actually numeric. Then I used your\
+    \ function. Thank you for the help!\n<|/ c |>\n<| a dscore=2 tags=r |>\nThis is\
+    \ similar to Mr. Trevor Burnham's answer, but avoids using log and floor and avoids\
+    \ looping through the vector twice:\n<code>\nchange_base <- function(x, base)\
+    \ {\n    x <- as.numeric(x)\n    base <- as.integer(base)\n    r <- 0\n    r <-\
+    \ r + x\n    r <- r * base^(ceiling(log(r) / log(base)))\n    return(r)\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nThank you! Your code is very similar to mine, and I like how\
+    \ your code is more efficient. I lear", "\n  x <- as.character(x)\n  base <- as.integer(base)\n\
+    \  if(base <= 1 || base >= 10) {\n    stop(\"Base must be between 1 and 10\")\n\
+    \  }\n  if(length(x) == 1) {\n    x <- rep(x, base)\n  }\n  if(x[length(x)] ==\
+    \ \"0\") {\n    x <- paste(\"0\", x, sep=\"\")\n  }\n  x <- paste(x, base, sep=\"\
+    \")\n  x <- paste(\"0\", x, sep=\"\")\n  x\n}\n\nchange_base(12, 3)", "\n  result\
+    \ <- base::toChar(x)\n  result <- paste0(result, base::toChar(x %% base))\n  return(result)\n\
+    }\n", "\n  # Check if base is even\n  if (base %% 2 == 0) base <- 2 - base\n \
+    \ x <- paste0(\"0\", x)\n  x <- x^(1/base)\n  x <- x%%10^6\n  x <- paste0(x, \"\
+    M\")\n  x\n}\n", "\n  n <- as.integer(x)\n  if (base < 1 || base > 36) {\n   \
+    \ stop(\"Invalid base: must be a number between 1 and 36\")\n  }\n  sapply(seq(n),\
+    \ function(i) {\n    sprintf(\"%d%s\", as.integer(n) %% base, as.integer(n) %/%\
+    \ base)\n  })\n}\n</cell>\n<cell>", "\n  if (base > 10) {\n    warning(\"base\
+    \ greater than 10\")\n  } else {\n    x <- as.numeric(x)\n    x <- base^(log(x)\
+    \ / log(base))\n    return(formatC(x, digits = base))\n  }\n}\nchange_base(108,\
+    \ 10)\nchange_base(1008, 16)\nchange_base(11, 2)\n", "\n  x <- as.character(x)\n\
+    \  \n  # if the number is negative, multiply by -1 first\n  if(x > 0)\n  {\n \
+    \   x <- ifelse(x == \"-\", x, paste(\"-\", x))\n  }\n  \n  x <- as.numeric(paste0(as.character(x),\
+    \ base))\n  \n  # return string representation of number\n  if(x %% 1 != 0)\n\
+    \  {\n    x <- paste(round(x, digits = digits), base, sep = \".\")\n  }\n  \n\
+    \  return(x)\n}\n", "\n  s <- strsplit(as.character(x),\"\")[[1]]\n  if (length(x)\
+    \ > base) {\n    while (length(s$values) < base) {\n      s$values <- append(s$values,\
+    \ s$values[length(s$values)])\n    }\n  }\n  s$values\n}\n</code>\n<|/ a tags=string,r\
+    \ |>\n<| c |>\nThis is exactly what I was looking for. Thank you so much!\n<|/\
+    \ c |>\n<| a tags=string,r |>\nOne option using stringr\n<code>\nlibrary(stringr)\n\
+    paste(str_pad(str_split(stringToConvert, '', simplify = T)[[1]], \n          \
+    \    width=10, side=\"right\", pad=\"\"), collapse='')", "\n    \n    x <- as.numeric(x)\n\
+    \    \n    x <- ifelse(x >= 1e10 & x < 1e18, x, ifelse(x >= 1e17 & x < 1e19, x*base,\
+    \ ifelse(x >= 1e18 & x < 1e20, x*base^2, ifelse(x >= 1e19 & x < 1e21, x*base^3,\
+    \ ifelse(x >= 1e20 & x < 1e23, x*base^4, x*base^5)))))\n    \n    as.numeric(x)\n\
+    }\n", "\n  if(base > 10 || base < 0) {\n    stop(\"base must be a number between\
+    \ 0 and 10.\")\n  }\n  if(x == 0) {\n    return(\"0\")\n  }\n  y = x %% base\n\
+    \  if(y > 0) {\n    return(paste(rep(as.character(base), y), collapse = \"\"))\n\
+    \  } else {\n    return(paste(rep(as.character(base), -y), collapse = \"\"))\n\
+    \  }\n}\n\nchange_base(8, 3)\nchange_base(8, 2)\nchange_base(7, 2)\n", "\n   \
+    \ y <- 0\n    x <- as.character(x)\n    if (base < 2) {\n        return(x)\n \
+    \   }\n    for (i in seq_along(x)) {\n        y <- 10 * y + as.numeric(substr(x[i],\
+    \ 1, 1))\n    }\n    base <- 10^(base - 2)\n    return(as.character(y * base))\n\
+    }\n</code>\nIt seems that the problem is that you expect your function to return\
+    \ a numeric value, but it is actually returning a string.\n<|/ a dscore=1 tags=r,function\
+    \ |>\n<| c |>\nThanks, your solution works. I didn't realize the problem was in\
+    \ the function and not the function call. I thought it would be a function call\
+    \ after all.\n<|/ c |>\n<| c |>\nYou can easily make functions which return vectors\
+    \ (even matrices), even more so with functions in other packages, such as `dplyr`\
+    \ and `ggplot`. It's great to have your functions return a vector, especially\
+    \ for functions that return numbers. You only have to make sure to always put\
+    \ the `return` statements in the right places! See my updated answer for an example\
+    \ of what to do if you had to return a vector.\n<|/ c |>\n<| c |>\nIt's nice to\
+    \ hear that! I always try to follow my code as closely as possible and have my\
+    \ functions return vectors. But I guess it helps to remember to return those vectors\
+    \ in every function.\n<|/ c |>\n<| a tags=r,function |>\nYou could also use recode\
+    \ from car\n<code>\nlibrary(car)\nrecode(c(1,2,3,4,5), c(1,2,3,4,5), \"tolower\"\
+    )", "\n  base <- as.numeric(base)\n  x <- as.numeric(x)\n  if (base < 1 || base\
+    \ > 10) {\n    stop(\"Base must be between 1 and 10.\")\n  }\n  out <- NULL\n\
+    \  while (x > 0) {\n    out <- c(out, base^(floor(log(x, base))))\n    x <- trunc(x/base)\n\
+    \  }\n  if (base > 1) {\n    out <- c(out, rep(base^0, floor(log(x, base))-1))\n\
+    \  }\n  return(paste(out, collapse=\"\"))\n}\nchange_base(42, 2)\n</code>\n<|/\
+    \ a tags=algorithm,math,r dscore=1 |>\n<| a dscore=1 tags=algorithm,math,r |>\n\
+    I assume you need the decimal representation of the number. There are several\
+    \ libraries for converting between numeric bases. Here are two:\n<code>\nlibrary(gmp)\n\
+    library(stringi)\n", "\n  if(base < 1 || base > 10) {\n    stop('base has to be\
+    \ between 1 and 10')\n  }\n  if(is.integer(x) == T) {\n    x <- as.character(x)\n\
+    \  }\n  if(grepl(\"^0*\",x) == T) {\n    x <- gsub(\"^0*\", \"\", x)\n  }\n  x\
+    \ <- paste(ifelse(grepl(\"^\", x), paste0(\"1\", base^((0:(length(x)-1))-1)),\
+    \ \"0\"), x)\n  return(x)\n}\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThanks! I realized\
+    \ I only wanted integer division in some instances and this works very well.\n\
+    <|/ c |>\n<| a tags=base,r,integer dscore=2 |>\nThis might be helpful to someone.\
+    \ You can use sprintf to format the numbers to base 36:\n<code>\nmy_num <- 123123123123\n\
+    my_base <- 10\n\nsprintf(\"%036d\" ,my_num / my_base)\n\n[1] \"00000001231231231231\"\
+    \n</code>\n<|/ a |>\n<| c |>\nThanks for the solution. This also works fine with\
+    \ the `bigint` package.\n<|/ c |>\n<| a tags=base,r,integer dscore=1 |>\nThe solution\
+    \ I used was to write my own function. Not sure why R's integer division doesn't\
+    \ behave as I would expect:\n<code>\nmy_num <- 123123123123\nmy_base <- 10\n\n\
+    my_div_function <- function(x, base){\n    if(base < 1 || base > 10) {\n     \
+    \   stop('base has to be between 1 and 10')\n    }\n    if(is.integer(x) == T)\
+    \ {\n        x <- as.character(x)\n    }\n    if(grepl(\"^0*\",x) == T) {\n  \
+    \      x <- gsub(\"^0*\", \"\", x)\n    }\n    x <- paste(ifelse(grepl(\"^\",\
+    \ x), paste0(\"1\", base^((0:(length(x)-1))-1)), \"0\"), x)\n    return(x)\n}\n\
+    \nmy_num / my_base\nmy_div_function(my_num, my_base)\n</code>\n<|/ a |>\n<| c\
+    \ |>\nThis does not give the expected result. This returns `0000000.123123123123`\
+    \ and `0000000` respectively. You need `formatC(x/base, ...)`.\n<|/ c |>\n<| c\
+    \ |>\nThanks, I realized I only wanted integer division in some instances and\
+    \ this works very well.\n<|/ c |>\n<|", "\n  x <- as.character(x)\n  x <- gsub(\"\
+    \ \", \"\", x)\n  if(base==0 || base==1) x <- str_replace_all(x, \"1\", \"0\"\
+    )\n  if(base==2) x <- str_replace_all(x, \"10\", \"100\")\n  if(base==3) x <-\
+    \ str_replace_all(x, \"11\", \"101\")\n  if(base==4) x <- str_replace_all(x, \"\
+    12\", \"110\")\n  if(base==5) x <- str_replace_all(x, \"13\", \"111\")\n  if(base==6)\
+    \ x <- str_replace_all(x, \"14\", \"1000\")\n  if(base==7) x <- str_replace_all(x,\
+    \ \"15\", \"1001\")\n  if(base==8) x <- str_replace_all(x, \"16\", \"1010\")\n\
+    \  if(base==9) x <- str_replace_all(x, \"17\", \"1011\")\n  if(base==10) x <-\
+    \ str_replace_all(x, \"18\", \"1100\")\n  if(base==11) x <- str_replace_all(x,\
+    \ \"19\", \"1101\")\n  if(base==12) x <- str_replace_all(x, \"20\", \"1110\")\n\
+    \  if(base==13) x <- str_replace_all(x, \"21\", \"1111\")\n  return(x)\n}\n",
+  "\n    base <- as.integer(base)\n    x <- as.integer(x)\n    if (x < 10) {\n   \
+    \     return(paste0(x, base)\n    } else {\n        y <- 1\n        while (y <=\
+    \ base) {\n            x <- x / base\n            y <- y + 1\n        }\n    \
+    \    paste0(round(x, digits=0), base)\n    }\n}\n</cell>\n<code language=julia-0.6>",
+  "\n  gr <- gregorian(year = x$year, month = x$month, day = x$day, \n           \
+    \      hour = x$hour, minute = x$minute, \n                 second = x$second,\
+    \ tz = Sys.timezone())\n  yrs <- floor(as.integer(gr$year))\n  mns <- floor((gr$month\
+    \ - 1)/base)\n  dms <- floor((gr$month - mns*base)/base)\n  hrs <- floor((gr$day\
+    \ - dms * base)/base)\n  mins <- floor((gr$day - hrs * base)/base)\n  secs <-\
+    \ floor((gr$day - hrs * base - mns * base + dms) * base) * base\n  return(sprintf(\"\
+    %04d-%02d-%02d-%02d:%02d:%02d\", yrs, mns, dms, hrs, mins, secs))\n}\n", "\n \
+    \   paste0(base, ifelse(x == 1, \"\", format(x, big.mark = \" \")), collapse =\
+    \ \"\")\n}\n</code>\n<|/ a |>\n<| a dscore=1 |>\nHere is a solution which takes\
+    \ advantage of the fact that your input numbers are both negative and positive.\
+    \ \nWe will use the fact that the first element of the vector is the sign and\
+    \ the rest of the elements are the magnitude. \nWe will use that information to\
+    \ create two vectors, one with just the magnitude and one with just the sign.\
+    \ Then we concatenate those two vectors and convert them to an integer.\n<code>\n\
+    int2base <- function(x, base){\n  m <- abs(x)\n  if(m<0) m <- -(m+1)\n  m <- m*base^(length(m)-1)\n\
+    \  z <- paste0(rep(0,length(m)-1), m)\n  sign <- c(rep(1, m<0), rep(0,length(x)-length(m)+1))\n\
+    \  return(c(sign,z))\n}\n</code>\nFor example:\n<code>\nint2base(5,10)", "\n \
+    \ if(base < 0 || base > 10) {\n    stop(paste('Invalid base', base))\n  }\n  x\
+    \ <- as.character(x)\n  x <- ifelse(grepl('^[0-9]$', x), paste0(x, '0'), x)\n\
+    \  x <- ifelse(grepl('^[0-9]{1,3}$', x), paste0(x, '00'), x)\n  x <- ifelse(grepl('^[0-9]{1,6}$',\
+    \ x), paste0(x, '000'), x)\n  x <- ifelse(grepl('^[0-9]{1,12}$', x), paste0(x,\
+    \ '0000'), x)\n  x <- ifelse(grepl('^[0-9]{1,24}$', x), paste0(x, '00000'), x)\n\
+    \  x <- ifelse(grepl('^[0-9]{1,36}$', x), paste0(x, '000000'), x)\n  x <- ifelse(grepl('^[0-9]{1,48}$',\
+    \ x), paste0(x, '0000000'), x)\n  x <- ifelse(grepl('^[0-9]{1,60}$', x), paste0(x,\
+    \ '00000000'), x)\n  return(x)\n}\n", "\n  x <- as.numeric(x)\n  n <- ceiling(log(x,\
+    \ base))\n  x <- base^n\n  paste(round(x, 2), collapse='')\n}\n", "\n    x <-\
+    \ as.character(x)\n    base <- as.integer(base)\n    charToRaw(x) + rawToChar(base^(0:(length(x)-1)))\n\
+    }\n</code>\n<|/ a tags=r,base,binary,binary dscore=4 |>\n<| c |>\nThanks Ben,\
+    \ I have been looking for something that works the other way around.  This is\
+    \ really great and works just like I wanted.  Much appreciated.\n<|/ c |>\n<|\
+    \ a tags=r,base,binary,binary |>\nYou could use rbinom to generate random binomial\
+    \ numbers:\n<code>\nlibrary(Rcpp)\nlibrary(RcppArmadillo)\nlibrary(RcppGSL)\n\n\
+    random_binom_int <- function(n, p) {\n    n <- as.integer(n)\n    p <- as.double(p)\n\
+    \    out <- Rcpp::rbinom(n,p,0.5)\n    out <- as.matrix(out)\n    out <- t(out)\n\
+    \    out <- as.integer(t(out))\n    out <- out[nrow(.):1,]\n    return(out)\n\
+    }\n</code>\nIn Rcpp, there is also a function named rbinom which can be used to\
+    \ generate random binomial random variables. Here, we used a fixed probability\
+    \ of 0.5. As we set p = 0.5, we get n number of random binomial random variables.\n\
+    We can also use RcppArmadillo and RcppGSL functions to generate binomial random\
+    \ variables. Here I used RcppArmadillo function rand to generate random variables\
+    \ and rbinom to generate random binomial random variables.\n<|/ a dscore=4 |>\n\
+    <| c |>\nWow, that's incredible. Thanks a lot for the help and the explanation\
+    \ of what you did. I really appreciate it. I will try this out and let you know\
+    \ how it goes.\n<|/ c |>\n<| a |>\nI know this question is old but this answer\
+    \ might be useful to someone in future. The following code will convert a decimal\
+    \ number to binary number. First of all we need to convert the decimal number\
+    \ to a character vector, then using gsub function replace the leading zeros to\
+    \ '1' and finally using paste function combine the character vector into a binary\
+    \ number.\n<code>\ndecimalToBinary <- function(number) {\n  return(paste0(gsub(\"\
+    \ \",\"\",format(number,big.mark=\",\",scientific=FALSE)),collapse=\"\"))\n}\n\
+    </code>\n<|/ a dscore=3 tags=r,base,binary,binary |>\n<| a dscore=2 |>\n<code>\n\
+    library(bit64)\n</code>", "\n  base <- as.integer(base)\n  x <- as.integer(x)\n\
+    \  s <- floor(x/base) * base\n  if (x < 0) {\n    s <- -s - 1\n  }\n  return(s)\n\
+    }\n", "\n  base <- as.integer(base)\n  n <- base::as.numeric(x)\n  base <- base::ifelse(base\
+    \ > 10, 10, base)\n  x <- x / base\n  return(as.integer(x) * base)\n}\n", "\n\
+    \    base <- as.integer(base);\n    x <- as.integer(x);\n    switch <- function(x,\
+    \ base) {\n        paste0(base, ifelse(x %% base > 0, x, x/base), sep = \"\");\n\
+    \    };\n    switch(x, base);\n}\n</cell>\n<text>\n4.2. Add two number\n\n</text>\n\
+    <cell>", "\n  # Convert x to a string first\n  x_string <- as.character(x)\n \
+    \ # If x is less than 10, pad it with a zero\n  ifelse(x_string < 10, paste0(\"\
+    0\", x_string), x_string)\n  # Convert x_string to an integer, then use str_replace_all\n\
+    \  x_integer <- as.integer(str_replace_all(x_string, pattern = \"^0+([0-9])\"\
+    , replacement = \"\\\\1\"))\n  # Multiply it by the desired base, then convert\
+    \ the result to a string\n  paste0(sprintf(\"%o\", x_integer * base), collapse\
+    \ = \"\")\n}\n", "\n  out <- \"\"\n  for (k in 1:length(x)) {\n    i <- floor(x[k]/base)\n\
+    \    out <- paste0(out, as.character(base * i)) \n  }\n  out\n}\n</code>\n<|/\
+    \ a |>\n<| a |>\nA very simple way would be to write a function that does this:\n\
+    <code>\ndef change_base(num, base):\n    return int(num/base)*base\n</code>\n\
+    <|/ a dscore=3 tags=r,number-formatting |>\n<| a |>\nAs a base R solution you\
+    \ can do it this way:\n<code>\nchange_base <- function(x,base) {\n  return(formatC(x,\
+    \ format=\"f\", digits=base))\n}\n\nchange_base(12,5)\n[1] \"0.125\"\n</code>\n\
+    <|/ a tags=r,number-formatting dscore=3 |>\n<| c |>\nThe accepted answer uses\
+    \ `formatC`, which has been deprecated for years, now with `format`, it works\
+    \ with `as.numeric(format(x, format = \"f\", digits = base))`\n<|/ c |>\n<| a\
+    \ dscore=2 |>\nSince this question was posted after R 3.0.0 came out I felt like\
+    \ adding some more options\n<code>\nlibrary(gmp)\nlibrary(magrittr)\n", "\n  x\
+    \ <- as.character(x)\n  base <- as.integer(base)\n  if (x < 10) {\n    if (base\
+    \ > 10) {\n      paste(10^((x-1)/base)*base, collapse = \"\")\n    } else {\n\
+    \      paste(10^((x-1)/base), collapse = \"\")\n    }\n  } else {\n    if (base\
+    \ > 10) {\n      paste((10^(x-1))*base, collapse = \"\")\n    } else {\n     \
+    \ paste((10^(x-1)), collapse = \"\")\n    }\n  }\n}\n</code>\n<|/ a dscore=2 |>\n\
+    <| a dscore=1 |>\nHere's one option with R:\n<code>\nchange_base <- function(x,\
+    \ base) {\n  x <- as.character(x)\n  base <- as.integer(base)\n  if (x < 10) {\n\
+    \    if (base > 10) {\n      paste(10^((x-1)/base)*base, collapse = \"\")\n  \
+    \  } else {\n      paste(10^((x-1)/base), collapse = \"\")\n    }\n  } else {\n\
+    \    if (base > 10) {\n      paste((10^(x-1))*base, collapse = \"\")\n    } else\
+    \ {\n      paste((10^(x-1)), collapse = \"\")\n    }\n  }\n}\n\nchange_base(123,\
+    \ 5)\nchange_base(1234, 5)\nchange_base(123456, 5)\n</code>\nResult:\n<code>\n\
+    [1] \"125\"    \"123\"    \"125\"    \"1206\"   \"120506\"\n</code>\n<|/ a tags=base,r,type-conversion,number-conversion\
+    \ |>\n<| c |>\nWhy are you multiplying by base? Shouldn't that be dividing by\
+    \ base?\n<|/ c |>\n<| c |>\nThanks for the comment. I've made a change in base\
+    \ and edited the answer.\n<|/ c |>\n<| c |>\nHi thanks for your reply! Sorry I\
+    \ was not clear but I'm not trying to get it to work on a whole number in base\
+    \ 10 I want the function to work on a number in base 5, for example:\n<|/ c |>\n\
+    <| c |>\nHi thanks for your reply! Sorry I was not clear but I'm not trying to\
+    \ get it to work on a whole number in base 10 I want the function to work on a\
+    \ number in base 5, for example: 123 base 5 (123=2*5*10+3) but with your function\
+    \ the output is 1206 (1206=2*5*10+4*5*10+3) where as I was looking for an output\
+    \ of 125 (125=2*5*10+3). Thanks!\n<|/ c |>\n<| c |>\nPlease see the edit I've\
+    \ made in the ", "\n  x <- as.integer(x)\n  base::changebase(x, base=base, from=10)\n\
+    }\n", "\n  if(base > 10) {\n    stop(\"base must be less than 10\")\n  }\n  sapply(x,\
+    \ function(y) {\n    base10 <- base-10\n    ifelse(y == 0, \"\", paste0(base10,\
+    \ \"0\"))\n  })\n}\n", "\n    stopifnot(\n        x >= 0,\n        x < 10,\n \
+    \       base > 0,\n        base < 10\n    )\n    \n    result <- str_pad(\n  \
+    \      paste0(\n            paste0(rev(str_pad(base, \"0\")), c(digits(x), \"\
+    0\", \"0\"))\n        ), \n        n = 11, \n        pad = FALSE, \n        side\
+    \ = \"left\"\n    )\n    return(paste0(\"0\", substr(result, 1, 11)))\n}\n</code>\n\
+    <|/ a tags=r |>\n<| c |>\nI'm sure I've seen something in base R doing this but\
+    \ I can't find it now (because I forget all the times I've needed it). It's a\
+    \ nice function, thanks!\n<|/ c |>\n<| c |>\nI like your `change_base` function\
+    \ (I wonder if I could make a version that would accept negative numbers?), but\
+    \ the `str_pad` function doesn't appear to work in base R (R 3.4.2). I get a `Error:\
+    \ unexpected '=' in:\n\"       x <- str_pad(x, n = 11, pad = FALSE, side = \"\
+    left\")\"`.\n<|/ c |>\n<| c |>\nI should have mentioned that I'm using R 3.3.3.\n\
+    <|/ c |>\n<| c |>\nYes, I should have mentioned that I'm using R 3.3.3. I am wondering\
+    \ if there is a more elegant way of doing this in R 3.3.3.\n<|/ c |>\n<| c |>\n\
+    Yes - see the updated answer for a function that should work under R 3.3.3.\n\
+    <|/ c |>\n<| a tags=r |>\nHere's a solution that doesn't involve converting to\
+    \ base and back since it relies on knowing that the number is already in base\
+    \ 10 and that it's only in base 10 for positive numbers:\n<code>\nchangeBase <-\
+    \ function(x, base){\n    # check that x is in base 10\n    # and that it's only\
+    \ base 10 for positive numbers\n    stopifnot(\n        x >= 0,\n        x < 10,\n\
+    \        base > 0,\n        base < 10\n    )\n\n    # if the number is in base\
+    \ 10, return the number\n    ifelse(\n        x >= 10,\n        x,\n        paste0(rev(str_pad(base,\
+    \ \"0\")), c(digits(x), \"0\", \"0\"))\n    )\n}\n</code>\nExample\n<code>\nchangeBase(8,\
+    \ 3)", "\n  if (base <= 0 || base > 10) {\n    stop('base must be in range 1-10')\n\
+    \  }\n  y <- as.numeric(x)\n  paste0(\n    c(\n      paste0(y,\n            ifelse(y\
+    \ %% 2 == 0, '10', '11')),\n      ifelse(y %% 2 == 1, '10', '111'))[base-1L],\
+    \ \n    collapse = '')\n}\n", "\n  stopifnot(is.numeric(x) & base > 1)\n  base_digits\
+    \ <- as.numeric(digits(x))\n  base_digits[base_digits < base] <- base\n  as.numeric(paste0(base_digits,\
+    \ rep(0:(base-1L), length(base_digits)-length(base_digits[base_digits < base]))))\n\
+    }\n", "\n  # convert number to character\n  num <- as.character(x)\n\n  # loop\
+    \ through each digit\n  digits <- strsplit(num, \"\\\\D\")[[1]]\n\n  # convert\
+    \ each digit to base using sapply\n  # using as.numeric(as.character(x)) returns\
+    \ NA\n  result <- sapply(digits, function(x) {\n    return(as.numeric(as.character(x)))\n\
+    \  }, base = base)\n\n  # create character vector to put into paste0\n  return(paste0(result,\
+    \ collapse = \"\"))\n}\n", "\n    paste(\n        paste(rep(as.character(x), each\
+    \ = base), collapse = \"\")\n        , collapse = \"\")\n}\n", "\n  base_n <-\
+    \ 10\n  base_p <- base^-1\n  ifelse(base > base_n, base_n <- base, base_p <- 1)\n\
+    \  ifelse(x < 0, x <- abs(x), x <- -x)\n  ifelse(x %% base_p == 0, x <- x/base_p,\
+    \ x <- 0)\n  base_p * x\n}\n</code>\n<|/ a tags=r |>\n<| c |>\nThis won't work\
+    \ for negative numbers though\n<|/ c |>\n<| a tags=r |>\nThis works for the negative\
+    \ numbers case:\n<code>\nchange_base <- function(x, base) {\n  ifelse(x<0, x <-\
+    \ abs(x), x <- -x)\n  x<-base*(x/base)\n  return(x)\n}\n</code>\n<|/ a dscore=1\
+    \ |>\n<| a tags=r dscore=1 |>\nHere is another way to do it using the integer\
+    \ division operator:\n<code>\nchange_base <- function(x, base) {\n    x <- base*(x/base)\n\
+    \    x\n}\n</code>\n<|/ a |>\n<| a dscore=0 |>\nThe most elegant answer that I've\
+    \ seen so far is to use the integer division operator. It does exactly what you're\
+    \ looking for. No need for special cases or anything.\n<code>\nchange_base <-\
+    \ function(x, base) {\n    x/base\n}\n</code>\n<|/ a tags=r |>\n<| a |>\n<code>\n\
+    change_base <- function(x, base) {\n    x <- base * (x %/% base)\n}\n</code>\n\
+    <|/ a dscore=0 tags=r |>\n<| c |>\nCode only answers are generally discouraged\
+    \ on SO, due to potential lack of clarity.  Please add an explanation as to why\
+    \ this works.\n<|/ c |>\n<| a tags=r dscore=0 |>\n<code>\nchange_base <- function(x,\
+    \ base) {\n  return(base*((x/base)))\n}\n</code>\n<|/ a |>\n<| a tags=r dscore=0\
+    \ |>\nFor anyone looking for the answer to a similar question, here is a solution\
+    \ that doesn't involve using integer division. Instead it uses logs and exponents:\n\
+    <code>\nchange_base <- function(x, base) {\n  logx <- log(x)\n  exp <- 10^(floor(logx)-1)\n\
+    \  return(base^exp)\n}\n</code>\n<|/ a |>\n<| a tags=r dscore=0 |>\n<code>\nchange_base\
+    \ <- function(x, base) {\n    x <- base*(x", "\n  x <- as.numeric(x)\n  base \
+    \ <- as.numeric(base)\n  ifelse(x < 10, paste(base * x, base = base), paste(x\
+    \ / base, base = base))\n}\n", "\n  num <- as.integer(x)\n  if (num < 10)\n  \
+    \  paste0(num, base)\n  else\n    paste(change_base(num %% base, base), num, base)\n\
+    }\n", "\n  if (base > 10) stop(\"base must be less than 10\")\n  x <- as.numeric(base\
+    \ * x)\n  div <- x / base\n  mod <- x - div * base\n  paste(div, mod, sep = \"\
+    -\")\n}\n", "\n  x <- as.numeric(x)\n  base <- as.numeric(base)\n  if (base >\
+    \ 10 | base < 1) {\n    return(as.character(NA))\n  }\n  base <- as.character(base)\n\
+    \  power = 1\n  x <- x / base\n  repeat {\n    x <- base * x\n    base <- as.numeric(base)\n\
+    \    power <- power + 1\n  }\n  as.character(x)\n}\n</cell>\n<cell>", "\n    x\
+    \ <- as.numeric(x)\n    base <- as.numeric(base)\n    if (base < 10) {\n     \
+    \   stop('The base can not be less than 10.')\n    }\n    x <- x/base\n    x <-\
+    \ round(x, 0)\n    x <- paste0(base, x, sep = \"\")\n    x\n}\n</cell>\n<text>\n\
+    Converting from binary to decimal number\n\n</text>\n<cell>", "\n  if(base < 10)\
+    \ {\n    x <- paste0(rep(0:9), x)\n  }\n  if(base > 10 && base < 27) {\n    x\
+    \ <- paste0(rep(0:9), x)\n  }\n  x <- as.character(x)\n  x <- strsplit(x, \"\"\
+    )[[1]]\n  x <- paste(x[-length(x)], x, sep=\"\")\n  x <- paste0(rep(c(base, base^2,\
+    \ base^3, base^4, base^5), each=length(x)), x)\n  return(x)\n}\n</code>\nTest\
+    \ results:\n<code>\nchange_base(\"1000\", 3)", "\n  \n  # Convert x to integer\n\
+    \  xInt <- as.integer(x)\n  \n  # Change base to base\n  xInt <- as.numeric(paste(xInt,\
+    \ base))\n  \n  # Convert back to base\n  xStr <- as.integer(paste(as.numeric(xInt),\
+    \ base))\n  \n  return(xStr)\n}\n", "\n  ifelse(x >= 10 | is.na(x), base^x, (base^x)+1)\n\
+    }\n"]
 stop_tokens:
 - "\n#"
 - "\n```"

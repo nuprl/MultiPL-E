@@ -8,6 +8,1664 @@ tests: "}\n\ncandidate() {\n    rolling_max \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \  [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"1 2 3 4\") = \"1 2 3 4\"\
   \ ]]\n    [[ $(candidate \"4 3 2 1\") = \"4 4 4 4\" ]]\n    [[ $(candidate \"3 2\
   \ 3 100 3\") = \"3 3 3 100 100\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local list=\"$1\"\n    local max\n    local i\n    local list\n\
+    \    for (( i=1; i<= $#list ; i++ )); do\n        if [[ -n $max ]]; then\n   \
+    \         max=\"\\\"${max}\\\"\"\n        else\n            max=$(grep -o -P \"\
+    \\\"[0-9]\" <<< \"${list[i]}\")\n        fi\n        local element=$(grep -o -P\
+    \ \"\\\"[0-9]\" <<< \"${list[i]}\")\n        if [[ -n \"${element}\" ]]; then\n\
+    \            list[i]=\"${element} \\\"${list[i]}\\\"\"\n        else\n       \
+    \     list[i]=\"\"\n        fi\n    done\n    echo \"${list[@]}\"", "  IFS=\"\
+    \ \" read -r -a array <<< \"$1\"\n\n  local i\n  local max\n  local max_i\n  local\
+    \ max_i_str\n\n  max=\"${array[0]}\"\n  for ((i=1; i<${#array[@]}; i++)); do\n\
+    \    if [ \"${array[i]}\" -gt \"${max}\" ]; then\n      max=\"${array[i]}\"\n\
+    \      max_i=\"${i}\"\n    fi\n  done\n\n  # Convert the index of the max element\
+    \ into a string\n  max_i_str=$(printf \"%d\" \"$max_i\")\n\n  # Generate the output\
+    \ array\n  echo \"${array[@]:0:$max_i_str}\"", "    local ROLLING_MAX=$(IFS='\
+    \ '; echo \"$1\" | sort -n)\n    local MAX_LAST_ELEMENT\n    local MAX_LIST=\"\
+    \ \"\n\n    local LAST_ELEMENT=0\n    local ELEMENT_LIST=\"\"\n    local ELEMENTS_COUNT=$(echo\
+    \ $ROLLING_MAX | wc -w)\n    local CURRENT_ELEMENT\n    local LAST_ELEMENT_INDEX=$(($ELEMENTS_COUNT\
+    \ - 1))\n    local CURRENT_ELEMENT_INDEX=0\n    local TEMP_ELEMENT\n\n    for\
+    \ ELEMENT in $ROLLING_MAX; do\n        # Look for the element with index 1\n \
+    \       if [[ \"$ELEMENT\" == $LAST_ELEMENT ]]; then\n            # If we've found\
+    \ it, no need to keep looking\n            CURRENT_ELEMENT=\"$ELEMENT\"\n    \
+    \        CURRENT_ELEMENT_INDEX=0\n            LAST_ELEMENT_INDEX=1\n        else\n\
+    \            CURRENT_ELEMENT=\"$ELEMENT\"\n            CURRENT_ELEMENT_INDEX=$((CURRENT_ELEMENT_INDEX\
+    \ + 1))\n            LAST_ELEMENT_INDEX=$((LAST_ELEMENT_INDEX - 1))\n        fi\n\
+    \n        # Keep rolling max\n        if [[ $CURRENT_ELEMENT_INDEX -gt $MAX_LAST_ELEMENT\
+    \ ]]; then\n            MAX_LAST_ELEMENT=$CURRENT_ELEMENT\n            MAX_LIST=\"\
+    $MAX_LIST $ELEMENT\"\n        fi\n    done\n\n    echo \"$MAX_LIST\"", "  local\
+    \ IFS=' '\n  local max_element=$1\n  local max_element_count=1\n  local rolling_max_list\n\
+    \  local rolling_max_list_item\n  local i=${#max_element}\n  while [ \"$i\" -gt\
+    \ 1 ]; do\n    rolling_max_list=$max_element\"-\"$max_element_count\n    rolling_max_list_item=\"\
+    ${rolling_max_list}\" \"$(echo $max_element | cut -d ' ' -f $((${i}/2)+1))\"\n\
+    \    max_element=$(echo $rolling_max_list_item | cut -d '-' -f 1)\n    max_element_count=$(echo\
+    \ $rolling_max_list_item | cut -d '-' -f 2)\n    i=$((${#max_element}-1))\n  done\n\
+    \  rolling_max_list=\"$max_element\"-\"$max_element_count\n  echo \"$rolling_max_list\"",
+  "    rolling_max=()\n    local rolling_max=()\n    local i\n    for i; do\n    \
+    \    if [[ \"$rolling_max\" =~ ^\"[[:space:]]*$i[[:space:]]+\"[[:space:]]* ]];\
+    \ then\n            rolling_max+=(\"$i\")\n        fi\n    done", "    local IFS=\\\
+    ' '\n    local a\n    local b\n    local c\n    local res\n\n    IFS=$'\\n'\n\
+    \    for a in $@; do\n        local i\n        for ((i=0; i < $#; i++)); do\n\
+    \            b=$(echo $a | cut -d ' ' -f $i)\n            if [ $i -eq $((i-1))\
+    \ ] ; then\n                res+=$(echo $b)\n            else\n              \
+    \  c=$(echo $a | cut -d ' ' -f $((i+1)))\n                res+=$(echo $b | cut\
+    \ -d ' ' -f 1 )\n                res+=$(echo $c | cut -d ' ' -f 1 )\n        \
+    \    fi\n        done\n    done\n\n    IFS=' '\n    echo \"${res[@]}\"", "   \
+    \ local line\n    local max_line=\"\"\n    local max_line_index=0\n    local lines=()\n\
+    \n    while read -r line; do\n        if [[ \"$max_line\" != *\"$line\"* ]]; then\n\
+    \            # new maximum line found, save it\n            lines=()\n       \
+    \     max_line=\"$line\"\n            max_line_index=0\n        else\n       \
+    \     # new maximum line found, add it to the saved one\n            lines[$max_line_index]+=$'\\\
+    t'\"$line\"\n        fi\n\n        # add the new line to the list of lines\n \
+    \       lines+=( \"\\\"$line\\\"\" ) \n\n        # increment the line index\n\
+    \        let \"max_line_index+=1\"\n    done <<< \"$1\"\n\n    # return the list\
+    \ of maximum lines\n    echo \"${lines[*]}\"", "    local array=( \"${@}\" )\n\
+    \    local rolling_max=''\n    local i\n    local n\n    local imax\n    local\
+    \ imax2\n    local imax3\n    local imax4\n    local imax5\n    local j\n    for\
+    \ ((i = 0; i < ${#array[@]}; ++i)); do\n        n=${array[i]}\n        if [ \"\
+    $n\" -ne \"$rolling_max\" ]; then\n            rolling_max=\"${n}\"\n        else\n\
+    \            # Check if last element is the maximum so far\n            if [ \"\
+    $rolling_max\" -gt \"$n\" ]; then\n                rolling_max=\"${n}\"\n    \
+    \        fi\n        fi\n    done\n    echo \"$rolling_max\"", "    local list=$1\n\
+    \    local rolling_max=\"\"\n    local i=0 rolling_max_i=0 rolling_max_i_last=0\n\
+    \    local last=0 rolling_max_i_last=0 rolling_max_i_lastlast=0\n    for element\
+    \ in $list; do\n        if [[ ${element} -ne ${rolling_max_i} ]]; then\n     \
+    \       if [[ ${rolling_max_i} != \"\" ]]; then\n                rolling_max=$(printf\
+    \ \"\\\"%s\\\" \" ${rolling_max})\n            fi\n            rolling_max_i=${element}\n\
+    \            rolling_max_i_last=${rolling_max_i}\n        fi\n        if [[ -z\
+    \ ${i} ]]; then\n            i=${rolling_max_i}\n            rolling_max_i_last=${rolling_max_i}\n\
+    \        else\n            i=$(( ${i} + ${rolling_max_i_last} ))\n           \
+    \ if [[ ${i} -eq ${rolling_max_i_last} ]]; then\n                rolling_max_i_last=${rolling_max_i}\n\
+    \            fi\n        fi\n        rolling_max_i_lastlast=$(( ${rolling_max_i}\
+    \ - ${rolling_max_i_last} ))\n        rolling_max_i=$(( ${i} - ${rolling_max_i_lastlast}\
+    \ ))\n        rolling_max_i_last=$(( ${rolling_max_i_last} - ${rolling_max_i_lastlast}\
+    \ ))\n    done\n    rolling_max=$(printf \"\\\"%s\\\" \" ${rolling_max})\n   \
+    \ echo ${rolling_max}", "  local tmp\n  local arr elem last\n\n  IFS=$'\\n' arr=\"\
+    $1\"\n\n  for elem in \"${arr[@]}\"; do\n    # remove all non-numeric characters\n\
+    \    # last=\"$(echo \"${elem}\" | grep -Eo '[0-9]')\"\n    last=$(echo \"${elem}\"\
+    \ | grep -o '[0-9]')\n    # find biggest element so far\n    if [[ ${last} -gt\
+    \ ${elem} ]]; then\n      last=${elem}\n    fi\n  done\n\n  echo \"${arr[@]}\"",
+  "  # Make sure the argument list is a list\n  local list_to_check=\"$(echo \"$1\"\
+    \ | sed -e 's/^\\(.*\\) $/\\1/')\"\n\n  # Split the list into space-separated\
+    \ values\n  local list_to_check=\"$(echo \"$list_to_check\" | sed -e 's/ /\" \"\
+    \ /g')\"\n  local rolling_max\n  local rolling_max_index\n\n  # Make sure the\
+    \ list is not empty\n  if [ -z \"$list_to_check\" ]; then\n    echo \"rolling_max()\
+    \ argument list must not be empty\"\n    return 1\n  fi\n\n  # Set rolling max\
+    \ to first item\n  rolling_max=\"$list_to_check\"\n\n  # Set rolling max index\
+    \ to 0\n  rolling_max_index=0\n\n  # Start loop to find the rolling max\n  while\
+    \ [ \"$rolling_max_index\" -lt \"$((${#list_to_check[@]} - 1))\" ]; do\n    #\
+    \ If the rolling max found is greater or equal to the last item in the list, then\
+    \ break out of the loop\n    if [[ $rolling_max -gt $list_to_check[$((${#list_to_check[@]}\
+    \ - 1))] ]]; then\n      break\n    else\n      # Keep a copy of the current rolling\
+    \ max found\n      rolling_max=\"$list_to_check[$((${#list_to_check[@]} - 1))]\"\
+    \n\n      # Increment the rolling max index\n      rolling_max_index=$((${#list_to_check[@]}-1))\n\
+    \    fi\n  done\n\n  # Return the rolling max list as a space-separated list\n\
+    \  echo \"$rolling_max\"", "    local roll_max=$1\n    local list=$2\n    local\
+    \ roll=()\n    local roll_max_index=${#roll_max}\n    local roll_max_element=\"\
+    \"\n    local i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i\
+    \ roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i roll_max_i ", "    local\
+    \ arr=(\"${!1}\")\n    # Escape each element to prevent shell from parsing $1\
+    \ to a list after split\n    arr=( $(printf \"\\\"%q\\\\n\\\"\" \"${arr[@]}\"\
+    ));\n    # Extract all the elements except the first one (which is always zero)\n\
+    \    arr=( ${arr[@]:1:$#} );\n    # Generate rolling max list\n    while [[ ${#arr[@]}\
+    \ -gt 1 ]]; do\n        if [[ ${arr[0]} -gt ${arr[1]} ]]; then\n            arr=(\
+    \ ${arr[@]:1} ${arr[@]:0:1} )\n        else\n            arr=( ${arr[@]:1} )\n\
+    \        fi\n    done\n    echo -n \"[ \\\"${arr[@]}\\\" ]\"", "    # $1: list\
+    \ of integers to rolling max\n    local i\n    local max\n    local line\n   \
+    \ local num\n    local maxval\n    local j\n    local ret\n    IFS=' ' read -r\
+    \ -a array <<< \"$1\"\n    for j in \"${array[@]}\"; do\n        if [[ -z \"$max\"\
+    \ ]]; then\n            max=$j\n        elif [[ $j > $max ]]; then\n         \
+    \   max=$j\n        elif [[ $j == $max ]]; then\n            maxval=$j\n     \
+    \   fi\n    done\n    for i in $(seq $((${#array[@]}-1)))\n    do\n        if\
+    \ [[ -z \"$max\" ]]; then\n            line=\n        elif [[ ${array[$i]} -gt\
+    \ ${max} ]]; then\n            line=$array[$i]\n        elif [[ ${array[$i]} ==\
+    \ ${max} ]]; then\n            line=${array[$i]}\n        else\n            line=${array[$i]}\n\
+    \        fi\n        array[$i]=\n        array[$i]=$line\n    done\n    IFS='\
+    \ ' read -r -a array <<< \"$array\"\n    ret=${array[@]}\n    ret=${ret[@]}\n\
+    \    ret=${ret[@]/\\\"/}\n    ret=${ret[@]/\\'/}\n    ret=${ret[@]/'\\\"/}\n \
+    \   ret=${ret[@]/'\\'/}\n    echo $ret", "  local list=\"$1\"\n\n  local max=$(echo\
+    \ \"$list\" | sort -rn | head -1)\n  shift\n  for i in $(seq 0 $# -1 1); do\n\
+    \    local item=$(echo \"$list\" | sed \"s/$max/$1/\" | awk -v max=$max 'NR==1\
+    \ {printf $max} NR>1 {printf \"%s\",$max}')\n    list=\"$list$item\"\n    shift\n\
+    \  done\n  echo \"$list\"", "    local list=\"$1\"\n    local max_element=-1\n\
+    \    local i=0\n    local rolling_max=$list\n    while [ $i -lt ${#rolling_max}\
+    \ ]; do\n        max_element=${rolling_max[$i]}\n        rolling_max[$i]=${rolling_max[$(($i-1))]}\n\
+    \        rolling_max[$i]=$(echo $rolling_max[$i] | cut -d\" \" -f1)\n        if\
+    \ [ $max_element -gt $1 ] ; then\n            break\n        fi\n        i=$(($i+1))\n\
+    \    done\n    echo \"${rolling_max[@]}\"", "    local max=\"\" maxval=\"\"\n\
+    \    local rollingmax=\"\"\n    local rollingmaxval=\"\"\n\n    echo \"$1\" |\
+    \ while read line\n    do\n        if [ \"$max\" != \"\" ]\n        then\n   \
+    \         if [ \"$line\" -gt \"$max\" ]\n            then\n                maxval=\"\
+    $max\"\n                max=\"$line\"\n            else\n                max=\"\
+    $line\"\n            fi\n        else\n            max=\"$line\"\n        fi\n\
+    \    done\n\n    rollingmaxval=\"$maxval\"\n    rollingmax=\"$max\"\n    \n  \
+    \  echo \"$rollingmax\"", "  local str=${1% *}\n  local n=${#str}\n  echo \"[\\\
+    \"${str}\\\"\"\n  local i\n  for ((i=1; i<=n; i++)); do\n    local str2=$(echo\
+    \ $str | sed -e \"s/${str}/ ${i}/g\")\n    if [[ $str2 != \"\" ]]; then\n    \
+    \  echo \"\\\"${str2}\\\"\"\n    fi\n  done\n  echo \"]\"", "  local var=$1\n\
+    \  local maxList=()\n  local i\n  local m\n  for (( i=0; i<${#var}; i++ )); do\n\
+    \    [[ -z ${var[i]} ]] && break\n    m=${var[i]}\n    shift\n    maxList=( \"\
+    ${maxList[@]}\" \"$m\" )\n  done\n  printf '%s\\n' \"${maxList[@]}\"", "    local\
+    \ input=\"${1}\"\n    shift\n    local output=\"\"\n    local index=0\n    local\
+    \ max\n    local maxIndex\n    local next\n    local this\n    local inputIndex\n\
+    \    local inputNum\n    local maxNum\n\n    # Sanitize input\n    local inputSize=${#input}\n\
+    \    if [ \"$inputSize\" -lt 1 ]; then\n        echo \"No input given\"\n    \
+    \    return\n    fi\n\n    # Sanitize input\n    local inputNum=${#input}\n  \
+    \  if [ \"$inputNum\" -lt 1 ]; then\n        echo \"No input given\"\n       \
+    \ return\n    fi\n\n    # Check if output is empty and if so initialize it\n \
+    \   output=\"${output:-$(inputNum)}\"\n    local outputNum=${#output}\n\n    #\
+    \ Check if there is only one item\n    if [ \"$inputNum\" -eq 1 ]; then\n    \
+    \    echo -n \"$output\"\n        return\n    fi\n\n    # Loop over the array\
+    \ once\n    while [ \"$index\" -lt \"$outputNum\" ]; do\n        if [[ \"$output[$index]\"\
+    \ -gt \"$max\" ]]; then\n            max=\"$output[$index]\"\n            maxIndex=\"\
+    $index\"\n        fi\n        this=\"$output[$index]\"\n        next=\"$input[$index+1]\"\
+    \n        index=`expr $index + 1`\n    done\n\n    # Store in output\n    output[$maxIndex]=\"\
+    $max\"\n    echo \"${output[@]}\"", "    local rolling_max\n    local arg\n  \
+    \  local rolling_max_str=''\n    for arg; do\n        local rolling_max_str_tmp=\"\
+    ${rolling_max_str}\\\"${arg}\\\",\"\n        rolling_max_str=\"${rolling_max_str_tmp}\"\
+    \n    done\n\n    local rolling_max_str_tmp=\"${rolling_max_str%,}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*,}\"\n    rolling_max_str=\"${rolling_max_str%\\*}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*\\}\"\n\n    local rolling_max_str_tmp=\"${rolling_max_str%,}\"\
+    \n    rolling_max_str=\"${rolling_max_str#*,}\"\n    rolling_max_str=\"${rolling_max_str%\\\
+    *}\"\n    rolling_max_str=\"${rolling_max_str#*\\}\"\n\n    local rolling_max_str_tmp=\"\
+    ${rolling_max_str%,}\"\n    rolling_max_str=\"${rolling_max_str#*,}\"\n    rolling_max_str=\"\
+    ${rolling_max_str%\\*}\"\n    rolling_max_str=\"${rolling_max_str#*\\}\"\n\n \
+    \   local rolling_max_str_tmp=\"${rolling_max_str%,}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*,}\"\n    rolling_max_str=\"${rolling_max_str%\\*}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*\\}\"\n\n    local rolling_max_str_tmp=\"${rolling_max_str%,}\"\
+    \n    rolling_max_str=\"${rolling_max_str#*,}\"\n    rolling_max_str=\"${rolling_max_str%\\\
+    *}\"\n    rolling_max_str=\"${rolling_max_str#*\\}\"\n\n    local rolling_max_str_tmp=\"\
+    ${rolling_max_str%,}\"\n    rolling_max_str=\"${rolling_max_str#*,}\"\n    rolling_max_str=\"\
+    ${rolling_max_str%\\*}\"\n    rolling_max_str=\"${rolling_max_str#*\\}\"\n\n \
+    \   local rolling_max_str_tmp=\"${rolling_max_str%,}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*,}\"\n    rolling_max_str=\"${rolling_max_str%\\*}\"\n    rolling_max_str=\"\
+    ${rolling_max_str#*\\}\"\n\n    local rolling_max_str_tmp=\"${rolling_max_str%,}\"\
+    \n    rolling_max_str=\"${rolling_max_str#*,}\"\n    rolling_", "  local -a rolling_max\n\
+    \  rolling_max=($(for ((i=0; i<$#; i+=2)); do echo \"${!i+1}\"; done))", "   \
+    \ local list_string i=0 elements=\"\" max=\"\" max_index=$1 max=$(rolling_max\
+    \ \"$2\" $3 $4 $5 $6 $7 $8 $9 $10 $11)\n    if [[ -z \"$max\" ]]; then\n     \
+    \   return\n    fi\n\n    while [[ -n \"$list_string\" ]]; do\n        i=$((i\
+    \ + 1))\n        elements=\"$elements $max\"\n        if [[ -z \"$max\" ]]; then\n\
+    \            max=$list_string\n            max_index=$i\n        fi\n        list_string=$(rolling_max\
+    \ \"$2\" \"$3\" \"$4\" \"$5\" \"$6\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\")\n \
+    \   done\n\n    echo $elements\n    echo $max $max_index", "    local rolling_max=\"\
+    []\"\n    local rolling_max_count=0\n    local rolling_max_i\n    for rolling_max_i\
+    \ in $1; do\n        local rolling_max_j\n        for rolling_max_j in $rolling_max;\
+    \ do\n            local rolling_max_count=\"($rolling_max_count+1)\"\n       \
+    \ done\n        if [ $rolling_max_count -ge \"$rolling_max_i\" ]; then\n     \
+    \       rolling_max_count=0\n            rolling_max=\"$rolling_max_j $rolling_max\"\
+    \n        else\n            rolling_max_count=\"$rolling_max_count\"\n       \
+    \     rolling_max=\"$rolling_max_j\"\n        fi\n    done\n    echo \"$rolling_max\"",
+  "    rolling_max_line=$(mktemp)\n    rolling_max_line=$(cat <<EOF\n${1}\nEOF\n)\n\
+    \    rolling_max_line=$(echo $rolling_max_line | sed \"s/ /\\\\ /g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/,/\\\\ /g\")\n    rolling_max_line=$(echo $rolling_max_line\
+    \ | sed \"s/[0-9]\\([0-9]*\\)/\\\\\\1/g\")\n    rolling_max_line=$(echo $rolling_max_line\
+    \ | sed \"s/^/\\{\\\"/\\\")\n    rolling_max_line=$(echo $rolling_max_line | sed\
+    \ \"s/}\\\"$/\\}/g\")\n    rolling_max_line=$(echo $rolling_max_line | sed \"\
+    s/,$//g\")\n    rolling_max_line=$(echo $rolling_max_line | sed \"s/,\\([0-9]*\\\
+    )$/\\1/g\")\n    rolling_max_line=$(echo $rolling_max_line | sed \"s/\\,/\\\"\
+    /g\")\n    rolling_max_line=$(echo $rolling_max_line | sed \"s/ /\\\"/g\")\n \
+    \   rolling_max_line=$(echo $rolling_max_line | sed \"s/,/\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/[0-9]\\([0-9]*\\)/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/^\\([0-9]*\\)$/\\1/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/\\([0-9]*\\)$/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/^\\([0-9]*\\)/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/\\([0-9]*\\)/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/^\\([0-9]*\\)$/\\1/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/\\([0-9]*\\)$/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/^\\([0-9]*\\)/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed \"s/\\([0-9]*\\)/\\\"\\1\\\"/g\")\n    rolling_max_line=$(echo\
+    \ $rolling_max_line | sed ", "  local rolling_max_arg\n  rolling_max_arg=$1\n\
+    \  local rolling_max_result\n  local rolling_max_value\n  local rolling_max_index\n\
+    \  local rolling_max_element\n  local rolling_max_counter\n  local rolling_max_delimiter\n\
+    \  local rolling_max_delimiter_list\n  local rolling_max_index\n  local rolling_max_index_count\n\
+    \  local rolling_max_index_count_element\n  local rolling_max_delimiter_index\n\
+    \  local rolling_max_delimiter_element\n  local rolling_max_delimiter_counter\n\
+    \  local rolling_max_delimiter_counter_index\n  local rolling_max_delimiter_counter_element\n\
+    \  local rolling_max_delimiter_counter_value\n  local rolling_max_delimiter_counter_value_index\n\
+    \  local rolling_max_delimiter_counter_value_index2\n  local rolling_max_delimiter_counter_value_index3\n\
+    \  local rolling_max_delimiter_counter_value_index4\n  local rolling_max_delimiter_counter_value_index5\n\
+    \  local rolling_max_delimiter_counter_value_index6\n  local rolling_max_delimiter_counter_value_index7\n\
+    \  local rolling_max_delimiter_counter_value_index8\n  local rolling_max_delimiter_counter_value_index9\n\
+    \  local rolling_max_delimiter_counter_value_index10\n  local rolling_max_delimiter_counter_value_index11\n\
+    \  local rolling_max_delimiter_counter_value_index12\n  local rolling_max_delimiter_counter_value_index13\n\
+    \  local rolling_max_delimiter_counter_value_index14\n  local rolling_max_delimiter_counter_value_index15\n\
+    \  local rolling_max_delimiter_counter_value_index16\n  local rolling_max_delimiter_counter_value_index17\n\
+    \  local rolling_max_delimiter_counter_value_index18\n  local rolling_max_delimiter_counter_value_index19\n\
+    \  local rolling_max_delimiter_counter_value_index20\n  local rolling_max_delimiter_counter_value_index21\n\
+    \  local rolling_max_delimiter_counter_value_index22\n  local rolling_max_delimiter_counter_value_index23\n\
+    \  local rolling_max_delimiter_counter_value_index24\n  local rolling_max_delimiter_counter_value_index25\n\
+    \  local rolling_max_delimiter_counter_value_index26\n  local rolling_max_delimiter_counter_value_index27\n\
+    \  local rolling_max_delimiter_counter_value_index28\n  local rolling_max_delimiter_counter_value_index29\n\
+    \  local rolling_max_delimiter_counter_value_index30\n  local rolling_max_delimiter_counter",
+  "  local rolling_max\n  # Convert the first argument to a list by splitting on whitespace.\n\
+    \  IFS=' ' read -a rolling_max <<< \"$1\"\n\n  local rolling_max_found\n  # Initialize\
+    \ a variable to keep track of the first valid rolling maximum value.\n  local\
+    \ rolling_max_value\n  local rolling_max_element\n\n  # Loop over all arguments\
+    \ and keep track of the current rolling maximum value\n  # and the first element\
+    \ that matches the current rolling maximum value.\n  for element in \"${rolling_max[@]}\"\
+    ; do\n    if [[ $rolling_max_found == 0 ]]; then\n      # If the element is the\
+    \ first rolling maximum value, then store that value.\n      rolling_max_found=1\n\
+    \      rolling_max_value=$element\n      rolling_max_element=$element\n    else\n\
+    \      # Otherwise, if that element is not equal to the current rolling maximum\
+    \ value,\n      # then store the current rolling maximum value and new current\
+    \ rolling maximum value.\n      if [ \"$element\" != \"$rolling_max_value\" ];\
+    \ then\n        rolling_max_found=0\n        rolling_max_value=$element\n    \
+    \    rolling_max_element=$element\n      else\n        rolling_max_found=1\n \
+    \       rolling_max_value=$element\n        rolling_max_element=$element\n   \
+    \   fi\n    fi\n  done\n  # Return the list that includes the current rolling\
+    \ maximum value and the first\n  # element that matches the current rolling maximum\
+    \ value.\n  echo \"${rolling_max[@]} $rolling_max_element\"", "    local rolling_max_list=()\n\
+    \    local rolling_max_max_element=$1\n\n    local count=0\n    local rolling_max_element=$1\n\
+    \n    local rolling_max_element_count=0\n    local rolling_max_element_max_element=$rolling_max_element\n\
+    \n    while [[ $rolling_max_element_count-lt $rolling_max_max_element ]]; do\n\
+    \        rolling_max_element=$(echo \"$rolling_max_element+$rolling_max_element_max_element\"\
+    \ | bc -l)\n        rolling_max_element_count=$(( $rolling_max_element_count+1\
+    \ ))\n        rolling_max_element_max_element=$rolling_max_element\n        rolling_max_list=(\"\
+    ${rolling_max_list[@]}\" \"$rolling_max_element\")\n    done\n\n    # Remove the\
+    \ trailing comma and space\n    echo \"${rolling_max_list[@]}\"", '    echo "$1
+    $(rolling_max_helper "$1" "$2" "${3}" "${4}")"', "  # The argument is a space-separated\
+    \ list of integers\n  local l=$1\n  local max=\"\"\n  local i rolling_max_i rolling_max_i\
+    \ rolling_max_i\n\n  # Check that the list is not empty and that its elements\
+    \ are all integers\n  if [ -n \"$l\" ] && [ \"${l: -1}\" -ge 1 ] &&\n     [ \"\
+    ${l: -1}\" -le \"${#l}\" ]; then\n    while read -a rolling_max_i; do\n      rolling_max_i=$(printf\
+    \ \"%q\" \"${rolling_max_i[@]}\" | sort -r)\n      rolling_max_i=$(printf \"%q\"\
+    \ \"${rolling_max_i[@]}\" | sort -nr)\n      rolling_max_i=$(printf \"%q\" \"\
+    ${rolling_max_i[@]}\" | sort -n -s)\n      for i in ${rolling_max_i[@]}; do\n\
+    \        if [ \"$max\" = \"$i\" ]; then\n          max=$rolling_max_i\n      \
+    \    break\n        fi\n      done\n    done < <(printf \"%q\" \"${l[@]}\" | sed\
+    \ 's/ /\\n/g')\n  fi\n  echo $max", "    # shellcheck disable=SC2064\n    local\
+    \ -r input_list=\"$1\"\n    local -r rolling_max_list=''\n    local -r rolling_max_item=''\n\
+    \    local -r rolling_max_value=0\n    local -r max_index_value=-1\n    local\
+    \ -r max_index=-1\n    local -r max_index_item=''\n    # shellcheck disable=SC2034\n\
+    \    for index in ${!input_list[@]}; do\n        local -r item=${input_list[index]}\n\
+    \        local -r value=$item\n        if [[ ${rolling_max_value} -gt ${value}\
+    \ ]]; then\n            rolling_max_value=${value}\n            rolling_max_item=${item}\n\
+    \            rolling_max_list+=\"\\\"${item}\\\",\"\n        fi\n        if [[\
+    \ ${max_index} -lt 0 ]]; then\n            max_index=0\n        fi\n        if\
+    \ [[ ${index} -gt ${max_index} ]]; then\n            max_index_value=${value}\n\
+    \            max_index_item=${item}\n            max_index=${index}\n        fi\n\
+    \    done\n    echo \"${rolling_max_list%,}\"", "    local -r rolling_max_cmd=\"\
+    $(command -v rolling-max)\"\n    ${rolling_max_cmd} \"$@\" \"$@\"", "    local\
+    \ rolling_max_list=$1\n\n    local rolling_max_elements=$(echo $rolling_max_list\
+    \ | awk '{ print $1 }')\n    local rolling_max_list='['\n\n    # Get the last\
+    \ element and put it at the end of the list.\n    local rolling_max_element=$(echo\
+    \ $rolling_max_elements | tail -1)\n    local rolling_max_list+=\"$rolling_max_element\"\
+    \n    local rolling_max_list+=\"]\"\n\n    local rolling_max_list+=\",\"\n\n \
+    \   # Get the current element and put it in the middle of the list\n    local\
+    \ rolling_max_element=$(echo $rolling_max_elements | head -1)\n    local rolling_max_list+=\"\
+    $rolling_max_element\"\n    local rolling_max_list+=\",\"\n\n    # Get the rest\
+    \ of the elements.\n    local rolling_max_elements=$(echo $rolling_max_list |\
+    \ awk '{ print $2 }')\n    local rolling_max_list+=\"]\"\n\n    echo \"$rolling_max_list\"",
+  '  echo "$(tail -n +2 <<< "${@/#/[${@}[0]]}")"', "    local seq=$1\n    local output\n\
+    \    output=$(echo $seq |  sed -n 's/^\\(.*\\)$/\\1/p' | sort | uniq -c | sort\
+    \ -n -r)\n    local i=0\n    local max_element=$(echo $output | awk -F \" \" '{print\
+    \ $2}' | head -1)\n    echo $max_element\n    while [ $i -lt $max_element ]\n\
+    \    do\n        echo $output\n        i=$((i+1))\n    done", "  local i\n  local\
+    \ max\n  local maxi\n  local maxes\n\n  # Parse $1, extract all rolling maximums\
+    \ one by one from each element\n  IFS=\" $1\"\n  local elements=( $* )\n\n  #\
+    \ Set empty list for results\n  local result=()\n  local max_num=\"\"\n\n  for\
+    \ ((i=0; i < ${#elements[@]}; i++)); do\n    if [ \"${elements[i]}\" -gt \"${max_num}\"\
+    \ ]; then\n      # Update max num to current element num\n      max_num=\"${elements[i]}\"\
+    \n      # If the element is greatest so far, then save it\n      maxes+=( \"${max_num}\"\
+    \ )\n    else\n      # If the element is already greatest, then update it with\
+    \ current max num\n      max+=( \"${max_num}\" )\n      maxes+=( \"${max_num}\"\
+    \ )\n      # Empty the list for next iteration\n      local x=()\n    fi\n  done\n\
+    \n  result+=( \"${max[@]}\" )\n  result+=( \"${maxes[@]}\" )\n  echo \"${result[@]}\"",
+  "  local list=\"$1\"\n  local max_list\n  local max_el\n  local i\n\n  max_el=$list\n\
+    \  max_list=\"\"\n  for i in $list; do\n    if [[ $max_el > \"$i\" ]]; then\n\
+    \      max_el=\"$i\"\n      max_list+=\" $max_el\"\n    fi\n  done\n\n  echo \"\
+    $max_list\"", "    local i\n    local str\n    local tmp\n\n    local tmp_list=()\n\
+    \    for i in $* ; do\n        tmp=$(echo $i | cut -d ' ' -f 1)\n        tmp_list+=(\"\
+    $tmp\")\n    done\n    echo \"${tmp_list[@]}\"", "  local arr=$1; shift\n  local\
+    \ max_rolling=0\n  local max_val\n  arr=($(echo $arr | tr ' ' ','))\n  for val\
+    \ in ${arr[@]}; do\n    if [[ $val -gt $max_rolling ]]; then\n      max_rolling=$val\n\
+    \      max_val=$val\n    elif [[ $val -eq $max_rolling ]]; then\n      max_rolling=$val\n\
+    \      max_val=$val\n    fi\n  done\n  echo $max_val", "    local rolling_max_var=$1\n\
+    \    local rolling_max_arr=()\n    local rolling_max_max_index=0\n    local rolling_max_max_index=$(tail\
+    \ -1 <<< \"${rolling_max_var}\")\n    local rolling_max_max_index_split=()\n \
+    \   for index in ${rolling_max_max_index_split[@]}; do\n        rolling_max_max_index_split+=(${index})\n\
+    \    done\n    # loop until $rolling_max_max_index_split is exhausted\n    while\
+    \ [[ ${#rolling_max_max_index_split[@]} -gt 0 ]]; do\n        local rolling_max_max_index_element=${rolling_max_max_index_split[@]%,*}\n\
+    \        local rolling_max_max_index_element_split=()\n        for index in ${rolling_max_max_index_split[@]};\
+    \ do\n            rolling_max_max_index_element_split+=(${index})\n        done\n\
+    \        local rolling_max_max_index_element_split+=($rolling_max_max_index_element)\n\
+    \        local rolling_max_max_index=${rolling_max_max_index_element_split[@]/%,*}\n\
+    \        local rolling_max_max_index_split=()\n        for index in ${rolling_max_max_index_split[@]};\
+    \ do\n            rolling_max_max_index_split+=(${index})\n        done\n    \
+    \    local rolling_max_max_index_split+=(${rolling_max_max_index})\n        local\
+    \ rolling_max_max_index_element_split+=($rolling_max_max_index)\n        local\
+    \ rolling_max_max_index_element_split+=($rolling_max_max_index)\n        local\
+    \ rolling_max_max_index_element_split+=($rolling_max_max_index)\n        rolling_max_max_index_split+=(\"\
+    ${#rolling_max_max_index_element_split[@]}\")\n        rolling_max_max_index_split+=(\"\
+    ${#rolling_max_max_index_element_split[@]}\")\n        rolling_max_max_index_split+=(\"\
+    ${#rolling_max_max_index_element_split[@]}\")\n        rolling_max_arr+=(\"${rolling_max_max_index_element_split[@]}\"\
+    )\n        rolling_max_max_index+=1\n    done\n    local rolling_max_var_index=$((${#rolling_max_arr[@]}\
+    \ + 1))\n    local rolling_max_var=${rolling_max_arr[@]:$rolling_max_var_index}\n\
+    \    echo \"${rolling_max_var[@]}\"", "    # Trim spaces and quotes\n    IFS=$'\\\
+    n'\n    set -- $1 | sed 's/^\"//;s/\"$//'\n\n    local rolling_max=$(echo $1 |\
+    \ awk '\n        BEGIN { max=0; max_rolling=0 }\n        { if ($0 < max) { max_rolling=$0;\
+    \ max=0 } }\n        END { print max_rolling }')\n\n    echo $rolling_max", "\t\
+    local L=${1+\"${1// /}}\"}\n\tlocal M=${2+\"${2// /}}\"}\n\tshift\n\tshift\n\t\
+    local output\n\n\tif [ -z \"$M\" ]; then\n\t\toutput=$(echo $L | tr '\\n' ','\
+    \ | sed \"s/,$//\")\n\t\techo \"$output\"\n\t\treturn\n\tfi\n\n\toutput=$( echo\
+    \ $(echo $L | tr '\\n' ',' | sed \"s/,$M/,${M//,/$M}\") | tr '\\n' ',' )\n\techo\
+    \ \"$output\"", "    local n=$1 rolling_max list\n    local max=$(( ${#list[@]}\
+    \ - 1 ))\n    local i\n\n    for (( i = 1; i <= ${#list[@]} && i <= $max; i++\
+    \ )); do\n        if [ ${list[$i]} -gt ${list[$max]} ]; then\n            list[$max+1]=\"\
+    ${list[$i]}\"\n        else\n            list[$max]=\"${list[$i]}\"\n        fi\n\
+    \    done\n\n    echo \"${list[@]}\"", "    local seq=\"$1\"\n    local last=\"\
+    \"\n    local max=\"\"\n    local tmp\n    local i\n\n    for ((i=1; i <= ${#seq};\
+    \ i++)); do\n        tmp=$(eval echo \"\\$\\{seq\\[$i\\]\\}\")\n        if [[\
+    \ \"$tmp\" > \"$max\" ]]; then\n            max=$(eval echo \"\\$\\{seq\\[$i\\\
+    ]\\}\")\n        fi\n    done\n    echo $max", "    local -r rolling_max_arguments=\"\
+    $@\"\n    local -r rolling_max_arguments_split=$(IFS=\" \"; echo \"$rolling_max_arguments\"\
+    ) || return\n    local rolling_max_argument_max_index=-1\n    local max_element=\"\
+    ${1}\"\n    local rolling_max_arguments_length=\"${#rolling_max_arguments_split[@]}\"\
+    \n    local rolling_max_argument_max_value=\"${rolling_max_arguments_split[$rolling_max_argument_max_index]}\"\
+    \n    local rolling_max_argument_min_value=1\n    local rolling_max_argument_counter=1\n\
+    \    local rolling_max_argument_result=\"\"\n    while [[ ${rolling_max_argument_counter}\
+    \ -le ${rolling_max_arguments_length} ]]; do\n        if [[ \"${max_element}\"\
+    \ -gt \"${rolling_max_argument_max_value}\" ]]; then\n            rolling_max_argument_result+=\"\
+    \\\"${rolling_max_argument_max_value}\\\"\"\n            rolling_max_argument_max_value=\"\
+    ${rolling_max_arguments_split[$((${rolling_max_argument_counter}-1))]}\"\n   \
+    \         rolling_max_argument_max_index=$((${rolling_max_argument_counter} -\
+    \ 1))\n        fi\n        rolling_max_argument_counter=$((${rolling_max_argument_counter}\
+    \ + 1))\n    done\n    echo \"${rolling_max_argument_result}\"", "    local string=${1:-}\n\
+    \    local array=(${string//[[:space:]][[:space:]]/})\n    local max_element=${array[-1]}\n\
+    \n    while [[ ${array[-1]} -gt ${max_element} ]]; do\n        max_element=${array[-1]}\n\
+    \        shift\n    done\n\n    echo \"$max_element\"", "\tlocal x=\"${1:-}\"\n\
+    \tlocal out=($(echo \"${x}\" | xargs -r -I % shuf --random-source=/dev/random\
+    \ --max-lines=1 --delimiter=\" %\" | sort -n -r))\n\techo \"${out[@]}\"", "  \
+    \  local rolling_max_args=\"$1\"\n    local rolling_max_index=1\n    local rolling_max_max_index=$(($(echo\
+    \ \"$rolling_max_args\" | grep -v \"#\" | tr -d ',' | wc -w) + 1))\n    local\
+    \ rolling_max_list=\"\"\n    local rolling_max_max_val=\"\"\n    local rolling_max_max_index=1\n\
+    \    local rolling_max_arg_index=1\n    local rolling_max_arg=\"\"\n    local\
+    \ rolling_max_arg_val=\"\"\n    local rolling_max_arg_val_index=1\n    local rolling_max_arg_val_temp=\"\
+    \"\n    local rolling_max_arg_val_temp_index=1\n    while [ \"$rolling_max_index\"\
+    \ -lt \"$rolling_max_max_index\" ]; do\n        local rolling_max_arg_val_temp=\"\
+    $rolling_max_arg_val_temp\"\n        local rolling_max_arg_val_temp_index=$(($(echo\
+    \ \"$rolling_max_arg_val_temp\" | grep -v \"#\" | tr -d ',' | wc -w) + 1))\n \
+    \       if [ \"$rolling_max_arg_val_index\" -lt \"$rolling_max_arg_val_temp_index\"\
+    \ ]; then\n            local rolling_max_arg_val_temp=\"$rolling_max_arg_val_temp\"\
+    \n        fi\n        local rolling_max_arg_val=\"$rolling_max_arg_val$rolling_max_arg_val_temp\"\
+    \n        local rolling_max_arg=\"$rolling_max_arg$rolling_max_arg_val\"\n   \
+    \     local rolling_max_arg_val_temp=\"$rolling_max_arg_val_temp$rolling_max_arg_val_temp\"\
+    \n        local rolling_max_arg_val_temp_index=$(($(echo \"$rolling_max_arg_val_temp\"\
+    \ | grep -v \"#\" | tr -d ',' | wc -w) + 1))\n        if [ \"$rolling_max_arg_val_index\"\
+    \ -lt \"$rolling_max_arg_val_temp_index\" ]; then\n            local rolling_max_arg_val_temp=\"\
+    $rolling_max_arg_val_temp\"\n        fi\n        local rolling_max_arg_val_index=$(($(echo\
+    \ \"$rolling_max_arg_val_temp\" | grep -v \"#\" | tr -d ',' | wc -w) + 1))\n \
+    \       local rolling_max_index=$(($(echo \"$rolling_max_max_index\" | grep -v\
+    \ \"#\" | tr -d ',' | wc -w) + 1))\n        local rolling_max_list=\"$rolling_max_list$rolling_max_arg\"\
+    \n    done\n    echo \"$rolling_max_list\"", "    local rolling_max=$1\n    local\
+    \ rolling_max_list=\"\"\n    local rolling_max_element=\"\"\n    local rolling_max_len=0\n\
+    \    for element in $rolling_max; do\n        if [[ \"$rolling_max_len\" -lt \"\
+    $#\" ]]; then\n            rolling_max_list=\"$rolling_max_list$rolling_max_element\"\
+    \n            rolling_max_element=\"$element\"\n            rolling_max_len=1\n\
+    \        else\n            if [[ \"$rolling_max_len\" -gt \"$#\" ]]; then\n  \
+    \              rolling_max_list=\"$rolling_max_list$rolling_max_element\"\n  \
+    \              rolling_max_element=\"$element\"\n                rolling_max_len=$((rolling_max_len\
+    \ + 1))\n            else\n                rolling_max_list=\"$rolling_max_list$rolling_max_element\"\
+    \n                rolling_max_list=\"$rolling_max_list$rolling_max_element\"\n\
+    \                rolling_max_len=$((rolling_max_len + 2))\n            fi\n  \
+    \          rolling_max_element=\"$element\"\n        fi\n    done\n    if [[ \"\
+    $rolling_max_len\" -lt \"$#\" ]]; then\n        rolling_max_list=\"$rolling_max_list$rolling_max_element\"\
+    \n    fi\n    echo \"$rolling_max_list\"", "  local arr=( $1 )\n  local max_element\n\
+    \  local max_elements_index\n  local max_elements_count_in_arr\n  local max_elements_count_in_max_element\n\
+    \n  # Check if there are at least 2 elements in the array\n  if [ ${#arr[@]} -le\
+    \ 2 ]; then\n    echo \"ERROR: No array elements given\"\n    return 1\n  fi\n\
+    \n  # If current element is larger than the previous, it is the new maximum\n\
+    \  if [[ $1 =~ [0-9]\\+ ]]; then\n    max_element=\"${arr[0]}\"\n    max_elements_index=0\n\
+    \    max_elements_count_in_arr=0\n    max_elements_count_in_max_element=${#arr[@]}\n\
+    \  else\n    max_element=\"${arr[1]}\"\n    max_elements_index=1\n    max_elements_count_in_arr=1\n\
+    \    max_elements_count_in_max_element=${#arr[@]}\n  fi\n\n  # Count how many\
+    \ maximum elements are there\n  local i\n  for (( i=0; i<${#arr[@]}; i++ )); do\n\
+    \    if [[ ${arr[$i]} -gt ${max_element} ]]; then\n      max_elements_count_in_arr=${i}\n\
+    \    fi\n  done\n\n  # Print max element\n  echo \"$max_element\"\n\n  # Print\
+    \ the maximum element found up to max_elements_index\n  local j\n  for (( j=0;\
+    \ j<${max_elements_count_in_arr}; j++ )); do\n    echo \"${arr[j]}\"\n  done\n\
+    \n  # Print the maximum element found up to max_elements_index\n  local k\n  for\
+    \ (( k=0; k<${max_elements_count_in_max_element}; k++ )); do\n    if [[ ${arr[k]}\
+    \ -gt ${max_element} ]]; then\n      echo \"$max_element\"\n    fi\n  done", " \
+    \   IFS=' ' read -r -a array <<< \"$1\"\n    max_rolling=\"${array[0]}\"\n   \
+    \ for i in \"${array[@]:1}\" ; do\n        if [ \"$i\" -gt \"$max_rolling\" ]\
+    \ ; then\n            max_rolling=\"$i\"\n        fi\n    done\n    echo \"$max_rolling\"",
+  "  local rollingMax _rollingMax _i _c\n\n  _rollingMax=()\n  for _i in; do\n   \
+    \ if [[ -z $rollingMax ]] || [[ $_rollingMax -ne $1 ]]; then\n      _rollingMax+=(\"\
+    $_i\")\n    fi\n  done\n  printf \"%s\\n\" \"${_rollingMax[@]}\"", "  local x\n\
+    \  local max\n\n  # Parse the input parameters\n  x=\"${1}\"\n\n  # If the input\
+    \ is empty, return an empty list\n  [ -z \"${x}\" ] && return 0;\n\n  # Convert\
+    \ the input string to an array\n  x=($(echo \"${x}\" | tr \" \" \"\\n\"))\n\n\
+    \  # If there are less elements than parameters, return an empty list\n  [ ${#x[*]}\
+    \ -le ${#1} ] && return 0;\n\n  # Set up the max and max index\n  max=\"${x[-1]}\"\
+    \n  maxIndex=\"${#x[@]}\"\n\n  # Iterate through the input array\n  for (( i=0;\
+    \ i<${#x[@]}; i++ )); do\n    # If the current element is the max and we are at\
+    \ the last element, return an empty\n    # list.\n    [ \"${i}\" = \"${maxIndex}\"\
+    \ ] && return 0;\n    [ \"${x[i]}\" = \"${max}\" ] && maxIndex=$(( maxIndex +\
+    \ 1 ))\n\n    # Otherwise, set the max and max index to the current element\n\
+    \    max=${x[i]}\n    maxIndex=${i}\n  done\n\n  # Return the list\n  echo \"\
+    ${x[@]}\"", "  local rolling_max=()\n  local input_list=$(echo \"${1}\" | tr '\\\
+    n' ' ')\n  local last_element=$(echo \"${input_list}\" | tail -1)\n  local element_list=$(\
+    \ IFS=\"[\" ; echo \"${input_list}\" | sed 's/^/\"${last_element}\"/')\n  local\
+    \ current_element\n  local max_element\n\n  current_element=$(echo \"${element_list}\"\
+    \ | head -1)\n  max_element=$(echo \"${current_element}\" | tail -1)\n\n  while\
+    \ [ \"$current_element\" != \"${last_element}\" ]; do\n    max_element=$(echo\
+    \ \"${current_element}\" | tail -1)\n    rolling_max+=($max_element)\n    current_element=$(echo\
+    \ \"${element_list}\" | head -1)\n  done\n\n  echo \"${rolling_max[@]}\"", "\t\
+    local items=$1\n\tlocal max=\"\"\n\n\tshift 1\n\n\tfor (( i=1; i<=$(( ${#items}\
+    \ -1 )); i++ )); do\n\t\tlocal item=$(( ${items[i]} + ${items[i+1]} ))\n\n\t\t\
+    if [[ -z \"${max}\" ]]; then\n\t\t\tmax=\"$item\"\n\t\telse\n\t\t\tif [[ \"${max}\"\
+    \ -gt \"$item\" ]]; then\n\t\t\t\tmax=\"$item\"\n\t\t\tfi\n\t\tfi\n\tdone\n\n\t\
+    echo \"$max\"", "    # Remove leading and trailing quotes and split arguments\n\
+    \    seq=$1\n    seq=${seq%\\\"*}\n    seq=${seq#*\\\"}\n\n    seq=$(awk \"BEGIN{\n\
+    \        split(seq,a,\\\" \\\")\n        rolling_max=[]\n        for (i=1;i<length(a);i++){\n\
+    \            rolling_max[i]=a[i]\n        }\n    }\n    {\n        rolling_max[NR-1]=$0\n\
+    \    }\n    END{\n        for (i=1;i<NR -1;i++){\n            printf \\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\
+    \\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\
+    \"\\\"\\\"\\\"\\\"\\\"\\\"\\\"\\\"", "    local str=$1\n    local arr=($str)\n\
+    \    # Create a string with the rolling max element \n    # until the current\
+    \ moment\n    local rollmax=\"\"\n    local maxval=${arr[0]}\n    local i\n  \
+    \  for ((i=1; i<${#arr[@]}; i++)); do\n        if [[ ${arr[i]} -gt ${maxval} ]];\
+    \ then\n            rollmax=\"${rollmax} \\\"${arr[i]}\\\"\"\n            maxval=${arr[i]}\n\
+    \        elif [[ ${arr[i]} == ${maxval} ]]; then\n            rollmax=\"${rollmax}\
+    \ \\\"${arr[i]}\\\"\"\n        fi\n    done\n\n    # Remove the last max element,\
+    \ if any exist\n    # Remove double quotes, if any.\n    if [[ -n $rollmax ]];\
+    \ then\n        rollmax=\"${rollmax%?}\"\n    fi\n    rollmax=\"${rollmax%?}\"\
+    \n\n    # Return as a list\n    echo \"$rollmax\"", "\tlocal list_=$1\n\tlocal\
+    \ i\n\tlocal l\n\tlocal result\n\tlocal n\n\n\tIFS=' ' read -r -a array <<<\"\
+    ${list_}\"\n\n\tfor (( n=$((${#array[@]} - 1)); n >= 0; n-- )); do\n\t\tresult=false\n\
+    \t\tfor (( i=n; i >= 0; i-- )); do\n\t\t\tif [[ ${array[$i]} -gt ${array[$((i\
+    \ - 1))]} ]]; then\n\t\t\t\tresult=true\n\t\t\t\tbreak\n\t\t\tfi\n\t\tdone\n\t\
+    \tif $result; then\n\t\t\tresult=\"${array[$((n))]}\"\n\t\t\tbreak\n\t\tfi\n\t\
+    done\n\n\tIFS=$'\\n' read -r -a array <<< \"$result\"\n\techo \"${array[@]}\"",
+  "    local rolling_max=()\n    local str=$1\n    local n=$2\n    local i=0\n   \
+    \ local max=0\n\n    while [ $i -lt $n ]; do\n        local x=`echo $str| cut\
+    \ -d \" \" -f $i`\n        local value=`echo $str| cut -d \" \" -f $((i+1))`\n\
+    \        if [[ $value -gt $max ]]; then\n            rolling_max+=($x)\n     \
+    \       max=$value\n        fi\n        i=$((i+1))\n    done\n    echo \"${rolling_max[@]}\"",
+  "    local list=$1\n    shift\n\n    local result=\"[]\"\n    local curr\n    local\
+    \ i\n    local j\n\n    for ((i = 0; i < ${#list}; i++)); do\n        curr=`eval\
+    \ echo \"\\${list}\"[i]`\n        local curr=$curr\n\n        if [[ ${#curr} -gt\
+    \ 0 ]]; then\n            result=( ${result}  \"'${curr}'\" )\n        fi\n  \
+    \      if [[ ${#curr} -eq 0 ]]; then\n            result=( ${result}  \"'${curr}'\"\
+    \ )\n        fi\n    done\n\n    for ((i = 0; i < ${#list}; i++)); do\n      \
+    \  j=i+1\n        while [[ ${j} -le ${#list} ]]; do\n            curr=`eval echo\
+    \ \"\\${list}\"[j]`\n            local curr=$curr\n\n            if [[ ${#curr}\
+    \ -gt 0 ]]; then\n                result=( ${result}  \"'${curr}'\" )\n      \
+    \      fi\n            if [[ ${#curr} -eq 0 ]]; then\n                result=(\
+    \ ${result}  \"'${curr}'\" )\n            fi\n            j=$(( j+1 ))\n     \
+    \   done\n    done\n\n    echo \"${result[@]}\"", "  local list=$1\n  local rolling_max_list=''\n\
+    \n  for element in ${list}; do\n    rolling_max_list+=\"$element \"\n  done\n\n\
+    \  # The first element in the list should be the maximal element in the list\n\
+    \  rolling_max_list=\"$(echo $rolling_max_list | sed 's/ //')\"\n\n  local rolling_max_list=''\n\
+    \  local rolling_max_element=''\n  local rolling_max_element2=''\n\n  for element\
+    \ in ${list}; do\n    if [ \"$element\" != \"$rolling_max_element\" ]; then\n\
+    \      rolling_max_list+=\"$rolling_max_element \"\n      rolling_max_element=$element\n\
+    \    elif [ \"$element\" != \"$rolling_max_element2\" ]; then\n      rolling_max_list+=\"\
+    $rolling_max_element2 \"\n      rolling_max_element2=$element\n    else\n    \
+    \  # Nothing to do, already covered\n      continue\n    fi\n  done\n\n  # The\
+    \ last element in the list should be the maximal element in the list\n  rolling_max_list+=\"\
+    $rolling_max_element \"\n  rolling_max_list+=\"$rolling_max_element2\"\n\n  #\
+    \ Remove the first and last spaces, if any\n  rolling_max_list=\"$(echo $rolling_max_list\
+    \ | sed 's/^[\" \"]*//; s/[\" \"]*$//')\"\n\n  # Remove the first and last quotes,\
+    \ if any\n  rolling_max_list=\"$(echo $rolling_max_list | sed 's/^[\"\\']*//;\
+    \ s/[\"\\']*$//')\"\n\n  echo \"$rolling_max_list\"", "    local numbers=$1\n\n\
+    \    local max\n    max=$1\n\n    # for each number in the list, find the largest\
+    \ number found before that number\n    for i in $numbers\n    do\n        if [[\
+    \ $i == *[!0-9]* ]]\n        then\n            max=$max$i\n        fi\n    done\n\
+    \n    # return the list but with the max number appended at the end\n    echo\
+    \ \"$numbers\"$max", "  local max=$1\n  shift\n  echo -n \"[\" >&2\n  for (( n=0\
+    \ ; n<${#max} ; n++ )); do\n    local var=$max[n]\n    local roll=$1\n    shift\n\
+    \    local roll1=$1\n    shift\n    local roll2=$1\n    shift\n    local roll3=$1\n\
+    \    shift\n    local roll4=$1\n    shift\n    local roll5=$1\n    shift\n   \
+    \ local roll6=$1\n    shift\n    local roll7=$1\n    shift\n    local roll8=$1\n\
+    \    shift\n    local roll9=$1\n    shift\n    local roll10=$1\n    shift\n  \
+    \  local roll11=$1\n    shift\n    local roll12=$1\n    shift\n    local roll13=$1\n\
+    \    shift\n    local roll14=$1\n    shift\n    local roll15=$1\n    shift\n \
+    \   local roll16=$1\n    shift\n    local roll17=$1\n    shift\n    local roll18=$1\n\
+    \    shift\n    local roll19=$1\n    shift\n    local roll20=$1\n    shift\n \
+    \   local roll21=$1\n    shift\n    local roll22=$1\n    shift\n    local roll23=$1\n\
+    \    shift\n    local roll24=$1\n    shift\n    local roll25=$1\n    shift\n \
+    \   local roll26=$1\n    shift\n    local roll27=$1\n    shift\n    local roll28=$1\n\
+    \    shift\n    local roll29=$1\n    shift\n    local roll30=$1\n    shift\n \
+    \   local roll31=$1\n    shift\n    local roll32=$1\n    shift\n    local roll33=$1\n\
+    \    shift\n    local roll34=$1\n    shift\n    local roll35=$1\n    shift\n \
+    \   local roll36=$1\n    shift\n    local roll37=$1\n    shift\n    local roll38=$1\n\
+    \    shift\n    local roll39=$1\n    shift\n    local roll40=$1\n    shift\n \
+    \   local roll41=$1\n    shift\n    local roll42=$1\n    shift\n    local roll43=$1\n\
+    \    shift\n    local roll44=$1\n    shift\n    local roll45=$1\n    shift\n \
+    \   local roll46=$1\n", "  local rolling_max\n  local length=0\n  local string=$1\n\
+    \  local string_array=( $string )\n  local max_value\n  local i\n  for ((i=1;\
+    \ i< ${#string_array[@]}; i++)); do\n    length=`expr length \"$string\"`\n  \
+    \  max_value=${string_array[i]}\n    if [ \"$max_value\" -ne \"$max_value\" ];\
+    \ then\n      rolling_max+=\"\\\"$max_value\\\"\\n\"\n      string=${string:0:length}\n\
+    \      max_value=0\n    fi\n  done\n  printf \"%s\" \"$rolling_max\"", "  local\
+    \ list=$1; shift\n  local result; local i; local k\n  for i=${#list}; do result+=(\"\
+    $((${list[$i]}))\"); done\n  for (( k=0 ; k<$2 ; k++ )); do result[$k]=${result[$k]}\
+    \ ${result[$k+1]}; done\n  printf \"%s\\n\" \"${result[@]}\"", "  local a=\"$1\"\
+    \n  local max=\"-1\"\n  local str='\"'\n  local i=0\n  local result\n  while [\
+    \ $i -lt ${#a[@]} ]; do\n    # $i is the current iteration number\n    result=$(eval\
+    \ 'echo \\$(echo $a | tr ' ' $'\\\\n' | sort -r -n | tail -n $i | head -n 1)')\n\
+    \    if [[ \"$result\" -gt \"$max\" ]]; then\n      max=\"$result\"\n    elif\
+    \ [[ \"$result\" -eq \"$max\" ]]; then\n      max=\"$max $result\"\n    fi\n \
+    \   ((i++))\n  done\n  echo $str\"${max}$str\"", "  local rolling_max\n  rolling_max=''\n\
+    \  shift\n  for var in \"$@\"; do\n    rolling_max=\"$rolling_max \\\"$var\\\"\
+    ,\"\n  done\n  echo -n \"${rolling_max%?}\"", "  local string=${1}\n  local rollingMax\n\
+    \  local currentMax\n\n  rollingMax=()\n  currentMax=0\n\n  for elem in ${string//$'\\\
+    n'/ }; do\n    currentMax=$(( currentMax + elem ))\n    rollingMax+=(\"$currentMax\"\
+    )\n  done\n  echo \"${rollingMax[@]}\"", "    local max_val=0\n    local max_elements=\"\
+    \"\n    shift\n    local elements=( $@ )\n    for element in ${elements[@]}; do\n\
+    \        if [ $element -gt $max_val ]; then\n            max_val=$element\n  \
+    \          max_elements=\"$max_elements $element\"\n        fi\n    done\n   \
+    \ echo $max_elements", "  local elements=$1\n  shift\n  local max_element\n  local\
+    \ element\n  local max_count\n  local max\n  local index\n  local element\n  local\
+    \ max_count\n  local max_elements\n\n  max_elements=\"\"\n  max_element=$(echo\
+    \ $elements | cut -d' ' -f1)\n  max_count=$(echo $max_element | wc -c)\n\n  while\
+    \ (( $# > 0 )); do\n    element=$(echo $elements | cut -d' ' -f1)\n    count=$((\
+    \ $max_count - 1 ))\n    for (( index=0; index<=$count; index++ )); do\n     \
+    \ if [ \"$element\" -gt \"$max_element\" ]; then\n        max_count=$(( $max_count\
+    \ + 1 ))\n        max_element=$element\n      fi\n    done\n    if [ \"$max_count\"\
+    \ -lt \"$max_element\" ]; then\n      max_count=$(( $max_count + 1 ))\n      max_element=$element\n\
+    \    fi\n    max_elements=\"$max_elements $max_element\"\n    shift\n  done\n\n\
+    \  echo $max_elements", "    local rolling=${1:-3 4 2}\n    shift\n    local elements=$(echo\
+    \ \"$*\" | tr ' ' '\\n')\n\n    local max=$elements[0]\n    for e in $elements;\
+    \ do\n        [[ $e -gt $max ]] && max=$e\n    done\n    while [ \"$max\" -gt\
+    \ \"$rolling\" ]; do\n        local max=${max,,}\n        local max=$(echo \"\
+    $max\" | tr ' ' '\\n')\n        for e in $elements; do\n            [[ $e -eq\
+    \ $max ]] && printf \"%s\\\\n\" \"\\\"$e\\\"\"\n        done\n    done", "   \
+    \ rolling_max=()\n    local i rolling_max_i rolling_max_tmp\n\n    IFS=$' \\t\\\
+    n'\n    for rolling_max_tmp in $(echo $1 | tr '\\n' ' '); do\n        ((rolling_max_i--))\n\
+    \        rolling_max[$rolling_max_i]=$rolling_max_tmp\n        if ((rolling_max_i\
+    \ == 0)); then\n            rolling_max[$rolling_max_i]='\"'$rolling_max_tmp'\"\
+    ';\n        fi;\n    done;\n    IFS=$ORIG_IFS;\n    echo \"${rolling_max[@]}\"",
+  "    local rolling_max_str=\"\"\n    local rolling_max_str_value=\"\"\n    local\
+    \ rolling_max_str_values=\"\"\n\n    for (( i=0; i < ${#1}; i++ )); do\n     \
+    \   rolling_max_str_values=$(echo \"${1}\" | sed -n \"${i}p\")\n        if [ -z\
+    \ \"$rolling_max_str_values\" ]; then\n            rolling_max_str_value=\"\"\n\
+    \        else\n            rolling_max_str_value=\"$(echo $rolling_max_str_values\
+    \ | sed -e 's/,/\",\"/g')\"\n        fi\n        rolling_max_str=\"${rolling_max_str}\\\
+    \"$rolling_max_str_value\\\"\"\n    done\n    echo \"$rolling_max_str\"", "  \
+    \  local rolling_max=\n    for rolling_max; do \n        [[ \"$rolling_max\" =~\
+    \ .*\"$1\"(\\s+|$) ]] && break\n    done\n    [[ -z \"$rolling_max\" ]] && printf\
+    \ '%s\\n' \"$1\" | sed -e 's/ /\" \"/g'", "    set -- ${1:-}\n    local i\n  \
+    \  local max\n    local list\n    local x\n    list=''\n    while [ -n \"$1\"\
+    \ ]; do\n        if [ \"$1\" = \"--\" ]; then shift; break; fi\n        x=$1\n\
+    \        if [ \"$x\" != \"--\" ]; then\n            list=$list'\"\"$x\"'\n   \
+    \     fi\n        shift\n    done\n    if [ \"$list\" = '' ]; then\n        printf\
+    \ \"'%s'\"\n        return\n    fi\n    for ((i=1; i<=$((${#list}-1)); i++));\
+    \ do\n        max=$(printf '%s\\n' ${list}| sort -n| tail -n 1| head -1)\n   \
+    \     list=$(printf '%s\\n' ${list} | sed \"s/^[${max}-]/&-/g\" | sed \"s/-$max//g\"\
+    )\n    done\n    list=$list\"-\"$max\n    printf '%s\\n' \"$list\"", "    local\
+    \ arg=$1 input=()\n    local output\n    local i sum=0 max_input\n    local max_input\n\
+    \    for arg in $@; do\n        i=-1\n        max_input=0\n        sum=0\n   \
+    \     while [ $i -lt $#-3 ]; do\n            input[$(( i + 2 ))]=${arg:$i:1}\n\
+    \            sum=$(( sum + input[$(( i + 2 ))] ))\n            i=$(( i + 1 ))\n\
+    \            max_input=$input[$(( i + 1 ))]\n        done\n        output[$((\
+    \ i ))]=$(echo \"$max_input\" | tr '[:upper:]' '[:lower:]')\n        (( i = i\
+    \ + 1 ))\n    done\n    IFS=\" \" read -rd '' -a output <<< \"${output[*]}\"\n\
+    \    echo \"${output[*]}\"", "\tlocal list=$1\n\tlocal i=0\n\tlocal max=0\n\t\
+    local maxi=0\n\tlocal str=\"\"\n\tlocal tail=\"\"\n\twhile [ $i -le ${#list[*]}\
+    \ ]; do\n\t\ttail=\"$list[$i] \"\n\t\tif [ ${#tail} -eq ${#max} ]; then\n\t\t\t\
+    max=$max\n\t\t\tmaxi=$i\n\t\tfi\n\t\tif [ $(( i+1 )) -ge ${#list} ]; then\n\t\t\
+    \ttail=\"$list[$(( ${#list} - 1 ))]\"\n\t\tfi\n\t\tif [ $i -ge ${#list} ]; then\n\
+    \t\t\tstr=\"$max$tail\"\n\t\telse\n\t\t\tstr=\"$max$tail\"\n\t\tfi\n\t\techo \"\
+    $str\"\n\t\ti=$(( i+1 ))\n\tdone\n\techo \"\"", "  local arr=(${1})\n  local length=${#arr[@]}\n\
+    \  local i=0\n\n  local max=\"${arr[i]}\"\n  local cur=\"${arr[i]}\"\n\n  while\
+    \ (( i < length )); do\n    if (( i > 0 )); then\n      max=\"$( echo $cur \\\"\
+    \\$(rolling_max ${arr[@]:(i-1)})\\\" )\"\n    fi\n    cur=\"${arr[i]}\"\n\n  \
+    \  ((i++))\n  done\n\n  echo $max", "    local L=( \"${@}\" )\n    local len=\"\
+    ${#L[@]}\"\n    local max_roll\n    local roll\n\n    for (( roll = 0; roll <\
+    \ len; roll++ )); do\n        max_roll=\"${L[roll]}\"\n        for (( roll = len\
+    \ - 1; roll >= roll; roll-- )); do\n            if [ \"${L[roll]}\" -gt \"${max_roll}\"\
+    \ ]; then\n                max_roll=\"${L[roll]}\"\n            fi\n        done\n\
+    \        rolling_max_array+=\"${max_roll}\"\n    done\n    echo \"${rolling_max_array[@]}\"",
+  "    local tmp=(\"${!1}\")\n    local i\n    for (( i=0; i<${#tmp[@]}; i++ )); do\n\
+    \        local j=$((i+1))\n        if [[ \"${tmp[i]}\" -gt \"${tmp[j]}\" ]]; then\n\
+    \            tmp[i]=\"${tmp[j]}\"\n        else\n            tmp[j]=\"${tmp[i]}\"\
+    \n        fi\n    done\n    echo \"${tmp[@]}\"", "\tlocal lst rolling_max max_num\n\
+    \tlst=$1\n\trolling_max=''\n\tmax_num=0\n\twhile read -r num; do\n\t\t((max_num\
+    \ += num))\n\t\trolling_max+=$(printf \"\\\"%s\\\"\" ${lst:$((max_num))})\n\t\t\
+    lst=${lst:$((max_num))}\n\tdone <<< \"$lst\"\n\techo \"$rolling_max\"", "  local\
+    \ list=$1\n  local max_el=$2\n  local max_val\n  local max_pos\n  local max_pos2\n\
+    \  local result\n\n  if [ -z \"$list\" ]; then\n    echo \"$list\"\n  else\n \
+    \   local idx\n    for idx in \"${!list}\"; do\n      if [ -z \"$max_el\" ]; then\n\
+    \        max_val=\"$list[$idx]\" # first element is the maximum one\n        max_pos=$idx\n\
+    \      else\n        if [ \"$list[$idx]\" -gt \"$max_el\" ]; then\n          max_val=\"\
+    $list[$idx]\" # new max el\n          max_pos=$idx\n        else\n          continue\n\
+    \        fi\n      fi\n    done\n    if [ -z \"$max_val\" ]; then\n      echo\
+    \ \"$list\"\n    else\n      if [ \"$max_val\" == \"$list\" ]; then\n        echo\
+    \ \"$list\"\n      else\n        result=\"$(rolling_max \"$(cut -d' ' -f1 <<<\
+    \ \"$list\" <<< \"$max_val\")\" \"$max_el\")\"\n        result=\"$result $(rolling_max\
+    \ \"$(cut -d' ' -f1 <<< \"$list\" <<< \"$max_val\")\" \"$max_el\")\"\n       \
+    \ result=\"$result $max_val\"\n      fi\n    fi\n  fi", "    local input_list=${1}\n\
+    \    local output_list=\"\"\n    while [ \"${#input_list}\" -gt 0 ]\n    do\n\
+    \        local current_max_num=\"${input_list[${#input_list} - 1]}\"\n       \
+    \ local current_max_index=\"${input_list[-1]}\"\n        local current_max_num_index=$(printf\
+    \ \"%q\" \"$current_max_num\")\n        local max_index=$((${current_max_index}\
+    \ - 1))\n        # Remove elements from input list starting from index max_index\n\
+    \        input_list=${input_list[max_index:]}\n        # Append current_max_num\
+    \ to output_list\n        output_list+=\"\\\"$current_max_num\\\"\"\n    done\n\
+    \    echo \"$output_list\"", "    local in=$1\n    local out_str=\"\"\n    local\
+    \ out_str_size=0\n    local index=0\n    local temp_str=\"$(($(echo -e \"${in}\"\
+    \ | tr \" \" \"+\" | sort | uniq | wc -l) + 1))\"\n    local out_str_size=$(echo\
+    \ -e \"${in}\" | tr \" \" \"+\" | sort | uniq | wc -l)\n    for (( i = 0; i <\
+    \ ${temp_str}; i++ )); do\n        if [[ ${out_str_size} -eq 0 ]]; then\n    \
+    \        out_str=\"${in}\"\n            break\n        fi\n        local out_str_size=$((out_str_size\
+    \ - 1))\n        local next_index=$(expr $index + $i)\n        if [[ \"${in:$next_index:1}\"\
+    \ == \"$i\" ]]; then\n            out_str=\"${out_str} ${in:$next_index}\"\n \
+    \       else\n            out_str=\"${out_str} ${in:$next_index:1}\"\n       \
+    \ fi\n        index=$next_index\n    done\n    echo \"${out_str}\"", "\tlocal\
+    \ items=($1)\n\tlocal roll_back=1;\n\n\tlocal rollingMax=\"\";\n\tlocal rollingMaxElement=\"\
+    \";\n\n\twhile [ $roll_back -le $items ]; do\n\t\trollingMaxElement=$(echo $rollingMaxElement\
+    \ $rollingMax);\n\t\trollingMax=\"$(echo $rollingMax \"$roll_back\" \"|\" | sed\
+    \ \"s/$rollingMaxElement//g;\")\"\n\t\troll_back=$(( $roll_back + 1 ))\n\tdone\n\
+    \n\techo $rollingMaxElement", "  local i max\n  max=$1\n  for ((i=1; i<= $1; i=i+1));\
+    \ do\n    local temp=max\n    max=${max%$max}\n    max=$max$temp\n  done\n  echo\
+    \ $max", "  local max=$1\n  shift\n  local array\n  while ((${#max} > 0)); do\n\
+    \    array=( $( shift $1 ) )\n    local tmp=${array[@]}\n    local max=($( echo\
+    \ \"${max} ${tmp}\" | sort -g | tail -1 ))\n  done\n  echo \"${array[@]}\"", " \
+    \   local rolling_max=\"$(echo $1 | tr \" \" \"\\n\")\"\n\n    # Initialize rolling\
+    \ max list\n    local rolling_max_list=\"()\"\n\n    # Iterate over rolling max\
+    \ list\n    for entry in $rolling_max; do\n        # Increment rolling max value\n\
+    \        local rolling_max_value_count=0\n        for value in $rolling_max_list;\
+    \ do\n            if [ \"$value\" == \"$entry\" ]; then\n                rolling_max_value_count=$((rolling_max_value_count\
+    \ + 1))\n            fi\n        done\n\n        # Append value to the list\n\
+    \        if [ \"$rolling_max_value_count\" -gt \"$MAXVALUE\" ]; then\n       \
+    \     rolling_max_list=\"$rolling_max_list $entry\"\n        else\n          \
+    \  rolling_max_list=\"$rolling_max_list $value\"\n        fi\n    done\n\n   \
+    \ # Return resulting list\n    echo \"${rolling_max_list}\"", "  local list=$1\n\
+    \n  local -r max_element=\"${list}\"\n  local -r max_size=${2:-$#list}\n  local\
+    \ -r min_size=$(( $max_size - 1 ))\n  local -r max_elements=()\n  local -r tail=''\n\
+    \  local -r counter=0\n  local -r tail_len=${#tail}\n  local -a elements\n\n \
+    \ if [ -n \"${max_element}\" ]; then\n    local element=($max_element)\n    local\
+    \ -r max_element_idx=0\n  else\n    local -r max_element_idx=0\n    local element=$max_size\n\
+    \  fi\n\n  while [ \"${counter}\" -le \"$max_size\" ]; do\n    local element=(\
+    \ ${elements[${max_element_idx}]} )\n    local -r next_element=( ${elements[$((\
+    \ $(( ${#elements[@]} - 1 )) ))]} )\n\n    local tail_element=( ${tail} )\n  \
+    \  local tail_next_element=( ${tail_element[@]:0:$(( $tail_len ))} )\n\n    local\
+    \ tail_element=$( printf \"${tail_element}%s\" \"${element}\" )\n    local tail_next_element=$(\
+    \ printf \"${tail_next_element}%s\" \"${next_element}\" )\n\n    local tail=(\
+    \ ${tail_element[@]} )\n    local tail=( ${tail[@]:0:$(( ${#tail[@]} - $(( ${#tail_element[@]}\
+    \ + $tail_len )) ))} )\n    local tail_element=( ${tail} )\n    local tail_next_element=(\
+    \ ${tail_next_element[@]:0:$(( $tail_len ))} )\n\n    local tail=$( printf \"\
+    ${tail_next_element}%s\" \"${tail[@]}\" )\n    local tail_len=${#tail[@]}\n\n\
+    \    if [ -n \"${max_element}\" ]; then\n      local element=($max_element)\n\
+    \      local -r max_element_idx=0\n    else\n      local -r max_element_idx=$((\
+    \ $max_element_idx + 1 ))\n      local element=$max_size\n    fi\n\n    local\
+    \ tail_element=$( printf \"${tail_element}%s\" \"${element}\" )\n    local tail_next_element=$(\
+    \ printf \"${tail_next_element}%s\" \"${next_element}\" )\n\n    local tail=(\
+    \ ${tail_element[@]} )\n    local tail=( ${tail[@]:0:$(( ${#tail[@]} - $tail_len\
+    \ ))} )\n    local tail_element=( ", "    local list=\"$1\"\n\n    # Uncomment\
+    \ the following line to test if the list is space-separated or not\n    # echo\
+    \ \"${list}\"\n\n    local maxElements=()\n    local count=0\n    # Find all elements\
+    \ in the list that are greater than a given one\n    for element in $list; do\n\
+    \        local count=\"$(expr $count + 1)\"\n        local maxElement=\"$(expr\
+    \ ${element} + ${maxElements[*]})\"\n        # Uncomment the following line to\
+    \ test if the list is space-separated or not\n        # echo \"${count} ${maxElement}\"\
+    \n        # Uncomment the following line to test if the list is space-separated\
+    \ or not\n        # echo \"${maxElements[*]}\"\n        if [ \"$count\" -gt \"\
+    $1\" ]; then\n            count=0\n            local maxElements[$count]=\"$maxElement\"\
+    \n        fi\n    done\n    # Uncomment the following line to test if the list\
+    \ is space-separated or not\n    # echo \"${maxElements[*]}\"\n    echo \"${maxElements[*]}\"",
+  "    IFS=' ' read -r -a array <<< \"$1\"\n    local i\n    local max_element\n \
+    \   local max_element_times=0\n    local index\n\n    for index in \"${!array[@]}\"\
+    ; do\n        max_element=\"${array[index]}\"\n        max_element_times=$((${max_element_times}+1))\n\
+    \        if [[ ${max_element_times} == 1 ]]; then\n            echo ${max_element}\n\
+    \        elif [[ ${index} -eq ${#array[@]} ]]; then\n            echo \\\"$max_element\\\
+    \"\n        else\n            echo \\\"$max_element \\$(rolling_max \\\"${array[@]:index-1}\\\
+    \")\"\n        fi\n    done", "   local roll=\"$1\"\n   local max=\"-\"\n   for\
+    \ (( i=1; i<${#roll}; i++ )); do\n      max=$(eval echo $max \" \" ${roll:$i:1})\n\
+    \   done\n   echo \"$max\"", "  # Sanitize input\n  local -n arr=$1\n  shift 1\n\
+    \n  # Get length of list\n  local -i size=${#arr[@]}\n\n  # Create output array\n\
+    \  local -n out=()\n\n  # Rolling maximum value so far\n  local -n max=0\n\n \
+    \ # Rolling maximum index\n  local -i maxind=0\n\n  # Scan for maximal element\n\
+    \  for i in {0..size-1}; do\n    # Add element to output array\n    out[$i]=${arr[$i]}\n\
+    \n    # Compare with current maximum\n    if [[ \"${arr[$i]}\" -gt \"${max}\"\
+    \ ]]; then\n      # Store new maximum\n      max=${arr[$i]}\n      maxind=$i\n\
+    \    fi\n  done\n\n  # Return output\n  printf '%s\\n' \"${out[@]:0:${maxind}}\"",
+  "    local rolling_max='['\n\n    for i in \"$@\"; do\n        # Ignore empty entries\n\
+    \        [[ -z \"$i\" ]] && continue\n        # Ignore entries which are not integers\n\
+    \        [[ \"$i\" != *[!0-9]*$ ]] && continue\n        # Take all non-negative\
+    \ integers except the first\n        local rolling_max_int=$(echo $i | sed -n\
+    \ \"s/^[^0-9]*\\([0-9]\\+\\)[^0-9]*$/\\1/p\")\n        # Skip if this rolling\
+    \ maximum is already found and add it to rolling maximum list\n        [[ -z \"\
+    $rolling_max\" || ! \"$rolling_max_int\" > \"$rolling_max\" ]] &&\n          \
+    \  rolling_max=\"$rolling_max_int $rolling_max\"\n    done\n\n    # Remove trailing\
+    \ space and add final closing bracket\n    local rolling_max_list=\"${rolling_max%\
+    \ *}\"\n    local rolling_max_list=\"$rolling_max_list]\" # double quotes required\n\
+    \    echo \"$rolling_max_list\"", "  local list=\"${1:-}\"\n  shift\n  local rolling\n\
+    \  local max\n  local maxlen\n\n  echo \"$list\" | awk '{ rolling = $1 }; { rolling\
+    \ = rolling \" \"$2 }; { rolling = rolling \" \"$3 }; { rolling = rolling \" \"\
+    $4 }; { rolling = rolling \" \"$5 }; { rolling = rolling \" \"$6 }; { rolling\
+    \ = rolling \" \"$7 }; { rolling = rolling \" \"$8 }; { rolling = rolling \" \"\
+    $9 }; { rolling = rolling \" \"$10 }; { rolling = rolling \" \"$11 }; { rolling\
+    \ = rolling \" \"$12 }; { rolling = rolling \" \"$13 }; { rolling = rolling \"\
+    \ \"$14 }; { rolling = rolling \" \"$15 }; { rolling = rolling \" \"$16 }; { rolling\
+    \ = rolling \" \"$17 }; { rolling = rolling \" \"$18 }; { rolling = rolling \"\
+    \ \"$19 }; { rolling = rolling \" \"$20 }; { rolling = rolling \" \"$21 }; { rolling\
+    \ = rolling \" \"$22 }; { rolling = rolling \" \"$23 }; { rolling = rolling \"\
+    \ \"$24 }; { rolling = rolling \" \"$25 }; { rolling = rolling \" \"$26 }; { rolling\
+    \ = rolling \" \"$27 }; { rolling = rolling \" \"$28 }; { rolling = rolling \"\
+    \ \"$29 }; { rolling = rolling \" \"$30 }; { rolling = rolling \" \"$31 }; { rolling\
+    \ = rolling \" \"$32 }; { rolling = rolling \" \"$33 }; { rolling = rolling \"\
+    \ \"$34 }; { rolling = rolling \" \"$35 }; { rolling = rolling \" \"$36 }; { rolling\
+    \ = rolling \" \"$37 }; { rolling = rolling \" \"$38 }; { rolling = rolling \"\
+    \ \"$39 }; { rolling = rolling \" \"$40 }; { rolling = rolling \" \"$41 }; { rolling\
+    \ = rolling \" \"$42 }; { rolling = rolling \" \"$43 }; { rolling = rolling \"\
+    \ \"$44 }; { rolling = rolling \" \"$45 }; { rolling = rolling \" \"$46 }; { rolling\
+    \ = rolling \" \"$47 }; { rolling = rolling \" \"$48 }; ", "  # Split $1 by space,\
+    \ store into an array\n  IFS=\" \" read -r -a array <<<\"$1\"\n  # Initialize\
+    \ max to first element of array\n  max=${array[0]}\n  # Loop through the rest\
+    \ of the array\n  for item in ${array[@]:1}; do\n    # When current item is greater\
+    \ or equal in value than max, update max\n    if [ \"$item\" -gt \"$max\" ]; then\n\
+    \      max=$item\n    fi\n  done\n  # Return the result as string\n  echo \"$max\"",
+  "    local list=$(echo $1 | sed 's/ /\" \"/g')\n    local size=${#list}\n    local\
+    \ max\n    for ((i=1; i<=$size; i++))\n    do\n        local maxIndex=0\n    \
+    \    for ((j=i; j<$size; j++))\n        do\n            if [[ ${list[j]} == $max\
+    \ ]]; then\n                maxIndex=$j\n            fi\n        done\n      \
+    \  max=${list[maxIndex]}\n    done\n    echo $max", "\tlocal _rolling_max\n\t\
+    _rolling_max=\"$(\n\t\tfor _rolling_max in \"$@\"; do\n\t\t\techo \"\\\"${_rolling_max}\\\
+    \"\" |\n\t\t\t\tsed -E -e 's/^.\\{1,\\}//' -e 's/\\s//g' -e 's/^\"//' -e 's/\"\
+    $//'\n\t\tdone\n\t)\"\n\techo \"${_rolling_max}\"", "    local rollingMaxList=$1\n\
+    \    local rollingMaxItems=$2\n    local maxCounter=0\n    local maxCounterItem=\"\
+    \"\n    local maxRolling=\"\"\n    local maxRollList=\"\"\n    local rollingMax=\"\
+    \"\n\n    for rollingMaxItem in $rollingMaxList; do\n        local rollingMaxCounter=0\n\
+    \        local rollingMaxCounterItem=\"\"\n        local rollingMaxRolling=\"\"\
+    \n\n        local rollingMaxItemIndex=$(echo $rollingMaxItem | cut -d'\"' -f1)\n\
+    \n        for rollingMaxCounterItem in $rollingMaxItems; do\n            if [\
+    \ $rollingMaxCounterItem -gt $maxCounter ]; then\n                maxCounter=$rollingMaxCounterItem\n\
+    \                maxCounterItem=$rollingMaxCounterItem\n            fi\n     \
+    \   done\n        local rollingMaxRolling=$maxCounterItem\n        local rollingMax=$maxCounterItem\n\
+    \        local maxCounter=0\n        local maxCounterItem=\"\"\n        local\
+    \ maxRolling=\"\"\n        local maxRollList=\"\"\n        local rollingMax=\"\
+    \"\n\n        for rollingMaxCounterItem in $rollingMaxItems; do\n            if\
+    \ [ $rollingMaxCounterItem -gt $maxCounter ]; then\n                maxCounter=$rollingMaxCounterItem\n\
+    \                maxCounterItem=$rollingMaxCounterItem\n            fi\n     \
+    \   done\n        local rollingMaxRolling=$maxCounterItem\n        local rollingMax=$maxCounterItem\n\
+    \    done\n\n    echo $rollingMaxRolling:$maxRolling", "    local input=\"$1\"\
+    \n    local output=\"\"\n\n    IFS=' ' read -r -a array <<< \"$input\"\n    local\
+    \ index=0\n    while [ $index -lt \"${#array[@]}\" ]; do\n        local element=${array[$index]}\
+    \ # Get the element from the array\n        local elements=$(rolling_max \"$element\"\
+    ) # Get the list of elements until this element\n\n        # Append the element\
+    \ to the output\n        local elementString=\"$element\"\n        if [ \"$element\"\
+    \ != \"$elements\" ]; then\n            elementString=\"$elements $element\"\n\
+    \        fi\n        elementString=$(echo \"$elementString\" | sed 's/^/\"/g')\n\
+    \        output=\"$output \\\"$elementString\\\"\"\n        index=$((index + 1))\n\
+    \    done\n\n    # Return the output\n    echo \"$output\"", "    local rolling_max_arg=$1\n\
+    \n    local max_list=$( local rolling_max_arg | xargs )\n    local rolling_max_max_list_index=0\n\
+    \    for max_val in ${max_list[*]}\n    do\n        if [ ${max_val} -gt ${max_list[${rolling_max_max_list_index}]}\
+    \ ]; then\n            rolling_max_max_list_index=$(echo $((${rolling_max_max_list_index}+1))\
+    \ | bc )\n        fi\n    done\n\n    local max_list_length=$(echo $((${#max_list[${rolling_max_max_list_index}]}+1))\
+    \ | bc )\n    local max_list_length_str=$(echo ${max_list_length} | bc)\n\n  \
+    \  if [ \"${max_list_length_str}\" == \"0\" ]; then\n        echo \"[]\"\n   \
+    \ elif [ \"${max_list_length}\" == \"1\" ]; then\n        echo \"[${max_list[${rolling_max_max_list_index}]}]\"\
+    \n    else\n        local rolling_max_list=(\n            ${max_list[${rolling_max_max_list_index}]}\n\
+    \        )\n        local tail_max_list=(\n            ${max_list[-1]}\n     \
+    \   )\n        for (( rolling_max_list_index=(${rolling_max_max_list_index}+1);\n\
+    \               rolling_max_list_index<${#max_list};\n               rolling_max_list_index++\
+    \ ))\n        do\n            local max_value_to_append=$( echo ${max_list[${rolling_max_list_index}]}\
+    \ | bc )\n            local tail_max_value=$( echo ${tail_max_list[-1]} | bc )\n\
+    \            if [ \"$max_value_to_append\" -gt \"$tail_max_value\" ]; then\n \
+    \               tail_max_list=(\"${tail_max_list[*]}\" \"$max_value_to_append\"\
+    )\n            else\n                tail_max_list=(\"${tail_max_list[*]}\" \"\
+    ${max_value_to_append}\")\n            fi\n        done\n        local tail_max_list_length=$(echo\
+    \ $((${#tail_max_list[*]}+1)) | bc )\n        local tail_max_list_length_str=$(echo\
+    \ ${tail_max_list_length} | bc)\n        if [ \"${tail_max_list_length_str}\"\
+    \ == \"0\" ]; then\n            echo \"[]\"\n        elif [ \"${tail_max_list_length}\"\
+    \ == \"1\" ]; then\n            echo \"[${tail_max_list[*]}]\"\n        else\n\
+    \            local tail_max_list_tail_max_list=(\n                ${tail_max_list[${tail_max_list_length}-1]}\n\
+    \            )\n            for (( tail_max_list_", "  local rolling_maxed last\n\
+    \  rolling_maxed=$1\n  last=$2\n  shift 2\n  for (( i=1; i <= $#; i++ )); do\n\
+    \    if [ $(($i - 1)) -gt 0 ] && [ $(($i - 1)) -lt $((${#rolling_maxed[@]} - 1))\
+    \ ]; then\n      rolling_maxed[$i]=\"\\\"$rolling_maxed[${#rolling_maxed[@]}-1]\\\
+    \"\"\n    fi\n    rolling_maxed[$i]=\"$rolling_maxed[$i]\"\n  done\n  echo \"\
+    ${rolling_maxed[@]}\"", "\tlocal list=$1\n\tlocal n=$2\n\tlocal i=0\n\tlocal last=\n\
+    \tlocal max=$list[0]\n\tshift\n\tshift\n\twhile [ $i -lt $n ]; do\n\t\tif [ \"\
+    $last\" == \"$list[i]\" ]; then\n\t\t\tlet i=$((i+1))\n\t\t\tmax=$list[i]\n\t\t\
+    else\n\t\t\tlast=$list[i]\n\t\t\tlet i=$((i+1))\n\t\tfi\n\tdone\n\techo \"$max\"",
+  "  local i\n  local j\n  local max=-1\n  local list=\"$1\"\n  local roll_max=$(expr\
+    \ $(eval echo '\\$$j+1' | bc -l))\n  for i in $list; do\n    ((j+=1))\n    if\
+    \ [[ \"$i\" == \"$roll_max\" ]]; then\n      ((max+=1))\n    fi\n  done\n  echo\
+    \ \"\\\"$roll_max\\\"\"", "    local arg=$(echo $1 | tr \" \" \"\\n\")\n    local\
+    \ max=\"\"\n    local i\n    local elem\n    local j\n    for ((i=0; i<${#arg};\
+    \ i++)); do\n        if [ $i -eq 0 ]; then\n            elem=\"${arg}\"\n    \
+    \    else\n            elem=${arg:${i}}\n        fi\n        j=$(echo $elem |\
+    \ awk '{print length}' | head -n 1)\n        if [[ ${j} -gt ${#max} ]]; then\n\
+    \            max=$elem\n        else\n            i=$(expr $i + 1); max=$elem\n\
+    \        fi\n    done\n    echo $max", "    # $1 is a space-separated list\n \
+    \   local rolling_max\n    local i result\n\n    for ((i=1; i<=$#; i++ ))\n  \
+    \  do\n        if [ \"$i\" -ne \"$1\" ]\n        then\n            rolling_max+=(\
+    \ \"$1\" )\n        fi\n        rolling_max+=( \"$@\" \"$i\" )\n    done\n   \
+    \ result=( $(printf '%s\\n' \"${rolling_max[@]}\" | sort -r) )\n    echo \"${result[@]}\"",
+  "    local x=\"$1\"\n    local -a rolling_max\n    local rolling_max_str\n    for\
+    \ (( i = 0; i < ${#x}; i++ )); do\n        if [[ ${x} == \"$x\" ]]; then\n   \
+    \         # $x is a list\n            rolling_max+=(\"$x\")\n        fi\n    \
+    \    local -n a=rolling_max\n        # $a is now a local variable name\n     \
+    \   rolling_max_str=\"$a[$(( ${#a[*]} - 1 ))]\"\n        eval \"${rolling_max_str}+=(\\\
+    \"$x\\\")\"\n    done\n    echo \"${rolling_max[@]}\"", "    local rolling_max_list=(${@//,/\
+    \ })\n    local temp_list\n\n    temp_list=$(rolling_max_element \"${rolling_max_list[@]}\"\
+    \ | sed 's/ /\" \"/g' | sort -n | tail -n 1)\n    temp_list=$(echo \"${temp_list}\"\
+    )\n\n    rolling_max_list=($(rolling_max_element \"${temp_list}\" | sed 's/ /\"\
+    ,\"/g' | sort -n))\n\n    for i in $(seq 1 ${#rolling_max_list[*]})\n    do\n\
+    \        rolling_max_list[i]=$(echo \"${rolling_max_list[i]}\" | sed 's/ /\",\"\
+    /g')\n    done\n\n    echo \"${rolling_max_list[@]}\"", "    local _rolling_max=\"\
+    $(echo \"$1\" | awk '{\n    rolling_max=0\n    for (i=1; i<=NF; i++)\n       \
+    \ if ($i>rolling_max) rolling_max=$i\n    print rolling_max", "\tlocal -n _array=\"\
+    $1\"\n\n\tlocal rollingMax max\n\n\tlocal i=0 iMax=${#_array[@]} iRoll=0\n\n\t\
+    while [ $i -lt $iMax ]; do\n\t\trollingMax+=( ${_array[$i]} )\n\t\ti=$((i+1))\n\
+    \tdone\n\trollingMax+=( ${_array[$i]} )\n\n\tmax=$( ${rollingMax[@]/#/-} )\n\t\
+    max=$( ${rollingMax[@]/%/-} )\n\n\twhile [ -n \"$1\" ]; do\n\t\tmax=$( ${rollingMax[@]/#/-}\
+    \ )\n\tdone\n\trollingMax=( \"${rollingMax[@]/%/-}\" )\n\n\techo \"$max\"", " \
+    \   local list=$1\n    local rolling\n\n    # Convert input list to a list with\
+    \ a double quote\n    list=${list//[ ]/\\\"}\n\n    # Remove double quotes from\
+    \ the list\n    list=`echo $list | sed 's/\"//g'`\n\n    # Get length of list\n\
+    \    list=`echo $list | wc -w`\n\n    # Initialize rolling max to empty list\n\
+    \    rolling=${list}\n\n    # Create a loop to append the maximum element of the\
+    \ list to a new list every time\n    # it exceeds the maximum element\n    for\
+    \ ((i=1; i<$list; i+=1)); do\n        rolling=`echo $rolling | awk '{print $1\
+    \ > '${rolling}'}'`\n        rolling=${rolling}\n    done\n\n    # Convert rolling\
+    \ max list to a list\n    rolling=`echo $rolling | sed 's/^\"//;s/\"$//g'`\n \
+    \   echo \"$rolling\"", "    local rolling_maxes=\"\"\n    local rolling_max=$1\n\
+    \    shift\n    while [ $# -gt 0 ]; do\n        local rolling_max=${rolling_max#*\
+    \ }\n        local max_elems=${rolling_max% *}\n        rolling_maxes=${rolling_maxes,,$max_elems}$max_elems\"\
+    \ \"\n        rolling_max=${rolling_max% *}\n        shift\n    done\n    rolling_maxes=${rolling_maxes,,$rolling_max}\n\
+    \    echo \"$rolling_maxes\"", "    local -a numbers=(\"${@}\")\n    local n=0\n\
+    \    local max=\"${numbers[0]}\"\n\n    # If the list is empty, return an empty\n\
+    \    # array\n    [[ -z \"${numbers[0]}\" ]] && return ()\n\n    while [[ $n -lt\
+    \ ${#numbers[*]} ]]; do\n        ((n++))\n        if (( n >= ${#numbers[*]} ));\
+    \ then\n            numbers=(\"${max}\" \"${numbers[*]:n-1}\")\n            continue\n\
+    \        fi\n\n        if [[ \"${numbers[$n]}\" -gt \"${max}\" ]]; then\n    \
+    \        numbers[$n]=\"${numbers[$n]}\"\n        else\n            numbers[$n]=\"\
+    ${max}\"\n        fi\n    done\n\n    numbers=(\"${numbers[*]:0:n}\")\n    [[\
+    \ -z \"${numbers[0]}\" ]] && return ()\n    numbers=(\"${numbers[*]:1:n}\")",
+  "  local rolling_max_elements=()\n  for element in \"$1\"; do\n    # Don't include\
+    \ the current element, since it's the \"rolling\" max\n    rolling_max_elements+=(\"\
+    $element\")\n  done\n\n  local rolling_max_element=\n  local rolling_max_element=$1\n\
+    \n  local rolling_max_element=$(echo $rolling_max_element | cut -d, -f1)\n  local\
+    \ rolling_max_elements=($(echo $rolling_max_elements))\n\n  for element in $rolling_max_elements;\
+    \ do\n    if [ -n \"$rolling_max_element\" ]; then\n      if [ -n \"${rolling_max_element:-0}\"\
+    \ ]; then\n        # We've found a rolling max\n        rolling_max_element=$(echo\
+    \ $element | cut -d, -f1)\n        rolling_max_elements=($(echo $rolling_max_elements))\n\
+    \        break\n      else\n        # If we get here, the rolling max is either\
+    \ the first element or the current element, so\n        # we need to remember\
+    \ the current element\n        rolling_max_element=$element\n      fi\n    fi\n\
+    \  done\n\n  echo \"${rolling_max_elements[@]}\"", "    local items=$1\n    local\
+    \ rolling_max=\"\"\n    local index\n    local max_value\n\n    if [ \"${items}\"\
+    \ == \"\" ]; then\n        echo \"\"\n        return 0\n    fi\n\n    for index\
+    \ in ${!items[*]}; do\n        max_value=$(echo ${items[$index]} | cut -d \" \"\
+    \ -f 2)\n\n        if [ \"$max_value\" == \"0\" ]; then\n            rolling_max+=\"\
+    \\\"${items[$index]} \"\n        else\n            if [ \"$rolling_max\" != \"\
+    \" ]; then\n                rolling_max+=\", \\\"${items[$index]} \"\n       \
+    \     else\n                rolling_max+=\"\\\"${items[$index]} \"\n         \
+    \   fi\n        fi\n    done\n\n    rolling_max+=\"]\"", "    local i\n    local\
+    \ max=\"${1}\"\n    local output=\"\"\n\n    # Remove quotation from max\n   \
+    \ max=\"${max#\\\"}\"\n\n    # Remove last quotation\n    max=\"${max%\\\"}\"\n\
+    \n    # Remove empty element\n    max=\"${max%,}\"\n\n    # Loop over each element\
+    \ in the list\n    i=0\n    while [ $i -lt $# ]; do\n        if [[ $output !=\
+    \ \"\" ]]; then\n            output+=\",\"\n        fi\n\n        # Keep track\
+    \ of the largest number\n        if [[ $max -le $i ]]; then\n            output+=$max\n\
+    \        fi\n\n        # Append the element to the output\n        output+=$1[i]\n\
+    \        i=$((i+1))\n\n        # Update max\n        max=$((max+1))\n    done\n\
+    \n    # Return output\n    echo \"$output\"", "    local input_list=\"$1\"\n \
+    \   local max_list=\"\"\n    local i j j m\n    local len=\"${#input_list[@]}\"\
+    \n\n    for (( i=1; i<=len; i++ )); do\n        m=-1\n        j=0\n        while\
+    \ [ $j -le $i ] && [ $m -lt 0 ]; do\n            m=${input_list[i]}\n        \
+    \    j=$(( i+1 ))\n        done\n        if [ $m -lt 0 ]; then\n            max_list=\"\
+    $max_list\\\"$i\\\"\"\n        fi\n    done\n    echo \"$max_list\"", "  local\
+    \ L\n  L=(\"$@\")\n\n  local MAX MIN i tmp result\n  MAX=${L[0]}\n  MIN=${L[0]}\n\
+    \  for i=1; i<\"${#L[@]}\"; do\n    MID=${L[i]}\n    if [[ ${MID} -gt ${MAX} ]];\
+    \ then\n      MAX=${MID}\n    elif [[ ${MID} -lt ${MIN} ]]; then\n      MIN=${MID}\n\
+    \    else\n      MAX=${MID}\n    fi\n  done\n\n  # If list is empty, return empty\
+    \ string\n  if [[ ${#L[@]} -eq 0 ]]; then\n    echo ''\n    return\n  fi\n\n \
+    \ # If list is 1 element long, return that single element\n  if [[ ${#L[@]} -eq\
+    \ 1 ]]; then\n    echo \"${L[@]}\"\n    return\n  fi\n\n  # For all remaining\
+    \ elements, find the minimum element and append it to list\n  for ((i=1; i<${#L[@]};\
+    \ i++)); do\n    if [[ ${L[i]} -eq ${MIN} ]]; then\n      MID=${L[i]}\n    else\n\
+    \      MID=$(echo \"${L[i - 1]} ${L[i]}\")\n    fi\n    L =\"${L[@]:0:i} ${MID}\"\
+    \n  done\n\n  printf '%s\\n' \"${L[@]}\"", "    local seq=$1\n    local -r max_element=$2\n\
+    \n    local -a result=()\n\n    for element in $(seq 1 $max_element $max_element);\
+    \ do\n        result+=(\"$element\")\n    done\n\n    echo \"${result[@]}\"",
+  "    local ROLLING_MAX_ARR=(${1//,/ })\n    local ROLLING_MAX_VAR\n    local ROLLING_MAX_VAL\n\
+    \n    # Convert to a Bash array\n    for (( i = 0; i < ${#ROLLING_MAX_ARR[@]}\
+    \ ; ++i )); do\n        ROLLING_MAX_VAR=`expr $i + 2`\n        ROLLING_MAX_VAL=${ROLLING_MAX_ARR[$i]}\n\
+    \        ROLLING_MAX_VAR=\"${ROLLING_MAX_VAR}=\\$${ROLLING_MAX_VAR}\"\n      \
+    \  eval \"$ROLLING_MAX_VAR\"\n        ROLLING_MAX_VAR=\"${ROLLING_MAX_VAR}+\\\
+    $${ROLLING_MAX_VAR}\"\n        eval \"$ROLLING_MAX_VAR\"\n    done\n\n    # Scan\
+    \ until given moment\n    for (( i = 0; i < ${#ROLLING_MAX_ARR[@]} ; ++i )); do\n\
+    \        ROLLING_MAX_VAR=`expr $i + 2`\n        ROLLING_MAX_VAL=${ROLLING_MAX_ARR[$i]}\n\
+    \        ROLLING_MAX_VAR=\"${ROLLING_MAX_VAR}=\\$${ROLLING_MAX_VAR}\"\n      \
+    \  eval \"$ROLLING_MAX_VAR\"\n    done", "\tlocal array=$1\n\tlocal len=${#array}\n\
+    \tlocal max_element=${array[0]}\n\tlocal max_index=0\n\tlocal current_index=1\n\
+    \twhile [ $current_index -lt $len ]; do\n\t\tif [[ \"$array[$current_index]\"\
+    \ -gt $max_element ]]; then\n\t\t\tmax_element=$array[$current_index]\n\t\t\t\
+    max_index=$current_index\n\t\tfi\n\t\tcurrent_index=$(( $current_index + 1 ))\n\
+    \tdone\n\tprintf '%s\\n' \"${array[@]:0:$(( max_index + 1 ))}\"", "    local i=$1\n\
+    \    local res=()\n    local roll=\n    local max=\n    local max_idx=\n    local\
+    \ rolling=\n    while [ \"$i\" -ge 0 ]; do\n        rolling=$(echo \"${1// /$i}\"\
+    \ | awk '{print $1}')\n        roll=${rolling}\n        max=${rolling}\n     \
+    \   max_idx=0\n        while [ \"$roll\" -gt \"$max\" ]; do\n            max=${rolling}\n\
+    \            max_idx=$(( $max_idx + 1 ))\n            roll=${rolling}\n      \
+    \  done\n        res=( \"${res[@]}\" \"$max_idx\" )\n        i=$(( $i - 1 ))\n\
+    \    done\n    echo \"${res[@]}\"", "  local seq=$1; shift\n  local seqs=\"\"\n\
+    \  for n in ${seq[@]}; do\n    seqs=$seqs $(rolling_max \"$n $seqs\")\n  done\n\
+    \  echo \"$seqs\"", "    local seq=$1\n    shift\n\n    local seqlen=${#seq}\n\
+    \    local maxlen=${#1}\n    local maxval=${1}\n\n    local rolling\n\n    while\
+    \ [ $seqlen -lt $maxlen ]; do\n        local maxidx=0\n        for idx in $(seq\
+    \ 0 $(( $seqlen - $maxlen )); do\n            local elem=${seq:$idx:$maxlen}\n\
+    \            if [[ \"${rolling}\" != \"$elem\" ]]; then\n                rolling=\"\
+    $elem\"\n                maxidx=$idx\n            fi\n        done\n\n       \
+    \ local maxelem=${seq:$maxidx:$maxlen}\n        if [[ \"${maxelem}\" == \"${maxval}\"\
+    \ ]]; then\n            echo \"$rolling\"\n            return\n        fi\n\n\
+    \        seq=$maxelem\n        seqlen=${#seq}\n    done", "  # For now, hard-code\
+    \ the length\n  local n=$1\n  shift\n\n  # Generate the list of rolling max elements:\n\
+    \  local max_list=($(rolling_max_elements \"${1}\" \"$n\"))\n\n  # Strip quotes\
+    \ and double quotes\n  local max_list2=\"\"\n  for element in ${max_list[@]};\
+    \ do\n    # Strip quotes\n    if [[ $element == *\\ ]] || [[ $element == *\"\\\
+    \ \"* ]]; then\n      element=${element/\\\"/}\n    fi\n    local new_element=${element//\\\
+    \"/}\n    max_list2+=\"$new_element \"\n  done\n  max_list2=\"${max_list2%? }\"\
+    \n\n  # Return\n  echo \"${max_list2}\"", "  local rolling_max=\"$(echo $1 | sed\
+    \ 's/ /\\n/g' | sed 's/^/\"/')\"\n  local rolling_max_len=\"${#rolling_max}\"\n\
+    \  local rolling_max_str=\"$(echo $rolling_max | awk '{printf \"\\\"%s\\\"\",\
+    \ \\$0}')\"\n  local rolling_max_len=\"$(echo $rolling_max_len | awk '{printf\
+    \ \"\\\"%d\\\"\", \\$0}')\"\n  local rolling_max_str=\"$(echo $rolling_max_str\
+    \ | awk '{printf \"\\\"%s\\\"\", \\$0}')\"\n  local rolling_max_str_len=\"$(echo\
+    \ $rolling_max_str | awk '{printf \"\\\"%d\\\"\", length}')\"\n  local rolling_max_str_len=\"\
+    $(echo $rolling_max_str_len | awk '{printf \"\\\"%d\\\"\", \\$0}')\"\n  if [[\
+    \ ${rolling_max_str_len} == \"0\" ]]; then\n    echo \"${rolling_max_str}\"\n\
+    \  else\n    local rolling_max_str_array=(${rolling_max_str})\n    local rolling_max_str_array=(${rolling_max_str_array[@]:0:$rolling_max_str_len})\n\
+    \    local rolling_max_str_array_len=${#rolling_max_str_array[@]}\n    for ((\
+    \ index=1; index<=$rolling_max_str_len; index++ )); do\n      local rolling_max_str_array[index]=\"\
+    $(echo $rolling_max_str_array[index] | awk '{printf \"\\\"%d\\\"\", \\$0}')\"\n\
+    \    done\n    local rolling_max_str_array_len=${#rolling_max_str_array[@]}\n\
+    \    for (( index=0; index<$rolling_max_str_array_len; index++ )); do\n      local\
+    \ rolling_max_str=\"${rolling_max_str}${rolling_max_str_array[$index]}\"\n   \
+    \ done\n    rolling_max_str=\"$(echo $rolling_max_str | sed 's/\"$/\"/')\"\n \
+    \   echo \"${rolling_max_str}\"\n  fi", "    local roll_array=($(echo \"${1}\"\
+    \ | tr \" \" \"\\n\"))\n    local roll_max=\"\"\n    local roll_count=0\n    local\
+    \ roll_arraysize=${#roll_array[@]}\n    local roll_max=0\n    while [ \"${roll_count}\"\
+    \ -lt \"${roll_arraysize}\" ] ; do\n        roll_max=$(echo \"${roll_max}\" |\
+    \ cut -d\"-\" -f1)\n        roll_max=\"${roll_max}${roll_array[${roll_count}]}\"\
+    \n        ((roll_count++))\n    done\n    echo \"${roll_max}\"", "  local input=${1}\n\
+    \  local rolling_max=($(echo $input | tr \" \" \"\\n\" | awk 'BEGIN { RS=\" \"\
+    ; ORS=\" \"; } { if (length($1) == 0) { print \"max\"; exit; } print $1\" max\"\
+    \ }))\n  local max_index=$(echo $input | tr \" \" \"\\n\" | awk 'BEGIN { RS=\"\
+    \ \"; ORS=\" \"; } { if (length($1) == 0) { print \"max\"; exit; } print $1\"\
+    \ max\" }')\n  local output=$output\n  local index=0\n  for index in $(seq $max_index);\
+    \ do\n    local element=${rolling_max[$index]}\n    output=${output}$element\"\
+    ,\"\n  done\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n\
+    \  output=${output%,}\n  output=${output%,}\n  output=${output%,}\n  output=${output%,",
+  "    local n=$1\n    shift\n    local list=\"$*\"\n    local i elem max\n    local\
+    \ str=\"\"\n    local j=0\n    for i in $list; do\n        elem-=$(( ${#str} +\
+    \ 1 ))\n        local k=$(( elem-1 ))\n        if [ \"$k\" -lt \"$i\" ]; then\n\
+    \            j=$k\n        fi\n        elem=$i\n        max=$i\n        for ((\
+    \ j=$j; $j>0; j-- )); do\n            if [ $j -ge $n ]; then\n               \
+    \ if [ $max -gt $i ]; then\n                    max=$i\n                fi\n \
+    \               break\n            fi\n            str=$str$elem\n           \
+    \ if [ $j -lt $n ]; then\n                elem=$(($elem-1))\n            fi\n\
+    \        done\n        echo \"$str\"\n    done", "    local string=\"${1}\"\n\n\
+    \    # Remove all leading and trailing space\n    string=${string#\"${string%%[![:space:]]*}\"\
+    }\n    string=${string%%\"$string\"} # strip $string from the end\n\n    # Separate\
+    \ all elements by space\n    string=${string// /}\n    string=${string//,/ }\n\
+    \n    local max=${string#${string%$string}}\n    local number=${string%$string}\n\
+    \n    # Rolling maximum found so far.\n    local rolling_max=\"${max}\"\n\n  \
+    \  # Rolling maximum found until the last element\n    while [[ ${number} -ge\
+    \ ${max} ]]\n    do\n        # Append the rolling maximum found so far\n     \
+    \   rolling_max+=\" $rolling_max\"\n\n        # Rolling maximum found until the\
+    \ current element\n        local rolling_max_number=${number}\n        while [[\
+    \ ${rolling_max_number} -ge ${max} ]]\n        do\n            rolling_max_number=$((${rolling_max_number}\
+    \ - 1))\n        done\n        rolling_max+=\" $rolling_max_number\"\n\n     \
+    \   # Rolling maximum found until the previous element\n        local rolling_max_number=${number}\n\
+    \        while [[ ${rolling_max_number} -ge ${max} ]]\n        do\n          \
+    \  rolling_max_number=$((${rolling_max_number} - 1))\n        done\n        rolling_max+=\"\
+    \ $rolling_max_number\"\n    done\n\n    # Rolling maximum found until the last\
+    \ element\n    while [[ ${number} -le ${max} ]]\n    do\n        # Append the\
+    \ rolling maximum found so far\n        rolling_max+=\" $rolling_max\"\n\n   \
+    \     # Rolling maximum found until the current element\n        local rolling_max_number=${number}\n\
+    \        while [[ ${rolling_max_number} -le ${max} ]]\n        do\n          \
+    \  rolling_max_number=$((${rolling_max_number} + 1))\n        done\n        rolling_max+=\"\
+    \ $rolling_max_number\"\n\n        # Rolling maximum found until the previous\
+    \ element\n        local rolling_max_number=${number}\n        while [[ ${rolling_max_number}\
+    \ -le ${max} ]]\n        do\n            rolling_max_number=$((${rolling_max_number}\
+    \ + 1))\n        done\n        rolling_max+=\" $rolling_max_number\"\n    done\n\
+    \n    # Append last element\n    rolling_max+=\" $number\"\n\n    echo ${rolling_max}",
+  '    echo "$(rolling_max "$@")"', "\tlocal a=($1);\n\tlocal b='';\n\tfor (( i=0;\
+    \ i<${#a[@]} ); do\n\t\tif [[ $i -lt ${#a[@]} ]]; then\n\t\t\tlocal c=${a[$i]};\n\
+    \t\t\tlocal d=${b};\n\t\t\tlocal e='';\n\t\t\tlocal f='';\n\t\t\tfor (( j=0; j<${#c[@]}\
+    \ ; j++ )); do\n\t\t\t\tif [[ $j -gt 0 ]]; then\n\t\t\t\t\tlocal k=$(printf \"\
+    %0${#c}d\" $j);\n\t\t\t\t\te=$e$k;\n\t\t\t\tfi\n\t\t\t\tf=$f$c;\n\t\t\t\tif [[\
+    \ \"${#c}\" -eq 0 ]]; then\n\t\t\t\t\tf=$f$e'\"'\n\t\t\t\tfi\n\t\t\t\tb=$f$d;\n\
+    \t\t\t\td=$b;\n\t\t\t\tc=$a[$j];\n\t\t\tdone\n\t\t\tb=$b$e\n\t\tfi\n\tdone\n\t\
+    echo \"${b[@]}\"", "  local n=$1\n  shift\n  local tmp\n  local max\n  local tmp2\n\
+    \  tmp=$(IFS=' '; echo \"$*\")\n  max=$(nix-eval 'print \\$$tmp')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(echo \"$tmp\" | sed 's/ .*//')\n  max=$(nix-eval\
+    \ \"print ${max} ${max+1}\")\n  tmp2=$(", "    set -- $*\n    declare -A arr\n\
+    \    while (( $# > 0 )); do\n        arr[$1]=\"$2\"\n        shift; shift\n  \
+    \  done\n\n    local results=()\n    while (( $# > 0 )); do\n        results=($(\n\
+    \            IFS=$'\\n'\n            for i in \"${!arr[@]}\"; do\n           \
+    \     local val=${arr[\"$i\"]}\n                if [[ $(( i )) -gt $1 ]]; then\n\
+    \                    val\n                    break\n                fi\n    \
+    \        done\n        ))\n        shift $(( $# ))\n    done\n    echo \"${results[@]}\"",
+  "\tlocal -i list_size element_count i result count\n\tlist_size=${#1}\n\telement_count=0\n\
+    \tcount=0\n\tfor ((i=0; i < list_size; i++)); do\n\t\tcount=$((element_count+1))\n\
+    \t\tif [[ $i -gt $count ]]; then\n\t\t\tresult=\"\\\"$(( list_size - count ))\\\
+    \"\"\n\t\telse\n\t\t\tresult=$1\n\t\tfi\n\t\techo \"$result\"\n\tdone", "    local\
+    \ roll_max=\n    local roll_list=$1\n\n    # Find the maximum value of the list\n\
+    \    local roll_max_line=\n    roll_max_line=$(echo \"${roll_list}\" | tr \" \"\
+    \ \"\\n\" | sort -n | tail -1)\n\n    # Remove the maximum value from the list\n\
+    \    local roll_list=$(echo \"${roll_list}\" | sed -r \"s/(^| )${roll_max_line}(\
+    \ |$)/\\1\\2/;s/( ^| )(.*)$/\\1\\2/g;s/^[ ]*|[ ]*$//g;s/[ ]*$//g;s/^ //g;s/ $//g\"\
+    )\n\n    # Keep adding elements from the list until all elements are taken\n \
+    \   while [[ ${#roll_list} -gt 0 ]]; do\n        roll_list=${roll_list// /}\n\
+    \        roll_list=${roll_list//$'\\n'/}\n        roll_list=${roll_list//$'\\\
+    r'/}\n        roll_list=${roll_list//$'\\t'/}\n        roll_list=${roll_list//$'\\\
+    v'/}\n        roll_list=${roll_list//$'\\0'/}\n        roll_list=${roll_list//$'\\\
+    a'/}\n        roll_list=${roll_list//$'\\b'/}\n        roll_list=${roll_list//$'\\\
+    c'/}\n        roll_list=${roll_list//$'\\d'/}\n        roll_list=${roll_list//$'\\\
+    e'/}\n        roll_list=${roll_list//$'\\f'/}\n        roll_list=${roll_list//$'\\\
+    n'/}\n        roll_list=${roll_list//$'\\r'/}\n        roll_list=${roll_list//$'\\\
+    t'/}\n        roll_list=${roll_list//$'\\v'/}\n        roll_list=${roll_list//$'\\\
+    0'/}\n        roll_list=${roll_list//$'\\a'/}\n        roll_list=${roll_list//$'\\\
+    b'/}\n        roll_list=${roll_list//$'\\c'/}\n        roll_list=${roll_list//$'\\\
+    d'/}\n        roll_list=${roll_list//$'\\e'/}\n        roll_list=${roll_list//$'\\\
+    f'/}\n        roll_list=${roll_list//$'\\0'/}\n        roll_list=${roll_list//$'\\\
+    a'/}\n        roll_list=${roll_list//$'\\b'/}\n        roll_list=${roll_list//$'\\\
+    c'/}\n        roll_list=${roll_list//$'\\d'/}\n        roll_list", "\tlocal -a\
+    \ arr=\"$1\"\n\tlocal -r max_element=${arr[0]}\n\tlocal -r max_index=${#arr[@]}\
+    \ \n\tlocal -i index\n\tlocal -r max_element_length=${#max_element}\n\twhile ((\
+    \ index<max_index )); do\n\t\tlocal -r max_element_value=${arr[$index]}\n\t\t\
+    if [[ ${max_element_value} -gt ${max_element} ]]; then\n\t\t\tarr[$(( index+1\
+    \ ))]=${max_element_value}\n\t\telse\n\t\t\tbreak\n\t\tfi\n\t\tindex=$(( index+1\
+    \ ))\n\tdone\n\techo \"${arr[@]}\"", "\tlocal -i rolling_max=\"$1\" rolling_max_i\
+    \ rolling_max_i len=\"$2\" len\n\n\tlen=${#rolling_max}\n\trolling_max_i=$(echo\
+    \ $rolling_max | tr -s ' ' | cut -d' ' -f1)\n\trolling_max_i=$((rolling_max_i+1))\n\
+    \trolling_max=$rolling_max_i\n\trolling_max_i=$((rolling_max_i+1))\n\trolling_max=$rolling_max_i\n\
+    \trolling_max_i=$((rolling_max_i+1))\n\trolling_max=$rolling_max_i\n\trolling_max_i=$((rolling_max_i+1))\n\
+    \trolling_max=$rolling_max_i\n\n\twhile [ $rolling_max_i -gt $len ]; do\n\t\t\
+    rolling_max_i=$((rolling_max_i-len+1))\n\t\trolling_max=$rolling_max_i\n\tdone\n\
+    \n\techo $rolling_max", "    local roll_max=$1\n    shift\n    while read -r line;\
+    \ do\n        roll_max=$((roll_max[${#roll_max[@]}]=$line) && roll_max)\n    done\n\
+    \    echo \"${roll_max[@]}\"", "    rolling_max_elements=\"$1\";\n    rolling_max_elements=${rolling_max_elements//,/\
+    \ };\n    rolling_max_elements=${rolling_max_elements//\\} };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n\
+    \    rolling_max_elements=${rolling_max_elements//,/} };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n\
+    \    rolling_max_elements=${rolling_max_elements//\"/ };\n    rolling_max_elements=${rolling_max_elements//\"\
+    //} };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n    rolling_max_elements=${rolling_max_elements//,/}\
+    \ };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n    rolling_max_elements=${rolling_max_elements//\"\
+    / };\n    rolling_max_elements=${rolling_max_elements//\"//} };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n\
+    \    rolling_max_elements=${rolling_max_elements//,/ };\n    rolling_max_elements=${rolling_max_elements//\\\
+    } };\n\n    rolling_max_elements=${rolling_max_elements,/ };\n    rolling_max_elements=${rolling_max_elements//\\\
+    } };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n    rolling_max_elements=${rolling_max_elements//,/}\
+    \ };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n    rolling_max_elements=${rolling_max_elements//\"\
+    / };\n    rolling_max_elements=${rolling_max_elements//\"//} };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n\
+    \    rolling_max_elements=${rolling_max_elements//,/ };\n    rolling_max_elements=${rolling_max_elements//\\\
+    } };\n\n    rolling_max_elements=${rolling_max_elements,/ };\n    rolling_max_elements=${rolling_max_elements//\\\
+    } };\n    rolling_max_elements=${rolling_max_elements//[[:space:]]/};\n    rolling_max_elements=${rolling_max_elements//,/} ",
+  "  local -a arr=(\"$@\")\n  local max_arr=()\n  local i\n  for ((i=1; i<${#arr[@]};\
+    \ i++)); do\n    if [[ ${arr[$i]} -gt ${arr[i-1]} ]]; then\n      max_arr+=(\"\
+    $arr[$i]\")\n    fi\n  done\n  echo \"${max_arr[@]}\"", "    if [[ ! -e $1 ]];\
+    \ then\n        echo \"ERROR: ${1} not exist\"\n        return\n    fi\n    local\
+    \ -r file=\"$1\"\n    local -r tmpfile=$(mktemp)\n    if [[ $# -eq 0 ]]; then\n\
+    \        rolling_max \"$file\" \"$tmpfile\"\n    else\n        local -r lines=$(wc\
+    \ -l < \"$file\")\n        local -i cnt=1\n        local -i result=-1\n      \
+    \  local -r max_elem=\"-1\"\n        while [[ $cnt -le $lines ]]; do\n       \
+    \     local -r elem=$(sed -n \"${cnt}p\" \"$file\")\n            if [[ $elem -gt\
+    \ $max_elem ]]; then\n                result=$(printf \"\\\"%s\\\"\" \"$elem\"\
+    )\n                max_elem=$elem\n            elif [[ $elem -lt $max_elem ]];\
+    \ then\n                max_elem=$elem\n            fi\n            cnt=$(expr\
+    \ $cnt + 1)\n        done\n        if [[ $result -eq 0 ]]; then\n            echo\
+    \ \"ERROR: Empty list\"\n            return\n        fi\n        if [[ -f \"$tmpfile\"\
+    \ ]]; then\n            rm \"$tmpfile\"\n        fi\n        echo \"$result\"\
+    \ > \"$tmpfile\"\n        rolling_max \"$tmpfile\" \"$tmpfile\"\n        rm \"\
+    $tmpfile\"\n    fi", "    local n=$1\n    local elements=$2\n    local rolling\n\
+    \n    local max=\"\"\n    local m=\"\"\n    local count=0\n\n    # Generate a\
+    \ list of elements until given moment\n    local i=0\n    while [ $i -le $n ];\
+    \ do\n        m=$elements[i]\n        if [ $m -eq $max ]; then\n            count=$((count+1))\n\
+    \        else\n            max=$m\n            count=1\n        fi\n\n       \
+    \ if [ $count -gt $n ]; then\n            count=$n\n        fi\n\n        i=$((i+1))\n\
+    \    done\n\n    # Convert the list to array\n    rolling=()\n    while [ $i -le\
+    \ $n ]; do\n        rolling=( \"${rolling[@]}\" \"$max\" )\n        i=$((i+1))\n\
+    \    done\n\n    # Convert back to space separated string\n    echo ${rolling[@]}",
+  "    local string=$1\n    local length=${#string}\n    local max\n    local n=0\n\
+    \    local element\n    local new_string\n    local out\n    local i\n    local\
+    \ j\n    local result\n    local maxlen\n    local temp\n    local count\n   \
+    \ local resultstr\n\n    # If the string is empty or null, then return an empty\
+    \ string\n    if [[ \"$string\" == \"\" ]]; then\n        return \"\"\n    fi\n\
+    \n    # If the string is null, then return an empty string\n    if [[ \"$string\"\
+    \ == null ]]; then\n        return \"\"\n    fi\n\n    # Split the string into\
+    \ substrings on space character\n    string=( $string )\n\n    # If the string\
+    \ is empty, then return an empty string\n    if [[ ${#string[@]} -eq 0 ]]; then\n\
+    \        return \"\"\n    fi\n\n    # Calculate the length of the string\n   \
+    \ length=${#string[@]}\n\n    # If the length is 0, then return an empty string\n\
+    \    if [[ $length -eq 0 ]]; then\n        return \"\"\n    fi\n\n    # If the\
+    \ string contains only a single element, return that element alone\n    if [[\
+    \ $length -eq 1 ]]; then\n        echo ${string[@]}\n        return\n    fi\n\n\
+    \    # Find the maximum element in the string\n    max=$(( ${string[0]} ))\n \
+    \   n=0\n\n    for element in \"${string[@]:1}\"; do\n        if [[ \"$element\"\
+    \ == \"$max\" ]]; then\n            n=$(( $n + 1 ))\n        else\n          \
+    \  (( n = $n + 1 ))\n            if [[ \"$n\" -gt \"$length\" ]]; then\n     \
+    \           n=$(( $n - $length ))\n            fi\n            if [[ \"$n\" -eq\
+    \ 0 ]]; then\n                max=$element\n                maxlen=$n\n      \
+    \      fi\n            if [[ \"$max\" == \"$element\" ]]; then\n             \
+    \   maxlen=$(( $maxlen + 1 ))\n            fi\n        fi\n    done\n\n    # If\
+    \ the maximum length is 1, then return that element alone\n    if [[ \"$maxlen\"\
+    \ -eq 1 ]]; then\n        echo ${string[@]}\n        return\n    fi\n\n    # If\
+    \ the maximum is greater than the length of the string, then return an empty string\n\
+    \    if [[ \"$max\" -gt \"$length\" ]]; then\n        return \"\"\n    fi\n\n\
+    \    # If the maximum is less than the length of the string, then return an empty\
+    \ string\n    if [[ \"$max\" -lt \"$length\" ]]; then\n        return \"\"\n \
+    \   fi\n\n    # Calculate the length of the string\n    length=${#string[@]}\n\
+    \n    # If the maximum is less than the length of the string, then return an empty\
+    \ string\n    if [[ \"$max\" -lt \"$length\" ]]; then\n        return \"\"\n \
+    \   fi\n\n    count", "    local input=$1; shift\n    local -a array=( $input\
+    \ )\n    local output=\"\"\n    local i=0 max\n\n    while [ $i -lt ${#array[@]}\
+    \ ]; do\n        local index=$i\n        local rolling_max=$(echo \"${array[$index]}\"\
+    \ | sed 's/\"//g')\n        max=$rolling_max\n        array[$index]=$max\n   \
+    \     output+=\"\\\"${max}\\\"\"\n        ((i++))\n    done\n\n    echo $output",
+  "  local rolling_max rolling_max_array rolling_max_array_size\n  rolling_max_array=(\
+    \ \"$1\" )\n  rolling_max_array_size=\"${#rolling_max_array[@]}\"\n  local rolling_max_result\
+    \ rolling_max_result_array\n  for (( i=1; i<=$(( $rolling_max_array_size-1 ));\
+    \ i++ )); do\n    rolling_max_result=\"$(echo \"${rolling_max_array[$(( ${i}-1\
+    \ )):$(( ${i} ))]}\" | sort -n | tail -1 )\"\n    rolling_max_result_array=( \"\
+    $rolling_max_result\" )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\"\
+    \ )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n   \
+    \ rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=(\
+    \ \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\"\
+    \ )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n   \
+    \ rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=(\
+    \ \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\"\
+    \ )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n   \
+    \ rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=(\
+    \ \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\"\
+    \ )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n   \
+    \ rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=(\
+    \ \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\"\
+    \ )\n    rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n   \
+    \ rolling_max_result_array=( \"${rolling_max_result_array[@]}\" )\n    rolling_max_result_array=(\
+    \ \"${rolling_max_result_array[@]}\" )\n    roll", "    local i\n    local max=0\
+    \ imax=0\n    IFS=', ' read -a arr <<< \"$1\"\n    for ((i=0; i < ${#arr[@]};\
+    \ i++)); do\n        if [ \"${i}\" -gt \"$imax\" ]; then\n            max=${i}\n\
+    \        fi\n        if [ \"${i}\" -eq \"$imax\" ]; then\n            ((imax++))\n\
+    \        fi\n    done\n    echo \"${arr[max]}\" \"${arr[max]}\" \"${arr[max]}\"",
+  "  local l=${1// / }\n  local max_elements=$1\n  local rolling=$(echo $max_elements)\n\
+    \  local maxes=()\n  while (( ${#l} > 0 )); do\n    local rolling_tmp=$(echo $rolling)\n\
+    \    for (( i=1; i<${#l}; i++ )); do\n      local element=${l}${i}\n      local\
+    \ elements=${l}${i}\n      local new_rolling\n      new_rolling=$rolling_tmp\n\
+    \      if (( $#new_rolling == 0 )); then\n        new_rolling=$(echo $rolling)\n\
+    \      fi\n      local new_maxes=$maxes\n      new_maxes=$new_maxes:${elements}\n\
+    \      new_rolling=$new_rolling:${element}\n      local maxes=$(echo \"${new_maxes}\"\
+    )\n      maxes=$(echo \"${maxes}\" | sed -e \"s/'/'\\\"'\\\"'/\")\n      maxes=$(echo\
+    \ \"${maxes}\" | sed -e \"s/'/'\\\"'\\\"'/\")\n      maxes=$(echo \"${maxes}\"\
+    \ | sed -e \"s/'/'\\\"'\\\"'/\")\n      maxes=$(echo \"${maxes}\" | sed -e \"\
+    s/'/'\\\"'\\\"'/\")\n    done\n    l=$maxes\n  done\n  echo $l", "    local max=\"\
+    \"\n    local maxlist=\"\"\n    local i\n    local maxi=0\n    local maxlen=0\n\
+    \    local tmp\n    for ((i=0; i<${#1}; i++));do\n        tmp=$(eval printf \"\
+    \\\"%s\\\"\" ${1}${i})\n        if (( \"${#max}\" < \"${#tmp}\" ));then\n    \
+    \        max=\"${tmp}\"\n            maxlen=${#max}\n        fi\n        ((maxlen+=1))\n\
+    \    done\n    for ((i=0; i<${#1}; i++));do\n        tmp=$(eval printf \"\\\"\
+    %s\\\"\" ${1}${i})\n        if (( \"${#max}\" < \"${#tmp}\" ));then\n        \
+    \    if (( \"${i}\" < \"${maxlen}\" ));then\n                if (( \"${i}\" ==\
+    \ \"0\" ));then\n                    max=${tmp}\n                    maxlist=\"\
+    ${maxlist} ${tmp}\"\n                else\n                    maxlist=\"${maxlist}\
+    \ \\\"${tmp}\\\"\"\n                fi\n            else\n                maxlist=\"\
+    ${maxlist} \\\"${tmp}\\\"\"\n            fi\n        fi\n    done\n    echo $maxlist",
+  "    IFS=$'\\n'\n    arr=($1)\n    len=${#arr[*]}\n    shift\n    output=()\n  \
+    \  i=1\n    while [[ $i -lt \"$len\" ]]; do\n        if [[ \"$arr[$i]\" -gt \"\
+    $arr[$(( $i - 1 ))]\" ]]; then\n            output+=($(echo \"$arr[$i]\"))\n \
+    \       else\n            output+=($(echo \"$arr[$(( $i - 1 ))]\"))\n        fi\n\
+    \        i=$(( $i + 1 ))\n    done\n    echo \"${output[*]}\"", "    local _rolling_max=''\n\
+    \    local _rolling_max_number=''\n    local _rolling_max_index=0\n    local _rolling_max_digits=0\n\
+    \    local _rolling_max_digits_idx=0\n    local _rolling_max_digits_length=0\n\
+    \    local _rolling_max_digits_length_idx=0\n    local _rolling_max_digits_length_idx0=0\n\
+    \    local _rolling_max_digits_length_idx1=0\n    local _rolling_max_digits_length_idx2=0\n\
+    \    local _rolling_max_digits_length_idx3=0\n    local _rolling_max_digits_length_idx4=0\n\
+    \n    local _rolling_max_digits_length_idx5=0\n    local _rolling_max_digits_length_idx6=0\n\
+    \    local _rolling_max_digits_length_idx7=0\n    local _rolling_max_digits_length_idx8=0\n\
+    \    local _rolling_max_digits_length_idx9=0\n    local _rolling_max_digits_length_idx10=0\n\
+    \    local _rolling_max_digits_length_idx11=0\n    local _rolling_max_digits_length_idx12=0\n\
+    \    local _rolling_max_digits_length_idx13=0\n    local _rolling_max_digits_length_idx14=0\n\
+    \    local _rolling_max_digits_length_idx15=0\n    local _rolling_max_digits_length_idx16=0\n\
+    \    local _rolling_max_digits_length_idx17=0\n    local _rolling_max_digits_length_idx18=0\n\
+    \    local _rolling_max_digits_length_idx19=0\n    local _rolling_max_digits_length_idx20=0\n\
+    \    local _rolling_max_digits_length_idx21=0\n    local _rolling_max_digits_length_idx22=0\n\
+    \    local _rolling_max_digits_length_idx23=0\n    local _rolling_max_digits_length_idx24=0\n\
+    \    local _rolling_max_digits_length_idx25=0\n    local _rolling_max_digits_length_idx26=0\n\
+    \    local _rolling_max_digits_length_idx27=0\n    local _rolling_max_digits_length_idx28=0\n\
+    \    local _rolling_max_digits_length_idx29=0\n    local _rolling_max_digits_length_idx30=0\n\
+    \    local _rolling_max_digits_length_idx31=0\n    local _rolling_max_digits_length_idx32=0\n\
+    \    local _rolling_max_digits_length_idx33=0\n", "  local roll_max roll_max_list\n\
+    \  roll_max=-1\n  roll_max_list=\"[\"\n  shift\n\n  while [ $# -gt 0 ]; do\n \
+    \   local roll_max_str=\"$1\"\n    if [ $roll_max -lt 0 ]; then\n      roll_max=$(echo\
+    \ $roll_max_str | cut -d\" \" -f1)\n      roll_max_list=\"$roll_max_list$roll_max_str\"\
+    \n    elif [ $roll_max -gt 0 ]; then\n      local roll_max_str=\"$roll_max_list\"\
+    \n      local roll_max_str=$roll_max_str$roll_max_str\" \"\n      roll_max_list=$(echo\
+    \ $roll_max_str | cut -d\" \" -f1)\n      roll_max_list=$(echo $roll_max_list\
+    \ | cut -d\" \" -f2)\n      roll_max_list=\"$roll_max_list$roll_max_str\"\n  \
+    \  fi\n    shift\n  done\n\n  roll_max_list=\"$roll_max_list]\" #close the list\n\
+    \  echo $roll_max_list", "\tlocal items=\"$1\"\n\tlocal count=0\n\tlocal max_item=\"\
+    \"\n\tlocal tmp=\"\"\n\n\tfor item in $items; do\n\t\tcount=$((count+1))\n\t\t\
+    if [ \"$count\" -gt \"$2\" ]; then\n\t\t\ttmp=\"$tmp $max_item\"\n\t\t\tcount=0\n\
+    \t\tfi\n\t\tmax_item=\"$item\"\n\tdone\n\ttmp=\"$tmp $max_item\"\n\techo $tmp",
+  "  # Removing spaces and special symbols except for numbers, parenthesis, colons\
+    \ and commas.\n  local input_list=$1 input_list_formatted\n  input_list_formatted=$(echo\
+    \ \"$input_list\" | sed -e 's/^ *//' -e 's/ *$//' -e 's/^[[:alpha:]]\\+\\([[:alpha:]]\\\
+    )/\\1/' -e 's/[[:alpha:]]\\+:\\([[:alpha:]]\\)/\\1/' -e 's/,/, /g' -e 's/\\([[:digit:]]\\\
+    )\\([[:digit:]]\\)/\\1 \\2/g')\n  # Eliminate spaces around commas\n  input_list_formatted=$(echo\
+    \ \"$input_list_formatted\" | sed -e 's/, \\(.*\\)/\\1/g')\n\n  # Split the list\
+    \ into two parts:\n  # - longest running list of numbers in the input, starting\
+    \ from the beginning\n  # - running list of numbers which are not part of the\
+    \ longest list\n  local max_input_list\n  local not_max_input_list\n  max_input_list=($(echo\
+    \ \"$input_list_formatted\" | awk '{print $1}'))\n  not_max_input_list=($(echo\
+    \ \"$input_list_formatted\" | awk '{print $2}'))\n\n  # If no input is given,\
+    \ return empty array\n  [[ -z $input_list ]] && return 0\n\n  # Set $max_index\
+    \ to zero\n  local max_index=0\n\n  # If $not_max_input_list is not empty, calculate\
+    \ longest running list of numbers not in the list\n  # and set $max_index to it's\
+    \ length\n  if [ ! -z $not_max_input_list ]; then\n    max_index=$((${#not_max_input_list[*]}\
+    \ - 1))\n  fi\n\n  # Iterate from 0 to the maximum possible index from the input\
+    \ list\n  for i in $(seq 0 $max_index)\n  do\n    # If current input integer is\
+    \ less than longest running list of numbers in the input,\n    # save this integer\
+    \ to the longest running list of numbers in the input\n    if [[ \"${not_max_input_list[i]}\"\
+    \ -gt \"$max_input_list\" ]]; then\n      max_input_list=(\"${max_input_list[*]}\"\
+    \ \"$not_max_input_list[i]\")\n    fi\n\n    # If current input integer is equal\
+    \ to the longest running list of numbers in the input,\n    # remove it from the\
+    \ longest running list of numbers in the input\n    if [[ \"${not_max_input_list[i]}\"\
+    \ -eq \"$max_input_list\" ]]; then\n      max_input_list=(\"${max_input_list[*]}\"\
+    \ \"$not_max_input_list[i]\")\n      not_max_input_list=(\"${not_max_input_list[@]:",
+  "    local items=$1\n    local idx=0\n    local maxidx=0\n    local maxval=0\n \
+    \   local rollingMax=()\n\n    for item; do\n        if [ \"$idx\" = \"$maxidx\"\
+    \ ]; then\n            rollingMax=\"$maxval\"\n        else\n            rollingMax=\"\
+    $rollingMax $maxval\"\n        fi\n        maxidx=$(( idx+1 ))\n        maxval=${item:$maxidx}\n\
+    \    done\n\n    echo \"$rollingMax\"", "    local list_str=$1\n    local list=$(echo\
+    \ $list_str | tr \" \" \"\\n\" | sort -n | uniq -u)\n    local max_num=$(echo\
+    \ $list | cut -d \" \" -f 1)\n    local tmp=$(echo $list | cut -d \" \" -f 2 |\
+    \ sort -n | tail -1)\n    local rolling_maxed\n    for i in $(seq 1 $(($max_num+1)));\
+    \ do\n        rolling_maxed=$(echo $list | sed -n \"${i}p\")\n        if [ $rolling_maxed\
+    \ != $tmp ]; then\n            tmp=$rolling_maxed\n        fi\n    done\n    echo\
+    \ \"$rolling_maxed\"", "    local s=$1; shift\n    local a=() b=()\n    while\
+    \ [ -n \"$1\" ]; do\n        a+=( $( echo \"$1\" | tr -d \" \" ) )\n        b+=(\
+    \ $( echo \"$1\" | head -n \"$1\" | tail -n 1 ) ); shift\n    done\n    echo -n\
+    \ \"${a[@]:0:-1}\"\n    for (( c=1; c<=$(( ${#a[@]} - 1 )); c++ )); do\n     \
+    \   echo \"${b[$c]}${a[$((c-1))]}\"\n    done", "    local list=\"$1\"\n    local\
+    \ max_list=\"\"\n    local max_rolling_list=\"\"\n    local max_moment\n    local\
+    \ last_moment\n    local rolling_list\n\n    for (( i=1;i<${#list};i++ )); do\n\
+    \        last_moment=$(echo $list | sed -n \"${i}p\")\n        rolling_list=\"\
+    \"\n        max_rolling_list=\"\"\n        for (( j=i;j<${#list};j++ )); do\n\
+    \            if [[ $rolling_list != \"\" ]]; then\n                if [[ $rolling_list\
+    \ == \"$last_moment\" ]]; then\n                    rolling_list=\"$rolling_list\
+    \ $list[j]\"\n                else\n                    rolling_list=\"$rolling_list\
+    \ $max_rolling_list\"\n                    max_rolling_list=\"$list[j]\"\n   \
+    \             fi\n            else\n                if [[ $max_list != \"\" ]];\
+    \ then\n                    if [[ $max_list == \"$last_moment\" ]]; then\n   \
+    \                     max_rolling_list=\"$list[j]\"\n                    else\n\
+    \                        max_rolling_list=\"$max_rolling_list $list[j]\"\n   \
+    \                 fi\n                else\n                    if [[ $last_moment\
+    \ != \"\" ]]; then\n                        max_rolling_list=\"$list[j]\"\n  \
+    \                  fi\n                fi\n            fi\n        done\n    \
+    \    max_moment=$(echo $max_rolling_list | sed -n \"s/^${last_moment} //p\")\n\
+    \        max_list=\"${max_list} $max_rolling_list\"\n    done\n    echo \"${max_list}\"",
+  "  local L=\"$1\"\n  shift 1\n  local -a R\n  R=( $( for elem in $L ; do echo $elem;\
+    \ done | sort -r -g | head -1) ) # R is a list of all elements with highest rolling\
+    \ max\n  echo \"$L${R[@]:1}\"", "  local -i count=$(echo $1 | wc -w)\n  local\
+    \ -i max_index\n  local -a max_values\n  local -i index\n  local -i values\n \
+    \ local -i max_element\n  local -i first_element\n  local -i max_value\n  local\
+    \ -i last_element\n  local -i max_index_element\n  local -i current_value\n  local\
+    \ -a max_value_element\n  local -a max_value_list\n  local -i max_elements_to_test\n\
+    \  local -a max_element_to_test\n  local -a max_element_to_test_list\n\n  if [\
+    \ $# -lt 2 ] ; then\n    echo \"Not enough parameters given to generate a list\
+    \ of rolling maxima\"\n    exit 1\n  fi\n\n  max_element=-1\n  max_values=()\n\
+    \  max_element=-1\n  max_elements_to_test=$(echo $count | awk '{print $1}')\n\
+    \  last_element=$(echo $1 | awk '{print $NF}' | head -1)\n\n  max_index_element=-1\n\
+    \  max_value=-1\n\n  max_element_to_test=\"1\"\n  max_elements_to_test=$max_elements_to_test\n\
+    \n  max_value_element=-1\n  max_value=-1\n\n  while [ \"$max_elements_to_test\"\
+    \ -lt \"$max_element\" ] ; do\n    current_value=$(echo $1 | awk '{print $'$max_elements_to_test'}'\
+    \ | head -1)\n    max_value=$(echo $max_value | awk '{if ($0 > $max_value) $0\
+    \ = $max_value}; {print $0}')\n\n    if [ \"$current_value\" = \"$max_value\"\
+    \ ] ; then\n      max_value+=$max_element_to_test\n      max_element=$(echo $max_element\
+    \ | awk '{print $1}')\n      max_value+=$max_element_to_test\n      max_element=$(echo\
+    \ $max_element | awk '{print $1}')\n      max_value=$(echo $max_value | awk '{print\
+    \ $0}')\n    fi\n\n    max_elements_to_test=$((max_elements_to_test-1))\n    max_element_to_test=$((max_element_to_test-1))\n\
+    \    max_value=$(echo $max_value | awk '{print $0}')\n    max_value_element=$(echo\
+    \ $max_value | awk '{print $1}')\n    max_value+=$max_value_element\n    max_value_element=$(echo\
+    \ $max_value_element | awk '{print $0}')\n    max_value=$(echo $max_value | awk\
+    \ '{print $0}')\n  done\n  max_value+=$max_element\n  max_element=$(echo $max_element\
+    \ | awk '{print $1}')\n  max_value+=$max_element\n  max_element=$(echo $max_element ",
+  "   local input=\"${1}\"\n   local output\n   for element in ${input}; do\n    \
+    \  output=\"${element}\"\n      if [[ ${output} != ${input} ]]; then\n       \
+    \  output+=\" \"\n      fi\n   done\n   echo \"${output}\"", "    local s=$1 max_elements=$2\
+    \ max_count=$3\n    local elements=$max_elements\n    local count=$max_count\n\
+    \    local i\n\n    while [ $elements -ne $count ]; do\n        for i in $(seq\
+    \ 1 $elements)\n        do\n            eval \"max_element=\\${${s%%$s}:#-$i}\"\
+    \n            if [ \"$max_element\" -lt \"$i\" ]\n            then\n         \
+    \       max_element=$i\n            fi\n            s=$max_element $s\n      \
+    \  done\n        elements=$(expr $elements + 1)\n    done\n\n    printf \"%s\"\
+    \ \"$max_element\"", "    local list=$1\n    local rolling_max=()\n    for i in\
+    \ ${list//,/ }; do\n        if [[ ! ${rolling_max[@]} =~ ^${i}$ ]]; then\n   \
+    \         rolling_max+=(\"$i\")\n        fi\n    done\n    echo \"${rolling_max[@]}\"",
+  "    local input_list=$1\n    local result=\"\"\n\n    for element in ${input_list};\
+    \ do\n        local element\n        result+=\"${element} \"\n        shift\n\
+    \    done\n\n    local element\n    result=$(echo $result | sed \"s/ //g\")\n\n\
+    \    # Remove last empty string\n    result=${result%?}\n    echo \"$result\"",
+  "  local -r array=\"$1\"\n  local -r rolling_max=''\n  local -r max_index=''\n\n\
+    \  local -r rolling_max_i=0\n  while IFS= read -r i; do\n    if [[ \"$rolling_max\"\
+    \ == \"''\" ]]; then\n      rolling_max=\"'$i'\" \n      max_index=\"$i\"\n  \
+    \  else\n      rolling_max=\"$rolling_max','$i\"\n    fi\n    (( rolling_max_i++\
+    \ ))\n  done <<< \"$array\"\n\n  while IFS= read -r i; do\n    if [[ \"$rolling_max\"\
+    \ == \"''\" ]]; then\n      rolling_max=\"'$i'\" \n      max_index=\"$i\"\n  \
+    \  else\n      rolling_max=\"$rolling_max','$i\"\n    fi\n    (( rolling_max_i++\
+    \ ))\n  done <<< \"$rolling_max\"\n\n  echo \"$max_index\"", "    local -a list=(\"\
+    $@\")\n    local max\n    local maxlen\n    local i\n    local ret\n\n    for\
+    \ ((i=0; i<${#list[@]}; i++)); do\n        if [[ $list[$i] == *$'\"'* ]]; then\n\
+    \            echo \"${list[$i]}\"\n            return\n        fi\n    done\n\n\
+    \    for ((i=0; i<${#list[@]}; i++)); do\n        if [[ $list[$i] == *$'\"'* ]];\
+    \ then\n            echo \"${list[$i]}\"\n            return\n        fi\n   \
+    \ done\n\n    local -a res\n    max=${list[0]}\n    maxlen=1\n    for ((i=1; i<${#list[@]};\
+    \ i++)); do\n        if [[ $list[$i] == $max ]]; then\n            maxlen=$((maxlen+1))\n\
+    \        else\n            if (( maxlen > $1 )); then\n                local -a\
+    \ tmp\n                tmp=()\n                max=$max\n                maxlen=$((maxlen+1))\n\
+    \                for ((j=0; j<i; j++)); do\n                    tmp=( \"${tmp[@]}\"\
+    \ \"$max\" )\n                    max=\"${list[$j]}\"\n                done\n\
+    \                tmp=( \"${tmp[@]}\" \"$max\" )\n                res=( \"${res[@]}\"\
+    \ \"$tmp\" )\n            fi\n        fi\n    done\n\n    printf \"\\\"%s\\\"\\\
+    n\" \"${res[@]}\"", "\tlocal lst=$1\n\tlocal i\n\tlocal max=\"\"\n\tlocal max=`echo\
+    \ $lst | sed -e \"s/ /, /g\"`\n\tfor i in `echo $lst | sed -e \"s/, / , /g\"`;\
+    \ do\n\t\tif [ \"$max\" == \"$i\" ]; then\n\t\t\tmax=$i\n\t\telif [ \"$max\" -gt\
+    \ \"$i\" ]; then\n\t\t\tmax=$i\n\t\tfi\n\tdone\n\techo $max", "  local str=$1\
+    \ result=\"\"\n  # Get the maximum number of elements in $1\n  local max=$( IFS='\
+    \ ' read -ra arr <( echo $str ); printf '%d' \"${arr[@]}\" | sort -r | head -1\
+    \ )\n  # Iterate in reverse direction\n  for (( i=$((${#str}-1)); i>=0; i-- ));\
+    \ do\n    # Compare each element with the max found so far\n    if [ $i -ne 0\
+    \ -a \"${str[i-1]}\" -gt $max ]; then\n      # Keep max as new max\n      max=$(\
+    \ IFS=' ' read -ra arr <( echo $str ); printf '%d' \"${arr[@]}\" | sort -r | head\
+    \ -1 )\n    fi\n    if [ \"$i\" -eq \"$i\" -a \"$max\" -eq \"$max\" ]; then\n\
+    \      result+=\"\\\"$max\\\"\"\n    fi\n  done\n  # Append the last element\n\
+    \  if [ \"$max\" -eq \"$max\" ]; then\n    result+=\"\\\"$max\\\"\"\n  fi\n  echo\
+    \ $result", "  declare -a arr=(\"$@\")\n\n  local rolling max\n\n  for i in \"\
+    ${arr[@]}\"; do\n    (( rolling+=i ))\n    max=${rolling#\"$rolling\"} # '#' removes\
+    \ first element\n  done\n\n  echo \"${arr[@]}\"", "    IFS=$'\\n' rolling_max_line=\"\
+    $(echo $1 | tr '\\n' ' ')\"\n    rolling_max_list=()\n    rolling_max_line=${rolling_max_line//,/\\\
+    ,}\n    for idx in $(seq 0 $(($#rolling_max_line-1))); do\n        rolling_max_list[$((idx+1))]=$rolling_max_line[$idx]\n\
+    \    done", "  local input_list=$1\n  local output_list\n  local i\n  local max_index\n\
+    \  local max_value\n  local max_num\n  local max_num_index\n\n  for ((i = 0; i\
+    \ < ${#input_list[@]}; i++)); do\n    max_value=0\n    max_index=-1\n    max_num=0\n\
+    \    max_num_index=-1\n    for ((j = 0; j < ${#input_list[@]}; j++)); do\n   \
+    \   if [[ ${input_list[j]} -gt ${input_list[i]} ]]; then\n        if ((max_num_index\
+    \ < 0 || input_list[j] > max_num_index)) ; then\n          max_value=input_list[j]\n\
+    \          max_num=${input_list[j]}\n          max_num_index=${j}\n        fi\n\
+    \      else\n        if ((max_num_index >= 0 && input_list[j] <= max_num_index))\
+    \ ; then\n          max_value=input_list[j]\n          max_num=${input_list[j]}\n\
+    \          max_num_index=${j}\n        fi\n      fi\n    done\n\n    if [[ -z\
+    \ $max_value ]]; then\n      output_list+=\"\\\"${input_list[i]}\\\"\"\n    else\n\
+    \      output_list+=\"\\\"${max_num}\\\" \"\n    fi\n  done\n  echo \"${output_list}\"",
+  "    local IFS=' '\n    local n=$#\n    local a=$1[${#1}/2]\n    local max\n   \
+    \ local c=0\n    local i\n\n    for (( i=1; i<=$n; i++ )); do\n        # if we\
+    \ found a maximum so far, then stop\n        if [[ \"$max\" == \"$a\" ]]; then\n\
+    \            echo '$max'\n            return\n        fi\n        # otherwise\
+    \ increase our counter\n        c=$((c+1))\n        max=$((a[${#a}/2]+1))\n  \
+    \  done", "    local rolling_max=$1\n    shift\n    local elem=$1\n    shift\n\
+    \    local i\n    local rolling_max_elem\n    while [ \"$i\" -lt \"$#\" ] do\n\
+    \        if [ \"$elem\" -gt \"$rolling_max_elem\" ]; then\n            rolling_max_elem=\"\
+    $elem\"\n        else\n            rolling_max_elem=\"$rolling_max_elem \\\"$elem\\\
+    \"\"\n        fi\n        elem=$(eval $rolling_max $elem $i)\n        i=$(($i\
+    \ + 1))\n    done\n    echo \"$rolling_max_elem\"", "  local list=$1\n  local\
+    \ out=''\n  local current=''\n  local next=''\n  local i\n  local j\n  local max_i\n\
+    \  local max_j\n  local max_value\n\n  for ((i = 0; i < ${#list}; i++)); do\n\
+    \    current=${list[i]}\n    if [[ ${current} == '\"1\"' ]]; then\n      out=${out}${current}\n\
+    \      next=${list[i+1]}\n      current=${next}\n    fi\n    if [[ ${current}\
+    \ == '\"2\"' ]]; then\n      out=${out}${current}\n      next=${list[i+1]}\n \
+    \     current=${next}\n      continue\n    fi\n    max_value=${current}\n    max_j=$i\n\
+    \    for ((j = i; j < ${#list}; j++)); do\n      next=${list[j]}\n      if [[\
+    \ ${next} == '\"1\"' ]]; then\n        out=${out}${next}\n        next=${list[j+1]}\n\
+    \        current=${next}\n      else\n        if (( $(echo \"$current < $next\"\
+    \ | bc -l) )); then\n          max_j=$j\n          max_i=$i\n          max_value=${next}\n\
+    \        fi\n      fi\n    done\n    out=${out}${max_value}\n    out=${out}' '\n\
+    \  done\n  echo $out", "    if [ -z \"$1\" ]; then\n        return 1\n    fi\n\
+    \    local rolling_maxed=false\n    local last=$(echo $1 | cut -d ' ' -f 1)\n\
+    \    shift\n    while [ -n \"$1\" ]; do\n        local current=$(echo $1 | cut\
+    \ -d ' ' -f 1)\n        local result=\"$last\"\n        local rolling=false\n\
+    \        local rolling_max=false\n        for (( i = 0; i < \"$last\"; i++ ));\
+    \ do\n            if [ \"$rolling\" != true ]; then\n                if [ $current\
+    \ -eq \"$last\" ]; then\n                    rolling=true\n                  \
+    \  rolling_max=true\n                    result=\"$current\"\n               \
+    \ fi\n            else\n                if [ $current -le \"$i\" ]; then\n   \
+    \                 rolling=true\n                    rolling_max=false\n      \
+    \              result=\"$current\"\n                fi\n            fi\n     \
+    \       last=\"$result\"\n        done\n        if [ \"$rolling_max\" != true\
+    \ ]; then\n            rolling_maxed=true\n        fi\n        shift\n    done\n\
+    \    echo \"$rolling_maxed\"", "    local list=$1\n    # Convert $list to an array\
+    \ to make it easier to loop\n    local arr=( ${list} )\n    local max=''\n   \
+    \ local last_max=''\n    local max_index=0\n    local max_index2=0\n\n    # Loop\
+    \ through array\n    for (( i = 0; i < ${#arr[@]}; ++i )); do\n\n        # Compare\
+    \ element with previous highest element\n        if [ \"${arr[i]}\" = \"${last_max}\"\
+    \ ]; then\n            # If current element is greater than the previous, move\
+    \ the highest element to the end\n            if [ \"${arr[i]}\" -gt \"${max}\"\
+    \ ]; then\n                max=${arr[i]}\n                max_index=${i}\n   \
+    \         fi\n        else\n            # If current element is greater than the\
+    \ previous, move the highest element to the end\n            if [ \"${arr[i]}\"\
+    \ -gt \"${max}\" ]; then\n                max=${arr[i]}\n                max_index=${i}\n\
+    \                last_max=${arr[i]}\n                last_max_index=${i}\n   \
+    \         else\n                # If the current element is equal to the previous,\
+    \ move the highest element to the end\n                if [ \"${arr[i]}\" = \"\
+    ${max}\" ]; then\n                    last_max=${arr[i]}\n                   \
+    \ last_max_index=${i}\n                fi\n            fi\n        fi\n    done\n\
+    \n    # Append highest element to array\n    arr+=( \"${max}\" )\n    arr+=( \"\
+    ${last_max}\" )\n\n    echo ${arr[@]}", "  local tmp=$1\n  shift\n  local out\n\
+    \  tmp=$(echo ${tmp} | sed 's/ /\",\"/g')\n  tmp=$(echo ${tmp} | sed 's/ //g')\n\
+    \  for i in $(seq 1 ${#tmp}); do\n    local tmp2\n    tmp2=$(echo ${tmp} | sed\
+    \ -n ${i}p)\n    [[ \"$tmp2\" == \"$tmp\" ]] && break\n    out=\"$out $tmp2\"\n\
+    \  done\n  echo \"${out}\"", "  local arg=$1\n  local max=$(echo \"${arg}\" |\
+    \ sed -e 's/ /\" /g' | sort -n)\n  local -a result=()\n  local count=0\n  local\
+    \ -a max_count=()\n  local max_count_index=0\n  local tmp\n  for element in ${max};\
+    \ do\n    ((count++))\n    if [[ ${count} -ge ${max_count[max_count_index]} ]];\
+    \ then\n      result+=(\"\\\"${element}\\\"\")\n      max_count[max_count_index]=\"\
+    ${count}\"\n    else\n      tmp=${max_count[max_count_index]}\n      max_count[max_count_index]=\"\
+    ${count}\"\n      max_count_index=$((max_count_index + 1))\n      if ((max_count_index==${#max_count[@]}-1));\
+    \ then\n        result+=(\"\\\"${max_count[max_count_index]}\\\"\")\n      else\n\
+    \        result+=(\"\\\"${max_count[max_count_index]}\\\"\")\n      fi\n    fi\n\
+    \  done\n  echo \"${result[@]}\"", "    local arr=$( echo $1 | sed 's/ /\",\"\
+    /g' );\n    local size=0;\n    local max=0;\n    local maxstr=\"\";\n    local\
+    \ maxstrlen=0;\n    for elem in $arr; do\n        if [ \"$size\" -eq \"$max\"\
+    \ ]; then\n            (( maxstrlen += 1 ));\n            echo \"$elem\";\n  \
+    \      fi\n        if [ \"$elem\" -gt \"$max\" ]; then\n            (( max = $elem\
+    \ ));\n            (( maxstr = maxstr * maxstrlen + \"$elem\" ));\n          \
+    \  (( size += 1 ));\n        fi\n    done;", "  local list=$1\n  local max_element=\n\
+    \  local max_element_index=0\n  local element_count=0\n  local element\n  local\
+    \ element_count_before=0\n  for (( i=0; i<${#list}; i++ )); do\n    element=${list[i]}\n\
+    \    if [[ ${element} == ${max_element} ]]; then\n      max_element_index=$i\n\
+    \      break\n    fi\n  done\n  for (( i=${max_element_index}+1; i<${#list}; i++\
+    \ )); do\n    element=${list[i]}\n    element_count=$(expr ${element_count} +\
+    \ 1)\n    if [[ ${element_count} -le ${max_element_index} ]]; then\n      max_element=${element}\n\
+    \      max_element_index=${i}\n    fi\n  done\n  echo $max_element", "    local\
+    \ L=\"$1\"\n\n    while [ -n \"$L\" ]; do\n        local I=\"$(tail -n 1 <<<\"\
+    $L\" | cut -d \" \" -f 1)\"\n        local N=\"$(head -n 1 <<<\"$L\" | cut -d\
+    \ \" \" -f 1)\"\n\n        local M=\"$(tail -n 1 <<<\"$L\" | cut -d \" \" -f 2)\"\
+    \n\n        local S=\"$(echo \"$M + $N\" | bc)\"\n        local P=\"$( echo \"\
+    $S + $I\" | bc)\"\n        local D=\"$(echo \"$P - $M\" | bc)\"\n\n        if\
+    \ [ $D -eq 0 ]; then\n            echo \"$I\"\n            break\n        fi\n\
+    \n        if [ $D -lt 0 ]; then\n            L=\"$(echo \"$L\" | sed -i.old -e\
+    \ \"s/${I}$/\\${P}/g\")\"\n        else\n            L=\"$(echo \"$L\" | sed -i.old\
+    \ -e \"s/${I}$/\\${M}/g\")\"\n        fi\n    done", "  local input=\"$1\"\n \
+    \ local max_num=-1\n  local max_element\n  local rolling\n  local i\n  IFS=' '\
+    \ read -r -a input <<< \"$input\"\n  local size=${#input[@]}\n  local count=0\n\
+    \  for ((i=0; i < ${size}; i++)); do\n    local current=$((i-1))\n    local elem=${input[$i]}\n\
+    \    if [[ $current -ne 0 ]]; then\n      local rolling=\"$(rolling_max \"${input[@]:0:$current})${input[$i]}\"\
+    \n      count=$((count+1))\n      if [[ -z \"$max_element\" ]]; then\n       \
+    \ max_num=$count\n        max_element=\"$elem\"\n      elif [[ $count -gt $max_num\
+    \ ]]; then\n        max_num=$count\n        max_element=\"$elem\"\n      fi\n\
+    \    else\n      if [[ -z \"$max_element\" ]]; then\n        max_num=$count\n\
+    \      else\n        ((count--))\n      fi\n    fi\n  done\n  echo \"$max_element\"",
+  "  local array=$1\n  local rolling_max\n  local rolling_max_element\n\n  rolling_max=()\n\
+    \n  for element in ${array[@]}; do\n    rolling_max_element=$(echo $element |\
+    \ xargs -n 1 -I {} echo $(echo \"$rolling_max\" | xargs -n 1 -I {} max))\n   \
+    \ rolling_max+=(\"$rolling_max_element\")\n  done\n\n  echo $rolling_max", " \
+    \   local line\n    local i\n    local m\n    local max\n    local maxcount\n\
+    \    local maxcounts\n    local maxlist\n    local maxlist\n    local maxlist1\n\
+    \    local maxlist2\n    local maxlist3\n    local maxlist4\n    local m\n   \
+    \ local n\n    local c\n\n    local list\n    local list1\n    local list2\n \
+    \   local list3\n    local list4\n\n    local maxcount\n    local maxcount1\n\
+    \    local maxcount2\n    local maxcount3\n    local maxcount4\n    local maxcounts\n\
+    \    local maxcounts1\n    local maxcounts2\n    local maxcounts3\n    local maxcounts4\n\
+    \    local maxlist\n    local maxlist1\n    local maxlist2\n    local maxlist3\n\
+    \    local maxlist4\n\n    for i in $( echo \"$1\" ); do\n        [ -z \"$list\"\
+    \ ] || list=\"$list \"\n        (( c++))\n        (( maxcounts[c] = c ))\n   \
+    \     (( maxlist[c] = i ))\n    done\n\n    maxcounts=$(for m in $(seq 0 $(( c\
+    \ - 1 ))); do echo ${maxcounts[$m]}; done)\n    maxlist=$(for m in $(seq 0 $((\
+    \ c - 1 ))); do echo ${maxlist[$m]}; done)\n\n    maxcount1=$(for m in $(seq 0\
+    \ $(( c - 1 ))); do echo ${maxcounts[$m]}; done)\n    maxlist1=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxlist[$m]}; done)\n\n    maxcount2=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxcounts[$m]}; done)\n    maxlist2=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxlist[$m]}; done)\n\n    maxcount3=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxcounts[$m]}; done)\n    maxlist3=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxlist[$m]}; done)\n\n    maxcount4=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ${maxcounts[$m]}; done)\n    maxlist4=$(for m in $(seq\
+    \ 0 $(( c - 1 ))); do echo ", "    local seq=\"${1}\"\n    local n=$2\n    local\
+    \ max=$(echo $seq | cut -d \" \" -f 1)\n    local maxes=()\n\n    for (( i=0;\
+    \ i<n; i++ )); do\n        local elm=$(echo $seq | cut -d \" \" -f $((i*n-1)))\n\
+    \        if [[ \"$max\" == \"$elm\" ]]; then\n            echo \"$max\"\n    \
+    \        return\n        fi\n        max+=$elm\n        maxes+=(\"$max\")\n  \
+    \  done\n\n    echo \"${maxes[*]}\"", "\tlocal list=\"${1:-}\"\n\tlocal index=\"\
+    $2\"\n\tshift\n\tlocal max_len=$3\n\tlocal max_element=\"\"\n\tlocal max_index=0\n\
+    \tlocal i=0\n\tlocal output=($(echo $list | tr \" \" \"\\n\"))\n\twhile [ $i -lt\
+    \ $index ]; do\n\t\tlocal element=$(echo \"${output[$i]}\" | cut -d\"|\" -f1)\n\
+    \t\tlocal index1=$(echo \"${output[$i]}\" | cut -d\"|\" -f2)\n\t\tlocal index2=$(echo\
+    \ \"${output[$i]}\" | cut -d\"|\" -f3)\n\t\tlocal index3=$(echo \"${output[$i]}\"\
+    \ | cut -d\"|\" -f4)\n\t\tlocal index4=$(echo \"${output[$i]}\" | cut -d\"|\"\
+    \ -f5)\n\t\tlocal length=$((index1-index))\n\t\tlet \"i+=1\"\n\t\tif [ $(echo\
+    \ \"${output[$i]}\" | grep -c \"|\") == \"6\" ]; then\n\t\t\tlet \"i-=1\"\n\t\t\
+    fi\n\t\tif [ -z \"$max_element\" ]; then\n\t\t\tmax_element=$element\n\t\t\tmax_index=$index\n\
+    \t\tfi\n\t\tif [ \"$element\" == \"$max_element\" ] && [ \"$max_len\" -ge \"$index\"\
+    \ ] && [ \"$max_len\" -le \"$index\" -a \"$index1\" -eq \"$index2\" -a \"$index3\"\
+    \ -eq \"$index4\" ]; then\n\t\t\tmax_element=$element\n\t\t\tmax_index=$index\n\
+    \t\tfi\n\t\tif [ \"$max_len\" -le \"$index1\" ]; then\n\t\t\tbreak\n\t\tfi\n\t\
+    done\n\techo \"$max_element\"", "    local lst=$1\n    local result=()\n    for\
+    \ i in `seq 0 $((${#lst} - 1))`\n    do\n        result+=(\"${lst:$i:1}\")\n \
+    \   done\n    echo \"${result[*]}\"", "  local l=$1 m n i\n  [[ -z $l ]] && return\
+    \ 0\n  for i in $(seq 1 ${#l}); do\n    m=$(echo \"${l}\" | sed -n \"${i}p\")\n\
+    \    n=$(echo \"${l}\" | sed -n \"${i}q;d\" | tail -1)\n    m=${m%,}\n    [[ -z\
+    \ $n ]] && n=$((${#l} - ${i}))\n    m=${m#*,}\n    [[ -z $m ]] && m=${#l}\n  \
+    \  [[ -z $n ]] && n=1\n    [[ -z $m ]] && m=1\n    l=$((${l#*,}${m//,/$n}))\n\
+    \  done\n  echo \"${l}\"", "  local input=\"$1\"\n  local output\n  output=$($(\n\
+    \    echo \"$input\" | tr '\\n' ',' | sed 's/,/\",\"/g' | tr '\"' '\\\"'\n  )\
+    \ | sed 's/.$//' | sed 's/^/\"/; s/$/\"/; s/,$//; s/.//')\n  echo $output", " \
+    \ local _rolling_max_args _rolling_max_result\n  _rolling_max_args=$(IFS=$'\\\
+    n' echo \"${1}\")\n  _rolling_max_result=()\n  while [[ ${#_rolling_max_args}\
+    \ -gt 0 ]]; do\n    _rolling_max_result+=(\"${${_rolling_max_args[-1]}}\")\n \
+    \   _rolling_max_args=$(echo \"${_rolling_max_args} | sed -E 's/(.*) ([0-9]+)/\\\
+    1 \\2/')\")\n  done\n  echo \"${_rolling_max_result[@]}\"", "  local -n arr=(\
+    \ \"$@\" )\n  local -a ret=()\n  local i tmp i2 j2 tmp2 max found\n\n  for i in\
+    \ \"${arr[@]}\"; do\n    tmp=${i}\n    i2=0\n    j2=0\n    while [[ $tmp -ne $tmp2\
+    \ ]]; do\n      tmp2=$tmp\n      tmp=$(echo \"$tmp*$i\" | bc)\n      i=$(($i+1))\n\
+    \      i2=$(echo $i2 | bc)\n      if [[ $i -le $i2 ]]; then\n        j2=$(echo\
+    \ $j2 | bc)\n        tmp2=$j2\n        j2=0\n      fi\n    done\n    found=false\n\
+    \    for ((j=j2; j<=i; j++))\n    do\n      if [[ \"${ret[j]}\" != ${ret[i]} ]];\
+    \ then\n        found=true\n        break\n      fi\n    done\n    if [[ \"$found\"\
+    \ = true ]]; then\n      ret+=(\"${ret[i]}\")\n    else\n      ret+=(\"$tmp\"\
+    )\n    fi\n  done\n  echo \"${ret[@]}\"", "\tlocal rolling_max_list\n\trolling_max_list=($(echo\
+    \ $1 | sed -e 's/ /\" \"/g'))\n\tshift\n\tfor i in $*\n\tdo\n\t\trolling_max_list=(${rolling_max_list[@]}\
+    \ \"$(echo $i | sed -e 's/ /\" \"/g')\")\n\tdone\n\techo \"${rolling_max_list[@]}\"",
+  "    local i\n    local max\n    local maxes\n    local str\n    local imax\n\n\
+    \    # Loop over the list splitting it into single words and appending them in\
+    \ 'maxes'\n    maxes=()\n    for str in $1; do\n        IFS=$'\\n' read -a list\
+    \ <<< \"$str\"\n        for ((i=0; i < ${#list[@]}; i++)); do\n            ((maxes[max]++))\n\
+    \        done\n        max=0\n        for ((i=0; i < ${#list[@]}; i++)); do\n\
+    \            if ((maxes[max]>max)); then\n                max=${i}\n         \
+    \   fi\n        done\n        maxes=()\n        for ((i=0; i < ${#list[@]}; i++));\
+    \ do\n            ((maxes[max]=0))\n        done\n        maxes[${i}+1]=1\n  \
+    \  done\n\n    # Return the elements found\n    local maxes2\n    for ((i=0; i\
+    \ < ${#maxes[@]}; i++)); do\n        ((maxes2[$i]++))\n    done\n    while ((i=0;\
+    \ i < ${#maxes[@]}; i++)); do\n        if ((${maxes2[$i]} < ${#maxes[@]})); then\n\
+    \            maxes=()\n            for ((i=0; i < ${#maxes[@]}; i++)); do\n  \
+    \              ((maxes[max]=0))\n            done\n            break\n       \
+    \ fi\n    done\n    echo \"${maxes[*]}\"", "    local LIST=\"${1}\"\n    local\
+    \ ROLLING_NUM=\"${2:-}\"\n    local ROLLING_MAX=''\n\n    if [[ ${ROLLING_NUM}\
+    \ = '' ]]; then\n        ROLLING_NUM=10\n    fi\n    if [[ ${#LIST} -gt ${ROLLING_NUM}\
+    \ ]]; then\n        ROLLING_MAX=${LIST:0:${ROLLING_NUM}}\n    else\n        local\
+    \ ROLLING_START=${LIST:0:1}\n        local ROLLING_END=${LIST:1}\n        while\
+    \ [[ ${ROLLING_START} -lt ${ROLLING_END} ]]; do\n            ROLLING_MAX=\"${ROLLING_MAX}\
+    \ ${ROLLING_MAX:0:${ROLLING_NUM}}\"\n            ROLLING_START=\"${ROLLING_START}\
+    \ ${ROLLING_START:1}\"\n            ROLLING_END=\"${ROLLING_END} ${ROLLING_END:1}\"\
+    \n        done\n    fi\n\n    echo \"${ROLLING_MAX}\"", "    local str=\"$1\"\n\
+    \    local max=$(echo \"$str\" | awk '{print $1}' | sort -nr | head -1)\n    local\
+    \ i\n    local result=\"\"\n    for i in $(echo \"$str\" | awk '{print $2}' |\
+    \ sort -nr | head -1); do\n        if [ \"$i\" == \"$max\" ]; then\n         \
+    \   result=\"$result \\\"$i\\\"\"\n        else\n            result=\"$result\
+    \ \\\"$i\\\" \\\"$max\\\"\"\n            max=$(echo \"$str\" | awk '{print $2}'\
+    \ | sort -nr | head -1)\n        fi\n    done\n    echo \"$result\"", "  rolling_max=()\n\
+    \  shift\n  rolling_max=( ${1+\"$1\"} )\n\n  # rolling_max is now the rolling\
+    \ max list\n  # $1 is now the original list\n\n  for ((i=${#rolling_max[@]}-1;i>=0;i--))\
+    \ ;do\n    rolling_max[i]=\"${rolling_max[i]}\"\n  done\n\n  rolling_max[0]=\"\
+    ${rolling_max[0]}\"\n\n  echo \"${rolling_max[@]}\"", "  echo \"$1\" | xargs -a\
+    \ \"$2\" -n 1 bash -c '\n  [[ \"$1\" =~ ^\\ -?[0-9]+$ ]] || return \"$1\"\n  echo\
+    \ $(( ${1%-}+1 ))\n  ' \"$(echo \"$1\" | tr -s ' ' ',' | sort -n | uniq -c | sort\
+    \ -nr | head -1)\"", "    rolling_max=$(echo \"$1\" | sed 's/ //g' | sed 's/^/\"\
+    /' | sort -g | tail -n 1)\n    shift\n    rolling_max=\"$1 $rolling_max\"\n  \
+    \  rolling_max=($(echo \"$rolling_max\" | sed 's/\"//g'))\n    echo \"${rolling_max[@]}\"",
+  "    local -n arr=$1\n    local -r start=${2:-1}\n    local -r stop=${3:-$(echo\
+    \ \"${arr[@]}\" | tail -n 1)}\n    local -a result\n\n    shift 3\n    while ((\
+    \ ${#arr[@]} > 0 )); do\n        result=()\n        for i in $(eval echo \"{${arr[@]}}\"\
+    ); do\n            result+=(\"${arr[@]:$((start - 1)):-1}\")\n        done\n \
+    \       result+=(\"${arr[@]:0:$((start - 1))}\")\n        arr=( \"${result[@]}\"\
+    \ )\n    done\n    arr+=( $2 )\n    echo \"${arr[@]}\"", "  local -r rolling_max=$1\n\
+    \  shift\n  local -r max=$1\n  shift\n  local -r count=0\n  local -r s=\"\"\n\
+    \  local -r r=0\n  local -r -a arr=()\n  while [ $# -gt 0 ]\n  do\n    local -r\
+    \ arg=$1\n    shift\n    if [ \"$arg\" != \"$max\" ]\n    then\n      arr[$count]=\"\
+    $arg\"\n      count=$((count+1))\n    fi\n  done\n  if [ \"$count\" -eq \"$count\"\
+    \ -a \"$count\" -gt 0 ]\n  then\n    r=$(( count - 2 ))\n  else\n    r=$(( count\
+    \ + 1 ))\n  fi\n  for i in $(seq 0 $(( r - 1 )))\n  do\n    s=\"$s${arr[$i]}\"\
+    \n  done\n  printf \"%s\" \"${s// /$max}\""]
 stop_tokens:
 - "\n}"

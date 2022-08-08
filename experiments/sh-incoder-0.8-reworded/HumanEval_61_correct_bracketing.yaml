@@ -14,6 +14,1567 @@ tests: "}\n\ncandidate() {\n    correct_bracketing \"$@\"\n}\n\nset -e\nrun_test
   \ \")\") = \"false\" ]]\n    [[ $(candidate \"(()\") = \"false\" ]]\n    [[ $(candidate\
   \ \"()()(()())())(()\") = \"false\" ]]\n    [[ $(candidate \"()()(()())()))()\"\
   ) = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local str=$1\n    local brackets=\"(\"\n    local count=0\n   \
+    \ local open_brackets=0\n\n    local i=0\n    while [ $i -lt ${#str} ]; do\n \
+    \       if [[ ${str[i]} == $brackets ]]; then\n            if [[ ${str[i+1]} ==\
+    \ $brackets ]]; then\n                count=$((count + 1))\n                if\
+    \ [[ ${count} == 1 ]]; then\n                    open_brackets=$((open_brackets\
+    \ + 1))\n                else\n                    open_brackets=0\n         \
+    \           count=0\n                fi\n            else\n                count=0\n\
+    \            fi\n        fi\n\n        i=$((i + 1))\n    done\n\n    if [[ ${open_brackets}\
+    \ -eq 1 ]]; then\n        return \"true\"\n    else\n        return \"false\"\n\
+    \    fi", "  # remove brackets\n  brackets=${1//[(){}]//}\n  if [ \"$brackets\"\
+    \ == \"\" ]\n  then\n    false\n  else\n    # count brackets\n    num_brackets=${brackets//[//}\n\
+    \    # count opening brackets\n    num_opening_brackets=${#brackets}\n    # count\
+    \ closing brackets\n    num_closing_brackets=0\n    brackets_array=()\n    for\
+    \ bracket in $brackets\n    do\n      brackets_array+=(\"$bracket\")\n    done\n\
+    \    for bracket in \"${brackets_array[@]}\"\n    do\n      bracket_count=${bracket//[//}\n\
+    \      if [ ${#bracket} == 1 ]\n      then\n        if [ \"$bracket\" == \"$brackets_array[0]\"\
+    \ ]\n        then\n          num_closing_brackets=$((num_closing_brackets+1))\n\
+    \        fi\n      fi\n    done\n    # return result\n    if [ ${#brackets} ==\
+    \ 1 ]\n    then\n      true\n    elif [[ ${num_opening_brackets} == $num_closing_brackets\
+    \ ]]\n    then\n      true\n    else\n      false\n    fi\n  fi", "    local brackets=\"\
+    ${1}\"\n    local opening_brackets=$(echo ${brackets} | sed -e 's/\\(.*\\)/\\\
+    1/g')\n    local closing_brackets=$(echo ${brackets} | sed -e 's/\\(.*\\)/\\1/g'\
+    \ | sed -e 's/\\)/\\)/g')\n    if [[ \"${opening_brackets}\" == \"\" ]] ; then\n\
+    \        echo \"false\"\n    elif [[ $(echo ${opening_brackets} | grep -c \\))\
+    \ == 0 ]] ; then\n        echo \"true\"\n    elif [[ $(echo ${opening_brackets}\
+    \ | grep -c \\(\") == 0 ]] ; then\n        echo \"false\"\n    else\n        echo\
+    \ \"$(correct_bracketing \"${closing_brackets}\")\"\n    fi", "  declare -r brackets=\"\
+    $1\"\n\n  local i\n  local opening_brackets=\"${brackets}\"\n  local closing_brackets=\"\
+    \"\n  local correct_brackets=0\n  for ((i=1; i<\"${#opening_brackets}; i++))\n\
+    \  do\n    local bracket=\"${opening_brackets}\"$i\n    local next_bracket=\"\
+    ${opening_brackets}\"$((i + 1))\n    if [[ \"$bracket\" != \"$next_bracket\" ]];\
+    \ then\n      local count=\"${#opening_brackets}-$((i + 1))\"\n      local sub_brackets=$(echo\
+    \ \"${opening_brackets}\"$((count))) #cut closing brackets from opening\n    \
+    \  local closing_brackets_string=\"$(echo \"$sub_brackets\" | tr \"()\" \"}\"\
+    )\" #put closing brackets in pairs.\n      closing_brackets_string=${closing_brackets_string}#remove\
+    \ last \")\"\n      local correct_brackets_string=\"${closing_brackets}\"$((i\
+    \ + 1))\n      correct_brackets=\"$correct_brackets\" && [[ \"$correct_brackets_string\"\
+    \ == \"$closing_brackets_string\" ]]\n    fi\n  done\n  echo \"$correct_brackets\"",
+  "  local opening_brackets=$1\n\n  # Count open brackets\n  local opening_brackets_count=$(echo\
+    \ ${opening_brackets}|grep -o \"\\((.*)\\)\")\n\n  # Return true if the brackets\
+    \ count is equal to the length of the brackets string.\n  [[ \"${opening_brackets_count}\"\
+    \ == \"${#opening_brackets}\" ]] && return 0 || return 1", "  brackets=$(echo\
+    \ $1 | awk -F'[][]' '{for (i=1;i<=NF;i++)printf \"%s%s\",$i,(i==NF-1?\"]\":\"\
+    [\") }')\n  while [[ ${brackets} == ${brackets}* ]]; do\n    brackets=${brackets/\\\
+    [*/}\n  done\n  echo ${brackets}", "  local brackets=\"${1}\"\n  local line=\"\
+    $2\"\n  local opening_brackets=()\n\n  for bracket in \"${brackets}\"; do\n  \
+    \  while [ \"$line\" != \"\" ]; do\n      case \"$line\" in\n        \"$bracket\"\
+    )\n          opening_brackets+=(\"$bracket\")\n          ;;\n        *)\n    \
+    \      line=\"${line#\"$bracket\"}\n          ;;\n      esac\n    done\n  done\n\
+    \n  local count=0\n  for bracket in \"${opening_brackets[@]}\"; do\n    (( count++\
+    \ ))\n  done\n\n  (( count != ${#opening_brackets[@]} ))", "    # strip trailing\
+    \ '$'\n    test \"${1:0:1}\" = \"$1\" = \" && return\"\n    local brackets=${1%$'\\\
+    001'}\n    # print it out\n    echo \"$1\"\n    # print out its parts, if any\n\
+    \    echo $brackets\n    # check if we got everything\n    if [[ $brackets ==\
+    \ ??(* ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n   \
+    \ fi", "  local brackets=\"$1\"\n  local incorrect=\"-1\"\n  local correct=\"\
+    1\"\n  for c in \"${brackets//,/ }\";\n  do\n    if [[ \"${brackets:$incorrect}:$c:${brackets:$c}:$c}\"\
+    \ != \"${brackets//,/ }\" ]]; then\n      incorrect=\"$c\"\n    else\n      correct=\"\
+    $c\"\n    fi\n  done\n  test \"${correct}x${incorrect}x\" = \"${brackets//,/ }\"",
+  "    local brackets=$1\n    local bracket_stack=\"$(echo $brackets | sed 's/[\\\
+    (\\){}]/\\\\\\\\&/g')\"\n    local result=false\n    while [[ -n \"$bracket_stack\"\
+    \ ]]; do\n        bracket_stack=\"$(echo $bracket_stack | sed 's/[\\(\\){}]/\\\
+    \\\\\\&/g')\"\n        local opening_bracket_index=$(echo $bracket_stack | grep\
+    \ -oP '^[^[]*')\n        local opening_bracket=\"${opening_bracket_index}\"\n\
+    \        local closing_bracket_index=$(echo $bracket_stack | grep -oP '^[^(){}]*')\n\
+    \        local closing_bracket=\"${closing_bracket_index}\"\n        if [[ $opening_bracket\
+    \ == $closing_bracket ]]; then\n            if [[ $opening_bracket != $opening_bracket_index\
+    \ ]]; then\n                bracket_stack=\"${opening_bracket}${bracket_stack}\"\
+    \n            elif [[ $opening_bracket == $opening_bracket_index ]]; then\n  \
+    \              bracket_stack=\"${bracket_stack}${opening_bracket}\"\n        \
+    \    fi\n            bracket_stack=\"${bracket_stack}${closing_bracket}\"\n  \
+    \          result=true\n        elif [[ $opening_bracket == \\( ]]; then\n   \
+    \         if [[ $opening_bracket = ${opening_bracket_index} ]]; then\n       \
+    \         bracket_stack=\"${opening_bracket}${bracket_stack}\"\n            else\n\
+    \                bracket_stack=\"${bracket_stack}${opening_bracket}\"\n      \
+    \      fi\n        fi\n    done\n    echo \"$result\"", "\tlocal brackets=$1\n\
+    \tlocal bracket_count=0\n\tfor c in $brackets\n\tdo\n\t\tbracket_count=$((bracket_count+1))\n\
+    \tdone\n\tif ((bracket_count % 2)) ; then\n\t\treturn false\n\telse\n\t\treturn\
+    \ true\n\tfi", "    local brackets=\"$1\"\n    local open=\"(\"\n    local close=\"\
+    )\" # no space needed after )\n    local noopen=\"$(echo \"$brackets\" | sed -E\
+    \ \"s/($open)/\\1/g\")\"\n    local noclose=\"$(echo \"$brackets\" | sed -E \"\
+    s/($close)/\\1/g\")\"\n    local noopenclosed=\"$(echo \"$brackets\" | sed -E\
+    \ \"s/($open$close)/\\1/g\")\"\n    if [ \"$noopen\" != \"$brackets\" ] || [ \"\
+    $noclose\" != \"$brackets\" ] || [ \"$noopenclosed\" != \"$brackets\" ]; then\n\
+    \        echo \"false\"\n    else\n        echo \"true\"\n    fi", "  local brackets=$1\n\
+    \  # if input is not valid bash syntax, exit immediately\n  if ! echo -n \"$1\"\
+    \ | egrep -q \"\\(|\\)\"; then\n    return 1\n  fi\n  # strip all whitespace from\
+    \ input\n  local input=$(echo $1 | sed 's/ //g')\n  local openings=0\n  local\
+    \ closings=0\n  local openings_reverse=0\n  local closings_reverse=0\n  local\
+    \ closings_reverse2=0\n  local closings_reverse3=0\n  local openings_reverse2=0\n\
+    \  local closings_reverse3=0\n  local closings_reverse4=0\n  local closings_reverse5=0\n\
+    \  local closings_reverse6=0\n  local closings_reverse7=0\n  local closings_reverse8=0\n\
+    \  local closings_reverse9=0\n  local closings_reverse10=0\n  local closings_reverse11=0\n\
+    \  local closings_reverse12=0\n  local closings_reverse13=0\n  local closings_reverse14=0\n\
+    \  local closings_reverse15=0\n  local closings_reverse16=0\n  local closings_reverse17=0\n\
+    \  local closings_reverse18=0\n  local closings_reverse19=0\n  local closings_reverse20=0\n\
+    \  local closings_reverse21=0\n  local closings_reverse22=0\n  local closings_reverse23=0\n\
+    \  local closings_reverse24=0\n  local closings_reverse25=0\n  local closings_reverse26=0\n\
+    \  local closings_reverse27=0\n  local closings_reverse28=0\n  local closings_reverse29=0\n\
+    \  local closings_reverse30=0\n  local closings_reverse31=0\n  local closings_reverse32=0\n\
+    \  local closings_reverse33=0\n  local closings_reverse34=0\n  local closings_reverse35=0\n\
+    \  local closings_reverse36=0\n  local closings_reverse37=0\n  local closings_reverse38=0\n\
+    \  local closings_reverse39=0\n  local closings_reverse40=0\n  local closings_reverse41=0\n\
+    \  local closings_reverse42=0\n  local closings_reverse43=0\n  local closings_reverse44=0\n\
+    \  local closings_reverse45=0\n  local closings_reverse46=0\n  local closings_reverse47=0\n\
+    \  local closings_reverse48=0\n  local closings_reverse49=0\n  local closings_reverse50=0\n\
+    \  local closings_reverse51=0\n  local closings_", "    local brackets=$1\n  \
+    \  local s=$'\\0';\n    printf -v $s '%s\\n' \"$brackets\"\n    [[ $brackets =~\
+    \ ^(.*[()]*)(.*)$ ]]", "  local brackets=\"$1\"\n  # strip leading whitespace\n\
+    \  brackets=\"$(bracketing_strip \"$brackets\")\"\n  # loop through opening brackets\n\
+    \  while IFS= read -r opening_bracket ; do\n    # find first closing bracket\n\
+    \    local closed_bracket=\"$(correct_bracketing \"$opening_bracket\")\"\n   \
+    \ # if we find a matching closing bracket\n    if [ \"$closed_bracket\" != \"\
+    false\" ] ; then\n      echo \"true\" ;\n      return 0\n    fi\n  done <<< \"\
+    $brackets\"\n  echo \"false\" ;\n  return 1", "  local brackets=$1\n  local brackets_str=$(echo\
+    \ $brackets | awk '{print $1}')\n  local bracket_count=0\n  local bracket_count2=0\n\
+    \  local bracket_count3=0\n  local bracket_count4=0\n  local bracket_count5=0\n\
+    \  local bracket_count6=0\n  local bracket_count7=0\n  local bracket_count8=0\n\
+    \  local bracket_count9=0\n  local bracket_count10=0\n  local bracket_count11=0\n\
+    \  local bracket_count12=0\n  local bracket_count13=0\n  local bracket_count14=0\n\
+    \  local bracket_count15=0\n  local bracket_count16=0\n  local bracket_count17=0\n\
+    \  local bracket_count18=0\n  local bracket_count19=0\n  local bracket_count20=0\n\
+    \  local bracket_count21=0\n  local bracket_count22=0\n  local bracket_count23=0\n\
+    \  local bracket_count24=0\n  local bracket_count25=0\n  local bracket_count26=0\n\
+    \  local bracket_count27=0\n  local bracket_count28=0\n  local bracket_count29=0\n\
+    \  local bracket_count30=0\n  local bracket_count31=0\n  local bracket_count32=0\n\
+    \  local bracket_count33=0\n  local bracket_count34=0\n  local bracket_count35=0\n\
+    \  local bracket_count36=0\n  local bracket_count37=0\n  local bracket_count38=0\n\
+    \  local bracket_count39=0\n  local bracket_count40=0\n  local bracket_count41=0\n\
+    \  local bracket_count42=0\n  local bracket_count43=0\n  local bracket_count44=0\n\
+    \  local bracket_count45=0\n  local bracket_count46=0\n  local bracket_count47=0\n\
+    \  local bracket_count48=0\n  local bracket_count49=0\n  local bracket_count50=0\n\
+    \  local bracket_count51=0\n  local bracket_count52=0\n  local bracket_count53=0\n\
+    \  local bracket_count54=0\n  local bracket_", "    local brackets\n    brackets=$(($(\
+    \ echo \"$1\" | tr '()' '[' | tr '[]' '(' | tr '[]' '[' | tr '()' '[' | tr '[]'\
+    \ '(' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' |\
+    \ tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()'\
+    \ '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' |\
+    \ tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]'\
+    \ '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' |\
+    \ tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()'\
+    \ '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' |\
+    \ tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]'\
+    \ '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' |\
+    \ tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()'\
+    \ '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' |\
+    \ tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]'\
+    \ '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' |\
+    \ tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()' '[' | tr '[]' '[' | tr '()'\
+    \ '[' | tr '[]' '['", "    local brackets=$1;\n    # split on brackets\n    local\
+    \ arr=($(echo $brackets | tr \")\" \"\\n\"))\n    # for each element of arr\n\
+    \    for el in \"${arr[@]}\"\n    do\n        # count parentheses\n        local\
+    \ brack_count=$(echo $el | grep -o ')' | wc -w)\n        # if the last element\
+    \ of a stack of brackets is empty, then the string isn't a correctly bracketed\
+    \ string.\n        if [[ $((${#arr[@]} - 1)) == 0 ]]; then\n            return\
+    \ False;\n        fi\n        # if there are no more open brackets\n        if\
+    \ [[ $brack_count == \"0\" ]]; then\n            return True;\n        fi\n  \
+    \      # increment count of open brackets\n        (( ${arr[$((${#arr[@]} - 1))]}\
+    \ = ${arr[$((${#arr[@]} - 1))]} + 1 ));\n    done\n    return False # string is\
+    \ not a correctly bracketed string", "  local brackets=$1\n  local bracket\n \
+    \ for bracket in $brackets; do\n    if [[ $bracket = \"(\" ]]; then\n      local\
+    \ right=${bracket:1}\n      while [[ ${#right} -gt 0 ]] && [[ $right != \")\"\
+    \ ]]; do\n        right=${right:0:$((${#right} - 1))}\n      done\n      if [[\
+    \ ${#right} -eq 1 ]]; then\n        brackets=${brackets:0:$((${#brackets} + 1))}${brackets%\"\
+    $bracket\"}\n      fi\n    elif [[ $bracket = \")\" ]]; then\n      local left=${bracket:1}\n\
+    \      while [[ ${#left} -gt 0 ]] && [[ $left != \"(\" ]]; do\n        left=${left:0:$((${#left}\
+    \ - 1))}\n      done\n      if [[ ${#left} -eq 1 ]]; then\n        brackets=${brackets:0:$((${#brackets}\
+    \ + 1))}${brackets%\"$bracket\"}\n      fi\n    fi\n  done\n  [[ $brackets = \"\
+    (\" ]] || [[ $brackets = \")\" ]]", "    local openings=\"$(\n        echo \"\
+    ${1}\" | tr \" \" \"\\n\" | grep -Eo '\\(\\?\\)' | grep -Eo '\\('\n    )\"\n \
+    \   if [ -z \"$openings\" ]\n    then\n        echo \"$1\"\n    else\n       \
+    \ echo \"false\"\n    fi", "    local brackets=$1\n    # remove brackets from\
+    \ input\n    local input=${1//\"$brackets\"/}\n    # go through the string and\
+    \ count the number of opening brackets\n    local num_opening=$((${#input} - ${#brackets}\
+    \ - 1))\n    # go through the string and count the number of closing brackets\n\
+    \    local num_closing=$((${#input} - ${#brackets} - 1))\n    if [ \"${num_opening}\"\
+    \ -eq 0 -o \"${num_closing}\" -eq 0 ]; then\n        echo \"true\"\n        return\
+    \ 0\n    else\n        echo \"false\"\n        return 1\n    fi", "  local brackets=\"\
+    ($1)\"\n  local bracket_count=0\n  for bracket in $brackets; do\n    bracket_count=$((bracket_count\
+    \ + $(check_pair $bracket)))\n  done\n  [[ \"$bracket_count\" -eq \"$brackets\"\
+    \ ]]", "    brackets=$1\n    if [[ \"$brackets\" == \"()\" ]] || [[ \"$brackets\"\
+    \ == \"(()\" || \"$brackets\" == \"(()())\" ]]; then\n        return \"true\"\n\
+    \    else\n        return \"false\"\n    fi", "    # Find every opening bracket\
+    \ and a corresponding closing bracket\n    local brackets=$( echo $1 | grep -o\
+    \ '[()]' )\n    # Return true if every opening bracket has a corresponding closing\
+    \ bracket\n    [[ \"$brackets\" =~ '('*')' ]]", "  # if string is empty or all\
+    \ characters are \"()\"\n  if [ -z \"$1\" ] || [ -z \"${1//[()*]}\" ]; then\n\
+    \    return 1\n  fi\n\n  # find matching closing bracket, starting from the front\n\
+    \  for (( i = 1; i < \"${#1}\" ; i++ )); do\n    if [[ \"$1\" = \"$( printf '%c'\
+    \ \"${1:0:i}\" )\" ]]; then\n      break\n    fi\n  done\n  if [ \"${#1}\" -eq\
+    \ \"${i}\" ]; then\n    return 1\n  fi\n\n  return 0", "    local brackets=''\n\
+    \    local brackets_used=''\n\n    local c\n    local i\n    local open_brackets=''\n\
+    \    local close_brackets=''\n    local bracket_count=0\n\n    for c in $1; do\n\
+    \        if [[ \"$c\" == ')' ]]; then\n            close_brackets=$(echo $close_brackets\
+    \ | sed -e 's/)$//' -e 's/$)/)/')\n            open_brackets=$(echo $open_brackets\
+    \ | sed -e 's/)$//' -e 's/$)/)/')\n\n            if [ \"$close_brackets\" == \"\
+    ($open_brackets)\" ]; then\n                brackets_used=true\n            fi\n\
+    \        else\n            if [ \"$c\" == \"(\" ]; then\n                if [[\
+    \ \"$open_brackets\" == \"()\" ]]; then\n                    brackets_used=true\n\
+    \                fi\n            fi\n\n            if [[ \"$brackets_used\" ==\
+    \ \"true\" ]]; then\n                brackets_used=false\n            fi\n\n \
+    \           if [[ \"$brackets_used\" == \"false\" ]]; then\n                open_brackets=$(echo\
+    \ $open_brackets | sed -e 's/)$//' -e 's/$)/)/')\n            fi\n\n         \
+    \   brackets_used=$(echo $brackets_used | sed -e 's/)$//' -e 's/$)/)/')\n\n  \
+    \          if [[ \"$c\" == ')' ]]; then\n                if [ \"$brackets_used\"\
+    \ == \"true\" ]; then\n                    brackets_used=false\n             \
+    \   fi\n            fi\n\n            brackets=$(echo $brackets | sed -e 's/)$//'\
+    \ -e 's/$)/)/')\n            brackets=$(echo $brackets | sed -e 's/)$//' -e 's/$)/)/')\n\
+    \n            brackets_used=$(echo $brackets_used | sed -e 's/)$//' -e 's/$)/)/')\n\
+    \n            if [[ \"$c\" == \"(\" ]]; then\n                if [ \"$brackets_used\"\
+    \ == \"false\" ]; then\n                    brackets_used=true\n             \
+    \   fi\n            fi\n        fi\n\n        brackets=$(echo $brackets | sed\
+    \ -e 's/)$//' -e 's/$)/)/')\n        brackets=$(echo $brackets | sed -e 's/)$//'\
+    \ -e 's/$)/)/')\n\n        brackets_used=$(echo $brackets_used | sed -e 's/)$//'\
+    \ -e 's/$)/)/')\n\n        brackets_used=$(echo $brackets_used | sed -e 's/)$//'\
+    \ -e 's/$)/)/", "  local brackets=\"$1\"\n  local count=0\n  local inpar=false\n\
+    \  local inpar2\n  local open_brackets=()\n  local close_brackets=()\n  local\
+    \ par_count\n  local bad_par=0\n  local bad_par2\n  local bad_par3\n  local bad_par4\n\
+    \n  while [ $count -le $#brackets ]; do\n    inpar2=false\n    bad_par2=true\n\
+    \    bad_par3=true\n    bad_par4=true\n    par_count=0\n    while [ $count -le\
+    \ $#open_brackets ]; do\n      par_count=$((par_count + 1))\n      if [ $((par_count\
+    \ % 2)) == 0 ]; then\n        close_brackets=(\"${close_brackets[@]}\" \"$((open_brackets[count-1]+1))\"\
+    )\n        if [ $((count % 2)) == 0 ]; then\n          bad_par2=false\n      \
+    \  fi\n      else\n        bad_par3=false\n      fi\n      ((count++))\n    done\n\
+    \    if [ $bad_par2 != true ]; then # no closing bracket\n      bad_par=true\n\
+    \      bad_par4=true\n    fi\n    if [ $bad_par3 != true ]; then # open bracket\n\
+    \      bad_par=true\n      bad_par4=true\n    fi\n    if [ $bad_par != true ];\
+    \ then # all brackets are open\n      inpar=false\n      bad_par2=true\n    fi\n\
+    \    if [ $bad_par4 != true ]; then # all brackets are closed\n      inpar=false\n\
+    \      bad_par3=true\n    fi\n    if [ $inpar != true ]; then # no open or closing\
+    \ brackets\n      inpar=true\n      bad_par=true\n      bad_par3=true\n      bad_par4=true\n\
+    \    fi\n    if [ $bad_par != true ]; then # no open or closing brackets\n   \
+    \   inpar=true\n      bad_par=true\n      bad_par3=true\n      bad_par4=true\n\
+    \    fi\n    if [ $inpar != true ]; then # no open or closing brackets\n     \
+    \ inpar=true\n      bad_par=true\n      bad_par3=true\n      bad_par4=true\n \
+    \   fi\n    if [ $inpar != true ]; then # no open or closing brackets\n      inpar=true\n\
+    \      bad_par=true\n      bad_par3=true\n      bad_par4=true", "    local brackets=$1\n\
+    \    shift\n    local output=\"\"\n    local open_brackets=\"\"\n    local close_brackets=\"\
+    \"\n    for word in $@; do\n        local bracket=\"\"\n        local wordlen=\"\
+    ${#word}\"\n        for ((i=0; i<wordlen; i+=1)); do\n            if [[ \"${word:i:1}\"\
+    \ == \"(\" ]; then \n                bracket+=\"(\"\n                open_brackets+=${bracket}\n\
+    \                bracket=\"\"\n            else\n                bracket+=\"${word:i:1}\"\
+    \n            fi\n        done\n        if [[ \"${word:wordlen}\" == \"(\" ];\
+    \ then \n            bracket+=\"(\"\n            open_brackets+=${bracket}\n \
+    \           bracket=\"\"\n        else\n            close_brackets+=\"${word:wordlen}\"\
+    \n        fi\n    done\n    close_brackets+=\"${close_brackets:1}\"\n\n    if\
+    \ [[ \"${open_brackets}\" != \"$close_brackets\" ]]; then\n        echo \"false\"\
+    \n    else\n        echo \"true\"\n    fi", "    local brackets=$1\n    local\
+    \ string=$2\n    local count=1\n    local opening_brackets=$(echo \"${string}\"\
+    \ | grep -e \"${brackets}+\" \\\n        | sed -e 's/^/0/' -e 's/$/\\\n      \
+    \  /'| grep -ve \"\\(^0*\\)*[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\\
+    )\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\\
+    1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\\
+    )[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\\
+    (]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\\
+    (0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\\
+    )\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\\
+    1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\\
+    )[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\\
+    (]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\\
+    (0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\)\\(]*\\1\\(0*\\)[^0*\\\
+    )\\(]*\\1\\(0*\\)[^0*\\)\\", "    local brackets=\"${1}\"\n    local correct=\"\
+    false\"\n    for i in ${brackets//'(' '('}; do\n        if [[ ${i} != ${brackets//'('\
+    \ '('}${i}${brackets//')' '('}${i}\n        then\n            correct=\"false\"\
+    \n            break\n        fi\n    done\n    echo \"${correct}\"", "  local\
+    \ bracket_string=$1\n  local bracket_string2=''\n\n  bracket_string=${bracket_string//\\\
+    \"}\n  bracket_string=${bracket_string//\\'}\n  for char in $bracket_string ;\
+    \ do\n    bracket_string2+=\"$(echo $char | tr -d '()')\"\n  done\n  bracket_string2=${bracket_string2//\\\
+    \"}\n  bracket_string2=${bracket_string2//\\'}\n  for char in $bracket_string2\
+    \ ; do\n    if [ \"$char\" = \"$bracket_string\" ] ; then\n      false\n     \
+    \ return\n    fi\n  done\n  true", "    local brackets=$1;\n    local bracketscount=${#brackets}\n\
+    \    for i in $(seq 0 $(( $bracketscount - 1 ))); do\n        if [ \"$brackets\"\
+    \ == \"(${brackets:$i:1}$(( $i - 1 )))\" ]; then\n            echo \"true\";\n\
+    \            return 0\n        fi\n    done\n    echo \"false\"\n    return 1",
+  "    local brackets=''\n    local opening='' # contains \"(\" or \"[\"\n    local\
+    \ closing='' # contains \")\" or \"]\"\n    while [[ $1 ]]; do\n        brackets+=$1\n\
+    \        opening=${1:0:1}\n        if [[ $opening == \"(\" ]]; then\n        \
+    \    closing=${1:2:1}\n            if [[ $closing != \")\" ]]; then\n        \
+    \        return 1\n            fi\n        fi\n        opening=${1:2:1}\n    \
+    \    if [[ $opening == \"[\" ]]; then\n            closing=${1:3:1}\n        \
+    \    if [[ $closing != \"]\" ]]; then\n                return 1\n            fi\n\
+    \        fi\n        shift\n    done\n    return 0", "  brackets=\"${1}\"\n  bracket_count=0\n\
+    \  while [ -n \"$brackets\" ]; do\n    case \"$brackets\" in\n      \"()\") return\
+    \ 0 ;;\n      \"[]\") return 0 ;;\n      \"{}\") return 0 ;;\n      \"<>\") return\
+    \ 0 ;;\n      \"()[]{}<>\") return 0 ;;\n      \"(){}<>\") return 0 ;;\n     \
+    \ *) break ;;\n    esac\n    bracket_count=$((bracket_count+1))\n    brackets=\"\
+    ${brackets%)}\"\n  done\n  return $((bracket_count == 0))", "  local brackets=\"\
+    ${1}\"\n  local opening=\"false\"\n  local closing=\"false\"\n\n  local opening_count=\"\
+    1\"\n  local opening_bracket=\" \"\n\n  local closing_bracket=\"\"\n  local closing_bracket_count=\"\
+    1\"\n\n  for bracket in \"${brackets}\"; do\n    if [[ \"${bracket}\" == \\( ]];\
+    \ then\n      opening=\"true\"\n      opening_bracket=\"${bracket}\"\n      opening_count=\"\
+    ${opening_count}1\"\n    elif [[ \"${bracket}\" == \\) ]]; then\n      if [[ \"\
+    ${opening}\" == true ]]; then\n        opening=\"false\"\n        opening_bracket=\"\
+    ${bracket}\"\n        opening_count=\"${opening_count}1\"\n      else\n      \
+    \  closing=\"true\"\n        closing_bracket=\"${bracket}\"\n        closing_bracket_count=\"\
+    ${closing_bracket_count}1\"\n      fi\n    elif [[ \"${bracket}\" == \\[ ]]; then\n\
+    \      opening=\"true\"\n      opening_bracket=\"${bracket}\"\n      opening_count=\"\
+    ${opening_count}1\"\n    elif [[ \"${bracket}\" == \\] ]]; then\n      opening=\"\
+    true\"\n      opening_bracket=\"${bracket}\"\n      opening_count=\"${opening_count}1\"\
+    \n    elif [[ \"${bracket}\" == \\{ ]]; then\n      opening=\"true\"\n      opening_bracket=\"\
+    ${bracket}\"\n      opening_count=\"${opening_count}1\"\n    elif [[ \"${bracket}\"\
+    \ == \\} ]]; then\n      opening=\"true\"\n      opening_bracket=\"${bracket}\"\
+    \n      opening_count=\"${opening_count}1\"\n    fi\n  done\n\n  if [[ \"${opening}\"\
+    \ == true ]]; then\n    if [[ \"${opening_count}\" == \"${closing_bracket_count}\"\
+    \ ]]; then\n      echo \"true\"\n    else\n      echo \"false\"\n    fi\n  else\n\
+    \    if [[ \"${opening_count}\" == \"${closing_bracket_count}\" ]]; then\n   \
+    \   echo \"false\"\n    else\n      echo \"true\"\n    fi\n  fi", "    local bracket_regex='^('\"\
+    ${BASH_REMATCH[1]}\"')'\n    local brackets=${1:-}\n    for bracket in $brackets;\
+    \ do\n        if [[ $bracket != \\( && $bracket != \\) ]]; then\n            echo\
+    \ \"Error with bracketing: '$bracket'\"\n            return 1\n        fi\n  \
+    \      if [[ $bracket == \\( ]]; then\n            bracket_regex=\"${bracket_regex}${bracket}\"\
+    \n        else\n            bracket_regex=\"${bracket_regex}(${bracket})\"\n \
+    \       fi\n    done\n    [[ \"$(bracketing_regex \"$bracket_regex\")\" == \"\
+    $brackets\" ]]", "    local opening_bracket=$1\n    local closing_bracket=$opening_bracket\n\
+    \    if [ -z \"$closing_bracket\" -o \"$closing_bracket\" == \"$opening_bracket\"\
+    \ ]; then\n        return 0\n    fi\n    while [[ $closing_bracket != \"\" ]];\
+    \ do\n        if [[ $opening_bracket == \"\" ]]; then\n            return 0\n\
+    \        fi\n        if [[ $closing_bracket == \"(\" ]]; then\n            if\
+    \ [[ $opening_bracket == \"(\"  ]]; then\n                return 1\n         \
+    \   else\n                return 0\n            fi\n        fi\n        if [[\
+    \ $closing_bracket == \"[\" ]]; then\n            if [[ $opening_bracket == \"\
+    [\" ]]; then\n                return 1\n            else\n                return\
+    \ 0\n            fi\n        fi\n        if [[ $closing_bracket == \"{\" ]]; then\n\
+    \            if [[ $opening_bracket == \"{\" ]]; then\n                return\
+    \ 1\n            else\n                return 0\n            fi\n        fi\n\
+    \        if [[ $closing_bracket == \"}\" ]]; then\n            if [[ $opening_bracket\
+    \ == \"}\" ]]; then\n                return 1\n            else\n            \
+    \    return 0\n            fi\n        fi\n        if [[ $closing_bracket == \"\
+    <\" ]]; then\n            if [[ $opening_bracket == \"<\" ]]; then\n         \
+    \       return 1\n            else\n                return 0\n            fi\n\
+    \        fi\n        if [[ $closing_bracket == \">\" ]]; then\n            if\
+    \ [[ $opening_bracket == \">\" ]]; then\n                return 1\n          \
+    \  else\n                return 0\n            fi\n        fi\n        if [[ $closing_bracket\
+    \ == \",\" ]]; then\n            if [[ $opening_bracket == \",\" ]]; then\n  \
+    \              return 1\n            else\n                return 0\n        \
+    \    fi\n        fi\n        if [[ $closing_bracket == \".\" ]]; then\n      \
+    \      if [[ $opening_bracket == \".\" ]]; then\n                return 1\n  \
+    \          else\n                return 0\n            fi\n        fi\n      \
+    \  if [[ $closing_bracket == \"?\" ]]; then\n            if [[ $opening_bracket\
+    \ == \"?\" ]]; then\n                return 1\n            else\n            \
+    \    return 0\n            fi\n        fi\n        if [[ $closing_bracket == \"\
+    !\" ]]; then\n            if [[ $opening_bracket == \"!\" ]]; then\n         \
+    \       return 1\n            else\n                return 0\n            fi\n\
+    \        fi\n        if [[ $closing_bracket == \";\" ]]; then\n            if\
+    \ [[ $opening_bracket == \";\" ]]; then\n                return 1\n          \
+    \  else\n", "    local brackets\n    local correct\n\n    brackets=\"${1#(}\"\n\
+    \    brackets=\"${brackets%)}\"\n    brackets=\"${brackets//(/)\"\n    brackets=\"\
+    ${brackets//)/\"\n\n    for (( i=1; i<=${#brackets}; i++ )); do\n        local\
+    \ current_bracket\n        current_bracket=\"${brackets:$i:1}\"\n        if [\
+    \ \"$current_bracket\" != \"$brackets\" ]; then\n            correct=\"false\"\
+    \n            break\n        fi\n    done\n\n    echo \"$correct\"", "    local\
+    \ brackets=\"$1\"\n    local open_brackets=\"$(grep \"$brackets\" <<< \"$brackets\"\
+    \ | wc -l)\"\n    local close_brackets=\"$(grep \"$brackets\" <<< \"$brackets\"\
+    \ | sed \"s/$brackets//g\" | wc -l)\"\n    return $((open_brackets == close_brackets))",
+  "    local brackets=\"$1\"\n    local bracket\n    local brackets\n    local ret=\"\
+    false\"\n    \n    # Count brackets\n    for bracket in $brackets; do\n      \
+    \  (( ++brackets ))\n    done\n    \n    for bracket in $brackets; do\n      \
+    \  if [[ \"$bracket\" == \"$brackets\" ]]; then\n            ret=\"true\"\n  \
+    \          break\n        fi\n    done\n    \n    echo $ret", "  local opening_bracket=\"\
+    $1\"\n  shift\n  local closing_bracket=\")\"\n  for bracket in \"${opening_bracket}${closing_bracket}\"\
+    ; do\n    for arg; do\n      if [[ $arg == $bracket ]]; then\n        return 0\n\
+    \      fi\n    done\n  done\n  return 1", "    local brackets=\"${1}\"\n    echo\
+    \ \"$brackets\" | grep -q '('\n    if [ $? -eq 0 ]; then\n        echo \"false\"\
+    \n    else\n        echo \"true\"\n    fi", "    local string=\"$1\"\n\n    [[\
+    \ \"$string\" = \"()\" ]]", "    local brackets=$1\n\n    local bracket\n    for\
+    \ bracket in $brackets\n    do\n        local count=0\n        while [ $count\
+    \ -le ${#brackets} ]\n        do\n            if [[ $brackets == *\"$bracket\"\
+    * ]]\n            then\n                count=$(( $count + 1 ))\n            fi\n\
+    \        done\n\n        if [ $count -eq ${#brackets} ]\n        then\n      \
+    \      return 0\n        fi\n    done\n\n    return 1", "    local brackets=\"\
+    $1\"\n    local i=0\n    while [ $i -lt ${#brackets} ]; do\n        if [ \"${brackets:i:1}\"\
+    \ = \"(\" ]\n        then\n            local j=0\n            while [ $j -le $i\
+    \ ]; do\n                if [ \"${brackets:j:1}\" = \"(\" ]\n                then\n\
+    \                    j=$((j+1))\n                else\n                    break\n\
+    \                fi\n            done\n            if [ $j -eq $i ]\n        \
+    \    then\n                return 1\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    return 0", "    local brackets=\"${1}\"\n    local count=0\n  \
+    \  for (( i = 0; i < ${#brackets}; ++i )); do\n        if [[ \"${brackets:$i:1}\"\
+    \ == \")\" ]]; then\n            (( count = count + 1 ))\n        else\n     \
+    \       if (( count == 0 )); then\n                printf 'false'\n          \
+    \      return 1\n            else\n                printf 'true'\n           \
+    \     return 0\n            fi\n        fi\n    done", "    local brackets=\"\
+    $1\"\n    local s=${#brackets}\n    if [[ $s != 0 ]]; then\n        for i in `seq\
+    \ 0 $((s-1))`; do\n            if [[ \"${brackets:$i:1}\" != \")\" ]]; then\n\
+    \                return 0\n            else\n                let i--\n       \
+    \     fi\n        done\n        return 1\n    else\n        return 0\n    fi",
+  "    local brackets=$1\n    # convert strings to list of chars\n    local bracket_string=()\n\
+    \    for char in $brackets\n    do\n        bracket_string+=( \"$char\" )\n  \
+    \  done\n    # remove trailing brackets\n    bracket_string=${bracket_string%)}\
+    \ # strip off trailing ')'\n    bracket_string=${bracket_string##*()} # strip\
+    \ off leading '('\n\n    local bracket_count=$((${#bracket_string} / 2)) # count\
+    \ the number of '('\n    local open_brackets=()\n    local closed_brackets=()\n\
+    \    local current_open_brackets=0\n    local current_closed_brackets=0\n\n  \
+    \  local string=\"${bracket_string}\" # copy bracket string into a temp string\n\
+    \    while [ $current_open_brackets -lt $bracket_count ]\n    do\n        local\
+    \ brackets=${string:$((current_open_brackets * 2)):$((current_open_brackets *\
+    \ 2 + 1))}\n        # bracket string is of form \"(()())\", so convert this to\n\
+    \        # [ [ open_bracket, closed_brackets ], ... ]\n        local bracket_count=$((${#brackets}\
+    \ / 2))\n        current_open_brackets+=1 #count the open brackets\n        local\
+    \ bracket_pair=()\n        for char in $brackets\n        do\n            bracket_pair+=(\
+    \ \"$char\" )\n        done\n        open_brackets+=( \"$bracket_pair\" )\n  \
+    \      current_closed_brackets+=1 #count the closed brackets\n        current_open_brackets-=1\
+    \ #count the open brackets\n        string=${string:$((current_open_brackets *\
+    \ 2)):$((current_open_brackets * 2 + 1))} #remove the open brackets\n        current_closed_brackets-=1\
+    \ #count the closed brackets\n        current_open_brackets-=1 #count the open\
+    \ brackets\n    done\n\n    local brackets_are_correct=true\n    local brackets_are_incorrect=false\n\
+    \    local open_brackets_are_correct=true\n    local open_brackets_are_incorrect=false\n\
+    \    local closed_brackets_are_correct=true\n    local closed_brackets_are_incorrect=false\n\
+    \n    local open_brackets_string=\"\"\n    for bracket in $open_brackets\n   \
+    \ do\n        open_brackets_", "  local brackets=\"${1}\"\n  local len=\"${#brackets}\"\
+    \n  for (( index=1; index < len; index++ )); do\n    if [[ ${brackets:index:1}\
+    \ == '(' || ${brackets:index:1} == ')' ]]; then\n      return 0\n    fi\n  done\n\
+    \  return 1", "    local brackets=$1 brackets\n    local open_bracket=\"(\" close_bracket=\"\
+    )\" string=$2 result\n    local i\n    local bracket\n    local opening\n    local\
+    \ closing\n    local is_opening\n    local is_closing\n    local bracket\n   \
+    \ local new_bracket\n\n    for (( i=1; i <= ${#brackets}; i++ )); do\n       \
+    \ bracket=\"${brackets:$i:1}\"\n        if [ \"$bracket\" = \"(\" ]; then\n  \
+    \          opening=\"${open_bracket:$i:1}\"\n            is_opening=\"${open_bracket:$i:1}\"\
+    \n        else\n            closing=\"${close_bracket:$i:1}\"\n            is_closing=\"\
+    ${close_bracket:$i:1}\"\n        fi\n\n        if [ \"$bracket\" != \"$is_closing\"\
+    \ ]; then\n            if [ \"$bracket\" == \"$opening\" ]; then\n           \
+    \     brackets=\"${brackets:0:$i-1}($brackets)\"\n                if [ \"$brackets\"\
+    \ == \"$string\" ]; then\n                    result=\"true\"\n              \
+    \      break\n                fi\n            fi\n        fi\n    done\n\n   \
+    \ echo \"$result\"", "    local bracket_char=\"${1}\"\n    local brackets=()\n\
+    \n    for char; do\n        case \"${char}\" in\n            '(')\n          \
+    \      brackets+=('(')\n                ;;\n            ')')\n               \
+    \ local opening=\"${brackets[${#brackets[*]} - 1]}\"\n                if [[ \"\
+    ${opening}\" != \"${char}\" ]]; then\n                    return false\n     \
+    \           fi\n                brackets+=(')')\n                ;;\n        \
+    \    *)\n                if [[ -n \"${brackets[${#brackets[*]} - 1]}\" ]]; then\n\
+    \                    return false\n                fi\n                brackets+=(\"\
+    ${char}\")\n                ;;\n        esac\n    done\n    if [[ ${#brackets[*]}\
+    \ != ${#bracket_char} ]]; then\n        return false\n    fi\n    return true",
+  "  local bracket_stack\n  bracket_stack=$1\n  if [[ \"${bracket_stack}\" == \"\"\
+    \ ]]; then\n    return 0\n  fi\n  # for (( i=0; i< \"${#bracket_stack}\"; i++\
+    \ )); do echo \"${bracket_stack:i:1}\"; done\n  local opening_bracket=$bracket_stack:0:1\n\
+    \  # echo \"opening_bracket=${opening_bracket}\"\n  local closing_bracket=$bracket_stack:1:1\n\
+    \  local open_count\n  local close_count\n  open_count=$((${#bracket_stack} +\
+    \ 1))\n  close_count=$((${#bracket_stack} + 1))\n  # echo \"open_count=${open_count},\
+    \ close_count=${close_count}\"\n  if [[ ${#bracket_stack} -le 1 ]]; then\n   \
+    \ return 1\n  fi\n  # echo \"bracket_stack=${bracket_stack}\"\n  local i\n  #\
+    \ echo \"${bracket_stack}\"\n  local opening_count=0\n  local opening_stack\n\
+    \  opening_stack=()\n  opening_stack=${bracket_stack:0:1}\n  opening_count=${#opening_stack}\n\
+    \  # echo \"opening_stack=${opening_stack}\"\n  local opening_char\n  local closed_char\n\
+    \  local opening_bracket\n  local closing_bracket\n  local i\n  for (( i=${#opening_stack};\
+    \ i-->0; )); do\n    opening_char=${opening_stack:i:1}\n    echo \"opening_char=${opening_char}\"\
+    \n    opening_bracket=$opening_char\n    echo \"opening_bracket=${opening_bracket}\"\
+    \n    if [[ \"${opening_bracket}\" == ${opening_bracket}* ]]; then\n      echo\
+    \ \"opening_bracket=${opening_bracket}\"\n      opening_count=${opening_count}\n\
+    \      opening_stack=${opening_stack:0:i}\n      opening_count=$((${#opening_stack}\
+    \ + 1))\n      echo \"opening_stack=${opening_stack}\"\n    else\n      opening_stack=${opening_stack:0:i}\n\
+    \      opening_count=$((${#opening_stack} + 1))\n      echo \"opening_stack=${opening_stack}\"\
+    \n    fi\n    echo \"opening_count=${opening_count}\"\n    if [[ \"${opening_count}\"\
+    \ == \"${open_count", "    local brackets=\"${1}\"\n    local result=\"false\"\
+    \n    local bracketCount=0\n    for char in $brackets; do\n        local openingChar=\"\
+    `echo $char|sed 's/[][]//g'`\"\n        if [ \"$bracketCount\" -eq 0 ]; then\n\
+    \            if [ \"$openingChar\" == \"$char\" ]; then\n                bracketCount=$(($bracketCount\
+    \ + 1))\n            else\n                bracketCount=$(($bracketCount + 0))\n\
+    \                result=\"true\"\n                break\n            fi\n    \
+    \    elif [ \"$bracketCount\" -eq 1 ]; then\n            if [ \"$openingChar\"\
+    \ == \"$char\" ]; then\n                bracketCount=$(($bracketCount + 1))\n\
+    \            else\n                bracketCount=$(($bracketCount + 0))\n     \
+    \           echo \"$result\"\n                return\n            fi\n       \
+    \ elif [ \"$bracketCount\" -eq 2 ]; then\n            if [ \"$openingChar\" ==\
+    \ \"$char\" ]; then\n                bracketCount=$(($bracketCount + 1))\n   \
+    \         else\n                bracketCount=$(($bracketCount + 0))\n        \
+    \        echo \"$result\"\n                return\n            fi\n        elif\
+    \ [ \"$bracketCount\" -ge 3 ]; then\n            if [ \"$openingChar\" == \"$char\"\
+    \ ]; then\n                bracketCount=$(($bracketCount + 1))\n            else\n\
+    \                bracketCount=$(($bracketCount + 0))\n                echo \"\
+    $result\"\n                return\n            fi\n        fi\n    done\n    echo\
+    \ \"$result\"", "\tlocal brackets=$1\n\tlocal s=0\n\tlocal p=0\n\twhile [[ $p\
+    \ -lt ${#brackets} ]] ; do\n\t\tlocal b=${brackets:$p:1}\n\t\tif [[ ${brackets:$p:1}\
+    \ =~ $(brackets) ]] ; then\n\t\t\t((++s))\n\t\telse\n\t\t\t((--s))\n\t\tfi\n\t\
+    \t((p+=1))\n\tdone\n\tif (( s )) ; then\n\t\treturn 0\n\telse\n\t\treturn 1\n\t\
+    fi", "  local brackets=''\n  while [[ $1 ]]; do\n    [[ $brackets != '' ]] &&\
+    \ {\n      if [[ ${brackets[-1]} == ${brackets[-2]} ]]; then\n        brackets=${brackets%)}\
+    \ # remove closing bracket from brackets\n      else\n        brackets=${brackets}\"\
+    \ \"$1\n      fi\n    } || {\n      brackets=${brackets}\" \"$1\n    }\n    shift\n\
+    \  done\n  [[ ${brackets} == *\" \"$1\" ]] && return 0\n  return 1", "    local\
+    \ brackets=$1\n    local i\n    local count=0\n    local opening_brackets=\"\"\
+    \n    local closing_brackets=\"\"\n    for i in $brackets; do\n        if [ \"\
+    $i\" = \"(\" ]; then\n            opening_brackets=\"$opening_brackets$i\"\n \
+    \           count=`expr $count + 1`\n        elif [ \"$i\" = \")\" ]; then\n \
+    \           closing_brackets=\"$closing_brackets$i\"\n            count=`expr\
+    \ $count + 1`\n            if [ \"$count\" -eq 0 ]; then\n                echo\
+    \ \"true\"\n                return\n            else\n                count=0\n\
+    \            fi\n        fi\n    done\n    echo \"false\"", "  local brackets=\"\
+    $1\"\n  local x\n  for x; do\n    if [[ $x =~ (^\\()|($)$ ]]; then\n      [ \"\
+    $brackets\" = \"$x\" ] || return 1\n      brackets=${x:1:-1}\n      x=${x:2:-1}\n\
+    \      continue\n    fi\n  done\n  return 0", "  # $1 is a string.\n  local brackets=$1\n\
+    \  [[ -z \"${brackets}\" ]] && return\n  # We use \"[[ ]]\" instead of \"[[ -z\
+    \ ]]\" so that we can tell the difference\n  # between empty brackets (\"\") and\
+    \ zero length brackets (where -z gives\n  # \"true\").\n  local opening=$(echo\
+    \ \"${brackets}\" | sed -e 's/^\\([(]*\\)$/\\1/g' -e 's/^\\([)]*\\)$/\\1/g' -e\
+    \ 's/^\\([)]*\\)$/\\1/g')\n  local closing=$(echo \"${brackets}\" | sed -e 's/^\\\
+    ([(]*\\)$/\\1/g' -e 's/^\\([)]*\\)$/\\1/g' -e 's/^\\([)]*\\)$/\\1/g')\n  [[ \"\
+    ${opening}\" =~ \"$closing\" ]] && return\n  return 1", "  local brackets=\"${1}\"\
+    \n  local bracket_count\n  bracket_count=0\n  for i in \"${brackets//'('//g;s/')'//g;s/'()'//g;s/'//g;s/\\\
+    ([a-zA-Z0-9]\\)/\\1/;\n  do\n    if [ \"${bracket_count}\" -eq \"$(expr \"$bracket_count\"\
+    \ +1)\" ]; then\n      bracket_count=0\n    fi\n    bracket_count=$(($bracket_count\
+    \ + 1))\n  done\n  return $(($bracket_count <= 0))", "    local brackets\n   \
+    \ if [[ \"${1}\" =~ ^\\([a-zA-Z0-9_]*\\)$ ]]; then\n        brackets=\"${1}\"\n\
+    \    else\n        echo \"invalid bracketing\"\n        return $?\n    fi\n  \
+    \  local count=0\n    for bracket in $brackets; do\n        if [[ \"$bracket\"\
+    \ == [a-zA-Z0-9_] ]]; then\n            # don't use [[ \"$bracket\" == [a-zA-Z0-9_]\
+    \ ]]; it will fail for brackets within brackets.\n            count=$(expr $count\
+    \ + 1)\n        else\n            # use quotes around \"$bracket\" to handle spaces\
+    \ in the bracket\n            if [[ \"$bracket\" == \\( ]]; then\n           \
+    \     if [[ \"$count\" -lt 2 ]]; then\n                    count=$(expr $count\
+    \ + 1)\n                else\n                    count=0\n                  \
+    \  echo \"too many brackets\"\n                    return $?\n               \
+    \ fi\n            else\n                if [[ \"$count\" -gt 1 ]]; then\n    \
+    \                count=0\n                    echo \"too many brackets\"\n   \
+    \                 return $?\n                fi\n            fi\n        fi\n\
+    \    done\n    return $(( $count % 2 ))", "    local brackets=$1\n    local string=$2\n\
+    \    local i\n    # count the number of opening brackets\n    count=$(brackets\
+    \ \"$string\" | wc -w)\n    if [ $count -ne 0 ] ; then\n        while IFS='' read\
+    \ -r i || [ -n \"$i\" ] ; do\n            # count the number of closing brackets\n\
+    \            count=$(brackets \"$string\" | awk -v i=\"$i\" '{if($1 !~ \"(\" &&\
+    \ !$1 ~ \")\" && !$1 ~ i {print 1}  else {print 0}}') \n            if [ $count\
+    \ -eq 0 ]; then\n                return 0\n            fi\n        done\n    else\n\
+    \        return 0\n    fi\n    return 1", "  local string=\"$1\"\n  if echo \"\
+    $string\" | grep -q '^['\"$1\"']$'; then\n    echo \"true\"\n  else\n    echo\
+    \ \"false\"\n  fi", "    local brackets=\"${1}\"\n    local string=\"$2\"\n  \
+    \  local bracket_pos=\"-1\"\n    local bracket_count=\"-1\"\n\n    echo \"$string\"\
+    \ | sed -e \"s/^$brackets//\" -e \"s/$brackets$/\\($brackets\\)/\" > /dev/null\
+    \ 2>&1\n    if [ $? -ne 0 ]; then\n        return 0\n    fi\n    echo \"$string\"\
+    \ | sed -e \"s/$brackets$/\\($brackets\\)/\" > /dev/null 2>&1\n    if [ $? -ne\
+    \ 0 ]; then\n        return 0\n    fi\n\n    bracket_count=$(echo $brackets |\
+    \ sed 's/\\(.*\\)/\\1/')\n    echo \"$string\" | sed -e \"s/$brackets$/\\($brackets\\\
+    )/\" > /dev/null 2>&1\n    if [ $? -ne 0 ]; then\n        return 0\n    fi\n \
+    \   echo \"$string\" | sed -e \"s/$brackets$/\\($brackets\\)/\" > /dev/null 2>&1\n\
+    \    if [ $? -ne 0 ]; then\n        return 0\n    fi\n\n    local brackets_pos=$(echo\
+    \ $brackets | sed 's/\\(.*\\)/\\1/' | sed 's/\\([\\(.*\\)\\)/\\1/' | sed 's/\\\
+    (.*\\)//')\n    for (( bracket_pos=1 ; bracket_pos < $bracket_count ; bracket_pos++\
+    \ ))\n    do\n        bracket_pos=$(echo $brackets | sed 's/\\(.*\\)/\\1/' | sed\
+    \ 's/\\([\\(.*\\)\\)/\\1/' | sed 's/\\(.*\\)//')\n        echo \"$string\" | sed\
+    \ -e \"s/$brackets$/\\($brackets\\)/\" > /dev/null 2>&1\n        if [ $? -ne 0\
+    \ ]; then\n            return 0\n        fi\n    done\n    return 1", "    local\
+    \ brackets=\"${1}\"\n    local i=$((${#brackets}-1))\n    while [ $i -ge 0 ]\n\
+    \    do\n        if [ \"${brackets:i:1}\" == \"(\" ]\n        then\n         \
+    \   local j=$((${i}-1))\n            local end=\"\"\n            if [ $j -le ${#brackets}\
+    \ ]\n            then\n                end=\"}\"\n                local x=$(bracket_count\
+    \ \"${brackets:$j:1}\")\n                local count=$((${#brackets}-$j))\n  \
+    \          else\n                local x=$(bracket_count \"${brackets:$j:1}\"\
+    )\n                local count=$((${#brackets}+1))\n            fi\n         \
+    \   if [ $x -ne 1 ]\n            then\n                echo \"${brackets:$j:1}\
+    \ is wrong!\"\n                echo \"$j is out of range!\"\n                echo\
+    \ \"${brackets:$j:1}, ${brackets:$j:2}${end:}\"\n                exit 2\n    \
+    \        fi\n            if [ $j -ge ${#brackets} ]\n            then\n      \
+    \          echo \"${brackets:$j:1} is wrong!\"\n                echo \"$j is out\
+    \ of range!\"\n                echo \"${brackets:$j:1}, ${brackets:$j:2}${end:}\"\
+    \n                exit 2\n            fi\n            if [ $count -ne 1 ]\n  \
+    \          then\n                echo \"${brackets:$j:1} is wrong!\"\n       \
+    \         echo \"$j is out of range!\"\n                echo \"${brackets:$j:1},\
+    \ ${brackets:$j:2}${end:}\"\n                exit 2\n            fi\n        \
+    \    if [ $x -eq 0 ]\n            then\n                echo \"${brackets:$j:1}\
+    \ is wrong!\"\n                echo \"$j is out of range!\"\n                echo\
+    \ \"${brackets:$j:1}, ${brackets:$j:2}${end:}\"\n                exit 2\n    \
+    \        fi\n            brackets=\"${brackets:0:$j}${end:}${brackets:$j:1}\"\n\
+    \        fi\n        if [ \"${brackets:i:1}\" == \")\" ]\n        then\n     \
+    \       local j=$((${i}-1))\n            if [ $j -ge 0 ]\n            then\n \
+    \               local x=$(bracket_count \"${brackets:$j:1}\")\n              \
+    \  local count=$((${#brackets}-$j))\n                if [ $x -ne 1 ]\n       \
+    \         then\n                    echo \"${brackets:$j:1} is wrong!\"\n    \
+    \                echo \"$j is out of range!\"\n                    echo \"${brackets:$j:1},\
+    \ ${brackets:", "    local brackets=\"${1}\"\n    local output=$(\n        echo\
+    \ \"${brackets}\" | sed -r \"s/(.)\\((.)\\2\\)/\\1\\2/g\" | \\\n        grep -v\
+    \ \")(\" \n    )\n\n    if [ -z \"$output\" ]; then\n        return \"false\"\n\
+    \    else\n        return \"true\"\n    fi", "  local brackets=\"$1\"\n  local\
+    \ string=\"$2\"\n  local i=0\n  while [[ $i -lt ${#brackets} ]]\n  do\n    if\
+    \ [[ ${brackets:$i:1} != \"(\" ]] ; then\n      echo \"false\"\n      return 1\n\
+    \    fi\n    (( i++ ))\n    if [[ ${brackets:$i:1} != \"(\" ]] && [[ ${brackets:$i:1}\
+    \ == \")\" ]] ; then\n      echo \"false\"\n      return 1\n    fi\n    (( i++\
+    \ ))\n    if [[ ${brackets:$i:1} != \"(\" ]] && [[ ${brackets:$i:1} == \")\" ]]\
+    \ ; then\n      echo \"false\"\n      return 1\n    fi\n    (( i++ ))\n  done\n\
+    \  echo \"true\"\n  return 0", "    local brackets=\"$(echo -n \"$1\" | tr -d\
+    \ '\"')\"\n    local result=\"$(echo \"$1\" | grep -o '^[^\\\\(]*\\\\(')\" ==\
+    \ \"$(echo \"$1\" | grep -o '^[^\\\\(]*\\\\(')\")\"\n    for bracket in \"$brackets\"\
+    ; do\n        if [ \"$bracket\" == \"(\" ] || [ \"$bracket\" == \"{\" ] || [ \"\
+    $bracket\" == \"}\" ]; then\n            result=\"false\"\n        fi\n    done\n\
+    \    echo \"$result\"", "  declare -r brackets=\"${1:-\"()\"}\"\n  declare -a\
+    \ depth\n  declare -a count\n\n  depth=(${#brackets})\n  count=(${#depth[@]})\n\
+    \  while [[ ${depth[@]} -gt 0 ]]; do\n    ((depth[${#depth[@]}-1]++))\n  done\n\
+    \n  for ((i=0; ${count[i]} -gt 0; i+=1)); do\n    ((depth[i]--))\n    ((count[i]--))\n\
+    \  done\n\n  echo $((${#brackets[@]} != ${#count[@]}))", "  local brackets=$1\n\
+    \  echo $brackets\n  local opening_brackets=$(bracketing_symbols | sed 's/\\(.*\\\
+    )/\\1/g')\n  echo $opening_brackets\n  local correct_brackets=$(echo $opening_brackets\
+    \ | grep -Fwf $brackets)\n  echo $correct_brackets\n  [ $correct_brackets == \"\
+    \" ]", "  local brackets=\"${1}\"\n  local brackets_string=\"$(echo \"${brackets}\"\
+    \ | sed -e 's/[\\(\\)\\{\\}\\[\\]]//g')\"\n  if [ \"$brackets_string\" == \"(\"\
+    \ ]\n  then\n    return 0\n  else\n    return 1\n  fi", "  local brackets_string=$1\n\
+    \  # create list of all pairs of brackets.\n  local open_brackets=$(echo ${brackets_string}\
+    \ | tr \")\" \"\\n\")\n  local closed_brackets=$(echo ${brackets_string} | tr\
+    \ \"(\" \"\\n\")\n  local correct=\"false\"\n\n  local opening_brackets=$(echo\
+    \ ${open_brackets} | tr \"\\n\" \" \")\n  local opening_brackets_count=$(echo\
+    \ ${opening_brackets} | wc -w)\n\n  local closing_brackets=$(echo ${closed_brackets}\
+    \ | tr \"\\n\" \" \")\n  local closing_brackets_count=$(echo ${closing_brackets}\
+    \ | wc -w)\n\n  if [[ ${opening_brackets_count} -lt ${closing_brackets_count}\
+    \ ]]; then\n    local brackets_ok=$(echo ${opening_brackets} | sort -u | wc -w)\n\
+    \    local brackets_not_ok=$(echo ${closing_brackets} | sort -u | wc -w)\n   \
+    \ if [[ ${brackets_ok} -eq ${brackets_not_ok} ]]; then\n      echo \"true\"\n\
+    \      correct=\"true\"\n    else\n      echo \"false\"\n      correct=\"false\"\
+    \n    fi\n  else\n    echo \"true\"\n    correct=\"true\"\n  fi\n\n  echo \"${correct}\"",
+  "    local brackets=\"${1}\"\n    local bracketscount\n    bracketscount=\"0\"\n\
+    \    while [[ \"$brackets\" != \"\" ]]; do\n        if [[ \"$brackets\" == \"\
+    (\" ]];then\n            bracketscount=$((bracketscount + 1))\n        elif [[\
+    \ \"$brackets\" == \")\" ]];then\n            bracketscount=$((bracketscount -\
+    \ 1))\n        fi\n        brackets=${brackets%?}\n    done\n    if [[ \"$bracketscount\"\
+    \ -eq 0 ]];then\n        echo \"true\"\n    else\n        echo \"false\"\n   \
+    \ fi", "\tlocal brackets=$1\n\tlocal i=0;\n\tfor (( i=0; i<${#brackets}; i++ ));\n\
+    \tdo\n\t\tif  [[ ${brackets:i:1} == \")\" ]]\n\t\tthen\n\t\t\tbrackets=${brackets:0:i-1}\n\
+    \t\t\tbreak\n\t\telse\n\t\t\tlet \"i+=1\"\n\t\tfi\n\tdone\n\tif [[ ${brackets}\
+    \ == \"\" ]];\n\tthen\n\t\treturn \"false\"\n\telse\n\t\treturn \"true\"\n\tfi",
+  "  local brackets_string brackets_array\n\n  brackets_string=\"$1\"\n  brackets_array=($brackets_string)\n\
+    \  \n  local i opening_brackets_count opening_brackets\n  local correct_bracketing_string\
+    \ corrected_bracketing_string\n\n  opening_brackets=0\n  opening_brackets_count=$(expr\
+    \ length \"${brackets_string}\")\n\n  # loop through brackets\n  for ((i=0; i<${#brackets_array[@]};\
+    \ i++))\n  do\n    opening_brackets=$((opening_brackets + 1))\n    opening_brackets_count_array[$opening_brackets]=\"\
+    ${opening_brackets_count_array[$opening_brackets]}${i}\"\n  done\n\n  correct_bracketing_string=\"\
+    \"\n  correct_bracketing_string=\"${opening_brackets_count_array[*]}\"\n  correct_bracketing_string=\"\
+    ${correct_bracketing_string//${opening_brackets_count}/${opening_brackets}}\"\n\
+    \n  corrected_bracketing_string=$(printf \"%s\" \"$correct_bracketing_string\"\
+    )\n  \n  if [ $(expr \"${corrected_bracketing_string}\" : \"${brackets_string}\"\
+    \ ) -ne 0 ]\n  then\n    return 0\n  else\n    return 1\n  fi", "  local brackets=\"\
+    ${1}\"\n  local opening=\"(^|[^${brackets}])\"\n  local closing=\"($|[^${brackets}])\"\
+    \n\n  echo -n \"$(echo \"${1}\" | sed -E \"s/${opening}/${closing}/g\")\"\n  local\
+    \ result=\"$?\"\n  echo -n \"$1\"\n  exit $result", "  local brackets=\"$1\"\n\
+    \  local parens=\"\"\n  local closingbrackets=\"\"\n  local openingbrackets=\"\
+    \"\n  for char in \"${brackets}\"; do\n    if [[ $char == \")\" ]]; then\n   \
+    \   parens=\"$parens )\"\n      if [[ $parens == \"\" ]]; then\n        closingbrackets=\"\
+    $closingbrackets $char\"\n      else\n        closingbrackets=\"$closingbrackets\
+    \ $parens\"\n        parens=\" \"\n      fi\n    elif [[ $char == \"(\" ]]; then\n\
+    \      openingbrackets=\"$openingbrackets $char\"\n    elif [[ $char == \" \"\
+    \ ]]; then\n      if [[ $parens != \"\" ]]; then\n        parens=\" $parens\"\n\
+    \      else\n        parens=\"\"\n      fi\n    else\n      parens=\" $parens\
+    \ $char\"\n    fi\n  done\n  if [[ $closingbrackets == \"\" ]]; then\n    return\
+    \ 0\n  fi\n  return 1", "    local brackets=\"$1\"\n    # brackets is a string\
+    \ of \"(\" and \")\".\n    # return true if every opening bracket has a corresponding\
+    \ closing bracket.\n    # >>> $(correct_bracketing \"(\")\n    # false\n    #\
+    \ >>> $(correct_bracketing \"()\")\n    # true\n    # >>> $(correct_bracketing\
+    \ \"(()())\")\n    # true\n    # >>> $(correct_bracketing \")(()\")\n    # false\n\
+    \    local opening_brackets='['\n    local closing_brackets=']'\n    local opening_brackets_count=\"\
+    ${#opening_brackets}\"\n    local closing_brackets_count=\"${#closing_brackets}\"\
+    \n    # count the number of opening brackets.\n    while (( opening_brackets_count\
+    \ > 0 )); do\n        opening_brackets=\"${opening_brackets}${opening_brackets}\"\
+    \n        opening_brackets_count=\"${opening_brackets_count}${#opening_brackets}\"\
+    \n    done\n    local closing_brackets_string=\"${closing_brackets}\"\n    local\
+    \ closing_brackets_count=\"${#closing_brackets_string}\"\n    # count the number\
+    \ of closing brackets.\n    while (( closing_brackets_count > 0 )); do\n     \
+    \   closing_brackets=\"${closing_brackets}${closing_brackets}\"\n        closing_brackets_count=\"\
+    ${closing_brackets_count}${#closing_brackets}\"\n    done\n    if [[ \"${opening_brackets_count}\"\
+    \ -eq \"${closing_brackets_count}\" ]]; then\n        local opening_bracket=\"\
+    ${opening_brackets}\"\n        local closing_bracket=\"${closing_brackets}\"\n\
+    \        local correct_bracket=\"$(echo \"${opening_bracket}\"${closing_brackets}\"\
+    )\"\n        if [[ ${correct_bracket} == ${opening_bracket} || ${correct_bracket}\
+    \ == ${closing_bracket} ]]; then\n            return 0\n        fi\n    fi\n \
+    \   return 1", "    if [[ \"$1\" = \"()\" ]]; then\n        echo \"true\"\n  \
+    \  else\n        echo \"false\"\n    fi", "    local brackets=$1\n    local string=$2\n\
+    \    local openbrackets=$(grep -o '(' $string)\n    local closebrackets=$(grep\
+    \ -o ')' $string)\n    if [ \"$openbrackets\" != \"\" ] && [ \"$closebrackets\"\
+    \ != \"\" ]; then\n        echo $\"true\"\n    else\n        echo $\"false\"\n\
+    \    fi", "    local bracket_string=$1\n    local opening_brackets=0\n    local\
+    \ closing_brackets=0\n    while [[ $1 ]]; do\n        if [[ \"$1\" = \"$bracket_string\"\
+    \ ]]; then\n            opening_brackets=$((opening_brackets + 1))\n         \
+    \   closing_brackets=$((closing_brackets + 1))\n        elif [[ \"$1\" == *\"\
+    $bracket_string\"* ]]; then\n            opening_brackets=$((opening_brackets\
+    \ + 1))\n        elif [[ \"$1\" = *\"$bracket_string\"* ]]; then\n           \
+    \ closing_brackets=$((closing_brackets + 1))\n        fi\n        shift\n    done\n\
+    \    [[ \"$opening_brackets\" == \"$closing_brackets\" ]]", "  local brackets=$1\n\
+    \  local brackets_closed=0\n  for bracket in $(echo $brackets | sed -e 's/^ *//'\
+    \ -e 's/ *$//'); do\n    brackets_closed=$(echo $brackets_closed | sed -e \"s/$bracket//\"\
+    )\n  done\n  if [[ \"$brackets_closed\" -eq 0 ]]; then\n    return 0\n  else\n\
+    \    return 1\n  fi", "    local brackets=$1\n    local result\n    local i\n\
+    \    local count\n    for (( i=0; i<${#brackets}; i++ )); do\n        count=$(expr\
+    \ match \"$brackets\" \"\\($i\\)\")\n        if [[ \"$count\" -eq 1 ]]; then\n\
+    \            result=\"false\"\n        elif [[ \"$count\" -eq 0 ]]; then\n   \
+    \         result=\"true\"\n        else\n            result=\"false\"\n      \
+    \      break\n        fi\n    done\n    echo \"$result\"", "  local brackets=$1\n\
+    \  for char in ${brackets}; do\n    [[ \"$char\" == *( )* ]]\n  done\n  return\
+    \ $?", "    local brackets=$1\n    local x=0\n    for ((x=0;x<${#brackets};x++));\
+    \ do\n        local c=\"${brackets:$x:1}\"\n        if [ \"${c}\" == \"(\" ] ;\
+    \ then\n            if [ \"${brackets:$(($x+1))}\" == \")\" ] ; then\n       \
+    \         echo \"true\"\n            else\n                echo \"false\"\n  \
+    \              echo \"${brackets}${brackets:$(($x+1))}\"\n                exit\
+    \ 0\n            fi\n        elif [ \"${c}\" == \")\" ] ; then\n            echo\
+    \ \"false\"\n            echo \"${brackets}${brackets:$(($x+1))}\"\n         \
+    \   exit 0\n        else\n            echo \"false\"\n            echo \"${brackets}${brackets:$(($x+1))}\"\
+    \n            exit 0\n        fi\n    done", "    local brackets=$1\n    local\
+    \ result=\"no\"\n    # loop over each character in $brackets\n    for ((i = 0;\
+    \ i < ${#brackets}; i++)); do\n        local c=${brackets:i:1}\n        # if the\
+    \ character is \")\", then we are done.\n        if [ \"${c}\" = \")\" ]; then\n\
+    \            result=\"yes\"\n            break\n        fi\n        # if the character\
+    \ is \"(\", append it to the current result and continue\n        if [ \"${c}\"\
+    \ = \"(\" ]; then\n            if [ \"${result:-}\" == \"yes\" ]; then\n     \
+    \           result=\"no\"\n                break\n            fi\n           \
+    \ result=\"yes\"\n        fi\n    done\n    echo \"${result}\"", "    local brackets=$1\n\
+    \    local correct_bracketing=false\n    for bracket in $brackets\n    do\n  \
+    \      local close_bracket\n        close_bracket=`echo $bracket | sed -e 's/\\\
+    ([()]*\\)\\(\\)/\\1/g'`\n        if [ -z \"$close_bracket\" ] ; then\n       \
+    \     correct_bracketing=true\n            break\n        fi\n    done\n    echo\
+    \ $correct_bracketing", "    local s=$1\n    local brackets\n    # parse out \"\
+    ()\" from $s.\n    brackets=$(echo $s | sed -e 's/\\(.*\\)//g')\n    local open_brackets\n\
+    \    # store a list of the opening brackets encountered in\n    # $brackets\n\
+    \    open_brackets=($brackets)\n    while [ $# -gt 0 ]; do\n        local c=$1\n\
+    \        local opening\n        opening=$(echo $c | grep -e '\\(' | wc -l)\n \
+    \       if [ $opening -eq 0 ]; then\n            echo \"false\"\n            return\
+    \ 0\n        fi\n        open_brackets+=( $opening )\n        shift\n    done\n\
+    \    local bracket\n    for bracket in \"${open_brackets[@]}\"; do\n        local\
+    \ closing\n        closing=$(echo $bracket | grep -e '\\)' | wc -l)\n        if\
+    \ [ $closing -eq 0 ]; then\n            echo \"false\"\n            return 0\n\
+    \        fi\n    done\n    echo \"true\"\n    return 0", "    local brackets=\"\
+    $1\"\n    local bracket_count=$#brackets\n\n    for (( i = 0; i < $bracket_count;\
+    \ i++ )); do\n        if [[ \"$brackets\" == \"$(( i + 1 ))\"* ]]; then\n    \
+    \        echo \"$(( i + 1 ))\"\n            return 0\n        fi\n    done\n\n\
+    \    echo \"false\"", "  brackets=$1;\n  for char in \"${brackets}\"\n  do\n \
+    \   if [[ $(correct_bracketing \"$char\") != \"true\" ]]; then\n      echo \"\
+    false\"\n      return 1\n    fi\n  done\n  echo \"true\"\n  return 0", "  local\
+    \ brackets=$1\n  [[ \"$brackets\" =~ ([()]|$)* ]] || return 1\n  local opening_brackets=0\n\
+    \  local closing_brackets=0\n  local bracket_depth=0\n  while IFS= read -r line;\
+    \ do\n    case \"$line\" in\n      \"$brackets\"*)\n        ((closing_brackets+=1))\n\
+    \        ((opening_brackets+=1))\n        ((bracket_depth+=(${#line}-2)))\n  \
+    \      ;;\n      \"${brackets}/.*\")\n        ((closing_brackets+=1))\n      \
+    \  ((opening_brackets+=1))\n        ((bracket_depth+=(${#line}-2)))\n        ;;\n\
+    \      \"${brackets}/\")\n        ((closing_brackets+=1))\n        ((opening_brackets+=1))\n\
+    \        ((bracket_depth+=(${#line}-1)))\n        ;;\n      \"$brackets$\")\n\
+    \        ((closing_brackets+=1))\n        ((opening_brackets+=1))\n        ((bracket_depth+=(${#line}-1)))\n\
+    \        ;;\n    esac\n  done\n  [[ ${closing_brackets} -eq ${opening_brackets}\
+    \ ]] || return 1\n  return 0", "    local string=\"$1\"\n    if [[ $string =~\
+    \ ([()]|[^()])+ ]]; then\n        local count=0\n        for i in $(echo $string\
+    \ |sed 's/[][]//g'); do\n            if [[ $i =~ [^()]*$ ]]; then\n          \
+    \      count=$(( count + 1 ))\n            else\n                break\n     \
+    \       fi\n        done\n        if (( count < 2 )); then\n            echo \"\
+    true\"\n        else\n            echo \"false\"\n        fi\n    else\n     \
+    \   echo \"false\"\n    fi", "\tlocal brackets=$1\n\tlocal correct\n\tlocal i=0\n\
+    \n\twhile [ $i -lt ${#brackets} ]\n\tdo\n\t\tcorrect=false\n\t\tbracket=$(echo\
+    \ $brackets | cut -d\"$i\" -f1)\n\t\tif [ \"$bracket\" == \"(\" ]\n\t\tthen\n\t\
+    \t\tcorrect=true\n\t\tfi\n\t\tif [ \"$bracket\" == \")\" ]\n\t\tthen\n\t\t\tcorrect=true\n\
+    \t\tfi\n\t\tlet i++\n\tdone\n\techo $correct", "    local brackets=\"${1}\"\n\
+    \    local openings=\"(\"\n    local closings=\")\"\n    while [[ \"${brackets}\"\
+    \ != \"\" ]]; do\n        if [[ \"${openings}\" == *\"${brackets}\" ]] ; then\n\
+    \            if [[ \"${closings}\" == *\"${brackets}\" ]] ; then\n           \
+    \     return True\n            else\n                openings=\"${openings}${closings}\"\
+    \n                closings=\"${closings}\"\n            fi\n        fi\n     \
+    \   brackets=\"${brackets}${closings}\"\n        closings=\"${closings}\"\n  \
+    \  done\n    return false", "    local brackets=$1\n    local open_bracket=0\n\
+    \    local close_bracket=0\n    local current_bracket=\"()\"\n    while [[ $brackets\
+    \ =~ \\(.*\\)$ ]]; do\n        open_bracket=$((open_bracket + 1))\n        current_bracket=$1\n\
+    \        brackets=${brackets:0:${#brackets}}\n        close_bracket=$((close_bracket\
+    \ + 1))\n    done\n    if [[ $open_bracket -eq 0 ]]; then\n        return 0\n\
+    \    else\n        local last_bracket=\"()\"\n        if [[ $close_bracket -eq\
+    \ 0 ]]; then\n            return 0\n        else\n            for (( index=0;\
+    \ index<$close_bracket; index++; index++ )); do\n                if [[ $open_bracket\
+    \ -eq 1 ]]; then\n                    return 0\n                else\n       \
+    \             last_bracket=${brackets:$((index+1))}\n                    brackets=${brackets:0:$((index+1))}\n\
+    \                    open_bracket=$((open_bracket - 1))\n                fi\n\
+    \            done\n            local left_bracket=${brackets:$((close_bracket-1))}\n\
+    \            last_bracket=${brackets:$((close_bracket-1))}\n        fi\n    fi\n\
+    \    return 1", "  local bracket_string=\"$1\"\n  local depth=0\n  local open_brackets=()\n\
+    \  local close_brackets=()\n\n  while (( depth > 0 )); do\n    (( depth-- ))\n\
+    \    local current_char=\"$(bracket_string $(( depth + 1 )))\"\n    if [[ \"$current_char\"\
+    \ = \"(\" ]]; then\n      open_brackets+=(\"$current_char\")\n    elif [[ \"$current_char\"\
+    \ = \")\" ]]; then\n      close_brackets+=(\"$current_char\")\n    fi\n  done\n\
+    \  if [[ ${#open_brackets[@]} != ${#close_brackets[@]} ]]; then\n    return 1\n\
+    \  else\n    return 0\n  fi", "  if [[ $1 != \"\" ]] ; then\n    echo $1 | perl\
+    \ -ne 'BEGIN{count=0}{if($_=~/\\(\\*\\)/){++count}}END{exit !count}'\n  else\n\
+    \    echo \"false\"\n  fi", "    local brackets=${1//,/$'\\n'}\n    local correct_bracketing=\"\
+    false\"\n    for bracket in ${brackets}; do\n        local bracket=${bracket//,/$'\\\
+    n'}\n        if [[ $bracket == *\"(\" ]]; then\n            correct_bracketing=\"\
+    true\"\n        fi\n    done\n    echo \"$correct_bracketing\"", "  # $2 is an\
+    \ unquoted string\n  # The first bracket is the second char\n  # $2 is the second\
+    \ char\n  # If $2 is (, return the string \"true\"\n  # If $2 is ), return the\
+    \ string \"false\"\n  # If $2 is the end of the string, return false.\n  # If\
+    \ the next char is not a closing bracket, return the string \"false\"\n  # If\
+    \ the next char is not a opening bracket, return the string \"false\"\n  # If\
+    \ next char is the closing bracket, return the string \"false\"\n  # If next char\
+    \ is the opening bracket, return the string \"false\"\n  \n  case $2 in\n  \"\
+    (\" ) echo \"true\"; return 0;;\n  \")\" ) echo \"false\"; return 0;;\n  *) echo\
+    \ \"false\"; return 0;;\n  esac", "\tlocal bracket_str=\"$1\"\n\tlocal bracket_list=\"\
+    ()\"\n\tlocal bracket_count=0\n\tlocal i\n\tlocal output\n\n\toutput=$(echo $bracket_str\
+    \ | tr \",\" \"\\n\")\n\tfor ((i=0; i<${#output}; i++)); do\n\t\tbracket_str=\"\
+    ${bracket_str//${output[i]}/}\"\n\t\tbracket_count=$((${bracket_count}+1))\n\t\
+    done\n\n\tif [[ ${bracket_count} == ${#bracket_list} ]]; then\n\t\treturn 1\n\t\
+    else\n\t\treturn 0\n\tfi", "  local brackets=\"$1\"\n  # Count all the opening\
+    \ brackets\n  local n=0\n  local s=\"\"\n  for c in $brackets; do\n    ((n++))\n\
+    \    if [[ $c == \"]\" ]]; then\n      ((n--))\n    fi\n    s=\"$s$c\"\n  done\n\
+    \  # If there are any opening brackets left, return false\n  if (( n )); then\n\
+    \    return \"false\"\n  fi\n  # If there are no opening brackets, return true\n\
+    \  [[ \"$s\" == \"$brackets\" ]]", "    local brackets=$1\n    local opens=$(echo\
+    \ $brackets | awk -F \"()\" '{ print $1 }')\n    local closes=$(echo $brackets\
+    \ | awk -F \"()\" '{ print $2 }')\n    local correct=false\n\n    for (( i=1;\
+    \ i<=${#opens}; i++ )); do\n        if [[ -z \"${closes[$i]}\" ]]; then\n    \
+    \        correct=true\n            break\n        fi\n    done\n\n    return $correct",
+  "    local brackets\n    brackets=$1\n    echo $brackets | sed \"s/\\\\(.*\\\\)/\\\
+    \\\\\\\\\\\\\\\\\\1/g\"\n    echo -n -e \"s/^/${brackets}/g\"", "  local bracket_string=$1\n\
+    \  # make sure it contains at least one character\n  if [[ ${#bracket_string}\
+    \ -lt 2 ]] ; then\n    echo \"${bracket_string} not well formed\"\n    return\
+    \ 0\n  fi\n  # make sure there are no unpaired brackets\n  local open_brackets=0\n\
+    \  local close_brackets=0\n  local bracket_count=`echo \"${bracket_string}\" |\
+    \ tr \")\" \"\\n\" | grep \"(\"| wc -l`\n  if [[ ${bracket_count} -lt 2 ]] ; then\n\
+    \    echo \"${bracket_string} not well formed\"\n    return 0\n  fi\n  # iterate\
+    \ through string one character at a time\n  for (( c=0; c<${#bracket_string};\
+    \ c++ ))\n  do\n    local bracket_char=${bracket_string:${c}:1}\n    if [[ $bracket_char\
+    \ == \"(\" ] ; then\n      open_brackets+=1\n    elif [[ $bracket_char == \")\"\
+    \ ]] ; then\n      close_brackets+=1\n    fi\n  done\n  if (( close_brackets -lt\
+    \ open_brackets )) ; then\n    echo \"${bracket_string} not well formed\"\n  \
+    \  return 0\n  else\n    return 1\n  fi", "    local bracket_map=()\n    local\
+    \ in_string=$1\n    local bracket_count=0\n    while [ $in_string ]\n    do\n\
+    \        bracket_count=$(($bracket_count + 1))\n        bracket_map[$bracket_count]=$in_string\n\
+    \        bracket_string=\"${in_string}\"\n        bracket_string=\"${bracket_string%?}\"\
+    \n        bracket_string=\"${bracket_string#*\\(}\"\n        in_string=\"${in_string#*\\\
+    (}\"\n        in_string=\"${in_string%\\)}\"\n        in_string=\"${in_string#*\\\
+    )}\"\n        in_string=\"${in_string%\\}}\"\n        in_string=\"${in_string#*\\\
+    }}\"\n        in_string=\"${in_string%\\}%\"\n        in_string=\"${in_string#*\\\
+    %\"\n        in_string=\"${in_string%\\}}\"\n        done\n    if [ $bracket_count\
+    \ = 0 ]; then\n        return 1\n    else\n        return 0\n    fi", "    local\
+    \ opening_brackets=\"$1$1\"\n    local closing_brackets=\"$2)\"\n    for opening\
+    \ in \"${opening_brackets}\" ; do\n        for closing_bracket in \"${closing_brackets}\"\
+    \ ; do\n            if [ \"$opening\" != \"$closing_bracket\" ] ; then\n     \
+    \           return 1\n            fi\n        done\n    done\n    return 0", " \
+    \   local bracket_string=$1\n    local count=0\n    local opening_count=0\n  \
+    \  local opening_string=\"\"\n    local opening_string_count=0\n    for c in ${bracket_string}\n\
+    \    do\n        if [ \"${c}\" == \"(\" ]\n        then\n            opening_string=\"\
+    ${opening_string}${c}\"\n            opening_count=$((${opening_count}+1))\n \
+    \       else\n            if [ \"${c}\" == \")\" ]\n            then\n       \
+    \         if [ \"${opening_count}\" -eq \"${opening_string_count}\" ]\n      \
+    \          then\n                    echo \"true\"\n                    return\
+    \ 0\n                else\n                    echo \"false\"\n              \
+    \      return 1\n                fi\n            else\n                echo \"\
+    false\"\n                return 1\n            fi\n        fi\n        opening_string_count=$((${opening_string_count}+1))\n\
+    \    done", "  local brackets=$1\n  local str=\"${2}\"\n  local open=0\n  local\
+    \ close=0\n  local correct=true\n  local len=0\n  local i=0\n  while [[ ${#str}\
+    \ -gt 0 ]]; do\n    case ${str:0:1} in\n      ((\"*)\n        (.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n      ((.))\n\
+    \      ((.))\n      ((.))\n      ((.))\n      ((.))", "    local brackets=$1\n\
+    \    local opening=$(expr match \"${brackets}\" '^\\(' '\\)')\n    local closing=$(expr\
+    \ match \"${brackets}\" '^\\(' '\\)') - $1\n    (( $closing == 0 ))", "    local\
+    \ _opening_brackets=$1 _closing_brackets=$(echo $2 | sed 's/\\([()]\\)/\\1/g')\n\
+    \    local _num_opening_brackets=${#_opening_brackets}\n    local _num_closing_brackets=${#_closing_brackets}\n\
+    \    if [ _num_opening_brackets -eq 0 -o _num_closing_brackets -eq 0 ]; then\n\
+    \        echo \"false\"\n    else\n        local _num_pairs=$((_num_opening_brackets\
+    \ - _num_closing_brackets))\n        local _equals=0\n        local _last_bracket=0\n\
+    \        while [ $_equals -le $((_num_opening_brackets - _num_closing_brackets))\
+    \ ]; do\n            if [ $_last_bracket -eq 0 ]; then\n                if [ \"\
+    $_closing_brackets\" == \"${_opening_brackets}\" ]; then\n                   \
+    \ echo \"true\"\n                else\n                    echo \"false\"\n  \
+    \              fi\n            else\n                if [ \"$_opening_brackets\"\
+    \ == \"${_closing_brackets}\" ]; then\n                    echo \"true\"\n   \
+    \             else\n                    echo \"false\"\n                fi\n \
+    \           fi\n            _last_bracket=$((_last_bracket + 1))\n           \
+    \ _equals=$((_equals + 1))\n        done\n    fi", "    if [[ \"$1\" =~ ([(]|([)]|{]|{[})|([()]|[(])|([{}]|{[())|([(]]))\
+    \ ]]; then\n        echo true\n    else\n        echo false\n    fi", "  local\
+    \ brackets=$1\n  local openings=$(echo -n $brackets | cut -d= -f1)\n  local closings=$(echo\
+    \ -n $brackets | cut -d= -f2)\n  local opening_count=0\n  local closing_count=0\n\
+    \  for opening in $openings; do\n    ((opening_count++))\n    if [ \"$opening\"\
+    \ == \"$closings\" ]; then\n      ((closing_count++))\n    fi\n  done\n  if ((opening_count\
+    \ != closing_count)); then\n    return false\n  else\n    return true\n  fi",
+  "    local brackets=${1}\n    local s=${#brackets}\n    for (( i = 1; i <= s; i++\
+    \ )); do\n        local c=${brackets:i:1}\n        local expected=${brackets:i:1}\n\
+    \        if [[ \"$c\" != \"$expected\" ]]; then\n            echo \"false\"\n\
+    \            echo \"brackets is not a correct form:\"\n            echo \"$brackets\"\
+    \n            return 1\n        fi\n    done\n    echo \"true\"\n    return 0",
+  "    local b=$1\n    local c=\"(())\"\n    for (( i=1; i<= ${#b}; i++ )); do\n \
+    \       if [[ \"${b[$i]}\" != \"${b[$i - 1]}\" ]]; then\n            echo \"false\"\
+    \n            return 1\n        fi\n    done\n    echo \"true\"", "    local brackets=\"\
+    ${1}\"\n    local stack=\"\"\n    local result=\"false\"\n    for c in ${brackets};\
+    \ do\n        if [[ \"$c\" =~ (.)\\ ]]; then\n            if [ \"$stack\" != \"\
+    \" ]; then\n                if [ \"$stack\" == \"${BASH_REMATCH[1]}\" ]; then\n\
+    \                    stack=\"${BASH_REMATCH[1]}\"\n                else\n    \
+    \                result=\"false\"\n                fi\n            else\n    \
+    \            stack=\"${BASH_REMATCH[1]}\"\n            fi\n        elif [ \"$stack\"\
+    \ != \"\" ]; then\n            if [ \"$stack\" == \"${BASH_REMATCH[1]}\" ]; then\n\
+    \                stack=\"\"\n                result=\"true\"\n            fi\n\
+    \        fi\n    done\n    echo \"$result\"", "\tlocal brackets=\"${1}\"\n\n\t\
+    local braces_found=0\n\tlocal parens_found=0\n\n\tlocal result=0\n\n\tfor ((i=0;\
+    \ i < ${#brackets}; i++)); do\n\t\tlocal curr=\"${brackets}\"\n\t\tlocal prev=\"\
+    ${brackets}\"\n\n\t\t(( i >0 )) && prev=\"${prev}${brackets}\"\n\n\t\tcase \"\
+    ${prev}\" in\n\t\t\t'('|')') (( parens_found++ ))\n\t\t\t\t;;\n\t\t\t(*) braces_found=1\n\
+    \t\t\t\t;;\n\t\tesac\n\n\t\tif (( i == 0 )); then\n\t\t\tif [[ ${braces_found}\
+    \ -eq 1 ]]; then\n\t\t\t\tresult=1\n\t\t\telif [[ ${parens_found} -eq 1 ]]; then\n\
+    \t\t\t\tresult=0\n\t\t\tfi\n\t\telse\n\t\t\tif [[ ${braces_found} -eq 1 ]]; then\n\
+    \t\t\t\tresult=1\n\t\t\telif [[ ${parens_found} -eq 1 ]]; then\n\t\t\t\tresult=0\n\
+    \t\t\telif [[ ${prev} != ')' ]]; then\n\t\t\t\tresult=0\n\t\t\tfi\n\t\tfi\n\n\t\
+    \t(( brackets=${prev} ))\n\tdone\n\n\techo \"${result}\"", "    local brackets=\"\
+    ${1}\"\n    for bracket in \"$brackets\"; do\n        local left=${bracket:0:1}\n\
+    \        local right=${bracket:1:1}\n        if [ \"$right\" == \"$left\" ]; then\n\
+    \            continue\n        fi\n        if [ -z \"$left\" ]; then\n       \
+    \     echo false >&2\n            return 0\n        fi\n        if [ -z \"$right\"\
+    \ ]; then\n            echo true >&2\n            return 0\n        fi\n    done\n\
+    \    echo false >&2\n    return 0", "  bracketing=\"\"\n  for x in $1;do\n   \
+    \ bracketing+=\"(${x}${bracketing})\";done\n  bracketing=\"${bracketing%})}\"\n\
+    \  if [[ ${bracketing} == \"\" ]]; then\n    echo \"true\"\n  else\n    echo \"\
+    false\"\n  fi", "  declare -n string=\"${1}\"\n  local -n match=\"$(expr match\
+    \ \"${string}\" '\\(' ')'\n  if [ \"${match}\" != \"0\" ] ; then\n    return 1\n\
+    \  fi\n  local -n open=\"$(expr subst \")\" \"\\\\(\" <<< \"${string}\")\"\n \
+    \ local -n close=\"$(expr subst \")\" \"\\\\(\" <<< \"${open}\\\\)\")\"\n  if\
+    \ [ \"$(expr subst \"\\\\(\" \" \" <<< \"${close}\")\" = \"${string}\" ] ; then\n\
+    \    return 0\n  fi\n  return 1", "    local string bracket brackets\n    brackets=\"\
+    $(echo $1 | sed \"s/\\([()]*\\)/\\(\\1\\)\\1/\")\"\n    if [ -z \"$brackets\"\
+    \ ]; then return 1; fi\n    string=\"$1\"\n    while\n        [[ \"$string\" =~\
+    \ $brackets ]]\n    do\n        string=\"${string//$brackets/}\"\n    done\n \
+    \   echo $string | grep -q \"}\"", "  brackets=$1\n  test \"$brackets\" == \"\"\
+    \ || [ \"$brackets\" == \"(\" ] || [ \"$brackets\" == \")\" ]", "    local brackets=$1\n\
+    \    local brackets_count=0\n    local count=0\n    while [ $1 ]; do\n       \
+    \ if [[ $1 =~ ($brackets$) ]]; then\n            brackets_count=$(expr ${brackets_count}\
+    \ + 1)\n        elif [[ $1 =~ ($brackets${brackets_count}) ]]; then\n        \
+    \    brackets_count=$(expr ${brackets_count} + 2)\n        else\n            brackets_count=$(expr\
+    \ ${brackets_count} + 1)\n        fi\n        brackets=$(brackets ${brackets_count})\n\
+    \        (( count++ ))\n        shift\n    done\n    [[ \"${brackets_count}\"\
+    \ -eq \"${count}\" ]]", "\tlocal brackets=\"${1//[\\(,]}\"\n\tlocal count=$(expr\
+    \ $brackets - '()')\n\t[ \"$count\" -gt 0 ]", "  echo \"$1\" | grep -P -E '^([^(]+)(\\\
+    ([^(]+\\)(\\([^(]+\\))*)+$'", "    local brackets=\"$1\"\n    local num_opening=0\n\
+    \    local num_closing=0\n    while [[ $1 =~ ([^${brackets}]+) ]]; do\n      \
+    \  local current=\"${BASH_REMATCH[1]}\"\n        local bracket_closed=$(( ${num_opening}\
+    \ > 0 && num_closing > 0 && current==\"${brackets}\"))\n        (( num_opening++\
+    \ ))\n        num_closing=$(( num_closing + bracket_closed ))\n        local remaining=$((\
+    \ ${#1} - ${#current} ))\n        if [[ $remaining -gt 0 ]]; then\n          \
+    \  echo \"false\"\n            return\n        fi\n        1\n    done\n    echo\
+    \ \"true\"", "    local brackets=\"$1\"\n    local len=\"${#brackets}\"\n    local\
+    \ i=0\n    while [ $i -lt \"$len\" ]; do\n        if [ \"$(expr \"$i\" \"+\" \"\
+    1\")\" -eq \"$i\" ]; then\n            echo \"false\"\n            return 1\n\
+    \        fi\n        if [[ \"$brackets\" == \"\\($brackets\\)\" ]]; then\n   \
+    \         echo \"true\"\n            return 1\n        fi\n        (( i++ ))\n\
+    \    done\n    echo \"false\"\n    return 1", "    local string=$1\n    local\
+    \ correct=\"\"\n    local bracket=\" \"\n    local brackets=$(echo ${string} |\
+    \ sed -e 's/\\(.*\\)/\\1/g' | sed -e 's/^\\((.*)\\)\\(.*\\)/\\1 \\2/g' | sed -e\
+    \ 's/^\\(.*\\)\\(.*\\)\\(.*\\)/\\1 \\2 \\3/g')\n    local opening=\" \"\n\n  \
+    \  # iterate through the brackets\n    for (( index = 0; index < ${#brackets};\
+    \ index++ )); do\n        bracket=${brackets:${index}:1}\n        if [[ \"${bracket}\"\
+    \ == \"(\" ]] || [[ \"${bracket}\" == \")\" ]]; then\n            opening+=\"\
+    ${bracket}\"\n        else\n            if [[ \"${opening}\" != \"\" ]]; then\n\
+    \                correct+=\"${opening}\"\n                opening=\"\"\n     \
+    \       fi\n            correct+=\"${bracket}\"\n        fi\n    done\n\n    if\
+    \ [[ \"${opening}\" != \"\" ]]; then\n        correct+=\"(${opening})\"\n    fi\n\
+    \n    local opening_count=\"$(echo \"${correct}\" | grep -Ev \"(()\\s)\" | wc\
+    \ -l)\"\n\n    if [[ \"${opening_count}\" == 0 ]]; then\n        return \"false\"\
+    \n    elif [[ \"${opening_count}\" == 1 ]]; then\n        return \"true\"\n  \
+    \  else\n        return \"false\"\n    fi", "  if [[ \"$1\" =~ (\\(|\\)) ]]; then\n\
+    \    local closing=${1%%\\($1\\)}\n    local opening=${1#*\\($1\\)}\n    if [[\
+    \ \"$closing\" == \"$opening\" ]]; then\n      echo \"true\"\n    else\n     \
+    \ echo \"false\"\n    fi\n  else\n    echo \"true\"\n  fi", "  local brackets=\"\
+    ${1}\"\n  [[ \"${brackets:(-1)}\" != \")\" ]] && echo \"false\" || echo \"true\"",
+  "    local string=\"$1\"\n    shift\n    local brackets=\"${1//[(]/}${1//[)]/}\"\
+    \n    local result\n    for character in $string; do\n        if [[ \"$brackets\"\
+    \ =~ \"${character}\" ]]; then\n            result=\"true\"\n        else\n  \
+    \          result=\"false\"\n        fi\n    done\n    echo \"$result\"", "  local\
+    \ bracket_string=$1\n  local bracket_count=0\n  local bracket_string2=\"\"\n \
+    \ while [ \"$bracket_string\" != \"\" ]; do\n    if [ \"$bracket_count\" -lt 2\
+    \ ]; then bracket_string2=\"$bracket_string\"; else bracket_string2=\"$bracket_string$bracket_string\"\
+    ; fi\n    if [ \"$bracket_count\" -eq 2 ]; then bracket_string=\"$bracket_string2\"\
+    ; else bracket_string=\"$bracket_string$bracket_string2\"; fi\n    bracket_count=`expr\
+    \ $bracket_count + 1`;\n    bracket_string=`expr \"$bracket_string\" : '\\(.*\\\
+    )'`;\n  done\n  if [ \"$bracket_count\" -ne 1 ]; then return 1; else return 0;\
+    \ fi", "    local string=\"$1\"\n    local brackets=\"${string//[\\(\\)]}\"\n\
+    \    local bracketcount=\"$(echo \"${brackets}\" | tr \",\" \"\\n\" | sort | uniq\
+    \ | wc -l)\"\n    if [[ \"${bracketcount}\" -eq 0 ]]; then\n        echo \"false\"\
+    \n    else\n        echo \"true\"\n    fi", "  local brackets=\"${1}\"\n  local\
+    \ bracket_count=\"$(echo $brackets | wc -w)\"\n  local in_quotes=\"\"\n  local\
+    \ bracket_open=\"$(echo $brackets | grep -w '(')\"\n  local bracket_close=\"$(echo\
+    \ $brackets | grep -w ')')\"\n\n  # make sure every bracket's close is a bracket's\
+    \ open\n  if [ ${#bracket_open} -eq 0 ]; then return 0; fi\n  if [ ${#bracket_close}\
+    \ -eq 0 ]; then return 1; fi\n  if [ ${#bracket_open} -ne ${#bracket_close} ];\
+    \ then return 0; fi\n\n  local num_opening=\"$(echo $bracket_open | wc -w)\"\n\
+    \  local num_closing=\"$(echo $bracket_close | wc -w)\"\n  local in_closing_bracket=0\n\
+    \  local in_opening_bracket=0\n  local num_opened=\"$(echo $num_opening | cut\
+    \ -d' ' -f 1)\"\n  local num_closed=\"$(echo $num_closing | cut -d' ' -f 1)\"\n\
+    \n  # loop through brackets and determine if they are open/close\n  for ((i=1;\
+    \ i<=$num_opening; i++))\n  do\n    # loop through brackets and determine if they\
+    \ are open/close\n    for ((j=1; j<=num_closing; j++))\n    do\n      if [ \"\
+    ${bracket_open:$i:1}\" == \"${bracket_close:$j:1}\" ]\n      then\n        # found\
+    \ a matching pair of brackets\n        ((in_closing_bracket+=1)) # increment closing\
+    \ bracket\n      else\n        # not a matching pair of brackets\n        ((in_opening_bracket+=1))\
+    \ # increment opening bracket\n      fi\n    done\n  done\n\n  if [ \"$num_opening\"\
+    \ -eq \"$num_closed\" ] #all brackets are closed\n  then\n    # this bracket is\
+    \ correct\n    if [ \"$in_opening_bracket\" -eq \"$in_closing_bracket\" ] #no\
+    \ matching pair of brackets\n    then\n      # this bracket is correct\n     \
+    \ echo $brackets\n    else\n      # this bracket is incorrect\n      echo \"false\"\
+    \n    fi\n  else\n    # this bracket is incorrect\n    echo \"true\"\n  fi", " \
+    \ # if brackets string is null, return false\n  local brackets=${1:-\"()\"}\n\
+    \  if [[ \"$brackets\" == \"\" ]]; then\n    echo \"false\"\n    return\n  fi\n\
+    \n  # create a stack of brackets\n  local bracketstack=()\n  # add brackets to\
+    \ stack\n  local bracket_count=0\n  local bracket_match=0\n  local opening_bracket=''\n\
+    \  local closing_bracket=''\n  local bracket_type=\"\"\n  # check if each character\
+    \ in brackets is balanced\n  for bracket in $brackets; do\n    if [[ $bracketstack\
+    \ == ()* ]]; then\n      echo \"false\"\n      return\n    fi\n    bracket_count=$((bracket_count\
+    \ + 1))\n    if [[ $bracket = ${bracketstack[-1]} ]]; then\n      bracket_match=$((bracket_match+1))\n\
+    \    else\n      bracketstack+=($bracket)\n    fi\n    if [[ $bracket_match ==\
+    \ \"$bracket_count\" ]]; then\n      bracketstack+=($bracket)\n      bracket_type=$bracketstack\n\
+    \    fi\n  done\n\n  if [[ $bracket_type != ()* ]]; then\n    echo \"false\"\n\
+    \    return\n  fi\n\n  local last_bracket=\"${bracketstack[-1]}\"\n  if [[ \"\
+    $last_bracket\" == \")\" || \"$last_bracket\" == \"}\" ]]; then\n    closing_bracket=\"\
+    $last_bracket\"\n  else\n    echo \"false\"\n    return\n  fi\n\n  local brackets_to_pop=()\n\
+    \  local i=-1\n  for bracket in ${bracketstack[@]}; do\n    if [[ \"$bracket\"\
+    \ == \"$opening_bracket\" ]]; then\n      brackets_to_pop+=($i)\n    fi\n    i=$((i+1))\n\
+    \  done\n\n  if [[ ${#brackets_to_pop[@]} -gt 0 ]]; then\n    for i in \"${brackets_to_pop[@]}\"\
+    ; do\n      bracketstack[$i]\n    done\n  fi\n\n  # pop the stack\n  while [[\
+    \ ${#bracketstack[@]} -gt 0 ]]; do\n    local bracket=${bracketstack[@]:(-1)}\n\
+    \    if [[ ${bracketstack[@]} =~ $opening_bracket ]]; then\n      bracketstack=(\"\
+    ${bracketstack[@]:0:$((${#bracketstack[@]} - 1))}\")\n    fi\n    bracketstack=(\"\
+    ${bracketstack[@]:$((${#bracketstack[@]} - 1))}\")\n  done\n\n  if [[ ${#bracketstack[@]} ",
+  "    local bracket_string=\"$1\"\n    local opening_bracket=\"(\"\n    local closing_bracket=\"\
+    )\" # assume always correct\n    local correction_result=\"false\"\n    local\
+    \ stack_bracket=\"[]\"\n    while [[ $bracket_string != \"\" ]]; do\n        local\
+    \ next=\"${bracket_string#*$opening_bracket}\"\n        local next_count=\"${#next}\"\
+    \n        if [[ $next_count == 0 ]]; then\n            correction_result=\"true\"\
+    \n            break\n        fi\n        stack_bracket=\"${stack_bracket}${opening_bracket}$next\"\
+    \n        bracket_string=\"${bracket_string#$next_count$closing_bracket}\"\n \
+    \       opening_bracket=\"${next}$closing_bracket\"\n    done\n    stack_bracket=\"\
+    ${stack_bracket}${closing_bracket}\"\n    stack_bracket=\"${stack_bracket}[]\"\
+    \n    if [[ ${#stack_bracket} != ${#bracket_string} ]]; then\n        correction_result=\"\
+    false\"\n    fi\n    echo \"$correction_result\"", "  brackets=$1\n  correct_bracketing2()\
+    \ {\n    local opening=$1\n    local closing=\"$2\"\n    if [[ \"$1\" == \"$closing\"\
+    \ ]]; then\n      return 0\n    else\n      return 1\n    fi\n  }\n  echo $((\
+    \ $(echo \"$brackets\" | grep -o '\\(' | tr -d '()' | tr -d '\\)' |\n       xargs\
+    \ -n1 correct_bracketing2 ) ))", "  if [[ $1 == ()* ]]; then\n    return true\n\
+    \  fi\n  if [[ $1 =~ (()(\\([^)]*\\)*)\\()* ]]; then\n    return true\n  fi\n\
+    \  return false", "    local string=\"$1\"\n    local brackets=\"${string//(//g}\"\
+    \n    local brackets=\"${brackets//)//g}\"\n    local brackets=\"${brackets//\\\
+    \"//g}\"\n    local brackets=\"${brackets//,//g}\"\n    local brackets=\"${brackets//\\\
+    \\//g}\"\n    local brackets=\"${brackets//'//g}\"\n    local brackets=\"${brackets//}//g}\"\
+    \n    local brackets=\"${brackets//]//g}\"\n    local brackets=\"${brackets//\\\
+    //g}\"\n    local brackets=\"${brackets//|//g}\"\n    local brackets=\"${brackets////g}\"\
+    \n\n    echo \"${brackets}\" > /dev/null", "  local brackets=\"$1\"\n  local opening=$(echo\
+    \ $brackets | grep -E \"\\(.*\\)\")\n  local closing=$(echo $brackets | grep -E\
+    \ \"\\)$\")\n  local count=0\n  local output\n  \n  output=$(echo $opening | while\
+    \ read x\n  do\n    count=$(( count + 1 ))\n    if [ $count -gt 2 ]; then\n  \
+    \    echo $x\n      break\n    fi\n  done)\n  \n  echo $(echo $output | wc -w)\n\
+    \  \n  if [ \"$count\" -ne \"$(( count - 1 ))\" ]; then\n    return 1\n  else\n\
+    \    return 0\n  fi", "  local brackets=\"${1}\"\n  local open_brackets=\"()\"\
+    \n  local close_brackets=\"${open_brackets})\"\n  local correct_brackets=0\n \
+    \ local i\n  local last_bracket\n  local open_count\n  local close_count\n  local\
+    \ bracket_count\n  for i in \"${bracket_count}\"; do\n    local j\n    bracket_count=$((bracket_count\
+    \ - 1))\n    last_bracket=${close_brackets:$((i - 1))}\n    open_count=$((close_brackets.split[${i}][0]))\n\
+    \    close_count=$((open_brackets.split[${i}][${open_count}]))\n    if [ ${close_count}\
+    \ -eq ${open_count} ]; then\n      correct_brackets=$((correct_brackets + 1))\n\
+    \    else\n      correct_brackets=$((correct_brackets + 0))\n    fi\n  done\n\
+    \  if [ \"${correct_brackets}\" -eq \"${bracket_count}\" ]; then\n    echo \"\
+    true\"\n  else\n    echo \"false\"\n  fi", "    local bracket_string=\"$1\"\n\
+    \    local opening_brackets=$(echo $bracket_string | grep -o ')')\n    local closing_brackets=$(echo\
+    \ $bracket_string | grep -o '(')\n    for bracket in $opening_brackets; do\n \
+    \       local count=$(echo \"$bracket_string\" | grep -o \"^${bracket}$\" | wc\
+    \ -l)\n        [ $count -eq 0 ] && echo \"false\" && return 1\n    done\n    for\
+    \ bracket in $closing_brackets; do\n        local count=$(echo \"$bracket_string\"\
+    \ | grep -o \"^${bracket}$\" | wc -l)\n        [ $count -eq 0 ] && echo \"true\"\
+    \ && return 0\n    done", "  local s=''\n  local open='false'\n  local close='false'\n\
+    \  for c in $1; do\n    case $c in '('*) open='true'; close='false'; break ;;\n\
+    \      ')') open='false'; close='true'; break ;;\n      '[') open='false'; close='false';\
+    \ break ;;\n      ']') open='false'; close='false'; break ;;\n      *) open='false';\
+    \ close='false'; break ;;\n    esac\n    s=$s'$'$open'$'$close'\n  done\n  [ \"\
+    $open\" = 'true' ]\n  [ \"$close\" = 'true' ]\n  [ \"$s\" = '' ]", "  brackets=\"\
+    $(echo \"$1\" | sed -n -e 's/^\\(\\([a-zA-Z0-9]*\\)\\)$/\\1/p')\"\n  brackets=\"\
+    $(echo \"$brackets\" | sed 's/\\(.*\\)$/\\\\\\1/g')\"\n  brackets=\"$(echo \"\
+    $brackets\" | sed 's/\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\\\\3/g')\"\
+    \n  brackets=\"$(echo \"$brackets\" | sed 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\\
+    )\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\n  brackets=\"$(echo\
+    \ \"$brackets\" | sed 's/\\\\\\(\\\\\\(\\(.*\\)\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\
+    \\\\(.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\n  brackets=\"$(echo \"$brackets\"\
+    \ | sed 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\
+    \\2\\\\\\3\\\\\\4/')\"\n  brackets=\"$(echo \"$brackets\" | sed 's/\\\\\\(\\\\\
+    \\(.*\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\
+    \n  brackets=\"$(echo \"$brackets\" | sed 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\\
+    )\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\n  brackets=\"$(echo\
+    \ \"$brackets\" | sed 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\\
+    (.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\n  brackets=\"$(echo \"$brackets\" | sed\
+    \ 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\
+    \\\\3\\\\\\4/')\"\n  brackets=\"$(echo \"$brackets\" | sed 's/\\\\\\(\\\\\\(.*\\\
+    )\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\\\\(.*\\)/\\\\\\1\\\\2\\\\\\3\\\\\\4/')\"\n  brackets=\"\
+    $(echo \"$brackets\" | sed 's/\\\\\\(\\\\\\(.*\\)\\)\\\\\\(.*\\)\\\\\\(.*\\)\\\
+    \\\\(.*", "    local opening_brackets=\"$1\"\n    local closing_brackets=\"$2\"\
+    \n    local brackets=\"\"\n    local true_brackets=\"\"\n    local false_brackets=\"\
+    \"\n    # for each opening bracket\n    for brackets in \"${opening_brackets//[([{()}]//}\"\
+    \n    do\n        # check if brackets are balanced\n        if [[ $brackets =\
+    \ \"(\" ]]\n        then\n            # if the next opening bracket is the last\
+    \ closing bracket,\n            # return true.\n            if [[ $closing_brackets\
+    \ = \"${brackets:0:1}\" ]]\n            then\n                true_brackets=\"\
+    $true_brackets $brackets\"\n            else\n                false_brackets=\"\
+    $false_brackets $brackets\"\n            fi\n        elif [[ $brackets = \")\"\
+    \ ]]\n        then\n            # if the next opening bracket is the last closing\
+    \ bracket,\n            # return false.\n            if [[ $closing_brackets =\
+    \ \"${brackets:0:1}\" ]]\n            then\n                false_brackets=\"\
+    $false_brackets $brackets\"\n            else\n                true_brackets=\"\
+    $true_brackets $brackets\"\n            fi\n        else\n            # if the\
+    \ next opening bracket is not the last closing bracket,\n            # return\
+    \ false.\n            if [[ $closing_brackets = \"${brackets:0:1}\" ]]\n     \
+    \       then\n                false_brackets=\"$false_brackets $brackets\"\n \
+    \           else\n                true_brackets=\"$true_brackets $brackets\"\n\
+    \            fi\n        fi\n    done\n    if [ \"$true_brackets\" != \"\" ]\n\
+    \    then\n        return true\n    else\n        return false\n    fi", "  local\
+    \ brackets=\"${1}\"\n  local opening=\"()\"\n  local closing=\"()\"\n\n  for char\
+    \ in $brackets; do\n    opening+=\".*-\"\n    closing+=\".*-\"\n  done\n\n  local\
+    \ escaped_brackets=$(echo \"$brackets\" | sed \"s,\\\\,\\\\\\\\,g\" | sed \"s,[),),g\"\
+    \ | sed \"s,\\($closing\\\\),$opening,g\")\n  local opening_escaped=$(echo \"\
+    $escaped_brackets\" | sed \"s,^,\\(,g\")\n  local closing_escaped=$(echo \"$escaped_brackets\"\
+    \ | sed \"s,$,\\)$,g\")\n  local opening_non_escaped=$(echo \"$opening_escaped\"\
+    \ | sed \"s,.,\\.,g\")\n  local closing_non_escaped=$(echo \"$closing_escaped\"\
+    \ | sed \"s,.,\\.,g\")\n  local correct_brackets=$(echo \"$opening_non_escaped$closing_non_escaped\"\
+    \ | sort | uniq -d)\n\n  echo \"$correct_brackets\" | xargs -n 1 sh -c \"\n  for\
+    \ i in \\$(seq 0 $((${#brackets}-1))); do\n    local opening_n=\\${opening::$i}\n\
+    \    local closing_n=\\${closing::$i}\n    if [ $opening_n != $closing_n ]; then\n\
+    \      echo false\n      return 1\n    fi\n  done\n  echo true\n  \"", "  local\
+    \ brackets=\"${1}\"\n  # return true if the string has exactly one \"(\" and \"\
+    )\"\n  if [[ \"${#brackets}\" -ne 1 ]]; then\n    return false\n  fi\n  # return\
+    \ true if every opening bracket has a corresponding closing bracket.\n  local\
+    \ opening_brackets=\"()\"\n  local closing_brackets=\"${brackets//${opening_brackets}/}\"\
+    \n  if [[ ${#closing_brackets} -ne 0 ]]; then\n    return true\n  else\n    return\
+    \ false\n  fi", "  local bracket_count=0\n  local num_bracket_pairs=$(echo \"\
+    $1\" | awk '{print length($0)}')\n  local brackets=\"$(echo $1 | awk -F\")\" '{print\
+    \ length($0)}')\"\n\n  echo \"$1\" | awk -F\")\" 'BEGIN{i=0} {\n    if ($i ==\
+    \ 0) {\n      bracket_count++\n    }\n    if ($0 != \"(\") {\n      printf(\"\
+    %s\\n\", $0)\n    }\n    i++\n  }'\n  echo \"$1\" | awk -F\")\" 'BEGIN{i=0} {\n\
+    \    if ($i == 0) {\n      bracket_count++\n    }\n    if ($0 != \")\") {\n  \
+    \    printf(\"%s\\n\", $0)\n    }\n    i++\n  }'\n  echo \"$1\" | awk -F\")\"\
+    \ 'BEGIN{i=0} {\n    if ($i == 0) {\n      bracket_count++\n    }\n    if ($0\
+    \ != \"(\" || $0 != \")\") {\n      printf(\"%s\\n\", $0)\n    }\n    i++\n  }'\n\
+    \  echo \"$1\" | awk -F\")\" 'BEGIN{i=0} {\n    if ($i == 0) {\n      bracket_count++\n\
+    \    }\n    if ($0 != \"(()\" || $0 != \")()\") {\n      printf(\"%s\\n\", $0)\n\
+    \    }\n    i++\n  }'\n  echo \"$1\" | awk -F\")\" 'BEGIN{i=0} {\n    if ($i ==\
+    \ 0) {\n      bracket_count++\n    }\n    if ($0 != \"(()()\" || $0 != \")()()\"\
+    ) {\n      printf(\"%s\\n\", $0)\n    }\n    i++\n  }'\n  echo \"$1\" | awk -F\"\
+    )\" 'BEGIN{i=0} {\n    if ($i == 0) {\n      bracket_count++\n    }\n    if ($0\
+    \ != \"(()()()\" || $0 != \")()()()\") {\n      printf(\"%s\\n\", $0)\n    }\n\
+    \    i++\n  }'\n  echo \"$1\" | awk -F\")\" 'BEGIN{i=0} {\n    if ($i == 0) {\n\
+    \      bracket_count++\n    }\n    if ($0 != \"(()()()()\" || $0 != \")()()()()\"\
+    ) {\n      printf(\"%s\\n\", $0)\n    }\n    i++\n  }'\n  echo \"$1\" | awk -F\"\
+    )\" 'BEGIN{i=0} {\n    if ($i == 0) {\n      bracket_count++\n    }\n    if ($0\
+    \ != \"(()()()()()\" || $0 != \")()()()()()\") {\n      ", "    local opening_brackets=\"\
+    $(IFS=\"[({]\" read -r -d '' \"$1\")\"\n    local closing_brackets=\"$(IFS=\"\
+    [)}])\" read -r -d '' \"$1\")\"\n\n    if [[ $opening_brackets =~ ([({]\\$?[)}])*\
+    \ ]]; then\n        # we got an unbalanced closing bracket. Report the problem.\n\
+    \        echo \"$opening_brackets has an unbalanced closing bracket\"\n      \
+    \  return 1\n    elif [[ ! $opening_brackets =~ [({]\\$?[)}]*[)}] ]]; then\n \
+    \       # no unbalanced closing brackets\n        return 0\n    else\n       \
+    \ # we got an unbalanced opening bracket\n        echo \"$opening_brackets has\
+    \ an unbalanced opening bracket\"\n        return 1\n    fi", "  local bracket_string=\"\
+    ${1}\"\n  local correct=\"false\"\n  local opening_brackets=0\n  local closing_brackets=0\n\
+    \  local brackets_string=\"\"\n  for bracket in \"${bracket_string}\" ; do\n \
+    \   if [[ \"${bracket}\" = \")\" ]]; then\n      if [[ ${closing_brackets} -eq\
+    \ 0 ]]; then\n        correct=\"true\"\n        break\n      else\n        closing_brackets=0\n\
+    \      fi\n    elif [[ \"${bracket}\" = \"(\" ]]; then\n      if [[ ${opening_brackets}\
+    \ -eq 0 ]]; then\n        correct=\"true\"\n        break\n      else\n      \
+    \  opening_brackets=0\n      fi\n    elif [[ \"${bracket}\" == \")\" ]]; then\n\
+    \      closing_brackets=$((closing_brackets+1))\n    elif [[ \"${bracket}\" ==\
+    \ \"(\" ]]; then\n      opening_brackets=$((opening_brackets+1))\n    fi\n   \
+    \ brackets_string+=\"${bracket}\"\n  done\n  echo \"${brackets_string}\"", " \
+    \   local brackets=$1\n    local closed_brackets=$2\n\n    local opening_count=0\n\
+    \    local opening_stack=\"\"\n    local opening_brackets=\"\"\n\n    local opening_count=${#opening_stack}\n\
+    \    for (( i=1; i <= opening_count; i++ )); do\n        if [[ $opening_stack\
+    \ = \"${opening_brackets}\" ]]; then\n            return 1\n        fi\n\n   \
+    \     if [[ \"${opening_stack:i}\" == \"${brackets}\" ]]; then\n            opening_stack=\"\
+    ${opening_stack:i}\"\n            opening_count=$((opening_count - 1))\n     \
+    \       opening_brackets=\"${opening_stack:i}\"\n        fi\n    done", "    local\
+    \ brackets_str=\"$1\"\n    local bracket_stack=\"\"\n    local open_bracket=0\n\
+    \    local close_bracket=0\n    for (( i=0; i<${#brackets_str}; i++ )); do\n \
+    \       local c=${brackets_str:i:1}\n        if [[ \"$c\" == \"(\" ]];then\n \
+    \           open_bracket=$((open_bracket+1))\n        elif [[ \"$c\" == \")\"\
+    \ ]];then\n            close_bracket=$((close_bracket+1))\n        elif [[ \"\
+    $c\" == \"{\" ]];then\n            open_bracket=$((open_bracket+1))\n        elif\
+    \ [[ \"$c\" == \"}\" ]];then\n            close_bracket=$((close_bracket+1))\n\
+    \        elif [[ \"$c\" == \"[\" ]];then\n            open_bracket=$((open_bracket+1))\n\
+    \        elif [[ \"$c\" == \"]\" ]];then\n            close_bracket=$((close_bracket+1))\n\
+    \        fi\n        bracket_stack=\"$bracket_stack$c\"\n    done\n    if [[ $open_bracket\
+    \ -eq $close_bracket ]];then\n        return false\n    else\n        return true\n\
+    \    fi", "  local brackets=\"$1\"\n  # the variable \"$2\" stores the result\
+    \ of the previous subshell\n  # the variable \"$3\" stores the result of the previous\
+    \ subshell\n  # and so on...\n  local result # this is where the result will be\
+    \ stored\n  local counter # number of nested brackets\n  result=\"false\" # this\
+    \ is the result of the subshell\n  counter=0\n  while [ $counter -le ${#brackets}\
+    \ ] # loops through the opening bracket indexes\n    do\n      local opening_bracket\
+    \ # stores the index of the current opening bracket\n      opening_bracket=$((counter+1))\n\
+    \      # if the opening_bracket is equal to 1\n      if [[ ${brackets} == ${opening_bracket}*\
+    \ ]] # if the opening bracket index is followed by another opening bracket\n \
+    \     then\n        opening_bracket=$((opening_bracket+1))\n        counter=$((counter+1))\n\
+    \      else\n        counter=$((counter+1))\n      fi\n      # if the opening\
+    \ bracket index is followed by another opening bracket\n      if [[ ${brackets}\
+    \ == ${opening_bracket}* ]] # if the opening bracket index is followed by another\
+    \ opening bracket\n      then\n        opening_bracket=$((opening_bracket+1))\n\
+    \        counter=$((counter+1))\n      else\n        counter=$((counter+1))\n\
+    \      fi\n      if [ $opening_bracket -eq ${#brackets} ] # if the opening bracket\
+    \ index is equal to the closing bracket index\n      then\n        result=\"true\"\
+    \ # if the nested brackets are correct\n        break # breaks out of loop\n \
+    \     else\n        result=\"false\" # if the nested brackets are not correct\n\
+    \      fi\n    done\n  echo \"$result\"", "    local brackets=$1\n    local opened=$(expr\
+    \ \"$brackets\" : '\\(.*\\)')\n    local closed=$(expr \"$brackets\" : '.*\\)')\n\
+    \    local opened2\n    local closed2\n    local correct=true\n    while [ \"\
+    $correct\" == \"true\" ] && [ \"$opened\" != \"\" ] && [ \"$closed\" != \"\" ];\
+    \ do\n        opened2=$opened\n        closed2=$closed\n        brackets=$(expr\
+    \ \"$brackets\" : '\\(.\\).*\\)')\n        opened=$(expr \"$brackets\" : '\\(.*\\\
+    )')\n        closed=$(expr \"$brackets\" : '.*\\)')\n        if [ \"$opened\"\
+    \ != \"\" ] && [ \"$closed\" != \"\" ]; then\n            if [ \"$opened\" ==\
+    \ \"$closed\" ]; then\n                correct=false\n            else\n     \
+    \           if [ \"$opened2\" != \"\" ]; then\n                    if [ \"$opened2\"\
+    \ != \"$closed2\" ]; then\n                        correct=false\n           \
+    \         fi\n                fi\n            fi\n        fi\n    done\n    return\
+    \ $correct", "  local brackets=$1\n  local count=0\n  local openings=$(echo $brackets\
+    \ | cut -d')' -f1)\n  local closings=$(echo $brackets | cut -d')' -f2)\n  local\
+    \ bracketCount=0\n  local openingCount=0\n  local closingCount=0\n\n  for opening\
+    \ in $openings\n  do\n    closing=$closings[$openingCount]\n    bracketCount=$((\
+    \ bracketCount + 1 ))\n    openingCount=$(( openingCount + 1 ))\n    if [ \"$opening\"\
+    \ == \"$closing\" ]\n    then\n      count=$(( count + 1 ))\n    else\n      count=$((\
+    \ count + 0 ))\n    fi\n  done\n\n  if [ $count -eq $bracketCount ]\n  then\n\
+    \    return 0\n  else\n    return 1\n  fi", "  local bracket_pairs=(\"{\" \"}\"\
+    )\n  local paren_pairs=(\"(\" \")\")\n  local brackets=\"${bracket_pairs[*]}${paren_pairs[*]}\"\
+    \n  local brackets_count=${#brackets}\n  if [[ $brackets_count -gt 0 ]] ; then\n\
+    \    local pair=$(expr match \"${1}\" '[^'${brackets}']\\+')\n    if [[ ${pair}\
+    \ -eq 1 ]] ; then\n      echo \"false\"\n    else\n      echo \"true\"\n    fi\n\
+    \  else\n    echo \"true\"\n  fi", "    local brackets=\"${1}\"\n    local openings=0\n\
+    \    local closings=0\n    local is_balanced\n    local bracket_count\n    local\
+    \ balance\n    local bracket_pos\n    for (( i = 0; i < ${#brackets}; i++ ));\
+    \ do\n        local bracket=${brackets:i:1}\n        if [[ $bracket == \\\\ ]];\
+    \ then\n            # If the current character is a backslash, skip it.\n    \
+    \        bracket=${bracket:1}\n        fi\n        is_balanced=$(bracket_check\
+    \ \"${bracket}\")\n        if is_balanced; then\n            openings=$((openings\
+    \ + 1))\n        else\n            closings=$((closings + 1))\n        fi\n  \
+    \  done\n    bracket_count=$((openings + closings))\n    if [[ $openings == $closings\
+    \ ]]; then\n        balance=\"${brackets}\"\n    else\n        balance=\"(${brackets})\"\
+    \n    fi\n    if [[ $is_balanced == true ]]; then\n        if [[ $openings ==\
+    \ 0 ]]; then\n            return true\n        elif [[ $bracket_count == 1 ]];\
+    \ then\n            echo \"true\"\n        else\n            echo \"false\"\n\
+    \        fi\n    else\n        echo \"false\"\n    fi", "  local brackets=\"$1\"\
+    \n  local i\n  for i in $(seq 0 $((${#brackets}-1)) ) ; do\n    local j\n    for\
+    \ j in $(seq 0 $((${#brackets}-i))) ; do\n      [[ \"${brackets:j:j+i}\" = \"\
+    (\" ]] && return 1\n      [[ \"${brackets:j:j+i}\" = \")\" ]] && return 1\n  \
+    \  done\n  done\n  return 0", "    # we need a stack\n    local stack=\"()\" #\
+    \ default stack\n    for char in $1; do\n        if [[ $stack == *\"$char\"* ]];\
+    \ then\n            # no new bracket\n            stack=\"($stack)\"\n       \
+    \ elif  [[ $stack == *\\(* ]]; then\n            # we have a new opening bracket\n\
+    \            stack=\"($stack)\\$char\"\n        elif  [[ $stack == *\\)* ]]; then\n\
+    \            # we have a closing bracket\n            stack=\"$stack\\($char\"\
+    \n        else\n            # we were in an unmatched bracket\n            stack=\"\
+    $stack\\($char\"\n        fi\n    done\n    echo -n \"$stack\"", "    brackets=$1\n\
+    \    open_brackets=$(brackets \"$\")\n    close_brackets=$(brackets \"$(\")\n\
+    \    brackets_found=0\n    for (( i=0; i<${#open_brackets[@]}; i++ )); do\n  \
+    \      if (( \"${close_brackets[$i]}\" != \"${open_brackets[$i]}\" )); then\n\
+    \            brackets_found=1\n            break\n        fi\n    done\n    return\
+    \ $(brackets_found)", "  local brackets=$1\n  while [[ ${#brackets} -gt 0 ]];\
+    \ do\n    local opening=${brackets:0:1}\n    local closing=${brackets:1:1}\n \
+    \   if [[ \"${opening}\" != \"${closing}\" ]]; then\n      return 0\n    fi\n\
+    \    brackets=${brackets:2:${#brackets}}\n  done\n  return 1", "  local brackets=\"\
+    $1\"\n  local bracket_count=$2\n  local bracket_open=0\n  local bracket_closed=0\n\
+    \  for char in ${brackets}; do\n    if [ \"$bracket_open\" -eq \"$bracket_count\"\
+    \ ]; then\n      bracket_closed=1\n      bracket_open=0\n    elif [ \"$bracket_closed\"\
+    \ -eq \"1\" ]; then\n      bracket_open=1\n    fi\n  done\n  if [ \"$bracket_open\"\
+    \ -ne \"1\" ]; then\n    return 0\n  else\n    return 1\n  fi", "    local bracket_map\n\
+    \    bracket_map=\"[\"\n    local i\n    for ((i = 0; i < $1; i++)); do\n    \
+    \    bracket_map=\"${bracket_map}]|\"\n    done\n    bracket_map=\"${bracket_map}]\"\
+    \n    # reverse the string\n    local bracket_map_reversed\n    bracket_map_reversed=\"\
+    |[\"\n    local j\n    for ((j = 0; j < $((${#bracket_map} / 2)); j++)); do\n\
+    \        bracket_map_reversed=\"${bracket_map_reversed}]|\"\n    done\n    bracket_map_reversed=\"\
+    ${bracket_map_reversed}]\"\n    # if the reverse is good, compare the two strings\
+    \ to see if they match.\n    if echo \"${bracket_map}\" | egrep -q \"^${bracket_map_reversed}$\"\
+    ; then\n        return 1\n    else\n        return 0\n    fi", "  local brackets=$1\n\
+    \  for char in $brackets; do\n    (( $(expr index \"$brackets\" \"$char\") ))\n\
+    \  done\n  return $(( $? == 0 ))", "    local bracket_string=\"$1\"\n    local\
+    \ bracket_length=${#bracket_string}\n\n    local i\n    for (( i = 0; i < bracket_length;\
+    \ i++ )); do\n        if [[ ${bracket_string[i]} == \")\" ]]; then\n         \
+    \   echo \"false\"\n            return 0\n        fi\n    done\n\n    echo \"\
+    true\"\n    return 1", "  local brackets=\"$1\"\n  local bracket_count=\"$(echo\
+    \ \"$brackets\" | wc -l | tr -d '\\n')\"\n  for ((i=1; i <= $bracket_count; i++));\
+    \ do\n    if [[ \"$brackets\" =~ \\( ]] ; then\n      local next_bracket=\"$(echo\
+    \ \"$brackets\" | sed -n \"${i}p\")\"\n      if [[ \"$next_bracket\" =~ \\) ]]\
+    \ ; then\n        # found a matching closing bracket\n        echo \"true\"\n\
+    \        break\n      else\n        # no matching closing bracket, assume this\
+    \ one was an opening bracket.\n        echo \"false\"\n        break\n      fi\n\
+    \    elif [[ \"$brackets\" =~ \\) ]] ; then\n      local next_bracket=\"$(echo\
+    \ \"$brackets\" | sed -n \"${i}p\")\"\n      if [[ \"$next_bracket\" =~ \\( ]]\
+    \ ; then\n        # found a matching opening bracket\n        echo \"true\"\n\
+    \        break\n      else\n        # no matching opening bracket, assume this\
+    \ one was a closing bracket.\n        echo \"false\"\n        break\n      fi\n\
+    \    else\n      echo \"false\"\n      break\n    fi\n  done", "\tlocal brackets=$1\n\
+    \tlocal brackets_length=\"${#brackets}\"\n\tlocal opening_brackets\n\tlocal closing_brackets\n\
+    \tlocal opening_bracket\n\tlocal closing_bracket\n\tlocal bracket\n\n\topening_brackets=$(echo\
+    \ $brackets | sed -n \"s/^\\(\\([()].*\\)\\)\\(.\\)/\\1/p\")\n\tclosing_brackets=$(echo\
+    \ $brackets | sed -n \"s/^\\(\\([()].*\\)\\)\\(.\\)/\\2/p\")\n\tif [ \"${#opening_brackets}\"\
+    \ = \"${#closing_brackets}\" ]; then\n\t\treturn 0\n\telse\n\t\treturn 1\n\tfi",
+  "    local brackets=${1}\n    local bracket_match=true\n    local close_brackets=\n\
+    \    for bracket in $brackets; do\n        if [[ \"$bracket\" == \"(\"* ]]; then\n\
+    \            close_brackets=${close_brackets}\" \"$bracket\"\n        else\n \
+    \           bracket_match=false\n        fi\n    done\n    if [ \"$bracket_match\"\
+    \ == \"true\" ]; then\n        echo $close_brackets\n    else\n        echo 0\n\
+    \    fi", "    local brackets=$1\n    local result=false\n\n    for i in $brackets\n\
+    \    do\n        if [ $i != '(' ]\n        then\n            result=false\n  \
+    \          break\n        fi\n    done\n    for i in $brackets\n    do\n     \
+    \   if [ $i != '(' -a $i != ')' ]\n        then\n            result=true\n   \
+    \         break\n        fi\n    done", "  local brackets=$1\n  local last_char\n\
+    \  local count\n  local bracket\n  count=0\n  last_char=\"\"\n  for bracket in\
+    \ $brackets; do\n    if [[ $last_char == $bracket ]]; then\n      count=$(($count\
+    \ + 1))\n    else\n      if [[ -z \"$last_char\" ]]; then\n        count=$(($count\
+    \ + 1))\n      else\n        if [[ \"$count\" -gt 0 ]]; then\n          return\
+    \ 0\n        else\n          count=$(($count + 1))\n        fi\n      fi\n   \
+    \ fi\n    last_char=$bracket\n  done\n  if [[ \"$count\" -gt 0 ]]; then\n    return\
+    \ 0\n  else\n    return 1\n  fi", "  local brackets=\"$1\"\n  local open_brackets=\"\
+    (\"\n  local close_brackets=\")\"\n\n  local result=$(echo \"$brackets\" | grep\
+    \ -w \"${open_brackets}\" | grep -v -E \"$close_brackets\")\n  if [ -z \"$result\"\
+    \ ]; then return 1; else return 0; fi", "    local string=$1\n    local brackets=\"\
+    $2\"\n    local result=\"$?\"\n    if [ \"$result\" == \"0\" ] ; then\n      while\
+    \ :\n        do\n            if [ \"$result\" == \"0\" ] ; then\n            \
+    \    local opening_bracket=\"$(expr $string \\| sed 's/^\\(.*\\)$/\\1/')\"\n \
+    \               if [ \"$opening_bracket\" == \"()\" ] ; then\n               \
+    \     local closing_bracket=\"$(expr \\$string \\| sed 's/^\\(.*\\)$/\\1/')\"\n\
+    \                    if [ \"$closing_bracket\" == \"()\" ] ; then\n          \
+    \              result=\"0\"\n                        break\n                 \
+    \   else\n                        string=\"${string#${closing_bracket}}\"\n  \
+    \                  fi\n                else\n                    string=\"${string#${opening_bracket}}\"\
+    \n                fi\n            else\n                string=\"${string#$(expr\
+    \ \\$string \\| sed 's/^\\(.*\\)$/\\1/')}\"\n            fi\n        done\n  \
+    \  fi\n    local return_string=\"$(echo $string)\"\n    if [ \"$result\" == \"\
+    0\" ] ; then\n        if [ \"${return_string:(-1)}\" == \"()\" ] ; then\n    \
+    \        result=\"1\"\n        fi\n    else\n        if [ \"${return_string:(-1)}\"\
+    \ != \"(\" ] ; then\n            result=\"0\"\n        fi\n    fi\n    local brackets_string=\"\
+    $(echo $brackets)\"\n    local brackets_result_string=\"$(echo $result)\"\n  \
+    \  echo \"${brackets_result_string} <-> ${brackets_string} : ${return_string}\"",
+  "    local bracket_string=$1\n    local length=${#bracket_string}\n    local opening_count=0\n\
+    \    local closing_count=0\n    local opening_brackets=()\n    local closing_brackets=()\n\
+    \    local result\n    # go through every character in the string.\n    for ((\
+    \ i=0; i<length; i++ )); do\n        if [[ \"${bracket_string:i:1}\" = \"(\" ]\
+    \ ; then\n            opening_count=$((opening_count+1))\n            opening_brackets+=(\"\
+    ${bracket_string:i:1}\")\n        elif [[ \"${bracket_string:i:1}\" = \")\" ]]\
+    \ ; then\n            closing_count=$((closing_count+1))\n            closing_brackets+=(\"\
+    ${bracket_string:i:1}\")\n        else\n            opening_count=$((opening_count+1))\n\
+    \            closing_count=$((closing_count+1))\n        fi\n    done\n    if\
+    \ [ \"$opening_count\" -eq \"$closing_count\" ] ; then\n        result=\"true\"\
+    \n    else\n        result=\"false\"\n    fi\n    echo \"$result\"", "  local\
+    \ bracket_string=\"$1\"\n  local opening_brackets=$(echo $bracket_string | cut\
+    \ -d')' -f1)\n  local closing_brackets=$(echo $bracket_string | cut -d')' -f2)\n\
+    \  if [[ $opening_brackets == $closing_brackets ]]\n  then\n    # every opening\
+    \ bracket has an corresponding closing bracket.\n    echo \"true\"\n  else\n \
+    \   # there is an extra closing bracket.\n    echo \"false\"\n  fi", "  local\
+    \ brackets=\"$1\"\n  local last=\"-1\"\n  local result=\"false\"\n  for bracket\
+    \ in ${brackets}; do\n    if [[ $bracket = ${brackets[$last]} ]]; then\n     \
+    \ # found a closing bracket\n      last=$((last - 1))\n    else\n      # found\
+    \ a opening bracket\n      result=\"true\"\n    fi\n  done\n  echo $result", " \
+    \   local brackets=$1\n    while [[ \"$1\" =~ $brackets ]]; do\n        local\
+    \ _=$1\n        local opens=${1#\"$brackets\"}\n        local closes=${1%\"$opens\"\
+    }\n        if [[ \"$opens\" != \"$closes\" ]]; then\n            return false\n\
+    \        fi\n        shift\n    done\n    return true", "    local brackets=\"\
+    ${1//,/$'\\n'}\"\n    echo \"$brackets\" | grep -Eq \"\\(\\(.*\\)\\)\" || return\
+    \ 0", "  local brackets=$1\n  for (( i=0; i < ${#brackets}; i++ )); do\n    local\
+    \ char=${brackets:$i:1}\n    if [[ \"$char\" == \")\" && ${char:-1:1} != \"(\"\
+    \ ]]; then\n      printf \"false\\n\"\n      return 1\n    fi\n    if [[ \"$char\"\
+    \ == \"(\" && ${char:-1:1} != \")\" ]]; then\n      printf \"false\\n\"\n    \
+    \  return 1\n    fi\n  done\n  printf \"true\\n\"", "  local brackets=\"${1}\"\
+    \n  local length=\"${#brackets}\"\n  local last=\"${length}\"\n  local num=\"\"\
+    \n\n  for (( c=0; c<=last; c++ )); do\n    local curr=\"${brackets:$c:1}\"\n \
+    \   local next=\"${brackets:(c+$1):1}\"\n    if [[ \"$curr\" == \"$next\" ]];\
+    \ then\n      num=\"1\"\n    else\n      num=\"0\"\n    fi\n    if [[ \"$num\"\
+    \ == \"1\" ]]; then\n      (( c++ ))\n    fi\n  done\n\n  [[ \"$c\" -eq \"$last\"\
+    \ ]] && return 0\n  return 1", "    local brackets=\"$1\"\n    local opening=\"\
+    $(echo $brackets | awk '{print $1}')\"\n    local closing=\"$(echo $brackets |\
+    \ awk '{print $2}')\"\n    if [ \"$opening\" == \"$closing\" ]; then\n       \
+    \ echo \"true\"\n    else\n        echo \"false\"\n    fi", "  local brackets\n\
+    \  brackets=$(echo \"$1\" | sed -n -r 's/.*\\(([^)]+)\\).*/\\1/p')\n  [ $brackets\
+    \ != \"\" ]", "    local brackets=$1\n    local bracket_stack=\" \"\n    local\
+    \ open_brackets=0\n    while [[ $brackets ]]; do\n        local bracket=$brackets\n\
+    \        brackets=${brackets#?}\n        if [[ $brackets ]]; then\n          \
+    \  local bracket=$brackets\n            brackets=${brackets#?}\n            if\
+    \ [[ $bracket ]]; then\n                bracket_stack=\"$bracket_stack $bracket\"\
+    \n            else\n                local bracket=$brackets\n                brackets=${brackets#?}\n\
+    \                local closing_bracket=$bracket\n                while [[ $closing_bracket\
+    \ ]]; do\n                    closing_bracket=${closing_bracket#?}\n         \
+    \           if [[ $closing_bracket ]]; then\n                        bracket_stack=\"\
+    $bracket_stack $closing_bracket\"\n                    else\n                \
+    \        if [[ $open_brackets > 0 ]]; then\n                            bracket_stack=\"\
+    $bracket_stack $open_brackets\"\n                        else\n              \
+    \              return 1\n                        fi\n                    fi\n\
+    \                    open_brackets=$((open_brackets + 1))\n                done\n\
+    \            fi\n        fi\n    done\n    if [[ $bracket_stack != \" \" ]]; then\n\
+    \        return 1\n    else\n        return 0\n    fi", "    local brackets=$1\n\
+    \    local i\n    for (( i=0; i < ${#brackets}; i++ )); do\n        if [[ ${brackets:i:1}\
+    \ == ${brackets:(i+1):1} ]]; then\n            brackets=${brackets:0:i}\n    \
+    \    else\n            return false\n        fi\n    done\n    return true", " \
+    \ local brackets=\"${1}\"\n  local correct_bracketing=\"false\"\n\n  while [ ${#brackets}\
+    \ -gt 0 ]; do\n    local next_bracket=\"$brackets\"\n    local current_char=\"\
+    $(expr substr $next_bracket 0 1)\"\n    local next_char=\"$(expr substr $next_bracket\
+    \ 1 1)\"\n    if [ ${current_char} == \"(\" ]; then correct_bracketing=\"true\"\
+    ; elif [ ${current_char} == \")\" ] && [ ${next_char} == \"(\" ]; then correct_bracketing=\"\
+    true\"; elif [ ${current_char} == \")\" ] && [ ${next_char} == \")\" ]; then correct_bracketing=\"\
+    true\"; elif [ ${current_char} == \"(\" ]; then correct_bracketing=\"true\"; elif\
+    \ [ ${current_char} == \")\" ]; then correct_bracketing=\"true\"; elif [ ${next_char}\
+    \ == \"(\" ]; then correct_bracketing=\"true\"; elif [ ${next_char} == \")\" ];\
+    \ then correct_bracketing=\"true\"; elif [ ${next_char} == \"(\" ]; then correct_bracketing=\"\
+    true\"; elif [ ${next_char} == \")\" ]; then correct_bracketing=\"true\"; fi\n\
+    \    brackets=\"${next_bracket}\"\n  done\n\n  echo \"$correct_bracketing\"",
+  "  local brackets=''\n  local bracket=\n  local open=\n  local closed=\n  while\
+    \ read -r line; do\n    if [[ -z $line ]]; then\n      continue\n    fi\n    case\
+    \ \"$line\" in\n      \\')\n        closed=false\n        bracket+='\\''\n   \
+    \     ;;\n      \\')\n        closed=true\n        bracket+='\\''\n        ;;\n\
+    \      \\')\n        closed=true\n        bracket+='\\''\n        ;;\n      \\\
+    ')\n        closed=true\n        bracket+='\\''\n        ;;\n      \\')\n    \
+    \    closed=false\n        bracket+='\\''\n        ;;\n      \\(\n        open=false\n\
+    \        bracket+='('\n        ;;\n      \\(\n        open=true\n        bracket+='('\n\
+    \        ;;\n      \\(\n        open=true\n        bracket+='('\n        ;;\n\
+    \      \\(\n        open=true\n        bracket+='('\n        ;;\n      \\(\n \
+    \       open=false\n        bracket+='('\n        ;;\n      \\)\n        open=false\n\
+    \        bracket+='('\n        ;;\n      \\)\n        open=true\n        bracket+='('\n\
+    \        ;;\n      \\)\n        open=true\n        bracket+='('\n        ;;\n\
+    \      \\)\n        open=true\n        bracket+='('\n        ;;\n      \\)\n \
+    \       open=false\n        bracket+='('\n        ;;\n      *)\n        continue\n\
+    \        ;;\n    esac\n    if [[ \"$open\" == \"$closed\" ]]; then\n      continue\n\
+    \    elif [[ \"$closed\" == true ]]; then\n      break\n    elif [[ \"$open\"\
+    \ == true ]]; then\n      brackets='$bracket'\"$brackets\"'\\''\"$bracket\"\n\
+    \      bracket=\n      open=\n      closed=\n    fi\n  done\n  [[ \"$brackets\"\
+    \ != '' ]]", "  if [[ $1 = \"()\" ]]; then\n    return 1\n  fi\n  local brackets=${1}\n\
+    \  local num_open=0\n  local num_closed=0\n  local bracket_count=0\n  while [[\
+    \ $1 ]]; do\n    if [[ ${1:0:1} == \"(\" ]];then\n      num_open=$((num_open+1))\n\
+    \    fi\n    if [[ ${1:0:1} == \")\" ]];then\n      num_closed=$((num_closed+1))\n\
+    \    fi\n    bracket_count=$((bracket_count+1))\n    local remainder=$1\n    shift\n\
+    \    local remainder_count=$#\n    if [[ $remainder ]]; then\n      remainder=\"\
+    (${remainder})\"\n    fi\n    if [[ $num_open -eq $num_closed ]]; then\n     \
+    \ if [[ $num_open == 0 ]];then\n        return 1\n      fi\n      return 0\n \
+    \   fi\n    if [[ $remainder_count == 0 ]];then\n      if [[ $num_open == $num_closed\
+    \ ]]; then\n        return 0\n      fi\n      return 1\n    fi\n    if [[ $remainder_count\
+    \ == 1 ]];then\n      if [[ $remainder == \"(\" ]];then\n        return 1\n  \
+    \    fi\n      if [[ $remainder == \")\" ]];then\n        return 0\n      fi\n\
+    \      if [[ $remainder == ${brackets:0:1} ]];then\n        return 1\n      fi\n\
+    \      return 1\n    fi\n    shift\n    shift\n  done\n  return 1", "  local brackets=$1\n\
+    \  echo \"$brackets\" | grep '^\\(.*\\)$' > /dev/null\n  echo \"$brackets\" |\
+    \ grep '^\\(.\\).*$' > /dev/null\n  echo \"$brackets\" | grep '^\\(.\\).*\\(.*\\\
+    )$' > /dev/null\n  echo \"$brackets\" | grep '^\\(.\\).*\\(.*\\).*\\(.*\\)$' >\
+    \ /dev/null\n  echo \"$brackets\" | grep '^\\(.\\).*\\(.*\\).*\\(.*\\).*\\(.*\\\
+    )$' > /dev/null\n  echo \"$brackets\" | grep '^\\(.\\).*\\(.*\\).*\\(.*\\).*\\\
+    (.*\\).*\\(.*\\)$' > /dev/null", "  # $1 is a string\n  local bracket_count=0\n\
+    \  local bracket_stack=()\n  # brackets is a string of \"(\" and \")\".\n  # return\
+    \ true if every opening bracket has a corresponding closing bracket.\n  # if $1\
+    \ is empty, return true.\n  if [[ \"$1\" ]]\n  then\n    bracket_stack+=( \"$1\"\
+    \ )\n    bracket_count=1\n  else\n    while [[ \"$1\" ]]\n    do\n      bracket_stack+=(\
+    \ \"$1\" )\n      bracket_count=$(( bracket_count + 1 ))\n      shift\n    done\n\
+    \  fi\n  # if the count of opening brackets is odd, return false.\n  if [[ \"\
+    ${bracket_count%2}\" = \"1\" ]]\n  then\n    echo \"false\"\n    return 1\n  else\n\
+    \    echo \"true\"\n    return 0\n  fi", "  # Check for \"(\" and \")\"\n  local\
+    \ brackets=${1}\n  local opening_count=$(brackets | wc -w)\n  if [[ $opening_count\
+    \ -eq 1 ]]; then\n    if [[ ${opening_count} -eq ${brackets} ]]; then\n      return\
+    \ true\n    else\n      return false\n    fi\n  else\n    echo \"error: brackets\
+    \ not closed correctly.\"\n    echo \"brackets: $brackets\"\n    echo \"opening_count:\
+    \ $opening_count\"\n    return 1\n  fi", "\tlocal brackets=\"${1}\"\n\tlocal result=0\n\
+    \tlocal open_stack\n\tlocal closed_stack\n\tlocal i\n\tlocal len\n\tlocal open_bracket\n\
+    \tlocal close_bracket\n\tfor ((i=1; i<=${#brackets}; i++)); do\n\t\tif [ ${brackets:i:i}\
+    \ == \")\" ]; then\n\t\t\tclosed_stack=\"${closed_stack}${brackets:i:i}\"\n\t\t\
+    elif [ ${brackets:i:i} == \"(\" ]; then\n\t\t\topen_stack=\"${open_stack}${brackets:i:i}\"\
+    \n\t\telse\n\t\t\tif [ -z \"${closed_stack}\" ]; then\n\t\t\t\tresult=0\n\t\t\t\
+    \tbreak\n\t\t\telif [ -z \"${open_stack}\" ]; then\n\t\t\t\tif [[ \"${brackets:i:i}\"\
+    \ == \"(\" ]]; then\n\t\t\t\t\topen_bracket=${brackets:i:i}\n\t\t\t\telif [[ \"\
+    ${brackets:i:i}\" == \")\" ]]; then\n\t\t\t\t\tclose_bracket=${brackets:i:i}\n\
+    \t\t\t\tfi\n\t\t\telif [[ \"${open_bracket}\" == \"${brackets:i:i}\" ]]; then\n\
+    \t\t\t\topen_bracket=\"${brackets:i:i}\"\n\t\t\telif [[ \"${close_bracket}\" ==\
+    \ \"${brackets:i:i}\" ]]; then\n\t\t\t\tclose_bracket=\"${brackets:i:i}\"\n\t\t\
+    \tfi\n\t\tfi\n\tdone\n\tif [ -z \"${closed_stack}\" ]; then\n\t\tresult=1\n\t\
+    elif [ -z \"${open_stack}\" ]; then\n\t\tif [[ \"${close_bracket}\" == \"(\" ]];\
+    \ then\n\t\t\tresult=1\n\t\telif [[ \"${close_bracket}\" == \")\" ]]; then\n\t\
+    \t\tresult=0\n\t\tfi\n\telif [[ \"${close_bracket}\" == \"(\" ]]; then\n\t\tif\
+    \ [[ \"${open_bracket}\" == \"(\" ]]; then\n\t\t\tresult=0\n\t\telif [[ \"${open_bracket}\"\
+    \ == \")\" ]]; then\n\t\t\tresult=1\n\t\tfi\n\telif [[ \"${close_bracket}\" ==\
+    \ \")\" ]]; then\n\t\tif [[ \"${open_bracket}\" == \"(\" ]]; then\n\t\t\tresult=0\n\
+    \t\telif [[ \"${open_bracket}\" == \")\" ]]; then\n\t\t\tresult=1\n\t\tfi\n\t\
+    fi\n\techo \"${result}\"", "  local bracket_count open_brackets\n  local bracket_count\
+    \ open_brackets_string\n  local closed_brackets\n\n  bracket_count=$(( $1 == \"\
+    ${1#(}\" ? $(( $1 == ${1#(} ? $(( $1 == ${1#(}${1#(}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#(})}${1#",
+  "    local open_brackets=\"${1}\"\n    local close_brackets=\"${2}\"\n    local\
+    \ count=0\n    while [[ ${close_brackets} != \"\" ]]\n    do\n        ((count++))\n\
+    \        local cur=${close_brackets:0:1}\n        local next_cur=${close_brackets:1:1}\n\
+    \        if [[ ${open_brackets:0:1} == \"${cur}\" ]]\n        then\n         \
+    \   open_brackets=\"${cur}${open_brackets}\"\n        elif [[ ${next_cur} == \"\
+    (\" ]]\n        then\n            open_brackets=\"${cur}${open_brackets}\"\n \
+    \       elif [[ ${next_cur} == \")\" ]]\n        then\n            if [[ ${close_brackets:1}\
+    \ == \"(\" ]]\n            then\n                close_brackets=\"${cur}${close_brackets}\"\
+    \n            else\n                close_brackets=\"${close_brackets}${cur}\"\
+    \n            fi\n        else\n            echo \"Unbalanced brackets\"\n   \
+    \         return 1\n        fi\n    done\n    if [[ ${count} != ${#open_brackets}\
+    \ ]]\n    then\n        echo \"Unbalanced brackets\"\n        return 1\n    fi\n\
+    \    return 0", "  local bracket_count\n  bracket_count=$(cat \"$1\") || return\
+    \ 0\n  # add 1 because bash counts characters starting at 1.\n  local bracket_count=$((bracket_count\
+    \ + 1))\n  for bracket in $(echo $1 | awk -F '[()]' '{print $1}')\n  do\n    local\
+    \ bracket_count=$((bracket_count - 1))\n    if [ $bracket_count -eq 0 ]\n    then\n\
+    \      # brackets are balanced.\n      return 0\n    fi\n  done\n  echo \"false\"",
+  "\tlocal brackets=\"${1:-()}\";\n\twhile [ ${#brackets} -gt 0 ]; do\n\t\tlocal opening=\"\
+    ${brackets:0:1}\";\n\t\tlocal closing=\"${brackets:1:1}\";\n\t\tif [ \"${opening}\"\
+    \ != \"${closing}\" ]; then\n\t\t\tbreak;\n\t\tfi;\n\t\tbrackets=${brackets:2:1}\n\
+    \tdone\n\techo $((${#brackets} > 0))", "  local brackets=$1\n  local last_bracket=\"\
+    \"\n  local bracket_count=0\n  for char in \"${brackets//\\//}\"; do\n    if [\
+    \ $char == \"(\" ]; then\n      last_bracket=\"(\"\n      bracket_count=$((bracket_count\
+    \ + 1))\n    elif [ $char == \")\" ]; then\n      if [ \"$last_bracket\" == \"\
+    (\" ] ; then\n        last_bracket=\"\"\n      else\n        bracket_count=$((bracket_count\
+    \ - 1))\n        if [ \"$bracket_count\" -lt 1 ] ; then\n          return 1\n\
+    \        fi\n      fi\n    fi\n  done\n  return 0", "  local brackets=\"${1}\"\
+    \n  local result=\"true\"\n  for char in ${brackets}; do\n    case \"${char}\"\
+    \ in\n      (\"${brackets}\")) ;;\n      (\")\")) result=\"false\" ;;\n      (\"\
+    (\")) result=\"false\" ;;\n      (\"{\"))\n        # brackets may not be nested,\
+    \ but we're not sure how you'd check that\n        result=\"false\"\n        ;;\n\
+    \    esac\n  done\n  echo \"${result}\"", "    local brackets=$1\n    local stack=()\n\
+    \    local brackets_correct=false\n    local i=0 #index of bracket\n    local\
+    \ n=0\n    while [ $i -le ${#brackets} ] #while we haven't ran out of brackets\n\
+    \    do\n        #increment the bracket\n        case ${brackets[$i]} in \n  \
+    \          '(')\n                stack[$(( i+1 ))]='('\n                i=$((\
+    \ i+1 ))\n                ;;\n            ')')\n                if [ ${#stack[@]}\
+    \ -eq ${#brackets} ]\n                then\n                    brackets_correct=true\n\
+    \                    break\n                fi\n                stack[$(( i+1\
+    \ ))]='('\n                i=$(( i+1 ))\n                ;;\n            '[')\
+    \ \n                stack[$(( i+1 ))]='['\n                i=$(( i+1 ))\n    \
+    \            ;;\n            ']')\n                if [ ${#stack[@]} -eq ${#brackets}\
+    \ ]\n                then\n                    brackets_correct=true\n       \
+    \             break\n                fi\n                stack[$(( i+1 ))]='['\n\
+    \                i=$(( i+1 ))\n                ;;\n            '{')\n        \
+    \        stack[$(( i+1 ))]='{'\n                i=$(( i+1 ))\n               \
+    \ ;;\n            '}')\n                if [ ${#stack[@]} -eq ${#brackets} ]\n\
+    \                then\n                    brackets_correct=true\n           \
+    \         break\n                fi\n                stack[$(( i+1 ))]='{'\n \
+    \               i=$(( i+1 ))\n                ;;\n            ':')\n         \
+    \       stack[$(( i+1 ))]=':'\n                i=$(( i+1 ))\n                ;;\n\
+    \            ':')\n                stack[$(( i+1 ))]=':'\n                i=$((\
+    \ i+1 ))\n                ;;\n            esac\n        done\n        #check if\
+    \ the stack is empty\n        if [ ${#stack[@]} -eq 0 ]\n        then\n      \
+    \      break\n        fi\n        #check to see if there is an extra '(' or ')'\n\
+    \        if [ ${#stack[@]} -gt 1 ]\n        then\n            brackets_correct=false\n\
+    \            break\n        fi\n        #check to see if there are the same number\
+    \ of '[' and ']'\n        if [ ${#stack[@]} -gt 2 ]\n        then\n          \
+    \  brackets_correct=false\n            break\n        fi\n    done\n    return\
+    \ $brackets_correct", "    # count the number of opening brackets\n    local brackets=0\n\
+    \    while [[ $1 =~ ([^)]*) ]]; do\n        brackets+=`expr $BASH_REMATCH | wc\
+    \ -w`\n        shift\n    done\n    echo $((brackets == 0))", "    # count the\
+    \ number of opening brackets\n    count=$1\n    i=0\n    while [ $i -lt $count\
+    \ ]; do\n        # make sure we haven't entered a bracket\n        [ $i -lt $1\
+    \ ]\n        [ $i -le $1 ]\n        if [ $i -eq $1 ] ; then\n            # if\
+    \ we haven't entered a bracket, return false\n            return 1\n        fi\n\
+    \        # make sure we haven't entered an open/close bracket\n        [ $i -gt\
+    \ $1 ]\n        [ $i -lt $1 ]\n        if [ $i -eq $1 ] ; then\n            #\
+    \ if we haven't entered a bracket, return false\n            return 1\n      \
+    \  fi\n        # make sure we haven't entered an open/close bracket\n        [\
+    \ $i -gt $1 ]\n        [ $i -lt $1 ]\n        if [ $i -eq $1 ] ; then\n      \
+    \      # if we haven't entered a bracket, return false\n            return 1\n\
+    \        fi\n        # make sure we haven't entered an open/close bracket\n  \
+    \      [ $i -gt $1 ]\n        [ $i -lt $1 ]\n        if [ $i -eq $1 ] ; then\n\
+    \            # if we haven't entered a bracket, return false\n            return\
+    \ 1\n        fi\n        # make sure we haven't entered an open/close bracket\n\
+    \        [ $i -gt $1 ]\n        [ $i -lt $1 ]\n        if [ $i -eq $1 ] ; then\n\
+    \            # if we haven't entered a bracket, return false\n            return\
+    \ 1\n        fi\n        i=$((i+1))\n    done\n    # if we haven't entered a bracket,\
+    \ return true\n    return 0", "  local bracket_string=$1\n  local correct_string=false\n\
+    \  local bracket_count=0\n  local bracket_length=$(bracket_strings | grep -e '^'\
+    \ | wc -l)\n  while [ $bracket_count -lt $bracket_length ]; do\n    local bracket_char=${bracket_strings[$bracket_count]}\n\
+    \    if [[ $bracket_string == *\"$bracket_char\"* ]]; then\n      correct_string=true\n\
+    \      bracket_count=$((bracket_count+1))\n    else\n      correct_string=$((correct_string\
+    \ && false))\n    fi\n    bracket_count=$((bracket_count+1))\n  done\n  echo $correct_string",
+  "\tlocal brackets=$1\n\tlocal openings=0\n\tlocal closings=0\n\tlocal result=0\n\
+    \tfor c in $brackets\n\tdo\n\t\tif [[ \"$c\" == \")\" ]]; then\n\t\t\tclosings+=1\n\
+    \t\telse\n\t\t\topenings+=1\n\t\tfi\n\tdone\n\tif (( $openings == $closings ))\n\
+    \tthen\n\t\tresult=1\n\tfi\n\techo $result", "  if [[ $(echo \"$1\" | grep -c\
+    \ \"\\($1\") == \"1\" ]]; then\n    echo \"false\"\n  else\n    echo \"true\"\n\
+    \  fi"]
 stop_tokens:
 - "\n}"

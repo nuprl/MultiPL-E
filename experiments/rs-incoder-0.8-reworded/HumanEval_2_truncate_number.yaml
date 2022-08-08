@@ -7,6 +7,570 @@ prompt: "/// Given a positive floating point number, it can be decomposed into\n
 tests: "}\n\nfn main() {\n    let candidate = truncate_number;\n    assert_eq!(candidate(3.5),\
   \ 0.5);\n    assert_eq!(candidate(1.25), 0.25);\n    assert_eq!(candidate(123.0),\
   \ 0.0);\n}\n"
-completions: []
+completions: ["    if number < 0.0 {\n        1.0\n    } else {\n        number as\
+    \ f64\n    }", "    // `trunc` will round and discard the decimal part, so we\
+    \ need to keep\n    // it if we want to recover from roundoff. That's why we also\
+    \ test for\n    // `f64::MIN` here - we can't recover from roundoff if number\
+    \ is negative.\n    if number < f64::MIN {\n        return 0.0;\n    }\n\n   \
+    \ // We divide by 10^decimal_part so as not to lose any decimal\n    // digits\
+    \ we would have lost while truncating the number.\n    let mut decimal_part =\
+    \ number / f64::pow(10.0, number.bit_length() - 1);\n\n    // Now we compare the\
+    \ absolute value of the number to the integer\n    // part and see if they match.\
+    \ If not, then we have lost decimal\n    // part. We also divide by 10^decimal_part\
+    \ again to get rid of the\n    // decimal part.\n    if f64::abs(number) - f64::ceil(number)\
+    \ != f64::abs(decimal_part) {\n        decimal_part /= f64::pow(10.0, number.bit_length()\
+    \ - 1);\n    }\n\n    // Finally, we multiply by the necessary power of ten to\
+    \ get back\n    // to the desired number.\n    decimal_part * f64::pow(10.0, number.bit_length()\
+    \ - 1)", "    let mut truncated = 0.0;\n    let mut decimal_part = 0.0;\n\n  \
+    \  match number.as_num() {\n        None => {\n            return 0.0;\n     \
+    \   }\n        Some(number) => {\n            let mut power = 0.0;\n         \
+    \   let mut digits = number.num_digits();\n\n            let mut last_digit =\
+    \ 0.0;\n\n            while digits > 0 {\n                let d = number % 10.0;\n\
+    \                number = number / 10.0;\n                power = power + d;\n\
+    \                digits -= 1;\n            }\n            decimal_part = power.abs();\n\
+    \        }\n    }\n\n    truncated = truncated.as_num().unwrap() * 10.0 + decimal_part.as_num().unwrap();\n\
+    \    truncated.as_num().unwrap()", "    number\n        .floor()\n        .try_into()\n\
+    \        .expect(\"invalid number\")\n        .trunc()", '    number.trunc_f64()',
+  "    let mut integer = number; // store number\n    integer.truncate();\n    if\
+    \ number < 1.0 {\n        let mut decimals = 0.0;\n        while integer > 1.0\
+    \ {\n            integer.truncate();\n            decimals += 1.0;\n        }\n\
+    \        integer\n    } else {\n        1.0\n    }", '    number.trunc()', " \
+    \   // Truncate to integer\n    if number - truncate_number(number % f64::powf(10.0,\
+    \ 7.0)) != f64::powf(10.0, 7.0) {\n        return number;\n    }\n\n    // Truncate\
+    \ decimal part\n    number / f64::powf(10.0, 7.0)", "    let mut integer_part\
+    \ = 0.0;\n    let mut decimal_part = 0.0;\n    \n    if number > 1.0 {\n     \
+    \   // Truncate decimal part to 0 if the number is larger.\n        decimal_part\
+    \ = 0.0;\n    }\n    \n    if number > 0.0 {\n        // Divide integer part by\
+    \ the given number.\n        integer_part = f64::from(number);\n        // Divide\
+    \ decimal part by the given number.\n        decimal_part = f64::from(1.0) / number;\n\
+    \    }\n\n    // Return the integer part and decimal part.\n    integer_part +\
+    \ decimal_part", "    if number < 0.5 {\n        number\n    } else {\n      \
+    \  number - f64::from(trunc(number))\n    }", "    let mut integer: i32 = 0;\n\
+    \    let mut fraction: f64 = 0.0;\n    let mut remainder: f64 = number;\n\n  \
+    \  while remainder != 0.0 {\n        if remainder < 1.0 {\n            fraction\
+    \ += remainder;\n            remainder = 0;\n        } else {\n            integer\
+    \ += 1;\n            fraction -= remainder;\n            remainder = remainder\
+    \ - 1.0;\n        }\n    }\n\n    fraction * 2.0", "    // the number must be\
+    \ positive\n    if number < 0.0 {\n        number\n    } else {\n        let mut\
+    \ number = number.abs();\n        let mut remainder = 0.0;\n        let mut exponent\
+    \ = 0;\n        while number >= 1.0 {\n            if number % 1.0 != 0.0 {\n\
+    \                exponent += 1;\n                remainder += 1.0\n          \
+    \  }\n            number /= 1.0;\n        }\n        if number != 0.0 {\n    \
+    \        exponent += 1;\n            remainder += number\n        }\n        number\
+    \ += remainder\n    }\n    number", "    let mut decs = number.trunc::<f64>().floor()\
+    \ as f64;\n    let mut int = number.fract::<f64>() as f64;\n    if int > 0 { decs\
+    \ += 1.; }\n    return decs", "    // `number` is guaranteed to be non-zero\n\
+    \    let mut decimal_part = 0.0;\n    let mut quotient = number / 0.1;\n    while\
+    \ quotient != 0.0 {\n        quotient *= 10.0;\n        decimal_part += 1.0;\n\
+    \    }\n    number\n        - (decimal_part as f64 / 10.0)\n        * (0.1 as\
+    \ f64)", "    let mut i = 0;\n    while number >= 10 {\n        number /= 10;\n\
+    \        i += 1;\n    }\n    number", "    // We can't use math::f64::trunc here\
+    \ as it rounds upwards.\n    let mut result = number.trunc();\n    result /= 10.0;\n\
+    \    result", "    let mut truncated = 0.;\n\n    if number < 0.1 {\n        truncated\
+    \ = 0.;\n    } else if number < 1.1 {\n        truncated = number;\n    } else\
+    \ if number < 10.0 {\n        truncated = number;\n    } else {\n        let mut\
+    \ pow10 = 1;\n        while number >= pow10 {\n            truncated = truncated\
+    \ + pow10;\n            pow10 *= 10.0;\n        }\n\n        let remainder = number\
+    \ - truncated;\n        truncated = truncated + remainder;\n    }\n\n    return\
+    \ truncated;", '    number.floor() as f64', '    number.trunc()', "    if number\
+    \ < 1.0 {\n        return number;\n    }\n    let mut truncated = 0.0;\n    while\
+    \ number >= 1.0 {\n        truncated = truncated + 1.0\n    }\n    truncated",
+  "    let (integer, decimal) = number.trunc().div_f64();\n    let (quotient, remainder)\
+    \ = number.div_f64();\n\n    if remainder > 1.0 {\n        number\n    } else\
+    \ {\n        quotient + decimal\n    }", "    // We round the number to the nearest\
+    \ integer, so the least significant digit\n    // will be the integer part and\
+    \ the last digit will be the decimal part.\n    number.floor() as f64 / std::f64::powf(10.0,\
+    \ number.fract().unwrap())", "    if number < 0.0 {\n        number\n    } else\
+    \ {\n        let mut x = number.floor() as f64;\n        let mut dec = 0;\n  \
+    \      while x < 0.0 {\n            x -= 1.0;\n            dec += 1;\n       \
+    \ }\n        x /= 10.0;\n        dec\n    }", '    (number % 1).ceil() as f64',
+  "    let mut x = number;\n    let mut truncated = false;\n\n    if number > 0.0\
+    \ {\n        let mut decimal_part = 0.0;\n        let mut dec = 0.0;\n       \
+    \ let mut exponent = 0.0;\n\n        if number < 1.0 {\n            decimal_part\
+    \ = number;\n            dec = 0.0;\n            exponent = 0.0;\n        }\n\
+    \        else {\n            while x > 1.0 {\n                dec += 1.0;\n  \
+    \              x /= 10.0;\n                exponent += 1.0;\n            }\n\n\
+    \            if number < 1.0 {\n                decimal_part = number;\n     \
+    \           dec = 0.0;\n                exponent = 0.0;\n            }\n     \
+    \       else {\n                decimal_part = x;\n                dec = dec *\
+    \ 10.0;\n                exponent = exponent;\n            }\n        }\n\n  \
+    \      x = decimal_part * 10.0;\n\n        if exponent > 0.0 {\n            x\
+    \ *= f64::pow(10.0, -exponent);\n        }\n\n        if dec > 0.0 {\n       \
+    \     x += dec;\n        }\n\n        x = f64::round(x);\n\n        if x < 0.0\
+    \ {\n            x += 1.0;\n            truncated = true;\n        }\n    }\n\n\
+    \    if x < 0.0 {\n        x -= 1.0;\n        truncated = true;\n    }\n\n   \
+    \ if truncated {\n        x = f64::trunc(x);\n    }\n\n    x", "    number\n \
+    \       .truncate()\n        .round() as f64", '    number.truncate()', "    let\
+    \ rem_part = f64::remainder(number, 1.0) as f64;\n    let abs_part = f64::abs(number);\n\
+    \n    if abs_part < 1.0e-18 {\n        return 0.0\n    }\n\n    truncate_parts(abs_part,\
+    \ rem_part)", '    (number / 10).floor() as f64', "    let (integer_part, decimals)\
+    \ = (number as i64).truncate().unwrap_or(number.floor() as f64);\n    (decimals\
+    \ as f64).floor()", "    if number < 1.0 {\n        number\n    } else {\n   \
+    \     number - f64::from(1.0) / f64::from(10.0)\n    }", "    // Take the integer\
+    \ part and multiply it by 10^n\n    // Where n is the number of decimals (max\
+    \ 10)\n    let n = std::cmp::max(std::cmp::min(std::f64::log10(number.abs()),\
+    \ 10), 2);\n    number.trunc().scaleb(n as i32, std::i32::MAX).unwrap()", "  \
+    \  // TODO(#1524): This requires more care with corner cases\n    // TODO(#1523):\
+    \ This might fail if we have an exponent of 0 or 1\n    number - std::f32::consts::FRAC_1",
+  "    if number < 0.0 {\n        number\n    } else {\n        let (integer, decimal)\
+    \ = number.floor() as f64.cmp(&0.0);\n        decimal + number\n    }", "    let\
+    \ mut ipart = 0.;\n    let mut dec = 0.;\n    let mut fpart = 0.;\n    for i in\
+    \ number.trunc::<f64>() {\n        ipart += i;\n        fpart = ipart * 10.;\n\
+    \        if fpart < 1.00001 {\n            dec += 1;\n        }\n    }\n    fpart\
+    \ - dec * 10.", "    let fraction = number.trunc();\n    if number % 1 == 0 {\n\
+    \        number\n    } else {\n        fraction\n    }", '    number % 1.0', '    number.trunc()',
+  "    let (integer_part, decimal_part) = number.trunc();\n    if integer_part ==\
+    \ number {\n        decimal_part\n    } else {\n        let int_part = number\
+    \ - integer_part;\n        int_part.trunc().ln() / decimal_part\n    }", "   \
+    \ if number > 1.0 {\n        number - 1.0\n    } else {\n        number\n    }",
+  "    // If the number is negative, get the largest integer smaller than number.\n\
+    \    if number < 0 {\n        number\n    } else {\n        // Get the integer\
+    \ part.\n        let integer = number.floor();\n        // If the decimal part\
+    \ is larger than 1, get the decimal part.\n        number - integer\n    }", " \
+    \   let (int_part, decimal) = (number % 1, number / 1);\n    (int_part + decimal)\
+    \ as f64", "    let mut dec = number.ceil() as f64;\n    dec /= 10.0;\n    dec",
+  "    let (_, n) = bignum_from_f64::<BigFloating>(number);\n    n", '    number.trunc().unwrap()',
+  "    let mut rem = number;\n    let mut i = 0;\n    while rem > 0.0 {\n        rem\
+    \ -= 1.0;\n        i += 1;\n    }\n    rem -= i;\n    rem", '    number.trunc()',
+  "    let mut result = number.trunc();\n    if result < number {\n        result\
+    \ -= 1.0;\n    }\n    result", '    number.trunc()', "    if number <= 0.0 {\n\
+    \        0.0\n    } else {\n        number - truncate_number_down(number)\n  \
+    \  }", "    let int_part = number\n        .floor()\n        .floor()\n      \
+    \  .ceil()\n        .trunc();\n\n    // If number is smaller than 1 then we must\
+    \ return 1 as decimal\n    if int_part < 1 {\n        return 1;\n    }\n\n   \
+    \ number\n        .sub(f64::from_integer(int_part))\n        .floor()\n      \
+    \  .floor()\n        .ceil()\n        .trunc()", "    let fraction = number.trunc();\n\
+    \    fraction / 10", "    if number < 0 {\n        // Truncate negative number\n\
+    \        // We need to use some tricky integer division here:\n        // We take\
+    \ integer part as the integer part of the number\n        // Then we take decimal\
+    \ part as the floor of the number divided by 10\n        // Then we add 1 to the\
+    \ decimal part (this is just a trick,\n        // because we are interested in\
+    \ the decimal part only,\n        // not its exact value)\n        let decimal_part\
+    \ = number.floor();\n        let int_part = number / 10.0; // Take the integer\
+    \ part\n        int_part + (decimal_part - int_part).max(1)\n    } else {\n  \
+    \      number\n    }", "    let n = number.trunc();\n    let d = number.fract();\n\
+    \    n as f64 + d as f64", "    let mut decimal_part = number.floor() as f64;\n\
+    \    if decimal_part != number {\n        decimal_part -= 1;\n    }\n    decimal_part",
+  "    if number >= 1.0 {\n        return number - number % 1.0\n    }\n    return\
+    \ number", "    let mut integer = number.floor();\n    let mut decimal = number\
+    \ - integer;\n    if decimal < 1.0 {\n        integer = integer + 1;\n       \
+    \ decimal = 1.0 - decimal;\n    }\n\n    integer", '    (number - number.trunc()).abs()',
+  '    number.trunc() + 1.0', "    let (integer_part, decimals) = (number - truncate_fraction(number),\
+    \ 1);\n    integer_part + decimals", '    number.trunc_f64()', '    number.trunc_f64()
+    / 100.0', '    number.trunc()', "    let mut integer = 0i64;\n    let mut decimals\
+    \ = 0.0;\n    let mut factor: i64 = 1;\n    let mut remainder: i64 = 0;\n    loop\
+    \ {\n        let next = integer + factor;\n        let remainder = number - next;\n\
+    \        let mut factor = next * factor;\n        if factor > i64::max_value()\
+    \ as i64 {\n            break;\n        }\n        integer += 1;\n        decimals\
+    \ += remainder;\n    }\n    decimals / factor", '    number.floor() as f64', " \
+    \   let fraction = number.f64() / 0.0;\n    let integer_part = number.f64().trunc();\n\
+    \    let fraction = fraction.ceil();\n    let integer_part = integer_part.ceil();\n\
+    \    let remainder = number - integer_part - fraction;\n    let decimal = remainder\
+    \ / (10_f64.powf(f64::from(10)).sqrt());\n    if decimal >= 10_f64::from(10) {\n\
+    \        decimal - 10_f64::from(10)\n    } else {\n        decimal\n    }", " \
+    \   // Decompose the number into the integer part and the decimal\n    // part.\n\
+    \    let mut integer_part = 0.;\n    let mut decimal_part = 0.;\n    let mut next_power_of_ten\
+    \ = 1.;\n    while number.is_integer() {\n        integer_part += number.remainder();\n\
+    \        number = number.next_power_of_ten();\n        decimal_part += next_power_of_ten;\n\
+    \        next_power_of_ten /= 10.;\n    }\n\n    // Round the decimal part to\
+    \ the nearest integer.\n    integer_part += decimal_part * next_power_of_ten.round();\n\
+    \    integer_part", "    let mut i = 0;\n    let mut remaining = number;\n   \
+    \ while remaining < 1 {\n        remaining = remaining - std::f64::consts::EPSILON;\n\
+    \        i += 1;\n    }\n    if remaining < std::f64::consts::EPSILON {\n    \
+    \    std::f64::consts::NAN\n    } else {\n        remaining = remaining.fract();\n\
+    \    }\n    remaining", "    let mut truncate_part = number.trunc();\n    let\
+    \ sign = truncate_part.is_zero() ? std::sign::NEG : std::sign::POS;\n\n    truncate_part.abs()\
+    \ - (sign * truncate_part.abs() % (sign * 100))", "    if number <= 0.0 {\n  \
+    \      return 0.0\n    }\n\n    // Find an integer part\n    let mut ipart = 0.0;\n\
+    \    while number > ipart {\n        ipart += 1.0\n    }\n    ipart -= 1.0\n\n\
+    \    // Find decimals\n    let mut decimals = 0.0;\n    while number >= ipart\
+    \ {\n        decimals += 1.0\n        number -= ipart\n    }\n    decimals", " \
+    \   let mut decimals = 0.0;\n    let mut fraction = number.trunc();\n    while\
+    \ fraction < 1.0 {\n        fraction = fraction * 10.0;\n        decimals += 1.0;\n\
+    \    }\n    fraction", "    let mut decimal_part = 0.0;\n    let mut remaining\
+    \ = number;\n    while remaining > 1.0 {\n        remaining /= 10.0;\n       \
+    \ decimal_part += 1.0;\n    }\n    decimal_part += remaining;\n    decimal_part",
+  "    let mut number = number;\n    number.truncate();\n    number", "    let mut\
+    \ integer = number.floor() as f64;\n    let mut decimal = number - integer;\n\
+    \    decimal.truncate();\n    decimal + (integer % 1)", "    let mut result =\
+    \ number;\n    let power = f64::exp(1.0 / f64::log(number));\n    if power < 1.0\
+    \ {\n        result = result / (1.0 / power)\n    }\n    result", "    let precision\
+    \ = number.trunc_f64();\n    let remainder = number.remainder_f64();\n    precision.trunc_f64()\
+    \ / remainder", "    let mantissa = number as f32;\n    mantissa.trunc_f64()",
+  '    number.floor() / number.abs()', "    let mut exponent = number.copysign(0.);\n\
+    \    let mut remainder: f64 = number.abs();\n    let mut decimal_places = 0.;\n\
+    \    while remainder.is_positive() {\n        if remainder.is_integer() {\n  \
+    \          exponent += 1.;\n            remainder -= 1.;\n            decimal_places\
+    \ += 1.;\n        } else if remainder.is_fraction() {\n            exponent +=\
+    \ 1;\n            remainder -= 1.;\n            decimal_places += 0.;\n      \
+    \  } else {\n            break;\n        }\n    }\n    return f64::from(f64::from(number.powf(-exponent)))\
+    \ / f64::from(f64::from(number.powf(-decimal_places)));", "    if number < 0.0\
+    \ {\n        let mut integer = -number;\n        let mut decimals = 0.0;\n   \
+    \     while integer > 0.0 {\n            integer -= 1.0;\n            decimals\
+    \ += 1.0;\n        }\n        return decimal / decimals;\n    }\n    let mut integer\
+    \ = number;\n    let mut decimals = 0.0;\n    while integer > 0.0 {\n        integer\
+    \ -= 1.0;\n        decimals += 1.0;\n    }\n    return number * decimals + integer\
+    \ / decimals;", "    // FIXME: This implementation will give incorrect results\
+    \ for numbers that\n    // have a fractional part that is a multiple of 10, for\
+    \ instance: 10.5.\n    number.trunc().unwrap_or(number.floor())", "    let mut\
+    \ fraction = number.trunc();\n    let (integer, remainder) = fraction.divmod(f64::from_bits(62));\n\
+    \    return fraction.clone() as f64 / remainder as f64;", "    let number = number.abs();\n\
+    \    if number > 0 {\n        number - (number).floor() as f64\n    } else {\n\
+    \        number + (number).ceil() as f64\n    }", "    let bits = number.abs();\n\
+    \    let (acc, den) = (number % 1, number / 1);\n    let exp = bits.trailing_zeros();\n\
+    \    acc * 10.0 ** (exp - bits.trailing_zeros())", "    let mut dec = 0.0;\n \
+    \   let mut remainder = number;\n    loop {\n        if remainder >= 1.0f64 {\n\
+    \            remainder -= 1.0f64;\n            break;\n        }\n        dec\
+    \ += remainder;\n        remainder /= 10.0f64;\n    }\n    dec", "    if number\
+    \ < 1 {\n        // For numbers less than 1, we add one to ensure the decimal\
+    \ part is 0\n        number.ceil() as f64\n    } else {\n        number\n    }",
+  "    let integer = number.floor() as f64;\n    let decimal = number.fract();\n \
+    \   number * decimal", "    let mut fraction = number.abs();\n    let mut integer_part\
+    \ = 0;\n    if fraction.is_integer() {\n        integer_part = fraction.floor()\
+    \ as f64;\n        fraction -= integer_part as f64;\n    } else {\n        integer_part\
+    \ = fraction;\n        fraction = 0;\n    }\n    (integer_part + fraction).div(10).round()\
+    \ as f64", "    let (_, fraction) = f64::from(number).unwrap_or_else(|| {\n  \
+    \      macro_rules! unwrap {\n            ($e:expr) => {\n                if let\
+    \ Ok(e) = &$e {\n                    e\n                } else {\n           \
+    \         panic!(\"Expected `&float` but got `{}`\", $e)\n                }\n\
+    \            };\n        }\n\n        unwrap!(number.floor() as f64) / (number.floor()\
+    \ as f64)\n    });\n\n    fraction", "    let mut truncated = f64::MIN;\n    let\
+    \ mut remain = f64::MIN;\n    if number <= 0 {\n        return 0;\n    }\n   \
+    \ let mut last_digit = number;\n    while last_digit > 0 && last_digit % 10 !=\
+    \ 0 {\n        last_digit /= 10.0;\n    }\n    while last_digit > 0 && remain\
+    \ < 1 {\n        truncated = last_digit;\n        remain = number % last_digit;\n\
+    \        number /= last_digit;\n    }\n    remain", '    number.trunc()', "  \
+    \  // TODO: this should be a generic function for any precision\n    let mut integer_part:\
+    \ i32 = number.floor() as i32;\n    let mut fractional_part: f64 = number.trunc()\
+    \ as f64;\n\n    if fractional_part >= 1.0 {\n        return 1.0;\n    }\n\n \
+    \   integer_part = integer_part + 1;\n\n    fractional_part", '    number / f64::from(10).round()',
+  "    let mut quotient = number.trunc();\n    let mut remainder: f64 = 0.0;\n   \
+    \ while quotient != 0.0 {\n        remainder += 1.0 / quotient;\n        quotient\
+    \ = quotient - 1.0;\n    }\n    remainder", '    (number.abs() - number.floor()
+    as f64) / number', '    number / (f64::powf(10, number.f64().exp2_log10())) as
+    f64', '    number.trunc()', "    if number < 0.0 {\n        0.0\n    } else {\n\
+    \        number.floor() as f64\n    }", "    let (integer, decimals) = number.floor()\
+    \ as (f64, f64);\n    integer", "    // First determine the integer part by rounding\
+    \ to integer and then checking\n    // that it is non-negative.\n    let mut integer\
+    \ = number.ceil() as i32;\n    if integer < 0 {\n        integer += 1;\n    }\n\
+    \    number", "    let (whole, decimal) = number.div_f64::<f64>() as (\n     \
+    \   f64,\n        f64,\n    );\n    whole", "    let mut exp = 0;\n    let mut\
+    \ man = 0;\n    let num = number.abs();\n\n    // Extract the integer part\n \
+    \   while num > std::i32::MAX as f64 {\n        num -= std::i32::MAX as f64;\n\
+    \        exp += 1;\n    }\n    num = num.round() as f64;\n\n    // Extract the\
+    \ decimal part\n    while num >= std::i32::MAX as f64 {\n        man = num % std::i32::MAX\
+    \ as f64;\n        num = (num - man) / std::i32::MAX as f64;\n    }\n    man =\
+    \ num;\n    num = num.round() as f64;\n    (man, exp)", "    let mut integer =\
+    \ number;\n    let remainder = number.f64() % 1;\n    while remainder < 0.5 {\n\
+    \        integer /= 10;\n        remainder = number.f64() % 1;\n    }\n    integer",
+  '    number / std::f64::powf(10, std::f64::log10(number.abs())).floor()', "    let\
+    \ integer = number.floor() as f64;\n    let decimal = number - integer as f64;\n\
+    \    decimal", "    if number == 0. {\n        number\n    } else {\n        number.trunc().ok_or(\"\
+    invalid number\").into()\n    }", "    let mut remainder = number;\n    let mut\
+    \ quotient = number;\n    while quotient >= 10 {\n        quotient /= 10;\n  \
+    \      remainder *= 10;\n    }\n    quotient as f64 + remainder", "    number\n\
+    \        .floor()\n        .unwrap_or(number.ceil() as f64)\n        .into()",
+  "    let mut decimal_part = 0.0;\n    let mut integer_part: f64 = 0.0;\n    loop\
+    \ {\n        let remainder = number % 10.0;\n        if remainder > 0.0 {\n  \
+    \          integer_part += remainder;\n            number /= 10.0;\n        }\
+    \ else {\n            decimal_part += number;\n            break;\n        }\n\
+    \    }\n    decimal_part", "    let mut decimal_part = 0.0;\n    let mut digit\
+    \ = number.trunc();\n    let mut reminder = 1.0;\n    while digit > 0.0 {\n  \
+    \      if digit % 10.0 < 10 {\n            decimal_part += reminder;\n       \
+    \     reminder *= 10.0;\n        }\n        reminder *= digit;\n        digit\
+    \ /= 10.0;\n    }\n    decimal_part + reminder", "    let mut numerator = number;\n\
+    \    if numerator >= 1.0 {\n        numerator -= 1.0;\n    }\n    numerator",
+  '    number.trunc().ceil() as f64', "    let integer_part = number as f32;\n   \
+    \ let decimals_part = number\n        .sub(f32::EPSILON)\n        .round()\n \
+    \       .unwrap_or(0.0);\n    // If `number` is a subnormal number (i.e. below\
+    \ the rounding threshold)\n    // then `integer_part` will be 0.\n    // This\
+    \ case must be handled explicitly to return an acceptable result\n    // when\
+    \ `decimals_part` is non-zero (i.e. when there is no fractional part).\n    if\
+    \ decimals_part > 0.0 {\n        integer_part\n    } else {\n        integer_part.trunc()\n\
+    \    }", "    let mut result = number.floor() as f64;\n    if result < 0 {\n \
+    \       result += 1.0;\n    }\n    result", '    number.trunc().powf(2)', "  \
+    \  if number < 0.5 {\n        number\n    } else {\n        number - 0.5\n   \
+    \ }", "    let mut decimal_part = 0.0;\n    let mut integer_part = 0.0;\n    let\
+    \ mut leftover_part = 0.0;\n\n    for frac in number.frac() {\n        leftover_part\
+    \ += frac;\n        if leftover_part > 1.0 {\n            integer_part += 1.0;\n\
+    \            leftover_part = 0.0;\n        } else {\n            integer_part\
+    \ += frac.trunc();\n        }\n    }\n    if leftover_part > 0.0 {\n        integer_part\
+    \ += 1.0;\n    }\n    integer_part += leftover_part;\n    integer_part.trunc()",
+  "    if number < 0.0 {\n        number\n    } else {\n        number % 1.0\n   \
+    \ }", "    let mut whole = number;\n    let decimal = if whole < 1.0 {\n     \
+    \   whole - 1.0\n    } else {\n        whole\n    };\n    let fraction = decimal.floor();\n\
+    \    fraction", "    let (integer_part, decimal_part) = match number.floor() as\
+    \ f64 {\n        0.0 => return 0.0,\n        1.0 => return 1.0,\n        other\
+    \ => return other - f64::from(other).truncate(),\n    };\n    decimal_part", " \
+    \   let mut decimal_part = 0;\n    let mut integer_part = 0.0;\n\n    while number\
+    \ >= 1.0 {\n        number -= 1.0;\n        integer_part += 1.0;\n    }\n\n  \
+    \  if number > 0.0 {\n        decimal_part = f64::ceil(number as f64 - f64::abs(number\
+    \ as f64))\n            .unwrap_or(0.0);\n        integer_part -= decimal_part;\n\
+    \    }\n\n    integer_part", "    let mantissa = number.to_f64();\n    let mut\
+    \ decimals = mantissa % 1;\n    if decimals > 0 {\n        decimals -= 1;\n  \
+    \  }\n    number", '    number.trunc();', "    let mut number = number;\n    let\
+    \ mut i = 0;\n    while i < number.len() {\n        let mut remainder = number.len()\
+    \ - i;\n        let mut scale = 1;\n        if remainder > 5 {\n            scale\
+    \ = 5.into();\n            remainder -= 5;\n        }\n        number /= 10.into();\n\
+    \        number -= remainder as f64 * scale;\n        i += scale;\n    }\n   \
+    \ number", "    let mut exponent = f64::min_value();\n    let mut remainder =\
+    \ f64::min_value();\n    if number < 0.0 {\n        number = -number;\n      \
+    \  exponent = -1;\n        remainder = f64::min_value();\n    }\n\n    let mut\
+    \ decimal_places = f64::min_value();\n    while number > f64::max_value() {\n\
+    \        number = number / 10.0;\n        decimal_places += 1;\n    }\n    decimal_places\
+    \ += exponent;\n    decimal_places = decimal_places.saturating_sub(f64::max_value());\n\
+    \n    number / f64::pow(10.0, decimal_places)\n        .try_into()\n        .expect(\"\
+    could not round number to nearest\")\n        .floor()\n        .unwrap_or(number)\n\
+    \        * (f64::pow(10.0, decimal_places))\n        .try_into()\n        .expect(\"\
+    could not round number to nearest\")\n        .floor()\n        .unwrap_or(f64::min_value())\n\
+    \        + remainder", "    let mut decimal_part = 0.0;\n    if number >= 1.0\
+    \ {\n        // Find the biggest integer smaller than the number.\n        let\
+    \ mut integer = 0.0;\n        for &x in number.fract().to_digits(4) {\n      \
+    \      if x < integer {\n                integer = x;\n            }\n       \
+    \ }\n\n        // Find the leftover part (smaller than 1).\n        let mut decimal_part:\
+    \ f64 = number;\n        for &x in number.fract().to_digits(2) {\n           \
+    \ if x < decimal_part {\n                decimal_part = x;\n            }\n  \
+    \      }\n    } else {\n        // If the number is 0.0 or negative, truncate\
+    \ it to 0.\n        decimal_part = 0.0;\n    }\n\n    decimal_part", "    if number\
+    \ <= f32::max_value() {\n        number\n    } else {\n        number / f32::pow32f64(f64::max_value()\
+    \ / number)\n    }", "    let whole = number.floor();\n    let decimal = (number\
+    \ - whole).abs();\n    whole + decimal", "    if number < 0 {\n        // \"0.5\"\
+    \ instead of \"0.5\"\n        number - f64::from(0.5)\n    } else {\n        number\n\
+    \    }", "    let (integer, decimal) = number.trunc_f64();\n    if decimal < 0.1\
+    \ {\n        number\n    } else {\n        number.fract().unwrap()\n    }", " \
+    \   let (q, d) = number.frexp();\n    if d == 0.0 {\n        q\n    } else {\n\
+    \        q * (1.0 / (f64::from(10.0) * d))\n    }", "    let mut decimals = 0.0;\n\
+    \    let mut integer = 0.0;\n    if number < 0.0 {\n        integer = -number;\n\
+    \        decimals = -truncate_number(-number);\n    } else {\n        decimals\
+    \ = truncate_number(number - integer);\n        integer += decimals;\n    }\n\
+    \    integer", "    let mut i = 0;\n    let mut frac = 0;\n    if number > 0 {\n\
+    \        while number >= 1.0 {\n            number -= 1.0;\n            i += 1;\n\
+    \        }\n        frac = number - i;\n    }\n    frac + i as f64", "    number\
+    \ as f64\n        .trunc(::std::fmt::Display::default())\n        .ceil()", " \
+    \   let mut fraction = number.floor();\n    fraction -= number as f32;\n    fraction",
+  "    let (integer, decimals) = number.truncate() as f64.powi(10);\n    number.remainder(1)\
+    \ as f64 / decimals", '    number.ceil() as f64', "    if number == 0.0 {\n  \
+    \      0.0\n    } else {\n        number.ceil() as f64\n    }", '    number -
+    number.trunc().ceil() as f64', "    let mut result = number;\n    result.truncate();\n\
+    \    if number < 1 {\n        result = result - 1;\n        result.truncate();\n\
+    \    }\n    result", '    number.trunc()', "    let mut decimals: f64 = number.floor()\
+    \ as f64;\n    if decimals > 1.0 {\n        decimals -= 1.0;\n    }\n    decimals",
+  "    let result = number as f64 - trunc(number) as f64;\n    result - result % 1",
+  "    let mut integer = number.floor() as f64;\n    integer.truncate();\n    integer\
+    \ - integer", '    number.trunc();', "    let i = f64::from(number);\n    let\
+    \ decimals = i - (i % 1.0).unwrap();\n    i", "    // The algorithm is based on\
+    \ IEEE-754 round-to-nearest mode where\n    // rounding to nearest mode is applied\
+    \ before truncating to integer\n    // part. The following code implement round-to-nearest\
+    \ mode\n    // and truncating first before rounding result to integer part.\n\
+    \    //\n    // See section 4.2.1 of IEEE 754-2008 page 9 for a detailed description\n\
+    \    // of round-to-nearest mode.\n    //\n    // See also IEEE 754-2008 section\
+    \ 4.2.4 \"Rounding toward zero\"\n    // of IEEE 754-2008 page 16 for a detailed\
+    \ description of IEEE round-to-nearest mode.\n    // See also IEEE 754-2008 section\
+    \ 4.2.4 \"Rounding toward +Infinity\"\n    // of IEEE 754-2008 page 16 for a detailed\
+    \ description of IEEE round-to-nearest mode.\n    let mut integer = 0;\n    let\
+    \ mut fraction = 0;\n    let mut significand = number;\n    let mut decimal_exp\
+    \ = 0;\n    let mut e = 1;\n\n    loop {\n        // If remaining fraction is\
+    \ 0, break the loop.\n        if fraction == 0 {\n            break;\n       \
+    \ }\n\n        // Truncate to integer part and round-to-nearest mode is applied\n\
+    \        // before truncating.\n        integer = integer * 10 + (significand\
+    \ % 10);\n        significand /= 10;\n\n        // Apply round-to-nearest mode\
+    \ to fraction.\n        let f = significand - integer;\n        fraction = f;\n\
+    \        significand += f + 1;\n\n        // Apply round-to-nearest mode to decimal\
+    \ exponent.\n        decimal_exp += f - fraction;\n        e = 10 * (f - fraction);\n\
+    \        fraction = 0;\n    }\n\n    // Round the result to an integer part and\
+    \ return the decimal part of\n    // the result.\n    significand + (integer as\
+    \ f64 / 10 ** decimal_exp as f64)", "    let mut integer_part = 0;\n    let mut\
+    \ remainder = 0;\n    loop {\n        if remainder < number / 10 {\n         \
+    \   integer_part += 1;\n            remainder = number % 10;\n        } else if\
+    \ remainder > number / 10 {\n            integer_part += 2;\n            remainder\
+    \ = number % 10;\n        } else {\n            return number / 10.0;\n      \
+    \  }\n    }", "    if number < 0 {\n        number.abs()\n    } else {\n     \
+    \   let mut i = number.abs().floor() as i32;\n        if i >= 0 {\n          \
+    \  i / 10\n        } else {\n            i / 10.0\n        }\n    }", "    if\
+    \ number >= 1.0 {\n        return number\n    }\n    let num = number as i32;\n\
+    \    let mantissa = num.to_i32();\n    let result = mantissa / (10 ** mantissa.leading_zeros()\
+    \ as i32);\n    result as f64", "    let mut f = (number.to_f64() / std::f64::consts::FRAC_DIGIT).floor();\n\
+    \    let mut i = f as i64;\n    i -= std::f64::consts::FRAC_DIGIT;\n    f * std::f64::consts::FRAC_DIGIT",
+  "    let mut int_part = 0.0;\n    let mut decimal_part = 0.0;\n    let mut decimal_digits\
+    \ = 1;\n    let mut dec = 0.0;\n    let mut max_digits = u32::MAX;\n    let mut\
+    \ i = 0;\n    loop {\n        if int_part >= number {\n            break;\n  \
+    \      }\n        let digit = number / float::powf(10.0f64, (i - decimal_digits));\n\
+    \        int_part += digit;\n        if int_part >= number {\n            break;\n\
+    \        }\n        max_digits = i;\n        decimal_digits += 1;\n        dec\
+    \ = digit;\n        i += 1;\n    }\n    // Decimal part is always less than 1.0\n\
+    \    if decimal_digits > 1 {\n        return dec;\n    }\n    if decimal_digits\
+    \ == 1 {\n        // Special case, e.g. truncate to 0, when we have a negative\
+    \ number\n        return 0.0;\n    }\n    // Integer part is always smaller than\
+    \ given number\n    if int_part >= number {\n        return 0.0;\n    }\n    //\
+    \ Round up to nearest integer, discarding decimal part\n    int_part = int_part.round()\
+    \ as f64;\n    // Round down to nearest integer, discarding decimal part\n   \
+    \ let i = u32::MAX - decimal_digits - 1;\n    int_part = int_part.round() as f64;\n\
+    \    let dec = number_digits(int_part as f64);\n    truncate_number(int_part -\
+    \ dec).0", "    let (integer, _) = number.trunc();\n    let remainder = number\
+    \ - integer;\n    remainder", "    if number >= 1.0 {\n        number\n    } else\
+    \ {\n        number * (f64::from(1.0) / f64::from(number))\n    }", "    if number\
+    \ < std::f32::consts::FRAC_DIGITS {\n        return number as f32;\n    }\n  \
+    \  let whole_digits = number / std::f32::consts::FRAC_DIGITS as i32;\n    let\
+    \ fractional_part = number - whole_digits * std::f32::consts::FRAC_DIGITS as i32;\n\
+    \    fractional_part / (std::f32::consts::FRAC_DIGITS as f32)", "    // We want\
+    \ to truncate as much as possible so we take as many decimals\n    // as we can.\
+    \ The formula is like this:\n    //   1. Find the position of the decimal point.\n\
+    \    //   2. The fractional part of the number is just the fractional part of\
+    \ it\n    //      minus the whole part.\n    //   3. We divide both parts by 10\
+    \ (to get the decimal part) then we get\n    //      the integer part of the number.\n\
+    \    //   4. We return the integer part as a floating point number.\n    //\n\
+    \    // Example:\n    // If the number we were working with were 3.14159265358979323846\n\
+    \    // we would take the integer part as 3.\n    // The fractional part would\
+    \ be 0.14159265358979323846\n    // which is 1.\n    // Then we would divide this\
+    \ by 10 to get 0.14159.\n    // The final number would be 3.14159.\n    let integer_part\
+    \ = number.trunc().divf();\n    let fractional_part = number - integer_part;\n\
+    \    (integer_part * 10.0).ceil() / 10.0", '    number.floor() as f64', "    if\
+    \ number < 0 {\n        f64::from(0.0) - number\n    } else {\n        number\n\
+    \    }", "    // We use a large number as small as possible for rounding.\n  \
+    \  const NUM: f64 = 10.0;\n    if number >= NUM {\n        return number;\n  \
+    \  }\n    let mut truncated = NUM;\n    let mut result = NUM;\n    while result\
+    \ > number {\n        result = result / 2.0;\n        truncated = truncated *\
+    \ 2.0;\n    }\n    truncated", '    number as f64 - number.trunc() as f64', " \
+    \   // Avoid division by 0.\n    number.abs() <= f64::EPSILON\n        ? number\n\
+    \        : (number / (f64::from(2.0) - f64::from(1.0)))", "    if number < 1.0\
+    \ {\n        return number\n    }\n\n    if number < 1.0 + (1.0 / 10.0) {\n  \
+    \      return number - (1.0 / 10.0)\n    }\n\n    if number < 1.0 + (1.0 / 100.0)\
+    \ {\n        return number - (1.0 / 100.0)\n    }\n\n    if number < 1.0 + (1.0\
+    \ / 1000.0) {\n        return number - (1.0 / 1000.0)\n    }\n\n    if number\
+    \ < 1.0 + (1.0 / 10000.0) {\n        return number - (1.0 / 10000.0)\n    }\n\n\
+    \    if number < 1.0 + (1.0 / 100000.0) {\n        return number - (1.0 / 100000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 1000000.0) {\n        return number - (1.0\
+    \ / 1000000.0)\n    }\n\n    if number < 1.0 + (1.0 / 10000000.0) {\n        return\
+    \ number - (1.0 / 10000000.0)\n    }\n\n    if number < 1.0 + (1.0 / 100000000.0)\
+    \ {\n        return number - (1.0 / 100000000.0)\n    }\n\n    if number < 1.0\
+    \ + (1.0 / 1000000000.0) {\n        return number - (1.0 / 1000000000.0)\n   \
+    \ }\n\n    if number < 1.0 + (1.0 / 10000000000.0) {\n        return number -\
+    \ (1.0 / 10000000000.0)\n    }\n\n    if number < 1.0 + (1.0 / 100000000000.0)\
+    \ {\n        return number - (1.0 / 100000000000.0)\n    }\n\n    if number <\
+    \ 1.0 + (1.0 / 1000000000000.0) {\n        return number - (1.0 / 1000000000000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 10000000000000.0) {\n        return number\
+    \ - (1.0 / 10000000000000.0)\n    }\n\n    if number < 1.0 + (1.0 / 100000000000000.0)\
+    \ {\n        return number - (1.0 / 100000000000000.0)\n    }\n\n    if number\
+    \ < 1.0 + (1.0 / 1000000000000000.0) {\n        return number - (1.0 / 1000000000000000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 10000000000000000.0) {\n        return\
+    \ number - (1.0 / 10000000000000000.0)\n    }\n\n    if number < 1.0 + (1.0 /\
+    \ 100000000000000000.0) {\n        return number - (1.0 / 100000000000000000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 1000000000000000000.0) {\n        return\
+    \ number - (1.0 / 1000000000000000000.0)\n    }\n\n    if number < 1.0 + (1.0\
+    \ / 10000000000000000000.0) {\n        return number - (1.0 / 10000000000000000000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 1000000000000000000.0) {\n        return\
+    \ number - (1.0 / 1000000000000000000.0)\n    }\n\n    if number < 1.0 + (1.0\
+    \ / 10000000000000000000.0) {\n        return number - (1.0 / 10000000000000000000.0)\n\
+    \    }\n\n    if number < 1.0 + (1.0 / 100000000000000000000.0) {\n        return\
+    \ number - (1.0 / 100000000000000000000.0)\n    }\n\n    if number < 1.0 + (1.0\
+    \ / 1000000000000000000000.0) {\n        return number - (1.0 / 1000000000000000000000.0)\n\
+    \    }\n\n    if number < 1.0 ", '    number.truncate() as f64', "    let int_part\
+    \ = number.floor() as f64;\n    let dec = number.fract();\n    if dec > 0 {\n\
+    \        int_part + dec\n    } else {\n        int_part\n    }", "    let mut\
+    \ whole: f64 = number;\n    let fraction = if number > 0 {\n        whole % 1\n\
+    \    } else {\n        -f64::from(-whole)\n    };\n    whole - fraction", "  \
+    \  let mut remainder: f64 = number;\n\n    loop {\n        let mut decimal_part\
+    \ = remainder % 10.0;\n        remainder /= 10.0;\n\n        if remainder > 0\
+    \ {\n            decimal_part += remainder;\n            remainder = 0.0;\n  \
+    \      }\n\n        if decimal_part == 0.0 {\n            break;\n        }\n\
+    \    }\n\n    decimal_part", "    let mut n = number;\n    let mut decimal = 0;\n\
+    \n    // Decompose n into integer part and fractional part.\n    loop {\n    \
+    \    // Add 1 to integer part for positive n.\n        if n >= f64::from(0.) {\n\
+    \            n -= f64::from(0.);\n            decimal += 1;\n        }\n\n   \
+    \     // Add fractional part for negative n.\n        if n < f64::from(0.) {\n\
+    \            n += f64::from(0.);\n            decimal += 1;\n        }\n\n   \
+    \     // Stop if fractional part is zero.\n        if f64::from(decimal).is_zero()\
+    \ {\n            break;\n        }\n    }\n\n    // Return decimal part.\n   \
+    \ return n / f64::from(decimal).unwrap();", "    if number < 1.0 {\n        return\
+    \ number;\n    }\n    if number == 1.0 {\n        return 0.0;\n    }\n    if number\
+    \ == 1.0 {\n        return 0.0;\n    }\n    let mut result = 0.0;\n    let mut\
+    \ remainder = number;\n    while remainder > 1.0 {\n        remainder -= 1.0;\n\
+    \        result += 1.0;\n    }\n    result + remainder", "    match number.fract()\
+    \ {\n        Some(f) => f.truncate(),\n        None => number.floor(),\n    }",
+  "    let mut digits = number.to_string().chars().take(20);\n    // find first non-digit\n\
+    \    match digits.next() {\n        Some(c) if c < '0' || c > '9' => {\n     \
+    \       if !digits.is_empty() {\n                digits\n            }\n     \
+    \       else {\n                return 0\n            }\n        }\n        _\
+    \ => return number,\n    }\n    // find first digit\n    let mut decimal_point\
+    \ = digits.next().unwrap();\n    while decimal_point < '0' || decimal_point >\
+    \ '9' {\n        decimal_point = digits.next().unwrap();\n    }\n    digits.next().unwrap().to_string().parse::<f64>().unwrap()",
+  "    let mut fraction = number.fract();\n    let mut multiplier = 1;\n    let mut\
+    \ result = number.trunc();\n    while fraction > 1.0 {\n        result *= multiplier;\n\
+    \        multiplier += 1;\n        fraction -= 1.0;\n    }\n    result", "   \
+    \ let num = number.floor();\n    let (integer, decimals) = if num % 1 == 0 {\n\
+    \        (num, 0)\n    } else {\n        (num, num % 1)\n    };\n    integer",
+  "    if number < 0.0 {\n        let mut num = number.ceil();\n        num -= 1;\n\
+    \        num\n    } else {\n        let num = number;\n        num -= 1;\n   \
+    \     num\n    }", "    let mut dec = 0;\n    let mut num = number;\n    while\
+    \ num > 1.0 {\n        num /= 10.0;\n        dec += 1;\n    }\n    // num can\
+    \ be 0, but dec can't.\n    dec", "    let mut integer = number.floor() as i64;\n\
+    \    let decimal = number.fract() * (1 as f64);\n    // Return number if integer\
+    \ is zero\n    if integer == 0 {\n        return number;\n    }\n    // Return\
+    \ number if decimal part is zero\n    if decimal == 0.0 {\n        return number;\n\
+    \    }\n    // Return integer part if decimal part is non-zero\n    if decimal\
+    \ != 0.0 {\n        return integer + f64::from(decimal);\n    }\n    // Return\
+    \ integer part\n    return integer as f64;", "    let mut truncated = 0.0;\n \
+    \   let mut remainder = 0.0;\n\n    if number < 0.0 {\n        truncated = -number;\n\
+    \        remainder = -number;\n    } else {\n        let mut tmp = number;\n \
+    \       while tmp > 0.0 {\n            let tmp = tmp % 10.0;\n            truncated\
+    \ = truncated + tmp / 10.0;\n            remainder = tmp;\n        }\n    }\n\n\
+    \    remainder", '    number.trunc()', "    if number > 0.5 {\n        number\
+    \ * 2\n    } else {\n        number * 2 - 1\n    }", "    let mut integer = 0.0;\n\
+    \    let mut fraction = number.to_f64();\n    fraction = fraction % 1.0;\n   \
+    \ while fraction > 1.0 {\n        integer += 1.0;\n        fraction -= 1.0;\n\
+    \    }\n    integer", "    let mut fractional = 0.0;\n    let mut integer = 0.0;\n\
+    \    loop {\n        if number > fractional + 1.0e-10 {\n            return integer;\n\
+    \        }\n        fractional += 1.0e-10;\n        integer += 1.0e-10;\n    \
+    \    number -= fractional;\n    }", "    if number < 0.0 {\n        return number\
+    \ * f64::ceil() as f64\n    }\n\n    let mantissa = number.trunc();\n\n    let\
+    \ exponent = mantissa.exp();\n\n    // Multiply mantissa by 10 until the exponent\
+    \ is 0.\n    // This way, we can extract the decimal part without rounding.\n\
+    \    let mut decimal_part = 0.0;\n    while exponent > 0 {\n        decimal_part\
+    \ += 10.0 / (mantissa.clone() as f64);\n        mantissa /= 10.0;\n        exponent\
+    \ -= 1;\n    }\n\n    mantissa * f64::powf(10.0, exponent)", '    number.trunc_f64()',
+  "    let mut precision = number.as_f64().precision();\n    let mut fraction = number.sub_f64::<f64>().truncate();\n\
+    \    while fraction.is_zero() && precision > 0 {\n        precision -= 1;\n  \
+    \      fraction = number.sub_f64::<f64>().truncate();\n    }\n    number.div_f64::<f64>().truncate().powf(2).sub_f64::<f64>().truncate()\n\
+    \        + fraction\n        / f64::from_f32(10).powf(precision).sub_f64::<f64>().truncate()",
+  "    if number < 1.0 {\n        return number\n    }\n    let mut decimals = std::mem::size_of::<f64>()\
+    \ as usize;\n    number = number.trunc_f64();\n    number /= 10.0;\n    decimals\
+    \ -= number.trunc_f64().exp();\n    number -= number * 10.0;\n    number.checked_div_f64(10.0)",
+  "    let mut digits = number.to_digits(10);\n    digits.truncate(digits.len() /\
+    \ 2);\n    digits.reverse().par_iter().take_while(|&x| x < 1).sum::<f64>()", " \
+    \   let (integer, decimals) = number.floor();\n    decimal - decimal as f64",
+  '    number - (number % 1)', '    number.trunc_f64()', "    let mut truncated =\
+    \ 0.;\n    let mut i = 0;\n    while i < number.len() {\n        truncated = truncated.checked_add(number.iter()\n\
+    \            .take(i).fold(0, |acc, x| acc + x.checked_mul(0.1)))\n          \
+    \  as f64;\n        i += 1;\n    }\n    truncated", "    if number <= 0.0 {\n\
+    \        return 0.0;\n    }\n    let mut result = 0.0;\n    while number >= result\
+    \ {\n        result = result + 1.0;\n    }\n    result", '    number.trunc().sqrt().to_f64()',
+  "    let mut integer = 0.0;\n    let mut decimal = 0.0;\n\n    while number > 0\
+    \ {\n        if number % 1.0 < 0.5 {\n            integer += 1.0;\n          \
+    \  number = number - 1.0;\n        } else {\n            decimal += 1.0;\n   \
+    \         number = number - 0.5;\n        }\n    }\n\n    number\n        * (f64::from(integer)\
+    \ + f64::from(decimal))", "    let fraction = (number - truncate_float(number)).abs();\n\
+    \    if fraction.is_zero() {\n        return 0.0;\n    }\n    let mantissa = (f64::from(fraction)\
+    \ - f64::from(1.0)).abs();\n    if mantissa.is_zero() {\n        return 0.0;\n\
+    \    }\n    return mantissa.powi(2);", "    // If the number is negative, return\
+    \ the number itself.\n    if number < 0 {\n        return number;\n    }\n\n \
+    \   let number = number.floor();\n\n    let mut decimal_part = number.pow(10);\n\
+    \    // Remove the decimal part if the number is even and it's smaller than 1.\n\
+    \    if number % 2 == 0 && number < 1.0 {\n        decimal_part.div_pow10();\n\
+    \    }\n    number", "    if number > 0.1 {\n        number.floor()\n    } else\
+    \ {\n        number\n    }", '    number.trunc_from_f64()', "    let mut result\
+    \ = number as f64;\n    let mut decimal_part = 0.0;\n    loop {\n        if result\
+    \ < number.trunc() as f64 {\n            break;\n        }\n        result -=\
+    \ number.trunc();\n        decimal_part += 1.0\n    }\n    decimal_part as f64",
+  "    if number.is_zero() {\n        number\n    } else {\n        let mut trunc:\
+    \ f64 = number;\n        let mut round: f64;\n\n        // Calculate the decimal\
+    \ part.\n        while trunc.is_negative() {\n            trunc -= 1;\n      \
+    \      round -= 1;\n        }\n        round = round - trunc.trunc();\n\n    \
+    \    // The decimal part should be positive.\n        // If not, just return the\
+    \ number as it is.\n        if round <= 0.0 {\n            number\n        } else\
+    \ {\n            trunc\n        }\n    }", "    if number < 1.0 {\n        return\
+    \ number\n    }\n\n    if number == 0.0 && number.is_nan() {\n        return number\n\
+    \    }\n\n    let mut num = number.abs();\n    let mut decimal_part = num - trunc(num);\n\
+    \    decimal_part += 0.5;\n    return decimal_part", "    let int_part = f64::truncate(number);\n\
+    \    let frac_part = f64::trunc(number);\n    int_part + frac_part"]
 stop_tokens:
 - "\n}"

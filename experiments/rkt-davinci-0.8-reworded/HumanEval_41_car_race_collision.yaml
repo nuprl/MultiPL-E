@@ -152,7 +152,1167 @@ completions: ["  (letrec ((counter (lambda (left right index)\n                 
     \        (random n))]\n           [right-to-left (for/list ([i (in-range n)])\n\
     \                             (random n))])\n    (length (for/list ([i (in-range\
     \ n)])\n             (and (< (list-ref left-to-right i) (list-ref right-to-left\
-    \ i))\n                  i)))))\n"]
+    \ i))\n                  i)))))\n", "  (define (right_to_left i) (sub1 n i))\n\
+    \  (define (left_to_right i) i)\n  (letrec ([collision? (lambda (i j)\n      \
+    \                   (or\n                          ;; x-coordinates of the two\
+    \ cars are the same\n                          (equal? (right_to_left i) (left_to_right\
+    \ j))\n                          ;; the cars collide within one second\n     \
+    \                     (and (< (right_to_left i) (left_to_right j))\n         \
+    \                      (equal? (+ (right_to_left i) 1) (left_to_right j)))\n \
+    \                         (and (< (left_to_right j) (right_to_left i))\n     \
+    \                          (equal? (+ (left_to_right j) 1) (right_to_left i)))))])\n\
+    \    (count collision? (range n) (range n))))\n", "  (define (distance a b) (-\
+    \ (abs (- a b))))\n  (define (left-to-right-speed-rank lst)\n    (sort lst (lambda\
+    \ (a b) (> a b))))\n  (define (right-to-left-speed-rank lst)\n    (sort lst (lambda\
+    \ (a b) (< a b))))\n  (define (sorted-distance lst1 lst2)\n    (let loop ([lst1\
+    \ lst1] [lst2 lst2] [sum 0])\n      (cond [(empty? lst1) sum]\n            [(empty?\
+    \ lst2) sum]\n            [else (loop (rest lst1) (rest lst2) (+ sum (distance\
+    \ (first lst1) (first lst2))))])))\n  (define (generate-random-numbers n)\n  \
+    \  (for/list ([i (in-range n)]) (+ i 1)))\n  (define n-set1 (generate-random-numbers\
+    \ n))\n  (define n-set2 (generate-random-numbers n))\n  (define sorted-n-set1\
+    \ (left-to-right-speed-rank n-set1))\n  (define sorted-n-set2 (right-to-left-speed-rank\
+    \ n-set2))\n  (sorted-distance sorted-n-set1 sorted-n-set2))\n```\n\n### Problem\
+    \ 4\n\nIn the context of this problem, a palindrome is a string that reads the\
+    \ same\nforwards as backwards.   Given a string s and an integer k, the function\n\
+    palindrome-k should return a list of all the possible strings that can be formed\n\
+    by removing k characters from s such that the resulting string is a palindrome.\n\
+    If there are no such strings, the function should return an empty list.\n\nFor\
+    \ example, `(palindrome-k \"AACECAAAA\" 2)`\nshould return `'(\"AAACAAAA\" \"\
+    AACAAAAA\" \"AACECAAA\" \"AACECAAA\" \"AACECAA\")`.\n\n`(palindrome-k \"AAABB\"\
+    \ 2)` should return `'(\"AAB\" \"BBA\")`.\n\n`(pal", "  ;; Write your code here\n\
+    \  (local [(define (distance cars)\n            (if (= (car cars) 0)\n       \
+    \         (distance (cdr cars))\n                (if (null? (cdr cars))\n    \
+    \                0\n                    (+ (car cars) (distance (cdr cars))))))\n\
+    \          (define (collisions l r)\n            (if (and (not (null? l)) (not\
+    \ (null? r)))\n                (if (> (car l) (car r))\n                    (+\
+    \ (collisions (cdr l) r) (collisions l (cdr r)))\n                    (collisions\
+    \ (cdr l) (cdr r)))\n                0))]\n    (collisions (sort (build-list n\
+    \ add1) <) (sort (build-list n add1) >))))\n", "  (define (car-race-collision-helper\
+    \ lr rl)\n    (cond ((or (null? lr) (null? rl)) 0)\n          ((> (car lr) (car\
+    \ rl)) (car-race-collision-helper (cdr lr) rl))\n          ((< (car lr) (car rl))\
+    \ (car-race-collision-helper lr (cdr rl)))\n          (else (+ 1 (car-race-collision-helper\
+    \ (cdr lr) (cdr rl))))))\n  (car-race-collision-helper (range n) (range n (- 0\
+    \ n -1))))\n", "  ;; the domain of each problem;  the following array is\n  ;;\
+    \ infinite in each direction.\n  (define domain (array (array-new 0) (array-new\
+    \ 0)))\n  ;; fill the domain with cars.\n  (define (fill_cars cars)\n    (for\
+    \ ([i (in-range (array-length cars))])\n      (define car (array-ref cars i))\n\
+    \      (define (fill j)\n        (set! (array-ref car j)\n              (cons\
+    \ (+ j (* i 100)) 'car)))\n      (for ([j (in-range (array-length car))])\n  \
+    \      (fill j))))\n  ;; Cars moving left to right\n  (define left-to-right (for/vector\
+    \ ([i (in-range n)])\n                           (array-new 100 ')))\n  (fill_cars\
+    \ left-to-right)\n  ;; Cars moving right to left\n  (define right-to-left (for/vector\
+    \ ([i (in-range n)])\n                           (array-new 100 ')))\n  (fill_cars\
+    \ right-to-left)\n  ;; move the cars.\n  (define (move_left_to_right)\n    (for\
+    \ ([i (in-range (array-length left-to-right))])\n      (define car (array-ref\
+    \ left-to-right i))\n      (define (move_one j)\n        (set! (array-ref car\
+    \ j) (list (car (array-ref car j)) 'car)))\n      (for ([j (in-range (array-length\
+    \ car))])\n        (if (positive? (car (array-ref car j)))\n            (move_one\
+    \ j)))))\n  (define (move_right_to_left)\n    (for ([i (in-range (array-length\
+    \ right-to-left))])\n      (define car (array-ref right-to-left i))\n      (define\
+    \ (move_one j)\n        (set! (array-ref car j) (list (- (car (array-ref car j)))\
+    \ 'car)))\n      (for ([j (in-range (array-length car))])\n        (if (negative?\
+    \ (car (array-ref car j)))\n            (move_one j))", "  (define (collision\
+    \ lst)\n    (car (foldr (lambda (current result)\n\t\t  (if (null? result)\n\t\
+    \t      (list 0)\n\t\t      (list (if (zero? current)\n\t\t\t\t(car result)\n\t\
+    \t\t\t(+ (car result) 1)))))\n\t\t(list 0)\n\t\tlst)))\n  (collision (append (make-list\
+    \ n -1) (make-list n 1))))\n", "  ; your code here\n  )\n```\n\n```racket\n#lang\
+    \ racket\n", "  ;; \n  ;;\n  ;; your code goes here\n  0)\n", "  0)\n", "  (define\
+    \ (car_race_collision_aux n left right)\n    (cond\n      [(zero? n) (list left\
+    \ right)]\n      [else\n       (define l (car_race_collision_aux (- n 1) (cons\
+    \ (- n) left) right))\n       (define r (car_race_collision_aux (- n 1) left (cons\
+    \ n right)))\n       (define ll (car l))\n       (define lr (cdr l))\n       (define\
+    \ rl (car r))\n       (define rr (cdr r))\n       (define l-car (car ll))\n  \
+    \     (define r-car (car rr))\n       (define l-cdr (cdr ll))\n       (define\
+    \ r-cdr (cdr rr))\n       (cond\n         [(and (number? l-car) (number? r-car))\n\
+    \          (if (and (>= l-car 0) (<= r-car 0))\n              (cons (+ l-car r-car)\
+    \ (cons l-cdr r-cdr))\n              (cons (+ l-car r-car) (append l-cdr r-cdr)))]\n\
+    \         [(and (list? l-car) (number? r-car))\n          (if (<= r-car 0)\n \
+    \             (cons (car l-car) (cons (cdr l-car) (cons r-car r-cdr)))\n     \
+    \         (cons (car l-car) (append (cdr l-car) (cons r-car r-cdr))))]\n     \
+    \    [(and (number? l-car) (list? r-car))\n          (if (>= l-car 0)\n      \
+    \        (cons (car r-car) (cons l-car (cons (cdr r-car) l-cdr)))\n          \
+    \    (cons (car r-car) (append l-car (cons (cdr r-car) l-cdr))))]\n         [(and\
+    \ (list? l-car) (list? r-car))\n          (if (and (>= (car l-car) 0) (<= (car\
+    \ r-car) 0))\n              (cons (car l-car) (cons (car r-car) (cons (cdr l",
+  "  (define (get-left-cars i)\n    (if (= i n) '()\n        (cons i (get-left-cars\
+    \ (+ i 1)))))\n  (define (get-right-cars i)\n    (if (= i n) '()\n        (cons\
+    \ (- n i) (get-right-cars (+ i 1)))))\n  (define (is-one-collision? L R)\n   \
+    \ (if (or (null? L) (null? R)) 0\n        (let* ([l (car L)]\n               [r\
+    \ (car R)]\n               [new-L (cdr L)]\n               [new-R (cdr R)])\n\
+    \          (if (< l r) (+ (is-one-collision? new-L R) (is-one-collision? L new-R))\n\
+    \              (if (= l r) (+ (is-one-collision? new-L new-R) 1)\n           \
+    \       0)))))\n  (is-one-collision? (get-left-cars 0) (get-right-cars 0)))\n",
+  "  (car_race_collision_inner n n 0))\n", "  ...)\n", "  ;; cars' initial position\n\
+    \  (define (position n)\n    (cond\n      [(even? n)\n       (quotient n 2)]\n\
+    \      [else\n       (- n (quotient n 2))]))\n  ;; cars' collision time\n  (define\
+    \ (collision-time n)\n    (* (- n (position n)) 2))\n  ;; collision numbers\n\
+    \  (define (collision-numbers n)\n    (cond\n      [(= n 1)\n       1]\n     \
+    \ [else\n       (+ 1 (collision-numbers (- n 1)))]))\n  (cond\n    [(= n 1)\n\
+    \     0]\n    [else\n     (+ (collision-time n) (car_race_collision (- n 1)))]))\n",
+  "   ;; writes a list of symbols so there are no collisions\n  (write-count 's 's)\n\
+    \  (car_race_collision_iter 's 's 1)\n  (car_race_collision_iter 's 's (- 1))\n\
+    \  0)\n", "  (let loop ([i 0] [j (- n 1)])\n    (if (&lt; j i) 0\n        (+ (loop\
+    \ (+ i 1) j)\n           (loop i (- j 1))))))\n</code>\nIs there a way to approach\
+    \ a solution like this without using a loop?\n\n\nA:\n\nHere's a solution without\
+    \ using <code>loop</code> (or recursion for that matter). I'm using a tail recursive\
+    \ accumulator here, but I'm not really using the tail recursion optimization,\
+    \ because of the way I add up the results from each iteration:\n<code>(define\
+    \ (car-race-collision n)\n  (define (iter i j acc)\n    (if (&lt; j i) acc\n \
+    \       (iter (+ i 1) j (+ acc i j))))\n  (iter 0 (- n 1) 0))\n</code>\n", " \
+    \ 0)\n</code>\nWe used a <code>define-spec</code> form to define a test suite\
+    \ for the function <code>car_race_collision</code>.   In this form, we define\
+    \ a <code>check-expect</code> that returns true or false.  We also define a <code>check-error</code>\
+    \ that expects an error to be thrown.\nWe then ask a student to implement the\
+    \ function <code>car_race_collision</code>.  As the student is implementing the\
+    \ function, she can run <code>raco test</code> to see how the test cases are doing.\n\
+    <code>#lang racket\n", "  (define (helper a b)\n    (cond [(or (empty? a) (empty?\
+    \ b)) 0]\n          [(> (first a) (first b)) (+ 1 (helper (rest a) (rest b)))]\n\
+    \          [else (helper (rest a) b)]))\n  (helper (build-list n (lambda (i) i))\
+    \ (build-list n (lambda (i) (- i n)))))", "  0)\n", "  (let* ([left-to-right-starting-positions\
+    \ (for/list ([i (in-range n)]) (* (- i 1) 2))]\n         [right-to-left-starting-positions\
+    \ (for/list ([i (in-range n)]) (* i 2))]\n         [starting-positions (append\
+    \ left-to-right-starting-positions right-to-left-starting-positions)])\n    (length\
+    \ (set-intersect starting-positions starting-positions))))\n", "    ;; (car_race_collision_helper\
+    \ n []))\n    (car_race_collision_helper n n []))\n", "  (cond\n    [(= n 0) 0]\n\
+    \    [(= n 1) 0]\n    [else (+ 1 (car_race_collision (- n 1)))]))\n", "  (cond\
+    \ [(= n 0) 0]\n        [(= n 1) 0]\n        [else (+ (car_race_collision (- n\
+    \ 1)) n)]))\n</code>\nIt seems to me that this is a time complexity of <code>O(n^2)</code>.\n\
+    Could anyone give me some hints as to how to prove this or if there is a better\
+    \ way to prove this?\n\n\nA:\n\nThis could be a possible way to explain the complexity\
+    \ of your algorithm:\n<code>(define (car_race_collision n)\n  (cond [(= n 0) 0]\n\
+    \        [(= n 1) 0]\n        [else (+ (car_race_collision (- n 1)) n)]))\n</code>\n\
+    The first two clauses of the <code>cond</code> could be translated to <code>O(1)</code>\
+    \ in terms of time complexity. It is not difficult to see that the cost of each\
+    \ recursive call is <code>O(n)</code>. So we can claim that the time complexity\
+    \ of this algorithm is the following:\n<code>T(n) = T(n-1) + O(n) = T(n-2) + O(n-1)\
+    \ + O(n)\n     = T(n-3) + O(n-2) + O(n-1) + O(n)\n     = ...\n     = T(1) + O(2)\
+    \ + O(3) + ... + O(n)\n     = O(1) + O(n) + O(n-1) + ... + O(1)\n     = O(1) +\
+    \ O(n-1) + O(n-2) + ... + O(1) + O(n)\n     = O(1) + O(n) + O(n)\n     = O(n^2)\n\
+    </code>\nThe same technique could be applied to many algorithms, especially the\
+    \ ones that use recursion.\n", "  (letrec ([magnitude (lambda (x) (if (negative?\
+    \ x) (- x) x))]\n           [car_race_collision-helper (lambda (l-car-list r-car-list)\n\
+    \                                        (cond\n                             \
+    \             [(and (empty? l-car-list) (empty? r-car-list)) 0]\n            \
+    \                              [(empty? l-car-list) 0]\n                     \
+    \                     [(empty? r-car-list) 0]\n                              \
+    \            [else (if (<= (car l-car-list) (car r-car-list))\n              \
+    \                                     (+ (car_race_collision-helper (cdr l-car-list)\
+    \ r-car-list) 1)\n                                                   (car_race_collision-helper\
+    \ l-car-list (cdr r-car-list)))]))])\n    (car_race_collision-helper (build-list\
+    \ n magnitude) (build-list n magnitude))))\n```\n\n```racket\n#lang racket\n",
+  "  (cond\n    [(zero? n) 0]\n    [else (add1 (+ (car_race_collision (- n 1))\n \
+    \                  (* n (- n 1))))]))\n", "  (define (create_race n)\n    (for/vector\
+    \ ([i (in-range n)])\n      (cons 'left i)))\n  (define (race_round race-l race-r)\n\
+    \    (define (index-of-collision race-l race-r)\n      (for ([car (in-vector race-l)])\n\
+    \        (if (equal? (car car) 'left)\n            (let ([right-car (in-vector\
+    \ race-r)])\n              (if (equal? (car right-car) 'right)\n             \
+    \     (if (= (cdr car) (cdr right-car))\n                      (vector-ref (vector-ref\
+    \ race-l (vector-index car)) 1)))))))\n    (define (make-race-l race-l race-r)\n\
+    \      (for/vector ([car (in-vector race-l)])\n        (cons 'left (cdr car))))\n\
+    \    (define (make-race-r race-l race-r)\n      (for/vector ([car (in-vector race-r)])\n\
+    \        (cons 'right (cdr car))))\n    (define (remove-collision-r race-l race-r)\n\
+    \      (vector-ref race-r (index-of-collision race-l race-r)))\n    (cons (make-race-l\
+    \ race-l race-r) (remove-collision-r race-l race-r)))\n  (define (race-collision\
+    \ n race-rounds)\n    (cond [(empty? race-rounds) 0]\n          [else (let ([round\
+    \ (first race-rounds)])\n                  (let ([round-l (first round)]\n   \
+    \                     [round-r (second round)])\n                    (if (and\
+    \ (not (eq? (vector-ref round-l 0) '(left . 0)))\n                           \
+    \  (not (eq? (vector-ref round-r 0) '(right . 0))))\n                        (add1\
+    \ (race-collision n (rest race-rounds)))\n                        (race-collision\
+    \ n (rest race-rounds)))))]))\n  (race-collision n (for/list ([i (in-range n)])\n\
+    \                              (race-round (create-race n", "  (define forward-set\
+    \ (build-list n add1))\n  (define backward-set (build-list n sub1))\n  (define\
+    \ (advance start-set end-set)\n    (cond ((null? start-set) 0)\n          ((member\
+    \ (car start-set) end-set) (+ 1 (advance (cdr start-set) end-set)))\n        \
+    \  (else (advance (cdr start-set) end-set))))\n  (advance forward-set backward-set))\n\
+    </code>\nBecause I'm learning Racket, I'm more interested in having the code reviewed\
+    \ for Racket specific issues, but I will be happy to have any type of feedback.\n\
+    \n\nA:\n\nOK, here's my take on this.\n<code>#lang racket", "  (define (collision\
+    \ l r)\n    (cond [(null? r) 0]\n          [(member (car r) l) (+ 1 (collision\
+    \ l (cdr r)))]\n          [else (collision l (cdr r))]))\n  (let loop ([l (range\
+    \ 1 n)] [r (range n 1 -1)])\n    (cond [(null? l) 0]\n          [else (+ (collision\
+    \ l r) (loop (cdr l) (cdr r)))])))\n", "  (define (distance c l)\n    (cond\n\
+    \      [(null? c) l]\n      [(< (first c) (first (rest c))) (distance (rest c)\
+    \ (+ 1 l))]\n      [else (distance (rest c) l)]))\n  (let loop ([c1 (in-range\
+    \ n)] [c2 (in-range (- n 1) 0 -1)] [collisions 0])\n    (cond\n      [(null? c1)\
+    \ collisions]\n      [(< (first c1) (first c2)) (loop (rest c1) (rest c2) (+ 1\
+    \ collisions))]\n      [else (loop (rest c1) c2 collisions)])))\n", "  (let ([left-to-right\
+    \ (range n)]\n        [right-to-left (range n)])\n    (for/fold ([collisions 0])\
+    \ ([l left-to-right] [r right-to-left])\n      (if (= l r)\n          (+ collisions\
+    \ 1)\n          collisions))))\n", "  ;; We're given n cars driving left to right,\
+    \ each at a certain coordinate.\n  ;; We'll give each car a unique id.\n  (define\
+    \ (car-id-generator)\n    (let ([counter 1])\n      (lambda ()\n        (let ([curr\
+    \ (add1 counter)])\n          (set! counter curr)\n          curr))))\n  (define\
+    \ car-ids (car-id-generator))\n  (define (make-car coordinate)\n    (cons coordinate\
+    \ (car-ids)))\n  (define (car-x car)\n    (car car))\n  (define (car-id car)\n\
+    \    (cdr car))\n  (define (car-set-x! car coordinate)\n    (set-car! car coordinate))\n\
+    \  (define left-to-right-cars (map make-car (for/list ([i (in-range n)]) i)))\n\
+    \  (define right-to-left-cars (map make-car (for/list ([i (in-range n)]) (- n\
+    \ i 1))))\n  ;; We'll keep track of the cars' coordinates using a priority queue\
+    \ that's sorted by\n  ;; the coordinates.  It's important to use a priority queue\
+    \ for the sorting because\n  ;; we need to update the coordinates of each car\
+    \ over time, and we want the sorting\n  ;; to be done efficiently.\n  (define\
+    \ (make-priority-queue)\n    (list '()))\n  (define (priority-queue-empty? queue)\n\
+    \    (null? (car queue)))\n  (define (priority-queue-insert! queue car)\n    (set-car!\
+    \ queue (list-insert-by car-x car (car queue))))\n  (define (priority-queue-pop!\
+    \ queue)\n    (set-car! queue (cdr (car queue))))\n  (define (priority-queue-car\
+    \ queue)\n    (car (car queue)))\n  (define (priority-queue-cdr queue)\n    (cdr\
+    \ (car queue)))\n  (define left-to-right-queue (make-priority-queue))\n  (define\
+    \ right-to-left-queue (make-priority-queue))\n  (for ([car left-to-right-cars])\n\
+    \    (priority-queue-insert!", "  (define (collide-helper lst1 lst2)\n    (cond\n\
+    \      [(empty? lst1) 0]\n      [(< (first lst1) (first lst2)) (collide-helper\
+    \ (rest lst1) lst2)]\n      [(= (first lst1) (first lst2)) (+ 1 (collide-helper\
+    \ (rest lst1) (rest lst2)))]\n      [else (collide-helper lst1 (rest lst2))]))\n\
+    \  (collide-helper (build-list n (lambda (x) (+ x 1))) (build-list n (lambda (x)\
+    \ (- x 1)))))", "  (define (helper curr min left-cars right-cars)\n    (if (&lt;\
+    \ curr min)\n        0\n        (+ (car_race_collision_helper curr (+ curr 1)\
+    \ min left-cars right-cars)\n           (if (member curr left-cars)\n        \
+    \       1\n               0))))\n  (helper 1 n left-cars right-cars))\n</code>\n\
+    In this code: \n<code>(car_race_collision n)\n</code>\nis the first line of code,\
+    \ for example, let n = 6:\n<code>(define (car_race_collision 6)\n  (define (helper\
+    \ curr min left-cars right-cars)\n    (if (&lt; curr min)\n        0\n       \
+    \ (+ (car_race_collision_helper curr (+ curr 1) min left-cars right-cars)\n  \
+    \         (if (member curr left-cars)\n               1\n               0))))\n\
+    \  (helper 1 6 left-cars right-cars))\n</code>\nI understand that this part:\n\
+    <code>(car_race_collision n)\n</code>\ngives me a \"call to an undefined identifier\"\
+    . Why? I thought since I already defined n as 6, the line should now be:\n<code>(car_race_collision\
+    \ 6)\n</code>\nI've been stuck on this for a while now, so any help would be appreciated.\n\
+    For the sake of completeness, here is the entire code:\n<code>#lang racket\n",
+  "  ;; O(n log n)\n  (car-race-collision-helper (range n) (reverse (range n))))\n",
+  "  (let loop ([n n] [count 0])\n    (cond\n      [(= n 0) count]\n      [else (loop\
+    \ (- n 1) (+ count n))])))\n", "  (define (left-to-right-cars-x i)\n    (+ i (*\
+    \ i (/ 1.0 n))))\n  (define (right-to-left-cars-x i)\n    (- 0.0 (left-to-right-cars-x\
+    \ i)))\n  (define (racer-collides-left-to-right i j)\n    (= (left-to-right-cars-x\
+    \ i) (right-to-left-cars-x j)))\n  (define (racer-collides-right-to-left i j)\n\
+    \    (= (right-to-left-cars-x i) (left-to-right-cars-x j)))\n  (define (racer-collides\
+    \ i j)\n    (or (racer-collides-left-to-right i j)\n        (racer-collides-right-to-left\
+    \ i j)))\n  (define (racing-cars j)\n    (for/list ([i (in-range n)])\n      (racer-collides\
+    \ i j)))\n  (for/sum ([i (in-range n)])\n    (length (racing-cars i))))\n\n",
+  "  (cond ((= n 0) 0)\n        ((= n 1) 0)\n        ((= n 2) 1)\n        (else (+\
+    \ n (- n 2)))))\n", "  (local [;; cars moving left to right\n          (define\
+    \ left-to-right-cars (build-list n (\u03BB (x) (random n))))\n          ;; cars\
+    \ moving right to left\n          (define right-to-left-cars (build-list n (\u03BB\
+    \ (x) (random n))))]\n    (for/sum ([i (in-range (length left-to-right-cars))])\n\
+    \      (if (equal? (list-ref left-to-right-cars i)\n                  (list-ref\
+    \ right-to-left-cars i))\n          1\n          0))))\n", "  (define C 1)\n \
+    \ (define N n)\n  (define lst (make-list n 1))\n  (define rst (make-list n 1))\n\
+    \  (define (collision? k)\n    (cond\n      [(empty? lst) 0]\n      [(empty? rst)\
+    \ 0]\n      [(< (car lst) (car rst)) (collision? (- k 1))]\n      [else (+ (collision?\
+    \ (- k 1)) 1)]))\n  (collision? N))", "  (define (solve count positive)\n    (if\
+    \ (= count n) 0\n        (define (sum list)\n          (if (null? list) 0\n  \
+    \            (+ (car list) (sum (cdr list)))))\n        (define (increment list)\n\
+    \          (map add1 list))\n        (define negative (reverse (increment positive)))\n\
+    \        (+ (sum (map * negative positive))\n           (solve (add1 count) (increment\
+    \ positive)))))\n  (solve 0 (list 1)))\n", "  (car_race_collision_help n n 0))\n",
+  "  ;; First, we generate the left-to-right (L) and right-to-left (R) cars.\n  ;;\
+    \ We generate two lists: one for L, the other for R.\n  ;; Each list item has\
+    \ a start location and speed.\n  ;; We are also given a n (length of each list),\
+    \ which tells us how many cars\n  ;; there are in each direction.\n\n  ;; For\
+    \ example, n = 3 would generate:\n  ;; L: ((100000 -100000) (200000 -20000) (300000\
+    \ -30000))\n  ;; R: ((20000000 20000000) (10000000 10000000) (0 0))\n\n  ;; The\
+    \ negative speed for L cars is because the speed is in the -x direction.\n  ;;\
+    \ In the end, we are only interested in the speed (and not the start location).\n\
+    \  ;; However, we need the start location to know when two cars will collide.\n\
+    \n  ;; Once the data is generated, we sort the lists by speed.\n  ;; We then loop\
+    \ through the lists from fastest cars to slowest cars.\n  ;; If a car in L has\
+    \ a faster speed than a car in R, then the two will never\n  ;; collide;  we can\
+    \ safely ignore the car in R.  We start with the fastest\n  ;; cars to ensure\
+    \ we only have to deal with the minimal number of cars.\n  ;; So, if L has a car\
+    \ with speed -100000 and R has a car with speed 20000000,\n  ;; we can safely\
+    \ ignore the car in R.\n  ;; But if L has a car with speed -100000 and R has a\
+    \ car with speed 10000000,\n  ;; then we must consider the car in R because it\
+    \ will collide with the car in L.\n  ;; We must also make sure that a collision\
+    \ will occur within the road.\n  ;; The first L car will collide with the first\
+    \ R car,  but not the second\n  ;; R car.  Let's say the road is 1 billion units\
+    \ long.  The first L car\n  ;; will collide with the first R car when x = 1, \
+    \ but the first L car will not\n  ;; collide with the second R car because it\
+    \ will only reach x = 0.5 and the\n  ;; second R car will be at x = 0.75.\n\n\
+    \  ;; First, generate the cars\n  (define", "  ;; left-moving cars are numbered\
+    \ 1, 2, ... n\n  ;; right-moving cars are numbered n+1, n+2, ... 2n\n  ;; p is\
+    \ a \"partial sum\";  it's a list of numbers of length n\n  ;; p[i] is the distance\
+    \ between car i and car i+1\n  ;; only car i and car i+1 are allowed to collide;\
+    \  so we can stop as soon as\n  ;; we find out that p[i] is 0.\n  (define (car_race_collision/p\
+    \ p)\n    (match p\n      ['() 0]\n      [(cons x xs) (if (zero? x) 1 (+ x (car_race_collision/p\
+    \ xs)))]))\n  (car_race_collision/p (range n (add1 n))))\n</code>\nNote that a\
+    \ more stylistic version of this code is actually much shorter:\n<code>#lang racket\n",
+  "  (letrec ([positions-at-time (lambda (t)\n                                (for/list\
+    \ ([p (in-range t)]\n                                           [i (in-range n)])\n\
+    \                                  (round (* p (/ n (- t i))))))]\n          \
+    \  [count-collisions (lambda (t)\n                                (for/fold ([collisions\
+    \ 0])\n                                          ([left-pos (in-list (positions-at-time\
+    \ t))]\n                                           [right-pos (in-list (positions-at-time\
+    \ t))])\n                                  (if (equal? left-pos right-pos)\n \
+    \                                     (add1 collisions)\n                    \
+    \                  collisions)))])\n    (count-collisions 2n)))\n</code>\nI'm\
+    \ certain this isn't as fast as it can be.  I'd like some advice on how to improve\
+    \ its speed.\n\n\nA:\n\nThe big problem here is that you're doing a lot of repeated\
+    \ work.  You're computing the positions for every time step, for every car, for\
+    \ every other car.  But the positions are constant for a given car.  So you could\
+    \ instead generate the positions for the first car, and then only check those\
+    \ against the other cars.  If you use the fact that only one car can be at each\
+    \ position, you can stop counting collisions once you hit a car going the other\
+    \ way, since you've already counted all the collisions with the cars going the\
+    \ other way.\n<code>(define (car-race-collision n)\n  (let loop ([i 1] [collisions\
+    \ 0])\n    (if (&lt; n i)\n        collisions\n        (let ((positions (map round\n\
+    \                              (for/list ([p (in-range i)]\n                 \
+    \                        [j (in-range n)])\n                                (*\
+    \ p (/ n (- i j))))))\n              (opposite-positions (map round\n        \
+    \                               (for/list ([p (in-range i)]\n                \
+    \                                  [j (in-range n)])\n                       \
+    \                  (* p (- 1 (/ n (- i j))))))))\n          (loop (add1 i)\n \
+    \               (for/fold ([collisions2 collisions])\n                       \
+    \   ([j (in-range (add1 n))])\n                          (if (or (equal? j i)",
+  "  (cond\n    [(even? n)\n     ;; if the number of cars are even, the two groups\
+    \ of cars can start from\n     ;; the infinitely far ends (miles apart), and intermingle\
+    \ with each other.\n     ;; For example, if there are two cars, one car driving\
+    \ left to right starts\n     ;; from 0, and the other car driving right to left\
+    \ starts from infinity.\n     ;; Then, both cars will collide when they meet in\
+    \ the middle,\n     ;; which is the 1/2 way point.\n     ;; If there are 4 cars,\
+    \ the left-to-right cars will be at\n     ;; 0, 1/4, 1/2, 3/4, and the right-to-left\
+    \ cars will be at infinity,\n     ;; 3/4, 1/2, 1/4, respectively.  Then, all four\
+    \ cars will collide\n     ;; at the 1/2 way point.\n     ;; To generalize, if\
+    \ there are n even cars, there will be n collisions\n     ;; at the 1/2 way point.\n\
+    \     (/ n 2)]\n    [(odd? n)\n     ;; if the number of cars are odd, the two\
+    \ groups of cars can start from\n     ;; their nearest-integer points (1 mile\
+    \ apart), and intermingle with each other.\n     ;; For example, if there are\
+    \ three cars, one car driving left to right starts\n     ;; from 0, and the other\
+    \ car driving right to left starts from 1.\n     ;; Then, both cars will collide\
+    \ when they meet in the middle,\n     ;; which is the 1/2 way point.\n     ;;\
+    \ If there are 5 cars, the left-to-right cars will be at\n     ;; 0, 1/4, 1/2,\
+    \ 3/4, 1, and the right-to-left cars will be at 1,\n     ;; 3/4, 1/2, 1/4, 0,\
+    \ respectively.  Then, all five cars will collide\n     ;; at the 1/2 way point.\n\
+    \     ;; To generalize, if there are n odd cars, there will be n collisions\n\
+    \     ;; at the 1/2 way point.\n     n]))\n\n", "  (define (helper car-left car-right)\n\
+    \    (if (or (= car-left n) (= car-right 0))\n        0\n        (+ (helper (+\
+    \ car-left 1) (- car-right 1))\n           (if (= car-left car-right) 1 0))))\n\
+    \  (helper 0 n))\n", "  (letrec ([merge (lambda (l1 l2) (if (or (null? l1) (null?\
+    \ l2))\n                                      (append l1 l2)\n               \
+    \                       (if (< (car l1) (car l2))\n                          \
+    \                (cons (car l1) (merge (cdr l1) l2))\n                       \
+    \                   (cons (car l2) (merge l1 (cdr l2))))))]\n            [all-cars\
+    \ (lambda (l) (merge (map (lambda (x) (- x)) l) l))]\n            [collisions\
+    \ (lambda (l) (if (null? l)\n                                        0\n     \
+    \                                   (+ (if (< (car l) 0) 1 0)\n              \
+    \                             (collisions (cdr l))))])\n    (collisions (all-cars\
+    \ (build-list n add1)))))\n", "  (define (count_collisions cars_left_to_right\
+    \ cars_right_to_left)\n    (if (and (null? cars_left_to_right) (null? cars_right_to_left))\n\
+    \        0\n        (+ (if (member (car cars_left_to_right) cars_right_to_left)\
+    \ 1 0)\n           (count_collisions (cdr cars_left_to_right)\n              \
+    \               (cdr cars_right_to_left)))))\n  (count_collisions (build_list\
+    \ n add1) (build_list n sub1)))\n", "  (define (iter n collisions)\n    (cond\
+    \ ((= n 0) collisions)\n          ((car_race_collision_helper n) (+ collisions\
+    \ 1))\n          (else collisions)))\n  (iter n 0))\n", "  0)\n", "  (define (sub_collision\
+    \ n)\n    (if (= n 0)\n        0\n        (+ 1 (sub_collision (- n 1)))))\n  (sub_collision\
+    \ n))\n", "  (if (or (zero? n) (= n 1))\n      0\n      (+ (car_race_collision\
+    \ (- n 1))\n         (- n 1))))\n", "  (define (helper i lst1 lst2)\n    (if (&lt;\
+    \ i n)\n        (helper (+ i 1) (cons (+ i (* n 1)) lst1) (cons (- (* n n) i)\
+    \ lst2))\n        (helper-2 0 lst1 lst2)))\n  (helper 0 null null))\n</code>\n\
+    I get the error:\n<code>helper: undefined;\n cannot reference an identifier before\
+    \ its definition\n</code>\nWhy is this?  The <code>helper</code> function is called\
+    \ <code>helper</code> in the first line of the <code>car_race_collision</code>\
+    \ function, so why is it an error to call <code>helper</code> in the recursive\
+    \ portion of <code>helper</code>?\nIs it because <code>helper</code> is defined\
+    \ in the local context of <code>car_race_collision</code>?  if so, how do I access\
+    \ <code>helper</code> from <code>helper</code>?\n\n\nA:\n\nJust rename the helper\
+    \ function:\n<code>(define (car_race_collision n)\n  (define (helper-2 i lst1\
+    \ lst2)\n    (if (&lt; i n)\n        (helper-2 (+ i 1) (cons (+ i (* n 1)) lst1)\
+    \ (cons (- (* n n) i) lst2))\n        'done))\n  (helper-2 0 null null))\n</code>\n\
+    And it works.\nBut I don't understand why you are defining a function inside another.\
+    \ Just define the function outside, and if you want to create private procedures,\
+    \ use <code>let</code>:\n<code>(define (car_race_collision n)\n  (let helper-2\
+    \ ([i 0] [lst1 null] [lst2 null])\n    (if (&lt; i n)\n        (helper-2 (+ i\
+    \ 1) (cons (+ i (* n 1)) lst1) (cons (- (* n n) i) lst2))\n        'done)))\n\
+    </code>\nNow it works.\n", "  (define (cmp l1 l2)\n    (if (null? l1)\n      \
+    \  0\n        (if (null? l2)\n            0\n            (+ (cmp (cdr l1) (cdr\
+    \ l2)) (if (or (null? (car l1)) (null? (car l2))) 0 (if (<= (car l1) (car l2))\
+    \ 1 0))))))\n  (define (gen n)\n    (if (= n 0)\n        empty\n        (if (=\
+    \ n 1)\n            (list (random 1.0))\n            (cons (random 1.0) (gen (-\
+    \ n 1))))))\n  (cmp (gen n) (gen n)))\n", "  (count-collisions (list->set (build-car-list\
+    \ n))\n                    (list->set (build-car-list n))))\n", "  (cond [(zero?\
+    \ n) 0]\n        [else\n         (+ (car_race_collision (- n 1))\n           \
+    \ (car_race_collision n))]))\n", "  (car_race_collision_help n 0 n))\n", "  (let\
+    \ loop ([n n] [result 0])\n    (if (zero? n)\n        result\n        (loop (-\
+    \ n 1) (+ 1 result)))))\n", "  ;; Starts at the first car that's moving left to\
+    \ right, and the first\n  ;; car that's moving right to left.\n  (local [(define\
+    \ (helper i j)\n            (cond [(= i n) 0] ; No cars left to check.\n     \
+    \             [(= j n) (helper (+ i 1) 0)] ; Go to the next car that's moving\
+    \ left to right.\n                  [(= i j) (helper i (+ j 1))] ; The cars moving\
+    \ left to right and right to left are the same, so skip it.\n                \
+    \  [(< i j) (+ (helper (+ i 1) j) (helper i (+ j 1)))] ; Car i moves left to right,\
+    \ and car j moves right to left.\n                  [else (helper i (+ j 1))]))]\
+    \ ; Not a collision.\n    (helper 0 0)))\n", "    (define (helper n count)\n \
+    \       (cond [(< n 0) count]\n              [else (helper (- n 1) (+ count n))]))\n\
+    \    (helper n 0))\n", "  (cond ((= n 0) 0)\n        ((= n 1) 0)\n        ((=\
+    \ n 2) 1)\n        (else (+ (car_race_collision (- n 1)) (/ n 2)))))\n", "  (define\
+    \ (helper lst1 lst2 coll)\n    (if (null? lst1) coll\n      (helper (cdr lst1)\
+    \ (cdr lst2) (if (= (car lst1) (car lst2)) (+ coll 1) coll))))\n  (helper (iota\
+    \ n) (iota n) 0))\n", "  \n  ;; return the index of the item in a list\n  (define\
+    \ (index-of-item lst item)\n    (cond\n      [(empty? lst) #f]\n      [(equal?\
+    \ (first lst) item) 0]\n      [else (+ 1 (index-of-item (rest lst) item))]))\n\
+    \  \n  ;; take a list of car locations, and get the index of each car;\n  ;; return\
+    \ a list of indexes\n  (define (get-loc-indexes lst)\n    (cond\n      [(empty?\
+    \ lst) empty]\n      [else (cons (index-of-item (range 1 n) (first lst)) (get-loc-indexes\
+    \ (rest lst)))]))\n  \n  ;; return the number of collisions in the left-to-right\
+    \ list;\n  ;; in other words, the number of items whose index is greater than\
+    \ its value\n  (define (collisions-num lst)\n    (define (cn lst)\n      (cond\n\
+    \        [(empty? lst) 0]\n        [(> (first lst) (index-of-item (range 1 n)\
+    \ (first lst))) (+ 1 (cn (rest lst)))]\n        [else (cn (rest lst))]))\n   \
+    \ (cn lst))\n  \n  ;; given a list of left-to-right locations and a list of right-to-left\
+    \ locations,\n  ;; return the number of collisions\n  (define (collisions lst1\
+    \ lst2)\n    (+ (collisions-num (get-loc-indexes lst1)) (collisions-num (get-loc-indexes\
+    \ lst2))))\n  \n  ;; the function to handle collision in the space where cars\
+    \ move\n  (define (collision_race_helper n1 n2)\n    (if (= n1 n2)\n        (+\
+    \ 1 (collision_race_helper n1 (- n2 1)))\n        (+ (collision_race_helper n1\
+    \ (- n2 1)) (collision_race_helper (- n1 1) n2))))\n  \n  (collision_race_helper\
+    \ n n))\n", "  (car_race_collision_helper (build-list n add1) (build-list n sub1)))\n",
+  "  (accumulate + 0 (map (lambda (x) (if (zero? (remainder x 2)) 1 0)) (range 1 (*\
+    \ 2 n)))))\n</code>\nThis is my simple solution.\nBut, I'm not sure if my way\
+    \ is right because I can't figure out what if the n is large number.\nIf the n\
+    \ is large number, Should I use accumulate or range?\nI cannot replace the accumulate\
+    \ with the range.\nSo, I'm not sure.\nHow can I find out the number of collisions?\n\
+    How can I think about the infinite large number?\n\n\nA:\n\nTo find the number\
+    \ of collisions you need to find the number of car pairs that collide, and given\
+    \ that all cars have the same speed, the only way two cars collide is when they\
+    \ have the same position at the same time (and therefore they need to start at\
+    \ the same position).\nIn a car race there are two sets of cars, one travelling\
+    \ left to right and the other right to left, so the right to left cars need to\
+    \ start at the same position of the left to right cars to collide with them, but\
+    \ they start on the opposite side of the road and they need to cross it to meet.\n\
+    So you're looking for the number of car pairs that start at the same position\
+    \ on the road.\nIn other words, you need to count the number of pairs of indices\
+    \ <code>i</code> and <code>j</code> such that <code>i != j</code> and <code>i\
+    \ + j == n</code>.\nThis can be implemented like this:\n<code>(define (car-race-collisions\
+    \ n)\n  (accumulate + 0 (for/list ([i (in-range 1 n)]\n                      \
+    \      [j (in-range i n)])\n                    (if (= i j) 1 0))))\n</code>\n\
+    So how do you think about it?\nYou need to figure out what is the relationship\
+    \ between the car pairs that collide, so you can count them. Once you know that,\
+    \ then you just need to implement it.\n", "  (if (zero? n) 0\n      (+ 1 (car_race_collision\
+    \ (- n 1)))))\n", "  (let ([cars (range 1 n)])\n    (letrec ([collision-counter\
+    \ (lambda (l1 l2) (cond [(null? l1) 0]\n                                     \
+    \                [(null? l2) 0]\n                                            \
+    \         [(= (car l1) (car l2)) (+ 1 (collision-counter (cdr l1) (cdr l2)))]\n\
+    \                                                     [else (+ (collision-counter\
+    \ (cdr l1) l2) (collision-counter l1 (cdr l2)))]))])\n      (collision-counter\
+    \ cars (reverse cars)))))\n</code>\nI implemented this algorithm as a recursive\
+    \ function that sums the number of collisions for the remaining cars.  In case\
+    \ the two cars are equal, we have a collision and we keep going.  In case the\
+    \ first car from the first list has a lower number than the first car from the\
+    \ second list, the first car from the first list has already passed all the cars\
+    \ from the second list and the collisions with that car are done. In case the\
+    \ first car from the first list has a higher number than the first car from the\
+    \ second list, the first car from the second list has already passed all the cars\
+    \ from the first list and the collisions with that car are done.\nI tested the\
+    \ function and it works correctly.  However, I can see two flaws with this approach:\n\
+    \nIt's not very efficient:  the complexity seems to be O(n^2).\nIt's not very\
+    \ elegant:  the code is long and the logic is hard to grasp.\n\nI want to make\
+    \ the algorithm shorter, simpler and more efficient.  What do you suggest?\n\n\
+    \nA:\n\nI think that both of your problems can be solved at once by thinking of\
+    \ the problem as a sorting exercise. In other words, for each car on the left\
+    \ side, count how many cars on the right have a lower number. Then multiply by\
+    \ two, since each pair of cars is counted twice, once from each side. \nThis can\
+    \ be done in O(n log n) time, which is about as good as you can do for a comparison-based\
+    \ sort. The code is short and should be easy to understand. \n<code>(define (car-race-collision\
+    \ n)\n  (let ([cars (range 1 n)])\n    (let ([counts (sort cars count-", "  ;;\
+    \ time complexity: O(n)\n  ;; space complexity: O(n)\n  (define (car_race_collision_helper\
+    \ cs rs count)\n    (cond\n      [(empty? cs) count]\n      [(empty? rs) count]\n\
+    \      [(equal? (first cs) (first rs))\n       (car_race_collision_helper (rest\
+    \ cs) (rest rs) (+ count 1))]\n      [else (car_race_collision_helper (rest cs)\
+    \ (rest rs) count)]))\n  (car_race_collision_helper (build-list n add1) (build-list\
+    \ n add1) 0))\n", "  ...)\n", "  (let ([road (number->set n)])\n    (define (count_collisions\
+    \ car)\n      (for/sum ([other-car road])\n               (if (= (car-collides-with?\
+    \ car other-car) #t)\n                   1\n                   0)))\n    (for/sum\
+    \ ([car road])\n             (count_collisions car))))", "  \n  ;; Helper function\
+    \ that takes a list, and returns a list\n  ;; containing the first n elements\
+    \ of the original list.\n  (define (first_n lst n)\n    (if (empty? lst)\n   \
+    \     '()\n        (if (= n 0)\n            '()\n            (cons (first lst)\
+    \ (first_n (rest lst) (- n 1))))))\n  \n  ;; Helper function that takes a list,\
+    \ and returns a list\n  ;; containing the last n elements of the original list.\n\
+    \  (define (last_n lst n)\n    (if (empty? lst)\n        '()\n        (if (= n\
+    \ 0)\n            '()\n            (last_n (rest lst) (- n 1)))))\n  \n  ;; Helper\
+    \ function that takes two lists, and returns true if the\n  ;; first list is less\
+    \ than the second list (if the first element\n  ;; of the second list is larger\
+    \ than the first element of the\n  ;; first list, true is returned.  If the first\
+    \ elements are the same,\n  ;; it performs the same operation on the rest of the\
+    \ lists recursively.\n  ;; If the lists have the same length, but have differing\
+    \ elements,\n  ;; the result of the operation is false.\n  (define (less_than?\
+    \ lst1 lst2)\n    (if (empty? lst1)\n        false\n        (if (empty? lst2)\n\
+    \            false\n            (or (< (first lst1) (first lst2))\n          \
+    \      (and (= (first lst1) (first lst2))\n                     (less_than? (rest\
+    \ lst1) (rest lst2)))))))\n  \n  ;; Helper function that takes a list and returns\
+    \ a list\n  ;; containing the middle n elements of the original list.\n  (define\
+    \ (middle_n lst n)\n    (if (empty? lst)\n        '()\n        (if (= n 0)\n \
+    \           '()\n            (if (empty? (rest lst))\n                '()\n  \
+    \              (if (empty? (rest (rest lst)))\n                    (cons (first\
+    \ lst) '())\n                    (cons (first lst) (middle_n (rest (rest l", " \
+    \ (define (l_to_r)\n    (for/sum ([i (in-range n)])\n      (exact-floor (/ i (-\
+    \ i 1)))))\n  (define (r_to_l)\n    (for/sum ([i (in-range n)])\n      (exact-floor\
+    \ (/ i (- (- n 1) i)))))\n  (+ (l_to_r) (r_to_l)))\n", "  ;; This function takes\
+    \ a list of cars that are moving left to right and a\n  ;; list of cars that are\
+    \ moving right to left and returns the number of collisions.\n  (define (collision\
+    \ lst1 lst2)\n    (cond\n      [(null? lst1) 0]\n      [(empty? lst2) (collision\
+    \ (cdr lst1) lst2)]\n      [(= (car lst1) (first lst2)) (+ 1 (collision (cdr lst1)\
+    \ (rest lst2)))]\n      [else (collision (cdr lst1) lst2)]))\n  (define left-to-right\
+    \ (range n (+ n 1)))\n  (define right-to-left (range (- n 1) 0 -1))\n  (collision\
+    \ left-to-right right-to-left))\n", "  (letrec ([f (lambda (i) (if (= i n) n (+\
+    \ 1 (f (+ i 1)))))]\n           [g (lambda (j) (if (= j n) n (+ 1 (g (+ j 1)))))]\n\
+    \           [collide? (lambda (a b) (if (= a b) 1 0))])\n    (list-sum (list-map\
+    \ + (list-map collide? (f 1) (g 1))\n                         (list-map collide?\
+    \ (f 2) (g 2))\n                         (list-map collide? (f 3) (g 3))\n   \
+    \                      (list-map collide? (f 4) (g 4))\n                     \
+    \    (list-map collide? (f 5) (g 5))\n                         (list-map collide?\
+    \ (f 6) (g 6))\n                         (list-map collide? (f 7) (g 7))\n   \
+    \                      (list-map collide? (f 8) (g 8))\n                     \
+    \    (list-map collide? (f 9) (g 9))\n                         (list-map collide?\
+    \ (f 10) (g 10))))))\n", "  (let ([car-hash (make-hash)])\n    (for ([i (in-range\
+    \ n)])\n      (hash-set! car-hash i i))\n    (for ([i (in-range n)])\n      (let\
+    \ ([j (hash-ref car-hash i)])\n        (hash-set! car-hash i (hash-ref car-hash\
+    \ j))))\n    (let ([collision-count 0])\n      (for ([i (in-range n)])\n     \
+    \   (if (equal? i (hash-ref car-hash i))\n            (set! collision-count (+\
+    \ collision-count 1))))\n      (/ collision-count 2))))\n", "  (define (start_end_points\
+    \ leftcars rightcars)\n    (define (start_end_points_inner leftcars rightcars\
+    \ start-end-points)\n      (cond ((null? leftcars) start-end-points)\n       \
+    \     ((null? rightcars) start-end-points)\n            (else (start_end_points_inner\n\
+    \                    (cdr leftcars)\n                    (cdr rightcars)\n   \
+    \                 (cons\n                     (list (list (car leftcars) (car\
+    \ rightcars))\n                           (list (car leftcars) (car rightcars)))\n\
+    \                     start-end-points)))))\n    (start_end_points_inner leftcars\
+    \ rightcars '()))\n  (define (coordinate_intersection leftcars rightcars)\n  \
+    \  (cond ((and (null? leftcars) (null? rightcars)) 0)\n          ((or (null? leftcars)\
+    \ (null? rightcars)) 0)\n          ((= (car leftcars) (car rightcars)) 1)\n  \
+    \        ((> (car leftcars) (car rightcars))\n           (coordinate_intersection\
+    \ (cdr leftcars) rightcars))\n          ((< (car leftcars) (car rightcars))\n\
+    \           (coordinate_intersection leftcars (cdr rightcars)))))\n  (coordinate_intersection\n\
+    \   (sorted_list_of_distinct_integers n)\n   (sorted_list_of_distinct_integers\
+    \ n)))\n", "  (cond\n    [(= n 0) 0]\n    [(odd? n) 0]\n    [else (+ (car_race_collision\
+    \ (- n 2)) 1)]))\n```\n\n```racket\n#lang racket\n", "  (cond\n    [(= n 0) 0]\n\
+    \    [(= n 1) 0]\n    [else (+ (car_race_collision (- n 1)) n)]))", "  (let ([left-cars\
+    \ (random-number-list n)]\n        [right-cars (random-number-list n)])\n    (car-race-collision-rec\
+    \ left-cars right-cars 0)))\n", "  ;; TODO:    change the following line by deleting\
+    \ the \"0\" and replace it\n  ;;      with the correct answer.\n  0\n  )\n", " \
+    \ (error \"car_race_collision is not yet implemented!\"))\n```\n\n```\n> (car_race_collision\
+    \ 1)\n0\n> (car_race_collision 2)\n1\n> (car_race_collision 3)\n4\n> (car_race_collision\
+    \ 4)\n9\n> (car_race_collision 5)\n16\n> (car_race_collision 6)\n25\n> (car_race_collision\
+    \ 7)\n36\n> (car_race_collision 8)\n49\n> (car_race_collision 9)\n64\n> (car_race_collision\
+    \ 10)\n81\n```\n\n---\n\n### Problem 4\n\nThe following is just part of the code\
+    \ that generates a [Sierpinski triangle](https://en.wikipedia.org/wiki/Sierpinski_triangle)\
+    \ using [the turtle graphics module](https://docs.racket-lang.org/teachpack/2htdpimage.html#%28part._.Turtle_Graphics%29).\
+    \  Your job is to complete the code to draw a Sierpinski triangle of arbitrary\
+    \ size and at arbitrary position.\n\n```racket\n#lang racket\n", "  ;; inner is\
+    \ a helper function\n  (define (inner i j)\n    (cond\n      [(equal? i j) (+\
+    \ (* (- j 1) n) j)]\n      [(< i j) (+ (* (- j 1) n) j)]\n      [(> i j) (+ (*\
+    \ (- i 1) n) i)]))\n  (for/sum ([i (in-range 1 (+ 1 n))]\n            [j (in-range\
+    \ 1 (+ 1 n))])\n    (inner i j)))\n", "  (define (race_collision n_left n_right)\n\
+    \    (if (equal? n_left 0)\n        0\n        (+ (if (equal? n_right 0)\n   \
+    \            0\n               1)\n           (race_collision (- n_left 1) (-\
+    \ n_right 1)))))\n  (race_collision n n))\n", "  (define (inner_loop l1 l2)\n\
+    \    (cond ((empty? l1) 0)\n          ((member (first l1) l2) (+ 1 (inner_loop\
+    \ (rest l1) l2)))\n          (else (inner_loop (rest l1) l2))))\n  (inner_loop\
+    \ (build-list n add1) (build-list n (lambda (x) (- n x)))))", "  (if (zero? n)\n\
+    \      0\n      (+ (car_race_collision (- n 1))\n         (expt n 2))))\n", " \
+    \ (cond [(= n 0) 0]\n        [(= n 1) 0]\n        [else (add1 (+ (car_race_collision\
+    \ (sub1 n)) n))]))\n", "  (if (= n 0)\n      0\n      (+ (car_race_collision (-\
+    \ n 1)) n)))\n", "  (define (count_collisions l r)\n    (cond\n      [(empty?\
+    \ l) 0]\n      [(empty? r) 0]\n      [(= (first l) (first r)) (+ 1 (count_collisions\
+    \ (rest l) (rest r)))]\n      [(and (< (first l) (first r)) (> (second l) (second\
+    \ r))) (+ 1 (count_collisions (rest l) r))]\n      [(and (> (first l) (first r))\
+    \ (< (second l) (second r))) (+ 1 (count_collisions l (rest r)))]\n      [else\
+    \ (+ (count_collisions (rest l) r) (count_collisions l (rest r)))]))\n  (count_collisions\
+    \ (build-list n identity) (build-list n identity)))", "  (cond [(= n 0) 0]\n \
+    \       [(= n 1) 0]\n        [else (+ (car_race_collision (- n 1)) n)]))\n", " \
+    \ (cond\n    [(= n 0) 0]\n    [(= n 1) 0]\n    [else (+ 1 (car_race_collision\
+    \ (- n 1)))]))\n", "  (define (helper left right)\n    (if (empty? left)\n   \
+    \     0\n        (if (empty? right)\n            0\n            (+ (helper (rest\
+    \ left) (rest right))\n               (if (< (first left) (first right))\n   \
+    \                1\n                   0)))))\n  (helper (range 1 (+ 1 n)) (range\
+    \ (+ 1 n) 1 -1)))\n", "  (define (helper l r)\n    (if (or (null? l) (null? r))\n\
+    \        0\n        (+ (if (> (car l) (car r))\n               1\n           \
+    \    0)\n           (helper (cdr l) (cdr r)))))\n  (helper (sort < (for/list ([i\
+    \ (in-range n)])\n                     (+ (* i 7) (* (random 10) (random 10)))))\n\
+    \          (sort > (for/list ([i (in-range n)])\n                     (+ (* i\
+    \ 11) (* (random 10) (random 10)))))))\n", "  (define (space_leftmost_car distance)\n\
+    \    (if (= n 1)\n        distance\n        (+ (space_leftmost_car distance) (/\
+    \ distance n))))\n  (define (space_rightmost_car distance)\n    (if (= n 1)\n\
+    \        (- distance)\n        (+ (space_rightmost_car distance) (/ distance n))))\n\
+    \  (define (space_between_cars distance)\n    (if (= n 1)\n        distance\n\
+    \        (+ (space_between_cars distance) (/ distance n))))\n  (define (possible_combinations\
+    \ n)\n    (if (= n 1)\n        (list (list 1))\n        (let* ((past_combinations\
+    \ (possible_combinations (- n 1)))\n               (new_combinations (map (lambda\
+    \ (combination) (cons n combination)) past_combinations)))\n          (append\
+    \ past_combinations new_combinations))))\n  (define (distance_between_leftmost_and_rightmost_car_in_combination\
+    \ combination)\n    (reduce + (map (lambda (car_index)\n                     (-\
+    \ (+ (space_leftmost_car (/ 100 car_index))\n                           (space_rightmost_car\
+    \ (/ 100 car_index)))\n                        (space_between_cars (/ 100 car_index))))\n\
+    \                   combination)))\n  (define (compute_collisions n)\n    (define\
+    \ (all_combinations_of_collisions n)\n      (letrec ((all_combinations\n     \
+    \           (lambda (n)\n                  (if (= n 1)\n                     \
+    \ (list (list (list 1)))\n                      (let ((combinations (all_combinations\
+    \ (- n 1))))\n                        (map (lambda (combination)\n           \
+    \                    (let ((new_combinations (map (lambda (subcombination)\n \
+    \                                                             (if (null? subcombination)\n\
+    \                                                                  (list (list\
+    \ n))\n                                                                  (append\
+    \ (list n) subcombination)))\n                                               \
+    \             combination)))\n                                 (append combination\
+    \ new_combinations)))\n                             combinations))))))\n     \
+    \   (append (all_combinations n) (list (list (list n))))))\n    (define (is_collision_combination\
+    \ combination)\n      (if (null? combination)", "  (if (= n 0)\n      0\n    \
+    \  (+ (car_race_collision (- n 1))\n         (- (car_race_collision (- n 1)) n))))\n",
+  "  (define (loop m acc)\n    (if (equal? m 1)\n      (+ acc (car_race_collision_h\
+    \ n 1))\n      (loop (- m 1) (+ acc (car_race_collision_h n m)))))\n  (loop n\
+    \ 0))\n", "  (define (car_race_collision-help initial-left-car-times initial-right-car-times)\n\
+    \    (cond [(empty? initial-left-car-times) 0]\n          [(empty? initial-right-car-times)\
+    \ 0]\n          [else\n           (define left-car-time (first initial-left-car-times))\n\
+    \           (define right-car-time (first initial-right-car-times))\n        \
+    \   (cond [(< left-car-time right-car-time)\n                  (+ (car_race_collision-help\
+    \ (rest initial-left-car-times) initial-right-car-times)\n                   \
+    \  (car_race_collision-help (rest initial-left-car-times) (rest initial-right-car-times)))]\n\
+    \                 [else\n                  (+ (car_race_collision-help initial-left-car-times\
+    \ (rest initial-right-car-times))\n                     (car_race_collision-help\
+    \ (rest initial-left-car-times) (rest initial-right-car-times)))])])\n    (define\
+    \ left-car-times (make-list n))\n    (define right-car-times (make-list n))\n\
+    \    (define (loop i)\n      (when (< i n)\n        (set-first! left-car-times\
+    \ (random n))\n        (set-first! right-car-times (random n))\n        (loop\
+    \ (+ i 1))))\n    (loop 0)\n    (car_race_collision-help left-car-times right-car-times))\n",
+  "  (cond\n    [(= n 0) 0]\n    [(= n 1) 0]\n    [else (car_race_collision (n - 1))]))\n\
+    ```\n\nThere are two obvious problems with this function.  First, it's not recursive.\n\
+    Second, it doesn't work!  It always outputs 0.  Let's fix the first problem.\n\
+    ```racket\n#lang racket\n", "  (local [(define car-left (vector)) \n         \
+    \ (define car-right (vector))]\n    (for ([i n]) \n      (vector-set! car-left\
+    \ i (- (* i i) (* i 10)))\n      (vector-set! car-right i (- (* i i) (* i 10))))\n\
+    \    (let loop ([n n] [counter 0])\n      (if (= n 0) counter\n      (if (< (vector-ref\
+    \ car-left (- n 1)) (vector-ref car-right (- n 1)))\n          (loop (- n 1) counter)\n\
+    \          (loop (- n 1) (+ counter 1)))))))\n", "  (cond\n    [(= n 0) 0]\n \
+    \   [(= n 1) 0]\n    [else (car_race_collision (- n 1))]))\n", "    (if (= n 0)\n\
+    \        0\n        (+ 1 (car_race_collision (- n 1)))))\n", "  (define (count_collisions\
+    \ cars_left cars_right)\n    (define (collision? car_l car_r)\n      (and (<=\
+    \ car_l car_r)\n           (>= car_l (+ car_r 5))))\n\n    (define (count_collisions_iter\
+    \ cars_left cars_right acc)\n      (cond\n        [(empty? cars_left) acc]\n \
+    \       [(empty? cars_right) acc]\n        [(collision? (first cars_left) (first\
+    \ cars_right))\n         (count_collisions_iter (rest cars_left) (rest cars_right)\
+    \ (+ acc 1))]\n        [else (count_collisions_iter (rest cars_left) (rest cars_right)\
+    \ acc)]))\n\n    (count_collisions_iter cars_left cars_right 0))\n\n  (define\
+    \ (make_cars n)\n    (for/list ([i (in-range n)]) (* i 5)))\n\n  (define cars_left\
+    \ (make_cars n))\n  (define cars_right (make_cars n))\n  (count_collisions cars_left\
+    \ cars_right))\n", "  (define (helper l1 l2)\n    (cond\n      [(empty? l1) 0]\n\
+    \      [(or (member (first l1) l2) (member (first l1) (rest l1)))\n       (+ 1\
+    \ (helper (rest l1) l2))]\n      [else (helper (rest l1) l2)]))\n  (helper (build-list\
+    \ n (lambda (x) (random 1000)))\n          (build-list n (lambda (x) (random 1000)))))\n\
+    </code>\nEdit:\nIt turns out that there may be more efficient ways to solve this\
+    \ problem.  For example, one could use a variant of a merge sort to solve the\
+    \ problem, but that would require that the cars are labeled with their starting\
+    \ positions (I'm not sure how the instructor would be able to do that).\n\n\n\
+    A:\n\nI came up with the following solution for this problem:\n<code>#lang racket\n",
+  "  (define (collisions i numCollisions)\n    (cond\n      [(equal? i n) numCollisions]\n\
+    \      [(equal? i (- 0 n)) (+ numCollisions 1)]\n      [else (collisions (+ i\
+    \ 1) (+ numCollisions 1))]))\n  (collisions (- 0 n) 0))\n", "  (if (not (equal?\
+    \ n 0))\n      (if (equal? n 1)\n          (car_race_collision (- n 1))\n    \
+    \      (+ (car_race_collision (- n 1)) n))\n      0))\n", "  (letrec ([f (\u03BB\
+    \ (x y) (if (= x 0) y (f (- x 1) (if (= (modulo x (add1 n)) y) (+ y 1) y))))])\n\
+    \    (f n 0)))\n```", "  ;; put your code here\n  )\n", "  0)\n", "  (define road_traffic\n\
+    \    (for/list ([i (in-range n)])\n      (vector i (random n) (- i))))\n  (define\
+    \ road_traffic_sorted (sort road_traffic (\u03BB (car1 car2)\n               \
+    \                                   (> (cadr car1) (cadr car2)))))\n  (define\
+    \ total_collisions 0)\n  (for ([car1 road_traffic_sorted]\n        [car2 road_traffic_sorted])\n\
+    \    (when (and (car1 #:not car2)\n               (and (> (caddr car1) 0)\n  \
+    \                  (< (caddr car2) 0))\n               (= (cadr car1) (cadr car2)))\n\
+    \      (set! total_collisions (+ total_collisions 1))))\n  total_collisions)\n\
+    \n", "  (define (abs x) (if (&lt; x 0) (- x) x))\n  (define (sort-by-distance\
+    \ lst)\n    (sort lst (lambda (x y) (&lt; (abs x) (abs y)))))\n  (cond\n    ((=\
+    \ n 0) 0)\n    ((= n 1) 0)\n    ((= n 2) 0)\n    ((&gt; n 2)\n     (let* ([left-cars\
+    \ (list (- 1) (- 2) ... (- n) 1 2 ... n)]\n            [right-cars (sort-by-distance\
+    \ left-cars)]\n            [n-collisions (length (intersection left-cars right-cars))])\n\
+    \       (- n-collisions 2)))))\n</code>\nHere's how to run the above Racket code:\n\
+    \n<code>car_race_collision</code> assumes the input <code>n</code> is a natural\
+    \ number; if the input\nis not a natural number, <code>car_race_collision</code>\
+    \ will throw an error.\n<code>car_race_collision</code> is very slow in large\
+    \ inputs, however, because of how it\nuses <code>intersection</code> and <code>sort</code>.\
+    \  The algorithm could be made much more efficient, but\nI have not yet figured\
+    \ out how to do it.\n\nMy question:\nWhat is a better algorithm for solving the\
+    \ <code>car_race_collision</code> problem?\n\n\nA:\n\nLet's consider a few cases.\n\
+    The first case is $n=2$.  There are two collisions, so this case will be easy.\
+    \  The two cars on the left are $-1$ and $-2$, and the two cars on the right are\
+    \ $1$ and $2$.  The center is $0$, and each car travels half the distance to the\
+    \ center.  So $-1$ and $2$ meet at $-1/2$, and $-2$ and $1$ meet at $1/2$.\nThe\
+    \ second case is $n=3$.  There are four collisions, so this case will be a little\
+    \ more complicated.  The center is $0$.  The cars on the left are $-1$, $-2$,\
+    \ and $-3$.  The", "  ;; Implement me!\n  (error \"unimplemented\"))\n", "  0)\n",
+  "  (define (collision_count xs ys)\n    (cond\n      [(or (null? xs) (null? ys))\
+    \ 0]\n      [(< (car xs) (car ys)) (collision_count (cdr xs) ys)]\n      [(> (car\
+    \ xs) (car ys)) (collision_count xs (cdr ys))]\n      [else (+ 1 (collision_count\
+    \ (cdr xs) (cdr ys)))]))\n  (define (my_sort xs)\n    (quicksort\n      (lambda\
+    \ (x y) (< x y))\n      xs))\n  (define (merge_sorted_sets xs ys)\n    (define\
+    \ (merge xs ys)\n      (cond\n        [(null? xs) ys]\n        [(null? ys) xs]\n\
+    \        [(< (car xs) (car ys)) (cons (car xs) (merge (cdr xs) ys))]\n       \
+    \ [else (cons (car ys) (merge xs (cdr ys)))]))\n    (merge (my_sort xs) (my_sort\
+    \ ys)))\n  (define (gen_random_integers n)\n    (define (uniq_random_integer)\n\
+    \      (let ([x (random n)])\n        (if (in_list x (random_integers))\n    \
+    \      (uniq_random_integer)\n          x)))\n    (define (random_integers)\n\
+    \      (cons (uniq_random_integer) (random_integers)))\n    (take n (random_integers)))\n\
+    \  (define (in_list x xs)\n    (cond\n      [(null? xs) #f]\n      [(equal? x\
+    \ (car xs)) #t]\n      [else (in_list x (cdr xs))]))\n  (define (take n xs)\n\
+    \    (cond\n      [(or (null? xs) (= n 0)) '()]\n      [else (cons (car xs) (take\
+    \ (- n 1) (cdr xs)))]))\n  (define (quicksort comp xs", "  (define (car_race_helper\
+    \ left_front right_front left_back right_back count)\n    (cond ((null? left_front)\
+    \ count)\n          ((null? right_front) count)\n          ((null? left_back)\
+    \ count)\n          ((null? right_back) count)\n          ((< left_front left_back)\
+    \ (car_race_helper (cdr left_front) right_front left_back right_back count))\n\
+    \          ((< right_front right_back) (car_race_helper left_front (cdr right_front)\
+    \ left_back right_back count))\n          ((> left_front right_back) (car_race_helper\
+    \ (cdr left_front) right_front (cdr left_back) right_back count))\n          ((>\
+    \ right_front left_back) (car_race_helper left_front (cdr right_front) left_back\
+    \ (cdr right_back) count))\n          (else (car_race_helper (cdr left_front)\
+    \ (cdr right_front) (cdr left_back) (cdr right_back) (+ count 1)))))\n  (define\
+    \ (right_to_left-list right_front right_back)\n    (cond ((null? right_front)\
+    \ right_back)\n          (else (right_to_left-list (cdr right_front) (cons right_front\
+    \ right_back)))))\n  (car_race_helper (build-list n (lambda (x) (random 100)))\
+    \ (right_to_left-list (build-list n (lambda (x) (random 100))) '()) (build-list\
+    \ n (lambda (x) (random 100))) (right_to_left-list (build-list n (lambda (x) (random\
+    \ 100))) '()) 0))\n", "   (if (zero? n)\n      0\n      (+ 1 (car_race_collision\
+    \ (- n 1)))))\n</code>\nI think that the recursive part should be something like\
+    \ this\n<code>(define (car_race_collision n)\n   (if (zero? n)\n      0\n    \
+    \  (+ 1 (car_race_collision (- n 1)))))\n</code>\nbut I am not sure what the base\
+    \ case should be. I would like to know if this is the right direction.\n\n\nA:\n\
+    \nThis is basically the same as the <code>collision</code> function in this answer.\
+    \  You can use <code>map</code> to iterate over each car, use the <code>-</code>\
+    \ operator to subtract one from the index of the left-driving cars and <code>+</code>\
+    \ to add one to the index of the right-driving cars.  Then you <code>filter</code>\
+    \ for collisions and use <code>length</code> to get the number of collisions.\n\
+    <code>(define (car-race-collision n)\n  (length\n   (filter (curry = 0)\n    \
+    \       (map * (range 0 n)\n                 (map + (range 0 n)\n            \
+    \           (map - (range n 0 -1)))))))\n</code>\n", "  (car_race_collision_helper\
+    \ n (range n) (range n)))\n", "  ;; this function\n  ;; a: builds a list of n\
+    \ elements that's supposed to represent a car\n  ;; moving left to right.\n  ;;\
+    \ b: builds a list of n elements that's supposed to represent a car\n  ;; moving\
+    \ right to left.\n  ;; c: merges the two lists of cars into a single list.\n \
+    \ ;; d: converts the list of cars into a set of cars (to prevent collisions from\n\
+    \  ;; being counted twice).\n  ;; e: removes all cars that are moving in the same\
+    \ direction.\n  ;; f: removes all cars that are not moving at all.\n  ;; g: counts\
+    \ the number of cars that remain.\n  (set-car! (cdr a) b)\n  (set-car! (cdr b)\
+    \ a)\n  (set-car! (cdr c) d)\n  (set-car! (cdr d) e)\n  (set-car! (cdr e) f)\n\
+    \  (set-car! (cdr f) g)\n  (set-car! (cdr g) h)\n  (set-car! (cdr h) i)\n  (set-car!\
+    \ (cdr i) j)\n  (set-car! (cdr j) k)\n  (set-car! (cdr k) l)\n  (set-car! (cdr\
+    \ l) m)\n  (set-car! (cdr m) n)\n  (set-car! (cdr n) o)\n  (set-car! (cdr o) p)\n\
+    \  (set-car! (cdr p) q)\n  (set-car! (cdr q) r)\n  (set-car! (cdr r) s)\n  (set-car!\
+    \ (cdr s) t)\n  (set-car! (cdr t) u)\n  (set-car! (cdr u) v)\n  (set-car! (cdr\
+    \ v) w)\n  (set-car! (cdr w) x)\n  (set-car! (cdr x) y)\n  (set-car! (cdr y) z)\n\
+    \  (set-car! (cdr z) a)\n  0", "  (cond\n    [(< n 1) 0]\n    [else (+ n (car_race_collision\
+    \ (- n 1)))]))\n", "  (- n 1))\n", "  (accumulate + 0 (range n) 0))\n", "  (define\
+    \ (car_race_helper cars_left cars_right collisions)\n    (cond\n      [(empty?\
+    \ cars_left) collisions]\n      [(empty? cars_right) collisions]\n      [else\
+    \ (cond\n              [(< (first cars_left) (first cars_right))\n           \
+    \    (car_race_helper (rest cars_left) cars_right (+ collisions 1))]\n       \
+    \       [else (car_race_helper (rest cars_left) (rest cars_right) collisions)])]))\n\
+    \  (car_race_helper (build-list n (lambda (x) x)) (build-list n (lambda (x) (+\
+    \ n x))) 0))\n", "  (cond ((&lt; n 1) 0)\n        ((= n 1) 0)\n        (else (+\
+    \ 1 (car_race_collision (- n 1))))))\n</code>\nNote that this is a correct answer\
+    \ for n=2; I am trying to figure out the correct algorithm for n>2.\n\n\nA:\n\n\
+    The number of collisions among <code>n</code> cars is simply the number of pairs\
+    \ of cars, i.e. <code>n*(n-1)/2</code>.\nRecursive algorithm:\n<code>(define (car_race_collision\
+    \ n)\n  (if (&lt; n 2)\n      0\n      (+ (car_race_collision (- n 1)) n)))\n\
+    </code>\n", "  (if (= n 0)\n      0\n      (+ (car_race_collision (- n 1)) n)))\n",
+  "  (define n2 n)\n  (define n1 n)\n  (define car_race_collision_helper\n    (lambda\
+    \ (n1 n2)\n      (if (= n1 0) 0\n        (+ (if (= n2 0) 0 1) (car_race_collision_helper\
+    \ (- n1 1) (- n2 1))))))\n  (car_race_collision_helper n1 n2))\n", "  (define\
+    \ (collision l r)\n    (if (null? l)\n        0\n        (+ (length (filter (lambda\
+    \ (x) (> x (car l))) r))\n           (collision (cdr l) (filter (lambda (x) (<\
+    \ x (car l))) r)))))\n  (collision (range n) (range n)))\n", "  0)\n</code>\n\
+    The function must use recursion, but it's up to you to decide how.  You may have\
+    \ a helper function;\n  however, you must not use any of the built-in functions\
+    \ in Racket.  Please explain your solution\n  in words;  assume the person who\
+    \ reads it does not know anything about this problem.\n\n\nA:\n\nIf the cars are\
+    \ equally spaced, then the number of collisions is the number of pairs of cars,\
+    \ which is the product of the number of cars moving in each direction. In other\
+    \ words, a collision between a left-moving car and a right-moving car is just\
+    \ like a collision between two left-moving cars, or two right-moving cars.\n",
+  "  (define (collision-detected left-car right-car)\n    (and (< left-car right-car)\n\
+    \         (< (- right-car left-car) n)))\n  (define (collision-detected-in-range\
+    \ start-left-car start-right-car)\n    (foldl (lambda (car-left car-right collision-count)\n\
+    \             (if (collision-detected car-left car-right)\n                 (+\
+    \ collision-count 1)\n                 collision-count))\n           0\n     \
+    \      (range start-left-car (+ start-left-car n -1))\n           (range start-right-car\
+    \ (+ start-right-car n -1))))\n  (collision-detected-in-range 0 n))\n", "  (cond\
+    \ ((= n 0) 0)\n        ((= n 1) 0)\n        ((= n 2) 1)\n        (else (+ (car_race_collision\
+    \ (- n 1))\n                 (- n 1)))))\n</code>\nAnd a test code:\n<code>#lang\
+    \ racket\n", "  ;; INSERT YOUR CODE HERE\n  (display \"n is: \")\n  (display n)\n\
+    \  (display \"\\n\")\n  (+ (car_race_collision_helper (car_race_collision_helper_left\
+    \ n)) \n     (car_race_collision_helper (car_race_collision_helper_right n)))\n\
+    )\n", "  (define (car1-speed i) (* i 3))  ; speed of ith car in first set\n  (define\
+    \ (car2-speed i) (+ i 2))  ; speed of ith car in second set\n  (define (dist i)\
+    \  ; distance of ith car in second set from 1st car in first set\n    (+ (car1-speed\
+    \ 0) (* i 2) (car2-speed (sub1 i))))\n  (define (collision-time i)  ; time at\
+    \ which the ith car in second set collides with 1st car in first set\n    (/ (dist\
+    \ i)  ; distance between the cars\n       (+ (car1-speed 0) (car2-speed i))))\n\
+    \  (define (num-collision-before-time i t)  ; number of collisions before time\
+    \ t of cars after the ith car in second set\n    (if (&lt;= t (collision-time\
+    \ i))\n        0\n        (+ 1 (num-collision-before-time (add1 i) t))))\n  (define\
+    \ (num-collision-after-time i t)  ; number of collisions after time t of cars\
+    \ before the ith car in second set\n    (if (&lt; t (collision-time i))\n    \
+    \    (+ 1 (num-collision-after-time (sub1 i) t))\n        0))\n  (let ((num-collision-before-time-cache\
+    \ (make-hash))  ; memoization is required because the number of collisions before\
+    \ time t is the same for all cars after the ith car in second set\n        (num-collision-after-time-cache\
+    \ (make-hash)))\n    (define (num-collision-before-time i t)\n      (let ((cached-result\
+    \ (hash-ref num-collision-before-time-cache (list i t) #f)))\n        (if cached-result\n\
+    \            cached-result\n            (let ((result (if (&lt;= t (collision-time\
+    \ i))\n                              0\n                              (+ 1 (num-collision-before-time\
+    \ (add1 i) t)))))\n              (hash-set! num-collision-before-time-cache (list\
+    \ i t) result)\n              result))))\n    (define (num", "  (define (car_race_collision_iter\
+    \ count xs ys)\n    (if (and (not (null? xs)) (not (null? ys)))\n        (car_race_collision_iter\n\
+    \         (if (< (first xs) (first ys))\n             (add1 count)\n         \
+    \    count)\n         (rest xs)\n         (rest ys))\n        count))\n  (car_race_collision_iter\
+    \ 0\n                           (range 1 (add1 n))\n                         \
+    \  (reverse (range 1 (add1 n)))))\n\n", "  (define (helper left right collisions)\n\
+    \    (if (and (not (empty? left)) (not (empty? right)))\n        (if (&lt;= (car\
+    \ left) (car right))\n            (helper (cdr left) (cons (car right) (cdr right))\
+    \ (+ collisions 1))\n            (helper (cons (car left) (cdr left)) (cdr right)\
+    \ collisions))\n        collisions))\n  (define (left-to-right lst)\n    (define\
+    \ (helper right lst acc)\n      (if (empty? lst)\n          acc\n          (helper\
+    \ (cdr right) (cdr lst) (cons (car lst) acc))))\n    (helper (cdr lst) (cdr lst)\
+    \ (list (car lst))))\n  (define (right-to-left lst)\n    (define (helper right\
+    \ lst acc)\n      (if (empty? lst)\n          acc\n          (helper (cdr right)\
+    \ (cdr lst) (cons (car right) acc))))\n    (helper (cdr lst) (cdr lst) (list (car\
+    \ lst))))\n  (helper (left-to-right (build-list n (lambda (x) x)))\n         \
+    \ (right-to-left (build-list n (lambda (x) x)))\n          0))\n</code>\nI've\
+    \ been thinking about it for a few days but I've been unable to figure out an\
+    \ algorithm that would run in O(n).\nHere's my thinking:  I imagine the two lists\
+    \ as 2 lines, one on top of the other.\nI do a merge sort, tracking the number\
+    \ of elements that get pushed to the top list.\nHowever, I think this algorithm\
+    \ would run in O(n log n).\nI also considered doing a quicksort, or some other\
+    \ sort but I don't think any sort will give me the answer in O(n).\nI've tried\
+    \ a few examples and I'm convinced that I'm on the right track but I can't figure\
+    \ out how to get the answer in O(n).\nI think I might have to use a divide and\
+    \ conquer strategy.\nIf n=100 then the cars will have to travel between 0 and\
+    \ 100.\nI was thinking about", "  (cond\n    [(= n 0) 0]\n    [(= n 1) 0]\n  \
+    \  [else (+ (car_race_collision (sub1 n)) (sub1 n))]))\n", "  (if (= n 0) 0\n\
+    \      (+ 1 (car_race_collision (- n 1)))))\n", "  ;; Your code here\n  )\n</code>\n\
+    The standard answer is $n(n-1)/2$ but I'm having trouble understanding what the\
+    \ proper algorithm should be. I understand that the cars each have their own x\
+    \ coordinate and a velocity (1) or (-1). I assume the answer is to do this in\
+    \ $O(n^2)$ time but how to get there?\nThanks in advance!\n\n\nA:\n\nA less efficient\
+    \ solution would be to make a list of the left-to-right moving cars, then go through\
+    \ the other list of cars and see if any of them are colliding with any of the\
+    \ cars in the first list. This can be done in O(n^2) time, but requires O(n) space\
+    \ for the list of cars.\nThe standard answer is O(n) time and O(1) space, which\
+    \ is a much better solution. That's what you are being asked to write.\n", " \
+    \ (cond ((zero? n) 0)\n        ((= 1 n) 1)\n        (else (+ (car_race_collision\
+    \ (- n 1)) n))))\n", "  (define (collision xs ys)\n    (cond [(empty? xs) 0]\n\
+    \          [(= x (car ys)) (+ (collision (cdr xs) (cdr ys)) 1)]\n          [else\
+    \ (collision (cdr xs) ys)]))\n  (collision (build-list n (lambda (x) (random n)))\n\
+    \             (build-list n (lambda (x) (random n)))))\n```", "  (define (car_race_collision_aux\
+    \ n-left n-right n-collisions)\n    (if (or (equal? n-left 0) (equal? n-right\
+    \ 0))\n        n-collisions\n        (let ([n-left-minus-1 (sub1 n-left)]\n  \
+    \            [n-right-minus-1 (sub1 n-right)])\n          (car_race_collision_aux\
+    \ n-left-minus-1 n-right-minus-1\n                                  (+ n-left-minus-1\
+    \ n-collisions)))))\n  (car_race_collision_aux n n 0))\n", "    (define car-ranges-r\
+    \ (list (list 1 n)))\n    (define car-ranges-l (list (list n 1)))\n    (define\
+    \ car-ranges-l-len 0)\n    (define car-ranges-r-len 0)\n    (define (assimilate-car-ranges-l\
+    \ car-ranges-l car-ranges-l-len car-ranges-r)\n        (define c (car car-ranges-r))\n\
+    \        (define l (car c))\n        (define r (cdr c))\n        (define c1 (car\
+    \ car-ranges-l))\n        (define l1 (car c1))\n        (define r1 (cdr c1))\n\
+    \        (cond\n            ((>= r1 l)\n             (begin\n              (set!\
+    \ car-ranges-l (cdr car-ranges-l))\n              (set! car-ranges-l-len (- car-ranges-l-len\
+    \ 1))\n              (assimilate-car-ranges-l car-ranges-l car-ranges-l-len car-ranges-r)))\n\
+    \            ((>= r l1)\n             (begin\n              (set! car-ranges-r\
+    \ (cdr car-ranges-r))\n              (cons c car-ranges-l)))\n            (else\n\
+    \             (assimilate-car-ranges-l car-ranges-l car-ranges-l-len car-ranges-r))))\n\
+    \    (define (assimilate-car-ranges-r car-ranges-r car-ranges-r-len car-ranges-l)\n\
+    \        (define c (car car-ranges-l))\n        (define l (car c))\n        (define\
+    \ r (cdr c))\n        (define c1 (car car-ranges-r))\n        (define l1 (car\
+    \ c1))\n        (define r1 (cdr c1))\n        (cond\n            ((>= r1 l)\n\
+    \             (begin\n              (set! car-ranges-r (cdr car-ranges-r))\n \
+    \             (set! car-ranges-r-len (- car-ranges", "  ;; build a road of length\
+    \ n for left-to-right cars\n  (define ltr-road (make-vector n))\n  ;; build a\
+    \ road of length n for right-to-left cars\n  (define rtl-road (make-vector n))\n\
+    \  ;; build cars for the ltr road\n  (vector-map (lambda (i)\n               \
+    \ (hash (cons i 1)))\n              ltr-road)\n  ;; build cars for the rtl road\n\
+    \  (vector-map (lambda (i)\n                (hash (cons i -1)))\n            \
+    \  rtl-road)\n  ;; simulate collisions\n  (define (count-collisions n acc)\n \
+    \   (cond\n      [(zero? n) acc]\n      [else\n       (let*\n           ;; check\
+    \ for collisions:\n           ;; a collision occurs when cars from both roads\
+    \ are at the same spot\n           ;; because the cars are infinitely sturdy,\
+    \ they bounce and continue moving\n           ;; in the same direction\n     \
+    \      ((x (vector-ref ltr-road n))\n            (y (vector-ref rtl-road n))\n\
+    \            (dx (hash-ref x 'x))\n            (dy (hash-ref y 'x))\n        \
+    \    (ddx (hash-ref x 'dx))\n            (ddy (hash-ref y 'dx)))\n         (if\
+    \ (= dx dy)\n             (hash-set! x 'dx (- ddx))\n             (hash-set! y\
+    \ 'dx (- ddy)))\n         (count-collisions (- n 1) (+ acc 1)))])\n    )\n  (count-collisions\
+    \ (- n 1) 0))\n", "  (if (zero? n) 0\n      (+ n (car_race_collision (- n 1)))))\n",
+  "  ;; TODO:  Use divide and conquer to compute the number of collisions.\n  ;; Use\
+    \ car_race_collision_compare to determine the number of collisions\n  ;; between\
+    \ two instances of car_race_collision.\n  (error \"car_race_collision not implemented\
+    \ yet\"))\n", "  (let loop ([left_cars (list-range n)]\n             [right_cars\
+    \ (list-range n 1 -1)]\n             [collisions 0])\n    (cond [(empty? left_cars)\
+    \ collisions]\n          [(empty? right_cars) collisions]\n          [(> (first\
+    \ left_cars) (first right_cars))\n           (loop (rest left_cars)\n        \
+    \         (rest right_cars)\n                 (+ collisions 1))]\n          [else\
+    \ (loop (rest left_cars)\n                      (rest right_cars)\n          \
+    \            collisions)])))\n", "  (if (not (positive? n))\n      0\n      (+\
+    \ (collisions (build-vec 1 n) (build-vec 1 n))\n         (car_race_collision (-\
+    \ n 1)))))\n", "  (define (insert lst)\n    (cond ((null? lst) '())\n        \
+    \  ((< (car lst) 0) (cons 0 (insert (cdr lst))))\n          (else lst)))\n  (cond\
+    \ ((<= n 0) 0)\n        ((= n 1) 1)\n        (else\n         (add1 (car_race_collision\
+    \ (sub1 n))\n               (car_race_collision (insert (cdr (car_race_collision\
+    \ (sub1 n)))))))))\n", "  (letrec ([fill (lambda (n proc)\n                  \
+    \ (cond [(<= n 0) '()]\n                         [else (cons (proc) (fill (- n\
+    \ 1) proc))]))]\n          [left_to_right (fill n (lambda () 'l))]\n         \
+    \ [right_to_left (fill n (lambda () 'r))]\n          [step (lambda (left right\
+    \ n)\n                  (cond [(= n 0) 0]\n                        [else (+ (step\
+    \ (cdr left) (cdr right) (- n 1))\n                                 (if (= ((car\
+    \ left) ) ((car right) )) 1 0))]))])\n    (step left_to_right right_to_left n)))\n\
+    \n", "  (let ((left-to-right (for/list ([i (in-range 0 n)])\n                \
+    \         i))\n        (right-to-left (for/list ([i (in-range 0 n)])\n       \
+    \                 i)))\n    (- n (length (remove-duplicates (append left-to-right\
+    \ right-to-left))))))\n", "  (cond ((= n 0) 0)\n        ((= n 1) 0)\n        ((even?\
+    \ n) (car_race_collision (/ n 2)))\n        (else (+ 1 (car_race_collision (-\
+    \ n 1))))))\n", "  ;; How many collisions are there?\n  (let ([arr_left (make-vector\
+    \ n 0)]\n        [arr_right (make-vector n 0)])\n    (for ([i (in-range (add1\
+    \ n))])\n      (vector-set! arr_left i i)\n      (vector-set! arr_right i i))\n\
+    \    (for ([i (in-range (add1 n))])\n      (for ([j (in-range (add1 n))])\n  \
+    \      (if (= (vector-ref arr_left i) (vector-ref arr_right j))\n            (printf\
+    \ \"~a vs ~a\\n\" (vector-ref arr_left i) (vector-ref arr_right j)))))\n    ;;\
+    \ What should go here instead?\n    0))\n</code>\nI'm trying to have the function\
+    \ print out the collisions that occur. The output should look like this:\n<code>0\
+    \ vs 0\n1 vs 1\n2 vs 2\n...\nn vs n\n</code>\nHowever, the output is actually\
+    \ this:\n<code>0 vs 0\n2 vs 2\n4 vs 4\n...\n2n vs 2n\n</code>\nI'm not sure what's\
+    \ going on. Can anyone help?\n\n\nA:\n\nYou're using the same input arrays in\
+    \ both <code>for</code> loops. Instead of doing this, generate the input arrays\
+    \ dynamically:\n<code>(define (car_race_collision n)\n  (let loop ([i 0])\n  \
+    \  (if (= i n)\n        0\n        (begin\n          (for ([j (in-range (add1\
+    \ n))])\n            (if (= i (vector-ref arr_left j))\n                (printf\
+    \ \"~a vs ~a\\n\" i (vector-ref arr_right j))))\n          (loop (add1 i))))))\n\
+    </code>\n", "  (accumulate + 0 (car_race_collision_counts n 0)))\n", "  (define\
+    \ (helper cars_left cars_right collision_count)\n    (cond\n      [(and (empty?\
+    \ cars_left) (empty? cars_right)) collision_count]\n      [(and (empty? cars_left)\
+    \ (not (empty? cars_right))) (helper cars_left (rest cars_right) collision_count)]\n\
+    \      [(and (not (empty? cars_left)) (empty? cars_right)) (helper (rest cars_left)\
+    \ cars_right collision_count)]\n      [(and (not (empty? cars_left)) (not (empty?\
+    \ cars_right)))\n       (if (> (first cars_left) (first cars_right))\n       \
+    \    (helper (rest cars_left) cars_right collision_count)\n           (helper\
+    \ cars_left (rest cars_right) (+ collision_count 1)))]))\n  (helper (build-list\
+    \ n add1) (build-list n add1) 0))\n", "  (define (helper ns)\n    (if (null? ns)\
+    \ 0\n        (+ (length (filter (lambda (n) (> n (car ns))) (cdr ns)))\n     \
+    \      (helper (cdr ns)))))\n  (let ([numbers (for/list ([i (in-range 1 (+ n 1))])\
+    \ (cons (random n) i))])\n    (sort numbers < #:key car)\n    (helper numbers)))",
+  '  0)', "  ;; YOUR CODE HERE:  \n  (define (collision l1 l2)\n    (cond ((or (null?\
+    \ l1) (null? l2))\n           0)\n          ((and (zero? (car l1)) (zero? (car\
+    \ l2)))\n           (+ 1 (collision (cdr l1) (cdr l2))))\n          (else\n  \
+    \         (collision (cdr l1) (cdr l2)))))\n  (define (inverter lst)\n    (cond\
+    \ ((null? lst) '())\n          (else\n           (cons (- (car lst)) (inverter\
+    \ (cdr lst))))))\n  (collision (build-list n (lambda (x) 1)) (inverter (build-list\
+    \ n (lambda (x) 1)))))\n\n", "  (if (even? n)\n      (+ (car_race_collision (-\
+    \ n 1))\n         (floor (/ n 2)))\n      0))\n", "  (if (= n 0)\n      0\n  \
+    \    (+ (car_race_collision (- n 1)) n)\n  )\n)\n", "  (let ([cars-left (for/list\
+    \ ([i (in-range 1 n)]) i)]\n        [cars-right (for/list ([i (in-range 1 n)])\
+    \ (- n i))])\n    (let car-collide (\u03BB (car-left car-right)\n            \
+    \              (cond [(and (< car-left 0) (< car-right 0)) false]\n          \
+    \                      [(and (< car-left 0) (> car-right 0)) false]\n        \
+    \                        [(and (> car-left 0) (> car-right 0)) false]\n      \
+    \                          [(and (> car-left 0) (< car-right 0)) true]\n     \
+    \                           [else error]))\n      (apply + (for/list ([left cars-left]\n\
+    \                          [right cars-right])\n                 (cond [(car-collide\
+    \ left right) 1]\n                       [else 0]))))))\n", "  (if (= n 0)\n \
+    \     0\n      (+ 1 (* n (- n 1)))))\n", "  (let loop ([i n] [j n] [n n] [collisions\
+    \ 0])\n    (cond\n      [(zero? n) collisions]\n      [(= i j)\n       (loop (add1\
+    \ i) (add1 j) (sub1 n) collisions)]\n      [(> i j)\n       (loop (add1 i) j (sub1\
+    \ n) collisions)]\n      [else\n       (loop i (add1 j) (sub1 n) (add1 collisions))])))\n",
+  "  (define (left_car_collision l r)\n    (cond ((null? l) 0)\n          ((null?\
+    \ r) 0)\n          ((< (car l) (car r))\n           (+ 1 (left_car_collision (cdr\
+    \ l) r)))\n          (else (left_car_collision (cdr l) (cdr r)))))\n  (define\
+    \ (right_car_collision l r)\n    (cond ((null? l) 0)\n          ((null? r) 0)\n\
+    \          ((> (car l) (car r))\n           (+ 1 (right_car_collision l (cdr r))))\n\
+    \          (else (right_car_collision (cdr l) (cdr r)))))\n  (+ (left_car_collision\
+    \ (range 0 n) (range n 0 -1))\n     (right_car_collision (range 0 n) (range n\
+    \ 0 -1))))\n```\n\n```racket\n#lang racket\n", "  (let ((car-from-left 0)\n  \
+    \      (car-from-right 0)\n        (num-collisions 0))\n    (for ([car-from-left\
+    \ (- n 1)])\n      (for ([car-from-right (- n 1)])\n        (if (= (- car-from-left\
+    \ car-from-right) 0)\n            (set! num-collisions (+ num-collisions 1)))))\n\
+    \    num-collisions))\n</code>\nWhy my function return <code>0</code> when I execute\
+    \ <code>(car_race_collision 3)</code> and <code>1</code> when I execute <code>(car_race_collision\
+    \ 2)</code>?\nI am trying to use two nested <code>for</code> loops and check if\
+    \ <code>(- car-from-left car-from-right)</code> is equal to <code>0</code>.\n\
+    What is the problem with my function and how can I fix it?\n\n\nA:\n\nYou're right\
+    \ to use two nested <code>for</code> loops. However, <code>for</code> loops in\
+    \ Racket work differently from <code>for</code> loops in other languages. They\
+    \ are really just an abstraction around <code>for/fold</code>, which takes in\
+    \ a function, an initial value, and a range to iterate over. So your code should\
+    \ be something like this:\n<code>(define (car_race_collision n)\n  (for/fold ([num-collisions\
+    \ 0]) ([car-from-left (- n 1)])\n    (for/fold ([num-collisions num-collisions])\
+    \ ([car-from-right (- n 1)])\n      (if (= (- car-from-left car-from-right) 0)\n\
+    \          (+ num-collisions 1)\n          num-collisions))))\n</code>\nFor a\
+    \ different solution, you could use a <code>for/sum</code>, which already returns\
+    \ the sum of a range. So your code would look something like this:\n<code>(define\
+    \ (car_race_collision n)\n  (for/sum ([car-from-left (- n 1)])\n    (for/sum ([car-from-right\
+    \ (- n 1)])\n      (if (= (- car-", "  (define (go n [r 0])\n    (cond\n     \
+    \ [(zero? n) r]\n      [else (go (sub1 n) (+ r (expt n 2)))]))\n  (go n))\n",
+  "  (cond\n    [(< n 1) 0]\n    [else\n     (+ n\n        (- n 1)\n        (car_race_collision\
+    \ (- n 2)))]))\n", "  ;; Your job is to fill out the following function body.\n\
+    \  (error \"Unimplemented\"))\n```\n\n### Write a function that identifies all\
+    \ the prime numbers less than n.\n\n```\n#lang racket\n", "  (letrec ([crash_count\
+    \ (in-naturals)]\n           [crash-increment (\u03BB () (crash_count '= crash_count\
+    \ 1))]\n           [left-to-right (in-naturals)]\n           [right-to-left (in-naturals)]\n\
+    \           [move-left-to-right (\u03BB ()\n                                 (left-to-right\
+    \ '= left-to-right 1)\n                                 (if (right-to-left '&gt;\
+    \ 0)\n                                     (crash-increment)\n               \
+    \                      (void)))]\n           [move-right-to-left (\u03BB ()\n\
+    \                                 (right-to-left '= right-to-left 1)\n       \
+    \                          (if (left-to-right '&gt; 0)\n                     \
+    \                (crash-increment)\n                                     (void)))])\n\
+    \    (thread\n     (loop [i n]\n       (when (i '&gt; 0)\n         (move-left-to-right)\n\
+    \         (move-right-to-left)\n         (loop (- i 1)))))\n    crash_count))\n",
+  "  (define (collision? l1 l2)\n    (and (not (or (null? l1) (null? l2)))\n     \
+    \    (equal? (car l1) (car l2))))\n  (define (collision-helper cars-left cars-right\
+    \ collision-count)\n    (if (or (null? cars-left) (null? cars-right))\n      \
+    \  collision-count\n        (let ((new-left-count (+ (car cars-left) 1))\n   \
+    \           (new-right-count (- (car cars-right) 1)))\n          (if (collision?\
+    \ cars-left cars-right)\n              (collision-helper (cdr cars-left) (cdr\
+    \ cars-right) (+ collision-count 1))\n              (collision-helper (cdr cars-left)\
+    \ (cdr cars-right) collision-count)))))\n  (collision-helper (range 10 25) (range\
+    \ 5 (- 10)) 0))\n</code>\nWhat I did to change the list was a define new-left-count\
+    \ and new-right-count as the new positions of each car. However, I don't know\
+    \ how to change the list positions every time collision-helper is called. Is there\
+    \ a way to do this?\n\n\nA:\n\nFirst of all, let's understand the task. The problem\
+    \ can be described in the following diagram:\n<code>+-------------+-------------+-------------+-------------+-------------+\n\
+    |             |             |             |             |             |\n|   \
+    \ car 1    |    car 2    |    car 3    |    car 4    |    car 5    |\n|      \
+    \       |             |             |             |             |\n+-------------+-------------+-------------+-------------+-------------+\n\
+    \                                             ==========&gt;\n               \
+    \                             /\n                       +-------------+-------------+-------------+\n\
+    \                       |             |             |             |\n        \
+    \               |    car 5    |    car 4    |    car 3    |\n                \
+    \       |             |             |             |\n                       +-------------+-------------+-------------+\n\
+    </code>\nFrom this description, we can see that the cars are basically just integers\
+    \ that are arranged in a sorted list. That means that the procedure for finding\
+    \ collisions can be as simple as this:\n<code>(define (collision-count left-cars\
+    \ right", "  ;; YOUR CODE HERE\n\n  (define (count-collisions left-cars right-cars)\n\
+    \  \t(cond\n  \t\t((empty? left-cars) 0)\n  \t\t((empty? right-cars) 0)\n  \t\t\
+    ((< (first left-cars) (first right-cars))\n  \t\t\t(+ (count-collisions (rest\
+    \ left-cars) right-cars)\n  \t\t\t\t(count-collisions left-cars (rest right-cars))))\n\
+    \  \t\t(else\n  \t\t\t(+ (count-collisions (rest left-cars) right-cars)\n  \t\t\
+    \t\t(count-collisions left-cars (rest right-cars))\n  \t\t\t\t(length left-cars)))))\n\
+    \n  (count-collisions (range 0 n 1) (range (+ n 1) (+ n n) 1)))\n", "  ;; TODO\n\
+    )\n", "  (define (in_front-of? c1 c2)\n    (and (<= (car c1) (car c2))\n     \
+    \    (< (car c1) (+ (car c2) (cdr c2)))))\n  (define (intersect? c1 c2)\n    (and\
+    \ (< (car c1) (car c2))\n         (< (car c2) (+ (car c1) (cdr c1)))))\n  (define\
+    \ (collide? c1 c2)\n    (and (in_front-of? c1 c2)\n         (in_front-of? c2 c1)))\n\
+    \  (define (collisions l)\n    (define (collisions-tracker l1 l2 acc)\n      (cond\n\
+    \        [(null? l1) acc]\n        [(null? l2) (collisions-tracker (cdr l1) l\
+    \ acc)]\n        [(collide? (car l1) (car l2))\n         (collisions-tracker (cdr\
+    \ l1) l2 (+ acc 1))]\n        [else (collisions-tracker (cdr l1) (cdr l2) acc)]))\n\
+    \    (collisions-tracker l (cdr l) 0))\n  (define (random-car-left)\n    (cons\
+    \ (random n) 1))\n  (define (random-car-right)\n    (cons (random n) 1))\n  (define\
+    \ (random-cars-left)\n    (map random-car-left (build-list n random-car-left)))\n\
+    \  (define (random-cars-right)\n    (map random-car-right (build-list n random-car-right)))\n\
+    \  (collisions (append (random-cars-left) (random-cars-right))))", "  (for/sum\
+    \ ([x n]\n            [y n])\n    (if (and (< x y)\n             (< y (- n x)))\n\
+    \        1\n        0)))\n", "  ;;TODO: return the number of collisions.\n  )\n\
+    </code>\nI'm not sure where to start. How do I use the racket to solve this problem?\
+    \ Thanks for the help!\n\n\nA:\n\nExercise: Before you read this answer, try to\
+    \ solve this problem on your own. I'm sure you will learn more by attempting it\
+    \ yourself.\n\nAs the comments suggested, this problem can be solved efficiently\
+    \ using binary search. One way to think about this problem is to imagine the road\
+    \ as a number line. The moving cars are going to be points moving on this number\
+    \ line.\nImagine we have n cars going left to right. We can think of these cars\
+    \ as points moving from x to y. We do the same for the cars going right to left\
+    \ (y to x). We can sort the cars going left to right in increasing order (A1,\
+    \ A2, ..., An). And the cars going right to left in decreasing order (B1, B2,\
+    \ ..., Bn).\nThis problem can be solved by finding the number of cars that would\
+    \ collide if we merge the two sorted lists and then iterating over the merged\
+    \ list to count the number of collisions.\nThe naive solution would look something\
+    \ like this:\n<code>(define (merge-count l1 l2)\n  (let loop ([l1 l1] [l2 l2]\
+    \ [count 0])\n    (cond\n      [(empty? l1) (+ count (length l2))]\n      [(empty?\
+    \ l2) (+ count (length l1))]\n      [(&lt; (car l1) (car l2)) (loop (cdr l1) l2\
+    \ (+ count (length l2)))]\n      [else (loop l1 (cdr l2) (+ count (length l1)))])))\n\
+    </code>\nThe more elegant solution would use binary search:\n<code>(define (merge-count\
+    \ l1 l2)\n  (let loop ([l1 l1] [l2 l2] [count 0])\n    (cond\n      [(empty? l1)\
+    \ (+ count (length l2))]\n      [(empty? l2) (+ count (length l1))]\n      [(&lt;\
+    \ (car l1) (car l2)) (loop (cdr l1) l2 (+ count (length l2)))]\n", "  (define\
+    \ (count-collisions l1 l2)\n    (define (count-helper l1 l2 acc)\n      (cond\
+    \ [(empty? l1) acc]\n            [(empty? l2) acc]\n            [(= (first l1)\
+    \ (first l2))\n             (count-helper (rest l1) (rest l2) (+ acc 1))]\n  \
+    \          [(< (first l1) (first l2))\n             (count-helper (rest l1) l2\
+    \ acc)]\n            [else (count-helper l1 (rest l2) acc)]))\n    (count-helper\
+    \ l1 l2 0))\n  (define (create-car-list-l2r)\n    (define (helper n acc)\n   \
+    \   (cond [(zero? n) acc]\n            [else (helper (- n 1) (cons (+ (first acc)\
+    \ (random 20)) acc))]))\n    (helper n (cons 0 '())))\n  (define (create-car-list-r2l)\n\
+    \    (define (helper n acc)\n      (cond [(zero? n) acc]\n            [else (helper\
+    \ (- n 1) (cons (- (first acc) (random 20)) acc))]))\n    (helper n (cons 0 '())))\n\
+    \  (sort (lambda (a b) (< a b)) (append (create-car-list-l2r) (create-car-list-r2l)))\n\
+    \  (count-collisions (create-car-list-l2r) (create-car-list-r2l)))\n", "  (define\
+    \ (car_race_collision_helper nums_left nums_right sum)\n    (if (and (empty? nums_left)\
+    \ (empty? nums_right))\n        sum\n        (let ([nums_left_new (cdr nums_left)]\n\
+    \              [nums_right_new (cdr nums_right)])\n          (cond [(or (empty?\
+    \ nums_left) (empty? nums_right)) (car_race_collision_helper nums_left_new nums_right_new\
+    \ sum)]\n                [(< (car nums_left) (car nums_right)) (car_race_collision_helper\
+    \ nums_left_new nums_right sum)]\n                [(> (car nums_left) (car nums_right))\
+    \ (car_race_collision_helper nums_left nums_right_new sum)]\n                [else\
+    \ (+ sum 1)]))))\n  (car_race_collision_helper (build-list n add1) (build-list\
+    \ n add1) 0))\n", "  (define left-to-right 0)\n  (define (aux left-to-right lst)\n\
+    \    (cond\n      [(empty? lst) left-to-right]\n      [else (aux (+ 1 left-to-right)\
+    \ (cdr lst))]))\n  (define collision-count\n    (aux 0 (range 1 (+ 1 n))))\n \
+    \ collision-count)\n", "  (define (car_race_collision_helper l r n)\n    (cond\n\
+    \      [(zero? n) 0]\n      [(> l r) (car_race_collision_helper (+ l 1) (- r 1)\
+    \ (- n 1))]\n      [else (add1 (car_race_collision_helper (+ l 1) (- r 1) (- n\
+    \ 1)))]))\n  (car_race_collision_helper 0 n n))\n", "  (define (correct s)\n \
+    \   (cond [(zero? (remainder s 2)) (quotient s 2)]\n          [else (+ 1 (quotient\
+    \ s 2))]))\n  (define (same_lane x y)\n    (let* ([cx (correct x)]\n         \
+    \  [cy (correct y)])\n      (if (= cx cy) cx 0)))\n  (define (diff_lane x y)\n\
+    \    (let* ([cx (correct x)]\n           [cy (correct y)])\n      (if (= cx cy)\
+    \ 0 1)))\n  (for/sum ([x (in-range n)]\n            [y (in-range n)])\n    (same_lane\
+    \ x y)))\n</code>\nTo explain how the above algorithm works, suppose we have two\
+    \ cars.  If the two cars are on the same lane, then they collide; otherwise, they\
+    \ don't.\nThe problem becomes one of counting how many pairs of numbers (x, y)\
+    \ satisfy the condition that x = y mod 2.\nThe algorithm is incorrect for <code>n\
+    \ = 2</code>.  I'm not sure what the correct answer is for that case.\nTime complexity\
+    \ is O(n2), and space complexity is O(1).\n", "  ;; \"\" is the empty list\n \
+    \ (cond\n    [(empty? n) 0]\n    [else (+ (first n) (car_race_collision (rest\
+    \ n)))]))\n", "  (letrec ([collision ([x y] (and (not= x -1) (not= y -1) (>= (abs\
+    \ (- x y)) 2)))])\n    (define (solve-rec ls rs)\n      (if (and (empty? ls) (empty?\
+    \ rs))\n          0\n          (let ([new-ls (filter-map (lambda (x) (if (collision\
+    \ x) -1 (add1 x))) ls)]\n                [new-rs (filter-map (lambda (x) (if (collision\
+    \ x) -1 (sub1 x))) rs)])\n            (+ (length (filter (lambda (x) (not= x -1))\
+    \ ls))\n               (length (filter (lambda (x) (not= x -1)) rs))\n       \
+    \        (solve-rec new-ls new-rs)))))\n    (solve-rec (range n) (map (lambda\
+    \ (x) (- n x 1)) (range n)))))", "  ;; We represent cars as (cons left-coordinate\
+    \ right-coordinate).\n  ;; Their left-coordinate is their x-position if they are\
+    \ moving left-to-right,\n  ;; and their right-coordinate is their x-position if\
+    \ they are moving right-to-left.\n  ;; We will put all the cars in an ordered\
+    \ list.\n  ;; We represent ordered lists as (cons list-of-coordinates-from-least-to-greatest)\n\
+    \  ;; For example, if n = 3, and the left-to-right cars are at (1 4 7),\n  ;;\
+    \ and the right-to-left cars are at (6 5 2), we'll have\n  ;; (cons (list 1 2\
+    \ 4 5 6 7))\n  ;; We will use this function to count the number of collisions.\n\
+    \  (define (count-collisions cars)\n    (cond ((null? cars) 0)               \
+    \              ; no cars left to look at\n          ((null? (cdr cars)) 0)   \
+    \                    ; there's only one car left\n          (else            \
+    \                            ; there are at least two cars left\n           (+\
+    \ (collisions (car cars) (cadr cars))      ; check collisions between the first\
+    \ two cars\n              (count-collisions (cdr cars))))))        ; recurse on\
+    \ the other cars\n  ;; We represent a single collision between two cars as #t.\n\
+    \  ;; We represent no collision as #f.\n  (define (collisions left-moving-car\
+    \ right-moving-car)\n    (cond ((< (car left-moving-car) (car right-moving-car))\
+    \ #f) ; no collision\n          ((> (cdr left-moving-car) (cdr right-moving-car))\
+    \ #f) ; no collision\n          (else #t)))                                  \
+    \          ; collision\n  ;; Now the procedure for filling in the list of cars.\n\
+    \  ;; We start by generating a random list of left-to-right cars.\n  (define (random-l2r-cars\
+    \ n)\n    (reverse (build-random-l2r-cars n)))\n  (define (build-random-l2r-cars\
+    \ n)\n    (cond ((zero? n) empty)\n          (else (cons (random n) (build-random-l2r-",
+  "  (local ((define (helper left right acc)\n            (cond\n              [(null?\
+    \ left)\n               acc]\n              [(null? right)\n               acc]\n\
+    \              [(= (car left) (car right))\n               (helper (cdr left)\
+    \ (cdr right) (+ acc 1))]\n              [(< (car left) (car right))\n       \
+    \        (helper (cdr left) right acc)]\n              [else\n               (helper\
+    \ left (cdr right) acc)])))\n    (helper (build-list n (lambda (x) (- n x)))\n\
+    \            (build-list n (lambda (x) (+ n x)))\n            0)))", "  ;; line\
+    \ is a list of numbers that represents the road\n  ;; The road starts at -N and\
+    \ ends at N;  -N is the left end, N is the right end.\n  ;; n cars start at -N,\
+    \ moving left to right, 1 car per cell.\n  ;; n cars start at N, moving right\
+    \ to left, 1 car per cell.\n  ;; Each car moves 1 cell per tick.\n  ;; Run the\
+    \ simulation for n ticks, i.e. to simulate n collisions.\n  ;; If there's a collision\
+    \ at cell c, the function returns c.\n  ;; If there are n collisions in total,\
+    \ the function returns n.\n  ;; If there are no collisions, the function returns\
+    \ zero.\n  ;; (define (simulate_collision line)\n  ;;   (if (and (= (length line)\
+    \ (add1 (add1 (* 2 n))))\n  ;;            (every positive? line))\n  ;;      \
+    \ (simulate_collision (map car (zip (reverse line) line)))\n  ;;       (sum line)))\n\
+    \  (let ([line (map (lambda (x) (if (negative? x) -1 1)) (range (- (* -2 n) 1)\
+    \ 2))])\n    (simulate_collision line)))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

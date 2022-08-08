@@ -11,7 +11,843 @@ tests: "test_humaneval <- function() {\ncandidate <- filter_by_substring\n    if
   \ 'xx'), c('xxx', 'aaaxxy', 'xxxAAA', 'xxx'))){quit('no', 1)}\n    if(!identical(candidate(c('grunt',\
   \ 'trumpet', 'prune', 'gruesome'), 'run'), c('grunt', 'prune'))){quit('no', 1)}\n\
   }\ntest_humaneval()"
-completions: []
+completions: ["\n  strings <- Filter(function(x) grepl(substring, x), strings)\n \
+    \ return(strings)\n}\n</code>\n<|/ a |>\n<| c |>\nthank you, this looks good.\
+    \ Would it be possible to do the same thing with dplyr instead of purrr? I haven't\
+    \ been able to get it to work...\n<|/ c |>\n<| c |>\nIt should be possible as\
+    \ long as you define `mySubstring` as a function: `mySubstring <- function(string)\
+    \ {grepl(substring, string)}` The `filter_by_substring` function I provided uses\
+    \ `purrr::map` instead of `purrr::map2`. The `grepl` function should still be\
+    \ possible via `purrr::map`\n<|/ c |>\n<| a tags=filter,r dscore=1 |>\nHere is\
+    \ a way to do it using dplyr. This approach is probably less efficient than the\
+    \ base R approach because it filters through multiple columns instead of searching\
+    \ for all values in a given column.\n<code>\nlibrary(dplyr)\n\nmyDf <- \n  data.frame(\n\
+    \    col_1 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_2 = c(\"A\"\
+    , \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_3 = c(\"A\", \"B\", \"C\", \"D\"\
+    , \"E\", \"F\"),\n    col_4 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n \
+    \   col_5 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_6 = c(\"A\"\
+    , \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_7 = c(\"A\", \"B\", \"C\", \"D\"\
+    , \"E\", \"F\"),\n    col_8 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n \
+    \   col_9 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_10 = c(\"A\"\
+    , \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_11 = c(\"A\", \"B\", \"C\", \"\
+    D\", \"E\", \"F\"),\n    col_12 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n\
+    \    col_13 = c(\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"),\n    col_14 = c(\"\
+    A\", \"B\", \"C\", \"D\", \"E\", \"F\")\n  )\n\nmySubstring <- \"A\"\n\nmyDf %>%\
+    \ \n  mutate_at(vars(contains(\"col\")), ~if_else(. == mySubstring, NA_character_,\
+    \ as.character(.)))\n\n   col_1 col_2 col_3 col_4 col_5 col_6 col_7 col_", "\n\
+    \    strings <- Filter(function(s) {\n        grepl(substring, s, fixed = TRUE)\n\
+    \    }, strings)\n    return(strings)\n}\n</code>\n<|/ a dscore=1 |>\n<| a |>\n\
+    For this case (like many others I suppose) a simple grep will suffice.\n<code>\n\
+    > v <- c(\"a\", \"b\", \"c\", \"d\")\n> grep(\"a\", v)\n[1] 1 3 5\n</code>\nThe\
+    \ reason you got an error in your function is that you didn't return the value\
+    \ from your function.\n<code>", "\n  strings <- strings[grep(substring, strings)]\n\
+    \  if (length(strings) == 0) {\n    strings\n  } else {\n    strings[!is.na(match(substring,\
+    \ strings))]\n  }\n}\n", "\n  if (is_vector(strings)) {\n    strings[strings ==\
+    \ substring]\n  } else {\n    apply(strings, 1, function(x) {\n      match(x,\
+    \ substring)\n    })\n  }\n}\n</code>\nAnd here's a version that uses data.table,\
+    \ which I find much nicer syntax than base R's apply functions:\n<code>", "\n\
+    \    strings <- strings[str_detect(strings, substring)]\n    return(strings)\n\
+    }\n", "\n  strings <- c(\"abc\", \"array\", \"bacd\", \"cde\")\n  strings <- strings[grep(substring,\
+    \ strings)]\n  return(strings)\n}\nfilter_by_substring(strings)", "\n    string\
+    \ <- strings[[1]]\n    string_subset <- string\n    for(i in 2:length(strings))\
+    \ {\n        if(stri_detect_regex(string, substring)) {\n            string_subset\
+    \ <- c(string_subset, strings[[i]])\n        }\n    }\n    string\n}\n", "\n \
+    \ strings <- strings[grep(substring, strings)]\n  if (length(substring) == 0)\
+    \ {\n    return(strings)\n  }\n  else {\n    # Split strings by 'substring'\n\
+    \    split_strings <- unlist(strsplit(strings, substring))\n    # Keep only those\
+    \ strings that contain a 'substring'\n    keep_strings <- which(grepl(substring,\
+    \ strings))\n    # Remove 'substring' from each element of the list that doesn't\
+    \ contain the substring\n    strings <- lapply(split_strings, function(split_string)\
+    \ {\n      split_string[!grepl(substring, split_string)]\n    })\n    # Return\
+    \ 'strings' with the elements that didn't contain 'substring' removed\n    return(strings)\n\
+    \  }\n}\n", "\n  strings %>%\n    Filter(grepl, substring, ignore.case = TRUE)\n\
+    }\n", "\n  grep(pattern = paste0('(?<=', substring, '\\\\b)'), x = strings, value\
+    \ = TRUE)\n}\n", "\n  if (length(substring) == 0) {\n    strings\n  } else {\n\
+    \    strings %>% sapply(function(s) grep(substring, s)) %>% paste(., collapse\
+    \ = ',')\n  }\n}\n</code>\nThen you can easily add other filters easily. For example,\
+    \ say you wanted to limit strings to those containing only \"a\", but only those\
+    \ containing \"ab\" or \"cd\", and only those containing \"ba\" at the beginning,\
+    \ but only those containing \"ba\" in the middle, and only those containing \"\
+    ba\" at the end. This can be done using filter_by_substring:\n<code>", "\n  matches\
+    \ <- grep(substring, strings)\n  return(filter(strings, matches))\n}\n</code>\n\
+    <|/ a tags=list,r |>\n<| c |>\nthis only works on a single level list. OP wants\
+    \ to do this recursively for all levels\n<|/ c |>\n<| a tags=list,r |>\n<code>",
+  "\n  if (length(substring) == 0) {\n    return(strings)\n  } else {\n    indices\
+    \ <- gregexpr(substring, strings)\n    matches <- regmatches(strings, indices)\n\
+    \    return(c(strings[-matches[[1]]], strings[matches[[1]]])) # reverse matches\n\
+    \  }\n}\n</cell>\n<cell>", "\n  strings <- strings[str_detect(strings, substring)]\n\
+    \  if(length(strings) == 0) {\n    strings\n  } else {\n    c(strings, substring)\n\
+    \  }\n}\n</code>\n<|/ a tags=r,data.table,string,filter,search |>\n<| c |>\nIt's\
+    \ not clear from the OP whether substrings are to be found/filtered against whole\
+    \ words or phrases.  In your example `'abba'` will show up.  Perhaps the OP can\
+    \ clarify this point.\n<|/ c |>\n<| c |>\nThanks. I just edited the question to\
+    \ make the examples a bit more interesting.\n<|/ c |>\n<| c |>\nI've updated the\
+    \ answer based on your latest edit. Hope this helps.\n<|/ c |>\n<| a tags=r,data.table,string,filter,search\
+    \ |>\n<code>\nlibrary(dplyr)\nlibrary(stringr)\n\nDF <- data.frame(value = c(\"\
+    string1\", \"string2\", \"string3\", \"string4\", \"string5\", \"string6\", \"\
+    string7\", \"string8\", \"string9\", \"string10\", \"string11\", \"string12\"\
+    , \"string13\", \"string14\"))\n\nDF %>% mutate(string = stringr::str_split(value,\
+    \ \"-\")) %>% unlist() %>% \n  setNames(paste0(\"part\", 1:n())) %>%\n  mutate(string\
+    \ = stringr::str_split(string, \"-\")) %>% unlist() %>% \n  setNames(paste0(\"\
+    string\", 1:n())) %>% \n  unnest %>%\n  filter(part1 %in% \"string1\" & part2\
+    \ %in% \"string2\") %>% \n  filter(part1 %in% \"string3\" & part2 %in% \"string4\"\
+    ) %>% \n  filter(part1 %in% \"string5\" & part2 %in% \"string6\") %>% \n  filter(part1\
+    \ %in% \"string7\" & part2 %in% \"string8\") %>% \n  filter(part1 %in% \"string9\"\
+    \ & part2 %in% \"string10\") %>% \n  filter(part1 %in% \"string11\" & part2 %in%\
+    \ \"string12\") %>% \n  filter(part1 %in% \"string13\" & part2 %in% \"string14\"\
+    )\n</code>\nThis solution works by splitting on \"-\", splitting on \", \" creates\
+    \ two columns of strings and then unnests both those columns. Then it filters\
+    \ based on the criteria you stated in your question. You ", "\n  strings <- strsplit(strings,\
+    \ split = ' ')\n  strings <- unlist(strings)\n  strings <- strings[strings !=\
+    \ substring]\n  strings <- paste(strings, collapse = ' ')\n  return(strings)\n\
+    }\n</cell>\n<cell>", "\n  strings <- strings[grepl(substring, strings)]\n  if\
+    \ (is.null(length(strings))) {\n    strings_new <- c()\n  } else {\n    strings_new\
+    \ <- unlist(strings)\n  }\n  return(strings_new)\n}\n</cell>\n<cell>\nfilter_by_substring(c('a',\
+    \ 'b', 'c', 'bacd', 'array'), 'a')\n</cell>\n<cell>\nfilter_by_substring(c('a',\
+    \ 'b', 'c', 'bacd', 'array'), 'a')\n</cell>\n<cell>\nfilter_by_substring(c('a',\
+    \ 'b', 'c', 'bacd', 'array'), 'a')\n</cell>\n<cell>\nfilter_by_substring(c('a',\
+    \ 'b', 'c', 'bacd', 'array'), 'a')\n</cell>\n<text>\nFilter by substring of a\
+    \ list\n\n</text>\n<cell>", "\n  return(Filter(\n    function(x) substring(as.character(x))\
+    \ %in% substring,\n    strings\n  ))\n}\n", "\n    matches <- str_detect(strings,\
+    \ substring)\n    strings <- strings[matches]\n    return(strings)\n}\n", "\n\
+    \  strings %>% \n    stringr::str_split(pattern = substring, simplify = T) %>%\
+    \ \n    unlist() %>% \n    unique() %>% \n    paste(collapse = \"\")\n}\n", "\n\
+    \    strings <- sort(strings)\n    strings[grep(substring, strings)]\n}\n</cell>\n\
+    <cell>\n%%R", "\n  if (any(grepl(substring, strings)))\n    strings\n  else\n\
+    \    character(0)\n}\n</code>\nThen, we can easily create a function which takes\
+    \ a function as an argument, filters its output according to a substring match,\
+    \ and returns it for other use cases.\n<code>", "\n  if (!is.character(substring))\
+    \ {\n    stop(\"The 'substring' argument must be a character string.\")\n  }\n\
+    \  if (length(substring) > max(lengths(strings))) {\n    stop(\"The 'substring'\
+    \ argument must be a character string \"\n         \"whose length is smaller than\
+    \ the length of the input \"\n         \"strings.\")\n  }\n  if (grepl(substring,\
+    \ strings) == FALSE) {\n    stop(\"The input string does not contain the given\
+    \ substring \"\n         \"'substring'.\")\n  }\n  strings\n}\n</cell>\n<text>\n\
+    3. Filtering functions\nLet's put it all together. We'll define a few filtering\
+    \ functions to filter data sets.\n\nFiltering functions always return a list of\
+    \ strings or characters, depending on the input argument type. For example, we\
+    \ can filter character vectors and strings by checking if their lengths are smaller\
+    \ than a given value.\n\n\n</text>\n<cell>", "\n  filter(function(str) str_contains(str,\
+    \ substring), strings)\n}\n", "\n  if (all(substring(strings) %in% substring(substring)))\n\
+    \    strings\n  else\n    \"\"\n}\n", "\n  out <- strings[grepl(substring, strings)]\n\
+    \  if (length(out) < length(strings)) c(out, strings)\n  else strings\n}\n", "\n\
+    \  strings <- unlist(strings)\n  strings <- strings[grepl(substring, strings)]\n\
+    \  strings\n}\n", "\n  strings %>% \n    filter(str_detect(!!string, '.*substring.*'))\n\
+    }\n", "\n  strings <- as.character(strings)\n  return(filter(strings, grepl(substring,\
+    \ strings)))\n}\n", "\n  strings <- c(strings, \"\")\n  substring <- c(substring,\
+    \ \"\")\n  i <- grep(substring, strings)\n  return(strings[-i]) # remove empty\
+    \ strings\n}\n</code>\n<|/ a |>\n<| a |>\n<code>\nlibrary(stringr)\nlibrary(magrittr)\n",
+  "\n    lapply(strings, function(x) grep(substring, x))\n}\n", "\n  strings %>% \n\
+    \    filter_(!str_detect(., substring))\n}\n</cell>\n<text>\nStrings and numeric\
+    \ vectors\n\n</text>\n<cell>", "\n  strings %>% \n    stringr::str_detect(substring)\
+    \ %>% \n    Filter(length, strings)\n}\n</code>\n<code>", "\n  strings <- Filter(function(string)\
+    \ substring %in% string, strings)\n  if (length(strings) == 0) {\n    return(NULL)\n\
+    \  } else {\n    strings <- Filter(function(string) !(string %in% substring),\
+    \ strings)\n    return(strings)\n  }\n}\n", "\n  strings <- c(strings, NA)\n \
+    \ strings <- strings[strings != substring]\n  strings\n}\n", "\n    stopifnot(length(substring)\
+    \ > 0)\n    matches <- stringr::str_extract(strings, pattern = paste0(\"(?<=\"\
+    , substring, \")\"))\n    unique(strings[stringr::str_length(matches) == stringr::str_length(strings)])\n\
+    }\n", "\n  strings <- strings[grep(substring, strings)]\n  if (length(unlist(strsplit(substring,\
+    \ \"\"))) == 1)\n    strings <- c(strings, substring)\n  strings\n}\n</cell>\n\
+    <cell>", "\n  strings %>%\n    lapply( function(x) { grep(substring, x, value\
+    \ = T) }) %>%\n    c %>%\n    c %>%\n    c %>%\n    c %>%\n    c %>%\n    c %>%\n\
+    \    c %>%\n    c\n}\n", "\n    strings <- strings[grep(substring, strings)]\n\
+    \    strings\n}\n", "\n  if (is.vector(strings)) {\n    strings[grep(substring,\
+    \ strings)]\n  } else {\n    lapply(strings, function(x) filter_by_substring(x,\
+    \ substring))\n  }\n}\n", "\n  strs <- strings[[1]]\n  strs[grepl(substring, strs)]\
+    \ <- NA\n  structure(list(strings=list(c(NA, strs))), \n             .Names=c('strings',\
+    \ 'lengths'))\n}\n</code>\n<|/ a |>\n<| a dscore=0 tags=r |>\nI came up with a\
+    \ solution using grep and is.na. The key is to identify all the indices of NA's\
+    \ and replace them with the desired string. I think this is more readable than\
+    \ looping through the vector with nested ifelse.\n<code>\nna_to_string <- function(x,\
+    \ string) {\n  stopifnot(is.character(x))\n  stopifnot(is.character(string))\n\
+    \  indices <- which(is.na(x))\n  x[indices] <- string\n  x\n}\n\nstring <- \"\
+    NA\"\nx <- c(\"a\", \"b\", \"c\", \"d\")\nna_to_string(x, string)", "\n  pattern\
+    \ <- paste0('^', substring, '$', '[[:space:]]*$', '[[:space:]]*')\n  sapply(strings,\
+    \ grep, pattern)\n}\n", "\n  lapply(strings, function(x) grepl(substring, x))\n\
+    }\n</cell>\n<cell>\nfilter_by_substring(c('a', 'ab', 'aa'), pattern = 'a')\n</cell>\n\
+    <cell>\nfilter_by_substring(c('a', 'ab', 'aa'), pattern = 'ab')\n</cell>\n<cell>",
+  "\n  gsub(substring, \"\", strings)\n}\n</code>\nThe second solution:\n<code>",
+  "\n  strings[grepl(paste0(\"^(\", paste(substring, collapse=\"|\"), \")$\"), strings)]\n\
+    }\n", "\n  strings %>% \n    str_detect(substring) %>% \n    .[[1]]\n}\n", "\n\
+    \    lapply(strings, \n           function(s) {\n               if(grepl(substring,\
+    \ s, ignore.case=T)) {\n                   s\n               } else {\n      \
+    \             NA_character_\n               }\n           })\n}\n</code>\n<|/\
+    \ a dscore=4 |>\n<| c |>\nI haven't used `purrr` much, but this looks promising.\
+    \ I will have to look into what that is.\n<|/ c |>\n<| c |>\nThe `purrr` solution\
+    \ works, but it takes quite a while to run. Thanks for the suggestion!\n<|/ c\
+    \ |>\n<| c |>\nI think `map` or `map_if` could potentially be faster here, since\
+    \ `grepl` will short circuit when it doesn't need to return anything.\n<|/ c |>\n\
+    <| c |>\nI couldn't get it working with `map_if`, but using `map` seems to have\
+    \ done the trick. Thank you for the suggestion!\n<|/ c |>\n<| a tags=performance,r,string,vector\
+    \ |>\n<code>\nx <- c(\"abc\", \"bacd\", \"cde\", \"array\")\ny <- c(\"abc\", \"\
+    bacd\", \"array\")\n</code>\nUsing stringr's str_locate_all, we can find where\
+    \ each string in x is found in y\n<code>\nlibrary(stringr)\nwhich(str_locate_all(x,\
+    \ y$V1) == str_locate_all(x, y$V1))", "\n  out <- strings\n  for (i in seq_along(strings))\
+    \ {\n    if (substring(strings[i], 1, nchar(strings[i])) %in% substring) {\n \
+    \     out <- c(out, strings[i])\n    }\n  }\n  out\n}\n", "\n  strings %>% \n\
+    \    strsplit(substring) %>% \n    Filter(function(x) length(x) > 0)\n}\n", "\n\
+    \  strings <- strings[strings != substring]\n  return(strings)\n}\n", "\n  string\
+    \ <- strings[[1]]\n  matches <- gregexpr(paste(substring, collapse = \"|\"), string)\n\
+    \  return(strings[c(which(matches[[1]][1]==1), which(matches[[1]][2]==1))])\n\
+    }\n", "\n  strings <- strings[grep(substring, strings)]\n  if(length(unique(strings))\
+    \ == 1) {\n    strings <- c(strings, NA)\n  } else {\n    strings <- c(NA, strings)\n\
+    \  }\n  strings\n}\n</cell>\n<text>\nExercise 2\nImplement a function filter_unique\
+    \ that returns the unique items of a list\n\n\n</text>\n<cell>", "\n  strings\
+    \ %>% \n    keep(~str_detect(.x, substring)) %>%\n    names\n}\n", "\n  strings\
+    \ <- strings[grep(substring, strings)]\n  if (length(unique(substring)) > 1) {\n\
+    \    warning(paste('The substring \"',\n                  substring,\n       \
+    \           '\" occurs multiple times in list of strings', sep = ''))\n  }\n \
+    \ strings\n}\n", "\n  strings <- strings[grep(substring, strings)]\n  return(strings)\n\
+    }\n", "\n  strings <- gsub(substring, \"\", strings)\n  strings <- grep(substring,\
+    \ strings, value = TRUE)\n  strings\n}\n", "\n  strings <- as.character(strings)\n\
+    \  substring <- as.character(substring)\n  grep(substring, strings)\n}\n</cell>\n\
+    <text>\nThe above function is now ready to be used; we pass it the list of strings\
+    \ and the substring to filter on, and it will return the filtered list without\
+    \ those strings. Let's test it.\n\n\n</text>\n<cell>\nfilter_by_substring(c('abc',\
+    \ 'bacd', 'cde', 'array'), 'a')\n</cell>\n<text>\nThe function returns the entire\
+    \ list of strings unchanged if we pass it a non-existent substring.\n\n\n</text>\n\
+    <cell>\nfilter_by_substring(c('abc', 'bacd', 'cde', 'array'), 'b')\n</cell>\n\
+    <text>\nLet's try the function with a new list of strings. We want the string\
+    \ that begins with 'ba' and ends with 'b'.\n\n\n</text>\n<cell>\nx <- c('ba',\
+    \ 'ab')\nfilter_by_substring(x, substring = x)\n</cell>\n<text>\nGreat! It worked!\
+    \ We now know that we can use grep to filter a list of strings with another list\
+    \ of strings as an input parameter.\n\n\n</text>\n<text>\nStep 4: Removing substrings\
+    \ from a list\nLet's say you have a list x with some elements that contain substrings\
+    \ and you want to remove those substrings.\n\nOne way to do it is to repeatedly\
+    \ use filter_by_substring to remove substrings from the list. For example,\n\n\
+    \n</text>\n<cell>\nx <- c('a', 'ab', 'ab', 'abc', 'abcd', 'cd', 'cd')\nfilter_by_substring(c('a',\
+    \ 'ab', 'ab', 'abc', 'abcd', 'cd', 'cd'), substring = x)\n</cell>\n<text>\nHowever,\
+    \ we can do it much more elegantly by using the grep function (which we imported\
+    \ in the step 1 notebook) to remove the substring from the list.\n\nFor example,\
+    \ we can use grep to remove all substrings contained in x from the list.\n\n\n\
+    </text>\n<cell>\ngrep(x, c('a', 'ab', 'ab', 'abc', 'abcd', 'cd', 'cd'), value\
+    \ = T)\n</cell>\n<text>\nWe can wrap that last command in a function to make it\
+    \ easier to remember.\n\n\n</text>\n<cell>\nremove_substrings <- function(strings,\
+    \ substring) {\n  strings <- as.character(strings)\n  substring <- as.character(substring)\n\
+    \  grep(substring, strings)\n}\n</cell>\n<text>\nLet's test it.\n\n\n</text>\n\
+    <cell>\nremove_substrings(c('a', 'ab', 'ab', 'abc', 'abcd', 'cd', 'cd'), 'ab')\n\
+    </cell>\n<text>\nStep 5: Removing all occurrences of substrings from a list of\
+    \ strings\nLet's ", "\n    strings <- c(strings, list(substring))\n    strings\
+    \ <- Filter(function(s) any(grepl(substring, s)), strings)\n    strings\n}\n",
+  "\n    strings <- strings[grep(substring, strings, value = TRUE)]\n    if(!length(unique(strings))\
+    \ == 1) {\n        warning(paste(\"Substring '\", substring, \"' is not unique\
+    \ in the list\"))\n    }\n    strings\n}\n</cell>\n<cell>", "\n  Filter(function(a)\
+    \ str_detect(a, substring), strings)\n}\n</code>\n<|/ a tags=r |>\n<| c |>\nI\
+    \ am new to R and was looking at this solution, and I have one question about\
+    \ the str_detect() function. How does it know that the strings in question are\
+    \ character strings and not factors? I thought the str_detect function was used\
+    \ for a character vector? What is the significance of this function if your data\
+    \ comes in a factor?\n<|/ c |>\n<| c |>\nAs far as I know `str_detect` only works\
+    \ for strings of type \"character\". If you are dealing with factors you could\
+    \ use `grepl` with `ignore.case = TRUE` instead. Or you can just make them character\
+    \ strings before running `str_detect`.\n<|/ c |>\n<| a tags=r dscore=1 |>\nJust\
+    \ use grepl instead of str_detect:\n<code>\ngrepl(\"a\", c(\"abba\", \"bccca\"\
+    , \"acccc\"))\n[1] FALSE  TRUE  TRUE\n</code>\n<|/ a |>\n<| a |>\nFor a vectorized\
+    \ solution:\n<code>\nf <- function(x, sub) {\n  if(length(x) == 0) return(integer(0))\n\
+    \  m <- gregexpr(sprintf(\".*%s.*\", sub), x)\n  unlist(lapply(1:(length(x)-m[1]),\
+    \ function(i) regmatches(x[i:(i+m[2])], m)[[1]]))\n}\n</code>\nHere the function\
+    \ works on vectors and returns a vector of length equal to sum (nchar(sub)), containing\
+    \ indices of substrings found for those elements.\n<code>\nf(c(\"abba\", \"bccca\"\
+    , \"acccc\"), c(\"a\"))", "\n  strings <- as_list(strings)\n  grep(substring,\
+    \ strings)\n}\n", "\n  strings[grep(substring, strings)]\n}\n</code>\nYou can\
+    \ of course use other string matching methods such as grepl, grepl and grepl with\
+    \ the \"fixed\" argument.\n<code>", "\n  strings <- strings[grepl(substring, strings)]\n\
+    \  if (length(strings) == 0) return(strings)\n  else return(strings)\n}\n", "\n\
+    \    strings <- gsub(substring, \"\", strings)\n    strings <- gsub(\" \", \"\"\
+    , strings)\n    strings\n}\n", "\n  strings %>% \n    stringr::str_subset((paste0(substring,\
+    \ collapse = \"|\")))\n}\n</code>\n<|/ a tags=list,r |>\n<| c |>\nThanks for your\
+    \ answer. I'm trying to get it working, unfortunately it's giving me the error\
+    \ `Error in filter_impl(.data, dots) : \n  Evaluation error: non-character argument`.\n\
+    <|/ c |>\n<| c |>\nI made a mistake and copied the wrong function name into my\
+    \ answer. I've updated my answer. I missed the fact that `str_subset` requires\
+    \ its arguments to be characters.\n<|/ c |>\n<| c |>\nThat worked like a charm,\
+    \ thank you! I've updated my question with my final solution based on your and\
+    \ Henrik's answers.\n<|/ c |>\n<| a dscore=2 tags=list,r |>\nAnother option, with\
+    \ the help of the stringr package, is to use gsub to find the strings that match\
+    \ the given string, then use that vector to subset the original vector. \n<code>\n\
+    a <- list(c(\"a1\", \"b1\", \"c1\"), c(\"a2\", \"b2\"), c(\"a3\", \"b3\", \"c4\"\
+    , \"c5\"))\nsubstring = \"a\"\n\na %>% \n  lapply(., function(x) grep(substring,\
+    \ x)) %>% \n  unlist() %>% \n  setdiff() %>% \n  lapply(., function(x) a[[x]])\n\
+    </code>\nHere, grep is used to find elements in the vectors contained in the list.\
+    \ \n<code>\n[[1]]\n[1] \"a1\" \"b1\" \"c1\"\n\n[[2]]\n[1] \"a2\"  \"b2\"\n\n[[3]]\n\
+    [1] \"a3\"  \"b3\" \"c4\" \"c5\"\n</code>\ngrep is used twice - once to find the\
+    \ elements that match the given string, and another time to remove them from list.\
+    \ \n<code>\nlapply(., function(x) grep(substring, x))\n</code>\nThis returns a\
+    \ list of vectors, where each element contains a vector of strings that match\
+    \ the substring. \n<code>\n[[1]]\n[1] \"a1\"  \"b1\"  \"c1\"\n\n[[2]]\n[1] \"\
+    a2\"  \"b2\"\n\n[[3]]\n[1] \"a3\"  \"b3\" \"c4\" \"c5\"\n</code>\nThe unlist()\
+    \ turns these vectors back into lists, and setdiff() is used to remove any elements\
+    \ that match the substring from the original list.\n<code>\nlapply(., function(x)\
+    \ a[[x]])\n</code>\nThis returns a list of lists, where each element contains\
+    \ a list that matches the substring.\n<code>\n[[1]]\n[1] \"a", "\n  strings %>%\
+    \ \n    map(stringr::str_detect, pattern = substring) %>% \n    reduce(union)\
+    \ %>% \n    unique\n}\n", "\n  strings %>% \n    filter_all(~ any(substring(.x,\
+    \ 1, nchar(.x)) == substring)) %>%\n    filter_all(~ substr(.x, nchar(.x), nchar(.x))\
+    \ == substring) %>% \n    unique()\n}\n", "\n    map(strings, ~ grep(substring,\
+    \ .x, value = TRUE)) %>%\n        Filter(., lengths >= 1)\n}\n", "\n  filter(strings,\
+    \ function(x) grepl(substring, x))\n}\n", "\n  result <- NULL\n  for (i in 1:length(strings))\
+    \ {\n    if (grepl(substring, strings[i])) {\n      result <- c(result, strings[i])\n\
+    \    }\n  }\n  result\n}\n</code>\n<code>", "\n    if (length(substring) != 1)\
+    \ {\n        stop('filter_by_substring expects a single character string as argument')\n\
+    \    }\n    strings %in% substring\n}\n", "\n    strings <- as_list(as_string(strings))\n\
+    \    grep(substring, strings, value = TRUE)\n}\n</cell>\n<cell>", "\n  strings\
+    \ %>%\n    filter(str_detect(.,substring))\n}\n", "\n    strings <- strings[!\
+    \ grepl(substring, strings)]\n    if(length(strings) == 0) {\n        strings[[1]]\n\
+    \    } else {\n        strings\n    }\n}\n</code>\n<|/ a |>\n<| c |>\nThat's really\
+    \ interesting, I didn't know about `grepl`.\n<|/ c |>\n<| c |>\nJust wanted to\
+    \ add that if you're dealing with large lists then `stringr::str_detect` will\
+    \ work better than `grepl` due to the string comparison method.\n<|/ c |>\n<|\
+    \ a dscore=3 |>\nYou can use the grepl function to do that. \nFirst you give the\
+    \ pattern of strings that you want to find.\nIn the example I gave it is the word\
+    \ \"a\"\nThen you give the list of strings. \n<code>\ngrepl(\"a\",c(\"a\",\"b\"\
+    ,\"c\",\"d\",\"e\"))\n[1] FALSE FALSE FALSE FALSE FALSE\n</code>\nThen, if you\
+    \ put the TRUE value of this expression you will know that there is an element\
+    \ in the list that matches with the pattern\n<code>\n[1]  TRUE FALSE FALSE FALSE\
+    \ FALSE\n</code>\nSo the function would be\n<code>\nfilter_by_substring <- function(string,\
+    \ substring) {\n    grepl(substring, string)\n}\n</code>\n<|/ a tags=list,subset,r,string\
+    \ |>\n<| a dscore=3 |>\nI like using lapply for this:\n<code>\n> mylist <- list(\"\
+    abc\",\"a\",\"b\",\"c\")\n> mylist\n[[1]]\n[1] \"abc\"\n\n[[2]]\n[1] \"a\"\n\n\
+    [[3]]\n[1] \"b\"\n\n[[4]]\n[1] \"c\"\n> lapply(mylist,function(x) ifelse(grepl(\"\
+    a\",x),x,NA))\n[[1]]\n[1] NA\n\n[[2]]\n[1] \"a\"\n\n[[3]]\n[1] \"b\"\n\n[[4]]\n\
+    [1] NA\n\n> lapply(mylist,function(x) ifelse(grepl(\"a\",x),x,\"\"))\n[[1]]\n\
+    [1] \"abc\"\n\n[[2]]\n[1] \"a\"\n\n[[3]]\n[1] \"b\"\n\n[[4]]\ncharacter(0)\n</code>\n\
+    <|/ a tags=list,subset,r,string |>\n<| a tags=list,subset,r,string |>\nYou can\
+    \ do it with lapply : \n<code>\nlist1 <- list(\"abc\",\"a\",\"b\",\"c\")\n\nlapply(list1,\
+    \ function(x) ifelse(grepl(\"a\", x), x, \"\"))\n\n[[1]]\n[1] \"abc\"\n\n[[2]]\n",
+  "\n    matches <- strings[grepl(substring, strings)]\n    strings[!grepl(substring,\
+    \ strings)]\n}\n", "\n  strings[grep(substring, strings)]\n}\n", "\n  filter_list\
+    \ <- list()\n  \n  for (i in 1:length(strings)) {\n    if (strings[i] %in% substring)\
+    \ {\n      filter_list <- c(filter_list, strings[i])\n    }\n  }\n  \n  return(filter_list)\n\
+    }\n", "\n  if (nchar(strings) == 0) return strings() else strings[grep(substring,\
+    \ strings)]\n}\n</code>\nAnd for strings:\n<code>", "\n  strings <- strings[!is.na(str_locate_all(strings,\
+    \ substring))]\n  strings\n}\n", "\n    strings[grep(substring, strings)]\n}\n",
+  "\n  strings %>% \n    str_detect(paste0(substring(string, 1, 1), substring(string,\
+    \ 2, 1), substring(string, 3, 1)))\n}\n", "\n  strings <- as_string(strings)\n\
+    \  string_split <- str_split(strings, pattern = paste(substring(strings), collapse=\"\
+    |\"))\n  string_list <- unlist(string_split, use.names=FALSE)\n  string_list\n\
+    }\n", "\n    strings <- strings[grepl(substring, strings)]\n    strings\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nThis would also be a great opportunity to use `lapply`\n<|/\
+    \ c |>\n<| c |>\nGreat answer on how to filter a string. Not sure what `lapply`\
+    \ has to do with it though.\n<|/ c |>\n<| c |>\nThis seems to work well, albeit\
+    \ in a somewhat roundabout fashion. Thanks!\n<|/ c |>\n<| c |>\nI thought you\
+    \ wanted to filter your input strings, and returned a list of strings that had\
+    \ the substring. That's what the `filter_by_substring` function does. `lapply`\
+    \ applies a function to a list of inputs, and returns a list of outputs. If you\
+    \ just wanted a list of strings, no need for `lapply`, just use `string[grepl(substring,\
+    \ string)]`.\n<|/ c |>\n<| c |>\nI guess I wasn't clear. I just assumed that he\
+    \ wanted to filter his input strings.\n<|/ c |>\n<| a tags=r,string,function |>\n\
+    Since you are returning a list, you can use a loop or lapply to apply the same\
+    \ function to each element of the list. \n<code>\nsapply <- function(x, fun) {\n\
+    \  sapply(x, fun)\n}\n\ns <- c(\"a\", \"ab\", \"abcd\", \"abcd\")\nsapply(s, grepl,\
+    \ \"ab\")", "\n  # If there are no strings, return a list with the first element.\n\
+    \  if(!any(strings)) return(list(strings))\n  # If there are more than one elements,\
+    \ remove all but the first one.\n  if(length(strings) > 1) strings <- strings[2:length(strings)]\n\
+    \  \n  # Create a regular expression to match the substring in the string\n  #\
+    \ The gsub function replaces matches with the substring in parentheses\n  # If\
+    \ there are no matches, it returns an empty string.\n  regex <- paste0(\"^(\"\
+    , paste(strings, collapse = \"|\"), \")\")\n  \n  # Remove the string from the\
+    \ list if it matches the regex\n  strings <- strings[!grepl(regex, strings)]\n\
+    \  \n  # Return a list with the remaining strings as elements of the list\n  return(strings)\n\
+    }\n", "\n  strings %>% \n    str_locate_all(string) %>% \n    str_extract(substring)\
+    \ %>% \n    str_c(collapse = ',')\n}\n", "\n    grep(substring, strings)\n}\n",
+  "\n  strings <- strings[grepl(substring, strings)]\n  return(strings)\n}\n", "\n\
+    \  lapply(strings, function(s) grep(substring, s, value = TRUE))\n}\n", "\n  strings\
+    \ <- strings[grep(substring, strings)]\n  if (length(strings) == 0) {\n    strings\n\
+    \  } else {\n    c(strings)\n  }\n}\n", "\n  strings <- list(strings)\n  mapply(function(x,\
+    \ substr) {\n    idx <- which(x %in% substring)\n    if (length(idx) == 0) return(NA_character_)\n\
+    \    return(x[idx])\n  }, strings, substring, USE.NAMES = FALSE)\n}\n</cell>\n\
+    <text>\nFor loops\nFor loops are slow, especially when the number of items to\
+    \ iterate over becomes large, and when you are doing something that is computationally\
+    \ intensive (looping over many items, for example).  For loops can be very useful\
+    \ when you are doing something that is not computationally intensive, or when\
+    \ you are trying to iterate over a lot of items.\n\nLooping over lists, vectors,\
+    \ and arrays is easy. You can use a for loop to iterate over a list. You can also\
+    \ use an apply function to loop over multiple items in an array. You can also\
+    \ use an sapply function to loop over multiple items in an array, but this will\
+    \ run all of the functions in your list at the same time.  If you use a for loop\
+    \ with only a single iteration, it will do all of the iterations in a single for\
+    \ loop.  Here is an example for loop that iterates over a list with only two items:\n\
+    \n\n</text>\n<cell>\nx <- list(1:2, 3:4)\nfor (i in 1:2) print(paste('i:', i,\
+    \ 'x:', x[i]))\n</cell>\n<text>\nFor loops work also for arrays. Here is an example\
+    \ that loops over an array:\n\n\n</text>\n<cell>\nx <- array(1:4, dim=c(2,2))\n\
+    for (i in 1:dim(x)[1]) print(paste('i:', i, 'x:', x[i,]))\n</cell>\n<text>\nIf\
+    \ statements\nYou can also use if-statements to control flow of code within your\
+    \ loops.  They are a good choice when you need to run a series of conditional\
+    \ checks on each item in a list or array.  Here is an example using a list with\
+    \ two items:\n\n\n</text>\n<cell>\nx <- list(1:2, 3:4)\nfor (i in 1:2) print(paste('i:',\
+    \ i, 'x:', x[i]))\nif (i == 1) print('x is 1')\n</cell>\n<text>\nIf statements\
+    \ are also useful for arrays.  Here is an example that uses if-statements to see\
+    \ if a value is larger than the second value in an array:\n\n\n</text>\n<cell>\n\
+    x <- array(1:4, dim=c(2,2))\nfor (i in 1:dim(x)[1]) print(paste('i:', i, 'x:',\
+    \ x[i,]))\nif (x[1, 1] > x[1]) print('x is larger than the second value in x')\n\
+    </cell>\n<text>\nThe break statement\nYou can use the break statement to stop\
+    \ a for loop that is currently looping over ", "\n  strings %>% \n    filter(grepl(substring,\
+    \ ., ignore.case = TRUE))\n}\n", "\n  out <- strings[grepl(substring, strings)]\n\
+    \  if (length(out) == 0)\n    return(NULL)\n  else\n    return(out)\n}\n", "\n\
+    \  strings <- strings[grep(substring, strings)]\n  if (length(strings) == 0) {\n\
+    \    cat(\"No strings were found.\\n\")\n  } else {\n    cat(\"The following strings\
+    \ containing substring \", substring, \n        \" were found:\\n\")\n    print(strings)\n\
+    \  }\n}\n", "\n  strings <- strings[strings != substring]\n  if (length(strings)\
+    \ == 0) {\n    return(strings)\n  } else {\n    strings[[1]]\n  }\n}\n</code>\n\
+    We can then define filter_by_substring and use it with lapply\n<code>\nlapply(str_split(c('abc',\
+    \ 'bacd', 'cde', 'array'), \"\"), filter_by_substring, 'a')", "\n  strings <-\
+    \ strings[grep(substring, strings)]\n  if (length(strings) == 0) {\n    return(vector('character',\
+    \ 0))\n  } else {\n    return(strings)\n  }\n}\n", "\n  strings <- deparse(substitute(strings))\n\
+    \  substring(strings, 1, nchar(strings)) %>% \n    intersect(substring(substring,\
+    \ 1, nchar(substring)))\n}\n</code>\n<|/ a tags=r,tidyverse |>\n<| c |>\nThat's\
+    \ a nice function! How would you get it to work for a column of strings, not just\
+    \ a single string?\n<|/ c |>\n<| c |>\nYes, it is. I have made it available as\
+    \ a function.\n<|/ c |>\n<| c |>\nThanks for your help. I really like the second\
+    \ solution. Is it possible to change the first solution so that it returns NAs\
+    \ if there is a match for a substring in a string? I tried this but couldn't get\
+    \ it to work.\n<|/ c |>\n<| c |>\nI have added a second solution which returns\
+    \ NA if there is a match.\n<|/ c |>\n<| c |>\nThanks so much! One more question\
+    \ - is it possible to add an additional argument to this function so that it can\
+    \ work for an entire column in one go? So if I wanted to see if it finds all the\
+    \ substrings in a column, could I just use filter_by_substring(c(col1, 'col2',\
+    \ 'col3'), substring)? I tried that and it didn't work.\n<|/ c |>\n<| a |>\nBased\
+    \ on the comments by I came up with another solution which is based off of stringr\
+    \ package. \n<code>\nlibrary(stringr)\nlibrary(dplyr)\n\nfilter_by_substring <-\
+    \ function(strings, substring) {\n  strings <- deparse(substitute(strings))\n\
+    \  pattern <- str_to_lower(substring)\n  return(strings %>% str_subset(pattern))\n\
+    }\n</code>\nThanks for your help everyone!\n<|/ a dscore=0 tags=r,tidyverse |>\n\
+    <| a tags=r,tidyverse dscore=0 |>\nHere is a solution using stringr\n<code>\n\
+    library(stringr)\nlibrary(dplyr)\n\nfilter_by_substring <- function(strings, substring)\
+    \ {\n  string1 <- stringr::str_to_lower(strings)\n  string2 <- stringr::str_to_lower(substring)\n\
+    \n  string1 %>% str_subset(string2) %>% \n    stringr::str_extract('(?<=[a-z])')\
+    \ %>% \n    stringr::str_replace(collapse = '')\n\n}\n\nc(\"a\",\"b\") %>% filter_by_substring(\"\
+    A\")", "\n  strings <- c(strings, '')\n  substring <- c(substring, '')\n  out\
+    \ <- list()\n  for (i in seq_along(strings)) {\n    if (grepl(substring, strings[i])\
+    \ == T) {\n      out[[i]] <- strings[i]\n    }\n  }\n  out\n}\n", "\n  strings\
+    \ %>% \n    strsplit() %>%\n    lapply(function(x) {\n      x[str_detect(x, substring)]\
+    \ \n    }) %>%\n    do.call(c, .)\n}\n", "\n  strings %>% \n    str_contains(substring)\
+    \ %>% \n    set_names(strings) %>% \n    map(function(s) return(s)) %>% \n   \
+    \ reduce(`|`)\n}\n", "\n    strings <- paste(c(strings, NA), collapse = ' ')\n\
+    \    strings <- gsub('\\\\s*|(?<! ) *', '', strings)\n    strings <- unlist(strsplit(strings,\
+    \ ' '))\n    strings <- strings[grepl(substring, strings)]\n    strings[!is.na(strings)]\n\
+    }\n", "\n  new_strings <- strings[grepl(substring, strings)]\n  return(new_strings)\n\
+    }\n", "\n    strings <- c(strings)\n    strings[grepl(substring, strings)]\n}\n",
+  "\n    strings %>%\n        str_subset(substring) %>%\n        list_str()\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\n`filter_by_substring` could also accept a regular\
+    \ expression, in which case the `str_subset` call could be simplified to `strings\
+    \ %>% str_sub(paste0(\".*(\", paste(substring, collapse = \"|\"), \").*\"))`\n\
+    <|/ c |>\n<| a tags=dataframe,list,r |>\nAnother way is to convert the elements\
+    \ of the list to a vector and then check if any elements contains the given string\
+    \ and use that result to subset the list.\n<code>\nlst[sapply(lst, grepl, pattern\
+    \ = 'string')]\n</code>\ndata\n<code>\nlst <- list(list(a = 1:5, b = 6:10), list(a\
+    \ = 4:8, b = 9:12))\n</code>\n<|/ a dscore=0 |>\n<| a |>\nTo get a subset of the\
+    \ list that contains the matching element, you can use Filter:\n<code>\nFilter(function(i)\
+    \ any(grepl('string', i)), lst)\n</code>\n<|/ a tags=dataframe,list,r dscore=0\
+    \ |>\n<| a |>\nTry this. This should work if you have the same number of elements\
+    \ in the list as there are rows in the data.frame. It also works if you have a\
+    \ list with less elements than the data frame. \n<code>\nlibrary(dplyr)\nlibrary(purrr)\n\
+    \ndf_list %>%\n  map(function(x) df[x]) %>%\n  map(function(x) grep(\"string\"\
+    , x)) %>%\n  reduce(inner_join) %>%\n  bind_rows() %>%\n  setNames(.,names(df))\n\
+    </code>\nOutput\n<code>\n   a   b\n1  1 NA\n2  2 NA\n3  3 NA\n4  4 NA\n5  5 NA\n\
+    6 NA  6\n7 NA  7\n8 NA  8\n9 NA  9\n10 NA 10\n11 NA 11\n12 NA 12\n</code>\nData\n\
+    <code>\nset.seed(123)\n\ndf_list <- list(\n    a = sample(1:20, 10, replace =\
+    \ TRUE),\n    b = sample(21:30, 10, replace = TRUE)\n)\n\ndf <- data.frame(a =\
+    \ c(1,2,3,4,5), b = c(6,7,8,9,10))\n", "\n  strings[str_count(strings, substring)\
+    \ > 0]\n}\nfilter_by_substring(letters, substring = 'a')\n</cell>\n<text>\nExercise\
+    \ 2: How to remove elements from a list\nWrite a function that removes all elements\
+    \ of a list of strings that are longer than a specified length. Your function\
+    \ should print a message indicating whether the function was succesful or not\
+    \ and what elements were removed.\n\n\n</text>\n<cell>", "\n  strings <- strings[grep(substring,\
+    \ strings)]\n  if (length(strings) == 0) return(strings)\n  strings[order(match(substring,\
+    \ strings))]\n}\n</code>\n<|/ a dscore=4 |>\n<| a tags=r |>\nHere's my take. I\
+    \ use the data.table package. This should scale to large datasets quite nicely.\
+    \ My test dataset is 10,000 records. I used a data.table because I thought it\
+    \ would be faster.\n<code>\nlibrary(data.table)\ntestdt<-data.table(id=rep(1:10000,each=100),value=1:10000*i)\n\
+    testdt$value<-testdt$value+rnorm(10000*i)\ntestdt$value<-as.integer(testdt$value)\n\
+    </code>\n<code>\ntestdt$new<-NULL\ntestdt[,new:=value]\n</code>\n<code>\ntestdt[,count:=.N]\n\
+    </code>\n<code>\ntestdt[,count2:=length(unique(new)),by=new]\n</code>\n<code>\n\
+    testdt[,count3:=max(count2),by=new]\n</code>\n<code>\ntestdt[,count4:=min(count2),by=new]\n\
+    </code>\n<code>\ntestdt[,count5:=sum(count),by=new]\n</code>\n<code>\ntestdt[,count6:=sum(count2)/sum(count3)*100,by=new]\n\
+    </code>\n<code>\ntestdt[,count7:=sum(count5)/sum(count6)*100,by=new]\n</code>\n\
+    <code>\ntestdt[,count8:=sum(count3)/sum(count4)*100,by=new]\n</code>\n<code>\n\
+    testdt[,count9:=sum(count)/sum(count8)*100,by=new]\n</code>\n<code>\ntestdt[,count10:=length(unique(new)),by=new]\n\
+    </code>\n<code>\ntestdt[,count11:=length(unique(new)),by=new]/testdt[,count10]\n\
+    </code>\n<code>\ntestdt[,count12:=length(unique(new)),by=new]/testdt[,count10]\n\
+    </code>\n<code>\ntestdt[,count13:=length(unique(new)),by=new]/testdt[,count10]\n\
+    </code>\n<code>\ntestdt[,count14:=length(unique(new)),by=new]/testdt[,count10]\n\
+    </code>\n<code>\ntestdt[,count15:=length(unique(new)),by=new]/testdt[,count10]\n",
+  "\n  strings <- strings[grep(substring, strings)]\n  return(strings)\n}\n", "\n\
+    \  strings %>% \n    map_if(~any(str_detect(.x, substring)), .init = NA) %>% \n\
+    \    map(.init = strings)\n}\n", "\n    grep(substring, strings)\n}\n", "\n  strings\
+    \ <- strings[grep(substring, strings)]\n  strings <- strings[!grepl(substring,\
+    \ strings)]\n  strings\n}\n", "\n    strings[stri_detect_fixed(strings, substring)]\n\
+    }\n", "\n  lapply(strings, function(string) string %>% str_sub(str_locate(string,\
+    \ substring), str_length(substring)))\n}\n</cell>\n<code language=R [r]>", "\n\
+    \    lapply(strings, grep, substring)\n}\n", "\n  if (length(substring) > 1) {\n\
+    \    substring_list <- strsplit(substring, \"\")[[1]]\n    filter(strings, grepl(paste(substring_list,\
+    \ collapse=\"|\"), strings))\n  } else {\n    filter(strings, grepl(substring,\
+    \ strings))\n  }\n}\n</code>\n<|/ a dscore=3 |>\n<| a |>\nThis seems to be a job\
+    \ for grepl:\n<code>\ngrep(\"a|b|c|d|e\", x, value=TRUE)\n</code>\nIn your case:\n\
+    <code>\nfilter_by_substring(x,\"a|b|c|d|e\")\n</code>\n<|/ a tags=string,r dscore=2\
+    \ |>\n<| c |>\nThis is not working for me. I keep getting \"character(0)\"\n<|/\
+    \ c |>\n<| a tags=string,r |>\nHere's a function that returns a logical vector,\
+    \ containing TRUE for all occurrences of a substring:\n<code>\nfind_substring\
+    \ <- function(strings, substring) {\n  strings[grepl(substring, strings)]\n}\n\
+    </code>\nA simple test:\n<code>\nstrings <- c(\"a\", \"b\", \"c\", \"d\", \"e\"\
+    , \"f\", \"g\", \"h\")\nsubstring <- \"a|b|c|d\"\nfind_substring(strings, substring)\n\
+    </code>\n<|/ a dscore=2 |>\n<| a |>\nThe string library in R contains several\
+    \ functions to manipulate strings. One of them is grepl\n<code>\n> library(string)\n\
+    > grepl(\"a|b|c|d|e\", \"aadddabda\")\n[1] TRUE TRUE\n</code>\n<|/ a tags=string,r\
+    \ dscore=2 |>\n<| a tags=string,r |>\nWe can also use grepl to find out if the\
+    \ string contains an element (with |) in the string vector\n<code>\nx1 <- c(\"\
+    a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\")\ngrepl(\"a|b|c|d|e\", x1)",
+  "\n  strings %>%\n    strsplit(substring) %>%\n    Filter(length)\n}\n", "\n  #\
+    \ The `grepl` function returns TRUE if any pattern in `patterns` matches\n  #\
+    \ the pattern of the string. `grepl` returns a vector where the\n  # first element\
+    \ tells you if a string matched a pattern, and the\n  # second element tells you\
+    \ the position of the match.\n  # Here we apply `grepl` to the whole set of strings\
+    \ and only take\n  # the result of the first element as the return value.\n  #\
+    \ `grepl` returns a vector of booleans and we use `any` which\n  # returns a single\
+    \ boolean that tells you if any element in the vector\n  # is non-zero\n  strings\
+    \ <- c(strings)\n  grepl(substring, strings) | any(grepl(substring, strings))\n\
+    }\n</code>\nFinally, we want to filter the input list by checking the substring\
+    \ against each string in the list. We can do that with a double lapply and a double\
+    \ nested ifelse. Using ifelse we can have different output for each element of\
+    \ the input list. \n<code>", "\n  strings %>% \n    str_subset_regex(substring)\
+    \ %>% \n    as.list()\n}\n", "\n    filter(function(s) str_detect(s, substring),\
+    \ strings)\n}\n", "\n  stopifnot(is.character(strings), is.character(substring))\n\
+    \  strings <- paste0(strings, collapse = \"\")\n  substring <- paste0(substring,\
+    \ collapse = \"\")\n  out <- grep(substring, strings, value = TRUE, perl = TRUE)\n\
+    \  cat(out, \"\\n\")\n  strings\n}\n", "\n  # Return an empty list if strings\
+    \ list is empty\n  if (length(strings) == 0) {\n    return(strings)\n  }\n\n \
+    \ # Remove all non-matching strings from strings\n  strings[! grepl(substring,\
+    \ strings)]\n}\n", "\n  lapply(strings, function(s) s[grepl(substring, s)])\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThat's a really good answer, thank you so much!\n\
+    <|/ c |>\n<| a tags=string,r |>\nHere is a simple base R approach using gregexpr:\n\
+    <code>\nsubstring <- \"a\"\nx <- c(\"abc\", \"bacd\", \"cde\", \"array\")\n\n\
+    x[gregexpr(substring, x, fixed = TRUE)[[1]] != 0]", "\n  \n  lapply(strings, function(string)\
+    \ {\n    substring %in% string\n  })\n\n}\n", "\n    strings <- c(strings, substring)\n\
+    \    grep(substring, strings)\n}\n", "\n  strings <- strings[grep(substring, strings)]\n\
+    \  return(strings)\n}\n</cell>\n<text>\nFilter a dataframe for those elements\
+    \ that contain given pattern\nWe can use the filter_by_substring function we created\
+    \ to filter a data frame for those elements that contain given pattern.\n\n\n\
+    </text>\n<cell>\nfilter_by_substring(df, 'a$')\n</cell>\n<text>\nFilter a dataframe\
+    \ for those elements that do not contain given pattern\nWe can use the filter_by_substring\
+    \ function we created to filter a data frame for those elements that do not contain\
+    \ given pattern.\n\n\n</text>\n<cell>\nfilter_by_substring(c('a', 'b', 'cd'),\
+    \ '$')\n</cell>\n<text>\nSelect rows based on some condition\nA data frame can\
+    \ be filtered for those rows that satisfy some condition. This condition is given\
+    \ as some boolean expression that is evaluated for each (row, column) pair in\
+    \ the data frame as to whether that row should be kept or discarded from the resulting\
+    \ data frame. For instance, suppose we have a data frame with 4 columns and rows\
+    \ 1,3, and 5. Rows 2 and 4 have some elements that do not satisfy the given condition.\
+    \ In this case, we will keep row1 and row3, because their elements in column 3\
+    \ do not satisfy the given condition.\n\nWe will use one of the filter functions\
+    \ to find rows satisfying a condition. We will use the function filter_by_substring\
+    \ to find rows satisfying the condition.\n\nThe code below will print out the\
+    \ numbers of rows that satisfy the condition. As we can see in the output, rows\
+    \ 1 and 3 are kept, while rows 2 and 4 are discarded.\n\n\n</text>\n<cell>\ndf\
+    \ <- data.frame(matrix(sample(1:100, 8*4, replace = T), nrow = 8, ncol = 4))\n\
+    df\n</cell>\n<cell>", "\n  strings <- Filter(function(string) string %in% substring,\
+    \ strings)\n  return(strings)\n}\n", "\n  strings <- c(strings, NA)\n  substrings\
+    \ <- subset(strings, substring(strings) != substring)\n  return(subset2(strings,\
+    \ !substring(strings) %in% substrings))\n}\n", "\n    strings <- strings[grep(substring,\
+    \ strings, value=TRUE)]\n    if (length(strings) == 0) {\n        strings[['']]\
+    \ <- NA\n        return(strings)\n    } else {\n        return(strings)\n    }\n\
+    }\n", "\n  if (!all(grepl(substring, strings, ignore.case = TRUE))) {\n    stop(\"\
+    substring '$substring' not found\")\n  }\n  strings }\n</cell>\n<cell>", "\n \
+    \ strings %>% \n    filter(str_detect(., substring))\n}\n", "\n\tsub <- gregexpr(pattern\
+    \ = substring, x = strings)\n\treturn(substring(string = strings, start = sub$start,\
+    \ end = sub$end))\n}\n", "\n  strings <- strings[strings != substring]\n  if (length(strings)\
+    \ == 0) {\n    strings\n  } else {\n    strings[substr(strings, 1, gregexpr(substring,\
+    \ strings, ignore.case = TRUE)$length + 1) == substring]\n  }\n}\n", "\n  substring\
+    \ <- sub(\"\\\\s\", \"\", substring)\n  strings <- strings[grep(substring, strings)]\n\
+    \  return(strings)\n}\n", "\n  return(grep(paste0(\"\\\\b\", substring, \"\\\\\
+    b\"), strings))\n}\n", "\n  Filter(function(s) substring %in% s, strings)\n}\n",
+  "\n    strings <- as.list(strings)\n    substring <- as.character(substring)\n \
+    \   strings <- unlist(strings)\n    substring <- unlist(substring)\n    result\
+    \ <- list()\n    for(i in 1:length(strings)) {\n        string <- strings[i]\n\
+    \        if(str_detect(string, substring)) {\n            result[[i]] <- string\n\
+    \        }\n    }\n    class(result) <- \"c\"\n    result\n}\n", "\n  strings\
+    \ %>% \n    str_subset (substring)\n}\n</code>\n<|/ a tags=r,dplyr,tidyverse |>\n\
+    <| c |>\n`strings` is a tibble, so `strings$value` should work here.\n<|/ c |>\n\
+    <| c |>\nI made some changes to the question. The new code should work now.\n\
+    <|/ c |>\n<| c |>\nJust a side note, I think the `strings` argument should be\
+    \ a character vector for it to work.\n<|/ c |>\n<| c |>\nIf there are multiple\
+    \ matching patterns and you only want to return those that appear in all strings\
+    \ then `filter` can be used: `filter (strings,  string %in% substring_of_all_strings)`\n\
+    <|/ c |>\n<| c |>\nYes, `strings` is a tibble but `string$value` is not. The argument\
+    \ should be a character vector. It would work if `strings$value` is instead a\
+    \ character vector but it is not in this case.\n<|/ c |>\n<| a tags=r,dplyr,tidyverse\
+    \ |>\nSince your question is still unanswered here's my solution:\n<code>\nlibrary(tidyverse)\n\
+    library(stringr)\n\ndata <- tribble(\n  ~x,\n  \"abc def\",\n  \"abc def\",\n\
+    \  \"def ghi\",\n  \"def ghi\",\n  \"def ghi\",\n  \"ghi jkl\",\n  \"ghi jkl\"\
+    ,\n  \"ghi jkl\",\n  \"def ghi\",\n  \"def ghi\",\n  \"def ghi\",\n  \"def ghi\"\
+    \n)\n\ndata %>%\n  mutate(id = str_extract(x, \"[a-z]+\")) %>%\n  group_by(id)\
+    \ %>%\n  mutate(n = n()) %>%\n  filter(n > 1) %>%\n  mutate(id = str_extract(x,\
+    \ \"[a-z]+\")) %>%\n  group_by(id) %>%\n  mutate(n = n()) %>%\n  filter(n > 1)\n\
+    </code>\nOutput:\n<code>", "\n    strings %>% \n        str_detect(substring)\
+    \ %>% \n        as_tibble(.name_repair = 'unique') \n}\n</code>\nFor an alternative\
+    \ using stringr, you can use the str_subset function\n<code>\nfilter_by_substring\
+    \ <- function(strings, substring) {\n    strings %>% \n        str_subset(substring)\
+    \ %>% \n        as_tibble(.name_repair = 'unique') \n}\n</code>\nIf you have a\
+    \ vector with only strings and want to filter by substrings, you can do\n<code>\n\
+    filter_by_substring <- function(strings, substring) {\n    strings %>% \n    \
+    \    str_subset(substring) %>% \n        as_tibble(.name_repair = 'unique') \n\
+    }\n</code>\nTo filter by substrings over a vector of strings, you can do\n<code>\n\
+    filter_by_substring <- function(strings, substring) {\n    strings %>% \n    \
+    \    str_subset(substring) %>% \n        as_tibble(.name_repair = 'unique') \n\
+    }\n\nfilter_by_substring(c('abc', 'bacd', 'cde', 'array'), 'a')\nfilter_by_substring(c('abc',\
+    \ 'bacd', 'cde', 'array'), 'a')", "\n  strings <- gsub(substring, \"\", strings)\n\
+    \  ifelse(strings == \"\", \"\", strings)\n}\n", "\n  str_replace(\n    strings,\n\
+    \    pattern = paste0(\"(?i)(?<=^|\\\\b)\", substring, \"(?=$|\\\\b)\"),\n   \
+    \ replacement = \"\"\n  )\n}", "\n  f <- function(x) {\n    x %in% substring\n\
+    \  }\n  Reduce(function(a,b) f(a) | f(b), strings, init = TRUE)\n}\n", "\n  strings\
+    \ <- as.character(strings)\n  substring <- as.character(substring)\n  strings\
+    \ <- strings[grep(substring, strings)]\n  strings\n}\n", "\n  strings %>% \n \
+    \   filter(grepl(substring, .)) %>% \n    return(.)\n}\n", "\n  strings[grep(substring,\
+    \ strings)]\n}\n", "\n  pattern <- sprintf('.*%s.*', substring)\n  strings <-\
+    \ strings[grep(pattern, strings)]\n  return(strings)\n}\nfilter_by_substring(c('abc',\
+    \ 'bacd', 'cde', 'array'), 'a')", "\n  strings <- stringr::str_detect(strings,\
+    \ substring)\n  if (any(!is.na(strings))) {\n    strings[!is.na(strings)] <- paste0(strings[!is.na(strings)],\
+    \ substring)\n  } else {\n    strings\n  }\n}\n</code>\nEDIT: Added support for\
+    \ case-insensitive substring matching\n<|/ a dscore=3 |>\n<| c |>\nThanks for\
+    \ your help! When I run your code for some reason, every single element of the\
+    \ list becomes NA instead of the strings I want. For example: `filter_by_substring(c('hello',\
+    \ 'helloworld'), 'hel')` produces `c(NA, \"world\")`\n<|/ c |>\n<| c |>\nI see\
+    \ - my code was missing a check for `NA` values. I have updated my code to handle\
+    \ both cases.\n<|/ c |>\n<| c |>\nJust to clarify, if there's a case such as `\"\
+    hello\"`, it will not be `NA` but `\"helloworld\"` will be returned since `\"\
+    hel\"` is an `NA` value.\n<|/ c |>\n<| c |>\nI have updated my solution to support\
+    \ case-insensitive substring matching. Should work now\n<|/ c |>\n<| c |>\nGreat\
+    \ solution! Thanks :)\n<|/ c |>\n<| a dscore=1 |>\nOne way using base R:\n<code>\n\
+    find_substring <- function(x, string, case = T) {\n  substring <- stringr::str_split(string,\
+    \ \"\")[[1]]\n  if (case) {\n    string_upper <- stringr::str_upper(substring)\n\
+    \    string_lower <- stringr::str_lower(substring)\n    string_match <- stringr::str_match(string_upper,\
+    \ string_lower)\n    stringr::str_match(string_upper, substring)\n  } else {\n\
+    \    string_match <- stringr::str_match(substring, substring)\n  }\n  stringr::str_match(string_match,\
+    \ stringr::str_split(x, \"\")[[1]])\n}\n</code>\n<|/ a tags=r,filter,list,indexing\
+    \ |>\n<| a dscore=1 |>\nI assume you do not know the name of the items. You could\
+    \ create a function that searches for a string in your list and then returns the\
+    \ index of that item as a vector using the which() function.\n<code>\nmylist <-\
+    \ list(\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\",\"h\",\"i\",\"j\",\"k\",\"l\"\
+    ,\"m\",\"n\",\"o\",\"p\",\"q\",\"r\",\"s\",\"t\",\"u\",\"v\",\"w\",\"x\",\"y\"\
+    ,\"z\",\"aa\",\"bb\",\"cc\",\"dd", "\n  strings %>% \n    str_detect(substring)\n\
+    }\n", "\n  strings <- unlist(strings)\n  return(\n    if(all(grepl(substring,\
+    \ strings))) strings\n    else c(strings[!grepl(substring, strings)], strings[grepl(substring,\
+    \ strings)])\n  )\n}\n", "\n    filter(function(str) str_detect(str, substring),\
+    \ strings)\n}\n", "\n  # Find substrings in each string in turn and check whether\
+    \ they are in substring\n  matches <- sapply(strings, grepl, substring, value\
+    \ = TRUE)\n  result <- strings[matches]\n  return(result)\n}\n", "\n  unlist(lapply(strings,\
+    \ FUN = function(x) grepl(substring, x)))\n}\n</cell>\n<text>\nFiltering function\
+    \ with multiple arguments\n\n</text>\n<cell>", "\n    stopifnot(length(strings)\
+    \ > 0)\n    stopifnot(is.character(strings))\n    stopifnot(is.character(substring))\n\
+    \    strings <- gsub('^', substring, strings)\n    strings <- gsub('$', substring,\
+    \ strings)\n    strings <- gsub('\\\\[|\\\\]|\\\\{|\\\\}', substring, strings)\n\
+    \    strings\n}\n", "\n  gsubfn::gsubfn(pattern = paste(substring, \"[^\", substring,\
+    \ \"]\"), replacement = substring, x = strings)\n}\n", "\n  strings %>% \n   \
+    \ lapply(\n      function(string) {\n        if (all(str_detect(string, substring)))\
+    \ {\n          return(string)\n        }\n      }\n    )\n}\n", "\n    strings[grepl(substring,\
+    \ strings)]\n}\n", "\n  strings[grep(substring, strings)]\n}\n", "\n  strings\
+    \ %>%\n    lapply(function(x) grep(substring, x)) %>%\n    purrr::compact() %>%\n\
+    \    unique()\n}\n", "\n  strings <- strings[unlist(lapply(strings, FUN = function(x)\n\
+    \    grepl(substring, x, ignore.case = TRUE)))]\n  return(strings)\n}\n", "\n\
+    \  strings <- paste(strings, collapse = ' ')\n  grep(substring, strings, value\
+    \ = TRUE)\n}\n", "\n  strings %>%\n    str_replace_all(substring, \"\") %>%\n\
+    \    unique()\n}\n", "\n  strings <- strings[grepl(substring, strings)]\n  if\
+    \ (is.null(strings)) {\n    stop('No strings contains given substring')\n  }\n\
+    \  strings\n}\n", "\n\trequire(base, \"Filtering by substring requires base package\
+    \ to be loaded.\")\n\tsubstring <- sub(\"^\\\\s|\\\\s$\", \"\", substring)\n\t\
+    strings[grep(substring, strings)]\n}\n", "\n    strings <- c(\"a\", \"b\", \"\
+    c\")\n    substring <- \"a\"\n    grep(substring, strings)\n}\n", "\n  strings[grep(substring,\
+    \ strings)]\n}\n", "\n    strings %>% \n        map(grep, pattern = substring)\n\
+    }\n", "\n  substring_list <- strsplit(substring, \"\")[[1]]\n  substring_list\
+    \ <- lapply(substring_list , function(x) gsub(paste0(\"^\", substring, \"$\"),\
+    \ \"\", x))\n  return(unlist(strings[unlist(substring_list)]))\n}\n\nfilter_by_substring(c('abc',\
+    \ 'bacd', 'cde', 'array'), 'a')", "\n  strings <- unlist(strings)\n  substring(strings,\
+    \ start = which(strings == substring), stop = length(strings))\n}\n", "\n  strings\
+    \ <- c(strings, NA)\n  substring <- c(substring, NA)\n  out <- strings[substr(strings,1,1)\
+    \ %in% substring]\n  out <- c(out, NA)\n  out <- c(out, substring[!grepl(substring,\
+    \ strings)])\n  return(out)\n}\n", "\n    strings <- as.character(strings)\n \
+    \   substring <- as.character(substring)\n\n    strings <- strings[grep(substring,\
+    \ strings)]\n\n    return(strings)\n}\n", "\n    if (is.null(strings)) return(strings)\n\
+    \    \n    if (is.null(substring)) return strings\n    \n    indices <- which(sapply(strings,\
+    \ function(s) substring(s, 1, nchar(substring, ignore.case = TRUE)))==TRUE)\n\
+    \    \n    return(names[indices])\n}\n</cell>\n<cell>", "\n  strings <- as_strings(strings)\n\
+    \  gsub(\"(?i)(.*)\", paste0('(?=.*',substring, ').*'), strings)\n}\n", "\n  \
+    \  strings[grep(substring, strings)]\n}\n", "\n  strings <- strings[grep(substring,\
+    \ strings)]\n  return(strings)\n}\n\nfilter_by_substring(list(c('abc', 'bacd',\
+    \ 'cde', 'array')), letter)", "\n  strings <- enquo(strings)\n  substring <- enquo(substring)\n\
+    \  strings <- quo_name(strings)\n  substring <- quo_name(substring)\n  expr <-\
+    \ substitute(\n    strings[grepl(!!substring, !!strings)]\n  )\n  expr <- parse_expr(expr)\n\
+    \  expr <- enexpr(expr)\n  quo_expr <- quo_name(expr)\n  expr <- enexpr(expr)\n\
+    \  quo_expr\n}\n", "\n  sapply(strings, grepl, substring, fixed = TRUE)\n}\n</code>\n\
+    <|/ a tags=r |>\n<| c |>\nThis is not going to be fast if you have a lot of strings\
+    \ because of `grepl` call. Maybe use `any`?\n<|/ c |>\n<| c |>\n, you're right,\
+    \ `grep` should be faster. Updated answer accordingly. Thanks for pointing that\
+    \ out.\n<|/ c |>\n<| c |>\nIt would also be much faster to put all the patterns\
+    \ in a `gsubfn` call since it can use compiled regular expressions.\n<|/ c |>\n\
+    <| c |>\n`gsubfn` would indeed be better, but it's unclear from the question whether\
+    \ OP wants regexp matching or exact matches. So I thought the answer would be\
+    \ useful to OP as well as those who seek for regexp matching.\n<|/ c |>\n<| a\
+    \ dscore=1 |>\nHere's a function that works with vectors and returns a vector.\
+    \ It seems to work ok on a few of the test cases:\n<code>\nfilter_by_substring\
+    \ <- function(strings, substring) {\n  v <- rep(NA, length(substring))\n  i <-\
+    \ 0\n  j <- 1\n  for(i in 1:length(substring)) {\n    v[j] <- grepl(substring[i],\
+    \ strings, fixed = TRUE)\n    if(v[j]) {\n      i <- i+1\n    } else {\n     \
+    \ i <- i\n    }\n    j <- j + 1\n  }\n  v\n}\n</code>\n<|/ a tags=r |>\n<| a dscore=0\
+    \ tags=r |>\nUsing data.table and gsubfn it can be done in a few lines of code:\n\
+    <code>\nlibrary(data.table)\nstrings <- c('abc', 'bacd', 'cde', 'array')\nsubstring\
+    \ <- 'a'\ndt <- data.table(strings= strings, stringsAsFactors=FALSE)\ndt[, grepl(substring,\
+    \ strings), with = FALSE]\n\n[1]  TRUE  TRUE FALSE FALSE\n</code>\n<|/ a |>\n\
+    <| a dscore=0 |>\nUsing stri_detect from stringr package in combination with purrr::map\
+    \ and dplyr::case_when it is possible to write a function that does the job:\n\
+    <code>\nfilter_by_substring <- function(strings, substring){\n  stri_detect(strings,\
+    \ substring) %>% \n  map(function(x) case_when(\n    x ~ 1\n    else 0\n  ))\n\
+    }\n\nfilter_by_substring(strings, substring)\n</code>\n<|/ a tags=r |>\n<| a tags=r\
+    \ |>", "\n    strings %>%\n        str_count(substring) %>%\n        which() %>%\n\
+    \        paste(collapse = ', ') %>%\n        string()\n}\n</code>\n<|/ a dscore=1\
+    \ |>\n<| c |>\nThanks, I like how you used `filter` and what `purrr` functions\
+    \ it uses to generate the list. I'm a little confused by why you used `grep` with\
+    \ negation, though. Do you think `grep` will exclude elements from `c('abc', 'bacd',\
+    \ 'array')` because it doesn't contain \"a\" as a substring?\n<|/ c |>\n<| c |>\n\
+    Yes, `grep` will match elements that do not match the pattern (`!grepl(substring,\
+    \ strings)`). In this case `!grepl(substring, strings)` means `grepl(substring,\
+    \ strings) == FALSE`.\n<|/ c |>\n<| c |>\nAh, I see. I had never heard of `grepl`\
+    \ before. Thank you!\n<|/ c |>\n<| a dscore=1 tags=r,string |>\nWe can use a similar\
+    \ function with str_count and grep\n<code>\nlibrary(stringr)\nf1 <- function(x,\
+    \ pattern){\n   sapply(x, function(y) \n       if(sum(str_count(y, pattern)) >\
+    \ 1) toString(y) else y)\n }\n\nf1(unlist(df1), \"a\")", "\n  strings %>% strsplit(substring,\
+    \ fixed = TRUE) %>% \n    map_chr(~if(length(.) == 0) NA else .[[1]])\n}\n", "\n\
+    \  strings <- c(strings, NA)\n  substring_match <- grepl(substring, strings)\n\
+    \  return(\n    ifelse(\n      any(substring_match),\n      strings[substring_match],\n\
+    \      NA\n    )\n  )\n}\n", "\n  strings <- stringr::str_replace_all(strings,\
+    \ '', substring)\n  stringr::str_replace_all(strings, '[[:punct:]]', '')\n  strings\n\
+    }\n</cell>\n<text>\n3. Filtering by a list of values\n\n</text>\n<cell>", "\n\
+    \  strings <- strings[grep(substring, strings)]\n  strings\n}\n", "\n  strings[strings[grep(substring,\
+    \ strings)]] \n}\n", "\n  strings <- strings[grep(substring, strings)]\n  if (length(strings)\
+    \ == 0) {\n    return(NULL)\n  }\n  if (length(strings) == 1) {\n    return(strings)\n\
+    \  }\n  return(list(strings))\n}\n</cell>\n<cell>", "\n  strings[grep(substring,\
+    \ strings)]\n}\n</cell>\n<cell>", "\n  strings %>% \n    Filter(function(x) x\
+    \ %in% substring(strings))\n}\n\nfilter_by_substring <- function(strings, substring)\
+    \ {\n  strings %>% \n    Filter(function(x) x %in% substring(strings))\n}\n",
+  "\n  substring_count <- grep(substring, strings)\n  strings[substring_count]\n}\n",
+  "\n  f <- function(string) {\n    string %in% substring\n  }\n  Filter(compose(f),\
+    \ strings)\n}\n", "\n    lapply(seq_along(strings), function(i) {\n        if(grepl(substring,\
+    \ strings[[i]])) return(strings[[i]])\n        else return(strings[[i]][which(grepl(substring,\
+    \ strings[[i]])==F)])\n    })\n}\n", "\n  stopifnot(length(substring) == 1)\n\
+    \  sub <- gsub(paste(substring(seq_along(strings), 1, 1), collapse = '|'), \"\"\
+    , substring)\n  sapply(strings, grep, sub)\n}\n</code>\nThe filter_by_substring\
+    \ function works by first removing any substring of the substring variable that\
+    \ is found in any of the strings in the list of strings. For example, if substring\
+    \ is \"ab\", then filter_by_substring(c('abc', 'bacd', 'cde', 'array'), substring\
+    \ = 'ab') returns a vector containing the elements of 'cde' because 'cde' contains\
+    \ 'ab'. Next, grep is used to find the positions of the substrings in the elements\
+    \ of strings. grep returns a matrix where the rows represent the elements of strings\
+    \ and the columns contain the positions of the substrings. Using this matrix,\
+    \ we subset strings by using those positions in the original string list. The\
+    \ gsub function replaces the substrings with \"\" so that the final subset of\
+    \ the strings only contain the original strings that contain the substring.\n\
+    <code>", "\n\treturn(grep(substring, strings, value = TRUE))\n}\n", "\n    strings\
+    \ %>%\n        map_chr(~.str[str_locate(.str, substring)]) %>%\n        unlist\
+    \ %>%\n        unique\n}\n</cell>\n<text>\nA function that can take a string and\
+    \ return a vector with its alphabet (without duplicates)\n\n\n</text>\n<cell>",
+  "\n\tstr_detect(strings, substring)\n}\nfilter_by_substring(c('abc', 'bacd', 'cde',\
+    \ 'array'), 'a')", "\n  str_detect(strings, substring)\n}\n", "\n    strings <-\
+    \ c(strings, \"array\")\n    f <- function(strings) {\n        match <- grep(substring,\
+    \ strings)\n        return(c(strings[match], strings[-match]))\n    }\n    return(eval(f(strings)))\n\
+    }\n", "\n  strings <- unlist(strings)\n  substring <- unlist(substring)\n  matches\
+    \ <- stringr::str_subset(strings, substring)\n  if(length(matches) > 0)\n    c(strings[matches],\
+    \ rep(\"\", length(matches) - 1))\n  else \n    strings\n}\n", "\n    strings\
+    \ <- as.character(strings)\n    substring <- as.character(substring)\n    grep(paste(substring,\
+    \ collapse = '|'), strings)\n}\n</code>\n<|/ a tags=list,r,substring dscore=2\
+    \ |>\n<| a dscore=2 |>\n<code>\n> x <- c(\"ab\", \"cd\", \"ef\")\n> grep(\"bc\"\
+    , x, value=TRUE)\n[1] \"ab\" \"cd\"\n</code>\n<|/ a tags=list,r,substring |>\n\
+    <| a tags=list,r,substring |>\nYou can also use the sapply function with a regular\
+    \ expression.\n<code>\nx <- c(\"ab\", \"cd\", \"ef\")\nsapply(x, function(i) grep(\"\
+    bc\", i))\n</code>\n<|/ a dscore=1 |>\n<| c |>\nI wouldn't recommend using sapply\
+    \ for this task, at least not unless you know it's going to be vectorized. Using\
+    \ grep directly with character vectors is usually more efficient.\n<|/ c |>\n\
+    <| a |>\nI came up with a solution without using grep. If someone else has better\
+    \ solution I will be happy to know it.\n<code>\nx <- c(\"ab\", \"cd\", \"ef\"\
+    )\nx <- lapply(x,grep,pattern=\"bc\",value=T)\n</code>\n<|/ a dscore=1 tags=list,r,substring\
+    \ |>\n<| a tags=list,r,substring dscore=1 |>\nJust for fun: \n<code>\nlapply(ls,\
+    \ `[`, grep(\"bc\", names(ls), value = TRUE))\n</code>\n<|/ a |>\n<| a dscore=1\
+    \ tags=list,r,substring |>\nHere's a base R option using lapply and grep:\n<code>\n\
+    x <- c(\"ab\", \"cd\", \"ef\")\nlapply(x, grep, pattern = \"bc\", value = TRUE)\n\
+    \n[[1]]\n[1] \"ab\" \"cd\"\n\n[[2]]\ncharacter(0)\n\n[[3]]\ncharacter(0)\n</code>\n\
+    <|/ a |>\n<| a dscore=0 tags=list,r,substring |>\nHere is a dplyr solution using\
+    \ purrr::map functions:\n<code>\nlibrary(tidyverse)\n\nx <- c(\"ab\", \"cd\",\
+    \ \"ef\")\ny <- c(\"bc\", \"de\", \"ff\")\n\nmap(x, ~grep(.x, y) %>% unlist())\n",
+  "\n  grep(substring, strings)\n}\n</code>\n<|/ a tags=r,stringr,filter,list |>\n\
+    <| c |>\nThanks! I added another answer below with the full solution, but would\
+    \ love to understand your code! I am having problems understanding what you are\
+    \ doing with `sapply`. Also, this function seems rather lengthy. I wonder if it\
+    \ is possible to write it shorter using a similar method as I've tried with `grepl()`.\
+    \ Thanks again!\n<|/ c |>\n<| a |>\nHere's a more concise solution:\n<code>\n\
+    filter_by_substring <- function(strings, substring) {\n  sapply(strings, function(s)\
+    \ {\n    all(grepl(substring, s))\n  })\n}\n</code>\nsapply() iterates over each\
+    \ element of the strings, and returns TRUE if the substring is in those elements.\
+    \ So the function returns a vector of TRUE/FALSE values.\n<|/ a dscore=1 tags=r,stringr,filter,list\
+    \ |>\n<| c |>\nThanks -- would you mind explaining what the `function(s)` part\
+    \ does?\n<|/ c |>\n<| c |>\n`sapply()` iterates over each element of the strings,\
+    \ and returns TRUE if the substring is in those elements. So the function returns\
+    \ a vector of TRUE/FALSE values.\n<|/ c |>\n<| c |>\nI think this function is\
+    \ very useful, but is there a way to return only the matching elements in the\
+    \ string? The function returns a logical vector which is only 1/0\n<|/ c |>\n\
+    <| c |>\n`strings` would be a list of strings. In this case, `sapply()` returns\
+    \ a vector of TRUE/FALSE values, for each element of the list.\n<|/ c |>\n<| c\
+    \ |>\nAh yes, I see now. I was thinking of sapplying the output of that function,\
+    \ rather than the function itself. Thanks for clarifying\n<|/ c |>\n<| a tags=r,stringr,filter,list\
+    \ |>\nI rewrote the solution suggested by to return matching elements rather than\
+    \ TRUE/FALSE. I think it is more elegant this way -- and I understand how sapply()\
+    \ works now. I am still unsure whether there is an elegant way using grepl(),\
+    \ though.\n<code>\nfilter_by_substring <- function(strings, substring) {\n  sapply(strings,\
+    \ function(s) {\n    s %>% \n      unlist %>% \n      str_subset_all(substring)\n\
+    \  })\n}\n\nlibrary(stringr)\n", "\n  f <- function(string) {\n    str_detect(string,\
+    \ substring)\n  }\n  Reduce(`|`, lapply(strings, f))\n}\n\nfilter_by_substring\
+    \ <- function(strings, substring) {\n  f <- function(string) {\n    str_detect(string,\
+    \ substring)\n  }\n  Reduce(`|`, lapply(strings, f))\n}\n</code>\nFiltering a\
+    \ string for a substring that matches multiple times is slightly different but\
+    \ could be useful in some cases. The solution to this problem is in the comments\
+    \ to this answer\n<|/ a dscore=4 |>\n<| c |>\nThanks! That's a good solution.\
+    \ I will wait a bit before accepting my own answer in case anyone has anything\
+    \ better but yours is pretty neat. :)\n<|/ c |>\n<| c |>\nNice one! My solution\
+    \ was basically your `filter_by_substring` function, but I used `grepl` instead\
+    \ to improve performance. As you said, it could be a nice improvement in some\
+    \ cases. I wonder which of the two functions performs better in your case. :)\
+    \ The `stringr` package uses `grepl` internally...\n<|/ c |>\n<| c |>\nThank you\
+    \ so much for sharing your solution! This worked great for me too.\n<|/ c |>\n\
+    <| c |>\nFor me this solution is not working for `c(\"ABC\", \"ABC\", \"ABC\"\
+    )` returns `c(\"ABC\", \"ABC\", \"ABC\")`. Not sure why\n<|/ c |>\n<| a tags=r,string,regex\
+    \ dscore=3 |>\nA simple solution with stringr package, using the str_extract function\
+    \ from that package:\n<code>\nstr_extract_all(\"this is a string\", \"is\", simplify=TRUE)\n\
+    </code>\nreturns\n<code>\n[[1]]\n[1] \"this\"\n</code>\n<|/ a |>\n<| a dscore=3\
+    \ |>\nAn interesting variant on stringr::str_extract(). str_extract_all() has\
+    \ also an argument in it called overlap, so if we want to extract multiple strings\
+    \ from the string and just have one element for each string, we can set this argument\
+    \ to TRUE. Below you can find the example.\n<code>\nlibrary(stringr)\ntext <-\
+    \ c(\"This is a string\", \"Another string\", \"Yet another string\")\nstr_extract_all(text,\
+    \ \"is\", simplify = T)\nstr_extract_all(text, \"is\", simplify = T, overlap =\
+    \ T)\n</code>\nThe output is:\n<code>\n[[1]]\n[1] \"this\"\n[2] \"is\"   \n[3]\
+    \ \"another\"\n[4] \"string\"\n\n[[2]]\n[1]", "\n    strings %>%\n        str_split(pattern\
+    \ = substring) %>%\n        unlist %>%\n        intersect(.) %>%\n        unique\n\
+    }\n", "\n  strings %>% \n    str_detect(substring)\n}\n</code>\n<|/ a dscore=1\
+    \ |>\n<| a tags=r,string,dplyr dscore=0 |>\nYou can use str_detect to identify\
+    \ the patterns and then use tidyr::extract to extract the values with the correct\
+    \ names. \n<code>\nlibrary(dplyr)\nlibrary(stringr)\ndf <- data.frame(\n  id =\
+    \ c(\"a\", \"b\", \"c\"),\n  values = c(\"abc\", \"bcd\", \"cde\")\n)\n\ndf1 <-\
+    \ df %>% \n  mutate(id = stringr::str_remove(id, \"[0-9]$\"),\n         id = stringr::str_remove(id,\
+    \ \".\")),\n  tidyr::extract(df, value, into = c(\"id\", \"value\"), \"(.*)(\\\
+    \\d+)$\", remove = FALSE))\ndf1", "\n    if (length(strings) <= 1)\n        return(strings)\n\
+    \    strings[strings == substring]\n}\n</code>\nThe result is the same:\n<code>\n\
+    filter_by_substring(c('abc', 'bacd', 'cde', 'array'), 'a')", "\n    lapply(seq_along(strings),\
+    \ function(i) {\n        if (grepl(substring, strings[i]))\n            strings[i]\n\
+    \        else\n            NA_character_\n    })\n}\n</cell>\n<text>\nLet's try\
+    \ it:\n\n\n</text>\n<cell>", "\n  strings <- strings[sapply(strings,grepl,pattern\
+    \ = paste0(\"\\\\b\",substring,\"\\\\b\"))]\n  if(length(unique(strings)) > 1)\
+    \ {\n    strings <- paste0(\n      strings,\n      collapse = \"\",\n      collapse\
+    \ = \", \"\n    )\n  } else {\n    strings <- unique(strings)\n  }\n  strings\n\
+    }\n", "\n  u <- unique(strings)\n  strings[grep(substring, u, invert = TRUE)]\n\
+    }\n</code>\n<|/ a |>\n<| a dscore=3 |>\nThis might be a useful workaround to your\
+    \ problem:\n<code>\nlibrary(tidyverse)\nlibrary(stringr)\n\nx <- c(\"abc\", \"\
+    bacd\", \"cde\", \"array\")\n"]
 stop_tokens:
 - "\n#"
 - "\n```"

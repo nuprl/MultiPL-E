@@ -9,7 +9,459 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 1, 2, 4, 5]))\n    assert_equal([2, 6], candidate.call([1, 2, 3]))\n    assert_equal([2,\
   \ 2], candidate.call([3, 2, 1]))\n    assert_equal([2, 2, 0, 16], candidate.call([3,\
   \ 2, 1, 0, 4]))\n    assert_equal([], candidate.call([1]))\n  end\nend\n"
-completions: []
+completions: ["  xs.inject(xs[0].inject(0).product(1).product(-1))\nend", "  @xs.method(:[])\n\
+    \  @xs.method(:[])\n  @xs.method(:[])\n  def call(x)\n    sum = 0\n    x.times\
+    \ do |i|\n      sum += x[i]\n    end\n    @xs.each_index { |i| sum -= x[i] * @xs[(i\
+    \ + 1)].call(x) }\n    sum\n  end\nend\n</code>\n<|/ a tags=ruby,algorithm |>\n\
+    <| c |>\n`@xs.each_index` - wow! That is a really nice idea, and I've been using\
+    \ `each_index` for so long!\n<|/ c |>\n<| c |>\nHm, I find it quite strange that\
+    \ the method `call` doesn't return a value.\n<|/ c |>\n<| c |>\nI don't like it.\
+    \ I think `call` should return `x` anyway, since it returns the derivative of\
+    \ `x`, not of `@xs` itself. However, I haven't had time to think about this.\n\
+    <|/ c |>\n<| c |>\nThis is not tail-recursive, so this can run out of stack space.\n\
+    <|/ c |>\n<| c |>\nI don't believe `call` should return `x`.  It should return\
+    \ the derivative of `@xs` itself, which means that `call` should return `@xs.call(x)`.\
+    \  `call` should *not* call `@xs.call(x)`.  The reason for this is that `@xs.call(x)`\
+    \ may return different values each time you call `call` because of `@xs[i]` which\
+    \ changes with every iteration of `call`.\n<|/ c |>\n<| a tags=ruby,algorithm\
+    \ |>\nYou could also implement it using a recursive function, which is simpler\
+    \ to understand:\n<code>", "  n = length(xs)\n  result = []\n  xs.each_with_index\
+    \ do |x, i|\n    result.push(n * (xs[i] - xs[i-1]))\n  end\n  result\nend", " \
+    \ # Write your code here\nend", "  # Create a copy since this is mutated as we\
+    \ iterate over it.\n  xsCopy = xs.dup\n  # Return the difference between the 2\
+    \ polynomials.\n  xsCopy.map! {|x| x - xsCopy.shift }\n  xsCopy\nend", "  return\
+    \ @(xs) xs.map { |x| 2 * x }\nend", "  xs.inject(0){|x, c| (x * c).call(c - 1)}\n\
+    end", "  (xs[1] - xs[0]) * xs.call(xs[2..-1]).call([0]) + xs[-1]\nend\n</code>\n\
+    You can use the following methods to evaluate your polynomials:\n<code>", "  result\
+    \ = []\n  for i in xs\n    if i == 0\n      next\n    else\n      result[i] =\
+    \ 1\n      next\n  end\n  result\nend", "  # Return derivative of this polynomial\
+    \ in the same form.\n  # >>> derivative.call([3, 1, 2, 4, 5])\n  # [1, 4, 12,\
+    \ 20]\n  # >>> derivative.call([1, 2, 3])\n  # [2, 6]\n  # >>> derivative.call([1,\
+    \ 2, 3], 1)\n  # [1, 6]\n  # >>> derivative.call([1, 2, 3], -1)\n  # [1, -4]\n\
+    \  # >>> derivative.call([1, 2, 3], 2)\n  # [3, -4]\n  case xs.length\n  when\
+    \ 1 then xs[0]\n  when 2 then xs[1]\n  when 3 then xs[1] + 2*xs[2] + 6*xs[3]\n\
+    \  when 4 then xs[1] + 4*xs[2] + 12*xs[3] + 20*xs[4]\n  end\nend", "  xs, d =\
+    \ [], 0\n  xs.each do |x|\n    d.push( x )\n    d.push( x * x )\n    d.push( x\
+    \ * x * x )\n  end\n  d\nend", "  xs.inject(0) { |sum, x| sum + x**2 }\nend",
+  "  xs = Array.new(xs)\n  n = xs.size - 1\n  xs[0] = xs[1]\n  for i in (0...n)\n\
+    \    xs[i + 1] = xs[i] - xs[i + 1] * xs[i] / i\n  end\n  xs.last\nend\n</cell>\n\
+    <text>\nNext, we define a function to be used in the derivative.", "  n = length(xs)\n\
+    \  if n == 0\n    []\n  else\n    [ xs[i] + derivative(xs[0..i-1]) ]\nend", " \
+    \ x = getFirst(xs)\n  y = getRest(xs)\n  if isNil(x) || isNil(y) || x > y\n  \
+    \  [x]\n  else\n    x = x[1] - x[1]*x[0]\n    y = getRest(xs)\n    if y[0] ==\
+    \ 0\n      [(x[0] + y[1]*x)/y[2], (x[0] - y[1]*x)/y[2]]\n    else\n      y = y[1]/y[0]\n\
+    \      [x*(y[0] + y[1]*x) + y[2]*x*(x[0] + y[1]*x), x*(y[0] - y[1]*x)/y[2]]\n\
+    \  end\nend", "  y = []\n  x.times do |i|\n    if i==0\n      y << 0\n    elsif\
+    \ i==1\n      y << x\n    else\n      term = xs[i-1]*y[i-1]\n      y << term\n\
+    \    end\n  end\n  y\nend", "  if xs.length == 0\n    1\n  else\n    xs.length.downto(1).inject(0)\
+    \ { |result, index| result+=((xs[index+1] - xs[index]) * (xs.last)); result }\n\
+    end\n</cell>\n<text>\nWe can now write our own Polynomial class that can operate\
+    \ on polynomials. We will implement this in terms of Polynomial and Derivative.",
+  "  xs, xs = xs.to_a(nil)\n  result = [xs[0]]\n  xs.each.with_index do |x, i|\n \
+    \   coef = xs[i + 1]\n    result.push(coef * x)\n  end\n  result\nend", "  x =\
+    \ 1\n  d = 0\n  while x < xs.length\n    d = d * x + xs[x]\n    x += 1\n  end\n\
+    \  d\nend", "  xs.each_with_index do |x, i|\n    xs[i+1] = xs[i] - xs[i-1] * x\n\
+    \  end\nend", "  x = xs[0]\n  res = []\n  x.times { |i| res << xs[i + 1] }\n \
+    \ res\nend", "  xs\nend", "  raise ArgumentError, \"The first argument must be\
+    \ a list\"\n  xs", "  n      = xs.length - 1\n  product = 1\n  xs.each do |x|\n\
+    \    product *= (1.0 / n)\n  end\n  return product\nend", "  xs.inject(0, :+)\
+    \ || raise ArgumentError, \"no derivative available\"\n  xs.inject(:+, :*)\nend",
+  "  xs.reduce(:*)\nend\n</code>\nNow we can easily calculate the derivative by calling\
+    \ the derivative function with our array as the argument.\n<code>", "  (0..(@.length\
+    \ - 1)).inject(0) do |acc, i|\n    acc + (@xs[i] * @xs[i + 1])\n  end\nend", " \
+    \ return reduce(lambda x, y: x * y, xs[1..-1]) + xs[0, -1]\nend", "  x = @(xs)\
+    \ xs[1]\n  x2 = xs[2] * x\n  x3 = x3 * x2\n  x4 = x3 * x2\n  x5 = x4 * x\n  x6\
+    \ = x5 * x4\n  x7 = x6 * x3\n  x8 = x7 * x2\n  x9 = x8 * x1\n  x10 = x9 * x\n\
+    \  x11 = x10 * x\n  x12 = x11 * x\n  x13 = x12 * x\n  x14 = x13 * x\n  x15 = x14\
+    \ * x\n  x16 = x15 * x\n  x17 = x16 * x\n  x18 = x17 * x\n  x19 = x18 * x\n  x20\
+    \ = x19 * x\n  x21 = x20 * x\n  x22 = x21 * x\n  x23 = x22 * x\n  x24 = x23 *\
+    \ x\n  x25 = x24 * x\n  x26 = x25 * x\n  x27 = x26 * x\n  x28 = x27 * x\n  x29\
+    \ = x28 * x\n  x30 = x29 * x\n  x31 = x30 * x\n  x32 = x31 * x\n  x33 = x32 *\
+    \ x\n  x34 = x33 * x\n  x35 = x34 * x\n  x36 = x35 * x\n  x37 = x36 * x\n  x38\
+    \ = x37 * x\n  x39 = x38 * x\n  x40 = x39 * x\n  x41 = x40 * x\n  x42 = x41 *\
+    \ x\n  x43 = x42 * x\n  x44 = x43 * x\n  x45 = x44 * x\n  x46 = x45 * x\n  x47\
+    \ = x46 * x\n  x48 = x47 * x\n  x49 = x48 * x\n  x50 = x49 * x\n  x51 = x50 *\
+    \ x\n  x52 = x51 * x\n  x53 = x52 * x\n  x54 = x53 * x\n  x55 = x54 * x\n  x56\
+    \ = x55 * x\n  x57 = x56 * x\n  x58 = x57 * x\n  x59 = x58 * x\n  x60 = x59 *\
+    \ x\n  x61 = x60 * x\n  x62 = x61 * x\n  x63 = x62 * x\n  x64 = x63 * x\n  x65\
+    \ = x", "  # Evaluate polynomial at xs[0]\n  x0 = evaluate(xs)\n  # Evaluate derivative\
+    \ polynomial.\n  der = [0] * len(xs)\n  # Evaluate polynomial at xs[1]\n  der[1]\
+    \ = evaluate([xs[0], xs[1]])\n  # Evaluate polynomial at xs[2]\n  der[2] = evaluate([xs[0],\
+    \ xs[1], xs[2]])\n  # Evaluate polynomial at xs[3]\n  der[3] = evaluate([xs[0],\
+    \ xs[1], xs[2], xs[3]])\n  return der\nend", "  xs, degree = xs.to_a, length(xs)\n\
+    \  if degree == 0\n    [1]\n  elsif degree == 1\n    elsif xs.last.kind_of? Integer\n\
+    \      [xs.last]\n    else\n      xs.collect{ |x| x * derivative(xs.drop(1))}.inject(:+)\n\
+    \    end\n  else\n    (xs.last == 1 ? xs.drop(2) : xs.last * derivative(xs.drop(1))).inject(:+)\n\
+    \  end\nend", "  result = xs.dup\n  1.upto(result.length) do |i|\n    result +=\
+    \ result[i-1]*xs.slice!(i-1)\n  end\n  return result\nend", "  return xs.inject(0)\
+    \ do |result, x|\n    result + (x * x) / derivative.call(xs[2..-1])\n  end\nend",
+  "    derivatives = []\n    i = 0\n    derivative = 0\n    while i < xs.length\n\
+    \        derivative += 1\n        i += 1\n    derivatives << derivative\n    xs.each_index\
+    \ do |j|\n        derivatives << (j <= derivative) ? 0 : xs[j - derivative]\n\
+    \    end\n    derivatives\nend", "  xs, length = xs.flatten, x.length\n  if length\
+    \ == 1\n    one\n  else\n    if length == 2\n      [xs[1], one]\n    else\n  \
+    \    [xs[1], derivative(xs[2..-1]), one]\n  end\nend", "  return xs[0..-2] * [1..-1].inject(:*)\n\
+    end", "  if xs.size == 1\n    xs.first\n  else\n    call(xs, [1, 0], xs[2] - xs[1]\
+    \ * xs[1] / xs[0] / xs[0])\n  end\nend\n</code>\n<|/ a |>\n<| c |>\nAwesome thank\
+    \ you. Is there a way to get the derivative of poly1?\n<|/ c |>\n<| c |>\nNo,\
+    \ `poly1` is a polynomial which has many solutions. However, you can use `poly1.each`\
+    \ to calculate the derivative `poly1.each {|x| ... }`.\n<|/ c |>\n<| c |>\nActually,\
+    \ I forgot to mention that I need a poly1 derivative in multiple variables. So\
+    \ I need the derivative of poly1 in 2 variables (x1, x2, x3) and the derivative\
+    \ of poly1 in 3 variables (x1, x2, x3, x4) and so on.\n<|/ c |>\n<| c |>\nI updated\
+    \ my answer with a solution for multiple variables.\n<|/ c |>\n<| c |>\nThank\
+    \ you so much. I really appreciate your help.\n<|/ c |>\n<| a dscore=1 |>\nHere\
+    \ is a simple approach to calculate partial derivatives:\n<code>", "  return xs[1...n].inject(0)\
+    \ do |sum, term|\n    sum + term / xs[0...n].inject(:*) / (xs[0...n].inject(:+)\
+    \ * term)\n  end\nend", "  # Write your code here\n  raise NotImplementedError\n\
+    end\n</cell>\n<code language=julia-1.5>\nderivative([1, 2])\n</cell>\n<code language=julia-1.5>\n\
+    derivative([1, 2])\n</cell>\n<code language=julia-1.5>\nderivative([1, 2, 3])\n\
+    </cell>\n<code language=julia-1.5>", "  xs.inject([1, 1], :+).reduce(:*)\nend",
+  "  result = [0]*(xs.length-1)\n  for i in (0...xs.length-1)\n    result[i] = xs[i+1]\
+    \ - xs[i]\n  return result\nend", "  derivatives = []\n  if xs.size == 1\n   \
+    \ derivatives << xs[0]\n  else\n    derivatives << derivative(xs.last) * (xs.size\
+    \ - 1)\n    derivatives << derivative(xs.size - 1) * xs.last\n  end\n  derivatives\n\
+    end", "  xs.inject([0, 1], &:*)\nend", "  # Implement me!\nend", "  return map(\n\
+    \    lambda x : x * xs, [1..(length(xs) - 1)]\n  )\nend", "  n = @array.length\
+    \ xs\n  if n < 0\n    raise ArgumentError, \"Cannot derive a polynomial from a\
+    \ negative number.\"\n  end\n  d = 0\n  for x in xs\n    d = @(d * x) + x\n  end\n\
+    \  return d\nend", "  n = xs.length - 1\n  d = Array.new(n)\n  d.fill(0)\n  for\
+    \ i in (0...n)\n    d[i] = xs[i + 1] - xs[i]\n  return d\nend", "  raise NotImplementedError\n\
+    end", "  n = length(xs)\n  if n > 0\n    d = Array.new(n - 1)\n    d[0] = xs[1]\n\
+    \    d[1] = xs[2]\n    for i in 2..n\n      d[i] = (d[i - 2] + d[i-2] * xs[i -\
+    \ 1]) / (xs[i] + xs[i] * xs[i - 1])\n  end\n  d\nend", "  return [] if xs.empty?\
+    \ || xs.size == 0\n  x = xs[0]\n  result = []\n  result.push(x) if xs.size ==\
+    \ 1\n  result.push(1) if x.eql? 0\n  result.push(x ** 2)\n  result = (-1) ** result.size\
+    \ - 1\n  if x.eql? 1\n    result = [result]\n  else\n    result = result\n  end\n\
+    \  return result\nend", "  return xs.product(@**[0, 1])\nend", "  \nend", "  if\
+    \ length(xs) == 0\n    raise ZeroDivisionError, \"Derivative: can't take a derivative\
+    \ of a zero.\"\n  else\n    return [1] * length(xs) + [0.0] + xs.reverse.inject(:+).reduce(:*)\n\
+    \  end\nend", "  # Initialize result\n  result = [0, ]\n  \n  # Compute partial\
+    \ derivative\n  result[0] = (xs[0] * ys[0]) - ys[0]\n  result[1] = ys[1]", " \
+    \ result = [1]\n  result.push xs[0]\n  for i in 1..(xs.length - 1)\n    result.push\
+    \ result.last * (xs[i] + xs[i - 1]) # the second term is coefficient of xs[i-1]\n\
+    \  end\n  result\nend", "  xs.inject([]) do |ary, x|\n    # This is x^3 + x^2\
+    \ + x^1\n    ary.unshift(1 if x == xs[0]\n    end\n    # This is x^3 + x^2\n \
+    \   ary.unshift(1 - (xs[0]**3 if x == xs[1]))\n    # This is x^3\n    ary.unshift(xs[0]**3\
+    \ if x == xs[2])\n    # Return derivative\n    ary\n  end\nend", "  result = []\n\
+    \  xs.each do |x|\n    result << 1 if x == 0\n    result << x - 1 if x != 0\n\
+    \  end\n  result\nend", "  result = []\n  x.times do |x|\n    result << 0 if x\
+    \ == 0\n    result << xs[x-1] if x > 1\n    result << (x - 1) * (2 * xs[x-1])\
+    \ if xs > 1\n    result << (x - 1) * (2 * xs[x-1]) if xs == 1\n  end\n  result\n\
+    end", "  x = 1\n  result = [x]\n  for i in xs\n    x, result = x * i, result +\
+    \ [x]\n  end\n  result\nend", "  xs = Array.wrap(xs)\n  \n  der = 0\n  \n  der\
+    \ = Array.new(@x.size - 1, 0) \n  \n  der[0] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[0] - xs[1])\n  der[1] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[1] - xs[2])\n  der[2] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[2] - xs[3])\n  der[3] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[3] - xs[4])\n  der[4] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[4] - xs[1])\n  der[5] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[1] - xs[4])\n  der[6] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[2] - xs[5])\n  der[7] = ((xs[0] + xs[1] * xs[2] + xs[3]\
+    \ * xs[4]) * @x[0]) * (xs[3] - xs[6])\n  \n  return der\nend", "  xs, @no_reset\n\
+    \  xs.reduce(:*) \nend", "    size = xs.size\n    if size == 1\n        return\
+    \ [1]\n    else\n        dydxs = derivative(xs[1:]).map(xs.next).zip([1]*xs.size)\n\
+    \        return [dydxs[0..i].inject(:+)]\n    end\nend", "  xs.inject([1], :*).reduce(:*)\n\
+    end", "  result = ones(xs.length)\n  for i in 0..(xs.length - 1)\n    # result[i]\
+    \ = xs[i - 1] * xs[i - 2] * ... * xs[i]\n    result[i] = (xs[i - 1] * xs[i + 1])\
+    \ if (i > 0) else 0\n  end\n  return result\nend", "  xs.inject([]) { |a, e| a\
+    \ << e }\n  xs.inject(1){ |a, e| a * e }\nend\n</code>\nWe use the inject method\
+    \ to create a function that computes a value from its input. The block computes\
+    \ a new value a as the sum of the inputs and the input itself. This new value\
+    \ will then be passed to the next input e, which will yield a new value a2, which\
+    \ is then passed again to the next input e2, and so on. So, to get the first derivative\
+    \ of the polynomial:\n<code>", "  return call(xs, derivative_index(xs))\nend",
+  "  return xs.map { |x| x**2 }\nend", "  xs, ys = xs.to_a, xs.to_a\n  if ys.length\
+    \ < 2\n    ys << [0]\n  end\n  ys[-1] = ys[-1] * xs[-1]\n  ys[-2] = ys[-2] * xs[-2]\
+    \ * xs[-3]\n  ys[-3] = ys[-3] * xs[-3]\n  ys[-4] = ys[-4] * xs[-4] * xs[-3] *\
+    \ xs[-2]\n  ys[-5] = ys[-5] * xs[-3]\n  return ys\nend", "  xs.each_with_index\
+    \ do |x, i|\n    xs[i] == 0 ? 0 : xs[i-1] + x * xs[i-1]\n  end\nend", "  num_xs\
+    \ = length(xs)\n  if num_xs < 1\n    []\n  else\n    [xs[1] - xs[0] * xs[num_xs-1]]\n\
+    \  end\nend", "  return call(xs.reverse)\nend", "  x = x[0]\n  ys = x[1]\n  ys.map!\
+    \ {|y| y}\n  ys.map {|y| y^2}\n  ys.map {|y| 2*y}\n  ys.map {|y| -1/y}\nend",
+  "  xs.inject(:+, 1).reduce(:*)\nend", "  xs.inject([0]) do |acc, x|\n    acc.push(acc.last\
+    \ * x)\n    acc\n  end\nend", "    derivative = Array.new(xs.length) do |i|\n\
+    \      derivative[i] = 0\n    end\n    derivative[0] = 1 if xs.first == 0\n  \
+    \  derivative[1] = xs.first if xs.first != 0\n    derivative[2] = (2 * xs.first)\
+    \ if xs.first != 0\n    derivative[3] = (3 * xs.first) if xs.first != 0\n    derivative[4]\
+    \ = 3 * xs.first - 1 if xs.first != 0\n    derivative[5] = (4 * xs.first) if xs.first\
+    \ != 0\n    derivative[6] = (5 * xs.first) if xs.first != 0\n    derivative[7]\
+    \ = (6 * xs.first) if xs.first != 0\n    derivative[8] = (7 * xs.first) if xs.first\
+    \ != 0\n    derivative[9] = 3 * xs.first - 1 if xs.first != 0\n    derivative[10]\
+    \ = 3 * xs.first - 2 if xs.first != 0\n    derivative[11] = (4 * xs.first) if\
+    \ xs.first != 0\n    derivative[12] = 6 * xs.first if xs.first != 0\n    derivative[13]\
+    \ = (5 * xs.first) if xs.first != 0\n    derivative[14] = (3 * xs.first) if xs.first\
+    \ != 0\n    derivative[15] = 2 * xs.first if xs.first != 0\n    derivative[16]\
+    \ = 8 * xs.first - 3 if xs.first != 0\n    derivative[17] = 3 * xs.first - 2 if\
+    \ xs.first != 0\n    derivative[18] = 6 * xs.first if xs.first != 0\n    derivative[19]\
+    \ = 7 * xs.first if xs.first != 0\n    derivative[20] = xs.first if xs.first !=\
+    \ 0\n    derivative[21] = -8 * xs.first if xs.first != 0\n    derivative[22] =\
+    \ -8 * xs.first - 9 if xs.first != 0\n    derivative[23] = 10 * xs.first - 2 if\
+    \ xs.first != 0\n    derivative[24] = -4 * xs.first - 2 if xs.first != 0\n   \
+    \ derivative[25] = 10 * xs.first - 2 if xs.first != 0\n    derivative[26] = -4\
+    \ * xs.first - 2 if xs.first != 0\n    derivative[27] = -8 * xs.first - 9 if xs.first\
+    \ != 0\n    derivative[28] = 8 * xs.first - 3 if xs.first != 0\n    derivative[29]\
+    \ = 6 * xs.first if xs.first != 0\n", "  @xs[0]\n  def f\n    xs[1]\n    def g\n\
+    \      xs[2]\n      def h\n        xs[3]\n        0\n      end\n      h\n    end\n\
+    \    g\n  end\n  f\nend\n</code>\nWe can use it to calculate the gradients of\
+    \ a polynomial using Newton's method. For example, if we're trying to minimize\
+    \ function of polynomial:\n<code>\nf(x) = x[0]*x[0] + 2*x[1]*x + 3*x[2]*x^2 +\
+    \ 4*x[3]*x^3 + 5*x[4]*x^4 + 6*x[5]*x^5 + 7*x[6]*x^6\n</code>\nNewton's method\
+    \ is basically gradient descent algorithm, but we need to start with a simple\
+    \ guess, instead of an arbitrary value. The gradient of the function f at any\
+    \ point is given by:\n<code>\nf'(x) = 2*x[0] + 6*x[1] + 12*x[2] + 24*x[3] + 36*x[4]\
+    \ + 48*x[5] + 64*x[6]\n</code>\nTherefore, the gradients of f and f' at any point\
+    \ x are:\n<code>\nf'(x) = (2x[0] + 6*x[1] + 12*x[2] + 24*x[3] + 36*x[4] + 48*x[5]\
+    \ + 64*x[6]) / 6\nf''(x) = (6*x[0] + 12*x[1] + 24*x[2] + 36*x[3] + 48*x[4] + 64*x[5]\
+    \ + 72*x[6]) / 6\n</code>\nAnd Newton's method uses the direction of the gradient:\n\
+    <code>\nf'(x) / f''(x) = (1/6)*(2x[0] + 6*x[1] + 12*x[2] + 24*x[3] + 36*x[4] +\
+    \ 48*x[5] + 64*x[6]) + (2/6)*(6*x[0] + 12*x[1] + 24*x[2] + 36*x[3] + 48*x[4] +\
+    \ 64*x[5] + 72*x[6])\n</code>\nTherefore, Newton's method is to find the point\
+    \ x that minimizes the function:\n<code>\nf'(x) / f''(x) = (1/6)*(2*x[0] + 6*x[1]\
+    \ + 12*x[2] + 24*x[3] + 36*x[4] + 48*x[5] + 64*x[6]) + (2/6)*(6*x[0] + 12*x[1]\
+    \ + 24*x[2] + 36*x[3] + 48*x[4] + 64*x[5] + 72*x[6])\nf'(x) / f''(x) = 2/6\nx\
+    \ = 1/6\n</code>\nHere's the code. It's simple since I'm only implementing the\
+    \ gradient for the function f, and not the gradient of the derivative function,\
+    \ since it's not needed.\n<code>", "  xs.inject(:+) do |sum, x|\n    sum.inject(:*)\
+    \ do |prod, y|\n      prod.call(y) * x\n    end\n  end\nend\n</pre>\n<p>A more\
+    \ succinct way of expressing the same thing is to use the\n<code>inject</code>\
+    \ method in combination with <code>reduce</code>:</p>\n<pre>", "  if @nargs >\
+    \ 1\n    raise ArgumentError, 'wrong number of arguments'\n  else\n    coefficients\
+    \ = @coefficients\n    coefficients.concat [coefficients.first - 1, coefficients.first]\n\
+    \    polynom = coefficients.first\n    coefficients.reject!{|c| c == polynom}\n\
+    \  end\nend", "  @xs.reduce(&:+)\nend", "  xs.reduce(:+).reduce(:*)\nend", " \
+    \ xs, xs.inject(0, :+)  # zero x\n  x = xs.last\n  y = 1\n  xs.each_index do |i|\n\
+    \    y += xs[i]\n  end\n  [y / x, xs.last]\nend", "  deriv = xs.inject(0) do |acc,\
+    \ x|\n    acc + (xs[2] - x)/(xs[1] - xs[0])\n  end\n  deriv\nend", "  n = xs.size\n\
+    \  d = Array.new(n)\n  d.fill(1)\n  \n  # Fill the derivative array with zeros\n\
+    \  (d[n-1]...).step(n-1).each do |i|\n    \n    # Loop through the current polynomial\
+    \ and add the next term (coefficient) to the current coefficient\n    (d[i] +\
+    \ xs[i+1] * d[i]).step(i+1).each do |j|\n      d[j] = d[j] * xs[i]\n    end\n\
+    \  end\n  \n  # Return the derivative polynomial\n  return d\nend", "  return\
+    \ xs.map { |x| x.to_f / (x.length - 1) }\nend", "  return [xs[1] - xs[0]] + ([xs[2]]\
+    \ * (xs[0].to_i + 1)) if xs.length > 2 else []\nend", "  raise NotImplementedError\n\
+    end", "    deriv = Array.new(xs.length + 1)\n    deriv[0] = xs[0]\n    deriv[0]\
+    \ += xs[1]\n    deriv[1] = deriv[0]\n    deriv[1] += xs[2]\n    deriv[2] = deriv[1]\n\
+    \    deriv[3] = 1\n    deriv[3] += xs[4]\n    deriv[4] = deriv[3]\n    deriv[4]\
+    \ += xs[5]\n    deriv[5] = 3\n    deriv[5] += xs[6]\n    deriv[6] = deriv[5]\n\
+    \    deriv[6] += xs[7]\n    deriv[7] = deriv[6]\n    deriv[7] += xs[8]\n    deriv[8]\
+    \ = deriv[7]\n    deriv[8] += xs[9]\n    deriv[9] = deriv[8]\n    deriv[9] +=\
+    \ xs[10]\n    deriv[10] = deriv[9]\n    deriv[10] += xs[11]\n    deriv[11] = deriv[10]\n\
+    \    deriv[11] += xs[12]\n    deriv[12] = deriv[11]\n    deriv[12] += xs[13]\n\
+    \    deriv[13] = deriv[12]\n    deriv[13] += xs[14]\n    deriv[14] = deriv[13]\n\
+    \    deriv[14] += xs[15]\n    deriv[15] = deriv[14]\n    deriv[15] += xs[16]\n\
+    \    deriv[16] = deriv[15]\n    deriv[16] += xs[17]\n    deriv[17] = deriv[16]\n\
+    \    deriv[17] += xs[18]\n    deriv[18] = deriv[17]\n    deriv[18] += xs[19]\n\
+    \    deriv[19] = deriv[18]\n    deriv[19] += xs[20]\n    deriv[20] = deriv[19]\n\
+    \    return deriv\nend", "  x = self\n  y = [x]\n  (0..x.size - 1).each { |i|\
+    \ y.push(x.send(:*, x.send(i+1))) }\n  y\nend", "  xs.reverse!\n  xs.inject(0)\
+    \ do |result, x|\n    result * x if x > 0 \n  end\nend", "  xs.each_with_index\
+    \ do |x, i|\n    xs[i+1] = xs[i+1].call(x) if i < (xs.length - 1)\n  end\n  xs[-1]\n\
+    end", "    deriv = xs[0]\n    term = 1\n    for i in 1..xs.length\n        term\
+    \ = term * xs[i]\n        deriv = deriv + term\n    end\n    return deriv\nend",
+  "  n = (@size - 1) * @polydeg + @polydeg + 1 - @polydeg\n  # Create array of derivatives\n\
+    \  ds = [nil] * (n - 1)\n  ds[0] = 0\n  ds[n - 1] = 0\n  for i in 0..(@size -\
+    \ 1)\n    ds[i + 1] = xs[i] * ds[i] - xs[i - 1] * ds[i - 2]\n  end\n  return ds\n\
+    end", "  xs\nend", "  x = xs[0]\n  result = [1]\n  result[0] += (xs[1]*x)\n  result[0]\
+    \ += (xs[2]*x*x)\n  result[0] += (xs[3]*x*x*x)\n  result[0] += (xs[4]*x*x*x*x)\n\
+    \  return result\nend", "  xs.inject(0) do |acc, x|\n    if x > 0\n      acc\n\
+    \    elsif x > 0 && acc.nonzero? # derivatives of non-zero polynomial is zero.\n\
+    \      0\n    else\n      acc * (-1)**x\n    end\n  end\nend", "    derivative\
+    \ = [0]\n    while xs.length > 0\n        derivative[0] += 1\n        derivative.push(xs.pop(-1))\n\
+    \    end\n    derivative\nend", "  xs.inject(:+).reduce(:*)\nend", "  xs, i =\
+    \ xs, 1\n  result = []\n  while i < length(xs)\n    result.push(xs[i] - xs[i-1])\n\
+    \    i += 1\n  end\n  result\nend", "  raise NotImplementedError\nend", "  n =\
+    \ length(xs)\n  if n == 0\n    return []\n  else\n    x =  xs[1]\n    s = [1,\
+    \ 0]\n    s[i + 1] = xs[i] / x\n    return s\nend\n</cell>\n<code language=julia-0.4>",
+  "\tderivatives = []\n\t\n\tderivative = 0\n\tfor i in xs\n\t\tderivative += i\n\t\
+    \tderivatives.append(derivative)", "  n = xs.length\n  xs.collect!\n  xs.each_with_index\
+    \ do |x, i|\n    if i == 0 || n == 1\n      xs[i] = 0\n    else\n      xs[i] =\
+    \ xs[i-1] * x - xs[i]\n    end\n  end\n  xs.collect!\n  xs.inject(0, :*)\nend",
+  "  result = Array.new\n  x.times do |i|\n    result << xs[i]\n  end\n  result\n\
+    end", "  (0..x).map { |i| xs[i] * derivative.call(xs[0..i]) }\nend", "  return\
+    \ [ xs[-1] * xs[-2] ] + xs[-2].to_a * [1..-1]\nend", "  if xs.length == 0\n  \
+    \  return [0]\n  x = @(x)xs[0]\n  xs = xs[1..-1]\n  d = [0]\n  for i in xs\n \
+    \   d = [d, x + i * d[0]]\n  end\n  return d\nend", "  xs\nend", "\tder = 1\n\t\
+    x.times do |x|\n\t\tder = x * der + 1\n\tend\n\tder\nend", "\tx_diff = diff(xs)\n\
+    \treturn [x_diff.length, x_diff.last, x_diff.last - x_diff.length]\nend", "  xs.inject(:*)\
+    \ do |sum, num|\n    sum + num\n  end\nend\n</code>\nSo how would you use this?\
+    \ This would work:\n<code>", "  xs.inject(:*, :+).inject(:^, :*)\nend", "  if\
+    \ xs.size == 0\n    puts \"derivative.call: invalid input\"\n    return nil\n\
+    \  end\n  if xs.size == 1\n    puts \"derivative.call: invalid input\"\n    return\
+    \ nil\n  end", "  deriv = Array.new(xs.length)\n  deriv[0] = 1\n  deriv[xs.length]\
+    \ = 1\n  for i in (1..xs.length-1)\n    deriv[i] = deriv[i-1] * xs[i]\n  end\n\
+    \  deriv\nend", "  # Create array that will contain derivative\n  derivative =\
+    \ []\n  # Return derivative\n  return derivative\nend", "  n = 1\n  for x in xs\n\
+    \    n += 1\n  end", "  x = xs.shift\n  xs = xs.shift\n  if x == 0\n    x.zero?\n\
+    \  else\n    x.zero? ? [] : [-x * derivative(xs)].flatten\n  end\nend\n</code>\n\
+    <|/ a tags=ruby,recursion |>\n<| a dscore=0 |>\nI like Jordan's answer; it got\
+    \ me thinking about how I might solve this problem with a simple recursive function,\
+    \ a while loop, and a bit of metaprogramming. The function doesn't actually do\
+    \ any work except for the recursive calls, so it should be faster than the iterative\
+    \ solutions.\n<code>", "  if xs.last == 0\n    []\n  else\n    xs[0, -1] + xs[1,\
+    \ -1] * xs[0, 0] + xs[2, -1] * xs[0, 0]^2 + ... + xs[-1, -1] * xs[0, -1]\n  end\n\
+    end", "  if xs.length == 0\n    []\n  else\n    1.x(xs.last) * (1.x(xs.last))\n\
+    \  end\nend", "  x = xs[0]\n  d = [0] * x.size", "  derivative = [0 for i in range(len(xs))]\n\
+    \  for x in xs\n    derivative[i] = xs[i - 1]\n  end\n  derivative\nend", '  deriv
+    = [0] * xs.size', "  if xs.length == 0\n    []\n  else\n    xs.length - 1.map\
+    \ { |i| xs[i] * xs[i + 1] }\nend\n</cell>\n<cell>", "  xs.inject(0) do |result,\
+    \ x|\n    result = 1 if result.nil?\n    result + (x * result * x)\n  end\nend",
+  "  x = x0\n  xs = [x0]\n  xs.each do |x|\n    x.to_s + \" * \" + x.to_s + \" * x^2\"\
+    \ + \" * \" + x.to_s + \" * \" + x.to_s + \" * \" + x.to_s + \" * \" + x.to_s\
+    \ + \" * \" + x.to_s + \" * \" + x.to_s + \" * \" + x.to_s\n  end\nend", "  ys\
+    \ = [0] * xs.length\n  ys[0] = 1\n  xs.each_with_index do |x, i|\n    ys[i+1]\
+    \ = x\n  end\n  ys\nend", "  raise NotImplementedError\nend", "  return [ xs[0]\
+    \ + (xs[1] + xs[2] * xs[3]) / (4 * xs[4]) ]\nend", "  raise NotImplementedError\n\
+    end", "    deriv = xs[1..-1].inject(0) do |sum, a|\n        sum + a*xs[0]\n  \
+    \  end\n    deriv\nend", "    product = 1\n    for i in 0...(xs.length - 1)\n\
+    \        product *= (xs[i] - xs[i - 1]) / (xs.length - 1)\n    end\n    product\n\
+    end", "  return xs.inject(:+, 1).reduce(:*)\nend\n</cell>\n<text>\nLet's try it:",
+  "  return xs.inject([1,1], :+) * xs.inject([1,1], :*)\nend", "  xs, xs_length =\
+    \ xs[0], length(xs)\n  if xs_length == 1\n    [1]\n  else\n    # Return the coefficients\
+    \ of the derivative polynomial (xs[i+1] - xs[i]) in the same form:\n    # xs[i\
+    \ + 1] - xs[i] + (xs[i + 1] - xs[i]) * xs + (xs[i + 1] - xs[i]) * xs ^ 2 + ...\n\
+    \    # Return derivative of the derivative polynomial in the same form.\n    #\
+    \ >>> derivative_of_derivative.call([3, 1, 2, 4, 5])\n    # [1, 4, 12, 20]\n \
+    \   # >>> derivative_of_derivative.call([1, 2, 3])\n    # [2, 6]\n    # >>> derivative_of_derivative.call([[0,\
+    \ 1], [2, 3], [4, 5], [6, 7]])\n    # [[1, 6], [24, 60], [124, 120], [728, 120]]\n\
+    \    diffs = call(xs[1..-1])\n    diffs_length = length(diffs)\n    diff = diffs[0]\n\
+    \    diffs = Array[Float64](0)\n    if diffs_length > 1\n      diffs = diffs ++\
+    \ diffs[1..diffs_length-1]\n      diff = diff * (diffs_length - 1)\n      for\
+    \ i in 0..diffs_length-2\n        diff = diff + (diffs[i+1] - diffs[i]) * (diffs_length-1)\
+    \ + diffs[i]\n    end\n    diffs ++ [diff]\n  end\nend", "  if xs.length < 1\n\
+    \    throw SyntaxError.new(\"Incorrect number of arguments for derivative function\"\
+    )\n  else\n    derivative =  (xs[0] + xs[1] * x + xs[2] * x^2 + xs[3] * x^3 +\
+    \ xs[4] * x^4 + xs[5] * x^5)\n  end\nend", "  # The result of this function is\
+    \ simply the product of the derivative\n  # of xs and the reverse of xs.\n  derivative\
+    \ = Array.new(xs.size)\n  derivative.each_index do |i|\n    derivative[i] = xs[i]\
+    \ * derivative[i - 1].call(xs.reverse)\n  end\nend\n</code>\n<|/ a tags=math,ruby,polynomial-math,polynomial-approximation\
+    \ dscore=0 |>\n<| c |>\nThe `Derivative` class seems overly complicated. Why not\
+    \ just use `Array.new(xs.size)`?\n<|/ c |>\n<| c |>\nYeah I should have used `Array.new(xs.size)`\
+    \ too. Thanks. I made an edit, and added your improvement.\n<|/ c |>\n<| c |>\n\
+    I don't think it's complicated at all.\n<|/ c |>\n<| c |>\nWell, I don't think\
+    \ it's a class at all, but a method that returns a single value. Ruby has [built-in\
+    \ support for this kind of methods](http://www.ruby-doc.org/core-1.9.3/Numeric.html#method-i-derivative).\n\
+    <|/ c |>\n<| c |>\nI guess my main concern was how Ruby handles array access,\
+    \ I didn't know that there was a built-in method for it. I just assumed that this\
+    \ was some kind of class because it had methods named after mathematical operators.\n\
+    <|/ c |>\n<| a tags=math,ruby,polynomial-math,polynomial-approximation |>\nHere\
+    \ are two other answers, that have already been given.\n<code>", "  xs = Array.new(xs.size)\
+    \ unless xs\n  xs.each do |x|\n    derivative = Array.new(xs.size) unless derivative\n\
+    \    derivative[i] = x.to_i\n    i += 1\n  end\n  derivative\nend", "  x = xs[0]\n\
+    \  ds = [xs[1]]\n  ds[0].times do\n    x -= 1\n    ds << x**2\n  end\n  ds.sum\n\
+    end\n</code>\nThis approach is more memory efficient than using a hash, but also\
+    \ more work (O(log n) instead of O(n)) to do the calculation. O(n\xB2) is the\
+    \ worst case, so it depends on the nature of your inputs.\n<|/ a dscore=2 |>\n\
+    <| c |>\nThanks alot for the answer. I was trying to see if there was a faster\
+    \ way to do it than O(n). But now I see, the only way to make it faster (other\
+    \ than memoization) is to use this approach. But just out of curiosity, is there\
+    \ a better way? I really appreciate your help.\n<|/ c |>\n<| c |>\nI added an\
+    \ example using memoization\n<|/ c |>\n<| c |>\nThanks again for the example.\
+    \ It really helped me.\n<|/ c |>\n<| a tags=ruby,algorithm,ruby-on-rails,loops,complexity-theory\
+    \ dscore=2 |>\nI think this can be done in O(n) time using dynamic programming.\n\
+    <code>", "  xs.each_with_index do |x, i|\n    if i == 0\n      return [0]\n  \
+    \  end\n    # multiply x by x's derivative and subtract from x.\n    x[i] = x[i]\
+    \ * derivative(xs[i-1]) + x[i-1]\n  end\n  x\nend", "  if @derivative.cache[xs]\
+    \ then\n    return @derivative.cache[xs]\n  end", "  return [2 * xs.first] + xs.drop(1)\n\
+    end", "  xs.inject([1,1], :+).reduce(:*)\nend", "  return [1, 0] + [1] * (xs.size\
+    \ - 1)\nend", "  if xs.length == 1 # 1st\n    [1.0].call(xs)\n  elsif xs.length\
+    \ == 2 # 2nd\n    xs.map { |x| x * derivative [x] }\n  elsif xs.length >= 3 #\
+    \ n terms\n    xs.map { |x| x * derivative [x, x]  }\n  elsif xs.length == 4 #\
+    \ n-1 terms\n    xs.map { |x| x * derivative [x, x, x] }\n  else # n+1 terms\n\
+    \    xs.map { |x| x * derivative [x, x, x, x] }\n  end\nend", "  raise NotImplementedError\n\
+    end", "  x = 0.\n  for i in xs do x += i * 1.0 end\n  xs[0] + xs[1] * x + xs[2]\
+    \ * x^2 + xs[3] * x^3\nend", "    deriv = Array.new(Float32, xs.size+1)\n    deriv[0]\
+    \ = 1.0\n    deriv[1] = xs[0]\n    for i in 2..deriv.size\n        deriv[i] =\
+    \ deriv[i-1] * xs[i]\n    end\n    return deriv\nend", "  if xs.length == 1\n\
+    \    diff(xs, xs)\n  else\n    diff(xs, xs[0...-1]) + [xs[0...-1].product(xs[1...])]\n\
+    \  end\nend", "  if xs.size == 1\n    [xs]\n  else\n    if xs.size < 3\n     \
+    \ raise ArgumentError, \"derivative expected at least 3 arguments, but got #{xs.size}\"\
+    \n    end\n    \n    # Find coefficients of first derivative of x\n    ds = Array.new(xs.size-1,\
+    \ 0)\n    i = 1\n    while i < xs.size\n      ds[i] = 0\n      i += 1\n      ds\
+    \ = ds.inject(:+).to_a.unshift(xs[i-1]) * ds\n    end\n    ds\n  end\nend", " \
+    \   deriv = [0]\n    xs.each do |x|\n      deriv.push(xs.shift)\n    end\n   \
+    \ deriv\nend", "  ys = []\n  xs.each do |x|\n    x = (x * x.to_i).to_s + '1'.to_i\n\
+    \    ys.unshift(x)\n  end\n  ys.reduce(1) { |sum, y| sum * y.to_f }\nend", " \
+    \ return xs.inject(0) { |result, x| result + x * x }\nend", '  @@derivative',
+  "\td = 0\n\tx = xs[0]\n\tfor i in range(1, length(xs))\n\t\td += xs[i] * x\n\t\t\
+    x = x * x\n\treturn d", "  return @(xs) * (xs[0] - xs[1] * xs[0] + xs[2])\nend",
+  "  result = []\n  xs.each_index do |i|\n    result.push(xs[i+1] - xs[i] * xs[i+1])\n\
+    \  end\n  result\nend", "  raise NotImplementedError\nend", "  result = [0 for\
+    \ _ in range(degree + 1)]\n  result[0] = xs[degree]\n  for i = 1, j =0\n    while\
+    \ j + 1 < degree and xs[j + 1] > 0\n      j += 1\n    result[i] = xs[j + 1]\n\
+    \    if j + 1 < degree and xs[j + 1] != 0\n      result[i + 1] = xs[j + 1] / result[j]\n\
+    \    end\n  end\n  result\nend", "\txs[0] = -xs[1]\n\txs[2] = xs[1] + xs[2]\n\t\
+    xs[3] = xs[1] + 2*xs[2] + xs[3]\n\txs[4] = xs[1] + 4*xs[2] + 6*xs[3] + xs[4]\n\
+    \treturn xs\nend", "  xs.map {|x| x * (-1) ** x}\nend\n</code>\n<|/ a tags=ruby,math\
+    \ |>\n<| c |>\nI think this is a good answer, but I think it should be `-1 + x**x`\
+    \ rather than `1 - (x**x)`. It will still work for polynomials such as: `x^2 +\
+    \ x + 1`, but I think `-1 + x**x` will work in all cases.\n<|/ c |>\n<| a tags=ruby,math\
+    \ |>\nThe solution to this problem is to first define some useful methods.\nA\
+    \ method to evaluate a polynomial at an argument\n<code>", "  x = 1\n  for i in\
+    \ 0..xs.size\n    x *= xs[i]\n  end\n  x\nend", "  return xs.map do |x|\n    #\
+    \ Get the coefficient.\n    coef = x.last", "  return x.product(x.product(x.minus(xs)),\
+    \ :).reduce(:+) / x.length\nend", "  return self(@(x, y) [x, y] + ([0] * size(xs)))\n\
+    end", "  return map((lambda x->(x-1)*x),xs)\nend", "  return call(xs)\nend", " \
+    \ # TODO: Finish this function\nend", "  return xs.inject { |sum, el| sum + el\
+    \ * el }\nend", "  case xs\n  when []\n    [1, 0]\n  when [nil]\n    [0, 1]\n\
+    \  when [first]\n    [0, first]\n  when [first, nil]\n    [0, first]\n  else\n\
+    \    first = first\n    second = xs\n    result =\n      case xs\n      when [first,\
+    \ second]\n        [1, first]\n      when [first, nil]\n        [1, 0]\n     \
+    \ else\n        second = second\n        result =\n          case xs\n       \
+    \   when [first, second]\n            [second, second]\n          when [first,\
+    \ nil]\n            [1, 0]\n          else\n            result =\n           \
+    \   case xs\n              when [first, nil, second]\n                [first,\
+    \ 0, first]\n              when [first, second]\n                [first, second,\
+    \ second]\n              when [first, second]\n                [first, second,\
+    \ first]\n              when [first, nil]\n                [first, 0, 0]\n   \
+    \           else\n                [first, second, first]\n          end\n    \
+    \    end\n      end\n    end\nend", "  x2 = x0 * xs[0]\n  xs[1] = xs[1] + 2 *\
+    \ x2\n  xs[2] = xs[2] + 3 * x2 * xs[0]\n  xs[3] = xs[3] + 4 * x2 * xs[0] * xs[0]\n\
+    \  xs[4] = xs[4] + 5 * x2 * xs[0] * xs[0] * xs[0]\n  return xs\nend", "  x = px.call(xs)\n\
+    \  y = x ** 2\n  z = x - y\n  x1 = x.slice(0, 1)\n  x2 = x.slice(1, 2)\n  x3 =\
+    \ x.slice(2, 3)\n  x4 = x.slice(3, 4)\n  return [x1, x2, x3, x4].map { |e| e +\
+    \ y }\nend", "  raise NotImplementedError\nend", "  return [x.call(x) for x in\
+    \ xs]\nend", "  return map((proc {|x| x * self(x) }), xs.reverse)\nend", "  return\
+    \ [derivative(y) for x in xs] + [derivative([x * x for x in xs])]\nend\nend",
+  "    diff = xs[1] - xs[0]\n    return [xs[0] + diff * i, diff * i] for i in xs[2..-1]\n\
+    end", "  # Use this polynomial to get the derivative of the xs list.\n  deriv\
+    \ = 0", "  return map( (x, xs.map { |x| x * x }), xs[1..-1] )\nend", "  return\
+    \ xs.inject(0) do |result, x|\n    result * x\n  end\nend", "  @xs.method(:call)\n\
+    \  @xs.method(:eval)\n  def derivative\n    if @xs.kind_of?(Array) || @xs.kind_of?(String)\n\
+    \      raise TypeError, \"Can't take a derivative of a string or array\"\n   \
+    \ end\n    length = @xs.length\n    if length == 0\n      []\n    else\n     \
+    \ if length == 1\n        [1]\n      else\n        polynomial = xs[0]\n      \
+    \  dydxs = [polynomial]\n        for i in range(1, length-1)\n          polynomial\
+    \ = polynomial.eval * xs[i]\n          dydxs << polynomial\n        end\n    \
+    \    dydxs\n      end\n    end\n  end\nend", "  xs\nend", "    derivative = Array.new(Array.length(xs))\
+    \ do |i|\n        xs[i+1] - xs[i]\n    end\n    derivative\nend", "  xs.inject(0)\
+    \ do |m, x|\n    m * x + 1\n  end\nend", "  return [xs[1] - xs[0]]\nend", "  xs.reverse!\n\
+    \  return xs.inject(0) do |result, x|\n    result + x * xs[-2]\n  end\nend", " \
+    \ xs.inject {|sum, item| sum + item}\nend\n</code>\nI hope it helps.\n<|/ a dscore=0\
+    \ |>\n<| a dscore=0 |>\nI took the liberty to write a pure ruby solution for your\
+    \ problem:\n<code>", "  raise NotImplementedError\nend", "  xs.inject([]) do |derivative,\
+    \ x|\n    derivative << x * (1 - x) if x < 1\n    derivative\n  end\nend", " \
+    \ # xs represent coefficients of a polynomial.\n  # Return derivative of this\
+    \ polynomial in the same form.\n  # >>> derivative.call([3, 1, 2, 4, 5])\n  #\
+    \ [1, 4, 12, 20]\n  # >>> derivative.call([1, 2, 3])\n  # [2, 6]\n  xs.inject([0,\
+    \ 0, 1]) do |acc, x|\n    acc.tap {|a| a << acc.last + x }\n  end\nend", "  xs.inject(0,\
+    \ :+) do |sum, element|\n    sum.*(element)\n  end\nend\n</code></pre>", "  xs,\
+    \ xs, xs\nend", "  derivative_calculator.call(xs)\nend", "  xs = [xs[1], xs[2]]\n\
+    \  \n  return call(xs)", "  # The output of this function will be the list of\
+    \ coefficients deriviative.\n  new_xs = []\n  for i in range(len(xs))\n    new_xs.append((xs[i]\
+    \ - xs[i-1]) / (xs[i] - xs[i-1]))\n  return new_xs\nend\n</cell>\n<code language=julia-1.5>\n\
+    derivative([3, 1, 2, 4, 5])\n</cell>\n<code language=julia-1.5>\nderivative([1,\
+    \ 2, 3])\n</cell>\n<code language=julia-1.5>\nfunction my_derivative(xs::Array)\n\
+    \  new_xs = []\n  for x in xs\n    new_xs += [ xs[i] - xs[i-1] / (xs[i] - xs[i-1])\
+    \ for i in 1:length(xs) ]\n  end\n  return new_xs\nend\n</cell>\n<code language=julia-1.5>\n\
+    my_derivative([1, 2, 3])\n</cell>\n<code language=julia-1.5>\nmy_derivative([1,\
+    \ 4, 12, 20])\n</cell>\n<code language=julia-1.5>", "  return call(xs, 0, 1, 2)\n\
+    end", "  deriv = []\n  x = nil\n  \n  xs.each do |x|\n    deriv << 1 if x == 0\n\
+    \    x = x * x\n  end\n  \n  deriv.each do |x|\n    deriv += 1\n  end\n  deriv\n\
+    end", "  return call([x[1] for x in xs], [0, -1])\nend", "  return call(xs, derivative.call)\n\
+    end", "  sum = 0\n  for x in xs\n    sum += x\n  end\n  sum *= -1\n  return sum\n\
+    end", "  return call(xs, derivative_form)\nend", "  result = [1]\n  x.times do\
+    \ |i|\n    result << result[i-1] * x\n  end\n  result\nend"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

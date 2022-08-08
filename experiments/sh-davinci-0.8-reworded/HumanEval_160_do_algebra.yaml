@@ -169,6 +169,1206 @@ completions: ["    local operators=$1\n    local operands=$2\n    local -a opera
     \ $2 into an array named \"operand\"\n  IFS=' ' read -ra operand <<< \"$2\"\n\n\
     \  # Calculate the result using a for loop\n  (( result = operand[0] ))\n  for\
     \ (( i=0; i<${#oper[@]}; i++ )); do\n    (( result = eval \"$result ${oper[i]}\
-    \ ${operand[i+1]}\" ))\n  done\n\n  echo \"$result\""]
+    \ ${operand[i+1]}\" ))\n  done\n\n  echo \"$result\"", "  # operator_list=`echo\
+    \ \"$1\" | sed -e 's/ /\\n/g'`\n  # operand_list=`echo \"$2\" | sed -e 's/ /\\\
+    n/g'`\n  # operand_length=`echo \"$2\" | sed -e 's/ /\\n/g' | wc -l`\n  # operand_length=$(expr\
+    \ $operand_length - 1)\n  #\n  # output=\"\"\n  # for (( i=0; i<$operand_length;\
+    \ i++ ))\n  # do\n  #   output=\"$output ${operand_list[$i]} ${operator_list[$i]}\"\
+    \n  # done\n  # output=\"$output ${operand_list[$operand_length]}\"\n  # echo\
+    \ \"$output\"\n  #\n  # echo \"$output\" | bc -l\n\n  # this works\n  echo \"\
+    $2\" | sed -e 's/ /\\n/g' | xargs echo | sed -e 's/^\\([^ ]*\\) \\([^ ]*\\) \\\
+    ([^ ]*\\)$/\\1 \\2 \\3/'\n  echo \"$2\" | sed -e 's/ /\\n/g' | xargs echo | sed\
+    \ -e 's/^\\([^ ]*\\) \\([^ ]*\\) \\([^ ]*\\)$/\\1 \\2 \\3/' | bc -l", "    local\
+    \ t=${1//\\+/\\$[a=a\\+b]}\n    t=${t//-/\\$[a=a-b]}\n    t=${t//\\*/\\$[a=a\\\
+    *b]}\n    t=${t//\\//\\$[a=a\\/b]}\n    t=${t//\\^/\\$[a=a\\^b]}\n    echo '#!/bin/bash'\n\
+    \    echo 'a='$2\n    echo $t\n    echo 'echo $a'", "\tlocal -n operator=$1\n\t\
+    local -n operand=$2\n\tlocal -n result=${3:-'result'}\n\tresult=\n\tlocal i=0\n\
+    \tlocal o o o_prev\n\tlocal op1 op2\n\tfor o in \"${operator[@]}\"; do\n\t\tif\
+    \ [[ -z $o_prev ]]; then\n\t\t\top1=${operand[$i]}\n\t\t\t(( i++ ))\n\t\telse\n\
+    \t\t\top1=$result\n\t\tfi\n\t\top2=${operand[$i]}\n\t\t(( i++ ))\n\t\tresult=$(python3\
+    \ -c \"print($op1 $o $op2)\")\n\t\to_prev=$o\n\tdone", "    IFS=\"$1\" read -r\
+    \ -a operator_list <<< \"$2\"\n    IFS=\"$1\" read -r -a operand_list <<< \"$3\"\
+    \n    # echo \"${operator_list[*]}\"\n    # echo \"${operand_list[*]}\"\n    #\
+    \ echo \"${operator_list[0]}\"\n    # echo \"${operand_list[0]}\"\n    # echo\
+    \ \"${operand_list[1]}\"\n    # /usr/bin/env python3 -c \"print(2${operator_list[0]}3)\"\
+    \n    python_code=\"print(${operand_list[0]}${operator_list[0]}${operand_list[1]}\"\
+    \n    # python_code=\"print(2${operator_list[0]}3)\"\n    # echo \"$python_code\"\
+    \n    # /usr/bin/env python3 -c \"print(2${operator_list[0]}3)\"\n    # /usr/bin/env\
+    \ python3 -c \"$python_code\"\n    # return $(/usr/bin/env python3 -c \"$python_code\"\
+    )\n    # return $(/usr/bin/env python3 -c \"print(2${operator_list[0]}3)\")\n\
+    \    return $(/usr/bin/env python3 -c \"$python_code\")", "    echo \"$1\"\n \
+    \   echo \"$2\"\n    math=$(printf \"$1\" | paste -d ' ' - <(echo \"$2\"))\n \
+    \   echo \"$math\"\n    bc -l <<< \"$math\"", "  # set expression to the first\
+    \ element\n  local expr=\"$1\"\n  shift\n  # build the expression, then evaluate\
+    \ it.\n  expr \"$@\"", "  #\n  # Write your code here\n  #", "  local operands=(\
+    \ ${2} )\n  local operators=( ${1} )\n  local num_operands=${#operands[@]}\n \
+    \ local num_operators=${#operators[@]}\n  if [ ${num_operands} -gt 1 -a ${num_operators}\
+    \ -eq $((num_operands-1)) ]; then\n    local result=\"${operands[0]}\"\n    for\
+    \ ((i=0; i<num_operators; i++)); do\n      let result=result${operators[i]}${operands[i+1]}\n\
+    \    done\n    echo ${result}\n  else\n    echo \"Bad number of operands and/or\
+    \ operators\"\n  fi", "    arr=()\n    for i in $1; do\n        if [ \"$i\" ==\
+    \ \"+\" ]; then\n            arr+=(`bc <<< \"${arr[@]: -2} + ${arr[@]: -1}\"`)\n\
+    \            unset arr[@]: -2\n        elif [ \"$i\" == \"-\" ]; then\n      \
+    \      arr+=(`bc <<< \"${arr[@]: -2} - ${arr[@]: -1}\"`)\n            unset arr[@]:\
+    \ -2\n        elif [ \"$i\" == \"*\" ]; then\n            arr+=(`bc <<< \"${arr[@]:\
+    \ -2} * ${arr[@]: -1}\"`)\n            unset arr[@]: -2\n        elif [ \"$i\"\
+    \ == \"//\" ]; then\n            arr+=(`bc <<< \"${arr[@]: -2} / ${arr[@]: -1}\"\
+    `)\n            unset arr[@]: -2\n        elif [ \"$i\" == \"**\" ]; then\n  \
+    \          arr+=(`bc <<< \"${arr[@]: -2} ^ ${arr[@]: -1}\"`)\n            unset\
+    \ arr[@]: -2\n        else\n            arr+=($i)\n        fi\n    done\n    echo\
+    \ ${arr[@]}", "  # define base variables \n  local result=0\n  local str=''\n\
+    \  # loop through the two space-separated lists\n  for ((i=0; i<${#1}; i++));\
+    \ do\n    str+=\"${2[$i]} ${1[$i]} \"\n  done\n  # add the last operand\n  str+=\"\
+    ${2[-1]}\"\n  result=$(eval echo \"$str\")\n  echo \"$result\"", "\t#echo \"Doing\
+    \ algebra\"\n\t#echo \"$1\"\n\t#echo \"$2\"\n\toperators=($1)\n\t#echo \"Operators:\
+    \ ${operators[@]}\"\n\toperands=($2)\n\t#echo \"Operands: ${operands[@]}\"\n\t\
+    declare -a results\n\teval=\"${operands[0]}\"\n\tfor ((i=0; i<${#operators[@]};\
+    \ i++)); do\n\t\teval=$(echo \"$eval ${operators[$i]} ${operands[$i+1]}\" | bc)\n\
+    \t\t#echo \"Evaling: $eval\"\n\tdone\n\techo \"$eval\"", "    echo $2 \\\n   \
+    \     |  awk '{for(i=1;i<=NF;i++) printf \"%s \", $i}' \\\n        |  paste -d\
+    \ \" \" - - - - \\\n        |  awk '{print $2 $1 $3 $1 $4}' \\\n        |  bc",
+  "    # 1) initialize operand stack and operator stack\n    stack_o=( )\n    stack_n=(\
+    \ )\n    # 2) push operators and operands onto their respective stacks\n    for\
+    \ ((i=0; i<${#1}; i++)); do\n        stack_o[i]=${1:i:1}\n    done\n    for ((i=0;\
+    \ i<${#2}; i++)); do\n        stack_n[i]=${2:i:1}\n    done\n    # 3) evaluate\n\
+    \    # loop through the stack\n    for ((i=0; i<${#stack_o[@]}; i++)); do\n  \
+    \      # 3.1) if the current operator is ** and the next operator is */-/+, \n\
+    \        # first apply ** then resume loop\n        if [[ ${stack_o[i]} == \"\
+    *\" && ${stack_o[i+1]} == \"/\" ]]; then\n            stack_n[i+1]=$((stack_n[i]/stack_n[i+1]))\n\
+    \            stack_o[i+1]=\" \"\n        elif [[ ${stack_o[i]} == \"*\" && ${stack_o[i+1]}\
+    \ == \"-\" ]]; then\n            stack_n[i+1]=$((stack_n[i]*stack_n[i+1]))\n \
+    \           stack_o[i+1]=\" \"\n        elif [[ ${stack_o[i]} == \"*\" && ${stack_o[i+1]}\
+    \ == \"+\" ]]; then\n            stack_n[i+1]=$((stack_n[i]*stack_n[i+1]))\n \
+    \           stack_o[i+1]=\" \"\n        # 3.2) if the current operator is */-/+\
+    \ and the next operator is */-/+, \n        # first apply */-/+ then resume loop\n\
+    \        elif [[ ${stack_o[i]} == \"/\" && ${stack_o[i+1]} == \"*\" ]]; then\n\
+    \            stack_n[i+1]=$((stack_n[i]/stack_n[i+1]))\n            stack_o[i+1]=\"\
+    \ \"\n        elif [[ ${stack_o", "  local -a ops=(\"$1\")\n  local -a ops=(\"\
+    $2\")\n  local res=${ops[0]}\n  local j=0\n  local res\n  for i in ${!ops[@]};\
+    \ do\n    res=\"$res ${ops[$i]} ${ops[$j]}\"\n    j=$((j+1))\n  done\n  echo \"\
+    $res\" | bc", "  local operator=\"$1\"\n  local operand=\"$2\"\n  local expr=\"\
+    $(printf \"%s\" \"$operand\" | sed 's/ /\\^/g')\"\n  local expr=\"$(echo \"$expr\"\
+    \ | sed 's/\\^/\\*/g')\"\n  local i=0\n  for op in $operator; do\n    local expr=\"\
+    $(echo \"$expr\" | sed \"$((i+1))s/$/ $op /\")\"\n    let i++\n  done\n  echo\
+    \ \"$expr\" | bc", "  op=$1; shift\n  opr=$1; shift\n  [[ -z $op || -z $opr ]]\
+    \ && return 1\n  declare -a op_a=($op)\n  declare -a opr_a=($opr)\n  len=${#op_a[@]}\n\
+    \  [[ $len -ne ${#opr_a[@]} - 1 ]] && return 1\n  declare -a r\n  r=(\"${opr_a[0]}\"\
+    )\n  for (( i=0; i<$len; i++ )) ; do\n    num=${opr_a[$i+1]}\n    case ${op_a[$i]}\
+    \ in\n      \\+ ) r[0]=$(( ${r[0]} + $num ));;\n      \\- ) r[0]=$(( ${r[0]} -\
+    \ $num ));;\n      \\* ) r[0]=$(( ${r[0]} * $num ));;\n      \\/ ) r[0]=$(( ${r[0]}\
+    \ / $num ));;\n      \\^ ) r[0]=$(( ${r[0]} ** $num ));;\n    esac\n  done\n \
+    \ echo ${r[0]}", "  echo -e \"$1\\n$2\" | awk '{\n  split($1, a, \" \")\n  split($2,\
+    \ b, \" \")\n  for (i = 1; i <= length(a); i++)\n    c = c b[i] a[i]\n  c = \"\
+    (\" c \")\"\n  printf \"%.0f\\n\", c\n  }'", "    set -f\n    declare -a operator=($1)\n\
+    \    declare -a operand=($2)\n    local result=0\n\n    local index=0\n    while\
+    \ [[ ${#operator[@]} -gt 0 ]]; do\n        if [[ $index -eq 0 ]]; then\n     \
+    \       result=${operand[$index]}\n        else\n            case ${operator[$index\
+    \ - 1]} in\n                '+') result=$((result + ${operand[$index]})) ;;\n\
+    \                '-') result=$((result - ${operand[$index]})) ;;\n           \
+    \     '*') result=$((result * ${operand[$index]})) ;;\n                '//') result=$((result\
+    \ / ${operand[$index]})) ;;\n                '**') result=$((result ** ${operand[$index]}))\
+    \ ;;\n            esac\n        fi\n        index=$((index + 1))\n    done\n \
+    \   echo $result", "    echo \"$1\"\n    echo \"$2\"\n    a=($1)\n    b=($2)\n\
+    \    echo \"${a[@]}\"\n    echo \"${b[@]}\"\n    c=(\"${a[@]}\" \"${b[@]}\")\n\
+    \    echo \"${c[@]}\"\n    d=\"${c[@]}\"\n    echo \"$d\"\n    python -c \"print($d)\"",
+  "    local -a ops=($1)\n    local -a data=($2)\n    local res=0\n    local -i i=-1\n\
+    \    local temp=0\n    while [[ $i -lt ${#ops[@]} ]]; do\n        ((++i))\n  \
+    \      case ${ops[$i]} in\n            '+') \n                ((res+=data[$i]))\
+    \ \n                ;;\n            '-') \n                ((res-=data[$i])) \n\
+    \                ;;\n            '*') \n                ((res*=data[$i])) \n \
+    \               ;;\n            '/') \n                ((res/=data[$i])) \n  \
+    \              ;;\n            '**') \n                ((temp=res**data[$i]))\n\
+    \                res=$temp\n                ;;\n        esac\n    done\n    echo\
+    \ $res", "    if [ $# -ne 2 ]; then\n        echo \"usage: do_algebra operator\
+    \ operand\" >&2\n        return 1\n    fi\n    operator=$1\n    operand=$2\n \
+    \   declare -a operand_array\n    eval \"operand_array=($operand)\"\n    declare\
+    \ -a operator_array\n    eval \"operator_array=($operator)\"\n    if [ ${#operator_array[@]}\
+    \ -ne ${#operand_array[@]} - 1 ]; then\n        echo \"error: operator list length\
+    \ is not equal to operand list length minus one\" >&2\n        return 1\n    fi\n\
+    \    if [ ${#operand_array[@]} -lt 2 ]; then\n        echo \"error: operand list\
+    \ must have at least two operands\" >&2\n        return 1\n    fi\n    if [ ${#operator_array[@]}\
+    \ -lt 1 ]; then\n        echo \"error: operator list must have at least one operator\"\
+    \ >&2\n        return 1\n    fi\n    for elem in ${operand_array[@]}; do\n   \
+    \     if [ \"$elem\" -lt 0 ]; then\n            echo \"error: operand list contains\
+    \ negative integers\" >&2\n            return 1\n        fi\n    done\n    ans=${operand_array[0]}\n\
+    \    for ((i=0; i<${#operator_array[@]}; i++)); do\n        op=${operator_array[$i]}\n\
+    \        if [ \"$op\" == '+' ]; then\n            ans=$((ans + ${operand_array[$((i+1))]}))\n\
+    \        elif [ \"$op\" == '-' ]; then\n            ans=$((ans - ${operand_array[$((i+1))]}))\n\
+    \        elif [ \"$op\" == '*' ]; then\n            ans=$((ans * ${operand_array[$((i+1))]}))\n\
+    \        elif [ \"$op\" == '//' ]; then\n            ans=$((ans / ${operand_array[$((i+1))]}))\n\
+    \        elif [ \"$op\" == '**' ]; then\n            ans=$((ans ** ${operand_array[$((i+1))]}))\n\
+    \        else\n            echo", "  # Write your code here\n  # To print results\
+    \ to the standard output you can use print(\"Hello world!\")\n  # To debug: printErr(\"\
+    Debug messages...\")\n  local -a operator=($1)\n  local -a operand=($2)\n  local\
+    \ -i result=${operand[0]}\n  local -i i=0\n  local -i j=1\n  #echo \"operator=${operator[@]}\"\
+    \n  #echo \"operand=${operand[@]}\"\n  while [ $i -lt ${#operator[@]} ]; do\n\
+    \    case ${operator[$i]} in\n      +)\n      result=$((result + ${operand[$j]}))\n\
+    \      ;;\n      -)\n      result=$((result - ${operand[$j]}))\n      ;;\n   \
+    \   \\*)\n      result=$((result * ${operand[$j]}))\n      ;;\n      //)\n   \
+    \   result=$((result / ${operand[$j]}))\n      ;;\n      \\*\\*)\n      result=$((result\
+    \ ** ${operand[$j]}))\n      ;;\n    esac\n    ((i++))\n    ((j++))\n  done\n\
+    \  print ${result}", "  # Write your solution here\n  local operator=($1)\n  local\
+    \ operand=($2)\n  local retval=0\n  local index\n  local op\n  local num1\n  local\
+    \ num2\n  local stack=()\n  local stackIndex\n  local pos\n  local lastOp=false\n\
+    \  for ((index=0; index<${#operator[@]}; index++)); do\n    op=${operator[$index]}\n\
+    \    stackIndex=${#stack[@]}\n    if [ $lastOp = true ]; then\n      stack[stackIndex-1]=$((${stack[stackIndex-1]}${op}${operand[$index]}))\n\
+    \    else\n      stack[stackIndex]=${operand[$index]}\n    fi\n    lastOp=false\n\
+    \    case \"$op\" in\n      +)\n        lastOp=true\n        ;;\n      -)\n  \
+    \      lastOp=true\n        ;;\n      \\*)\n        lastOp=true\n        ;;\n\
+    \      \\/)\n        lastOp=true\n        ;;\n      \\*)\n        lastOp=true\n\
+    \        ;;\n      \\*)\n        lastOp=true\n        ;;\n    esac\n  done\n \
+    \ stackIndex=${#stack[@]}\n  pos=0\n  while ((pos<stackIndex)); do\n    retval=$(($retval${stack[$pos]}))\n\
+    \    pos=$(($pos+1))\n  done\n  echo $retval", "  local str_operators=$1\n  local\
+    \ str_array=$2\n  local arr_operators\n  local arr_array\n  local result\n\n \
+    \ read -ra arr_operators <<< \"$str_operators\"\n  read -ra arr_array <<< \"$str_array\"\
+    \n\n  for i in \"${!arr_operators[@]}\"; do\n    result=\"${arr_array[$i]} ${arr_operators[$i]}\
+    \ ${arr_array[$(( i + 1 ))]}\"\n    arr_array[$(( i + 1 ))]=$(eval \"$result\"\
+    )\n  done\n\n  echo ${arr_array[${#arr_array[@]} - 1]}", "  result=$1\n  local\
+    \ operator=($2)\n  local operand=($3)\n  local j=0\n  for i in ${operand[@]:1};\
+    \ do\n    if [[ ${operator[$j]} == '+' ]]; then\n      result=$((result + i))\n\
+    \    elif [[ ${operator[$j]} == '-' ]]; then\n      result=$((result - i))\n \
+    \   elif [[ ${operator[$j]} == '*' ]]; then\n      result=$((result * i))\n  \
+    \  elif [[ ${operator[$j]} == '//' ]]; then\n      result=$((result / i))\n  \
+    \  elif [[ ${operator[$j]} == '**' ]]; then\n      result=$((result ** i))\n \
+    \   fi\n    j=$((j + 1))\n  done\n  echo $result", "  OIFS=$IFS\n  IFS=$'\\n'\n\
+    \  local operators=($1)\n  local operands=($2)\n  local result=${operands[0]}\n\
+    \  for (( i=0; i<${#operators[@]}; i++ )); do\n    (( j=i+1 ))\n    [[ ${operators[$i]}\
+    \ == '+' ]] && \\\n      (( result+=${operands[$j]} ))\n    [[ ${operators[$i]}\
+    \ == '-' ]] && \\\n      (( result-=${operands[$j]} ))\n    [[ ${operators[$i]}\
+    \ == '*' ]] && \\\n      (( result*=${operands[$j]} ))\n    [[ ${operators[$i]}\
+    \ == '/' ]] && \\\n      (( result/=${operands[$j]} ))\n    [[ ${operators[$i]}\
+    \ == '**' ]] && \\\n      (( result=result**${operands[$j]} ))\n  done\n  IFS=$OIFS\n\
+    \  echo $result", "  local IFS=$'\\n'\n  local -a operator=(\"$1\")\n  local -a\
+    \ operand=(\"$2\")\n  local expression=\"\"\n  local result=${operand[0]}\n  #\
+    \ Be careful of the space in the expression.\n  for ((i=0; i<${#operator[@]};\
+    \ i++)); do\n    expression=\"$expression ${operand[$i]} ${operator[$i]}\"\n \
+    \ done\n  expression=\"$expression ${operand[-1]}\"\n  result=$(echo \"$result\
+    \ $expression\" | bc)\n  echo \"$result\"", "\toperators=(${1})\n\toperands=(${2})\n\
+    \tresult=\"${operands[0]}\"\n\tlocal i\n\tfor ((i=0; i<${#operators[@]}; i++));\
+    \ do\n\t\tcase \"${operators[$i]}\" in\n\t\t\t'+') result=\"$(($result + ${operands[$((i+1))]}))\"\
+    ;;\n\t\t\t'-') result=\"$(($result - ${operands[$((i+1))]}))\";;\n\t\t\t'*') result=\"\
+    $(($result * ${operands[$((i+1))]}))\";;\n\t\t\t'//') result=\"$(($result / ${operands[$((i+1))]}))\"\
+    ;;\n\t\t\t'**') result=\"$(($result ** ${operands[$((i+1))]}))\";;\n\t\tesac\n\
+    \tdone\n\techo \"$result\"", "  op=$1\n  opa=$2\n  declare -a ops\n  read -ra\
+    \ ops <<<\"$op\"\n  declare -a opsa\n  read -ra opsa <<<\"$opa\"\n  op1=${opsa[0]}\n\
+    \  for i in \"${!ops[@]}\"; do\n    eval \"op1=${op1}${ops[$i]}${opsa[$((i+1))]}\"\
+    \n  done\n  echo $op1", "    local n=${#1}\n    local r=${2[0]}\n    for ((i=0;\
+    \ i<n; i++)); do\n        case ${1[i]} in\n            +) r=$((r + ${2[i+1]}))\
+    \ ;;\n            -) r=$((r - ${2[i+1]})) ;;\n            \\*) r=$((r * ${2[i+1]}))\
+    \ ;;\n            //) r=$((r / ${2[i+1]})) ;;\n            \\*\\*) r=$((r ** ${2[i+1]}))\
+    \ ;;\n        esac\n    done\n    echo $r", "    local -a operator\n    local\
+    \ -a operand\n    local result=0\n    local item=0\n    local tmp=0\n    operator=($1)\n\
+    \    operand=($2)\n    for ((i=0; i<=${#operator[@]}; i++)); do\n        #echo\
+    \ \"result=${result} item=${item} operator=${operator[$i]} operand=${operand[$i+1]}\"\
+    \n        case ${operator[$i]} in\n            +)\n                result=$((result\
+    \ + operand[$i+1]))\n                ;;\n            -)\n                result=$((result\
+    \ - operand[$i+1]))\n                ;;\n            \\*)\n                result=$((result\
+    \ * operand[$i+1]))\n                ;;\n            //)\n                tmp=$((result\
+    \ / operand[$i+1]))\n                result=$tmp\n                ;;\n       \
+    \     \\*)\n                result=$((result * operand[$i+1]))\n             \
+    \   ;;\n            **)\n                result=$((result ** operand[$i+1]))\n\
+    \                ;;\n            *)\n                result=${operand[$i]}\n \
+    \               ;;\n        esac\n    done\n    echo $result", "  local operator=\"\
+    $1\"\n  local operand=\"$2\"\n  local tmp=\"\"\n  local x=\"\"\n  local result=\"\
+    \"\n  local arr\n  local i=0\n  local j=0\n  local k=0\n  local operators\n  local\
+    \ operands\n  local op\n  local a\n  local b\n  # First, split the lists and store\
+    \ them in arrays\n  j=0\n  for op in $operator; do\n    operators[$j]=$op\n  \
+    \  ((j++))\n  done\n  j=0\n  for a in $operand; do\n    operands[$j]=$a\n    ((j++))\n\
+    \  done\n  # First, determine how many operators of the same type we have\n  #\
+    \ For example, if we have '*' then we will multiply all the operands\n  # after\
+    \ the '*' operator\n  for ((i=0; i<${#operators[@]}; i++)); do\n    op=${operators[$i]}\n\
+    \    if [[ \"$op\" = \"*\" ]]; then\n      a=${operands[$i]}\n      b=${operands[$((i+1))]}\n\
+    \      a=$((a*b))\n      operands[$((i+1))]=$a\n      unset operators[$i]\n  \
+    \    unset operands[$i]\n    fi\n  done\n  # Second, determine how many operators\
+    \ of the same type we have\n  # For example, if we have '//' then we will divide\
+    \ all the operands\n  # after the '//' operator\n  for ((i=0; i<${#operators[@]};\
+    \ i++)); do\n    op=${operators[$i]}\n    if [[ \"$op\" = \"//\" ]]; then\n  \
+    \    a=${operands[$i]}\n      b=${operands[$((i+1))]}\n      a=$((a/b))\n    \
+    \  operands[$((i+1))]=$a\n      unset operators[$i]\n      unset operands[$i]\n\
+    \    fi\n  done\n  # Third, determine how many operators of the same type we have\n\
+    \  # For example, if we have '**' then", "  local result=\"$1\"\n  local operator=(\"\
+    $2\")\n  local operand=(\"$3\")\n  for ((i=0; i<\"${#operator[@]}\"; i++)); do\n\
+    \    if [[ \"${operator[$i]}\" == '+' ]]; then\n      result=\"$((result + operand[$((i+1))]))\"\
+    \n    elif [[ \"${operator[$i]}\" == '-' ]]; then\n      result=\"$((result -\
+    \ operand[$((i+1))]))\"\n    elif [[ \"${operator[$i]}\" == '*' ]]; then\n   \
+    \   result=\"$((result * operand[$((i+1))]))\"\n    elif [[ \"${operator[$i]}\"\
+    \ == '//' ]]; then\n      result=\"$((result / operand[$((i+1))]))\"\n    elif\
+    \ [[ \"${operator[$i]}\" == '**' ]]; then\n      result=\"$((result ** operand[$((i+1))]))\"\
+    \n    fi\n  done\n  echo \"$result\"", "  local operator=($1) operand=($2)\n \
+    \ local value=${operand[0]}\n  for (( i=0; i<${#operator[@]}; i++ )); do\n   \
+    \ ((value ${operator[i]}= ${operand[i+1]}))\n  done\n  echo $value", "  local\
+    \ operator=$1\n  local operand=$2\n  local result=0\n  local i=0\n  local op=''\n\
+    \  local curr=0\n  local prev=0\n  for curr in $operand; do\n    op=${operator[$i]}\n\
+    \    if [[ $i -eq 0 ]]; then\n      result=$prev\n    fi\n    result=$(($result$op$curr))\n\
+    \    prev=$curr\n    i=$((i+1))\n  done\n  echo $result", "    op_chars=\"+-*/\"\
+    \n    op_types=(+) - ((/)) ^\n    local ops=()\n    local operands=()\n    for\
+    \ i in ${1//[ ]/ }; do\n        for (( j=0; j<${#op_chars}; j++ )); do\n     \
+    \       [[ $i == ${op_chars:$j:1} ]] && ops+=(${op_types[$j]})\n        done\n\
+    \    done\n    for i in ${2//[ ]/ }; do\n        operands+=($i)\n    done\n  \
+    \  echo $operands\n    echo $ops\n    printf '%s' \"${operands[0]}\"\n    for\
+    \ (( i=0; i<${#ops[@]}; i++ )); do\n        printf '%s' \"${ops[$i]}\"\n     \
+    \   printf '%s' \"${operands[$i+1]}\"\n    done\n    printf '\\n'", "    local\
+    \ operators=($1)\n    local operands=($2)\n    local result=\"\"\n    local i=0\n\
+    \    local num_ops=${#operators[@]}\n    local num_nums=${#operands[@]}\n    for\
+    \ (( i=0; i<num_ops; i++ )); do\n        result+=\"${operands[i]} ${operators[i]}\
+    \ \"\n    done\n    result+=\"${operands[i]}\"\n    echo $result | bc", "  local\
+    \ -a operator=(${1})\n  local -a operand=(${2})\n  local result=$(eval $(printf\
+    \ \"%s $[${#operator[@]}-1] %s %s %s\" \"${operand[0]}\" \"${operator[0]}\" \"\
+    ${operand[1]}\" \"${operator[1]}\"))\n  for i in $(seq 2 $[${#operator[@]}-1]);\
+    \ do\n    result=$(eval $(printf \"%s %s %s %s\" \"${result}\" \"${operator[$i]}\"\
+    \ \"${operand[$i]}\" \"${operator[$i]}\"))\n  done\n  echo $result", "  local\
+    \ OP=$1 OPS=$2 AS\n  # Split strings by spaces and convert to array\n  IFS=' '\
+    \ read -r -a AS <<< \"$OPS\"\n  # Iterate through operator list\n  for SYM in\
+    \ $OP; do\n    # Get first two elements of array\n    local LHS=${AS[0]} RHS=${AS[1]}\n\
+    \    # Pop first two elements from array\n    AS=(\"${AS[@]:2}\")\n    # Add back\
+    \ result, in place of LHS\n    AS=(\"${AS[@]}\" $(expr $LHS $SYM $RHS))\n  done\n\
+    \  # Return result from array\n  echo ${AS[${#AS[@]}-1]}", "  local -a operator=()\n\
+    \  local -a operand=()\n  local expression=''\n  local result=0\n  for i in $1;\
+    \ do\n    operator+=(\"$i\")\n  done\n  for i in $2; do\n    operand+=(\"$i\"\
+    )\n  done\n  for i in $(seq 0 $((${#operator[@]} - 1))); do\n    expression+=\"\
+    ${operand[$i]} ${operator[$i]} \"\n  done\n  expression+=\"${operand[$i+1]}\"\n\
+    \  result=$(bc <<<\"$expression\")\n  echo $result", "    local opers=($1)\n \
+    \   local operands=($2)\n    result=${operands[0]}\n    for (( i=0; i<${#opers[@]};\
+    \ i++ )); do\n        oper=\"${opers[$i]}\"\n        (( j = i + 1 ))\n       \
+    \ operand=\"${operands[$j]}\"\n        if [ \"$oper\" == \"+\" ]; then\n     \
+    \       (( result += operand ))\n        elif [ \"$oper\" == \"-\" ]; then\n \
+    \           (( result -= operand ))\n        elif [ \"$oper\" == \"*\" ]; then\n\
+    \            (( result *= operand ))\n        elif [ \"$oper\" == \"//\" ]; then\n\
+    \            (( result /= operand ))\n        elif [ \"$oper\" == \"**\" ]; then\n\
+    \            (( result **= operand ))\n        fi\n    done\n    echo $result",
+  "    # Write your code here\n    local -a array\n    local -a operator\n    local\
+    \ operand\n    local result\n    IFS=' ' read -r -a array <<< \"$2\"\n    IFS='\
+    \ ' read -r -a operator <<< \"$1\"\n    operand=$((${array[0]}${operator[0]}${array[1]}))\n\
+    \    for i in ${!operator[@]}; do\n        if [ $i -gt 0 ]; then\n           \
+    \ operand=$(($operand${operator[$i]}${array[$i+1]}))\n        fi\n    done\n \
+    \   echo $operand", "    declare -A ops=([+]=+ [\\-]=- [*]=* [//]=/ [**]=**)\n\
+    \    local r=\"$2\"\n    for op in $1; do\n        r=$(bc <<< \"$r ${ops[$op]}\
+    \ $3\")\n    done\n    printf \"%s\\n\" \"$r\"", '  echo "Not yet implemented"',
+  "    # Convert spaces to newlines\n    local -a operators=($(echo \"$1\" | tr '\
+    \ ' '\\n'))\n    local -a numbers=($(echo \"$2\" | tr ' ' '\\n'))\n    local result=${numbers[0]}\n\
+    \    for ((i=0; i<${#operators[@]}; i++)); do\n        # Use a temp variable to\
+    \ prevent the first operand from being modified\n        local temp=$result\n\
+    \        case ${operators[i]} in\n            '+') \n                result=$((temp\
+    \ + ${numbers[i+1]}))\n                ;;\n            '-')\n                result=$((temp\
+    \ - ${numbers[i+1]}))\n                ;;\n            '*')\n                result=$((temp\
+    \ * ${numbers[i+1]}))\n                ;;\n            '//')\n               \
+    \ result=$((temp / ${numbers[i+1]}))\n                ;;\n            '**')\n\
+    \                result=$((temp ** ${numbers[i+1]}))\n                ;;\n   \
+    \     esac\n    done\n    echo $result", "  local operators=\"$1\"\n  local operands=\"\
+    $2\"\n  local op array result\n\n  IFS=\" \" read -a array <<< \"$operands\"\n\
+    \  result=\"${array[0]}\"\n  IFS=\" \" read -a array <<< \"$operators\"\n  index=0\n\
+    \  for op in \"${array[@]}\"; do\n    index=$(( index + 1 ))\n    case \"$op\"\
+    \ in\n      \"+\") result=$(( result + ${array[$index]} ));;\n      \"-\") result=$((\
+    \ result - ${array[$index]} ));;\n      \"*\") result=$(( result * ${array[$index]}\
+    \ ));;\n      \"//\") result=$(( result / ${array[$index]} ));;\n      \"**\"\
+    ) result=$(( result ** ${array[$index]} ));;\n    esac\n  done\n  echo \"$result\"",
+  "    local r=\"$1\"\n    local o=\"$2\"\n    shift\n    shift\n    r=\"$r $o $*\"\
+    \n    echo \"$r\" | bc", "  local op=( $1 )\n  local arr=( $2 )\n  local result=${arr[0]}\n\
+    \  local i=0\n  local j=1\n  local op\n  for op in \"${op[@]}\"; do\n    if [\
+    \ \"$op\" == \"+\" ]; then\n      result=$(( result + arr[j] ))\n    elif [ \"\
+    $op\" == \"-\" ]; then\n      result=$(( result - arr[j] ))\n    elif [ \"$op\"\
+    \ == \"*\" ]; then\n      result=$(( result * arr[j] ))\n    elif [ \"$op\" ==\
+    \ \"//\" ]; then\n      result=$(( result / arr[j] ))\n    elif [ \"$op\" == \"\
+    **\" ]; then\n      result=$(( result ** arr[j] ))\n    fi\n    (( j++ ))\n  done\n\
+    \  echo $result", "  local -a operator=()\n  local -a operand=()\n  local i=0\n\
+    \  local result=0\n  for i in $1; do\n    operator[$i]=$i\n  done\n  for i in\
+    \ $2; do\n    operand[$i]=$i\n  done\n  result=${operand[0]}\n  for ((i=0; i<${#operator[@]};\
+    \ i++)); do\n    case ${operator[$i]} in\n      '+') result=$((result + ${operand[$((i+1))]}))\
+    \ ;;\n      '-') result=$((result - ${operand[$((i+1))]})) ;;\n      '*') result=$((result\
+    \ * ${operand[$((i+1))]})) ;;\n      '//') result=$((result / ${operand[$((i+1))]}))\
+    \ ;;\n      '**') result=$((result ** ${operand[$((i+1))]})) ;;\n    esac\n  done\n\
+    \  echo $result", "  local -a operator=($1)\n  local -a operand=($2)\n  for ((\
+    \ i=0; i<${#operator[@]}; i++ )); do\n    case ${operator[$i]} in\n      +) ((\
+    \ operand[$i+1] = operand[$i] + operand[$i+1] )) ;;\n      -) (( operand[$i+1]\
+    \ = operand[$i] - operand[$i+1] )) ;;\n      \\*) (( operand[$i+1] = operand[$i]\
+    \ * operand[$i+1] )) ;;\n      //) (( operand[$i+1] = operand[$i] / operand[$i+1]\
+    \ )) ;;\n      \\*) (( operand[$i+1] = operand[$i] ** operand[$i+1] )) ;;\n  \
+    \  esac\n  done\n  echo \"${operand[-1]}\"", "\techo $1 $2 | sed -e 's/ /\\n/g'\
+    \ -e 's/^/echo /g' -e 's/$/ /g' -e 's/^/\\`/g' -e 's/$/\\`/g' | tr '\\n' '+' |\
+    \ sed -e 's/^/echo /g' -e 's/+$//g' | bash -", "    # write your solution here\n\
+    \    local operators=($1)\n    local operands=($2)\n    local result=${operands[0]}\n\
+    \    for (( i=0; i<${#operators[@]}; i++ )); do\n        ((i++))\n        result=`bc\
+    \ <<< \"scale=3; $result ${operators[$i]} ${operands[$i]}\"`\n    done\n    echo\
+    \ $result", "    local ops=$1\n    local vals=$2\n    local res=0\n    declare\
+    \ -a opvals\n    local i=0\n    read -ra opvals <<< \"$ops\"\n    read -ra vals\
+    \ <<< \"$vals\"\n    for val in \"${vals[@]}\"; do\n        if [ \"$i\" -eq 0\
+    \ ]; then\n            res=$val\n        else\n            case \"${opvals[$i-1]}\"\
+    \ in\n                '+') res=$((res+val)) ;;\n                '-') res=$((res-val))\
+    \ ;;\n                '*') res=$((res*val)) ;;\n                '//') res=$((res/val))\
+    \ ;;\n                '**') res=$((res**val)) ;;\n            esac\n        fi\n\
+    \        i=$((i+1))\n    done\n    echo $res", "    local -n _op=$1\n    local\
+    \ -n _operand=$2\n    local _eval=\"\"\n    for ((i=0; i<${#_op[@]}; i++)); do\n\
+    \        _eval+=\"${_operand[i]} ${_op[i]} \"\n    done\n    _eval+=\"${_operand[i]}\"\
+    \n    echo \"$_eval\" | bc", "\tlocal operator=\"$1\"\n\tlocal operand=\"$2\"\n\
+    \t# Use an array, not a string\n\tlocal -a op_array\n\tlocal -a opd_array\n\t\
+    # Read the list into arrays:\n\tread -a op_array <<< \"$operator\"\n\tread -a\
+    \ opd_array <<< \"$operand\"\n\t# Generate Python code to do the calculation:\n\
+    \tlocal -a python_code=(\n\t\t'print('\n\t\t\"${opd_array[0]}\"\n\t)\n\tlocal\
+    \ count=${#op_array[@]}\n\tfor ((i=0; i<$count; i++)); do\n\t\tpython_code+=(\"\
+    \ ${op_array[$i]} ${opd_array[$((i+1))]}\")\n\tdone\n\tpython_code+=(')')\n\t\
+    # Run the code:\n\tpython -c \"${python_code[*]}\"", "    # If there is no operand\
+    \ or no operator, return 0\n    if [ -z \"$1\" ] || [ -z \"$2\" ]; then\n    \
+    \    echo 0\n        return\n    fi\n    # Read the first operand\n    local operand1=\"\
+    $1\"\n    shift\n    # Read the first operator\n    local operator=\"$1\"\n  \
+    \  shift\n    # Read the remaining list of operands\n    local operand2=$@\n \
+    \   # Evaluate the remaining list of operands\n    local operand2=$(do_algebra\
+    \ \"$operand2\")\n    # Evaluate the expression using the remaining operands and\
+    \ operator\n    expr \"$operand1\" \"$operator\" \"$operand2\"", "    local opers=($1)\n\
+    \    local operands=($2)\n    local output=\"\"\n    for ((i=0; i<${#opers[@]};\
+    \ i++)); do\n        output=\"${output}${operands[$i]} ${opers[$i]} \"\n    done\n\
+    \    output=\"${output}${operands[$i]}\"\n    echo \"$output\" | bc", "\top_list=$1\n\
+    \tnumber_list=$2\n\t[[ -z $op_list ]] && return\n\t[[ -z $number_list ]] && return\n\
+    \tpython -c \"\nimport sys\nop_list = sys.argv[1].split()\nnumber_list = [int(x)\
+    \ for x in sys.argv[2].split()]\ni = 0\nresult = number_list[i]\ni = i + 1\nwhile\
+    \ i < len(number_list):\n\tif op_list[i-1] == '+':\n\t\tresult = result + number_list[i]\n\
+    \telif op_list[i-1] == '-':\n\t\tresult = result - number_list[i]\n\telif op_list[i-1]\
+    \ == '*':\n\t\tresult = result * number_list[i]\n\telif op_list[i-1] == '//':\n\
+    \t\tresult = result // number_list[i]\n\telif op_list[i-1] == '**':\n\t\tresult\
+    \ = result ** number_list[i]\n\ti = i + 1\nprint(result)\n\" \"$op_list\" \"$number_list\"",
+  "  local operator=$1\n  local operand=$2\n  # Write your solution here", "    local\
+    \ opr=$1\n    local n=$2\n    local n1=$3\n    local ans=0\n    IFS=' ' read -r\
+    \ -a opr_arr <<< \"$opr\"\n    IFS=' ' read -r -a n_arr <<< \"$n\"\n    IFS='\
+    \ ' read -r -a n1_arr <<< \"$n1\"\n    local opl=${#opr_arr[@]}\n    local nl=${#n_arr[@]}\n\
+    \    local n1l=${#n1_arr[@]}\n    if [[ ${opr_arr[0]} == '+' ]]; then\n      \
+    \  for ((i=0; i<$nl; i++)); do\n            ((ans+=${n_arr[$i]}))\n        done\n\
+    \    elif [[ ${opr_arr[0]} == '-' ]]; then\n        for ((i=0; i<$nl; i++)); do\n\
+    \            ((ans-=${n_arr[$i]}))\n        done\n    elif [[ ${opr_arr[0]} ==\
+    \ '*' ]]; then\n        ans=1\n        for ((i=0; i<$nl; i++)); do\n         \
+    \   ((ans*=${n_arr[$i]}))\n        done\n    elif [[ ${opr_arr[0]} == '//' ]];\
+    \ then\n        ans=${n_arr[0]}\n        for ((i=1; i<$nl; i++)); do\n       \
+    \     ((ans/=${n_arr[$i]}))\n        done\n    elif [[ ${opr_arr[0]} == '**' ]];\
+    \ then\n        ans=${n_arr[0]}\n        for ((i=1; i<$nl; i++)); do\n       \
+    \     ((ans**=${n_arr[$i]}))\n        done\n    fi\n    if [[ $opl -ge 1 ]]; then\n\
+    \        for ((i=0; i<$opl; i++)); do\n            if [[ ${opr_arr[$i]} == '+'\
+    \ ]]; then\n                ((ans+=${n1_arr[$i]}))\n            elif [[ ${opr_arr[$i]}",
+  "    awk '\nBEGIN {\n    for (i = 1; i <= NF; i++) {\n        nums[i] = $i\n   \
+    \ }\n    for (i = 1; i <= NF; i++) {\n        ops[i] = \" \" $i \" \"\n    }\n\
+    \    # evaluate the product of numbers first\n    while(nums[3] != \"\") {\n \
+    \       mult = nums[2] * nums[3]\n        # replace the two product operands with\
+    \ their product\n        nums[2] = mult\n        nums[3] = \"\"\n        # also\
+    \ delete the operator between them\n        ops[2] = \"\"\n    }\n    while(nums[3]\
+    \ == \"\" && ops[2] != \"\") {\n        # shift the array left\n        for (i\
+    \ = 2; i <= NF; i++) {\n            nums[i] = nums[i+1]\n            ops[i] =\
+    \ ops[i+1]\n        }\n    }\n    for (i = 2; i <= NF; i++) {\n        if (ops[i]\
+    \ == \" + \") {\n            nums[i] = nums[i-1] + nums[i]\n            nums[i-1]\
+    \ = \"\"\n            ops[i-1] = \"\"\n        }\n        if (ops[i] == \" - \"\
+    ) {\n            nums[i] = nums[i-1] - nums[i]\n            nums[i-1] = \"\"\n\
+    \            ops[i-1] = \"\"\n        }\n    }\n    for (i = 2; i <= NF; i++)\
+    \ {\n        if (nums[i] != \"\") {\n            print nums[i]\n        }\n  \
+    \  }", "    if [[ -z \"$1\" || -z \"$2\" ]]; then\n        echo \"This function\
+    \ requires two lists as arguments.\"\n        return 1\n    fi\n    local operator=($1)\
+    \ operand=($2) result=$2\n    local i=0\n    while (( ${#operator[@]} > i ));\
+    \ do\n        result=$(awk \"BEGIN {printf \\\"%.1f\\\", $result ${operator[$i]}\
+    \ ${operand[$((i+1))]}}\")\n        (( i += 1 ))\n    done\n    echo \"$result\"",
+  "  local exp=$(paste -d\" \" <(echo \"$1\") <(echo \"$2\"))\n  echo \"$exp\" | bc",
+  "  declare -a OP\n  declare -a OPS\n  read -ra OP < <(echo \"$1\")\n  read -ra OPS\
+    \ < <(echo \"$2\")\n  read -r -a OPS <<<\"${OPS[@]:1}\"\n  let OPS[0]=\"${OPS[0]}\
+    \ ${OP[0]} ${OPS[1]}\"\n  while [[ ${#OPS[@]} -gt 1 ]]; do\n    let OPS[0]=\"\
+    ${OPS[0]} ${OP[${#OPS[@]}-1]} ${OPS[${#OPS[@]}-1]}\"\n    unset OPS[${#OPS[@]}-1]\n\
+    \  done\n  echo \"${OPS[0]}\"", "  # Implement this function\n  # Return the value\
+    \ of the algebraic expression\n  # Return `None` if the expression has syntax\
+    \ error\n  # Return `NaN` if the expression has invalid operand\n  local operator=\"\
+    $1\"\n  local operand=\"$2\"\n  local result=\"\"\n  local operand_list=($operand)\n\
+    \  local op_l=${#operand_list[@]}\n  local op_count=0\n  for op in $operator;\
+    \ do\n    local operator_list[$op_count]=$op\n    op_count=$((op_count+1))\n \
+    \ done\n  local op_count=0\n  local var_count=0\n  while [ $op_count -lt $op_l\
+    \ ]; do\n    result+=\"${operand_list[$var_count]}\"\n    var_count=$((var_count+1))\n\
+    \    if [ $op_count -lt $((op_l-1)) ]; then\n      result+=\"${operator_list[$op_count]}\"\
+    \n    fi\n    op_count=$((op_count+1))\n  done\n  echo $result | bc -l", "  echo\
+    \ \"$1\" | paste -d ' ' - <(echo \"$2\") |\\\n    awk '{for(i=2;i<=NF;i++) a[i]=a[i-1]$1$i;\
+    \ print a[NF]}' |\\\n    bc", "  local operator=($1)\n  local operand=($2)\n \
+    \ for i in ${!operator[@]}; do\n    local left=${operand[$i]}\n    local right=${operand[$((i+1))]}\n\
+    \    case ${operator[$i]} in\n      '+') operand[$((i+1))]=$((left+right)) ;;\n\
+    \      '-') operand[$((i+1))]=$((left-right)) ;;\n      '*') operand[$((i+1))]=$((left*right))\
+    \ ;;\n      '//') operand[$((i+1))]=$((left/right)) ;;\n      '**') operand[$((i+1))]=$((left**right))\
+    \ ;;\n    esac\n  done\n  echo ${operand[-1]}", "  local ops=\"$1\"\n  local nums=\"\
+    $2\"\n  local result\n  local op\n  local num\n\n  result=\"$(echo \"$nums\" |\
+    \ cut -d ' ' -f 1)\"\n  ops=\"$(echo \"$ops\" | tr ' ' '\\n')\"\n  nums=\"$(echo\
+    \ \"$nums\" | tr ' ' '\\n')\"\n\n  while read -r op && read -r num\n  do\n   \
+    \ result=\"$(printf \"%s\\n\" \"$result\" \"$op\" \"$num\" | bc)\"\n  done <<<\
+    \ \"$ops\"\n  echo \"$result\"", "    local operators=($1)\n    local operands=($2)\n\
+    \    local is_first=true\n    local result=\"\"\n    for i in $(seq 0 $((${#operators[@]}\
+    \ - 1))); do\n        local operand=${operands[$i]}\n        local operator=${operators[$i]}\n\
+    \        if $is_first; then\n            result=$operand\n            is_first=false\n\
+    \        else\n            if [ \"$operator\" == \"//\" ]; then\n            \
+    \    result=$(($result / $operand))\n            else\n                result=$(($result$operator$operand))\n\
+    \            fi\n        fi\n    done\n    echo $result", "  # Don't forget the\
+    \ double quote!\n  # $(( )) is an arithmetic expansion\n  local opers=\"$1\"\n\
+    \  local nums=\"$2\"\n  local op\n  local total=0\n  for op in $opers; do\n  \
+    \  total=$(( $total $op ${nums%% *} ))\n    nums=\"${nums#* }\"\n  done\n  echo\
+    \ \"$total\"", "    local ops=($1)\n    local arr=($2)\n    local i=0\n    local\
+    \ result=${arr[0]}\n    local op=${ops[0]}\n    while [[ $i -lt ${#ops[@]} ]];\
+    \ do\n        case $op in\n            '+') result=$((result + ${arr[$((i+1))]}));;\n\
+    \            '-') result=$((result - ${arr[$((i+1))]}));;\n            '*') result=$((result\
+    \ * ${arr[$((i+1))]}));;\n            '//') result=$((result / ${arr[$((i+1))]}));;\n\
+    \            '**') result=$((result ** ${arr[$((i+1))]}));;\n        esac\n  \
+    \      i=$((i+1))\n        op=${ops[$i]}\n    done\n    echo $result", "    lop=(\"\
+    $@\")\n    op=(\"${lop[@]:1}\")\n    a=(\"${op[@]:0:$((${#op[@]}/2))}\")\n   \
+    \ b=(\"${op[@]:$((${#op[@]}/2))}\")\n    declare -A ops\n    ops=([\"+\"]=+ [\"\
+    -\"]=- [\"*\"]=* [\"/\"]=/ [\"%\"]=% [\"^\"]=**)\n    for ((i=0; i<\"${#lop[@]}\"\
+    ; i++)); do\n        out=$((${out:-${a[0]}} ${ops[${lop[i]}]} ${b[i]}))\n    done\n\
+    \    echo \"$out\"", "    local op\n    local ex\n    local ops\n    local i\n\
+    \    local pos\n    if [[ -z \"$1\" || -z \"$2\" ]]; then\n        echo \"Usage:\
+    \ $0 <operators list> <operands list>\"\n        exit 1\n    fi\n    ops=($1)\n\
+    \    for op in \"${ops[@]}\"; do\n        ex=\"$ex $op\"\n    done\n    pos=0\n\
+    \    for i in $2; do\n        ex=\"$ex $i\"\n        ((pos++))\n        if [[\
+    \ $pos -eq ${#ops[@]} ]]; then\n            break\n        fi\n    done\n    echo\
+    \ \"$ex\" | bc", "  # Your code here\n  echo -n $2 | sed -e 's/[^0-9]/ /g' | (\n\
+    \    read x\n    while read i; do\n      [[ -z $x ]] && read x\n      echo -n\
+    \ \"$x\" | sed -e 's/\\(.*\\)\\s\\(.*\\)/\\1/'\n      x=$(echo -n \"$x\" | sed\
+    \ -e 's/\\(.*\\)\\s\\(.*\\)/\\2/')\n      echo -n \"$1\" | sed -e 's/[^+\\-*\\\
+    /^]/ /g' |\n      (read op\n        while read o; do\n          [[ -z $op ]] &&\
+    \ read op\n          echo -n \" $(($op $i))\"\n          op=$(echo -n \"$op\"\
+    \ | sed -e 's/\\(.*\\)\\s\\(.*\\)/\\2/')\n        done\n      )\n    done\n  )\
+    \ | bc", "  op=$1\n  num=$2\n  # need to use python, bc, or awk to do floating-point\
+    \ math. (bc is probably fastest)\n  echo \"$num\" | sed 's/\\([0-9][0-9]*\\)/(\\\
+    1)/g' | paste -d \"$op\" - <(echo \"$op\") | bc", "    declare -a arr=()\n   \
+    \ local -a operator=()\n    local -a operand=()\n    local size=\"${1}\"\n   \
+    \ local pos=\"${2}\"\n    shift 2\n    local -a operator=(\"${@}\")\n    for ((\
+    \ i=0; i<size; i++ )); do\n        arr+=(\"${i}\")\n    done\n    for (( i=0;\
+    \ i<size; i++ )); do\n        if [[ \"${pos}\" = \"${i}\" ]]; then\n         \
+    \   arr[i]=\"${operator[0]}\"\n        else\n            arr[i]=\"${arr[i]}\"\n\
+    \        fi\n    done\n    echo \"${arr[@]}\"", "    local o=\"$1\"\n    local\
+    \ a=\"$2\"\n    local m i\n    m=\"${a%% *}\"\n    m=\"(${m//+/})\"\n    a=\"\
+    ${a#* }\"\n    for i in $o\n    do\n        m=\"${m//${a%% *}/${a#* }}\"\n   \
+    \     a=\"${a#* }\"\n    done\n    echo $m | bc", "  local res=()\n  local l=()\n\
+    \  local r=()\n  local -a _l=()\n  local -a _r=()\n  local _op=$1\n  local _val=$2\n\
+    \  local _op_l=()\n  local _val_l=()\n  local _l_idx=0\n  local _r_idx=0\n  local\
+    \ _op_idx=0\n  local _val_idx=0\n  local _l_len=0\n  local _r_len=0\n  local _op_len=0\n\
+    \  local _val_len=0\n  local _op_cur=\"\"\n  local _val_cur=\"\"\n  local _val_cur_prev=\"\
+    \"\n  local _op_cur_prev=\"\"\n  local _l_cur=0\n  local _r_cur=0\n  local _result=0\n\
+    \  # Split the strings\n  IFS=' ' read -r -a _op_l <<< \"$_op\"\n  IFS=' ' read\
+    \ -r -a _val_l <<< \"$_val\"\n  _op_len=${#_op_l[@]}\n  _val_len=${#_val_l[@]}\n\
+    \  _r_len=$((_val_len - 1))\n  _l_len=$((_val_len - _r_len))\n  #echo \"_l_len:\
+    \ ${_l_len}\"\n  #echo \"_r_len: ${_r_len}\"\n  #echo \"_op_len: ${_op_len}\"\n\
+    \  #echo \"_val_len: ${_val_len}\"\n  #echo \"_op_l: ${_op_l[@]}\"\n  #echo \"\
+    _val_l: ${_val_l[@]}\"\n  # Create the list of left and right\n  for ((i=0; i<${_val_len};\
+    \ i++)); do\n    _val_cur=${_val_l[$i]}\n    #echo \"_val_cur: ${_val_cur}\"\n\
+    \    #echo \"_l_idx: ${_l_idx}\"\n    #echo \"_r_idx: ${_r_idx}\"\n    if", " \
+    \   local operator=\"$1\"\n    local operand=\"$2\"\n    local expression=\"\"\
+    \n    for i in `seq 0 $(( ${#operator[@]} - 1 ))`\n    do\n        expression=\"\
+    ${expression} ${operand[i]} ${operator[i]}\"\n    done\n    expression=\"${expression}\
+    \ ${operand[${#operand[@]} - 1]}\"\n    echo \"$expression\" | bc", "  local -a\
+    \ oprtr=(\"$1\")\n  local -a operand=(\"$2\")\n  local -a result=(\"${operand[0]}\"\
+    )\n  local -i len=${#oprtr[@]}\n  for ((i=0; i<len; i++)); do\n    op=${oprtr[i]}\n\
+    \    op1=${operand[i+1]}\n    op2=${result[i]}\n    case \"$op\" in\n      \"\
+    +\") result[i+1]=$((op1+op2)) ;;\n      \"-\") result[i+1]=$((op1-op2)) ;;\n \
+    \     \"*\") result[i+1]=$((op1*op2)) ;;\n      \"//\") result[i+1]=$((op1/op2))\
+    \ ;;\n      \"**\") result[i+1]=$((op1**op2)) ;;\n    esac\n  done\n  printf \"\
+    %s\\n\" \"${result[@]}\"", "  local ops=$1\n  local operands=$2\n  local ops_arr=()\n\
+    \  local operands_arr=()\n  local math_str=\n  local i=\n  local idx=\n  local\
+    \ op=\n  # Fill arrays with each value in space-separated list\n  while read -d\
+    \ ' ' op; do\n    ops_arr+=(\"$op\")\n  done <<< \"$ops\"\n  while read -d ' '\
+    \ operand; do\n    operands_arr+=(\"$operand\")\n  done <<< \"$operands\"\n  for\
+    \ ((i=0; i<${#ops_arr[@]}; i++)); do\n    op=${ops_arr[$i]}\n    idx=$((i+1))\n\
+    \    operand=${operands_arr[$idx]}\n    # If we're not at the beginning of the\
+    \ string, add space for next operand\n    if [ -n \"$math_str\" ]; then\n    \
+    \  math_str+=\" \"\n    fi\n    # Add operand to string\n    math_str+=\"$operand\"\
+    \n    # Add operation to string\n    math_str+=\" $op\"\n  done\n  # Append last\
+    \ operand to string\n  math_str+=\" ${operands_arr[-1]}\"\n  # Evaluate the string\n\
+    \  echo \"$(eval \"echo $math_str\")\"", '    eval $1 $2', "  local -a operator=(\"\
+    $1\")\n  local -a operand=(\"$2\")\n  local result=\"${operand[0]}\"\n  local\
+    \ op\n  local value\n  local i=0\n  local len=${#operator[@]}\n  while [ $i -lt\
+    \ $len ]; do\n    op=\"${operator[$i]}\"\n    value=\"${operand[$i+1]}\"\n   \
+    \ case \"$op\" in\n      '+') result=$((result + value));;\n      '-') result=$((result\
+    \ - value));;\n      '*') result=$((result * value));;\n      '//') result=$((result\
+    \ / value));;\n      '**') result=$((result ** value));;\n    esac\n    i=$((i+1))\n\
+    \  done\n  echo \"$result\"", "\t# the lists to be calculated\n\toperators=\"\
+    $1\"\n\toperands=\"$2\"\n\t\n\t# create a list of operations to do\n\tfor (( i=0;\
+    \ i<${#operators}; i++ )); do\n\t\t# loop through all possible operators\n\t\t\
+    for op in + - \\* \\/ \\^; do\n\t\t\t# if the current operator is the same as\
+    \ our current loop\n\t\t\tif [[ \"${operators:$i:1}\" == \"$op\" ]]; then\n\t\t\
+    \t\t# add the symbol to our list\n\t\t\t\talgebra_ops+=\" $op \"\n\t\t\t\t# save\
+    \ the index of this operator\n\t\t\t\tops_indices+=\" $i \"\n\t\t\tfi\n\t\tdone\n\
+    \tdone\n\t\n\t# loop through the algebra operations\n\tfor op in $algebra_ops;\
+    \ do\n\t\t# figure out which indices we are working with\n\t\tfor i in $ops_indices;\
+    \ do\n\t\t\tif [[ \"$op\" == \"+\" ]]; then\n\t\t\t\t# add the first element to\
+    \ the second\n\t\t\t\top1=$(echo \"${operands[$i]} + ${operands[$i+1]}\" | bc)\n\
+    \t\t\t\t# replace the first two elements with the result\n\t\t\t\toperands[$i]=$op1\n\
+    \t\t\t\tunset operands[$i+1]\n\t\t\t\t# renumber the array after the first element\n\
+    \t\t\t\toperands=(${operands[@]})\n\t\t\t\t# save the index of the result\n\t\t\
+    \t\t# this will be used later to replace the operand list with the result\n\t\t\
+    \t\t# of the next operation\n\t\t\t\tfinal_index=$i\n\t\t\telif [[ \"$op\" ==\
+    \ \"-\" ]]; then\n\t\t\t\t# subtract the second element from the first\n\t\t\t\
+    \top1=$(echo \"${operands[$i]} - ${operands[$i+1]}\" | bc)\n\t\t\t\t# replace\
+    \ the first two elements with the result\n\t\t\t\toperands[$i]=$op1\n\t\t\t\t\
+    unset operands", "    # Write your code here...\n    local -a operator=(${1//\
+    \ / })\n    local -a operand=(${2// / })\n    local -i result=${operand[0]}\n\
+    \    for ((i=0; i<${#operator[@]}; i++)); do\n        (( result = result ${operator[i]}\
+    \ operand[i+1] ))\n    done\n    echo $result", "  # Your code here\n  local -a\
+    \ oper=$1 opand=$2\n  #echo \"op = $oper, and = $opand\"\n  local result=\"\"\n\
+    \  local operand=\"\"\n  local operator=\"\"\n  local next=\"\"\n  local isFirst=1\n\
+    \  local i=0\n  local j=0\n  local k=0\n  if [ \"$oper\" == \"\" ]; then\n   \
+    \ echo \"Error! No operator found!\"\n    return 1\n  fi\n  if [ \"$opand\" ==\
+    \ \"\" ]; then\n    echo \"Error! No operand found!\"\n    return 1\n  fi\n  if\
+    \ [ $(( $(echo \"$oper\" | wc -w) + 1 )) -ne $(echo \"$opand\" | wc -w) ]; then\n\
+    \    echo \"Error! Operator + 1 must equal to operand size\"\n    return 1\n \
+    \ fi\n  for operand in $opand; do\n    if [ $isFirst -eq 1 ]; then\n      result=$operand\n\
+    \      isFirst=0\n    else\n      operator=$(echo \"$oper\" | cut -d \" \" -f\
+    \ $i)\n      ((i++))\n      #echo \"result = $result, opand = $operand, op = $operator\"\
+    \n      if [ \"$operator\" == \"*\" ]; then\n        next=$(( $result * $operand\
+    \ ))\n      elif [ \"$operator\" == \"+\" ]; then\n        next=$(( $result +\
+    \ $operand ))\n      elif [ \"$operator\" == \"-\" ]; then\n        next=$(( $result\
+    \ - $operand ))\n      elif [ \"$operator\" == \"//\" ]; then\n        next=$((\
+    \ $result / $operand ))\n      elif [ \"$operator\" == \"**\" ]; then\n      \
+    \  #echo \"result = $result, opand = $operand, op = $operator\"\n        next=$((\
+    \ $result ** $operand ))\n      else\n        echo \"Error! Unknown operator =\
+    \ $operator\"\n        return 1\n      fi\n      result=$next\n    fi\n  done\n\
+    \  echo \"$result\"", "  # arg1 is the operator list and arg2 is the operand list.\n\
+    \  # this function should return the evaluation of the algebra expression.\n \
+    \ ops=(\"$@\")\n  if [[ ${#ops[@]} == 0 ]]; then\n    printf \"Undefined\\n\"\n\
+    \    return 1\n  fi\n  # -A: convert to array\n  # -n: non-empty\n  if [[ ${#ops[@]}\
+    \ == 1 ]]; then\n    if [[ ${ops[0]} =~ ^-?[0-9]+$ ]]; then\n      printf \"%d\\\
+    n\" \"${ops[0]}\"\n      return 0\n    else\n      printf \"Undefined\\n\"\n \
+    \     return 1\n    fi\n  fi\n  if [[ ${#ops[@]} == 2 ]]; then\n    if [[ ${ops[0]}\
+    \ =~ ^-?[0-9]+$ ]] && [[ ${ops[1]} =~ ^-?[0-9]+$ ]]; then\n      printf \"Undefined\\\
+    n\"\n      return 1\n    else\n      printf \"Undefined\\n\"\n      return 1\n\
+    \    fi\n  fi\n  while [[ ${#ops[@]} > 2 ]]; do\n    prev=${ops[0]}\n    operator=${ops[1]}\n\
+    \    num=${ops[2]}\n    ops=(\"${ops[@]:3}\")\n    case $operator in\n      '+')\n\
+    \        num=$((prev + num))\n        ;;\n      '-')\n        num=$((prev - num))\n\
+    \        ;;\n      '*')\n        num=$((prev * num))\n        ;;\n      '/')\n\
+    \        num=$((prev / num))\n        ;;\n      '**')\n        num=$((prev **\
+    \ num))\n        ;;\n      *)\n        printf \"Undefined\\n\"\n        return\
+    \ 1\n        ;;\n    esac\n    ops=(\"$num\" \"${ops[@]}\")\n  done\n  printf\
+    \ \"%d\\n\" \"${ops[0]}\"\n  return 0", "  echo $(echo $1 | awk '{printf \"%s\"\
+    , $1}')$(echo $2 | awk '{printf \"%s\", $1}')$(echo $1 | awk '{printf \"%s\",\
+    \ $2}')$(echo $2 | awk '{printf \"%s\", $2}')$(echo $1 | awk '{printf \"%s\",\
+    \ $3}')$(echo $2 | awk '{printf \"%s\", $3}')", "  local -a operator\n  local\
+    \ -a operand\n  local evalstr\n  local n\n  IFS=\" \" read -r -a operator <<<\
+    \ \"$1\"\n  IFS=\" \" read -r -a operand <<< \"$2\"\n  evalstr=\"${operand[0]}\"\
+    \n  for n in $(seq 1 $(( ${#operator[@]} - 1 )) ); do\n    evalstr=\"${evalstr}\
+    \ ${operator[$n]} ${operand[$n]}\"\n  done\n  echo $(($evalstr))", "    local\
+    \ -a operator\n    local -a operand\n    local -a equation\n    read -a operator\
+    \ <<< \"$1\"\n    read -a operand <<< \"$2\"\n    for (( i=0; i<${#operator[@]};\
+    \ i++ )); do\n        equation+=(\"${operand[$i]}\")\n        equation+=(\"${operator[$i]}\"\
+    )\n    done\n    equation+=(\"${operand[-1]}\")\n    declare -p equation | cut\
+    \ -d'=' -f2-", "  local __array=(\"$1\")\n  local __operator=(\"$2\")\n  local\
+    \ __result\n\n  local i\n  for ((i=0; i<${#__operator[@]}; i++)); do\n    case\
+    \ ${__operator[$i]} in\n      \"+\") __result=$((__array[$i] + __array[$i+1]))\
+    \ ;;\n      \"-\") __result=$((__array[$i] - __array[$i+1])) ;;\n      \"*\")\
+    \ __result=$((__array[$i] * __array[$i+1])) ;;\n      \"//\") __result=$((__array[$i]\
+    \ / __array[$i+1])) ;;\n      \"**\") __result=$((__array[$i] ** __array[$i+1]))\
+    \ ;;\n    esac\n    unset __array[$i+1]\n    __array[$i]=$__result\n  done\n\n\
+    \  echo $__result", '    echo "$2" | xargs -n1 | paste -d "$1" -s | bc', "   \
+    \ echo \"$1\"\n    echo \"$2\"\n    operands=($(echo \"$2\" | tr \" \" \"\\n\"\
+    ))\n    ops=($(echo \"$1\" | tr \" \" \"\\n\"))\n    let \"i=0\"\n    let \"n=${#operands[@]}\"\
+    \n    #echo \"Length of 'ops' is $n\"\n    #echo \"Length of 'operands' is $n\"\
+    \n    let \"result=${operands[0]}\"\n    while [ $i -lt $n ]; do\n        #echo\
+    \ \"Result is $result, operand is ${operands[$i+1]}, operator is ${ops[$i]}\"\n\
+    \        # Can't do arithmetic without let\n        let \"result=${result}${ops[$i]}${operands[$i+1]}\"\
+    \n        #echo \"Result is $result\"\n        let \"i=i+1\"\n    done\n    echo\
+    \ \"Result is $result\"", "    if [[ $# -lt 2 ]]; then\n        echo \"Usage:\
+    \ do_algebra 'operators' 'operands'\"\n        return 1\n    fi\n    local operators=($1)\n\
+    \    local operands=($2)\n    local result=${operands[0]}\n    for ((i=0; i<${#operators[@]};\
+    \ i++)); do\n        result=$(echo $result ${operators[$i]} ${operands[$((i+1))]}\
+    \ | bc)\n    done\n    echo $result", "  if [ $# -ne 2 ]; then\n    echo \"Usage:\
+    \ do_algebra 'operators' 'operands'\" >&2\n    return 1\n  fi\n  local ops=\"\
+    $1\"\n  local ops_len=$(echo \"$ops\" | wc -w)\n  local operands=\"$2\"\n  local\
+    \ operands_len=$(echo \"$operands\" | wc -w)\n  if [ $ops_len -eq 0 -o $operands_len\
+    \ -lt 2 ]; then\n    echo \"operator list must not be empty and operand list must\
+    \ contain at least two operands\" >&2\n    return 1\n  fi\n  if [ $ops_len -ne\
+    \ $(( operands_len - 1 )) ]; then\n    echo \"operator list must be one less than\
+    \ operand list\" >&2\n    return 1\n  fi\n  local i\n  local n\n  local cur_n=0\n\
+    \  local expr\n  local op\n  expr=$(echo \"$operands\" | cut -d' ' -f 1)\n  for\
+    \ i in $(seq 1 $(( ops_len ))); do\n    op=$(echo \"$ops\" | cut -d' ' -f $i)\n\
+    \    cur_n=$(( cur_n + 1 ))\n    n=$(echo \"$operands\" | cut -d' ' -f $(( cur_n\
+    \ + 1 )))\n    case \"$op\" in\n      '+')\n        expr=\"$expr + $n\"\n    \
+    \    ;;\n      '-')\n        expr=\"$expr - $n\"\n        ;;\n      '*')\n   \
+    \     expr=\"$expr * $n\"\n        ;;\n      '//')\n        expr=\"$expr / $n\"\
+    \n        ;;\n      '**')\n        expr=\"$expr ** $n\"\n        ;;\n      *)\n\
+    \        echo \"unrecognized operator: $op\" >&2\n        return 1\n        ;;\n\
+    \    esac\n  done\n  echo \"$expr\" | bc", "    local operator=($1)\n    local\
+    \ array=($2)\n    # Build the string\n    local string=\"\"\n    local j\n   \
+    \ for ((i=0; i<$(( ${#array[@]} - 1 )); i++)); do\n        let j=$i+1\n      \
+    \  string=$string${array[$i]}${operator[$i]}\n    done\n    string=$string${array[$j]}\n\
+    \    echo $string\n    let string", "    # $1 is a space-separated list\n    #\
+    \ $2 is a space-separated list\n    # trim spaces\n    op=$(echo $1 | tr -d '\
+    \ ')\n    num=$(echo $2 | tr -d ' ')\n    # turn space-separated list into array\n\
+    \    IFS=' ' read -r -a op_array <<< \"$op\"\n    IFS=' ' read -r -a num_array\
+    \ <<< \"$num\"\n    # \n    answer=$(python -c \"print(${num_array[0]}${op_array[0]}${num_array[1]})\"\
+    )\n    # loop over list and \n    for i in $(seq 0 ${#op_array[@]}); do\n    \
+    \    # echo \"answer: $answer\"\n        # echo \"op_array[$i]: ${op_array[$i]}\"\
+    \n        # echo \"num_array[$i+1]: ${num_array[$i+1]}\"\n        if [ $i -lt\
+    \ $((${#op_array[@]})) ]; then\n            answer=$(python -c \"print($answer${op_array[$i]}${num_array[$i+1]})\"\
+    )\n        fi\n    done\n    echo $answer", "    local list_ops=$1\n    local\
+    \ list_nums=$2\n    local result=0\n    local num=0\n    local ops=0\n    local\
+    \ c=0\n    local i=0\n    local len_ops=$(echo \"${list_ops}\" | wc -w)\n    local\
+    \ len_nums=$(echo \"${list_nums}\" | wc -w)\n    if [ \"${len_ops}\" -lt 1 -o\
+    \ \"${len_nums}\" -lt 2 ]; then\n        echo \"Invalid arguments\" >&2\n    \
+    \    return 1\n    fi\n    if [ \"${len_ops}\" -ne \"$((len_nums - 1))\" ]; then\n\
+    \        echo \"Arguments of different lengths\" >&2\n        return 1\n    fi\n\
+    \    # Do the first operation\n    num=$(echo \"${list_nums}\" | cut -d ' ' -f\
+    \ 1)\n    ops=$(echo \"${list_ops}\" | cut -d ' ' -f 1)\n    case \"${ops}\" in\n\
+    \        \"+\")\n            result=$((result + num))\n            ;;\n      \
+    \  \"-\")\n            result=$((result - num))\n            ;;\n        \"*\"\
+    )\n            result=$((result * num))\n            ;;\n        \"//\")\n   \
+    \         result=$((result / num))\n            ;;\n        \"**\")\n        \
+    \    result=$((result ** num))\n            ;;\n        *)\n            echo \"\
+    Invalid operator\" >&2\n            return 1\n            ;;\n    esac\n    #\
+    \ Do the other operations\n    for (( i=2; i<=len_nums; i++ )); do\n        num=$(echo\
+    \ \"${list_nums}\" | cut -d ' ' -f ${i})\n        ops=$(echo \"${list_ops}\" |\
+    \ cut -d ' ' -f ${i})\n        case \"${ops}\" in\n            \"+\")\n      \
+    \          result=$((result + num))\n                ;;\n            \"-\")\n\
+    \                result=$((result - num))\n                ;;\n            \"\
+    *\")\n                result=$((result * num))\n                ;;\n         \
+    \   \"//\")\n                result=$((result / num))\n                ;;\n  \
+    \          \"**\")\n                result=$((result ** num))\n              \
+    \  ;;\n", "    local operator=($1)\n    local array=($2)\n    local result=${array[0]}\n\
+    \    local op_index=0\n    let op_index++\n    let index=1\n    while [[ $index\
+    \ -lt ${#array[@]} ]]; do\n        local value=${array[$index]}\n        local\
+    \ operator=${operator[$op_index]}\n        case $operator in\n            \"+\"\
+    ) result=$(( $result + $value )) ;;\n            \"-\") result=$(( $result - $value\
+    \ )) ;;\n            \"*\") result=$(( $result * $value )) ;;\n            \"\
+    //\") result=$(( $result / $value )) ;;\n            \"**\") result=$(( $result\
+    \ ** $value )) ;;\n        esac\n        let op_index++\n        let index++\n\
+    \    done\n    echo $result", "    operators=$1\n    operands=$2\n    echo $(echo\
+    \ \"$operators\" | awk '{\n        res = $1\n        shift\n        while (NF)\
+    \ {\n            res = res '$(echo \"$operands\" | cut -d \" \" -f $(($(echo $operands\
+    \ | wc -w) - NF + 1)))' '$(echo $1)\n            shift\n        }\n        print\
+    \ res\n    }')", "    declare -a operator=(\"$1\")\n    declare -a operand=(\"\
+    $2\")\n    declare -i result=${operand[0]}\n    declare -i l=${#operator[@]}\n\
+    \    declare -i i\n    for ((i=0; i<l; i++)); do\n        case ${operator[i]}\
+    \ in\n            '+') result=${result}+${operand[i+1]} ;;\n            '-') result=${result}-${operand[i+1]}\
+    \ ;;\n            '*') result=${result}*${operand[i+1]} ;;\n            '//')\
+    \ result=${result}/${operand[i+1]} ;;\n            '**') result=${result}**${operand[i+1]}\
+    \ ;;\n        esac\n    done\n    echo $result", "  local -a operator=($1)\n \
+    \ local -a operand=($2)\n  local result=${operand[0]}\n  for i in ${!operator[@]};\
+    \ do\n    opr=${operator[$i]}\n    num=${operand[$((i+1))]}\n    case $opr in\n\
+    \      +)\n        ((result+=num))\n        ;;\n      -)\n        ((result-=num))\n\
+    \        ;;\n      *)\n        ((result*=num))\n        ;;\n    esac\n  done\n\
+    \  echo $result", "    local operators=($1)\n    local values=($2)\n    local\
+    \ i=0\n    # Start with the first value\n    local result=${values[0]}\n    while\
+    \ [ $i -lt ${#operators[@]} ]; do\n        # Perform the operation\n        case\
+    \ ${operators[$i]} in\n            \"+\") result=$((result + ${values[$((i+1))]}))\
+    \ ;;\n            \"-\") result=$((result - ${values[$((i+1))]})) ;;\n       \
+    \     \"*\") result=$((result * ${values[$((i+1))]})) ;;\n            \"//\")\
+    \ result=$((result / ${values[$((i+1))]})) ;;\n            \"**\") result=$((result\
+    \ ** ${values[$((i+1))]})) ;;\n        esac\n        # Increment the counter\n\
+    \        i=$((i+1))\n    done\n    echo $result", "\tIFS=' ' read -r -a op <<<\
+    \ \"$1\"\n\tIFS=' ' read -r -a arr <<< \"$2\"\n\ttmp=$(echo \"scale=20;${arr[0]}${op[0]}${arr[1]}\"\
+    \ | bc)\n\tfor ((i=1; i<${#op[@]}; i++)); do\n\t\ttmp=$(echo \"scale=20;${tmp}${op[i]}${arr[i+1]}\"\
+    \ | bc)\n\tdone\n\ttmp=$(echo \"scale=20;$tmp/1\" | bc)\n\techo $tmp", "    local\
+    \ operator=($1)\n    local operand=($2)\n    local result=${operand[0]}\n    local\
+    \ i\n    for ((i=0; i<${#operator[@]}; i++)); do\n        result=\"${result} ${operator[$i]}\
+    \ ${operand[$((i+1))]}\"\n    done\n    echo $result | bc", "  local operator=($1)\n\
+    \  local operand=($2)\n  local result=${operand[0]}\n  local len=${#operator[@]}\n\
+    \  for ((i=0; i<len; i++)); do\n    case ${operator[i]} in\n      +)\n       \
+    \ result=$((result + ${operand[i+1]}))\n        ;;\n      -)\n        result=$((result\
+    \ - ${operand[i+1]}))\n        ;;\n      \\*)\n        result=$((result * ${operand[i+1]}))\n\
+    \        ;;\n      \\/\\/)\n        result=$((result / ${operand[i+1]}))\n   \
+    \     ;;\n      \\*\\*)\n        result=$((result ** ${operand[i+1]}))\n     \
+    \   ;;\n    esac\n  done\n  echo $result", "    local operand=()\n    for i in\
+    \ $1; do\n        operand+=($i)\n    done\n    local operator=()\n    for i in\
+    \ $2; do\n        operator+=($i)\n    done\n    local result=$(python -c \"print(${operand[0]}\
+    \ ${operator[0]} ${operand[1]})\")\n    if [ ${#operator[@]} -gt 1 ]; then\n \
+    \       let i=1\n        for (( ; i < ${#operator[@]}; i++ )); do\n          \
+    \  result=$(python -c \"print($result ${operator[$i]} ${operand[$i+1]})\")\n \
+    \       done\n    fi\n    echo $result", "    local -n _opr=$1\n    local -n _oper=$2\n\
+    \    local res=${_oper[0]}\n    for (( i=0; i<${#_opr[@]}; i++ )); do\n      \
+    \  res=$(($res ${_opr[$i]} ${_oper[$((i+1))]}))\n    done\n    echo $res", " \
+    \   if [[ \"$#\" -ne 2 ]]; then\n        echo \"2 arguments required\"\n     \
+    \   return 1\n    fi\n    IFS=' ' read -r -a operator <<< \"$1\"\n    IFS=' '\
+    \ read -r -a operand <<< \"$2\"\n    ((len = ${#operator[@]}))\n    ((len1 = ${#operand[@]}))\n\
+    \    if [[ $len -eq 0 || $len1 -eq 0 ]]; then\n        echo \"input error\"\n\
+    \        return 1\n    fi\n    if [[ $len -ne $len1-1 ]]; then\n        echo \"\
+    operator and operand error\"\n        return 1\n    fi\n    result=${operand[0]}\n\
+    \    for ((i=0; i<len; i++)); do\n        result=$(python -c \"print($result ${operator[$i]}\
+    \ ${operand[$i+1]})\")\n    done\n    echo $result", "    op=$1; shift\n    nums=($@)\n\
+    \    echo $op | tr ' ' '\\n' | xargs -I{} echo $((nums[0] { nums[1] { nums[2]\
+    \ { nums[3] }} }))", "    # Split operands into an array\n    IFS=' ' read -r\
+    \ -a operands <<< \"$1\"\n    # Split operators into an array\n    IFS=' ' read\
+    \ -r -a operators <<< \"$2\"\n    # Start of expression, first operand\n    expression=\"\
+    ${operands[0]}\"\n    # Iterate through operators, appending to expression\n \
+    \   for ((i=0; i<${#operators[@]}; i++)); do\n        expression=\"$expression\
+    \ ${operators[$i]} ${operands[$((i+1))]}\"\n    done\n    # Evaluate expression\
+    \ and echo result\n    echo $(($expression))", "\tlocal ops=(${1// / })\n\tlocal\
+    \ nums=(${2// / })\n\tlocal result=${nums[0]}\n\tfor (( i=0; i<${#ops[@]}; i++\
+    \ )); do\n\t\top=${ops[$i]}\n\t\tnum=${nums[$((i+1))]}\n\t\tlet result=\"$result\
+    \ $op $num\"\n\tdone\n\techo $result", "  # get operator and operand lists\n \
+    \ operator=$1\n  operand=$2\n  operand=($operand)\n  # define a stack\n  stack=()\n\
+    \  # separate operator list into an array\n  IFS=' ' read -r -a operator_array\
+    \ <<< \"$operator\"\n  # the length of operator list is equal to the length of\
+    \ operand list minus one\n  for((i=0;i<${#operator_array[@]};i++)); do\n    op1=${operand[$i]}\n\
+    \    op2=${operand[$((i+1))]}\n    case ${operator_array[$i]} in\n      \"+\"\
+    )\n        stack+=($((op1+op2)))\n        ;;\n      \"-\")\n        stack+=($((op1-op2)))\n\
+    \        ;;\n      \"*\")\n        stack+=($((op1*op2)))\n        ;;\n      \"\
+    //\")\n        stack+=($((op1/op2)))\n        ;;\n      \"**\")\n        stack+=($((op1**op2)))\n\
+    \        ;;\n    esac\n  done\n  eval $3=\"${stack[*]}\"", "    local operator=\"\
+    $1\"\n    local operand=\"$2\"\n    local result=0\n    local op_number=0\n  \
+    \  local op_type=\n\n    for num in $operand; do\n        if [ $op_number -eq\
+    \ 0 ]; then\n            result=$num\n        else\n            op_type=$(echo\
+    \ $operator | awk '{print $'$op_number'}')\n            if [ \"$op_type\" == \"\
+    +\" ]; then\n                result=$(( $result + $num ))\n            elif [\
+    \ \"$op_type\" == \"-\" ]; then\n                result=$(( $result - $num ))\n\
+    \            elif [ \"$op_type\" == \"*\" ]; then\n                result=$((\
+    \ $result * $num ))\n            elif [ \"$op_type\" == \"//\" ]; then\n     \
+    \           result=$(( $result / $num ))\n            elif [ \"$op_type\" == \"\
+    **\" ]; then\n                result=$(( $result ** $num ))\n            fi\n\
+    \        fi\n        op_number=$(( $op_number + 1 ))\n    done\n    echo $result",
+  "    local IFS=\" \" arr=($1) op=($2)\n    local result=${arr[0]}\n    for ((i=0;\
+    \ i<${#op[@]}; i++)); do\n        result=$(($result ${op[i]} ${arr[i+1]}))\n \
+    \   done\n    echo $result", "  local operators=($1)\n  local operands=($2)\n\
+    \  local operator\n  local operand\n  local result\n  local i\n  local op1\n \
+    \ local op2\n  result=${operands[0]}\n  for ((i=0; i<${#operators[@]}; i++));\
+    \ do\n    operator=${operators[$i]}\n    operand=${operands[$i+1]}\n    case $operator\
+    \ in\n      '+') result=$((result + operand));;\n      '-') result=$((result -\
+    \ operand));;\n      '*') result=$((result * operand));;\n      '//') result=$((result\
+    \ / operand));;\n      '**') result=$((result ** operand));;\n    esac\n  done\n\
+    \  echo $result", "    local operator=$1\n    local operand=$2\n    echo \"${operand}\"\
+    \ | tr ' ' '\\n' | paste -d\"${operator}\" -s | bc", "  local operator=($1) operand=($2)\n\
+    \  local a=$2 op=$1\n  shift\n  shift\n  echo \"a = $a\"\n  echo \"op = $op\"\n\
+    \  for i in $(seq 0 $((${#operator[@]} - 1))); do\n    if [ $op == '+' ]; then\n\
+    \      a=$((a + operand[i]))\n    elif [ $op == '-' ]; then\n      a=$((a - operand[i]))\n\
+    \    elif [ $op == '*' ]; then\n      a=$((a * operand[i]))\n    elif [ $op ==\
+    \ '//' ]; then\n      a=$((a / operand[i]))\n    elif [ $op == '**' ]; then\n\
+    \      a=$((a ** operand[i]))\n    fi\n    echo \"a[$i] = $a\"\n    op=${operator[i]}\n\
+    \  done\n  echo $a", "    IFS=$' ' read -ra OP <<< \"$1\"\n    IFS=$' ' read -ra\
+    \ NUMS <<< \"$2\"\n    str=''\n    for i in \"${!OP[@]}\"; do\n        str+=\"\
+    ${NUMS[$i]} ${OP[$i]} \"\n    done\n    str+=\"${NUMS[-1]}\"\n    python -c \"\
+    print(int($str))\"", "    local op_list=$1\n    local opd_list=$2\n    local op_cnt=$(echo\
+    \ $op_list | wc -w)\n    local opd_cnt=$(echo $opd_list | wc -w)\n    local result=${opd_list%%\
+    \ *}\n\n    if [ $opd_cnt -lt 2 ]; then\n        echo \"Invalid operand list\"\
+    \n        return 1\n    fi\n\n    if [ $op_cnt -eq 0 -o $op_cnt -ne $(( opd_cnt\
+    \ - 1 )) ]; then\n        echo \"Invalid operator list\"\n        return 1\n \
+    \   fi\n\n    for opd in $opd_list; do\n        if [ ! $opd -ge 0 ]; then\n  \
+    \          echo \"Invalid operand\"\n            return 1\n        fi\n    done\n\
+    \n    for op in $op_list; do\n        if [ ! \"$op\" == \"**\" -a ! \"$op\" ==\
+    \ \"//\" -a ! \"$op\" == \"*\" -a ! \"$op\" == \"+\" -a ! \"$op\" == \"-\" ];\
+    \ then\n            echo \"Invalid operator\"\n            return 1\n        fi\n\
+    \    done\n\n    # Calculate the result\n    for op in $op_list; do\n        local\
+    \ opd=$(echo $opd_list | cut -d \" \" -f 2)\n        opd_list=${opd_list#* }\n\
+    \        if [ \"$op\" == \"**\" ]; then\n            result=$(( result ** opd\
+    \ ))\n        elif [ \"$op\" == \"//\" ]; then\n            result=$(( result\
+    \ // opd ))\n        elif [ \"$op\" == \"*\" ]; then\n            result=$(( result\
+    \ * opd ))\n        elif [ \"$op\" == \"+\" ]; then\n            result=$(( result\
+    \ + opd ))\n        elif [ \"$op\" == \"-\" ]; then\n            result=$(( result\
+    \ - opd ))\n        fi\n    done\n\n    echo $result", "  declare -A operator\n\
+    \  operator['+']='+'\n  operator['-']='-'\n  operator['*']='*'\n  operator['/']='//'\n\
+    \  operator['^']='**'\n  declare -a _operator\n  declare -a _operand\n  read -ra\
+    \ _operator <<< \"$1\"\n  read -ra _operand <<< \"$2\"\n  local -a _output\n \
+    \ local i=0\n  local count=${#_operator[@]}\n  local _expr=\n  while [ \"$i\"\
+    \ -lt \"$count\" ]; do\n    if [ -z \"$_expr\" ]; then\n      _expr=\"${_operand[$i]}\
+    \ ${operator[${_operator[$i]}]} ${_operand[$((i+1))]}\"\n    else\n      _expr=\"\
+    $_expr ${operator[${_operator[$i]}]} ${_operand[$((i+1))]}\"\n    fi\n    ((i++))\n\
+    \  done\n  echo \"$(( $_expr ))\"", "  local ops=\"$1\"\n  local nums=\"$2\"\n\
+    \  local cmd=''\n  IFS=' ' read -r -a ops <<< \"$ops\"\n  IFS=' ' read -r -a nums\
+    \ <<< \"$nums\"\n  for i in \"${!ops[@]}\"; do\n    if [[ $i -eq 0 ]]; then\n\
+    \      cmd=\"${nums[$i]} ${ops[$i]} ${nums[$i+1]}\"\n    else\n      cmd=\"${cmd}\
+    \ ${ops[$i]} ${nums[$i+1]}\"\n    fi\n  done\n  echo \"$cmd\" | bc", "  declare\
+    \ -a operator\n  declare -a operand\n  declare tmp\n  operator=(${1//,/ })\n \
+    \ operand=(${2//,/ })\n  declare -i i=0\n  declare -i n=${#operator[@]}\n  declare\
+    \ -i t=${#operand[@]}\n  declare -i result=${operand[0]}\n  ((n = n > t - 1 ?\
+    \ t - 1 : n))\n  for ((i = 0; i < n; i++)); do\n    case ${operator[i]} in\n \
+    \     \"+\") ((result += ${operand[i+1]})) ;;\n      \"-\") ((result -= ${operand[i+1]}))\
+    \ ;;\n      \"*\") ((result *= ${operand[i+1]})) ;;\n      \"//\") ((result /=\
+    \ ${operand[i+1]})) ;;\n      \"**\") ((result = result ** ${operand[i+1]})) ;;\n\
+    \    esac\n  done\n  echo $result", "  local -a algebra_operator=($1)\n  local\
+    \ -a algebra_operand=($2)\n  echo ${algebra_operator[@]} ${algebra_operand[@]}\
+    \ | dc", "  local -a ops=( $1 )\n  local -a nums=( $2 )\n  local result\n  let\
+    \ result=${nums[0]}\n  local n=${#ops[@]}\n  for ((i=0; i<n; i++)); do\n    let\
+    \ result=\"$result ${ops[$i]} ${nums[$((i+1))]}\"\n  done\n  echo \"$result\"",
+  "    # Fill in the blanks\n    local operator=$1\n    local operand=$2\n    # Simple\
+    \ expression\n    # output=$(echo $operator | awk '{print $1 $2 $3}')\n    # More\
+    \ complex expression, taking precedence into account\n    # output=$(echo $operator\
+    \ | awk '{print $1 $2 $3 $4 $5}')\n    # Use eval to allow for more complex expressions\n\
+    \    local output=$(eval $operator)\n    echo $output", "    local operator operand\n\
+    \    local -i result\n    operator=($1)\n    operand=($2)\n    (( result = ${operand[0]}\
+    \ ))\n    for ((i=0; i<${#operator[@]}; i++)); do\n        case ${operator[$i]}\
+    \ in\n            +) (( result += ${operand[$i+1]} )) ;;\n            -) (( result\
+    \ -= ${operand[$i+1]} )) ;;\n            \\*) (( result *= ${operand[$i+1]} ))\
+    \ ;;\n            //) (( result /= ${operand[$i+1]} )) ;;\n            \\*\\*)\
+    \ (( result **= ${operand[$i+1]} )) ;;\n        esac\n    done\n    echo $result",
+  "    local array=($1)\n    local op=($2)\n    local len=$((${#array[@]}-1))\n  \
+    \  for ((i=0; i<len; i++)); do\n        ((i==0)) && result=${array[i]} || \\\n\
+    \        case ${op[i-1]} in\n            \"+\") result=$((result+${array[i]}))\
+    \ ;;\n            \"-\") result=$((result-${array[i]})) ;;\n            \"*\"\
+    ) result=$((result*${array[i]})) ;;\n            \"//\") result=$((result/${array[i]}))\
+    \ ;;\n            \"**\") result=$((result**${array[i]})) ;;\n        esac\n \
+    \   done\n    echo $result", "  op_list=($1)\n  array=($2)\n  result=\"${array[0]}\"\
+    \n  for i in \"${!op_list[@]}\"; do\n    [[ \"${op_list[$i]}\" == \"+\" ]] &&\
+    \ result=$((result + array[$i+1]))\n    [[ \"${op_list[$i]}\" == \"-\" ]] && result=$((result\
+    \ - array[$i+1]))\n    [[ \"${op_list[$i]}\" == \"*\" ]] && result=$((result *\
+    \ array[$i+1]))\n    [[ \"${op_list[$i]}\" == \"//\" ]] && result=$((result /\
+    \ array[$i+1]))\n    [[ \"${op_list[$i]}\" == \"**\" ]] && result=$((result **\
+    \ array[$i+1]))\n  done\n  echo $result", "  set -f\n  eval \"$(\n    awk 'BEGIN{n=0}{\n\
+    \      printf(\"%s %s %s \",$1,$2,$3);\n      if($1==\"//\")\n        printf(\"\
+    %d\",$2 $1 $3);\n      else if($1==\"**\")\n        printf(\"%d\",$2 ^ $3);\n\
+    \      else\n        printf(\"%f\",$2 $1 $3);\n      n++;\n      if(n==NF/3)\n\
+    \        printf(\"\\n\");\n    }' <<<\"$1 $2\"\n  )\"\n  set +f", "    local ops=${1//\\\
+    // }\n    local vals=($2)\n    local i=0\n    local answer=${vals[0]}\n    local\
+    \ thisop=\n    while [ $i -lt ${#ops} ]; do\n        thisop=${ops:$i:1}\n    \
+    \    case $thisop in\n            +) ((answer+=${vals[$((i+1))]})) ;;\n      \
+    \      -) ((answer-=${vals[$((i+1))]})) ;;\n            \\*) ((answer*=${vals[$((i+1))]}))\
+    \ ;;\n            \\*) ((answer/=${vals[$((i+1))]})) ;;\n            \\*) ((answer=answer**${vals[$((i+1))]}))\
+    \ ;;\n        esac\n        ((i++))\n    done\n    echo $answer", "  local -a\
+    \ oper operator opers operands\n\n  IFS=' ' read -ra oper <<< \"$1\"\n  IFS='\
+    \ ' read -ra opers <<< \"$2\"\n\n  for ((i=0; i<\"${#opers[@]}\"; i++)); do\n\
+    \    operands[i]=${opers[i]}\n  done\n\n  for ((i=0; i<\"${#oper[@]}\"; i++));\
+    \ do\n    if [[ ${oper[i]} == \"+\" ]]; then\n      operands[i+1]=$((operands[i]+operands[i+1]))\n\
+    \    elif [[ ${oper[i]} == \"-\" ]]; then\n      operands[i+1]=$((operands[i]-operands[i+1]))\n\
+    \    elif [[ ${oper[i]} == \"*\" ]]; then\n      operands[i+1]=$((operands[i]*operands[i+1]))\n\
+    \    elif [[ ${oper[i]} == \"//\" ]]; then\n      operands[i+1]=$((operands[i]/operands[i+1]))\n\
+    \    elif [[ ${oper[i]} == \"**\" ]]; then\n      operands[i+1]=$((operands[i]**operands[i+1]))\n\
+    \    fi\n  done\n\n  echo \"${operands[-1]}\"", "    operator=($1)\n    operand=($2)\n\
+    \    # number of operands\n    n=${#operand[@]}\n    # number of operators\n \
+    \   m=${#operator[@]}\n    # check if n-1 == m\n    if [ $((n-1)) != $m ]; then\n\
+    \        echo \"Invalid input\"\n        return\n    fi\n    # build expression\n\
+    \    expr=\"\"\n    for i in $(seq 0 $((n-1))); do\n        expr=\"$expr${operand[$i]}\"\
+    \n        # last one\n        if [ $i != $((n-1)) ]; then\n            expr=\"\
+    $expr${operator[$i]}\"\n        fi\n    done\n    # evaluate the expression\n\
+    \    result=$(python -c \"print($expr)\")\n    echo $result", "    local operator=$1\n\
+    \    local operand=$2\n    #echo \"operator = $operator\"\n    #echo \"operand\
+    \ = $operand\"\n    local len_operator=$(echo $operator | awk '{print NF}')\n\
+    \    local len_operand=$(echo $operand | awk '{print NF}')\n    local i=1\n  \
+    \  local result=0\n    while [ $i -lt $len_operand ]; do\n        local op=$(echo\
+    \ $operator | awk '{print $1}')\n        operator=$(echo $operator | cut -d' '\
+    \ -f2-)\n        local x=$(echo $operand | awk '{print $1}')\n        operand=$(echo\
+    \ $operand | cut -d' ' -f2-)\n        local y=$(echo $operand | awk '{print $1}')\n\
+    \        operand=$(echo $operand | cut -d' ' -f2-)\n        case $op in\n    \
+    \        '+') result=$((x+y)) ;;\n            '-') result=$((x-y)) ;;\n      \
+    \      '*') result=$((x*y)) ;;\n            '//') result=$((x/y)) ;;\n       \
+    \     '**') result=$((x**y)) ;;\n        esac\n        operand=\"$operand $result\"\
+    \n        i=$((i+1))\n    done\n    echo $result", "    local op=\"$1\"\n    local\
+    \ array=\"$2\"\n    local res=''\n    local separator=''\n    local op_next=''\n\
+    \    local i=0\n    local op_pos=0\n    local val1=''\n    local val2=''\n   \
+    \ res=\"$(echo \"$array\" | cut -d ' ' -f 1)\"\n    for i in $(seq 2 $(echo \"\
+    $array\" | wc -w)); do\n        val1=\"$res\"\n        val2=\"$(echo \"$array\"\
+    \ | cut -d ' ' -f \"$i\")\"\n        op_pos=$((i - 1))\n        op_next=\"$(echo\
+    \ \"$op\" | cut -d ' ' -f \"$op_pos\")\"\n        res=\"$(bash -c \"echo \\\\\\\
+    \"$val1 $op_next $val2\\\\\\\" | bc\")\"\n    done\n    echo \"$res\"", "    local\
+    \ -a operator=($1)\n    local -a operand=($2)\n    local size=${#operator[@]}\n\
+    \    local result=0\n    result=${operand[0]}\n    for ((i=0; i<size; i++)); do\n\
+    \        [[ ${operator[i]} == '+' ]] && result=$(( result + ${operand[i+1]} ))\n\
+    \        [[ ${operator[i]} == '-' ]] && result=$(( result - ${operand[i+1]} ))\n\
+    \        [[ ${operator[i]} == '*' ]] && result=$(( result * ${operand[i+1]} ))\n\
+    \        [[ ${operator[i]} == '//' ]] && result=$(( result / ${operand[i+1]} ))\n\
+    \        [[ ${operator[i]} == '**' ]] && result=$(( result ** ${operand[i+1]}\
+    \ ))\n    done\n    echo \"$result\"", "  operators=($1)\n  operands=($2)\n  #\
+    \ set the leftmost operand as result\n  result=${operands[0]}\n  # loop over the\
+    \ operands in reverse order\n  for ((i=${#operands[@]}-1; i>0; i--)); do\n   \
+    \ operand=${operands[$i]}\n    operator=${operators[$i-1]}\n    case $operator\
+    \ in\n      \"+\")\n        result=$((result + operand))\n        ;;\n      \"\
+    -\")\n        result=$((result - operand))\n        ;;\n      \"*\")\n       \
+    \ result=$((result * operand))\n        ;;\n      \"//\")\n        result=$((result\
+    \ / operand))\n        ;;\n      \"**\")\n        result=$((result ** operand))\n\
+    \        ;;\n    esac\n  done\n  echo $result", "    op=\"$1\"\n    i=0\n    for\
+    \ o in $op; do\n        if [[ \"$o\" == \"**\" ]]; then\n            j=0\n   \
+    \         for p in $2; do\n                if [[ $j -eq $i ]]; then\n        \
+    \            let operand1=$p\n                elif [[ $j -eq $(( $i + 1 )) ]];\
+    \ then\n                    let operand2=$p\n                fi\n            \
+    \    let j=$j+1\n            done\n            arr2[$i]=$(( $operand1 ** $operand2\
+    \ ))\n        elif [[ \"$o\" == \"//\" ]]; then\n            j=0\n           \
+    \ for p in $2; do\n                if [[ $j -eq $i ]]; then\n                \
+    \    let operand1=$p\n                elif [[ $j -eq $(( $i + 1 )) ]]; then\n\
+    \                    let operand2=$p\n                fi\n                let\
+    \ j=$j+1\n            done\n            arr2[$i]=$(( $operand1 // $operand2 ))\n\
+    \        else\n            arr2[$i]=$o\n        fi\n        let i=$i+1\n    done\n\
+    \    expr=\"$(tr ' ' '\\n' <<< \"${arr2[@]}\" | paste -sd \"+\" -)\"\n    expr=\"\
+    $(tr ' ' '\\n' <<< \"$expr\" | sed 's/\\(.*\\)-\\(.*\\)/\\1+-\\2/')\"\n    eval\
+    \ $expr", '    (tokens=("$1"); eval "echo $2")', "    local -n algebra_operators=$1\n\
+    \    local -n algebra_operands=$2\n    local result=$3\n    local -i index=0\n\
+    \    for val in ${algebra_operators[@]}; do\n        result=$(($result $val ${algebra_operands[$index]}))\n\
+    \        ((index++))\n    done\n    echo $result", "  local operator=${1//,/ }\
+    \ operand=${2//,/ }\n  local operation\n  local result\n  local i=0\n\n  while\
+    \ ((i < ${#operator[@]})); do\n    if [[ ${operator[$i]} == '*' ]]; then\n   \
+    \   # Replace $i element of array with multiplication\n      operand[$i]=$((operand[$i]\
+    \ * operand[$i+1]))\n      # Remove $i+1 element of array\n      unset operand[$i+1]\n\
+    \      # Re-index array\n      operand=(${operand[@]})\n      # Remove $i element\
+    \ of array\n      unset operator[$i]\n      # Re-index array\n      operator=(${operator[@]})\n\
+    \    else\n      ((i++))\n    fi\n  done\n\n  i=0\n  while ((i < ${#operator[@]}));\
+    \ do\n    if [[ ${operator[$i]} == '//' ]]; then\n      # Replace $i element of\
+    \ array with floor division\n      operand[$i]=$((operand[$i] / operand[$i+1]))\n\
+    \      # Remove $i+1 element of array\n      unset operand[$i+1]\n      # Re-index\
+    \ array\n      operand=(${operand[@]})\n      # Remove $i element of array\n \
+    \     unset operator[$i]\n      # Re-index array\n      operator=(${operator[@]})\n\
+    \    else\n      ((i++))\n    fi\n  done\n\n  i=0\n  while ((i < ${#operator[@]}));\
+    \ do\n    if [[ ${operator[$i]} == '**' ]]; then\n      # Replace $i element of\
+    \ array with exponentiation\n      operand[$i]=$((operand[$i] ** operand[$i+1]))\n\
+    \      # Remove $i+1 element of array\n      unset operand[$i+1]\n      # Re-index\
+    \ array\n      operand=(${operand[@]})\n      # Remove $i element of array\n \
+    \     unset operator[$i]\n      # Re-index array\n      operator=(${operator[@]})\n",
+  "    local -a op_list\n    local -a num_list\n    local -i i\n    local -i len\n\
+    \    local -i val\n    local -i val2\n    local -i tmp_val\n    local op\n   \
+    \ op_list=($1)\n    num_list=($2)\n    val=${num_list[0]}\n    i=0\n    len=${#op_list[@]}\n\
+    \    while ((i < len)); do\n        op=${op_list[i]}\n        val2=${num_list[i+1]}\n\
+    \        case $op in\n            '+')\n                val=$((val + val2))\n\
+    \                ;;\n            '-')\n                val=$((val - val2))\n \
+    \               ;;\n            '*')\n                val=$((val * val2))\n  \
+    \              ;;\n            '/')\n                val=$((val / val2))\n   \
+    \             ;;\n            '%')\n                val=$((val % val2))\n    \
+    \            ;;\n            '**')\n                tmp_val=$val\n           \
+    \     val=1\n                while ((val2)); do\n                    val=$((val\
+    \ * tmp_val))\n                    val2=$((val2 - 1))\n                done\n\
+    \                ;;\n            *)\n                printf 'Invalid operator\
+    \ %s\\n' \"$op\" >&2\n                return 1\n                ;;\n        esac\n\
+    \        i=$((i + 1))\n    done\n    printf '%s\\n' \"$val\"", "    local ops=($1)\n\
+    \    local nums=($2)\n    local exp=\"\"\n    local num=\"\"\n    local op=\"\"\
+    \n    for (( i=0; i<${#ops[@]}; i++ )); do\n        op=${ops[$i]}\n        num=${nums[$i]}\n\
+    \        if [ $i -eq 0 ]; then\n            exp=$num\n        else\n         \
+    \   exp=$exp$op$num\n        fi\n    done\n    echo \"$exp\" | bc", "    local\
+    \ -a operator\n    read -a operator <<< \"$1\"\n    local -a operand\n    read\
+    \ -a operand <<< \"$2\"\n    local -a result\n    result=(\"${operand[0]}\")\n\
+    \    for (( i=0; i<${#operator[@]}; i++ ))\n    do\n        (( result[$i+1] =\
+    \ result[$i] ${operator[$i]} operand[$i+1] ))\n    done\n    printf \"%d\\n\"\
+    \ \"${result[${#result[@]}-1]}\"", "  local result=${2%% *}\n  local -a f=(${1//\
+    \ / })\n  local -a t=(${2// / })\n  local x\n\n  for ((x=0; x<${#f[@]}; x++));\
+    \ do\n    case ${f[x]} in\n      \"+\") result=$((result + ${t[x+1]})) ;;\n  \
+    \    \"-\") result=$((result - ${t[x+1]})) ;;\n      \"*\") result=$((result *\
+    \ ${t[x+1]})) ;;\n      \"//\") result=$((result / ${t[x+1]})) ;;\n      \"**\"\
+    ) result=$((result ** ${t[x+1]})) ;;\n    esac\n  done\n  echo $result", "  local\
+    \ operator=(\"$@\")\n\n  printf '%s\\n' \"${operator[@]}\"", "  local -a operator=\"\
+    ${1// / }\"\n  local -a operand=\"${2// / }\"\n  local -i result=${operand[0]}\n\
+    \  local -i i=0\n  #echo \"operator=${operator[@]}\"\n  #echo \"operand=${operand[@]}\"\
+    \n  while (( ${#operator[@]} > i )); do\n    case ${operator[i]} in\n      '+')\
+    \ result=$(( $result + ${operand[i+1]} ));;\n      '-') result=$(( $result - ${operand[i+1]}\
+    \ ));;\n      '*') result=$(( $result * ${operand[i+1]} ));;\n      '//') result=$((\
+    \ $result / ${operand[i+1]} ));;\n      '**') result=$(( $result ** ${operand[i+1]}\
+    \ ));;\n    esac\n    ((i++))\n  done\n  echo $result", "  local list_operator=$1\n\
+    \  local list_operand=$2\n  local result=0\n  local operator\n  local operand\n\
+    \  local operand_last\n  local operand_first=true\n  local c_operand\n  local\
+    \ c_operator\n  # echo \"list_operator=$list_operator\"\n  # echo \"list_operand=$list_operand\"\
+    \n  # Read operand list\n  while read operand ; do\n    if $operand_first ; then\n\
+    \      result=$operand\n      operand_first=false\n    else\n      operand_last=$operand\n\
+    \    fi\n  done <<< \"$list_operand\"\n  # echo \"operand_last=$operand_last\"\
+    \n  # Read operator list\n  while read operator ; do\n    # echo \"operator=$operator\"\
+    \n    # Save the result of the last operation\n    c_operand=$result\n    c_operator=$operator\n\
+    \    # Do the last operation\n    result=$( eval \"$c_operand $c_operator $operand_last\"\
+    \ )\n    # echo \"result=$result\"\n  done <<< \"$list_operator\"\n  echo $result",
+  "  local __resultvar=$3\n  local myresult=\"\"\n  local i=0\n  for e in $1; do\n\
+    \    myresult=\"$myresult$2[$i] $e \"\n    i=$((i+1))\n  done\n  myresult=\"$myresult$2[$i]\"\
+    \n  eval $__resultvar=\"'$myresult'\"", "  local -a a_operand\n  local -a a_operator\n\
+    \  local a_result\n  local i\n  local idx\n  local len\n  local op\n  local rem\n\
+    \  local result\n  # build arrays\n  for i in $1; do\n    a_operand[${#a_operand[@]}]=$i\n\
+    \  done\n  for i in $2; do\n    a_operator[${#a_operator[@]}]=$i\n  done\n  #\
+    \ check arguments\n  if [[ ${#a_operand[@]} -eq 0 || ${#a_operator[@]} -eq 0 ]];\
+    \ then\n    echo 'error: invalid argument'\n    return 1\n  fi\n  # compute result\n\
+    \  result=${a_operand[0]}\n  len=${#a_operator[@]}\n  for ((i=0; i<$len; i++));\
+    \ do\n    op=${a_operator[$i]}\n    idx=$((i+1))\n    rem=${a_operand[$idx]}\n\
+    \    case $op in\n      +)\n        result=$((result+rem))\n        ;;\n     \
+    \ -)\n        result=$((result-rem))\n        ;;\n      \\*)\n        result=$((result*rem))\n\
+    \        ;;\n      //)\n        result=$((result/rem))\n        ;;\n      \\*)\n\
+    \        result=$((result**rem))\n        ;;\n      *)\n        echo \"error:\
+    \ invalid operator '$op'\"\n        return 1\n        ;;\n    esac\n  done\n \
+    \ echo $result", "  local -n _ope=$1\n  local -n _arr=$2\n  local _r=${_arr[0]}\n\
+    \  local _i=1\n  for (( i=0; i<${#_ope[@]}; i++ )); do\n    if [ ${_ope[$i]} ==\
+    \ '+' ]; then\n      _r=$(( ${_r} + ${_arr[$_i]} ))\n    elif [ ${_ope[$i]} ==\
+    \ '-' ]; then\n      _r=$(( ${_r} - ${_arr[$_i]} ))\n    elif [ ${_ope[$i]} ==\
+    \ '*' ]; then\n      _r=$(( ${_r} * ${_arr[$_i]} ))\n    elif [ ${_ope[$i]} ==\
+    \ '//' ]; then\n      _r=$(( ${_r} / ${_arr[$_i]} ))\n    elif [ ${_ope[$i]} ==\
+    \ '**' ]; then\n      _r=$(( ${_r} ** ${_arr[$_i]} ))\n    fi\n    _i=$(( $_i\
+    \ + 1 ))\n  done\n  echo ${_r}", "  lhs=${2%% *}\n  rhs=${2#* }\n  case \"$1\"\
+    \ in\n    +)\n      echo \"$((lhs + rhs))\"\n      ;;\n    -)\n      echo \"$((lhs\
+    \ - rhs))\"\n      ;;\n    \\*)\n      echo \"$((lhs * rhs))\"\n      ;;\n   \
+    \ //)\n      echo \"$((lhs / rhs))\"\n      ;;\n    \\*\\*)\n      echo \"$((lhs\
+    \ ** rhs))\"\n      ;;\n  esac", "  IFS=' ' read -r -a operators <<< \"$1\"\n\
+    \  IFS=' ' read -r -a operands <<< \"$2\"\n  ((operands[0] = operands[0] ${operators[0]}\
+    \ operands[1]))\n  for ((i=1; i<${#operators[@]}; i++)); do\n    ((operands[0]\
+    \ = operands[0] ${operators[i]} operands[i+1]))\n  done\n  echo \"${operands[0]}\"",
+  "    local -a operator=($1)\n    local -a operand=($2)\n    local i\n    local -i\
+    \ result=${operand[0]}\n    for ((i=0; i<${#operator[@]}; i++)); do\n        case\
+    \ ${operator[$i]} in\n            \"+\") result+=$((operand[$((i+1))])) ;;\n \
+    \           \"-\") result-=$((operand[$((i+1))])) ;;\n            \"*\") result*=$((operand[$((i+1))]))\
+    \ ;;\n            \"//\") result=$((result/operand[$((i+1))])) ;;\n          \
+    \  \"**\") result=$((result**operand[$((i+1))])) ;;\n        esac\n    done\n\
+    \    echo $result", "  local op=$1 oprand=$2\n  for i in $op\n  do\n    if [[\
+    \ $i == \"+\" ]]; then\n      oprand=$(echo $oprand + ${oprand%% *} | bc)\n  \
+    \    oprand=${oprand#* }\n    elif [[ $i == \"-\" ]]; then\n      oprand=$(echo\
+    \ $oprand - ${oprand%% *} | bc)\n      oprand=${oprand#* }\n    elif [[ $i ==\
+    \ \"*\" ]]; then\n      oprand=$(echo $oprand * ${oprand%% *} | bc)\n      oprand=${oprand#*\
+    \ }\n    elif [[ $i == \"//\" ]]; then\n      oprand=$(echo $oprand / ${oprand%%\
+    \ *} | bc)\n      oprand=${oprand#* }\n    elif [[ $i == \"**\" ]]; then\n   \
+    \   oprand=$(echo $oprand ** ${oprand%% *} | bc)\n      oprand=${oprand#* }\n\
+    \    fi\n  done\n  echo \"$oprand\"", "    local -a operator\n    local -a operand\n\
+    \    local i\n    local -i result\n    local arg\n    if [ -z \"$1\" -o -z \"\
+    $2\" ]; then\n        echo \"Usage: $0 operator operand\"\n        return 1\n\
+    \    fi\n    read -r -a operator <<< \"$1\"\n    read -r -a operand <<< \"$2\"\
+    \n    if [ \"${#operator[@]}\" -ne \"$(( ${#operand[@]} - 1 ))\" ]; then\n   \
+    \     echo \"operator and operand lengths don't match\"\n        return 1\n  \
+    \  fi\n    if [ \"${#operator[@]}\" -lt 1 -o \"${#operand[@]}\" -lt 2 ]; then\n\
+    \        echo \"operator and operand lengths must be >= 1 and >= 2, respectively\"\
+    \n        return 1\n    fi\n    result=${operand[0]}\n    for (( i=0; i<${#operator[@]};\
+    \ i++ )); do\n        case \"${operator[$i]}\" in\n            +) result=$(( result\
+    \ + ${operand[$(( i + 1 ))]} ));;\n            -) result=$(( result - ${operand[$((\
+    \ i + 1 ))]} ));;\n            \\*) result=$(( result * ${operand[$(( i + 1 ))]}\
+    \ ));;\n            //) result=$(( result / ${operand[$(( i + 1 ))]} ));;\n  \
+    \          \\*) result=$(( result ** ${operand[$(( i + 1 ))]} ));;\n         \
+    \   *)\n                echo \"Invalid operator: ${operator[$i]}\"\n         \
+    \       return 1\n        esac\n    done\n    echo \"$result\"", "\toperators=(\
+    \ $1 )\n\toperands=( $2 )\n\t\n\t# Operators is one less than operands\n\tif [\
+    \ ${#operators[@]} -ne $((${#operands[@]} - 1)) ]; then\n\t\techo \"You need one\
+    \ less operator than operands.\"\n\t\texit\n\tfi\n\t\n\t# Setup the formula string\n\
+    \tf=\"\"\n\tfor i in $(seq 0 $((${#operators[@]} - 1))); do\n\t\tf=\"$f${operands[$i]}\
+    \ ${operators[$i]} \"\n\tdone\n\t\n\tf=\"$f${operands[${#operands[@]} - 1]}\"\n\
+    \t\n\t# Test the formula\n\techo $(($f))", "    local -a operator=($1)\n    local\
+    \ -a operand=($2)\n    for ((i=0; i<${#operator[@]}; i++)); do\n        ((operand[i+1]\
+    \ = operand[i] ${operator[i]} operand[i+1]))\n    done\n    echo ${operand[@]}",
+  "    local operator=($1)\n    local operand=($2)\n    local result=\"\"\n    for\
+    \ ((i=0; i<${#operator[@]}; i++)); do\n        result+=\"${operand[$i]} ${operator[$i]}\
+    \ \"\n    done\n    result+=\"${operand[$i]}\"\n    echo $result | bc", "  operator=($1)\n\
+    \  operand=($2)\n  result=${operand[0]}\n  for ((i=0; i<${#operator[@]}; i++));\
+    \ do\n    case ${operator[$i]} in\n      \"+\") result=$(( $result + ${operand[$((i+1))]}\
+    \ )) ;;\n      \"-\") result=$(( $result - ${operand[$((i+1))]} )) ;;\n      \"\
+    *\") result=$(( $result * ${operand[$((i+1))]} )) ;;\n      \"//\") result=$((\
+    \ $result / ${operand[$((i+1))]} )) ;;\n      \"**\") result=$(( $result ** ${operand[$((i+1))]}\
+    \ )) ;;\n    esac\n  done\n  echo $result", "  local opr=\"$1\"\n  local ops=\"\
+    $2\"\n  #\n  # The operands are numbers, and so are the result.\n  # We must declare\
+    \ all variables to be integers.\n  # But in general, the operator list can contain\
+    \ strings.\n  # So we must declare all variables of the operator list to be strings.\n\
+    \  #\n  declare -i -a operands\n  declare -a operators\n  #\n  # Declare the first\
+    \ number from the operand list as the first result.\n  # We will use this result\
+    \ in the loop.\n  #\n  read -r result <<<\"$ops\"\n  #\n  # Create a list of operators,\
+    \ and a list of operands,\n  # by splitting the string into a list of words.\n\
+    \  #\n  read -a operators <<<\"$opr\"\n  read -a operands <<<\"$ops\"\n  #\n \
+    \ # Replace the '+' operator by the shell's built-in addition operator.\n  #\n\
+    \  opr=\"${opr//+/@}\"\n  #\n  # Create and execute the string of arithmetic expressions.\n\
+    \  #\n  let \"${opr// / ${operands[1]} ${operators[1]} }\"\n  #\n  # Do the same\
+    \ for each operand and operator in the list.\n  #\n  for (( i=2; i<${#operands[@]};\
+    \ i++ )); do\n    let \"${opr// / ${operands[i]} ${operators[i]} }\"\n  done\n\
+    \  #\n  # Return the result.\n  #\n  echo \"$result\"", "  operators=($1)\n  operands=($2)\n\
+    \  result=0\n  echo $operators\n  echo $operands\n  if [ ${#operators[@]} -ne\
+    \ ${#operands[@]}-1 ]; then\n    echo \"Error in parameters\"\n    return\n  fi\n\
+    \  result=$(echo $operands | cut -d ' ' -f 1)\n  for ((i=0; i<${#operators[@]};\
+    \ i++)); do\n    case ${operators[$i]} in\n      \"+\") let result+=${operands[$((i+1))]};;\n\
+    \      \"-\") let result-=${operands[$((i+1))]};;\n      \"*\") let result*=${operands[$((i+1))]};;\n\
+    \      \"//\") let result/=${operands[$((i+1))]};;\n      \"**\") let result**=${operands[$((i+1))]};;\n\
+    \      *) echo \"Unrecognized operator ${operators[$i]}\"\n         return;;\n\
+    \    esac\n  done\n  echo $result", "  # Your code here\n  # Good luck!\n  local\
+    \ operators=$1\n  local operands=$2\n  local op\n  local opd\n  local acc=0\n\
+    \  local i=0\n  for op in $operators\n  do\n    opd=${operands%% *}\n    if [\
+    \ $i == 0 ]\n    then\n      acc=$opd\n    else\n      case $op in\n        \"\
+    +\") acc=$((acc + opd)) ;;\n        \"-\") acc=$((acc - opd)) ;;\n        \"*\"\
+    ) acc=$((acc * opd)) ;;\n        \"//\") acc=$((acc / opd)) ;;\n        \"**\"\
+    ) acc=$((acc ** opd)) ;;\n      esac\n    fi\n    operands=${operands#* }\n  \
+    \  i=$((i + 1))\n  done\n  echo $acc", "  local -r O=\"$1\"\n  local -r A=\"$2\"\
+    \n  local -r A_LEN=\"$(echo \"$A\" | wc -w)\"\n  local -r O_LEN=\"$(echo \"$O\"\
+    \ | wc -w)\"\n  local -r NUM_ARGS=$((A_LEN + O_LEN))\n  local -r O_I=\"$(expr\
+    \ $A_LEN - 1)\"\n\n  if [[ $NUM_ARGS -lt 3 ]]; then\n    echo \"Invalid arguments\"\
+    \n    exit 1\n  fi\n\n  local -r OPS=(\"\" \"**\" \"//\" \"*\" \"+\" \"-\")\n\
+    \  local -r OPS_LEN=${#OPS[@]}\n  local exp\n  local result\n  local arg_cnt\n\
+    \  local op_index\n  local op\n  local op_sign\n\n  while read -r arg; do\n  \
+    \  if [[ $arg_cnt -lt $O_I ]]; then\n      result=\"$((result $op $arg))\"\n \
+    \   else\n      exp=\"$exp $arg\"\n    fi\n\n    if [[ $arg_cnt -gt 0 ]]; then\n\
+    \      op_index=$((((op_index + 1) % OPS_LEN)))\n      op=${OPS[$op_index]}\n\
+    \      op_sign=\"$op\"\n    fi\n\n    exp=\"$exp $op_sign\"\n    arg_cnt=$((arg_cnt\
+    \ + 1))\n  done <<< \"$A\"\n\n  echo \"$exp\" | bc -l", "\tlocal -a array\n\t\
+    local -a operator\n\tlocal -i i\n\tlocal -i j\n\n\t# If $2 is a list of operands\
+    \ and $1 is a list of operators,\n\t# then $2 must be one element longer than\
+    \ $1.\n\tif [ $(echo \"$2\" | wc -w) -eq $(echo \"$1\" | wc -w) + 1 ]; then\n\t\
+    \techo \"Error: Length of array ($2) must be one element longer than operator\
+    \ list ($1).\" >&2\n\t\treturn 1\n\tfi\n\n\t# Load list of operands into array.\n\
+    \ti=0\n\tfor j in $2; do\n\t\tarray[$i]=$j\n\t\ti=$i+1\n\tdone\n\n\t# Evaluate\
+    \ the operands in order using the operators.\n\ti=0\n\tfor j in $1; do\n\t\tif\
+    \ [[ $j == \"**\" ]]; then\n\t\t\tarray[$i]=$((${array[$i]} ** ${array[$i+1]}))\n\
+    \t\telif [[ $j == \"//\" ]]; then\n\t\t\tarray[$i]=$((${array[$i]} // ${array[$i+1]}))\n\
+    \t\telif [[ $j == \"*\" ]]; then\n\t\t\tarray[$i]=$((${array[$i]} * ${array[$i+1]}))\n\
+    \t\telif [[ $j == \"+\" ]]; then\n\t\t\tarray[$i]=$((${array[$i]} + ${array[$i+1]}))\n\
+    \t\telif [[ $j == \"-\" ]]; then\n\t\t\tarray[$i]=$((${array[$i]} - ${array[$i+1]}))\n\
+    \t\telse\n\t\t\techo \"Error: Unknown operator '$j'.\" >&2\n\t\t\treturn 1\n\t\
+    \tfi\n\t\tarray[$i+1]=0\n\t\ti=$i+1\n\tdone\n\n\t# Return the final result\n\t\
+    echo ${array[0]}", "  IFS=$' '\n  operators=(\"$1\")\n  operands=(\"$2\")\n  IFS=$'\\\
+    n'\n  n=${#operators[@]}\n  echo ${operands[0]} $(for i in $(seq 1 $n); do echo\
+    \ ${operators[$i-1]} ${operands[$i]}; done) | bc", "    op=($1)\n    opd=($2)\n\
+    \    exp=\"\"\n    for ((i=0; i<${#opd[@]}; i++)); do\n        if [[ i -gt 0 ]];\
+    \ then\n            exp=\"$exp ${op[$i-1]} ${opd[$i]}\"\n        else\n      \
+    \      exp=\"${opd[$i]}\"\n        fi\n    done\n    echo \"$exp\" | bc", "  local\
+    \ operator=$1\n  local operand=$2\n  local -a array_op=(\"${operator// / }\")\n\
+    \  local -a array_od=(\"${operand// / }\")\n  local n=${#array_op[@]}\n\n  local\
+    \ val=${array_od[0]}\n  for ((i=0; i<n; i++)); do\n    case ${array_op[i]} in\n\
+    \      \"+\") val=$((val + ${array_od[i+1]})) ;;\n      \"-\") val=$((val - ${array_od[i+1]}))\
+    \ ;;\n      \"*\") val=$((val * ${array_od[i+1]})) ;;\n      \"//\") val=$((val\
+    \ / ${array_od[i+1]})) ;;\n      \"**\") val=$((val ** ${array_od[i+1]})) ;;\n\
+    \    esac\n  done\n  echo $val", "  local -a  operators operands=($1)\n  local\
+    \ -a  operator=($2)\n  local -i  i=0\n  for (( i=0; i<${#operators[@]}; i++ ));\
+    \ do\n    local -i  total\n    total=$(( operands[i] ${operators[i]} operands[i+1]\
+    \ ))\n    operands[i+1]=$total\n  done\n  echo \"${operands[i]}\"", "    local\
+    \ operand=\"$1\"\n    local operator=\"$2\"\n    local result=0\n    local -a\
+    \ operand_list\n    local -a operator_list\n    local list_size=0\n    local i=0\n\
+    \    local lhs=0\n    local rhs=0\n    local op=''\n    IFS=' ' read -r -a operand_list\
+    \ <<< \"$operand\"\n    IFS=' ' read -r -a operator_list <<< \"$operator\"\n \
+    \   list_size=${#operand_list[@]}\n    result=${operand_list[0]}\n    for ((i=0;\
+    \ i<$list_size-1; i++)); do\n        lhs=$result\n        rhs=${operand_list[$i+1]}\n\
+    \        op=${operator_list[$i]}\n        result=$((\"$lhs\" \"$op\" \"$rhs\"\
+    ))\n    done\n    echo \"$result\"", "    # Your code here\n    #operators=$1\n\
+    \    #numbers=$2\n    #if [[ $# -eq 1 ]]; then\n    #   echo $1\n    #   return\
+    \ 0\n    #fi\n    #if [[ $# -eq 2 ]]; then\n    #   echo $1 $2\n    #   return\
+    \ 0\n    #fi\n    #echo $1\n    #echo $2\n    #echo $1 $2\n    #echo $1 $2 $3\n\
+    \    #do_algebra $(( $1 $2 $3 )) ${@:4}\n    operators=${1// /}\n    numbers=${2//\
+    \ /}\n    #echo \"operators=${operators}\"\n    #echo \"numbers=${numbers}\"\n\
+    \    len=${#operators}\n    #echo \"len=${len}\"\n    #declare -a numbers\n  \
+    \  #numbers=($2)\n    i=0\n    result=${numbers:i:1}\n    i=$i+1\n    while [[\
+    \ i -lt len ]]; do\n        result=$(( result ${operators:i:1} ${numbers:i+1:1}\
+    \ ))\n        i=$i+1\n    done\n    echo $result", "  local -a array=(\"$@\")\n\
+    \  let s=0\n  let i=1\n  echo \"${array[0]} ${array[2]} ${array[1]}\" | bc\n \
+    \ while [ $i -lt ${#array[@]} ]\n  do\n    echo \"$s ${array[$i]} ${array[$((i+1))]}\"\
+    \ | bc\n    let i+=2\n  done", "    local operator=(\"$@\")\n    local operand=(\"\
+    $@\")\n    # echo \"operands: $operand\"\n    # echo \"operators: $operator\"\n\
+    \    local len=${#operator[@]}\n    local op_index\n    local op_index_i\n   \
+    \ local left\n    local right\n    for (( i=0; i<len; i++ )); do\n        op_index_i=$((\
+    \ i + 1 ))\n        op_index=${operator[$i]}\n        left=${operand[$i]}\n  \
+    \      right=${operand[$op_index_i]}\n        if [ \"$op_index\" == \"**\" ];\
+    \ then\n            operand[$op_index_i]=$(( $left ** $right ))\n        elif\
+    \ [ \"$op_index\" == \"//\" ]; then\n            operand[$op_index_i]=$(( $left\
+    \ // $right ))\n        elif [ \"$op_index\" == \"*\" ]; then\n            operand[$op_index_i]=$((\
+    \ $left * $right ))\n        elif [ \"$op_index\" == \"+\" ]; then\n         \
+    \   operand[$op_index_i]=$(( $left + $right ))\n        elif [ \"$op_index\" ==\
+    \ \"-\" ]; then\n            operand[$op_index_i]=$(( $left - $right ))\n    \
+    \    fi\n    done\n    echo ${operand[$op_index_i]}", "  declare -a operator\n\
+    \  declare -a operand\n  local i=0 j=0\n  for x in $1; do operator[$i]=$x; i=$((i+1));\
+    \ done\n  for x in $2; do operand[$j]=$x; j=$((j+1)); done\n  local n=$((j-1))\n\
+    \  local result=${operand[0]}\n  for ((i=0; i<n; i++)); do\n    op=${operator[$i]}\n\
+    \    val=${operand[$((i+1))]}\n    case $op in\n      \"+\") result=$((result+val));;\n\
+    \      \"-\") result=$((result-val));;\n      \"*\") result=$((result*val));;\n\
+    \      \"//\") result=$((result/val));;\n      \"**\") result=$((result**val));;\n\
+    \    esac\n  done\n  echo $result", "    local array=(\"$@\")\n    local i=0\n\
+    \    local ret\n    let i++\n    ret=${array[0]}\n    #echo \"ret=$ret\"\n   \
+    \ while [ $i -lt ${#array[@]} ]; do\n        case ${array[$i]} in\n          \
+    \  +) ret=$((ret + ${array[$i+1]}));;\n            -) ret=$((ret - ${array[$i+1]}));;\n\
+    \            *) ret=$((ret * ${array[$i+1]}));;\n        esac\n        i=$((i+2))\n\
+    \    done\n    echo $ret", "    local ops=($1) operands=($2)\n    local ops_len=${#ops[@]}\
+    \ operands_len=${#operands[@]}\n    local len=$((ops_len+operands_len)) i=0\n\
+    \    local exp_list exp\n    while [ $i -lt $len ]; do\n        [ $i -lt $ops_len\
+    \ ] && exp_list[$i]=${ops[$i]} || exp_list[$i]=${operands[$((i-ops_len))]}\n \
+    \       i=$((i+1))\n    done\n    echo \"${exp_list[@]}\"\n    exp=\"${exp_list[@]}\"\
+    \n    echo \"$exp\"\n    echo \"($exp)\" | bc", "  local operator=($1)\n  local\
+    \ operand=($2)\n  let n=${#operator[@]}\n  # The operator array has length n\n\
+    \  # The operand array has length n+1\n  # If there is only one operand, return\
+    \ it\n  if [ ${#operand[@]} -eq 1 ]; then\n    echo ${operand[0]}\n    return\n\
+    \  fi\n  # If there is only one operator,\n  # Perform the operation on the last\
+    \ two operands\n  # Put the result back in the operand array\n  if [ ${#operator[@]}\
+    \ -eq 1 ]; then\n    let i=${#operand[@]}-1\n    let j=${#operand[@]}-2\n    case\
+    \ ${operator[0]} in\n      +) operand[$j]=$((${operand[$i]}+${operand[$j]})) ;;\n\
+    \      -) operand[$j]=$((${operand[$j]}-${operand[$i]})) ;;\n      *) operand[$j]=$((${operand[$i]}*${operand[$j]}))\
+    \ ;;\n    esac\n    unset operand[$i]\n    unset operator[0]\n    # Call this\
+    \ function recursively with new arrays\n    do_algebra \"${operator[@]}\" \"${operand[@]}\"\
+    \n    return\n  fi\n  # There are at least two operators\n  # Left-associative:\n\
+    \  # Perform operation on the first two operands\n  # Put the result back in the\
+    \ operand array\n  # Call this function recursively with new arrays\n  let i=0\n\
+    \  let j=1\n  case ${operator[0]} in\n    +) operand[$j]=$((${operand[$i]}+${operand[$j]}))\
+    \ ;;\n    -) operand[$j]=$((${operand[$j]}-${operand[$i]})) ;;\n    *) operand[$j]=$((${operand[$i]}*${operand[$j]}))\
+    \ ;;\n  esac\n  unset operand[$i]\n  unset operator[", "  if [ $# -ne 2 ]; then\n\
+    \    echo \"2 arguments required, $# provided\"\n    exit 1\n  fi\n  local o=\"\
+    $1\"\n  local a=($2)\n  local result=${a[0]}\n  local i=0\n  while read op; do\n\
+    \    let i=i+1\n    local operand=${a[$i]}\n    case $op in\n      +) let result=$result+$operand;;\n\
+    \      -) let result=$result-$operand;;\n      \\*) let result=$result\\*$operand;;\n\
+    \      /) let result=$result/$operand;;\n      \\*) let result=$result\\*\\*$operand;;\n\
+    \    esac\n  done <<< \"$o\"\n  echo $result", "    operator=(\"$@\")\n    operand=(\"\
+    $@\")\n    shift $(( $# - 1 ))\n    unset operand[$#]\n    echo \"operator is\
+    \ $operator\"\n    echo \"operand is $operand\"\n    echo \"a[0]=${a[0]}\"\n \
+    \   echo \"a[1]=${a[1]}\"\n    echo \"a[2]=${a[2]}\"\n    expr $operator[0] $operand[0]\
+    \ $operand[1]", "  local operator=\"$1\"\n  local operand=\"$2\"\n  local res=0\n\
+    \  local op1=0\n  local op2=0\n  local i=0\n  local c=0\n  local num=0\n  local\
+    \ oper=\"$operator\"\n  local list=\"$operand\"\n  local len=0\n  local expr=\n\
+    \  local tmp=\n\n  if [ -z \"$oper\" ] || [ -z \"$list\" ]; then\n    return 2\n\
+    \  fi\n\n  res=0\n  oper=${oper% }\n  list=${list% }\n  i=0\n  len=${#oper}\n\
+    \  while [ \"$i\" -lt \"$len\" ]; do\n    c=${oper:$i:1}\n    if [ \"$c\" = '+'\
+    \ ] || [ \"$c\" = '-' ] || [ \"$c\" = '*' ] || \\\n      [ \"$c\" = '/' ] || [\
+    \ \"$c\" = '^' ]; then\n      num=$((num+1))\n    fi\n    i=$((i+1))\n  done\n\
+    \  i=0\n  len=${#list}\n  while [ \"$i\" -lt \"$len\" ]; do\n    c=${list:$i:1}\n\
+    \    if [ \"$c\" = ' ' ]; then\n      num=$((num+1))\n    fi\n    i=$((i+1))\n\
+    \  done\n  if [ \"$num\" -ne $((len-1)) ]; then\n    return 3\n  fi\n\n  op1=${list%%\
+    \ *}\n  list=${list#* }\n  while [ \"$list\" != \"${list#* }\" ]; do\n    op2=${list%%\
+    \ *}\n    list=${list#* }\n    oper=${oper%% *}\n    oper=${oper#* }\n    tmp=\"\
+    $op1 $oper $op2\"\n    expr=$(echo \"$expr $tmp\" | bc -l)\n    op1=\"$expr\"\n\
+    \  done\n  expr=$(echo \"$expr $list\" | bc -l)\n  echo \"$expr\"\n  return 0"]
 stop_tokens:
 - "\n}"

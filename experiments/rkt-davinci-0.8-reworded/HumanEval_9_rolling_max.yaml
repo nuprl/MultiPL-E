@@ -72,7 +72,663 @@ completions: ["  (local [(define (rolling-max numbers max)\n            (cond [(
     \ (empty? numbers)\n      empty\n      (cons (fold max 0 numbers)\n          \
     \  (rolling_max (rest numbers)))))\n", "  (for/fold ([max (first numbers)])\n\
     \            ([n (in-list (rest numbers))])\n    (if (> n max)\n        n\n  \
-    \      max)))\n"]
+    \      max)))\n", "  (if (null? numbers)\n      '()\n      (let ((max-so-far (car\
+    \ numbers)))\n        (cons max-so-far\n              (map (\u03BB (x) (max x\
+    \ max-so-far))\n                   (cdr numbers))))))\n", "  (cond\n    [(empty?\
+    \ numbers) '()]\n    [else\n     (cons (max (first numbers) (second numbers))\n\
+    \           (rolling_max (rest numbers)))]))\n</code>\nIn this case, I find it\
+    \ rather hard to do it in an immutable way using the one-element-at-a-time language\
+    \ of regular loops, so I resorted to using recursion.\nWhat would be a typical\
+    \ way of doing this using only regular loops?\n\n\nA:\n\nLooping through a list\
+    \ is typically done via <code>map</code>, <code>for/list</code>, or <code>for*/list</code>.\
+    \ In your case, it might be easier to use the <code>foldl</code> function. This\
+    \ is the equivalent of a for-loop over a list, but the loop accumulates a \"result\"\
+    \ that is computed from each item of the list and the result of the previous iteration.\
+    \ \nFor example, here's a function that sums the first N squares:\n<code>(define\
+    \ (sum-n-squares n)\n  (foldl (lambda (x acc) (+ acc (* x x)))\n         0\n \
+    \        (range 1 (+ n 1))))\n</code>\nAnd here's how you could use it to write\
+    \ the rolling max:\n<code>(define (rolling-max lst)\n  (foldl (lambda (x acc)\n\
+    \           (let* ([last-max (first acc)]\n                  [new-max (max x last-max)])\n\
+    \             (cons new-max (rest acc))))\n         '(-inf.0)\n         lst))\n\
+    </code>\n\nAn alternative would be to use a <code>for/list</code> loop. This is\
+    \ similar to a fold, except that the loop creates a list of each value of the\
+    \ \"result\" that was computed by the loop at each iteration:\n<code>(define (rolling-max\
+    \ lst)\n  (for/list ([x lst]\n             [max (in-list '(-inf.0))])\n    (let\
+    \ ([new-max (max x max)])\n      new-max)))\n</code>\n\nThe other option would\
+    \ be to use a <code>for*/list</code> loop. This is like a for/list loop, except\
+    \ that instead of providing values for", "  (letrec ([acc (list (car numbers))]\n\
+    \           [process (lambda (numbers)\n                      (cond [(empty? numbers)\
+    \ acc]\n                            [else (begin (set! acc (cons (max (car numbers)\
+    \ (car acc)) acc))\n                                        (process (cdr numbers)))]))])\n\
+    \    (process (cdr numbers))))\n", "  (if (empty? numbers)\n      (list)\n   \
+    \   (cons (max (first numbers) (max (rest numbers)))\n            (rolling_max\
+    \ (rest numbers)))))\n", "  (cond\n    [(empty? numbers) empty]\n    [(rest numbers)\n\
+    \     (cons (max (first numbers) (rolling_max (rest numbers)))\n           (rolling_max\
+    \ (rest numbers)))]\n    [else\n     empty]))\n", "  (for/fold ([rolling_max '()])\n\
+    \            ([number numbers])\n            (cons (max number (car rolling-max))\n\
+    \                  rolling-max)))\n", "    (if (null? numbers)\n        (void)\n\
+    \        (let ([max (car numbers)])\n            (cons max (rolling_max (cdr numbers))))))\n\
+    </code>\nI expected \"2 3 3 3 4 4\" but I got \"2 3 3 3 3 4\". I thought that\
+    \ my procedure would compare the current max with the upcoming element in the\
+    \ sequence and store the larger value of the two. Am I wrong?\n\n\nA:\n\nThe problem\
+    \ is in this line:\n<code>(let ([max (car numbers)])\n</code>\nThe binding of\
+    \ <code>max</code> is a constant and it always evaluates to the first element\
+    \ in the list. If you want to compare the value in <code>max</code> to the next\
+    \ element in the list, you need to define a helper procedure that takes <code>max</code>\
+    \ as an argument:\n<code>(define (rolling-max numbers)\n  (if (null? numbers)\n\
+    \      '()\n      (let ((new-max (rolling-max1 (cdr numbers) (car numbers))))\n\
+    \        (cons new-max new-max))))\n", "  (apply append\n         (for/list ([subsequence\
+    \ (in-naturals)])\n           (for/list ([subset (in-subsequence numbers (+ 1\
+    \ subsequence))])\n             (sublist-max subset)))))\n", "  (cond\n    [(empty?\
+    \ numbers) empty]\n    [(= 1 (length numbers)) numbers]\n    [else\n     (cond\n\
+    \       [(> (first numbers) (second numbers))\n        (cons (first numbers) (rolling_max\
+    \ (rest numbers)))]\n       [else\n        (cons (second numbers) (rolling_max\
+    \ (rest numbers)))])]))\n", "  (let loop ([acc '(])\n             [numbers numbers])\n\
+    \    (cond [(empty? numbers)\n           (reverse acc)]\n          [else\n   \
+    \        (loop (cons (max (first numbers) (first acc)) acc)\n                \
+    \ (rest numbers))])))\n", "  (match numbers\n    ('() '())\n    (cons (cons (car\
+    \ numbers)\n                (apply max (car numbers) (cdr numbers)))\n       \
+    \   (rolling_max (cdr numbers)))))\n```\n\n```ruby\ndef rolling_max(numbers)\n\
+    \  numbers.map.with_index do |n, i|\n    numbers[0..i].max\n  end\nend\n```\n\n\
+    ```python\ndef rolling_max(numbers):\n  m = []\n  for (i, n) in enumerate(numbers):\n\
+    \    m.append(max(numbers[0:i + 1]))\n  return m\n```\n\n```javascript\nconst\
+    \ rolling_max = numbers => numbers.map((n, i) => Math.max(...numbers.slice(0,\
+    \ i + 1)))\n```\n\n```c++\n#include <algorithm>\n\nstd::vector<int> rolling_max(std::vector<int>\
+    \ & numbers) {\n  std::vector<int> result;\n  for (int i = 0; i < numbers.size();\
+    \ i++) {\n    result.push_back(*max_element(numbers.begin(), numbers.begin() +\
+    \ i + 1));\n  }\n  return result;\n}\n```\n\n## Rolling Max\n\nA rolling max is\
+    \ a sequence of integers. In this sequence the nth element is the maximum value\
+    \ for the first n elements of the original sequence.\n\nFor example, let's assume\
+    \ we have a set of numbers - `5, 6, 1, 2, 4, 9, 3`. The first element in the rolling\
+    \ max is 5 because it is the largest number in the set `[5]`. The second element\
+    \ is 6 because it is the largest number in the set `[5, 6]`. The third element\
+    \ is 6 because it is the largest number in the set `[5, 6, 1]` and so on. The\
+    \ output would be `[5, 6, 6, 6, 6, 9, 9]`.\n\n## Implementation\n\nWe will use\
+    \ the following algorithm to find the rolling max:\n\n- Start at the first number\
+    \ in the sequence\n- Add the number to the result\n- The next number is the max\
+    \ of the next number in the sequence and the max", "  (rolling-max-internal numbers\
+    \ (list (first numbers))))\n", "  (for/fold ([acc (list 0)]\n             [memo\
+    \ 0])\n      ([cur numbers])\n    (begin\n      (if (and (not (zero? memo)) (>\
+    \ memo cur))\n          (set! cur memo))\n      (set! memo cur)\n      (append\
+    \ acc (list cur)))))\n", "  (if (null? numbers)\n      '()\n      (cons (apply\
+    \ max numbers)\n            (rolling_max (cdr numbers)))))\n", "  (if (null? numbers)\n\
+    \      '()\n      (let ((rest-of-numbers (rolling_max (cdr numbers))))\n     \
+    \   (cons (max (car numbers) (car rest-of-numbers)) rest-of-numbers))))\n", " \
+    \ (if (null? numbers)\n      '()\n      (cons (max (car numbers) (if (null? (cdr\
+    \ numbers)) 0 (car (cdr numbers))))\n            (rolling_max (cdr numbers)))))\n",
+  "  (if (empty? numbers) empty\n      (cons (apply max numbers)\n            (rolling_max\
+    \ (rest numbers)))))\n", "  (if (null? numbers)\n      '()\n      (letrec ([next-max\
+    \ (cons (apply max numbers) (rolling_max (cdr numbers)))]\n               [curr-max\
+    \ (apply max numbers)])\n        (if (equal? (first numbers) curr-max)\n     \
+    \       next-max\n            (cons curr-max next-max)))))\n", "  (rolling-max-helper\
+    \ numbers 0 1))\n", "  (cond\n    [(empty? numbers) empty]\n    [(< (first numbers)\
+    \ (second numbers))\n     (cons (second numbers) (rolling_max (rest numbers)))]\n\
+    \    [else\n     (cons (first numbers) (rolling_max (rest numbers)))]))\n\n",
+  "  (define (next_max previous_result current_number)\n    (if (<= current_number\
+    \ (car previous_result))\n        previous_result\n        (cons current_number\
+    \ previous_result)))\n  (map reverse (foldl next_max '(0) numbers)))\n", "  (if\
+    \ (null? numbers)\n      '()\n      (cons (apply max numbers)\n            (rolling_max\
+    \ (cdr numbers)))))\n", "  (define (max-till-here maxnum number (numbers (rest\
+    \ numbers)))\n    (cond ((empty? numbers) (cons maxnum number))\n          ((>\
+    \ maxnum number) (max-till-here maxnum number (rest numbers)))\n          (else\
+    \ (max-till-here number number (rest numbers)))))\n  (cond ((empty? numbers) empty)\n\
+    \        (else (cons (first numbers) (max-till-here (first numbers) (first numbers)\
+    \ (rest numbers))))))\n", "  (if (empty? numbers)\n      empty\n      (cons (apply\
+    \ max numbers)\n            (rolling_max (rest numbers)))))\n", "  (define (helper\
+    \ acc-list max)\n    (cond [(empty? numbers)\n           acc-list]\n         \
+    \ [(= (first numbers) max)\n           (helper (append acc-list (list max)) max)]\n\
+    \          [(> (first numbers) max)\n           (helper (append acc-list (list\
+    \ (first numbers))) (first numbers))]\n          [else\n           (helper (append\
+    \ acc-list (list max)) max)]))\n  (helper '() 0))\n", "  (if (null? numbers)\n\
+    \      '()\n      (cons (foldr max 0 numbers)\n            (rolling_max (cdr numbers)))))\n",
+  "  (if (empty? numbers)\n      '()\n      (append (list (apply max numbers))\n \
+    \             (rolling_max (rest numbers)))))\n", "  (define (rolling_max_aux\
+    \ accum numbers)\n    (cond\n      [(empty? numbers) accum]\n      [(and (not\
+    \ (empty? accum)) (empty? (rest accum)))\n       (rolling_max_aux (cons (first\
+    \ numbers) accum) (rest numbers))]\n      [(< (first accum) (first numbers))\n\
+    \       (rolling_max_aux (cons (first numbers) accum) (rest numbers))]\n     \
+    \ [else\n       (rolling_max_aux (cons (first accum) accum) (rest numbers))]))\n\
+    \  (rolling_max_aux (list) numbers))\n", "  (if (null? numbers)\n      (list)\n\
+    \      (cons (list-max numbers)\n            (rolling-max (cdr numbers)))))\n",
+  "  (cond\n    [(empty? numbers) empty]\n    [(rest numbers)\n     (if (= (first\
+    \ numbers) (first (rest numbers)))\n         (append (list (first numbers)) (rolling_max\
+    \ (rest numbers)))\n         (append (list (if (&gt; (first numbers) (first (rest\
+    \ numbers)))\n                           (first numbers)\n                   \
+    \        (first (rest numbers))))\n                 (rolling_max (rest numbers))))]\n\
+    \    [else numbers]))\n</code>\nI had trouble understanding where I could use\
+    \ recursion, and in what form. I had trouble understanding where I could use conditionals\
+    \ and how to use them. I had trouble with the use of the <code>append</code> function,\
+    \ since I did not know that it would accept a list of lists and concatenate them.\n\
+    It is tedious to write and hard to understand what is going on. I am now trying\
+    \ to generate lists in parallel and do not want to repeat this style of coding.\n\
+    This is the code I ended up with:\n<code>#lang racket\n", "  (define (max-loop\
+    \ result cur-max left-numbers)\n    (if (null? left-numbers)\n        result\n\
+    \        (let ([next-max (if (&gt; (car left-numbers) cur-max)\n             \
+    \               (car left-numbers)\n                            cur-max)])\n \
+    \         (max-loop (append result (list next-max))\n                    next-max\n\
+    \                    (cdr left-numbers)))))\n  (if (null? numbers)\n      numbers\n\
+    \      (max-loop (list (car numbers))\n                (car numbers)\n       \
+    \         (cdr numbers))))\n", "  (cond\n    [(empty? numbers) empty]\n    [(empty?\
+    \ (rest numbers)) numbers]\n    [else\n     (cons (first numbers)\n          \
+    \ (rolling_max (list (max (first numbers) (second numbers)) (rest (rest numbers)))))]))\n",
+  "  (cond\n    [(empty? numbers) empty]\n    [(empty? (rest numbers)) (list (first\
+    \ numbers))]\n    [else (cons (max (first numbers) (rolling_max (rest numbers)))\
+    \ (rolling_max (rest numbers)))]))\n", "  (define (rolling_max' remaining acc\
+    \ max-acc)\n    (if (null? remaining)\n        (reverse acc)\n        (let ((new-max\
+    \ (if (and (not (null? max-acc))\n                                (&gt; (car remaining)\
+    \ (car max-acc)))\n                           (car remaining)\n              \
+    \             (car max-acc))))\n          (rolling_max' (cdr remaining)\n    \
+    \                    (cons new-max acc)\n                        (cons new-max\
+    \ max-acc)))))\n  (rolling_max' numbers '() '()))\n", "  (if (empty? numbers)\n\
+    \      (list)\n      (cons (apply max numbers)\n            (rolling_max (rest\
+    \ numbers)))))\n", "  (define (rolling_max-inner numbers max-list current-max)\n\
+    \    (if (null? numbers)\n        max-list\n        (if (&gt; (car numbers) current-max)\n\
+    \            (rolling_max-inner (cdr numbers) (append max-list (list (car numbers)))\
+    \ (car numbers))\n            (rolling_max-inner (cdr numbers) (append max-list\
+    \ (list current-max)) current-max))))\n  (rolling_max-inner numbers '() 0))\n",
+  "  (if (empty? numbers)\n      '()\n      (let* ([max (max (first numbers) (second\
+    \ numbers))]\n             [rest (rolling_max (rest numbers))])\n        (cons\
+    \ max rest))))\n</code>\nTests:\n<code>#lang racket\n", "  (match numbers\n  \
+    \  ((cons first rest)\n     (cons first (rolling-max* first rest)))\n    (else\
+    \ '())))\n", "  (define (helper current_max remaining acc)\n    (cond\n      [(empty?\
+    \ remaining) acc]\n      [(> (first remaining) current_max) (helper (first remaining)\
+    \ (rest remaining) (append acc (list (first remaining))))]\n      [else (helper\
+    \ current_max (rest remaining) (append acc (list current_max)))]))\n  (helper\
+    \ (first numbers) (rest numbers) (list (first numbers))))\n", "  (for/fold ([maximum\
+    \ 0]) ([number numbers])\n    (let ([maybe-max (max maximum number)])\n      (set!\
+    \ maximum maybe-max)\n      (list maybe-max))))\n", "  (if (empty? numbers)\n\
+    \      '()\n      (cons (apply max numbers)\n            (rolling_max (rest numbers)))))\n",
+  "  (if (null? numbers)\n      (list)\n      (cons (max (car numbers) (car (rolling_max\
+    \ (cdr numbers))))\n            (rolling_max (cdr numbers)))))\n```\n\n```racket\n\
+    #lang racket\n", "  (define (rolling_max_aux numbers max sofar)\n    (if (null?\
+    \ numbers)\n        sofar\n        (let ([current (car numbers)])\n          (rolling_max_aux\
+    \ (cdr numbers) (max current max) (cons (max current max) sofar)))))\n  (reverse\
+    \ (rolling_max_aux numbers 0 '())))\n", "  (if (null? numbers)\n      (list)\n\
+    \      (cons (max (car numbers) (apply max (cdr numbers)))\n            (rolling_max\
+    \ (cdr numbers)))))\n", "  (let loop ([numbers numbers]\n             [so-far-max\
+    \ (first numbers)]\n             [result (list so-far-max)])\n    (if (null? numbers)\n\
+    \        result\n        (let ([next-max (max so-far-max (first numbers))])\n\
+    \          (loop (rest numbers) next-max (append result (list next-max)))))))\n",
+  "  (define (rolling_max_iter numbers max-stack result)\n    (if (null? numbers)\n\
+    \        result\n        (let ([n (car numbers)])\n          (cond\n         \
+    \   [(> n (car max-stack))\n             (rolling_max_iter (cdr numbers) (cons\
+    \ n max-stack) (cons n result))]\n            [else\n             (rolling_max_iter\
+    \ (cdr numbers) max-stack (cons (car max-stack) result))]))))\n  (rolling_max_iter\
+    \ numbers (list -inf.0) (list)))\n```\n\n# 4.1.2\n\n```scheme\n#lang racket\n",
+  "  (if (empty? numbers)\n      '()\n      (let ([maximum-so-far (first numbers)])\n\
+    \        (cons maximum-so-far\n              (let loop ([rest-of-numbers (rest\
+    \ numbers)]\n                         [max-so-far maximum-so-far])\n         \
+    \       (if (empty? rest-of-numbers)\n                    '()\n              \
+    \      (let ([next-value (first rest-of-numbers)])\n                      (loop\
+    \ (rest rest-of-numbers)\n                            (if (> next-value max-so-far)\n\
+    \                                next-value\n                                max-so-far)))))))))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond\n    [(empty? numbers) empty]\n  \
+    \  [(singleton? numbers) numbers]\n    [else\n     (cons (first numbers)\n   \
+    \        (rolling_max (cons (max (second numbers) (first numbers)) (rest (rest\
+    \ numbers)))))]))\n", "  (if (null? numbers)\n      (list)\n      (if (null? (cdr\
+    \ numbers))\n          (list (car numbers))\n          (cons (max (car numbers)\
+    \ (car (rolling_max (cdr numbers))))\n                (rolling_max (cdr numbers))))))\n",
+  "  (letrec ([acc '()]\n           [max-so-far 0]\n           [loop (lambda (numbers)\n\
+    \                   (cond\n                     [(empty? numbers) (reverse acc)]\n\
+    \                     [else (let ([num (first numbers)])\n                   \
+    \          (if (> num max-so-far)\n                                 (begin (set!\
+    \ max-so-far num)\n                                        (set! acc (cons num\
+    \ acc))\n                                        (loop (rest numbers)))\n    \
+    \                             (begin (set! acc (cons max-so-far acc))\n      \
+    \                                  (loop (rest numbers))))))]))])\n    (loop numbers)))\n",
+  "  (local [(define (max number list)\n            (cond\n              [(empty?\
+    \ list)\n               number]\n              [(>= number (first list))\n   \
+    \            (max number (rest list))]\n              [else\n               (max\
+    \ (first list) (rest list))]))]\n    (cond\n      [(empty? numbers)\n       empty]\n\
+    \      [else\n       (cons (max (first numbers) (rest numbers))\n            \
+    \ (rolling_max (rest numbers)))])))\n", "  (define (roll-max-rec result max-so-far\
+    \ rest)\n    (cond\n      [(empty? rest) result]\n      [(> (first rest) max-so-far)\n\
+    \        (roll-max-rec (append result (list (first rest))) (first rest) (rest\
+    \ rest))]\n      [else\n        (roll-max-rec (append result (list max-so-far))\
+    \ max-so-far (rest rest))]))\n  (roll-max-rec empty (first numbers) (rest numbers)))\n",
+  "  (for/fold ([result '()])\n            ([n numbers])\n            (cons (max (or\
+    \ (car result) n) n) result)))\n", "  (cond\n    [(empty? numbers) empty]\n  \
+    \  [(empty? (rest numbers)) (list (first numbers))]\n    [else (cons (first numbers)\
+    \ (rolling_max (rest numbers)))]))\n", "  (define (rolling_max_inner numbers current-max\
+    \ acc)\n    (if (null? numbers)\n        acc\n        (if (&gt; (car numbers)\
+    \ current-max)\n            (rolling_max_inner (cdr numbers) (car numbers) (cons\
+    \ (car numbers) acc))\n            (rolling_max_inner (cdr numbers) current-max\
+    \ (cons current-max acc)))))\n  (reverse (rolling_max_inner numbers 0 '())))\n",
+  "  (rolling_max_h 0 0 numbers))\n", "  (if (empty? numbers)\n      '()\n      (cons\
+    \ (apply max numbers)\n            (rolling_max (rest numbers)))))\n", "  (let\
+    \ loop ([numbers numbers]\n             [prev-max (car numbers)]\n           \
+    \  [result (list prev-max)])\n    (cond [(empty? numbers) (reverse result)]\n\
+    \          [(> (car numbers) prev-max)\n           (loop (cdr numbers) (car numbers)\
+    \ (cons (car numbers) result))]\n          [else\n           (loop (cdr numbers)\
+    \ prev-max (cons prev-max result))])))\n", "  (let ([rolling_maxes null])\n  \
+    \  (define (rolling_maxes-aux numbers max)\n      (cond\n        [(empty? numbers)\
+    \ (reverse rolling-maxes)]\n        [(> (first numbers) max)\n         (rolling_maxes-aux\
+    \ (rest numbers) (first numbers))]\n        [else\n         (rolling_maxes-aux\
+    \ (rest numbers) max)]))\n    (rolling_maxes-aux numbers (first numbers))))\n",
+  "  (if (null? numbers)\n      '()\n      (cons (car numbers) (append (rolling_max\
+    \ (cdr numbers)) (list (max (car numbers) (car (cdr numbers))))))))\n", "  (define\
+    \ (rolling_max/acc acc numbers)\n    (cond\n      [(empty? numbers) (reverse acc)]\n\
+    \      [(empty? acc) (rolling_max/acc (list (first numbers)) (rest numbers))]\n\
+    \      [else (rolling_max/acc (cons (max (first acc) (first numbers)) acc) (rest\
+    \ numbers))]))\n  (rolling_max/acc empty numbers))\n", "  (define (loop rolling_max_accumulator\
+    \ rolling_max_so_far numbers)\n    (cond [(empty? numbers) rolling_max_accumulator]\n\
+    \          [(> (first numbers) rolling_max_so_far)\n           (loop (cons (first\
+    \ numbers) rolling_max_accumulator)\n                 (first numbers)\n      \
+    \           (rest numbers))]\n          [else (loop (cons rolling_max_so_far rolling_max_accumulator)\n\
+    \                      rolling_max_so_far\n                      (rest numbers))]))\n\
+    \  (reverse (loop (list (first numbers))\n                 (first numbers)\n \
+    \                (rest numbers))))\n", "  (if (null? numbers)\n      '()\n   \
+    \   (cons (maximum numbers)\n            (rolling_max (cdr numbers)))))\n", " \
+    \ (define (filter n m)\n    (if (< n m) m n))\n  (foldl (lambda (n m) (append\
+    \ m (list (foldl filter n m)))) empty numbers))\n\n", "  (define (get-rolling-max\
+    \ (numbers maxes))\n    (cond\n      [(empty? numbers) (reverse maxes)]\n    \
+    \  [(empty? maxes) (get-rolling-max (rest numbers) (list (first numbers)))]\n\
+    \      [else (get-rolling-max (rest numbers) (cons (max (first numbers) (first\
+    \ maxes)) maxes))]))\n  (get-rolling-max numbers (list)))\n", "  (build-list (length\
+    \ numbers)\n              (lambda (i)\n                (apply max (sublist numbers\
+    \ 0 (+ i 1))))))\n", "  (let loop ([numbers numbers]\n             [acc (list)])\n\
+    \    (cond [(empty? numbers)\n           acc]\n          [(empty? acc)\n     \
+    \      (loop (rest numbers)\n                 (list (first numbers)))]\n     \
+    \     [else\n           (if (> (first numbers) (first acc))\n               (loop\
+    \ (rest numbers)\n                     (cons (first numbers) acc))\n         \
+    \      (loop (rest numbers)\n                     (cons (first acc) acc)))])))\n\
+    \n", "  (if (null? numbers)\n      '()\n      (cons (apply max numbers)\n    \
+    \        (rolling_max (cdr numbers)))))\n", "  (accumulate max '() numbers))\n",
+  "  (define (rolling_max_generator numbers acc)\n    (cond\n      [(empty? numbers)\
+    \ acc]\n      [(not (empty? numbers))\n       (rolling_max_generator (rest numbers)\n\
+    \                              (append acc (list (find-max (cons (first acc) (cons\
+    \ (first numbers) empty))))))]))\n  (rolling_max_generator (rest numbers) (list\
+    \ (first numbers))))\n", "  (define (rolling_max_iter max_numbers numbers)\n \
+    \   (match numbers\n      [(list) max_numbers]\n      [(cons hd rest) (rolling_max_iter\
+    \ (append max_numbers (list (if (empty? max_numbers) hd (max hd (last max_numbers)))))\
+    \ rest)]))\n  (rolling_max_iter (list) numbers))\n", "  (if (null? numbers)\n\
+    \      empty\n      (cons (apply max numbers)\n            (rolling_max (cdr numbers)))))\n",
+  "  (define (iter acc nums max)\n    (cond\n      [(empty? nums) (reverse acc)]\n\
+    \      [(> (first nums) max) (iter (cons (first nums) acc) (rest nums) (first\
+    \ nums))]\n      [else (iter (cons max acc) (rest nums) max)]))\n  (iter '() numbers\
+    \ -oo))\n", "  (let loop ([result (list 0)]\n             [acc 0])\n    (cond\
+    \ [(empty? numbers) (rest result)]\n          [(and (> (first numbers) acc) (not\
+    \ (zero? acc)))\n           (loop (append result (list (first numbers))) (first\
+    \ numbers))]\n          [(and (> (first numbers) acc) (zero? acc))\n         \
+    \  (loop (append result (list (first numbers))) (first numbers))]\n          [else\
+    \ (loop (append result (list acc)) acc)])))\n", "  (if (null? numbers)\n     \
+    \ numbers\n      (let ([maximum (car numbers)])\n        (cons maximum (rolling_max\
+    \ (map (lambda (element) (if (> element maximum) element maximum)) (cdr numbers)))))))\n",
+  "  (cond [(empty? numbers) empty]\n        [else\n         (cons (max (first numbers)\
+    \ (apply max (rest numbers)))\n               (rolling_max (rest numbers)))]))\n",
+  "  (define (rolling_max current-max numbers)\n    (if (null? numbers)\n        '()\n\
+    \        (let ((n (car numbers)))\n          (cons (if (&gt; n current-max) n\
+    \ current-max)\n                (rolling_max (if (&gt; n current-max) n current-max)\
+    \ (cdr numbers))))))\n  (rolling_max -oo numbers))\n</code>\nThe solution works\
+    \ but I would like to improve it.\n\nIs it possible to write the solution in more\
+    \ functional way? To not use a helper function and/or use <code>let</code> in\
+    \ a function body?\nIs it possible to write the solution for an arbitrary number\
+    \ of arguments of <code>numbers</code>?\n\nFor example, if the list is provided\
+    \ as:\n<code>(rolling_max 1 2 3 2 3 4 2)\n</code>\nThe result should be the same.\n\
+    \n\nA:\n\nHere's how to make it take an arbitrary number of arguments and remove\
+    \ the helper:\n<code>(define (rolling-max . numbers)\n  (define (rolling-max current-max\
+    \ numbers)\n    (if (null? numbers)\n        '()\n        (let ((n (car numbers)))\n\
+    \          (cons (if (&gt; n current-max) n current-max)\n                (rolling-max\
+    \ (if (&gt; n current-max) n current-max) (cdr numbers))))))\n  (rolling-max -oo\
+    \ numbers))\n</code>\nI'd probably prefer the following approach:\n<code>(define\
+    \ (rolling-max . numbers)\n  (let loop ((numbers numbers)\n             (current-max\
+    \ -oo)\n             (max-values '()))\n    (if (null? numbers)\n        (reverse\
+    \ max-values)\n        (let ((n (car numbers)))\n          (loop (cdr numbers)\n\
+    \                (if (&gt; n current-max) n current-max)\n                (cons\
+    \ (if (&gt; n current-max) n current-max)\n                      max-values))))))\n\
+    </code>\n", "  (if (empty? numbers)\n      empty\n      (cons (max (first numbers)\
+    \ (apply max (rest numbers)))\n            (rolling_max (rest numbers)))))\n",
+  "  (local ((define (recur s remaining-numbers)\n            (cond\n            \
+    \  [(empty? remaining-numbers) (reverse s)]\n              [(> (first remaining-numbers)\
+    \ (first s))\n               (recur (cons (first remaining-numbers) s) (rest remaining-numbers))]\n\
+    \              [else (recur (cons (first s) s) (rest remaining-numbers))])))\n\
+    \    (recur (list (first numbers)) (rest numbers))))\n", "    (let loop ([input\
+    \ (cdr numbers)]\n               [output (list (car numbers))])\n        (if (null?\
+    \ input)\n            output\n            (loop (cdr input)\n                \
+    \  (append output (list (max (car input) (car (last output)))))))))\n\n", "  (if\
+    \ (null? numbers)\n      '()\n      (append (list (apply max numbers))\n     \
+    \         (rolling_max (cdr numbers)))))\n", "  (for/fold ([max-so-far '()])\n\
+    \            ([number numbers])\n            (if (or (null? max-so-far)\n    \
+    \                (< number (car max-so-far)))\n                (cons number max-so-far)\n\
+    \                (cons (car max-so-far) max-so-far))))\n", "  (local [(define\
+    \ (roll? xs acc)\n            (cond [(empty? xs) acc]\n                  [(> (first\
+    \ xs) (first acc)) (roll? (rest xs) (cons (first xs) acc))]\n                \
+    \  [else (roll? (rest xs) (cons (first acc) acc))]))]\n    (reverse (roll? numbers\
+    \ (list (first numbers))))))\n", "  (define (iter numbers max-found)\n    (if\
+    \ (null? numbers)\n        '()\n        (cons max-found (iter (cdr numbers) (max\
+    \ max-found (car numbers))))))\n  (if (null? numbers)\n      '()\n      (iter\
+    \ (cdr numbers) (car numbers))))\n", "  (if (null? numbers)\n      '()\n     \
+    \ (cons (apply max numbers)\n            (rolling_max (cdr numbers)))))\n", " \
+    \ (define (go max_so_far numbers)\n    (if (null? numbers)\n        '()\n    \
+    \    (let ((curr_number (car numbers)))\n          (if (&gt; curr_number max_so_far)\n\
+    \              (cons curr_number (go curr_number (cdr numbers)))\n           \
+    \   (cons max_so_far (go max_so_far (cdr numbers)))))))\n  (cons (car numbers)\
+    \ (go (car numbers) (cdr numbers))))\n", "  (if (empty? numbers)\n      '()\n\
+    \      (cons (apply max numbers)\n            (rolling_max (rest numbers)))))\n",
+  "  (if (null? numbers)\n      '()\n      (let ([current-maximum (apply max numbers)])\n\
+    \        (cons current-maximum (rolling-max (cdr numbers))))))\n", "  (foldl (\u03BB\
+    \ (n result)\n           (cond [(> n (first result))\n                  (cons\
+    \ n result)]\n                 [else\n                  (cons (first result) result)]))\n\
+    \         (list (first numbers))\n         (rest numbers)))\n", "  (match numbers\n\
+    \    [(list)\n     empty]\n    [(list x xs)\n     (list-cons x (rolling_max (append\
+    \ (list (max x (car xs))) (cdr xs))))]))\n", "  (cond [(empty? numbers) empty]\n\
+    \        [else\n         (cons (max (first numbers) (first (rolling_max (rest\
+    \ numbers))))\n               (rolling_max (rest numbers)))]))\n", "  (define\
+    \ (rolling_max_tail numbers max)\n    (cond\n      [(empty? numbers) '()]\n  \
+    \    [(> (first numbers) max) (cons (first numbers) (rolling_max_tail (rest numbers)\
+    \ (first numbers)))]\n      [else (cons max (rolling_max_tail (rest numbers) max))]))\n\
+    \  (rolling_max_tail numbers (first numbers)))\n", "  (if (empty? numbers)\n \
+    \     '()\n      (cons (list-max numbers)\n            (rolling-max (rest numbers)))))\n",
+  "  (cond [(empty? numbers) (list)]\n        [else\n         (define current-max\
+    \ (first numbers))\n         (cons current-max\n               (for/list ([number\
+    \ (in-list (rest numbers))])\n                 (begin\n                   (set!\
+    \ current-max (max current-max number))\n                   current-max)))]))\n",
+  "  (let loop ([max-so-far 0]\n             [result (list)]\n             [numbers\
+    \ numbers])\n    (cond\n      [(empty? numbers) (reverse result)]\n      [(> (first\
+    \ numbers) max-so-far)\n       (loop (first numbers)\n             (cons (first\
+    \ numbers) result)\n             (rest numbers))]\n      [else\n       (loop max-so-far\n\
+    \             (cons max-so-far result)\n             (rest numbers))])))\n", " \
+    \ (define (rolling_max-iter maxes remaining)\n    (if (null? remaining)\n    \
+    \    maxes\n        (let ((current-value (car remaining))\n              (current-max\
+    \ (car maxes)))\n          (if (and (not (null? current-max)) (&gt; current-value\
+    \ current-max))\n              (rolling_max-iter (cons current-value maxes) (cdr\
+    \ remaining))\n              (rolling_max-iter (cons current-max maxes) (cdr remaining))))))\n\
+    \  (rolling_max-iter '() numbers))\n", "  (map-accummax numbers '()))\n", "  (filter\
+    \ (lambda (x) (not (equal? x 0))) (map (lambda (x) (max x 0)) (map (lambda (x)\
+    \ (- x (first numbers))) numbers))))\n", "  (let iter ([numbers numbers] [current_max\
+    \ (peek numbers)] [running_max (list current_max)])\n    (if (null? numbers)\n\
+    \        running_max\n        (iter (rest numbers)\n              (if (peek numbers)\n\
+    \                  (max current_max (peek numbers))\n                  current_max)\n\
+    \              (cons (max current_max (peek numbers)) running_max)))))\n", " \
+    \ (if (empty? numbers)\n      empty\n      (cons (apply max numbers)\n       \
+    \     (rolling_max (rest numbers)))))\n", "    (define (recursive-helper rolling-max-to-this-point\
+    \ numbers-remaining)\n        (cond\n            ((null? numbers-remaining) rolling-max-to-this-point)\n\
+    \            ((= (car numbers-remaining) rolling-max-to-this-point)\n        \
+    \        (recursive-helper rolling-max-to-this-point (cdr numbers-remaining)))\n\
+    \            ((> (car numbers-remaining) rolling-max-to-this-point)\n        \
+    \        (recursive-helper (car numbers-remaining) (cdr numbers-remaining)))\n\
+    \            (else\n                (recursive-helper rolling-max-to-this-point\
+    \ (cdr numbers-remaining)))))\n    (recursive-helper (car numbers) (cdr numbers)))\n",
+  "  (cond\n    ((empty? numbers) empty)\n    (else\n      (cons (max (first numbers)\
+    \ (rolling_max (rest numbers)))\n            (rolling_max (rest numbers))))))\n",
+  "  (if (empty? numbers)\n      (list)\n      (cons (max-value numbers)\n       \
+    \     (rolling_max (rest numbers)))))\n", "  (let loop ([acc (list (car numbers))]\n\
+    \             [numbers (cdr numbers)])\n    (cond [(empty? numbers) acc]\n   \
+    \       [(&gt; (car numbers) (car acc)) (loop (cons (car numbers) acc) (cdr numbers))]\n\
+    \          [else (loop (cons (car acc) acc) (cdr numbers))])))\n", "  (foldl (lambda\
+    \ (next-num current-num maxes)\n            (cons next-num\n                 \
+    \ (cons (if (&gt; next-num current-num)\n                            next-num\n\
+    \                            current-num)\n                        maxes)))\n\
+    \         (list '())\n         numbers))\n</code>\nThis works well, except that\
+    \ I need the list in reverse order. I can use <code>reverse</code> after the fact,\
+    \ but then this is not tail recursive, and I'd like to better understand how to\
+    \ write this recursion.\nIt is easy to write the tail recursive version using\
+    \ mutation and a <code>for/fold</code>, but I'd like to know how to write it using\
+    \ purely functional programming as well.\nAny pointers or suggestions would be\
+    \ most welcome. Thanks!\n\n\nA:\n\nThis is just a matter of inverting the parameters:\n\
+    <code>(define (rolling-max numbers)\n  (reverse (foldl (lambda (acc next-num)\n\
+    \                    (cons (if (&gt; next-num (car acc))\n                   \
+    \           next-num\n                              (car acc))\n             \
+    \             acc))\n                  (list (car numbers))\n                \
+    \  (cdr numbers))))\n</code>\nIt's probably also worth pointing out that there's\
+    \ a built-in function for this, <code>cumulative-max</code>.\n", "  (if (empty?\
+    \ numbers)\n      (list)\n      (cons (apply max numbers)\n            (rolling_max\
+    \ (rest numbers)))))\n", "  (if (null? numbers)\n      '()\n      (cons (apply\
+    \ max numbers)\n            (rolling_max (cdr numbers)))))\n", "  (let ([acc '(0)])\n\
+    \    (for ([number numbers])\n      (match number\n        [max (first acc) (set!\
+    \ acc (cons max acc))]\n        [max (- max 1) (set! acc (cons (- max 1) acc))]\n\
+    \        [_ (set! acc (cons (first acc) acc))]))))\n", "  (define (rolling_max_aux\
+    \ numbers max-so-far accumulator)\n    (cond\n      [(empty? numbers) (reverse\
+    \ accumulator)]\n      [(> (first numbers) max-so-far)\n       (rolling_max_aux\
+    \ (rest numbers) (first numbers) (cons (first numbers) accumulator))]\n      [else\n\
+    \       (rolling_max_aux (rest numbers) max-so-far (cons max-so-far accumulator))]))\n\
+    \  (rolling_max_aux numbers -inf.0 empty))\n", "  (define (recur acc rest)\n \
+    \   (cond [(empty? rest) (reverse acc)]\n          [else\n           (let* ([head\
+    \ (first rest)]\n                  [tail (rest rest)]\n                  [new-acc\
+    \ (if (&gt; head (first acc))\n                               (cons head acc)\n\
+    \                               acc)])\n             (recur new-acc tail))]))\n\
+    \  (recur (list (first numbers)) (rest numbers)))\n", "  (cond [(empty? numbers)\
+    \ empty]\n        [else\n         (cond [(null? (cdr numbers)) numbers]\n    \
+    \           [else\n                (let ([new-max (max (car numbers) (cadr numbers))])\n\
+    \                  (cons (car numbers) (rolling_max (cons new-max (cddr numbers)))))]\n\
+    \               )]\n        ])\n  )\n", "  (let loop ([accum (list (car numbers))]\n\
+    \             [to-be-processed (cdr numbers)])\n    (cond [(empty? to-be-processed)\
+    \ accum]\n          [else\n           (let ([prev-max (car accum)])\n        \
+    \     (let ([current-number (car to-be-processed)])\n               (loop (append\
+    \ accum (list (max prev-max current-number)))\n                     (cdr to-be-processed))))])))\n",
+  "  (local ((define (impl max-until-now idx)\n            (cond [(empty? numbers)\
+    \ empty]\n                  [(zero? idx) (cons (car numbers) (impl (car numbers)\
+    \ (add1 idx)))]\n                  [(> (car numbers) max-until-now) (cons (car\
+    \ numbers) (impl (car numbers) (add1 idx)))]\n                  [else (cons max-until-now\
+    \ (impl max-until-now (add1 idx)))])))\n    (impl 0 0)))\n", "  (define (helper\
+    \ current-max numbers rest)\n    (cond [(empty? numbers) empty]\n          [(>\
+    \ (first numbers) current-max) (cons (first numbers) (helper (first numbers) (rest\
+    \ numbers) rest))]\n          [else (cons current-max (helper current-max (rest\
+    \ numbers) rest))]))\n  (helper 0 numbers numbers))\n```\n\n## Test\n\n```racket\n\
+    #lang racket\n", "  (let ([max (list (car numbers))])\n    (for/fold ([acc max])\
+    \ ([e (in-list (cdr numbers))])\n      (let ([acc (cons e acc)])\n        (if\
+    \ (< (car acc) (car (rest acc)))\n            (cons (car (rest acc)) (cdr acc))\n\
+    \            acc)))))\n", "  (define (rec n acc max)\n    (cond [(null? n) (reverse\
+    \ acc)]\n          [(> (car n) max) (rec (cdr n) (cons (car n) acc) (car n))]\n\
+    \          [else (rec (cdr n) (cons max acc) max)]))\n  (rec numbers (list) 0))\n",
+  "  (define (rrolling_max numbers rolling-max-so-far)\n    (cond ((null? numbers)\
+    \ '())\n          ((&gt; (car numbers) rolling-max-so-far)\n           (cons (car\
+    \ numbers) (rrolling_max (cdr numbers) (car numbers))))\n          (else (cons\
+    \ rolling-max-so-far (rrolling_max (cdr numbers) rolling-max-so-far)))))\n  (rrolling_max\
+    \ numbers 0))\n", "  (let loop ([num-seq numbers]\n             [max-seq (list\
+    \ (car numbers))])\n    (cond [(empty? num-seq) (reverse max-seq)]\n         \
+    \ [else (loop (cdr num-seq)\n                      (cons (max (car num-seq) (car\
+    \ max-seq)) max-seq))])))\n", "  (if (null? numbers)\n      '()\n      (cons (apply\
+    \ max numbers)\n            (rolling_max (cdr numbers)))))\n```\n\n```racket\n\
+    #lang racket\n", "  (local ((define (max-till n maximums)\n            (if (null?\
+    \ (cdr n))\n                (cons (car n) maximums)\n                (max-till\
+    \ (cdr n) (cons (max (car n) (car maximums)) maximums)))))\n    (max-till numbers\
+    \ (list (car numbers)))))\n", "  (cond\n    [(empty? numbers) empty]\n    [(singleton?\
+    \ numbers) numbers]\n    [else\n     (cons (max (first numbers) (second numbers))\n\
+    \           (rolling_max (rest numbers)))]))\n", "  (local [(define (rolling-max-helper\
+    \ src maxes)\n            (match src\n              [(cons ht rest)\n        \
+    \       (rolling-max-helper rest (if (or (empty? maxes) (&gt; ht (car maxes)))\n\
+    \                                            (cons ht maxes)\n               \
+    \                             maxes))]\n              [else (reverse maxes)]))]\n\
+    \    (rolling-max-helper numbers '())))\n", "  (define (rolling_max_helper new_max\
+    \ maxes numbers)\n    (cond ((null? numbers) (reverse maxes))\n          ((> (car\
+    \ numbers) new_max) (rolling_max_helper (car numbers) (cons (car numbers) maxes)\
+    \ (cdr numbers)))\n          (else (rolling_max_helper new_max (cons new_max maxes)\
+    \ (cdr numbers)))))\n  (rolling_max_helper (car numbers) (list (car numbers))\
+    \ (cdr numbers)))\n", "  (define (iter remaining max_so_far results)\n    (if\
+    \ (null? remaining)\n        (reverse results)\n        (let ([current (car remaining)])\n\
+    \          (if (> current max_so_far)\n              (iter (cdr remaining) current\
+    \ (cons current results))\n              (iter (cdr remaining) max_so_far (cons\
+    \ max_so_far results))))))\n  (iter numbers 0 '()))\n", "  (cond\n    [(empty?\
+    \ numbers)\n     empty]\n    [(empty? (rest numbers))\n     (list (first numbers))]\n\
+    \    [else\n     (cons (first numbers)\n           (rolling_max (rest numbers)))]))\n",
+  "  (define (rec current_max rest_numbers)\n    (cond\n      [(empty? rest_numbers)\
+    \ empty]\n      [(max current_max (first rest_numbers))\n       (cons current_max\
+    \ (rec current_max (rest rest_numbers)))]\n      [else\n       (cons (first rest_numbers)\
+    \ (rec (first rest_numbers) (rest rest_numbers)))]))\n  (rec (first numbers) (rest\
+    \ numbers)))\n", "  (let ([max-so-far (first numbers)])\n    (cons max-so-far\n\
+    \          (for/list ([n (in-list (rest numbers))])\n            (if (> n max-so-far)\n\
+    \                (begin (set! max-so-far n)\n                       n)\n     \
+    \           max-so-far)))))\n", "  (if (null? numbers)\n      '()\n      (let\
+    \ ([max (apply max numbers)])\n        (cons max (rolling_max (cdr numbers))))))\n",
+  "  (let* ([numbers (reverse numbers)]\n         [max-so-far (first numbers)]\n \
+    \        [out (list max-so-far)])\n    (for/fold ([out out]) ([n (in-list (rest\
+    \ numbers))])\n      (let* ([new-max (max max-so-far n)])\n        (set! max-so-far\
+    \ new-max)\n        (cons new-max out)))))\n", "  (if (null? numbers)\n      '()\n\
+    \      (cons (max (car numbers) (car (rolling_max (cdr numbers))))\n         \
+    \   (rolling_max (cdr numbers)))))\n", "  (cond\n    [(empty? numbers) empty]\n\
+    \    [(empty? (rest numbers)) numbers]\n    [else\n     (cons (max (first numbers)\
+    \ (first (rolling_max (rest numbers))))\n           (rolling_max (rest numbers)))]))\n",
+  "  (define (rolling_max_acc numbers max)\n    (if (null? numbers) max\n      (let\
+    \ ([next-max (if (&gt; (car numbers) max) (car numbers) max)])\n        (rolling_max_acc\
+    \ (cdr numbers) (cons next-max max)))))\n  (reverse (rolling_max_acc numbers 0)))\n",
+  "  (if (null? numbers)\n      (list)\n      (rolling_max-helper numbers (list (car\
+    \ numbers)))))\n", "  (if (empty? numbers) empty\n      (cons (max (first numbers)\
+    \ (rolling_max (rest numbers)))\n            (rolling_max (rest numbers)))))\n",
+  "  (define (l rolling-max-so-far numbers)\n    (cond [(empty? numbers) (reverse\
+    \ rolling-max-so-far)]\n          [else (let ([current-max (max (first rolling-max-so-far)\
+    \ (first numbers))])\n                  (l (cons current-max rolling-max-so-far)\
+    \ (rest numbers)))]))\n  (l (list (first numbers)) (rest numbers)))\n", "  (let\
+    \ loop ([accumulator (list)]\n             [current-max (list)]\n            \
+    \ [numbers numbers])\n    (cond [(empty? numbers) accumulator]\n          [(<\
+    \ (first numbers) (first current-max))\n           (loop (cons (first current-max)\
+    \ accumulator) current-max (rest numbers))]\n          [else\n           (loop\
+    \ (cons (first numbers) accumulator) (list (first numbers)) (rest numbers))])))\n\
+    </code>\nI'm new to the Racket language, so I'm likely going to end up with a\
+    \ lot of silly mistakes.\n<code>$ raco test rolling_max.rkt\nraco test: module:\
+    \ rolling_max in rolling_max.rkt\nraco test: error: test-rolling-max: expects\
+    \ 1 arguments, given none\nraco test: error: test-rolling-max: expects 1 arguments,\
+    \ given none\nraco test: error: test-rolling-max: expects 1 arguments, given none\n\
+    raco test: error: test-rolling-max: expects 1 arguments, given none\nraco test:\
+    \ error: test-rolling-max: expects 1 arguments, given none\nraco test: error:\
+    \ test-rolling-max: expects 1 arguments, given none\nraco test: error: test-rolling-max:\
+    \ expects 1 arguments, given none\nraco test: error: test-rolling-max: expects\
+    \ 1 arguments, given none\nraco test: error: test-rolling-max: expects 1 arguments,\
+    \ given none\nraco test: error: test-rolling-max: expects 1 arguments, given none\n\
+    raco test: error: test-rolling-max: expects 1 arguments, given none\nraco test:\
+    \ error: test-rolling-max: expects 1 arguments, given none\nraco test: error:\
+    \ test-rolling-max: expects 1 arguments, given none\nraco test: error: test-rolling-max:\
+    \ expects 1 arguments, given none\nraco test: error: test-rolling-max: expects\
+    \ 1 arguments, given none\nraco test: error: test-rolling-max: expects 1 arguments,\
+    \ given none\nraco test: error: test-rolling-max: expects 1 arguments, given none\n\
+    raco test: error: test-rolling-max: expects 1 arguments, given none\nraco test",
+  "  (if (null? numbers)\n      numbers\n      (cons (max (car numbers) (second numbers))\n\
+    \            (rolling_max (cdr numbers)))))\n", "  (define (rolling_max_iter numbers\
+    \ max_so_far result)\n    (cond\n      [(empty? numbers) result]\n      [(> (first\
+    \ numbers) max_so_far)\n       (rolling_max_iter (rest numbers) (first numbers)\
+    \ (append result (list (first numbers))))]\n      [else\n       (rolling_max_iter\
+    \ (rest numbers) max_so_far (append result (list max_so_far)))]))\n  (rolling_max_iter\
+    \ numbers -inf.0 empty))\n", "  (define (helper acc curr maxes)\n    (if (empty?\
+    \ numbers)\n        (reverse maxes)\n        (if (>= curr acc)\n            (helper\
+    \ curr (cons curr maxes))\n            (helper acc (cons acc maxes)))))\n  (helper\
+    \ -inf.0 (cons -inf.0 (cons (first numbers) '()))))\n", "  (apply max numbers))\n\
+    \n", "    (if (null? numbers)\n        '()\n        (cons (apply max numbers)\n\
+    \              (rolling_max (cdr numbers)))))\n", "  (local ((define (rolling_max_helper\
+    \ result remaining)\n            (cond\n              [(empty? remaining) result]\n\
+    \              [(> (first remaining) (first result))\n               (rolling_max_helper\
+    \ (cons (first remaining) result) (rest remaining))]\n              [else\n  \
+    \             (rolling_max_helper (cons (first result) result) (rest remaining))])))\n\
+    \    (reverse (rolling_max_helper (list (first numbers)) (rest numbers)))))\n",
+  "  (if (null? numbers)\n      numbers\n      (cons (max (car numbers) (if (null?\
+    \ (cdr numbers))\n                                  (car numbers)\n          \
+    \                        (apply max (map car (cdr numbers)))))\n            (rolling_max\
+    \ (cdr numbers)))))\n", "  (let loop ([acc (list (first numbers))]\n         \
+    \    [numbers (rest numbers)])\n    (if (null? numbers)\n        acc\n       \
+    \ (loop (append acc (list (max (first numbers) (last acc))))\n              (rest\
+    \ numbers)))))\n", "  (if (empty? numbers)\n      (list)\n      (cons (apply max\
+    \ numbers)\n            (rolling_max (rest numbers)))))\n", "  (if (empty? numbers)\n\
+    \      (list)\n      (cons (max (first numbers) (first (rolling_max (rest numbers))))\n\
+    \            (rolling_max (rest numbers)))))\n", "  (match numbers\n    [(list)\
+    \ '()]\n    [(list head tail)\n     (cons head (rolling_max_aux head tail))]))\n",
+  "    (local ((define (tail-helper tresult tmax tail)\n                 (if (null?\
+    \ tail)\n                     (reverse tresult)\n                     (tail-helper\
+    \ (cons (if (> (car tail) tmax)\n                                            (car\
+    \ tail)\n                                            tmax)\n                 \
+    \                       tresult)\n                                  (if (> (car\
+    \ tail) tmax)\n                                      (car tail)\n            \
+    \                          tmax)\n                                  (cdr tail)))))\n\
+    \        (tail-helper (list (car numbers))\n                     (car numbers)\n\
+    \                     (cdr numbers))))\n", "  (if (null? numbers)\n      '()\n\
+    \      (cons (apply max numbers)\n            (rolling_max (cdr numbers)))))\n",
+  "  (if (empty? numbers)\n      empty\n      (append (list (maximum numbers))\n \
+    \             (rolling_max (rest numbers)))))\n</code>\nOutput:\n<code>&gt; (rolling_max\
+    \ (list 1 2 3 2 3 4 2))\n'(1 2 3 3 3 4 4)\n</code>\n", "  (cond\n    [(empty?\
+    \ numbers) empty]\n    [(= 1 (length numbers)) (list (first numbers))]\n    [else\n\
+    \     (let ([rmax (rolling_max (rest numbers))])\n       (cons (max (first numbers)\
+    \ (first rmax)) rmax))]))\n", "  (if (empty? numbers)\n      empty\n      (append\
+    \ (list (apply max numbers))\n              (rolling_max (rest numbers)))))\n",
+  "  (if (null? numbers)\n      '()\n      (cons (apply max numbers)\n           \
+    \ (rolling_max (cdr numbers)))))\n", "  (map max (in-naturals) numbers))\n", " \
+    \ (define (helper current-max numbers)\n    (cond\n      [(empty? numbers) '()]\n\
+    \      [(>= (first numbers) current-max)\n       (cons (first numbers) (helper\
+    \ (first numbers) (rest numbers)))]\n      [else\n       (cons current-max (helper\
+    \ current-max (rest numbers)))]))\n  (helper -999999999 numbers))\n", "  (define\
+    \ (helper (numbers remaining-max)\n           (match numbers\n             ('()\
+    \ remaining-max)\n             ((cons n ns)\n              (helper ns (cons (max\
+    \ n remaining-max) remaining-max)))))\n  (reverse (helper numbers '())))\n", " \
+    \ (if (null? numbers)\n      '()\n      (append (list (max (car numbers) (car\
+    \ (rolling_max (cdr numbers)))))\n              (rolling_max (cdr numbers)))))\n",
+  "  (let ([max-sofar (car numbers)])\n    (cons max-sofar (for/list ([number (in-list\
+    \ (cdr numbers))])\n                              (let ([max-sofar (max max-sofar\
+    \ number)])\n                                max-sofar)))))\n", "  (if (null?\
+    \ numbers)\n      '()\n      (cons (max (car numbers) (or (car (rolling_max (cdr\
+    \ numbers))) -1))\n            (rolling_max (cdr numbers)))))\n", "  (match numbers\n\
+    \    [(list) (list)]\n    [(list x y . z)\n     (cons x (rolling_max (cons (max\
+    \ x y) z)))]))\n", "  (for/fold ([acc (list (list-ref numbers 0))])\n        \
+    \    ([n (in-list (cdr numbers))])\n            (list (if (> n (list-ref acc 0))\
+    \ n (list-ref acc 0)))))\n", "  (let loop ([numbers numbers]\n             [acc\
+    \ (list (first numbers))])\n    (if (null? (rest numbers))\n        acc\n    \
+    \    (loop (rest numbers)\n              (append acc (list (max (first numbers)\
+    \ (last acc))))))))\n", "  (let ([rolling-max (list (car numbers))])\n    (for\
+    \ ((numbers (cdr numbers)))\n      (let ([n (car numbers)])\n        (set! rolling-max\
+    \ (cons (if (> n (car rolling-max)) n (car rolling-max)) rolling-max))))\n   \
+    \ (reverse rolling-max)))\n", "  (define (rolling_max_acc numbers rolling-max)\n\
+    \    (cond\n      [(empty? numbers) rolling-max]\n      [(number? (first numbers))\n\
+    \       (rolling_max_acc (rest numbers)\n                        (append rolling-max\n\
+    \                                (list (max (first numbers)\n                \
+    \                           (if (empty? rolling-max) 0 (first rolling-max))))))]\n\
+    \      [else (error 'rolling_max \"Expected a list of integers.\")]))\n  (rolling_max_acc\
+    \ numbers (list)))\n", "  (rolling_max_aux numbers (list 0) 0))\n", "  (let loop\
+    \ ([numbers numbers]\n             [acc (list (car numbers))])\n    (if (null?\
+    \ (cdr numbers))\n        acc\n        (loop (cdr numbers)\n              (cons\
+    \ (max (car numbers) (car acc)) acc)))))\n", "  (define (iter largest-so-far remaining-numbers)\n\
+    \    (cond\n      ((null? remaining-numbers) '())\n      (else\n       (cons (max\
+    \ largest-so-far (car remaining-numbers))\n             (iter (max largest-so-far\
+    \ (car remaining-numbers))\n                   (cdr remaining-numbers))))))\n\
+    \  (iter -1/0 numbers))\n", "  (define (iter numbers acc)\n    (cond [(empty?\
+    \ numbers) '()]\n          [(= 1 (length numbers)) (cons (car numbers) '())]\n\
+    \          [else (cons (car numbers)\n                      (iter (cdr numbers)\
+    \ (cons (max (car numbers) (car acc)) acc)))]))\n  (reverse (iter numbers (list\
+    \ (car numbers)))))\n", "  (rolling_max-gen numbers 0))\n", "  (define (my-max\
+    \ a b)\n    (if (&gt; a b) a b))\n  (define (rolling-max-r numbers mx)\n    (cond\
+    \ ((null? numbers) '())\n          ((null? mx) (rolling-max-r (cdr numbers) (car\
+    \ numbers)))\n          (else (cons (my-max (car numbers) mx)\n              \
+    \        (rolling-max-r (cdr numbers) (my-max (car numbers) mx))))))\n  (rolling-max-r\
+    \ numbers '()))\n", "  (let ([current-max -inf.0])\n    (map (\u03BB (n)\n   \
+    \        (if (> n current-max)\n               (begin (set! current-max n)\n \
+    \                     n)\n               current-max))\n         numbers)))\n",
+  "  (if (empty? numbers)\n      empty\n      (cons (max (first numbers) (if (empty?\
+    \ (rest numbers)) 0 (apply max (rest numbers))))\n            (rolling_max (rest\
+    \ numbers)))))\n", "  (letrec\n    ([rolling-max-helper (lambda (max-seen-sofar\
+    \ numbers)\n      (match numbers\n        [(list) '()]\n        [(list first-number\
+    \ tail-of-numbers)\n          (cons (max max-seen-sofar first-number)\n      \
+    \          (rolling-max-helper (max max-seen-sofar first-number) tail-of-numbers))]))])\n\
+    \    (rolling-max-helper -inf.0 numbers)))\n", "  (define (rolling_max_iter numbers\
+    \ max)\n    (cond\n      [(empty? numbers) '()]\n      [(> (first numbers) max)\
+    \ (cons (first numbers) (rolling_max_iter (rest numbers) (first numbers)))]\n\
+    \      [else (cons max (rolling_max_iter (rest numbers) max))]))\n  (rolling_max_iter\
+    \ numbers (first numbers)))\n", "    (if (null? numbers)\n        '()\n      \
+    \  (cons (max (car numbers) (car (rolling_max (cdr numbers))))\n             \
+    \ (rolling_max (cdr numbers)))))\n", "  (if (null? numbers)\n      (list)\n  \
+    \    (let* ([max-so-far (list (car numbers))]\n             [elements (rolling_max\
+    \ (cdr numbers))])\n        (cons (max (car numbers) (car max-so-far)) elements))))\n",
+  "  (if (empty? numbers)\n      (list)\n      (if (empty? (rest numbers))\n     \
+    \     (list (first numbers))\n          (cons (max (first numbers) (first (rolling_max\
+    \ (rest numbers))))\n                (rolling_max (rest numbers))))))\n```\n\n\
+    ##### Haskell\n\n```Haskell\n-- | Given a list of integers, generate a list of\
+    \ rolling maximum element found until given moment\n-- in the sequence.\n--\n\
+    -- >>> rolling_max [1, 2, 3, 2, 3, 4, 2]\n-- [1,2,3,3,3,4,4]\nrolling_max :: [Int]\
+    \ -> [Int]\nrolling_max [] = []\nrolling_max [x] = [x]\nrolling_max (x:xs) = max\
+    \ x (head $ rolling_max xs) : rolling_max xs\n```\n\n##### OCaml\n\n```OCaml\n\
+    let rolling_max (numbers : int list) : int list =\n  let rec aux = function\n\
+    \    | [] -> []\n    | [x] -> [x]\n    | x :: t -> max x (List.hd (aux t)) ::\
+    \ aux t\n  in\n  aux numbers\n```\n\n##### Elixir\n\n```Elixir\n# Given a list\
+    \ of integers, generate a list of rolling maximum element found until given moment\n\
+    # in the sequence.\n# rolling_max [1, 2, 3, 2, 3, 4, 2]\n# [1,2,3,3,3,4,4]\ndef\
+    \ rolling_max(numbers) do\n  numbers\n  |> Enum.map_reduce([], fn x, acc ->\n\
+    \    if Enum.empty?(acc) do\n      [x]\n    else\n      [max(List.first(acc),\
+    \ x)] ++ acc\n  end)\n  |> Enum.reverse\nend\n```\n\n#### Question 6 (20 pts)\n\
+    \nConsider a list of numbers. The function `select` should return a list of the\
+    \ numbers appearing only once in the list.\n\nFor example, given the list `[1,2,2,3,3,3,4,4,4,4,5,5,",
+  "  (define (rolling_max_iter rest current-max acc)\n    (if (null? rest)\n     \
+    \   (reverse acc)\n        (let ((head (car rest)))\n          (if (&gt; head\
+    \ current-max)\n              (rolling_max_iter (cdr rest) head (cons head acc))\n\
+    \              (rolling_max_iter (cdr rest) current-max (cons current-max acc))))))\n\
+    \  (rolling_max_iter numbers (car numbers) (list (car numbers))))\n", "  (if (null?\
+    \ numbers)\n      '()\n      (cons (first numbers)\n            (rolling_max (rest\
+    \ numbers)))))\n", "  (for/fold ([accum 0]) ([numbers numbers])\n           (if\
+    \ (or (= accum 0) (> (car numbers) accum))\n               (car numbers)\n   \
+    \            accum)))\n\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

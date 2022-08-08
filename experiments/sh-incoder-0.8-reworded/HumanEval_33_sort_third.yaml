@@ -12,6 +12,1572 @@ tests: "}\n\ncandidate() {\n    sort_third \"$@\"\n}\n\nset -e\nrun_test() {\n  
   5 8 3 4 6 9 2\") = \"2 8 3 4 6 9 5\" ]]\n    [[ $(candidate \"5 6 9 4 8 3 2\") =\
   \ \"2 6 9 4 8 3 5\" ]]\n    [[ $(candidate \"5 6 3 4 8 9 2 1\") = \"2 6 3 4 8 9\
   \ 5 1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["\tfor i in $(seq 1 $#); do\n\t\techo ${!i} ${!i:3}\n\tdone | sort -nr\
+    \ | sed 's/\"//g'", "    echo \"$1\" | awk '\n    {\n        for(i=1;i<=NF;i++)\n\
+    \        { \n            if(i%3!=0)\n            {\n                a[$i]=$i;\n\
+    \                b[$i]=i;\n            }\n        }\n    }\n    END {\n      \
+    \  for(i in a)\n        {\n            for(j=1;j<=i;j++)\n            {\n    \
+    \            if(a[i]!=a[j])\n                {\n                    c[b[a[i]]]=a[i];\n\
+    \                    c[b[a[j]]]=a[j];\n                }\n            }\n    \
+    \    }\n    }\n    '", "    l=\"$1\"\n    declare -A divisible_by_three=()\n \
+    \   declare -A sorted_third=()\n    declare -i k\n    declare -i j\n    declare\
+    \ -i i\n\n    [[ -z \"$l\" ]] && return 1\n\n    for (( i = 0; i < ${#l}; i++\
+    \ )); do\n        k=\"${l[i]}\"\n        (( k == 0 )) && continue\n        k=\"\
+    ${k//[^0-9]}\"\n        divisible_by_three[${i}]=1\n        j=${i}\n        while\
+    \ (( j <= ${#l} && divisible_by_three[${j}] == 1 )); do\n            j=$(( j +\
+    \ 1 ))\n        done\n        divisible_by_three[${j}]=k\n        sorted_third[${j}]=$k\n\
+    \    done\n\n    for i in $(seq 0 ${#sorted_third}); do\n        l=\"${sorted_third[i]}\"\
+    \n        [[ -z \"$l\" ]] && break\n        echo \"${l}\"\n    done\n    return\
+    \ 0", "    local i j l n'\n    local -i num\n\n    local list=\"$1\"\n    for\
+    \ ((i=0; i<${#list}; i++)); do\n        num=${list:$i:1}\n        if [[ $num =~\
+    \ ^\"[0-9]\"$ ]]; then\n            j=$i\n            break\n        fi\n    done\n\
+    \    l=$list\n    list=`echo $list | sed 's/ /\\\\ /g'`\n    for ((j=$i; j<${#list};\
+    \ j++)); do\n        num=${list:$j:1}\n        if [[ $num =~ ^\"[0-9]\"$ ]]; then\n\
+    \            l=\"${l:$j} ${list:$j:1}\"\n            n=\"$j\"\n        fi\n  \
+    \  done\n    l=${l:0:$n}\n    list=`echo $list | sed 's/ /\\ /g'`\n    for ((j=$n;\
+    \ j<${#list}; j++)); do\n        num=${list:$j:1}\n        if [[ $num =~ ^\"[0-9]\"\
+    $ ]]; then\n            l=\"${l:0:$j} ${list:$j:1} ${list:$j:1}\"\n          \
+    \  n=\"$j\"\n        fi\n    done\n    l=${l#* }\n    list=`echo $list | sed 's/\
+    \ /\\\\ /g'`\n    list=\"${l} $list\"\n    list=`echo $list | sed 's/\\\\ /, /g'`\n\
+    \    list=\"${list} \"\n    list=`echo $list | sed 's/\\(\\(.*\\)\\)\\(,\\)/\\\
+    1\\2, /g'`\n    echo $list", "    local i=0\n    local j=1\n    local l=$1\n \
+    \   l2=\"$(printf \"$l\" | tr \"\\n\" \" \")\"\n    local l2\n    for ((i=0; i<${#l[@]};\
+    \ i=i+2)); do\n        l2=$(printf \"$l\" | tr \"\\n\" \" \")\n        if [ \"\
+    $i\" -ne \"$j\" ]; then\n            l2=$(printf \"$l2\" | sort -n | sed 's/\\\
+    ([0-9]*\\)$/\\1/')\n        fi\n        l3=$(printf \"$l2\" | sort -n | sed 's/\\\
+    ([0-9]*\\)$/\\1/')\n        l=$(printf \"$l\" | tr \"\\n\" \" \")\n        l=$(printf\
+    \ \"$l\" | sed -e \"s/${l3}/${l}/g\" -e \"s/\\([0-9]*\\)$/\\1/\")\n    done\n\
+    \    echo \"$l\"", "    local lines=( $1 )\n    local len=${#lines[@]}\n    if\
+    \ [ $len -lt 3 ]; then return 1; fi\n    local last=$(echo $len | grep -o \"^[0-9]+$\"\
+    )\n    local first=$(echo $len | grep -o \"^[0-9][0-9]*$\")\n    local rest=$(echo\
+    \ $len | grep -o \"^[0-9]+\\[0-9][0-9]*$\")\n    for ((i=0; i<$len; i++ )) ; do\n\
+    \        if [ \"${i}\" -lt \"$first\" ] ; then\n            echo \"${lines[*]}\"\
+    \n            return 0;\n        fi\n        if [ \"${i}\" -le \"$last\" ] ; then\n\
+    \            if [ \"${i}\" -le \"$rest\" ] ; then\n                echo \"${lines[*]}\"\
+    \n                return 0;\n            fi\n        fi\n    done", "    local\
+    \ l_str=\"$1\"\n    # Split each space-separated value into an array (but leave\
+    \ the quotes)\n    local l_array=($(echo \"${l_str}\" | tr \" \" \"\\n\"))\n \
+    \   for ((i=0; i<${#l_array[@]}; i+=3)); do\n        # Increment the i by 3 to\
+    \ get the next 3 items in the array\n        ((i += 3))\n        # Swap the ith\
+    \ and i+1 values if the values are divisible by 3\n        if ((${#l_array[*]}\
+    \ % 3 == 0)); then\n            l_array[${i}]=\"${l_array[${i}]}\"\n         \
+    \   l_array[${i+1}]=\"${l_array[${i+1}]}\"\n        fi\n    done\n    # Put it\
+    \ back together in the sorted order and put quotes around it.\n    echo \"${l_array[@]}\"\
+    \ | tr \" \" \"\\n\" | tr \" \" \"\\\"", "\tlocal L=($1)\n\tlocal i\n\tlocal j\n\
+    \tlocal count\n\tlocal Lnew\n\tlocal new\n\tfor ((i=0; i<${#L[@]}; i++)); do\n\
+    \t\tcount=0\n\t\tnew=false\n\t\tfor ((j=0; j<i; j++)); do\n\t\t\tcount=$((count\
+    \ + ${L[j]}+${L[j+1]}))\n\t\tdone\n\t\t((count % 3))\n\t\tif [[ ${count} -eq 0\
+    \ ]]; then\n\t\t\tnew=true\n\t\tfi\n\t\tif [[ ${new} ]]; then\n\t\t\tLnew=(\"\
+    ${Lnew[@]}\" ${L[i]})\n\t\tfi\n\tdone\n\techo \"${Lnew[@]}\"", "    local l l'\
+    \ k\n    for (( k=0; k<${#1}; k++ )); do\n        l[${k}]=${!k}\n    done\n  \
+    \  for (( k=0; k<${#l}-1; k++ )); do\n        (( ${l[${k}]} % 3 == 0)) && continue\n\
+    \        (( ${l[${k}]} % 3 != 0)) || continue\n        l[${k}]=${l[${k}]}\n  \
+    \      l'[${k}]=${l[${k}]}\n    done\n    echo \"${l[@]}\"", "\tlocal l=\"$1\"\
+    \n\t# create a sorted copy of l\n\tlocal l2=\"${l// /, }\"\n\t# find indices of\
+    \ l that are divisible by three\n\tlocal i1=\"${l2//[^,]*,/}\"\n\t# find indices\
+    \ of l not divisible by three\n\tlocal i2=\"${l2//[^,]*//}\"\n\t# merge the two\
+    \ lists together\n\tlocal l3=\"${i1//,/ $i2 }\"\n\t# sort l3\n\tl3=$(sort --field-separator='\
+    \ ' <<<\"$l3\")\n\t# remove spaces at the beginning and end\n\tl3=\"${l3// /,\
+    \ }\"\n\t# return the list\n\techo \"$l3\"", "    l=$1 \n    list=()\n    third=()\n\
+    \    for value in $l; do\n        third+=(\"$((value/3))\")\n    done\n    for((i=1;\
+    \ i<${#third}; i++)); do\n        found=0\n        for value in $l; do\n     \
+    \       if [[ $value == ${third[$i]} ]]; then\n                found=1\n     \
+    \       fi\n        done\n        if [[ $found == 0 ]]; then\n            list+=(\"\
+    ${third[$i]}\")\n        fi\n    done\n    echo ${list[*]} ", "  # Convert $1\
+    \ to an array\n  read -r -a array <<<\"$1\"\n\n  # Set up the array for sorting\n\
+    \  declare -a array2\n\n  # For each value in $array, append it to array2\n  for\
+    \ i in \"${!array[@]}\"; do\n    array2+=(\"${array[$i]}\")\n  done\n\n  # Sort\
+    \ the array\n  sort -n -t ' ' -k3,3 -u <<<\"${array2[@]}\"\n\n  # Convert array2\
+    \ back to a string\n  read -r -d '' array3 <<<\"$(IFS=' '; echo \"${array2[*]}\"\
+    )\"\n\n  # Return the new string\n  printf \"%s\\n\" \"${array3[@]}\"", "  l=$1\n\
+    \  l=${l// / }\n  echo $l | sed -e 's/ /\\n/g' | sort -nr | sed -e 's/^/\"$\"\
+    /g' | sed -e 's/$/\"/g'", "    local i l l' j\n    l=$1\n    i=0\n    while [\
+    \ ${#l} -gt 0 ]; do\n        j=$(( 3 * i ))\n        if [ \"${l[$j]}\" = \"${l[$((\
+    \ 2 * i ))]}\" ]; then\n            l[$j]=$(( 2 * i + 2 ))\n        elif [ \"\
+    ${l[$j]}\" = \"${l[$(( 2 * i + 1 ))]}\" ]; then\n            l[$j]=$(( 2 * i +\
+    \ 1 ))\n        else\n            l[$j]=$(( 2 * i ))\n        fi\n        i=$((\
+    \ i + 1 ))\n    done\n    echo \"${l[@]}\"", "    local IFS=$1 l\n    local idx\n\
+    \    local i\n    local j\n    local result\n    local tmp\n    local k\n    local\
+    \ k0\n    local k0\n    local k0\n    local k0\n    local k0\n    local len\n\n\
+    \    local -a l\n    local -a result\n    local i\n    local j\n\n    len=${#l[@]}\n\
+    \    i=0\n    while [ $i -lt \"$len\" ];\n    do\n        j=i+1\n        if [\
+    \ $i -eq \"$len\" ] ; then\n            # last element of list, no need to search\
+    \ any more\n            break\n        fi\n        k0=$j\n        k=$j\n     \
+    \   while [ $k -le \"$len\" ] ; do\n            k0=$k\n            k=$((k+1))\n\
+    \            tmp=${l[$k]}\n            if [ $((k0+1)) -eq \"$len\" ] ; then\n\
+    \                # last element of list, no need to search any more\n        \
+    \        break\n            fi\n            k0=$k\n            k=$((k+1))\n  \
+    \          if [ \"${#tmp}\" -gt 0 ] ; then\n                # the second next\
+    \ element has already been found as ${l[k]}\n                k0=$k\n         \
+    \       k=$((k+1))\n                if [ \"$tmp\" = \"${l[$k0]}\" ] ; then\n \
+    \                   # this one has not been found yet.\n                    result+=\"\
+    \\\"$tmp\\\"\"\n                    # k0 has already been incremented to k so\
+    \ increment k here.\n                    k=k0\n                else\n        \
+    \            # the second next element has not already been found as ${l[k]}\n\
+    \                    result+=\"\\\"${l[$k0]}\\\"\"\n                    # k0 has\
+    \ already been incremented to k so increment k here.\n                    k=k0\n\
+    \                    break\n                fi\n            fi\n        done\n\
+    \        i=$((i+1))\n    done\n    echo \"${result[@]}\"", "\tlocal a b\n\tlocal\
+    \ len=\"$#\" i\n\t# make sure we have some valid data\n\tif [ $len -ne 3 ]; then\n\
+    \t\techo \"sort_third: not enough arguments\"\n\t\treturn 1\n\tfi\n\t# first sort\
+    \ it by its value\n\ta=$($1 |sort -n |awk '{print $2}')\n\t# now try to sort by\
+    \ position\n\tfor (( i = 0; i < ${#a}; i++ )); do\n\t\tif [ \"${i}\" -eq 0 ];\
+    \ then\n\t\t\tb=\"$i\"\n\t\telse\n\t\t\tif [ \"${a[$i]}\" -gt \"${a[$b]}\" ];\
+    \ then\n\t\t\t\tb=\"$i\"\n\t\t\tfi\n\t\tfi\n\tdone\n\techo $(echo $a |sort -n\
+    \ |awk -v b=\"$b\" '{$b=$b+1; print $b'})", "\t# Get the input list l\n\tl=\"\
+    $1\"\n\n\t# Convert the list l to a list l' by adding the first element to the\
+    \ end of the list\n\tl=\"$(($l))\"\n\n\t# If the list l has less than two elements,\
+    \ return\n\t[ ${#l} -le 2 ] && return\n\n\t# If the list l has two elements, sort\
+    \ it\n\t[ ${#l} -eq 2 ] && return\n\n\t# If the list l has three elements, sort\
+    \ it\n\t[ ${#l} -eq 3 ] && return\n\n\t# If the list l has more than three elements,\
+    \ sort it\n\tl=\"$(($l | sort))\"\n\n\t# Reset the list l\n\tl=\"$(($l))\"\n\n\
+    \t# If the list l has less than two elements, return\n\t[ ${#l} -le 2 ] && return\n\
+    \n\t# If the list l has two elements, sort it\n\t[ ${#l} -eq 2 ] && return\n\n\
+    \t# If the list l has three elements, sort it\n\t[ ${#l} -eq 3 ] && return\n\n\
+    \t# If the list l has more than three elements, sort it\n\tl=\"$(($l | sort))\"\
+    \n\n\t# Reset the list l\n\tl=\"$(($l))\"\n\n\t# If the list l has less than two\
+    \ elements, return\n\t[ ${#l} -le 2 ] && return\n\n\t# If the list l has two elements,\
+    \ sort it\n\t[ ${#l} -eq 2 ] && return\n\n\t# If the list l has three elements,\
+    \ sort it\n\t[ ${#l} -eq 3 ] && return\n\n\t# If the list l has more than three\
+    \ elements, sort it\n\tl=\"$(($l | sort))\"\n\n\t# Reset the list l\n\tl=\"$(($l))\"\
+    \n\n\t# If the list l has less than two elements, return\n\t[ ${#l} -le 2 ] &&\
+    \ return\n\n\t# If the list l has two elements, sort it\n\t[ ${#l} -eq 2 ] &&\
+    \ return\n\n\t# If the list l has three elements, sort it\n\t[ ${#l} -eq 3 ] &&\
+    \ return\n\n\t# If the list l has more than three elements, sort it\n\tl=\"$(($l\
+    \ | sort))\"\n\n\t# Reset the list l\n\tl=\"$(($l))\"\n\n\t# If the list l has\
+    \ less than two elements, return\n\t[ ${#l} -le 2 ] && return\n\n\t# If the list\
+    \ l has two elements, sort it\n\t[ ${#l} -eq 2 ] && return\n\n\t# If the list\
+    \ l has three elements, sort it\n\t[ ${#l} -eq ", "    local l l' i\n    local\
+    \ -n IFS=\"$1\"\n\n    l=( ${!1} )\n    for (( i=0; i<${#l[@]}; i++ )); do\n \
+    \       local c\n        c=( ${l[$i]} )\n        if (( i % 3 == 0 )); then\n \
+    \           l'[$i]='\"${c[*]}\"'\n        else\n            l'[$i]='\"${c[0]}\"\
+    '\n        fi\n    done\n\n    IFS=\"$IFS_OLD\"\n    echo \"${l[@]}\"", "\tlocal\
+    \ l '=(\"${!1}\") '\n\tlocal len '${#l[@]}'\n\tlocal i j '${#l[@]} '\n\tlocal\
+    \ tmp '${#l[@]} '\n\tlocal ret '${#l[@]} '\n\tlocal xs '${#l[@]} '\n\n\tlocal\
+    \ k i2 j2 k2 i3 j3 k3 i4 j4 k4 i5 j5 k5 i6 j6 k6 i7 j7 k7 i8 j8 k8 i9 j9 k9 '\n\
+    \n\tfor i in \"${!l[@]}\"; do\n\t\tlocal j '${#l[@]} '\n\t\tlocal k '${#l[@]}\
+    \ '\n\t\tlocal i2 j2 k2 i3 j3 k3 i4 j4 k4 i5 j5 k5 '\n\t\tlocal i6 j6 k6 i7 j7\
+    \ k7 i8 j8 k8 i9 j9 k9 '\n\n\t\tif (( len % 3 )); then\n\t\t\techo \"sort_third:\
+    \ ${i} is not a multiple of 3\" >&2\n\t\t\techo \"l=${l}\" >&2\n\t\t\texit 1\n\
+    \t\tfi\n\n\t\ti3=$(( i % 3 ))\n\t\tj3=$(( i / 3 ))\n\t\tk3=$(( i + j - 1 ))\n\n\
+    \t\tif [ ! -z \"$l[$i3]\" ] && [ ! -z \"$l[$j3]\" ]; then\n\t\t\tk1=$(( i * 3\
+    \ + '0' ))\n\t\t\tk2=$(( j * 3 + '0' ))\n\t\t\tl[$i3]=$( expr \"$l[$i3]\" ++ )\n\
+    \t\t\tl[$k1]=$( expr \"$l[$k1]\" ++ )\n\t\t\tl[$k2]=$( expr \"$l[$k2]\" ++ )\n\
+    \t\t\tl[$j3]=$( expr \"$l[$j3]\" ++ )\n\t\tfi\n\n\t\tif [ ! -z \"$l[$i2]\" ] &&\
+    \ [ ! -z \"$l[$j2]\" ]; then\n\t\t\tk1=$(( i2 * 3 + '0' ))\n\t\t\tk2=$(( j2 *\
+    \ 3 + '0' ))\n\t\t\tl[$i2]=$( expr \"$l[$i2]\" ++ )\n\t\t\tl[$k1]=$( expr \"$l[$k1]\"\
+    \ ++ )\n\t\t\tl[$k2]=$( expr \"$l[$k2]\" ++ )\n\t\t\tl[$j2]=$( expr \"$", "  \
+    \  IFS=\" \" read -r -a array <<< \"$1\"\n    local i j l l' k\n    local -a temp\n\
+    \    local -a temp2\n    for ((i=0; i < ${#array[@]}; i++)); do\n        l=${array[i]}\n\
+    \        for ((j=0; j < ${#l}; j++)); do\n            k=${l[j]}\n            [[\
+    \ -z $j ]] || l+=\"'\"\n            [[ -z $k ]] || k+=\"'\"\n            if ((\
+    \ ${k//[^0-9]} == ${l//[^0-9]} )) ; then\n                temp+=$l\n         \
+    \       temp2+=(\"$k\")\n            fi\n        done\n    done\n    l=( \"${temp[@]}\"\
+    \ )\n    k=( \"${temp2[@]}\" )\n    local i' j'\n    for ((i=0; i < ${#l[@]};\
+    \ i++)); do\n        l[i]+=\"'\"\n    done\n    for ((j=0; j < ${#k[@]}; j++));\
+    \ do\n        k[j]=\"'$k[j]'\"\n    done\n    echo \"${l[@]}\"", "  # split the\
+    \ list into a list of single and double quoted strings\n  IFS=' ' read -ra items\
+    \ <<< \"$1\"\n\n  # sort the list of items\n  items=(${items[@]##*\\\"})\n  items=(${items[@]#*\\\
+    \"})\n\n  # iterate over the list, comparing each value with the next one\n  #\
+    \ starting at element zero and using two iterators to skip the first\n  # element\
+    \ and the last\n  local i j\n  for ((i=1; i<${#items[@]}; i+=2)); do\n    ((j=$((i+1))))\n\
+    \    \n    # if the two elements are not divisible by three, move on\n    if ((\
+    \ ${items[i]%3} != ${items[j]%3} )); then\n      break\n    fi\n    \n    # otherwise,\
+    \ compare the values at i and j, which should always be equal\n    if (( ${items[i]}\
+    \ == ${items[j]} )); then\n      items[i]=\"${items[j]}\";\n      break\n    fi\n\
+    \  done\n\n  # restore the original IFS\n  IFS=$saveIFS\n\n  # restore the IFS\
+    \ to its original value\n  echo \"${items[*]}\"", "    # sort on the third value\
+    \ of the list\n    local l_arr=($1)\n    # split into two lists\n    local l_arr_1=(\"\
+    ${l_arr[@]:0:3}\")\n    local l_arr_2=(\"${l_arr[@]:3}\")\n    # create an array\
+    \ that has three equal values\n    local l_arr_3=($l_arr_1 $l_arr_1 $l_arr_2)\n\
+    \    # sort it\n    l_arr_3=($(sort -n ${l_arr_3}))\n    # return the result\n\
+    \    echo \"${l_arr_3[@]}\"", "    local list_array=( \"$@\" )\n    local l_len=${#list_array[@]}\n\
+    \    local l_result\n    local i\n    local j\n    local temp\n    for (( i =\
+    \ 1; i <= l_len; i++ )); do\n        if [ $(( i % 3 )) -eq 0 ]; then\n       \
+    \     l_result+=(\"$list_array[i]\")\n            continue\n        fi\n     \
+    \   j=$(( i / 3 ))\n        l_result+=(\"\\\"${list_array[j]}\\\"\")\n       \
+    \ l_result+=(\"\\\"${list_array[j + 1]}\\\"\")\n        l_result+=(\"\\\"${list_array[j\
+    \ + 2]}\\\"\")\n    done\n    echo \"${l_result[@]}\"", "    local l l' i\n  \
+    \  # l=( $1 )\n    l=( \"$@\" )\n    i=0\n    # while [ \"$i\" -lt \"${#l}\" ]\n\
+    \    while (( \"$#\" )); do\n        (( ++i ))\n        if [ \"${i}\" -eq \"$((\
+    \ 0 % 3 ))\" ]; then\n            l'[i]=\"${l[i]}\"\n        elif [ \"${i}\" -eq\
+    \ \"$(( 1 % 3 ))\" ]; then\n            l'[i]=\"${l[i]}\"\n        elif [ \"${i}\"\
+    \ -eq \"$(( 2 % 3 ))\" ]; then\n            l'[i]=\"${l[i]}\"\n        else\n\
+    \            l'[i]=\"${l[i]}\"\n        fi\n    done\n    echo \"${l[@]}\"", " \
+    \   local l\n    local -a l0\n    local -a l0w\n    local j\n    local k\n\n \
+    \   l0w=( ${( IFS=$'\\n'; echo \"${@}\")} )\n    l0=( ${l0w[1]} ${l0w[2]} )\n\
+    \    k=${#l0w[@]}\n\n    local i=0\n    while [ $i -le $k ]; do\n        j=$((\
+    \ i*3 + 1 ))\n        if [ $(( i % 3 )) -eq 0 ]; then\n            l0[i]=\"${l0[j]}\"\
+    \n        else\n            l0[i]=\"${l0[j]}\"\n        fi\n        i=$(( i +\
+    \ 1 ))\n    done\n\n    l0=( ${l0[@]} )\n    IFS=$'\\n'\n    local j=0\n    while\
+    \ [ $j -le $k ]; do\n        if [ $(( j % 3 )) -eq 0 ]; then\n            l0[${l0[$j]:1}]=\"\
+    ${l0[${l0[$j]:1}]:1:1}\"\n        else\n            l0[${l0[$j]:1}]=\"${l0[${l0[$j]:1}]:1:1}\"\
+    \n        fi\n        j=$(( j + 1 ))\n    done\n\n    IFS=$' '\n    l0=\"${l0[*]}\"\
+    \n    l0=\"${l0[@]}\"\n    l0=\"${l0[@]}\"\n    l0=\"${l0[@]}\"\n    l0=\"${l0[@]}\"\
+    \n    l0=\"${l0[@]}\"\n    l0=\"${l0[@]}\"\n    l0=\"${l0[@]}\"\n\n    l0=\"${l0[@]}\"\
+    \n\n    l0=( $(echo $l0 | tr \" \" \",\" | sort -u ) )", "    local sorted_list=()\n\
+    \    local current_element=${1% *}\n    local index_of_current_element=${1#* }\n\
+    \    for i in $(seq 0 $((index_of_current_element-1)); do\n        local next_element=${sorted_list[$i]}\n\
+    \        local next_element_index=${sorted_list[$(i+2)]} \n        if [[ $next_element\
+    \ == \"$next_element_index\" ]]; then\n            local next_element_value=1\n\
+    \        else\n            local next_element_value=3\n        fi\n        local\
+    \ current_element_value=${sorted_list[$(i+1)]}\n        if [[ $current_element_value\
+    \ == \"$next_element_value\" ]]; then\n            sorted_list[$i]=$next_element_index\n\
+    \        else\n            sorted_list[$i]=$next_element_value\n        fi\n \
+    \   done\n    sorted_list=($(printf '\"%s\"' \"${sorted_list[@]}\" ))\n    echo\
+    \ \"${sorted_list[@]}\"", "    local l\n    l=$1\n    local len=${#l}\n    local\
+    \ ind ind1\n    for (( ind1 = 0; ind1 < len; ind1+=3 )); do\n        ind=$ind1\n\
+    \        while [ \"$ind\" -le \"$(($ind+1))\" ] && [ \"$(($ind+1))\" -le \"$len\"\
+    \ ]; do\n            ((ind+=3))\n        done\n        if [ \"$ind\" -eq \"$(($ind1+1))\"\
+    \ ]; then\n            local val=$(echo \"${l[$ind1]} ${l[$ind2]} ${l[$ind3]}\"\
+    \ | tr -s ' ' | tr ' ' '\"' | sed 's/\"//g')\n            local ind2=$(echo $ind\
+    \ | awk '{print $1}')\n            if [ \"$ind1\" -ne \"$ind2\" ]; then\n    \
+    \            l[$ind1]=$val\n                l[$ind2]=$val\n            fi\n  \
+    \      fi\n    done\n    echo $l", "  local list=\"$1\"\n  local output=\"\"\n\
+    \  local index=0\n  for element in ${list} ; do\n    if [ $(($index+1)%3) == 0\
+    \ ]; then\n      output+=\"'$element'\"\n    else\n      output+=\"\\\"$element\\\
+    \"\"\n    fi\n    index=$(($index+1))\n  done\n  echo $output", "  echo $1 | awk\
+    \ '{print $1 \" \" $2 \" \" $3 \" \" $4}'", "    local l l' i\n    for ((i=0;\
+    \ i < ${#1}; i++)); do\n        if [[ ${1:i} -eq 0 ]]; then\n            echo\
+    \ \"ERROR: sort_third requires a non-empty list\"\n            return 1\n    \
+    \    elif [[ ${1:i} -eq 1 ]]; then\n            l=${1:i}\n        elif [[ ${1:i}\
+    \ -ge 3 ]]; then\n            l=${1:i}\n        else\n            l=\"$(cut -d:\
+    \ -f2 <<< \"${1:i}\")\"\n        fi\n        l'=(\"${l}\")\n        for ((j=0;\
+    \ j < ${#l}'; j++)); do\n            if [[ -z ${l'[j]} ]]; then\n            \
+    \    l'[j]=${l'}[j]\n                break\n            fi\n        done\n   \
+    \ done\n    echo \"${l'[@]}\"", "  local l=\"$1\"\n  local l' '='('\n  local index=0\n\
+    \  local item\n  while [[ $index -lt ${#l[*]} ]]; do\n    item=${l[$index]}\n\
+    \    item=${item//$'\"'/\"\"}\n    # Make sure that item is an integer \n    #\
+    \ and that we only deal with integers\n    # and that the item is not divisible\
+    \ by three\n    # because we will be dealing with integers\n    # and integers\
+    \ always start with \"0\"\n    if [[ ! \"$(echo \"$item\" | egrep -E \"^[0-9]+$|^[0-9]+$\"\
+    )\" ]]; then\n      echo \"Error: invalid item \\\"${item}\\\" at index ${index}\"\
+    \n      exit 1\n    fi\n    if [[ ${item%%/*} == \"0\" ]]; then\n      echo \"\
+    Error: invalid item \\\"${item}\\\" at index ${index}\"\n      exit 1\n    fi\n\
+    \    if [[ $((${item%%/*}%3)) -ne 0 ]]; then\n      echo \"Error: invalid item\
+    \ \\\"${item}\\\" at index ${index}\"\n      exit 1\n    fi\n    l+=\"${l'${item}'}\
+    \ \"\n    local tmpIndex\n    for tmpIndex in $((${#l[*]} + 1))\n    do\n    \
+    \  if [[ $tmpIndex -ne $index ]]; then\n        l+=\"${l'${item}'} \"\n      fi\n\
+    \    done\n    index=${tmpIndex}\n  done\n  echo \"${l}\"", "    local IFS= read\
+    \ -r -a array <<< \"$1\"\n    for i in \"${!array[@]}\"; do\n        # Only put\
+    \ indices that are not divisible by 3 at the end (so this only sorts those indicies\
+    \ that were not yet put in the desired order)\n        if (( (${#array[@]} % 3)\
+    \ == 0 )); then\n            array[$(( ${i} % 3 ))]=${array[$i]}\n        fi\n\
+    \    done\n    echo \"${array[@]}\"", "    local l l' i j k temp temp1 temp2 temp3\
+    \ temp4\n    IFS=$' \\t\\n' l=$1\n    l=(\"${l[@]}\")\n    for (( i=1 ; i<${#l[@]}\
+    \ ; i++ )); do\n        if [ $(( $i % 3 )) -eq 0 ]; then\n            k=${l[$i]}\n\
+    \            if [ \"$k\" == \"$l[$(( $i % 3 ))]\" ]; then\n                l[$i]=$k\n\
+    \            fi\n        fi\n    done\n    for (( i=${#l[@]}-1 ; i>0 ; i-- ));\
+    \ do\n        k=\"${l[$i]}\"\n        j=\"${l[$(( $i / 3 ))]}\"\n        temp=\"\
+    ${l[$(( $i % 3 ))]}\"\n        temp3=\"${l[$(( $j % 3 ))]}\"\n        temp2=\"\
+    ${l[$(( $j / 3 ))]}\"\n        temp4=\"${l[$(( $j % 3 ))]}\"\n        temp1=\"\
+    ${l[$i]}\"\n        if [ \"${k}\" != \"$temp3\" ]; then\n            if [ \"$temp1\"\
+    \ == \"$temp2\" ] || [ \"$temp2\" == \"$temp3\" ]; then\n                if [\
+    \ \"$temp2\" == \"$temp4\" ]; then\n                    l[$(( $i - 1 ))]=\"$temp\"\
+    \n                else\n                    l[$(( $i - 1 ))]=\"$temp4\"\n    \
+    \            fi\n            else\n                l[$(( $i - 1 ))]=\"$temp2\"\
+    \n            fi\n        fi\n    done\n    echo \"${l[@]}\"", "    local l=\"\
+    $1\"\n    local n=$(echo $l | wc -l)\n    local i j\n    for ((i=0; i<$n; i++));\
+    \ do\n        j=$((i-3))\n        if [ $((i%3)) == 0 ]; then\n            l[$j]=$l[i]\n\
+    \        elif [ $((i%3)) == 1 ]; then\n            l[$j]=$l[j]\n        elif [\
+    \ $((i%3)) == 2 ]; then\n            l[$j]=$l[j]\n        fi\n    done\n    echo\
+    \ -n \"[\"\n    for i in $(seq 0 $((n-1)); do\n        echo -n \"${l[i]},\"\n\
+    \    done\n    echo \"]\"", "    l=$1\n    for((i=1; i<${#l}; i++)); do\n    \
+    \    i=$(expr $i % 3)\n        if [ $i -eq 0 ]; then\n            echo \"${l[i]}\"\
+    \n        elif [ $i -eq 1 ]; then\n            echo \"${l[i]}\"\n        elif\
+    \ [ $i -eq 2 ]; then\n            echo \"\\\"${l[i]}\\\"\"\n        fi\n    done",
+  "  local tmp tmp2 l2 l3\n  local i j\n\n  for ((i=1;i<=$#;i+=3));do\n    tmp=\"\
+    ${1[i]}\"\n    tmp2=\"${1[i+1]}\"\n    l2=\"$(echo \"$tmp2 $tmp2\" | tr ' ' '\\\
+    t' | awk '{print substr($1,index($1,\" \"),1)}')\"\n    l3=\"$(echo \"$tmp2 $tmp2\"\
+    \ | tr ' ' '\\t' | awk '{print substr($1,index($1,\" \"),1)}')\"\n    l3=\"$l3\
+    \ $tmp\"\n    l2=\"$l2 $tmp\"\n    echo \"$l2 $l3\"\n  done", "  local l=\"$(echo\
+    \ \"$1\" | tr ' ' ' ')\"\n  local len=\"$(echo \"${#l}\" | tr ' ' '\\n')\"\n \
+    \ local a\n  for (( i=0; i<${len}; i++ )); do\n    if [[ \"${i}\" == *\"$((i/3))\"\
+    \ ]]; then\n      a=\"$(echo \"${l}\" | sed -E \"s/.*\\($((i%3))\\).*/\\\"\\1\\\
+    \"/\" )\"\n    else\n      a=\"${l}\"\n    fi\n    l=\"${l} ${a}\"\n  done\n \
+    \ echo \"$l\"", "\tlocal l lp l2 lp2 l3\n\tlocal -i n c mx j\n\tunset -n l3\n\t\
+    unset -n lp2\n\tunset -n lp\n\n\t# get a list of all values of l (without the\
+    \ quotes and sorted by increasing order)\n\tl=$(echo $1 | sed \"s/\\\"//g\" |\
+    \ sed \"s/ /\\n/g\" | sort -n | tr '\\n' ' ')\n\n\t# create an empty list for\
+    \ l' to be filled in with values of l\n\t# with indicies of l' that are not divisible\
+    \ by three removed\n\t# and whose values at those indicies are equal to the values\
+    \ of l\n\twhile read -r l; do\n\t\t(( ++c % 3 == 0 )); unset l; l2=${l}\n\t\t\
+    (( ++c % 3 != 0 )); unset l; l2=${l}\n\t\tl3=\"${l2}\\n\"\n\tdone <<< \"$l\"\n\
+    \n\t# loop through l' until l3 is exhausted\n\twhile read -r l; do\n\t\t(( ++c\
+    \ % 3 != 0 )); unset l; l2=${l}\n\t\tlp=\"${l2}\\n\"\n\tdone <<< \"$l3\"\n\n\t\
+    # loop through l' while l3 is still exhausted\n\twhile read -r l; do\n\t\t(( ++c\
+    \ % 3 == 0 )); unset l; l2=${l}\n\t\tlp2=\"${l2}\\n\"\n\tdone <<< \"$lp\"\n\n\t\
+    j=$(echo $l | sed \"s/\\\"//g\" | sed \"s/ /\\n/g\" | sort -n | tr '\\n' ' ')\n\
+    \t(( c-- == 1 ))\n\n\t# return l' in the order in which it appears in l, with\
+    \ indicies of l that are not divisible by three removed\n\techo \"$j\"", "  #\
+    \ echo \"$1\"\n  # echo \"$2\"\n  # echo \"$3\"\n  local l l' i j k tmp\n  l=$1\n\
+    \  l=''\n  for ((i=0; i<${#l}; i++)); do\n    k=${l:$i:1}\n    [[ -z \"${k}\"\
+    \ ]] && k=${l:$i:1}\n    [[ -z \"${k}\" ]] && continue\n    ((j=${i}+1))\n   \
+    \ ((j-=k))\n    while ((j>=${#l})); do l+=\" '\"$j\"'\"; j-=3; done\n    tmp=\"\
+    ${l}${l}'$j'\"\n    ((j++))\n    l=\"${tmp}\"\n  done\n  echo \"$l\"", "    local\
+    \ l l l i j l l' i j l' i l' o r\n    l=\"$1\"\n    read i j l < <(echo \"$l\"\
+    \ | tr ' ' ',' | sort -n -k 2,2 -k 3,3)\n    read i < <(echo \"$l\" | tr ' ' ','\
+    \ | sort -n -k 2,2 -k 1,1)\n    read j > /dev/null\n    read l < <(echo \"$l\"\
+    \ | tr ' ' ',' | sort -n -k 1,2 -k 1,1)\n    read j > /dev/null\n    read l >\
+    \ /dev/null\n    read l' < <(echo \"$l\" | tr ' ' ',' | sort -n -k 1,3 -k 1,1)\n\
+    \    read j > /dev/null\n    echo \"$l' $j $l\"", "    local l l' i\n    local\
+    \ p=0\n    local prev_val\n    local prev_len\n    local new_val\n    l=$1\n \
+    \   l=$(echo $l | tr \" \" \"\\n\")\n    local length=$(( $(( ${#l} / 3 )) ))\n\
+    \    l=( ${l[@]:0:$length} )\n    prev_val=\"\"\n    prev_len=0\n    for i in\
+    \ \"${!l[@]}\"; do\n        if [ \"$i\" -eq \"$(( ${#l[@]} - 1 ))\" ]; then\n\
+    \            prev_val=\"$i\"\n            continue\n        fi\n        local\
+    \ len=$(( ${#l[@]} - 1 ))\n        if [ ${l[$i]} -eq ${l[$(( $i + 1 ))]}]; then\n\
+    \            if [ \"${l[$i]}\" != \"${l[$(( ${#l[@]} - 1 ))]}\" ]; then\n    \
+    \            new_val=\"$l[$i] $l[$(( ${#l[@]} - 1 ))]\"\n            else\n  \
+    \              new_val=\"$l[$i]\"\n            fi\n            if [ \"$prev_val\"\
+    \ != \"\" ]; then\n                l[$i]=\"$new_val\"\n                l[$(( $i\
+    \ + 1 ))]=\"$new_val\"\n                l[$i]=\"$prev_val\"\n                l[$((\
+    \ $i + 1 ))]=\"$prev_val\"\n            else\n                l[$i]=\"$l[$(( $i\
+    \ + 1 ))]\"\n                l[$(( $i + 1 ))]=\"$l[$i]\"\n            fi\n   \
+    \     fi\n        prev_len=$(( ${#l[@]} - 1 ))\n        prev_val=\"$l[$i]\"\n\
+    \    done\n    echo ${l[@]} | tr \" \" \"\\n\"", "  l=$1\n  lsorted=$(echo \"\
+    $l\" | sort -n -k 1,1 -k 2,2 -k 3,3)\n  for i in $(seq 0 $((${#lsorted}-1)))\n\
+    \  do\n    if (( $(expr ${lsorted:$i:2}/${3:3} + 0) == 0 ))\n    then\n      lsorted[$i]=\"\
+    $(echo \"$l\" |sort -n -k 1,1 -k 2,2 -k 3,3 -k 4,4 -k 5,5 -k 6,6 -k 7,7 -k 8,8\
+    \ -k 9,9 | tail -1)\"\n    fi\n  done\n  echo \"${lsorted[@]}\"", "  local l l'\
+    \ idx\n  idx=3\n  l=($1)\n  while [ $idx -le $(( ${#l[@]} -1 )) ]\n  do\n    ((\
+    \ idx+=3 ))\n    [[ \"${l[$idx]}\" == \"$(( idx%3 ))\" ]] && \\\n      l+=($((\
+    \ idx%3 ))) && \\\n      (( idx+=1 ))\n  done\n  l+=($(( ${#l[@]} - 1 ))) && \\\
+    \n    (( idx+=1 ))\n  printf '%s\\n' \"${l[@]}\"", "    sort -n -k3 -n -s \"$1\"\
+    \ | cut -d' ' -f1", "    local i j l l' p\n    i=1\n    shift $(( $#+1 ))\n  \
+    \  l=$1\n    while (( $# > 0 )); do\n        if (( i % 3 == 0 )); then\n     \
+    \       l=$l\n            j=$i\n        fi\n        i=$(($i+1))\n    done\n  \
+    \  l=( ${l[@]:0:j} ${l[@]:j+1:} )\n    for (( p=1; p <= j; p++ )); do\n      \
+    \  l'=( ${l[@]:0:p} ${l[@]:p+1:} )\n    done\n    echo $l", "    local i x y z\n\
+    \    local l=\"$1\"\n\n    i=0 x=0 y=0 z=0\n\n    while [ $i -lt ${#l} ]; do\n\
+    \        i=$((i+1))\n        if [ $((i % 3)) -eq 0 ]; then\n            x=$((x+1))\n\
+    \        else\n            y=$((y+1))\n        fi\n    done\n\n    # print in\
+    \ sorted order\n    while [ $x -lt $y ]; do\n        echo \"\\\"${l[$x]}\\\"\"\
+    \ >> temp\n        ((x++))\n    done\n    while [ $y -lt $z ]; do\n        echo\
+    \ \"\\\"${l[$y]}\\\"\" >> temp\n        ((y++))\n    done\n\n    # move the third\
+    \ column to its place\n    mv temp \"${l}\"\n    # remove it from the list\n \
+    \   rm temp\n    # return the result\n    echo \"${l}\"", "    local l idx i i2\
+    \ i3 j\n    l=\"$1\"\n    echo \"$l\" | awk '{for(i=1;i<=NF;++i) if(!(i %% 3))\
+    \ a[i]=a[i] ? a[i]\",\"$i : $i; print a[1]}'\n    echo \"$l\" | awk '{for(i=1;i<=NF;++i)\
+    \ if(!(i %% 3)) a[i]=a[i] ? a[i]\",\"$i : $i; print a[1]}' | sort -u", "    local\
+    \ l \n    local l' \n    local i \n    local last_index \n    \n    l=$1 \n  \
+    \  l=( $l ) \n    \n    last_index=$(( ${#l[@]} - 1 )) \n    \n    for (( i=0;\
+    \ i < ${#l[@]}; i++ )); do \n        if (( i % 3 )); then \n            l[$((\
+    \ last_index + i ))]=${l[$(( last_index + i ))]} \n        else\n            l[$((\
+    \ last_index + i ))]=${l[$(( last_index + i ))]} \n        fi \n    done\n   \
+    \ for (( i=0; i < ${#l[@]}; i++ )); do \n        if (( i % 3 )); then \n     \
+    \       l[$(( last_index + i ))]=${l[$(( last_index + i ))]} \n        fi \n \
+    \   done\n    for (( i=0; i < ${#l[@]}; i++ )); do \n        if (( i % 3 )); then\
+    \ \n            l[$(( last_index + i ))]=${l[$(( last_index + i ))]} \n      \
+    \  fi \n    done\n    \n    l=$( IFS=$' \\t\\n\\r' printf '%s' \"${l[@]}\") \n\
+    \    l=$( IFS=$'\\n' echo \"$l\" ) \n    \n    l=$( IFS=$' \\t\\n\\r' printf '%s'\
+    \ \"${l[@]}\") \n    l=$( IFS=$'\\n' echo \"$l\" ) \n    \n    l=$( IFS=$' \\\
+    t\\n\\r' printf '%s' \"${l[@]}\") \n    l=$( IFS=$'\\n' echo \"$l\" ) \n    \n\
+    \    l=$( IFS=$' \\t\\n\\r' printf '%s' \"${l[@]}\") \n    l=$( IFS=$'\\n' echo\
+    \ \"$l\" ) \n    \n    l=$( IFS=$' \\t\\n\\r' printf '%s' \"${l[@]}\") \n    l=$(\
+    \ IFS=$'\\n' echo \"$l\" ) \n    \n    l=$( IFS=$' \\t\\n\\r' printf '%s' \"${l[@]}\"\
+    ) \n    l=$( IFS=$'\\n' echo \"$l\" ) \n    \n    l=$( IFS=$' \\t\\n\\r' printf\
+    \ '%s' \"${l[@]}\") \n    l=$( IFS=$'\\n' echo \"$l\" ) \n    \n    l=$( IFS=$'\
+    \ \\t\\n\\r' printf '%s' \"${l[@]}\") \n    l=$( IFS=$'\\n' echo \"$l\" ) \n \
+    \   \n    l", "    l=$1\n    length=${#l}\n    third=${l/3:3}\n    i=0;\n    while\
+    \ [ ${i} -lt ${length} ]\n    do\n        if [[ ${l:${i}} =~ ^(${third})$ ]];\
+    \ then\n            l1=${l:$((i-1))}\n            l2=${l:$((i-1))}\n         \
+    \   l3=${l:$((i-1))}\n            l=${l1:0:1}${l2:2:1}${l3:3:1}\n        else\n\
+    \            l=${l:$((i-1))}\n        fi\n        i=$((i+1))\n    done\n    echo\
+    \ \"${l}\"", "  local l=\"$1\"\n  local i=$(for i in \"${l[@]}\"; do\n      [[\
+    \ \"$i\" == \"$i\" && \"$i\" != *[^3] ]] && echo $i\n    done)\n  echo \"${l[@]}\"",
+  "    # $1 is a list of space-separated integers\n    # $2 stores the result (which\
+    \ is returned at the end)\n    if [ -z \"$1\" ]; then\n        echo \"Usage: $0\
+    \ <space-separated integers>\"\n        exit 1\n    fi\n    local l=$1\n    local\
+    \ nl=$( IFS=$' \\t\\n\\r' read -r -a l <<< \"$l\" )\n    nl=( (( ${#nl[@]} % 3\
+    \ )) )\n    local nlnew\n    local i=${#l[@]}\n    while (( ${#l[@]} > 0 )); do\n\
+    \        nlnew=( ${nl[@]:0:i} )\n        l[${#nl[@]}-1]=\\${l[${#nl[@]}-1]}\n\
+    \        nl[${#nlnew[@]}-1]=\"\\\"${nlnew[${#nlnew[@]}-1]}\\\"\"\n        (( i\
+    \ -= 1 ))\n    done\n    nlnew=( ${nl[@]:0:i} )\n    l[${#nl[@]}-1]=\\${l[${#nl[@]}-1]}\n\
+    \    nl[${#nlnew[@]}-1]=\"\\\"${nlnew[${#nlnew[@]}-1]}\\\"\"\n    echo \"${nl[@]}\"",
+  "    IFS=' ' read -r -a l <<< \"$1\"\n    declare -A vals\n    for idx in \"${!l[@]}\"\
+    ; do\n        vals[$idx]=$(echo \"${l[$idx]}\" | tr \" \" \"\\n\")\n    done\n\
+    \    for idx in \"${!l[@]}\"; do\n        if (( idx % 3 == 0 )); then\n      \
+    \      l[$idx]=\"${vals[$idx]}\"\n        fi\n    done\n    for idx in \"${!l[@]}\"\
+    ; do\n        echo \"${l[$idx]}\"\n    done", "    local IFS=\" \"\n    local\
+    \ i\n    local i1\n    local i3\n    local l\n\n    # Sort the third column, removing\
+    \ quotes\n    IFS=$' \\t\\n'\n    for i in $(sort -k 3 <<< \"$1\") ; do\n    \
+    \    # Remove the quotes and sort the second column\n        sed \"s/\\\"//g\"\
+    \ <<< \"$i\"\n    done | sort -k2 | uniq", "    local l=\"$1\"\n    local llen=${#l[@]}\n\
+    \    for i in $(seq 0 $(($llen-1) )); do\n        (( i % 3 == 0 )) && {\n    \
+    \        local j=$i\n            while (( l != \"\" && \"$j\" != $(($llen-1))\
+    \ )) && [[ \"$l\" =~ $l ]]; do\n                l=\"${l%$j}${l#$j}\"\n       \
+    \         j=$(( j-1 ))\n            done\n            l+=( \"$l\" )\n        }\n\
+    \        (( l != \"\" && \"$i\" != $(($llen-1)) )) && l+=( \"$l\" )\n    done\n\
+    \    sort -n \"$l\"", "    local l l' i j tmp a\n\n    l=$(echo \"$1\" | tr '\
+    \ ' '\\n')\n    for ((i = 0; i < ${#l}; i = i + 2)); do\n        j=i+1\n     \
+    \   tmp=l[j]\n        while ((j<${#l}) && (($j % 3) == 0)); do\n            l[j]=l[j]\n\
+    \            j=$((j+1))\n        done\n        l[j]=tmp\n    done\n\n    for a\
+    \ in ${l[@]}; do\n        l'=$(echo \"$1\" | sed -e \"s#^${a} ##\" | tr ' ' '\\\
+    n' | sort -u)\n    done\n\n    echo \"${l'[@]}\"", "    local -n arr=$1\n    #\
+    \ split into an array, then sort by third value\n    IFS=\" \" read -r -a arr\
+    \ <<< \"${arr[*]}\"\n    for ((i=0; i<${#arr[@]}; i+=3)); do\n        (( i % 3\
+    \ )) && continue\n        (( i == 0 )) && break\n        arr[$i] = \"$arr[$i]\"\
+    \n    done\n    echo \"${arr[*]}\"", "\tlocal l=$1\n\tlocal l_sorted\n\tlocal\
+    \ l_sorted_indices\n\tlocal i\n\tlocal j\n\tlocal k\n\tlocal l_count\n\tlocal\
+    \ l_value\n\tlocal l_value_temp\n\tlocal l_value_temp2\n\tlocal l_value_temp3\n\
+    \tlocal l_value_temp4\n\tlocal l_value_temp5\n\tlocal l_value_temp6\n\tlocal l_value_temp7\n\
+    \tlocal l_value_temp8\n\tlocal l_value_temp9\n\tlocal l_value_temp10\n\tlocal\
+    \ l_value_temp11\n\tlocal l_value_temp12\n\tlocal l_value_temp13\n\tlocal l_value_temp14\n\
+    \tlocal l_value_temp15\n\tlocal l_value_temp16\n\tlocal l_value_temp17\n\tlocal\
+    \ l_value_temp18\n\tlocal l_value_temp19\n\tlocal l_value_temp20\n\tlocal l_value_temp21\n\
+    \tlocal l_value_temp22\n\tlocal l_value_temp23\n\tlocal l_value_temp24\n\tlocal\
+    \ l_value_temp25\n\tlocal l_value_temp26\n\tlocal l_value_temp27\n\tlocal l_value_temp28\n\
+    \tlocal l_value_temp29\n\tlocal l_value_temp30\n\tlocal l_value_temp31\n\tlocal\
+    \ l_value_temp32\n\tlocal l_value_temp33\n\tlocal l_value_temp34\n\tlocal l_value_temp35\n\
+    \tlocal l_value_temp36\n\tlocal l_value_temp37\n\tlocal l_value_temp38\n\tlocal\
+    \ l_value_temp39\n\tlocal l_value_temp40\n\tlocal l_value_temp41\n\tlocal l_value_temp42\n\
+    \tlocal l_value_temp43\n\tlocal l_value_temp44\n\tlocal l_value_temp45\n\tlocal\
+    \ l_value_temp46\n\tlocal l_value_temp47\n\tlocal l_value_temp48\n\tlocal l_value_temp49\n\
+    \tlocal l_value_temp50\n\tlocal l_value_temp51\n\tlocal l_value_temp52\n\tlocal\
+    \ l_value_temp53\n\tlocal l_value_temp54\n\tlocal l_value_temp55\n\tlocal l_value_temp56\n\
+    \tlocal l_value_temp57\n\tlocal l_value_temp58\n\tlocal l_value_temp59\n\tlocal\
+    \ l_value_temp60\n\tlocal l_value_temp61\n\tlocal l_value_temp62\n\tlocal l_value_temp63\n\
+    \tlocal l_value_temp64\n\tlocal l_value_temp65\n\tlocal l_value_temp66\n\tlocal\
+    \ l_value_temp67\n\tlocal l_value_temp", "  local arr=$1\n  local nl nl nl2 lst\
+    \ nl2\n  local i j k\n\n  nl=\"${arr[@]}\"\n  nl2=\"$(sed 's/ /\\n/g' <<< \"$nl\"\
+    )\"\n  echo \"$nl2\" | while read -r line ; do\n    nl=\"${nl// /$line}\"\n  \
+    \  echo \"$nl\"\n  done\n  nl2=\"$(sed 's/ /\\n/g' <<< \"$nl\")\"\n  echo \"$nl2\"\
+    \ | while read -r line ; do\n    nl=\"${nl// /$line}\"\n    lst=\"${nl// /}\n\
+    \    nl2=\"$(sed 's/ /\\n/g' <<< \"$nl\")\"\n    echo \"$nl2\"\n  done\n  nl2=\"\
+    $(sed 's/ /\\n/g' <<< \"$nl\")\"\n  echo \"$nl2\"", "  # This function takes in\
+    \ a list l and returns a list l' such that\n  # l' is identical to l in the indicies\
+    \ that are not divisible by three, while its values at the indicies that are divisible\
+    \ by three are equal\n  # to the values of the corresponding indicies of l, but\
+    \ sorted.\n  # >>> $(sort_third \"1 2 3\")\n  # ['\"1\"', '\"2\"', '\"3\"']\n\
+    \  # >>> $(sort_third \"5 6 3 4 8 9 2\")\n  # ['\"2\"', '\"6\"', '\"3\"', '\"\
+    4\"', '\"8\"', '\"9\"', '\"5\"']\n  local IFS=$' '\n  local l\n  local l_sorted\n\
+    \  local l_sorted_flag\n  local l_sorted_index\n  l_sorted=( ${!1} )\n  for l_sorted_flag\
+    \ in ${l_sorted[*]}\n  do\n    l_sorted_index=${!l_sorted_flag}\n    (( ${#l}\
+    \ > 0 && l_sorted_index % 3 )) && l[${l_sorted_index/3}]=${l_sorted_index}\n \
+    \ done\n  l_sorted_flag=0\n  for l_sorted_index in ${!l[*]}\n  do\n    (( ${#l}\
+    \ > 0 && l_sorted_index % 3 == 0 )) && l[${l_sorted_index/3}]=${l[${l_sorted_index/3}]}\n\
+    \    (( l_sorted_flag++ )) || true\n  done\n  unset IFS", "\tlocal list_=\"$1\"\
+    \n\tlocal list_new\n\tlocal i\n\tlocal j\n\tlocal k\n\tlist_new=()\n\ti=0\n\t\
+    j=0\n\tk=0\n\twhile [ $i -lt ${#list_[@]} ]; do\n\t\tk=0\n\t\twhile [ $k -lt 3\
+    \ ]; do\n\t\t\tlist_new[$j]=$list_[$i]\n\t\t\t((i+=1))\n\t\t\t((j+=1))\n\t\t\t\
+    k=$((k+1))\n\t\tdone\n\t\t((j-=1))\n\t\t((i+=1))\n\tdone\n\treturn \"${list_new[@]}\"",
+  "    local l l' i j\n    l=$1\n    for ((i=0; i < ${#l[@]}; ++i)); do\n        j=$((i\
+    \ % 3))\n        if [ $j -eq 0 ]; then\n            l'[$i]=$l[$i]'\n        elif\
+    \ [ $j -eq 1 ]; then\n            l'[$i]=$l[$i]'\n        elif [ $j -eq 2 ]; then\n\
+    \            l'[$i]=$l[$i]'\n        elif [ $j -eq 3 ]; then\n            l'[$i]=$l[$i]'\n\
+    \        fi\n    done\n    echo \"${l[@]}\"", "\tlocal l=${1}\n\tlocal i=0\n\t\
+    local j=1\n\tlocal k=1\n\tlocal tmp\n\tlocal list\n\tlocal sorted\n\twhile [ \"\
+    $i\" -lt \"$#\" ];\n\tdo\n\t\tif [[ $((i%3)) == 0 ]]; then\n\t\t\ttmp=${l[$i]}\n\
+    \t\t\twhile [[ $((j%3)) == 0 ]]; then\n\t\t\t\tsorted[$k]=${l[$j]}\n\t\t\t\tj=$((j+1))\n\
+    \t\t\t\tk=$((k+1))\n\t\t\tdone\n\t\t\tsorted[$k]=${l[$j]}\n\t\t\tj=$((j+1))\n\t\
+    \t\tk=$((k+1))\n\t\t\tlist=\"${sorted[*]}\"\n\t\tfi\n\t\ti=$((i+1))\n\tdone\n\t\
+    echo \"${list[*]}\"", "    local l_list=\"$1\" l_len=\"${#l_list}\"\n    local\
+    \ l_result=\"\"\n    local l_min=\"${l_list[0]}\" l_max=\"${l_list[0]}\"\n\n \
+    \   for (( i=1; i<l_len; i++ )); do\n        l_min=\"${l_min#*[^0-9]}\" l_min=\"\
+    ${l_min%[^0-9]}\" && l_min=\"${l_min#*^}\" || l_min=\"${l_min%^}\"\n        l_max=\"\
+    ${l_max#*[^0-9]}\" l_max=\"${l_max%[^0-9]}\" && l_max=\"${l_max#*^}\" || l_max=\"\
+    ${l_max%^}\"\n\n        [[ \"${l_max}\" = \"${l_min}\" ]] && continue\n\n    \
+    \    [[ \"$(( (i % 3) ))\" == \"0\" ]] && l_result+=\"\\\"${l_list[i]}\\\"\" ||\
+    \ l_result+=${l_list[i]}\n    done\n\n    echo \"${l_result}\" | tr '\\0' '\\\
+    n'", "    local l=$1\n    local len=${#l}\n    local i=0 j=0 k=0 l=() l1=()\n\n\
+    \    if [ -z $len ]; then\n        echo \"$1 is not defined\"\n        exit 1\n\
+    \    fi\n\n    # split l into l by space\n    while ((i < $len))\n    do\n   \
+    \     ((i++))\n        l1[k]=${l[i]}\n        k=$((k+1))\n    done\n\n    local\
+    \ m\n\n    # sort l1 by third column\n    for ((k=0; k < len; k++))\n    do\n\
+    \        m=$((k+1))\n        if [ $m -eq 1 ]; then\n            l[($m-1)]=${l[k]}\n\
+    \        else\n            l[($m-1)]=${l[($m-1)]} ${l[k]}\n        fi\n    done\n\
+    \n    # re-split l by space\n    for ((k=0; k < len; k++))\n    do\n        ((j++))\n\
+    \        l[(($j-1))]=${l[k]}\n    done\n\n    # print result\n    echo \"${l[@]}\"",
+  "    local list=\"$1\"\n    # Sort the list\n    local sorted_list\n    IFS=$'\\\
+    n' sorted_list=($(sort -n <<<\"${list[*]}\"))\n    # Remove the list items that\
+    \ are divisible by three\n    local len=${#sorted_list[@]}\n    for (( i=0; i\
+    \ < len; i++ ))\n    do\n        if [[ $(( $i % 3 )) == 0 ]]\n        then\n \
+    \           sorted_list=(${sorted_list[@]:$i:1})\n        fi\n    done\n    echo\
+    \ \"${sorted_list[*]}\"", "    local i\n    for i in $@; do\n        local j\n\
+    \        for j in $(seq 0 $(( $(( $#l % 3 )) )) ); do\n            echo \"$j$i\"\
+    \n        done\n    done", "        set -- $1 \n        l=$(IFS=\" \" read -a\
+    \ list <<< \"$1\")\n        length=${#list[@]}\n        if [ $length -lt 3 ];\
+    \ then\n                echo \"$l\"\n        else\n                list=(${list[@]})\n\
+    \                list[2]=$(echo $list[2] | sed -e 's/ //g')\n                list[3]=$(echo\
+    \ $list[3] | sed -e 's/ //g')\n                list[1]=$(echo $list[1] | sed -e\
+    \ 's/ //g')\n                if [ $list[1] -eq $list[2] ]; then\n            \
+    \            list[2]=$(echo $list[2] | sed -e 's/ //g')\n                    \
+    \    list[3]=$(echo $list[3] | sed -e 's/ //g')\n                        list[1]=$(echo\
+    \ $list[1] | sed -e 's/ //g')\n                fi\n                for (( i=1;\
+    \ i<$length; i++ )); do\n                        if [ $((i%3)) -eq 0 ]; then\n\
+    \                                list[\"$((i+2))\"]=$(echo $list[\"$((i-1))\"\
+    ] | sed -e 's/ //g')\n                                list[\"$((i+1))\"]=$(echo\
+    \ $list[\"$((i))\"] | sed -e 's/ //g')\n                        else\n       \
+    \                         list[\"$((i+1))\"]=$(echo $list[\"$((i-1))\"] | sed\
+    \ -e 's/ //g')\n                                list[\"$((i+2))\"]=$(echo $list[\"\
+    $((i))\"] | sed -e 's/ //g')\n                        fi\n                done\n\
+    \                echo \"${list[@]}\"\n        fi", "  local sorted_list=\"$(\n\
+    \    IFS=\" \" # split the input by space\n    set -A sorted_list $1 # populate\
+    \ the sorted list with $1\n    local len=\"${#sorted_list[@]}\" # get the length\
+    \ of the list\n    for i in $(seq 0 $(($len - 2)) # iterate over the input list\
+    \ from last to first\n    do\n      if [ \"$i\" -eq 0 ]\n      then\n        sorted_list[0]=\"\
+    ${sorted_list[$i]}\"\n        sorted_list[$i]=\"${sorted_list[$(($i - 1))]}\"\n\
+    \        continue\n      fi\n      if [ \"$i\" -eq \"$(($len - 1))\" ]\n     \
+    \ then\n        sorted_list[$(($i - 1))]=\"${sorted_list[$i]}\"\n        sorted_list[0]=\"\
+    ${sorted_list[$(($i - 1))]}\"\n        sorted_list[$i]=\"${sorted_list[0]}\"\n\
+    \        continue\n      fi\n      # get the elements from the input list that\
+    \ lie between the current and previous elements\n      local i1=\"${sorted_list[$i\
+    \ - 1]}\"\n      local i2=\"${sorted_list[$i]}\"\n      local j1=\"${sorted_list[$((i\
+    \ - 2))]}\"\n      local j2=\"${sorted_list[$(($i - 1))]}\"\n      local k1=\"\
+    ${sorted_list[$((i - 3))]}\"\n      local k2=\"${sorted_list[$(($i - 2))]}\"\n\
+    \      # swap the values of the list elements between current and previous elements\
+    \ if they are divisible by three\n      if [ \"$i\" -eq \"$(($i - 3))\" ]\n  \
+    \    then\n        sorted_list[$i]=\"${i1}\"\n        sorted_list[$(($i - 2))]=\"\
+    ${i2}\" # swap the values\n      fi\n      if [ \"$i\" -eq \"$(($i - 2))\" ]\n\
+    \      then\n        sorted_list[$i]=\"${j1}\"\n        sorted_list[$(($i - 1))]=\"\
+    ${j2}\" # swap the values\n      fi\n      if [ \"$i\" -eq \"$(($i - 1))\" ]\n\
+    \      then\n        sorted_list[$i]=\"${k1}\"\n        sorted_list[$(($i - 1))]=\"\
+    ${k2}\" # swap the values\n      fi\n    done\n    echo \"${sorted_list[*]}\"\
+    \ # return the sorted list with double quotes around each value\n  )\"\n  echo\
+    \ \"${sorted_list}\"", "    local l l' i\n    local len=${#1}\n    for ((i=0;\
+    \ i<len; ++i)); do\n\tl=$(echo \"${1}\" | sed -n \"${i}p\")\n\tl=\"${l% *}\"\n\
+    \tl=\"${l##* }\"\n\t[[ \"$l\" = \"$1\" ]] || continue\n\t[[ \"$((i % 3))\" -eq\
+    \ 0 ]] || [[ \"$i\" -eq \"$((i % 3))\" ]] && l=\"${l% *}\" \"${l##* }\"\n\tl=\"\
+    ${l% *}\"\n\tl=\"${l##* }\"\n\tl+=\" \" # make space\n\tl1=\"${l}\"\n\t[[ \"$l1\"\
+    \ = \"$l\" ]] || { [[ \"$l1\" = \"$l1\" ]] || continue; echo \"$l1\"; continue;\
+    \ }\n\tl1=\"${l1% *}\"\n\tl1=\"${l1##* }\"\n\tl1=\"${l1% *}\"\n\tl1=\"${l1##*\
+    \ }\"\n\tl1+=\" \" # make space\n\tl2=\"${l}\"\n\t[[ \"$l2\" = \"$l\" ]] || {\
+    \ [[ \"$l2\" = \"$l1\" ]] || continue; echo \"$l2\"; continue; }\n\tl2=\"${l2%\
+    \ *}\"\n\tl2=\"${l2##* }\"\n\tl2=\"${l2% *}\"\n\tl2=\"${l2##* }\"\n\tl2+=\" \"\
+    \ # make space\n\tl3=\"${l}\"\n\t[[ \"$l3\" = \"$l\" ]] || { [[ \"$l3\" = \"$l1\"\
+    \ ]] || continue; echo \"$l3\"; continue; }\n\tl3=\"${l3% *}\"\n\tl3=\"${l3##*\
+    \ }\"\n\tl3=\"${l3% *}\"\n\tl3=\"${l3##* }\"\n\tl3+=\" \" # make space\n\tl4=\"\
+    ${l}\"\n\t[[ \"$l4\" = \"$l\" ]] || { [[ \"$l4\" = \"$l1\" ]] || continue; echo\
+    \ \"$l4\"; continue; }\n\tl4=\"${l4% *}\"\n\tl4=\"${l4##* }\"\n\tl4=\"${l4% *}\"\
+    \n\tl4=\"${l4##* }\"\n\tl4+=\" \" # make space\n\tl5=\"${l}\"\n\t[[ \"$l5\" =\
+    \ \"$l\" ]] || { [[ \"$l5\" = \"$l1\" ]] || continue; echo \"$l5\"; continue;\
+    \ }\n\tl5=\"${l5% *}\"\n\t", "    local list=\"$1\"\n    local index=0\n    local\
+    \ list_aux\n    local list_aux_aux\n    local index_aux\n    local aux\n    local\
+    \ list_aux_aux_aux\n    local tmp\n    local tmp2\n    local tmp3\n    local tmp4\n\
+    \    while [ \"$index\" -lt \"$#list\" ]; do\n        list_aux=\"${list} ${list}${list+$index}\"\
+    \n        index=$(( $index + 1 ))\n    done\n    list_aux=\"${list} ${list}${list+$index}\"\
+    \n    index_aux=$index\n    declare -a aux=$(echo ${list_aux} | tr \" \" \"\\\
+    n\")\n    for index in $(seq 0 \"$index_aux\"); do\n        list_aux_aux_aux=\"\
+    ${list_aux} ${list}${list+$index}\"\n        list_aux_aux=\"${list_aux_aux_aux}\
+    \ ${list}${list+$(($index+1))}\"\n        list_aux=\"${list_aux_aux} ${list}${list+$(($index+2))}\"\
+    \n    done\n    list_aux=\"${list_aux} ${list}${list+$(($index_aux+1))}\"\n  \
+    \  declare -a tmp=$(echo ${list_aux} | tr \" \" \"\\n\")\n    declare -a tmp2=$(echo\
+    \ ${list_aux} | tr \" \" \"\\n\")\n    declare -a tmp3=$(echo ${list_aux} | tr\
+    \ \" \" \"\\n\")\n    declare -a tmp4=$(echo ${list_aux} | tr \" \" \"\\n\")\n\
+    \    for index in $(seq 0 \"$index_aux\"); do\n        tmp3[$index]=\"\\\"${tmp[$index]}\\\
+    \",\"\n        tmp4[$index]=\"\\\"${tmp[$index]}\\\",\"\n    done\n    aux=$(echo\
+    \ ${tmp3} | tr \" \" \"\\n\")\n    tmp3=$(echo ${tmp3} | tr \" \" \"\\n\")\n \
+    \   tmp4=$(echo ${tmp4} | tr \" \" \"\\n\")\n    aux=$(echo ${tmp4} | tr \" \"\
+    \ \"\\n\")\n    tmp4=$(echo ${tmp4} | tr \" \" \"\\n\")\n    tmp3=$(echo ${tmp3}\
+    \ | tr \" \" \"\\n\")\n    tmp2=$(echo ${tmp2} | tr \" \" \"\\n\")\n    for index\
+    \ in $(seq 0 \"$index_aux\"); do\n        tmp3[$index]=${tmp3[$index]%,}\n   \
+    \     tmp4[$index]=${tmp4[$index]%,}\n    done\n    for index in $(seq 0 \"$index_aux\"\
+    ); do\n        tmp3[$index]=${tmp3[$index]}\\\"\n        tmp4[$index]=${tmp4[$index]}\\\
+    \"\n    ", "    local l new_list\n    local i\n    local j\n\n    read -a new_list\
+    \ <<< \"$1\"\n\n    for (( i = 0; i < ${#new_list[*]} - 1; i++ )); do\n      \
+    \  for (( j = (i + 1); j < ${#new_list[*]}; j++ )); do\n            if (( $(echo\
+    \ \"${new_list[i]} < ${new_list[j]}\" | bc) ));then\n                let \"k=i\"\
+    \n            else\n                let \"k=j\"\n            fi\n            echo\
+    \ \"${new_list[k]}\"\n        done\n    done\n", "  local l=$1 m=$2 i=$(( $(wc\
+    \ -l <<< \"$1\") - 1 ))\n  l=$( sed -n \"s/^$m.*//p\" <<< \"$l\" )\n  if [ \"\
+    $i\" -lt \"$m\" ]; then\n    for i in $(seq 1 $(( $i + 1 ))); do\n      l+=($(sed\
+    \ -n \"s/^$i.*//p\" <<< \"$l\"))\n    done\n  fi\n  echo $l", "    local l l l'\
+    \ i\n    l=\"$1\"\n    shift\n    for i in $( seq 0 $(( $# % 3 )) )\n    do\n\
+    \        echo \"${l[${i}]}\"\n    done\n    l=\"$( sort_third $( echo $l ) )$l\"\
+    \n    echo \"${l%$( echo )}\" ", "    local l=$1\n    local l' i=0\n    local\
+    \ n=0\n    while [ $((i++)) -lt ${#l} ]; do\n        n=$((n+1))\n        if [[\
+    \ ${#l}==$n ]]; then\n            ((n=0))\n        fi\n    done\n    for ((i=0;i<n;i++))\n\
+    \    do\n        l$'$i'=${l[i]}\n    done\n    \n    for ((i=0;i<${#l};i++))\n\
+    \    do\n        if [[ ${#l}==$((i%3)) ]]; then\n            local j=$i\n    \
+    \        while [[ ${#l}' -ge $((j+1)) ]]\n            do\n                l$'$j'=${l$((j+1))}\n\
+    \                ((j+=1))\n            done\n        fi\n    done\n    \n    echo\
+    \ $l'", "    local l l' i j k k r\n    local k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11\
+    \ k12 k13\n    l=$1\n    k1=$(echo $l | cut -d \" \" -f 1)\n    k2=$(echo $l |\
+    \ cut -d \" \" -f 2)\n    k3=$(echo $l | cut -d \" \" -f 3)\n    k4=$(echo $l\
+    \ | cut -d \" \" -f 4)\n    k5=$(echo $l | cut -d \" \" -f 5)\n    k6=$(echo $l\
+    \ | cut -d \" \" -f 6)\n    k7=$(echo $l | cut -d \" \" -f 7)\n    k8=$(echo $l\
+    \ | cut -d \" \" -f 8)\n    k9=$(echo $l | cut -d \" \" -f 9)\n    k10=$(echo\
+    \ $l | cut -d \" \" -f 10)\n    k11=$(echo $l | cut -d \" \" -f 11)\n    k12=$(echo\
+    \ $l | cut -d \" \" -f 12)\n    k13=$(echo $l | cut -d \" \" -f 13)\n    r=$k13\n\
+    \    k4=$(echo $l | cut -d \" \" -f 4)\n    k5=$(echo $l | cut -d \" \" -f 5)\n\
+    \    k6=$(echo $l | cut -d \" \" -f 6)\n    k7=$(echo $l | cut -d \" \" -f 7)\n\
+    \    k8=$(echo $l | cut -d \" \" -f 8)\n    k9=$(echo $l | cut -d \" \" -f 9)\n\
+    \    k10=$(echo $l | cut -d \" \" -f 10)\n    k11=$(echo $l | cut -d \" \" -f\
+    \ 11)\n    k12=$(echo $l | cut -d \" \" -f 12)\n    k13=$(echo $l | cut -d \"\
+    \ \" -f 13)\n    r=$k13\n    k7=$(echo $l | cut -d \" \" -f 7)\n    k8=$(echo\
+    \ $l | cut -d \" \" -f 8)\n    k9=$(echo $l | cut -d \" \" -f 9)\n    k10=$(echo\
+    \ $l | cut -d \" \" -f 10)\n    k11=$(echo $l | cut -d \" \" -f 11)\n    k12=$(echo\
+    \ $l | cut -d \" \" -f 12)\n    k13=$(echo $l | cut -d \" \" -f 13)\n    r=$k13\n\
+    \    k8=$(echo $l | cut -d \" \" -f 8)\n    k9=$(echo $l | cut -d \" \" -f 9)\n\
+    \    k10=$(echo $l | cut -d \" \" -f 10)\n    k11=$(echo $l | cut -d \" \" -f\
+    \ 11)\n    k12=$(echo $l | cut -d \" \" -f ", "\tlocal l l' '\n\tset -- $1\n\t\
+    while [ \"$#\" -gt 0 ]; do\n\t\tl+=\" $2\"\n\t\t(( $# > 2 )) && l+=\" \"\n\t\t\
+    shift 2\n\tdone\n\tset -- \"$l\"\n\twhile [ \"$#\" -gt 0 ]; do\n\t\t(( $# > 1\
+    \ )) && l+=\" \"\n\t\t(( $# > 2 )) && l+=\" $2\"\n\t\tshift 2\n\tdone\n\tset --\
+    \ \"$l\"\n\tset -- \"$@\"", "  l=$1\n  l_sorted=`echo $l | sed 's/ /\\n/g' | sort\
+    \ | uniq`\n  i=2\n  l=()\n  for n in $l_sorted; do\n    if [ $(($i % 3)) -eq 0\
+    \ ]; then\n      l+=($n)\n    fi\n    i=$((i+1))\n  done\n  for n in $l; do\n\
+    \    if [ $(($i % 3)) -eq 0 ]; then\n      l+=($n)\n    fi\n    i=$((i+1))\n \
+    \ done\n  echo \"$l\"", "   local l\n   local l'\n   local i\n   local val\n \
+    \  local val2\n   read -r l || return\n   read -r l' || return\n   read -r l'\
+    \ || return\n   for i in \"${!l[@]}\"; do\n     val=${l[i]}\n     val2=$((val\
+    \ % 3))\n     if [[ \"$val2\" -eq 1 ]]; then\n       l'[$((i+1))]=\"'$val'\"\n\
+    \     elif [[ \"$val2\" -eq 0 ]]; then\n       l'[$((i+1))]=\"$val\"\n     elif\
+    \ [[ \"$val2\" -eq 2 ]]; then\n       l'[$((i+1))]=\"$val\"\n     fi\n   done\n\
+    \   echo \"${l[@]}\"", "  local l len\n  l=\"$( eval \"$1\" )\"\n  len=\"$( echo\
+    \ \"$l\" | wc -l )\"\n  if [ $len -gt 0 ]; then\n    for ((i=1; i<len; i+=3));\
+    \ do\n      l3=\"$(echo \"${l[@]:$i:2}\" | sort -g)\"\n      l4=\"$(echo \"${l[@]:$i+1:2}\"\
+    \ | sort -g)\"\n      l5=\"$(echo \"${l[@]:$i+2:2}\" | sort -g)\"\n      l=\"\
+    $l3 $l4 $l5\"\n    done\n  fi\n  echo \"$l\"", "    # Get the number of arguments\
+    \ to $1, which should be the number of lists.\n    n=$($(echo $1 | wc -w))\n\n\
+    \    # Preserve the input and output streams for the pipe\n    exec 3>&1\n   \
+    \ exec 4>&2\n\n    # Sort the indicies with indicies that are multiples of 3,\
+    \ but preserve the value at the same indicies that are multiples of 3\n    $(echo\
+    \ $1 | sort -k1,1 -k2,2n -k3,3n -k4,4 --stable --key=$2)\n\n    # Sort the indicies\
+    \ with indicies that are multiples of 3 and preserve the value at the same indicies\
+    \ that are multiples of 3\n    $(echo $1 | sort -k1,1 -k2,2 -k3,3 -k4,4 --stable\
+    \ --key=$2)", "  local l i j k\n  local len=${#1}\n  for i in `seq 0 $((len-1))`;\
+    \ do\n    if [ ${1:$i:1} -eq ${2:$i:1} ]; then\n      k=$(expr $i % 3)\n     \
+    \ if [ $k -eq 0 ]; then\n        echo \"$1 $((i+2)) $((i+1))\"\n      else\n \
+    \       echo \"$1 $((i+1)) $((i+2))\"\n      fi\n      exit 0\n    fi\n  done",
+  "        local x\n        local tmp i\n        local l l' x\n        local i\n \
+    \       local j\n        l=$1\n        x=\"\"\n        for i in $(seq 1 $#); do\n\
+    \                if [[ $((i % 3)) -eq 0 ]]; then\n                        x=$((i+1))\n\
+    \                fi\n                tmp=$((i + 1))\n                l'=$tmp\n\
+    \                j=$((i+1))\n                while [[ $((j > i)) ]] && \\\n  \
+    \              [[ $(expr $l < $(expr $l' )) ]]; do\n                        tmp=$((j\
+    \ + 1))\n                        l'=$tmp\n                        j=$((j + 1))\n\
+    \                done\n                l'=\\`expr \"$l\" < \"$l\"'\\`\n      \
+    \          l[$i]=\\`expr \"$l\" > \"$l\"'\\`\n                l[$i]=\\`expr \"\
+    $l\" > \"$l'\"\\`\n                l[$i]=\\`expr \"$l\" > \"$l'\"\\`\n       \
+    \ done\n        for i in $(seq 1 $#); do\n                l[$i]='\\\"'$l[$i]'\\\
+    \"'\n        done\n        for i in $(seq 1 $#); do\n                if [[ $((i\
+    \ % 3)) -eq 0 ]]; then\n                        l[$i]='\\\"'$l[$i]'\\\"'\n   \
+    \             fi\n        done\n        for i in $(seq 1 $#); do\n           \
+    \     l[$i]=\\`expr \"$l\" < \"$l\"'\\`\n        done\n        l=\"${l[*]}\"\n\
+    \        echo \"${l[@]}\"", "    local l i\n    local l l i l' result\n    local\
+    \ i\n\n    l=$( echo $1 | tr ' ' ',' )\n    for (( i = 0; i < ${#l}; i++ )); do\n\
+    \        for (( j = ( i+1 ); j < ${#l}; j++ )); do\n            if [ ${l[j]} -eq\
+    \ ${l[i]} ]; then\n                l[j]=$(echo $l[j])\n                l[i]=$(echo\
+    \ $l[i])\n            fi\n        done\n    done\n\n    l=${l[*]}\n    l=$( echo\
+    \ $l | tr ' ' ',' )\n    l=${l[*]}\n    result=$( echo $l | tr ' ' ',' )\n\n \
+    \   echo \"$result\"", "    local -n l=\"$1\"\n    local -a l1'\n    local -i\
+    \ i\n    local -p 'sort_third: Do you want to sort the third column ? [yn]? '\n\
+    \    read -r y\n    if [[ $y = \"y\" || $y = \"Y\" ]]; then\n        for (( i\
+    \ = 1; i < ${#l[@]}; i++ )); do\n            l1=(\"${l[$i]}\")\n            ((\
+    \ i%3 )) && l1[$i]=\"${!i}\"\n            l1+=(\"${!i}\")\n            (( i++\
+    \ ))\n        done\n        sort -k 1 -t '|' \"${l1[@]}\"\n    else\n        \"\
+    ${l[@]}\"\n    fi", "  # $1 is expected to be a space-separated list\n  # $2 is\
+    \ the desired output list\n  local l=$1\n  local lprime=$2\n  # Create an empty\
+    \ list\n  local n=''\n  local i=0\n  # Loop over all the elements of the first\
+    \ list\n  for e in ${l}; do\n    if [[ $(( $i % 3 )) == 0 ]]; then\n      # Append\
+    \ the element\n      n+=$e\n    else\n      # Append a copy of the element\n \
+    \     n+=\"$e \"\n    fi\n    i=$(( $i + 1 ))\n  done\n  # Append the remaining\
+    \ elements\n  n+=$(( $i - 1 ))\n  # Append the remaining elements of the second\
+    \ list lprime\n  n+=$lprime\n  # Remove trailing whitespace\n  n+=$'\\n'\n  echo\
+    \ \"$n\"", "  local l nl nr\n  local nl2\n  local i\n\n  read -a nl <<< \"$1\"\
+    \n\n  nl2=()\n  nr=()\n  local i=0\n  while [ $i -lt ${#nl[@]} ]; do\n    case\
+    \ \"$nl[$i]\" in\n      \"\")\n        ((i++))\n      ;;\n      *)\n        ((nr[$((i%3))]=$((i%3))))\n\
+    \        ((i+=3))\n      ;;\n    esac\n  done\n\n  while [ $i -lt ${#nl[@]} ];\
+    \ do\n    case \"$nl[$i]\" in\n      \"\")\n        ((i++))\n      ;;\n      *)\n\
+    \        ((nl2[$((i%3))]=$nl[$i]))\n        ((i+=3))\n      ;;\n    esac\n  done\n\
+    \n  nl2=($(IFS=:; echo \"${nl2[@]}\"; unset IFS))\n  nl=($(IFS=:; echo \"${nl[@]}\"\
+    ; unset IFS))\n  nl=($(IFS=:; echo \"${nl[@]}\"; unset IFS))\n\n  nl=$nl[@]\n\
+    \  nl=$nl2[@]\n\n  echo \"${nl[@]}\"", "    local IFS=$1; shift\n    echo \"$@\"\
+    \ | sed -e 's/^/\"/' -e 's/ /, /' -e 's/ /, /' -e 's/ /, /' -e 's/ /, /' -e 's/\
+    \ /, /' -e 's/ /, /'", "    local i\n    local val\n\n    local list=\"$1\"\n\
+    \    local list_size=\"$((${#list}))\"\n    for ((i=0;i<$list_size;i++)); do\n\
+    \        local val=\"${list[$i]}\"\n        local third_val\n\n        if (( $((i\
+    \ % 3)) )); then\n            third_val=\"${val}\"\n        else\n           \
+    \ third_val=\"\\\"${val}\\\",\"\n        fi\n        list=\"${list%:*}:${third_val}\"\
+    \n    done\n    echo \"$list\"", "    local l l' i\n\n    for(( i=1; i<${#1};\
+    \ i++ )); do\n        local j=0\n        for(( j=0; j<i; j++ )); do\n        \
+    \    if(( ${${1[j]}} % 3 == 0 )); then\n                break\n            fi\n\
+    \        done\n        l+=($j)\n    done\n\n    l=(\"${l[@]}\")\n    l=$(sort\
+    \ \"${l[*]}\")\n    l=${l[@]}\n\n    return $l", "  local l l2 l3 l i j k\n  l=$1\n\
+    \  shift\n  l2=$(echo $l | sed 's/ /\",\"/g')\n  l3=$(echo $l | sed 's/ /\",\"\
+    /g')\n  l3=`echo $l2 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"`\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"\
+    `\n  l3=`echo $l3 | sed -e \"s/$l3$l3$/\"", "  local l=$1\n  l=${l//$'\\n'/''}\n\
+    \  local l='['\n  local i\n  for ((i=0; i < ${#l}; i++)); do\n    local j\n  \
+    \  if [[ ${l[i]} != *\".\"* ]]; then\n      l=\"${l} ${l[i]}\"\n    elif (( i\
+    \ % 3 == 0 )); then\n      j=$(( i * 3 + 1 ))\n      if (( j >= ${#l} )); then\n\
+    \        l=\"${l} ${l[i]}\"\n        break\n      else\n        l=\"${l} ${l[i]}\"\
+    \n        l=\"${l} ${l[j]}\"\n      fi\n    else\n      j=$(( i * 3 ))\n     \
+    \ if (( j >= ${#l} )); then\n        l=\"${l} ${l[i]}\"\n        break\n     \
+    \ else\n        l=\"${l} ${l[i]}\"\n        l=\"${l} ${l[j]}\"\n      fi\n   \
+    \ fi\n  done\n  l=\"${l} ]\"\n  echo \"${l}\"", "    local l l' j\n    l=$(echo\
+    \ $1 |tr '[:space:]' '\\n' |sed 's/[[:space:]]*/ /g')\n    for j in $(seq 0 $((\
+    \ ${#l} - 1 ))); do\n        if [ ${l:$j:1} == 3 ]; then\n            l'+='$l:$j'\n\
+    \        elif [ ${l:$j:1} == 2 ]; then\n            l'='$l:$j'\n        fi\n \
+    \   done", "  local i n result\n\n  for (( n=1; n<$1; n++ )); do\n    i=$(expr\
+    \ index \"$1\" \"$n\")\n    result[i]=\"$(( $i > $n ? \"$i\" : \"$n\" ))\"\n \
+    \ done\n  \n  for i in \"${!result[@]}\"; do\n    eval eval result[$i]=\"\\\"\
+    ${result[$i]}\\\"\"\n  done\n  \n  for (( i=0; i<${#result[@]}; i++ )); do\n \
+    \   eval eval result[i]=\"\\\"${result[i]}\\\"\"\n  done\n\n  printf \"${result[@]}\\\
+    n\"", "  l=$1\n  [[ -n $1 ]] || return\n  l1=$(echo \"${l}\" | sed -e 's/ /\"\
+    \ \"/g')\n  l2=$(echo \"${l}\" | sed -e 's/ /\" \"/g' | sort | uniq -d)\n  for\
+    \ i in $(seq 0 $((${#l}-1))); do\n    if [[ ${l2[$i]} -eq ${l2[$(($i+1))]} ]];\
+    \ then\n      l1=\"${l1//[${l1[$i]}]/${l2[$i]}}\"\n      l2=(${l2[@]:$(($i+1))})\n\
+    \    fi\n  done\n  echo \"${l1}\"", "\tlocal l i i2 l l i\n\tIFS=$'\\n' read -ra\
+    \ l <<< \"$1\"\n\tlocal len=${#l[@]}\n\tlocal i=0\n\tlocal i2=0\n\twhile (( i\
+    \ < len )) ; do\n\t\t(( i % 3 )) && l[i2]=\"${l[i]}\" && i2++\n\t\t(( i++ ))\n\
+    \tdone\n\techo \"${l[@]}\"", "    local sorted=()\n    local list=$1\n    for\
+    \ ((i=0; i < ${#list}; i++)); do\n        local element=${list[i]}\n        local\
+    \ j=0\n        local temp=()\n        for ((j=0; j < ${#list}; j++)); do\n   \
+    \         local el2=\"${list[j]}\"\n            local res=$(expr \"${element}\"\
+    \ = \"${el2}\")\n            if [ ${res} -eq 0 ]; then\n                temp+=(\"\
+    ${el2}\")\n            fi\n        done\n        local k=0\n        for ((k=0;\
+    \ k < ${#temp}; k++)); do\n            local el3=${temp[k]}\n            local\
+    \ res=$(expr \"${element}\" = \"${el3}\")\n            if [ ${res} -eq 0 ]; then\n\
+    \                sorted+=(\"${el3}\")\n            fi\n        done\n    done\n\
+    \    echo ${sorted[@]}", "  local x\n  local y=( \"$@\" )\n  for ((i=0; i < ${#y[@]};\
+    \ i++));do\n    [[ ${y[$i]} -eq ${y[$((i%3))]} ]] &&\n    y[$i]=${y[$((i%3))]}\n\
+    \  done\n  echo \"${y[*]}\"", "    local l l' i\n    l=$(echo $1 | tr \" \" \"\
+    \\n\")\n    l=$(echo $1 | sed -e 's/ /\\n/g')\n    l=$(echo $l | sed 's/ /\\n/g')\n\
+    \    l=$(echo $l | sed -e 's/^/\"/; s/$/\"/; s/\\n/\" \" /')\n    for (( i=0;\
+    \ i<${#l}; i++ )); do\n        if (( i % 3 )); then\n            ${l[$i]}=\"${l[$i]}\
+    \ \\\"${l[$(($i+1)%${#l[@]})]}\\\"\"\n        fi\n    done\n    echo ${l[@]}",
+  "\tl=$( eval echo \"$1\" | tr -d ' ' )\n\tlen=$( expr ${#l} )\n\tl=( ${l[@]:0:len/3};\
+    \ l=( ${l[@]:len/3}; ${l[@]} ) )\n\tfor i in \"${!l[@]}\"; do\n\t\t(( ${#l[@]}\
+    \ == 1 )) && ((l=(${l[@]})))\n\t\t(( ${#l[@]} > 1 )) && ((l=(${l[@]})))\n\t\t\
+    (( ${#l[@]} % 3 == 0 )); \n\t\t(( ${l[${i}]} == ${l[i]} )) && ((l[${i}]=${l[i]}))\n\
+    \tdone\n\techo \"${l[@]}\"", "  l=$1\n  \n  # Convert the list into a space-separated\
+    \ string and split it\n  l=$(echo $l | tr -s \" \")\n  \n  for i in {0..${#l}-1};\
+    \ do\n    \n    # Print out the current element\n    echo \"$i: $l\"\n    \n \
+    \   # Remove the current element from the list\n    l=${l/$i}\n    \n    # Break\
+    \ if the list is now empty\n    if [ -z \"$l\" ]; then break; fi\n    \n    #\
+    \ Sort on the third element\n    l=$(echo $l | tr \" \" \"\\n\" | sort -n -k 3,3\
+    \ | sed 's/^.* //g' | sed 's/^.* //g' | sed 's/^.* //g')\n    \n    # Print out\
+    \ the modified list\n    echo \"$l\"\n    \n    # Break if $l is now empty\n \
+    \   if [ -z \"$l\" ]; then break; fi\n  done", "    local l=$1\n    local l' tmp'\
+    \ i' count'\n    for ((count=0; count < \"${#l}\"; count++)); do\n        tmp=$(echo\
+    \ $l | awk '{print $count}')\n        tmp=${tmp:(-1)}\n        l'=(\"${l[@]}\"\
+    )'\n        tmp=${tmp:(-1)}\n        i'=1\n        for ((i=1; $((i<<1)+i)) < \"\
+    ${#l}\"; do\n            if [ $i -eq $((i<<1)+i) ]; then\n                l'[$i]'=\"\
+    ${l[$i]}\"\n            else\n                l'[$i]'=\"${l[$i]}\"\n         \
+    \       l'[$((i<<1)+i)]'=\"${l[$((i<<1)+i)]}\"\n            fi\n            ((i++))\n\
+    \        done\n        l=${l[@]}'[${i}]'\n    done", "    local l l' i\n    local\
+    \ i j\n    l=\"${1// /}\"\n    IFS=' ' read -a l <<<\"${l}\"\n    for ((i=0;i<${#l[@]};++i));\
+    \ do\n        if (( i % 3 == 0 )); then\n            for ((j=$i;j<${#l[@]};++j));\
+    \ do\n                if (( l[j]%3 == 0 )); then\n                    l[${j}]=${l[j]}\n\
+    \                fi\n            done\n        else\n            l[$i]=l[$i]\n\
+    \        fi\n    done\n    l=${l[*]}\n    l=\"${l// /}\"\n    IFS=' ' read -a\
+    \ l <<<\"${l}\"", "    local L len\n    L=$1\n    len=${#L}\n    sort -n -k 2\
+    \ -t ' ' $L | while read L; do\n        if [[ $L % 3 == 0 ]]; then\n         \
+    \   echo $L\n        else\n            echo $L | cut -c3- | sort -n -k 2\n   \
+    \     fi\n    done", "    local sorted_l=()\n    local i\n    local a\n    for\
+    \ a in \"$1\"; do\n        i=${a%%*}\n        if [ $((i % 3)) -eq 0 ]; then\n\
+    \            sorted_l+=(\"$a\")\n        fi\n    done\n    sorted_l=( \"${sorted_l[@]}\"\
+    \ )\n    local j\n    for j in \"${sorted_l[@]}\"; do\n        i=$(( ${j%%*} %\
+    \ 3 ))\n        if [ $i -ne 0 ]; then\n            sorted_l[i]=\"$j\"\n      \
+    \  fi\n    done\n    echo \"${sorted_l[@]}\"", "    read -a array <<< $1;\n  \
+    \  for (( i=0; i<${#array[@]}; i++ ));\n    do\n        (( i%3 == 0 && i!=0 ))\
+    \ && break || let j=$((i+1))\n        (( j%3 == 0 && j!=0 )) && break || let j=$((j+1))\n\
+    \        (( array[$i]<array[$j] && array[$j]<array[$i] )) && let j=$i || let j=$j;\n\
+    \    done\n    echo $array[$(eval \"printf \\\"%d\\\" $(( $j - 1 ))\")]", "  \
+    \  local IFS=$'\\n'\n    local i\n    local j\n    local i_rev\n    local j_rev\n\
+    \    local i_tmp\n    local j_tmp\n    local i_tmp2\n    local j_tmp2\n    local\
+    \ i_tmp3\n    local j_tmp3\n    local l_sorted\n    local l_sorted2\n    local\
+    \ l_sorted3\n    local l_sorted3_rev\n    local l_sorted3_rev2\n    local l_sorted3_rev3\n\
+    \    local l_sorted3_rev4\n    local l_sorted3_rev5\n    local l_sorted3_rev6\n\
+    \    local l_sorted3_rev7\n    local l_sorted3_rev8\n    local l_sorted3_rev9\n\
+    \    local l_sorted3_rev10\n    local l_sorted3_rev11\n    local l_sorted3_rev12\n\
+    \    local l_sorted3_rev13\n    local l_sorted3_rev14\n    local l_sorted3_rev15\n\
+    \    local l_sorted3_rev16\n    local l_sorted3_rev17\n    local l_sorted3_rev18\n\
+    \    local l_sorted3_rev19\n    local l_sorted3_rev20\n    local l_sorted3_rev21\n\
+    \    local l_sorted3_rev22\n    local l_sorted3_rev23\n    local l_sorted3_rev24\n\
+    \    local l_sorted3_rev25\n    local l_sorted3_rev26\n    local l_sorted3_rev27\n\
+    \    local l_sorted3_rev28\n    local l_sorted3_rev29\n    local l_sorted3_rev30\n\
+    \    local l_sorted3_rev31\n    local l_sorted3_rev32\n    local l_sorted3_rev33\n\
+    \    local l_sorted3_rev34\n    local l_sorted3_rev35\n    local l_sorted3_rev36\n\
+    \    local l_sorted3_rev37\n    local l_sorted3_rev38\n    local l_sorted3_rev39\n\
+    \    local l_sorted3_rev40\n    local l_sorted3_rev41\n    local l_sorted3_rev42\n\
+    \    local l_sorted3_rev43\n    local l_sorted3_rev44\n    local l_sorted3_rev45\n\
+    \    local l_sorted3_rev46\n    local l_sorted3_rev47\n    local l_sorted3_rev48\n\
+    \    local l_sorted3_rev49\n", "        local l\n        l=$(echo $1 | sed -e\
+    \ \"s/ /, /g\")\n        local i\n        local j\n        local c\n        c=0\n\
+    \        for i in $(seq 0 $((${#l[@]}-1)/3)) ; do\n                for j in $(seq\
+    \ 0 $((${#l[@]}/3)) ; do\n                        c=$(expr $i + $j)\n        \
+    \                if [ $(expr $i %% 3 == 0) -eq 0 ] && [ $(expr $j %% 3 == 0) -eq\
+    \ 0 ]; then\n                                if [[ ${l[$((c+1))]} != ${l[$((c+2))]}\
+    \ ]]; then\n                                        echo \"\\\"${l[$((c+1))]}\\\
+    \" \\\"${l[$((c+2))]}\\\"\"\n                                fi\n            \
+    \                    l[$((c+1))]=\"${l[$((c+1))]}\"\n                        \
+    \        l[$((c+2))]=\"${l[$((c+2))]}\"\n                        fi\n        \
+    \        done\n        done\n        echo $l", "    # Split $1 into an array and\
+    \ sort it\n    local lines=$(echo $1 | tr \" \" \"\\n\")\n    local sorted_lines=()\n\
+    \    for i in $(seq 0 $((${#lines[@]} - 1)/3)); do\n        if [ \"${i}\" -eq\
+    \ \"0\" ]; then\n            sorted_lines=(\"${sorted_lines[@]}\" ${lines[$i])\n\
+    \        else\n            sorted_lines=(\"${sorted_lines[@]}\" ${lines[$i]} ${lines[$(($i+1))]})\
+    \ \n        fi\n    done\n\n    # Sort and remove any double quotes\n    local\
+    \ sorted_lines_string=\"$(echo -e \"${sorted_lines[@]}\" | sort | tr -d '\"')\"\
+    \n    local sorted_lines=(\"${sorted_lines_string//\\\"/}\")\n\n    echo ${sorted_lines[@]}",
+  "  # sort -k 2\n  local list sorted\n  IFS=$'\\n' list=( $1 )\n  sorted=( $( printf\
+    \ \"%s\\n\" \"${list[*]}\" | sort -k 2 ) )\n  for i in \"${!sorted[@]}\"; do\n\
+    \    (( i % 3 == 0 )) && sorted[$i]=\"$i\"\n  done\n  printf \"%s\\n\" \"${sorted[@]}\"",
+  "        local IFS=' '\n        local IFMT=%d\n        local result=()\n       \
+    \ local i\n        local l=\"$1\"\n        for i in \"${!l}\"; do\n          \
+    \      local j\n                if (( $(echo \"$i % 3 = 0\" |bc -l) )); then\n\
+    \                        j=$(( i / 3 ))\n                else\n              \
+    \          j=$(( i / 3 + 1 ))\n                fi\n                local k\n \
+    \               k=$(( j - 1))\n                local temp\n                temp=\"\
+    \\\"${l[i]}\\\"\"\n                result+=(\"${temp}\")\n                if ((\
+    \ j != k)) && [[ \"${l[k]}\" -gt \"${l[j]}\" ]]; then\n                      \
+    \  result+=(\"\\\"${l[k]}\\\"\")\n                        result+=(\"\\\"${l[j]}\\\
+    \"\")\n                fi\n        done\n        IFS=$ORIG_IFS\n        result=(\
+    \ \"${result[@]}\" )\n        IFS=$IFMT\n        echo \"${result[@]}\"", "   \
+    \ l=$(echo $1 | tr ' ' '\\n' | sort -rn)\n    thirds=$(echo $1 | tr ' ' '\\n'\
+    \ | sort -rn | awk '{print $2}')\n    thirds_map=$(echo $thirds | tr ' ' '\\n'\
+    \ | sed 's/\"/\\\\\"/g')\n    thirds_map=${thirds_map%'\"'};${thirds_map#\"'\"\
+    }\n    i=0\n    while [ $i -lt $((${#l[@]}-1) ) ]; do\n        for third in $thirds_map;\
+    \ do\n            if [ $(expr ${l[$i]} % $third) == 0 ]; then\n              \
+    \  if [ ${l[$i]} != $third ]; then\n                    l[$i]=$third\n       \
+    \             thirds_map=${thirds_map%$'\\n'};${thirds_map#$'\\n'}\n         \
+    \           break\n                fi\n            fi\n        done\n        i=$((i+1))\n\
+    \    done\n    for ((i=0;i<${#l[@]};i++)); do\n        for ((j=0;j<${#thirds_map[@]};j++));\
+    \ do\n            if [ ${l[$i]} != ${thirds_map[j]} ]; then\n                break\n\
+    \            fi\n        done\n        if [[ ${l[$i]} != ${thirds_map[0]} ]];\
+    \ then\n            l[$i]=`echo \"$l[$i]\" | sed \"s/$thirds_map[0]/$thirds_map[0]/\"\
+    \ | sed \"s/$thirds_map[1]/$thirds_map[1]/\" | sed \"s/$thirds_map[2]/$thirds_map[2]/\"\
+    `\n        fi\n    done\n    echo \"$l\"", "    local list=\"$1\"\n    if [ -z\
+    \ \"$list\" ]\n    then\n        return $list\n    fi\n    # split into array\n\
+    \    IFS=\" \" read -r -a array <<< \"$list\"\n    local element\n    for element\
+    \ in \"${array[@]}\"; do\n        # check if element is a multiple of three\n\
+    \        if [ $element % 3 -eq 0 ]; then\n            # if the element is a multiple\
+    \ of three, sort from least to greatest\n            array+=($element)\n     \
+    \   fi\n    done\n    # sort from least to greatest\n    IFS=\" \" read -r -a\
+    \ array_2 <<< \"${array[@]}\"\n    local element\n    for element in \"${array_2[@]}\"\
+    ; do\n        # check if element is a multiple of three\n        if [ $element\
+    \ % 3 -eq 0 ]; then\n            # if the element is a multiple of three, sort\
+    \ from least to greatest\n            array_2+=($element)\n        fi\n    done\n\
+    \    echo \"${array[*]} ${array_2[*]}\"", "    local l\n    local i\n    local\
+    \ m\n    local len\n    local len2\n    local len3\n    local r\n    local r2\n\
+    \    local r3\n    local s3\n    local s4\n    local s5\n    local s6\n    local\
+    \ s7\n    local s8\n    local s9\n    local s10\n    local s11\n    local s12\n\
+    \    local s13\n    local s14\n    local s15\n    local s16\n    local s17\n \
+    \   local s18\n    local s19\n    local s20\n    local s21\n    local s22\n  \
+    \  local s23\n    local s24\n    local s25\n    local s26\n    local s27\n   \
+    \ local s28\n    local s29\n    local s30\n    local s31\n    local s32\n    local\
+    \ s33\n    local s34\n    local s35\n    local s36\n    local s37\n    local s38\n\
+    \    local s39\n    local s40\n    local s41\n    local s42\n    local s43\n \
+    \   local s44\n    local s45\n    local s46\n    local s47\n    local s48\n  \
+    \  local s49\n    local s50\n    local s51\n    local s52\n    local s53\n   \
+    \ local s54\n    local s55\n    local s56\n    local s57\n    local s58\n    local\
+    \ s59\n    local s60\n    local s61\n    local s62\n    local s63\n    local s64\n\
+    \    local s65\n    local s66\n    local s67\n    local s68\n    local s69\n \
+    \   local s70\n    local s71\n    local s72\n    local s73\n    local s74\n  \
+    \  local s75\n    local s76\n    local s77\n    local s78\n    local s79\n   \
+    \ local s80\n    local s81\n    local s82\n    local s83\n    local s84\n    local\
+    \ s85\n    local s86\n    local s87\n    local s88\n    local s89\n    local s90\n\
+    \    local s91\n    local s92\n    local s93\n    local s94\n    local s95\n \
+    \   local s96\n    local s97", "\tdeclare -a l\n\tdeclare -a lsub\n\tdeclare -a\
+    \ ltemp\n\t\n\tl=( $1 )\n\n\tltemp=( $(declare -A lsub=( $( echo $l | tr \" \"\
+    \ \"\\n\" ) )) )\n\n\tfor i in \"${!ltemp[@]}\"; do\n\t\tlsub[$i]=${ltemp[$i]}\n\
+    \tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\t(( ${lsub[$i]%#} > 0 )) && lsub[$i]=`expr\
+    \ ${lsub[$i]} + 2`\n\tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]#?}\n\
+    \tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%#?}\n\tdone\n\
+    \n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%?}\n\tdone\n\n\tfor\
+    \ i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]#?}\n\tdone\n\n\tfor i in \"\
+    ${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%#?}\n\tdone\n\n\tfor i in \"${!lsub[@]}\"\
+    ; do\n\t\tlsub[$i]=${lsub[$i]%?}\n\tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\
+    \tlsub[$i]=${lsub[$i]#?}\n\tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%#?}\n\
+    \tdone\n\n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%?}\n\tdone\n\
+    \n\tfor i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]#?}\n\tdone\n\n\tfor\
+    \ i in \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%#?}\n\tdone\n\n\tfor i in\
+    \ \"${!lsub[@]}\"; do\n\t\tlsub[$i]=${lsub[$i]%?}\n\tdone\n\n\tfor i in \"${!lsub[@]}\"\
+    ; do\n\t\tlsub[$i]=${lsub[$i]#?}\n\tdone\n\n", "    IFS=' ' read -r -a array <<<\"\
+    $1\"\n    for i in \"${array[@]}\"; do\n        (( i % 3 == 0 )) && continue\n\
+    \        (( $(echo \"$i ${array[$(($i-1))]}\" >> b) && \\\n            $(echo\
+    \ \"$i ${array[$(($i+1))]}\" >> b) && \\\n            $(echo \"$i ${array[$(($i-1))]}\"\
+    \ >> b) && \\\n            $(echo \"$i ${array[$(($i+1))]}\" >> b) && \\\n   \
+    \         array+=(\"$i\") && \\\n            ((i--)) && \\\n            continue\n\
+    \        )\n    done", "    local l l' j\n    local i\n    i=0\n    while [ $i\
+    \ -lt ${#1} ]; do\n        j=0\n        l=\"\"\n        while [ $j -lt ${#1} ];\
+    \ do\n            l=\"${l} ${1}[$j]\"\n            j=$((j+1))\n        done\n\
+    \        l=${l% }\n        if [[ $l == *3* ]]; then\n            i=$((i+1))\n\
+    \            i=$((i-1))\n            l=\"${l#* }\"\n        else\n           \
+    \ l=\"${l% }\"\n            l=\"${l#* }\"\n        fi\n        (( i++ ))\n   \
+    \     l+=\"\\\"\"\n        (( j++ ))\n        l+=\" \"\n    done\n    l=${l% }\n\
+    \    (( j++ ))\n    l+=\"\\\"\"\n    echo ${l%\"$\"} #remove trailing quote",
+  "    local l l' i x\n    IFS=$' \\t\\n\\r' l=\"${@}\"\n    for (( i=1; i<${#l};\
+    \ i++ )); do\n        x=`echo ${l[$i]} | sed 's/ /\\n/g'`\n        IFS=$' \\t\\\
+    n\\r' l$'\\n'x=\"${l[$i]}\"\n    done\n    l=`echo ${l} | sed 's/ /\\n/g'`\n \
+    \   IFS=$' \\t\\n\\r' l$'\\n'x=\"${l}\"\n    while [ \"${l}\" != \"$l' \" ]; do\n\
+    \        l=`echo ${l} | sed 's/ /\\n/g'`\n        IFS=$' \\t\\n\\r' l$'\\n'x=\"\
+    ${l}\"\n    done\n    l=`echo ${l} | sed 's/ /\\n/g'`\n    IFS=$' \\t\\n\\r' l$'\\\
+    n'x=\"${l}\"\n    echo \"$x\"", "    local l=\"$1\"\n    local lprime\n    local\
+    \ i\n    # sort the list l' by dividing each element in l by three\n    # then\
+    \ create a list lprime such that lprime is identical to l, but sorted.\n    for\
+    \ ((i=0; i < \"${#l[@]}\"; i+=1)); do\n        lprime[$i]=${l[$i]/=3}\n    done\n\
+    \    # return the sorted list\n    echo \"${lprime[@]}\"", "    local l l' '\n\
+    \    l=$1\n    l=$(printf \"%s\" \"$l\" | tr \" \" \"\\n\")\n    l=$( echo \"\
+    $l\" | cut -d \" \" -f 1 )\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(\
+    \ echo \"$l\" | cut -d \" \" -f 1 )\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n\
+    \    l=$( echo \"$l\" | tr \" \" \"\\n\")\n    l=$( echo \"$l\" | tr \" \" \"\\\
+    n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \"\
+    \ \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr\
+    \ \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\"\
+    \ | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"\
+    $l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | tr \" \" \"\\n\")\n    l=$(echo \"$l\" | tr \" \" \"\\n\")\n    l=$(echo\
+    \ \"$l\" | ", "  local tmp=$1\n  local a\n  local b\n  local c\n  while read a\
+    \ b c; do\n    [[ \"$b\" -lt \"$c\" ]] && { echo \"$a $b $c\" >&2 ; break; }\n\
+    \    echo \"$a $c $b\" >&2\n  done <<< \"$tmp\"", "    local IFS=' ' l\n    local\
+    \ i\n    local len=${#l[@]}\n    local j\n    local k\n    local jlen\n    local\
+    \ result\n    # sort by 3rd char\n    for i in \"${!l[@]}\"; do\n        j=\"\
+    ${l[i]%% *}\"\n        jlen=${#j}\n        k=\"${l[i]#$j}\"\n        if [[ \"\
+    ${jlen}\" -eq \"3\" ]]; then\n            # j is longer than k by exactly 2 characters\n\
+    \            (( jlen > k )) || {\n                k=$j\n            }\n      \
+    \  fi\n        k=$(echo \"${k}\" | sed 's/ //g')\n        result[i]=$k\n    done\n\
+    \    IFS=$' \\t\\n'\n    for j in \"${!result[@]}\"; do\n        l[${j}]=\"\\\"\
+    ${result[j]}\\\"\"\n    done\n    for j in \"${!l[@]}\"; do\n        l[${j}]=${l[${j}]//\
+    \ /}\n    done\n    echo \"${l[@]}\"", "    local list=\"$1\"\n    local len=${#list}\n\
+    \    local len1=${len}\n    local len2=${len1}\n    local len3=${len1}\n    local\
+    \ len4=${len1}\n\n    while [[ ${len1} == ${len2} ]]; do\n        len1=$((${len1}\
+    \ / 3))\n        len2=$((${len2} / 3))\n    done\n\n    # reverse sort list if\
+    \ needed\n    if [[ ${len3} != ${len1} ]]; then\n        list=\"$(sort -n \"${list}\"\
+    )\"\n    fi\n\n    # split list into three parts\n    list1=\"${list:0:${len1}}\"\
+    \n    list2=\"${list:${len1}:${len2}}\"\n    list3=\"${list:${len2}:}\"\n\n  \
+    \  # sort each part\n    list1=\"$(sort_third \"$list1\")\"\n    list2=\"$(sort_third\
+    \ \"$list2\")\"\n    list3=\"$(sort_third \"$list3\")\"\n\n    # join parts and\
+    \ return list with equal values\n    local sorted=$(echo \"${list1}${list2}${list3}\"\
+    )\n    if [[ ${#sorted} == ${#list} ]]; then\n        echo \"$sorted\"\n    else\n\
+    \        echo \"$sorted\" >&2\n        return 1\n    fi", "  local list=\"$1\"\
+    \n  list=\"${list// /, }\"\n  list=\"${list// /, }\"\n  list=\"${list//[} , }\"\
+    \n  list=\"${list//]} , }\"\n  list=\"${list// , }\"\n  list=\"${list// , }\"\n\
+    \  list=\"${list//\\//\\//}\"\n  list=\"${list// , }\"\n  list=\"${list////}\"\
+    \n  list=\"${list// /\"}\"\n  list=\"${list//$//}\"\n  list=\"${list//$/,}\"\n\
+    \  list=\"${list//,/,}\"\n  list=\"${list//\\// }\"\n  list=\"${list//^,/}\"\n\
+    \  list=\"${list//,$/}\"\n  list=\"${list//,$//}\"\n  list=\"${list//,/,}\"\n\
+    \  list=\"${list//^/}\"\n  list=\"${list//$/,}\"\n  list=\"${list//$/}\"\n  list=\"\
+    ${list//,$//}\"\n  list=\"${list//,/$//}\"\n  list=\"${list//,/,}\"\n  list=\"\
+    ${list//$/,}\"\n  list=\"${list//,$//}\"\n  list=\"${list//$/}\"\n  list=\"${list//,$//}\"\
+    \n  list=\"${list//,/$//}\"\n  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\
+    \n  list=\"${list//$/}\"\n  list=\"${list//,$//}\"\n  list=\"${list//,/$//}\"\n\
+    \  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\n  list=\"${list//,/$//}\"\n\
+    \  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\n  list=\"${list//,/$//}\"\n\
+    \  list=\"${list//,$//}\"\n  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\n\
+    \  list=\"${list//,/$//}\"\n  list=\"${list//,$//}\"\n  list=\"${list//$/,}\"\n\
+    \  list=\"${list//,$//}\"\n  list=\"${list//,/$//}\"\n  list=\"${list//,$//}\"\
+    \n  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\n  list=\"${list//,/$//}\"\
+    \n  list=\"${list//$/,}\"\n  list=\"${list//,$//}\"\n", "  # The array containing\
+    \ the arguments that will get passed to sort_third should be $1, not $*\n  local\
+    \ l\n  for l in \"$@\"; do\n    # If the indicies of the elements of l are divisible\
+    \ by three, sort them in decreasing order\n    if [[ ${l:0:3} != {1..3} ]]; then\n\
+    \      unset l # don't sort the indicies\n      printf '%s\\n' \"$l\"\n      continue\n\
+    \    fi\n    local i\n    # Sort the indicies of the elements of l as strings\
+    \ in ascending order when they don't start with '\"'\n    for (( i=1; i<\"${#l[@]}\"\
+    ; i++ )); do\n      if [[ \"$l[$i]\" != \\'* ]]; then\n        local j\n     \
+    \   for (( j=1; j<i; j++ )); do\n          [[ $l[$j] < \"$l[$i]\" ]] && break\n\
+    \        done\n        (( j-=1 ))\n        l[$j:$i]=\"${l[$j]:#*}\"\n      fi\n\
+    \    done\n    printf '%s\\n' \"${l[@]}\"\n  done", "    local l\n    l=$($(echo\
+    \ $1 | sed \"s/ /|/g\"))\n    for (( i=0; i<${#l[@]}; i++ )); do\n        if ((\
+    \ i % 3 != 0 )); then\n            echo \"${l[$i]}\"\n        elif (( i % 3 ==\
+    \ 0 )); then\n            echo \"${l[$(( i/3 ))]}\"\n        fi\n    done", " \
+    \ local index\n  local list=$1\n  local list2=$2\n  local i=0\n  local j=0\n \
+    \ local list3=$( echo \"$list\" | sort -k 1 -n )\n  local list4=$( echo \"$list2\"\
+    \ | sort -k 1 -n )\n  for i in $(seq 0 $(( ${#list} -1 ))); do\n    if [[ $((\
+    \ i % 3 )) -eq 0 ]]; then\n      list3[$(( ${#list3[@]} -1 ))]=$(echo $list3[$((\
+    \ ${#list3[@]} -1 ))]\" \"$list4[$(( ${#list4[@]} -1 ))]\")\n      list4[$(( ${#list4[@]}\
+    \ -1 ))]=$(echo $list4[$(( ${#list4[@]} -1 ))]\" \"$list3[$(( ${#list3[@]} -1\
+    \ ))]\")\n    fi\n    if [[ $(( i % 3 )) -eq 0 ]]; then\n      list2[$(( ${#list2[@]}\
+    \ -1 ))]=$(echo $list2[$(( ${#list2[@]} -1 ))]\" \"$list3[$(( ${#list3[@]} -1\
+    \ ))]\")\n      list3[$(( ${#list3[@]} -1 ))]=$(echo $list3[$(( ${#list3[@]} -1\
+    \ ))]\" \"$list2[$(( ${#list2[@]} -1 ))]\")\n    fi\n    if [[ $(( i % 3 )) -eq\
+    \ 0 ]]; then\n      list[$(( ${#list[@]} -1 ))]=$(echo $list[$(( ${#list[@]} -1\
+    \ ))]\" \"$list3[$(( ${#list3[@]} -1 ))]\")\n      list3[$(( ${#list3[@]} -1 ))]=$(echo\
+    \ $list3[$(( ${#list3[@]} -1 ))]\" \"$list[$(( ${#list[@]} -1 ))]\")\n    fi\n\
+    \  done\n  list", "    local l=($(echo \"$1\" | tr \" \" \"\\n\"))\n    l=($(sort\
+    \ -r -n <<<\"$l\"))\n    local count=0\n    local i=0\n    for l in ${l[@]}; do\n\
+    \        if [[ $(( i % 3 )) -eq 0 ]]; then\n            echo \"\\\"$l\\\"\"\n\
+    \        else\n            if [[ $(( count % 3 )) -eq 0 ]]; then\n           \
+    \     echo \"\\\"$l\\\"\"\n            else\n                echo \"\\\"$l\\\"\
+    \ \\\"$(( count + 1 ))\\\"\"\n            fi\n        fi\n        count=$(( count\
+    \ + 1 ))\n        i=$(( i + 1 ))\n    done", "    local list len\n    list=$1;\
+    \ shift\n    len=$((${#list[*]} % 3))\n    if [ ${len} -gt 0 ]; then\n       \
+    \ len=$((${len} - 1))\n    fi\n    list=$(echo ${list[*]} | tr -s '[:space:]'\
+    \ ',' | sort -n | sed -e 's/,$//')\n    for ((i=0; i < ${#list[*]}; i++)); do\n\
+    \        list[$i]=$(echo \"${list[$i]}\" | tr -d '\"')\n    done\n    printf '%s\\\
+    n' \"${list[@]}\"", "    l=$1\n    len=${#l}\n    for i in $(seq 0 $((len/3-1)));\
+    \ do\n        key=$(expr ${i} * 3 +${i} + 1) #offset by one since $l has one extra\
+    \ element for $len\n        key=${key//\\\"}\n        key=${key//\\\\}\n     \
+    \   key=${key//\\}\n        l[$i]=$key\n    done\n    len=${#l}\n    for((i=0;i<$len;i++))\
+    \ do\n        key=${l[$i]//\\\"}\n        key=${key//\\\\}\n        key=${key//\\\
+    }\n        l[$i]=$key\n    done\n    echo $l", "    l=$1\n    local sorted_l\n\
+    \    sorted_l=`sort -n -k 1 ${l}`\n    local k\n    k=0\n    while [[ ${sorted_l[k]}\
+    \ != ${sorted_l[k+1]} ]]; do\n        ((k=k+1))\n    done\n    k=k-1\n    l=${sorted_l[@]:k+1}\n\
+    \    l=\"${l[*]}\"\n    echo \"${l}\"", "    declare -a line\n    line=( $1 )\n\
+    \    declare -i i j\n    for (( i=0; i<${#line[@]}; i++ )); do\n        for ((\
+    \ j=i+1; j<${#line[@]} && ${line[i]} < ${line[j]}; j++ )); do\n            line[i]=\"\
+    ${line[j]}\"\n        done\n    done\n    local -a line'\n    line'=( ${line[@]}\
+    \ )\n    for (( i=0; i<${#line[@]}; i++ )); do\n        if [[ \"${line'[i]}\"\
+    \ != \"${line[i]}\" ]]; then\n            line'[i]=\"${line[i]}\"\n        fi\n\
+    \    done\n    echo \"${line[@]}\"", "  local list=$1\n  local i count\n  local\
+    \ count3\n  list=($(echo $list | sed 's/ /\" \" /g'))\n  for i in \"${!list[@]}\"\
+    ; do\n    count3=0\n    for j in $(seq $i \"$((i + 1))\"); do\n      if [[ ${list[j]}\
+    \ % 3 == 0 ]]; then\n        count3=$((count3 + 1))\n        list[j]=\"\\\"${list[j]}\\\
+    \"\"\n      fi\n    done\n    for ((j=$i; j<$((i+count3+1)); j++)); do\n     \
+    \ list[j-1]=$list[j]\n    done\n  done\n  echo \"${list[@]}\"", "  local x\n \
+    \ x=\"${1}\"\n  echo \"$x\" | awk '{for (i=2; i <= NF; i++) if ($i %% 3 != 0)\
+    \ {print $i; print $(i/3)}}'", "\tunset -v result index\n\tIFS=$'\\n' read -r\
+    \ -a list <<< \"$1\"\n\tfor (( index = 0; index < ${#list[@]}; index++ )); do\n\
+    \t\tlocal value\n\t\tif (( index % 3 == 0 )); then\n\t\t\tvalue=${list[$index]}\n\
+    \t\telse\n\t\t\tvalue=${list[$index]}\"${list[$(($index+1))]}\n\t\tfi\n\t\tresult[index]=\\\
+    \"\\\"\\\"$value\\\"\\\"\\\"\n\tdone\n\tIFS=' ' read -ra result <<< \"${result[*]}\"",
+  "    local list=\"$1\"\n    local thirds=($(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -u | tr '\\n' ' '))\n    local indices=$thirds\n    local tmp result\n    tmp=\"\
+    \"\n    for index in \"${!indices}\"; do\n        result=\"${list[$index]}\"\n\
+    \        (( indices[$index] ))\n        tmp+=\"\\\"$result\\\"\\t\"\n    done\n\
+    \    echo $tmp | sed 's/\\t*//'", "    # split the string on whitespace\n    local\
+    \ list=\"$(echo \"$1\" | tr ' ' ',')\"\n    # loop over the elements of list\n\
+    \    for index in $(seq -w 0 \"$((${#list}-1)/3)\"); do\n        # if the element\
+    \ at $index is divisible by three, append it to list'\n        if [[ ${list[$index]}\
+    \ % 3 == 0 ]]; then\n            list+=\",\"\n        fi\n    done\n    echo \"\
+    ${list}\"", "\tlocal l=\"$1\"\n\tlocal l_unsorted=\"$1\"\n\tlocal l_temp\n\tlocal\
+    \ l_temp2\n\tlocal l_temp3\n\tlocal l_temp4\n\tlocal l_temp5\n\tlocal l_temp6\n\
+    \tlocal l_temp7\n\tlocal l_temp8\n\tlocal l_temp9\n\tlocal l_temp10\n\tlocal l_temp11\n\
+    \tlocal l_temp12\n\tlocal l_temp13\n\tlocal l_temp14\n\tlocal l_temp15\n\tlocal\
+    \ l_temp16\n\tlocal l_temp17\n\tlocal l_temp18\n\tlocal l_temp19\n\tlocal l_temp20\n\
+    \tlocal l_temp21\n\tlocal l_temp22\n\tlocal l_temp23\n\tlocal l_temp24\n\tlocal\
+    \ l_temp25\n\tlocal l_temp26\n\tlocal l_temp27\n\tlocal l_temp28\n\tlocal l_temp29\n\
+    \tlocal l_temp30\n\tlocal l_temp31\n\tlocal l_temp32\n\tlocal l_temp33\n\tlocal\
+    \ l_temp34\n\tlocal l_temp35\n\tlocal l_temp36\n\tlocal l_temp37\n\tlocal l_temp38\n\
+    \tlocal l_temp39\n\tlocal l_temp40\n\tlocal l_temp41\n\tlocal l_temp42\n\tlocal\
+    \ l_temp43\n\tlocal l_temp44\n\tlocal l_temp45\n\tlocal l_temp46\n\tlocal l_temp47\n\
+    \tlocal l_temp48\n\tlocal l_temp49\n\tlocal l_temp50\n\tlocal l_temp51\n\tlocal\
+    \ l_temp52\n\tlocal l_temp53\n\tlocal l_temp54\n\tlocal l_temp55\n\tlocal l_temp56\n\
+    \tlocal l_temp57\n\tlocal l_temp58\n\tlocal l_temp59\n\tlocal l_temp60\n\tlocal\
+    \ l_temp61\n\tlocal l_temp62\n\tlocal l_temp63\n\tlocal l_temp64\n\tlocal l_temp65\n\
+    \tlocal l_temp66\n\tlocal l_temp67\n\tlocal l_temp68\n\tlocal l_temp69\n\tlocal\
+    \ l_temp70\n\tlocal l_temp71\n\tlocal l_temp72\n\tlocal l_temp73\n\tlocal l_temp74\n\
+    \tlocal l_temp75\n\tlocal l_temp76\n\tlocal l_temp77\n\tlocal l_temp78\n\tlocal\
+    \ l_temp79\n\tlocal l_temp80\n\tlocal l_temp81\n\tlocal l_temp82\n\tlocal l_temp83\n\
+    \t", "  local list list_length i j n n list_new\n  list=\"$1\"\n  list_length=${#list}\n\
+    \  # create new list from input\n  list_new=$( echo $list | tr \" \" \"\\n\" )\n\
+    \  for i in $(seq 0 $((list_length-1))); do\n    # skip first and last elements\
+    \ and handle rest of list\n    if (( $i )); then\n      # check if current element\
+    \ is divisible by three\n      if (( ${list[i]} % 3 == 0 )); then\n        # find\
+    \ index of current element\n        j=$(( ${list[i]} - 1 ))\n        # handle\
+    \ other indicies based on values\n        if (( $j == 0 )) ; then\n          list_new[i]=$list[i]\n\
+    \        else\n          n=$( ${list_new[j]} | wc -c)\n          n=$(( n + 1 ))\n\
+    \          list_new[$i]=$( echo ${list_new[j]} | tr \" \" \"\\n\" | sort -n |\
+    \ head -$n )\n        fi\n      fi\n    fi\n  done\n  echo \"$list_new\"", "\t\
+    local l=$1\n\tlocal l tmp l' i\n\n\tfor (( i = 1; i <= ${#l}; i++ )); do\n\t\t\
+    tmp=$i\n\t\twhile (( tmp <= ${#l} && ${l:$tmp} % 3 == 0 )) && [[ $(( 3 * ${l:$tmp}\
+    \ )) -eq 0 ]]; do\n\t\t\ttmp=$(( $tmp + 1 ))\n\t\tdone\n\n\t\tl' \"${l:$i:1}\"\
+    \n\tdone\n\techo \"${l'}\"", "    local l=${1:-}\n    local tmp i\n    tmp=$(echo\
+    \ $l | tr \" \" \"\\n\")\n    for ((i=0;i<${#tmp};i++))\n    do\n\tlet j=i*3\n\
+    \tlet k=i*3+2\n\tlet m=i*3+3\n\tlet l[i]=${tmp[j]}\n\tlet l[k]=${tmp[m]}\n   \
+    \ done\n    for ((i=0;i<${#tmp};i++))\n    do\n\tlet j=i*3\n\tlet k=i*3+2\n\t\
+    let m=i*3+3\n\tlet tmp[j]=${l[i]}\n\tlet tmp[m]=${l[k]}\n    done\n    echo $tmp",
+  "    local i j=0\n    # split the input in to two lists, one for non-divisible by\
+    \ three indicies and one for divisible by three indicies\n    local ilist dlist\n\
+    \    while read -r i; do\n        (( ++j % 3 == 0 )) && dlist+=( \"$i\" )\n  \
+    \      (( ++j % 3 == 1 )) && ilist+=( \"$i\" )\n    done < <( echo \"$1\" )\n\
+    \    # sort both lists, remove duplicates, and join the results\n    local dlist\n\
+    \    for dlist in \"${dlist[@]}\"; do\n        sort -u <<< \"$dlist\"\n    done\n\
+    \    echo \"${ilist[@]}\"", "  local x\n  local y\n  x=\"$1\"\n  y=\"$2\"\n  local\
+    \ z\n  z=\"\"\n  for (( i=0; i<${#x}; i++ )); do\n    # Append the second argument\
+    \ to z as long as it is at least\n    # as long as the corresponding element of\
+    \ x, and then\n    # append the elements of x to z\n    if [[ ${x:$i:1} == ${y:$i:1}\
+    \ ]]; then\n      z=\"$z$y\"\n    else\n      z=\"$z$x\"\n    fi\n  done\n  echo\
+    \ \"$z\"", "    # Convert to array\n    l=\"$( echo ${1} )\"\n    # Keep track\
+    \ of indices\n    i1=\n    i2=\n    i3=\n    # Sort the indicies\n    for i in\
+    \ $(seq 0 ${#l})\n    do\n        if [[ \"$i\" -eq 0 ]]; then\n            i1=$i\n\
+    \        elif [[ \"$i\" -eq 1 ]]; then\n            i2=$i\n        elif [[ \"\
+    $i\" -eq 2 ]]; then\n            i3=$i\n        fi\n    done\n    # Swap the indicies\
+    \ if they are divisible by three\n    if [ \"$i1\" -eq \"$i3\" ]; then\n     \
+    \   swap_array \"$l\" \"$i1\" \"$i3\"\n    fi\n    # Convert to array\n    l=\"\
+    $( echo ${l[@]})\"\n    # Sort l\n    sort -u -k1,2 -n <<< \"${l[@]}\"", "  local\
+    \ l=\"$1\"\n  [[ \"${#l}\" -gt \"1\" ]] || return 1\n  local i j k\n  local len\n\
+    \  local val\n  local sorted_l sorted_val\n\n  [[ \"${l}\" =~ \" \" ]] || return\
+    \ 1\n  len=${#l}\n  for ((i=2; i<len; i++)); do\n    [[ \"${l}\" =~ \" \" ]] ||\
+    \ return 1\n    val=${l::$i}\n    if [[ $((i%3)) -eq 0 ]]; then\n      sorted_l=(\"\
+    ${sorted_l[@]}\" \"$val\")\n    else\n      sorted_val=\"$val\"\n      for ((j=$i;\
+    \ j>0; j--)); do\n        [[ \"${l}\" =~ \" \" ]] || return 1\n        val=${l::$j}\n\
+    \        if [[ ! \"$val\" == \"$sorted_val\" ]]; then\n          sorted_val=\"\
+    $sorted_val$val\"\n          sorted_l=(\"${sorted_l[@]}\" \"$val\")\n        else\n\
+    \          unset sorted_val\n          unset sorted_l\n          break\n     \
+    \   fi\n      done\n      [[ -n \"$sorted_val\" ]] || return 1\n      sorted_l=(\"\
+    ${sorted_l[@]}\" \"$sorted_val\")\n    fi\n  done\n  echo \"${sorted_l[@]}\"",
+  "\t# $2 contains numbers, $3 is the list we operate on\n\tlocal l i j k n v\n\t\
+    l=$1 i=0 j=0 k=0\n\t# Loop on $3\n\twhile [ $i -lt ${#3} ]; do\n\t\tn=$(echo $3\
+    \ | cut -d' ' -f $i)\n\t\tv=$(( ${l[$i]} + n ))\n\t\tv=${v%% *}  # remove any\
+    \ trailing spaces in the value\n\t\tif [ $v -lt 3 ]; then\n\t\t\tk=$(( k + 1 ))\n\
+    \t\t\tl[$k]=$v\n\t\telif [ $v -lt 6 ]; then\n\t\t\tk=$(( k + 1 ))\n\t\t\tl[$k]=$v\n\
+    \t\telif [ $v -lt 9 ]; then\n\t\t\tk=$(( k + 1 ))\n\t\t\tl[$k]=$v\n\t\telse\n\t\
+    \t\tk=$(( k + 1 ))\n\t\t\tl[$k]=$v\n\t\tfi\n\t\ti=$(( i + 1 ))\n\tdone\n\tfor\
+    \ i in \"${!l[@]}\"; do\n\t\techo \"$i ${l[i]}\"\n\tdone", "    local IFS= read\
+    \ -r -a l <<< \"$1\"\n    local IFS= read -r -a l' <<< \"${l[@]:0:2}\"\n    local\
+    \ IFS= read -r -a l'' <<< \"${l[@]:2}\"\n\n    local i\n    for (( i = 0; i <\
+    \ ${#l[@]}; i++ )); do\n        if (( i % 3 == 0 )); then\n            local j\n\
+    \            for (( j = 0; j < ${#l[@]}; j++ )); do\n                if (( j %\
+    \ 3 == 0 )); then\n                    if (( l[$i] < l[$j] )); then\n        \
+    \                l'[$i]=$l[$j]\n                        l''[$i]=$l[$j+1]\n   \
+    \                     l''[$i+1]=$l[$j+2]\n                    else\n         \
+    \               l'[$i]=$l[$j+1]\n                        l''[$i]=$l[$j]\n    \
+    \                    l''[$i+1]=$l[$j+2]\n                    fi\n            \
+    \        break\n                fi\n            done\n        fi\n    done\n \
+    \   shift ${#l[@]}\n    echo \"${l[@]}\"", "    local list=$1\n\n    local i\n\
+    \    local j\n    local imax\n    local jmax\n    local key\n    local k\n   \
+    \ local value\n\n    local sorted\n\n    list=$(echo $list | sed \"s/^$(cat <<-'EOF'\n\
+    \    3 4 6 8 1 2 5\n    EOF\n    )/^/g\")\n    echo \"$list\"\n\n    sorted=`sort\
+    \ -n \"$list\"`\n    echo \"$sorted\"\n\n    imax=\"${#sorted[@]}\"\n    for ((i=1;\
+    \ i <= imax; i=i+3))\n    do\n        jmax=\"${#sorted[@]}\"\n        for ((j=1;\
+    \ j <= jmax; j=j+3))\n        do\n            key=${sorted[$j-1]}\n          \
+    \  value=${sorted[$j]}\n            k=${sorted[$j+1]}\n            if [ \"$i\"\
+    \ -gt \"$j\" ]; then\n                key=$k\n                value=$value\n \
+    \           fi\n            sorted[$i]=$key\n            sorted[$j]=${sorted[$i]}\n\
+    \            sorted[$j+1]=$value\n        done\n    done\n\n    echo \"${sorted[@]}\"",
+  "    local l l' i j\n    l=( $1 )\n    i=0\n    j=0\n    while [ $i -lt ${#l[@]}\
+    \ ]; do\n        j=$(( j + 1 ))\n        l'[$j]=${l[i]}'\n        (( i++ ))\n\
+    \    done\n    for (( j=0; j < ${#l[@]}; j )); do\n        (( i % 3 == 0 )) &&\
+    \ l''[$j]='\"$(l[$j])\"'\n    done\n    printf \"%s\" \"${l'[@]}\"", "  l=$1\n\
+    \  lnew=()\n  for i in $(seq 0 $((${#l[@]}-1))); do\n    # $2 must be a space\
+    \ separated list\n    ind=${l[$i]}\n    ind ${l[$(($i-1))]}\n    ind1=${l[$(($i-3))]}\n\
+    \    if [[ $ind1 != $ind ]]; then\n      lnew+=( \"$ind\" )\n    fi\n  done\n\
+    \  lnew+=( \"$l\" ) # add the original list at the end\n  echo \"${lnew[@]}\"",
+  "    local l_list=$1\n    local l_new=()\n    for i in ${!l_list}; do\n        if\
+    \ [ ${i} -eq 0 ]; then\n            l_new+=(\"${l_list[$i]}\")\n        elif [\
+    \ ${i} -eq 2 ]; then\n            l_new+=(\"${l_list[$i]}\")\n        elif [ ${i}\
+    \ -gt 2 ] && [ ${i} -lt ${#l_list[@]} ]; then\n            l_new+=(\"${l_list[$i]}\"\
+    )\n        elif [ ${i} -eq ${#l_list[@]} ]; then\n            l_new+=(\"${l_list[$i]}\"\
+    )\n        elif [ ${i} -eq ${#l_list[@]} -a ${i} -eq 2 ]; then\n            l_new+=(\"\
+    ${l_list[$i]}\")\n        elif [ ${i} -eq ${#l_list[@]} -a ${i} -eq ${#l_list[@]}\
+    \ ]; then\n            l_new+=(\"${l_list[$i]}\")\n        elif [ ${i} -eq ${#l_list[@]}\
+    \ -a ${i} -eq ${#l_list[@]} -a ${i} -eq 0 ]; then\n            l_new+=(\"${l_list[$i]}\"\
+    )\n        elif [ ${i} -eq ${#l_list[@]} -a ${i} -eq ${#l_list[@]} -a ${i} -eq\
+    \ 1 ]; then\n            l_new+=(\"${l_list[$i]}\")\n        elif [ ${i} -eq ${#l_list[@]}\
+    \ -a ${i} -eq ${#l_list[@]} -a ${i} -eq 2 -a ${i} -eq ${#l_list[@]} ]; then\n\
+    \            l_new+=(\"${l_list[$i]}\")\n        elif [ ${i} -eq ${#l_list[@]}\
+    \ -a ${i} -eq ${#l_list[@]} -a ${i} -eq ${#l_list[@]} -a ${i} -eq 0 ]; then\n\
+    \            l_new+=(\"${l_list[$i]}\")\n        elif [ ${i} -eq ${#l_list[@]}\
+    \ -a ${i} -eq ${#l_list[@]} -a ${i} -eq ${#l_list[@]} -a ${i} -eq 1 ", "    local\
+    \ l=\"$(echo \"$1\" | sed 's/ /\",\"/g')\"\n    local l'=\"\"\n    for (( i =\
+    \ 0; i <= $#l; i++ )); do\n        if (( i % 3 == 0 )); then\n            l'=\"\
+    $l'\"\"'$(echo \"$l\" | sed \"s/$((i+1))/\\\"${i}\\\"/\")'\"'\n        else\n\
+    \            l'=\"$l'\"\"'$(echo \"$l\" | sed \"s/$((i+1))/\\${i}\")'\"'\n   \
+    \     fi\n    done\n    l'=\"$l'\"\"'$(echo \"$l\" | sed \"s/$((${#l}+1))/\\\"\
+    $((${#l}+2))\\\"\")'\"'\n    echo \"$l'\"", "  local string=$1\n  local indices\
+    \ values\n  indices=($string); values=($string)\n  local count=$((${#indices[@]}\
+    \ % 3)) \n  for i in $(seq 0 $((${#indices[@]} - $count + 1))); do\n    local\
+    \ value\n    value=${values[$i]}\n    indices[$i]=${indices[$i]:0:3}\n    values[$i]=${values[$i]:3}\n\
+    \  done\n  local sorted_indices\n  sorted_indices=''\n  for i in $(seq 0 $count);\
+    \ do\n    sorted_indices=${sorted_indices:+\"${sorted_indices} \"}\"${indices[$i]}\"\
+    \n  done\n  sorted_indices=\"${sorted_indices} \"\n  for i in $(seq 0 $((${#indices[@]}\
+    \ % 3))); do\n    local value\n    value=${values[$((${#indices[@]} - $count +\
+    \ $i))]}\n    sorted_indices=${sorted_indices:+\"${sorted_indices} \"}\"${value}\"\
+    \n  done\n  echo \"${sorted_indices}\"", "    # get the input string\n    IFS='\
+    \ ' read -r input < <(echo \"$1\")\n\n    # sort it\n    sort -u -t '\" \"' \"\
+    $input\"\n\n    # return the string\n    IFS=' '; echo \"$input\"", "    local\
+    \ n=$#\n    local j=0\n    local k\n    local d\n    local j0\n    local j1\n\
+    \    local d\n    local k0\n    local k1\n    local d\n    while [ $(( $n / 2\
+    \ )) -ne 0 ]; do\n        j=$(( $j + 1 ))\n        k=$(( $j + 1 ))\n        d=$((\
+    \ $n - 1 ))\n        j0=$(( $j - 1 ))\n        j1=$(( $j + 1 ))\n        d=$((\
+    \ $n - 1 ))\n        k0=$(( $k - 1 ))\n        k1=$(( $k + 1 ))\n        d=$((\
+    \ $n - 1 ))\n        (( n % 2 ))\n        if [ $j0 -eq 0 ]; then\n           \
+    \ j0=$j1\n        fi\n        if [ $k0 -eq 0 ]; then\n            k0=$k1\n   \
+    \     fi\n        if [ $j1 -eq 0 ]; then\n            j1=$j0\n        fi\n   \
+    \     if [ $k1 -eq 0 ]; then\n            k1=$k0\n        fi\n        if [ $j0\
+    \ -gt 0 ] && [ $j1 -eq 0 ]; then\n            sort -g \"$1\" -o $1 \"$j0 $j1 $d\"\
+    \n        elif [ $k0 -gt 0 ] && [ $k1 -eq 0 ]; then\n            sort -g \"$1\"\
+    \ -o $1 \"$j0 $k $d\"\n        elif [ $j0 -gt 0 ] && [ $k1 -eq 0 ]; then\n   \
+    \         sort -g \"$1\" -o $1 \"$j0 $k $d\"\n        elif [ $k0 -gt 0 ] && [\
+    \ $j1 -eq 0 ]; then\n            sort -g \"$1\" -o $1 \"$j $k0 $d\"\n        elif\
+    \ [ $j0 -gt 0 ] && [ $k1 -eq 0 ]; then\n            sort -g \"$1\" -o $1 \"$j\
+    \ $k0 $d\"\n        fi\n    done", "\tl=$1\n\ti=0\n\twhile [ $i -lt ${#l} ]\n\t\
+    do\n\t\t(( i=i+1 ))\n\t\tkey=${l[i]}\n\t\tj=$(( $i-1 ))\n\t\twhile [ $j -lt ${#l}\
+    \ ]\n\t\tdo\n\t\t\t(( j=j+1 ))\n\t\t\tkey=${l[j]}\n\t\t\tif [ \"${key}\" == \"\
+    ${l[$i]}\" ]; then\n\t\t\t\tcontinue\n\t\t\tfi\n\t\t\tif [ $j -eq $(( $i-1 ))\
+    \ ]; then\n\t\t\t\tl[$j]=${l[$i]}\n\t\t\telse\n\t\t\t\tif [ \"${l[$j]}\" -gt \"\
+    ${l[$i]}\" ]; then\n\t\t\t\t\tl[$j]=${l[$i]}\n\t\t\t\telse\n\t\t\t\t\tl[$j]=${l[$j]}\n\
+    \t\t\t\tfi\n\t\t\tfi\n\t\tdone\n\tdone\n\techo \"${l[@]}\"", "  local i\n  local\
+    \ j\n  local l\n\n  for ((i = 0; i < $#; i++)); do\n    j=$((i + 1))\n    if ((i\
+    \ % 3 != 0)); then\n      l[$i]=\"$j\"\n    elif ((j % 3 != 0)); then\n      l[$i]=\"\
+    $j\"\n    fi\n  done\n\n  while ((i < $#));\n  do\n    if [[ -z ${l[i]} ]];\n\
+    \    then\n      break\n    fi\n    l[$i]=\"${l[i]}\"\n    ((i++))\n  done\n\n\
+    \  while ((j < $#));\n  do\n    if [[ -z ${l[j]} ]];\n    then\n      break\n\
+    \    fi\n    l[$j]=\"${l[j]}\"\n    ((j++))\n  done\n\n  echo \"${l[@]}\"", " \
+    \   local l l' x\n    l=$1; shift\n    x=$1; shift\n    for ((i=0; i<${#l}; i+=2));\
+    \ do\n        if (( $(( i % 3 )) )); then\n            l'[$i]=$x'\n          \
+    \  x=$x\n        else\n            l'[$i]=$l[$i+1]'\n        fi\n    done\n  \
+    \  echo \"${l[@]}\"", "    local list=$1\n    local i=$(($#list - 1))\n    local\
+    \ j=$(($#list - 2))\n    local l\n    while [[ $i -le $j ]]; do\n        ((j--))\n\
+    \        ((l=$(( (i + j) / 2 ))));\n        if [[ $l == 0 ]]; then\n         \
+    \   ((i--))\n            continue;\n        fi\n        if [[ \"$list\" == \"\
+    $l*\" ]]; then\n            l=$(echo \"$list\" | sed -E 's/ [^ ]*$//' | sort -n\
+    \ | tr -d ' ' );\n            list=$list$l\"*\"\n            ((i--))\n       \
+    \     ((j--))\n            ((l=$(( (i + j) / 2 ))));\n        else\n         \
+    \   list=$list\"*\"\n            ((i--))\n            ((j--))\n            ((l=$((\
+    \ (i + j) / 2 ))));\n        fi\n    done\n    list=$list$l\n    list=$list$list\n\
+    \    echo $list", "    local list=$1\n    local list len\n    local list len2\n\
+    \    local list2 list2\n\n    list=$(echo $list | tr -s \" \")\n    list=$(echo\
+    \ $list | tr -d '\"')\n    list=$(echo $list | tr -d '[')\n    list=$(echo $list\
+    \ | tr -d ']')\n    list=$(echo $list | tr -d ' ')\n    list=$(echo $list | tr\
+    \ -d '[')\n    list=$(echo $list | tr -d ']')\n    list=$(echo $list | tr -d '\
+    \ ')\n    list=$(echo $list | tr -d '[')\n    list=$(echo $list | tr -d ']')\n\
+    \n    list2=$(echo $list | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \"\
+    \ \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 |\
+    \ tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(echo $list2 | tr \" \" \"_\")\n    list2=$(echo\
+    \ $list2 | tr \" \" \"_\")\n    list2=$(", "  local l=\"$1\"\n  local llen=${#l}\n\
+    \  for ((i=0;i<llen;i++)); do\n    local j=$((i+1))\n    local jlen=${#l}\n  \
+    \  while ((j<jlen) && ($(echo \"${l[$i]}\" | grep -q \"${l[$j]}\") == 0)); do\n\
+    \      j=$((j+1))\n    done\n    # echo \"${l[$i]} ${l[$j]}\"\n    [[ $j -gt $i\
+    \ ]] && l[$i]=\"${l[$j]}\"\n    [[ $i -gt $j ]] && l[$j]=\"${l[$i]}\"\n  done\n\
+    \  echo \"${l[@]}\"", "    local l_orig=$1\n    l_orig=${l_orig// /\",\"}\n  \
+    \  local l=( $( echo \"$l_orig\" | sed 's/,/\",\"/g' ) )\n    local l=( $( echo\
+    \ \"$l_orig\" | sed 's/$/,0/g' ) )\n    local j=1\n    local i\n    for (( i=0;\
+    \ i < ${#l[@]}; i++ )); do\n        if [ ${l[$i]} -eq $(( $l[$j] % 3 )) ]; then\n\
+    \            l[$j]=$l[$i]\n        fi\n        let j=$j+1\n    done\n    local\
+    \ l' c\n    for (( c=0; c < ${#l[@]}; c++ )); do\n        if [[ ${l[$c]} -lt ${l[$c+1]}\
+    \ ]]; then\n            l'=( \"${l[@]:$c}\" )\n        fi\n    done\n    echo\
+    \ \"${l[@]}\"", "    local IFS=' ' a\n    local l l\n    local l' j\n    for ((i=0;\
+    \ i<\"${#1}\"; i++ )); do\n        j=$(( (i + 1) % ${#1} ))\n        local c=${!j}\n\
+    \        local c$(( ${#1}-j ))\n        if (( ${#c} % 3 )); then\n           \
+    \ [[ \"$c\" -lt $(( ${#c} / 3 )) ]] || continue\n        elif (( ${#c} % 3 ));\
+    \ then\n            local k\n            for (( j=0; j<${#c}; j++ )); do\n   \
+    \             k=$(( (j + 3) % ${#c} ))\n                local l=${!k}\n      \
+    \          local m=${!l}\n                [[ \"$m\" == \"$c\" ]] || { [ \"$m\"\
+    \ > \"$c\" ] && c$(( j-j )) || c$(( j-k )) }\n            done\n            l[$((\
+    \ i + 2 ))]=${!j}\n        fi\n    done\n    a=\"${l[@]}\"", "    local l=$( $1\
+    \ )\n    for i in $(seq 1 $((${#l[@]}-1))); do\n        local val=${l[$i]}\n \
+    \       local index=$(( i / 3))\n        local val2=$(( i % 3 ))\n        local\
+    \ index2=$(( index * 3))\n        if (( $val2 > 0 )); then\n            l[$index]=${l[$index]}\"\
+    \\\"\"${val}\n            l[$index2]=${l[$index2]}\"\\\"\"${val}\n        elif\
+    \ (( $val2 < 0 )); then\n            l[$index]=${l[$index]}\"\\\"\"${val}\n  \
+    \          l[$index2]=${l[$index2]}\"\\\"\"${val}\n        else\n            l[$index]=${l[$index]}\"\
+    \\\"\"${val}\n        fi\n    done\n    local len=$((${#l[@]}))\n    if (( $len\
+    \ % 3 )); then\n        for (( i=1; i<$(( $len / 3 )); i++ )); do\n          \
+    \  local val=${l[$(( $i * 3 ))]}\n            l[$(( i * 3 ))]=${l[$(( $i * 3 ))]}\"\
+    \\\"\"${val}\n        done\n    fi\n    local len=$((${#l[@]}))\n    for (( i=$((\
+    \ $len / 3 )); i<$(( $len )); i++ )); do\n        l[$i]=${l[$i]}\"\\\"\"${l[$((\
+    \ $i * 3 ))]}\n    done\n    echo ${l[@]}", "  local list=\"$1\"\n  local list2=\"\
+    $(echo \"$list\" | sed -e 's/ /\",\"/g')\"\n  local list3=\"$(echo \"$list\" |\
+    \ sed -e 's/^/\"/' -e 's/$/\"/g')\"\n  echo \"$list3\" | sort -n -k 2 -k 4 -k\
+    \ 6", "    local sorted_list\n\n    local l_count=0\n    local l_len=${#1}\n \
+    \   for (( i=2; i<=$l_len; i++ )); do\n        local temp=${1:$i:1}\n        l_count=$((l_count\
+    \ + 1))\n        if [[ $l_count -eq 3 ]]; then\n            sorted_list=( \"${sorted_list[@]}\"\
+    \ \"$temp\" )\n        elif [[ $(echo $temp | wc -c) -eq 1 ]]; then\n        \
+    \    sorted_list=( \"${sorted_list[@]}\" \"$temp\" )\n        fi\n    done\n\n\
+    \    echo \"${sorted_list[@]}\"", "  local l l' i j\n  l=\"$1\"\n  i=1\n  j=1\n\
+    \  while [ $i -le ${#l} ]; do\n    if [[ $((i % 3)) -ne 0 ]]; then\n      l\"\
+    $j\"=\"l$i\"\n      j=$((j+1))\n    fi\n    i=$((i+1))\n  done\n  l\"$j\"=\"l$((j+1))\"\
+    \n  echo \"$l\"", "  local l i c=$1\n  l=$(bc <<< \"$l\")\n  for i in $(seq 0\
+    \ $(($((${#l[@]}-1))-1))); do\n    [[ \"$i\" -eq \"$((${#l[@]}/3))\" ]] || break\n\
+    \    [[ \"$i\" -eq \"$((3*$((${#l[@]}/3))))\" ]] || break\n    local j=$((${#l[@]/3}))\n\
+    \    l[$i]=${l[$i]}\n    l[$j]=${l[$j]}\n  done\n  echo \"${l[@]}\"", "    local\
+    \ i=0\n    local l l' n\n    local i1=0\n    local i3=0\n    l=$1\n    # create\
+    \ l' with l sorted by values\n    for n in ${l[@]}; do\n        if [[ ${i} -eq\
+    \ 0 ]]; then\n            l'=\"${n}\"\n        else\n            l'=\"${n}\"\n\
+    \            if [ ${i} -eq 2 ]; then\n                i1=3\n            fi\n \
+    \           if [ ${i} -eq 3 ]; then\n                i3=3\n            fi\n  \
+    \          if [ $i1 -gt $i3 ]; then\n                l'=\"${n}\"\n           \
+    \ else\n                if [ ${i1} -eq 0 ]; then\n                    l'\"=\"\
+    ${n}\"\n                elif [ ${i1} -eq 1 ]; then\n                    l'\"=\"\
+    ${n}\"\n                elif [ ${i1} -eq 2 ]; then\n                    l'\"=\"\
+    ${n}\"\n                    i1=0\n                else\n                    if\
+    \ [ ${i3} -eq 0 ]; then\n                        l'\"=\"${n}\"\n             \
+    \       else\n                        l'\"=\"${n}\"\n                        i3=0\n\
+    \                    fi\n                fi\n            fi\n        fi\n    \
+    \    i=$((i+1))\n    done\n    echo \"${l'\"}\"", "    l=$1\n    for i in $(seq\
+    \ 0 $((${#l[@]} - 1)))\n    do\n        if [ $(expr $i \\% 3) -eq 0 ]\n      \
+    \  then\n            echo \"$l[$i]\"\n        fi\n    done", "\tlocal l l' i\n\
+    \tfor i in $(seq 0 $(($#-1)));\n\tdo\n\t\tlocal j=$((3*i+1))\n\t\tif [[ $i -eq\
+    \ $j ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\tl=$(echo \"$l $((i*3))\" | sort)\n\t\
+    \tl' \"$((i*3))\" \"$l\"\n\tdone", "    local l=$1\n    local len=${#l}\n    local\
+    \ j=0\n    for ((i=1; i<len; i++)); do\n        local j=$((i+1))\n        while\
+    \ [ $((j-1)) -lt 0 ]; do\n            local k=$((j-1))\n            ((k--))\n\
+    \            if [ $((j-1)) -eq $((len-1)) ]; then break; fi\n            local\
+    \ k=$((j-1))\n            if [ $((j-1)) -eq 0 ]; then break; fi\n            local\
+    \ j=$((j-1))\n        done\n        local k=$((j))\n        if [ $((i%3)) -eq\
+    \ 0 ]; then\n            local j=$((j-1))\n            if [ $((j)) -eq 0 ]; then\n\
+    \                local j=$((j+1))\n                local k=$((k+1))\n        \
+    \    fi\n        fi\n        echo $((k+1)),$((j+1))\n    done", "    local l l'\
+    \ c1 c2\n    l=$(echo $1 | sed -e 's/ /\" /g')\n    for (( i=0; i<$#; i++ ));\
+    \ do\n\tc1=${l[$i]}\n\tc2 =${l[$(( $i - 1 ))]}\n        if [[ $c1 =~ ^[0-9]$ ]];\
+    \ then\n            if [[ $c2 =~ ^[0-9]$ ]]; then\n                [[ ( (( $i\
+    \ % 3 == 0 )) && $c1 != $c2) ]] && (( l' ))+=($c1 \"$c2\")\n            else\n\
+    \                (( l' ))+=($c1 \"$c2\")\n            fi\n        elif [[ $c1\
+    \ =~ ^\"[0-9]$\" ]]; then\n            if [[ $c2 =~ ^\"[0-9]$\" ]]; then\n   \
+    \             [[ ( (( $i % 3 == 0 )) && $c1 != $c2) ]] && (( l' ))+=($c1 \"$c2\"\
+    )\n            else\n                (( l' ))+=($c1 \"$c2\")\n            fi\n\
+    \        else\n            l' =($c1 \"$c2\")\n        fi\n    done\n    echo \"\
+    ${l[@]}\"", "    local list=\"$1\" i\n    list2=()\n    list3=($list)\n    length=${#list[@]}\n\
+    \    for((i=1;i<length-1;i+=3)); do\n        index=${list[i]}\n        value=${list[i+1]}\n\
+    \        value=$(echo \"$value\" | tr '[:upper:]' '[:lower:]')\n        case \"\
+    $value\" in\n            \"A\") value=$(echo \"$value\" | tr '[:lower:]' '[:upper:]')\
+    \ ;;\n            \"a\") value=$(echo \"$value\" | tr '[:upper:]' '[:lower:]')\
+    \ ;;\n            \"1\") value=\"a\"; break;;\n            \"2\") value=\"b\"\
+    ; break;;\n            \"3\") value=\"c\"; break;;\n            \"4\") value=\"\
+    d\"; break;;\n            \"5\") value=\"e\"; break;;\n            \"6\") value=\"\
+    f\" break;;\n            \"7\") value=\"g\"; break;;\n            \"8\") value=\"\
+    h\"; break;;\n            \"9\") value=\"i\"; break;;\n            \"0\") value=\"\
+    j\"; break;;\n         *)\n            value=$(echo \"$value\" | tr '[:upper:]'\
+    \ '[:lower:]')\n        esac\n        list2+=($value)\n        list3=${list3:0:index}${list3[index]}${list3[index+1]}\n\
+    \    done\n    echo \"${list2[@]}\"\n    echo \"${list3}\"", "    local l=$1\n\
+    \    local tmp\n    for (( i=1; i<${#l[@]}; i++ )); do\n        tmp=${l[$i]}\n\
+    \        if [[ ${l[$((i-1))]} == *\"#\"* ]]; then\n            tmp=${l[$((i-1))]}\n\
+    \        fi\n        if [[ ${l[$((i-2))]} == *\"#\"* ]]; then\n            tmp=${l[$((i-2))]}\n\
+    \        fi\n        if [[ ${l[$((i-3))]} == *\"#\"* ]]; then\n            tmp=${l[$((i-3))]}\n\
+    \        fi\n        l[$i]=${tmp}\n    done\n    IFS=$' \\t\\n'\n    echo \"${l[@]}\"",
+  "    local l\n    local l1'\n    IFS=$'\\n'\n    IFS=\" \" read -r -a l <<< \"$1\"\
+    \n    l1=( ${l[@]/%/1/ })\n    l1=( ${l[@]/%/3/ })\n    l1=( ${l1[@]/%/1/ })\n\
+    \    echo \"${l[@]}\"", "  # Split the first parameter into a list of elements\n\
+    \  # $1 is a space-separated list\n  local -n LIST=$1\n  # Initialize a temporary\
+    \ variable to store our list elements\n  local -n TMP_LIST\n  # Loop over the\
+    \ list of elements\n  for element in \"${LIST[@]}\"; do\n    # If the current\
+    \ element is divisible by three, store its value at the current index\n    if\
+    \ [[ $((element % 3)) != 0 ]]; then\n      TMP_LIST+=\"\\\"$element\\\"\"\n  \
+    \  else\n      # Otherwise, store the value at the current index\n      TMP_LIST+=\"\
+    \\\"$((element % 3))\\\"\"\n    fi\n  done\n  # Build the return list using the\
+    \ temporary variable\n  echo \"${TMP_LIST[@]}\"", "\tlocal l o\n\tlocal -a l\n\
+    \tlocal -a lp\n\tlocal -i n\n\tlocal j k\n\tlocal i\n\tlocal -a lp\n\tlocal tmp\n\
+    \tlocal res\n\n\tl=$1\n\tlocal i\n\tlocal j\n\tlocal k\n\tlocal n\n\tlocal c\n\
+    \tlocal jc\n\tlocal kc\n\tlocal llen\n\tlocal p\n\tlocal tmp\n\tlocal tmplen\n\
+    \tlocal llen2\n\tlocal llen3\n\tlocal llen4\n\tlocal llen5\n\tlocal llen6\n\t\
+    local llen7\n\tlocal llen8\n\tlocal llen9\n\tlocal llen10\n\tlocal llen11\n\t\
+    local llen12\n\tlocal llen13\n\tlocal llen14\n\tlocal llen15\n\tlocal llen16\n\
+    \tlocal llen17\n\tlocal llen18\n\tlocal llen19\n\tlocal llen20\n\n\t# Create tmp\
+    \ array\n\tfor i in ${#l[*]}; do\n\t\ttmp+=\"\\\"${l[i]}\\\"\"\n\tdone\n\ttmp=${tmp%?}\n\
+    \n\tllen=$(echo \"${#l[*]}\" | cut -d ' ' -f 1)\n\ttmplen=$(echo \"${#tmp}\" |\
+    \ cut -d ' ' -f 1)\n\n\t# create tmp array llen\n\tfor i in $(seq 0 $((${#l[*]}/3)-1));\
+    \ do\n\t\tllen+=\"\\\"${l[$((i*3)+0)]}\\\"\"\n\tdone\n\tllen=${llen%?}\n\n\t#\
+    \ create tmp array llen2\n\tfor i in $(seq 0 $((${#l[*]}/3)-1)); do\n\t\tllen2+=\"\
+    \\\"${l[$((i*3)+2)]}\\\"\"\n\tdone\n\tllen2=${llen2%?}\n\n\t# create tmp array\
+    \ llen3\n\tfor i in $(seq 0 $((${#l[*]}/3)-1)); do\n\t\tllen3+=\"\\\"${l[$((i*3)+4)]}\\\
+    \"\"\n\tdone\n\tllen3=${llen3%?}\n\n\t# create tmp array llen4\n\tfor i in $(seq\
+    \ 0 $((${#l[*]}/3)-1)); do\n\t\tllen4+=\"\\\"${l[$((i*3)+6)]}\\\"\"\n\tdone\n\t",
+  "  local list=$(echo $1 | sed -e 's/ /\" \"/g')\n  local res=()\n  for i in $(seq\
+    \ 0 $((${#list[@]} - 1))); do\n    local num=$(echo $list[$i] | sed -e 's/ /\"\
+    \ \"/g')\n    for k in $(seq 0 $((${#list[@]} - $i + 1))); do\n      local num2=$(echo\
+    \ $list[$k] | sed -e 's/ /\" \"/g')\n      if (( ${num} % 3 )); then\n       \
+    \ res+=(\"\\\"${num2}\\\"\")\n      else\n        res+=(\"\\\"${num}\\\"\")\n\
+    \      fi\n    done\n  done\n  echo ${res[@]}", "  # get the list\n  local list=(\"\
+    ${@}\")\n  # sort it\n  local sorted=(\"${list[@]}\")\n  # sort it in place by\
+    \ using the indicies that are not divisible by three\n  for (( index=1; index<${#list[@]};\
+    \ index+=3 )); do\n    (( index > ${#sorted[@]} )) && break\n    (( sorted[index%3]=${sorted[index%3]}\
+    \ )) && let sorted[index%3]+=1\n  done\n  # put it back\n  printf '%s\\n' \"${sorted[@]}\"",
+  "    local l\n    local l' j\n    local i\n    local len=${#1}\n    local val\n\n\
+    \    l=$(echo $1 |sed 's/ /,/g')\n    l=( \"${l[@]}\" )\n    len=${#l[@]}\n  \
+    \  for i in $(seq $((len-1)/2)); do\n        j=$((i+1))\n        val=${l[$i]}\n\
+    \        val=${val}\n        val=${val}\n        if [ \"$j\" -gt \"$len\" ]; then\n\
+    \            val=${l[$j]}\n            val=${val}\n            val=${val}\n  \
+    \      fi\n        l'[$i]=\"$val\"\n    done\n    l=\"${l[*]}\"\n    echo $(echo\
+    \ $l' | sort -t',' -n -k 2,2 -k 3,3')", "    l=( $( echo $1 | sed 's/ /\" \"/g'\
+    \ ))\n    length=${#l[@]}\n    for(( i=0; i<${#l[@]}; i++ )); do\n        (( j=i*3\
+    \ ))\n        (( j+=i ))\n        (( j+=1 ))\n        l[${j}]=${l[j]}\n    done\n\
+    \    sort -u <<< \"${l[@]}\"", "    set -A array $( echo \"$1\" | tr \" \" \"\\\
+    n\" | sort -n | awk '{print $3\" \"$2}' )\n    set -A indicies $( echo \"$1\"\
+    \ | tr \" \" \"\\n\" | sort -n | awk '{print $1\" \"$2}' )\n    \n    i=0\n  \
+    \  for i in \"${!array[@]}\"\n    do\n        if [ $((i % 3)) -eq 0 ]\n      \
+    \  then\n            indices[i]=$(echo \"$i\" | awk '{print $1\" \"$2}')\n   \
+    \     fi\n    done\n    \n    for i in \"${!array[@]}\"\n    do\n        if [\
+    \ \"$i\" -ne \"$indices[i]\" ]\n        then\n            indices[i]=$(echo \"\
+    $i\" | awk '{print $1\" \"$2}')\n        fi\n    done\n    \n    echo \"${indices[*]}\"",
+  "  # Parse the string into an array l of non-zero values \n  local l=$1\n  declare\
+    \ -a l1=( $l )\n  # Sort l into an array l' such that l' is identical to l in\
+    \ the indicies that are not divisible by three\n  local i=0;\n  local j=0\n  local\
+    \ k=0\n  local l3=($l);\n  while [ $((i%3)) -eq 0 ]; do\n    l3[i]=`echo $l3[i]\
+    \ | sed \"s/.$//\"`;\n    i=$((i+1));\n  done;\n  # Sort l3 into an array l' such\
+    \ that l' is identical to l in the indicies that are divisible by three\n  while\
+    \ [ $((j%3)) -ne 0 ]; do\n    l3[k]=`echo $l3[k] | sed \"s/.$//\"`;\n    j=$((j+1));\n\
+    \  done;\n  l3[k]=`echo $l3[k] | sed \"s/.$//\"`;\n  # Convert to string\n  local\
+    \ l1=\"\";\n  for i in $(seq 0 $((${#l3[@]}/3)))\n  do\n    l1+=\"\\\"${l3[i*3]}\\\
+    \" \";\n  done;\n  echo \"$l1\"", "  local i\n  local sorted\n  for i in $( echo\
+    \ $1 | tr \" \" \"\\n\" | sort ); do\n    sorted=false\n    for j in $( echo $1\
+    \ | tr \" \" \"\\n\" | grep -Eo \"^$i\" ); do\n      if [ $j != $i ]; then\n \
+    \       sorted=true\n        break\n      fi\n    done\n    if [ $sorted = false\
+    \ ]; then\n      echo $i\n    fi\n  done", "  l=$1\n  l1=${l#* }\n  l2=${l1#*\
+    \ }\n  l3=${l2#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n\
+    \  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n \
+    \ l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#*\
+    \ }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n\
+    \  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n \
+    \ l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#*\
+    \ }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n\
+    \  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n \
+    \ l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#* }\n  l3=${l3#*\
+    \ }\n  l3=${l3#* }\n", "\tlocal l=\"$1\"\n\tlocal m=\"${l[1]}\"\n\tlocal l=\"\
+    ${l[@]}\"\n\tlocal t=\"${l[0]}\"\n\tlocal l=\"$t\"\n\tfor (( c=0; c<${#l}; ++c\
+    \ )); do\n\t\tlocal i=\"${l[c]}\"\n\t\tlocal j=\"${l[(c + 1)]}\"\n\t\tif (( $i\
+    \ % 3 == 0 )); then\n\t\t\tif [ -z \"${m[c]}\" ]; then\n\t\t\t\tm[c]=\"${i}\"\n\
+    \t\t\telse\n\t\t\t\tm[c]=\"${m[c]} ${i}\"\n\t\t\tfi\n\t\tfi\n\t\tif (( $j % 3\
+    \ == 0 )); then\n\t\t\tif [ -z \"${m[c+1]}\" ]; then\n\t\t\t\tm[c+1]=\"${j}\"\n\
+    \t\t\telse\n\t\t\t\tm[c+1]=\"${m[c+1]} ${j}\"\n\t\t\tfi\n\t\tfi\n\tdone\n\techo\
+    \ \"${m[*]}\"", "    # A helper function\n    declare -a indices\n\n    # Initialize\
+    \ indices\n    indices=(\"${!1}\")\n    \n    # Iterate over the elements of l\n\
+    \    for idx in \"${!indices[@]}\"; do\n        # If this index is not divisible\
+    \ by three, add it to the list\n        if (( idx % 3 == 0 )); then\n        \
+    \    indices+=(\"$idx\")\n        fi\n    done\n    \n    # Sort the list\n  \
+    \  local sorted=()\n    local i=0\n    for idx in \"${indices[@]}\"; do\n    \
+    \    sorted+=(\"${!idx}\")\n        ((i=i+1))\n    done\n    sorted+=(\"$i\")\n\
+    \    \n    # Convert to a string\n    local output=\"\"\n    for idx in \"${sorted[@]}\"\
+    ; do\n        output+=\"\\\"$idx\\\" \" \n    done\n    \n    # Return the sorted\
+    \ list\n    echo \"${output}\"", "    local _l _l _l2\n    local _n \n    _l=$(echo\
+    \ ${1} | tr \" \" \"\\n\")\n    for ((_n=0; _n<${#_l}; _n++)); do\n        _l2=$(echo\
+    \ ${_l} | sed \"s/ \\\"\\([0-9]*\\)\\\" / \\\"\\1\\\"/g\" | sort -n)\n       \
+    \ if [[ -n $(echo ${_l} | sed \"s/ \\\"\\([0-9]*\\)\\\" / \\\"\\1\\\"/g\" | grep\
+    \ -E \"^[0-9]*$\") ]]; then\n            _l2=$(echo ${_l} | sed \"s/ \\\"\\([0-9]*\\\
+    )\\\" / \\\"\\1\\\"/g\" | sort -nr | sed \"s/ \\\"\\([0-9]*\\)\\\" / \\\"\\1\\\
+    \"/g\" | sort -n)\n        fi\n        _l2=$(echo ${_l2} | sed \"s/ \\\"\\([0-9]*\\\
+    )\\\" / \\\"\\1\\\"/g\")\n        _l2=$(echo ${_l2} | sed \"s/ \\\"\\([0-9]*\\\
+    )\\\" / \\\"\\1\\\"/g\" | sort -n)\n        _l=${_l}${_l2}\n    done\n    _l=$(echo\
+    \ ${_l} | sed \"s/ \\\"\\([0-9]*\\)\\\" / \\\"\\1\\\"/g\")\n    _l=$(echo ${_l}\
+    \ | sed \"s/ \\\"\\([0-9]*\\)\\\" / \\\"\\1\\\"/g\" | sort -n)\n    echo ${_l}",
+  "    local l i\n    l=\"$( $1 )\"\n    local l' i' 'j'\n    l='(\"'$l'\"')\n   \
+    \ for (( i = 0; i < ${#l}; i++ ))\n    do\n\t\n\tj=$(( $i + 1 ))\n\t\n\twhile\
+    \ (( $j < ${#l} ))\n\tdo\n\t    l' =\"$l\" '\n\t    l' =\"${l' // /}\" '\n\t \
+    \   j=$(( $j + 1 ))\n\tdone\n\t\n\tl' =\"$l\" '\n\tl' =\"${l' // /}\" '\n\t\n\t\
+    l='${l// /}'\n\tl=\"$( sort_third_part \"$l\" \"$i\" \"$j\" )\"\n\t\n\tfor i in\
+    \ \"${l' }\"\n\tdo\n\t    l=\"$l\" \"$i\"\n\tdone\n    done\n    l=\"$( ${l//,/\
+    \ } )\"\n    echo \"$l\"", "    local l\n    l=( $1 )\n    local i\n    local\
+    \ j\n    local k\n\n    for (( i=1; i<${#l[@]}; i++ )); do\n        local k\n\
+    \        local j\n\n        for (( j=0; j<${#l[@]}; j++ )); do\n            k=$i\n\
+    \            (( k *= 3 ))\n            (( k %= ${#l[@]} ))\n            [[ \"\
+    ${l[j]}\" == \"${l[k]}\" ]] && l[j]=$(echo \"${l[j]}\" | sed -e \"s/^/\\\"&\\\"\
+    /\" -e \"s/$/\\\"&\\\"/\")\n        done\n    done\n\n    echo \"${l[@]}\"", " \
+    \ local l i\n  local l' i\n  read l' $1 # read l in as a space-separated list\
+    \ into variable l'\n  for i in \"${!l}'\"; do\n    (( i % 3 == 0 )) && l[$i]=\"\
+    '$i'\" || l[$i]=\"${l[$i]}\"\n  done\n  echo ${l[*]}", "    local l=$1\n    local\
+    \ i\n    # find indicies where $l is divisible by three\n    for i in `seq 0 $((${#l}-1))`;\
+    \ do\n        if [[ ${l[i]} % 3 == 0 ]]; then\n            local j\n         \
+    \   # find other indicies where $l is divisible by three\n            for j in\
+    \ `seq $((i)) $((${#l}-1))`; do\n                if [[ ${l[j]} % 3 == 0 ]]; then\n\
+    \                    # if the two indicies are equal\n                    local\
+    \ m\n                    if (( j > i )); then\n                        m=i\n \
+    \                   else\n                        m=j\n                    fi\n\
+    \                    # swap values of indicies i and j\n                    l[$i]=$l[$j]\n\
+    \                    l[$j]=$m\n                    # exit the inner loop\n   \
+    \                 break\n                fi\n            done\n        fi\n  \
+    \  done\n    # return l\n    echo $l", "  local l=\"$1\"\n  local i j m\n  # If\
+    \ l is empty, do nothing\n  if [ -z \"$l\" ]; then return ; fi\n  # If l has one\
+    \ value, return it\n  if [ \"$#\" -eq \"1\" ]; then\n    echo \"$l\"\n    return\
+    \ \n  fi\n  # If l has one value, return it\n  if [ \"$#\" -eq \"0\" ]; then\n\
+    \    echo \"$l\"\n    return \n  fi\n  # Iterate over every value i in the list\n\
+    \  for j in \"$l\"; do\n    if [ \"$j\" -ne \"3\" ]; then\n      m=$j\n    else\n\
+    \      m=$j\n      i=$(( $i + 1 ))\n    fi\n    echo $m\n  done", "  local l l'\
+    \ i=0 k=$1 j=0 llen=${#l[@]}\n  [[ -n $2 ]] || { echo \"Usage: $0 [list] [key\
+    \ value]\" >&2; exit 1; }\n  for ((i=0; i < llen; i+=3)); do\n    key=$(expr $i\
+    \ + 2 \\* $j)\n    key=$(expr $key % 3)\n    k=$key && l[$i]=$key\n    (( i++\
+    \ ))\n    k=$key && l[$i]=$key\n    (( j++ ))\n  done\n  [[ $i == $llen ]] ||\
+    \ { echo \"$0: $1 is not in correct format\" >&2; exit 1; }\n  l' > $2", "   \
+    \ local string=\"$1\"\n    local list l\n    list=( $string )\n    l=()\n    for\
+    \ (( i = 1; i <= ${#list}; i++ )); do\n        if [ ${list[$i]} -eq 3 ]; then\n\
+    \            (( l[$i]=$i ))\n        else\n            (( l[$i%3]=$list[$i%3]\
+    \ ))\n        fi\n    done\n    for (( i = 0; i < ${#l[@]}; i++ )); do\n     \
+    \   list[$l[$i]%3]=$l[$i]\n    done\n    echo $string", "    local l=\"$1\"\n\
+    \    local newlist=\"$l\"\n    local thirdnum=$((${#l} / 3))\n    local start=0\n\
+    \    while [ $start -lt $thirdnum ]; do\n        local third=\"${newlist[$start]}\"\
+    \n        local second=${newlist[$((start+1))]}\n        local second=\"${newlist[$((start+2))]}\n\
+    \        if [ \"$third\" -lt \"$second\" ]; then\n            newlist[$((start+1))]=$third\n\
+    \            newlist[$((start+2))]=$second\n        elif [ \"$third\" -gt \"$second\"\
+    \ ]; then\n            newlist[$((start+1))]=$second\n            newlist[$((start+2))]=$third\n\
+    \        else\n            newlist[$((start+1))]=$third\n        fi\n        ((start+=3))\n\
+    \    done\n    echo \"$newlist\"", "  local i tmp x\n  read -a x <<< \"$1\"\n\
+    \  i=0\n  for x in \"${x[@]}\"; do\n    (( i % 3 == 0 )) && {\n      tmp=${x[i]}\n\
+    \      tmp=${x[$((i-1))]}\n      tmp=${x[$((i-2))]}\n      (( i == 0 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 1 )) && tmp=${x[$((i-2))]}\n      (( i == 2 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 3 )) && tmp=${x[$((i-2))]}\n      (( i == 4 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 5 )) && tmp=${x[$((i-2))]}\n      (( i == 6 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 7 )) && tmp=${x[$((i-2))]}\n      (( i == 8 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 9 )) && tmp=${x[$((i-2))]}\n      (( i == 10 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 11 )) && tmp=${x[$((i-2))]}\n      (( i == 12 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 13 )) && tmp=${x[$((i-2))]}\n      (( i == 14 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 15 )) && tmp=${x[$((i-2))]}\n      (( i == 16 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 17 )) && tmp=${x[$((i-2))]}\n      (( i == 18 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 19 )) && tmp=${x[$((i-2))]}\n      (( i == 20 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 21 )) && tmp=${x[$((i-2))]}\n      (( i == 22 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 23 )) && tmp=${x[$((i-2))]}\n      (( i == 24 )) && tmp=${x[$((i-1))]}\n\
+    \      (( i == 25 )) && tmp=${x[$((i-2))]}\n      (( i == 26 )) && tmp=${x[$((i-1))]}\n",
+  "    local temp=\"${1/#/ }\"\n    local temp2=\" \"\n    local temp3=\" \"\n   \
+    \ local temp4=\" \"\n    local temp5=\"${temp/ / }\"\n    local temp6=\" \"\n\
+    \    local temp7=\" \"\n    local temp8=\" \"\n    local temp9=\" \"\n    local\
+    \ temp10=\" \"\n    local temp11=\" \"\n    local temp12=\" \"\n    local temp13=\"\
+    \ \"\n    local temp14=\" \"\n    local temp15=\" \"\n    local temp16=\" \"\n\
+    \    local temp17=\" \"\n    local temp18=\" \"\n    local temp19=\" \"\n    local\
+    \ temp20=\" \"\n    local temp21=\" \"\n    local temp22=\" \"\n    local temp23=\"\
+    \ \"\n    local temp24=\" \"\n    local temp25=\" \"\n    local temp26=\" \"\n\
+    \    local temp27=\" \"\n    local temp28=\" \"\n    local temp29=\" \"\n    local\
+    \ temp30=\" \"\n    local temp31=\" \"\n    local temp32=\" \"\n    local temp33=\"\
+    \ \"\n    local temp34=\" \"\n    local temp35=\" \"\n    local temp36=\" \"\n\
+    \    local temp37=\" \"\n    local temp38=\" \"\n    local temp39=\" \"\n    local\
+    \ temp40=\" \"\n    local temp41=\" \"\n    local temp42=\" \"\n    local temp43=\"\
+    \ \"\n    local temp44=\" \"\n    local temp45=\" \"\n    local temp46=\" \"\n\
+    \    local temp47=\" \"\n    local temp48=\" \"\n    local temp49=\" \"\n    local\
+    \ temp50=\" \"\n    local temp51=\" \"\n    local temp52=\" \"\n    local temp53=\"\
+    \ \"\n    local temp54=\" \"\n    local temp55=\" \"\n    local temp56=\" \"\n\
+    \    local temp57=\" \"\n    local temp58=\" \"\n    local temp59=\" \"\n    local\
+    \ temp60=\" \"\n    local temp61=\" \"\n    local temp62=\" \"\n    local temp63=\"\
+    \ \"\n    local temp64=\" \"\n    local temp65=\" \"\n    local temp66=\" \"\n\
+    \    local temp67=\" \"\n    local temp68=\" \"\n    local temp69=\" \"\n    local\
+    \ temp70=\" \"\n    local temp71=\" \"\n    local temp72=\" \"\n    local temp",
+  "    local l len\n    local l' i j\n    local len' len'\n    local vals\n    local\
+    \ k v tmp\n    read -ra vals < <(echo \"$1\" | sort -t)\n    len=\"${#vals[@]}\"\
+    \n    for ((i = 1; i <= len; ++i)); do\n        k=$(expr ${i} - 3)\n        vals[k]=$(echo\
+    \ \"${vals[$k]}$((${i}-3))\" | bc)\n    done\n    local count\n    for ((i = 1;\
+    \ i <= len; ++i)); do\n        if ((i % 3 != 0)); then\n            count=0\n\
+    \            for ((j=i+1; j<=len; ++j)); do\n                if [[ $((j - i))\
+    \ -eq 0 ]]; then\n                    ((count++))\n                else\n    \
+    \                break\n                fi\n            done\n            if ((count\
+    \ > 0)); then\n                tmp=\n                for ((j=i; j<=len; ++j));\
+    \ do\n                    if [[ $((j - i)) -eq 0 ]]; then\n                  \
+    \      tmp=${vals[$j]}$((j-i)) #$((j-i)) is calculated as $((j-i)) modulo 3\n\
+    \                    fi\n                    l' += ${vals[$j]}$((j-i)) #$((j-i))\
+    \ is calculated as $((j-i)) modulo 3\n                done\n                l+=$(echo\
+    \ \"$tmp\" | sort -t)\n            fi\n        fi\n    done\n    echo \"${l[@]}\"",
+  "    local l_list tmp tmp2 i l l l l' tmp2 l l l' tmp2 i l l l'\n    l=$1\n    l_list=$(echo\
+    \ $l | sed 's/ /,/g')\n    l_list=$(echo $l_list | awk '{print $1}')\n    l=$(echo\
+    \ $l | sed 's/ /,/g')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l |\
+    \ awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk\
+    \ '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print\
+    \ $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n\
+    \    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n  \
+    \  l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo\
+    \ $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l\
+    \ | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l |\
+    \ awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk\
+    \ '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print\
+    \ $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n\
+    \    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n  \
+    \  l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo\
+    \ $l | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l\
+    \ | awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l |\
+    \ awk '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk\
+    \ '{print $1}')\n    l=$(echo $l | awk '{print $1}')\n    l=$(echo $l | awk '{print\
+    \ $1}')\n    l=$(echo $l | awk"]
 stop_tokens:
 - "\n}"

@@ -17,6 +17,1659 @@ tests: "}\n\ncandidate() {\n    skjkasdkd \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \ 1 7\") = \"7\" ]]\n    [[ $(candidate \"8191\") = \"19\" ]]\n    [[ $(candidate\
   \ \"8191 123456 127 7\") = \"19\" ]]\n    [[ $(candidate \"127 97 8192\") = \"10\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["    # $1 is a space-separated list.\n    local array=($1)\n    # Iterate\
+    \ over all elements in $1 array\n    for (( i = 1; i <= ${#array[@]}; i++ ));\
+    \ do\n        local prime=\"$array[$i]\"\n        # Iterate over all elements\
+    \ in the array from $i index\n        for (( j = 2; j < $prime; j++ )); do\n \
+    \           # Check if j is prime\n            if [[ $(( ${#prime} % $j )) ==\
+    \ 0 ]]; then\n                # If j is prime and $j divides $prime, increment\
+    \ j\n                let \"j += $prime\"\n                # If j is not prime,\
+    \ break out of the loop and let j be the new prime value\n                break\n\
+    \            fi\n        done\n        # Check if j is prime and is larger than\
+    \ the largest prime number found\n        if [[ $(( $j > $i )) ]]; then\n    \
+    \        # If $j is larger than the largest prime number found, set $i as the\
+    \ new largest prime number\n            local result=\"$j\"\n            # Set\
+    \ $i to be the value of $j\n            local prime=\"$j\"\n            # Exit\
+    \ the loop and go on to the next element in the array\n            break\n   \
+    \     fi\n    done\n    # Return the sum of the digits in the number\n    echo\
+    \ \"$result\"", "    local array=( $1 )\n    local result=0\n    local i\n\n \
+    \   for ((i = 1; i <= ${#array[@]}; i++))\n    do\n        local prime_count=0\n\
+    \        local prime_candidate\n        for prime_candidate in ${array[@]:0:i}\n\
+    \        do\n            if [[ $prime_candidate -eq 0 ]]; then\n             \
+    \   local prime_flag\n                prime_flag=\"no\"\n                break\n\
+    \            fi\n            local prime_test\n            prime_test=\"$(echo\
+    \ \"$prime_candidate\" | bc -l)\"\n            if [ $prime_test -gt 0 ]; then\n\
+    \                prime_count=$(($prime_count + 1))\n            fi\n        done\n\
+    \        if [[ $prime_count -eq 0 ]]; then\n            result=$(($result + ${array[$i]}))\n\
+    \        fi\n    done\n    echo \"$result\"", "    local -n integers=$1\n    local\
+    \ -n max\n    local -n maxSum\n\n    max=${integers[0]}\n    maxSum=0\n\n    for\
+    \ integer in \"${integers[@]}\"; do\n        max=$((max > integer ? max : integer))\n\
+    \        maxSum=$((maxSum + $max))\n    done\n\n    echo \"$maxSum\"", "  local\
+    \ -a arr=($1)\n  local -i max=${#arr[@]}\n  local -i i\n  local str=\"\"\n  local\
+    \ j\n  local prime\n  local sum\n\n  for ((i=0; i<max; ++i)); do\n    local sum=0\n\
+    \n    if [ $i -eq 0 ]; then\n      prime=${arr[i]}\n    else\n      for ((j=i-1;\
+    \ j>=0; j--)); do\n        local test=$((prime*j))\n        if [ $test -eq $arr[j]\
+    \ ]; then\n          prime=$test\n          break\n        fi\n      done\n  \
+    \  fi\n\n    if [ $prime -eq 0 ]; then\n      if [ $i -eq 0 ]; then\n        break\n\
+    \      fi\n    else\n      if [ $prime -eq $arr[i] ]; then\n        sum=$(($sum\
+    \ + $((10#$prime))))\n      fi\n    fi\n  done\n\n  echo $sum", "    local array=($1)\n\
+    \    local primes=()\n    local len=${#array[@]}\n    local max_val=0\n    local\
+    \ sum_val=0\n    local i=0 j=0 k=0\n\n    while [ $i -lt $len ]; do\n        if\
+    \ [[ ${primes[$i]} ]]; then\n            primes=()\n            i=$(( i + 1 ))\n\
+    \            continue\n        fi\n\n        j=$(( i + 1 ))\n        k=$(( k +\
+    \ 1 ))\n\n        (( max_val = max_val + array[i] ))\n        sum_val=$(( sum_val\
+    \ + array[i] % 10 ))\n        (( array[i] /= 10 ))\n        (( array[i] ))\n\n\
+    \        if [ $j -eq $len ]; then\n            if [[ ${primes[$i]} ]]; then\n\
+    \                primes=()\n                i=$(( i + 1 ))\n                continue\n\
+    \            else\n                break\n            fi\n        fi\n\n     \
+    \   if [[ ${primes[$j]} ]]; then\n            primes=()\n            j=$(( j +\
+    \ 1 ))\n            continue\n        fi\n\n        if [[ ${primes[$k]} ]]; then\n\
+    \            primes=()\n            k=$(( k + 1 ))\n            continue\n   \
+    \     fi\n\n        if [[ ${array[j]} -gt ${max_val} ]]; then\n            primes=()\n\
+    \            j=$(( j + 1 ))\n            continue\n        fi\n\n        primes=(\"\
+    ${primes[@]}\" \"$array[j]\")\n        j=$(( j + 1 ))\n    done\n\n    if [[ ${primes[$i]}\
+    \ ]]; then\n        primes=()\n        i=$(( i + 1 ))\n    fi\n\n    local sum=$((\
+    \ sum_val + ${primes[$i]} ))\n    if [ $sum -gt ${max_val} ]; then\n        sum=$((\
+    \ sum - ${max_val} ))\n    fi\n\n    echo $sum", "  if [[ -z \"$1\" ]]; then\n\
+    \    echo \"ERROR: No argument supplied\"\n    exit 1\n  fi\n  \n  # Store current\
+    \ output to a variable \n  max=0\n  maxPrime=0\n  echo \"$1\" | awk '{\n    for\
+    \ (i=1; i<=NF; ++i) {\n      if ($i>max) {\n        max=$i\n        maxPrime=$i\n\
+    \      }\n    }\n  }'\n\n  # Return result\n  echo \"$maxPrime\"", "  local str=\"\
+    $1\" \n  local j=0\n  local p1=$(echo \"$str\" | grep \"^1\" | wc -l)\n  local\
+    \ p2=$(echo \"$str\" | grep \"^2\" | wc -l)\n  local p3=$(echo \"$str\" | grep\
+    \ \"^3\" | wc -l)\n  local p4=$(echo \"$str\" | grep \"^4\" | wc -l)\n  local\
+    \ p5=$(echo \"$str\" | grep \"^5\" | wc -l)\n  local p6=$(echo \"$str\" | grep\
+    \ \"^6\" | wc -l)\n  local p7=$(echo \"$str\" | grep \"^7\" | wc -l)\n  local\
+    \ p8=$(echo \"$str\" | grep \"^8\" | wc -l)\n  local p9=$(echo \"$str\" | grep\
+    \ \"^9\" | wc -l)\n  local p10=$(echo \"$str\" | grep \"^10\" | wc -l)\n  local\
+    \ p11=$(echo \"$str\" | grep \"^11\" | wc -l)\n  local p12=$(echo \"$str\" | grep\
+    \ \"^12\" | wc -l)\n  local p13=$(echo \"$str\" | grep \"^13\" | wc -l)\n  local\
+    \ p14=$(echo \"$str\" | grep \"^14\" | wc -l)\n  local p15=$(echo \"$str\" | grep\
+    \ \"^15\" | wc -l)\n  local p16=$(echo \"$str\" | grep \"^16\" | wc -l)\n  local\
+    \ p17=$(echo \"$str\" | grep \"^17\" | wc -l)\n  local p18=$(echo \"$str\" | grep\
+    \ \"^18\" | wc -l)\n  local p19=$(echo \"$str\" | grep \"^19\" | wc -l)\n  local\
+    \ p20=$(echo \"$str\" | grep \"^20\" | wc -l)\n  local p21=$(echo \"$str\" | grep\
+    \ \"^2\" | wc -l)\n  local p22=$(echo \"$str\" | grep \"^21\" | wc -l)\n  local\
+    \ p23=$(echo \"$str\" | grep \"^23\" | wc -l)\n  local p24=$(echo \"$str\" | grep\
+    \ \"^24\" | wc -l)\n  local p25=$(echo \"$str\" | grep \"^25\" | wc -l)\n  local\
+    \ p26=$(echo \"$str\" | grep \"^26\" | wc -l)\n  local p27=$(echo \"$str\" | grep ",
+  "  local IFS=' ' a=$1\n  a=($a)\n  local max=$((${#a[*]} < 50 ? ${#a[*]}*2 : ${#a[*]}*3+2))\n\
+    \  local max2=$(echo $max | awk '{printf \"%.2s\",\"$1\"')\n  local max3=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$2\"')\n  local max4=$(echo $max | awk '{printf\
+    \ \"%.2s\",\"$3\"')\n  local max5=$(echo $max | awk '{printf \"%.2s\",\"$4\"')\n\
+    \  local max6=$(echo $max | awk '{printf \"%.2s\",\"$5\"')\n  local max7=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$6\"')\n  local max8=$(echo $max | awk '{printf\
+    \ \"%.2s\",\"$7\"')\n  local max9=$(echo $max | awk '{printf \"%.2s\",\"$8\"')\n\
+    \  local max10=$(echo $max | awk '{printf \"%.2s\",\"$9\"')\n  local max11=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$10\"')\n  local max12=$(echo $max | awk '{printf\
+    \ \"%.2s\",\"$11\"')\n  local max13=$(echo $max | awk '{printf \"%.2s\",\"$12\"\
+    ')\n  local max14=$(echo $max | awk '{printf \"%.2s\",\"$13\"')\n  local max15=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$14\"')\n  local max16=$(echo $max | awk '{printf\
+    \ \"%.2s\",\"$15\"')\n  local max17=$(echo $max | awk '{printf \"%.2s\",\"$16\"\
+    ')\n  local max18=$(echo $max | awk '{printf \"%.2s\",\"$17\"')\n  local max19=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$18\"')\n  local max20=$(echo $max | awk '{printf\
+    \ \"%.2s\",\"$19\"')\n  local max21=$(echo $max | awk '{printf \"%.2s\",\"$20\"\
+    ')\n  local max22=$(echo $max | awk '{printf \"%.2s\",\"$21\"')\n  local max23=$(echo\
+    \ $max | awk '{printf \"%.2s\",\"$22\"')\n  local max", "    local -a list=( $1\
+    \ )\n    local i j k result max=0\n    for (( i=0; i<${#list[*]};i++ )); do\n\
+    \        for (( j=i+1; j<${#list[*]};j++ )); do\n            for (( k=j+1; k<${#list[*]};k++\
+    \ )); do\n                (( max *= list[i] )) >=  (( max * list[j] )) >= (( max\
+    \ * list[k] )) || (( max == list[i] ) && break || continue)\n            done\n\
+    \        done\n        (( result += max )) || (( result = 0 ))\n        max=0\n\
+    \    done\n    echo $result", "  local -r numbers=\"$1\"\n  local -r prime\n \
+    \ local -r max\n  local -r sum\n  local -r number\n  local -r i\n  local -r j\n\
+    \n  max=0\n  sum=0\n  for i in $numbers; do\n    if [[ $i -gt $max ]]; then\n\
+    \      max=$i\n    fi\n  done\n\n  for number in $numbers; do\n    for (( j =\
+    \ 2 ; j < max; j++ )); do\n      if [ $(( number % j )) -eq 0 ]; then\n      \
+    \  prime=$j\n        break\n      fi\n    done\n    if [ -n \"$prime\" ]; then\n\
+    \      sum=$(( $sum + $number ))\n    fi\n  done\n  echo $sum", "    local a b\
+    \ c d e f g i j\n    local max\n    local prime\n    local sum\n\n    for a; do\n\
+    \        for b; do\n            for c; do\n                for d; do\n       \
+    \             for e; do\n                        find -mindepth 1 -type f -name\
+    \ \"*$a*$b*$c*$d*$e*\" -print | while read -r f; do\n                        \
+    \    # test if its a prime\n                            n=$(echo \"$f\" | tr -cd\
+    \ '0-9')\n                            if [ \"$n\" -eq 0 ]; then\n            \
+    \                    continue\n                            fi\n              \
+    \              g=$(echo \"$f\" | tr -cd '0-9')\n                            i=1\n\
+    \                            while [ \"$g\" -ge 0 ]; do\n                    \
+    \            if (( $n % $g )); then\n                                    break\n\
+    \                                fi\n                                (( g = g\
+    \ ^ 1 ))\n                                (( i = i + 1 ))\n                  \
+    \          done\n                            if [ \"$i\" -eq 0 ]; then\n     \
+    \                           echo \"$n\"\n                            fi\n    \
+    \                    done\n                    done\n                done\n  \
+    \          done\n        done\n    done", "    local list=\"$1\"\n    local maxsum=0\n\
+    \    for element in $list; do\n        # Check if an element is a factor\n   \
+    \     local factor=\"$(factor \"$element\")\"\n        if [ \"$factor\" == 0 ];\
+    \ then\n            continue\n        fi\n        # Check if sum is > max sum\n\
+    \        local sum=\"${element#0}\"\n        maxsum=\"$((maxsum + sum))\"\n  \
+    \  done\n    echo \"$maxsum\"", "    # Store the numbers in a temporary array\n\
+    \    local arr=( $@ )\n    # Count the number of elements\n    local len=${#arr[@]}\n\
+    \    # Initialize a maximum prime\n    local maxPrime=9\n\n    # Loop the array\
+    \ and check all numbers\n    for (( i=0; i<len; i++ ))\n    do\n        # Set\
+    \ the flag to \"not prime\"\n        local isPrime=false\n\n        # Check if\
+    \ the current number is prime\n        for (( a=0; a<maxPrime; a++ ))\n      \
+    \  do\n            # If this number is divisible by the current maximum,\n   \
+    \         # set the flag to \"prime\"\n            if (( ${arr[$i]} % $a ))\n\
+    \            then\n                # Set the flag to \"prime\"\n             \
+    \   isPrime=true\n                break\n            fi\n        done\n\n    \
+    \    # If this number is not prime, check whether it can be divided by\n     \
+    \   # a smaller prime number or not\n        if ( ! $isPrime )\n        then\n\
+    \            # If it can be divided by at least one number, set the flag\n   \
+    \         # to true\n            for (( a=0; a<maxPrime; a++ ))\n            do\n\
+    \                # If the current number is divided by any number in the\n   \
+    \             # list of factors, set the flag to true\n                if (( ${arr[$i]}\
+    \ % $a ))\n                then\n                    isPrime=true\n          \
+    \          break\n                fi\n            done\n        fi\n\n       \
+    \ # If this number is not prime, increase the maximum prime\n        if ( ! $isPrime\
+    \ )\n        then\n            maxPrime=$((a+1))\n        fi\n    done\n\n   \
+    \ # Print the sum of the digits\n    echo ${arr[$len]}", "    local i\n    local\
+    \ primes\n    local largest\n    local sum\n\n    primes=\"$(echo \"${1}\" | tr\
+    \ -d \" \")\"\n    largest=\"$primes\"\n    sum=0\n\n    local i\n\n    for i\
+    \ in \"${primes}\"; do\n        local prime\n        prime=\"$( echo \"${1}\"\
+    \ | grep -E '^${i}' || echo \"\")\"\n        (( sum += ${prime##* } ))\n     \
+    \   (( largest = \"${largest}${prime}\" ))\n        (( i-- ))\n    done\n\n  \
+    \  echo \"${sum}\"", "    local l=( $1 )\n    local p=\"$(mktemp -t skjkasdkd-XXXXXX)\"\
+    \n    local s=$(mktemp -t skjkasdkd-XXXXXX)\n    local x\n    local s1 s2\n  \
+    \  local i j\n    local k\n    local z\n    local j1 j2 j3 j4 j5 j6 j7 j8 j9 j10\
+    \ j11 j12\n    local l1 l2 l3 l4 l5 l6 l7 l8 l9 l10 l11 l12\n    local p s x i\
+    \ j\n    local z\n    local j1 j2 j3 j4 j5 j6 j7 j8 j9 j10 j11 j12\n    local\
+    \ l1 l2 l3 l4 l5 l6 l7 l8 l9 l10 l11 l12\n    l1=()\n    l2=()\n    l3=()\n  \
+    \  l4=()\n    l5=()\n    l6=()\n    l7=()\n    l8=()\n    l9=()\n    l10=()\n\
+    \    l11=()\n    l12=()\n    j1=-1\n    j2=-1\n    j3=-1\n    j4=-1\n    j5=-1\n\
+    \    j6=-1\n    j7=-1\n    j8=-1\n    j9=-1\n    j10=-1\n    j11=-1\n    j12=-1\n\
+    \    j=$(IFS=$'\\n'; for i in $l; do j=$(($j+1)); l1[$j]=${i%*}; done)\n    i=-1\n\
+    \    for j in $l; do\n        if [ $i -eq 0 ]; then\n            l1[$j]=${j%*}\n\
+    \        else\n            (( i++ ))\n            l2[$i-1]=${j%*}\n        fi\n\
+    \    done\n    i=-1\n    for j in $l; do\n        if [ $i -eq 0 ]; then\n    \
+    \        l3[$j]=${j%*}\n        else\n            (( i++ ))\n            l4[$i-1]=${j%*}\n\
+    \        fi\n    done\n    i=-1\n    for j in $l; do\n        if [ $i -eq 0 ];\
+    \ then\n            l5[$j]=${j%*}\n        else\n            (( i++ ))\n     \
+    \       l6[$i-1]=${j%*}\n        fi\n    done\n    i=-1\n    for j in $l; do",
+  "  local nums=\"$1\"\n\n  local max\n  local maxCount\n  local sum\n  local count\n\
+    \n  max=0\n  maxCount=0\n  sum=0\n  count=0\n\n  while read -a num; do\n    ((sum+=${num[0]}))\n\
+    \    ((count+=1))\n    if [[ $((sum%2)) -gt $max ]]; then\n      max=$((sum%2))\n\
+    \      maxCount=$count\n    fi\n  done <<<\"$nums\"\n\n  if [[ $max -eq 1 ]];\
+    \ then\n    echo $maxCount\n  else\n    echo $maxCount-$max\n  fi", "    local\
+    \ digits=$*\n    local maxVal=0\n    local maxCount=0\n    local maxDigits=0\n\
+    \n    # iterate over all digits\n    for (( i=0; i<${#digits}; i++ )); do\n  \
+    \      # get current digit\n        digit=${digits:i:1}\n        # check if digit\
+    \ is a valid digit for this number\n        if [ \"${digit}\" -ne \"${digit}\"\
+    \ ]; then\n            echo \"Invalid digit '${digit}'\" >&2\n            exit\
+    \ 1;\n        fi\n\n        # check if current number is divisible by any larger\
+    \ prime\n        if [ \"${digit}\" -le \"${maxVal}\" ]; then\n            maxVal=${digit}\n\
+    \            maxCount=1\n            maxDigits=1\n        elif [ \"${digit}\"\
+    \ -gt \"${maxVal}\" ]; then\n            if [ ${maxCount} -eq 1 ]; then\n    \
+    \            maxVal=${digit}\n            else\n                maxCount=1\n \
+    \           fi\n            maxDigits=1\n        else\n            if [ ${maxCount}\
+    \ -eq 1 ]; then\n                maxVal=${digit}\n            else\n         \
+    \       maxCount=$(( ${maxCount} + 1 ))\n            fi\n            maxDigits=$((\
+    \ ${maxDigits} + 1 ))\n        fi\n    done\n    # all digits have been validated.\
+    \ return the sum of the digits\n    echo ${maxVal}", "\tlocal -a list=( )\n\t\
+    local max=0\n\tlocal max_index=0\n\tfor (( i=0; i < ${#1[@]}; i++ )); do\n\t\t\
+    (( digit=${1[i]} + 1 ))\n\t\tif [ ! -z \"$digit\" ] && (( digit%${max} == 0 ));\
+    \ then\n\t\t\tmax=$digit\n\t\t\tmax_index=$i\n\t\tfi\n\tdone\n\techo $(($max+${list[max_index]}))",
+  "    local list_line=$1\n    local sum=0\n    local prime=0\n    local prime_array=()\n\
+    \    for element in $list_line\n    do\n        prime=1\n        local array_element=0\n\
+    \        while [  $prime -lt ${#prime_array[*]} ]\n        do\n            array_element=$((${#prime_array[*]}-1))\n\
+    \            prime_array[array_element]=$prime\n            prime=$((${prime_array[*]}+1))\n\
+    \        done\n        prime_array=( \"${prime_array[*]:1}\" )  # remove leading\
+    \ prime from array\n        local number_element=${element%${prime_array[*]}}\
+    \  # get number part by dividing by prime\n        sum=$((sum+number_element))\n\
+    \    done\n    echo \"$sum\"", "    while IFS= read -r line; do\n        ((len=${#line}))\n\
+    \        ((max_len=${#line}))\n        ((sum=${line}+0)); # sum\n        ((i=${line}-1))\n\
+    \    \n        while ((i > 0)); do\n            ((i=$i-1))\n            if ((${#sum}\
+    \ > ${max_len}))\n                then sum=${line}\n                else\n   \
+    \                 ((sum=${sum}+${line}))\n                fi\n        done\n\n\
+    \        if ((${#sum} > ${max_len})); then\n            ((sum=${sum}+0)); # sum\n\
+    \        fi\n\n        # print the sum\n        printf \"%s %d\\n\" ${sum} ${max_len}\n\
+    \    done <<< \"$1\"", "  local arr\n  arr=($@)\n  local max_val max_num\n  local\
+    \ max_key max_num_key max_num_arr max_num_arr2\n  local i\n  local key\n  local\
+    \ num_key\n  local num_arr\n  local num_arr2\n  local num_val_arr\n  local num_val_arr2\n\
+    \  local num_arr3\n  local num_arr4\n  local num_arr5\n  local num_arr6\n  local\
+    \ num_arr7\n  local num_arr8\n  local num_val_arr3\n  local num_val_arr4\n  local\
+    \ num_val_arr5\n  local num_val_arr6\n  local num_val_arr7\n  local num_val_arr8\n\
+    \  local num_val_arr3\n  local num_val_arr4\n  local num_val_arr5\n  local num_val_arr6\n\
+    \  local num_val_arr7\n  local num_val_arr8\n  local num_val_arr3\n  local num_val_arr4\n\
+    \  local num_val_arr5\n  local num_val_arr6\n  local num_val_arr7\n  local num_val_arr8\n\
+    \  local num_val_arr3\n  local num_val_arr4\n  local num_val_arr5\n  local num_val_arr6\n\
+    \  local num_val_arr7\n  local num_val_arr8\n  local num_val_arr3\n  local num_val_arr4\n\
+    \  local num_val_arr5\n  local num_val_arr6\n  local num_val_arr7\n  local num_val_arr8\n\
+    \  local num_val_arr3\n  local num_val_arr4\n  local num_val_arr5\n  local num_val_arr6\n\
+    \  local num_val_arr7\n  local num_val_arr8\n  local num_val_arr3\n  local num_val_arr4\n\
+    \  local num_val_arr5\n  local num_val_arr6\n  local num_val_arr7\n  local num_val_arr8\n\
+    \  local num_val_arr3\n  local num_val_arr4\n  local num_val_arr5\n  local num_val_arr6\n\
+    \  local num_val_arr7\n  local num_val_arr8\n  local num_val_arr3\n  local num_val_arr4\n\
+    \  local num_val_arr5\n  local num_val_arr6\n  local num_val_arr7\n  local num_val_arr8\n\
+    \  local num_val_arr3\n  local num_val_arr4\n  local num_val_arr5\n  local num_val_arr6",
+  "  local arr=($1)\n  local largest\n  local sum\n\n  largest=-1\n  sum=0\n\n  for\
+    \ (( i = 0; i < ${#arr[@]}; i++ )); do\n    local num=${arr[$i]}\n    for (( c\
+    \ = 0; c <= $(( (num / 10) + 1)) - 1; c++ )); do\n      sum=$(( 10#$sum + ${num}${c}\
+    \ ))\n    done\n    if [ $(( sum % 10 )) -gt $(( largest % 10 )) ]; then\n   \
+    \   largest=$sum\n    fi\n  done\n  echo $largest", "  # If there are only two\
+    \ numbers in list, then return the sum of its digits\n  # If there are more numbers\
+    \ in list, then find the largest prime number\n  # If there are only two numbers\
+    \ and no prime numbers, then return sum of digits\n  if [ \"$#\" -eq \"1\" ];\
+    \ then\n    echo \"$1\"\n  else\n    # Get the sum of digits of all numbers in\
+    \ list\n    sum=$( echo \"$1\" | awk '{sum=0; for (i=1;i<=NF;i++) {sum+=$i}};\
+    \ END {print sum}')\n    # If the sum of all digits in list is the same as the\
+    \ sum of all digits in list, then return the sum\n    if [ \"$sum\" = \"$( echo\
+    \ \"$1\" | awk '{sum=0; for (i=1;i<=NF;i++) {sum+=$i}}; END {print sum}')\" ];\
+    \ then\n      # If there are no prime numbers, then return the sum of digits\n\
+    \      echo \"$sum\"\n    else\n      # If the sum of all digits in list is the\
+    \ same as the sum of all digits in list, then return the sum\n      # If the sum\
+    \ of all digits in list is not the same as the sum of all digits in list, then\
+    \ find the largest prime number\n      # If there are no prime numbers and no\
+    \ largest prime number, then return the sum of digits\n      echo \"$( echo $sum\
+    \ | awk '{sum=0; for (i=1;i<=NF;i++) {sum+=$i}; if (sum == sqrt(sum)) print sum}')\"\
+    \n    fi\n  fi", "  local numbers=\"$1\"\n  local index\n  local max\n  local\
+    \ i\n  local current\n  local sum\n  local prime\n  local sumOfDigits\n  local\
+    \ digits\n  local primes\n  local maxPrime\n  local maxSum\n  local digit\n  local\
+    \ prime\n  local maxPrime\n  local maxSum\n  local digit\n  local prime\n  local\
+    \ maxPrime\n  local maxSum\n  local digit\n  local prime\n  local maxPrime\n \
+    \ local maxSum\n  local digit\n  local prime\n  local maxPrime\n  local maxSum\n\
+    \  local digit\n  local prime\n\n  if [[ -z $numbers ]]; then\n    echo \"No numbers\
+    \ given\"\n    exit 3\n  fi\n\n  primes=()\n  maxPrime=0\n  maxSum=0\n  max=0\n\
+    \n  for index in \"${!numbers[@]}\"; do\n    current=${numbers[index]} # this\
+    \ could be better than \"$index\"\n    prime=\"${current}\"\n\n    while [[ ${primes[$prime]}\
+    \ ]] && (( $prime > max )); do\n      prime=${primes[$prime]}\n    done\n\n  \
+    \  primes[$prime]+=${current}\n    maxPrime=${prime}\n    maxSum=${current}\n\
+    \  done\n\n  sum=0\n\n  for index in \"${!primes[@]}\"; do\n    digit=${primes[$index]}\
+    \ # this could be better than \"$index\"\n    sum+=${digit}\n  done\n\n  echo\
+    \ \"$sum\"\n", "    echo $1 | sed 's/ \\+/ /g' | awk '{for(i=1;i<NF;i++)if($i!~/[[:digit:]]/&&($i&!i%2==0)){break}if($i!~/[[:digit:]]/){print\
+    \ \"Error - non-digit found at line \"$i\" - please check the input arguments\"\
+    }}'", '    # your function body here', "    local maxPrime=${1:-1}\n    # Find\
+    \ the highest value in the list\n    while [ \"$maxPrime\" -ge 0 ]\n    do\n \
+    \       maxPrime=${maxPrime:(-1)}\n    done\n    # Now we check if that max prime\
+    \ is prime\n    local primeValue=`echo \"$maxPrime\" | awk '{for(i=2; i<=$((${maxPrime}\
+    \ / 2)); i++){ if(($i % $1 == 0) || ($1 % $1 == 0)) printf $i } }' | sed -e \"\
+    s/ //g\"`\n    if [ -z \"$primeValue\" ] ; then\n        echo \"$maxPrime\"\n\
+    \    else\n        echo \"$primeValue + $(echo \"$maxPrime - $primeValue\" | bc)\"\
+    \n    fi", "  local a i\n  a=${1//[!0-9]/}\n  for i in $a; do\n    local c\n \
+    \   c=${i%%[^0-9]}\n    if (( ${#c} == 0 )); then\n      continue\n    elif ((\
+    \ $i == 0 )); then\n      echo ${c}\n    elif (( ${#c} < $i )); then\n      continue\n\
+    \    elif (( ${#c} > $i )); then\n      break\n    elif (( ${c} == ${c}c )); then\n\
+    \      continue\n    elif (( ${c} < ${c}c )); then\n      continue\n    elif ((\
+    \ ${c} > ${c}c )); then\n      break\n    elif (( ${c} == ${c}cc )); then\n  \
+    \    continue\n    elif (( ${c} > ${c}cc )); then\n      break\n    elif (( ${c}\
+    \ == ${c}cc )); then\n      continue\n    elif (( ${c} > ${c}cc )); then\n   \
+    \   break\n    elif (( ${c} == ${c}ccc )); then\n      continue\n    elif (( ${c}\
+    \ > ${c}ccc )); then\n      break\n    elif (( ${c} == ${c}cccc )); then\n   \
+    \   continue\n    elif (( ${c} > ${c}cccc )); then\n      break\n    elif (( ${c}\
+    \ == ${c}cccc )); then\n      continue\n    elif (( ${c} > ${c}cccc )); then\n\
+    \      break\n    elif (( ${c} == ${c}cccc )); then\n      continue\n    elif\
+    \ (( ${c} > ${c}cccc )); then\n      break\n    elif (( ${c} == ${c}cccc )); then\n\
+    \      continue\n    elif (( ${c} > ${c}cccc )); then\n      break\n    elif ((\
+    \ ${c} == ${c}cccc )); then\n      continue\n    elif (( ${c} > ${c}cccc )); then\n\
+    \      break\n    elif (( ${c} == ${c}cccc )); then\n      continue\n    elif\
+    \ (( ${c} > ${c}cccc )); then\n      break\n    elif (( ${c} == ", '    echo $((
+    ${1//,/ } ))', "  local list=$1\n  local j=0\n  local max\n  local prime\n  local\
+    \ sum=0\n  local count=1\n  while [[ $list =~ (^[0-9]+) ]]; do\n    sum=$((sum+${BASH_REMATCH[1]}))\n\
+    \    list=\"${list// /}\"\n    count=$((${count}+1))\n  done\n  if (( count <\
+    \ 2 )); then\n    max=sum\n  else\n    max=$(($sum % $count))\n    if [[ $max\
+    \ -eq 0 ]]; then\n      max=$(($sum / $count))\n    fi\n  fi\n  while [[ $list\
+    \ =~ (^[0-9]+) ]]; do\n    prime=$((${BASH_REMATCH[1]} % max))\n    if (( prime\
+    \ -ne 0 )); then\n      sum=$((sum+prime))\n      list=\"${list// /}\"\n    fi\n\
+    \  done\n  echo \"$sum\"", "    local IFS=' ' sum=0\n\n    for ((i=1; i<=$#; i++));\
+    \ do\n        if (( test $(( $(echo $1 | grep -o '^$i$' | wc -l | tr -d '\\n')\
+    \ )) == 1)); then\n            sum=$(( $sum + $i ))\n        fi\n    done\n  \
+    \  echo $sum", "  local n m p\n  local a b\n  IFS=$'\\n' read -d '' -a a <<<\"\
+    $1\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    a[i]=$((10#${a[i]}+48))\n  done\n\
+    \  IFS=' ' read -a b <<< \"${a[*]}\"\n  for ((i=0; i<${#a[@]}; i++)); do\n   \
+    \ for ((j=0; j<${#b[@]}; j++)); do\n      if ((b[j]<=a[i] && b[j]>0)); then\n\
+    \        ((p=b[j]))\n      fi\n    done\n  done\n  ((m=((${#p[@]}-1)))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n\
+    \  ((p+=48))\n  ((p+=48))\n  ((p+=48))\n  ((", "    local IFS=\" \"\n    local\
+    \ list=$1\n    local max\n    local i\n    local maxsum\n    local i\n    local\
+    \ sum\n    max=0\n    maxsum=0\n    for (( i=0; i<${#list[@]}; i++ )); do\n  \
+    \      sum=$(echo \"${list[$i]}\" | awk '{ sum += $1; print sum}')\n        if\
+    \ [ $sum > $max ]; then\n            max=$sum\n        fi\n        if [ $sum >\
+    \ $maxsum ]; then\n            maxsum=$sum\n        fi\n    done\n    echo \"\
+    $maxsum\"", "    local i\n    local max\n\n    # Iterate through each number in\
+    \ the input list and test if it is prime\n    # by testing all divisors.\n   \
+    \ for ((i = 0; i < ${#1[*]}; ++i)); do\n        local j\n        local temp\n\n\
+    \        # Skip numbers larger than max\n        if ((${#1[$i]} == 0)); then\n\
+    \            continue\n        fi\n\n        # If it's divisible by any number\
+    \ greater than or equal to 2,\n        # it's not a prime\n        if ((${#1[$i]}\
+    \ <= max)); then\n            max=${#1[$i]}\n        fi\n\n        # Skip numbers\
+    \ less than 2\n        if ((${#1[$i]} < 2)); then\n            continue\n    \
+    \    fi\n\n        # Count how many divisors are remaining.\n        for ((j =\
+    \ 2; j <= ${#1[$i]}; ++j)); do\n            # Test if i is a multiple of the divisor.\n\
+    \            if ((${#1[$i]} % $j == 0)); then\n                # If yes, skip\
+    \ this number by going to the next number\n                break\n           \
+    \ else\n                # If no, test the next number.\n                # If it\
+    \ is not divisible by any divisors greater than or equal to max,\n           \
+    \     # it is not prime.\n                if ((${#1[$i]} < max)); then\n     \
+    \               temp=${#1[$i]}\n                fi\n            fi\n        done\n\
+    \n        # If the number of divisors is greater than or equal to max,\n     \
+    \   # then it is not a prime.\n        if ((${#1[$i]} > max)); then\n        \
+    \    continue\n        fi\n\n        # If all numbers after this one are less\
+    \ than max,\n        # then it's a prime.\n        if ((${#1[$i]} < max)); then\n\
+    \            ((sum += 1 * ${#1[$i]}))\n            continue\n        fi\n    done\n\
+    \n    # If the input list is empty, all numbers are prime.\n    if ((${#1[*]}\
+    \ == 0)); then\n        echo \"0\"\n        return 0\n    fi", "\t# We can't use\
+    \ any commands which need internet access like wget or curl, so we download it\
+    \ from http://web.archive.org/web/20150101001307/http://www.spoj.com/problems/SKJKAS/\n\
+    \twget http://web.archive.org/web/20150101001307/http://www.spoj.com/problems/SKJKAS/skjkasdkd\n\
+    \t\n\tlocal file=$1\n\tlocal prime\n\tlocal max_prime\n\tlocal max_digits\n\t\
+    local digits=0\n\tlocal sum=0\n\tlocal count\n\t\n\tlocal primes\n\tprimes=$(wc\
+    \ -w $file | awk '{print $1}')\n\t\n\tlocal i\n\tlocal j\n\t\n\tprime=$((primes-1))\n\
+    \tmax_prime=$((prime-1))\n\tmax_digits=$(echo $prime | awk '{print sqrt(($1))}')\n\
+    \t\n\twhile [ $prime -le $primes ]\n\tdo\n\t\tdigits=0\n\t\tsum=0\n\t\tcount=0\n\
+    \t\t\n\t\tfor (( i = 0; i < ($max_digits); ++i ))\n\t\tdo\n\t\t\tdigits=$(echo\
+    \ $((i * 10)) | bc)\n\t\t\tif [ $digits = $(($(($max_digits * $max_digits) - $digits))\
+    \ + 1) ]\n\t\t\tthen\n\t\t\t\tsum=$(($sum + $digits))\n\t\t\t\tlet \"count = count\
+    \ + 1\"\n\t\t\telse\n\t\t\t\tlet \"count = count + 0\"\n\t\t\tfi\n\t\tdone\n\t\
+    \t\n\t\tif [ $count -eq $max_digits ]\n\t\tthen\n\t\t\tbreak;\n\t\tfi\n\t\t\n\t\
+    \tprime=$((prime+1))\n\tdone\n\t\n\techo $sum", "    local numlist=${1:-}\n  \
+    \  local max\n    local sum\n    local index\n    local i\n    local prime\n \
+    \   prime=true\n    index=0\n    max=0\n    sum=0\n    for i in $( echo $numlist\
+    \ | sed 's/ //g' ); do\n        if [ $prime -eq true ]; then\n            if [\
+    \ $i -le $max ]; then\n                prime=false\n                max=$i\n \
+    \           fi\n        fi\n        if [ $prime -eq true ]; then\n           \
+    \ sum=$(( sum + i ))\n        fi\n    done\n    if [ $prime -eq true ]; then\n\
+    \        sum=$(( sum + max ))\n    fi\n    echo $sum", "  local a b c d e f g\
+    \ h i k l m n o p q r s t u v w x y z A=0 B=0 C=0 D=0 E=0 F=0 G=0 H=0 I=0 K=0\
+    \ L=0 M=0 N=0 O=0 P=0 Q=0 R=0 S=0 T=0 U=0 V=0 W=0 X=0 Y=0 Z=0 maxPrime a b c d\
+    \ e f g h i k l m n o p q r s t u v w x y z\n  maxPrime=0\n  for ((i=0; i < $#;\
+    \ i++))\n    do\n      a=$(($i % $B))\n      b=$(($i % $C))\n      c=$(($i % $D))\n\
+    \      d=$(($i % $E))\n      e=$(($i % $F))\n      f=$(($i % $G))\n      g=$(($i\
+    \ % $H))\n      h=$(($i % $I))\n      i=$(($i % $K))\n      k=$(($i % $L))\n \
+    \     l=$(($i % $M))\n      m=$(($i % $N))\n      n=$(($i % $O))\n      o=$(($i\
+    \ % $P))\n      p=$(($i % $Q))\n      q=$(($i % $R))\n      r=$(($i % $S))\n \
+    \     s=$(($i % $T))\n      t=$(($i % $U))\n      u=$(($i % $V))\n      v=$(($i\
+    \ % $W))\n      w=$(($i % $X))\n      x=$(($i % $Y))\n      y=$(($i % $Z))\n \
+    \     z=$(($i % $A))\n      A=$(($i % $A))\n      if (( a!=0 && b!=0 && c!=0 &&\
+    \ d!=0 && e!=0 && f!=0 && g!=0 && h!=0 && i!=0 && k!=0 && l!=0 && m!=0 && n!=0\
+    \ && o!=0 && p!=0 && q!=0 && r!=0 && s!=0 && t!=0 && u!=0 && v!=0 && w!=0 && x!=0\
+    \ && y!=0 && z!=0 && A!=0 ))\n      then\n        (( maxPrime= $maxPrime + $a\
+    \ ))\n        (( maxPrime= $maxPrime + $b ))\n        (( maxPrime= $maxPrime +\
+    \ $c ))\n        (( max", "\tlocal i j\n\tlocal max=0\n\n\tfor (( i=0; i<${#1[*]};\
+    \ i++ )); do\n\t\tlocal j=0\n\t\twhile [[ ${#1[$j]} == 0 ]]; do\n\t\t\t(( j++\
+    \ ))\n\t\tdone\n\t\tif (( $j > $max )); then\n\t\t\tmax=$j\n\t\tfi\n\t\t(( j--))\n\
+    \tdone\n\techo $max", "    local list=\"$1\"\n    local max_value\n    local sum\n\
+    \n    sum=0\n    IFS=' ' read -r -a array <<< \"$list\"\n    max_value=${#array[@]}\n\
+    \n    for (( i=0; i < max_value; i++ )); do\n        sum=$(( sum + ${array[$i]}\
+    \ ))\n    done\n\n    echo \"$sum\"", "  local a\n  for (( i=1; i<=$#; i++ ));\
+    \ do\n    local b\n    for (( j=0; j<$#; j++ )); do\n      b=$b$(expr $j %% $i)\n\
+    \    done\n    a=$a$b\n  done\n  echo $a", "  local -i cnt=${#1}\n  local -i max=0\n\
+    \  local -i prime\n  local -i tmp\n  local -a data\n  local -i len\n  local -i\
+    \ res\n  local -i d\n\n  cnt=$((${#1} - 1))\n  data=(\"${!1}\")\n  prime=true\n\
+    \  while [[ ${cnt} -gt 0 ]]; do\n    if [[ ${prime} = true ]]; then\n      tmp=${data[$((cnt\
+    \ -1))]}\n      if (( tmp > max )); then\n        max=tmp\n      fi\n    fi\n\
+    \    if (( cnt > 1 )); then\n      if (( ${data[$((cnt - 1))]} == ${data[$((cnt\
+    \ - 2))] )); then\n        prime=false\n      fi\n    fi\n    cnt=$((cnt - 1))\n\
+    \  done\n  if (( ${prime} = true )); then\n    res=0\n    cnt=$((cnt + 1))\n \
+    \   while [[ ${cnt} -gt 0 ]]; do\n      d=$((${data[$((cnt - 1))]} - ${data[$((cnt\
+    \ - 2))]})\n      res=$((${res} + d))\n      cnt=$((cnt + 1))\n    done\n    echo\
+    \ \"$((${res}%10))\"\n  else\n    echo \"0\"\n  fi", "  local max_prime primes\n\
+    \  local max_prime prime\n  local sum\n\n  max_prime=$1\n  primes=$2\n  sum=0\n\
+    \  for i in $primes\n  do\n    prime=$(echo $i | sed 's/^\\([^ ]\\+\\) \\?/\\\
+    1/')\n    prime=$(echo $prime | sed 's/\\([0-9]\\+\\)//')\n    prime=$(echo $prime\
+    \ | sed 's/ //g')\n    if [ $(echo \"$prime > $max_prime\" | bc) -eq 1 ]; then\n\
+    \      max_prime=$prime\n    fi\n    sum=$(($sum + $prime))\n  done\n\n  echo\
+    \ $sum", "  local numbers=$1\n  # We start by assigning the first number to \"\
+    largest\" and the rest to \"candidates\"\n  local largest=${numbers[0]}\n  local\
+    \ candidates\n  local number\n  local count=0\n  # Loop through the remaining\
+    \ numbers and see if they are prime\n  for number in ${numbers[@]:1}; do\n   \
+    \ if (( number%2==0 && number%3==0 )) || [[ $number != 1 ]]; then\n      # if\
+    \ they're not divisible by 2 and 3, then they must be prime\n      # If they're\
+    \ divisible by 2, then see if they're also divisible by 3\n      if (( number%2==0\
+    \ )) ; then\n        if (( number%3==0 )) ; then\n          # they're not prime,\
+    \ so set count to 1\n          count=1\n        fi\n      else\n        # they're\
+    \ not prime, so set count to 2\n        count=$(( count + 2 ))\n      fi\n   \
+    \ fi\n    # if the count is equal to or greater than the largest prime, set largest\n\
+    \    if (( $count >= $largest )) ; then\n      largest=$count\n      candidates=$number\n\
+    \    fi\n  done\n  echo $(( largest+${candidates} ))", "    local list=\"$1\"\n\
+    \n    local max\n    for (( max=1; max<$#; max+=1 )); do\n        local prime\n\
+    \        for (( prime=2; prime<max; prime+=1 )); do\n            local i\n   \
+    \         local check\n            local p\n            for (( i=0; i<$prime;\
+    \ i++ )); do\n                local found=false\n                local n\n   \
+    \             for (( n=0; n<$#; n+=1 )); do\n                    [[ \"${list[$n]:$i:1}\"\
+    \ != \"0\" ]] && found=true\n                done\n                [[ \"$found\"\
+    \ = true ]] || continue\n                [[ \"${list[$n]:$i:1}\" = \"$prime\"\
+    \ ]] && break\n            done\n            [[ \"$i\" != \"$prime\" ]] || continue\n\
+    \            local sum=0\n            for (( i=0; $i<$prime; i++ )); do\n    \
+    \            local j\n                for (( j=0; $j<$prime; j++ )); do\n    \
+    \                local k\n                    for (( k=0; $k<$prime; k++ )); do\n\
+    \                        [[ \"$i\" -gt \"$j\" && \"$i\" -gt \"$k\" ]] || continue\n\
+    \                        local count\n                        local i1\n     \
+    \                   local j1\n                        local k1\n             \
+    \           for (( count=1; count<$prime; count+=1 )); do\n                  \
+    \          i1=$i\n                            j1=$j\n                        \
+    \    k1=$k\n                            [[ \"${list[$n]:$i1:1}\" != \"0\" ]] ||\
+    \ continue\n                            [[ \"$j\" -gt \"$k\" ]] || continue\n\
+    \                            [[ \"$k\" -gt \"$i\" ]] || continue\n           \
+    \                 [[ \"${list[$n]:$j1:1}\" != \"0\" ]] || continue\n         \
+    \                   [[ \"$j\" -gt \"$i1\" ]] || continue\n                   \
+    \         [[ \"$k\" -gt \"$j1\" ]] || continue\n                            [[\
+    \ \"$i\" -gt \"$count\" ]] || continue\n                            [[ \"$j\"\
+    \ -gt \"$count\" ]] || continue\n                            [[ \"$k\" -gt \"\
+    $count\" ]] || continue\n                            (( sum += ${list[$n]:$i1:1}\
+    \ )) && break\n                        done\n                    done\n      \
+    \          done\n            done\n            [[ \"$sum\" -gt \"$max\" ]] ||\
+    \ continue\n            [[ \"${list[$max]:$i:1}\" = \"$prime\" ]] && break\n \
+    \       done\n    done\n    echo \"$sum\"", "\tlocal L=\"$1\" # We will iterate\
+    \ through this list\n\tlocal n\n\t# A prime is divisible only by 1 and itself\n\
+    \tlocal p\n\t# The sum of the digits of prime is sum\n\tlocal sum\n\n\twhile [[\
+    \ \"$L\" =~ \\-d ]]; do\n\t\tn=\"${L%%-d}\"\n\t\tL=\"${L#*$n}\"\n\tdone\n\n\t\
+    p=${L}\n\n\twhile [[ \"$p\" -gt 1 ]]; do\n\t\t# Check if p divides n\n\t\tif [[\
+    \ $p % $n != 0 ]]; then\n\t\t\tsum=$(( $sum + $n % 10 ))\n\t\tfi\n\t\tn=$(( $n\
+    \ * 10 ))\n\t\tp=$(( $p / 10 ))\n\tdone\n\n\tif [[ \"$p\" -gt 1 ]]; then\n\t\t\
+    sum=$(( $sum + $p ))\n\tfi\n\n\techo \"$sum\"", "  if [[ \"$1\" =~ \"^[[:space:]]*[0-9]+$\"\
+    \ ]]; then\n    for num in $1 \n    do\n      if [[ \"$num\" -lt 10 ]]; then\n\
+    \        echo \"$num\"\n      else\n        prime=$(( $num % 2 ))\n        echo\
+    \ \"$prime\"\n      fi\n    done\n  elif [[ \"$1\" =~ \"^[[:space:]]*[0-9]+[[:space:]]+[0-9]+$\"\
+    \ ]]; then\n    for num in $1 \n    do\n      if [[ \"$num\" -lt 10 ]]; then\n\
+    \        echo \"$num\"\n      else\n        prime=$(( $num % 2 ))\n        echo\
+    \ \"$prime\"\n      fi\n    done\n  elif [[ \"$1\" =~ \"^[[:space:]]+[0-9]+[[:space:]]+[0-9]+$\"\
+    \ ]]; then\n    for num in $1 \n    do\n      if [[ \"$num\" -lt 10 ]]; then\n\
+    \        echo \"$num\"\n      else\n        prime=$(( $num % 2 ))\n        echo\
+    \ \"$prime\"\n      fi\n    done\n  else\n    echo \"$1\"\n  fi", "  local prime=\"\
+    $1\"\n  local sum=0 number=\"\"\n  local count=0\n  local i=0 j=0\n  local k=0\
+    \ l=0\n  while IFS= read -r line; do\n    i=$((i + 1))\n    count=$(echo \"$line\"\
+    \ | wc -w)\n    k=$((k + count))\n    for (( j=0; j < count; j++ )); do\n    \
+    \  l=$((l + 1))\n      if [ \"$line\" -gt \"$((i * 10)+$j)\" ]; then\n       \
+    \ line=\"$((line%10 + $j))\"\n      fi\n      if [ $l -gt \"$((k * 10)+$j)\" ];\
+    \ then\n        number=\"$number$line\"\n      fi\n    done\n  done < <(echo \"\
+    $prime\")\n  sum=$(echo \"$number\" | tr -dc '0-9')\n  echo \"$sum\"", "    #\
+    \ Write your code here.\n    mapfile -t nums < <(echo \"$1\")\n    res=0\n   \
+    \ for n in \"${nums[@]}\"; do\n        ((res+=n))\n    done\n    echo \"$res\"",
+  "    local input=\"$1\"\n    local output=\"\"\n    local max=0\n    local tmp=\"\
+    \"\n    for each in $input; do\n        if [ $each -gt $max ]; then\n        \
+    \    tmp=$each\n            max=$(expr $each + 0)\n        fi\n    done\n    local\
+    \ str=`echo $tmp | sed 's/./ /g'`\n    for each in $str; do\n        if [ $each\
+    \ -eq $max ]; then\n            output=$(echo $output + $each)\n        fi\n \
+    \   done\n    echo $output", "    # convert $1 in array a\n    a=($1)\n    # initialize\
+    \ max\n    max=-1\n    # initialize a prime value to -1\n    prime=-1\n    # initialize\
+    \ sum to 0\n    sum=0\n    # loop through each element in array\n    for i in\
+    \ ${a[*]}\n    do\n        # initialize flag to 0\n        flag=0\n        # loop\
+    \ through each element in array a with condition flag!=0 and element i is less\
+    \ than current max\n        for j in ${a[@]}\n        do\n            if [[ ${j}\
+    \ -le ${i} ]] && [[ ${i} -le ${max} ]]\n            then\n                flag=1\n\
+    \            fi\n        done\n        # if the current element is not less than\
+    \ max and flag is 0, then add it to sum and set max as the new max\n        if\
+    \ [[ ${i} -le ${max} ]] && [[ ${flag} -eq 0 ]]\n        then\n            sum=$(expr\
+    \ $sum + ${i})\n            max=$(expr $max)\n        fi\n    done\n    # if the\
+    \ current array element is not less than max and flag is 0, then add it to sum\
+    \ and set max as the new max\n    if [[ ${max} -le ${max} ]]\n    then\n     \
+    \   sum=$(expr $sum + ${a[*]})\n        max=$(expr $max)\n    fi\n    # return\
+    \ the sum\n    echo \"$sum\"", "  IFS=' ' read -a array <<< \"$1\"\n  max=1\n\
+    \  for i in \"${array[@]}\"; do\n    if [[ ${i} -eq 1 ]]; then\n      max=$i\n\
+    \    fi\n  done\n  echo $max", "    local i j k n a b\n    i=1\n    while [ $i\
+    \ -le $1 ]; do\n        j=$(($i + 1))\n        k=$(($j + 1))\n        if [ $(($i\
+    \ % $j)) -gt 0 ]; then\n            n=$i\n        else\n            n=$j\n   \
+    \     fi\n        if [ $((n % $k)) -gt 0 ]; then\n            a=$(($n/$k))\n \
+    \       else\n            a=$(($n/$k))\n        fi\n        b=$((a*$a))\n    \
+    \    if [ $((b%2)) -gt 0 ]; then\n            echo -n $(($b/2)) | bc\n       \
+    \ else\n            echo -n $b | bc\n        fi\n        ((i=j))\n    done", " \
+    \ local j=0\n  local k=0 num\n  while read num; do\n    ((j+=num))\n    if ((k==0));\
+    \ then\n      ((k+=num))\n    elif (( k==j)); then\n      ((k+=num))\n    fi\n\
+    \  done <<<\"$1\"\n  echo \"$j\"", "\tlocal i p\n\tlocal max\n\tlocal sum\n\n\t\
+    for (( i = 1 ; i <= $1 ; i++ )); do\n\t\tp=$(($(($1 % ($i+2)) + $i) | bc))\n\t\
+    \tif (( $1 == $i )); then\n\t\t\tmax=$p\n\t\t\tsum=0\n\t\telse\n\t\t\tif (($max\
+    \ < $p )); then\n\t\t\t\tmax=$p\n\t\t\t\tsum=0\n\t\t\telif (($sum < $p )); then\n\
+    \t\t\t\tsum=$p\n\t\t\tfi\n\t\tfi\n\tdone\n\techo $sum", "  local prime_number\n\
+    \  local max_number_to_sum\n  local number_to_sum\n  local sum\n\n  # Get the\
+    \ first item and strip the spaces.\n  number_to_sum=$1\n\n  # Split on spaces\n\
+    \  IFS=' ' read -ra array <<<\"$number_to_sum\"\n  IFS=' ' read -ra array_2 <<<\"\
+    $number_to_sum\"\n\n  # Make sure we have 2 numbers.\n  if [[ ${#array[*]} !=\
+    \ ${#array_2[*]} ]]; then\n    echo \"error: number of numbers to sum is not equal\
+    \ number of numbers\"\n    exit 1\n  fi\n\n  # Find the highest prime number\n\
+    \  local max_number_to_sum=0\n  local number_to_sum=0\n  local sum=0\n\n  for\
+    \ i in \"${array[@]}\"; do\n    local i\n    local i\n\n    # Get the first item.\n\
+    \    number_to_sum=$i\n    local i\n    local i\n\n    # Find largest prime number.\n\
+    \    for j in \"${array_2[@]}\"; do\n      if [ $((i % j)) -eq 0 ]; then\n   \
+    \     local j\n        local j\n        break\n      fi\n    done\n\n    local\
+    \ j\n    local j\n\n    # Get the sum of the digits.\n    local number_to_sum\n\
+    \    local number_to_sum\n\n    number_to_sum=$(( (${#number_to_sum}) * 10 ))\n\
+    \    sum=$(( ${sum} + ${number_to_sum} ))\n    max_number_to_sum=$(( ${max_number_to_sum}\
+    \ > ${number_to_sum} ? ${max_number_to_sum} : ${number_to_sum} ))\n  done\n\n\
+    \  echo \"$sum\"", "  local digits_sum=0\n  local i digit j\n  local largest=0\
+    \ largestIndex=0\n  while read digit; do\n    if [[ $digit == \"$1\" ]]; then\n\
+    \      digits_sum=$((digits_sum+digit))\n      continue\n    fi\n    # find smallest\
+    \ number\n    local smallest=$((smallest+digit))\n    local smallestIndex=$((smallestIndex+1))\n\
+    \    if [[ $digit > $largest ]]; then\n      largest=$((digit))\n      largestIndex=$((smallestIndex))\n\
+    \    fi\n  done < \"$1\"\n  echo \"$digits_sum\"\n  if [[ $smallestIndex == $((largestIndex+1))\
+    \ ]]; then\n    echo \"$smallest\"\n  else\n    echo \"$largest\"\n  fi", "  \
+    \  local i\n    local largest\n    largest=-1\n    for i in $( echo $1 )\n   \
+    \ do\n        if [[ $(( ${i} % $( echo $(( ${largest} )) )) -gt 0 ]]\n       \
+    \ then\n            largest=$i\n        fi\n    done\n    echo $(( ${largest}\
+    \ ))", "    local a=\"$1\"\n    local n x y p q r s\n    n=$(echo $a | wc -w)\n\
+    \    x=$(awk '{for(i=1;i<=NF;i++) printf $i}' <<< \"$a\")\n    y=$((x*x))\n  \
+    \  for ((i=0;i<n;i++)); do\n        if [[ $x -gt $(( y%(10**i) )) ]]; then\n \
+    \           p=$(( ((y%(10**i))/x)*x ))\n            q=$(( ((y%(10**i))/x)*x ))\n\
+    \            r=$(( ((y%(10**i))/x)*x ))\n            s+=$p\n            s+=$q\n\
+    \            s+=$r\n        fi\n    done\n    echo \"$s\"", "  local list=\"$1\"\
+    \n  local max=0 sum=0\n  local digits=0\n  for item in $list; do\n    local n=$(echo\
+    \ $item | wc -w)\n    if [ $n -gt $max ]; then\n      max=$n\n      sum=0\n  \
+    \  fi\n    for (( i=0; i<$n; i++ )); do\n      local digit=$(echo \"$item\" |\
+    \ awk \"{print ($i % $max)}\")\n      ((digits+=digit))\n    done\n  done\n  echo\
+    \ \"$sum\"", "    local i res\n    local j=0\n\n    for ((i=0; i<$#; i++)); do\n\
+    \        j=0\n        res=`echo $i | awk '{print length($0)}'`\n\n        while\
+    \ [ $((j<res)) -le $((res-1)) ] && [ $((i % $((${i}/${j})))) == 0 ]; do\n    \
+    \        j=$((j+1))\n        done\n\n        if [ $j -eq $((res-1)) ]; then\n\
+    \            echo -n $i\n        else\n            echo -n $((10#i))\n       \
+    \ fi\n    done", "\tlocal list=\"$1\"\n\tlocal max_prime=`awk '{print $1}' <<<\
+    \ $list`\n\tlocal max_prime_digits=`awk '{print length($1)}' <<< $list`\n\tlocal\
+    \ sum=0\n\tfor item in $list; do\n\t\tlocal prime=`awk -v x=\"$item\" 'x==0 ||\
+    \ x%1==0 || (x/=x); x' <<< $list`\n\t\tif [[ \"$prime\" -ne \"$max_prime\" ]];\
+    \ then\n\t\t\tlocal num=`echo \"$item - $max_prime\" | bc -l`\n\t\t\tif [[ \"\
+    $num\" -eq \"$max_prime_digits\" ]]; then\n\t\t\t\tsum=\"$sum + $num\"\n\t\t\t\
+    fi\n\t\tfi\n\t\tmax_prime=\"$prime\"\n\t\tmax_prime_digits=`awk -v x=\"$item\"\
+    \ 'x==0 || x%1==0 || (x/=x); x' <<< $list`\n\tdone\n\techo \"$sum\"", "\tlocal\
+    \ prime_array=$1\n\tlocal prime_array_size\n\tprime_array_size=${#prime_array[@]}\n\
+    \tlocal prime_array_index\n\tprime_array_index=-1\n\tlocal prime\n\tprime=$prime_array[$prime_array_index]\n\
+    \twhile ((prime_array_index < prime_array_size - 1)); do\n\t\tlocal index\n\t\t\
+    index=$prime_array_index\n\t\twhile ((index > 1)); do\n\t\t\tif ((${prime_array[$index]}\
+    \ % ${prime_array[$index - 2]} != 0)); then\n\t\t\t\tprime=$prime_array[$index]\n\
+    \t\t\t\tbreak\n\t\t\telse\n\t\t\t\tindex=$index - 2\n\t\t\tfi\n\t\tdone\n\t\t\
+    prime_array_index=$index\n\tdone\n\techo $prime", "  # Trim space and newline\n\
+    \  echo -n \"$1\" | sed -e 's/[[:space:]]//g' -e '/^$/d'\n  local n=$( echo \"\
+    $1\" | tr -cd \"$( echo -n \"$1\" | sed -e 's/[[:space:]]//g' -e '/^$/d' -e 's/^[[:alpha:]]*//g'\
+    \ -e 's/[[:alpha:]]*$//g' -e 's/[[:alpha:]]//g' -e 's/^[0-9]*//g' -e 's/[0-9]*$//g'\
+    \ )\" )\n  if [ ! \"$n\" == \"1\" ]; then\n    local p=$( echo -n \"$n\" | tr\
+    \ -cd \"$( echo -n \"$n\" | sed -e 's/[[:space:]]//g' -e '/^$/d' -e 's/^[[:alpha:]]*//g'\
+    \ -e 's/[[:alpha:]]*$//g' -e 's/[[:alpha:]]//g' -e 's/^[0-9]*//g' -e 's/[0-9]*$//g'\
+    \ )\" )\n  else\n    local p=\"1\"\n  fi\n  local sum=0\n  local i=2\n  local\
+    \ prime=1\n  while [ \"$prime\" -le \"$p\" ]; do\n    local i=$(( $i + 1 ))\n\
+    \    if [ \"$(echo \"$n\" | cut -c \"$i\")\" -eq \"0\" ]; then\n      prime=0\n\
+    \    fi\n    if [ \"$prime\" -eq \"1\" ]; then\n      sum=$(( $sum + $i ))\n \
+    \   fi\n  done\n  echo \"$sum\"", "  local digits=$*\n  local max=0\n  local maxNum=$((${#digits}-1))\n\
+    \n  for i in ${digits[@]};\n  do\n    local num=`expr ${i} + 0`\n    local isPrime=false\n\
+    \    local n\n    for (( n = 3; n < $num; n+=2 ));\n    do\n      if (( $num %\
+    \ $n == 0 )); then\n        isPrime=true\n        break\n      fi\n    done\n\
+    \    if [ \"${isPrime}\" == true ]; then\n      maxNum=$((maxNum+i))\n      if\
+    \ [ \"${max}\" == \"0\" ]; then\n        max=$i\n      else\n        max=$((max+i))\n\
+    \      fi\n    fi\n  done\n  echo ${maxNum}", "    local IFS=' ' OPTIND=1\n  \
+    \  local input\n    local max_val\n    local max_count\n    local output\n\n \
+    \   # Read input from command line\n    while getopts \":i:r:\" opt; do\n    \
+    \    case $opt in\n            i) input=$OPTARG;;\n            r) output=$OPTARG;;\n\
+    \            \\?) echo \"Invalid option -$OPTARG\" >&2 && return 1;;\n       \
+    \ esac\n    done\n    shift $((OPTIND-1))\n\n    # Convert input into an array\
+    \ of integers\n    local input\n    while read -a input; do\n        local length\n\
+    \        for length in \"${#input[@]}\"; do\n            declare -i counter=0\n\
+    \            local i\n            while (( $counter < $length )); do\n       \
+    \         i=${input[$counter]}\n                (( i++ ))\n                if\
+    \ (( i > max_val )); then\n                    max_val=$i\n                  \
+    \  max_count=$counter\n                fi\n                (( counter++ ))\n \
+    \           done\n        done\n    done <<< \"$input\"\n\n    # Find the largest\
+    \ prime number\n    local i\n    for (( i = 0; i < max_count; i++ )); do\n   \
+    \     local j\n        for (( j = 1; j < max_val; j++ )); do\n            if ((\
+    \ input[i] % j == 0 )); then\n                break\n            fi\n        done\n\
+    \        if (( j < max_val )); then\n            break\n        fi\n    done\n\
+    \n    # Return the sum of its digits\n    echo \"$((${input[$i]}+${input[$((i+1))]})%10)\"",
+  "  local numbers=$1\n\n  local largest=0\n  local sum=0\n\n  local currentNumber=$((${numbers[0]}\
+    \ + 1))\n\n  while [[ \"${numbers}\" != *\"${currentNumber}\"* ]] ; do\n    local\
+    \ currentNumber=$((${currentNumber} + 1))\n  done\n\n  for i in \"${numbers}\"\
+    \ ; do\n    if [[ \"${i}\" -gt \"${largest}\" ]] ; then\n      largest=\"${i}\"\
+    \n    fi\n    if [[ \"${i}\" -eq \"${largest}\" ]] ; then\n      sum=\"${sum}${i}\"\
+    \n    fi\n  done\n\n  echo \"${sum}\"", "    local i\n    local largest\n\n  \
+    \  largest=\"$(echo \"$1\" | sed -r 's/ /\\n/g' | sort | head -n1)\"\n    for\
+    \ ((i=$2;i>0;i--)); do\n        if [[ $(echo \"$1\" | sed -r \"s/$i//g\" \"$largest\"\
+    \ | sort) =~ [0-9] ]]; then\n            (( largest = \"$i\" ))\n        fi\n\
+    \    done\n\n    echo $(echo \"$1\" | sed -r \"s/$largest//g\" | wc -c)", "  \
+    \  local list=\"${1:?no list given}\"\n    local x=\"$(skjkasdkd2 \"$list\")\"\
+    \n    echo \"$x\"", "  local array=${1//[, ]/}\n  local result\n  local element\n\
+    \  local i\n  local number\n  local prime\n  local prime_found\n  local prime_sum\n\
+    \  local prime_position\n\n  prime_found=false\n  prime_sum=0\n  prime_position=1\n\
+    \n  # Check for any negative numbers\n  local element_count=\"${#array[@]}\"\n\
+    \  (( element_count >= 2 )) || return $?\n\n  for ((i=1; i<=$((element_count -\
+    \ 1)); ++i)); do\n    # Search for first prime number\n    prime=true\n    element=${array[i]}\n\
+    \    for ((j=i; (j<element_count && !prime); ++j)); do\n      # Check if current\
+    \ number is a prime\n      if ((( element % ${array[j]} != 0 )) && prime); then\n\
+    \        prime=false\n      fi\n    done\n    # If prime found, add the sum to\
+    \ the result and exit\n    if ((prime)); then\n      if ((element_count > 1));\
+    \ then\n        prime_found=true\n        (( prime_sum += element ))\n      fi\n\
+    \      break\n    fi\n  done\n\n  # Find prime position of largest sum\n  for\
+    \ ((i=0; i<$prime_position; ++i)); do\n    if (( $prime_sum > ${result} ));\n\
+    \    then\n      result=$prime_sum\n      prime_position=$i\n    fi\n  done\n\n\
+    \  # Return result if found\n  if (( prime_found )); then\n    echo \"$result\"\
+    \n  else\n    echo \"0\"\n  fi", "  local numbers=$1 \n  local result=0\n  for\
+    \ number in $numbers; do\n    local prime=$(factors_all $number)\n    echo $prime\
+    \ \n    let result+=${prime}\n  done\n  echo $result", "    local input=\"$1\"\
+    \ output\n    local p s i j k l m n o p q r s t u\n    output=$(p=0)\n    s=0\n\
+    \    i=${#input}\n    for ((j=0; j<i; j++)); do\n        k=0\n        l=0\n  \
+    \      p=$((p+input[j]))\n        while ((k<((2*p)-1)) && [[ $(p+((k+=p)$((k+=p))))\
+    \ == $p ]]); do\n            p=$((p+((k+=p)))); l=$((l+1))\n        done\n   \
+    \     if ((k>=((2*p)-1))); then\n            m=$((k-l))\n        fi\n        if\
+    \ ((m<2)); then\n            s=$((s+m))\n        else\n            s=$((s+((m-2)%1)))\n\
+    \        fi\n    done\n    echo \"$output\"", "  local i\n  local max\n  max=$1\n\
+    \  shift\n  for ((i=1; i<=max; i++)); do\n    if [[ \"$max\" -gt \"$i\" ]]; then\n\
+    \      if [[ $(($max/$(echo \"$i\" | sed 's/ /+ /g'))) -gt 1 ]]; then\n      \
+    \  max=$i\n      fi\n    fi\n  done\n  echo \"$max\"", "    local -n a=() b=()\n\
+    \    for ((i = 0; i <= ${#1}; i++)); do\n        a+=(\"${!i}\")\n        b+=(\"\
+    ${!i}\")\n    done\n    local i j\n    for ((i = 0; i < ${#a[@]}; i++)); do\n\
+    \        for ((j = 1; j <= ${#b[@]}; j++)); do\n            if [ ${a[$i]} -eq\
+    \ ${b[$j]} ]; then\n                local -n result=()\n                while\
+    \ (( ${#result[@]} <= i )); do\n                    result+=(\"0\")\n        \
+    \        done\n                result[$i]=${!result[@]}\n                break\n\
+    \            fi\n        done\n    done\n    echo ${result[@]}", "    local i\
+    \ j p\n    local sum\n    local max\n    local x\n\n    sum=0\n    max=0\n   \
+    \ for ((i=0;i<${#1};i++)); do\n        j=$((i+2))\n        while [[ ${1:j} !=\
+    \ *\" \"$* ]]; do\n            j=$((j+2))\n        done\n        x=$((${1:j}))\n\
+    \        sum=$((${sum}+${x}))\n        while ((${x} > 0)); do\n            if\
+    \ (( ${x:0:1} <= ${max} )); then\n                max=$((${x:0:1}))\n        \
+    \    fi\n            x=$((${x:1:1}))\n        done\n    done\n    if (( max >\
+    \ 0 )); then\n        sum=$((${sum}+${max}))\n    fi\n    echo $((${sum}%10))",
+  "    local maxPrime\n    maxPrime=$(echo \"$1\" | sed 's/ //g' | sort -rn | head\
+    \ -n 1)\n\n    if [ $maxPrime -eq 1 ]; then\n        return 0\n    fi\n\n    local\
+    \ maxSum\n    maxSum=0\n    for d in $((${maxPrime}+1))\n    do\n        local\
+    \ sum\n        sum=$(echo \"$1\" | sed -n 's/^'$maxPrime'.*//p')\n        if [\
+    \ $sum -ne 0 ]; then\n            maxSum=$(($maxSum+$sum))\n        fi\n    done\n\
+    \n    return $maxSum", "    # Store input in a variable\n    set -- $1 \n\n  \
+    \  # If there are no numbers, return 0\n    [[ $# -eq 0 ]] || return 0\n\n   \
+    \ # Initialize sum and max\n    sum=0\n    max=0\n    \n    # Count number of\
+    \ digits\n    digits=0\n    while [ $# -gt 0 ]\n    do\n        ((digits++))\n\
+    \        shift\n    done\n\n    while [ $# -gt 0 ]\n    do\n        # Check if\
+    \ number is prime\n        for (( i=2; i<$((${#})); i++ ))\n        do\n     \
+    \       # Check if remainder is 0\n            [[ $((${#})) % $((i)) == 0 ]] ||\
+    \ continue\n            # Check if number is less than or equal to the square\
+    \ root of i\n            [[ $((${#})) % $((i**2))  -gt 0 ]] || continue\n    \
+    \        # Check if new max is greater than old max\n            [[ $((${#}))\
+    \ > $((max)) ]] || continue\n            # Check if new sum is greater than old\
+    \ sum\n            [[ $((${#})) > $((sum)) ]] || continue\n            # Update\
+    \ max and sum\n            ((max=$((${#})))); \n            ((sum=$((${#}))));\
+    \ \n        done\n\n        ((sum=$((${sum}+${#})))); \n        ((max=$((${max}+${#}))));\
+    \ \n        shift; \n    done\n\n    # Check if max and sum are equal\n    ((\
+    \ max == sum )) && return $((max))\n    return $((sum))", "    local IFS=' ' arr\n\
+    \n    for num in \"$1\"\n    do\n        arr+=( \"$num\" )\n    done\n\n    local\
+    \ max\n    for num in \"${arr[@]}\"\n    do\n        if [[ $num != 0 ]]; then\n\
+    \            (( $num % 2 == 0 && $num !~ /^3/) || ! $num %  $( echo \"$num\" |\
+    \ bc) ) 2> /dev/null; then\n                max=\"$num\"\n                break\n\
+    \            fi\n        fi\n    done\n\n    echo \"$max\"", "    IFS=' ' read\
+    \ -a a <<< \"$1\"\n    for i in \"${a[@]}\"; do\n\t[ -z \"$prime\" ] && [ -z \"\
+    $primes\" ] && prime=\"${i}\"\n\t[ \"${i}${prime}\" -gt \"${prime}\" ] && [ -z\
+    \ \"$primes\" ] && primes=\"${prime} ${i}\"\n    done\n    echo $(echo \"${primes}\"\
+    \ | awk '{print substr($1, length($1)-1)}' | xargs printf \"%i\") | bc", "   \
+    \ local x\n    local sum\n\n    local max=${1:-0}\n\n    for ((x=0;x<${#max}-1;x++));\
+    \ do\n        local y=$(x+1)\n        for ((i=0;i<${#max}-x;i++)); do\n      \
+    \      local z=x+$i\n            local w\n            if [ \"${#max}\" -ge \"\
+    $i\" ]; then\n                if [ ! -z \"$max\" -a \"$max\" -ne \"0\" -a \"$max\"\
+    \ -ne \"$y\" ]; then\n                    max=$y\n                fi\n       \
+    \     fi\n        done\n    done\n\n    local tmp\n    local str\n    local tmp2\n\
+    \n    str=$(echo \"${max}\" | sed -e 's/^0*//' -e 's/ //g' | sed -e 's/^0*//')\n\
+    \n    sum=0\n\n    while read -r tmp ; do\n        if [ \"$tmp\" == \"$max\" ];\
+    \ then\n            break\n        fi\n        tmp2=$(echo \"$tmp\" | sed -e 's/\
+    \ //g')\n        if [ \"${tmp2:0:1}\" -eq \"0\" ]; then\n            sum+=${tmp2}\n\
+    \        fi\n    done < <(echo \"$str\")\n\n    echo \"$sum\"", "  local list=$(\
+    \ echo $1 | tr -s ' ' )\n\n  # find the highest number in the list\n  local max=$(\
+    \ echo $list | rev | head -1 | rev | cut -d' ' -f1 )\n\n  # find the highest prime\
+    \ number smaller than the highest number in the list\n  local maxprime=0\n  local\
+    \ maxflag=0\n  while [ $maxprime -lt $max ]; do\n    let maxprime+=2\n    # print\
+    \ \"$maxprime $max\"\n    if [ $maxprime -eq $max ]; then\n      maxflag=1\n \
+    \     break\n    fi\n  done\n\n  # if there are no prime numbers between $max\
+    \ and $maxprime, return max\n  if [ $maxflag -eq 0 ]; then\n    echo \"$max\"\n\
+    \    return\n  fi\n\n  # find the sum of all its digits\n  local sum=0\n  local\
+    \ digits=0\n  while [ $digits -lt $maxprime ]; do\n    let \"sum+=$( echo $list\
+    \ | sed -n 's/./ &/p' | rev | cut -d' ' -f1 )\" # remove the last digit\n    let\
+    \ \"digits-=1\"\n  done\n\n  # return the sum of all its digits\n  echo \"$sum\"",
+  "    while read -r i; do\n        if [[ $(echo \"$i\" | grep -c -E '^[0-9]+$') -ne\
+    \ $(($(echo \"$i\" | grep -c -E '^[0-9]+$') | $(($(echo \"$i\" | grep -c -E '^[0-9]+$')))))\
+    \ ]]; then\n            echo \"Invalid input. Your input is invalid\"\n      \
+    \  fi\n    done", "    local maxPrime=\"${1}\"\n    local prime\n    local sum\n\
+    \    local i\n    for ((i=1; i<=${#maxPrime}; i++))\n    do\n        prime=\"\
+    $(isPrime \"${maxPrime:$i}\")\"\n        if [[ -n \"${prime}\" ]]; then\n    \
+    \        sum=\"$(( ${sum}+${prime} ))\"\n        fi\n    done\n    echo \"$sum\"",
+  "  # Split list into separate digits\n  IFS=' ' read -a array <<< \"$1\"\n\n  #\
+    \ Store the largest prime\n  largest=0\n  \n  # Store the sum of each digit in\
+    \ the list\n  sum=0\n\n  # Loop through the list of digits\n  for i in \"${array[@]}\"\
+    ; do\n    # If the digit is not prime, add it to the sum\n    if [ ${#i} -le 3\
+    \ ]; then\n      sum=$((sum+i))\n    fi\n\n    # If the digit equals the largest\
+    \ prime, set it to the current digit\n    if [ ${#i} -eq 3 ] && [[ ${i} == ${largest}\
+    \ ]]; then\n      largest=${i}\n    fi\n\n    # If the digit equals the second\
+    \ largest prime, set it to the current digit\n    if [ ${#i} -eq 3 ] && [[ ${i}\
+    \ != ${largest} ]]; then\n      largest=${i}\n    fi\n\n    # If the digit equals\
+    \ the third largest prime, set it to the current digit\n    if [ ${#i} -eq 3 ]\
+    \ && [[ ${i} != ${largest} ]]; then\n      largest=${i}\n    fi\n  done\n\n  echo\
+    \ ${sum}", "  local x\n  local max\n  x=\"$1\"\n  max=0\n  for i in $x ; do\n\
+    \    if [ $(( ${#x} % $i )) -ne 0 ] ; then\n      max=$(( ${#x} / $i ))\n    fi\n\
+    \  done\n  echo $max", "  local num_elements=$( echo $1 | wc -w )\n  local max_prime\n\
+    \  local current_prime\n  local max_sum\n  local sum\n  local i\n  local j\n \
+    \ local k\n  local elements\n  local max_num_digits\n  local element\n  local\
+    \ elements_to_check_for_prime\n  local max_element\n  local prime\n\n  # Read\
+    \ input list into array called elements\n  elements=()\n  for (( i = 0; i <= num_elements\
+    \ - 1; i++ )); do\n    elements+=( $( echo $1 | sed -r \"s/^[ ]*\\([0-9]*\\).*/\\\
+    1/\" ) )\n  done\n\n  # Get a list of the first elements greater than or equal\
+    \ to $2\n  elements_to_check_for_prime=($elements)\n\n  # Store first element\
+    \ greater than $2 in variable\n  max_element=${elements_to_check_for_prime[$2]}\n\
+    \n  # Store largest prime so far in variable\n  max_prime=$max_element\n\n  #\
+    \ Store sum of digits of first element greater than or equal to $2 in variable\n\
+    \  max_num_digits=$( echo $max_element | wc -w )\n\n  # Loop through the remaining\
+    \ $num_elements elements\n  for (( i = 3; i <= num_elements - 1; i++ )); do\n\
+    \    # Check if the element is a multiple of the first element\n    if [ $i -ge\
+    \ $1 ]; then\n      # Get the current element and store it into variable\n   \
+    \   current_element=${elements_to_check_for_prime[$i]}\n      # Get the sum of\
+    \ digits of current element\n      current_num_digits=$( echo $current_element\
+    \ | wc -w )\n      # Check if the sum of digits of current element exceeds the\
+    \ largest sum\n      if [ \"$current_num_digits\" -gt \"$max_num_digits\" ]; then\n\
+    \        max_num_digits=\"$current_num_digits\"\n        max_element=${elements_to_check_for_prime[$i]}\n\
+    \      fi\n    fi\n  done\n\n  # Store sum of digits of first element greater\
+    \ than or equal to $2 in variable\n  sum=$( echo $max_element | wc -w )\n\n  #\
+    \ Check if largest prime found is prime\n  if [ $max_prime -ne 1 ]; then\n   \
+    \ echo \"$sum\"\n  else\n    echo \"0\"\n  fi", '    echo "$(skjkasdkd_helper
+    "$@")"', "  local l=$1\n  local max_index=0\n  local max_val=0\n  local max_val_index=0\n\
+    \n  for index in ${l[@]}\n  do\n    if [ ${l[${index}]} -gt ${max_val} ]; then\n\
+    \      max_val=${l[${index}]}\n      max_val_index=${index}\n    fi\n  done\n\n\
+    \  echo ${max_val}\n  echo ${l[${max_val_index}]}\n  echo ${l[${max_val_index}+1]}\n\
+    \  echo ${l[${max_val_index}+2]}", "  local input=\"$1\"\n  local output\n\n \
+    \ local largest=0\n  local sum=0\n\n  for value in $input; do\n    if [[ $value\
+    \ -gt $largest ]]; then\n      largest=$value\n    fi\n    if [[ $value -eq $largest\
+    \ ]]; then\n      sum=$(( $sum + $value ))\n    fi\n  done\n\n  if [[ $sum -ne\
+    \ 0 ]]; then\n    echo $sum\n  else\n    echo \"0\"\n  fi", "    local input=\"\
+    $1\"\n    local sum=\"$2\"\n    local max_count\n    local i\n    local count\n\
+    \    local j\n    for max_count=$(echo $input | wc -l; do :; done); do\n     \
+    \   i=0 count=1\n        while [[ $i -lt $max_count ]] && [[ $count -eq 1 ]];\
+    \ then\n            ((i++))\n            ((count++))\n        done\n        j=$((\
+    \ $max_count - $count ))\n        (( j < count )) && { j=$(( 0 )); } || { j=$((\
+    \ count )); }\n        for ((j=0; j<$j; j++)); do break; done\n        max_count=$(echo\
+    \ \"$input\" | wc -l)\n    done\n    for (( i=1; i<$max_count; i++ )); do\n  \
+    \      sum=\"$(( 10#$sum + $(( $input[$i] / 10 )) ))\"\n    done\n    echo \"\
+    $sum\"", "  local n=$1 res=\"$2\"\n\n  (( n-- )) || return 0\n  [[ -z \"$n\" ]]\
+    \ && return 0\n\n  local x d i\n  local p=$(( 10#$(nmod p $(n-1)) ))\n\n  while\
+    \ [[ $n -gt 1 ]]; do\n    d=$(( 10#$(head -1 $n | tail -c 1) ))\n    (( d++ ))\n\
+    \    if [[ $n -gt $p ]]; then\n      (( p++ ))\n    fi\n\n    (( n-=$d ))\n  done\n\
+    \  printf -v res '%d' \"$p\" # convert $p to integer\n  (( n++ ))\n  echo $res",
+  "  echo \"$1\" | awk '{ print $1 } END{ max=0; for(i=2; i<=NF; i++){ for(j=2;j<=i;j++)\
+    \ { if(i%j==0) exit(1); else if(i-j==0) exit(1); else max=(max>i?max:i) } }; print\
+    \ max }'", "    local nlist=\"$1\"\n    # nlist may have leading zeros, so we\
+    \ trim it here\n    nlist=\"${nlist#0}\"\n    # remove trailing space\n    nlist=\"\
+    ${nlist% *}\"\n    # remove the trailing \"\\n\"\n    nlist=\"${nlist##*$'\\n'}\"\
+    \n    # split the input into its components\n    nlist=\"$(echo \"$nlist\" | tr\
+    \ -d ' ' | tr '\\n' ' ')\"\n    # remove any empty entries\n    nlist=\"$(echo\
+    \ \"$nlist\" | tr ' ' ' ')\"\n    # trim leading zeros from nlist\n    nlist=\"\
+    $(echo \"$nlist\" | sed \"s/^0*//;\")\"\n    # remove any spaces left in the nlist\n\
+    \    nlist=\"$(echo \"$nlist\" | sed \"s/ //;\")\"\n    # remove any empty entries\n\
+    \    nlist=\"$(echo \"$nlist\" | tr ' ' ' ')\"\n    # remove leading zeros from\
+    \ nlist\n    nlist=\"$(echo \"$nlist\" | sed \"s/^0*//;\")\"\n    # remove any\
+    \ remaining spaces left in the nlist\n    nlist=\"$(echo \"$nlist\" | sed \"s/\
+    \ *$//;\")\"\n    # remove any remaining spaces from the end of the nlist\n  \
+    \  nlist=\"$(echo \"$nlist\" | sed \"s/ *$//;\")\"\n    # remove any remaining\
+    \ newlines left in the nlist\n    nlist=\"$(echo \"$nlist\" | sed \"s/ *$//;\"\
+    )\"\n    # remove the leading space and add the largest prime to it\n    nlist=\"\
+    $(echo \"$nlist\" | sed \"s/^0*//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^\
+    \ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^\
+    \ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^\
+    \ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^ *//;s/^\
+    \ *", "    local i\n    local max\n    local s\n    local nums\n    local num\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local num\n    local s\n    local num\n    local\
+    \ nums\n    local num\n    local s\n    local num\n    local nums\n    local num\n\
+    \    local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num\n    local s\n    local\
+    \ num\n    local nums\n    local num\n    local s\n    local num\n    local nums\n\
+    \    local num\n    local s\n    local num\n    local nums\n    local num\n  \
+    \  local s\n    local num\n    local nums\n    local num", "    local n=$1 res=0\n\
+    \    for ((i=0; i<${#n}; i++)); do\n        local j\n        (( j=0; while ((${#j}<${#n}));\
+    \ do j+=(${n}:${j}); done; n=\"${j}\" ))\n        if [[ ${n} -ge 1 ]]; then\n\
+    \            (( ${#j} > res )) && res=${j}\n        fi\n    done\n    echo \"\
+    $res\"", "    local input=\"$1\"\n    local max=0\n    local count=0\n    local\
+    \ digits=0\n    local max_digits=0\n    local prime\n    local prime_number\n\n\
+    \    while [ \"$input\" != \"\" ]; do\n        digits=$(( digits + 1 ))\n    \
+    \    prime_number=$(( $(echo $input | tr -cd \"0123456789\"| wc -c) + 1 ))\n \
+    \       if [ $prime_number -lt 2 ]; then\n            echo \"$prime_number is\
+    \ not prime\"\n            continue\n        fi\n        prime=true\n        ((\
+    \ count = 0 ))\n        while [ $prime == true ] && [ $count -lt $prime_number\
+    \ ]; do\n            if [ $(( $(echo $input | cut -d\" \" -f$count | tr -cd \"\
+    0123456789\"| wc -c) )) -gt $max ]; then\n                max=$(( $(echo $input\
+    \ | cut -d\" \" -f$count | tr -cd \"0123456789\"| wc -c) ))\n            fi\n\
+    \            (( count++ ))\n        done\n    done\n    if [ $digits -lt $max_digits\
+    \ ]; then\n        echo \"$digits is not the largest prime number\"\n    else\n\
+    \        echo \"$max\"\n    fi", "  local -a arr=( $1 )\n  local max=0\n  local\
+    \ index=0\n  local num=0\n  local res\n\n  local primes=( 2 3 5 7 11 13 17 19\
+    \ 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97 )\n  for (( i=0; i < ${#primes[@]};\
+    \ i++ )); do\n    if [ ${arr[i]} -ne 0 ]; then\n      index=$(find \"${primes[@]}\"\
+    \ -type d -name \"*${arr[i]}*\" -printf \"%f\\n\" | sort -n | tail -1)\n     \
+    \ if [ ! -z $index ]; then\n        (( num+=arr[i] ))\n        if [[ $num -gt\
+    \ $max ]]; then\n          max=$num\n        fi\n      fi\n    fi\n  done\n\n\
+    \  if [ -z $max ]; then\n    echo \"0\"\n  else\n    res=$(printf \"%0${max}d\\\
+    n\" $num)\n  fi\n\n  echo \"$res\"", "  # Split the input list into space-separated\
+    \ values\n  local -a primes=( $1 )\n  # Iterate over the list and check each value\n\
+    \  for value in \"${primes[@]}\"; do\n    # If the current value is a prime, continue\
+    \ to the next value\n    # Otherwise, stop the iteration\n    if [ $value -eq\
+    \ 1 ]; then\n      continue\n    else\n      break\n    fi\n  done\n  # Use a\
+    \ regular expression to match the largest number in the list\n  local pattern=\"\
+    ([0-9]+)\"\n  # Get the last group within the match\n  local -a result=( $(echo\
+    \ \"${primes[*]}\" | sed -n '$s/^.*\\($pattern$\\).*/\\1/p') )\n  # Convert the\
+    \ digits to an integer\n  local sum=0\n  for digit in \"${result[@]}\"; do\n \
+    \   sum=$(( sum + digit ))\n  done\n  # Return the result\n  echo \"${sum}\"",
+  "  local i j p sum\n  local input\n  local MAXVAL\n  local MAXINDEX\n  local RESULT\n\
+    \n  input=\"$1\"\n  IFS=' ' read -a array <<< \"$input\"\n  MAXVAL=${#array[*]}\n\
+    \  MAXINDEX=0\n  RESULT=0\n  for ((i=1; i<=MAXVAL; i++)); do\n    for ((j=1; j<=i;\
+    \ j++)); do\n      ((p=$((j+i))%$MAXVAL))\n      ((p=$((j+i))%$MAXVAL))\n    \
+    \  if [ $j -eq $MAXVAL ]; then\n        echo \"$p $MAXVAL\"\n        break\n \
+    \     fi\n      if [ $p -eq 0 ]; then\n        continue\n      fi\n      ((p=$((p+1)))%$MAXVAL))\n\
+    \      if [ $p -eq $MAXVAL ]; then\n        continue\n      fi\n      if [ $p\
+    \ -eq 0 ]; then\n        continue\n      fi\n      RESULT=`expr $RESULT + $((array[$i-1]\
+    \ % 10 + array[$p-1] % 10 + array[$p]))`\n    done\n  done\n  echo \"$RESULT\"",
+  "    local maxNum=\"$1\"\n    maxNum=\"${maxNum//$'\\n'/ }\"\n    local maxNum=\"\
+    ${maxNum//$'\\t'/ }\"\n    local maxNum=\"${maxNum//$'\\r'/ }\"\n    maxNum=\"\
+    ${maxNum//$'\\b'/ }\"\n    maxNum=\"${maxNum//$'\\r'/ }\"\n    maxNum=\"${maxNum//$'\\\
+    t'/ }\"\n    maxNum=\"${maxNum//$'\\b'/ }\"\n    maxNum=\"${maxNum//$'\\n'/ }\"\
+    \n    local primeNum\n    local maxSum=0\n\n    primeNum=$(echo \"$maxNum\" |\
+    \ sed -n '1{s/^\\s*//;s/\\s*$//p}')\n    maxSum=$(echo \"$primeNum\" | bc) &&\
+    \ maxSum=$((maxSum+$(bc<<<\"$primeNum\")))\n\n    while [ \"$maxSum\" -lt \"$maxNum\"\
+    \ ]; do\n        primeNum=$(echo \"$maxNum\" | sed -n \"$((${#maxNum}+1))p\")\n\
+    \        maxSum=$(echo \"$primeNum\" | bc) && maxSum=$((maxSum+$(bc<<<\"$primeNum\"\
+    )))\n    done\n\n    echo \"$maxSum\"", "    local a b\n    local largest\n  \
+    \  a=$1; shift\n    for b in $a; do\n        local x=$(( b * (b+1))/2)\n     \
+    \   local y=$(( a - x ))\n        test $(( x % y )) = 0 &&\n        (($largest=$x)\
+    \ >0 || ($largest=$y))\n    done\n    echo \"$largest\"", "    local IFS=' '\n\
+    \    local N=${#1}\n    local MAX=0\n    local P\n    local S\n\n    for (( i=0;\
+    \ i<N; i++ )); do\n        P=${1}\n        if [[ $P -lt 10 ]]; then\n        \
+    \    P=0${P}\n        fi\n        (( S = P * P ))\n        if [[ $MAX < S ]];\
+    \ then\n            MAX=$S\n        fi\n        shift\n    done\n    echo \"$MAX\"",
+  "    local numbers=$1\n    local result=\"\"\n    local number\n    local count=0\n\
+    \    local maxcount=0\n\n    for number in $numbers; do\n        if [ $count -gt\
+    \ $maxcount ]; then\n            count=0\n            maxcount=0\n        fi\n\
+    \n        if [ $number -gt 1 ]; then\n            if [ $number -eq 2 ]; then\n\
+    \                if [[ $number != 4 ]]; then\n                    maxcount=$count\n\
+    \                    result=\"$result$number\"\n                fi\n         \
+    \   elif [ $number -eq 3 ]; then\n                if [[ $number != 3 ]]; then\n\
+    \                    maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 5 ]; then\n             \
+    \   if [[ $number != 5 ]]; then\n                    maxcount=$count\n       \
+    \             result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 7 ]; then\n                if [[ $number != 7 ]]; then\n     \
+    \               maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 9 ]; then\n             \
+    \   if [[ $number != 9 ]]; then\n                    maxcount=$count\n       \
+    \             result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 11 ]; then\n                if [[ $number != 11 ]]; then\n   \
+    \                 maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 13 ]; then\n            \
+    \    if [[ $number != 13 ]]; then\n                    maxcount=$count\n     \
+    \               result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 17 ]; then\n                if [[ $number != 17 ]]; then\n   \
+    \                 maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 19 ]; then\n            \
+    \    if [[ $number != 19 ]]; then\n                    maxcount=$count\n     \
+    \               result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 21 ]; then\n                if [[ $number != 21 ]]; then\n   \
+    \                 maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 23 ]; then\n            \
+    \    if [[ $number != 23 ]]; then\n                    maxcount=$count\n     \
+    \               result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 27 ]; then\n                if [[ $number != 27 ]]; then\n   \
+    \                 maxcount=$count\n                    result=\"$result$number\"\
+    \n                fi\n            elif [ $number -eq 29 ]; then\n            \
+    \    if [[ $number != 29 ]]; then\n                    maxcount=$count\n     \
+    \               result=\"$result$number\"\n                fi\n            elif\
+    \ [ $number -eq 31 ", "    local IFS=' ' sum=0 largest=0\n    local i\n    for\
+    \ (( i=0; i<${#1}; i++ )); do\n        [[ ${1[i]} -eq 0 ]] && continue\n     \
+    \   [[ ${1[i]} -eq 1 ]] && echo -n ${1[i]} || continue\n        local j\n    \
+    \    for (( j=0; j<${#1[i]}; j++ )); do\n            (( sum+=${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}+${1[i]}",
+  "  local -n input=\"$1\"\n  input=($input)\n  local -n output=\"\"\n  local i=0\
+    \ max=${#input[@]} min=0\n\n  while [ \"$min\" -lt \"$max\" ]; do\n    (( i++\
+    \ ))\n    for (( i=\"$min\" ; \"$i\" -le \"$max\" ; i=\"$(( i + 1 ))\" ))\n  \
+    \  do\n      # echo \"i=$i input[i]=${input[i]}\"\n      if [ \"${input[i]}\"\
+    \ -gt 1 ]; then\n        # echo \"i=$i input[i]=${input[i]}\"\n        if [ \"\
+    $(echo \"${input[i]}\" | grep -E '^[0-9]+$')\" == \"\" ]; then\n          echo\
+    \ \"${input[i]}\" >> output\n          # echo \"i=$i input[i]=${input[i]}\"\n\
+    \          min=$(( i + 1 ))\n        fi\n      fi\n    done\n    # echo \"i=$i\
+    \ input[i]=${input[i]}\"\n    (( min = $(( min + 1 )) ))\n  done\n  if [ \"$min\"\
+    \ -gt \"$max\" ]; then echo \"$max\" >> output; fi\n  echo \"$(( max - min + 1\
+    \ ))\"", "  local L=$1\n  local S\n  local LSIZE=${#L} \n  local SSIZE=${#S} \n\
+    \  local INDEX=${SSIZE} \n  \n  if [[ \"$LSIZE\" -gt \"1\" ]]; then\n    local\
+    \ START=0\n    local END=$((SSIZE-1))\n    while [[ \"$INDEX\" -le \"$LSIZE\"\
+    \ ]]; do \n      local START=${INDEX}\n      local END=$((INDEX+1))\n      local\
+    \ VALUE=$(expr ${L}${START} + ${S}${END})\n      if [[ $VALUE -gt 0 ]]; then\n\
+    \        local INDEX=$((INDEX+1))\n      fi\n    done\n    echo \"$((${L}${START}+${S}${END}))\"\
+    \n  else\n    echo \"0\"\n  fi", "  local IFS=' ' num\n  for i in $*; do\n   \
+    \ if [[ $((num += ${i%?})) == 0 ]]; then\n      echo \"$num\"\n    fi\n  done",
+  "  local list=\"$1\"\n  local sum=\"$2\"\n  local i prime sum digit prime\n\n  prime=$(df\
+    \ -B \"$list\" | tail -1 | awk '{print $2}')\n  if [ -z \"$prime\" ]; then\n \
+    \   echo \"No prime number found\" >&2\n    exit 0\n  fi\n\n  sum=$(df -B \"$list\"\
+    \ | tail -1 | awk '{print $1}')\n\n  for i in $(seq 2 \"$#\"); do\n    digit=$(echo\
+    \ \"$list\" | grep \"$i\" | wc -c)\n    if [ \"$digit\" -eq \"1\" ]; then\n  \
+    \    sum=$((${sum}+${digit}))\n    else\n      prime=$((${prime}+1))\n    fi\n\
+    \  done\n\n  echo \"${sum}\"", "    local list num largest=0\n    list=$1\n  \
+    \  for (( i=0; i<${#list[@]}; i++ )); do\n        # if the current number is greater\
+    \ than the previous largest,\n        # then it is the new largest\n        if\
+    \ [ ${list[i]} -gt $largest ]; then\n            largest=${list[i]}\n        fi\n\
+    \    done\n\n    # output the sum of the number's digits\n    echo -n \"SUM =\
+    \ \"\n    for (( i=0; i<${#list[@]}; i++ )); do\n        # if the current number\
+    \ is greater than the previous largest,\n        # then it is the new largest\n\
+    \        if [ ${list[i]} -gt $largest ]; then\n            sum=$(($sum + ${list[i]}))\n\
+    \        fi\n    done\n    echo \"$sum\"", "    local -r nums=\"$1\"\n    local\
+    \ -r max=\"-1\"\n    local -r maxlen=0\n    local -r sum\n    local index\n  \
+    \  local num\n    local p\n    local found\n    local j\n    # Fill an index to\
+    \ track where we are in nums\n    for index in \"${!nums[@]}\"; do\n        ((\
+    \ nums[$index] ))\n    done\n    # Iterate through each number to find prime\n\
+    \    for num in \"${nums[@]}\"; do\n        # Check for overflow\n        if ((\
+    \ num > 999 )) ; then\n            break\n        fi\n        # Check for prime\
+    \ at each index\n        for (( index = 0; index < ${#nums[@]}; index++ )); do\n\
+    \            p=\"${nums[$index]}\"\n            # Skip odd numbers\n         \
+    \   if (( num % p )) ; then\n                continue\n            fi\n      \
+    \      found=0\n            for j in \"${!nums[@]}\"; do\n                # Skip\
+    \ even numbers\n                if (( num % ${nums[$j]} )) ; then\n          \
+    \          continue\n                fi\n                if (( p * p <= ${nums[$j]})\
+    \ ) ;then\n                    found=1\n                    break\n          \
+    \      fi\n            done\n            # Check for a prime\n            if ((\
+    \ found )) ; then\n                # Found a prime\n                if (( max\
+    \ < 0 )) ; then\n                    max=\"$p\"\n                    maxlen=\"\
+    ${#nums[@]}\"\n                    sum=\"$num\"\n                else\n      \
+    \              max=\"$max\"\n                    maxlen=\"${maxlen}\"\n      \
+    \              sum=\"$sum + $num\"\n                fi\n                # Decrease\
+    \ the index to go through the next number\n                (( index-- ))\n   \
+    \             break\n            fi\n        done\n    done\n    # Return max\
+    \ and sum\n    echo \"$max $sum\"", "  local L=${1%% *}\n  local max\n  local\
+    \ sum\n  max=${L}\n  while [ ${L} != 0 ]; do\n    local test\n    test=${L}\n\
+    \    while [[ ${test} != 0 ]]; do\n      if [[ ${test} < ${max} ]]; then\n   \
+    \     max=${test}\n      else\n        break\n      fi\n      test=${L/${max}${max}${max}\
+    \ #replace with max*max*max\n    done\n    if [[ ${max} == 1 ]]; then\n      sum=0\n\
+    \      break\n    else\n      sum=$((sum + ${max}))\n    fi\n    L=${L%% *}\n\
+    \  done\n  echo \"${sum}\"", "    local a b\n    a=${1%%[!0-9]}\n    for b in\
+    \ $(seq 0 9); do\n        local c=a\n        local d=$b\n        if [[ ${#a} -eq\
+    \ 0 ]]; then\n            if [[ ${#b} -eq 0 ]]; then\n                echo \"\
+    0\"\n            else\n                echo \"$b\"\n            fi\n        else\n\
+    \            local i\n            for (( i=0; i<${#c}; i++ )); do\n          \
+    \      local j=$(expr ${#c} - $i)\n                local k=$(expr ${#c} - ${i})\n\
+    \                if [[ ${c} -gt 0 ]]; then\n                    local m=`expr\
+    \ ${c} + ${k}`\n                    local n=`expr ${c} - ${j}`\n             \
+    \       local x=$m\n                    local y=$n\n                    if [[\
+    \ ${#a} -gt ${#b} ]]; then\n                        local z=`expr ${m} + ${n}`\n\
+    \                        if [[ $m -eq ${n} ]]; then\n                        \
+    \    if [[ $z -lt ${b} ]]; then\n                                x=$z\n      \
+    \                      fi\n                        fi\n                    fi\n\
+    \                    local q=$(( ${x} * ${y} ))\n                    if [[ ${q}\
+    \ -eq ${c} ]]; then\n                        if [[ ${q} -lt ${c} ]]; then\n  \
+    \                          echo \"$q\"\n                        fi\n         \
+    \           fi\n                fi\n            done\n        fi\n    done", " \
+    \ # Split $1 into $array\n  IFS=\" \" read -r -a array <<<\"$1\"\n\n  # $i holds\
+    \ the current element in the loop\n  i=-1\n\n  # Loop through array\n  while ((\
+    \ ${#array[@]} > 0 )); do\n    (( ++i ))\n\n    # Inside the loop, test if array[i]\
+    \ has already been tested as prime\n    if [[ ${array[$i]} == 1 ]]; then\n   \
+    \   continue\n    fi\n\n    # Scan the array for prime factors\n    array=(${array[@]/${array[$i]}/\
+    \ })\n\n    # Check if no more primes remain\n    if [[ ${#array[@]} == 0 ]];\
+    \ then\n      break\n    fi\n\n    # Check if the array contains non-primes\n\
+    \    if [[ ${array[$i]} != 1 ]]; then\n      # Check if the prime is prime\n \
+    \     if (( ${#array[@]} == 2 )); then\n        (( ${array[0]} % ${array[1]} ))\n\
+    \      else\n        (( ${#array[@]} == 3 ))\n      fi\n    fi\n\n    # Remove\
+    \ the prime from the array\n    array=(${array[@]/${array[$i]}/ })\n  done\n\n\
+    \  # $j holds the current element in the array\n  j=-1\n\n  # For the last element\
+    \ in array\n  while (( ${#array[@]} > 0 )); do\n    (( ++j ))\n\n    # Check if\
+    \ the current element has already been added to the sum\n    if [[ ${sum} == ${array[$j]}\
+    \ ]]; then\n      # Increment the sum\n      (( sum += array[$j] ))\n      break\n\
+    \    fi\n\n    # Check if array[$j] has already been added to the sum\n    if\
+    \ [[ ${sum} == ${array[$j] - 1 }* ]]; then\n      # Increment the sum\n      ((\
+    \ sum += array[$j] ))\n      break\n    fi\n\n    if [[ ${sum} == ${array[$j]\
+    \ - 1 }* ]]; then\n      # Increment the sum\n      (( sum += array[$j] ))\n \
+    \     break\n    fi\n  done\n\n  # If no such element exists, return 0\n  if ((\
+    \ ${#array[@]} < 1 )); then\n    echo \"$sum\"\n    return\n  fi\n\n  # Return\
+    \ the sum\n  echo \"$sum\"", "    local number=\"${1##* }\"\n    local numbers=()\n\
+    \    local temp=${number}\n    local max=0\n    local sum=0\n    while [ -n \"\
+    $temp\" ]; do\n        if [ \"$temp\" -lt \"$max\" ]; then\n            max=\"\
+    $temp\"\n        fi\n        numbers+=($temp)\n        temp=${temp#0}\n    done\n\
+    \    if [ -z \"$max\" ]; then\n        max=\"$number\"\n    fi\n    for (( i=0;\
+    \ i < ${#numbers[@]}; i++ )); do\n        for (( j=0; j < ${#number}; j++ ));\
+    \ do\n            if [ \"$number\" -eq \"${numbers[$i]:$j}\" ]; then\n       \
+    \         sum=$(( $sum + $j ))\n            fi\n        done\n    done\n    echo\
+    \ \"$sum\"", "  local -a input\n  local -a output\n  local -i max_idx\n  local\
+    \ -i outputlen\n\n  input=($1)\n\n  outputlen=0\n  max_idx=0\n  for ((idx=0; idx<${#input[*]};\
+    \ idx++)); do\n    local -a input\n    local -a output\n    local -i count\n\n\
+    \    local val=${input[${idx}]}\n\n    # If the value isn't prime, keep going\n\
+    \    if [ ${val} -eq 1 ]; then\n      continue\n    fi\n\n    # If the value is\
+    \ prime, store it\n    if [ ${val} -eq ${primes[${val}]+1} ]; then\n      output[${outputlen}]=${val}\n\
+    \      outputlen=$((outputlen+1))\n      output[${outputlen}]=${val}\n      outputlen=$((outputlen+1))\n\
+    \      output[${outputlen}]=${val}\n      outputlen=$((outputlen+1))\n    fi\n\
+    \n    # If the value is greater than our maximum, store it\n    if [ ${val} -gt\
+    \ ${max_idx} ]; then\n      max_idx=${val}\n    fi\n  done\n\n  output=\"${output[*]}\"\
+    \n  output=\"${output[${outputlen}]}\"\n\n  echo \"${output}\"", "    local array=\"\
+    $1\"\n    local largest=0\n    local largestIndex\n    local sum=0\n    local\
+    \ primeIndex\n\n    # Loop through the array from the first to the last\n    for\
+    \ (( index=1; index<${#array[@]}; index++ )); do\n        (( primeIndex=${array[index]}\
+    \ ))\n\n        # prime index found\n        if [ $primeIndex -gt 0 ]; then\n\
+    \            # found the largest prime number\n            if [ $primeIndex \"\
+    $largest\" -eq 0 ]; then\n                largest=$primeIndex\n              \
+    \  largestIndex=\"$index\"\n            fi\n\n            # check if the prime\
+    \ index has not been visited yet\n            if [ $primeIndex \"$index\" -eq\
+    \ 0 ]; then\n                (( sum+=${primeIndex} ))\n            fi\n      \
+    \  fi\n    done\n\n    # return largest value and largest index\n    echo \"$largest\"\
+    \n    echo \"$largestIndex\"\n    echo \"$sum\"\n", "    local intList=$1\n  \
+    \  local listLength=${#intList}\n    local largestPrime=0\n    local sum=0\n \
+    \   local primeLength=0\n    local primeNum\n    local num\n    local numValue\n\
+    \n    # Prime number is a number that divides all the others\n    # by only dividing\
+    \ itself by 1 and itself.\n    # All this prime numbers are saved in an array\
+    \ primeNums\n    # and they are marked with their number of divisions.\n    local\
+    \ primeNums\n    # Prime number count is number of primes found so far.\n    local\
+    \ primeCount=0\n    # Prime number length is number of divisions till this prime\
+    \ number.\n    # Every prime number has this length.\n    local primeLength\n\
+    \    # Current prime number that is being checked.\n    local primeNum\n    #\
+    \ Prime number that is being checked\n    local primeNum2\n    # Sum of digits\
+    \ of current prime number\n    local sum2\n    # Array that stores digits of current\
+    \ prime number\n    local primeDigits\n    # Array that stores last two primes\n\
+    \    local lastPrime\n    # Variable that stores last two prime numbers\n    local\
+    \ lastPrime2\n    # Variable that stores digit of last prime number\n    local\
+    \ lastDigit\n    # Variable that stores current prime number\n    local currentPrime\n\
+    \    # Variable that stores prime numbers\n    local primes\n    # Variable that\
+    \ stores prime numbers\n    local primes2\n    # Variable that stores prime numbers\n\
+    \    local primes3\n\n    # Find first prime number that divides all others.\n\
+    \    # This is done by starting from 2.\n    local currentPrime\n    local primeNum\n\
+    \    local primeNum2\n    local sum2\n    local primeDigits\n    local lastPrime\n\
+    \    local lastPrime2\n    local lastDigit\n    local currentPrime\n    local\
+    \ primes\n    local primes2\n    local primes3\n    for currentPrime=2 ; currentPrime\
+    \ <= listLength ; do\n        primeNum=0\n        primeNum2=0\n        primeDigits=()\n\
+    \        lastPrime=()\n        lastPrime2=()\n        lastDigit=0\n        # Iterate\
+    \ through all numbers in the array.\n        primeNum=0\n        for num in ${intList[@]};\
+    \ do\n            # If current number is not equal to current prime\n        \
+    \    # number then\n            if [ \"$num\" != \"$currentPrime\" ] ; then\n\
+    \                # Save current prime number to primeNum2 variable\n         \
+    \       primeNum2=$num\n                # Save prime ", "    local -n nums=${1:-}\n\
+    \    local max=0\n\n    # loop through list\n    for num in ${nums[@]}; do\n \
+    \       # check if number is prime\n        if test \"${num:0:1}\" != \"${num:0:1}\"\
+    ; then\n            local max=$((max+num))\n        elif test \"$num\" == 1 &&\
+    \ test \"$max\" -gt 0; then\n            max=$(expr \"$max\" \"+\" \"1\")\n  \
+    \      else\n            # check if number is prime\n            if test \"$num\"\
+    \ != 1 && test \"$num\" != \"${max}\" && test \"$max\" -gt 0; then\n         \
+    \       local max=$((max+num))\n            fi\n        fi\n    done\n\n    echo\
+    \ \"$max\"", "  local IFS=' '\n  local max=${1:-999999999}\n  local prime=0\n\
+    \  local sum=0\n  local num=${1//$IFS}\n  local i\n  local found\n  for i in $num;\
+    \ do\n    found=$((prime))\n    prime=0\n    found=$((found + i))\n    found=$((found\
+    \ > max ? found : max))\n  done\n  echo \"$sum\"", "   local s=$1 m=1\n   local\
+    \ i j\n   for i; do\n      for ((j=i;j<=$m;j+=$i)); do\n         local n=$(( ${#s}${#m}\
+    \ ))\n         if (( ${#s}${#j} > n )); then\n            (( ${#s}${#m} = n ))\n\
+    \         else\n            (( ${#s}${#m} = ${#s}${#j} ))\n         fi\n     \
+    \ done\n      (( i = j + $i ))\n   done\n   echo -n \"${s}\"", "\tlocal numbers=$1\n\
+    \tlocal max_value=$(skjkasdkd \"0 ${numbers}\")\n\techo \"$max_value\"", "   \
+    \ local max_prime=$1\n    local max_prime_number=0\n    local max_prime_number_in_list=0\n\
+    \    local prime_sum=0\n\n    local prime_index=0\n    local prime_list_index=0\n\
+    \    local prime_indexes=()\n    local prime_list_indexes=()\n\n    local prime_list_index_in_list=0\n\
+    \n    for (( prime_index=1; prime_index<=max_prime; prime_index++ )); do\n   \
+    \     local prime_number=$max_prime_number\n        max_prime_number_in_list=0\n\
+    \n        prime_list_index_in_list=0\n        while [ $prime_index \\< $max_prime_number\
+    \ ]; do\n            if [ $max_prime_number -eq $prime_index ]; then\n       \
+    \         local prime_number_in_list_index=$((prime_index+1))\n              \
+    \  if [[ $prime_number -eq $max_prime_number_in_list ]]; then\n              \
+    \      prime_number=$prime_number_in_list\n                else\n            \
+    \        prime_number=$prime_number_in_list_index\n                fi\n      \
+    \      fi\n            if [ $prime_list_index_in_list -eq $prime_index ]; then\n\
+    \                local prime_number_in_list_index=$((prime_index+1))\n       \
+    \         if [[ $prime_number -eq $max_prime_number_in_list ]]; then\n       \
+    \             prime_number=$prime_number_in_list\n                else\n     \
+    \               prime_number=$prime_number_in_list_index\n                fi\n\
+    \            fi\n\n            (( prime_list_index_in_list++ ))\n            max_prime_number_in_list=`expr\
+    \ $max_prime_number_in_list + 1`\n        done\n\n        prime_indexes[$prime_index]=${max_prime_number}\n\
+    \        prime_list_indexes[$prime_list_index_in_list]=${prime_number}\n    done\n\
+    \n    for prime_index in \"${!prime_indexes[@]}\"; do\n        prime_sum=$((prime_sum\
+    \ + ${prime_indexes[$prime_index]}))\n    done\n\n    echo $prime_sum", " local\
+    \ x=\"${1:-}\"\n local max\n local sum\n local p\n local i\n for i in $x; do\n\
+    \   p=$(( $(for (( j=0; j<i; j++ )); do if (( $i % $j )); then break; fi; done;\
+    \ echo $j | bc) )\n   if [ -z \"$max\" ] ; then\n     max=$p\n   elif [ \"$p\"\
+    \ -gt \"$max\" ] ; then\n     max=$p\n   fi\n   sum=$(( $sum + $i ))\n done\n\
+    \ [ \"$x\" == *\"1\"* ] && echo \"$sum\"", "  local input\n  input=$(echo \"$1\"\
+    \ | sed \"s/ /' '/g\")\n  echo \"$input | sort -nr | head -1 | sed 's/^[0-9]\\\
+    +$/'\"", "\tlocal i j\n\tfor j in $(cat \"$1\"); do\n\t\techo \"$j\"\n\tdone",
+  "    local str=\"$1\"\n    local max_str=${str#* }\n    local arr=()\n    local\
+    \ len=${#max_str}\n    local i\n    local p\n    local plen\n    local sum=0\n\
+    \    for (( i = 0; i < len; i++ )); do\n        arr+=( ${max_str%%*} )\n     \
+    \   max_str=\"${max_str#* }\"\n    done\n    local i\n    for (( i = 0; i < len;\
+    \ i++ )); do\n        p=${max_str%%*}\n        plen=${#p}\n        if [ \"${plen}\"\
+    \ -gt 0 ]; then\n            local c=0\n            while (( c < plen ))\n   \
+    \         do\n                local c=${c}+${p[$c]}\n            done\n      \
+    \      sum=$(( sum + ${c} ))\n        fi\n        max_str=\"${max_str#* }\"\n\
+    \    done\n    echo \"$sum\"", "    local items=$1\n    # iterate through the\
+    \ list and try to find an even number\n    for (( item = 0; item < ${#items[*]};\
+    \ item++ )); do\n        if [[ ${items[$item]} -eq $(( item % 2 )) ]]; then\n\
+    \            echo \"${items[$item]}\";\n        fi\n    done", "    local -r input=\"\
+    ${1}\"\n    local -r output=\"${2}\"\n    local -r count=\"${#input}\"\n    local\
+    \ -r prime\n    local -r prime_sum\n\n    local i\n    for (( i = 0; i < count;\
+    \ i++ )); do\n        prime=\"${input[i]}\"\n        # Skip even numbers\n   \
+    \     (( i % 2 )) || continue\n        # Skip numbers that are not prime\n   \
+    \     [[ ${prime} -eq 1 ]] && continue\n        prime_sum=0\n        # Find all\
+    \ factors up to and including square root of the number\n        for (( j = 2;\
+    \ j <= ${prime}; j = j + 2 )); do\n            if [[ ${prime} % ${j} = 0 ]]; then\n\
+    \                # If ${prime} is divisible by ${j}, it is a factor\n        \
+    \        break\n            fi\n        done\n        # Add the sum of digits\
+    \ of ${prime} to ${prime_sum}\n        (( prime_sum += ${prime} % 10 ))\n    done\n\
+    \n    # Print the result\n    [[ ${prime_sum} == ${output} ]] || \\\n        die\
+    \ \"Incorrect output! ${prime_sum} is not equal to ${output}\"", "  local numList=\"\
+    $1\"\n  local maxSum=-1\n  local sum=0\n  for num in $numList; do\n    if [ $num\
+    \ -gt $maxSum ]; then\n      maxSum=$num\n    fi\n  done\n\n  for num in $numList;\
+    \ do\n    (( sum += num ))\n  done\n  echo $sum", "    set -- $1 # $1 is the space-separated\
+    \ list\n    local p=$2 # p is the largest prime number\n    local digit\n    local\
+    \ max\n    local sum=0\n    local i\n\n    max=`echo $1 | awk '{print length($1)}'`\n\
+    \n    for ((i=3; i<=max; i++)); do\n        if [[ `echo $1 | awk '{print $i}'`\
+    \  -eq $i ]]\n        then\n            echo \"$i is a factor of $p\"\n      \
+    \      sum=`echo $sum + $i`\n        else\n            echo \"$i is not a factor\
+    \ of $p\"\n        fi\n    done\n\n    echo \"$sum\"", "    # Convert to an array\n\
+    \    IFS=\" \" read -ra array <<<$1\n    local max_prime prime_sum\n    max_prime=\"\
+    ${array[0]}\"\n    prime_sum=\"0\"\n\n    # Find all multiples of max_prime smaller\
+    \ than the maximum value in array\n    for (( i=1; i <= ${#array[@]}; i++ ));\
+    \ do\n        (( prime_sum += ${array[$i]} ))\n        if (( ${prime_sum} < max_prime\
+    \ )); then\n            max_prime=\"${prime_sum}\"\n        fi\n    done\n\n \
+    \   # Return max_prime\n    echo \"$max_prime\"", "    local list\n    list=\"\
+    $1\"\n    local max_prime\n    max_prime=\"2\"\n    while true; do\n        max_prime=$((max_prime+1))\n\
+    \        echo \"$max_prime\"\n        echo \"$list\" | grep \"$max_prime\"\n \
+    \       case \"$?\" in\n            0)\n                break\n              \
+    \  ;;\n            1)\n                break\n                ;;\n        esac\n\
+    \    done\n    echo \"$max_prime\"", "  local prime\n  local i\n  local sum\n\
+    \  local list\n  local len\n  local max\n  list=$(echo $1 | sed 's/ /\\n/g')\n\
+    \  len=$(echo \"${#list}\" | awk '{print length}')\n  sum=0\n  max=0\n  prime=3\n\
+    \  for (( i=0; i < len; i++ )); do\n    prime=$(( prime + 1 ))\n    if (( prime\
+    \ > max )); then\n      max=$prime\n    fi\n    sum=$(( sum + ${list[i]} ))\n\
+    \  done\n  echo \"$sum\"", "  # your code\n  local list_string=$1\n  local list_array=($list_string)\n\
+    \  local largest\n  local sum\n  local i\n  local j\n  largest=0\n  sum=0\n  for\
+    \ ((i=0;i<${#list_array[*]};++i)); do\n    ((j=${list_array[i]}-1))\n    if [\
+    \ ! \"${list_array[j]}\" -eq 0 ]; then \n      if [ \"$largest\" -gt \"${list_array[j]}\"\
+    \ ]; then \n        largest=\"${list_array[j]}\"\n      fi\n    fi\n  done\n \
+    \ for ((i=0;i<${#list_array[*]};++i)); do\n    ((j=${list_array[i]}-1))\n    if\
+    \ [ ! \"${list_array[j]}\" -eq 0 ]; then \n      sum+=\"$((${list_array[j]}+1))\"\
+    \n    fi\n  done\n  echo \"$sum\"", "    local input=\"$1\"\n    local output=\"\
+    \"\n    local i\n    local prime\n    local counter=0\n    local total=0\n   \
+    \ local flag=0\n    for ((i=${#input}-1; i >= 1; i--)); do\n        ((counter++))\n\
+    \        prime=\"$(prime_generator \"$i\")\"\n        if [ \"$prime\" == \"$i\"\
+    \ ]; then\n            flag=1\n            break\n        else\n            total+=\"\
+    $i\"\n        fi\n    done\n    if [ \"$flag\" -eq 0 ]; then\n        total+=\"\
+    $((${input:${#input}-1} % 10))\"\n        total=\"$((${total:${#total}-1} / 10))\"\
+    \n    fi\n    echo \"$total\"", "    local IFS=' ' sum=1\n    # echo $1 |\n  \
+    \  # while read -r number; do\n    #      local div=$(( $number%$sum ))\n    #\
+    \      if [ $div -eq 0 ]; then\n    #          sum=$(($sum + $number))\n    #\
+    \      else\n    #          sum=$(($sum - $div))\n    #      fi\n    # done\n\
+    \    local num=$(echo $1 | tr '\\n' '\\0' | sed -e 's/^ *//' -e 's/ *$//')\n \
+    \   local div=$(( $num%$sum ))\n    if [ $div -eq 0 ]; then\n        sum=$(($sum\
+    \ + $num))\n    else\n        sum=$(($sum - $div))\n    fi\n    echo $sum", " \
+    \ local -a arr=( ${1//,/ } )\n  local max\n  local sum=0\n\n  for (( i=0; i <\
+    \ ${#arr[@]} )) ; do\n    local x=\"${arr[$i]}\"\n    if [[ ${#x} -ge 2 ]]; then\n\
+    \      if (( $(echo \"$x $x\" | sort -nu | uniq -d | wc -l) > 1 )); then\n   \
+    \     local -a p=( ${x//./ } )\n        max=${p[0]}\n      fi\n    fi\n  done\n\
+    \n  for (( i=0; i < ${#arr[@]} )) ; do\n    local x=\"${arr[$i]}\"\n    if [[\
+    \ ${#x} -ge 2 ]]; then\n      if (( $(echo \"$x $x\" | sort -nu | uniq -d | wc\
+    \ -l) > 1 )); then\n        local -a p=( ${x//./ } )\n        sum=$(( sum + ${p[0]}\
+    \ ))\n      fi\n    fi\n  done\n\n  if (( max )); then\n    sum=$(( sum + max\
+    \ ))\n  fi\n\n  echo \"$sum\"", "    set -- $1;\n    local maxnum=0;\n    local\
+    \ maxnumstr=;\n    for num in \"${@:2}\"; do\n        if [[ $num -gt $maxnum ]];\
+    \ then\n            maxnum=$num\n            maxnumstr=$num\n        fi\n    done\n\
+    \    echo \"$maxnumstr\"", "\tlocal numbers=$1\n\tlocal largest=\n\tlocal sum=0\n\
+    \tfor number in $numbers\n\tdo\n\t\t(( sum += $number % 10 ))\n\t\t(( largest\
+    \ = $number > largest ? $number : largest ))\n\tdone\n\techo \"$sum $largest\"",
+  "    local nums=\"$1\"\n    local max=$(echo \"${nums}\"| sort -nr | head -1)\n\
+    \    local sum=0\n    local factors=()\n    local factor=$(echo \"${nums}\"| sort\
+    \ -nr | head -1)\n    while (( \"$factor\" != 1 )); do\n        (( factor+1 ))\n\
+    \        factors+=( \"$factor\" )\n    done\n    local maxFactor=\"${factors}\"\
+    \n    maxFactor=${maxFactor:(-1)}\n    local i\n    for (( i=0; i<${#maxFactor};\
+    \ i++ )); do\n        if [[ ${maxFactor:(i)} -eq \"$i\" ]]; then\n           \
+    \ (( sum+=$i ))\n        fi\n    done\n    echo \"$sum\"", "  # Your code here\n\
+    \  local numbers=$1\n\n  local nmax=$(sort -n <<<\"$numbers\" | tail -n 1)\n \
+    \ local sum\n  local i\n  sum=0\n  for i in $(seq 0 $((${#numbers}-1)) )\n  do\n\
+    \    local isPrime=$(echo \"$numbers[i]\" | awk '{ if( $1 % 2 == 0 || $1 % 3 ==\
+    \ 0 ) { print; exit 0} else {print 0} }')\n    if [ \"$isPrime\" == \"0\" ]; then\n\
+    \      continue\n    fi\n    local primeNum=$(echo \"$numbers[i]\" | awk '{ if($1\
+    \ == $nmax) { print; exit 0} else {print 0} }')\n    local lastDigit=$((10#$primeNum))\n\
+    \    let sum+=lastDigit\n  done\n  echo -n \"Largest Prime Number: $sum\"", "\t\
+    local -n arr=( \"$@\" )\n\tlocal max\n\tlocal cnt\n\tlocal d\n\tlocal ret\n\n\t\
+    for cnt in \"${!arr[@]}\"; do\n\t\td=$(echo \"${arr[cnt]}\" | sed -r \"s/(.*)(\\\
+    ([0-9]+\\))/\\1\\2/\" ); max=$(echo \"${d}\" | sort -n | tail -n 1)\n\t\tif [\
+    \ \"${max}\" = \"${d}\" ]; then\n\t\t\tmax=\"${d}\"\n\t\tfi\n\tdone\n\n\tret=\"\
+    ${max}\"\n\tfor ((cnt=cnt+1; cnt<${#arr[@]}; cnt++)); do\n\t\td=$(echo \"${arr[cnt]}\"\
+    \ | sed -r \"s/(.*)(\\([0-9]+\\))/\\1\\2/\" ); max=$(echo \"${d}\" | sort -n |\
+    \ tail -n 1)\n\t\tif [ \"${max}\" = \"${d}\" ]; then\n\t\t\tret+=\"${max}\"\n\t\
+    \tfi\n\tdone\n\n\techo \"${ret}\"", "    local n\n    local -a primes\n    local\
+    \ i\n\n    n=$1\n\n    primes=()\n    local -a prime\n    local -i k\n\n    while\
+    \ read x; do\n        prime+=($x)\n    done <<< \"${primes[@]}\"\n    prime=()\n\
+    \    k=0\n\n    while [[ ${#primes[@]} -gt 0 ]]; do\n        prime+=(${primes[$k]})\n\
+    \        k=$((k+1))\n    done\n    prime+=($n)\n\n    # Check if n is prime\n\
+    \    for (( i=0; i<${#prime[@]}; i++ )); do\n        if (( ${prime[i]} == $n ));\
+    \ then\n            # remove prime\n            prime=(${prime[@]:0:i})\n    \
+    \        break\n        fi\n    done\n\n    local p\n    p=0\n    for (( i=0;\
+    \ i<${#prime[@]}; i++ )); do\n        if (( ${prime[i]} <= ${n} )); then\n   \
+    \         p=$((p+${prime[i]}))\n        fi\n    done\n    echo \"${p}\"", "  \
+    \  local list=\"$1\"\n    local largest\n    local sum\n    local i\n    local\
+    \ j\n    local tmp\n    local largestPossible\n    local found\n    # loop over\
+    \ list\n    for i do\n        found=\n        # loop over list to find largest\
+    \ value\n        for j in {1..${#list}} do\n            tmp=\n            if [[\
+    \ \"${list[j]}\" -gt \"${list[i]}\" ]]; then\n                tmp=${list[j]}\n\
+    \                found=true\n            fi\n        done\n        # set largest\
+    \ and largestPossible\n        if [ -z \"$largest\" ]; then\n            largest=${list[i]}\n\
+    \            largestPossible=${i}\n        elif [ \"$found\" -eq true ]; then\n\
+    \            if [ \"$largest\" -gt \"$tmp\" ]; then\n                largest=${tmp}\n\
+    \                largestPossible=${i}\n            fi\n        fi\n    done\n\
+    \    # return sum\n    sum=0\n    for j in {1..${#list}} do\n        sum=$(( ${sum}\
+    \ + ${list[j]} ))\n    done\n    echo \"$sum\"", "    local IFS=$'\\n'\n    local\
+    \ primes=$(\n        echo \"${1}\"\n        | awk '{\n            for(i = 2; i\
+    \ <= NF; i++) {\n                if($i ~ \"^[0-9]+$\") {\n                   \
+    \ $i = int($i)\n                }\n                if($i > 0) {\n            \
+    \        if($i %% i == 0) {\n                        $i = 1\n                \
+    \        print i\n                    }\n                }\n            }\n  \
+    \      }'\n    )\n    local max=$( printf \"%s\\n\" \"${primes}\" | sort -nr |\
+    \ head -1 | awk '{print $1}' )\n    local sum=$( printf \"%s\\n\" \"${primes}\"\
+    \ | sort -nr | head -1 | awk '{print $2}' )\n    echo \"${sum}\"", "  local IFS='\
+    \ ' list=\"$1\"\n  local largestPrime\n  local sum\n\n  largestPrime=0\n  sum=0\n\
+    \  local i\n  for (( i=0; i < ${#list} ; ++i )); do\n    local listNumber=\"${list[i]}\"\
+    \n    if [[ $listNumber -eq 0 ]]; then\n      continue\n    fi\n    if [[ $listNumber\
+    \ -le 0 ]]; then\n      echo \"${listNumber} cannot be greater than 0\"\n    \
+    \  exit 1\n    fi\n    if [[ $listNumber -eq 1 ]]; then\n      sum=$listNumber\n\
+    \      continue\n    fi\n    local numPrime=$(($listNumber * $listNumber))\n \
+    \   local flag=1\n    for (( countPrime=2; countPrime < $numPrime; countPrime++\
+    \ )); do\n      if (( $numPrime % $countPrime == 0 )); then\n        flag=0\n\
+    \        break\n      fi\n    done\n    if [[ $flag -eq 1 ]]; then\n      sum=$(($sum\
+    \ + $listNumber))\n      continue\n    fi\n    local count\n    for (( count=1;\
+    \ count < $(( ${#list} - i )); count++ )); do\n      local listNumber=\"${list[i]}${list[i+1]}\"\
+    \n      if [[ $listNumber -le 0 ]]; then\n        break\n      fi\n      if ((\
+    \ listNumber == $listNumber )); then\n        if [[ $listNumber -gt $largestPrime\
+    \ ]]; then\n          largestPrime=$listNumber\n        fi\n      fi\n    done\n\
+    \  done\n  echo \"$sum\"", "  local -i n=$1 i sum max=1\n  local arr=( ${@:2}\
+    \ )\n  for (( i=0; i<n; i++ )); do\n    while (( ${#arr[@]} > 0 )); do\n     \
+    \ if [ ${arr[0]} -le ${max} ]; then\n        max=$arr[0]\n      else\n       \
+    \ arr=( ${arr[@]:1} )\n      fi\n    done\n  done\n  if [ -z ${arr[0]} ]; then\n\
+    \    echo \"-1\"\n  else\n    sum=${arr[0]}\n    for (( i=1; i<n; i++ )); do\n\
+    \      if [ \"${arr[i]}\" -gt \"${max}\" ]; then\n        sum=$(expr $sum + ${arr[i]})\n\
+    \        max=${arr[i]}\n      else\n        arr=( ${arr[@]:i:1} )\n      fi\n\
+    \    done\n    echo \"$sum\"\n  fi", "    local sum=0 i=0 n=$(echo \"${1}\" |\
+    \ tr '[:space:]' ' '); shift 1\n    for n in $*; do\n        while [ $(( i++ %\
+    \ n )) == 0 ]; do\n            let sum=$sum+$i\n        done\n    done\n    echo\
+    \ \"$sum\"", "    local IFS=' '\n    local L\n    local MAX\n\n    MAX=$1\n  \
+    \  if [ -n \"$MAX\" ]; then\n        for L in $*; do\n            if [ $L -ge\
+    \ $MAX ]; then\n                MAX=$L\n            fi\n        done\n    fi\n\
+    \    local SUM\n    SUM=0\n    for L in $*; do\n        if [ $L -eq $MAX ]; then\n\
+    \            SUM=$(($SUM + $L))\n        fi\n    done\n    echo \"$SUM\"", " \
+    \ local i j list sum len\n  list=$1\n  len=${#list}\n  sum=0\n  for (( i=0; i\
+    \ < len; i++ )); do\n    i=$((i+1))\n    for (( j=0; j < len; j++ )); do\n   \
+    \   j=$((j+1))\n      if (( ${list[j]} == ${list[i]} )); then\n        list=\"\
+    ${list[@]:0:i}\"\n        break\n      fi\n    done\n    sum=$(($sum + ${list[i]}))\n\
+    \  done\n  echo $sum", "    # Get the input as an array\n    local input=($@)\n\
+    \n    # Get the length of the array\n    local length=${#input[@]}\n\n    # Loop\
+    \ over all array elements\n    for (( i=0; i < length; i++ )); do\n        # If\
+    \ i is smaller than the current largest value, keep track of the current largest\
+    \ value\n        if [ \"$i\" -le \"$largest\" ]; then\n            largest=\"\
+    ${input[$i]}\"\n        fi\n    done\n\n    # Return the sum of the digits\n \
+    \   local sum=0\n    for (( i=0; i < length; i++ )); do\n        # Convert the\
+    \ current digit to an integer\n        local digit=${input[$i]}\n        # Add\
+    \ the current digit to the sum\n        sum=$((sum + digit))\n    done\n\n   \
+    \ # Return the sum\n    echo $sum", "  IFS=$'\\n'\n  for j in $1; do\n    i=$j\n\
+    \    while [ -z \"$i\" ] || [ -z \"$i\" ] || [ \"$i\" -lt 2 ] || [ \"$i\" -gt\
+    \ 67 ]; do\n      i=$(( $i + 1 ))\n    done\n    while [ -z \"$i\" ] || [ -z \"\
+    $i\" ] || [ \"$i\" -lt 2 ] || [ \"$i\" -gt 67 ]; do\n      i=$(( $i + 1 ))\n \
+    \   done\n    while [ -z \"$i\" ] || [ -z \"$i\" ] || [ \"$i\" -lt 2 ] || [ \"\
+    $i\" -gt 67 ]; do\n      i=$(( $i + 1 ))\n    done\n    while [ -z \"$i\" ] ||\
+    \ [ -z \"$i\" ] || [ \"$i\" -lt 2 ] || [ \"$i\" -gt 67 ]; do\n      i=$(( $i +\
+    \ 1 ))\n    done\n    while [ -z \"$i\" ] || [ -z \"$i\" ] || [ \"$i\" -lt 2 ]\
+    \ || [ \"$i\" -gt 67 ]; do\n      i=$(( $i + 1 ))\n    done\n    while [ -z \"\
+    $i\" ] || [ -z \"$i\" ] || [ \"$i\" -lt 2 ] || [ \"$i\" -gt 67 ]; do\n      i=$((\
+    \ $i + 1 ))\n    done\n    while [ -z \"$i\" ] || [ -z \"$i\" ] || [ \"$i\" -lt\
+    \ 2 ] || [ \"$i\" -gt 67 ]; do\n      i=$(( $i + 1 ))\n    done\n    echo \"$i\"\
+    \n  done", "  local n a\n  a=$1\n  n=\"${#a}\"\n  a=\"${a// /|}\"\n  a=\"${a//\
+    \ /|}\"\n  while read -a b\n  do\n    local m\n    for m in \"${b[@]}\"\n    do\n\
+    \      ((m++))\n      if  test \"$m\" -gt \"$n\"\n      then\n        n=\"$m\"\
+    \n      fi\n    done\n  done <<< \"$a\"\n  printf '%d' \"$n\"", "    set -- $1\
+    \ || exit 1;\n    local j=1;\n    local i=0;\n    while [ $i -lt $# ]; do\n  \
+    \      local prime=$([ \"$j\" -ge \"$i\" ] && echo \"${!j}\"; echo \"$j\" | bc)\n\
+    \        local digits=$(( $((${!prime})) % 10 ))\n        local sum=$(($sum +\
+    \ $digits))\n        j=$(( ${!prime} + 1 ));\n        i=$(( i + $prime ));\n \
+    \   done\n    echo \"$sum\"", "  # Your code here\n  ", "\tlocal a b\n\ta=\"${1//\
+    \ /}\"\n\tlocal i temp\n\tfor (( i=0; i<${#a}; i++ )); do\n\t\tb=\"${a:$i:1}\"\
+    \n\t\tif [ $b == \"0\" ] ; then\n\t\t\tb=1\n\t\tfi\n\t\tif [[ $a -eq 0 ]] ; then\n\
+    \t\t\ta=$b\n\t\t\tcontinue\n\t\tfi\n\t\ttemp=$b\n\t\twhile [ $a -le $temp ]; do\n\
+    \t\t\ta=`expr $a \\* $b`\n\t\t\tb=`expr $temp \\% $b`\n\t\tdone\n\t\tif [[ $a\
+    \ -eq $temp ]] ; then\n\t\t\ta=$b\n\t\tfi\n\tdone\n\techo \"$a\"", "    local\
+    \ IFS=' '\n    local arr=($1)\n    local max\n    local num\n    local sum\n\n\
+    \    max=${arr[0]}\n    for i in \"${arr[@]:1}\"\n    do\n        if [[ $i -le\
+    \ $max ]]; then\n            max=i\n        fi\n    done\n\n    for (( i = 0;\
+    \ i < max; i++ ))\n    do\n        num=${arr[i]}\n        for (( j = 1; j < i;\
+    \ j++ ))\n        do\n            if [[ $num -gt ${arr[j]} ]]; then\n        \
+    \        num=${arr[j]}\n            fi\n        done\n        if (( num == 0 ));\
+    \ then\n            sum=$(( sum + ${arr[i]} ))\n        else\n            sum=$((\
+    \ sum + $(( ${arr[i]} / $num )) ))\n        fi\n    done\n    echo \"$sum\"",
+  "    local i sum last\n    i=0\n    sum=0\n    last=\"${1}\"\n    echo \"${last}\"\
+    \ | while read line; do\n        if [[ $line == $((last)) ]]; then\n         \
+    \   ((sum+=line))\n        elif (( last%$line == 0 )); then\n            ((sum+=last%$line))\n\
+    \        else\n            ((sum+=line%$last))\n            last=$line\n     \
+    \   fi\n    done\n    echo \"$sum\"", "    # Check if there are any arguments.\
+    \ If there is none, then return 0\n    if [ \"$#\" -lt 1 ]; then\n        echo\
+    \ \"no arguments provided\"\n        echo \"usage: $(basename $0) [numbers...]\"\
+    \n        echo \"examples: $(basename $0) 1 2 3 4 5\"\n        exit 1\n    fi\n\
+    \    # Convert spaces to commas and strip them\n    local numbers=$(echo $@ |\
+    \ tr -s \" \" \",\" | tr -d \",\")\n    # Find largest prime number\n    local\
+    \ largestPrimeNumber\n    local largestPrimeNumberNumber\n    local numberList\n\
+    \    local i\n    local result\n\n    numberList=($numbers)\n    largestPrimeNumber=${numberList[0]}\n\
+    \n    for (( i=1; i<${#numbers[@]}; i++ )); do\n        number=${numberList[i]}\n\
+    \        if [ $number -gt $largestPrimeNumber ]; then\n            largestPrimeNumber=$number\n\
+    \        fi\n    done\n\n    for (( i=1; i<${#numbers[@]}; i++ )); do\n      \
+    \  number=${numberList[i]}\n        sum=$(($sum + ${number//[0-9]/}))\n    done\n\
+    \    result=$(($sum + ${largestPrimeNumber//[0-9]/}))\n\n    echo \"$result\"",
+  "  local -a arr=($1)\n  local -i i k res p\n  p=${arr[0]}\n  res=${p}\n  for ((i=1;i<${#arr[@]};i++));\
+    \ do\n    k=${arr[i]}\n    if (( k == p )); then\n      ((res+=p))\n      p=$k\n\
+    \    else\n      ((p=k))\n    fi\n  done\n  echo $res", "    local list=$1\n \
+    \   local max_num=0\n    local max_num_digits=0\n    local tmp\n    local i\n\
+    \    local num\n    for ((i = 0; i <= ${#list[@]}; i++)); do\n        # Check\
+    \ if element is prime\n        if [[ ${list[i]} -eq 1 ]]; then\n            continue\n\
+    \        fi\n        num=$(echo \"${list[i]}\" | awk '{print sqrt($0)}')\n   \
+    \     if (( num > max_num )) ; then\n            max_num=${num}\n            max_num_digits=${i}\n\
+    \        fi\n    done\n    echo \"${list[max_num_digits]}\"", "    local n\n \
+    \   local i\n    local k\n    local result\n    local p\n    local m\n    local\
+    \ sum\n    local x\n    local y\n    local z\n\n    # Convert list to array\n\
+    \    n=\"$1\"\n    n=\"$(tr '\\n' ' ' <<< \"$n\")\"\n    IFS=' ' read -r -a n\
+    \ <<< \"$n\"\n\n    for ((i = 0; i < \"${#n[@]}\"; i++)); do\n        p=$(n[i])\n\
+    \        if [[ \"$p\" =~ ^[0-9]+$ ]]; then\n            sum=\"$sum$((p%10))\"\n\
+    \        fi\n    done\n\n    printf \"%s\\n\" \"$sum\"", "    set -- \"${1:-}\"\
+    \n    local -a primes=()\n    local largest=''\n    for (( i = 0; $i < ${#primes[*]};\
+    \ i++ )); do\n        local j=$((i + 1))\n        local prime=\"${primes[$i]}\"\
+    \n        if (( ${prime:-0} != 0 )); then\n            local j=$((j + 1))\n  \
+    \          local prime=\"${primes[$i]}\"\n            for (( k = 0; $k < ${#primes[*]};\
+    \ k++ )); do\n                if (( ${primes[$k]:-0} != 0 )); then\n         \
+    \           prime=\"${primes[$k]}\"\n                    break\n             \
+    \   fi\n            done\n            if (( ${#primes[*]} > $i )); then\n    \
+    \            local j=$((j + 1))\n                local prime=\"${primes[$i]}\"\
+    \n            fi\n        fi\n        (( ${prime:-0} > $largest )) && largest=${prime}\n\
+    \    done\n    echo ${#primes[*]} > /tmp/primes.list\n    local sum=$(( ${#primes[*]}\
+    \ + 1 ))\n    for (( i = 0; $i < ${#primes[*]}; i++ )); do\n        local prime=\"\
+    ${primes[$i]}\"\n        if (( ${prime:-0} != 0 )); then\n            local sum=$(($sum\
+    \ + ${prime:-0}))\n        fi\n    done\n    echo ${sum} > /tmp/sum", "  local\
+    \ x=\"$1\"\n  local d\n  local i\n  local result\n\n  x=${x//,/ }\n  x=${x// }\n\
+    \  for d in $x; do\n    i=$(( $d ))\n    if [ ${i} -eq 0 ]; then\n      echo \"\
+    $d\" | bc\n    elif [ ${i} -eq 1 ]; then\n      result=$(bc <<< \"1 + $d\")\n\
+    \    else\n      result=$(bc <<< \"$i * $(( $d - 1 ))\")\n      while [ ${i} -le\
+    \ ${d} ]; do\n        if [ $(( $i % ${i} )) -eq 0 ]; then\n          result=$(bc\
+    \ <<< \"$result + ${d}\")\n        fi\n        i=$(( $i + 1 ))\n      done\n \
+    \   fi\n  done\n\n  echo \"$result\"", "  local arr=($1)\n  local i j k l m n\
+    \ p sum x\n  sum=0\n  n=${#arr[@]}\n  x=$(( 10 ** $(( n - 1 )) ))\n\n  for ((\
+    \ k = 0; k < n; k++ )); do\n    for (( j = k + 1; j < n; j++ )); do\n      ((\
+    \ m = (( j * j ) + k )) < n && (( m = (( j * j ) + k )) > k)\n      p=$(( arr[m]\
+    \ % x ))\n      if [ ! -z \"${arr[@]:$m:1}\" ] && [ $p -ne 0 ] && [ $p != $((\
+    \ arr[m] % x )) ]; then\n        (( arr[m] /= p ))\n        (( sum = ( sum + p\
+    \ )) )\n      fi\n    done\n  done\n  echo $sum", "  local n=$1\n  # We start\
+    \ with a list of all the primes we know about.\n  local -a primes=( )\n  # We\
+    \ have found a prime that is not in the list yet, it is 1.\n  local prime=$primes[1]\n\
+    \n  # Loop through all the numbers and remove all the multiples of primes.\n \
+    \ for ((i=0; i<n; i++)); do\n    (( prime += i % prime ))\n    primes[${#primes[*]}]=$prime\n\
+    \  done\n\n  # Find the prime and remove it from our array.\n  local prime=\n\
+    \  local primesnum\n  for primesnum in \"${primes[@]}\"; do\n    (( prime = primesnum\
+    \ * primesnum % ${primes[$prime]} ))\n    primes[$prime]=$prime\n  done\n\n  #\
+    \ The number found is the sum of the digits of our number.\n  echo \"${#primes[*]}\"",
+  "  local list=\"$1\";\n  local max=$( echo \"$list\" | tail -n +2 | sort -n -k 1\
+    \ | head -n 1 );\n  local sum=0;\n  local i;\n  for ((i=0;i<$list.length;i++));\
+    \ do\n    while [ $((i*10+$list[i])) -lt $max ]; do \n      ((i++));\n    done\n\
+    \    sum=$(($sum+$(($list[i]))));\n  done\n  echo $sum;", "  local -n array=$1\
+    \ max=0 sum=0\n  IFS=' ' read -a array <<< \"$1\"\n  for ((i = 0; i < ${#array[@]};\
+    \ i++)); do\n    (( max < ${array[$i]} )) && max=${array[$i]}\n  done\n  for ((i\
+    \ = 0; i < ${#array[@]}; i++)); do\n    (( sum == 0 )) && sum=${array[$i]}\n \
+    \   for ((i2 = i; i2 < ${#array[@]}; i2++)); do\n      (( ${array[$i2]} % max\
+    \ != 0 )) && sum=${sum} + ${array[$i2]}\n    done\n  done\n  echo \"$sum\"", " \
+    \   local -n nums=$1\n    local maxprime=3\n    local maxvalue=0\n    local values=()\n\
+    \    for (( i=2; i<=maxprime; i++ )); do\n        local flag=0\n        local\
+    \ value=$nums[i]\n        for (( j=0; j<=nums[0]; j++ )); do\n            if [\
+    \ $i == $nums[j] ]; then\n                (( value+=1 ))\n                flag=1\n\
+    \                break\n            fi\n        done\n        if [ \"$flag\" !=\
+    \ 1 ]; then\n            values+=( $value )\n            maxvalue=$value\n   \
+    \     fi\n    done\n    echo \"${values[@]}\"", "  local digits=$(cat <<EOF\n\
+    $(echo $1 \\\n  | sed 's/ /\\n/g' \\\n  | awk '{ for (i = 1; i <= NF; i++) { printf(\"\
+    %d \", $i); } } ' \\\n  | sort -n -k 1n | tail -1)\nEOF\n)\n  local largest\n\
+    \  for d in ${digits}; do\n    if [ $(($d * $d)) -gt $largest ]; then\n      largest=$d\n\
+    \    fi\n  done\n  echo $(($largest))", "    local numbers=$1\n    local prime\n\
+    \    local sum\n    prime=1\n    sum=0\n    for number in $numbers; do\n     \
+    \   while [[ $prime -lt $number && $number -ge 0 ]];do\n            let \"prime=prime+1\"\
+    \n        done\n        if [ $prime -eq $number ]; then\n            let \"sum+=$number\"\
+    \n        fi\n    done\n    echo $sum", " local prime_list max_prime _prime_so_far\
+    \ _digit\n local i\n\n # split $1 into words\n IFS=\"[,]\" read -r -a prime_list\
+    \ <<< \"$1\"\n\n # get max prime number\n max_prime=\n for ((i=0; i < \"${#prime_list[@]}\"\
+    ; i++ )) ; do\n   if [ \"${prime_list[i]}\" -gt \"${max_prime}\" ]; then\n   \
+    \  max_prime=\"${prime_list[i]}\"\n   fi\n done\n\n # prime numbers greater than\
+    \ 0 are prime\n if [ ! \"${max_prime}\" -ge 0 ] ; then\n   return 0\n fi\n\n #\
+    \ start calculating\n _prime_so_far=0\n _digit=0\n\n for ((i=0; i < \"${#prime_list[@]}\"\
+    ; i++ )) ; do\n   if [ ! \"${prime_list[i]}\" -eq 0 ] ; then\n     if (( i % 2\
+    \ == 0 )); then\n       if [ ! \"${_prime_so_far}\" -eq 0 ] ; then\n         _prime_so_far+=${prime_list[i]}\n\
+    \         _digit+=${prime_list[i]}\n       fi\n       if [ ! \"${prime_list[i]}\"\
+    \ -gt \"${max_prime}\" ] ; then\n         _prime_so_far+=${prime_list[i]}\n  \
+    \       _digit+=${prime_list[i]}\n       fi\n     else\n       if [ ! \"${_prime_so_far}\"\
+    \ -eq 0 ] ; then\n         _prime_so_far+=${prime_list[i]}\n         _digit+=${prime_list[i]}\n\
+    \       fi\n       if (( \"${prime_list[i]}\" > \"${max_prime}\" )) ; then\n \
+    \        _prime_so_far+=${prime_list[i]}\n         _digit+=${prime_list[i]}\n\
+    \       fi\n     fi\n   fi\n done\n\n return \"${_digit}\"", "  local numbers=()\n\
+    \  local maxPrime=3\n  local maxDigit=0\n  local count=0\n  local primes=()\n\
+    \  local primeCount=0\n  local primeSum=0\n  local input\n\n  while IFS=$'\\n'\
+    \ read -r input; do\n    numbers+=(\"$input\")\n  done < <(echo \"$1\")\n\n  for\
+    \ num in \"${numbers[@]}\"; do\n    local digits=$(echo \"$num\" | tr ' ' '.')\n\
+    \    local sum=0\n\n    for d in \"${digits[@]}\"; do\n      if ! test -z \"$d\"\
+    ; then\n        sum=$((sum + d))\n      fi\n    done\n\n    if test \"$sum\" -lt\
+    \ \"$maxPrime\"; then\n      maxPrime=\"$sum\"\n      maxDigit=\"$count\"\n  \
+    \  fi\n  done\n\n  if test -n \"$maxDigit\"; then\n    for p in \"${primes[@]}\"\
+    ; do\n      if test \"$p\" -lt \"$maxDigit\"; then\n        maxDigit=\"$p\"\n\
+    \      fi\n    done\n  fi\n\n  if test \"$maxDigit\" = \"$count\"; then\n    echo\
+    \ \"$maxPrime\"\n  else\n    echo \"$maxPrime\"\n  fi", "    local -a arr=( $@\
+    \ )\n    local prime\n    local i\n    local sum\n    local len\n    local max_val\n\
+    \    local max_pos\n    local max_val_idx\n    local max_val_i\n    local max_val_j\n\
+    \    local max_val_sum\n    local j\n    local val\n    local idx\n    local val_i\n\
+    \    local val_j\n    local val_sum\n    local result\n\n    # find the maximum\
+    \ value\n    max_val=0\n    for ((i=0; i < ${#arr[@]}; i++)); do\n        val=${arr[i]}\n\
+    \        if [[ ${val} -gt ${max_val} ]]; then\n            max_val=${val}\n  \
+    \      fi\n    done\n    \n    len=${#arr[@]}\n    \n    idx=0\n    val=${arr[idx]}\n\
+    \    \n    # find the largest prime\n    prime=1\n    while [[ ${val} -gt ${prime}\
+    \ ]]; do\n        idx=$((idx + 1))\n        val=${arr[idx]}\n    done\n    \n\
+    \    # find the sum\n    sum=0\n    for ((i=1; i < ${len}; i++)); do\n       \
+    \ val=${arr[i]}\n        val_i=$((i - 1))\n        val_j=$((i + 1))\n        val_sum=$((val*val\
+    \ + val_i*val_i))\n        if [[ ${val_sum} -gt ${max_val} ]]; then\n        \
+    \    max_val_idx=$((idx + 1))\n            max_val_i=$((i - 1))\n            max_val_j=$((i\
+    \ + 1))\n            max_val_sum=$((val*val + val_i*val_i))\n            max_val=${arr[idx]}\n\
+    \        fi\n        sum=$((sum + ${val}))\n    done\n    \n    if [[ ${max_val}\
+    \ == ${max_val_idx} ]]; then\n        result=0\n    else\n        result=$((sum\
+    \ % max_val))\n    fi\n    \n    echo \"${result}\"", "  local -n arr=$1\n\n \
+    \ local max\n  max=0\n  for item in \"${arr[@]}\"; do\n    if [[ $item -gt $max\
+    \ ]]; then\n      max=$item\n    fi\n  done\n  echo \"$max\"", "  local L=$(echo\
+    \ \"$1\" | tr -s \" \")\n  local S=0\n  local I=1\n  while (( $I <= ${#L} ));\
+    \ do\n    if [ ${L[$I]} -eq 0 ]; then\n      I=$(expr $I + 1)\n      continue\n\
+    \    fi\n    local P=`wc -l <<< \"$L\" | awk \"BEGIN{FS=\\\" \\\"; OFS=\\\u201D\
+    \ \\\u201D} NR>1 && $1==$1 { print $1 }\"`\n    (( P > P ))\n    for (( N=1 ;\
+    \ N<=P ; N++ )); do\n      if [ \"${L[$I]}\" -eq ${L[$I-1]} ]; then\n        ((\
+    \ S = S + ${L[$I-1]} ))\n        (( I = I + 1 ))\n      fi\n    done\n    I=$(expr\
+    \ $I + 1)\n  done\n  echo ${S}", "    local ints=( $1 )\n    local int\n    local\
+    \ largest\n    local sum\n\n    largest=$( echo \"${ints[@]}\" | sort -n -r |\
+    \ head -1 )\n\n    for int in \"${ints[@]}\"; do\n        if [ $int -gt $largest\
+    \ ]; then\n            largest=$int\n        fi\n    done\n\n    sum=$( echo \"\
+    ${ints[@]}\" | sed -n \"${largest}p\" )\n\n    echo $sum", "  max=0\n  sum=0\n\
+    \  for i in $1; do\n    if [[ $i -gt $max ]]; then\n      max=$i\n    fi\n  done\n\
+    \  for i in $1; do\n    sum=$((sum + $i % $max))\n  done\n  echo \"$sum\"", " \
+    \   local i\n    local max_i\n    local sum=0\n    local a\n    local b\n    local\
+    \ c\n    local d\n    local e\n    local f\n    local g\n    local h\n    local\
+    \ i1\n    local i2\n    local j\n    local k\n    local l\n    local m\n    local\
+    \ n\n    local o\n    local p\n    local q\n    local r\n    local s\n    local\
+    \ t\n    local u\n    local v\n    local w\n    local x\n    local y\n    local\
+    \ z\n    local i3\n    local j1\n    local j2\n    local j3\n    local k1\n  \
+    \  local k2\n    local k3\n    local l1\n    local l2\n    local l3\n    local\
+    \ m1\n    local m2\n    local m3\n    local n1\n    local n2\n    local n3\n \
+    \   local o1\n    local o2\n    local o3\n    local p1\n    local p2\n    local\
+    \ p3\n    local q1\n    local q2\n    local q3\n    local r1\n    local r2\n \
+    \   local r3\n    local s1\n    local s2\n    local s3\n    local t1\n    local\
+    \ t2\n    local t3\n    local u1\n    local u2\n    local u3\n    local v1\n \
+    \   local v2\n    local v3\n    local w1\n    local w2\n    local w3\n    local\
+    \ x1\n    local x2\n    local x3\n    local y1\n    local y2\n    local y3\n \
+    \   local z1\n    local z2\n    local z3\n    local l5\n    local l6\n    local\
+    \ l7\n    local l8\n    local l9\n    local l10\n    local l11\n    local l12\n\
+    \    local l13\n    local l14\n    local l15\n    local l16\n    local l17\n \
+    \   local l18\n    local l19\n    local l20\n    local l21\n    local l22\n  \
+    \  local l23\n    local l24\n    local l25\n    local l26\n    local l27\n   \
+    \ local l28\n    local l29\n    local l30\n    local l31\n    local l32\n    local\
+    \ l33\n    local l34\n    local l35\n    local l", "  echo \"$1\" |\n    sed 's/\
+    \ /\\n/g' |\n    awk '{ for (i=1;i<=NF;i++) {\n             for (j=i+i;j<=NF;j++)\
+    \ {\n               if($j % i == 0) {\n                 printf \"%d\\t\", $j;\n\
+    \                 exit 1;\n               }\n             }\n           }\n  \
+    \       }' | \n    paste -sd+ | bc", "    # Convert to an array\n    IFS=' ' read\
+    \ -a array <<< \"$1\"\n\n    # Loop through the array elements\n    for i in \"\
+    ${array[@]}\"; do\n        # Get largest prime number\n        largest=${i#* }\n\
+    \n        # If the element is prime\n        if (( $i == $largest )); then\n \
+    \           # Add it to our sum\n            sum=$(( sum + i ))\n        fi\n\
+    \    done\n\n    # Return our sum\n    echo \"$sum\"", "  local list\n  local\
+    \ sum\n  local i\n\n  list=\"$1\"\n\n  for i in ${list}; do\n    sum=0\n    sum=\"\
+    $((sum + ${i}))\"\n  done\n\n  echo \"$sum\"", "  local list\n  list=\"$1\"\n\n\
+    \  local result\n\n  for item in $list; do\n    if [[ $item -lt 0 ]]; then\n \
+    \     result=$result\n    elif [[ $item -ge 1 ]]; then\n      result=$result\n\
+    \    elif [[ $item -eq 0 ]]; then\n      result=$result\n    elif [[ $item -eq\
+    \ 1 ]]; then\n      if [[ $result -gt 0 ]]; then\n        result=$result\n   \
+    \   else\n        result=$item\n      fi\n    fi\n  done\n\n  echo \"$result\"",
+  "\tlocal numbers=$1\n\tlocal answer=0\n\tfor (( i=1; i<${#numbers}; i++ )); do\n\
+    \t\tlocal num=$(echo $numbers | awk -v i=$i '{ print $i }')\n\t\tif [[ $num -gt\
+    \ 1 ]]; then\n\t\t\tlocal primes=$(find -type f -name 'prime*' -exec bash -c 'awk\
+    \ -F \"\" '\"'\"'{ print $1 }'\"'\"' {} \\;)\n\t\t\tfor (( p=0; p<${#primes};\
+    \ p++ )); do\n\t\t\t\tif [[ ${numbers[$i]} -eq ${primes[$p]} ]]; then\n\t\t\t\t\
+    \tanswer=$((answer+$num))\n\t\t\t\t\tbreak\n\t\t\t\tfi\n\t\t\tdone\n\t\tfi\n\t\
+    done\n\techo ${answer}", "    local input=\"$1\"\n    local max=$(echo \"${input}\"\
+    \ | tr -dc '0-9' | wc -l)\n    local primes=$(echo \"${input}\" | tr ' ' '\\n'\
+    \ | sort -rn | head -n \"${max}\")\n    local sum=0\n    local max_prime=$(echo\
+    \ \"${primes}\" | awk '{max = $1 ; sub(/[^ ]+ /,\"\",max)} ; max >= 0 { print\
+    \ max}')\n    for prime in \"${primes[@]}\"; do\n        if (( prime <= ${max_prime}\
+    \ )); then\n            sum=$((${sum}+${prime}))\n        fi\n    done\n    echo\
+    \ ${sum}", "  local i j\n  for (( i = 0; i <= $1; i++ )); do\n    if [[ $(( $1\
+    \ % $i )) == 0 ]]; then\n      (( ${!i} += ${$i} ))\n    fi\n  done\n  echo ${!i}",
+  "  local -a numbers\n  local max\n  local result\n\n  numbers=( $@ )\n\n  max=-1\n\
+    \n  for (( i=0; i < ${#numbers[@]} ; i++)); do\n    (( ${numbers[i]} > max ))\
+    \ && max=${numbers[i]}\n  done\n\n  result=0\n  (( max > 0 )) && result=$(( ${max}\
+    \ + 1 ))\n\n  for (( i=0; i < ${#numbers[@]} ; i++)); do\n    (( ${numbers[i]}\
+    \ != max )) && result=$(( ${result} + ${numbers[i]} ))\n  done\n\n  echo $result",
+  "  local arr=($1)\n  local max=0\n  local i=0\n\n  echo \"${arr[@]}\"\n\n  for j\
+    \ in \"${arr[@]}\"; do\n    ((i++))\n    local num=$((j*i))\n    while [ $num\
+    \ -ge $max ]; do\n      ((max++))\n      ((num--))\n    done\n  done\n\n  echo\
+    \ \"$max\"", "  local arr=($1)\n\n  # find the largest prime number\n  local max_prime=0\n\
+    \  local max_index=0\n  for index in ${!arr[@]}; do\n    if [ ${arr[$index]} -gt\
+    \ ${max_prime} ]; then\n      max_prime=${arr[$index]}\n      max_index=${index}\n\
+    \    fi\n  done\n\n  # find the sum of the digits\n  local sum=0\n  for index\
+    \ in ${!arr[@]}; do\n    local digit=${arr[$index]}\n    (( sum += digit ))\n\
+    \  done\n\n  echo \"${sum}\"", "    local numStr=$1\n    numStr=${numStr// /}\n\
+    \    local primeNum\n    primeNum=$(isPrime \"$numStr\")\n    local primeSum\n\
+    \    primeSum=$(sumOfDigits \"$primeNum\")\n    echo \"$primeSum\"", "    local\
+    \ IFS=' '\n    # Check to see if there are any integers in the list\n    if [[\
+    \ $1 =~ $\"[0-9]+\" ]]; then\n        # Count the number of integers\n       \
+    \ NUM=$((${#1}))\n        local LNUM=0\n        # Loop through each integer\n\
+    \        for (( i=0; i<NUM; i++ )); do\n            # If there are integers left,\
+    \ start a new while loop to check the rest of the numbers\n            if [[ $NUM\
+    \ -gt $i ]]; then\n                # Reset LNUM for the next iteration\n     \
+    \           LNUM=0\n                # While there are still integers in the list,\
+    \ keep checking them for primes\n                while [[ $LNUM -gt $i ]];do\n\
+    \                    # Start a while loop to check each potential prime number\n\
+    \                    while [[ $((${1:$i:1})) = 1 ]]; do\n                    \
+    \    # If there is a potential prime, add it to the sum\n                    \
+    \    SUM=`expr ${SUM} + ${1:$i:1}`\n                        (( LNUM++ ))\n   \
+    \                     done\n                    # If there are no more integers\
+    \ to check, break the while loop\n                    (( i++ ))\n            \
+    \        done\n                # End while loop over LNUM\n                done\n\
+    \            # Once there are no more integers to check, exit the while loop\n\
+    \            (( i++ ))\n        done\n        # Return the sum\n        echo ${SUM}\n\
+    \    else\n        # No integers were found\n        echo 0\n    fi", "  local\
+    \ list=\"$1\"\n  local max_value\n  local sum\n  local prime\n  local i\n\n  IFS=\"\
+    \ \"\n  max_value=\"$(awk -F\" \" -v prime=\"$max_value\" 'BEGIN{max=prime} $2==prime{max=$2}\
+    \ END{print max}')\"\n  sum=\"$(awk -F\" \" -v sum=\"$max_value\" -v prime=\"\
+    $max_value\" 'BEGIN{sum+=prime} $2==prime{sum+=$2} END{print sum}')\"\n\n  for\
+    \ ((i=0; i < ${#list}; i++)); do\n    prime=\"$(echo \"${list[i]}\" | cut -d \"\
+    \ \" -f 1)\"\n    if [ \"$prime\" -gt \"$max_value\" ]; then\n      max_value=\"\
+    $prime\"\n    fi\n  done\n\n  echo \"$sum\"", '    echo "skjkasdkd not implemented
+    yet"', "  local arr=(\"$@\")\n  local max_num 0\n  local max_num 2\n  local max_num\
+    \ 3\n  local max_num 4\n  local max_num 5\n  local max_num 6\n  local max_num\
+    \ 7\n  local max_num 8\n  local max_num 9\n  local max_num 10\n  local max_num\
+    \ 11\n  local max_num 12\n  local max_num 13\n  local max_num 14\n  local max_num\
+    \ 15\n  local max_num 16\n  local max_num 17\n  local max_num 18\n  local max_num\
+    \ 19\n  local max_num 20\n  local max_num 21\n  local max_num 22\n  local max_num\
+    \ 23\n  local max_num 24\n  local max_num 25\n  local max_num 26\n  local max_num\
+    \ 27\n  local max_num 28\n  local max_num 29\n  local max_num 30\n  local max_num\
+    \ 31\n  local max_num 32\n  local max_num 33\n  local max_num 34\n  local max_num\
+    \ 35\n  local max_num 36\n  local max_num 37\n  local max_num 38\n  local max_num\
+    \ 39\n  local max_num 40\n  local max_num 41\n  local max_num 42\n  local max_num\
+    \ 43\n  local max_num 44\n  local max_num 45\n  local max_num 46\n  local max_num\
+    \ 47\n  local max_num 48\n  local max_num 49\n  local max_num 50\n  local max_num\
+    \ 51\n  local max_num 52\n  local max_num 53\n  local max_num 54\n  local max_num\
+    \ 55\n  local max_num 56\n  local max_num 57\n  local max_num 58\n  local max_num\
+    \ 59\n  local max_num 60\n  local max_num 61\n  local max_num 62\n  local max_num\
+    \ 63\n  local max_num 64\n  local max_num 65\n  local max_num 66\n  local max_num\
+    \ 67\n  local max_num 68\n  local max_num 69\n  local max_num 70\n  local max_num\
+    \ 71\n  local max_num 72\n  local max_num 73\n  local max_num 74\n  local max_num\
+    \ 75\n  local max_num 76\n  local max_num 77\n  local max_num 78\n  local max_num\
+    \ 79\n  local max_num 80\n  local max_num 81\n  local max_num 82\n  local max_num\
+    \ 83\n  local max_num 84", "    local i n sum x y z\n    sum=0\n    for n in \"\
+    $@\"\n    do\n        x=${n/$n/}\n        if [[ ! $x = \"0\" ]] ; then\n     \
+    \       y=$(echo $x | awk '{ print sqrt($0) }')\n            if [[ -z $z ]] ;\
+    \ then\n                z=$y\n            else\n                if [[ $y -gt $z\
+    \ ]] ; then\n                    z=$y\n                fi\n            fi\n  \
+    \      fi\n        sum=$(( $sum + $x ))\n    done\n    echo $sum", "  local list=\"\
+    $1\"\n  local max\n  local sum\n  for item in $list; do\n    while (( item > 0\
+    \ )); do\n      if [ $(echo \"$item > 0\"|bc) -eq 1 ]; then\n        echo \"$item\
+    \ is greater than 0\"\n        break\n      fi\n      item=$(( $item - 1 ))\n\
+    \    done\n    if (( $item > 0 )); then\n      max=$item\n      break\n    fi\n\
+    \  done\n  echo \"$max\"\n  sum=0\n  while (( $max > 0 )); do\n    if (( $max\
+    \ > 9 )); then\n      sum=$(( $sum + $(echo \"$max%10\"|bc) ))\n    fi\n    max=$((\
+    \ $max - 1 ))\n  done\n  echo \"$sum\"", "    local max=0\n    local str\n   \
+    \ local tmp\n\n    for str in $1; do\n        if (( $str > 0 )); then\n      \
+    \      tmp=$(echo \"$str\" | grep -o \"[^1]*\")\n            if (( ${#tmp} > 0\
+    \ )); then\n                max=$(echo \"$tmp\" | head -n1)\n                tmp=$(echo\
+    \ \"$tmp\" | tail -n1)\n            fi\n        fi\n    done\n\n    echo \"$max\"",
+  "    # Get the integer list\n    # $1 is a space-separated list\n    local intlist=\"\
+    $1\"\n    # Get the prime number\n    # $2 is the result number\n    local prime\n\
+    \    # Iterate through the integer list\n    # $3 is the current iteration\n \
+    \   for (( iter = 0; iter < ${#intlist[@]}; iter++ )); do\n        # Get the current\
+    \ number\n        local num=\"${intlist[$iter]}\"\n        # Check if the current\
+    \ number is prime\n        # $4 is the current iteration value\n        if ! is_prime\
+    \ $num ${iter}; then\n            continue\n        fi\n        # Get the current\
+    \ prime number\n        local prime\n        # Get the current prime number\n\
+    \        prime=\"$(prime_helper \"$num\")\"\n        # Add the current digit to\
+    \ the result number\n        (( $prime++ ))\n        # Stop iterating if the current\
+    \ number is prime\n        local i\n        # $5 is the current iteration value\n\
+    \        for (( i = 0; i < ${#prime}; i++ )); do\n            # $6 is the current\
+    \ digit value\n            (( \"${prime:$i:1}\" != 0 )) && continue\n        \
+    \    # Stop iterating if the current digit value is zero\n            break\n\
+    \        done\n        # Add the current iteration to the result number\n    \
+    \    (( \"${prime}\" > ${num} )) && break\n    done\n    # Return the result number\n\
+    \    echo $prime", "    local -a arr=($1)\n    local max=0\n    local maxindex\n\
+    \    local count=1\n    local tst\n    local n\n\n    for ((i=0; i < ${#arr[@]};\
+    \ i++)); do\n        if [[ $i -eq 0 ]]; then\n            tst=${arr[i]}\n    \
+    \    fi\n        for ((j=i+1; j < (${#arr[@]}-1); j++)); do\n            if [[\
+    \ $((arr[j]/tst)) -gt $((tst/${arr[j]})) ]]; then\n                tst=${arr[j]}\n\
+    \            fi\n        done\n        if [[ $tst -gt $max ]]; then\n        \
+    \    max=tst\n            maxindex=${i}\n        fi\n    done\n    echo ${max}",
+  "  local n s\n  s=0\n  for ((n=0; n<${#1}; n++))\n  do\n    local j\n    for ((j=n+1;\
+    \ j<${#1}; j++))\n    do\n      if [[ ${1:$j} -eq ${1:$n} ]]\n      then\n   \
+    \     ((j=j-1))\n        break\n      fi\n    done\n    if [[ ${1:$j} -eq 0 ]]\n\
+    \    then\n      ((n=n-1))\n      break\n    fi\n    ((j=j-1))\n    s=${s+${1:$n}}\n\
+    \  done\n  echo ${s}", "    local a=$1\n    local b\n    local c\n    local d\n\
+    \    local e\n    local f\n    local g\n    local h\n    local i\n    local j\n\
+    \    local k\n    local l\n    local m\n    local n\n    local o\n    local p\n\
+    \    local q\n    local r\n    local s\n    local t\n    local u\n    local v\n\
+    \    local w\n    local x\n    local y\n    local z\n\n    [[ -z \"$a\" ]] &&\
+    \ echo \"$a\" && exit 1\n\n    for i in $a; do\n        for j in $a; do\n    \
+    \        for k in $a; do\n                for l in $a; do\n                  \
+    \  for m in $a; do\n                        for n in $a; do\n                \
+    \            for o in $a; do\n                                for p in $a; do\n\
+    \                                    for q in $a; do\n                       \
+    \                 for r in $a; do\n                                          \
+    \  for s in $a; do\n                                                for t in $a;\
+    \ do\n                                                    for u in $a; do\n  \
+    \                                                      for v in $a; do\n     \
+    \                                                       for w in $a; do\n    \
+    \                                                            for x in $a; do\n\
+    \                                                                    for y in\
+    \ $a; do\n                                                                   \
+    \     for z in $a; do\n                                                      \
+    \                      if [[ $(( $i + $j + $k + $l + $m + $n + $o + $p + $q +\
+    \ $r + $s + $t + $u + $v + $w + $x + $y + $z )) -gt 100 ]]; then\n           \
+    \                                                                     echo \"\
+    $(( $i + $j + $k + $l + $m + $n + $o + $p + $q + $r + $s + $t + $u + $v + $w +\
+    \ $x + $y + $z ))\" && break\n                                               \
+    \                             fi\n                                           \
+    \                             done\n                                         \
+    \                           done\n                                           \
+    \                     done\n                                                 \
+    \           done\n                                                        done\n\
+    \                                                    done\n                  \
+    \                              done\n                                        \
+    \    done\n                                        done\n                    \
+    \                done\n                                done\n                \
+    \            done\n                        done\n                    done\n  \
+    \              done\n            done\n        done\n    done"]
 stop_tokens:
 - "\n}"

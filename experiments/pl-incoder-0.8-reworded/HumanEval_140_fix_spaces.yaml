@@ -16,7 +16,1140 @@ tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&fix_spa
   \        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
   \   Exa 1 2 2 mple\"),\"-Exa_1_2_2_mple\")) {\n        print \"ok!\" }else{\n  \
   \      exit 1;\n        }\n}\n\ntesthumaneval();"
-completions: []
+completions: ["    \n    # Replace all spaces with underscores\n    $text =~ s/\\\
+    s+/_/g;\n    \n    # If the text has more than 2 consecutive spaces, replace all\
+    \ \n    # consecutive spaces with hyphens\n    if ($text =~ /\\s/) {\n       \
+    \ my $i = 0;\n        \n        while (1) {\n            my $space = $text[$i];\n\
+    \            if ($space =~ /\\s/) {\n                $text[$i-1] .= \"-\";\n \
+    \               $i++;\n            } else {\n                $i++;\n         \
+    \       break;\n            }\n        }\n    }\n    \n    return $text;\n}\n\
+    </code>\n<|/ a dscore=2 |>\n<| a |>\nI used the regex\n<code>\n/[[:blank:]]\\\
+    1\\K|[-]?(?=\\1)/\n</code>\nIt replaces any sequence of more than one space or\
+    \ one dash followed by a space with just one dash. It also removes any spaces\
+    \ that are not followed by a dash before replacing.\nIt also removes any spaces\
+    \ before a dash or after a dash and replaces them with a single dash.\n<|/ a tags=perl,regex\
+    \ dscore=2 |>\n<| c |>\nThis is really the only solution that works for me!  Thank\
+    \ you.\n<|/ c |>\n<| a dscore=1 tags=perl,regex |>\n<code>\nuse strict;\nuse warnings;\n\
+    use 5.010;", "    return $text if $text =~ /^\\s+$/;\n    $text =~ s/ /_/g;\n\
+    \    $text =~ s/(\\s)\\s(\\s)/$1$2/g;\n    return $text;\n}", "    $text =~ s/\\\
+    s+/_/g;\n    $text =~ s/\\s{2,}/_/g;\n    $text =~ s/\\s{2,}/_/g;\n    return\
+    \ $text;\n}\n</code>\n<|/ a dscore=3 tags=regex,perl |>\n<| c |>\nFor some reason\
+    \ that doesn't work on all of my strings, it just replaces the spaces around the\
+    \ word and doesn't touch spaces inside a word. I've added a clarification to the\
+    \ question.\n<|/ c |>\n<| a |>\nThis should do it:\n<code>\n$text =~ s/(?<! )/\
+    \ /g;\n</code>\nOr, alternatively:\n<code>\n$text =~ s/(?<!_)/ /g;\n</code>\n\
+    <|/ a tags=regex,perl dscore=2 |>\n<| a tags=regex,perl |>\nA simple pattern will\
+    \ do it:\n<code>\n$text =~ s/^\\s+|\\s+$//g;\n</code>\n<|/ a dscore=2 |>\n<| a\
+    \ dscore=1 |>\nYou can try this:\n<code>\n$text =~ s/^\\s+|\\s+$//g;\n</code>\n\
+    <|/ a tags=regex,perl |>\n<| a tags=regex,perl |>\nHere's another one:\n<code>\n\
+    $text =~ s/(?<![ \\*])([* ])/$1_/g;\n</code>\nThis regex will remove any spaces\
+    \ between and before the *. It also doesn't matter if you have multiple spaces\
+    \ in a row or multiple *s in a row.\n<|/ a dscore=1 |>\n<| a tags=regex,perl |>\n\
+    <code>\n$text =~ s/(?<!\\d)(\\s)(?!\\d)/$1_/g;\n</code>\n<|/ a dscore=1 |>\n<|\
+    \ c |>\nThis works fine as long as the string doesn't contain *s. But it won't\
+    \ work for `*abc` or `*abc*`.\n<|/ c |>\n<| c |>\nIt's a little surprising that\
+    \ `(?<!\\d)(\\s)(?!\\d)` works fine, since it *should* also match `(?<!\\d)*`\
+    \ and return `_*`.\n<|/ c |>\n<| c |>\nIt does not, but it doesn't match it. So\
+    \ it doesn't replace the spaces. `(?<!\\d)(\\s)(?!\\d)` is the same as `(?<!\\\
+    d)(\\s)`\n<|/ c |>\n<| c |>\n: Yes, `(?<!\\d)(\\s)(?!\\d)` matches `*` and ",
+  "    my $text = lc($text);\n    $text =~ s/\\s+/_/g;\n    $text =~ s/\\s{2,}/_/g;\n\
+    \    $text =~ s/_{2,}/ -/g;\n    return $text;\n}\n</code>\nThe first replaces\
+    \ all the spaces with underscores. In case a word has more than 2 consecutive\
+    \ spaces, it then replaces all spaces with - and finally it replaces all underscores\
+    \ with a single -.\nI tested this for several cases and it seems to work fine.\n\
+    <|/ a tags=regex,perl |>\n<| c |>\nI made a small mistake in my comment - this\
+    \ also replaces 2 or more underscores with a single dash. So the example doesn't\
+    \ work as intended now. Try this one instead to fix it: `$text =~ s/_{2,}/ -/g;`\n\
+    <|/ c |>\n<| c |>\nYes, you're absolutely right. I made a small edit to my post\
+    \ and edited the answer. Thanks.\n<|/ c |>\n<| c |>\nYes, this solves my problem.\
+    \ Thanks for the solution and the explanation.\n<|/ c |>\n<| a |>\n<code>\n$text\
+    \ =~ s/\\s{2,}/_/g;\n$text =~ s/_{2,}/_/g;\n$text =~ s/_{2,}/ -/g;\n</code>\n\
+    The first will replace 2 or more spaces with one underscore. The second replaces\
+    \ 2 or more underscores with one underscore. The third replaces 2 or more underscores\
+    \ with one dash.\n<|/ a tags=regex,perl dscore=0 |>\n<| a dscore=0 tags=regex,perl\
+    \ |>\nA little improvement to previous answers. Instead of replacing all occurrences\
+    \ of _{2,} with -, use preg_replace:\n<code>\n$text =~ s/_{2,}/-/g;\n$text =~\
+    \ s/_{2,}/ -/g;\n</code>\nUsing this technique will preserve any sequence of two\
+    \ or more consecutive underscores. For example, if you have _ ___ it won't change\
+    \ it into __ ___.\n<|/ a |>\n<| a |>\n<code>\n$text =~ s/(\\s{2,})/_/g;\n$text\
+    \ =~ s/_{2,}/ -/g;\n$text =~ s/_{2,}/ -/g;\n$text =~ s/_/-/g;\n</code>\n<|/ a\
+    \ tags=regex,perl d", "    return $text if $text =~ /\\s/;\n    if ($text !~ /\\\
+    s+/) {\n\treturn $text;\n    }\n    my $i = 1;\n    while($text =~ s/\\s+/-/g)\
+    \ {\n\t$i++;\n    }\n    if ($i ==  2) {\n\treturn $text;\n    }\n    else {\n\
+    \treturn \"$text-$i\";\n    }\n}", "    $text =~ s/ /_/g;\n    if (length($text)\
+    \ > 2) {\n        $text =~ s/( +)/-/g;\n    }\n    $text;\n}\n</code>\n<|/ a |>\n\
+    <| a dscore=1 |>\nA simple regex is fine, except for the fact that you would want\
+    \ a regex which removes the space between two words, not all spaces. You could\
+    \ use a negative lookahead for a word boundary, but that is overkill. Why not\
+    \ just use Perl's split and join?\n<code>\nmy = split ' ', $text;\n$text = join\
+    \ '-',;\n</code>\nThe join will leave the separators intact.\n<|/ a tags=perl,string,whitespace\
+    \ |>\n<| a dscore=0 tags=perl,string,whitespace |>\nFor my own purposes, I used\
+    \ this regex:\n<code>\ns/(?<=[A-Z])(?=[^A-Z])/-/g;\n</code>\nIt replaces any capital\
+    \ letter followed by anything which is not an upper case letter with a dash.\n\
+    <|/ a |>\n<| a dscore=0 |>\nThe answers using regex are great. But, if you want\
+    \ a little bit more power you could use transliteration from Transliterators::Slugify.\n\
+    <code>\nuse lib '.';\nuse Transliterators::Slugify qw(slugify);", "    $text =~\
+    \ s/\\s+/_/g;\n    $text =~ s/^\\s+//;\n    $text =~ s/\\s+$//;\n    return $text;\n\
+    }", "    $text =~ s/ /-/g;\n    return $text if length($text) <= 2;\n    $text\
+    \ =~ s/\\ +/-/g;\n    return $text;\n}", "    $text =~ s/^\\s+//;\n    if ( $text\
+    \ =~ s/\\s+\\z//) {\n        $text =~ s/\\s+/-/g;\n    }\n    return $text;\n}",
+  "    while($text =~ /^(\\s+)/x) {\n        $text =~ s/^\\s+//;\n        $text =~\
+    \ s/\\s+$//;\n    }\n    return $text if length($text) > 1;\n    return $text\
+    \ =~ /^\\s$/ ? $text : \"_$text\";\n}", "    $text =~ tr/ /_/g;\n    $text =~\
+    \ s/ (\\s)\\1+/ -/g;\n    $text;\n}", "    $text =~ s/[ ]+/_/g;\n    if ($text\
+    \ !~ /(_+)/g) {\n        $text =~ s/_+/-/g;\n    }\n    return $text;\n}", " \
+    \   $text =~ s/\\s/_/g;\n    if ($text =~ s/(\\s){2,}//g) {\n        $text =~\
+    \ s/_/-/g;\n    }\n    $text;\n}\n</code>\n<|/ a tags=perl,string |>\n<| a dscore=0\
+    \ tags=perl,string |>\nI wrote this little function. It should replace consecutive\
+    \ spaces with only one '_' character.\n<code>", "    chomp($text);\n    $text\
+    \ =~ s/\\s/_/g;\n    $text =~ s/( )/-/g;\n    return $text;\n}", "    $text =~\
+    \ s/ /_/g;\n    $text =~ s/(^|\\s+)//g;\n    return $text if length($text);\n\
+    \    return;\n}", "    \n    $text =~ s/ /_/g;\n    if ($text !~ /^\\s+$/g) {\n\
+    \t$text =~ s/^\\s+//;\n\t$text =~ s/\\s+$//;\n    }\n    $text =~ s/ +/-/g;\n\
+    \    $text =~ s/^-+/_/g;\n    $text =~ s/-$//;", "    $text =~ s/^\\s+//;\n  \
+    \  $text =~ s/\\s+$//;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n \
+    \   $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n\
+    \    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n\
+    \    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n\
+    \    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/\\s+/ /g;\n\
+    \    return $text;\n}", "    $text =~ s{ (?: ^ ) }{_}gxms;\n    $text =~ s{ ^\
+    \ }{_}gxms;\n    $text =~ s{ ( } { }gxms;\n    $text =~ s{ $}{_}gxms;\n    return\
+    \ $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/(?<! )\\s/-/g;\n    $text\
+    \ =~ s/-$/_/g;\n    return $text;\n}\n</code>\n<|/ a |>\n<| a |>\nI like's answer\
+    \ (upvoted), but found it didn't work when there were multiple spaces next to\
+    \ each other. So I adapted it slightly to handle that:\n<code>", "    \n    return\
+    \ unless $text && $text =~ /\\s/;\n    \n    $text =~ s/\\s/_/g;\n    \n    while\
+    \ ($text =~ /\\s/) {\n        $text =~ s/\\s/-/g;\n    }\n    \n    return $text;\n\
+    }", "    $text =~ s/\\s\\s/_/g;\n    $text =~ s/\\s/-/g;\n    return $text;\n\
+    }\n</code>\n<|/ a dscore=3 tags=perl,sed,awk |>\n<| c |>\nWhile this is elegant,\
+    \ it relies on some assumptions about the input data. Specifically, it assumes\
+    \ that consecutive spaces will not occur on the same line.\n<|/ c |>\n<| c |>\n\
+    : yes, I agree with you. I've added a comment to the original question.\n<|/ c\
+    \ |>\n<| a |>\nThis works for me:\n<code>\necho \"foo  bar\" | perl -pe 's/\\\
+    s(?=\\s)/-/g'\n</code>\n<|/ a tags=perl,sed,awk dscore=3 |>\n<| c |>\nPerfect.\
+    \ Could you explain a bit how this is working?\n<|/ c |>\n<| c |>\nI added an\
+    \ explanation above. Basically, it says, \"replace all spaces that are immediately\
+    \ followed by a space with a dash\"\n<|/ c |>\n<| a dscore=2 |>\nHere is a perl\
+    \ version\n<code>", "    $text =~ s/\\s//g;\n    $text =~ s/\\s\\s/_/g;\n    $text\
+    \ =~ s/\\s\\s/-/g;\n    return $text;\n}\n</code>\n<|/ a tags=perl,regex |>\n\
+    <| c |>\nThis doesn't remove all spaces.\n<|/ c |>\n<| c |>\nit does not: fix_spaces\
+    \ does remove consecutive spaces, which is what it says it does.\n<|/ c |>\n<|\
+    \ c |>\nYeah, it doesn't. What does it do though? It replaces all spaces with\
+    \ dashes, even when there are more than 2 spaces between words.\n<|/ c |>\n<|\
+    \ c |>\n: it replaces all spaces with underscores, not dashes.\n<|/ c |>\n<| a\
+    \ tags=perl,regex |>\nYou can use a pattern like this to remove the multiple spaces:\n\
+    <code>\ns/\\s+/-/g;\n</code>\n<|/ a dscore=4 |>\n<| a |>\nYou can use tr//; \n\
+    <code>\n$str=~tr/ /-/;\n</code>\n<|/ a tags=perl,regex dscore=4 |>\n<| c |>\n\
+    I used this and worked for me.  Thanks!\n<|/ c |>\n<| c |>\nDon't forget to put\
+    \ the modifier `g` after the substitution.\n<|/ c |>\n<| a dscore=3 |>\nHere is\
+    \ a version that just uses substitutions, no regex:\n<code>", "    $text =~ s/_/-/g;\n\
+    \    $text =~ s/\\s+/_/g;\n    return $text;\n}", "    my $result;\n    my @result\
+    \ = ();\n    my $len = length($text);\n    my $space_count = () = tr/  /0/xeg;\n\
+    \    while ($len >= 2) {\n        # find last space in text\n        my $start\
+    \ = rindex($text, \" \", $len-1);\n        if ($start == -1) {\n            $result\
+    \ = $text;\n        }\n        else {\n            $result = substr($text, 0,\
+    \ $start) . \"-\" . substr($text, $start+1);\n        }\n        # replace all\
+    \ spaces in result with underscores\n        $result = $_;\n    }\n    return\
+    \ $result;\n}\n</code>\n<|/ a tags=perl |>\n<| c |>\nI like your solution, but\
+    \ I think I'd probably use a regex for this: `s/ /_/g` should work, right?\n<|/\
+    \ c |>\n<| c |>\nYes, that would work too. I used `tr/  /0/xeg` because it is\
+    \ more concise and easier to read. I suppose using `tr` could cause problems,\
+    \ if the text had a trailing space. `tr` uses a regex internally, so I thought\
+    \ it was more robust. Not sure if `s/` would work or `tr` would just be faster.\n\
+    <|/ c |>\n<| c |>\n: Why would the trailing space be an issue?  All it does is\
+    \ move the problem elsewhere in processing.  It's not actually removing or changing\
+    \ the data.\n<|/ c |>\n<| c |>\n: `s/ /_/g` is slightly more efficient as it only\
+    \ has to check one character at a time, whereas `tr` has to check all characters,\
+    \ whereas `tr` has to check all characters, and then remove spaces in between.\
+    \  `tr` also has to check every character twice, so it's more expensive.\n<|/\
+    \ c |>\n<| c |>\n: Aha, thanks.  I thought there was something magical about trailing\
+    \ spaces.\n<|/ c |>\n<| a dscore=2 tags=perl |>\nThe most obvious solution would\
+    \ be to add a bit of code which would remove the trailing spaces from $text_string\
+    \ and then compare it to $text_string again.  If they match, then remove them\
+    \ from the beginning and end of $text_string and do the same until you have a\
+    \ string that has no trailing spaces.  Then you could just compare those strings\
+    \ again.\n<|/ a |>\n<| a tags=perl |>\nThe first thing to note is that your problem\
+    \ is essentially a variant of the one described here: \nHow do I get rid of trailing\
+    \ whitespace in a string in Perl?\nIf you take that answer and simply modify it\
+    \ to fit your requirement", "    $text =~ s{\\s+}{_}g;\n    if($text =~ s/\\s{2,}/_/g)\
+    \ {\n        $text =~ s{\\s}{-}g;\n    }\n    return $text;\n}", "    $text =~\
+    \ tr/ /_/;\n    $text =~ s/( )//g;\n    $text =~ s/(-+)/ -/g;\n    return $text;\n\
+    }", "    $text =~ s/ /_/g;\n    if ( $text =~ s/ (.*) ( .*) ( .*) ( .*) /$1$2$3-$4$5$6/\
+    \ ) {\n\t$text =~ s/ (.*) ( .*) ( .*) ( .*) /$1$2$3-$4$5$6/;\n    }\n    return\
+    \ $text;\n}\n</code>\n<|/ a |>\n<| c |>\n: I did say \"...and if a string has\
+    \ more than 2 consecutive spaces\", so it will work for strings like \"This is\
+    \ an example\", but it will not work for strings like \"This     is     an   \
+    \  example\" which has more than two spaces between the words. The solution that\
+    \ I gave will work for strings like \"This is an example\" but will not work for\
+    \ strings like \"This     is     an     example\". Note that it will also give\
+    \ the result \"Example-an\", which is not desired.\n<|/ c |>\n<| a tags=perl dscore=2\
+    \ |>\nThe following is an awk solution:\n<code>\n$ cat text.txt\nThis is an example\
+    \ of multiple spaces.", "    return unless $text;\n    $text =~ s/ /_/g;\n   \
+    \ if ($text !~ /  +/g) {\n        return $text;\n    }\n    $text =~ s/ +(?!$)//g;\n\
+    \    return $text;\n}\n</code>\n<|/ a |>\n<| c |>\nThe code above does not seem\
+    \ to handle single spaces correctly.  Please see: https://stackoverflow.com/questions/33858527/perl-replace-single-spaces-with-hyphens-in-between-words-when-not-consecutive\n\
+    <|/ c |>\n<| a tags=regex,perl |>\nUse the following regex:\n<code>\ns/(?<!\\\
+    S)(?=\\S)(\\s)/-/g\n</code>\nRegex101\n<|/ a dscore=2 |>\n<| a tags=regex,perl\
+    \ dscore=2 |>\nThis code is a bit of a hack but it works.\n<code>\nuse strict;\n\
+    use warnings;\nuse 5.010;", "    \n    $text =~ s/ /_/g;\n    $text =~ s/^_//g;\n\
+    \    $text =~ s/_$//g;\n    $text =~ s/_+/-/g;\n    $text =~ s/^_//g;\n    $text\
+    \ =~ s/_$//g;\n    $text =~ s/_+/-/g;\n    $text =~ s/_+/-/g;\n    $text =~ s/_+/-/g;\n\
+    \    $text =~ s/_+/-/g;\n    $text =~ s/_+/-/g;\n    $text =~ s/_+/-/g;\n    \n\
+    \    return $text;\n}", "    $text =~ s/\\s+/_/g;\n    $text =~ s/(?<=\\s)\\s(?=\\\
+    s)/-/g;\n    return $text;\n}\n</code>\n<|/ a tags=regex,perl dscore=1 |>\n<|\
+    \ c |>\nThanks for the help. I understand the code better now.\n<|/ c |>\n<| c\
+    \ |>\nThis one looks neat, and it works as expected even for the case of multiple\
+    \ consecutive spaces.\n<|/ c |>\n<| a tags=regex,perl |>\nMy attempt at it:\n\
+    <code>", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/\\s\\+/-/g;\n    return $text;\n}\n</code>\nThis also handles\
+    \ the case where you have more than one consecutive space, which may or may not\
+    \ be what you want.\n<|/ a tags=perl,regex |>\n<| a dscore=3 |>\n<code>\ns/(?<!\
+    \ )\\s/_/g;\n</code>\n<|/ a tags=perl,regex |>\n<| c |>\nNote that `(?<! )` means\
+    \ that previous character is space. But it also means previous character is not\
+    \ space.\n<|/ c |>\n<| a dscore=2 tags=perl,regex |>\nYou might want to look into\
+    \ Text::Unaccent.\n<|/ a |>\n<| c |>\nI thought Text::Unaccent was for removing\
+    \ accents from a string? I guess that would be the opposite of what I want, no?\n\
+    <|/ c |>\n<| a |>\n<code>\ns/(?<! )(\\s)/-/g;\n</code>\n<|/ a dscore=2 tags=perl,regex\
+    \ |>\n<| c |>\nIt doesn't work if a whitespace exists after the hyphen, like `-`.\n\
+    <|/ c |>\n<| a tags=perl,regex |>\nHere is an improved version of Borodin's answer.\
+    \ \nThe \"(?!\" part means \"match whitespace that is not immediately followed\
+    \ by a space\" This ensures that the last two replacements in the code below work\
+    \ correctly.\n<code>\n$text =~ s/(?<!\\s)(\\s)/-/g;\n$text =~ s/(?<! )(\\s)/-/g;\n\
+    $text =~ s/(?<! \\-)(\\s)/-/g;\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis doesn't\
+    \ work when there's a whitespace after the hyphen.  It replaces the hyphen with\
+    \ a dash anyway.\n<|/ c |>\n<| c |>\n: That doesn't make sense. The OP asked for\
+    \ consecutive whitespace characters, not whitespace characters that follow a space.\n\
+    <|/ c |>\n<| c |>\nThe OP asked for consecutive whitespace characters, not whitespace\
+    \ characters that follow a space\n<|/ c |>\n<| a tags=perl,regex |>\nIf you're\
+    \ trying to remove all spaces from a string, then use tr:\n<code>\n$text =~ tr/\
+    \ /_/;\n</code>\n<|/ a dscore=1 |>", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n\
+    \    $text =~ s/\\s/-/g;\n    $text =~ s/^-/ /;\n    return $text;\n}", "    $text\
+    \ =~ s/\\s+/_/g;\n    while($text =~ s/\\s+/-/g) {\n    }\n    return $text;\n\
+    }", "    $text =~ s/ /_/g;\n    $text =~ s/(?<![^\\s])[ ]{2,}/_/g;\n    $text\
+    \ =~ s/(?<![^\\s])[ ]{2,}/_/g;\n    return $text;\n}", '    return $text if ($text
+    !~ /\s+/g);', "    $text =~ s/ (?=(?:[^']|'[^']*')+$)/_/g;\n    $text =~ s/([^\
+    \ ]{2,}+)//g;\n    return $text;\n}", "    $text =~ s/\\s+/_/g;\n    $text =~\
+    \ s/^\\s+//;\n    $text =~ s/\\s+$//;\n    $text =~ s/\\s+/ _/g;\n    return $text;\n\
+    }\n</code>\n<|/ a tags=string,perl,regex,whitespace |>\n<| a dscore=3 tags=string,perl,regex,whitespace\
+    \ |>\nI needed a solution that would convert tabs to spaces, and I needed it to\
+    \ also convert multiple spaces to a single space.  I was dealing with strings\
+    \ that were actually JSON data, and there were no spaces in them.  So, I decided\
+    \ to solve this problem with regular expressions.  Here's what I came up with:\n\
+    <code>\n$data =~ s/\\t/  /g; # Replace tabs with double spaces\n$data =~ s/^\\\
+    s+|\\s+$//g; # Remove leading and trailing spaces.\n$data =~ s/\\s+/ /g; # Remove\
+    \ multiple spaces\n</code>\nThe first line replaces tabs with double spaces and\
+    \ the second and third lines remove the leading and trailing spaces.  And the\
+    \ last line replaces multiple spaces with a single space.\n<|/ a |>\n<| c |>\n\
+    This is probably the most straightforward solution for most people.\n<|/ c |>\n\
+    <| a tags=string,perl,regex,whitespace |>\nIf you don't have a good reason to\
+    \ try and do this with a regex, I would suggest using split instead:\n<code>\n\
+    $text =~ s/\\s+/ /;\nmy = split /\\s+/, $text;\nmy $final_text = \"\";\nforeach(@parts)\
+    \ {\n    $final_text .= $_ . \" \";\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\n\
+    This solution is simple and effective.\n<|/ c |>\n<| c |>\nI agree with the split\
+    \ approach, but why would you suggest the regex approach?\n<|/ c |>\n<| c |>\n\
+    , I have no idea why I suggested it, I just thought that that would have been\
+    \ the most elegant solution to OP's problem. Perl is my weakest point ;)\n<|/\
+    \ c |>\n<| c |>\n, split is much more readable than a regex and definitely more\
+    \ elegant than looping and concatenating, as has been suggested multiple times.\
+    \ Perl is my weakest point too, but it is worth remembering that when choosing\
+    \ between a regex or a subroutine or something else, readability is more important\
+    \ than elegance.\n<|/ c |>\n<| c |>\n", "    $text =~ s/ /_/g;\n    if ( $text\
+    \ =~ s/\\s\\s/-/g ) {\n        $text =~ s/\\s\\s/-/g;\n    }\n    $text;\n}",
+  "    $text =~ s/ /_/g;\n    $text =~ s/^_//g;\n    \n    return $text unless length\
+    \ $text <= 3;", "    \n    while($text =~ m/^(\\s*) (\\S*) \\s*$/) {\n       \
+    \ $text =~ s/^($2) /$1/gs;\n    }\n    \n    while($text =~ m/^(\\S*)[ \\t]*(\\\
+    S*)[ \\t]*$/) {\n        $text =~ s/^($2) $1/s$1-$2/gs;\n    }\n    \n    return\
+    \ $text;\n}", '    return $text unless $text =~ /\s+/;', "    \n    $text =~ s/^\\\
+    s+//;\n    \n    my $space_count = $text =~ s/(\\s)/$1/g;\n    if ($space_count\
+    \ > 1) {\n        my $replaced_spaces = \" \";\n        \n        for (my $i =\
+    \ 1; $i <= $space_count - 1; $i++) {\n            $replaced_spaces .= \"-\";\n\
+    \        }\n        \n        $text =~ s/(\\s)/$replaced_spaces/g;\n    }\n  \
+    \  \n    return $text;\n}\n</code>\n<|/ a tags=string,perl,regex dscore=1 |>\n\
+    <| c |>\nYes, but that's not what I'm looking for. I want the spaces to be replaced\
+    \ by - if there are more than 2 consecutive spaces.\n<|/ c |>\n<| c |>\nOops,\
+    \ sorry I misread that.  I'll edit.  Thanks.\n<|/ c |>\n<| c |>\nI fixed it. \
+    \ I forgot to include the `g` modifier in my first edit.\n<|/ c |>\n<| c |>\n\
+    Thanks, I'm trying it. But I still get a syntax error for the `for (my $i = 1;\
+    \ $i <= $space_count - 1; $i++) {` line\n<|/ c |>\n<| c |>\nI forgot a closing\
+    \ brace on the for loop.  Try again.  I tested it and it works.\n<|/ c |>\n<|\
+    \ a tags=string,perl,regex |>\n<code>\nuse strict;\nuse warnings;", "    $text\
+    \ =~ s/ +/ /g;\n    $text =~ s/ \\+ / /g;\n    $text =~ s/ \\( / /;\n    $text\
+    \ =~ s/ \\) \\+ / /g;\n    $text =~ s/ \\- / /g;\n    $text =~ s/ \\_/ /g;\n \
+    \   $text =~ s/ +$// if $text =~ /^\\s*$/ || $text =~ /\\s*$/ || $text =~ /^\\\
+    s+$/;\n    return $text;\n}", "    $text =~ s/(^\\s*)|(\\s*$)//g;\n    if ($text\
+    \ =~ s/(\\s{2,})/-/g) {\n        $text =~ s/(\\s{2,})/-/g;\n    }\n    return\
+    \ $text;\n}", "    \n    if ($text =~ s/^[ \\t]+//) { \n\t$text = uc($text);\n\
+    \    }\n    \n    if ($text =~ s/[ \\t]+$//) { \n\t$text = uc($text);\n    }\n\
+    \    \n    if ($text =~ s/^[ \\t]+//) { \n\t$text = \"_$text\";\n    }\n    \n\
+    \    if ($text =~ s/[ \\t]+$//) {\n\t$text = \"_$text\";\n    }\n    \n    $text;\n\
+    }\n</code>\n<|/ a tags=perl dscore=1 |>\n<| c |>\nThanks, this is very helpful.\
+    \ Although it turns out that the '-' is being put in place of the spaces even\
+    \ when I use '-' instead of '_', which is why I asked the original question in\
+    \ comment above.\n<|/ c |>\n<| c |>\n: Yes, sorry, there was a bug in my code.\
+    \ The `-` was being put in place of any spaces after the first, and any spaces\
+    \ before the last (if they don't already have `-`). See the new edit.\n<|/ c |>\n\
+    <| c |>\nBorodin, thank you for your help. This works. However, I still have a\
+    \ couple of questions. 1) How come the \"-\" was getting turned into \"_\" even\
+    \ though I used \"_\" in the \"replace\" statement? 2) I did not use any special\
+    \ characters like '$' in the \"replace\" statement to eliminate that possibility.\
+    \ Why was that necessary?\n<|/ c |>\n<| c |>\n: 1) Because you used `uc()` on\
+    \ `$text` in the first two statements of `fix_spaces`; `uc()` will uppercase all\
+    \ the letters in the string, so the spaces are all converted to underscores. 2)\
+    \ No special characters were used because you used `/` instead of `//` in the\
+    \ `s` expressions\n<|/ c |>\n<| c |>\nBorodin, thanks for your help again. I really\
+    \ appreciate it. I am learning Perl so your help is very much appreciated. 1)\
+    \ I thought the /s were equivalent to //s? 2) I noticed that if I change the first\
+    \ if statement to if ($text =~ s/^[ \\t]+//) { \n    $text = \"_$text\";\n}\n\
+    then it works perfectly. Why did that change in statement cause it not to work?\
+    \ Thanks again.\n<|/ c |>\n<| a dscore=0 |>\n<code>", "    $text =~ s/\\s+/-/g;\n\
+    \    $text =~ s/(\\s*\\S){2,}/$1-/g;\n    return $text;\n}\n</code>\n<|/ a dscore=2\
+    \ tags=ruby-on-rails,ruby,regex |>\n<| c |>\nThanks for the edit. Won't take much\
+    \ more than a quick look. I'll leave it at that. Maybe the OP will come back with\
+    \ more comments or another question :)\n<|/ c |>\n<| c |>\nThanks for your help.\
+    \ That makes sense now. Thanks!\n<|/ c |>\n<| c |>\nYes, that is a good idea,\
+    \ but I thought it'd be better to post a separate answer if someone else in the\
+    \ future comes across the same problem and the answer isn't clear :)\n<|/ c |>\n\
+    <| a tags=ruby-on-rails,ruby,regex |>\n<code>\nclass String\n  def despace\n \
+    \   downcase!\n    squeeze(' ').gsub!(/\\s\\s/, ' ')\n    squeeze(' ').gsub!(/\\\
+    s+/, ' ')\n  end\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\n`downcase!` and `squeeze`\
+    \ come from the [ActiveSupport gem](http://activesupport.rubyforge.org/) so you'll\
+    \ need `require 'active_support/core_ext'`\n<|/ c |>\n<| a tags=ruby-on-rails,ruby,regex\
+    \ dscore=2 |>\n<code>\nclass String\n  def despace\n    squeeze(' '.gsub(/\\s+/,\
+    \ \"-\"))\n  end\nend\n</code>\n<|/ a |>\n<| c |>\nIf you were going to use `squeeze`\
+    \ it would make sense to pass `' '`, not `''`. And you should probably use `gsub`\
+    \ instead of `sub`\n<|/ c |>\n<| c |>\nThanks for catching that. I didn't realize\
+    \ that about `squeeze`.\n<|/ c |>\n<| a dscore=0 |>\nIf you don't want to load\
+    \ activesupport, you can use this:\n<code>\nclass String\n  def despace\n    squeeze('\
+    \ '.gsub(/\\s+/, \"-\"))\n  end\nend\n</code>\n<|/ a tags=ruby-on-rails,ruby,regex\
+    \ |>\n<| a dscore=0 |>\nThis worked for me for stripping multiple spaces in a\
+    \ string:\n<code>\n'    hello    world    !!!!   '.gsub(/\\s+/, '-').gsub(/\\\
+    s\\s/, '-')\n</code>\n<|/ a tags=ruby-", "    return $text if $text !~ /\\s+/;\n\
+    \    $text =~ s/\\s+/_/g;\n    if ($text =~ /  /) {\n        $text =~ s/_\\K\\\
+    s+/-/g;\n    }\n    $text;\n}", "    $text =~ s/\\s+/_/g;\n    $text =~ s/ (\\\
+    s)/ -$1/g;\n    $text =~ s/^-/-_/g;\n    return $text;\n}\n</code>\n<|/ a tags=perl,regex,whitespace\
+    \ dscore=5 |>\n<| c |>\nI think `s/(?<! ) /\\ /g` would do better\n<|/ c |>\n\
+    <| c |>\nI added the extra space in the first one to avoid that case.\n<|/ c |>\n\
+    <| c |>\nThe first regex replaces spaces before a punctuation or symbol. The second\
+    \ regex replaces spaces before a space or punctuation.\n<|/ c |>\n<| a dscore=5\
+    \ |>\nIf you can use Perl 5.14+ and have the /r modifier, then use the /x modifier.\n\
+    <code>", "    return $text unless $text =~ /\\S/;\n    my $spaces_count = () =\
+    \ $text =~ /[^ ]/g;\n    $spaces_count += $text =~ /[^ ]{2,}/g;\n    $spaces_count\
+    \ += $text =~ /[ ]{2,}/g;\n    return $text if $spaces_count < 2;\n    $text =~\
+    \ s/ /_/g;\n    return $text unless $text =~ /[^A-Za-z0-9\\-]/g;\n    $text =~\
+    \ s/_+/_/g;\n    return $text;\n}", "    $text =~ tr/ /_/g;\n    my @words = split(/\\\
+    s+/, $text);\n    my $num_spaces = -1;\n    my $word_str = \"\";\n    foreach\
+    \ my $word (@words) {\n        if ($num_spaces == -1) {\n            $word_str\
+    \ .= $word;\n            $num_spaces = 0;\n        } elsif ($num_spaces != 0)\
+    \ {\n            $word_str .= \" \";\n            $num_spaces = -1;\n        }\
+    \ elsif ($word eq \"\") {\n            $num_spaces = -1;\n        } else {\n \
+    \           $word_str .= \"_\";\n            $num_spaces++;\n        }\n    }\n\
+    \    return $word_str;\n}", "    \n    return $text unless $text =~ /^ /;\n  \
+    \  $text =~ s/ /_/g;\n    return $text if $text =~ s/ +/ /g;\n    $text =~ s/\
+    \ +/-/g;\n    \n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/\
+    \ +/-/g;\n    $text =~ s/^ //;\n    $text =~ s/ $//;\n    return $text;\n}\n</code>\n\
+    <|/ a dscore=3 tags=perl,python |>\n<| c |>\nThis is quite an awesome solution.\
+    \ I thought of using a regex for this problem but wasn't sure if that was the\
+    \ best solution. Thanks!\n<|/ c |>\n<| c |>\nThanks a lot for this solution. Just\
+    \ what I was looking for. I used the Python code in the answer to generate the\
+    \ Perl code and executed that with my test case.\n<|/ c |>\n<| c |>\nThis doesn't\
+    \ work for me. The function just returns the unmodified text, so I cannot see\
+    \ any difference in output between the Python and Perl code.\n<|/ c |>\n<| c |>\n\
+    : It works for me, and I added a link to a working example.\n<|/ c |>\n<| c |>\n\
+    This doesn't seem to work for spaces in other contexts. For example, it doesn't\
+    \ work for \"a b\" -> \"a-b\"\n<|/ c |>\n<| a tags=perl,python |>\n<code>\nimport\
+    \ re\nre.sub(r\"(^| )([^ ]+)(?= )\", \"\\\\1\\\\2\", \"a b\")\n'a-b'\n</code>\n\
+    <|/ a dscore=3 |>\n<| c |>\nI didn't downvote you, but I don't think that is exactly\
+    \ what he's looking for.\n<|/ c |>\n<| c |>\nOh no! You edited your post just\
+    \ before I posted my comment :)\n<|/ c |>\n<| c |>\nI edited my post to match\
+    \ your new requirement\n<|/ c |>\n<| c |>\nThanks for this solution. I tried it\
+    \ and it's working well. I've got one more quick question regarding this. What\
+    \ would be the regular expression if we wanted to match a string such as: \"[hello]\
+    \ world[hello]\"? The regex would be \"\\[hello\\] world\\[hello\\]\". But it\
+    \ doesn't work. Any suggestions?\n<|/ c |>\n<| c |>\n: Do you mean `\"[hello]\
+    \ world[hello]\"` where \"hello\" is a variable containing some string?  If so,\
+    \ I'd recommend posting that as a new question.\n<|/ c |>\n<| a |>\n<code>\nre.sub(r\"\
+    (?<=^|\\s)\\W+(?=\\s|$)\", \"_\", 'a b')\n</code>\n<|/ a tags=perl,python dscore=2\
+    \ |>\n<| c |>\nThis ", "    return $text if !$text;\n    my $spaces = 1;\n   \
+    \ my $chars = length $text;\n    my $result = '';\n    foreach my $c (split //,\
+    \ $text) {\n        if ($c eq ' ') {\n            $spaces++;\n        }\n    \
+    \    else {\n            $spaces = 1;\n            $result .= '_' if $spaces;\n\
+    \            $result .= $c;\n        }\n    }\n    if ($chars > 2) {\n       \
+    \ my $i = 0;\n        my $j = 0;\n        while (length($result) > 2) {\n    \
+    \        $result =~ s/(\\s+)(\\s)/$1$2/g;\n            $j++;\n            if ($j\
+    \ == 2) {\n                $j = 0;\n                $i++;\n            }\n   \
+    \     }\n    }\n    return $result;\n}", "    \n    $text =~ s/ /_/g;\n    $text\
+    \ =~ s/ (?! \\s [^ ]+(?: [^ ]+)?$)/ -/g;\n    return $text;\n}", "    $text =~\
+    \ s/ /_/g;\n    $text =~ s/\\s\\s+/-/g;\n    \n    $text =~ s/_\\-\\d_/_-$&_/;\n\
+    \    return $text;\n}", "    $text =~ tr/ /_/;\n    $text =~ s/(\\s\\s+)//g;\n\
+    \    $text =~ s/(\\s{2,})/-/g;\n    return $text;\n}\n</code>\n<|/ a tags=perl,regex\
+    \ dscore=2 |>\n<| c |>\nThis is very close to what I want. \nThe only thing I\
+    \ changed from your example code was that instead of using \\s+ and \\s, I used\
+    \ \\s\\s+ to catch consecutive whitespace characters. \nThe original code doesn't\
+    \ work for something like this (I'm only concerned about two consecutive spaces):\n\
+    \    \"Example   Example\"\n<|/ c |>\n<| c |>\nYou're right about \\s\\s+ not\
+    \ catching consecutive spaces.  I've edited my answer to use \\s{2,} instead.\n\
+    <|/ c |>\n<| a tags=perl,regex |>\nHere's a version that handles all of the cases\
+    \ you have specified:\n<code>", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n\
+    \    $text =~ s/^-|-$//g;\n    return $text;\n}", "    my $text = \"\";\n    $text\
+    \ =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/\\s\\s\\s/_-/g;\n    return\
+    \ $text;\n}", "    my $space = \" \";\n    my $dash = \"-\";\n    $text =~ s/\\\
+    s+/$space/g;\n    $text =~ s/^(\\S*)\\s*$space/$1-$space/g;\n    $text =~ s/^(\\\
+    S*)\\s*$space/$1-$dash/g;\n    return $text;\n}\n</code>\n<|/ a dscore=4 tags=string,perl\
+    \ |>\n<| a tags=string,perl dscore=2 |>\nThis question has already been answered\
+    \ and accepted so I figured I'd add one more solution that I find very useful.\n\
+    The method I used was the use of regular expressions to find the number of occurrences\
+    \ of spaces and then to remove the appropriate number of spaces based on the number\
+    \ of occurrences.\n<code>\n$str =~ s/(^|\\s+)(\\S+?)(\\s+|$)/ $1 . &fix_spaces($2)\
+    \ . $3 /ge;\n</code>\nThe regular expression finds all occurrences of one or more\
+    \ spaces (\\s+) and then captures one or more non-whitespace characters ([\\S+?]).\
+    \  It then finds all occurrences of one or more spaces (\\s+) and then captures\
+    \ one or more non-whitespace characters ([\\S+?]).  It then replaces all of these\
+    \ occurrences with a space followed by itself plus another space.  The replacement\
+    \ is performed by calling a subroutine with the captured non-whitespace characters.\n\
+    <code>", "    $text =~ s/ /_/g;\n    $text =~ s/^\\s+//;\n    $text =~ s/\\s+$//;\n\
+    \    $text =~ s/ +/ /g;\n    $text =~ s/\\s{2,}/ -/g;\n    return $text;\n}",
+  "    \n    $text =~ s#\\s##g;\n    $text =~ s#\\s{2,}#-#g;\n    $text =~ s#\\s#_#g;\n\
+    \    $text =~ s#^_##;\n    \n    return $text;\n}", "    \n    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/\\s+$//g;\n    return $text;\n}", "    my $regex = qr/^ ( (?:\
+    \ [^\\s] )* (?: \\s* )* )? $/x;\n    return $text =~ s/ $regex/_/g;\n}", "   \
+    \ $text =~ s/\\s+/_/g;\n    $text =~ s/\\s+/ -/g;\n    return $text;\n}", "  \
+    \  $text =~ s/ \\+/_/g;\n    $text =~ s/ (?=.{2,})/_/g;\n    return $text;\n}",
+  "    $text =~ s/[ ]+/_/g;\n    $text =~ s/( )+-/-/g;\n    return $text;\n}", " \
+    \   $text =~ s/  */ _/g;\n    $text =~ s/(  +)  +/ $1 /g;\n    $text =~ s/(  +)\
+    \  / $1 /g;\n    $text =~ s/_+_+_+/ _/g;\n    $text =~ s/_+_+_/ _/g;\n    return\
+    \ $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/ +/ /g;\n    return $text\
+    \ unless (($text =~ s/ +/_/g) > 2); # Has a space with 2 or more\n    $text =~\
+    \ s/ +/_/g;\n    return $text;\n}", "    $text =~ s{( *)}{$1}g;\n    $text =~\
+    \ s{(\\s+)\\1+}{-}g;\n    return $text;\n}", "    \n    $text =~ s/ +/_/g;\n \
+    \   $text =~ s/ /_/g;\n    $text =~ s/_+/_/g;\n    $text =~ s/(_)/ \\U$1/ge;\n\
+    \    \n    return $text;\n}", "    $text =~ s/ +/_/g;\n    if ($text =~ /  +/g)\
+    \ {\n        $text =~ s/  +/_/g;\n    }\n    $text;\n}\n</code>\n<|/ a tags=perl,replace,string,regex\
+    \ dscore=5 |>\n<| c |>\nThat doesn't fix consecutive spaces.\n<|/ c |>\n<| c |>\n\
+    You are correct. It does not fix consecutive spaces.\n<|/ c |>\n<| c |>\nFixed\
+    \ that.\n<|/ c |>\n<| a tags=perl,replace,string,regex |>\nI prefer using transliteration\
+    \ for this.  The transliteration module (CPAN) does exactly that.  It also handles\
+    \ more complicated issues like non-breaking spaces, etc.\n<|/ a dscore=4 |>\n\
+    <| c |>\nThe question says \"replace spaces\", not \"transliterate\".\n<|/ c |>\n\
+    <| a dscore=4 |>\nIn Perl, the substitution operator is ~:\n<code>\n$text =~ s/\
+    \ /-/g;\n</code>\n<|/ a tags=perl,replace,string,regex |>\n<| c |>\nHow could\
+    \ I not have thought of that? Thanks! That would have solved my problem (I actually\
+    \ already had it in a longer line of code... just didn't paste it into the question\
+    \ here).\n<|/ c |>\n<| a tags=perl,replace,string,regex |>\nIn a subroutine, you\
+    \ can do this with a single substitution statement:\n<code>", "    $text =~ s/\\\
+    s+/_/g;\n    $text =~ s/  +//g;\n    return $text;\n}", "    $text =~ tr/ /_/;\n\
+    \    $text =~ s/ /_/;\n    $text =~ s/_{2,}/_/g;\n    return $text;\n}", "   \
+    \ $text =~ s/\\s+/_/g;\n    $text =~ s/(\\s\\s+)/_/g;\n    return $text;\n}",
+  "    return $text unless $text =~ m/^([A-Za-z0-9_\\-]+)/;\n    my $fixed = join(\"\
+    \",\n            map { \n                my $x = $_;\n                if    ($x\
+    \ eq ' ' && $text !~ /  /) {$x = \"_\"}\n                elsif ($x eq ' ' && $text\
+    \ =~ /  /) {$x = \"-\"}\n                else  {$x}\n            }\n         \
+    \   split(//, $text)\n    );\n    return $fixed\n}\n</code>\n<|/ a tags=perl,regex\
+    \ dscore=0 |>\n<| a tags=perl,regex |>\nIf you're not going to be doing this more\
+    \ than once, I suggest using tr/// and \\s:\n<code>\ns/ /_/g;\ns/\\s/-/g;\n</code>\n\
+    If you're going to be doing this more than once, it would be more efficient to\
+    \ store a hash of replacements somewhere (a file, a database, etc.), then you\
+    \ can just say:\n<code>\ns/\\Q$hash{$_}//g for (keys %hash);\n</code>\n<|/ a dscore=0\
+    \ |>\n<| c |>\nYeah, that's what I was thinking, but I thought maybe there was\
+    \ a more elegant solution than having a long list of substitutions in `tr`.  I\
+    \ guess there isn't one, so that's what I used.\n<|/ c |>\n<| a tags=perl,regex\
+    \ |>\n<code>", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/(^\\\
+    s*)|(\\s*$)//g;\n    return $text;\n}\n</code>\n<|/ a |>\n<| c |>\nThe `/+/ /g`\
+    \ bit doesn't do anything useful in this situation. Also, `sub` doesn't care about\
+    \ trailing spaces either. You'd need `s/\\s+/_/g` to do that.\n<|/ c |>\n<| c\
+    \ |>\nThis seems to work for spaces other than tabs but it doesn't seem to work\
+    \ for consecutive spaces.\n<|/ c |>\n<| c |>\nThis doesn't work for me. Can you\
+    \ provide an example where it doesn't?\n<|/ c |>\n<| c |>\nIt also fails if the\
+    \ text starts or ends with a space. e.g. \" example \" -> \"_example_\"\n<|/ c\
+    \ |>\n<| c |>\nYes, that's true. I'll fix it, but I don't think it will matter\
+    \ too much because you shouldn't be doing this.\n<|/ c |>\n<| a |>\nThe answer\
+    \ that uses regex does not work with non-whitespace characters. It is very similar\
+    \ to the regex used in this answer. The one difference is that the regex that\
+    \ uses \\G to match a position before a newline will match the position after\
+    \ the newline as well. This means that you cannot replace all spaces with underscores\
+    \ while using \\G. Instead, you have to find the end of the previous whitespace\
+    \ and use \\G to match the position before that instead:\n<code>\nuse strict;\n\
+    use warnings;\nuse 5.010;", "    $text =~ s/\\s{2,}/_/g;\n    $text =~ s/\\s/-/g;\n\
+    \    return $text;\n}\n</code>\n<|/ a |>\n<| c |>\nAside from just posting a code,\
+    \ what is the reason behind it?\n<|/ c |>\n<| c |>\nI guess it's a matter of habit.\
+    \ IIRC, it was a problem in the last time I worked with Perl.\n<|/ c |>\n<| c\
+    \ |>\n: It's not necessarily a problem with Perl. It's a problem with programmers,\
+    \ who have to write code, where they have no idea what it does.\n<|/ c |>\n<|\
+    \ c |>\n: I suppose you could say it a problem with people who write code without\
+    \ reading the documentation and just blindly copy and paste.\n<|/ c |>\n<| c |>\n\
+    This is what I have been looking for, thanks!  I added a version that doesn't\
+    \ require any modules and works with non-ascii characters also.\n<|/ c |>\n<|\
+    \ a dscore=5 |>\n<code>\ns/\\s(?=\\s)/-/g\n</code>\nIf Perl supports look-ahead\
+    \ assertions, it's a simple as that. Look-ahead assertions are zero-width assertions\
+    \ they don't match characters or anything else.\n<|/ a tags=perl,regex |>\n<|\
+    \ c |>\nIt does. It's an assertion that matches whitespace, which is followed\
+    \ by a whitespace.\n<|/ c |>\n<| c |>\nThis does not work if there are non-breaking\
+    \ spaces.\n<|/ c |>\n<| c |>\nThis does not work if there are non-breaking spaces\
+    \ (`0xa0`).\n<|/ c |>\n<| c |>\nHmm... I assumed that wasn't a concern because\
+    \ I used the unicode characters, `0xa0` which `\\s` excludes. However, in Perl\
+    \ 5.10.1 it works just like `\\s` would.\n<|/ c |>\n<| c |>\n`0xa0` is an ASCII\
+    \ space, not a non-breaking space.\n<|/ c |>\n<| a tags=perl,regex dscore=5 |>\n\
+    <code>\ns/\\s{2,}/_/g;\n</code>\n<|/ a |>\n<| c |>\nYep, this one will also remove\
+    \ spaces after _\n<|/ c |>\n<| a dscore=5 |>\nIf you need to replace two or more\
+    \ consecutive spaces with one single space then use this regular expression:\n\
+    <code>\ns/\\s{2,", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~\
+    \ s/-{2,}/_/g;\n    $text =~ s/_{2,}/-/g;\n    $text =~ s/-{2,}$/_/g;\n    $text\
+    \ =~ s/_{2,}$//g;\n    $text =~ s/ _ /_/g;\n    return $text;\n}", "    $text\
+    \ =~ s/ /-/g;\n    $text =~ s/ +/_/g;\n    $text =~ s/ ([^-]{2})/ - $1/;\n   \
+    \ return $text;\n}\n</code>\n<|/ a tags=perl,regex |>\n<| a dscore=1 tags=perl,regex\
+    \ |>\n<code>\nperl -pe 's/  */ /g' file\n</code>\n<|/ a |>\n<| a tags=perl,regex\
+    \ dscore=0 |>\nIf your file is \"pure\" text, i.e. no markup language, use sed:\n\
+    <code>\nsed -i 's/\\(\\<[^ ]*\\>\\)\\( +\\)/\\1/g'\n</code>\n<|/ a |>\n<| a dscore=0\
+    \ tags=perl,regex |>\nYou can try this too:\n<code>\ncat file | sed 's/ /_/g'\
+    \ | sed 's/_+/-/g' | sed 's/_//g'\n</code>\n<|/ a |>\n<| c |>\nWhile this code\
+    \ may answer the question, providing additional context regarding why and/or how\
+    \ this code answers the question improves its long-term value\n<|/ c |>\n<| c\
+    \ |>\nThis answer will also replace single spaces with two (instead of only consecutive\
+    \ spaces).\n<|/ c |>\n<| a dscore=0 tags=perl,regex |>\nYou could use tr:\n<code>\n\
+    tr/ /_/\n</code>\nThis removes spaces.\n<|/ a |>\n<| c |>\nYes, but that only\
+    \ works if there are only spaces.  This would replace multiple spaces with a single\
+    \ space.\n<|/ c |>\n<| c |>\nAh, I missed that.\n<|/ c |>\n<| a tags=perl,regex\
+    \ |>\nHere are some examples:\n<code>\n$ echo \"a b c\" | tr / /_\na_b_c\n$ echo\
+    \ \"a b c\" | tr / /\na b c\n$ echo \"a b c\" | tr / / | tr / /_\na_b_c\n$ echo\
+    \ \"a b c\" | tr / /\na_b_c\n$ echo \"a b c\" | tr / / | tr / /\na_b_c\n$ echo\
+    \ \"a b c\" | tr / / | tr / / | tr / /_\na_b_c\n$ echo \"a b c\" | tr / / | tr\
+    \ / / | tr / / | tr / /\na-b_c\n$ echo \"a b c\" | tr / / | tr / / | tr / / ",
+  "    $text =~ s/\\s+/_/g;\n    $text =~ s/\\s/-/g;\n    $text =~ s/_{2,}//g;\n \
+    \   $text =~ s/_//g;\n    return $text;\n}", "    $text =~ s/\\s+/_/g;\n    $text\
+    \ =~ s/(\\s+)\\1+/-/ig;\n    return $text;\n}", "    local $_ = lc($_);\n    $text\
+    \ =~ s/\\s+/-/g;\n    $text =~ s/(^\\s*)|(\\s*$)//g;\n    return $text;\n}", " \
+    \   \n    return $text if $text !~ /\\s/; ", "    $text =~ s/ +/ /g;\n    $text\
+    \ =~ s/_{2,}/ /g;\n    return $text;\n}\n</code>\n<|/ a tags=substitution,regex,perl,perl-data-structures\
+    \ |>\n<| c |>\nThe OP already mentioned that the desired output has leading underscores.\
+    \ I don't see how your answer is going to produce that output.\n<|/ c |>\n<| c\
+    \ |>\nThe OP said \"If a string has more than 2 consecutive spaces\" which implies\
+    \ that consecutive spaces should be replaced with a single hyphen. That's why\
+    \ I posted the subroutine `fix_spaces` :-)\n<|/ c |>\n<| c |>\n: You're right.\
+    \ I read that differently and thought you meant consecutive spaces.\n<|/ c |>\n\
+    <| a dscore=0 |>\nYou can use a regex that looks for the first character followed\
+    \ by another character and replaces it with a single underscore.\n<code>\n$_ =\
+    \ \"  abc  \";\ns/^(\\w)(\\w)/$1\\U$1/;\n</code>\nOr, another regex that looks\
+    \ for two consecutive characters and replaces it with a single underscore:\n<code>\n\
+    $_ = \"  abc  \";\ns/([^\\W_])\\1\\1/g;\n</code>\nBoth of these will replace two\
+    \ consecutive characters with a single underscore.\n<|/ a tags=substitution,regex,perl,perl-data-structures\
+    \ |>\n<| c |>\nI'm sorry, but this doesn't quite produce the desired output. Try\
+    \ it on a string with two consecutive spaces, say, \"  abc  \".\n<|/ c |>\n<|\
+    \ c |>\nOh, I see now. It was a little unclear in the question, since you said\
+    \ \"more than 2 consecutive spaces\". I'll fix the answer shortly.\n<|/ c |>\n\
+    <| c |>\nThanks for your answer. I think it still doesn't produce the desired\
+    \ output because your regex doesn't take into account that consecutive spaces\
+    \ are also replaced by a single underscore.\n<|/ c |>\n<| c |>\nYeah, sorry. I\
+    \ missed that part. I've edited my answer appropriately.\n<|/ c |>\n<| c |>\n\
+    : Please edit your question to clarify that you're looking to replace more than\
+    \ two consecutive spaces by a single underscore.\n<|/ c |>\n<| a dscore=0 |>\n\
+    This code will replace all spaces with an underscore followed by an underscore:\n\
+    <code>\ns/ ( [^ ] ) ( [^ ] ) /_$1_$2/\n", "    local $| = 1;\n    $text =~ s/\
+    \ /_/g;\n    $text =~ s/_/ /g;\n    $text =~ s/_([^_]+?)_\\1_/g;\n    while($text\
+    \ =~ s/_([^_]+?)_\\1_/){\n        my $s = $1;\n        $s =~ s/_/-/g;\n      \
+    \  $s =~ s/-([^-]+)_\\1_/-$1/g;\n        $s =~ s/-([^-]+)_\\1_/-$1/g;\n      \
+    \  $s =~ s/-([^-]+)_\\1_/-$1/g;\n        $s =~ s/-([^-]+)_\\1_/-$1/g;\n      \
+    \  $s =~ s/-([^-]+)_\\1_/-$1/g;\n        $s =~ s/-([^-]+)_\\1_/-$1/g;\n      \
+    \  $s =~ s/-([^-]+)_\\1_/-$1/g;\n        $s =~ s/-([^-]+)_\\1_/-$1/g;\n      \
+    \  $s =~ s/_/-/g;\n        $s =~ s/_/ /g;\n    }\n    $text;\n}\n</code>\nThe\
+    \ reason I wanted to keep it short is that I wanted to keep it simple and easy\
+    \ to read. Also, I wanted to keep the code simple.\n<|/ a |>\n<| c |>\nI like\
+    \ the idea, but this doesn't work if the text contains dashes, eg \"--Example--3\"\
+    \n<|/ c |>\n<| c |>\n- Oh yes it will. I would need to have it replace the first\
+    \ - with - and _ with -, and a second set of replacement rules so it replaces\
+    \ _ with - before the next set of rules are done.\n<|/ c |>\n<| c |>\n- Updated\
+    \ to work that way as well now.\n<|/ c |>\n<| c |>\nThanks for your help! I was\
+    \ looking at this all wrong. :)\n<|/ c |>\n<| c |>\n: You might also want to consider\
+    \ using '-' as the delimiter rather than '_', since it is the only thing that\
+    \ can't be used in a variable name. I've found that it's a lot easier to read/write,\
+    \ and also easier to avoid confusing issues like \"hello_world\" vs. \"helloWorld\"\
+    .\n<|/ c |>\n<| a dscore=3 |>\nYou can just do something like this:\n<code>",
+  "    $text =~ s/  +/ /g;\n    if ($text =~ s/ +\\K\\s+(?=[^ ]* +$)/-/ig) {\n   \
+    \     $text =~ s/_+/ /ig;\n    }\n    return $text;\n}", "    \n    # Split on\
+    \ spaces and remove empty strings\n    my @tokens = grep { defined } split /\\\
+    s+/, $text;\n    \n    my @token_with_spaces = map { $_ . ' ' } @tokens;\n   \
+    \ \n    # Remove extra spaces within words (unless word is all spaces)\n    for\
+    \ (my $i = 1; $i < @token_with_spaces; $i++) {\n        next unless $token_with_spaces[$i]\
+    \ =~ /^ *$/;\n        $token_with_spaces[$i] = $token_with_spaces[$i] . ' ';\n\
+    \    }\n    \n    # Remove consecutive spaces (unless word is all spaces)\n  \
+    \  for (my $i = 1; $i < @token_with_spaces; $i++) {\n        next if $token_with_spaces[$i]\
+    \ =~ / *$/;\n        $token_with_spaces[$i] = $token_with_spaces[$i] . '-';\n\
+    \    }\n    \n    return join '', @token_with_spaces;\n}", "    $text =~ s/^\\\
+    s+//;\n    $text =~ s/\\s+$//;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/^\\s+//;\n\
+    \    $text =~ s/\\s+$//;\n    $text =~ s/\\s+/ /g;\n    $text =~ s/^\\s+//;\n\
+    \    $text =~ s/\\s+$//;\n    $text =~ s/\\s+/ /g;\n    return $text;\n}", " \
+    \   $text =~ tr/ /_/g;\n    $text =~ s/ +$//g;\n    $text =~ s/^ +//;\n    $text\
+    \ =~ s/ +\\z//;\n    return $text;\n}", "    $text =~ s/ /_/g;\n    return unless\
+    \ $text =~ s/ (?! \\s ) /_/g;\n    $text =~ s/ (?! \\s )/ _/g;\n    return $text;\n\
+    }", "    my $new_text = \"\";\n    if ( $text =~ /\\s+/g ) {\n        $new_text\
+    \ .= \" \" . join(\"_\", map { $_ });\n    }\n    if ( $text =~ /( +) /g ) {\n\
+    \        $new_text .= $1 . \"-\" . join(\"_\", map { $_ });\n    }\n    return\
+    \ $new_text;\n}", "    $text =~ s/ /_/g;\n    if ( $text =~ s/\\s{2,}/ - /g )\
+    \ {\n        $text =~ s/(\\s{2,})/$1-/g;\n    }\n    return $text;\n}\n</code>\n\
+    <|/ a |>\n<| a |>\nThe shortest possible solution that works for me is using '\\\
+    s' like this:\n<code>", "    $text =~ s{ (\\s)+}{\n        $1 =~ s/\\-/ /g\n \
+    \   } if length($1);\n    $text =~ s{(\\s)+}{_}g;\n    return $text;\n}", "  \
+    \  $text =~ s/ /_/g;\n    $text =~ s/\\s/_/g;\n    if ($text !~ /-/) {\n     \
+    \   $text =~ s/_\\s/-/g;\n    }\n    return $text;\n}", "    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/\\s{2,}/_/g;\n    return $text;\n}", "    return $text if ( $text\
+    \ =~ /^\\s+$/ );\n    return $text if $text !~ /^\\s+$/;\n    return $text unless\
+    \ $text =~ /^\\s+/;\n    return $text if $text =~ /\\s{2,}/;\n    return $text\
+    \ if $text =~ /\\s\\s+/;\n    $text =~ s/ /_/g;\n    $text =~ s/^_//g;\n    return\
+    \ $text;\n}", "    $text =~ s/ /_/g;\n    while(!($text =~ /^_*$/)){\n       \
+    \ $text =~ s/_+/-/g;\n    }\n    return $text;\n}", "    $text =~ s/(\\s+)/_/g;\n\
+    \    $text =~ s/ +$//g;\n    return $text;\n}", "    if ($text =~ /^ (.*) $/)\
+    \ {\n\tmy $result = $1;\n\t$result =~ s/ /_/g;\n\treturn $result;\n    }\n   \
+    \ return $text;\n}", "    $text =~ s/ \\+/_/g;\n    $text =~ s/(.*) (.*)/$1_$2/g;\n\
+    \    return $text;\n}", "    $text =~ s/ /_/g;\n    while($text =~ s/ (\\S)/$1\
+    \ /g) {\n        $text =~ s/ /-/g;\n    }\n    return $text;\n}", "    $text =~\
+    \ s/\\s+/_/g;\n    $text =~ s/\\s{2,}/_/g;\n    $text =~ s/_+/_/g;\n    return\
+    \ $text;\n}\n</code>\n<|/ a dscore=4 |>\n<| c |>\nThis is what I was looking for\
+    \ when trying to figure out why my regex was failing.  Thanks.\n<|/ c |>\n<| c\
+    \ |>\nVery nice. I would add a comment or two, explaining the regex, e.g. \"Matches\
+    \ sequences of one or more spaces followed by one or more of any character.\"\n\
+    <|/ c |>\n<| c |>\n: Thanks, added some more explanations.\n<|/ c |>\n<| a dscore=3\
+    \ |>\nMy favorite perl regex test is regexbuddy.com\n<|/ a tags=regex,whitespace\
+    \ |>\n<| a |>\nThis one does not include spaces, tabs, or newlines:\n<code>\n\
+    s/ +(?=[a-z])/-/g\n</code>\n<|/ a tags=regex,whitespace dscore=3 |>\n<| c |>\n\
+    This also fails on \"Example  Example\"\n<|/ c |>\n<| c |>\nit works fine for\
+    \ me.  Try it with a space before the 'e'.\n<|/ c |>\n<| c |>\n`s/ +(?=[a-z])/-/g`\
+    \ works fine. It replaces multiple consecutive spaces with a single '-'.\n<|/\
+    \ c |>\n<| a tags=regex,whitespace dscore=3 |>\n<code>\n$string =~ s/ +(?=\\p{L}+)//g;\n\
+    </code>\n(where \\p{L} is a Unicode property matching a \"letter\")\nThis matches\
+    \ 1 or more spaces, followed by a letter that isn't followed by another space.\
+    \  That will leave a single space in front of your word.\n<|/ a |>\n<| a tags=regex,whitespace\
+    \ |>\nMy favorite regex: s/\\s{2,}/_/g\n<code>", "    $text =~ s/ /_/g;\n    $text\
+    \ =~ s/  / -/g;\n    $text =~ s/(_+)/ \\1/g;\n    return $text;\n}", "    $text\
+    \ =~ s/\\s+/_/g;\n    if ($text =~ s/(\\s+\\s+)/$1_/g) {\n        $text =~ s/_\\\
+    K|_/-/g;\n    }\n    return $text;\n}\n</code>\nThis makes use of \\K, which restricts\
+    \ rematching to the text matched by the \\K in pattern. \nIf there is more than\
+    \ one occurrence of \\s+ in $text, then the second pattern is rematched and the\
+    \ replacement pattern _\\K replaces those two occurrences with _. But since _\\\
+    K was matched, no replacement is done for that. \nIf there is only one occurrence\
+    \ of \\s+ in $text, then the second pattern is rematched and - is replaced.\n\
+    <|/ a |>\n<| c |>\nVery nice solution, thank you! I didn't know about `\\K`\n\
+    <|/ c |>\n<| c |>\n: Thanks, appreciate the compliment.\n<|/ c |>\n<| c |>\n:\
+    \ Thanks for the compliment :) I am glad I could help you.\n<|/ c |>\n<| c |>\n\
+    Thank you for such an interesting solution. I tried it out and it works great.\
+    \ Thank you!\n<|/ c |>\n<| c |>\nThis isn't quite right, because `\\s` will match\
+    \ all whitespace characters (tabs, spaces, newlines). So `'example'` becomes `'example'`\
+    \ but `'example 1'` becomes `'_example'`\n<|/ c |>\n<| a tags=perl,regex dscore=2\
+    \ |>\nHere's another solution that's a little simpler.  It replaces the spaces\
+    \ with underscores if they are followed by two or more spaces.  If they are followed\
+    \ by one or no spaces, then it replaces with underscore.\n<code>\n$text =~ s/(\\\
+    s+) /$1/g;\n$text =~ s/\\s+(?=(?:\\s+|$))/_/g;\n</code>\nThe first line replaces\
+    \ any number of spaces with a single underscore.  The second line adds a dash\
+    \ to the end of those two or more spaces.  If those two or more spaces are followed\
+    \ by another space, those two spaces are replaced with underscore.\n<|/ a |>\n\
+    <| c |>\nThis doesn't replace consecutive spaces with `_`. Try it.\n<|/ c |>\n\
+    <| c |>\n: You're right, missed that.  Fixed.\n<|/ c |>\n<| c |>\nThanks for your\
+    \ answer. I just tried it and it still doesn't work. \n`'example'` becomes `'example'`\
+    \ but `'example 1'` becomes `'_example'`.\n<|/", "    $text =~ s/\\s+/_/g;\n \
+    \   $text =~ s/\\s+/-/g;\n    $text =~ s/_+/_/g;\n    $text =~ s/_+/-/g;\n   \
+    \ return $text;\n}\n</code>\n<|/ a tags=perl,regex |>\n<| a tags=perl,regex dscore=4\
+    \ |>\nThis answer applies to Perl >= 5.10 only.\nThere is a built in function,\
+    \ called s///, which is designed to do what you want:\n<code>\nmy $text = \"This\
+    \ is test string with spaces\";", "    \n    $text =~ s/ /_/g;\n    $text =~ s/\
+    \ \\{2,}/_-/g;\n    \n    return $text;\n}\n</code>\n<|/ a dscore=1 |>\n<| a dscore=1\
+    \ |>\nThis version uses two regexes (one to remove spaces, another to substitute\
+    \ the spaces to dash), using look-around assertions to ensure that a space does\
+    \ not immediately follow a dash:\n<code>\nuse strict;\nuse warnings;", "    \n\
+    \    $text =~ s/\\s//g;\n    if ($text =~ s/\\s{2,}//) {\n        $text =~ s/\\\
+    s//g;\n    }\n    $text;\n}\n</code>\n<|/ a tags=perl |>\n<| c |>\nThis breaks\
+    \ consecutive spaces if one space is after a dash. Better: `s/\\s{2,}/-/g`.\n\
+    <|/ c |>\n<| a dscore=3 tags=perl |>\nI've always liked the split /\\s+/ approach.\
+    \ It's probably a little bit slower than the regex approach, but it's easy to\
+    \ read. It's also a lot more flexible if you have special cases in your text.\
+    \ I'd still go with it, though.\n<|/ a |>\n<| a tags=perl dscore=2 |>\n<code>\n\
+    $text =~ s/(\\s\\s+)//g;\n</code>\n<|/ a |>\n<| a tags=perl |>\n<code>\n$text\
+    \ =~ s/\\s*(-\\s*|\\s+)//g;\n</code>\n<|/ a dscore=2 |>\n<| c |>\n`$1` is undefined,\
+    \ so this would never work. If you want to replace with `$text`, it should be\
+    \ `s/(\\s+-|\\s+)//g`\n<|/ c |>\n<| c |>\n`$1` is defined here, just that `$text`\
+    \ is not defined. But you are right, I should have tested it.\n<|/ c |>\n<| c\
+    \ |>\n: You're right, I didn't test it. I just assumed that `$1` was defined in\
+    \ the scope of the `s///` operator, but I didn't bother testing it either way.\
+    \ The scope is still different when `$text` is undefined.\n<|/ c |>\n<| a dscore=2\
+    \ |>\n<code>\n$text =~ s/(\\s-\\s?)/$1/g;\n</code>\n<|/ a tags=perl |>\n<| a |>\n\
+    <code>\n$text =~ s/\\s{2,}/-/g;\n</code>\nThis one replaces consecutive spaces\
+    \ with -, so if your $text is \"Example   1\", it will become \"Example-1\".\n\
+    <|/ a dscore=1 tags=perl |>\n<| a tags=perl |>\nThis one works best for me:\n\
+    <code>\n$text =~ s/\\s{2,}/-/g;\n</code>\nIt replaces consecutive spaces with\
+    \ -\n<|/ a dscore=1 |>\n<| a |>\n<code>\n$text =~ s/(\\s+-\\s+|\\s+)//g;\n</code>\n\
+    <|/", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    return $text;\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| a tags=perl |>\nThis solution assumes that there are no\
+    \ consecutive spaces, and that there are no more than two consecutive spaces in\
+    \ the string.\n<code>", "    $text =~ s/ +/_/g; \n    if ( $text =~ /  +/ ) {\n\
+    \        $text =~ s/ +/_/g;\n        $text =~ s/  +/-/g;\n    }\n    return $text;\n\
+    }\n</code>\n<|/ a tags=perl,string,replace |>\n<| a |>\nUsing substitutions isn't\
+    \ the best way, but if your input string is always delimited by some character,\
+    \ for example \"#\", you can do the following:\n<code>\n$input = \"##This is some\
+    \ input##\";\n$input =~ s/(^#+)|(#+$)//g;\n</code>\nThis regular expression would\
+    \ match all characters at the beginning or the end of string that is either preceded\
+    \ and followed by \"#\", and replace it with nothing.\n<|/ a tags=perl,string,replace\
+    \ dscore=3 |>\n<| c |>\nThis can be shortened to: `s/^#+|\\#+$//g`\n<|/ c |>\n\
+    <| c |>\nNo, it cannot. It would also delete a leading or trailing #.\n<|/ c |>\n\
+    <| a dscore=3 |>\n<code>\ns/(?<!\\S)\\W+(?!\\S)/_/g;\n</code>\n<|/ a tags=perl,string,replace\
+    \ |>\n<| a |>\nIn your example, you can do this:\n<code>\nmy $string=\"this is\
+    \ my string\";\n$string =~ s/\\s/_/g;\n</code>\n<|/ a dscore=3 tags=perl,string,replace\
+    \ |>\n<| c |>\nI guess I should have mentioned that in my original post.  Sorry\
+    \ about that.  I edited it above.\n<|/ c |>\n<| c |>\nThat's still not what you\
+    \ want. If you want to replace spaces then replace them with underscores. If you\
+    \ want to replace non-spaces then you need a different solution.\n<|/ c |>\n<|\
+    \ a tags=perl,string,replace |>\n<code>\n$string =~ s/ \\w /_/g;\n</code>\n<|/\
+    \ a dscore=2 |>\n<| a |>\n<code>\ns/\\W+/_/g\n</code>\nIt will replace all consecutive\
+    \ non-word characters with _. \nIf you want a space to be replaced too, use this:\n\
+    <code>\ns/\\W+/ /g\n</code>\n<|/ a dscore=1 tags=perl,string,replace |>\n<| c\
+    \ |>\nThis will also replace consecutive spaces with a single space.\n<|/ c |>\n\
+    <| c |>\nNo, it will not. `\\W` is a negated character class, so it matches ",
+  "    $text =~ s/^\\s+|\\s+$//g;\n    $text =~ s/  +/-/g;\n    $text =~ s/_+/_/g;\n\
+    \    $text =~ s/(?<=\\s|^)_([^_])/$1_/g;\n    $text =~ s/(?<=\\s|^)_([^_])_/$1\\\
+    _/g;\n    $text =~ s/(?<=\\s|^)_([^_])-/$1_-/g;\n    $text =~ s/_([^_])_/$1\\\
+    _/g;\n    $text =~ s/_([^_])-/$1_-/g;\n    $text =~ s/(?<=\\s|^)_/-/g;\n    $text\
+    \ =~ s/(?<=\\s|^)-/-/g;\n    $text =~ s/_/-/g;\n    return $text;\n}", "    $text\
+    \ =~ s/ /_/g;\n    $text =~ s/_{2,}/_/g;\n    $text =~ s/^_//g;\n    return $text;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nYou don't need the `if` statement. Just use the\
+    \ `split` function and let it handle it for you.\n<|/ c |>\n<| c |>\nThat won't\
+    \ work, since it won't preserve spaces inside quotes.\n<|/ c |>\n<| c |>\nIt's\
+    \ a bad idea to modify the question and ask completely different ones - that's\
+    \ what the \"edit\" button is for. Just ask a new question and link to this one\
+    \ if you need.\n<|/ c |>\n<| c |>\nI edited my answer to include the quotes issue.\
+    \ Thanks for pointing that out.\n<|/ c |>\n<| a |>\nI came up with a slightly\
+    \ different approach:\n<code>", "    $text =~ s/\\s\\s+/_-_-/g; # fix consecutive\
+    \ spaces\n    $text =~ s/\\s+-+/_-_-/g; # fix consecutive dashes\n    $text =~\
+    \ s/_\\-_/-/g; # fix consecutive underscores\n    return $text;\n}", "    $text\
+    \ =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/^-+//;\n    $text =~ s/-+$//;\n\
+    \    return $text;\n}", "    my($space_or_dash) = ($text =~ m/^(\\S+)\\s+\\S+$/);\n\
+    \    my($space_or_dash_2) = $text =~ m/\\s+\\S+/s;\n    \n    return $space_or_dash\
+    \ . $space_or_dash_2;\n}", '    return unless defined($text);', "    \n    # remove\
+    \ extra spaces\n    $text =~ s/^ +//;\n    $text =~ s/ +$//;", "    local $_ =\
+    \ $text =~ s/^\\s+|\\s+$//g;\n    $text =~ s/ +/ /g;\n    if ($text =~ /^\\s*$/)\
+    \ {\n        my $i = 0;\n        my $j = 0;\n        my $l = 0;\n        my $s\
+    \ = \"\";\n        my $c = \" \";\n        while ($i < length($text)) {\n    \
+    \        if ($i == 0 || ($j > 0 && $l != $j)) {\n                $l += length($c);\n\
+    \                substr($s, 0, length($c), $c);\n            }\n            $l\
+    \ = length($c) + 1;\n            $c = \"_\";\n            $s[$i] .= $c;\n    \
+    \        $i++;\n            $j++;\n        }\n        $_ =~ s/^\\s*//;\n     \
+    \   $_ =~ s/\\s*$//;\n        $_ =~ s/\\Q$s//;\n    }\n    $_;\n}", "    return\
+    \ $text =~ s/[ ]{2,}/_/g; \n}\n</code>\n<|/ a tags=perl,string,replace |>\n<|\
+    \ a |>\nHere is an elegant solution to replace consecutive spaces with underscore.\n\
+    <code>", "    $text =~ s/ /_/g;\n    $text =~ s/ \\+/ /g;\n    return $text;\n\
+    }", "    $text =~ s/ +/ /g; # Replace all spaces with underscores\n    if ($text\
+    \ =~ /( +)/g) {  # If a string has more than 2 consecutive spaces\n        $text\
+    \ =~ s/(\\s+)(\\1)/ $1 . \"-\" ; # Replace all consecutive spaces with -\n   \
+    \ }\n    return $text;\n}", "    return $text if $text =~ /\\s+/;\n    if ( $text\
+    \ =~ /  +/ ) {\n        $text =~ s/  +/-/g;\n    }\n    return $text;\n}", " \
+    \   $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/^[ \\t]+//g;\n \
+    \   $text =~ s/[ \\t]+$//g;\n    $text =~ s/^[_\\-]+|[_\\-]+$//g;\n    return\
+    \ $text;\n}", "    \n    if($text =~ /\\s+/) {\n        $text =~ s/\\s+/_/g;\n\
+    \    }\n    \n    my $space_count = 1;\n    \n    my $prev_char = ' ';\n    my\
+    \ $curr_char = ' ';\n    \n    for(my $i = 0; $i < length($text); ++$i) {\n  \
+    \      if($text[$i] eq ' ') {\n            $space_count += 1;\n        }\n   \
+    \     else {\n            $curr_char = $text[$i];\n            $space_count -=\
+    \ 1;\n            if($space_count > 1) {\n                $text =~ s/\\Q$prev_char/$curr_char/g;\n\
+    \            }\n        }\n        \n        $prev_char = $curr_char;\n    }\n\
+    \    \n    $text;\n}\n</code>\n<|/ a tags=perl,regex |>\n<| a |>\nUse this simple\
+    \ regex to replace multiple spaces with single one in between words\n<code>\n\
+    $text =~ s/[ ]{2,}/-/g;\n</code>\n<|/ a tags=perl,regex dscore=3 |>\n<| c |>\n\
+    This does not match `\"Example 1\"`\n<|/ c |>\n<| a tags=perl,regex dscore=3 |>\n\
+    <code>\nuse strict;\nuse warnings;", "    $text =~ s/^\\s+//;\n    $text =~ s/\\\
+    s+$//;\n    $text =~ s/\\s+/-/g;\n    $text =~ s/(-+\\s+)+/-/g;\n    return $text;\n\
+    }", "    $text =~ s/^\\s+//;\n    $text =~ s/\\s+$//;\n    $text =~ s/\\s+/-/g;\n\
+    \    $text =~ s/\\s{2,}/-/g;\n    $text;\n}\n</code>\n<|/ a tags=perl,replace,regex,string\
+    \ dscore=0 |>\n<| a tags=perl,replace,regex,string |>\nI think this should do\
+    \ it.\n<code>\nuse 5.010;\nuse strict;\nuse warnings;", "    $text =~ s/^\\s+//;\n\
+    \    $text =~ s/\\s+\\z//;\n    $text =~ s/\\s+/ /g;\n    return $text if length\
+    \ $text > 2;\n    return $text =~ s/ /_/g;\n}\n</code>\n<|/ a tags=perl,regex\
+    \ |>\n<| a tags=perl,regex |>\nIf you're using Perl6 (which includes regexes such\
+    \ as \\A to anchor the pattern to the beginning of the string, \\z to anchor the\
+    \ pattern to the end of the string) you can do this:\n<code>\nperl6 -ne '\n  \
+    \  say for /\\p{space}{2,}/;\n'\n</code>\n<|/ a dscore=2 |>\n<| a tags=perl,regex\
+    \ dscore=1 |>\nIf you have problems with the regex that others have posted, try\
+    \ this:\n<code>", "    $text =~ s/\\s+/_/g;\n    if ($text =~ s/(\\s+)(\\s)(?!\\\
+    1)/$1$2/g) {\n        $text =~ s/_(\\s)/_$1/g;\n    }\n    $text;\n}\n</code>\n\
+    <|/ a dscore=2 |>\n<| a dscore=2 |>\nA simple but effective way is to replace\
+    \ all spaces outside tags with dashes. If you have tags already in place, it will\
+    \ be much simpler:\n<code>\n$text = $text =~ s/(?<=\\<)\\s*//g;\n$text = $text\
+    \ =~ s/(?<!\\<)\\s*/-/g;\n</code>\n<|/ a tags=regex,perl |>\n<| c |>\nIt will\
+    \ remove all spaces inside tags also.\n<|/ c |>\n<| c |>\nI realized that after\
+    \ I wrote this answer. Updated accordingly.\n<|/ c |>\n<| c |>\nThat regex still\
+    \ doesn't work, just as mine. I don't really want to replace all spaces, just\
+    \ spaces that appear outside a tag. I want a regex, not a substitution :)\n<|/\
+    \ c |>\n<| a dscore=1 tags=regex,perl |>\n<code>\n$string =~ s/\\([^<]*\\)/ &_html_entity($1)\
+    \ /eg;\n</code>\n<|/ a |>\n<| a tags=regex,perl |>\nHere is what I came up with\
+    \ that worked for me:\n<code>\n$string =~ s/<[^>]*?>/ /ig;\n$string =~ s/\\s{2,}/\
+    \ /g;\n$string =~ s/_/ -/g;\n</code>\n<|/ a dscore=1 |>\n<| a dscore=0 |>\n<code>\n\
+    $string =~ s/<.*?>/ /g;\n$string =~ s/_/ -/g;\n$string =~ s/\\s/ /g;\n</code>\n\
+    <|/ a tags=regex,perl |>\n<| c |>\nI really don't want to replace all the spaces.\
+    \ I just want to replace all spaces that appear outside a tag.\n<|/ c |>\n<| a\
+    \ dscore=0 |>\n<code>\n$string =~ s/<.*?>/ /g;\n$string =~ s/\\s/ /g;\n$string\
+    \ =~ s/_/ -/g;\n</code>\n<|/ a tags=regex,perl |>\n<| a |>\n<code>\n$string =~\
+    \ s/<[^>]*>/ /", "    $text =~ tr/ /_/;\n    $text =~ s/ (\\s*)/$1/;\n    $text\
+    \ =~ s/ ([\\s])/-/g;\n    return $text;\n}", "    my($spaces) = 0;\n    return\
+    \ $text if $text =~ /\\s/;\n    foreach $char (split(//, $text)) {\n        if\
+    \ ($char == \" \") {\n            $spaces += 1;\n        } elsif ($spaces > 1)\
+    \ {\n            $text = substr($text, 0, $spaces - 1) . \"-\" . substr($text,\
+    \ $spaces - 1);\n            $spaces = 1;\n        } else {\n            $spaces\
+    \ = 0;\n        }\n    }\n    return $text;\n}", "    return $text if $text !~\
+    \ /^\\w/;\n    return $text unless $text =~ /^\\s/;\n    $text =~ s/^\\s+//;\n\
+    \    $text =~ s/\\s+$//;\n    return $text if $text !~ /--$/;\n    $text =~ s/(?<=^|$)\\\
+    s{2,}/-/;\n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/_/ /g;\n\
+    \    $text =~ s/_+/_/g;\n    $text =~ s/_{1,2}//g;\n    $text =~ s/^_//g;\n  \
+    \  $text =~ s/_$//g;\n    $text;\n}", "    \n    $text =~ s/ /_/g;", "    \n \
+    \   $text =~ s/\\s/_/g;\n    $text =~ s/(\\s+)\\1{2,}/_-/g;\n    \n    return\
+    \ $text;\n}\n</code>\n<|/ a tags=perl,perl-data-structures dscore=4 |>\n<| c |>\n\
+    It seems like it would be best to return the number of consecutive spaces replaced,\
+    \ rather than return the whole string and have the caller do another replace.\n\
+    <|/ c |>\n<| c |>\nThat's true.\n<|/ c |>\n<| a |>\nThis is just my two cents:\n\
+    <code>", "    $text =~ s/ /_/g;\n    $text =~ s/ +/_/g;\n    $text =~ s/_+/_/g;\n\
+    \    $text =~ s/_{1,}//g;\n    return $text;\n}", "    \n    return $text unless\
+    \ defined($text);\n    \n    $text =~ tr/ /_/;\n    if ( $text =~ tr/  /-/ ) {\n\
+    \        $text =~ tr/ /-/;\n    }\n    return $text;\n}", "    $text =~ tr/  /-/g;\n\
+    \    $text =~ s/ +(?!$)//g;\n    return $text;\n}", "    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/(\\s+){2,}/-/g;\n    return $text;\n}\n</code>\n<|/ a dscore=1\
+    \ tags=string,perl,replace,regex |>\n<| c |>\nI tried to implement this, but it\
+    \ didn't quite work. I ended up with 'Example-_3'. Could you provide an explanation\
+    \ as to why?\n<|/ c |>\n<| c |>\n`s/\\s+/-/g` matches `1+ whitespace`, replace\
+    \ with `_`. See http://ideone.com/3iEy9\n<|/ c |>\n<| c |>\nThanks! I used $text\
+    \ =~ s/\\s+/-/g; $text =~ s/(\\s+){2,}/-/g; and that worked!\n<|/ c |>\n<| c |>\n\
+    Oops, sorry. I missed the other solution in the edit history. I've added your\
+    \ solution as well, thanks.\n<|/ c |>\n<| a dscore=1 |>\nHere is a simple one:\n\
+    <code>\n$text =~ s/(^\\s*)//;\n$text =~ s/\\s*$//;\n</code>\n<|/ a tags=string,perl,replace,regex\
+    \ |>\n<| c |>\nHow about `s/[\\n\\r]/\\n/g;`? :)\n<|/ c |>\n<| a dscore=0 |>\n\
+    Here is a generic solution:\n<code>\nuse strict;\nuse warnings;", "    $text =~\
+    \ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/(?<=(\\w)(\\w)\\w)\\s+(?=\\\
+    w(\\w)\\w)/$1---$2/g;\n    return $text;\n}\n</code>\n<|/ a dscore=3 |>\n<| c\
+    \ |>\nThis seems to be the most concise solution and it worked perfectly.\n<|/\
+    \ c |>\n<| a |>\nIt can be done with substr:\n<code>\n$text =~ s/ /_/g;\n$text\
+    \ =~ s/ +/_/g;\n$text =~ s/^(_+)/$1/;\n</code>\n<|/ a tags=perl,regex,substitution\
+    \ dscore=3 |>\n<| c |>\n: Yeah, I was trying to come up with a way to do it without\
+    \ using another `s///` but I couldn't come up with a way to do it.  I figured\
+    \ it would be faster than `s///` since the patterns would be compiled once versus\
+    \ twice for each substitution.\n<|/ c |>\n<| c |>\nWhat would be the reason to\
+    \ use `$text =~ s/^(_+)/$1/;` instead of the simpler `$text =~ s/^(_+)/$1/;` ?\n\
+    <|/ c |>\n<| c |>\nThe second s/// is redundant.  Also, you can write `s/^(_+)/$1/`\
+    \ as `s/^(_+)//`.\n<|/ c |>\n<| a tags=perl,regex,substitution dscore=3 |>\nYou\
+    \ could use negative look-ahead:\n<code>\n$text =~ s/ /_/g;\n$text =~ s/ +/_/g;\n\
+    $text =~ s/(?<=(\\w)(\\w)\\w)\\s+(?=\\w(\\w)\\w)/$1---$2/g;\n</code>\n<|/ a |>\n\
+    <| a dscore=2 |>\nAnother way:\n<code>\n$text =~ s/(\\w+)\\s+(\\w+)/$1-$2/;\n\
+    </code>\n<|/ a tags=perl,regex,substitution |>\n<| c |>\nThanks for your input.\
+    \ I am getting an undefined subroutine error. Could you help me figure out why?\n\
+    <|/ c |>\n<| c |>\n: I missed a pair of parens.  Try now.\n<|/ c |>\n<| a tags=perl,regex,substitution\
+    \ |>\nThis is an old question but it still ranks high on my google search.\nI\
+    \ needed a ", "    return $text unless $text =~ /\\s/;\n    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/_{2,}/-/g;\n    return $text;\n}", "    return $text unless $text;\n\
+    \    $text =~ s/ /_/g;\n    $text =~ s/  +/_/g;\n    return $text;\n}", "    $text\
+    \ =~ s/ /_/g;\n    $text =~ s/ +/ -/g if $text !~ /^\\s+$/;\n    $text;\n}\n</code>\n\
+    <|/ a dscore=3 |>\n<| a dscore=3 tags=perl,regex |>\nI tend to prefer to use Regexp::Assemble,\
+    \ but here's a more readable way:\n<code>\n$text =~ s/\\s+/_/g;\n$text =~ s/_{2,}/_/g;\n\
+    </code>\n<|/ a |>\n<| a dscore=2 |>\nThe fastest way I've found to do this is\
+    \ by using Regexp::Assemble:\n<code>\nmy $assemble = qr{(?-x:^\\s+$)};\n$text\
+    \ =~ s/$assemble/$_/g;\n</code>\nI should also note that if you don't need to\
+    \ worry about $text being undefined, you can use:\n<code>\nmy $assemble = qr{(?-x:^\\\
+    s+$)};\n$text =~ s/$assemble/${_}/g;\n</code>\nBut this will fail if $text is\
+    \ undefined when $_ is, and will even give a different error if it does.\n<|/\
+    \ a tags=perl,regex |>\n<| a dscore=2 |>\n<code>\nuse Text::Trim;\n$text =~ s/\\\
+    s+\\K/_/g;\n$text =~ s/_\\K\\s+//g;\n</code>\n<|/ a tags=perl,regex |>\n<| a dscore=1\
+    \ |>\n<code>\n$text =~ s/ /_/g; # replace all spaces\n$text =~ s/ /_/g; # replace\
+    \ all spaces again\n</code>\nBut this second replacement is unnecessary.\n<code>\n\
+    $text =~ s/ /_/g; # replace all spaces\n$text =~ s/_//g; # replace all underscores\n\
+    </code>\nThe substitution is only necessary if there is more than one underscores\
+    \ in the string.\n<|/ a tags=perl,regex |>\n<| c |>\nThis doesn't work if the\
+    \ string contains multiple underscores like `abc def` will turn into `abc_def`\n\
+    <|/ c |>\n<| c |>\n: I fixed the answer.\n<|/ c |>\n<| c |>\nThis isn't actually\
+    \ true. `s/ /_/g;` will replace all spaces with an underscore (like he wants).\
+    \ It doesn't matter if there are multiple spaces. `s/ /_/g;` followed by `s/_//g;`\
+    \ will result in `", "    $text =~ s/ /_/g;\n    my $spaces = $text =~ s/\\s{1,}/_-_-/g;\n\
+    \    return $spaces unless $spaces > 2;\n    return $text =~ s/\\s{1,}/-/g;\n}",
+  "    s/ /_/g;\n    my $count = 0;\n    $text =~ s/ +/-/g;\n    $text =~ s/_(?=(_|_))/-/g;\n\
+    \    while($text =~ /-(?=_)/g) {\n        $count++;\n    }\n    return $text if\
+    \ $count > 1;\n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/\
+    \ (\\s)/_\\1/g;\n    $text =~ s/([^\\s]{2,})/$1_/g;\n    return $text;\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nThis is not working with some special characters like\
+    \ \xF1 \xA7\xA8\xB6\xAB\xCD\xAD\xB5\xC9\n<|/ c |>\n<| a tags=perl dscore=0 |>\n\
+    This might be what you want:\n<code>", "    my $spaces = ' ';\n    my $underscores\
+    \ = '_';\n    my $hyphens = '-';\n    $text =~ s/ $spaces//g;\n    $text =~ s/\
+    \ $underscores//g;\n    $text =~ s/ $hyphens//g;\n    $text =~ s/^_/-/g;\n   \
+    \ $text =~ s/^_+/_/g;\n    $text =~ s/_+$//g;\n    return $text;\n}", "    $text\
+    \ =~ s/\\s\\+/_/g;\n    if ($text !~ s/\\s\\+/_/g) {\n        $text =~ s/\\s\\\
+    +/_/g;\n    }\n    return $text;\n}\n</code>\n<|/ a |>\n<| c |>\nThanks for your\
+    \ help! I actually used another solution but this is really cool. I never knew\
+    \ about these 2 flags in regexes :)\n<|/ c |>\n<| a dscore=1 |>\nHere's my two\
+    \ cents:\n<code>", "    if ( $text =~ s/^\\s*//g ) {\n        $text =~ s/\\s+/_/g;\n\
+    \    }\n    if ( $text =~ s/\\s\\s+/-/g ) {\n        $text =~ s/\\s\\s+/-/g;\n\
+    \    }\n    return $text;\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThis does not\
+    \ seem to work, even with the function changed to `sub fix_spaces {\n    my($text)\
+    \ = @_;\n    my $len = length($text);\n    while ($len > 2) {\n        $text =~\
+    \ s/\\s(\\s|$)/_$1/;\n        $len--;\n    }\n    return $text;\n}` . I get the\
+    \ error `syntax error at ./test.pl line 18, near \"s/\\s(\\s|$)/_$1/;\"` which\
+    \ I don't understand.\n<|/ c |>\n<| c |>\n: That is strange; it works for me in\
+    \ Perl v5.10.0 and 5.16.0 running on Mac OS X 10.9.1.\n<|/ c |>\n<| a |>\n<code>",
+  "    $text =~ s/\\s/_/g;\n    $text =~ s/\\s\\+/ /g;\n    $text =~ s/\\s/-/g;\n\
+    \    $text =~ s/_-/ /g;\n    $text =~ s/_-/-/g;\n    $text =~ s/_-_/ /g;\n   \
+    \ $text =~ s/_-_/-/g;\n    $text =~ s/_-_-/ /g;\n    $text =~ s/_-_-/-/g;\n  \
+    \  $text =~ s/_-_-_/ /g;\n    $text =~ s/_-_-_/-/g;\n    $text =~ s/_-_-_-/ /g;\n\
+    \    $text =~ s/_-_-_-/-/g;\n    $text =~ s/_-_-_-_/ /g;\n    $text =~ s/_-_-_-_/-/g;\n\
+    \    $text =~ s/_-_-_-_-/ /g;\n    $text =~ s/_-_-_-_-/-/g;\n    $text =~ s/_-_-_-_-_/\
+    \ /g;\n    $text =~ s/_-_-_-_-_/-/g;\n    $text =~ s/_-_-_-_-_-/ /g;\n    $text\
+    \ =~ s/_-_-_-_-_-/-/g;\n    $text =~ s/_-_-_-_-_-_/ /g;\n    $text =~ s/_-_-_-_-_-_/-/g;\n\
+    \    $text =~ s/_-_-_-_-_-_-/ /g;\n    $text =~ s/_-_-_-_-_-_-/-/g;\n    $text\
+    \ =~ s/_-_-_-_-_-_-_-/ /g;\n    $text =~ s/_-_-_-_-_-_-_-/-/g;\n    return $text;\n\
+    }", "    \n    $text =~ s/ /_/g;\n    $text =~ s/(\\s\\s+)/ /g;\n    \n    if\
+    \ ($text =~ s/\\s/-/g) {\n        $text =~ s/-{2,}/ -/g;\n    }\n    return $text;\n\
+    }", "    return unless defined $text;\n    $text =~ s/ /_/g;\n    $text =~ s/_{2,}/-/g;\n\
+    \    $text;\n}\n</code>\n<|/ a tags=perl,regex dscore=2 |>\n<| c |>\nYes, this\
+    \ is what I was trying to get at, but for some reason I thought `+` wasn't allowed.\n\
+    <|/ c |>\n<| c |>\nYes, `+` means \"one or more of the previous thing\", which\
+    \ you don't want in this case. You'd normally use `*` or `{x,y}`.\n<|/ c |>\n\
+    <| c |>\nI thought that was what I was trying to get at too. I don't know why\
+    \ I thought `+` was the way to go. Thanks for the help!\n<|/ c |>\n<| a dscore=2\
+    \ tags=perl,regex |>\nI like using Regexp::Assemble for complex string replacements.\
+    \ \n<code>", "    $text =~ s/ /_/g;\n    $text =~ s/^_//g;\n    $text =~ s/ _$//g;\n\
+    \    return $text;\n}", "    my($spaces) = 0;\n    \n    for(split(/\\s+/, $text))\
+    \ {\n        if( $spaces ) {\n            $_ .= \"-\" x $spaces;\n        }\n\
+    \        $spaces = 0 if length($_);\n        $_ =~ tr/ /_/;\n        $spaces++\
+    \ if length($_);\n    }\n    \n    return $text;\n}\n</code>\n<|/ a tags=perl\
+    \ |>\n<| a tags=perl |>\nThis solution will replace all spaces and tabs with underscores\
+    \ while preserving the case of all letters:\n<code>\ns/\\W+//g;\n</code>\n<|/\
+    \ a dscore=2 |>\n<| a |>\nUse a regular expression to replace spaces with underscores,\
+    \ while preserving the case of the letters:\n<code>\n$subject =~ s/ /_/g;\n</code>\n\
+    <|/ a tags=perl dscore=1 |>\n<| c |>\nThis doesn't preserve the case of the letters.\n\
+    <|/ c |>\n<| a tags=perl |>\nYou can use tr:\n<code>\nprint \"hello  world\" |\
+    \ tr/ /_/\n</code>\n<|/ a dscore=1 |>\n<| a tags=perl dscore=1 |>\nIn general,\
+    \ I'd use tr///, but if you want to do it with split, try this:\n<code>", "  \
+    \  $text =~ s/  +/ /g;\n    $text =~ s/ +/ /g;\n    return $text if $text !~ /^[_a-zA-Z0-9]+$/;\n\
+    \    my $i = 0;\n    my $j = 0;\n    my $space;\n    my $repl = \"\";\n    for\
+    \ (my $i = 0; $i < length($text); $i++) {\n        $space = $text[$i];\n     \
+    \   last if ($i == length($text) - 1);\n        next if ($text[$i + 1] == \" \"\
+    );\n        if ($space eq \" \") {\n            $repl = \"_\";\n            $i++;\n\
+    \        }\n        else {\n            $repl = $space;\n        }\n        $text[$i]\
+    \ = $repl;\n    }\n    return $text;\n}", "    \n    $text =~ s/ /_/g;\n    \n\
+    \    if ($text !~ /[\\s]{2,}/ ) {\n        $text =~ s/\\s+/_/g;\n    }\n    \n\
+    \    $text =~ s/_\\s/-/g;\n    return $text;\n}", "    $text =~ s/ /_/g;\n   \
+    \ $text =~ s/^\\s*//g;\n    $text =~ s/\\s*$//g;\n    $text =~ s/(?<!\\S)\\s((?!\\\
+    S)\\s)/-/g;\n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/ (?=(?:[^\
+    \ ]* ){2})/_/g;\n    return $text;\n}", "    \n    # $text is modified in the\
+    \ sub, so make a copy here\n    my $text_copy = $text;\n    \n    while($text\
+    \ =~ /\\s+/) {\n        # replace each space with _\n        $text =~ s/\\s+/_/g;\n\
+    \    }\n    \n    # replace all consecutive spaces with -\n    while($text =~\
+    \ /\\s{2,}/) {\n        $text =~ s/\\s{2,}/-/g;\n    }\n    \n    return $text_copy;\n\
+    }", "    s/  +/ /g;\n    s/(?<! )(  +)  +(?! )/ -/g;\n    return $text;\n}", " \
+    \   \n    local $_ = lc $_;", "    $text =~ s/  +/\\_/g;\n    $text =~ s/(^_+)\\\
+    s(.+?_+)(\\1)/$1$2$3/;\n    $text =~ s/(^_+)\\s(.+?_+)(\\1)/$1$2$3/;\n    $text\
+    \ =~ s/(^_+)(.+?_+)(\\1)/$1$2$3/;\n    $text =~ s/(^_+)(.+?_+)(\\1)/$1$2$3/;\n\
+    \    return $text;\n}", "    my $fixed_text = \"\";\n    $text =~ s/\\s+/_/g;\n\
+    \    $text =~ s/\\s/-/g;\n    $fixed_text .= $text if $text ne \"\";\n    $fixed_text\
+    \ .= \"-\" while $text !~ /-\\s*$/;\n    return $fixed_text;\n}\n</code>\n<|/\
+    \ a tags=perl,linux |>\n<| c |>\nThanks, this works well on some input strings,\
+    \ but on others it doesn't. I am testing on some input strings now. I am running\
+    \ into an issue where the string has two consecutive spaces, not two, or the string\
+    \ is empty, but still has a dash afterwards. I will update my original question\
+    \ to show where I am running into this issue.\n<|/ c |>\n<| c |>\nI added some\
+    \ examples on when this doesn't work. Thanks\n<|/ c |>\n<| c |>\nYes, I figured\
+    \ out my issue. I was having trouble with the regex. Thanks again.\n<|/ c |>\n\
+    <| a tags=perl,linux |>\nThis is one way to go:\n<code>\nuse strict;\nuse warnings;",
+  "    s/\\s+/-/g;\n    my $num_spaces = $text =~ s/\\s//g;\n    $text =~ s/^-/-/g;\n\
+    \    if ($num_spaces > 2) {\n\t$text =~ s/\\-+/_/g;\n\t$text =~ s/\\-+$//;\n \
+    \   }\n    return $text;\n}", "    $text =~ tr/ /_/;\n    $text =~ s/( +)/ $1\
+    \ /mx; \n    $text =~ s/^[^a-zA-Z]*//;\n    return $text;\n}", "    \n    $text\
+    \ =~ s/ /_/g;\n    \n    # Fix multiple spaces next to each other\n    while(\
+    \ $text =~ /  +/g ) {\n        $text =~ s/  +/_/g;\n    }", "    \n    $text =~\
+    \ s/ +/_/g;\n    $text =~ s/\\s{2,}/_/g;\n    $text =~ s/_\\s/-/g;\n    \n   \
+    \ return $text;\n}", "    $text =~ s{\\s+}{_}g;\n    $text =~ s/\\s+(-+)/ $1/sg;\n\
+    \    return $text;\n}", "    \n    # Replace all spaces with underscores\n   \
+    \ $text =~ s/ /_/g;\n    \n    # Make sure there's more than one consecutive space\n\
+    \    if ($text =~ /  +/ ) {\n        # Replace all consecutive spaces with -\n\
+    \        $text =~ s/ +/ -/g;\n    }\n    \n    return $text;\n}", "    while($text\
+    \ =~ /\\s+/g) {\n        if($text =~ /\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\\
+    s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s\\s", "    $text =~ s/ /_/g;\n    $text =~\
+    \ s/( +)/ -/g;\n    return $text;\n}", "    $text =~ s/\\s+/_/g;\n    $text =~\
+    \ s/_{2,}/ -/;\n    return $text;\n}", "    $text =~ s/ ([\\n\\t ]+)/_/g;\n  \
+    \  $text =~ s/ ([\\n\\t ]+) ([\\n\\t ]+)/$1$2/g;\n    $text =~ s/ ([\\n\\t ]+)\
+    \ (\\n)/$1$2$3/;\n    $text =~ s/ [\\n\\t ]+/_/g;\n    $text =~ s/_$//g;\n   \
+    \ return $text;\n}\n</code>\n<|/ a tags=perl |>\n<| c |>\n: It doesn't seem to\
+    \ work, at least when used with `-I`\n<|/ c |>\n<| a dscore=1 tags=perl |>\n<code>",
+  "    $text =~ s/ /_/g;\n    $text =~ s/(\\s+)/ -$1 /g;\n    $text;\n}", "    $text\
+    \ =~ s/ /_/g;\n    $text =~ s/  +/_/g;\n    $text =~ s/ +/_/g;\n    $text =~ s/^_//;\n\
+    \    return $text;\n}\n</code>\nThe last one is obviously a little more flexible,\
+    \ as it can detect if the current word is too long to fit within the current line\
+    \ and break into multiple lines if it does.\n<|/ a dscore=5 tags=string,perl,replace,regex\
+    \ |>\n<| c |>\nThis is very useful for dealing with output from some commands,\
+    \ where it would be useful to output the results to a file and have the output\
+    \ file contain the correct spacing rather than output spaces so you can read them\
+    \ in another program.\n<|/ c |>\n<| c |>\nI like your idea of just using the `\\\
+    s` character class to match whitespace and not have to worry about whether it\
+    \ is there or not in the string.  However, I do not like the idea of replacing\
+    \ sequences of 2 or more spaces with a single dash.  It doesn't seem like the\
+    \ most robust solution.  You might consider replacing sequences of 2 or more spaces\
+    \ with dashes followed by a space, leaving the other sequences alone.\n<|/ c |>\n\
+    <| c |>\nGood point. Yeah, I didn't want to try to go into much detail about how\
+    \ to approach that problem - but I was also not sure whether I wanted to force\
+    \ a requirement on OPs input (for example, that all strings have at least one\
+    \ space, or just that there are at least 2 consecutive spaces). I think it's reasonably\
+    \ clear to me that a substitution that doesn't remove spaces is perfectly valid,\
+    \ and that any reasonable replacement could be devised from that idea.\n<|/ c\
+    \ |>\n<| c |>\nYes, I agree that `\\s` would probably be the way to go if it were\
+    \ really a one-off.  However, in my experience it's not easy to determine when\
+    \ a regex is going to be too long for the regex.  When that happens, you can either\
+    \ 1) break the regex into smaller pieces until it fits on one line or 2) run it\
+    \ through a series of regexes until you get something that works without breaking\
+    \ the regex too much.  The latter approach is probably preferable in most cases.\n\
+    <|/ c |>\n<| c |>\nI usually just use `tr/[ ]/-/`\n<|/ c |>\n<| a tags=string,perl,replace,regex\
+    \ dscore=5 |>\nI wrote a Perl script that replaces spaces by underscores and dashes.\
+    \ You can find it here: https://github.com/yoderis/perl-string-replacements\n\
+    <|/ a |>\n", "    my $fixed_text = \"\";\n    \n    my ($i, $j) = pos( $text );\n\
+    \    my $consecutive = 0;\n    while( $i < $j ) {\n        if ( $text[$i] == '\
+    \ ' ) {\n            $fixed_text .= \"_\";\n        }\n        else {\n      \
+    \      $fixed_text .= $text[$i];\n        }\n        $i++;\n    }\n    \n    while(\
+    \ $i < $j ) {\n        if ( $text[$i] == '  ' ) {\n            $fixed_text .=\
+    \ \"-\";\n        }\n        else {\n            $fixed_text .= $text[$i];\n \
+    \       }\n        $i++;\n    }", "    $text =~ s/\\s+/-/g;\n    my $last = -1;\n\
+    \    for my $space ( ' ', '\\t') {\n        my $pos = $text =~ /(?<!^)($space)(?!$space)/g;\n\
+    \        if ($pos && $pos != $last) {\n            $text =~ s/(?<!^)($space)(?!$space)/-/g;\n\
+    \            $last = $pos;\n        }\n    }\n    $text =~ s/^-//g;\n    $text\
+    \ =~ s/-$//g;\n    return $text;\n}\n</code>\n<|/ a tags=perl dscore=4 |>\n<|\
+    \ a tags=perl dscore=4 |>\n<code>\nuse strict;\nuse warnings;", "    \n    $text\
+    \ =~ tr/ /_/;\n    \n    if ($text !~ /^(\\s+)\\1+$/) {\n        $text .= \"-\"\
+    ;\n    }\n    \n    return $text;\n}", "    my ($space_count, $replace) = @_;\n\
+    \    return $text unless defined $text;\n    $space_count ||= 0;\n    if ($text\
+    \ =~ /\\s+/) {\n        $space_count++;\n        return $text if $space_count\
+    \ > 2;\n    }\n    $text =~ s/^\\s+//;\n    $text =~ s/\\s+$//;\n    $text =~\
+    \ s/\\s+/-/g;\n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/([^\
+    \ ])/ -$1/ while $text =~ s/\\s{2,}/-/g;\n    return $text;\n}", "    $text =~\
+    \ s/ /_/g;\n    $text =~ s/\\s{2,}//g;\n    $text =~ s/\\s\\s/-/g;\n    return\
+    \ $text;\n}", "    $text =~ s/ /_/g;\n    $text =~ s/ +/-/g;\n    $text =~ s/^_//;\n\
+    \    return $text;\n}", "    local $_ = \" \";\n    \n    # Remove leading spaces.\n\
+    \    s/^\\s+//;", "    local $_ = lc($_);\n    $text =~ s/ (\\S+) /$1/g;\n   \
+    \ $text =~ s/ ([^\\s][\\s\\S]+) /$1/g;\n    $text =~ s/ ([^\\s])/$1/g;\n    $text\
+    \ =~ s/ (\\S)/ $1/;\n    $text =~ s/ (\\S)/ $1/;\n    $text =~ s/ \\s /-/g;\n\
+    \    $text =~ s/^[-_]/-/;\n    $text =~ s/^-[-_]/-/;\n    $text =~ s/--/-/;\n\
+    \    $text =~ s/__/-/;\n    $text =~ s/-\\-/-/;\n    $text =~ s/-_-/-/;\n    $text\
+    \ =~ s/^-$/-/;\n    $text =~ s/^$/-/;\n    return lc($text);\n}", "    $text =~\
+    \ s/ /_/g;\n    if ( $text =~ /  +/ ) {\n        $text =~ s/ +/ -/;\n    }\n \
+    \   return $text;\n}\n</code>\n<|/ a |>\n<| c |>\nYour code has some unnecessary\
+    \ backslashes throughout. I suggest `s/ +/ -/g`, which does not add any backslashes.\n\
+    <|/ c |>\n<| c |>\nThe OP's code had unnecessary backslashes in some places and\
+    \ backslashes in others, just like you said. I tried to be explicit, though, since\
+    \ that made it a little more clear what was going on.\n<|/ c |>\n<| a tags=perl,regex\
+    \ dscore=2 |>\nI like these answers (upvoted). However, for my own needs I often\
+    \ find that for my use case I can also use \"lookahead\" and \"lookbehind\" conditional\
+    \ statements which is very useful and makes the code more readable especially\
+    \ when compared to regular expressions.\n<code>\nif ($string=~/(?<=\\s|^)(?!\\\
+    s)\\s/) {\n    $string =~ s/\\s+/-/g;\n}\n</code>\n\"Lookahead\" conditional statement\
+    \ checks to see if the character before the next space is whitespace(\\s+) or\
+    \ the beginning of the string (\\s).\n\"Lookbehind\" conditional statement checks\
+    \ to see if the character before the next character in the string is a whitespace\
+    \ character or beginning of the string.\nThe conditional statement is basically\
+    \ saying if the character before the next space is a whitespace character or beginning\
+    \ of the string then replace it with a hyphen (-)\n<|/ a |>\n<| a tags=perl,regex\
+    \ dscore=1 |>\nIn case you want the regex to behave differently when there is\
+    \ no space before a dash, you can use something like:\n<code>\ns/(?<=\\s|^)\\\
+    s/-/g\n</code>\n<|/ a |>\n<| c |>\nI think you meant `(?<=\\s|^)\\s/` instead\
+    \ of `(?<=^\\s|^)\\s/`\n<|/ c |>\n<| a dscore=0 |>\n<code>\nmy ($str)=;\nmy =\
+    \ split /\\s+ /, $str;\nfor my $x (@split) {\n    $x =~ s/\\s+/-/;\n}\n$str =~\
+    \ s/\\s/-/;\n</code>\n<|/ a tags=perl,regex |>\n<| a tags=perl,regex |>\n<code>\n\
+    s/(?<=\\s|^)\\s/-/g\n</code>\n<|/ a dscore=0 |>\n<| a ", "    $text =~ s/ \\+/_/g;\n\
+    \    $text =~ s/ \\{2,\\}/-/g;\n    return $text;\n}\n</code>\n<|/ a |>\n<| c\
+    \ |>\nThanks, it works! I modified it a little bit to match my input as much as\
+    \ I could: $text =~ s/ \\{2,\\}/-/g;\n<|/ c |>\n<| c |>\n: Cool, thanks for the\
+    \ update. I have fixed it accordingly.\n<|/ c |>\n<| a tags=perl |>\nHere's a\
+    \ perl solution, which will allow you to specify exactly how many spaces you want\
+    \ to replace:\n<code>", "    $text =~ s/^\\s*(.*?)\\s*(.*?)\\s*$/\\1_\\2_/;\n\
+    \    return $text if length($text) > 2;\n    $text =~ s/^\\s*(.*?)\\s+(.*?)\\\
+    s*$/\\1_\\2/;\n    return $text if length($text) > 1;\n    return $text;\n}",
+  "    if ($text =~ /  +/g) {\n        $text =~ s/  +/_/g;\n    } else {\n       \
+    \ $text =~ s/ +/_/g;\n    }\n    $text =~ s/_{2}//g;\n    return $text;\n}", " \
+    \   $text =~ s/\\s+/_/g;\n    $text =~ s/\\s+\\Z//g;\n    return $text;\n}\n</code>\n\
+    <|/ a tags=string,perl |>\n<| a tags=string,perl |>\n<code>\nmy $str = \"Hello\
+    \  World\";", "    $text =~ s/\\s+/_/g;\n    if ($text =~ /^(\\s*)/ && $text !~\
+    \ /\\1/) {\n        $text =~ s/(\\s)+/-$1/;\n    }\n    return $text;\n}", " \
+    \   $text =~ s/[ ]{2,}/ /g;\n    $text =~ s/\\s//g;\n    if (length($text) > 2)\
+    \ {\n        $text =~ s/\\s{2,}/_/g;\n    }\n    return $text;\n}\n</code>\n<|/\
+    \ a |>\n<| a tags=string,perl |>\n<code>", "    return unless defined($text);\n\
+    \    return unless $text =~ /[[:space:]]/;\n    return $text =~ s/\\s+/_/g;\n\
+    \    return $text =~ s/(\\s+)/_\\L$1/g;\n}", "    $text =~ s/\\s+/_/g;\n    $text\
+    \ =~ s/\\s+/-/g;\n    $text =~ s/_\\B\\B/_/g;\n    $text =~ s/_\\B\\B/-/g;\n \
+    \   return $text;\n}", "    my $fixed = $text;\n    $fixed =~ s/^\\s+//;\n   \
+    \ $fixed =~ s/\\s+$//;\n    $fixed =~ s/\\s+/ _/g;\n    $fixed =~ s/ +/_/g;\n\
+    \    return $fixed;\n}", "    my $fixed_text = \"\";\n    $text =~ s/ +/_/g;\n\
+    \    if ($text =~ /^(.)\\s{2,}/) {\n        $fixed_text .= \"_$1\"; \n    } else\
+    \ {\n        $fixed_text .= $text; \n    }\n    $fixed_text;\n}", "    \n    $text\
+    \ =~ s/ /_/g;\n    \n    while($text =~ s/\\s{2,}/ /g) {\n        $text =~ s/\
+    \ /_/g;\n    }\n    \n    return $text;\n}", "    $text =~ s/ /_/g;\n    $text\
+    \ =~ s/\\s{2,}/_/g;\n    $text =~ s/_\\s/-/g;\n    return $text;\n}", '    my($text_with_replacements);',
+  "    \n    # First get rid of any consecutive spaces.\n    $text =~ s/\\s+/_/g;\n\
+    \    \n    # Then get rid of any sequences of more than 2 consecutive spaces.\n\
+    \    $text =~ s/ ([^ ]+ ){2,}/_/g;\n    \n    return $text;\n}\n</code>\n<|/ a\
+    \ tags=replace,perl dscore=4 |>\n<| c |>\nThis answer is incomplete.\n<|/ c |>\n\
+    <| c |>\n`s/ /_/g;` will replace multiple spaces with one space, which is not\
+    \ what the OP wants.\n<|/ c |>\n<| a dscore=3 |>\nThis will only replace a space\
+    \ with underscores (and no other whitespace) and leave any non-space untouched:\n\
+    <code>\n$text =~ s/ /_/g;\n</code>\n<|/ a tags=replace,perl |>\n<| c |>\nThis\
+    \ is incomplete, as it replaces all spaces including consecutive spaces.\n<|/\
+    \ c |>\n<| a tags=replace,perl |>\n<code>\n$text =~ s/ /_/g;\n</code>\nwill replace\
+    \ all whitespaces with underscores, and it also replaces consecutive whitespaces\
+    \ with a single underscore.\n<|/ a dscore=2 |>\n<| c |>\nThis is the correct answer\
+    \ - this is why I always put the spaces in my regexes.\n<|/ c |>\n<| c |>\nYes,\
+    \ but this answer has the unneeded space in it, which makes it incorrect.\n<|/\
+    \ c |>\n<| a dscore=2 |>\nThis is one of those rare occasions when I'd rather\
+    \ avoid using Perl regexes altogether. Perl's regexps can do most things you can\
+    \ achieve by hand. Here are some examples:\n<code>", "    $text =~ tr/ /_/g;\n\
+    \    if ($text !~ /  /g) {\n        $text =~ s/  +/ -/g;\n    }\n    return $text;\n\
+    }\n</code>\nThe above is what I have used many times. I try to avoid using tr/\
+    \ for such a simple thing - but I do recall that using it had some undesired side\
+    \ effects.\n<|/ a dscore=2 tags=perl |>\n<| c |>\n: Yes, it does. I just tested\
+    \ it and it does. Not that much to it. You could probably write a one-liner using\
+    \ regex but I wanted to keep things simple.\n<|/ c |>\n<| c |>\n: I did a test.\
+    \ Your first solution didn't work. It did replace _spaces_ with _ - _spaces_.\
+    \ Your second solution didn't replace _spaces_ with _spaces_. Your third solution\
+    \ doesn't work and it returns _Example_1 instead of Example_1.\n<|/ c |>\n<| c\
+    \ |>\n: In Perl, a one-liner is a block of code that is just on one line, not\
+    \ a line like `my $one = <STDIN>; my $two = <STDIN>; my $three = <STDIN>; my $four\
+    \ = <STDIN>; $three = $two . \"_\" . $four; print $three;`.\n<|/ c |>\n<| c |>\n\
+    : Thank you very much. I would never have figured this out by myself.\n<|/ c |>\n\
+    <| c |>\n: Be sure to check the code I posted. It works fine for me (apart from\
+    \ the bugs that I already pointed out).\n<|/ c |>\n<| a tags=perl |>\nHere's another\
+    \ solution using Regexp::Common:\n<code>\nuse strict;\nuse warnings;\nuse Regexp::Common\
+    \ qw/tr/;", "    $text =~ s/ /_/g;\n    if ($text =~ s/\\s{2,}/_/g) {\n\t$text\
+    \ =~ s/_\\s/-/g;\n    }\n    $text;\n}\n</code>\n<|/ a dscore=5 |>\n<| c |>\n\
+    This solution worked perfectly for me. My problem was that I needed two consecutive\
+    \ spaces to become one in HTML, and I needed to convert all double spaces to singles\
+    \ spaces before I sent the text to the server and use an HTML preprocessing filter\
+    \ to convert to HTML spaces.\n<|/ c |>\n<| c |>\nI used your method but with a\
+    \ slight modification: \nif ($text =~ s/\\s{2,}/_/g) {\n $text =~ s/_\\s/-/g;\n\
+    }\n<|/ c |>\n<| c |>\nThanks for this! I used it with slight modification: if\
+    \ ($text =~ s/\\s{2,}/_/g) { $text =~ s/_\\s/-/g; } as I had to convert double\
+    \ spaces to singles spaces to pass it on to another application.\n<|/ c |>\n<|\
+    \ c |>\nPerfect solution, thanks. I needed this for parsing a form field for another\
+    \ application.\n<|/ c |>\n<| c |>\nThis is nice, but what about cases where you're\
+    \ replacing `' '` with `'-'` and `' '` with `'_'`?\n<|/ c |>\n<| a dscore=5 |>\n\
+    <code>\n$str =~ s/\\s{2,}/_/g;\n</code>\nThis replaces 2 or more spaces with _,\
+    \ you can change this to suit your needs.\n<|/ a tags=replace,perl,regex |>\n\
+    <| c |>\nThis was perfect for my situation, i just needed a 2 spaces to become\
+    \ one in a string. thank you!\n<|/ c |>\n<| c |>\nThis is also a great answer,\
+    \ as it will replace 2 or more spaces with _ in the middle of words as well.\n\
+    <|/ c |>\n<| a |>\nIf you just want to replace one or more  whitespace char with\
+    \ an underscore, this will do it:\n<code>\n$str =~ s/\\s+/_/g;\n</code>\n<|/ a\
+    \ dscore=5 tags=replace,perl,regex |>\n<| a dscore=5 |>\nI personally found the\
+    \ /x modifier to be the most useful while troubleshooting regex. It will display\
+    \ and explain how the regex is applied at each step.\n<code>\nmy $string = \"\
+    \  foo  ", "    $text =~ s/ /_/g;\n    $text =~ s/ +/_/g;\n    $text =~ s/(?:^|\\\
+    b)(_{2,})(?!$)/ $1 /g;\n    return $text;\n}"]
 stop_tokens:
 - "\nsub"
 - "\n#"

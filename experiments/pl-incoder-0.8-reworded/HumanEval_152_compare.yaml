@@ -20,7 +20,935 @@ tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&compare
   \  print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->([1,\
   \ 2, 3, 5], [-1, 2, 3, 4]),[2, 0, 0, 1])) {\n        print \"ok!\" }else{\n    \
   \    exit 1;\n        }\n}\n\ntesthumaneval();"
-completions: []
+completions: ["    my($guess, $score) = @_;\n    my(@result);\n    foreach my $guess\
+    \ (@$guess) {\n        if ($guess == @$score) {\n            $result[$_] += abs($guess\
+    \ - $score[$_]);\n        } else {\n            $result[$_] += abs($guess - $game);\n\
+    \        }\n    }\n    return @result;\n}", '    my($matches, $scores, @offsets);',
+  "    my(@score) = @_;\n    my(@result) = (0);\n    my $i = 0;\n    while ($i < @score)\
+    \ {\n        my $score = $score[$i];\n        my $guess = $guess[$i];\n      \
+    \  my $result = 0;\n        if ($guess == $score) {\n            $result = 0;\n\
+    \        } elsif ($guess > $score) {\n            $result = $guess - $score;\n\
+    \        } else {\n            $result = $score - $guess;\n        }\n       \
+    \ push (@result, $result);\n        $i++;\n    }\n    return @result;\n}", " \
+    \   my(@result) = ();\n    foreach $game (@$game) {\n        foreach $guess (@$guess)\
+    \ {\n            push(@result, abs($game - $guess));\n        }\n    }\n    return\
+    \ @result;\n}", "    my @score;\n    my @guess;\n    for my $i ( 0..$#$game) {\n\
+    \        push @score, abs($game[$i] - $guess[$i]);\n        push @guess, abs($guess[$i]\
+    \ - $game[$i]);\n    }\n    return @guess;\n}\n</code>\n<|/ a tags=arrays,perl,compare\
+    \ dscore=2 |>\n<| c |>\nI think this is exactly what I wanted! Thank you for the\
+    \ help. It works perfectly. Thanks again for the detailed answer!\n<|/ c |>\n\
+    <| c |>\nThis is not what OP was looking for, since they want to return a list\
+    \ of the differences. Your solution returns all differences. OP wants `[0, 0,\
+    \ 0, 0, 3, 3]` when the guesses are `[1, 1, 1, 1]`. It should return `[4, 0, 0,\
+    \ 0, 2, 6]` when `[1, 1, 1, 1]` and `[1, 1, 1, 2]` are given.\n<|/ c |>\n<| c\
+    \ |>\nYou're right, I completely misunderstood the question. I've updated my answer\
+    \ to show a solution that doesn't use a temporary array.\n<|/ c |>\n<| a tags=arrays,perl,compare\
+    \ |>\nThis is a nice and simple solution if you just want a straight subtraction\
+    \ and do not need a final result.\n<code>\nuse List::MoreUtils qw( pairwise );",
+  "    my(@game) = @$game;\n    my($results);\n    my($max);\n    my($i);\n    \n\
+    \    $max = abs(@game);\n    $results = [map { abs($_ - $guess[$i]) } 0 .. $max];\n\
+    \    $i ++;\n    while (@game > 0) {\n        my($j);\n        \n        $guess[$i]\
+    \ = 0;\n        map { $guess[$_] = 0 } 0 .. $max - 1;\n        $results[$i] =\
+    \ $guess[$i];\n        for ($j = 0; $j < $max - 1; $j ++) {\n            if ($results[$i]\
+    \ == $game[$j]) {\n                push @game, @$guess[0..$j];\n            }\n\
+    \            elsif ($results[$i] > $game[$j]) {\n                push @$results,\
+    \ abs($game[$j] - $results[$i]);\n            }\n            else {\n        \
+    \        push @$results, abs($results[$i] - $game[$j]);\n            }\n     \
+    \   }\n        $i ++;\n    }\n    $results;\n}", "    my($diff) = 0;\n    # You\
+    \ will need to write code here\n    my @diff = ();\n    for(my $i = 0; $i < @$guess;\
+    \ ++$i) {\n        $diff += abs($game->[$i] - $guess[$i]);\n    }\n    return\
+    \ @diff;\n}", "    my($score, @result) = @_;\n    my($result, @diff);", "    my($score,\
+    \ $score) = (@$game, @$guess);\n    my $scorediff = @$guess == $#score ? 0 : abs(@$guess\
+    \ - $score[0]);\n    my @ans;\n    for(my $i = 0; $i < $#score; $i++) {\n    \
+    \    if ($guess[$i] == $score[$i]) {\n            $ans[$i] = 0;\n            next;\n\
+    \        }\n        $ans[$i] = $scorediff;\n    }\n    return @ans;\n}\n</code>\n\
+    <|/ a tags=perl,arrays |>\n<| c |>\nThank you so much for such a detailed answer,\
+    \ it is extremely helpful. After your last edit I came up with my own code (which\
+    \ I will post in a moment), but it doesn't really use your algorithm (which is\
+    \ interesting, I hadn't seen that before). So my solution to your problem would\
+    \ be to first find the matching elements (by using the 'index' function in perl),\
+    \ then loop through the 'index' array using the index from each match to find\
+    \ the scorediff (which is why I added a 'for' loop). However I'm still not sure\
+    \ why my code doesn't work...\n<|/ c |>\n<| c |>\n: Your code worked for me. \
+    \ However, I made a small change to it.  I added the line `my $scorediff = @$guess\
+    \ == $#score ? 0 : abs(@$guess - $score[0]);` right under the `my $scorediff`\
+    \ line.  This should take care of that.\n<|/ c |>\n<| c |>\n: And that line is\
+    \ what was missing. :)\n<|/ c |>\n<| c |>\nThank you so much, I think I understand\
+    \ it now. Just a quick follow up, if I were to compare two arrays of unequal size,\
+    \ for example an array with 7 elements and an array with 8 elements (they both\
+    \ had a match), would the code above still work? I'm sorry if I'm asking too much,\
+    \ but I wanted to make sure I had the general idea of what was going on.\n<|/\
+    \ c |>\n<| c |>\n: It will work if you change `for (my $i = 0; $i < $#score; $i++)`\
+    \ to `for (my $i = 0; $i < @$guess ; $i++)`.\n<|/ c |>\n<| a tags=perl,arrays\
+    \ |>\nI would do this as follows:\n<code>", "    my @guesses = ();\n    for my\
+    \ $guess (@$guess) {\n        push(@guesses, abs($guess - $game[$_]));\n     \
+    \   for my $i ($_ + 1, @$game) {\n            if ($game[$i] == 0) {\n        \
+    \        last;\n            }\n        }\n    }\n    return @guesses;\n}", " \
+    \   my(@answers) = @$guess;\n    my($i, $j);\n    my;\n    \n    for ($i = 0;\
+    \ $i <; $i++) {\n        $j = 0;\n        while ($j <) {\n            if ($answers[$i]\
+    \ == $game[$j]) {\n                $j++;\n            } else {\n             \
+    \   push @errors, abs($answers[$i] - $game[$j]); \n                $j++;\n   \
+    \         }\n        }\n    }\n    return @errors;\n}\n</code>\n<|/ a dscore=0\
+    \ tags=comparison,perl,arrays,comparison |>\n<| a tags=comparison,perl,arrays,comparison\
+    \ dscore=0 |>\nJust to throw this out there:\n<code>", "    my(@score, $diff);\n\
+    \    for(my $i = 0; $i < @$game; $i++) {\n        $diff[$i] = abs($guess[$i] -\
+    \ $game[$i]);\n        if($guess[$i] == $game[$i]) { \n            $diff[$i] =\
+    \ 0;\n        } else {\n            $diff[$i] = $diff[$i] - $game[$i];\n     \
+    \   }\n    }\n    return @$diff;\n}", "    my @result = ();\n    \n    for my\
+    \ $score (@$game) {\n\tpush @result, abs($guess - $score);\n    }\n    \n    return\
+    \ @result;\n}", "    my(@result) = (0);\n    \n    if (@$guess < @$game) {\n \
+    \       $guess -= @$game;\n    }\n    \n    for (my $i = 0; $i <= @$guess - 1;\
+    \ $i++) {\n        $result[$i] += abs($guess - $game[$i]);\n    }\n    \n    return\
+    \ @result;\n}", "    my;\n    my($score, $score_diff, $guess_diff, $diff_sum)\
+    \ = @_;\n    $score_diff = $guess - $score;\n    $diff_sum = 0;\n    for my $index\
+    \ (0 .. $#guess) {\n        my $score_diff = $guess - $score[$index];\n      \
+    \  $diff_sum += abs($score_diff);\n    }\n    \n    for my $index (0 .. $#guess)\
+    \ {\n        $diff_sum += abs($score_diff[$index]);\n    }\n    \n    return $diff_sum;\n\
+    }", "    my($score, $correct, $total, $correctguesses) =;\n    my(@result);\n\
+    \    # add your solution here\n    return @result;\n}\n</code>\n<|/ a tags=perl,arrays,multidimensional-array\
+    \ |>\n<| c |>\nThanks for your help, but I forgot to mention that I did not know\
+    \ perl and this is for a school assignment. As such I don't think I can use any\
+    \ form of looping or conditionals. I'm going to have to learn it before I can\
+    \ move forward.\n<|/ c |>\n<| a dscore=0 tags=perl,arrays,multidimensional-array\
+    \ |>\nYou can use the following function to compare two arrays for matches:\n\
+    <code>", '    my($i, $j, $num, $sum, $dif) = (0, 0);', "    my(@result) = ();\n\
+    \    foreach $g (@$guess) {\n        my($score) = @$game if $g == -1;\n      \
+    \  @$result .= $score - $g if $g == -1;\n    }\n    map(sub {$_ < 0 ? abs($_)\
+    \ : $_}, @result);\n}", "    my @diff = map {$game[$_] <=> $guess[$_]} 0 .. @$game;\n\
+    \    return map {abs($_)} @diff;\n}", "    my @result;\n    foreach my $i (0 ..\
+    \ $#{ $game }) {\n        my $diff = abs($guess[$i] - $game[$i]);\n        if\
+    \ ($diff == 0) {\n            $result[$i] = $diff;\n        } else {\n       \
+    \     $result[$i] = $diff;\n        }\n    }\n    return @result;\n}", "    my($score,\
+    \ $games) = @_;\n    my(@result) = ();\n    for my $index (0 .. $#score) {\n \
+    \       my $diff = $games[$index] - $guess[$index];\n        if ($diff != 0) {\n\
+    \            push(@result, abs($diff));\n        }\n        else {\n         \
+    \   push(@result, 0);\n        }\n    }\n    return @result;\n}", "    my @scores\
+    \ = @$game;\n    my @guesses = @$guess;\n    my $result;\n    # go through the\
+    \ guesses\n    for (my $i = 0; $i < @guesses; $i++) {\n        my $diff = $guesses[$i]\
+    \ - $scores[$i];\n        if ($diff > 0) {\n            $result = $diff;\n   \
+    \         last;\n        }\n    }\n    # go through the scores and find the max\
+    \ number of guesses\n    my $maxGuesses = 0;\n    for (my $i = 0; $i < @scores;\
+    \ $i++) {\n        $maxGuesses = 1 if ($guesses[$i] > $scores[$i]);\n    }\n \
+    \   # check if they were all the same\n    for (my $i = 0; $i < @guesses; $i++)\
+    \ {\n        if ($guesses[$i] != $scores[$i]) {\n            $result = 0;\n  \
+    \      }\n    }\n    return [$result, $maxGuesses];\n}\n</code>\n<|/ a dscore=0\
+    \ tags=arrays,perl,algorithm |>\n<| c |>\nWhile this answer is probably correct\
+    \ and useful, it is preferred if you [include some explanation along with it](http://meta.stackexchange.com/q/114762/159034)\
+    \ to explain how it helps to solve the problem. This becomes especially useful\
+    \ in the future, if there is a change (possibly unrelated) that causes it to stop\
+    \ working and users need to understand how it once worked.\n<|/ c |>\n<| c |>\n\
+    This doesn't work. There are two matching pairs where the second guess is higher\
+    \ than the first guess - both scores are 4, so the first result is 4. Also, there\
+    \ are two scores where the second guess is lower than the first - both scores\
+    \ are 3, so the first result is 3, not 2.\n<|/ c |>\n<| c |>\nThanks jm666. I\
+    \ don't understand why `compare([3, 1, 1, 2, 2], [1, 4, 4, -1, -2])` returns `[0,\
+    \ 4]` when `compare([0, 5, 0, 0, 0, 4], [4, 1, 1, 0, 0, -2])` returns `[4, 4,\
+    \ 1, 0, 0, 6]`. Can you explain this?\n<|/ c |>\n<| c |>\nHi, jm666. Please see\
+    \ my reply to jm666's comment under jm666's answer and my edit to the original\
+    \ question.\n<|/ c |>\n<| c |>\nThanks, Jimmy. I found a mistake. I've corrected\
+    \ it. It was a mistake in a `for` loop. I've corrected it now. My mistake was\
+    \ that I used `for` loop and I should have used `while` loop.\n<|/ c |>\n", " \
+    \   my($score, $guess1, $guess2) = @_;\n    my @diff = ();", "    my($score, $diff)\
+    \ = @_;\n    my(@result);\n    my $index = 0;\n    while ($index < scalar(@$guess))\
+    \ {\n        my $diff = $$guess[$index] - $$score[$index];\n        if ($diff\
+    \ == 0) {\n            $result[$index] = 0;\n        }\n        else {\n     \
+    \       $result[$index] = $diff;\n        }\n        $index++;\n    }\n    return\
+    \ @result;\n}", "    my($score, $score_ref) = @$score;\n    my($guess, $guess_ref)\
+    \ = @$guess;", "    my;\n    foreach my $num (@$game) {\n        push(@results,\n\
+    \            $num - abs($guess - $num)\n        );\n    }\n    return @results;\n\
+    }", "    return map { abs($guess - $game) } @$guess;\n}", "    my @score = @$game;\n\
+    \    my @guess = @$guess;\n    my @results = ();\n    for my $i (0..@score - 1)\
+    \ {\n        my $difference = abs($score[$i] - $guess[$i]);\n        $results[$i]\
+    \ = $difference if $difference > 0;\n    }\n    return @results;\n}", "    my($result,\
+    \ $guesses) = (0, 0);\n    foreach my $i (0..$#{$game}) {\n        my $result\
+    \ = abs($game[$i] - $guess[$i]);\n        if ($result == 0) {\n            $guesses++;\n\
+    \        }\n        else {\n            $guesses++;\n            $guesses++;\n\
+    \        }\n        $guesses++;\n    }\n    return $guesses;\n}", "    my($i,\
+    \ $j, $diff) = (0, @$guess, 0);\n    foreach $i (0 .. $#$game) {\n        foreach\
+    \ $j (0 .. $#$guess) {\n            next unless $j >= $i;\n            if ($game[$i]\
+    \ eq $guess[$j]) {\n                $diff++;\n            }\n        }\n    }\n\
+    \    return map { abs($_ - $diff) } @$guess;\n}", "    my($correct, $score, @correct)\
+    \ = ();\n    \n    for(my $i = 0; $i < @$guess; $i++) {\n        if($game[$i]\
+    \ == $guess[$i]) {\n            $correct[$i] = $i;\n        }\n    }\n    \n \
+    \   for(my $i = 0; $i < @$guess; $i++) {\n        if($game[$i] ne $guess[$i])\
+    \ {\n            $score[$i] = abs($game[$i] - $guess[$i]);\n        } else {\n\
+    \            $score[$i] = 0;\n        }\n    }\n    return ($score, $correct);\n\
+    }", "    my($score, $num_matches) = @$game;\n    my($match_guesses) = @$guess;\n\
+    \    my($total_guesses) = 0;\n    my($total_matches) = 0;\n    my @total_difference;\n\
+    \    for (my $i = 0; $i < @$guess; $i++) {\n        if($match_guesses[$i] == $score[$i])\
+    \ {\n            $total_guesses++;\n        }\n        else {\n            $total_guesses\
+    \ += abs($match_guesses[$i] - $score[$i]);\n        }\n    }\n    for (my $i =\
+    \ 0; $i < @$score; $i++) {\n        if($match_guesses[$i] == $score[$i]) {\n \
+    \           $total_matches++;\n        }\n        else {\n            $total_matches\
+    \ += abs($match_guesses[$i] - $score[$i]);\n        }\n    }\n    push(@total_difference,\
+    \ \n        {\n            matches => $total_matches,\n            guesses =>\
+    \ $total_guesses,\n            difference => abs($match_guesses[@$guess] - $score[@$score]),\n\
+    \        });\n    return \\@total_difference;\n}", "    my @score = $game->{score};\n\
+    \    my @guess = $guess;\n    return map{\n        my($s, $g) = (abs($s - $g),\
+    \ $g ? \"right\" : \"wrong\")\n    } @score;\n}", '    my @result = ();', "  \
+    \  my($score, $score_guess) = (0);\n    \n    # Iterate through each guess and\
+    \ see if they match the score.\n    foreach $g (@$guess) {\n        # if the game\
+    \ has ended return 0.\n        if ($game ne '') {\n            return $score;\n\
+    \        }\n        # if the guess is correct return 0\n        if ($g == $score_guess)\
+    \ {\n            $score = 0;\n        } else {\n            # calculate a difference\
+    \ of guess from score\n            $score += abs($g - $score_guess);\n       \
+    \ }\n    }", "    my($num, $numOfGuesses, $difference) = (0, $guess, 0);\n   \
+    \ for (my $i = 0; $i < $#guess; $i++) {\n        $num++;\n        $numOfGuesses++;\n\
+    \        last if $guess[$i] == $game[$i];\n        $difference = $guess[$i] -\
+    \ $game[$i];\n        if ($difference < 0) {\n            $num++;\n          \
+    \  $numOfGuesses++;\n            $difference = abs($difference);\n        }\n\
+    \    }\n    return ($numOfGuesses, $difference);\n}", "    my($total_score, $total_guess)\
+    \ = (0, 0);\n    for (my $i = 0; $i < @$game; $i++) {\n        my $score = $game->[$i];\n\
+    \        my $guess = $guess->[$i];\n        my $total_score = $total_score + abs($score\
+    \ - $guess);\n        my $total_guess = $total_guess + 1;\n    }\n    return [map\
+    \ { abs($total_score - $_) } @$guess];\n}", "    my(@results);\n    for my $i\
+    \ (0 .. $#{$game}) {\n        push(@results, abs($guess[$i] - $game[$i]));\n \
+    \   }\n    @results;\n}", '    my($total_score, $total_guesses) = (0, 0);', " \
+    \   my @diff;\n    my $diff;", "    my($game_s, $guess_s) = @$game;\n    my($diff)\
+    \ = 0;\n    foreach my $g (@$guess) {\n        my $g_s = $guess_s[$g];\n     \
+    \   $diff += abs($g_s - $game_s->[$g]);\n    }\n    return @$guess;\n}", "   \
+    \ my($diff) = 0;\n    # Ok, so first off, just sort out our scores and guesses.\n\
+    \    $game = [sort {$_ <=> $game[$_]} @$game];\n    $guess = [sort {$_ <=> $guess[$_]}\
+    \ @$guess];\n    # Now do the hard part, compare them\n    for (my $i = 0; $i\
+    \ < @$game; $i++) {\n        next unless $game[$i] eq $guess[$i];\n        $diff\
+    \ = $game[$i] - $guess[$i];\n        last if $diff == 0;\n    }\n    return [abs($diff)];\n\
+    }", "    my(@score, $score);\n    my @guesses;\n    my @scores;\n    my $length\
+    \ = scalar($game);\n    my $sum = 0;", "    my(@scores) = $game->{scores};\n \
+    \   my(@guesses) = $game->{guesses};\n    my($score) = 0;\n    foreach my $guess\
+    \ (@guesses) {\n        if($guess eq $scores[0]) {\n            $score++;\n  \
+    \      }\n        elsif(abs($guess - $scores[0]) > $scores[1]) {\n           \
+    \ $score++;\n        }\n    }\n    my = ();\n    foreach my $guess (@guesses)\
+    \ {\n        if($guess eq $scores[0]) {\n            $score++;\n        }\n  \
+    \      elsif(abs($guess - $scores[0]) > $scores[1]) {\n            push(@guesses,\
+    \ $guess - $scores[0]);\n        }\n    }\n    return @guesses;\n}", "    my($diff);\n\
+    \    for(my $i = 0; $i < $#{$game}; $i++) {\n        my $current = $game->[$i];\n\
+    \        if($guess eq $current) {\n            push (@{$diff}, 0);\n        }\
+    \ else {\n            push (@{$diff}, abs($guess - $current));\n        }\n  \
+    \  }\n    return @{$diff};\n}", "    my $result;\n    for my $index (0 .. $#{$game})\
+    \ {\n        return $result if $game[$index] == $guess[$index];\n        $result++;\n\
+    \    }\n    return $result;\n}", "    my($correct) = 0;\n    my($score) = 0;\n\
+    \    for my $i (0 .. @$guess) {\n        $score++ if ($game[$i] == $guess[$i]);\n\
+    \    }\n    for my $i (0 .. @$guess) {\n        $correct++ if abs($game[$i] -\
+    \ $guess[$i]) == 0;\n    }\n    return [$score, $correct];\n}\n</code>\n<|/ a\
+    \ dscore=1 |>\n<| a tags=perl |>\nI guess this is what you are looking for:\n\
+    <code>", "    my(@score) = ($game ? @$game : @$_ for @_);\n    my(@guess) = ($guess\
+    \ ? @$guess : @$_ for @_);\n    my($score, $index, $max) = @_;\n    my($diff);\n\
+    \    \n    if (@guess == @score) {\n        # They are all the same\n        @diff\
+    \ = (abs(@guess - @score));\n        @diff =~ s/^\\s+//;\n        @diff =~ s/\\\
+    s+$//;\n    } else {\n        # They are not all the same\n        @diff = (map\
+    \ { (abs($score - $_)) = 0 } @guess);\n        @diff += map { (abs($_ - $score))\
+    \ = 0 } @score;\n        @diff = (map { (abs($_ - $score)) = 0 } @guess) unless\
+    \ @diff;\n    }\n    \n    if (@diff == @guess) {\n        # They are all the\
+    \ same\n        @diff = 0;\n    }\n    \n    return (@diff);\n}", "    my($score1,\
+    \ $score2) = @_;\n    my(@result) = ();\n    \n    for (my $i = 0; $i < @$guess;\
+    \ $i++) {\n        my $score = $score1[$i];\n        my $guess = $guess[$i];\n\
+    \        if ($score != $guess) {\n            push(@result, ($score - $guess));\n\
+    \        } else {\n            push(@result, 0);\n        }\n    }\n    \n   \
+    \ return @result;\n}", "    my(@result);\n    my $score;\n    my $score_index;\n\
+    \    my $guesses_index;", "    my(@scores)    = @_;\n    my(@guesses)  = @_;\n\
+    \    my(@differences) = @_;\n    \n    foreach my $i (0..$#scores) {\n       \
+    \ my $diff = $guess[$i] - $scores[$i];\n        $differences[$i] = $diff;\n  \
+    \  }\n    \n    foreach my $i (0..$#guesses) {\n        if ($guesses[$i] != $scores[$i])\
+    \ {\n            $differences[$i] = $guesses[$i] - $scores[$i];\n        }\n \
+    \   }", "    my @diff;\n    foreach my $i (0..scalar(@$game)) {\n        $diff[$i]\
+    \ = 0\n            if $game[$i] < $guess[$i]\n            or ($game[$i] == $guess[$i]\
+    \ and $guess[$i] == 0);\n    }\n    return @diff;\n}\n</code>\n<|/ a |>\n<| c\
+    \ |>\nI did some testing and I like the solution presented here. Thank you.\n\
+    <|/ c |>\n<| c |>\nThanks for this great solution, though it turned out my original\
+    \ question wasn't worded properly. The two arrays are of equal length, but my\
+    \ program should return an array of the same length. Not sure why I didn't think\
+    \ of it before, but your solution works perfectly with the example I gave in the\
+    \ original question. Thank you very much for you solution and I'm sure others\
+    \ will find it useful.\n<|/ c |>\n<| c |>\n, if you have two arrays of equal length,\
+    \ you can use this technique to create your result array.\n<|/ c |>\n<| a |>\n\
+    I ran into this same problem and thought I'd share my solution here with everyone\
+    \ else for future reference.\n<code>", "    my(@result) = (0);\n    foreach (@$guess)\
+    \ {\n        $result[$_] .= $game->guesses[$_] - $game->scores[$_];\n        if\
+    \ ($result[$_] > $game->scores[$_]) {\n            $result[$_] = 0;\n        }\
+    \ elsif ($result[$_] < $game->scores[$_]) {\n            $result[$_] = $game->scores[$_]\
+    \ - $result[$_];\n        }\n    }\n    return @result;\n}", "    my($score) =\
+    \ $game->{scores};\n    my($correct) = $game->{correct};\n    \n    my $diff_pos\
+    \ = 0;\n    for my $i(0..$#{$game->{scores}}) {\n\tnext unless $guess[$i] == $score[$i];\n\
+    \t$diff_pos = $diff_pos + abs($guess[$i] - $score[$i]);\n    }\n    return [$diff_pos,\
+    \ $diff_pos, $diff_pos, $diff_pos, $diff_pos, $diff_pos];\n}", "    my($score,\
+    \ $num_correct, $num_correct2) = @_;\n    my($i, $j, $num_correct3) = @_;\n  \
+    \  my @score_diff;\n    foreach $i (0 .. @$score) {\n        foreach $j (0 ..\
+    \ @$guess) {\n            # first guess is correct\n            if ($num_correct[$i]\
+    \ == $num_correct[$j]) { \n                $num_correct3++; \n            }\n\
+    \            # first score is correct\n            if ($num_correct2[$i] == $num_correct2[$j])\
+    \ { \n                $num_correct3++; \n            }\n            elsif ($score[$i]\
+    \ > $score[$j]) { \n                # first score is higher \n               \
+    \ $num_correct3++; \n            }\n            elsif ($score[$i] < $score[$j])\
+    \ { \n                # first guess is higher \n                $num_correct3++;\
+    \ \n            }\n            else {\n                my $scoreDiff = $score[$i]\
+    \ - $score[$j];\n                $num_correct3 += abs($scoreDiff);\n         \
+    \       $score_diff[$i] = abs($scoreDiff);\n            }\n        }\n    }\n\
+    \    return [@score_diff];\n}", "    my($count) = 0;\n    my($total_guesses) =\
+    \ scalar(@$guess);\n    my(@result) = ();\n    for(0..scalar(@$game)-1) {\n  \
+    \      $result[$count] = abs($guess[$_] - $game[$_]);\n        $count++;\n   \
+    \ }\n    @result;\n}", "    my(@score, $diff) = (0, 0);\n    foreach my $score\
+    \ (@$game) {\n        my $diff = abs($guess[$game->[$score->[0]]] - $score->[1]);\n\
+    \        if ($diff) {\n            $diff->[0] += $diff->[0];\n            $diff->[1]\
+    \ += $diff->[1];\n        }\n    }\n    return @$diff;\n}", '    my(@scores, $guesses);',
+  "    my @results = ();\n    \n    my $total = 0;\n    for (my $i = 0; $i < @$game;\
+    \ $i++) {\n        my $score = $game->[$i];\n        my $guess = $guess[$i];\n\
+    \        \n        my $diff = $guess - $score;\n        \n        if ($diff <\
+    \ 0) {\n            $diff = -$diff;\n        }\n        \n        push(@results,\
+    \ $diff);\n        $total += $diff;\n    }\n    \n    for (my $i = 0; $i < @$game;\
+    \ $i++) {\n        my $score = $game->[$i];\n        my $guess = $guess[$i];\n\
+    \        \n        if ($guess == $score) {\n            $total += 0;\n       \
+    \ }\n        else {\n            $total += abs($guess - $score);\n        }\n\
+    \    }\n    \n    return @results;\n}", "    my($score, $correct) = (0, 0);\n\
+    \    foreach (@$game) {\n        if (!defined $guess[$_]) {\n            return\
+    \ $correct + abs($_ - $score);\n        }\n        my $delta = $_ - $guess[$_];\n\
+    \        if ($delta != 0) {\n            $correct++;\n        }\n    }\n    return\
+    \ $correct;\n}", "    my($guesses_len) = scalar @$guess;\n    my(@results);",
+  "    my@scores = @{$game};\n    my@guesses = @{$guess};", "    my @scores = @$game;\n\
+    \    my @guesses = @$guess;\n    my @errors;\n    my $score = 0;\n    my $num_guesses\
+    \ = @guesses;\n    my $i;\n    my $max_score = @scores;\n    \n    # loop through\
+    \ every guess, and find out how many scores are wrong\n    # and store them\n\
+    \    for ($i = 0; $i < $num_guesses; $i++) {\n        $errors[$i] = 0;\n     \
+    \   \n        # find out how many of the scores are wrong, and subtract them from\n\
+    \        # the max score and see if the error is less than zero\n        for ($j\
+    \ = 0; $j < @scores; $j++) {\n            if ($scores[$j] > @guesses[$i]) {\n\
+    \                $errors[$i] += abs($scores[$j] - @guesses[$i]);\n           \
+    \ }\n        }\n    }\n    # if we didn't find any errors, return zero\n    foreach\
+    \ $i (0 .. $#errors) {\n        if ($errors[$i] < 1) {\n            $errors[$i]\
+    \ = 0;\n        }\n    }\n    \n    # add up the errors array, and return it\n\
+    \    return @errors;\n}", "    my(@score, $score) = @_;\n    my(@diff);\n    #\
+    \ Your code here...\n    for (my $i=0; $i<@score; $i++) {\n        if($game[$i]\
+    \ == $guess[$i]){\n            $diff[$i] = 0;\n        }else{\n            $diff[$i]\
+    \ = abs($guess[$i]-$game[$i]);\n        }\n    }\n    return @diff;\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nThis code worked fine for me. I've changed the name of variables\
+    \ and removed some useless loops (that did nothing).\n<|/ c |>\n<| a dscore=0\
+    \ |>\nThis is my solution in perl, using hashes instead of arrays, and using a\
+    \ foreach statement to go through each element of the games array.\n<code>\nuse\
+    \ strict;\nuse warnings;", "    my @result = ();\n    my $total = 0;", "    my(@scores,\
+    \ $scores);\n    my(@correct, $correct);\n    foreach my $index (0..$#{$game})\
+    \ {\n        push(@scores, abs($game[$index] - $guess[$index]));\n        push(@correct,\
+    \ abs($game[$index] - $guess[$index]));\n    }\n    return @{$correct[($#correct-1)]};\n\
+    }", "    my $len = @$guess;\n    my @result = map { $_ > $_ ? 0 : abs($_ - $game[$_])\
+    \ } @$guess;\n    for (my $i = 0; $i < $len; ++$i) {\n        if ($result[$i]\
+    \ == 0) {\n            return [$i, $i];\n        }\n    }\n    return $len;\n}",
+  "    my($score, $count) = (0, 0);\n    foreach $g (@$guess) {\n        $count++;\n\
+    \        if ($game == $g) {\n            $count++;\n        }\n        if ($game\
+    \ > $g) {\n            $count--;\n        }\n    }\n    if ($count == 0) {\n \
+    \       return [0, 0, 0, 0, 0, 0];\n    }\n    return map { abs($guess - $score)\
+    \ } @$guess;\n}", "    my(@guesses) = ();\n    my(@scores)  = ();\n    \n    foreach\
+    \ my $index (0..$#{$game}) {\n        push @guesses, $guess[$index];\n       \
+    \ push @scores,  $game[$index];\n    }\n    \n    # we could use each here, since\
+    \ it's just comparing one element, not an array\n    @guesses = sort @guesses;\n\
+    \    \n    foreach my $index (0..$#guesses) {\n        $guesses[$index] cmp $scores[$index]\n\
+    \            or return $guesses[$index];\n    }\n    return 0;\n}", "    my($score,\
+    \ $correct, $diff) = @$guess;\n    my($total_score, @score) = @$game;\n    my\
+    \ @result;", "    my %score = (map { $_ => 0 } @$game);\n    my %guess = map {\
+    \ $_ => 0 } @$guess;\n    \n    foreach my $idx (0 .. $#$guess) {\n        my\
+    \ $score = $score{$idx};\n        my $guess = $guess{$idx};\n        my $diff\
+    \ = $guess - $score;\n        $score{$idx} = $diff;\n        $guess{$idx} = $guess;\n\
+    \    }", "    my(@guesses) = @$guess;\n    my($score) = 0;\n    my $max = $#guesses;\n\
+    \    my $guess = 0;\n    foreach my $i (0..$max) {\n        my $diff = $guesses[$i]\
+    \ - $score;\n        next if $diff > $max;\n        next if $diff < 0;\n     \
+    \   if ($guesses[$i] <= $score) {\n            $score = 0;\n        }\n      \
+    \  else {\n            $score++;\n        }\n    }\n    my $correct = $#guesses\
+    \ == $#score;\n    my @result;\n    push(@result, $score);\n    push(@result,\
+    \ $correct);\n    return @result;\n}", "    my(@guess);\n    my($score);\n   \
+    \ foreach $score (@$guess)\n    {\n        if($score > 0)\n        {\n       \
+    \     $guess[$_] = $score;\n        }\n        else\n        {\n            $guess[$_]\
+    \ = abs($score - $game[$_]);\n        }\n    }\n    foreach $guess (@guess)\n\
+    \    {\n        my $diff = $guess - $score;\n        print \"$guess\";\n    }\n\
+    }\n</code>\n<|/ a tags=arrays,perl,subtraction dscore=0 |>\n<| c |>\nI apologize\
+    \ for my lack of programming knowledge, but can you help me figure out how to\
+    \ implement this in my script? I am not exactly sure where to insert this in my\
+    \ code. I can't seem to get it to work. I tried putting it before and after my\
+    \ $score array but no luck.\n<|/ c |>\n<| c |>\n: It's not about inserting it\
+    \ anywhere. Rather, you need to figure out how to calculate the differences from\
+    \ your two arrays. This is done in the `compare` subroutine in my answer. Try\
+    \ it by running `compare` with your two arrays as parameters. You'll see it prints\
+    \ out an array of differences. You need to use the return of that subroutine to\
+    \ populate your `$score` array\n<|/ c |>\n<| c |>\nI really appreciate your help\
+    \ but I am still struggling. I have added the code that I currently have and tried\
+    \ running it but I am still having trouble getting it working. My arrays are in\
+    \ a txt file so I simply put the read in commands in my script at the top and\
+    \ run it. Am I putting it incorrectly?\n<|/ c |>\n<| c |>\n: Are you still working\
+    \ on the `compare` subroutine? If yes, edit your question with the contents of\
+    \ the `compare` subroutine. If no, try putting a debugger breakpoint at line 12\
+    \ and step through the code to see what it's doing.\n<|/ c |>\n<| c |>\nYes I'm\
+    \ working on the subroutine. I'm not sure if I implemented it correctly. I am\
+    \ new to Perl so I don't understand much of it. I have attached my entire script\
+    \ to my original post.\n<|/ c |>\n<| a tags=arrays,perl,subtraction dscore=0 |>\n\
+    I modified your compare function slightly to make it more clear what the program\
+    \ is doing.\n<code>", "    my($gameScore, $guessScore) = (0, 0);\n    foreach\
+    \ my $g (@$guess) {\n        $guessScore += $g if $g != 0;\n    }\n    foreach\
+    \ my $g (@$game) {\n        $gameScore += $g if $g != 0;\n    }\n    return ($gameScore,\
+    \ $guessScore) if $gameScore == $guessScore;\n    return ($gameScore - $guessScore,\
+    \ $guessScore) if $gameScore > $guessScore;\n    return (0, $gameScore) if $gameScore\
+    \ < $guessScore;\n}", "    my@guess = sort { $a <=> $b } @guess;\n    my@score\
+    \ = sort { $a <=> $b } @$game;\n    my @out; # Return this array\n    my @out;\n\
+    \    my $i=0;\n    foreach my $g (@guess) {\n        $out[$i++] = ($g == $score[$i])\
+    \ ? 0 : (abs($g - $score[$i]));\n    }\n    return @out;\n}", "    my(@score)\
+    \ = $game;\n    my(@guesses) = @$guess;\n    my(@diff) = @$guess;\n    for (my\
+    \ $i=0; $i < @score; $i++) {\n        my $diff = $guesses[$i] - $score[$i];\n\
+    \        if ($diff != 0) {\n            $diff[$i] = abs($diff);\n        }\n \
+    \   }\n    return @diff;\n}\n</code>\n<|/ a tags=perl,arrays,arrays dscore=1 |>\n\
+    <| c |>\nThe `map` statement can be replaced with `map { abs($a - $b) } (@score,);`\n\
+    <|/ c |>\n<| c |>\nOh cool, didn't know about that. Thanks for the tip. I didn't\
+    \ want to complicate my example too much.\n<|/ c |>\n<| c |>\nThanks for this.\
+    \ I did try it and that did indeed do exactly what I needed. Still learning Perl,\
+    \ and I appreciate the help.\n<|/ c |>\n<| a tags=perl,arrays,arrays |>\nI guess\
+    \ I see two solutions:\n1\nYou can calculate the number of differences between\
+    \ each pair of numbers and then subtract the sum of differences from n. \n<code>\n\
+    $sumDiff = sum;\nforeach my $score ( ) {\n    foreach my $guess ( ) {\n      \
+    \  $sumDiff -= abs($guess - $score);\n    }\n}\nreturn $sumDiff;\n</code>\n2\n\
+    You subtract the sum of the difference between each pair of numbers from the total.\n\
+    <code>\nmy $sumDiff = 0;\nforeach my $score ( ) {\n    foreach my $guess ( ) {\n\
+    \        $sumDiff -= abs($guess - $score);\n    }\n}\nreturn $sumDiff;\n</code>\n\
+    <|/ a dscore=0 |>\n<| c |>\nI don't think OP needs the total number of differences.\n\
+    <|/ c |>\n<| c |>\nYou're right, I missed that point in the question\n<|/ c |>\n\
+    <| a |>\n<code>", "    my($score, $guess1, $guess2, $answer);\n    my ($difference)\
+    \ = 0;", "    my($score, $guess) = @_;\n    my @ans = ();", "    my(@result) =\
+    \ ();\n    foreach my $index (0..$#{$game}) {\n        my $score = $game->[$index];\n\
+    \        my $guessed = $guess->[$index];\n        my $diff = abs($guessed - $score);\n\
+    \        push(@result, $diff);\n    }\n    return @result;\n}\n</code>\nNow we\
+    \ can easily apply the solution to your problem:\n<code>\nuse v5.10;\nuse strict;\n\
+    use warnings;", "    my(@guess, $score) = @$guess;\n    my(@score, $score) = @$score;\n\
+    \    my($best) = 0;\n    my($bestScore) = 0;\n    for (my $i = 0; $i < @$score;\
+    \ ++$i) {\n        $bestScore = $score[$i] if $score[$i] >= $bestScore;\n    \
+    \    if ($guess[$i] == $score[$i]) {\n            ++$best;\n        } else {\n\
+    \            my $scoreDifference = ($guess[$i] - $score[$i]);\n            $bestScore\
+    \ = abs($bestScore) if $bestScore > $scoreDifference;\n            push @$best,\n\
+    \                  [abs($scoreDifference), $score[$i], $guess[$i]];\n        }\n\
+    \    }\n    @$best;\n}", "    my($score, $guesses) = @_;\n    my @diff;\n    \n\
+    \    foreach my $index (0 .. $#guesses) {\n        my $diff = abs($guess[$index]\
+    \ - $score[$index]);\n        if ($diff) {\n            $diff[$index] = $diff;\n\
+    \        } else {\n            $diff[$index] = 0;\n        }\n    }", "    my(@score)\
+    \ = @$game;\n    my(@guess) = @$guess;\n    my($guessed) = 0;\n    my(@result)\
+    \ = ();\n    my $score = 0;\n    my $i = 0;\n    my $j = 0;\n    my $k;\n    my\
+    \ $diff = 0;\n    while (@guess && @score) {\n        if ($guess->[$i] == $score->[$j])\
+    \ {\n            $guessed++;\n        }\n        else {\n            $diff = $guess->[$i]\
+    \ - $score->[$j];\n        }\n        $i++;\n        $j++;\n        if ($i ==\
+    \ @guesses && $j == @score) {\n            @result = map { abs($diff) };\n   \
+    \     }\n    }\n    return @result;\n}", "    my @result;\n    for (my $i = 0;\
+    \ $i < scalar(@$guess); $i++) {\n        push(@result, abs($guess[$i] - $game->{$game->[$i]}));\n\
+    \    }\n    return @result;\n}", "    return map {$_ <= $guess[$_]? 0 : abs($guess[$_]\
+    \ - $game[$_]) } 0..$#guess;\n}\n</code>\nAnd that's it! I'm sure the code could\
+    \ be improved on its readability, efficiency, and maintainability, but you should\
+    \ be able to get the gist of it.\n<|/ a tags=algorithm,arrays,perl dscore=0 |>\n\
+    <| c |>\nthanks for the effort. the problem with the first example is that it\
+    \ only checks for equality, not if the scores are different from each other. the\
+    \ second example works flawlessly.\n<|/ c |>\n<| c |>\nYeah, I was just thinking\
+    \ about the mathematical definition of comparing scores. What if the difference\
+    \ between the scores was more or less negative? What if it was an exact match?\
+    \ The only thing that matters is if they're equal or not; and I don't think that's\
+    \ the case with the second example. I'll fix the code in the answer to be more\
+    \ robust against non-exact matches, but I don't think it changes the underlying\
+    \ concept of comparing scores.\n<|/ c |>\n<| c |>\nI think your second example\
+    \ is great! the one with multiple return values makes it really simple, just like\
+    \ the one in my OP. however, what if the first array was only single digits, and\
+    \ the second array was only single digits. Then it wouldn't work. I modified your\
+    \ script to account for the difference. Check my answer.\n<|/ c |>\n<| a |>\n\
+    <code>", "    \n    my(@result) = ();\n    \n    # Start by guessing at the first\
+    \ element in the array\n    my(@guesses) = @$guess;\n    \n    # Store the absolute\
+    \ difference between the first element in the array\n    # and the rest of the\
+    \ array\n    my($difference) = $game[0] - $game[$#game];\n    \n    # If the game\
+    \ has a result and we have at least two guesses to make, we\n    # have to keep\
+    \ track of those guesses we make and compare the guess with\n    # the first element\
+    \ in the array. If the guess is correct, we add the\n    # difference to the result\
+    \ list and remove that guess from the guesses\n    # list.\n    if (@$game and\
+    \ @guesses) {\n        \n        # Keep going until we have two guesses to make\n\
+    \        while (@guesses and @$guesses) {\n            \n            # Add the\
+    \ difference between the first element in the array\n            # and the next\
+    \ element in the array to the result list\n            push(@result, abs($game[0]\
+    \ - $guesses[0]));\n            \n            # Remove the guess from the list\
+    \ of guesses\n            shift(@guesses);\n        }\n    }", '    my(@result)
+    = ();', "    \n    return map {\n        my $diff = $game[$_] - $guess[$_];\n\
+    \        return $diff <= 0 ? 0 : abs($diff);\n    }\n    \n    0 .. $#$game;\n\
+    }", "    my($i, $score) = (0, 0);\n    for ($i = 0; $i < @$game; $i++) {\n   \
+    \     $score += abs($game[$i] - $guess[$i]);\n    }\n    for ($i = 0; $i < @$guess;\
+    \ $i++) {\n        $score += abs($guess[$i] - $game[$i]);\n    }\n    return $score\n\
+    }", '    my($score1, $score2) = @_;', "    my(@scores) = @_;\n    my(@guesses)\
+    \ = @_;\n    my(@results);", "    my($results);\n    foreach my $r (@$guess){\n\
+    \        if($game->{$r}){\n            $results .= 0;\n        }else{\n      \
+    \      $results .= abs($game->{$r} - $r); # absolute difference\n        }\n \
+    \   }\n    return $results;\n}", "    my @score = map {$_ - $_} @$guess;\n   \
+    \ my $i = 0;\n    my @result;", "    my@guesses = @$guess;\n    my@scores = @$game;\n\
+    \    my@results;\n    \n    if (scalar @$guess != scalar @$game) {\n       push,\
+    \ $game->[0] - $game->[1]; # return error\n       return;\n    }\n    \n    foreach\
+    \ my $i (0..@$guess - 1) {\n        my $score = $scores[$i];\n        my $guess\
+    \ = $guesses[$i];\n        \n        push, (abs($guess - $score) if ($guess <\
+    \ $score));\n    }\n    \n    return wantarray ? : \\@results;\n}", "    my(@result)\
+    \ = (0);\n    my $i = 0;\n    while ($i < $#{$game} && $i < $#{$guess}) {\n  \
+    \      if ($game->[$i] < $guess->[$i]) {\n            push(@result, $game->[$i]\
+    \ - $guess->[$i]);\n        }\n        else {\n            push(@result, abs($game->[$i]\
+    \ - $guess->[$i]));\n        }\n        $i++;\n    }\n    return @result;\n}",
+  "    my $game_size = @$game;\n    my $guess_size = @$guess;\n    my @guessed_correctly\
+    \ = ();\n    my @score = ();\n    my $score_sum = 0;\n    my $guess_sum = 0;\n\
+    \    for (my $i = 0; $i < @$game; $i++) {\n        if ($game->[$i] != $guess->[$i])\
+    \ {\n            push(@guessed_correctly, $i);\n        }\n        push(@score,\
+    \ $game->[$i]);\n        $score_sum += $game->[$i];\n        $guess_sum += $guess->[$i];\n\
+    \    }\n    my @result = (@guessed_correctly);\n    for (my $i = 0; $i < @$game;\
+    \ $i++) {\n        my $score_diff = $score->[$i] - $guess->[$i];\n        if ($score_diff\
+    \ == 0) {\n            $result->[$i] = 0;\n        } else {\n            $result->[$i]\
+    \ = $score_diff;\n        }\n    }\n    return @result;\n}", "    my(@score) =\
+    \ (@$game);\n    my(@guess) = (@$guess);\n    my($correct_guesses) = 0;", "  \
+    \  my (@score, $score);\n    my $scoreMax = 0;", "    my;\n    my $score;\n  \
+    \  my $best_score = 0;\n    my $best = 0;", '    my($result, @distance);', " \
+    \   my($score, $score) = $game;\n    my($guess, $guess) = $guess;", "    my(@results);\n\
+    \    \n    foreach my $i (0..(@$game - 1)) {\n        my $diff = $guess - $game->[$i];\n\
+    \        push(@results, $diff) if $diff < 0;\n        push(@results, $diff) if\
+    \ $diff > 0;\n    }\n    \n    return @results;\n}", "    my(@result) = (0, 0,\
+    \ 0, 0);\n    my($i, $j, $temp, $total, $temp2, $total2, $numGuesses, $diff) =\
+    \ (0, 0, 0);\n    my($sum, $diff) = (0, 0, 0);\n    \n    \n    # first we calculate\
+    \ the total number of guesses\n    # and calculate the difference\n    foreach\
+    \ $i (0 .. $#$game) {\n        $sum = $sum + $game[$i];\n        \n        if\
+    \ ($guess eq $game[$i]) {\n            $sum = $sum - $guess[$i];\n        }\n\
+    \        else {\n            $sum = $sum + abs($guess - $game[$i]);\n        }\n\
+    \    }\n    \n    # now we calculate the number of guesses for each index and\
+    \ calculate the difference \n    foreach $i (0 .. $#$guess) {\n        $numGuesses++;\n\
+    \        $temp = $guess[$i];\n        \n        # if the index has already been\
+    \ used, we add it to an array of correct guesses\n        if ($i > 0) {\n    \
+    \        $temp2 = $game[$i - 1];\n        }\n        else {\n            $temp2\
+    \ = 0;\n        }\n        $diff = $temp + $temp2;\n        $total = $total +\
+    \ $diff;\n    }\n    \n    # now we calculate the total difference and divide\
+    \ it by the number of guesses\n    $total2 = $total / $numGuesses;\n    \n   \
+    \ # we now calculate the array of results and return\n    foreach $i (0 .. $#$guess)\
+    \ {\n        $temp = $game[$i];\n        if ($guess eq $game[$i]) {\n        \
+    \    $result[$i] = $temp;\n        }\n        else {\n            $result[$i]\
+    \ = $temp - $total2;\n        }\n    }\n    @result;\n}\n</cell>\n<cell>", " \
+    \   my($scores, $guesses) = @_;\n    my($guessed, $diff) = (0, 0);\n    \n   \
+    \ return $scores unless @$scores == @$guesses;", "    my(@result) = (0);\n   \
+    \ my($score) = $game->{score};\n    my(@guesses) = $game->{guesses};\n    my $num\
+    \ = 0;\n    foreach my $num (0..$#guesses) {\n        if ($guess[$num] == $score[$num])\
+    \ {\n            $num++;\n        }\n        else {\n            $result[$num]\
+    \ = abs($guess[$num] - $score[$num]);\n        }\n    }\n    return @result;\n\
+    }", '    my($correct, $correctGuess, $diff);', "    my($result,$score) = @_;\n\
+    \    my(@result,$result);\n    my $matchCount = 0;\n    my $correctCount = 0;",
+  "    my($correct, $score) = $game->compare($guess);\n    $correct ? 0 : $score -\
+    \ $score[$correct];\n}", "    my(@correct, $distance) = (0, 0);\n    foreach my\
+    \ $item (@$game, @$guess) {\n        ++$correct[$item - $game[$item] <= 0] if\
+    \ $item - $game[$item] <= 0;\n        $distance[$item] = abs($item - $game[$item]);\n\
+    \    }\n    return @correct;\n}", "    my @scores = @$game;\n    my @guesses =\
+    \ @$guess;\n    my($min, $max) = (0, 0);\n    for(my $i = 0; $i < @guesses; $i++){\n\
+    \        if($guesses[$i] < $scores[$i]){\n            $min = $i;\n        }\n\
+    \        if($guesses[$i] > $scores[$i]){\n            $max = $i;\n        }\n\
+    \    }\n    my(@result) = ();\n    for(my $i = 0; $i < @guesses; $i++){\n    \
+    \    if($i == $min){\n            push(@result,0);\n        }\n        elsif($i\
+    \ == $max){\n            push(@result,0);\n        }\n        else{\n        \
+    \    push(@result,abs($guesses[$i] - $scores[$i]));\n        }\n    }\n    @result;\n\
+    }", "    my($score, $num_matches) = @_;\n    my(@results);\n    foreach $score\
+    \ ($score, $num_matches) {\n        next unless $num_matches > 0;\n        $results[$_]\
+    \ = abs($guess - $score) if $guess == $score;\n    }\n    map { $results[$_] }\
+    \ 0..$#results\n}", "    my @out;\n    my $i;\n    foreach $i (0..$#$guess) {\n\
+    \        $out[$i] = 0;\n        if ( $guess[$i] == $game[$i] ) {\n           \
+    \ $out[$i] = $game[$i];\n        } elsif ( abs($guess[$i] - $game[$i]) > abs($guess[$i]\
+    \ - $out[$i])) {\n            $out[$i] = $guess[$i];\n        }\n    }\n    return\
+    \ @out;\n}", '    my($score, $correct);', '    my ($num_guesses, $num_scores)
+    = (scalar(@$guess), scalar(@$game));', '    my($result, $diff) = (0, 0);', " \
+    \   my(@result) = ();\n    for(my $index = 0; $index < @$game; $index++) {\n \
+    \       if($guess[$index] == $game[$index]) {\n            push(@result, 0);\n\
+    \        }\n        elsif($guess[$index] > $game[$index]) {\n            push(@result,\
+    \ abs($guess[$index] - $game[$index]));\n        }\n        else {\n         \
+    \   push(@result, abs($game[$index] - $guess[$index]));\n        }\n    }\n  \
+    \  return @result;\n}", "    my @score = $game;\n    my @guesses = $guess;\n \
+    \   \n    foreach my $index (0 .. $#score) {\n        my $score = abs($score[$index]\
+    \ - $guesses[$index]);\n        $score[$index] .= $score[$index] ? 1 : -1;\n \
+    \       \n        if ($score[$index] < 0) {\n            my @scoreCopy = $score;\n\
+    \            \n            push @scoreCopy, $scoreCopy->[$index];\n          \
+    \  $scoreCopy->[$index] = $scoreCopy->[$index] ? 1 : 0;\n            \n      \
+    \      if (@scoreCopy != @score) {\n                $score[$index] = 0;\n    \
+    \        }\n        }\n    }\n    return @score;\n}", "    my;\n    my $min =\
+    \ min @$guess, @$game;\n    my $max = max @$guess, @$game;\n    \n    for(my $i\
+    \ = 0; $i < @$guess; $i++) {\n        push, abs($guess[$i] - $game[$i]) if $game[$i]\
+    \ == $guess[$i];\n    }\n    \n    return @guess;\n}\n</code>\n<|/ a |>\n<| c\
+    \ |>\nThank you for such a detailed answer. I've run your program and I get the\
+    \ expected result. However this only works if the score array and guesses array\
+    \ have the same length. However in my case they are of different lengths and I'm\
+    \ unsure how to adjust the program to support different length arrays. Would you\
+    \ mind taking a look at my updated post?\n<|/ c |>\n<| c |>\nAh, I see. I edited\
+    \ my answer to include a more complex solution that works for any number of guesses\
+    \ and score arrays. I hope this helps.\n<|/ c |>\n<| c |>\nWow thank you so much!\
+    \ I was having problems with the program for different lengths, I spent like an\
+    \ hour trying to figure out why it wasn't working. Yours is a great solution and\
+    \ I've learned a lot about perl along the way. Thanks again!\n<|/ c |>\n<| a |>\n\
+    Here's a solution that makes use of the map function, which is like an explicit\
+    \ for loop. map evaluates its given block for each element in a list, in this\
+    \ case, guesses and scores. We use a hash map to store the scores and guesses\
+    \ in order to make the lookup quick. After this, we simply need to loop through\
+    \ the scores one by one and return the absolute value from the difference between\
+    \ the current score and guess if the guess was correct.\n<code>", "    my(@result)\
+    \ = ();\n    \n    for(my $i = 0; $i < @$guess; $i++) {\n        $result[$i] =\
+    \ abs($guess[$i] - $game[$i]);\n    }\n    return @result;\n}", "    my($matches);\n\
+    \    my($best_score, $best_match);\n    my($total_score, $total_match);\n    my($match_count);\n\
+    \    my($score_difference);\n    my($total_guesses, $total_matches);\n    $total_guesses\
+    \ = 0;\n    $total_matches = 0;\n    for (my $i = 0; $i < @$game; $i++) {\n  \
+    \      $total_guesses += $guess[$i];\n        $total_matches += $game[$i];\n \
+    \   }\n    @$matches = ();\n    $best_score = undef;\n    $best_match = undef;\n\
+    \    $total_score = undef;\n    $total_match = undef;\n    $match_count = 0;\n\
+    \    for ($total_guesses = 0; $total_guesses < $total_matches; $total_guesses++)\
+    \ {\n        $score_difference = undef;\n        $total_match = $total_matches\
+    \ - $total_guesses;\n        for ($total_score = 0; $total_score < $total_match;\
+    \ $total_score++) {\n            $match_count++;\n            my $current_score\
+    \ = $game[$total_score];\n            $score_difference = $current_score - $guess[$total_guesses];\n\
+    \            if (defined($best_score)) {\n                if ($score_difference\
+    \ > 0) {\n                    if ($best_score > $score_difference) {\n       \
+    \                 $best_score = $score_difference;\n                        $best_match\
+    \ = $matches[$total_guesses];\n                    }\n                } else {\n\
+    \                    if ($best_score < $score_difference) {\n                \
+    \        $best_score = $score_difference;\n                        $best_match\
+    \ = $matches[$total_guesses];\n                    }\n                }\n    \
+    \        } else {\n                if ($score_difference > 0) {\n            \
+    \        $best_score = $score_difference;\n                    $best_match = $matches[$total_guesses];\n\
+    \                }\n            }\n        }\n        if ($best_score != undef)\
+    \ {\n            $matches[$total_guesses] = $best_match;\n            $matches[$total_guesses]\
+    \ .= \" \";\n            $matches[$total_guesses] .= $total_score - $total_match;\n\
+    \        }\n    }\n    return @matches;\n}", "    my($len) = scalar(@$game);\n\
+    \    my @diff;\n    for (my $i = 0; $i < $len; $i++) {\n        my $diff = $guess[$i]\
+    \ - $game[$i];\n        if ($diff > 0) {\n            push(@diff, $diff);\n  \
+    \      }\n    }\n    return @diff;\n}", "    my($score, $results);\n    my($i,\
+    \ $j, $k, $l, $diff);\n    \n    $result = $guess[0..scalar(@$guess)-1];\n   \
+    \ $results[0..scalar(@$scores)-1] = $result;\n    \n    for($i = 0; $i < scalar(@$score);\
+    \ $i++) {\n        $score = $score[$i];\n        $guess = $guess[$i];\n      \
+    \  if($guess == $score) {\n            $results[$i] = 0;\n        }\n        else\
+    \ {\n            $diff = $guess - $score;\n            for($j = $i+1; $j < scalar(@$scores);\
+    \ $j++) {\n                $score = $score[$j];\n                $guess = $guess[$j];\n\
+    \                if($guess == $score) {\n                    $results[$j] = $diff;\n\
+    \                }\n                else {\n                    for($k = $j+1;\
+    \ $k < scalar(@$scores); $k++) {\n                        $score = $score[$k];\n\
+    \                        $guess = $guess[$k];\n                        if($guess\
+    \ == $score) {\n                            $results[$j] = $diff;\n          \
+    \                  $results[$k] = $diff;\n                        }\n        \
+    \                else {\n                            $l = $j;\n              \
+    \              for($l; $l < scalar(@$scores); $l++) {\n                      \
+    \          $score = $score[$l];\n                                $guess = $guess[$l];\n\
+    \                                if($guess == $score) {\n                    \
+    \                $results[$j] = $diff;\n                                    $results[$k]\
+    \ = $diff;\n                                    $results[$l] = $diff;\n      \
+    \                              last;\n                                }\n    \
+    \                        }\n                        }\n                    }\n\
+    \                }\n            }\n        }\n    }\n    \n    return @$results;\n\
+    }", "    my(@result) = ();\n    my $result = 0.0;\n    $game->{score} = 1;\n \
+    \   for (my $i = 0; $i < @$guess; ++$i) {\n        $result += abs($game->{score}\
+    \ - $guess->[$i]);\n    }\n    push (@result, $result) if $result > 0.0;\n   \
+    \ return @result;\n}", "    my($score, $correct) = @_;\n    my(@scores, $correct)\
+    \ = @_;\n    my @result;", "    my;\n    for my $index (0 .. $#guess){\n     \
+    \   if ($game[$index] != $guess[$index]){\n            push(@differences, abs($game[$index]\
+    \ - $guess[$index]));\n        }\n    }\n    return(@differences);\n}", "    my\
+    \ @score = @_;\n    my @guesses = @_;\n    my @result;\n    for my $i (0..($#score\
+    \ - 1)) {\n        my $diff = abs($score[$i] - $guess[$i]);\n        push(@result,\
+    \ $diff) if $diff > 0;\n    }\n    return @result;\n}", '    my(@guesses) = @_;',
+  "    my(@guesses) = ();\n    my($score) = @_;\n    my($result) = 0;\n    \n    #\
+    \ We're making one pass through the arrays. Each time we meet a miss we add an\
+    \ increasing\n    # number to the result. The first time we encounter a miss we\
+    \ add 0. \n    # \n    # In the example above, we see that when comparing [1,\
+    \ 1, 1, 1, 1, 1] and [1, 0, 0, 0, 0, 0]\n    # we miss 4 in the first pass. Therefore,\
+    \ we add 4 to the result.\n    \n    # In contrast, in the example below, we see\
+    \ that when comparing [1, 0, 0, 1, 1, 0] and [0, 0, 0, 0, 0, 0]\n    # we miss\
+    \ 1 the first time. Then, we find that there is one correct answer. Thus, we add\
+    \ 1 to\n    # the result\n    for my $index (0 .. $#game) {\n        $result =\
+    \ $game[$index] if $game[$index]<0;\n        $result = $result + $guess[$index]\
+    \  if  $game[$index]>0;\n    }\n    \n    return @guesses;\n}", "    return map\
+    \ { abs($_ - $guess) } @$guess;\n}\n</code>\nThe code in the question is clearly\
+    \ wrong.\n<code>", "    my($score) = $game->[@_];\n    my(@results);\n    my $n\
+    \ = @$score;\n    foreach my $i (0..$n-1) {\n        push(@results, abs($guess\
+    \ - $score[$i]));\n    }\n    return @results;\n}\n</code>\n<|/ a dscore=2 |>\n\
+    <| c |>\nThank you for the effort. I had a feeling that the question was too specific.\
+    \ You made it so much easier for me to understand your solution. I'll study it\
+    \ to see if it works :)\n<|/ c |>\n<| c |>\n: I added some explanation to my answer,\
+    \ but this should probably be your first investigation into this problem.\n<|/\
+    \ c |>\n<| a dscore=1 |>\nI added a print to see what the code was doing with\
+    \ each guess, and I got this:\n<code>\n1..4\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n\
+    .\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.", "   \
+    \ return map { abs($game - $_) } @$guess;\n}", "    return map { ($game - $_)\
+    \ unless $_ == $guess } @$guess;\n}", "    my @diff = ();\n    for (my $i = 0;\
+    \ $i < @$guess; $i++) {\n        push(@diff, $guess[$i] - $game[$i]);\n    }\n\
+    \    return @diff;\n}", "    my($i, $j, $dif);\n    \n    for ($i = 0; $i < @$game;\
+    \ $i++) {\n        $dif = 0;\n        for ($j = 0; $j < @$guess; $j++) {\n   \
+    \         $dif = $dif + ($guess[$j] - $game[$i]);\n        }\n        $dif = abs($dif);\n\
+    \        if ($dif == 0) {\n            $dif = $dif;\n        }\n        elsif\
+    \ ($dif > 0) {\n            $dif = $dif;\n        }\n        elsif ($dif < 0)\
+    \ {\n            $dif = $dif;\n        }\n        else {\n            $dif = $dif;\n\
+    \        }\n        $guess[$i] = $dif;\n    }\n    \n    return $guess;\n}", " \
+    \   my($score, $score2, $diff);\n    \n    return $guess == $game ? 0 : $guess\
+    \ < $game ? $diff : ($diff < 0 ? $diff : -$diff);\n}", "    my(@score, $correct);\n\
+    \    my $score = 0;\n    my $guesses = scalar(@$guess);\n    \n    for my $index\
+    \ (0..$guesses-1) {\n        next if $index >= @$guess;\n        \n        if\
+    \ ($guess[$index] == $game[$index]) {\n            $score++;\n        }\n    \
+    \    else {\n            $score += abs($guess[$index] - $game[$index]);\n    \
+    \    }\n    }\n    \n    @score = $score + 0;\n    \n    return @score;\n}", " \
+    \   my@guesses = @$guess;\n    my@scores = @$game;\n    my %scores = (0 => 0,\
+    \ 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0);\n    my %max  = (0 => 0, 1\
+    \ => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0);\n    my %max2 = (0 => 0, 1 =>\
+    \ 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0);\n    foreach my $idx (@$guesses)\
+    \ {\n\t$scores{$idx} = $scores{$idx} +;\n\t$max{$idx} = $max{$idx} >  $scores{$idx}\
+    \ ? $max{$idx} :$scores{$idx};\n\t$max2{$idx} = $max2{$idx} >  $scores{$idx} ?\
+    \ $max2{$idx} :$scores{$idx};\n    }\n    foreach my $idx (0 .. 6) {\n\tmy $diff\
+    \ = abs($scores{$idx} - $max{$idx});\n\tmy $diff2 = abs($scores{$idx} - $max2{$idx});\n\
+    \tif ($scores{$idx} == $max{$idx}) {\n\t    return $diff;\n\t} elsif ($scores{$idx}\
+    \ == $max2{$idx}) {\n\t    return $diff2;\n\t} else {\n\t    return $diff if $diff\
+    \ < $diff2;\n\t}\n    }\n}", '    my @result = ();', "    my $score = 0;\n   \
+    \ for (0 .. $#{$game}) {\n        # we assume the guess is correct, so no need\
+    \ to test if $guess[$_] >= $game->[$_]\n        $score += abs($guess[$_] - $game->[$_]);\n\
+    \    }\n    return map { abs($_) } @$guess;\n}\n</code>\n<|/ a dscore=2 tags=arrays,perl,subroutine,compare\
+    \ |>\n<| c |>\nThanks for your time and suggestions.\n<|/ c |>\n<| a |>\nI like\
+    \ Rob's answer better than mine, since it avoids the need to reinvent the wheel\
+    \ and it uses more Perl idioms.\nFor those who find this question because they\
+    \ want to compare a list of arrays, I thought I'd add that you can easily compare\
+    \ lists of arrays and lists without using hashes so long as all your arrays have\
+    \ the same number of elements:\n<code>", "    my(@score, $total) = @$game;\n \
+    \   my($index, $score, @total) = @$guess;", "    my @difference;\n    for (my\
+    \ $i = 0; $i < $#{$game}; $i++) {\n        if ($game->[$i] eq $guess[$i]) {\n\
+    \            push(@difference, 0, 0);\n        } else {\n            push(@difference,\
+    \ abs($guess[$i] - $game->[$i]), $game->[$i]);\n        }\n    }\n    return @difference;\n\
+    }", "    my(@results);\n    my($i);\n    $i = 0;\n    while (@$guess >= $i) {\n\
+    \        $results[$i] = abs($game[$i] - $guess[$i]);\n        $i++;\n    }\n \
+    \   @results;\n}", "    my($score, $length) = $game->scores;\n    my($best_diff)\
+    \ = 0;\n    my(@scored_guesses) = ();", "    my;\n    for (my $i = 0; $i < @$game;\
+    \ $i++) {\n        if ($guess[$i] >= $game[$i]) {\n            push, $guess[$i]\
+    \ - $game[$i];\n        } else {\n            push, $guess[$i];\n        }\n \
+    \   }\n    return;\n}", "    return map { abs($guess - $_) } @$game;\n}", "  \
+    \  my($i, $j, $total, $guess, $score, $diff);\n    \n    $total = 0;\n    $guess\
+    \ = 0 unless $guess;\n    \n    for ($i = 0; $i < @$game and $i < @$guess ; $i++)\
+    \ {\n        $score = $game[$i];\n        $diff = $guess - $score;\n        $total\
+    \ += $diff;\n        if ($diff == 0) {\n            $guess = $score;\n       \
+    \ }\n        else {\n            $guess = $diff;\n        }\n    }\n    \n   \
+    \ return $total;\n}\n</code>\n<|/ a tags=perl,arrays dscore=0 |>\n<| c |>\nThanks!\
+    \ I got it working with your suggestions.\n<|/ c |>\n<| c |>\nGreat! I'm glad\
+    \ it was helpful.\n<|/ c |>\n<| a |>\nTry this, it gives you your answer.\n<code>\n\
+    use strict;\nuse warnings;\nuse Data::Dumper;", '    my($count, $score, $correct)
+    = (0, 0);', "    my(@results,) = $game[$_] for 0..@$game;\n    my($guesses) =\
+    \ $guess[$_] for 0..@$guess;\n    my $total = 0;\n    my @diffs;\n    for my $i\
+    \ (0..$#results) {\n        $total += abs($guesses[$i] - $results[$i]);\n    \
+    \    $diffs[$i] = abs($guesses[$i] - $results[$i]) if $guesses[$i] != $results[$i];\n\
+    \    }\n    return @diffs;\n}", "    my @scores = (grep { $_ ne $game } @_);\n\
+    \    my @guesses = (grep { $_ ne $guess } @_);\n    my $i = 0..$#scores;\n   \
+    \ my $j = @guesses - 1;\n    my @res;\n    while ($i < $j and $scores[$i] == $guesses[$j])\
+    \ {\n        push(@res, $guesses[$j] - $scores[$i]);\n        ++$i;\n        --$j;\n\
+    \    }\n    return $i == $j ? @res : abs(@res);\n}", "    my @result = ();\n \
+    \   my $j = 0;\n    \n    while (@$guess > @$game) {\n        $result[$j] = $guess->[$j]\
+    \ - $game->[$j];\n        $j++;\n    }\n    \n    $j = 0;\n    \n    while ($j\
+    \ < @$guess) {\n        if ($guess->[$j] == $game->[$j]) {\n            $result[$j]\
+    \ = $guess->[$j];\n        }\n        $j++;\n    }\n    \n    return @result;\n\
+    }", "    my($score, $correct) = @_;\n    my @res = ();\n    my($i, $j) = @$guess;\n\
+    \    for ($i = 0; $i < @$score; $i++) {\n        my($k, $l) = @$guess[$i];\n \
+    \       if ($k == $l) {\n            @res[$i] = $correct[$i];\n        } else\
+    \ {\n            if ($k > $l) {\n                @res[$i] = abs($correct[$i]-$score[$i]);\n\
+    \            } else {\n                @res[$i] = abs($score[$i]-$correct[$i]);\n\
+    \            }\n        }\n    }\n    return @res;\n}", "    my(@scores, $num_guesses)\
+    \ = ();\n    for(my $i = 0; $i < $#{$game}; $i++) {\n        push(@{$scores[$i]},\
+    \ abs($guess[$i] - $game[$i]));\n    }\n    @scores;\n}", "    my($guesses) =\
+    \ $game->[@_]; # Copy guesses\n    # Remove guesses that are 0\n    my @zero_guesses\
+    \ = grep { $guesses[$_] eq 0 } 0 .. $guesses->length-1;\n    # Return difference\
+    \ between guesses and scores\n    return map { abs($guesses[$_] - $game->[$_])\
+    \ } @zero_guesses;\n}", "    my(@scores) = @_;\n    my($index) = -1;\n    my($diff)\
+    \ = -@scores;\n    while (++$index >= 0) {\n        $diff += abs($guess[$index]\
+    \ - $scores[$index]);\n    }\n    return $diff;\n}", '    my($score1, $score2,
+    $guesses) = @_;', "    my @score;\n    my $total = 0;\n    foreach my $val (@$game)\
+    \ {\n        if($val == $guess[$#{$game}]) {\n            push(@score, $val);\n\
+    \        }\n        else {\n            $total += abs($val - $guess[$#{$game}]);\n\
+    \        }\n    }\n    return @score;\n}", "    my(@$guesses) = @_;\n    my $n\
+    \ = @$game;\n    my $i = $n - 1;\n    my @score;\n    my @diff;\n    for ($i;\
+    \ $i >= 0; $i--) {\n        if ($guesses[$i] eq $game[$i]) {\n            push\
+    \ @score, 0;\n        }\n        else {\n            push @score, $game[$i] -\
+    \ $guesses[$i];\n        }\n        push @diff, $diff = $game[$i] - $guesses[$i];\n\
+    \        $guesses[$i] = 0;\n    }\n    return (@score);\n}", "    my(@score, $diff)\
+    \ = @_;\n    my $score = scalar @score;\n    my $diff  = scalar @$diff;\n    my($off,\
+    \ $diff) = @$diff;\n    my $guessCount = scalar @$guess;\n    my(@result, $guessCount);\n\
+    \    @result = (0);\n    while ($diff > 0) {\n        $off = $diff - 1;\n    \
+    \    if ($score == 0 && $guess[$off] == $score[$off]) {\n            $diff = 0;\n\
+    \        } else {\n            $diff -= 1;\n        }\n        $result[$guessCount]\
+    \ += $diff;\n        $guessCount += 1;\n    }\n    return @result;\n}", "    \n\
+    \    # find the score for each match\n    my($score, $score) = (0, 0);\n    \n\
+    \    for (my $i = 0; $i < @$guess; $i++) {\n        if ($game->[$i] eq $guess[$i])\
+    \ {\n            $score = $score + 1;\n        }\n    }\n    \n    # find the\
+    \ difference\n    my(@differences, $difference) = (0, 0);\n    for (my $i = 0;\
+    \ $i < @$guess; $i++) {\n        if ($game->[$i] eq $guess[$i]) {\n          \
+    \  $difference = $difference + abs($guess[$i] - $score);\n        }\n    }\n \
+    \   \n    # return an array of differences\n    return @differences;\n}\n</cell>\n\
+    <text>\nYour solution is in the file game.pl and will be submitted in the cell\
+    \ below.", "    my @result;\n    # $guesses_scores is the array of scores the\
+    \ guesses have to each score\n    # $scores is the array of scores given by the\
+    \ user\n    my $guesses_scores = map {($_, $game->{scores}[$_])} 0..$#guesses;\n\
+    \    # go through every guess and calculate its score\n    foreach my $guess (@$guess)\
+    \ {\n        my $score = $game->{scores}[$guess];\n        $score++ if $guesses_scores{$guess}\
+    \ == $score;\n        $result[$guess] = abs($guesses_scores{$guess} - $score);\n\
+    \    }\n    return @result;\n}", "    my (@result, $total, $difference);\n   \
+    \ for (my $i = 0; $i < @$guess; ++$i) {\n        if ($game->[$i] ne $guess[$i])\
+    \ { # not matched\n            $total++ if $total < 1;\n            $difference\
+    \ = abs($guess[$i] - $game->[$i]);\n        } else {\n            $total = 0;\
+    \ # reset\n        }\n        @result[$i] = $total;\n    }\n    return @result;\n\
+    }", "    my(@score) = @_;\n    my(@guess) = @_;", "    my($score, $guess) = @_;\n\
+    \    my(@result) = ();", "    my($best_score) = 0;\n    my($best_guess) = 0;\n\
+    \    my($i, $score, $guess);\n    \n    # sort guesses numerically\n    foreach\
+    \ $guess (@$guess) {\n        $guess = $_ if $guess =~ /^-?\\d+$/;\n    }\n  \
+    \  \n    # sort scores numerically\n    foreach $score (@$game) {\n        $score\
+    \ = $_ if $score =~ /^-?\\d+$/;\n    }\n    \n    foreach $guess (@$guess) {\n\
+    \        $best_guess = $best_score if $best_score > $guess;\n        $best_guess\
+    \ = $guess if $best_score < $guess;\n        $best_score = abs($guess - $score);\n\
+    \    }\n    \n    @$best_guess;\n}", "    my(@score) = @$game;\n    my(@guess)\
+    \ = @$guess;\n    my(@diff) = (0);\n    foreach (@score) {\n        push(@diff,\
+    \ $_ - $_ if $_ == $guess->[$_]);\n    }\n    @diff;\n}", "    my(@score, $score)\
+    \ = (0, 0) unless @$score;\n    my %scores = (\n        -1 => 1,\n        -2 =>\
+    \ -1,\n    );\n    foreach my $guess (@$guess) {\n\tmy $score = ( $scores{$guess}\
+    \ ) ? $scores{$guess} : 0;\n        push(@$score, $score);\n    }\n    my @result\
+    \ = ();\n    foreach my $score (@$score) {\n\tpush(@result, abs($guess - $score));\n\
+    \    }\n    return @result;\n}", '    my($index, $score) = @_;', "    my(@score)\
+    \ = @_;\n    my($diff);\n    \n    $diff =\n    for my $i (0 .. $#score) {\n \
+    \       if ($guess[$i] > $score[$i]) {\n            $diff = $guess[$i] - $score[$i];\n\
+    \        }\n        else {\n            $diff = $score[$i] - $guess[$i];\n   \
+    \     }\n        push @{ $game->{'correct'} }, $diff;\n    }\n    \n    return\
+    \ @{ $game->{'correct'} };\n}", "    return map {abs($_ - $game[$_]) } 0 .. $#game;\n\
+    }\n</cell>\n<text>\nNow we can test our new function in Perl.", "    my(@result)\
+    \ = (0);\n    \n    for my $index (0 .. $#guesses) {\n        if ($game[$index]\
+    \ > $guess[$index]) {\n            push(@result, $game[$index] - $guess[$index]);\n\
+    \        }\n        else {\n            push(@result, abs($game[$index] - $guess[$index]));\n\
+    \        }\n    }", "    my $score = 0;\n    my $min = $#{$game};\n    my $max_index\
+    \ = $#{$guess};\n    my $guessed_correctly = 0;\n    my @score;\n    my $index\
+    \ = 0;\n    for (my $i = 0; $i < $min; $i++) {\n        next unless $guess[$i]\
+    \ == $game[$i];\n        $score++;\n        \n        if ($guessed_correctly)\
+    \ {\n            $score++;\n        }\n        \n        if ($score == $max_index)\
+    \ {\n            push @score, $i;\n        }\n        elsif ($score > $max_index)\
+    \ {\n            $guessed_correctly++;\n        }\n        $index++;\n    }\n\
+    \    \n    for (my $i = 0; $i < $min; $i++) {\n        next unless $guess[$i]\
+    \ == $game[$i];\n        $score++;\n        \n        if ($guessed_correctly)\
+    \ {\n            $score++;\n        }\n        \n        if ($score == $max_index)\
+    \ {\n            push @score, $i;\n        }\n        elsif ($score > $max_index)\
+    \ {\n            $guessed_correctly++;\n        }\n        $index++;\n    }\n\
+    \    \n    my @result;\n    my $min_diff = $#{$guess} - $#{$game};\n    push @result,\
+    \ $min_diff;\n    \n    return @result;\n}\n</cell>\n<text>\nHow we could improve\
+    \ this code?", "    my($correct_answer);\n    my($diff);", "    my(@results) =\
+    \ ();\n    my($best) = (0);\n    my($max) = scalar(@$guess);\n    my($current)\
+    \ = (0);\n    foreach my $i (0..$max) {\n        $results[$i] = $guess->[$i] -\
+    \ $game->[$i];\n    }\n    foreach my $i (0..$max) {\n        if($current->[$i]\
+    \ == $guess->[$i]) {\n            $current->[$i] = 0;\n        } else {\n    \
+    \        $current->[$i] = $guess->[$i] - $game->[$i];\n        }\n        if($current->[$i]\
+    \ > $best) {\n            $best = $current->[$i];\n        }\n    }\n    return\
+    \ @results;\n}\n</code>\n<|/ a tags=arrays,perl dscore=0 |>\n<| c |>\nAhh thank\
+    \ you, i understand what you're doing here now. I was trying to use map to do\
+    \ this but i wasn't getting anywhere with it. I'm still a beginner so i understand\
+    \ it a little better now. Thanks again.\n<|/ c |>\n<| a dscore=0 tags=arrays,perl\
+    \ |>\nYour example data is not consistent with the question, but here is an example\
+    \ that would give you the absolute difference between the scores and guesses.\n\
+    <code>\nuse strict;\nuse warnings;\nuse v5.10;", "    my @score = @_;\n    my\
+    \ @guesses = @_;\n    my @scores = @_;", "    my(@score) = @_;\n    my(@guess)\
+    \ = @_;\n    my($sum, @diff, @off);", "    my(@guessed_correct, $score);\n   \
+    \ foreach my $n (0..$#guess)  {\n        if ($guess[$n] eq $score[$n]) {\n   \
+    \         push(@guessed_correct, $score[$n]);\n        }\n        else {\n   \
+    \         push(@guessed_correct, abs($guess[$n] - $score[$n]));\n        }\n \
+    \   }\n    return @guessed_correct;\n}", "    my($numMatch, $score) = @$game ?\
+    \ @$game : @$guess;\n    my($i, $j, $numGame, $numGuess, $numMatch, $totalDiff);\n\
+    \    # Initialise the return array\n    my @out;\n    \n    # Start by sorting\
+    \ both to start things off\n    sort @$game;\n    sort @$guess;\n    \n    # Initialize\
+    \ the total difference for first element\n    $totalDiff = $game->[0] - $guess->[0];\n\
+    \    \n    # Iterate over the guesses starting from 1\n    for ($i = 1; $i < @$guess;\
+    \ $i++) {\n        $numGuess = $guess->[$i] - $game->[$i];\n        $numGame =\
+    \ $game->[$i] - $guess->[$i];\n        $numMatch = $numGuess/$numGame;\n     \
+    \   $totalDiff += abs($numGuess - $numGame);\n        @out[$i] = $numGuess;\n\
+    \    }\n    \n    # Return array\n    return @out;\n}", "    \n    my @results\
+    \ = ();\n    \n    for (my $i = 0; $i < $#{$game}; $i++) {\n        my $diff =\
+    \ $game->[$i] - $guess[$i];\n        if ($diff > 0) {\n            push(@results,\
+    \ $diff);\n        } elsif ($diff < 0) {\n            push(@results, $diff);\n\
+    \        } else {\n            push(@results, 0);\n        }\n    }\n    \n  \
+    \  return @results;\n}", "    my(@score) = @$game;\n    my(@guess) = @$guess;\n\
+    \    my @ans;\n    \n    for (my $i = 0; $i < @$game; $i++) {\n        my $score\
+    \ = 0;\n        for ($i; $i < @$game; $i++) {\n            if ($guess->[$i] !=\
+    \ $score) {\n                $score = $guess->[$i];\n            } else {\n  \
+    \              return \"ERROR: The guesses were wrong! $score was found instead\
+    \ of $guess->[$i]\";\n            }\n        }\n        push @ans, $score - $guess->[$i]\
+    \ if $score == $guess->[$i];\n    }\n    return @ans;\n}", "    my(@scores) =\
+    \ $game->{scores};\n    my(@guesses) = $guess->@{qw/a b c d e f g h/};\n    \n\
+    \    my(@differences) = (@guesses)\n                        .map{ $scores[$_]\
+    \ - $guesses[$_] }\n                        .grep{ $_ > 0 };\n    \n    return\
+    \ map { abs($_) };\n}", '    my($correct, $total) = (0, 0);', "    my($score)\
+    \ = @$game[0..$#{$game}-1];\n    my(@guess) = @$guess[0..$#{$guess}-1];\n    my\
+    \ $count = 0;\n    foreach my $i (0..$#guess) {\n        my $diff = abs($guess[$i]\
+    \ - $score[$i]);\n        if ($diff == 0) {\n            $count++;\n        }\
+    \ else {\n            $count = $diff;\n        }\n    }\n    \n    @$guess;\n}",
+  "    my($score1, $score2) = $game->@score;\n    my($guesse1, $guesse2) = $guess->@guess;\n\
+    \    my($count) = 0;", "    my($difference) = 0;\n    foreach my $i (0 .. $#{$guess})\
+    \ {\n        $difference += abs($guess[$i] - $game->[$i]);\n    }\n    return\
+    \ $difference;\n}", '    my($game, $guess) = @_;', "    my $score = shift;\n \
+    \   my @guesses = @_;", "    my($score, $diff) = @$game;\n    my($guess, $diff)\
+    \ = @$guess;\n    my @diff;\n    my @diffs;\n    my($i, $j);\n    my($score, $diff);\n\
+    \    \n    # Loop through the number of guesses\n    for($i = 0; $i < @$guesses;\
+    \ $i++) {\n        $score = $diff;\n        # Loop through the score array and\
+    \ find the best match\n        for($j = 0; $j < @$diffs; $j++) {\n           \
+    \ # If the guess matches the score, then we have found the best match\n      \
+    \      if($guess == $diffs[$j]) {\n                $diff = $diffs[$j];\n     \
+    \       }\n        }\n        \n        # Add the difference to the diffs array\n\
+    \        $diffs[$i] = $diff;\n        \n        # Add the difference to our diffs\
+    \ array\n        push(@diff, $diff);\n    }\n    \n    # Return the difference\
+    \ of the guesses\n    return @diff;\n}", "    my @result = ();\n    \n    # This\
+    \ is an extremely inefficient way of getting the difference between a guess and\n\
+    \    # a score. But it works fine for my test cases. \n    for (my $i = 0; $i\
+    \ < @$guess; $i++) {\n        $result[$i] = $game->abs($guess[$i] - $game->lookup($game,\
+    \ $i));\n    }\n    \n    return @result;\n}", "    my @scores = @$game;\n   \
+    \ my @guesses = @$guess;\n    my @difference;", "    my(@result) = (@$guess[0]);\n\
+    \    for my $i (1..@$guess){\n        if($result[$i-1] != @$game[$i]){\n     \
+    \       @result[$i-1] = abs($result[$i-1] - @$game[$i]);\n        }\n    }\n \
+    \   return @result;\n}\n</code>\n<|/ a dscore=1 tags=arrays,perl,algorithm |>\n\
+    <| c |>\nYour algorithm is correct, but it seems to me that you're overcomplicating\
+    \ things, like using `$a` and `$b` as indexes and using `$game` and `$guess` as\
+    \ arrays. There's no need to use them that way; they're just variables local to\
+    \ the sub. You're also not using the `@result` array at all; it seems that `$result[$i-1]`\
+    \ should be `$result[$i] - $game[$i]`. But if you fix those issues, you get the\
+    \ right answer already.\n<|/ c |>\n<| c |>\nThanks for your opinion! I just fixed\
+    \ my mistakes and added comments to show what I am doing. However, your algorithm\
+    \ is still correct and I believe my code is much more understandable and compact\
+    \ than yours. I hope you agree with me that it is more simple and readable.\n\
+    <|/ c |>\n<| c |>\n, Thank you for spotting that issue, you are right, there is\
+    \ no need to use indexes as arrays. I have edited my answer and removed them.\
+    \ My code was not only more understandable, it was actually easier to understand\
+    \ for me. And your version is more efficient than the one I used! I still think\
+    \ my solution is much more clear and readable.\n<|/ c |>\n<| a |>\nHere is another\
+    \ one that works well in Perl\n<code>\nuse strict;\nuse warnings;", "    my(@result)\
+    \ = ();\n    foreach my $i (0..$#$game) {\n        if ($game[$i] == $guess[$i])\
+    \ {\n            push(@result, 0);\n        } else {\n            push(@result,\
+    \ abs($guess[$i] - $game[$i]));\n        }\n    }\n    @result;\n}", "    my $i\
+    \ = 0;\n    my @scores = map { abs($_ - $guess) } @$game;\n    my @guesses = map\
+    \ { abs($_ - $game->[$_]) } 0..$#{$game};\n    \n    for my $guess (@guesses)\
+    \ {\n        push @$scores, unless $guess eq $game->[$i];\n        push @$scores,\
+    \ unless $guess > $game->[$i];\n        ++$i if $guess == $game->[$i];\n    }\n\
+    \    return @$scores;\n}", "    my(@guessed_correct, $guessed_wrong, $correct_guesses,\
+    \ $wrong_guesses);\n    my(@score, $correct, $wrong);\n    for my $index (0 ..\
+    \ $#{$game}) {\n        # Skip games that don't show a match.\n        next if\
+    \ !$game->[$index];\n        # Skip games that don't have a correct guess.\n \
+    \       next if !$guessed{$game->[$index]}++;\n        # Skip games that don't\
+    \ have a incorrect guess.\n        next if !$incorrect{$game->[$index]}++;", " \
+    \   my @score = ();\n    my @guess = ();\n    \n    foreach my $i(0..$#game) {\n\
+    \        push(@score, $game[$i] - $guess[$i]);\n        push(@guess, $guess[$i]);\n\
+    \    }\n    \n    my @ret = ();\n    \n    # compare each element of score with\
+    \ the entire of guesses, and sum the differences.\n    foreach my $i(0..$#score)\
+    \ {\n        my $diff = abs($guess[$i] - $score[$i]);\n        push(@ret, $diff);\n\
+    \    }\n    \n    # return the differences for each guess\n    return @ret;\n}",
+  "    my@diff = ();\n    my $size = @$game;\n    my $i;\n    for ($i = 0; $i < $size;\
+    \ ++$i) {\n        my $diff = (abs($guess[$i] - $game->[$i]) < abs($guess[$i]\
+    \ - $game->[$i]))? 0 : $guess[$i] - $game->[$i];\n        push(@diff, $diff);\n\
+    \    }\n    return @diff;\n}", "    my;\n    \n    foreach $i (0..$#{$game}) {\n\
+    \        if($game->[$i] == $guess[$i]) {\n            $guess[$i] = 0;\n      \
+    \  }\n        else {\n            $guess[$i] = abs($guess[$i] - $game->[$i]);\n\
+    \        }\n    }\n    return \\@guess;\n}", "    my($scores, $guesses) = @_;\n\
+    \    my;\n    \n    my $i = 0;\n    for(my $j=0; $j<$#scores; $j++) {\n      \
+    \  $guesses[$j] = ($guesses[$j] > 0) ? $guesses[$j] - $scores[$j] : abs($scores[$j]\
+    \ - $guesses[$j]);\n        $guesses[$j] = abs($guesses[$j]);\n        if($guesses[$j]\
+    \ == 0) {\n            $guesses[$j] = $scores[$j];\n        }\n        $guesses[$j]\
+    \ += $guesses[$j];\n        $guesses[$j] += $guesses[$j];\n        if($guesses[$j]\
+    \ == $scores[$j]) {\n            push(@correct, $i);\n        }\n        $i++;\n\
+    \    }\n    return;\n}", "    my($score, $score) = $game;\n    my($guessed, $guessed)\
+    \ = $guess;\n    return map { abs($guessed - $score) } @$guess;\n}", "    my($score,\
+    \ $win);\n    my($num_guesses) = @$guess;\n    my($num_score) = @$score;\n   \
+    \ my @result;\n    for (my $i=0; $i<$num_guesses; $i++) {\n        my $guess_idx\
+    \ = @$guess == 1 ? $i : 0;\n        my $score_idx = $i;\n        $result[$guess_idx]\
+    \ = $win = $score[$score_idx] - ($guess->[$score_idx] eq $score[$score_idx] ?\
+    \ 0 : abs($guess->[$score_idx] - $score[$score_idx]));\n    }\n    return @result;\n\
+    }", "    my @diff;\n    foreach my $g (@$guess) {\n        $diff[$g] += abs($game->[$_]\
+    \ - $g) for (0 .. @$game - 1);\n    }\n    return @diff;\n}\n</cell>\n<cell>",
+  "    my($score, $correct);\n    \n    my $scoreDiff = ();\n    \n    for($score,\
+    \ $correct = @$game) {\n        $scoreDiff[$score] = abs($guess - $score);\n \
+    \   }\n    \n    return $scoreDiff;\n}"]
 stop_tokens:
 - "\nsub"
 - "\n#"

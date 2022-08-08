@@ -7,6 +7,680 @@ tests: "}\n\ncandidate() {\n    add \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(
   \ \"4 88\") = \"88\" ]]\n    [[ $(candidate \"4 5 6 7 2 122\") = \"122\" ]]\n  \
   \  [[ $(candidate \"4 0 6 7\") = \"0\" ]]\n    [[ $(candidate \"4 4 6 8\") = \"\
   12\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local lst=$1\n  local even=0\n  local odd=0\n  for i in ${lst[@]};\
+    \ do\n    if [[ $i =~ ^(-?[0-9]+)$ ]]; then\n      ((odd+=${BASH_REMATCH[1]}))\n\
+    \    else\n      ((even+=${i}))\n    fi\n  done\n  echo \"${even}\"", "    set\
+    \ -- $1 || return 1\n    local even=0\n    for (( i=0; $i<$#; i++ ))\n    do\n\
+    \        local idx=$(( i%2 ))\n        local val=$( eval echo $i $( eval echo\
+    \ $idx $1 ) )\n        if (( $idx == 0 )); then\n            even=$(( $even+$val\
+    \ ))\n        fi\n    done\n    echo \"$even\"", "    local i\n    local lst\n\
+    \    lst=$@\n    for i in ${lst[@]:1}; do\n        if [ $(($i % 2)) -eq 0 ]; then\n\
+    \            lst+=$i\n        fi\n    done\n    echo \"${lst[@]}\"", "    local\
+    \ lst=\"$1 $2 $3\"\n    local even=true\n    local sum=0\n    local i\n    for\
+    \ ((i=0; i<${#lst}-1; i++))\n    do\n        (( sum+=${lst:$i:2} ))\n        ((\
+    \ even = even && ${lst:$i:2} %2 ))\n    done\n    if [ \"$even\" = true ]\n  \
+    \  then\n        echo \"$sum\"\n    else\n        echo \"0\"\n    fi", "  if [[\
+    \ $# != 1 ]]\n  then\n    echo \"$(basename $0): expected a non-empty list of\
+    \ integers as first argument\" >&2\n    return 1\n  fi\n\n  local i=0\n  local\
+    \ j=1\n  local sum\n\n  while [[ $i -lt ${#$1} ]]\n  do\n    local elem=$(echo\
+    \ \"${1}\" |cut -d ' ' -f $i)\n    local elem=$elem\n    local elem\n    if [[\
+    \ $((j % 2)) == 0 ]]\n    then\n      (( sum += elem ))\n    fi\n    (( j += 1\
+    \ ))\n    (( i += 1 ))\n  done\n  echo \"$sum\"", "    local lst=$1 ev i\n   \
+    \ ev=0\n    for i in $lst; do\n        if [ $(($i % 2)) -eq 0 ]; then\n      \
+    \      ev=$((ev + $i))\n        fi\n    done\n    echo \"$ev\"", "    local i\
+    \ num\n    IFS=' ' read -r -a nums <<< \"$1\"\n    for ((i=0; i < ${#nums[@]};\
+    \ i+=2)); do\n        nums[i]=$((nums[i] + nums[i+1]))\n    done\n    echo \"\
+    ${nums[*]}\"", "  local lst res\n  IFS=' ' read -r -a lst <<< \"$1\"\n  res=\"\
+    \"\n  for (( i=0; i<${#lst[@]}; i++ )); do\n    if [[ ${lst[i]} -eq 0 ]]; then\n\
+    \      continue\n    fi\n    (( res+=${lst[i]} ))\n  done\n  echo \"$res\"", " \
+    \ local lst arr\n  arr=($*)\n  local i\n  lst=()\n  for i in ${arr[@]}; do\n \
+    \   [[ -n $i ]] || continue\n    [[ -z $lst ]] || lst+=\" $i\"\n  done\n  echo\
+    \ $lst", "  local lst=$1 sum=0\n\n  lst=(\"${lst[@]}\" )\n  for(( i=0; i<${#lst[@]};\
+    \ i++ ));\n  do\n    case \"${lst[$i]}\" in\n      ${lst[i]}* ) sum=$(( ${sum}\
+    \ + ${lst[i]} ))\n                    ;;\n      * ) echo \"invalid number: $lst[$i]\"\
+    \ >&2\n              exit 1\n              ;;\n    esac\n  done\n\n  echo \"$sum\"",
+  "  local lst=$1;\n  local i=0;\n  local sum=0;\n  while [[ $i -lt ${#lst} ]]; do\n\
+    \    (( ${lst:$i:1}==0 ? sum+=${lst:$i:1} : sum+=${lst:$i:1%2} ))\n    i=$(( $i+2\
+    \ ))\n  done\n  echo $sum;", "    local list_str=$1\n    local odd=1\n    while\
+    \ [[ $list_str != '' ]]; do\n        odd=0\n        list_str=$(echo $list_str\
+    \ | sed -e 's/ //g')\n        local i\n        for (( i = 0; i < ${#list_str};\
+    \ i++ )); do\n            if [[ $(echo \"${list_str}\" | grep '^$i') == \"\" ]];\
+    \ then\n                odd=1\n                break\n            fi\n       \
+    \ done\n        if [[ $odd -eq 1 ]]; then\n            echo $(echo \"${list_str}\"\
+    \ | sed -e 's/^/'$odd'/')\n        fi\n    done", "  local lst index odds evens\
+    \ sum\n  IFS=$' \\t\\n' read -r -a lst <<< \"$1\"\n  odds=()\n  evens=()\n  for\
+    \ index in \"${!lst[@]}\"; do\n    if [[ $index -ne 0 ]]; then\n      odds+=(\
+    \ ${lst[$index]} )\n    else\n      evens+=( ${lst[$index]} )\n    fi\n  done\n\
+    \  (( ${#odds[@]} > ${#evens[@]} )) && sum=$(printf '%s\\n' \"${odds[@]}\")\n\
+    \  (( ${#odds[@]} < ${#evens[@]} )) && sum+=\"-${evens[@]}\"\n  echo \"$sum\"",
+  "  eval 'echo $((${!1}%2))'", "    local i\n    local lst=\"$1 $2 $3 $4\"\n    local\
+    \ sum\n    for i in $(seq 0 $(( $# - 1)))\n    do\n        sum=$(($sum+$((${lst:$i:1}%2)+${lst:$i:2})))\n\
+    \    done\n    echo \"$sum\"", "  echo \"$@\" 1>&2\n  eval local sum=0\n  local\
+    \ i\n  for i in  \"$@\" ; do\n    (( sum += ( $i % 2 ) ))\n  done\n  echo \"$sum\"\
+    \ 1>&2", "    while read -n 1 num\n    do\n        if [[ \"$num\" =~ ^([2-9])$\
+    \  ]]; then\n            if [ \"$num\" != ${BASH_REMATCH[1]} ]; then\n       \
+    \         echo $((${num}+2))\n            fi\n        else\n            echo $num\n\
+    \        fi\n    done", "  if [[ \"$#\" -eq \"0\" ]]; then\n    echo \"Usage:\
+    \ $0 [-n] numbers\"\n    return\n  fi\n  local N=$1\n  shift\n  local i\n  for\
+    \ i in $(seq 0 $((${N} / 2-1)));\n  do\n    if [[ ${N} -eq 0 ]]; then\n      break\n\
+    \    fi\n    if [[ ${N} -gt $((${N} / 2-1) + i) ]]; then\n      continue\n   \
+    \ fi\n    if [[ ${N} -lt $((${N} / 2-1) + i) ]]; then\n      echo \"${i}\"\n \
+    \   fi\n  done", "    local lst=( $1 )\n    local sum=0\n    for (( i=0; i<${#lst[@]}\
+    \ && i < ${#lst[@]}/2 ; i++ )); do\n        sum=$(( sum + ${lst[i]} ))\n    done\n\
+    \    echo $sum", "  local arg=$1 lst=$2 res\n  IFS=' ' read -a lst <<< \"$1\"\n\
+    \  res=0\n  for ((i=0;i<${#lst[@]};i+=2)); do\n    ((res+=${lst[i]}))\n  done\n\
+    \  echo $res", "  local lst=$1\n  echo $(( ${lst[@]%$2} ))", "    lst=$1\n   \
+    \ local -n lst=${lst//[[:space:]]/}\n    local -i i=0;\n    local sum=0;\n   \
+    \ local cur;\n    while [ -n \"${lst[i]}\" ]; do\n        if [ $(($i % 2)) -eq\
+    \ 0 ]; then\n            cur=${lst[i]};\n        else\n            cur=${lst[i]}\
+    \ + $sum;\n        fi\n        sum=$cur;\n        ((i++));\n    done\n    printf\
+    \ \"$sum\\n\";", "    local -a lst\n    local -i j\n    local result \n    lst=(\
+    \ $1 )\n    for (( j=0 ; j<${#lst[@]};  j++ )) ; do\n        if [[ ${lst[j]} %\
+    \ 2 == 0 ]]; then\n            result+=\" $lst[j] \"\n        fi\n    done\n \
+    \   echo \"$result\"", "\tlocal lst=\"$1\"\n\tlocal sum\n\tlocal idx\n\t# loop\
+    \ through all elements of the list\n\tfor idx in $lst; do\n\t\tif (( idx%2 ==\
+    \ 0 ))\n\t\tthen\n\t\t\tsum=\"$sum+$idx\"\n\t\tfi\n\tdone\n\techo \"$sum\"", " \
+    \   # Split input at space\n    set -- \"$1\"\n    shift\n\n    local even=0\n\
+    \    local odd=0\n    for (( i = 0; i < ${#lst[@]}; i++ )); do\n        if [ $((i%2))\
+    \ -eq 0 ]; then\n            even=$((even+${lst[i]}))\n        fi\n        if\
+    \ [ $((i%2)) -eq 1 ]; then\n            odd=$((odd+${lst[i]}))\n        fi\n \
+    \   done\n    echo \"${even}\"", "  local lst \n  lst=$( echo $1 | sed -e 's/[^0-9]*\\\
+    ([0-9]*\\) /\\1/' -e 's/ //g' )\n  for (( i=${#lst}-1; i>=0; i-- )); do\n    if\
+    \ [[ $i -eq ${#lst} ]]; then\n      echo ${lst:0:i}\n      return 0\n    fi\n\
+    \    if [[ ${lst:$i:1} -eq 0 ]]; then\n      continue\n    fi\n    echo ${lst:$i:1}\
+    \ \n  done | sed -e 's/ //g' -e 's/ //g'", "    # read each integer in $1 into\
+    \ an array\n    IFS=' ' read -r -a array <<< \"$1\"\n    # find the odd indices\n\
+    \    even=0\n    odd=1\n    while [ $(($odd % 2)) -eq 0 ]; do\n        odd=$((odd+1))\n\
+    \    fi\n    for element in \"${array[@]}\"; do\n        if [ $((element%2)) -eq\
+    \ 1 ]; then\n            even=$((even+1))\n        fi\n    done\n    echo ${array[$even]}",
+  "    local i\n    local sum=0\n    for i in $(echo $1 | sed 's/ /\" \"/'); do\n\
+    \        if [ $i % 2 -eq 0 ]; then sum=$((sum+i)); fi\n    done\n    echo $sum",
+  "  local idx\n  local x\n  for idx; do\n    x=$1\n  done | awk '{$0=$1+$2$3$4$5$6$7$8$9$10}1'",
+  "    local lst=$1\n    local even=\"0 1\"\n    local odd=\"2 3\"\n    local even1=\"\
+    4 5\"\n    local even2=\"6 7\"\n    local odd1=\"8 9\"\n    local odd2=\"10 11\"\
+    \n    echo $lst\n    if [[ -z \"$lst\" ]]; then\n        echo \"No Arguments Given\"\
+    \n        exit 1\n    fi\n    echo $lst\n    local even=`echo $even | tr '[:lower:]'\
+    \ '[:upper:]'`\n    local odd=`echo $odd | tr '[:lower:]' '[:upper:]'`\n    echo\
+    \ $even\n    echo $odd\n    echo $even1\n    echo $even2\n    echo $odd1\n   \
+    \ echo $odd2\n    local even1=\"`echo $even1 | tr '[:upper:]' '[:lower:]'`\"\n\
+    \    local even2=\"`echo $even2 | tr '[:upper:]' '[:lower:]'`\"\n    local odd1=\"\
+    `echo $odd1 | tr '[:upper:]' '[:lower:]'`\"\n    local odd2=\"`echo $odd2 | tr\
+    \ '[:upper:]' '[:lower:]'`\"\n    for (( i=0; i<${#lst[@]}; i++ )); do\n     \
+    \   if [[ ${lst[$i]} = $even ]]; then\n            let \"even1++\"\n        elif\
+    \ [[ ${lst[$i]} = $odd ]]; then\n            let \"odd1++\"\n        elif [[ ${lst[$i]}\
+    \ = $even1 ]]; then\n            let \"even2++\"\n        elif [[ ${lst[$i]} =\
+    \ $even2 ]]; then\n            let \"even2++\"\n        elif [[ ${lst[$i]} = $odd1\
+    \ ]]; then\n            let \"odd2++\"\n        elif [[ ${lst[$i]} = $odd2 ]];\
+    \ then\n            let \"odd2++\"\n        fi\n    done\n    echo $even1\n  \
+    \  echo $odd1\n    echo $even2\n    echo $odd2", "    local IFS=$1\n    local\
+    \ out\n    out=$(bc <<< \"$1 * $2 >> $3\")\n    echo \"$out\"", "    set -- $1\
+    \ \n    # set $2 so we don't overwrite any arguments we pass to $1\n    local\
+    \ i=0\n    local result=0\n    while [[ $i -lt $1 ]]; do\n        if (( $(echo\
+    \ $i | bc) %% 2 == 0)); then\n            result=$(( $result + $i ))\n       \
+    \ fi\n        i=$(( $i + 1 ))\n    done\n    echo \"$result\"", "    local str=\"\
+    \ \"\n    local result=\" \"\n    local n=$1\n    for (( i=0; i<$n; i++ )); do\n\
+    \        str+=$2\n    done\n    echo $str\n    local arr=$(echo $str | tr ' '\
+    \ ',')\n    local evens=$(echo $arr | tr ',' '\\n' | grep -v ^0 )\n    local odds=$(echo\
+    \ $arr | tr ',' '\\n' | grep ^0 )\n    local even\n    local odd\n    echo $evens\n\
+    \    echo $odds\n    while read even; do\n        echo $evens\n        echo $odds\n\
+    \        echo even\n        echo $evens\n        echo $odds\n        echo $evens\n\
+    \        echo $odds\n    done <<< \"$odds\"", "    local str=$1\n    local even_inds=$((${#str}%2))\
+    \ \n    local even_vals=$((${#str}%2))\n\n    # If the length is even, even_inds\
+    \ will be zero. So:\n    # even_inds % 2 = 0\n    # even elements will be at even\
+    \ indexes.\n    # $((${#str}%2)) gives the remainder after division by 2, so even_inds\
+    \ is always odd \n    \n    local i=${even_inds} \n    while (( i < ${#str} ));\
+    \ do\n        if [[ $str[$i]%2 != $even_vals ]]; then\n            str=$str$even_vals\n\
+    \        else\n            even_inds=$((even_inds+1))\n            i=${even_inds}\n\
+    \        fi\n    done\n    echo $str", "  local lst=$( echo $1 | tr ' ' ' ' )\n\
+    \  local i=0\n  while [ $i -lt ${#lst} ]\n  do\n    if (( ${lst:$i:1} == 2 ))\n\
+    \    then\n      lst=\"${lst:0:$i} ${lst:$i:1}\"\n    else\n      (( i+=1 ))\n\
+    \    fi\n  done\n  echo $lst", "  local lst=$1 lst_tmp lst_tmp2 i\n  for i in\
+    \ $(eval echo {0..$(( ${#lst} - 1 ))}); do\n    if [[ $((i%2)) -eq 0 ]]; then\n\
+    \      lst_tmp=$(eval echo $lst)\n      lst_tmp2=\"$lst_tmp $lst\"\n      lst=$lst_tmp2\n\
+    \      break\n    fi\n  done\n  echo $lst", "  local -n lst=$1\n\n  # The loops\
+    \ below do the job. Believe it or not, they work. :-)\n  # for i in $(seq 0 $((${#lst[@]}\
+    \ - 1)); do\n  #   if ((${#lst[@]} % 2 != 0)); then\n  #     if ((${lst[$i]} %\
+    \ 2 != 0)); then\n  #       lst[$i]=$(($lst[$i] + $lst[$(($i + 1))]))\n  #   \
+    \  fi\n  #   fi\n  # done\n\n  # A little simpler but a lot slower:\n  local -n\
+    \ evens=$lst\n  local -n odds=()\n  for i in $(seq 0 $((${#lst[@]} - 1)); do\n\
+    \    if ((${#lst[@]} % 2 != 0)); then\n      odds+=(\"${evens[$i]}\")\n    fi\n\
+    \    evens[$i]=$(($evens[$i] + $evens[$(($i + 1))]))\n  done\n  odds+=(\"${evens[@]}\"\
+    )\n\n  # And finally, the solution using the same loop structure as above:\n \
+    \ echo ${odds[@]}", "  local i=0\n  while [ $i -lt ${#1} ]; do\n    local val=${1:$i:1}\n\
+    \    if [[ $val -eq 0 ]]\n    then\n      val=$(cat)\n      echo $val\n    fi\n\
+    \    (( i+=2 ))\n  done", "  local lst=${1}\n  local res=\"\"\n  local i\n  for\
+    \ ((i=0; i<${#lst}; i+=2)); do\n    res=\"${res} ${lst:$i:1}\"\n  done\n  echo\
+    \ ${res}", "\tlocal lst=\"$1\"\n\tlocal sum=0\n\tlocal i=0\n\twhile (( $i < ${#lst[@]}\
+    \ )); do\n\t\t(( sum+=${lst[$i]} ))\n\t\ti=$(( $i + 2 ))\n\tdone\n\techo ${sum}",
+  "  lst=$1\n  even=0\n  for ((i=0; i < ${#lst}; i++)); do\n    ((j=2*i))\n    ((j\
+    \ > i)) && continue\n    echo ${lst:$i:2} | bc\n    ((even+=$(echo ${lst:$i:2}\
+    \ | bc)))\n  done\n  echo $even", "  local lst=$1\n  shift 1\n  echo $(( ${lst[@]/#/even}\
+    \ + ${lst[@]/#/odd} ))", "    local -i i\n    local list\n    list=(\"${1// /\
+    \ }\")\n    for i in \"${!list[@]}\"; do\n        if [[ \"${list[i]}\" = \"${list[i+1]}\"\
+    \ ]]; then\n            list[i]=\"${list[i]}${list[i+1]}\"\n            list[i+1]=\"\
+    \"\n        fi\n    done\n    echo \"${list[@]}\"", "  local lst output\n  IFS=\"\
+    \ \" read -r -a lst <<< \"$1\"\n  output=\"null\"\n  for i in \"${!lst[@]}\";\
+    \ do\n    ((i % 2)) && output+=\" $lst[$i]\"\n  done\n  echo \"$output\"", " \
+    \   IFS=' ' read -a array \"$1\"\n    local i=${#array[@]}\n    local output\n\
+    \    while (( $i > 0 )); do\n        if (( $(expr index $array $(( $i % 2 )))\
+    \ % 2 )); then\n            output=\"$output$array[$(( $i % 2 ))]\"\n        fi\n\
+    \        (( i % 2 ))\n    done\n    echo \"$output\"", "    local lst=$1\n   \
+    \ local sum=0\n    for i in $lst; do\n        if (( $i % 2 )); then\n        \
+    \    sum=$(( $sum + $i ))\n        fi\n    done\n    echo \"$sum\"", "    IFS=$'\\\
+    n' arr=( $1 )\n    odds=0\n    for i in \"${arr[@]}\"; do\n        [[ $(( i +\
+    \ 1 )) % 2 ]] && odds+=( $i )\n    done\n    echo \"${arr[@]:0:$(( ${#arr[@]}\
+    \ - 1 )):1}${arr[@]:$(( ${#arr[@]} - 1 )):1}${odds:1}\"", "    local lst len\n\
+    \    local i\n    lst=( $1 )\n    len=${#lst[@]}\n    for ((i=1;i<$len;i+=2));\
+    \ do\n        lst+=(\"${lst[i]}\")\n    done\n    echo \"${lst[@]}\"", "  local\
+    \ lst=\"$1\";\n  local even=$2 \"1 \";\n  local odd=$3 \"0 \";\n  local sum;\n\
+    \  for ((i=0; i<${#lst}; i++));\n  do\n    if [[ $i -eq 0 ]]; then\n      sum=${lst[i]};\n\
+    \    elif [[ $i -eq 1 ]]; then\n      sum=$(($sum + ${lst[i]}));\n    else\n \
+    \     if [[ $(($i % 2)) -eq 0 ]]; then\n        sum=$(($sum + ${even}${lst[i]}));\n\
+    \      else\n        sum=$(($sum + ${odd}${lst[i]}));\n      fi\n    fi\n  done;\n\
+    \  echo $sum;", "  local IFS=$' \\t\\n'\n  local result=$1\n  echo \"$result\"\
+    \ | grep -E -o '[0-9]+' | while read num; do\n    if [ $((num%2)) -eq 0 ]; then\n\
+    \      result+=$num\n    fi\n  done\n  echo \"$result\"", "  lst=$(cat $1)\n \
+    \ res=\"\"\n  for (( i = 0; i < ${#lst}; ++i )); do\n    if (( i % 2 == 0 ));\
+    \ then\n      res=\"${res} ${lst[i]}\"\n    fi\n  done\n  echo $res", "    local\
+    \ lst\n    lst=\"$1\"\n    local i\n    for ((i=0; i < ${#lst}; i++)); do\n  \
+    \      if [ $(($i % 2)) -eq 1 ]; then\n            lst=\"${lst} ${lst[$i]}\"\n\
+    \        fi\n    done\n    echo \"${lst}\"", "  local -i x\n  for x in $@; do\n\
+    \    if [ \"$x\" -ge 0 ]; then \n      (( $x % 2 == 0 )); then\n        echo $((\
+    \ $x + $( echo \"$( expr $(( $x % 2 )) -1 )\" ) ))\n      fi\n    fi\n  done",
+  "   local lst=$1\n   local sum=0\n   for ((i=${#lst}-1; i>=0; i--))\n   do\n   \
+    \   if (( $i % 2 == 0 ))\n      then\n         sum=$(($sum + ${lst[$i]}))\n  \
+    \    fi\n   done\n   echo $sum", "  local lst=$1\n  local idx=0\n  while [ $idx\
+    \ -lt $lst ]\n  do\n    local x=$lst[$idx]\n    local y=$((x%2)?$lst[idx+1]:$lst[idx+1])\n\
+    \    echo \"$x$y\"\n    ((idx+=2))\n  done", "    local lst=$1\n    local result=''\n\
+    \    for i in $(seq 0 $((${#lst[@]}/2))); do\n        if [ ${lst[$i]} -eq ${lst[$((\
+    \ $i + 1 ))]} ]; then\n            result=${result} ${lst[$i]}\n        fi\n \
+    \   done\n    echo $result", "    local i\n    local sum=0\n\n    set -- $1 2>/dev/null\n\
+    \n    for ((i=0; i<$#; i+=2)); do\n        if (( $((i+2)) % 2 )); then\n     \
+    \       ((sum+=$(( ${!i} + ${!i+1} ))) < 0)\n        fi\n    done\n    echo \"\
+    $sum\"", "  local lst=$1\n  local sum=0\n  local i=0\n  while (( i < ${#lst[@]}\
+    \ )); do\n    if [ ${lst[i]} -eq 0 ]; then\n      (( sum = sum + 2 ))\n    else\n\
+    \      if [ ${lst[i]} -eq 1 ]; then\n        (( sum += ${lst[i]} ))\n      else\n\
+    \        (( sum += ${lst[i]} ))\n      fi\n    fi\n    i=$(( i + 1 ))\n  done\n\
+    \  echo \"$sum\"", "    local lst=$1\n    local i num\n    num=0\n    for i in\
+    \ `echo ${lst} | sed 's/ /,/g'`; do\n        if [[ \"${i:0:1}\" == \"-\" ]]; then\n\
+    \            lst=\"-$lst\"\n        else\n            if [[ \"${i:0:1}\" == \"\
+    :\" ]]; then\n                lst=\":$lst\"\n            else\n              \
+    \  if [[ \"${i:0:1}\" == \"+\" ]]; then\n                    lst=\"+$lst\"\n \
+    \               else\n                    lst=\"-$lst\"\n                fi\n\
+    \            fi\n        fi\n        num=$(($num + ${i}))\n    done\n    echo\
+    \ \"$num\"", "  local n=$(( $# ))\n  local i j num\n  for (( i = 0; i < n; i++\
+    \ )); do\n    num=${1:i:1}\n    j=0\n    for (( j = 0; j < ${#num}; j++ )); do\n\
+    \      if [ ${num:j:1} = \"0\" ]; then break; fi\n      if [ ${num:j:1} = \"1\"\
+    \ ]; then j+=2; fi\n    done\n    echo \"${num:0:j}\"\n  done", "  # This can\
+    \ be replaced with \"${@:2}\"\n  # but we keep it here to preserve backward compatibility.\n\
+    \  local -n lst=\"$1\"\n  shift\n  local -n nums=\"$1\"\n  shift\n  local res=\"\
+    $1\"\n  shift\n  local i\n  while [ -n \"$1\" ]; do\n    local num=\"${nums//$1/}\"\
+    \n    local v=\"${lst[$num]}\"\n    if [ \"$(expr $v \\% 2)\" -eq \"1\" ]; then\n\
+    \      printf '%s\\n' \"$res\" \"$v\"\n    fi\n    res=\"${res} $v\"\n    lst=$((\
+    \ ${lst:$(( $num + 1 ))} + 1 ))\n  done\n  printf '%s\\n' \"$res\"", "  eval lst=\\\
+    $$1\n  for i in $(seq 0 $(($#lst-1)));\n  do\n    if [[ \"$i\" -eq \"$((i/2))\"\
+    \ ]]; then\n        eval lst=\\${lst:$i:$(($i-($i/2))):1}\n    fi\n  done\n  echo\
+    \ ${lst}", "    local lst=$1 even=$2 odd=$3\n    local even_index odd_index\n\
+    \    even_index=$(( ${#lst} / 2 ))\n    odd=$(( ${#lst} - $even_index * 2 ))\n\
+    \n    for (( i = 0; i <= $even_index; i++ )); do\n        even+=$(( ${lst:$i:1}\
+    \ % 2 ))\n    done\n\n    for (( i = 0; i <= $odd_index; i++ )); do\n        odd+=$((\
+    \ ${lst:$i:1} % 2 ))\n    done\n\n    echo \"$even\"\n    echo \"$odd\"", "  \
+    \  local list_string=$1\n    local list_integers=$($list_string | xargs)\n   \
+    \ local list_indices=$($list_string | awk '{split($0,a,\" \"); for(i in a) if\
+    \ (a[i]%2!=0) print i}')\n    local list_even_values=$($list_string | awk '{split($0,a,\"\
+    \ \"); for(i in a) if (a[i]%2==0) print a[i]}')\n    echo \"${list_integers%2}\"",
+  "    local lst=$1\n    shift\n    local even=$(echo $lst | awk '{print $1}' | awk\
+    \ '{if($0 %2==0)print $0}' >/dev/null; echo $?)\n    if [ \"$even\" -eq 0 ]; then\n\
+    \        echo \"0\"\n    else\n        local odd_indices=$(echo $lst | awk '{print\
+    \ ($1-1)/2} >/dev/null; echo $?')\n        echo $(($(echo $lst | awk -v even=$even\
+    \ -v odd_indices=$odd_indices '{print $even+($odd_indices + 1)} >/dev/null; echo\
+    \ $?')))\n    fi", "  echo -n $1\n  shift\n  echo $1 ${1/*@/+}", "  local lst=\"\
+    $1\"\n  shift\n  local even\n  local evenidx\n  local odd\n  local oddidx\n  local\
+    \ sum\n\n  if [[ ${#lst} -eq 0 ]]; then\n    echo 0\n    return\n  fi\n\n  evenidx=$((\
+    \ ${#lst} / 2 ))\n  while (( ${#lst} > 0 )); do\n    (( oddidx=(${lst:0:${#lst}})\
+    \ ))\n    (( odd=\"${lst:${evenidx}:${#oddidx}}\"   ))\n    (( even=\"${lst:${#evenidx}:${#oddidx}}\"\
+    \   ))\n    (( sum=\"${sum}${even}${odd}\"     ))\n    (( lst=\"${lst:${#lst}}\"\
+    \              ))\n  done\n\n  echo $sum", "  local lst\n  lst=\"$*\"\n  echo\
+    \ \"${lst//[^0-9]/}\" | grep -v '^$' |\n    awk '{print $1 + $2 * 2}'", "    echo\
+    \ $1\n    local ints=$1\n    local sum=0\n    for num in $ints; do\n        if\
+    \ (( num % 2 == 0 )); then\n            sum=$(( $sum + $num ))\n        fi\n \
+    \   done\n    echo \"$sum\"", "    local input=\"$1\"\n    local i=0\n    local\
+    \ output=\"\"\n    while [[ ${input} == *\"$( IFS=' ' read -ra arr <<< \"$1\"\
+    \ )\" ]] do\n        output=\"${output} ${arr[$((i%2))]}\"\n        ((i++))\n\
+    \    done\n    echo \"$output\"", "    if [ \"$1\" ] ; then\n        set -- $((\
+    \ $(( ${#1} % 2 )) )) $1 \n        if [ \"$2\" ] ; then\n            set -- \"\
+    $2\" \"$1\"\n        fi\n        echo $(( $1 ))\n    else\n        echo 0\n  \
+    \  fi", "  evens=$(echo $1 | tr \" \" \"\\n\")\n  odds=$(echo $1 | tr \" \" \"\
+    \\n\")\n  for i in $evens; do\n    if [[ $i -ne $odds ]]; then\n      echo $i\n\
+    \    fi\n  done", "    local lst=$1\n    local evens=\"\"\n    for i in $(seq\
+    \ 0 $((${#lst[@]} - 1)))\n    do\n        if (( $(expr ${i} + 1) % 2 ))\n    \
+    \    then\n            evens=${evens}${lst[$i]}\n        fi\n    done\n    echo\
+    \ \"$evens\"", "    local x=$1\n    local num\n    local even\n    local odd\n\
+    \    local n\n\n    odd=0\n    even=$((${#x}-1))\n    while [ $(( $even )) -ne\
+    \ 0 ]; do\n        if [ ${x:$even} -eq $(( $even )) ] ; then\n            even=$((\
+    \ $even - 1 ))\n        else\n            odd=$(( $odd + 1 ))\n        fi\n  \
+    \  done\n    odd=$(( $odd + 1 ))\n    for n in $( echo $x ); do\n        if [\
+    \ ${x:$even} -eq $n ] ; then\n            even=$(( $even + 1 ))\n        fi\n\
+    \    done\n    echo $(( $even+$odd ))", "  local lst\n  lst=$( echo \"$1\" | tr\
+    \ ' ' ',' )\n  local even_index\n  for i in $(seq 0 $((${#lst[@]} -1 ))); do\n\
+    \    even_index=$(( i%2 ))\n    if [ $even_index -eq 0 ]; then\n      lst=$( echo\
+    \ \"$lst\" | sed -e \"s/$i /$((i+2))/\" )\n    fi\n  done\n  echo \"$lst\"", " \
+    \ local lst=$1 odd_index even_numbers sum\n  odd_index=$(echo $lst | cut -d\"\
+    \ \" -f1 | sort -n | tail -1)\n  even_numbers=$(echo $lst | cut -d\" \" -f2 |\
+    \ sort -n | tail -1)\n  sum=$(echo $(( ${even_numbers} + ${odd_index} )))", " \
+    \ lst=($1)\n  even=($(awk '{for(i=1;i<=NF;i++) if((i%2==0)) print i}'));\n  for\
+    \ i in ${!even[@]}; do\n    let \"tmp=${lst[$i]}\"\n    let \"lst[$i]=${lst[$i]+$tmp}\"\
+    \n  done\n  echo \"${lst[@]}\"", "    local lst=$1\n    local evens=\"\"\n   \
+    \ local odds=\"\"\n    for ((i=0; i<${#lst}; i++)); do\n        if [ ${lst:$i:1}\
+    \ = 0 ]; then\n            evens=\"${evens}${lst:$i:1}\"\n        else\n     \
+    \       odds=\"${odds}${lst:$i:1}\"\n        fi\n    done\n    echo ${evens}",
+  "    local lst=$1\n    local evens=$2\n    local odds=$3\n    for i in $( seq 1\
+    \ $( echo $lst | wc -l ) ); do\n        local tmp=$( echo $lst | awk -F' ' '{print\
+    \ $i}')\n        if [ \"$tmp\" -eq \"0\" ]; then\n            echo \"0\"\n   \
+    \     else\n            local tmp=$( echo $evens | awk -F' ' '{print $i}')\n \
+    \           local evens=$( echo $evens | awk -F' ' '{print $tmp}')\n         \
+    \   local odds=$( echo $odds | awk -F' ' '{print $tmp}')\n            evens=$(\
+    \ echo $evens | awk -F' ' '{print $tmp}')\n            odds=$( echo $odds | awk\
+    \ -F' ' '{print $tmp}')\n        fi\n    done\n    echo $evens", "  local lst\
+    \ n ev\n  lst=$1\n  ((n=0))\n  while read -r ev; do\n    ((n+=2))\n  done <<<\
+    \ \"$lst\"\n  echo $n", "  echo $1 |\n  awk '{print $1}'| #get first field\n \
+    \ tr ' ' '\\n' |  # replace spaces with new lines\n  xargs -n 1 -I % echo $((\
+    \ % * 2)) |  # add an even number at an odd index\n  paste -s -d '' | #re-combine\
+    \ lines\n  sed 's/^/+ /'  # prepend a '+' for every line", "    local lst=$1\n\
+    \    local ev\n    for ev in $lst; do\n        if [ $(( ${ev} % 2 )) -eq 0 ];\
+    \ then\n            echo \"$ev\"\n        fi\n    done", "    local lst=$1\n \
+    \   local ans=\"\"\n    for x in $lst; do\n        ans=$ans\"$(( ${x} + ${ans:0:1}\
+    \ ))\"\n    done\n    echo \"$ans\"", "    local n=$#\n    local lst=$1\n    if\
+    \ [ $n -gt 1 ]; then\n        echo $lst\n        echo ${lst%$1}\n    else\n  \
+    \      echo $lst\n    fi", "  local list_str=$1\n  local result=\"\"\n  echo $list_str\
+    \ | while read n; do\n    if [ $n % 2 != 0 ]; then\n      result=$(( $result +\
+    \ $n ))\n    fi\n  done\n  echo $result", "    local index\n    while read index\
+    \ || [ -n \"$index\" ]; do\n        if [ -n \"$index\" ]; then\n            if\
+    \ [ $index -eq 2 ]; then\n                printf \"$2\" >&2\n            else\n\
+    \                printf \"$1\" \"$2\" >&2\n            fi\n        else\n    \
+    \        printf \"$1\" >&2\n        fi\n    done < <(echo \"$1\" | tr '[:space:]'\
+    \ ' ' |\\\n    awk '{\n        split($0, a, \" \"); \n        for (i=1; i<=length(a);\
+    \ i++) {\n            if ( a[i] % 2 != 0 ) {\n                printf \"%s%s\"\
+    , a[i], (i==length(a)? \"\":\" \")\n            }\n        }\n        printf \"\
+    \\n\"\n    }')", "  local lst=$1\n  local val\n  for (( i=0; i < ${#lst}; i++\
+    \ )); do\n    val=${lst:$i:2}\n    if [ $val -gt 0 ] && [ $val -lt 2 ]; then\n\
+    \      echo $val\n    fi\n  done", "  lst=(${1//[# ]})\n  evens=$(find \"${lst[@]}\"\
+    \ -not -path \"*[0-9]*\" -type f -name \"*even*\" -printf \"%f\" 2>/dev/null)\n\
+    \  oddby=$(find \"${lst[@]}\" -not -path \"*[0-9]*\" -type f -name \"*oddby*\"\
+    \ -printf \"%f\" 2>/dev/null)\n  echo \"${evens}+${oddby}\"", "  # shellcheck\
+    \ disable=SC2086\n  mapfile -t array <<< \"$1\"\n  local i\n  local sum\n  i=0\n\
+    \  sum=0\n  while ((i < \"${#array[@]}\")); do\n    ((i % 2 == 0)) && sum=$((${sum}+${array[i]}))\n\
+    \    ((++i))\n  done\n  printf '%s\\n' \"${sum}\"", "  declare -i even=0\n  declare\
+    \ -i tmp\n\n  for idx in \"${!1}\" ; do\n    if [ ${even} -eq 0 ]; then\n    \
+    \  even=1\n      tmp=\"${!1}\"\n    else\n      tmp=\"${!1}\"\n      ((tmp+=\"\
+    \ $tmp\"))\n      ((even=0))\n    fi\n    echo \"$tmp\"\n  done", "    local lst=$1\n\
+    \    local index=0\n    local even\n    even=0\n    for x in $lst; do\n      \
+    \  if [ $(( index%2 )) -eq 0 ]; then\n            even=$(( $even + $x ))\n   \
+    \     fi\n        index=$(( index + 1 ))\n    done\n    echo \"$even\"", "   \
+    \ local lst=$1\n    local even\n    local odd\n    even=$(echo $lst | awk '{print\
+    \ $1}')\n    odd=$(echo $lst | awk '{print $2}')\n    for ((i = 0; i < ${#even};\
+    \ i++))\n    do\n        ((sum+=${even[$i]}))\n    done\n    for ((i = 0; i <\
+    \ ${#odd}; i++))\n    do\n        ((sum+=${odd[$i]}))\n    done\n    echo \"$sum\"",
+  "    local -i index\n    while (( ${#} > 0 )); do\n        index=$(expr ${1} %%\
+    \ 2)\n        echo $index\n        shift && shift || break\n    done", "  IFS='\
+    \ ' read -r -a arr <<< \"$1\"\n  for (( i=0; i<${#arr[@]}; i+=2 )); do\n    arr[$i]=\"\
+    $((arr[$i]+arr[$i+1]))\"\n  done\n  echo ${arr[@]}", "    # $1: space-separated\
+    \ list\n    # $2: space-separated list\n    # $3: space-separated list\n\n   \
+    \ # get the length of the list\n    listlen=$(( ${#1} ))\n    # create an empty\
+    \ variable for the new number\n    sum=\"\"\n    # loop through each element\n\
+    \    for (( i = 1; i <= listlen; i++ ));\n    do\n        # if the index is even\n\
+    \        if [ $((i % 2)) -eq 0 ]; then\n            # add the element to the new\
+    \ variable\n            sum=\"${sum} $($1 $i $3)\"\n        fi\n    done\n\n \
+    \   # return the new variable\n    echo \"$sum\"", "    local tmp out\n    out=\"\
+    \"\n    for i in $@; do\n        if [[ $i =~ ^- ]]; then\n            tmp=${tmp:-$i}\n\
+    \        else\n            if [[ $i =~ ^[0-9]+ ]]; then\n                if ((\
+    \ $i % 2 != 0 )); then\n                    tmp=${tmp:-$i}\n                fi\n\
+    \            else\n                if (( $i % 2 == 0 )); then\n              \
+    \      tmp=${tmp:-$i}\n                fi\n            fi\n        fi\n    done\n\
+    \    echo \"$tmp\"", '    echo $(expr $(cat -) "+" $(($2 + 1)))', "    if [[ $#\
+    \ -lt 1 ]] ; then\n        echo \"Usage: $0 integers\"\n        return 1\n   \
+    \ fi\n    local lst=$1\n    echo \"$(($(lst | grep -v '^0$') | xargs -n2 -I% echo\
+    \ \"% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %\
+    \ % % % % % % % ", "    echo \"$@\" | cut -d\" \" -f2 | sort | uniq | \\\n   \
+    \ while read a ; do\n        echo $a\n        if [[ $(( ${a} % 2 )) == 0 ]] ;\
+    \ then\n            echo $a\n        fi\n    done", "    local lst idx\n    [[\
+    \ \"$1\" =~ ^(\\([0-9]*\\))? ]] && lst=${BASH_REMATCH[1]}\n    [[ -z $lst ]] &&\
+    \ echo \"No integers given\"; return 1\n    [[ -z \"$idx\" ]]\n    idx=0\n   \
+    \ while (( idx < ${#lst[@]} ));\n    do\n        (( idx+=2 ))\n        [[ ${lst[idx]}\
+    \ -eq 0 ]] && { lst[idx]=\"even\"; break; }\n    done\n    echo $((${lst[0]} +\
+    \ ${lst[1]}))", "    local lst=$1\n    local cnt=0\n    local even=0\n    local\
+    \ odd=0\n    for ((i=1; i<=length($lst); i+=2)); do\n        ((cnt=cnt+1))\n \
+    \       if (( $cnt % 2 )); then\n            even=$even+$(( $lst | cut -c2- |\
+    \ sed 's/ //g' ))\n        fi\n        ((odd=odd+1))\n        if (( $odd % 2 ));\
+    \ then\n            even=$even+$(( $lst | cut -c1-2 | sed 's/ //g' ))\n      \
+    \  fi\n    done\n    echo $even", "    local i sum res\n    for ((i=0; i < ${#1};\
+    \ i++ )); do\n        if [[ ${1:i} =~ '^[0-9]+$' ]] ; then\n            sum=$(expr\
+    \ $sum + ${1:i})\n        fi\n    done\n    if [[ ${sum} -gt 0 ]] ; then\n   \
+    \     res=\"${sum}\"\n    fi\n    echo \"${res}\"", "    local lst=\"$1\"\n  \
+    \  local even=\"$(cut -d \" \" -f 2 <<< \"$lst\")\"\n    local odd=\"$(cut -d\
+    \ \" \" -f 1 <<< \"$lst\")\"\n    local result=\"$(echo $even | awk '{print $1}')\"\
+    \n    local even=\"${even//[0-9]}\"\n    if [ -z \"$even\" ]; then\n        echo\
+    \ \"$even\"\n    else\n        result=\"$result$even\"\n    fi\n    for (( i=$odd-1\
+    \ ; i >= 0 ; i-- )); do\n        result=\"$result$(echo $odd | awk '{print $i}')\"\
+    \n    done\n    echo $result", "  echo \"$1\" | awk '{print $1}' | while read\
+    \ -r x ; do\n    echo $x | awk '{ if ($1%2==0) print $0 }'\n  done", "  local\
+    \ i=0\n  while [[ $1 =~ ([^ ]*) ]]; do\n    (( i=$i+2 ))\n    (( $i-- ))\n   \
+    \ [[ $1 =~ ^([0-9]*) ]] && echo \"$((${BASH_REMATCH[1]})+${BASH_REMATCH[0]})\"\
+    \ || echo $((${BASH_REMATCH[1]})+0))\n    shift\n  done", "    local list=$1\n\
+    \    local odd\n    odd=$(echo $list | tr ' ' '\\n' | grep -o \"^[^\\ ]*$\")\n\
+    \    local even\n    even=$(echo $list | tr ' ' '\\n' | grep -o \"^[\\ ]*[^\\\
+    \ ]*$\")\n    echo $(( ${even}+${odd}))", "    # Split $1 into its elements: $1\
+    \ will be a list of integers\n    # Iterate $1 elements\n    # If the current\
+    \ element is an even number, add it to the result\n    # If the current element\
+    \ is odd, add the element at odd-index position\n    for (( i=0; i < ${#1}; i++\
+    \ )); do\n        if (( i % 2 == 0 )); then\n            # Add ${1[i]} to the\
+    \ result\n            result=\"${result} ${1[i]}\"\n        else\n           \
+    \ # Add ${1[i]} to the result at odd indices\n            result=\"${result} ${1[i-2]}\"\
+    \n        fi\n    done\n\n    # Remove the final space\n    echo \"${result% *}\"",
+  "    local lst=\"${1}\"\n    if [[ \"$lst\" == \"\" ]]; then\n        return\n \
+    \   fi\n    local evens=$(echo $lst | sed 's/ //g' | awk '{\n        for(i = 1;\
+    \ i <= NF; i++) {\n            if (($i % 2) == 0) {\n                print $i\n\
+    \            }\n        }\n    }')\n    echo ${evens}", "    lst=${1//\" \"/\"\
+    \ \"} # convert spaces to spaces\n    lst=$( echo \"${lst}\" | sed -e \"s/ //g\"\
+    \ ) # remove spaces\n    echo \"${lst}\" | sed -e 's/^/even elements: /' > list2.txt\n\
+    \    lst=$( cat list2.txt | sed -e 's/^/odd elements: /' ) # add new list to list2.txt\n\
+    \    echo \"$lst\"", "  # Get first number\n  val1=$1\n  # Get rest of the numbers\n\
+    \  val2=${val1% *}\n  # Get even indices\n  evenIndices=$( echo $val2 | sed 's/\
+    \ //g' | awk '{ print $1 }' )\n  echo $evenIndices | tr ' ' '\\n'", "  local lst=$1\n\
+    \  local val=0\n  for x in $lst; do\n    ((val+=x))\n  done\n  echo $val", " \
+    \ local item\n  local odd\n  local even\n  for item in ${1:?}; do\n    odd=false\n\
+    \    even=false\n    for ((i=0;i<${#item};i++)); do\n      ((i%2==0)) && odd=true\n\
+    \      ((i%2==1)) && even=true\n      if ((${odd} == ${even})); then\n       \
+    \ echo ${item}\n        break\n      fi\n    done\n  done", "    local lst=${1:-}\n\
+    \    echo \"$(expr ${lst//' '/ } + 2)\"", "    echo $1 | tr ' ' '\\n' | awk '{print\
+    \ $2}' | awk '{if ($2%2==1) print $1; else print 0}' | paste -s -d \"+\" | xargs\
+    \ | tr '\\n' ' '", "  local lst i\n  lst=$1\n  for i in ${!lst[@]}; do\n    if\
+    \ [ $(echo \"$i\" | awk '{ print $1 }') % 2 ]; then\n      echo \"$i\"\n    fi\n\
+    \  done", "    local lst=$1\n    local even\n    local odd\n    local sum\n\n\
+    \    if [ $# -eq 0 ]; then\n        echo \"Usage: $0 LIST\"\n        exit 0;\n\
+    \    fi\n\n    for element in $lst; do\n        odd=$(echo $element | awk '{print\
+    \ $1}')\n        even=$(echo $element | awk '{print $2}')\n\n        if [ $even\
+    \ -eq 0 ]; then\n            continue;\n        fi\n\n        if [ $odd -eq 0\
+    \ ]; then\n            sum=$even\n        else\n            sum=$sum + $even\n\
+    \        fi\n\n        echo $sum\n    done", "    local lst=$1 even=$2\n    local\
+    \ i=$((${#lst}-1)) j=$((${#even}-1)) odd=$((${#lst}+${#even}))\n\n    ${lst[$i]}\
+    \ ${even[$j]} ${even[$j+1]} ${lst[$odd]} ${lst[$odd+1]}", "    local arr=( $1\
+    \ )\n    local index=$(( ${#arr[@]} -1 ))\n    local sum=0\n    for (( i = 0;\
+    \ i < index; i++ ))\n    do\n        (( sum+=arr[i] ))\n    done\n    for (( i\
+    \ = index+1; i < ${#arr[@]}; i++ ))\n    do\n        (( sum+=arr[i] ))\n    done\n\
+    \    echo $sum", "  local items=$(echo $1 | awk '{print $1}')\n  local count=0\n\
+    \  for i in $items; do\n    count=$(( $count+$i % 2 ))\n  done\n  echo $count",
+  "    lst=$1\n    shift\n    i=0\n    while [ $i -lt ${#lst} ]\n    do\n        if\
+    \ [ $((i % 2)) -eq 0 ] ; then\n            lst+=\"${lst[i]}\"\n        fi\n  \
+    \      i=$((i+1))\n    done\n    echo \"$lst\"", "    local lst\n    for ((i =\
+    \ 0; i < ${#1}; i++)); do\n        if [[ ${1:i:2} -eq 0 ]]; then\n           \
+    \ continue\n        fi\n        lst=\"${lst} ${1:i:2}\"\n    done\n    echo \"\
+    ${lst}\"", "    lst=$1\n    lst=($lst)\n    evens=()\n    odds=()\n    # go over\
+    \ all the elements\n    for e in ${lst[@]}; do\n        # add them to the even\
+    \ list\n        if [[ $((e%2)) -eq 0 ]]; then evens+=(\"$e\"); fi\n        # add\
+    \ them to the odd list\n        if [[ $((e%2)) -eq 1 ]]; then odds+=(\"$e\");\
+    \ fi\n    done\n    echo \"${evens[*]}\"", "\tlocal lst index num\n\tlst=${1//$2/}\n\
+    \tfor index in ${!lst[@]}; do\n\t\tnum=${lst[$index]}\n\t\tif [[ $index % 2 ==\
+    \ 0 ]]; then\n\t\t\techo $((num+$3))\n\t\telse\n\t\t\techo $((num+$2))\n\t\tfi\n\
+    \tdone", "  # echo $@\n  # echo \"$@\"\n  local lst=$1\n  local odd=$2\n  local\
+    \ even=$3\n  local i=0\n\n  # echo $lst\n  # echo $odd\n  # echo $even\n  while\
+    \ [ \"$i\" -lt \"$#\" ];\n  do\n    if [[ \"$lst\" =~ \"^[0-9]*$\" ]]\n    then\n\
+    \      # echo $i\n      # echo $lst\n      # echo $even\n      # echo $odd\n \
+    \     eval \"echo $lst $(( $(( $lst % $odd )) )) $(( $(( $even % $odd )) ))\"\n\
+    \      lst=$(echo \"$lst\" | tail -1)\n      even=$(echo \"$even\" | tail -1)\n\
+    \      odd=$(echo \"$odd\" | tail -1)\n    elif [ \"$lst\" =~ \"^[!0-9]*$\" ];\n\
+    \    then\n      # echo $i\n      # echo $lst\n      # echo $even\n      # echo\
+    \ $odd\n      eval \"echo $lst $(( $(( $lst % $even )) )) $(( $(( $odd % $even\
+    \ )) ))\"\n      lst=$(echo \"$lst\" | tail -1)\n      even=$(echo \"$even\" |\
+    \ tail -1)\n      odd=$(echo \"$odd\" | tail -1)\n    else\n      echo \"Not a\
+    \ number!\"\n      exit 1\n    fi\n    i=$(( $i + 1 ))\n  done", "    local arr=($1)\n\
+    \    local i=0\n    for num in $arr; do\n        if [ $((i % 2)) -eq 1 ]; then\
+    \ \n            echo -n $num\n        fi\n        i=$((i + 1))\n    done", " \
+    \ [[ \"${#1}\" -eq 0 ]] && return 1\n  local lst=$1\n  local str=\"\"\n  local\
+    \ odd=0\n  local even=0\n  local i\n\n  for ((i=0; i<${#lst}; i++)); do\n    [\
+    \ \"${lst:$i:1}\" == \"0\" ] && { even=$((even+1)); continue; }\n    [ \"${lst:$i:1}\"\
+    \ == \"2\" ] && { odd=$((odd+1)); continue; }\n    str+=\"${lst:$i} \"\n  done\n\
+    \n  if [ \"${even}\" -gt 0 ]; then\n    str+=\"${even} \"\n  fi\n  if [ \"${odd}\"\
+    \ -gt 0 ]; then\n    str+=\"${odd} \"\n  fi\n  echo $str", "  lst=${1:?}\n  sum=$((\
+    \ ${lst:*:2} ))\n  echo $sum", "  local lst=\"${1}\"\n  local sum=0\n  local i=0\n\
+    \  while [ $i -lt $lst ]; do\n    if [ $i -eq $(( $i % 2 )) ]\n    then\n    \
+    \  sum=$(( $sum + $i ))\n    fi\n    i=$(( $i + 1 ))\n  done\n  echo \"$sum\"",
+  " set -- $1 \n evens=\"\"\n oddes=\"\"\n for i; do\n case $i in\n    0) odds=$i;;\n\
+    \    1) evens=$i;;\n    *)  echo \"Expected even and odd integers got $i\"; exit\
+    \ 1;;\n esac\n done\n if [ -n \"$evens\" ]; then\n  echo \"$evens\"\n fi\n if\
+    \ [ -n \"$oddes\" ]; then\n  echo \"$oddes\"\n fi", "    local lst=$1\n    local\
+    \ i=0 sum\n    local j=0 num\n    while [ \"${lst[i]}\" != \"\" ]; do\n      \
+    \  if (( i % 2 == 0 )); then\n            (( sum += ${lst[i]} ))\n        fi\n\
+    \        (( i++ ))\n    done\n    return $sum", "  local lst=$1\n  echo $(( (${#lst[@]}\
+    \ % 2) + ${lst[@]} ))", "    local lst=$1\n    echo \"$lst\" | tr '\\n' ' ' |\
+    \ awk '{for(i=1;i<=NF;i++){if($i%2==0){print $i}}}' | sed 's/ /+/g' | bc", " \
+    \   local i\n    local sum=0\n    local lst=\"$1\"\n    shift\n    for ((i=1;\
+    \ i<=${#lst}; i=i+2)); do\n        sum=$((sum+${lst:$i}))\n    done\n    echo\
+    \ \"$sum\"", "    local -i cnt=0\n    local -i val\n    for (( i=0; i<${#1}; i++\
+    \ )); do\n        val=\"${1}[$i]\"\n        if (( ${val}%2==0 )); then\n     \
+    \       echo \"${1}[$i]\"\n            ((cnt++))\n        fi\n    done\n    if\
+    \ (( cnt==0 )); then\n        echo \"0\"\n    else\n        echo \"${1}[${#1}-1]\"\
+    \n    fi", "  local lst=$1\n  local str=\"\"\n  local even\n  local odd\n  local\
+    \ i\n  local l\n  local n\n  local evens\n  local odds\n  \n  evens=$(echo $lst\
+    \ | sed 's/ //g' | awk '{print $2}')\n  odds=$(echo $lst | sed 's/ //g' | awk\
+    \ '{print $1}')\n  \n  for ((i=0; i<${#evens[@]}; i++)); do\n    even=$( echo\
+    \ $evens | sed \"s/.\\+/${evens[i]}/g\" )\n    odd=$( echo $odds | sed \"s/.\\\
+    +/${odds[i]}/g\" )\n    str=$( echo $str + \" \" + $( echo $even + $odd ) )\n\
+    \  done\n  echo $( echo $str | cut -d' ' -f2 )", "  local i=0\n  while [ \"$i\"\
+    \ -lt \"$1\" ]; do\n    let \"i+=1\"\n    if [ \"$i\" -eq \"$1\" ]; then break;\
+    \ fi\n    if [ \"${1:i:1}\" -eq \"0\" ]; then\n      echo \"$i\"\n      break\n\
+    \    fi\n  done", "\techo $((${1// / })", "    local lst=${1:-$1}\n    local tmp=()\n\
+    \    local i\n    for (( i=0; i<${#lst[*]}; i++ ))\n    do\n        if [ ${lst[i]}\
+    \ -eq $(( i % 2 )) ]\n        then\n            tmp+=${lst[i]}\n        fi\n \
+    \   done\n    echo ${tmp[@]}", "    local lst=\"$1\"\n    local res=\"$2\"\n\n\
+    \    # split list into separate integers\n    local integers=()\n    for n in\
+    \ $lst; do\n        integers+=( $n )\n    done\n    # add even values at odd indices\
+    \ ($( ) converts the list into a string containing the\n    # individual digits)\n\
+    \    for index in ${!integers[@]}; do\n        if [ \"$index\" -eq 0 ]; then\n\
+    \            res=\"$res ${integers[$index]}${integers[$(( index + 1 ))]}\"\n \
+    \       else\n            res=\"$res ${integers[$index]}\"\n        fi\n    done\n\
+    \    # add leading 0s to ensure proper length output (as if all were even)\n \
+    \   res=\"$(echo ${res:0:1})$res\"\n    echo $res", '        echo "$1" | sed "s/^/echo
+    &/" | sh', "  local IFS=\"$1\"\n  local -n lst=$2\n  local val\n\n  val=$((lst[$((lst.length+1))%${#lst[@]}]-$((lst[$((lst.length+2))%${#lst[@]}])))\n\
+    \  echo \"$val\"", "  local lst=\"$1\";\n  local even_indices=( $(cut -d \" \"\
+    \ -f 2 <<< $lst) | awk '{for (i=1;i<NF;i+=2) print i}' | grep -Ev \"^0$\");\n\
+    \  echo $((${#lst}+${#even_indices}));", "    local i j result\n    i=0; result=0\n\
+    \    while [ $1 ]; do\n        j=$((i+1))\n        if [ $(($j % 2)) -ne $(($(echo\
+    \ $1 | cut -d ' ' -f $j) % 2)) ]; then\n            result=$((result+$1))\n  \
+    \      fi\n        i=$j\n        shift\n    done\n    echo \"$result\"", "  local\
+    \ IFS=$1\n  local lst=$2\n\n  local val=0\n  for v in $lst; do\n    ((val+=v))\n\
+    \  done\n  echo $val", "    local IFS=' '\n    local -a res=( )\n    for ((i=0;i<\"\
+    ${#1[@]}\" ;i++)); do\n        (( ${i} % 2 )) || let \"res[${i}]+=${1[i]}\"\n\
+    \    done\n    echo ${res[*]}", "   local lst=$1\n   local result=0\n   for i\
+    \ in $lst; do\n      (( result += $i % 2 ))\n   done\n   echo $result", "   if\
+    \ [[ -z \"$1\" ]]; then\n      echo -n \"No argument supplied\"\n   elif [[ -z\
+    \ \"$2\" ]]; then\n      echo -n \"No argument supplied\"\n   else\n      local\
+    \ lst res\n      lst=$($1 $2 | tr '[:upper:]' '[:lower:]')\n      for (( i = 0;\
+    \ i < ${#lst}; i++ )); do\n         if [[ ${lst:$i:2} -eq 0 ]]; then\n       \
+    \     res=$res$(( i % 2 == 0 ))\n         fi\n      done\n      echo -n $res\n\
+    \   fi", "    local input=$1\n\n    local sum=0\n    for ((i = 0; i < ${#input};\
+    \ i++)); do\n        if [[ ${input[$i]} % 2 == 0 ]]; then\n            sum=$((${sum}\
+    \ + ${input[$i]}))\n        fi\n    done\n    echo \"$sum\"", "    local lst\n\
+    \    lst=( $@ )\n    local i\n    local result\n    result=\"\"\n    for ((i=0;\
+    \ i<${#lst[@]}; i++)); do\n        [[ ${lst[$i]} -eq ${lst[$((i+1))]} ]] && result=${result}${lst[$i]}\n\
+    \    done\n    echo ${result}", "    local lst=$1\n    echo \"$lst\" | sed -r\
+    \ \"s/(.*\\s)([0-9]+)/\\1 \\2/g\" | sort | uniq -c | awk '{print $2, $1}'", " \
+    \ local lst n\n  lst=\"$( eval \"echo $1\" )\"\n  read -a n\n  local sum\n  for\
+    \ (( i=0; i<${#lst[@]}; i++ )); do\n    sum=$(( ${lst[i]}+${n[i]} ))\n    lst[i]=${sum}\n\
+    \  done\n  echo \"${lst[@]}\"", "    evens=$(echo $1 | sed -E 's/^ *//g; s/ *$//g')\n\
+    \    echo $(( $evens ))", "        local lst=$1\n        local i=0\n        while\
+    \ [ $i -lt $lst ]; do\n                if [ $((i%2)) -eq 0 ]; then\n         \
+    \               lst+=$((${lst:$i}))\n                fi\n                i=$((i+1))\n\
+    \        done\n        echo ${lst:$i}", "  local i\n  local elem\n  echo \"$1\"\
+    \ | while read elem; do\n    i=$(( (i + 1) % $2 ))\n    echo \"$elem\"\n  done",
+  '  echo $(( $1 + $2 ))', "  lst=$1\n  local i even\n  for i in $lst; do\n    if\
+    \ [ \"$i\" -eq \"0\" ] ; then\n      even=true\n    elif [ \"$even\" -eq \"false\"\
+    \ -a $(( $i - 1 )) -eq \"0\" ] ; then\n      even=false\n      echo $i\n    fi\n\
+    \  done", "  for i in $(echo $1 | awk '{print $1}'); do\n    sum=$((sum+i))\n\
+    \  done\n  echo $sum", "    local lst=$1\n    local i=0\n    while (( i < ${#lst[@]}\
+    \ )) ; do\n        if (( i % 2 == 0 )); then\n            lst[i]=$(( lst[i] +\
+    \ ${lst[( ( $i % 2 ))-1]} ))\n        fi\n        i=$(( i + 1 ))\n    done", " \
+    \   local i=0\n    local result=\"\"\n    local args=( \"$@\" )\n    # Read all\
+    \ the args\n    while [ ${#args[@]} -gt 0 ]; do\n        result=\"$result ${args[$i]}\"\
+    \n        (( i++ ))\n    done\n    result=$(echo $result | tr ' ' '\\n' | awk\
+    \ '{print ($1+$2)}')\n    echo $result", "    local lst=$1\n    local i=0\n  \
+    \  while [ $i -lt ${#lst} ]; do\n        if (( $(echo $lst | grep -Ev \"^0$\"\
+    ) )); then\n            # empty lines are allowed\n            lst=${lst:$i:1}\n\
+    \        else\n            lst=${lst:$i:1}\n            (( i=i+1 ))\n        fi\n\
+    \    done\n    echo $lst", "    local lst=$1\n    local odd=$(echo \"$lst\" |\
+    \ sed 's/\\([0-9]*\\)/\\1/g')\n    local even=$(echo \"$lst\" | sed 's/\\([0-9]*\\\
+    )/ /g')\n    local result\n    if [[ ! $odd ]]; then\n        result=$(echo \"\
+    $even\" | awk '{sum+=$1} END {print sum}')\n    else\n        result=$(echo \"\
+    $even\" | sed \"s/^/$odd/\" | awk '{sum+=$1} END {print sum}')\n    fi\n    echo\
+    \ \"$result\"", "  local lst=\"$1\"\n  local index\n\n  for index in $(seq 0 $((${#lst}\
+    \ - 1)))\n  do\n    [[ ${lst:$index} == *0* ]] && continue\n    local value=${lst:$index:1}\n\
+    \    echo \"${value}\"\n  done", "  local lst=$1\n  local evens=\"\"\n  local\
+    \ odd_indices=$(seq 0 $((${#lst} - 2)))\n  for i in $odd_indices; do\n    local\
+    \ even=$(expr $i % 2 \\* 2 \\+ $i / 2)\n    evens=\"${evens} $even\"\n  done\n\
+    \  echo \"$evens\"", "  local lst=\"$1\"\n\n  echo \"$lst\" | sed 's/ /\\n/g'\
+    \ | while read -a elem; do\n    echo $((${elem[0]} + ${elem[1]}))\n  done", " \
+    \   local lst=$1 result=$(echo \"$lst\" | sed 's/ //g' | awk '{print $1}')\n \
+    \   for idx in $(seq $((${#lst} / 2)) -1 -1 -1); do\n        local element=$(echo\
+    \ $lst | sed \"$idxd\")\n        if [[ $element == 0 ]]; then\n            break\n\
+    \        fi\n        if [[ ${element:0:1} == \"#\" ]]; then\n            continue\n\
+    \        fi\n        result=\"$element$result\"\n    done\n    echo \"$result\"",
+  "  local lst=$1\n  # first find the even indices\n  local even_indices=$(find \"\
+    ${lst[@]}\" -name 'even' -print)\n  # then print all elements of the odd indices\
+    \ with \"x\"\n  printf '%s\\n' \"${lst[@]}\" \\\n    | sed -E 's/(\\([0-9]\\+\\\
+    ))/${1}x\\2/g' \\\n    | sed -E 's/([0-9]\\+\\)/\\1x/g' \\\n    | sed -E 's/x([0-9]+)/\\\
+    1/' \\\n    | sed -E 's/x([0-9]+)/\\1/'", "    local lst=\"$1\"\n    local i\n\
+    \    for ((i=1; i<${#lst}; i++)); do\n        if [ $(expr $i % 2) == 0 ]; then\n\
+    \            lst+=\" $( expr \"$lst\" \"^\" $i)\"\n        fi\n    done\n    echo\
+    \ \"$lst\"", "    # Check for correct number of arguments supplied\n    if [ $#\
+    \ -eq 0 ]; then \n        echo \"Wrong number of arguments supplied: $# provided\"\
+    \n        echo \"Usage: $(basename $0) <list>\"\n        return 1\n    fi\n  \
+    \  \n    # Remove leading spaces and split the list into words for processing\n\
+    \    local lst=\"$1\"\n    IFS=\" \" read -r -a array <<< \"$lst\"\n    for ((\
+    \ i=0; i < ${#array[@]}; i++ )); do\n        # Only process list elements that\
+    \ are odd, and not blank.\n        if (( i % 2 )); then\n            array[$i]=$(($array[$i]\
+    \ + $array[$((i+1)%${#array[@]})]))\n        fi\n    done\n    echo \"${array[@]}\"",
+  "    local index=$1\n    local input=$2\n    local even=$((index % 2 == 0))\n  \
+    \  local output=''\n\n    while [ \"$index\" -gt 0 ]; do\n        if [ $index\
+    \ -eq 0 ] && [ \"$even\" -eq 0 ]; then\n            index=$(expr $index - 1)\n\
+    \            output=\"$output$input\"\n        elif [ \"$even\" -eq 0 ]; then\n\
+    \            output=\"$output$input\"\n        elif [ \"$even\" -eq 1 ]; then\n\
+    \            output=\"$output${input}\"\n        elif [ \"$even\" -eq 2 ]; then\n\
+    \            output=\"$output$input\"\n        else\n            output=\"$output${input}\"\
+    \n        fi\n        index=$((index - 2))\n        input=$((input + 1))\n   \
+    \ done\n\n    echo \"$output\"", "  local i\n  for ((i = 1; i <= ${#1}; i++));\
+    \ do\n    [[ \"${#1}\" -gt \"$i\" ]] && return 0\n    if [[ ${1:$i:1} -eq 0 ]];\
+    \ then\n      continue\n    fi\n    echo \"$((${1:$i:1}))\"\n  done", "    local\
+    \ lst=$1\n    echo \"${lst}\"\n    # grep the list for even elements but skip\
+    \ odd elements\n    # use awk to extract even elements\n    echo $(awk '{ print\
+    \ ($1 % 2) }' <<< \"${lst}\")", "    local lst i=0 j=0\n    lst=( $1 )\n    while\
+    \ [ \"$i\" -le \"${#lst[@]}\" ]; do\n        if [ \"${lst[$i]}\" -eq \"${lst[$((j+1))]}\"\
+    \ ]; then\n            lst[$i]=\"${lst[$i]} ${lst[$((j+1))]}\"\n        fi\n \
+    \       let \"i = i + 2\"\n        let \"j = j + 2\"\n    done\n    echo \"${lst[*]}\"",
+  "    local list_elements=$1\n    local sum=0\n    for element in $list_elements;\n\
+    \    do\n        if (( ( $element % 2 == 0 )) && (( $element == ${list_elements[*]:1:$((\
+    \ $element / 2 ))} )))\n        then\n            ((sum += $element))\n      \
+    \  fi\n    done\n    echo $sum", "  if [ -z \"$1\" ]; then\n    echo \"Usage:\
+    \ `basename $0` integer1 integer2 ... integerN\" >&2\n    return 1\n  fi\n  \n\
+    \  for ((i=0;i<${#1};++i)); do\n    if [[ \"$i\" -eq ${#1} ]]; then\n      echo\
+    \ \"$i\"\n    elif [[ \"${i:$(($i+1))}\" -eq 0 ]]; then\n      echo \"$i\"\n \
+    \   else\n      echo \"$((${i}+${#1:$(($i+1))}))\"\n    fi\n  done", "  local\
+    \ lst=\"$1\"\n  local even=\"1\"\n  local odd=\"2\"\n  local sum=\"0\"\n  while\
+    \ read -r n; do\n    case \"$n\" in\n      \"$even\") ((sum+=$n))\n          \
+    \     ;;\n      \"$odd\")  ((sum+=$n))\n               ;;\n      *) printf \"\
+    invalid input: %s\\n\" \"$n\" >&2\n         exit 1\n    esac\n  done\n  echo \"\
+    $sum\"", "    echo $(($1 + $(($2 - 1)))) | tr ' ' .", "    local lst=$1\n    local\
+    \ sum=0\n    local i\n    for i in $lst; do\n        if (( $i % 2 == 0 )); then\n\
+    \            sum=$(($sum+$i))\n        fi\n    done\n    echo \"$sum\"", "   \
+    \ local lst=$1\n    local evens=\"\"\n    local odds=\"\"\n    local temp\n\n\
+    \    for idx in $(seq 0 $(( $((${#lst[@]} / 2)) )) ); do\n        if (( $(expr\
+    \ ${idx} + 2) <= $((${#lst[@]}) ))); then\n            temp=$(expr ${idx} + 2)\n\
+    \            odds=\"${odds} ${lst[$temp]}\"\n        else\n            temp=$(expr\
+    \ ${idx} + 1)\n            evens=\"${evens} ${lst[$temp]}\"\n        fi\n    done\n\
+    \    echo \"${evens}\"", "    local -i i=0 even=0\n    for ((i; $i != ${#lst[@]};\
+    \ ++i)); do\n        if (( ${lst[i]} % 2 == 0 )); then\n            even=1\n \
+    \       fi\n    done\n    if [[ \"$even\" = 0 ]]; then\n        return 0\n   \
+    \ fi\n    echo \"${lst[@]:$(( ${#lst[@]} - i + 1 )):2} ${lst[$(( $i + 1 ))]}\"",
+  "    local lst=\"$1\"\n    # split $lst on spaces, trim newlines, and then convert\
+    \ to an array\n    local -i len=${#lst}\n    local -i evens=0\n    local -i odds=0\n\
+    \    local -i i\n    for ((i=0; i<len; i++)) ; do\n        # if the number is\
+    \ even...\n        if (( ${lst:$i:1} == \"0\" )); then\n            # increment\
+    \ the evens counter\n            ((evens++))\n        else\n            # increment\
+    \ the odds counter\n            ((odds++))\n        fi\n    done\n    # return\
+    \ $odds + $evens, remembering to add 1 to the evens counter\n    echo \"$((odds+1))$((evens+1)\"",
+  "    while read -r elem; do\n        even=$(( ${elem%?} % 2 ))\n        odd_indices=$((\
+    \ ${elem%?} / 2 ))\n        lst[$odd_indices]+=\"$even\"\n    done < \"$1\"\n\
+    \    printf '%s\\n' \"${lst[@]}\"", "  local lst tmp i j\n\n  lst=\"${1}\"\n \
+    \ shift 1\n\n  for ((i=0; i<${#lst[@]}; i+=2)); do\n    if (( $(echo \"${lst[i]}\
+    \ ${lst[i+1]}\" | bc) )) ; then\n      lst+=(\"${lst[i]}\")\n    fi\n  done\n\n\
+    \  printf '%s' \"${lst[@]}\"", '    echo "$1 ${lst[$((${#lst[@]} + ${#$1} % 2))]}"
+    >&2', "  if [ -z \"$1\" ]; then echo 1; return 1; fi\n  local lst result\n  lst=\"\
+    $1\"\n  result=\"1\"\n  for (( n=1; n<${#lst}; n++ )); do\n    if [ \"${lst:$n:1}\"\
+    \ = \"1\" ]; then result+=\"2\"; else result+=\"1\"; fi\n  done\n  echo $result",
+  "    local lst=$1\n    local even\n    local odd\n    even=$(($(echo $lst | cut\
+    \ -d \" \" -f 2) % 2)) # get the even element\n    odd=$(($(echo $lst | cut -d\
+    \ \" \" -f 2) / 2)) # get the odd element\n    echo $even+$odd", "\tlocal a=$1;\
+    \ shift\n\tlocal b=\"\";\n\tlocal i=0\n\tfor ((i=0; i<${#a}; i++)); do\n\t\t((i\
+    \ % 2 == 0)) && b+=\"${a[i]}\";\n\tdone\n\techo $b;", "  if [[ -z \"$1\" ]]; then\n\
+    \    echo \"ERROR: Parameter 'lst' is required\"\n    exit 1\n  fi\n  \n  # Split\
+    \ string on spaces, convert string elements to integers, and add even\n  # numbers\
+    \ of odd indices.\n  local lst_tmp=(${1//[[:space:]]/})\n  local sum=0\n  for\
+    \ i in ${lst_tmp[@]}; do\n    if [[ \"$i\" =~ ^[0-9]+$ ]]; then\n      ((sum+=${i}))\n\
+    \    else\n      echo \"ERROR: Parameter contains non-numeric characters\"\n \
+    \     exit 1\n    fi\n  done\n  echo $sum", "    local lst=\"$1\"\n    local even=\"\
+    $(echo $lst | cut -d \" \" -f 1 | cut -d \",\" -f 2)\"\n    local odd=\"$(echo\
+    \ $lst | cut -d \" \" -f 1 | cut -d \",\" -f 3)\"\n    echo \"$even\"", "    local\
+    \ lst=$1\n    local sum=0\n    for i in $lst; do\n        if [ $((i % 2)) -eq\
+    \ 1 ]\n        then\n            sum=$((sum + i))\n        fi\n    done\n    echo\
+    \ $sum", "    local lst=$1\n    local odd=$(echo $lst | awk '{print $1}')\n  \
+    \  for i in `seq 1 $((${#lst[@]} / 2)) ; do\n        echo $((${odd}+${lst[$i]}))\n\
+    \    done", "  local lst i=0 result=0 ii=0 i\n  \n  while [ $# -gt 0 ]; do\n \
+    \   lst=$1\n    i=1\n    while [ $i -le $(( ${#lst} )-1 ) ]; do\n      # echo\
+    \ \"ii is $ii\"\n      if [ \"$(echo \"$lst\" | cut -d\\  -f$i)\" == \"$i\" ];\
+    \ then\n        # echo \"skipping $i\"\n      else\n        (( result=$result\
+    \ + ${lst:$i} )); \n      fi\n      (( i=i+1 ))\n    done\n    # echo \"result\
+    \ is $result\"\n    (( ii=$ii+1 ))\n    (( i--))\n    lst=$(echo \"$lst\" | sed\
+    \ -E -e 's/^[[:digit:]]+$/$1/')\n  done\n  # echo \"result is $result\"\n  echo\
+    \ \"$result\"", "  lst=$1\n  echo $(( $(( ${lst:0:1} + ${lst:2:1} )) ))", "  local\
+    \ str=$1\n  local idx\n  for idx in $(echo $str | tr \" \" \"\\n\" | grep -v \"\
+    )\" | grep \"^[0-9]$\"); do\n    local num\n    num=$(echo $idx | cut -d\" \"\
+    \ -f1)\n    if [ $num -gt 0 ]; then\n      (( num-- ))\n    fi\n    echo \"${num}\"\
+    \n  done", "    local lst \n    local i \n    local ev \n    IFS=\" \" read -a\
+    \ lst <<< \"$1\"\n    for ((i=0; i<\"${#lst[@]}\"; i+=2))\n    do\n        ev=\"\
+    ${lst[i]} ${lst[i+1]}\"\n    done\n    echo \"${ev}\"", "  lst=(\"$@\")\n  echo\
+    \ \"${lst[@]}\"\n  echo ${lst[*]} | sed -E -e 's/([^ ])/ \\1/' -e 's/ /+/g' -e\
+    \ 's/^/x/' -e 's/$/y/' -e 's/^y/y/' -e 's/^x/x/' -e 's/^y+y/y/' -e 's/^y+x/y/'\
+    \ -e 's/^y/y/' -e 's/^y+y/y/'", "    local IFS=$'\\n'\n    local lst=$1\n    local\
+    \ evens=0\n    local odds=0\n    local result=0\n    local i=0\n\n    while [\
+    \ $i -lt ${#lst} ]; do\n        if [ ${lst:$i:1} = \"2\" ]; then\n           \
+    \ evens=$((${evens}+2))\n        else\n            odds=$((${odds}+2))\n     \
+    \   fi\n        result=$((${result}+${lst:$i:1}))\n        i=$((${i}+1))\n   \
+    \ done\n\n    if [ ${evens} -gt ${odds} ]; then\n        echo \"${evens}+${result}\"\
+    \n    else\n        echo \"${result}\"\n    fi", "    local lst=$1\n    local\
+    \ i=0 val\n    local even\n    local odd\n\n    while [[ $i -lt ${#lst} ]]; do\n\
+    \        val=${lst:$i:2}\n        if [[ \"$val\" == \"0\" ]]; then\n         \
+    \   val=\"even\"\n        fi\n        if [[ \"$val\" == \"1\" ]]; then\n     \
+    \       val=\"odd\"\n        fi\n        if [[ \"$val\" == \"even\" ]]; then\n\
+    \            even=$((even+2))\n        elif [[ \"$val\" == \"odd\" ]]; then\n\
+    \            odd=$((odd+2))\n        fi\n        lst=${lst:0:$i}${even}${lst:$(i+1):}\n\
+    \        i=$((i+2))\n    done\n    echo \"$lst\"", "    local var=\"${1}\"\n \
+    \   local lst=$(cat <<-'EOF'\n    $(echo $var | sed 's/^[ \\t]*//;s/[ \\t]*$//')\n\
+    EOF\n    )\n    local result=\"\"\n    local i\n    for ((i=0; i < ${#lst}; i++));\
+    \ do\n        if ((i % 2 == 0)); then\n            result+=\"$lst[$i]\"\n    \
+    \    fi\n    done\n    echo $result", "  local lst=$1\n  local even\n  local odd\n\
+    \  for (( i=0; i < ${#lst}; ++i )); do\n    odd=`${lst:$i:2}`\n    even=`${lst:$i:1}`\n\
+    \    if [ -z \"$odd\" ]; then\n      echo $even\n    elif [ -z \"$even\" ]; then\n\
+    \      echo $odd\n    else\n      echo $even $odd\n    fi\n  done", "  local lst=$1\n\
+    \  local result\n\n  result=$(expr $lst | awk '{print $0 }'; )\n  echo $result"]
 stop_tokens:
 - "\n}"

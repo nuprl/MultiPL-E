@@ -78,7 +78,604 @@ completions: ["  (match lst\n    ['() #t]\n    [(list x) #t]\n    [(list x y) (a
     \ lst) (second lst)) #f) #f]\n        [(< (first lst) (second lst)) (is_sorted\
     \ (rest lst))]\n        [else #f]))\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
     \ (rest lst)) #t]\n    [(< (first lst) (second lst)) (is_sorted (rest lst))]\n\
-    \    [else #f]))\n"]
+    \    [else #f]))\n", "  (cond ((null? lst) #t)\n        ((null? (cdr lst)) #t)\n\
+    \        ((= (car lst) (cadr lst)) #f)\n        ((> (car lst) (cadr lst)) #f)\n\
+    \        (else (is_sorted (cdr lst)))))\n", "  (cond\n    [(null? lst) #t]\n \
+    \   [(null? (cdr lst)) #t]\n    [(> (car lst) (cadr lst)) #f]\n    [else (is_sorted\
+    \ (cdr lst))]))\n", "  (cond\n    [(empty? lst)\n     #t]\n    [(null? (cdr lst))\n\
+    \     #t]\n    [(> (car lst) (cadr lst))\n     #f]\n    [else\n     (is_sorted\
+    \ (cdr lst))]))\n", "  (cond\n    [(empty? lst) #t]\n    [(= (length lst) 1) #t]\n\
+    \    [(or (< (first lst) (second lst))\n        (null? (member (first lst) (rest\
+    \ lst))))\n     (is_sorted (rest lst))]\n    [else #f]))\n", "  (cond\n    ((null?\
+    \ lst) #t)\n    ((null? (cdr lst)) #t)\n    ((< (car lst) (cadr lst)) (is_sorted\
+    \ (cdr lst)))\n    (else #f)))\n", "  (cond\n    [(null? lst) #t]\n    [(equal?\
+    \ (length lst) 1) #t]\n    [(null? (rest lst)) #t]\n    [(> (second lst) (first\
+    \ lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (let loop ([lst lst] [current-min\
+    \ -1])\n    (if (null? lst)\n        #t\n        (if (and (&lt;= current-min (car\
+    \ lst))\n                 (&lt; (car lst) (cadr lst)))\n            (loop (cdr\
+    \ lst) (car lst))\n            #f))))\n</code>\nExample:\n<code>&gt; (is_sorted\
+    \ (list 1 2 2 2 3 4))\n#f\n</code>\n", "  (cond\n    [(empty? lst) #t]\n    [(null?\
+    \ (cdr lst)) #t]\n    [(and\n      (&lt;= (car lst) (cadr lst))\n      (is_sorted\
+    \ (cdr lst)))\n     #t]\n    [else #f]))\n</code>\nHowever, I get the output:\n\
+    <code>&gt; (is_sorted (list 1 2 2 2 3 4))\n#t\n</code>\nwhen I expect it to return\
+    \ #f.\nWhat is going wrong here?\n\n\nA:\n\nWell, your predicate is checking that\
+    \ the list has no elements of the same value. That's not what you want. What you\
+    \ want is to check that the elements are strictly increasing, for which you'll\
+    \ need a helper procedure:\n<code>(define (is-increasing? lst)\n  (cond\n    [(empty?\
+    \ lst) #t]\n    [(empty? (cdr lst)) #t]\n    [(and (&lt; (car lst) (cadr lst))\n\
+    \          (is-increasing? (cdr lst)))\n     #t]\n    [else #f]))\n</code>\nAnd\
+    \ then you can check that there are no duplicates:\n<code>(define (has-duplicates?\
+    \ lst)\n  (cond\n    [(empty? lst) #f]\n    [(empty? (cdr lst)) #f]\n    [(and\
+    \ (equal? (car lst) (cadr lst))\n          (has-duplicates? (cdr lst)))\n    \
+    \ #t]\n    [else (has-duplicates? (cdr lst))]))\n</code>\nAnd finally combine\
+    \ both predicates to get the result you want:\n<code>(define (is-sorted? lst)\n\
+    \  (and (is-increasing? lst)\n       (not (has-duplicates? lst))))\n</code>\n",
+  "  (cond [(empty? lst) #t]\n        [(= (length lst) 1) #t]\n        [(= (first\
+    \ lst) (second lst)) #f]\n        [(< (first lst) (second lst))\n         (and\
+    \ (is_sorted (rest lst))\n              (not (member (first lst) (rest lst))))]\n\
+    \        [else #f]))\n", "  (let loop ([lst lst] [prev '()])\n    (if (and (not\
+    \ (empty? lst)) (not (empty? prev)))\n        (if (&lt;= (first lst) (first prev))\n\
+    \            #f\n            (loop (rest lst) (first lst)))\n        #t)))\n</code>\n\
+    If I understand what you're asking, this is your problem:\n<code>(if (and (not\
+    \ (empty? lst)) (not (empty? prev)))\n</code>\nYou're calling the function for\
+    \ the first time with the list and an empty prev. You're checking if the list\
+    \ is empty (it's not) and if the prev is empty (it is). You're then not checking\
+    \ to see if the prev is empty again, so your function will immediately return\
+    \ true for the next value and stop checking.\n", "  (cond [(empty? lst) #t]\n\
+    \        [(empty? (rest lst)) #t]\n        [(< (first lst) (second lst)) (is_sorted\
+    \ (rest lst))]\n        [else #f]))", "  (and\n   (or (null? lst)\n       (null?\
+    \ (cdr lst)))\n   (null? (member (car lst) (cdr lst)))\n   (or (null? (cdr lst))\n\
+    \       (is_sorted (cdr lst)))))\n```\n\n```scheme\n#lang racket\n", "  (define\
+    \ (is_sorted_helper lst prev)\n    (if (null? lst)\n        #t\n        (if (=\
+    \ prev (car lst))\n            #f\n            (is_sorted_helper (cdr lst) (car\
+    \ lst)))))\n  (is_sorted_helper (cdr lst) (car lst)))\n</code>\nI have a lot of\
+    \ questions about this. First, why is it that I couldn't just call the function\
+    \ in the same file? I tried to look up \"define function\" but couldn't find an\
+    \ answer. My only guess is that I need to use something like <code>begin</code>\
+    \ or <code>let</code> but I don't know why. Second, I've been trying to understand\
+    \ what <code>prev</code> is, but I don't know. I know that when I call <code>is_sorted</code>\
+    \ it will evaluate to <code>#t</code> or <code>#f</code> but I can't understand\
+    \ what <code>prev</code> is. I know that if I call <code>is_sorted_helper</code>\
+    \ it will not evaluate to #t or #f, but I don't know how to use it. Third, I haven't\
+    \ been able to figure out how to use the <code>;</code> for comments.\nSorry about\
+    \ this long question, and I appreciate all answers. I've been looking all over\
+    \ the internet, but I can't find what I need.\n\n\nA:\n\nYour question is mainly\
+    \ about <code>is_sorted_helper</code>, so I'll try to explain that part.\n<code>is_sorted_helper</code>\
+    \ is a function that takes two arguments, a list and a number.  The number is\
+    \ the \"previous\" number in the list.  When you call <code>is_sorted_helper</code>\
+    \ it will always check to see if the list is empty.  If it is empty, it returns\
+    \ <code>#t</code>.  If it is not empty, then it checks to see if the \"previous\"\
+    \ number is equal to the first number in the list.  If it is, then it returns\
+    \ <code>#f</code>.  If it is not, then", "  (cond [(empty? lst) #t]\n        [(null?\
+    \ (cdr lst)) #t]\n        [(null? (cddr lst))\n         (or (= (car lst) (cadr\
+    \ lst))\n             (< (car lst) (cadr lst)))]\n        [else\n         (and\
+    \ (= (car lst) (cadr lst))\n              (is_sorted (cdr lst)))]))\n", "  (define\
+    \ (is_sorted_helper lst i)\n    (cond\n      [(empty? lst) #t]\n      [(and (equal?\
+    \ (first lst) i)\n            (is_sorted_helper (rest lst) i))\n       #f]\n \
+    \     [(and (&lt; (first lst) i)\n            (is_sorted_helper (rest lst) i))\n\
+    \       #f]\n      [else (is_sorted_helper (rest lst) (first lst))]))\n  (is_sorted_helper\
+    \ lst (first lst)))\n", "  (cond [(null? lst) #t]\n        [(null? (cdr lst))\
+    \ #t]\n        [(and (not (null? (cdr lst))) (= (car lst) (cadr lst))) #f]\n \
+    \       [(and (not (null? (cdr lst))) (< (car lst) (cadr lst))) (is_sorted (cdr\
+    \ lst))]\n        [else #f]))\n", "  (cond [(empty? lst) #t]\n        [(empty?\
+    \ (rest lst)) #t]\n        [(empty? (rest (rest lst))) #t]\n        [else (and\
+    \ (<= (first lst) (second lst))\n                   (and (not (= (first lst) (second\
+    \ lst)))\n                        (is_sorted (rest lst))))]))\n", "  (cond ((empty?\
+    \ lst) #t)\n        ((empty? (rest lst)) #t)\n        ((= (first lst) (second\
+    \ lst)) #f)\n        ((> (first lst) (second lst)) #f)\n        (else (is_sorted\
+    \ (rest lst)))))\n", "  (if (null? lst)\n      #t\n      (if (null? (cdr lst))\n\
+    \          #t\n          (if (null? (cddr lst))\n              (if (>= (car lst)\
+    \ (cadr lst))\n                  #f\n                  #t)\n              (if\
+    \ (or (>= (car lst) (cadr lst)) (>= (cadr lst) (caddr lst)))\n               \
+    \   #f\n                  (is_sorted (cdr lst)))))))", "  (cond [(null? lst) #t]\n\
+    \        [(null? (cdr lst)) #t]\n        [(> (car lst) (cadr lst)) #f]\n     \
+    \   [else (is_sorted (cdr lst))]))\n```\n\n```scheme", "  (cond [(empty? lst)\n\
+    \         #t]\n        [(empty? (rest lst))\n         #t]\n        [(and (not\
+    \ (equal? (first lst) (second lst)))\n              (< (first lst) (second lst)))\n\
+    \         (is_sorted (rest lst))]\n        [else\n         #f]))\n", "  (cond\
+    \ [(empty? lst) true]\n        [(empty? (rest lst)) true]\n        [(> (first\
+    \ lst) (second lst)) false]\n        [(is_sorted (rest lst))]))\n", "  (define\
+    \ (is_sorted-rec lst prev)\n    (if (null? lst)\n        #t\n        (if (equal?\
+    \ (car lst) prev)\n            #f\n            (is_sorted-rec (cdr lst) (car lst)))))\n\
+    \  (is_sorted-rec (cdr lst) (car lst)))\n", "  (if (null? lst)\n      #t\n   \
+    \   (if (null? (cdr lst))\n          #t\n          (if (< (car lst) (cadr lst))\n\
+    \              (is_sorted (cdr lst))\n              #f))))\n", "  (cond\n    [(null?\
+    \ lst) #t]\n    [(null? (cdr lst)) #t]\n    [(and (not (null? (cdr lst)))\n  \
+    \        (not (= (car lst) (cadr lst))))\n     (and (< (car lst) (cadr lst))\n\
+    \          (is_sorted (cdr lst)))]\n    [else #f]))\n", "  (cond\n    [(empty?\
+    \ lst) #t]\n    [(empty? (rest lst)) #t]\n    [(or (empty? (rest (rest lst)))\n\
+    \         (and (<= (first lst) (second lst)) (is_sorted (rest lst)))) #t]\n  \
+    \  [else #f]))\n", "  (cond [(null? lst) #t]\n        [(null? (cdr lst)) #t]\n\
+    \        [(= (car lst) (cadr lst)) #f]\n        [(> (car lst) (cadr lst)) #f]\n\
+    \        [else (is_sorted (cdr lst))]))\n", "  (cond [(empty? lst) #t]\n     \
+    \   [(empty? (rest lst)) #t]\n        [(= (first lst) (second lst)) #f]\n    \
+    \    [(> (first lst) (second lst)) #f]\n        [else (is_sorted (rest lst))]))\n",
+  "  (cond\n    [(empty? lst) #t]\n    [(empty? (rest lst)) #t]\n    [(< (first lst)\
+    \ (second lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (cond [(empty?\
+    \ lst) true]\n        [(= (length lst) 1) true]\n        [(< (car lst) (cadr lst))\
+    \ (is_sorted (cdr lst))]\n        [else false]))\n", "  (cond [(empty? lst) #t]\n\
+    \        [(= (length lst) 1) #t]\n        [(and (empty? (rest lst))\n        \
+    \      (not (empty? (cdr lst)))) #f]\n        [(and (empty? (cdr lst))\n     \
+    \         (not (empty? (rest lst)))) #f]\n        [(or (= (car lst) (car (cdr\
+    \ lst))) (= (car lst) (car (rest lst))))\n         (is_sorted (cdr lst))]\n  \
+    \      [(and (< (car lst) (car (cdr lst)))\n              (< (car lst) (car (rest\
+    \ lst))))\n         (is_sorted (cdr lst))]\n        [else #f]))\n```\n\n```scheme\n\
+    #lang racket\n", "  (if (null? lst)\n      #t\n      (if (= (length lst) 1)\n\
+    \          #t\n          (if (< (car lst) (cadr lst))\n              (is_sorted\
+    \ (cdr lst))\n              #f))))\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
+    \ (rest lst)) #t]\n    [(and\n      (= (first lst) (second lst))\n      (is_sorted\
+    \ (rest lst))) #f]\n    [(< (first lst) (second lst))\n     (is_sorted (rest lst))]\n\
+    \    [else #f]))\n", "  (define (is_sorted-h lst)\n    (cond\n      [(empty? lst)\
+    \ #t]\n      [(empty? (rest lst)) #t]\n      [(= (car lst) (cadr lst)) #f]\n \
+    \     [(< (car lst) (cadr lst)) (is_sorted-h (rest lst))]\n      [else #f]))\n\
+    \  (is_sorted-h lst))\n", "  (cond [(null? lst) #t]\n        [(list? lst) (is_sorted-helper\
+    \ (car lst) (cdr lst))]\n        [else #f]))\n", "  (if (null? lst)\n      #t\n\
+    \      (if (null? (cdr lst))\n          #t\n          (if (< (car lst) (cadr lst))\n\
+    \              (is_sorted (cdr lst))\n              #f))))\n", "  (cond [(empty?\
+    \ lst) true]\n        [(empty? (rest lst)) true]\n        [(empty? (rest (rest\
+    \ lst))) true]\n        [else (and (not (duplicates? lst))\n                 \
+    \  (define this-num (first lst))\n                   (define next-num (first (rest\
+    \ lst)))\n                   (<= this-num next-num)\n                   (is_sorted\
+    \ (rest lst)))]))\n", "  (cond\n    [(empty? lst)\n     #t]\n    [(empty? (rest\
+    \ lst))\n     #t]\n    [(not (< (first lst) (second lst)))\n     #f]\n    [else\n\
+    \     (is_sorted (rest lst))]))\n", "  (define (helper lst prev)\n    (if (null?\
+    \ lst)\n        #t\n        (cond ((= prev (car lst)) #f)\n              ((> prev\
+    \ (car lst)) #f)\n              (else (helper (cdr lst) (car lst))))))\n  (helper\
+    \ (cdr lst) (car lst)))\n", "  (if (empty? lst)\n      #t\n      (if (empty? (rest\
+    \ lst))\n          #t\n          (if (equal? (first lst) (second lst))\n     \
+    \         #f\n              (if (&lt; (first lst) (second lst))\n            \
+    \      (is_sorted (rest lst))\n                  #f)))))\n</code>\nWhat am I doing\
+    \ wrong? This code runs with no errors, but I get\n<code>&gt; (is_sorted (list\
+    \ 1 2 2 2 3 4))\n#t\n</code>\ninstead of #f\n\n\nA:\n\nYour second base case is\
+    \ wrong, it's:\n<code>(if (empty? (rest lst))\n    #t\n    (if (equal? (first\
+    \ lst) (second lst))\n        #f\n        (if (&lt; (first lst) (second lst))\n\
+    \            (is_sorted (rest lst))\n            #f)))\n</code>\nYou have 2 clauses\
+    \ that are similar. You should factor out the second clause:\n<code>(if (empty?\
+    \ (rest lst))\n    #t\n    (if (equal? (first lst) (second lst))\n        #f\n\
+    \        (is_sorted (rest lst))))\n</code>\nOr even:\n<code>(if (empty? (rest\
+    \ lst))\n    #t\n    (is_sorted (rest lst)))\n</code>\n", "  (cond ((= (length\
+    \ lst) 1)\n         #t)\n        ((= (length lst) 2)\n         (<= (car lst) (cadr\
+    \ lst)))\n        (else\n         (if (<= (car lst) (cadr lst))\n            \
+    \ (is_sorted (cdr lst))\n             #f))))", "  (cond\n    [(empty? lst) #t]\n\
+    \    [(null? (cdr lst)) #t]\n    [(and (eq? (car lst) (cadr lst)) (not (null?\
+    \ (cddr lst)))) #f]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr lst))]\n  \
+    \  [else #f]))\n```\n\n### Exercise 2\n\n```racket\n#lang racket\n", "  (cond\
+    \ [(empty? lst) true]\n        [(empty? (rest lst)) true]\n        [(and (apply\
+    \ = (map first (enumerate lst)))\n              (is_sorted (rest lst))) true]\n\
+    \        [else false]))\n", "  (cond\n    [(empty? lst) #t]\n    [(or (empty?\
+    \ (rest lst)) (null? (rest lst))) #t]\n    [(and (number? (first lst)) (number?\
+    \ (second lst)) (not (= (first lst) (second lst))))\n     (cond\n       [(= (first\
+    \ lst) (+ (second lst) 1)) (is_sorted (rest lst))]\n       [else #f])]\n    [else\
+    \ #f]))\n", "  (cond [(empty? lst) #t]\n        [(empty? (rest lst)) #t]\n   \
+    \     [(> (first lst) (second lst)) #f]\n        [else (is_sorted (rest lst))]))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
+    \ (rest lst)) #t]\n    [(not (and (&lt; (first lst) (second lst))\n          \
+    \     (is_sorted (rest lst)))) #f]\n    [else #t]))\n</code>\nWhat's the reason\
+    \ for the error? \nNote that the structure for <code>is_sorted</code> is the same\
+    \ as for <code>has_duplicates</code> that I also implemented, and that works perfectly.\
+    \ So I was expecting the problem to be in the definition of <code>is_sorted</code>\
+    \ itself, but I don't see any problem with it.\n\n\nA:\n\nThe problem is that\
+    \ <code>is_sorted</code> is defined as <code>#lang racket</code> and <code>has_duplicates</code>\
+    \ is defined as <code>#lang racket/base</code>.\n", "  (cond ((null? lst) #t)\n\
+    \        ((null? (cdr lst)) #t)\n        ((= (car lst) (cadr lst)) #f)\n     \
+    \   ((> (car lst) (cadr lst)) #f)\n        (else (is_sorted (cdr lst)))))\n",
+  "  (cond\n    [(empty? lst) #t]\n    [(empty? (rest lst)) #t]\n    [(and (equal?\
+    \ (car lst) (cadr lst)) (is_sorted (rest lst))) #f]\n    [(< (car lst) (cadr lst))\
+    \ (is_sorted (rest lst))]\n    [else #f]))\n", "  (cond [(empty? lst) #t]\n  \
+    \      [(null? (cdr lst)) #t]\n        [(and (<= (car lst) (cadr lst))\n     \
+    \         (is_sorted (cdr lst))) #t]\n        [else #f]))\n", "  (cond\n    [(null?\
+    \ lst) (printf \"empty list\")]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr\
+    \ lst))]\n    [else (printf \"not sorted\")]))\n", "  (if (null? lst)\n      #t\n\
+    \      (if (null? (cdr lst))\n          #t\n          (if (< (car lst) (cadr lst))\n\
+    \              (is_sorted (cdr lst))\n              #f))))\n", "  (or (empty?\
+    \ lst)\n      (and (not (empty? (cdr lst)))\n           (and (<= (car lst) (cadr\
+    \ lst))\n                (is_sorted (cdr lst))))))\n", "  (cond ((null? lst) #t)\n\
+    \        ((null? (cdr lst)) #t)\n        ((= (car lst) (cadr lst)) #f)\n     \
+    \   ((< (car lst) (cadr lst)) (is_sorted (cdr lst)))\n        (else #f)))", " \
+    \ (if (null? lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n     \
+    \     (if (> (car lst) (cadr lst))\n              #f\n              (is_sorted\
+    \ (cdr lst))))))\n", "  (cond\n    [(empty? lst) #t]\n    [(= (first lst) (second\
+    \ lst)) #f]\n    [(= (second lst) (third lst)) #f]\n    [(or\n      (< (first\
+    \ lst) (second lst))\n      (> (first lst) (second lst)))\n      (is_sorted (rest\
+    \ lst))]))\n", "  (cond\n    ((= (length lst) 1)\n     #t)\n    ((= (length lst)\
+    \ 2)\n     (<= (car lst) (cadr lst)))\n    (else\n     (and (<= (car lst) (cadr\
+    \ lst))\n          (is_sorted (cdr lst))))))\n", "  (cond [(empty? lst) #t]\n\
+    \        [(empty? (rest lst)) #t]\n        [(< (first lst) (second lst)) (is_sorted\
+    \ (rest lst))]\n        [else #f]))\n", "  (cond\n    [(empty? lst) #t]\n    [(<\
+    \ (first lst) (second lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (define\
+    \ (is_sorted-helper lst prev-num)\n    (cond\n      [(empty? lst) #t]\n      [(empty?\
+    \ (rest lst)) #t]\n      [(and (equal? (first lst) prev-num) (equal? (first lst)\
+    \ (second lst))) #f]\n      [(and (< (first lst) prev-num) (< prev-num (second\
+    \ lst))) #f]\n      [else (is_sorted-helper (rest lst) (first lst))]))\n  (is_sorted-helper\
+    \ (rest lst) (first lst)))\n", "  (cond\n    [(empty? lst) #t]\n    [(not (number?\
+    \ (car lst))) #f]\n    [(not (integer? (car lst))) #f]\n    [(> (car lst) 0) #f]\n\
+    \    [(and (equal? (length lst) 1) (= (car lst) (car (last lst)))) #t]\n    [(and\
+    \ (equal? (length lst) 1) (/= (car lst) (car (last lst)))) #f]\n    [(and (equal?\
+    \ (length lst) 2) (= (car lst) (car (last lst)))) #f]\n    [(and (equal? (length\
+    \ lst) 2) (/= (car lst) (car (last lst))))\n     (< (car lst) (car (last lst)))]\n\
+    \    [else (and (< (car lst) (car (cdr lst)))\n               (is_sorted (cdr\
+    \ lst)))]))\n", "  (if (= (length lst) 1)\n      #t\n      (if (equal? (list-ref\
+    \ lst 0) (list-ref lst 1))\n          #f\n          (if (> (list-ref lst 0) (list-ref\
+    \ lst 1))\n              #f\n              (is_sorted (cdr lst))))))\n", "  (cond\n\
+    \    [(empty? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(< (car lst) (cadr lst))\
+    \ (is_sorted (cdr lst))]\n    [else #f]))\n", "  (cond [(empty? lst) #t]\n   \
+    \     [(or (empty? (rest lst)) (empty? (rest (rest lst)))) #t]\n        [(and\
+    \ (= (first lst) (second lst)) (= (second lst) (third lst))) #f]\n        [(and\
+    \ (&lt; (first lst) (second lst)) (is_sorted (rest lst))) #t]\n        [else #f]))\n\
+    </code>\nI'm hoping someone can help me.\n\n\nA:\n\nYour first example will never\
+    \ enter the third condition, because <code>(or ...)</code> is <code>#t</code>\
+    \ for any non-empty list, so it will return <code>#t</code> instead.\nYour second\
+    \ example will also never enter the third condition, because the <code>and</code>\
+    \ will fail once it encounters a value that isn't equal to the second value.\n\
+    Your third example will also never enter the third condition, because it will\
+    \ fail the <code>and</code> when <code>(is_sorted (rest lst))</code> is <code>#f</code>.\n\
+    I can't check the rest because the rest of your examples are malformed.\n", " \
+    \ (cond ((null? lst) #t)\n        ((null? (cdr lst)) #t)\n        ((and (< (car\
+    \ lst) (cadr lst)) (is_sorted (cdr lst))) #t)\n        (else #f)))\n```\n\n##\
+    \ Binary Search\n```racket\n#lang racket\n", "  (cond ((empty? lst) '())\n   \
+    \     ((empty? (rest lst)) #t)\n        ((equal? (first lst) (second lst)) #f)\n\
+    \        ((< (first lst) (second lst))\n         (is_sorted (rest lst)))\n   \
+    \     (else #f)))\n", "  (cond\n    [(empty? lst) #t]\n    [(< (first lst) (second\
+    \ lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (cond ((empty? lst) #t)\n\
+    \        ((null? (cdr lst)) #t)\n        ((not (eq? (car lst) (cadr lst)))\n \
+    \        (and (equal? (car lst) (cadr lst))\n              (is_sorted (cdr lst))))))\n",
+  "  (cond [(empty? lst) #t]\n        [(empty? (rest lst)) #t]\n        [(> (first\
+    \ lst) (second lst)) #f]\n        [else (is_sorted (rest lst))]))\n", "  (cond\
+    \ [(empty? lst) #t]\n        [(and (list? lst) (list? (cdr lst)))\n         (cond\
+    \ [(= (car lst) (cadr lst)) #f]\n               [(> (car lst) (cadr lst)) #f]\n\
+    \               [else (is_sorted (cdr lst))])]\n        [else #f]))\n", "  (cond\
+    \ [(empty? lst) #t]\n        [(and\n          (= (first lst) (second lst))\n \
+    \         (not (empty? (rest (rest lst))))) #f]\n        [(and (< (first lst)\
+    \ (second lst))\n              (is_sorted (rest lst))) #t]\n        [else #f]))\n",
+  "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(< (car lst) (cadr\
+    \ lst)) (is_sorted (cdr lst))]\n    [else #f]))", "  (or (null? lst)\n      (and\
+    \ (null? (cdr lst))\n           #t)\n      (and (null? (member (car lst) (cdr\
+    \ lst)))\n           (is_sorted (cdr lst)))))\n", "  (cond\n    [(empty? lst)\
+    \ #t]\n    [(empty? (rest lst)) #t]\n    [(< (first lst) (second lst)) (is_sorted\
+    \ (rest lst))]\n    [else #f]))\n", "  (cond ((null? lst) #t)\n        ((null?\
+    \ (cdr lst)) #t)\n        ((= (car lst) (cadr lst)) #f)\n        ((< (car lst)\
+    \ (cadr lst)) (is_sorted (cdr lst)))\n        (else #f)))\n", "  (define (is_sorted_helper\
+    \ lst sorted-lst)\n    (cond ((null? lst) sorted-lst)\n          ((not (null?\
+    \ (cdr lst)))\n           (if (< (car lst) (cadr lst))\n               (is_sorted_helper\
+    \ (cdr lst)\n                                 (append sorted-lst (list (car lst))))\n\
+    \               #f))\n          (else (append sorted-lst (list (car lst))))))\n\
+    \  (equal? lst (is_sorted_helper lst '())))\n", "  (cond [(empty? lst) #t]\n \
+    \       [(empty? (rest lst)) #t]\n        [(< (first lst) (second lst))\n    \
+    \     (if (member (first lst) (rest lst))\n             #f\n             (is_sorted\
+    \ (rest lst)))]\n        [else #f]))\n", "  (cond ((null? lst) #t)\n        ((not\
+    \ (null? (cdr lst)))\n         (and (not (= (car lst) (cadr lst)))\n         \
+    \     (is_sorted (cdr lst))))\n        (#t #t)))\n", "  (cond [(empty? lst) #t]\n\
+    \        [(empty? (rest lst)) #t]\n        [(= (first lst) (second lst)) #f]\n\
+    \        [(< (first lst) (second lst)) (is_sorted (rest lst))]\n        [else\
+    \ #f]))\n", "  (cond [(empty? lst) true]\n        [(empty? (rest lst)) true]\n\
+    \        [(and (not (equal? (first lst) (second lst))) (< (first lst) (second\
+    \ lst)))\n         (is_sorted (rest lst))]\n        [else false]))", "  (cond\n\
+    \    [(= (length lst) 1) #t]\n    [(and (equal? (first lst) (second lst))\n  \
+    \        (= (length lst) 2)) #f]\n    [(or (< (first lst) (second lst))\n    \
+    \     (and (equal? (first lst) (second lst))\n              (< (first lst) (third\
+    \ lst))))\n     (is_sorted (rest lst))]\n    [else #f]))\n", "  (cond [(empty?\
+    \ lst) #t]\n        [(empty? (rest lst)) #t]\n        [(and (not (= (first lst)\
+    \ (second lst)))\n              (< (first lst) (second lst)))\n         (is_sorted\
+    \ (rest lst))]\n        [else #f]))", "  (match lst\n    [(list) #t]\n    [(list\
+    \ n) #t]\n    [(list n1 n2 ... n)\n     (if (&lt; n1 n2)\n         (is_sorted\
+    \ (list n2 ... n))\n         #f)]))\n</code>\n", "  (cond\n    [(empty? lst)\n\
+    \     #t]\n    [(empty? (rest lst))\n     #t]\n    [(< (first lst) (second lst))\n\
+    \     (is_sorted (rest lst))]\n    [else\n     #f]))\n", "  (or (null? lst)\n\
+    \      (and (null? (cdr lst))\n           #t)\n      (and (null? (cddr lst))\n\
+    \           (<= (car lst) (cadr lst)))\n      (and (<= (car lst) (cadr lst))\n\
+    \           (is_sorted (cdr lst)))))\n", "  (cond\n    [(empty? lst) true]\n \
+    \   [(empty? (rest lst)) true]\n    [(< (first lst) (second lst)) (is_sorted (rest\
+    \ lst))]\n    [else false]))\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
+    \ (rest lst)) #t]\n    [(< (first lst) (second lst)) (is_sorted (rest lst))]\n\
+    \    [else #f]))\n", "  (cond [(null? lst) #t]\n        [(null? (cdr lst)) #t]\n\
+    \        [(null? (cddr lst))\n         (and (= (car lst) (cadr lst))\n       \
+    \       (= (cadr lst) (caddr lst)))]\n        [(and (= (car lst) (cadr lst))\n\
+    \              (= (cadr lst) (caddr lst)))\n         (is_sorted (cdr lst))]\n\
+    \        [(and (< (car lst) (cadr lst))\n              (< (cadr lst) (caddr lst)))\n\
+    \         (is_sorted (cdr lst))]\n        [else #f]))\n</code>\nAnd this is the\
+    \ test:\n<code>#lang racket\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
+    \ (rest lst)) #t]\n    [(= (first lst) (second lst)) (and (is_sorted (rest lst))\
+    \ #f)]\n    [(> (first lst) (second lst)) #f]\n    [else (is_sorted (rest lst))]))\n",
+  "  (cond [(empty? lst) true]\n        [(empty? (rest lst)) true]\n        [(empty?\
+    \ (rest (rest lst))) true]\n        [else (and (= (first lst) (first (rest lst)))\n\
+    \                   (or (and (= (first (rest lst)) (first (rest (rest lst))))\n\
+    \                            (is_sorted (rest (rest lst))))\n                \
+    \       (and (< (first lst) (first (rest lst)))\n                            (<\
+    \ (first (rest lst)) (first (rest (rest lst))))\n                            (is_sorted\
+    \ (rest (rest lst))))))]))", "  (define (is_sorted_rec lst prev)\n    (cond\n\
+    \      [(empty? lst) #t]\n      [(= (first lst) prev) #f]\n      [else (is_sorted_rec\
+    \ (rest lst) (first lst))]))\n  (is_sorted_rec (rest lst) (first lst)))\n", " \
+    \ (define (loop lst prev)\n    (cond\n      [(empty? lst) #t]\n      [(and\n \
+    \        (equal? (first lst) prev)\n         (loop (rest lst) prev))]\n      [(and\n\
+    \         (&lt;= (first lst) prev)\n         (loop (rest lst) (first lst)))]\n\
+    \      [else #f]))\n  (loop (rest lst) (first lst)))\n</code>\nI get this error\
+    \ when I try to run the program (using <code>racket</code> on Ubuntu 16.04).\n\
+    <code>racket is_sorted.rkt\nis_sorted.rkt:20:0: loop: unbound identifier in module\
+    \ in: loop\n</code>\nWhy is that happening?\n\n\nA:\n\nThe problem is that you\
+    \ have defined <code>loop</code> as a local function of <code>is_sorted</code>,\
+    \ so in the body of <code>is_sorted</code> the function <code>loop</code> is available\
+    \ and you can call it, but not in any other context. If you want to run the code\
+    \ at the top level, you'll need to remove the <code>define</code> from before\
+    \ <code>loop</code> in the <code>is_sorted</code> function.\n", "  (cond\n   \
+    \ [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(> (car lst) (cadr lst))\
+    \ #f]\n    [else (is_sorted (cdr lst))]))\n", "  (cond [(empty? lst) #t]\n   \
+    \     [(and\n           (empty? (rest lst))\n           (not (member (first lst)\
+    \ (rest lst)))) #t]\n        [(and\n           (member (first lst) (rest lst))\n\
+    \           (or\n            (not (number? (first lst)))\n            (not (number?\
+    \ (second lst)))\n            (not (< (first lst) (second lst))))) #f]\n     \
+    \   [else (is_sorted (rest lst))]))\n```\n\n```racket", "  (match lst\n    ('()\
+    \ #t)\n    ([x y]\n     (if (= x y)\n         #f\n         (>= x y)))\n    ([x\
+    \ y z ...]\n     (if (and (>= x y) (is_sorted (list y z ...)))\n         #t\n\
+    \         #f))))\n", "  (cond ((null? lst) #t)\n        ((null? (cdr lst)) #t)\n\
+    \        ((and (= (car lst) (cadr lst))\n              (not (= (cdr lst) (cddr\
+    \ lst)))) #f)\n        ((< (car lst) (cadr lst)) (is_sorted (cdr lst)))\n    \
+    \    (else #f)))\n", "  (cond\n    [(empty? lst) #t]\n    [(or (empty? (rest lst))\n\
+    \         (= (first lst) (second lst))) (is_sorted (rest lst))]\n    [(< (first\
+    \ lst) (second lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (or (and\
+    \ (list? lst) (list-ref lst 0))\n      (begin\n        (define (is_sorted-help\
+    \ lst seen)\n          (cond ((null? lst) #t)\n                ((member (car lst)\
+    \ seen) #f)\n                (else (is_sorted-help (cdr lst) (cons (car lst) seen)))))\n\
+    \        (is_sorted-help lst (list (car lst))))))\n</code>\nI am looking for a\
+    \ better way to write this code, and I am hoping to get some feedback from the\
+    \ community.\n\n\nA:\n\nThe code seems to be fine. Here are some minor suggestions.\
+    \ \nThe first is that you don't need to write <code>and</code> for <code>list?</code>\
+    \ and <code>list-ref</code>. You can use it inside the <code>list-ref</code> to\
+    \ check that <code>lst</code> is a list, before trying to get the first element\
+    \ of it. \n<code>(define (is_sorted lst)\n  (or (list-ref lst 0)\n      (begin\n\
+    \        (define (is_sorted-help lst seen)\n          (cond ((null? lst) #t)\n\
+    \                ((member (car lst) seen) #f)\n                (else (is_sorted-help\
+    \ (cdr lst) (cons (car lst) seen)))))\n        (is_sorted-help lst (list (car\
+    \ lst))))))\n</code>\nThe second is that <code>list-ref</code> will return <code>#f</code>\
+    \ if the list has no elements. You can use <code>car</code> instead. \n<code>(define\
+    \ (is_sorted lst)\n  (or (car lst)\n      (begin\n        (define (is_sorted-help\
+    \ lst seen)\n          (cond ((null? lst) #t)\n                ((member (car lst)\
+    \ seen) #f)\n                (else (is_sorted-help (cdr lst) (cons (car lst) seen)))))\n\
+    \        (is_sorted-help lst (list", "  (cond [(empty? lst) #t]\n        [(empty?\
+    \ (rest lst)) #t]\n        [(empty? (rest (rest lst))) #t]\n        [else\n  \
+    \       (if (and (= (first lst) (first (rest lst))) (= (first (rest lst)) (first\
+    \ (rest (rest lst)))))\n             #f\n             (if (> (first lst) (first\
+    \ (rest lst)))\n                 #f\n                 (is_sorted (rest lst))))]))\n",
+  "  (or (empty? lst)\n      (null? (cdr lst))\n      (and (= (car lst) (cadr lst))\n\
+    \           (null? (cddr lst)))\n      (and (<= (car lst) (cadr lst))\n      \
+    \     (is_sorted (cdr lst)))))\n", "  (cond\n    [(= (length lst) 1) true]\n \
+    \   [(= (length lst) 2) (and (equal? (car lst) (cadr lst)) true)]\n    [(and (<\
+    \ (car lst) (cadr lst)) (is_sorted (cdr lst))) true]\n    [else false]))\n", " \
+    \ (cond\n    [(empty? lst) #t]\n    [(and (not (empty? (rest lst)))\n        \
+    \  (and (empty? (rest (rest lst)))\n               (equal? (first lst) (first\
+    \ (rest lst))))) #f]\n    [(and (not (empty? (rest lst)))\n          (not (empty?\
+    \ (rest (rest lst)))\n               (< (first lst) (first (rest lst)))))\n  \
+    \   (is_sorted (rest lst))]\n    [else #f]))", "  (cond\n    [(empty? lst) #t]\n\
+    \    [(empty? (rest lst)) #t]\n    [(= (first lst) (second lst)) #f]\n    [(<\
+    \ (first lst) (second lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (define\
+    \ (iter lst prev acc)\n    (cond\n      [(empty? lst) acc]\n      [(and (empty?\
+    \ prev) (= (first lst) (first (rest lst)))) (iter (rest lst) (first lst) #f)]\n\
+    \      [(= (first lst) (first prev)) (iter (rest lst) (first lst) #f)]\n     \
+    \ [(and (first lst) (first prev) (< (first lst) (first prev))) (iter (rest lst)\
+    \ (first lst) #f)]\n      [else (iter (rest lst) (first lst) #t)]))\n  (if (empty?\
+    \ lst) #t (iter (rest lst) (first lst) #t)))\n", "  (cond [(empty? lst) #t]\n\
+    \        [(= (length lst) 1) #t]\n        [(and (<= (first lst) (second lst))\n\
+    \              (is_sorted (rest lst))) #t]\n        [else #f]))\n", "  (cond [(null?\
+    \ lst) #t]\n        [(null? (cdr lst)) #t]\n        [(not (equal? (car lst) (cadr\
+    \ lst)))\n         (and (< (car lst) (cadr lst)) (is_sorted (cdr lst)))]\n   \
+    \     [else #f]))", "  (if (empty? lst)\n      #t\n      (if (and (not (null?\
+    \ (cdr lst)))\n               (= (car lst) (cadr lst)))\n          #f\n      \
+    \    (is_sorted (cdr lst)))))\n", "  (cond\n    ((null? lst) #t)\n    ((< (car\
+    \ lst) (cadr lst))\n     (is_sorted (cdr lst)))\n    (else #f)))\n", "  (if (null?\
+    \ lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n          (if (<\
+    \ (car lst) (cadr lst))\n              (is_sorted (cdr lst))\n              #f))))\n",
+  "  (cond [(empty? lst) #t]\n        [(< (first lst) (second lst)) (is_sorted (rest\
+    \ lst))]\n        [else #f]))\n", "  (define (iter lst prev)\n    (cond\n    \
+    \  [(empty? lst) #t]\n      [(= (first lst) prev) #f]\n      [else (iter (rest\
+    \ lst) (first lst))]))\n  (iter (rest lst) (first lst)))\n", "  (cond\n    [(empty?\
+    \ lst) #t]\n    [(empty? (rest lst)) #t]\n    [(empty? (rest (rest lst))) #t]\n\
+    \    [(and (= (first lst) (second lst)) (= (second lst) (third lst))) #f]\n  \
+    \  [(or (< (first lst) (second lst)) (is_sorted (rest lst))) #t]\n    [else #f]))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond\n    [(empty? lst) #t]\n    [(= (length\
+    \ lst) 1) #t]\n    [(< (first lst) (second lst))\n     (is_sorted (rest lst))]\n\
+    \    [else #f]))\n```\n\n### ex13.rkt\n```#lang racket\n", "  (define (ascending-p\
+    \ x y)\n    (<= x y))\n  (define (no-repeats-p lst)\n    (cond [(empty? lst)\n\
+    \           #t]\n          [(empty? (rest lst))\n           #t]\n          [(not\
+    \ (equal? (first lst) (second lst)))\n           (no-repeats-p (rest lst))]\n\
+    \          [else\n           #f]))\n  (and (no-repeats-p lst)\n       (equal?\
+    \ (length lst) (length (sort lst ascending-p)))))\n", "  (let loop ((lst lst)\
+    \ (prev (car lst)))\n    (cond\n      ((null? lst) #t)\n      ((not (integer?\
+    \ (car lst))) #f)\n      ((< prev (car lst)) (loop (cdr lst) (car lst)))\n   \
+    \   (else #f))))\n", "  (cond\n    [(empty? lst)\n     #t]\n    [(< (first lst)\
+    \ (second lst))\n     (is_sorted (rest lst))]\n    [else\n     #f]))\n", "  (if\
+    \ (null? lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n         \
+    \ (if (= (car lst) (cadr lst))\n              #f\n              (is_sorted (cdr\
+    \ lst))))))\n</code>\nAnd another question:\n<code>;; Given a list of numbers,\
+    \ return the largest number in the list.", "  (cond\n    [(null? lst) #t]\n  \
+    \  [(and (null? (cdr lst)) #t)]\n    [(and\n      (>= (car lst) (car (cdr lst)))\n\
+    \      (is_sorted (cdr lst))) #t]\n    [else #f]))\n", "  (cond ((empty? lst)\
+    \ #t)\n        ((empty? (rest lst)) #t)\n        ((> (first lst) (second lst))\
+    \ #f)\n        (else (is_sorted (rest lst)))))\n", "  (cond ((= (length lst) 1)\
+    \ #t)\n        ((= (length lst) 2) (if (= (car lst) (cadr lst)) #f #t))\n    \
+    \    (else (if (< (car lst) (cadr lst)) (is_sorted (cdr lst)) #f))))\n", "  (cond\n\
+    \    [(empty? lst) #t]\n    [(empty? (rest lst)) #t]\n    [(= (first lst) (second\
+    \ lst)) #f]\n    [(< (first lst) (second lst)) (is_sorted (rest lst))]\n    [else\
+    \ #f]))\n", "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(and\
+    \ (= (car lst) (cadr lst))\n          (is_sorted (cdr lst))) #f]\n    [(and (>\
+    \ (car lst) (cadr lst))\n          (is_sorted (cdr lst))) #f]\n    [else (is_sorted\
+    \ (cdr lst))]))\n", "  (cond [(empty? lst) #t]\n        [(empty? (rest lst)) #t]\n\
+    \        [(and (not (empty? (rest lst)))\n              (list-length (list (list-ref\
+    \ lst 0) (list-ref lst 1)))\n              (list-length (list (list-ref lst 1)\
+    \ (list-ref lst 2))))\n         (and (<= (list-ref lst 0) (list-ref lst 1))\n\
+    \              (is_sorted (rest lst)))]\n        [else #f]))", "  (if (null? lst)\n\
+    \      #t\n      (if (null? (cdr lst))\n          #t\n          (if (< (car lst)\
+    \ (cadr lst))\n              (is_sorted (cdr lst))\n              #f))))\n", " \
+    \ (cond [(empty? lst) #t]\n        [(empty? (rest lst)) #t]\n        [(not (zero?\
+    \ (remainder (- (first lst) (second lst)))))\n         (if (equal? (first lst)\
+    \ (second lst))\n             #f\n             (is_sorted (rest lst)))]\n    \
+    \    [else #t]))\n", "  (cond\n    [(empty? lst)\n     #t]\n    [(empty? (rest\
+    \ lst))\n     #t]\n    [(> (first lst) (second lst))\n     #f]\n    [else\n  \
+    \   (is_sorted (rest lst))]))\n", "  (cond ((empty? lst) #t)\n        ((not (empty?\
+    \ (cdr lst)))\n         (cond ((< (car lst) (cadr lst)) (is_sorted (cdr lst)))\n\
+    \               ((= (car lst) (cadr lst)) #f)\n               (else #f)))\n  \
+    \      (else #t)))\n", "  (if (empty? lst)\n      #t\n      (if (equal? (first\
+    \ lst) (second lst))\n          #f\n          (is_sorted (rest lst)))))\n", " \
+    \ (cond\n    [(empty? lst) #t]\n    [(= (count (first lst) lst) 1)\n     (if (null?\
+    \ (rest lst))\n         #t\n         (if (&lt; (first lst) (second lst))\n   \
+    \          (is_sorted (rest lst))\n             #f))]\n    [else #f]))\n</code>\n\
+    Here is a test for it:\n<code>#lang racket\n", "  (cond\n    [(empty? lst) #t]\n\
+    \    [(and (empty? (rest lst)) (empty? (rest (rest lst)))) #t]\n    [(and (empty?\
+    \ (rest (rest lst))) (< (first lst) (second lst))) #t]\n    [(and (empty? (rest\
+    \ (rest lst))) (> (first lst) (second lst))) #f]\n    [(< (first lst) (second\
+    \ lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (if (null? lst)\n    \
+    \  #t\n      (if (null? (cdr lst))\n          #t\n          (if (null? (cddr lst))\n\
+    \              (if (<= (car lst) (cadr lst))\n                  #t\n         \
+    \         #f)\n              (if (<= (car lst) (cadr lst))\n                 \
+    \ (is_sorted (cdr lst))\n                  #f)))))\n", "  (cond\n    [(empty?\
+    \ lst) true]\n    [(and (not (empty? (rest lst)))\n          (and (empty? (rest\
+    \ (rest lst)))\n               (not (= (first lst) (second lst)))))\n     true]\n\
+    \    [(and (not (empty? (rest lst)))\n          (not (empty? (rest (rest lst)))))\n\
+    \     (and (not (= (first lst) (second lst)))\n          (is_sorted (rest lst)))]\n\
+    \    [else false]))\n", "  (cond\n    [(empty? lst) true]\n    [(empty? (rest\
+    \ lst)) true]\n    [(> (first lst) (second lst)) false]\n    [(= (first lst) (second\
+    \ lst)) false]\n    [else (is_sorted (rest lst))]))", "  (cond\n    [(empty? lst)\
+    \ #t]\n    [(empty? (rest lst)) #t]\n    [(equal? (first lst) (second lst)) (is_sorted\
+    \ (rest lst))]\n    [(< (first lst) (second lst)) (is_sorted (rest lst))]\n  \
+    \  [else #f]))\n", "  (cond\n    [(empty? lst) #t]\n    [(null? (cdr lst)) #t]\n\
+    \    [(> (car lst) (cadr lst)) #f]\n    [else (is_sorted (cdr lst))]))\n", " \
+    \ (match lst\n    ['() #t]\n    [(cons a '()) #t]\n    [(cons a (cons b c))\n\
+    \     (if (or (= a b) (> a b))\n         #f\n         (is_sorted (cons b c)))]))\n",
+  "  (if (null? lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n      \
+    \    (let ((rest (cdr lst)))\n            (if (cond ((= (car lst) (car rest))\n\
+    \                       (is_sorted rest))\n                      ((< (car lst)\
+    \ (car rest))\n                       (is_sorted rest))\n                    \
+    \  (else #f))\n                #t\n                #f)))))\n", "  (if (null? lst)\n\
+    \      #t\n      (if (null? (cdr lst))\n          #t\n          (if (< (car lst)\
+    \ (cadr lst))\n              (is_sorted (cdr lst))\n              #f))))\n", " \
+    \ (cond\n    [(empty? lst) #t]\n    [(empty? (rest lst)) #t]\n    [(> (first lst)\
+    \ (second lst)) #f]\n    [else (is_sorted (rest lst))]))\n", "  (and\n   (not\
+    \ (zero? (length lst)))\n   (andmap (lambda (x y) (<= x y)) lst (rest lst))\n\
+    \   (apply max lst)\n   (not (apply = lst))))\n", "  (match lst\n    [(list) #t]\n\
+    \    [(list h) #t]\n    [(list h t) #t]\n    [(list h1 h2 t) (and (equal? h1 h2)\
+    \ #f)]\n    [(list h1 h2 t1 t2) (and (less-than? h1 h2) (is_sorted (cdr lst)))]))\n\
+    </code>\n", "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(>\
+    \ (car lst) (cadr lst)) #f]\n    [else (is_sorted (cdr lst))]))\n```\n\n```scheme\n\
+    #lang racket\n", "  (define (loop lst old)\n    (if (empty? lst)\n        #t\n\
+    \        (if (< old (first lst))\n            (loop (rest lst) (first lst))\n\
+    \            #f)))\n  (if (empty? lst)\n      #t\n      (loop (rest lst) (first\
+    \ lst))))\n", "  (define (all-equal? lst)\n    (or (null? lst)\n        (and (null?\
+    \ (cdr lst)) #t)\n        (and (equal? (car lst) (cadr lst))\n             (all-equal?\
+    \ (cdr lst)))))\n  (if (all-equal? lst)\n      #t\n      (if (and (equal? (length\
+    \ lst) 1) #t)\n          #t\n          (or\n           (and (equal? (car lst)\
+    \ (cadr lst))\n                (is_sorted (cdr lst)))\n           (and (equal?\
+    \ (car lst) (cadr lst))\n                (and (equal? (cadr lst) (caddr lst))\n\
+    \                     (is_sorted (cddr lst))))\n           (and (not (equal? (car\
+    \ lst) (cadr lst)))\n                (and (< (car lst) (cadr lst))\n         \
+    \            (is_sorted (cdr lst))))))))\n\n", "  (cond [(empty? lst)\n      \
+    \   #t]\n        [(empty? (rest lst))\n         #t]\n        [(= (first lst) (second\
+    \ lst))\n         #f]\n        [(or (< (first lst) (second lst))\n           \
+    \  (is_sorted (rest lst)))\n         #t]\n        [else\n         #f]))\n", " \
+    \ (if (null? lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n     \
+    \     (if (= (car lst) (cadr lst))\n              #f\n              (is_sorted\
+    \ (cdr lst))))))\n", "  (if (&lt; (length lst) 2) #t\n    (if (or (equal? (first\
+    \ lst) (second lst))\n            (&lt; (first lst) (second lst)))\n        (is_sorted\
+    \ (rest lst))\n        #f)))\n</code>\n", "  (match lst\n    [(list) #t]\n   \
+    \ [(list x y) (and (= x y) #t)]\n    [(list x y . rest)\n     (and\n      (= x\
+    \ y)\n      (is_sorted (list y . rest)))]))\n", "  (cond\n    [(empty? lst) #t]\n\
+    \    [(empty? (rest lst)) #t]\n    [(and\n      (andmap\n        (lambda (x)\n\
+    \          (and\n            (<= (first lst) x)\n            (<= x (first (rest\
+    \ lst)))\n            (<= (first (rest lst)) (first (rest (rest lst))))))\n  \
+    \      (rest lst))\n      (= (length lst) (length (remove-duplicates lst))))\n\
+    \     #t]\n    [else #f]))\n", "  (cond\n    [(empty? lst) #t]\n    [(null? (cdr\
+    \ lst)) #t]\n    [(> (car lst) (cadr lst)) #f]\n    [else (is_sorted (cdr lst))]))\n",
+  "  (define (sorted? s)\n    (and (not (empty? s))\n         (or (empty? (rest s))\n\
+    \             (and (apply < (first s) (rest s))\n                  (sorted? (rest\
+    \ s))))))\n  (sorted? lst))\n\n", "  (cond\n    [(empty? lst) #t]\n    [(empty?\
+    \ (rest lst)) #t]\n    [(< (first lst) (second lst)) (is_sorted (rest lst))]\n\
+    \    [else #f]))\n", "  (if (or (empty? lst)\n          (empty? (rest lst)))\n\
+    \      #t\n      (if (< (first lst) (second lst))\n          (is_sorted (rest\
+    \ lst))\n          #f)))\n", "  (if (empty? lst)\n      #t\n      (if (and (empty?\
+    \ (rest lst)) (not (empty? lst)))\n          #t\n          (if (< (first lst)\
+    \ (first (rest lst)))\n              (is_sorted (rest lst))\n              #f))))\n",
+  "  (if (null? lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n      \
+    \    (if (equal? (car lst) (cadr lst))\n              #f\n              (is_sorted\
+    \ (cdr lst))))))\n", "  (cond\n    [(empty? lst) #t]\n    [(empty? (rest lst))\
+    \ #t]\n    [(and (= (first lst) (second lst))\n          (not (equal? (first lst)\
+    \ (last lst)))) #f]\n    [(and (not (equal? (first lst) (second lst)))\n     \
+    \     (< (first lst) (second lst)))\n     (is_sorted (rest lst))]\n    [else #f]))\n\
+    ```\n\n<br>\n\n### 1.9\n```\n#lang racket\n", "  (cond\n    [(empty? lst) #t]\n\
+    \    [(empty? (rest lst)) #t]\n    [(= (first lst) (second lst)) #f]\n    [(<\
+    \ (first lst) (second lst)) (is_sorted (rest lst))]\n    [else #f]))\n", "  (if\
+    \ (empty? lst)\n      #t\n      (if (empty? (rest lst))\n          #t\n      \
+    \    (if (= (first lst) (second lst))\n              #f\n              (if (<\
+    \ (first lst) (second lst))\n                  (is_sorted (rest lst))\n      \
+    \            #f)))))\n", "  (if (empty? lst)\n      #t\n      (if (and (rest lst)\
+    \ (empty? (rest (rest lst))))\n          #t\n          (if (< (first lst) (first\
+    \ (rest lst)))\n              (is_sorted (rest lst))\n              #f))))\n",
+  "  (cond\n    [(null? lst) true]\n    [(null? (cdr lst)) true]\n    [(= (car lst)\
+    \ (cadr lst)) false]\n    [(> (car lst) (cadr lst)) false]\n    [else (is_sorted\
+    \ (cdr lst))]))", "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n\
+    \    [(> (car lst) (cadr lst)) #f]\n    [else (is_sorted (cdr lst))]))\n", " \
+    \ (let ([sorted? #t])\n    (cond\n      [(empty? lst) (void)]\n      [(empty?\
+    \ (rest lst)) (void)]\n      [else\n       (cond\n         [(> (first lst) (second\
+    \ lst)) (set! sorted? #f)]\n         [else (is_sorted (rest lst))])])\n    sorted?))\n",
+  "  (cond\n    [(empty? lst) #t]\n    [(and (not (empty? (rest lst))) (and (first\
+    \ lst) < (second lst)))\n      (is_sorted (rest lst))]\n    [else #f]))\n", " \
+    \ (cond\n    [(empty? lst) #t]\n    [(empty? (rest lst)) #t]\n    [(zero? (sub1\
+    \ (length lst))) #t]\n    [(and (<= (first lst) (second lst))\n          (not\
+    \ (member (first lst) (rest lst)))\n          (is_sorted (rest lst))) #t]\n  \
+    \  [else #f]))\n", "  (or (empty? lst)\n      (and (empty? (cdr lst))\n      \
+    \     (is_sorted (cdr lst)))))\n", "  (if (null? lst)\n      #t\n      (if (null?\
+    \ (cdr lst))\n          #t\n          (if (< (car lst) (cadr lst))\n         \
+    \     (is_sorted (cdr lst))\n              #f))))\n", "  (define (is_sorted_tr\
+    \ lst i)\n    (if (null? (cdr lst))\n        #t\n        (cond ((= (car lst) (cadr\
+    \ lst))\n               #f)\n              ((&gt; (car lst) (cadr lst))\n    \
+    \           #f)\n              (else\n               (is_sorted_tr (cdr lst) (+\
+    \ i 1))))))\n  (is_sorted_tr lst 0))\n", "  (cond\n    [(empty? lst) true]\n \
+    \   [(null? (cdr lst)) true]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr lst))]\n\
+    \    [else false]))\n", "  (cond [(empty? lst) #t]\n        [(empty? (rest lst))\
+    \ #t]\n        [(zero? (sub1 (length lst))) #t]\n        [(< (first lst) (second\
+    \ lst))\n         (and (not (member (first lst) (rest lst)))\n              (is_sorted\
+    \ (rest lst)))]\n        [else #f]))\n", "  (or (null? lst)\n      (and (null?\
+    \ (cdr lst))\n           #t)\n      (and (null? (member (car lst) (cdr lst)))\n\
+    \           (is_sorted (cdr lst)))))\n", "  (cond\n    [(null? lst) #t]\n    [(null?\
+    \ (cdr lst)) #t]\n    [(&lt; (car lst) (cadr lst)) (is_sorted (cdr lst))]\n  \
+    \  [else #f]))\n</code>\nThis is the error:\n<code>csc: evaluation of expression\
+    \ in compiler's context has failed:\n  csc: value &lt; is not applicable\n  csc:\
+    \ expression: (&lt; (car lst) (cadr lst))\n  csc: context...:\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [running body]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj3-scheme/tests/test_utils.rkt:\
+    \ [traversing imports]\n   csc:   /home/kevin/Documents/CS61A/proj", "  (cond\n\
+    \    [(empty? lst) true]\n    [(empty? (rest lst)) true]\n    [(and (not (empty?\
+    \ lst)) (not (empty? (rest lst))))\n     (cond\n       [(and (= (first lst) (second\
+    \ lst)) (= (first lst) (third lst))) false]\n       [(and (= (first lst) (second\
+    \ lst)) (= (first lst) (third lst)) (is_sorted (rest lst))) true]\n       [(and\
+    \ (< (first lst) (second lst)) (is_sorted (rest lst))) true]\n       [else false])]))\n",
+  "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n    [(= (car lst) (cadr\
+    \ lst)) #f]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr lst))]\n    [else #f]))\n",
+  "  (cond\n    [(empty? lst) #t]\n    [(or (negative? (first lst)) (not (integer?\
+    \ (first lst)))) #f]\n    [(empty? (rest lst)) #t]\n    [(not (integer? (first\
+    \ (rest lst)))) #f]\n    [(= (first lst) (first (rest lst))) #f]\n    [(> (first\
+    \ lst) (first (rest lst))) #f]\n    [else (is_sorted (rest lst))]))\n", "  (define\
+    \ (helper lst)\n    (cond\n      [(null? lst) #t]\n      [(null? (cdr lst)) #t]\n\
+    \      [(> (car lst) (cadr lst)) #f]\n      [else (helper (cdr lst))]))\n  (helper\
+    \ lst))\n", "  (if (empty? lst)\n      #t\n      (begin\n        (let ((c (car\
+    \ lst))\n              (r (cdr lst)))\n          (if (empty? r)\n            \
+    \  #t\n              (begin\n                (let ((cc (car r))\n            \
+    \          (rr (cdr r)))\n                  (if (<= c cc)\n                  \
+    \    (is_sorted r)\n                      #f))))))))\n", "  (define (sorted? lst\
+    \ last)\n    (cond ((null? lst) #t)\n          ((= (car lst) last) #f)\n     \
+    \     (else (sorted? (cdr lst) (car lst)))))\n  (sorted? lst -1))\n", "  (if (null?\
+    \ lst)\n      #t\n      (if (null? (cdr lst))\n          #t\n          (if (<\
+    \ (car lst) (cadr lst))\n              (is_sorted (cdr lst))\n              #f))))\n",
+  "  (cond [(empty? lst) #t]\n        [(not (in-order? lst)) #f]\n        [else (is_sorted\
+    \ (cdr lst))]))\n", "  (cond\n    [(null? lst) #t]\n    [(null? (cdr lst)) #t]\n\
+    \    [(null? (cddr lst)) #t]\n    [(null? (cdddr lst)) #t]\n    [(null? (cddddr\
+    \ lst)) #t]\n    [(null? (cdddddr lst)) #t]\n    [(null? (cddddddr lst)) #t]\n\
+    \    [(null? (cdddddddr lst)) #t]\n    [(null? (cddddddddr lst)) #t]\n    [(null?\
+    \ (cdddddddddr lst)) #t]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr lst))]\n\
+    \    [else #f]))\n", "  (cond\n    [(empty? lst) true]\n    [(null? (cdr lst))\
+    \ true]\n    [(< (car lst) (cadr lst)) (is_sorted (cdr lst))]\n    [else false]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

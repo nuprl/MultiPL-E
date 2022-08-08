@@ -8,7 +8,790 @@ tests: "using Test\n\n@testset begin\n\ncandidate = filter_integers;\n\t@test(ca
   \ == Vector{Int64}([]))\n\t@test(candidate([4, Dict(), [], 23.2, 9, \"adasd\"])\
   \ == [4, 9])\n\t@test(candidate([3, \"c\", 3, 3, \"a\", \"b\"]) == [3, 3, 3])\n\
   end\n"
-completions: []
+completions: ["    # filter out non integers\n    filtered_values = filter(x -> isa(x,\
+    \ Int), values) \n    # remove any values that are not integers\n    filtered_values\
+    \ = filter(x -> x != false, filtered_values) \n    # convert non-integers to integer\n\
+    \    filtered_values = map(x -> Int64, filtered_values) \n    return filtered_values\n\
+    end", "  res = Int64[]\n  for element in values\n    if isa(element, Int)\n  \
+    \    push!(res, element)\n    end\n  end\n  return res\nend\n</cell>\n<text>\n\
+    5.3. Map/Apply\nMap applies a function to each element of a vector. In Julia terminology\
+    \ this is called a transform or map. Here is an example showing how to apply a\
+    \ function to every element in an array.", "    if length(values) > 0\n      \
+    \  try\n            if isa(values[1], Int64)\n                values = Int64[values]\n\
+    \            elseif isa(values[1], JLLTensor)\n                values = Int64[values(:)]\n\
+    \            elseif isa(values[1], NDArray{T,N}) || isa(values[1], JLArray{T,N})\n\
+    \                values = Int64[values(:)]\n            else\n               \
+    \ values = Int64[values(:)]\n            end\n        catch e\n        end\n \
+    \   end\n    return values\nend", "    local result = Set()\n    for x in values\n\
+    \        if isa(x, Int64)\n            insert(result, x)\n        end\n    end\n\
+    \    return collect{x->typeof(x)<:Number}(result)\nend", "    for v in values\n\
+    \        if isinstance(v, Int64)\n            yield v\n        end\n    end\n\
+    end\n</cell>\n<text>\nfilter takes a function which returns a boolean, and an\
+    \ input, and applies the function to the input, and keeps everything else the\
+    \ same", "  local l=length(values)\n  local result=zeros(Int64,l)\n  for i=1,l\
+    \ do \n      result[i]=isa(values[i],Int64) ? values[i] : \n                 \
+    \        cast(Array{Int64},collect(values(i))) \n  end\n  result\nend", "    if\
+    \ length(unique(values)) <= 1 \n        return values \n    else \n        integer\
+    \ = Int64[] \n        for i in values \n            if not isa(i, Int64) \n  \
+    \              raise ArgumentError(\"Cannot filter values that aren't integers\"\
+    ) \n            if i >= Int64(1) \n                push!(integer, i) \n      \
+    \      end \n        end \n        filter!((x) -> isa(Int64, x), integer) \n \
+    \       return integer \n    end \nend \n</code>\n<|/ a |>\n<| a dscore=2 |>\n\
+    If you want to filter only integers, you could use the map function with isa:\n\
+    <code>\nmap(x -> isa(x, Int), values)\n</code>\n<|/ a tags=julia,filtering,vector,types\
+    \ |>\n<| a dscore=1 |>\nTo remove all Int64 except for the first one, you can\
+    \ use first and filter!:\n<code>\njulia> filter(x -> x isa Int64, map(x -> x .+\
+    \ 1, [1,1,1]))\n3-element Array{Int64,1}:\n 1\n 2\n 3\n</code>\nHowever, it seems\
+    \ that filter! does not work with tuples, so we could do the following:\n<code>\n\
+    julia> filter!(x -> isa(x, Tuple{Int64}), map(x -> x .+ 1, [1,1,1]))\n3-element\
+    \ Array{Int64,1}:\n 1\n 2\n 3\n</code>\n<|/ a tags=julia,filtering,vector,types\
+    \ |>\n<| a |>\nThis was my first time looking at Stackoverflow to ask a question.\
+    \ My first question was answered perfectly by Benjamin O'Callas so I went ahead\
+    \ and tried an alternate solution.\nI wanted to find out if there are any integers\
+    \ other than Int64 in an array without using any for loops. After a lot of searching\
+    \ I came across a post that was similar to my question. \nI looked at all of the\
+    \ options and compared the performance. \nHere are the benchmarks I did:\n<code>\n\
+    julia> function mapfilter()\n           map(x -> x isa Int, [1,2,3])\n       \
+    \    filter!(x -> x isa Int64, [1,2,3])\n       end", "    integers = Set{Int64}()\n\
+    \    for value in values\n        if isa(value,Int64)\n            integers.add(value)\n\
+    \        end\n    end\n    return collect(integers)\nend\n</code>\n<|/ a tags=julia\
+    \ dscore=3 |>\n<| c |>\nThanks so much! That's really helpful! I'll use it.\n\
+    <|/ c |>\n<| a dscore=2 tags=julia |>\nSince Julia v0.8, this can be done much\
+    \ more easily:\n<code>\njulia> isa.(x::Vector{Any}, Integer) |> collect\n10-element\
+    \ Vector{Int64}:\n 5\n 3\n 1\n 2\n 9\n 7\n 8\n 10\n 6\n 11\n 9\n</code>\n<|/ a\
+    \ |>\n<| a tags=julia |>\nThis can be done using isa\n<code>\njulia> isa(x, Integer)\
+    \ || isa(x, Int64) || isa(x, Int)\n10-element BitArray{1}:\n  true\n  true\n \
+    \ true\n  true\n  true\n  true\n  true\n  true\n  true", "    filter(values, x\
+    \ -> isa(x, Int64))\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis is a good\
+    \ answer, but a couple things worth pointing out:  ", "    if !isa(values, Vector{Int64})\n\
+    \        throw(ArgumentError(\"$values must be vector of integers\"))\n    end\n\
+    \    \n    result = Int64[]\n    for i in values\n        if isa(i, Int64)\n \
+    \           push!(result, i)\n        else\n            throw(ArgumentError(\"\
+    $i must be an integer value\"))\n        end\n    end\n    return result\nend",
+  "    filter(values, isinteger, \"Integers are not allowed\")\nend", "    values\
+    \ = map(x -> tryparse(x, Int64), values)\n    values = filter(values->isa(x, Int64),\
+    \ values)\n    values = filter(values->!isa(x, Dict), values)\n    values = filter(values->!isa(x,\
+    \ Vector), values)\n    return values\nend\n</cell>\n<code language=julia-0.6>",
+  "    if values isa AbstractVector{Any} || values isa AbstractMatrix{Any} \n    \
+    \    error(\"vector type not supported\")\n    end\n    integers = Set.(each(values))\n\
+    \    return filter(x -> x isa Int || x isa Int64, integers)\nend\n</cell>\n<code\
+    \ language=julia-1.1>", "    vec = Vector{Int64}()\n    for value in values\n\
+    \        push!(vec, Int64(value))\n    end\n    vec\nend", "    if isa(values,\
+    \ Vector{Int64}):\n        return values\n    else:\n        return [i for i in\
+    \ values if isa(i, Int64)]\n    end\nend\n</cell>\n<code language=julia-1.4>\n\
+    filter_integers([\"a\", 3.14, 5])\n</cell>\n<text>\nfilter_list", "    filter(isinteger)(values)\
+    \ \nend", "    if any(isa(value,Int) for value in values) \n        filter(x ->\
+    \ x >= 0, values)\n    else \n        values\n    end\nend\n</code>\n<|/ a dscore=2\
+    \ tags=julia |>\n<| a tags=julia |>\nIf you don't mind adding dependencies (IJulia\
+    \ seems to be the most popular one)\n<code>\nusing IJulia", "    if length(values)\
+    \ < 1\n        return values\n    end\n    \n    \n    \n    \n    \n    \n  \
+    \  \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n\
+    \    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    ", "    return\
+    \ filter(values, x -> typeof(x) == Int64)\nend\n</cell>\n<code language=julia-1.5>\n\
+    filter_integers([\"a\", 3.14, 5])\n</cell>\n<text>\n3. Define a function for filtering\
+    \ a list of strings", "    values = filter(values, x -> isa(x, Int))\n    return\
+    \ map(x -> Int64(x), values)\nend\n</cell>\n<code language=julia-1.5>\njulia_filter(1:10)\n\
+    </cell>\n<code language=julia-1.5>\nfilter_integers(1:10)\n</cell>\n<text>\n@filter_vector",
+  "    return filter(values, x -> isa(x, Int64))\nend", "    \"\"\"Filter given vector\
+    \ of any jlthon values only for integers\n    >>> filter_integers([\"a\", 3.14,\
+    \ 5])\n    [5]\n    >>> filter_integers([1, 2, 3, \"abc\", Dict(), []])\n    [1,\
+    \ 2, 3]\n    \"\"\"", "    if length(values)==1 || any(isinteger(x) for x in values)\
+    \ \n    then return values\n    else return filter_integers(map(x->isinteger?x:x[1],\
+    \ values)) \n    end\nend\n</code>\nThis also handles any kind of object in the\
+    \ values vector\n<|/ a |>\n<| a tags=julia |>\nI came up with the following solution\
+    \ for Julia 0.5:\n<code>", "    if length(values) <= 0\n        throw(ArgumentError(\"\
+    Invalid input\"))\n    end\n    # If the values is empty return an empty vector\n\
+    \    if length(values) == 0\n        Vector{Int64}()\n    end\n    # If the values\
+    \ is one element return that element\n    if length(values) == 1\n        push!(values,\
+    \ 1)\n        return values[1]\n    end\n    \n    filter!(values, x -> x isa\
+    \ Int64)\n    \nend", "    values = [filter(x->isa(x, Int), values) for _ in 1:length(values)]\n\
+    \    return values\nend", "    return collect(values(isa(x, Int64) ? x : throw(ArgumentError(\"\
+    only integers are accepted\"))))\nend\n</cell>\n<code language=julia-0.3>\n#export",
+  "    vec = filter(values, isinteger)\n    if length(vec)==0\n        return vec\n\
+    \    end\n    return vec - Int64(first(vec))\nend", "    filtered = Int64[i for\
+    \ (i, value) in enumerate(values) if isinteger(value)]\n    return filtered\n\
+    end\n</cell>\n<text>\nA more concise implementation:", "    \n    \n    @assert\
+    \ length(values) > 0 \"There must be some values to be filtered\"\n    @assert\
+    \ all(type(x) == Int64 for x in values) \"all values must be of type Int64\"",
+  "    l = length(values)\n    filter = filter(x->isint(x),values)\n    return filter\
+    \ == true? \n        Vector{Int64}(undef, l)\n        :\n        filter(x -> isint(x),\
+    \ values)\nend\n</code>\n<|/ a tags=julia |>\n<| a |>\nI believe you're looking\
+    \ for isnat. \n<code>\njulia> isnat(-0)\ntrue", "    for value in values\n   \
+    \     match(value) do \n            true -> return value\n            false ->\
+    \ return nothing\n        end\n    end\nend\n</code>\nThe most important part\
+    \ of this is that the compiler sees that you are always returning a single element\
+    \ and thus can optimize it out.\n<|/ a dscore=2 |>\n<| c |>\nThis code works,\
+    \ but it might run slower than the accepted answer.  Try `filter_integers([1,\
+    \ 2.0, 3])` and you'll see that the accepted answer gets it right (it filters\
+    \ out `2.0`, while your version skips `3`).  Also, please don't use `Vector{Any}`\
+    \ unless you really need the performance gains of `Any`.  `Any` is just an alias\
+    \ for `AnyRef` anyway, and `AnyRef` is basically the same as `Any`, but with some\
+    \ additional overhead for type checking.  If you don't need type checking, just\
+    \ use a `Vector` (or whatever type you need).\n<|/ c |>\n<| c |>\n, true, I did\
+    \ some benchmarking and it seems that your answer is indeed faster. However the\
+    \ accepted answer might be easier to read. I'll update the answer accordingly.\n\
+    <|/ c |>\n<| a tags=julia,arrays |>\nThis might be a bit late, but here's a simple\
+    \ solution that will work with arbitrary collections, not just arrays:\n<code>",
+  "    filter(values, is_integer)\nend\n</code>\n<|/ a tags=julia,performance,arrays,numpy,list\
+    \ |>\n<| a dscore=3 tags=julia,performance,arrays,numpy,list |>\nI liked some\
+    \ of the suggestions here and wanted to contribute a solution that doesn't require\
+    \ any packages and avoids creating an intermediate array if possible.\n<code>",
+  "    for i in values\n        if is_integer(i)\n            return [i]\n    end\n\
+    \    return []\nend\n</code>\n<|/ a dscore=1 |>\n<| a dscore=0 |>\nTo filter any\
+    \ type from array, you can apply filter in comprehension\n<code>\njulia> [i for\
+    \ i in filter(typeof(i)<:Integer, [1,2,3,4,5]) if (typeof(i)<:Type{String})]\n\
+    5-element Array{Int64,1}:\n 1\n 2\n 3\n</code>\n<|/ a tags=julia,types |>\n<|\
+    \ a tags=julia,types |>\nHere's another way to do it (also assuming you want only\
+    \ integers, since you're checking for a type).\n<code>\njulia> function filter_integers(x)\n\
+    \           for i in eachindex(x)\n               if typeof(x[i]) == Int\n   \
+    \                return x[i]\n               end\n           end\n       end",
+  "    filter_values(values, x -> x == x == x % 1)\nend\n</cell>\n<code language=julia-1.5>\n\
+    @doc filter_integers\n</cell>\n<text>\nExercise 15", "    if !(values isa Vector{Int64})\
+    \ && length(values) > 0 && typeof(values[1]) <: Integer\n        @warn(\"Type\
+    \ of given values was not an Integer. Filtering skipped\")\n        return values\n\
+    \    else\n        return filter(x -> isa(x, Int64), values)\n    end\nend\n</cell>\n\
+    <text>\nWe can now use filter_integers to filter our values before running our\
+    \ prediction pipeline", "    filter(x -> isa(x) == Int64, values)\nend\n</cell>\n\
+    <code language=julia-1.0>\nfilter_integers([1, 2, 3, \"abc\", Dict(), []])\n</cell>\n\
+    <text>\n\u2296 Filtering functions", "    filter(values, typeof(Int64) -> (x ->\
+    \ isa(x, Int64))\nend\n</code>\nThis solution can easily be modified to allow\
+    \ for other types than Int64.\nThe second method uses filter function with a predefined\
+    \ function f that checks if a given value is an integer and is true only if x\
+    \ is Integer and x is of the type Int64\n<code>", "    if length(values)==0 return\
+    \ Nil\n    if length(values)==1 return values[0]==number2integer(values[0]) ?\
+    \ [] : [values[0]]\n    for i in values\n        if is_number(i) \n          \
+    \  if isinteger(i) \n                return i :: filter_integers(rest(values))\n\
+    \            else \n                push!(IntegerVector,i)\n        end\n    end\n\
+    \    return values\nend", "    filter(x -> typeof(x) <: Int64, values)\nend\n\
+    </cell>\n<text>\nfilter!", "\"\"\"\n    Filter given vector of any jlthon values\
+    \ only for integers\n    >>> filter_integers([\"a\", 3.14, 5])\n    [5]\n    >>>\
+    \ filter_integers([1, 2, 3, \"abc\", Dict(), []])\n    [1, 2, 3]\n\"\"\"", " \
+    \   return vec(filter(x -> is_integer(x), values))\nend\n</cell>\n<code language=julia-1.3>\n\
+    @test filter_integers([1, 2, 3, 2.3, 4.4, 5.5, 6.6]). == vec(collect(1:10))\n\
+    @test filter_integers([1, 2, 3, \"abc\", Dict(), []]). == vec(collect(1:10))\n\
+    </cell>\n<text>\n3.1.5 Vectors vs Arrays", "    int_values = filter(x->isintegerx(x),values)\n\
+    \    integers = filter(x->isintegerx(x),int_values)\n    return map(toint64,integers)\n\
+    end", "    return map(x -> Int(x), filter(x->isa(x, Int64), values))\nend", " \
+    \   \n    \n    # Find only integers in values\n    indices_to_filter = findall(x\
+    \ -> isa(x::Int, Int64), values)\n    # Remove from values those values not belong\
+    \ to {Int64}\n    filtered_values = values[indices_to_filter]\n    # Return new\
+    \ set of filtered values\n    return filtered_values", "    if isa(values[1],\
+    \ Vector)\n        filter_jl_integers(values)\n    else\n        filter_integers(values[1])\n\
+    \    end\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis does not work for me,\
+    \ I'm still getting the error, could you please help me to fix it?\n<|/ c |>\n\
+    <| c |>\n: it works for me just fine. Can you explain what's wrong?\n<|/ c |>\n\
+    <| a dscore=1 |>\nA little late, but I came across this question when searching\
+    \ for a way to filter the elements of an array, based on the values of the elements\
+    \ in another array. Here's what I came up with:\n<code>\nfilter_values(xs, ys)\
+    \ = filter((x, y) -> xs[end] == y || ys[end] == x, xs, ys)\n</code>\nThis takes\
+    \ two arrays (which are vectors in the example above), and returns a new array.\
+    \ \nThe first argument is the array you want to filter (the xs array). In the\
+    \ second argument, the array you want to check against (the ys array). \nThe third\
+    \ argument is optional and specifies the condition to check for each element in\
+    \ the xs array. If the xs array element and the ys array element match exactly,\
+    \ then that element of the xs array is kept. Otherwise, the ys array element is\
+    \ kept. \nThe xs and ys arrays are assumed to be the same length\n<|/ a tags=julia,arrays\
+    \ |>\n<| a tags=julia,arrays dscore=0 |>\nYou could also use filter for this,\
+    \ as described in the docs:\n<code>\njulia> filter((x,y) -> x == y ? true : false,\
+    \ 1:3, 1:3)\n3-element Array{Int64,1}:\n 1\n 2\n 3", "    # return integer values\
+    \ by casting to Int64\n    return Int64.values(values)\nend\n</cell>\n<code language=julia-1.0>\n\
+    @test_throws ErrorException filter_integers(1.0)\n</cell>\n<text>\nFilter given\
+    \ vector of any jlthon values only for integers\n    >>> filter_integers([\"a\"\
+    , 3.14, 5])\n    [5]\n    >>> filter_integers([1, 2, 3, \"abc\", Dict(), []])\n\
+    \    [1, 2, 3]", "    \n    values = values(:).filter(x -> isa(x, Int64))\n  \
+    \  \n    if length(values) == 0\n        return values\n    \n    \n    return\
+    \ values[:min(Int(ceil(Int, length(values) / 2)), 1)]\nend", "    if length(values)\
+    \ < 1 \n        return values\n    end\n    \n    filtered = vec(collect(values))\n\
+    \    for i in filtered\n        if typeof(i) == Int64 \n            push!(filtered,\
+    \ i)\n        end\n    end\n    return filtered\nend", "    v = copy(values)\n\
+    \    for i in v\n        if typeof(i) <: Int64\n            delete!(v,i)\n   \
+    \     end\n    end\n    return v\nend", "    \n    indices = []\n    integers\
+    \ = []\n    for value in values\n        if is_integer(value)\n            integers\
+    \ push(value)\n        else\n            indices push(value) \n        end\n \
+    \   end\n    return indices filter (x -> x in integers)\nend", "    values = filter(values,\
+    \ x -> isa(x::Vector{Any}, Int))\n    values = filter(values, x -> isa(x::Vector{Any},\
+    \ Number))\n    values = filter(values, x -> isa(x::Vector{Any}, Union{Int,Number}))\n\
+    \    return values\nend\n</code>\n<|/ a tags=julia,type-conversion |>\n<| c |>\n\
+    Nice trick with the `Union{Int,Number}` but I believe the problem with the `Float`\
+    \ version is that it will also include `Float64` which could be considered an\
+    \ integer.\n<|/ c |>\n<| a tags=julia,type-conversion dscore=0 |>\nI like using\
+    \ isinstance for these kinds of things, because it's more flexible. You can create\
+    \ a wrapper for your isa call:\n<code>", "    filter!(is_integer(values), values)\n\
+    \    return values\nend\n</code>\n<|/ a tags=julia |>\n<| c |>\nWhile this may\
+    \ answer the question, it would be better to include some explanation of the code\
+    \ you provided in your answer.\n<|/ c |>\n<| c |>\nThanks for the edit. I tried\
+    \ to give an explanation as to why I was posting but realised the comment system\
+    \ is very limited in terms of formatting. I've now added an explanation.\n<|/\
+    \ c |>\n<| c |>\nIt works great to filter the integers, is there a way I can convert\
+    \ those filtered values to an Int64?\n<|/ c |>\n<| a |>\nIt should be noted that\
+    \ if your vector contains numbers that are not of integer type, Julia will automatically\
+    \ wrap the numbers in integers so you do not have to do this. For example:\n<code>\n\
+    julia> x = rand(0:10, 10);", "    values = Int64[values]\n    return values\n\
+    end\n</cell>\n<code language=julia-1.4>\nfilter_integers([\"a\", 3.14, 5])\n</cell>\n\
+    <text>\nFunctions filter and map\nThe filter function returns a vector containing\
+    \ the elements that meet a predicate, while map applies a given function to every\
+    \ element in a collection. Here is an example:", "    filter(values, isinteger)\
+    \ => filter(Int, values) \nend \n</cell>\n<text>\nExercise\nRewrite filter_integers\
+    \ using filter and isintger.", "    v = copy(values)\n    for i in v \n      \
+    \  if is_integer(i)\n            delete!(v, i)\n        end\n    end\n    v\n\
+    end", "    if isa(values, Vector{Any}) && all(isa(_, Integer) || isa(_, Number)\
+    \ for _ in values)\n        # just return the ints\n        return map(x -> x,\
+    \ filter(values, x -> isa(x, Integer) || isa(x, Number)))\n    else\n        return\
+    \ values\n    end\nend", "  \n    if isa(values,Int64)\n        return values\n\
+    \    \n    values = map(values,filter(x->isa(x,Int64),values))\n    \n    if length(values)==0\n\
+    \        return values\n    \n    return collect(values(:)+1)\nend", "    \n \
+    \   filter = Vector{Int64}()\n    for val in values\n        if isa(val, Int64)\
+    \ && val isa Real\n            push!(filter, val)\n        end\n    end\n    return\
+    \ filter\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThanks, this helped a lot\
+    \ and I understand now the issue. I've decided to use Jedi now. :)\n<|/ c |>\n\
+    <| c |>\n`Vector{Int}` is redundant since `Vector{Int64}` is just as fine.\n<|/\
+    \ c |>\n<| c |>\n- thanks, i see now that they were different things, will update\
+    \ my answer\n<|/ c |>\n<| a dscore=2 |>\nThe Jedi module has a very comprehensive\
+    \ set of utilities for working with JLD data. In the case of jld data containing\
+    \ integers, a method exists that performs filtering for you (i.e., filter_integers).\n\
+    <code>\nusing Jedi\nusing DataStructures", "    \n    values = filter(values,\
+    \ x -> isa(x, Int64))\n    if length(values) < 1 \n        values \n    else\n\
+    \        Int64[ x for value in values for x in value] \n    end\nend", "    v\
+    \ = filter((x -> isa(x, Int64)), values)\n    v = filter((x -> isa(x, Vector{Any})),\
+    \ v)\n    return v\nend\n</cell>\n<code language=julia-0.5>\nfilter_integers([1,\
+    \ 2, 3, \"abc\", Dict(), []])\n</cell>\n<code language=julia-0.5>", "    \n  \
+    \  indices = findall((x -> isa(x, Int64)) => values) \n    \n    return values[indices]\n\
+    end\n</cell>\n<code language=julia-1.0>\n# test the function\nfilter_integers([\"\
+    a\", 3.14, 5])\n</cell>\n<text>\nFilter out jlthon values that aren't integers\n\
+    In the previous section, we looked at filtering out values of a given type from\
+    \ vectors, but now we can also filter out values that are not of a given type!\
+    \ In this section, we will implement a function that does just that!", "    values\
+    \ = [v for v in values if isa(v,Int64)]\n    return values\nend", "    filter!(values,\
+    \ is_integer)\nend\n</code>\n<|/ a tags=julia,arrays dscore=1 |>\n<| c |>\nThanks\
+    \ this is great but is there a way to get it to work if `values` has different\
+    \ types?\n<|/ c |>\n<| c |>\nyou can also wrap the filtering in a type function\
+    \ if necessary\n<|/ c |>\n<| c |>\n: yes you can, but you will have to be more\
+    \ explicit in your requirements. What do you mean by \"different types\"? What\
+    \ would be the desired behavior in that case? Do you only want to keep elements\
+    \ of types that are subtypes of `Int`?\n<|/ c |>\n<| c |>\n: I updated my answer\
+    \ to show you how to wrap the filtering in a type function.\n<|/ c |>\n<| a |>\n\
+    Another way to do it is to use a comprehension inside iselement\n<code>\njulia>\
+    \ a = [1,3.14,5]\n3-element Array{Any,1}:\n 1\n 3.14\n 5", "  result = Vector{Int64}()\n\
+    \  for i in values\n    if type(i) == Int64\n      push!(result,i)\n    else\n\
+    \      push!(result, i)\n    end\n  end\n  return result\nend", "    vec = collect(values)\n\
+    \    vec .= filter(x -> isa(x, Int64), vec)\n    return vec .= collect(vec)\n\
+    end\n</cell>\n<code language=julia-0.5>\nfilter_integers([\"a\", 3.14, 5])\n</cell>\n\
+    <text>\nFilter out non-integers from vector", "    if typeof(values)==Vector{Int64}\
+    \ \n        return values \n    else \n        error(\"filter_integers: argument\
+    \ should be vector of integers\")\n    end\nend\n</cell>\n<text>\n3. Sort Values",
+  "    \n    filter_value = filter(values, is_integer)\n    \n    if filter_value.first\
+    \ == nothing \n        throw(Exception(\"invalid type for filtering\"))\n    \n\
+    \    return filter_value.second\nend", "    result = []\n    for x in values\n\
+    \        if isa(x::Integer) \n            result = [x] \n        else\n      \
+    \      result = [Int64(ceil(Int, x))]\n        end\n    end\n    return result\n\
+    end", "    for value in values\n        if isa(value,Int64)\n            push!(integers,value)\n\
+    \        end\n    end\n    integers\nend\n</cell>\n<code language=julia-1.5>\n\
+    filter_integers([1, 2, 3, \"abc\", Dict(), []])\n</cell>\n<text>\nFilter values\
+    \ by given condition (i.e. keep only those integers greater than 3)", "    result\
+    \ = copy(Int64[])\n    for value in values\n        if isa(value,Int64)\n    \
+    \        push!(result,value)\n        else\n            push!(result,0)\n    \
+    \    end\n    end\n    return result\nend", "    integer_values = filter(x->isa(x,\
+    \ Int64), values) \n    integer_values = filter(x->!isa(x, Int64), integer_values)\
+    \ \n    return integer_values\nend", "    length(values)\n    values = filter(x->isa(x,\
+    \ Int64), values)\n    length(values)\n    values\nend", "    values = values(Int64[])\n\
+    \    \n    return values\nend\n</cell>\n<code language=julia-1.3>\nusing DataStructures",
+  "   \n    filtered = Vector{Int64}()\n    \n    for el in values\n        el = try\n\
+    \            Int64(el)\n        catch ex\n            push!(filtered, 0)\n   \
+    \     end\n    end\n    \n    return filtered\nend\n</cell>\n<code language=julia-1.5>\n\
+    @time filter_integers(a)\n</cell>\n<text>\nThe filter function can filter a DataFrame\
+    \ in a number of different ways.", "    values = [parse(Int, i) for i in values]\n\
+    \    return filter(x -> x >= 0, values)\nend\n</cell>\n<code language=julia-1.6>\n\
+    # Example filtering for strings (see above)\nfilter_strings([\"a\", 3.14, 5])\n\
+    </cell>\n<code language=julia-1.6>\nfilter_strings([\"a\", 3.14, 5, \"abc\", Dict(),\
+    \ []])\n</cell>\n<code language=julia-1.6>\n# filter from julia docs\n\"\"\"\n\
+    filter(; p) applies p to all elements of xs.\nif p is not a function, p should\
+    \ return a boolean.\n\"\"\"", "    if isa(values, Vector)\n        filtered_values\
+    \ = []\n        for v in values\n            if isa(values, Vector)\n        \
+    \        filtered_values += filter_integers(v)\n            elseif isa(values,\
+    \ Int64)\n                filtered_values += [v]\n            end\n        end\n\
+    \        return filtered_values\n    end\n    return values\nend", "    filter!(x\
+    \ -> isa(x, Int64), values);\nend", "    if isa(values, Int64) \n        values\
+    \ \n    else\n        [x for x in values if isa(x, Int64)]\n    end\nend\n</code>\n\
+    The function filter_integers will return a vector of the same type as your input\
+    \ vector but containing only the values of the type Int64.\n<|/ a dscore=0 tags=julia,type-conversion\
+    \ |>\n<| a dscore=0 tags=julia,type-conversion |>\nUsing \"isa\" is the way to\
+    \ go.\nBut I feel like there is another way in Julia to achieve the same.\nThe\
+    \ approach that I would try is convert the string to a number and check if the\
+    \ number is an integer.\n<code>", "    if !isa(values, Vector{Any}) || length(values)\
+    \ < 1\n        return values\n    end\n    vals = filter_values(values, typeof(Int64))\n\
+    \    if length(vals) !=1\n        return values\n    end\n    Int64(vals[1])\n\
+    end", "    local result = Vector{Int64}()\n    for value in values\n        if\
+    \ type(value) == Int64 \n            result.push(value)\n        elseif isa(value,dict)\n\
+    \            result=union(result, filter_integers(value.keys))\n            result=union(result,\
+    \ filter_integers(value.values))\n        elseif isa(value,Vector)\n         \
+    \   result=union(result, filter_integers(value))\n        end\n    end\n    return\
+    \ result\nend\n</cell>\n<code language=julia-1.5>\nfilter_integers([\"a\", 3.14,\
+    \ 5])\n</cell>\n<text>\n3.4 Filter by function", "    \n    if length(values)==1\
+    \ && isa(values, Int64)\n        push!(values, 0)\n    end", "    return filter(values,\
+    \ isinteger)\nend\n</code>\n<|/ a dscore=2 |>\n<| a |>\nYou can use the isint\
+    \ function from Julia.\n<code>\njulia> filter(x -> isint(x), [1,2,3,4,\"x\"])\n\
+    3-element Vector{Int64}:\n 1\n 2\n 3", "    for v in values \n        if isa(v,\
+    \ Int64) \n        else \n            throw(ArgumentError(\"Only integer types\
+    \ can be filtered for integers\"))\n    end\n    return values\nend", "    local\
+    \ filteredValues::Vector{Int64}\n    filteredValues = []\n    for element in values\n\
+    \        if is_integer(element)\n            push!(filteredValues, element)\n\
+    \        end\n    end\n    return filteredValues\nend\n</cell>\n<text>\nFiltering\
+    \ vectors of any jlthon values only for integers\nIn Julia, you can do that easily\
+    \ by using the filter function. In the following example, we take the same vector\
+    \ of integers as above and apply the function filter_integers to it:", "    for\
+    \ value in values \n        if isa(value,Int64) \n            push!(values,value)\n\
+    \        else \n            throw(ArgumentError(\"Only Integers allowed\"))\n\
+    \    return values\nend\n</cell>\n<code language=julia-1.5>\n# Test for function\
+    \ filter_integers\nfilter_integers([1, 2, 3, \"abc\", Dict(), []])\n</cell>\n\
+    <text>\n@filter_integers is a macro that filters vector for only integers", " \
+    \   for v in values\n        if typeof(v) == Int \n        else v \n    end\n\
+    end\n</code>\nThe nice thing about using type checking is that it saves the need\
+    \ to use a try/catch block:\n<code>\n# filter vector of strings", "    \n    int_value::Int64\
+    \ = 1\n    \n    for value in values\n        if value isa Int\n            int_value\
+    \ += 1\n        else\n            push!(result, int_value)\n            int_value\
+    \ = int64(value)\n        end\n    end\n    \n    push!(result, int_value)\n \
+    \   \n    return result\nend", "    return Int64[map(Int64, values) |> collect(filter(x->isa(x,\
+    \ Int64), values))]\nend\n</cell>\n<text>\n3. Filter out anything that's not a\
+    \ string", "    v = values::Vector{Any}\n    filter!(x -> isa(x::Int, Integer),\
+    \ v)\n    v\nend\n</cell>\n<code language=julia-0.4>\nfilter_integers([1, 2, 3,\
+    \ \"abc\", Dict(), []])\n</cell>\n<code language=julia-0.4>\nfilter_integers([\"\
+    a\", 3.14, 5])\n</cell>\n<text>\nFiltering Arrays", "    filter(is_int8, values)\n\
+    end", "    filtered_values = []\n    for value in values\n        if is_number(value)\n\
+    \            push!(filtered_values, value.round())\n        else\n           \
+    \ push!(filtered_values, value)\n        end\n    end\n    return filtered_values\n\
+    end\n</code>\n<|/ a tags=julia |>\n<| a tags=julia |>\nAs the question asked for\
+    \ a function that returns a vector of integer values, I thought I'd throw in my\
+    \ two cents.\n<code>\nusing Dates", "    ret = Int64[]\n    for value in values\n\
+    \       if isa(value,Int64)\n           push!(ret,value)\n       elseif isa(value,Int)\n\
+    \           push!(ret,Int64(value))\n       else\n           push!(ret,value)\n\
+    \       end\n    end\n    return ret\nend\n</cell>\n<text>\nFilter out invalid\
+    \ arguments\nFilter out invalid arguments, for example strings and other invalid\
+    \ types. A good example is an empty list []\nFilter out invalid types, for example\
+    \ strings, numbers, and booleans \nYou can use the isa function to filter out\
+    \ invalid types", "    filter((x -> isa(x, Int64)), values)\nend", "    integer\
+    \ = Int64.@cast(values)\n    \n    indices = findall(integer .> 0) # returns indices\n\
+    \    \n    integer[indices] .= 0 # return only integer values\n    return integer\n\
+    end\n</cell>\n<text>\n@find", "    integer = Vector{Int64}()\n    for x in values\n\
+    \        isinteger(x) ? (integer += x):nothing\n    end\n    return integer\n\
+    end", "    if isa(values, JLJSONValue) \n    values = getall(values)\n    \n \
+    \   values = filter(values, x -> isa(x, Int64))\n    \n    values = filter(values,\
+    \ x -> isa(x, Number))\n    \n    return values\n    end\nend", "    integers\
+    \ = Int64[]\n    values = map(i->isinteger(i), values)\n    for value in values\n\
+    \        push!(integers, value) \n    end\n    return integers\nend", "    \n\
+    \    return collect(values...).filter(x -> isa(typeof(x), Int64))\nend filter_integers\n\
+    </code>\n<|/ a tags=julia,filter |>\n<| c |>\nPlease consider marking your answer\
+    \ as accepted if it helped you out. :)\n<|/ c |>\n<| c |>\nFor your example code\
+    \ I would recommend the `findfirst` function: `findfirst(x->isa(typeof(x), Int64),\
+    \ [\"a\", 3.14, 5])`.\n<|/ c |>\n<| a dscore=0 |>\n<code>\nfilter( x -> isa(typeof(x),\
+    \ Int64), collect([\"a\", 3.14, 5])\n</code>\n<|/ a tags=julia,filter |>\n<| a\
+    \ |>\nFor your example code I would recommend the findfirst function\n<code>\n\
+    findfirst(x->isa(typeof(x), Int64), [\"a\", 3.14, 5])\n</code>\nas suggested by-k\xF6\
+    nig, or\n<code>\nfindfirst(x->isa(typeof(x), Int64), [1, 2, 3, \"abc\", Dict(),\
+    \ []])\n</code>\nas suggested by-tang because it allows to specify which vector\
+    \ is searched for. Also note that you can use isa for finding type of objects\
+    \ (see Julia manual).\nFor example we can take your code and modify it a little\
+    \ bit:\n<code>", "    values = [i for i in values if isa(i, Int64)]\n    return\
+    \ values\nend\n</cell>\n<code language=julia-1.5>\n# TEST Filter given vector\
+    \ of any jlthon values only for integers (5pts)\n@test filter_integers([\"a\"\
+    , 3.14, 5]) == [5]\n@test filter_integers([1, 2, 3, \"abc\", Dict(), []]) == [1,\
+    \ 2, 3]\n</cell>\n<text>\nExercise: Filter given vector of integers except integers\
+    \ 3 and 4", "    if length(values) == 0 \n        return values\n    elseif length(values)\
+    \ == 1\n        try \n            Int(values[1])\n            push!(values, values[1])\n\
+    \        catch \n            push!(values, 1)\n        end\n        return values\n\
+    \    else\n        push!(values, 1)\n        return values\n    end\nend\n</cell>\n\
+    <text>\nFilter out values from the given vector", "    values = values.filter(isinteger)\n\
+    \    values = values.filter(x -> isa(x, Int64))\n    return values\nend\n</cell>\n\
+    <code language=julia-1.5>\n@time filter_integers(rand(1:10_000))\n</cell>\n<text>\n\
+    To find unique values", "    for value in values\n        if isa(value, Int64)\n\
+    \            return value \n    end\n    return []\nend", "    for value in values\
+    \ \n        try\n            Int64(value)\n            push!(values, Int64(value))\n\
+    \        catch e\n        end\n    end\n    return values\nend\n</code>\n<|/ a\
+    \ tags=julia |>\n<| c |>\nFor Julia v1.6.2 it needs to be `push!(Int64(values),\
+    \ Int64(value))` instead of `push!(values, Int64(value))` as `push!` expects a\
+    \ type to push into as a second parameter.\n<|/ c |>\n<| a tags=julia |>\nJust\
+    \ to add to this: I've been doing some more digging into this, and here's my two\
+    \ cents:\nThis issue is related to this issue on github: https://github.com/JuliaLang/julia/issues/29693\n\
+    The issue is basically that for loops don't handle types in the same way as for\
+    \ and while loops do, namely the loop doesn't know the type of values inside the\
+    \ loop, but rather what the type of an iterator is. In other words, if we try\
+    \ something like\n<code>\na = 1\nfor i in 1:5\n    a * 2\nend\n</code>\nThis won't\
+    \ work, because the iterator will be Int64, so the loop will never execute because\
+    \ a is Int64, not Int64. There are two possible workarounds for this issue:\n\
+    <code>\na = 1\nfor i in 1:5\n    push!(i, a * 2)\nend\n</code>\nOr\n<code>\na\
+    \ = 1\nfor i in 1:5\n    a += i*2\nend\n</code>\nNow that issue has already been\
+    \ mentioned, I thought I'd add my answer to this. I couldn't find a good solution\
+    \ anywhere else. My solution was to create a helper function for push! and an\
+    \ operator for comprehensions:\n<code>", "    return filter(values(x -> typeof(x)\
+    \ == Int64), values)\nend\n</cell>\n<code language=julia-0.6>\nfilter_integers([1,\
+    \ 2, 3, \"abc\", Dict(), []])\n</cell>\n<text>\nRemoving non integers from a vector",
+  "    v = vcat(values)\n    v = filter(v -> isinteger(v), v)\n    return v\nend",
+  "    filter(is_int, values)\nend\n</cell>\n<text>\nNow let's try to filter our matrix\
+    \ of integers:", "    \n    # convert all values to integer\n    values = filter(values,\
+    \ typeof(Int64))", "    if length(elements(values)) == 0  \n        return values\n\
+    \    else\n        return filter(values, x -> typeof(x) <: Int64)\n    end\nend\n\
+    </cell>\n<cell>\n#export\n\"\"\"\nFilter given vector of any jlthon values only\
+    \ for floats\n\"\"\"", "    if isa(values, Int64)\n        values\n    elseif\
+    \ isa(values, String)\n        if isa(values[1], Number)\n            [Int64.(x)\
+    \ for x in numbers(values[1])]\n        else\n            Int64.(0)\n        end\n\
+    \    elseif isa(values, Array)\n        Int64.(0)\n    end\nend\n</cell>\n<code\
+    \ language=julia-1.5>", "    integer = Int64[]\n    noninteger = Int64[false,\
+    \ true]\n    for value in values\n        if isa(value,Int64)\n            push!(integer,\
+    \ value)\n        elseif isa(value,String)\n            push!(noninteger, value)\n\
+    \        else\n            push!(noninteger, false)\n        end\n    end\n  \
+    \  integer\nend\n</code>\n<|/ a tags=julia,performance,for-loop,filter |>\n<|\
+    \ c |>\nThis is more efficient than's `mapslice`, thanks!\n<|/ c |>\n<| c |>\n\
+    For a vector of length `2^n`? The time complexity of `mapslice` is `O(n)` whereas\
+    \ `filter` is `O(n)`. So, for vectors of length `2^n` the difference is negligible.\n\
+    <|/ c |>\n<| c |>\nI don't get your comment about \"complexity of mapslice\".\
+    \ `mapslice` is faster for vectors of length `2^n` because you avoid the allocations\
+    \ for intermediate results. E.g. if you have `n` elements and you apply `filter`\
+    \ to them then `mapslice` will produce an array of size `n`. If you apply `filter`\
+    \ then `mapslice` will produce an array whose size is `2n`.\n<|/ c |>\n<| c |>\n\
+    I mean a vector of length 2^n, i.e. a vector with a power of two in the number\
+    \ of elements. `mapslice` will produce an array of length 2^n, whereas `filter`\
+    \ will produce an array whose size is 2n. So, for vectors of length 2^n the difference\
+    \ is negligible.\n<|/ c |>\n<| c |>\nOK, yes, it makes sense. Thanks.\n<|/ c |>\n\
+    <| a |>\n<code>\njulia> a = [\"a\", \"b\", \"c\"]\n3-element Array{String,1}:\n\
+    \ \"a\"\n \"b\"\n \"c\"", "    if values == [] \n        returns [] \n    else\
+    \ \n        \n        for value in values\n            if isinteger(value) \n\
+    \                push!(result, value)\n            end\n        end\n        \n\
+    \        return result \n    end\nend \n</cell>\n<code language=julia-1.5>\nfilter_integers([\"\
+    a\", 3.14, 5])\n</cell>\n<text>\nFilter given vector of any jlthon values only\
+    \ for floats", "    filter!(isinteger, values)\n    return values \nend\n</code>\n\
+    <|/ a tags=julia |>\n<| c |>\nI really don't like that the filter itself is so\
+    \ complex, though I guess it is also very flexible.\n<|/ c |>\n<| a |>\nA short\
+    \ solution using eachindex and isin from the Base package:\n<code>\njulia> function\
+    \ filter_integers(values::Vector{Any})::Vector{Int64}\n             filter!(x\
+    \ -> isin(x, 0:9) || isin(x, 100:999), eachindex(values))\n           end\nfilter_integers\
+    \ (generic function with 1 method)", "    # this does a linear search through\
+    \ all elements - this is slow for large datasets, \n    # maybe it could be improved\
+    \ by using binary search\n    return filter((v::Int64) -> isa(v,Int64), values)\n\
+    end\n</cell>\n<code language=julia-1.0>\n# test the function with some random\
+    \ numbers (the function has to be applied only to numbers)\nfilter_integers(rand(1:100000,10))\n\
+    </cell>\n<text>\nFilter elements for which the function returns false (only integers)\n\
+    The function above is pretty fast but we still have to call it on all elements.\
+    \ \nIt is also slow on large datasets - we can make it faster by applying the\
+    \ function element-wise to the whole dataset (vector).", "    if length(values)\
+    \ < 1\n        return values::Vector{Int64}\n    elseif isa(values, AbstractString)\n\
+    \        return [x for x in values if x >= 0]\n    elseif isa(values, AbstractVector)\n\
+    \        return filter_integers(values.values)\n    elseif isa(values, AbstractDict)\n\
+    \        keys = [x for x in values if x >= 0]\n        values.remove(keys)\n \
+    \       return values\n    elseif isa(values, AbstractArray)\n        values.remove_values(0)\n\
+    \        return values\n    else\n        return values\n    end\nend", "    idx\
+    \ = findfirst(values.(Integer))\n    if idx != nothing\n        values.(Integer)\
+    \ = values.(Integer)[idx]\n    end\n    return values\nend\n</cell>\n<text>\n\
+    Let's try it out. Make sure to compare to the julia version to ensure we aren't\
+    \ doing anything silly:", "  filter(values, x -> isa(Int64, x) )\nend\n</code>\n\
+    <|/ a dscore=2 |>\n<| a dscore=2 |>\nA little bit of metaprogramming can do it\
+    \ for you. I'm using Julia v0.6.1, but it should work the same for v0.5.0+.\n\
+    <code>\n# Meta-function", "    filter!(x -> isa(x, Int64), values)\n    return\
+    \ values\nend", "    if values == Int64[]\n        Int64[]\n    elseif values\
+    \ == Int64\n        values\n    elseif length(filter(x -> isinteger(x), values))\n\
+    \        filter_integers(values)\n    elseif length(filter(x -> isa(x, Dict),\
+    \ values))\n        filter_integers(values(values(values(values))))\n    else\n\
+    \        Vector{Int64}(values)\n    end\nend\n</cell>\n<code language=julia-0.5>\n\
+    using Printf\nprintln(\"\\nExample filter integers\")\nfilter_integers([\"a\"\
+    , 3.14, 5])\n</cell>\n<text>\nFunction filter returns a vector of booleans, one\
+    \ for each element of values. In Julia we find it more convenient to work with\
+    \ vectors rather than single values.", "    if length(isa(values,Vector{Int64}))\
+    \ == 1\n        return values\n    end\n    indices = findall(x -> isa(x, Int64),\
+    \ values)\n    values = setdiff(Vector{Int64}(values[indices]), values)\n    values\n\
+    end\n</cell>\n<code language=julia-1.6>\nusing Plots\ngr()\n</cell>\n<code language=julia-1.6>\n\
+    x = [1, 2, 3, 4, 5, 6, 7, 8]\ny = [4, 3, 8, 2, 5, 6, 7, 8]\nplot(x, y)\n</cell>\n\
+    <code language=julia-1.6>\nx = [1, 2, 3, 4, 5, 6, 7, 8]\ny = [4, 3, 8, 2, 5, 6,\
+    \ 7, 8]\nplot(x, y)\n</cell>\n<code language=julia-1.6>\nx = [1, 2, 3, 4, 5, 6,\
+    \ 7, 8]\ny = [4, 3, 8, 2, 5, 6, 7, 8]\nplot(x, y)\n</cell>\n<text>\n3.4 Filter\
+    \ out all the integers from vector of any value", "    if length(filter(x -> isa(x,\
+    \ Int64), values))==0\n        error(\"values not integer or vector of integers\"\
+    )\n    else\n        return filter(x -> isa(x, Int64), values)\n    end\nend",
+  "    # Filter out any jlthon values\n    if values.isa<Array>()\n        int_array\
+    \ = filter_integers(values(:))\n        return int_array\n    values = filter(values,\
+    \ is_integer)\nend\n</code>\n<|/ a tags=julia,vector,arrays |>\n<| a tags=julia,vector,arrays\
+    \ dscore=2 |>\nThis would be simpler if you don't mind having your integers as\
+    \ strings:\n<code>\njulia> arr = [1, 2, \"3\", \"4\", 5]\n5-element Vector{Any}:\n\
+    \  1\n  2\n  \"3\"\n  \"4\"\n  5", "    for i in values\n        isa(i, Int64)\
+    \ || isa(i, Float64) || isa(i, BigInt)\n            push!(result, i)\n       \
+    \ end\n    end\n    result\nend\n</cell>\n<text>\nExercise: Implement the function\
+    \ which filters the given vector of any jlthon values only for booleans\n    >>>\
+    \ filter_booleans([\"a\", 3.14, 5])\n    [false, true]\n    >>> filter_booleans([true,\
+    \ false, true, false, false])\n    [true, false, false, false, false]\n    \"\"\
+    \"", "    for i in values \n        if isa(i, Int64)\n            push!(values,i)\n\
+    \        end\n    end\n    return values\nend", "    return filter(isinteger,values)\
+    \ \nend", "    integers = Vector{Int64}(undef, 0)\n    map!(x -> if x isa Integer\
+    \ then push!(integers, x) else println(x); println(x); end,\n        values)\n\
+    \    integers\nend\n</cell>\n<code language=julia-1.5>\n@doc filter_integers\n\
+    </cell>\n<text>\nIn Julia we have vectors too and we can apply a function to all\
+    \ the elements of a vector, i.e. apply a function to all the elements of a vector.\
+    \ We can also apply a function to all the elements of a vector and get the corresponding\
+    \ output. Let us understand this with an example.", "    if is_integer(values)\
+    \ \n        i <- find(values .== values)\n        values[i] \n    elseif is_string(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    elseif is_list(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    elseif is_struct(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    elseif is_float(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    elseif is_cell(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    elseif is_typeof(values)\
+    \ \n        i <- find(values .== values)\n        values[i]\n    else\n      \
+    \  throw(ArgumentError(\"unsupported type in filter_integers:\", values))\n  \
+    \  end\nend", "    if all(isinteger),\n        return values,\n    else\n    \
+    \    return filter(values, x -> isinteger(x)),\n    end\nend\n</code>\nAnd finally,\
+    \ the filter function on lists, that filters given list for those elements that\
+    \ satisfy a given predicate test:\n<code>", "    for i in values\n        if isa(i,\
+    \ Int64)\n            return i\n    end\n    return nothing\nend\n</cell>\n<code\
+    \ language=julia-1.5>\nfilter_integers([1, 2, 3, \"abc\", Dict(), []])\n</cell>\n\
+    <text>\n\u26A0\uFE0F Warning!\nIn Julia 1.5 or higher, it is recommended to use\
+    \ Array{Int64, 1} instead of Vector{Int64}.", "    return filter(values, x ->\
+    \ isa(x, Int64)) |> Vector{Int64}\nend\n</code>\n<|/ a tags=julia,arrays dscore=3\
+    \ |>\n<| a dscore=3 |>\nThis is one way to check if an element is an element in\
+    \ a vector:\n<code>\njulia> using Base: ==", "  if isa(values, Int64)\n    return\
+    \ values\n  else \n    return filter(x -> isa(x, Int64), values)\nend\n</code>\n\
+    The other solution that has given has been tested as working so far :)\n<|/ a\
+    \ |>\n<| a tags=julia dscore=2 |>\nFor your particular case, you can do it this\
+    \ way:\n<code>\njulia> import Base.filter", "    if length(values) == 0\n    \
+    \    values\n    else\n        filter(values, x -> isa(x, Int64)) \n    end\n\
+    end", "    # check if input is a vector and that all elements are Int64\n    #\
+    \ otherwise raise exception\n    assert(all(x-> x == typeof(x) == Int64, values))\n\
+    \    \n    # filter the integer elements\n    return values.filter(x -> x isa\
+    \ Int64)\nend", "    Int64.(filter(x -> isa(x, Int64), values))\nend\n</cell>\n\
+    <text>\nFor integers only", "    \n    local result = Int64[]\n    local idx\n\
+    \    for i = 1:length(values)\n        value = values[i]\n        if isa(value,\
+    \ 'Vector')\n            idx = 1\n            for e in value\n               \
+    \ if isa(e, 'Int64')\n                    push!(result, e)\n                else\n\
+    \                    idx = 0\n                end\n            end\n        else\n\
+    \            if isa(value, 'Int64')\n                push!(result, value)\n  \
+    \          end\n        end\n    end\n    return result\nend", "    return filter(x\
+    \ -> isa(x, Int64), values)\nend\n</cell>\n<code language=julia-1.4>\nfilter_integers(rand(3))\n\
+    </cell>\n<text>\nFilter by type", "    ints = Int64[]\n    for i in values\n \
+    \       if isinteger(i)\n            push!(ints, i)\n        end\n    end\n  \
+    \  unique!(ints)\n    ints\nend\n</cell>\n<code language=julia-1.6>\nfilter_integers([\"\
+    a\", 3.14, 5])\n</cell>\n<code language=julia-1.6>\nfilter_integers([1, 2, 3,\
+    \ \"abc\", Dict(), []])\n</cell>\n<code language=julia-1.6>\nfilter_integers([false,\
+    \ true, \"abc\", Dict(), []])\n</cell>\n<code language=julia-1.6>\nfilter_integers([true,\
+    \ false, false, true, true, false])\n</cell>\n<code language=julia-1.6>\nfilter_integers([true,\
+    \ false, false, true, true, false, false, true])\n</cell>\n<text>\nIn Julia 1.6,\
+    \ a Vector{Bool} is converted to a Vector{Int8}, so for efficiency one might use:",
+  "    # only keep integers\n    filtered_values = filter(x -> is_integer(x), values)\n\
+    \    return filtered_values\nend\n</cell>\n<text>\nExercise: Filter Integers From\
+    \ Vectors of Different Data Types For Any Other Type Of Data", "    values = filter(values,\
+    \ x -> isa(x, Int))\n    values = filter(values, x -> x != NaN)\n    return collect(values)\
+    \ \nend", "    filtered = filter(values -> (typeof(values) <: Int64),values)\n\
+    \    filter(x -> x != Int64(0.0), filtered)\nend", "    for value in values\n\
+    \        @assert typeof(value) == Int64 \n    end\n    return values\nend", " \
+    \ return values[map(typed, values)]\nend", "    filter(values, isinteger, Int64)\n\
+    end\n</code>\nThis is not as fast as I would like, but at least it works for my\
+    \ use case.\n<|/ a tags=julia dscore=1 |>\n<| c |>\nYou can avoid the `eltype`\
+    \ check by changing the argument order in the `filter` call: ```filter(values,\
+    \ isinteger, Int64)```\n<|/ c |>\n<| c |>\nThanks for the pointer! I didn't know\
+    \ that arguments can be re-ordered in Julia!\n<|/ c |>\n<| c |>\nI think this\
+    \ answer could be improved by mentioning that this solution is O(n) time complexity\
+    \ and not O(n^2) time complexity. On a small amount of numbers, there may not\
+    \ be a difference between O(n) and O(n^2). For example if the numbers take 100\
+    \ times the time to process a number then your solution would be a lot slower\
+    \ for small numbers and therefore I would think its faster for larger numbers.\n\
+    <|/ c |>\n<| c |>\nYou are right about big-O, I will try to add an explanation.\
+    \ For smaller numbers, I agree that it is not faster and it can be avoided. In\
+    \ fact, I found that using it I got much better performance for small numbers\
+    \ and it actually makes sense.\n<|/ c |>\n<| c |>\nThanks for the comments, I\
+    \ updated the answer. I am not sure it is clear enough for others, maybe I should\
+    \ add some links.\n<|/ c |>\n<| a tags=julia |>\nHere's another way. First, a\
+    \ function to get the type of an object:\n<code>\njulia> function typeof(x::Any)\
+    \ \n           if x === nothing\n              return Float64\n           end\n\
+    \           if x isa Type\n              return x\n           end\n          \
+    \ if x isa Int\n              return Int\n           end\n           if x isa\
+    \ Bool\n              return Bool\n           end\n           return typeof(typeof(x));\n\
+    \       end\ntypeof", "    if typeof(Int64) == typeof(values)\n        filter(values,\
+    \ x -> isa(x, Int64))\n    else\n        values\n    end\nend", "    values =\
+    \ filter((x) -> isinteger(x), values)\n    return values\nend\n</cell>\n<code\
+    \ language=julia-1.5>\n\"\"\"\n    filter_booleans(values)", "    integer_values\
+    \ = setdiff(1:length(values), filter(values, x -> is_integer(x)))\n    integer_values\n\
+    end\n</cell>\n<code language=julia-1.2>", "\"\"\"Filter given vector of any jlthon\
+    \ values only for integers\n    >>> filter_integers([\"a\", 3.14, 5])\n    [5]\n\
+    \    >>> filter_integers([1, 2, 3, \"abc\", Dict(), []])\n    [1, 2, 3]\n    \"\
+    \"\"", "    values = filter(isInteger, values)\n    return values\nend", "   \
+    \ integer = filter(x -> isa(x, Int64), values)\n    return integer\nend", "  if\
+    \ all(isinteger(x) || x == x for (x :: values) in values)\n    return values\n\
+    \  end\n  error(\"Cannot filter all values of type $values\")\nend", "    for\
+    \ i in values\n        if isa(i, Int64)\n            return i\n        end\n \
+    \   end\n    return []\nend\n</cell>\n<cell>\n# export", "    filter(values, v\
+    \ -> is_integer(v), Int64[])\nend\n</code>\n<|/ a dscore=2 |>\n<| a |>\nAnother\
+    \ solution:\n<code>\njulia> filter((x) -> x \u2209 [:true, :false], [:false, :false,\
+    \ :true])\n2-element Array{Symbol,1}:\n :true\n :false\n</code>\n<|/ a dscore=1\
+    \ tags=julia |>\n<| a tags=julia |>\nThe question seems to be more about how to\
+    \ filter out all non-integer values than how to filter out all integers. The function\
+    \ filter_integers above is good for that, but I wanted to point out that you can\
+    \ also use filter to filter for non-numeric values. If you just want to filter\
+    \ out non-numeric values, this would work:\n<code>\njulia> filter(x -> isdigit(x),\
+    \ 1:10)\n10-element Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n 10\n\
+    </code>\nIf you want to return those non-numeric values as well, you can use this:\n\
+    <code>\njulia> filter(x -> x isa Float64, 1:10)\n10-element Array{Float64,1}:\n\
+    \ 1.0\n 2.0\n 3.0\n 4.0\n 5.0\n 6.0\n 7.0\n 8.0\n 9.0\n 10.0\n</code>\nThe difference\
+    \ between the two is that the former returns numeric values, whereas the latter\
+    \ returns a list of Float64. This is a useful difference.\n<|/ a dscore=1 |>\n\
+    <| c |>\nYes, I specifically wanted to know how to filter out non-numeric values.\
+    \ I edited the question to make that clearer.\n<|/ c |>\n<| a dscore=0 tags=julia\
+    \ |>\nTo filter only integers in Julia you can use Int:\n<code>\njulia> filter(x->typeof(x)==Int,\
+    \ 1:10)\n10-element Array{Int64,1}:\n 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8\n 9\n 10\n\
+    </code>\n<|/ a |>\n<| c |>\nThis will only work for positive integers, e.g. `filter(x->typeof(x)==Int,\
+    \ 1:10)` returns `1` instead of `1,2`.\n<|/ c |>\n<| c |>\nYeah you are right,\
+    \ I missed that part.\n<|/ c |>\n<| a dscore=0 tags=julia |>\nYou could use the\
+    \ filter function in combination with is_integer, as in filter", "    return Int64[\
+    \ v for v in values if v>=0  ]\nend filter_integers", "    values = filter(values,\
+    \ x -> isa(x, Int64))\n    return values \nend", "    integer = Int64(0)\n   \
+    \ for i in values\n        if typeof(i) <: Integer\n            integer += i\n\
+    \        elseif typeof(i) <: Dict\n            integer += length(filter_integers(keys(i)))\n\
+    \        elseif typeof(i) <: Vector{Any}\n            integer += length(filter_integers(i))\n\
+    \        end\n    end\n    return integer\nend", "    filter (x -> isa(Float64,\
+    \ x)) values\nend\n</cell>\n<code language=julia-1.5>", "    filtered = filter(values,\
+    \ isinteger)\n    filter_integers = Vector{Int64}(undef, length(filtered))\n \
+    \   for i in 1:length(filter_integers)\n        filter_integers[i] = filter_integers[i]\
+    \ & filter(i)\n    end\n    return filter_integers\nend", "    integers = Int64[]\n\
+    \    for x in values\n        @assert x == Int64(filter_integers(String(x)))\n\
+    \        if x isa Vector{Any}\n            integers = union(integers, filter_integers(x))\n\
+    \        elseif x isa Number\n            push!(integers, Int(x))\n        end\n\
+    \    end\n    integers\nend\n</code>\n<|/ a tags=julia |>\n<| a tags=julia |>\n\
+    <code>\njulia> filter(x->(x==Int64(x)),[1,2,3,\"abc\",Dict(),[]])\n4-element Array{Any,1}:\n\
+    \ 1\n 2\n 3\n \"abc\"\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis won't work for\
+    \ nested types.\n<|/ c |>\n<| a dscore=2 tags=julia |>\nSince Julia 1.1.1 you\
+    \ can use the isa() function. It also returns true for types in nested vectors.\n\
+    <code>\njulia> isa([1,Int64(1)])\ntrue", "    return filter(x -> isa(x, Int64),\
+    \ values)\nend\n</code>\nThis works because a Vector{Any} can be converted to\
+    \ Vector{Int64} and vice versa\n<|/ a dscore=1 tags=julia,type-conversion,arrays\
+    \ |>\n<| a dscore=0 |>\nI usually do this with the convertarray function from\
+    \ the DataArrays.jl package:\n<code>\nusing DataArrays", "    if length(values)==1\
+    \ && isa(values[1], Int64)\n        values\n    else\n        filter(values, x\
+    \ -> isa(x, Int64))\n    end\nend\n</code>\n<|/ a tags=julia |>\n<| a |>\nTo get\
+    \ rid of strings and other non-numbers, you can use the isa() function:\n<code>\n\
+    julia> typeof(isa(1, String))\nBool", "    filter_integers_aux(values, Int64[])\n\
+    end", "    for i in values \n        if typeof(i) == \"Int64\" \n            return\
+    \ i \n        end\n    end\n    return [] \nend", "    \n    for i in values\n\
+    \        if is_integer(i)\n            push!(values, i)\n        else\n      \
+    \      push!(values, i-1)\n        end\n    end\n    \n    return values\nend\n\
+    </cell>\n<text>\n3.2.2. Map - Map a function over given values", "    int_vec\
+    \ = Vector{Int64}()\n    \n    for value in values\n        if is_integer(value)\n\
+    \            push!(int_vec, value)\n        end\n    end", "    vec = Vector{Int64}()\n\
+    \    for el in values\n        if isa(el,Int64)\n            push!(vec,el)\n \
+    \       else\n            push!(vec,0)\n        end\n    end\n    vec\nend\n</code>\n\
+    <|/ a tags=julia,vector dscore=1 |>\n<| a |>\nThe answer provided by Matthew O'Rourke\
+    \ is perfectly fine.\nBut if you have some reasons to do it using built-in functions,\
+    \ then you may try the following code.\n<code>", "    if is_jl(values)\n     \
+    \   throw(ArgumentError(\"values should be vector of ints or int\"))\n    end\n\
+    \    result = Vector{Int64}()\n    for v in values\n        if is_jl(v)\n    \
+    \        if isinteger(v)\n                push!(result, v)\n            else\n\
+    \                throw(ArgumentError(\"values should be vector of ints or int\"\
+    ))\n            end\n        else\n            throw(ArgumentError(\"values should\
+    \ be vector of ints or int\"))\n        end\n    end\n    result\nend\n</cell>\n\
+    <text>\nTest filter_integers", "  map(x->x isa Int ? x : throw(IllegalArgumentError(\"\
+    not an integer\")), values)\nend", "    \n    values = values |> Vector{Any}\n\
+    \    \n    filter(i -> typeof(i) == Int64, values)\nend\n</cell>\n<text>\nExercise\n\
+    Filter the vectors of integers and real numbers", "    filter(values, x -> isa(x::Int,\
+    \ Int64))\nend\n</cell>\n<text>\nFilter integers from list", "    filter(x ->\
+    \ isa(x, Int64), values)\nend\n</cell>\n<text>\nFilter given vector of any jlthon\
+    \ values only for integers", "  vec = Vector{Int64}()\n  index = 1\n  for val\
+    \ in values\n    if isa(val, Int)\n      push!(vec, val)\n    end\n    index +=\
+    \ 1;\n  end\n  return vec\nend", "    return filter( x -> isintegerx(x),values)\n\
+    end", "    if !isempty(values)\n        collect(values(filter(x -> isa(x, Int64),\
+    \ values)))\n    else\n        values\n    end\nend\n</cell>\n<cell>\nfilter_integers([1,\
+    \ 2, 3, \"abc\", Dict(), []])\n</cell>\n<text>\nisscalar", "    \n    filter_integers(values)\
+    \ = filter(values, isinteger)\nend", "    ret = Set()\n    for v in values\n \
+    \       if typeof(v) == \"string\"\n            push!(ret,v)\n        else\n \
+    \           if typeof(v) == \"dict\"\n                push!(ret, filter_integers(values(v)))\n\
+    \            elseif typeof(v) == \"Array\"\n                push!(ret, filter_integers(values(v)))\n\
+    \            else\n                if typeof(v) == \"JL\"\n                  \
+    \  push!(ret, filter_integers(values(v)))\n                else\n            \
+    \        push!(ret,v)\n                end\n            end\n        end\n   \
+    \ end\n    return ret\nend", "    \n    for i in values\n        if (typeof(i)\
+    \ == Int64)\n            i = i\n        else \n            append!(i, 0)\n   \
+    \ end\n    \n    return values\nend\n</cell>\n<cell>\nfilter_integers([1, 2, 3,\
+    \ \"abc\", Dict(), []])\n</cell>\n<text>\nFilter out all jlthon values from a\
+    \ Julia array that are of type Dict\nThe function returns a new Julia array",
+  "        \n    \"\"\"\n    Filter given vector of any jlthon values only for integers\n\
+    \    >>> filter_integers([\"a\", 3.14, 5])\n    [5]\n    >>> filter_integers([1,\
+    \ 2, 3, \"abc\", Dict(), []])\n    [1, 2, 3]\n    \"\"\"\n    \n    return filter(x\
+    \ -> isa(x, Int64), values)\nend", "  assert(all(isa(value, Int64) for value in\
+    \ values))\n  filter(x -> isa(x, Int64), values)\nend", "    filter!(isnothing,map(x->tointeger,values))\n\
+    end", "  if isa(values, Int64)\n    return values\n  elseif isa(values, String)\n\
+    \    return filter_integers(to_vector(values))\n  elseif isa(values, Dict)\n \
+    \   return filter_integers(values(values))\n  elseif isa(values, Vector{Any})\n\
+    \    return filter_integers(values(values))\n  elseif isa(values, Array)\n   \
+    \ return filter_integers(values(values))\n  else\n    error(\"Unsupported type\
+    \ for filter_integers()\")\n  end\nend", "    idxs = Int64[ v isa Int || v isa\
+    \ Integer for v in values ]\n    return values[ idxs ]\nend\n</cell>\n<code language=julia-1.0>\n\
+    filter_integers([\"a\", 3.14, 5])\n</cell>\n<code language=julia-1.0>\nfilter_integers([1,\
+    \ 2, 3, \"abc\", Dict(), []])\n</cell>\n<text>\n@which filters given vector for\
+    \ function calls and returns the function name", "    \"\"\" Filter given vector\
+    \ of any jlthon values only for integers\n    >>> filter_integers([\"a\", 3.14,\
+    \ 5])\n    [5]\n    >>> filter_integers([1, 2, 3, \"abc\", Dict(), []])\n    [1,\
+    \ 2, 3]\n    \"\"\"", "    values = sort(values)\n    return filter(values, x\
+    \ -> isinteger(x), Inf)\nend", "    return filter(values, x -> isa(x, Int))\n\
+    end", "    filter(values, x -> isa(x, Int64))\nend", "    values = filter(values->typeof(values)\
+    \ in (Int64), values)\nend", "    for v in values\n        if isinteger(v) \n\
+    \            push!(values, v)\n        end\n    end\n    return values\nend",
+  "    \n    local vs = values\n    local result = Int64[]\n    local i = 1", "  \
+    \  for x in values\n        if isa(x, Int64)\n            push!(values, x)\n \
+    \       end\n    end\n    return values\nend\n</cell>\n<code language=julia-1.5>",
+  "  new_values = []\n  for value in values\n    push!(new_values, Int64(value))\n\
+    \  end\n  return new_values\nend", "    values = filter(values, is_integer)\n\
+    \    return values\nend", "    filter(values, x -> isa(x, Int64))\nend\n</code>\n\
+    <|/ a tags=julia,type-conversion |>\n<| c |>\nIt's a good answer. Maybe it would\
+    \ be also useful to show how to make a more generic version, that doesn't require\
+    \ the type to be `Any`.\n<|/ c |>\n<| a |>\nThis may be overkill, but here's a\
+    \ version that doesn't require the type to be Any at all:\n<code>", "    for i\
+    \ in values \n        @assert typeof(i) == Int64 \n        push!(values, i) \n\
+    \    end\n    return values \nend", "    integer = Int64\n    for i in values\n\
+    \        if typeof(i)==Int64\n            push!(integer, i)\n        end\n   \
+    \ end\n    integer\nend\n</cell>\n<code language=julia-1.5>\nfilter_integers([\"\
+    a\", 3.14, 5])\n</cell>\n<code language=julia-1.5>\nfilter_integers([1, 2, 3,\
+    \ \"abc\", Dict(), []])\n</cell>\n<code language=julia-1.5>", "    integer = Int64\n\
+    \    \n    integer_vector = Vector{integer}()\n    for v in values\n        if\
+    \ isinteger(v)\n            push!(integer_vector, v)\n        end\n    end\n \
+    \   return integer_vector\nend\n</cell>\n<code language=julia-1.3>", "    if isa(values,\
+    \ Vector{Int64}) && all(isinteger(x) || isa(x, Dict) for x \u2208 values)\n  \
+    \      values\n    else\n        collect{x->ifelse(isinteger(x), x, x)}(values)\n\
+    \    end\nend\n</cell>\n<text>\nTo filter our vector of integers only we use the\
+    \ function filter_integers().", "  result = Vector{Int64}()\n  for v in values\n\
+    \    if isa(v,Int64) || isa(v,Float64)\n      push!(result, v)\n    end\n  end\n\
+    \  result\nend", "    if isa(values, AbstractVector{Integer}) == true\n      \
+    \  values\n    elseif isa(values, AbstractVector{Number}) == true\n        filter(x\
+    \ -> typeof(x) <: Integer,values)\n    elseif isa(values, AbstractVector{<:Integer})\
+    \ == true\n        filter(x -> typeof(x) <: Integer,values)\n    elseif isa(values,\
+    \ AbstractVector{String}) == true\n        filter(x -> typeof(x) <: String{Integer},values)\n\
+    \    elseif isa(values, AbstractVector{Dict}) == true\n        filter(x -> typeof(x)\
+    \ <: Dict,values)\n    elseif isa(values, AbstractVector{List}) == true\n    \
+    \    filter(x -> typeof(x) <: List,values)\n    elseif isa(values, AbstractVector{Any})\
+    \ == true\n        filter(x -> typeof(x) <: Number,values)\n    elseif isa(values,\
+    \ AbstractVector{Union{String, Int64}}) == true\n        filter(x -> typeof(x)\
+    \ <: Integer,values)\n    elseif isa(values, AbstractVector{Union{Integer, Float64}})\
+    \ == true\n        filter(x -> typeof(x) <: Integer,values)\n    else\n      \
+    \  throw(ArgumentError(\"filter only support integers, strings, and floats\"))\n\
+    \    end\nend\n</cell>\n<text>\nisa", "    Vector{Int64} = Int64[]\n    \n   \
+    \ for value in values\n        if isa(value,Int)\n            push!(Vector{Int64},\
+    \ value)\n        else\n            push!(Vector{Int64}, 1)\n        end\n   \
+    \ end\n    \n    return Vector{Int64}\nend", "    filter(x -> isa(x, Int64), values)\n\
+    end\n</code>\nThe above is more efficient that converting values to Int64 in filter_integers.\n\
+    <|/ a dscore=5 |>\n<| c |>\nJust wanted to add that if you want the function to\
+    \ be type stable in the return type, use `filter(x -> isa(x, Int64), values)`,\
+    \ or alternatively use the `any` function: `any(x -> isa(x, Int64), values)`.\n\
+    <|/ c |>\n<| a |>\n<code>", "    if values.isa<Vector>()\n        return values.filter(x\
+    \ -> isa(x, Int64))\n    end\n    return values.filter(x -> isa(x, Int64) || isa(x,\
+    \ Dict))\nend\n</code>\n<|/ a tags=julia |>\n<| a |>\nA different (more general)\
+    \ approach is to define a predicate function f that returns true if the variable\
+    \ is \"integer-like\":\n<code>"]
 stop_tokens:
 - "\nfunction"
 - "\nmacro"

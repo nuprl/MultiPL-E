@@ -72,7 +72,594 @@ completions: ["  (define (all-odd? n)\n    (cond\n      ((= n 0) #t)\n      ((od
     \ (list (first x))\n                         (unique_digits (rest x))))]))\n",
   "  (define (helper x)\n    (if (empty? x) '()\n    (if (even? (remainder (car x)\
     \ 10)) (helper (cdr x))\n     (cons (car x) (helper (cdr x))))))\n  (sort < (helper\
-    \ x)))\n"]
+    \ x)))\n", "  (cond\n    [(empty? x) empty]\n    [(even-digit? (first x)) (unique_digits\
+    \ (rest x))]\n    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (define\
+    \ (even_digit? y)\n    (if (zero? (remainder y 2))\n        #t\n        #f))\n\
+    \  (define (unique_digit? y)\n    (if (zero? (modulo y 10))\n        #f\n    \
+    \    (if (even_digit? (modulo y 10))\n            #f\n            (unique_digit?\
+    \ (quotient y 10)))))\n  (sort (filter unique_digit? x) <))\n\n```\n\n```racket\n\
+    #lang racket\n", "  (filter (lambda (n)\n            (not (contains-even-digit?\
+    \ n)))\n          (sort x)))\n", "  (sort (filter (\u03BB (n)\n              \
+    \    (not (for/or ([n (in-naturals)])\n                              (even? (modulo\
+    \ n 10)))))\n                x)\n        <))\n", "  (sort\n   (define (has-even-digit?\
+    \ n)\n     (if (&lt; n 10)\n         #f\n         (cond\n          [(even? (remainder\
+    \ n 10))\n           #t]\n          [else\n           (has-even-digit? (quotient\
+    \ n 10))])))\n   (filter (lambda (n)\n             (not (has-even-digit? n)))\n\
+    \           x)))\n</code>\nHere's the corresponding python code:\n<code>#!/usr/bin/env\
+    \ python\n\n# Given a list of positive integers x. return a sorted list of all\
+    \ \n# elements that hasn't any even digit.\n# Note: Returned list should be sorted\
+    \ in increasing order.\n# For example:\n# &gt;&gt;&gt; unique_digits([15, 33,\
+    \ 1422, 1])\n# [1, 15, 33]\n# &gt;&gt;&gt; unique_digits([152, 323, 1422, 10])\n\
+    # []\n\ndef unique_digits(x):\n    return sorted(filter(lambda n: not has_even_digit(n),\
+    \ x))\n\ndef has_even_digit(n):\n    if n &lt; 10:\n        return False\n   \
+    \ else:\n        return True if (n % 10) % 2 == 0 else has_even_digit(n / 10)\n\
+    \nprint unique_digits([15, 33, 1422, 1])\nprint unique_digits([152, 323, 1422,\
+    \ 10])\n</code>\nWhen I run the Racket code, I get the expected result:\n<code>#lang\
+    \ racket", "  (set! x (sort x <))\n  (let loop ((x x) (l '()))\n    (cond\n  \
+    \    [(empty? x) l]\n      [(has_even_digit? (first x)) (loop (rest x) l)]\n \
+    \     [else (loop (rest x) (cons (first x) l))])))\n", "  (define (unique? x)\n\
+    \    (define (even? x)\n      (cond ((= (modulo x 10) 0) #t)\n            ((=\
+    \ (modulo x 10) 2) #t)\n            ((= (modulo x 10) 4) #t)\n            ((=\
+    \ (modulo x 10) 6) #t)\n            ((= (modulo x 10) 8) #t)\n            (else\
+    \ #f)))\n    (cond ((= x 0) #t)\n          ((even? x) #f)\n          (else (unique?\
+    \ (quotient x 10)))))\n  (define (append-if-unique x lst)\n    (cond ((unique?\
+    \ x) (append lst (list x)))\n          (else lst)))\n  (define (filter x lst)\n\
+    \    (cond ((null? lst) (append-if-unique x '()))\n          (else (append-if-unique\
+    \ x (filter x (cdr lst))))))\n  (cond ((null? x) '())\n        (else (sort < (filter\
+    \ (car x) (unique_digits (cdr x)))))))\n", "  (sort\n   (filter (lambda (x) (equal?\
+    \ (length (filter even? (digits x))) 0)) x) <))", "  (define (has_even? n)\n \
+    \   (cond\n      [(zero? n) #f]\n      [(even? (remainder n 10)) #t]\n      [else\
+    \ (has_even? (quotient n 10))]))\n  (define (has_no_even? n)\n    (not (has_even?\
+    \ n)))\n  (define (unique_digits_acc acc x)\n    (cond\n      [(null? x) acc]\n\
+    \      [(has_no_even? (car x)) (unique_digits_acc (cons (car x) acc) (cdr x))]\n\
+    \      [else (unique_digits_acc acc (cdr x))]))\n  (define (remove_duplicates\
+    \ acc x)\n    (cond\n      [(null? x) acc]\n      [(equal? (car x) (car acc))\
+    \ (remove_duplicates acc (cdr x))]\n      [else (remove_duplicates (cons (car\
+    \ x) acc) (cdr x))]))\n  (sort (remove_duplicates '() (unique_digits_acc '() x))\
+    \ <))\n", "  (define (unique? num)\n    (for/or ([digit (in-string (number->string\
+    \ num))])\n            (even? (string-&gt;number digit))))\n  (for/list ([num\
+    \ (in-list x)])\n            (if (unique? num) num)))\n</code>\nwhich works fine,\
+    \ but i'm getting a type error <code>expected: number given: string in: (string-&gt;number\
+    \ digit)</code> on the last line of the <code>unique?</code> function.\nAny idea\
+    \ what i'm doing wrong?\n\n\nA:\n\nYou're calling <code>string-&gt;number</code>\
+    \ on a single character, which is a string, not a number. You need to convert\
+    \ the string to a number first, and then iterate on its digits. Something like\
+    \ this:\n<code>(define (unique_digits x)\n  (define (unique? num)\n    (let ((num-str\
+    \ (number-&gt;string num)))\n      (for/or ([digit (in-string num-str)])\n   \
+    \           (even? (string-&gt;number digit)))))\n  (for/list ([num (in-list x)])\n\
+    \            (if (unique? num) num)))\n</code>\n", "  (cond [(empty? x) empty]\n\
+    \        [(even-digits? (first x))\n         (unique_digits (rest x))]\n     \
+    \   [else (cons (first x) (unique_digits (rest x)))]))\n", "\t;; list of 1's\n\
+    \t(define one (list 1))\n\t;; return a list of numbers which only contain odd\
+    \ digits\n\t(define (contain_odd_digits i)\n\t\t(define (helper i)\n\t\t\t(if\
+    \ (even? (remainder i 10))\n\t\t\t\t(zero? i)\n\t\t\t\t(helper (quotient i 10))))\n\
+    \t\t(if (helper i)\n\t\t\tone\n\t\t\t(list)))\n\t;; return a list of numbers which\
+    \ only contain even digits\n\t(define (contain_even_digits i)\n\t\t(define (helper\
+    \ i)\n\t\t\t(if (odd? (remainder i 10))\n\t\t\t\t(zero? i)\n\t\t\t\t(helper (quotient\
+    \ i 10))))\n\t\t(if (helper i)\n\t\t\tone\n\t\t\t(list)))\n\t;; return a list\
+    \ of numbers which contain mixed digits\n\t(define (contain_mix_digits i)\n\t\t\
+    (define (helper i)\n\t\t\t(if (even? (remainder i 10))\n\t\t\t\t(if (odd? (remainder\
+    \ (quotient i 10) 10))\n\t\t\t\t\t(zero? (quotient i 10))\n\t\t\t\t\t(helper (quotient\
+    \ i 10)))\n\t\t\t\t(if (even? (remainder (quotient i 10) 10))\n\t\t\t\t\t(zero?\
+    \ (quotient i 10))\n\t\t\t\t\t(helper (quotient i 10)))))\n\t\t(if (helper i)\n\
+    \t\t\tone\n\t\t\t(list)))\n\t;; append three lists together\n\t(define (append_odd_even_mix\
+    \ i)\n\t\t(append (contain_odd_digits i)\n\t\t\t(append (contain_even_digits i)\n\
+    \t\t\t\t(contain_mix_digits i))))\n\t;; original idea of list of numbers which\
+    \ only contain even digits\n\t;; return a list of numbers which only contain even\
+    \ digits\n\t(define (contain_even_digits i)\n\t\t", "  (unique_digits_loop x (list)))\n",
+  "  (cond\n    [(empty? x) empty]\n    [(even-digits? (first x)) (unique_digits (rest\
+    \ x))]\n    [else (list-sort < (cons (first x) (unique_digits (rest x))))]))\n",
+  "  (list (list-ref x 0)))\n", "  (filter (lambda (y) (null? (filter even? (integer->list\
+    \ y)))) x))\n", "  (define (unique_digits_helper x acc)\n    (if (null? x)\n \
+    \       acc\n        (if (odd-digits? (car x))\n            (unique_digits_helper\
+    \ (cdr x) (cons (car x) acc))\n            (unique_digits_helper (cdr x) acc))))\n\
+    \  (sort < (unique_digits_helper x '())))\n", "  (define (unique_digits-iter accum\
+    \ x)\n    (if (null? x) accum\n        (if (not (has-even-digit (car x)))\n  \
+    \          (unique_digits-iter (cons (car x) accum) (cdr x))\n            (unique_digits-iter\
+    \ accum (cdr x)))))\n  (define (has-even-digit x)\n    (if (= x 0) #f\n      \
+    \  (if (even? (modulo x 10)) #t\n            (has-even-digit (quotient x 10)))))\n\
+    \  (sort (unique_digits-iter '() x) <))\n", "  (sort (filter (\u03BB (y)\n   \
+    \               (every even? (map string->number\n                           \
+    \      (string-split (number->string y)\n                                    \
+    \           #\\space))))\n                x) <))\n", "  (filter (lambda (y) (not\
+    \ (has_even_digit y))) (sort x <)))\n", "  (cond\n    [(null? x) empty]\n    [(has_even_digit?\
+    \ (car x)) (unique_digits (cdr x))]\n    [else (cons (car x) (unique_digits (cdr\
+    \ x)))]))\n", "  (cond\n    [(empty? x) empty]\n    [(is-odd? (first x)) (cons\
+    \ (first x) (unique_digits (rest x)))]\n    [else (unique_digits (rest x))]))\n",
+  "  (define (is_unique a)\n    (andmap (lambda (b) (and (equal? b #\\1)\n       \
+    \                      (equal? b #\\3)\n                             (equal? b\
+    \ #\\5)\n                             (equal? b #\\7)\n                      \
+    \       (equal? b #\\9)))\n            (string->list (number->string a))))\n \
+    \ (sort <\n        (filter is_unique x)))\n", '  (sort x <))', "  (define (has-even-digit?\
+    \ n)\n    (cond [(= (remainder n 10) 0) true]\n          [(= (remainder n 10)\
+    \ 2) true]\n          [(= (remainder n 10) 4) true]\n          [(= (remainder\
+    \ n 10) 6) true]\n          [(= (remainder n 10) 8) true]\n          [else (has-even-digit?\
+    \ (quotient n 10))]))\n  (cond [(empty? x) empty]\n        [(has-even-digit? (first\
+    \ x)) (unique_digits (rest x))]\n        [else (cons (first x) (unique_digits\
+    \ (rest x)))]))\n", "  (cond [(empty? x) empty]\n        [(and (even? (remainder\
+    \ (first x) 10))\n              (or (empty? (unique_digits (rest x)))\n      \
+    \            (< (first x) (first (unique_digits (rest x)))))) (unique_digits (rest\
+    \ x))]\n        [(and (even? (remainder (first x) 10))\n              (or (empty?\
+    \ (unique_digits (rest x)))\n                  (> (first x) (first (unique_digits\
+    \ (rest x)))))) (cons (first x) (unique_digits (rest x)))]\n        [else (cons\
+    \ (first x) (unique_digits (rest x)))]))\n  ", "  (filter (lambda (y) (even (string->number\
+    \ (string-append (number->string (modulo y 10))\n                            \
+    \                               (number->string (modulo (quotient y 10) 10))\n\
+    \                                                           (number->string (quotient\
+    \ y 100))))))\n          x))", "  (unique_digits_helper x '()))\n", "  (define\
+    \ (any_even_digits? n)\n    (cond\n      ((= n 0) #f)\n      ((= (remainder n\
+    \ 2) 0) #t)\n      (else (any_even_digits? (quotient n 10)))))\n  (define (unique_digits_inner\
+    \ x)\n    (if (null? x) x\n      (if (any_even_digits? (car x))\n        (unique_digits_inner\
+    \ (cdr x))\n        (cons (car x) (unique_digits_inner (cdr x))))))\n  (sort <\
+    \ (unique_digits_inner x)))\n", "  (cond [(empty? x) empty]\n        [(= 2 (modulo\
+    \ (first x) 10)) (unique_digits (rest x))]\n        [(= 0 (modulo (first x) 10))\
+    \ (unique_digits (rest x))]\n        [else (append (list (first x)) (unique_digits\
+    \ (rest x)))]))\n", "  (filter (lambda (x) (or (= 0 (remainder x 2)) (= 0 (remainder\
+    \ x 5)))) x))\n", "  (cond\n    [(empty? x) empty]\n    [(even? (car x)) (unique_digits\
+    \ (cdr x))]\n    [else (cons (car x) (unique_digits (cdr x)))]))\n", "  (letrec\
+    \ ([check (lambda (num)\n                    (if (eq? num 0)\n               \
+    \         #t\n                        (if (eq? (remainder num 2) 0)\n        \
+    \                    #f\n                            (check (quotient num 10)))))])\n\
+    \    (filter check x)))\n", "  (cond\n    [(empty? x) empty]\n    [(every even?\
+    \ (map string->number (list->string (first x))))\n     (unique_digits (rest x))]\n\
+    \    [else\n     (cons (first x) (unique_digits (rest x)))]))", "  (cond\n   \
+    \ [(null? x) '()]\n    [(not (has_even_digit (car x))) (append (list (car x))\
+    \ (unique_digits (cdr x)))]\n    [else (unique_digits (cdr x))]))\n</code>\nI\
+    \ have another helper function but I think it is pretty straightforward.\n<code>#lang\
+    \ racket\n", "  (cond\n    [(null? x) '()]\n    [(even? (modulo (remainder (car\
+    \ x) 10) 10)) (unique_digits (cdr x))]\n    [(not (even? (modulo (remainder (car\
+    \ x) 10) 10)))]\n    [else (append (list (car x)) (unique_digits (cdr x)))]))\n\
+    </code>\nHere's my code to see if it has an even digit.\n<code>#lang racket\n",
+  "  (set! l x)\n  (set! l2 '())\n  (while (not (empty? l))\n    (set! l1 (car l))\n\
+    \    (if (null? (even? l1))\n        (set! l2 (append l2 (list l1)))\n       \
+    \ (set! l2 l2))\n    (set! l (cdr l)))\n  (sort l2 <))\n", "  (apply append (map(lambda\
+    \ (n)\n                      (if (odd? (remainder n 10))\n                   \
+    \       (list n)\n                          '()))\n                    x)))",
+  "  (cond\n    [(empty? x) empty]\n    [(not (is_even_number (first x)))\n     (cons\
+    \ (first x) (unique_digits (rest x)))]\n    [else (unique_digits (rest x))]))\n",
+  "  (filter (lambda (y)\n            (not (list-exists even? (digits y))))\n    \
+    \      (sort x <)))\n", "  (sort (filter (lambda (l) (not (even? (all_digits l))))\
+    \ x) <))\n", "  (cond [(empty? x) empty]\n        [(even-digit? (first x)) (unique_digits\
+    \ (rest x))]\n        [else (cons (first x) (unique_digits (rest x)))]))\n", " \
+    \ (cond\n    [(empty? x) '()]\n    [(even-digit? (first x)) (unique_digits (rest\
+    \ x))]\n    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (cond [(empty?\
+    \ x) empty]\n        [(or (equal? (modulo (first x) 2) 0) (has_even? (first x)))\
+    \ (unique_digits (rest x))]\n        [else (cons (first x) (unique_digits (rest\
+    \ x)))]))\n", "  (cond\n    [(empty? x) empty]\n    [(even? (first x)) (unique_digits\
+    \ (rest x))]\n    [else (insert-sorted \n            (first x)\n            (unique_digits\
+    \ (rest x)))]))\n", "  (apply list\n         (build-list (length x) (lambda (i)\
+    \ i)\n                     (lambda (i j)\n                       (cond ((andmap\
+    \ is-even?\n                                      (map (lambda (a)\n         \
+    \                                    (number->string a))\n                   \
+    \                        (list i j)))\n                              j)\n    \
+    \                         (else i))))))\n", "  (sort (list-ref (list (filter (lambda\
+    \ (n)\n                                  (not (even? (remainder n 10)))) x)\n\
+    \                             (filter (lambda (n)\n                          \
+    \             (not (even? (remainder n 100)))) x)\n                          \
+    \   (filter (lambda (n)\n                                       (not (even? (remainder\
+    \ n 1000)))) x)\n                             (filter (lambda (n)\n          \
+    \                             (not (even? (remainder n 10000)))) x)\n        \
+    \                     (filter (lambda (n)\n                                  \
+    \     (not (even? (remainder n 100000)))) x)\n                             (filter\
+    \ (lambda (n)\n                                       (not (even? (remainder n\
+    \ 1000000)))) x)\n                             (filter (lambda (n)\n         \
+    \                              (not (even? (remainder n 10000000)))) x)\n    \
+    \                         (filter (lambda (n)\n                              \
+    \         (not (even? (remainder n 100000000)))) x)\n                        \
+    \     (filter (lambda (n)\n                                       (not (even?\
+    \ (remainder n 1000000000)))) x)\n                             (filter (lambda\
+    \ (n)\n                                       (not (even? (remainder n 10000000000))))\
+    \ x)\n                             (filter (lambda (n)\n                     \
+    \                  (not (even? (remainder n 100000000000)))) x)\n            \
+    \                 (filter (lambda (n)\n                                      \
+    \ (not (even? (remainder n 1000000000000)))) x)\n                            \
+    \ (filter (lambda (n)\n                                       (not (even? (remainder\
+    \ n 10000000000000)))) x)\n                             (filter (lambda (n)\n\
+    \                                       (not (even? (remainder n 100000000000000))))\
+    \ x)\n                             (filter (lambda (n)\n                     \
+    \                  (not (even? (remainder n 1000000000000000)))) x)\n        \
+    \                     (filter (lambda (n)\n                                  \
+    \     (not (even? (remainder n 10000000000000000)))) x)\n                    \
+    \         (filter (lambda (n)\n                                       (not (even?\
+    \ (remainder n 100000000000000000)))) x)\n                             (filter\
+    \ (lambda (n)\n                                       (not (even? (remainder n\
+    \ 1000000000000000000))))", '    (remove even? (remove even? x)))', "  (cond ((empty?\
+    \ x) empty)\n        ((even? (first x)) (unique_digits (rest x)))\n        (else\
+    \ (cons (first x) (unique_digits (rest x))))))\n", "  (define (has-even-digit?\
+    \ x)\n    (if (= x 0)\n        #f\n        (or (even? (remainder x 10))\n    \
+    \        (has-even-digit? (quotient x 10)))))\n  (filter (lambda (x) (not (has-even-digit?\
+    \ x)))\n          (sort x <)))\n", "    (sort (filter (lambda (y) (eq? (even_digits\
+    \ y) 0)) x) <))\n", "  (filter (lambda (n) (not (member-of? n (even-digits n))))\
+    \ (list-sort < x)))\n", "  (sort x <)\n  )\n", "  (define (div_mod_10 n)\n   \
+    \ (cons (quotient n 10) (remainder n 10)))\n  (define (is_even n)\n    (and (not\
+    \ (zero? n)) (not (odd? n))))\n  (define (has_even_digit n)\n    (let loop ((n\
+    \ n))\n      (cond\n        ((zero? n) #f)\n        ((is_even (remainder n 10))\
+    \ #t)\n        (else (loop (quotient n 10))))))\n  (define (unique_digits-iter\
+    \ x y)\n    (cond\n      ((null? x) y)\n      ((has_even_digit (car x)) (unique_digits-iter\
+    \ (cdr x) y))\n      (else (unique_digits-iter (cdr x) (cons (car x) y)))))\n\
+    \  (sort (unique_digits-iter x '()) <))\n</code>\nTests\n<code>#lang racket\n",
+  "  (cond\n    [(empty? x) empty]\n    [(even-digit? (first x)) (unique_digits (rest\
+    \ x))]\n    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (cond\n\
+    \    [(empty? x) empty]\n    [(even? (list-ref x 0)) (unique_digits (rest x))]\n\
+    \    [else (cons (list-ref x 0) (unique_digits (rest x)))]))\n", "  (cond [(empty?\
+    \ x) empty]\n        [(even? (remainder (first x) 10)) (unique_digits (rest x))]\n\
+    \        [(even? (remainder (first x) 100)) (unique_digits (rest x))]\n      \
+    \  [(even? (remainder (first x) 1000)) (unique_digits (rest x))]\n        [(even?\
+    \ (remainder (first x) 10000)) (unique_digits (rest x))]\n        [(even? (remainder\
+    \ (first x) 100000)) (unique_digits (rest x))]\n        [(even? (remainder (first\
+    \ x) 1000000)) (unique_digits (rest x))]\n        [(even? (remainder (first x)\
+    \ 10000000)) (unique_digits (rest x))]\n        [(even? (remainder (first x) 100000000))\
+    \ (unique_digits (rest x))]\n        [(even? (remainder (first x) 1000000000))\
+    \ (unique_digits (rest x))]\n        [else (cons (first x) (unique_digits (rest\
+    \ x)))]))\n", "  (filter (lambda (y) (null? (even_digits? y))) x))\n", "    (sort\
+    \ x < (filter-out contains-even-digit? x))\n)", "  (sort (filter (lambda (x) (not\
+    \ (or (even? (modulo x 10))\n                                     (and (not (zero?\
+    \ (modulo x 100)))\n                                          (even? (modulo x\
+    \ 100))))))\n               x)\n        &lt;))\n</code>\nWhat is the most elegant\
+    \ way to write this function?\n\n\nA:\n\nHere is a solution written in the spirit\
+    \ of Racket, aka <code>#lang racket</code> (or <code>#lang scheme</code> for older\
+    \ versions of Racket):\n<code>(define (unique-digits xs)\n  (sort (filter (compose\
+    \ not even?)\n                (flatten (map (compose map digit-&gt;integer string-&gt;list\
+    \ number-&gt;string)\n                              xs)))\n        &lt;))\n</code>\n",
+  "  (remove-evens-digits (sort x #:key (\u03BB (x) x))))\n", "  (unique_digits_helper\
+    \ x))\n", "  (cond [(empty? x) empty]\n        [(zero? (modulo (first x) 2)) (unique_digits\
+    \ (rest x))]\n        [else (cons (first x) (unique_digits (rest x)))]))\n</code>\n",
+  "  (cond\n    [(empty? x) empty]\n    [(even? (remainder (car x) 10)) (unique_digits\
+    \ (cdr x))]\n    [(even? (remainder (car x) 100)) (unique_digits (cdr x))]\n \
+    \   [(even? (remainder (car x) 1000)) (unique_digits (cdr x))]\n    [(even? (remainder\
+    \ (car x) 10000)) (unique_digits (cdr x))]\n    [(even? (remainder (car x) 100000))\
+    \ (unique_digits (cdr x))]\n    [(even? (remainder (car x) 1000000)) (unique_digits\
+    \ (cdr x))]\n    [(even? (remainder (car x) 10000000)) (unique_digits (cdr x))]\n\
+    \    [(even? (remainder (car x) 100000000)) (unique_digits (cdr x))]\n    [(even?\
+    \ (remainder (car x) 1000000000)) (unique_digits (cdr x))]\n    [else (cons (car\
+    \ x) (unique_digits (cdr x)))]))\n", "  (filter (lambda (y) (filter (lambda (z)\
+    \ (even? z))\n                              (list->set (list->string y))))\n \
+    \         x))", "  (filter (lambda (y)\n            (zero? (remainder (length\
+    \ (filter even? (string-&gt;list (number-&gt;string y)))) 2))) x))\n", "  (filter\
+    \ (\u03BB (y) (not (number-has-even-digit? y))) (sort < x)))\n", "  (cond\n  \
+    \  [(empty? x) empty]\n    [(any_even_digit? (first x)) (unique_digits (rest x))]\n\
+    \    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (letrec ((odd-digit?\
+    \ (lambda (n)\n                         (if (= n 0)\n                        \
+    \     #f\n                             (if (odd? (remainder n 10))\n         \
+    \                        (odd-digit? (quotient n 10))\n                      \
+    \           #f))))\n           (has-no-even? (lambda (n)\n                   \
+    \        (if (= n 0)\n                               #t\n                    \
+    \           (if (even? (remainder n 10))\n                                   #f\n\
+    \                                   (has-no-even? (quotient n 10)))))))\n    (filter\
+    \ has-no-even? x)))\n", "  (filter (lambda (n) (even-digit? n)) (sort x <)))\n",
+  "  (filter (\u03BB (a)\n            (equal? 0 (modulo a 10))) x))\n</code>\nAnd\
+    \ the function:\n<code>#lang racket\n", "  (cond ((null? x) '())\n        ((even-digit?\
+    \ (car x)) (unique_digits (cdr x)))\n        (else (cons (car x) (unique_digits\
+    \ (cdr x))))))\n", "  (define (has_even_digit? x)\n    (cond [(= x 0) #f]\n  \
+    \        [(even? (remainder x 10)) #t]\n          [else (has_even_digit? (quotient\
+    \ x 10))]))\n  (define (rec lst u-list)\n    (cond [(empty? lst) u-list]\n   \
+    \       [(has_even_digit? (first lst)) (rec (rest lst) u-list)]\n          [else\
+    \ (rec (rest lst) (append u-list (list (first lst))))]))\n  (rec x (list)))\n",
+  "  (cond [(empty? x) empty]\n        [(zero? (modulo (first x) 2)) (unique_digits\
+    \ (rest x))]\n        [else (sort < (cons (first x) (unique_digits (rest x))))]))\n",
+  "  (filter (lambda (x) (not (even-digit? x))) (sort x #&lt;)))\n", "  (filter (lambda\
+    \ (n) (not (contains_even_digit n))) (sort x <)))\n", "  (cond\n    [(empty? x)\
+    \ empty]\n    [(has-even-digit? (first x)) (unique_digits (rest x))]\n    [else\
+    \ (insertion-sort < (cons (first x) (unique_digits (rest x))))]))\n", "  (define\
+    \ (is_even? n)\n    (not (odd? n)))\n  (define (has_even_digit? n)\n    (cond\
+    \ ((= n 0) #f)\n          ((is_even? (remainder n 10)) #t)\n          (else (has_even_digit?\
+    \ (quotient n 10)))))\n  (define (has_even_digit_list? l)\n    (cond ((null? l)\
+    \ #f)\n          ((has_even_digit? (car l)) #t)\n          (else (has_even_digit_list?\
+    \ (cdr l)))))\n  (sort (remove has_even_digit_list? x) <))\n", "  (filter \n \
+    \  (lambda (y) (not (has_even_digit y))) \n   (sort x <)))", "  (filter (lambda\
+    \ (y) (not (any even? (string->list (number->string y))))) x))\n", "  (filter\
+    \ \n   (lambda (x) (not (any even? (list->digits x))))\n   (sort x <)))\n```\n\
+    \n### `list->digits`\n```scheme\n#lang racket\n", "  (cond ((null? x) '())\n \
+    \       ((has_even_digit? (car x)) (unique_digits (cdr x)))\n        (else (cons\
+    \ (car x) (unique_digits (cdr x))))))\n", "  (define (even-digit? n)\n    (cond\
+    \ ((= n 0) #f)\n          ((= (remainder n 2) 0) #t)\n          (else (even-digit?\
+    \ (quotient n 10)))))\n  (define (iter lst result)\n    (cond ((null? lst) result)\n\
+    \          ((even-digit? (car lst)) (iter (cdr lst) result))\n          (else\
+    \ (iter (cdr lst) (cons (car lst) result)))))\n  (sort (iter x '()) <))\n</code>\n\
+    Sample test cases:\n<code>&gt; (unique_digits (list 15 33 1422 1))\n'(1 15 33)\n\
+    &gt; (unique_digits (list 152 323 1422 10))\n'()\n</code>\n", "  (filter (lambda\
+    \ (n) (not (even? (remainder n 10))))\n          (quicksort (lambda (a b) (&lt;\
+    \ a b)) x)))\n</code>", "  (sort x <))\n\n```\n---\n\n```#lang racket\n", "  (unique-digits-helper\
+    \ x '()))\n", "  (sort x < (filter (lambda (n) (odd? (remainder n 10)))\n    \
+    \                (filter (lambda (n) (not (zero? (remainder n 10))))\n       \
+    \                     x))))\n", "  (cond\n    ((null? x) '())\n    ((odd? (remainder\
+    \ (first x) 10)) (cons (first x) (unique_digits (rest x))))\n    (else (unique_digits\
+    \ (rest x)))))\n", "    (cond\n        [(null? x) empty]\n        [(even-digit?\
+    \ (car x)) (unique_digits (cdr x))]\n        [else (cons (car x) (unique_digits\
+    \ (cdr x)))]))\n", "  (define (aux lst)\n    (if (null? lst)\n        '()\n  \
+    \      (if (even-digit? (car lst))\n            (aux (cdr lst))\n            (cons\
+    \ (car lst) (aux (cdr lst))))))\n  (sort < (aux x)))\n", "  (cond [(empty? x)\
+    \ empty]\n        [(odd? (remainder (car x) 10))\n         (append (list (car\
+    \ x)) (unique_digits (cdr x)))]\n        [else (unique_digits (cdr x))]))\n</code>\n",
+  "  (define even? (lambda (n)\n                  (even? (remainder n 10))))\n  (define\
+    \ (no-even-digits? n)\n    (cond ((null? n) #t)\n          ((even? (car n)) #f)\n\
+    \          (else (no-even-digits? (cdr n)))))\n  (sort < (filter no-even-digits?\
+    \ x)))\n", "  (cond\n    [(null? x) empty]\n    [(or (string-ref (number->string\
+    \ (car x)) 0 #\\0)\n         (string-ref (number->string (car x)) 1 #\\0)\n  \
+    \       (string-ref (number->string (car x)) 2 #\\0)\n         (string-ref (number->string\
+    \ (car x)) 3 #\\0)\n         (string-ref (number->string (car x)) 4 #\\0)\n  \
+    \       (string-ref (number->string (car x)) 5 #\\0)\n         (string-ref (number->string\
+    \ (car x)) 6 #\\0)\n         (string-ref (number->string (car x)) 7 #\\0)\n  \
+    \       (string-ref (number->string (car x)) 8 #\\0)\n         (string-ref (number->string\
+    \ (car x)) 9 #\\0))\n        (cons (car x) (unique_digits (cdr x)))]\n    [else\
+    \ (unique_digits (cdr x))]))", "  (cond [(= 0 (remainder (length x) 2))\n    \
+    \      (insert-sort (remdup (filter even? (apply append (map number->list x)))))]\n\
+    \        [else (unique_digits (map number->list x))]))\n", "  (sort (remove (lambda\
+    \ (y) (member (modulo y 10) (list 0 2 4 6 8))) x) <))\n", "  (define (loop x acc)\n\
+    \    (cond [(null? x) acc]\n          [(and (not (has-even-digit (car x)))\n \
+    \               (not (has-even-digit (cdr x))))\n           (loop (cdr x) (cons\
+    \ (car x) acc))]\n          [else (loop (cdr x) acc)]))\n  (sort (loop x '())\
+    \ <))\n", "  (sort (remove (lambda (a) (even? (modulo a 10))) x) <))\n</code>\n\
+    However, this doesn't work, because it only checks the first digit in each list\
+    \ element.\nHow can I make it check the rest of the number?\n\n\nA:\n\nYou could\
+    \ implement <code>even?</code> like this:\n<code>(define (even? n)\n  (if (zero?\
+    \ n)\n      #t\n      (odd? (sub1 n))))\n</code>\nAnd <code>odd?</code> like this:\n\
+    <code>(define (odd? n)\n  (if (zero? n)\n      #f\n      (even? (sub1 n))))\n\
+    </code>\nAnd then write your <code>unique_digits</code> function like this:\n\
+    <code>(define (unique_digits x)\n  (sort (remove even? x) &lt;))\n</code>\n",
+  "  (filter (lambda (n) (andmap (lambda (d) (odd? d)) \n                        \
+    \ (number->list n)))\n          x))\n", "  (cond [(empty? x) empty]\n        [(integer?\
+    \ (car x)) (cons (car x) (unique_digits (cdr x)))]\n        [else (cons (car x)\
+    \ (unique_digits (cdr x)))]))\n</code>\nWhen I run this code in DrRacket, I get\
+    \ the following error: \n<code>car: expects argument of type &lt;pair&gt;; given\
+    \ '()\n</code>\nI don't understand why I get this error. Any help would be appreciated.\n\
+    \n\nA:\n\nYou need to put parentheses around your <code>cons</code> expressions,\
+    \ which are currently nested at the same level of the rest of the code.\nThe parentheses\
+    \ you want are:\n<code>(define (unique_digits x)\n  (cond [(empty? x) empty]\n\
+    \        [(integer? (car x))\n         (cons (car x)\n               (unique_digits\
+    \ (cdr x)))]\n        [else\n         (cons (car x)\n               (unique_digits\
+    \ (cdr x)))]))\n</code>\n", "  (filter\n   (lambda (element)\n     (filter-map\n\
+    \      (lambda (digit)\n        (if (even? digit)\n            #f\n          \
+    \  digit))\n      (iota element)))\n   x))\n", "  (sort x <))\n", "  (define (contains-even?\
+    \ n)\n    (cond\n      [(equal? (remainder n 10) 0) true]\n      [(equal? (remainder\
+    \ n 10) 2) true]\n      [(equal? (remainder n 10) 4) true]\n      [(equal? (remainder\
+    \ n 10) 6) true]\n      [(equal? (remainder n 10) 8) true]\n      [else (contains-even?\
+    \ (quotient n 10))]))\n  (cond\n    [(empty? x) empty]\n    [(contains-even? (first\
+    \ x)) (unique_digits (rest x))]\n    [else (cons (first x) (unique_digits (rest\
+    \ x)))]))", "  (define (helper n)\n    (cond\n      [(zero? n) true]\n      [(odd?\
+    \ (remainder n 10)) (helper (quotient n 10))]\n      [else false]))\n  (define\
+    \ (odds l)\n    (if (null? l)\n        '()\n        (if (helper (car l))\n   \
+    \         (cons (car l) (odds (cdr l)))\n            (odds (cdr l)))))\n  (sort\
+    \ < (odds x)))\n", "  (filter (lambda (n)\n            (not (any even? (digits\
+    \ n))))\n          (sort x <)))\n", "  (define (is_odd? n)\n    (not (even? n)))\n\
+    \  (define (contains_even? n)\n    (cond\n      [(empty? n) false]\n      [(even?\
+    \ (first n)) true]\n      [else (contains_even? (rest n))]))\n  (define (digit_list\
+    \ n)\n    (if (empty? n) n\n      (cons (first n) (digit_list (rest n)))))\n \
+    \ (define (get_odds lst)\n    (cond\n      [(empty? lst) '()]\n      [(contains_even?\
+    \ (digit_list (first lst))) (get_odds (rest lst))]\n      [else (cons (first lst)\
+    \ (get_odds (rest lst)))]))\n  (sort (get_odds x) <))\n", "  (cond\n    [(empty?\
+    \ x) empty]\n    [(andmap has-odd? (string->list (number->string (first x))))\n\
+    \     (cons (first x) (unique_digits (rest x)))]\n    [else (unique_digits (rest\
+    \ x))]))\n", "  (define (has_even? x)\n    (cond [(empty? x) #f]\n          [(even?\
+    \ (first x)) #t]\n          [else (has_even? (rest x))]))\n  (cond [(empty? x)\
+    \ empty]\n        [(has_even? x) (unique_digits (rest x))]\n        [else (cons\
+    \ (first x) (unique_digits (rest x)))]))\n", "  (cond [(null? x) empty]\n    \
+    \    [(even-digit? (car x)) (unique_digits (cdr x))]\n        [else (cons (car\
+    \ x) (unique_digits (cdr x)))]))\n", "  (unique_digits_ (sort x <) '()))\n", " \
+    \ (define (even? a)\n    (even? (modulo a 10)))\n  (sort (list-filter even? x)\
+    \ <))\n", "  (sort (filter (lambda (x) (not (has_even_digit? x))) x) <))\n", " \
+    \ (match x\n    [(cons hd tl) (cond [(not (even? (string->number (string-append\
+    \ (number->string hd) \"\"))))\n                       (cons hd (unique_digits\
+    \ tl))]\n                      [else (unique_digits tl)])]\n    [_ '()]))", " \
+    \ (define (aux x result)\n    (if (empty? x)\n        result\n        (if (even-digit?\
+    \ (first x))\n            (aux (rest x) result)\n            (aux (rest x) (append\
+    \ result (list (first x)))))))\n  (aux x '()))\n", "  (filter (lambda (e) (every\
+    \ odd? (digits e))) x))\n", "  (sort x < #:key\n        (lambda (n)\n        \
+    \  (andmap even? (list->digits n)))))\n", "  (cond ((null? x) '())\n        ((not\
+    \ (has_even_digit (car x))) (cons (car x) (unique_digits (cdr x))))\n        (else\
+    \ (unique_digits (cdr x)))))\n", "  (filter (lambda (x) (not (equal? #f (member?\
+    \ 2 (string->list (number->string x)))))) (list-sort < x)))\n", "  (cond\n   \
+    \ [(list? x)\n     (cond\n       [(empty? x) (list)]\n       [else\n        (cond\n\
+    \          [(list-contains-even-digits (car x)) (unique_digits (cdr x))]\n   \
+    \       [else\n           (cond\n             [(empty? (cdr x)) (list (car x))]\n\
+    \             [else (cons (car x) (unique_digits (cdr x)))])])])]\n    [else (display\
+    \ \"Error in input list\")]))\n", "  (define (unique_digits_inner x acc)\n   \
+    \ (cond [(empty? x) acc]\n          [(null? (member (modulo (first x) 10) (list\
+    \ 2 4 6 8 0))) \n           (unique_digits_inner (rest x) (append acc (list (first\
+    \ x))))]\n          [else (unique_digits_inner (rest x) acc)]))\n  (sort < (unique_digits_inner\
+    \ x '())))\n", "  (define (is-even? n)\n    (even? (remainder n 10)))\n  (define\
+    \ (has-even? x)\n    (or (is-even? x)\n        (cond\n          [(zero? x) #f]\n\
+    \          [else (has-even? (quotient x 10))])))\n  (cond\n    [(zero? x) null]\n\
+    \    [(has-even? (car x)) (unique_digits (cdr x))]\n    [else\n     (cons (car\
+    \ x) (unique_digits (cdr x)))]))", "  (list-sort < \n\t     (remove-duplicates\n\
+    \t      (filter (\u03BB (n) (not (even? (modulo n 10)))) \n\t\t      (filter (\u03BB\
+    \ (n) (not (even? (modulo n 100)))) \n\t\t\t      (filter (\u03BB (n) (not (even?\
+    \ (modulo n 1000)))) \n\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n\
+    \ 10000)))) \n\t\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n 100000))))\
+    \ \n\t\t\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n 1000000)))) \n\
+    \t\t\t\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n 10000000)))) \n\t\
+    \t\t\t\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n 100000000)))) \n\
+    \t\t\t\t\t\t\t\t\t      (filter (\u03BB (n) (not (even? (modulo n 1000000000))))\
+    \ \n\t\t\t\t\t\t\t\t\t\t      x))))))))))))", "  (filter \n   (lambda (x)\n  \
+    \   (not (even? (modulo x 10)))\n   )\n   (filter \n    (lambda (x)\n      (not\
+    \ (even? (modulo x 100)))\n    )\n    (filter \n     (lambda (x)\n       (not\
+    \ (even? (modulo x 1000)))\n     )\n     (filter \n      (lambda (x)\n\t(not (even?\
+    \ (modulo x 10000)))\n      )\n      (filter \n       (lambda (x)\n\t (not (even?\
+    \ (modulo x 100000)))\n       )\n       (filter \n\t(lambda (x)\n\t  (not (even?\
+    \ (modulo x 1000000)))\n\t)\n\t(filter \n\t (lambda (x)\n\t   (not (even? (modulo\
+    \ x 10000000)))\n\t )\n\t (filter \n\t  (lambda (x)\n\t    (not (even? (modulo\
+    \ x 100000000)))\n\t  )\n\t  (filter \n\t   (lambda (x)\n\t     (not (even? (modulo\
+    \ x 1000000000)))\n\t   )\n\t   (filter \n\t    (lambda (x)\n\t      (not (even?\
+    \ (modulo x 10000000000)))\n\t    )\n\t    (filter \n\t     (lambda (x)\n\t  \
+    \     (not (even? (modulo x 100000000000)))\n\t     )\n\t     (filter \n\t   \
+    \   (lambda (x)\n\t\t(not (even? (modulo x 1000000000000)))\n\t      )\n\t   \
+    \   (filter \n\t       (lambda (x)\n\t\t (not (even? (modulo x 10000000000000)))\n\
+    \t       )\n\t       (filter \n\t\t(lambda (x)\n\t\t  (not (even? (modulo x 100000000000000)))\n\
+    \t\t)\n\t\t(filter \n\t\t (lambda (x)\n\t\t   (not (even? (modulo x 1000000000000000)))\n\
+    \t\t )\n\t\t (filter \n\t\t  (lambda (x)\n\t\t    (not (even? (modulo x 10000000000000000)))\n\
+    \t\t  )\n\t\t ", "  (if (null? x)\n      '()\n      (if (has_even_digit? (car\
+    \ x))\n          (unique_digits (cdr x))\n          (cons (car x) (unique_digits\
+    \ (cdr x))))))\n", "  (cond\n    [(null? x) '()]\n    [(= 1 (remainder (car x)\
+    \ 2)) (cons (car x) (unique_digits (cdr x)))]\n    [else (unique_digits (cdr x))]))\n",
+  "  (filter-even-digits x '()))\n", "  (unique_digits-helper (sort x <) '()))\n",
+  "  (cond [(null? x) empty]\n        [(odd-digits? (car x)) (cons (car x) (unique_digits\
+    \ (cdr x)))]\n        [else (unique_digits (cdr x))]))\n", "  (sort x <))\n",
+  "  (let ([no_even_digit? (lambda (n)\n                          (andmap (lambda\
+    \ (a) (zero? (modulo a 2)))\n                                  (list->numbers\
+    \ (number->string n))))])\n    (sort (filter no_even_digit? x) <)))\n", "  (define\
+    \ (unique? x)\n    (cond\n      [(empty? x) #t]\n      [(eq? (modulo (first x)\
+    \ 2) 0) #f]\n      [else (unique? (rest x))]))\n  (cond\n    [(empty? x) empty]\n\
+    \    [(unique? (number->list (first x))) (cons (first x) (unique_digits (rest\
+    \ x)))]\n    [else (unique_digits (rest x))]))", '  (filter (lambda (y) (even?
+    (remainder y 10))) x))', "  (define (has-evens x)\n    (cond\n      [(empty? x)\
+    \ #f]\n      [(even? (car x)) #t]\n      [else (has-evens (cdr x))]))\n  (cond\n\
+    \    [(empty? x) empty]\n    [(has-evens (number->digits (car x))) (unique_digits\
+    \ (cdr x))]\n    [else (cons (car x) (unique_digits (cdr x)))]))\n```", "  (unique_digits_helper\
+    \ x '()))\n", "  (cond [(empty? x) empty]\n        [(member #\\2 (symbol->string\
+    \ (number->string (first x)))\n                (member #\\4 (symbol->string (number->string\
+    \ (first x)))\n                (member #\\6 (symbol->string (number->string (first\
+    \ x)))\n                (member #\\8 (symbol->string (number->string (first x)))\n\
+    \        \n                (member #\\0 (symbol->string (number->string (first\
+    \ x)))\n                (cons (first x)\n                      (unique_digits\
+    \ (rest x)))))))))\n", "  (sort (list) &lt; (filter (lambda (l) (= 0 (remainder\
+    \ (length (filter (lambda (y) (even? y)) (string-&gt;list (number-&gt;string l))))\
+    \ 0))) x)))\n", "  (define (is_odd x)\n    (not (even? x)))\n  (define (is_even\
+    \ lst)\n    (cond\n      [(null? lst) #t]\n      [(is_odd (car lst)) (is_even\
+    \ (cdr lst))]\n      [else #f]))\n  (define (sort_num lst)\n    (cond\n      [(null?\
+    \ lst) '()]\n      [(is_even (car lst)) (sort_num (cdr lst))]\n      [else (cons\
+    \ (car lst) (sort_num (cdr lst)))]))\n  (sort_num x))\n", "    (define (digits-filter\
+    \ ls)\n        (if (null? ls)\n            '()\n            (if (even? (car ls))\n\
+    \                (digits-filter (cdr ls))\n                (cons (car ls) (digits-filter\
+    \ (cdr ls))))))\n    (digits-filter (sort x <)))\n", "  (cond [(null? x) empty]\n\
+    \        [(any_even_digit? (car x)) (unique_digits (cdr x))]\n        [else (cons\
+    \ (car x) (unique_digits (cdr x)))]))\n", "  (define (odd? x) (equal? (remainder\
+    \ x 2) 1))\n  (define (unique-digits? x)\n    (define (unique-digits-helper x)\n\
+    \      (cond ((null? x) true)\n            ((odd? (first x)) (unique-digits-helper\
+    \ (rest x)))\n            (else false)))\n    (unique-digits-helper (digits x)))\n\
+    \  (define (my-sort x)\n    (if (null? x)\n        empty\n        (insert (first\
+    \ x) (my-sort (rest x)))))\n  (define (insert x list)\n    (cond ((null? list)\
+    \ (list x))\n          ((< x (first list)) (cons x list))\n          (else (cons\
+    \ (first list) (insert x (rest list))))))\n  (filter unique-digits? x))", "  (define\
+    \ (check_even x)\n    (if (zero? (modulo x 2))\n        #t\n        #f))\n  (define\
+    \ (even_in_list x)\n    (if (empty? x)\n        #f\n        (if (check_even (first\
+    \ x))\n            #t\n            (even_in_list (rest x)))))\n  (define (get_evens\
+    \ x)\n    (if (empty? x)\n        '()\n        (if (check_even (first x))\n  \
+    \          (cons (first x) (get_evens (rest x)))\n            (get_evens (rest\
+    \ x)))))\n  (define (remove_evens x)\n    (if (empty? x)\n        '()\n      \
+    \  (if (check_even (first x))\n            (remove_evens (rest x))\n         \
+    \   (cons (first x) (remove_evens (rest x))))))\n  (define (unique_digits_helper\
+    \ x y)\n    (if (empty? x)\n        y\n        (unique_digits_helper (rest x)\
+    \ (cons (first x) y))))\n  (define (sort_list x)\n    (if (empty? x)\n       \
+    \ '()\n        (let ((min (first x)))\n          (let ((min-index (find min x)))\n\
+    \            (cons min (sort_list (remove* min x)))))))\n  (if (empty? x)\n  \
+    \    '()\n      (if (not (even_in_list x))\n          (sort_list x)\n        \
+    \  (if (empty? (get_evens x))\n              (sort_list x)\n              (if\
+    \ (empty? (remove_evens x))\n                  '()\n                  (sort_list\
+    \ (unique_digits_helper (remove_evens x) '())))))))\n</code>\nIn order to see\
+    \ its working, paste it in DrRacket, if you don't have one, you can download it\
+    \ from here and see if it works.\nI would like to hear your opinion about this\
+    \ code, if it is good or bad, how could I improve it, or maybe fix it? As I started\
+    \ learning racket about 2 weeks ago I don't really know if I applied", "  (define\
+    \ (dig x)\n    (if (= x 0) (list 0) (cons (modulo x 10) (dig (quotient x 10)))))\n\
+    \  (let loop ([x x] [seen '()])\n    (if (null? x) seen\n        (if (member (odd?\
+    \ (car x)) (dig (car x)))\n            (loop (cdr x) (cons (car x) seen))\n  \
+    \          (loop (cdr x) seen)))))\n</code>", "  (cond [(empty? x) empty]\n  \
+    \      [(digit-even? (first x)) (unique_digits (rest x))]\n        [else\n   \
+    \      (cons (first x) (unique_digits (rest x)))]))\n", "  (define (get_digits\
+    \ num)\n    (if (&lt; num 10)\n        (list num)\n        (cons (modulo num 10)\
+    \ (get_digits (quotient num 10)))))\n  (define (has_even n)\n    (cond ((&lt;\
+    \ n 10) (even? n))\n          ((even? (modulo n 10)) #t)\n          (else (has_even\
+    \ (quotient n 10)))))\n  (define (remove_even_digits x acc)\n    (cond ((null?\
+    \ x) (reverse acc))\n          ((has_even (car x)) (remove_even_digits (cdr x)\
+    \ acc))\n          (else (remove_even_digits (cdr x) (cons (car x) acc)))))\n\
+    \  (remove_even_digits x '()))\n", "  (sort (filter\n          (lambda (x)\n \
+    \           (not (has-even-digit? x)))\n          x)\n        &lt;))\n", "  (cond\n\
+    \    [(= (length x) 0) '()]\n    [(even? (first x)) (unique_digits (rest x))]\n\
+    \    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (cond\n    [(empty?\
+    \ x) empty]\n    [(even? (digit-even? (first x))) (unique_digits (rest x))]\n\
+    \    [else (cons (first x) (unique_digits (rest x)))]))\n", "  (define (is_even_digit?\
+    \ n)\n    (cond ((= n 0) #f)\n          ((= n 2) #t)\n          ((= n 4) #t)\n\
+    \          ((= n 6) #t)\n          ((= n 8) #t)\n          (else (is_even_digit?\
+    \ (- n 2)))))\n  (define (is_even_digits? n)\n    (cond ((= n 0) #f)\n       \
+    \   ((= n 1) #f)\n          ((= n 2) #f)\n          ((= n 3) #f)\n          ((=\
+    \ n 4) #f)\n          ((= n 5) #f)\n          ((= n 6) #f)\n          ((= n 7)\
+    \ #f)\n          ((= n 8) #f)\n          ((= n 9) #f)\n          (else (is_even_digit?\
+    \ (- n (/ n 10)))))\n          (else (is_even_digits? (- n (/ n 10)))))\n  (define\
+    \ (unique_digits-helper n lst)\n    (cond ((= n 0) '())\n          ((is_even_digits?\
+    \ n)\n           (unique_digits-helper (- n 1) lst))\n          (else (cons n\
+    \ (unique_digits-helper (- n 1) lst)))))\n  (filter positive? (sort < (unique_digits-helper\
+    \ x '()))))\n", "  (let loop ([ls x] [res null])\n    (cond\n      [(null? ls)\
+    \ (sort res <)]\n      [(find-even (car ls)) (loop (cdr ls) res)]\n      [else\
+    \ (loop (cdr ls) (cons (car ls) res))])))\n", "  (define (unique? n)\n    (cond\
+    \ ((= n 0) #f)\n          ((= (remainder n 2) 0) #t)\n          (else (unique?\
+    \ (quotient n 10)))))\n  (cond ((empty? x) empty)\n        ((unique? (first x))\
+    \ (cons (first x) (unique_digits (rest x))))\n        (else (unique_digits (rest\
+    \ x)))))\n```\n\n```scheme\n#lang racket\n", "  (sort (remove (\u03BB (e) (list-member\
+    \ (list 2 4 6 8 0) (digits e))) x) <))\n", "  (sort (filter (\u03BB (i)\n    \
+    \              (or (zero? (modulo i 2))\n                      (zero? (modulo\
+    \ i 5))))\n                x)\n        <))", "  (cond ((null? x) '())\n      \
+    \  ((has_even_digit? (car x)) (unique_digits (cdr x)))\n        (else (cons (car\
+    \ x) (unique_digits (cdr x))))))\n", "  (sort x <))\n", "  (filter (lambda (y)\n\
+    \            (not (even-digit? y)))\n          (sort < x)))\n", "  (cond\n   \
+    \ [(empty? x) empty]\n    [(empty? (remove #f (map (lambda (y) (even? y)) (integer->list\
+    \ (first x)))))\n     (cons (first x) (unique_digits (rest x)))]\n    [else (unique_digits\
+    \ (rest x))]))\n```\n##### Verify your solution works:\n\n```racket\n#lang racket\n",
+  "  (filter-map\n   (lambda (n)\n     (if (member n (list 2 4 6 8 0)) #f n))\n  \
+    \ (quicksort x))\n  )\n</code>\nTest function:\n<code>#lang racket", "  (define\
+    \ (has-even-digit n)\n    (cond\n      [(null? n) #f]\n      [(even? (remainder\
+    \ (car n) 10)) #t]\n      [else (has-even-digit (cdr n))]))\n  (let loop ([x x]\
+    \ [xs '()])\n    (cond\n      [(null? x) xs]\n      [(has-even-digit (number->list\
+    \ (car x))) (loop (cdr x) xs)]\n      [else (loop (cdr x) (cons (car x) xs))])))\n",
+  "  (remove \n   (lambda (n) (even? (remainder n 10)))\n   (sort (map (lambda (n)\
+    \ (quotient n 10)) x) <)))\n", "  (define (iter xs rst)\n    (cond [(empty? xs)\
+    \ rst]\n          [(even-digit? (first xs)) (iter (rest xs) rst)]\n          [else\
+    \ (iter (rest xs) (cons (first xs) rst))]))\n  (sort (iter x '()) <))\n", "  (filter\
+    \ (lambda (x) (even? (remainder x 10))) x))\n", "  (define (has_even_digit? num)\n\
+    \    (if (eq? (remainder num 10) 0)\n        #t\n        (if (eq? num 0)\n   \
+    \         #f\n            (has_even_digit? (quotient num 10)))))\n  (define (unique_digits_helper\
+    \ x acc)\n    (if (empty? x)\n        acc\n        (if (has_even_digit? (first\
+    \ x))\n            (unique_digits_helper (rest x) acc)\n            (unique_digits_helper\
+    \ (rest x) (append acc (list (first x)))))))\n  (sort < (unique_digits_helper\
+    \ x (list))))", "  (sort x < \n        (filter (lambda (n) (not (even? (modulo\
+    \ n 10)))) x)))\n ", "  (if (empty? x) \n      '()\n      (let ((first (first\
+    \ x))\n            (rest (rest x)))\n        (if (has_even? first)\n         \
+    \   (unique_digits rest)\n            (cons first (unique_digits rest))))))\n",
+  "  (cond ((null? x) '())\n        ((no-even-digits? (car x)) (cons (car x) (unique_digits\
+    \ (cdr x))))\n        (else (unique_digits (cdr x)))))\n", "  (define (has-even-digit?\
+    \ n)\n    (cond ((= n 0) #f)\n          ((even? (remainder n 10)) #t)\n      \
+    \    (else (has-even-digit? (quotient n 10)))))\n  (define (remove-even-digit\
+    \ x)\n    (cond ((null? x) '())\n          ((has-even-digit? (car x)) (remove-even-digit\
+    \ (cdr x)))\n          (else (cons (car x) (remove-even-digit (cdr x))))))\n \
+    \ (define (sort lst)\n    (cond ((null? lst) '())\n          ((null? (cdr lst))\
+    \ lst)\n          (else (let ([max (for/max ([x lst]) x)])\n                 \
+    \ (cons max (sort (remove max lst)))))))\n  (sort (remove-even-digit x)))\n",
+  "  (cond\n    [(null? x) '()]\n    [(equal? (digits (car x)) (list 1 3 5 7 9))\n\
+    \      (cons (car x) (unique_digits (cdr x)))]\n    [else (unique_digits (cdr\
+    \ x))]))\n", "  (sort x <))\n", "    (cond\n        [(null? x) '()]\n        [(digit-check\
+    \ (car x))\n            (cons (car x) (unique_digits (cdr x)))]\n        [else\
+    \ (unique_digits (cdr x))]))\n", "  (define (find_unique lst)\n    (cond ((null?\
+    \ lst) '())\n          ((find_even_digits (car lst)) (find_unique (cdr lst)))\n\
+    \          (else (cons (car lst) (find_unique (cdr lst))))))\n  (define (find_even_digits\
+    \ x)\n    (if (zero? (remainder x 10))\n        #t\n        (if (zero? x)\n  \
+    \          #f\n            (find_even_digits (quotient x 10)))))\n  (merge '()\
+    \ (find_unique x)))\n```\n\n```Racket\n#lang racket\n", "  (cond\n    [(= (length\
+    \ x) 0) (list)]\n    [(even? (last x)) (unique_digits (butlast x))]\n    [else\
+    \ (cons (last x) (unique_digits (butlast x)))]))\n", "  (define (odd n)\n    (not\
+    \ (even? n)))\n  (cond\n    [(null? x) empty]\n    [(= (number->list (car x))\
+    \ (filter odd (number->list (car x)))) (cons (car x) (unique_digits (cdr x)))]\n\
+    \    [else (unique_digits (cdr x))]))\n", "  (cond [(empty? x) '()]\n        [else\
+    \ (define (all_even? x) (and (even? (remainder (first x) 10))\n              \
+    \                           (or (null? (rest x)) (all_even? (rest x)))))\n   \
+    \           (if (all_even? x) (unique_digits (rest x)) (cons (first x) (unique_digits\
+    \ (rest x))))]))\n", "  (define (unique? n)\n    (define (has-even-digit n)\n\
+    \      (cond ((< n 10) #f)\n            ((even? (remainder n 10)) #t)\n      \
+    \      (else (has-even-digit (quotient n 10)))))\n    (not (has-even-digit n)))\n\
+    \  (sort (filter unique? x) <))", '  (sort x <))', "  (sort x >))\n", "  (cond\
+    \ [(null? x) empty]\n        [(equal? #t (even? (first x))) (unique_digits (rest\
+    \ x))]\n        [else (unite (list (first x)) (unique_digits (rest x)))]))\n",
+  "  (if (= x null)\n      (list)\n      (let ([next (car x)])\n        (if (every\
+    \ (lambda (d) (odd? d))\n                   (list->digits next))\n           \
+    \ (cons next (unique_digits (cdr x)))\n            (unique_digits (cdr x))))))\n",
+  "  (cond ((null? x) '())\n        ((even? (modulo (car x) 10)) (unique_digits (cdr\
+    \ x)))\n        ((and (list? (car x)) (or (even? (modulo (car (car x)) 10))\n\
+    \                                  (even? (modulo (car (cdr (car x))) 10))))\n\
+    \         (unique_digits (cdr x)))\n        (else (cons (car x) (unique_digits\
+    \ (cdr x))))))\n", "  (define (iter x y)\n    (cond\n      [(empty? x)\n     \
+    \  (sort y <)]\n      [(check_if_has_even_digit (first x))\n       (iter (rest\
+    \ x) y)]\n      [else\n       (iter (rest x) (cons (first x) y))]))\n  (iter x\
+    \ (list)))\n", "  (cond\n    [(empty? x) '()]\n    [(odd? (remainder (first x)\
+    \ 10))\n     (cons (first x) (unique_digits (rest x)))]\n    [else (unique_digits\
+    \ (rest x))]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

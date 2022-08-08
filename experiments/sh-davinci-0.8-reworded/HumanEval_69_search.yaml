@@ -142,6 +142,1110 @@ completions: ["    echo $1 | tr ' ' '\\n' | sort | uniq -c | sort -r | grep -o -
     \ loop through the given numbers and return the biggest number that meets the\
     \ condition of occurences\n\tfor ((i=max; i>0; i--)); do\n\t\tif check $i; then\n\
     \t\t\techo $i\n\t\t\treturn\n\t\tfi\n\tdone\n\t# return -1 if no such a value\
-    \ exist\n\techo -1"]
+    \ exist\n\techo -1", "\t# $1 is a space-separated list\n\t# For every element,\
+    \ count the number of occurrences of this element\n\t# in the list, and return\
+    \ the element if it is equal to the number of\n\t# occurrences.\n\t# If no such\
+    \ element exists, return -1.\n\t#\n\t# Loop through every element in the list:\n\
+    \tfor element in $1; do\n\t\t# $element is the current element\n\t\toccurrences=0;\n\
+    \t\t# Loop through every element in the list again:\n\t\tfor element_2 in $1;\
+    \ do\n\t\t\t# Check if $element_2 is equal to $element:\n\t\t\tif [ $element -eq\
+    \ $element_2 ]; then\n\t\t\t\t# If it is, increment $occurrences by 1:\n\t\t\t\
+    \toccurrences=$((occurrences+1));\n\t\t\tfi\n\t\tdone\n\t\t# Check if $occurrences\
+    \ is equal to $element:\n\t\tif [ $occurrences -eq $element ]; then\n\t\t\t# If\
+    \ it is, output $element:\n\t\t\techo $element;\n\t\t\texit 0;\n\t\tfi\n\tdone\n\
+    \t# If none of the elements are equal to their number of occurrences,\n\t# output\
+    \ -1.\n\techo -1;", "    # Get the unique elements in $1, return them as a string\n\
+    \    unique_elements() {\n        echo $(echo \"$@\" | tr ' ' '\\n' | sort -u\
+    \ | tr '\\n' ' ')\n    }\n    # Get the element of $1 with the highest frequency,\
+    \ return it\n    max_frequency() {\n        local values=($@) # an array\n   \
+    \     local max_f=0 # the max_frequency so far\n        local max_i=0 # the index\
+    \ of the element with max_frequency\n        for ((i=0; i<${#values[@]}; i++));\
+    \ do\n            local value=${values[$i]}\n            # get the frequency of\
+    \ value\n            local frequency=$(echo \"$@\" | tr ' ' '\\n' | grep -c \"\
+    $value\")\n            if (($frequency >= $max_f)); then\n                # update\
+    \ max_frequency and max_i\n                max_f=$frequency\n                max_i=$i\n\
+    \            fi\n        done\n        # output the element with max_frequency\n\
+    \        echo ${values[$max_i]}\n    }\n    # Check whether $1 is greater than\
+    \ 0 and has a frequency greater than or equal to itself\n    valid() {\n     \
+    \   local value=$1\n        local frequency=$(echo \"$@\" | tr ' ' '\\n' | grep\
+    \ -c \"$value\")\n        if (($value > 0)) && (($frequency >= $value)); then\n\
+    \            echo \"true\"\n        else\n            echo \"false\"\n       \
+    \ fi\n    }\n    local values=$(unique_elements $@)\n    local max_frequency=$(max_frequency\
+    \ $values)\n    if [ $(valid $max_frequency) = \"true\" ]; then\n        echo\
+    \ $max_frequency\n    else\n        echo \"-1\"\n    fi", "  local freq=()\n \
+    \ local nums=($1)\n\n  # Calculate frequency\n  for n in ${nums[@]}; do\n    freq[$n]=$((freq[$n]+1))\n\
+    \  done\n\n  # Iterate frequencies in reverse order\n  for ((i=${#freq[@]}-1;\
+    \ i>=0; i--)); do\n    # If frequency is greater than or equal to the integer\
+    \ itself, return the integer\n    [[ -n ${freq[$i]} && ${freq[$i]} -ge $i ]] &&\
+    \ echo $i && return\n  done\n\n  # No integer found, return -1\n  echo \"-1\"",
+  "\tlocal l=\"\" #empty list\n\n\tfor i in $1; do #iterate over all integers\n\t\t\
+    l=\"$l $(($i))\" #add the integer to the list\n\tdone\n\t\n\t# This will sort\
+    \ the list in descending order\n\t# and remove any duplicates, so that we're\n\
+    \t# left with a sorted list of distinct integers.\n\t# At this point the list\
+    \ will contain integers\n\t# that might appear in the original list and\n\t# integers\
+    \ that are not in the original list.\n\tl=\"$(echo $l | sed 's/ /\\n/g' | sort\
+    \ -rn | uniq)\"\n\n\tfor i in $l; do #iterate over all integers\n\t\t# this grep\
+    \ will return all occurences of an\n\t\t# integer in the original list\n\t\tlocal\
+    \ f=\"$(echo $1 | grep -o $i | wc -l)\"\n\n\t\t# if the frequency of an integer\n\
+    \t\t# is higher than the integer itself\n\t\t# return the integer\n\t\t[ $f -ge\
+    \ $i ] && echo $i && return\n\tdone\n\n\t# if we've reached this point, no such\
+    \ integer\n\t# exist, so return -1\n\techo -1", "\t# put the list in an array.\n\
+    \tlocal -a list\n\tlist=(${1// / })\n\t# sort the array in descending order\n\t\
+    IFS=$'\\n' list=($(sort -r <<<\"${list[*]}\"))\n\tunset IFS\n\t# loop through\
+    \ the array and check if any number appears as many times \n\t# as its value.\n\
+    \tfor i in \"${list[@]}\"; do\n\t\tif [ \"${list[@]}\" == \"${list[@]//[^$i]}\"\
+    \ ]; then\n\t\t\techo \"$i\"\n\t\t\treturn\n\t\tfi\n\tdone\n\t# if no such number,\
+    \ return -1\n\techo \"-1\"", "  for i in $1; do\n    if [[ $i -eq $(echo $1 |\
+    \ tr ' ' '\\n' | grep -c \"$i\") ]]; then\n      echo $i\n      return\n    fi\n\
+    \  done\n  echo -1", "\tlocal list=( $1 )\n\tlocal sorted=$(echo ${list[@]} |\
+    \ tr ' ' '\\n' | sort -n | tr '\\n' ' ')\n\t\n\tlocal last_n=1\n\tlocal last_i=${list[0]}\n\
+    \tfor n in $sorted; do\n\t\tif [ $n -ne $last_i ]; then\n\t\t\tif [ $last_n -ge\
+    \ $last_i ]; then\n\t\t\t\techo $last_i\n\t\t\t\treturn\n\t\t\tfi\n\t\t\tlast_n=1\n\
+    \t\t\tlast_i=$n\n\t\telse\n\t\t\tlast_n=$((last_n+1))\n\t\tfi\n\tdone\n\t\n\t\
+    if [ $last_n -ge $last_i ]; then\n\t\techo $last_i\n\t\treturn\n\tfi\n\t\n\techo\
+    \ -1", "    local -i max=0\n    local list=\"$1\"\n    for i in $list; do\n  \
+    \      local -i freq=0\n        for j in $list; do\n            ((j == i)) &&\
+    \ ((freq++))\n        done\n        ((max < freq && i <= freq)) && max=$i\n  \
+    \  done\n    ((max == 0)) && max=-1\n    echo $max", "  local array=($1)\n  local\
+    \ max_value=${array[0]}\n  local freq=0\n  local count=0\n  for (( i=0; i<${#array[@]};\
+    \ i++ )); do\n    value=${array[$i]}\n    (( freq++ ))\n    for (( j=i+1; j<${#array[@]};\
+    \ j++ )); do\n      (( value == ${array[$j]} )) && (( freq++ ))\n    done\n  \
+    \  if (( freq >= value )); then\n      (( max_value < value )) && max_value=$value\n\
+    \    fi\n    (( freq = 0 ))\n  done\n  if (( max_value > 0 )); then\n    echo\
+    \ $max_value\n  else\n    echo \"-1\"\n  fi", "    # check if the list is empty\n\
+    \    if [ -z \"$1\" ]; then\n        echo \"List is empty.\"\n        return\n\
+    \    fi\n\n    # sort the list (in reverse order) and print the first element\n\
+    \    local greater_integer=$(echo \"$1\" | sort -nr | head -n 1)\n\n    # set\
+    \ up a counter to check the frequency of the greater integer\n    local freq=0\n\
+    \n    # loop through the list to count the frequency of the greater integer\n\
+    \    while read line; do\n        if [ \"$line\" -eq \"$greater_integer\" ]; then\n\
+    \            ((freq++))\n        fi\n    done <<< \"$1\"\n\n    # check if the\
+    \ frequency of the greater integer is greater than or equal to the integer itself\n\
+    \    if [ \"$freq\" -ge \"$greater_integer\" ]; then\n        echo \"$greater_integer\"\
+    \n    else\n        echo \"-1\"\n    fi", "    # take the first value of the first\
+    \ line and then sort the list by \n    # greatest frequency, making sure not to\
+    \ include duplicates.\n    # e.g.\n    # $ sort -nu -r 4 1 2 2 3 1\n    # 4\n\
+    \    # 3\n    # 2\n    # 1\n    # \n    # we need to cut the second line to extract\
+    \ the frequency of the first line\n    # e.g.\n    # $ echo \"2 3 4 1 1 2 3\"\
+    \ | cut -f 2 -d ' '\n    # 2\n    # 3\n    # 4\n    # 1\n    # 1\n    # 2\n  \
+    \  # 3\n    # \n    # so the first value of the first line (4) should have a frequency\
+    \ of 4 or\n    # greater.  This is the value that is returned by search.\n   \
+    \ # \n    # Example:\n    # $ cat <<EOF | sort -nu -r | grep -v \"0\" | head -n\
+    \ 1 | sed 's/^\\([0-9]*\\).*/\\1/'\n    # 4 1 2 2 3 1\n    # 0 0 0 0 0 0 0 0 0\n\
+    \    # 0 0 0 0 0 0 0 0 0\n    # EOF\n    # 2\n    #\n    # if the sorted list\
+    \ is empty, then the first line is zero and the second\n    # line is zero, so\
+    \ there is no integer that is greater than zero with a\n    # frequency greater\
+    \ than or equal to itself.  In this case, return -1.\n    #\n    # Example:\n\
+    \    # $ cat <<EOF | sort -nu -r | grep -v \"0\" | head -n 1 | sed 's/^\\([0-9]*\\\
+    ).*/\\1/'\n    # 0 0 0 0 0 0 0 0 0\n    # 0 0 0 0 0 0 0 0 0\n    # 0 0 0 0 0 0\
+    \ 0 0 0\n    # EOF\n    # -1\n    #\n    # Note: When comparing the frequency\
+    \ of the first line to itself, the\n    # frequency should be the frequency of\
+    \ the digit in the second line.  For\n    # example, in the following case the\
+    \ first line is 0, but the second line\n    # is 4.", "    local items=($1)\n\
+    \    local item=\"\"\n    local count=0\n    local has=0\n    for item in ${items[@]};\
+    \ do\n        count=0\n        for item2 in ${items[@]}; do\n            if [\
+    \ \"$item\" -eq \"$item2\" ]; then\n                count=$((count+1))\n     \
+    \       fi\n        done\n        if [ \"$count\" -ge \"$item\" ] && [ \"$item\"\
+    \ -gt \"$has\" ]; then\n            has=$item\n        fi\n    done\n    if [\
+    \ \"$has\" -eq 0 ]; then\n        echo \"-1\"\n    else\n        echo \"$has\"\
+    \n    fi", "    # your code here\n    printf \"\";", "    local -i max=0 freq=0\n\
+    \    local -i min=0\n    local -i freq_min=0\n    local -i len=0\n    local -a\
+    \ arr\n    local -i i=0\n    local -i j=0\n    local -i value=0\n    # Get the\
+    \ list with quotes,\n    # replace spaces with newlines,\n    # replace the newlines\
+    \ with spaces again\n    local list=$(echo \"$1\" | tr ' ' '\\n' | tr '\\n' '\
+    \ ')\n    # Get the maximum value\n    max=$(echo \"$list\" | sort -rn | head\
+    \ -n 1)\n    arr=( $list )\n    len=${#arr[@]}\n    # Find the minimum value\n\
+    \    for (( i=0; i<len; i++ )); do\n        value=${arr[$i]}\n        if [ $value\
+    \ -lt $min ] || [ $min -eq 0 ]; then\n            min=$value\n        fi\n   \
+    \ done\n    # Get the minimum value's frequency,\n    # get the maximum value's\
+    \ frequency\n    for (( i=0; i<len; i++ )); do\n        value=${arr[$i]}\n   \
+    \     if [ $value -eq $min ]; then\n            (( freq_min++ ))\n        fi\n\
+    \        if [ $value -eq $max ]; then\n            (( freq++ ))\n        fi\n\
+    \    done\n    # Loop the integers from the minimum to the maximum\n    for ((\
+    \ i=$min; i<=$max; i++ )); do\n        for (( j=0; j<len; j++ )); do\n       \
+    \     value=${arr[$j]}\n            if [ $value -eq $i ]; then\n             \
+    \   (( freq++ ))\n            fi\n        done\n        # Return the value if\
+    \ the frequency of the value is greater than the value itself\n        if [ $freq\
+    \ -ge $i ]; then\n            echo $i\n            exit 0\n        fi\n      \
+    \  freq=0\n    done\n    # Return -1 if no such a value exist\n    echo -1", " \
+    \   local list=$(echo $1 | tr \" \" \"\\n\" | sort -n)\n    local prev\n    local\
+    \ count=0\n    for x in $list; do\n        if [ -z \"$prev\" ]; then\n       \
+    \     prev=$x\n            count=1\n        elif [ \"$x\" == \"$prev\" ]; then\n\
+    \            count=$((count+1))\n        else\n            if [ \"$count\" -ge\
+    \ \"$prev\" ]; then\n                echo \"$prev\"\n                return\n\
+    \            fi\n            prev=$x\n            count=1\n        fi\n    done\n\
+    \    if [ \"$count\" -ge \"$prev\" ]; then\n        echo \"$prev\"\n    else\n\
+    \        echo \"-1\"\n    fi", "    # get a list of frequency of each integer\n\
+    \    freq=($(echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | awk '{print $1}'))\n\
+    \    # number of integers in the list\n    num=$(echo \"$1\" | tr ' ' '\\n' |\
+    \ wc -l)\n    # make a list of integers\n    arr=($(echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -n))\n    # the integer that is greater than zero, and has a frequency\
+    \ greater than or equal to the value of the integer itself\n    ans=-1\n    #\
+    \ start from the smallest integer in the list to avoid missing the largest one\n\
+    \    for (( i = 0; i < num; i++ )); do\n        # if current integer is greater\
+    \ than zero and its frequency is greater than or equal to the value of the integer\
+    \ itself\n        if [[ ${arr[$i]} -gt 0 && ${freq[$i]} -ge ${arr[$i]} ]]; then\n\
+    \            # update ans\n            ans=${arr[$i]}\n        fi\n    done\n\
+    \    echo \"$ans\"", "  # your code\n  echo $1 | tr \" \" \"\\n\" | sort | uniq\
+    \ -c | sort -n | tr -s \" \" | cut -d \" \" -f 2 | tac | head -n 1", '  # your
+    code here', "    # Sort first, so that the same values appear together.\n    sorted=($(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n))\n    # Use pointer to point to the last element\
+    \ in array, and then \n    # remove elements from the end until the value of the\
+    \ element\n    # is greater than zero and the frequency of the value is greater\n\
+    \    # than or equal to the value of the element.\n    pointer=$((${#sorted[@]}\
+    \ - 1))\n    while [ $pointer -ge 0 ]; do\n        # Count the number of times\
+    \ the element at $pointer is found in the\n        # list.\n        count=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | grep -c \"${sorted[$pointer]}\")\n        # Is the count\
+    \ greater than the current element?\n        if [ $count -ge ${sorted[$pointer]}\
+    \ ]; then\n            echo \"${sorted[$pointer]}\"\n            return\n    \
+    \    fi\n        pointer=$(($pointer - 1))\n    done\n    echo \"-1\"", "\tfor\
+    \ i in $1\n\tdo\n\t\tif [ $(echo \"$1\" | tr ' ' '\\n' | grep -c \"^$i$\") -ge\
+    \ $i ]\n\t\tthen\n\t\t\techo $i\n\t\t\tbreak\n\t\tfi\n\tdone", "    local arr=($1)\n\
+    \    local index=0\n    local max=${arr[0]}\n    local max_freq=0\n    while [[\
+    \ $index -lt ${#arr[@]} ]]; do\n        local cur=${arr[$index]}\n        local\
+    \ freq=0\n        local jndex=0\n        while [[ $jndex -lt ${#arr[@]} ]]; do\n\
+    \            if [[ ${arr[$jndex]} -eq $cur ]]; then\n                freq=$((freq\
+    \ + 1))\n            fi\n            jndex=$((jndex + 1))\n        done\n    \
+    \    if [[ $freq -ge $cur ]] && [[ $cur -gt $max ]]; then\n            max=$cur\n\
+    \            max_freq=$freq\n        fi\n        index=$((index + 1))\n    done\n\
+    \    if [[ $max_freq -eq 0 ]]; then\n        echo -1\n    else\n        echo $max\n\
+    \    fi", "    local -a ints=(${1})\n    local freq=\"\"\n    local biggest=\"\
+    \"\n    local output=\"\"\n    for value in ${ints[@]}; do\n        freq=${ints[@]/$value/}\n\
+    \        freq=$((${#ints[@]} - ${#freq[@]}))\n        if [ \"${freq}\" -ge \"\
+    ${value}\" ]; then\n            if [ \"${value}\" -gt \"${biggest}\" ]; then\n\
+    \                biggest=\"${value}\"\n            fi\n        fi\n    done\n\
+    \    if [ \"${biggest}\" == \"\" ]; then\n        output=\"-1\"\n    else\n  \
+    \      output=\"${biggest}\"\n    fi\n    echo \"${output}\"", "  local count=\"\
+    \"\n  local max=\"\"\n  local freq=\"\"\n  #\n  for i in $1; do\n    let count=0\n\
+    \    for j in $1; do\n      if [[ $i -eq $j ]]; then\n        let count=count+1\n\
+    \      fi\n    done\n    if [[ $count -ge $i ]]; then\n      max=$i\n    fi\n\
+    \  done\n  if [[ $max -gt 0 ]]; then\n    echo $max\n  else\n    echo \"-1\"\n\
+    \  fi", "  # generate array of integers from first argument\n  local ints=($1)\n\
+    \  # generate array of frequencies for each integer\n  local freqs=(`for i in\
+    \ ${ints[@]}; do echo ${ints[@]} | grep -o -E \"\\b$i\\b\" | wc -l; done`)\n \
+    \ # loop over frequencies\n  for ((i=0; i<${#freqs[@]}; i++)); do\n    # skip\
+    \ non-positive integers\n    [ ${ints[$i]} -le 0 ] && continue\n    # skip integers\
+    \ with frequencies less than their own value\n    [ ${freqs[$i]} -lt ${ints[$i]}\
+    \ ] && continue\n    # we have a match, so echo it and exit\n    echo ${ints[$i]}\n\
+    \    exit\n  done\n  # we have no matches, so echo -1\n  echo -1", "\t# sort the\
+    \ integers\n\techo $1 | tr \" \" \"\\n\" | sort -g | tr \"\\n\" \" \"\n\t# get\
+    \ the unique elements and count the frequency of each element\n\tfor i in $(echo\
+    \ $1 | tr \" \" \"\\n\" | sort -u); do\n\t\tif [ $(echo $1 | tr \" \" \"\\n\"\
+    \ | grep -c \"^$i$\") -ge $i ]; then\n\t\t\techo $i\n\t\t\tbreak\n\t\tfi\n\tdone",
+  '  # Write your code here', "    numbers=($1)\n    #echo \"Numbers: ${numbers[@]}\"\
+    \n\n    freq=()\n    for i in ${numbers[@]}; do\n        freq[$i]=$((freq[$i]+1))\n\
+    \    done\n    #echo \"Frequencies: ${freq[@]}\"\n\n    max=${freq[1]}\n    max_i=1\n\
+    \    for i in ${!freq[@]}; do\n        if [ $i -gt 0 ] && [ ${freq[$i]} -ge $i\
+    \ ] && [ ${freq[$i]} -gt $max ]; then\n            max=${freq[$i]}\n         \
+    \   max_i=$i\n        fi\n    done\n    #echo \"Max: $max\"\n    #echo \"Max index:\
+    \ $max_i\"\n\n    if [ $max_i -eq 1 ] && [ $max -eq 1 ]; then\n        echo \"\
+    -1\"\n    else\n        echo \"$max_i\"\n    fi", "   local -i max=-1\n   local\
+    \ -a unique\n   local -i i\n   local -i l1\n   local -i l2\n   local -i count\n\
+    \   local item\n   local -a array\n\n   IFS=\" \" read -a array <<< \"$1\"\n \
+    \  for item in \"${array[@]}\"; do\n      if [[ -n $item ]]; then\n         ((max<item))\
+    \ && max=$item\n      fi\n   done\n   [[ $max == -1 ]] && echo -1 && return\n\n\
+    \   for item in \"${array[@]}\"; do\n      if [[ -n $item ]]; then\n         [[\
+    \ -z ${unique[$item]} ]] && unique[$item]=$item\n      fi\n   done\n   ((l1=${#unique[@]}))\n\
+    \n   for ((i=0; i<$l1; i++)); do\n      item=${unique[$i]}\n      count=0\n  \
+    \    for ((j=0; j<$l1; j++)); do\n         [[ ${unique[$j]} == $item ]] && ((count++))\n\
+    \      done\n      if ((count>=item)); then\n         echo $item\n         return\n\
+    \      fi\n   done\n   echo -1", "    local args=$(echo $1 | tr ' ' '\\n' | sort\
+    \ -n)\n    for x in $(echo $args | tr ' ' '\\n' | uniq); do\n        local x_count=$(echo\
+    \ $args | tr ' ' '\\n' | grep -c $x)\n        if [[ \"$x\" -eq \"$x_count\" ]];\
+    \ then\n            echo $x\n            return\n        fi\n    done\n    echo\
+    \ -1", "   declare -a arr=($1)\n   for i in \"${arr[@]}\"; do\n      a=($(echo\
+    \ \"${arr[@]}\" | tr ' ' '\\n' | grep -x \"$i\" | tr '\\n' ' '))\n      if [[\
+    \ \"${#a[@]}\" -ge \"$i\" ]]; then\n         echo \"$i\"\n         return\n  \
+    \    fi\n   done\n   echo \"-1\"", "  values=$(echo $1 | tr ' ' '\\n' | sort -n)\n\
+    \  max=0\n  freq=0\n  result=-1\n  for v in $values; do\n    if [ $v -gt $max\
+    \ ]; then\n      max=$v\n      freq=1\n    elif [ $v -eq $max ]; then\n      freq=$((freq+1))\n\
+    \    fi\n    if [ $v -eq $freq ]; then\n      result=$v\n    fi\n  done\n  echo\
+    \ $result", "    _uniq_list=()\n    _freq_list=()\n    _max_cnt=0\n    _max_val=0\n\
+    \    _max_freq=0\n    # Make a sorted list of uniqe values\n    for _val in $1\n\
+    \    do\n        if [[ ! \"${_uniq_list[@]}\" =~ \"${_val}\" ]]\n        then\n\
+    \            _uniq_list+=(${_val})\n        fi\n    done\n    for _val in ${_uniq_list[@]}\n\
+    \    do\n        let _cnt=0\n        for _val_tst in $1\n        do\n        \
+    \    if [[ ${_val} -eq ${_val_tst} ]]\n            then\n                let _cnt+=1\n\
+    \            fi\n        done\n        if [[ ${_cnt} -gt ${_max_cnt} ]]\n    \
+    \    then\n            _max_cnt=${_cnt}\n            _max_val=${_val}\n      \
+    \  fi\n        _freq_list+=(${_cnt})\n    done\n    for _freq in ${_freq_list[@]}\n\
+    \    do\n        if [[ ${_freq} -ge ${_max_val} ]]\n        then\n           \
+    \ if [[ ${_freq} -gt ${_max_freq} ]]\n            then\n                _max_freq=${_freq}\n\
+    \            fi\n        fi\n    done\n    if [[ ${_max_freq} -gt 0 ]]\n    then\n\
+    \        echo ${_max_freq}\n    else\n        echo \"-1\"\n    fi", "\t(( $# ==\
+    \ 0 )) && {\n\t\techo -1\n\t\treturn\n\t}\n\tl=\"$*\"\n\tfor n in $l; do\n\t\t\
+    c=$(echo \"$l\" | tr ' ' '\\n' | grep -c \"$n\")\n\t\tif (( c == n )); then\n\t\
+    \t\techo \"$n\"\n\t\t\treturn\n\t\tfi\n\tdone\n\techo -1", "\t# the frequency\
+    \ of the greatest integers\n\tmax=$(echo \"$1\" | tr ' ' '\\n' | sort -nr | uniq\
+    \ -c | sort -nr | head -n 1 | awk '{print $1}')\n\t\n\tif [[ -z \"$max\" ]]; then\n\
+    \t\techo -1\n\telse\n\t\t# the greatest integer such that its frequency is >=\
+    \ its value\n\t\techo \"$1\" | tr ' ' '\\n' | sort -nr | uniq -c | sort -nr |\
+    \ grep \"^[[:space:]]*$max \" | head -n 1 | awk '{print $2}'\n\tfi", "  gxargs\
+    \ bash -c \\\n    'if [[ ! $1 =~ ^[0-9]+$ ]]; then exit 1; fi\n     shift;\n \
+    \    echo $( echo $@ | tr \" \" \"\\n\" | sort -n | uniq -c | sort -rn | awk -v\
+    \ v=$1 \"{ if (\\$1 >= v && \\$2 > 0) { print \\$2 } }\" | head -n 1);' \\\n \
+    \   -- $@", '  # your code here', "    max=0\n    for i in $(echo $1 | tr ' '\
+    \ '\\n' | sort -n); do\n        count=$(echo $1 | tr ' ' '\\n' | grep $i | wc\
+    \ -l)\n        if [ $i -eq $count ] && [ $i -gt $max ]; then\n            max=$i\n\
+    \        fi\n    done\n    [ $max -gt 0 ] && echo $max || echo \"-1\"", "\t# Create\
+    \ an array with the input values\n\tlocal INPUT_ARRAY=($1)\n\t# Create an array\
+    \ with the unique values\n\tlocal UNIQUE_ARRAY=($(echo \"${INPUT_ARRAY[@]}\" |\
+    \ tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n\t# Holds the last index of the input\
+    \ array\n\tlocal INPUT_ARRAY_LENGTH=${#INPUT_ARRAY[@]}\n\t# Holds the last index\
+    \ of the unique array\n\tlocal UNIQUE_ARRAY_LENGTH=${#UNIQUE_ARRAY[@]}\n\t# Flag\
+    \ to check if no such a value exist\n\tlocal NO_ELEMENT=1\n\t# Variable to hold\
+    \ the result value\n\tlocal OUTPUT=''\n\t# Iterate through the unique array\n\t\
+    for (( i=0; i<$UNIQUE_ARRAY_LENGTH; i++ )); do\n\t\t# Variable to count the frequency\
+    \ of the current integer\n\t\tlocal FREQUENCY=0\n\t\t# Iterate through the input\
+    \ array\n\t\tfor (( j=0; j<$INPUT_ARRAY_LENGTH; j++ )); do\n\t\t\t# Check if the\
+    \ current element of the input array is equal to the current integer\n\t\t\tif\
+    \ [ ${INPUT_ARRAY[$j]} -eq ${UNIQUE_ARRAY[$i]} ]; then\n\t\t\t\t# Increment the\
+    \ frequency count\n\t\t\t\tFREQUENCY=$(( $FREQUENCY + 1 ))\n\t\t\tfi\n\t\tdone\n\
+    \t\t# Check if the current integer has a frequency equal to the integer itself\n\
+    \t\tif [ $FREQUENCY -eq ${UNIQUE_ARRAY[$i]} ]; then\n\t\t\t# Set the output\n\t\
+    \t\tOUTPUT=${UNIQUE_ARRAY[$i]}\n\t\t\t# Set the flag\n\t\t\tNO_ELEMENT=0\n\t\t\
+    \t# Break the current loop\n\t\t\tbreak\n\t\tfi\n\tdone\n\t# Check if no such\
+    \ a value exist\n\tif [ $NO_ELEMENT -eq 1 ]; then\n\t\t# Set the output\n\t\t\
+    OUTP", "  frequencies=($(echo $1 | xargs -n1 | sort | uniq -c | sort -r | cut\
+    \ -d' ' -f1))\n  values=($(echo $1 | xargs -n1 | sort | uniq -c | sort -r | cut\
+    \ -d' ' -f2))\n  for i in ${!frequencies[@]}; do\n    if [ ${frequencies[$i]}\
+    \ -ge ${values[$i]} ]; then\n      echo ${values[$i]}\n      return\n    fi\n\
+    \  done\n  echo \"-1\"", "  # Iterate over each element and count how many times\
+    \ it appears in the list.\n  for e in $1; do\n    count=$(echo $1 | tr ' ' '\\\
+    n' | grep \"^$e$\" | wc -l)\n    # If the count is equal to or greater than the\
+    \ value, print the value.\n    if [ $count -ge $e ]; then\n      echo $e\n   \
+    \   break\n    fi\n  done\n  # If we didn't find anything, return -1.\n  echo\
+    \ \"-1\"", "    echo \"$1\" \\\n    | tr \" \" \"\\n\" \\\n    | sort -n \\\n\
+    \    | uniq -c \\\n    | sort -k1nr -k2nr \\\n    | awk '{ if ($1>=$2) print $2;\
+    \ else print -1 }' \\\n    | head -n 1", "  grep -v -F -x -f <(echo \"$1\" | sort\
+    \ -nr) <(echo \"$1\" | sort | uniq -c | awk '{if ($1 >= $2) print $2}') | sort\
+    \ -nr | head -n 1", "\t# convert the space-separated list of integers into the\n\
+    \t# integer frequency hash-table \n\tdeclare -A arr\n\tfor i in $1; do\n\t\tlet\
+    \ arr[$i]++\n\tdone\n\t# loop through the hash-table of integer frequency\n\t\
+    for key in ${!arr[@]}; do\n\t\t# if the frequency is greater than or equal to\
+    \ the\n\t\t# value of the integer itself and the integer is\n\t\t# greater than\
+    \ zero, return the integer\n\t\tif [ ${arr[$key]} -ge $key ] && [ $key -gt 0 ];\
+    \ then\n\t\t\techo $key\n\t\t\treturn\n\t\tfi\n\tdone\n\t# return -1\n\techo -1",
+  "  # Iterate through the given integers\n  while read -r int; do\n    # Convert\
+    \ $int to uppercase\n    int=${int^^}\n    # Compare the count of occurences of\
+    \ $int to its value\n    if [[ $(tr -cd \"$int\" <<< \"$1\" | wc -c) -ge $int\
+    \ ]]; then\n      # Return the value of $int\n      printf \"$int\"\n      return\n\
+    \    fi\n  done <<< \"$1\"\n  # Return -1 if no such integer exists\n  printf\
+    \ \"-1\"", "    unset counts\n    declare -A counts\n    freq=0\n    for n in\
+    \ $1\n    do\n        counts[$n]=$((counts[$n]+1))\n        if [ ${counts[$n]}\
+    \ -ge $n ] && [ $n -gt $freq ]\n        then\n            freq=$n\n        fi\n\
+    \    done\n    if [ $freq -eq 0 ]\n    then\n        echo -1\n    else\n     \
+    \   echo $freq\n    fi", "    result=-1\n    for i in $1; do\n        count=$(grep\
+    \ -o $i <<< $1 | wc -l)\n        if [[ $i -eq $count ]]; then\n            result=$i\n\
+    \        fi\n    done\n    echo $result", "    local temp max_freq\n    temp=$(awk\
+    \ '{for(i=1;i<=NF;i++) c[$i]++}END{for(j in c) print c[j],j}' <(echo $1))\n  \
+    \  max_freq=$(echo \"$temp\" | awk '$1>=$2' | sort -n | tail -n 1 | awk '{print\
+    \ $1}')\n    echo \"$temp\" | awk -v x=$max_freq '$1==x' | sort -n | tail -n 1\
+    \ | awk '{print $2}'", "  local list=(${1})\n  local a\n  # Array to store the\
+    \ frequencies\n  local freq=()\n  # Iterate through the list\n  for a in ${list[@]};\
+    \ do\n    if [[ ${freq[$a]} ]]; then\n      # Increment the frequency in the array\n\
+    \      freq[$a]=$(( ${freq[$a]} + 1 ))\n    else\n      # Initialize the frequency\n\
+    \      freq[$a]=1\n    fi\n  done\n  # Initialize return value\n  local ret=-1\n\
+    \  # Itarate through the list again\n  for a in ${list[@]}; do\n    # Check if\
+    \ the value is greater than zero and greater than or equal to the frequency\n\
+    \    if [[ $a -gt 0 && $a -le ${freq[$a]} ]]; then\n      if [[ $a -gt $ret ]];\
+    \ then\n        # Update the return value\n        ret=$a\n      fi\n    fi\n\
+    \  done\n  echo $ret", "    count=()\n    result=-1\n    for n in $1; do\n   \
+    \     count[$n]=$(( ${count[$n]} + 1 ))\n        if [ \"${count[$n]}\" -ge \"\
+    $n\" ] && [ \"$n\" -gt \"$result\" ]; then\n            result=$n\n        fi\n\
+    \    done\n    echo $result", "\tlocal input=( $1 )\n\tfor (( i=0; i<${#input[@]};\
+    \ i++ )); do\n\t\tlocal num=${input[$i]}\n\t\tlocal frequency=0\n\t\tfor (( j=0;\
+    \ j<${#input[@]}; j++ )); do\n\t\t\tif [[ ${input[$j]} -eq $num ]]; then\n\t\t\
+    \t\t(( frequency++ ))\n\t\t\tfi\n\t\tdone\n\t\tif [[ $frequency -ge $num ]]; then\n\
+    \t\t\techo $num\n\t\t\treturn\n\t\tfi\n\tdone\n\techo -1", "    declare -A array\n\
+    \    local out=\"\"\n    local i=\"\"\n    local key=\"\"\n    local value=\"\"\
+    \n    local max=\"\"\n    local max_key=\"\"\n    max=0\n    max_key=\"-1\"\n\
+    \    for i in $1; do\n        if [ \"${array[$i]}\" = \"\" ]; then\n         \
+    \   array[$i]=1\n        else\n            array[$i]=$(( ${array[$i]} + 1 ))\n\
+    \        fi\n    done\n    for key in \"${!array[@]}\"; do\n        value=${array[$key]}\n\
+    \        if [ \"$value\" -eq \"$key\" ]; then\n            if [ \"$key\" -gt \"\
+    $max\" ]; then\n                max=$key\n                max_key=$key\n     \
+    \       fi\n        fi\n    done\n    echo \"$max_key\"", "\tlocal -i result=-1\
+    \ \n\tlocal i cnt\n\tfor i in $1; do\n\t\tcnt=`echo $1 | grep -o $i | wc -l`\n\
+    \t\tif (( $i >= $cnt )) && (( $result < $i )); then\n\t\t\tresult=$i\n\t\tfi\n\
+    \tdone\n\techo $result", "    declare -A array\n    # count frequencies\n    for\
+    \ i in $1; do\n        ((array[$i]++))\n    done\n    # sort array ascending\n\
+    \    sorted=($(for i in \"${!array[@]}\"; do\n        echo \"$i:${array[$i]}\"\
+    \n    done | sort -n))\n    # echo length of sorted array\n    echo ${#sorted[@]}\n\
+    \    # print key:value pairs\n    for i in \"${sorted[@]}\"; do\n        echo\
+    \ $i\n    done\n    # get largest key:value pair with value greater than or equal\
+    \ to key\n    for i in \"${sorted[@]}\"; do\n        key=$(echo $i | cut -d: -f1)\n\
+    \        value=$(echo $i | cut -d: -f2)\n        # if value is greater than or\
+    \ equal to key, print key and break\n        if [[ $value -ge $key ]]; then\n\
+    \            echo $key\n            break\n        fi\n    done", "  local numbers=(\
+    \ $1 )\n  local i\n\n  for (( i=${#numbers[@]}-1; i>=0; i-- )); do\n    local\
+    \ frequency=$(count ${numbers[i]} \"${numbers[@]}\")\n    if (( ${numbers[i]}\
+    \ == frequency )); then\n      echo ${numbers[i]}\n      return\n    fi\n  done\n\
+    \n  echo -1", "  echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -nr | head\
+    \ -n 1 | sed 's/^ *[0-9]* //' | tr '\\n' ' ' | awk '{print $1 >= $2 ? $1 : -1}'",
+  "    local sorted arr\n    sorted=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tr '\\\
+    n' ' ')\n    for i in ${sorted[@]}; do\n        arr[i]=$(echo \"$sorted\" | grep\
+    \ -o \"$i\" | wc -l)\n    done\n    for i in ${!arr[@]}; do\n        if [[ $i\
+    \ -eq ${arr[$i]} ]]; then\n            echo \"$i\"\n            return\n     \
+    \   fi\n    done\n    echo \"-1\"", "  local -r list=$1\n  local -r max=$(echo\
+    \ \"$list\" | sort -nr | head -n 1)\n  local -i i\n  local -i maxCount=0\n  local\
+    \ candidate\n  # Find the most frequent integer.\n  for i in $(seq 1 $max); do\n\
+    \    local -i count=$(echo \"$list\" | grep -o -E \"^$i\\$\" | wc -l)\n    if\
+    \ [ $count -gt $maxCount ]; then\n      maxCount=$count\n      candidate=$i\n\
+    \    fi\n  done\n  # Check that it satisfies the required frequency.\n  if [ $maxCount\
+    \ -lt $candidate ]; then\n    echo -1\n  else\n    echo $candidate\n  fi", " \
+    \   local -a nums=( $1 )\n    local num\n    local freq\n    local value=-1\n\
+    \    for num in \"${nums[@]}\"; do\n        freq=$(printf \"%s\\n\" \"${nums[@]}\"\
+    \ | grep -cw \"$num\")\n        if [[ \"$freq\" -ge \"$num\" ]] && [[ \"$num\"\
+    \ -gt \"$value\" ]]; then\n            value=\"$num\"\n        fi\n    done\n\
+    \    echo \"$value\"", "  local max=1\n  local numbers=($1)\n  local frequency=($(for\
+    \ n in \"${numbers[@]}\"; do echo \"${numbers[@]}\" | grep -o \"$n\" | wc -l;\
+    \ done))\n  for (( i=0; i<${#numbers[@]}; i++ )); do\n    if [[ \"${frequency[$i]}\"\
+    \ -ge \"${numbers[$i]}\" ]] && [[ \"${numbers[$i]}\" -gt \"$max\" ]]; then\n \
+    \     max=\"${numbers[$i]}\"\n    fi\n  done\n  if [[ \"$max\" == \"1\" ]]; then\n\
+    \    echo \"-1\"\n  else\n    echo \"$max\"\n  fi", "    local numbers\n    IFS=\"\
+    \ \" read -r -a numbers <<< \"$1\"\n    sort -nr <<< \"${numbers[*]}\" | uniq\
+    \ -c | awk '{if ($1>=$2) print $2}' | head -n 1", "\tlocal list=($1)\n\tlocal\
+    \ max=\"-1\"\n\tlocal max_freq=\"-1\"\n\tfor((i=0;i<${#list[@]};i++)); do\n\t\t\
+    local freq=$(get_frequency \"${list[i]}\" \"${list[@]}\")\n\t\t[[ \"$freq\" -eq\
+    \ \"${list[i]}\" ]] && local greater=\"true\" || local greater=\"false\"\n\t\t\
+    [[ \"${list[i]}\" -gt \"0\" ]] && local positive=\"true\" || local positive=\"\
+    false\"\n\t\tif $greater && $positive && [[ \"$freq\" -gt \"$max_freq\" ]]; then\n\
+    \t\t\tmax=\"${list[i]}\"\n\t\t\tmax_freq=\"$freq\"\n\t\tfi\n\tdone\n\techo \"\
+    $max\"", "  list=$1\n  # sort by frequency descending, then by value descending\n\
+    \  sorted=$(echo \"$list\" | tr ' ' '\\n' | sort | uniq -c | sort -rn | awk '{print\
+    \ $2}')\n  # iterate over the sorted list and return the first value that passes\
+    \ the test\n  while read value; do\n    count=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | grep -c $value)\n    if [ $value -le $count ]; then\n      echo $value\n \
+    \     return\n    fi\n  done <<< \"$sorted\"\n  echo -1", "    local -A result_map\n\
+    \    local -a nums=($1)\n    local num num_count\n    for num in ${nums[@]}; do\n\
+    \        let result_map[$num]++\n    done\n    for num in ${nums[@]}; do\n   \
+    \     num_count=${result_map[$num]}\n        if [ $num -le $num_count ]; then\n\
+    \            echo $num\n            return\n        fi\n    done\n    echo -1",
+  "    input=\"$1\"\n    freq_data=$(echo \"$input\" | sort | uniq -c)\n    freq_list=$(echo\
+    \ \"$freq_data\" | awk '{print $1}')\n    output=$(echo \"$freq_list\" | sort\
+    \ -r | uniq -c | awk '{print $2, $1}' | sort -r | grep -w -v \"1\" | awk '{print\
+    \ $2}' | head -n 1)\n    if [ -z \"$output\" ]; then\n        echo \"-1\"\n  \
+    \  else\n        echo \"$output\"\n    fi", "    #\n    # NOTE: You should not\
+    \ have to modify anything above this line.\n    #\n    # Your solution here:\n\
+    \    echo \"$1\" | tr \" \" \"\\n\" | sort -n | uniq -c | sed 's/^ *//g' | awk\
+    \ '{print $1, $2}' | sort -k2n | sort -k1rn | awk '{print $2}' | head -n 1", " \
+    \   local list=($1)\n    local to_find=()\n    local max=0\n    for i in ${list[@]};\
+    \ do\n        if [ \"$i\" -gt 0 ]; then\n            to_find+=($i)\n         \
+    \   if [ \"$i\" -gt \"$max\" ]; then\n                max=$i\n            fi\n\
+    \        fi\n    done\n    local counter=0\n    local value=-1\n    for i in ${to_find[@]};\
+    \ do\n        let counter=0\n        for j in ${list[@]}; do\n            if [\
+    \ \"$i\" -eq \"$j\" ]; then\n                let counter++\n            fi\n \
+    \       done\n        if [ \"$counter\" -ge \"$i\" ] && [ \"$i\" -eq \"$max\"\
+    \ ]; then\n            value=$i\n        fi\n    done\n    echo \"$value\"", "\t\
+    # Change the stdin from the keyboard to the file descriptor 3.\n\texec 3<&0\n\t\
+    # Change the stdin to the $1 and read line by line.\n\texec 0< <(\n\t\twhile read\
+    \ item; do\n\t\t\t# Print the current item in the list and the number of times\
+    \ it appears.\n\t\t\techo \"$item $item\"\n\t\tdone\n\t)\n\t# Sort the list alphabetically.\n\
+    \tsort\n\t# Split the list into a space-separated string.\n\ttr ' ' '\\n'\n\t\
+    # Save the output of the previous command as the variable \"sorted\".\n\tread\
+    \ -a sorted\n\t# Read the sorted list and count the frequency of each element.\n\
+    \tfor (( i=0; i<${#sorted[@]}; i++ )); do\n\t\t# Set the variable \"c\" to the\
+    \ current index of the sorted list.\n\t\tc=${sorted[$i]}\n\t\t# Set the variable\
+    \ \"cnt\" to 0.\n\t\tcnt=0\n\t\t# Set the variable \"chk\" to true.\n\t\tchk=true\n\
+    \t\t# Read the sorted list from the current index to the end.\n\t\tfor (( j=$i;\
+    \ j<${#sorted[@]}; j++ )); do\n\t\t\t# If the value of the index is equal to the\
+    \ current element of the sorted list,\n\t\t\t# increment the value of \"cnt\"\
+    \ by 1.\n\t\t\tif [ ${sorted[$j]} -eq $c ]; then\n\t\t\t\t((cnt++))\n\t\t\tfi\n\
+    \t\t\t# If the value of the current element is not equal to the value of the current\n\
+    \t\t\t# element of the sorted list, and the value of \"chk\" is true, set the\
+    \ \"chk\"\n\t\t\t# variable to false, and set the current index of the list to\
+    \ the value of \"j\".\n\t\t\tif [ ${sorted[$j]} -ne $c ] && [ $chk == true ];\
+    \ then\n\t\t\t\tchk=false\n\t\t\t\ti=$j\n\t\t\tfi\n\t\tdone\n\t\t# If the value\
+    \ of \"cnt\" is greater than", "    list=$1\n    max=0\n    for i in $list; do\n\
+    \        count=$(echo $list | tr ' ' '\\n' | grep $i | wc -l)\n        if [ $count\
+    \ -eq $i ]; then\n            if [ $i -gt $max ]; then\n                max=$i\n\
+    \            fi\n        fi\n    done\n    if [ $max -eq 0 ]; then\n        echo\
+    \ \"-1\"\n    else\n        echo $max\n    fi", "    [ $# -lt 1 ] && { echo \"\
+    Usage: search <list-of-integers>\"; return; }\n    for (( i=1; i<=$#; i++ ));\
+    \ do\n\tif [[ $(( $i - ${1:$i-1:1} )) -eq 0 ]]; then\n\t    printf \"%s\\n\" ${1:$i-1:1}\n\
+    \t    return\n\tfi\n    done\n    printf \"%s\\n\" -1", "  local input_array=($(echo\
+    \ $1 | tr ' ' '\\n' | sort -n)) #split string $1, sort the items and save in array\n\
+    \  local max_number=${input_array[-1]} #get the max number of the array\n  local\
+    \ frequency_of_number=0\n  local current_number=0\n  local freq_array=($(echo\
+    \ $1 | tr ' ' '\\n' | sort -n | uniq -c | awk '{print $1}')) # create frequency\
+    \ array\n \n  for (( i=0; i < max_number; i++ )); do # iterate through numbers\
+    \ from 0 to max_number\n    current_number=$(($i+1)) # start at number 1\n   \
+    \ frequency_of_number=${freq_array[$i]} # pull the frequency of the current number\
+    \ from the freq_array\n    \n    if [ $current_number -le $frequency_of_number\
+    \ ]; then # compare current number against its frequency\n      echo $current_number\
+    \ # echo the current number if the number is lower than its frequency\n      return\
+    \ 0\n    fi\n  done\n  echo -1 # if none of the numbers satisfied the if statement,\
+    \ there is no integer for which the \n          # frequency is greater than or\
+    \ equal to its value, so print -1", "    local max_occurrence=0\n    local max_frequency=0\n\
+    \    for x in $1; do\n        occurrence=$(echo $1 | tr \" \" \"\\n\" | grep -c\
+    \ $x)\n        if [ $occurrence -ge $x ]; then\n            if [ $occurrence -gt\
+    \ $max_occurrence ]; then\n                max_occurrence=$occurrence\n      \
+    \          max_frequency=$x\n            fi\n        fi\n    done\n    if [ $max_occurrence\
+    \ -eq 0 ]; then\n        echo \"-1\"\n    else\n        echo $max_frequency\n\
+    \    fi", "    #Write your code here\n    greatest=0\n    for i in $1\n    do\n\
+    \    \tif [[ $i -gt $greatest ]]\n    \tthen\n    \t\tgreatest=$i\n    \tfi\n\
+    \    done\n    freq=-1\n    for i in $1\n    do\n    \tif [[ $i -eq $greatest\
+    \ ]]\n    \tthen\n    \t\tfreq=$((freq+1))\n    \tfi\n    done\n    if [[ $freq\
+    \ -ge $greatest ]]\n    then\n    \techo $greatest\n    else\n    \techo -1\n\
+    \    fi", "    # Generate a frequency table using 'uniq -c' and sort the output.\n\
+    \    # This way, the largest frequency is the first line of the output\n    #\
+    \ and the smallest is the last.\n    freq=$(printf \"$1\" | tr ' ' '\\n' | sort\
+    \ | uniq -c | sort -rn)\n    # Loop through each line of the frequency table.\n\
+    \    # The line starts with the frequency, followed by a space and the\n    #\
+    \ value.\n    while read -r freq value; do\n        # If the frequency is less\
+    \ than the value, no value exists\n        # in the list that has a frequency\
+    \ greater than or equal to\n        # the value of the integer itself.\n     \
+    \   if [ \"$freq\" -lt \"$value\" ]; then\n            echo \"-1\"\n         \
+    \   return\n        fi\n        # If the frequency is equal to the value, the\
+    \ value is the\n        # solution we are looking for.\n        if [ \"$freq\"\
+    \ -eq \"$value\" ]; then\n            echo \"$value\"\n            return\n  \
+    \      fi\n    done <<< \"$freq\"", "  # Your solution here\n  INPUT=($1)\n  HASH=()\n\
+    \  INPUT_REVERSE=($(echo \"${INPUT[@]}\" | awk '{for (i=NF; i>0; i--) print $i}'))\n\
+    \  for num in ${INPUT[@]}; do\n    if [[ ${HASH[$num]} = '' ]]; then\n      HASH[$num]=1\n\
+    \    else\n      ((HASH[$num]++))\n    fi\n  done\n  for num in ${INPUT_REVERSE[@]};\
+    \ do\n    if [[ ${HASH[$num]} -ge $num ]]; then\n      echo $num\n      return\n\
+    \    fi\n  done\n  echo -1", "    array=($1)\n    length=${#array[@]}\n    max=0\n\
+    \    # find max value\n    for i in \"${array[@]}\"\n    do\n        if [ $i -gt\
+    \ $max ]\n        then\n            max=$i\n        fi\n    done\n    # iterate\
+    \ through ints to find if any value's frequency is greater than itself\n    for\
+    \ i in `seq 1 $max`\n    do\n        count=0\n        for j in \"${array[@]}\"\
+    \n        do\n            if [ $i -eq $j ]\n            then\n               \
+    \ count=$((count+1))\n            fi\n        done\n        if [ $count -ge $i\
+    \ ]\n        then\n            echo $i\n            return\n        fi\n    done\n\
+    \    echo \"-1\"", "  declare -a freq\n  local -i i max\n  local -r elem=(${1//[^0-9\
+    \ ]/})\n  # calculate occurences\n  for i in \"${elem[@]}\"; do\n    let freq[i]++\n\
+    \  done\n  # get the maximum and search for the first number with the same frequency\n\
+    \  max=${freq[@]}\n  for i in \"${elem[@]}\"; do\n    if (( freq[i] == max &&\
+    \ i <= max )); then\n      echo \"$i\"\n      return\n    fi\n  done\n  echo \"\
+    -1\"", "    [ -z \"$1\" ] && { echo -1; return; }\n\n    local res freq=0\n  \
+    \  IFS=' '; read -r -a arr <<< \"$1\"\n    for i in \"${arr[@]}\"; do\n      \
+    \  freq=$(grep -c \"$i\" <<< \"$1\")\n        if [ \"$i\" -le \"$freq\" ] && [\
+    \ \"$i\" -gt \"$res\" ]; then\n            res=$i\n        fi\n    done\n    echo\
+    \ \"${res:--1}\"", "    echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | grep -Eo\
+    \ \"^ *[0-9]+ (.*)$\" | grep -o \"[0-9]*\" | sort -rn | uniq -c | grep -Eo \"\
+    ^ *[0-9]+ (.*)$\" | grep -o \"[0-9]*\" | sort -rn | uniq -c | grep -Eo \"^ *[0-9]+\
+    \ (.*)$\" | grep -o \"[0-9]*\" | grep -v \"^$\" | tr '\\n' ' ' | tr -s ' ' | grep\
+    \ -Eo \"[0-9]+\" | sort -rn | head -n 1", "\tlocal -a nums\n\tlocal -a counts\n\
+    \tlocal i\n\tlocal idx\n\tlocal max_count=0\n\tlocal max_idx=0\n\tlocal -A already_seen\n\
+    \t# generate an array of numbers\n\tfor i in $1\n\tdo\n\t\tnums+=(\"$i\")\n\t\
+    done\n\t# get the count of each integer\n\tfor i in \"${nums[@]}\"\n\tdo\n\t\t\
+    # check to see if we've already seen the number\n\t\t# if we have, increment the\
+    \ count, otherwise \n\t\t# add it to the counts array, \n\t\t# and set the count\
+    \ to 1\n\t\tif [ -v already_seen[\"$i\"] ]\n\t\tthen\n\t\t\t# get the index for\
+    \ the number\n\t\t\tidx=${already_seen[\"$i\"]}\n\t\t\t# increment the count for\
+    \ the index\n\t\t\tcounts[$idx]=$(( ${counts[$idx]} + 1 ))\n\t\telse\n\t\t\t#\
+    \ add the number to the counts array\n\t\t\tcounts+=(\"$i\")\n\t\t\t# set the\
+    \ count for the number to 1\n\t\t\tcounts+=(\"1\")\n\t\t\t# store the index of\
+    \ the number in the counts array\n\t\t\talready_seen[\"$i\"]=$(( ${#counts[@]}\
+    \ - 2 ))\n\t\tfi\n\tdone\n\t# go through the counts array and find the value\n\
+    \t# with the greatest frequency that is greater than\n\t# or equal to the value\
+    \ of the integer itself\n\tfor (( i=0; i<${#counts[@]}; i++ ))\n\tdo\n\t\t# check\
+    \ if we have a new maximum count, \n\t\t# if so, store the index\n\t\tif [ ${counts[$((\
+    \ i+1 ))]} -gt $max_count ]\n\t\tthen\n\t\t\tmax_count=${counts[$(( i+1 ))]}\n\
+    \t\t\tmax_idx=$i\n\t\t# check if we have the same maximum count,\n\t\t# if so,\
+    \ check if the value is greater than\n\t\t# or equal to the current value, if\
+    \ so,\n", "  local frequencies=($(printf \"%s\\n\" \"$1\" | sort | uniq -c | awk\
+    \ '{ print $1 }'))\n  local integers=($(printf \"%s\\n\" \"$1\" | sort | uniq\
+    \ | awk '{ print $1 }'))\n  local frequency threshold\n  local i=${#integers[@]}-1\n\
+    \n  while [ $i -ge 0 ]; do\n    frequency=${frequencies[$i]}\n    if [ $frequency\
+    \ -eq 0 ]; then\n      let i-=1\n      continue\n    fi\n    threshold=$((${integers[$i]}-1))\n\
+    \    if [ $frequency -ge $threshold ]; then\n      echo \"${integers[$i]}\"\n\
+    \      return\n    fi\n    let i-=1\n  done\n  echo \"-1\"", "  local -A count\n\
+    \  local entry\n  local max\n  local maxcount\n  maxcount=0\n  max=0\n  for entry\
+    \ in $1; do\n    if [[ ${count[$entry]} -eq 0 ]]; then\n      count[$entry]=1\n\
+    \    else\n      count[$entry]=$((count[$entry]+1))\n    fi\n    if [[ $((count[$entry]))\
+    \ -ge $entry ]]; then\n      if [[ $((count[$entry])) -gt $maxcount ]]; then\n\
+    \        maxcount=$((count[$entry]))\n        max=$entry\n      elif [[ $((count[$entry]))\
+    \ -eq $maxcount ]]; then\n        max=$entry\n      fi\n    fi\n  done\n  if [[\
+    \ $maxcount -eq 0 ]]; then\n    echo -1\n  else\n    echo $max\n  fi", "    declare\
+    \ -A ht  #declare an associative array\n    for i in $1; do ((ht[$i]++)); done\
+    \  #increment value of each key by 1 if value is present in the list\n    for\
+    \ ((i=1; i<${#ht[@]}; i++)); do\n        if [[ ${ht[$i]} -ge $i ]]; then  #if\
+    \ the value of a key is greater than or equal to the key\n            echo $i\
+    \  #echo the key\n            break\n        fi\n    done\n    [[ ${ht[$i]} -lt\
+    \ $i ]] && echo -1  #if value of key is less than the key, echo -1", "  max=$(echo\
+    \ \"$1\" | grep -Eo '[0-9]+' | sort -n | tail -n 1)\n  if [[ $(echo \"$1\" | grep\
+    \ -Eo \"[0-9]+\" | grep -c \"^$max$\") -lt $max ]]; then\n    echo -1\n  else\n\
+    \    echo $max\n  fi", "  # Enter your code here\n  # You can use while read -r;\
+    \ do ... ; done <<<\"$1\" to iterate over input lines\n  # $REPLY is the last\
+    \ read line\n  local RESULT=-1\n  while read -r; do\n    local COUNT=$(grep -c\
+    \ \"\\<$REPLY\\>\" <<<\"$1\")\n    if [ $COUNT -ge $REPLY ]; then\n      if [\
+    \ $REPLY -gt $RESULT ]; then\n        RESULT=$REPLY\n      fi\n    fi\n  done\
+    \ <<<\"$1\"\n  echo $RESULT", "    local numbers=($1)\n    for i in ${numbers[@]};\
+    \ do\n        counter=0\n        for j in ${numbers[@]}; do\n            if [\
+    \ $i -eq $j ]; then\n                counter=$((counter+1))\n            fi\n\
+    \        done\n        if [ $counter -ge $i ]; then\n            return $i\n \
+    \       fi\n    done\n    return -1", "    local -a array\n    local idx item\
+    \ val\n    array=($1)\n    for idx in \"${!array[@]}\"; do\n        item=${array[$idx]}\n\
+    \        [[ $item -eq 0 ]] && continue # ignore 0\n        val=${array[$idx]}\n\
+    \        [[ $val -eq 0 ]] && val=-1\n        [[ $item -gt ${#array[@]} ]] && continue\
+    \ # skip impossible values\n        [[ ${array[$idx]} -ge ${array[@]:0:${#array[@]}}\
+    \ =~ ${item} ]] && echo $item && break\n    done", "    # declare local variable\n\
+    \    local input=($1)\n    local freq\n    local result\n    local -i i\n\n  \
+    \  for i in \"${input[@]}\"; do\n        # save input element into freq variable\n\
+    \        freq=${i}\n        # increase value of freq variable by 1\n        let\
+    \ \"freq += 1\"\n        # check if element from input list is equal to number\
+    \ of occurrences of this element\n        if [[ \"${input[@]}\" =~ \"${i}.*${i}\"\
+    \ ]]; then\n            # if element is equal, check if it's higher than the result\n\
+    \            if [ \"${i}\" -gt \"${result}\" ]; then\n                # save new\
+    \ result\n                result=${i}\n            fi\n        fi\n    done\n\n\
+    \    # check if result is empty, if yes, print -1\n    if [ -z \"${result}\" ];\
+    \ then\n        echo \"-1\"\n    else\n        echo \"${result}\"\n    fi", " \
+    \   local -a freq=(0 0 0 0 0 0 0 0 0 0)  # holds freq of each number\n    local\
+    \ -a nums=(0 1 2 3 4 5 6 7 8 9)  # nums array for future display\n    local -i\
+    \ i=0\n    local -i temp=0\n\n    # loop through nums\n    for num in ${1}; do\n\
+    \        temp=${num}\n        ((freq[temp]++))\n    done\n\n    # loop through\
+    \ freq array\n    while ((i < ${#freq[@]})); do\n        if ((freq[i] >= i));\
+    \ then\n            # if we find a freq equal to a num, display it\n         \
+    \   echo \"${nums[i]}\"\n            return 0\n        fi\n        ((i++))\n \
+    \   done\n\n    # we didn't find a number that meets our criteria, so display\
+    \ -1\n    echo \"-1\"", '  # Your code here', "    # First, let's convert the\
+    \ string into an array of integers.\n    IFS=\" \" read -a array <<< \"$1\"\n\
+    \    result=\"-1\"\n\n    # Second, let's get the unique values in the array.\n\
+    \    unique=( $(printf \"%s\\n\" \"${array[@]}\" | sort -u) )\n\n    # Now, for\
+    \ each value in the array, let's get the count.\n    for i in \"${unique[@]}\"\
+    \n    do\n        count=$(for i in \"${array[@]}\"; do if [ \"$i\" == \"$i\" ];\
+    \ then echo \"\"; fi; done | wc -l)\n        if [ \"$count\" -ge \"$i\" ] && [\
+    \ \"$i\" -gt \"0\" ] && [ \"$i\" -gt \"$result\" ]; then\n            result=\"\
+    $i\"\n        fi\n    done\n\n    echo \"$result\"", "    # cut -d' ' -f1 | sort\
+    \ | uniq -c | sort -rn\n    local i=0\n    local counts=()\n    local nums=()\n\
+    \    local result=-1\n    for num in $1; do\n        if [ \"${nums[$num]}\" ==\
+    \ \"\" ]; then\n            nums[$num]=1\n        else\n            nums[$num]=$((nums[$num]+1))\n\
+    \        fi\n        if [ \"${nums[$num]}\" -ge \"$num\" ]; then\n           \
+    \ result=$num\n        fi\n    done\n    echo $result", "    # Find the largest\
+    \ integer in the list\n    max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n\
+    \ 1)\n    # For each integer in the list, count how many times it occurs\n   \
+    \ for i in $(seq 1 $max); do\n        count=$(echo \"$1\" | tr ' ' '\\n' | grep\
+    \ -c $i)\n        # If that integer's frequency is greater than or equal to the\
+    \ integer, return the integer\n        if [ $count -ge $i ]; then\n          \
+    \  echo $i\n            return\n        fi\n    done\n    # If no integer is found,\
+    \ return -1\n    echo -1", "    local -a freq\n    for num in $1; do\n       \
+    \ freq[$num]=$((++freq[$num]))\n    done\n    for ((i=${#freq[@]}-1; i>0; i--));\
+    \ do\n        if [[ ${freq[$i]} -ge $i ]]; then\n            echo $i\n       \
+    \     return\n        fi\n    done\n    echo -1", "    local max_freq=0\n    for\
+    \ x in $1\n    do\n        freq=$(printf \"$1\" | tr ' ' '\\n' | grep -c \"^$x$\"\
+    )\n        if [ $freq -ge $x ] && [ $freq -gt $max_freq ]\n        then\n    \
+    \        max_freq=$freq\n            res=$x\n        fi\n    done\n    if [ $max_freq\
+    \ -eq 0 ]\n    then\n        echo -1\n    else\n        echo $res\n    fi", " \
+    \   local list max_num max_num_freq i num freq\n    list=($1)\n    max_num=${list[0]}\n\
+    \    max_num_freq=0\n    for ((i=0; i<${#list[@]}; i++)); do\n        num=${list[$i]}\n\
+    \        if ((max_num < num)); then\n            max_num=$num\n        fi\n  \
+    \  done\n    for ((i=0; i<${#list[@]}; i++)); do\n        num=${list[$i]}\n  \
+    \      ((freq = 0))\n        for ((j=0; j<${#list[@]}; j++)); do\n           \
+    \ if ((num == ${list[$j]})); then\n                ((freq = freq + 1))\n     \
+    \       fi\n        done\n        if ((max_num_freq < freq)); then\n         \
+    \   max_num_freq=$freq\n        fi\n    done\n    if ((max_num > max_num_freq));\
+    \ then\n        echo -1\n    else\n        echo $max_num\n    fi", "    read -a\
+    \ array <<< $(echo $1 | tr ' ' '\\n' | sort -n)\n\n    index=0\n    value=0\n\
+    \    count=0\n    max=0\n    previous=0\n    min=${array[0]}\n\n    for number\
+    \ in ${array[@]}; do\n        if [ $number -eq $min ]; then\n            continue\n\
+    \        fi\n\n        if [ $number -ne $previous ]; then\n            if [ $count\
+    \ -ge $value ]; then\n                index=$value\n                max=$count\n\
+    \            fi\n\n            value=$number\n            count=1\n        else\n\
+    \            count=$(($count + 1))\n        fi\n\n        previous=$number\n \
+    \   done\n\n    if [ $count -ge $value ]; then\n        index=$value\n       \
+    \ max=$count\n    fi\n\n    if [ $max -ge $value ]; then\n        echo $index\n\
+    \    else\n        echo \"-1\"\n    fi", "   echo \"Input list: $1\"\n   for i\
+    \ in $1; do\n      echo \"checking $i\"\n      local count=$(echo $1 | tr ' '\
+    \ '\\n' | grep -c \"^$i$\")\n      echo \"count=$count\"\n      if [ $count -ge\
+    \ $i ]; then\n         echo \"Greatest value is $i\"\n         return 0\n    \
+    \  fi\n   done\n   echo \"No such a value\"\n   return 1", "  local elements=$(echo\
+    \ $1 | tr \" \" \"\\n\")\n  local element frequency\n\n  for element in $elements;\
+    \ do\n    frequency=$(echo $elements | tr \" \" \"\\n\" | grep -c $element)\n\
+    \    if [ $frequency -ge $element ]; then\n      echo $element\n      return\n\
+    \    fi\n  done\n\n  echo -1", "\tlocal target\n\tlocal freq\n\tlocal highest\n\
+    \n\tfor target in $1; do\n\t\t(( freq = 0 ))\n\t\tfor x in $1; do\n\t\t\t(( freq\
+    \ += ( x == target ) ))\n\t\tdone\n\t\tif (( freq >= target )); then\n\t\t\tif\
+    \ (( highest < target )); then\n\t\t\t\thighest=$target\n\t\t\tfi\n\t\tfi\n\t\
+    done\n\t\n\tif (( highest > 0 )); then\n\t\techo $highest\n\telse\n\t\techo -1\n\
+    \tfi", "    local result=0\n    echo \"$1\" | while read x; do\n        local\
+    \ frequency=$(echo \"$1\" | grep -c \"^$x\\$\")\n        if [ $x -gt $result ]\
+    \ && [ $x -le $frequency ]; then\n            result=$x\n        fi\n    done\n\
+    \    if [ $result -eq 0 ]; then\n        echo -1\n    else\n        echo $result\n\
+    \    fi", "  for n in $1; do\n    f=$(echo \"$1\" | grep -c \"$n\")\n    if [\
+    \ \"$f\" -ge \"$n\" ]; then\n      echo \"$n\"\n      return\n    fi\n  done\n\
+    \  echo \"-1\"", "  # declare an array variable\n  declare -a arr=($1)\n  # get\
+    \ length of an array\n  n=${#arr[@]}\n  i=0\n  j=0\n  # sort the list in reverse\
+    \ order\n  for ((i=0; i<n; i++)) do\n    for ((j=i+1; j<n; j++)) do\n      if\
+    \ [[ ${arr[j]} -gt ${arr[i]} ]]\n      then\n        # swap\n        temp=${arr[i]}\n\
+    \        arr[i]=${arr[j]}\n        arr[j]=$temp\n      fi\n    done\n  done\n\
+    \  # find the element which is greater than zero, and has a frequency greater\
+    \ than or equal to the value of the integer itself\n  for i in \"${arr[@]}\"\n\
+    \  do\n    echo $i\n    t=$(echo ${arr[@]} | tr \" \" \"\\n\" | grep -c $i)\n\
+    \    echo $t\n    if [[ $i -gt 0 ]] && [[ $t -ge $i ]]\n    then\n      break\n\
+    \    fi\n  done\n  if [[ $i -le 0 ]] || [[ $t -lt $i ]]\n  then\n    echo -1\n\
+    \  else\n    echo $i\n  fi", "  local numbers\n  IFS=\" \" numbers=( $1 )\n  unset\
+    \ IFS\n  declare -A a\n  for i in \"${numbers[@]}\"; do\n    (( a[i]++ ))\n  done\n\
+    \  for i in \"${numbers[@]}\"; do\n    if [[ ${a[i]} -ge $i ]]; then\n      echo\
+    \ $i\n      return\n    fi\n  done\n  echo \"-1\"", "    local a=$(echo $1 | tr\
+    \ \" \" \"\\n\" | sort -nr)\n    local x=$(echo $a | tr \" \" \"\\n\" | uniq -c\
+    \ | tr -s \" \")\n    for i in $x; do\n        local b=$(echo $i | cut -d \" \"\
+    \ -f 1)\n        local c=$(echo $i | cut -d \" \" -f 2)\n        if [ $b -ge $c\
+    \ ]; then\n            echo $c\n            return\n        fi\n    done\n   \
+    \ echo -1", "    # get a sorted array of all the numbers\n    declare -a numbers=($(echo\
+    \ \"$1\" | tr \" \" \"\\n\" | sort -n | uniq))\n    # get the maximum of all numbers\
+    \ \n    max=${numbers[-1]}\n    # if the maximum is zero, then return -1\n   \
+    \ if [[ $max -eq 0 ]]; then\n        echo -1\n        return\n    fi\n    # the\
+    \ numbers array contains the last value the most times\n    # assume the maximum\
+    \ occurs the most and is the answer\n    answer=$max\n    max_count=0\n    # loop\
+    \ through all the numbers, counting the occurrences of each number\n    for i\
+    \ in ${numbers[@]}; do\n        count=$(echo \"$1\" | tr \" \" \"\\n\" | grep\
+    \ -c \"$i\")\n        # if the number occurs more than the maximum, then update\
+    \ the maximum and the answer\n        if [[ $count -gt $max_count ]]; then\n \
+    \           answer=$i\n            max_count=$count\n        fi\n    done\n  \
+    \  # if the answer appears the same amount of times as the answer is, then it\
+    \ is the answer\n    if [[ $answer -eq $max_count ]]; then\n        echo $answer\n\
+    \    else\n        echo -1\n    fi", "\t# First, we split the string using space\
+    \ as the delimiter.\n\t# Then, we sort the array in reverse order.\n\t# Once we\
+    \ have the sorted array, we use the uniq command to get the counts of the element\
+    \ of each integer.\n\t# Finally, we loop through the array, and check the counts\
+    \ of each element against the element's value.\n\t# If the element's value is\
+    \ less than or equal to its count, we return the element as the greatest value.\n\
+    \tIFS=' ' read -ra arr <<< \"$1\"\n\tsorted_arr=($(printf '%s\\n' \"${arr[@]}\"\
+    \ | sort -r))\n\tcount_arr=($(printf '%s\\n' \"${sorted_arr[@]}\" | uniq -c))\n\
+    \tfor i in \"${count_arr[@]}\"; do\n\t\tcount=$(echo $i | cut -d' ' -f1)\n\t\t\
+    num=$(echo $i | cut -d' ' -f2)\n\t\tif [ $num -le $count ]; then\n\t\t\techo $num\n\
+    \t\t\tbreak\n\t\tfi\n\tdone", "    local res\n    for i in $1; do\n        freq=$(echo\
+    \ $1 | tr \" \" \"\\n\" | grep -c $i)\n        if [[ $freq -ge $i ]]; then\n \
+    \           res=$i\n        fi\n    done\n    if [[ -z $res ]]; then\n       \
+    \ echo \"-1\"\n    else\n        echo $res\n    fi", "  # get the frequencies\
+    \ of each integer\n  mapfile -t freqs < <(echo \"$1\" | tr \" \" \"\\n\" | sort\
+    \ | uniq -c | tr -s \" \" | cut -d\" \" -f2,3 | tr \" \" \"\\n\")\n  freqs=(\"\
+    ${freqs[@]}\" \"-1\")\n  # filter out the integers which have a frequency less\
+    \ than the value itself\n  mapfile -t filtered < <(for i in \"${freqs[@]}\"; do\
+    \ if [[ $i -ge $(echo $i | cut -d\" \" -f2) ]]; then echo $i; fi; done)\n  # if\
+    \ there are no numbers left, return -1\n  if [[ ${#filtered[@]} -eq 0 ]]; then\
+    \ echo -1; fi\n  # print out the greatest number\n  for i in \"${filtered[@]}\"\
+    ; do echo $i; done | sort -n | tail -n1 | cut -d\" \" -f1", "    occurences=$(echo\
+    \ \"$1\" | sed 's/[^ ]*//g')\n    for ((i=${#occurences}; i>0; i--)); do\n   \
+    \     result=\"$( echo \"$1\" | grep -E \"\\b$i\\b\" | wc -l)\"\n        if [[\
+    \ $result -ge $i ]]; then\n            echo $i\n            return\n        fi\n\
+    \    done\n    echo -1", "\t# group items by frequency. The format is\n\t# [frequency]\
+    \ [item]\n\tgroups=($(printf \"%s\\n\" $1 | sort | uniq -c | sort -rn))\n\t# iterate\
+    \ over the groups in reverse order\n\tfor i in ${!groups[@]}; do\n\t\tfreq=${groups[$i]}\n\
+    \t\tif [ $freq -ge $((i + 1)) ]; then\n\t\t\techo ${groups[$i+1]}\n\t\t\treturn\n\
+    \t\tfi\n\tdone\n\techo -1", "    # If the list is empty, return -1\n    if [ ${#1}\
+    \ -eq 0 ]; then\n        echo -1\n        return\n    fi\n\n    # Create an array\
+    \ of the input integers\n    local -a array\n    array=($(echo \"$1\" | tr ' '\
+    \ '\\n'))\n\n    # Loop through the array of integers\n    for num in \"${array[@]}\"\
+    ; do\n        # If the number is greater than zero\n        if [ \"$num\" -gt\
+    \ 0 ]; then\n            # Get the frequency of the number in the list\n     \
+    \       local freq=$(echo \"$1\" | tr ' ' '\\n' | grep -c \"$num\")\n        \
+    \    # If the frequency of the number is greater than or equal to the number itself\n\
+    \            if [ \"$freq\" -ge \"$num\" ]; then\n                # return the\
+    \ number\n                echo \"$num\"\n                return\n            fi\n\
+    \        fi\n    done\n\n    # If the for loop completes, no number in the list\
+    \ has a frequency greater than or equal to the value\n    # of the integer itself.\
+    \ Return -1.\n    echo -1", "  # Convert the list in argument to an array\n  list=($1)\n\
+    \  # Loop through the elements in the array\n  for i in \"${list[@]}\"; do\n \
+    \   # If the integer is strictly greater than zero and the frequency of the integer\n\
+    \    # is greater than or equal to the value of the integer itself, then return\
+    \ it.\n    if [[ \"$i\" -gt 0 ]] && [[ \"$(echo ${list[@]} | tr \" \" \"\\n\"\
+    \ | grep -c \"$i\")\" -ge \"$i\" ]]; then\n      echo \"$i\"\n      exit 0\n \
+    \   fi\n  done\n  # Otherwise, return -1\n  echo \"-1\"", "\tlocal data=$(echo\
+    \ \"$1\" | sed 's/ /\\n/g' | sort -n)\n\tlocal output=\"\"\n\tlocal i=0\n\tlocal\
+    \ frequency=0\n\tlocal last=\"\"\n\t\n\t# iterate through all numbers in the list\n\
+    \tfor number in $data; do\n\t\t# if it's a new number, check if its frequency\
+    \ is >= than the number\n\t\tif [ \"$number\" != \"$last\" ]; then\n\t\t\tif [\
+    \ $frequency -ge $number ]; then\n\t\t\t\toutput=$number\n\t\t\t\tbreak\n\t\t\t\
+    fi\n\t\t\tfrequency=0\n\t\tfi\n\t\t((frequency++))\n\t\tlast=$number\n\tdone\n\
+    \t\n\t# if no number was found, return -1\n\tif [ -z \"$output\" ]; then\n\t\t\
+    output=\"-1\"\n\tfi\n\t\n\techo \"$output\"", "  # get a list of integer frequencies\n\
+    \  set -f # disable globbing\n  IFS=' ' read -r -a NUMS <<< \"$1\"\n  unset IFS\n\
+    \  set +f # enable globbing\n  local FREQS=()\n  for NUM in \"${NUMS[@]}\"; do\n\
+    \    if [[ ${FREQS[$NUM]} ]]; then\n      (( FREQS[$NUM]++ ))\n    else\n    \
+    \  FREQS[$NUM]=1\n    fi\n  done\n  # calculate max frequency\n  local max_freq=0\n\
+    \  for freq in \"${FREQS[@]}\"; do\n    if [[ \"$freq\" -gt \"$max_freq\" ]];\
+    \ then\n      max_freq=\"$freq\"\n    fi\n  done\n  # find first number in FREQS\
+    \ whose value is equal to max_freq\n  for i in \"${!FREQS[@]}\"; do\n    if [[\
+    \ \"${FREQS[$i]}\" == \"$max_freq\" ]]; then\n      if [[ \"$i\" -gt 0 ]]; then\n\
+    \        echo \"$i\"\n        return\n      fi\n    fi\n  done\n  echo \"-1\"",
+  "    local -i d=-1 c freq lst=()\n    for i in $1; do\n        freq=$(grep -o $i\
+    \ <<< $1 | wc -l)\n        [[ $freq -ge $i ]] && lst+=($i)\n    done\n    echo\
+    \ ${lst[@]} | tr \" \" \"\\n\" | sort -rn | head -n1", "    # loop through space-separated\
+    \ list of integers\n    for i in $1; do\n        # count the number of times the\
+    \ integer appears in the list and\n        # store result in the count variable\n\
+    \        count=$(echo $1 | grep -o $i | wc -l)\n        # if the number of times\
+    \ the integer appears in the list is equal to\n        # or greater than the integer\
+    \ itself, the function returns the integer\n        if [ $count -ge $i ]; then\n\
+    \            echo $i\n            return 0\n        fi\n    done\n    # if the\
+    \ function gets here, no value was found so -1 is returned\n    echo -1", "  \
+    \  local freq\n    local num\n    local max=0\n    local output=\"-1\"\n    local\
+    \ array=($1)\n    for num in ${array[@]}; do\n        freq=0\n        for comp\
+    \ in ${array[@]}; do\n            if [[ $num -eq $comp ]]; then\n            \
+    \    freq=$((freq+1))\n            fi\n        done\n        if [[ $freq -ge $num\
+    \ ]] && [[ $freq -gt $max ]]; then\n            max=$freq\n            output=$num\n\
+    \        fi\n    done\n    echo $output", "\t# treat the whole list as a string\n\
+    \tlocal input=\"$1\"\n\t# create a hash from a string of elements, \n\t# each\
+    \ followed by a counter (see Hash.mk_hash)\n\tlocal hash=$(echo \"$input\" | awk\
+    \ '{for(i=1;i<=NF;i++) print $i,++a[$i]}' ORS=\" \")\n\t# for each element in\
+    \ the hash, check if it is equal to\n\t# the frequency of this element (in the\
+    \ original list);\n\t# if yes, output the element\n\tlocal element=\"\"\n\tlocal\
+    \ counter=\"\"\n\twhile IFS= read -r element counter; do\n\t\tif [ \"$element\"\
+    \ = \"$counter\" ]; then\n\t\t\techo \"$element\"\n\t\t\texit 0\n\t\tfi\n\tdone\
+    \ <<< \"$hash\"\n\t# if no such element was found, output -1\n\techo \"-1\"",
+  "    for((i=1;i<=$1;i++)); do\n        a[$i]=0\n    done\n    for i in $1; do\n\
+    \        a[$i]=$((a[$i]+1))\n    done\n    for i in $1; do\n        if [ $i -le\
+    \ ${a[$i]} ]; then\n            echo $i\n            return\n        fi\n    done\n\
+    \    echo -1", "  typeset -i max=0\n  typeset -i count=0\n  typeset -i frequency=0\n\
+    \  typeset -i result=0\n  # set array\n  typeset -a array\n  array=($1)\n  for\
+    \ i in \"${array[@]}\"\n  do\n    if [[ $i -gt $max ]]; then\n      max=$i\n \
+    \   fi\n  done\n  for i in \"${array[@]}\"\n  do\n    frequency=0\n    for j in\
+    \ \"${array[@]}\"\n    do\n      if [[ $i -eq $j ]]; then\n        (( frequency++\
+    \ ))\n      fi\n    done\n    if [[ $frequency -ge $i ]]; then\n      count=1\n\
+    \      result=$i\n    fi\n  done\n  if [[ $count -eq 0 ]]; then\n    echo -1\n\
+    \  else\n    echo $result\n  fi", "  # TODO complete the task.\n  declare -A arr\n\
+    \  arr=()\n  max=-1\n  for element in $1\n  do\n    arr[$element]=$((${arr[$element]}+1))\n\
+    \    if [ \"${arr[$element]}\" -ge \"$element\" ] && [ \"$element\" -gt \"$max\"\
+    \ ]\n    then\n      max=$element\n    fi\n  done\n  echo $max", "\t[[ $# -lt\
+    \ 1 ]] && { echo \"-1\"; return; }\n\tlocal frequency\n\tlocal max=0\n\tfor i\
+    \ in $1; do\n\t\tfrequency=$(echo $1 | sed \"s/ /\\n/g\" | grep -c \"$i\")\n\t\
+    \t[[ $frequency -eq $i ]] && [[ $frequency -gt $max ]] && max=$i\n\tdone\n\t[[\
+    \ $max -gt 0 ]] && echo $max || echo \"-1\"", "    # Get the list of unique elements\
+    \ in the list\n    # e.g. \"1 2 3\"\n    unique_elems=$(echo \"$1\" | tr ' ' '\\\
+    n' | sort -n | uniq | tr '\\n' ' ')\n    # Get the frequency of each unique elements\
+    \ in the list\n    # e.g. \"3 2 1\"\n    freq=$(echo \"$1\" | tr ' ' '\\n' | sort\
+    \ -n | uniq -c | sort -nr | awk '{print $1}' | tr '\\n' ' ')\n    # Pair the unique\
+    \ element and its frequency\n    # e.g. \"1:3 2:2 3:1\"\n    paired=$(echo \"\
+    $unique_elems\" | paste -d ':' - <(echo \"$freq\"))\n    # Find the maximum frequency\n\
+    \    # e.g. \"3\"\n    max_freq=$(echo \"$freq\" | tr ' ' '\\n' | sort -nr | head\
+    \ -n 1)\n    # Extract only the frequency that is greater than zero\n    # e.g.\
+    \ \"1 2 3\"\n    filtered_freq=$(echo \"$unique_elems\" | tr ' ' '\\n' | awk '{\
+    \ if ($1 > 0) print $1 }' | tr '\\n' ' ')\n    # Find the element with the maximum\
+    \ frequency that is greater than the value of the element itself\n    # e.g. \"\
+    2\"\n    echo \"$paired\" | tr ' ' '\\n' | awk -v max_freq=\"$max_freq\" -v filtered_freq=\"\
+    $filtered_freq\" '\n        {\n            split($0, a, \":\");\n            if\
+    \ (a[2] == max_freq && a[1] <= a[2] && grep(a[1], filtered_freq)) {\n        \
+    \        found = a[1];\n            }\n        } END {\n            if (found\
+    \ == \"\") {\n                print \"-1\";\n            } else {\n          \
+    \      print found;\n            }\n        }'", "    # ./$(array2dict \"$1\"\
+    )\n    # python -c \"print(dict( ${1} ))\"\n\n    DICT=$(./$(array2dict \"$1\"\
+    ))\n    MAX=0\n    for n in $1; do\n        if [ ${n} -gt ${MAX} ]; then\n   \
+    \         MAX=${n}\n        fi\n    done\n    for ((n=MAX; n>=1; n--)); do\n \
+    \       if [ ${DICT[${n}]} -ge ${n} ]; then\n            echo ${n}\n         \
+    \   return\n        fi\n    done\n    echo \"-1\"", "    numbers=( $1 )\n    #\
+    \ Take the max number\n    max=$(printf \"%s\\n\" \"${numbers[@]}\" | sort -nr\
+    \ | head -n1)\n    # Create an associative array of frequencies\n    declare -A\
+    \ frequencies\n    for i in \"${numbers[@]}\"; do\n        frequencies[$i]=$((\
+    \ ${frequencies[$i]} + 1 ))\n    done\n    # Check if the number is greater than\
+    \ the frequency\n    for i in \"${!frequencies[@]}\"; do\n        if [[ $i -gt\
+    \ ${frequencies[$i]} ]]; then\n            echo -n \"$max\"\n            return\n\
+    \        fi\n    done\n    echo -n \"-1\"", "    #Fill this in.\n    list=$1\n\
+    \    #echo $list\n    #echo \"------\"\n    max_count=0\n    max_ele=0\n    res=0\n\
+    \    for i in $list; do\n        count=0\n        for j in $list; do\n       \
+    \     if [ $i -eq $j ]; then\n                ((count++))\n            fi\n  \
+    \      done\n        if [ $count -gt $max_count ]; then\n            max_count=$count\n\
+    \            max_ele=$i\n        fi\n    done\n    #echo \"max_count=$max_count,\
+    \ max_ele=$max_ele\"\n    if [ $max_count -ge $max_ele ]; then\n        res=$max_ele\n\
+    \    else\n        res=-1\n    fi\n    echo $res", "    local -A map\n    local\
+    \ max_int max_count\n    local IFS=' '\n    for x in $1; do\n        (( map[$x]++\
+    \ ))\n        if (( x > max_int )); then\n            max_int=$x\n        fi\n\
+    \    done\n    for (( i=1; i<=max_int; i++ )); do\n        if (( map[$i] >= i\
+    \ )); then\n            max_count=$i\n        fi\n    done\n    (( max_count ))\
+    \ || echo '-1'", "    if [[ -z $1 ]]; then\n        echo \"No arguments passed.\"\
+    \n        exit 1\n    fi\n    # Initial value is an empty string.\n    # IFS used\
+    \ to capture last value.\n    RES=\"\"\n    while read -r -a INT; do\n       \
+    \ # Iterate through $1 space-separated values.\n        # Should be integers.\n\
+    \        for i in \"${INT[@]}\"; do\n            # Get the count of each integer.\n\
+    \            # grep -wo counts how many times a word appears.\n            # -w\
+    \ is a word and -o outputs only that word.\n            # wc -l counts the lines\
+    \ in a file, which is the number of times\n            # an integer appears.\n\
+    \            count=$(echo \"$1\" | grep -wo \"$i\" | wc -l)\n            # If\
+    \ the integer is greater than 0 and its count\n            # is greater than or\
+    \ equal to the value of the integer\n            # set it to RES.\n          \
+    \  if [[ $i -gt 0 ]] && [[ $count -ge $i ]]; then\n                RES=$i\n  \
+    \          fi\n        done\n    done <<<\"$1\"\n    # If RES is an empty string,\
+    \ no value was found.\n    if [[ -z $RES ]]; then\n        echo \"-1\"\n    else\n\
+    \        echo \"$RES\"\n    fi", "  if [ -z \"$1\" ]; then\n    echo \"Please\
+    \ supply a list of integers.\"\n    exit 1\n  fi\n  local list=\"$1\"\n\n  # Sort\
+    \ the list\n  local sorted_list=$(echo \"$list\" | tr ' ' '\\n' | sort -n)\n\n\
+    \  # Count the occurrences of each item in the list\n  local count\n  while read\
+    \ -r num; do\n    # Add the count of 1 to the beginning of each number, so that\
+    \ we can use a space as the delimiter\n    echo \"1$num\"\n  done <<< \"$sorted_list\"\
+    \ | uniq -c | tr -d '\\n' > /tmp/tmp1.txt\n\n  # Get the most frequent number\n\
+    \  local max_freq=\"$(cat /tmp/tmp1.txt | sort -nr | head -n 1)\"\n  # Only take\
+    \ the number from the beginning of the string\n  local max_num=\"$(echo \"$max_freq\"\
+    \ | cut -d ' ' -f 2)\"\n  local max_freq_count=\"$(echo \"$max_freq\" | cut -d\
+    \ ' ' -f 1)\"\n\n  if [[ \"$max_freq_count\" -ge \"$max_num\" ]]; then\n    echo\
+    \ \"$max_num\"\n  else\n    echo \"-1\"\n  fi", "\t# Set var to -1\n\tlocal var=-1\n\
+    \t# IFS=' ': split input on whitespace.\n\t# read -a nums: read input into the\
+    \ array nums, and set IFS back to its default (newline)\n\tIFS=' ' read -a nums\n\
+    \t# Set IFS to newline\n\tIFS=$'\\n'\n\t# Sort nums\n\tsorted=($(sort <<<\"${nums[*]}\"\
+    ))\n\t# Iterate over sorted\n\tfor num in \"${sorted[@]}\"; do\n\t\t# Count matches\
+    \ for num\n\t\tcount=0\n\t\tfor ((j=0; j<${#sorted[@]}; j++)); do\n\t\t\tif [\
+    \ \"${sorted[$j]}\" -eq \"$num\" ]; then\n\t\t\t\tcount=$((count+1))\n\t\t\tfi\n\
+    \t\tdone\n\t\t# If count >= num and num > var, update var\n\t\tif [ \"$count\"\
+    \ -ge \"$num\" ] && [ \"$num\" -gt \"$var\" ]; then\n\t\t\tvar=$num\n\t\tfi\n\t\
+    done\n\t# Print var\n\techo \"$var\"", "  local out num\n  for i in $1; do\n \
+    \   if [[ $(eval echo $(echo \\$$i) ) -ge $i ]]; then\n      out=$i\n    fi\n\
+    \  done\n  echo \"$out\"", "    local -A map=()\n    local -a array=($1)\n   \
+    \ local l=${#array[@]}\n    local i=0\n\n    while (( i < l )); do\n        map[${array[$i]}]=$((\
+    \ ${map[${array[$i]}]} + 1 ))\n        (( i++ ))\n    done\n\n    i=1\n    while\
+    \ (( i < ${#map[@]} )); do\n        [[ ${map[$i]} -ge $i ]] && echo $i && return\n\
+    \        (( i++ ))\n    done\n\n    echo -1", "    for i in $1; do\n        if\
+    \ [[ $1 =~ (^|[[:space:]])$i($|[[:space:]]) ]]; then\n            freq=$((1 +\
+    \ ${BASH_REMATCH[0]// / }))\n            if [[ $freq -ge $i ]]; then\n       \
+    \         echo $i\n                return\n            fi\n        fi\n    done\n\
+    \    echo -1", "    if [[ \"$1\" = \"\" ]]; then\n        echo \"No parameters\
+    \ were given. Aborting.\"\n        exit 1\n    fi\n    local array=($1)\n    local\
+    \ max=0\n    for x in \"${array[@]}\"; do\n        local c=0\n        for y in\
+    \ \"${array[@]}\"; do\n            if [[ \"$x\" -eq \"$y\" ]]; then\n        \
+    \        c=$((c+1))\n            fi\n        done\n        if [[ \"$c\" -ge \"\
+    $x\" ]] && [[ \"$x\" -gt \"$max\" ]]; then\n            max=$x\n        fi\n \
+    \   done\n    if [[ \"$max\" -eq 0 ]]; then\n        echo \"-1\"\n    else\n \
+    \       echo \"$max\"\n    fi", "    # create an array\n    local -a arr=($1)\n\
+    \    # Get length of an array\n    local len=${#arr[@]}\n    # loop through and\
+    \ count\n    for (( i=0; i<$len; i++ )); do\n        local count=0\n        for\
+    \ (( j=0; j<$len; j++ )); do\n            if [[ \"${arr[$i]}\" -eq \"${arr[$j]}\"\
+    \ ]]; then\n                count=$((count+1))\n            fi\n        done\n\
+    \        if [[ \"${arr[$i]}\" -le \"$count\" ]]; then\n            echo \"${arr[$i]}\"\
+    \n            return\n        fi\n    done\n    echo \"-1\"", "  local result=-1\
+    \ # default answer\n  for i in $1; do\n    local freq=$(echo $1 | tr ' ' '\\n'\
+    \ | grep -c \"^$i$\")\n    if [ $freq -ge $i ]; then\n      result=$i\n    fi\n\
+    \  done\n  echo $result", "  local largest=0\n  local largest_freq=0\n  for n\
+    \ in ${1}; do\n    local freq=$(echo \"${1}\" | tr \" \" \"\\n\" | grep -c \"\
+    ^${n}$\")\n    if [ ${freq} -ge ${n} ] && [ ${freq} -gt ${largest_freq} ]; then\n\
+    \      largest=${n}\n      largest_freq=${freq}\n    fi\n  done\n  if [ ${largest}\
+    \ -eq 0 ]; then\n    echo \"-1\"\n  else\n    echo \"${largest}\"\n  fi", "  local\
+    \ n=\n  local freq=\n  local maxfreq=0\n  local ans=\n  for n in $1; do\n    freq=$(echo\
+    \ $1 | tr ' ' '\\n' | grep -c \"^$n$\")\n    if [ $freq -ge $n ]; then\n     \
+    \ if [ $freq -gt $maxfreq ]; then\n        maxfreq=$freq\n        ans=$n\n   \
+    \   fi\n    fi\n  done\n  if [ $maxfreq -gt 0 ]; then\n    echo $ans\n  else\n\
+    \    echo -1\n  fi", "\t\t", "  printf \"%s\\n\" $1 | tr \" \" \"\\n\" | sort\
+    \ | uniq -c | sort -nr | while read line; do\n    if [ $(echo $line | sed 's/\\\
+    s\\+/ /g' | cut -d ' ' -f1) -ge $(echo $line | sed 's/\\s\\+/ /g' | cut -d ' '\
+    \ -f2) ]; then\n      echo $line | sed 's/\\s\\+/ /g' | cut -d ' ' -f2\n     \
+    \ break\n    fi\n  done", "    local input_str=$1\n    local i\n    local max=-1\n\
+    \    local dict=()\n    local dict_keys=()\n    local dict_values=()\n    local\
+    \ dict_keys_len\n    local return_val=-1\n    IFS=' ' read -r -a input_arr <<<\
+    \ \"$input_str\"\n    for i in \"${input_arr[@]}\"; do\n        local frequency=${dict[$i]}\n\
+    \        if [ -z \"$frequency\" ]; then\n            dict[$i]=1\n        else\n\
+    \            dict[$i]=$((frequency+1))\n        fi\n    done\n    dict_keys=($(printf\
+    \ '%s\\n' \"${!dict[@]}\" | sort -nr))\n    dict_values=($(printf '%s\\n' \"${dict[@]}\"\
+    \ | sort -nr))\n    dict_keys_len=${#dict_keys[@]}\n    for ((i=0; i<$dict_keys_len;\
+    \ i++)); do\n        local key=${dict_keys[$i]}\n        local value=${dict_values[$i]}\n\
+    \        if (($key > $max && $value >= $key)); then\n            max=$key\n  \
+    \          return_val=$max\n        fi\n    done\n    echo $return_val", "   \
+    \ list=$1\n    out=\"\"\n    for i in $list; do\n        if [ $i -gt 0 ]; then\n\
+    \            frequency=$(count $i $list)\n            if [ $frequency -ge $i ];\
+    \ then\n                if [ -z $out ]; then\n                    out=$i\n   \
+    \             elif [ $i -gt $out ]; then\n                    out=$i\n       \
+    \         fi\n            fi\n        fi\n    done\n    if [ -z $out ]; then\n\
+    \        echo \"-1\"\n    else\n        echo $out\n    fi", "\techo \"$1\" | tr\
+    \ ' ' '\\n' | sort | uniq -c | tr -s ' ' | sed -E 's/([0-9]+) ([0-9]+)/\\2 \\\
+    1/' | while read count number; do\n\t\tif [ \"$count\" -ge \"$number\" ]; then\n\
+    \t\t\techo \"$number\"\n\t\t\tbreak\n\t\tfi\n\tdone | head -n 1", "    SORTED_LIST=$(sort\
+    \ -n <<< $1)\n    MAX=0\n    GREATEST=-1\n    # Loop through the sorted list,\
+    \ once per frequency value.\n    # Keep track of the greatest frequency value\
+    \ seen and \n    # the greatest integer with that frequency value. \n    # If\
+    \ we find an integer with greater frequency than its value, \n    # we can stop\
+    \ searching because we know that no greater integer \n    # with the same frequency\
+    \ value will be found.\n    for VALUE in `seq $MAX`; do\n        COUNT=$(grep\
+    \ -c $VALUE <<< $SORTED_LIST)\n        if [ $COUNT -gt $VALUE ]; then\n      \
+    \      break\n        fi\n        if [ $COUNT -eq $VALUE ]; then\n           \
+    \ if [ $VALUE -gt $MAX ]; then\n                MAX=$VALUE\n                GREATEST=$VALUE\n\
+    \            fi\n        fi\n    done\n    echo $GREATEST", "    local last_value=-1\n\
+    \    local last_freq=0\n    local value=0\n    local freq=0\n    for value in\
+    \ $1; do\n        freq=$(echo \"$1\" | grep -o $value | wc -l)\n        if [ $freq\
+    \ -ge $value ] && [ $freq -ge $last_freq ]; then\n            last_value=$value\n\
+    \            last_freq=$freq\n        fi\n    done\n    if [ $last_value -eq -1\
+    \ ]; then\n        echo \"-1\"\n    else\n        echo \"$last_value\"\n    fi",
+  "    local arr=( $1 )\n    local min=1\n    local max=${#arr[@]}\n    for (( k =\
+    \ min; k <= max; k++ )); do\n        count=0\n        for (( j = 0; j < ${#arr[@]};\
+    \ j++ )); do\n            if [ ${arr[$j]} -eq $k ]; then\n                (( count++\
+    \ ))\n            fi\n        done\n        if [[ $count -eq $k ]]; then\n   \
+    \         echo \"$k\"\n            return\n        fi\n    done\n    echo \"-1\"",
+  "    local search=$1\n    local arr=($search)\n    local max=-1\n    for el in ${arr[@]};\
+    \ do\n        if [[ ${#arr[@]} -eq 1 ]]; then\n            max=-1\n          \
+    \  break\n        fi\n        if [[ ${#arr[@]} -eq ${el} ]]; then\n          \
+    \  max=${el}\n            break\n        fi\n        if [[ ${#arr[@]} -ge ${el}\
+    \ ]]; then\n            local count=$(echo ${arr[@]} | tr ' ' '\\n' | grep -c\
+    \ ${el})\n            if [[ ${count} -ge ${el} ]]; then\n                max=${el}\n\
+    \            fi\n        fi\n    done\n    echo ${max}", "    if [ -z \"$1\" ];\
+    \ then\n        echo \"error: $FUNCNAME: no argument\" >&2\n        return 1\n\
+    \    fi\n    local -r a=\"$1\"\n    local -r len=$(echo \"$a\" | wc -w)\n    local\
+    \ -r max=$(echo \"$a\" | tr ' ' '\\n' | sort -nr | head -n 1)\n    local -r max_freq=$(echo\
+    \ \"$a\" | tr ' ' '\\n' | sort | uniq -c | sort -nr | head -n 1 | tr -s ' ' |\
+    \ cut -d ' ' -f 2)\n    local -r max_freq_count=$(echo \"$a\" | tr ' ' '\\n' |\
+    \ sort | uniq -c | sort -nr | head -n 1 | tr -s ' ' | cut -d ' ' -f 1)\n    local\
+    \ -r max_freq_idx=$(echo \"$a\" | tr ' ' '\\n' | grep -n -m 1 \"$max_freq\" |\
+    \ cut -d ':' -f 1)\n    local -r max_freq_first_pos=$(echo \"$a\" | cut -d ' '\
+    \ -f \"$max_freq_idx\")\n    local -r max_freq_last_pos=$(echo \"$a\" | cut -d\
+    \ ' ' -f \"$(( max_freq_idx + max_freq_count - 1 ))\")\n    local -r max_freq_pos_range=$((\
+    \ max_freq_last_pos - max_freq_first_pos + 1 ))\n    local -r max_freq_pos_range_half=$((\
+    \ max_freq_pos_range / 2 ))\n    local -r min_freq=$(echo \"$a\" | tr ' ' '\\\
+    n' | sort | uniq -c | sort -n | head -n 1 | tr -s ' ' | cut -d ' ' -f 2)\n   \
+    \ local -r min_freq_count=$(echo \"$a\" | tr ' ' '\\n' | sort | uniq -c | sort\
+    \ -n | head -n 1 | tr -s ' ' | cut -d ' ' -f 1)", "    # 1. Put arguments in an\
+    \ array.\n    words=($1)\n    # 2. Iterate through list, incrementing a counter\
+    \ every time we see the same number.\n    for ((i=0; i<${#words[@]}; i++)); do\n\
+    \        for ((j=0; j<${#words[@]}; j++)); do\n            if [ ${words[$i]} -eq\
+    \ ${words[$j]} ]; then\n                counter=$((counter+1))\n            fi\n\
+    \        done\n        # 3. If the number is greater than zero, and the frequency\
+    \ is greater than or equal to the \n        # value of the integer itself, save\
+    \ it.\n        if [ ${words[$i]} -gt 0 ] && [ $counter -ge ${words[$i]} ]; then\n\
+    \            numbers[$i]=${words[$i]}\n        fi\n        # 4. Reset counter.\n\
+    \        counter=0\n    done\n    # 5. If the array is empty, print -1. Otherwise,\
+    \ find the greatest integer in the array.\n    if [ ${#numbers[@]} -eq 0 ]; then\n\
+    \        echo \"-1\"\n    else\n        printf \"%s\\n\" \"${numbers[@]}\" | sort\
+    \ -rn | head -1\n    fi", "    # get every numbers\n    numbers=$(echo $1 | tr\
+    \ \" \" \"\\n\")\n    # sort the numbers so that the result is more reliable\n\
+    \    numbers=$(echo \"$numbers\" | sort -g)\n    # arrange them using the source\
+    \ code below\n    # and arrange them into the array\n    arr=($(arrange $numbers))\n\
+    \    # show the result\n    echo ${arr[@]}", "  # Save frequency of each integer\
+    \ from input list\n  # Get the greatest integer\n  # If it's frequency greater\
+    \ than or equal to value, return it\n  # Else, return -1\n  for i in $1; do\n\
+    \    a[$i]=$(( ${a[$i]} + 1 ))\n  done\n  value=$(printf \"%s\\n\" ${!a[@]} |\
+    \ sort -nr | head -1)\n  if [[ $value -eq -1 ]]; then\n    echo -1\n  elif [[\
+    \ ${a[$value]} -ge $value ]]; then\n    echo $value\n  else\n    echo -1\n  fi",
+  "    _list=$1\n    echo -n $_list | awk '{\n        i = 1; \n        while (i <=\
+    \ NF) {\n            a[$i]++;\n            i++;\n        }\n    }\n    END {\n\
+    \        for (i in a) {\n            if (a[i] >= i) {\n                print i;\n\
+    \                break;\n            }\n        }\n        if (i == NF + 1) {\n\
+    \            print -1;\n        }\n    }'", "\tlocal -a array=()\n\tread -a array\
+    \ <<< \"$1\"\n\tlocal frequencies=()\n\tfor i in \"${array[@]}\"; do\n\t\tlocal\
+    \ count=0\n\t\tfor j in \"${array[@]}\"; do\n\t\t\tif [[ $i == $j ]]; then\n\t\
+    \t\t\t((count++))\n\t\t\tfi\n\t\tdone\n\t\tfrequencies+=($count)\n\tdone\n\tlocal\
+    \ counter=0\n\tfor i in \"${array[@]}\"; do\n\t\tif [[ ${frequencies[$counter]}\
+    \ -ge $i ]]; then\n\t\t\techo $i\n\t\t\treturn\n\t\tfi\n\t\t((counter++))\n\t\
+    done\n\techo -1", "\t# write your solution in the body of this function.\n\t#\
+    \ $1 is a space-separated list\n\t# for each number of the list, save it as a\
+    \ key to a hash table, with the value being the number of occurrences\n\t# for\
+    \ each number of the list, check if it has more occurrences than itself\n\t# save\
+    \ the highest number, which still has more occurrences than itself, to a var,\
+    \ and return it\n\t\n\tdeclare -A myHash\n\thighest_num=0\n\n\tfor num in \"${@:1}\"\
+    ; do\n\t\t((myHash[$num]++))\n\tdone\n\n\tfor num in \"${!myHash[@]}\"; do\n\t\
+    \tif [ \"${myHash[$num]}\" -ge \"$num\" ] && [ \"$num\" -gt \"$highest_num\" ];\
+    \ then\n\t\t\thighest_num=$num\n\t\tfi\n\tdone\n\n\tif [ \"$highest_num\" -eq\
+    \ 0 ]; then\n\t\techo \"-1\"\n\telse\n\t\techo \"$highest_num\"\n\tfi", '  # YOUR
+    CODE HERE', "    myinput=$1\n    for i in $(echo $myinput | awk '{ for (i=1; i<=NF;\
+    \ i++) {print $i} }' | sort -n | uniq); do\n        mycnt=$(echo $myinput | awk\
+    \ '{ for (i=1; i<=NF; i++) {print $i} }' | grep -c \"$i\")\n        mynum=$(echo\
+    \ $myinput | awk '{ for (i=1; i<=NF; i++) {print $i} }' | grep -wc \"$i\")\n \
+    \       if [[ $mycnt -ge $i ]] && [[ $mynum -ge $i ]]; then\n            echo\
+    \ $i\n            exit 0\n        fi\n    done\n    echo -1", "\t# $freqCount\
+    \ is the array that holds the frequency of each number in the list\n\tdeclare\
+    \ -A freqCount\n\t\n\t# Initialize the array to have all values as 0\n\tfor i\
+    \ in {1..99}; do\n\t\tfreqCount[$i]=0\n\tdone\n\t\n\t# Loop through all numbers\
+    \ in the list and increment count if it exists\n\tfor i in $1; do\n\t\tif [ $i\
+    \ -gt 0 ]; then\n\t\t\t((freqCount[$i]++))\n\t\tfi\n\tdone\n\t\n\t# Check if frequency\
+    \ of number is greater than or equal to the number\n\tfor i in {1..99}; do\n\t\
+    \tif [ ${freqCount[$i]} -ge $i ]; then\n\t\t\techo $i\n\t\t\treturn 0\n\t\tfi\n\
+    \tdone\n\t\n\t# If no such number exists\n\techo -1", '    # Write your code here',
+  "   # Store the list in an array\n   local -a numbers=($1)\n   local greatest=-1\n\
+    \   local frequency=0\n   local i\n   # Loop through the array\n   for ((i=0;\
+    \ i<${#numbers[@]}; i++)); do\n      # Get frequency of current number\n     \
+    \ local current=${numbers[$i]}\n      frequency=$(echo \"${numbers[@]}\" | grep\
+    \ -o -E \"\\b$current\\b\" | wc -l)\n      # Check if the frequency is greater\
+    \ than or equal to the current number\n      if [[ $frequency -ge $current ]];\
+    \ then\n         # Check if the current number is greater than the previously\
+    \ saved greatest number\n         if [[ $current -gt $greatest ]]; then\n    \
+    \        greatest=$current\n         fi\n      fi\n   done\n   echo $greatest",
+  "    # n is the length of the list\n    declare -i n=0\n    # f is the frequency\
+    \ of the elements\n    declare -i f=0\n    # array is the array of numbers\n \
+    \   declare -a array\n    # large is the greatest integer that is greater than\
+    \ zero, \n    # and has a frequency greater than or equal to the value of the\
+    \ integer itself\n    declare -i large=-1\n    # reading the numbers into the\
+    \ array\n    while read -r num; do\n        array[n]=$num\n        let n=n+1\n\
+    \    done <<< \"$1\"\n    # looping over the array\n    for((i=0;i<n;i++)); do\n\
+    \        # Loop over the array again to count the frequency of a[i]\n        for((j=0;j<n;j++));\
+    \ do\n            if [[ ${array[i]} -eq ${array[j]} ]]; then\n               \
+    \ let f=f+1\n            fi\n        done\n        # If f is equal to array[i]\
+    \ and array[i] is greater than large, \n        # set large to array[i]\n    \
+    \    if [[ $f -eq ${array[i]} && ${array[i]} -gt $large ]]; then\n           \
+    \ large=${array[i]}\n        fi\n        # Reset f\n        let f=0\n    done\n\
+    \    # Output the result\n    echo $large", "  nums=($1)\n  max=0\n  # Get max\
+    \ value\n  for num in ${nums[@]}; do\n    if [[ $num -gt $max ]]; then\n     \
+    \ max=$num\n    fi\n  done\n  # Iterate over values and check if the frequency\
+    \ is equal to the value\n  for value in $(seq 1 $max); do\n    freq=0\n    for\
+    \ num in ${nums[@]}; do\n      if [[ $num -eq $value ]]; then\n        freq=$((freq+1))\n\
+    \      fi\n    done\n    if [[ $freq -ge $value ]]; then\n      echo $value\n\
+    \      return\n    fi\n  done\n  echo \"-1\"", "    freq_table=$(printf \"%s\"\
+    \ \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -rn)\n    read -r -a freq_array\
+    \ <<<\"$freq_table\"\n    for (( i=0; i<${#freq_array[@]}; i++ )); do\n      \
+    \  if [[ ${freq_array[$i]} -ge $(( ${freq_array[$i - 1]} / 2 + 1 )) ]]; then\n\
+    \            echo $(( ${freq_array[$i - 1]} / 2 + 1 ))\n            break\n  \
+    \      fi\n    done", "  string=$1\n  arr=()\n  result=-1\n  n=0\n  freq=0\n \
+    \ for i in $string\n  do\n    arr[$n]=$i\n    n=$((n+1))\n  done\n  n=$((n-1))\n\
+    \  while [ $n -ge 0 ]\n  do\n    freq=0\n    for i in ${arr[@]}\n    do\n    \
+    \  if [ $i -eq ${arr[$n]} ]\n      then\n        freq=$((freq+1))\n      fi\n\
+    \    done\n    if [ $freq -ge ${arr[$n]} ]\n    then\n      result=${arr[$n]}\n\
+    \      break\n    fi\n    n=$((n-1))\n  done\n  echo $result", "    _max=-1\n\
+    \    _freq=-1\n    _cur=0\n    # loop through values\n    for _val in $1; do\n\
+    \        # get frequency of val\n        _freq=$(echo \"$1\" | tr \" \" \"\\n\"\
+    \ | grep -c \"$_val\")\n        # check if freq >= val\n        if [ $_freq -ge\
+    \ $_val ]; then\n            if [ $_val -gt $_max ]; then\n                _max=$_val\n\
+    \            fi\n        fi\n    done\n    echo $_max", "    declare -A dict\n\
+    \    for i in $1; do\n        dict[$i]=$(( ${dict[$i]} + 1 ))\n    done\n    max=0\n\
+    \    for i in $1; do\n        if [[ ${dict[$i]} -ge $i ]] && [[ $i -gt $max ]];\
+    \ then\n            max=$i\n        fi\n    done\n    if [[ $max -eq 0 ]]; then\n\
+    \        echo \"-1\"\n    else\n        echo \"$max\"\n    fi", "    for i in\
+    \ $1; do\n        if [ $(echo $1 | grep -o $i | wc -l) -ge $i ]; then\n      \
+    \      echo $i\n            return\n        fi\n    done\n    echo -1", "    for\
+    \ ((i=1; i<=$1; i++)); do\n        current=$(echo \"$2\" | grep -o $i | wc -l)\n\
+    \        if [ $current -ge $i ]; then\n            echo $i\n            break\n\
+    \        fi\n    done", "\t# store the input as an array\n\tinput=($1)\n\t\n\t\
+    echo \"Input: ${input[@]}\"\n\n\t# store the max value of input\n\tmax=${input[0]}\n\
+    \tmax_count=0\n\t\n\t# go through every element in input\n\tfor (( i=0; i<${#input[@]};\
+    \ i++ )); do\n\t\telement=${input[$i]}\n\t\t# store the frequency of element\n\
+    \t\tcount=0\n\t\t\n\t\t# go through the rest of the array\n\t\tfor (( j=$i; j<${#input[@]};\
+    \ j++ )); do\n\t\t\t# if there is any match, increase the frequency\n\t\t\tif\
+    \ [ $element == ${input[$j]} ]; then\n\t\t\t\t((count++))\n\t\t\tfi\n\t\tdone\n\
+    \t\t\n\t\t# if the frequency is larger than the max frequency\n\t\t# and it is\
+    \ greater than zero and larger than itself\n\t\tif [ $count -gt $max_count ] &&\
+    \ [ $element -gt 0 ] && [ $count -ge $element ]; then\n\t\t\t# update the max\
+    \ frequency and the max value\n\t\t\tmax_count=$count\n\t\t\tmax=$element\n\t\t\
+    fi\n\tdone\n\t\n\t# if there is no such value, return -1\n\tif [ $max_count -eq\
+    \ 0 ]; then\n\t\techo \"-1\"\n\telse\n\t\techo $max\n\tfi", "    list=$1\n   \
+    \ # BEGIN SOLUTION\n    # END SOLUTION", "\t# Turn into associative array\n\t\
+    declare -A assoc\n\n\tfor i in $1; do\n\t\t# If i exists in assoc, increment it\
+    \ by 1. Otherwise, create it.\n\t\t(( ${assoc[$i]:=0}++ ))\n\tdone\n\n\tmax=-1\n\
+    \tfor i in \"${!assoc[@]}\"; do\n\t\tif (( $i > $max && $i <= ${assoc[$i]} ));\
+    \ then\n\t\t\tmax=$i\n\t\tfi\n\tdone\n\n\techo $max", "    local -a list\n   \
+    \ local i\n    mapfile -t list < <(echo \"$1\" | tr ' ' '\\n' | sort -n)\n   \
+    \ for i in \"${list[@]}\"; do\n        if [ $i -eq \"$(echo \"${list[@]}\" | tr\
+    \ ' ' '\\n' | grep -c $i)\" ]; then\n            echo $i\n            break\n\
+    \        fi\n    done", "  local sum=0\n  local count=0\n  local line=$(echo $1\
+    \ | tr ' ' '\\n' | sort -n)\n  local l=$(echo \"$line\" | tr '\\n' ' ')\n  local\
+    \ -a freq=($l)\n  local -a num=($l)\n  local -a results\n  for ((i=0; i<${#num[@]};\
+    \ i++)); do\n    for ((j=0; j<${#num[@]}; j++)); do\n      if [ ${num[$i]} -eq\
+    \ ${num[$j]} ]; then\n        ((count++))\n      fi\n    done\n    if [ $count\
+    \ -ge ${num[$i]} ]; then\n      results+=(\"${num[$i]}\")\n    fi\n    count=0\n\
+    \  done\n  if [ ${#results[@]} -gt 0 ]; then\n    echo \"${results[@]}\" | tr\
+    \ ' ' '\\n' | sort -rn | head -n 1\n  else\n    echo -1\n  fi", "  awk '{\n  \
+    \  for (i = 1; i <= NF; i++) {\n      nums[$i]++;\n    }\n  }\n  END {\n    for\
+    \ (i = 1; i <= NF; i++) {\n      if (nums[$i] >= $i) {\n        print $i;\n  \
+    \      exit;\n      }\n    }\n    print \"-1\";\n  }' <<< $1", "    input=\"$1\"\
+    \n    output=\"\"\n    frequency=\"\"\n    max=0\n    for n in $input; do\n  \
+    \      if [[ \"$n\" == \"$max\" ]]; then\n            frequency=\"$frequency $n\"\
+    \n        elif [[ \"$n\" -gt \"$max\" ]]; then\n            frequency=\"$n\"\n\
+    \            max=\"$n\"\n        fi\n    done\n    length=$(echo $frequency |\
+    \ wc -w)\n    if [[ \"$length\" -ge \"$max\" ]]; then\n        echo \"$max\"\n\
+    \    else\n        echo \"-1\"\n    fi", "  # Write your code here\n  #TODO",
+  "  local answer\n  answer=\"-1\"\n  for i in $1\n  do\n    #echo \"i = $i\"\n  \
+    \  local count\n    count=$(echo \"$1\" | tr ' ' '\\n' | grep -c \"^$i$\")\n \
+    \   #echo \"count = $count\"\n    if [[ $count -ge $i ]]\n    then\n      answer=$i\n\
+    \    fi\n  done\n  echo \"$answer\"", "  # Variables\n  local list=\"$1\"\n  local\
+    \ arr=($list) # Convert a string to an array\n  local max=0\n  local result=-1\n\
+    \  local i=0\n\n  # Loop through array\n  for item in \"${arr[@]}\"; do\n    local\
+    \ frequency=0\n\n    # Loop through each element of the array\n    # If a looped\
+    \ number equal to item, then increase the frequency\n    for i in \"${arr[@]}\"\
+    ; do\n      if [[ $i -eq $item ]]; then\n        ((frequency++))\n      fi\n \
+    \   done\n\n    # If the frequency of an integer is greater than or equal to the\
+    \ value of the integer itself\n    # then save the integer in a variable\n   \
+    \ if [[ $frequency -ge $item ]]; then\n      if [[ $item -gt $max ]]; then\n \
+    \       max=$item\n      fi\n    fi\n  done\n\n  # If there is a value greater\
+    \ than zero saved in a variable, return that value\n  if [[ $max -gt 0 ]]; then\n\
+    \    result=$max\n  fi\n\n  echo $result", "\tlocal lst=\"$1\"\n\tlocal best_score=-1\n\
+    \tlocal best_val=-1\n\tlocal val=\"$1\"\n\twhile [[ $val ]]; do\n\t\tscore=$(echo\
+    \ \"$lst\" | tr ' ' '\\n' | grep -c \"$val\")\n\t\tif [[ $score -ge $val ]]; then\n\
+    \t\t\tif [[ $score -gt $best_score ]]; then\n\t\t\t\tbest_score=$score\n\t\t\t\
+    \tbest_val=$val\n\t\t\tfi\n\t\tfi\n\t\tval=$(echo \"$lst\" | cut -d' ' -f2-)\n\
+    \t\tlst=$val\n\tdone\n\techo \"$best_val\"", "\tFOUND=false\n\tfor i in $1; do\n\
+    \t\tCOUNT=0\n\t\tfor x in $1; do\n\t\t\tif [ $i -eq $x ]; then\n\t\t\t\t((COUNT++))\n\
+    \t\t\tfi\n\t\tdone\n\t\tif [[ $COUNT -ge $i ]]; then\n\t\t\techo $i\n\t\t\tFOUND=true\n\
+    \t\t\tbreak\n\t\tfi\n\tdone\n\tif [ \"$FOUND\" = false ]; then\n\t\techo \"-1\"\
+    \n\tfi", '    # Write your code here']
 stop_tokens:
 - "\n}"

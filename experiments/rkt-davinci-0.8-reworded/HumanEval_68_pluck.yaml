@@ -114,7 +114,886 @@ completions: ["  (if (null? arr)\n      empty\n      (cond [(even? (first arr)) 
     \ x1 x2 ...)\n             (min x1 x2 ...)])]\n         [min-even-pos\n      \
     \    (match min-even\n            [#f\n             #f]\n            [_\n    \
     \         (seq-index arr min-even)])])\n    (if (or (eq? min-even #f) (eq? min-even-pos\
-    \ #f))\n        (list)\n        (list min-even min-even-pos))))\n"]
+    \ #f))\n        (list)\n        (list min-even min-even-pos))))\n", "  (define\
+    \ (iter i min minidx acc)\n    (if (null? arr)\n        (list min minidx)\n  \
+    \      (let ([el (car arr)])\n          (if (zero? (modulo el 2))\n          \
+    \    (if (< el min)\n                  (iter (add1 i) el i acc)\n            \
+    \      (iter (add1 i) min minidx acc))\n              (iter (add1 i) min minidx\
+    \ acc)))))\n  (iter 0 10000 10000 arr))\n", "  (define (pluck-i arr min-even min-index)\n\
+    \    (cond\n      ((empty? arr) (list min-even min-index))\n      ((= (first arr)\
+    \ 0) (pluck-i (rest arr) 0 0))\n      ((<= (first arr) min-even) (pluck-i (rest\
+    \ arr) (first arr) 0))\n      (else (pluck-i (rest arr) min-even (+ 1 min-index)))))\n\
+    \  (pluck-i arr (+ 10000 1) 0))\n", "  (if (empty? arr)\n      '(())\n      (let*\
+    \ ([min-even-value (for/min ([x arr] #:when (even? x)) x)]\n             [min-even-index\
+    \ (for/first ([x arr] #:when (and (even? x) (= x min-even-value))) x)])\n    \
+    \    (if (and min-even-value min-even-index)\n            (list min-even-value\
+    \ min-even-index)\n            '(())))))\n```\n\n### Python\n\n```python\n# Given\
+    \ a list representing a branch of a tree that has non-negative integer nodes\n\
+    # your task is to pluck one of the nodes and return it.\n# The plucked node should\
+    \ be the node with the smallest even value.\n# If multiple nodes with the same\
+    \ smallest even value are found return the node that has smallest index.\n# The\
+    \ plucked node should be returned in a list, [ smalest_value, its index ],\n#\
+    \ If there are no even values or the given list is empty, return [].\n# Example\
+    \ 1:\n# >>> (pluck (list 4 2 3))\n# (list 2 1)\n# Explanation: 2 has the smallest\
+    \ even value, and 2 has the smallest index.\n# Example 2:\n# >>> (pluck (list\
+    \ 1 2 3))\n# (list 2 1)\n# Explanation: 2 has the smallest even value, and 2 has\
+    \ the smallest index.\n# Example 3:\n# >>> (pluck (list ))\n# (list )\n# Example\
+    \ 4:\n# >>> (pluck (list 5 0 3 0 4 2))\n# (list 0 1)\n# Explanation: 0 is the\
+    \ smallest value, but  there are two zeros,\n# so we will choose the first zero,\
+    \ which has the smallest index.\n# Constraints:\n# * 1 <= nodes.length <= 10000\n\
+    # * 0 <= node.value\n\ndef pluck(arr):\n    if not arr:\n        return []\n \
+    \   min_even_value = None\n    min_even_index = None\n    for x in arr:\n    \
+    \    if x % 2 == 0:\n            if min_even_value is None or x < min_even_value:\n\
+    \                min_even_value = x", "  (if (null? arr)\n      (list)\n     \
+    \ (let\n        ([indices (for/list ([index (in-naturals)])\n                \
+    \    (cons index (list-ref arr index)))]\n         [sorted (sort (filter even?\
+    \ arr) <)])\n        (if (null? sorted)\n            (list)\n            (let\n\
+    \              ([target (list-ref sorted 0)])\n              (filter (lambda (p)\
+    \ (= (cdr p) target)) indices))))))\n", "  (cond [(empty? arr) empty]\n      \
+    \  [(= (modulo (first arr) 2) 0) (list (first arr) 0)]\n        [else (let ([i\
+    \ (pluck (rest arr))])\n                (if (empty? i)\n                    empty\n\
+    \                    (cons (+ (first i) 1) (rest i))))]))\n", "  (cond [(empty?\
+    \ arr) (list)]\n        [(empty? (filter even? arr)) (list)]\n        [else (let*\
+    \ ([smallest (min (filter even? arr))]\n                     [smallest-index (first\
+    \ (find-index (lambda (x) (= x smallest)) arr))])\n               (list smallest\
+    \ smallest-index))]))\n", "  (let/ec break\n    (for ([n (in-range (length arr))])\n\
+    \      (cond [(= 0 (modulo (list-ref arr n) 2))\n             (return (list (list-ref\
+    \ arr n) n))]))\n    (list)))\n", "  (cond\n    [(null? arr) (list)]\n    [(even?\
+    \ (car arr)) (list (car arr) 0)]\n    [else (pluck (cdr arr))]))\n", "  (or (apply\
+    \ min (map (compose list-ref arr) (filter even? arr))) '()))\n", "  (let\n   \
+    \ ((smallest-even\n      (for/first\n        ((numbers (in-list arr))\n      \
+    \   #:when (even? numbers))\n        (list numbers numbers))))\n    (if (not smallest-even)\n\
+    \      (list)\n      (list\n        (cadr smallest-even)\n        (for/first\n\
+    \          ((numbers (in-list arr))\n           #:when (equal? numbers (car smallest-even)))\n\
+    \          (list numbers numbers)))))\n  )\n", "  (if (null? arr)\n      (list)\n\
+    \      (if (even? (car arr))\n          (list (car arr) 0)\n          (let ([p\
+    \ (pluck (cdr arr))])\n            (if (null? p)\n                (list)\n   \
+    \             (list (car p) (+ 1 (cadr p))))))))\n</code>\nI don't know if I'm\
+    \ doing this right.\nThis is my first clojure code and my first functional code\
+    \ for that matter.\n<code>(defn pluck [arr]\n  (if (empty? arr)\n      (list)\n\
+    \      (if (even? (first arr))\n          (list (first arr) 0)\n          (let\
+    \ [[p i] (pluck (rest arr))]\n            (if (empty? p)\n                (list)\n\
+    \                (list p (+ 1 i)))))))\n</code>\nI'm getting this error:\n<code>CompilerException\
+    \ java.lang.RuntimeException: Unable to resolve symbol: first in this context,\
+    \ compiling:(form-init9096525541210341705.clj:1:1)\n</code>\nHow do I fix that?\n\
+    How can I improve my code?\n\n\nA:\n\nYour problem is that in Racket <code>first</code>\
+    \ is a function:\n<code>(first (list 1 2 3))\n</code>\nbut in Clojure it's a special\
+    \ form, so you should use <code>first</code> without parentheses:\n<code>(first\
+    \ [1 2 3])\n</code>\nor, as you mentioned in your comment, the equivalent function\
+    \ <code>peek</code>.\nAlso, the first argument in <code>let</code> should be a\
+    \ vector.\nYou can use <code>peek</code> and <code>rest</code> instead of <code>first</code>\
+    \ and <code>rest</code>:\n<code>(defn pluck [arr]\n  (if (empty? arr)\n      (list)\n\
+    \      (if (even? (peek arr))\n          (list (peek arr) 0)\n          (let [[p\
+    \ i] (pluck (rest arr))]\n            (if (empty? p)\n                (list)\n\
+    \                (list p", "  (for/first ([pair (in-indexed arr)]\n          \
+    \    #:when (even? (cdr pair)))\n    (list (cdr pair) (car pair))))\n```\n\n####\
+    \ Python\n\n```py\n#!/usr/bin/env python3\n\n# Given a list representing a branch\
+    \ of a tree that has non-negative integer nodes\n# your task is to pluck one of\
+    \ the nodes and return it.\n# The plucked node should be the node with the smallest\
+    \ even value.\n# If multiple nodes with the same smallest even value are found\
+    \ return the node that has smallest index.\n# The plucked node should be returned\
+    \ in a list, [ smalest_value, its index ],\n# If there are no even values or the\
+    \ given list is empty, return [].\n# Example 1:\n# >>> (pluck (list 4 2 3))\n\
+    # (list 2 1)\n# Explanation: 2 has the smallest even value, and 2 has the smallest\
+    \ index.\n# Example 2:\n# >>> (pluck (list 1 2 3))\n# (list 2 1)\n# Explanation:\
+    \ 2 has the smallest even value, and 2 has the smallest index.\n# Example 3:\n\
+    # >>> (pluck (list ))\n# (list )\n# Example 4:\n# >>> (pluck (list 5 0 3 0 4 2))\n\
+    # (list 0 1)\n# Explanation: 0 is the smallest value, but  there are two zeros,\n\
+    # so we will choose the first zero, which has the smallest index.\n# Constraints:\n\
+    # * 1 <= nodes.length <= 10000\n# * 0 <= node.value\ndef pluck(arr):\n    return\
+    \ next(((v, i) for i, v in enumerate(arr) if v % 2 == 0), None)\n```\n\n#### Ruby\n\
+    \n```rb\n#!/usr/bin/env ruby\n\n# Given a list representing a branch of a tree\
+    \ that has non-negative integer nodes\n# your task is to pluck one of the nodes\
+    \ and return it.\n# The plucked node should be the node with the smallest even\
+    \ value.\n# If multiple nodes with the same smallest even value are found return\
+    \ the node that has smallest index.\n# The plucked node should be returned in\
+    \ a list, [ smal", "  (if (not arr) '()\n      (pluck-helper arr #f)))\n", " \
+    \ (define (min arr)\n    (cond [(null? arr) #f]\n          [(even? (car arr))\
+    \ (car arr)]\n          [else (min (cdr arr))]))\n  (define (index arr i n)\n\
+    \    (cond [(null? arr) #f]\n          [(= (car arr) n) i]\n          [else (index\
+    \ (cdr arr) (+ i 1) n)]))\n  (cond [(null? arr) (list)]\n        [(null? (min\
+    \ arr)) (list)]\n        [else (list (min arr) (index arr 0 (min arr)))]))", " \
+    \ (define (pluck-helper arr min-even min-index)\n    (cond\n      [(empty? arr)\
+    \ (list min-even min-index)]\n      [(= (modulo (first arr) 2) 0)\n       (cond\n\
+    \         [(= min-even 0) (pluck-helper (rest arr) (first arr) 1)]\n         [(<\
+    \ (first arr) min-even) (pluck-helper (rest arr) (first arr) (+ 1 min-index))]\n\
+    \         [else (pluck-helper (rest arr) min-even (+ 1 min-index))])]\n      [else\
+    \ (pluck-helper (rest arr) min-even (+ 1 min-index))]))\n  (cond\n    [(empty?\
+    \ arr) (list)]\n    [else (pluck-helper arr 0 0)]))\n", "  (define i 0)\n  (define\
+    \ size (vector-length arr))\n  (define (rec arr pos)\n    (if (or (= pos size)\
+    \ (not (even? (vector-ref arr pos))))\n      rec (vector-copy arr) (+ pos 1)\n\
+    \      (vector-set! arr pos (vector-ref arr size))\n      (vector-set! arr size\
+    \ #f)\n      arr))\n  (rec arr i))\n", "  (define (even? x)\n    (= (remainder\
+    \ x 2) 0))\n  (define (smallest-even arr)\n    (let loop ([arr arr] [result (vector)]\
+    \ [index 0])\n      (cond [(null? arr) (values (empty? result) (vector-ref result\
+    \ 0) index)]\n            [(and (not (empty? result)) (&lt; (vector-ref result\
+    \ 0) (car arr))) (loop (cdr arr) result (+ index 1))]\n            [(and (empty?\
+    \ result) (even? (car arr))) (loop (cdr arr) (vector (car arr)) (+ index 1))]\n\
+    \            [(and (not (empty? result)) (even? (car arr)) (&lt; (car arr) (vector-ref\
+    \ result 0))) (loop (cdr arr) (vector (car arr)) (+ index 1))]\n            [else\
+    \ (loop (cdr arr) result (+ index 1))])))\n  (let-values ([(has-even? even-value\
+    \ index) (smallest-even arr)])\n    (if has-even? (list even-value index) '())))\n\
+    </code>\n", "  (define smallest #f)\n  (define smallest_idx #f)\n  (for ([x (in-list\
+    \ arr)])\n    (when (and (even? x)\n               (or (not smallest) (< x smallest)))\n\
+    \      (set! smallest x)\n      (set! smallest_idx (index arr x))))\n  (if smallest\n\
+    \      (list smallest smallest_idx)\n      '()))\n```\n\n```\n#lang racket\n",
+  "  (if (null? arr)\n      '()\n      (let recur (", "  (cond [(empty? arr) (list)]\n\
+    \        [(even? (first arr))\n         (for/fold ([smallest-even (first arr)]\n\
+    \                    [smallest-even-index 1]\n                    [even-index\
+    \ 1])\n             ([current-element (in-list arr)])\n           (if (and (even?\
+    \ current-element)\n                    (< current-element smallest-even))\n \
+    \              (values current-element even-index)\n               (values smallest-even\
+    \ smallest-even-index)))]\n        [else (pluck (rest arr))]))", "  (let\n   \
+    \ ;; will return min value from a list.\n    ;; if there are more than one min,\
+    \ it will return the first min it encounters.\n    ;; if the list is empty, it\
+    \ will return #f.\n    ([min-val (lambda (lst)\n                (if (null? lst)\n\
+    \                  #f\n                  (let\n                    ([rst (apply\
+    \ min lst)])\n                    (if (member rst lst)\n                     \
+    \ rst\n                      #f))))]\n      (let\n        ;; will return min value\
+    \ from a list of lists.\n        ;; if there are more than one min, it will return\
+    \ the first min it encounters.\n        ;; if the list is empty, it will return\
+    \ #f.\n        ([min-val-lst (lambda (lst)\n                        (if (null?\
+    \ lst)\n                          #f\n                          (let\n       \
+    \                     ([rst (apply min lst)])\n                            (if\
+    \ (member rst lst)\n                              rst\n                      \
+    \        #f))))]\n          (let\n            ;; will return a list with min evens.\n\
+    \            ;; if the list is empty, it will return #f.\n            ([min-evens\
+    \ (lambda (lst)\n                          (if (null? lst)\n                 \
+    \           #f\n                            (let\n                           \
+    \   ([rst (filter even? lst)])\n                              (if (null? rst)\n\
+    \                                #f\n                                rst))))]\n\
+    \              (let\n                ;; will return a list of indices of the minimum\
+    \ in the given list.\n                ;; if the list is empty, it will return\
+    \ #f.\n                ([min-idx (lambda (lst)\n                            (if\
+    \ (null? lst)\n                              #f\n                            \
+    \  (let\n                                ([rst (for/list ([(idx elem) (in-indexed\
+    \ lst)])\n                                           (if (eq? elem (min-val lst))\n\
+    \                                             idx\n                          \
+    \                   #f))])\n                                (filter (lambda (x)\
+    \ (and (not (null? x)) (not (equal? x #f)))) rst))))]\n                  (let\n\
+    \                    ;; will return a list of indices", "  (if (empty? arr)\n\
+    \      (list)\n      (let loop\n        ([lst arr]\n         [min 0]\n       \
+    \  [min-pos 0]\n         [pos 0])\n        (cond\n          [(empty? lst) (list\
+    \ min min-pos)]\n          [(and (zero? (modulo (first lst) 2))\n            \
+    \    (< (first lst) min))\n           (loop (rest lst) (first lst) pos (+ pos\
+    \ 1))]\n          [(and (zero? (modulo (first lst) 2))\n                (= (first\
+    \ lst) min))\n           (loop (rest lst) min (min min-pos pos) (+ pos 1))]\n\
+    \          [else (loop (rest lst) min min-pos (+ pos 1))]))))\n", "  (for/fold\
+    \ ([mini '(-1 -1)])\n            ([e (in-list arr)])\n            (cond\n    \
+    \          [ (and (even? e) (<= e (car mini))) (list e (add1 (list-ref arr e)))\
+    \ ]\n              [ else mini])))", "  (cond [(empty? arr) (list)]\n        [(not\
+    \ (even? (first arr))) (pluck (rest arr))]\n        [(and (even? (first arr))\
+    \ (empty? (rest arr))) (list (first arr) 1)]\n        [(and (even? (first arr))\
+    \ (not (empty? (rest arr))))\n         (cond [(even? (first (rest arr))) (pluck\
+    \ (rest arr))]\n               [else (list (first arr) 1)])]))\n```\n\n```racket",
+  "  (if (null? arr)\n      '()\n      (let ((evens (filter even? arr)))\n       \
+    \ (if (null? evens)\n            '()\n            (let ((sorted-evens (sort arr\
+    \ <)))\n              (list (car sorted-evens)\n                    (position\
+    \ (car sorted-evens) arr)))))))\n", "  (cond\n    [(empty? arr) empty]\n    [(and\
+    \ (even? (first arr)) (empty? (pluck (rest arr))))\n     (list (first arr) 0)]\n\
+    \    [(even? (first arr))\n     (define x (pluck (rest arr)))\n     (if (empty?\
+    \ x)\n         (list (first arr) 0)\n         (list (min (first arr) (first x))\n\
+    \               (if (positive? (compare (first arr) (first x)))\n            \
+    \       (+ 1 (second x))\n                   0)))]\n    [else (define x (pluck\
+    \ (rest arr)))\n          (if (empty? x)\n              empty\n              (list\
+    \ (first x) (+ 1 (second x))))]))\n", "  (let loop ([acc (list #f 0)] [i 0])\n\
+    \    (cond\n      [(>= i (length arr)) (reverse acc)]\n      [(even? (vector-ref\
+    \ arr i))\n       (loop (cons (vector-ref arr i) i) (+ i 1))]\n      [else (loop\
+    \ acc (+ i 1))])))\n```\n\n```racket\n#lang racket\n", "  (define (even? x)\n\
+    \    (= (remainder x 2) 0))\n  (define (helper arr min min-index index)\n    (if\
+    \ (null? arr)\n        (list min min-index)\n        (if (and (even? (car arr))\n\
+    \                 (&lt; (car arr) min))\n            (helper (cdr arr) (car arr)\
+    \ index (+ index 1))\n            (helper (cdr arr) min min-index (+ index 1)))))\n\
+    \  (if (not (null? arr))\n      (if (even? (car arr))\n          (helper (cdr\
+    \ arr) (car arr) 0 1)\n          (helper (cdr arr) (* 2 (car arr)) 0 1))\n   \
+    \   (list)))\n</code>\nThis function returns the proper value given the constraints,\
+    \ however, I'd like to hear about comments on how I could improve the style and\
+    \ the use of racket to make the code clearer, more concise and, ultimately, better.\n\
+    \n\nA:\n\nFirst of all, the easiest way to do what you want is to take advantage\
+    \ of the <code>min</code> function, which not only returns the smallest item in\
+    \ a sequence, but also keeps track of the index:\n<code>(define (pluck xs)\n \
+    \ (define (even? x)\n    (= (remainder x 2) 0))\n  (if (null? xs)\n      '()\n\
+    \      (if (even? (car xs))\n          (min xs)\n          (min (map (\u03BB (x)\
+    \ (+ x 1)) xs)))))\n</code>\nThere are a few problems with your code:\n\nIn the\
+    \ first example, you give <code>(list 4 2 3)</code> but your code returns <code>(list\
+    \ 4 1)</code>. Is this a mistake in the example?\nYou assume that the input has\
+    \ at least one element, but you don't validate it: <code>(pluck '())</code> breaks\
+    \ with an error.\nYou assume that the input list only contains numbers, but the\
+    \ code isn't restricted to numbers. \n\nI would suggest a few improvements:\n\n\
+    Validate that the input is valid, for example by raising an error if it's not.\n\
+    Use Racket's built-in list", "  (if (empty? arr)\n      (list)\n      (let loop\
+    \ ([arr arr] [min (max-integer)] [loc 0])\n        (cond [(empty? arr) (list min\
+    \ loc)]\n              [(and (even? (car arr))\n                    (< (car arr)\
+    \ min))\n               (loop (cdr arr) (car arr) (+ loc 1))]\n              [else\
+    \ (loop (cdr arr) min (+ loc 1))]))))\n", "  (define smallest-even-value (smallest-even\
+    \ arr))\n  (if (even? smallest-even-value)\n      (list smallest-even-value (index\
+    \ smallest-even-value arr))\n      (list)))\n", "  (match arr\n    [(cons a (_))\
+    \ (displayln a)]\n    [(cons a (cons b rest))\n     (match (pluck (cons b rest))\n\
+    \       [(list (? number? even?) idx)\n        (cond\n          [(even? a) (list\
+    \ a 1)]\n          [(= a (list-ref (list b) 0)) (list a 2)]\n          [else (list\
+    \ (list-ref (list b) 0) idx)])]\n       [else (list a 1)])]\n    [_ (list)]))\n",
+  "  (define smallest-even-index\n    (\u03BB (arr)\n      (define (helper arr index\
+    \ current-smallest-even-index)\n        (cond\n          [(empty? arr) current-smallest-even-index]\n\
+    \          [(and\n            (even? (first arr))\n            (or\n         \
+    \     (= 0 current-smallest-even-index)\n              (< (first arr) (list-ref\
+    \ arr current-smallest-even-index))))\n            (helper (rest arr) (+ index\
+    \ 1) index)]\n          [else (helper (rest arr) (+ index 1) current-smallest-even-index)])))\n\
+    \    (helper arr 0 0)))\n  (if (= 0 smallest-even-index)\n    (list)\n    (list\
+    \ (list-ref arr smallest-even-index) smallest-even-index)))", "  (if (empty? arr)\
+    \ (list)\n      (if (= (modulo (first arr) 2) 0)\n          (let ([first-even\
+    \ (first arr)])\n            (if (empty? (rest arr)) (list first-even 0)\n   \
+    \             (let ([rest-arr (rest arr)])\n                  (let ([rest-pluck\
+    \ (pluck rest-arr)])\n                    (if (empty? rest-pluck) (list first-even\
+    \ 0)\n                        (if (< (first rest-pluck) first-even) (cons (first\
+    \ rest-pluck) (add1 (second rest-pluck)))\n                            (list first-even\
+    \ 0)))))))\n          (let ([rest-arr (rest arr)])\n            (let ([rest-pluck\
+    \ (pluck rest-arr)])\n              (if (empty? rest-pluck) (list)\n         \
+    \         (cons (first rest-pluck) (add1 (second rest-pluck)))))))))\n", "  (cond\
+    \ [(empty? arr) '( )]\n        [(and (zero? (remainder (first arr) 2)) (= (min-arr-even\
+    \ arr) (first arr)))\n         `(,(first arr) ,(list-ref arr 0))]\n        [else\
+    \ (pluck (rest arr))]))\n", "  (define (my-filter proc xs)\n    (filter proc xs))\n\
+    \  (define (even? x)\n    (= (remainder x 2) 0))\n  (define evens (my-filter even?\
+    \ arr))\n  (cond\n    [(empty? evens) empty]\n    [(= (length evens) 1) (list\
+    \ (first evens) 1)]\n    [else (list (list-ref evens 0) (list-ref arr (list-ref\
+    \ evens 0)))]))\n", "  (cond\n    [(empty? arr) empty]\n    [(and (= 0 (modulo\
+    \ (first arr) 2)) (not (even? (first arr))))\n     (list (first arr) 0)]\n   \
+    \ [else\n     (cond\n       [(not (even? (first arr)))\n        (cons 1 (pluck\
+    \ (rest arr)))]\n       [else\n        (cons (first arr) (pluck (rest arr)))])]))\n",
+  "  (cond\n    [(null? arr) (list)]\n    [(even? (car arr)) (if (= (car arr) (apply\
+    \ min (filter even? arr))) (list (car arr) 1) (pluck (cdr arr)))]\n    [else (pluck\
+    \ (cdr arr))]))\n", "  (filter odd? arr))\n", "  (if (empty? arr)\n      '()\n\
+    \      (let* ([smallest-even-index 0]\n             [smallest-even-value (apply\
+    \ min\n                                         (filter even?\n              \
+    \                                   arr))])\n        (for/first ([(x i) (in-indexed\
+    \ arr)])\n          (if (and (= x smallest-even-value)\n                   (=\
+    \ i smallest-even-index))\n              (list x i))))))\n", "  (cond ((null?\
+    \ arr) '())\n        ((< (length arr) 2) '())\n        ((not (number? (car arr)))\
+    \ '())\n        ((= (remainder (car arr) 2) 0) (cons (car arr) 1))\n        (else\
+    \ (pluck (cdr arr)))))", "  (let ([evens (filter even? arr)])\n    (if (empty?\
+    \ evens)\n        '()\n        (let ([best-i (foldl (\u03BB (best-i curr-i)\n\
+    \                               (if (< (list-ref evens best-i)\n             \
+    \                         (list-ref evens curr-i))\n                         \
+    \          best-i\n                                   curr-i))\n             \
+    \                0\n                             (build-list (length evens) add1))])\n\
+    \          (list (list-ref evens best-i)\n                best-i)))))", "  (define\
+    \ (even? x) (= (remainder x 2) 0))\n  (define (get-smallest-even-value arr)\n\
+    \    (apply min (filter even? arr)))\n  (define (get-smallest-even-value-index\
+    \ arr)\n    (filter (lambda (x) (= (get-smallest-even-value arr) (car x))) (enumerate\
+    \ arr)))\n  (if (empty? arr)\n      '()\n      (let ([smallest-even-value (get-smallest-even-value\
+    \ arr)])\n        (if (= smallest-even-value (expt 2 31))\n            '()\n \
+    \           (list (get-smallest-even-value arr) (caar (get-smallest-even-value-index\
+    \ arr)))))))\n", "  (if (empty? arr)\n      (list)\n      (let ([even-indices\
+    \ (index-evens arr)])\n        (if (null? even-indices)\n            (list)\n\
+    \            (let ([min-even-index (vector-min even-indices)]\n              \
+    \    [min-even-value (vector-ref arr min-even-index)])\n              (list min-even-value\
+    \ min-even-index))))))\n", "  (define (pluck-even arr smallest smallest-idx)\n\
+    \    (cond [(and (empty? arr) smallest) (list smallest smallest-idx)]\n      \
+    \    [(and (empty? arr) (not smallest)) empty]\n          [(and (even? (first\
+    \ arr)) (not smallest)) (pluck-even (rest arr) (first arr) 1)]\n          [(and\
+    \ (even? (first arr)) (< (first arr) smallest)) (pluck-even (rest arr) (first\
+    \ arr) 1)]\n          [else (pluck-even (rest arr) smallest (+ 1 smallest-idx))]))\n\
+    \  (pluck-even arr empty empty))\n", "  (cond\n    [(null? arr) '()]\n    [(empty?\
+    \ arr) '()]\n    [(empty? (filter even? arr)) '()]\n    [else (list (arr-minimum\
+    \ (filter even? arr)) (1+ (index-of (arr-minimum (filter even? arr)) arr)))]))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond [(empty? arr) empty]\n        [(zero?\
+    \ (remainder (first arr) 2))\n         (cons (first arr) (cons 1 empty))]\n  \
+    \      [else (pluck (rest arr))]))\n", "  (cond [(empty? arr) empty]\n       \
+    \ [(empty? (filter (\u03BB (x) (even? x)) arr)) empty]\n        [else\n      \
+    \   (let ([smallest (apply min (filter (\u03BB (x) (even? x)) arr))])\n      \
+    \     (if (even? smallest)\n               (list smallest (index arr smallest))\n\
+    \               empty))]))\n</code>\n", "  (if (not (empty? arr))\n      (let\
+    \ ([first (first arr)])\n        (if (even? first)\n            (define (min-even\
+    \ arr)\n              (if (empty? arr)\n                  first\n            \
+    \      (let ([first-of-rest (first (rest arr))])\n                    (if (even?\
+    \ first-of-rest)\n                        (min (min-even (rest arr)) first first-of-rest)\n\
+    \                        (min-even (rest arr))))))\n            (define (min-even\
+    \ arr)\n              (if (empty? arr)\n                  99999\n            \
+    \      (let ([first-of-rest (first (rest arr))])\n                    (if (even?\
+    \ first-of-rest)\n                        (min (min-even (rest arr)) first-of-rest)\n\
+    \                        (min-even (rest arr))))))\n            ))\n      (list)))\n\
+    </code>\nBut it gives me this error: <code>define: bad syntax in: (define (min-even\
+    \ arr) (if (empty? arr) 99999 ...)</code>\nHow can I fix it?\n\n\nA:\n\n<code>define</code>\
+    \ can only be used at the top level or within a lambda expression. It can't be\
+    \ used in a context where you can put any kind of expression, such as an <code>if</code>\
+    \ or <code>let</code>.\nSince you're using Racket and not the more limited <code>#lang\
+    \ racket/base</code>, there's a better way to do what you want, using <code>letrec</code>\
+    \ (which is like <code>let</code>, but allows binding recursive functions):\n\
+    <code>(define (pluck arr)\n  (if (not (empty? arr))\n      (letrec ([min-even\
+    \ (lambda (arr)\n                           (if (empty? arr)\n               \
+    \                99999\n                               (let ([first-of-rest (first\
+    \ (rest arr))])\n                                 (if (even? first-of-rest)\n\
+    \                                     (min (min-even (rest arr)) first-of-rest)\n\
+    \                                     (min-even (rest arr))))))])\n        (let\
+    \ ([first (first arr)])\n          (if (even? first)\n              (list", " \
+    \ (cond\n    [(empty? arr) (list)]\n    [(empty? (filter even? arr)) (list)]\n\
+    \    [else (list (min (filter even? arr)) (position (min (filter even? arr)) arr))]))",
+  "  (let\n    (\n      (result\n        (foldl\n          (lambda (x acc)\n     \
+    \       (when (even? x)\n              (if (null? acc)\n                (cons\
+    \ x 1)\n                (if (< x (car acc))\n                  (cons x 1)\n  \
+    \                acc))))\n          '()\n          arr))\n      )\n    (if (null?\
+    \ result)\n      '()\n      (cons (car result) (cdr result)))))\n", "  (if\n \
+    \     (empty? arr)\n      (list)\n      (for/fold ([acc  (list 10000 1)]) ([item\
+    \ (in-list arr)])\n        (if\n            (and\n             (even? item)\n\
+    \             (< item (car acc)))\n            (list item (index arr item))\n\
+    \            acc))))\n", "  (if (empty? arr) (list)\n      (else\n       (let*\
+    \ ([first (first arr)]\n              [tail (rest arr)]\n              [tail-result\
+    \ (pluck tail)]\n              [tail-even (car tail-result)]\n              [tail-index\
+    \ (cadr tail-result)])\n         (if (= (modulo first 2) 0)\n             (if\
+    \ (and (> first 0) (> tail-even 0))\n                 (if (< first tail-even)\
+    \ (list first 0) tail-result)\n                 (if (= tail-even 0) (list first\
+    \ 0) tail-result))\n             tail-result)))))\n```\n\n## Q5\n```racket\n#lang\
+    \ racket\n", "  (if (empty? arr)\n      '()\n      (let ([evens (filter even?\
+    \ arr)])\n        (if (empty? evens)\n            '()\n            (let ([min-even\
+    \ (apply min evens)])\n              (if (zero? min-even)\n                  (list\
+    \ min-even 0)\n                  (list min-even (index min-even arr))))))))\n",
+  "  (and-let* ([even? (filter (lambda (x) (even? x)) arr)]\n             [smallest-even\
+    \ (apply min even?)])\n    (list smallest-even (index-of smallest-even arr))))\n",
+  "  (cond\n    [(empty? arr) (list)]\n    [(= 0 (modulo (first arr) 2)) (list (first\
+    \ arr) 0)]\n    [(= 0 (modulo (first (rest arr)) 2)) (list (first (rest arr))\
+    \ 1)]\n    [else (list 0 1)]))\n", "  (cond\n    [(empty? arr) (list)]\n    [(even?\
+    \ (first arr)) (let ([first-even (first arr)])\n                        (let ([rest\
+    \ (pluck (rest arr))])\n                          (if (empty? rest)\n        \
+    \                      (list first-even 0)\n                              (if\
+    \ (< first-even (first rest))\n                                  (list first-even\
+    \ 0)\n                                  rest))))]\n    [else (pluck (rest arr))]))\n",
+  "  (let ([evens (filter even? arr)])\n    (and-map evens\n             (\u03BB (x)\
+    \ (list x (index arr x)))\n             (\u03BB (x y) (or (and (= (first x) (first\
+    \ y))\n                               (< (second x) (second y)))\n           \
+    \               (< (first x) (first y)))))))", "  (if (null? arr)\n      '()\n\
+    \      (let ([evens (filter even? arr)])\n        (if (null? evens)\n        \
+    \    '()\n            (let ([min-even (apply min evens)])\n              (list\
+    \ min-even (index-of min-even arr)))))))\n", "  (cond [(null? arr) (list)]\n \
+    \       [(even? (car arr))\n         (let ([smalleven (car arr)])\n          \
+    \ (for/fold ([res (list smalleven 0)])\n                     ([curr 0])\n    \
+    \                 (if (and (even? (list-ref arr curr))\n                     \
+    \         (< smalleven (list-ref arr curr)))\n                         (list (list-ref\
+    \ arr curr) curr)\n                         res)))]\n        [else (pluck (cdr\
+    \ arr))]))\n", "  (if (empty? arr) empty\n      (if (even? (first arr))\n    \
+    \      (pluck-helper (first arr) 0 arr)\n          (pluck (rest arr)))))\n", " \
+    \ (define (helper arr min min-index min-index-count)\n    (cond [(empty? arr)\n\
+    \           (if (zero? min-index-count)\n               empty\n              \
+    \ (list min min-index))]\n          [(zero? (remainder (first arr) 2))\n     \
+    \      (if (< min (first arr))\n               (helper (rest arr) (first arr)\
+    \ (+ 1 min-index) 1)\n               (if (= min (first arr))\n               \
+    \    (helper (rest arr) min (+ 1 min-index) (+ 1 min-index-count))\n         \
+    \          (helper (rest arr) min min-index min-index-count)))]\n          [else\
+    \ (helper (rest arr) min (+ 1 min-index) min-index-count)]))\n  (helper arr +inf.0\
+    \ 0 0))\n```\n\n### 3.2\n\n```Racket\n#lang racket\n", "  (if (empty? arr)\n \
+    \     empty\n      (let ([evens (filter even? arr)])\n        (if (empty? evens)\n\
+    \            empty\n            (let ([min (min (filter even? arr))])\n      \
+    \        (list min (index-of arr min)))))))\n", "  (match arr\n    [(list '())\
+    \ (list)]\n    [(list (head ...))\n     (define evens (filter even? arr))\n  \
+    \   (if (= 0 (length evens))\n         (list)\n         (let ([min (apply min\
+    \ evens)])\n           (list min (car (member min arr)))))\n     ]))", "  (let\
+    \ ([evens (filter even? arr)])\n    (if (empty? evens)\n        (list)\n     \
+    \   (list\n         (apply min evens)\n         (list-ref arr (index-of (apply\
+    \ min evens) arr))))))\n", "  (let loop ([arr arr] [min 0] [index -1])\n    (cond\
+    \ [(empty? arr) (list min index)]\n          [(and (even? (first arr)) (or (zero?\
+    \ min) (&lt; (first arr) min)))\n           (loop (rest arr) (first arr) (add1\
+    \ index))]\n          [else (loop (rest arr) min index)])))\n", "  (if (empty?\
+    \ arr)\n      (list)\n      (if (even? (first arr))\n          (let loop (xs (cdr\
+    \ arr) (list (first arr) 0) 0)\n            (if (empty? xs)\n                (first\
+    \ lst)\n                (if (even? (first xs))\n                    (if (&lt;\
+    \ (first xs) (first lst))\n                        (loop (cdr xs) (list (first\
+    \ xs) (+ 1 index)) (+ 1 index))\n                        (loop (cdr xs) lst (+\
+    \ 1 index)))\n                    (loop (cdr xs) lst (+ 1 index)))))\n       \
+    \   (pluck (cdr arr)))))\n", "  (filter-map\n   (lambda (n)\n     (when (even?\
+    \ n)\n       n))\n   arr))\n", "  (cond\n    [(empty? arr) empty]\n    [(andmap\
+    \ (\u03BB (e) (even? e)) arr)\n     (let ((fmin (\u03BB (a b) (if (< (car a) (car\
+    \ b)) a b))))\n       (foldl fmin empty (map (\u03BB (e i) (list e i)) arr (range\
+    \ (length arr)))))]\n    [else (pluck (remove-odd arr))]))\n", "  (for/fold ([index\
+    \ 1] [value 1000]) ([x arr])\n    (cond\n      [(zero? (modulo x 2))\n       (if\
+    \ (< x value)\n           (values x index)\n           (values value index))]\n\
+    \      [else (values value index)])))", "  (let\n    ([len (list-length arr)]\n\
+    \     [even (filter (lambda (x) (= (remainder x 2) 0)) arr)]\n     [smallest (if\
+    \ (null? even) 0 (apply min even))])\n    (if (= smallest 0) '()\n      (define\n\
+    \        (find-smallest index)\n        (if (= index len) '()\n          (if (=\
+    \ (list-ref arr index) smallest)\n            (list smallest index)\n        \
+    \    (find-smallest (+ index 1)))))\n      (find-smallest 0))))\n", "  (cond\n\
+    \    [(empty? arr) empty]\n    [(empty? (filter even? arr)) empty]\n    [else\
+    \ (list (min (filter even? arr)) (position (min (filter even? arr)) arr))]))\n",
+  "  (if (null? arr) '()\n      (let* ((min (min-even arr)))\n        (if (zero? min)\
+    \ '()\n            (let* ((min-index (if (even? min) (index-of arr min) -1))\n\
+    \                   (indexed-min (list min min-index)))\n              (printf\
+    \ \"~a ~a\\n\" min min-index)\n              indexed-min)))))\n", "  (let* ([evens\
+    \ (filter even? arr)]\n         [min-even (if (empty? evens) -1 (min evens))])\n\
+    \    (if (= min-even -1)\n        '(())\n        (list min-even\n            \
+    \  (for/first ([(index value) (in-indexed arr)]\n                          #:when\
+    \ (= value min-even))\n                index)))))\n", "  (if (empty? arr) (list)\n\
+    \      (let* ([even? (\u03BB (n) (= (remainder n 2) 0))]\n             [even-indices\
+    \ (filter even? arr)]\n             [min-even-index (min-index even-indices)])\n\
+    \        (list (list-ref even-indices min-even-index) min-even-index))))\n```\n\
+    \n```racket\n#lang racket\n", "  (let ([min-value (apply min (filter even? arr))])\n\
+    \    (if (number? min-value)\n        (let ([min-index (apply min (filter (lambda\
+    \ (x) (= min-value x)) (enumerate arr)))]\n              [min-value-list (filter\
+    \ (lambda (x) (= min-value x)) arr)])\n          (list min-value min-index))\n\
+    \        (list))))\n", "  (match arr\n    [(list) (list)]\n    [(list e ...)\n\
+    \     (local [(define odd? (lambda (n) (not (even? n))))]\n       (let-values\
+    \ ([(sm ei) (for/fold ([sm 1000000] [ei -1]) ([e (in-list arr)])\n           \
+    \                 (if (and (even? e) (< e sm))\n                             \
+    \   (values e (count arr e))\n                                (values sm ei)))]\n\
+    \         (if (not (zero? ei))\n             (list sm ei)\n             (list))))]))\n",
+  "  (let ([evens (filter even? arr)])\n    (cond\n      [(null? evens) '()]\n   \
+    \   [(null? (cdr evens))\n       (list (car evens) (in-arr? arr (car evens)))]\n\
+    \      [else\n       (let ([min (min (car evens) (cadr evens))])\n         (if\
+    \ (= min (car evens))\n             (list min (in-arr? arr min))\n           \
+    \  (list min (in-arr? arr min -1))))])))\n", "  (cond\n    ((null? arr) (list))\n\
+    \    ((and (even? (car arr)) (= 0 (apply min (filter even? arr)))) (list (car\
+    \ arr) 1))\n    ((even? (car arr)) (list (apply min (filter even? arr)) (index-of\
+    \ arr (apply min (filter even? arr)))))\n    (else (pluck (cdr arr)))))\n", " \
+    \ (let ([even-nodes (filter even? arr)])\n    (cond [(empty? even-nodes) '()]\n\
+    \          [else (cons (apply min even-nodes)\n                      (pos (apply\
+    \ min even-nodes) arr))])))\n", "  (define (loop arr sofar)\n    (if (and (not\
+    \ (empty? arr)) (not (even? (car arr))))\n        (loop (cdr arr) sofar)\n   \
+    \     (if (empty? arr)\n            sofar\n            (loop (cdr arr) (cons (car\
+    \ arr) sofar)))))\n  (define (iter res)\n    (if (empty? res)\n        res\n \
+    \       (if (even? (car res))\n            (list (car res) (length (filter even?\
+    \ arr)))\n            (iter (cdr res)))))\n  (iter (loop arr '())))\n", "    (let\
+    \ ([minv (for/min ((x arr)) (if (even? x) x #f))])\n        (if (number? minv)\n\
+    \            (list minv (position minv arr))\n            (list))))\n", "  (if\
+    \ (empty? arr)\n      (list)\n      (let* ([evens (filter even? arr)]\n      \
+    \       [smallest-even (apply min evens)]\n             [index (index-of arr smallest-even)])\n\
+    \        (if (not (empty? evens))\n            (list smallest-even index)\n  \
+    \          (list)))))\n", "  (cond [(empty? arr) '()]\n        [(even? (first\
+    \ arr))\n         (cond [(empty? (rest arr)) (list (first arr) 0)]\n         \
+    \      [(= (first arr) (first (rest arr))) (list (first arr) 1)]\n           \
+    \    [else (list (first arr) 0)])]\n        [else (pluck (rest arr))]))\n", " \
+    \ (define (filter-fn n)\n    (eqv? 0 (modulo n 2)))\n  (define (min-even arr)\n\
+    \    (car (sort arr <)))\n  (cond [(empty? arr) '()]\n        [(not (filter filter-fn\
+    \ arr)) '()]\n        [else (list (min-even (filter filter-fn arr)) (index (min-even\
+    \ (filter filter-fn arr)) arr))]))", "  (let ([evens (filter even? arr)])\n  \
+    \  (match evens\n      ([even] (list even (index arr even)))\n      ([even1 even2\
+    \ ...] (let ([min-even (min even1 even2 ...)])\n                           (list\
+    \ min-even (index arr min-even))))\n      (_ '()))))\n```\n\n```\n#lang racket\n",
+  "    (cond [(empty? arr) arr]\n          [(not (even? (car arr))) (pluck (cdr arr))]\n\
+    \          [else (list (car arr) (car (get-indexes (lambda (x) (equal? x (car\
+    \ arr))) arr)))]))\n", "  (cond [(empty? arr)\n         empty]\n        [(even?\
+    \ (first arr))\n         (list (first arr) (map (lambda (x) x) arr))]\n      \
+    \  [else\n         (pluck (rest arr))]))", "  (define (next-even i)\n    (if (=\
+    \ i 0) 0\n        (if (even? i) i\n            (next-even (sub1 i)))))\n  (define\
+    \ (ret-even i)\n    (if (= i 0) 0\n        (if (even? i) i\n            (ret-even\
+    \ (sub1 i)))))\n  (define (prev-even i)\n    (if (= i 0) 0\n        (if (even?\
+    \ i) i\n            (prev-even (sub1 i)))))\n  (define (ret-odd i)\n    (if (=\
+    \ i 0) 0\n        (if (odd? i) i\n            (ret-odd (sub1 i)))))\n  (define\
+    \ (next-odd i)\n    (if (= i 0) 0\n        (if (odd? i) i\n            (next-odd\
+    \ (sub1 i)))))\n  (define (prev-odd i)\n    (if (= i 0) 0\n        (if (odd? i)\
+    \ i\n            (prev-odd (sub1 i)))))\n  (define (index-of e lst)\n    (cond\
+    \ ((null? lst) #f)\n          ((equal? e (car lst)) 0)\n          (else (add1\
+    \ (index-of e (cdr lst))))))\n  (define (min-even lst)\n    (let loop ((lst lst)\
+    \ (v 10000))\n      (cond ((null? lst) v)\n            ((< (next-even (car lst))\
+    \ v) (loop (cdr lst) (next-even (car lst))))\n            (else (loop (cdr lst)\
+    \ v)))))\n  (define (first-even lst)\n    (let loop ((lst lst) (v 10000))\n  \
+    \    (cond ((null? lst) v)\n            ((< (ret-even (car lst)) v) (loop (cdr\
+    \ lst) (ret-even (car lst))))\n            (else (loop (cdr lst) v)))))\n  (define\
+    \ (min-odd lst)\n    (let loop ((lst lst) (v 10000))\n      (cond ((null? lst)\
+    \ v)\n", "  (cond\n    [(empty? arr) (list)]\n    [(empty? (filter even? arr))\
+    \ (list)]\n    [else (let [min (apply min (filter even? arr))]\n            (list\
+    \ min (index-of min arr 0)))]))\n", "  (let* ((is-even? (lambda (x) (= (remainder\
+    \ x 2) 0)))\n         (min-value (apply min (filter is-even? arr)))\n        \
+    \ (min-index (find-first is-even? arr)))\n    (if (= -1 min-index)\n        (list)\n\
+    \        (list min-value min-index))))\n", "  (cond [(empty? arr)\n         empty]\n\
+    \        [(odd? (first arr))\n         (pluck (rest arr))]\n        [else\n  \
+    \       (for/fold ([r empty]) ([i (in-list arr)])\n           (cond [(empty? r)\n\
+    \                  (list (first i) (second i))]\n                 [(even? (first\
+    \ r))\n                  (cond [(< (first i) (first r))\n                    \
+    \     (list (first i) (second i))]\n                        [else\n          \
+    \               r])]\n                 [else\n                  (list (first i)\
+    \ (second i))]))]))\n", "  (if (empty? arr)\n      (list)\n      (define evens\
+    \ (filter even? arr))\n      (if (empty? evens)\n          (list)\n          (list\
+    \ (reduce min evens) (index-of (reduce min evens) arr)))))\n", "  (match arr [(list)\
+    \ (list)] [(list x) (if (even? x) (list x 0) (list))]\n   [(list (even? x) (rest\
+    \ ...)) (pluck rest)]\n   [(list (not (even? x)) (rest ...)) (cons (list x 0)\
+    \ (pluck rest))]))", "  (cond\n    [(empty? arr) empty]\n    [(and (even? (first\
+    \ arr)) (or (empty? (rest arr))\n                                  (even? (first\
+    \ (rest arr)))\n                                  (and (odd? (first (rest arr)))\n\
+    \                                       (< (first arr) (first (rest arr))))))\n\
+    \     (list (first arr) 0)]\n    [else (let ([r (pluck (rest arr))])\n       \
+    \     (if (empty? r) empty\n                (list (first r) (+ 1 (second r)))))]))\n",
+  "  (cond [(empty? arr) (list)]\n        [(even? (first arr)) (first (min-index-value\
+    \ arr))]\n        [else (pluck (rest arr))]))\n", "  (cond [(empty? arr) (list)]\n\
+    \        [(empty? (filter even? arr)) (list)]\n        [else (list (foldl min\
+    \ (first arr) (filter even? arr))\n                  (position (foldl min (first\
+    \ arr) (filter even? arr)) arr))]))\n", "  (define (is-even n)\n    (= (remainder\
+    \ n 2) 0))\n  (define (pluck-helper acc min min-pos)\n    (cond [(empty? arr)\
+    \ (if (empty? min)\n                            acc\n                        \
+    \    (cons min-pos acc))]\n          [(and (is-even (first arr))\n           \
+    \     (or (empty? min)\n                    (< (first arr) min)))\n          \
+    \ (pluck-helper acc (first arr) (first acc))]\n          [else (pluck-helper (rest\
+    \ acc) min min-pos)]))\n  (pluck-helper (build-list (length arr) add1) '() '()))\n\
+    ```\n\n```\nsolutions:\n  - model:\n    - tree: '1'\n    - list: '2'\n    - branch:\
+    \ '1'\n    - node: '6'\n    - index: '2'\n    - pos: '2'\n    - value: '4'\n \
+    \   - smalest: '3'\n    - first: '4'\n    - min: '6'\n    - even: '1'\n    - empty:\
+    \ '2'\n    - nil: '2'\n    - acc: '2'\n    - arr: '4'\n    - pluck: '1'\n    -\
+    \ pluck-helper: '1'\n    - is-even: '1'\n    - remainder: '1'\n    - build-list:\
+    \ '1'\n    - add1: '1'\n    - cond: '1'\n    - rest: '1'\n  - predicates:\n  \
+    \  - has_syntax_error: '0'\n    - has_runtime_error: '0'\n    - has_failed_test:\
+    \ '0'\n    - is_idiomatic: '0'\n    - has_missing_feature: '0'\n    - has_missing_coverage:\
+    \ '0'\n    - passes_all_tests: '0'\n    - meets_mutation_score_threshold: '0'\n\
+    \  - scores:\n    - execution: '100'\n    - output: '100'\n    - mutation: '100'\n\
+    \    -", "  (let ([evens (filter even? arr)])\n    (cond [(empty? evens) '()]\n\
+    \          [(list? evens) (list (car evens) 1)]\n          [else (let* ([index\
+    \ (index-of (min evens) arr)]\n                       [value (list-ref arr index)])\n\
+    \                  (list value index))])))\n", "  (let loop ([arr arr] [acc '()])\n\
+    \    (cond [(empty? arr) (cond [(null? acc) '()] [else (list (min acc) (- (length\
+    \ arr) (length acc)))])]\n          [(even? (car arr)) (loop (cdr arr) (cons (car\
+    \ arr) acc))]\n          [else (loop (cdr arr) acc)])))\n```\n\n## Day 3: Using\
+    \ Closures to Share Class State\n\n[problem](http://www.pythonchallenge.com/pc/def/equality.html)\n\
+    \n```racket\n#lang racket\n", "  (cond ((null? arr) '(list))\n        ((null?\
+    \ (filter even? arr)) '(list))\n        (else (list (argmin even? arr) (argmin-idx\
+    \ even? arr)))))\n", "  (cond [(empty? arr) '(list)]\n        [(member? (even?\
+    \ (first arr)) (map even? arr)) (list (first arr) (list-ref arr 0))]\n       \
+    \ [else (pluck (rest arr))]))\n", "  (define (get-min-even arr)\n    (cond [(empty?\
+    \ arr) \n           (cons 0 -1)]\n          [(and (even? (first arr)) (< 0 (second\
+    \ arr)))\n           (cons (first arr) (second arr))]\n          [(and (even?\
+    \ (first arr)) (> 0 (second arr)))\n           (get-min-even (rest arr))]\n  \
+    \        [else\n           (get-min-even (rest arr))]))\n  (let* ([min-even (get-min-even\
+    \ arr)]\n         [min-even-value (first min-even)]\n         [min-even-index\
+    \ (second min-even)])\n    (cond [(= min-even-index -1)\n           empty]\n \
+    \         [else\n           (list min-even-value min-even-index)])))\n", "  (cond\n\
+    \    [(empty? arr) empty]\n    [(equal? 2 (remainder (first arr) 2)) (cons (first\
+    \ arr) 1)]\n    [else (pluck (rest arr))]))\n```\n\n```racket\n#lang racket\n",
+  "  (match arr\n    [(list) '()]\n    [(list (? even? h) t ...) (list h 1)]\n   \
+    \ [(list h t ...) (cons h (pluck t))]))\n", "  (if (null? arr)\n      arr\n  \
+    \    (if (even? (car arr))\n          (cons (car arr) 0)\n          arr)))\n",
+  "  (cond\n    [(empty? arr) empty]\n    [(empty? (remove-odd arr)) empty]\n    [else\
+    \ (smallest-even-index arr)]))\n", "  (define (smallest-index-even? a b)\n   \
+    \ (and (even? (car a))\n         (not (even? (car b)))\n         #t\n        \
+    \ (and (even? (car a))\n              (even? (car b))\n              (< (car a)\
+    \ (car b)))))\n  (let ([even-nodes (filter even? arr)])\n    (if (empty? even-nodes)\n\
+    \        '()\n        (let ([sorted-even-nodes (sort smallest-index-even? even-nodes)])\n\
+    \          (list (car sorted-even-nodes)\n                (index-of (car sorted-even-nodes)\
+    \ arr))))))\n", "  (if (empty? arr)\n      (list)\n      (let ((n 0)\n       \
+    \     (lst (list)))\n        (for ([a arr]\n              [i (in-naturals)])\n\
+    \          (if (and (even? a)\n                   (or (empty? lst)\n         \
+    \              (< a (car lst))))\n              (set! lst (list a i))))\n    \
+    \    lst)))\n", "  (cond [(empty? arr) empty]\n        [(and (even? (first arr))\
+    \ (empty? (rest arr))) (list (first arr) 1)]\n        [(and (even? (first arr))\
+    \ (not (empty? (rest arr))))\n         (if (< (first arr) (first (pluck (rest\
+    \ arr))))\n             (list (first arr) 1)\n             (cons (first (pluck\
+    \ (rest arr))) (add1 (second (pluck (rest arr))))))]\n        [else (pluck (rest\
+    \ arr))]))", "  (let loop ([arr arr] [i 0] [smallest (for/first ([a arr]) (void))]\
+    \ [smi 0])\n    (cond\n      [(empty? arr) (list smallest smi)]\n      [(empty?\
+    \ (filter even? arr)) (list)]\n      [(even? (first arr))\n       (if (< (first\
+    \ arr) smallest)\n           (loop (rest arr) (+ i 1) (first arr) i)\n       \
+    \    (loop (rest arr) (+ i 1) smallest smi))]\n      [else (loop (rest arr) (+\
+    \ i 1) smallest smi)])))\n", "  (let loop ([i 0] [min -1] [index -1])\n    (cond\n\
+    \      [(>= i (length arr))\n       (if (= min -1)\n           (list)\n      \
+    \     (list min index))]\n      [(and (even? (list-ref arr i))\n            (<\
+    \ min (list-ref arr i)))\n       (loop (+ i 1) (list-ref arr i) i)]\n      [else\n\
+    \       (loop (+ i 1) min index)])))\n", "    (cond\n        [(null? arr) '()]\n\
+    \        [(and (not (even? (car arr)))\n              (not (null? (cdr arr))))\n\
+    \            (pluck (cdr arr))]\n        [(even? (car arr))\n            (cons\
+    \ (car arr)\n                  (cons 1 '()))]\n        [else (cons (car arr)\n\
+    \                    (pluck (cdr arr)))]))\n", "  (if (null? arr)\n      (list)\n\
+    \      (let ([even-elems (filter even? arr)])\n        (if (null? even-elems)\n\
+    \            (list)\n            (list-ref even-elems (index-of (min even-elems)\
+    \ arr))))))\n", "  (define evens (filter even? arr))\n  (if (empty? evens)\n \
+    \     '()\n      (let ([val (min evens)])\n        (define indexes (filter (lambda\
+    \ (x) (= (first x) val)) (enumerate arr)))\n        (if (empty? indexes)\n   \
+    \         '()\n            (list val (min indexes))))))\n```\n\n```racket\n#lang\
+    \ racket\n", "  (define (pluck-rec arr cur)\n    (if (or (empty? arr)\n      \
+    \      (= cur #f))\n        cur\n        (let ([pluck (if (even? (car arr))\n\
+    \                        (cons (car arr)\n                              (length\
+    \ arr))\n                        #f)])\n          (pluck-rec (cdr arr)\n     \
+    \                (if (or (not (pair? pluck))\n                             (pair?\
+    \ cur)\n                             (and (pair? pluck)\n                    \
+    \              (< (car pluck)\n                                     (car cur))))\n\
+    \                         pluck\n                         cur)))))\n  (pluck-rec\
+    \ arr #f))\n```\n\n```racket\n#lang racket\n", "  (define (smallest-even arr)\n\
+    \    (cond ((null? arr) 0)\n          ((even? (car arr)) (car arr))\n        \
+    \  (else (smallest-even (cdr arr)))))\n  (define (get-i a e)\n    (if (equal?\
+    \ a e) 1\n        (+ 1 (get-i (cdr a) e))))\n  (define (find-first-even arr)\n\
+    \    (cond ((null? arr) '())\n          ((and (even? (car arr)) (= (get-i arr\
+    \ (car arr)) 1)) (list (car arr) 1))\n          (else (find-first-even (cdr arr)))))\n\
+    \  (define (indexOf arr e)\n    (cond ((null? arr) -1)\n          ((equal? (car\
+    \ arr) e) 0)\n          (else (+ 1 (indexOf (cdr arr) e)))))\n  (if (null? arr)\
+    \ (list)\n      (if (zero? (smallest-even arr)) (find-first-even arr)\n      \
+    \    (list (smallest-even arr) (indexOf arr (smallest-even arr))))))\n", "  (if\
+    \ (equal? (length arr) 0)\n      (list)\n      (let* ([evens (filter even? arr)]\n\
+    \             [smallest-even (min evens)]\n             [indices (map-indexed\
+    \ (lambda (i v) (list v i)) arr)]\n             [smallest-even-index (map second\
+    \ (filter (lambda (i-v) (equal? (first i-v) smallest-even)) indices))])\n    \
+    \    (list smallest-even (min smallest-even-index)))))\n", "  (cond [(empty? arr)\
+    \ '()]\n        [(= 0 (modulo (first arr) 2)) (list (first arr) 0)]\n        [else\
+    \ (let* ([x (pluck (rest arr))])\n                 (if (empty? x) (list (first\
+    \ arr) 0)\n                     (list (min (first arr) (first x))\n          \
+    \                 (if (< (first arr) (first x)) 0 (+ 1 (second x))))))]))\n",
+  "  (if (empty? arr)\n      empty\n      (let ((evens (list->stream (filter even?\
+    \ arr))))\n        (if (empty? evens)\n            empty\n            (let ((min\
+    \ (stream-ref evens 0)))\n              (for ([i (in-naturals)])\n           \
+    \     (cond [(even? (stream-ref evens i))\n                       [else\n    \
+    \                    (define new-min (stream-ref evens i))\n                 \
+    \       (when (< new-min min)\n                          (set! min new-min))]\n\
+    \                       [else empty]]))\n              (list min (index-of min\
+    \ arr)))))))\n", "  (define arr-len (length arr))\n  (define (is-even n)\n   \
+    \ (= (remainder n 2) 0))\n  (define (find-min-even a)\n    (let loop ([a a] [idx\
+    \ 0] [min-idx 0] [min-even-val (car a)])\n      (cond\n        [(empty? a) (list\
+    \ min-even-val min-idx)]\n        [(and (= min-even-val 0) (is-even (car a)))\
+    \ (loop (cdr a) (+ idx 1) idx (car a))]\n        [(and (is-even (car a)) (< (car\
+    \ a) min-even-val)) (loop (cdr a) (+ idx 1) idx (car a))]\n        [else (loop\
+    \ (cdr a) (+ idx 1) min-idx min-even-val)])))\n  (cond\n    [(= arr-len 0) '()]\n\
+    \    [(= arr-len 1) (if (is-even (car arr)) (list (car arr) 0) '())]\n    [else\
+    \ (find-min-even arr)]))\n```\n\n## C\n\n```C\n#include <stdbool.h>\n#include\
+    \ <stdio.h>\n#include <stdlib.h>\n\nbool is_even(int n) {\n  return n % 2 == 0;\n\
+    }\n\nint* pluck(int* arr, int len) {\n  int* ret = (int*)malloc(sizeof(int) *\
+    \ 2);\n  if (len == 0) {\n    return ret;\n  }\n  int min_even_val = arr[0];\n\
+    \  int min_idx = 0;\n  int i;\n  for (i = 0; i < len; i++) {\n    if (min_even_val\
+    \ == 0 && is_even(arr[i])) {\n      min_even_val = arr[i];\n      min_idx = i;\n\
+    \    } else if (is_even(arr[i]) && arr[i] < min_even_val) {\n      min_even_val\
+    \ = arr[i];\n      min_idx", "  (let ([arr (filter even? arr)])\n    (cond\n \
+    \     [(empty? arr) '()]\n      [else (list (apply min arr) (index-of (apply min\
+    \ arr) arr))])))\n", "  (let loop ((arr arr) (x (max-integer)) (ix -1))\n    (if\
+    \ (empty? arr)\n        (list)\n        (if (and (even? (first arr))\n       \
+    \          (< (first arr) x))\n            (loop (rest arr) (first arr) 0)\n \
+    \           (loop (rest arr) x (+ 1 ix))))))\n", "  (map\n   (\u03BB (i x) (if\
+    \ (even? x) (list x i) '()))\n   (build-list (length arr) add1)\n   arr))\n</code>\n\
+    This solution does not work, but I think it is the simplest way to do. I'm probably\
+    \ missing a step with <code>map</code>\nWorking solution:\n<code>#lang racket\n",
+  "  (cond\n    [(empty? arr) empty]\n    [(zero? (remainder (first arr) 2))\n   \
+    \  (list (first arr) 0)]\n    [else\n     (define res (pluck (rest arr)))\n  \
+    \   (cond\n       [(empty? res)\n        (list (first arr) 1)]\n       [(and (zero?\
+    \ (remainder (first res) 2))\n             (< (first res) (first arr)))\n    \
+    \    res]\n       [else\n        (list (first arr) (+ 1 (second res)))])]))\n",
+  "  (if (null? arr)\n      '()\n      (let ([smallest (first arr)])\n        (for/fold\
+    \ ([smallest (first arr)]\n                   [min-index 0])\n            ([a\
+    \ (in-list (rest arr))]\n             [i (in-range (add1 i))])\n          (cond\
+    \ [(> i 0)\n                 (if (and (even? a)\n                          (<\
+    \ a smallest))\n                     (values a i)\n                     (values\
+    \ smallest min-index))]\n                [else (if (even? a)\n               \
+    \           (values a i)\n                          (values smallest min-index))])))))\n",
+  "  (match arr\n    [(list) (list)]\n    [(list (? even? x) xs ...) (list x 1)]\n\
+    \    [(list x xs ...) (pluck (append (list x) xs))]))", "  (if (= 0 (length arr))\n\
+    \      (list)\n      (let* ([evens (filter (lambda (x) (= 0 (modulo x 2))) arr)]\n\
+    \             [smallest (apply min evens)])\n        (if (= 0 (length evens))\n\
+    \            (list)\n            (list smallest (index arr smallest))))))\n",
+  "  (and (not (empty? arr))\n       (let ([evens (filter even? arr)])\n         (and\
+    \ (not (empty? evens))\n              (let ([smallest (apply min evens)])\n  \
+    \              (list smallest (index-of smallest arr)))))))\n```\n### Hard\n```racket\n\
+    #lang racket\n", "  (cond\n    [(empty? arr) '()]\n    [(even? (first arr))\n\
+    \     (let ([ind (index-of (first arr) arr)])\n       (if (null? ind)\n      \
+    \     (pluck (rest arr))\n           (list (first arr) (first ind))))]\n    [else\
+    \ (pluck (rest arr))]))\n", "  (cond\n    [(empty? arr) '()]\n    [(= (remainder\
+    \ (first arr) 2) 0) (list (first arr) 1)]\n    [else (pluck (rest arr))]))\n```\n\
+    \n```racket\n#lang racket\n", "  (cond\n    [(empty? arr) '()]\n    [(and (even?\
+    \ (first arr))\n          (or (empty? (rest arr))\n              (and (not (even?\
+    \ (second arr)))\n                   (pluck/smallest-even? (first arr) (second\
+    \ arr)))))]\n    [else (pluck (rest arr))]))\n", "    (cond\n      [(null? arr)\
+    \ (list)]\n      [(and (>= (car arr) 2) (odd? (car arr))) (list)]\n      [(and\
+    \ (>= (car arr) 2) (even? (car arr))) (cons (car arr) (cons (car (cdr arr)) (list)))]\n\
+    \      [else (pluck (cdr arr))]))\n", "  (cond ((empty? arr) '())\n        ((empty?\
+    \ (filter even? arr)) '())\n        (else (list (minimum (filter even? arr)) (argmin\
+    \ (filter even? arr) arr)))))\n", "  (cond [(empty? arr) empty]\n        [(empty?\
+    \ (filter even? arr)) empty]\n        [else (list (first (sort (filter even? arr)\
+    \ <))\n                     (first (position (first (sort (filter even? arr) <))\
+    \ arr)))]))\n", "  (cond\n    [(empty? arr)\n     '()]\n    [(even? (first arr))\n\
+    \     (define evens (filter even? arr))\n     (cond\n       [(empty? evens)\n\
+    \        '()]\n       [else\n        (define min-even (apply min evens))\n   \
+    \     (define min-index (index-of (lambda (x) (= x min-even)) arr))\n        (list\
+    \ min-even min-index)])]\n    [else\n     (pluck (rest arr))]))\n", "  (cond [(empty?\
+    \ arr)  (list)]\n        [(= 0 (modulo (first arr) 2))\n         (let ([smallest-even\
+    \ (first arr)])\n           (for/fold ([best (list smallest-even 1)])\n      \
+    \                ([item (in-list (rest arr))])\n                      (if (= 0\
+    \ (modulo item 2))\n                          (cond [(< item (first best))\n \
+    \                                (list item (+ 1 (second best)))]\n          \
+    \                      [else best])\n                          best)))]\n    \
+    \    [else (pluck (rest arr))]))\n", "  (match arr\n    [(list) (list)]\n    [(list\
+    \ v rest ...)\n     (define (min-even lst)\n       (let ([min (find-min-even lst)])\n\
+    \         (if (empty? min)\n             (list)\n             (list (first min)\
+    \ (if (equal? (first lst) (first min))\n                                    1\n\
+    \                                    (+ 1 (first (rest min))))))))\n     (min-even\
+    \ arr)]))\n", "  (define (is-even? x)\n    (= (remainder x 2) 0))\n  (define (pluck-helper\
+    \ arr acc)\n    (match arr\n      (('() acc)\n       (else (let ((first (car arr))\n\
+    \                   (rest (cdr arr)))\n               (if (is-even? first)\n \
+    \                  (let ((index (car acc))\n                         (smallest\
+    \ (cadr acc)))\n                     (if (or (null? smallest)\n              \
+    \               (< first smallest))\n                         (pluck-helper rest\
+    \ (list index (cons first '())))\n                         (if (= first smallest)\n\
+    \                             (pluck-helper rest (list index (cons first smallest)))\n\
+    \                             (pluck-helper rest acc))))\n                   (pluck-helper\
+    \ rest (list (+ 1 (car acc)) (cadr acc)))))))))\n  (let ((result (pluck-helper\
+    \ arr (list 0 '()))))\n    (if (null? (cadr result))\n        '()\n        (list\
+    \ (car (cadr result)) (car result)))))\n", "  (define (helper arr curr-idx smallest-idx\
+    \ smallest-val)\n    (cond\n      [(empty? arr)\n       (if (= smallest-idx -1)\n\
+    \           (list)\n           (list smallest-val smallest-idx))]\n      [(even?\
+    \ (first arr))\n       (cond\n         [(< smallest-val (first arr))\n       \
+    \   (helper (rest arr) (+ curr-idx 1) curr-idx smallest-val)]\n         [(= smallest-val\
+    \ (first arr))\n          (cond\n            [(> curr-idx smallest-idx)\n    \
+    \         (helper (rest arr) (+ curr-idx 1) curr-idx smallest-val)]\n        \
+    \    [else\n             (helper (rest arr) (+ curr-idx 1) smallest-idx smallest-val)])]\n\
+    \         [else\n          (helper (rest arr) (+ curr-idx 1) curr-idx (first arr))])]\n\
+    \      [else\n       (helper (rest arr) (+ curr-idx 1) smallest-idx smallest-val)]))\n\
+    \  (helper arr 0 -1 -1))\n", "  (define (helper arr)\n    (if (null? arr) #f\n\
+    \        (let ([v (car arr)])\n          (if (and (even? v) (< v (or (cadr (helper\
+    \ (cdr arr))) v)))\n              (list v 0)\n              (let ([v (cadr (helper\
+    \ (cdr arr)))])\n                (if v (list (car v) (+ 1 (cadr v))) #f))))))\n\
+    \  (let ([v (helper arr)])\n    (if v v '(0 0))))\n", "  (let ([node (find (lambda\
+    \ (node) (= 0 (modulo (car node) 2))) arr)])\n    (if node (cons (car node) (car\
+    \ (reverse (position node arr)))) '())))\n", "  (define (is-even n)\n    (= (remainder\
+    \ n 2) 0))\n  (define evens (filter is-even arr))\n  (if (empty? evens)\n    \
+    \  (list)\n      (define min-even (apply min evens))\n      (let ([min-even-positions\
+    \ (filter (lambda (n) (= n min-even)) (build-list (length arr) (lambda (n) (list-ref\
+    \ arr n))))])\n        (list min-even (apply min min-even-positions)))))\n", " \
+    \ (cond\n    [(empty? arr) '()]\n    [(null? (filter even? arr)) '()]\n    [else\
+    \ (list (apply min (filter even? arr))\n                (position (apply min (filter\
+    \ even? arr)) arr))]))\n", "  (if (empty? arr)\n      '()\n      (let* ([evens\
+    \ (for/list ([x arr] #:when (even? x)) x)]\n             [evens (if (empty? evens)\n\
+    \                        '()\n                        (list (min evens)))])\n\
+    \        (if (empty? evens)\n            '()\n            (list (car evens) (index\
+    \ arr (car evens)))))))\n", "  (cond\n    [(empty? arr) (list)]\n    [(even? (first\
+    \ arr)) (list (first arr) 1)]\n    [else (cons (first arr) (add1 (pluck (rest\
+    \ arr))))]))\n", "  (if (empty? arr)\n      (list)\n      (let ([min_even_val\
+    \ (car (seq/filter even? arr))])\n        (if (null? min_even_val)\n         \
+    \   (list)\n            (list min_even_val (seq/position min_even_val arr))))))\n",
+  "  (define (smallest-index evens)\n    (if (null? evens) -1\n        (apply min\
+    \ (map (lambda (even) (if (null? even) -1 (car even))) evens))))\n  (if (null?\
+    \ arr) (list)\n      (let* ([evens (map (lambda (i) (if (even? (car i)) i (list)))\
+    \ (enumerate arr))]\n             [index (smallest-index evens)])\n        (if\
+    \ (null? index) (list)\n            (list (list-ref arr index) index)))))\n",
+  "  (if (empty? arr)\n      (list)\n      (pluck-helper arr #f)))\n", "  (cond [(empty?\
+    \ arr) '()]\n        [(andmap even? arr) (let ([min-even (apply min (filter even?\
+    \ arr))])\n                              (cons min-even (index-of arr min-even)))]\n\
+    \        [else '()]))\n", "  (define (pluck-iter arr min-value min-index)\n  \
+    \  (if (empty? arr)\n        (if (zero? min-value)\n            '()\n        \
+    \    (list min-value min-index))\n        (if (odd? (first arr))\n           \
+    \ (pluck-iter (rest arr) min-value (+ min-index 1))\n            (if (< (first\
+    \ arr) min-value)\n                (pluck-iter (rest arr) (first arr) (+ min-index\
+    \ 1))\n                (pluck-iter (rest arr) min-value (+ min-index 1))))))\n\
+    \  (pluck-iter arr 10000 0))\n", "  (match arr\n    [(list)\n     (list)]\n  \
+    \  [(list first . rest)\n     (define (even? x)\n       (= (remainder x 2) 0))\n\
+    \     (define (pluck-helper arr)\n       (cond\n         [(empty? arr)\n     \
+    \     (list)]\n         [(even? (first arr))\n          (define (help x y)\n \
+    \           (list (list (first x) (first y)) (rest x) (rest y)))\n          (define\
+    \ (find-even arr)\n            (cond\n              [(empty? arr)\n          \
+    \     (list)]\n              [(even? (first arr))\n               (cons (first\
+    \ arr) (find-even (rest arr)))]\n              [else\n               (find-even\
+    \ (rest arr))]))\n          (help (find-even arr) (range (length arr)))]\n   \
+    \      [else\n          (pluck-helper rest)]))\n     (pluck-helper arr)]))", " \
+    \ (if (empty? arr)\n      (list)\n      (let ([evens (filter even? arr)])\n  \
+    \      (if (empty? evens)\n            (list)\n            (let ([smallest (apply\
+    \ min evens)])\n              (let ([smallest-index (get-index arr smallest)])\n\
+    \                (list smallest smallest-index)))))))\n", "  (if (empty? arr)\n\
+    \      '()\n      (cond\n        ((even? (car arr)) (list (car arr) 1))\n    \
+    \    (else (list (car arr) 1)))))\n", "  (cond\n    [(empty? arr) '()]\n    [(even?\
+    \ (first arr)) (pluck (rest arr))]\n    [else (cons (first arr) (pluck (rest arr)))]))\n",
+  "  (match arr\n    [(list) '()]\n    [(list head tail ...)\n     (define arr-sorted\
+    \ (sort arr <))\n     (define filtered (filter even? arr-sorted))\n     (if (null?\
+    \ filtered)\n       '()\n       (list (car filtered) (index filtered (car filtered))))]))",
+  "  (define (rec lst)\n    (cond [(empty? lst) '()]\n          [(empty? (cdr lst))\
+    \ '()]\n          [(= (car lst) (car (cdr lst))) (rec (cdr lst))]\n          [(=\
+    \ (car lst) 0) (list 0 (car (cdr lst)))]\n          [(= (car (cdr lst)) 0) (list\
+    \ 0 (car (cdr (cdr lst))))]\n          [(even? (car lst)) (list (car lst) (car\
+    \ (cdr lst)))]\n          [(even? (car (cdr lst))) (list (car (cdr lst)) (car\
+    \ (cdr (cdr lst))))]\n          [else (rec (cdr lst))]))\n  (rec arr))\n", " \
+    \   (let loop ([arr arr] [ans (list 99999999 0)])\n        (cond [(empty? arr)\
+    \ ans]\n              [(and (even? (car arr)) (< (car arr) (car ans))) (loop (cdr\
+    \ arr) (list (car arr) (add1 (cadr ans))))]\n              [else (loop (cdr arr)\
+    \ ans)])))\n```\n\n## 3.2.2\n\n```racket\n#lang racket\n", "  (or (apply min (filter\
+    \ even? arr)) '()))", "  (if (empty? arr) (list)\n      (if (odd? (car arr)) (pluck\
+    \ (cdr arr))\n          (let ((sub (pluck (cdr arr))))\n            (if (empty?\
+    \ sub) (list (car arr) 0)\n                (if (< (car arr) (car sub)) (list (car\
+    \ arr) 0)\n                    (list (car sub) (+ 1 (cadr sub)))))))))\n", " \
+    \ (define (is-even? x) (= (remainder x 2) 0))\n  (define (find-evens arr)\n  \
+    \  (filter is-even? arr))\n  (define (get-smallest-even arr)\n    (list (apply\
+    \ min (find-evens arr)) (min (find-evens arr))))\n  (cond [(empty? arr) empty]\n\
+    \        [(empty? (find-evens arr)) empty]\n        [else (get-smallest-even arr)]))",
+  "  (cond ((or (empty? arr) (null? (filter even? arr)))\n         (list))\n     \
+    \   (else\n         (let* ([evens (filter even? arr)]\n                [min-even\
+    \ (apply min evens)]\n                [min-even-index (index-of min-even arr)]\n\
+    \                [zero-index (index-of 0 arr)])\n           (if (and (= min-even\
+    \ 0) (= zero-index 0))\n               (list 0 zero-index)\n               (list\
+    \ min-even min-even-index))))))", "  (define even?\n    (lambda (v)\n      (=\
+    \ (remainder v 2) 0)))\n  (define (find-min-even-value ind acc)\n    (if (empty?\
+    \ acc)\n        (if (even? (first arr))\n            (list (first arr) ind)\n\
+    \            (list -1 ind))\n        (if (even? (first arr))\n            (if\
+    \ (< (first acc) (first arr))\n                acc\n                (list (first\
+    \ arr) ind))\n            acc)))\n  (cond\n    [(empty? arr) (list)]\n    [else\
+    \ (cond\n            [(even? (first arr)) (list (first arr) 0)]\n            [else\
+    \ (find-min-even-value 0 (reduce find-min-even-value (rest arr) acc: (list -1\
+    \ 0)))])]))\n", "  (let ([even-nums (filter even? arr)])\n    (if (not (empty?\
+    \ even-nums))\n        (list (reduce min even-nums)\n              (vector-ref\
+    \ arr (apply min (apply map (vector-index-of even-nums arr))))\n             \
+    \ )\n        '())))\n", "  (cond [(null? arr) \n         empty]\n        [(zero?\
+    \ (modulo (car arr) 2))\n         (list (car arr) 0)]\n        [else\n       \
+    \  (let ([res (pluck (cdr arr))])\n           (if (or (null? res) (> (car res)\
+    \ (car arr)))\n               (list (car arr) (add1 (cadr res)))\n           \
+    \    res))]))\n```\n\n```racket\n#lang racket\n", "  (match arr\n    ['() '(())\
+    \ ]\n    [(cons x xs) (if (even? x)\n                      (find-smallest-even\
+    \ x xs x 0 1)\n                      (pluck xs))]))\n", "  (filter even? arr))\n",
+  "  (define (is-even? x) (= (remainder x 2) 0))\n  (cond [(empty? arr) '()]\n   \
+    \     [(is-even? (first arr))\n         (define (r-pluck rest best)\n        \
+    \   (if (empty? rest) best\n               (if (< (first best) (first rest))\n\
+    \                   (r-pluck (rest rest) best)\n                   (r-pluck (rest\
+    \ rest) (cons (first rest) (cons (add1 (second best)) '()))))))\n         (r-pluck\
+    \ (rest arr) (cons (first arr) (cons 0 '())))]\n        [else (pluck (rest arr))]))\n",
+  "  (cond [(null? arr) (list)]\n        [(even? (car arr))\n         (if (list? (cadr\
+    \ arr))\n             (cond [(> (car (cadr arr)) (car arr)) (cons (car arr) 0)]\n\
+    \                   [else (cons (car (cadr arr)) (cadr (cadr arr)))])\n      \
+    \       (cons (car arr) 0))]\n        [else (pluck (cdr arr))]))\n", "  (define\
+    \ (pluck-helper arr smalest_value i)\n    (cond ((null? arr) (if (= smalest_value\
+    \ 0) (list smalest_value i) (list )))\n          ((= (remainder (car arr) 2) 0)\
+    \ (if (= smalest_value 0) (pluck-helper (cdr arr) (car arr) (+ i 1))\n       \
+    \                                   (if (< (car arr) smalest_value) (pluck-helper\
+    \ (cdr arr) (car arr) (+ i 1))\n                                             \
+    \ (pluck-helper (cdr arr) smalest_value (+ i 1)))))\n          (else (pluck-helper\
+    \ (cdr arr) smalest_value (+ i 1)))))\n  (pluck-helper arr 0 0))\n", "  (cond\
+    \ [(null? arr) (list )]\n        [(= 0 (modulo (car arr) 2)) (pluck-even-value\
+    \ arr 1 (car arr) 1)]\n        [else (pluck (cdr arr))]))\n", "  (cond [(empty?\
+    \ arr) null]\n        [(empty? (filter even? arr)) null]\n        [else\n    \
+    \     (let ([sorted (sort arr <)])\n           (filter\n            (\u03BB (n)\n\
+    \              (and (even? n)\n                   (= n (car sorted))))\n     \
+    \       arr))]))\n", "  (cond ((null? arr) (list))\n        ((null? (filter (\u03BB\
+    \ (v) (even? v)) arr)) (list))\n        (else (list (list-ref (sort (filter (\u03BB\
+    \ (v) (even? v)) arr)) 0)\n                     (list-ref (filter (\u03BB (v)\
+    \ (equal? (list-ref (sort (filter (\u03BB (v) (even? v)) arr)) 0) v))\n      \
+    \                                 (for/list ([i (in-range (length arr))])\n  \
+    \                                                (list-ref arr i))) 0)))))\n",
+  "  (match arr\n    [() '()]\n    [(list num) (\n       if (and (even? num) (not\
+    \ (null? num)))\n           (list num 0)\n           '())]\n    [(list num nums\
+    \ ...) (\n       let* ([even-nums (filter even? arr)]\n             [smallest-even-num\
+    \ (apply min even-nums)]\n             [index-of-smallest-even-num (list-index\
+    \ arr smallest-even-num)])\n       (list smallest-even-num index-of-smallest-even-num))]))\n",
+  "  (match arr [(list) (list)]\n           [(list (head . tail)) (smallest-even tail\
+    \ head 0)]))\n", "  (if (empty? arr)\n      (list)\n      (map (lambda (lst)\n\
+    \            (cond\n              [(empty? lst) (list)]\n              [(even?\
+    \ (first lst)) (first lst)]\n              [else (pluck (rest lst))]))\n     \
+    \     arr)))\n", "  (let loop ((arr arr) (evens '()) (result '()))\n    (cond\
+    \ ((null? arr) (cond ((null? evens) '())\n                             ((> (car\
+    \ evens) (cadr evens)) (list (cadr evens) (caddr evens)))\n                  \
+    \           (else (list (car evens) (cadr evens)))))\n          ((and (= 0 (modulo\
+    \ (car arr) 2)) (null? evens)) (loop (cdr arr) (list (car arr) (cadr arr)) result))\n\
+    \          ((and (= 0 (modulo (car arr) 2)) (< (car arr) (car evens))) (loop (cdr\
+    \ arr) (list (car arr) (cadr arr)) result))\n          (else (loop (cdr arr) evens\
+    \ result)))))\n", "  (cond\n    [(empty? arr) empty]\n    [(even? (first arr))\
+    \ (cons (first arr) (cons 1 empty))]\n    [else\n     (if (empty? (pluck (rest\
+    \ arr)))\n         (pluck (rest arr))\n         (let ([result (pluck (rest arr))])\n\
+    \           (if (> (first result) (first arr))\n               (cons (first arr)\
+    \ (cons 1 empty))\n               result)))]))\n", "  (filter even? arr))\n</code>\n\
+    Here is my attempt so far.\n\n\nA:\n\nI'm not really sure what you're trying to\
+    \ do. From your code, it looks like you're trying to return a list containing\
+    \ all the even numbers in the input array.\nIf that's what you're trying to do,\
+    \ there's a couple of things wrong with your code:\n\nThe <code>filter</code>\
+    \ function doesn't work on arrays, it only works on lists. So try replacing <code>(filter\
+    \ even? arr)</code> with <code>(filter even? (array-&gt;list arr))</code>.\nThe\
+    \ <code>filter</code> function takes a function (that takes only one parameter)\
+    \ as the first argument, and a sequence (a list, string, hash table, etc.) as\
+    \ the second argument. The filter function will then return a sequence where each\
+    \ element of the input sequence is passed through the function, and elements that\
+    \ return true are kept, while elements that return false are discarded.\nYour\
+    \ code is trying to return an array, but you're using the <code>filter</code>\
+    \ function, which only works on lists. If you want to return an array, you need\
+    \ to convert the list that <code>filter</code> returns back into an array, like\
+    \ this: <code>(list-&gt;array (filter even? (array-&gt;list arr)))</code>.\nFinally,\
+    \ it looks like you're trying to solve a problem from a website called codewars.\
+    \ The program you've written doesn't meet the requirements of the problem. From\
+    \ the problem description, it looks like you need to return a list containing\
+    \ two numbers: the first number should be the smallest even number in the input\
+    \ array, and the second number should be the index of that number in the input\
+    \ array.\n\nHere's what I think your program should look like:\n<code>#lang racket\n",
+  "  (if (null? arr)\n      empty\n      (if (even? (car arr))\n          (list (car\
+    \ arr) (car (iota (length arr))))\n          (pluck (cdr arr)))))", "  (let* ([minEven\
+    \ (apply min (filter even? arr))]\n         [indices (filter (lambda (idx) (eq?\
+    \ (list-ref arr idx) minEven)) (iota (length arr)))])\n    (if (eq? indices '())\n\
+    \        (list)\n        (list minEven (apply min indices)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

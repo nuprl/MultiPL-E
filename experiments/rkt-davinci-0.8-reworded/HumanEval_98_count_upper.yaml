@@ -77,7 +77,763 @@ completions: ["  (letrec ((vowels (list #\\a #\\e #\\i #\\o #\\u))\n           (
     \ (rest (rest s)))]))\n", "  (let ((count 0))\n    (for ([ch (in-string s)])\n\
     \      (when (and (char-upper-case? ch)\n                 (even? (string-index\
     \ s ch)))\n        (set! count (+ count 1))))\n    count))\n```\n\n```scheme\n\
-    #lang racket\n"]
+    #lang racket\n", "  (if (string-empty? s)\n      0\n      (let ((ch (string-ref\
+    \ s 0)))\n        (if (and (char-upcase? ch) (vowel? ch) (even? (string-length\
+    \ s)))\n            (+ 1 (count_upper (substring s 1)))\n            (count_upper\
+    \ (substring s 1))))))\n", "  (letrec ([even-s (for/list ([c (in-string s)]) (if\
+    \ (even? (string-index s c)) c #f))]\n           [vowels (list \"A\" \"E\" \"\
+    I\" \"O\" \"U\")])\n    (for/sum ([e (in-list even-s)]\n              [v (in-list\
+    \ vowels)])\n      (if (equal? e v) 1 0))))\n", "  (if (string-empty? s)\n   \
+    \   0\n      (if (and (even? (string-length s))\n               (member (string-ref\
+    \ s 0) '(#\\A #\\E #\\I #\\O #\\U)))\n          (+ 1 (count_upper (substring s\
+    \ 1)))\n          (count_upper (substring s 1)))))\n", "  (let loop ([s s] [count\
+    \ 0])\n    (if (string-empty? s)\n        count\n        (if (not (member (string-ref\
+    \ s 0) '(#\\a #\\e #\\i #\\o #\\u)))\n            (loop (substring s 1) count)\n\
+    \            (if (even? (string-index (string-ref s 0) \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\
+    ))\n                (loop (substring s 1) (+ count 1))\n                (loop\
+    \ (substring s 1) count))))))\n", "  ;; uses a continuation based approach that\
+    \ I'm not sure I understand...\n  (letrec ([s (string->list s)]\n           [count_chars\
+    \ (lambda (chars total)\n                          (match chars\n            \
+    \                [(list) total]\n                            [(list head tail\
+    \ ...)\n                             (count_chars tail\n                     \
+    \                     (if (and (= 0 (remainder (length tail) 2))\n           \
+    \                                        (char-upper-case? head))\n          \
+    \                                    (+ total 1)\n                           \
+    \                   total))]))])\n    (count_chars s 0)))\n", "  (let loop ([s\
+    \ s] [count 0])\n    (cond [(empty? s) count]\n          [(and (char-vowel? (car\
+    \ s)) (char-upper-case? (car s)))\n           (loop (cdr s) (+ count 1))]\n  \
+    \        [else (loop (cdr s) count)])))\n", "  (cond\n    [(&lt; (string-length\
+    \ s) 2)\n     0]\n    [(&gt;= (modulo (string-index (string-upper-case s) (string-ref\
+    \ s 1)) 2) 1)\n     (count_upper (substring s 2))]\n    [else\n     (+ 1 (count_upper\
+    \ (substring s 2)))]))\n</code>\nWith this code, I'm getting an error: \"odd-length\
+    \ list passed to \nlist->string\"\n\n\nA:\n\nIs this what you're looking for?\n\
+    <code>(define (count-upper s)\n  (define (inner str i)\n    (cond\n      [(negative?\
+    \ i) 0]\n      [(and (eq? i 0)\n            (char-upper-case? (string-ref str\
+    \ i)))\n       1]\n      [(and (zero? (modulo i 2))\n            (char-upper-case?\
+    \ (string-ref str i)))\n       (+ 1 (inner str (- i 1)))]\n      [else\n     \
+    \  (inner str (- i 1))]))\n  (inner s (- (string-length s) 1)))\n</code>\nEx:\n\
+    <code>(count-upper \"aBCdEf\")", "  (let loop ([s s] [i 0] [c 0])\n    (if (string-empty?\
+    \ s)\n        c\n        (cond\n         ((or (char=? (string-ref s i) #\\A)\n\
+    \              (char=? (string-ref s i) #\\E)\n              (char=? (string-ref\
+    \ s i) #\\I)\n              (char=? (string-ref s i) #\\O)\n              (char=?\
+    \ (string-ref s i) #\\U))\n          (loop (substring s 1) (+ i 1) (+ c 1)))\n\
+    \         (else (loop (substring s 1) (+ i 1) c))))))\n", "  (define (iter i n)\n\
+    \    (cond\n      [(= i (string-length s)) n]\n      [(even? i)\n       (cond\n\
+    \         [(char-upcase? (string-ref s i)) (iter (+ i 1) (+ n 1))]\n         [else\
+    \ (iter (+ i 1) n)])]\n      [else (iter (+ i 1) n)]))\n  (iter 0 0))\n", "  (let\
+    \ ((count 0))\n    (for/fold ([s s])\n              ([i (in-range (string-length\
+    \ s))])\n      (let ([c (string-ref s i)])\n        (when (and (= 0 (modulo i\
+    \ 2)) (char-upcase? c))\n          (set! count (+ count 1)))\n        s))\n  \
+    \  count))\n", "  (define (count_upper-helper s i)\n    (if (eq? i (string-length\
+    \ s))\n        0\n        (if (and (vowel? (string-ref s i)) (upper? (string-ref\
+    \ s i)))\n            (+ 1 (count_upper-helper s (+ i 2)))\n            (count_upper-helper\
+    \ s (+ i 2)))))\n  (count_upper-helper s 0))\n", "  (cond [(empty? s) 0]\n   \
+    \     [(and (char-upcased? (first s))\n              (vowel? (first s))\n    \
+    \          (even? (remainder (add1 (string-length s)) 2)))\n         (add1 (count_upper\
+    \ (rest s)))]\n        [else (count_upper (rest s))]))\n", "  (if (string-empty?\
+    \ s)\n      0\n      (if (string-ci=? (string-upper-case (string-ref s 0)) (string-ref\
+    \ s 0))\n          (+ 1 (count_upper (string-drop s 2)))\n          (count_upper\
+    \ (string-drop s 2)))))\n", "  (letrec ([len (string-length s)]\n           [vowels\
+    \ (build-vector 5 #\\A)]\n           [count 0])\n    (define (is-vowel? c)\n \
+    \     (if (= -1 (vector-ref vowels 0))\n          #f\n          (letrec ([n (vector-length\
+    \ vowels)]\n                   [i 0])\n            (define (loop i)\n        \
+    \      (if (= i n)\n                  #f\n                  (let ([val (vector-ref\
+    \ vowels i)])\n                    (if (and (char=? c val) (even? i))\n      \
+    \                  #t\n                        (loop (+ i 1))))))\n          \
+    \  (loop i))))\n    (define (odd-or-even? i)\n      (if (even? i)\n          #t\n\
+    \          #f))\n    (define (loop i)\n      (if (= i len)\n          count\n\
+    \          (let ([val (string-ref s i)])\n            (if (and (odd-or-even? i)\
+    \ (is-vowel? val))\n                (loop (+ i 1))\n                (loop (+ i\
+    \ 1))))))\n    (loop 0)))\n", "  ;; YOUR CODE HERE\n  )\n", "  (let ((count 0))\n\
+    \    (define (is_vowel c)\n      (or (equal? c #\\a)\n          (equal? c #\\\
+    e)\n          (equal? c #\\i)\n          (equal? c #\\o)\n          (equal? c\
+    \ #\\u)))\n    (define (count_even s i)\n      (if (= i (string-length s))\n \
+    \         count\n          (if (and (is_vowel (string-ref s i))\n            \
+    \       (char-upcase? (string-ref s i)))\n              (count_even s (+ i 1))\n\
+    \              (count_even s (+ i 2)))))\n    (count_even s 0)))\n", "  (cond\
+    \ [(= 0 (string-length s)) 0]\n        [(and (char-upper-case? (string-ref s 0))\
+    \ (vowel? (string-ref s 0))) (+ 1 (count_upper (substring s 2)))]\n        [else\
+    \ (count_upper (substring s 2))]))\n", "  (define (count_upper-inner s n)\n  \
+    \  (if (empty? s)\n        n\n        (let ([c (first s)])\n          (if (and\
+    \ (char-upcase? c) (vowel? c) (even? n))\n              (count_upper-inner (rest\
+    \ s) (+ n 1))\n              (count_upper-inner (rest s) n)))))\n  (count_upper-inner\
+    \ s 0))\n", "  (if (empty? s)\n      0\n      (if (equal? (even? (string-index\
+    \ s 0)) true)\n          (if (equal? (is_upper_vowel (string-ref s 0)) true)\n\
+    \              (+ 1 (count_upper (substring s 1)))\n              (count_upper\
+    \ (substring s 1)))\n          (count_upper (substring s 1)))))\n", "  (define\
+    \ (iter idx acc)\n    (if (eq? idx (string-length s))\n        acc\n        (if\
+    \ (char-vowel? (string-ref s idx))\n            (if (even? idx)\n            \
+    \    (if (char-upper-case? (string-ref s idx))\n                    (iter (+ idx\
+    \ 1) (+ acc 1))\n                    (iter (+ idx 1) acc))\n                (iter\
+    \ (+ idx 1) acc))\n            (iter (+ idx 1) acc))))\n  (iter 0 0))\n```\n\n\
+    ## Compiling the Code\n\nTo compile the code and run the test cases:\n\n```bash\n\
+    $ make\n```\n\nTo clean the code:\n\n```bash\n$ make clean\n```", "  (define (is_upper?\
+    \ c)\n    (char-alphabetic? c)\n    (char-upcase? c))\n  (define (is_vowel? c)\n\
+    \    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (is_vowel_in_even_index?\
+    \ c)\n    (and (is_vowel? c)\n         (even? (position c s))))\n  (define (is_upper_vowel_in_even_index?\
+    \ c)\n    (and (is_upper? c)\n         (is_vowel_in_even_index? c)))\n  (length\
+    \ (filter is_upper_vowel_in_even_index? s)))\n", "  (let loop ([i 0] [count 0])\n\
+    \    (cond\n      [(= i (string-length s)) count]\n      [(and (vowel? (string-ref\
+    \ s i)) (string-upper-case? (string-ref s i)))\n       (loop (+ i 2) (+ count\
+    \ 1))]\n      [else (loop (+ i 2) count)])))\n", "  (define (is-upper-vowel c)\n\
+    \    (and (member c '(#\\A #\\E #\\I #\\O #\\U))\n         (char-upper-case? c)))\n\
+    \  (define (count-help s count)\n    (if (empty? s)\n        count\n        (if\
+    \ (is-upper-vowel (first s))\n            (count-help (rest s) (+ count 1))\n\
+    \            (count-help (rest s) count))))\n  (if (empty? s)\n      0\n     \
+    \ (count-help (rest s) 0)))\n", "  (define (cnt_upper i)\n    (cond\n      [(=\
+    \ i (string-length s)) 0]\n      [(vowel? (string-ref s i)) (cnt_upper (+ i 2))]\n\
+    \      [else (cnt_upper (+ i 1))]))\n  (cnt_upper 0))\n", "  (define (is-vowel\
+    \ c)\n    (or (equal? c #\\a)\n        (equal? c #\\e)\n        (equal? c #\\\
+    i)\n        (equal? c #\\o)\n        (equal? c #\\u)))\n  (define (is-upper c)\n\
+    \    (char-upper-case? c))\n  (define (count n count-fn)\n    (if (zero? n)\n\
+    \        0\n        (+ (if (count-fn (string-ref s n)) 1 0)\n           (count\
+    \ (- n 2) count-fn))))\n  (count (- (string-length s) 1)\n         (lambda (x)\
+    \ (and (is-upper x) (is-vowel x)))))\n", "  (define vowels \"aeiouAEIOU\")\n \
+    \ (define (helper s i)\n    (cond\n      [(empty? s) 0]\n      [(and (char-in-range?\
+    \ (first s) #\\A #\\Z)\n            (pos-vowel? (first s) vowels)\n          \
+    \  (even? i))\n       (+ 1 (helper (rest s) (+ i 1)))]\n      [else (helper (rest\
+    \ s) (+ i 1))]))\n  (helper s 0))\n", "  (for/sum ((c (in-string s)))\n    (and\
+    \ (char-alphabetic? c)\n         (char-upper-case? c)\n         (even? (string-index\
+    \ c s)))))\n", "  (cond\n    [(empty? s) 0]\n    [(empty? (rest s)) 0]\n    [(char-upcase?\
+    \ (first s))\n     (+ 1 (count_upper (rest (rest s))))]\n    [else (count_upper\
+    \ (rest (rest s)))]))\n\n", "  (if (string-empty? s)\n      0\n      (if (string-uppercase?\
+    \ (string-ref s 0))\n          (+ 1 (count_upper (string-drop s 2)))\n       \
+    \   (count_upper (string-drop s 2)))))\n", "  (count-vowels (filter-vowels (filter-odd\
+    \ (string->list s)))))\n", "  (cond\n    [(= (string-length s) 0) 0]\n    [(string-upper-case?\
+    \ (string-ref s 0))\n     (+ 1 (count_upper (substring s 2)))]\n    [else (count_upper\
+    \ (substring s 2))]))\n\n", "  (cond ((null? s) 0)\n        ((char-numeric? (car\
+    \ s)) (count_upper (cdr s)))\n        ((char-upper-case? (car s)) (+ 1 (count_upper\
+    \ (cdr s))))\n        (else (count_upper (cdr s)))))\n```\n\n### 2.3.3 Counting\
+    \ Odds\n\n```racket\n#lang racket\n", "  (if (not (empty? s))\n      (if (char-vowel?\
+    \ (char-upcase (first s)))\n          (+ (if (even? (char->integer (first s)))\
+    \ 1 0)\n             (count_upper (rest s)))\n          (count_upper (rest s)))\n\
+    \      0))\n", "  (define (is_upper c) (and (char-upper-case? c) (member c '(#\\\
+    A #\\E #\\I #\\O #\\U))))\n  (count (lambda (i c) (and (even? i) (is_upper c)))\
+    \ s))\n```\n\n```racket\n#lang racket\n", "  (let ((idx 0)\n        (count 0))\n\
+    \    (for ([c (in-string s)])\n      (when (and (vowel? c)\n                 (even?\
+    \ idx))\n        (set! count (+ count 1)))\n      (set! idx (+ idx 1)))\n    count))\n",
+  "  (define (helper s idx count)\n    (cond\n      [(= idx (string-length s)) count]\n\
+    \      [(and (eq? (modulo idx 2) 0)\n            (member (string-ref s idx) '(#\\\
+    A #\\E #\\I #\\O #\\U)))\n       (helper s (+ idx 1) (+ count 1))]\n      [else\
+    \ (helper s (+ idx 1) count)]))\n  (helper s 0 0))\n", "  (cond [(empty? s) 0]\n\
+    \        [(zero? (remainder (add1 (length s)) 2))\n         (cond [(member (first\
+    \ s) '(\"A\" \"E\" \"I\" \"O\" \"U\"))\n                (add1 (count_upper (rest\
+    \ s)))]\n               [else (count_upper (rest s))])]\n        [else (count_upper\
+    \ (rest s))]))\n", "  (cond\n    [(empty? s) 0]\n    [(in-set? (car s) \"AEIOU\"\
+    ) (+ 1 (count_upper (cdr s)))]\n    [else (count_upper (cdr s))]))\n", "  (let\
+    \ ([count 0])\n    (for ([i (in-range (string-length s))])\n      (define c (string-ref\
+    \ s i))\n      (if (and (even? i)\n               (member c '(#\\A #\\E #\\I #\\\
+    O #\\U)))\n          (set! count (+ count 1))))\n    count))\n", "  (let loop\
+    \ ([i 0] [count 0])\n    (cond\n      [(eq? i (string-length s)) count]\n    \
+    \  [(and (even? i) (char-upper-case? (string-ref s i)))\n       (loop (+ i 1)\
+    \ (+ count 1))]\n      [else (loop (+ i 1) count)])))\n</code>\nHere's what I\
+    \ came up with:\n<code>#lang racket\n", "  (for/sum ((i (in-range (string-length\
+    \ s))))\n    (if (char-alphabetic? (string-ref s i))\n        (if (even? i)\n\
+    \            (if (char-uppercase? (string-ref s i))\n                1\n     \
+    \           0)\n            0)\n        0)))\n```\n\n### problem-7\n\n```racket\n\
+    #lang racket\n", "  (let loop ([s s] [i 0] [c 0])\n    (cond\n      [(empty? s)\
+    \ c]\n      [(empty? (rest s)) c]\n      [(= 0 (remainder i 2))\n       (cond\n\
+    \         [(member (first s) '(#\\A #\\E #\\I #\\O #\\U))\n          (loop (rest\
+    \ s) (+ i 1) (+ c 1))]\n         [else (loop (rest s) (+ i 1) c)])]\n      [else\
+    \ (loop (rest s) (+ i 1) c)])))\n", "  (define (is_vowel c)\n    (or (char=? c\
+    \ #\\a)\n        (char=? c #\\e)\n        (char=? c #\\i)\n        (char=? c #\\\
+    o)\n        (char=? c #\\u)))\n  (define (helper s n acc)\n    (if (zero? n)\n\
+    \        acc\n        (helper (rest s) (- n 1)\n               (if (and (is_vowel\
+    \ (first s))\n                        (char-upper-case? (first s)))\n        \
+    \           (+ acc 1)\n                   acc))))\n  (helper s (string-length\
+    \ s) 0))", "  (cond ((string-null? s) 0)\n        ((even? (string-ref s 0))\n\
+    \         (cond ((or (char=? (string-ref s 0) #\\A)\n                    (char=?\
+    \ (string-ref s 0) #\\E)\n                    (char=? (string-ref s 0) #\\I)\n\
+    \                    (char=? (string-ref s 0) #\\O)\n                    (char=?\
+    \ (string-ref s 0) #\\U))\n                (+ 1 (count_upper (string-drop s 1))))\n\
+    \               (else (count_upper (string-drop s 1)))))\n        (else (count_upper\
+    \ (string-drop s 1)))))\n", "  (cond\n    [(empty? s) 0]\n    [(empty? (rest s))\
+    \ 0]\n    [(and (char-upcase? (first s))\n          (vowel? (first s)))\n    \
+    \ (+ 1 (count_upper (rest (rest s))))]\n    [else (count_upper (rest (rest s)))]))\n",
+  "  (define (count_upper-acc n s)\n    (cond ((null? s) n)\n          ((char-upcase?\
+    \ (car s))\n           (count_upper-acc (add1 n) (cdr s)))\n          (else (count_upper-acc\
+    \ n (cdr s)))))\n  (count_upper-acc 0 s))\n", "  (define (uc? c)\n    (char-upper-case?\
+    \ c))\n  (define (vowel? c)\n    (or (= c #\\a) (= c #\\e) (= c #\\i) (= c #\\\
+    o) (= c #\\u)))\n  (let ([num_vowels 0])\n    (for ([ch (in-string s)])\n    \
+    \  (cond [(and (even? (string-index s ch)) (uc? ch) (vowel? ch))\n           \
+    \  (set! num_vowels (+ num_vowels 1))]))\n    num_vowels))\n", "  (cond\n    [(empty?\
+    \ s) 0]\n    [(cons? s)\n     (cond\n       [(and (char-upcase? (first s)) (vowel?\
+    \ (first s)))\n        (+ 1 (count_upper (rest s)))]\n       [else (count_upper\
+    \ (rest s))])]\n    [else 0]))\n", "  (cond\n    [(= (string-length s) 0) 0]\n\
+    \    [(char-uppercase? (string-ref s 0)) (+ 1 (count_upper (substring s 2)))]\n\
+    \    [else (count_upper (substring s 2))]))\n", "  (count-if-even\n   (lambda\
+    \ (x)\n     (string-contains? (string-upcase x) \"AEIOU\"))\n   (string->list\
+    \ s)))\n", "  (let loop ([i 0] [n 0])\n    (cond\n      [(= i (string-length s))\
+    \ n]\n      [(= i (% i 2))\n       (cond\n         [(and (= (string-ref s i) #\\\
+    A) (= (string-ref s i) #\\E) (= (string-ref s i) #\\I) (= (string-ref s i) #\\\
+    O) (= (string-ref s i) #\\U)) (+ n 1)]\n         [else (+ n 0)])\n       (loop\
+    \ (+ i 1) n)]\n      [else (loop (+ i 1) n)])))\n", "  (let ([even-indices (filter\
+    \ even? (range (string-length s)))]\n        [s (string-normalize-spaces s)])\n\
+    \    (length (filter (lambda (i) (vowel? (string-ref s i) #:upper? #t))\n    \
+    \                even-indices))))\n", "  (cond ((null? s) 0)\n        ((and (member\
+    \ (string-upcase (string-ref s 0)) \"AEIOU\")\n              (even? (string-length\
+    \ s)))\n         (+ 1 (count_upper (substring s 1 (string-length s)))))\n    \
+    \    (else (count_upper (substring s 1 (string-length s))))))\n```\n\n``` #lang\
+    \ racket", "  (define (count-upper! s index acc)\n    (if (empty? s)\n       \
+    \ acc\n        (if (even? index)\n            (if (char-uppercase? (first s))\n\
+    \                (count-upper! (rest s) (+ index 1) (+ acc 1))\n             \
+    \   (count-upper! (rest s) (+ index 1) acc))\n            (count-upper! (rest\
+    \ s) (+ index 1) acc))))\n  (count-upper! s 0 0))\n", "  (count (lambda (c) (and\
+    \ (member c '(\"A\" \"E\" \"I\" \"O\" \"U\")) (even? (string-position c s))))\n\
+    \         (string->list s)))\n```\n\n```racket\n#lang racket\n", "  (if (empty?\
+    \ s)\n      0\n      (if (string-upper-case? (first s))\n          (if (even?\
+    \ (string-index (first s) \"AEIOU\"))\n              (+ 1 (count_upper (rest s)))\n\
+    \              (count_upper (rest s)))\n          (count_upper (rest s)))))\n",
+  "  (let ((res 0))\n    (for ([c (in-string s)])\n      (cond [(vowel? c)\n     \
+    \        (when (even? (string-index s c))\n               (set! res (+ res 1)))]))\n\
+    \    res))\n", "  (cond\n    [(empty? s) 0]\n    [(vowel? (string-upcase (string-ref\
+    \ s 0)))\n     (+ 1 (count_upper (substring s 2)))]\n    [else (count_upper (substring\
+    \ s 2))]))\n", "  (define (is-upper? c)\n    (and (char-alphabetic? c) (char-upper-case?\
+    \ c)))\n  (define (is-vowel? c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n\
+    \  (for/sum ([i (in-range (string-length s))]\n            [c (in-string s)])\n\
+    \    (cond [(even? i) 0]\n          [(and (is-upper? c) (is-vowel? c)) 1]\n  \
+    \        [else 0])))", "  (count-even-upper-vowels s 0))\n", "  (define vowels\
+    \ '(\"A\" \"E\" \"I\" \"O\" \"U\"))\n  (define (count acc (idx (rest-s s)))\n\
+    \    (if (empty? rest-s)\n        acc\n        (if (and (= 0 (modulo idx 2))\n\
+    \                 (member (string-upcase (first rest-s)) vowels))\n          \
+    \  (count (+ acc 1) (+ idx 1) (rest rest-s))\n            (count acc (+ idx 1)\
+    \ (rest rest-s)))))\n  (count 0 0 s))\n```\n\n## 10.\n\n```#lang racket\n", " \
+    \ (count-if (\u03BB (c)\n              (and (char-upper-case? c)\n           \
+    \        (or (char=? c #\\A)\n                       (char=? c #\\E)\n       \
+    \                (char=? c #\\I)\n                       (char=? c #\\O)\n   \
+    \                    (char=? c #\\U))))\n            (range s 0 (sub1 (string-length\
+    \ s)) 2)))\n", "  (let loop ([s s] [i 0] [acc 0])\n    (cond\n      [(empty? s)\
+    \ acc]\n      [(even? i)\n       (cond\n         [(member (first s) '#(#\\A #\\\
+    E #\\I #\\O #\\U))\n          (loop (rest s) (+ i 1) (+ acc 1))]\n         [else\
+    \ (loop (rest s) (+ i 1) acc)])]\n      [else (loop (rest s) (+ i 1) acc)])))\n",
+  "  (length (filter (\u03BB (x) (and (upper-case? x) (vowel? x))) (rest (str-&gt;list\
+    \ s)))))\n", "  (cond [(empty? s) 0]\n        [(even? (length s))\n         (cond\
+    \ [(vowel? (first s)) (add1 (count_upper (rest s)))]\n               [else (count_upper\
+    \ (rest s))])]\n        [else (count_upper (rest s))]))\n", "  (cond ((zero? (length\
+    \ s)) 0)\n        ((and (even? (string-length s)) (vowel? (string-ref s (sub1\
+    \ (string-length s)))))\n         (+ 1 (count_upper (substring s 0 (sub1 (string-length\
+    \ s))))))\n        (else (count_upper (substring s 0 (sub1 (string-length s)))))))\n",
+  "  (let ((count 0))\n    (for ([x (in-string s)])\n      (when (and (string-upper-case?\
+    \ x)\n                 (even? (count x (string-&gt;list s))))\n        (set! count\
+    \ (+ count 1))))\n    count))\n</code>\nHowever, I'm getting a compile-time error:\n\
+    <code>count.rkt:5:12: compile: unbound identifier in module in: count\n</code>\n\
+    I suspect this is an issue with my syntax, but I'm not sure.\n\n\nA:\n\nI think\
+    \ the main issue is, as others commented, that you're not using the right <code>count</code>\
+    \ function, you're mixing the function <code>count</code> from <code>for</code>\
+    \ with <code>count</code> from <code>list</code>.\nOther than that, you should\
+    \ think about naming things, for instance, <code>s</code> is a string, but <code>x</code>\
+    \ is not, it's a char, give them better names and this is much more readable:\n\
+    <code>(define (count-upper str)\n  (let ((count 0))\n    (for ([ch (in-string\
+    \ str)])\n      (when (and (string-upper-case? ch)\n                 (even? (for/fold\
+    \ ([position 0])\n                                 ([ch (in-string str)])\n  \
+    \                               (+ position 1))))\n        (set! count (+ count\
+    \ 1))))\n    count))\n</code>\nWith better names:\n<code>(define (count-upper\
+    \ str)\n  (let ((count 0))\n    (for ([ch (in-string str)])\n      (when (and\
+    \ (string-upper-case? ch)\n                 (even? (string-position ch str)))\n\
+    \        (set! count (+ count 1))))\n    count))\n</code>\n", "  ;; Todo\n  )\n",
+  "  (for/sum ([i (in-naturals 2)])\n    (if (vowel? (string-ref s i))\n        (if\
+    \ (char-upper-case? (string-ref s i))\n            1\n            0))))\n", " \
+    \ (define vowel-regexp #rx\"[AEIOU]\")\n  (define (counter i acc)\n    (cond\n\
+    \      [(empty? s) acc]\n      [(and (odd? i) (regexp-match? vowel-regexp (string-ref\
+    \ s 0)))\n       (counter (+ i 1) (+ acc 1))]\n      [else (counter (+ i 1) acc)]))\n\
+    \  (counter 0 0))\n```\n\n```js\n// Given a string s, count the number of uppercase\
+    \ vowels in even indices.\n// For example:\n// >>> count_upper(\"aBCdEf\")\n//\
+    \ 1\n// >>> count_upper(\"abcdefg\")\n// 0\n// >>> count_upper(\"dBBE\")\n// 0\n\
+    function count_upper(s) {\n  let vowel_regexp = /[AEIOU]/;\n  function counter(i,\
+    \ acc) {\n    if (s.length === 0) {\n      return acc;\n    } else if (i % 2 ===\
+    \ 1 && vowel_regexp.test(s[0])) {\n      return counter(i + 1, acc + 1);\n   \
+    \ } else {\n      return counter(i + 1, acc);\n    }\n  }\n  return counter(0,\
+    \ 0);\n}\n```\n\n```clojure", "  (cond\n    [(&lt; (length s) 2) 0]\n    [(&gt;=\
+    \ (modulo (length s) 2) 1) (count_upper (substring s 1))]\n    [(not (char-lower-case?\
+    \ (string-ref s 0))) (add1 (count_upper (substring s 1)))]\n    [else (count_upper\
+    \ (substring s 1))]))\n</code>\n", "  (define vowels '(\"A\" \"E\" \"I\" \"O\"\
+    \ \"U\"))\n  (define (count_upper_aux s counter)\n    (cond [(empty? s) 0]\n \
+    \         [(and (not (string-contains? vowels (string-upcase (first s)))) (even?\
+    \ counter)) (count_upper_aux (rest s) (+ counter 1))]\n          [(and (string-contains?\
+    \ vowels (string-upcase (first s))) (even? counter)) (+ 1 (count_upper_aux (rest\
+    \ s) (+ counter 1)))]\n          [else (count_upper_aux (rest s) (+ counter 1))]))\n\
+    \  (count_upper_aux s 0))\n", "  (cond\n    [(&lt; (string-length s) 2) 0]\n \
+    \   [(&gt;= (modulo (string-length s) 2) 1) (if (or (equal? (string-upper-case\
+    \ (substring s 1 1)) \"A\") (equal? (string-upper-case (substring s 1 1)) \"E\"\
+    ) (equal? (string-upper-case (substring s 1 1)) \"I\") (equal? (string-upper-case\
+    \ (substring s 1 1)) \"O\") (equal? (string-upper-case (substring s 1 1)) \"U\"\
+    )) (add1 (count_upper (substring s 2))) (count_upper (substring s 2)))]\n    [else\
+    \ (if (or (equal? (string-upper-case (substring s 0 1)) \"A\") (equal? (string-upper-case\
+    \ (substring s 0 1)) \"E\") (equal? (string-upper-case (substring s 0 1)) \"I\"\
+    ) (equal? (string-upper-case (substring s 0 1)) \"O\") (equal? (string-upper-case\
+    \ (substring s 0 1)) \"U\")) (add1 (count_upper (substring s 1))) (count_upper\
+    \ (substring s 1)))]))\n</code>\nIt looks pretty ugly and I am not sure whether\
+    \ this is the right way to go.\nAny help/suggestions/tips are appreciated.\n\n\
+    \nA:\n\nLike most things, this is much easier with proper tools:\n<code>(require\
+    \ srfi/1)\n", "  (let ([l (string->list s)])\n    (cond\n      [(empty? l) 0]\n\
+    \      [(vowel? (list-ref l 0))\n       (cond\n         [(upper? (list-ref l 0))\
+    \ (+ 1 (count_upper (list->string (cdr l))))]\n         [else (count_upper (list->string\
+    \ (cdr l)))])]\n      [else (count_upper (list->string (cdr l)))])))\n", "  (for/sum\
+    \ ([c (in-string s)])\n    (if (and (char-vowel? c) (char-upper-case? c) (even?\
+    \ (string-index s c)))\n        1\n        0)))", "  (cond\n    [(empty? s) 0]\n\
+    \    [(and (even? (string-length s))\n          (char-upper-case? (string-ref\
+    \ s 0)))\n     (+ 1 (count_upper (substring s 1)))]\n    [else (count_upper (substring\
+    \ s 1))]))\n", "  (define (is_upper? c)\n    (char-upper-case? c))\n  (define\
+    \ (is_vowel? c)\n    (member c '(\"A\" \"E\" \"I\" \"O\" \"U\")))\n  (define (even-index?\
+    \ i)\n    (= (modulo i 2) 0))\n  (define (filter-even-upper-vowels str)\n    (for/list\
+    \ ([c (in-string str)]\n               #:when (and (even-index? (string-index\
+    \ str c))\n                           (is_upper? c)\n                        \
+    \   (is_vowel? c)))\n      c))\n  (length (filter-even-upper-vowels s)))\n", " \
+    \ (define (helper c-string pos len even-flag)\n    (if (equal? pos len)\n    \
+    \    0\n        (if (char-upper-case? (string-ref c-string pos))\n           \
+    \ (if even-flag\n                (+ 1 (helper c-string (+ pos 1) len (not even-flag)))\n\
+    \                (helper c-string (+ pos 1) len (not even-flag)))\n          \
+    \  (helper c-string (+ pos 1) len (not even-flag)))))\n  (helper (string->immutable-string\
+    \ s) 0 (string-length s) #f))\n", "  (accumulate + 0 (for/list ([c (in-string\
+    \ s)])\n                  (when (and (char-vowel? c) (char-uppercase? c)\n   \
+    \                          (even? (string-index s c)))\n                    1))))\n",
+  "  (cond\n    [(empty? s) 0]\n    [(and (vowel? (first s))\n          (even? (remainder\
+    \ (string-length s) 2)))\n     (+ 1 (count_upper (rest s)))]\n    [else (count_upper\
+    \ (rest s))]))\n", "  (accumulate + 0 (map (\u03BB (v i) (and (eq? 'E (string-upcase\
+    \ v)) (even? i))) (string->list s) (iota (string-length s)))))\n", "  (define\
+    \ (count_upper_helper s i result)\n    (cond\n      [(empty? s) result]\n    \
+    \  [(char-upcase? (first s)) (if (even? i) (count_upper_helper (rest s) (+ i 1)\
+    \ (+ result 1)) (count_upper_helper (rest s) (+ i 1) result))]\n      [else (count_upper_helper\
+    \ (rest s) (+ i 1) result)]))\n  (count_upper_helper s 0 0))\n```\n\n[Running\
+    \ the code](https://repl.it/@aguycalled/Exercise-4b#main.rkt) gives:\n\n```\n\
+    -> (count_upper \"aBCdEf\")\n1\n-> (count_upper \"abcdefg\")\n0\n-> (count_upper\
+    \ \"dBBE\")\n0\n```\n\n## Exercise 5\n\nWrite a function called `count_upper`\
+    \ that takes in a string and returns the number of uppercase vowels in the string.\n\
+    \n```racket\n#lang racket\n", "  ;; This is the basic idea:\n  ;; (map (lambda\
+    \ (i) (= (string-upcase (string-ref s i)) (string-ref s i)))\n  ;;      (range\
+    \ 0 (string-length s) 2))\n  ;; However, this will turn each result into a list,\
+    \ so the length of the\n  ;; result will be the wrong type to be used by +.\n\
+    \  ;;\n  ;; This will turn each result into #t or #f:\n  ;; (map (lambda (i) (equal?\
+    \ (string-upcase (string-ref s i)) (string-ref s i)))\n  ;;      (range 0 (string-length\
+    \ s) 2))\n  ;; This will also provide a list of results, but the list will contain\
+    \ either\n  ;; #t or #f, so the length of the list can be used by +.\n  ;;\n \
+    \ ;; This will sum the length of the list:\n  ;; (apply + (map (lambda (i) (equal?\
+    \ (string-upcase (string-ref s i)) (string-ref s i)))\n  ;;               (range\
+    \ 0 (string-length s) 2)))\n  ;;\n  ;; This is equivalent to the final solution\
+    \ below.\n\n  (apply + (map (lambda (i) (equal? (string-upcase (string-ref s i))\
+    \ (string-ref s i)))\n                 (range 0 (string-length s) 2))))\n```\n\
+    \nSince `map` returns a list of results, and `apply` is used to turn that list\
+    \ into individual arguments to `+`, the final result will be the sum of the list\
+    \ returned by `map`.", "  (cond [(empty? s) 0]\n        [(symbol=? #\\A (string-ref\
+    \ s 0))\n         (+ 1 (count_upper (substring s 2)))]\n        [(symbol=? #\\\
+    E (string-ref s 0))\n         (+ 1 (count_upper (substring s 2)))]\n        [(symbol=?\
+    \ #\\I (string-ref s 0))\n         (+ 1 (count_upper (substring s 2)))]\n    \
+    \    [(symbol=? #\\O (string-ref s 0))\n         (+ 1 (count_upper (substring\
+    \ s 2)))]\n        [(symbol=? #\\U (string-ref s 0))\n         (+ 1 (count_upper\
+    \ (substring s 2)))]\n        [else (count_upper (substring s 2))]))", "  (local\
+    \ [(define (even-upper? ch)\n            (and (char-upper-case? ch)\n        \
+    \         (even? (sub1 (char-&gt;integer ch)))))\n          (define (count-upper-rec\
+    \ s n)\n            (cond [(empty? s)\n                   n]\n               \
+    \   [(even-upper? (first s))\n                   (count-upper-rec (rest s) (+\
+    \ n 1))]\n                  [else\n                   (count-upper-rec (rest s)\
+    \ n)]))]\n    (count-upper-rec s 0)))\n</code>\n", "  (define (count_upper_index\
+    \ s idx)\n    (cond\n      [(>= idx (string-length s)) 0]\n      [(member (string-ref\
+    \ s idx) (list #\\A #\\E #\\I #\\O #\\U))\n       (+ 1 (count_upper_index s (+\
+    \ idx 2)))]\n      [else (count_upper_index s (+ idx 2))]))\n  (count_upper_index\
+    \ s 0))\n", "  (letrec ([vowels \"aeiouAEIOU\"]\n           [chars (string->list\
+    \ s)]\n           [evens (filter even? (build-list (string-length s) (lambda (x)\
+    \ x)))]\n           [counter (build-list 10 (lambda (x) 0))])\n    (for ([i evens])\n\
+    \      (for ([v vowels])\n        (if (eq? (list-ref chars i) v)\n           \
+    \ (set! (list-ref counter 0) (+ 1 (list-ref counter 0))))))\n    (list-ref counter\
+    \ 0)))\n", "  (let loop ([cur 0] [s s] [vowels 0])\n    (cond [(< cur (string-length\
+    \ s))\n           (let ([cur-char (string-ref s cur)])\n             (cond [(member\
+    \ cur-char '(\"A\" \"E\" \"I\" \"O\" \"U\"))\n                    (if (odd? cur)\n\
+    \                        (loop (+ cur 1) s vowels)\n                        (loop\
+    \ (+ cur 1) s (+ vowels 1)))]\n                   [else (loop (+ cur 1) s vowels)]))]\n\
+    \          [else vowels])))\n```\n\nNote that I'm using a _member_ function to\
+    \ test if the current character\nis a vowel, and a _string-ref_ function to get\
+    \ the current character.\n\n#### Solution: Python\n\n```python\n#lang python\n\
+    \n# Given a string s, count the number of uppercase vowels in even indices.\n\
+    # For example:\n# >>> count_upper(\"aBCdEf\")\n# 1\n# >>> count_upper(\"abcdefg\"\
+    )\n# 0\n# >>> count_upper(\"dBBE\")\n# 0\ndef count_upper(s):\n    vowels = 0\n\
+    \    for i in range(len(s)):\n        if s[i] in \"AEIOU\" and i % 2 == 0:\n \
+    \           vowels += 1\n    return vowels\n```\n\nPython has a lot of ways to\
+    \ do this, but this version is similar to the\nRacket version.", "  (local [(define\
+    \ (counter acc index)\n            (cond [(= index (string-length s)) acc]\n \
+    \                 [(= (modulo index 2) 0)\n                   (counter (if (char-upcase?\
+    \ (string-ref s index))\n                                (+ acc 1)\n         \
+    \                       acc)\n                            (+ index 1))]\n    \
+    \              [else (counter acc (+ index 1))]))]\n    (counter 0 0)))\n", " \
+    \ (letrec ([loop (lambda (s n)\n                  (cond\n                    [(string-empty?\
+    \ s) n]\n                    [(vowel? (string-ref s 0))\n                    \
+    \ (if (even? (string-length s))\n                         (loop (substring s 1)\
+    \ (+ n 1))\n                         (loop (substring s 1) n))]\n            \
+    \        [else (loop (substring s 1) n)]))])\n    (loop s 0)))\n", "  (let ((s-len\
+    \ (string-length s))\n        (idx (modulo (string-length s) 2))\n        (num-upper\
+    \ 0))\n    (do ((i 0 (+ i 1)))\n        ((>= i s-len) num-upper)\n      (when\
+    \ (and (= idx 0) (vowel? (string-ref s i)))\n        (set! num-upper (+ num-upper\
+    \ 1))))))\n", "  (define (vowel? c)\n    (member c '(#\\A #\\E #\\I #\\O #\\U)))\n\
+    \  (define (even? n)\n    (= (remainder n 2) 0))\n  (define (upper? c)\n    (if\
+    \ (vowel? c)\n        (and (char-upper-case? c)\n             (even? (char-&gt;integer\
+    \ c)))\n        #f))\n  (define (counter s acc)\n    (if (empty? s)\n        acc\n\
+    \        (counter (rest s) (if (upper? (first s)) (+ acc 1) acc))))\n  (counter\
+    \ s 0))\n</code>\nNotice that this is a recursive function. Also notice how I\
+    \ separated concerns into different functions. This is to increase readability\
+    \ and reusability. I find this approach to be more pleasant to read and work with.\
+    \ There are no hidden side effects, and you can easily test each function separately.\n",
+  "  (define (go s i c)\n    (cond [(eq? i 0) c]\n          [(char-upcase? (string-ref\
+    \ s i)) (go s (- i 2) (+ c 1))]\n          [else (go s (- i 2) c)]))\n  (go s\
+    \ (- (string-length s) 1) 0))\n", "  (let ([s (string-upcase s)])\n    (define\
+    \ (is_upper c)\n      (and (string-contains? \"AEIOU\" c) (char-upper-case? c)))\n\
+    \    (define (loop s count)\n      (if (empty? s)\n          count\n         \
+    \ (let ([x (first s)])\n            (if (and (is_upper x)\n                  \
+    \   (even? (string-length s)))\n                (loop (rest s) (+ count 1))\n\
+    \                (loop (rest s) count)))))\n    (loop s 0)))\n```\n\n```python\n\
+    def count_upper(s):\n    s = s.upper()\n    def is_upper(c):\n        return c\
+    \ in \"AEIOU\" and c.isupper()\n    def loop(s, count):\n        if not s:\n \
+    \           return count\n        x = s[0]\n        if is_upper(x) and len(s)\
+    \ % 2 == 0:\n            return loop(s[1:], count + 1)\n        else:\n      \
+    \      return loop(s[1:], count)\n    return loop(s, 0)\n```\n\n## Underscore-free\n\
+    \n```racket\n#lang racket\n", "  (letrec ([loop (lambda (s idx acc)\n        \
+    \           (cond [(empty? s) acc]\n                         [(and (char-vowel?\
+    \ (string-ref s idx))\n                               (char-upper-case? (string-ref\
+    \ s idx)))\n                          (loop (substring s 1)\n                \
+    \                (+ idx 1)\n                                (+ acc 1))]\n    \
+    \                     [else (loop (substring s 1)\n                          \
+    \           (+ idx 1)\n                                     acc)]))])\n    (loop\
+    \ s 0 0)))\n", "  (cond\n    [(= (string-length s) 0) 0]\n    [(and (= (even?\
+    \ (string-length s)) 1)\n          (vowel? (string-ref s 0)))\n     (+ 1 (count_upper\
+    \ (substring s 1 (string-length s))))]\n    [else (count_upper (substring s 1\
+    \ (string-length s)))]))\n", "  (cond\n    [(empty? s) 0]\n    [(eq? (modulo (list-ref\
+    \ s 0) 2) 0)\n     (cond\n       [(member (char-upcase (list-ref s 0)) '(#\\A\
+    \ #\\E #\\I #\\O #\\U))\n        (+ 1 (count_upper (rest s)))]\n       [else (count_upper\
+    \ (rest s))])]\n    [else (count_upper (rest s))]))\n", "  (cond [(empty? s) 0]\n\
+    \        [(vowel? (string-ref s 0))\n         (if (odd? (string-length s))\n \
+    \            0\n             (+ 1 (count_upper (substring s 2))))]\n        [else\
+    \ (count_upper (substring s 1))]))\n", "  (let ((l (string->list s)))\n    (count-vowels-even\
+    \ l)))\n", "  (cond\n    [(empty? s) 0]\n    [(upper-vowel? (first s))\n     (+\
+    \ 1 (count_upper (rest s)))]\n    [else\n     (count_upper (rest s))]))\n", " \
+    \ (define (is-upper? c)\n    (and (char-alphabetic? c) (char-upper-case? c)))\n\
+    \  (define (is-vowel? c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define\
+    \ (count-even-uppers? s)\n    (letrec ([_ (print s)]\n             [r (cond [(or\
+    \ (empty? s) (empty? (rest s))) 0]\n                      [(and (is-upper? (first\
+    \ s)) (is-vowel? (second s))) (+ 1 (count-even-uppers? (rest (rest s))))]\n  \
+    \                    [else (count-even-uppers? (rest s))])])\n      r))\n  (count-even-uppers?\
+    \ s))\n", "  (let loop ([s s] [even #t] [counter 0])\n    (cond\n      [(empty?\
+    \ s) counter]\n      [(equal? (string-upcase (first s)) (first s))\n       (cond\n\
+    \         [(and even (= 'E (first s))) (loop (rest s) (not even) (+ counter 1))]\n\
+    \         [(and even (= 'I (first s))) (loop (rest s) (not even) (+ counter 1))]\n\
+    \         [(and even (= 'O (first s))) (loop (rest s) (not even) (+ counter 1))]\n\
+    \         [(and even (= 'U (first s))) (loop (rest s) (not even) (+ counter 1))]\n\
+    \         [else (loop (rest s) (not even) counter)])]\n      [else (loop (rest\
+    \ s) (not even) counter)])))\n```\n\n### 3.27\n\n```scheme\n#lang racket\n", " \
+    \ (let loop ([s s] [i 0] [n 0])\n    (if (empty? s)\n        n\n        (if (and\
+    \ (char-vowel? (string-ref s i))\n                 (char-upcase? (string-ref s\
+    \ i)))\n            (loop (substring s 1) (+ i 1) (+ n 1))\n            (loop\
+    \ (substring s 1) (+ i 1) n)))))\n```\n\n```racket\n#lang racket\n", "  (count\
+    \ (lambda (x) (and (char-upper-case? x) (vowel? x))) (string-&gt;list s)))\n",
+  "  (cond ((eq? (string-length s) 0) 0)\n        ((eq? (string-length s) 1) 0)\n\
+    \        ((eq? (string-length s) 2)\n         (cond ((vowel? (string-ref s 0))\
+    \ 1)\n               (else 0)))\n        (else\n         (cond ((vowel? (string-ref\
+    \ s 0)) (add1 (count_upper (substring s 2 (string-length s)))))\n            \
+    \   (else (count_upper (substring s 2 (string-length s))))))))\n", "  (let ([len\
+    \ (string-length s)])\n    (let recur ([i 0] [count 0])\n      (cond\n       \
+    \ [(= i len) count]\n        [(even? i)\n         (cond\n           [(vowel? (string-ref\
+    \ s i))\n            (recur (+ i 1) (+ count 1))]\n           [else\n        \
+    \    (recur (+ i 1) count)])]\n        [else\n         (recur (+ i 1) count)]))))",
+  "  (define (helper str result i)\n    (cond\n      [(empty? str) result]\n     \
+    \ [(char-upper-case? (string-ref str i)) (helper (rest str) (+ result 1) (+ i\
+    \ 2))]\n      [else (helper (rest str) result (+ i 2))]))\n  (helper s 0 0))\n",
+  "  (count-if (lambda (x)\n              (and (eq? (modulo (string-length x) 2) 0)\n\
+    \                   (char-upcase? (string-ref x 0))))\n            (string-split\
+    \ s \"\")))\n\n```\n\n## \u6765\u6E90\uFF1A\nhttp://community.schemewiki.org/?racket-cookbook",
+  "  (define (uc? c)\n    (and (char-alphabetic? c) (char-upper-case? c)))\n  (define\
+    \ (even? n)\n    (= (remainder n 2) 0))\n  (cond\n    [(zero? (string-length s))\
+    \ 0]\n    [(and (even? (string-length s)) (uc? (string-ref s 0)))\n     (+ 1 (count_upper\
+    \ (substring s 1)))]\n    [else (count_upper (substring s 1))]))\n", "  (let ([even-indices\
+    \ (filter-map (lambda (n) (odd? n)) (iota (string-length s)))])\n    (filter-map\
+    \ (lambda (v) (member v '(\"A\" \"E\" \"I\" \"O\" \"U\"))) (string-split (string-upcase\
+    \ s) (string-to-list \",\")))))\n```\n\n```\n#lang racket\n", "  (for/sum ([(letter\
+    \ i) (in-indexed s)]\n            #:when (and (char-upcase? letter)\n        \
+    \                (vowel? letter)\n                        (even? i)))\n    1))\n",
+  "  (define (upper? c)\n    (and (char-upcase? c)\n         (or (char=? c #\\A)\n\
+    \             (char=? c #\\E)\n             (char=? c #\\I)\n             (char=?\
+    \ c #\\O)\n             (char=? c #\\U))))\n  (define (count_even_upper s)\n \
+    \   (define (next_even_index i)\n      (if (= i (string-length s))\n         \
+    \ i\n          (next_even_index (+ 2 i))))\n    (define (count_even_upper-rec\
+    \ i)\n      (if (= i (string-length s))\n          0\n          (if (upper? (string-ref\
+    \ s i))\n              (+ 1 (count_even_upper-rec (next_even_index (+ 1 i))))\n\
+    \              (count_even_upper-rec (next_even_index (+ 1 i))))))\n    (count_even_upper-rec\
+    \ 0))\n  (count_even_upper s))\n", "  (count-if even?\n            (list-index\
+    \ \"AEIOU\" (string-uppercase s))))", "  (define (iter s counter)\n    (if (and\
+    \ (= (modulo counter 2) 0)\n             (member (string-ref s counter) \"AEIOU\"\
+    ))\n        (add1 (iter s (add1 counter)))\n        (if (= counter (sub1 (string-length\
+    \ s)))\n            counter\n            (iter s (add1 counter)))))\n  (iter s\
+    \ 0))\n", "  (define (count_upper_helper n)\n    (if (< n (string-length s))\n\
+    \        (cond\n          ((is-upper? s n)\n           (+ 1 (count_upper_helper\
+    \ (+ n 2))))\n          (else\n           (count_upper_helper (+ n 2))))\n   \
+    \     0))\n  (count_upper_helper 0))\n", "  (cond\n    [(empty? s) 0]\n    [(empty?\
+    \ (rest s)) 0]\n    [(eq? (char-upcase (first s)) (first s))\n     (+ 1 (count_upper\
+    \ (rest (rest s))))]\n    [else\n     (count_upper (rest (rest s)))]))\n", " \
+    \ (apply + (filter odd? (map (lambda (c) (if (and (char-upper-case? c) (char-vowel?\
+    \ c)) 1 0)) (string->list s)))))\n", "  (let ([even? (\u03BB (x) (= (remainder\
+    \ x 2) 0))])\n    (for/sum ([c (in-string s)])\n      (if (and (even? (string-index\
+    \ s c))\n               (member c '(\"A\" \"E\" \"I\" \"O\" \"U\")))\n       \
+    \   1\n          0))))\n</code>\n", "  (let loop ([s s] [idx 0] [n 0])\n    (cond\n\
+    \      [(zero? (string-length s)) n]\n      [(char-upcase? (string-ref s idx))\n\
+    \       (loop (substring s (add1 idx))\n             (add1 idx)\n            \
+    \ (add1 n))]\n      [else\n       (loop (substring s (add1 idx))\n           \
+    \  (add1 idx)\n             n)])))\n</code>\nIt works as expected:\n<code>&gt;\
+    \ (count_upper \"aBCdEf\")\n1\n&gt; (count_upper \"abcdefg\")\n0\n&gt; (count_upper\
+    \ \"dBBE\")\n0\n</code>\nNow, let's write a function that given a string <code>s</code>\
+    \ and a character <code>c</code>, returns a list of the indices at which <code>c</code>\
+    \ occurs in <code>s</code>.\n<code>#lang racket\n", "  (define (is-vowel c)\n\
+    \    (or (equal? c #\\a)\n        (equal? c #\\e)\n        (equal? c #\\i)\n \
+    \       (equal? c #\\o)\n        (equal? c #\\u)))\n  (let loop ([s s] [i 0] [count\
+    \ 0])\n    (if (or (empty? s) (odd? i))\n        count\n        (loop (rest s)\
+    \ (+ i 1)\n              (if (and (is-vowel (first s))\n                     \
+    \  (char-upper-case? (first s)))\n                  (+ count 1)\n            \
+    \      count)))))\n", "  (if (or (empty? s) (empty? (rest s)))\n      0\n    \
+    \  (add1 (if (and (char-upper-case? (first s))\n                     (member (first\
+    \ s) '(#\\A #\\E #\\I #\\O #\\U)))\n               1\n               0)\n    \
+    \        (count_upper (rest (rest s))))))\n", "  (let* ([s (string-upcase s)]\n\
+    \         [i (string-index s #\\A)])\n    (cond [(string-null? s) 0]\n       \
+    \   [(zero? (modulo i 2)) (+ 1 (count_upper (substring s (+ i 1))))]\n       \
+    \   [else (count_upper (substring s (+ i 1)))])))\n", "  (count (lambda (c) (and\
+    \ (vowel? c) (char-uppercase? c))) (rest (string->list s))))\n", "  (count-if\
+    \ (lambda (x) (and (member (char-upcase x) '#(\"A\" \"E\" \"I\" \"O\" \"U\"))\n\
+    \                             (even? (char-index x (string->list s)))))\n    \
+    \        (string->list s)))\n", "  (if (null? s)\n      0\n      (if (and (char-vowel?\
+    \ (car s)) (char-upcase? (car s)))\n          (+ 1 (count_upper (cdr s)))\n  \
+    \        (count_upper (cdr s)))))\n", "  (define (s-range l h)\n    (cond ((>\
+    \ l h) '())\n          (else (cons l (s-range (+ l 1) h)))))\n  (define (search-vowels\
+    \ i l)\n    (cond ((empty? l) i)\n          ((char-lower-case? (first l)) (search-vowels\
+    \ i (rest l)))\n          ((member (first l) '(#\\a #\\e #\\i #\\o #\\u)) (search-vowels\
+    \ (+ i 1) (rest l)))\n          (else (search-vowels i (rest l)))))\n  (search-vowels\
+    \ 0 (filter (lambda (x) (even? x)) (s-range 0 (- (string-length s) 1)))))\n```\n\
+    \n### Question 4\n\n```racket\n#lang racket\n", "  ;; two-liner :)\n  (count (lambda\
+    \ (c) (and (member c '(\"A\" \"E\" \"I\" \"O\" \"U\")) (even? (string-index c\
+    \ s))))\n         (string->list s)))\n", "  (cond\n    [(empty? s) 0]\n    [(even?\
+    \ (string-length s))\n     (cond\n       [(member (string-ref s 0) '(#\\A #\\\
+    E #\\I #\\O #\\U)) (+ 1 (count_upper (substring s 1)))]\n       [else (count_upper\
+    \ (substring s 1))])]\n    [else (count_upper (substring s 1))]))\n", "  (cond\
+    \ ((empty? s) 0)\n        ((string-upper-case? (string-ref s 0))\n         (+\
+    \ 1 (count_upper (string-drop s 2))))\n        (else (count_upper (string-drop\
+    \ s 2)))))\n</code>\nI'm wondering if there's a better way of doing this using\
+    \ a <code>for/fold</code> loop. I can get a list of the uppercase vowels in even\
+    \ indices, but I'm not sure how to count them:\n<code>#lang racket\n", "  (local\
+    \ [;(define vowels (vector #\\a #\\e #\\i #\\o #\\u))\n          (define (is-vowel?\
+    \ c)\n            (or (equal? c #\\a)\n                (equal? c #\\e)\n     \
+    \           (equal? c #\\i)\n                (equal? c #\\o)\n               \
+    \ (equal? c #\\u)))\n          (define (is-uppercase? c)\n            (and (&gt;\
+    \ c #\\A)\n                 (&lt; c #\\Z)))\n          (define (is-even? c)\n\
+    \            (even? (sub1 (string-ref s c))))\n          (define (count-upper-vowels\
+    \ index)\n            (if (&gt;= index (string-length s))\n                0\n\
+    \                (if (and (is-even? index)\n                         (is-uppercase?\
+    \ (string-ref s index))\n                         (is-vowel? (string-ref s index)))\n\
+    \                    (+ 1 (count-upper-vowels (+ index 1)))\n                \
+    \    (count-upper-vowels (+ index 1)))))])\n  (count-upper-vowels 0))\n</code>\n\
+    I'm trying to use <code>string-ref</code> instead of <code>string-index</code>\
+    \ but struggling on how to get <code>count-upper-vowels</code> to iterate over\
+    \ the string. I'm using <code>sub1</code> to get the index, but I don't understand\
+    \ why I need it.\nIf I use <code>string-index</code> instead of <code>string-ref</code>\
+    \ I can get it to work with:\n<code>#lang racket\n", "  (cond [(empty? s) 0]\n\
+    \        [(and (vowel? (first s))\n              (upper? (first s))\n        \
+    \      (even? (char->integer (first s))))\n         (+ 1 (count_upper (rest s)))]\n\
+    \        [else (count_upper (rest s))]))\n", "  (define (count_upper-iter s i)\n\
+    \    (cond\n      [(string=? (substring s i (+ i 1)) \"A\")\n       (+ 1 (count_upper-iter\
+    \ s (+ i 2)))]\n      [(string=? (substring s i (+ i 1)) \"E\")\n       (+ 1 (count_upper-iter\
+    \ s (+ i 2)))]\n      [(string=? (substring s i (+ i 1)) \"I\")\n       (+ 1 (count_upper-iter\
+    \ s (+ i 2)))]\n      [(string=? (substring s i (+ i 1)) \"O\")\n       (+ 1 (count_upper-iter\
+    \ s (+ i 2)))]\n      [(string=? (substring s i (+ i 1)) \"U\")\n       (+ 1 (count_upper-iter\
+    \ s (+ i 2)))]\n      [else\n       (count_upper-iter s (+ i 2))]))\n  (count_upper-iter\
+    \ s 0))\n```\n\n```racket\n#lang racket\n", "  (local [\n    (define (inner-count-upper\
+    \ s i acc)\n      (cond [(= i (string-length s)) acc]\n            [(and (even?\
+    \ i)\n                  (string-ci=? \"A\" (string-ref s i))\n               \
+    \   (string-ci=? \"E\" (string-ref s i))\n                  (string-ci=? \"I\"\
+    \ (string-ref s i))\n                  (string-ci=? \"O\" (string-ref s i))\n\
+    \                  (string-ci=? \"U\" (string-ref s i)))\n             (inner-count-upper\
+    \ s (+ i 1) (+ acc 1))]\n            [else (inner-count-upper s (+ i 1) acc)]))\n\
+    \    ]\n    (inner-count-upper s 0 0)))\n```\n\n```\n#lang racket\n", "  (if (string-empty?\
+    \ s)\n      0\n      (if (and (even? (string-index s))\n               (vowel?\
+    \ (string-ref s 0)))\n          (+ 1 (count_upper (substring s 1)))\n        \
+    \  (count_upper (substring s 1)))))\n", "  (let ([ls (string->list s)])\n    (for/sum\
+    \ ([s ls]\n              #:when (and (char-upper-case? s)\n                  \
+    \        (even? (list-ref ls (- (list-index s ls) 1)))))\n      1)))\n", "  (count-if\
+    \ (lambda (c) (and (eq? (char-upcase c) c)\n                             (vowel?\
+    \ c)))\n            (enumerate-interval 0 (string-length s) 2)))\n", "  (cond\
+    \ [(empty? s) 0]\n        [(and (vowel? (string-ref s 0))\n              (even?\
+    \ (string-length s))) 1]\n        [else (count_upper (rest s))]))\n", "  (cond\n\
+    \    [(empty? s) 0]\n    [(upper-vowel? (first s)) (+ 1 (count_upper (rest s)))]\n\
+    \    [else (count_upper (rest s))]))\n", "  (if (null? s)\n      0\n      (if\
+    \ (char-upper-case? (car s))\n          (+ 1 (count_upper (cdr s)))\n        \
+    \  (count_upper (cdr s)))))", "  (define (acc s n)\n    (if (empty? s)\n     \
+    \   n\n        (let ([c (first s)])\n          (if (and (upper-case? c) (vowel?\
+    \ c) (even? n))\n              (acc (rest s) (+ n 1))\n              (acc (rest\
+    \ s) n)))))\n  (acc s 0))\n", "  (define (even? n)\n    (= (remainder n 2) 0))\n\
+    \  (define (is_vowel c)\n    (or (char=? c #\\a)\n        (char=? c #\\e)\n  \
+    \      (char=? c #\\i)\n        (char=? c #\\o)\n        (char=? c #\\u)))\n \
+    \ (define (helper s i count)\n    (cond\n      [(empty? s) count]\n      [(and\
+    \ (is_vowel (first s))\n            (even? i))\n       (helper (rest s) (add1\
+    \ i) (add1 count))]\n      [else (helper (rest s) (add1 i) count)]))\n  (helper\
+    \ s 0 0))\n", "  (cond\n    [(empty? s) 0]\n    [(and (char-upper-case? (first\
+    \ s))\n          (string-contains \"aeiou\" (first s)))\n     (+ 1 (count_upper\
+    \ (rest s)))]\n    [else (count_upper (rest s))]))\n", "  (foldl (lambda (x i)\n\
+    \           (if (and (vowel? x)\n                    (char-upcase? x)\n      \
+    \              (even? i))\n               (+ i 1)\n               i))\n      \
+    \   0\n         (string->list s)))\n", "  (let loop ([s s] [count 0])\n    (cond\
+    \ [(empty? s) count]\n          [(and (string-index (car s) \"AEIOU\") (even?\
+    \ (index s)))\n           (loop (cdr s) (+ count 1))]\n          [else (loop (cdr\
+    \ s) count)])))\n", "  (define (helper s i uppervowels)\n    (cond [(eq? i (string-length\
+    \ s))\n           uppervowels]\n          [(eq? (remainder i 2) 0)\n         \
+    \  (if (member (string-ref s i) (list #\\A #\\E #\\I #\\O #\\U))\n           \
+    \    (helper s (+ i 1) (+ uppervowels 1))\n               (helper s (+ i 1) uppervowels))]\n\
+    \          [else\n           (helper s (+ i 1) uppervowels)]))\n  (helper s 0\
+    \ 0))\n", "  (let ((i 0)\n        (vowels '(\"A\" \"E\" \"I\" \"O\" \"U\")))\n\
+    \    (for/sum ([c (in-string s)])\n      (if (and (= i 0) (member c vowels))\n\
+    \          1\n          0))))\n```\n\n```racket\n#lang racket\n", "  (cond ((string-empty?\
+    \ s) 0)\n        ((char-upper-case? (string-ref s 0))\n         (+ 1 (count_upper\
+    \ (string-drop s 2))))\n        (else (count_upper (string-drop s 2)))))\n```\n\
+    \n![](images/pseudocode.png)\n\n#### Function\n\n```racket\n#lang racket\n", " \
+    \ (let ([len (string-length s)])\n    (define (is_upper c)\n      (eq? (char-upcase\
+    \ c) c))\n    (define (is_vowel c)\n      (or (eq? c #\\a) (eq? c #\\e) (eq? c\
+    \ #\\i) (eq? c #\\o) (eq? c #\\u)))\n    (define (recur_even i)\n      (if (>=\
+    \ i len)\n          0\n          (+ (if (and (is_upper (string-ref s i))\n   \
+    \                 (is_vowel (string-ref s i)))\n                 1\n         \
+    \        0)\n             (recur_odd (+ i 1)))))\n    (define (recur_odd i)\n\
+    \      (if (>= i len)\n          0\n          (+ (if (and (is_upper (string-ref\
+    \ s i))\n                    (is_vowel (string-ref s i)))\n                 1\n\
+    \                 0)\n             (recur_even (+ i 1)))))\n    (recur_even 0)))\n",
+  "  (if (empty? s)\n      0\n      (if (even? (string-index s 0))\n          (if\
+    \ (member (char-upcase (first s)) '(#\\A #\\E #\\I #\\O #\\U))\n             \
+    \ (+ 1 (count_upper (rest s)))\n              (count_upper (rest s)))\n      \
+    \    (count_upper (rest s)))))\n", "  (define (is-uppercase? x)\n    (and (char-upper-case?\
+    \ x)\n         (member x '(#\\A #\\E #\\I #\\O #\\U))))\n  (filter-count is-uppercase?\
+    \ (even-indexed s)))\n", "  (cond\n    [(empty? s) 0]\n    [(string-upper-case?\
+    \ (string-ref s 0))\n     (+ 1 (count_upper (substring s 2)))]\n    [else (count_upper\
+    \ (substring s 2))]))\n```\n\n## Author\n\nJonathan Chu\n\n## License\n\nNone",
+  "  (let ([evens (for/list ([i (in-range (string-length s))]\n                  \
+    \        #:when (even? i))\n                  (string-ref s i))])\n    (for/sum\
+    \ ([char evens])\n      (if (member char '(\"A\" \"E\" \"I\" \"O\" \"U\"))\n \
+    \         1\n          0))))\n```\n\n### \u53E6\u4E00\u4E2A\u89E3\u6CD5\n\n```racket\n\
+    #lang racket\n", "  (define (loop s count i)\n    (cond ((= i (string-length s))\
+    \ count)\n          ((char-upper-case? (string-ref s i)) (loop s (+ count 1) (+\
+    \ i 2)))\n          (else (loop s count (+ i 2)))))\n  (loop s 0 0))\n```\n\n\
+    ### Problem 4\n\n```#lang racket\n", "  (let ((count 0))\n    (for ([i (in-range\
+    \ (string-length s))])\n      (when (even? i)\n        (if (regexp-match #rx\"\
+    [AEIOU]\" (string-ref s i))\n            (set! count (+ count 1)))))\n    count))\n\
+    ```\n\n### Duplicate the elements in an array\n\n```racket\n#lang racket\n", " \
+    \ (letrec ([even? (lambda (n) (= (remainder n 2) 0))]\n           [check-for-vowel\
+    \ (lambda (c) (or (eq? (char-upcase c) #\\A)\n                               \
+    \             (eq? (char-upcase c) #\\E)\n                                   \
+    \         (eq? (char-upcase c) #\\I)\n                                       \
+    \     (eq? (char-upcase c) #\\O)\n                                           \
+    \ (eq? (char-upcase c) #\\U)))]\n           [recur (lambda (i c s)\n         \
+    \           (if (eq? i (string-length s))\n                        c\n       \
+    \                 (recur (+ i 1)\n                               (if (and (even?\
+    \ i) (check-for-vowel (string-ref s i)))\n                                   (+\
+    \ c 1)\n                                   c)\n                              \
+    \ s)))])\n    (recur 0 0 s)))\n</code>\nAnd I get this error:\n<code>application:\
+    \ not a procedure;\n expected a procedure that can be applied to arguments\n \
+    \ given: #\\A\n  arguments...: [none]\n</code>\nNow, I already know that it is\
+    \ not returning the correct values, so that needs to be fixed.  But I'm not sure\
+    \ how to fix the error.  I think that <code>eq?</code> and <code>char-upcase</code>\
+    \ are returning values that are somehow not compatible and I'm not sure how to\
+    \ fix that.  Any help is appreciated!\n\n\nA:\n\n<code>eq?</code> is a good choice\
+    \ for comparing characters. What you need is to wrap your character in <code>char</code>\
+    \ before using it, in order to make it a character rather than just a literal.\n\
+    <code>(check-for-vowel (char-upcase (string-ref s i)))\n</code>\n", "  (cond [(empty?\
+    \ s) 0]\n        [(and (char-upper-case? (first s)) (vowel? (first s))) (+ 1 (count_upper\
+    \ (rest s)))]\n        [else (count_upper (rest s))]))\n", "  (cond\n    [(empty?\
+    \ s) 0]\n    [(< 0 (string-ci=? #\\A (string-ref s 0)))\n     (+ 1 (count_upper\
+    \ (string-drop s 2)))]\n    [else (count_upper (string-drop s 2))]))\n", "  (define\
+    \ (is-even x)\n    (= (remainder x 2) 0))\n  (define (is-vowel x)\n    (member\
+    \ x '(#\\A #\\E #\\I #\\O #\\U)))\n  (define (count-upper xs)\n    (cond\n   \
+    \   [(empty? xs) 0]\n      [(is-even (count xs))\n       (+ (if (is-vowel (first\
+    \ xs)) 1 0)\n          (count-upper (rest xs)))]\n      [else (count-upper (rest\
+    \ xs))]))\n  (count-upper (string->list s)))\n```\n\n###2.2\n\n```racket\n#lang\
+    \ racket\n", "  (cond\n    [(empty? s) 0]\n    [(and (vowel? (string-ref s 0))\
+    \ (even? (index s))) (+ 1 (count_upper (rest s)))]\n    [else (count_upper (rest\
+    \ s))]))\n", "  (define (upper? c)\n    (and (char-uppercase? c)\n         (member\
+    \ c '#(#\\A #\\E #\\I #\\O #\\U))))\n  (define (acc s index)\n    (if (and (not\
+    \ (eq? (string-length s) index))\n             (odd? index))\n        (if (upper?\
+    \ (string-ref s index))\n            (+ 1 (acc s (+ index 1)))\n            (acc\
+    \ s (+ index 1)))\n        0))\n  (acc s 0))\n```\n\n### Suffixes\n\nGiven a string\
+    \ s, return all suffixes of s, sorted by length. For example:\n\n```racket\n#lang\
+    \ racket\n", "  (let loop ([i 0] [count 0])\n    (cond [(= i (string-length s))\
+    \ count]\n          [(and (char-numeric? (string-ref s i))\n                (member\
+    \ (string-ref s i) \"AEIOU\"))\n           (loop (+ i 2) (+ count 1))]\n     \
+    \     [else (loop (+ i 2) count)])))\n", "  (let ([s (string-upcase s)])\n   \
+    \ (for/sum ([i (in-range (string-length s))]\n              #:when (even? i))\n\
+    \      (eq? (string-ref s i) #\\A\n           (string-ref s i) #\\E\n        \
+    \   (string-ref s i) #\\I\n           (string-ref s i) #\\O\n           (string-ref\
+    \ s i) #\\U))))\n", "  (define (iter s i)\n    (cond ((or (eq? i 0) (eq? i (string-length\
+    \ s))) i)\n          ((and (eq? (modulo i 2) 0)\n                (char-upper-case?\
+    \ (string-ref s i)))\n           (iter s (+ i 1)))\n          (else\n        \
+    \   (iter s (+ i 1)))))\n  (iter s 0))\n</code>\nI am in the process of learning\
+    \ racket and I understand the above code. What I am not clear is the else clause.\
+    \ How does the \"iter s (+ i 1))\" get evaluated? Will the value of i be 0 for\
+    \ the else clause. \n\n\nA:\n\nWhen you call a function that does not have an\
+    \ explicit return expression, the last expression in the function body is returned.\
+    \ So, in this case, yes, the final value of <code>i</code> will be returned when\
+    \ the <code>else</code> clause is evaluated.\n", "  (cond\n    [(empty? s) 0]\n\
+    \    [(= (modulo (string-length s) 2) 0)\n     (if (member (string-ref s 0) \"\
+    AEIOU\") 1 0)]\n    [else 0]))\n", "  (let loop ([s s] [count 0])\n    (cond\n\
+    \      [(empty? s) count]\n      [(member (first s) '(\"A\" \"E\" \"I\" \"O\"\
+    \ \"U\"))\n       (loop (rest s) (add1 count))]\n      [else (loop (rest s) count)])))\n",
+  "  (for/sum ([i (in-naturals 2)])\n    (if (member (string-ref s i) \"AEIOU\") 1\
+    \ 0)))\n", "  (let ([s (string-downcase s)])\n    (let loop ([index 0] [count\
+    \ 0])\n      (cond\n        [(eq? index (string-length s)) count]\n        [(even?\
+    \ index)\n         (if (char-vowel? (string-ref s index))\n             (loop\
+    \ (+ index 1) (+ count 1))\n             (loop (+ index 1) count))]\n        [else\
+    \ (loop (+ index 1) count)]))))\n```\n\n### Part 2: Using a loop/recur form\n\
+    ```racket\n#lang racket\n", "  (cond [(= (string-length s) 0) 0]\n        [(char-upper-case?\
+    \ (string-ref s 0))\n         (+ 1 (count_upper (substring s 2)))]\n        [else\
+    \ (count_upper (substring s 2))]))\n```\n**Self-validating email checker:**\n\
+    ```\n#lang racket\n", "  (for/sum ((letter (in-string s))\n            (index\
+    \ (in-naturals)))\n    (if (and (= (remainder index 2) 0)\n             (char-upper-case?\
+    \ letter))\n        1\n        0)))\n</code>\n", "  (define (iter i n)\n    (cond\n\
+    \      [(= i (string-length s)) n]\n      [(even? i) (cond\n                 \
+    \  [(char-upper-case? (string-ref s i)) (iter (+ i 1) (+ n 1))]\n            \
+    \       [else (iter (+ i 1) n)])]\n      [else (iter (+ i 1) n)]))\n  (iter 0\
+    \ 0))\n", "  (let ([l (string->list s)])\n    (for/sum ([i (in-naturals 2 2)]\n\
+    \              [ch (in-list l)])\n      (and (char-alphabetic? ch)\n         \
+    \  (char-upper-case? ch)\n           (member (char-upcase ch) '(\"A\" \"E\" \"\
+    I\" \"O\" \"U\"))\n           1))))\n", "  (define vowels '(#\\a #\\e #\\i #\\\
+    o #\\u))\n  (define (is_upper? c)\n    (char-upper-case? c))\n  (define (is_vowel?\
+    \ c)\n    (member c vowels))\n  (define (count_if_even pred lst)\n    (if (empty?\
+    \ lst)\n        0\n        (if (pred (car lst))\n            (if (even? (quotient\
+    \ (length lst) 2))\n                1\n                0)\n            0)))\n\
+    \  (count_if_even is_upper? s))\n", "  (if (null? s)\n      0\n      (if (and\
+    \ (= 0 (remainder (string-length s) 2)) (eq? (char-upcase (string-ref s 0)) (string-ref\
+    \ s 0)))\n          (+ 1 (count_upper (substring s 1)))\n          (count_upper\
+    \ (substring s 1)))))\n", "  (define (iter index result)\n    (cond ((equal? index\
+    \ (length s)) result)\n          ((and (even? index) (char-vowel? (string-ref\
+    \ s index) #:upper? #t))\n           (iter (+ index 1) (+ result 1)))\n      \
+    \    (else (iter (+ index 1) result))))\n  (iter 0 0))\n</code>\n", "  (accumulate-index\
+    \ s 0\n    (lambda (index sum ch)\n      (if (and (vowel? ch)\n              \
+    \ (even? index))\n          (+ sum 1)\n          sum))))\n", "  (cond\n    [(empty?\
+    \ s) 0]\n    [(eq? (modulo (string-length s) 2) 0)\n     (cond\n       [(or (char-upper-case?\
+    \ (first s))\n            (char-lower-case? (first s)))\n        (cond\n     \
+    \     [(vowel? (first s))\n           (+ 1 (count_upper (rest s)))]\n        \
+    \  [else\n           (count_upper (rest s))])]\n       [else\n        (count_upper\
+    \ (rest s))])]\n    [else\n     (count_upper (rest s))]))\n", "  (cond [(null?\
+    \ s) 0]\n        [(and (char-upper-case? (car s))\n              (vowel? (car\
+    \ s)))\n         (+ 1 (count_upper (cdr s)))]\n        [else (count_upper (cdr\
+    \ s))]))\n", "  (let loop ([s s] [n 0])\n    (if (and (not (null? s))\n      \
+    \       (char-upper-case? (car s)))\n        (if (even? n)\n            (loop\
+    \ (cdr s) (+ n 1))\n            (loop (cdr s) (+ n 1)))\n        (if (even? n)\n\
+    \            (loop (cdr s) (+ n 1))\n            n))))\n", "  (for/sum ([c (in-string\
+    \ s)])\n    (if (and (vowel? c) (odd? (position c s))) 1 0)))\n", "  ;; pad with\
+    \ a dummy character to avoid out of bounds\n  (define (first-even-vowel-upper?\
+    \ s)\n    (let loop ([i 2])\n      (if (&lt; i (string-length s))\n          (let\
+    \ ([c (string-ref s i)])\n            (cond\n              [(or (char=? c #\\\
+    A) (char=? c #\\E) (char=? c #\\I) (char=? c #\\O) (char=? c #\\U)) (+ 1 (loop\
+    \ (+ i 2)))]\n              [else (loop (+ i 2))]))\n          0)))\n  (first-even-vowel-upper?\
+    \ (string-append \"X\" s)))\n</code>\nBut this seems a bit clunky and un-idiomatic.\
+    \ How could I improve this code?\n\n\nA:\n\nWell, I'd start by not bothering with\
+    \ the dummy character.  It's possible your input will have only a single character\
+    \ in it or something, but then you would have a problem anyway.  You can just\
+    \ leave it out and check the length first.\nAs for the recursive loop, your <code>loop</code>\
+    \ procedure is repeating the <code>&lt;</code> check, but it doesn't need to.\
+    \  And you don't need the <code>cond</code> expression, you can just use the <code>cond</code>\
+    \ expression of <code>string-ref</code>.  I'd do it like this:\n<code>(define\
+    \ (count-upper s)\n  (define (count-upper-even-vowels i)\n    (cond\n      [(&gt;=\
+    \ i (string-length s)) 0]\n      [(or (char=? (string-ref s i) #\\A)\n       \
+    \    (char=? (string-ref s i) #\\E)\n           (char=? (string-ref s i) #\\I)\n\
+    \           (char=? (string-ref s i) #\\O)\n           (char=? (string-ref s i)\
+    \ #\\U))\n       (+ 1 (count-upper-even-vowels (+ i 2)))]\n      [else (count-upper-even-vowels\
+    \ (+ i 2))]))\n  (count-"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

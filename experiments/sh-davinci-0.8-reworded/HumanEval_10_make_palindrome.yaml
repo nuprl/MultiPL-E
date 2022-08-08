@@ -151,6 +151,1319 @@ completions: ["    local s=$1\n    local max_pal_len=0\n    local max_pali_postf
     \   local index len\n    len=${#1}\n    for (( index=0; index < len; index++ ))\
     \ {\n        test_str=$(echo \"$1\" | tail -c +$((index+1)) | tac)\n        if\
     \ [[ ${1::index} == $test_str ]]; then\n            echo \"$1$test_str\"\n   \
-    \         return\n        fi\n    }\n    echo \"$1\""]
+    \         return\n        fi\n    }\n    echo \"$1\"", "  local input=\"$1\"\n\
+    \  local reverse=$(echo $input | rev)\n  local pos=1\n  local sub=${input:0:$pos}\n\
+    \  while [ \"$sub\" != \"${input}\" ]; do\n    if [ \"$sub\" == \"${reverse:${#input}-$pos}\"\
+    \ ]; then\n      return $(echo $input$(echo $input | rev | cut -c $pos-))\n  \
+    \  fi\n    pos=$((pos+1))\n    sub=${input:0:$pos}\n  done\n  echo \"$input\"",
+  "  if [[ -z \"$1\" ]]; then\n    echo -n \"\"\n    return 0\n  fi\n  local SUPPLIED=\"\
+    $1\"\n  local REVERSED=\"$(echo -n \"$SUPPLIED\" | rev)\"\n  local SUPPLIED_LEN=${#SUPPLIED}\n\
+    \  for ((i=0; i<=SUPPLIED_LEN; i++)); do\n    local PREFIX=${SUPPLIED:0:$i}\n\
+    \    local POSTFIX=${SUPPLIED:$i}\n    if [[ \"$POSTFIX\" == \"$(echo -n \"$POSTFIX\"\
+    \ | rev)\" ]]; then\n      echo -n \"${SUPPLIED}${REVERSED:${#PREFIX}}\"\n   \
+    \   return 0\n    fi\n  done", "    local suffix=$(longest_palindrome_suffix \"\
+    $1\")\n    local prefix=${1:0:$((${#1} - ${#suffix}))}\n    local reverse_prefix=${prefix:$((${#prefix}\
+    \ - 1)):1}\n    echo \"$1$reverse_prefix\"", "    if [ -z \"$1\" ]; then\n   \
+    \     echo \"\"\n        return\n    fi\n    local -a pfx_str\n    pfx_str=($(echo\
+    \ \"$1\" | grep -o .))\n    local -i pfx_len=${#pfx_str[@]}\n    local -i l=0\n\
+    \    local -i r=$pfx_len-1\n    while (( l < r )); do\n        if [[ \"${pfx_str[$l]}\"\
+    \ == \"${pfx_str[$r]}\" ]]; then\n            (( l++ ))\n            (( r-- ))\n\
+    \        else\n            (( l = 0 ))\n            (( r-- ))\n        fi\n  \
+    \  done\n    local -i first_half_len=$l\n    local -i second_half_len=$pfx_len-1-$l\n\
+    \    local -i j=$first_half_len-1\n    local -i i=$pfx_len-1\n    while (( j >=\
+    \ 0 )); do\n        pfx_str[$i]=${pfx_str[$j]}\n        (( i-- ))\n        ((\
+    \ j-- ))\n    done\n    local palindrome=\"${pfx_str[@]}\"\n    echo \"$palindrome\"",
+  "    local -r string=\"$1\"\n    # Determine the prefix of the string that comes\
+    \ before the palindromic suffix.\n    local prefix=\"\"\n    if [ -n \"$string\"\
+    \ ]; then\n        prefix=\"${string:0:$((${#string} - $(longest_palindromic_suffix\
+    \ \"$string\")))}\"\n    fi\n    # Reverse the prefix and append it to the string.\n\
+    \    echo \"$string$(reverse \"$prefix\")\"", "  string=$1\n  rev=`rev <<< \"\
+    $string\"`\n  lps=`longest_palindromic_suffix \"$string\"`\n  # Trim off the longest\
+    \ palindromic suffix from the beginning of the string.\n  pfx=${string:0:$((${#string}\
+    \ - ${#lps}))}\n  revpfx=`rev <<< \"$pfx\"`\n  echo \"${string}${revpfx}\"", " \
+    \ local str=\"$1\"\n  local prefix=\"\"\n  local middle=\"\"\n  local postfix=\"\
+    \"\n  local i=0\n  local len=${#str}\n  if [ $len -eq 0 ]; then\n    echo \"$1\"\
+    \n    return\n  fi\n  while [ $i -lt $len ]; do\n    prefix=${str:0:$i}\n    middle=${str:$i:1}\n\
+    \    postfix=${str:$i+1}\n    if [ \"$postfix\" == \"$(revstr \"$postfix\")\"\
+    \ ]; then\n      break\n    fi\n    i=$(($i+1))\n  done\n  if [ $i -eq $len ];\
+    \ then\n    str=\"$str$(revstr \"$str\")\"\n  else\n    str=\"$str$(revstr \"\
+    $prefix\")$middle\"\n  fi\n  echo \"$str\"", "  local ss=\"$1\"\n  local palindrome_prefix=\"\
+    $(string_substring 0 \"$(string_find_longest_palindrome_suffix \"$ss\")\" \"$ss\"\
+    )\"\n  local palindrome_postfix=\"$(string_reverse \"$palindrome_prefix\")\"\n\
+    \  local string_prefix=\"$(string_substring 0 \"$(string_find_longest_palindrome_suffix\
+    \ \"$ss\")\" \"$ss\")\"\n  string_concat \"$ss\" \"$palindrome_postfix\"", " \
+    \ # This algorithm works by reversing and comparing the original string\n  # with\
+    \ a portion of the original string. If they match, then the\n  # partial string\
+    \ is a palindrome.\n  local sz=${#1}\n  # Find the shortest postfix that is a\
+    \ palindrome\n  while [ $sz -gt 0 ]; do\n    # Get the last $sz letters of the\
+    \ string, and the first $sz letters of the reversed string\n    local post=$(echo\
+    \ \"$1\" | tail -c $sz)\n    local rev_pre=$(echo \"$1\" | rev | tail -c $sz)\n\
+    \    if [ \"$post\" == \"$rev_pre\" ]; then\n      break\n    fi\n    sz=$(( $sz\
+    \ - 1 ))\n  done\n  local prefix=$(echo \"$1\" | head -c $(( ${#1} - $sz )))\n\
+    \  local rev_prefix=$(echo \"$prefix\" | rev)\n  echo \"${prefix}${rev_prefix}\"",
+  "    # Find the longest palindromic suffix of the string $1.\n    # >>> find_palindromic_suffix\
+    \ \"cata\"\n    # \"a\"\n    # >>> find_palindromic_suffix \"catac\"\n    # \"\
+    catac\"\n    # >>> find_palindromic_suffix \"catacd\"\n    # \"a\"\n    # >>>\
+    \ find_palindromic_suffix \"catacdc\"\n    # \"c\"\n    #\n    # $1 is a string\n\
+    \    find_palindromic_suffix() {\n        local suffix=\n        local length=$((${#1}-1))\n\
+    \        for ((i=$length; i >= 0; i--)); do\n            if is_palindrome \"${1:i}\"\
+    ; then\n                echo \"${1:i}\"\n                return\n            fi\n\
+    \        done\n    }\n\n    # Find the longest palindromic prefix of the string\
+    \ $1.\n    # >>> find_palindromic_prefix \"cata\"\n    # \"c\"\n    # >>> find_palindromic_prefix\
+    \ \"catac\"\n    # \"catac\"\n    # >>> find_palindromic_prefix \"catacd\"\n \
+    \   # \"catac\"\n    # >>> find_palindromic_prefix \"catacdc\"\n    # \"catacdc\"\
+    \n    #\n    # $1 is a string\n    find_palindromic_prefix() {\n        local\
+    \ prefix=\n        local length=$((${#1}-1))\n        for ((i=$length; i >= 0;\
+    \ i--)); do\n            if is_palindrome \"${1:0:i}\"; then\n               \
+    \ echo \"${1:0:i}\"\n                return\n            fi\n        done\n  \
+    \  }\n\n    # Check if $1 is a palindrome.\n    # >>> is_palindrome \"catac\"\n\
+    \    # True\n    # >>> is_palindrome \"cata\"\n    # False\n    #\n    # $1 is\
+    \ a string\n    is_palindrome() {\n        local length=$((${#1}-1))\n       \
+    \ for ((i=0; i <= $length/", "    local str=$1\n    local postfix=$(substring\
+    \ $str 0)\n    local len=${#str}\n    local i=0\n    local j=0\n    local prefix=\"\
+    \"\n    local result=\"\"\n    if [ \"$str\" == \"\" ]; then\n        echo \"\"\
+    \n        return\n    fi\n    for (( i = 0; i < len; i++ )); do\n        for ((\
+    \ j = 0; j < len - i; j++ )); do\n            postfix=$(substring $str $j)\n \
+    \           if is_palindrome $postfix; then\n                prefix=$(substring\
+    \ $str 0 $j)\n                prefix=$(reverse $prefix)\n                result=$str$prefix\n\
+    \                echo $result\n                return\n            fi\n      \
+    \  done\n    done", "    local string=\"$1\"\n    local palindrome=\"\"\n    local\
+    \ reversed=\"\"\n    reversed=$(reverse_string \"$string\")\n    palindrome=$(longest_common_suffix\
+    \ \"$string\" \"$reversed\")\n    palindrome=\"$palindrome${string:${#palindrome}}\"\
+    \n    palindrome=\"$palindrome$(reverse_string \"${string%$palindrome}\")\"\n\
+    \    echo \"$palindrome\"", "  local string=\"$1\"\n  local len=${#string}\n \
+    \ for ((i=len; i>0; i--)); do\n    if is_palindrome \"${string:$i}\"; then\n \
+    \     echo \"${string}$(reverse \"${string:0:$i}\")\"\n      return\n    fi\n\
+    \  done\n  echo \"${string}$(reverse \"${string}\")\"", "  if [ \"$1\" == \"\"\
+    \ ]; then\n    echo \"\"\n    return\n  fi\n  i=0\n  j=$((${#1}-1))\n  while [\
+    \ \"$i\" -lt \"$j\" ] && [ \"${1:$i:1}\" == \"${1:$j:1}\" ]; do\n    i=$(($i+1))\n\
+    \    j=$(($j-1))\n  done\n  if [ \"$i\" -eq \"$j\" ]; then\n    # Found the palindrome\
+    \ starting at 0\n    result=\"$1\"\n  elif [ \"$i\" -eq $(($j+1)) ]; then\n  \
+    \  # Found the palindrome starting at $(($i-1))\n    result=\"${1:0:$(($i-1))}${1:$i:1}${1:$(($i-1)):$(($i-1))}${1:$(($i+1)):$((${#1}-$i))}\"\
+    \n  else\n    # Found the palindrome starting at $i\n    result=\"${1:0:$((${#1}-$i))}${1:$i:$((${#1}-$i))}${1:$i:$((${#1}-$i))}\"\
+    \n  fi\n  echo \"$result\"", "    local s=\"$1\"\n    local s_len=${#s}\n    local\
+    \ i=0\n\n    while [ $i -lt $s_len ]; do\n        local pre=${s:0:$i}\n      \
+    \  local post=${s:$i}\n        if [ \"$pre\" == \"$(rev <<< \"$post\")\" ]; then\n\
+    \            echo \"${s}$(rev <<< \"${s:0:$(($s_len - $i))}\")\"\n           \
+    \ return\n        fi\n        ((i++))\n    done\n    # There is no palindromic\
+    \ suffix, so return the same string with it's reverse appended.\n    echo \"${s}$(rev\
+    \ <<< \"$s\")\"", "  local string=$1\n  local string_length=${#string}\n  local\
+    \ palindrome_beginning=${string}\n  local palindrome_end=\"\"\n  local i=0\n \
+    \ while [[ $i -lt $string_length ]]; do\n    palindrome_end=${string:$i:1}${palindrome_end}\n\
+    \    if [[ $palindrome_beginning == $palindrome_end ]]; then\n      i=$string_length\n\
+    \    else\n      ((i++))\n    fi\n  done\n  echo \"${string}${palindrome_end}\"",
+  "    [[ $# -eq 0 ]] && echo \"\" && return 0\n\n    # String suffix that is a palindrome\n\
+    \    local suffix=\"\"\n    local i=\"\"\n    local j=\"\"\n    local len=$((${#1}\
+    \ - 1))\n    local iter=$(($len / 2))\n    local sub_len=0\n    local sub_start=0\n\
+    \    local sub_end=0\n    local sub_str=\"\"\n    local sub_rev=\"\"\n\n    for\
+    \ ((i=0; i<iter; i++)); do\n        sub_len=$(($len - $i))\n        for ((j=0;\
+    \ j<=$i; j++)); do\n            sub_start=$j\n            sub_end=$(($len - $j))\n\
+    \            sub_str=${1:$sub_start:$sub_len}\n            sub_rev=$(revstr \"\
+    $sub_str\")\n            if [[ \"$sub_str\" == \"$sub_rev\" ]]; then\n       \
+    \         suffix=\"$sub_str\"\n            fi\n        done\n    done\n\n    revstr\
+    \ \"$1\" | sed \"s/^${suffix}//\" | revstr", "    local string=$1\n    local length=${#string}\n\
+    \    local suffix_length\n    local suffix\n    local prefix\n\n    if [ $length\
+    \ -eq 0 ]; then\n        echo \"\"\n        return\n    fi\n\n    for suffix_length\
+    \ in $(seq $length -1 1); do\n        suffix=${string: -$suffix_length}\n    \
+    \    if is_palindrome $suffix; then\n            prefix=${string:0:$((length -\
+    \ suffix_length))}\n            echo -n \"$string$(reverse $prefix)\"\n      \
+    \      return\n        fi\n    done", "  # If the input string is empty, return\
+    \ the empty string.\n  if [[ -z \"$1\" ]]; then\n    echo \"\"\n    return\n \
+    \ fi\n\n  local input=\"$1\"\n  local prefix_size=0\n  local postfix_size=0\n\
+    \  local new_prefix=\"\"\n  local new_postfix=\"\"\n\n  # Iterate from the end\
+    \ of the string.\n  while [[ $postfix_size -lt ${#input} ]]; do\n    prefix_size=$((\
+    \ ${#input} - postfix_size - 1 ))\n    new_prefix=\"${input:0:prefix_size}\"\n\
+    \    new_postfix=\"${input:prefix_size:postfix_size+1}\"\n    if [[ \"$new_prefix\"\
+    \ == \"$(rev <<< $new_postfix)\" ]]; then\n      break\n    fi\n    postfix_size=$((\
+    \ postfix_size + 1 ))\n  done\n\n  # Use rev to reverse the prefix, then append\
+    \ it to the end of the string.\n  echo \"${input}$(rev <<< ${input:0:prefix_size})\"",
+  "  if [[ \"$1\" == \"\" ]]; then\n    echo \"\"\n    return\n  fi\n  local string=$1\n\
+    \  local postfix=\"\"\n  while true; do\n    if [[ \"$string\" == \"$(rev <<<\
+    \ \"$string\")\" ]]; then\n      break\n    fi\n    string=\"${string%?}\"\n \
+    \   postfix=\"${postfix}${string: -1}\"\n  done\n  local prefix=\"${string:0:$((${#string}\
+    \ - ${#postfix}))}\"\n  echo \"${string}${(R)prefix}${postfix}\"", "  # find longest\
+    \ palindromic postfix of a string\n  longest_palindromic_postfix() {\n    result=''\n\
+    \    for ((len=${#1}; len > 0; len--)); do\n      if [[ \"${1:0:len}\" == \"${1:0:len}\"\
+    \ ]]; then\n        result=\"${1:0:len}\"\n        break\n      fi\n    done\n\
+    \    echo \"$result\"\n  }\n  # Return reverse of the string.\n  reverse() {\n\
+    \    result=''\n    for ((i=${#1}-1; i >= 0; i--)); do\n      result+=\"${1:i:1}\"\
+    \n    done\n    echo \"$result\"\n  }\n  string=\"$1\"\n  palindromic_postfix=$(longest_palindromic_postfix\
+    \ \"$string\")\n  # substring of a string before the longest palindromic postfix.\n\
+    \  prefix=\"${string:0:${#string}-${#palindromic_postfix}}\"\n  echo \"${string}$(reverse\
+    \ \"$prefix\")\"", "    if [ $# -ne 1 ]; then\n        echo 'make_palindrome function\
+    \ takes one argument'\n        return\n    fi\n    if [ -z \"$1\" ]; then\n  \
+    \      echo \"\"\n        return\n    fi\n    local str\n    str=\"$1\"\n    local\
+    \ i\n    i=${#str}\n    local j\n    local k\n    # If the whole string is a palindrome,\
+    \ just return it\n    for j in $(seq 0 $((i/2))); do\n        if [ \"${str:$j:1}\"\
+    \ != \"${str:$((i-j-1)):1}\" ]; then\n            break\n        fi\n    done\n\
+    \    if [ $j -eq $((i/2)) ]; then\n        echo \"$str\"\n        return\n   \
+    \ fi\n    # Find the longest palindromic suffix\n    for j in $(seq $((i-1)) -1\
+    \ 0); do\n        for k in $(seq 0 $((j/2))); do\n            if [ \"${str:$((i-j+k)):1}\"\
+    \ != \"${str:$((j-k-1)):1}\" ]; then\n                break\n            fi\n\
+    \        done\n        if [ $k -eq $((j/2)) ]; then\n            echo \"$str${str:0:$((i-j))}$(echo\
+    \ \"${str:0:$((i-j))}\" | rev)\"\n            return\n        fi\n    done", " \
+    \ local string=\"$1\"\n  local prefix=\"$(reverse_string \"${string:0:$(longest_palindromic_suffix_length\
+    \ \"$string\")}\")\"\n  echo \"${string}${prefix}\"", "  local arg_len=\"${#1}\"\
+    \n  local i=0\n  while (( i < arg_len / 2 )); do\n    (( i++ ))\n    if [[ \"\
+    ${1:0:i}\" == \"${1:arg_len-i:i}\" ]]; then\n      return\n    fi\n  done\n  echo\
+    \ \"${1}$(rev <<< \"${1:0:i-1}\")\"", "  local -r str=$1\n  local -r str_rev=$(reverse\
+    \ $str)\n  local -r half_len=$(( ${#str} / 2 ))\n  local -r str_half=$(substr\
+    \ $str 1 $half_len)\n  local -r str_rev_half=$(substr $str_rev 1 $half_len)\n\
+    \  local -r pos=$(longest_common_substring $str_half $str_rev_half)\n  local -r\
+    \ prefix=$(substr $str 1 $pos)\n  echo \"$str$(reverse $prefix)\"", "    local\
+    \ str=\"$1\"\n    if [[ -z \"$str\" ]]; then\n        echo \"\"\n        return\n\
+    \    fi\n    local prefix=$(make_palindrome \"${str%?}\")\n    if [[ \"$str\"\
+    \ = \"$(rev <<<\"$str\")\" ]]; then\n        echo \"$str\"\n    else\n       \
+    \ echo \"$str$prefix\"\n    fi", "  local r\n  local s\n  # Reverse the string.\n\
+    \  r=\"$(rev <<< \"$1\")\"\n  # Find the longest postfix of the string that is\
+    \ a palindrome.\n  s=\"$(postfix_palindrome \"$1\")\"\n  # Append to the end of\
+    \ the string reverse of a string prefix that comes before the palindromic suffix.\n\
+    \  printf '%s%s' \"${1%$s}\" \"${r%$s}\"", "  local str=\"$1\"\n  local str_len=\"\
+    ${#str}\"\n  local str_rev=\"$(rev <<< \"$str\")\"\n  local str_rev_len=\"${#str_rev}\"\
+    \n  local i j\n  local longest_len longest_i\n\n  # Find the longest palindromic\
+    \ suffix\n  longest_len=0\n  for ((i=0; i<str_len; i++)); do\n    for ((j=0; j<str_rev_len;\
+    \ j++)); do\n      if [[ \"${str:i:1}\" != \"${str_rev:j:1}\" ]]; then\n     \
+    \   if (( j > longest_len )); then\n          longest_len=\"$j\"\n          longest_i=\"\
+    $i\"\n        fi\n        break\n      fi\n    done\n  done\n\n  # Append to the\
+    \ supplied string reverse of a string prefix that comes before the palindromic\
+    \ suffix\n  printf \"%s%s\" \"$str\" \"${str:0:longest_i}\" | rev", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local first=\"\"\n    local last=\"\"\
+    \n    local i=\"\"\n    local j=\"\"\n    local rev_first=\"\"\n    local is_palindrome=\"\
+    \"\n    local suffix=\"\"\n    local prefix=\"\"\n    local palindrome=\"\"\n\n\
+    \    # Find the longest postfix of supplied string that is a palindrome.\n   \
+    \ for (( i = len; i > 0; i-- )); do\n        first=${str:0:i}\n        last=${str:len-i}\n\
+    \        if [[ \"$first\" == \"$last\" ]]; then\n            is_palindrome=1\n\
+    \            break\n        fi\n    done\n\n    # If no palindrome was found,\
+    \ it means the supplied string is already palindrome.\n    if [[ -z \"$is_palindrome\"\
+    \ ]]; then\n        palindrome=\"$str\"\n    else\n        rev_first=$(reverse\
+    \ \"$first\")\n        palindrome=\"$first$rev_first\"\n    fi\n\n    echo \"\
+    $palindrome\"", "    local s=$1\n    local slen=${#s}\n    # If the string is\
+    \ a palindrome, return it\n    if [ \"${s:0:1}\" == \"${s:$((slen-1)):1}\" ];\
+    \ then\n        echo \"$s\"\n        return\n    fi\n    local i=0\n    while\
+    \ [ $i -lt $((slen/2)) ]; do\n        if [ \"${s:$i:1}\" != \"${s:$((slen-i-1)):1}\"\
+    \ ]; then\n            break\n        fi\n        i=$((i+1))\n    done\n    #\
+    \ Append to the string reverse of a string prefix that comes before the palindromic\
+    \ suffix.\n    echo \"$s$(reverse \"${s:0:$((slen-i))}\")\"", "  local my_arg=$1\n\
+    \  local my_return=\"\"\n  if [[ ${#my_arg} -le 1 ]]; then\n    my_return=$my_arg\n\
+    \  else\n    local my_suffix=\"\"\n    local my_prefix=\"\"\n    local my_length=${#my_arg}\n\
+    \    local my_half=$(( $my_length / 2 ))\n    local my_half_ceil=$(( $my_half\
+    \ + $my_length % 2 ))\n    local my_half_floor=$(( $my_half ))\n    local my_iter=1\n\
+    \    while [[ $my_iter -le $my_half_ceil ]]; do\n      my_prefix=${my_arg:0:$my_iter}\n\
+    \      if [[ \"$my_prefix\" == \"${my_arg:$my_half_floor:$my_iter}\" ]]; then\n\
+    \        my_suffix=$my_prefix\n      fi\n      my_iter=$(( $my_iter + 1 ))\n \
+    \   done\n    my_return=\"${my_arg}$(reverse \"${my_arg}\" 0 $(( ${#my_arg} -\
+    \ ${#my_suffix} )))\"\n  fi\n  echo \"$my_return\"", "    local s=\"$1\"\n   \
+    \ # s_reverse contains reverse of a string\n    local s_reverse=\"$(echo \"$s\"\
+    \ | rev)\"\n    # s_head contains a prefix of the original string\n    local s_head=\"\
+    $s\"\n    # s_tail contains a suffix of the original string\n    local s_tail=\"\
+    \"\n    # len_s is a length of the original string\n    local len_s=\"${#s}\"\n\
+    \    # len_s_palindrome is a length of the palindromic suffix\n    local len_s_palindrome=0\n\
+    \    # i is an index\n    local i=0\n    # single_char is a string with a single\
+    \ character\n    local single_char=\"\"\n    # palindrome_found is a flag which\
+    \ is set when a palindromic suffix is found\n    local palindrome_found=0\n  \
+    \  #\n    # Algorithm loop\n    while [[ $palindrome_found -eq 0 ]]; do\n    \
+    \    # \n        # We iterate from the end of the string to the beginning\n  \
+    \      i=$((len_s - 1))\n        #\n        # We compare the last character of\
+    \ the string and the last character of the reverse of the string.\n        # If\
+    \ the characters are not equal we chop the last character of the string and try\
+    \ again.\n        # If the characters are equal we chop the last character of\
+    \ the string and the last character of the reverse of the string and try again.\n\
+    \        while [[ $i -ge 0 ]]; do\n            single_char=\"${s:$i:1}\"\n   \
+    \         if [[ \"$single_char\" != \"${s_reverse:$i:1}\" ]]; then\n         \
+    \       i=$((i - 1))\n                s_head=\"${s:0:$i}\"\n                break\n\
+    \            fi\n            if [[ $i -eq 0 ]]; then\n                palindrome_found=1\n\
+    \                len_s_palindrome=$((len_s - i))\n                break\n    \
+    \        fi\n            i=$((i - 1))\n            s_head=\"${s:0:$i}\"\n    \
+    \        s_reverse=\"${s_reverse:0:$i}\"\n        done\n    done\n    #\n    #\
+    \ Once the palindromic suffix", "  echo -n \"$1\"\n  echo -n \"$1\" | rev | cut\
+    \ -c \"$(get_palindrome_suffix_length \"$1\")\"", "  local forward_string=\"$1\"\
+    \n  local reverse_string=$(rev <<< \"$1\")\n  local max_len=${#forward_string}\n\
+    \  local i=0\n  local j=0\n  local prefix=\"\"\n  local suffix=\"\"\n  for ((\
+    \ i=0; i<$max_len; i++ )); do\n    # Find a suffix of maximum length that is a\
+    \ palindrome\n    suffix=${forward_string:$i}\n    prefix=${reverse_string:0:$((max_len-i))}\n\
+    \    #echo \"i=${i}, max_len=${max_len}, suffix=${suffix}, prefix=${prefix}\"\n\
+    \    if [[ \"$suffix\" == \"$prefix\" ]]; then\n      break\n    fi\n  done\n\
+    \  prefix=${forward_string:0:$((max_len-i))}\n  echo \"${forward_string}$(rev\
+    \ <<< \"$prefix\")\"", "  local s=\"$1\"\n  [[ -z \"$s\" ]] && return\n  local\
+    \ s_len=\"${#s}\"\n  local i\n\n  for (( i = s_len; i > 0; i-- )); do\n    local\
+    \ prefix=\"${s:0:i}\"\n    local suffix=\"${s:s_len-i}\"\n    [[ \"$prefix\" ==\
+    \ \"$suffix\" ]] && break\n  done\n\n  local prefix=\"${s:0:i}\"\n  local tail=\"\
+    ${s:i}\"\n  printf '%s%s%s' \"$prefix\" \"$(reverse \"$tail\")\" \"$prefix\"",
+  "  local s=$1\n  local lps=\"\"\n  local r=\"\"\n  local res=\"\"\n  lps=$(longest_palindromic_suffix\
+    \ \"$s\")\n  echo lps: $lps\n  if [ -z \"$lps\" ]; then\n    res=\"$s$(reverse\
+    \ \"$s\")\"\n  else\n    r=$(reverse \"$s\")\n    r=\"${r#$lps}\"\n    res=\"\
+    $s$r\"\n  fi\n  echo $res", "    local s=\"$1\"  # string\n    if [ -z \"$s\"\
+    \ ]; then\n        echo \"$s\"\n        return\n    fi\n    if [ $(expr length\
+    \ \"$s\") -eq 1 ]; then\n        echo \"$s\"\n        return\n    fi\n    local\
+    \ n=$(expr length \"$s\")\n    local max=1\n    local i=1\n    local palindrome=\"\
+    \"\n    local prefix=\"\"\n    local suffix=\"\"\n    local rev=\"\"\n    while\
+    \ [ $i -lt $n ]; do\n        j=$(expr $n - $i)\n        suffix=\"${s:0:$i}\"\n\
+    \        prefix=\"${s:$j}\"\n        #echo \"suffix='$suffix', prefix='$prefix'\"\
+    \n        if [ \"$suffix\" = \"$prefix\" ]; then\n            rev=$(rev <<< \"\
+    $s\")\n            rev=\"${rev:$i}\"\n            palindrome=\"$s$rev\"\n    \
+    \        max=$(expr $i + 1)\n        fi\n        i=$(expr $i + 1)\n    done\n\
+    \    echo \"$palindrome\"", "  local s=\"$1\"\n  local l=${#s}\n  local longest=\n\
+    \  local i=0\n  local j=0\n  local k=0\n  local start=\n  for ((i=0; i<l; i++));\
+    \ do\n    for ((j=0; j<l-i; j++)); do\n      for ((k=j; k<l-i; k++)); do\n   \
+    \     local ss=\"${s:j:k-j+1}\"\n        local ssrev=\"$(rev \"$ss\")\"\n    \
+    \    if [[ \"$ss\" == \"$ssrev\" ]]; then\n          if [[ ${#ss} -gt ${#longest}\
+    \ ]]; then\n            longest=\"$ss\"\n            start=\"$j\"\n          fi\n\
+    \        fi\n      done\n    done\n  done\n  if [[ -z \"$longest\" ]]; then\n\
+    \    echo \"$s\"\n  else\n    local prefix=\"${s:0:start}\"\n    local prefixrev=\"\
+    $(rev \"$prefix\")\"\n    echo \"${s}${prefixrev}\"\n  fi", "  if [ $# -ne 1 ];\
+    \ then\n    echo \"Error: there should be exactly one string argument\"\n    return\
+    \ 1\n  fi\n  local string=$1\n  echo \"${string}$(reverse_substring $(postfix_string_for_longest_palindrome\
+    \ \"${string}\"))\"", "    local str=\"$1\"\n    [[ -z \"$str\" ]] && echo \"\"\
+    \ && return\n    local -i i j\n    local -a palindrome_length=()\n    local -i\
+    \ max_length=0\n    local -i max_length_start=0\n    local -i max_length_end=0\n\
+    \    # Manacher's algorithm.\n    # http://www.leetcode.com/2011/11/longest-palindromic-substring-part-ii.html\n\
+    \    # Find the longest postfix of supplied string that is a palindrome.\n   \
+    \ # In the loop we use two indices: i, j\n    # - i is an array index in the input\
+    \ string\n    # - j is an array index in the \"prepared\" string.\n    # There\
+    \ is a rule how to convert j to i and vice versa:\n    # i = (j - 1) / 2\n   \
+    \ # j = i * 2 + 1\n    local -i str_len=${#str}\n    local -i prepared_str_len=$(($str_len\
+    \ * 2 + 1))\n    local -a prepared_str=()\n    for ((i=0; i<prepared_str_len;\
+    \ i++)); do\n        if ((i % 2 == 0)); then\n            prepared_str[$i]=\"\
+    |\"\n        else\n            prepared_str[$i]=${str:$(((i - 1) / 2)):1}\n  \
+    \      fi\n    done\n    prepared_str[$((prepared_str_len - 1))]=\"|\"\n    local\
+    \ -i S_len=${#prepared_str[@]}\n    local -i R=0\n    local -i C=0\n    for ((i=0;\
+    \ i<S_len; i++)); do\n        local -i mirror_i=2 * C - i\n        palindrome_length[$i]=0\n\
+    \        if ((R > i)); then\n            local -i diff=$((R - i))\n          \
+    \  local -i min_len=$((diff < palindrome_length[$mirror_i] ? diff : palindrome_length[$mirror_i]))\n\
+    \            palindrome_length[$i]=$", "    local string=\"$1\"\n    local length=${#string}\n\
+    \    local half_length=$((length / 2))\n    local longest_palindrome_offset=0\n\
+    \    local longest_palindrome_length=0\n    local longest_palindrome=''\n    local\
+    \ prefix_offset=0\n    local reversed_prefix=''\n    local suffix_offset=0\n \
+    \   local suffix_length=0\n    for i in $(seq 1 $half_length); do\n        prefix_offset=$((length\
+    \ - i))\n        reversed_prefix=$(echo $string | rev | cut -c 1-$i)\n       \
+    \ if [[ \"$reversed_prefix\" == \"${string:prefix_offset:i}\" ]]; then\n     \
+    \       if ((i > longest_palindrome_length)); then\n                longest_palindrome_offset=$prefix_offset\n\
+    \                longest_palindrome_length=$i\n            fi\n        fi\n  \
+    \  done\n    if ((longest_palindrome_length > 0)); then\n        longest_palindrome=${string:longest_palindrome_offset:longest_palindrome_length}\n\
+    \        suffix_offset=$((longest_palindrome_offset - longest_palindrome_length))\n\
+    \        suffix_length=$((length - longest_palindrome_length - suffix_offset))\n\
+    \        echo \"$string$(echo $string | rev | cut -c $((suffix_offset + 1))-$((suffix_offset\
+    \ + suffix_length)))\"\n    else\n        echo \"$string$(echo $string | rev)\"\
+    \n    fi", "  str=\"$1\"\n  endpos=$((${#str}-1))\n  for ((i=endpos; i>0; i--));\
+    \ do\n    if [ \"${str:0:i}\" == \"${str:$((endpos-i+1)):i}\" ]; then\n      echo\
+    \ \"${str}$(reverse_substring \"${str}\" 0 $((i-1)))\"\n      return\n    fi\n\
+    \  done\n  echo \"$str$(reverse_substring \"$str\")\"", "    local input=\"$1\"\
+    \n    local reverse_input=$(reverse_string \"$input\")\n    local longest_palindrome=\n\
+    \n    for ((i = 0; i < ${#input}; i++)); do\n        suffix=${input:i}\n     \
+    \   if [[ $suffix == $reverse_input ]]; then\n            longest_palindrome=$suffix\n\
+    \            break\n        fi\n    done\n\n    echo \"$input${reverse_input:${#longest_palindrome}}\"",
+  "    local r=$(rev <<< $1)\n    local i=1\n    local n=${#1}\n    while [[ \"${r:0:$i}\"\
+    \ != \"${1:$n-i:$i}\" ]]; do\n        i=$((i+1))\n    done\n    local o=${1:0:$((n-i))}\n\
+    \    echo \"${1}${r:${#o}}\"", "    local prefix=\"\"\n    local suffix=\"\"\n\
+    \    local prefix_tail_index=0\n    local suffix_tail_index=0\n    # Find the\
+    \ longest suffix that is also a palindrome.\n    # This can be any suffix of the\
+    \ supplied string.\n    while true; do\n        local char_prefix=$(echo $1 |\
+    \ cut -c${prefix_tail_index})\n        local char_suffix=$(echo $1 | cut -c${suffix_tail_index})\n\
+    \        if [ \"$char_prefix\" == \"$char_suffix\" ]; then\n            prefix=$char_prefix$prefix\n\
+    \            suffix=$char_suffix$suffix\n            prefix_tail_index=$((prefix_tail_index\
+    \ + 1))\n            suffix_tail_index=$((suffix_tail_index - 1))\n        else\n\
+    \            break\n        fi\n    done\n    # Reversed suffix goes to the end\
+    \ of the result string.\n    local result=$1$(echo $suffix | rev)\n    echo $result",
+  "    local string=\"$1\"\n    local tail\n    tail=$(find_palindrome_substring \"\
+    $string\")\n    local prefix_length=${#string}\n    prefix_length=$((prefix_length\
+    \ - ${#tail}))\n    local prefix\n    prefix=${string:0:prefix_length}\n    local\
+    \ reversed_prefix\n    reversed_prefix=$(reverse_string \"$prefix\")\n    local\
+    \ result\n    result=\"$string$reversed_prefix\"\n    echo \"$result\"", "   \
+    \ if [ -z \"$1\" ]; then\n        echo \"\"\n        return\n    fi\n    reversed_prefix=$(rev\
+    \ <<< \"$1\")\n    for ((i=${#1}; i>=0; i--)); do\n        suffix=${1:$i}\n  \
+    \      if [[ $(rev <<< \"$suffix\") == \"$suffix\" ]]; then\n            echo\
+    \ \"$1$reversed_prefix\"\n            return\n        fi\n    done", "  # Find\
+    \ the largest palindromic suffix.\n  local suffix=\"\"\n  local prefix=\"\"\n\
+    \  # Don't include the first character in suffix.\n  for((i=1; i<${#1}; i++));\
+    \ do\n    suffix=\"${1:i}\"\n    prefix=\"${1:0:${#1}-i}\"\n    # Compare reversed\
+    \ prefix with suffix.\n    if [[ \"$(rev <<< \"$prefix\")\" == \"$suffix\" ]];\
+    \ then\n      break\n    fi\n  done\n  # The result is the string with the original\
+    \ suffix plus the reversed prefix.\n  echo \"$1$(rev <<< \"$prefix\")\"", "  if\
+    \ [ -z \"$1\" ]; then\n    echo \"\"\n    return\n  fi\n  local str=\"$1\"\n \
+    \ local pdrome_length=$(get_longest_palindrome_postfix_length \"$str\")\n  if\
+    \ [ $pdrome_length -eq $((${#str} - 1)) ]; then\n    echo \"$str\"\n    return\n\
+    \  fi\n  local str_postfix=${str:$pdrome_length}\n  local str_prefix=${str_postfix}\n\
+    \  echo \"$str$(reverse \"$str_prefix\")\"", "    if [ -z \"$1\" ]; then\n   \
+    \     echo \"\"\n        return\n    fi\n    local STRING_LENGTH=${#1}\n    local\
+    \ LONGEST_PALINDROME_LENGTH=0\n    local LONGEST_PALINDROME_SUFFIX=\"\"\n    for\
+    \ ((i=1; i<STRING_LENGTH; i++)); do\n        local STRING_PREFIX=$(printf \"%s\"\
+    \ \"$1\" | cut -c1-$i)\n        local STRING_PREFIX_REVERSE=$(printf \"%s\" \"\
+    $STRING_PREFIX\" | rev)\n        if [ \"$STRING_PREFIX\" == \"$STRING_PREFIX_REVERSE\"\
+    \ ]; then\n            LONGEST_PALINDROME_LENGTH=$i\n            LONGEST_PALINDROME_SUFFIX=$STRING_PREFIX\n\
+    \        fi\n    done\n    local PALINDROME=$1\n    if [ $LONGEST_PALINDROME_LENGTH\
+    \ -gt 0 ]; then\n        PALINDROME=$(printf \"%s%s\" \"$PALINDROME\" \"$(printf\
+    \ \"%s\" \"$LONGEST_PALINDROME_SUFFIX\" | rev)\")\n    fi\n    echo \"$PALINDROME\"",
+  "    str=\"$1\"\n    # find the longest postfix that is a palindrome.\n    len=${#str}\n\
+    \    suffix=\"$str\"\n    while [[ \"$len\" -gt 0 ]]; do\n        prefix=\"${str:0:$len}\"\
+    \n        reverse_prefix=\"$(reverse_string \"$prefix\")\"\n        if [[ \"$suffix\"\
+    \ == \"$reverse_prefix\" ]]; then\n            break\n        fi\n        len=$((len\
+    \ - 1))\n        suffix=\"${suffix:1}\"\n    done\n    # append to the end of\
+    \ the string reverse of a string prefix that comes before the palindromic suffix.\n\
+    \    prefix=\"${str:0:$((len - 1))}\"\n    reverse_prefix=\"$(reverse_string \"\
+    $prefix\")\"\n    echo \"$str$reverse_prefix\"", "  : ${1:?missing string to make\
+    \ a palindrome of}\n  local  s=${1}\n  local  n=${#s}\n  local  m=${n}\n  # Find\
+    \ the longest postfix that is a palindrome.\n  while ((m > 0)); do\n    if is_palindrome\
+    \ \"${s:0:m}\"; then\n      break\n    fi\n    ((m--))\n  done\n  local  r=$(reverse\
+    \ \"${s:0:$((n-m))}\")\n  echo \"${s}${r}\"", "  local word_len=$((${#1}))\n \
+    \ local middle=$((word_len / 2))\n  local palindrome_len=0\n  for ((i=0; i<=middle;\
+    \ i++)); do\n    local prefix=${1:0:i}\n    local suffix=${1:i:$((word_len - i))}\n\
+    \    if [[ \"$prefix\" == \"$(rev <<< $suffix)\" ]]; then\n      palindrome_len=$((i*2))\n\
+    \    fi\n  done\n  local prefix=${1:0:$((palindrome_len / 2))}\n  echo \"$1$(rev\
+    \ <<< $prefix)\"", "  local str=\"$1\"\n  local start_pos\n  local prefix\n  local\
+    \ reversed_prefix\n  local postfix\n\n  # Find the longest palindromic postfix.\n\
+    \  start_pos=$(find_longest_palindromic_postfix \"$str\")\n  postfix=${str:$start_pos}\n\
+    \n  # Find the prefix that goes before the palindromic postfix.\n  prefix=${str:0:$start_pos}\n\
+    \n  # Reverse the prefix.\n  reversed_prefix=$(reverse_string \"$prefix\")\n\n\
+    \  # Append the reversed prefix to the end of the string.\n  echo \"$str$reversed_prefix\"",
+  '  echo "$1$(echo $1 | rev | cut -c $(expr $(expr $(expr $(echo $1 | wc -c) - 1)
+    / 2) + 1)-$(expr $(echo $1 | wc -c) - 1))"', "    local str len\n    str=\"$1\"\
+    \n    len=${#str}\n    while [ $len -gt 0 ]; do\n        len=$((len - 1))\n  \
+    \      if [ \"${str:$len}\" == \"$(rev <<< \"${str:0:$len}\")\" ]; then\n    \
+    \        echo \"$str$(rev <<< \"${str:0:$len}\")\"\n            return\n     \
+    \   fi\n    done\n    echo \"$str\"", "    # $1 is a string\n    is_palindrome()\
+    \ {\n        string=\"$1\"\n        palindrome=\"$string$(rev <<< \"$string\"\
+    )\"\n        echo \"$palindrome\"\n    }\n\n    string=\"$1\"\n    if [ -z \"\
+    $string\" ]; then\n        echo \"\"\n        return\n    fi\n\n    prefix=\"\
+    $string\"\n    is_palindrome \"$prefix\"\n\n    # Find a palindrome suffix of\
+    \ the string by extending the prefix.\n    while [ \"$prefix\" != \"\" ]; do\n\
+    \        prefix=\"${prefix%?}\"\n        suffix=\"${string##$prefix}\"\n     \
+    \   palindrome=\"$(is_palindrome \"$suffix\")\"\n        if [ \"$palindrome\"\
+    \ == \"$suffix\" ]; then\n            echo \"$suffix$(rev <<< \"$prefix\")\"\n\
+    \            return\n        fi\n    done", "  local string=\"$1\"\n  local reversed_string=\"\
+    $(reverse_string \"$string\")\"\n  local longest_suffix_palindrome=\"$(longest_suffix_palindrome\
+    \ \"$string\")\"\n  local longest_suffix_palindrome_length=${#longest_suffix_palindrome}\n\
+    \  local string_prefix=\"${string:0:$((${#string} - $longest_suffix_palindrome_length))}\"\
+    \n  local string_prefix_reversed=\"$(reverse_string \"$string_prefix\")\"\n  printf\
+    \ \"$string_prefix_reversed$string\"", "  local s=$1\n  local l=\"${#s}\"\n  local\
+    \ i=1\n  # Find the longest suffix that is a palindrome\n  while [[ ${s:$l-$i:$i}\
+    \ != \"${s:$l-$i:$i}\" | rev ]]; do\n    i=$(($i+1))\n  done\n  # Append to it\
+    \ reverse of a prefix that preceeds it\n  echo -n \"${s}${s:0:$(($l-$i))}\" |\
+    \ rev", "  local char_count=$(echo -n \"$1\" | wc -c)\n  if [ $char_count -eq\
+    \ 0 ]; then\n    echo \"\"\n    return\n  fi\n  local max_substr_len=`expr $char_count\
+    \ - 1`\n  local longest_substr_len=$(longest_substring_palindrome_length \"$1\"\
+    \ \"$max_substr_len\")\n  echo \"$1$(echo -n \"$1\" | head -c `expr $char_count\
+    \ - $longest_substr_len` | rev)\"", "  if [[ -z \"$1\" ]]; then\n    echo -n \"\
+    \"\n    return\n  fi\n  local suffix=$(rev <<< \"$1\" | longest_palindrome)\n\
+    \  local prefix=$(rev <<< \"$suffix\")\n  local main=$(rev <<< \"$1\" | sed -e\
+    \ \"s/$suffix//\")\n  echo -n \"$main$suffix$prefix\"", "  local str=$1\n  local\
+    \ revstr=$(revstr \"$str\")\n  local palinstr=\n  local found=\n  while [[ -z\
+    \ $found ]]; do\n    palinstr=$(palin_postfix \"$str\")\n    if [[ -z $palinstr\
+    \ ]]; then\n      found=1\n    else\n      str=${str%%$palinstr}\n    fi\n  done\n\
+    \  if [[ -z $str ]]; then\n    echo \"$palinstr\"\n  else\n    echo \"$str$revstr$palinstr\"\
+    \n  fi", "    local -r str=$1\n    local -r len=${#str}\n    local -r end=${str:$len-1:1}\n\
+    \    if [[ \"$len\" -eq 0 ]]; then\n        echo \"\"\n    elif [[ \"$len\" -eq\
+    \ 1 ]]; then\n        echo \"$str$end\"\n    else\n        local longest_palindrome_suffix=${str:0:1}\n\
+    \        for ((i=1; i<$len; i++)); do\n            local suffix=${str:$len-$i:$i}\n\
+    \            local prefix=${str:0:$len-$i}\n            if [[ \"$suffix\" == \"\
+    $(reverse \"$suffix\")\" ]]; then\n                longest_palindrome_suffix=$suffix\n\
+    \            fi\n        done\n        local result=\"$str$(reverse \"${str%$longest_palindrome_suffix}\"\
+    )\"\n        echo \"$result\"\n    fi", "  local -r str=\"$1\"\n  local -r len=\"\
+    ${#str}\"\n  if [[ \"$len\" -eq 0 ]]; then\n    echo -n \"\"\n    return\n  fi\n\
+    \  if [[ \"$len\" -eq 1 ]]; then\n    echo -n \"$str$str\"\n    return\n  fi\n\
+    \  for (( i = \"$len\"; i > 0; i-- )); do\n    if is_palindrome \"${str:0:i}\"\
+    ; then\n      local -r postfix=\"${str:0:i}\"\n      local -r prefix=\"${str:0:$((len\
+    \ - i))}\"\n      echo -n \"$postfix$(reverse \"$prefix\")\"\n      return\n \
+    \   fi\n  done", "  s=$1\n  len=${#s}\n  palindrome_found=false\n  half_len=$((\
+    \ len / 2 ))\n  for (( i=0; i<half_len; i++ )); do\n    if [[ \"${s:i:1}\" !=\
+    \ \"${s:len-i-1:1}\" ]]; then\n      # a mismatch found, the current suffix is\
+    \ not a palindrome\n      palindrome_found=false\n      break\n    else\n    \
+    \  palindrome_found=true\n    fi\n  done\n  if $palindrome_found; then\n    #\
+    \ echo $1\n    # an entire suffix is a palindrome\n    # no need to do anything,\
+    \ just return the input string\n    echo $1\n  else\n    # echo $1\n    # extract\
+    \ a prefix that is one character shorter than the longest palindromic suffix\n\
+    \    # it will be saved in $prefix\n    prefix=${s:0:$((${#s} - $i - 1))}\n  \
+    \  # echo $prefix\n    # reverse the prefix and save it to $reversed_prefix\n\
+    \    reversed_prefix=$(echo $prefix | rev)\n    # echo $reversed_prefix\n    #\
+    \ concatenate it with the input string\n    echo \"$1$reversed_prefix\"\n  fi",
+  "  # Calculate the length of the input string, n.\n  n=$((${#1}))\n  if [ $n -eq\
+    \ 0 ]; then\n    # Return an empty string if the input string is empty.\n    echo\
+    \ \"\"\n  else\n    # Find the longest postfix of string that is a palindrome.\n\
+    \    # Here, (n-1) is the length of the palindromic prefix.\n    longest_palindromic_prefix_len=$(($n\
+    \ - 1))\n    while true; do\n      # Iterate over lengths of palindromic postfixes\
+    \ of string.\n      # Here, x is the length of the postfix.\n      for x in $(seq\
+    \ 0 $(($n - 1))); do\n        # Break out of the iteration if the postfix of length\
+    \ x is not a palindrome.\n        if [ \"${1:$(($n - $x)):$x}\" != \"$(rev <<<\
+    \ \"${1:0:$x}\")\" ]; then\n          break\n        fi\n        # Remember the\
+    \ length of the palindromic postfix.\n        if [ $x -gt $longest_palindromic_prefix_len\
+    \ ]; then\n          longest_palindromic_prefix_len=$x\n        fi\n      done\n\
+    \      # Exit if the length of the palindromic postfix is zero.\n      if [ $longest_palindromic_prefix_len\
+    \ -eq 0 ]; then\n        break\n      fi\n      # Exit if the length of the palindromic\
+    \ postfix is the same as the length of the original string.\n      if [ $longest_palindromic_prefix_len\
+    \ -eq $n ]; then\n        break\n      fi\n      # Decrement the length of the\
+    \ palindromic postfix.\n      longest_palindromic_prefix_len=$(($longest_palindromic_prefix_len\
+    \ - 1))\n    done\n    # Append to the end of the string a reversed prefix that\
+    \ comes before the palindromic suffix.\n    suffix_len=$(($n - $longest_palindromic_prefix_len))\n\
+    \    rev <<< \"${1:0:$(($n - $suffix_len))}\"\n    echo \"$", "  local -r str=\"\
+    $1\"\n  local -r str_len=${#str}\n  local -r str_halved=$((str_len / 2))\n  local\
+    \ -i i\n  local -i j\n  local -i max_palindrome_len=0\n  local -i max_palindrome_start=0\n\
+    \  local -i new_max_palindrome_len=0\n  local -i new_max_palindrome_start=0\n\
+    \  # Find a palindrome with the largest length.\n  for ((i = 0; i < str_halved;\
+    \ i++)); do\n    for ((j = 0; j < 2; j++)); do\n      local k=i\n      local l=$((str_len\
+    \ - i - 1))\n      if [[ $j -eq 1 ]]; then\n        k=$((k - 1))\n        l=$((l\
+    \ + 1))\n      fi\n      while [[ $k -ge 0 && $l -lt $str_len && ${str:k:1} ==\
+    \ ${str:l:1} ]]; do\n        new_max_palindrome_len=$((l - k + 1))\n        new_max_palindrome_start=$k\n\
+    \        k=$((k - 1))\n        l=$((l + 1))\n      done\n      if [[ $new_max_palindrome_len\
+    \ -gt $max_palindrome_len ]]; then\n        max_palindrome_len=$new_max_palindrome_len\n\
+    \        max_palindrome_start=$new_max_palindrome_start\n      fi\n    done\n\
+    \  done\n  local -r palindrome_suffix=${str:max_palindrome_start:max_palindrome_len}\n\
+    \  local -r palindrome_prefix=${str::max_palindrome_start}\n  echo \"${palindrome_prefix}${palindrome_suffix}$(rev\
+    \ <<< \"$palindrome_prefix\")\"", "  local string=$1\n  local string_length=${#string}\n\
+    \  local prefix_length=0\n  local has_palindrome_suffix=false\n  local palindrome_suffix_length=$string_length\n\
+    \  local i=0\n  local j=0\n  local k=0\n  local postfix=''\n  local prefix=''\n\
+    \  local palindrome=''\n\n  while [ $i -lt $string_length ] && [ $has_palindrome_suffix\
+    \ = false ]; do\n    j=$i\n    k=$(($string_length - 1))\n    while [ $j -lt $k\
+    \ ] && [ $has_palindrome_suffix = false ]; do\n      if [ \"${string:$j:1}\" !=\
+    \ \"${string:$k:1}\" ]; then\n        break\n      else\n        j=$(($j + 1))\n\
+    \        k=$(($k - 1))\n      fi\n      if [ $j -ge $k ]; then\n        has_palindrome_suffix=true\n\
+    \        palindrome_suffix_length=$(($string_length - $i))\n      fi\n    done\n\
+    \    i=$(($i + 1))\n  done\n\n  if [ $has_palindrome_suffix = true ]; then\n \
+    \   prefix_length=$(($string_length - $palindrome_suffix_length))\n    postfix=${string:$prefix_length:$palindrome_suffix_length}\n\
+    \    prefix=${string:0:$prefix_length}\n    palindrome=$prefix$(reverse $postfix)$postfix\n\
+    \  else\n    palindrome=$string\n  fi\n\n  echo $palindrome", "  local string=\"\
+    $1\"\n  local length=$((${#string}))\n  if [ $length -lt 2 ]; then\n    echo \"\
+    $1\"\n    return\n  fi\n  local suffix_start=$(($length-1))\n  local suffix_end=$(($length-1))\n\
+    \  while [ $suffix_start -gt 0 ]; do\n    local prefix_start=0\n    local prefix_end=$(($suffix_start-1))\n\
+    \    while [ $prefix_start -lt $prefix_end ]; do\n      if [ \"${string:$prefix_start:1}\"\
+    \ != \"${string:$prefix_end:1}\" ]; then\n        break\n      fi\n      let prefix_start+=1\n\
+    \      let prefix_end-=1\n    done\n    if [ $prefix_start -ge $prefix_end ];\
+    \ then\n      break\n    fi\n    let suffix_start-=1\n  done\n  local palindrome_suffix=\"\
+    ${string:$suffix_start:$(($suffix_end-$suffix_start+1))}\"\n  local palindrome_prefix=\"\
+    ${string:0:$(($suffix_start))}\"\n  echo \"$palindrome_prefix$palindrome_suffix$(reverse\
+    \ \"$palindrome_prefix\")\"", "  local s=\"$1\"\n  local i j len\n  # Find the\
+    \ longest palindromic suffix\n  for ((i=${#s}; i>=0; i--)); do\n    # Check substring\
+    \ from i to the end for a palindrome\n    for ((j=0, len=${#s}-i; j<len; j++));\
+    \ do\n      # If the current char is different from its reverse counterpart, stop\
+    \ checking\n      if [[ \"${s:i+j:1}\" != \"${s:len-j-1:1}\" ]]; then\n      \
+    \  break\n      fi\n    done\n    # If the whole substring is a palindrome, stop\
+    \ checking\n    if ((j == len)); then\n      break\n    fi\n  done\n  # Add the\
+    \ reversed prefix\n  echo \"${s}$(reverse \"${s:0:i}\")\"", "    if [ \"$1\" ==\
+    \ \"\" ]; then\n        echo -n \"\"\n        return 0\n    fi\n    # Find the\
+    \ longest postfix of supplied string that is a palindrome.\n    local str=$1\n\
+    \    local longest_palindrome_postfix=\"\"\n    for (( i=${#str}; i>0; i-- ));\
+    \ do\n        if [ \"${str:0:i}\" == \"${str:${#str}-i:${#str}}\" ]; then\n  \
+    \          longest_palindrome_postfix=${str:0:i}\n            break\n        fi\n\
+    \    done\n    # Append to the end of the string reverse of a string prefix that\
+    \ comes before the palindromic suffix.\n    local prefix=${str:${#longest_palindrome_postfix}}\n\
+    \    local prefix_reversed=$(echo -n \"$prefix\" | rev)\n    echo -n \"$prefix$prefix_reversed$longest_palindrome_postfix\"",
+  "    local reversed=$(echo \"$1\" | rev)\n    local longest_common_suffix=$(longest_common_suffix\
+    \ \"$1\" \"$reversed\")\n    local prefix=$(echo \"$1\" | cut -c \"1-$(( ${#1}\
+    \ - ${#longest_common_suffix} ))\")\n    local reversed_prefix=$(echo \"$prefix\"\
+    \ | rev)\n    echo \"$1$reversed_prefix\"", "    s=$1\n    if [ -z \"${s}\" ];\
+    \ then\n        echo \"\"\n        return\n    fi\n    # First we need to find\
+    \ the string length as a ',' separated string.\n    # For example, for a string\
+    \ \"cata\" we need \"4,3,2,1\".\n    # We'll use the range function to generate\
+    \ that string.\n    # Now we need to get a substring of the supplied string based\
+    \ on that substring length.\n    # We'll use param expansion to do that.\n   \
+    \ # We'll test the substring against itself to see if it's palindromic.\n    #\
+    \ If it is we'll take it and prepend it to the supplied string.\n    # If it's\
+    \ not we'll try with a shorter substring.\n    # We'll use an until loop to do\
+    \ that until we find a palindromic string.\n    # We'll store the longest palindromic\
+    \ string for later use.\n    # Then we'll get the string prefix that comes before\
+    \ the palindromic string.\n    # We'll reverse that string and append it to the\
+    \ end of the original string.\n    # That's it!\n    #\n    # Note: to test param\
+    \ expansion against an empty string add ':-' at the end of the param expansion.\n\
+    \    # That will default it to an empty string in case the param expansion fails.\n\
+    \    # The param expansion to get a substring of a string is ${string:start:length}.\n\
+    \    # We'll use the substring length as the start value and we'll set the length\
+    \ to 1.\n    until ((len == 1)); do\n        for i in $(range ${#s}); do\n   \
+    \         substring=${s:$i:-}\n            if [ -z \"${substring}\" ]; then\n\
+    \                continue\n            fi\n            substring_reversed=$(reverse\
+    \ ${substring})\n            if [ \"${substring}\" == \"${substring_reversed}\"\
+    \ ]; then\n                palindrome=${substring}\n                break\n  \
+    \          fi\n        done\n        len=${#palindrome}\n    done\n    prefix=${s%${palindrome}}\n\
+    \    prefix_reversed=$(reverse ${prefix})\n    echo \"${s}${prefix_reversed}\"",
+  "  # Find the longest postfix of supplied string that is a palindrome.\n  longest_palindrome_suffix\
+    \ \"$1\"\n  local suffix_length=$?\n  local last_index=$((${#1} - 1))\n  # Append\
+    \ to the end of the string reverse of a string prefix that comes before the palindromic\
+    \ suffix.\n  echo \"$1$(rev \"${1:0:$(($last_index - $suffix_length))}\")\"",
+  "    if [ $# -ne 1 ]; then\n        echo \"Invalid parameters\"\n        return\
+    \ 1\n    fi\n    local string=\"$1\"\n    local len=${#string}\n    local len_div2=$((len\
+    \ / 2))\n    local i=0\n    while [ $i -lt $len_div2 ]; do\n        local tail=$((len\
+    \ - i - 1))\n        if [ \"${string:$i:1}\" != \"${string:$tail:1}\" ]; then\n\
+    \            break\n        fi\n        i=$((i + 1))\n    done\n    local j=$((len\
+    \ - i))\n    local reversed_str=\"$(rev \"${string:0:$j}\")\"\n    echo \"${string}${reversed_str}\"",
+  "  local input=$1\n  local reversed=${input::-1}\n  local prefix=\"\"\n  local tmp=\"\
+    \"\n  for (( i=${#input}-1; i>=0; i-- )); do\n    prefix+=${input:$i:1}\n    tmp=${prefix}${reversed}\n\
+    \    if [[ \"${tmp}\" == \"${tmp::-1}\" ]]; then\n      echo \"${tmp}\"\n    \
+    \  return\n    fi\n  done", "  local str=\"$1\"\n  # If the string is empty, return\
+    \ it, as it's already a palindrome\n  if [ -z \"$str\" ]; then\n    printf '%s'\
+    \ \"$str\"\n    return\n  fi\n  # Find the longest palindromic suffix of a string.\n\
+    \  local palindromic_suffix=\"\"\n  for ((index=${#str}-1; index>=0; index--));\
+    \ do\n    local substr=\"${str:index}\"\n    # If the string is a palindrome,\
+    \ it's the longest one.\n    if is_palindrome \"$substr\"; then\n      palindromic_suffix=\"\
+    $substr\"\n      break\n    fi\n  done\n  # A string itself is a palindrome.\n\
+    \  if [ -z \"$palindromic_suffix\" ]; then\n    printf '%s' \"$str\"\n    return\n\
+    \  fi\n  # This is a prefix of the string before the palindromic suffix.\n  local\
+    \ prefix=\"${str:0:${#str}-${#palindromic_suffix}}\"\n  # Reverse the prefix,\
+    \ append it to the end of the string, and voila!\n  printf '%s%s' \"$str\" \"\
+    $(reverse_string \"$prefix\")\"", "  local in=\"$1\"\n  local str_len=\"${#in}\"\
+    \n  local substr=\"\"\n  local longest=\"\"\n  local substr_len=\"\"\n  for ((i=0;\
+    \ i<str_len; i++)); do\n    substr=\"${in:i}\"\n    substr_len=\"${#substr}\"\n\
+    \    if is_palindrome \"$substr\"; then\n      longest=\"$substr\"\n      break\n\
+    \    fi\n  done\n  echo \"${in}$(reverse \"${in}\" | cut -c-$((str_len-substr_len)))\"",
+  "  s=$1\n  len=${#s}\n  if [ $len -le 1 ]; then\n    echo $s\n    return\n  fi\n\
+    \  # We have at least 2 characters in s.\n  # The longest palindromic suffix of\
+    \ s that doesn't end at the end of s\n  # is a substring that is the same reversed\
+    \ and ends at the end of s.\n  for i in $(seq 1 $(($len - 1))); do\n    sub=${s:$(($len\
+    \ - $i)):$i}\n    rev=$(echo \"$sub\" | rev)\n    if [ \"$sub\" == \"$rev\" ];\
+    \ then\n      rev=${s:0:$(($len - $i))}\n      echo \"$s$(echo \"$rev\" | rev)\"\
+    \n      return\n    fi\n  done\n  # s is already a palindrome, because it doesn't\
+    \ have a palindromic suffix.\n  echo $s", "  declare prefix=\"\"\n  declare suffix=\"\
+    \"\n  declare -i max_len=0\n  declare -i len=0\n  declare max_suffix=\"\"\n  declare\
+    \ -i i=0\n  declare -i j=0\n  local string=\"$1\"\n  local res=\"\"\n  len=${#string}\n\
+    \  while (( i < len )); do\n    while (( j < len )); do\n      suffix=${string:i:len-j}\n\
+    \      if [[ \"$suffix\" == \"$(reverse \"$suffix\")\" ]]; then\n        if ((\
+    \ ${#suffix} > max_len )); then\n          max_len=${#suffix}\n          max_suffix=$suffix\n\
+    \        fi\n      fi\n      j+=1\n    done\n    i+=1\n    j=0\n  done\n  if ((\
+    \ max_len > 0 )); then\n    prefix=${string%$max_suffix}\n    res=$string$(reverse\
+    \ \"$prefix\")\n  else\n    res=$string\n  fi\n  echo \"$res\"", "    local str=$1\n\
+    \    local str_len=${#str}\n    local pal_len=1\n    local pal_idx=$str_len\n\
+    \    local pal_start\n    local is_palindrome=true\n    while [ $pal_len -lt $str_len\
+    \ ]; do\n        pal_idx=$(($pal_idx-1))\n        is_palindrome=true\n       \
+    \ pal_start=$(($pal_idx-$pal_len))\n        for offset in $(seq 0 $(($pal_len/2)));\
+    \ do\n            if [ ${str:$(($pal_start+$offset)):1} != ${str:$(($pal_idx-$offset)):1}\
+    \ ]; then\n                is_palindrome=false\n                break\n      \
+    \      fi\n        done\n        if [ $is_palindrome = true ]; then\n        \
+    \    break\n        fi\n        pal_len=$(($pal_len+1))\n    done\n    if [ $pal_idx\
+    \ -eq $str_len ]; then\n        pal_start=0\n    fi\n    local result=$str\n \
+    \   for offset in $(seq 0 $(($pal_start-1))); do\n        result=${result}${str:$(($pal_start-$offset-1)):1}\n\
+    \    done\n    echo $result", "  local given_string=${1}\n  local len=${#given_string}\n\
+    \  local palindrome_string=\"\"\n  local palindrome_length=0\n  # We will do an\
+    \ O(n^2) search here by trying to make a palindrome from each\n  # string prefix\
+    \ and see if the reverse of the remaining string after the prefix\n  # can be\
+    \ appended in order to make a palindrome.\n  for ((i=0; i<len; i++)); do\n   \
+    \ local prefix=${given_string:0:$i}\n    local len_prefix=${#prefix}\n    local\
+    \ remaining_string=${given_string:$i}\n    local reversed_remaining_string=$(rev\
+    \ <<< ${remaining_string})\n    if [[ \"${remaining_string}\" == \"${reversed_remaining_string}\"\
+    \ ]]; then\n      # We've found the longest palindromic postfix of the string,\
+    \ so we can append\n      # the reversed prefix to the beginning of the string.\n\
+    \      palindrome_string=\"${reversed_remaining_string}${given_string}\"\n   \
+    \   palindrome_length=${#palindrome_string}\n      break\n    fi\n  done\n  echo\
+    \ \"${palindrome_string}\"", "    local string=\"$1\"\n    local rev_string=$(rev\
+    \ \"$string\")\n    local max_suffix=0\n    local reversed_string_prefix=''\n\
+    \    # Cycle through all possible suffixes of the supplied string and find the\
+    \ longest suffix that is a palindrome.\n    # Note, substring length is a length\
+    \ of a prefix of the string that is not a palindrome.\n    for ((suffix_len=${#string};\
+    \ suffix_len>0; suffix_len--)); do\n        local suffix=${string:$suffix_len}\n\
+    \        # At first check whether a substring is a palindrome.\n        if [[\
+    \ \"$suffix\" == \"$(rev \"$suffix\")\" ]]; then\n            max_suffix=$suffix_len\n\
+    \            reversed_string_prefix=${rev_string:$max_suffix}\n            break\n\
+    \        fi\n    done\n    echo \"$string$reversed_string_prefix\"", "    local\
+    \ forward=\"$1\"\n    local backward=\"$(reverse \"$forward\")\"\n    local common_suffix=\"\
+    $(suffix \"$forward\" \"$backward\")\"\n    local common_prefix=\"$(reverse \"\
+    $(prefix \"$forward\" \"$backward\")\")\"\n    local result=\"$forward$common_prefix\"\
+    \n    echo \"$result\"", "  if [ -z \"$1\" ]; then\n    echo \"\"\n    return\n\
+    \  fi\n  local str=\"$1\"\n  local len=$(expr length \"$str\")\n  local left=0\n\
+    \  local right=0\n  local max_palindrome_length=0\n  local start_index=0\n  local\
+    \ end_index=0\n  # start from the middle, going left and right\n  for i in $(seq\
+    \ 0 $(expr \"$len\" - 1)); do\n    for ((left = i, right = i + 1)); ; left--,\
+    \ right++)) do\n      if [ \"$left\" -lt 0 -o \"$right\" -ge \"$len\" ]; then\n\
+    \        break\n      fi\n      if [ \"${str:$left:1}\" != \"${str:$right:1}\"\
+    \ ]; then\n        break\n      fi\n      local palindrome_length=$(expr $right\
+    \ - $left + 1)\n      if [ \"$palindrome_length\" -gt \"$max_palindrome_length\"\
+    \ ]; then\n        max_palindrome_length=\"$palindrome_length\"\n        start_index=\"\
+    $left\"\n        end_index=\"$right\"\n      fi\n    done\n    for ((left = i\
+    \ - 1, right = i + 1)); ; left--, right++)) do\n      if [ \"$left\" -lt 0 -o\
+    \ \"$right\" -ge \"$len\" ]; then\n        break\n      fi\n      if [ \"${str:$left:1}\"\
+    \ != \"${str:$right:1}\" ]; then\n        break\n      fi\n      local palindrome_length=$(expr\
+    \ $right - $left + 1)\n      if [ \"$palindrome_length\" -gt \"$max_palindrome_length\"\
+    \ ]; then\n        max_palindrome_length=\"$palindrome_length\"\n        start_index=\"\
+    $left\"\n        end_index=\"$right\"\n      fi\n    done\n  done\n  if [ \"$max_palindrome_length\"\
+    \ -ne \"$len\" ]; then\n    local prefix=\"${str:0:$(expr $len - $max_palindrome_length)}\"\
+    \n    local result=\"$str$(reverse_string \"$prefix\")\"\n  else\n    local",
+  "  local str=\"$1\"\n  local len=${#str}\n  local idx=$(($len-1))\n  local min_idx=$(($len/2-1))\n\
+    \  local odd=$(($len % 2))\n  local substr\n  local palindrome\n\n  while [[ $idx\
+    \ -gt $min_idx ]]; do\n    substr=${str:0:$idx}\n    if [[ $substr == $(echo $substr\
+    \ | rev) ]]; then\n      palindrome=$str$(echo $substr | rev)\n      echo \"$palindrome\"\
+    \n      return\n    fi\n    idx=$(($idx-1))\n  done\n\n  if [[ $odd -eq 1 ]];\
+    \ then\n    substr=${str:0:$idx}\n    palindrome=$str$(echo $substr | rev)\n \
+    \   echo \"$palindrome\"\n    return\n  fi\n\n  echo \"$str\"", "    input=$1\n\
+    \    len=${#input}\n    while [[ $len -gt 0 ]]; do\n        suffix=${input: -$len}\n\
+    \        if [[ $suffix == $(str_reverse $suffix) ]]; then\n            break\n\
+    \        fi\n        len=$((len - 1))\n    done\n    prefix=${input:0:$((len-1))}\n\
+    \    result=\"$input$(str_reverse $prefix)\"\n    echo $result", "  # Find the\
+    \ longest postfix of supplied string that is a palindrome.\n  local prefix_len\n\
+    \  local palindrome_len\n  local palindrome\n  local reverse\n  if [ -z \"$1\"\
+    \ ]; then\n    echo \"\"\n    return\n  fi\n  palindrome_len=$(palindrome_len\
+    \ \"$1\")\n  if [ \"$palindrome_len\" -eq 0 ]; then\n    echo \"$1$(reverse \"\
+    $1\")\"\n    return\n  fi\n  prefix_len=$((${#1} - $palindrome_len))\n  # Append\
+    \ to the end of the string reverse of a string prefix that comes before the palindromic\
+    \ suffix.\n  palindrome=$(substring \"$1\" 0 $palindrome_len)\n  reverse=$(reverse\
+    \ \"$(substring \"$1\" 0 $prefix_len)\")\n  echo \"$palindrome$reverse\"", " \
+    \ local str=$1\n  if [[ -z $str ]]; then\n    echo \"\"\n    return\n  fi\n  local\
+    \ -i str_len=${#str}\n  local -i pal_len=0\n  local -i shift_distance=0\n  local\
+    \ -i match_len=0\n  local -i max_match_len=0\n  local -i max_match_len_shift_distance=0\n\
+    \  local -i str_index=0\n  local -i pal_index=0\n  local -i max_match_len_str_index=0\n\
+    \  for ((shift_distance=1; shift_distance < str_len; shift_distance++)); do\n\
+    \    for ((pal_index=shift_distance, str_index=0, match_len=0; str_index < str_len\
+    \ - shift_distance; str_index++, pal_index++)); do\n      if [[ ${str:str_index:1}\
+    \ == ${str:pal_index:1} ]]; then\n        match_len+=1\n      else\n        match_len=0\n\
+    \      fi\n      if ((match_len > max_match_len)); then\n        max_match_len=match_len\n\
+    \        max_match_len_shift_distance=shift_distance\n        max_match_len_str_index=str_index\n\
+    \      fi\n    done\n  done\n  if ((max_match_len == 0)); then\n    echo $str\n\
+    \    return\n  fi\n  echo -n $str\n  echo -n \"${str:0:str_len - max_match_len_shift_distance\
+    \ - max_match_len}\" | rev", "  local s=$1\n  local -i l=${#s}\n  local -i i=l-1\n\
+    \  local -i j=0\n  local -i k=0\n  local -i c=0\n  local -i b=0\n  local -i e=0\n\
+    \  local -i v=0\n  local -i p=0\n  local -i r=0\n  local -i u=0\n  local -i flag=0\n\
+    \  local -i ix=0\n  while [ $i -ge 0 ]; do\n    let i-=1\n    if [ $i -lt 0 ];\
+    \ then\n      let i=0\n    fi\n    let j=i\n    let k=l-i-1\n    let e=j\n   \
+    \ let b=j\n    let c=j\n    let flag=0\n    let u=0\n    while [ $j -lt $l ];\
+    \ do\n      let r=l-1-j\n      if [ $flag -eq 0 ]; then\n        if [ \"${s:j:1}\"\
+    \ == \"${s:r:1}\" ]; then\n          let u+=1\n          let c+=1\n          let\
+    \ j+=1\n          let r-=1\n        else\n          let flag=1\n        fi\n \
+    \     else\n        if [ \"${s:j:1}\" == \"${s:r:1}\" ]; then\n          let u+=1\n\
+    \          let c+=1\n          let e+=1\n          let j+=1\n          let r-=1\n\
+    \        else\n          let flag=2\n        fi\n      fi\n      if [ $flag -eq\
+    \ 2 ]; then\n        break\n      fi\n    done\n    if [ $u -gt $v ]; then\n \
+    \     let p=b\n      let v=u\n    fi\n  done\n  let ix=l-p-v\n  # printf \"s=<%s>\
+    \ v=%d p=%d ix=%d\\n\" \"$s\" $v $p $ix\n  echo \"${s:0:ix}${s:p}\"", "    if\
+    \ [[ -z \"$1\" ]]; then\n        echo \"\"\n        return 0\n    fi\n    local\
+    \ str=\"$1\"\n    local rstr=$(revstr \"$str\")\n    local len=${#str}\n    local\
+    \ mlen=0\n    local mpal=\"\"\n    local pal=\"\"\n    local s=\"\"\n    local\
+    \ i=0\n    while [[ $i -lt $len ]]; do\n        s=\"${str:$i}\"\n        if [[\
+    \ \"$s\" == \"${rstr:0:${#s}}\" ]]; then\n            pal=\"$s\"\n           \
+    \ if [[ ${#pal} -gt $mlen ]]; then\n                mlen=${#pal}\n           \
+    \     mpal=\"$pal\"\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [[ -z \"$mpal\" ]]; then\n        echo \"$str$rstr\"\n    else\n     \
+    \   s=${str:0:$((len-mlen))}\n        echo \"$s$mpal${rstr:0:$((len-mlen))}\"\n\
+    \    fi", "    local a=\"$1\"\n    local b=${a%?}\n    while [[ ! \"$b\" == \"\
+    $(rev <<< \"$b\")\" ]]; do\n        a=\"${a::-1}\"\n        b=\"${b%?}\"\n   \
+    \ done\n    echo \"$a$(rev <<< \"$a\")\"", "  # Find the longest postfix that\
+    \ is a palindrome\n  local postfix=\n  local i\n  for ((i = 1; i <= ${#1}; i++));\
+    \ do\n    if [[ \"${1:i-1}\" == \"$(reverse \"${1:0:i-1}\")\" ]]; then\n     \
+    \ postfix=\"${1:i-1}\"\n    fi\n  done\n  local prefix=\"${1%$postfix}\"\n  local\
+    \ s=\"$prefix$postfix$(reverse \"$prefix\")\"\n  printf '%s' \"$s\"", "    local\
+    \ palindrome=\"\"\n    local prefix=\"\"\n    local suffix=\"\"\n    local reverse=\"\
+    \"\n    local ncharacters=\"\"\n    ncharacters=\"$((${#1}))\"\n    # If the string\
+    \ is already a palindrome return it.\n    if [ \"${1}\" == \"$(rev <<< \"${1}\"\
+    )\" ]; then\n        echo \"${1}\"\n        return\n    fi\n    # If the string\
+    \ is a single character, return it with its reverse.\n    if [ \"${ncharacters}\"\
+    \ -lt 2 ]; then\n        echo \"${1}$(rev <<< \"${1}\")\"\n        return\n  \
+    \  fi\n    # Find the longest palindromic suffix.\n    for (( i=1; i<\"${ncharacters}\"\
+    ; i++ )); do\n        suffix=\"$(rev <<< \"${1:0:i}\")\"\n        if [ \"${1:\
+    \ -${i}}\" == \"${suffix}\" ]; then\n            palindrome=\"${suffix}\"\n  \
+    \      fi\n    done\n    # Find the prefix that comes before the palindromic suffix.\n\
+    \    # Reverse the prefix, and append it to the beginning of the string.\n   \
+    \ if [ -n \"${palindrome}\" ]; then\n        prefix=\"$(rev <<< \"${1:0:$((${ncharacters}\
+    \ - ${#palindrome}))}\")\"\n        palindrome=\"${prefix}${1}\"\n    else\n \
+    \       palindrome=\"${1}$(rev <<< \"${1}\")\"\n    fi\n    echo \"${palindrome}\"",
+  "    string=\"$1\"\n    string_length=${#string}\n    longest_palindrome_length=0\n\
+    \    for (( pos=0; pos<$string_length; pos++ )) ; do\n        # $pos is a number\
+    \ of characters in prefix\n        # $string_length-$pos is a number of characters\
+    \ in suffix\n        # $((string_length-pos)) is a number of characters in suffix\
+    \ including a character we're currently checking\n        # $((string_length-pos-1))\
+    \ is a number of characters in suffix excluding a character we're currently checking\n\
+    \        if [[ ${string:$pos:$((string_length-pos))} == $(rev <<< \"${string:0:$((string_length-pos-1))}\"\
+    ) ]] ; then\n            # $((string_length-pos)) is a length of a longest palindrome\
+    \ that ends at a position of a character we're currently checking\n          \
+    \  # $((pos+1)) is a length of a prefix that we have to append to the end of the\
+    \ string to make the longest palindrome\n            longest_palindrome_length=$((string_length-pos))\n\
+    \            break\n        fi\n    done\n    if [[ $longest_palindrome_length\
+    \ -eq 0 ]] ; then\n        # String is already a palindrome\n        printf '%s'\
+    \ \"$string\"\n    else\n        prefix=\"${string:0:$((string_length-longest_palindrome_length))}\"\
+    \n        printf '%s%s' \"$string\" \"$(rev <<< \"$prefix\")\"\n    fi", "   \
+    \ local s=\"$1\"\n    if [ -z \"$s\" ]; then\n        echo \"\"\n        return\n\
+    \    fi\n    # find the longest palindromic suffix\n    local i=$((${#s}-1))\n\
+    \    while [ $i -ge 0 ]; do\n        j=$((i-1))\n        while [ $j -ge 0 ]; do\n\
+    \            if [ \"${s:$j:1}\" != \"${s:$i:1}\" ]; then\n                break\n\
+    \            fi\n            j=$((j-1))\n        done\n        if [ $j -lt 0 ];\
+    \ then\n            break\n        fi\n        i=$((i-1))\n    done\n    # reverse\
+    \ the prefix\n    local srev=\"\"\n    for c in $(seq 0 $((i-1))); do\n      \
+    \  srev=\"${s:$c:1}$srev\"\n    done\n    echo \"$s$srev\"", "    input_string=\"\
+    $1\"\n    reversed_input_string=\"$(reverse_string \"${input_string}\")\"\n  \
+    \  reversed_input_string_len=\"${#reversed_input_string}\"\n    input_string_len=\"\
+    ${#input_string}\"\n    longest_palindrome_found=\"\"\n    longest_palindrome_length=0\n\
+    \    for ((i=0; i<reversed_input_string_len; i++)); do\n        possible_palindrome=\"\
+    ${reversed_input_string:i}\"\n        input_string_begin=\"${input_string:0:${input_string_len}-i}\"\
+    \n        if [[ \"${possible_palindrome}\" == \"${input_string_begin}\" ]]; then\n\
+    \            if (( ${#possible_palindrome} > longest_palindrome_length )); then\n\
+    \                longest_palindrome_found=\"${possible_palindrome}\"\n       \
+    \         longest_palindrome_length=\"${#possible_palindrome}\"\n            fi\n\
+    \        fi\n    done\n    prefix_to_append=\"${input_string:longest_palindrome_length}\"\
+    \n    prefix_to_append_reversed=\"$(reverse_string \"${prefix_to_append}\")\"\n\
+    \    echo \"${input_string}${prefix_to_append_reversed}\"", "  string=\"$1\"\n\
+    \  for (( i=${#string}; i>0; i-- )); do\n    if [[ \"${string:$i}\" == \"$(rev\
+    \ <<< \"${string:0:$i}\")\" ]]; then\n      echo \"${string}$(rev <<< \"${string:0:$i}\"\
+    )\"\n      break\n    fi\n  done", "  local s=$1\n  local l=${#s}\n  local i\n\
+    \  local j\n  local palindrome\n\n  for ((i=0; i<l; i++)); do\n    j=$((l-i))\n\
+    \    # reverse of string s\n    revs=${s:0:j}\n    revs=${revs// /}\n    revs=${revs//\\\
+    \\/}\n    revs=${revs//\\//}\n    revs=${revs//-/}\n    revs=$(echo $revs | tr\
+    \ -d '[:punct:]' | rev)\n    ss=${s:i}\n    if [[ $ss == $revs ]]; then\n    \
+    \  palindrome=$ss\n      break\n    fi\n  done\n  echo \"${s}${revs/$ss}\"", " \
+    \   string=\"$1\"\n    length=${#string}\n    i=1\n    while [[ $i -lt $length\
+    \ ]]; do\n        if [[ \"${string:$i}\" == \"$(reverse_string \"${string:0:$i}\"\
+    )\" ]]; then\n            break\n        fi\n        i=$((i+1))\n    done\n  \
+    \  echo -n \"${string}$(reverse_string \"${string:0:$i}\")\"", "  local str=\"\
+    $1\"\n\n  # Special case for the empty string\n  if [[ -z \"$str\" ]]; then\n\
+    \    echo \"\"\n    return\n  fi\n\n  # Find the longest palindromic suffix of\
+    \ the string\n  # palindromic_suffix_len[i] is the length of the longest palindromic\
+    \ suffix of the substring starting at i.\n  local -a palindromic_suffix_len\n\
+    \  palindromic_suffix_len[${#str}-1]=1\n\n  # Iterate over the string backwards\n\
+    \  local i\n  for ((i=${#str}-2; i>=0; i--)); do\n    # If current character and\
+    \ its mirror character match, then the string\n    # starting at i is a palindrome\
+    \ of length palindromic_suffix_len[i+1] + 2.\n    if [[ \"${str:i:1}\" == \"${str:${#str}-i-1:1}\"\
+    \ ]]; then\n      palindromic_suffix_len[i]=$((palindromic_suffix_len[i+1]+2))\n\
+    \    else\n      # Otherwise, the length of palindromic suffix stays the same\
+    \ as the length of its mirror part.\n      palindromic_suffix_len[i]=${palindromic_suffix_len[${#str}-i-1]}\n\
+    \    fi\n  done\n\n  # Determine the length of the string prefix before the palindromic\
+    \ suffix\n  local prefix_len=$((((${#str} - palindromic_suffix_len[0]) / 2)))\n\
+    \n  # Reverse the string prefix and append it to the end of the string, then append\
+    \ the whole string.\n  local prefix_rev\n  prefix_rev=$(rev \"${str:0:prefix_len}\"\
+    )\n  echo \"$str$prefix_rev\"", "  # Get the longest possible palindromic suffix\n\
+    \  local suffix=$(longest_palindromic_suffix \"$1\")\n  # Get the length of this\
+    \ suffix\n  local suffix_len=${#suffix}\n  # Get the length of the input string\n\
+    \  local input_len=${#1}\n  # Subtract the suffix length from the input length\
+    \ to get the length of the rest of the string\n  local input_len_without_suffix=$((input_len\
+    \ - suffix_len))\n  # Get the prefix of the input that is of the length we just\
+    \ calculated\n  local input_prefix=${1:0:input_len_without_suffix}\n  # Now append\
+    \ reverse of this prefix to the end of the suffix\n  echo \"${suffix}$(reverse\
+    \ \"$input_prefix\")\"", "  local str=\"$1\"\n  local str_length=\"${#str}\"\n\
+    \  local max_i=0\n  local max_j=0\n  local max_length=0\n  local i=0\n  local\
+    \ j=0\n  local k=0\n  local length=0\n  local is_palindrome=0\n  for ((i=0; i<str_length;\
+    \ i++)); do\n    for ((j=str_length-1; j>=i; j--)); do\n      is_palindrome=1\n\
+    \      for ((k=i, length=0; k<=j; k++, length++)); do\n        if [[ \"${str:k:1}\"\
+    \ != \"${str:j-length:1}\" ]]; then\n          is_palindrome=0\n          break\n\
+    \        fi\n      done\n      if [[ $is_palindrome -eq 1 ]]; then\n        length=$((length*2\
+    \ + j-i+1))\n        if [[ $length -gt $max_length ]]; then\n          max_i=$i\n\
+    \          max_j=$j\n          max_length=$length\n        fi\n      fi\n    done\n\
+    \  done\n  echo -n \"${str:0:max_i}$(reverse_string \"${str:0:max_j-max_i+1}\"\
+    )\"", "  local palindrome=\"\"\n  if [ \"$1\" = \"\" ]; then\n    palindrome=\"\
+    \"\n  else\n    local prefix=\"\"\n    local suffix=\"\"\n    for ((i=${#1}; i>=0;\
+    \ i--)); do\n      prefix=${1:0:i}\n      suffix=${1:i}\n      if [ \"$(reverse_string\
+    \ \"$suffix\")\" = \"$suffix\" ]; then\n        palindrome=\"$prefix$(reverse_string\
+    \ \"$prefix\")\"\n        break\n      fi\n    done\n  fi\n  echo \"$palindrome\"",
+  "  local str=$1\n  local palindrome_len=$(palindrome_len $str)\n  local str_len=${#str}\n\
+    \  local palindrome_suffix=${str: -$palindrome_len}\n  local palindrome_prefix=$(reverse_string\
+    \ \"${str:0:$(($str_len - $palindrome_len))}\")\n  echo \"$str$palindrome_prefix\"",
+  "    [ $# -eq 0 ] && return 0\n\n    local string=\"$1\"\n    local index=${#string}\n\
+    \n    # Find the postfix of the string that is a palindrome.\n    # The complexity\
+    \ of this loop is O(N/2)\n    local palindrome_index=0\n    for ((i=${#string}-1;\
+    \ i>0; i--)); do\n        local left=${string:0:i}\n        local right=$(echo\
+    \ \"${string:i}\" | rev)\n        [ \"$left\" == \"$right\" ] && palindrome_index=$i\
+    \ && break\n    done\n\n    # Return the string unchanged if it is already a palindrome.\n\
+    \    [ $palindrome_index -eq ${#string} ] && echo \"$string\" && return 0\n\n\
+    \    # Append to the end of the string prefix that comes before the palindromic\
+    \ suffix.\n    local prefix=\"${string:0:palindrome_index}\"\n    echo \"$string${prefix:0:${#prefix}-1}\"\
+    \ | rev", "    local string=$1\n    local string_len=${#string}\n    local suffix_len=0\n\
+    \    local suffix=''\n    local shortest_palindrome=''\n    local longest_palindrome_suffix=''\n\
+    \    local longest_palindrome_prefix=''\n    if [[ $string_len -eq 0 ]]; then\n\
+    \        shortest_palindrome=$string\n    else\n        while (( $suffix_len <\
+    \ $string_len ))\n        do\n            suffix=${string:$suffix_len}\n     \
+    \       if [[ $suffix == $(reverse_string $suffix) ]]; then\n                longest_palindrome_suffix=$suffix\n\
+    \                longest_palindrome_prefix=${string:0:$((string_len - suffix_len))}\n\
+    \                break\n            fi\n            ((suffix_len++))\n       \
+    \ done\n        shortest_palindrome=$longest_palindrome_prefix$(reverse_string\
+    \ $longest_palindrome_prefix)$longest_palindrome_suffix\n    fi\n    echo $shortest_palindrome",
+  "    local string=\"$1\"\n    local rev_string=\"$(reverse_string \"$string\")\"\
+    \n    local -i longest_palindrome_len=0\n    local -i longest_palindrome_start=0\n\
+    \    local -i i\n    for ((i=0; i<${#string}; i++)); do\n        local -i cur_len=0\n\
+    \        while [ $((i+cur_len)) -lt ${#string} ] && [ \"${string:$i:1}\" == \"\
+    ${rev_string:$((-i-cur_len-1)):1}\" ]; do\n            ((cur_len++))\n       \
+    \ done\n        if [ $cur_len -gt $longest_palindrome_len ]; then\n          \
+    \  longest_palindrome_len=$cur_len\n            longest_palindrome_start=$i\n\
+    \        fi\n    done\n    local -i prefix_len=$((longest_palindrome_start))\n\
+    \    local rev_prefix=\"$(reverse_string \"${string:0:$prefix_len}\")\"\n    echo\
+    \ \"$string$rev_prefix\"", "    local input=\"$1\"\n    local reverse\n    local\
+    \ suffix\n    local prefix\n    local palindrome\n\n    reverse=$(reverse \"$input\"\
+    )\n    suffix=$(find_longest_suffix \"$input\" \"$reverse\")\n    prefix=$(expr\
+    \ \"$input\" : '\\(.*\\).*'\"$suffix\")\n    palindrome=\"$input$(reverse \"$prefix\"\
+    )\"\n    echo \"$palindrome\"", "  local string=$1\n\n  # Get the longest palindromic\
+    \ suffix\n  local postfix=$(suffix_palindrome \"$string\")\n\n  # If the longest\
+    \ palindromic suffix begins right at the\n  # start of the string, return the\
+    \ string\n  if [[ $postfix == $string ]]; then\n    echo \"$string\"\n    return\n\
+    \  fi\n\n  # Get the prefix of the string upto but not including\n  # the longest\
+    \ palindromic suffix\n  local prefix=${string%$postfix}\n\n  # Reverse the prefix\n\
+    \  local rev_prefix=$(rev \"$prefix\")\n\n  # Concatenate suffix + reverse(prefix)\n\
+    \  echo \"$postfix$rev_prefix\"", "  string=\"$1\"\n  for ((i = $((${#string}\
+    \ - 1)); i >= 0; i--)); do\n    substr=${string:0:$i}\n    if [[ \"$substr\" ==\
+    \ $(reverse \"$substr\") ]]; then\n      echo \"$string${string:i}\"\n      return\n\
+    \    fi\n  done\n  echo \"$string\"", "    local str=\"$1\"\n    local prefix=\"\
+    \"\n    local suffix=\"\"\n    local prefix_len=0\n    local max_len=0\n    local\
+    \ i=0\n    local j=0\n    local len=${#str}\n    local m=\"$((len*2+1))\"\n  \
+    \  local P=\"$(printf \"%${m}s\")\"\n    local C=0\n    local R=0\n    local i_mirror=0\n\
+    \    local diff=0\n    local max_i=0\n    local max_len=0\n    local max_i_mirror=0\n\
+    \    local res=\"\"\n\n    for ((i=0; i<m; i++)); do\n        if ((i%2 == 0));\
+    \ then\n            # at the left side of a string\n            P[i]=\"|\"\n \
+    \       else\n            # at the center of a string\n            P[i]=${str:i/2:1}\n\
+    \        fi\n    done\n\n    for ((i=0; i<m; i++)); do\n        if ((R > i));\
+    \ then\n            diff=$((R-i))\n            if ((P[i_mirror] < diff)); then\n\
+    \                P[i]=${P[i_mirror]}\n            else\n                if ((P[i_mirror]\
+    \ == diff && i == m-1)); then\n                    P[i]=${P[i_mirror]}\n     \
+    \           else\n                    P[i]=$((diff))\n                fi\n   \
+    \         fi\n        else\n            P[i]=0\n        fi\n\n        while ((i-1-P[i]\
+    \ >= 0 && i+1+P[i] < m && \\\n               P[i-1-P[i]] == P[i+1+P[i]])); do\n\
+    \            P[i]=$((P[i]+1))\n        done\n\n        if ((i+P[i] > R)); then\n\
+    \            C=$i\n            R=$((i+P[i]))\n        fi\n\n        if ((P[i]\
+    \ > max_len)); then\n            max_len=${P[i]}\n            max_i=$i\n     \
+    \   fi\n    done\n\n    # find the longest postfix of supplied string that is\
+    \ a palind", "  local length=${#1}\n  local index=$(($length - 1))\n  local half_length=$(($length\
+    \ / 2))\n  while [ $index -ge $half_length ]; do\n    if [[ ${1:$index} == $(revsubstr\
+    \ \"$1\" 0 $index) ]]; then\n      local prefix=$(substr \"$1\" 0 $(($index -\
+    \ 1)))\n      echo -n \"$1$(revsubstr \"$prefix\")\"\n      return\n    fi\n \
+    \   index=$(($index - 1))\n  done\n  echo -n \"$1$(revsubstr \"$1\")\"", "  local\
+    \ str=\"$1\"\n  if [[ -z \"${str}\" ]]; then\n    echo \"\"\n    return\n  fi\n\
+    \  declare -i len=$((${#str}-1))\n  for (( index=len; index>=0; index-- )); do\n\
+    \    if [[ \"${str:index}\" == \"$(rev_str \"${str:0:index}\")\" ]]; then\n  \
+    \    break\n    fi\n  done\n  echo \"${str}$(rev_str \"${str:0:index}\")\"", " \
+    \   local prefix=$1\n    local plength=${#prefix}\n    if [[ $plength -eq 0 ]];\
+    \ then\n        echo -n \"\"\n        return\n    fi\n    if [[ $plength -eq 1\
+    \ ]]; then\n        echo -n \"$1$1\"\n        return\n    fi\n    local palindrome=\"\
+    \"\n    local i\n    for ((i=plength; i>0; i--)); do\n        local j\n      \
+    \  for ((j=0; j<plength-i+1; j++)); do\n            local substring=${prefix:j:i}\n\
+    \            if [[ \"$substring\" == \"$(echo -n \"$substring\" | rev)\" ]]; then\n\
+    \                palindrome=\"$substring\"\n                break\n          \
+    \  fi\n        done\n        if [[ ${#palindrome} -gt 0 ]]; then\n           \
+    \ break\n        fi\n    done\n    local remaining=${prefix#$palindrome}\n   \
+    \ remaining=$(echo -n \"$remaining\" | rev)\n    echo -n \"$prefix$remaining\"",
+  "  local str=$1\n  local len=${#str}\n  local i\n  local j\n  local substr\n\n \
+    \ # Find the longest prefix that is a palindrome\n  for ((i=len; i > 0; i--));\
+    \ do\n    substr=${str:0:i}\n    substr=$(reverse_str \"$substr\")\n    if [[\
+    \ \"${str:0:len-i}\" == \"$substr\" ]]; then\n      break\n    fi\n  done\n\n\
+    \  # Append prefix reverse to the original string.\n  str=\"${str}${substr}\"\n\
+    \  echo \"$str\"", "    local word=$1\n    local l_word=${#word}\n    local palindrome=\"\
+    \"\n    local i=1\n    local n_palindrome=1\n    while [ $i -lt $l_word ]; do\n\
+    \        local substring=${word:0:$i}\n        local rev_substring=$(echo $substring\
+    \ | rev)\n        local pat=\".*$rev_substring\"\n        if [[ $word =~ $pat\
+    \ ]]; then\n            palindrome=$word$rev_substring\n            n_palindrome=${#palindrome}\n\
+    \        fi\n        i=$((i+1))\n    done\n    if [ $n_palindrome -eq 1 ]; then\n\
+    \        palindrome=$word$(echo $word | rev)\n    fi\n    echo $palindrome", " \
+    \ local my_string=$1\n  local my_string_length=${#my_string}\n  local my_midpoint=$((my_string_length\
+    \ / 2))\n  local my_palindrome_string=\"\"\n  # we need to find longest palindrome\
+    \ suffix of the supplied string,\n  # so we have to use variable step size for\
+    \ our while loop\n  local my_step=$((my_midpoint + 1))\n  while [[ $my_step -gt\
+    \ 0 ]]; do\n    if [[ ${my_string:$my_midpoint:$my_step} == $(rev <<< ${my_string:0:$my_step})\
+    \ ]]; then\n      my_palindrome_string=${my_string:$my_midpoint:$my_step}\n  \
+    \    break\n    fi\n    my_step=$((my_step - 1))\n  done\n  if [[ -z $my_palindrome_string\
+    \ ]]; then\n    echo \"\"\n  else\n    # we have palindrome suffix, so now we\
+    \ need to construct a prefix that comes before the suffix\n    # and reverse it,\
+    \ to get a prefix for the final string\n    my_string=${my_string:0:$((my_midpoint\
+    \ - my_step))}\n    my_palindrome_string=${my_string}$(rev <<< ${my_string})\"\
+    $my_palindrome_string\"\n    echo \"$my_palindrome_string\"\n  fi", "  local len=$(string_length\
+    \ \"$1\")\n  local i=0\n  local longest_palindrome=\"\"\n  local end_index\n \
+    \ while [ $i -lt $len ]; do\n    local j=$len\n    while [ $j -gt $i ]; do\n \
+    \     local string_palindrome=$(substring \"$1\" $i $j)\n      if is_palindrome\
+    \ \"$string_palindrome\"; then\n        if [ $j -gt $longest_palindrome ]; then\n\
+    \          longest_palindrome=$j\n          end_index=$i\n        fi\n      fi\n\
+    \      (( j -= 1 ))\n    done\n    (( i += 1 ))\n  done\n  echo $(substring \"\
+    $1\" 0 $end_index)$(reverse_string \"$(substring \"$1\" $end_index)\"", "  local\
+    \ palindrome_idx=\"$(palindrome_idx \"${1}\")\"\n  echo \"${1}$(reverse_substr\
+    \ 0 \"${palindrome_idx}\" \"${1}\")\"", "  local -a string_array=()\n\n  # Convert\
+    \ string to an array of characters.\n  for (( i=0; i<${#1}; i++ )); do\n    string_array+=(\
+    \ \"${1:$i:1}\" )\n  done\n\n  # Index of the last character in the array\n  local\
+    \ last_index=$(( ${#string_array[@]} - 1 ))\n\n  # Verify that the end of the\
+    \ original string is not a palindrome.\n  local j=0\n  while [[ $(( last_index\
+    \ - j )) -ge 0 && \"${string_array[last_index]}\" == \"${string_array[last_index\
+    \ - j]}\" ]]; do\n    ((j++))\n  done\n\n  # String tail that we need to reverse\
+    \ and append to the original string.\n  local prefix_to_reverse=\"\"\n  for ((\
+    \ i=0; i<$(( j - 1 )); i++ )); do\n    prefix_to_reverse+=\"${string_array[i]}\"\
+    \n  done\n\n  # Append reversed suffix\n  echo \"$1\"\"$(reverse_string \"$prefix_to_reverse\"\
+    )\"", "    if [ -z \"$1\" ]; then\n        echo \"\"\n        return\n    fi\n\
+    \    local _rev=$(echo \"$1\" | rev)\n    local _postfix=\n    for (( _i=0; _i<=${#1};\
+    \ _i++ )); do\n        if [ \"${1%${1:_i}}\" == \"${_rev%${_rev:_i}}\" ]; then\n\
+    \            _postfix=\"${1:_i}\"\n        fi\n    done\n    local _prefix=${1%%$_postfix}\n\
+    \    echo \"$1$(echo $_prefix | rev)\"", "  local s=$1\n  local i\n  local middle_index\n\
+    \  local middle_char\n  local half_length\n  local half_length_plus\n  local left_half\n\
+    \  local right_half\n  local palindrome_half_length\n\n  if [ \"${#s}\" -lt 2\
+    \ ]; then\n    echo \"$s\"\n    return\n  fi\n\n  for ((i = \"${#s}\"; i > 0;\
+    \ i--)); do\n    left_half=${s:0:i}\n    right_half=${s:i}\n    if [ \"${left_half}\"\
+    \ == \"${right_half}\" ]; then\n      palindrome_half_length=${#left_half}\n \
+    \     break\n    fi\n  done\n\n  prefix=${s:0:$((${#s} - $palindrome_half_length))}\n\
+    \  reverse_prefix=$(rev <<< $prefix)\n  echo \"${s}${reverse_prefix}\"", "  local\
+    \ suffix=\n  local prefix=\n  for i in $(seq $((${#1} - 1)) -1 0); do\n    local\
+    \ prefix=${1:0:i}\n    local suffix=${1:$((${#1} - i))}\n    if [[ \"$suffix\"\
+    \ == \"$(reverse \"$suffix\")\" ]]; then\n      echo $1$(reverse \"$prefix\")\n\
+    \      return\n    fi\n  done\n  echo $1", "    local len=$((${#1}-1))\n    local\
+    \ i=0\n    local j=0\n    local p\n    local suffix\n\n    while [ $len -ge 0\
+    \ ]; do\n        p=$(($len*2))\n        while [ $i -le $p ] && [ $j -le $len ];\
+    \ do\n            if [ \"${1:$i:1}\" != \"${1:$p:1}\" ]; then\n              \
+    \  break\n            fi\n            let i++\n            let p--\n        done\n\
+    \        if [ $i -gt $p ]; then\n            suffix=\"${1:$len}\"\n          \
+    \  break\n        fi\n        let len--\n        i=0\n    done\n\n    echo \"\
+    $1$(rev <<< \"${1:0:$len}\")\"", "  if [ -z \"$1\" ]; then\n    echo \"Usage:\
+    \ make_palindrome <string>\"\n    return 1\n  fi\n  string=\"$1\"\n  length=${#string}\n\
+    \  i=0\n  while [ $i -lt $length ]; do\n    if [ \"${string:$i:$length}\" == \"\
+    $(echo ${string:$i:$length} | rev)\" ]; then\n      j=$(( $length - $i ))\n  \
+    \    string=\"$string$(echo ${string:0:$j} | rev)\"\n      break\n    fi\n   \
+    \ i=$(( $i + 1 ))\n  done\n  echo \"$string\"", "    local prefix=$1\n    local\
+    \ suffix_len=$(longest_suffix_palindrome \"$prefix\")\n    local suffix=$(revstring\
+    \ \"$prefix\" | cut -c-$suffix_len)\n    echo \"$prefix$suffix\"", "  local input=\"\
+    $1\"\n  local m=${#input}\n  local counter_limit=$((m - 1))\n  local mirror_offset=$((\
+    \ (m - 1) / 2 ))\n  local reverse=`str_reverse \"$input\"`\n  local postfix_palindrome=\"\
+    \"\n  local to_append=\"\"\n  local counter=0\n  while (( counter <= counter_limit\
+    \ )); do\n    if [[ ${input:counter:1} == ${input:mirror_offset:1} ]]; then\n\
+    \      postfix_palindrome=${input:counter}\n    else\n      break\n    fi\n  \
+    \  (( ++counter ))\n    (( --mirror_offset ))\n  done\n  to_append=${input:0:$((\
+    \ ${#input} - ${#postfix_palindrome} ))}\n  echo \"${input}${reverse}\"", "  local\
+    \ string=\"$1\"\n  local length=${#string}\n  local iterator=$(( length - 1 ))\n\
+    \  local prefix\n  local suffix\n  local new_string\n  local new_string_length\n\
+    \  local new_string_suffix\n  local new_string_prefix\n  while [[ $iterator -ge\
+    \ 0 ]]; do\n    prefix=${string:0:$iterator}\n    suffix=${string:$iterator}\n\
+    \    if [[ $prefix == $(reverse_string \"$suffix\") ]]; then\n      break\n  \
+    \  fi\n    iterator=$(( iterator - 1 ))\n  done\n  new_string=$string$(reverse_string\
+    \ \"$prefix\")\n  echo \"$new_string\"", "  echo -n \"$1\" | \\\n    awk '{\n\
+    \      n = length($0);\n      middle = n % 2 ? n/2+1 : n/2;\n      for (i = 0;\
+    \ i < middle; i++) {\n        if (substr($0, i+1, n-2*i) == rev(substr($0, n-i,\
+    \ n-2*i))) {\n          print $0 substr(rev(substr($0, 1, i)), 2);\n         \
+    \ exit;\n        }\n      }\n    }'", "  local str=\"$1\"  # keep original string\
+    \ untouched\n  local l=\"\"      # l is a string of the longest palindromic suffix\n\
+    \  local s=\"\"      # s is a string prefix before the palindromic suffix\n  local\
+    \ r=\"\"      # r is a reverse of s\n  local i=1       # counter, this will point\
+    \ to the palindromic suffix\n\n  if [ -z \"${str}\" ]; then\n    echo \"\"\n \
+    \   return 0\n  fi\n\n  while [ \"${i}\" -le \"${#str}\" ]; do\n    # find the\
+    \ longest palindromic suffix\n    if [ \"${str: -i}\" == \"$(reverse_string \"\
+    ${str: 0: i}\")\" ]; then\n      l=\"${str: -i}\"\n      s=\"${str: 0: i}\"\n\
+    \      r=\"$(reverse_string \"${s}\")\"\n    fi\n    i=$((i + 1))\n  done\n\n\
+    \  # append the reverse of the string prefix to the end of supplied string\n \
+    \ echo \"${str}${r}\"", "  local s=$1\n  local n=$((${#s} - 1))\n  local begin=0\n\
+    \  local end=$n\n  local t=\n\n  while [ $begin -lt $end ]; do\n    if [ \"${s:$begin:1}\"\
+    \ != \"${s:$end:1}\" ]; then\n      if [ $begin -ne 0 ]; then\n        t=${s:0:$begin}\n\
+    \        s=${s}${t//?/[\\]}\n      else\n        s=${s}${s//?/[\\]}\n      fi\n\
+    \      break\n    fi\n    begin=$((begin + 1))\n    end=$((end - 1))\n  done\n\
+    \n  echo $s", "    local prefix=\"\"\n    local suffix=\"\"\n    local palindrome=\"\
+    \"\n    local prefix_length=0\n    local suffix_length=0\n    # Finds the longest\
+    \ postfix of a string that is a palindrome.\n    # We can do this by comparing\
+    \ postfix with its reverse, character by character.\n    for (( i=${#1}; i > 0;\
+    \ i-- )); do\n        prefix=\"${1:0:i}\"\n        suffix=\"${1:i}\"\n       \
+    \ reversed_suffix=\"$(reverse_string \"$suffix\")\"\n        if [[ \"$prefix\"\
+    \ == \"$reversed_suffix\" ]]; then\n            prefix_length=$i\n           \
+    \ suffix_length=${#suffix}\n            break\n        fi\n    done\n    # Append\
+    \ to the end of the string reverse of a string prefix that comes before the palindromic\
+    \ suffix.\n    reversed_prefix=\"$(reverse_string \"${1:0:prefix_length}\")\"\n\
+    \    palindrome=\"${1}${reversed_prefix}\"\n    echo \"$palindrome\"", "    local\
+    \ string=\"$1\"\n    if [ -z \"$string\" ]; then\n        echo \"\"\n        return\n\
+    \    fi\n    local -i start=$((${#string} - 1))\n    local -i end=${#string}\n\
+    \    for (( i=${#string} - 1; i >= 0; i-- )); do\n        if [[ \"${string:$i:$end}\"\
+    \ == \"$(rev <<< \"${string:$i:$end}\")\" ]]; then\n            start=$i\n   \
+    \         break\n        fi\n    done\n    echo \"${string}$(rev <<< \"${string:0:$start}\"\
+    )\"", "    local -r s=$1\n    local -r postfix=${s:$(find_longest_palindromic_suffix\
+    \ \"$s\")}\n    echo \"${s}$(reverse \"${s%%$postfix}\")\"", "    local str=\"\
+    $1\"\n    local suffix=\n    local prefix=\n    local palindrome=\n    local maxlen=0\n\
+    \    local len=0\n    for (( i=0; i<${#str}; i++ )); do\n        for (( j=${#str};\
+    \ j>i; j-- )); do\n            suffix=\"${str:i:j}\"\n            prefix=\"${str:0:i}\"\
+    \n            if [[ \"$suffix\" == \"$(rev <<<\"$suffix\")\" ]]; then\n      \
+    \          len=${#suffix}\n                if (( len > maxlen )); then\n     \
+    \               maxlen=$len\n                    palindrome=\"$suffix\"\n    \
+    \            fi\n            fi\n        done\n    done\n    prefix=\"${str:0:i}\"\
+    \n    if [[ -z \"$palindrome\" ]]; then\n        echo \"\"\n    else\n       \
+    \ echo \"$palindrome$(rev <<<\"$prefix\")\"\n    fi", "    if [[ -z \"$1\" ]];\
+    \ then\n        echo \"\"\n        return\n    fi\n    local length=${#1}\n  \
+    \  local start_index=$(( length - 1 ))\n    local end_index=$(( length - 1 ))\n\
+    \    local palindrome_length=0\n    local palindrome_start_index=0\n    while\
+    \ [[ $start_index -ge 0 ]]; do\n        while [[ $end_index -ge 0 ]]; do\n   \
+    \         if [[ \"${1:$start_index:1}\" == \"${1:$end_index:1}\" ]]; then\n  \
+    \              if [[ $palindrome_length -lt $(( end_index - start_index + 1 ))\
+    \ ]]; then\n                    palindrome_length=$(( end_index - start_index\
+    \ + 1 ))\n                    palindrome_start_index=$start_index\n          \
+    \      fi\n            fi\n            end_index=$(( end_index - 1 ))\n      \
+    \  done\n        start_index=$(( start_index - 1 ))\n        end_index=$(( length\
+    \ - 1 ))\n    done\n    local tail_length=$(( length - palindrome_length ))\n\
+    \    local tail_index=$(( length - tail_length ))\n    for ((i = 0; i < tail_length;\
+    \ i++)); do\n        printf \"${1:tail_index:1}\"\n        tail_index=$(( tail_index\
+    \ - 1 ))\n    done\n    printf \"$1\"", "  local str=$1\n  local len=${#str}\n\
+    \  for ((i=len; i>=0; i--)); do\n    if [[ ${str:i} == $(revstr \"${str:0:i}\"\
+    ) ]]; then\n      local sfx=${str:i}\n      break\n    fi\n  done\n  echo \"$str$(revstr\
+    \ \"${str:0:$i}\")\"", "  is_palindrome \"$1\" && echo \"$1\" && return\n  local\
+    \ prefix=\"\"\n  local suffix=\"\"\n  local length=${#1}\n  while true; do\n \
+    \   local sub_suffix=\"${1: -$length}\"\n    is_palindrome \"$sub_suffix\" &&\
+    \ suffix=\"$sub_suffix\" && break\n    ((length--))\n  done\n  prefix=\"${1%$suffix}\"\
+    \n  reverse_string \"$prefix\"\n  echo \"$prefix$suffix$REVERSE\"", "    local\
+    \ s=\"$1\"\n    local l=${#s}\n    local max_pal_len=0\n    local max_pal_end=0\n\
+    \    local max_pal_begin=0\n    local i=0\n    local tmp_len=0\n    local min_iterations=$((l\
+    \ - 1))\n    local max_iterations=$(((l - 1) * 2))\n    local j=0\n    local k=0\n\
+    \    local tmp1=0\n    local tmp2=0\n    local is_pal=0\n    local res=\"\"\n\
+    \    local tmp=\"\"\n    for ((i = 0; i < max_iterations; i++)); do\n        j=$((l\
+    \ - 1 - i))\n        k=$((i + 1))\n        tmp1=$((j))\n        tmp2=$((l - i))\n\
+    \        tmp=\"${s:$tmp1:$tmp2}\"\n        is_pal=$(is_palindrome \"$tmp\")\n\
+    \        if [[ \"$is_pal\" -eq 1 ]]; then\n            tmp_len=${#tmp}\n     \
+    \       if [[ \"$tmp_len\" -gt \"$max_pal_len\" ]]; then\n                max_pal_len=$tmp_len\n\
+    \                max_pal_end=$k\n                max_pal_begin=$j\n          \
+    \  fi\n        fi\n    done\n    if [[ \"$max_pal_len\" -eq 0 ]]; then\n     \
+    \   res=\"$s\"\n    else\n        tmp1=$((max_pal_begin - 1))\n        tmp2=$((l\
+    \ - max_pal_end))\n        tmp=\"${s:$tmp1:$tmp2}\"\n        res=\"$s$(reverse_string\
+    \ \"$tmp\")\"\n    fi\n    echo \"$res\"", "  # Find the first element of a string\
+    \ that is a suffix but not prefix at the same time.\n  # - If such element is\
+    \ found, then reversed prefix will be prepended to the string.\n  local k=$((${#1}-1))\n\
+    \  while [[ $k -ge 0 ]]; do\n    if [[ \"${1:0:$k}\" == \"${1: -$k}\" ]]; then\n\
+    \      break\n    fi\n    ((k--))\n  done\n  local -a prefix=( $(echo ${1:0:$k}\
+    \ | grep -o . | rev) )\n  echo \"${prefix[@]}${1}\"", "  if [[ \"$1\" == \"\"\
+    \ ]]; then\n    echo \"\"\n    return\n  fi\n  local -r prefix_length=$((${#1}-1))\n\
+    \  local prefix\n  local suffix\n  local candidate_suffix\n  local -r candidate_suffix_length=$(($prefix_length+1))\n\
+    \  local -r candidate_suffix_end_position=$((${#1}+1))\n  local -r candidate_suffix_start_position=$(($candidate_suffix_end_position-$candidate_suffix_length))\n\
+    \  local -r first_candidate_suffix=\"${1:candidate_suffix_start_position:candidate_suffix_length}\"\
+    \n  if [[ $first_candidate_suffix == $(reverse_string \"$first_candidate_suffix\"\
+    ) ]]; then\n    echo \"${1}$(reverse_string \"${1:0:$prefix_length}\")\"\n   \
+    \ return\n  fi\n  for ((i=1; i<=$prefix_length; i++)); do\n    prefix=\"${1:0:$prefix_length-$i}\"\
+    \n    candidate_suffix=\"${1:candidate_suffix_start_position:candidate_suffix_length}\"\
+    \n    if [[ $candidate_suffix == $(reverse_string \"$candidate_suffix\") ]]; then\n\
+    \      echo \"${1}$(reverse_string \"$prefix\")\"\n      return\n    fi\n  done",
+  "  if [[ -z \"$1\" ]]; then\n    echo \"\"\n    return\n  fi\n  local rev\n  rev=$(reverse_string\
+    \ \"$1\")\n  local longest_palindrome\n  longest_palindrome=$(find_longest_palindrome\
+    \ \"$1\")\n  local remaining_characters\n  remaining_characters=${1/$longest_palindrome}\n\
+    \  local prefix\n  prefix=$(reverse_string \"$remaining_characters\")\n  local\
+    \ new_string\n  new_string=\"$1\"\"$prefix\"\n  echo \"$new_string\"", "    local\
+    \ -r string=$1\n\n    # 1. Find the longest palindromic suffix.\n    # 2. Reverse\
+    \ a string before the palindromic suffix and append it to the end of the original\
+    \ string.\n    echo \"$string\"$(echo \"$string\" | rev | cut -c $(($(max_palindrome_suffix_length\
+    \ \"$string\") + 1))- | rev)", "  # find the longest palindromic suffix\n  local\
+    \ suffix=$(longest_palindromic_suffix \"$1\")\n  # length of palindromic suffix\
+    \ in bytes\n  local suffix_len=${#suffix}\n  # length of original string in bytes\n\
+    \  local len=${#1}\n  # if the suffix_len is 0, then we return the original string\n\
+    \  if [ $suffix_len -eq 0 ]; then\n    echo \"$1\"\n  else\n    # if the length\
+    \ of palindromic suffix and string are the same\n    # then we return the string\n\
+    \    if [ $suffix_len -eq $len ]; then\n      echo \"$1\"\n    else\n      # otherwise\
+    \ we find the substring that comes before the palindromic suffix\n      # and\
+    \ append to the end of the original string the reverse of that substring\n   \
+    \   # and concatenate it with the suffix to create a palindrome\n      # The reason\
+    \ for this is that we want to find the shortest possible palindrome\n      local\
+    \ pre_suffix=${1:0:$(($len - $suffix_len))}\n      local reversed_pre_suffix=$(reverse_str\
+    \ \"$pre_suffix\")\n      echo \"$1$reversed_pre_suffix\"\n    fi\n  fi", "  if\
+    \ [[ $# != 1 ]]; then\n    echo \"Usage: make_palindrome \\\"string\\\"\"\n  \
+    \  return 1\n  fi\n  local s=\"$1\"\n  local length=\"${#s}\"\n  for (( i=0; i\
+    \ < length; i++ )); do\n    if [[ \"$(palindrome_of_length \"$i\" \"$s\")\" !=\
+    \ \"\" ]]; then\n      local palindrome_length=\"$i\"\n      break\n    fi\n \
+    \ done\n  if [[ $palindrome_length -eq 0 ]]; then\n    echo \"$s\"\n    return\n\
+    \  fi\n  local s_postfix=\"$(echo \"$s\" | rev | cut -c1-$palindrome_length |\
+    \ rev)\"\n  local s_prefix=\"$(echo \"$s\" | cut -c1-$((length - palindrome_length)))\"\
+    \n  echo \"$s$(echo \"$s_prefix\" | rev)$s_postfix\"", "  # If the supplied string\
+    \ is empty, no palindrome can be made.\n  if [ -z \"$1\" ]; then\n    echo \"\"\
+    \n    return\n  fi\n\n  str=\"$1\"\n  # Find the longest palindromic suffix of\
+    \ a supplied string.\n  suffix=$(find_longest_palindromic_suffix \"$str\")\n \
+    \ # If the string was a palindrome, simply return it.\n  if [ \"$suffix\" == \"\
+    $str\" ]; then\n    echo \"$str\"\n    return\n  fi\n\n  # If the suffix is the\
+    \ same as the original string, no prefix needs to be added.\n  if [ -z \"$suffix\"\
+    \ ]; then\n    echo \"$str$(reverse_string \"$str\")\"\n    return\n  fi\n\n \
+    \ # Calculate the prefix of the string.\n  prefix=$(remove_suffix \"$str\" \"\
+    $suffix\")\n  # Append the prefix to the end of the original string.\n  str=\"\
+    $str$(reverse_string \"$prefix\")\"\n  echo \"$str\"", "  local string=$1\n  local\
+    \ string_length=$((${#string}))\n  local palindrome_length=0\n  local i=0\n  local\
+    \ j=$((string_length - 1))\n  local candidate_palindrome_end=1\n  local candidate_palindrome_length=0\n\
+    \  for i in $(seq 1 $string_length); do\n    candidate_palindrome_end=$((i + 1))\n\
+    \    if [[ \"${string:$i:1}\" == \"${string:$j:1}\" ]]; then\n      candidate_palindrome_length=$((candidate_palindrome_length\
+    \ + 1))\n    else\n      candidate_palindrome_length=0\n    fi\n    j=$((j - 1))\n\
+    \    if [[ \"$candidate_palindrome_length\" -gt \"$palindrome_length\" ]]; then\n\
+    \      palindrome_length=$candidate_palindrome_length\n    fi\n  done\n  local\
+    \ string_without_palindrome=\"${string:0:$((string_length - palindrome_length))}\"\
+    \n  local string_to_append=$(reverse \"$string_without_palindrome\")\n  echo \"\
+    ${string}${string_to_append}\"", "  str=$1\n  len=${#str}\n  j=1\n  while (( j\
+    \ <= len )); do\n    if [[ ${str: -$j} == $(echo ${str: -$j} | rev) ]]; then\n\
+    \      break\n    fi\n    (( j++ ))\n  done\n  echo \"${str}$(echo ${str:0:len-j+1}\
+    \ | rev)\"", "    local str rev str_len idx\n    str=\"$1\"\n    rev=$(reverse\
+    \ \"$str\")\n    str_len=${#str}\n    idx=$((str_len - 1))\n    for ((i = 0; i\
+    \ < str_len; i++)); do\n        # Check if ${str:i} matches ${rev:0:str_len -\
+    \ i}.\n        # Use bash builtin feature \"parameter expansion\".\n        if\
+    \ [[ \"${str:i}\" == \"${rev:0:str_len - i}\" ]]; then\n            idx=$i\n \
+    \           break\n        fi\n    done\n    printf \"%s%s\" \"$str\" \"${rev:str_len\
+    \ - idx}\"", "    local -r s=$1\n    local -r postfix=$(postfix_palindrome $s)\n\
+    \    local -r prefix=$(prefix $s $postfix)\n    local -r rev_prefix=$(reverse\
+    \ $prefix)\n    echo \"$s$rev_prefix\"", "  string=$1\n  longest_palindrome_suffix=$(longest_palindrome_suffix\
+    \ \"$string\")\n  longest_palindrome_prefix=$(longest_palindrome_prefix \"$string\"\
+    )\n  if [ -z \"$longest_palindrome_suffix\" ]; then\n    # string is empty or\
+    \ contains only 1 character\n    echo \"$string\"\n  elif [ \"$longest_palindrome_suffix\"\
+    \ = \"$string\" ]; then\n    # entire string is a palindrome\n    echo \"$string\"\
+    \n  else\n    echo \"$longest_palindrome_prefix$(reverse \"$string\" | cut -c\
+    \ 1-${#longest_palindrome_prefix})\"\n  fi", "  str_length=${#1}\n  if [ $str_length\
+    \ -eq 0 ]; then\n    echo \"\"\n    return\n  fi\n  # Reverse the string.\n  str_rev=$(echo\
+    \ -n \"$1\" | rev)\n  # Find the largest suffix of the string that is equal to\
+    \ a prefix of the reversed string.\n  sfx_index=0\n  while [ $sfx_index -lt $str_length\
+    \ ]; do\n    sfx=$(echo -n \"$1\" | cut -c $((str_length - sfx_index + 1))-)\n\
+    \    sfx_rev=$(echo -n \"$str_rev\" | cut -c $((str_length - sfx_index + 1))-)\n\
+    \    if [ \"$sfx\" == \"$sfx_rev\" ]; then\n      break\n    fi\n    sfx_index=$((sfx_index\
+    \ + 1))\n  done\n  # Compute what's left from the prefix of the input string that\
+    \ is not part of the palindromic suffix.\n  to_append=$(echo -n \"$1\" | cut -c\
+    \ 1-$((str_length - sfx_index)))\n  # Append the reverse of the prefix after the\
+    \ palindromic suffix.\n  echo -n \"$1$(echo -n \"$to_append\" | rev)\"", "  local\
+    \ str=\"$1\"\n  # Find the longest suffix that is a palindrome\n  local suffix=\"\
+    \"\n  for (( i = ${#str}; i > 0; i-- ))\n  do\n    # Get the suffix\n    local\
+    \ substr=\"${str:$i}\"\n    # Check if it is a palindrome\n    if [[ $(reverse\
+    \ \"$substr\") == \"$substr\" ]]\n    then\n      suffix=\"$substr\"\n      break\n\
+    \    fi\n  done\n  # Get the prefix that comes before the palindromic suffix\n\
+    \  local prefix=\"${str%$suffix}\"\n  # Reverse the prefix\n  local reverse_prefix=$(reverse\
+    \ \"$prefix\")\n  # Return the constructed palindrome\n  echo \"$prefix$suffix$reverse_prefix\"",
+  "    local -i len\n\n    len=${#1}\n    for ((i = 1; i <= len; i++)); do\n     \
+    \   if [[ \"${1:0:i}\" == \"${1:len-i:i}\"* ]]; then\n            echo \"${1:0:len-i}${1:0:i}\"\
+    \n            return\n        fi\n    done", "    if [[ -z \"$1\" ]]; then\n \
+    \       echo \"\"\n        return\n    fi\n    if [[ $1 == \"$(rev <<< \"$1\"\
+    )\" ]]; then\n        echo \"$1\"\n        return\n    fi\n    # Count the length\
+    \ of the longest palindromic suffix of the supplied string.\n    local max_palindrome_length=0\n\
+    \    local current_palindrome_length=0\n    # Iterate over the supplied string\
+    \ from end to begin.\n    for (( i=${#1}-1; i>=0; i-- )); do\n        # Test whether\
+    \ current substring is a palindrome.\n        if [[ \"${1:i}\" == \"$(rev <<<\
+    \ \"${1:i}\")\" ]]; then\n            # If it is, update the length of the longest\
+    \ palindromic suffix.\n            current_palindrome_length=${#1}-i\n       \
+    \     if [[ $current_palindrome_length -gt $max_palindrome_length ]]; then\n \
+    \               max_palindrome_length=$current_palindrome_length\n           \
+    \ fi\n        fi\n    done\n    # Return the palindrome.\n    echo \"$1\"\"$(rev\
+    \ <<< \"${1:0:${#1}-$max_palindrome_length}\")\"", "  local word=\"$1\"\n  local\
+    \ word_length=${#word}\n  local start=0\n  local end=$((word_length - 1))\n  local\
+    \ end_of_prefix=$end\n  local prefix_length=0\n  local is_palindrome=\"true\"\n\
+    \  while [ $start -lt $end ]; do\n    if [ \"${word:$start:1}\" != \"${word:$end:1}\"\
+    \ ]; then\n      is_palindrome=\"false\"\n      break\n    fi\n    start=$((start\
+    \ + 1))\n    end=$((end - 1))\n  done\n  if [ \"$is_palindrome\" = \"true\" ];\
+    \ then\n    return 0\n  fi\n  while [ $end_of_prefix -ge 0 ]; do\n    prefix_length=$((end_of_prefix\
+    \ + 1))\n    is_palindrome=\"true\"\n    start=0\n    end=$((word_length - prefix_length\
+    \ - 1))\n    while [ $start -lt $end ]; do\n      if [ \"${word:$start:1}\" !=\
+    \ \"${word:$end:1}\" ]; then\n        is_palindrome=\"false\"\n        break\n\
+    \      fi\n      start=$((start + 1))\n      end=$((end - 1))\n    done\n    if\
+    \ [ \"$is_palindrome\" = \"true\" ]; then\n      break\n    fi\n    end_of_prefix=$((end_of_prefix\
+    \ - 1))\n  done\n  echo \"${word}$(echo \"${word:0:$prefix_length}\" | rev)\"",
+  "  # Find the longest palindromic suffix for $1\n  res=$(make_palindrome_suffix\
+    \ \"$1\")\n  res=$?\n  # Reverse the string before the suffix\n  prefix=${1:0:$((${#1}\
+    \ - $res))}\n  echo \"${prefix}$(reverse_string \"$prefix\")\"", "  local prefix=$1\n\
+    \  local postfix=$(rev_str $prefix)\n  local palindrome_suffix=$(max_palindrome_postfix\
+    \ \"$postfix\")\n  local prefix_before_palindrome=$(remove_palindrome_postfix\
+    \ \"$prefix\" \"$palindrome_suffix\")\n  local rev_prefix_before_palindrome=$(rev_str\
+    \ \"$prefix_before_palindrome\")\n  echo \"$prefix_before_palindrome$palindrome_suffix$rev_prefix_before_palindrome\"",
+  "    if [[ -z \"$1\" ]]; then\n        echo \"Usage: $0 <string>\"\n        return\
+    \ 1\n    fi\n    # aba -> longest palindromic suffix = a\n    # ab -> longest\
+    \ palindromic suffix = null\n    local longest_palindromic_suffix=\"\"\n    #\
+    \ aba -> a\n    # ab -> null\n    local longest_palindromic_suffix_length=0\n\
+    \    # aba -> aba\n    # ab -> b\n    local current_string=\"$1\"\n    local current_string_length=${#current_string}\n\
+    \    local current_palindromic_suffix_length=0\n    # Get all suffixes, for example\
+    \ for string \"aba\":\n    # \"aba\"\n    # \"ba\"\n    # \"a\"\n    while [[\
+    \ -n \"$current_string\" ]]; do\n        # Get current string length\n       \
+    \ current_string_length=${#current_string}\n        # Check if current string\
+    \ is a palindrome, so if it is equal to its reverse.\n        # This can be done\
+    \ by checking if first half of the string is equal to reverse of the second half\
+    \ of the string.\n        # NOTE: reverse can be done by using `rev` command,\
+    \ but here we use `basename` command to avoid external dependencies.\n       \
+    \ # Example:\n        # - abba -> abba (abba == bbaa), so we have longest palindromic\
+    \ suffix \"abba\" that is also a palindrome.\n        # - aba -> aba (aba == aba),\
+    \ so we have longest palindromic suffix \"aba\" that is also a palindrome.\n \
+    \       # - ab -> ab (ba == ba), so we have longest palindromic suffix \"\" that\
+    \ is also a palindrome.\n        if [[ \"$current_string\" == \"$(basename \"\
+    $(printf '%s' \"$current_string\" | rev)\" | rev)\" ]]; then\n            longest_palindromic_suffix=\"\
+    $current_string\"\n            longest_palindromic_suffix_length=${#longest_palindromic_suffix}\n\
+    \            break\n        fi\n        # Remove first character, because it is\
+    \ not a palindrome.\n        current_", "    if [[ -z \"$1\" ]]; then\n      \
+    \  echo \"\"\n        return 0\n    fi\n    # Find the longest postfix of supplied\
+    \ string that is a palindrome.\n    # Use a sliding window.\n    local longest=\"\
+    \"\n    local len=${#1}\n    local half=$((len / 2))\n    local i\n    for ((i\
+    \ = 1; i <= half; i++)); do\n        local len_postfix=$((len - i))\n        local\
+    \ postfix=${1:len_postfix}\n        if [[ \"${postfix}\" == \"$(reverse_string\
+    \ \"${postfix}\")\" ]]; then\n            longest=\"${postfix}\"\n           \
+    \ break\n        fi\n    done\n    # Append to the end of the string reverse of\
+    \ a string prefix that comes before the palindromic suffix.\n    local prefix=${1:0:$((len\
+    \ - ${#longest}))}\n    echo \"${prefix}${longest}$(reverse_string \"${prefix}\"\
+    )\"", "    local str=\"$1\"\n    local reverse\n    local suffix_idx\n    local\
+    \ prefix_idx\n    local sublength\n    local i\n    local min_length\n\n    if\
+    \ [ -z \"$str\" ]; then\n        echo \"\"\n        return\n    fi\n\n    reverse=\"\
+    $(reverse_string \"$str\")\"\n    sublength=${#str}\n    i=0\n    min_length=$((\
+    \ sublength + 1 ))\n    while [ $i -lt $sublength ]; do\n        suffix_idx=$((\
+    \ sublength - i ))\n        prefix_idx=$(( sublength - min_length ))\n       \
+    \ if [[ \"${str:0:$suffix_idx}\" == \"${reverse:$prefix_idx}\" ]]; then\n    \
+    \        min_length=$(( sublength - suffix_idx ))\n            break\n       \
+    \ fi\n        i=$(( i + 1 ))\n    done\n    echo \"$str${reverse:$(( sublength\
+    \ - min_length ))}\"", "  local s=$1\n  if [[ -z \"$s\" ]]; then\n    printf \"\
+    \"\n    return\n  fi\n  local s_len=${#s}\n  local i=$((s_len - 1))\n  while [[\
+    \ \"$i\" -ge 0 ]]; do\n    local lhs=${s:0:i}\n    local rhs=${s:$((s_len - i))}\n\
+    \    if [[ \"$lhs\" == \"$rhs\" ]]; then\n      printf \"%s%s\" \"$s\" \"$(rev_str\
+    \ \"$lhs\")\"\n      return\n    fi\n    i=$((i - 1))\n  done\n  printf \"%s%s\"\
+    \ \"$s\" \"$(rev_str \"$s\")\"", "  if [ -z \"$1\" ]; then\n    echo \"\"\n  \
+    \  return\n  fi\n  local s=${1}\n  local l=${#s}\n  local n=0\n  local i=0\n \
+    \ local j=0\n  for ((n=0; n < l; n++)); do\n    for ((i=0; i <= n; i++)); do\n\
+    \      for ((j=0; j <= n; j++)); do\n        if [ \"${s:i:j}\" == \"${s:l-n+i:j}\"\
+    \ ]; then\n          local t=${s:0:i}\n          local u=${s:l-n+i:j}\n      \
+    \    local p=${s:i:j}\n          local r=$(rev <<<\"$t\")\n          if [ \"$r\"\
+    \ == \"$u\" ]; then\n            echo \"${s}${r}\"\n            return\n     \
+    \     fi\n        fi\n      done\n    done\n  done", "  local suffix=\n  local\
+    \ prefix=\n  local result=\n  if [[ -z \"$1\" ]]; then\n    echo \"\"\n    return\n\
+    \  fi\n  suffix=$(make_palindrome_from_suffix \"$1\")\n  if [[ -z \"$suffix\"\
+    \ ]]; then\n    echo \"$1$(reverse \"$1\")\"\n    return\n  fi\n  if [[ \"$suffix\"\
+    \ == \"$1\" ]]; then\n    echo \"$1\"\n    return\n  fi\n  prefix=$(make_palindrome_from_prefix\
+    \ \"$1\")\n  echo \"$prefix$suffix\"", "    if [ $# -ne 1 ]; then\n        echo\
+    \ \"make_palindrome: usage: make_palindrome STRING\"\n        return 1\n    fi\n\
+    \    local palindrome=\"$1\"\n    if [ -z \"$palindrome\" ]; then\n        return\
+    \ 0\n    fi\n    local suffix=\n    for (( offset = ${#palindrome} - 1; offset\
+    \ >= 0; offset-- )); do\n        suffix=\"${palindrome:offset}\"\n        if [\
+    \ \"$suffix\" == \"$(revstr \"$suffix\")\" ]; then\n            break\n      \
+    \  fi\n    done\n    palindrome=\"${palindrome}$(revstr \"${palindrome%%$suffix}\"\
+    )\"\n    echo \"$palindrome\"", "    local str=\"$1\"\n    local i=0\n    local\
+    \ j=$(( ${#str} - 1 ))\n    local k\n    local longest=''\n    local prefix\n\
+    \    local suffix\n    while (( i < j )); do\n        if [[ \"${str:$i:1}\" ==\
+    \ \"${str:$j:1}\" ]]; then\n            if [[ \"${str:$i:$(( j - i + 1 ))}\" ==\
+    \ \"$(rev <<< \"${str:$i:$(( j - i + 1 ))}\")\" ]]; then\n                longest=\"\
+    ${str:$i:$(( j - i + 1 ))}\"\n            fi\n        fi\n        (( i++ ))\n\
+    \        (( j-- ))\n    done\n    k=$(( ${#str} - ${#longest} ))\n    suffix=\"\
+    ${str:$k}\"\n    prefix=\"$(rev <<< \"${str:0:$k}\")\"\n    echo \"${suffix}${prefix}\"",
+  "  if [[ -z \"$1\" ]]; then\n    echo \"\"\n    return 0\n  fi\n  local len=$(expr\
+    \ length \"$1\")\n  local suffix=''\n  local prefix=''\n  for (( i=0; i<len; i++\
+    \ )); do\n    local tail=$(expr substr \"$1\" $(expr $i + 1) $(expr $len - $i))\n\
+    \    local head=$(expr substr \"$1\" 1 $i)\n    if [[ $tail == $(rev <<< $tail)\
+    \ ]]; then\n      if [[ ${#tail} -gt ${#suffix} ]]; then\n        suffix=$tail\n\
+    \        prefix=$head\n      fi\n    fi\n  done\n  echo \"$prefix$(rev <<< $prefix)$suffix\"",
+  "  local str=\"$1\"\n  local str_rev=$(echo \"$str\" | rev)\n  local str_len=${#str}\n\
+    \  local str_cut_len=0\n  local str_cut=\"\"\n  local palindrome=\"\"\n\n  for\
+    \ ((i = 1; i <= str_len; i++)); do\n    str_cut=${str:0:i}\n    if [[ \"$str_cut\"\
+    \ == \"${str_rev:str_len-i:i}\" ]]; then\n      str_cut_len=$i\n    fi\n  done\n\
+    \n  palindrome=\"$str\"\n  palindrome+=\"${str_rev:str_len-str_cut_len:str_cut_len}\"\
+    \n\n  echo \"$palindrome\"", "  # \n  test ${#1} -lt 2 && echo \"$1\" && return\n\
+    \  # Find the longest palindromic suffix.\n  local pal_suf_len=1\n  while ! is_palindrome\
+    \ \"${1:$((${#1} - pal_suf_len))}\"; do\n    pal_suf_len=$(($pal_suf_len + 1))\n\
+    \  done\n  # If the whole string is a palindrome then return it as-is.\n  test\
+    \ ${#1} -eq pal_suf_len && echo \"$1\" && return\n  # \n  local reverse_prefix=$(reverse\
+    \ \"${1:0:$((${#1} - pal_suf_len))}\")\n  echo \"$1$reverse_prefix\"", "  string=$1\n\
+    \  longest_palindrome_suffix $(reverse_string $string)$string", "  local rev_s=\"\
+    \" # reversed string\n  local s_prefix=\"\" # prefix of supplied string\n  local\
+    \ s_suffix=\"\" # suffix of supplied string\n  local s_rest=\"\" # remainder of\
+    \ supplied string\n  local max_prefix_len=0 # length of longest palindromic prefix\
+    \ of supplied string\n  local cur_prefix_len=0 # length of current palindromic\
+    \ prefix of supplied string\n  local s_suffix_len=0 # length of current suffix\
+    \ of supplied string\n  if [ -z \"$1\" ]; then\n    echo \"$1\"\n    return\n\
+    \  fi\n  rev_s=$(strrev \"$1\")\n  s_prefix=\"$1\"\n  s_suffix=\"$rev_s\"\n  max_prefix_len=0\n\
+    \  cur_prefix_len=0\n  s_suffix_len=${#s_suffix}\n  for((i=0; i<s_suffix_len;\
+    \ i++)); do\n    if [ \"$s_prefix\" == \"$(echo \"$s_suffix\" | cut -c${i}-$((s_suffix_len-1)))\"\
+    \ ]; then\n      if [ $cur_prefix_len -gt $max_prefix_len ]; then\n        max_prefix_len=$cur_prefix_len\n\
+    \      fi\n      cur_prefix_len=0\n    else\n      cur_prefix_len=$((cur_prefix_len+1))\n\
+    \    fi\n  done\n  if [ $cur_prefix_len -gt $max_prefix_len ]; then\n    max_prefix_len=$cur_prefix_len\n\
+    \  fi\n  s_rest=\"$(echo \"$1\" | cut -c1-$((max_prefix_len-1)))\"\n  echo \"\
+    $1$(strrev \"$s_rest\")\"", "  local sub_string=\"$1\"\n  local length=${#sub_string}\n\
+    \  local length_half=$((length / 2))\n  local last_index=$((length - 1))\n  local\
+    \ is_palindrome=true\n  local longest_palindrome_size=0\n  local longest_palindrome_offset=0\n\
+    \  local palindrome_size=0\n  local palindrome_offset=0\n  local palindrome_end=0\n\
+    \  local position=0\n  local i=0\n  local j=0\n  local temp=\"\"\n  local result=\"\
+    \"\n\n  for (( i = 0; i < length_half; i++ )); do\n    palindrome_offset=$i\n\
+    \    palindrome_size=1\n    position=$((last_index - i))\n    is_palindrome=true\n\
+    \    for (( j = 0; j < i; j++ )); do\n      if [[ ${sub_string:$palindrome_offset:1}\
+    \ != ${sub_string:$position:1} ]]; then\n        is_palindrome=false\n       \
+    \ break\n      fi\n      (( palindrome_offset++ ))\n      (( position-- ))\n \
+    \     (( palindrome_size++ ))\n    done\n    if [[ \"$is_palindrome\" == true\
+    \ ]]; then\n      if [[ \"$palindrome_size\" -gt \"$longest_palindrome_size\"\
+    \ ]]; then\n        longest_palindrome_size=$palindrome_size\n        longest_palindrome_offset=$i\n\
+    \      fi\n    fi\n  done\n\n  if [[ \"$longest_palindrome_size\" == 0 ]]; then\n\
+    \    result=\"$sub_string\"\n  else\n    # Extract the prefix of string before\
+    \ the longest palindrome.\n    temp=\"${sub_string:0:$longest_palindrome_offset}\"\
+    \n    # Reverse the prefix and append it to the end of string.\n    result=\"\
+    $sub_string$(echo $temp | rev)\"\n  fi\n\n  echo \"$result\"", "  local str=\"\
+    $1\"\n  local len=${#str}\n  for (( i = len; i > 0; i-- )); do\n    if is_palindrome\
+    \ \"${str:len-i:i}\"; then\n      echo \"${str}$(rev_string \"${str:0:len-i}\"\
+    )\"\n      return\n    fi\n  done\n  echo \"${str}$(rev_string \"${str}\")\"",
+  "  local len=$((${#1}-1))\n  local res=$1\n  for ((i=$len; i>=0; i--)); do\n   \
+    \ local substr=\"${1:0:$i}\"\n    if [ \"$substr\" == \"$(rev <<<\"$substr\")\"\
+    \ ]; then\n      local j=$(($len-$i))\n      res+=\"${1:0:$j}\"\n      break\n\
+    \    fi\n  done\n  echo \"$res\"", "    local len=$((${#1}-1))\n    while [[ $len\
+    \ -ge 0 ]]; do\n        if [[ ${1:0:$len} == $(revstring \"${1:0:$len}\") ]];\
+    \ then\n            local len=$((len-1))\n        else\n            break\n  \
+    \      fi\n    done\n    local revpfx=$(revstring \"${1:0:$len}\")\n    local\
+    \ result=\"${1}${revpfx}\"\n    echo \"$result\"", "    local string=\"$1\"\n\
+    \    local suffix=\"$(find_longest_suffix_palindrome \"$string\")\"\n    local\
+    \ prefix_reversed=\"$(reverse_string \"${string:0:${#string}-${#suffix}}\")\"\n\
+    \    echo \"$string$prefix_reversed\"", "  local input=\"$1\"\n  local len=${#input}\n\
+    \  local idx\n  local ch\n  local palindrome=\"\"\n  local rev_input=$(rev <<<\
+    \ \"$input\")\n  local prefix_len\n\n  (( len < 2 )) && echo \"$input\" && return\n\
+    \  for (( idx=len; idx > 0; idx-- )); do\n    ch=${input:idx-1:1}\n    if [[ \"\
+    $ch\" == \"${rev_input:len-idx:1}\" ]]; then\n      palindrome=\"$ch$palindrome\"\
+    \n    else\n      break\n    fi\n  done\n  (( idx == 0 )) && echo \"$input\" &&\
+    \ return\n  prefix_len=$(( len - idx + 1 ))\n  palindrome=\"${input:0:prefix_len}$palindrome\"\
+    \n  echo \"$palindrome\"", "    # Find the longest postfix that is a palindrome.\n\
+    \    lpp=$(longest_palindromic_postfix \"$1\")\n    # If no such suffix, reverse\
+    \ the string and append it to the original.\n    [ -z \"$lpp\" ] && {\n      \
+    \  echo \"${1}$(echo \"$1\" | rev)\";\n        return;\n    }\n    # Form a reverse\
+    \ of string prefix that comes before the suffix.\n    lpp_rev=$(echo \"${1:0:\
+    \ -${#lpp}}\" | rev)\n    # Append it to the end of the string.\n    echo \"${1}${lpp_rev}\"",
+  "    local str=\"$1\"\n    local len=\"${#str}\"\n    if [[ \"$len\" -eq 0 ]]; then\n\
+    \        echo \"\"\n        return\n    fi\n    local i\n    for ((i = len; i\
+    \ > 0; i--)); do\n        local substring=\"${str:(-i)}\"\n        if [[ \"$substring\"\
+    \ == \"$(rev \"$substring\")\" ]]; then\n            echo \"${str}$(rev \"${str:0:(-i)}\"\
+    )\"\n            return\n        fi\n    done"]
 stop_tokens:
 - "\n}"

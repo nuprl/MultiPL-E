@@ -83,7 +83,813 @@ completions: ["  (define (shift-right x shift)\n    (define (make-number xs)\n  
     \           (expt 10 shift))))\n                            (list (* (exact-floor\
     \ (/ x (expt 10 shift)))\n                                     (expt 10 (- (exact-floor\
     \ (log10 x)) shift)))))))\n          (else (list (reverse (list->string x)))))\n\
-    \    )\n  (list->string (shift x shift))\n)\n"]
+    \    )\n  (list->string (shift x shift))\n)\n", "  (string-&gt;number (string-join\
+    \ (rotate-list (list-&gt;string x) shift) \"\")))\n", "  (if (= shift 0)\n   \
+    \   (number->string x)\n      (if (>= shift (length (number->string x)))\n   \
+    \       (string-reverse (number->string x))\n          (regexp-replace* #rx\"\
+    ([0-9]*)([0-9]*)\"\n                           (number->string x)\n          \
+    \                 (lambda (a b) (string-append b a))))))\n", "  (define (reverse-string\
+    \ s)\n    (define (iter s1 s2)\n      (if (string-empty? s1)\n          s2\n \
+    \         (iter (substring s1 1 (string-length s1))\n                (string-append\
+    \ (substring s1 0 1) s2))))\n    (iter s \"\"))\n  (define (pad-zeros count string)\n\
+    \    (cond\n      [(string-empty? string) string]\n      [(< count (string-length\
+    \ string)) string]\n      [else (pad-zeros count (string-append \"0\" string))]))\n\
+    \  (define (shift-string s shift)\n    (let* ([s-len (string-length s)]\n    \
+    \       [shift (if (> shift s-len) (- shift s-len) shift)])\n      (string-append\
+    \ (substring s shift s-len)\n                     (substring s 0 shift))))\n \
+    \ (define (num-to-string n)\n    (define (iter n s)\n      (if (= n 0)\n     \
+    \     s\n          (iter (quotient n 10) (string-append (number->string (remainder\
+    \ n 10)) s))))\n    (iter n \"\"))\n  (define (digits n)\n    (string-length (num-to-string\
+    \ n)))\n  (let* ([s (num-to-string x)]\n         [s-len (string-length s)]\n \
+    \        [n-digits (digits x)])\n    (cond\n      [(= 0 n-digits) \"0\"]\n   \
+    \   [(= 1 n-digits) s]\n      [(= 0 shift) s]\n      [(= shift n-digits) (reverse-string\
+    \ s)]\n      [else (string-append (pad-zeros n-digits (shift-string s shift))\n\
+    \                           (pad-zeros n-digits (shift-string (reverse-string\
+    \ s) (- n-digits shift))))])))\n", "  (define (shift-right-helper x result shift)\n\
+    \    (if (= 0 shift)\n        result\n        (shift-right-helper (/ x 10) (+\
+    \ (* (% x 10) (expt 10 shift)) result) (- shift 1))))\n  (number->string (shift-right-helper\
+    \ x 0 shift)))\n", "  (number->string\n   (string->number\n    (string-join\n\
+    \     (reverse\n      (circular-shift-helper\n       (string->list (number->string\
+    \ x))\n       shift\n       (string-length (number->string x))))))))\n", "  (define\
+    \ (helper i)\n    (if (&lt; i shift)\n        (string (modulo (- x (* (expt 10\
+    \ i)) (quotient x (expt 10 (+ i 1)))) 10))\n        (string (quotient x (expt\
+    \ 10 i)))\n        (helper (- i 1))))\n  (helper (- (number-&gt;string x) 1)))\n",
+  "  (number->string (string->number (string-reverse (number->string x)))))\n", " \
+    \ (reverse (string-append (substring (number->string x) shift)\n             \
+    \             (substring (number->string x) 0 shift))))\n", "  (cond\n    [(=\
+    \ 0 shift) (number->string x)]\n    [(= 0 (modulo x 10)) (circular_shift (quotient\
+    \ x 10) shift)]\n    [else (string-append (circular_shift (quotient x 10) shift)\n\
+    \                         (substring (number->string (modulo x 10)) 0 1))]))\n",
+  "  (define digits (number->string x))\n  (define len (string-length digits))\n \
+    \ (cond [(< shift len)\n         (define index (modulo (- len shift) len))\n \
+    \        (string-append (substring digits index)\n                        (substring\
+    \ digits 0 index))]\n        [else (string-reverse digits)]))\n", "  (string-append\n\
+    \   (substring\n    (number->string x)\n    shift)\n   (substring\n    (number->string\
+    \ x)\n    0\n    shift)))\n", "  (define-values (neg digits) (integer->digits\
+    \ x))\n  (if (negative? x) (set! neg true))\n  (define digits-len (length digits))\n\
+    \  (if (<= shift digits-len)\n      (string-append (substring digits (- shift)\
+    \ digits-len)\n                     (substring digits 0 (- shift)))\n      (string-append\
+    \ (substring digits (- shift digits-len) digits-len)\n                     (substring\
+    \ digits 0 (- shift digits-len))))\n  )\n", "  (if (= x 0)\n      \"0\"\n    \
+    \  (define (rec x shift digits)\n        (if (< x 10)\n            (make-string\
+    \ shift #\\0)\n            (let* ([x-last-digit (modulo x 10)]\n             \
+    \      [x-shifted (truncate x 10)]\n                   [digits (+ digits 1)])\n\
+    \              (if (= digits shift)\n                  (string-append (make-string\
+    \ shift #\\0)\n                                 (number->string x-last-digit))\n\
+    \                  (string-append (rec x-shifted shift digits)\n             \
+    \                    (number->string x-last-digit))))))\n      (string->number\
+    \ (rec x shift 0))))\n", "  (define (rotate lst)\n    (append (reverse (cdr lst))\
+    \ (list (car lst))))\n  (string->number (list->string (foldr rotate (string->list\
+    \ (number->string x)) (range 1 shift)))))\n", "  (define (zero-p x)\n    (if (=\
+    \ x 0)\n        #t\n        #f))\n  (define (reverse x)\n    (define (reverse-helper\
+    \ x acc)\n      (if (zero-p x)\n          acc\n          (reverse-helper (quotient\
+    \ x 10) (+ (* 10 (remainder x 10)) acc))))\n    (reverse-helper x 0))\n  (define\
+    \ (count-digits x)\n    (define (count-digits-helper x i)\n      (if (zero-p x)\n\
+    \          i\n          (count-digits-helper (quotient x 10) (+ i 1))))\n    (count-digits-helper\
+    \ x 0))\n  (define (count-shift shift)\n    (define (count-shift-helper shift\
+    \ i)\n      (if (zero-p shift)\n          i\n          (count-shift-helper (quotient\
+    \ shift 10) (+ i 1))))\n    (count-shift-helper shift 0))\n  (define (shift x\
+    \ shift)\n    (if (zero-p shift)\n        x\n        (shift (remainder x 10) (-\
+    \ shift 1))))\n  (define (shift-to-string shift)\n    (if (zero-p shift)\n   \
+    \     \"\"\n        (string-append (number->string (remainder shift 10)) (shift-to-string\
+    \ (quotient shift 10)))))\n  (define (circular-shift-helper x shift)\n    (if\
+    \ (zero-p x)\n        \"\"\n        (string-append (shift-to-string (shift x shift))\
+    \ (circular-shift-helper (quotient x 10) shift))))\n  (cond ((> (count-digits\
+    \ x) shift) (circular-shift-helper x shift))\n        ((> shift (count-digits\
+    \ x)) (shift-to-string (reverse x)))\n        (else (shift-to-string (reverse\
+    \ x)))))\n", "  (string-&gt;number (string-join (reverse (list-&gt;string (reverse\
+    \ (string-&gt;list (number-&gt;string x))))))))\n", "  (define (do-shift x shift)\n\
+    \    (cond ((< shift 0) (do-shift x (+ shift (number->string x) (length (number->string\
+    \ x)))))\n          ((= shift 0) x)\n          (else (do-shift (string->number\
+    \ (string-append (substring (number->string x) (sub1 shift))\n               \
+    \                                           (substring (number->string x) 0 (sub1\
+    \ shift))))\n                          (sub1 shift)))))\n  (number->string (do-shift\
+    \ x shift)))\n", "  (string-append (substring (number->string x) shift)\n    \
+    \             (substring (number->string x) 0 shift)))\n", "  (string-&gt;number\
+    \ (string-reverse (string-&gt;number x))))\n", "  (integer->string (list->uninteger\
+    \ (reverse (for/list ([x (in-list (string->list (integer->string x)))]) x)))))\n",
+  "  (define (right_shift x l)\n    (match l [(list a b c) (list c a b)]))\n  (string-join\n\
+    \   (for/list ((e (in-list (string->list (number->string x)))))\n     (apply string\
+    \ (right_shift e shift)))\n   \"\"))\n```\n\nTo test the above code we can use\
+    \ the following examples:\n\n```racket\n#lang racket\n", "  (string-join (reverse\
+    \ (flatten (reverse (circular-shift-helper x shift))))))\n", "  (define (str-reverse\
+    \ s)\n    (string-join (reverse (string-split s))))\n  (define (str-rotate s shift)\n\
+    \    (define (helper acc k)\n      (cond ((= k 0) acc)\n            ((= k shift)\
+    \ (str-rotate (str-reverse s) (- k 1)))\n            (else (helper (str-reverse\
+    \ s) (- k 1)))))\n    (helper s shift))\n  (define (str-len s)\n    (if (equal?\
+    \ (string-length s) 0)\n        0\n        (+ 1 (str-len (substring s 1)))))\n\
+    \  (if (< shift (str-len (number->string x)))\n      (str-rotate (number->string\
+    \ x) shift)\n      (str-reverse (number->string x))))\n", "  (define s (integer->string\
+    \ x))\n  (define (rotate ls)\n    (if (zero? shift)\n        ls\n        (rotate\
+    \ (list-rest ls) (- shift 1))))\n  (list->string (rotate (string->list s))))\n",
+  "  (define x-str (number->string x))\n  (if (&gt; shift (string-length x-str))\n\
+    \      (reversed-str x-str)\n      (string-append (substring x-str shift (string-length\
+    \ x-str))\n                     (substring x-str 0 shift))))\n", "  (if (= shift\
+    \ 0)\n      (number->string x)\n      (define (length x)\n        (if (= x 0)\n\
+    \            0\n            (+ 1 (length (quotient x 10)))))\n      (define (shift-digit\
+    \ x shift)\n        (define (mod-10 x)\n          (modulo x 10))\n        (define\
+    \ (div-10 x)\n          (quotient x 10))\n        (define (length x)\n       \
+    \   (if (= x 0)\n              0\n              (+ 1 (length (div-10 x)))))\n\
+    \        (define (shift x shift len)\n          (if (= len 1)\n              (mod-10\
+    \ x)\n              (shift (div-10 x) (+ shift 1) (- len 1))))\n        (if (=\
+    \ shift 0)\n            (mod-10 x)\n            (shift x shift (length x))))\n\
+    \      (define (shift-digits x shift)\n        (define (shift-digit x shift)\n\
+    \          (define (mod-10 x)\n            (modulo x 10))\n          (define (div-10\
+    \ x)\n            (quotient x 10))\n          (define (length x)\n           \
+    \ (if (= x 0)\n                0\n                (+ 1 (length (div-10 x)))))\n\
+    \          (define (shift x shift len)\n            (if (= len 1)\n          \
+    \      (mod-10 x)\n                (shift (div-10 x) (+ shift 1) (- len 1))))\n\
+    \          (if (= shift 0)\n              (mod-10 x)\n              (shift x shift\
+    \ (length x))))\n        (define (shift-digits x shift)\n          (if (= x 0)\n\
+    \              \"\"\n              (string-append (shift-digits (div-10 x) shift)\n\
+    \                             (number->string (shift-digit x shift)))))\n    \
+    \    (shift-digits x shift))\n      (shift-digits x shift)))", "  (number->string\n\
+    \   (string->number\n    (string-join\n     (reverse\n      (if (&gt; shift (string-length\
+    \ (number-&gt;string x)))\n          (string-&gt;list (number-&gt;string x))\n\
+    \          (append (reverse (substring (number-&gt;string x) shift))\n       \
+    \           (reverse (substring (number-&gt;string x) 0 shift))))) \"\"))))\n",
+  "  (if (> shift (number->string x).length)\n      (string-reverse (number->string\
+    \ x))\n      (string-append (substring (number->string x) shift (string-length\
+    \ (number->string x)))\n                     (substring (number->string x) 0 shift))))\n",
+  "  (number->string\n   (number->string (modulo (* x (expt 10 shift))\n         \
+    \                (expt 10 (number->string x |> string-length |> string->number))))\n\
+    \   |> string->number\n   |> number->string))\n", "  (string-join (reversed (split\
+    \ (number->string x) \"\")) \"\"))\n", "  (define (reverse-digits x)\n    (define\
+    \ (reverse-digits-iter x result)\n      (if (= x 0)\n          result\n      \
+    \    (reverse-digits-iter (quotient x 10)\n                               (+ (*\
+    \ result 10) (remainder x 10)))))\n    (reverse-digits-iter x 0))\n  (define (num-digits\
+    \ x)\n    (define (num-digits-iter x result)\n      (if (= x 0)\n          result\n\
+    \          (num-digits-iter (quotient x 10) (+ 1 result))))\n    (num-digits-iter\
+    \ x 0))\n  (if (> shift (num-digits x))\n      (number->string (reverse-digits\
+    \ x))\n      (number->string (modulo (+ (* (expt 10 shift) x)\n              \
+    \                   (quotient x (expt 10 shift)))\n                          \
+    \    (expt 10 (num-digits x))))))\n", "  (define (digit->char d)\n    (integer->char\
+    \ (+ (char->integer #\\0) d)))\n  (define (char->digit c)\n    (- (char->integer\
+    \ c) (char->integer #\\0)))\n  (define (sh n)\n    (let ((number-of-digits (string-length\
+    \ (number->string n))))\n      (let loop ((d 0) (s 0) (n (* n 10)))\n        (if\
+    \ (= d number-of-digits)\n            n\n            (let ((digit (remainder (floor\
+    \ (/ n (expt 10 (- number-of-digits 1)))) 10)))\n              (loop (+ d 1) (+\
+    \ s digit) (+ (* n 10) (- digit))))))))\n  (define (cshift n)\n    (let ((number-of-digits\
+    \ (string-length (number->string n))))\n      (let loop ((d 0) (s 0) (n (* n 10)))\n\
+    \        (if (> d number-of-digits)\n            0\n            (let ((digit (remainder\
+    \ (floor (/ n (expt 10 (- number-of-digits 1)))) 10)))\n              (loop (+\
+    \ d 1) (+ s digit) (+ (* n 10) (- digit))))))))\n  (define (reverse n)\n    (let\
+    \ ((n1 (sh n)))\n      (let loop ((d 0) (n n1))\n        (if (= d (/ (string-length\
+    \ (number->string n)) 2))\n            n\n            (let ((digit (remainder\
+    \ (floor (/ n (expt 10 (- (string-length (number->string n)) 1)))) 10)))\n   \
+    \           (loop (+ d 1) (+ n (* (expt 10 (- (string-length (number->string n))\
+    \ 1)) digit))))))))\n  (let* ((s (string->number (number->string x)))\n      \
+    \   (n (if (< shift (string-length (number->string x)))\n                (sh s)\n\
+    \                (reverse s))))\n    (number->string n)))\n", "  (let ([str (number->string\
+    \ x)])\n    (string-append (substring str shift) (substring str 0 shift))))\n",
+  "  (define (helper x shift acc)\n    (if (&lt; shift 0) (reverse acc)\n        (if\
+    \ (&lt; x 10) (reverse (cons x acc))\n            (helper (quotient x 10) (sub1\
+    \ shift) (cons (remainder x 10) acc)))))\n  (string-&gt;number (list-&gt;string\
+    \ (helper x shift '()))))\n", "  (let ((n-digits (string-length (number->string\
+    \ x))))\n    (string-join\n     (if (> shift n-digits)\n         (list->string\
+    \ (reverse (string->list (number->string x))))\n         (list->string\n     \
+    \     (append (substring (number->string x) shift n-digits)\n                \
+    \  (substring (number->string x) 0 shift)))))))\n", "  (let loop ([n x] [count\
+    \ shift])\n    (cond [(zero? count) (number->string n)]\n          [(< (quotient\
+    \ n 10) 1) (number->string n)]\n          [else (loop (+ (* n 10)\n          \
+    \               (modulo n 10))\n                     (sub1 count))])))", "  (string-append\
+    \ (substring (number->string x) shift)\n                 (substring (number->string\
+    \ x) 0 shift)))\n", "  (number->string (number-shift x shift)))\n", "  (define\
+    \ (cs x s)\n    (if (= s 0)\n        (number->string x)\n        (let ([digits\
+    \ (number->string x)])\n          (string-append (substring digits s)\n      \
+    \                   (substring digits 0 s)))))\n  (define (digits x)\n    (if\
+    \ (= x 0)\n        0\n        (+ 1 (digits (quotient x 10)))))\n  (if (> shift\
+    \ (digits x))\n      (let ([rev (string-reverse (number->string x))])\n      \
+    \  (substring rev 0 (- shift (digits x))))\n      (cs x (- shift (digits x)))))\n",
+  "  (define (cs-helper x shift)\n    (let ((base (expt 10 shift)))\n      (let ((left\
+    \ (* base (quotient x base)))\n            (right (modulo x base)))\n        (string-append\
+    \ (number->string right)\n                       (number->string left)))))\n \
+    \ (define ndigits (integer-length x))\n  (if (>= shift ndigits)\n      (reverse-string\
+    \ (number->string x))\n      (cs-helper x shift)))\n", "  (define (digits n)\n\
+    \    (if (= n 0)\n        '()\n        (cons (remainder n 10) (digits (quotient\
+    \ n 10)))))\n  (define (shift-right shift ls)\n    (if (= shift 0)\n        ls\n\
+    \        (shift-right (- shift 1) (append (cdr ls) (list (car ls))))))\n  (define\
+    \ (reverse-digits n)\n    (if (= n 0)\n        '()\n        (cons (remainder n\
+    \ 10) (reverse-digits (quotient n 10)))))\n  (define (shift-left shift ls)\n \
+    \   (if (= shift 0)\n        ls\n        (shift-left (- shift 1) (append (list\
+    \ (last ls)) (reverse (drop-right ls 1))))))\n  (define (drop-right ls n)\n  \
+    \  (if (= n 0)\n        ls\n        (drop-right (reverse (cdr (reverse ls))) (-\
+    \ n 1))))\n  (define (last ls)\n    (if (null? (cdr ls))\n        (car ls)\n \
+    \       (last (cdr ls))))\n  (define (integer->string n)\n    (if (= n 0)\n  \
+    \      \"\"\n        (string-append (integer->string (quotient n 10)) (string\
+    \ (remainder n 10)))))\n  (integer->string (if (> shift (length (digits x)))\n\
+    \                       (foldl (lambda (a b) (+ (* 10 a) b)) 0 (reverse-digits\
+    \ x))\n                       (foldl (lambda (a b) (+ (* 10 a) b)) 0 (shift-right\
+    \ shift (digits x))))))\n", "  (define (reverse-digits x)\n    (let ([digits (number->string\
+    \ x)])\n      (number->string (string->number (reverse digits)))))\n  (let ([digits\
+    \ (number->string x)])\n    (if (> (string-length digits) shift)\n        (string-append\
+    \ (substring digits shift)\n                       (substring digits 0 shift))\n\
+    \        (reverse-digits x))))\n", "  (define (pow x p)\n    (if (= p 0)\n   \
+    \     1\n        (* x (pow x (- p 1)))))\n  (define (digit-length x)\n    (define\
+    \ (loop x p)\n      (if (> x (pow 10 p))\n          (loop x (+ p 1))\n       \
+    \   p))\n    (loop x 0))\n  (define (shift-unit x shift)\n    (define (pow x p)\n\
+    \      (if (= p 0)\n          1\n          (* x (pow x (- p 1)))))\n    (define\
+    \ (loop x p shift)\n      (if (> shift p)\n          (loop x (- p 1) shift)\n\
+    \          (/ (modulo x (+ (* (pow 10 shift) (pow 10 p))\n                   \
+    \       (* (pow 10 p) (pow 10 (- shift p)))))\n             (pow 10 p))))\n  \
+    \  (if (<= shift (digit-length x))\n        (loop x (digit-length x) shift)\n\
+    \        (loop x (digit-length x) shift)))\n  (define (shift-digit x shift)\n\
+    \    (define (loop x p shift)\n      (if (> shift p)\n          (loop x (- p 1)\
+    \ shift)\n          (/ (modulo x (+ (* (pow 10 shift) (pow 10 p))\n          \
+    \                (* (pow 10 p) (pow 10 (- shift p)))))\n             (pow 10 p))))\n\
+    \    (if (<= shift (digit-length x))\n        (loop x (digit-length x) shift)\n\
+    \        (loop x (digit-length x) shift)))\n  (define (digit-reversed x)\n   \
+    \ (define (pow x p)\n      (if (= p 0)\n          1\n          (* x (pow x (-\
+    \ p 1)))))\n    (define (loop x p)\n      (if (> x (pow 10 p))\n          (loop\
+    \ x (+ p 1))\n          p))\n    (define (reversed x)\n      (if (> x 0)\n   \
+    \       (string-append (number->string (modulo x 10))\n                      \
+    \   (reversed (/ x 10)))\n          \"\"))\n    (reversed x))\n  (", "  (displayln\
+    \ \"\")\n  (display \"Circular shift \")\n  (display x)\n  (display \" by \")\n\
+    \  (display shift)\n  (display \" \")\n  (displayln \"\")\n  (if (zero? shift)\n\
+    \      (displayln (number->string x))\n      (displayln (string-append (substring\
+    \ (number->string x) shift)\n                                (substring (number->string\
+    \ x) 0 shift)))\n      )\n  )\n", "  (string-append\n   (substring (number->string\
+    \ x) shift)\n   (substring (number->string x) 0 shift)))\n", "  (let ((str (number->string\
+    \ x)))\n    (if (> shift (string-length str))\n        (list->string (reverse\
+    \ (string->list str)))\n        (list->string (append (substring str (- shift))\n\
+    \                              (substring str 0 (- shift)))))))\n", "  (number->string\
+    \ (string->number (reverse (number->string x)))))\n", "  (define (char-swap s\
+    \ i j)\n    (string-set! s j (string-ref s i))\n    (string-set! s i (string-ref\
+    \ s j))\n    s)\n  (define (swap s)\n    (for/fold ([s s]) ([i (in-range (sub1\
+    \ (string-length s)))])\n      (char-swap s i (modulo (+ i (string->number shift))\
+    \ (string-length s)))))\n  (swap (number->string x)))\n", "  (string-append (substring\
+    \ (number->string x) shift)\n                 (substring (number->string x) 0\
+    \ shift)))\n", "  (define (digit-list x)\n    (if (zero? x)\n        (list)\n\
+    \        (cons (remainder x 10) (digit-list (quotient x 10)))))\n  (define (shift-digit-list\
+    \ x shift)\n    (define (rev-accum x shift accum)\n      (if (zero? x)\n     \
+    \     accum\n          (rev-accum (quotient x 10) shift (cons (remainder x 10)\
+    \ accum))))\n    (let ((r-shift (- (length (digit-list x)) shift)))\n      (if\
+    \ (zero? r-shift)\n          (rev-accum x shift (list))\n          (let ((rev-list\
+    \ (rev-accum x shift (list))))\n            (append (cdr rev-list) (list (car\
+    \ rev-list)))))))\n  (define (list->string l)\n    (define (list->string-accum\
+    \ l accum)\n      (if (null? l)\n          accum\n          (list->string-accum\
+    \ (cdr l) (string-append accum (number->string (car l))))))\n    (list->string-accum\
+    \ l \"\"))\n  (list->string (shift-digit-list x shift)))", "  (define str-x (number->string\
+    \ x))\n  (define len (string-length str-x))\n  (if (> shift len)\n      (string-reverse\
+    \ str-x)\n      (define (helper str-x len shift)\n        (if (= len 0)\n    \
+    \        \"\"\n            (string-append (substring str-x (- len 1) len)\n  \
+    \                         (helper (substring str-x 0 (- len 1)) (- len 1) (- shift\
+    \ 1)))))\n      (helper str-x len shift)))\n", "  (define (reverse_shift x)\n\
+    \    (string-&gt;number (string-reverse (number-&gt;string x))))\n  (cond\n  \
+    \  [(= 0 shift) (number-&gt;string x)]\n    [(= shift (string-length (number-&gt;string\
+    \ x))) (reverse_shift x)]\n    [else (reverse_shift (modulo (+ (* 10 shift) x)\
+    \ (expt 10 shift)))]))\n", "  (string-&gt;number\n   (string-append\n    (substring\
+    \ (number-&gt;string x) shift)\n    (substring (number-&gt;string x) 0 shift))))\n",
+  "  (cond\n    [(zero? shift) (number->string x)]\n    [(> shift (digit-count x))\
+    \ (string-reverse (number->string x))]\n    [else (string-append (string-take\
+    \ (number->string x)\n                                      (- (digit-count x)\
+    \ shift))\n                         (string-drop (number->string x)\n        \
+    \                              (- (digit-count x) shift)))]))\n", "  (define digits\
+    \ (string->list (number->string x)))\n  (define (shift-digit lst shift)\n    (if\
+    \ (>= shift (length lst))\n        (reverse lst)\n        (append (drop lst shift)\
+    \ (take lst shift))))\n  (string-join (shift-digit digits shift) \"\"))\n", " \
+    \ (if (> shift (number->string x))\n      (reverse (number->string x))\n     \
+    \ (list->string (append (list->string (substring (number->string x) shift))\n\
+    \                            (list->string (substring (number->string x) 0 shift))))))\n",
+  "  (if (< shift (number->string x) length)\n      (number->string x)\n      (define\
+    \ (shift-digits x shift)\n        (if (= shift 0)\n            x\n           \
+    \ (string-append (substring x (- shift 1)) (string-append (substring x 1 (- shift\
+    \ 1)) (substring x 0 1))))))\n  (shift-digits (number->string x) shift))\n", " \
+    \ (if (zero? shift)\n      (number->string x)\n      (let* ([in_string (number->string\
+    \ x)]\n             [in_len (string-length in_string)]\n             [in_list\
+    \ (string->list in_string)]\n             [shift (modulo shift in_len)]\n    \
+    \         [in_list_rev (reverse in_list)]\n             [out_list (append (list-tail\
+    \ in_list_rev shift)\n                               (list-head in_list_rev shift))])\n\
+    \        (list->string out_list))))\n", "  (number->string (modulo (expt 10 shift)\
+    \ (expt 10 (string-length (number->string x))))))\n", "  (if (> shift (length\
+    \ (number->string x)))\n      (reverse-string (number->string x))\n      (make-string\
+    \ (- (length (number->string x)) shift)\n                   (string-ref (number->string\
+    \ x)\n                               (- (length (number->string x)) shift)))\n\
+    \      (string-append (make-string shift #\\0)\n                     (reverse-string\
+    \ (make-string (- (length (number->string x)) shift)\n                       \
+    \                           (string-ref (number->string x) shift))))))\n", " \
+    \ (reverse (number->string (modulo (string->number (reverse (number->string x)))\
+    \ (expt 10 shift)))))\n", "  (define (shift x shift)\n    (cond ((zero? shift)\
+    \ x)\n          ((not (zero? (modulo x 10))) x)\n          (else (shift (quotient\
+    \ x 10) (sub1 shift)))))\n  (cond ((> shift (length (number->string x)))\n   \
+    \      (integer->string (shift x (length (number->string x)))))\n        (else\
+    \ (integer->string (shift x shift)))))\n", "  (define (digits-of-int x)\n    (if\
+    \ (= x 0)\n        \"\"\n        (string-append (digits-of-int (quotient x 10))\n\
+    \                       (number->string (remainder x 10)))))\n  (define (shift-digits\
+    \ x shift)\n    (let ([d (digits-of-int x)])\n      (string-append (substring\
+    \ d shift)\n                     (substring d 0 shift))))\n  (define (reverse-digits\
+    \ x)\n    (let ([d (digits-of-int x)])\n      (string-append (substring d 1)\n\
+    \                     (substring d 0 1))))\n  (let ([len (string-length (digits-of-int\
+    \ x))])\n    (if (>= shift len)\n        (reverse-digits x)\n        (shift-digits\
+    \ x shift))))\n", "  (string-append (substring (number->string x) shift)\n   \
+    \              (substring (number->string x) 0 shift)))\n", "  (string-append\
+    \ (substring (number->string x) shift)\n                 (substring (number->string\
+    \ x) 0 shift)))\n", "  (define (iter shift-left? list)\n    (if (null? list) \"\
+    \"\n        (if shift-left? (iter shift-left? (cdr list))\n            (string-append\
+    \ (number->string (car list))\n                           (iter shift-left? (cdr\
+    \ list))))))\n  (let ([x-str (number->string x)])\n    (if (> shift (string-length\
+    \ x-str))\n        (iter #f (string->list (reverse x-str)))\n        (let* ([l\
+    \ (string->list x-str)]\n               [n (string-length x-str)]\n          \
+    \     [l1 (list-take l shift)]\n               [l2 (list-drop l shift)])\n   \
+    \       (iter #t (append l2 l1))))))\n", "  (if (< shift 0)\n      (circular_shift\
+    \ x (+ shift (string-length (number->string x))))\n      (string-append (substring\
+    \ (number->string x) shift)\n                    (substring (number->string x)\
+    \ 0 shift))))\n", "  (number->string\n   (string->number\n    (reverse\n     (substring\n\
+    \      (reverse\n       (number->string x)) 0 shift)))))\n", "  (string-join\n\
+    \   (reverse\n    (map number->string\n         (map string->number\n        \
+    \      (reverse\n               (string-split (number->string x) #\\space)))))\n\
+    \   \" \"))", "  (define (next-shift y) (modulo (+ y shift) (length y)))\n  (define\
+    \ (shift-loop x shift y)\n    (if (zero? shift)\n        y\n        (shift-loop\
+    \ (next-shift x) (- shift 1) (string-append (list (string-ref x shift)) y))))\n\
+    \  (shift-loop (number->string x) (- (length (number->string x)) 1) \"\"))\n",
+  "  (let* ([str (number->string x)]\n         [n (string-length str)])\n    (cond\n\
+    \      [(>= shift n) (string-reverse str)]\n      [else (string-append (substring\
+    \ str shift n)\n                           (substring str 0 shift))])))\n", " \
+    \ (format \"~s\" (reverse (build-list (string-length (number->string x))\n   \
+    \                                 (\u03BB (i) (exact->inexact\n              \
+    \                              (modulo (exact->inexact x)\n                  \
+    \                                  (expt 10 (add1 i)))))))))\n", "  (define (num_digits\
+    \ n)\n    (define (helper i)\n      (if (= i 0)\n          0\n          (+ (modulo\
+    \ n (expt 10 i)) (helper (- i 1)))))\n    (helper (exact-floor (log10 x))))\n\
+    \  (define (shift-helper n digits shift)\n    (define (rotate-right digits shift)\n\
+    \      (define (split-at lst n)\n        (if (= n 0)\n            (values null\
+    \ lst)\n            (let ([a (first lst)] [d (rest lst)])\n              (define\
+    \ (helper n lst)\n                (if (= n 0)\n                    (values (list\
+    \ a) lst)\n                    (define-values ([a b] (helper (- n 1) d))\n   \
+    \                   (values (cons a b) d))))\n              (helper n lst))))\n\
+    \    (define (rotate-right-digits lst shift)\n      (define (rotate-digits lst)\n\
+    \        (if (null? lst)\n            (values '() '())\n            (define-values\
+    \ ([a b] (rotate-digits (rest lst)))\n              (values (cons (first lst)\
+    \ b) (cons (first lst) a)))))\n      (define-values ([a b] (rotate-digits lst))\n\
+    \        (if (= shift 0)\n            lst\n            (append b a))))\n    (define-values\
+    \ ([a b] (split-at digits shift))\n      (append b a)))\n  (define (split_int\
+    \ n)\n    (define (helper i)\n      (if (= i 0)\n          (list 0)\n        \
+    \  (let ([a (modulo n (expt 10 i))])\n            (cons a (helper (- i 1))))))\n\
+    \    (helper (exact-floor (log10 x))))\n  (define (recombine lst)\n    (define\
+    \ (helper lst i)\n      (if (null? lst)\n          0\n          (+ (* (first lst)\
+    \ (expt 10 i)) (helper (rest lst) (+ i 1)))))\n    (helper lst 0))\n", "  (define\
+    \ (aux x shift digits acc)\n    (if (= x 0)\n        (string-join digits)\n  \
+    \      (let* ([n (modulo x 10)]\n               [x (quotient x 10)]\n        \
+    \       [shift (remainder shift (add1 digits))])\n          (if (= 0 shift)\n\
+    \              (aux x shift (cons (number->string n) digits) 0)\n            \
+    \  (aux x shift digits (add1 acc))))))\n  (aux x shift '() 0))\n", "  (define\
+    \ (reversed-string x)\n    (apply string (reverse (integer->list x))))\n  (define\
+    \ (reverse-substring x start end)\n    (apply string (reverse (substring x start\
+    \ end))))\n  (define (substring x start end)\n    (apply list (substring/shared\
+    \ x start end)))\n  (define (substring/shared x start end)\n    (substring/shared\
+    \ x start end #f))\n  (define (substring/shared x start end shared)\n    (cond\n\
+    \      [(negative? start)\n       (substring/shared x (+ start (string-length\
+    \ x)) end shared)]\n      [(> start (string-length x))\n       (substring/shared\
+    \ x (- start (string-length x)) end shared)]\n      [(not (or (zero? start) (zero?\
+    \ end)))\n       (substring/shared x start (- end 1) shared)]\n      [(zero? start)\n\
+    \       (let* ([ch (string-ref x 0)]\n              [r (substring/shared x 1 end\
+    \ shared)])\n         (if shared\n             (set-car! r ch)\n             (cons\
+    \ ch r)))]\n      [(zero? end)\n       (if shared\n           (if (null? shared)\n\
+    \               '()\n               (cdr shared))\n           '())]\n      [else\
+    \ (error 'substring \"should not happen\")]))\n  (define (digits x)\n    (define\
+    \ (iter i acc)\n      (if (= 0 i)\n          acc\n          (iter (truncate (/\
+    \ i 10)) (cons (modulo i 10) acc))))\n    (iter x '()))\n  (define (shift-digits\
+    \ x shift)\n    (define (iter lst shift acc)\n      (if (null? lst)\n        \
+    \  acc\n          (iter (cdr lst) (modulo (- shift 1) (length lst)) (cons (car\
+    \ lst) acc))))\n    (iter x shift '()))\n  (reversed-string (apply + (map (lambda\
+    \ (x) (* x (expt 10 x))) (shift-digits (digits x) shift)))))\n", "  (define (cs\
+    \ x shift count)\n    (if (= shift count)\n        (number->string x)\n      \
+    \  (let* ([y (integer-sqrt x)]\n               [pow (expt 10 y)]\n           \
+    \    [a (quotient x pow)]\n               [b (remainder x pow)])\n          (integer->string\
+    \ (+ (* pow a) b)))))\n  (let* ([y (integer-sqrt x)]\n         [pow (expt 10 y)]\n\
+    \         [a (quotient x pow)]\n         [b (remainder x pow)])\n    (cs x (modulo\
+    \ shift y) 0)))\n", "  (define (shift-helper x shift)\n    (if (= shift 0)\n \
+    \       (string-&gt;number (string-join (reverse (number-&gt;string x))))\n  \
+    \      (shift-helper (modulo x (expt 10 shift)) (- shift 1))))\n  (shift-helper\
+    \ x shift))\n", "  (define (circular_shift-helper digits shift)\n    (if (zero?\
+    \ shift)\n        digits\n        (let* ([first-digit (first digits)]\n      \
+    \         [rest-digits (rest digits)])\n          (circular_shift-helper (append\
+    \ rest-digits (list first-digit))\n                                 (- shift 1)))))\n\
+    \  (circular_shift-helper (string->list (number->string x)) shift))\n", "  (define\
+    \ (split-digits x)\n    (cond [(zero? x) empty]\n          [else (cons (remainder\
+    \ x 10) (split-digits (quotient x 10)))]))\n  (define (helper shift digits)\n\
+    \    (if (= shift 0)\n        (string-join (reverse digits))\n        (helper\
+    \ (- shift 1) (append (cdr digits) (list (car digits))))))\n  (helper shift (split-digits\
+    \ x)))\n", "  (if (> shift (length (number->string x)))\n      (reverse (number->string\
+    \ x))\n      (let* ([string_x (number->string x)]\n             [shift_length\
+    \ (length string_x)]\n             [shift_length_minus_shift (- shift_length shift)]\n\
+    \             [first_half (substring string_x shift_length_minus_shift shift_length)]\n\
+    \             [second_half (substring string_x 0 shift_length_minus_shift)])\n\
+    \        (string-append first_half second_half))))\n```\n\n```\n#lang racket\n",
+  "  (define y x)\n  (define z 0)\n  (define count 0)\n  (define digits '())\n  (define\
+    \ (power n i)\n    (if (= i 0)\n        1\n        (* n (power n (- i 1)))))\n\
+    \  (while (> y 0)\n    (set! y (/ y 10))\n    (set! count (+ count 1)))\n  (set!\
+    \ count (- count shift))\n  (set! y x)\n  (set! x 0)\n  (while (> y 0)\n    (set!\
+    \ digits (cons (modulo y 10) digits))\n    (set! y (/ y 10)))\n  (for ([i (in-range\
+    \ count)])\n    (set! z (+ (* (list-ref digits i) (power 10 i)) z)))\n  (for ([i\
+    \ (in-range (- (length digits) count))])\n    (set! z (+ (* (list-ref digits (+\
+    \ i count)) (power 10 i)) z)))\n  (number->string z))\n", "  (let ((num_digits\
+    \ (number->string x))\n        (shift (modulo shift (string-length num_digits))))\n\
+    \    (string-append (substring num_digits shift)\n                   (substring\
+    \ num_digits 0 shift))))\n", "  (let ([digits (string->list (number->string x))])\n\
+    \    (if (= shift (length digits))\n        (reverse digits)\n        (reverse\n\
+    \         (append (drop shift digits)\n                 (take shift digits))))))\n",
+  "  (let ([x-str (number->string x)])\n    (if (&gt; shift (string-length x-str))\n\
+    \        (string-reverse x-str)\n        (string-append (substring x-str shift)\n\
+    \                       (substring x-str 0 shift)))))\n", "  (define s (integer->string\
+    \ x))\n  (define s-len (string-length s))\n  (define shift (if (> shift s-len)\
+    \ (- shift s-len) shift))\n  (string-append (substring s shift s-len) (substring\
+    \ s 0 shift)))", "  (string-append\n   (substring (number->string x) (- shift))\n\
+    \   (substring (number->string x) 0 (- shift))))\n", "  (define (reverser lst)\n\
+    \    (if (empty? lst)\n        empty\n        (append (reverser (rest lst)) (list\
+    \ (first lst)))))\n  (let* ([digits (string->list (number->string x))]\n     \
+    \    [num-digits (length digits)])\n    (if (> shift num-digits)\n        (string-join\
+    \ (reverser digits))\n        (string-join (append (reverser (sublist digits shift))\n\
+    \                             (reverser (sublist digits 0 shift)))))))\n", " \
+    \ (define (cs x shift r)\n    (if (= x 0)\n        r\n        (cs (quotient x\
+    \ 10)\n            (- shift 1)\n            (if (= shift 0)\n                (string-append\
+    \ r (number->string (remainder x 10)))\n                (string-append (number->string\
+    \ (remainder x 10)) r)))))\n  (cs x shift \"\"))\n", "  (number->string (integer-&gt;digits/reversed\
+    \ x)))\n", "  (define (cs x-n x-rem)\n    (if (zero? x-rem)\n        x-n\n   \
+    \     (cs (string-append (string (modulo x-rem 10)) x-n)\n            (quotient\
+    \ x-rem 10))))\n  (if (> shift (length (integer->string x)))\n      (reverse (integer->string\
+    \ x))\n      (define (reverser x)\n        (if (zero? x)\n            \"\"\n \
+    \           (string-append (string (modulo x 10)) (reverser (quotient x 10)))))\n\
+    \      (string-append (reverser (quotient x (expt 10 shift)))\n              \
+    \       (reverser (modulo x (expt 10 shift))))))\n", "  (if (< shift 0)\n    \
+    \  (circular_shift (integer->string x) (+ shift (string-length (integer->string\
+    \ x))))\n      (string-append (substring (integer->string x) shift)\n        \
+    \             (substring (integer->string x) 0 shift))))\n", "  (define shift-amt\
+    \ (remainder shift (number->string x)))\n  (if (and (positive? shift-amt) (negative?\
+    \ shift))\n      (substring (number->string x) (sub1 (string-length (number->string\
+    \ x))) shift-amt)\n      (substring (number->string x) 0 (sub1 shift-amt))))\n",
+  "  (define x-digits (string->list (number->string x)))\n  (define shift-digits (build-list\
+    \ (quotient shift (length x-digits))\n                                   (\u03BB\
+    \ (x) x-digits)))\n  (define new-x-digits (append (append (cdr (append-map\n \
+    \                                            identity shift-digits))\n       \
+    \                                (first shift-digits))\n                     \
+    \          (list-tail x-digits (modulo shift (length x-digits)))))\n  (list->string\
+    \ new-x-digits))\n", "  (define x-str (number->string x))\n  (define x-len (string-length\
+    \ x-str))\n  (if (> shift x-len)\n      (string-reverse x-str)\n      (string-append\
+    \ (substring x-str shift x-len)\n                     (substring x-str 0 shift))))\n",
+  "  (string-append (substring (number->string x) (- shift))\n                 (substring\
+    \ (number->string x) 0 (- shift))))\n", "  (if (> shift (number->string x) (string-length))\n\
+    \      (reversed (number->string x))\n      (let* ((digits (number->string x))\n\
+    \             (j (modulo shift (string-length digits))))\n        (string-append\
+    \ (substring digits j) (substring digits 0 j)))))\n", "  (display x)\n  (display\
+    \ \" \")\n  (display shift)\n  (newline)\n  (string-append\n   (substring (number->string\
+    \ x) shift)\n   (substring (number->string x) 0 shift)))\n", "  (if (zero? shift)\n\
+    \      (number->string x)\n      (number->string (modulo (+ (* (quotient x 10)\
+    \ 10) (remainder x 10)) 10))))\n", "  (apply string\n         (reverse\n     \
+    \     (let loop ([x x] [n shift])\n            (cond [(zero? n) x]\n         \
+    \         [(even? x) (loop (/ x 10) (- n 1))]\n                  [else (cons (modulo\
+    \ x 10) (loop (/ x 10) (- n 1)))])))))\n", "  (define (circular_shift_aux x shift\
+    \ res)\n    (if (zero? x) res\n        (let ([digit (modulo x 10)])\n        \
+    \  (circular_shift_aux (quotient x 10) shift\n            (string-append res (number->string\
+    \ digit))))))\n  (define (rev x res)\n    (if (zero? x) res\n        (let ([digit\
+    \ (modulo x 10)])\n          (rev (quotient x 10) (string-append (number->string\
+    \ digit) res)))))\n  (let ([numdigits (string-length (number->string x))])\n \
+    \   (if (>= shift numdigits) (rev x \"\")\n        (let ([shift (+ shift 1)])\n\
+    \          (if (>= shift numdigits) (rev x \"\")\n              (let ([numright\
+    \ (quotient x (expt 10 shift))])\n                (string-append (circular_shift_aux\
+    \ numright shift \"\")\n                  (number->string numright))))))))\n",
+  "  (define (shift-digits digits shift)\n    (if (= shift 0)\n        digits\n  \
+    \      (let ([digit (string-ref digits 0)])\n          (append (string-drop digits\
+    \ 1) (string digit)))))\n  (define (make-string n c)\n    (if (= n 0)\n      \
+    \  \"\"\n        (string-append (string c) (make-string (- n 1) c))))\n  (define\
+    \ (shift-left str shift)\n    (if (= shift 0)\n        str\n        (shift-left\
+    \ (string-append (string-drop str 1) (string (string-ref str 0))) (- shift 1))))\n\
+    \  (define (shift-right str shift)\n    (if (= shift 0)\n        str\n       \
+    \ (shift-right (string-append (string (string-ref str (- (string-length str) 1)))\
+    \ (string-drop str 0 (- (string-length str) 1))) (- shift 1))))\n  (define (circular-shift-helper\
+    \ x shift)\n    (let ([digits (string-&gt;number (number-&gt;string x))])\n  \
+    \    (if (&gt; shift (string-length digits))\n          (string-reverse digits)\n\
+    \          (string-append (shift-digits digits shift) (shift-digits digits (-\
+    \ shift))))))\n  (let ([digits (string-&gt;number (number-&gt;string x))])\n \
+    \   (if (&gt; shift (string-length digits))\n        (string-reverse digits)\n\
+    \        (string-append (shift-digits digits shift) (shift-digits digits (- shift))))))\n\
+    </code>\n", "  (letrec ([digits (integer->list x)]\n           [len (length digits)]\n\
+    \           [newdigits (append (drop shift digits) (take shift digits))])\n  \
+    \  (list->string (if (> len shift) newdigits (reverse newdigits)))))\n", "  (let\
+    \ ([digits (list->string (number->list x))])\n    (cond [(> (string-length digits)\
+    \ shift)\n           (string-append (substring digits shift)\n               \
+    \           (substring digits 0 shift))]\n          [else (reverse digits)])))\n",
+  "  (let* ([digits (string->list (number->string x))]\n         [num-digits (length\
+    \ digits)])\n    (if (< shift num-digits)\n        (string-append (apply string-append\
+    \ (list-tail digits shift))\n                       (apply string-append (list-head\
+    \ digits shift)))\n        (string-append (apply string-append (reverse digits))\n\
+    \                       (apply string-append (reverse (list-tail digits 0)))))))\n",
+  "  (define (shift-digits xs xs-shifted)\n    (if (null? xs)\n        xs-shifted\n\
+    \        (shift-digits (cdr xs) (append xs-shifted (list (car xs))))))\n  (define\
+    \ (reverse xs)\n    (if (null? xs)\n        '()\n        (append (reverse (cdr\
+    \ xs)) (list (car xs)))))\n  (string->number (number->string (reverse (shift-digits\
+    \ (reverse (number->string x)) '())))))\n", "  (string-&gt;number\n   (string-join\n\
+    \    (reverse\n     (append (rest (string-&gt;list (number-&gt;string x)))\n \
+    \            (list (string-ref (number-&gt;string x) 0)))))))\n</code>\n", " \
+    \ (apply string (reverse (cdr (reverse (string->list (number->string x)))))))\n",
+  "  (define (digits x)\n    (cond\n      [(zero? x) (list)]\n      [else\n      \
+    \ (cons (remainder x 10) (digits (quotient x 10)))]))\n  (define (circular_shift_helper\
+    \ digits shift shift-counter)\n    (cond\n      [(= shift-counter shift) digits]\n\
+    \      [else\n       (circular_shift_helper (append (cdr digits) (list (car digits)))\n\
+    \                              shift\n                              (+ shift-counter\
+    \ 1))]))\n  (apply string (reverse (circular_shift_helper (digits x) shift 0))))\n",
+  "  (let ([str (number->string x)])\n    (if (> (string-length str) shift)\n    \
+    \    (circular_shift-helper str shift)\n        (reverse str))))", "  (define\
+    \ (helper x shift)\n    (if (zero? x)\n        \"\"\n        (string-append (substring\
+    \ (number->string x) shift)\n                       (substring (number->string\
+    \ x) 0 shift))))\n  (if (< shift (number->string x))\n      (helper x shift)\n\
+    \      (helper x (- (number->string x) shift))))\n", "  (number->string\n   (cond\n\
+    \     ((> shift (number->string x) #:base 10)\n      (string->number (string-reverse\
+    \ (number->string x)) #:base 10))\n     (else\n      (let ([x-length (number->string\
+    \ x #:base 10)])\n        (let ([x-string (number->string x #:base 10)])\n   \
+    \       (let ([y (string->number (string-append (substring x-string shift)\n \
+    \                                                 (substring x-string 0 shift))\n\
+    \                                   #:base 10)])\n            y)))))))\n", " \
+    \ (define digits (string->list (number->string x)))\n  (define num-digits (length\
+    \ digits))\n  (if (> shift num-digits)\n      (apply string (reverse digits))\n\
+    \      (apply string (append (drop shift digits) (take shift digits)))))\n", " \
+    \ (if (zero? shift)\n      (number->string x)\n      (string-append (substring\
+    \ (number->string x) shift)\n                     (substring (number->string x)\
+    \ 0 shift))))\n", "  (define d (string->list (number->string x)))\n  (define l\
+    \ (length d))\n  (cond [(= shift l)\n         (list->string (reverse d))]\n  \
+    \      [else\n         (list->string (append (drop shift d) (take shift d)))]))\n",
+  "  (let ([shifted-positions (modulo shift (exact-integer-length x))])\n    (number->string\
+    \ (reverse (list->number (reverse (number->list x)) shifted-positions)))))\n",
+  "  (string-append (substring (number->string x) shift)\n                 (substring\
+    \ (number->string x) 0 shift)))\n", "  (define digits (list->string (reverse (string->list\
+    \ (number->string x)))))\n  (define digits_length (string-length digits))\n  (if\
+    \ (> shift digits_length)\n      digits\n      (define left_chars (substring digits\
+    \ (- digits_length shift) digits_length))\n      (define right_chars (substring\
+    \ digits 0 (- digits_length shift)))\n      (string-append left_chars right_chars)))\n",
+  "  (define (circular-shift-helper ls)\n    (if (null? ls)\n        \"\"\n      \
+    \  (append (circular-shift-helper (cdr ls)) (list (car ls)))))\n  (string-join\
+    \ (circular-shift-helper (string->list (number->string x))) \"\"))\n", "  (cond\n\
+    \    [(= shift (string-length (number->string x))) (number->string x)]\n    [(>\
+    \ shift (string-length (number->string x))) (string-reverse (number->string x))]\n\
+    \    [else (string-append (substring (number->string x) shift) (substring (number->string\
+    \ x) 0 shift))]))\n", "  (define (shift-1 ls)\n    (if (zero? shift)\n       \
+    \ ls\n        (shift-1 (append (cdr ls) (list (car ls))))))\n  (define (reverse-1\
+    \ ls)\n    (if (null? ls)\n        '()\n        (append (reverse-1 (cdr ls)) (list\
+    \ (car ls)))))\n  (cond ((> shift (length (number->string x)))\n         (reverse-1\
+    \ (number->string x)))\n        (else\n         (number->string (string->number\
+    \ (shift-1 (number->string x)))))))\n", "  (let* ([x-str (number->string x)]\n\
+    \         [x-rev (string-reverse x-str)]\n         [shift (if (> shift (string-length\
+    \ x-str))\n                    (string-length x-str)\n                    shift)])\n\
+    \    (string-append (substring x-rev shift)\n                   (substring x-rev\
+    \ 0 shift))))\n", "  (define (digits n)\n    (match n\n      [(? number? n)\n\
+    \       (if (= n 0)\n           (list)\n           (cons (remainder n 10) (digits\
+    \ (quotient n 10))))]\n      [else\n       (error 'circular_shift \"~a is not\
+    \ a number\" n)]))\n  (define (make-number ds)\n    (define (make-number-iter\
+    \ ds acc)\n      (if (null? ds)\n          acc\n          (make-number-iter (cdr\
+    \ ds) (+ (car ds) (* 10 acc)))))\n    (make-number-iter ds 0))\n  (define (reverse\
+    \ ds)\n    (define (reverse-iter ds acc)\n      (if (null? ds)\n          acc\n\
+    \          (reverse-iter (cdr ds) (cons (car ds) acc))))\n    (reverse-iter ds\
+    \ (list)))\n  (define (shift ds shift)\n    (define (shift-iter ds acc shift)\n\
+    \      (if (zero? shift)\n          acc\n          (shift-iter (cdr ds) (cons\
+    \ (car ds) acc) (- shift 1))))\n    (shift-iter ds (list) shift))\n  (number->string\
+    \ (make-number (if (> shift (length (digits x)))\n                           \
+    \        (reverse (digits x))\n                                   (shift (digits\
+    \ x) shift)))))", "  (define x_string (number->string x))\n  (define (last-shift\
+    \ x_string shift)\n    (string-append (substring x_string shift (string-length\
+    \ x_string))\n                   (substring x_string 0 shift)))\n  (define (first-shift\
+    \ x_string shift)\n    (last-shift (string-reverse x_string) shift))\n  (cond\n\
+    \    [(> shift (string-length x_string)) (first-shift x_string shift)]\n    [else\
+    \ (last-shift x_string shift)]))\n", "  (let ([lst (number->string x)])\n    (string-append\
+    \ (substring lst (modulo shift (string-length lst)))\n                   (substring\
+    \ lst 0 (modulo shift (string-length lst))))))\n", "  (define (shift-right lst\
+    \ shift)\n    (if (= shift 0)\n        lst\n        (shift-right (append (cdr\
+    \ lst) (list (car lst))) (- shift 1))))\n  (define (reverse-if-needed result)\n\
+    \    (if (> shift (length result))\n        (string-reverse result)\n        result))\n\
+    \  (reverse-if-needed (list->string (shift-right (string->list (number->string\
+    \ x)) shift))))\n", "  (define (length integer)\n    (if (= integer 0)\n     \
+    \   0\n        (+ 1 (length (quotient integer 10)))))\n  (define (shift-right\
+    \ integer shift)\n    (if (= integer 0)\n        0\n        (+ (* (modulo integer\
+    \ 10) (expt 10 shift))\n           (shift-right (quotient integer 10)\n      \
+    \                  (- shift 1)))))\n  (define (shift-left integer shift)\n   \
+    \ (if (= integer 0)\n        0\n        (+ (* (modulo integer 10) (expt 10 (-\
+    \ (length integer) shift 1)))\n           (shift-left (quotient integer 10)\n\
+    \                        (- shift 1)))))\n  (if (> (length x) shift)\n      (number->string\
+    \ (shift-right x shift))\n      (number->string (shift-left x shift))))\n", " \
+    \ (define (round x (count 0))\n    (cond ((zero? x) count)\n          (else (round\
+    \ (quotient x 10) (+ count 1)))))\n  (define (rotate x shift count)\n    (cond\
+    \ ((= count shift) x)\n          (else (rotate (quotient x 10) shift (+ count\
+    \ 1)))))\n  (define (reverse x)\n    (cond ((zero? x) \"\")\n          (else (string-append\
+    \ (reverse (quotient x 10)) (number->string (remainder x 10))))))\n  (define (last\
+    \ n x)\n    (cond ((zero? n) (remainder x 10))\n          (else (last (- n 1)\
+    \ (quotient x 10)))))\n  (define (append-last x n)\n    (cond ((zero? n) \"\"\
+    )\n          (else (string-append (number->string (last n x)) (append-last x (-\
+    \ n 1))))))\n  (define (start x count)\n    (cond ((= count 0) x)\n          (else\
+    \ (start (remainder x (expt 10 count)) (- count 1)))))\n  (cond ((<= shift (round\
+    \ x 0)) (string-append (append-last x shift) (reverse (start x shift))))\n   \
+    \     (else (reverse x))))\n", "  (if (and (integer? x) (integer? shift))\n  \
+    \    (if (< shift 0)\n          (circular_shift (circular_shift x (- shift)) 1)\n\
+    \          (if (= shift 0)\n              (number->string x)\n              (if\
+    \ (= shift (floor (log10 x)))\n                  (number->string (reverse_digits\
+    \ x))\n                  (let ([r (modulo x (expt 10 shift))])\n             \
+    \       (number->string (+ r (* (quotient x (expt 10 shift))\n               \
+    \                             (expt 10 (- (floor (log10 x))\n                \
+    \                                         shift)))))))))\n      (error \"invalid\
+    \ argument to circular_shift\" x)))\n", "  (apply string\n         (if (> shift\
+    \ (number->string x))\n             (reverse (number->string x))\n           \
+    \  (append (reverse (number->string x))\n                     (reverse (number->string\
+    \ x))))))\n", "  (define (shift-digits digits shift)\n    (let ([n (string-length\
+    \ digits)])\n      (if (<= shift n)\n          (string-append (substring digits\
+    \ shift n)\n                         (substring digits 0 shift))\n          (string-reverse\
+    \ digits))))\n  (define (digits-of x)\n    (string->list (number->string x)))\n\
+    \  (string-join (shift-digits (digits-of x) shift) \"\"))\n", "  (define (digits\
+    \ x)\n    (match x\n      [(list) (list)]\n      [(cons a d) (cons (number->string\
+    \ a) (digits d))]))\n  (reversed_string (reverse (append (reverse (drop shift\
+    \ (digits x)))\n                                    (reverse (take shift (digits\
+    \ x)))))))\n", "  (number->string (circular-shift x shift)))\n", "  (define (reverse-digits\
+    \ n)\n    (if (zero? n) n\n        (cons (remainder n 10) (reverse-digits (quotient\
+    \ n 10)))))\n  (define (shift-rlist n rlist)\n    (if (null? rlist) n\n      \
+    \  (cons (car rlist) (shift-rlist (quotient n 10) (cdr rlist)))))\n  (define (shift-nlist\
+    \ n)\n    (define (shift-nlist-aux n nlist)\n      (if (null? nlist) n\n     \
+    \     (cons (quotient n 10) (shift-nlist-aux (remainder n 10) (cdr nlist)))))\n\
+    \    (shift-nlist-aux n (reverse-digits n)))\n  (define (shift-nlist-digits n)\n\
+    \    (define (shift-nlist-digits-aux n nlist)\n      (if (null? nlist) n\n   \
+    \       (cons (remainder n 10) (shift-nlist-digits-aux (quotient n 10) (cdr nlist)))))\n\
+    \    (shift-nlist-digits-aux n (reverse-digits n)))\n  (define (rlist->str rlist)\n\
+    \    (list->string (reverse rlist)))\n  (define (nlist->str nlist)\n    (string-append\
+    \ (rlist->str (reverse nlist))))\n  (if (<= shift 0) (nlist->str (reverse-digits\
+    \ x))\n      (if (= shift (length (reverse-digits x)))\n          (string-append\
+    \ (nlist->str (shift-nlist x))\n                         (nlist->str (shift-nlist-digits\
+    \ x)))\n          (nlist->str (shift-rlist x (reverse-digits shift))))))\n", " \
+    \ (define (shift-helper x shift reversed-tail)\n    (if (zero? x)\n        (string->number\
+    \ reversed-tail)\n        (shift-helper (quotient x 10)\n                    \
+    \  shift\n                      (string-append (number->string (remainder x 10))\n\
+    \                                     reversed-tail))))\n  (number->string (shift-helper\
+    \ x shift \"\")))\n", "  (define (convert n)\n    (number->string n))\n  (define\
+    \ (rev n)\n    (convert (string->number (string-reverse (convert n)))))\n  (if\
+    \ (= shift 0)\n      (convert x)\n      (if (< shift (string-length (convert x)))\n\
+    \          (string-append (string-drop (convert x) shift)\n                  \
+    \        (string-take (convert x) shift))\n          (rev x))))\n", "  (let* ([digs\
+    \ (number->string x)]\n         [len (string-length digs)])\n    (cond [(< shift\
+    \ len)\n           (string-append (substring digs shift len)\n               \
+    \           (substring digs 0 shift))]\n          [else\n           (reverse digs)])))\n",
+  "  (number->string\n   (local ((define digits (integer->list-of-digits x)))\n  \
+    \   (if (<= shift (length digits))\n         (cond [(zero? shift) x]\n       \
+    \        [else (apply list->integer (append (reverse (cdr digits))\n         \
+    \                                         (list (car digits))))])\n         (apply\
+    \ list->integer (reverse digits))))))\n", "  (regexp-replace* (number->string\
+    \ x)\n                   (regexp \"^(.)(.*)(.)$\")\n                   (regexp-quote\
+    \ \"\\\\3\\\\1\\\\2\")))\n", "  (define x-str (number->string x))\n  (define x-len\
+    \ (string-length x-str))\n  (define shift-len (string-length (number->string shift)))\n\
+    \  (define shift-str (if (= x-len shift-len)\n                        (number->string\
+    \ shift)\n                        (substring (number->string shift) 0 (- x-len\
+    \ shift-len))))\n  (string-append (substring x-str shift-len) (substring x-str\
+    \ 0 shift-len)))\n", "  (define (rec shift)\n    (if (= shift 0)\n        (list->string\
+    \ (reverse x))\n        (rec (- shift 1))\n        )\n    )\n  (define (lst->str\
+    \ lst)\n    (cond [(empty? lst) \"\"]\n          [(= (length lst) 1) (number->string\
+    \ (car lst))]\n          [else (string-append (number->string (car lst)) (lst->str\
+    \ (cdr lst)))]\n          )\n    )\n  (rec shift)\n  )\n", "  (let ((str (number->string\
+    \ x)))\n    (if (< shift (string-length str))\n        (string-append (substring\
+    \ str shift) (substring str 0 shift))\n        (string-reverse str))))\n", " \
+    \ (define (circular-shift-helper x shift-factor result)\n    (if (> x 0)\n   \
+    \     (circular-shift-helper (/ x 10) (* shift-factor 10)\n                  \
+    \             (+ (* shift-factor (% x 10)) result))\n        (number->string result)))\n\
+    \  (if (= shift 0)\n      (number->string x)\n      (if (= x 0)\n          (number->string\
+    \ x)\n          (circular-shift-helper x 1 0))))\n", "  (local\n    [;; Convert\
+    \ x to a string and put it in a list\n     (define x-as-string (number->string\
+    \ x))\n     (define x-as-list (string->list x-as-string))\n     ;; If x has fewer\
+    \ digits than shift, return digits reversed\n     (define num-digits (length x-as-list))\n\
+    \     (define shifted-digits (if (> num-digits shift)\n                      \
+    \        (let ([y (cons (first (drop-right x-as-list shift))\n               \
+    \                             (take x-as-list shift))])\n                    \
+    \            (take-right y num-digits))\n                              (reverse\
+    \ x-as-list)))\n     ]\n     (list->string shifted-digits)))\n", "  (define (inner\
+    \ x shift len)\n    (define (index len)\n      (cond ((= len 0) -1)\n        \
+    \    ((= len 1) 0)\n            (else (remainder shift len))))\n    (cond ((=\
+    \ len 0) \"\")\n          ((= len 1) (number->string x))\n          (else (string-append\
+    \ (substring (number->string x) (index len) len)\n                           \
+    \    (substring (number->string x) 0 (index len))))))\n  (inner x shift (number->string\
+    \ x)))\n", "  (define digits (number->string x))\n  (define num_digits (string-length\
+    \ digits))\n  (if (> shift num_digits)\n      (list->string (reverse (string->list\
+    \ digits)))\n      (list->string (append (substring digits shift num_digits)\n\
+    \                            (substring digits 0 shift)))))\n", "  (define (shift-once\
+    \ x)\n    (string-append (substring x 1) (substring x 0 1)))\n  (define (shift-many\
+    \ x shift)\n    (if (= shift 0)\n        x\n        (shift-many (shift-once x)\
+    \ (- shift 1))))\n  (shift-many (number->string x) (modulo shift (string-length\
+    \ (number->string x)))))\n", "  (define (rotate ls shift)\n    (if (= shift 0)\n\
+    \        ls\n        (rotate (append (cdr ls) (list (car ls))) (- shift 1))))\n\
+    \  (list->string (rotate (string->list (number->string x)) shift)))\n", "  (string-append\n\
+    \   (substring (number->string x) (- shift))\n   (substring (number->string x)\
+    \ 0 (- shift))))\n", "  (cond [(> shift (number-of-digits x)) (reverse-string\
+    \ (integer->string x))]\n        [else (let* ([y (string->number (substring (integer->string\
+    \ x) shift (number-of-digits x)))]\n                      [z (string->number (substring\
+    \ (integer->string x) 0 shift))])\n                (integer->string (+ y z)))]))\n",
+  "  (define digits (string->list (number->string x)))\n  (define num-digits (length\
+    \ digits))\n  (define shifted (for/list ([i (in-range num-digits)])\n        \
+    \             (list-ref digits (modulo (- i shift) num-digits))))\n  (list->string\
+    \ shifted))\n", "  (define (circ-shift-helper x shift-left shift-right)\n    (if\
+    \ (zero? shift-left)\n        (number->string x)\n        (circ-shift-helper\n\
+    \         (modulo (quotient x 10)\n                 (expt 10 shift-right))\n \
+    \        (sub1 shift-left)\n         (add1 shift-right))))\n  (circ-shift-helper\
+    \ x (sub1 shift) shift))\n", "  (define (rshift i s)\n    (if (= s 0) i\n    \
+    \  (let* ([str (number->string i)]\n             [ds (string-length str)]\n  \
+    \           [s (modulo s ds)]\n             [x0 (substring str s)]\n         \
+    \    [x1 (substring str 0 s)])\n        (string->number (string-append x0 x1)))))\n\
+    \  (number->string (rshift x shift)))\n", "  (if (= 0 (integer-length x))\n  \
+    \    \"\"\n      (circular_shift (modulo (* x 10) (expt 10 shift)) shift)))\n",
+  "  (define (string-reverse s)\n    (define (digits-helper n)\n      (cond\n    \
+    \    [(zero? n) empty]\n        [else (cons (remainder n 10) (digits-helper (quotient\
+    \ n 10)))]))\n    (string-join (map number->string (reverse (digits-helper s)))))\n\
+    \  (string-append (string-take (number->string x) (- (string-length (number->string\
+    \ x)) shift))\n                 (string-drop (number->string x) (- (string-length\
+    \ (number->string x)) shift))))\n```\n\n## 2.3 Averaging Test Scores\n\nIn this\
+    \ exercise you will write a function to compute the average of a list of numbers.\
+    \ You will need to add a function to compute the sum of the elements of a list.\n\
+    \n```racket\n#lang racket\n", "  (number->string (reverse (string->number (string-append\
+    \ (reverse (string-append (string-drop (number->string x) shift) (string-take\
+    \ (number->string x) shift))))))))\n", "  (define (circshift n str)\n    (if (=\
+    \ (remainder n 10) 0)\n        (string-append \"0\" str)\n        (string-append\
+    \ (string (remainder n 10)) str)))\n  (string->number (cond ((> shift (string-length\
+    \ (number->string x)))\n                         (reverse (number->string x)))\n\
+    \                        (else (circshift x \"\"))))\n", "  (string-append (substring\
+    \ (number->string x) shift)\n                 (substring (number->string x) 0\
+    \ shift)))\n", "  (define (circle x shift)\n    (if (< shift (floor (log10 x)))\n\
+    \        (circle (modulo (* 10 x) (integer-power 10 (floor (log10 x)))) shift)\n\
+    \        (number->string x)))\n  (circle x (modulo shift (floor (log10 x)))))\n",
+  "  (string-append (substring (number->string x) shift)\n                 (substring\
+    \ (number->string x) 0 shift)))\n</code>\nWhich works just as expected:\n<code>#|racket|",
+  "  (let ([str (number->string x)])\n    (if (> shift (string-length str))\n    \
+    \    (list->string (reverse (string->list str)))\n        (let ([shifted (string-append\
+    \ (substring str shift)\n                                      (substring str\
+    \ 0 shift))])\n          shifted))))\n", "  (define (helper x shift)\n    (if\
+    \ (empty? x)\n        x\n        (append (rest x) (list (first x)))))\n  (define\
+    \ (helper1 x shift)\n    (if (= shift 0)\n        x\n        (helper1 (helper\
+    \ x 1) (- shift 1))))\n  (number->string (string->number (implode (helper1 (string->list\
+    \ (number->string x)) shift)))))\n", "  (cond\n    [(> shift (number-of-digits\
+    \ x)) (reverse-digits x)]\n    [else (string-append (number->string (remainder\
+    \ x (expt 10 shift)))\n                         (number->string (truncate x (expt\
+    \ 10 shift))))]))\n", "  (define (helper x shift acc)\n    (if (= x 0)\n     \
+    \   (number->string (reverse acc))\n        (helper (integer-divide x 10)\n  \
+    \              (if (>= shift 10) \n                    10 \n                 \
+    \   (+ shift 1))\n                (cons (remainder x 10) acc))))\n  (helper x\
+    \ shift '()))\n```\n\n```racket\n#lang racket\n", "  (define digits (number->string\
+    \ x))\n  (define (rotate lst count)\n    (if (zero? count)\n        lst\n    \
+    \    (rotate (append (cdr lst) (list (car lst))) (- count 1))))\n  (string-join\
+    \ (rotate (string->list digits) shift) \"\"))\n```\n\n## Tests\n\n```racket\n\
+    #lang racket\n", "  (let ((str (number->string x)))\n    (string-append (substring\
+    \ str (- shift))\n                   (substring str 0 (- shift)))))\n", "  (let\
+    \ ([digits (string->list (number->string x))])\n    (cond\n      [(> shift (length\
+    \ digits))\n       (list->string (reverse digits))]\n      [else\n       (let\
+    \ ([half (length digits)])\n         (list->string (append (drop half shift) (take\
+    \ half shift))))])))\n", "  (string-&gt;number (string-append (substring (number-&gt;string\
+    \ x) shift) (substring (number-&gt;string x) 0 shift))))\n", "  (string-join\n\
+    \   (append (reverse (string->list (number->string x)))\n           (reverse (string->list\
+    \ (number->string shift))))))\n", "  (let ([digits-reversed (reverse (integer->list\
+    \ x))])\n    (let ([digits-rotated (list-rotate digits-reversed shift)])\n   \
+    \   (list->string (reverse digits-rotated)))))\n", "  (define (num-digits x)\n\
+    \    (if (= x 0) 0 (+ 1 (num-digits (/ x 10)))))\n  (define (shifted-num a b)\n\
+    \    (define (shift-helper a b acc)\n      (if (zero? b) acc\n        (shift-helper\
+    \ (/ a 10) (- b 1) (+ (* a 10) acc))))\n    (shift-helper a b 0))\n  (define (reverse\
+    \ x)\n    (define (reverse-helper x acc)\n      (if (zero? x) acc\n        (reverse-helper\
+    \ (/ x 10) (+ (* acc 10) (remainder x 10)))))\n    (reverse-helper x 0))\n  (if\
+    \ (> shift (num-digits x))\n      (number->string (reverse x))\n      (number->string\
+    \ (shifted-num x shift))))\n", "  (define digits (string->list (number->string\
+    \ x)))\n  (define (rotate digits)\n    (cond ((null? digits) '())\n          ((null?\
+    \ (cdr digits)) (list (car digits)))\n          (else (append (cdr digits) (list\
+    \ (car digits))))))\n  (define (rotate-n digits n)\n    (cond ((zero? n) digits)\n\
+    \          (else (rotate-n (rotate digits) (- n 1)))))\n  (if (> shift (length\
+    \ digits))\n      (reverse (rotate-n digits shift))\n      (rotate-n digits shift)))\n",
+  "  (number->string (reverse (build-list shift\n                                \
+    \       (lambda (x) (modulo x 10))\n                                       (build-list\
+    \ (exact-floor (log10 x))\n                                                  \
+    \ (lambda (x) (quotient x 10))\n                                             \
+    \      x)))))\n", "  (number->string (string->number (string-reverse (number->string\
+    \ x)))))\n", "  (define (cs n s acc)\n    (cond [(zero? n) acc]\n          [(zero?\
+    \ s) (cs n (- (length (number->string n)) 1) acc)]\n          [else (cs (- n (modulo\
+    \ n 10)) (- s 1) (string-append (number->string (modulo n 10)) acc))]))\n  (cs\
+    \ x shift \"\"))\n", "  (define (break-up-number x digits)\n    (if (= x 0)\n\
+    \        (cons 0 digits)\n        (cons (modulo x 10) (break-up-number (quotient\
+    \ x 10) digits))))\n  (define (concat-reverse-digits digits)\n    (if (null? digits)\n\
+    \        \"\"\n        (string-append (number->string (car digits)) (concat-reverse-digits\
+    \ (cdr digits)))))\n  (define (shift-digits digits)\n    (if (null? digits)\n\
+    \        \"\"\n        (string-append (concat-reverse-digits (cdr digits)) (number->string\
+    \ (car digits)))))\n  (if (= shift 0)\n      (number->string x)\n      (let ((digits\
+    \ (break-up-number x '())))\n        (shift-digits digits))))\n", "  (define (cs\
+    \ x shift acc)\n    (if (= x 0)\n        (number->string (reverse acc))\n    \
+    \    (cs (quotient x 10) shift (cons (remainder x 10) acc))))\n  (if (< shift\
+    \ (length (number->string x)))\n      (define result (cs x shift '()))\n     \
+    \ (define digits (string->list (number->string x)))\n      (define result (list->string\
+    \ (reverse digits))))\n  result)\n\n", "  (define (iter s x)\n    (cond ((<= x\
+    \ 0) s)\n          (else (iter (string-append (number->string (remainder x 10))\
+    \ s)\n                      (quotient x 10)))))\n  (let* ((s (iter \"\" x))\n\
+    \         (len (string-length s)))\n    (if (> shift len)\n        (string-reverse\
+    \ s)\n        (string-append (substring s shift len)\n                       (substring\
+    \ s 0 shift)))))\n", "  (define (rotate xs shift)\n    (append (drop shift xs)\
+    \ (take shift xs)))\n  (number->string\n   (number->list\n    x\n    10)\n   10\n\
+    \   (rotate (number->list x 10) shift)))\n", "  (define (right_shift x y)\n  \
+    \  (let ((len (number->string x)))\n      (number->string (string->number (string-append\
+    \ (substring len y) (substring len 0 y))))))\n  (define (left_shift x y)\n   \
+    \ (let ((len (number->string x)))\n      (number->string (string->number (string-append\
+    \ (substring len (- 0 y)) (substring len 0 (- 0 y)))))))\n  (if (> shift (length\
+    \ (number->string x)))\n      (reverse (number->string x))\n      (if (> shift\
+    \ 0)\n          (right_shift x shift)\n          (left_shift x (- shift)))))\n",
+  "  (define (int->list x)\n    (define (helper x)\n      (if (zero? x)\n        \
+    \  '()\n          (cons (remainder x 10) (helper (quotient x 10)))))\n    (helper\
+    \ x))\n  (define (list->int x)\n    (apply string->number (list->string x)))\n\
+    \  (define (shift x)\n    (define (helper x)\n      (if (empty? x)\n         \
+    \ x\n          (append (rest x) (list (first x)))))\n    (define (helper2 x n)\n\
+    \      (if (zero? n)\n          x\n          (helper2 (helper x) (- n 1))))\n\
+    \    (if (empty? x)\n        0\n        (list->int (helper2 x shift))))\n  (number->string\
+    \ (shift (int->list x))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

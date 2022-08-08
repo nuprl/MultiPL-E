@@ -9,6 +9,914 @@ tests: "}\n\ncandidate() {\n    sum_product \"$@\"\n}\n\nset -e\nrun_test() {\n 
   \  [[ $(candidate \"\") = \"0 1\" ]]\n    [[ $(candidate \"1 1 1\") = \"3 1\" ]]\n\
   \    [[ $(candidate \"100 0\") = \"100 0\" ]]\n    [[ $(candidate \"3 5 7\") = \"\
   15 105\" ]]\n    [[ $(candidate \"10\") = \"10 10\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local arr=( \"$1\" )\n  local sum=0\n  local product=1\n  for i in\
+    \ \"${arr[@]}\"; do\n    (( sum += i ))\n    (( product *= i ))\n  done\n  echo\
+    \ \"$sum x $product\"", "  local _IFS=$IFS\n  IFS=$'\\n'\n  local item\n  local\
+    \ sum\n  local product\n  sum=$(cat <<-EOF\n$1 |\n  sed 's/ /+/g' |\n  awk '{\
+    \ sum += $1 }; END { print sum }' |\n  sed 's/^/0/' |\n  awk '{ product *= $1\
+    \ }; END { print product }'\nEOF\n)\n  product=$(cat <<-EOF\n$1 |\n  sed 's/ /+/g'\
+    \ |\n  awk '{ sum += $1 }; END { print sum }' |\n  sed 's/^/1/' |\n  awk '{ product\
+    \ *= $1 }; END { print product }'\nEOF\n)\n  IFS=$_IFS\n  echo \"[$sum,$product]\"",
+  "    local sum=\"$1\"\n    shift\n    local product=1\n    for number in \"$@\"\
+    ; do\n        product=\"$((product*number))\"\n        sum=\"$((sum+product))\"\
+    \n    done\n    printf '%s\\n' \"$sum\" \"$product\"", "  echo $1 | xargs -n1\
+    \ echo -n \"$1 | cut -d' ' -f1 | xargs -n1 echo -n '\" + ' | xargs -n1 echo -n\
+    \ ' + ' | xargs -n1 echo -n '\" | xargs -n1 echo -n \"'", "    local numbers=$1\n\
+    \    local sum=\"$2\"\n    local product=\"$3\"\n    local result\n    while read\
+    \ number ; do\n        sum=\"$(($sum + $number))\"\n        product=\"$(($product\
+    \ * $number))\"\n    done < <(echo \"$numbers\")\n    result=\"$(echo \"$sum $product\"\
+    )\"\n    echo \"$result\"", "    local -a sum=0\n    local -a product=1\n    local\
+    \ arg\n    for arg; do\n        (( sum+arg ))\n        (( product*arg ))\n   \
+    \ done\n    IFS=' ' eval '[\"\\[$(( sum+product ))]\" \"\\[$(( product*product\
+    \ ))]\"]'", "    local number=$1\n    local sum=0\n    local product=1\n\n   \
+    \ if [ \"$number\" == \"\" ]; then\n        echo \"['\\\"0\\\"', '\\\"1\\\"']\"\
+    \n        return\n    fi\n\n    while [ $number != \"\" ]; do\n        local value=$(echo\
+    \ $number | awk '{print $1}')\n        local mult=`echo \"$number $value\" | awk\
+    \ '{print $1}'`\n        local sum=`expr $sum + $mult`\n        local product=`expr\
+    \ $product * $value`\n        number=${number//$value}\n    done\n\n    echo \"\
+    ['\\\"$sum\\\"', '\\\"$product\\\"']\"", "    local sum\n    local product\n \
+    \   IFS=$'\\n' sum=0; product=1\n    for x; do\n        [ \"$x\" == \"$sum\" ]\
+    \ && product=0\n        [ \"$x\" == \"$product\" ] && sum=0\n        [ \"$sum\"\
+    \ -eq 0 ] && [ \"${#x}\" -gt 0 ] && sum=$x\n        [ \"$product\" -eq 1 ] &&\
+    \ [ \"$x\" -gt 0 ] && product=$x\n    done\n    echo \"\\\"$sum\\\"x\\\"$product\"",
+  "    local sum=\"${1}\"\n    local product=\"${1}\"\n    # split by space\n    IFS='\
+    \ ' read -a array <<< \"${sum}\"\n    # initialize with zero\n    local sum2\n\
+    \    local product2\n    for n in \"${array[@]}\"; do\n        # add to sum2\n\
+    \        sum2=$(expr \"${sum2}\" + \"$n\")\n        # add to product2\n      \
+    \  product2=$(expr \"${product2}\" + \"$(echo \"$n * $sum2\" | bc)\")\n    done\n\
+    \    # return both sum and product string\n    echo \"${sum2}\" \"${product2}\"",
+  "  local IFS=' ' sum=0 product=1\n  while IFS=$'\\t' read -r num rest; do\n    sum=$((sum\
+    \ + num))\n    product=$((product * num))\n  done\n  echo \"$sum\\t$product\"",
+  "    IFS=$'\\n' read -d '' -a array <<< \"$1\"\n    local sum=0 product=1\n    for\
+    \ element in \"${array[@]}\"; do\n        if [ \"$element\" != \"\" ]; then\n\
+    \            ((sum+=element))\n        fi\n    done\n    for element in \"${array[@]}\"\
+    ; do\n        if [ \"$element\" != \"\" ]; then\n            product*=element\n\
+    \        fi\n    done\n    local string\n    string=$(printf \"%.0f\\n\" \"$sum\"\
+    )\n    string+=\" \"\n    string+=\"$product\"\n    printf \"%s\\n\" \"$string\"",
+  "  local sum=\"$(echo \"$1\" | tr '\\n' '+')\"\n  local product=\"$(echo \"$1\"\
+    \ | tr '\\n' '*')\"\n\n  local numbers=$(echo \"$1\" | awk '{for (i=1;i<=NF;i++)\
+    \ print $i}' | tr '\\n' ' ')\n\n  if [[ -z \"$sum\" ]]; then\n    sum=\"0\"\n\
+    \  fi\n\n  if [[ -z \"$product\" ]]; then\n    product=\"1\"\n  fi\n\n  echo \"\
+    [$sum x $product]\"", "    local sum='0';\n    local product='1';\n    local i\n\
+    \    for i in \"$1\"; do\n        sum=$(expr ${sum} + $i)\n        product=$(expr\
+    \ ${product} * $i)\n    done\n    echo $sum $product", "  local S=\"$(printf '%s\\\
+    n' \"$1\")\"\n  echo \"$(echo $S | xargs -n 1 -P 1 echo -n '\"0\" | bc -l\")\"\
+    \n  echo \"$(echo $S | xargs -n 1 -P 1 echo -n '\"1\" | bc -l\")\"", "    local\
+    \ sum=0\n    local product=1\n    local words=$1\n    echo \"$words\" | grep -w\
+    \ \"$sum|$product\" |grep -w \"$words\" | sed 's/^\\s\\+//' | sed 's/\\s\\+$//'\
+    \ | tr '\\n' ' '", "    local -a arr=( $1 )\n    local sum prod\n    sum=0\n \
+    \   prod=1 \n    for value in \"${arr[@]}\"; do\n        sum=$((sum+value))\n\
+    \        prod=$((prod*value))\n    done\n    printf '%s\\n' \"${arr[@]:$((${#arr[@]}-1))}\"\
+    \ \"${sum}\" \"$((prod/sum))\"", "  local sum=$(sum $1)\n  local product=1\n \
+    \ for x in $@; do\n    ((product*=x))\n  done\n  echo \"${sum},${product}\"",
+  "  local i\n  local j\n  local res\n  res=$(eval echo '[\"$1\" '\"$1\"']')\n  for\
+    \ i in ${res[@]}; do\n    if [[ \"$i\" =~ ^[0-9]+$ ]]; then\n      ((j+=$i))\n\
+    \    else\n      j=1\n    fi\n  done\n  echo '[\"$j\"' '\"$i\"']'", "    local\
+    \ list=\"$1\";\n    local sum=$(echo $list | sed 's/ /+/g');\n    local product=$(echo\
+    \ $list | sed 's/ /*/g');\n    echo \"$sum $product\";", "    local -n SUM_PRODUCT=name\n\
+    \    if [[ \"$1\" =~ (^|[[:space:]])($1|[[:space:]]+)($|[[:space:]]+) ]]; then\n\
+    \        local -a list=(\"${BASH_REMATCH[1]}\" \"${BASH_REMATCH[2]}\")\n     \
+    \   local -n sum_=0\n        local -n product_=1\n        for i in \"${list[@]}\"\
+    ; do\n            [[ $i -eq 0 ]] && { sum=$(($sum_ + $product_)); product_=1;\
+    \ }\n            [[ $i -gt 0 ]] && { sum=$(($sum_ + $i)); product_=$i; }\n   \
+    \     done\n        SUM_PRODUCT=(\"$sum\" \"${product_}\")\n    fi\n    echo \"\
+    $SUM_PRODUCT\"", "  local sum='0';\n  local product='1';\n  local list_to_process=\"\
+    $1\"\n  while read -r -a list; do\n    sum=\"$(( $sum + ${list[0]} ))\";\n   \
+    \ product=\"$(( $product * ${list[0]} ))\";\n  done <<<\"$list_to_process\"\n\
+    \  # echo \"sum=${sum} product=${product}\"\n  # echo \"sum=$sum product=$product\"\
+    \n  echo \"$sum $product\"", "  local a=$1\n  local b=0\n  local c=1\n  local\
+    \ res=()\n  while [[ \"$a\" != \"\" ]]; do\n    b=$(( $b + $c ))\n    c=$(( $c\
+    \ * $a ))\n    a=${a#* }\n    res+=(\"$b $c\")\n  done\n  echo \"${res[@]}\"",
+  "    local tmp\n    local sum\n    local prod\n    local element\n    local result\n\
+    \n    sum=0\n    prod=1;\n    for element in \"$1\"\n    do\n        sum=$((sum+element))\n\
+    \        prod=$((prod*element))\n    done\n\n    result=( \"${sum}\" \"${prod}\"\
+    \ )\n    echo \"${result[@]}\"", "    local list=$1\n    shift\n    local sum\
+    \ product\n    sum=0\n    product=1\n    IFS=$'\\n' read -a array <<< \"$list\"\
+    \n    for element in \"${array[@]}\"\n    do\n        (( sum += element ))\n \
+    \       (( product *= element ))\n    done\n    echo \"[\\\"$sum\\\", \\\"$product\\\
+    \"]\"", "    local sum=0\n    local product=1\n\n    for x in $@; do\n       \
+    \ let \"sum+=x\"\n        let \"product*=x\"\n    done\n\n    local result=()\n\
+    \    if [ -n \"$sum\" ]; then\n        result+=($sum)\n    fi\n    if [ -n \"\
+    $product\" ]; then\n        result+=($product)\n    fi\n\n    IFS=\"|\" ; echo\
+    \ \"${result[*]}\"", "    sum=$1\n    shift 1\n    product=1\n    while (( \"\
+    $#\" )); do\n        sum=$(( $sum + $1 ))\n        product=$(( $product * $1 ))\n\
+    \        shift 1\n    done\n    echo \"$sum x $product\"", "  local sum=0\n  local\
+    \ product=1\n  local i\n  local x\n  local output\n  x=\"$1\"\n  output=$(echo\
+    \ \"$x\" | tr -s \" \")\n  for i in $(echo \"$x\" | tr \" \" \"\\n\"); do\n  \
+    \  sum=$(($sum+$i))\n    product=$(($product*$i))\n  done\n  echo \"$sum $product\"",
+  "        local varlist=\"$1\"\n        local sumvar=\"sum\"\n        local prodvar=\"\
+    prod\"\n        local sum prod\n        varlist=\"$varlist ${!sumvar}\"\n    \
+    \    varlist=\"$varlist ${!prodvar}\"\n        while read var; do\n          \
+    \      sum=$(( ${sum:-0} + ${var:-0} ))\n                prod=$(( ${prod:-0} +\
+    \ ${var:-0} ))\n        done < <(printf '%s\\n' \"${varlist}\")\n        echo\
+    \ \"$sum\" \"$prod\"", "  local IFS=\"$1\"\n  # shellcheck disable=SC2206\n  local\
+    \ LIST=($(IFS=\"$1\" tr \"\\n\" \"\\01\"))\n  local SUM PROD\n  # shellcheck disable=SC2206\n\
+    \  SUM PROD=$(IFS=\"$1\" awk --field-separator=\\040 -- '{ SUM += $2 }\n     \
+    \             END {print SUM \" \" PROD}')\n  # shellcheck disable=SC2206\n  SUM\
+    \ PROD=$(IFS=\"$1\" awk '{print $2} END{print SUM \" \" PROD}')\n  printf '[\"\
+    %s\" \"%s\"]' \"$SUM\" \"$PROD\"", "  local SAVED_PARENT_PARENT_RESULT=\"$(echo\
+    \ \"$1\" | sed -e 's/ .*//' | sed -e 's/^[0-9]\\+$//')\"\n  local SAVED_PARENT_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_PARENT_RESULT\" | sed -e 's/ .*//')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$SAVED_PARENT_RESULT\" | sed -e 's/^ //')\"\n  local SAVED_PARENT_RESULT=\"\
+    $(echo \"$", "  local item\n  local sum\n  local product\n\n  if [ -z \"$1\" ]\
+    \ ; then\n    sum=0\n    product=1\n  elif [ \"$1\" == \"[]\" ]; then\n    sum=0\n\
+    \    product=1\n  elif [ \"$1\" == \"{}\" ]; then\n    sum=1\n    product=1\n\
+    \  elif [ \"$1\" == \"-\" ]; then\n    sum=$(echo \"$1\" | sed 's/^-//')\n   \
+    \ product=$(echo \"$1\" | sed 's/-$//')\n  elif [ \"$1\" == \"'-' -\" ]; then\n\
+    \    sum=$(echo \"$1\" | sed 's/^\\'-//')\n    product=$(echo \"$1\" | sed 's/-\\\
+    '$//')\n  elif [ \"$1\" == \"'-' '-' \" ]; then\n    sum=$(echo \"$1\" | sed 's/^\\\
+    '\\'\\''-//')\n    product=$(echo \"$1\" | sed 's/-\\'\\'\\'$//')\n  else\n  \
+    \  IFS=\" $1 \" read -r -a items <<< \"$1\"\n    sum=$(echo \"${items[*]}\" |\
+    \ sed 's/^-//')\n    product=$(echo \"${items[*]}\" | sed 's/-$//')\n  fi\n  echo\
+    \ \"$sum $product\"", "  local sum=0\n  local product=1\n  local list=\"$1\"\n\
+    \  if [[ $list == \"\" ]] ; then\n    echo \"$sum $product\"\n    return\n  fi\n\
+    \  IFS=$'\\n'\n  for element in $list ; do\n    sum=$((sum + element))\n    product=$((product\
+    \ * element))\n  done\n  echo \"$sum $product\"", "    local string=$1\n    #\
+    \ $2 will be our output variable\n    local product=1\n    local sum=0\n    #\
+    \ loop through the string using for loop\n    for number in $string; do\n    \
+    \    sum=$(($sum + $number))\n        product=$(($product * $number))\n    done\n\
+    \    echo \"[$sum,$product]\"", "  local string=$(echo \"$1\" | sed 's/ /+/g')\n\
+    \  local numbers=$(echo \"$1\" | sed 's/^[0-9\\+]*//g')\n  local sum=0\n  local\
+    \ product=1\n  while [ \"$numbers\" != \"\" ]; do\n    ((sum+=$numbers))\n   \
+    \ numbers=$(echo \"$numbers\" | sed 's/^[0-9\\+]*//g')\n  done\n  echo \"[\\\"\
+    $sum\\\", \\\"$product\\\"]\"", "    local string=$1\n    local sum='\"0\"'\n\
+    \    local product='\"1\"'\n    local i=0\n    while read -r line; do\n      \
+    \  ((i++))\n        sum=$((${sum} + ${line}))\n        product=$((${product} +\
+    \ ${line} * ${line}))\n    done <<< \"$string\"\n    printf '%s\\n' \"${sum}\"\
+    \ \"${product}\"", "    local xsum=$(echo \"$1\" | sed -e 's/^ *//g' -e 's/ *$//g')\n\
+    \    local xproduct=1\n    for x in $xsum; do\n        xproduct=$(($xproduct*$x))\n\
+    \    done\n    echo $xsum $xproduct", "    local sum=\"$1\"\n    local product=1\n\
+    \    local i\n    local res\n    if [[ -n \"$sum\" ]] ; then\n        res=($(for\
+    \ i  in $sum; do echo \"$product*$i\" ; product=$((product*i)); done ))\n    \
+    \    echo ${res[0]}\n    else\n        echo \"$sum\"\n    fi", "    local IFS=',\
+    \ ' read -r -a numbers <<< \"$1\"\n    local sum=\"1\"\n    local product=\"1\"\
+    \n    for number in \"${numbers[@]}\"; do\n        sum=\"$(( sum + number ))\"\
+    \n        product=\"$(( product * number ))\"\n    done\n    printf '%s\\n' \"\
+    ${sum}\" \"${product}\"", "    local IFS=\" \"\n    local list_sum\n    local\
+    \ list_product\n    list_sum=$( echo \"$1\" | awk '{ sum+=$1; sum1=1; for(i=1;i<=NF;i++)\
+    \ { sum1*=$i; } } END { print sum }' )\n    list_product=$( echo \"$1\" | awk\
+    \ '{ for(i=1;i<=NF;i++) { sum1*=$i; product+=sum1; } } END { print product }'\
+    \ )\n    # echo \"$list_sum\" \"$list_product\"\n    echo \"$list_sum $list_product\"",
+  "  local sum=\"$(echo \"$1\" | sed 's/ //g' | sed 's/^[ \\t]*//g' | tr '\\n' '-'\
+    \ | sed 's/-$//g' | sed 's/-$//g' | sort -n)\"\n  local product=\"$(echo \"$1\"\
+    \ | sed 's/ //g' | sed 's/^[ \\t]*//g' | tr '\\n' '-' | sed 's/-$//g' | sed 's/-$//g'\
+    \ | sort -n | tail -1)\"\n  echo \"$sum x $product\"", "\tlocal -i sum=0\n\tlocal\
+    \ -i product=1\n\tlocal -a a\n\tlocal -n nums=$1\n\tshift\n\tfor i in \"$@\";\
+    \ do\n\t\t((a+=nums)&&(sum+=i)&&(product*=i))\n\tdone\n\techo \"[\\\"${sum}\\\"\
+    , \\\"${product}\\\"]\"", "    local list=$1\n    local sum=\"${list% *}\"\n \
+    \   local product=\"${list#* }\"\n    echo \"[\\\"${sum}\\\", \\\"${product}\\\
+    \"]\"", "    local IFS=\" \"\n    local sum=0\n    local product=1\n    local\
+    \ list=\"$1\"\n    while [[ \"${list}\" ]]; do\n        ((sum+=${list%/*}))\n\
+    \        ((product*=10))\n        list=${list#*/ }\n    done\n    echo \"[\\\"\
+    ${sum}\\\"\\,\\\"${product}\\\"]\"", "    local i sum\n    sum=$((${1#-} + ${1%-}\
+    \ + ${1%%-}))\n    local -n product\n    for (( i=0; i<${#1}; i++ )); do\n   \
+    \     product=$((${1[i]} * sum))\n    done\n    echo -n \"$sum\\t\"\n    echo\
+    \ \"${product%-*}\"", "    local -n arr=$1\n    arr=( $arr )\n    if [[ -z \"\
+    $arr\" ]]; then\n        echo -n \"\\\"\\\"\n        echo -n \"\\\"\\\"\n    \
+    \    echo -n \"\\\"\\\"\n        return\n    fi\n\n    local sum=\"${arr[0]}\"\
+    \n    local product=1\n    local i=0\n    while [[ $i -lt \"${#arr[@]}\" ]]; do\n\
+    \        product=$((product * ${arr[i]}))\n        sum=$((sum + ${arr[i]}))\n\
+    \        ((i++))\n    done\n\n    if [[ $product = 0 ]]; then\n        arr=( \"\
+    $sum\" )\n    else\n        arr=( \"$sum\" \"$product\" )\n    fi\n\n    echo\
+    \ \"${arr[@]}\"", "  if [[ -z \"$1\" ]]; then echo \"\\\"0\\\" \\\"1\\\"\"; return;\
+    \ fi\n  # The $@ in $* is called array expansion.\n  declare -a a=($@)\n  # The\
+    \ array a consists of all the arguments, separated by spaces.\n  # Now let's get\
+    \ the sum of all these arguments\n  sum=$(echo \"${a[@]}\" | paste -s -d \"+\"\
+    )\n  # The paste command generates a string of sums in one line.\n  # So we just\
+    \ need the last element of this string.\n  last_element=$(echo $sum | sed 's/\\\
+    ([+-]\\)$//')\n  # Now the result will be the sum + the last_element of this string.\n\
+    \  product=\"1\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    product=$((product*${a[i]}))\n\
+    \  done\n  # Now let's get back the last element of the string\n  # This step\
+    \ is necessary because the string might contain + and -\n  product=$((${product#${last_element}}))\n\
+    \  echo \"$sum ${product}\"", "    local sum=\"${1:-}\"\n    local product=\"\
+    ${2:-}\"\n\n    [[ -z \"${sum}\" ]] && sum=\"0\"\n    [[ -z \"${product}\" ]]\
+    \ && product=\"1\"\n\n    local s=${sum//[^0-9.-]}\n    local p=${product//[^0-9.-]}\n\
+    \n    # remove anything that's not a digit\n    [[ -z \"${s}\" ]] && s=\n    [[\
+    \ -z \"${p}\" ]] && p=\n    [[ -z \"${s}\" ]] && s=\"0\"\n    [[ -z \"${p}\" ]]\
+    \ && p=\"1\"\n\n    IFS=$'\\n' read -ra T <<< \"${s//[^0-9.-]}\\n\"\n    IFS=$'\\\
+    n' read -ra U <<< \"${p//[^0-9.-]}\\n\"\n\n    local i=0\n    local result=()\n\
+    \    local last=\"\"\n\n    # add first and last item\n    result+=(\"$last\"\
+    )\n    result+=(\"${T[0]}\")\n\n    # loop through remaining items\n    for ((i=1;;));\
+    \ do\n        # add to sum\n        local sum=\"${sum:+$sum}$i\"\n        local\
+    \ product=\"${product:+$product}${U[i]}\"\n        (( ++i ))\n\n        # if the\
+    \ sum exceeds the product, we're done\n        if (( ${#sum} > ${#product} ))\
+    \ ; then\n            result+=(\"$sum\")\n            break\n        fi\n\n  \
+    \      # if the product exceeds the sum, we're done\n        if (( ${#product}\
+    \ > ${#sum} )) ; then\n            break\n        fi\n\n        # add the remainder\
+    \ to the sum\n        sum=\"${sum:+$sum}0\"\n        product=\"${product:+$product}1\"\
+    \n    done\n\n    IFS=$' ' read -ra R <<< \"${result[*]}\"\n    echo \"${R[*]}\"",
+  "    local s=0;\n    local p=0;\n    for x in $@;do\n        if test -z \"$x\";then\n\
+    \            echo \"$s=$p\" 2>/dev/null;\n            s=0;p=0;\n        else\n\
+    \            s=$((s+x))\n            p=$((p*x))\n        fi\n    done\n    echo\
+    \ \"$s=$p\" 2>/dev/null;", "  local n=$1 sum=$(echo \"$n\" | tr -d '\\n' | sed\
+    \ 's/ //g' |  tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]' ) product=$(echo\
+    \ $n | tr -d '\\n' | sed 's/ //g' |  tr '[:upper:]' '[:lower:]' | tr '[:lower:]'\
+    \ '[:upper:]' | awk '{n+=$1; m*=$1} END {print n}') nums=$(echo \"$n\" | tr -d\
+    \ '\\n' | sed 's/ //g' |  tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]'\
+    \ | awk '{n+=$1; m*=$1} END {print n}') num_items=$(echo \"$nums\" | tr -d '\\\
+    n' | awk '{print $1}') result=$(echo $sum $product)\n  if [ \"$num_items\" -eq\
+    \ \"0\" ]; then\n    echo '[\"'\"$sum\"'\", \"'\"$product'\"]'\n  elif [ \"$num_items\"\
+    \ -eq \"1\" ]; then\n    echo '[\"'\"$sum\"'\", \"'\"$product'\"]'\n  else\n \
+    \   echo '['\"$sum\"'\"'\"$product\"', '\"'\"0\"'\"]'\n  fi", "  local list=\"\
+    $1\"\n  local sum=$(eval \"echo '$list' | tr ' ' '\\n' | sort -nr | head -n1 |\
+    \ awk -F ':' '{ print $1 }'\")\n  local product=$(eval \"echo '$list' | tr ' '\
+    \ '\\n' | sort -nr | head -n1 | awk -F ':' '{ print $2 }'\")\n  local res=\"$sum\
+    \ $product\"\n  echo \"$res\"", "    local i sum\n    sum=0\n    shift\n    local\
+    \ product=1\n    for ((i = 0; i < $#; i++)); do\n        sum=$((sum+$i))\n   \
+    \     product=$((product*$i))\n    done\n    echo -n \"$sum $product\"", "   \
+    \ sum=0\n    product=1\n\n    while read num; do\n        (( sum += num ))\n \
+    \       (( product *= num))\n    done < <(echo $1 | tr -d ' ')\n    printf -v\
+    \ \"sum\" \"%s\" \"$sum\"\n    printf -v \"product\" \"%s\" \"$product\"\n   \
+    \ printf -v \"result\" \"%s\" \"$(printf \"%d\\n%d\" \"$sum\" \"$product\")\"\n\
+    \    printf -v \"result\" \"%s\" \"$(printf \"%d\\n%d\" \"$sum\" \"$product\"\
+    )\"\n    printf -v \"result\" \"%s\" \"$result\"\n    printf -v \"result\" \"\
+    %s\" \"$result\"\n    printf -v \"result\" \"%s\" \"$result\"\n    printf -v \"\
+    result\" \"%s\" \"$result\"", "  IFS=' ' read -r -a array <<< \"$1\"\n  local\
+    \ sum=0\n  local product=1\n  for element in \"${array[@]}\"; do\n    ((sum+=element))\n\
+    \    ((product*=element))\n  done\n  echo \"['${sum}', '${product}']\"", "   \
+    \ local sum=$1\n    local product=1\n    local input\n    while IFS= read -r input;\
+    \ do\n        (( product*=input ))\n        (( sum += product ))\n    done\n \
+    \   echo \"[$sum,$product]\"", "    local sum=0\n    local product=1\n    local\
+    \ i\n    local numbers=$1\n    IFS=' ' read -r -a numbers <<< \"$numbers\"\n \
+    \   for (( i=0; i<${#numbers[@]}; i++ )); do\n        (( sum += numbers[i] ))\n\
+    \        (( product *= numbers[i] ))\n    done\n    IFS=$' \\t\\n' arr=( \"${sum}\"\
+    \ \"${product}\" )\n    echo \"${arr[@]}\"", "    # Initialize result list\n \
+    \   results=\"\"\n    # Iterate over all elements\n    for element in ${1//[[:space:]]/};\
+    \ do\n        # Add a sum and a product to the result list\n        results=\"\
+    $results $(expr $(echo \"$element + $element * $element | bc\") \\* 100) / 100\"\
+    \n    done\n    # Return result list\n    echo $results", "    # Initialize variables\n\
+    \    list=\"$1\"\n    sum=0\n    product=1\n    flag=0\n    # Check if list is\
+    \ empty\n    if [[ $list == \"\" ]]; then\n        echo \"$list\"\n        echo\
+    \ \"$sum\"\n        echo \"$product\"\n        return\n    fi\n    # Get the first\
+    \ number in the list\n    first_num=$(echo \"$list\" | sed -e \"s/^[^0-9]*\\([0-9]*\\\
+    )[^0-9]*$/\\1/\")\n    echo $first_num\n    # Check if the first number is in\
+    \ the list and set flag to 1\n    if [[ $first_num == $list ]]; then\n       \
+    \ flag=1\n    fi\n    # Check if second number is in the list and set flag to\
+    \ 1\n    if [[ $list == *\"2\"* ]]; then\n        flag=1\n    fi\n    # Check\
+    \ if third number is in the list and set flag to 1\n    if [[ $list == *\"3\"\
+    * ]]; then\n        flag=1\n    fi\n    # Check if fourth number is in the list\
+    \ and set flag to 1\n    if [[ $list == *\"4\"* ]]; then\n        flag=1\n   \
+    \ fi\n    # Check if fifth number is in the list and set flag to 1\n    if [[\
+    \ $list == *\"5\"* ]]; then\n        flag=1\n    fi\n    # Check if sixth number\
+    \ is in the list and set flag to 1\n    if [[ $list == *\"6\"* ]]; then\n    \
+    \    flag=1\n    fi\n    # Check if seventh number is in the list and set flag\
+    \ to 1\n    if [[ $list == *\"7\"* ]]; then\n        flag=1\n    fi\n    # Check\
+    \ if eighth number is in the list and set flag to 1\n    if [[ $list == *\"8\"\
+    * ]]; then\n        flag=1\n    fi\n    # Check if ninth number is in the list\
+    \ and set flag to 1\n    if [[ $list == *\"9\"* ]]; then\n        flag=1\n   \
+    \ fi\n    # Check if first number is less than 10 and set flag to 1\n    if [[\
+    \ $first_num < 10 ]]; then\n        flag=1\n    fi\n    # Check if first number\
+    \ is less than 100 and set flag to 1\n    if [[ $first_num < 100 ]]; then\n  \
+    \      flag=1\n    fi\n    # Check if first number is less than 1000 and set flag\
+    \ to 1\n    if [[ $first_num < 1000 ]]; then\n        flag=1\n    fi\n    # Check\
+    \ if first number is less than 10000 and set flag to 1\n    if [[ $first_num <\
+    \ 10000 ]]; then\n        flag=1\n    fi\n    # Check if first number is less\
+    \ than 100000 and set flag to 1\n    if [[ $first_num < 100000 ]]; then\n    \
+    \    flag=1\n    fi\n    # Check if first number is less than 1000000 and set\
+    \ flag to 1\n    if [[ $first_num < 1000000 ]]; then\n", "  if [ ! -z \"$1\" ];\
+    \ then\n    local sum=0\n    local product=1\n    local elems=${1//[![:space:]]}\n\
+    \    for elem in $elems; do\n      ((sum+=elem))\n      ((product*=elem))\n  \
+    \  done\n    printf '[\"%s\", \"%s\"]\\n' \"$sum\" \"$product\"\n  else\n    printf\
+    \ '[\"0\" \"1\"]\\n'\n  fi", "    local sum=0\n    local product=1\n    local\
+    \ array=\"$1\"\n    # echo \"${array}\"\n    for i in $array; do\n        sum=$((\
+    \ sum + i ))\n        product=$(( product * i ))\n    done\n    echo \"[$sum,\
+    \ $product]\"", "    sum=0\n    product=1\n    for i in $1;\n    do\n        sum=$((\
+    \ $sum + $i ))\n        product=$(( $product * $i ))\n    done\n    echo '[ \"\
+    '\"$sum\"', '\"' \"1\" ']'", "    local i\n    local sum=\"1\"\n    local product=\"\
+    1\"\n\n    IFS=$'\\n' read -d '' -ra array <<<\"$1\"\n\n    for i in \"${array[@]}\"\
+    ; do\n        [[ $i -gt 0 ]] && sum=$(echo \"$sum + $i\" | bc)\n        [[ $i\
+    \ -gt 0 ]] && product=$(echo \"$product * $i\" | bc)\n    done\n\n    echo \"\
+    [$sum, $product]\"", "  local sum=''\n  local product='1=1'\n  local i=$(( $#\
+    \ - 1 ))\n  while [ $i -ge 0 ]; do\n    sum=$(( $sum + $1 ))\n    product=$((\
+    \ $product * $1 ))\n    i=$(( $i - 1 ))\n  done\n  echo \"[$sum, '$product']\"",
+  "  IFS=' ' read -r -a array <<< \"$1\"\n  local sum=0\n  local product=1\n  for\
+    \ n in \"${array[@]}\"; do\n    (( sum += n ))\n    (( product *= n ))\n  done\n\
+    \  echo \"\\\"$sum\\\"|\\\"$product\\\"\"", "    local items=($(compgen -v \"\
+    $1\"))\n    local sum=0\n    local product=1\n    for element in ${items[@]};\
+    \ do\n        sum=$((sum+element))\n        product=$((product*element))\n   \
+    \ done\n    printf '[%s]' \"${sum:-0}\" \"${product:-0}\"", "  local sum=0\n \
+    \ local product=1\n  local numbers=$( echo $1 | sed \"s/[, ]/ /g\" )\n  shift\n\
+    \n  local number_tmp\n  for number_tmp in $numbers; do\n    sum=$((sum + number_tmp))\n\
+    \    product=$((product*number_tmp))\n  done\n\n  echo $(( ${product#0} )), $sum",
+  "    # Convert list of integers into an array\n    IFS=' ' read -r -a array <<<\
+    \ \"$1\"\n\n    # Initialize sum and product accumulators\n    sum=0\n    product=1\n\
+    \n    # Iterate through array\n    for i in \"${array[@]}\"; do\n        # Accumulate\
+    \ the sum and product\n        ((sum+=i))\n        ((product*=i))\n    done\n\n\
+    \    # Return a space-separated list with the sum and product\n    echo \"\\\"\
+    $sum\\\" \\\"$product\\\"\"", "  local SUM=\n  local PRODUCT=\n  IFS=\" \" read\
+    \ -r -a array <<< \"$1\"\n  for (( i=0; i<${#array[@]}; i++ )); do\n    local\
+    \ SUM=\"$SUM + ${array[i]}\"\n    local PRODUCT=\"$PRODUCT * ${array[i]}\"\n \
+    \ done\n  echo \"$SUM $PRODUCT\"", "  local sum=\"$1\"\n  local product=1\n  IFS=\"\
+    \ \" read -r -a list <<< \"$1\"\n  for ele in \"${list[@]}\"; do\n    (( sum +=\
+    \ ele ))\n    (( product *= ele ))\n  done\n  echo \"${sum:+\"$sum\"} ${product:+\"\
+    $product\"}\" >&2", "\tlocal sum=0\n\tlocal product=1\n\tfor (( c=$1; c>1; c--\
+    \ )); do\n\t\tsum=$(($sum+$c))\n\tdone\n\tfor (( c=$1; c>1; c-- )); do\n\t\tproduct=$(($product*$c))\n\
+    \tdone\n\techo \"[\\\"$sum\\\", \\\"$product\\\"]\"", "  echo \"$*\" | tr ' '\
+    \ '+' | tr ' ' '-' | sed 's/-$//g' | tr '+' ' '", "    local L=\"${1}\"\n    local\
+    \ sum='\"0\"'\n    local product='\"1\"'\n\n    if [ -z \"$L\" ]; then return\
+    \ \"${sum} ${product}\"; fi\n    local x\n    for x in $L; do\n        [[ $x -lt\
+    \ 10 ]] && x=\"$(x+0)\" && sum=\"${sum} $x\"\n        [[ $x -gt 10 ]] && x=\"\
+    $(x+0)\" && product=\"${product} $x\"\n    done\n\n    echo \"${sum} ${product}\"",
+  "  local sum=0\n  local product=1\n\n  while [ $1 ]; do\n    sum=$((sum + $1))\n\
+    \    product=$((product * $1))\n    shift\n  done\n\n  echo \"[$sum, $product]\"",
+  "  local S=\"$1\" # first argument is a space-separated list\n  if [ \"$S\" = \"\
+    \" ]\n  then\n    # No space-separated list passed, add empty quotes to empty\
+    \ strings\n    S=\"'\\\"'\\\"'\"\n  fi\n  local SUM=\"'0'\" # first element is\
+    \ the sum\n  local PROD=\"'1'\" # first element is the product\n  local SPACE=\"\
+    '  '\" # extra spaces to separate the elements\n  for e in $S; do\n    if [ $e\
+    \ -lt 10 ]; then\n      SUM=\"$SUM$SPACE$e\"\n      PROD=\"$PROD$SPACE$e\"\n \
+    \   else\n      SUM=\"$SUM$SPACE$e$SPACE\"\n      PROD=\"$PROD$SPACE$e$SPACE\"\
+    \n    fi\n  done\n  echo $SUM\"\\\"$PROD\"", "  local sum=1\n  local product=1\n\
+    \  local int_list=$1\n  local int_list2=\"\"\n  local num\n  for num in $int_list;\
+    \ do\n    sum=$(($sum + $num))\n    product=$(($product * $num))\n  done\n  int_list2=\"\
+    $sum\"\n  int_list2=\"$int_list2\"\n  int_list2=\"$int_list2\"\n  int_list2=\"\
+    $int_list2\"\n  int_list2=\"$int_list2\"\n  echo \"$int_list2 $product\"", " \
+    \   sum=\"$(echo \"$1\" | sed 's/ //g' | sed 's/^ *//g' | sed 's/ *$//g' | tr\
+    \ -d '\"')\"\n    product=\"$(echo \"$1\" | sed 's/ //g' | sed 's/^ *//g' | sed\
+    \ 's/ *$//g' | tr -d '\"')\"\n    if [ \"$sum\" == \"0\" ] || [ \"$product\" ==\
+    \ \"1\" ]; then\n      echo \"[$sum $product]\"\n    else\n      echo \"[$(echo\
+    \ $sum * $product | bc) $(echo $sum * $product | bc)]\"\n    fi", "  local numbers=$1\
+    \ # $1 should be a list of integers\n  local sum=0 # sum is an integer variable\n\
+    \  local product=1 # product is an integer variable\n  for i in $numbers; do\n\
+    \    sum=$((sum+i)) # sum is now the sum of the integers in the list\n    product=$((product*i))\
+    \ # product is the product of the integers in the list\n  done\n  echo \"[\\\"\
+    $sum\\\", \\\"$product\\\"]\" # Output the sum and product in a list", "  local\
+    \ sum=0\n  local product=1\n  local intlist=$1\n\n  while read -r int; do\n  \
+    \  (( sum += int ))\n    (( product *= int ))\n  done\n\n  echo \"\\\"$sum\\\"\
+    \"\n  echo \"\\\"$product\\\"\"", "  local arg=\"$1\"\n  shift\n  local sum='\"\
+    0\"'\n  local product='\"1\"'\n  for integer in $arg; do\n    sum=\"${sum} ${integer}\"\
+    \n    product=\"${product} * ${integer}\"\n  done\n  echo \"[$sum] [$product]\"",
+  "  local sum=\"$(printf '%s' \"$1\") \"\n  local product=\"$(printf '%s' \"$1\"\
+    ) \"\n  shift\n  while [ \"$1\" != \"\" ]; do\n    if [ \"$1\" == \"--help\" ];\
+    \ then\n      cat <<HEREDOC\nUsage:\n  $0 [--help] [<sum> <product>] <n>\n\n<sum>:\n\
+    \    The sum to append to the product list (default: 0)\n<product>:\n    The product\
+    \ to append to the sum list (default: 1)\n<n>:\n    Number of items in the list\n\
+    \n  --help:\n      Show this help message\nHEREDOC\n      return 0\n    fi\n \
+    \   if [ \"$1\" != \"--\" ]; then\n      sum=\"$sum$1 \"\n      product=\"$product$1\
+    \ \"\n      shift\n      continue\n    fi\n    sum=\"${sum%?}\"\n    product=\"\
+    ${product%?}\"\n    if [ \"$1\" == \"--\" ]; then\n      shift\n      continue\n\
+    \    fi\n    shift\n  done\n  # If sum or product is empty, return empty lists\n\
+    \  if [ \"$sum\" == \"\" ]; then\n    sum=\"0\"\n  fi\n  if [ \"$product\" ==\
+    \ \"\" ]; then\n    product=\"1\"\n  fi\n  # Return list of sum and product\n\
+    \  echo \"$sum\"\n  echo \"$product\"", "  local results=() sum=0 product=1\n\
+    \  for integer in \"$1\"; do\n    (( sum += integer ))\n    (( product *= integer\
+    \ ))\n    results+=(\"$sum\" \"$product\")\n  done\n  echo \"${results[*]}\"",
+  "    local sum=0\n    local product=1\n    for i in \"$1\"; do\n        sum=\"$((\
+    \ sum + i ))\"\n        product=\"$(( product * i ))\"\n    done\n    echo \"\
+    $sum\"\n    echo \"$product\"", "  local list_to_process\n  list_to_process=$(\
+    \ echo \"$1\" )\n  list_to_process=${list_to_process// /}\n  list_to_process=${list_to_process//\
+    \ +/ }\n  list_to_process=${list_to_process//,/ }\n  list_to_process=${list_to_process//+/\
+    \ }\n  list_to_process=${list_to_process//-/ }\n  list_to_process=${list_to_process//#/\
+    \ }\n  list_to_process=${list_to_process//,/ }\n\n  local sum=$(echo \"$list_to_process\"\
+    \ | tr '[:upper:]' '[:lower:]' | sed \"s/\\(.\\)/\\L\\1\\U\\1/\")\n  local product=$(echo\
+    \ \"$list_to_process\" | tr '[:upper:]' '[:lower:]' | sed \"s/\\(.\\)/\\L\\1\\\
+    U\\1/\")\n  local sum_to_return=$(echo \"$sum\" | sed 's/\\(.\\)/\\L\\1\\U\\1/')\n\
+    \  local product_to_return=$(echo \"$product\" | sed 's/\\(.\\)/\\L\\1\\U\\1/')\n\
+    \n  echo \"$sum_to_return\"\n  echo \"$product_to_return\"", "  sum=\"${1#*=}\
+    \ $1 $1 0\"\n  product=1\n  for number in \"$@\"; do\n    product=`echo \"$product\
+    \ * $number\" | bc -l`\n  done\n  echo $sum \\\"\\\"$product", "  local IFS=\"\
+    $1\"\n  shift\n  local S\n  S=0\n  while [ -n \"$1\" ]; do\n    eval \"S+=\\$1\"\
+    \n    shift\n  done\n  echo \"[\\\"\\$S\\\",\\\"\\$S\\\"]\"", "\tlocal list_str=$1\n\
+    \tlocal sum=0\n\tlocal product=1\n\twhile read list_int; do\n\t\tsum=$((sum +\
+    \ list_int))\n\t\tproduct=$((product * list_int))\n\tdone\n\techo \"'${sum}'\"",
+  "    local tmp=\"${1#*=} ${1%% *}\"\n    local sum=\"$(( ${#tmp} + 0 ))\"\n    local\
+    \ product=\"$(( ${#tmp} + 1 ))\"\n    local res=()\n    for x in $tmp; do\n  \
+    \      (( sum += x ))\n        (( product *= x ))\n    done\n    echo \"$sum x\
+    \ $product\"", "  local sum=\"0\"\n  local product=\"1\"\n  local str=\"${1}\"\
+    \n  echo \"${str}\" | while read -r line; do\n    sum=\"${sum} ${line}\"\n   \
+    \ product=\"${product} * ${line}\"\n  done\n  echo \"$sum\"\n  echo \"$product\"",
+  "    IFS=$'\\n' read -d '' -r -a list <<< \"$1\"\n    sum=0\n    product=1\n   \
+    \ for i in \"${list[@]}\"; do\n        [[ $i == *[![:digit:]]* ]] && continue\n\
+    \        (( sum += i ))\n        (( product *= i ))\n    done\n    echo '[\"'\"\
+    ${sum}\"'\" \"'\"${product}\"'\"]'", "  local x\n  local a\n  # Remove spaces\
+    \ from argument list\n  x=\"$(echo \"$1\" | sed -e 's/[ \\t]//g')\"\n  # Initialize\
+    \ sum and product\n  a=0\n  i=0\n  while [ $i -lt $x ]\n  do\n    ((a+=i))\n \
+    \   ((i++))\n  done\n  # Return the sum and product\n  printf '%s\\n' \"$a\" \"\
+    $x\"", "    local sum=\"0\"\n    local product=\"1\"\n    local i\n    for i in\
+    \ $1; do\n        sum=$(( $sum + $i ))\n        product=$(( $product * $i ))\n\
+    \    done\n    echo \"\\\"$sum\\\" \\\"$product\\\"\"", "  local tmp=\"\"\n  local\
+    \ sum=\"\"\n  local product=\"\"\n  local list=\"\"\n  while IFS=\" \" read -r\
+    \ _sum _product; do\n    tmp=\"${_sum} ${_product}\"\n    list=\"${list} \\\"\
+    ${tmp}\\\"\"\n  done < <(echo $1 |awk '{for(i=1;i<=NF;i++) print $i}')\n  [[ -z\
+    \ \"$tmp\" ]] && return \"${list}\"\n  sum=\"${tmp%% *}\"\n  product=\"${tmp#*\
+    \ }\"\n  echo \"[\\\"$sum\\\", \\\"$product\\\"]\"", "    local n=$1\n    if [\
+    \ \"$n\" = \"[]\" ]; then\n        echo \"[]\"\n        return\n    fi\n    local\
+    \ sum=$(eval echo {1..${#n}} | sort -n | tail -n 1)\n    local product=1\n   \
+    \ local result\n    while [ \"$n\" != \"\" ]; do\n        local sub=( $(n-$sum)\
+    \ )\n        result=$sub $product\n        product=$(( product * $sub ))\n   \
+    \     sum=$(($sum + $sub))\n        n=${n#*[!0-9]}\n    done\n    echo $result",
+  "    local i sum=$1 product=1\n    for i in $*; do\n        sum+=$i\n        product*=$i\n\
+    \    done\n    echo $sum\n    echo $product", "    local i\n    local sum\n  \
+    \  local prod \n\n    i=\"$1\"\n    sum=$(( ${#i} > 0 ))\n    prod=$(echo \"$i\"\
+    \ | tr \" \" \"\\n\" | xargs -L 1 shuf | head -1)\n\n    if [ \"$sum\" -eq 1 ];\
+    \ then\n        echo \"$sum\" \"$prod\"\n    else\n        echo \"$sum\" \"$prod\"\
+    \n    fi", "\tlocal i sum=\"$(echo \"$1\" | sed 's/ /+/g')\"\n\tlocal prod=\"\
+    $(echo \"$1\" | sed 's/ /1/g')\"\n\n\t[[ \"$1\" =~ \\#* ]] && shift\n\n\tfor i\
+    \ in \"$@\"\n\tdo\n\t\tlocal j=\"$((${i%% *}))\"\n\t\tlocal k=\"$((${i##* }))\"\
+    \n\t\tlocal a=\"$((${sum}+${j}))\"\n\t\tlocal b=\"$((${sum}*${prod}))\"\n\t\t\
+    sum=\"$a\"\n\t\tprod=\"$b\"\n\tdone\n\techo \"$sum x $prod\"", "    local list=$1\n\
+    \    local sum=\"$(echo $list | sed -e 's/ /\\\\n/g' | xargs -0 echo $0)\"\n \
+    \   local product=\"$(echo $list | sed -e 's/ /\\\\n/g' | xargs -0 echo $0)\"\n\
+    \    [[ ${#sum} -gt 1 ]] && sum=\"${sum#*\"} ${sum%%\"*\"}\" || sum=\"0\"\n  \
+    \  [[ ${#product} -gt 1 ]] && product=\"${product#*\"} ${product%%\"*\"}\" ||\
+    \ product=\"1\"\n    sum=\"${sum%%\"*\"}\" \"${sum#*\"}\"\n    product=\"${product%%\"\
+    *\"}\" \"${product#*\"}\"\n    echo $sum $product", "  local x\n  local sum\n\
+    \  local product\n  local xlist\n  local -a numberList\n  local -a outputList\n\
+    \n  xlist=$($@)\n  xlist=\"${xlist// /\\n}\"\n  xlist=\"${xlist//[[:blank:]]/\\\
+    n\"}\"\n  xlist=\"${xlist%$'\\n'*}\"\n  xlist=\"$(echo \"$xlist\" | sed 's/^/\"\
+    /;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"${xlist%$'\\n'*}\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^/\"/;s/$/\"/;s/\\n/\\\\n/;s/\\t/\"/')\"\n  xlist=\"\
+    $(echo \"$xlist\" | sed 's/^", "    local sum=0\n    local product=1\n    for\
+    \ x in \"$@\"; do\n        sum=$(( $sum + $x ))\n        product=$(( $product\
+    \ * $x ))\n    done\n    printf -v res '%s\\n' \"$sum\" \"$product\"\n    printf\
+    \ '%s\\n' \"${res##* }\"", "  local str=$1 i\n  \n  for i in $(seq 1 $#); do\n\
+    \    local sum=\"$(( ${str%% *} + $i ))\"\n    local prod=\"$(( ${str##* } + $i\
+    \ ))\"\n    \n    str=\"${str/$sum $prod\"\n  done\n  \n  echo \"$str\"", "  \
+    \  local output='$(( $(echo \"${1}\" | tr ' ' '\\n' | sort -nr | head -n 1) ))'\n\
+    \    if [ -z \"$output\" ]; then\n        output='$(( $(echo \"${1}\" | tr ' '\
+    \ '\\n' | sort -nr | head -n 1) ))'\n    fi\n    echo \"$(( ${output} ))\"\n \
+    \   echo \"$(( ${output} ))\"", "    local -n arr=$1\n    local sum=0\n    local\
+    \ product=1\n    IFS=$'\\n' read -ra arr <<<\"${arr[*]}\"\n    for x in \"${arr[@]}\"\
+    ; do\n        ((sum+=x))\n        ((product*=x))\n    done\n    echo ['\"' $sum\
+    \ '\"', '\"' $product '\"']", "\tx=\"$1\";\n\tshopt -s extglob;\n\t[[ -z \"$x\"\
+    \ ]] && return 1 #empty list is also valid\n\ty=${x%%+([0-9]*)}\n\tz=${x%%-([0-9]*)}\n\
+    \tw=${x%% *([0-9]*)}\n\t[[ -z \"$y\" ]] && y='0'\n\t[[ -z \"$z\" ]] && z='1'\n\
+    \t[[ -z \"$w\" ]] && w='1'\n\tyzw=\"${y}${z}${w}\"\n\techo \"$yzw\"", "    local\
+    \ sum=0\n    local product=1\n    for element in $1\n    do\n        ((sum+=element))\n\
+    \        ((product*=element))\n    done\n    echo \"${sum}\"\n    echo \"${product}\"",
+  "    local sum=$1 product=1\n    while (( $# > 0 )); do\n        sum=$(( $sum +\
+    \ $1 ))\n        product=$(( $product * $1 ))\n        shift\n    done\n    echo\
+    \ [$sum, $product]", "    local IFS=\" \"\n    local sum=0\n    local product=1\n\
+    \    for element in $*; do\n        sum=$((sum+element))\n        product=$((product*element))\n\
+    \    done\n    echo $((sum/product))", "        local list_=\"$1\"\n\n       \
+    \ local sum=\"\"\n        local product=\"\"\n\n        list_=\"$(echo $list_\
+    \ | sed 's/ /\",\"/g' | sed 's/$/\"/g')\"\n        list_=\"$(echo $list_ | sed\
+    \ 's/ /\",\"/g' | sed 's/^/\"/' | sed 's/$/\"/g')\"\n        list_=\"$(echo $list_\
+    \ | sed 's/^/\"/' | sed 's/$/\"/g')\"\n        list_=\"$(echo $list_ | sed 's/\
+    \ /\",\"/g' | sed 's/^/\"/' | sed 's/$/\"/g')\"\n\n        local len=${#list_}\n\
+    \        for (( i=1; i<len; i++ )); do\n                sum=\"${sum}${list_[i]}\"\
+    \n        done\n        sum=\"${sum%?}\"\n\n        local j=$(( len-1 ))\n   \
+    \     for (( i=0; i<len; i++ )); do\n                product=\"${product}${list_[i]}${list_[j]}\"\
+    \n        done\n        product=\"${product%?}\"\n\n        echo \"[\\\"${sum}\\\
+    \", \\\"${product}\\\"]\"", "  local LIST=\"$1\"\n  local SUM=\"\"\n  local PROD=1\n\
+    \  local VAL\n\n  VAL=$(IFS=$'\\n' echo \"$LIST\" | sort -n)\n  VAL=$((VAL | tail\
+    \ -n +2 | head -n -1))\n  SUM=\"'\"$SUM\"'\"'\"$VAL\"\n  VAL=$(IFS=$'\\n' echo\
+    \ \"$LIST\" | sort -nr) # reverse the order of the list before summing\n  VAL=$((VAL\
+    \ | tail -n +2 | head -n -1))\n  PROD=\"'\"$PROD\"'\"'\"$VAL\"\n\n  # remove unnecessary\
+    \ \" symbol\n  SUM=$(echo $SUM | sed 's/\"//g')\n  PROD=$(echo $PROD | sed 's/\"\
+    //g')\n\n  # remove unnecessary spaces at the beginning\n  SUM=$(echo $SUM | sed\
+    \ 's/^ *//g')\n  PROD=$(echo $PROD | sed 's/^ *//g')\n\n  # remove unnecessary\
+    \ spaces at the end\n  SUM=$(echo $SUM | sed 's/ *$//g')\n  PROD=$(echo $PROD\
+    \ | sed 's/ *$//g')\n\n  # remove unnecessary \\n\n  SUM=$(echo $SUM | sed 's/\\\
+    n//g')\n  PROD=$(echo $PROD | sed 's/\\n//g')\n\n  # remove unnecessary empty\
+    \ strings\n  SUM=$(echo $SUM | sed 's/^ *//g')\n  PROD=$(echo $PROD | sed 's/^\
+    \ *//g')\n\n  # add single quote before and after SUM and PROD\n  SUM=\"'\"$SUM\"\
+    '\"\n  PROD=\"'\"$PROD\"'\"\n  echo $SUM $PROD", "  local sum=\"\"\n  local product=1\n\
+    \  IFS=' ' read -a array <<< \"$1\"\n  local length=${#array[@]}\n  for (( i=0;\
+    \ i<length; i++ )); do\n    local value=${array[$i]}\n    if [[ ${sum:0:2} ==\
+    \ \"-\" ]]; then\n      sum+=\"-$value\"\n    else\n      sum+=\"$value\"\n  \
+    \  fi\n    product*=$value\n  done\n  echo \"[\\\"$sum\\\", \\\"$product\\\"]\"",
+  "  if [ \"$1\" ]\n  then\n    local sum=0\n    local product=1\n    local elements=($1)\n\
+    \    for element in ${elements[@]}\n    do\n      sum=$(($sum + $element))\n \
+    \     product=$(($product * $element))\n    done\n    echo \"$sum x $product\"\
+    \n  fi", "        local sum=\"$1\";\n        sum=\"\\\"$sum\\\"\";\n        local\
+    \ product=\"1\";\n        local i=\"1\";\n        local elem=\"\";\n        local\
+    \ elems=0;\n        local j=0;\n        while [[ $i -le ${#sum} ]]; do\n     \
+    \           elem=$(echo \"$sum\" | cut -d \" \" -f $i);\n                elems=$(($elems\
+    \ * $elem));\n                i=$(($i + 1));\n        done;\n        sum=$(($elems));\n\
+    \        product=$(echo \"$product\" | cut -d \" \" -f 1);\n        sum=\"\\\"\
+    $sum\\\"\";\n        product=\"\\\"$product\\\"\";\n        echo \"$sum $product\"\
+    ;", "    local sum=0;\n    local product=1;\n    for integer in \"$@\" ; do\n\
+    \        sum=$(( $sum + $integer ))\n        product=$(( $product * $integer ))\n\
+    \    done\n    echo \"'$sum'\" \"'$product'\"", "    local n=$1; shift\n    echo\
+    \ \"['\"$(\n        n=$(($(nproc) || 1))\n        for a in $n; do\n          \
+    \  for b in $(nproc); do\n                (( n[$a] || n[$b] )) && break\n    \
+    \        done\n        done\n        echo \"$(( $((n[$a] || n[$b]) + $a ))\"\n\
+    \            for b in $(nproc); do\n                (( n[$b] || n[$a] )) && break\n\
+    \            done\n        echo \"$(( $((n[$a] || n[$b]) * $b ))\"\n    )\"']\"",
+  "  local list=$(echo \"$1\" | tr '[:space:]' '\\n')\n  if [ \"$#\" -eq 1 ]; then\n\
+    \    echo \"$(( ( $( echo \"$list\" | grep -c \"^$list$\") ) * $( echo \"$list\"\
+    \ | grep -v \"^$list$\") ))\"\n  else\n    local sum=0\n    local product=1\n\
+    \    for value in $list; do\n      local string=\"$value\"\n      local string2=\"\
+    ${string%?}\"\n      local string3=\"${string2%?}\"\n      local string4=\"${string3%?}\"\
+    \n      local string5=\"${string4%?}\"\n      local string6=\"${string5%?}\"\n\
+    \      local string7=\"${string6%?}\"\n      local string8=\"${string7%?}\"\n\
+    \      local string9=\"${string8%?}\"\n      local string10=\"${string9%?}\"\n\
+    \      local string11=\"${string10%?}\"\n      local string12=\"${string11%?}\"\
+    \n      local string13=\"${string12%?}\"\n      local string14=\"${string13%?}\"\
+    \n      local string15=\"${string14%?}\"\n      local string16=\"${string15%?}\"\
+    \n      local string17=\"${string16%?}\"\n      local string18=\"${string17%?}\"\
+    \n      local string19=\"${string18%?}\"\n      local string20=\"${string19%?}\"\
+    \n      local string21=\"${string20%?}\"\n      local string22=\"${string21%?}\"\
+    \n      local string23=\"${string22%?}\"\n      local string24=\"${string23%?}\"\
+    \n      local string25=\"${string24%?}\"\n      local string26=\"${string25%?}\"\
+    \n      local string27=\"${string26%?}\"\n      local string28=\"${string27%?}\"\
+    \n      local string29=\"${string28%?}\"\n      local string30=\"${string29%?}\"\
+    \n      local string31=\"${string30%?}\"\n      local string32=\"${string31%?}\"\
+    \n      local string33=\"${string32%?}\"\n      local string34=\"${string33%?}\"\
+    \n      local string35=\"${string34%?}\"\n      local string36=\"${string35%?}\"\
+    \n      local string37=\"${string36%?}\"\n      local string38=\"${string37%?}\"\
+    \n      local string39=\"${string38%?}\"\n      local string40=\"${string39",
+  "    local sum=0\n    local product=1\n    local list=\"$1\"\n    IFS=\" \" read\
+    \ -r -a array <<< \"$list\"\n    for element in \"${array[@]}\"; do\n        ((sum+=element))\n\
+    \        ((product*=element))\n    done\n    echo \"[$sum x $product]\"", "  local\
+    \ sum=0\n  local product=1\n  for i in $1 \n  do\n    sum=$(( $sum + $i ))\n \
+    \   product=$(( $product * $i ))\n  done\n  # echo \"$sum $product\"\n  echo $sum\
+    \ $product", "   local integers=$1\n   local sum=\"\"\n   local product=\"\"\n\
+    \   local i=0\n   while read -r integer || [[ -n \"$integer\" ]] ; do\n      #\
+    \ echo $i\n      sum=\"${sum}${sum:+}$integer\"\n      # echo $sum\n      product=\"\
+    ${product}${product:+}$integer\"\n      ((i++))\n   done <<< \"$integers\"\n \
+    \  # echo $i\n   echo \"$sum, $product\"", "        local sum=0\n        local\
+    \ product=1\n        local list_string=${1}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string=${list_string//[!0-9]}\n        list_string=${list_string//[!0-9]}\n\
+    \        list_string", "    local x=\"0 1\"\n    for y in $(cat $1); do\n    \
+    \    local s=$(echo \"$y + $y\" | bc)\n        local p=$(echo \"$s * $s\" | bc)\n\
+    \        x=$(echo \"$x $y\" | bc)\n        echo \"[$p \\\"$x\\\"]\"\n    done",
+  "  IFS=$' '\n  set -- \"$1\"\n  declare -a sum=() product=1\n  for value in \"$@\"\
+    \ ; do\n    (( sum += value ))\n    (( product *= value ))\n  done\n  echo \"\
+    [$sum, ${product}]\"", "  local a=\"$1\"\n  local s=\"0\"\n  local p=\"1\"\n\n\
+    \  for a in $a; do\n    s=$((s+a))\n    p=$((p*a))\n  done\n  echo $s\"\\\"$p\"",
+  "    local x=\"\"\n    local sum=0\n    local product=1\n    for i in $(cat \"$1\"\
+    ); do\n        ((sum+=i))\n        product*=i\n    done\n    if [[ -n $x ]]; then\n\
+    \        x+=\" \"\n    fi\n    x+=\"\\\"$sum\\\"\"\n    if [[ -n $product ]];\
+    \ then\n        x+=\"*\"\n    fi\n    x+=\"\\\"$product\\\"\"\n    echo $x", " \
+    \ local sum=\"1\"\n  local product=\"1\"\n  for item in $1\n  do\n    sum=\"$(expr\
+    \ $sum + $item)\"\n    product=\"$(expr $product * $item)\"\n  done\n  echo \"\
+    ${sum}\"\n  echo \"${product}\"", "    local sum=0\n    local product=1\n    local\
+    \ array=($1)\n\n    for element in ${array[@]}; do\n        ((sum+=element))\n\
+    \        ((product*=element))\n    done\n    echo \"[\\\"${sum}\\\",\\\"${product}\\\
+    \"]\"", "  local var=$1\n  shift 1\n  local sum=\"$1\"\n  local product=1\n  echo\
+    \ $var\n  echo \"${var}\" | while read -r line\n  do\n    sum=$(( $sum + $line\
+    \ ))\n    product=$(( $product * $line ))\n  done\n  echo \"${sum}\" \"${product}\"",
+  "    local sum=0\n    local product=1\n    for numbers in $1; do\n        sum=$(($sum\
+    \ + numbers))\n        product=$(($product*numbers))\n    done\n    printf '%s\\\
+    n' \"$sum $product\"", "    local sum\n    local product\n    local list\n   \
+    \ IFS=\" \"\n    list=(\"$1\")\n    sum=0\n    product=1\n    for (( i=1 ; i <=\
+    \ \"${#list[@]}\" ; i++ )); do\n        sum=$(( $sum + ${list[$i]} ))\n      \
+    \  product=$(( $product * ${list[$i]} ))\n    done\n    echo $(( $sum / $product\
+    \ ))", "    sum=0\n    product=1\n    echo $1 | tr \" \" \"\\n\" | while read\
+    \ line; do\n        (( sum += $line ))\n        (( product *= $line ))\n    done\n\
+    \    echo \"[\\\"$sum\\\", \\\"$product\\\"]\"", "\tlocal numbers=$(echo $1 |\
+    \ tr \" \" \" \")\n\tlocal sum\n\tlocal product\n\n\tsum=0\n\tproduct=1\n\tfor\
+    \ number in $numbers; do\n\t\t((sum+=number))\n\t\t((product*=number))\n\tdone\n\
+    \techo $sum $product", "  local total=0\n  local product=1\n  shift\n  while [\
+    \ \"$#\" -ne 0 ]; do\n    local i\n    for (( i=0; i<${#1}; i++ )); do\n     \
+    \ local value=\"${1:$i:1}\"\n      local next=\"$((${total} + ${value}))\"\n \
+    \     local product=\"$((${product} * ${value}))\"\n    done\n    total=$next\n\
+    \    shift\n  done\n  echo \"['${total}', '${product}']\"", "    IFS= read -r\
+    \ -d '' -a array <<< \"$1\"\n    local sum=\"${array[0]}\"\n    local product=\"\
+    ${array[1]}\"\n    echo \"$sum $product\"", "    local sum=0\n    local product=1\n\
+    \    for i in $(cat \"$1\" | sed -e \"s/,/ /g\")\n    do\n        sum=$(($sum\
+    \ + $i))\n        product=$(($product * $i))\n    done\n    echo $sum \"x $product\"",
+  "    local integers\n    integers=($(echo \"$1\" | sed \"s/ /, /g\"))\n\n    # return\
+    \ an empty string if there are no integers\n    [[ ! \"$integers\" ]] && integers=\"\
+    0 1\"\n\n    # return sum and product of integers\n    echo \"[\\\"$((${integers[0]}+${integers[1]}))\\\
+    \", \\\"$((${integers[0]}*${integers[1]}))\\\"]\"", "    local list=\"$1\"\n \
+    \   local result=$(eval echo '\\[' + ${list//(/-}'\\]' | sed 's/ /+/g' | sed 's/+/-/g'\
+    \ | sort | uniq)\n    local sum=$(eval echo '\\[' + ${result//(/-}'\\]' | sort\
+    \ | uniq)\n    local product=$(eval echo '\\[' + ${result//(/-}'\\]' | sort |\
+    \ uniq | tr '\\n' '+' | tr '-' '/')\n    local ret=()\n    local sep=''\n    local\
+    \ index=0\n    for (( index=0; index < ${#sum}; index+=1 )); do\n        if [[\
+    \ \"${sum:$index}\" != \"0\" && \"${product:$index}\" != \"1\" ]]; then\n    \
+    \        ret+=(\"$sep$sum[$index]$sep$product[$index]\")\n        fi\n       \
+    \ sep=\" \"\n    done\n    echo \"${ret[@]}\"", "  # Convert the first argument\
+    \ to an integer array\n  read -a array <<< \"$1\"\n  # Initialize the sum and\
+    \ product variables to the empty values\n  sum=\"$(printf \"%s\" \"${array[@]}\"\
+    \ | sed 's/^ *//')\"\n  product=\"$(printf \"%s\" \"${array[@]}\" | sed 's/ *$//')\"\
+    \n  # Loop through the array and add the values to the sum and product variables\n\
+    \  for i in \"${array[@]}\"; do\n    ((sum+=$i)) && break\n  done\n  for i in\
+    \ \"${array[@]}\"; do\n    ((product*=$i)) && break\n  done\n  # Escape double\
+    \ quotes in the sum and product variables\n  printf \"[%s]\" \"${sum/\\\"/\\\\\
+    \\\"}\"\n  printf \"[%s]\" \"${product/\\\"/\\\\\\\"}\"", "  local list=\"$1\"\
+    \n  local sum=\"$2\"\n  local product=\"$3\"\n  local sum=\"$sum\"\n  local product=\"\
+    $product\"\n  local i\n\n  shift\n  shift\n  shift\n  local empty=\"$1\"\n\n \
+    \ local i\n  for ((i=0; i<${#list}; i++)); do\n    local elem=${list:$i}\n   \
+    \ if [[ -z \"${sum}\" ]]; then\n      sum=\"${elem}\"\n    elif [[ -z \"${product}\"\
+    \ ]]; then\n      product=\"${elem}\"\n    elif [[ -n \"${list}\" ]]; then\n \
+    \     sum=\"${sum}${elem}\"\n      product=\"${product}${elem}\"\n    fi\n  done\n\
+    \n  if [[ ${#sum} -ne ${#list} || ${#product} -ne ${#list} ]]; then\n    echo\
+    \ \"ERROR: Given list is empty or contains only whitespace.\" >&2\n    return\
+    \ 1\n  fi\n  list=\"$sum $product\"\n  [[ \"${list}\" =~ \"^[[:space:]]*[0-9]+[[:space:]]*[[:space:]]*[0-9]+[[:space:]]*[[:space:]]*$\"\
+    \ ]]\n  if [[ $? -ne 0 ]]; then\n    echo \"ERROR: Given list is not numeric.\"\
+    \ >&2\n    return 1\n  fi\n\n  echo \"${list}\"", "    local -a arr=(\"${1//[^0-9,.]/}\"\
+    )\n    local -a result=()\n    local i\n    local sum=0\n    local product=1\n\
+    \n    for i in \"${arr[@]}\"; do\n        sum=$((sum + i))\n        product=$((product\
+    \ * i))\n    done\n\n    result+=(\\\"$sum\\\"${sum:+}\\\"$product\\\")\n    printf\
+    \ '[\"%s\"]' \"${result[@]}\"", "  local sum\n  local product\n  local integers\n\
+    \  local total\n  integers=\"$1\"\n  integers=${integers// /-}\n  integers=$(echo\
+    \ \"$integers\" | sed -e 's/ //g')\n  sum=$(( $(eval echo \"$integers\") ))\n\
+    \  product=1\n  total=\"$sum x $product\"\n  total=\"${total//+/ }\"\n  printf\
+    \ '%s\\n' \"$total\"", "    local L\n    read -ra L <<< \"$1\"\n    local sum=$(IFS=\"\
+    \"; echo \"$(( ${L[0]} + ${L[1]} ))\")\n    local product=$(IFS=\"\"; echo \"\
+    $(( ${L[0]} ))\")\n    echo $sum $product", "    local n=\"$1\"\n    if [ -z \"\
+    $n\" ] ; then\n        local s=\"0 1\"\n    else\n        local s=($(nix-build\
+    \ \"$1/...\" --eval '(import <nixpkgs/nixos> {}).lib.boostrappers.utils.sum_product\
+    \ { (builtins.split \" \" \"$1\") }'));\n    fi\n    echo \"[\\\"$s\\\"]\";",
+  "  local sum=0\n  local product=1\n  local args=$1\n\n  echo \"$args\" | sed -e\
+    \ \"s/^\\\"//\" -e \"s/\\\"$//\"\n  echo \"$args\" | tr \" \" \"\\n\" | awk -F\
+    \ \"\\\" \"{ print \\$1 }\" | awk '{ sum += $1; product *= $1 } END { print sum,\
+    \ product }'\n  echo \"$args\" | tr \" \" \"\\n\" | awk -F \"\\\" \"{ print \\\
+    $1 }\" | awk '{ sum += $1; product *= $1 } END { print sum, product }'\n  echo\
+    \ \"$args\" | tr \" \" \"\\n\" | awk -F \"\\\" \"{ print \\$1 }\" | awk '{ sum\
+    \ += $1; product *= $1 } END { print sum, product }'\n  echo \"$args\" | tr \"\
+    \ \" \"\\n\" | awk -F \"\\\" \"{ print \\$1 }\" | awk '{ sum += $1; product *=\
+    \ $1 } END { print sum, product }'", "  local -n arr=$1; shift\n  local sum=0;\
+    \ local product=1\n  for el in $arr; do\n    sum=$(( sum + el ))\n    product=$((\
+    \ product * el ))\n  done\n  echo \"[\\\"$sum\\\",\\\"$product\\\"]\"", "    local\
+    \ IFS=\\\n        \" \" sum=\"$[sum+$(echo \"$1\" | awk '{print $1}')] \\\n  \
+    \      product=\"$[product*$(echo \"$1\" | awk '{print $1}')]\"\n    shift\n \
+    \   [[ -z $1 ]] && return 1\n    echo $sum product | tr -d '\"\\n'", "    if [[\
+    \ -z \"$1\" ]] ; then\n        echo '[\"0\"', '\"1\"']'\n        return\n    fi\n\
+    \    local sum=0\n    local product=1\n    while [[ \"$1\" =~ ([0-9]*)( [0-9]*)\
+    \ ]] ; do\n        sum=$(($sum + ${BASH_REMATCH[2]}))\n        product=$(($product\
+    \ * ${BASH_REMATCH[2]}))\n        shift\n    done\n    echo \"[$sum, $product]\"",
+  "    local sum=\"$1\"\n    local product=1\n    local spaces\n    spaces=\"${sum//\
+    \ / }\"\n    echo \"${spaces// / }\" | while read -r line; do\n        local i\n\
+    \        local sum=0\n        local product=1\n        sum=\"${sum}${line}\"\n\
+    \        product=\"${product}${line}\"\n    done\n    local result\n    if [ -z\
+    \ \"$sum\" ]; then\n        result=[0]\n    else\n        result=(\"$sum\" \"\
+    ${product}\")\n    fi\n    echo \"${result[@]}\"", "  local xs sum\n  IFS=$'\\\
+    t' read -r -a xs <<<\"$1\"\n  sum=$(xs[0]*)\n  for x in \"${xs[@]:1}\"; do\n \
+    \   sum=$((sum*$x))\n  done\n  echo \"$sum\"", "    local -n total=$1\n    # $2\
+    \ is a space-separated list\n    for number in $2; do\n        total+=$number\n\
+    \    done\n    # $3 is a space-separated list\n    local -n product=1\n    for\
+    \ number in $3; do\n        product*=$number\n    done\n    # echo ${!total}\n\
+    \    # echo ${!product}\n    # echo ${*total}\n    # echo ${*product}\n    echo\
+    \ $(printf \"%d %d\" $((${*total})) $((${*product})))", "  local n=$1\n  local\
+    \ sum=0 product=1\n  for (( i=0; i < ${#n}; i++ )); do\n    (( sum+=${n[i]} ))\n\
+    \    (( product*=${n[i]} ))\n  done\n  echo \"[\\\"${sum}\\\",\\\"${product}\\\
+    \"]\"", "  if [ $# -lt 1 ]; then\n    echo \"No arguments given to sum_product\"\
+    \n    return 1\n  fi\n  local -a sum=()\n  local -a product=()\n  local i\n  IFS=$'\\\
+    t' read -r -a array <<< \"$1\"\n  for (( i=0; i<${#array[@]}; i++ )); do\n   \
+    \ local num=\"${array[$i]}\"\n    if [[ ! -z \"$num\" ]]; then\n      sum+=(\"\
+    $num\")\n      product+=(\"$num\")\n    fi\n  done\n  echo \"[\\\"${sum[0]}\\\"\
+    , \\\"${product[0]}\\\"]\"", "    echo $1 | sed 's/ /\\n/g'  | tr -d '\\n' | awk\
+    \ '{ sum += $1 }; END { print \"'$((sum*prod))'\"}'", "  local list_in list_out\
+    \ index\n  list_in=$1\n  list_out=\"\"\n  index=0\n  while [ $index -le ${#list_in}\
+    \ ]; do\n    list_out+=\" $((${list_in:$index:1}*$index_product))\"\n    index=$(($index\
+    \ + 1))\n  done\n  echo \"${list_out}\"", "    local -n _list=$1\n    local -n\
+    \ sum=0\n    local -n product=1\n    for element in ${_list[@]}; do\n        ((sum\
+    \ += element))\n        ((product *= element))\n    done\n    echo -n \"$sum $product\"",
+  "    # Initialize sum and product variables\n    sum=\"$1\"\n    product=\"1\"\n\
+    \n    # Split the arguments string on spaces, converting each element into an\
+    \ integer\n    # Note that the quotes around elements are necessary to avoid troubles\
+    \ with spaces in the elements.\n    # When an element has no spaces, bash will\
+    \ treat it as two arguments, the first one containing the\n    # element, and\
+    \ the second one containing the spaces. We don't want the first argument to be\
+    \ split as an\n    # argument with the spaces.\n    list=($@)\n    listLength=${#list[@]}\n\
+    \    for (( i=1; i<$listLength; i++ )); do\n        sum=\"${sum}${list[$i]}\"\n\
+    \        product=\"$product${list[$i]}\"\n    done\n\n    # Remove the quotes\
+    \ and return a list consisting of the sum and the product\n    # Remove spaces\
+    \ at the end of an element of the list to ensure correct return value\n    sum=\"\
+    ${sum%\\\"}\"\n    sum=\"${sum#\\\"}\"\n    product=\"${product%\\\"}\"\n    product=\"\
+    ${product#\\\"}\"\n    sum=\"${sum% }\"\n    product=\"${product% }\"\n    echo\
+    \ -n \"[\\\"${sum}\\\",\\\"${product}\\\"]\"", "  local sum=0\n  local product=1\n\
+    \  for x in $(cat \"$1\"|cut -d ' ' -f 1 | sort); do\n    sum=$((sum+x))\n   \
+    \ product=$((product*x))\n  done\n  echo $(printf \"%.0f\" \"${sum}\")\" \"$(printf\
+    \ \"%.0f\" \"${product}\")", "    local -i sum=0\n    local -i product=1\n   \
+    \ local -a numbers\n    numbers=(\"$@\")\n    sum=$(IFS=$'\\n' sum=$(echo \"${sum}${product}\"\
+    \ | sed 's/ /+/g; s/+$//'))\n    product=$(IFS=$'\\n' product=$(echo \"${product}${sum}\"\
+    \ | sed 's/ /+/g; s/+$//'))\n    echo \"${numbers[@]}\"", "        local sum=0\n\
+    \        local product=1\n        local i\n        for (( i=0; i < \"${#1}\";\
+    \ i++ ))\n        do\n                sum=$((sum+${!i}))\n                product=$((product*${!i}))\n\
+    \        done\n        printf '[%s]' \"$sum\"\n        printf '[%s]' \"$product\"",
+  "\tlocal sum=$1\n\tlocal product=1\n\tlocal word\n\n\twhile read -r word; do\n\t\
+    \t((sum+=${word}))\n\t\t((product*=word))\n\tdone <<< \"$1\"\n\n\techo \"[$sum,\
+    \ ${product}]\"", "\tIFS=$'\\n' read -r -a array <<< \"$1\"\n\tlocal sum=0\n\t\
+    local product=1\n\tfor element in \"${array[@]}\"; do\n\t\t((sum+=$element))\n\
+    \t\t((product*=$element))\n\tdone\n\techo \"'${sum}'\" $'\\n'\n\techo \"'${product}'\"",
+  "  local numbers=\"${1}\"\n  local sum=\"0\"\n  local product=\"1\"\n  for number\
+    \ in $numbers; do\n    local string=\"$sum $product\"\n    sum=$(expr $sum + $number)\n\
+    \    product=$(expr $product * $number)\n    echo [\"$string\"]\n  done", "  \
+    \  local a b c d e f g h i j k l m n o p q r s t u v w x y z\n    local -a arr\n\
+    \    local empty=0 one=1\n\n    for ((i = 0; i < ${#1}; ++i)); do\n        arr+=(\"\
+    ${!i}\")\n    done\n\n    local -a sum\n    local -a prod\n\n    sum=()\n    prod=()\n\
+    \n    for ((i = 0; i < ${#arr[@]}; ++i)); do\n        a=${arr[i]}\n        b=${arr[i+1]}\n\
+    \        c=${arr[i+2]}\n        d=${arr[i+3]}\n        e=${arr[i+4]}\n       \
+    \ f=${arr[i+5]}\n        g=${arr[i+6]}\n        h=${arr[i+7]}\n        i=${arr[i+8]}\n\
+    \        j=${arr[i+9]}\n        k=${arr[i+10]}\n        l=${arr[i+11]}\n     \
+    \   m=${arr[i+12]}\n        n=${arr[i+13]}\n        o=${arr[i+14]}\n        p=${arr[i+15]}\n\
+    \        q=${arr[i+16]}\n        r=${arr[i+17]}\n        s=${arr[i+18]}\n    \
+    \    t=${arr[i+19]}\n        u=${arr[i+20]}\n        v=${arr[i+21]}\n        w=${arr[i+22]}\n\
+    \        x=${arr[i+23]}\n        y=${arr[i+24]}\n        z=${arr[i+25]}\n    \
+    \    ((empty+=(b<=0)?0:1))\n        ((one+=(a==1?1:0)))\n        sum+=(\"$empty\"\
+    )\n        prod+=(\"$one\")\n    done\n    echo \"[\\\"${sum[@]}\\\",\\\"${prod[@]}\\\
+    \"]\"", "    local sum=0\n    local product=1\n    local values=$(IFS=\" \" ;\
+    \ echo \"$@\")\n    local i=0\n    while [ $i -lt $# ]; do\n        sum=$(( $sum\
+    \ + $values[$i] ))\n        product=$(( $product * $values[$i] ))\n        i=$((\
+    \ $i + 1 ))\n    done\n    echo $(( \"$sum\" )) \"$(( \"$product\" ))\"", "  \
+    \  local numbers=\"$1\"\n    local sum=\"0\"\n    local product=\"1\"\n    for\
+    \ number in $numbers; do\n        sum=\"$(( $sum + number ))\"\n        product=\"\
+    $(( $product * number ))\"\n    done\n    echo \"$sum x $product\"", "    local\
+    \ IFS=\" \" sum=$(IFS=+) product=$(IFS=*) IFS=\".\" \n    local sum=${!1} product=${!2}\n\
+    \    local _IFS=\"$IFS\"\n    IFS=+\n    local sum=$(( $sum + $1 )) \n    IFS=$_IFS\n\
+    \    local product=$(( $product * $1 ))\n    IFS=$sum=$product=$_IFS\n    echo\
+    \ \"$sum $product\"", "  local list_var=$1\n  local list_elements=$2\n  local\
+    \ sum=0\n  local product=1\n\n  for i in $(echo $list_var| tr \" \" \"\\n\");\
+    \ do\n    let sum=$sum+$i\n  done\n\n  for i in $(echo $list_elements| tr \" \"\
+    \ \"\\n\"); do\n    let product=$product*$i\n  done\n\n  echo $list_var '\\t'\
+    \ $sum '\\t' $product", "    if [[ \"$1\" == \"\" ]]; then\n        echo \"$1\"\
+    \n        echo \"$1\"\n    else\n        echo \"$1 $(( $1 * $( echo \"$1\" | sed\
+    \ -E 's/^ *([0-9]+).*$/\\1/' )))\"\n        echo \"$1 $(( $1 * $( echo \"$1\"\
+    \ | sed -E 's/^ *([0-9]+).*$/\\1/' )))\"\n    fi", "\tlocal sum=0\n\tlocal product=1\n\
+    \tlocal integers=$1\n\t\n\tfor integer in $integers; do\n\t\t((sum+=integer))\n\
+    \t\t((product*=integer))\n\tdone\n\t\n\tprintf '%s\\n' \"$sum\" \"$product\"",
+  "    local -i sum=0\n    local -i product=1\n    local -i index=0\n\n    while [\
+    \ \"$index\" -lt \"$#\" ] ; do\n        local val=\"$( echo \"$1\" | cut -d\\\
+    \  -f1 )\"\n        product=$( echo \"$product*$val\" | bc )\n        sum=$( echo\
+    \ \"$sum + $val\" | bc )\n        index=$(( $index + 1 ))\n    done\n\n    local\
+    \ -a result\n    result=( [ \"$(echo \"$sum\")\" = \"0\" ] && [ \"$(echo \"$product\"\
+    )\" = \"0\" ] )\n\n    echo \"${result[@]}\"", "  local numbers=$1\n  if [[ -z\
+    \ \"$numbers\" ]]; then\n    return 1\n  fi\n  local product=1\n  local sum=0\n\
+    \  while read -r number; do\n    (( sum += number ))\n    (( product *= number\
+    \ ))\n  done <<< \"$numbers\"\n  echo \"[$sum]($product)\"", "  # Get a list from\
+    \ $1\n  aList=$1\n  echo \"${aList// /+}\" \"${aList% /}\"", "  # Convert arguments\
+    \ to array and remove empty elements\n  array=(\"${@,,}\")\n  [[ ${#array[@]}\
+    \ -eq 0 ]] && return '[\"0\"', '\"1\"']\n  # Set a variable for sum and a variable\
+    \ for product\n  sum=0\n  product=1\n  # Iterate over all elements in list\n \
+    \ for element in \"${array[@]}\"; do\n    ((sum+=element))\n    ((product*=element))\n\
+    \  done\n  # Return list\n  return '[\"'\"$sum\"\\'\"', '\"1$product\"']", " \
+    \   local sum=$1\n    local product=1\n    local i\n    for (( i = 0; i < ${#sum};\
+    \ i++ )); do\n        sum=${sum:$i:1}\n        product=$((product*$i))\n    done\n\
+    \    echo \"[$sum x $product]\"", "  local LIST=\"$1\"\n  local SUM=\"$(echo \"\
+    $LIST\" | tr -d \" \" | tr \" \" \"\\n\" | tr -d \",\")\"\n  echo \"[$(echo \"\
+    $SUM\"|bc|sed 's/^/\\\"/;s/$/\\\"/;s/,/\\\"\\n/'),$(echo \"$LIST\"|bc|sed 's/^/\\\
+    \"/;s/$/\\\"/;s/,/\\\"\\n/')]\"", "    local IFS=$'\\n'\n    local n=0\n    local\
+    \ sum=0\n    local product=1\n    local list\n    list=\"$(IFS=$'\\n' echo \"\
+    $1\")\"\n    while read n\n    do\n        ((n++))\n        sum=$((sum+n))\n \
+    \       product=$((product*n))\n    done <<<\"$list\"\n    echo \"$sum $product\"",
+  "  local -a nums\n  local sum=0\n  local product=1\n\n  nums=( \"$@\" )\n  for i\
+    \ in \"${nums[@]}\"; do\n    (( sum += i ))\n    product=$(( product*i ))\n  done\n\
+    \n  echo \"\\\"$sum\\\"\" \\\"$product\\\"\"", "    # empty sum\n    sum=$1;\n\
+    \n    # empty product\n    product=$1;\n\n    IFS=' ' read -a a <<< \"$1\"\n\n\
+    \    for element in \"${a[@]}\"; do\n        # sum of the list\n        sum=\"\
+    $sum + $element\";\n\n        # product of the list\n        product=\"$product\
+    \ * $element\";\n    done\n\n    echo \"[$sum \\\"${product//./\\\"}\\\"]\";",
+  "  local sum=\"$1\"\n  shift\n  local x=\"$1\"\n  shift\n  local -a a=($@)\n  local\
+    \ sum=\"${a[0]}${sum// /+}\"\n  local sum=\"${sum// /+}\"\n  local product=\"\
+    $(a=()\n  for x in \"${a[@]}\"\n  do\n    a+=(\"${x*x}\")\n  done\n  echo \"${sum//+/}\"\
+    \ \"${product//+/}\")\"", "  # Convert the list to array if it's not already\n\
+    \  # [[ $1 =~ ^[0-9]+$ ]] || { echo \"Error: Invalid argument $1 is not an integer\"\
+    \ >&2; return 1; };\n  IFS=\" \" read -r -a array <<< \"$1\"\n  # Initialize sum\
+    \ and product\n  sum=\"1\"\n  product=\"1\"\n  # Compute the sum\n  for item in\
+    \ \"${array[@]}\"; do\n    (( sum += item ))\n  done\n  # Compute the product\n\
+    \  for item in \"${array[@]}\"; do\n    (( product *= item ))\n  done\n  # Return\
+    \ the sum and product\n  echo \"['$sum', '$product']\"", "    local list_array=(${1//\
+    \ / })\n    local result\n    local sum\n    local product\n    local i\n    sum=0\
+    \ product=1\n\n    for ((i=0; i<${#list_array[@]}; ++i)); do\n        sum=$((\
+    \ $sum + $list_array[i] ))\n        product=$(( $product * $list_array[i] ))\n\
+    \    done\n\n    if [[ $sum == 0 ]]; then\n        result=(\"$sum\")\n    else\n\
+    \        result=(\"$sum\" \"${product}\")\n    fi\n\n    echo \"$result\"", " \
+    \ local sum=\"$1\"\n  shift\n  local product=1\n  local i\n  for ((i = 1; i <=\
+    \ ${#1}; ++i)); do\n    local current_sum=$(echo $sum | sed \"s/ / + /g\")\n \
+    \   local current_product=$(echo $product | sed \"s/ / * /g\")\n    sum=$(echo\
+    \ $current_sum + $i | sed \"s/ + / /g\")\n    product=$(echo $current_product\
+    \ * $i | sed \"s/ * / /g\")\n  done\n  echo $sum\n  echo $product", "    local\
+    \ res=$(printf \"%s\\n\" \"$1\" | sed 's/ /,/' | awk '{sum=0; product=1; for (i=1;\
+    \ i<=NF; i++) {sum+=$i; product*=$i} print sum,product}')\n    if [[ $res == *\"\
+    sum\"* ]] || [[ $res == *\"product\"* ]]; then\n        # print a quoted string\n\
+    \        echo \"'$res'\"\n    else\n        # just print unquoted string\n   \
+    \     echo $res\n    fi", "  # We loop through the input list $1, and output two\
+    \ lists. One with sums, and the other with products.\n  local -a sums\n  local\
+    \ -a products\n  for item in $1; do\n    local sum=0\n    local product=1\n  \
+    \  for num in $item; do\n      (( sum += num ))\n      (( product *= num ))\n\
+    \    done\n    sums+=(\"${sum}\")\n    products+=(\"${product}\")\n  done\n  echo\
+    \ -n '['\n  echo -n \"${sums[*]}\"\n  echo -n ' ]'\n  echo -n '\\n'\n  echo -n\
+    \ '['\n  echo -n \"${products[*]}\"\n  echo -n ' ]'\n  echo -n '\\n'\n  echo ']'",
+  "    local sum=\"$1\"\n    shift\n    local product=1\n    for (( i=0; i<${#sum};\
+    \ i++ )); do\n        (( product *= ${sum:$i:1} ))\n    done\n    echo -n \"${sum:0:-1}${product}\\\
+    n\"", "    local x\n    for x in $*; do\n        echo $(( ${x}+${x} ))\n    done",
+  "    local x\n    local sum=0\n    local product=1\n    local output\n    while\
+    \ [ $# -gt 0 ]\n    do\n        x=\"$1\"\n        local spaces=`echo $x | sed\
+    \ -e \"s/^[[:space:]]*//\" -e \"s/[[:space:]]*$//\"`\n        local val=\"`echo\
+    \ $x | sed -e \"s/$spaces//\"`\"\n        output=\"$output $sum $product\"\n \
+    \       sum=`expr $sum + $val`\n        product=`expr $product * $val`\n     \
+    \   shift\n    done\n    output=\"$output $sum $product\"\n    echo $output",
+  "    local list=\"$1\"\n    if [ -z \"$list\" ]; then\n        echo \"$list\"\n\
+    \        return\n    fi\n    local sum=0 product=1\n    local item \n    for item\
+    \ in $list; do\n        (( sum += item ))\n        (( product *= item ))\n   \
+    \ done\n    echo \"$sum\"\n    echo \"$product\"", "  echo -n \"$(echo $1 |\n\
+    \    sed -e 's/ /+/g'\\\n    | bc | sed -e 's/^/sum \\+/g' -e 's/$/product = 1/g')\"",
+  "    # Return an array, where first element is the sum and second element is the\
+    \ product\n    # Example: [\"10\",\"24\"] => [\"24\",\"8\"]\n    # Example: [\"\
+    1\",\"2\",\"3\",\"4\"] => [\"7\",\"6\",\"15\",\"24\"]\n    local x=\"$(echo $1\
+    \ | tr \" \" \"\\n\")\"\n    local sum=$[${#x}+1]\n    local product=1\n    local\
+    \ i=0\n    while [ $i -lt ${#x} ]\n    do\n        product=$((product*${x[i]}))\n\
+    \        ((sum+=product))\n        ((i++))\n    done\n    echo [\"$sum\"','\"\
+    $product\"']", "    sum=0\n    product=1\n    array=(${1//[[:space:]]/})\n   \
+    \ for element in \"${array[@]}\"; do\n        sum=$(($sum + $element))\n     \
+    \   product=$(($product * $element))\n    done\n    echo $sum\n    echo $product",
+  "    local -n arr=$1\n    local sum\n    local product\n    local i\n    local result\n\
+    \    sum=0\n    product=1\n    arr=( $arr )\n    for (( i=0; i < ${#arr[@]}; i++\
+    \ )); do\n        sum=$(( $sum + $arr[i] ))\n        product=$(( $product * $arr[i]\
+    \ ))\n    done\n    result=$(echo $sum \"*\" $product | sed 's/ /\\\\\\\\ /g')\n\
+    \    printf '%s\\n' \"${arr[@]}\" | sed \"s/ /$result /\" | tr '\\n' ' '", " \
+    \   IFS=\" \"\n    local IFS=\" \"\n    local result=\n    local x=0\n    local\
+    \ y=\n    local sum=0\n    local product=1\n    for x in \"$1\"; do\n        local\
+    \ val=$(x=$((x+=y)))\n        local product=$((product*x))\n        local sum=$((sum+val))\n\
+    \    done\n    printf \"['\\\"$sum\\\"', '\\\"$product\\\"']\\n\"", "        IFS=\
+    \ read -r -a array\n        sum=0\n        product=1\n        \n        echo \"\
+    ${array[*]}\" | while read value; do\n                (( sum += value ))\n   \
+    \             (( product *= value ))\n        done\n        \n        echo \"\
+    ${sum},${product}\"", "    # initialize result array\n    declare -a result\n\
+    \    result[0]=0\n    result[1]=1\n\n    # split $1 into a list of ints\n    IFS=$'\
+    \ \\t\\n' read -r -a array <<< \"$1\"\n\n    # initialize sum variable\n    sum=0\n\
+    \n    # initialize product variable\n    product=1\n\n    # loop over elements\
+    \ in the list\n    for element in \"${array[@]}\"; do\n        # add the element\
+    \ to the sum\n        sum=$(( sum + element ))\n\n        # multiply by the element\
+    \ to give the product\n        product=$(( product * element ))\n    done\n\n\
+    \    # append the sum and product to the result array\n    array=(\"$sum\" \"\
+    ${product}\")\n    printf -v result '\"%s\" \"%s\"'\"${array[@]}\"\n    IFS=$'\
+    \ \\t\\n' read -r -a array <<< \"$result\"\n\n    # return the result array\n\
+    \    echo \"$result\"", "    local list_string=$1\n    local list_array=($list_string)\n\
+    \    if [[ $list_array ]]; then\n        local list_length=${#list_array[@]}\n\
+    \        local sum=\"\"\n        local product=1\n        for (( i=0 ; i < $list_length\
+    \ ; i+=1 )); do\n            if [[ -z $i ]]; then\n                sum=$sum$list_array[$i]\n\
+    \            else\n                sum=$sum\"+$list_array[$i]\"\n            fi\n\
+    \        done\n        local result=`echo $sum | awk -F '+' '{print $1}'`\n  \
+    \      if [[ $list_array ]]; then\n            local result_array=($result)\n\
+    \        fi\n        if [[ $list_array ]]; then\n            local product=`echo\
+    \ $product | awk '{print $1*$2}'`\n        fi\n        if [[ $list_array ]]; then\n\
+    \            local result=`echo \"$product$list_array[$list_length-1]\"`\n   \
+    \     fi\n        echo \"$result\"\n    else\n        echo \"$list_string\"\n\
+    \    fi", "  local array=\"$1\"\n  local sum=\"$2\"\n  local product=\"$3\"\n\
+    \  if [[ \"${array:0:1}\" == \"[\" ]]; then\n    local array=($(echo \"${array}\"\
+    \ | tr -s ' '))\n  fi\n  if [[ \"${array:0:1}\" == \"]\" ]]; then\n    local array=($(echo\
+    \ \"${array}\" | tr '[', ''))\n  fi\n  for element in \"${array[@]}\"; do\n  \
+    \  if [[ \"${element}\" =~ ^[0-9]+$ ]]; then\n      if [[ -z \"${product}\" ]];\
+    \ then\n        product=\"${element}\"\n      else\n        product=\"$(( ${product}\
+    \ * ${element} ))\"\n      fi\n      if [[ -z \"${sum}\" ]]; then\n        sum=\"\
+    ${element}\"\n      else\n        sum=\"$(( ${sum} + ${element} ))\"\n      fi\n\
+    \    fi\n  done\n  echo \"${sum} ${product}\"", "    local sum=0\n    local product=1\n\
+    \    for v in \"$1\"; do\n        (( sum+=v ))\n        (( product*=v ))\n   \
+    \ done\n    echo \"$sum\"\n    echo \"$product\"", "    local var1=\"$1\"\n  \
+    \  local var2=$(echo $var1 | sed 's/ /+/g' | sed 's/-/-/g')\n    local var3=$(echo\
+    \ $var2 | sed 's/ /+/g')\n    echo $var3", "    local tmp=$(echo $1 | sed 's/\
+    \ //g')\n    local tmp1=0\n    local tmp2=1\n    local sum=''\n    local product='1'\n\
+    \n    while [[ -n $tmp ]]; do\n        sum=$(($sum + $tmp))\n        tmp1=$(($tmp1\
+    \ * $tmp))\n        tmp2=$(($tmp2 * $tmp))\n        tmp=$(($tmp - 1))\n    done\n\
+    \n    local tmp=$(($sum + $tmp1))\n    local tmp2=$(($tmp2 * $tmp))\n\n    # Remove\
+    \ leading zeros and convert to a string\n    local tmp3=$(($tmp - 1))\n    if\
+    \ [[ $tmp3 -eq 0 ]]; then\n        sum='\"0\"'\n    else\n        sum=$(($sum))\n\
+    \    fi\n\n    # Remove trailing zeros and convert to a string\n    local tmp4=$(($tmp2\
+    \ - 1))\n    if [[ $tmp4 -eq 0 ]]; then\n        product='\"1\"'\n    else\n \
+    \       product=$(($product))\n    fi\n\n    # Return the string representation\
+    \ of the sum and product\n    echo $sum \", \" $product", "  local SUM\n  SUM=\"\
+    ${1}\"\n  local MULTIPLIER\n  MULTIPLIER=\"1\"\n  local SIMPLES\n  SIMPLES=$(echo\
+    \ \"${SUM}\" | sed 's/ //g')\n  if [ \"${SUM}\" == \"0\" ] ; then\n      echo\
+    \ \"$MULTIPLIER\"\n      echo \"$SIMPLES\"\n      return\n  fi\n  for SIMPLE in\
+    \ ${SIMPLES} ; do\n      echo \"$MULTIPLIER\"\n      SUM=\"${SUM} ${SIMPLE}\"\n\
+    \      MULTIPLIER=\"*\"\n  done\n  echo \"$SUM\"", "\tlocal sum=0\n\tlocal product=1\n\
+    \tlocal elements=( $1 )\n\techo \"${elements[@]}\" | while read i; do\n\t\t((\
+    \ sum += i ))\n\t\tproduct = product * i\n\tdone\n\techo \"'$sum'; '$product'\"",
+  "  local list=\"$1\"\n  local sum=\"0\"\n  local product=\"1\"\n\n  IFS=$'\\n' read\
+    \ -r -a array <<< \"$list\"\n\n  for item in \"${array[@]}\"; do\n    ((sum+=item))\n\
+    \    ((product*=item))\n  done\n\n  # Replace quotes within sum and product variables\n\
+    \  sum=$(printf \"$sum\")\n  product=$(printf \"$product\")\n\n  echo [\"$sum\"\
+    ', '\"$product\"]", "  local LIST=\"$1\"\n  local SUM=0 PRODUCT=1\n  for x in\
+    \ $(echo ${LIST} | sed 's/ //g'); do\n    SUM=$((SUM+x))\n    PRODUCT=$((PRODUCT*x))\n\
+    \  done\n  echo [\"${SUM}\" \"${PRODUCT}\"]"]
 stop_tokens:
 - "\n}"

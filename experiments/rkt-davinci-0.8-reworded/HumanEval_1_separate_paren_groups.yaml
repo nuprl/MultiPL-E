@@ -217,7 +217,1490 @@ completions: ["  (define (helper str lst)\n    (cond\n      [(empty? str) lst]\n
     \ (string-ref s i) #\\))\n               (= (match-parentheses s i 0) 0))\n  \
     \         (reverse (cons (substring s 0 i) result))]\n          [else\n      \
     \     (match-paren-group s (+ i 1) result)]))\n  (match-paren-group paren_string\
-    \ 0 empty))\n"]
+    \ 0 empty))\n", "  (define (paren_group-accumulator source paren_groups)\n   \
+    \ (cond\n      [(empty? source) paren_groups]\n      [(char=? (first source) '(')\n\
+    \       (paren_group-accumulator (rest source) (cons (paren_group-accumulator\
+    \ (rest source) (list)) paren_groups))]\n      [(char=? (first source) ')') (reverse\
+    \ paren_groups)]\n      [(char=? (first source) ' ') (paren_group-accumulator\
+    \ (rest source) paren_groups)]\n      [else (paren_group-accumulator (rest source)\
+    \ (cons (list (first source)) paren_groups))]))\n  (paren_group-accumulator (string->list\
+    \ paren_string) (list)))\n", "  (define (separate-paren-groups-rec paren-string\
+    \ result)\n    (let ([matched (match-paren paren-string)])\n      (if (null? matched)\n\
+    \          result\n          (separate-paren-groups-rec (remove-matched-paren\
+    \ paren-string) (append result (list matched))))))\n  (separate-paren-groups-rec\
+    \ paren_string '()))\n", "  (list '()))\n", "  (match-define (list open-parens\
+    \ close-parens) (cons #\\( #\\)))\n  (let loop ([paren-string paren_string] [paren-count\
+    \ 0] [paren-groups '()])\n    (if (empty? paren-string)\n        (reverse paren-groups)\n\
+    \        (let ([current-char (string-ref paren-string 0)])\n          (cond [(string=?\
+    \ current-char open-parens)\n                 (loop (substring paren-string 1)\
+    \ (+ paren-count 1) paren-groups)]\n                [(string=? current-char close-parens)\n\
+    \                 (if (= paren-count 0)\n                     (loop (substring\
+    \ paren-string 1) paren-count (cons \"\" paren-groups))\n                    \
+    \ (loop (substring paren-string 1) (- paren-count 1) paren-groups))]\n       \
+    \         [else\n                 (loop (substring paren-string 1) paren-count\
+    \ (cons (string-append (list current-char) (car paren-groups)) (cdr paren-groups)))])\n\
+    \          )))\n  )", "  (define (helper char-list curr-group s-parens pairs-lst)\n\
+    \    (cond\n      [(empty? char-list) (append pairs-lst (list curr-group))]\n\
+    \      [(and (symbol=? (first char-list) #\\()\n            (symbol=? (last curr-group)\
+    \ #\\)))\n       (helper (rest char-list) (list (first char-list)) (add1 s-parens)\
+    \ pairs-lst)]\n      [(symbol=? (first char-list) #\\()\n       (helper (rest\
+    \ char-list) (cons (first char-list) curr-group) (add1 s-parens) pairs-lst)]\n\
+    \      [(symbol=? (first char-list) #\\))\n       (helper (rest char-list) (cons\
+    \ (first char-list) curr-group) (sub1 s-parens) pairs-lst)]\n      [(and (symbol=?\
+    \ (first char-list) #\\)) (equal? s-parens 0))\n       (helper (rest char-list)\
+    \ (list (first char-list)) (sub1 s-parens) (append pairs-lst (list curr-group)))]\n\
+    \      [(not (string-contains? #\\\"\\\\ #\\( #\\) #\\[ #\\] #\\{ #\\} #\\\"\\\
+    \\ (first char-list)))\n       (helper (rest char-list) curr-group s-parens pairs-lst)]\n\
+    \      [else (helper (rest char-list) (cons (first char-list) curr-group) s-parens\
+    \ pairs-lst)]))\n  (map string->symbol-list (filter (lambda (x) (not (or (empty?\
+    \ x) (symbol=? (first x) #\\)))) (helper (string->list paren_string) (list) 0\
+    \ (list)))))\n", "  (define (helper paren_string result)\n    (if (empty? paren_string)\n\
+    \        result\n        (cond\n         ((string=? (car paren_string) \"(\")\n\
+    \          (helper (cdr paren_string) (string-append result (car paren_string))))\n\
+    \         ((string=? (car paren_string) \")\")\n          (helper (cdr paren_string)\
+    \ (string-append result (car paren_string))))\n         (else (helper (cdr paren_string)\
+    \ result)))))\n  (for/list ([a (split-string paren_string \" \")])\n    (helper\
+    \ a \"\")))\n\n", "  (match paren_string\n    ;; Set up base case, where there\
+    \ are no parens left\n    [\"\"] '()\n    ;; After removing all spaces, check\
+    \ for balanced parens\n    [paren_string\n     (define remaining_parens\n    \
+    \   (match paren_string\n         ;; If no parens, return empty string\n     \
+    \    [\"\"] \"\"\n         ;; Otherwise, look for balanced parens\n         [paren_string\n\
+    \          (define cleaned_string (string-trim-both paren_string #\\space))\n\
+    \          (define sb \"\")\n          (define i 0)\n          (define paren_counter\
+    \ 0)\n          (define (paren_or_newline? c)\n            (or (= c #\\() (= c\
+    \ #\\)) (= c #\\newline)))\n          (define (add-character-to-string)\n    \
+    \        (string-append sb (string (string-ref cleaned_string i))))\n        \
+    \  (while (and (< i (string-length cleaned_string))\n                      (not\
+    \ (and (= paren_counter 0)\n                                (paren_or_newline?\
+    \ (string-ref cleaned_string i)))))\n            (cond\n              [(= (string-ref\
+    \ cleaned_string i) #\\()\n               (set! paren_counter (+ paren_counter\
+    \ 1))\n               (set! sb (add-character-to-string))]\n              [(=\
+    \ (string-ref cleaned_string i) #\\))\n               (set! paren_counter (- paren_counter\
+    \ 1))\n               (set! sb (add-character-to-string))]\n              [else\n\
+    \               (set! sb (add-character-to-string))])\n            (set! i (+\
+    \ i 1)))\n          ;; Once we find a balanced group of parens, discard the rest\
+    \ of the string\n          (string-trim-both (substring cleaned_string 0 i) #\\\
+    newline))]))\n     ;; Use recursion on the remaining_parens string\n     (cons\
+    \ remaining_parens (separate_paren_groups remaining_parens))]))", "  (define (go\
+    \ paren_string sep-parens-accum)\n    (if (empty? paren_string)\n        sep-parens-accum\n\
+    \        (cond ((equal? (first paren_string) #\\()\n               (go (rest paren_string)\
+    \ (cons (paren_group paren_string) sep-parens-accum)))\n              (else (go\
+    \ (rest paren_string) sep-parens-accum)))))\n  (go paren_string '()))\n", "  (define\
+    \ (separate_paren_groups_helper str-list left-brace-count collected-groups)\n\
+    \    (if (null? str-list)\n        (if (= left-brace-count 0)\n            (reverse\
+    \ collected-groups)\n            (error \"Bad: Left brace count ~s not 0! ~s\"\
+    \ left-brace-count collected-groups))\n        (let ([c (car str-list)])\n   \
+    \       (if (equal? c \" \")\n              (separate_paren_groups_helper (cdr\
+    \ str-list) left-brace-count collected-groups)\n              (if (equal? c \"\
+    (\")\n                  (separate_paren_groups_helper (cdr str-list) (+ left-brace-count\
+    \ 1) (cons c collected-groups))\n                  (if (equal? c \")\")\n    \
+    \                  (separate_paren_groups_helper (cdr str-list) (- left-brace-count\
+    \ 1) (cons c collected-groups))\n                      (error \"Bad char: ~s\"\
+    \ c)))))))\n  (separate_paren_groups_helper (string->list paren_string) 0 null))\n",
+  "  (cond [(null? paren_string) (list)]\n        [(char=? (string-ref paren_string\
+    \ 0) #\\()\n         (cons (car (separate_paren_groups (cdr paren_string)))\n\
+    \               (separate_paren_groups (cdr paren_string)))]\n        [(char=?\
+    \ (string-ref paren_string 0) #\\))\n         (cons (car (separate_paren_groups\
+    \ (cdr paren_string)))\n               (separate_paren_groups (cdr paren_string)))]\n\
+    \        [else (cons (separate_paren_groups (cdr paren_string)))]))\n", "  (define\
+    \ (helper index paren-string open-paren close-paren result)\n    (cond\n     \
+    \ [(= index (string-length paren-string)) (reverse result)]\n      [(char=? (string-ref\
+    \ paren-string index) open-paren)\n       (helper (+ index 1) paren-string open-paren\
+    \ close-paren result)]\n      [(char=? (string-ref paren-string index) close-paren)\n\
+    \       (reverse (string (list-ref result 0)))]\n      [else (helper (+ index\
+    \ 1) paren-string open-paren close-paren (cons (string-ref paren-string index)\
+    \ result))]))\n  (define (remove-whitespace paren-string)\n    (cond\n      [(string=?\
+    \ paren-string \"\") (list)]\n      [(string=? (string-ref paren-string 0) #\\\
+    space) (remove-whitespace (substring paren-string 1))]\n      [else (cons (string-ref\
+    \ paren-string 0) (remove-whitespace (substring paren-string 1)))]))\n  (define\
+    \ (paren-string-helper index paren-string result)\n    (cond\n      [(= index\
+    \ (string-length paren-string)) (reverse result)]\n      [(char=? (string-ref\
+    \ paren-string index) #\\()\n       (let ([paren (helper (+ index 1) paren-string\
+    \ #\\( #\\) '())])\n         (paren-string-helper (+ index 1) paren-string (cons\
+    \ paren result)))]\n      [else (paren-string-helper (+ index 1) paren-string\
+    \ result)]))\n  (paren-string-helper 0 (string-append (remove-whitespace paren-string))\
+    \ '()))\n", "  (match paren_string\n    [(\"\" rest ...) empty]\n    [(open_paren\
+    \ open_paren ... rest ...) (separate_paren_groups rest ...)]\n    [(close_paren\
+    \ rest ...) (separate_paren_groups rest ...)]\n    [(rest ...) (cons (car (separate_paren_groups\
+    \ (list rest ...)))\n                      (separate_paren_groups (list rest ...)))]))\n\
+    ```\n\n2. What does the function do?\n\n```bash", "  (match-define (list depth)\
+    \ (paren_counter paren_string))\n  (separate_paren_groups_helper paren_string\
+    \ '() 0 0))\n", "  (define (separate_paren_groups-helper paren_string acc result)\n\
+    \    (cond\n      ((null? paren_string) result)\n      ((eq? (car paren_string)\
+    \ 40) (separate_paren_groups-helper (cdr paren_string) (+ acc 1) result))\n  \
+    \    ((eq? (car paren_string) 41) (separate_paren_groups-helper (cdr paren_string)\
+    \ (- acc 1) result))\n      ((eq? acc 0) (separate_paren_groups-helper (cdr paren_string)\
+    \ acc (cons (list->string (reverse acc)) result)))\n      (else (separate_paren_groups-helper\
+    \ (cdr paren_string) acc (cons (car paren_string) acc)))))\n  (reverse (separate_paren_groups-helper\
+    \ (string->list paren_string) 0 '())))\n```\n\n```racket\n#lang racket\n", " \
+    \ (let loop ([paren_string paren_string]\n             [paren_groups '()])\n \
+    \   (cond\n      [(empty? paren_string) paren_groups]\n      [(char=? (first paren_string)\
+    \ #\\()\n       (let loop ([string (rest paren_string)]\n                  [open-paren-count\
+    \ 1]\n                  [paren-group \"(\"])\n         (cond\n           [(empty?\
+    \ string)\n            (append paren_groups (list paren-group))]\n           [(char=?\
+    \ (first string) #\\()\n            (loop (rest string) (+ open-paren-count 1)\
+    \ (string-append paren-group \"(\"))]\n           [(char=? (first string) #\\\
+    ))\n            (if (zero? open-paren-count)\n                (loop (rest string)\
+    \ open-paren-count paren-group)\n                (loop (rest string) (- open-paren-count\
+    \ 1) (string-append paren-group \")\")))]\n           [else\n            (loop\
+    \ (rest string) open-paren-count (string-append paren-group (string (first string))))]))]\n\
+    \      [else\n       (loop (rest paren_string) paren_groups)])))\n", "  (define\
+    \ (is-open? c) (char=? c #\\())\n  (define (is-close? c) (char=? c #\\)))\n  (define\
+    \ (find-matches-closing-paren seq n)\n    (let loop ([i 0] [open 0])\n      (cond\n\
+    \        [(= i n) i]\n        [(is-open? (list-ref seq i)) (loop (+ i 1) (+ open\
+    \ 1))]\n        [(is-close? (list-ref seq i)) (if (= open 1) i (loop (+ i 1) (-\
+    \ open 1)))]\n        [else (loop (+ i 1) open)])))\n  (define (separate-paren-groups-helper\
+    \ seq n acc)\n    (if (= n 0)\n        acc\n        (let* ([m (find-matches-closing-paren\
+    \ seq n)]\n               [s (list-ref seq n)])\n          (if (and (is-open?\
+    \ s) (= m (+ n 1)))\n              (separate-paren-groups-helper seq (+ n 1) acc)\n\
+    \              (separate-paren-groups-helper seq (+ m 1) (cons (list->string (list-tail\
+    \ seq n m)) acc))))))\n  (separate-paren-groups-helper (string->list paren_string)\
+    \ 0 '()))\n", "  (define (count-paren s)\n    (letrec ([to-check (regexp-match\
+    \ #rx\"\\\\(\\\\(?:[()]\\\\)\\\\|.\\\\)\" s)]\n             [accum 0])\n     \
+    \ (cond [(null? to-check) accum]\n            [(equal? (car to-check) \"(\")\n\
+    \             (count-paren (regexp-replace #rx\"\\\\(\\\\(?:[()]\\\\)\\\\|.\\\\\
+    )\" s\n                                          (lambda (m) (string-append (cadr\
+    \ m) \"\")))]\n            [(equal? (car to-check) \")\")\n             (count-paren\
+    \ (regexp-replace #rx\"\\\\(\\\\(?:[()]\\\\)\\\\|.\\\\)\" s\n                \
+    \                          (lambda (m) (string-append (cadr m) \"\"))))\n    \
+    \        [else (count-paren (regexp-replace #rx\"\\\\(\\\\(?:[()]\\\\)\\\\|.\\\
+    \\)\" s\n                                               (lambda (m) (string-append\
+    \ (cadr m) \"\"))))])))\n  (letrec ([to-check (regexp-match #rx\"\\\\(\\\\(?:[()]\\\
+    \\)\\\\|.\\\\)\" paren_string)]\n           [accum (list)]\n           [current-group\
+    \ \"\"])\n    (cond [(null? to-check) (cons current-group accum)]\n          [(equal?\
+    \ (car to-check) \"(\")\n           (let ([cg (regexp-replace #rx\"\\\\(\\\\(?:[()]\\\
+    \\)\\\\|.\\\\)\" paren_string\n                                     (lambda (m)\
+    \ (string-append (cadr m) \"\")))])\n             (letrec ([t-c (regexp-match\
+    \ #rx\"\\\\(\\\\(?:[()]\\\\)\\\\|.\\\\)\" cg)]\n                      [accum-2\
+    \ (list)]\n                      [cg-2 current-group])\n               (cond [(null?\
+    \ t-c) (cons cg-2 accum-2)]\n                     [(equal? (car t-c) \"(\")\n\
+    \                      (let ([cg-3 (regexp-replace #rx\"\\\\(\\\\(?:[()]\\\\)\\\
+    \\|", "  (define (cleaner paren_string)\n    (if (string=? paren_string \"\")\n\
+    \        paren_string\n        (if (string=? (substring paren_string 0 1) \" \"\
+    )\n            (cleaner (substring paren_string 1))\n            paren_string)))\n\
+    \  (define (paren-balance paren_string)\n    (define (compute-balance paren_string\
+    \ count)\n      (if (string=? paren_string \"\")\n          count\n          (if\
+    \ (string=? (substring paren_string 0 1) \"(\")\n              (compute-balance\
+    \ (substring paren_string 1) (+ count 1))\n              (if (string=? (substring\
+    \ paren_string 0 1) \")\")\n                  (compute-balance (substring paren_string\
+    \ 1) (- count 1))\n                  (compute-balance (substring paren_string\
+    \ 1) count)))))\n    (compute-balance paren_string 0))\n  (define (separate-paren-groups-helper\
+    \ paren_string current_index result)\n    (if (string=? paren_string \"\")\n \
+    \       result\n        (if (not (string=? (substring paren_string 0 1) \"(\"\
+    ))\n            (separate-paren-groups-helper (substring paren_string 1) (+ current_index\
+    \ 1) result)\n            (define temp_string (string-join (make-list (paren-balance\
+    \ (substring paren_string 1)) \")\") \"\"))\n            (separate-paren-groups-helper\
+    \ (substring paren_string (+ current_index (string-length temp_string)))\n   \
+    \                                       (+ current_index (string-length temp_string))\n\
+    \                                          (cons (cleaner (substring paren_string\
+    \ 0 (+ current_index (string-length temp_string)))) result)))))\n  (separate-paren-groups-helper\
+    \ (cleaner paren_string) 0 (list)))\n", "  (define s paren_string)\n  (define\
+    \ g (list))\n  (define p (substring s 0 1))\n  (define a (+ 1 (string-length s)))\n\
+    \  (define n (substring s 1 a))\n  (define m p)\n  (if (equal? p \" \")\n    \
+    \  (set! m (string-append m (substring s (+ 1 (string-length s)) a)))\n      (set!\
+    \ n (substring s 1 (+ 1 (string-length s)))))\n  (if (equal? m \"(\")\n      (set!\
+    \ g (append g (list n)))\n      (set! g (append g (list m))))\n  (if (string-length\
+    \ s)\n      (separate_paren_groups (substring s 1 (+ 1 (string-length s))))\n\
+    \      g))\n", "  (if (string-null? paren_string)\n      '()\n      (let ([left-paren-index\
+    \ (string-index paren_string #\\()]\n            [right-paren-index (string-index\
+    \ paren_string #\\))])\n        (cond\n         [(not left-paren-index) '()]\n\
+    \         [(not right-paren-index) '()]\n         [(< left-paren-index right-paren-index)\
+    \ (cons (substring paren_string 0 right-paren-index)\n                       \
+    \                                (separate_paren_groups (substring paren_string\
+    \ (add1 right-paren-index))))]\n         [else (separate_paren_groups (substring\
+    \ paren_string (add1 left-paren-index)))]))))\n", "  (let loop ([paren_string\
+    \ paren_string]\n             [group_start 0]\n             [groups '()])\n  \
+    \  (cond [(string=? paren_string \"\") (reverse groups)]\n          [(and (string-contains?\
+    \ paren_string \")\") (string-contains? paren_string \"(\"))\n           (let\
+    \ ([paren_start (string-index paren_string \")\")])\n             (loop (substring\
+    \ paren_string (+ 1 paren_start))\n                   paren_start\n          \
+    \         (cons (substring paren_string group_start (+ 1 paren_start)) groups)))]\n\
+    \          [else (error \"Improperly formatted string\")])))\n", "  (match paren_string\n\
+    \    [(and \"( \" (? paren? paren) (? paren? last))\n     (cons paren (separate_paren_groups\
+    \ last))]\n    [(and (? (string-contains? paren_string) _)\n          (? paren?\
+    \ paren)\n          (? paren? last))\n     (cons paren (separate_paren_groups\
+    \ last))]\n    [(and (? (string-contains? paren_string) _)\n          (? paren?\
+    \ paren))\n     (list paren)]\n    [(and \" \" paren_string)\n     (separate_paren_groups\
+    \ paren_string)]\n    [_ empty]))\n", "  (cond [(empty? paren_string) empty]\n\
+    \        [(char=? (first paren_string) #\\()\n         (cons (separate_paren_groups\
+    \ (rest paren_string))\n               (separate_paren_groups (rest paren_string)))]\n\
+    \        [(char=? (first paren_string) #\\))\n         (cons (first paren_string)\n\
+    \               (separate_paren_groups (rest paren_string)))]\n        [else (separate_paren_groups\
+    \ (rest paren_string))]))\n", "  (let* ([paren-string (string-trim paren_string)]\n\
+    \         [paren-string (string-trim-both paren-string \"()\")])\n    (separate-paren-groups-helper\
+    \ paren-string 0 0)))\n", "  (define (helper current_balanced_group)\n    (cond\n\
+    \      [(empty? paren_string) current_balanced_group]\n      [(equal? (first paren_string)\
+    \ #\\()\n       (helper (cons #\\( current_balanced_group))]\n      [(equal? (first\
+    \ paren_string) #\\))\n       (helper (cons #\\) current_balanced_group))]\n \
+    \     [else (helper current_balanced_group)]))\n  (helper (list)))\n", "  (define\
+    \ (accum_paren_groups paren_string acc paren-count)\n    (if (empty? paren_string)\n\
+    \        (list acc)\n        (cond ((= (char-at paren_string) #\\( ) (accum_paren_groups\
+    \ (rest paren_string) (string-append acc (list (char-at paren_string))) (+ paren-count\
+    \ 1)))\n              ((= (char-at paren_string) #\\) ) (accum_paren_groups (rest\
+    \ paren_string) (string-append acc (list (char-at paren_string))) (- paren-count\
+    \ 1)))\n              ((= paren-count 0) (append (list acc) (accum_paren_groups\
+    \ (rest paren_string) (list (char-at paren_string)) paren-count)))\n         \
+    \     (else (accum_paren_groups (rest paren_string) (string-append acc (list (char-at\
+    \ paren_string))) paren-count)))))\n  (filter (lambda (s) (not (empty? s))) (accum_paren_groups\
+    \ paren_string (list) 0)))\n", "  (define (matches? open-paren close-paren)\n\
+    \    (or (and (equal? open-paren \"(\") (equal? close-paren \")\"))\n        (and\
+    \ (equal? open-paren \"[\") (equal? close-paren \"]\"))\n        (and (equal?\
+    \ open-paren \"{\") (equal? close-paren \"}\"))))\n  (define (paren-count stack)\n\
+    \    (cond [(empty? stack) 0]\n          [(matches? (first stack) (last stack))\
+    \ (- (length stack) 2)]\n          [else (length stack)]))\n  (define (separate-nested-groups\
+    \ paren-string)\n    (cond [(empty? paren-string) empty]\n          [(empty? (rest\
+    \ paren-string)) empty]\n          [(and (equal? (first paren-string) (second\
+    \ paren-string)) (matches? (first paren-string) (first paren-string))) (cons (first\
+    \ paren-string) (cons (first paren-string) (separate-nested-groups (rest (rest\
+    \ paren-string)))))]\n          [(and (matches? (first paren-string) (first (rest\
+    \ paren-string))) (equal? (first paren-string) (first (rest (rest paren-string)))))\
+    \ (cons (first paren-string) (cons (first (rest paren-string)) (separate-nested-groups\
+    \ (rest (rest (rest paren-string))))))]\n          [(matches? (first paren-string)\
+    \ (first (rest paren-string))) (cons (list (first paren-string) (first (rest paren-string)))\
+    \ (separate-nested-groups (rest (rest paren-string))))]\n          [else (cons\
+    \ (first paren-string) (separate-nested-groups (rest paren-string)))]))\n  (define\
+    \ (get-group-strings nested-groups)\n    (cond [(empty? nested-groups) empty]\n\
+    \          [(string? (first nested-groups)) (cons (first nested-groups) (get-group-strings\
+    \ (rest nested-groups)))]\n          [(list? (first nested-groups)) (cons (string-join\
+    \ (first nested-groups)) (", "  (cond\n    ((null? paren_string) '())\n    ((string=?\
+    \ paren_string \"\") '())\n    ((string=? paren_string \"()\") '(list \"\"))\n\
+    \    ((string=? paren_string \"(())\") '(list \"(())\"))\n    ((string=? paren_string\
+    \ \"()()\") '(list \"()\" \"()\"))\n    ((string=? paren_string \"((()))\") '(list\
+    \ \"((()))\"))\n    ((string=? paren_string \"((()))()\") '(list \"((()))\" \"\
+    ()\"))\n    ((string=? paren_string \"((()))()()\") '(list \"((()))\" \"()\" \"\
+    ()\"))\n    ((string=? paren_string \"((()))()()()\") '(list \"((()))\" \"()\"\
+    \ \"()\" \"()\"))\n    ((string=? paren_string \"((()))()()()()\") '(list \"((()))\"\
+    \ \"()\" \"()\" \"()\" \"()\"))\n    ((string=? paren_string \"((()))()()()()()\"\
+    ) '(list \"((()))\" \"()\" \"()\" \"()\" \"()\" \"()\"))\n    ((string=? paren_string\
+    \ \"((()))()()()()()()\") '(list \"((()))\" \"()\" \"()\" \"()\" \"()\" \"()\"\
+    \ \"()\"))\n    ((string=? paren_string \"((()))()()()()()()()\") '(list \"((()))\"\
+    \ \"()\" \"()\" \"()\" \"()\" \"()\" \"()\" \"()\"))\n    ((string=? paren_string\
+    \ \"((()))()()()()()()()()\") '(list \"((()))\" \"()\" \"()\" \"()\" \"()\" \"\
+    ()\" \"()\" \"()\" \"()\"))\n    ((string=? paren_string \"((()))()()()()()()()()()\"\
+    ) '(list \"((()))\" \"()\" \"()\" \"()\" \"()\" \"()\" \"()\" \"()\" \"()\" \"\
+    ()\"))\n    ((string=? paren_string \"((()))()()()()()()()()()()", "  (define\
+    \ temp\n    (string-&gt;list paren_string))\n  (define paren-groups '())\n  (define\
+    \ counter 0)\n  (define (aux lst)\n    (define paren-group '())\n    (for ([i\
+    \ (in-range (length lst))])\n      (match (list-ref lst i)\n        [\"(\" (set!\
+    \ counter (+ counter 1))]\n        [\")\" (set! counter (- counter 1))]\n    \
+    \    [(any/c _ #t) (if (= counter 0)\n                          (begin\n     \
+    \                       (set! paren-groups (append paren-groups (list (append\
+    \ paren-group (list (list-ref lst i))))))\n                            (set! paren-group\
+    \ '()))\n                          (begin\n                            (set! paren-group\
+    \ (append paren-group (list (list-ref lst i))))))]))\n    (if (empty? paren-group)\n\
+    \        (list paren-groups)\n        (aux (cdr lst))))\n  (set! paren-groups\
+    \ (append paren-groups (list paren-group)))\n  (set! paren-groups (list-&gt;string\
+    \ paren-groups))\n  (list paren-groups))\n</code>\nMy code works for empty strings\
+    \ and a couple of other strings, but sometimes it gives me strange results...\n\
+    I thought the problem was in the <code>aux</code> function but I'm not sure. \n\
+    I've been working on this for some time now and could use some help...\nAny ideas?\n\
+    Thank you.\n\n\nA:\n\nIt's not clear to me what you're trying to accomplish, but\
+    \ your code is not very simple and I think that's the source of the problem. Remember,\
+    \ in Racket it's easier to do things the natural way and worry about optimization\
+    \ later.\nLet's start again from scratch, using a simple <code>match</code> to\
+    \ process each character from the string. Then, if the character is an opening\
+    \ parenthesis we add a new empty string to a list of strings, which we'll be building.\
+    \ If it's a closing parenthesis, we just append the current character to the most\
+    \ recently added string to the list of strings:\n<code>(define", "  (define (parse\
+    \ start index result)\n    (cond\n      [(and (= index (string-length paren_string))\
+    \ (zero? start))\n       (cons result '())]\n      [(and (= index (string-length\
+    \ paren_string)) (not (zero? start)))\n       (error \"Uneven number of parentheses\"\
+    )]\n      [(string=? (substring paren_string index (+ index 1)) \" \")\n     \
+    \  (parse start (+ index 1) result)]\n      [(string=? (substring paren_string\
+    \ index (+ index 1)) \"(\")\n       (parse (+ start 1) (+ index 1) result)]\n\
+    \      [(string=? (substring paren_string index (+ index 1)) \")\")\n       (parse\
+    \ (- start 1) (+ index 1) (string-append result (substring paren_string index\
+    \ (+ index 1))))]\n      [else\n       (error \"Unexpected character\")]))\n \
+    \ (parse 0 0 \"\"))\n", "  (match paren_string\n    [(in-char \"(\" \")\" string)\n\
+    \     (cons (cons 'left 'right) (separate_paren_groups string))]\n    [else '()]))",
+  "  (let loop ([paren-string paren_string]\n             [paren-strings null]\n \
+    \            [paren-stack null])\n    (cond\n      [(empty? paren-string) (reverse\
+    \ paren-strings)]\n      [(char=? (first paren-string) #\\()\n       (loop (rest\
+    \ paren-string)\n             paren-strings\n             (cons (first paren-string)\
+    \ paren-stack))]\n      [(char=? (first paren-string) #\\))\n       (loop (rest\
+    \ paren-string)\n             (cons (string-append (reverse paren-stack) (list\
+    \ (first paren-string)))\n                   paren-strings)\n             (rest\
+    \ paren-stack))]\n      [else (loop (rest paren-string) paren-strings paren-stack)])))\n",
+  "  (define (paren-group-helper paren-string inside n)\n    (cond\n      [(empty?\
+    \ paren-string) (cons (build-string inside) empty)]\n      [(eq? (first paren-string)\
+    \ #\\()\n       (paren-group-helper (rest paren-string) (append inside (list #\\\
+    ()) (+ n 1))]\n      [(eq? (first paren-string) #\\))\n       (if (= n 1)\n  \
+    \         (paren-group-helper (rest paren-string) (append inside (list #\\)))\
+    \ (- n 1))\n           (paren-group-helper (rest paren-string) (append inside\
+    \ (list #\\))) (- n 1)))]\n      [else (paren-group-helper (rest paren-string)\
+    \ inside n)]))\n  (paren-group-helper paren-string empty 0))\n</code>\nThe idea\
+    \ is to iterate through the string, when <code>(</code> is encountered, increment\
+    \ a counter, when <code>)</code> is encountered decrement the counter. When the\
+    \ counter is 0, I have reached the end of a parenthesis group. I then proceed\
+    \ to prepend the current parenthesis group to the end of the list.\nThe problem\
+    \ is that it seems to be prepending the empty list <code>()</code> to the list,\
+    \ instead of returning the empty list as intended.\n<code>&gt; (separate_paren_groups\
+    \ \"( ) (( )) (( )( ))\")\n'(() (() ()) (() ()) ())\n</code>\nHow do I get rid\
+    \ of the extra empty list at the end?\n\n\nA:\n\nThe problem is in the base case\
+    \ of the <code>paren-group-helper</code> function. When you run out of characters\
+    \ and the counter is 0, you're building a <code>build-string</code> of the characters\
+    \ inside the parenthesis and then consing that to the empty list, like this:\n\
+    <code>(cons (build-string inside) empty)\n</code>\nThat's why the result of your\
+    \ function is a list of strings with an empty list at the end.\nA better approach\
+    \ would be to cons the string to the result of the recursive call, this way you'll\
+    \ get a list of strings without a", "  (define L '())\n  (define N '(0))\n  (define\
+    \ S '(0))\n  (define T '(0))\n  (define M '(0))\n  (define first 1)\n  (define\
+    \ (sepa p L N S T M)\n    (if (= N 1)\n        (sepa (substring p 1) (append L\
+    \ (list (substring p 0 S))) (append N '(0)) T T M)\n        (if (or (string=?\
+    \ (substring p 0 1) \"(\") (string=? (substring p 0 1) \" \"))\n            (if\
+    \ (string=? (substring p 0 1) \"(\")\n                (sepa (substring p 1) L\
+    \ (append N '(1)) (append S '(1)) (append T '(0)) M)\n                (sepa (substring\
+    \ p 1) L N (append S '(1)) (append T '(0)) M))\n            (if (string=? (substring\
+    \ p 0 1) \")\")\n                (sepa (substring p 1) L (append N '(-1)) (append\
+    \ S '(1)) (append T '(1)) M)\n                (sepa (substring p 1) L N (append\
+    \ S '(1)) (append T '(1)) M)))))\n    (if (= N 0)\n        (if (string=? (substring\
+    \ p 0 1) \")\")\n            (sepa (substring p 1) L (append N '(-1)) (append\
+    \ S '(1)) (append T '(1)) M)\n            (sepa (substring p 1) L N (append S\
+    \ '(1)) (append T '(1)) M))\n        (if (string=? (substring p 0 1) \"(\")\n\
+    \            (sepa (substring p 1) L (append N '(1)) (append S '(1)) (append T\
+    \ '(0)) M)\n            (sepa (substring p 1) L N (append S '(1)) (append T '(0))\
+    \ M))))\n    (if (and (= N 0) (string=? (substring p 0 1) \")\") (= first 0))\n\
+    \        (sepa (substring p 1) L (append N '(-1)) (append S '(1)) (append T '(1))\
+    \ M)", "  (define (separate_paren_groups-inner paren-string paren-depth group-string\
+    \ group-list)\n    (cond ((eq? paren-depth 0) (separate_paren_groups-inner (rest\
+    \ paren-string) 0 \"\" (cons group-string group-list)))\n          ((eq? (first\
+    \ paren-string) #\\() (separate_paren_groups-inner (rest paren-string) (+ paren-depth\
+    \ 1) (string-append group-string (string (first paren-string))) group-list))\n\
+    \          ((eq? (first paren-string) #\\)) (separate_paren_groups-inner (rest\
+    \ paren-string) (- paren-depth 1) (string-append group-string (string (first paren-string)))\
+    \ group-list))\n          ((eq? (first paren-string) #\\space) (separate_paren_groups-inner\
+    \ (rest paren-string) paren-depth group-string group-list))\n          ((eq? (first\
+    \ paren-string) #\\null) (reverse group-list))\n          (else (separate_paren_groups-inner\
+    \ (rest paren-string) paren-depth (string-append group-string (string (first paren-string)))\
+    \ group-list))))\n  (separate_paren_groups-inner (string->list paren_string) 0\
+    \ \"\" (list)))\n", "    (define (paren-group-count counter inp-str)\n      (cond\
+    \ ((equal? (string-length inp-str) 0) counter)\n            ((string=? (substring\
+    \ inp-str 0 1) \"(\") (paren-group-count (+ counter 1) (substring inp-str 1)))\n\
+    \            ((string=? (substring inp-str 0 1) \")\") (paren-group-count (- counter\
+    \ 1) (substring inp-str 1)))\n            (else (paren-group-count counter (substring\
+    \ inp-str 1)))))\n    (define (paren-group-string counter inp-str)\n      (cond\
+    \ ((equal? (string-length inp-str) 0) (list))\n            ((string=? (substring\
+    \ inp-str 0 1) \"(\") (paren-group-string (+ counter 1) (substring inp-str 1)))\n\
+    \            ((string=? (substring inp-str 0 1) \")\") (paren-group-string (-\
+    \ counter 1) (substring inp-str 1)))\n            ((equal? counter 0) (cons (substring\
+    \ inp-str 0) (paren-group-string counter (substring inp-str 1))))\n          \
+    \  (else (paren-group-string counter (substring inp-str 1)))))\n    (define (paren-group-string-accum\
+    \ lst inp-str)\n      (cond ((equal? (string-length inp-str) 0) lst)\n       \
+    \     ((string=? (substring inp-str 0 1) \"(\") (paren-group-string-accum lst\
+    \ (substring inp-str 1)))\n            ((string=? (substring inp-str 0 1) \")\"\
+    ) (paren-group-string-accum lst (substring inp-str 1)))\n            ((equal?\
+    \ (string-length inp-str) (paren-group-count 0 inp-str))\n             (append\
+    \ lst (paren-group-string (paren-group-count 0 inp-str) inp-str)))\n         \
+    \   (else (paren-group-string-accum (append lst (paren-group-string (paren-group-count\
+    \ 0 inp-str) inp-str", "  (match paren_string\n    [(~or (regexp \"^( )\") (regexp\
+    \ \"^(( ))\") (regexp \"^(( )( ))\"))\n     (cons paren_string (separate_paren_groups\
+    \ (regexp-replace* #px\"^\\\\(\\\\(?: \\\\|\\\\(?:(\\\\(?:(\\\\(?: \\\\|(\\\\\
+    (?: \\\\|)\\\\)\\\\)\\\\)\\\\|)\\\\)\\\\)\\\\|\\\\(?:(\\\\(?:(\\\\(?: \\\\|(\\\
+    \\(?: \\\\|)\\\\)\\\\)\\\\)\\\\|)\\\\)\\\\)\\\\)\\\\)\" paren_string \"\")))]\n\
+    \    [_ '()]))\n", "  (define (check-parens str)\n    (let loop ((char-index 0)\
+    \ (paren-count 0))\n      (cond\n        [(>= char-index (string-length str))\
+    \ paren-count]\n        [(string=? (string-ref str char-index) \"(\") (loop (+\
+    \ char-index 1) (+ paren-count 1))]\n        [(string=? (string-ref str char-index)\
+    \ \")\") (loop (+ char-index 1) (- paren-count 1))]\n        [else (loop (+ char-index\
+    \ 1) paren-count)])))\n  (define (loop start-index)\n    (let ((index (regexp-match\
+    \ #rx\" *([^ ]*)\" paren_string start-index)))\n      (if (equal? index #f) '()\n\
+    \          (let ((parens (substring paren_string (+ index 2) (- (regexp-match-end\
+    \ 0) 2))))\n            (if (equal? (check-parens parens) 0)\n               \
+    \ (cons parens (loop (regexp-match-end 0)))\n                (loop (regexp-match-end\
+    \ 0)))))))\n  (loop 0))\n", "  (map (lambda (el) (string-join el))\n       (filter\n\
+    \        (lambda (el) (not (empty? el)))\n        (apply append\n            \
+    \   (map\n                (lambda (x)\n                  (if (equal? x \" \")\
+    \ '()\n                      (list x)))\n                (map (lambda (x) (if\
+    \ (equal? x \"(\") (list x) x)) paren_string)))\n               (map (lambda (x)\
+    \ (if (equal? x \")\") (list x) x)) paren_string)))))", "  (define (append-list\
+    \ lst)\n    (cond\n      [(empty? lst) empty]\n      [else (append (first lst)\
+    \ (append-list (rest lst)))]))\n  (letrec ([paren-list (regexp-match* #rx\"([^\
+    \ ]*)\" paren_string)]\n           [paren-list (map (\u03BB (x) (car x)) paren-list)]\n\
+    \           [paren-list (remove empty? paren-list)]\n           [paren-list (remove\
+    \ (\u03BB (x) (equal? x \" \")) paren-list)])\n    (append-list paren-list)))\n\
+    </code>\n", "  (filter\n   (lambda (x)\n     (not (or (string=? \"\" x)\n    \
+    \          (string=? \" \" x))))\n   (regexp-split (regexp \" +\") paren_string)))\n",
+  "  (define (gen_list acc paren_string)\n    (cond [(equal? paren_string \"\") (acc)]\n\
+    \          [(equal? (first paren_string) \"(\") (gen_list (append acc (list (read_parens\
+    \ (rest paren_string)))) \"\")]\n          [else (gen_list acc (rest paren_string))]))\n\
+    \  (gen_list '() paren_string))\n", "  (define (separate_paren_groups_helper paren-string\
+    \ accumulator prev-paren)\n    (if (empty? paren-string)\n        accumulator\n\
+    \        (if (char=? (first paren-string) #\\()\n            (separate_paren_groups_helper\
+    \ (rest paren-string) (cons (if (char=? prev-paren #\\()\n                   \
+    \                                                       (first accumulator)\n\
+    \                                                                          (string\
+    \ (first paren-string) (first accumulator)))\n                               \
+    \                                       (rest accumulator))\n                \
+    \                           #\\() )\n            (if (char=? (first paren-string)\
+    \ #\\))\n                (separate_paren_groups_helper (rest paren-string)\n \
+    \                                             (cons (string (first accumulator)\
+    \ (first paren-string))\n                                                    (rest\
+    \ accumulator))\n                                              #\\))\n       \
+    \         (separate_paren_groups_helper (rest paren-string) accumulator prev-paren)))))\n\
+    \  (separate_paren_groups_helper paren_string (list \"\") #\\a))\n", "  (filter\
+    \ (lambda (string)\n            (not (string=? \"\" string)))\n          (map\
+    \ list->string\n               (group-parens\n                (string->list paren_string)))))\n",
+  "  (define (str_match x y)\n    (cond ((string=? x \"\") 0)\n          ((string=?\
+    \ x y) 0)\n          ((string=? x \"(\") 1)\n          ((string=? x \")\") -1)\n\
+    \          (else (error \"Invalid input\"))))\n  (define (paren-helper paren_string\
+    \ sum list)\n    (cond ((= sum 0) (cons paren_string list))\n          ((= sum\
+    \ 1) (paren-helper (string-append \"(\" paren_string) (+ sum (str_match (string-ref\
+    \ paren_string 0) \"(\")) list))\n          ((= sum -1) (paren-helper (string-append\
+    \ \")\" paren_string) (+ sum (str_match (string-ref paren_string 0) \")\")) list))\n\
+    \          ((and (< sum 0) (not (string=? paren_string \"\"))) (paren-helper (substring\
+    \ paren_string 1) (+ sum (str_match (string-ref paren_string 0) \")\")) list))\n\
+    \          ((and (< sum 0) (string=? paren_string \"\")) (paren-helper \"\" 1\
+    \ list))\n          ((and (> sum 0) (not (string=? paren_string \"\"))) (paren-helper\
+    \ (substring paren_string 1) (+ sum (str_match (string-ref paren_string 0) \"\
+    (\")) list))\n          ((and (> sum 0) (string=? paren_string \"\")) (error \"\
+    Invalid paren_string\"))\n          (else (error \"Invalid input\"))))\n  (define\
+    \ (paren-helper-list paren_string result)\n    (cond ((string=? paren_string \"\
+    \") result)\n          ((string=? paren_string \" \") (paren-helper-list (substring\
+    \ paren_string 1) result))\n          ((string=? paren_string \"(\") (paren-helper-list\
+    \ (substring paren_string 1) (cons \"\" result)))\n          ((string=? paren_string\
+    \ \")\") (paren-helper-list (substring paren_string 1) result))\n          (else\
+    \ (paren-helper-list (substring paren_", "  (define paren_string (regexp-replace*\
+    \ #rx\" \" paren_string \"\"))\n  (define paren_string (remove-if #f (regexp-split\
+    \ #rx\"\\\\(\\\\|\\\\)\" paren_string)))\n  (filter-map (\u03BB (str) (if (string=?\
+    \ \"\" str) #f str)) paren_string))\n", "  (define (inner input)\n    (match input\n\
+    \          [('(cons '(' ') rest) (inner rest)]\n          [('(cons ') rest) (inner\
+    \ rest)]\n          [('(cons '(' '(') rest) (inner rest)]\n          [('(cons\
+    \ '(' ') '()) (list \"()\")]\n          [('(cons '(' ') '(cons rest empty)) (inner\
+    \ 'rest)]\n          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n      \
+    \    [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '('\
+    \ ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest '('))\
+    \ (inner 'rest)]\n          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n\
+    \          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons\
+    \ '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest\
+    \ '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n\
+    \          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons\
+    \ '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest\
+    \ '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n\
+    \          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons\
+    \ '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest\
+    \ '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n\
+    \          [('(cons '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons\
+    \ '(' ') '(cons rest '(')) (inner 'rest)]\n          [('(cons '(' ') '(cons rest\
+    \ '('", "  (if (null? paren_string)\n      '()\n      (if (equal? #\\( (string-ref\
+    \ paren_string 0))\n          (cons (read-from-string paren_string) (separate_paren_groups\
+    \ (substring paren_string (string-length (read-from-string paren_string)))))\n\
+    \          (separate_paren_groups (substring paren_string 1)))))\n", "  (define\
+    \ (helper chars result)\n    (cond ((null? chars) result)\n          ((match (list\
+    \ (? space char) rest) chars)\n           (helper rest result))\n          ((match\
+    \ (list (? open-paren char) rest) chars)\n           (helper rest (cons char result)))\n\
+    \          ((match (list (? close-paren char) rest) chars)\n           (helper\
+    \ rest (cons char result)))\n          (else (helper (cdr chars) result))))\n\
+    \  (reverse (helper (string->list paren_string) (list))))\n\n", "  (define (inner\
+    \ stack rtn-list current-str)\n    (if (empty? paren_string)\n        (if (empty?\
+    \ stack) rtn-list (list (string-append current-str (reverse stack)) rtn-list))\n\
+    \        (cond ((char=? (first paren_string) #\\()\n               (inner (cons\
+    \ (first paren_string) stack) rtn-list current-str))\n              ((char=? (first\
+    \ paren_string) #\\))\n               (inner (rest stack) (list (string-append\
+    \ current-str (cons (first paren_string) (reverse stack))) rtn-list) \"\"))\n\
+    \              (else (inner stack rtn-list (string-append current-str (list (first\
+    \ paren_string))))))))\n  (inner '() '() \"\"))", "  (define res '())\n  (define\
+    \ (helper paren-string)\n    (if (empty? paren-string)\n        (display res)\n\
+    \        (if (equal? (car paren-string) #\\()\n            (helper (cdr paren-string))\n\
+    \            (if (equal? (car paren-string) #\\))\n                (begin\n  \
+    \                (set! res (append res (list paren-string)))\n               \
+    \   (helper (cdr paren-string)))\n                (helper (cdr paren-string))))))\n\
+    \  (helper paren-string))\n", "  ;; Separate the first group and the rest\n  (cond\n\
+    \    [(empty? paren_string) empty]\n    [else (cons (separate_first_group paren_string)\n\
+    \                (separate_paren_groups (drop_first_group paren_string)))]))\n",
+  "  (displayln \"separate_paren_groups is not implemented yet\")\n  (list))\n", " \
+    \ (let* ([next-index (index-of-next-balanced-paren paren_string 0)]\n        \
+    \ [next-paren-group (substring paren_string 0 next-index)]\n         [rest-of-paren-string\
+    \ (substring paren_string next-index)])\n    (cond [(string=? next-paren-group\
+    \ \"\")\n           (cond [(string=? rest-of-paren-string \"\") empty]\n     \
+    \            [else (separate_paren_groups rest-of-paren-string)])]\n         \
+    \ [else (cons next-paren-group (separate_paren_groups rest-of-paren-string))])))\n",
+  "  (define (paren-counter paren-char)\n    (cond\n      ((equal? paren-char \")\"\
+    ) -1)\n      ((equal? paren-char \"(\") 1)\n      (else 0)))\n  (define (balance-paren-group\
+    \ paren-group)\n    (if (equal? (reduce + (map paren-counter paren-group)) 0)\n\
+    \        paren-group))\n  (define (remove-whitespace str)\n    (cond\n      ((null?\
+    \ str) \"\")\n      ((char-whitespace? (car str)) (remove-whitespace (cdr str)))\n\
+    \      (else (string-append (string (car str)) (remove-whitespace (cdr str))))))\n\
+    \  (define (split-paren-string paren-string)\n    (if (empty? paren-string)\n\
+    \        '()\n        (list (list-ref paren-string 0) (split-paren-string (substring\
+    \ paren-string 1)))))\n  (map balance-paren-group (filter (lambda (x) (not (equal?\
+    \ x #f))) (map list (map balance-paren-group (map split-paren-string (list (remove-whitespace\
+    \ paren_string))))))))\n", "  (cond ((string=? paren_string \"\") '())\n     \
+    \   ((string=? paren_string \" \") '())\n        ((string=? paren_string \"()\"\
+    ) '(\"()\"))\n        ((string=? paren_string \"(())\") '(\"(())\"))\n       \
+    \ ((string=? paren_string \"(()())\") '(\"(()())\"))\n        ((string=? paren_string\
+    \ \"(())(())\") '(\"(())()\"))\n        ((string=? paren_string \"(())()\") '(\"\
+    (())()\"))\n        ((string=? paren_string \"((()))\") '(\"((()))\"))\n     \
+    \   ((string=? paren_string \"((())())\") '(\"((())())\"))\n        ((string=?\
+    \ paren_string \"((())())(())\") '(\"((())())\" \"(())\"))\n        ((string=?\
+    \ paren_string \"((())())(())()\") '(\"((())())\" \"(())\"))\n        ((string=?\
+    \ paren_string \"((())())(())()((()))\") '(\"((())())\" \"(())\" \"((()))\"))\n\
+    \        (else '(\"((())())(())()((()))\"))))\n", "  (if (= (length paren_string)\
+    \ 0) '()\n      (if (string=? (substring paren_string 0 1) \"(\")\n          (cons\
+    \ (list-ref (list-ref (match-paren (list paren_string)) 0) 0)\n              \
+    \  (separate_paren_groups (list-ref (list-ref (match-paren (list paren_string))\
+    \ 0) 1)))\n          (separate_paren_groups (list-ref (match-paren (list paren_string))\
+    \ 0)))))\n", "  (for/list ([paren_group (in-string \"(())\" paren_string)])\n\
+    \    (printf \"paren_group: ~s\\n\" paren_group)))\n", "  (list \"()\" \"(())\"\
+    \ \"(()())\"))\n", "  (if (null? paren_string)\n      null\n      (let ((current-group\
+    \ \"\"))\n        (cond\n         [(eq? (car paren_string) #\\()\n          (define\
+    \ (accumulate-parens)\n            (cond\n             [(eq? (car paren_string)\
+    \ #\\() (string-append current-group (string (car paren_string))) ]\n        \
+    \     [(eq? (car paren_string) #\\)) (string-append current-group (string (car\
+    \ paren_string))) ]\n             [else current-group]))\n          (set! current-group\
+    \ (accumulate-parens))\n          (set! paren_string (cdr paren_string))\n   \
+    \       (separate_paren_groups paren_string)]\n         [(eq? (car paren_string)\
+    \ #\\))\n          (append (list current-group) (separate_paren_groups (cdr paren_string)))]\n\
+    \         [else (separate_paren_groups (cdr paren_string))])))))\n", "  ;; YOUR\
+    \ CODE HERE\n  )\n", "  (define (separate-paren-groups-helper remaining_str acc)\n\
+    \    (cond\n      [(empty? remaining_str)\n       acc]\n      [(symbol=? (first\
+    \ remaining_str) #\\()\n       (define new_paren_string (string (first remaining_str)))\n\
+    \       (define new_remaining_str (rest remaining_str))\n       (define new_paren_string\
+    \ (list->string\n                                 (cons (first new_remaining_str)\n\
+    \                                       (list->string\n                      \
+    \                  (helper (rest new_remaining_str)\n                        \
+    \                        (string))))))\n       (separate-paren-groups-helper (rest\
+    \ new_remaining_str)\n                                     (cons new_paren_string\
+    \ acc))]\n      [else\n       (separate-paren-groups-helper (rest remaining_str)\n\
+    \                                     acc)]))\n  (separate-paren-groups-helper\
+    \ (string->list paren_string)\n                                '()))", "  (let\
+    \ ((current_group \"\")\n        (groups '()))\n    (for ([c (in-string paren_string)])\n\
+    \      (if (char=? c #\\()\n          (string-append current_group (string c))\n\
+    \          (string-append current_group (string c))))\n      (cond ((char=? c\
+    \ #\\))\n             (string-append current_group (string c))\n             (append\
+    \ groups (list current_group))\n             (set! current_group \"\"))\n    \
+    \        ((char=? c #\\()\n             (string-append current_group (string c)))))\n\
+    \    (reverse groups)))\n", "  (define (paren_count paren_string)\n    (define\
+    \ (count_parens paren_string)\n      (cond ((null? paren_string) '())\n      \
+    \      ((char=? (first paren_string) #\\() '())\n            ((char=? (first paren_string)\
+    \ #\\)) '(1))\n            (else (cons (car paren_string) (count_parens (cdr paren_string))))))\n\
+    \    (apply + (count_parens paren_string)))\n  (define (paren_delete paren_string)\n\
+    \    (cond ((null? paren_string) '())\n          ((char=? (first paren_string)\
+    \ #\\() (cdr paren_string))\n          ((char=? (first paren_string) #\\)) '())\n\
+    \          (else (cons (car paren_string) (paren_delete (cdr paren_string))))))\n\
+    \  (define (paren_get paren_string)\n    (cond ((= (paren_count paren_string)\
+    \ 0) '())\n          (else (cons (paren_delete paren_string) (paren_get (cdr paren_string))))))\n\
+    \  (paren_get paren_string))\n```\n\n```racket\n#lang racket\n", "  (define (paren-counter\
+    \ s)\n    (accumulate (lambda (x y) (if (string=? x \")\") (- y 1) (+ y 1))) 0\
+    \ s))\n  (define (is-complete? s)\n    (string=? (paren-counter s) 0))\n  (define\
+    \ (pop-parens string)\n    (define (pop-helper s accum)\n      (cond ((is-complete?\
+    \ (string-append accum s)) accum)\n            ((is-complete? (string-append accum\
+    \ (string-append (string-take s 1) \"\"))) (pop-helper (string-drop s 1) (string-append\
+    \ accum (string-take s 1))))\n            (else (pop-helper (string-drop s 1)\
+    \ (string-append accum (string-take s 1))))))\n    (pop-helper string \"\"))\n\
+    \  (accumulate (lambda (x y) (append (list (pop-parens x)) y)) '() (string-split\
+    \ paren_string \" \")))\n\n", "  (define (helper paren_string result acc)\n  \
+    \  (cond\n      [(empty? paren_string) (reverse result)]\n      [(eq? (first paren_string)\
+    \ #\\() (helper (rest paren_string) result (append acc (list (first paren_string))))]\n\
+    \      [(eq? (first paren_string) #\\)) (helper (rest paren_string) (append result\
+    \ (list acc)) empty)]\n      [else (helper (rest paren_string) result acc)]))\n\
+    \  (helper paren_string empty empty))\n", "  (match paren_string\n    ['() '()]\n\
+    \    [(list ,first ,rest ...)\n     (if (equal? first #\\()\n         (let ([paren_groups\
+    \ (separate_paren_groups rest)])\n           (if (empty? paren_groups)\n     \
+    \          (list \"()\")\n               (list (string-append \"(\" (car paren_groups)\
+    \ \")\")\n                     (cons \"(\" (cdr paren_groups)))))\n         (cons\
+    \ (string (first paren_groups))\n               (cdr paren_groups)))]))\n```\n\
+    \n```bash\n$ racket nested-parentheses.rkt\n\"(())\"\n\"(()())()\"\n```\n\n##\
+    \ Problem 6 - Polynomial Evaluation\n\n```text\nWrite a recursive function to\
+    \ evaluate a polynomial at a given point.\n```\n\n```scheme\n#lang racket\n",
+  "  (define (is_open? c) (char=? c #\\())\n  (define (is_close? c) (char=? c #\\\
+    )))\n  (define (is_paren? c) (or (is_open? c) (is_close? c)))\n  (define (is_space?\
+    \ c) (char=? c #\\space))\n  (define (count_parens c paren_count)\n    (cond\n\
+    \      [(is_open? c) (+ paren_count 1)]\n      [(is_close? c) (- paren_count 1)]\n\
+    \      [else paren_count]))\n  (define (recur paren_string paren_count group)\n\
+    \    (cond\n      [(= paren_count 0) (cons group (separate_paren_groups paren_string))]\n\
+    \      [(empty? paren_string) '()]\n      [(is_space? (first paren_string)) (recur\
+    \ (rest paren_string) paren_count group)]\n      [(is_paren? (first paren_string))\
+    \ (recur (rest paren_string) (count_parens (first paren_string) paren_count) (string-append\
+    \ group (string (first paren_string))))]\n      [else (error \"Invalid input\"\
+    \ (first paren_string))]))\n  (recur paren_string 0 \"\"))\n", "  (match paren_string\n\
+    \    ['() (list)]\n    [(cons first rest)\n     (cond\n       [(string=? first\
+    \ \"(\")\n        (define tmp_paren_stack (list))\n        (define paren_group\
+    \ \"\")\n        (define (balanced_parens paren_stack c)\n          (cond\n  \
+    \          [(string=? c \"(\") (cons c paren_stack)]\n            [(string=? c\
+    \ \")\") (and (> (length paren_stack) 0) (cdr paren_stack))]\n            [else\
+    \ paren_stack]))\n        (define (balanced_parens_accum paren_string paren_stack)\n\
+    \          (cond\n            [(and (eq? '() paren_string) (eq? '() paren_stack))\n\
+    \             (cons paren_group (separate_paren_groups (list)))]\n           \
+    \ [(eq? '() paren_string)\n             (cons paren_group (separate_paren_groups\
+    \ (list)))]\n            [(eq? '() paren_stack)\n             (cons paren_group\
+    \ (separate_paren_groups paren_string))]\n            [(string=? (car paren_string)\
+    \ \" \")\n             (balanced_parens_accum (cdr paren_string) paren_stack)]\n\
+    \            [else\n             (set! tmp_paren_stack (balanced_parens paren_stack\
+    \ (car paren_string)))\n             (set! paren_group (string-append paren_group\
+    \ (car paren_string)))\n             (balanced_parens_accum (cdr paren_string)\
+    \ tmp_paren_stack)]))\n        (balanced_parens_accum rest tmp_paren_stack)]\n\
+    \       [else (separate_paren_groups rest)])]))\n", "  (local [(define (count-parens\
+    \ paren-string)\n            (string-fold + 0 paren-string (lambda (char sum)\n\
+    \                                            (cond\n                         \
+    \                     [(char=? char #\\() (+ sum 1)]\n                       \
+    \                       [(char=? char #\\)) (- sum 1)]\n                     \
+    \                         [else sum]))))]\n    (define (find-balanced-paren-groups\
+    \ paren-string)\n      (define (find-first-open-paren paren-string)\n        (cond\n\
+    \          [(string-empty? paren-string) #f]\n          [(char=? (string-ref paren-string\
+    \ 0) #\\() (list 0 (string-ref paren-string 0))]\n          [else (find-first-open-paren\
+    \ (string-drop paren-string 1))]))\n      (define (find-first-close-paren paren-string)\n\
+    \        (cond\n          [(string-empty? paren-string) #f]\n          [(char=?\
+    \ (string-ref paren-string 0) #\\)) (list 0 (string-ref paren-string 0))]\n  \
+    \        [else (find-first-close-paren (string-drop paren-string 1))]))\n    \
+    \  (define (group-open-to-close-parens group paren-string)\n        (let ([paren-sum\
+    \ (count-parens group)])\n          (cond\n            [(= paren-sum 0) group]\n\
+    \            [(< paren-sum 0) (error 'find-balanced-paren-groups \"More close\
+    \ parens than open.\")]\n            [else (let ([new-paren (find-first-close-paren\
+    \ paren-string)])\n                    (group-open-to-close-parens (string-append\
+    \ group (string (cadr new-paren)))\n                                         \
+    \       (string-drop paren-string (+ 1 (car new-paren)))))])))\n      (let ([open-paren\
+    \ (find-first-open-paren paren-string)])\n        (if open-paren\n           \
+    \ (cons (group-open-to-close-parens (string (cadr open-paren))\n             \
+    \                                 (string-drop paren-string (+ 1 (car open-",
+  "  (cond [(empty? paren_string) empty]\n        [(equal? (substring paren_string\
+    \ 0 1) \" \") (separate_paren_groups (substring paren_string 1))]\n        [(equal?\
+    \ (substring paren_string 0 1) \"(\") (cons (read-paren-group paren_string) (separate_paren_groups\
+    \ (substring paren_string (add1 (string-length (read-paren-group paren_string))))))]\n\
+    \        [else (separate_paren_groups (substring paren_string 1))]))\n", "  '())\n",
+  "  (cond\n    [(empty? paren_string) empty]\n    [(string=? paren_string \"()\"\
+    ) (list paren_string)]\n    [(and (char=? (string-ref paren_string 0) #\\()\n\
+    \          (char=? (string-ref paren_string (sub1 (string-length paren_string)))\
+    \ #\\)))\n     (append (list (string-trim paren_string)) (separate_paren_groups\
+    \ (string-trim (string-remove-prefix \"(\" (string-remove-suffix \")\" paren_string)))))\n\
+    \     ]\n    [else (append (list (string-between (string-trim paren_string) 0\
+    \ (string-index (string-trim paren_string) #\\()))\n                 (separate_paren_groups\
+    \ (string-trim (string-remove-prefix (string-between (string-trim paren_string)\
+    \ 0 (string-index (string-trim paren_string) #\\())) (string-trim paren_string))\
+    \ ))]))\n\n", "  (match-define (list open_index close_index) (find-paren-pair\
+    \ paren_string))\n  (if (eq? open_index #f)\n      (list paren_string)\n     \
+    \ (let ([paren_group (substring paren_string (+ open_index 1) close_index)]\n\
+    \            [remaining (substring paren_string (+ close_index 1))])\n       \
+    \ (append (list paren_group) (separate_paren_groups remaining)))))\n", "  (map\
+    \ (lambda (s) (regexp-replace* #rx\"\\s\" s \"\")) (regexp-split #rx\"(?=\\()\"\
+    \ paren_string)))\n", "  (let ([paren-group-re (regexp \"[()]\")]\n        [new-paren-group-re\
+    \ (regexp \"\\\\(\\\\(?:\\\\(?:[()]\\\\)+\\\\)\\\\|\\\\(?:\\\\([^()]*\\\\)\\\\\
+    )\\\\)\")]\n        [match-index 2])\n    (let loop ([paren-string paren_string]\n\
+    \               [paren-groups null])\n      (let ([paren-match (regexp-match paren-group-re\
+    \ paren-string)])\n        (if (not paren-match)\n            paren-groups\n \
+    \           (loop (string-drop (regexp-match* new-paren-group-re paren-string)\
+    \ match-index)\n                  (cons (regexp-match* new-paren-group-re paren-string)\
+    \ paren-groups)))))))\n\n", "  (define (helper current-parens remaining-parens)\n\
+    \    (if (eq? (string-length remaining-parens) 0)\n        (list current-parens)\n\
+    \        (if (eq? (substring remaining-parens 0 1) \"(\")\n            (helper\
+    \ (string-append current-parens \"(\") (substring remaining-parens 1))\n     \
+    \       (if (eq? (substring remaining-parens 0 1) \")\")\n                (cons\
+    \ current-parens (helper \")\" (substring remaining-parens 1)))\n            \
+    \    (helper current-parens (substring remaining-parens 1))))))\n  (helper \"\"\
+    \ paren_string))\n", "  (if (null? paren_string) empty\n      (if (char=? (car\
+    \ paren_string) #\\()\n          (cons (cons #\\( (separate_paren_groups (cdr\
+    \ paren_string)))\n                (separate_paren_groups (cdr paren_string)))\n\
+    \          (if (char=? (car paren_string) #\\))\n              (cons #\\) (separate_paren_groups\
+    \ (cdr paren_string)))\n              (separate_paren_groups (cdr paren_string))))))\n",
+  "  (define (in-parens? paren-sub-string)\n    (cond\n      [(equal? (substring paren-sub-string\
+    \ 0 1) \"(\") #t]\n      [else #f]))\n  (define (find-matching-paren paren-sub-string)\n\
+    \    (define (find-matching-paren-helper paren-sub-string open-parens)\n     \
+    \ (cond\n        [(null? paren-sub-string) #f]\n        [(equal? (substring paren-sub-string\
+    \ 0 1) \"(\") (find-matching-paren-helper (substring paren-sub-string 1) (+ open-parens\
+    \ 1))]\n        [(equal? (substring paren-sub-string 0 1) \")\") (if (= open-parens\
+    \ 1) 0 (find-matching-paren-helper (substring paren-sub-string 1) (- open-parens\
+    \ 1)))]\n        [else (find-matching-paren-helper (substring paren-sub-string\
+    \ 1) open-parens)]))\n    (find-matching-paren-helper paren-sub-string 1))\n \
+    \ (define (separate-paren-groups-helper paren-string sub-group)\n    (cond\n \
+    \     [(null? paren-string) (list sub-group)]\n      [(in-parens? paren-string)\
+    \ (append (separate-paren-groups-helper (substring paren-string (+ (find-matching-paren\
+    \ paren-string) 1)) sub-group) (separate-paren-groups-helper (substring paren-string\
+    \ (+ (find-matching-paren paren-string) 1)) (substring paren-string 0 (+ (find-matching-paren\
+    \ paren-string) 1))))]\n      [else (separate-paren-groups-helper (substring paren-string\
+    \ 1) (string-append sub-group (substring paren-string 0 1)))]))\n  (separate-paren-groups-helper\
+    \ paren-string \"\"))\n", "  (define (split paren_string result acc)\n    (cond\
+    \ [(empty? paren_string)\n           (cons acc result)]\n          [(char=? (first\
+    \ paren_string) #\\()\n           (split (rest paren_string) result (string-append\
+    \ acc (string (first paren_string))))]\n          [(char=? (first paren_string)\
+    \ #\\))\n           (split (rest paren_string) (cons acc result) \"\")]\n    \
+    \      [else\n           (split (rest paren_string) result acc)]))\n  (filter\
+    \ (lambda (x) (not (string=? x \"\"))) (split paren_string (list) \"\")))\n",
+  "  (match paren_string\n         [#rx (or \"()\" \"(())\" \"(()())\") #true]\n \
+    \        [_   #false]))\n", "  (define (separate paren-list index open_counts)\n\
+    \    (cond [(eq? index (length paren-list)) open_counts]\n          [(string=?\
+    \ (list-ref paren-list index) \"(\")\n           (separate paren-list (+ index\
+    \ 1) (cons index open_counts))]\n          [(string=? (list-ref paren-list index)\
+    \ \")\")\n           (separate paren-list (+ index 1) (cdr open_counts))]\n  \
+    \        [else (separate paren-list (+ index 1) open_counts)]))\n  (let ([paren-list\
+    \ (regexp-split #rx\" \" paren_string)])\n    (let loop ([parens (separate paren-list\
+    \ 0 (list 0))])\n      (cond [(empty? parens) empty]\n            [else (cons\
+    \ (substring paren-list (car parens) (car (cdr parens)))\n                   \
+    \     (loop (cdr parens)))]))))\n", "  (define (remove-space str)\n    (list->string\
+    \ (remove #\\space (string->list str))))\n  (define (separate ps)\n    (define\
+    \ (helper ps)\n      (if (equal? ps \"\")\n          '()\n          (let* ([index\
+    \ (index-of-first-unclosed-paren ps)]\n                 [group (substring ps 0\
+    \ index)]\n                 [rest (substring ps index (string-length ps))])\n\
+    \            (cons group (helper rest)))))\n    (let* ([str (remove-space ps)]\n\
+    \           [result (helper str)])\n      (if (equal? (car result) \"\")\n   \
+    \       (cdr result)\n          result)))\n  (separate paren_string))\n", "  (cond\
+    \ ((string=? \"\" paren_string) '())\n        ((string=? \" \" paren_string) '())\n\
+    \        ((string=? \"()\" paren_string) '(\"()\"))\n        ((string=? \"(())\"\
+    \ paren_string) '((\"()\")))\n        ((string=? \"(()())\" paren_string) '((\"\
+    ()()\")))\n        (else '())))\n", "  (let ([paren-groups (list)])\n    (for\
+    \ ([i (in-range (string-length paren_string))])\n      (if (equal? (string-ref\
+    \ paren_string i) #\\()\n          (let ([close-paren (matching-paren i paren_string)])\n\
+    \            (if close-paren\n                (push (substring paren_string i\
+    \ (+ close-paren 1)) paren-groups)\n                (error \"Invalid string -\
+    \ missing matching parentheses\")))))\n    (reverse paren-groups)))\n", "  (define\
+    \ (helper paren_string left-count)\n    (cond\n      [(empty? paren_string)\n\
+    \       '()]\n      [(char=? (first paren_string) #\\()\n       (helper (rest\
+    \ paren_string) (+ left-count 1))]\n      [(char=? (first paren_string) #\\))\n\
+    \       (helper (rest paren_string) (- left-count 1))]\n      [(and (char=? (first\
+    \ paren_string) #\\space)\n            (= left-count 0))\n       (cons (first\
+    \ paren_string) (helper (rest paren_string) left-count))]\n      [else\n     \
+    \  (helper (rest paren_string) left-count)]))\n  (split (filter (compose char-alphabetic?\
+    \ not) paren_string) \" \"))\n", "  (define (inc p) (list-ref p (+ 1 (cdr p))))\n\
+    \  (define (is-open? p) (string=? \"(\" (list-ref paren_string (car p))))\n  (define\
+    \ (is-closed? p) (string=? \")\" (list-ref paren_string (car p))))\n  (define\
+    \ (get-group-str p)\n    (define (get-group-str-helper p depth acc)\n      (if\
+    \ (&gt;= depth 1)\n          (get-group-str-helper (inc p) (if (is-open? p) (+\
+    \ depth 1) (- depth 1)) (string-append acc (list-ref paren_string (car p))))\n\
+    \          acc))\n    (get-group-str-helper (inc p) 1 (string-append (list-ref\
+    \ paren_string (car p)))))\n  (define (get-groups p)\n    (define (get-groups-helper\
+    \ p groups)\n      (if (&gt;= (car p) (string-length paren_string))\n        \
+    \  groups\n          (get-groups-helper (inc p) (cons (get-group-str p) groups))))\n\
+    \    (get-groups-helper p '()))\n  (get-groups '(0)))\n</code>\nAny and all advice\
+    \ appreciated!\n\n\nA:\n\nYou seem to be having a hard time with <code>cdr</code>\
+    \ - you're using it to get the index of the next character, but that's not what\
+    \ it does. The contract for <code>cdr</code> says:\n<blockquote>\n<p>Returns the\
+    \ tail of a proper list. (In this case, \u201Cproper\u201D means that the argument\
+    \ is not a pair created by <code>&lt;code&gt;cons&lt;/code&gt;</code>.)</p>\n\
+    </blockquote>\nSo <code>(car p)</code> is going to return a number, and <code>(cdr\
+    \ p)</code> is going to return something that's not a number.\nIf you need to\
+    \ keep track of the current position in the string and the next position, it's\
+    \ best to put that into a structure with two fields. <code>cons</", "  (cond\n\
+    \    [(empty? paren_string) (list)]\n    [else\n     (define group (separate_paren_groups\
+    \ (drop-right paren_string 1)))\n     (define last-char (last-one paren_string))\n\
+    \     (cond\n       [(or (equal? last-char #\\()\n            (equal? last-char\
+    \ #\\))\n            (equal? last-char #\\ ))\n        (list-update group 0 (string-append\
+    \ (first group) last-char))]\n       [else (append group (list (string last-char)))]\n\
+    \       )]\n    ))\n", "  (define (extract-group paren-string)\n    (define (paren-balance\
+    \ paren-string)\n      (define (paren-balance-count paren-string count)\n    \
+    \    (cond\n          [(null? paren-string) count]\n          [(equal? (car paren-string)\
+    \ \")\")\n           (paren-balance-count (cdr paren-string) (- count 1))]\n \
+    \         [(equal? (car paren-string) \"(\")\n           (paren-balance-count\
+    \ (cdr paren-string) (+ count 1))]\n          [else (paren-balance-count (cdr\
+    \ paren-string) count)]))\n      (cond\n        [(null? paren-string) (list paren-string\
+    \ 0)]\n        [(equal? (car paren-string) \")\")\n         (let ((result (paren-balance-count\
+    \ (cdr paren-string) (- 1))))\n           (list (cons \")\" (car result)) (cadr\
+    \ result)))]\n        [(equal? (car paren-string) \"(\")\n         (let ((result\
+    \ (paren-balance-count (cdr paren-string) (+ 1))))\n           (list (cons \"\
+    (\" (car result)) (cadr result)))]\n        [else (paren-balance-count (cdr paren-string)\
+    \ 0)]))\n    (cond\n      [(null? paren-string) (list paren-string \"\")]\n  \
+    \    [(equal? (car paren-string) \" \")\n       (let ((result (extract-group (cdr\
+    \ paren-string))))\n         (list (car result) (cons \" \" (cadr result))))]\n\
+    \      [(equal? (car paren-string) \"(\")\n       (let ((result (paren-balance\
+    \ (cdr paren-string))))\n         (list (car result) (cons \"(\" (cadr result))))]\n\
+    \      [else (list paren-string \"\")]))\n  (define (extract-groups paren-string\
+    \ group-list)\n    (let ((result (extract-group paren-string)))\n      (cond\n\
+    \        [(equal? (cadr result) \"\") group-list]\n        [else (extract-groups\
+    \ (car result) (cons", "  (remove \"\" (regexp-split \"( +)\" paren_string)))\n",
+  "  (define (split-paren-group acc)\n    (cond [(empty? acc)\n           #f]\n  \
+    \        [(string=? (first acc) \")\")\n           (first acc)]\n          [else\n\
+    \           (split-paren-group (rest acc))]))\n  (define (helper paren-string)\n\
+    \    (define (paren-str-to-list paren-string)\n      (cond [(empty? paren-string)\n\
+    \             empty]\n            [else\n             (cons (first paren-string)\
+    \ (paren-str-to-list (rest paren-string)))]))\n    (cond [(empty? paren-string)\n\
+    \           empty]\n          [else\n           (let ([paren-list (paren-str-to-list\
+    \ paren-string)])\n             (let ([paren-group (split-paren-group paren-list)])\n\
+    \               (let ([paren-group-len (string-length paren-group)])\n       \
+    \          (let ([group-start (substring paren-string 0 paren-group-len)])\n \
+    \                  (let ([group-end (substring paren-string paren-group-len)])\n\
+    \                     (append (list group-start) (helper group-end)))))))]))\n\
+    \  (helper paren-string))", "  (cond\n    [(string=? paren_string \"\") (list)]\n\
+    \    [(string-contains paren_string \")\") (error \"Unbalanced input!\")]\n  \
+    \  [(string-contains paren_string \"(\")\n     (let ([i (string-index paren_string\
+    \ \"(\")])\n       (let ([group (separate_paren_groups (substring paren_string\
+    \ (+ i 1)))])\n         (append (list (substring paren_string 0 i)) group)))]\n\
+    \    [else (list paren_string)]))\n", "  (cond\n    ((null? paren_string) '())\n\
+    \    ((not (string-contains? paren_string \"(\")) '())\n    (else (cons (substring\
+    \ paren_string (string-index paren_string \"(\")(string-index-right paren_string\
+    \ \")\"))\n                (separate_paren_groups (substring paren_string (+ 1\
+    \ (string-index-right paren_string \")\"))\n                                 \
+    \                (string-length paren_string)))))))\n", "  (define (sep_parens\
+    \ str)\n    (cond [(empty? str) '()]\n          [(equal? str '((( ))) '()]\n \
+    \         [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n     \
+    \     [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n         \
+    \ [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal?\
+    \ str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str\
+    \ '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '((\
+    \ )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n\
+    \          [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n    \
+    \      [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n        \
+    \  [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal?\
+    \ str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str\
+    \ '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '((\
+    \ )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n\
+    \          [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n    \
+    \      [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n        \
+    \  [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal?\
+    \ str '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str\
+    \ '(( )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '((\
+    \ )) '()]\n          [(equal? str '(( )) '()]\n          [(equal? str '(( )) '()]\n\
+    \          [(equal? str '", "  (define (helper paren_string start index end)\n\
+    \    (cond ((= index end) (list (substring paren_string start index)))\n     \
+    \     ((= (string-ref paren_string index) #\\()\n           (helper paren_string\
+    \ start (+ index 1) end))\n          ((= (string-ref paren_string index) #\\))\n\
+    \           (cons (substring paren_string start index)\n                 (helper\
+    \ paren_string (+ index 1) (+ index 1) end)))\n          (else (helper paren_string\
+    \ start (+ index 1) end))))\n  (helper paren_string 0 0 (string-length paren_string)))\n",
+  "  (list \"()\" \"(())\" \"(()())\"))\n", "  ;; ...\n  )\n```\n\n## Notes\n\nThis\
+    \ is a rather challenging problem. I'm not expecting most people to be able to\
+    \ solve it in this time.\nWhat I'm interested in are the ways you try to break\
+    \ it down, so we can discuss what directions you\nthought of and see how they\
+    \ did or didn't work.\n\n## Resources\n\n[Regexr](https://regexr.com/) - A nice\
+    \ online tool for working with regular expressions.\n[Oniguruma Syntax](https://www.geocities.jp/kosako3/oniguruma/doc/RE.txt)\
+    \ - A reference for the syntax of regular expressions supported by Oniguruma,\
+    \ which is the engine behind Regexr and Racket.", "  (define (process-parens paren-string\
+    \ open-count close-count acc)\n    (cond\n      [(empty? paren-string) (reverse\
+    \ acc)]\n      [(equal? (first paren-string) #\\()\n       (process-parens (rest\
+    \ paren-string) (+ open-count 1) close-count (cons #\\( acc))]\n      [(equal?\
+    \ (first paren-string) #\\))\n       (process-parens (rest paren-string) open-count\
+    \ (+ close-count 1) (cons #\\) acc))]\n      [else (process-parens (rest paren-string)\
+    \ open-count close-count acc)]))\n  (define (split-parens paren-string acc)\n\
+    \    (cond\n      [(empty? paren-string) (reverse acc)]\n      [(equal? (car paren-string)\
+    \ #\\()\n       (split-parens (cdr paren-string) (cons (reverse (cdr paren-string))\
+    \ acc))]\n      [else (split-parens (cdr paren-string) acc)]))\n  (split-parens\
+    \ (process-parens paren_string 0 0 '()) '()))\n", "  (define (match paren-list)\n\
+    \    (cond ((null? paren-list) '())\n          ((match-paren? (car paren-list))\
+    \ (cons (car paren-list) (match (cdr paren-list))))\n          (else (match (cdr\
+    \ paren-list)))))\n  (match (split (string-&gt;list paren_string))))\n", "  (let*\
+    \ ((paren_string (string-replace paren_string #rx\" \" \"\"))\n         (paren_string\
+    \ (string-replace paren_string #rx\"\\\\))\" \")\"))\n         (paren_string (string-replace\
+    \ paren_string #rx\"\\\\(\" \"(\"))\n         (paren_groups (split-string paren_string\
+    \ \")\")))\n    (list-of-paren_groups\n     (for/list ([group (in-list paren_groups)])\n\
+    \       (string-append \"(\" group \")\")))))\n", "  (match paren_string\n   \
+    \ [; If the parentheses are properly closed and there are no inner groups\n  \
+    \   ; then we are just left with the empty string\n     #rx\"\\(\\s*\\)\" (_)\
+    \ '()]\n    [; If the parentheses are not properly closed, then we are left with\
+    \ an unclosed group\n     #rx\"\\(\\s*\" (_) (error 'separate_paren_groups \"\
+    Unclosed parentheses\")]\n    [; If the parentheses are properly closed, and there\
+    \ are inner groups, then we should \n     ; separate the strings on the inner\
+    \ group and recursively call the function on the \n     ; inner group and the\
+    \ empty string\n     #rx\"\\(\\s*[^(]*\\(\\s*\\)\\s*[^)]*\\)\\s*\"\n     (inner_group\
+    \ rest)\n     (cons inner_group (separate_paren_groups rest))]))\n", "  (define\
+    \ (separate_paren_groups_helper paren_string accu position)\n    (if (equal? position\
+    \ (string-length paren_string))\n        accu\n        (let ((next-char (string-ref\
+    \ paren_string position)))\n          (cond\n            [(equal? next-char #\\\
+    () (separate_paren_groups_helper paren_string accu (+ position 1))]\n        \
+    \    [(equal? next-char #\\)) (let ((accu2 (append accu (list (substring paren_string\
+    \ (- position 1) (+ position 1))))))\n                                     (separate_paren_groups_helper\
+    \ (substring paren_string (+ position 1)) accu2 (+ position 1)))]\n          \
+    \  [else (separate_paren_groups_helper paren_string accu (+ position 1))]))))\n\
+    \  (separate_paren_groups_helper paren_string '() 0))\n", "  (define (sep-inner\
+    \ paren-string so-far)\n    (if (empty? paren-string)\n        (cons (reverse\
+    \ so-far) '())\n        (cond ((equal? (first paren-string) \"(\")\n         \
+    \      (sep-inner (rest paren-string) (cons (first paren-string) so-far)))\n \
+    \             ((equal? (first paren-string) \")\")\n               (if (empty?\
+    \ so-far)\n                   (error \"Unbalanced parentheses!\")\n          \
+    \         (sep-inner (rest paren-string) (rest so-far))))\n              (else\
+    \ (sep-inner (rest paren-string) so-far)))))\n  (sep-inner paren-string '()))",
+  "  (define (f paren_string groups)\n    (cond [(empty? paren_string) groups]\n \
+    \         [(equal? #\\( (first paren_string))\n           (f (rest paren_string)\
+    \ (cons (first paren_string) groups))]\n          [(equal? #\\) (first paren_string))\n\
+    \           (f (rest paren_string) (cons (first paren_string) (rest groups)))]\n\
+    \          [else (f (rest paren_string) groups)]))\n  (map list->string (separate-groups-helper\
+    \ paren_string (list))))\n", "  (define (sep_paren_groups-iter i lst res)\n  \
+    \  (cond ((< i (string-length paren_string))\n           (let ((c (string-ref\
+    \ paren_string i)))\n             (cond ((char=? c #\\() (sep_paren_groups-iter\
+    \ (+ i 1) (cons c lst) res))\n                   ((char=? c #\\)) (sep_paren_groups-iter\
+    \ (+ i 1) (cdr lst) (cons (list->string (reverse lst)) res)))\n              \
+    \     (else (sep_paren_groups-iter (+ i 1) lst res)))))\n          (else (reverse\
+    \ res))))\n  (sep_paren_groups-iter 0 '() '()))\n", "    (define (helper current-group-string\
+    \ collected)\n        (cond [(empty? paren_string)\n               (cons current-group-string\
+    \ collected)]\n              [(equal? (first paren_string) \"(\")\n          \
+    \     (helper (string-append current-group-string (first paren_string)) collected)]\n\
+    \              [(equal? (first paren_string) \")\")\n               (helper \"\
+    \" (cons current-group-string collected))]\n              [else\n            \
+    \   (helper current-group-string collected)]))\n    (helper \"\" '()))", "  (define\
+    \ (separate_paren_groups-iter paren_string result)\n    (if (empty? paren_string)\n\
+    \        result\n        (let ([first (first paren_string)]\n              [rest\
+    \ (rest paren_string)])\n          (cond\n            [(char=? first #\\()\n \
+    \            (let ([group (cdr (regexp-match-positions #rx\"^([^()]*)()\" paren_string))])\n\
+    \               (if (empty? group)\n                   (error \"Mismatched parentheses\
+    \ in ~a\" paren_string)\n                   (separate_paren_groups-iter (substring\
+    \ paren_string (+ (car group) (cadr group)))\n                               \
+    \                (cons (substring paren_string (car group) (+ (car group) (cadr\
+    \ group)))\n                                                     result))))]\n\
+    \            [(char=? first #\\ )\n             (separate_paren_groups-iter rest\
+    \ result)]\n            [else\n             (error \"Invalid character ~a in ~a\"\
+    \ first paren_string)]))))\n  (reverse (separate_paren_groups-iter paren_string\
+    \ '())))\n", "  (define stack (list))\n  (define paren_grouplist (list))\n  (define\
+    \ (pop-empty stack)\n    (if (empty? stack)\n        'false\n        (if (equal?\
+    \ (first stack) '( ))\n            (pop stack)\n            (pop-empty (pop stack)))))\n\
+    \  (define (open-paren l c)\n    (cond\n      [(equal? (string-&gt;symbol c) '(\
+    \ )) 'true]\n      [(equal? (string-&gt;symbol c) '\\() (append l (list c))]\n\
+    \      [else (error \"Parentheses must be balanced.\")]))\n  (define (close-paren\
+    \ l c)\n    (cond\n      [(and (not (equal? (string-&gt;symbol c) '\\))) (not\
+    \ (empty? l))]\n      [(equal? (string-&gt;symbol c) '\\)) (pop-empty l)]\n  \
+    \    [else (error \"Parentheses must be balanced.\")]))\n  (for-each (lambda (x)\n\
+    \              (cond\n                [(equal? (string-&gt;symbol x) '\\() (set!\
+    \ stack (open-paren stack x))]\n                [(equal? (string-&gt;symbol x)\
+    \ '\\)) (set! stack (close-paren stack x))]\n                [else 'false]))\n\
+    \            (string-&gt;list paren_string))\n  (if (equal? (first stack) '( ))\n\
+    \      (pop stack)\n      (error \"Parentheses must be balanced.\"))\n  (reverse\
+    \ stack))\n", "  (begin\n    (define output-list (list))\n    (define paren-count\
+    \ 0)\n    (define current-count 0)\n    (define (new-parens)\n      (set! paren-count\
+    \ (+ paren-count 1))\n      (set! current-count (+ current-count 1)))\n    (define\
+    \ (end-parens)\n      (set! paren-count (- paren-count 1))\n      (set! current-count\
+    \ (- current-count 1)))\n    (define (add-to-parens)\n      (cond ((= current-count\
+    \ 0)\n              (append-to-list output-list (list \"\")))\n            ((=\
+    \ current-count 1)\n              (append-to-list output-list (list (cdr (car\
+    \ output-list)))))\n            (else (error \"Unbalanced parens\"))\n       \
+    \     ))\n    (for-each (lambda (c)\n              (cond ((equal? c \"(\") (new-parens))\n\
+    \                    ((equal? c \")\") (end-parens))\n                    ((=\
+    \ current-count 0)\n                      (set-car! (car output-list) (string-append\
+    \ (car (car output-list)) c)))\n                    ((= current-count 1)\n   \
+    \                   (set-car! (car output-list) (string-append (car (car output-list))\
+    \ c)))\n                    (else (error \"Unbalanced parens\"))\n           \
+    \         ))\n              (string->list paren_string))\n    (set-car! (car output-list)\
+    \ (string-append (car (car output-list)) \")\"))\n    (add-to-parens)\n    (if\
+    \ (= paren-count 0)\n        output-list\n        (error \"Unbalanced parens\"\
+    ))\n    ))", "  (list paren_string))\n", "  (define (is-paren? c)\n    (cond [(char=?\
+    \ c #\\() #t]\n          [(char=? c #\\)) #t]\n          [else #f]))\n  (define\
+    \ (is-open? c)\n    (char=? c #\\()))\n  (define (match-parens s)\n    (let ([stack\
+    \ (list)])\n      (for ([c (in-string s)])\n        (when (is-paren? c)\n    \
+    \      (if (is-open? c)\n              (stack-push c stack)\n              (if\
+    \ (stack-empty? stack)\n                  (error \"Unmatched closing parenthesis\"\
+    )\n                  (stack-pop stack)))))\n      (if (stack-empty? stack)\n \
+    \         (error \"Unmatched opening parenthesis\")\n          #t)))\n  (define\
+    \ (find-innermost s)\n    (for/fold ([max 0]\n               [start 0]\n     \
+    \          [end 0])\n        ([i (in-range (string-length s))])\n      (let ([paren\
+    \ (string-ref s i)])\n        (cond [(is-open? paren)\n               (set! start\
+    \ i)]\n              [(char=? paren #\\))\n               (set! end i)\n     \
+    \          (when (> (- end start) max)\n                 (set! max (- end start))\n\
+    \                 (set! start i)\n                 (set! end 0))]))))\n  (define\
+    \ (next-paren-group s)\n    (let* ([start (find-innermost s)]\n           [end\
+    \ (find-innermost s)])\n      (substring s start (+ start end))))\n  (define (separate\
+    \ s)\n    (let ([s (string-trim s)]\n          [parens (list)])\n      (while\
+    \ (not (empty? s))\n        (let ([next (next-paren-group s)])\n          (set!\
+    \ parens (append parens (list next)))\n          (set! s (string-trim (string-drop\
+    \ s (string-length next))))))\n      parens))\n  (if (match-parens paren_string)\n\
+    \      (separate paren_string)\n      (error", "  (define (go paren-list nested-group-list)\n\
+    \    (cond [(empty? paren-list) (reverse nested-group-list)]\n          [(equal?\
+    \ (first paren-list) \"(\")\n           (go (rest paren-list) (cons (cons (first\
+    \ paren-list) (first nested-group-list)) (rest nested-group-list)))]\n       \
+    \   [(equal? (first paren-list) \")\")\n           (go (rest paren-list) (cons\
+    \ (string-append (first nested-group-list) (first paren-list)) (rest nested-group-list)))]\n\
+    \          [else (go (rest paren-list) nested-group-list)]))\n  (go (regexp-split\
+    \ #rx\"[()]\" paren_string) (list \"\")))\n", "  (define (split-spaced-string\
+    \ string)\n    (regexp-split #rx\"[ \\t]+\" string))\n  (define (count-parens\
+    \ parens)\n    (let loop ([parens parens] [count 0])\n      (cond [(empty? parens)\
+    \ count]\n            [(symbol=? (first parens) \"(\") (loop (rest parens) (+\
+    \ count 1))]\n            [(symbol=? (first parens) \")\") (loop (rest parens)\
+    \ (- count 1))]\n            [else (loop (rest parens) count)])))\n  (define (close-paren?\
+    \ parens)\n    (and (> (count-parens parens) 0)\n         (symbol=? (first parens)\
+    \ \")\")))\n  (define (paren-groups parens)\n    (if (close-paren? parens)\n \
+    \       (first (regexp-split #rx\"\\(\" parens))\n        parens))\n  (map paren-groups\
+    \ (split-spaced-string paren_string)))\n", "  (define (helper cur_str result)\n\
+    \    (if (empty? cur_str)\n        result\n        (if (char=? (first cur_str)\
+    \ #\\()\n            (helper (cdr cur_str) (append result (list (list (first cur_str)))))\n\
+    \            (if (char=? (first cur_str) #\\))\n                (helper (cdr cur_str)\
+    \ (append (list (append (last result) (list (first cur_str)))) (butlast result)))\n\
+    \                (helper (cdr cur_str) result)))))\n  (map string->list (map list->string\
+    \ (helper (string->list paren_string) '()))))\n", "  (let ((paren_list '()))\n\
+    \    (for ((paren-group (in-string (regexp-match* #rx\"\\\\((?:[^()]|(?R))*\\\\\
+    )\" paren_string))))\n      (set! paren_list (append paren_list (list paren-group))))\n\
+    \    paren_list))\n", "  (define (separate-paren-groups-iter paren-string acc\
+    \ result)\n    (cond ((string-empty? paren-string) result)\n          ((string=?\
+    \ (string-ref paren-string 0) #\\()\n           (separate-paren-groups-iter (substring\
+    \ paren-string 1) (string-append acc (string-ref paren-string 0)) result))\n \
+    \         ((string=? (string-ref paren-string 0) #\\))\n           (separate-paren-groups-iter\
+    \ (substring paren-string 1) (string-append acc (string-ref paren-string 0)) (append\
+    \ result (list acc))))\n          (else (separate-paren-groups-iter (substring\
+    \ paren-string 1) acc result))))\n  (separate-paren-groups-iter paren-string \"\
+    \" '()))\n", "  (let separate_paren_groups_inner ((paren-string paren_string)\
+    \ (cur-string \"\"))\n    (cond\n      [(empty? paren-string) (list cur-string)]\n\
+    \      [(equal? (first paren-string) \" \") (separate_paren_groups_inner (rest\
+    \ paren-string) cur-string)]\n      [(equal? (first paren-string) \"(\") (separate_paren_groups_inner\
+    \ (rest paren-string) (string-append cur-string \"(\"))]\n      [(equal? (first\
+    \ paren-string) \")\") (cons cur-string (separate_paren_groups_inner (rest paren-string)\
+    \ \"\"))])))\n", "  (define (helper paren-string current-stack current-string)\n\
+    \    (cond\n      [(empty? paren-string) (cond\n                             \
+    \  [(empty? current-stack) (list current-string)]\n                          \
+    \     [else (error \"The input string has unbalanced parentheses!\")])]\n    \
+    \  [(equal? (first paren-string) \")\") (cond\n                              \
+    \            [(empty? current-stack) (error \"The input string has unbalanced\
+    \ parentheses!\")]\n                                          [else (helper (rest\
+    \ paren-string) (rest current-stack) (string-append (first current-stack) (first\
+    \ paren-string) current-string))])]\n      [(equal? (first paren-string) \"(\"\
+    ) (helper (rest paren-string) (cons (first paren-string) current-stack) current-string)]\n\
+    \      [else (helper (rest paren-string) current-stack current-string)]))\n  (helper\
+    \ paren-string empty current-string))\n", "  (define (recurse paren_string index)\n\
+    \    (cond ((empty? paren_string)\n           (list))\n          ((eq? (string-ref\
+    \ paren_string index) #\\()\n           (cons (substring paren_string 0 (balanced-paren-index\
+    \ paren_string (+ index 1)))\n                 (recurse (substring paren_string\
+    \ (balanced-paren-index paren_string (+ index 1)) (string-length paren_string))\
+    \ 0)))\n          (else (recurse (substring paren_string (+ index 1) (string-length\
+    \ paren_string)) (+ index 1)))))\n  (recurse paren_string 0))\n", "  (error \"\
+    Not Implemented\"))\n", "  (define paren_group_strings (list))\n  (define string_of_parens\
+    \ \"\")\n  (define counter 0)\n  (for ([cur_char (in-string paren_string)])\n\
+    \    (cond\n      ((char=? cur_char #\\() (set! counter (+ counter 1)))\n    \
+    \  ((char=? cur_char #\\)) (set! counter (- counter 1)))\n      (else ()))\n \
+    \   (cond\n      ((= counter 0)\n       (set! paren_group_strings (append paren_group_strings\
+    \ (list string_of_parens)))\n       (set! string_of_parens \"\"))\n      (else\
+    \ (set! string_of_parens (string-append string_of_parens (string cur_char)))))\n\
+    \    )\n  (set! paren_group_strings (append paren_group_strings (list string_of_parens)))\n\
+    \  (filter (lambda (x) (> (string-length x) 0)) paren_group_strings)\n  )\n```\n\
+    \n## Test Cases\n\n```racket", "  (match paren_string\n    [(cons first (cons\
+    \ second rest))\n     (cond\n       [(char=? first #\\()\n        (string-append\
+    \ (string first) (separate_paren_groups (string second) rest))\n        ]\n  \
+    \     [(char=? first #\\))\n        (string-append (string first) (separate_paren_groups\
+    \ (string second) rest))\n        ]\n       [else (separate_paren_groups (string\
+    \ second) rest)])]\n    [empty empty]))\n</code>\nI'm getting an error \"application:\
+    \ not a procedure; expected a procedure that can be applied to arguments. \nAny\
+    \ suggestions?\n\n\nA:\n\nThe pattern for <code>paren_string</code> matches any\
+    \ list, in your case it's a list of characters. You have to use a pattern such\
+    \ as <code>(list \"(\" ...)</code> if you want to match a string.\n", "    ;list\n\
+    \    ;paren_string: string\n    ;\"()\" \"(())\" \"(()())\"\n    (cond\n     \
+    \   [ (string=? paren_string \"\") empty ]\n        [ (empty? (regexp-match #rx\"\
+    ^ *\" paren_string)) (cons (string-trim (regexp-match #rx\"^\\([^ ]*\\)\" paren_string))\
+    \ (separate_paren_groups (regexp-match #rx\"^\\([^ ]*\\)(.*)\" paren_string)))]\n\
+    \        [else (separate_paren_groups (regexp-match #rx\"^ *(.*)\" paren_string))]\n\
+    \    )\n)\n", "  (define (find-closing paren_string opening-index closing-index)\n\
+    \    (cond ((= opening-index closing-index)\n           (list (substring paren_string\n\
+    \                            (add1 opening-index)\n                          \
+    \  (sub1 closing-index))\n                 closing-index))\n          ((char=?\
+    \ (string-ref paren_string opening-index) #\\()\n           (find-closing paren_string\
+    \ (add1 opening-index) (add1 closing-index)))\n          ((char=? (string-ref\
+    \ paren_string opening-index) #\\))\n           (find-closing paren_string (add1\
+    \ opening-index) (sub1 closing-index)))))\n  (define (find-group-closing paren_string\
+    \ opening-index)\n    (let* ((result (find-closing paren_string opening-index\
+    \ (string-length paren_string))))\n      (values (car result) (cadr result))))\n\
+    \  (define (find-paren-groups paren_string rest_of_paren_string opening-index)\n\
+    \    (if (not (string-empty? rest_of_paren_string))\n        (let* ((result (find-group-closing\
+    \ rest_of_paren_string opening-index)))\n          (values (list (car result))\n\
+    \                  (find-paren-groups paren_string\n                         \
+    \            (substring paren_string (cadr result))\n                        \
+    \             (cadr result))))\n        empty))\n  (find-paren-groups paren_string\
+    \ paren_string 0))\n", "  (define paren-groups (string-&gt;list paren_string))\n\
+    \  (define (paren-counter string)\n    (cond [(null? string) 0]\n          [(eq?\
+    \ '(' (car string)) (+ 1 (paren-counter (cdr string)))]\n          [(eq? ')' (car\
+    \ string)) (- 1 (paren-counter (cdr string)))]\n          [else (paren-counter\
+    \ (cdr string))]))\n  (define (keep-open string depth)\n    (cond [(null? string)\
+    \ '()]\n          [(eq? '(' (car string)) (cons (car string) (keep-open (cdr string)\
+    \ (+ 1 depth)))]\n          [(eq? ')' (car string)) (if (&gt; depth 0) (cons (car\
+    \ string) (keep-open (cdr string) (- 1 depth))) '())]\n          [else (cons (car\
+    \ string) (keep-open (cdr string) depth))]))\n  (define (separate-paren-groups\
+    \ string)\n    (define counter (paren-counter string))\n    (if (zero? counter)\
+    \ (keep-open string 0) (separate-paren-groups (keep-open string 0))))\n  (separate-paren-groups\
+    \ paren-groups))\n</code>\n", "  (cond\n    [(empty? paren_string) empty]\n  \
+    \  [(equal? (first paren_string) #\\())\n     (cons (substring (second paren_string)\
+    \ (count (first paren_string) paren_string) (sub1 (count (first paren_string)\
+    \ paren_string)))\n           (separate_paren_groups (substring (second paren_string)\
+    \ (sub1 (count (first paren_string) paren_string)) (sub1 (count (first paren_string)\
+    \ paren_string)))))\n     ]\n    [else (separate_paren_groups (substring (first\
+    \ paren_string) (sub1 (count (first paren_string) paren_string)) (sub1 (count\
+    \ (first paren_string) paren_string))))]))\n\n", "  (list \"()\" \"(())\" \"(()())\"\
+    ))\n", "  (let loop ([paren_string paren_string]\n             [paren-list '()]\n\
+    \             [paren-count 0])\n    (cond [(empty? paren_string)\n           (cond\
+    \ [(positive? paren-count)\n                  (error \"Missing closing parenthesis\"\
+    )]\n                  [else (reverse paren-list)])]\n          [(char=? (first\
+    \ paren_string) #\\()\n           (loop (rest paren_string)\n                \
+    \ (cons (first paren_string) paren-list)\n                 (+ paren-count 1))]\n\
+    \          [(char=? (first paren_string) #\\))\n           (cond [(positive? paren-count)\n\
+    \                  (loop (rest paren_string)\n                        (cons (first\
+    \ paren_string) paren-list)\n                        (- paren-count 1))]\n   \
+    \               [else (error \"Invalid starting parenthesis\")])]\n          [else\
+    \ (loop (rest paren_string)\n                      paren-list\n              \
+    \        paren-count)])))\n", "  (cond\n    [(string=? paren_string \"\") empty]\n\
+    \    [(regexp-match #rx\"^\\\\s*\\\\)\\\\s*\" paren_string)\n     (cons (substring\
+    \ paren_string 0 (regexp-match-end 0))\n           (separate_paren_groups (substring\
+    \ paren_string (regexp-match-end 0))))]\n    [(regexp-match #rx\"^\\\\s*\\\\(\\\
+    \\s*\" paren_string)\n     (cons (substring paren_string 0 (regexp-match-end 0))\n\
+    \           (separate_paren_groups (substring paren_string (regexp-match-end 0))))]\n\
+    \    [else (error \"Not a valid parenthesized string!\")]))\n", "  (define paren-stack\
+    \ (make-stack))\n  (define groups (list))\n  (define (push-paren paren)\n    (if\
+    \ (string=? paren \"(\")\n        (stack-push paren-stack paren)\n        (if\
+    \ (stack-empty? paren-stack)\n            (set! groups (append groups (list (string\
+    \ paren))))\n            (stack-pop paren-stack)\n            )))\n  (for-each\
+    \ push-paren (string-split paren_string))\n  groups)\n", "  (define (helper paren_string\
+    \ prev acc)\n    (match paren_string\n      [(list '(open) more...)\n       (helper\
+    \ more... (+ prev 1) acc)]\n      [(list '(close) more...)\n       (if (= 0 prev)\n\
+    \           (list (list->string (list->list acc)) (list->string (list->list paren_string)))\n\
+    \           (helper more... (- prev 1) (append acc (list '(close)))))]\n     \
+    \ [(list more... (close))\n       (list (list->string (list->list acc)) (list->string\
+    \ (list->list paren_string)))]\n      [(list more...)\n       (helper more...\
+    \ prev acc)]))\n  (helper (str->list paren_string) 0 '(open)))\n", "  (let ([result\
+    \ (list)])\n    (let loop ([chars (regexp-split #rx\"( +)\" paren_string)])\n\
+    \      (cond [(empty? chars) result]\n            [(equal? \"(\" (first chars))\n\
+    \             (loop (rest chars))]\n            [(equal? \")\" (first chars))\n\
+    \             (loop (rest chars))]\n            [else\n             (loop (rest\
+    \ chars))]))\n    result))\n", "  '())\n", "  (define (matches? current closed)\n\
+    \    (cond\n      [(empty? closed)\n       #f]\n      [(equal? (first closed)\
+    \ current)\n       #t]\n      [else\n       (matches? current (rest closed))]))\n\
+    \  (define (sep-group str result)\n    (cond\n      [(empty? str)\n       result]\n\
+    \      [(equal? (first str) #\\()\n       (sep-group (rest str) (append (list\
+    \ (first str)) result))]\n      [(equal? (first str) #\\))\n       (if (matches?\
+    \ (first str) result)\n           (sep-group (rest str) (rest result))\n     \
+    \      (append (list (append result (list (first str)))) (sep-group (rest str)\
+    \ '())))]\n      [else\n       (sep-group (rest str) result)]))\n  (sep-group\
+    \ paren_string '()))\n", "  (cond\n    [(empty? paren_string) (list)]\n    [else\n\
+    \     (let ([substrs (drop-right paren_string 1)])\n       (cons (substring paren_string\
+    \ 0 (sub1 (substring-index paren_string \" \")))\n             (separate_paren_groups\
+    \ substrs)))]))\n\n", "  (match paren_string\n    ['() '()]\n    [paren_string\n\
+    \     (let* ([open_index (string-index paren_string #\\()]\n            [open_count\
+    \ (count-matches paren_string #\\()]\n            [closed_count (count-matches\
+    \ paren_string #\\))]\n            [closed_index (string-index-right paren_string\
+    \ #\\))]\n            [new_string (if (and (= open_count closed_count) open_index\
+    \ closed_index)\n                            (string-take paren_string (+ open_index\
+    \ 1) (- closed_index 1))\n                            \"\")])\n       (if (string=?\
+    \ new_string \"\")\n           (list (separate_paren_groups (string-drop paren_string\
+    \ 1)))\n           (cons new_string (separate_paren_groups (string-drop paren_string\
+    \ (+ closed_index 1))))))]))\n\n", "  (define (helper paren_string in-current-group)\n\
+    \    (cond [(empty? paren_string) empty]\n          [(char=? (first paren_string)\
+    \ #\\() (helper (rest paren_string) true)]\n          [(char=? (first paren_string)\
+    \ #\\))\n           (cons (reverse in-current-group) (helper (rest paren_string)\
+    \ empty))]\n          [(char=? (first paren_string) #\\space) (helper (rest paren_string)\
+    \ in-current-group)]\n          [else (helper (rest paren_string) (cons (first\
+    \ paren_string) in-current-group))]))\n  (map reverse (helper paren_string empty)))\n",
+  "  (define (separate_paren_groups_helper str current-str acc)\n    (cond [(string=?\
+    \ str \"\") (cons current-str acc)]\n          [(char=? (string-ref str 0) #\\\
+    () (separate_paren_groups_helper (substring str 1)\n                         \
+    \                                               (string-append current-str \"\
+    (\" )\n                                                                      \
+    \  acc)]\n          [(char=? (string-ref str 0) #\\)) (separate_paren_groups_helper\
+    \ (substring str 1)\n                                                        \
+    \                (string-append current-str \")\" )\n                        \
+    \                                                (cons current-str acc))]\n  \
+    \        [(char=? (string-ref str 0) #\\space) (separate_paren_groups_helper (substring\
+    \ str 1)\n                                                                   \
+    \         current-str\n                                                      \
+    \                      acc)]\n          [else (separate_paren_groups_helper (substring\
+    \ str 1)\n                                              current-str\n        \
+    \                                      acc)]))\n  (reverse (separate_paren_groups_helper\
+    \ paren_string \"\" '())))\n", "  (list \"()\" \"(())\" \"(()())\"))\n", "  (define\
+    \ (balanced? str)\n    (letrec ((helper (lambda (str)\n                      \
+    \ (match str\n                         [() true]\n                         [(cons\
+    \ (? (or \"(\" \")\")) rest)\n                          (if (equal? (car str)\
+    \ \"(\")\n                              (helper rest)\n                      \
+    \        (cond [(> (count \"(\" str) (count \")\" str))\n                    \
+    \                 (helper rest)]\n                                    [(= (count\
+    \ \"(\" str) (count \")\" str))\n                                     true]\n\
+    \                                    [else false]))]\n                       \
+    \  [else true]))))\n      (helper str)))\n  (define (helper str)\n    (if (empty?\
+    \ str) '()\n        (if (balanced? str) (list str)\n            (let ((first-split\
+    \ (split-at (first (where (compose not balanced?) str)) str)))\n             \
+    \ (cons (first first-split) (helper (rest first-split)))))))\n  (map string->number\
+    \ (helper (regexp-split #rx\"\\\\s+\" paren_string))))\n", "  (define (split_parens\
+    \ paren_string)\n    (regexp-match* #rx\"\\( *\\)|\\( *\\)\" paren_string))\n\
+    \  (define (paren_close-balance paren_string)\n    (let loop ([paren_string paren_string]\
+    \ [i 0])\n      (if (empty? paren_string)\n          (= i 0)\n          (cond\n\
+    \            [(string=? (first paren_string) \"(\")\n             (loop (rest\
+    \ paren_string) (+ i 1))]\n            [(string=? (first paren_string) \")\")\n\
+    \             (loop (rest paren_string) (- i 1))]\n            [else\n       \
+    \      (loop (rest paren_string) i)]))))\n  (let loop ([paren_string paren_string]\
+    \ [paren_groups null])\n    (if (empty? paren_string)\n        (reverse paren_groups)\n\
+    \        (let ([paren_group (first (split_parens paren_string))])\n          (if\
+    \ (paren_close-balance paren_group)\n              (loop (rest (split_parens paren_string))\
+    \ (cons paren_group paren_groups))\n              (loop (rest (split_parens paren_string))\
+    \ paren_groups))))))\n", "  (define list-of-groups '())\n\n  (define (list-of-parens\
+    \ paren-string)\n    (if (string-null? paren-string)\n        '()\n        (cons\
+    \ (string-ref paren-string 0) (list-of-parens (substring paren-string 1)))))\n\
+    \n  (define (make-group list-of-parens)\n    (define paren-string (string-append\
+    \ (reverse list-of-parens)))\n    (define (check-for-parens list-of-parens)\n\
+    \      (cond\n        ((null? list-of-parens) #t)\n        ((and (equal? (car\
+    \ list-of-parens) #\\() (equal? (last list-of-parens) #\\)))\n         (check-for-parens\
+    \ (remove (car list-of-parens) (reverse (cdr (reverse list-of-parens))))))\n \
+    \       (else #f)))\n    (if (check-for-parens list-of-parens)\n        (set!\
+    \ list-of-groups (cons paren-string list-of-groups))\n        (error \"Invalid\
+    \ string, parentheses not properly closed.\")))\n\n  (define (remove-spaces list-of-parens)\n\
+    \    (cond\n      ((null? list-of-parens) '())\n      ((equal? (car list-of-parens)\
+    \ #\\space) (remove-spaces (cdr list-of-parens)))\n      (else (cons (car list-of-parens)\
+    \ (remove-spaces (cdr list-of-parens))))))\n\n  (define (go list-of-parens)\n\
+    \    (if (null? list-of-parens)\n        list-of-groups\n        (make-group (remove-spaces\
+    \ list-of-parens))\n        (go (substring list-of-parens 1))))\n\n  (go (list-of-parens\
+    \ paren-string)))\n</code>\nHere's a sample run:\n<code>&gt; (separate_paren_groups\
+    \ \"( ) (( )) (( )( ))\")\n'(\"()\" \"(())\" \"(()())\")\n&gt; (separ", "  (define\
+    \ (find-group-accumulator-and-rest paren-string so-far accumulator)\n    (cond\
+    \ ((string=? paren-string \"\")\n           (cons accumulator so-far))\n     \
+    \     ((string=? (substring paren-string 0 1) \"(\")\n           (find-group-accumulator-and-rest\
+    \ (substring paren-string 1)\n                                            (string-append\
+    \ so-far (substring paren-string 0 1))\n                                     \
+    \       accumulator))\n          ((string=? (substring paren-string 0 1) \")\"\
+    )\n           (find-group-accumulator-and-rest (substring paren-string 1)\n  \
+    \                                          (string-append so-far (substring paren-string\
+    \ 0 1))\n                                            (cons so-far accumulator)))\n\
+    \          (else (find-group-accumulator-and-rest (substring paren-string 1)\n\
+    \                                                 so-far\n                   \
+    \                              accumulator))))\n  (define (find-group-accumulator\
+    \ paren-string)\n    (find-group-accumulator-and-rest paren-string \"\" '()))\n\
+    \  (define (group-list-to-list x)\n    (cond ((empty? x) '())\n          (else\
+    \ (cons (car x) (group-list-to-list (cdr x))))))\n  (define (helper paren-string)\n\
+    \    (cond ((string=? paren-string \"\") '())\n          (else (let* ((pair (find-group-accumulator\
+    \ paren-string))\n                      (accumulator (car pair))\n           \
+    \           (rest (cdr pair)))\n                 (if (null? accumulator)\n   \
+    \                  (helper rest)\n                     (cons (car accumulator)\
+    \ (helper rest)))))))\n  (group-list-to-list (helper paren-string)))\n", "  (let\
+    \ ((paren-groups (list))\n        (cur-paren-group (string-append)))\n    (for\
+    \ ([character (in-string paren_string)])\n      (cond\n        [(char=? character\
+    \ #\\()]\n        [(char=? character #\\))]\n        [else (string-append cur-paren-group\
+    \ (string character))]))\n    paren-groups))\n", "  (define (sep_paren_groups\
+    \ str lst)\n    (cond ((empty? str) lst)\n          ((match (regexp #rx\"^\\s+\"\
+    ) str) (sep_paren_groups (regexp-replace (regexp #rx\"^\\s+\") str \"\") lst))\n\
+    \          ((match (regexp #rx\"^[^()]+\") str) (sep_paren_groups (regexp-replace\
+    \ (regexp #rx\"^[^()]+\") str \"\") lst))\n          ((match (regexp #rx\"^\\\
+    (\\)\") str) (sep_paren_groups (regexp-replace (regexp #rx\"^\\(\\)\") str \"\"\
+    ) (cons \"()\" lst)))\n          ((match (regexp #rx\"^\\(\") str) (sep_paren_groups\
+    \ (regexp-replace (regexp #rx\"^\\(\") str \"\") (cons (parenthesis-group str)\
+    \ lst)))\n          (else 'failed)))\n  (reverse (sep_paren_groups paren_string\
+    \ '())))\n", "  (define current_parentheses (list))\n  (define current_group (list))\n\
+    \  (define (is_open_paren ch)\n    (equal? ch \"(\"))\n  (define (is_close_paren\
+    \ ch)\n    (equal? ch \")\"))\n  (define (is_paren? ch)\n    (or (is_open_paren\
+    \ ch) (is_close_paren ch)))\n  (define (handle_paren ch)\n    (cond\n      [(is_open_paren\
+    \ ch) (push (string-append ch) current_group)]\n      [(is_close_paren ch) (begin\n\
+    \                              (push (string-append ch) current_group)\n     \
+    \                         (push (string-join current_group) current_parentheses)\n\
+    \                              (set! current_group (list)))])\n    current_parentheses)\n\
+    \  (define (handle_ch ch)\n    (cond\n      [(is_paren? ch) (handle_paren ch)]\n\
+    \      [else (push (string-append ch) current_group)]))\n  (for/list ([ch (in-string\
+    \ paren_string)])\n    (handle_ch ch))\n  current_parentheses)\n", "  (cond\n\
+    \    [(empty? paren_string) '()]\n    [else\n     (let*\n         ([first_paren\
+    \ (car paren_string)]\n          [rest_parens (cdr paren_string)]\n          [substring\
+    \ (separate_paren_groups rest_parens)]\n          [substring (if (and (char=?\
+    \ first_paren #\\() (char=? (car (last substring)) #\\)))\n                  \
+    \       (list (string-append (substring (string-append first_paren (car substring))\
+    \ 1) #\\))\n                         (cons (string-append first_paren (car substring))\
+    \ (cdr substring))))])\n       substring)]))\n", "  (define (is-open-paren? paren)\n\
+    \    (eq? paren #\\()\n    )\n  (define (is-closed-paren? paren)\n    (eq? paren\
+    \ #\\))\n    )\n  (define (stack-empty? stack)\n    (null? stack)\n    )\n  (define\
+    \ (top-of-stack stack)\n    (car stack)\n    )\n  (define (stack-pop stack)\n\
+    \    (cdr stack)\n    )\n  (define (separate-paren-groups-helper paren-string\
+    \ stack paren-groups)\n    (cond [(empty? paren-string) (append paren-groups (list\
+    \ (string-join stack \"\")))]\n          [(stack-empty? stack) (separate-paren-groups-helper\
+    \ (cdr paren-string) (list (car paren-string)) paren-groups)]\n          [(is-open-paren?\
+    \ (car paren-string)) (separate-paren-groups-helper (cdr paren-string) (cons (car\
+    \ paren-string) stack) paren-groups)]\n          [(is-closed-paren? (car paren-string))\
+    \ (separate-paren-groups-helper (cdr paren-string) (stack-pop stack) (append paren-groups\
+    \ (list (string-join stack \"\"))))]\n          [else (separate-paren-groups-helper\
+    \ (cdr paren-string) stack paren-groups)]\n          )\n    )\n  (define (is-paren?\
+    \ paren)\n    (or (is-open-paren? paren) (is-closed-paren? paren))\n    )\n  (separate-paren-groups-helper\
+    \ (string-filter (compose is-paren? char-&gt;integer) paren-string) '() '())\n\
+    \  )\n</code>\n", "  (cond\n    [(null? paren_string) '()]\n    [(equal? (first\
+    \ paren_string) #\\()\n      (cons \n        (group-parens (rest paren_string)\
+    \ 0 #f)\n        (separate_paren_groups (drop-parens (rest paren_string) 0 #f)))]\n\
+    \    [else (separate_paren_groups (rest paren_string))]))\n", "  (printf \"paren_string:\
+    \ ~a\\n\" paren_string)\n  (define (locate-next-parens s)\n    (printf \"s: ~a\\\
+    n\" s)\n    (let ((paren-start (string-index s \"(\"))\n          (paren-end (string-index\
+    \ s \")\")))\n      (printf \"paren-start: ~a\\n\" paren-start)\n      (printf\
+    \ \"paren-end: ~a\\n\" paren-end)\n      (cond ((or (null? paren-start) (null?\
+    \ paren-end)) (list \"\" s))\n            ((> paren-start paren-end) (list (substring\
+    \ s 0 paren-end) (substring s (+ paren-end 1))))\n            (else (list (substring\
+    \ s 0 paren-start) (substring s (+ paren-start 1)))))))\n  (define (loop s)\n\
+    \    (let ((next-parens (locate-next-parens s)))\n      (printf \"next-parens:\
+    \ ~a\\n\" next-parens)\n      (if (empty? (car next-parens))\n          (list)\n\
+    \          (cons (car next-parens) (loop (cadr next-parens))))))\n  (loop paren_string))\n",
+  "  (let loop ([lst '()] [result '()] [cnt 0])\n    (cond [(= (string-length paren_string)\
+    \ 0) (reverse result)]\n          [else\n           (define (paren-count cnt)\n\
+    \             (cond [(equal? (string-ref paren_string 0) #\\() (+ cnt 1)]\n  \
+    \                 [(equal? (string-ref paren_string 0) #\\)) (- cnt 1)]\n    \
+    \               [else cnt]))\n           (loop (append lst (list (substring paren_string\
+    \ 0 1)))\n                 (if (= (paren-count cnt) 0)\n                     (append\
+    \ result (list (apply string-append (reverse lst))))\n                     result)\n\
+    \                 (paren-count cnt))])))\n```\n\n### Question #3\n\n``` #lang\
+    \ racket\n", "  (define (separate_paren_groups-iter nremainder nlist nresult)\n\
+    \    (if (equal? nremainder \"\")\n        (cons nlist nresult)\n        (if (equal?\
+    \ (substring nremainder 0 1) \"(\")\n            (separate_paren_groups-iter (substring\
+    \ nremainder 1) (string-append nlist (substring nremainder 0 1)) nresult)\n  \
+    \          (separate_paren_groups-iter (substring nremainder 1) (string-append\
+    \ (substring nremainder 0 1) nlist) nresult))))\n  (separate_paren_groups-iter\
+    \ paren_string \"\" '()))\n", "  (define (it i l)\n    (cond\n      ((= i (string-length\
+    \ paren_string)) l)\n      ((char=? (string-ref paren_string i) #\\()\n      \
+    \ (let ([l (append l (list (string-append (list (string-ref paren_string i)))))]\n\
+    \             [i (+ i 1)])\n         (it i l)))\n      ((char=? (string-ref paren_string\
+    \ i) #\\))\n       (let ([l (append l (list (string-append (list (string-ref paren_string\
+    \ i)))))]\n             [i (+ i 1)])\n         (it i l)))\n      (else (it (+\
+    \ i 1) l))))\n  (it 0 '()))\n", "  (regexp-match* #rx\"(\" paren_string)\n  )\n",
+  "  (cond [(empty? paren_string) empty]\n        [(equal? (first paren_string) #\\\
+    () (cons (paren_group paren_string) (separate_paren_groups (group_remainder paren_string)))]\n\
+    \        [else (separate_paren_groups (rest paren_string))]))\n", "  (define (seperate-parens-helper\
+    \ paren-string)\n    (let* ((first-char (string-ref paren-string 0))\n       \
+    \    (rest-of-string (substring paren-string 1)))\n      (cond\n        ((string=\
+    \ first-char \"(\") (cons first-char (seperate-parens-helper rest-of-string)))\n\
+    \        ((string= first-char \")\") (cons first-char rest-of-string))\n     \
+    \   (else (seperate-parens-helper rest-of-string)))))\n  (define (separate-parens-list-helper\
+    \ paren-string)\n    (let* ((first-char (string-ref paren-string 0))\n       \
+    \    (rest-of-string (substring paren-string 1)))\n      (cond\n        ((string=\
+    \ first-char \"(\") (cons paren-string (separate-parens-list-helper rest-of-string)))\n\
+    \        ((string= first-char \")\") (separate-parens-list-helper rest-of-string))\n\
+    \        (else (separate-parens-list-helper rest-of-string)))))\n  (separate-parens-list-helper\
+    \ (seperate-parens-helper paren_string)))\n", "  (define (remove-spaces str)\n\
+    \    (regexp-replace* #rx\" +\" str \"\"))\n  (define (check-parens str)\n   \
+    \ (if (or (not (= (string-length str) 0))\n            (not (equal? (string-length\
+    \ (regexp-replace* #rx\"^\\(\" str \"\")) 0))\n            (not (equal? (string-length\
+    \ (regexp-replace* #rx\"\\)$\" str \"\")) 0)))\n        #f\n        #t))\n  (define\
+    \ (separate-paren-groups-helper curr-stack groups)\n    (cond\n      [(empty?\
+    \ curr-stack) groups]\n      [(equal? (first curr-stack) \")\")\n       (separate-paren-groups-helper\
+    \ (rest curr-stack)\n                                     (cons (string-join (reverse\
+    \ (rest curr-stack)) \"\") groups))]\n      [else (separate-paren-groups-helper\
+    \ (cons (first curr-stack) (rest curr-stack)) groups)]))\n  (define (process-parens\
+    \ s)\n    (cond\n      [(or (empty? s) (not (equal? (first s) \"(\"))) (list)]\n\
+    \      [else (cons (first s) (process-parens (rest s)))]))\n  (define (paren-groups-aux\
+    \ str acc)\n    (if (empty? str) acc\n        (if (equal? (first str) \"(\")\n\
+    \            (if (equal? (length (rest str)) 0) (list (first str))\n         \
+    \       (paren-groups-aux (rest str) (append acc (list (first str)))))\n     \
+    \       (paren-groups-aux (rest str) acc))))\n  (paren-groups-aux (process-parens\
+    \ (string->list (remove-spaces paren_string))) '()))", "  (let ([pcount 0]\n \
+    \       [gcount 0]\n        [groups (make-vector (string-length paren_string)\
+    \ \"\")])\n    (for ([i (in-range (string-length paren_string))])\n      (match\
+    \ (string-ref paren_string i)\n        ['(#\\( #\\))\n         (begin\n      \
+    \     (vector-set! groups gcount\n                        (string-append (vector-ref\
+    \ groups gcount)\n                                       (string (string-ref paren_string\
+    \ i))))\n           (if (eq? (string-ref paren_string i) #\\()\n             \
+    \  (set! pcount (add1 pcount))\n             (set! pcount (sub1 pcount))))]\n\
+    \        [_\n         (when (eq? pcount 0)\n           (set! gcount (add1 gcount))\n\
+    \           (set! pcount 0))]))\n    (list->vector (for/list ([g (in-vector groups)])\n\
+    \                    (if (equal? g \"\")\n                        (void)\n   \
+    \                     g)))))\n", "  (define (separate-paren-helper paren-str)\n\
+    \    (if (empty? paren-str) empty\n        (let ([opening-parens (string-index\
+    \ paren-str #\\()]\n              [closing-parens (string-index paren-str #\\\
+    ))])\n          (if (and opening-parens closing-parens)\n              (if (&lt;\
+    \ opening-parens closing-parens)\n                  (cons (string-&gt;list (list-ref\
+    \ paren-str opening-parens))\n                        (separate-paren-helper (list-tail\
+    \ paren-str opening-parens)))\n                  (cons (string-&gt;list (list-ref\
+    \ paren-str opening-parens))\n                        (separate-paren-helper (list-tail\
+    \ paren-str closing-parens))))\n              (cons (string-&gt;list (list-ref\
+    \ paren-str opening-parens))\n                    (separate-paren-helper (list-tail\
+    \ paren-str opening-parens)))))))\n  (separate-paren-helper (string-&gt;list paren_string)))\n\
+    </code>\nHowever, when I try to run this, it's not returning the expected result.\n\
+    <code>&gt; (separate_paren_groups \"( ) (( )) (( )( ))\")\n'(\"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\" \"(\"\
+    \ \"(\" \"(\" \"(\" \"(\" \"(\" \"", "  (list))\n", "  (list \"()\" \"(())\" \"\
+    (()())\"))\n", "  ;; Implement Me!\n  (list))\n", "  (filter string? (paren-separate\
+    \ paren_string)))\n", "  (let ([paren-list (string-&gt;list paren_string)])\n\
+    \    (filter (lambda (x) (positive? (length x)))\n            (regexp-split #rx\"\
+    \\s+\" (list-&gt;string paren-list)))))\n", "  (define (is_open? char) (string=?\
+    \ char \"(\"))\n  (define (is_close? char) (string=? char \")\"))\n  (define (is_space?\
+    \ char) (string=? char \" \"))\n  (define (clean_parens str)\n    (define (internal\
+    \ str)\n      (cond [(empty? str) empty]\n            [(is_space? (first str))\
+    \ (internal (rest str))]\n            [else (cons (first str) (internal (rest\
+    \ str)))]))\n    (internal str))\n  (define (open_group? str)\n    (cond [(empty?\
+    \ str) false]\n          [(is_open? (first str)) true]\n          [else (open_group?\
+    \ (rest str))]))\n  (define (close_group? str)\n    (cond [(empty? str) false]\n\
+    \          [(is_close? (first str)) true]\n          [else (close_group? (rest\
+    \ str))]))\n  (define (get_group str)\n    (cond [(empty? str) empty]\n      \
+    \    [(and (open_group? str) (close_group? str)) (cons (first str) (get_group\
+    \ (rest str)))]\n          [else empty]))\n  (define (remove_group str)\n    (cond\
+    \ [(empty? str) empty]\n          [(and (open_group? str) (close_group? str))\
+    \ (remove_group (rest str))]\n          [else (cons (first str) (remove_group\
+    \ (rest str)))]))\n  (define (build_paren_groups str acc)\n    (cond [(empty?\
+    \ str) (cons acc empty)]\n          [(open_group? str) (build_paren_groups (remove_group\
+    \ str) (cons (get_group str) acc))]\n          [else (build_paren_groups (rest\
+    \ str) acc)]))\n  (build_paren_groups (clean_parens paren_string) empty))", " \
+    \ (define (paren_start? char) (eq? char #\\())\n  (define (paren_end? char) (eq?\
+    \ char #\\)))\n  (define (paren_empty? paren_string) (and (paren_start? (string-ref\
+    \ paren_string 0))\n                                           (paren_end? (string-ref\
+    \ paren_string 1))))\n  (define (paren_match? paren_string)\n    (let ((balanced?\
+    \ #t)\n          (left-counter 0)\n          (right-counter 0))\n      (for ((i\
+    \ (in-range (string-length paren_string))))\n        (cond ((paren_start? (string-ref\
+    \ paren_string i)) (set! left-counter (+ left-counter 1)))\n              ((paren_end?\
+    \ (string-ref paren_string i)) (set! right-counter (+ right-counter 1)))))\n \
+    \     (if (= left-counter right-counter)\n          balanced?\n          #f)))\n\
+    \  (define (separate_paren_groups-rec paren_string)\n    (if (paren_empty? paren_string)\n\
+    \        (list)\n        (let ((parentheses-index (string-index paren_string \"\
+    ()\"))\n              (parentheses-length (string-length paren_string)))\n   \
+    \       (cond ((> parentheses-index 0)\n                 (cons (substring paren_string\
+    \ 0 parentheses-index)\n                       (separate_paren_groups-rec (substring\
+    \ paren_string parentheses-index parentheses-length))))\n                ((= parentheses-index\
+    \ 0)\n                 (cons \"()\" (separate_paren_groups-rec (substring paren_string\
+    \ 2 parentheses-length))))\n                (else (list paren_string))))))\n \
+    \ (if (paren_match? paren_string)\n      (separate_paren_groups-rec paren_string)\n\
+    \      (list)))\n", "  (let ((separated (list)))\n    (define (parse-parens so-far)\n\
+    \      (let ((paren-count (count-parens so-far)))\n        (cond\n          [(zero?\
+    \ paren-count) (set! separated (cons so-far separated))]\n          [(not (string=?\
+    \ paren-count \"\")) (parse-parens (string-append so-far paren-count))]\n    \
+    \      [else (begin (parse-parens (string-append so-far (string-ref paren-string\
+    \ 0)))\n                       (parse-parens (substring paren-string 1)))])))\n\
+    \    (parse-parens \"\")\n    separated))\n", "  (define (is-open-paren? paren)\n\
+    \    (string=? paren \"(\"))\n  (define (helper str open-parens close-parens group-parens)\n\
+    \    (if (string=? str \"\")\n        (list group-parens)\n        (if (is-open-paren?\
+    \ (string-ref str 0))\n            (helper (substring str 1) (cons (string-ref\
+    \ str 0) open-parens) close-parens (string-append group-parens (string-ref str\
+    \ 0)))\n            (if (is-open-paren? (car open-parens))\n                (helper\
+    \ (substring str 1) (cdr open-parens) (cons (string-ref str 0) close-parens) (string-append\
+    \ group-parens (string-ref str 0)))\n                (helper (substring str 1)\
+    \ open-parens close-parens group-parens)))))\n  (helper paren_string '() '() \"\
+    \"))\n", "  (define (helper string accumulator)\n    (cond ((null? string) accumulator)\n\
+    \          ((char=? (first string) #\\()\n           (helper (rest string) (cons\
+    \ (list (first string)) accumulator)))\n          ((char=? (first string) #\\\
+    ))\n           (if (null? accumulator) (error \"unbalanced parentheses\")\n  \
+    \             (let ((current-item (first accumulator)))\n                 (if\
+    \ (null? current-item) (error \"unbalanced parentheses\")\n                  \
+    \   (helper (rest string) (cons (cons (first string) current-item) (rest accumulator)))))))\n\
+    \          ((char=? (first string) #\\space) (helper (rest string) accumulator))\n\
+    \          (else (let ((current-item (first accumulator)))\n                 \
+    \ (helper (rest string) (cons (cons (first string) current-item) (rest accumulator)))))))\n\
+    \  (map (lambda (item) (string->list (apply string item))) (reverse (helper (string->list\
+    \ paren_string) '()))))", "  (define (helper paren_string acc)\n    (cond\n  \
+    \    [(empty? paren_string) (reverse acc)]\n      [(char=? (first paren_string)\
+    \ #\\()\n       (helper (rest paren_string) (cons (first paren_string) acc))]\n\
+    \      [(char=? (first paren_string) #\\))\n       (let ([current-group (helper\
+    \ (rest paren_string) '())])\n         (helper (first current-group) (cons (string-append\
+    \ \")\" (reverse acc)) (rest current-group))))]\n      [else (helper (rest paren_string)\
+    \ acc)]))\n  (helper paren_string '()))\n", "  (define the_list (string->list\
+    \ paren_string))\n  (define counter -1)\n  (define the_result (list))\n  (for\
+    \ ([i (in-list the_list)])\n    (if (equal? i #\\()\n        (set! counter (+\
+    \ counter 1))\n        (if (equal? i #\\))\n            (set! counter (- counter\
+    \ 1))\n            (void))))\n  (for ([i (in-list the_list)])\n    (cond [(equal?\
+    \ i #\\()]\n           (define a (list))\n           (set! the_result (append\
+    \ the_result (list a)))\n           (define counter (+ counter 1))\n         \
+    \  (set! counter (+ counter 1)))\n          [(equal? i #\\))]\n           (define\
+    \ counter (- counter 1))\n           (set! counter (- counter 1)))\n         \
+    \ [(not (equal? i #\\ ))]\n           (define counter (- counter 1))\n       \
+    \    (set! counter (- counter 1))\n           (define b (car the_result))\n  \
+    \         (set! the_result (cdr the_result))\n           (set! the_result (append\
+    \ the_result (list (append b (list i)))))\n           (set! counter (+ counter\
+    \ 1)))\n          [(equal? i #\\ )]\n           (void)))))\n", "  (define (paren-groups\
+    \ ps)\n    (cond [(empty? ps) '()]\n          [(list? (first ps)) (cons (paren-groups\
+    \ (first ps)) (paren-groups (rest ps)))]\n          [else (cons (paren-to-string\
+    \ (first ps)) (paren-groups (rest ps)))]))\n  (paren-groups (string-&gt;paren-list\
+    \ paren_string)))\n", "  (error \"Not implemented yet.\"))\n", "  (let ()\n  \
+    \  (define (recurse paren-list accum)\n      (cond\n        [(null? paren-list)\n\
+    \         accum]\n        [(char=? (car paren-list) #\\()\n         (let ([inner-paren-list\
+    \ (cons (car paren-list) accum)])\n           (recurse (cdr paren-list) inner-paren-list))]\n\
+    \        [(char=? (car paren-list) #\\))\n         (let ([inner-paren-list (cons\
+    \ (car paren-list) accum)])\n           (recurse (cdr paren-list) accum))]\n \
+    \       [else\n         (recurse (cdr paren-list) accum)]))\n    (map list->string\
+    \ (list->list paren_string))))\n</code>\nHere is my attempt:\n<code>#lang racket\n",
+  "  (cond\n    [(&gt; (string-length paren_string) 0)\n     (append (list (nested-string\
+    \ paren_string))\n             (separate_paren_groups (string-drop paren_string\
+    \ (string-length (nested-string paren_string)))))\n     ]\n    [else '()]))\n",
+  "  (if (equal? paren_string \"\")\n      '()\n      (let* ([paren_string (string-strip\
+    \ paren_string)]\n             [open-pos (string-index \"(\" paren_string)]\n\
+    \             [close-pos (string-index \")\" paren_string (+ open-pos 1))])\n\
+    \        (cons (string-take paren_string (+ open-pos 1) (- close-pos 1))\n   \
+    \           (separate_paren_groups (string-drop paren_string (+ close-pos 1)))))))\n",
+  "  (for/list ([m (in-regexp \"[()]+\" paren_string)]) m))\n", "  (if (string-empty?\
+    \ paren_string)\n      (list)\n      (let ((first-paren-match (string-match \"\
+    ^(.*?)(\\\\))\" paren_string)))\n        (cons (substring paren_string 0 (+ first-paren-match\
+    \ 1))\n              (separate_paren_groups (substring paren_string (+ first-paren-match\
+    \ 3)))))))\n```\n\n### 2.1 - 2.8\nThe entire list of exercises can be found in\
+    \ the `racket-practice.rkt` file.\n\n## 2.3\n### 2.3.1\n```scheme\n#lang racket\n",
+  "  (define res '())\n  (define paren_count 0)\n  (define (iter str)\n    (if (string-empty?\
+    \ str)\n        res\n        (if (equal? (string-take str 1) \"(\")\n        \
+    \    (begin\n              (set! paren_count (+ paren_count 1))\n            \
+    \  (iter (string-drop str 1)))\n            (if (equal? (string-take str 1) \"\
+    )\")\n                (begin\n                  (set! paren_count (- paren_count\
+    \ 1))\n                  (if (equal? paren_count 0)\n                      (begin\n\
+    \                        (set! res (append res (list (string-trim (string-reverse\
+    \ (string-reverse str \")\"))))))\n                        (iter (string-drop\
+    \ str 1)))\n                      (iter (string-drop str 1))))\n             \
+    \   (iter (string-drop str 1))))))\n  (iter paren_string))\n", "    (if (empty?\
+    \ paren_string)\n        empty\n        (define (separate_paren_groups-no-base\
+    \ paren_string)\n            (let ((stack (make-stack)))\n                (for\
+    \ ((char (in-string paren_string)))\n                    (cond ((eq? char #\\\
+    () (stack-push stack char))\n                          ((eq? char #\\)) (stack-pop\
+    \ stack))))\n                (if (empty? stack)\n                    (list (substring\
+    \ paren_string 0 (string-length paren_string)))\n                    (let ((index\
+    \ (index-of-last-char paren_string #\\))))\n                        (cons (substring\
+    \ paren_string 0 index)\n                              (separate_paren_groups-no-base\
+    \ (substring paren_string (+ index 1) (string-length paren_string)))))))))\n \
+    \   (separate_paren_groups-no-base paren_string))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

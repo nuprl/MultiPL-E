@@ -14,7 +14,632 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 4, 3, 0, 1, 5, 6]))\n    assert_equal([1, 2], candidate.call([2, 1]))\n    assert_equal([0,\
   \ 11, 15, 32, 42, 87], candidate.call([15, 42, 87, 32, 11, 0]))\n    assert_equal([23,\
   \ 21, 14, 11], candidate.call([21, 14, 23, 11]))\n  end\nend\n"
-completions: []
+completions: ["  array.sort.each { |i| return i if i.odd? || i.even? }\n  array.sort.each\
+    \ { |i| return -i if i.odd? && !i.even? }\n  array\nend", "  if array.empty?\n\
+    \    return array\n  sum, size = array.length, 1\n  while sum != 0\n    sum %=\
+    \ array.size\n    size += 1\n  end\n  return array.reverse if sum % 2 == 0\n \
+    \ array.reverse if sum % 2 == 1\n  array\nend", "  return array.reverse if array.sum\
+    \ % 2 == 1 else array\nend\nputs \"ok\"\n</code>\n<|/ a |>\n<| a dscore=2 |>\n\
+    For Ruby 1.9, this seems to work:\n<code>", "  array.sort do |a, b|\n    case\n\
+    \    when a + b > 0\n      true\n    when a + b == 0\n      false\n    when b\
+    \ + a = 0\n      false\n    else\n      false\n    end\n  end\nend", "  return\
+    \ nil if array.size <= 0\n  array.sort do |a, b|\n    a_sum = a.last\n    b_sum\
+    \ = b.last\n    if a_sum.even?\n      b_sum\n    elsif b_sum.even?\n      a_sum\n\
+    \    else\n      a_sum.odd? ? 1 : -1\n    end\n  end\nend", "  array.sort_by!\n\
+    \  array\nend\n</code>\n<|/ a |>\n<| a tags=sorting,ruby |>\nIf you're a fan of\
+    \ ActiveSupport and Rails you can do this in one line using Enumerable#sort_by.\n\
+    <code>\n>> require 'active_support/all'\n=> true\n>> [5,8,1,6,3,2,4].sort_by{\
+    \ |x| (x.even? && x.odd?) ? 1 : -1 }\n=> [1, 2, 3, 4, 6, 5, 8]\n</code>\n<|/ a\
+    \ dscore=5 |>\n<| a dscore=4 |>\nThe array has a good amount of methods. A more\
+    \ interesting method is sort, which does exactly what you want in a single line:\n\
+    <code>\narray.sort { |a, b| a <=> b }\n</code>\n<|/ a tags=sorting,ruby |>\n<|\
+    \ c |>\nThis doesn't work if all elements are `nil`. Use `sort_by` as suggested\
+    \ above.\n<|/ c |>\n<| c |>\nTrue, but that's what the OP wanted to do.\n<|/ c\
+    \ |>\n<| c |>\n`sort { |a, b| b <=> a }` would also work, though you might need\
+    \ to reverse the result.\n<|/ c |>\n<| c |>\nThis solution also breaks if the\
+    \ array contains nil values.  It would be better to use `sort_by` and return `nil`\
+    \ if the values are the same.\n<|/ c |>\n<| a dscore=3 |>\n<code>\n[5, 8, 1, 6,\
+    \ 3, 2 ,4].sort_by{|x| [x.odd?, x.even?]}.collect{|x| x.odd? ? x : -x}\n</code>\n\
+    <|/ a tags=sorting,ruby |>\n<| c |>\nYou should use either `return x.odd? ? x\
+    \ : -x` or `return (x.odd? ? x : -x)`.\n<|/ c |>\n<| a |>\n<code>\narray = [5,\
+    \ 8, 1, 6, 3, 2 ,4]\narray.sort!.collect{|i| i.odd? ? i : -i.odd? ? -i : i}\n\
+    </code>\n<|/ a dscore=2 tags=sorting,ruby |>\n<| c |>\nThis would fail if all\
+    \ elements are nil. `sort!` returns nil if all the elements are the same. Try\
+    \ with `[5,8,1,nil,3,2,4]`.\n<|/ c |>\n<| a tags=sorting,ruby |>\n<code>", " \
+    \ odd_sum = array[0] + array[-1]\n  even_sum = array[-2] if array[-1] == 0 else\
+    \ array[-1] + array[-2] if array[-1] < 0 else array[-1] + array[-2] + array[-3]\n\
+    \  odd_sorted = array.sort.select { |e| (odd_sum % 2) == 0 }\n  even_sorted =\
+    \ array.sort.select { |e| (even_sum % 2) == 0 }\n  odd_sorted.concat(even_sorted)\n\
+    end", "  array.sort.with_index do |x,i|\n    if x%2 != 0\n      x<array[i - 1]\
+    \ if i <= array.size\n    else\n      x>array[i - 1] if i <= array.size\n    end\n\
+    \  end\nend", "  return unless(array.length,\n    []\n  ).to_a.sort{|a,b| a.to_i\
+    \ + b.to_i} +\n    unless(array.length,\n      []\n    ).to_a.sort{|a,b| b.to_i\
+    \ + a.to_i}\nend", "    array.sort!\n    return array\nend", "  last_sum = array[0]\n\
+    \  sorted = []\n  sorted_index = 0\n  array.each do |num|\n    if num > last_sum\n\
+    \      sorted = sorted + [num]\n    else\n      last_sum = last_sum + num\n  \
+    \    sorted_index = sorted_index + 1\n      sorted = sorted + [num]\n    end\n\
+    \  end\n  if last_sum % 2 == 0\n    sorted.reverse # descending order\n  else\n\
+    \    sorted # ascending order\n  end\nend", "  array.each do |i|\n    sum1 = array[i]\n\
+    \    sum2 = sum1\n    array.delete_at(i)\n    sum2 = sum1.next\n    sum2.next\n\
+    \    sum1.next\n  end\nend\n</code>\n<|/ a dscore=0 |>\n<| a tags=ruby |>\nHere's\
+    \ an approach that uses inject:\n<code>", "  result = array.dup\n  result.reverse_merge\n\
+    \  result\nend", "  sorted_array = array.clone\n  sorted_array.sort\n  sorted_array.compact!\n\
+    \  sorted_array\nend", "    array.sort!\nend", "  new_array = []\n  array.each\
+    \ do |x|\n    if x.odd?\n      new_array << x.to_i\n    else\n      new_array\
+    \ << x.to_i - (array.length - 1)\n    end\n  end\n  new_array.sort!\n  return\
+    \ new_array\nend", "  array.sort!\n  array\nend", "    array = array.dup\n   \
+    \ array.sort {|a,b| b <=> a}\n    return array\nend\n</cell>\n<cell>\narray =\
+    \ [5,10,7,6,9,3,2,4,8,1]\nsort_array(array)\n</cell>\n<text>\n\uB9CC\uB4E4\uC5B4\
+    \uC9C4 \uC54C\uD30C\uBCB3 \uC774\uB984\uC744 \uB123\uC73C\uBA74 \uC5F0\uC2B5\uBB38\
+    \uC81C\uC5D0\uC11C \uC601\uD5A5\uC744 \uC8FC\uC9C0 \uC54A\uB3C4\uB85D \uD558\uACA0\
+    \uC2B5\uB2C8\uB2E4.", "  array.sort.each_with_index do |e, i|\n    i % 2 == 0\
+    \ ? array[i] = e : array[i] = -e\n  end\n  return array\nend\n</code>\n<|/ a dscore=0\
+    \ |>\n<| a dscore=0 |>\n<code>", "  return [] if array.empty?\n  array.sort.with_index\
+    \ { |e, i| i % 2 != 0 ? e : -e }\nend", '  new_array = []', "  array.sort\n  array.map(&:to_i).reverse.compact\n\
+    end", "  array.sort! # O(nlogn)\n  array.rotate! if array.length % 2 == 0 # O(n)\n\
+    \  array\nend\n</code>\n<|/ a |>\n<| c |>\nNice solution, but what about O(n)?\n\
+    <|/ c |>\n<| c |>\n, what do you mean? Your answer looks like O(n^2). Do you mean\
+    \ O(nlogn)?\n<|/ c |>\n<| c |>\nThe question is how to sort an array with O(n)\
+    \ complexity. Your solution sorts in O(nlogn).\n<|/ c |>\n<| c |>\n, OP said \"\
+    a solution with O(n) complexity\", not \"a solution O(nlogn)\". And I believe\
+    \ that my solution has O(n) complexity.\n<|/ c |>\n<| c |>\n, I misunderstood\
+    \ your comment, thanks for clarifying. I edited my answer and added O(n) solution.\n\
+    <|/ c |>\n<| a tags=algorithm,ruby,arrays,sorting |>\nSince you only have to return\
+    \ the first or last element of an odd or even sorted array, you can sort once,\
+    \ then just take the first or last element.\n<code>", "  array.sort\n  if array.inject(0)\
+    \ {|sum, elem| sum + elem}.reduce(:<=>) != :<=>\n    array.reverse\n  end\n  array\n\
+    end", "  array.sort!\nend", "  return if array.empty?\n  array = array.dup\n \
+    \ array.sort! do |i,j|\n    i1 =  i + array[0]\n    j1 =  j + array[-1]\n    if\
+    \ i1 > j1 then\n      1\n    elsif i1 < j1 then\n      -1\n    else\n      0\n\
+    \    end\n  end\n  array\nend", "  return array if array.size == 0 || (array.size\
+    \ - 1) % 2 == 0 ? (array.sort { |a,b| b <=> a }) : array.sort { |a,b| b <=> a\
+    \ }.reverse\nend", "  return array.sort{|a,b| [a, b].sum % 2 == 0 ? b<=>a : a<=>b}\n\
+    end", "  return [] if array.empty?\n  s = array.first.last \n  array.first.remove\n\
+    \  array.last.remove\n  array.first.each {|i| array.push(i)}\n  array.last +=\
+    \ s if array.first.odd?\n  array.last -= s if array.first.even?\n  return array\n\
+    end", "  return array.sort.tap { |a| a.reverse if a.sum % 2 == 1 }\nend", "  array.sort.with_index\
+    \ do |_, i| \n    case i.odd?\n    when true then i.push(nil)\n    when false\
+    \ then i.unshift(nil)\n    end\n  end\nend\nputs sort_array.call([]) # []\nputs\
+    \ sort_array.call([5]) # [5]\nputs sort_array.call([2, 4, 3, 0, 1, 5]) # [0, 1,\
+    \ 2, 3, 4, 5]\nputs sort_array.call([2, 4, 3, 0, 1, 5, 6]) # [6, 5, 4, 3, 2, 1,\
+    \ 0]\n</code>\n<|/ a |>\n<| c |>\nYou guys are awesome! Thank you so much!\n<|/\
+    \ c |>\n<| c |>\nThis assumes the sum of the first and last elements is even.\
+    \  It would be better to push nil onto the front of the array if the sum is odd.\n\
+    <|/ c |>\n<| c |>\nyes you are right. i fixed it. Thank you !\n<|/ c |>\n<| c\
+    \ |>\nI guess I should add that this is O(n) solution. I don't know a way to solve\
+    \ this in O(logn) time.\n<|/ c |>\n<| c |>\nThis can be done in O(n) if you change\
+    \ the comparison operator to subtract instead of add. So to sort `[5, 8, -7, 4,\
+    \ 3]` you would use `[5,-7,3,-4,8]` as the input.\n<|/ c |>\n<| a dscore=2 |>\n\
+    Here is a solution with O(n log n) complexity that sorts the array in O(n log\
+    \ n) time using a heap and a helper array. The heap is used to store the elements\
+    \ of the array that need to be added in the desired order into the helpers array.\
+    \ Then, for each element in the array, we add it to the helper array at its correct\
+    \ index. Finally, we add the remaining elements of the helper array to the end\
+    \ of the sorted array. \n<code>", '  result = array.dup', "  array.sort\nend",
+  "  result = []\n  for i in 0...array.length\n    result[i] = array[i % array.length]\n\
+    \  result = result.sort_by {|x| x}\n  result.reverse!\n  result\nend", "  even\
+    \ = (array.length % 2) == 0\n  if even\n    array.sort! { |i, j| i < j ? 1 : -1\
+    \ }\n  else\n    array.sort! { |i, j| i > j ? 1 : -1 }\n  end\nend\n</code>\n\
+    <|/ a tags=sorting,ruby,arrays dscore=1 |>\n<| c |>\nThis code has two bugs: it\
+    \ doesn't work if there's more than one element in the array and the sort doesn't\
+    \ sort the even numbers, it sorts the numbers in reverse order. I've fixed the\
+    \ bugs in my answer, but I don't think that this is what the OP meant.\n<|/ c\
+    \ |>\n<| a |>\n<code>", "  array.sort_by { |x| x % 2 == 0 ? 1 : -1 }\nend", " \
+    \   return array.sort.to_a\nend\n</cell>\n<cell>", "  array.sort! {|a, b| b.zero?\
+    \ ? a : a^b}\nend", "    array.sort\nend", "  array.sort!\n  return array\nend",
+  "    array = array.sort.to_a\n    array.each do |num|\n        odd =  num % 2 ==\
+    \ 0\n        array.insert(array.size - num + odd, odd)\n    end\n    array\nend",
+  "  array.sort\nend", "  array.sort!\n  array\nend", "  # Your code here\n  return\
+    \ array\nend\n</cell>\n<code language=julia-1.5>", "  return array if array.empty?\
+    \ else get_first_and_last_element_of_the_array(array).inject(:+) if is_odd_sum?(array[0])\
+    \ && is_odd_sum?(array[-1])\n  array.reverse\nend", "  # Your code goes here\n\
+    \  array1 = array.map{|e| [e]}\n  array2 = array.map{|e| [e]}\n  for i in 0...array1.length-1\n\
+    \   array1.each_index{|i| if array1[i].last > array1[i+1].first then array1[i+1].first\
+    \ = array1[i].first end}\n   array2.each_index{|i| if array2[i].last > array2[i+1].first\
+    \ then array2[i+1].first = array2[i].first end}\n  end\n  return array1 + array2\n\
+    end", "  array.sort!\n  return array\nend", "  # write your code here\n  array.sort\n\
+    end", "  return array.sort.to_a\nend", "  array.sort! do |a, b|\n    if a + b\
+    \ == sum(a, b)\n      a\n    else\n      b\n    end\n  end\n  array\nend", " \
+    \   array.sort\nend", "  array.sort!\n  array\nend", "  result = array\n  if array.size.odd?\n\
+    \    array.each_index do |i|\n      temp = array[i]\n      result[i] = array[i\
+    \ - 1]\n      result[i - 1] += temp\n    end\n    result = result.reverse if result.first\
+    \ % 2 == 1\n  elsif array.size.even?\n    array.each_index do |i|\n      temp\
+    \ = array[i]\n      result[i] = array[i - 1]\n      result[i - 1] -= temp\n  \
+    \  end\n  end\n  return result\nend\n</code>\n<|/ a dscore=0 |>\n<| a dscore=0\
+    \ |>\n<code>", "  array.each_with_index {|x, i| array.swap(i, i + 1)}\n  array.each_with_index\
+    \ {|x, i| array.swap(i, i - 1)}\n  array.sort\n  array\nend", "  array.each_with_index\
+    \ do |x, i|\n    array.slice!(i, i + 1)\n  end\n  array.sort!.reverse!\n  array\n\
+    end", "  array.each_with_index { |n, i| array[i] = [array[i], i] }\n  array.sort!\n\
+    \  array.inject([]) { |result, (i, n)| result << n[1] }\nend", "  array.sort\n\
+    \  odd = 1\n  even = 0\n  n = array.length\n  loop do\n    break unless odd +=\
+    \ array[n - 1] if n != 0\n    odd += array[0] if n != 0\n    break unless even\
+    \ += array[n - 1] if n != 0\n    even += array[0] if n != 0\n  end\n  odd = odd\
+    \ - array[0] if odd != 0\n  even = even - array[0] if even != 0\n  odd > 0 ? array.unshift(odd)\
+    \ : array.push(odd)\n  even > 0 ? array.push(even) : array.unshift(even)\n  return\
+    \ array\nend", "  array.sort\nend", "  array.sort\nend", "  array.sort.with_index\
+    \ do |value, index|\n    if index < array.size - 1\n      index == 0 ? [value]\
+    \ : [value, array[index - 1]]\n    else\n      [value]\n    end\n  end\nend\n\
+    puts sort_array.call([2, 4, 3, 0, 1, 5, 6]) # => [6, 5, 4, 3, 2, 1, 0]\n</code>\n\
+    <|/ a |>\n<| a dscore=2 |>\nYou can use the merge method.\n<code>\n[1,2,3,4,5].sort_by\
+    \ {|x| x.to_s}.merge([2,1,5,3])\n</code>\nThe result is:\n<code>\n=> [1, 2, 3,\
+    \ 4, 5, 2, 1]\n</code>\n<|/ a tags=ruby,arrays |>\n<| a dscore=2 tags=ruby,arrays\
+    \ |>\nYou can do this using inject:\n<code>\na = [1,2,3,4]", "  array.sort\n \
+    \ if array.length < 2\n    return array\n  if array[array.length-1].zero? and\
+    \ array.length > 1\n    array.push(*array[0..(array.length-1)])\n    array.pop\n\
+    \  end\n  if array.length > 2\n    array.insert(0, *array[1..array.length-1])\n\
+    \  end\n  return array\nend", "    sum = array.inject(0) { |sum, element| sum\
+    \ + element }\n    odd_sum = (sum % 2).zero?\n    return array.sort do |a, b|\n\
+    \        odd_sum ? a > b : a < b\n    end\nend", "  return array if array.size\
+    \ == 0 # if the array is empty, return it\n  array.shift # remove the first element\
+    \ to prevent wrong count of the sum\n  array.size.times do |i|\n    array[i] =\
+    \ -array[i] if array[i] * (array.size - 1) < 0 # if the sum of the first and last\
+    \ element is not odd, sort it in descending order\n    array[i] = array[i] if\
+    \ array[i] * (array.size - 1) >= 0 # if the sum of the first and last element\
+    \ is odd, sort it in ascending order\n  end\n  array.sort! # sort the array\n\
+    end\n</code>\n<|/ a dscore=3 |>\n<| a tags=ruby,sorting dscore=3 |>\n<code>",
+  "  return array.sort_by{|x| x.first}\nend", "    # write your code here\n    array.sort!\n\
+    \    return array\nend\n</code>\nRuby has many built-in methods.  For example,\
+    \ Array#sort is probably the best method to use for this problem. The sort method\
+    \ takes a comparison block, which can take advantage of various Ruby tricks to\
+    \ make code more readable.  In the code below, I've rewritten the sort method\
+    \ using sort_by.  \n<code>", "  array.each do |value|\n    next_value = array[value-1]\n\
+    \    next if next_value == 0\n    next_value += 1 if next_value % 2 == 1\n   \
+    \ array[value-1], array[value] = array[value], array[value-1]\n  end\n  array\n\
+    end", "  array.sort!\nend\n</cell>\n<code language=julia-1.0>", "  array.sort\
+    \ do |a, b|\n    sum1 = a.inject(0, :+) \n    sum2 = b.inject(0, :+)\n    if sum1\
+    \ % 2\n      sum1 > sum2\n    else\n      sum2 > sum1\n    end\n  end\nend", " \
+    \ return array.sort\nend", "    # write your code here\n\t\n\tif array.length\
+    \ < 2\n\t\treturn array\n\t\n\tsum_of_array = array.inject(:+) \n\t\n\tif sum_of_array\
+    \ % 2 == 0 \n\t\tsorted_array = array.sort.reverse\n\telse\n\t\tsorted_array =\
+    \ array.sort\n\tend\n\t\n\treturn sorted_array\nend", "  array.sort!\n  array.inject([])\
+    \ do |sum, num|\n    sum = sum + num\n    if sum.odd?\n      array.unshift(num)\n\
+    \    else\n      array.push(num)\n    end\n    sum\n  end\n  array\nend", "  array.sort!\n\
+    \  i = 1\n  while i < array.length\n    if array[i-1].even?\n      array[i-1].swap\
+    \ array[i-1]\n      array[i-1].swap array[i+1]\n      i += 1\n    i += 1\n  end\n\
+    \  array\nend", "  array.sort\nend", "  array = array.to_a\n  array.sort!\n  new_array\
+    \ = []\n  until array.empty? do\n    if array.first < array.last\n      new_array\
+    \ << array.shift\n    end\n    if array.first > array.last\n      new_array <<\
+    \ array.last\n    end\n  end\n  new_array\nend", "  array.sort!\n  array.compact!\n\
+    \  return array\nend", "  array.sort\nend\n</cell>\n<code language=julia-1.5>\n\
+    @assert sort_array([1, 2, 3]) == [1,2,3]\n@assert sort_array([5, 3, 1]) == [1,\
+    \ 3, 5]\n@assert sort_array([5, 3, 1]) == [1, 3, 5]\n@assert sort_array([10, 5])\
+    \ == [5,10]\n@assert sort_array([10, 5]) == [5,10]\n@assert sort_array([10]) ==\
+    \ [10]\n@assert sort_array([10,10]) == [10,10]\n@assert sort_array([10, 5, 3,\
+    \ 1]) == [5, 3, 1, 10]\n@assert sort_array([10, 5, 3]) == [5, 3, 10]\n@assert\
+    \ sort_array([10, 5]) == [5, 10]\n</cell>\n<code language=julia-1.5>", "  new_array\
+    \ = []\n  array.each do |value|\n    if sum(value) % 2 == 0\n      new_array.push(value)\n\
+    \    end\n  end\n  new_array.sort!\nend\n</code>\n<|/ a tags=ruby,arrays dscore=0\
+    \ |>\n<| c |>\nPlease don't use ternary operators in Ruby. `sum(value) % 2 ==\
+    \ 0 ? value : nil` does the same thing as `sum(value) % 2 == 0 ? value : nil`\n\
+    <|/ c |>\n<| a tags=ruby,arrays |>\nAnother way is to use inject and reverse the\
+    \ returned array in either even or odd cases.\n<code>", "  array.sort!\nend",
+  "\tarray.sort.with_index do |i, index|\n\t\tif index.zero?\n\t\t\ti\n\t\telse\n\t\
+    \t\tif array[index-1].odd?\n\t\t\t\tarray[index-1]\n\t\t\telse\n\t\t\t\tarray[index-1]\n\
+    \t\t\tend\n\t\tend\n\tend\nend", "    array.sort! {|a, b| a <=> b}\n    array\n\
+    end", "  len = array.size\n  tmp = array.dup\n  if len.even?\n    tmp = tmp.sort\n\
+    \    tmp.inject([]){|sum, elem| sum << elem}\n  elsif len.odd?\n    tmp = tmp.sort!.reverse\n\
+    \    tmp.inject([]){|sum, elem| sum << elem}\n  end\n  return tmp\nend\n</code>\n\
+    <|/ a dscore=1 tags=ruby |>\n<| a tags=ruby |>\nIn Ruby, you can do this:\n<code>\n\
+    a = [5,4,3,2,1]", "  return array.sort do |a, b|\n    sumA = a.inject(:+).to_i\n\
+    \    sumB = b.inject(:+).to_i\n    if sumA.odd? == false && sumB.odd? == false\n\
+    \      sumA <=> sumB\n    elsif sumA.odd? == false && sumB.odd? == true\n    \
+    \  sumA <=> -sumB\n    elsif sumA.odd? == true && sumB.odd? == false\n      -sumA\
+    \ <=> sumB\n    else\n      -sumA <=> -sumB\n    end\n  end\nend", "  new_array\
+    \ = []\n  odd = array.inject(0) {|sum, i| sum + i}\n  even = array.inject(0) {|sum,\
+    \ i| sum + i}\n  if odd % 2 == 0\n    array.sort.reverse\n  else\n    array\n\
+    \  end\nend\n</code>\n<|/ a tags=ruby,arrays dscore=1 |>\n<| c |>\nThe OP wants\
+    \ to sort the array in **descending order** if the sum of the first two elements\
+    \ is odd, and in **ascending order** if the sum of the first two elements is even.\n\
+    <|/ c |>\n<| a dscore=1 tags=ruby,arrays |>\nFor Ruby 1.8.7+\n<code>\na = [2,\
+    \ 4, 3, 0, 1, 5, 6]\na.sort! { |a, b| (b - a) * (b - a) }\n</code>\nFor Ruby 1.9\n\
+    <code>\na = [2, 4, 3, 0, 1, 5, 6]\na.sort! { |a, b| (b - a) * (b - a) }.reverse\n\
+    </code>\n<|/ a |>\n<| c |>\nYour solution is very inefficient as it compares two\
+    \ values twice per element. Your solution works fine on small arrays, but on big\
+    \ ones it is O(n\xB2).\n<|/ c |>\n<| c |>\nIt was just a proof of concept solution.\
+    \  I didn't want to provide code for production environments.\n<|/ c |>\n<| c\
+    \ |>\nThe OP wants to sort the array in **descending order** if the sum of the\
+    \ first two elements is odd, and in **ascending order** if the sum of the first\
+    \ two elements is even.\n<|/ c |>\n<| a |>\nFor those looking for a solution with\
+    \ Ruby 1.9\n<code>\na = [2, 4, 3, 0, 1, 5, 6]\na.sort_by do |x|\n  (x[1]+x[0])\
+    \ * (x[1]+x[0])\nend\n</code>\n<|/ a tags=ruby,arrays dscore=1 |>\n<| a dscore=1\
+    \ |>\nTry this, It will work for you, But this is not the correct way to use inject\
+    \ method\n<code>\na = [2, 4, 3, 0, 1, 5, 6]\na = a.sort{|i,j| i[1]+i[0]<j[1]+j[0]?\
+    \ i[1]+i[0]:j[1]+j[0]}\na.join(\" \")\n</code>\nOutput\n<code>\n\"0 1 2 3 4 5\
+    \ 6\"\n</code>\n<|/ a tags=ruby,arrays |>\n<| c |>\nYour solution is very inefficient\
+    \ as it compares two values twice per element. Your solution works fine on ",
+  "    sum = 0 \n    odd = 1\n    even = 0\n    sorted = []\n    array.each do |num|\n\
+    \        sum = sum + num\n        if odd? sum\n            sorted.push( num )\
+    \ \n        elsif even? sum\n            sorted.push( num ) \n        else\n \
+    \           sorted.push( num ) \n        end\n    end\n    return sorted\nend",
+  "\tsorted = []\n\tarray.each do |number|\n\t\tnext if number == 0\n\t\tsum = array[0]\n\
+    \t\tarray -= [number]\n\t\tarray.each do |element|\n\t\t\tsum -= element\n\t\t\
+    end\n\t\tsum *= -1\n\t\tarray.each do |element|\n\t\t\tsum += element\n\t\tend\n\
+    \t\tsorted.push(sum)\n\tend\n\treturn sorted\nend\nputs sort_array.call([5, 1,\
+    \ 3, 7, 4, 2, 0])", "  array.sort!\nend", "  array.sort\n  sum = 0\n  for i in\
+    \ 0...array.length\n    sum += array[i]\n    if sum.odd?\n      sum -= array[i]\n\
+    \      array.push array[i]\n    end\n  end\n  array\nend", "  array.sort\nend",
+  "  return array.inject([]) do |ar, el|\n    if sum( el[1], ar.length ) % 2 == 0\
+    \ # odd sum\n      ar.push( el )\n    else\n      ar.pop while sum( ar.pop.last,\
+    \ ar.length ) == sum( el, ar.length ) % 2\n      ar.push( el )\n    end\n    ar\n\
+    \  end\nend", "  array.sort\n  case array.sum % 2 == 0\n    when true\n      array.sort!.reverse!\n\
+    \    when false\n      array.sort!\n  end\n  array\nend\n</code>\n<|/ a dscore=0\
+    \ |>\n<| a tags=ruby |>\nAnother variation of's answer:\n<code>", "    return\
+    \ array.sort.reverse.inject(0){|sum, el| sum + el} % 2 ? array.sort : array.sort[-1,-1]\n\
+    end", "  result = []\n  if array.length <= 0\n    return result\n  if array.length\
+    \ == 1\n    return array\n  first, last = array[0], array[1]\n  temp = 1\n  while\
+    \ temp < last\n    temp += 1\n  end\n  while last > first\n    temp = temp - 1\n\
+    \    first = first - temp\n    last = last - temp\n  end\n  temp = 1\n  while\
+    \ temp < last\n    temp = temp + 1\n    first = first - temp\n    last = last\
+    \ - temp\n  end\n  first += 1\n  last -= 1\n  array.unshift(first)\n  array.push(last)\n\
+    \  result\nend", "    # write your code here\n    return nil\nend", "  sorted_array\
+    \ = array\n  sorted_array.sort! # sort() method sorts the array in ascending order\n\
+    \  if array.inject(0) {|sum, num| sum + num} % 2 != 0\n    sorted_array.unshift(*sorted_array.pop,\
+    \ array.last)\n  else\n    sorted_array.unshift(*sorted_array.last, *sorted_array.pop)\n\
+    \  end\n  sorted_array\nend\n</code>\n<|/ a dscore=2 tags=ruby |>\n<| a |>\n<code>",
+  "  array.sort.each do |i|\n    return i if sum((i, array.length-1)) % 2 == 1\n \
+    \ end\n  array.sort.each do |i|\n    return i if sum((i, array.length-1)) % 2\
+    \ == 0\n  end\nend", "  return array.sort do |a,b|\n    if a.odd? && b.odd?\n\
+    \      b - a\n    elsif a.even? && b.even?\n      a - b\n    else\n      a <=>\
+    \ b\n    end\n  end\nend", "    # write your code here\n    even = (array.inject(0)\
+    \ { |sum, el| sum + el % 2 } )\n    odd = (array.inject(0) { |sum, el| sum + el\
+    \ % 2 } )\n    return array[(odd - even).abs < (even - odd)]\nend", "  array.sort\
+    \ { |a, b| a <=> b } if array.sum % 2 == 0\n  array.sort { |a, b| b <=> a } if\
+    \ array.sum % 2 == 1\n  array\nend", "\tarray = array.to_a\n\ti = 0\n\tresult\
+    \ = []\n\t\n\twhile i < array.length - 1\n\t\t# sum first and last index\n\t\t\
+    sum = (array[i] +  array[i+1]).to_i", "  array.sort!\nend", "  return if array.nil?\n\
+    \  left, right = array[0..-2], array[-2..-1]\n  if left.empty? || right.empty?\n\
+    \    array\n  else\n    if left.last + right.last <= 0\n      array.concat([left.pop,\
+    \ right.pop])\n      sort_array(left)\n      sort_array(right)\n    elsif left.last\
+    \ + right.last % 2 == 0\n      array.concat([left.pop, right.shift])\n      sort_array(left)\n\
+    \      sort_array(right)\n    else\n      array.concat([left.shift, right.pop])\n\
+    \      sort_array(left)\n      sort_array(right)\n    end\n  end\nend\n</code>\n\
+    <|/ a tags=ruby,arrays |>\n<| a |>\nSort the array in O(nlogn) time using Heap-Sort\n\
+    <code>", "  sum = 0\n  result = array.dup\n  array.each do |num|\n    sum += num\n\
+    \    result << num if sum % 2 == 0\n    result << num if sum % 2 == 1\n  end\n\
+    \  result\nend\n</code>\n<|/ a |>\n<| c |>\nThis has two problems. The first is\
+    \ that `sort` isn't guaranteed to sort in-place. The second is that it will fail\
+    \ if the array contains only a single element, which may or may not be what the\
+    \ OP wants to do.\n<|/ c |>\n<| a dscore=2 |>\nHere's another approach, which\
+    \ doesn't require you to modify the original array, and will always sort your\
+    \ array in ascending order:\n<code>", "    # write code here\n    array.sort!\n\
+    end", "  array.sort! do |a,b|\n    if a <=> b\n      a\n    else\n      b\n  \
+    \  end\n  end\n  array\nend", "  even = (array.length % 2).zero?\n  array.sort.with_index\
+    \ do |value, i|\n    if even\n      array[i] > value ? 1 : -1\n    elsif array[i]\
+    \ < value\n      array[i] > value ? 1 : -1\n    else\n      i\n    end\n  end\n\
+    end", "\tsorted_array = array\n\tsum = 0\n\tfor i in array\n\t\tsum = sum + i\n\
+    \t\tbreak\n\tif sum % 2 == 0\n\t\tsorted_array.reverse\n\telse\n\t\tsorted_array\n\
+    end", "  array.sort\n  array.inject([[]]) do |corb, i|\n    corb[i] << i\n   \
+    \ corb\n  end\nend", "  array.sort.call(array)\n  array\nend", "  return array.sort.reduce(:+)\n\
+    end", '  return [] if array.empty?', "  return array.sort.call(array).reverse\n\
+    end", "  array.sort! # use sort! to sort the array in ascending order if the sum(\
+    \ first index value, last index value) is odd, or sort it in descending order\
+    \ if the sum( first index value, last index value) is even.\nend\n</code>\n<|/\
+    \ a dscore=2 |>\n<| a dscore=2 tags=ruby,arrays |>\nFor those looking for even\
+    \ or odd counts, here are a few examples.\n<code>\nirb(main):009:0> arr = [1,8,3,6,2,5,4,7,9]\n\
+    => [1, 8, 3, 6, 2, 5, 4, 7, 9]\nirb(main):010:0> arr.group_by(&:even?).map { |even_or_odd,\
+    \ items| even_or_odd ? \"even\" : \"odd\", items.size }\n=> [[\"even\", 3], [\"\
+    odd\", 6], [\"even\", 2], [\"odd\", 4], [\"even\", 1], [\"odd\", 9]]\n</code>\n\
+    <|/ a |>\n<| a tags=ruby,arrays |>\n<code>", "  array = array.clone\n  array.length.times\
+    \ do\n    break if array.sum.to_i > array.max.to_i\n    sum, max = 0, -1\n   \
+    \ array.each_index do |i|\n      sum = sum + array[i]\n      max = max < array[i]\
+    \ ? max : array[i]\n    end\n    break if sum % 2 != 0\n    array.swap(max, sum)\n\
+    \  end\n  array\nend", "  return array.dup.sort.to_a\nend\n</code>\n<|/ a tags=ruby,sorting\
+    \ |>\n<| c |>\nThis doesn't seem to work. (Ruby 2.1.4)\n<|/ c |>\n<| c |>\n, Please\
+    \ see the updated answer. Hope it helps.\n<|/ c |>\n<| c |>\nI realized my mistake,\
+    \ thank you for the clarification.\n<|/ c |>\n<| a |>\nThe way I ended up doing\
+    \ it was to create a new array and insert each of the elements as they were given\
+    \ into the new array and sort them using a custom sort function (by comparing\
+    \ their values at either end, depending on the odd/even criteria). The new array\
+    \ can be returned to its original position. \n<code>", "  if array.length == 0\n\
+    \    return array\n  last_index = array.length - 1\n  first_index = 0\n  sum_first\
+    \ = array[first_index]\n  sum_last = array[last_index]\n  if sum_first > sum_last\n\
+    \    swap(array, first_index, last_index)\n    last_index -= 1\n    first_index\
+    \ += 1\n  sum_first = array[first_index]\n  sum_last = array[last_index]\n  while\
+    \ sum_first <= sum_last\n    swap(array, first_index, last_index)\n    sum_first\
+    \ += array[first_index]\n    first_index += 1\n    sum_last -= array[last_index]\n\
+    \    last_index -= 1\n  return array\nend\n</pre>\n      </div>\n      <div class=\"\
+    hints\">\n        <div class=\"hinted-question\">\n          <p>\n           \
+    \ Given an array of non-negative integers, return a corb of the given array after\
+    \ sorting,\n            you will sort the given array in ascending order if the\
+    \ sum( first index value, last index value) is odd,\n            or sort it in\
+    \ descending order if the sum( first index value, last index value) is even.\n\
+    \            <em>Time Complexity: O(n)</em>\n          </p>\n          <p>\n \
+    \           Extra space complexity: O(1)\n          </p>\n        </div>\n   \
+    \     <ul>\n          <li>\n            O(n) means we only need to keep two pointers,\
+    \ one from beginning to middle and one from middle to end and calculate the sum.\n\
+    \          </li>\n        </ul>\n      </div>\n      <div class=\"solution\" data-type=\"\
+    custom\">\n        <div class=\"validator-function\">\n          <ul class=\"\
+    validators\">\n            <li>\n              var validator = interview.validate.validatorChain();\n\
+    \              var result = validator.validate(input, solution, validators);\n\
+    \              return result === true || result === getStrings().True;\n     \
+    \       </li>\n          </ul>\n        </div>\n        <section class=\"array-contains-duplicate-elements\"\
+    >\n          <p>\n            <strong>Array contains duplicate elements</strong>\n\
+    \          </p>\n          <div class=\"validator-function\">\n            <ul\
+    \ class=\"validators\">\n              <li>\n                var validator = interview.validate.validatorChain();\n\
+    \                var result = validator.validate(input, solution, validators);\n\
+    \                return result === true || result === getStrings().True;\n   \
+    \           </li>\n            </ul>\n          </div>\n          <p>\n      \
+    \      Given an array of non-negative integers, return a new array that has all\
+    \ of the duplicates removed and is sorted in ascending order.\n            <em>Time\
+    \ Complexity: O(n)</em>\n          </p>\n          <p>\n            Extra space\
+    \ complexity: O(1)\n          </p>\n          <p>\n            Examples:\n   \
+    \       </p>\n          <ul>\n            <li>\n              Input: [1, 2, 2,\
+    \ 1, 1, 5]\n              Output: [1, 2, 5]\n            </li>\n            <li>\n\
+    \              Input: [2, ", "  if array.empty?\n    []\n  elsif array.length\
+    \ == 1\n    array\n  elsif array.length == 0\n    []\n  else\n    if array.length\
+    \ % 2 == 0\n      array.sort { |a, b| a <=> b }\n    else\n      array.sort {\
+    \ |a, b| b <=> a }\n    end\n  end\nend", "  result = []\n  result.push(*array.first(array.length))\n\
+    \  array.delete_at(0)\n  array.delete_at(-1)\n  array = array.sort.reverse\n \
+    \ until array.empty?\n    sum = 0\n    array.each {|i|\n      sum+=i\n      if\
+    \ sum%2 != 0\n        result.push(i)\n      end\n    }\n  end\n  result\nend",
+  "    # Your code here\n    sorted = []\n    even = 0\n    odd = 0\n    array_length\
+    \ = array.length - 1\n    array_length.times do |index|\n        sorted_array\
+    \ = array[index...]\n        even = sorted_array[index] + even\n        odd =\
+    \ sorted_array[index] + odd\n        if (even % 2 != 0) && (odd % 2 == 0)\n  \
+    \          sorted << sorted_array\n        else\n            sorted << sorted_array[array_length]\n\
+    \        end\n    end\n    sorted\nend", "  if array.empty?\n    array\n  else\n\
+    \    array = array.sort.reverse\n    array.unshift(0) if array.sum.is_a?(Integer)\
+    \ and array.sum % 2 == 1\n    array\n  end\nend\n</code>\n<|/ a dscore=0 |>\n\
+    <| c |>\nWelcome to Stack Overflow. Code-only answers are not very useful on their\
+    \ own. Could you please edit your answer to include a brief explanation of why\
+    \ this code solves the problem?\n<|/ c |>\n<| c |>\nThe question was \"given an\
+    \ array of non-negative integers, return a corb of the given array after sorting,\
+    \ you will sort the given array in ascending order if the sum( first index value,\
+    \ last index value) is odd, or sort it in descending order if the sum( first index\
+    \ value, last index value) is even.\" My answer was a solution to the above question,\
+    \ that is, how do you sort an array of integers given that one of them is the\
+    \ sum of two elements, which is either even or odd.\n<|/ c |>\n<| c |>\nThanks\
+    \ for adding explanation, but why does `array.unshift(0) if array.sum.is_a?(Integer)\
+    \ and array.sum % 2 == 1` need to be before `array`?\n<|/ c |>\n<| c |>\nIt is\
+    \ not needed there. array.unshift(0) will add to the beginning of the array unless\
+    \ the sum of the last and first element is even. When the sum of the last and\
+    \ first element is even, the array will be sorted descendingly (array.sort.reverse).\
+    \ array.unshift(0) will add 0 to the beginning of the array, so that the first\
+    \ element of the array is always 0, and so the first element of the array will\
+    \ never be evenly summed to the last element.\n<|/ c |>\n<| c |>\n`array.unshift(0)`\
+    \ adds `0` to `array` *before* `array.sum` checks. It's not a part of the sum's\
+    \ condition. The whole thing is done because `array.sum` was introduced into the\
+    \ solution, and it is now needed to be done before the `array.sum` checks.\n<|/\
+    \ c |>\n<| a tags=ruby,arrays,sorting dscore=0 |>\n<code>", "  array.sort.each_with_index\
+    \ do |num, i|\n    if num % 2 == 0\n      array.reverse!\n    else\n      array.reverse!\n\
+    \    end\n  end\n  array\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks but\
+    \ this answer is wrong. Try this call:sort_array.call([1,2,3,4,5,6,7,8])\n<|/\
+    \ c |>\n<| c |>\nOh yes, I missed that. Updated the answer now.\n<|/ c |>\n<|\
+    \ a dscore=0 tags=sorting,ruby,ruby-on-rails |>\nYou could do this in a single\
+    \ statement, however this would probably be a bit more efficient if sorting is\
+    \ going to be done repeatedly.\n<code>", "  array.sort\nend", "  return array[0..-2]\
+    \ if array.sum % 2 == 0\n  return array.reverse[0..-2] if array.sum % 2 == 1\n\
+    end", "  array.sort\n  if array.uniq.count == 1\n    array\n  else\n    array.sort\
+    \ { |i, j| (i+j) % (i+j) < 0 }\n  end\nend", "  array = array.to_a\n  i = 0\n\
+    \  j = array.length\n  odd_sum = 0\n  even_sum = 0\n  while i < j\n    if array[i]\
+    \ < array[i]\n      array[i] = array[i].to_i\n      i += 1\n      odd_sum += 1\n\
+    \    else if array[i] > array[i]\n      array[i] = array[i].to_i\n      j += 1\n\
+    \      even_sum += 1\n    end\n  end\n  if odd_sum % 2 != 0 \n    array.unshift(array[j-1])\n\
+    \    array.pop\n  else\n    array.push (array[i-1])\n    array.pop\n  end\n  array\n\
+    end", "  array.sort\n  if array.length % 2 == 0 \n    array.push array.pop\n \
+    \ end\n  array\nend", "  len = array.length\n  max_sum = array[0]+array[len-1]\n\
+    \  if len==1 || max_sum%2 == 0\n    array\n  else\n    sort_array(array.slice(1,\
+    \ len-1).concat(array.slice(0, 1)))\nend", "  array.sort do |a, b|\n    if a<b\n\
+    \      -1\n    elsif a>b\n      1\n    else\n      0\n    end\n  end\nend", " \
+    \ array.sort\nend", "    array.each_with_index do |value, i|\n        if array.length\
+    \ - i > 1\n            i += 1 if sum((array[0], array[(array.length - 1) - i])\
+    \ % 2) == 0 \n        end\n        array.swap i, array.sort_index\n    end\n \
+    \   array\nend", "  array.sort\n  array\nend", "  if array.sum % 2 == 1 then array.sort!;\
+    \ return array\n  array.sort!.reverse\nend", "  array.sort\n  array.sort do |a,\
+    \ b|\n    if a > b\n      1\n    elsif a < b\n      -1\n    else\n      0\n  \
+    \  end\n  end\n  array\nend", "  array.each do |num|\n    if num.even? && num.odd?\n\
+    \      num.swap num.first\n    elsif num.even? && !num.odd?\n      num.swap num.last\n\
+    \    end\n  end\n  array\nend\nputs sort_array.call([5, 2, 1, 6, 3, 0])", "  if\
+    \ array.length == 1\n    return []\n  else\n    first = array[0]\n    last = array[array.length-1]\n\
+    \    if odd_or_even(first, last)\n      array.sort.with_index do |i, index|\n\
+    \        if i.first == first\n          array[i] = array[index + array.length\
+    \ - 1]\n          array[index + array.length - 1] = i\n          array.delete_at(index\
+    \ + 1)\n        end\n      end\n      array\n    else\n      array.sort.with_index\
+    \ do |i, index|\n        if i.first == first\n          array[i] = array[index\
+    \ - array.length + 1]\n          array[index - array.length + 1] = i\n       \
+    \   array.delete_at(index - 1)\n        end\n      end\n      array\n    end\n\
+    \  end\nend\n</code>\n<|/ a dscore=0 tags=ruby,arrays,sorting |>\n<| a dscore=0\
+    \ |>\n<code>", "\tarray.sort\nend", "  array.sort\n  array = array.each_with_index.with_index\
+    \ do |element, i|\n    if i%2 == 0\n      element > array[i+1] ? i+1 : i+1\n \
+    \   else\n      element < array[i+1] ? i+1 : i+1\n    end\n  end\n  return array\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nI think you can get rid of the ternary operator\
+    \ and use <=> instead:  `array.sort.each_with_index.with_index do |element, i|\n\
+    \    element<=> array[i+1] if i%2==0\n    element>array[i+1] ? i+1 : i+1\n  end`\n\
+    <|/ c |>\n<| a |>\n<code>", "    array.sort!\n    return array\nend", "    array.sort\n\
+    \    array.sum.odd? ? array.sort : array.sort { |a, b| b - a}\nend", "  result\
+    \ = []\n  array.each_with_index do |i, index|\n    if i > 0 and ((array.sum -\
+    \ i) % 2 == 0)\n      result << i << index\n    else\n      result << index <<\
+    \ i\n    end\n  end\n  result\nend", "  n = array.length\n  sum = 0\n  for i in\
+    \ 0...n\n    sum = sum + array[n-i-1]\n    if sum % 2 == 1\n      array.swap(n-i-1,\
+    \ n-i)\n      sum = 0\n  end\nend", "  array.sort!\n  array.each do |i|\n    if\
+    \ i%2 == 0\n      array.reverse!\n    end\n  end\n  array\nend\n</code>\n<|/ a\
+    \ dscore=0 |>\n<| c |>\nYour second solution is inefficient. It mutates the original\
+    \ array in place and unnecessarily creates a lot of extra copies. You should either\
+    \ return the sorted array or use a different data structure to hold the sorted\
+    \ list.\n<|/ c |>\n<| c |>\nIn your second solution the `array` variable is unnecessary.\
+    \ Instead of `array.sort!` you can simply use `sort = array.reverse.sort`\n<|/\
+    \ c |>\n<| c |>\nThe `array` variable is unnecessary but it is unnecessary to\
+    \ store it in a separate variable. You could simply do `sort = array.reverse.sort`\n\
+    <|/ c |>\n<| c |>\nThat's correct. I was trying to make it clear how his implementation\
+    \ should look like. I tried to improve the code by using a different data structure.\
+    \ I'll change my answer accordingly.\n<|/ c |>\n<| a tags=ruby,arrays dscore=0\
+    \ |>\nHere is my solution:\n<code>", "    array.each_with_index do |el, index|\n\
+    \      el.to_i.even? ? (array[index], array[index + 1]) = ([array[index], array[index\
+    \ + 1]], el) : (array[index], array[index + 1]) = ([el], array[index])\n    end\n\
+    end\n</code>\n<|/ a |>\n<| a tags=ruby,arrays,sorting |>\nHere's a solution based\
+    \ on Array#sort.  It makes use of the fact that if two elements are equal, they\
+    \ will be sorted according to their natural ordering.  So you can just use the\
+    \ natural ordering for strings, integers, and booleans, and then just put anything\
+    \ else.  If you don't need it to be fast, and you want to be explicit about your\
+    \ ordering, then I'd suggest using Array#sort, but with your own custom comparator.\
+    \  I used this one as it's much easier to understand and probably easier to extend.\n\
+    <code>", "  return array_to_corb.call(array) if array.sum&1==1 else array_to_corb.call(array.reverse)\n\
+    end", "    \n    array.sort!\n    return array\nend", "    array.sort!\n    \n\
+    \    sum = (array[0]+array[-1]).to_i\n    \n    return array if sum%2 == 0 \n\
+    \    \n    array.sort!{|x,y| y <=> x }\nend", "  array.sort!\n  array\nend", " \
+    \ if array.length == 1\n    array\n  else\n    array.dup.sort!\n    array.map!\
+    \ {|i| -i } if array.sum % 2 == 1\n    array.map! {|i| i } if array.sum % 2 ==\
+    \ 0\n    array\n  end\nend", "  array\nend", "    return array.sort.reverse.map\
+    \ { |i| i if i.odd? ? i + array.length - 1 : i }\nend", "  return if array.empty?\n\
+    \  array.sort\n  array.each_cons(2).map { |a,b| a.succ * b} if array.sum & 1 ==\
+    \ 0\n  array.sort.reverse\nend", "  array.sort\n  array.map(&:to_i)\nend\n</code></pre>",
+  "  even = (array.map {|x| x%2 == 0} ).uniq.sort\n  odd = (array.map {|x| x%2 !=\
+    \ 0} ).uniq.sort\n  return even + odd\nend", "  array.sort\nend", "  return array.reduce(:+)\n\
+    end", "  array.sort.with_index{ |_, i| array[i] }\nend", "  return array.sort.to_a\n\
+    end", "  if array.empty?\n    []\n  elsif array.size == 1\n    array.first\n \
+    \ elsif (array[1] - array[0]) % 2 != 0\n    array.sort\n  else\n    array.sort!.reverse\n\
+    \  end\nend", "  array.sort! do |a, b|\n    if a.kind_of? Integer\n      b\n \
+    \   elsif b.kind_of? Integer\n      a\n    else\n      0\n    end\n  end\n  array\n\
+    end", "  array.sort!\n  case array.sum % 2 == 0\n  when true\n    array.reverse!\n\
+    \  else\n    array\n  end\nend", "  array.sort! # sort array in ascending order\n\
+    \  odd_sum = array.inject(0) {|sum, element| sum + element }\n  even_sum = array.inject(0)\
+    \ {|sum, element| sum + element }\n  if odd_sum % 2 == 1 \n    array.sort!\n \
+    \ else\n    array.sort!.reverse!\n  end\nend", "    # Write your code here\n \
+    \   sum = 0\n    i = 0\n    length = array.length\n    while i < length\n    \
+    \    sum += array[i]\n        i += 1\n    array.sort!\n    i = 0\n    length =\
+    \ array.length\n    while i < length\n        if sum%2 == 1\n            array[i]\
+    \ = array[length-i - 1]\n            array[length-i - 1] = 0\n        end\n  \
+    \      i += 1\n    array\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\nI didn't understand\
+    \ your solution. I don't know how to apply this code in my Ruby code. Thank you\
+    \ very much\n<|/ c |>\n<| c |>\nI added some explanation\n<|/ c |>\n<| a dscore=0\
+    \ tags=ruby,sorting,arrays |>\nJust to share my own solution, which is a bit shorter.\n\
+    <code>", "  return nil if array.nil?\n  sum = array.inject(0){|sum,x| sum += x}\n\
+    \  array.sort do |a,b|\n    sum <=> b \n  end\nend\n</code>\n<|/ a |>\n<| a |>\n\
+    One way is to make an array with both values and sort it according to your rules:\n\
+    <code>\na = [1, 2, 3, 4, 5]\na.sort! { |a, b| a + b }\np a", "  if array.empty?\n\
+    \    array.dup\n  else\n    array.each_with_index do |value, i|\n      break if\
+    \ i >= array.length - 1\n      while i > 0\n        i -= 1\n        array[i] <\
+    \ value ? break : \"#{value} is out of place!\" if array[i] != value && value\
+    \ % 2 == 0\n      end\n    end\n  end\n  array\nend\n</pre>\n        </section>",
+  "    array.sort! { |a, b| a <=> b }\n    array\nend", "  array.sort\n  array.reverse\n\
+    \  array\nend", "    array.sort\nend", "  if array.length == 0 then\n    return\
+    \ []\n  end\n  if array.length == 1 then\n    return array\n  end\n  local sum\
+    \ = 0\n  local index = 1\n  local temp, index\n  local is_odd, is_even\n  while\
+    \ index >= 1 do\n    sum = sum + array[index]\n    if sum % 2 == 0 then\n    \
+    \  is_even = true\n      break\n    end\n    sum = sum - array[index]\n    if\
+    \ sum % 2 == 1 then\n      is_odd = true\n      break\n    end\n    index = index\
+    \ + 1\n  end\n  if is_even then\n    temp = array[index - 1]\n    array[index\
+    \ - 1] = array[array.length - 1]\n    array[array.length - 1] = temp\n  end\n\
+    \  if is_odd then\n    temp = array[index - 1]\n    array[index - 1] = array[array.length\
+    \ - 1]\n    array[array.length - 1] = temp\n  end\n  index = 1\n  while index\
+    \ < array.length do\n    if index == array.length - 1 then\n      index = index\
+    \ + 1\n    end\n    temp = array[index]\n    array[index] = array[index + 1]\n\
+    \    array[index + 1] = temp\n    index = index + 1\n  end\n  return array\nend",
+  "  if array.length == 0\n    puts array\n  else\n    temp = array[0]\n    array.delete_at(0)\n\
+    \    sum1 = array.length\n    sum2 = sum1 + 1\n    sum3 = sum2\n    sum4 = 0\n\
+    \    sum5 = sum1\n    puts array\n    if sum1 % 2 == 0\n      puts \"The given\
+    \ array is not sorted\"\n      return\n    elsif sum1 % 2 == 1\n      puts \"\
+    The given array is sorted in descending order\"\n      return\n    elsif sum2\
+    \ % 2 == 0\n      puts \"The given array is sorted in ascending order\"\n    \
+    \  return\n    elsif sum2 % 2 == 1\n      puts \"The given array is sorted in\
+    \ descending order\"\n      return\n    else\n      while sum3 < sum5\n      \
+    \  sum4 += temp\n        sum3 += 1\n        sum2 -= 1\n        sum5 -= 1\n   \
+    \     puts array\n        puts temp\n      end\n      while sum4 > sum1\n    \
+    \    sum3 += temp\n        sum4 -= 1\n        sum1 += 1\n        sum5 += 1\n \
+    \       puts array\n        puts temp\n      end\n    end\n  end\nend", "    array\
+    \ = array.dup\n    array.sort!\nend", "  return array if array.size <= 1 \n  \n\
+    \  left_sum = 0\n  right_sum = 0\n  \n  # find left and right sum\n  array.each_with_index\
+    \ do |n,i| \n    left_sum += n\n    right_sum += n\n  end", "  \n  array.length.times\
+    \ do |i|\n    \n    sum = array[i]\n    min = i\n    max = array.length - 1\n\
+    \    \n    while min < max\n      \n      if sum % 2 == 0\n        min = min +\
+    \ 1\n      else\n        max = max - 1 \n      end\n      \n      sum = array[min]\
+    \ + array[max]\n    end\n    \n    if sum % 2 == 0\n      \n      array.swap(min,\
+    \ max)\n    end\n    \n  end\n  \n  array\n  \nend", "  array.sort\n  last_index\
+    \ = array.size-1\n  first_index = 0\n  sum_of_first_index_and_last = array.inject(0)\
+    \ {|sum,x| sum + x }", "    array.dup.sort!\nend", '    sorted = []', "  return\
+    \ array.sort{|a,b| a <=> b unless a.nil? or b.nil? or a + b < 0}\nend", "  return\
+    \ array.sort.call([1, array.size, array.sum % 2 == 0 ?-1 :1])\nend", "    array.sort!\n\
+    \    return array\nend", "    array.sort.each do |value|\n        if sum(value)\
+    \ > sum(value.next)\n            value.next\n        else\n            value\n\
+    \        end\n    end\nend", "  array.sort\nend", "    array.sort\n    array.map\
+    \ {|i| i < 0 ? i : -i}\n    array\nend", "  return array.sort\nend", "  sorted\
+    \ = []\n  sum = 0", "    array.sort\n    return array\nend", "  result = []\n\
+    \  for i in 0...array.length\n    if array[i] > 0 && array[i] > result[array.length\
+    \ - i - 1]\n      result.unshift(array[i]) \n      result.pop() \n    else \n\
+    \      result.unshift(array[i])\n    end\n  end\n  result\nend\n</code>\n<|/ a\
+    \ |>\n<| c |>\nThanks this is really helpful, I will try to understand it step\
+    \ by step!\n<|/ c |>\n<| a |>\n<code>", '  return sort_array_recur(array)', " \
+    \   array.sort!\n    if array.length > 0\n        if array.length % 2 == 1\n \
+    \           array[array.length-1] = array[array.length-1].next\n            array.pop\n\
+    \        end\n    end\n    array\nend\n</code>\n<|/ a dscore=0 tags=arrays,sorting,ruby\
+    \ |>\n<| c |>\nI see that your code is more efficient than the code in the original\
+    \ question, but I have been unable to get it to output the correct results (and\
+    \ I couldn't get your code to work at all). Please explain how I can modify my\
+    \ code to output the correct results. Thanks.\n<|/ c |>\n<| c |>\nThis code doesn't\
+    \ work. You're not doing anything to remove the duplicates.\n<|/ c |>\n<| c |>\n\
+    - Thanks for pointing that out. I made a few changes and posted the working code\
+    \ at the top. I thought I was going to be able to figure this out on my own, but\
+    \ I never got to the bottom of it. I hope I helped! :)\n<|/ c |>\n<| a dscore=0\
+    \ tags=arrays,sorting,ruby |>\n<code>", "  \n  count = 0\n  sorted = []\n  \n\
+    \  loop do\n    count = count + 1\n    \n    if count == 1 then\n      \n    \
+    \  array.each do |number|\n        sorted << number\n      end\n      \n     \
+    \ break\n    end\n    \n    array_size = array.size\n    \n    if count == 2 then\n\
+    \      \n      first_index = array.index{ |x| x > 0 }\n      last_index = array.index{\
+    \ |x| x < 0 }\n      \n      first_index || last_index || raise('array is not\
+    \ ordered')\n      \n      first_index && last_index\n      \n      if first_index\
+    \ > last_index then\n        sorted = array.reverse\n      else\n        sorted\
+    \ = array\n      end\n      \n      break\n    end\n    \n    first_index = -1\n\
+    \    \n    loop do\n      first_index = first_index + 1\n      \n      last_index\
+    \ = -1\n      \n      loop do\n        last_index = last_index + 1\n        \n\
+    \        break unless array_size >= first_index\n        break unless array_size\
+    \ >= last_index\n        \n        break if array.get(first_index) > array.get(last_index)\n\
+    \      end\n    end\n  end\n  \n  sorted\nend", "    array = array.sort\n    array.sort!\n\
+    \    return array\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\nIt doesn't work for\
+    \ me, the output is the same as before\n<|/ c |>\n<| a tags=ruby,arrays dscore=0\
+    \ |>\nFor me using sort was very slow. My solution is to use sort_by instead and\
+    \ use the last value in the array as criteria for determining which of the two\
+    \ arrays is largest.\n<code>", "  array.sort\nend", "  return array.sort do |a,\
+    \ b|\n    a <=> b\n  end\nend", "  array.sort!\n  return array\nend", "    array.sort\n\
+    \    return array\nend", "\tsort = Array.new\n\tarray.each do |num|\n\t\ti = 1\n\
+    \t\twhile i <= num do\n\t\t\tif num - i > 0 && num - i <= 1\n\t\t\t\tsort.push(i)\n\
+    \t\t\t\tnum -= i\n\t\t\telsif num - i > 1\n\t\t\t\tsort.push(num - i)\n\t\t\t\t\
+    break\n\t\t\telsif num - i < 1\n\t\t\t\tsort.push(num + i)\n\t\t\t\tbreak\n\t\t\
+    \tend\n\t\t\ti += 1\n\t\tend\n\tend\n\tsort.reverse!\n\tarray.each do |num|\n\t\
+    \tsort.push(num)\n\tend\n\treturn sort\nend", '  return [] if array.empty?', " \
+    \ if array.empty?\n    []\n  else\n    if array.first != array[array.size - 1]\n\
+    \      array.sort\n    end\n    array\n  end\nend", "  if array.length <= 0\n\
+    \    array\n  elsif sum?(array[0], array[array.length - 1])\n    array.sort\n\
+    \  else\n    array.reverse.sort\n  end\nend", "  return array if array.nil? or\
+    \ array.empty?\n  array.sort!.inject([]){ |ar, i| ar.empty? ? ar.unshift(i) :\
+    \ ar.push([i,ar.last].max) }\nend\nputs sort_array.call([2,4,3,0,1,5,6])", " \
+    \ array.sort\n  case array.length % 2 \n    when 0\n      array.dup\n    when\
+    \ 1\n      array.push(-array[-1])\n    else \n      array.dup.reverse\n  end\n\
+    end", "  array.sort\nend\n</code></pre>\n</div>\n</div>\n<div class=\"colist arabic\"\
+    >\n<ol>\n<li>\n<p>\n<strong>\u63D0\u793A:</strong> \u5728\u5B9E\u73B0\u4E00\u4E2A\
+    \u6392\u5E8F\u7B97\u6CD5\u65F6\uFF0C\u5E38\u5E38\u9700\u8981\u628A array \u7684\
+    \u5143\u7D20\u4FDD\u5B58\u8D77\u6765\u3002\u56E0\u6B64\uFF0C\u6211\u4EEC\u6709\
+    \u4E00\u4E2A\u65B0\u7684\u53D8\u91CF array \u7684 <code>def sort_array(array)</code>\
+    \ \uFF0C\u6211\u4EEC\u5C06 array \u4FDD\u5B58\u5230\u8FD9\u4E2A\u53D8\u91CF\u4E2D\
+    \u3002\n</p>\n</li>\n<li>\n<p>\n<strong>\u6B65\u9AA4:</strong> \u628A array \u7684\
+    \u5143\u7D20\u4FDD\u5B58\u5230 array \u53D8\u91CF\u4E2D\u3002\n</p>\n</li>\n<li>\n\
+    <p>\n<strong>\u8F93\u51FA:</strong> \u628A array \u7684\u5143\u7D20\u5B58\u50A8\
+    \u5230 array \u53D8\u91CF\u4E2D\u3002\n</p>\n</li>\n<li>\n<p>\n<strong>\u8BF4\u660E\
+    :</strong> <code>def sort_array(array)</code> \u548C <code>array.sort</code> \u662F\
+    \u4E00\u6837\u7684\u3002\n</p>\n</li>\n</ol>\n</div>\n<div class=\"paragraph\"\
+    >\n<p>\n\u4E0A\u9762\u7684\u5B9A\u4E49\u662F\u5408\u7406\u7684\u3002\u4F46\u662F\
+    \u5F53\u6211\u4EEC\u4F7F\u7528\u5B83\u6765\u6392\u5E8F\u4E00\u4E2A\u6570\u7EC4\
+    \u65F6\uFF0C\u53EF\u80FD\u4F1A\u53D1\u751F\u4E9B\u95EE\u9898\u3002\n</p>\n</div>\n\
+    <div class=\"paragraph\">\n<p>\n\u5F53\u6211\u4EEC\u4F7F\u7528 <code>array.sort</code>\
+    \ \u6765\u5BF9\u6570\u7EC4\u6392\u5E8F\u65F6\uFF0C\u6211\u4EEC\u5C06\u6839\u636E\
+    \u7684\u6570\u7EC4\u5143\u7D20\u7684\u4E2A\u6570\u6765\u51B3\u5B9A\u6392\u5E8F\
+    \u7684\u65B9\u5411\u3002\u5982\u679C\u5143\u7D20\u4E2A\u6570\u662F\u5947\u6570\
+    \uFF0C\u90A3\u4E48\u6570\u7EC4\u5C06\u6839\u636E\u5B83\u7684\u5143\u7D20\u4E2A\
+    \u6570\u6765\u51B3\u5B9A\u6392\u5E8F\u7684\u65B9\u5411\u3002\u5982\u679C\u5143\
+    \u7D20\u4E2A\u6570\u662F\u5076\u6570\uFF0C\u90A3\u4E48\u6570\u7EC4\u5C06\u6839\
+    \u636E\u5B83\u7684\u5143\u7D20\u4E2A\u6570\u6765\u51B3\u5B9A\u6392\u5E8F\u7684\
+    \u65B9\u5411\u3002\n</p>\n</div>\n<div class=\"paragraph\">\n<p>\n\u6211\u4EEC\
+    \u5728\u5B9E\u73B0 sort \u7684\u65F6\u5019\uFF0C\u901A\u5E38\u5C06\u8FD9\u4E2A\
+    \u6570\u7EC4\u7684\u5143\u7D20\u4FDD\u5B58\u8D77\u6765\u6765\u4F7F\u7528 <code>sort</code>\
+    \ \u6765\u5BF9\u8FD9\u4E2A\u6570\u7EC4\u8FDB\u884C\u6392\u5E8F\u3002\u4F46\u662F\
+    \uFF0C\u6211\u4EEC\u5BF9\u6BD4\u8FD9\u4E2A\u6570\u7EC4\u7684\u5143\u7D20\u65F6\
+    \uFF0C\u6211\u4EEC\u901A\u5E38\u53EA\u9700\u8981\u6839\u636E array \u7684\u5143\
+    \u7D20\u4E2A\u6570\u6765\u51B3\u5B9A\u6392\u5E8F\u7684\u65B9\u5411\u3002\u5982\
+    \u679C array \u7684\u5143\u7D20\u4E2A\u6570\u662F\u5947\u6570\uFF0C\u90A3\u4E48\
+    \u6570\u7EC4\u5C06\u6839\u636E\u5B83\u7684\u5143\u7D20\u4E2A\u6570\u6765\u51B3\
+    \u5B9A\u6392\u5E8F\u7684\u65B9\u5411\u3002\u5982\u679C array \u7684\u5143\u7D20\
+    \u4E2A\u6570", "  n = array.length\n  if n == 0\n    return array\n  if n % 2\
+    \ != 0\n    array.push(array.pop / 2)\n    array.push(array.pop / 2)\n  end\n\
+    \  array.sort!"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

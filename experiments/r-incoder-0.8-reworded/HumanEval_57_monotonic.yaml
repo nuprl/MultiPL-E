@@ -11,7 +11,1412 @@ tests: "test_humaneval <- function() {\ncandidate <- monotonic\n    if(!identica
   \ 2, 3, 2, 5, 60)), FALSE)){quit('no', 1)}\n    if(!identical(candidate(c(1, 2,\
   \ 3, 4, 5, 60)), TRUE)){quit('no', 1)}\n    if(!identical(candidate(c(9, 9, 9, 9)),\
   \ TRUE)){quit('no', 1)}\n}\ntest_humaneval()"
-completions: []
+completions: ["\n    n <- length(l);\n    m <- head(cumsum(c(1, diff(l))), n - 1);\n\
+    \    (m > 0 & m == n) | (m > -n)\n}\n</cell>\n<cell>", "\n    all((l == sort(l))[-seq_along(l)])\n\
+    }\n</code>\n<|/ a tags=list,r |>\n<| a dscore=1 |>\nAnother option is to convert\
+    \ the list into a data.frame and then use sapply with a custom function to check\
+    \ whether all the values decrease or not.\n<code>\ndf <- as.data.frame(lapply(L,\
+    \ function(x) x[1:(length(x)-1)]))\n\ndf$decreasing <- apply(df, 1, function(x)\
+    \ all(diff(x) < 0))\n\ndf", "\n    for(i in seq_along(l)) {\n        if(is.numeric(l[i]))\
+    \ {\n            next\n        }\n        else if(!is.atomic(l[i])) {\n      \
+    \      next\n        }\n        if(is.list(l[i])) {\n            if(!is.atomic(l[[i]]))\
+    \ {\n                next\n            }\n            if(is.list(l[[i]])) {\n\
+    \                if(is.numeric(l[[i]])) {\n                    if(!is.atomic(l[[i]][[1]]))\
+    \ {\n                        next\n                    }\n                }\n\
+    \            }\n        }\n    }\n    return(TRUE)\n}\n</cell>\n<text>\nThe following\
+    \ function removes duplicate elements from a list, keeping only the first instance\
+    \ of each element (i.e., the first appearance of the element in the list). The\
+    \ default is to remove duplicate elements.\n\n\n</text>\n<cell>", "\n    # Handle\
+    \ NA case\n    if (any(is.na(l)))\n        return(FALSE)\n    \n    # If list\
+    \ element is a vector, return FALSE unless each element is strictly\n    # monotonically\
+    \ increasing or decreasing.\n    if (is.vector(l)) {\n        for (i in seq_along(l))\n\
+    \            if (l[i] < l[i - 1] || l[i] > l[i + 1]) return(FALSE)\n        return(TRUE)\n\
+    \    }\n    \n    # If list element is not a vector, return FALSE unless the element\
+    \ is\n    # monotonically increasing or decreasing.\n    for (i in seq_along(l))\n\
+    \        if (l[i] > l[i - 1] || l[i] < l[i + 1]) return(FALSE)\n    return(TRUE)\n\
+    }\n</code>\nBenchmarks\n<code>", "\n    out <- FALSE\n    if(length(l) <= 1L)\
+    \ return(out)\n    out <- c(out, diff(sort(l)) == -1L) # returns FALSE for all\
+    \ but first element\n    if(all(out)) {\n        out <- c(out, out[1] > l[1L])\
+    \ # returns TRUE if all but first element are TRUE\n    }\n    return(all(out))\n\
+    }\n</code>\nIt seems to me that you could also use this to test if two sorted\
+    \ lists are equal by calculating the intersection of their sorted lists and then\
+    \ comparing the length of the intersection to that of the length of the original\
+    \ lists, but that would require some extra memory to store that result.\n<|/ a\
+    \ dscore=1 |>\n<| a dscore=0 |>\nHere's another option, using base R's diff:\n\
+    <code>\nf <- function(x) x == x[1] || diff(x)\n</code>\nExamples:\n<code>\n> f(1:10)\n\
+    [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE\n> f(c(1, 4, 9,\
+    \ 10))\n[1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE\n> f(c(1,\
+    \ 10, 4, 8))\n[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE\n</code>\n\
+    The advantage of this approach is that it works for vectors of different length.\n\
+    <|/ a tags=r,list |>\n<| c |>\n`f(c(1, 10, 4, 8))` returns `FALSE` whereas the\
+    \ original question asked for `TRUE`\n<|/ c |>\n<| a |>\nA simple recursive function\
+    \ would do the trick\n<code>\nis_monotonic_increasing <- function(x){\n  if(!is.null(x)){\n\
+    \    if(x < (x[1] + x[2]))\n      is_monotonic_increasing(x[3])\n  }else{\n  \
+    \  return(TRUE)\n  }\n}\n</code>\n<|/ a tags=r,list dscore=0 |>\n<| a dscore=0\
+    \ tags=r,list |>\nHere's a very simple recursive solution:\n<code>\nis_monotonic_increasing\
+    \ <- function(x) {\n  if(!is.null(x)) {\n    if(length(x) < 3L) return(TRUE)\n\
+    \    if(x < (x[1] + x[2])) return(is_monotonic_increasing(x[3]))\n  }\n  return(FALSE)\n\
+    }\n\nis_monotonic_increasing(c(1, 10, 4, 8))", "\n    l <- sort(l)\n    i <- 1\n\
+    \    while(i <= length(l)-1) {\n        if (l[i] > l[i-1]) {\n            return(TRUE)\n\
+    \        }\n        i <- i + 1\n    }\n    return(FALSE)\n}\n", "\n  # Initialize\
+    \ flag\n  flag <- TRUE\n  # Loop through list\n  for (i in seq_along(l)) {\n \
+    \   # Find out if the current number is greater than the previous.\n    if (l[i]\
+    \ > l[i-1]) {\n      flag <- FALSE\n    }\n  }\n  # Return the flag\n  return(flag)\n\
+    }\n</cell>\n<cell>", "\n    x <- sort(l)\n    if (length(x) <= 1) TRUE else x[length(x)]\
+    \ - x[1] <= 0\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nNice solution but your\
+    \ function returns FALSE for `c(1, 20, 4, 10, -1, 4)`\n<|/ c |>\n<| c |>\n- thanks\
+    \ for pointing that out. I've fixed the bug, although it seems to me that a more\
+    \ straightforward solution is still out there!\n<|/ c |>\n<| c |>\nI think this\
+    \ might have been a bug in older R versions. I see `monotonic(c(1, 20, 4, 10))`\
+    \ return `TRUE` in R 3.1.0 but `FALSE` in R 3.0.1 . By the way, I still have this\
+    \ bug in  R 3.3.2 .\n<|/ c |>\n<| a dscore=0 |>\nYou could use the package tibble.\
+    \ It has some interesting ways of specifying monotonicity that you may find useful.\n\
+    <code>\nlibrary(tibble)\nlibrary(magrittr)\n\n> x <- tibble(x = c(1, 2, 4, 20))\n\
+    > x", "\n    any(diff(sort(l)) < 0)\n}\n", "\n  all(diff(l) < 0)\n}\n\n", "\n\
+    \  \n  # if length less than 2\n  # or if only one element in the list\n  # then\
+    \ return FALSE\n  if (length(l) <= 1) FALSE \n  \n  # if not list type then return\
+    \ FALSE\n  if (!is.list(l)) FALSE \n  \n  # create a vector of the non-list elements\
+    \ (elements which are NOT lists)\n  # e.g. c(1, 2, 4, 20) returns 1:20\n  non_list_elements\
+    \ <- !sapply(l, is.list)\n  \n  # calculate the difference between the non-list\
+    \ elements \n  # and return the result as the difference vector\n  diffs <- diff(non_list_elements)\n\
+    \  \n  # if the difference vector is all positive then return TRUE\n  # otherwise\
+    \ return FALSE\n  return (all(diffs > 0))\n}\n</cell>\n<text>\nProblem 3\nComplete\
+    \ the function below that finds the two elements of the list \nwith the smallest\
+    \ difference. \nThen use that two element pair to find the three elements of the\
+    \ list\nwith the largest difference. \nThen use that three element pair to find\
+    \ the four elements of the list\nwith the largest difference. \nThen use that\
+    \ four element pair to find the five elements of the list\nwith the largest difference.\
+    \ \nReturn the largest possible difference between the five elements of the list.\
+    \ \nThe largest difference can be calculated by simply comparing the values \n\
+    in the list to the greatest difference: \n(max(list) - min(list)).\n\n\n</text>\n\
+    <cell>", "\n  # sort as numeric to break ties\n  l[order(as.numeric(names(l)))]\n\
+    \  n <- length(l)\n  i1 <- seq_len(n - 1)\n  i2 <- seq_len(n + 1)\n  v1 <- l[i1]\n\
+    \  v2 <- l[i2]\n  return(c(v1 < v2) - (v1 > v2) > 0)\n}\n</code>\nThe function\
+    \ above returns TRUE for lists containing monotonically increasing and/or decreasing\
+    \ elements. But it doesn't take into account that order matters, for example:\n\
+    <code>", "\n  x <- NULL\n  y <- NULL\n  xx <- NULL\n  xy <- NULL\n  yy <- NULL\n\
+    \  repeat {\n    x <- c(x, l[x])\n    y <- c(y, l[y])\n    xx <- c(x, xx)\n  \
+    \  yy <- c(y, yy)\n    x <- c(y, l[x])\n    y <- c(y, y)\n    if (all(x == xx\
+    \ & y == yy)) {\n      return(TRUE)\n    } else {\n      xx <- c(x, xx)\n    \
+    \  yy <- c(y, yy)\n    }\n  }\n}\n</code>\n<|/ a |>\n<| c |>\nHmmm yeah, I feel\
+    \ silly now (my comment is deleted now). Thanks for bringing me to attention.\n\
+    <|/ c |>\n<| c |>\nThank you. I will check this out and get back to you ASAP.\n\
+    <|/ c |>\n<| c |>\n: Can you post your implementation for future readers, please?\
+    \ I don't mind copying my implementation from my answer into your answer if I\
+    \ can get it working.\n<|/ c |>\n<| c |>\nSure, I am sure that I will post a complete\
+    \ solution soon after I've tested it with a few test cases. This is my first time\
+    \ posting a solution on SO and I wanted to be as complete as possible, so I went\
+    \ ahead and did some initial research on my own and got some pretty solid ideas.\
+    \ I will post my implementation for future readers.\n<|/ c |>\n<| c |>\n: I posted\
+    \ my implementation of `monotonic()` in my original answer. I hope that helps\
+    \ someone. I can add some more test cases later. :)\n<|/ c |>\n<| a tags=r,list\
+    \ |>\nI believe the following will do what you want:\n<code>\ntest <- list(\n\
+    \  c(1,2,3),\n  c(3,5,5),\n  c(2,4,5),\n  c(5,1,0),\n  c(3,5,0),\n  c(2,4,0),\n\
+    \  c(5,1,0)\n)\n\ntest <- test[order(sapply(test,max))]\n> test\n[[1]]\n[1] 1\
+    \ 2 3\n\n[[2]]\n[1] 3 5 5\n\n[[3]]\n[1] 2 4 5\n\n[[4]]\n[1] 5 1 0\n\n[[5]]\n[1]\
+    \ 3 5 0\n\n[[6]]\n[1] 2 4 0\n\n[[7]]\n[1] 5 1 0\n\ntest2 <- sapply(test,function(x)\
+    \ length(unique", "\n  l <- sort(l)\n  u <- l[-1]\n  c(FALSE, diff(u) > 0)\n}\n\
+    </code>\nNow we could use those two functions to define another function that\
+    \ calculates the maximum distance between any two points in the list.  Since we're\
+    \ going to be applying that function to a list of lists, it would be nice to define\
+    \ it once, and apply it to each list element.  We can do that by writing a function\
+    \ that takes a list element, and returns a function that takes the other list\
+    \ element, and returns a single boolean for whether the distance between them\
+    \ is greater than zero.  We can then apply that function to each list element\
+    \ to get the list of booleans.  In other words, we can apply a function to all\
+    \ list elements of the list with lapply.\n<code>\ndistlist <- function(x)\n{\n\
+    \  dist <- function(y)\n  {\n    dist(y) - dist(y)\n  }\n  lapply(x, dist, x=x)\n\
+    }\n\nmax_dist <- distlist(l)\n</code>\nAnd we're done.\n<code>\nmax_dist", "\n\
+    \    n <- length(l);\n    i <- integer(n); x1 <- numeric(n); x2 <- numeric(n);\n\
+    \    for (i in seq_along(l)) {\n        x1[i] <- i;\n        if (i == 1) x1[i]\
+    \ <- 0; x2[i] <- i-1;\n        else if (i == n) x2[i] <- n; else x2[i] <- i+1;\n\
+    \    }\n    x1[x2 > x1] <- NA;\n    is.na(x1) | is.na(x2) | is.na(x1[x2 > x1])\
+    \ | is.na(x2[x1 > x1]);\n}\n</code>\n<|/ a dscore=2 |>\n<| a tags=sorting,r |>\n\
+    Here is a solution using data.table\n<code>", "\n  # The first element must be\
+    \ non-zero\n  if (l[1] == 0) return(FALSE)\n  # The list must be increasing or\
+    \ decreasing.\n  sapply(l, function(x) identical(signif(x, 2), x))\n}\n</code>\n\
+    <|/ a |>\n<| a |>\nHere's a quick solution I wrote up.  Not as elegant as the\
+    \ other solutions provided, but perhaps easier to understand?  I used a while\
+    \ loop and an if statement.\n<code>\nmyMonot <- function(l) {\n  i <- 1\n  while(\
+    \ i <= length(l) ) {\n    j = i + 1\n    if ( l[i] < l[j] ) {\n      if(i != j)\
+    \ {\n        i <- j\n      }\n    } else {\n      if(j != i) {\n        j <- i\n\
+    \      }\n    }\n  }\n  return(TRUE)\n}\n</code>\n<|/ a dscore=0 tags=list,r |>\n\
+    <| c |>\nThis solution doesn't work if there is a list with zero elements (`myMonot(c(0))`).\
+    \ I've fixed it below.\n<|/ c |>\n<| a dscore=0 |>\nThis should work:\n<code>\n\
+    myMonot <- function(l){\n  if((min(l) > 0) && !(all(l==l[[1]]))) {\n    for(j\
+    \ in 2:length(l)) {\n      if(l[j] < l[j-1]){\n        if(!(j==1 || j==length(l)))\n\
+    \          return(FALSE)\n      }\n    }\n  } else {\n    return(FALSE)\n  }\n\
+    \  return(TRUE)\n}\n</code>\n<|/ a tags=list,r |>\n<| a dscore=0 |>\nThis function\
+    \ returns TRUE if the list contains only increasing or decreasing numbers. Otherwise\
+    \ it returns FALSE.\n<code>\nmyMonot <- function(list){\n  if(length(list) ==\
+    \ 0)\n    return(TRUE)\n  if(min(list) != 0)\n    return(FALSE)\n  i <- 1\n  while(i\
+    \ <= length(list)) {\n    j = i + 1\n    if(list[i] < list[j]) {\n      if(i !=\
+    \ j) {\n        i <- j\n      }\n    }\n    else {\n      if(j != i) {\n     \
+    \   j <- i\n      }\n    }\n  }\n  return(TRUE)\n}\n</code>\n<|/ a tags=list,r\
+    \ |>\n<| a tags=list,r dscore=0 |>\nI couldn't get any of the answers here to\
+    \ work (as they had previously missed a test case which would return FALSE). I\
+    \ would love to see any more elegant solutions, but ", "\n  # We check only increasing\
+    \ or decreasing numbers\n  return(all(diff(sort(l)) == 0))\n}\n</code>\n<|/ a\
+    \ dscore=3 tags=sorting,r |>\n<| a |>\n<code>\nlibrary(zoo)\nlibrary(dplyr)\n\n\
+    df <- data.frame(group = c('a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e'),\
+    \ value = c(10, 2, -5, 20, 5, 30, 5, -20, 50, -15, 100))\ndf$group <- factor(df$group,\
+    \ levels = c('a', 'b', 'c', 'd'))\ndf$group <- as.character(df$group)\n", "\n\
+    \  return(Reduce(`|`, lapply(l, `>`, 0)))\n}\n\nmonotonic(c(1, 2, 4, 20, 1))",
+  "\n  l <- as.numeric(l)\n  if (length(l) == 1) return(TRUE)\n  mn <- min(l)\n  u\
+    \ <- max(l)\n  return(u < mn & mn > 0)\n}\n", "\n    n <- length(l)\n    i <-\
+    \ 1L\n    while(i < n) {\n        i <- i + 1L\n        if(l[i-1] < l[i]) {\n \
+    \           i <- i + 1L\n            n <- n - 1L\n        } else if(l[i-1] > l[i])\
+    \ {\n            n <- n - 1L\n        }\n    }\n    i <- 1L\n    while(i < n)\
+    \ {\n        if(l[i - 1] > l[i]) {\n            i <- i + 1L\n            n <-\
+    \ n - 1L\n        } else if(l[i - 1] < l[i]) {\n            n <- n - 1L\n    \
+    \    }\n    }\n    if(n == 0L) {\n        return(TRUE)\n    } else {\n       \
+    \ return(FALSE)\n    }\n}\n</code>\n<|/ a tags=r |>\n<| c |>\nThank you very much\
+    \ for these suggestions. I should probably add that the first approach fails when\
+    \ `k` gets very large (>10) for some reason, whereas the second approach can sometimes\
+    \ fail to find `k`. I am not sure how to address this.\n<|/ c |>\n<| c |>\n: I\
+    \ updated the answer with a new version which is more robust to `k` getting too\
+    \ large. I can't really say why `k` gets so large - I didn't find that case in\
+    \ either my version nor your version. Can you tell us the value of `k` where this\
+    \ happens?\n<|/ c |>\n<| c |>\nI believe it is when `k` is around 10. Anything\
+    \ above that causes an error on one of the `pmax` calls.\n<|/ c |>\n<| c |>\n\
+    : Yes, I think I see now - it's because `pmax` uses `pmin` internally, and `pmin`\
+    \ doesn't behave correctly if `k` becomes large. I don't know whether there's\
+    \ a more \"obvious\" way to fix it though.\n<|/ c |>\n<| c |>\nI just realized\
+    \ that my `pmin` example has a bug (which I already fixed). My `k` example works\
+    \ fine for small `k` - it gets around 10 or so. Can you confirm this works correctly\
+    \ for you for `k` up to 10?\n<|/ c |>\n<| a dscore=1 tags=r |>\nBased on the solution\
+    \ suggested by and my previous answer here, I think this solution has more robustness\
+    \ with respect to k getting too large, with several potential pitfalls. In particular,\
+    \ it doesn't require the package PerformanceAnalytics and it can easily be used\
+    \ with other vectors than just x and y.\n<code>", "\n  return(length(unique(l))\
+    \ < length(l)-1)\n}\n", "\n  l <- as.data.frame(l)\n  l$x <- with(l, ifelse(x\
+    \ > lag(x), 1, ifelse(x < lead(x), -1, 0)))\n  rowSums(l)\n}\n", "\n    l <- sort(l)\n\
+    \    for (i in seq(1, length(l), 2)) {\n        if (l[i] < l[i+1]) {\n       \
+    \     return(FALSE)\n        }\n    }\n    return(TRUE)\n}\n", "\n  all(sapply(l,\
+    \ function(x) is.finite(x)) & sapply(l, function(x) is.infinite(x)) | sapply(l,\
+    \ function(x) is.na(x)))\n}\n", "\n  sapply(l, function(x){\n    y <- x\n    if\
+    \ (is.numeric(x)) {\n      y <- as.numeric(x)\n    }\n    diff(y) < 0\n  }, USE.NAMES\
+    \ = FALSE)\n}\n", "\n    k <- length(l) - 1\n    i <- 1\n    while(k >= 0) {\n\
+    \        if(l[i] < l[k]) {\n            k <- k - 1\n        }\n        else {\n\
+    \            i <- i + 1\n        }\n    }\n    return(i %% 2 != 0)\n}\n</cell>\n\
+    <text>\nThe first function takes in a list and checks if its elements are monotonically\
+    \ increasing or decreasing.\n\nIn the second function I count how many steps are\
+    \ needed to check if the list is increasing or decreasing.\n\nIf this is odd then\
+    \ we know the list is decreasing. Otherwise it is increasing.\n\nNow I can check\
+    \ if the list is monotonically increasing or decreasing.\n\n\n</text>\n<cell>",
+  "\n    n <- length(l)\n    if (n <= 1) return(TRUE)\n    i <- 1\n    while(i <=\
+    \ n) {\n        x <- l[i]\n        y <- l[i-1]\n        if(x > y && (y < 0 ||\
+    \ y > 0)) return(FALSE)\n        i <- i + 1\n    }\n    return(TRUE)\n}\n</cell>\n\
+    <text>\nTests\nTesting our monotonic function we do some basic tests.\n\n\n</text>\n\
+    <cell>", "\n  # Sort list into increasing or decreasing order, and return TRUE\
+    \ if that\n  # is possible.\n  i <- which(c(TRUE, diff(l) <= 0) == TRUE) - 1\n\
+    \  if (length(i) > 0) return(TRUE) else return(FALSE)\n}\n</cell>\n<text>\nThe\
+    \ next cell creates our $d$, $Q$, and $p$ ($p$ is a vector with dimension $1$\
+    \ or $2$ depending on whether we have a vector of counts or a vector of proportions).\n\
+    \n\n</text>\n<code language=conda-root-py>", "\n  l <- c(l, l[-length(l)])\n \
+    \ n <- length(l) - 1\n  u <- unique(l)\n  u[n + 1] <- NA\n  return(u[n] == u)\n\
+    }\n</code>\n<|/ a tags=r |>\n<| a tags=r |>\nHere's a quick-and-dirty solution\
+    \ (no packages):\n<code>\nx <- c(1, 10, 2, 3, 4, 20, 30, 4)", "\n  l <- rev(l)\n\
+    \  any(sapply(l, function(x) x >= x[1])) || any(sapply(l, function(x) x < x[1]))\n\
+    }\n", "\n    l <- sort(l)\n    for (i in 2:length(l)-1) {\n        if (l[i-1]\
+    \ > l[i]) {\n            return(FALSE)\n        }\n    }\n    return(TRUE)\n}\n\
+    </code>\n<|/ a tags=r dscore=4 |>\n<| a tags=r |>\nYou could define your function\
+    \ like this\n<code>\nmont <- function(x, max){\n  m <- max*ifelse(x>0, x/max,\
+    \ -x/max)\n  m^x <= 0\n}\n</code>\nThen check your output\n<code>\nmont(c(1,1,2,4,5),5)\n\
+    [1] FALSE\n</code>\n<|/ a dscore=3 |>\n<| c |>\n+1 I like this, more generalizable,\
+    \ but also more mathematical than my own answer.\n<|/ c |>\n<| c |>\n+1 I like\
+    \ this and it's also a very simple approach (no loops). I think this is a very\
+    \ good approach.\n<|/ c |>\n<| c |>\n+1 I like this too. I think the other solutions\
+    \ are a little bit more elegant. I really like the \"max*\" solution. It is a\
+    \ really neat solution.\n<|/ c |>\n<| a dscore=2 |>\nHere is an option with pmin/pmax\
+    \ which can take care of both the cases (positive and negative values)\n<code>\n\
+    f1 <- function(x, max){\n    out <- pmin(x, max) - pmax(x, -max)\n    out/max\
+    \ >= 0\n  }\n\nf1(1:10, 5)", "\n    if (any(is.na(l))) {\n        return(FALSE)\n\
+    \    }\n    l <- sort(l)\n    ii <- 1\n    while (TRUE) {\n        i <- ii\n \
+    \       i <- i + 1\n        i <- i + 1\n        i <- i + 1\n        i <- i + 1\n\
+    \        if (ii > length(l)) {\n            break\n        }\n        if (l[ii]\
+    \ == l[i]) {\n            i <- i + 1\n            i <- i + 1\n        }\n    \
+    \    if (l[ii] != l[i]) {\n            return(FALSE)\n        }\n        ii <-\
+    \ i\n    }\n    return(TRUE)\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nI haven't\
+    \ read your answer properly but +1 since it gave me an idea of how to solve the\
+    \ problem.\n<|/ c |>\n<| a |>\nHere is a solution without loops. This is just\
+    \ an idea that may work to detect monotonic series.\n<code>\nx <- c(0,1,2,5,4,7,3,5,-100,-5,-6,-7,-10)\n\
+    y <- rep(NA,length(x))\nind <- 1\nfor(i in 2:length(x)){\n  y[i] <- x[i-1]\n \
+    \ if(i > 1){\n    if(y[i-1] < y[i])\n      ind <- ind + 1\n    else\n      ind\
+    \ <- ind - 1\n  }\n}\nif(ind == 0)\n  return(FALSE)\nif(ind == 1)\n  return(TRUE)\n\
+    </code>\n<|/ a tags=r dscore=1 |>\n<| c |>\n+1 for the idea. Though I'm not going\
+    \ to accept it as the answer, since a more robust one would still be very welcome.\n\
+    <|/ c |>\n<| c |>\nI think this is more robust than what you have\n<|/ c |>\n\
+    <| c |>\n+1 since it gave me an idea of how to solve the problem. Though I'd still\
+    \ like to see a more robust solution as well.\n<|/ c |>\n<| c |>\nThis can give\
+    \ a false negative for a vector of all negative values\n<|/ c |>\n<| a dscore=1\
+    \ tags=r |>\nI would do this with rollapply from zoo package:\n<code>\nlibrary(zoo)\n\
+    x <- c(0,1,2,5,4,7,3,5,-100,-5,-6,-7,-10)\ny <- rollapply(x,1,function(x) x[-1]<x[1])",
+  "\n  l <- sort(l, index.return = TRUE)\n  y <- rep(TRUE, length(l))\n  y[1] <- l[1]\
+    \ == l[length(l)]\n  y[2] <- l[2] > l[1]\n  y[3] <- l[3] > l[2]\n  y[4] <- l[4]\
+    \ > l[3]\n  y[5] <- l[5] > l[4]\n  y[6] <- l[6] > l[5]\n  y[7] <- l[7] > l[6]\n\
+    \  y[8] <- l[8] > l[7]\n  y[9] <- l[9] > l[8]\n  y[10] <- l[10] > l[9]\n  y[11]\
+    \ <- l[11] > l[10]\n  y[12] <- l[12] > l[11]\n  y[13] <- l[13] > l[12]\n  y[14]\
+    \ <- l[14] > l[13]\n  y[15] <- l[15] > l[14]\n  y[16] <- l[16] > l[15]\n  y[17]\
+    \ <- l[17] > l[16]\n  y[18] <- l[18] > l[17]\n  y[19] <- l[19] > l[18]\n  y[20]\
+    \ <- l[20] > l[19]\n  y\n}\n</code>\n<|/ a |>\n<| c |>\nThis is amazing! And very\
+    \ fast as well.\n<|/ c |>\n<| a dscore=1 |>\nI've written an R function called\
+    \ arc that computes a monotonic path on a curve, and a corresponding function\
+    \ arc_sum that sums up the elements of the path produced by arc. arc's output\
+    \ is a vector of length n with values between 0 and 1, where 0 is the initial\
+    \ point, 1 is the final point, and values between 0 and the ratio between start\
+    \ and end is the distance between the two points. The function also includes some\
+    \ functions for computing the tangent at any point, and some functions for computing\
+    \ intersections.\n<code>\nlibrary(ggplot2)\n\narc <- function(x, y, n=10) {\n\
+    \  df <- data.frame(x = x,\n                  y = y,\n                  start\
+    \ = 0:n,\n                  end = n*2:n)\n  df$d <- df$end - df$start\n  df$d[1]\
+    \ <- 0\n  df$d <- df$d[1:(length(x)-2)]\n  df$d[1] <- 0\n  df$d[-1] <- df$d[-length(df$d)]\n\
+    \  df$dist <- c(rep(0, ", "\n    l <- c(l, NA)\n    u <- na.omit(l)\n    u <-\
+    \ u[order(u)]\n    u[1] < u[2] | u[1] > u[3]\n}\n</code>\n<|/ a tags=vector,r,function\
+    \ |>\n<| c |>\nIt's not an easy function to understand for someone who is new\
+    \ to R. Thank you for providing a solution that uses `diff` as well!\n<|/ c |>\n\
+    <| a dscore=1 tags=vector,r,function |>\nHere's a one-liner:\n<code>\nmonotonic_vector\
+    \ <- function(vector) {\n    return (min(vector) > max(vector) & min(vector) <=\
+    \ max(vector))\n}\n</code>\n<|/ a |>\n<| a dscore=0 |>\nHere's a version that\
+    \ uses diff()\n<code>\n> monotonic_vector <- function(vector) {\n+ l <- c( vector,\
+    \ NA)\n+ u <- na.omit(l)\n+ u[ order(u)[[1]] ]\n+ }\n> monotonic_vector(c(1,2,4,20))\n\
+    [1] TRUE\n> monotonic_vector(c(1,20,4,10))\n[1] FALSE\n> monotonic_vector(c(4,1,0,-10))\n\
+    [1] TRUE\n</code>\n<|/ a tags=vector,r,function |>\n<| c |>\nIt's a nice solution,\
+    \ but unfortunately it fails on my real data (vector has missing values).\n<|/\
+    \ c |>\n<| c |>\nI suppose the solution would be: `u[ order(u)[[1]] ] <- u[order(u)]`\
+    \ before the `return` statement...\n<|/ c |>\n<| c |>\n, indeed it works. However,\
+    \ I'm still wondering why my function fails with missing values.\n<|/ c |>\n<|\
+    \ c |>\n, I just ran it on the real data and it worked (I guess there was a bug\
+    \ in my code). Thanks!\n<|/ c |>\n<| c |>\n, I wonder if you can post your function\
+    \ as an answer so I can accept it? Thank you!\n<|/ c |>\n<| a dscore=0 tags=vector,r,function\
+    \ |>\nMy take on this is:\n<code>\nmonotonic = function(vector) {\n    vec = na.omit(vector)\n\
+    \    return(min(vec) <= max(vec) & min(vec) <= max(vec))\n}\n</code>\n<|/ a |>\n\
+    <| a tags=vector,r,function |>\nHere is another approach using diff:\n<code>\n\
+    monotonic_vector = function(vector) {\n    return(min(vector) == max(vector",
+  "\n    l <- sort(l)\n    sapply(seq_along(l), function(i) return(identical(l[i],\
+    \ l[i - 1])) & c(FALSE, head(l[-1], -1) != tail(l[-length(l)], -1)))\n}\n", "\n\
+    \    if (length(l) == 1) FALSE\n    x <- l[1]\n    r <- l[-1]\n    r <- r[order(r)]\n\
+    \    r <- r[order(x, decreasing = TRUE)]\n    r <- r[order(x, decreasing = FALSE)]\n\
+    \    return(length(r) == 0)\n}\n", "\n    # Return TRUE if all list elements are\
+    \ monotonically increasing or decreasing.\n    all(sapply(l, function(x) x > x[1]))\n\
+    }\n", "\n  n <- length(l) - 1\n  k <- 0\n  l <- c(l, rep(NA, n))\n  for(k in seq(n))\
+    \ {\n    if(l[k + 1] > l[k]) {\n      l[k + 1] <- l[k]\n    }\n  }\n  l <- l[!is.na(l)]\n\
+    \  return(length(l) > 0)\n}\n", "\n  u <- unique(c(l, Inf))\n  any(diff(sort(u))\
+    \ != 0)\n}\n", "\n    n <- length(l)\n    if (n == 0) return TRUE\n    x <- rev(l)\n\
+    \    if (x[1L] == x[1]) {\n        if (n == 1L) return TRUE\n        if (n ==\
+    \ 2L) {\n            a <- x[2L]\n            b <- x[3L]\n            if (a < b)\
+    \ return TRUE\n            c <- x[4L]\n            if (c < a) return TRUE\n  \
+    \      }\n    }\n    i <- 1L\n    repeat {\n        x <- l[i]\n        if (x ==\
+    \ 1L) {\n            i <- i + 1L\n            if (i == n) return TRUE\n      \
+    \  }\n        else {\n            a <- x\n            b <- x\n            if (a\
+    \ > b) {\n                if (i == n) return TRUE\n            }\n           \
+    \ else {\n                c <- x\n                if (c > a) return TRUE\n   \
+    \         }\n        }\n    } while (i <= n)\n}\n</code>\nAnd here is the benchmark\
+    \ of the algorithms:\n<code>\nx <- seq_len(1e7)\nmicrobenchmark(\n    monotonic1(x),\n\
+    \    monotonic2(x),\n    monotonic3(x)\n)\n", "\n  n1 <- length(l) - 1\n  n2 <-\
+    \ length(l) - 1\n  while(n1 > 0 && l[n1] <= l[n2]) {\n    n1 <- n1 - 1\n  }\n\
+    \  while(n2 > 0 && l[n2] <= l[n1]) {\n    n2 <- n2 - 1\n  }\n  return(n1 > 0 &&\
+    \ n2 > 0)\n}\n", "\n  s <- sort(l)\n  all(diff(s) + s > 0)\n}\n</code>\nAnd now\
+    \ the plot with ggplot:\n<code>\nggplot(dat, aes(x = time, y = value)) +\n  geom_line()\
+    \ +\n  geom_smooth(method = 'lm', se = FALSE) +\n  geom_point() +\n  xlab('Time')\
+    \ +\n  ylab('Value') +\n  ggtitle('Monotonicity Test')\n</code>\n\nThe point is\
+    \ that the difference is always positive, and so if your data lies in increasing\
+    \ order and you are looking for the linear relationship then this is obviously\
+    \ going to be monotonic.\n<|/ a |>\n<| c |>\nThanks for answering but I just realized\
+    \ that I had an error in my question. Your answer would be correct if the question\
+    \ were asking about the differences between consecutive elements, which is what\
+    \ I now realize. Sorry for the confusion.\n<|/ c |>\n<| c |>\nIt is not correct\
+    \ in my case, because the data isn't in a regular interval space. I should have\
+    \ mentioned that in my question. Sorry about that.\n<|/ c |>\n<| c |>\nBut what\
+    \ is the problem with my answer? If your data is spaced out by some arbitrary\
+    \ interval then it will still be monotonic as long as you are looking for a linear\
+    \ relationship. And it does work, see the results of `monotonic(c(1, 20, 4, 10))`\n\
+    <|/ c |>\n<| c |>\nSorry, I must have not had enough coffee this morning when\
+    \ I wrote my answer.\n<|/ c |>\n<| c |>\nBut what if the data isn't spaced out\
+    \ by some arbitrary interval?\n<|/ c |>\n<| a dscore=5 |>\nIf your data is ordered,\
+    \ as in all your examples, you can do this to test for monotonicity in R:\n<code>\n\
+    is.monotonic = function(x) x==cummax(x)\n</code>\n<|/ a tags=r,plot |>\n<| c |>\n\
+    This is great. I could do this and have this as the answer!\n<|/ c |>\n<| a tags=r,plot\
+    \ |>\nYou might find the following useful, as it compares non-linear plots created\
+    \ using ggplot2 with a linear plot created using plotly and ggplot2 graphics.\
+    \ Using random data and using the ggplot2() function, this gives us the following:\n\
+    \n<code>", "\n    l <- sort(l, decreasing = TRUE)\n    all(diff(l) >= 0)\n}\n\
+    </code>\nThis works because we sort the list decreasingly and compare the first\
+    \ and last elements.  As long as they differ, we know they are decreasing.  We\
+    \ would need to add a test to see if they are equal (if they are decreasing),\
+    \ or if we get to the ends (if they are increasing).  To be complete, we can add\
+    \ checks for l[1] == l[n+1].  And if we do get a difference, we can return FALSE.\n\
+    <|/ a dscore=3 |>\n<| a |>\nA variation that doesn't require a complete test of\
+    \ the entire list with n comparisons:\n<code>\nis.decreasing <- function(x) {\n\
+    \  y <- diff(x)\n  y <- (y == 0)\n  y <- c(TRUE, y[seq(1, length(y), 1)])\n  y\n\
+    }\n</code>\nFor a large list with n elements, this is more efficient than using\
+    \ sapply as sapply will create a large vector, even if the list is short:\n<code>\n\
+    is.decreasing <- function(x) {\n  y <- diff(x)\n  y <- (y == 0)\n  y <- c(TRUE,\
+    \ y[seq(1, length(y), 1)])\n  y\n}\n\nis.decreasing(1:10)\nis.decreasing(1:10000)\n\
+    is.decreasing(1:100000)\nis.decreasing(1:1000000)\nis.decreasing(1:10000000)\n\
+    </code>\nTimings:\n<code>\n> microbenchmark(isdecreasing(c(1, 2, 4, 20)), ismonotonic(c(1,\
+    \ 2, 4, 20)))\nUnit: microseconds\n                                          \
+    \                            expr     min       lq      mean\n isdecreasing(c(1,\
+    \ 2, 4, 20)), ismonotonic(c(1, 2, 4, 20))    297.556 304.1380 350.06848\n</code>\n\
+    <|/ a tags=r dscore=3 |>\n<| c |>\nVery interesting approach. Maybe I'm missing\
+    \ something, but I don't see how this would improve efficiency.\n<|/ c |>\n<|\
+    \ c |>\nI added an improved version to my answer.\n<|/ c |>\n<| a |>\nYou could\
+    \ use diff() to get the difference of consecutive items in the list and test whether\
+    \ it is negative or not. \n<code>\nsapply(c(1, 2, 4, 20), function(x) {\n  all(diff(x)\
+    \ < 0)\n})", "\n  u <- unique(l) # unique unordered elements\n  any(sapply(u,\
+    \ function(u) diff(sort(u)) > 0))\n}\n</cell>\n<text>\nFind all positions of the\
+    \ value \"k\" in a sorted vector\n\n\n</text>\n<cell>", "\n  r <- c(0, diff(l))\n\
+    \  ifelse(r <= 0, 0, ifelse(r >= 0, 1, 0) * sign(r))\n}\n", "\n    l <- sort(l)\n\
+    \    all(diff(l) == 0) || all(diff(l) == -sign(diff(l)) * length(l))\n}\n</code>\n\
+    And then you can do this:\n<code>", "\n    if (is.null(l)) return(FALSE)\n   \
+    \ i <- 1\n    l <- unique(l)\n    s <- seq_along(l)\n    while(i < length(s) &&\
+    \ !is.unsorted(s[start:end])) {\n        i <- i + 1\n        start <- i - 1\n\
+    \        end <- start + length(l)\n    }\n    return(TRUE)\n}\n</code>\n<|/ a\
+    \ dscore=2 |>\n<| a |>\nBased on this answer https://stackoverflow.com/a/40578101/12113202,\
+    \ I put this function in a package to make the code shorter and easier to use\
+    \ (if you don't need it anywhere else)\n<code>", "\n    length(l) == 1 || (length(l)\
+    \ == 2 && (min(l) > max(l)))\n}\n", "\n  return(!is.null(Reduce(`|`, lapply(l,\
+    \ function(x) c(x, rep(FALSE, length(x) - 1))))))\n}\n", "\n  sapply(l, function(x)\
+    \ identical(seq_len(min(x, length(x)) - 1), x))\n}\n", "\n  # check if vector\
+    \ is atomic\n  if(!is.atomic(l) || is.list(l)) {\n    # check if list is atomic\n\
+    \    if(is.atomic(lapply(l, is.atomic))) {\n      # check elements in list\n \
+    \     res <- Reduce(`|`, lapply(l, monotonic), init = FALSE)\n    } else {\n \
+    \     # check elements in list\n      res <- Reduce(`&`, lapply(l, monotonic),\
+    \ init = FALSE)\n    }\n  } else {\n    # check if list is atomic\n    if(is.atomic(lapply(l,\
+    \ is.atomic))) {\n      # check elements in list\n      res <- Reduce(`|`, lapply(l,\
+    \ monotonic), init = TRUE)\n    } else {\n      # check elements in list\n   \
+    \   res <- Reduce(`&`, lapply(l, monotonic), init = TRUE)\n    }\n  }\n  return(res)\n\
+    }\n</code>\nSome benchmark\n<code>\na <- rnorm(1e3, 100, 10)\nb <- rnorm(1e3,\
+    \ 100, 10)\nc <- rnorm(1e3, 100, 10)\nd <- rnorm(1e3, 100, 10)\n\nsystem.time(\n\
+    \  r <- mapply(is_monotonic, a)\n  system.time(\n    r <- mapply(is_monotonic,\
+    \ b)\n  )\n  system.time(\n    r <- mapply(is_monotonic, c)\n  )\n  system.time(\n\
+    \    r <- mapply(is_monotonic, d)\n  )\n)\n\nsystem.time(\n  r <- mapply(is_monotonic_2,\
+    \ a)\n  system.time(\n    r <- mapply(is_monotonic_2, b)\n  )\n  system.time(\n\
+    \    r <- mapply(is_monotonic_2, c)\n  )\n  system.time(\n    r <- mapply(is_monotonic_2,\
+    \ d)\n  )\n)\n</code>\nOn my old laptop I get:\n<code>\n> system.time(\n+   r\
+    \ <- mapply(is_monotonic, a)\n+   )\n   user  system elapsed \n  7.967   0.004\
+    \   7.978 \n> system.time(\n+   r <- mapply(is_monotonic, b)\n+   )\n   user \
+    \ system elapsed \n  7.497   0.004   7.503 \n> system.time(\n+   r <- mapply(is_monotonic,\
+    \ c)\n+   )\n   user  system elapsed \n  7.825   0.002   7.832 \n> system.time(\n\
+    +   r <- mapply(is_monotonic, d)\n+   )\n   user  system elapsed \n  7.899   0.002\
+    \   7.926 \n</code>\n", "\n  all(c(TRUE, diff(l)) == 1) # increasing\n}\n</cell>\n\
+    <text>\nThis function is vectorized over lists and returns TRUE if the elements\
+    \ of the list are monotonic (increasing or decreasing). All other elements are\
+    \ considered to be decreasing.\n\n\n</text>\n<cell>", "\n  n <- length(l);\n \
+    \ mono <- numeric(n);\n  mono <- c(mono,1,0);\n  m0 <- c(0, head(l, -1));\n  mono\
+    \ <- c(mono,c(1,1),m0);\n  m1 <- c(tail(l, -1), 0);\n  mono <- c(mono,c(0,1),m1);\n\
+    \  m2 <- c(tail(l, -2), 0);\n  m3 <- c(0, head(l,1));\n  mono <- c(mono,c(1,0,1),m2);\n\
+    \  mono <- c(mono,c(0,1,1),m3);\n  m4 <- c(tail(l, -1), 0);\n  m5 <- c(0, head(l,-1));\n\
+    \  mono <- c(mono,c(1,1,1),m4);\n  mono <- c(mono,c(1,1,0),m5);\n  mono <- c(mono,1,0);\n\
+    \  return(mono==1);\n};\n</code>\n<|/ a dscore=1 |>\n<| c |>\nNice solution, I\
+    \ think I like this one better. I'm still trying to understand why you use `cbind(m0[1],\
+    \ m0)` instead of `rbind(m0, m0)`. Doesn't `cbind` convert its arguments to lists?\n\
+    <|/ c |>\n<| c |>\n: Yes, but that doesn't work with vectors and matrices. If\
+    \ you only have a vector or matrix, you could use rbind() instead of cbind().\
+    \ Or you could use c() instead of cbind().\n<|/ c |>\n<| c |>\n: Your solution\
+    \ is better, mine is more elegant.\n<|/ c |>\n<| c |>\n: I edited the solution\
+    \ to fix the bugs. I think it would be interesting to see the actual run time\
+    \ difference between the two methods.\n<|/ c |>\n<| c |>\n: I edited the solution\
+    \ to fix the bugs. I think it would be interesting to see the actual run time\
+    \ difference between the two methods.\n<|/ c |>\n<| a dscore=1 tags=list,r,vectorization,performance\
+    \ |>\n<code>", "\n  n <- length(l) - 1\n  m <- n + 1\n  for (i in 1:(n+1)) {\n\
+    \    for (j in (i+1):n) {\n      if (l[i] > l[j]) {\n        m <- i\n        break\n\
+    \      }\n    }\n  }\n  return(m == n)\n}\n", "\n    g <- function(x)\n      \
+    \  which.min(abs (x - l))\n    Reduce(g, l)\n}\n</code>\n<|/ a dscore=4 tags=r\
+    \ |>\n<| a tags=r |>\nThis solution uses base R and produces three logical vectors:\n\
+    <code>\nis_increasing <- c(TRUE,diff(mylist) >= 0)\nis_decreasing <- c(TRUE,diff(mylist)\
+    \ < 0)\nis_same <- mylist == mylist[order(mylist)]\n</code>\nThe first two are\
+    \ TRUE/FALSE vectors indicating whether there are any monotonically increasing\
+    \ or decreasing values in the list, respectively. The third vector is a vector\
+    \ of TRUE/FALSE values, where the ith element is TRUE if the ith element of the\
+    \ list is equal to the ith element of the list in the same order.\n<code>\n> is_increasing\n\
+    \ [1]  TRUE FALSE  TRUE  TRUE FALSE\n> is_decreasing\n [1]  TRUE FALSE  TRUE FALSE\
+    \  TRUE\n> is_same\n [1] FALSE FALSE FALSE  TRUE  TRUE\n</code>\n<|/ a dscore=4\
+    \ |>\n<| a tags=r |>\nHere is a function which returns a single logical vector\
+    \ indicating whether a list of numbers is increasing or decreasing by 1 or by\
+    \ 0:\n<code>\nis_increasing <- function(numbers) {\n    n <- length(numbers)\n\
+    \    decreasing <- TRUE\n    i <- 1\n    while(i <= n) {\n        decreasing <-\
+    \ decreasing & (numbers[i] > numbers[i - 1])\n        i <- i + 1\n    }\n    decreasing\
+    \ & decreasing == FALSE\n}\n\nis_increasing(c(1,2,3))", "\n  n <- length(l) -\
+    \ 1\n  s <- l[1]\n  i <- 1\n  while (i <= n && is.finite(s[i])) {\n    s <- c(s,\
+    \ l[i])\n    i <- i + 1\n  }\n  i <- 1\n  while (i <= n && is.finite(s[i])) {\n\
+    \    if (s[i] < s[i - 1]) return(TRUE)\n    i <- i + 1\n  }\n  return(FALSE)\n\
+    }\n", "\n  l <- c(l, l)\n  return(\n    all(diff(l) < 0) ||\n    all(diff(l) >\
+    \ 0))\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\nThis doesn't seem to take into\
+    \ account that `f` can be any function that returns a scalar. I'd like the function\
+    \ to return TRUE if all elements are strictly increasing or FALSE otherwise. How\
+    \ would you go about that part?\n<|/ c |>\n<| c |>\nYou can just pass `f` to `all`\
+    \ as a vector or use `Reduce` to apply `f` to each element of vector `l`.\n<|/\
+    \ c |>\n<| a dscore=1 |>\nYou can use the all() function for this.\n<|/ a tags=r,list,function\
+    \ |>\n<| c |>\nThe question has been edited since my answer. I believe `f` should\
+    \ only take two arguments (the elements of the list)\n<|/ c |>\n<| c |>\nI meant\
+    \ `f` should only take one argument, the element of vector `l`, but now the OP\
+    \ has edited his question, so this answer is no longer relevant.\n<|/ c |>\n<|\
+    \ c |>\nThanks. I didn't realize you could apply a function to a vector in R.\
+    \ I thought it was only possible in SAS (proc fcmp).\n<|/ c |>\n<| c |>\nYes,\
+    \ you can use the `apply()` function as well.\n<|/ c |>\n<| a tags=r,list,function\
+    \ |>\nUsing lapply and grepl on the first element of list elements:\n<code>\n\
+    all.increasing <- function(l) {\n  v <- l\n  v[1] <- l[1]; v[2] <- l[2]\n  !all(grepl(\"\
+    ^0$\", v))\n}\n\nall.increasing(list(1,2,4,4))", "\n  l <- sort(l)\n  diffs <-\
+    \ diff(c(0, l))\n  c(TRUE, diffs < 0)\n}\n", "\n  l <- c(l, NA)\n  r <- c(rev(l),\
+    \ NA)\n  any(sapply(l, function(x) { diff(c(0, diff(x))) < 0 }))\n}\n", "\n  n\
+    \ <- length(l);\n  n <- ifelse(n < 3, n, n - 3);\n  p <- rep(NA, n);\n  for(i\
+    \ in 2:n) {\n    p[i] <- (l[i-1] > l[i]) - (l[i-1] < l[i]);\n  }\n  return(!any(p));\n\
+    };\n</code>\nI used a for-loop to iterate over each of the list elements.\nNote\
+    \ that I used the rep to create an array of NAs (n), and then I set the ith element\
+    \ of p to TRUE if the previous element was larger than the current element, and\
+    \ vice versa.\nThen I use anyto return TRUE if any of the elements of p are TRUE,\
+    \ and FALSE otherwise.\nThis works when the list elements are of length 3 to 4\
+    \ or more.\n<|/ a dscore=2 tags=r,list,element,difference |>\n<| c |>\nThis is\
+    \ great! Thank you. I was trying to use `mapply` for this, but could not get it\
+    \ to work. Your solution was so elegant and compact.\n<|/ c |>\n<| a tags=r,list,element,difference\
+    \ dscore=2 |>\nYou could use diff on lapply() and then use Reduce with +:\n<code>\n\
+    Reduce(`+`, lapply(x, diff)) > 0", "\n  l <- c(l, NA)\n  i <- c(TRUE, diff(l)\
+    \ > 0)\n  all(which.max(i) & which.min(tail(i, 1)))\n}\n", "\n    l <- unlist(l)\n\
+    \    diffs <- diff(l[c(TRUE, FALSE)])\n    return(length(which(diffs < 0)) ==\
+    \ 1)\n}\n</code>\n<|/ a |>\n<| a |>\nJust thought I'd add this as a solution using\
+    \ data.table. Since it appears that the OP wants a TRUE or FALSE if the first\
+    \ element of a list is monotonically increasing or decreasing, then this seems\
+    \ to be the most straight-forward approach:\n<code>\nlibrary(data.table)\n", "\n\
+    \  s <- sort(l)\n  l[which(diff(s) > 0)]\n}\n</code>\n<|/ a tags=r,sorting |>\n\
+    <| a dscore=4 |>\nHere's a general solution using data.table:\n<code>\nlibrary(data.table)\n\
+    DT = data.table(vars = c(2,1,4,6,5,3), values = c(7,2,5,8,9,7))\nDT[order(-DT$values)]\n\
+    \   vars values\n1:    1       7\n2:    2       2\n3:    4       5\n4:    6  \
+    \     8\n5:    5       9\n6:    3       7\n</code>\n<|/ a tags=r,sorting |>\n\
+    <| a tags=r,sorting |>\nIn R we can use order:\n<code>\nx <- c(2,1,4,6,5,3)\n\
+    order(-x)\n[1] 1 2 3 5 6 4\n</code>\nTo reverse the order we can use rev:\n<code>\n\
+    rev(-x)\n[1] 4 5 6 1 2 3\n</code>\n<|/ a dscore=3 |>\n<| a dscore=3 tags=r,sorting\
+    \ |>\nIn base R you also have the function order(). This works as follows: order(x)\
+    \ sorts the vector x in ascending order. Then, order(-x)  reverses the order and\
+    \ yields the reversed vector. Thus you get:\n<code>\n> x <- c(2,1,4,6,5,3)\n>\
+    \ order(x)\n[1] 1 2 3 5 6 4\n> order(-x)\n[1] 4 5 6 1 2 3\n</code>\n<|/ a |>\n\
+    <| c |>\nThe question specifies that the reverse ordering is required.\n<|/ c\
+    \ |>\n<| a |>\nAnother option is reverse function:\n<code>\nx <- c(2,1,4,6,5,3)\n\
+    x <- reverse(x)\n[1] 4 5 6 1 2 3\n</code>\n<|/ a dscore=3 tags=r,sorting |>\n\
+    <| a tags=r,sorting dscore=3 |>\nAn easy option to sort descending order can be\
+    \ found in this post:\n<code>\nx <- c(2,1,4,6,5,3)\n\nsort(x, decreasing=TRUE)\n\
+    </code>\n<|/ a |>\n<| a dscore=3 |>\nA bit more general:\n<code>\nreverse.sort\
+    \ <- function(x){\n    sort(x, decreasing=TRUE)\n}\n</code>\nThis works for any\
+    \ sorting of vectors or data.frames, and will work even if multiple criteria are\
+    \ being used.\n<|/ a tags=r,sorting |>\n<| c |>\nThis answer does not take into\
+    \ account that two items need to be ordered in ascending order. The correct ",
+  "\n  # The first and last values are assumed to be the same.\n  i <- 1\n  length(l)\
+    \ > 1 & l[1] < l[2] & l[length(l)] > l[2]\n}\n</cell>\n<text>\nThe following function\
+    \ defines a function to compute the distance between two points, given as coordinates\
+    \ in vectors:\n\n\n</text>\n<cell>", "\n  l <- lapply(l, sort)\n  l[[1]][order(l[[1]][-1L])]\
+    \ == l[[1]][-1L]\n}\n</code>\n<|/ a tags=sequence,r,sorting dscore=2 |>\n<| c\
+    \ |>\nThis doesn't seem to handle lists with repeated elements, i.e. `c(\"a\"\
+    , \"a\", \"b\", \"b\", \"c\")`\n<|/ c |>\n<| c |>\n.coffee It does. I just tested\
+    \ it again.\n<|/ c |>\n<| c |>\nI must have misread the output when I tried it.\
+    \  I thought that it only returned a single \"TRUE\".  When I ran it on that input,\
+    \ I got a single TRUE or FALSE.  I tried it again, and got different outputs for\
+    \ each execution.  It seems I misinterpreted the output when I first tested it.\n\
+    <|/ c |>\n<| c |>\nAh, you're right, didn't try it with `c(\"a\", \"a\", \"b\"\
+    , \"b\", \"c\")`.\n<|/ c |>\n<| a tags=sequence,r,sorting |>\nIf there are repeated\
+    \ elements, then one option is to use rle\n<code>\nlibrary(dplyr)\nlibrary(tidyr)\n\
+    df1 %>%\n   group_by(grp = with(rle(names(df1)), \n           rep(seq_along(values),\
+    \ lengths))) %>%\n   mutate(out = as.integer(names %in% names(which(rleid(names)\
+    \ == rleid(names)))))", "\n    # Sort and compare adjacent elements of the list.\n\
+    \    sortedL <- sort(l)\n    diff <- c(FALSE, diff(l) > 0)\n    sorted <- c(FALSE,\
+    \ diff(sortedL) > 0)\n    # Return TRUE if the list is monotonically increasing\
+    \ or decreasing.\n    return(all(sorted) | all(diff))\n}\n</code>\nA few test\
+    \ cases:\n<code>\na <- c(10, 4, 9, 5, 14)\nb <- c(4, 2, 9, 5, 4)\nc <- c(0, 10,\
+    \ 11, 14, 6)\nd <- c(1, 0, 1, 0, 0)\n\nidentical(monotonic(a), TRUE)\nidentical(monotonic(b),\
+    \ TRUE)\nidentical(monotonic(c), TRUE)\nidentical(monotonic(d), TRUE)\n</code>\n\
+    <|/ a |>\n<| a dscore=4 |>\nThe answer of is good if you want a general approach\
+    \ (i.e. not just for numeric lists).  In that case you can do:\n<code>\nis.monotonic\
+    \ <- function(x) {\n  all(diff(x) > 0)\n}\n\nis.monotonic(list(1, 2, 4, 20))\n\
+    [1] TRUE\n</code>\nHowever, I think that your case is specific.  You could define\
+    \ \"monotonic\" as having only decreasing or increasing elements, and this would\
+    \ also work:\n<code>\nis.monotonic <- function(x) {\n  all(diff(x) <= 0)\n}\n\
+    </code>\n<|/ a tags=r,list |>\n<| a tags=r,list |>\nIf you want a function that\
+    \ works also with lists, this can be used:\n<code>\nis.monotonic <- function(x)\
+    \ {\n  if(inherits(x, \"list\")) \n    all(!is.na(lapply(x, is.numeric)))\n  else\
+    \ \n    all(diff(x) > 0)\n}\n</code>\nThis also considers the case of a list containing\
+    \ only NAs.\n<|/ a dscore=3 |>\n<| c |>\nI suggest to check that the list elements\
+    \ are numbers, not `NA`s only. Like `all(!is.na(lapply(x, is.numeric)))`. `is.numeric`\
+    \ will consider all `NA`s as `NA`s.\n<|/ c |>\n<| a |>\nMy favorite solution is\
+    \ using data.table for efficiency:\n<code>\nlibrary(data.table)\nas.data.table(list(1,\
+    \ 2, 4, 20))", "\n  l <- as.numeric(l)\n  l[c(TRUE, diff(l) <= 0)]\n}\n", "\n\
+    \  # If list is empty, return False\n  if(!is.list(l))\n    return(False)\n  #\
+    \ If list consists entirely of NaNs, return False\n  if(all(is.nan(l)))\n    return(False)\n\
+    \  # Return True if elements are monotonically\n  # increasing or decreasing.\n\
+    \  return(all(diff(sort(l)) == 0, na.last = TRUE))\n}\n</code>\nIf speed matters,\
+    \ this is probably not the right solution.\n<|/ a tags=r,dplyr,tidyr dscore=2\
+    \ |>\n<| c |>\nIf speed matters, then I wonder if one could use data.table here.\
+    \ It might be faster.\n<|/ c |>\n<| c |>\nI've added a benchmark of some approaches\
+    \ I tried.\n<|/ c |>\n<| c |>\nIt doesn't seem to matter much. I'd use `dplyr::if_else`\
+    \ instead of `dplyr::if_else_` to get the correct type (`logical`), but speed\
+    \ seems negligible.\n<|/ c |>\n<| c |>\nThe `if_else()` function is part of the\
+    \ `dplyr` package.  `if_else()` does not return a logical vector.\n<|/ c |>\n\
+    <| a |>\nHere's a data.table solution. I'm only using an lapply() to loop over\
+    \ the input vector. I don't think this is a good solution, since it uses more\
+    \ memory than needed. I'm sure there's a better solution.\n<code>\ndt <- data.table(x\
+    \ = 1:100)\ndt <- data.table(x = 1:100, y = 1:100)\ndt$id <- 1:nrow(dt)\n\nsystem.time({\n\
+    \  result <- dt[, z := \n    lapply(x, \n      function(x){\n        any(x > y\
+    \ | x < -y)\n      })]\n})", "\n  return(\n    all(diff(sort(c(l,0)))) <= 0 &\n\
+    \      all(diff(sort(c(0,l)))) <= 0\n  )\n}\n</code>\n<|/ a dscore=2 |>\n<| c\
+    \ |>\nI like this idea. I'd just add `all(diff(sort(c(l,0)))) < 0` to make sure\
+    \ `c(l,0)` won't be a decreasing sequence.\n<|/ c |>\n<| c |>\nYes, that's a good\
+    \ idea.  It should fix that problem.\n<|/ c |>\n<| a tags=r,sorting,vector |>\n\
+    Here is a solution using sort. Although it seems simpler to me, it has a worse\
+    \ time complexity:\n<code>", "\n  if(all(is.na(l)))\n    return(TRUE)\n  if(!all(diff(sort(as.numeric(l),\
+    \ partial=TRUE))==0))\n    return(FALSE)\n  if(is.null(l))\n    return(TRUE)\n\
+    }\n", "\n    l <- c(l[length(l):1], reverse(l))\n    any(l[1:2] <= l[3:4])\n}\n",
+  "\n  n <- length(l)\n  min <- l[1]\n  idx <- 1\n  while (idx < n && l[idx] < min)\n\
+    \    idx <- idx + 1\n  idx <- n - idx - 1\n  while (idx > 0 && l[idx] > min)\n\
+    \    idx <- idx - 1\n  idx - 1 == n || l[idx] > l[idx - 1]\n}\n</cell>\n<text>\n\
+    And so does this one that tests whether the first element of a list is greater\
+    \ than or less than or equal to any element of another list:\n\n\n</text>\n<cell>",
+  "\n  l <- sort(l)\n  diff <- l[1] - l[-length(l)]\n  return(diff == 0 || diff >\
+    \ 0)\n}\n", "\n  if(length(l) < 2) {\n    return(TRUE)\n  }\n  i <- 1\n  while(i\
+    \ <= length(l)) {\n    t <- l[i - 1]\n    d <- l[i]\n    if(d < t & d < t) {\n\
+    \      return(TRUE)\n    }\n    i <- i + 1\n  }\n  return(FALSE)\n}\n", "\n  l\
+    \ <- sort(l)\n  is.na(l) | is.na(diff(l)) != T\n}\n", "\n  n <- length(l)\n  u\
+    \ <- numeric(n)\n  u[1] <- l[1]\n  for (i in 2:n){\n    u[i] <- u[i-1] > l[i]\
+    \ & l[i-1] < l[i]\n  }\n  return(all(!u))\n}\n", "\n  n <- length(l)\n  out <-\
+    \ c()\n  i <- 1\n  while(i <= n) {\n    j <- 1\n    while(j <= i) {\n      if(l[j]\
+    \ < l[j + 1]) {\n        out <- c(out, FALSE)\n        break\n      }\n      else\
+    \ out <- c(out, TRUE)\n      j <- j + 1\n    }\n    i <- i + 1\n  }\n  return(all(out))\n\
+    }\n", "\n  sapply(l, function(x) all(diff(x) < 0))\n}\n</code>\n<|/ a |>\n<| c\
+    \ |>\nWhat is wrong with `all(diff(x) < 0)` ? Please explain.\n<|/ c |>\n<| c\
+    \ |>\nThe `all(...)` function tells whether the argument holds at least one TRUE\
+    \ element. If it is TRUE then all elements in `diff(x)` must be smaller than 0.\
+    \ The `diff(x)` tells us what we want. `all(diff(x) < 0)` tells us whether the\
+    \ argument holds at least one of the elements of `diff(x)` which is smaller than\
+    \ 0.\n<|/ c |>\n<| a tags=r,sorting |>\n<code>\nx <- c(1, 20, 4, 10)\nx[order(x,\
+    \ decreasing = TRUE)]", "\n  u <- unique(c(l))\n  u <= sort(u)\n}\n", "\n  is.list(l)\
+    \ || (l <- list(l))\n  l <- sort(l)\n  l[c(TRUE, diff(l)<0)]\n}\n", "\n  n <-\
+    \ length(l); ind <- c(FALSE, head(seq_len(n), -1)); all(diff(ind) <= 0)\n}\n",
+  "\n  x <- NULL\n  y <- NULL\n  i <- 0\n  while(length(l) > 0) {\n    i <- i + 1\n\
+    \    x <- c(x, l[[i]])\n    y <- c(y, l[[i+1]])\n    l <- l[-(i+1):length(l)]\n\
+    \  }\n  x <- (length(x) <= 1) & is.finite(x) & !is.na(x)\n  y <- (length(y) <=\
+    \ 1) & is.finite(y) & !is.na(y)\n  return(x | y)\n}\n</cell>\n<cell>", "\n  #\
+    \ Check that there are at least two elements.\n  if (length(l) <= 1) {\n    return(FALSE)\n\
+    \  }\n  # Check that all elements are non-negative numbers.\n  el <- l\n  while\
+    \ (el < 0 || !all(el > 0)) {\n    el <- -el\n  }\n  # Check for decreasing values.\n\
+    \  is_d <- FALSE\n  l <- c(l[1:(length(l)-1)], l[length(l)], l[1])\n  if (all(l\
+    \ < 0)) {\n    is_d <- TRUE\n    l <- -l \n  }\n  # Check that the first element\
+    \ is non-negative and the last is non-negative.\n  if (all(el > 0) && (el[1] >=\
+    \ 0) && (el[length(el)] >= 0)) {\n    # Return TRUE if the list elements are monotonically\
+    \ increasing or decreasing.\n    return(is_d)\n  }\n  return(FALSE)\n}\n</code>\n\
+    <|/ a tags=r,list dscore=3 |>\n<| c |>\n`return(is_d)` is what I was looking for,\
+    \ thanks!\n<|/ c |>\n<| a dscore=3 |>\nUsing any:\n<code>\nany(lapply(unlist(l),\
+    \ function(x) x[1] < x[2] & x[2] < x[3]))", "\n    l <- as.numeric(l)\n    l <-\
+    \ l[order(l)]\n    decreasing <- tail(l, 1) == head(l,1)\n    increasing <- head(l,\
+    \ 1) == tail(l,1)\n    return(decreasing | increasing)\n}\n", "\n  x <- l[[1]]\n\
+    \  y <- l[[2]]\n  return(all(x < y))\n}\n", "\n  is.increasing = TRUE\n  is.decreasing\
+    \ = FALSE\n  n = 1\n  while (is.increasing && n < length(l)-1) {\n    if (l[n]\
+    \ < l[n+1]) is.increasing = FALSE\n    n <- n + 1\n  }\n  while (is.decreasing\
+    \ && n > 0) {\n    if (l[n] > l[n-1]) is.decreasing = FALSE\n    n <- n - 1\n\
+    \  }\n  return(is.increasing | is.decreasing)\n}\n</code>\n<|/ a |>\n<| a tags=r,vector\
+    \ |>\nHere's an approach using cumsum.  It doesn't need any packages, and it's\
+    \ probably faster than any of those other answers provided so far.\n<code>\nisIncreasing\
+    \ <- function(x) x != x[1]\nisDecreasing <- function(x) x != tail(x,1)\n\n> isIncreasing(c(4,7,4,1,5,2,9,3))\n\
+    [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE\n\n> isDecreasing(c(4,7,4,1,5,2,9,3))\n\
+    [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE\n\n> isIncreasing(c(4,7,4,1,5,2,9,3,2))\n\
+    [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE\n\n> isDecreasing(c(4,7,4,1,5,2,9,3,2))\n\
+    [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE\n</code>\n<|/ a dscore=2 |>\n<| a tags=r,vector\
+    \ |>\nYou could use the lag function in dplyr and then count the lengths of the\
+    \ groups. \n<code>\nisIncreasing <- function(x) {\n  length(which(x <= lag(x,\
+    \ default = NA)))/length(unique(x))\n}\n\nisDecreasing <- function(x) {\n  length(which(x\
+    \ > lag(x, default = NA)))/length(unique(x))\n}\n\n> isIncreasing(c(4,7,4,1,5,2,9,3))\n\
+    [1] 0.3333333 0.0000000\n> isDecreasing(c(4,7,4,1,5,2,9,3))\n[1] 0.0000000\n</code>\n\
+    <|/ a dscore=2 |>\n<| a tags=r,vector dscore=2 |>\nWe can use diff \n<code>\n\
+    library(dplyr)\nisIncreasing<- function(v1) v1 != lag(v1) & !is.na(v1) & !is.na(lag(v1))\n\
+    isDecreasing <- function(v", "\n  l <- sort(l)\n  all(diff(l) > 0)\n}\n</cell>\n\
+    <text>\nThe next step is to write a function that will return a list of increasing,\
+    \ decreasing, and non-monotonic elements. We'll use the same functions as we did\
+    \ for the monotonic() function we wrote.\n\nThe first step is to return a list\
+    \ of increasing elements.\n\n\n</text>\n<cell>\nincs <- function(x) {\n  incs\
+    \ <- Filter(function(x) {\n    monotonic(x)\n  }, x)\n  incs\n}\n</cell>\n<text>\n\
+    Next, we will write a function to return a list of non-monotonic elements. We'll\
+    \ use the same function as we did for the monotonic() function.\n\n\n</text>\n\
+    <cell>\nnonmono <- function(x) {\n  nonmono <- Filter(function(x) {\n    not monotonic(x)\n\
+    \  }, x)\n  nonmono\n}\n</cell>\n<text>\nFinally, we write a function to return\
+    \ a list of increasing or non-monotonic elements. The function will take a list\
+    \ of elements and return a list of increasing or non-monotonic elements.\n\n\n\
+    </text>\n<cell>\nincreasing <- function(x) {\n  increasing <- Filter(function(x)\
+    \ {\n    monotonic(x)\n  }, x)\n  increasing\n}\n</cell>\n<cell>\nincreasing(sort(c(1,\
+    \ 10, 2, 3, 4, 5)))\n</cell>\n<cell>\nnonmono(c(1, 10, 2, 3, 4, 5))\n</cell>\n\
+    <text>\nWe've now written three functions that will operate on lists and return\
+    \ a list. Let's review how they will work on the next examples:\n\n\n</text>\n\
+    <cell>\nincreasing(sort(c(1, 10, 2, 3, 4, 5)))\n</cell>\n<cell>\nnonmono(c(1,\
+    \ 10, 2, 3, 4, 5))\n</cell>\n<cell>\nincreasing(sort(c(1, 10, 2, 3, 4, 5)))\n\
+    </cell>\n<text>\nWe could also combine our three functions to form one function\
+    \ that will work on lists and return a list. We'll use the two functions to get\
+    \ a list of increasing elements. We'll use our function for the decreasing list\
+    \ and combine it with the increasing list to form the complete list of increasing,\
+    \ decreasing, and non-monotonic elements.\n\n\n</text>\n<cell>\nincs <- function(x)\
+    \ {\n  incs <- Filter(function(x) {\n    monotonic(x)\n  }, x)\n  incs <- Filter(function(x)\
+    \ {\n    not monotonic(x)\n  }, incs)\n  incs <- Filter(function(x) {\n    monotonic(x)\n\
+    \  }, incs)\n  incs\n}", "\n    stopifnot(length(l) > 0)\n    stopifnot(all(is.numeric(l)))\n\
+    \    \n    diff <- diff(l, na.rm = T)\n    if (any(diff < 0)) return(FALSE)\n\
+    \    \n    idx <- c(0, cumsum(diff[diff<0]))\n    return (abs(diff[idx]) < 1e-9)\n\
+    }\n</cell>\n<text>\nThe function returns TRUE if all the list elements are strictly\
+    \ monotonically increasing or decreasing. For more information, see the description\
+    \ of the function monotonic in the documentation of ?diff.\n\n\n</text>\n<cell>",
+  "\n  l <- unique(l) # Remove duplicates\n  sapply(l, function(x) {\n    diff(x)\
+    \ != 0 & (x > x[1] | x < x[2])\n  }, USE.NAMES = TRUE)\n}\n</code>\nA couple of\
+    \ tests:\n<code>\nx <- c(2, 3, 1, 3, 2, 2)\nmonotonic(x)", "\n    l = sort(l)\n\
+    \    diff1 <- c(0,diff(l))\n    diff2 <- c(0,diff(l,lag=-1))\n    diff1[is.na(diff1)]\
+    \ <- Inf\n    diff2[is.na(diff2)] <- Inf\n    return (min(diff1) < min(diff2))\n\
+    }\n</cell>\n<cell>", "\n  u <- unique(c(l))\n  u <- u[order(u, decreasing=TRUE)]\n\
+    \  all(diff(u) < 0)\n}\n</code>\n<|/ a |>\n<| c |>\nThis fails to test the monotonicity\
+    \ property for `list`s (the example in the question). `all(diff(sort(unlist(l)))\
+    \ < 0)` works but is too slow.\n<|/ c |>\n<| c |>\nI see! Thanks. I modified the\
+    \ answer accordingly.\n<|/ c |>\n<| a dscore=1 |>\nA base R solution using diff\n\
+    <code>\nl1 <- list(a=1, b=2, c=3)\nl2 <- list(a=2, b=1, c=3)\n\ndiff(l1) < 0 |\
+    \ diff(l2) < 0", "\n  n <- length(l); i <- seq_len(n)\n  u <- c(1, n); v <- c(0,\
+    \ n - 1)\n  return(all(sapply(u, function(x) all(v >= l[x] & l[x] >= v[x]))))\n\
+    }\n", "\n    l == sort(l)\n}\n</cell>\n<text>\nFor a non-list we can use anyDuplicated\
+    \ instead, as follows:\n\n\n</text>\n<cell>", "\n  # Create a copy to avoid modification\
+    \ of original\n  l <- c(l)\n  l[l == 0] <- NA\n  l[order(l)] <- 1:length(l)\n\
+    \  any(diff(sign(diff(l))) != 0)\n}\n", "\n  l <- unlist(l)\n  l <- c(l[1], diff(l))\n\
+    \  l <- c(l[1], -diff(l))\n  return(all(abs(l) < 1e-6))\n}\n", "\n    n <- length(l);\n\
+    \    if(n < 2) return(FALSE);\n    i <- 1L;\n    while (i < n) {\n        x <-\
+    \ l[i];\n        j <- 1L;\n        while (j < i) {\n            y <- l[j];\n \
+    \           if (y > x) return(FALSE);\n            j <- j + 1L;\n        }\n \
+    \       i <- i + 1L;\n    }\n    return(TRUE);\n}\n</code>\n<|/ a tags=r,time-series,data.table,lm\
+    \ |>\n<| a |>\nA data.table version of's answer\n<code>\nlibrary(data.table)\n\
+    dt <- data.table(\n  x = c(1,2,4,20),\n  y = c(1, 20, 4, 10),\n  grp = c(\"A\"\
+    , \"A\", \"A\", \"B\")\n)\ndt[, \n  grp := rleid(grp)\n][, \n  mx := pmax(y, x)\n\
+    ][, \n  mx := pmin(x, y)\n][, \n  mx := pmin(mx, pmax(y, x))\n][, \n  grp := c(1L,\
+    \ \n    head(grp, 1L) + cumsum(c(TRUE, diff(grp) != 0L)), \n    tail(grp, 1L)\n\
+    \  )\n][, \n  grp := grp - 1L\n][, \n  grp := ifelse(grp == 1L, 1L, grp)\n][,\
+    \ \n  grp := cumsum(ifelse(grp == 1L, 1L, grp))\n][, \n  grp := cumsum(ifelse(grp\
+    \ == 1L, 1L, grp)) + 1L\n][, \n  grp := cumsum(grp)\n][, \n  grp := rleid(grp)\n\
+    ][, \n  mx := pmax(y, x)\n][, \n  mx := pmin(x, y)\n][, \n  mx := pmin(mx, pmax(y,\
+    \ x))\n][, \n  grp := c(1L, \n    head(grp, 1L) + cumsum(c(TRUE, diff(grp) !=\
+    \ 0L)), \n    tail(grp, 1L)\n  )\n][, \n  grp := grp - 1L\n][, \n  grp := ifelse(grp\
+    \ == 1L, 1L, grp)\n][, \n  grp := cumsum(ifelse(grp == 1L, 1L, grp))\n][, \n \
+    \ grp := cumsum(ifelse(grp == 1L, 1L, grp)) + 1L\n][, \n  grp := cumsum(grp)\n\
+    ][, \n  gr", "\n  x1 <- l[1]\n  x2 <- l[2]\n  x3 <- l[3]\n  x4 <- l[4]\n  if (x1\
+    \ < x2 & x1 < x3 & x1 < x4) {\n    if (x2 < x3 & x2 < x4) {\n      if (x3 < x4)\
+    \ {\n        return(TRUE)\n      }\n      return(FALSE)\n    }\n    return(FALSE)\n\
+    \  }\n  if (x2 < x1 & x2 < x3 & x2 < x4) {\n    if (x1 < x3 & x1 < x4) {\n   \
+    \   if (x3 < x4) {\n        return(TRUE)\n      }\n      return(FALSE)\n    }\n\
+    \    return(FALSE)\n  }\n  if (x3 < x1 & x3 < x2 & x3 < x4) {\n    if (x1 < x2\
+    \ & x1 < x4) {\n      if (x2 < x4) {\n        return(TRUE)\n      }\n      return(FALSE)\n\
+    \    }\n    return(FALSE)\n  }\n  if (x4 < x1 & x4 < x2 & x4 < x3) {\n    if (x1\
+    \ < x2 & x1 < x3) {\n      if (x2 < x3) {\n        return(TRUE)\n      }\n   \
+    \   return(FALSE)\n    }\n    return(FALSE)\n  }\n  return(TRUE)\n}\n</code>\n\
+    <|/ a tags=r,sorting,dataframe |>\n<| c |>\nHi, I ran your example and it worked\
+    \ fine, however, my actual data set has some elements that are all 0s and it isn't\
+    \ returning TRUE. I tried using all.equal() to compare all elements in a row to\
+    \ the first element in the row and they are all equal. Any suggestions?\n<|/ c\
+    \ |>\n<| c |>\nI think you may be misunderstanding how `all.equal` works. Try\
+    \ running `all.equal(c(1, 0, 3, 0, 0), c(1, 1, 3, 0, 0)) == TRUE`. If all elements\
+    \ are equal, that returns `TRUE`. What you probably want to do instead is check\
+    \ whether the `diff` of each element in your list are equal to zero. `diff(c(1,\
+    \ 0, 3, 0, 0))` will return the differences of each element in your list. So `all(diff(my_list)\
+    \ == 0)` will return `TRUE` for any list where all elements are equal (including\
+    \ 0).\n<|/ c |>\n<| c |>\nI tried your example and it returned \"TRUE\", however,\
+    \ when I ran my actual data set it is still returning \"FALSE\". I just realized\
+    \ that some of my elements are all 0s, so I decided to test my data set by looking\
+    \ at the first element in the row and see if it was equal to all elements in the\
+    \ row, but even though they are all equal, it still ", "\n  # Check vector l\n\
+    \  if (is.numeric(l))\n    l <- c(l, 0)\n  \n  # Check if any elements equal zero\n\
+    \  if (any(l == 0))\n    return(FALSE)\n  \n  # Find first increasing element\n\
+    \  i <- which.max(l)\n  \n  # If last element is decreasing, then return TRUE\n\
+    \  last <- l[length(l)]\n  if (last <= l[i])\n    return(TRUE)\n  \n  # Compare\
+    \ i element to last element and keep track of which was last\n  last <- l[i]\n\
+    \  l[which.max(l)] <- last\n  \n  return(TRUE)\n}\n", "\n  a <- l[1]\n  for (i\
+    \ in 2:length(l)) {\n    b <- l[i]\n    if (b < a) {\n      break\n    } else\
+    \ {\n      a <- b\n    }\n  }\n  return(i < length(l))\n}\n", "\n    l <- sort(l)\n\
+    \    diff(l)[1] < 0\n}\n</code>\nNow we can define the function max2\n<code>\n\
+    max2 <- function(l) sort(l)[which.max(cumsum(l)[-length(l)])]\n</code>\nwhich\
+    \ finds the max in any two elements and returns TRUE for monotonically increasing\
+    \ lists and FALSE for monotonically decreasing lists.\n<code>\nmax2(c(1, 2, 4,\
+    \ 20))", "\n  l <- as.data.frame(l)\n  m[order(m[, 1], decreasing = TRUE)] <-\
+    \ c()\n  m[order(m[, 1], decreasing = FALSE)] <- c()\n  m[order(m[, 1], decreasing\
+    \ = FALSE), ]\n}\n</code>\n<|/ a tags=r,dplyr dscore=0 |>\n<| c |>\nNice! I believe\
+    \ you meant `monotonic = ` instead of `mon = ` in the first line.\n<|/ c |>\n\
+    <| c |>\nThanks. Fixed.\n<|/ c |>\n<| a tags=r,dplyr dscore=0 |>\nHere is a data.table\
+    \ version. As you mentioned in your question, this function can be easily ported\
+    \ to dplyr. The key is use cumsum on both lag and lead to get the running sum\
+    \ of values. When cumsum value is greater than 1, we set that row to TRUE. \n\
+    <code>\nlibrary(data.table)\n\nf <- function(x) {\n  x <- data.table(x)\n  x[,\
+    \ sx := cumsum(x[, value])]\n  x[, x := cumsum(x[, value]), by = name]\n\n  x[,\
+    \ `:=` (lead = value > shift(sx),\n            lag  = value < shift(sx)),\n  \
+    \   by = name]\n  x[, lead, by = name][!lead]\n}\n\nf(c(5, 4, 3, 2))", "\n  stopifnot(is.vector(l))\n\
+    \  l <- as.data.frame(l)\n  l[, \"i\" := seq_along(l)]\n  l[, \"cumsum\" := cumsum(l$v1),\
+    \ on=\"i\"]\n  l[, \"diff\" := c(l$v2, diff(l$v1), diff(l$cumsum))][ c(TRUE, diff(sign(diff(l$cumsum)))\
+    \ != 0) ]\n}\n", "\n  l <- sort(l)\n  n <- length(l) - 1\n  c(FALSE, diff(l)>0\
+    \ | head(l,n+1)>tail(l,n))\n}\n</code>\n<|/ a dscore=4 |>\n<| a |>\nHere is another\
+    \ approach using lapply. \n<code>\n> x<-c(1,2,4,20)\n> y<-c(2,20,4,10)\n> lapply(x,function(x){\n\
+    +     ifelse(x>y,(y-x),(y-x))\n+   })\n[[1]]\n[1] 3 2\n\n[[2]]\n[1] 10 4 1\n\n\
+    [[3]]\n[1] 4 1 0 -10\n\n> \n</code>\n<|/ a tags=r dscore=4 |>\n<| a tags=r |>\n\
+    A few other approaches are possible.  Here are a few.\n<code>\nx <- c(1, 2, 4,\
+    \ 20)\ny <- c(2, 20, 4, 10)\n\nlibrary(dplyr)\nlibrary(purrr)\nmap(x, y, ~ {\n\
+    \  stopifnot(length(x) == length(y))\n  map2_dbl(x, y, ~ .x - .y) %>% \n    reduce(`+`)\n\
+    })\n", "\n    y <- l[-1]\n    x <- l[1]\n    i <- length(l) - 1\n    while (i\
+    \ > 0) {\n        if (y < x) break\n        y <- c(y[2:1], y_max(y))\n       \
+    \ i <- i - 1\n    }\n    i <- length(l) - 1\n    while (i > 0) {\n        if (x\
+    \ < y) break\n        x <- c(x_min(x), x_max(y))\n        i <- i - 1\n    }\n\
+    \    return(TRUE)\n}\n", "\n  return(length(l)==length(unique(l)))\n}\n", "\n\
+    \  l <- as.list(l)\n  n <- length(l)\n  for (i in 2:n) {\n    if (l[i-1] <= l[i])\
+    \ {\n      return (FALSE)\n    }\n  }\n  (TRUE)\n}\n", "\n    l <- sort(l)\n \
+    \   i <- 1\n    while (i <= length(l)) {\n        if (l[i-1] > l[i]) {\n     \
+    \       l[i] <- l[i-1]\n        }\n        i = i + 1\n    }\n    return(length(l)\
+    \ == 1)\n}\n</code>\n<|/ a dscore=4 |>\n<| a tags=algorithm,r |>\nI think you\
+    \ can solve this problem without having to use any packages. You can solve it\
+    \ using the following approach.\nConsider a list l such that,\n<code>\nl <- list(1,\
+    \ 5, 7, 3, 9, 1, 6)\n</code>\nNow, we want to sort the list so that the smallest\
+    \ integer is first and largest is last. Thus, we will need to sort each element\
+    \ individually.\n<code>", "\n    if (!length(l)||l[1]<l[2]) {\n        return(FALSE)\n\
+    \    }\n    sapply(l, function(x) x>x[1]-x[2]+x[1]+l[1] && x<x[1]+x[1]+x[2]+l[2])\n\
+    }\n", "\n    l <- sort(l)\n    diffs <- diff(l) < 0\n    diffs[1] <- diffs[1]\
+    \ & diffs[2]\n    return(!any(diffs))\n}\n", "\n  if(!is.list(l)) return(FALSE)\n\
+    \  m <- c(l[[1]], length(l))\n  m[ c( diff(m) < 0 ) ] <- length(m) + 1\n  all(\
+    \ is.na(m)[1:2] )\n}\n</code>\n<|/ a tags=list,r,sorting dscore=2 |>\n<| a |>\n\
+    A little bit late, but I find this one quite intuitive.\n<code>\na <- c(3,5,7,9,11)\n\
+    b <- c(4,5,8,10,12)\nc <- c(2,4,5,10,15)\nmy_list <- list(a = a, b = b, c = c)\n\
+    \nmy_list\n\n$a\n[1] 3 5 7 9 11\n\n$b\n[1] 4 5 8 10 12\n\n$c\n[1] 2 4 5 10 15\n",
+  "\n  sapply(l, function(x) x<-sort(x))\n  all(diff(l)==0) & all(l[order(l)][-1]>l[order(l)][-2])\n\
+    }\n</code>\nThis function is probably not very efficient if your lists contain\
+    \ many repeated elements (it sorts them all to remove duplicates before performing\
+    \ any computation). It's also likely not very fast if your lists contain many\
+    \ identical elements.\nIn your question, you ask for \"most efficient\". I believe\
+    \ that most efficient means in this case that speed is the primary concern. So\
+    \ if speed is a concern, you should use the function above and test whether it\
+    \ performs adequately for you.\n<|/ a |>\n<| c |>\nGood point! I've just added\
+    \ a note to my original post that my lists are very large, so speed is really\
+    \ the most important issue. I will test your solution and compare it to the one\
+    \ below to see which is faster.\n<|/ c |>\n<| c |>\nI have updated my answer to\
+    \ include an alternative implementation which does much the same thing (apart\
+    \ from removing the second call to `sort`).\n<|/ c |>\n<| a |>\nHere's a solution\
+    \ using lapply to create a boolean vector indicating whether each element in the\
+    \ list increases or decreases in value with its successive elements, then negate\
+    \ that vector to indicate whether all elements in the list increase or decrease\
+    \ in value.\n<code>\nf <- function(x) {\n    i <- 1L\n    y <- x[i]\n    result\
+    \ <- FALSE\n    while(i <= length(x)) {\n        x[i] <- x[i + 1]\n        if(diff(x)\
+    \ > 0) {\n            result <- FALSE\n        }\n        i <- i + 1L\n    }\n\
+    \    return(result)\n}\n</code>\nIt's not necessarily fast, but it's certainly\
+    \ easier to understand what's going on.\n<|/ a dscore=1 tags=performance,lapply,r,for-loop,list\
+    \ |>\n<| a |>\nI'm sure this is overkill, but I couldn't find a simpler one:\n\
+    <code>\nf2 <- function(X){\n  res <- vector(mode=\"logical\", length=length(X))\n\
+    \  for(i in seq_along(X))\n    res[i] <- all(X[i] > X[(i+1):length(X)])\n  return(res)\n\
+    }\n</code>\n<|/ a tags=performance,lapply,r,for-loop,list dscore=1 |>\n<| c |>\n\
+    It took me a while to work out what this was doing, but it works! Nice.\n<|/ c\
+    \ |>\n<| c |>\n, no problem. Just don't get too wrapped up in the ", "\n    #\
+    \ Sort and compare adjacent pairs, return TRUE if sorted and increasing.\n   \
+    \ s <- sort(l)\n    if (all(diff(s) == 0)) return(TRUE)\n    if (all(diff(s[1:length(s)])\
+    \ < 0)) return(FALSE)\n    return(TRUE)\n}\n", "\n  m <- matrix(0, length(l),\
+    \ length(unique(l)))\n  for (i in 1:length(unique(l))) {\n    m[, i] <- all(l[l\
+    \ == unique(l[i])] >= l[order(l)][-i])\n  }\n  rowSums(m) > 0\n}\n</code>\n<|/\
+    \ a dscore=1 tags=r,list |>\n<| a dscore=0 |>\nI came up with this as a solution.\
+    \ Surely there must be an easier way!\n<code>\nmonotonic <- function(l) {\n  \
+    \ m <- matrix(0, length(l), length(unique(l)))\n   for (i in 1:length(unique(l)))\
+    \ {\n      m[, i] <- all(l[l == unique(l[i])] >= l[order(l)][-i])\n   }\n   rowSums(m)\
+    \ > 0\n}\n\nl <- list(c(1, 2, 3, 5, 6, 7, 8, 9, 10, 11), \n           c(2, 4,\
+    \ 5, 6, 8, 9, 10, 11, 12), \n           c(3, 6, 7, 9, 10, 11, 12, 13, 14))\n\n\
+    > l\n[[1]]\n[1] 1 2 3 5 6 7 8 9 10 11\n\n[[2]]\n[1] 2 4 5 6 8 9 10 11 12\n\n[[3]]\n\
+    [1] 3 6 7 9 10 11 12 13 14\n\n> monotonic(l)\n[1] TRUE\n</code>\n<|/ a tags=r,list\
+    \ |>\n<| c |>\nIt should be noted that `monotonic` will return `FALSE` if you\
+    \ have a list with negative numbers in it.  You might want to add an `if` statement\
+    \ to check for that.\n<|/ c |>\n<| a |>\n<code>\nx <- c(1,2,3,5,6,7,8,9,10,11)\n\
+    x\n[1] 1 2 3 5 6 7 8 9 10 11\n\ni <- order(x)\ni\n[1] 3 2 1 6 5 4 8 9 10 7\n\n\
+    sapply(i, function(x) x[i[1]] == x[-i[1]])\n[1] FALSE FALSE  TRUE  TRUE FALSE\
+    \ FALSE FALSE FALSE  TRUE  TRUE\n</code>\n<|/ a tags=r,list dscore=0 |>\n<| a\
+    \ |>\nThe OP has posted the answer they found so I figured I'd post the function\
+    \ I came up with that returns TRUE if all elements in the list are greater than\
+    \ or equal to the first element in the list and the first element is greater than\
+    \ or equal to the last element in the list.\n<code>\nisMonotonic <- function(x)\
+    \ {\n    x <- sort(x)\n    # if the first value is greater than the last, the\
+    \ whole list is not monotonic\n    if (x[length(x)]>x[1])\n        return(FALSE)",
+  "\n  # The initial assumption here is that the list is monotonic iff the\n  # difference\
+    \ between successive elements is at least one.\n  l <- l[order(-seq_along(l))]\n\
+    \  diff <- diff(l) != 0\n  # If any differences exist, we have a decreasing sequence.\n\
+    \  any(diff)\n}\n</cell>\n<text>\nMonotonicity test of list\nTo test whether a\
+    \ list is monotonic, we first apply monotonicity to the list.  Then, we compare\
+    \ the first element with the second.  If they are the same, all elements are monotonic\
+    \ from there, so we return TRUE, else FALSE.\n\n\n</text>\n<cell>\nis_monotonic\
+    \ <- function(l) {\n  # First check that the list is monotonic\n  if(monotonic(l))\
+    \ {\n    # Return TRUE if every element is greater than the previous one\n   \
+    \ all(l[c(TRUE, FALSE)] > l[c(FALSE, TRUE)])\n  } else {\n    # Return FALSE if\
+    \ all elements are the same\n    all(l != l[1])\n  }\n}\n</cell>\n<text>\nLinear\
+    \ sequences of length n\nWe define a linear sequence to be defined by the elements\
+    \ of a sequence $x_1, \\ldots, x_n$ which is of the same linear order.  We allow\
+    \ for different lengths of the sequences, but if n is the same length, then a\
+    \ linear sequence is defined.  Let's define a function to test linear sequences.\n\
+    \n\n</text>\n<cell>", "\n    n <- length(l)\n    c(FALSE, diff(sort(l)) == 0)\n\
+    }\n", "\n    k <- length(l) - 1\n    for(i in k) {\n        if(l[i] < l[i + 1])\
+    \ {\n            return FALSE\n        }\n    }\n    return TRUE\n}\n</code>\n\
+    <|/ a tags=r,time-series,sorting,dataframe |>\n<| c |>\nThanks Joran! It works\
+    \ very well and is a very smart approach. I just have to find out why it works\
+    \ in my case.\n<|/ c |>\n<| c |>\nGreat, I will try and take a look. Thanks!\n\
+    <|/ c |>\n<| c |>\nIt would probably be better to sort by `d` first and `c` second,\
+    \ instead of `c` first and `d` second. This should give a more consistent result\
+    \ when sorting non-decreasing vectors.\n<|/ c |>\n<| c |>\nThanks Joran, I will\
+    \ try your suggestion.\n<|/ c |>\n<| a tags=r,time-series,sorting,dataframe dscore=1\
+    \ |>\nHere's a method using a sorted list.  The trick here is to sort the vector\
+    \ a by the absolute value of the differences between consecutive elements, and\
+    \ then sort by the absolute value of differences between adjacent elements.  These\
+    \ differences are given by c(NA_real_, diff(a)) and c(NA_real_, diff(sort(a))).\n\
+    <code>\na <- c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)\n", "\n  l <- sort(l)\n\
+    \  diff(l) < 0\n}\n", "\n    decreasing_list <- c(tail(sort(rev(l)), 1), head(l,\
+    \ reverse = TRUE))\n    increasing_list <- c(head(l, reverse = TRUE), tail(sort(rev(l)),\
+    \ 1))\n    return((decreasing_list == increasing_list) | \n           (decreasing_list\
+    \ < increasing_list))\n}\n</code>\nNote that I did have to reverse the order of\
+    \ the list elements to ensure that the decreasing-increasing criterion is always\
+    \ satisfied.\n<|/ a dscore=3 |>\n<| a tags=r dscore=3 |>\nHere's an approach that\
+    \ doesn't use any packages. It just looks for two consecutive values decreasing\
+    \ and increasing from the first to the last element. Here, x is the vector:\n\
+    <code>\nf1 <- function(x) {\n  s1 <- tail(sort(x), 1)\n  s2 <- head(x, reverse\
+    \ = TRUE)\n  return(all(s1[c(F, T)] >= s2[c(T, F)])); # or s1[c(F, T)] < s1[c(T,\
+    \ F)] or all(s1[c(F, T)] <= s2[c(T, F)])\n}\n</code>\nThis code also assumes that\
+    \ the vector is strictly increasing or decreasing. As long as this is true, the\
+    \ code works.\n<|/ a |>\n<| a dscore=3 |>\nUsing the tidyverse, a simple for loop\
+    \ will do:\n<code>\nlibrary(tidyverse)\n", "\n  l <- c(l) # copy l to make sure\
+    \ l isn't changed accidentally\n  l[order(l)][seq_along(order(l)) %% 2 != 0] #\
+    \ return TRUE if increasing else FALSE\n}\n", "\n  # If l==0, return TRUE as per\
+    \ R's convention\n  # Return FALSE if l is a list with zero elements\n  if (is.null(l)\
+    \ || length(l) == 0) {\n    return(FALSE)\n  }\n  vals <- sort(l)\n  l1 <- which(vals\
+    \ > vals[[1]])\n  if (length(l1) == 0) return(FALSE)\n  l2 <- which(vals < vals[[1]])\n\
+    \  return(length(l1) < length(l2))\n}\n", "\n  sapply(l, function(x)\n    all(sapply(l,\
+    \ function(y)\n      all(diff(sort(c(x, y))) == 1) # == 1 ensures monotonicity\n\
+    \    ))\n  )\n}\n", "\n  diffs <- c(NA, -diff(l))\n  a <- c(FALSE, diffs < 0)\n\
+    \  b <- c(diffs > 0, NA)\n  c <- c(a, b)\n  return(length(c[!is.na(c)]))\n}\n",
+  "\n    g <- function(x, i=1) x[i] - x[1]\n    r <- Reduce(Vectorize(g), l, accumulate=TRUE)\n\
+    \    all(diff(r) > 0)\n}\n", "\n  k <- l[[1]]\n  for (k in l[-1L]) {\n    break\n\
+    \  }\n  k == k & diff(l) == 0 & c(FALSE, diff(sort(l)) == -1L)\n}\n</code>\n<|/\
+    \ a tags=r |>\n<| c |>\nI like the answer but I don't understand it. I would like\
+    \ you to explain your code a little bit. I am not really sure how to apply it\
+    \ to my data.\n<|/ c |>\n<| c |>\nI just added some comments. If you want more,\
+    \ please ask.\n<|/ c |>\n<| c |>\nThank you. This really helped. Could you explain\
+    \ in detail why this works?\n<|/ c |>\n<| c |>\n, did you see the explanations\
+    \ I added after the code? It's pretty straightforward. I'm going to assume you\
+    \ understand how a for loop works.\n<|/ c |>\n<| c |>\nThanks. I understand it\
+    \ better now. But for some reason, when I apply it to the data, I get `FALSE`.\
+    \ I used the code exactly as you did, but I just replaced `c()` with `data.frame()`.\n\
+    <|/ c |>\n<| a |>\nYou can use this function and apply it with sapply to the data.frame\
+    \ column.\n<code>\nx <- c(1,3,5,2,1,7,8,6,2)\nsapply(x, function(x){\n  y1 <-\
+    \ which(x == x[1])\n  y2 <- which(x == x[2])\n  if(y1 == y2){\n    if(y[y1] >\
+    \ y[y2]){\n      TRUE\n    } else {\n      FALSE\n    }\n  } else {\n    FALSE\n\
+    \  }\n})\n\n[1] FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE\n</code>\n\
+    <|/ a tags=r dscore=1 |>\n<| a dscore=1 |>\nHere's a solution using dplyr (as\
+    \ per your comment)\n<code>\nlibrary(dplyr)\n\ndf <- data.frame(a = c(1,3,5,2,1,7,8,6,2))\n\
+    \ndf %>% \n  mutate(b=lead(a),\n         c=lag(a),\n         d=as.numeric(a-b<c),\n\
+    \         e=as.numeric(a-b>c))\n", "\n    x <- c(l)\n    n <- length(x)\n    i\
+    \ <- c(1, n)\n    l <- c(-l)\n    for (i in 1:n) if (x[i] > x[i + 1]) x[i] <-\
+    \ x[i] + l[i]\n    x\n}\n", "\n    # Sort and check monotonicity\n    l <- sort(l)\n\
+    \    diffs <- c(diff(l), NA)\n    all(diff(diffs) > 0)\n}\n</code>\nThe above\
+    \ function takes advantage of the fact that the diffs vector starts with NA, and\
+    \ also that all non-NA values must be strictly increasing.\nI wrote the code this\
+    \ way because I assumed that your input vector was already ordered (otherwise\
+    \ you could just do l <- order(l) before entering the function). You could reorder\
+    \ the vector with l <- c(l, c(NA, 1)) or equivalently l <- c(c(l, 1), c(NA, NA)).\n\
+    <|/ a tags=r dscore=2 |>\n<| a tags=r dscore=1 |>\nHow about this?:\n<code>",
+  "\n    r <- NULL\n    for (i in 1:length(l)) {\n        if (l[i - 1] > l[i])\n \
+    \           r[i] <- TRUE\n        else if (l[i] > l[i - 1])\n            r[i]\
+    \ <- FALSE\n        else\n            r[i] <- FALSE\n    }\n    return(r)\n}\n",
+  "\n  pos <- numeric()\n  neg <- numeric()\n  pos <- which(l > cummax(l))\n  neg\
+    \ <- which(l < cummin(l))\n  length(intersect(pos, neg))\n}\n", "\n    l <- as.numeric(l)\n\
+    \    return(all(diff(sort(l)) == 0))\n}\n", "\n  l <- sort(l)\n  diffs <- c(l[1],\
+    \ diff(l))\n  return(diffs <= 0)\n}\n", "\n    d <- diff(s)\n    c(rep(FALSE,\
+    \ length(d)), as.logical(d > 0))\n}\n</code>\n<|/ a dscore=4 |>\n<| c |>\nNice\
+    \ solution but it doesn't work if `s <- c(NA,1,2,NA,NA,NA)` gives `c(NA,NA,NA,TRUE,FALSE,NA)`\
+    \ instead of `c(NA,NA,NA,NA,TRUE,FALSE)`\n<|/ c |>\n<| c |>\nThanks. I added `d`\
+    \ for the case where `s` is missing.\n<|/ c |>\n<| c |>\nYou might also want to\
+    \ check out `?na.locf` instead of `?fill`.\n<|/ c |>\n<| a tags=r,na,vector,boolean,conditional-statements\
+    \ |>\nA vectorized approach using the diff function:\n<code>\nx <- c(2,1,4,5,6,1,7,8)\n\
+    (x <- na.omit(x)) > lag(x)", "\n  l <- sort(l)\n  i <- 1\n  while (i < length(l))\
+    \ {\n    if (l[i] < l[i - 1]) i <- i + 1\n    else return (FALSE)\n  }\n  return\
+    \ (TRUE)\n}\n</code>\n<|/ a dscore=1 tags=function,r,sorting |>\n<| a tags=function,r,sorting\
+    \ |>\nI like the rle answer. rle is great but in my experience, it is slow for\
+    \ big vectors. Here is a simple function that uses only indices and is much faster\n\
+    <code>\nrle_fast <- function(x) {\n  tmp <- rle(x)\n  inds <- rep(seq_along(tmp$values),\
+    \ each = length(tmp$values))\n  values <- tmp$values\n  values[inds+1] <- values[inds]\
+    \ + 1\n  inds\n}\n</code>\nHere are the benchmarks\n<code>\nx <- rnorm(100000)\n\
+    system.time(inds <- rle(x))", "\n  sapply(l, function(x) x > x[1] || x < x[2])\n\
+    }\n", "\n    l <- as.list(l)\n    d <- diff(l,1,1)\n    return (all(d < 0) ==\
+    \ all(d > 0))\n}\n</code>\n<|/ a tags=list,r,numeric,vector |>\n<| a dscore=1\
+    \ tags=list,r,numeric,vector |>\nAnother solution using purrr library:\n<code>\n\
+    library(purrr)\n", "\n    l <- as.list(l)\n    if (length(l) <= 1) return(FALSE)\n\
+    \    u <- sort(unlist(l))\n    i <- which(u != seq(min(u), max(u), length = length(l)))\n\
+    \    return(length(i) == length(l)-1)\n}\n</code>\n<|/ a tags=sorting,r dscore=5\
+    \ |>\n<| a dscore=4 |>\nThis is a little bit more efficient since you only have\
+    \ to sort once per group:\n<code>\nlibrary(data.table)\ndt = data.table(A = c(1,2,3,4),\
+    \ B = c(10,20,30,40))\ndt[, group := .GRP, by = c(\"A\", \"B\")]\ndt[, v := v\
+    \ + c(0,diff(group)), by = group]\ndt[, v := as.integer(v)]\n</code>\n<|/ a tags=sorting,r\
+    \ |>\n<| c |>\nI like this one a lot more than the other answer as it avoids recomputing\
+    \ the diff. I would also recommend using `rle` instead of `rleid`\n<|/ c |>\n\
+    <| c |>\nI added benchmarks comparing this to other solutions given here.\n<|/\
+    \ c |>\n<| a |>\nYou can use the rleid function from the data.table package:\n\
+    <code>\ndt[, v := rleid(A), by = B]\n</code>\nExample:\n<code>\ndt <- data.table(A\
+    \ = c(1,2,1,2), B = c(10,20,10,20))\ndt", "\n  l <- l[!is.na(l)]\n  i <- which(diff(l)\
+    \ < 0)\n  length(setdiff(seq_along(l), i)) > 0\n}\n", "\n  if (!length(l)) {\n\
+    \    return(FALSE)\n  }\n  r <- rev(l)\n  i <- 1\n  while (i <= length(r)) {\n\
+    \    if (l[i] > l[i-1]) {\n      return(FALSE)\n    }\n    if (l[i] < l[i-1])\
+    \ {\n      return(TRUE)\n    }\n    i <- i + 1\n  }\n  return(TRUE)\n}\n</code>\n\
+    <|/ a tags=r,subset |>\n<| a |>\nHere is a solution using dplyr and tidyr:\n<code>\n\
+    library(dplyr)\nlibrary(tidyr)\n\ndf %>%\n  mutate(rn = row_number()) %>%\n  arrange(value)\
+    \ %>%\n  group_by(rn) %>%\n  mutate(inc = cumsum(value)) %>%\n  filter(inc > 0)\
+    \ %>%\n  select(-rn)\n\n  value inc\n1     3   1\n2     1   1\n3     2   2\n</code>\n\
+    <|/ a dscore=2 tags=r,subset |>\n<| a |>\nA simple and efficient data.table solution\
+    \ is\n<code>", "\n    l <- sort(l)\n    res <- rep(FALSE, length(l))\n    res[1]\
+    \ <- TRUE\n    res[1] <- res[1] & (l[1] > l[-length(l)])\n    res\n}\n", "\n \
+    \   c(tail(sort(l), -1), head(l))\n}\n", "\n    l <- sort(l)\n    any(diff(l)\
+    \ < 0L)\n}\n</code>\n<|/ a tags=r,optimization dscore=3 |>\n<| c |>\nThanks, I'll\
+    \ try this one. It seems that the problem with my solution is that it requires\
+    \ me to pre-allocate all possible permutations in the first place, which is quite\
+    \ impractical.\n<|/ c |>\n<| c |>\nThe complexity is O(n log n), but this can\
+    \ be solved in O(n) time using dynamic programming. The recursive call can be\
+    \ replaced with memoization to avoid repeatedly computing the same sub-lists.\n\
+    <|/ c |>\n<| c |>\nI added a modified version of the above function that avoids\
+    \ repeated computation.\n<|/ c |>\n<| a tags=r,optimization |>\nHere's an Rcpp\
+    \ solution which uses S-Expressions.\n<code>\nR> library(Rcpp)\nR> cppFunction('LogicalVector\
+    \ monotonic(NumericVector x) {\n    Rcpp::NumericVector perm( length(x) + 1 );\n\
+    \    perm[0] = Rcpp::no_init();\n    perm[1] = Rcpp::no_init();\n    perm[2] =\
+    \ Rcpp::no_init();\n    perm[3] = x;\n    for( int i = 4; i < length(x); i++ )\
+    \ {\n        perm[i] = Rcpp::no_init();\n    }\n    bool monotonic = false;\n\
+    \    for( int i = 0; i < length(x); i++ ) {\n        if( perm[i] == Rcpp::no_init()\
+    \ ) {\n            perm[i] = x[i];\n            monotonic = true;\n          \
+    \  continue;\n        }\n        for( int j = 0; j < i; j++ ) {\n            if(\
+    \ x[i] < perm[j] ) perm[i] = perm[j];\n            if( x[i] > perm[j] ) perm[i]\
+    \ = perm[j];\n        }\n    }\n    return Rcpp::LogicalVector( monoticn );\n\
+    }')\nR> monotonic(c(1, 2, 4, 20))\n[1] TRUE\nR> monotonic(c(1, 20, 4, 10))\n[1]\
+    \ FALSE\nR> monotonic(c(4, 1, 0, -10))\n[1] TRUE\nR> monotonic(c(4, 10, 1, 0))\n\
+    [1] FALSE\nR> monotonic(c(1, 10, 4, 0))\n[1] FALSE\nR> monotonic(c(-10, 4, 1,\
+    \ 0))\n[1] FALSE\nR> monotonic(c(10, 4, 1, 0))\n[1] TRUE\nR> monotonic(c(1, 10,\
+    \ -10, 0))\n[1] TRUE\nR> monotonic(c(1, 10, -10, 100))\n[1] TRUE\nR> monotonic(c(1,\
+    \ 10, -10, 1000))\n[1] FALSE\nR> monotonic(c(1, 10, -10, ", "\n    n <- length(l)\n\
+    \    n <- if (n < 2) 1 else n\n    r <- l[n]\n    for(i in seq(2, n, by = 1))\
+    \ {\n        if (l[i-1] < r || l[i+1] < r) return(FALSE)\n        r <- l[i]\n\
+    \    }\n    return(TRUE)\n}\n</code>\n<|/ a dscore=0 tags=performance,r,dataframe\
+    \ |>\n<| c |>\nThanks for your answer. This works very well with my data. But\
+    \ if I try this on a dataframe with multiple columns and multiple rows my script\
+    \ is stuck and I have to restart RStudio. I don't get an error, but the script\
+    \ is stuck.\n<|/ c |>\n<| c |>\nSorry, I should have made this explicit. If I\
+    \ run this on a dataframe with 4 columns and 150 rows, it runs for hours and hours\
+    \ until it finally stops. I tried running it on a dataframe with 2 columns and\
+    \ 100 rows but it also freezes.\n<|/ c |>\n<| c |>\nDo you know what the problem\
+    \ might be? I already tried this on a dataframe with only 2 columns and it also\
+    \ freezes.\n<|/ c |>\n<| c |>\nYes, I ran it on a dataframe with 2 columns and\
+    \ 100 rows, and it froze the entire machine. That's because there are 100^2 combinations\
+    \ of pairs to check and there are n^2 pairs to check, so the computer has to check\
+    \ all possible pairs against all possible pairs. Even if there were 100^2 pairs\
+    \ possible, the loop was only going for n^2 pairs.\n<|/ c |>\n<| c |>\nOk. Now\
+    \ I understand how this works. Thanks!\n<|/ c |>\n<| a dscore=0 tags=performance,r,dataframe\
+    \ |>\nThis is an interesting problem. I found a solution and tested it on my machine.\
+    \ It uses Rcpp to speed up the algorithm because I have some experience with Rcpp,\
+    \ plus it uses the vector recycling feature of R. The idea is to compute a matrix\
+    \ A[x, y] containing the number of times each pair x is in A and y is in B. In\
+    \ particular, the number of times x is in A and y is in B is given by A[x, y]\
+    \ + A[y, x] and we use the fact that x and y are in A as many times as they appear\
+    \ in B. By this trick, we have a matrix of pairs with counts instead of counts\
+    \ of pairs. We are interested in counts of pairs whose elements are in A and B.\
+    \ Then, we compute A[x, y] as the number of times x appears in A and y appears\
+    \ in B and we use the fact that x and y are in A as ", "\n  u <- unique(c(l))\n\
+    \  return(length(u) == 1 && all(u >= l[order(l)]))\n}\n</cell>\n<cell>", "\n \
+    \   l <- sort(l)\n    u <- head(l, -1)\n    all(diff(sort(l)) < 0L) || all(diff(sort(u))\
+    \ > 0L)\n}\n</code>\n<|/ a tags=r,numeric,string |>\n<| a dscore=1 |>\nTo complement\
+    \ the answer from-R: it seems that the string version of the number should be\
+    \ sorted as well (otherwise it might be confused with the number version).\n<code>\n\
+    monotonic2 <- function(l) {\n    l <- sort(l)\n    u <- head(l, -1)\n    all(diff(sort(l))\
+    \ < 0L) || all(diff(sort(u)) > 0L)\n}\n\nmonotonic(c('1', '2', '4', '20'))", "\n\
+    \  g <- function(x) x > l\n  d <- function(x) x < l\n  return(all(sapply(l, g,\
+    \ d)))\n}\n", "\n  n <- length(l)\n  m <- vector(\"list\", n)\n  m[[1]] <- l\n\
+    \  for (i in 2:n) {\n    delta <- l[i] - l[i-1]\n    if (delta > 0) {\n      m[i]\
+    \ <- c(1, m[i-1])\n    } else if (delta == 0) {\n      m[i] <- m[i-1]\n    } else\
+    \ {\n      m[i] <- c(m[i-1], NA)\n    }\n  }\n  any(unlist(m) != m) # check all\
+    \ monotonically increasing or decreasing\n}\n", "\n    s <- lapply(l, function(x)\
+    \ {\n        if (is.factor(x)) \n            sort(levels(x))\n        else\n \
+    \           x\n    })\n    return (\n        sapply(seq_along(l), function(i)\
+    \ {\n            if (i == 1) \n                return (all(s[[i]] <= s[[i-1]]))\n\
+    \            else \n                return (any(s[[i]] >= s[[i-1]]) & \n     \
+    \                   (any(s[[i]] < s[[i-1]])) | (all(s[[i]] > s[[i-1]])))\n   \
+    \     })\n    )\n}\n</cell>\n<text>\nWe define an R function which returns a list\
+    \ with TRUE/FALSE indicating whether all values in an R list are monotonically\
+    \ increasing/decreasing or not.\n\n\n</text>\n<cell>", "\n    # Make sure all\
+    \ elements are positive (remember 0 is also a positive number)\n    l <- l[l >\
+    \ 0]\n    n <- length(l) - 1\n    # Sort list in descending order (highest to\
+    \ lowest)\n    # Note: this step isn't necessary (it happens anyway as sort()\
+    \ is a stable sort)\n    l <- l[order(-l)]\n    # Check for decreasing sequence\
+    \ (lowest to highest)\n    # Return TRUE if l[n - (1:n)) decreasing\n    all(diff(l[n\
+    \ - (1:n)], n) < 0)\n}\n</code>\n<|/ a dscore=2 |>\n<| a |>\nFor those interested,\
+    \ I created an R package called \"monotonic\" that finds monotonicity of a vector.\
+    \ It can handle vectors of different lengths and different sign values. It also\
+    \ allows for non-numeric inputs (it just uses the first non-numeric value to determine\
+    \ monotonicity).\nSee this article for details.\n<|/ a dscore=1 tags=r |>\n<|\
+    \ c |>\nThanks for sharing this!\n<|/ c |>\n<| a |>\nHere's my take on the problem:\n\
+    <code>\nmonotonic_increasing <- function(x) {\n    y <- x\n    y <- x[order(-y)]\n\
+    \    all(y <= y[-length(y)]) | all(y > y[-1])\n}\n</code>\nA few comments:\nThe\
+    \ function is vectorized because it's called on the whole vector x, and each element\
+    \ is assigned to one element. It's not vectorized because of y <- x[order(-y)].\n\
+    The vector y is sorted first, then the order is checked for monotonicity (with\
+    \ all the negative numbers in the beginning and the positive numbers at the end).\n\
+    <|/ a dscore=1 tags=r |>\n<| c |>\nThanks! I'm a Python programmer, so this is\
+    \ an interesting exercise for me.\n<|/ c |>\n<| c |>\nThis does not work for a\
+    \ vector of negative values.\n<|/ c |>\n<| c |>\nWhat do you mean? It works for\
+    \ negative numbers. It returns TRUE if all the elements are increasing, FALSE\
+    \ if all the elements are decreasing. It does not work for non-increasing numbers,\
+    \ such as `c(0,-2)`.\n<|/ c |>\n<| c |>\nI think I misunderstood your function.\
+    \ Let me try again.\n<|/ c |>\n<| a tags=r |>\nThis can be done with function\
+    \ Reduce and function diff, but for different length and different sign:\n<code>\n\
+    Reduce(`-`,diff(sign(as.numeric(1:10", "\n  return(any((diff(l)>0) & (diff(l)<0)))\n\
+    }\n</code>\n<|/ a tags=r,performance,data.table,sorting |>\n<| c |>\nNice. Looks\
+    \ like `roll=Inf` was added in `v1.9.5` of data.table, which I just installed.\n\
+    <|/ c |>\n<| c |>\nI really like the `roll=Inf` option. It works well and does\
+    \ a decent job of detecting non-monotonic values. But how do we get `roll` to\
+    \ work with `roll=\"nearest\"`?\n<|/ c |>\n<| a tags=r,performance,data.table,sorting\
+    \ |>\nThe answer by Martin is great.\nHere are two more options to consider in\
+    \ cases like these. Depending on what you want to achieve with it, you might need\
+    \ to change the first option slightly.\n<code>", "\n    require(methods)\n   \
+    \ l <- as.list(l)\n    ns <- names(l)\n    n <- length(l)\n    f <- rep(NA, length(ns))\n\
+    \    for(i in seq_along(ns)) {\n        f[i] <- is.ordered(l[[i]])\n    }\n  \
+    \  all(f) # Check that all elements are logical.\n    all(f[ns]) # Check that\
+    \ all names are valid.\n    for(i in seq_along(ns)) {\n        f[ns[[i]]] <- sapply(l[[i]],\
+    \ is.atomic)\n    }\n    all(f[ns]) # Check that all elements are atomic.\n  \
+    \  all(f[ns][ns]) # Check that all nested elements are atomic.\n    all(f[ns][ns]\
+    \ == T) # Check that all nested elements are ordered.\n    all(f[ns][ns] == F)\
+    \ # Check that all nested elements are not.\n    all(f[ns] == F) # Check that\
+    \ all elements are logical.\n    all(f[ns] == T) # Check that all elements are\
+    \ ordered.\n    all(f[ns] == F) # Check that all elements are not.\n    return(all(f\
+    \ == T)) # Check that all elements are ordered.\n}\n", "\n\tres <- NULL\n\tfor(i\
+    \ in seq_along(l)) {\n\t\tcur <- l[i]\n\t\tif(cur > l[i - 1]) {\n\t\t\tres <-\
+    \ c(res, FALSE)\n\t\t} else if(cur < l[i - 1]) {\n\t\t\tres <- c(res, TRUE)\n\t\
+    \t} else {\n\t\t\tres <- c(res, is.na(cur))\n\t\t}\n\t}\n\tres\n}\n", "\n  stopifnot(is.numeric(l))\n\
+    \  sapply(l, function(x) {\n    all(is.finite(x) & is.finite(x[x > 0]))\n  })\
+    \ & sapply(l, function(x) {\n    all(is.finite(x) & is.finite(x[x < 0]))\n  })\n\
+    }\n", "\n    l <- as.list(l)\n    ndiff <- c(0, diff(l)); ndiff <- ndiff[ndiff\
+    \ > 0]\n    all(length(ndiff) == 1)\n}\n</code>\n<|/ a |>\n<| c |>\nThis is also\
+    \ a great solution for determining if all elements in a list are equal to another\
+    \ element. +1\n<|/ c |>\n<| a tags=r |>\nThe question was about determining if\
+    \ a vector contains any element of a list of vectors.\nThe accepted answer did\
+    \ not cover this case and I found the question interesting enough to write my\
+    \ own answer.\n<code>\n ## Check if a vector contains any element of a list of\
+    \ vectors\n ## or NA\n ## \n ## Arguments:\n ## \n ##   v         : vector to\
+    \ check\n ##   vlist     : list of vectors\n ##   na.rm = FALSE :  if TRUE then\
+    \ NA is also accepted\n ## \n ## Returns:\n ## \n ##   TRUE/FALSE \n ## \n containsAnyElement\
+    \ = function(v, vlist, na.rm=FALSE) {\n     sapply(vlist, function(x) any(c(x,\
+    \ NA)==v, na.rm=na.rm), simplify=FALSE)\n }\n</code>\nThe na.rm = FALSE argument\
+    \ is important in the function.  \nIn the case where vlist contains only a single\
+    \ vector the function will fail.  \n<code>\n ## Check if a vector contains any\
+    \ element of a list of vectors\n ## \n ## Arguments:\n ## \n ##   v         :\
+    \ vector to check\n ##   vlist     : list of vectors\n ## \n ## Returns:\n ##\
+    \ \n ##   TRUE/FALSE \n ## \n containsAnyElement = function(v, vlist) {\n    \
+    \ sapply(vlist, function(x) any(c(x, NA)==v), simplify=FALSE)\n }\n</code>\n<|/\
+    \ a dscore=4 |>\n<| c |>\nThis solution does have problems if there are multiple\
+    \ NAs in vlist - it will return TRUE even if only one of the NAs matches v.\n\
+    <|/ c |>\n<| c |>\nThe function works as expected if `vlist` is a single vector\
+    \ and `v` is a single value.  However, it will return `TRUE` even when `vlist`\
+    \ contains multiple NAs.  I thought that was the desired outcome.  In that case\
+    \ you can change the function to `containsAnyElement = function(v, vlist) {\n\
+    \  any(sapply(vlist, function(x) any(c(x, NA)==v), simplify=FALSE))\n}`\n<|/ c\
+    \ |>\n<|", "\n  x <- 0\n  y <- 0\n  m <- l[1]\n  for (i in 2:length(l)) {\n  \
+    \  if (l[i] > m)\n      y <- y+1\n    else if (l[i] < m)\n      x <- x+1\n   \
+    \ m <- l[i]\n  }\n  (x == y) | is.na(x)\n}\n", "\n    l <- tail(sort(l), -1)\n\
+    \    diff(head(l)) != 0\n}\n", "\n    l <- unlist(l)\n    l <- sort(l)\n    l\
+    \ <- c(l[1], diff(l))\n    l <- c(l, l[length(l)])\n    l <- l > 0 & l <= 1\n\
+    \    return(l)\n}\n", "\n  u <- sort(l)\n  diff(u[1:2]) < 0 && (diff(u[3:4]) <\
+    \ 0 || diff(u[2:3]) < 0)\n}\n</code>\n<|/ a tags=r |>\n<| a |>\n<code>", "\n \
+    \ x <- l[[1]]\n  i <- 1\n  while (i < length(l)) {\n    if (x[i] > l[i + 1]) {\n\
+    \      x <- c(x[i], l[i + 1])\n      i <- i + 2\n    } else {\n      i <- i +\
+    \ 1\n    }\n  }\n  all(diff(x) < 0)\n}\n", "\n  u <- unique(c(l))\n  diffs <-\
+    \ diff(u)\n  all(diffs > 0)\n}\n</code>\n<|/ a tags=function,r,sorting dscore=1\
+    \ |>\n<| c |>\nIt took me a while to understand what was going on in each line,\
+    \ but the code works great!\n<|/ c |>\n<| a tags=function,r,sorting dscore=0 |>\n\
+    We can use tidyverse to create a logical index and check if there is a duplicate\
+    \ element in the vector with that index\n<code>\nlibrary(dplyr)\nv1 %>% \n   .[!duplicated(.)\
+    \ &  c(TRUE,diff(!is.na(.)) > 0)]\n", "\n  r <- numeric(0)\n  l <- sort(l)\n \
+    \ for (i in 1:length(l)-1) r[i] <- c(l[i], l[i+1]) >= c(l[i+1], l[i])\n  return(r[1])\n\
+    }\n", "\n    # Return FALSE if list is empty.\n    if (length(l) == 0) return(FALSE)\n\
+    \    if (length(l) == 1) return(TRUE)\n    l <- sort(l)\n    # Return TRUE is\
+    \ list elements are monotonically increasing or decreasing.\n    if (l[1] > l[length(l)]\
+    \ | l[1] < l[length(l)-1]) return(TRUE)\n    return(FALSE)\n}\n</code>\n<|/ a\
+    \ |>\n<| c |>\nFor your first and last line `l <- sort(l)`, why not just use sort\
+    \ as is? Also `return(FALSE)` will never be executed. `return` ends a function\
+    \ but in this case there is nothing after the return so why bother having `return`\
+    \ at all?\n<|/ c |>\n<| c |>\n`return(FALSE)` is just to make it clear to the\
+    \ user that if the list is empty the function returns FALSE without printing an\
+    \ error. That is why I have the `print` function at the beginning of the function.\
+    \ I don't need to include that in my answer since it is not relevant to the user\
+    \ but I will add it for completeness.\n<|/ c |>\n<| c |>\nSorry, I meant `return(FALSE)`.\
+    \ And `return(TRUE)` will be executed because there is another function that executes\
+    \ the function and if it returns FALSE then the program will stop. Thanks for\
+    \ the clarification.\n<|/ c |>\n<| a dscore=3 |>\nHere is a very good solution\
+    \ that checks for monotonicity. It also handles non-increasing/non-decreasing\
+    \ cases:\n<code>\nmonotonic <- function(l) {\n  if(length(l) < 2) return(FALSE)\n\
+    \  if(all(is.na(l)) || all(is.na(tail(l, 1))))\n    return(FALSE)\n  if(all(is.na(l))\
+    \ || all(is.na(head(l, -1))))\n    return(FALSE)\n  if(all(is.na(l)) || all(is.na(diff(l)==0)))\n\
+    \    return(FALSE)\n  if(all(is.na(l)) || all(is.na(diff(l)==1)))\n    return(FALSE)\n\
+    \  if(all(is.na(l)) || all(is.na(diff(l)==-1)))\n    return(FALSE)\n  if(all(is.na(l))\
+    \ || all(is.na(diff(l)==+1)))\n    return(FALSE)\n  if(all(is.na(l)) || all(is.na(diff(l)==-2)))\n\
+    \    return(FALSE)\n  if(all(is.na(l)) || all(is.na(diff(l)==+2)))\n    return(FALSE)\n\
+    \  if(", "\n  len <- length(l) - 1\n  a <- sort(l)\n  a[1] < a[-len]\n}\n", "\n\
+    \  if(!is.list(l)) stop(\"Argument must be list\")\n  if(length(l) < 3) return(FALSE)\n\
+    \  diffs <- numeric(length(l))\n  diffs[1] <- l[1] - l[2]\n  for(i in 2:length(l)-1)\
+    \ {\n    diffs[i] <- l[i] - l[i-1]\n  }\n  return(all(diffs < 0))\n}\n</code>\n\
+    Note that it does return TRUE if all list elements are strictly increasing. This\
+    \ is because monotonic considers the strict increasing nature of a list to return\
+    \ TRUE. Also it returns TRUE if all elements are strictly decreasing.\nTo explain\
+    \ it a little more:\nIf we look at the diffs variable, it stores differences from\
+    \ the first element to the next element. For the first element it'll look like\
+    \ c(NA, -2, 1). Then for the second element it'll look like c(NA, -1, 2). After\
+    \ the third element it'll look like c(NA, -1, 3). The differences will then be\
+    \ c(NA, -1, 2), c(NA, -2, 1), c(NA, -1, 3) and so on. Each element in the list\
+    \ will be compared to all other elements in the list except itself.\nIn the first\
+    \ element it'll look like c(NA, NA, NA, NA, -2) and for the third element it'll\
+    \ look like c(NA, NA, NA, NA, -3). All the remaining elements will be compared\
+    \ to all other elements in the list except itself. \nThis is why it returns TRUE\
+    \ if all list elements are strictly increasing. \nHope this helps!\n<|/ a |>\n\
+    <| a dscore=2 |>\n<code>\nlibrary(data.table)\na<-data.table(a)\na[,2:ncol(a)]<-a[,2:ncol(a)]-1\n\
+    a[,-1]<-a[,-1]-1\na[,ncol(a)]<-a[,ncol(a)]-1\na<-a[,-which(names(a)==\"V1\"),with=F]\n\
+    </code>\n<|/ a tags=r,list,vector |>\n<| a dscore=2 tags=r,list,vector |>\nUsing\
+    \ only base R\n<code>", "\n    l <- Filter(Negate(is.null), l)\n    if (all(!is.na(l)))\
+    \ {\n        return(Reduce(`&`, lapply(l, `>=`, 0)))\n    } else {\n        return(NA)\n\
+    \    }\n}\n", "\n  sapply(l, function(x) all(diff(x) > 0))\n}\n", "\n    l <-\
+    \ c(l, NA)\n    i <- which(is.na(l))\n    i <- c(0, head(i, -1))\n    l[i] <-\
+    \ NA\n    i <- i + 1\n    l[i]\n}\n", "\n    i <- 1\n    e <- numeric(length(l)-1)\n\
+    \    while (i <= length(l)-1) {\n        if (l[i] == l[i+1]) {\n            e[i-1]\
+    \ <- FALSE\n        } else if (is.finite(l[i])) {\n            e[i-1] <- TRUE\n\
+    \        } else {\n            e[i-1] <- l[i] > l[i+1]\n        }\n        i <-\
+    \ i+1\n    }\n    return(e)\n}\n", "\n  i <- seq_along(l)\n  all(i[-1] <= i[-length(i)])\n\
+    }\n</code>\n<|/ a tags=sorting,r,dataframe,time-series,statistics |>\n<| c |>\n\
+    Thanks for this - I understand this and have been able to adapt it to my needs.\
+    \ Is there a way to apply your method across a data frame (instead of a vector)?\
+    \ I have about 10 columns and about 600 rows to run over and would like to save\
+    \ time by running it on all the data.\n<|/ c |>\n<| c |>\nI see - I see I can\
+    \ just wrap your code in a for loop and assign to a data frame or assign to a\
+    \ vector I suppose.\n<|/ c |>\n<| c |>\n: Yes, something like `data.frame(lapply(df,\
+    \ myfun))`.\n<|/ c |>\n<| c |>\nThanks - I'm going to try that now. I think I\
+    \ was overthinking it a bit.\n<|/ c |>\n<| c |>\nI tried your code on a small\
+    \ dataframe of 4 columns and 10 rows. It ran through the 10 rows and returned\
+    \ a 1 x 4 data frame with 2 columns instead of 10 rows. I'm not sure why that\
+    \ happened.\n<|/ c |>\n<| a |>\nThis is my approach:\n<code>", "\n    is.unsorted(l)\n\
+    \        ||\n        (\n            all(diff(sort(l)) < 0)\n        )\n}\n</cell>\n\
+    <text>\nExercise 11\n\n</text>\n<cell>", "\n  l <- unname(l)\n  ret <- FALSE\n\
+    \  for(i in seq_along(l)) {\n    for(j in (i+1):length(l)) {\n      if(l[j] <\
+    \ l[j-1]) {\n        ret <- TRUE\n        break\n      }\n    }\n    if(!ret)\
+    \ {\n      ret <- FALSE\n    }\n  }\n  return(ret)\n}\n", "\n  ll <- lapply(l,\
+    \ as.numeric)\n  any(diff(ll) < 0)\n}\n", "\n    n <- length(l);\n    l <- c(l,\
+    \ c(rep(NA, n-2), l[1]));\n    l <- rbind(c(0, l[-length(l)]), l);\n    diff <-\
+    \ diff(l[,1]);\n    diff[is.na(diff)] <- NA;\n    all(abs(diff)<1e-13) | all(abs(diff)>0-1e-13);\n\
+    };\n", "\n  l = lapply(l, sort)\n  l[[1]][c(TRUE, diff(l[[1]])) == 1]\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nThank you. This is what I was looking for. However, the answer\
+    \ is a bit messier than what I had in mind. I will accept this answer if nothing\
+    \ better comes along.\n<|/ c |>\n<| a tags=sorting,r |>\nJust found this answer,\
+    \ which was quite helpful. I added an answer which uses purrr, so I hope it's\
+    \ helpful to someone else who stumbles upon this question.\n<code>\nlibrary(purrr)\n\
+    \nc1 <- c(2, 5, 8, 10)\nc2 <- c(1, 2, 7, 8, 10, 15)\nc3 <- c(3, 6, 9, 11)\n",
+  "\n  n <- length(l) + 1\n  i <- rep(1:n, length.out = n)\n  j <- rep(1:n, each =\
+    \ n)\n  k <- rep(1:n, n)\n  j[j] < i\n}\n", "\n  l <- c(l, NA)\n  nl <- na.omit(l)\n\
+    \  nl <- nl - 1\n  nl <- nl[order(nl[!is.na(nl)], decreasing=TRUE)]\n  nl <- nl[!is.na(nl)]\n\
+    \  nl <- nl[order(nl[!is.na(nl)], decreasing=FALSE)]\n  nl <- nl[!is.na(nl)]\n\
+    \  nl <- nl[order(nl[!is.na(nl)], decreasing=FALSE)]\n  nl <- nl[!is.na(nl)]\n\
+    \  return(length(nl)>0)\n}\n</code>\n<|/ a tags=time-series,r dscore=2 |>\n<|\
+    \ a tags=time-series,r dscore=2 |>\nI have extended the answer of to deal with\
+    \ dates, as I find it more straightforward.\n<code>\nmonotonicList <- function(dateList){\n\
+    \n  dateList <- as.Date(dateList)\n\n  if(dateList[1] < dateList[2]){\n    l <-\
+    \ c(dateList, NA)\n    nl <- na.omit(l)\n    nl <- nl - 1\n    nl <- nl[order(nl[!is.na(nl)],\
+    \ decreasing=TRUE)]\n    nl <- nl[!is.na(nl)]\n    nl <- nl[order(nl[!is.na(nl)],\
+    \ decreasing=FALSE)]\n    nl <- nl[!is.na(nl)]\n    nl <- nl[order(nl[!is.na(nl)],\
+    \ decreasing=FALSE)]\n    nl <- nl[!is.na(nl)]\n    return(length(nl)>0)\n  }\
+    \ else {\n    return(TRUE)\n  }\n}\n</code>\nIt works for dates as well as with\
+    \ POSIXct dates.\n<|/ a |>\n<| c |>\nThe first comparison is incorrect, it should\
+    \ read `if(dateList[1] < dateList[2]){`, otherwise the first element in the list\
+    \ is always considered 'greater'.\n<|/ c |>\n<| a tags=time-series,r |>\nA simple\
+    \ way to identify whether a list has a monotonically increasing or decreasing\
+    \ order is using Reduce:\n<code>\nmylist <- c(1, 2, 3, 4, 5)\nReduce('>', mylist)",
+  "\n  l <- as.numeric(l)\n  n <- length(l)\n  l <- c(l, rep(NA, n))\n  l[c(FALSE,\
+    \ head(order(-l), n))] <- 1\n  return(any(l))\n}\n</code>\n<|/ a tags=list,r,vector\
+    \ |>\n<| c |>\nThanks! However, I don't think this gives what I want. The example\
+    \ I gave has negative numbers, but I only want positive.\n<|/ c |>\n<| c |>\n\
+    It doesn't give what you're looking for because you said you wanted monotonic\
+    \ increasing or decreasing. See the last two rows in the output: `c(1, 20, 4,\
+    \ 10)` is increasing but `c(1, 20, 4, -10))` is decreasing.\n<|/ c |>\n<| a tags=list,r,vector\
+    \ |>\nYou can do something like this with lapply:\n<code>", "\n  return(length(which(diff(l)\
+    \ < 0)) == 1)\n}\n", "\n  return(length(l) > 1 & Reduce(`|`, lapply(l, `<`, head(l,\
+    \ -1)), init = TRUE))\n}\n</code>\nFor all test cases, I got:\n<code>", "\n  l\
+    \ <- unlist(l)\n  any(l > c(rev(l), NA))\n}\n\nmonotonic_c <- function(l) {\n\
+    \  l <- unlist(l)\n  any(c(rev(l), NA) > l)\n}\n", "\n  if(length(l) == 0) return(FALSE)\n\
+    \  x <- l[1]\n  for(i in 2:length(l)) {\n    if(l[i-1] <= x) break\n    x <- l[i]\n\
+    \  }\n  return(TRUE)\n}\n</cell>\n<text>\nThe above is implemented as a list function\
+    \ in R. Let's see if we can use that in R to solve the problem of finding the\
+    \ largest subset of a given set.\n\n\n</text>\n<cell>", "\n    n <- length(l)\n\
+    \    if (n == 1) return(TRUE)\n    f <- rep(1, n)\n    for (i in 2:n) {\n    \
+    \    f[i] <- f[i-1] * l[i-1] > l[i]\n    }\n    return(sum(f) == 0)\n}\n", "\n\
+    \    x <- l[[1]] \n    y <- l[[2]]\n    y <- y[order(y)]\n    if(length(x) ==\
+    \ 1) {\n        return(TRUE)\n    } else if(length(y) == 1) {\n        return(TRUE)\n\
+    \    } else {\n        return(all(diff(y) < 0))\n    }\n}\n", "\n    l <- sort(l)\n\
+    \    decreasing <- l[c(TRUE, diff(l) < 0)]\n    return(length(decreasing) == 0)\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThanks. I guess I will have to accept that there\
+    \ isn't a way to know whether or not a vector is sorted unless you look at it\
+    \ at its meaning. It's a shame that there doesn't seem to be a standard function\
+    \ for that...\n<|/ c |>\n<| a dscore=3 |>\nI came up with a different approach\
+    \ than Benoit. But it may help someone looking to sort the columns of a data frame.\n\
+    Here's a little bit of code to sort the columns of a data frame in descending\
+    \ order using dplyr:\n<code>\ndf <- df %>%\n  mutate(across(everything(), ~sort(.,\
+    \ decreasing=T)))\n</code>\n<|/ a tags=r |>\n<| c |>\n`dplyr::across` was the\
+    \ answer I was looking for!\n<|/ c |>\n<| c |>\nThis solution worked for me. Thanks\
+    \ Benoit\n<|/ c |>\n<| c |>\nThis answer doesn't work for columns that are factors.\n\
+    <|/ c |>\n<| a dscore=3 |>\nHere's an approach that seems to work consistently\
+    \ for me:\n<code>", "\n  l2 <- lapply(l, function(x) c(x[1], diff(x), x[2], rep(NA,3)),\n\
+    \         USE.NAMES = FALSE)\n  all(sapply(l2, any))\n}\n", "\n  if(length(l)\
+    \ < 2) return(FALSE)\n  if(l[1] < l[2] | l[2] < l[3]) return(FALSE)\n  if(l[1]\
+    \ < l[2] & l[2] < l[3]) return(TRUE)\n  if(l[1] < l[2] | l[2] < l[3]) return(TRUE)\n\
+    \  return(TRUE)\n}\n</code>\nI decided to implement the algorithm using a recursive\
+    \ function which is much more efficient than the algorithm suggested by in the\
+    \ comments. My function uses a data frame as input and returns the same data frame\
+    \ as the input.\n<code>\nis_monotonic <- function(df) {\n  if(all(is.na(df)))\
+    \ return(df)\n  df$prev <- NA\n  df$next <- NA\n  df$result <- FALSE\n  for(i\
+    \ in c(1:nrow(df))) {\n    if(is.na(df$prev)) df$prev <- df[i,]\n    if(is.na(df$next))\
+    \ df$next <- df[i,]\n    if(df[i,1] < df[i,2] & is.na(df$prev) & is.na(df$next))\n\
+    \      df$result <- TRUE\n    if(is.na(df$prev) & is.na(df$next) & df[i,1] < df[i,2]\
+    \ & df[i,2] < df[i,3])\n      df$result <- TRUE\n    if(df[i,1] < df[i,2] | df[i,2]\
+    \ < df[i,3] | is.na(df$prev) & is.na(df$next))\n      df$result <- TRUE\n    if(df[i,1]\
+    \ < df[i,2] & df[i,2] < df[i,3] & is.na(df$prev) & is.na(df$next))\n      df$result\
+    \ <- TRUE\n    df$prev <- df$next\n    df$next <- df[i,]\n  }\n  return(df)\n\
+    }\n</code>\nI created a function to test if the results of the function are the\
+    \ same as those from the built-in functions is.monotonic and is.decreasing:\n\
+    <code>\nis_monotonic_test <- function(df) {\n  if(!is.data.frame(df)) stop(\"\
+    Data must be a data frame\")\n  if(!is.numeric(df)) stop(\"Data must be a numeric\
+    \ vector\")\n  if(!all(!is.na(df))) stop(\"Data must not contain NAs\")\n  df$prev\
+    \ <- NA\n  df$next <- NA\n  df$result <- FALSE\n  for(i in c(1:nrow(df))) {\n\
+    \    if(is.na(df$prev)) df$prev <- df[i,]", "\n  g <- function(x, i = 0, inc =\
+    \ 0) {\n    if (i == length(x)) return(integer(0))\n    if (x[i] == x[i + 1])\
+    \ return(inc)\n    if (inc) return(1 + g(x, i = i + 1, inc = 0))\n    return(-1\
+    \ + g(x, i = i + 1, inc = 0))\n  }\n  g(l, inc = 0) == 0\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nFor `c(1, 20, 4, 10)` the function returns `TRUE` but I expected `FALSE`?\n\
+    <|/ c |>\n<| c |>\nFor `c(1, 20, 4, 10)` the function returns `FALSE` but expected\
+    \ `TRUE`.\n<|/ c |>\n<| a tags=r,sorting |>\nYou could use the R function na.locf\
+    \ from zoo to remove NA values from your dataset and then apply the function rank\
+    \ from plyr to compute the ranks. \nThe function na.locf will remove NA values\
+    \ from the vector and return a vector with the NA values removed. Then, the function\
+    \ rank will compute the ranks.\nIn your example, this would give the result:\n\
+    <code>\nlibrary(zoo)\nlibrary(plyr)\ndf <- data.frame(a = c(1,20,4,NA),\n    \
+    \             b = c(2,3,4,1),\n                 c = c(4,3,2,1),\n            \
+    \     d = c(5,2,1,NA))\n\ndf <- na.locf(df)\ndf$rank <- rank(df[c('a', 'b','c','d')],\
+    \ ties.method = 'max')\n</code>\n<|/ a dscore=2 |>\n<| a tags=r,sorting |>\nAnother\
+    \ way could be to sort each column and see if they have the same numbers. If they\
+    \ do, just use which.max to get the column position in which they have the highest\
+    \ value.\n<code>\n> sort(df[,1], decreasing = T)[1]\n[1] 1\n\n> sort(df[,2], decreasing\
+    \ = T)[1]\n[1] 2\n\n> sort(df[,3], decreasing = T)[1]\n[1] 4\n\n> sort(df[,4],\
+    \ decreasing = T)[1]\n[1] NA\n</code>\nThen if you use lapply to get the column\
+    \ positions, you get a list of column positions.\n<code>\n> lapply(df[-c(1:3)],\
+    \ function(x) which.max(x))\n$a\n[1] 1\n\n$b\n[1] 2\n\n$c\n[1] 4\n\n$d\n[1] NA\n\
+    </code>\n<|/ a dscore=1 |>\n<| a tags=r,sorting |>\nThis should work for you using\
+    \ dplyr.\n<code>\nlibrary(dplyr)\n\ndf <- data.frame(a = c(1,20,4,NA),\n     \
+    \            b = c(", "\n  u <- unique(c(l))\n  all(diff(sort(u, partial=Inf))\
+    \ <= 0)\n}\n", "\n\tl[length(l)] == min(l[length(l)])\n}", "\n\tstopifnot(is.list(l))\n\
+    \ts <- sort(l)\n\tall(s[-1] == s[-length(s)])\n}\n\nmonotonic <- function(l) {\n\
+    \tstopifnot(is.list(l))\n\ts <- sort(l)\n\tall(s[-1] == s[-length(s)])\n}\n",
+  "\n  # if length(l) <= 1, then TRUE\n  if(length(l) <= 1) return(TRUE)\n\n  # if\
+    \ length(l) == 2, then if first element is greater than the second, return TRUE\n\
+    \  if(length(l) == 2) {\n    if(l[1] > l[2]) return(TRUE)\n    else return(FALSE)\n\
+    \  }\n\n  # initialize variables used in while loop\n  prev <- l[1]\n  curr <-\
+    \ l[2]\n  result <- FALSE\n\n  # Loop through and compare each pair of the two\
+    \ list elements\n  # If the current pair is less than previous pair, return FALSE\n\
+    \  # If the current pair is greater than previous pair, return TRUE\n  while(curr\
+    \ < prev) {\n    if(curr < prev) return(FALSE)\n    prev = curr\n    curr = l[length(l)]\n\
+    \  }\n  # If we get here then all the list elements have been compared, so\n \
+    \ # return TRUE\n  return(TRUE)\n}\n</code>\n<|/ a dscore=1 |>\n<| a tags=r,comparison,list\
+    \ |>\n<code>\n> x = list(c(1,2,4,5),c(2,3,5,5))\n> x[1] > x[2]\n[1] TRUE\n> x[length(x)\
+    \ - 1] > x[2]\n[1] FALSE\n> length(x)\n[1] 2\n> x[2]\n[1] 5\n> x[3]\n[1] 5\n>\
+    \ length(x)\n[1] 2\n> x[4]\n[1] 5\n> x[length(x) - 1]\n[1] 5\n</code>\n<|/ a dscore=1\
+    \ |>\n<| a dscore=1 |>\nI think this would work and be relatively efficient:\n\
+    <code>\nfun <- function(x, order) {\n  x1 <- x[1]\n  x2 <- x[2]\n  x3 <- x[3]\n\
+    \  x4 <- x[4]\n  x5 <- x[5]\n\n  out <- TRUE\n  for (i in 2:length(order)) {\n\
+    \    x1 <- order[[i]][x1]\n    x2 <- order[[i]][x2]\n    x3 <- order[[i]][x3]\n\
+    \    x4 <- order[[i]][x4]\n    x5 <- order[[i]][x5]\n    out <- out*(x1 > x2)\n\
+    \    out <- out*(x2 > x3)\n    out <- out*(x3 > x4)\n    out <- out*(x4 > x5)\n\
+    \    out <- out*(x5 > x1)\n  }\n\n  return(out)\n}\n\nfun(list(a = 1:3, b = 3:5,\
+    \ c = 5:7), list(a = 1:3, b = 3:5, c = 5:7))\n", "\n  m <- l[[1]]\n  for (i in\
+    \ 2:length(l)) m <- min(m, l[[i]])\n  return(m)\n}\n</cell>\n<cell>", "\n    l\
+    \ <- c(l)\n    all(diff(sort(l)) != 0)\n}\n</cell>\n<text>\nMonotonicity is useful\
+    \ for determining when to stop a for loop.\nWe will use it later in this tutorial\n\
+    \nWe can test monotonicity by comparing the two functions below.\n\n\n</text>\n\
+    <cell>", "\n  l <- as.data.frame(l)\n  i1 <- l[,1] > l[,2]\n  l[i1,]\n}\n", "\n\
+    \  return(all(diff(sort(l)) < 0))\n}\n</code>\n<|/ a |>\n<| c |>\nThis solution\
+    \ does not work. `monotonic(c(1, 20, 4, 10))` returns `FALSE`\n<|/ c |>\n<| c\
+    \ |>\n: that's an excellent point and now I understand why I've made it so much\
+    \ more complicated than it needs to be.\n<|/ c |>\n<| c |>\nThanks a lot. This\
+    \ is great.\n<|/ c |>\n<| a dscore=2 |>\nA very simple and fast solution can be:\n\
+    <code>\n    any(x<-sort(x), x[1])==FALSE\n</code>\n<|/ a tags=r |>\n<| c |>\n\
+    This will return a value even if all numbers are positive\n<|/ c |>\n<| c |>\n\
+    Yes. I made a mistake. Fixed it\n<|/ c |>\n<| a tags=r dscore=2 |>\n<code>\nsum(is.na(sort(x)))\
+    \ == length(x)\n</code>\n<|/ a |>\n<| a |>\n<code>\nall(diff(c(x)) < 0)\n</code>\n\
+    <|/ a tags=r dscore=1 |>\n<| c |>\nThis works but it's horribly inefficient and\
+    \ very unclear\n<|/ c |>\n<| c |>\nThis also returns `TRUE` for values that are\
+    \ monotonic (i.e. not decreasing).  It's not clear from the OP whether that's\
+    \ acceptable.\n<|/ c |>\n<| c |>\n: it's more clear than my solution though, unless\
+    \ I'm missing something?\n<|/ c |>\n<| c |>\nThat's not correct - it returns `TRUE`\
+    \ for values that are increasing, but they aren't decreasing, and also returns\
+    \ `FALSE` for values that are decreasing, but aren't increasing.\n<|/ c |>\n<|\
+    \ c |>\n: it's more clear than your solution, but it's also less efficient than\
+    \ mine.  You don't need `sort` to get a decent solution to this.\n<|/ c |>\n<|\
+    \ a tags=r |>\nIf you have a vector \n<code>\nx <- c(2,4,1,4,7,5,7,2,8,8,8,2)\n\
+    </code>\nAnd you want to find out if there is a decrease in each group, then you\
+    \ can do\n<code>\ndecrease <- function(x){\n    if(diff(x) == 1){\n        TRUE\n\
+    \    } else {\n        FALSE\n    }\n}\n\nsapply(split(x, seq(length(x))), decrease)\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\n", "\n  # This could be implemented faster\
+    \ using a hash table or something\n  l == sort(l)\n}\n", "\n    l <- sort(l)\n\
+    \    diffs <- diff(l) * sign(l[2:length(l)])\n    return(identical(diffs, 0))\n\
+    }\n</code>\n<|/ a dscore=5 |>\n<| c |>\nI like the `return(identical(diffs, 0))`\
+    \ line because it works with NA.\n<|/ c |>\n<| c |>\nThis was really useful, but\
+    \ I find that if the last two elements are the same, the last element will be\
+    \ returned as TRUE. For example, `c(1, 2, 4, 10)` will return TRUE.\n<|/ c |>\n\
+    <| a tags=r |>\nHere's a modified version of Aaron's solution that avoids having\
+    \ to sort the list first:\n<code>\nincr_diff <- function(x) {\n  y <- x[1]\n \
+    \ for (i in 2:length(x)) {\n    if (x[i] != y) {\n      return(FALSE)\n    }\n\
+    \    y <- x[i]\n  }\n  return(TRUE)\n}\n</code>\n<|/ a dscore=5 |>\n<| a dscore=4\
+    \ |>\nHere's a short and sweet one:\n<code>\n> test <- c(1, 2, 3, 5, 7, 9, 10)\n\
+    > any(diff(test) > 0)\n[1] TRUE\n</code>\n<|/ a tags=r |>\n<| c |>\nThis does\
+    \ not work if the last element is \"1\", since this removes it from the sequence.\
+    \ If the last element is \"10\" then it works.\n<|/ c |>\n<| a |>\nHere's a function\
+    \ that will return a boolean telling if the first element in the vector is increasing\
+    \ or decreasing.\n<code>\nisIncrOrDec <- function(x) {\n  if(length(x) == 1) return(FALSE)\n\
+    \  if(first(x) > first(x[-1])) return(FALSE)\n  return(TRUE)\n}\n\nisIncrOrDec(c(9,\
+    \ 1, 2, 10, 3, 5)) # TRUE\nisIncrOrDec(c(9, 1, 2, 9, 3, 5)) # FALSE\nisIncrOrDec(c(9,\
+    \ 1, 2, 9, 3, 9, 5)) # TRUE\nisIncrOrDec(c(9, 1, 2, 9, 3, 9, 5)) # FALSE\n</code>\n\
+    <|/ a dscore=4 tags=r |>\n<| c |>\nNice. My only improvement would be to not return\
+    \ FALSE until after the first element has been tested instead of returning immediately\
+    \ upon testing all elements.\n<|/ c |>\n<| a |>\nMy solution:\n<code>\nlibrary(data.table)\n\
+    incrDecr <- function(x){\n  y <- x[1]\n  for(i in 2:length(x)){\n    if(x[i] !=\
+    \ y){", "\n  return(length(l) < 2 ||\n          all(diff(l) <= 0))\n}\n", "\n\
+    \  # Return FALSE if list is not monotonic.\n  if (!all(l[[1]] < l[[2]])) {\n\
+    \    return(FALSE)\n  }\n  n <- length(l) - 1\n  i <- 1\n  repeat {\n    # While\
+    \ current value is not increasing or decreasing.\n    while (i < n && l[[i + 1]]\
+    \ < l[[i]]) {\n      # Increment i while current value is increasing.\n      if\
+    \ (l[[i + 1]] < l[[i]]) {\n        i <- i + 1\n      }\n    }\n    # If i is out\
+    \ of list index, then list is not monotonic.\n    if (i > n) {\n      break\n\
+    \    }\n    # While current value is not decreasing or increasing.\n    while\
+    \ (i < n && l[[i + 1]] > l[[i]]) {\n      # Decrement i while current value is\
+    \ decreasing.\n      if (l[[i + 1]] > l[[i]]) {\n        i <- i + 1\n      }\n\
+    \    }\n    # If i is out of list index, then list is not monotonic.\n    if (i\
+    \ > n) {\n      break\n    }\n  }\n  return(TRUE)\n}\n", "\n  l <- sort(l)\n \
+    \ any(diff(l)==-1)\n}\n", "\n  all((l != 0) & is.finite(l) & !is.na(l))\n}\n</code>\n\
+    I then create a vector of thresholds.  I used the mean of the sample data to define\
+    \ the thresholds.  It may be possible to do this with a pre-defined set of thresholds,\
+    \ but I haven't tried this yet.\n<code>\nthresholds <- sort(sampleMean) + c(10,\
+    \ -10)\n</code>\nI then used findInterval to find the indices where a value is\
+    \ less than or greater than the thresholds.  I then compared these indices to\
+    \ determine which values are in the desired interval.  Then I filtered the data\
+    \ by these indices.\n<code>\nwhich(\n  sapply(\n    list(\"lt\", \"gt\")\n   \
+    \ , function(x) findInterval(l[which(names(l) == x)], thresholds)\n  )\n)\n",
+  "\n  n <- length(l)\n  i <- 1\n  while (i <= n && l[i - 1] >= l[i]) {\n    i <-\
+    \ i + 1\n  }\n  if (i <= n) {\n    i <- i + 1\n    while (i <= n && l[i - 1] <=\
+    \ l[i]) {\n      i <- i + 1\n    }\n    return(TRUE)\n  }\n  return(FALSE)\n}\n\
+    </code>\n<|/ a tags=r,list,performance |>\n<| c |>\nThis does not work for the\
+    \ case when element `i` doesn't have any neighboring elements. E.g. if `c(1, 3,\
+    \ 4, 9, 10)` then you check `c(1,3,4,9,10)`, `c(1,3,5,9,10)` and `c(1,3,6,9,10)`.\n\
+    <|/ c |>\n<| c |>\nI fixed the code to deal with these cases.\n<|/ c |>\n<| c\
+    \ |>\n`identical(sort(c(1,3,4,9,10)), rev(sort(c(1,3,4,9,10))))`\n<|/ c |>\n<|\
+    \ c |>\nNo, it would not work. The second check would be `c(1,3,4,10,9)` which\
+    \ would not be considered as monotonic. Try this with your function.\n<|/ c |>\n\
+    <| a tags=r,list,performance dscore=2 |>\nUsing purrr :\n<code>\nlibrary(purrr)\n\
+    \nmonotonic2 <- function(x) {\n  n <- length(x)\n  if(all(is.na(x))) return(NA_integer_)\n\
+    \  i <- 1\n  j <- 1\n  repeat {\n    if(is.na(x[i])) return(NA_integer_)\n   \
+    \ if(is.na(x[j])) return(NA_integer_)\n    if(is.na(x[i])) return(NA_integer_)\n\
+    \    if(is.na(x[j])) return(NA_integer_)\n    if(is.na(x[i]) || is.na(x[j])) return(NA_integer_)\n\
+    \    if(x[i] < x[j]) {\n      if(i - 1 == -1) i <- 1\n      if(i - 1 > -1) i <-\
+    \ i - 1\n      if(j + 1 < n) j <- j + 1\n      if(j + 1 < n) j <- j + 1\n    \
+    \  if(j + 1 == n) j <- 1\n      if(j + 1 == n) j <- 1\n    }\n    else {\n   \
+    \   if(j + 1 == n) j <- 1\n      if(j + 1 == n) j <- 1\n      if(i - 1 == -1)\
+    \ i <- 1\n      if(i - 1 > -1) i <- i - 1\n      if(j - 1 < n) j <- j - 1\n  \
+    \    if(j - 1 < n) j <- j"]
 stop_tokens:
 - "\n#"
 - "\n```"

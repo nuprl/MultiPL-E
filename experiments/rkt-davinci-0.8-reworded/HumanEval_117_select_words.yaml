@@ -107,7 +107,975 @@ completions: ["  (define (select_words-impl s n lst)\n    (cond [(empty? s) lst]
     \          (select_words (string-tail s) (- n 1))))]))\n```\n\n```#lang racket",
   "  (define cons \"bcdfghjklmnpqrstvwxyz\")\n  (map list\n       (filter (lambda\
     \ (word)\n                 (= n (length (filter (lambda (c) (member c cons)) word))))\n\
-    \               (string-split s))))"]
+    \               (string-split s))))", "  (map (\u03BB (s) (string-trim s))\n \
+    \   (filter (\u03BB (s) (= n (count-consonants s)))\n      (string-split s #\\\
+    space))))\n", "  (cond ((null? s) '())\n        ((string=? s \"\") '())\n    \
+    \    (else (filter (lambda (a) (word-has-n-consonants? a n)) (string-split s)))))\n",
+  "  (define (string-&gt;word-list s)\n    (string-split s))\n  (define (count-consonants\
+    \ s)\n    (define (is-consonant? c)\n      (and (char-lower-case? c)\n       \
+    \    (not (member c '(#\\a #\\e #\\i #\\o #\\u)))))\n    (define (is-word? w)\n\
+    \      (and (string? w)\n           (&gt; (string-length w) 0)))\n    (if (is-word?\
+    \ s)\n        (length (filter is-consonant? (string-&gt;list s)))\n        0))\n\
+    \  (filter (lambda (w) (= n (count-consonants w)))\n          (string-&gt;word-list\
+    \ s)))\n</code>\nMy code fails with the \"lamb\" line, which only has 3 consonants,\
+    \ but I can't figure out why.\n\n\nA:\n\nYou're using <code>string-split</code>\
+    \ to split the input string into words, but that function does not split by spaces,\
+    \ but by the regex <code>\"[\\n\\t\\r\\f ]+\"</code>. That regex doesn't match\
+    \ spaces, so your program doesn't split on spaces. You can see that if you print\
+    \ the result of <code>(string-split \"Mary had a little lamb\" #t)</code>, which\
+    \ is <code>'(\"Mary\" \"had\" \"a\" \"little\" \"lamb\")</code>. Try this instead:\n\
+    <code>(define (string-&gt;word-list s)\n  (regexp-split (regexp \"[ \\n\\t\\r\\\
+    f]+\") s))\n</code>\n", "  (define (cons-count string)\n    (define (is-vowel?\
+    \ c)\n      (member c '(#\\a #\\e #\\i #\\o #\\u)))\n    (let loop ([x 0] [count\
+    \ 0])\n      (if (= x (string-length string))\n          count\n          (if\
+    \ (is-vowel? (string-ref string x))\n              (loop (+ x 1) count)\n    \
+    \          (loop (+ x 1) (+ count 1))))))\n  (let loop ([wlist '()] [i 0])\n \
+    \   (if (= i (string-length s))\n        wlist\n        (let ([w (string-tokenize\
+    \ s #\\space)])\n          (if (= n (cons-count (list-ref w i)))\n           \
+    \   (loop (append wlist (list (list-ref w i))) (+ i 1))\n              (loop wlist\
+    \ (+ i 1)))))))\n", "  (let ([words (string-split s #\\space)])\n    (filter\n\
+    \     (\u03BB (word) (= n (consonants-in word)))\n     words)))\n", "  (local\
+    \ [(define (consonant? c)\n            (cond\n              [(member c '(#\\B\
+    \ #\\C #\\D #\\F #\\G #\\H #\\J #\\K #\\L #\\M #\\N #\\P #\\Q #\\R #\\S #\\T #\\\
+    V #\\W #\\X #\\Y #\\Z))]\n              [else (consonant? (string-upcase c))]))\n\
+    \          (define (count-consonants word)\n            (if (empty? word)\n  \
+    \              0\n                (+ (if (consonant? (first word)) 1 0)\n    \
+    \               (count-consonants (rest word)))))\n          (define (select-word\
+    \ w)\n            (cond\n              [(equal? (count-consonants w) n) (list\
+    \ w)]\n              [else '()]))\n          (define (select-words-aux words)\n\
+    \            (if (empty? words)\n                '()\n                (append\
+    \ (select-word (first words))\n                        (select-words-aux (rest\
+    \ words)))))\n          ]\n    (select-words-aux (string-split s))))\n", "  (define\
+    \ (is-consonant? c)\n    (member c '(\"b\" \"c\" \"d\" \"f\" \"g\" \"h\" \"j\"\
+    \ \"k\" \"l\" \"m\" \"n\" \"p\" \"q\" \"r\" \"s\" \"t\" \"v\" \"w\" \"x\" \"y\"\
+    \ \"z\")))\n  (define (word? w)\n    (cond\n      [(= n (length (filter is-consonant?\
+    \ w))) w]\n      [else '()]))\n  (filter word? (string-split s)))\n</code>\n",
+  "  (if (zero? (string-length s))\n      '()\n      (define (select_words_h wordlist\
+    \ nlist)\n        (if (zero? (length wordlist))\n            nlist\n         \
+    \   (define (is_cons word)\n              (not (or (char-alphabetic=? (string-ref\
+    \ word 0) #\\a)\n                       (char-alphabetic=? (string-ref word 0)\
+    \ #\\e)\n                       (char-alphabetic=? (string-ref word 0) #\\i)\n\
+    \                       (char-alphabetic=? (string-ref word 0) #\\o)\n       \
+    \                (char-alphabetic=? (string-ref word 0) #\\u))))\n           \
+    \ (define (is_n_cons word)\n              (define (is_n_cons_h word acc)\n   \
+    \             (if (zero? (string-length word))\n                    acc\n    \
+    \                (if (is_cons word)\n                        (is_n_cons_h (substring\
+    \ word 1) (+ acc 1))\n                        (is_n_cons_h (substring word 1)\
+    \ acc))))\n              (= (is_n_cons_h word 0) n))\n            (if (is_n_cons\
+    \ (car wordlist))\n                (select_words_h (cdr wordlist) (cons (car wordlist)\
+    \ nlist))\n                (select_words_h (cdr wordlist) nlist))))\n      (select_words_h\
+    \ (string-split s #\\space) '())))", "  (define (count_consonants word)\n    (if\
+    \ (string=? word \"\")\n        0\n        (if (member (string-ref word 0) '(#\\\
+    a #\\e #\\i #\\o #\\u))\n            (count_consonants (substring word 1))\n \
+    \           (+ 1 (count_consonants (substring word 1))))))\n  (cond ((string=?\
+    \ s \"\")\n         (list))\n        ((= n (count_consonants (substring s 0 (string-index\
+    \ s #\\space))))\n         (append (list (substring s 0 (string-index s #\\space)))\n\
+    \                 (select_words (substring s (+ 1 (string-index s #\\space)))\
+    \ n)))\n        (else (select_words (substring s (+ 1 (string-index s #\\space)))\
+    \ n))))\n", "  (cond\n    [(empty? s) empty]\n    [else\n     (define s-list (string-&gt;list\
+    \ s))\n     (define word (take-until (lambda (c) (or (eq? c #\\space) (eq? c #\\\
+    newline))) s-list))\n     (define rest-list (drop-until (lambda (c) (or (eq? c\
+    \ #\\space) (eq? c #\\newline))) s-list))\n     (if (or (empty? word) (empty?\
+    \ rest-list)) empty\n         (if (= n (word-consonants word)) (cons (list-&gt;string\
+    \ word) (select_words (list-&gt;string rest-list) n)) (select_words (list-&gt;string\
+    \ rest-list) n)))]))\n</code>\nBasically, the function receives a string and an\
+    \ integer, and has to return a list of all the words that have exactly that many\
+    \ consonants. The helper function <code>word-consonants</code> is a function I\
+    \ wrote to count the number of consonants in a word, <code>take-until</code> and\
+    \ <code>drop-until</code> are functions that return a list of characters until\
+    \ a condition is met and a list starting after that condition is met, respectively.\
+    \ So, the function loops through each word in the string, and checks if it has\
+    \ the right number of consonants. If it does, it is added to the list. If not,\
+    \ the function moves on to the next word.\nI am pretty new to Racket and functional\
+    \ programming in general, so I was wondering if there is a better way to do this.\
+    \ I was thinking that I could use recursion, but I was unsure how to deal with\
+    \ the different parameters I am getting. Any help would be appreciated. \n\n\n\
+    A:\n\nIt would be useful to see your implementation of <code>word-consonants</code>,\
+    \ but I think you may be going about this in an inefficient way. You are looping\
+    \ over your characters and rebuilding lists for each word. This is not very functional,\
+    \ and would be better solved recursively.\nI would approach this problem in a\
+    \ different way. First, I would split the string on spaces and newlines and return\
+    \ a list of words. Then, I would write a function to get", "    (define (find-n-consonants\
+    \ s n)\n        (cond ((equal? n 0) #t)\n              ((equal? n (- (string-length\
+    \ s)\n                            (length (filter (compose char-upper-case char-downcase)\n\
+    \                                            (string->list s))))) #t)\n      \
+    \        (else #f)))\n    (define (append-last-to-list lst last)\n        (cond\
+    \ ((null? lst) (list last))\n              (else (cons (car lst) (append-last-to-list\
+    \ (cdr lst) last)))))\n    (cond ((equal? \"\" s) (list \"\"))\n          ((equal?\
+    \ n 0) (list \"\"))\n          ((equal? n (- (string-length s)\n             \
+    \           (length (filter (compose char-upper-case char-downcase)\n        \
+    \                                (string->list s))))) (list s))\n          (else\
+    \ (append-last-to-list (select_words (substring s 1) n)\n                    \
+    \                 (substring s 0 1)))))", "  (define (consonant? c)\n    (member\
+    \ c '(#\\b #\\c #\\d #\\f #\\g #\\h #\\j #\\k #\\l #\\m #\\n #\\p #\\q #\\r #\\\
+    s #\\t #\\v #\\w #\\x #\\y #\\z)))\n  (define (is-n-consonants s n)\n    (if (zero?\
+    \ n) #t\n        (if (null? s) #f\n            (if (consonant? (car s))\n    \
+    \            (is-n-consonants (cdr s) (- n 1))\n                (is-n-consonants\
+    \ (cdr s) n)))))\n  (define (find-word s start)\n    (if (or (member (car s) '(#\\\
+    space #\\newline))\n            (null? s))\n        (let ((word (substring s start)))\n\
+    \          (if (not (null? word))\n              (if (is-n-consonants word n)\n\
+    \                  (cons word '())\n                  '())\n              '()))\n\
+    \        (find-word (cdr s) start)))\n  (define (find-words s)\n    (if (null?\
+    \ s)\n        '()\n        (append (find-word s 0) (find-words (cdr s)))))\n \
+    \ (find-words s))\n", "  (define (consonant? c)\n    (string-index \"AEIOUaeiou\"\
+    \ c))\n  (define (n_consonants s)\n    (cond\n      [(empty? s) empty]\n     \
+    \ [(consonant? (first s)) (+ 1 (n_consonants (rest s)))]\n      [else (n_consonants\
+    \ (rest s))]))\n  (cond\n    [(empty? s) empty]\n    [(= n (n_consonants (first\
+    \ s))) (cons (first s) (select_words (rest s) n))]\n    [else (select_words (rest\
+    \ s) n)]))\n</code>\n", "  (select_words_helper s n))\n", "  (if (empty? s)\n\
+    \      (list)\n      (let ((words (split-string s)))\n        (filter (lambda\
+    \ (word)\n                  (= n (count-consonants word)))\n                words))))",
+  "  (cond ((empty? s) empty)\n        ((= n (word-consonants (first (string-split\
+    \ s #\\space))))\n         (cons (first (string-split s #\\space))\n         \
+    \      (select_words (string-join (rest (string-split s #\\space)) \" \") n)))\n\
+    \        (else (select_words (string-join (rest (string-split s #\\space)) \"\
+    \ \") n))))\n", "  (if (null? s) \n      '()\n      (if (= n (word-consonants\
+    \ (car (string-split s #\\space))))\n          (cons (car (string-split s #\\\
+    space)) (select_words (cdr (string-split s #\\space)) n))\n          (select_words\
+    \ (cdr (string-split s #\\space)) n))))\n", "  (define (count c)\n    (if (member\
+    \ c '(#\\a #\\e #\\i #\\o #\\u))\n        0\n        1))\n  (define (helper ws)\n\
+    \    (define (helper1 ws i)\n      (if (&lt; i (string-length s))\n          (if\
+    \ (char=? (string-ref s i) #\\ )\n              (cons (substring s (add1 (string-index\
+    \ s #\\  i)) i) (helper1 ws (add1 i)))\n              (helper1 ws (add1 i)))\n\
+    \          (cons (substring s 0 i) ws)))\n    (helper1 ws 0))\n  (define (helper2\
+    \ lst n)\n    (if (null? lst)\n        lst\n        (if (= n (for/sum ([w (in-list\
+    \ (string-&gt;list (car lst)))])\n                    (count w)))\n          \
+    \  (cons (car lst) (helper2 (cdr lst) n))\n            (helper2 (cdr lst) n))))\n\
+    \  (helper2 (helper null) n))\n</code>\n", "  (cond [(empty? s) empty]\n     \
+    \   [else\n         (let ([w (car (string-split s #\\space))]\n              \
+    \ [z (cdr (string-split s #\\space))])\n           (if (= n (word-consonants w))\n\
+    \               (cons w (select_words (string-join z #\\space) n))\n         \
+    \      (select_words (string-join z #\\space) n)))]))\n", "  (define (sel s n)\n\
+    \    (cond [(empty? s) empty]\n          [(and (eq? n (count-consonants (first\
+    \ s)))\n                (or (empty? (rest s))\n                    (char-whitespace?\
+    \ (first (rest s)))))\n           (cons (first s) (sel (rest s) n))]\n       \
+    \   [else (sel (rest s) n)]))\n  (sel (string->list s) n))\n", "    (local ((define\
+    \ (contains-n-consonants? word n)\n             (define (helper word count)\n\
+    \                     (cond ((empty? word)\n                             (= count\
+    \ n))\n                           ((char-consonant? (first word))\n          \
+    \                  (helper (rest word) (+ count 1)))\n                       \
+    \    (else (helper (rest word) count))))\n             (helper word 0)))\n   \
+    \     (define (has-vowel? word)\n            (cond ((empty? word)\n          \
+    \          #f)\n                  ((char-vowel? (first word))\n              \
+    \     #t)\n                  (else (has-vowel? (rest word)))))\n        (define\
+    \ (char-consonant? char)\n            (and (char-lower-case? char)\n         \
+    \        (not (char-vowel? char))))\n        (define (char-vowel? char)\n    \
+    \        (member char '(#\\a #\\e #\\i #\\o #\\u))))\n    (define (select-words-helper\
+    \ s n)\n        (cond ((empty? s)\n                (list))\n              ((has-vowel?\
+    \ s)\n               (cons (list-ref s 0)\n                     (select-words-helper\
+    \ (rest s) n)))\n              ((contains-n-consonants? s n)\n               (cons\
+    \ (list-ref s 0)\n                     (select-words-helper (rest s) n)))\n  \
+    \            (else (select-words-helper (rest s) n))))\n    (select-words-helper\
+    \ (string-split s) n))\n", "  (define (helper lst acc)\n    (if (null? lst)\n\
+    \        acc\n        (if (= n (count_consonants (car lst)))\n            (helper\
+    \ (cdr lst) (cons (car lst) acc))\n            (helper (cdr lst) acc))))\n  (helper\
+    \ (string-split s #\\space) '()))\n", "  (filter (lambda (word)\n            (=\
+    \ n (count-matches #\\ consonants word)))\n          (string-tokenize s)))", " \
+    \ (define (is_vowel c)\n    (member c (list #\\a #\\e #\\i #\\o #\\u)))\n  (define\
+    \ (has-n-consonants w n)\n    (if (= n 0) #t (if (is_vowel (string-ref w 0))\n\
+    \          (has-n-consonants (substring w 1) n)\n          (has-n-consonants (substring\
+    \ w 1) (- n 1)))))\n  (if (string=? s \"\")\n      (list)\n      (if (has-n-consonants\
+    \ (string-trim s) n)\n          (cons (string-trim s) (select_words (cdr (string-split\
+    \ s #\\space)) n))\n          (select_words (cdr (string-split s #\\space)) n))))\n\
+    \n```\n\n```\n>>> (select_words \"Mary had a little lamb\" 4)", "  (define (is-consonant\
+    \ c)\n    (cond ((string=? c \"a\") #f)\n          ((string=? c \"e\") #f)\n \
+    \         ((string=? c \"i\") #f)\n          ((string=? c \"o\") #f)\n       \
+    \   ((string=? c \"u\") #f)\n          (else #t)))\n  (define (count-consonants\
+    \ s)\n    (cond ((string=? s \"\") 0)\n          ((is-consonant (string-take s\
+    \ 1))\n           (+ 1 (count-consonants (string-drop s 1))))\n          (else\
+    \ (count-consonants (string-drop s 1)))))\n  (define (select-word w ws)\n    (cond\
+    \ ((string=? w \"\") ws)\n          ((= n (count-consonants w)) (cons w ws))\n\
+    \          (else ws)))\n  (define (select-words s ws)\n    (cond ((string=? s\
+    \ \"\") ws)\n          (else (select-words (string-drop s (string-index #\\space\
+    \ s))\n                              (select-word (string-take s (string-index\
+    \ #\\space s)) ws)))))\n  (reverse (select-words s '())))\n", "  (if (string=?\
+    \ s \"\")\n      '()\n      (let ((words (string-split s #\\space)))\n       \
+    \ (filter (lambda (x) (= n (consonants-in-word x))) words))))\n", "  (define (word-size\
+    \ w)\n    (length (regexp-match* #rx\"[bcdfghjklmnpqrstvwxz]\" (string->list w))))\n\
+    \  (filter (lambda (w)\n            (= n (word-size w)))\n          (string-split\
+    \ s)))", "  (cond [(empty? s) empty]\n        [else (if (= n (count-consonants\
+    \ (first (string-split s #\\space))))\n                 (cons (first (string-split\
+    \ s #\\space)) (select_words (string-tail s 1) n))\n                 (select_words\
+    \ (string-tail s 1) n))]))\n", "  (for/list ([w (in-list (string-split s))]\n\
+    \             #:when (= n (count-consonants w)))\n            w))\n", "  (if (empty?\
+    \ s)\n      empty\n      (filter (lambda (w)\n                (= n (count-vowels\
+    \ w)))\n              (string-split s))))\n", "  (cond\n    [(equal? s \"\") '()]\n\
+    \    [(= n (number-of-consonants (first (string-split s #\\space))))\n     (cons\
+    \ (first (string-split s #\\space))\n           (select_words (string-drop-right\
+    \ s (string-length (first (string-split s #\\space)))) n))]\n    [else (select_words\
+    \ (string-drop-right s (string-length (first (string-split s #\\space)))) n)]))\n",
+  "  (cond\n    [(empty? s) empty]\n    [else\n     (let* ([w (first (string-split\
+    \ s))]\n            [c (count_consonants w)])\n       (if (= c n)\n          \
+    \ (cons w (select_words (string-trim s) n))\n           (select_words (string-trim\
+    \ s) n)))]))\n", "  (cond\n    [(string=? s \"\") (list)]\n    [(= n 0) (list\
+    \ s)]\n    [else (list (list-ref (string-split s #\\space) n))]))\n", "  (cond\n\
+    \    [(equal? (string-length s) 0) '()]\n    [(equal? (count-consonants (string-trim\
+    \ (string-split s #\\space))) n)\n     (append (list (string-trim (string-split\
+    \ s #\\space))) (select_words (rest s) n))]\n    [else (select_words (rest s)\
+    \ n)]))\n", "  (define (is_consonant? c)\n    (not (member c '(#\\a #\\e #\\i\
+    \ #\\o #\\u))))\n  (define (count-consonants s)\n    (cond ((string=? s \"\")\
+    \ 0)\n          ((is_consonant? (string-ref s 0))\n           (+ 1 (count-consonants\
+    \ (substring s 1))))\n          (else (count-consonants (substring s 1)))))\n\
+    \  (define (select-words' s n lst)\n    (cond ((string=? s \"\") lst)\n      \
+    \    ((= n (count-consonants (string-before s #\\ )))\n           (select-words'\
+    \ (string-after s #\\ ) n (cons (string-before s #\\ ) lst)))\n          (else\
+    \ (select-words' (string-after s #\\ ) n lst))))\n  (select-words' s n (list)))\n\
+    </code>\n", "  (filter (lambda (w) (= n (count-consonants w)))\n          (split-string\
+    \ s \" \")))\n", "  (cond [(empty? s) empty]\n        [else\n         (if (= n\
+    \ (word-consonants (word (first s))))\n             (cons (word (first s)) (select_words\
+    \ (rest s) n))\n             (select_words (rest s) n))]))", "  (define (consonant?\
+    \ c)\n    (if (member c '(#\\a #\\e #\\i #\\o #\\u)) #f #t))\n  (define (word-consonants\
+    \ n word)\n    (cond ((empty? word) n)\n          ((consonant? (first word)) (word-consonants\
+    \ (+ n 1) (rest word)))\n          (else (word-consonants n (rest word)))))\n\
+    \  (define (select-words s n)\n    (cond ((empty? s) empty)\n          ((word-consonants\
+    \ 0 (first s)) s)\n          (else (select-words (rest s) n))))\n  (select-words\
+    \ (string-split s) n))\n</code>\nand its running test:\n<code>#lang racket\n",
+  "  (define (is-consonant? c)\n    (or (char=? c #\\b)\n        (char=? c #\\c)\n\
+    \        (char=? c #\\d)\n        (char=? c #\\f)\n        (char=? c #\\g)\n \
+    \       (char=? c #\\h)\n        (char=? c #\\j)\n        (char=? c #\\k)\n  \
+    \      (char=? c #\\l)\n        (char=? c #\\m)\n        (char=? c #\\n)\n   \
+    \     (char=? c #\\p)\n        (char=? c #\\q)\n        (char=? c #\\r)\n    \
+    \    (char=? c #\\s)\n        (char=? c #\\t)\n        (char=? c #\\v)\n     \
+    \   (char=? c #\\w)\n        (char=? c #\\x)\n        (char=? c #\\y)\n      \
+    \  (char=? c #\\z)))\n  (define (count-consonants s)\n    (define (count-consonants-iter\
+    \ count i)\n      (if (< i (string-length s))\n          (count-consonants-iter\n\
+    \           (if (is-consonant? (string-ref s i))\n               (+ count 1)\n\
+    \               count)\n           (+ i 1))\n          count))\n    (count-consonants-iter\
+    \ 0 0))\n  (define (select-words-iter words i)\n    (if (< i (string-length s))\n\
+    \        (if (char=? (string-ref s i) #\\ )\n            (select-words-iter words\
+    \ (+ i 1))\n            (select-words-iter\n             (if (= n (count-consonants\
+    \ (substring s i (string-index-right s #\\  i))))\n                 (cons (substring\
+    \ s i (string-index-right s #\\  i)) words)\n                 words)\n       \
+    \      (+ i 1)))\n        words))\n  (select-words-iter '() 0))", "  (map string-trim\
+    \ (filter (\u03BB (x) (equal? n (consonants x)))\n                           (map\
+    \ string-trim (string-split s \" \")))))\n", "  (define (helper word)\n    (if\
+    \ (string=? word \"\")\n        0\n        (if (or (char-ci=? (string-ref word\
+    \ 0) #\\a)\n                (char-ci=? (string-ref word 0) #\\e)\n           \
+    \     (char-ci=? (string-ref word 0) #\\i)\n                (char-ci=? (string-ref\
+    \ word 0) #\\o)\n                (char-ci=? (string-ref word 0) #\\u))\n     \
+    \       (helper (substring word 1))\n            (+ 1 (helper (substring word\
+    \ 1))))))\n  (define (filter word)\n    (if (string=? word \"\")\n        '()\n\
+    \        (if (= (helper word) n)\n            (cons word (filter (substring word\
+    \ 1)))\n            (filter (substring word 1)))))\n  (filter s))\n", "  (if (empty?\
+    \ s)\n      '()\n      (define-values (word rest) (string-break s #\\space))\n\
+    \      (if (empty? rest)\n          (if (= n (count-vowels word))\n          \
+    \    (list word)\n              '())\n          (cons* (if (= n (count-vowels\
+    \ word))\n                     (list word)\n                     '())\n      \
+    \           (select_words rest n)))))\n", "  (define (alpha? c)\n    (or (char-alphabetic?\
+    \ c) (char-whitespace? c)))\n  (define (const? c)\n    (or (char=? c #\\b) (char=?\
+    \ c #\\c) (char=? c #\\d)\n        (char=? c #\\f) (char=? c #\\g) (char=? c #\\\
+    h)\n        (char=? c #\\j) (char=? c #\\k) (char=? c #\\l)\n        (char=? c\
+    \ #\\m) (char=? c #\\n) (char=? c #\\p)\n        (char=? c #\\q) (char=? c #\\\
+    r) (char=? c #\\s)\n        (char=? c #\\t) (char=? c #\\v) (char=? c #\\w)\n\
+    \        (char=? c #\\x) (char=? c #\\y) (char=? c #\\z)))\n  (define (consonants?\
+    \ str)\n    (define (consonants?-iter str i)\n      (if (= i (string-length str))\n\
+    \          true\n          (if (const? (string-ref str i))\n              (consonants?-iter\
+    \ str (+ i 1))\n              false)))\n    (consonants?-iter str 0))\n  (define\
+    \ (select_words-iter str n lst)\n    (if (or (= (string-length str) 0) (= n 0))\n\
+    \        lst\n        (if (alpha? (string-ref str 0))\n            (if (consonants?\
+    \ str)\n                (select_words-iter (substring str 1 (string-length str))\
+    \ (- n 1) (cons str lst))\n                (select_words-iter (substring str 1\
+    \ (string-length str)) n lst))\n            (select_words-iter (substring str\
+    \ 1 (string-length str)) n lst))))\n  (select_words-iter s n '()))", "  (cond\n\
+    \    [(empty? s) empty]\n    [else\n     (let* ([word (first (regexp-match #rx\"\
+    [a-z]+\" s))]\n            [count (count-consonants word)])\n       (if (= count\
+    \ n)\n           (cons word (select_words (regexp-replace #rx\"[a-z]+\" s \"\"\
+    ) n))\n           (select_words (regexp-replace #rx\"[a-z]+\" s \"\") n)))]))\n",
+  "  (define (vowel? c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (consonant?\
+    \ c)\n    (and (char-alphabetic? c) (not (vowel? c))))\n  (define (count-consonants\
+    \ s)\n    (define (count-consonants-iter s n)\n      (cond ((string-empty? s)\
+    \ n)\n            ((consonant? (string-ref s 0))\n             (count-consonants-iter\
+    \ (substring s 1) (+ n 1)))\n            (else (count-consonants-iter (substring\
+    \ s 1) n))))\n    (count-consonants-iter s 0))\n  (define (consonant-count-filter\
+    \ w)\n    (= n (count-consonants w)))\n  (filter consonant-count-filter (string-split\
+    \ s #\\space)))\n", "  (cond ((null? s) '())\n        ((= n (count-consonants\
+    \ (car (string-split s)))) (cons (car (string-split s))\n                    \
+    \                                          (select_words (cdr (string-split s))\
+    \ n)))\n        (else (select_words (cdr (string-split s)) n))))\n", "  (select_words_helper\
+    \ s n (string-split s #\\space)))\n", "  (if (string=? s \"\")\n      '()\n  \
+    \    (let ([l (string-tokenize s)])\n        (filter (\u03BB (x) (= n (consonants\
+    \ x))) l))))", "  (cond ((or (null? s) (= n 0)) null)\n        ((string-contains-n-consonants?\
+    \ s n) (cons s (select_words (substring s 1) n)))\n        (else (select_words\
+    \ (substring s 1) n))))\n", "  (define (my-list s)\n    (define (get-list lst)\n\
+    \      (if (null? lst)\n          (list)\n          (cons (car lst) (get-list\
+    \ (cdr lst)))))\n    (define (remove-space lst)\n      (if (null? lst)\n     \
+    \     (list)\n          (let ((a (car lst)))\n            (if (equal? a \" \"\
+    )\n                (remove-space (cdr lst))\n                (cons a (remove-space\
+    \ (cdr lst)))))))\n    (define (list-to-list lst)\n      (if (null? lst)\n   \
+    \       (list)\n          (cons (list (car lst)) (list-to-list (cdr lst)))))\n\
+    \    (define (vowel? c)\n      (if (or (equal? c #\\a) (equal? c #\\e) (equal?\
+    \ c #\\i) (equal? c #\\o) (equal? c #\\u))\n          #t\n          #f))\n   \
+    \ (define (n-const? lst n)\n      (define (inner n lst)\n        (if (null? lst)\n\
+    \            n\n            (if (vowel? (car lst))\n                (inner n (cdr\
+    \ lst))\n                (inner (+ n 1) (cdr lst)))))\n      (if (null? lst)\n\
+    \          #f\n          (if (= (inner 0 lst) n)\n              #t\n         \
+    \     #f)))\n    (define (sel-word lst)\n      (if (null? lst)\n          (list)\n\
+    \          (if (n-const? (car lst) n)\n              (cons (car lst) (sel-word\
+    \ (cdr lst)))\n              (sel-word (cdr lst)))))\n    (define (make-word lst)\n\
+    \      (cond ((null? lst) (list))\n            ((null? (cdr lst)) (car lst))\n\
+    \            (else (string-append (car lst) (make-word (cdr lst))))))\n    (define\
+    \ (make-list lst)\n", "\t(match (string-tokenize s)\n\t\t[(list) '()]\n\t\t[(list\
+    \ (list w) n)\n\t\t\t(match (count_consonants w)\n\t\t\t\t[n (list w)]\n\t\t\t\
+    \t[_ '()])]\n\t\t[(list (list w) n rest)\n\t\t\t(match (count_consonants w)\n\t\
+    \t\t\t[n (cons w (select_words (string-join rest) n))]\n\t\t\t\t[_ (select_words\
+    \ (string-join rest) n)])]))\n", "  (define (count_consonants word)\n    (if (not\
+    \ (pair? word))\n        0\n        (if (not (member (car word) '(\"a\" \"e\"\
+    \ \"i\" \"o\" \"u\" \"A\" \"E\" \"I\" \"O\" \"U\")))\n            (+ 1 (count_consonants\
+    \ (cdr word)))\n            (count_consonants (cdr word)))))\n  (define (get_words\
+    \ s)\n    (define (get_words-rec s ret words)\n      (if (not (pair? s))\n   \
+    \       (list (list->string ret) words)\n          (if (not (equal? (car s) \"\
+    \ \"))\n              (get_words-rec (cdr s) (append ret (list (car s))) words)\n\
+    \              (get_words-rec (cdr s) '() (append words (list (list->string ret)))))))\n\
+    \    (cadr (get_words-rec s '() '())))\n  (if (not (pair? s))\n      '()\n   \
+    \   (filter (lambda (word) (= n (count_consonants word))) (get_words s))))\n</code>\n",
+  "  (define (helper c l)\n    (cond\n      [(eq? c #\\space) l]\n      [(member c\
+    \ \"aeiouAEIOU\") l]\n      [else (cons c l)]))\n  (define (check l)\n    (cond\n\
+    \      [(null? l) '()]\n      [(eq? (length l) n)\n       (cons (remove #\\space\
+    \ (apply string l)) '())]\n      [else '()]))\n  (let loop ([s s] [n n] [l '()])\n\
+    \    (cond\n      [(eq? s \"\") '()]\n      [(eq? (string-length s) 1) (check\
+    \ (helper (string-ref s 0) l))]\n      [else\n       (loop (substring s 1) n (helper\
+    \ (string-ref s 0) l))])))", "  (cond [(string=? s \"\") empty]\n        [else\
+    \ (cons (first-word s) (select_words (rest-string s) n))]))\n", "  (define (is_consonant\
+    \ c)\n    (cond\n      [(member c '(\"a\" \"e\" \"i\" \"o\" \"u\")) #f]\n    \
+    \  [else #t]))\n  (define (num_consonants s)\n    (cond\n      [(string=? s \"\
+    \") 0]\n      [(is_consonant (string-ref s 0)) (+ 1 (num_consonants (substring\
+    \ s 1)))]\n      [else (num_consonants (substring s 1))]))\n  (define (filter_words\
+    \ s)\n    (cond\n      [(string=? s \"\") empty]\n      [(= n (num_consonants\
+    \ (string-trim s)))\n       (cons (string-trim s) (filter_words (substring s (add1\
+    \ (string-length (string-trim s))))))]\n      [else (filter_words (substring s\
+    \ (add1 (string-length (string-trim s)))))]))\n  (filter_words s))\n", "  (map\
+    \ (lambda (word)\n         (if (= (word-n-consonants word) n) word '()))\n   \
+    \    (split s)))\n", "  (cond\n    [(empty? s) empty]\n    [else\n     (if (=\
+    \ n (count-consonants (car (string-tokenize s \" \"))))\n         (cons (car (string-tokenize\
+    \ s \" \")) (select_words (cdr (string-tokenize s \" \")) n))\n         (select_words\
+    \ (cdr (string-tokenize s \" \")) n))]))\n", "  (define (select-words-helper word-list\
+    \ n)\n    (if (null? word-list)\n      (list)\n      (if (= n (count-consonants\
+    \ (car word-list)))\n        (cons (car word-list) (select-words-helper (cdr word-list)\
+    \ n))\n        (select-words-helper (cdr word-list) n))))\n  (select-words-helper\
+    \ (string-split s) n))\n", "  (for/list ((word (in-string s)))\n    (if (= n (apply\
+    \ + (for/list ((l (in-string word)))\n                        (if (or (char=?\
+    \ l #\\A)\n                                (char=? l #\\E)\n                 \
+    \               (char=? l #\\I)\n                                (char=? l #\\\
+    O)\n                                (char=? l #\\U))\n                       \
+    \     0\n                            1))))\n        word)))\n", "  (cond [(empty?\
+    \ s) empty]\n        [else (cons (string-head s) (string-tail s))]))\n", "  (define\
+    \ (consonant? c)\n    (regexp-match? #rx\"[^aeiouAEIOU ]\" (list c)))\n  (filter\
+    \ (lambda (w)\n            (= n (length (filter consonant? w))))\n          (split\
+    \ (regexp-split #rx\"[ \\t\\n]+\" s))))", "  (if (empty? s) '()\n      (let* ([ws\
+    \ (string-split s)]\n             [ss (map string-&gt;list ws)]\n            \
+    \ [cs (map cons-only ss)]\n             [hs (map hash cs)]\n             [ms (map\
+    \ (lambda (h) (hash-ref h 'c n)) hs)]\n             [zs (map (lambda (x) (zero?\
+    \ x)) ms)]\n             [ts (keep string? zs)]\n             [ss (map symbol-&gt;string\
+    \ ts)])\n        ss)))\n", "  (regexp-match #rx\" \" s)\n  )", "  (for/list ([word\
+    \ (in-string s)])\n    (if (= n (count-consonants word))\n        word)))\n",
+  "  (define (consonant? c)\n    (or (equal? c \"b\")\n        (equal? c \"c\")\n\
+    \        (equal? c \"d\")\n        (equal? c \"f\")\n        (equal? c \"g\")\n\
+    \        (equal? c \"h\")\n        (equal? c \"j\")\n        (equal? c \"k\")\n\
+    \        (equal? c \"l\")\n        (equal? c \"m\")\n        (equal? c \"n\")\n\
+    \        (equal? c \"p\")\n        (equal? c \"q\")\n        (equal? c \"r\")\n\
+    \        (equal? c \"s\")\n        (equal? c \"t\")\n        (equal? c \"v\")\n\
+    \        (equal? c \"w\")\n        (equal? c \"x\")\n        (equal? c \"y\")\n\
+    \        (equal? c \"z\")))\n  (define (count-consonants word)\n    (if (equal?\
+    \ (string-length word) 0)\n        0\n        (if (consonant? (string-ref word\
+    \ 0))\n            (+ 1 (count-consonants (substring word 1)))\n            (count-consonants\
+    \ (substring word 1)))))\n  (define (recur words)\n    (if (equal? (length words)\
+    \ 0)\n        '()\n        (if (= (count-consonants (first words)) n)\n      \
+    \      (cons (first words) (recur (rest words)))\n            (recur (rest words)))))\n\
+    \  (recur (regexp-split #rx\"\\s+\" s)))", "  (let\n    ([word (string-split s\
+    \ \" \")])\n    (cond\n      [(empty? word) empty]\n      [(or\n        (= n 0)\n\
+    \        (= n (string-length (regexp-replace #rx\"[aeiou]\" (first word) \"\"\
+    ))))\n        (cons (first word) (select_words (string-join (rest word) \" \"\
+    ) n))]\n      [else (select_words (string-join (rest word) \" \") n)])))", " \
+    \ (define (select-words-iter s acc)\n    (cond [(string=? s \"\") acc]\n     \
+    \     [(string=? (word (string-trim s)) \"\")\n           (select-words-iter (string-drop-right\
+    \ s 1) acc)]\n          [else\n           (select-words-iter (string-drop-right\
+    \ s 1)\n                              (if (= n (string-count-matches \"qwrtypsdfghjklzxcvbnm\"\
+    \ (word (string-trim s))))\n                                  (cons (word (string-trim\
+    \ s)) acc)\n                                  acc))]))\n  (select-words-iter s\
+    \ (list)))\n", "  (cond ((empty? s) (list))\n        ((= n (count-consonants (first\
+    \ (string-split s))))\n         (append (list (first (string-split s)))\n    \
+    \             (select_words (string-join (rest (string-split s))) n)))\n     \
+    \   (else (select_words (string-join (rest (string-split s))) n))))", "  (unless\
+    \ (empty? s)\n    (if (eq? n (count-consonants (first (split s))))\n        (cons\
+    \ (first (split s)) (select_words (rest (split s)) n))\n        (select_words\
+    \ (rest (split s)) n))))\n", "  (define (not-vowel? c)\n    (or (equal? c #\\\
+    b)\n        (equal? c #\\c)\n        (equal? c #\\d)\n        (equal? c #\\f)\n\
+    \        (equal? c #\\g)\n        (equal? c #\\h)\n        (equal? c #\\j)\n \
+    \       (equal? c #\\k)\n        (equal? c #\\l)\n        (equal? c #\\m)\n  \
+    \      (equal? c #\\n)\n        (equal? c #\\p)\n        (equal? c #\\q)\n   \
+    \     (equal? c #\\r)\n        (equal? c #\\s)\n        (equal? c #\\t)\n    \
+    \    (equal? c #\\v)\n        (equal? c #\\w)\n        (equal? c #\\x)\n     \
+    \   (equal? c #\\y)\n        (equal? c #\\z)))\n  (define (count_consonants s_0)\n\
+    \    (if (empty? s_0)\n        0\n        (if (not-vowel? (first s_0))\n     \
+    \       (+ 1 (count_consonants (rest s_0)))\n            (count_consonants (rest\
+    \ s_0)))))\n  (define (solution s_0)\n    (if (empty? s_0)\n        (list)\n \
+    \       (if (= n (count_consonants (string-&gt;list (string-trim (car s_0)))))\n\
+    \            (cons (car s_0) (solution (cdr s_0)))\n            (solution (cdr\
+    \ s_0)))))\n  (solution (string-split s #\\ )))\n</code>\nI'm testing this function\
+    \ in the DrRacket REPL (interactions window), like this:\n<code>(select_words\
+    \ \"Mary had a little lamb\" 4)\n</code>\nbut it seems to hang.\nTo test the individual\
+    \ functions I have this:\n<code>(define s \"Mary had a little lamb\")", "  (if\
+    \ (empty? s)\n      (list)\n      (if (= n (count_consonants (first (string-split\
+    \ s #\\space))))\n          (cons (first (string-split s #\\space)) (select_words\
+    \ (remove (first (string-split s #\\space)) s) n))\n          (select_words (remove\
+    \ (first (string-split s #\\space)) s) n))))\n", "  (map (lambda (word)\n    \
+    \    (string-upcase word))\n        (filter (lambda (word)\n                 \
+    \ (= n (count-vowels word)))\n                (string-split s))))\n", "  (let*\
+    \ ((vowels \"aeiou\")\n         (is-vowel (lambda (c)\n                     (if\
+    \ (equal? n 0)\n                         #t\n                         (if (member\
+    \ c vowels)\n                             #f\n                             (is-vowel\
+    \ (substring c 1 (add1 (string-length c)))))))))\n    (if (empty? s)\n       \
+    \ (list)\n        (if (and (string-contains s \" \")\n                 (is-vowel\
+    \ (substring s 1 (add1 (string-length s)))))\n            (cons (substring s 0\
+    \ (string-index s \" \"))\n                  (select_words (substring s (add1\
+    \ (string-index s \" \"))\n                                           (string-length\
+    \ s))\n                                n))\n            (select_words (substring\
+    \ s 1 (string-length s)) n)))))\n", "  (cond\n    [(empty? s) empty]\n    [else\n\
+    \     (define (n-consonants? word)\n       (define (consonant? ch)\n         (and\
+    \ (char-alphabetic? ch)\n              (not (member ch (list #\\a #\\e #\\i #\\\
+    o #\\u #\\y)))))\n       (define (count word)\n         (cond\n           [(empty?\
+    \ word) 0]\n           [else\n            (cond\n              [(consonant? (first\
+    \ word)) (+ 1 (count (rest word)))]\n              [else (count (rest word))])]))\n\
+    \       (= n (count word)))\n     (define (select-words-help s n answer)\n   \
+    \    (cond\n         [(empty? s) (reverse answer)]\n         [else\n         \
+    \ (define word (list->string (list-take s\n                                  \
+    \              (find-count-consecutive-space s)) ))\n          (define (remove-word\
+    \ s word)\n            (string-append (substring s\n                         \
+    \             0\n                                      (first (string-indexes\
+    \ s #\\ )))\n                           (substring s\n                       \
+    \               (+ (length word) (first (string-indexes s #\\ )))\n          \
+    \                            (string-length s))))\n          (if (n-consonants?\
+    \ word)\n              (select-words-help (remove-word s word) n (cons word answer))\n\
+    \              (select-words-help (remove-word s word) n answer))]))\n     (select-words-help\
+    \ s n empty)]))\n", "  (define (count_consonants s)\n    (define vowels '(#\\\
+    a #\\e #\\i #\\o #\\u))\n    (if (empty? s) 0\n      (if (member (car s) vowels)\n\
+    \          (count_consonants (cdr s))\n          (+ 1 (count_consonants (cdr s))))))\n\
+    \  (define (select_words_helper s n res)\n    (if (empty? s) res\n      (let ((curr\
+    \ (cadr s)))\n        (if (= n (count_consonants curr))\n            (select_words_helper\
+    \ (cddr s) n (cons curr res))\n            (select_words_helper (cddr s) n res)))))\n\
+    \  (reverse (select_words_helper (regexp-split #rx\" \" s) n (list))))\n", " \
+    \ (filter (lambda (word) (= n (length (regexp-match #rx\"^[^aeiou]+$\" word))))\n\
+    \          (regexp-match #rx\"\\w+\" s)))", "  (define vowel '(a e i o u))\n \
+    \ (define (is-vowel? c)\n    (if (char-alphabetic? c)\n      (if (member (char-downcase\
+    \ c) vowel)\n        #t\n        #f)\n      #f))\n  (define (count-consonants\
+    \ s)\n    (cond\n      ((null? s) 0)\n      ((is-vowel? (car s)) (count-consonants\
+    \ (cdr s)))\n      (else (+ 1 (count-consonants (cdr s))))))\n  (define (proc\
+    \ s lst)\n    (cond\n      ((null? s) lst)\n      ((char-whitespace? (car s))\n\
+    \        (proc (cdr s) (cond\n                        ((= n (count-consonants\
+    \ (car (cdr s))))\n                          (cons (car (cdr s)) lst))\n     \
+    \                   (else lst))))\n      (else (proc (cdr s) lst))))\n  (proc\
+    \ s '()))\n", "  (map (lambda (w)\n         (let ((w-len (string-length w)))\n\
+    \           (if (= (count-consonants w) n)\n               (string-take w-len\
+    \ (string-drop (string-length \" \") w))\n               #f)))\n       (regexp-split\
+    \ #rx\"[ \\t\\n\\r\\f]+\" s)))\n", "  (if (empty? s)\n      '()\n      (filter\
+    \ (lambda (word) (= n (count_consonants word))) (string-split s))))\n", "  (map\
+    \ (lambda (w)\n\t (if (= (length (regexp-match* #rx\"[^aeiouy ]\" w)) n)\n\t \
+    \    w\n\t     \"\"))\n       (string-split s #rx\" \")))\n", "  (filter (lambda\
+    \ (w) (= n (consonants w))) (string-split s)))\n", "  (let ([words (string-split\
+    \ s #\\space)])\n    (filter (\u03BB (w) (= n (count-consonants w))) words)))\n",
+  "  (define (consonant? c)\n    (member c '(#\\b #\\c #\\d #\\f #\\g #\\h #\\j #\\\
+    k #\\l #\\m #\\n #\\p #\\q #\\r #\\s #\\t #\\v #\\w #\\x #\\y #\\z)))\n  (define\
+    \ (count-consonants str)\n    (define (count-loop idx count)\n      (if (= idx\
+    \ (string-length str))\n          count\n          (if (consonant? (string-ref\
+    \ str idx))\n              (count-loop (+ idx 1) (+ count 1))\n              (count-loop\
+    \ (+ idx 1) count))))\n    (count-loop 0 0))\n  (define (loop str lst)\n    (define\
+    \ (trim str)\n      (let ([trimmed (string-trim str)])\n        (if (= (string-length\
+    \ trimmed) 0)\n            \"\"\n            trimmed)))\n    (define (try-match\
+    \ str lst)\n      (let ([first-word (regexp-match #rx\"^[^ ]+\" str)])\n     \
+    \   (if (not first-word)\n            lst\n            (define (first-word-length)\n\
+    \              (string-length (cadr first-word)))\n            (define (remaining-string)\n\
+    \              (string-trim (substring str (add1 first-word-length)) #\\space))\n\
+    \            (if (= n (count-consonants (cadr first-word)))\n                (loop\
+    \ remaining-string (cons (cadr first-word) lst))\n                (loop remaining-string\
+    \ lst)))))\n    (try-match (trim str) lst))\n  (loop s '()))\n", "  (for/list\
+    \ ([w (in-list (string-split s))]\n             #:when (= n (count-vowels w)))\n\
+    \    w))", "  (define (to-char-list s)\n    (map char-&gt;integer (string-&gt;list\
+    \ s)))\n  (define (from-char-list l)\n    (string-&gt;list (map integer-&gt;char\
+    \ l)))\n  (define (contains? l e)\n    (cond ((null? l) #f)\n          ((equal?\
+    \ (car l) e) #t)\n          (else (contains? (cdr l) e))))\n  (define (consonants?\
+    \ c)\n    (define consonants '(\"b\" \"c\" \"d\" \"f\" \"g\" \"h\" \"j\" \"k\"\
+    \ \"l\" \"m\" \"n\" \"p\" \"q\" \"r\" \"s\" \"t\" \"v\" \"w\" \"x\" \"y\" \"z\"\
+    ))\n    (contains? consonants c))\n  (define (count-consonants s)\n    (define\
+    \ (count c n)\n      (cond ((null? c) n)\n            ((consonants? (car c)) (count\
+    \ (cdr c) (+ n 1)))\n            (else (count (cdr c) n))))\n    (count (to-char-list\
+    \ s) 0))\n  (define (split-on-whitespace s)\n    (string-split s \" \"))\n  (define\
+    \ (remove-empty-strings l)\n    (cond ((null? l) '())\n          ((string=? (car\
+    \ l) \"\") (remove-empty-strings (cdr l)))\n          (else (cons (car l) (remove-empty-strings\
+    \ (cdr l))))))\n  (define (filter-by-n l n)\n    (cond ((null? l) '())\n     \
+    \     ((equal? (count-consonants (car l)) n) (cons (car l) (filter-by-n (cdr l)\
+    \ n)))\n          (else (filter-by-n (cdr l) n))))\n  (filter-by-n (remove-empty-strings\
+    \ (split-on-whitespace s)) n))\n</code>\nIt works for the examples given, but\
+    \ I'm not sure if it works for all inputs. I would appreciate any feedback on\
+    \ the", "  (if (empty? s)\n      (list)\n      (let ((words (regexp-split #rx\"\
+    \ \" s)))\n        (for/list ([word words])\n          (if (= n (count-consonants\
+    \ word))\n              word)))))\n", "  (if (equal? s \"\")\n      '()\n    \
+    \  (filter (lambda (x)\n                (equal? (length (remove vowel? (string->list\
+    \ x))) n))\n              (string-split s #\\space))))", "  (cond [(empty? s)\
+    \ empty]\n        [else (filter (lambda (x) (char-count x #\\?)) (string-&gt;list\
+    \ s))]))\n</code>\nI have tried this, but it is not working.\n<code>#lang racket\n",
+  "  (define (consonant? x)\n    (let ((vowels '(#\\a #\\e #\\i #\\o #\\u)))\n   \
+    \   (and (not (member x vowels))\n           (not (member x '(#\\y #\\w))))))\n\
+    \  (let* ((words (string-split s #\\ ))\n         (results '()))\n    (for ((word\
+    \ words))\n      (let ((n-consonants (for/sum ((c (string->list word)))\n    \
+    \                          (if (consonant? c) 1 0))))\n        (when (= n-consonants\
+    \ n)\n          (set! results (cons word results)))))\n    (reverse results)))\n",
+  "  (cond\n    [(null? s)\n     (list)]\n    [(null? (consonants s))\n     (list)]\n\
+    \    [(= n (length (consonants s)))\n     (cons (car (string-tokenize s #\\ ))\n\
+    \           (select_words (cdr (string-tokenize s #\\ )) n))]\n    [else\n   \
+    \  (select_words (cdr (string-tokenize s #\\ )) n)]))\n", "  (map (curry list-ref\
+    \ s)\n       (filter (lambda (i) (= n (length (filter (compose not member? \"\
+    aeiou\")\n                                                (string-ref s i)))))\n\
+    \               (iota (string-length s)))))", "  (map \n   (\u03BB (x) (string-downcase\
+    \ x))\n   (filter\n    (\u03BB (x) (= n (word-const x)))\n    (map\n     (\u03BB\
+    \ (x) (string-trim x))\n     (string-split s #\\space)))))\n", "  (if (empty?\
+    \ s)\n      '()\n      (let ([words (string-split s #\\space)])\n        (remove-if-not\
+    \ (lambda (word) (consonants-count word n)) words))))\n", "  (define (consonant-count\
+    \ s)\n    (cond [(string=? s \"\") 0]\n          [(or (char-alphabetic? (string-ref\
+    \ s 0))\n               (string=? \" \" (string-ref s 0)))\n           (consonant-count\
+    \ (substring s 1))]\n          [else (+ 1 (consonant-count (substring s 1)))]))\n\
+    \  (define (answer s n)\n    (cond [(string=? s \"\") (list)]\n          [(= n\
+    \ (consonant-count (string-append (list-ref (string-split s) 0) \" \")))\n   \
+    \        (cons (list-ref (string-split s) 0) (answer (substring s (string-length\
+    \ (list-ref (string-split s) 0))) n))]\n          [else (answer (substring s (string-length\
+    \ (list-ref (string-split s) 0))) n)]))\n  (answer s n))\n</code>\nI think I understand\
+    \ the logic and concepts behind it, but I'm having a hard time getting it to pass\
+    \ the test cases. It seems like <code>select_words</code> isn't returning a proper\
+    \ list, but I can't figure out what's going wrong.\n\n\nA:\n\n<code>string-split</code>\
+    \ can be used to split a string into a list of words. \n<code>(string-split \"\
+    simple white space\")", "  (if (string=? s \"\") (list)\n      (let ((word (word-index\
+    \ n (string->list s))))\n        (if (eq? word \"\") (select_words (string-tail\
+    \ s) n)\n            (cons word (select_words (string-tail s) n))))))\n", "  (define\
+    \ vowels '(#\\a #\\e #\\i #\\o #\\u))\n  (define (consonant? c)\n    (if (member\
+    \ c vowels)\n        false\n        true))\n  (define (is-selected? word n)\n\
+    \    (let loop ((i 0) (consonants 0))\n      (if (= i (string-length word))\n\
+    \          (= consonants n)\n          (if (consonant? (string-ref word i))\n\
+    \              (loop (+ i 1) (+ consonants 1))\n              (loop (+ i 1) consonants)))))\n\
+    \  (define (select-words s n)\n    (if (empty? s)\n        '()\n        (if (is-selected?\
+    \ (first s) n)\n            (cons (first s) (select-words (rest s) n))\n     \
+    \       (select-words (rest s) n))))\n  (select-words (string-split s) n))\n",
+  "  (define (words s)\n    (cond\n      [(string=? s \"\") empty]\n      [else (append\
+    \ (list (string-trim s))\n                    (words (rest-of-string s)))]))\n\
+    \  (filter (lambda (word) (= n (count-consonants word))) (words s)))\n", "  (define\
+    \ (is-consonant? c)\n    (cond ((eq? c #\\a) #f)\n          ((eq? c #\\e) #f)\n\
+    \          ((eq? c #\\i) #f)\n          ((eq? c #\\o) #f)\n          ((eq? c #\\\
+    u) #f)\n          (else #t)))\n  (let ((words (string-split s)))\n    (filter\n\
+    \     (lambda (w)\n       (= n (apply + (map is-consonant? (string->list w)))))\n\
+    \     words)))\n", "  (define consonants '(#\\b #\\c #\\d #\\f #\\g #\\h #\\j\
+    \ #\\k #\\l #\\m #\\n #\\p #\\q #\\r #\\s #\\t #\\v #\\w #\\x #\\y #\\z))\n  (define\
+    \ (vowel? c)\n    (member c '(#\\a #\\e #\\i #\\o #\\u)))\n  (define (count-consonants\
+    \ w)\n    (for/fold ([result 0]) ([c (in-string w)])\n      (if (vowel? c)\n \
+    \         result\n          (+ result 1))))\n  (for/list ([w (in-list (string-split\
+    \ s))])\n    (if (= n (count-consonants w))\n        w\n        '())))\n</code>\n",
+  "  (map (lambda (x)\n         (substring x 1 (- (string-length x) 1)))\n       (filter\
+    \ (lambda (x)\n                 (= n (consonants x)))\n               (map (lambda\
+    \ (x)\n                      (substring s (string-index x s) (+ 1 (string-index\
+    \ x s))))\n                   (split-string s \" \")))))", "  (define (vowel?\
+    \ c)\n    (or (char=? c #\\a)\n        (char=? c #\\e)\n        (char=? c #\\\
+    i)\n        (char=? c #\\o)\n        (char=? c #\\u)))\n  (define (count-consonants\
+    \ word)\n    (define (count-consonants-iter word consonants)\n      (if (string-empty?\
+    \ word)\n          consonants\n          (if (vowel? (string-ref word 0))\n  \
+    \            (count-consonants-iter (substring word 1) consonants)\n         \
+    \     (count-consonants-iter (substring word 1) (+ consonants 1)))))\n    (count-consonants-iter\
+    \ word 0))\n  (define (select-words-iter s n words)\n    (if (string-empty? s)\n\
+    \        words\n        (let ((i (string-index-right s #\\)))\n              (word\
+    \ (substring s 0 i)))\n          (if (= n (count-consonants word))\n         \
+    \     (select-words-iter (substring s (+ i 1)) n (cons word words))\n        \
+    \      (select-words-iter (substring s (+ i 1)) n words)))))\n  (select-words-iter\
+    \ s n '()))", "  (if (string=? s \"\")\n      '()\n      (let ([words (split-string\
+    \ s \" \")])\n        (filter (lambda (x) (= n (count-consonants x))) words))))\n",
+  "  (define (consonant-count s)\n    (if (string-empty? s)\n        0\n        (if\
+    \ (memq (string-ref s 0) '(#\\a #\\e #\\i #\\o #\\u))\n            (consonant-count\
+    \ (substring s 1))\n            (+ 1 (consonant-count (substring s 1))))))\n \
+    \ (define (collect lst)\n    (if (null? lst)\n        '()\n        (if (= n (consonant-count\
+    \ (car lst)))\n            (cons (car lst) (collect (cdr lst)))\n            (collect\
+    \ (cdr lst)))))\n  (collect (string-split s)))\n", "  (cond [(empty? s) (list)]\n\
+    \        [else\n         (append\n          (if (= n (count-consonants (first\
+    \ (string-tokenize s #\\space))))\n              (list (first (string-tokenize\
+    \ s #\\space)))\n              (list))\n          (select_words (substring s\n\
+    \                                   (+ 1 (string-length (first (string-tokenize\
+    \ s #\\space))))\n                                   (string-length s))\n    \
+    \                   n))]))", "  (if (empty? s)\n      empty\n      (if (= n (count-consonants\
+    \ (first (string-tokenize s))))\n          (cons (first (string-tokenize s)) (select_words\
+    \ (rest (string-tokenize s)) n))\n          (select_words (rest (string-tokenize\
+    \ s)) n))))\n", "  (define (count_consonants str)\n    (if (empty? str)\n    \
+    \    0\n        (if (or (char=? (first str) #\\m)\n                (char=? (first\
+    \ str) #\\p)\n                (char=? (first str) #\\b)\n                (char=?\
+    \ (first str) #\\f)\n                (char=? (first str) #\\v)\n             \
+    \   (char=? (first str) #\\l)\n                (char=? (first str) #\\r)\n   \
+    \             (char=? (first str) #\\c)\n                (char=? (first str) #\\\
+    d)\n                (char=? (first str) #\\j)\n                (char=? (first\
+    \ str) #\\k)\n                (char=? (first str) #\\g)\n                (char=?\
+    \ (first str) #\\h)\n                (char=? (first str) #\\s)\n             \
+    \   (char=? (first str) #\\t)\n                (char=? (first str) #\\w)\n   \
+    \             (char=? (first str) #\\y)\n                (char=? (first str) #\\\
+    z)\n                (char=? (first str) #\\x)\n                (char=? (first\
+    \ str) #\\q)\n                (char=? (first str) #\\n))\n            (+ 1 (count_consonants\
+    \ (rest str)))\n            (count_consonants (rest str)))))\n  (if (empty? s)\n\
+    \      (list)\n      (if (= n (count_consonants (first (string-split s #\\space))))\n\
+    \          (cons (first (string-split s #\\space)) (select_words (string-join\
+    \ (rest (string-split s #\\space)) #\\space) n))\n          (select_words (string-join\
+    \ (rest (string-split s #\\space)) #\\space) n))))", "  (define (select_words1\
+    \ s n a)\n    (if (or (empty? s) (empty? n))\n        (reverse a)\n        (if\
+    \ (= (consonants (first s)) n)\n            (select_words1 (rest s) n (list (first\
+    \ s) a))\n            (select_words1 (rest s) n a))))\n  (select_words1 (split-string\
+    \ s \" \") n '()))\n", "  (if (string=? s \"\")\n      (list)\n      (if (eq?\
+    \ n (count_consonants (string-&gt;list (string-titlecase s))))\n          (list\
+    \ (string-titlecase s))\n          (select_words (string-&gt;list (string-titlecase\
+    \ s)) n))))\n", "  (if (empty? s)\n      '()\n      (let loop ([words (string-split\
+    \ s)])\n        (if (empty? words)\n            '()\n            (if (= n (count-consonants\
+    \ (first words)))\n                (cons (first words)\n                     \
+    \ (loop (rest words)))\n                (loop (rest words)))))))", "  (match (regexp-match*\
+    \ #rx\"\\\\w+\" s)\n    [(list) '()]\n    [(list a) (if (= n (vowel-consonant-count\
+    \ a))\n                  (list a)\n                  '())]\n    [(list a . b)\
+    \ (if (= n (vowel-consonant-count a))\n                      (cons a (select_words\
+    \ (string-join b) n))\n                      (select_words (string-join b) n))]))\n",
+  "  (if (empty? s)\n      (list)\n      (if (= n (consonants (first (string-split\
+    \ s #\\Space))))\n          (cons (first (string-split s #\\Space)) (select_words\
+    \ (string-tail s (string-length (first (string-split s #\\Space)))) n))\n    \
+    \      (select_words (string-tail s (string-length (first (string-split s #\\\
+    Space)))) n))))\n", "  (filter (\u03BB (x) (= n (word-n-consonants x))) (string-&gt;words\
+    \ s)))\n", "  (cond ((equal? s \"\") '())\n        ((= n (count-consonants (car\
+    \ (string-split s #\\space)))) (cons (car (string-split s #\\space))\n       \
+    \                                                                 (select_words\
+    \ (string-join (cdr (string-split s #\\space)) #\\space) n)))\n        (else (select_words\
+    \ (string-join (cdr (string-split s #\\space)) #\\space) n))))\n", "  (cond\n\
+    \    [(empty? s) empty]\n    [else (define (consonants s)\n            (cond\n\
+    \              [(empty? s) 0]\n              [(char-ci=? (first s) #\\a) (consonants\
+    \ (rest s))]\n              [(char-ci=? (first s) #\\e) (consonants (rest s))]\n\
+    \              [(char-ci=? (first s) #\\i) (consonants (rest s))]\n          \
+    \    [(char-ci=? (first s) #\\o) (consonants (rest s))]\n              [(char-ci=?\
+    \ (first s) #\\u) (consonants (rest s))]\n              [else (+ 1 (consonants\
+    \ (rest s)))]))\n      (define (f s n)\n        (cond\n          [(empty? s) empty]\n\
+    \          [(= (consonants (first s)) n) (cons (first s) (f (rest s) n))]\n  \
+    \        [else (f (rest s) n)]))\n      (f (regexp-split #rx\" +\" s) n)]))",
+  "  (define (helper ls curr-coun)\n    (if (and (not (equal? 0 curr-coun)) (empty?\
+    \ ls))\n        (list)\n        (if (and (not (equal? 0 curr-coun)) (not (empty?\
+    \ ls)))\n            (if (or (char-consonant? (car ls))\n                    (char-consonant?\
+    \ (cadr ls)))\n                (helper (cdr ls) (+ curr-coun 1))\n           \
+    \     (helper (cdr ls) curr-coun))\n            (if (equal? curr-coun n)\n   \
+    \             (cons (string->list (take (cadr ls) (- (length ls) 1)))\n      \
+    \                (helper (cddr ls) 0))\n                (helper (cdr ls) 0)))))\n\
+    \  (helper (list->string s) 0))\n", "  (define vowels '(a e i o u))\n  (define\
+    \ (is-consonant? c)\n    (not (member c vowels)))\n  (define (count-consonants\
+    \ word)\n    (cond [(empty? word) 0]\n          [(is-consonant? (first word))\
+    \ (+ 1 (count-consonants (rest word)))]\n          [else (count-consonants (rest\
+    \ word))]))\n  (define (go remainder)\n    (cond [(empty? remainder) empty]\n\
+    \          [(= n (count-consonants (first remainder)))\n           (append (list\
+    \ (first remainder)) (go (rest remainder)))]\n          [else (go (rest remainder))]))\n\
+    \  (go (string-split s)))\n", "  (cond [(empty? s) empty]\n        [else (if (=\
+    \ n (word-consonants (first (string-split s))))\n                (cons (first\
+    \ (string-split s))\n                      (select_words (rest (string-split s))\
+    \ n))\n                (select_words (rest (string-split s)) n))]))\n", "  (for/list\
+    \ ([w (in-string s)]\n             #:when (= n (word-consonants w)))\n    w))\n",
+  "  (for/list ([word (in-string s)])\n    (when (= n (count-consonants word))\n \
+    \     word)))\n", "  (cond ((empty? s) (list))\n        ((eq? n (count-consonants\
+    \ (first (string-split s))))\n         (cons (first (string-split s)) (select_words\
+    \ (second (string-split s)) n)))\n        (else (select_words (second (string-split\
+    \ s)) n))))\n", "  (define (is_consonant? c)\n    (if (member c (list #\\a #\\\
+    e #\\i #\\o #\\u)) #f #t))\n  (define (count_consonants s)\n    (define (count_consonants_iter\
+    \ a i)\n      (if (zero? i) a\n        (count_consonants_iter (+ a (if (is_consonant?\
+    \ (string-ref s i)) 1 0)) (- i 1))))\n    (count_consonants_iter 0 (- (string-length\
+    \ s) 1)))\n  (define (filter-words s n)\n    (define (filter-words-iter a s n)\n\
+    \      (if (zero? (string-length s)) a\n        (filter-words-iter (if (= n (count_consonants\
+    \ (string-before (string-drop-right s 1) \" \")))\n                          \
+    \     (cons (string-before (string-drop-right s 1) \" \") a)\n               \
+    \                a) (string-drop-right s 1) n)))\n    (filter-words-iter (list)\
+    \ s n))\n  (filter-words s n))\n\n```\n\n```racket\n#lang racket\n", "  (define\
+    \ (word_consonants_count word)\n    (let ((vowels '(#\\a #\\e #\\i #\\o #\\u)))\n\
+    \      (filter (lambda (x) (not (member x vowels))) word)))\n  (define (consonants_count\
+    \ word)\n    (length (word_consonants_count word)))\n  (define (words str)\n \
+    \   (if (string=? str \"\")\n        (list)\n        (cons (car (string-split\
+    \ str #\\ )) (words (cdr (string-split str #\\ ))))\n    )\n  )\n  (filter (lambda\
+    \ (x) (= n (consonants_count x))) (words s))\n)\n", "    (define (word-n-cons\
+    \ word n)\n        (if (not (regexp-match #rx\"[aeiouAEIOU]\" word))\n       \
+    \     (if (= (string-length word) n)\n                (list word)\n          \
+    \      '())\n            '()))\n    (define (scan lst acc)\n        (if (null?\
+    \ lst)\n            acc\n            (let ([word (car lst)])\n               \
+    \ (if (equal? (word-n-cons word n) '())\n                    (scan (cdr lst) acc)\n\
+    \                    (scan (cdr lst) (append acc (word-n-cons word n)))))))\n\
+    \    (scan (string-split s #rx\"\\s+\") '()))", "  (define (find-words lst)\n\
+    \    (cond [(empty? lst) empty]\n          [(= n (count-consonants (first lst)))\n\
+    \           (cons (first lst) (find-words (rest lst)))]\n          [else (find-words\
+    \ (rest lst))]))\n  (find-words (string-&gt;list/words s)))\n</code>\ncount-consonants.rkt\n\
+    <code>#lang racket\n", "  (if (string=? s \"\")\n      '()\n      (append (cons\
+    \ (car (split (string-filter (lambda (c) (not (eq? c #\\ ))) s) #\\ )) '())\n\
+    \              (select_words (string-drop-right s (string-length (car (split (string-filter\
+    \ (lambda (c) (not (eq? c #\\ ))) s) #\\ )))) n))))", "  (define (consonant? c)\n\
+    \    (cond ((member c '(\"b\" \"c\" \"d\" \"f\" \"g\" \"h\" \"j\" \"k\" \"l\"\
+    \ \"m\" \"n\" \"p\" \"q\" \"r\" \"s\" \"t\" \"v\" \"w\" \"x\" \"y\" \"z\")) #t)\n\
+    \          (else #f)))\n  (define (number-of-consonants s)\n    (length (filter\
+    \ consonant? (string->list s))))\n  (filter (lambda (word) (= n (number-of-consonants\
+    \ word))) (string-split s)))\n", "  (define (is_consonant c)\n    (or (char=?\
+    \ c #\\b)\n        (char=? c #\\c)\n        (char=? c #\\d)\n        (char=? c\
+    \ #\\f)\n        (char=? c #\\g)\n        (char=? c #\\h)\n        (char=? c #\\\
+    j)\n        (char=? c #\\k)\n        (char=? c #\\l)\n        (char=? c #\\m)\n\
+    \        (char=? c #\\n)\n        (char=? c #\\p)\n        (char=? c #\\q)\n \
+    \       (char=? c #\\r)\n        (char=? c #\\s)\n        (char=? c #\\t)\n  \
+    \      (char=? c #\\v)\n        (char=? c #\\w)\n        (char=? c #\\x)\n   \
+    \     (char=? c #\\y)\n        (char=? c #\\z)))\n  (define (consonant-count word)\n\
+    \    (cond ((string=? word \"\") 0)\n          ((is_consonant (string-ref word\
+    \ 0))\n           (+ 1 (consonant-count (substring word 1))))\n          (else\
+    \ (consonant-count (substring word 1)))))\n  (define (consonant-count-list l)\n\
+    \    (if (not (null? l))\n        (append (cons (consonant-count (car l)) '())\n\
+    \                (consonant-count-list (cdr l)))))\n  (define (select_words s\
+    \ n)\n    (define (select_words-iter l1 l2 l3)\n      (if (not (null? l1))\n \
+    \         (cond ((= (car l1) n) (select_words-iter (cdr l1) (cdr l2)\n       \
+    \                                           (append l3 (list (car l2)))))\n  \
+    \              (else (select_words-iter (cdr l1) (cdr l2) l3)))))\n    (select_words-iter\
+    \ (consonant-count-list (string-split s))", "  (define (helper s n)\n    (cond\n\
+    \      [(empty? s) (list)]\n      [(= n 0) s]\n      [(consonant? (first s)) (helper\
+    \ (rest s) (- n 1))]\n      [else (helper (rest s) n)]))\n  (split-at-space (helper\
+    \ s n)))\n", "  (define (cons? x)\n    (member x '(\"b\" \"c\" \"d\" \"f\" \"\
+    g\" \"h\" \"j\" \"k\" \"l\" \"m\" \"n\" \"p\" \"q\" \"r\" \"s\" \"t\" \"v\" \"\
+    w\" \"x\" \"y\" \"z\")))\n  (define (select_words/aux s n res)\n    (cond\n  \
+    \    [(empty? s)\n       res]\n      [(cons? (first s))\n       (select_words/aux\
+    \ (rest s) (- n 1) res)]\n      [(not (cons? (first s)))\n       (cond\n     \
+    \    [(= n 0)\n          (select_words/aux (rest s) n (append res (list (first\
+    \ s))))]\n         [else\n          (select_words/aux (rest s) n res)])]))\n \
+    \ (define (select_words/final s n)\n    (select_words/aux s n (list)))\n  (select_words/final\
+    \ (string->list s) n))", "  (cond ((= (string-length s) 0) '())\n        ((equal?\
+    \ (count-consonants (get-words (string-split s \" \") (first (string-split s \"\
+    \ \")))) n)\n         (append (list (first (string-split s \" \"))) (select_words\
+    \ (regexp-replace* #rx\"[^a-zA-Z ]+\" s \"\") n)))\n        (else (select_words\
+    \ (regexp-replace* #rx\"[^a-zA-Z ]+\" s \"\") n))))\n", "    (if (equal? s \"\"\
+    )\n        (list)\n        (append (if (equal? (count-consonants (car (string-split\
+    \ s))) n)\n                    (list (car (string-split s)))\n               \
+    \     (list))\n                (select_words (string-append (cdr (string-split\
+    \ s)) \" \") n))))\n", "  (match s [(or #f #\\space #\\\" #\\[ #\\] #\\( #\\))\
+    \ '()]\n    [else\n     (cond [(and (= n (word-length (word s)))\n           \
+    \      (not (has-vowel? (word s))))\n            (cons (word s) (select_words\
+    \ (rest s) n))]\n           [else (select_words (rest s) n)])]))", "  (match n\n\
+    \    [(consonants_in? (string-split s))]))\n", "  (cond\n    [(empty? s) empty]\n\
+    \    [else\n     (define words (string-split s #\\space))\n     (define selected-words\
+    \ (list))\n     (for-each\n      (lambda (word)\n        (if (= n (count-consonants\
+    \ word))\n            (set! selected-words (cons word selected-words))))\n   \
+    \   words)\n     (reverse selected-words)]))\n", "  (filter (lambda (word) (=\
+    \ n (get-n-consonants word)))\n          (string-split s #\\space)))\n", "  (define\
+    \ (count-con s)\n    (cond ((eq? s \"\") 0)\n          ((member (string-ref s\
+    \ 0) (list #\\a #\\e #\\i #\\o #\\u))\n           (count-con (substring s 1)))\n\
+    \          (else (+ 1 (count-con (substring s 1))))))\n  (define (helper lst)\n\
+    \    (cond ((eq? lst '()) '())\n          ((eq? (count-con (car lst)) n)\n   \
+    \        (cons (car lst) (helper (cdr lst))))\n          (else (helper (cdr lst)))))\n\
+    \  (helper (string-split s)))\n", "  (define (is-vowel? c)\n    (or (char=? c\
+    \ #\\a)\n        (char=? c #\\e)\n        (char=? c #\\i)\n        (char=? c #\\\
+    o)\n        (char=? c #\\u)))\n  (define (count-consonants ls)\n    (cond [(empty?\
+    \ ls) 0]\n          [(is-vowel? (first ls)) (count-consonants (rest ls))]\n  \
+    \        [else (+ 1 (count-consonants (rest ls)))]))\n  (cond [(empty? s) '()]\n\
+    \        [(and (empty? (rest s)) (= (count-consonants s) n)) (list s)]\n     \
+    \   [(and (not (char=? (first s) #\\ ))\n              (= (count-consonants s)\
+    \ n))\n         (cons s (select_words (substring s 1 (string-length s)) n))]\n\
+    \        [else (select_words (substring s 1 (string-length s)) n)]))\n```\n\n\
+    ```scheme", "  (define consonants \"bcdfghjklmnpqrstvwxyz\")\n  (define (word?\
+    \ w)\n    (if (empty? w)\n        false\n        (if (member (string-ref w 0)\
+    \ consonants)\n            (word? (substring w 1))\n            false)))\n  (define\
+    \ (count-consonants w)\n    (if (empty? w)\n        0\n        (if (member (string-ref\
+    \ w 0) consonants)\n            (+ 1 (count-consonants (substring w 1)))\n   \
+    \         (count-consonants (substring w 1)))))\n  (define (select-words s n)\n\
+    \    (if (empty? s)\n        (list)\n        (if (and (word? s) (= n (count-consonants\
+    \ s)))\n            (append (list s) (select-words (rest s) n))\n            (select-words\
+    \ (rest s) n))))\n  (select-words s n))\n", "  (cond [(empty? s) empty]\n    \
+    \    [else (define ws (map (lambda (s) (string-downcase s)) (string-split s)))\n\
+    \              (filter (lambda (s) (= n (count-consonants s))) ws)]))\n", "  (define\
+    \ char-list \"aeiou\")\n  (define (is-consonant? c)\n    (not (member c char-list)))\n\
+    \  (define (num-consonants w)\n    (foldl (lambda (c count)\n             (if\
+    \ (is-consonant? c)\n                 (+ count 1)\n                 count))\n\
+    \           0\n           w))\n  (define (generate-answer words)\n    (cond [(null?\
+    \ words)\n           (list)]\n          [(zero? n)\n           (list)]\n     \
+    \     [(= n (num-consonants (car words)))\n           (cons (car words)\n    \
+    \             (generate-answer (cdr words)))]\n          [else\n           (generate-answer\
+    \ (cdr words))]))\n  (let* ([word-list (string-split s)]\n         [result (generate-answer\
+    \ word-list)])\n    result))\n", "  (cond [(empty? s) empty]\n        [else (define\
+    \ word (substring s 0 (search-forward #\\space s)))\n              (cond [(&gt;\
+    \ (count_consonants word) n) (select_words (substring s (search-forward #\\space\
+    \ s)) n)]\n                    [(&lt; (count_consonants word) n) (select_words\
+    \ (substring s (search-forward #\\space s)) n)]\n                    [else (append\
+    \ (list word) (select_words (substring s (search-forward #\\space s)) n))])]))\n\
+    </code>\nI don't know if the search function is fine. The main problem is that\
+    \ I always get a list with the first value (which should be \"Mary\" with the\
+    \ example given) and then an empty list.\nThanks a lot in advance.\n\n\nA:\n\n\
+    <code>search-forward</code> returns the number of characters consumed. Try using\
+    \ <code>position</code> instead:\n<code>(define (select_words s n)\n  (cond [(empty?\
+    \ s) empty]\n        [else (define word (substring s 0 (position #\\space s)))\n\
+    \              (cond [(&gt; (count_consonants word) n) (select_words (substring\
+    \ s (position #\\space s)) n)]\n                    [(&lt; (count_consonants word)\
+    \ n) (select_words (substring s (position #\\space s)) n)]\n                 \
+    \   [else (append (list word) (select_words (substring s (position #\\space s))\
+    \ n))])]))\n</code>\n", "  (filter (lambda (w) (= n (count-consonants w)))\n \
+    \         (string-split s)))\n", "  (let ([words (string-split s \" \")])\n  \
+    \  (filter (\u03BB (w) (= n (count-consonants w))) words)))\n", "  (define (consonant-count\
+    \ s)\n    (define (is-vowel? c)\n      (member c '(#\\a #\\e #\\i #\\o #\\u)))\n\
+    \    (define (count-helper s count)\n      (cond ((null? s) count)\n         \
+    \   ((is-vowel? (car s)) (count-helper (cdr s) count))\n            (else (count-helper\
+    \ (cdr s) (+ count 1)))))\n    (count-helper s 0))\n  (define (selected-words-helper\
+    \ s count)\n    (cond ((null? s) '(list))\n          ((> count 0) (append (word-helper\
+    \ (car s) count)\n                               (selected-words-helper (cdr s)\
+    \ count)))\n          (else (selected-words-helper (cdr s) (consonant-count (car\
+    \ s))))))\n  (define (word-helper s count)\n    (cond ((null? s) (list (reverse\
+    \ (cdr (reverse s)))))\n          ((< count 0) '(list))\n          ((is-vowel?\
+    \ (car s)) (word-helper (cdr s) count))\n          (else (word-helper (cdr s)\
+    \ (- count 1)))))\n  (selected-words-helper (string-tokenize s #\\space) n))\n",
+  "  (cond ((eq? (string-length s) 0) '())\n        ((= n (count-consonants (first\
+    \ (string-split s #\\space))))\n         (cons (first (string-split s #\\space))\n\
+    \               (select_words (apply string-append (rest (string-split s #\\space)))\
+    \ n)))\n        (else (select_words (apply string-append (rest (string-split s\
+    \ #\\space))) n))))\n", "  (define (ncons s)\n    (let* ([ls (string->list s)]\n\
+    \           [vls (map (\u03BB (x) (vector-member-index #\\vowels x)) ls)]\n  \
+    \         [cons-ls (map (\u03BB (x) (vector-member-index #\\consonants x)) ls)])\n\
+    \      (define (consonant-count x)\n        (cond [(null? x) 0]\n            \
+    \  [(not (member (car x) vls)) (add1 (consonant-count (cdr x)))]\n           \
+    \   [else (consonant-count (cdr x))]))\n      (consonant-count cons-ls)))\n  (define\
+    \ (select ls)\n    (cond [(null? ls) '()]\n          [(= (ncons (car ls)) n) (cons\
+    \ (car ls) (select (cdr ls)))]\n          [else (select (cdr ls))]))\n  (select\
+    \ (string-split s #\\space)))\n", "  (filter (lambda (w) (= n (count-consonants\
+    \ w))) (string-tokenize s)))\n", "  (define (isVowel c)\n    (or (equal? c #\\\
+    a)\n        (equal? c #\\e)\n        (equal? c #\\i)\n        (equal? c #\\o)\n\
+    \        (equal? c #\\u)))\n  (filter (lambda (word)\n            (equal? n (apply\
+    \ + (map (lambda (c) (if (isVowel c) 0 1)) word))))\n          (filter (lambda\
+    \ (s) (> (length s) 0))\n                  (regexp-split #rx\"\\s+\" s))))\n",
+  "  (cond\n    ((or (null? s) (string=? s \"\")) '())\n    ((= n (count_consonants\
+    \ (string-&gt;list (string-trim s)))) (cons (string-trim s) '()))\n    (else (select_words\
+    \ (substring s (add1 (string-index s #\\ ))) n))))\n", "  (define (count-consonants\
+    \ w)\n    (define (helper w c)\n      (cond ((string=? w \"\") c)\n          \
+    \  ((or (string=? (substring w 0 1) \"a\")\n                 (string=? (substring\
+    \ w 0 1) \"e\")\n                 (string=? (substring w 0 1) \"i\")\n       \
+    \          (string=? (substring w 0 1) \"o\")\n                 (string=? (substring\
+    \ w 0 1) \"u\"))\n             (helper (substring w 1) c))\n            (else\
+    \ (helper (substring w 1) (+ c 1)))))\n    (helper w 0))\n  (define (helper1 s\
+    \ l n)\n    (cond ((string=? s \"\") l)\n          ((= n (count-consonants (car\
+    \ (string-split s \" \"))))\n           (helper1 (string-drop s (string-length\
+    \ (car (string-split s \" \"))))\n                    (append l (list (car (string-split\
+    \ s \" \")))) n))\n          (else (helper1 (string-drop s (string-length (car\
+    \ (string-split s \" \")))) l n))))\n  (helper1 s '() n))\n", '  (filter (lambda
+    (w) (= n (length (filter (lambda (ch) (not (is_vowel ch))) w)))) (string-split
+    s #\Space)))', "  (filter (lambda (w) (= n (count-consonants w))) (string-tokenize\
+    \ s #\\space)))\n", "  (for/list ([word (in-list (regexp-match* #rx\"\\w+\" s))])\n\
+    \    (define vowel?\n      (composec string-contains? \"aeiouAEIOU\"))\n    (if\
+    \ (= n (for/sum ([ch (in-string word)])\n                      (unless (vowel?\
+    \ ch) 1 0)))\n        word)))\n", "  (define (consonant? c)\n    (member c (list\
+    \ #\\b #\\c #\\d #\\f #\\g #\\h #\\j #\\k #\\l #\\m #\\n #\\p #\\q #\\r #\\s #\\\
+    t #\\v #\\w #\\x #\\y #\\z)))\n  (define (count-cons c)\n    (if (consonant? c)\
+    \ 1 0))\n  (define (count-cons-in-string s)\n    (if (string=? s \"\") 0 (+ (count-cons\
+    \ (string-ref s 0)) (count-cons-in-string (substring s 1)))))\n  (define (words\
+    \ s)\n    (cond\n      [(empty? s) '()]\n      [else (cons (first s) (words (rest\
+    \ s)))]))\n  (cond\n    [(empty? s) '()]\n    [else (cond\n            [(= n (count-cons-in-string\
+    \ (first s))) (cons (first s) (select_words (rest s) n))]\n            [else (select_words\
+    \ (rest s) n)])]))\n", "  (filter (lambda (item)\n            (= n (find-consonants\
+    \ item)))\n          (string-split s #\\Space)))\n", "  (for/list ([word (in-string\
+    \ s)])\n    (if (= n (count-consonants word))\n        word)))\n", "  (cond\n\
+    \    [(empty? s) empty]\n    [else (cond\n            [(= n (count-consonants\
+    \ (first s))) (cons (first s) (select_words (rest s) n))]\n            [else (select_words\
+    \ (rest s) n)])]))\n", "  (if (or (= n 0) (equal? s \"\")) (list)\n      (for/list\
+    \ ([w (in-list (string-split s #\\space))]\n                 #:when (= n (count-consonants\
+    \ w))) w)))\n", "  (cond ((string=? s \"\") '())\n        ((= (count_consonants\
+    \ (car (string-split s \" \"))) n)\n         (cons (car (string-split s \" \"\
+    )) (select_words (cdr (string-split s \" \")) n)))\n        (else (select_words\
+    \ (cdr (string-split s \" \")) n))))\n", "  (cond\n    [(string=? s \"\") empty]\n\
+    \    [else (set-difference \n            (string-split s) \n            (filter\
+    \ \n              (lambda (c) (&lt;= (count-vowels c) n)) \n              (string-split\
+    \ s)))]))\n", "  (define (count_consonants s)\n    (define (letter? c)\n     \
+    \ (or (char=? c #\\a) (char=? c #\\e) (char=? c #\\i) (char=? c #\\o) (char=?\
+    \ c #\\u)))\n    (cond\n      [(empty? s) 0]\n      [(letter? (first s)) (count_consonants\
+    \ (rest s))]\n      [else (+ 1 (count_consonants (rest s)))]))\n  (define (check_word\
+    \ word)\n    (cond\n      [(equal? (count_consonants word) n) word]\n      [else\
+    \ (check_word word)]))\n  (define (check_words s)\n    (cond\n      [(empty? s)\
+    \ empty]\n      [(member (first s) '(#\\space #\\#\\)) (check_words (rest s))]\n\
+    \      [else (cons (check_word (first s)) (check_words (rest s)))]))\n  (check_words\
+    \ (string->list s)))\n", "  (cond\n    [(empty? s) (list)]\n    [(empty? (regexp-match\
+    \ #rx\"[aAeEiIoOuUyY]\" s))\n     (if (= (string-length s) n) (list s) (list))]\n\
+    \    [else (append\n            (select_words (substring s 1) n)\n           \
+    \ (select_words (substring s 2) n))]))\n</code>\nRunning this returns the following:\n\
+    <code>&gt; (select_words \"Mary had a little lamb\" 4)\n'(#&lt;regexp&gt;)\n&gt;\
+    \ (select_words \"Mary had a little lamb\" 3)\n'(#&lt;regexp&gt;)\n&gt; (select_words\
+    \ \"simple white space\" 2)\n'(#&lt;regexp&gt;)\n&gt; (select_words \"Hello world\"\
+    \ 4)\n'(#&lt;regexp&gt;)\n&gt; (select_words \"Uncle sam\" 3)\n'(#&lt;regexp&gt;)\n\
+    </code>\nThe problem I'm having is that I can't seem to get the regexp to work\
+    \ the way it should. I'm pretty sure this should work (at least conceptually)\
+    \ by making the regexp match everything except the vowels and then returning a\
+    \ list of the strings that contain n consonants. I also tried changing <code>#rx\"\
+    [aAeEiIoOuUyY]\"</code> to <code>#rx\"[^aAeEiIoOuUyY]\"</code> with no success.\
+    \ Any ideas?\n\n\nA:\n\nThe problem is you're using <code>regexp-match</code>\
+    \ instead of <code>regexp-match*</code>. The former function only matches the\
+    \ first instance of the regex in the string, while the latter returns all matches.\n",
+  "  (define vowel-set (list #\\a #\\e #\\i #\\o #\\u))\n  (define (is-consonant c)\n\
+    \    (and (char-alphabetic? c)\n         (not (member c vowel-set))))\n  (define\
+    \ (consonant-count word)\n    (length (filter is-consonant word)))\n  (define\
+    \ (consonant-words ws)\n    (filter (lambda (w) (= n (consonant-count w))) ws))\n\
+    \  (consonant-words (string-split s #\\space)))\n", "  (define (consonant? ch)\n\
+    \    (and (char-alphabetic? ch)\n         (not (char-vowel? ch))))\n  (for/list\
+    \ ([word (in-list (string-split s #\\space))]\n             #:when (= n (for/sum\
+    \ ([ch (in-string word)])\n                                  (if (consonant? ch)\
+    \ 1 0))))\n    word))\n</code>\nIn your original solution, you were returning\
+    \ <code>word</code> without putting it in a list, hence the empty result.\n",
+  "  (cond\n    [(empty? s) empty]\n    [else\n     (define a (string-&gt;list s))\n\
+    \     (define b (regexp-match #rx\"\\w+\" a))\n     (define c (filter (lambda\
+    \ (x) (= n (list-length (regexp-match #rx\"[^aeiouAEIOU]\" x)))) b))\n     (map\
+    \ list-&gt;string c)]))\n</code>\nIn the examples above, the input is of the form\
+    \ <code>\"(select_words \"Mary had a little lamb\" 4)\"</code>. However, when\
+    \ submitting the code to the contest, it will be run like this:\n<code>$ racket\
+    \ -t solve.rkt &lt;input.txt\n</code>\nThe input file <code>input.txt</code> is\
+    \ of the form\n<code>5\n5\nto\n9\ntelevision\n20\na\n20\na\n20\na\n20\na\n</code>\n\
+    The first line is the number of lines in the file. Each line has the form <code>n\
+    \ s</code>, where <code>n</code> is the number of consonants and <code>s</code>\
+    \ is the string. The output should be of the form\n<code>(list \"to\")", "  (if\
+    \ (empty? s)\n      '()\n      (let* ([words (regexp-split #rx\"\\s+\" s)]\n \
+    \            [s (filter (lambda (s) (= n (count-vowels s))) words)])\n       \
+    \ s)))\n", "  (cond\n    [(empty? s) empty]\n    [else\n     (cons \n      (if\
+    \ (and (not (empty? (regexp-match #rx\"\\s\" s)))\n               (= n (length\
+    \ (regexp-match #rx\"[^aeiou\\s]\" s))))\n          (list (regexp-match #rx\"\
+    [^\\s]+\" s)) empty)\n      (select_words (regexp-replace #rx\"[^\\s]+\" s \"\"\
+    ) n))]))\n", "  (if (string=? s \"\")\n      '()\n      (let* ([f (string-index\
+    \ s #\\ )]\n             [t (string-index s #\\ )]\n             [word (substring\
+    \ s f t)])\n        (if (equal? n (consonants word))\n            (cons word (select_words\
+    \ (substring s t) n))\n            (select_words (substring s t) n)))))\n", " \
+    \ (map (lambda (word) (if (= (consonants word) n) word)) (string-split s)))\n",
+  "  (cond\n    [(empty? s) '()]\n    [else (filter (compose has-n-cons? string->list)\
+    \ (string-split s))]))\n", "    (if (empty? s)\n        '()\n        (for/list\
+    \ ([word (in-list (string-split s))])\n            (if (= n (word-consonants word))\n\
+    \                word))))\n", "  (define (is_consonant c)\n    (or (char=? c #\\\
+    b) (char=? c #\\c) (char=? c #\\d) (char=? c #\\f)\n      (char=? c #\\g) (char=?\
+    \ c #\\h) (char=? c #\\j) (char=? c #\\k)\n      (char=? c #\\l) (char=? c #\\\
+    m) (char=? c #\\n) (char=? c #\\p)\n      (char=? c #\\q) (char=? c #\\r) (char=?\
+    \ c #\\s) (char=? c #\\t)\n      (char=? c #\\v) (char=? c #\\w) (char=? c #\\\
+    x) (char=? c #\\y)\n      (char=? c #\\z)))\n  (define (count-consonants word)\n\
+    \    (let loop ((word word) (count 0))\n      (if (and (not (empty? word)) (is_consonant\
+    \ (car word)))\n        (loop (cdr word) (+ count 1))\n        count)))\n  (define\
+    \ (select-inner words n)\n    (cond ((empty? words) empty)\n          ((= n (count-consonants\
+    \ (car words)))\n           (cons (car words) (select-inner (cdr words) n)))\n\
+    \          (else (select-inner (cdr words) n))))\n  (define (cleaner string)\n\
+    \    (cond ((empty? string) empty)\n          ((char=? (car string) #\\space)\n\
+    \           (cons (string-&gt;symbol \" \") (cleaner (cdr string))))\n       \
+    \   (else (cons (car string) (cleaner (cdr string))))))\n  (select-inner (cleaner\
+    \ (string-&gt;list s)) n))\n</code>\nI'm just wondering if there's a better way\
+    \ to do the consonant-counting; maybe with regex, but I'm not sure how to do that.\n\
+    \n\nA:\n\nI think you should use the <code>regexp</code> library for this. It's",
+  "  (cond [(empty? s) (list)]\n        [else (let ([w (car (string-split s \" \"\
+    ))])\n                (cons (if (= n (number-of-consonants w))\n             \
+    \             w\n                          \"\")\n                      (select_words\
+    \ (cdr (string-split s \" \")) n)))]))\n", "  (if (empty? s)\n      (list)\n \
+    \     (let ((words (string-split s \" \")))\n        (define (consonants str)\n\
+    \          (list->string (filter (lambda (c) (not (char-vowel? c))) (string->list\
+    \ str))))\n        (filter (lambda (w) (= (string-length (consonants w)) n)) words))))\n",
+  "  (filter\n   (lambda (x)\n     (= n (word-n-consonants x)))\n   (string-&gt;words\
+    \ s)))\n", "  (for/list ([i (in-string s)])\n    (cond\n      [(vowel? i) #f]\n\
+    \      [else #t])))\n", "  (define (count-consonants word)\n    (define (is-consonant?\
+    \ c)\n      (not (char-alphabetic? c)))\n    (length (filter is-consonant? (string->list\
+    \ word))))\n  (define (word-filter word)\n    (= n (count-consonants word)))\n\
+    \  (filter word-filter (string-split s #\\space)))\n", "  (define (f l)\n    (cond\
+    \ ((null? l) '())\n          ((= n (string-count (car l) [#\\B #\\C #\\D #\\F\
+    \ #\\G #\\H #\\J #\\K #\\L #\\M #\\N #\\P #\\Q #\\R #\\S #\\T #\\V #\\W #\\X #\\\
+    Y #\\Z])) (cons (car l) (f (cdr l))))\n          (else (f (cdr l)))))\n  (f (string-split\
+    \ s)))", "  (cond\n    [(empty? s) empty]\n    [else\n     (define (is_consonant?\
+    \ c)\n       (member c '(#\\b #\\c #\\d #\\f #\\g #\\h #\\j #\\k #\\l #\\m #\\\
+    n #\\p #\\q #\\r #\\s #\\t #\\v #\\w #\\x #\\y #\\z)))\n     (define (get-consonants\
+    \ s)\n       (for/list ([c (in-string s)])\n         (if (is_consonant? c)\n \
+    \            c\n             empty)))\n     (define (get-words s)\n       (split-string\
+    \ s #\\space))\n     (define (filter-words words n)\n       (for/list ([w (in-list\
+    \ words)])\n         (if (= n (length (get-consonants w)))\n             w\n \
+    \            empty)))\n     (filter-words (get-words s) n)]))\n", "  (if (null?\
+    \ s)\n      '()\n      (let ([x (str->list s)])\n        (if (and (>= (length\
+    \ x) n) (= (count-consonants x) n))\n            (cons x (select_words (substring\
+    \ s (add1 (length x))) n))\n            (select_words (substring s (add1 (length\
+    \ x))) n)))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -7,7 +7,1152 @@ tests: "test_humaneval <- function() {\ncandidate <- all_prefixes\n    if(!ident
   \ c())){quit('no', 1)}\n    if(!identical(candidate('asdfgh'), c('a', 'as', 'asd',\
   \ 'asdf', 'asdfg', 'asdfgh'))){quit('no', 1)}\n    if(!identical(candidate('WWW'),\
   \ c('W', 'WW', 'WWW'))){quit('no', 1)}\n}\ntest_humaneval()"
-completions: []
+completions: ["\n  lapply(strsplit(string, \"\"), function(x) paste(prefix, x, sep=\"\
+    \"))\n}\n</code>\n<|/ a |>\n<| a dscore=1 |>\nBased on your example and comment\
+    \ I guess you're looking for something like the following:\n<code>\nlibrary(data.table)\n\
+    library(magrittr)\ndf <- structure(list(letter = c(\"a\", \"ab\", \"abc\", \"\
+    ac\", \"ad\", \"ae\"), number = c(1L, 2L, 3L, 4L, 5L, 6L)), .Names = c(\"letter\"\
+    , \"number\"), class = \"data.frame\", row.names = c(NA, -5L))\n\n> df\n  letter\
+    \ number\n1      a     1\n2     ab     2\n3    abc     3\n4     ac     4\n5  \
+    \   ad     5\n6     ae     6\n\n> df[, letter := letter][, number := number][\n\
+    \      ,\n      c(\"prefix\", \"suffix\") := list(\n        paste0(letter, \"\
+    _\", number),\n        paste0(number, \"_\", letter)\n      )\n    ][]\n   letter\
+    \ number prefix  suffix\n1:      a     1       a 1_1\n2:     ab     2      ab\
+    \ 2_1\n3:    abc     3    abc_3 3_1\n4:     ac     4     ac_4 4_1\n5:     ad \
+    \    5     ad_5 5_1\n6:     ae     6     ae_6 6_1\n</code>\n<|/ a tags=r,string\
+    \ |>\n<| a dscore=1 tags=r,string |>\nHere is another option:\n<code>\ndf$prefix\
+    \ <- sapply(1:nrow(df), function(i)paste(df$letter[i], df$number[i], sep = ''))\n\
+    df$suffix <- sapply(1:nrow(df), function(i)paste(df$number[i], df$letter[i], sep\
+    \ = ''))\ndf", "\n  # Make sure our string is well-formed\n  stopifnot(\n    is.character(string),\n\
+    \    grepl(\"^$\", string))\n\n  # Return list of all prefixes in string\n  prefix_list\
+    \ <- strsplit(string, \"\")[[1]]\n  return(prefix_list)\n}\n", "\n  str <- strsplit(string,\
+    \ \"\")[[1]]\n  lapply(seq_along(str)[-1], paste, collapse = \"\")\n}\n</code>\n\
+    And another function to take all the prefixes of a string of given length from\
+    \ shortest to longest:\n<code>", "\n    prefix <- character()\n    len <- numeric()\n\
+    \    len[1] <- 1\n    for (i in 2:length(string)) {\n        if (substr(string,\
+    \ i, 1) == substr(string, 1, i)) {\n            prefix <- c(prefix, substr(string,\
+    \ 1, i - 1))\n            len[i] <- i\n        } else {\n            prefix <-\
+    \ c(prefix, substr(string, i, i - len[i]))\n            len[i] <- i\n        }\n\
+    \    }\n    prefix <- c(prefix, substr(string, 1, length(string) - 1))\n    len\
+    \ <- c(len, length(prefix))\n    c(prefix, len)\n}\n", "\n  n <- nchar(string)\n\
+    \  repeat {\n    prefix <- substr(string, 1, n)\n    if (all(substr(string, 1,\
+    \ n) == prefix)) {\n      return(list(prefix))\n    } else {\n      n <- n + 1\n\
+    \    }\n  }\n}\n", "\n    stopifnot(is.character(string))\n    if (length(string)\
+    \ == 1) {\n        c(string)\n    }\n    else {\n        prefixes <- character(0)\n\
+    \        prefix <- character(0)\n        for (letter in string) {\n          \
+    \  if (is.na(prefix)) {\n                prefix <- letter\n            }\n   \
+    \         else {\n                prefix <- paste(prefix, letter, sep = '')\n\
+    \            }\n            prefixes <- c(prefixes, prefix)\n        }\n     \
+    \   prefixes\n    }\n}\n</cell>\n<cell>\nall_prefixes('aab')\n</cell>\n<cell>",
+  "\n  paste(substr(string, 1, nchar(string) - 1), collapse = \"\")\n}\nall_prefixes(\"\
+    abracadabra\")", "\n  str <- string\n  out <- character(length(str)+1)\n  out[1]\
+    \ <- str[1]\n  for (i in 2:length(out)) out[i] <- paste0(out[i-1], str[i])\n \
+    \ out\n}\n</cell>\n<code language=R [r]>", "\n  gsub(paste0(letters, collapse\
+    \ = '|'), paste0('(.)', collapse = '|'), string)\n}\n", "\n    len <- length(string)\n\
+    \    out <- c()\n    for (i in 1:len) {\n        x <- substring(string, i, i)\n\
+    \        if (length(x) > 0) {\n            out <- c(out, x)\n        }\n    }\n\
+    \    return(out)\n}\n</cell>\n<cell>", "\n  l <- strsplit(string, \"(?<=.)\",\
+    \ perl = TRUE)\n  m <- sapply(l, length)\n  m <- m[m > 0]\n  m\n}\n", "\n    paste(\n\
+    \        substring,\n        string = string,\n        sep = '',\n        fixed\
+    \ = TRUE)\n}\n</code>\nThis could be done in one line:\n<code>\nall_prefixes <-\
+    \ function(string) {\n    paste(\n        substring,\n        string = string,\n\
+    \        sep = '',\n        fixed = TRUE)\n}\n</code>\nSo all we need to do is\
+    \ put it in a for loop:\n<code>\nfor (i in 1:length(str)) {\n    prefix_vector[i]\
+    \ <- all_prefixes(str[i])\n}\n</code>\nAnd we're done:\n<code>\n> prefix_vector\n\
+    \ [1] \"a\"       \"ab\"      \"abc\"     \"ac\"      \"ca\"      \"cba\"    \
+    \ \"cab\"     \"cba\"     \"ac\"      \"cab\"     \"cab\"     \"cab\"     \"cab\"\
+    \     \"cab\"     \"cba\"\n</code>\nAs the result is a vector, the order of the\
+    \ elements are the same as the input string:\n<code>\n> prefix_vector[c(3, 5,\
+    \ 6, 10)]\n [1] \"ab\"      \"abc\"     \"ac\"      \"cab\"     \"cba\"     \"\
+    ac\"      \"cab\"     \"cab\"     \"cab\"     \"cab\"     \"cab\"     \"cab\"\
+    \     \"cba\"    \n</code>\n<|/ a |>\n<| c |>\nThanks your answer was very helpful.\
+    \ My real problem was trying to do it with mapply but since I used the wrong function\
+    \ I wasn't getting anything but a bunch of NA's. So thank you for your answer\
+    \ which solved it for me!\n<|/ c |>\n<| c |>\nNice! I didn't know about that function.\
+    \ One caveat is that this solution doesn't work for longer strings than 10 characters.\n\
+    <|/ c |>\n<| c |>\nYes this is true, but for my purposes the strings are always\
+    \ less than 10 characters. Thanks again for the answer!\n<|/ c |>\n<| a tags=r,apply,substring,string\
+    \ dscore=1 |>\nHere's a vectorized approach that uses strsplit and lapply:\n<code>\n\
+    vect <- c(\"a\",\"ab\",\"abc\",\"ac\",\"ca\",\"cba\",\"cab\",\"cba\",\"ac\",\"\
+    cab\",\"cab\",\"cab\",\"cab\",\"cab\",\"cab\",\"cba\")\n\n> vect\n [1] \"a\" \"\
+    ab\" \"abc\" \"ac\" \"ca\" \"cba\" \"cab\" \"cba\" \"ac\" \"cab\" \"cab\" \"cab\"\
+    \ \"cab\" \"cab\" \"cab\" \"cba\"\n> \n> unlist(lapply(strsplit(vect,\"\"),function(x)\
+    \ paste(substr(x,1,1),substr(", "\n  # Base case\n  if(grepl('^[a-zA-Z]+$', string))\
+    \ {\n    return(c(string))\n  }\n  # Recursion\n  l <- all_prefixes(substr(string,\
+    \ 1, nchar(string)))\n  r <- all_prefixes(substr(string, nchar(string)+1, nchar(string)))\n\
+    \  return(append(l, string[(nchar(string) - nchar(r))+1:nchar(string)], after\
+    \ = TRUE))\n}\n</code>\nThen you can use these functions to get your desired output,\
+    \ e.g.:\n<code>", "\n  return(lapply(strsplit(string, \"\"), function(x) prefix(x,\
+    \ string)))\n}\n", "\n  n <- nchar(string)\n  i <- 1\n  repeat {\n    if (i ==\
+    \ n) return(c(string))\n    else return(c(string[1:i], paste0(string[i], string[i\
+    \ + 1:n])))\n    i <- i + 1\n  }\n}\n", "\n  out <- rep(\"\", length(unlist(strsplit(string,\
+    \ \"\"))))\n  for (i in seq_along(out)) out[i] <- paste(substr(string, 1, i),\
+    \ collapse = \"\")\n  return(out)\n}\n", "\n    prefix_count <- length(string)\n\
+    \    all_prefixes <- list(c(\"\", string))\n    while (prefix_count > 0) {\n \
+    \       prefix <- substring(all_prefixes[[length(all_prefixes)]], 1, 1)\n    \
+    \    prefix_count <- prefix_count - 1\n        all_prefixes[[length(all_prefixes)]\
+    \ + 1] <- prefix\n    }\n    all_prefixes\n}\n</code>\n<|/ a dscore=0 |>\n<| c\
+    \ |>\nThanks Chris! This code is really helpful for me to understand how the R\
+    \ function works. However, I have a question. I am currently using this code to\
+    \ find the prefix of \"abc\" in the list that I provided. However, I do not understand\
+    \ the meaning of the first line of code you have written. I am not really familiar\
+    \ with R coding, and I do not know how to interpret it even after reading the\
+    \ tutorial. Can you explain to me what it does in layman terms?\n<|/ c |>\n<|\
+    \ c |>\nThis line `prefix_count <- length(string)` gets the length of the string\
+    \ that is passed to it. This is how long it goes in to find the longest prefix.\
+    \ \n\nThis line `all_prefixes <- list(c(\"\", string))` creates a vector that\
+    \ starts with an empty string `\"\"` and then the original string. This is so\
+    \ that we can find the longest prefix later in the code.\n\nThe next line `while\
+    \ (prefix_count > 0) {` checks to see if the `prefix_count` is greater than 0.\
+    \ if it is, the loop will continue and the line `prefix <- substring(all_prefixes[[length(all_prefixes)]],\
+    \ 1, 1)` will get the first character of the longest prefix and then remove it\
+    \ from the longest prefix vector. The next line `prefix_count <- prefix_count\
+    \ - 1` decreases the prefix count by one and repeats the loop. \n\nHope that helps!\n\
+    <|/ c |>\n<| c |>\nThanks Chris! Your explanation was really helpful. Just one\
+    \ more question. Suppose that I wanted to return the list of the longest prefixes\
+    \ of all possible prefixes of the same length. I can just run the function again\
+    \ to get the prefix of \"abc\" since that is the longest prefix of all prefixes\
+    \ of \"abc\". What code do I need in order to do this (I am assuming that I would\
+    \ need something like a while loop to keep running it until it returns an empty\
+    \ list) ?\n<|/ c |>\n<| c |>\nYou'll want to use `lapply` on your list to create\
+    \ a list of all the prefixes that match a certain criteria. [This post](https://stackoverflow.com/questions/14265439/r-sapply-with-conditions)\
+    \ explains it a little more detailed.\n<|/ c |>\n<| c |>\nSo it seems like I would\
+    \ have to create a new function for each different ", "\n  # Start with a single\
+    \ prefix and go through the string\n  # until it becomes empty or it finds another\
+    \ prefix of the\n  # same length\n  prefix = c('a')\n  prefix = c('ab', prefix)\n\
+    \  prefix = c('abc', prefix)\n  prefix = c('abcd', prefix)\n  prefix = c('abcde',\
+    \ prefix)\n  prefix = c('abcdef', prefix)\n  prefix = c('abcdefg', prefix)\n \
+    \ prefix = c('abcdefgh', prefix)\n  prefix = c('abcdefghi', prefix)\n  prefix\
+    \ = c('abcdefghij', prefix)\n  prefix = c('abcdefghijk', prefix)\n  prefix = c('abcdefghijkl',\
+    \ prefix)\n  prefix = c('abcdefghijklm', prefix)\n  prefix = c('abcdefghijklmn',\
+    \ prefix)\n  prefix = c('abcdefghijklmn', prefix)\n  prefix = c('abcdefghijklmno',\
+    \ prefix)\n  prefix = c('abcdefghijklmnop', prefix)\n  prefix = c('abcdefghijklmnopq',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqr', prefix)\n  prefix = c('abcdefghijklmnopqrs',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrsz', prefix)\n  prefix = c('abcdefghijklmnopqrszz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzz', prefix)\n  prefix = c('abcdefghijklmnopqrszzzz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzzzz', prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzz', prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzzz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzzzz', prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzzzzz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzzzzzz', prefix)\n  prefix =\
+    \ c('abcdefghijklmnopqrszzzzzzzzzzzz', prefix)\n  prefix = c('abcdefghijklmnopqrszzzzzzzzzzzzz',\
+    \ prefix)\n  prefix = c('abcdefghijklmnopqrszzzz", "\n  prefixes <- rep(\"\",\
+    \ sapply(strsplit(string, \"\"), length))\n  prefixes[lengths(strsplit(string,\
+    \ \"\"))[1L]] <- string\n  prefixes\n}\n</code>\nTo see that it works as expected\
+    \ (by inspecting the contents of all_prefixes in RStudio's global environment):\n\
+    <code>\n> all_prefixes(\"abc\")\n[1] \"c\" \"a\" \"ab\" \"abc\"\n</code>\nThen\
+    \ use lapply to remove all occurrences of string from each prefix and return the\
+    \ result:\n<code>", "\n  prefix_list <- list()\n  \n  # Scan from right to left,\
+    \ add prefix to list if prefix is not longer than input string\n  while(length(string)\
+    \ > 0) {\n    prefix_list <- c(prefix_list, paste(substr(string, 1, 1), collapse\
+    \ = \"\"))\n    string <- substr(string, 2)\n  }\n  \n  # Return the list of prefixes\n\
+    \  return(prefix_list)\n}\n", "\n  n <- nchar(string)\n  c()\n  for(i in 2:n)\
+    \ c <- c(string[1:i], c)\n  return(c)\n}\n", "\n  output <- c()\n  for (i in seq_along(string))\
+    \ {\n    output <- c(output, substr(string, 1, i))\n  }\n  return(output)\n}\n\
+    all_prefixes(\"abrakadabra\")", "\n    require(stringr)\n    str_split(string,\
+    \ \"\")[[1]] %>% map_chr(~paste(str_sub(.,1, 1), .)) %>% unlist()\n}\n", "\n \
+    \ prefix_list <- list()\n  \n  for (i in 1:length(string)) {\n    for (j in 1:i)\
+    \ {\n      prefix_list[[i]] <- paste0(substr(string, j, j), prefix_list[[i]])\n\
+    \    }\n  }\n  \n  prefix_list\n}\n</cell>\n<cell>\nall_prefixes('abc')\n</cell>\n\
+    <cell>\nall_prefixes('abcd')\n</cell>\n<cell>\nall_prefixes('abba')\n</cell>\n\
+    <cell>\nall_prefixes('abbab')\n</cell>\n<cell>\nall_prefixes('abbaba')\n</cell>\n\
+    <cell>\nall_prefixes('abbaba')\n</cell>\n<cell>\nall_prefixes('abbaba')\n</cell>\n\
+    <text>\nAll unique prefixes of a string\n\n</text>\n<cell>", "\n  result <- rep(\"\
+    \", length(string))\n  i <- 1\n  while (i <= length(string)) {\n    prefix <-\
+    \ substring(string, i, i)\n    prefix <- c(prefix, prefix, prefix[1])\n    result[i]\
+    \ <- prefix\n    i <- i + 3\n  }\n  result\n}\n\nall_prefixes(\"abc\")", "\n \
+    \ nm <- nchar(string)\n  x <- character(nm)\n  x <- substr(string, 1, 1, nm)\n\
+    \  x <- c(x, string[nm])\n  x\n}\n</code>\n<|/ a tags=r dscore=1 |>\n<| a tags=r\
+    \ |>\nThis can also be done using the str_pad function in the stringr package:\n\
+    <code>", "\n  \n  # Create a list to store prefixes and current prefix\n  prefixes\
+    \ <- c()\n  prefix <- \"\"\n  \n  # While there are characters in the string\n\
+    \  while (length(string) > 0) {\n    \n    # Append the current prefix to the\
+    \ list\n    prefixes <- c(prefixes, prefix)\n    \n    # Append the next character\
+    \ from the string to the prefix\n    prefix <- c(prefix, substr(string, 1, 1))\n\
+    \    \n    # Remove the character from the string\n    string <- substr(string,\
+    \ 2)\n  }\n  \n  # Return the list\n  return(prefixes)\n}\n", "\n  prefix <- character(length\
+    \ = nchar(string))\n  prefix[1] <- string[1]\n  prefix <- c(prefix, substr(string,\
+    \ 2, nchar(string)))\n  prefix <- c(prefix, substr(string, 3, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 4, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 5, nchar(string)))\n  prefix <- c(prefix, substr(string, 6, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 7, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 8, nchar(string)))\n  prefix <- c(prefix, substr(string, 9, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 10, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 11, nchar(string)))\n  prefix <- c(prefix, substr(string, 12,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 13, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 14, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 15, nchar(string)))\n  prefix <- c(prefix, substr(string, 16,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 17, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 18, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 19, nchar(string)))\n  prefix <- c(prefix, substr(string, 20,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 21, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 22, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 23, nchar(string)))\n  prefix <- c(prefix, substr(string, 24,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 25, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 26, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 27, nchar(string)))\n  prefix <- c(prefix, substr(string, 28,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 29, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 30, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 31, nchar(string)))\n  prefix <- c(prefix, substr(string, 32,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 33, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 34, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 35, nchar(string)))\n  prefix <- c(prefix, substr(string, 36,\
+    \ nchar(string)))\n  prefix <- c(prefix, substr(string, 37, nchar(string)))\n\
+    \  prefix <- c(prefix, substr(string, 38, nchar(string)))\n  prefix <- c(prefix,\
+    \ substr(string, 39, nchar(string", "\n  # Return list of all prefixes from shortest\
+    \ to longest of the input string\n  # >>> all_prefixes('abc')\n  # c('a', 'ab',\
+    \ 'abc')\n  return(apply(expand.grid(rep(list(strsplit(string, \"\")), each =\
+    \ length(string)), stringsAsFactors = FALSE), 1, function(x)\n    paste(unlist(strsplit(x,\
+    \ \"\")), collapse = \"\"))\n  )\n}\n", "\n  s <- strsplit(string, '')[[1]]\n\
+    \  p <- unlist(lapply(s, function(x) which(x != '')[1]))\n  unlist(lapply(s, function(x)\
+    \ paste(s[p[x]:(length(x)-1)], collapse=' ')))\n}\n</code>\n<|/ a tags=r dscore=1\
+    \ |>\n<| a dscore=1 |>\nHere is a one-liner using regex and stringr packages:\n\
+    <code>\nlibrary(stringr)\nlibrary(magrittr)\n\nstr_split(string = \"aa bb cc dd\
+    \ ee\", pattern = \" \") %>% \n  str_split(pattern = \" \") %>% \n  map(str_trim)\
+    \ %>% \n  map(str_c, collapse = \" \")\n", "\n  out <- c()\n  for (i in 1:nchar(string))\
+    \ {\n    out <- c(out, substr(string, i, i))\n  }\n  return(out)\n}\n", "\n  str\
+    \ <- c(\"\\\\w\", \"\\\\W\", \"\\\\w+\", \"\\\\W+\", \"\\\\w+$\", \"\\\\W+$\"\
+    , \"^.*$\")\n  unlist(lapply(str, function(x) {\n    strsplit(gsub(x, \"\", string),\
+    \ \"\")[[1]][1]\n  }))\n}\n", "\n  res <- c()\n  for(i in 1:nchar(string)) {\n\
+    \    for(j in i:nchar(string)) {\n      res <- c(res, substr(string, i, j))\n\
+    \    }\n  }\n  res\n}\n</code>\n<|/ a tags=r,regex |>\n<| a |>\nFor this kind\
+    \ of problem, I find the recursive functions to be the cleanest, since they don't\
+    \ involve loops and are easy to understand, i.e.,\n<code>\nall_prefixes <- function(string)\
+    \ {\n  if(nchar(string) == 1) return(list(string))\n  return(lapply(string, recursive_function,\
+    \ string[1:(nchar(string)-1)]))\n}\n\nrecursive_function <- function(string, prefix)\
+    \ {\n  if(identical(prefix, string)) return(list(prefix))\n  return(lapply(prefix,\
+    \ recursive_function, paste0(prefix, string), string[nchar(string):1]))\n}\n\n\
+    recursive_function(string = \"abc\", prefix = \"abc\")\n[[1]]\n[1] \"abc\"\n[[2]]\n\
+    [1] \"ab\" \"abc\"\n[[3]]\n[1] \"a\" \"ab\" \"abc\"\n[[4]]\n[1] \"a\" \"ab\" \"\
+    c\"\n[[5]]\n[1] \"a\" \"ab\" \"c\"\n</code>\n<|/ a dscore=2 tags=r,regex |>\n\
+    <| a tags=r,regex |>\nUsing stringr:\n<code>\nall_prefixes <- function(string)\
+    \ {\n    l <- str_split(string, \"\")[[1]][-1]\n    paste(l, string[[1]][seq(nchar(string))],\
+    \ sep=\"\")\n}\n</code>\nExplanation:\n<code>\n> library(stringr)\n> str <- \"\
+    ab\"\n> str_split(str, \"\")[[1]][-1]\n[1] \"a\"\n</code>\nThe above will split\
+    \ string into characters, split it into characters, then concatenate those character\
+    \ vectors back together. \n<code>\n> str <- \"abc\"\n> str_split(str, \"\")[[1]][-1]\n\
+    [1] \"a\"\n[2] \"ab\"\n[3] \"abc\"\n</code>\nThis will split string into characters,\
+    \ split it into characters, then concatenate those character vectors back together.\
+    \ \n<code>\n> str <- \"ab\"\n> str_split(str, \"\")[[1]][seq(nchar(str))]\n[1]\
+    \ \"a\"\n[2] \"ab\"\n[3] \"c\"\n</code>\nThis will split string into characters,\
+    \ split it into characters, then concatenate those character vectors back together.\
+    \ \n<code>\n> str <- \"abc\"\n> str_split(str, \"\")[[1]][seq(n", "\n  prefix_list\
+    \ <- list()\n  current_string <- string\n  i <- 1\n  while (i > 0) {\n    # Save\
+    \ prefix in list if present\n    prefix_list[length(prefix_list)] <- substr(current_string,\
+    \ 1, i)\n    # Remove prefix from input string\n    current_string <- substr(current_string,\
+    \ i + 1)\n    i <- i - 1\n  }\n  prefix_list\n}\n\nall_prefixes('abc')", "\n \
+    \ return(sort(str_split(string, \"\")[[1]], decreasing = TRUE))\n}\n", "\n  result\
+    \ <- character(length = nchar(string))\n  i <- 0\n  while (i < nchar(string))\
+    \ {\n    result[i] <- substring(string, i, nchar(string))\n    i <- i + 1\n  }\n\
+    \  return(result)\n}\n</code>\n<|/ a |>\n<| a dscore=2 |>\nHere is a simple way\
+    \ I came up with for a similar problem (extracting words from a string that starts\
+    \ with a specific letter). It uses gregexpr() to find all substrings that start\
+    \ with the letter specified, then pastes them together and trims whitespace from\
+    \ the beginning.\n<code>", "\n    string <- unlist(strsplit(string, \".\"))\n\
+    \    length(string)\n    lapply(seq_along(string), function(i) c(string[seq_len(i)],\
+    \ string[i]))\n}\n", "\n    # Convert the string to a character vector\n    string_vector\
+    \ <- as.vector(t(string))\n    # Return empty list if there is only a single character\n\
+    \    if(length(string_vector) == 1) return(character(0))\n    # Initialize a list\
+    \ to hold prefixes\n    prefixes <- list()\n    # Get the first character\n  \
+    \  first_character <- string_vector[1]\n    # Loop through rest of characters\
+    \ and add them to the prefixes\n    for(letter in string_vector[-1]) {\n     \
+    \   # Add current prefix to the list\n        prefixes <- c(prefixes, c(first_character,\
+    \ letter))\n    }\n    # Return the list as a character vector\n    return(paste0(prefixes,\
+    \ collapse = \"\"))\n}\n", "\n  stopifnot(is.character(string))\n  l <- strsplit(string,\
+    \ '')[[1]]\n  out <- rep(\"\", length(l))\n  prefix <- unlist(strsplit(string,\
+    \ ''))\n  i <- 0\n  for (s in prefix) {\n    l <- strsplit(s, '')[[1]]\n    out[i]\
+    \ <- s\n    out[i + 1] <- l\n    i <- i + 1\n  }\n  out\n}\n", "\n  stopifnot(is.character(string))\n\
+    \  stopifnot(length(string) >= 2)\n  output <- c()\n  output[1] <- string[1]\n\
+    \  for(i in 2:length(string)) {\n    output[i] <- paste0(output[i-1], string[i])\n\
+    \  }\n  output\n}\n", "\n    strings <- str_split(string, '')\n    strings <-\
+    \ strings[[1]]\n    for(i in seq_along(strings)) {\n        for(j in seq_along(strings))\
+    \ {\n            if(j > i) strings[i] <- paste(strings[i], strings[j], sep='')\n\
+    \        }\n    }\n    strings\n}\n", "\n  output <- \"\"\n  i <- 1\n  while(i\
+    \ <= nchar(string)) {\n    output <- c(output, substring(string, 1, i - 1))\n\
+    \    i <- i + 1\n  }\n  return(output)\n}\n", "\n    s <- strsplit(string, \"\"\
+    )[[1]]\n    lapply(s, function(x) unlist(strsplit(x, \"\\\\\")))\n}\n", "\n  x\
+    \ <- stringToRawVector(string, mode='bytes')\n  x <- unlist(strsplit(x, split=\"\
+    .\"))\n  x <- unlist(strsplit(x, split=\".\"))\n  return(x)\n}\n", "\n    prefix\
+    \ <- function(string) {\n        string <- as.character(string)\n        l <-\
+    \ min(which(string != \"\"))\n        out <- string[1:l]\n        return(out)\n\
+    \    }\n    list(string)\n}\n", "\n  # Remove leading characters\n  string <-\
+    \ substr(string, 1, 1)\n\n  # Recurse into each character and add to the accumulator\
+    \ if not at the end\n  c(string, all_prefixes(substring(string, 2, nchar(string))))\n\
+    }\n</code>\n<|/ a tags=algorithm,r,stringr,recursion |>\n<| a dscore=1 tags=algorithm,r,stringr,recursion\
+    \ |>\n<code>\nstrsplit(strsplit(x, \"\")[[1]][-1], \"\")", "\n  s <- unlist(strsplit(string,\
+    \ \".\"))\n  l <- max(lengths(s))\n  p <- numeric(l)\n  for(i in 1:l) {\n    p[i]\
+    \ <- paste0(s[-(i+1):i-1], collapse = \"\")\n  }\n  c(string, \".\", p)\n}\n</code>\n\
+    We test it:\n<code>\n> all_prefixes(\"a.b.c\")\n[1] \"a.b.c\"\n> all_prefixes(\"\
+    a\")\n[1] \"a\"\n> all_prefixes(\"ab\")\n[1] \"ab\"\n> all_prefixes(\"abc\")\n\
+    [1] \"abc\"\n</code>\n<|/ a |>\n<| c |>\nNice solution! The only issue is that\
+    \ it requires additional loop to add all prefixes (as `all_prefixes(\"abc\")`\
+    \ will return `\"abc\"`, not `\"a.b.c\"`). Of course, this can be easily overcomed\
+    \ with `sapply(all_prefixes, function(x) if (nchar(x) > nchar(string)) { string\
+    \ <- paste0(x, \".\", string)})`.\n<|/ c |>\n<| c |>\nThanks for your answer.\
+    \ I'm new to R and am just trying to wrap my head around it. I'm getting an error\
+    \ with `all_prefixes <- function(string) {s <- unlist(strsplit(string, \".\"));\
+    \ l <- max(lengths(s)); p <- numeric(l)` `for(i in 1:l) {p[i] <- paste0(s[-(i+1):i-1],\
+    \ collapse = \"\")}` `c(string, \".\", p)}` `Error: unexpected '}' in \"}\"`.\
+    \ I have tried adding line breaks, but I keep getting errors. Any suggestions?\n\
+    <|/ c |>\n<| c |>\nNo need for line breaks. That was a mistake on my part. You\
+    \ should add another `}` at the end of the function definition, so you get `all_prefixes\
+    \ <- function(string) {\n  s <- unlist(strsplit(string, \".\"))\n  l <- max(lengths(s))\n\
+    \  p <- numeric(l)\n  for(i in 1:l) {\n    p[i] <- paste0(s[-(i+1):i-1], collapse\
+    \ = \"\")\n  }\n  c(string, \".\", p)\n}`\n<|/ c |>\n<| a tags=string,r dscore=1\
+    \ |>\nHere are a couple of functions to find the prefix for a given string based\
+    \ on a character vector. The function returning a vector is useful for when you\
+    \ know the prefix you want. \n<code>\nprefix1 <- function(string, prefix) {\n\
+    \    x <- unlist(strsplit(string, \"\"))\n    i <- which.max( lengths(x)==", "\n\
+    \    string\n        %||% \n        string %||% \n        string %||% \n     \
+    \   string %||% \n        character \n            %||% \n            character\
+    \ %||% \n            character %||% \n            character %||% \n          \
+    \  numeric\n                %||% \n                numeric %||% \n           \
+    \     numeric %||% \n                numeric %||% \n                numeric\n\
+    \        }\n    ", "\n    prefix <- list()\n    prefix_len <- 0\n    string <-\
+    \ tolower(string)\n    for(i in seq_along(string)) {\n        for(j in i:length(string))\
+    \ {\n            prefix <- c(prefix, c(substring(string[j], i, j), substring(string[j],\
+    \ i, j)))\n            prefix_len <- prefix_len + length(substring(string[j],\
+    \ i, j))\n        }\n    }\n    prefix <- prefix[order(prefix_len)]\n    return(prefix)\n\
+    }\n</code>\n<|/ a dscore=3 tags=algorithm,r,string |>\n<| a dscore=3 |>\n<code>",
+  "\n  prefix_list <- strsplit(string, \"\")\n  prefix_list[[1]]\n}\n", "\n    stringr\
+    \ ::stringi::stri_locate_all_fixed(string, fixed = \"\")[[1]]\n}\n</code>\nThen\
+    \ you can find all the longest prefixes and their lengths and sort them by length.\n\
+    <code>\nlongest_prefix <- sapply(all_prefixes(x), length)\nlongest_prefix <- sort(longest_prefix,\
+    \ decreasing = TRUE)\nlongest_prefix <- longest_prefix[[1]]\n</code>\nFinally\
+    \ you can create a string from the longest prefix\n<code>\npaste0(longest_prefix,\
+    \ collapse = \"\")\n</code>\n<|/ a |>\n<| a |>\nUsing gregexpr:\n<code>", "\n\
+    \    paste0(head, tail, string)\n}\n", "\n  return(sort(gsub('[[:alpha:]]','',\
+    \ string)))\n}\n", "\n  prefix = \"\"\n  for(i in 1:nchar(string))\n    prefix\
+    \ <- paste(prefix, substr(string, i, i), sep=\"\", collapse=\"\")\n  return(paste(prefix,\
+    \ string, sep=\"\", collapse=\"\"))\n}\n", "\n  sapply(strsplit(string, ''), function(x)\
+    \ paste(unique(x), collapse = ''))\n}\n", "\n  lengths <- lapply(strsplit(string,\
+    \ \"\"), length)\n  prefixes <- sapply(lengths, function(x) rep(\"\", x))\n  return(prefixes)\n\
+    }\n\nall_prefixes('ab')", "\n    prefixes <- list()\n    for(i in 1:nchar(string))\
+    \ {\n        prefixes <- c(prefixes, string[1:i])\n    }\n    prefixes\n}\n",
+  "\n    string <- unlist(strsplit(string, \"\"))\n    prefix <- c()\n    while (length(prefix)\
+    \ < length(string)) {\n        prefix <- c(prefix, unlist(strsplit(string[length(prefix)],\
+    \ \"\")))\n    }\n    return(prefix)\n}\n", "\n  n <- length(string)\n  c(rep(string,\
+    \ rep(n, each = 2)), string)\n}\n</code>\nThe first step is to get the number\
+    \ of prefixes that we need (n in the above code).\nThen we create a vector of\
+    \ length n with n repeated n times, and a shorter version of the input string\
+    \ with each character repeated n times.\nWe can then return the first n prefixes\
+    \ as the beginning of the output vector, and concatenate the two vectors together\
+    \ into one with c()\n<|/ a dscore=1 |>\n<| a tags=regex,string,r |>\nThis code\
+    \ will take into account for multiple matches, while providing the longest possible\
+    \ match.\n<code>\nlibrary(dplyr)\n\nstring <- c(\"ab\", \"bc\")\n\nstr_sub(string,\
+    \ 1, 4) %>% \n  paste(collapse = \"\") %>% \n  paste(str_sub(string, 1, 4), collapse\
+    \ = \".\")\n</code>\n<|/ a dscore=0 |>\n<| c |>\nWhile this code snippet may solve\
+    \ the question, [including an explanation](http://meta.stackexchange.com/questions/114762/explaining-entirely-code-based-answers)\
+    \ really helps to improve the quality of your post. Remember that you are answering\
+    \ the question for readers in the future, and those people might not know the\
+    \ reasons for your code suggestion.\n<|/ c |>\n<| c |>\nThanks for your suggestion\
+    \ - I have added some explanation.\n<|/ c |>\n<| a tags=regex,string,r |>\n<code>\n\
+    string <- c(\"ab\", \"bc\")\nsubstr(string, 1, nchar(string))", "\n  prefixes\
+    \ <- unlist(lapply(string, nchar))\n  prefixes\n}\n", "\n  l <- str_length(string)\n\
+    \  out <- list()\n  for(i in 1:l) {\n    for(j in 1:l) {\n      if(j != i) {\n\
+    \        out <- c(out, paste0(substr(string, 1, i), substr(string, i, j)))\n \
+    \     }\n    }\n  }\n  out\n}\n</code>\nHere's an example using it on input \"\
+    ab\":\n<code>\nall_prefixes(\"ab\")", "\n  out <- character(length(string))\n\
+    \  for(i in seq_along(string)) {\n    temp <- string[(i+1):length(string)]\n \
+    \   out <- c(out, string[1:i], temp)\n  }\n  return(out)\n}\n", "\n  return(sort(unique(string)))\n\
+    }", "\n    lapply(strsplit(string, \"\"), function(x) paste0(x[1:length(x)], collapse\
+    \ = \"\"))\n}\n", "\n  # If input string is empty, report an empty list as a result\n\
+    \  if (length(string) == 0) {return(list())}\n  # Otherwise, find first non-letter\
+    \ character in input string\n  first_nonletter <- which(!(grepl(\"[A-Za-z]\",\
+    \ string)))[1]\n  # If no non-letter characters are found, return empty list\n\
+    \  if (length(first_nonletter) == 0) {return(list())}\n  # Otherwise, start searching\
+    \ backwards from the first non-letter character\n  # and find all prefixes\n \
+    \ prefixes <- substr(string, 1, first_nonletter - 1)\n  # Add all prefixes to\
+    \ list and return it\n  return(c(prefixes, all_prefixes(substr(string, first_nonletter,\
+    \ length(string))))) \n}\n", "\n  nchar(string)\n  string[seq_len(nchar(string))]\n\
+    }\n</code>\n<|/ a tags=r,string,function,regex,character |>\n<| c |>\nI made a\
+    \ mistake in the example, it should be c('a', 'ab', 'abc')\n<|/ c |>\n<| a |>\n\
+    <code>\nx = \"ab\"\npaste(substring(x, 1L, nchar(x)), \n      substring(x, nchar(x)+1L,\
+    \ nchar(x)), \n      sep=\"\") \n</code>\n<|/ a dscore=0 tags=r,string,function,regex,character\
+    \ |>\n<| a tags=r,string,function,regex,character |>\nYou can just use substring\
+    \ for this:\n<code>\nsubstring(s, 1, 1)\n</code>\nor\n<code>\nsubstring(s, nchar(s)\
+    \ - 1, 1)\n</code>\nSo you can wrap it in a function:\n<code>\nmySubstring <-\
+    \ function(s, n){\n  substring(s, nchar(s) - 1, 1)\n}\n</code>\nOr you could use\
+    \ regex:\n<code>\nmySubstring <- function(s){\n  substring(gregexpr(\"(?<=.{1})\"\
+    , s)[[1]], 1, 1)\n}\n</code>\n<|/ a dscore=0 |>\n<| a dscore=0 |>\n<code>\nget_prefixes\
+    \ <- function(string) {\n    out <- list()\n    n <- nchar(string)\n    out[1]\
+    \ <- substr(string, 1, 1)\n    for(i in 2:n) out[[i]] <- substr(string, i, i)\n\
+    \    return(out)\n}\n</code>\n<|/ a tags=r,string,function,regex,character |>\n\
+    <| a tags=r,string,function,regex,character dscore=0 |>\n<code>\nprefixes <- function(x)\
+    \ {\n  nx <- nchar(x)\n  x1 <- substr(x, 1, 1)\n  sapply(seq_len(nx), function(x)\
+    \ paste(substr(x, x, x), collapse = \"\"))\n}\n</code>\n<|/ a |>\n<| a tags=r,string,function,regex,character\
+    \ dscore=0 |>\nUsing the base R substring function, which works on strings, you\
+    \ can do\n<code>\nsubstring(x = s, start = 1, stop = 1)", "\n  result <- list()\n\
+    \  i <- 1\n  while (i < length(string)) {\n    prefix <- substr(string, i, i)\n\
+    \    i <- i + 1\n    result[[length(result) + 1]] <- prefix\n  }\n  result\n}\n",
+  "\n    apply(expand.grid(x=string, y=string), 1, paste0, collapse=\"\")\n}\n</code>\n\
+    <|/ a dscore=3 |>\n<| a tags=r,python,algorithm |>\nYou could do this with base\
+    \ R's gregexpr function. The trick is that we match zero or more letters followed\
+    \ by zero or more digits. We can use stringr::str_extract to extract these matches\
+    \ into an atomic vector.\n<code>", "\n  string <- as.character(string)\n  result\
+    \ <- list(c(string, paste(prefix, string, sep = '')))\n  result$n <- lengths(result)\n\
+    \  return(result)\n}\n", "\n    prefix <- function(string, prefix_char) {\n  \
+    \      str_split(string, split = prefix_char)[[1]][lengths(str_split(string, split\
+    \ = prefix_char))==1]\n    }\n    map(string, rep(\"[^\", c(2, length(unique(string)))))\n\
+    }\n", "\n  prefix_list <- list()\n  string_length <- nchar(string)\n  string_length\
+    \ <- ceiling(string_length)\n  prefix_list[[1]] <- substr(string, 1, 1)\n  for(i\
+    \ in 2:string_length){\n    prefix_list[[i]] <- paste(prefix_list[[i-1]],\n  \
+    \                             substr(string,i,i),\n                          \
+    \     sep = '')\n  }\n  return(prefix_list)\n}\n", "\n    prefix <- function(string)\
+    \ {\n        for(s in string) {\n            prefix <- function(s) c(prefix, string[1:s])\n\
+    \        }\n        c(prefix, string)\n    }\n    prefix(list(string))\n}\n",
+  "\n  n <- nchar(string)\n  c(string[1:n], rev(string[-(1:n)]))\n}\n</code>\nThen\
+    \ we can define a function to take an input string and return the longest prefix\
+    \ of any substring of that string that contains at least one letter of the alphabet:\n\
+    <code>", "\n    result <- list()\n    prefix_count <- 1\n    for (i in 1:length(string))\
+    \ {\n        \n        if (i == 1) {\n            result[[i]] <- c(string[[i]],\
+    \ rep(string[[1]], prefix_count))\n        }\n        \n        if (i > 1) {\n\
+    \            result[[i]] <- c(result[[i-1]], string[[i]])\n        }\n       \
+    \ \n        prefix_count <- prefix_count + 1\n    }\n    return(result)\n}\n</cell>\n\
+    <cell>", "\n  prefixes <- c()\n  for (i in seq_along(string)) {\n    prefix <-\
+    \ substring(string, i, i)\n    if (!is.na(prefix)) {\n      prefix <- c(prefix,\
+    \ substring(rev(string), i, i))\n    }\n    prefixes <- c(prefixes, prefix)\n\
+    \  }\n  return(prefixes)\n}\n", "\n  stopifnot(is.character(string))\n  # Initialize\
+    \ output list\n  output <- list()\n  \n  # Initialize prefix vector\n  prefix\
+    \ <- unlist(str_split(string))\n  \n  # Run through all possible prefixes\n  for(i\
+    \ in 1:length(prefix)) {\n    \n    # Get possible prefixes of length i from original\
+    \ string\n    possible_prefixes <- strsplit(prefix[i], \"\")[[1]]\n    \n    #\
+    \ If the original string has length i\n    if(length(prefix[i]) == i) {\n    \
+    \  output[[i]] <- c(prefix[i], paste(possible_prefixes, collapse = \"\"))\n  \
+    \  }\n    \n    # If the original string has length i + 1 \n    # AND string contains\
+    \ one of the possible prefixes\n    if(length(prefix[i]) == i + 1 & \n       \
+    \ prefix[i] %in% possible_prefixes) {\n      \n      output[[i]] <- c(prefix[i],\
+    \ paste(possible_prefixes, collapse = \"\"))\n    }\n  }\n  \n  # Return output\
+    \ list\n  return(output)\n}\n</code>\nOutput:\n<code>\n> all_prefixes(\"abc\"\
+    )\n[[1]]\n[1] \"abc\"\n\n[[2]]\n[1] \"abc\" \"ab\"  \"bc\"  \"c\"   \n\n[[3]]\n\
+    [1] \"abc\" \"ab\"  \"bc\"  \"c\"   \"ab\" \"bc\" \"c\"  \"a\"  \n\n[[4]]\n[1]\
+    \ \"abc\" \"ab\"  \"bc\"  \"c\"   \"ab\" \"bc\" \"c\"  \"a\"  \"ab\" \"bc\" \"\
+    c\" \"a\" \"b\"  \n\n[[5]]\n[1] \"abc\" \"ab\"  \"bc\"  \"c\"   \"ab\" \"bc\"\
+    \ \"c\"  \"a\"  \"ab\" \"bc\" \"c\" \"a\" \"b\" \"ab\"\n\n[[6]]\n[1] \"abc\" \"\
+    ab\"  \"bc\"  \"c\"   \"ab\" \"bc\" \"c\"  \"a\"  \"ab\" \"bc\" \"c\" \"a\" \"\
+    b\" \"ab\" \"bc\"\n\n[[7]]\n[1] \"abc\" \"ab\"  \"bc\"  \"c\"   \"ab\" \"bc\"\
+    \ \"c\"  \"a\"  \"ab\" \"bc\" \"c\" \"a\" \"b\" \"ab\" \"bc\" \"c\"\n\n[[8]]\n\
+    [1] \"abc\" \"ab\"  \"bc\"  \"c\"   \"ab\" \"bc\" \"c\"  \"a\"  \"ab\" \"bc\"\
+    \ \"c\" \"a\" \"b\" \"ab\" \"bc\" \"c\" \"a\"\n\n[[9]]\n[1] \"abc\" \"ab\"  \"\
+    bc\"  \"c\"   \"ab\" \"bc\" \"c\"  \"a\"  \"ab\" \"bc\" \"c\" \"a\" \"b\" \"ab\"\
+    \ \"bc\" \"c\" \"a", "\n    mapply(paste0, strsplit(string, \"[^a-zA-Z0-9]\"),\
+    \ USE.NAMES=F)\n}\n", "\n    string_lengths <- str_len(string)\n    string_index\
+    \ <- 1\n    output <- list()\n\n    while (string_lengths[string_index] != 0)\
+    \ {\n        output[[string_index]] <- paste(string[string_index],\n         \
+    \                                string[string_index + 1],\n                 \
+    \                        sep = \"\")\n        string_index <- string_index + 1\n\
+    \    }\n\n    output[[1]]\n}\n", "\n  # For each character\n  lapply(string, function(x)\
+    \ {\n    # Keep a running list of all the prefixes of the string\n    prefix <-\
+    \ c()\n    # Cycle the input string until the character is found and\n    # keep\
+    \ adding characters to prefix until no more characters\n    # are found\n    while\
+    \ (length(x) > 0) {\n      prefix <- c(prefix, x)\n      x <- substr(x, 1, nchar(x)-1)\n\
+    \    }\n    # Return prefix of the string to be used in the output\n    return(prefix)\n\
+    \  })\n}", "\n    string <- tolower(string)\n    string <- gsub(\"[^a-z]+\", \"\
+    \", string)\n    paste0(string, rep(1:length(string), each = length(gregexpr(\"\
+    [^a-z]+\", string))), collapse = \"-\")\n}\n", "\n  if(string.length == 0) {\n\
+    \    return(vector('character', 0))\n  }\n  all_prefixes_helper <- all_prefixes_helper1(string)\n\
+    \  return(paste(all_prefixes_helper[[1]], all_prefixes_helper[[2]], sep = ''))\n\
+    }\n", "\n  sapply(1:nchar(string), function(i) {\n    paste(substring(string,\
+    \ 1, i), collapse=\"\")\n  })\n}\n", "\n    prefix_list <- list()\n    prefix_list[[length(string)]]\
+    \ <- string\n    for(i in 2:(length(string))){\n        prefix_list[[length(string)-i]]\
+    \ <- paste0(prefix_list[[length(string)-i]], string[i])\n    }\n    return(prefix_list)\n\
+    }\n</code>\n<|/ a dscore=0 tags=r,algorithm,python |>\n<| a |>\nYou can try this\
+    \ in R. \n<code>\nlibrary(dplyr)\n\npaste(\n  str_pad(str_trim(str_squish(my_string)),\n\
+    \         width = 3, side = 'left', pad = ''),\n  collapse = '')\n\n[1] \"aba\"\
+    \    \"abbcc\"  \"abbbcc\" \"abbbbcc\"\n</code>\n<|/ a tags=r,algorithm,python\
+    \ dscore=0 |>\n<| a dscore=0 tags=r,algorithm,python |>\nIn python\n<code>\ndef\
+    \ all_prefixes(s):\n    prefixes = [s]\n    prev = s\n    for c in s[::-1]:\n\
+    \        prefixes.append(f'{prev}{c}')\n        prev = prefixes[-1]\n    return\
+    \ prefixes\n</code>\n<|/ a |>\n<| a tags=r,algorithm,python |>\nHere is a recursive\
+    \ solution in R that is more performant than anything in the answers so far:\n\
+    <code>\nall_prefixes <- function(string, prefix) {\n  if (length(prefix) > 0)\
+    \ {\n    prefix <- c(prefix, string[1:(length(prefix)-1)])\n    if (length(prefix)\
+    \ == length(unique(string))) {\n      return(prefix)\n    }\n    all_prefixes(string,\
+    \ prefix)\n  }\n}\n</code>\nThe idea is to first append prefix to all characters\
+    \ in string, and then append the string itself to the prefix in every recursive\
+    \ iteration. For a large enough prefix and string, the recursive iteration will\
+    \ never finish. Since we only want to return prefix once, we can break out of\
+    \ the recursive call with return() in each iteration.\nHere are some benchmarkings:\n\
+    <code>\nmicrobenchmark::microbenchmark(\n  all_prefixes_strings = \"abbbcc\",\n\
+    \  all_prefixes_str_squish = \"abbbcc\",\n  all_prefixes_str_squish_pad = \"abbbcc\"\
+    ,\n  all_prefixes_str_trim = \"abbbcc\",\n  all_prefixes_str_trim_pad = \"abbbcc\"\
+    ,\n  all_prefixes_str_substr = \"abbbcc\",\n  all_prefixes_str_substr_pad = \"\
+    abbbcc\",\n  all_prefixes_str_substr_pad_front = \"abbbcc\",\n  all_prefixes_str_substr_pad_front\
+    \ = \"abbbcc", "\n  # Find shortest prefix\n  minlen <- min(which(sapply(string,\
+    \ length) == 1))\n  \n  # Return prefix string\n  function(x) {\n    # Recursive\
+    \ call to get longest prefix\n    x[minlen:length(x)]\n  }\n}\n</cell>\n<code\
+    \ language=conda-root-py>", "\n    if (strlen(string) == 0)\n        NULL\n  \
+    \  else if (string[1] == \"\")\n        c(\"\", string)\n    else {\n        string\
+    \ <- gsub(\"\\\\s\", \"\", string)\n        prefixes <- c()\n        index <-\
+    \ 1\n        while (index <= length(string)) {\n            prefixes <- c(prefixes,\
+    \ string[1:index])\n            index <- index + 1\n        }\n        prefixes\n\
+    \    }\n}\n</code>\n<|/ a tags=r,string |>\n<| c |>\n+1 for \"The `stringr` package\"\
+    \ ... the function `str_extract_all` might be useful here\n<|/ c |>\n<| c |>\n\
+    Thank you for these excellent answers.  I chose the other one because it had some\
+    \ additional info about the `stringr` package.\n<|/ c |>\n<| a tags=r,string |>\n\
+    I'm sure there's a more efficient solution, but here's a recursive solution with\
+    \ no loops:\n<code>\nrecurse_prefix <- function(string) {\n  base <- ifelse(substr(string,\
+    \ 1, 1) == \"\", \"\", substr(string, 1, 1))\n  recursive <- function(string)\
+    \ {\n    prefix <- c(base, unlist(strsplit(string, split = \"\\\\s\")))\n    paste(prefix,\
+    \ collapse = \"\")\n  }\n  return(recursive(string))\n}\n</code>\n<|/ a dscore=2\
+    \ |>\n<| c |>\nYour solution is more efficient than mine, however I wanted to\
+    \ understand how I could use `str_extract_all` to get to what I wanted.  Do you\
+    \ know a good tutorial explaining how to use `str_extract_all` to get to what\
+    \ I wanted?\n<|/ c |>\n<| c |>\nYes, I do.  Here's a [tutorial](http://cran.r-project.org/web/packages/stringr/stringr.pdf)\
+    \ on `stringr` that's good if you're learning R.  I encourage you to check it\
+    \ out.\n<|/ c |>\n<| a |>\nYou can use strsplit with regex \\\\s+ to split on\
+    \ spaces:\n<code>\n> s <- \"foo bar\"\n> x <- strsplit(s,\" \", fixed = T)\n>\
+    \ x[[1]][[1]]\n[1] \"foo\" \"bar\"\n</code>\nOr, if you just want a vector as\
+    \ output of a function then \n<code>\n> unlist(strsplit(s,\" \", fixed = T))\n\
+    [1] \"foo\" \"bar\"\n</code>\n<|/ a tags=r,string dscore=2 |>\n<| a |>\nHere's\
+    \ a base R solution (it uses sapply to apply the function repeatedly to each element\
+    \ of a character vector). It uses g", "\n  string <- gsub(\"^\", \"\", string)\n\
+    \  n <- length(string)\n  i <- 1\n  res <- list()\n  while (i <= n) {\n    res[[i]]\
+    \ <- substr(string, i, i + 1)\n    i <- i + 1\n  }\n  res[[i]] <- gsub(\"^\",\
+    \ \"\", string)\n  return(res)\n}\n", "\n  sapply(1:nchar(string), function(i)\n\
+    \    paste0(substring(string, i, i), collapse = ''))\n}\n", "\n  # get a list\
+    \ of all possible prefixes of the input string and sort.\n  # this ensures they\
+    \ are in descending order as we want \"abc\" before \"ab\"\n  # but we will put\
+    \ them in alphabetical order so \"abc\" comes before \"ab\"\n  # and it will help\
+    \ with readability later on.\n  all_prefixes <- sort(substring(regexpr(\"[[:alpha:]]+\"\
+    , string), 2, nchar(string)),\n                       decreasing = TRUE)\n  #\
+    \ get the longest prefix\n  longest_prefix <- unlist(all_prefixes[length(all_prefixes)])\n\
+    \  # return the list of all prefixes in alphabetical order.\n  # we will need\
+    \ to append the longest prefix to the list of all prefixes\n  c(all_prefixes,\
+    \ longest_prefix)\n}\n</code>\n<|/ a |>\n<| a tags=r,string,algorithm |>\nTry\
+    \ this:\n<code>\nlibrary(stringr)\n\nstr <- \"abc\"\nstr_extract(str, \".(?=.)\"\
+    )", "\n    paste(substr(string, 1, 1), substr(string, 2, nchar(string)), substr(string,\
+    \ 3, nchar(string)), sep=\"\")\n}\n", "\n    strings <- sort(str_split(string))\n\
+    \    strings <- strings[seq(1, length(strings), 2)]\n    paste(strings, collapse\
+    \ = \"\")\n}\n", "\n  \n  # Initialize list of prefixes\n  output <- c()\n  \n\
+    \  # Get current prefix length\n  current_prefix_length <- nchar(string)\n  \n\
+    \  # Initialize current prefix\n  current_prefix <- string\n  \n  # Iterate over\
+    \ string until we get to first character that doesn't match current_prefix\n \
+    \ while (nchar(current_prefix) != current_prefix_length){\n  \n    # Add current_prefix\
+    \ to output list\n    output <- c(output, current_prefix)\n    \n    # Increment\
+    \ current prefix\n    current_prefix <- paste0(substr(current_prefix, 1, current_prefix_length),\
+    \ collapse=\"\")\n  }\n  \n  # Return output list\n  return(output)\n}\n\n", "\n\
+    \    s <- strsplit(string, \"\")[[1]]\n    p <- vector(mode = 'list', length =\
+    \ length(s))\n    p[1] <- string\n    for (i in 2:length(s)) {\n        p[i] <-\
+    \ paste0(s[i - 1], p[i-1])\n    }\n    p\n}\n", "\n  prefix <- \"\"\n  output\
+    \ <- list()\n\n  for(i in 1:length(string)) {\n    prefix <- paste(prefix, string[i],\
+    \ sep=\"\", collapse=\"\")\n    output[[i]] <- prefix\n  }\n\n  return(output)\n\
+    }\n", "\n    x <- strsplit(string, \"\")[[1]]\n    y <- c()\n    for (i in 1:length(x))\
+    \ {\n        y <- c(y, c(substr(x[i], 1, 1), paste(substr(x[i], 2, nchar(x[i])),\
+    \ collapse = \"\")))\n    }\n    return(y)\n}\n", "\n  all_prefixes <- strsplit(string,\
+    \ '')\n  all_prefixes[[1]]\n}\n", "\n  require(pacman)\n  p_list <- strsplit(string,\
+    \ \"\")[[1]]\n  all_prefixes <- function(x) {\n    for(i in seq_along(p_list))\
+    \ {\n      p <- p_list[[i]]\n      if(length(p) == 0) {\n        out <- p_list[seq_len(i)]\n\
+    \        break\n      } else {\n        if(length(x) == 0) {\n          out <-\
+    \ c(out, p)\n        }\n        x <- substring(x, 1, p) - 1\n        out <- c(out,\
+    \ all_prefixes(x))\n      }\n    }\n    out\n  }\n  all_prefixes(string)\n}\n",
+  "\n  out <- list()\n  for(i in seq_along(string)) {\n    prefix <- string[i : (length(string)\
+    \ - i)]\n    out <- c(out, prefix)\n  }\n  out\n}\n", "\n  chars <- strsplit(string,\
+    \ \"\")[[1]]\n  n <- max(lengths(chars))\n  prefix_chars <- sapply(seq_len(n),\
+    \ function(i) paste0(chars[seq_len(i)], collapse = \"\"))\n  prefix_char <- c(\"\
+    \", prefix_chars)\n  prefix_char\n}\n", "\n  return(setNames(lapply(string, paste0,\
+    \ strsplit(string, \"\")), paste0(string, collapse = \"\")))\n}\n</code>\nAnd\
+    \ a very inefficient method - using gregexpr to split into every possible combinations\
+    \ of length 1:\n<code>", "\n  n <- length(string)\n  if (n <= 1) return(list(string))\n\
+    \  return(lapply(seq_along(string), function(k) {\n    k <- min(k, n)\n    return(substr(string,\
+    \ k, k))\n  }))\n}\n</code>\nHere is a quick example:\n<code>\nall_prefixes(\"\
+    abc\")", "\n  string <- toupper(substr(string, 1, nchar(string)))\n  n <- length(string)\n\
+    \  result <- character(n)\n  for (i in 2:n) result[i] <- substr(string, 1, i)\n\
+    \  return(result)\n}\n</code>\n<|/ a tags=r |>\n<| c |>\nThat is exactly what\
+    \ I need. Thank you so much. I also posted a new related question in the same\
+    \ thread.\n<|/ c |>\n<| c |>\nI posted a new question related to your suggested\
+    \ code, can you take a look? https://stackoverflow.com/questions/55244426/r-combining-two-data-frames-based-on-specific-criteria\n\
+    <|/ c |>\n<| a |>\nA solution that uses gsub to extract matching prefixes and\
+    \ combine those prefixes into a single string.\n<code>\nlibrary(dplyr)\n\ndf <-\
+    \ data_frame(prefixes = c(\n  \"foo\", \"foo1\", \"foo2\", \"foo3\", \"foo4\"\
+    , \"foo5\", \"foo6\", \"foo7\", \"foo8\", \"foo9\", \"foo10\", \"foo11\", \"foo12\"\
+    , \"foo13\", \"foo14\", \"foo15\", \"foo16\", \"foo17\", \"foo18\", \"foo19\"\
+    , \"foo20\", \"foo21\", \"foo22\", \"foo23\", \"foo24\", \"foo25\", \"foo26\"\
+    , \"foo27\", \"foo28\", \"foo29\", \"foo30\", \"foo31\", \"foo32\", \"foo33\"\
+    , \"foo34\", \"foo35\", \"foo36\", \"foo37\", \"foo38\", \"foo39\", \"foo40\"\
+    , \"foo41\", \"foo42\", \"foo43\", \"foo44\", \"foo45\", \"foo46\", \"foo47\"\
+    , \"foo48\", \"foo49\", \"foo50\", \"foo51\", \"foo52\", \"foo53\", \"foo54\"\
+    , \"foo55\", \"foo56\", \"foo57\", \"foo58\", \"foo59\", \"foo60\", \"foo61\"\
+    , \"foo62\", \"foo63\", \"foo64\", \"foo65\", \"foo66\", \"foo67\", \"foo68\"\
+    , \"foo69\", \"foo70\", \"foo71\", \"foo72\", \"foo73\", \"foo74\", \"foo75\"\
+    , \"foo76\", \"foo77\", \"foo78\", \"foo79\", \"foo80\", \"foo81\", \"foo82\"\
+    , \"foo83\", \"foo84\", \"foo85\", \"foo86\", \"foo87\", \"foo88\", \"foo89\"\
+    , \"foo90\", \"foo91\", \"foo92\", \"foo93\", \"foo94\", \"foo95\", \"foo96\"\
+    , \"foo97\", \"foo98\", \"foo99\", \"foo100\", \"foo101\", \"foo102\", \"foo103\"\
+    , \"foo104\", \"foo105\", \"foo106\", \"foo107\", \"foo108\", \"foo109\", \"foo110\"\
+    , \"foo111\", \"foo112\", \"", "\n  string <- unlist(strsplit(string, \"\"))\n\
+    \  unlist(lapply(seq_along(string), function(x) {\n    paste(substr(string, x,\
+    \ x+1), collapse = \"-\")\n  }))\n}\n", "\n    x <- string\n    l <- c()\n   \
+    \ while (length(x) > 0) {\n        x <- substring(string = x, start = 1, stop\
+    \ = length(x))\n        l <- c(l, x)\n    }\n    return(l)\n}\n", "\n    paste0(string,collapse='')\
+    \ # Collapse string with empty string to create empty string\n}\n", "\n    string\
+    \ = tolower(string)\n    string[strsplit(string, \"\")[[1]]]\n}\n", "\n    prefixes\
+    \ <- list()\n    for (i in 0:length(string)) {\n        prefixes[[i]] <- substring(string,\
+    \ i, 1)\n    }\n    prefixes\n}\n", "\n  prefixes <- strsplit(string, '')[[1]]\n\
+    \  for(i in seq(2, length(prefixes))) {\n    if(prefixes[i - 1] == prefixes[i])\
+    \ {\n      prefixes[i - 1] <<- c(prefixes[i - 1], prefixes[i])\n      break\n\
+    \    }\n  }\n  return(prefixes)\n}\n", "\n  result <- c()\n  for (i in 1:nchar(string))\
+    \ {\n    result <- c(result, substr(string, i, i))\n  }\n  return(result)\n}\n",
+  "\n\tprefix_list <- c()\n\tfor (i in 1:nchar(string)) {\n\t\tprefix_list <- c(prefix_list,\
+    \ substr(string, 1, i))\n\t}\n\treturn(prefix_list)\n}\n", "\n  prefix_list <-\
+    \ c()\n  prefix_char <- c()\n  prefix_char[1] <- string[1]\n  prefix_char <- substr(prefix_char,\
+    \ start = 1, stop = nchar(prefix_char))\n  prefix_char <- paste(prefix_char, collapse\
+    \ = '')\n  for (i in 2:nchar(string)) {\n    for (j in 1:i) {\n      prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    }\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n    prefix_char <- paste(prefix_char,\
+    \ collapse = '')\n    prefix_char <- paste(prefix_char, collapse = '')\n    prefix_char\
+    \ <- paste(prefix_char, collapse = '')\n", "\n  string <- strsplit(string, \"\"\
+    )\n  res <- list()\n  for (i in seq_along(string)) {\n    res <- c(res, string[[i]]\
+    \ %>% rep(1:length(string[[i]]), each = length(string[[i]])))\n  }\n  return(res)\n\
+    }\n", "\n  return(str_split(string, \"\")[[1]]) # Use str_split() to split string\
+    \ into characters, not words\n}\n</cell>\n<cell>\nall_prefixes('abc')\n</cell>\n\
+    <cell>", "\n    \n    prefix <- function(string, prefix){\n        if (string[1]\
+    \ == prefix){\n            return prefix\n        }\n        if (string[1] !=\
+    \ prefix) {\n            prefix <- prefix(string, \"a\")\n        }\n        return(prefix)\n\
+    \    }\n    \n    string_list <- c()\n    \n    for (i in 1:length(string)) {\n\
+    \        string_list <- c(string_list, prefix(string,string[i]))\n    }\n    return(string_list)\n\
+    }\n</cell>\n<text>\nTime complexity\nThe time complexity of all_prefixes is $O(n)$.\n\
+    \n\n</text>\n<cell>\nall_prefixes(\"abab\")\n</cell>\n<text>\nReverse a string\n\
+    Given a string, return a new string with characters reversed.\n\n\n</text>\n<cell>",
+  "\n    string <- stringr::str_replace_all(string, pattern = \"([^a-z]+)\", replacement\
+    \ = \"\", fixed = TRUE)\n    string <- stringr::str_replace_all(string, pattern\
+    \ = \"([a-z]+)$\", replacement = \"\\\\1\", fixed = TRUE)\n    stringr::str_replace_all(string,\
+    \ pattern = \"([a-z]+)$\", replacement = \"\\\\1\", fixed = TRUE)\n    string\n\
+    }\n", "\n    p <- strsplit(string, \"\")[[1]]\n    len <- length(p)\n    m <-\
+    \ matrix(p, 1, len, byrow = TRUE)\n    t(m)[,1]\n}\n</code>\n<|/ a |>\n<| c |>\n\
+    Ok, I get why it's wrong. I tried your code and it returns all combinations of\
+    \ substrings while I need all possible combinations of substrings starting from\
+    \ longest prefix to shortest (so all substrings beginning from letter `b`). For\
+    \ example input `abc` should return `a b c ab ac bc abc`.\n<|/ c |>\n<| c |>\n\
+    .sf OK, I've updated the answer. I still think there might be a more elegant way\
+    \ using one of the many algorithms on [this page](http://en.wikipedia.org/wiki/Longest_common_substring_problem).\n\
+    <|/ c |>\n<| c |>\nI've updated my example to show why it returns all combinations,\
+    \ while I expect it to return all combinations of substrings starting from longest\
+    \ prefix to shortest.\n<|/ c |>\n<| a tags=r,algorithm,performance,string |>\n\
+    <code>\nfind_string2 <- function(string){\n  s <- strsplit(string, \"\")\n  s2\
+    \ <- sapply(s, function(x){return(x)})\n  n <- length(s2[[1]])\n  result <- rep(\"\
+    \",n)\n  for(i in 1:n){\n     for(j in 1:n){\n        result[i] <- paste(s2[[i]][j],\
+    \ s2[[i]][j+1],sep=\"\")\n     }\n  }\n  return(paste(substr(result, 1, n+1),\
+    \ substr(result, 1, n+1), sep=\"\"))\n}\n</code>\n<|/ a dscore=0 |>\n<| a tags=r,algorithm,performance,string\
+    \ dscore=0 |>\nBased on Ben's answer, I came up with the following code which\
+    \ does exactly what I need. I'll leave the question open for better algorithms\
+    \ if anyone has any.\n<code>\nfind_string2 <- function(string) {\n  p <- strsplit(string,\
+    \ \"\")[[1]]\n  len <- length(p)\n  m <- matrix(p, 1, len, byrow = TRUE)\n  t(m)[,1]\n\
+    \n}\n", "\n    \n    string <- unlist(strsplit(string, \"\"))\n    \n    n <-\
+    \ length(string)\n    \n    prefixes <- character(n)\n    \n    for(i in seq(n))\
+    \ {\n        \n        prefix <- substring(string[i], 1, n-1)\n        \n    \
+    \    if(i <= 1) {\n            \n            prefixes[i] <- prefix\n         \
+    \   \n        } else {\n            \n            prefix <- c(prefix, substring(string[i],\
+    \ n+1, n))\n            \n            prefixes[i] <- prefix\n        }\n    }\n\
+    \    \n    return(prefixes)\n}\n", "\n  str <- unlist(strsplit(string, ''))\n\
+    \  len <- length(str)\n  out <- character(len)\n  for(i in 1:len) {\n    if(i\
+    \ > 1) {\n      out[i] <- paste(prefix, str[-i], sep = '')\n    } else {\n   \
+    \   out[i] <- str[-i]\n    }\n  }\n  return(out)\n}\n", "\n    all( lapply( strsplit(string,\
+    \ ''), paste0, collapse='') )\n}\nall_prefixes(\"abaabc\")", "\n    prefix <-\
+    \ c()\n    for (s in seq_along(string)) {\n        prefix <- c(prefix, string[1:s])\n\
+    \    }\n    return(prefix)\n}\n", "\n  n <- nchar(string)\n  prefix <- list('')\n\
+    \  for(i in seq_len(n)) {\n    prefix[[i]] <- c(prefix[[i]], substr(string,i,i+1))\
+    \ # append current substring to current prefix\n  }\n  return(prefix)\n}\nall_prefixes('abc')\n\
+    </code>\n<|/ a tags=r,string,list,for-loop,split dscore=1 |>\n<| c |>\nThis was\
+    \ a brilliant answer! Just one question. Would it be possible to modify it so\
+    \ that it would output a list?\n<|/ c |>\n<| c |>\nYou can do `unlist(lapply(all_prefixes('abc'),\
+    \ function(x){paste0(head(tail(x, -1), -1), tail(x, -1))}))`\n<|/ c |>\n<| c |>\n\
+    I've edited the answer to show how to get your list rather than the string output.\n\
+    <|/ c |>\n<| c |>\nThis was fantastic! Just one problem; it keeps outputting a\
+    \ character vector rather than a list. Would you know a way to fix this?\n<|/\
+    \ c |>\n<| c |>\nSure, just wrap the output in list like so: `list(lapply(all_prefixes('abc'),\
+    \ function(x){paste0(head(tail(x, -1), -1), tail(x, -1))}))`\n<|/ c |>\n<| a dscore=1\
+    \ tags=r,string,list,for-loop,split |>\nA similar approach to Rudolph's answer:\n\
+    <code>\nall_prefixes <- function(string){\n    n <- nchar(string)\n    prefix\
+    \ <- list('')\n    for(i in seq_len(n)) {\n        prefix[[i]] <- c(prefix[[i]],\
+    \ substr(string,i,i+1)) # append current substring to current prefix\n    }\n\
+    \    return(prefix)\n}\n\nstrings <- c(\"abc\", \"bca\", \"abbc\", \"cab\")\n\
+    all_prefixes(strings)\n[[1]]\n[1] \"abc\" \"ab\"  \"abc\" \"a\"   \"ab\"  \"ab\"\
+    \  \"a\"   \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"  \"\
+    a\"   \"ab\"  \"ab\"  \"a\"   \n[26] \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"  \"\
+    a\"   \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"  \"a\"  \
+    \ \"ab\"  \"ab\"  \"a\"   \n[53] \"ab\"  \"ab\"  \"a\"   \"ab\"  \"ab\"", "\n\
+    \    prefix <- vector('character', length(string))\n    lengths <- length(prefix)\n\
+    \    for (i in 1:lengths) {\n        for (j in (i+1):lengths) {\n            prefix[i]\
+    \ <- paste(prefix[i], string[j], sep='')\n        }\n    }\n    return(prefix)\n\
+    }\n", "\n    # Create a list with one entry per each prefix of string\n    prefixes\
+    \ <- unlist(\n        lapply(\n            strsplit(string, \"\"),\n         \
+    \   function(s) {\n                s <- sub(\"^\", \"\", s)\n                s\
+    \ <- sub(\"\\\\w+\", \"\", s)\n                return(s)\n            }\n    \
+    \    )\n    )\n    \n    # Return vector with all unique prefixes\n    unique(prefixes)\n\
+    }\n</code>\n<|/ a tags=string,r,algorithm |>\n<| c |>\n+1 This is an interesting\
+    \ approach. I'd recommend using `stringi::stri_split_regex` as its `perl` option\
+    \ is `perl = TRUE`. This will produce a list, rather than a character vector,\
+    \ which can be handy if your data is particularly large.\n<|/ c |>\n<| c |>\n\
+    Thanks. I didn't know about `stringi`. I added a solution that uses that function\
+    \ instead.\n<|/ c |>\n<| a |>\nA base R solution:\n<code>\nlibrary(gsubfn)\nunlist(strapplyc(x,\
+    \ \"\\\\w+\", simplify = character))", "\n  strsplit(string, \"\")[[1]]\n}\n",
+  "\n    lapply(seq_along(sort(nchar(string))), function(x) {\n        substring(x\
+    \ = string, from = x, to = x)\n    })\n}\n", "\n  prefixes <- c()\n  repeat {\n\
+    \    prefix <- substr(string, 1, 1)\n    if (prefix %in% prefixes) {\n      return(prefixes)\n\
+    \    } else {\n      prefixes <- c(prefixes, prefix)\n    }\n  }\n}\n", "\n  chars\
+    \ <- strsplit(string, \"\")[[1]]\n  lapply(seq(1, length(chars)), function(i)\
+    \ {\n    substr(chars, i, i + 1)\n  })\n}\n", "\n    stringl <- strsplit(string,\
+    \ \"\")[[1]]\n    paste0(subset(stringl, nchar(stringl) > 1), collapse = \"\"\
+    )\n}\n</code>\n<|/ a tags=regex,string,r |>\n<| a dscore=1 |>\n<code>\nlibrary(stringr)\n\
+    paste0(str_subset(strsplit(str1, '')[[1]], nchar(str_subset(str1, nchar(str_subset(str1,\
+    \ nchar(str_subset(str1, ''), nchar(str1))))>1)), '')\n</code>\n<|/ a tags=regex,string,r\
+    \ |>\n<| c |>\nYou can add an explanation about your solution\n<|/ c |>\n<| a\
+    \ tags=regex,string,r dscore=1 |>\n<code>\nlibrary(stringr)\nlibrary(magrittr)\n\
+    \ngsub(\"(?<=.)(?=.)\", \"\", str_extract(str1, \"[a-z0-9]+\"), perl = TRUE)",
+  "\n  \n  # Create list of all possible prefixes of string\n  prefixes <- strsplit(string,\
+    \ \"\")[[1]]\n  \n  # Create empty list to hold output values\n  results <- list()\n\
+    \  \n  # For each prefix, return all suffixes (all possible suffixes of substring)\n\
+    \  for (i in 1:length(prefixes)) {\n    results[[i]] <- strsplit(prefixes[i],\
+    \ \"\")[[1]][-1]\n  }\n  \n  # Return list of all prefixes from shortest to longest\
+    \ of the input string\n  # Return all possible prefixes of string as list\n  #\
+    \ >>> all_prefixes('abc')\n  # c('a', 'ab', 'abc')\n  results\n}\n</cell>\n<cell>",
+  "\n  stopifnot(!is.null(string))\n  stopifnot(is.character(string))\n  \n  stopifnot(length(gregexpr(paste0(\"\
+    (?<=^\", string, \"$)\"), string, perl = TRUE)) == 0)\n  \n  \n  lapply(1:length(gregexpr(paste0(\"\
+    (?<=^\", string, \"$)\"), string, perl = TRUE)), function(i) {\n    if (i == 1)\
+    \ {\n      return(substr(string, 1, gregexpr(paste0(\"(?<=^\", string, \"$)\"\
+    ), string, perl = TRUE)[i]))\n    } else {\n      return(substr(string, gregexpr(paste0(\"\
+    (?<=^\", string, \"$)\"), string, perl = TRUE)[i-1], gregexpr(paste0(\"(?<=^\"\
+    , string, \"$)\"), string, perl = TRUE)[i]))\n    }\n  })\n}\n", "\n    \n   \
+    \ # Initialize prefix list\n    prefix_list <- c()\n    \n    # Keep iterating\
+    \ until string becomes an empty string\n    while(string != \"\") {\n        \n\
+    \        # Check if character is a prefix\n        if(str_detect(string, string[1]))\
+    \ {\n            \n            # Add prefix to list\n            prefix_list <-\
+    \ c(prefix_list, string[1])\n            \n            # Remove prefix from string\n\
+    \            string <- gsub(paste0(string[1], \"+\"), \"\\\\1\", string)\n   \
+    \     }\n        \n        # Move through string and add to prefix list if it\
+    \ is a prefix\n        for(i in 2:(nchar(string)-1)) {\n            \n       \
+    \     # Check if character is a prefix\n            if(str_detect(string, string[i]))\
+    \ {\n                \n                # Add prefix to list\n                prefix_list\
+    \ <- c(prefix_list, string[i])\n                \n                # Remove prefix\
+    \ from string\n                string <- gsub(paste0(string[i], \"+\"), \"\\\\\
+    1\", string)\n            }\n        }\n    }\n    \n    # Return prefix list\n\
+    \    return(prefix_list)\n}\n", "\n  # Create recursive function which calls itself\
+    \ with two arguments\n  # First argument is prefix\n  # Second argument is suffix\n\
+    \  # Return list of all prefixes from shortest to longest of the input string\n\
+    \  # Examples:\n  # >>> all_prefixes('')\n  # []\n  # >>> all_prefixes('a')\n\
+    \  # ['a']\n  # >>> all_prefixes('ab')\n  # ['a', 'ab']\n  # >>> all_prefixes('abc')\n\
+    \  # ['a', 'ab', 'abc']\n  all_prefixes <- function(prefix, suffix) {\n    # If\
+    \ input is empty, return empty list\n    if (length(prefix) == 0) {\n      return(list(prefix))\n\
+    \    }\n    # If input is empty string, return empty list\n    if (length(suffix)\
+    \ == 0) {\n      return(list(prefix))\n    }\n    # If input is single character,\
+    \ return list with single prefix character\n    if (length(prefix) == 1 && length(suffix)\
+    \ == 1) {\n      return(list(prefix))\n    }\n    # Find prefixes from shortest\
+    \ to longest\n    prefix_list <- all_prefixes(prefix, substr(string, 1, length(prefix)\
+    \ - 1))\n    # Find suffixes from shortest to longest\n    suffix_list <- all_prefixes(substr(string,\
+    \ 1, length(prefix)), suffix)\n    # Return list including both prefixes and suffixes\n\
+    \    # Example: prefix is 'b', suffix is 'bc'\n    # >>> all_prefixes('b', 'bc')\n\
+    \    # ['b', 'bc', 'bca', 'bcb']\n    # >>> all_prefixes('b', 'bc')\n    # ['b',\
+    \ 'bc', 'bca', 'bcb']\n    return(prefix_list + suffix_list)\n  }\n  # Call recursive\
+    \ function with all characters of input string\n  # Example: prefix is 'b', suffix\
+    \ is 'bc'\n  # >>> all_prefixes('b', 'bc')\n  # ['b', 'bc', 'bca', 'bcb']\n  #\
+    \ >>> all_prefixes('b', 'bc')\n  # ['b', 'bc', 'bca', 'bcb']\n  return(all_prefixes(string,\
+    \ string))\n}\n</cell>\n<cell>", "\n  string <- gsub(\" \", \"\\\\ \", string)\n\
+    \  str_split(string, \"\\\\ \")[[1]]\n}\n", "\n    # Initialize our list\n   \
+    \ prefix <- character(0)\n    prefix <- c(prefix, string[1:(length(string)-1)])\n\
+    \    prefix <- c(prefix, string[2:length(string)])\n    return(prefix)\n}\n",
+  "\n  string <- gsub(\" \", \"\", string)\n  string_length <- nchar(string)\n  prefix_list\
+    \ <- c(\"\", string[1:string_length])\n  return(prefix_list)\n}\n</code>\n<|/\
+    \ a dscore=0 |>\n<| a dscore=0 |>\nWe can use gsubfn from gsubfn to replace all\
+    \ the spaces with single space, and then gsub to remove the single space from\
+    \ the start and end. \n<code>\nlibrary(gsubfn)\n", "\n    len <- nchar(string)\n\
+    \    res <- NULL\n    repeat {\n        i <- 1\n        while(i <= len) {\n  \
+    \          i <- i + 1\n            if(substr(string, i, 1) %in% \"a\") {\n   \
+    \             tmp <- substr(string, i, i)\n                if(!is.null(res)) {\n\
+    \                    rec <- c(res, rec)\n                } else {\n          \
+    \          rec <- tmp\n                }\n            }\n        }\n        res\
+    \ <- c(res, res)\n    }\n    res\n}\n", "\n    prefix <- rep(\"\", length(string))\n\
+    \    prefix[1] <- string[1]\n    prefix <- append(prefix, string[-1])\n    prefix\
+    \ <- c(prefix, NA)\n    prefix\n}\n", "\n  \n  prefix_list <- character(0)\n \
+    \ \n  \n  \n  \n  for(i in 1:nchar(string)) {\n    for(j in 1:nchar(string)) {\n\
+    \      prefix_list[i] <- paste(substr(string, i = i, j), sep = \"\")\n      prefix_list[i+1]\
+    \ <- paste(substr(prefix_list[i], i = 1, j), sep = \"\")\n    }\n  }\n  \n  return(prefix_list)\n\
+    \  \n}\n</code>\n<|/ a tags=r,string dscore=0 |>\n<| a tags=r,string |>\nThis\
+    \ answer relies on recursive functions.  We break this problem into two parts\
+    \ -- a recursive function that splits a string into two strings based on the first\
+    \ character of the string, and a function that calls itself to create sub-strings\
+    \ of the split string.  This function splits string s into two parts s -- one\
+    \ that starts with prefix and one that does not.  It uses base R and is thus relatively\
+    \ straightforward to write.\n<code>\nsplitStr <- function(s, prefix) {\n  \n \
+    \ splitStr <- function(s, prefix) {\n    \n    # base case: s is the whole string\n\
+    \    if (s == \"\") {\n      c(\"\", s)\n    }\n    \n    # base case: s starts\
+    \ with prefix and prefix is the empty string\n    if (substr(s, 1, 1) == prefix)\
+    \ {\n      c(prefix, s)\n    }\n    \n    # recursive case: s starts with prefix\
+    \ and prefix is not empty\n    # -- split it on first character and recurse\n\
+    \    else if (substr(s, 1, 1) == prefix) {\n      c(prefix, splitStr(substring(s,\
+    \ 2), prefix))\n    }\n    \n    # base case: s does not start with a prefix and\
+    \ prefix is not empty\n    # -- recurse\n    else {\n      splitStr(substring(s,\
+    \ 2), prefix)\n    }\n  }\n  \n  # call recursive function with the original string\n\
+    \  # and an empty prefix to split on\n  splitStr(s, \"\")\n}\n</code>\n<|/ a dscore=0\
+    \ |>\n<| a dscore=0 |>\nHere are two ways to do it, both relying on base R:\n\n\
+    <code>", "\n\tprefix_list <- character(0)\n\tprefix_list <- c(prefix_list, substring(string,\
+    \ 1, 1))\n\tfor(i in 2:length(string)) {\n\t\tprefix_list <- c(prefix_list, substring(string,\
+    \ i, 1))\n\t}\n\treturn(prefix_list)\n}\n", "\n    x <- unlist(strsplit(string,\
+    \ \"\"))\n    lapply(x, function (x) {\n        paste0(x, collapse = \"\")\n \
+    \   })\n}\n</cell>\n<cell>", "\n    string <- paste0(rep(\"\", times = nchar(string)),\
+    \ string)\n    start <- match(substr(string, nchar(string), nchar(string)), string)\n\
+    \    end <- start + nchar(substr(string, start, nchar(string)))\n    substr(string,\
+    \ start, end)\n}\n</code>\n<|/ a dscore=2 tags=r |>\n<| c |>\nThank you for this\
+    \ solution! I really appreciate it!\n<|/ c |>\n<| a |>\nYou could also use the\
+    \ package stringr. Here is an example which should work for your case.\n<code>",
+  "\n    string <- gsub(\"^\", \"\", string)\n    string <- paste(string, collapse\
+    \ = \"\")\n    n <- nchar(string)\n    n <- min(n, max(lengths(strsplit(string,\
+    \ \"\\\\W\"))))\n    string[seq(1, n, by = 1L)]\n}\n", "\n    prefix <- function(string,\
+    \ prefixes = c()) {\n        prefix <- substr(string, 1, 1) # First character\
+    \ of string\n        if (substr(string, 1, 1) != prefix) {\n            return(append(prefixes,\
+    \ prefix))\n        }\n        prefix <- substr(string, 2, nchar(string))\n  \
+    \      if (substr(string, 2, nchar(string)) != prefix) {\n            return(append(prefixes,\
+    \ prefix))\n        }\n        prefix <- substr(string, 3, nchar(string))\n  \
+    \      if (substr(string, 3, nchar(string)) != prefix) {\n            return(append(prefixes,\
+    \ prefix))\n        }\n        return(prefixes)\n    }\n    return(prefix(string))\n\
+    }\n", "\n  # Base case: empty input string\n  if(length(string) == 0) {\n    return(list())\n\
+    \  }\n\n  # Recursive case: try appending each prefix of the input string to a\
+    \ list of\n  # all prefixes of the input string recursively\n  return(\n    lapply(string,\
+    \ all_prefixes) +\n    # Recursively add the current prefix of the input string\
+    \ to the list of\n    # all prefixes of the input string recursively\n    lapply(\n\
+    \      all_prefixes,\n      function(x) {\n        if(length(x) == 0) {\n    \
+    \      return(list(x))\n        } else {\n          return(list(x, substr(x, 1,\
+    \ nchar(x))))\n        }\n      }\n    )\n  )\n}\n", "\n  n <- length(string)\n\
+    \  m <- 1L\n  prefix <- character(n)\n  while (m <= n){\n    prefix[m] <- string[seq(m,\
+    \ n)]\n    m <- m + 1L\n  }\n  prefix\n}\n</code>\nThis code is a very fast version\
+    \ for your problem. Now we can use strsplit and collapse to split string by each\
+    \ prefix and return all possible combination :\n<code>\nall_combinations <- function(string,\
+    \ prefix) {\n  n <- length(string)\n  m <- 1L\n  result <- character(n)\n  while(m\
+    \ <= n){\n    m <- m + 1L\n    result[m] <- string[seq(m, n)]\n  }\n  return(result)\n\
+    }\n\nsplitted <- strsplit(inputString, '[ab]') \nresult <- lapply(splitted, function(x)\
+    \ {\n  all_combinations(x, all_prefixes(string))\n})\n</code>\nFinally, combine\
+    \ them all to one single data.frame with cbind\n<code>\ndo.call(rbind, result)\n\
+    </code>\n<|/ a |>\n<| c |>\nThanks alot! The code works. But can you please explain\
+    \ the code?\n<|/ c |>\n<| c |>\nI have added some explanations. Please let me\
+    \ know if you have any more questions.\n<|/ c |>\n<| c |>\nThanks alot for this\
+    \ answer. Your help is very appreciated. :)\n<|/ c |>\n<| c |>\nHow about `all_combinations(string,\
+    \ \"ab\")` ?\n<|/ c |>\n<| c |>\nI think `all_combinations` should take `string`\
+    \ instead of `inputString`.\n<|/ c |>\n<| a tags=r,combinations |>\nWith your\
+    \ current input string, \"abc\", the result will be :\n<code>\n$`1`\n[1] \"a\"\
+    \ \"b\" \"c\"\n\n$`2`\n[1] \"a\" \"b\" \"c\"\n\n$`3`\n[1] \"a\" \"b\" \"c\"\n\n\
+    $`4`\n[1] \"a\" \"b\" \"c\"\n\n$`5`\n[1] \"a\" \"b\" \"c\"\n\n$`6`\n[1] \"a\"\
+    \ \"b\" \"c\"\n\n$`7`\n[1] \"a\" \"b\" \"c\"\n\n$`8`\n[1] \"a\" \"b\" \"c\"\n\n\
+    $`9`\n[1] \"a\" \"b\" \"c\"\n\n$`10`\n[1] \"a\" \"b\" \"c\"\n\n$`", "\n  str_split(string,\"\
+    \")[[1]]\n}\n", "\n    map(string, stringr::str_prefix) %>%\n        map(paste,\
+    \ collapse = \"\")\n}\n", "\n    shortest <- min(strsplit(string, \"\")[[1]])\n\
+    \    longest <- max(strsplit(string, \"\")[[1]])\n    c(shortest, longest)\n}\n\
+    </code>\n<|/ a dscore=2 |>\n<| c |>\nThanks for your answer. I tested your solution\
+    \ out and it didn't work (I edited the question to show you). I will also test\
+    \ out Kevin's and see if I can figure it out.\n<|/ c |>\n<| c |>\nYeah, I edited\
+    \ the question to show you what I meant.\n<|/ c |>\n<| c |>\nI edited my answer\
+    \ (after finding some bug). Try now. BTW, if you want the longest prefix to appear\
+    \ only once, change `sort(rep(longest, lengths))` to `sort(rep(longest, lengths))[seq_len(length(longest))]`\n\
+    <|/ c |>\n<| a dscore=2 |>\nI thought I'd throw in another solution using stringr:\n\
+    <code>\nlibrary(stringr)\nwords <- \"The quick brown fox jumps over the lazy dog\"\
+    \nprefix <- str_split(words, \" \")[[1]]\n(x <- str_sub(words, 1, nchar(prefix)))\n\
+    [1] \"\"        \"The\"     \"quick\"   \"brown\"   \"fox\"     \"jumps\"   \"\
+    over\"    \"the\"     \"lazy\"    \"dog\" \n</code>\n<|/ a tags=prefix,r |>\n\
+    <| c |>\nThank you for your answer. I updated my question to show the string `words`.\
+    \ Unfortunately, I don't think this works because I don't know how to implement\
+    \ `str_sub` with my data\n<|/ c |>\n<| c |>\nNo problem, just added an example\
+    \ using your data.\n<|/ c |>\n<| a |>\nOne option would be to use a for loop with\
+    \ strsplit:\n<code>\nwords <- c(\"The\", \"quick\", \"brown\", \"fox\", \"jumps\"\
+    , \"over\", \"the\", \"lazy\", \"dog\")\nfor (word in words) {\n     if (length(word)\
+    \ > 1) {\n         print(word)\n     }\n}\n</code>\nWhich gives:\n<code>\n> words\n\
+    [1] \"The\"   \"quick\" \"brown\" \"fox\"   \"jumps\" \"over\"  \"the\"   \"lazy\"\
+    \  \"dog\" \n</code>\n<|/ a tags=prefix,r dscore=1 |>\n<| a dscore=1 |>\nHere\
+    \ is a base R solution that works.\n<code>\nwords <- c(\"The\", \"quick\", \"\
+    brown\", \"fox\", \"jumps\", \"over\", \"the\", \"lazy\", \"dog\")\npref <- words\n\
+    for (i in 1:", "\n    stringr :: str_split(string, \"\")\n    output <- stringr::map_chr(stringr,\
+    \ ~paste0(substring(x, 1, 1), collapse = \"\"))\n    return(output)\n}\n", "\n\
+    \  if(length(string) == 1) {\n    return(list(string))\n  } else {\n    prefix_list\
+    \ <- list()\n    prefix_list <- c(prefix_list, substr(string, 1, 1))\n    prefix_list\
+    \ <- c(prefix_list, all_prefixes(substr(string, 2, nchar(string))))\n    return(prefix_list)\n\
+    \  }\n}\n", "\n    \n    string <- str_split(string, \"\")[[1]]\n    \n    prefix_list\
+    \ <- lapply(string, (function(x) {\n        x <- str_split(x, \"\")[[1]]\n   \
+    \     if (length(x) == 1) return(as.list(x))\n        return(lapply(x, function(y)\
+    \ {\n            if (length(y) == 1) return(as.list(y))\n            return(lapply(y,\
+    \ function(z) {\n                return(as.list(z)[[1]])\n            }))\n  \
+    \      }))\n    }))\n    \n    prefix_list <- lapply(prefix_list, function(x)\
+    \ lapply(x, function(x) {\n        xx <- as.list(x)[[1]]\n        if (length(xx)\
+    \ == 1) return(xx)\n        return(lapply(xx, function(x) {\n            if (length(xx)\
+    \ == 1) return(xx)\n            return(lapply(xx, function(x) {\n            \
+    \    if (length(xx) == 1) return(xx)\n                return(lapply(xx, function(x)\
+    \ {\n                    if (length(xx) == 1) return(xx)\n                   \
+    \ return(lapply(xx, function(x) {\n                        if (length(xx) == 1)\
+    \ return(xx)\n                        return(xx[-length(xx)])))\n            \
+    \    }))\n            }))\n        }))\n    }))\n    \n    prefix_list <- lapply(prefix_list,\
+    \ function(x) lapply(x, function(x) {\n        xx <- as.list(x)[[1]]\n       \
+    \ if (length(xx) == 1) return(xx)\n        return(lapply(xx, function(x) {\n \
+    \           if (length(xx) == 1) return(xx)\n            return(lapply(xx, function(x)\
+    \ {\n                if (length(xx) == 1) return(xx)\n                return(lapply(xx,\
+    \ function(x) {\n                    if (length(xx) == 1) return(xx)\n       \
+    \             return(xx[-length(xx)])))\n            }))\n        }))\n    }))\n\
+    \    \n    prefix_list <- lapply(prefix_list, function(x) lapply(x, function(x)\
+    \ {\n        xx <- as.list(x)[[1]]\n        if (length(xx) == 1) return(xx)\n\
+    \        return(lapply(xx, function(x) {\n            if (length(xx) == 1) return(xx)\n\
+    \            return(lapply(xx, function(x) {\n                if (length(xx) ==\
+    \ 1) return(xx)\n                return(xx[-length(xx)])))\n        }))\n    }))\n\
+    \    \n    prefix_list <- lapply(prefix_list, function(x) lapply(x, function(x)\
+    \ {\n        xx <- as.list(x)[[1]]\n        if (length(xx) == 1) return(xx)\n\
+    \        return(lapply(xx, function(x) {\n            if (length(xx) == 1) return(xx)\n\
+    \            return(lapply(xx, function(x) {\n                if (length(xx) ==\
+    \ 1) return(xx)\n                return(xx[-", "\n  n = nchar(string)\n  prefix\
+    \ = character()\n  prefix_pos = 1\n  while (prefix_pos < n) {\n    prefix[prefix_pos]\
+    \ = substring(string, prefix_pos, prefix_pos + 1)\n    prefix_pos = prefix_pos\
+    \ + 1\n  }\n  return(prefix)\n}\n", "\n  sapply(string, function(x) {\n    paste0(c(substr(x,\
+    \ 1, 1), substr(x, 1, 1)), collapse='')\n  })\n}\n", "\n    \n    # Convert string\
+    \ to list\n    string = unlist(strsplit(string, \"[,]\")) \n    \n    # Return\
+    \ vector of prefixes from shortest to longest\n    # Return vector of prefixes\
+    \ from shortest to longest\n    string[string!= \"\"][string== string[1]][2:length(string)]\n\
+    }\n", "\n  x <- string\n  c(unlist(strsplit(x, '')), x)\n}\n", "\n    string <-\
+    \ c(string, c(''), rep(NA, length(str_split(string, ''))))\n    lapply(seq_along(string),\
+    \ function(i) {\n        if (string[i - 1] != '') c(string[i - 1], string[i])\n\
+    \        else string[i]\n    })\n}\n</code>\nThen we can just use map_chr to return\
+    \ the same character vector as you had in your example. \n<code>\nmap_chr(all_prefixes(\"\
+    abc\"), paste, collapse = '')\n", "\n    chars <- strsplit(string, \"\")[[1]]\n\
+    \    chars2 <- strsplit(string, \"\")[[1]]\n    for(i in 1:length(string)) {\n\
+    \        chars2[[i]] <- chars[[i]]\n    }\n    c(chars2, chars)\n}\n\nall_prefixes\
+    \ <- Vectorize(all_prefixes)\n</code>\n<|/ a |>\n<| c |>\nThis doesn't return\
+    \ the full prefix though. `all_prefixes('abcd')` returns only `c('ab', 'abc',\
+    \ 'abcd')`\n<|/ c |>\n<| c |>\nIt does not return the full prefix either, as I\
+    \ understand your question. You want all prefixes of all strings?\n<|/ c |>\n\
+    <| c |>\nYes, that's what I mean.\n<|/ c |>\n<| c |>\nAh, I see now. I'm updating\
+    \ my answer now\n<|/ c |>\n<| a dscore=1 |>\nAn alternative approach is to find\
+    \ the longest common prefix for all strings and then find the prefix of this common\
+    \ prefix for both of the strings. \n<code>\nlibrary(stringr)\ncommonPrefix <-\
+    \ function(strings, otherstring){\n   strings <- str_pad(strings, width = max(strings),\
+    \ side = \"left\", pad = \"\")\n   otherstring <- str_pad(otherstring, width =\
+    \ max(strings), side = \"left\", pad = \"\")\n   commonPrefix <- str_c(strings,\
+    \ otherstring, sep = \"\")\n   commonPrefix <- str_sub(commonPrefix, c(1, length(commonPrefix),\
+    \ 1))\n   commonPrefix\n}\n", "\n  return(lapply(strsplit(string, \"\"), function(x)\
+    \ \n    c(\"a\",\"ab\",\"abc\") + c(x)[-length(x)]))\n}\n", "\n    string[1:nchar(string)]\
+    \ %>% \n        regexp(\"^(.)\") %>% \n        map_chr(~str_c(.,.)[1:nchar(.)])\
+    \ %>% \n        unlist() %>% \n        sort\n}\n</code>\n<|/ a dscore=2 |>\n<|\
+    \ c |>\nThanks for this answer! Do you know how I can implement it using tidyverse\
+    \ functions?\n<|/ c |>\n<| c |>\nI suspect that you could use `stringr::str_split`\
+    \ and then use `purrr::reduce` on all splits\n<|/ c |>\n<| a |>\nFor those who\
+    \ are looking for a more elegant solution with dplyr and/or purrr, here it is:\n\
+    <code>\nlibrary(dplyr)\nlibrary(purrr)\n", "\n  nchar <- nchar(string)\n  res\
+    \ <- list()\n  for (i in 1:nchar) {\n    res[[i]] <- substr(string, i, nchar)\n\
+    \  }\n  return(res)\n}\n", "\n    string\n}\n", "\n    paste0(head(string, nchar(string)),\n\
+    \           tail(string, nchar(string)))\n}\n", "\n  # use sapply over string$char\
+    \ to extract out a list with each character in string\n  sapply(string$char, function(x)\
+    \ {\n    # use regexp to capture all prefixes starting with each character in\
+    \ string\n    regmatches(string = x,\n               regexpr = '^(.)',\n     \
+    \          invert = TRUE)\n  })\n}\n\nall_prefixes('hello world')\n</code>\n<|/\
+    \ a tags=string,substring,regex,r |>\n<| c |>\nThat's a great approach!  Would\
+    \ you mind adding some comments to explain what is happening in the code above?\n\
+    <|/ c |>\n<| c |>\nIt uses `sapply` which iterates over each character in the\
+    \ string and captures all prefixes for that character using a regular expression.\
+    \ `regexpr` searches for all instances of a regular expression in `x`. `regmatches`\
+    \ returns a list of all matches. The `^(.)` means capture all prefixes of each\
+    \ character in the string. `regmatches` returns the whole match (the character)\
+    \ so we just need to extract the prefixes of those characters\n<|/ c |>\n<| c\
+    \ |>\nThe result is a list which is easier to work with. For a string: `\"hello\
+    \ world\"` it returns `[[1]]\n[1] \"h\"\n\n[[2]]\n[1] \"he\"\n\n[[3]]\n[1] \"\
+    hel\"\n\n[[4]]\n[1] \"hell\"\n\n[[5]]\n[1] \"hello\"\n\n[[6]]\n[1] \"hello\"\n\
+    \n[[7]]\n[1] \"hellow\"\n\n[[8]]\n[1] \"hello\"\n\n[[9]]\n[1] \"hello\"\n\n[[10]]\n\
+    [1] \"hello\"\n\n[[11]]\n[1] \"hello\"\n\n[[12]]\n[1] \"hello\"\n\n[[13]]\n[1]\
+    \ \"hello\"\n\n[[14]]\n[1] \"hello\"\n\n[[15]]\n[1] \"hellow\"\n\n[[16]]\n[1]\
+    \ \"hell\"\n\n[[17]]\n[1] \"he\"\n\n[[18]]\n[1] \"h\"`\n<|/ c |>\n<| c |>\nThanks\
+    \ for your great answer!\n<|/ c |>\n<| a dscore=0 |>\n<code>\nlibrary(dplyr)\n\
+    library(stringr)\nlibrary(magrittr)\n</code>\nI hope this helps.\n<code>", "\n\
+    \  # Split string into two halves, shortest and longest\n  s <- strsplit(string,\
+    \ \"\")[[1]]\n  l <- c(tail(s,-1),s)\n  # Return list of prefixes from shortest\
+    \ to longest\n  lapply(l, function(x) paste0(head(x,-1),collapse=\"\"))\n}\n",
+  "\n  all_prefixes(string, string[1L])\n}\n", "\n  if (string.length == 0) return(list())\n\
+    \  result <- all_prefixes(string[1:(length(string)-1)])\n  return(list(result,string))\n\
+    }\n", "\n    s <- strsplit(string, '', fixed = TRUE)[[1]]\n    paste0(s, s[length(s)])\n\
+    }\n", "\n  prefix <- c()\n  for (i in 1:nchar(string)) {\n    prefix <- c(prefix,\
+    \ string[1:i])\n  }\n  prefix\n}\n", "\n    l <- length(string)\n    lengths <-\
+    \ sort(rep(1:l, l))\n    lapply(lengths, function(i) substr(string, i, i + 1))\n\
+    }\n", "\n    out <- list()\n    for(i in seq_along(string)) {\n        out[[i]]\
+    \ <- prefixes(string[i])\n    }\n    out <- do.call(rbind, out)\n    colnames(out)\
+    \ <- c(\"characters\", \"prefixes\")\n    return(out)\n}\n", "\n  n <- length(string)\n\
+    \  output <- vector(\"character\", n)\n  i <- 1\n  while (i <= n) {\n    output\
+    \ <- c(output, c(string[1:i], string[2:n]))\n    i <- i + 1\n  }\n  output\n}\n\
+    all_prefixes(\"a\")\n</code>\n<|/ a tags=string,r,string dscore=2 |>\n<| a dscore=1\
+    \ |>\nHere is a base R solution, using regular expressions:\n<code>\nx <- \"abca\"\
+    \ngsub(paste(\"^(\",paste0(LETTERS,collapse=\"\"),\")\",sep=\"\"),\"\\\\1\",x)",
+  "\n  n <- nchar(string)\n  unlist(lapply(1:n, function(i) {\n    paste(head(string,\
+    \ rep(i, n)), tail(string, rep(i, n)), sep = '')\n  }))\n}\n", "\n    string <-\
+    \ unlist(strsplit(string, \"\"))\n    chars <- sort(unique(string))\n    lens\
+    \ <- lapply(chars, function(x) {\n        len <- sum(unlist(strsplit(x, \"\"))\
+    \ == string)\n        len <- max(as.integer(len), 1L)\n        len\n    })\n \
+    \   do.call(Map, c(f=function(x, len) c(x[1], rep(x, len), x[3]), lens))\n}\n\
+    </code>\nNote that this won't work for a character vector of arbitrary length,\
+    \ as you get this error when the first character in the list is unique:\n<code>\n\
+    > all_prefixes(\"a\")\nError in chars <- sort(unique(string)) : \n  'x' must be\
+    \ atomic for 'sort.list'\n> all_prefixes(\"abc\")\nError in chars <- sort(unique(string))\
+    \ : \n  'x' must be atomic for 'sort.list'\n</code>\nI added an additional parameter\
+    \ to control the number of characters in the longest prefix to speed up the algorithm.\
+    \ If you have longer prefixes, the speed gain will be significant.\n<code>\n>\
+    \ all_prefixes(\"abcd\", 4)\n[[1]]\n[1] \"abcd\"\n\n[[2]]\n[1] \"ab\" \"bcd\"\
+    \ \"cde\" \"d\"\n\n[[3]]\n[1] \"abcd\" \"abdc\" \"abde\" \"ac\"   \"acd\"  \"\
+    adec\" \"adef\" \"ad\"   \"adec\"\n[10]\n[1] \"ac\" \"acd\" \"adec\" \"adef\"\
+    \ \"ad\"\n</code>\n<|/ a tags=substring,string,regex,r |>\n<| c |>\nYour answer\
+    \ works with that example, but it seems that it fails when the string begins with\
+    \ a unique character. For example `prefixes(\"ab\")` returns `list()` instead\
+    \ of `c(\"a\", \"ab\")`.\n<|/ c |>\n<| c |>\nThat's a good point. I updated my\
+    \ answer to address that.\n<|/ c |>\n<| c |>\nThis still does not work. Now `all_prefixes(\"\
+    abc\")` returns `character(0)`. That's because `chars <- sort(unique(string))`\
+    \ returns `character(0)`. I think `chars <- sort(unique(string), function(x) sum(unique(string)\
+    \ == x))` would work, but I get a `Error in chars <- sort(unique(string), function(x)\
+    \ sum(unique(string) == x)) : \n  attempt to set 'order' on an object with less\
+    \ than two slots` error. `all_prefixes(\"ab\")` returns `list()`, which is expected.\n\
+    <|/ c |>\n<| c |>\nI tested it and it works on my computer. My ", "\n    l <-\
+    \ strsplit(string, \"\")\n    s <- lengths(l)\n    s <- s[order(s)]\n    paste0(s[-length(s)],\
+    \ collapse = \"\")\n}\n</cell>\n<cell>\nall_prefixes(\"abracadabra\")\n</cell>\n\
+    <text>\nall_suffixes - return all suffixes from shortest to longest of the input\
+    \ string\n>>> all_suffixes('abc')", "\n  return(lapply(strsplit(string, \"(?<=.)\"\
+    ), function (x) c(x, paste0(x, collapse = ''))))\n}\n", "\n  strings <- strsplit(string,\
+    \ \"\")\n  strings <- strings[lengths(strings) > 1]\n  strings[[1]]\n}\n</code>\n\
+    <|/ a tags=r,regex,string,split |>\n<| c |>\nThanks for sharing your package!\
+    \ I was going to go through them one by one but this does it.\n<|/ c |>\n<| a\
+    \ tags=r,regex,string,split |>\nThis should work for you\n<code>\nstring <- c('abcdefg',\
+    \ 'abc', 'ab', 'abc', 'abcd', 'abcde', 'abcdef')\n\ngsub(\" \",\"\",unlist(strsplit(string,\"\
+    \")))\n</code>\n<|/ a dscore=4 |>\n<| c |>\nThat works great, thank you! Can you\
+    \ explain the gsub() a bit more? The regex makes sense but I don't quite understand\
+    \ what the replacement string does.\n<|/ c |>\n<| c |>\nit simply removes spaces\
+    \ from your string. see `help(\"gsub\")`\n<|/ c |>\n<| a tags=r,regex,string,split\
+    \ |>\nHere's another possibility:\n<code>\nx <- \"abcdefg\"\nsubstr(x, 1, 1)",
+  "\n  prefix <- c()\n  for (i in seq_along(string)) {\n    if (i > 1) {\n      prefix\
+    \ <- c(prefix, substring(string, i, i))\n    }\n  }\n  return(prefix)\n}\n", "\n\
+    \  require(stringr)\n  str_match(string, \"^(.*)$\")[,2]\n}\n", "\n    str_split(string,\
+    \ \"\", simplify = T)[[1]][2:length(str_split(string, \"\", simplify = T))]\n\
+    }\n", "\n    \n    result <- character(0)\n    \n    while(length(string) > 0)\
+    \ {\n        \n        prefix <- substr(string, 1, which(substring(string, 1,\
+    \ 1) == substr(string, 2, 1)))\n        \n        while(length(prefix) != 0) {\n\
+    \            \n            result <- c(result, prefix)\n            \n       \
+    \     prefix <- substr(prefix, 1)\n            \n        }\n        \n       \
+    \ string <- substr(string, 2, nchar(string))\n    }\n    \n    return(result)\n\
+    }\n</cell>\n<cell>", "\n  \n  prefix <- NULL\n  \n  for(i in 1:nchar(string))\
+    \ {\n    \n    if(substr(string, i, i) == substr(string, 1, i)) {\n      prefix\
+    \ <- c(prefix, substr(string, 1, i))\n    }\n    \n    if(substr(string, i, i)\
+    \ != substr(string, 1, i)) {\n      break\n    }\n    \n  }\n  \n  return(prefix)\n\
+    }\n", "\n  prefix_list <- list()\n  # initialize list with single empty string\n\
+    \  prefix_list[[1]] <- ''\n  # iterate through string, remove first character,\
+    \ and append to\n  # prefix list until length is greater than 1\n  for(i in seq(1,\
+    \ nchar(string))) {\n    prefix_list[[i+1]] <- substr(string, i, nchar(prefix_list[[i]]))\n\
+    \  }\n  # return result\n  prefix_list[length(prefix_list)]\n}\n</code>\n<|/ a\
+    \ tags=r |>\n<| c |>\nThat's a clever use of vectorization, and I agree it's likely\
+    \ to be faster than my solution. However, I wonder whether it would be possible\
+    \ to vectorize the final part of this algorithm--i.e. the one that goes from `string`\
+    \ to `prefix_list`--to save a lot of time and memory. I'm guessing that this will\
+    \ be a much slower operation than that of your solution, since the final step\
+    \ involves iterating through each of the characters in `string` multiple times.\
+    \ Am I on the right track? Perhaps someone could shed some light on this? Thanks.\n\
+    <|/ c |>\n<| c |>\nThis would depend on what you mean by \"vectorize\". If by\
+    \ \"vectorize\" you mean \"vectorize a loop\", then yes, that's definitely possible.\
+    \ You could vectorize the loop (e.g., `for` loops inside `lapply` functions),\
+    \ but this would only really be beneficial if you wanted to do it in C/C++. Vectorization\
+    \ of R code can often be made more efficient by vectorizing data structures that\
+    \ R uses to store data (e.g., matrices). I've never needed to vectorize anything\
+    \ in R, but I'm sure someone could give a more complete answer or point to good\
+    \ resources. I would suggest taking a look at some of the `stringi` packages.\n\
+    <|/ c |>\n<| c |>\nI should add that vectorization of any algorithm is rarely\
+    \ a good idea, unless you're sure that your algorithm is correct and you know\
+    \ it can be made more efficient in some other language (e.g., C/C++).\n<|/ c |>\n\
+    <| c |>\nYes, I'm also interested in vectorizing any algorithm, so I've edited\
+    \ my question to include that. I'm going to look into stringi to see if I can\
+    \ vectorize something in the manner that you're describing.\n<|/ c |>\n<| c |>\n\
+    I added a vectorized solution using `stringi`. Note that it is much slower than\
+    \ the original algorithm. For instance, my solution takes about 30 times longer\
+    \ to run on my system than yours.\n<|/ c |>\n<| a dscore=3 tags=", "\n  result\
+    \ <- c(string[1], paste(all_prefixes(string[-1]), collapse = ''))\n  return(result)\n\
+    }\n", "\n  if (length(gregexpr('([[:alpha:]]).*', string)) == 1) {\n    x <- string\n\
+    \  } else {\n    x <- paste(substr(string, 1, which(gregexpr('([[:alpha:]]).*',\
+    \ string)[[1]][1])), substr(string, which(gregexpr('([[:alpha:]]).*', string)[[1]][1]),\n\
+    \                                                             length(string)),\
+    \ sep = \"\", collapse = \".\")\n  }\n  return(x)\n}\n", "\n    n <- nchar(string)\n\
+    \    x <- 0\n    i <- 1\n    l <- 0\n    while(i < n){\n        x <- max(x, i\
+    \ + 1)\n        i <- i + 1\n        if(i != n){\n            l <- l+1\n      \
+    \      i <- i + 1\n        }\n    }\n    l <- nchar(substr(string, 1, x))\n  \
+    \  l <- l + 1\n    l <- c(l, 0)\n    l <- c(1, l)\n    n <- nchar(string)\n  \
+    \  l <- c(l,n)\n    l <- rep(l, c(1,nchar(string)))\n    l <- as.vector(l)\n \
+    \   l <- rep(l, c(1,nchar(string)))\n    l <- rep(l, c(1,nchar(string)))\n   \
+    \ l <- as.vector(l)\n    l\n}\n", "\n    lapply(string, function(x) {\n      \
+    \  paste(head(c(x, paste(x, x, sep=\"\")), -1), collapse=\"\")\n    })\n}\n",
+  "\n    string <- gsub('(^|.)(.)(?=.)', '\\\\1\\\\2', string)\n    string <- gsub('(.)(.)(?=.)(.)',\
+    \ '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\\
+    3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n\
+    \    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <-\
+    \ gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)',\
+    \ '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\\
+    3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n\
+    \    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <-\
+    \ gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)',\
+    \ '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\\
+    3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n\
+    \    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <-\
+    \ gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)',\
+    \ '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\\
+    3\\\\4', string)\n    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n\
+    \    string <- gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <-\
+    \ gsub('(.)(.)(?=.)(.)', '\\\\1\\\\3\\\\4', string)\n    string <- gsub('(.)(",
+  "\n  if (length(string) == 1) return(c(string))\n  else {\n    prefix <- substring(string,\
+    \ 1, 1)\n    all_prefixes(substring(string, 2))\n  }\n}\n", "\n  result <- list()\n\
+    \  \n  # The longest prefix is the empty string at the end\n  max_prefix <- \"\
+    \"\n  \n  for (i in 1:nchar(string)) {\n    # Don't add prefixes longer than the\
+    \ number of characters\n    if (i > nchar(string)) {\n      result[[i]] <- max_prefix\n\
+    \      break\n    }\n    \n    # Get the longest prefix from the last iteration\n\
+    \    prefix <- substr(string, i, i - 1)\n    \n    # Check if this prefix is the\
+    \ longest for this string\n    if (nchar(prefix) > nchar(max_prefix)) {\n    \
+    \  max_prefix <- prefix\n    }\n    \n    # Add the prefix to the result list\n\
+    \    result[[i]] <- prefix\n  }\n  \n  return(result)\n}\n", "\n  s <- strsplit(string,\
+    \ \"\")\n  sapply(seq_along(s), function(i) paste0(s[[i]], s[i + 1]), simplify\
+    \ = FALSE)\n}\n", "\n  string <- strsplit(string, '')[[1]]\n  string[!duplicated(string)]\n\
+    }\n", "\n  prefix_list <- strsplit(string, \"\")[[1]]\n  prefix_list <- prefix_list[order(prefix_list)]\n\
+    \  prefix_list\n}\n", "\n  n <- nchar(string)\n  out <- NULL\n  out <- c(out,\
+    \ c(0, string[1:(n-1)]))\n  out <- c(out, c(n+1, string))\n  out\n}\n", "\n  \
+    \  substr(string = string, start = 1, stop = 1 + nchar(string))\n}\n</code>\n\
+    <code>", "\n\tstringToInt <- function(string) {\n\t\tstrsplit(string, \"\")[[1]]\n\
+    \t}\n\tshortest <- stringToInt(string)[1]\n\tlongest <- stringToInt(string)[length(stringToInt(string))]\n\
+    \tlist(a=shortest,b=longest)\n}\n", "\n  all_prefixes <- function(string) {\n\
+    \    string <- strsplit(string, '')\n    lapply(string, \"[\", 1:length(string))\n\
+    \  }\n  all_prefixes(string)\n}\n", "\n    output <- c()\n    for(i in 1:length(string))\
+    \ {\n        output <- c(output, substr(string, i, i))\n    }\n    return(output)\n\
+    }\n", "\n    strings <- unlist(strsplit(string, \"\"))\n    strings[length(strings):1]\n\
+    }\n", "\n    # Get the length of the string\n    len <- nchar(string)\n\n    #\
+    \ Define empty prefixes vector\n    prefixes <- character()\n\n    # Create prefixes\
+    \ vector for each iteration\n    for(i in seq_along(string)) {\n        # Create\
+    \ vector, with first character repeated i times\n        new_prefix <- c(rep(1,\
+    \ i), rep(string[i], len - i - 1))\n\n        # If vector has enough elements,\
+    \ append it to the prefixes vector\n        prefix <- if (length(new_prefix) <=\
+    \ length(prefixes)) new_prefix else prefixes\n        prefixes <- c(prefix, new_prefix)\n\
+    \    }\n\n    # Return prefixes vector\n    prefixes\n}\n", "\n    for(i in 1:length(string))\
+    \ {\n        for(p in 1:length(string)) {\n            if(substr(string, i, p)\
+    \ == substr(string, i, p)) {\n                prefix <- substr(string, 1, i)\n\
+    \                break\n            }\n        }\n    }\n    return(paste(prefix,\
+    \ collapse=\"\"))\n}\n", "\n  \n  # Initialize return vector\n  out <- character(length(string))\n\
+    \  \n  # Check input strings\n  if (!is_string(string)) {\n    stop('string must\
+    \ be a string')\n  }\n  \n  # Check each prefix string\n  for (i in 1:length(string))\
+    \ {\n    \n    # Check for a complete match\n    if (string[i] == string) {\n\
+    \      out[i] <- string[i]\n      \n    # Otherwise, append prefix\n    } else\
+    \ {\n      out[i] <- string[i]\n      \n      while (i+1 < length(string)) {\n\
+    \        \n        # Check for a complete match\n        if (string[i+1:length(string)]\
+    \ == string) {\n          \n          # Assign match string\n          out[i]\
+    \ <- paste(string[i], string[i+1], sep = string[i:length(string)])\n         \
+    \ \n          # Continue to append suffix\n          break\n          \n     \
+    \   # Otherwise, append suffix\n        } else {\n          out[i] <- paste(string[i],\
+    \ string[i+1], sep = string[i:length(string)])\n        }\n        \n        i+=1\n\
+    \      }\n    }\n  }\n  \n  # Return output string\n  out\n}\n"]
 stop_tokens:
 - "\n#"
 - "\n```"

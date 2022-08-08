@@ -6,6 +6,876 @@ prompt: "#!/bin/bash\n# Return list of all prefixes from shortest to longest of 
 tests: "}\n\ncandidate() {\n    all_prefixes \"$@\"\n}\n\nset -e\nrun_test() {\n \
   \   [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"asdfgh\") = \"a as asd\
   \ asdf asdfg asdfgh\" ]]\n    [[ $(candidate \"WWW\") = \"W WW WWW\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local shortest longest prefix i\n\n  # The shortest string is simply\
+    \ the empty string\n  if [[ \"${1:0:1}\" == \"$\" ]];then\n    printf '%s\\n'\
+    \ \"\"\n    return 0\n  fi\n  shortest=\"${1:0:1}\"\n  # The longest string is\
+    \ simply the rest of the string\n  longest=\"${1:1}\"\n  # For each letter in\
+    \ the input, prefix the string with the shortest string\n  # so that it becomes\
+    \ equal to the longest string if that letter wasn't\n  # already in the longest\
+    \ string\n  for ((i=2; i<${#1}; i++)); do\n    prefix+=\"${shortest}\"\n    longest=${1:0:i}${longest}\n\
+    \    shortest=\"${1:i:1}\"\n  done\n  # Append the longest string to the output\n\
+    \  printf '%s\\n' \"${prefix}${longest}\"\n  return 0", "    local -n prefixes=$1\n\
+    \    local prefix\n    for prefix in \"${prefixes[@]}\"; do\n        echo \"$prefix\"\
+    \n    done", "  # Take in a single string and return the list of prefixes that\
+    \ match it\n  echo \"$1\" | awk '{print $1}' | sort | uniq", "  local -r tokens=($(echo\
+    \ $1 | sed \"s/^\\./'&'/g\"))\n  local -a prefixes\n  local maxlen=${#tokens[@]}\n\
+    \  local -a words=()\n  local -a minlen\n  local -a maxlen\n  local i\n\n  minlen=${#prefixes[@]}\n\
+    \  if (( ${#minlen[@]} < ${#maxlen[@]} )); then\n    minlen=${#maxlen[@]}\n  fi\n\
+    \  maxlen=0\n  for (( i=0; i<${#tokens[@]} && ${maxlen} < ${minlen}; i++ )); do\n\
+    \    local this_len=${#tokens[$i]}\n    if (( this_len > maxlen ));  then\n  \
+    \    maxlen=$this_len\n      prefixes=(\"${prefixes[@]}\" ${tokens[$i]})\n   \
+    \ fi\n  done\n  echo \"${prefixes[@]}\"", "    local string=$1\n    local shortest\
+    \ longest prefix\n    shortest=${#string}\n    longest=${#string}\n    prefix=\"\
+    \"\n    while [ $shortest -gt 0 ]; do\n        prefix=$(echo $string | cut -d'$'\
+    \ -f1)\n        if [ ! -z \"$prefix\" ]; then\n            shortest=0\n      \
+    \  else\n            shortest=$(($shortest-1))\n        fi\n    done\n    while\
+    \ [ $longest -gt 0 ]; do\n        prefix=$(echo $string | cut -d'$' -f$((longest-1)))\n\
+    \        if [ ! -z \"$prefix\" ]; then\n            longest=0\n        else\n\
+    \            longest=$(($longest-1))\n        fi\n    done\n    echo \"${prefix}${string}\"",
+  "  # remove quotes from $1, so we don't match \"ab\" or \"abc\"\n  local -i n=${1//'\"\
+    '};\n  local -i s=0;\n  local rs=();\n  for ((i=2; i <= $n; i++)) ; do\n    #\
+    \ prefix of $i is $(( ${s#$i} + $i )).\n    # this prefix is either \"\" (empty\
+    \ string) or $i.\n    # note: ${s#$i} is safe if $i is a string without leading\
+    \ or trailing spaces.\n    # ${s#$i} removes leading spaces.\n    local -r prefix=$((\
+    \ ${s#$i} + $i ));\n    # remove $prefix from $1, in case it contains no quotes.\n\
+    \    local -i j=${1#$prefix};\n    # only keep empty prefix if $prefix is empty.\n\
+    \    if [[ \"${#prefix}\" -eq 0 ]]; then\n      # if prefix is not empty, then\
+    \ we don't need quotes\n      [[ \"$j\" != \"$i\" ]] || { [[ $1 = *\"\\\"$prefix\\\
+    \"\"* ]] || return ; }\n    else\n      # if prefix is empty, then we need quotes\n\
+    \      [[ \"$j\" != \"$i\" ]] || { [[ $1 = *\"\\\"$prefix\\\"\"* ]] || return\
+    \ ; }\n    fi\n    # keep current prefix for next iteration\n    s=$prefix;\n\
+    \    # put quotes around the prefix if needed\n    [[ $s = *\"\\\"$prefix\\\"\"\
+    * ]] || rs[${#rs[*]}]='\"'\"$prefix\"'\"';\n  done\n  printf '%s\\n' \"${rs[@]}\"",
+  "    echo \"${1}\" | grep -Eo '^\"[[:alpha:]]+$' | sort | uniq -c | awk '{ print\
+    \ $2 }' | sort -nr", "\tlocal IFS=$'\\n'\n\tset $1 a=\n\twhile [[ $1 ]]; do\n\t\
+    \tset $1\n\t\tlocal b=${b:+$b\"\\n\"}\n\t\tb=$'\\n\\\"'$b\n\t\tprintf '%s\\n'\
+    \ \"$b\"\n\tdone", "  local s=$1\n  local prefixes=()\n  while [[ ${#s} -gt 0\
+    \ ]]; do\n    prefixes+=(\"${s%%/*}\")\n    s=${s#*/}\n  done\n  echo \"${prefixes[@]}\"",
+  "    local prefix_length=${1:-3}\n    local prefix_string=$2\n    local prefix_list\n\
+    \    prefix_string+=\"*\"\n    for prefix_string in ${prefix_string}; do\n   \
+    \     prefix_list+=(\"\\\"${prefix_string::${prefix_length}}\\\"\")\n    done\n\
+    \    echo \"${prefix_list[@]}\"", "  local STR=\"$1\"\n  local LEN=${#STR}\n \
+    \ local S=$STR\n  local P\n  local S2\n  local OPT=''\n  local OPT3=''\n  local\
+    \ OPT4=''\n  local OPT5=''\n  local OPT6=''\n  local OPT7=''\n\n  while test $#\
+    \ -gt 0\n  do\n    case \"$1\" in\n      --all)\n        OPT=\"-a\"\n        shift\n\
+    \        ;;\n      --long)\n        OPT=\"-l\"\n        OPT3=\"-l\"\n        OPT4=\"\
+    -l\"\n        OPT5=\"-l\"\n        OPT6=\"-l\"\n        OPT7=\"-l\"\n        shift\n\
+    \        ;;\n      --short)\n        OPT=\"-s\"\n        shift\n        ;;\n \
+    \     --all)\n        OPT3=\"-a\"\n        OPT4=\"-a\"\n        OPT5=\"-a\"\n\
+    \        OPT6=\"-a\"\n        OPT7=\"-a\"\n        shift\n        ;;\n      *)\n\
+    \        OPT=\"-s\"\n        OPT3=\"-s\"\n        OPT4=\"-s\"\n        OPT5=\"\
+    -s\"\n        OPT6=\"-s\"\n        OPT7=\"-s\"\n        ;;\n    esac\n  done\n\
+    \n  P=$(echo \"${S}\" | sed -e \"s/^\\(.\\+\\)$OPT$//g\" -e \"s/^$OPT//g\" -e\
+    \ \"s/$OPT$//g\")\n  S2=\"$(echo \"${S}\" | sed -e \"s/^\\(.\\+\\)$OPT3$//g\"\
+    \ -e \"s/^$OPT3//g\" -e \"s/$OPT3$//g\")\"\n  echo \"${P}\" | sed -e \"s/^\\(.\\\
+    +\\)$OPT4$//g\" -e \"s/^$OPT4//g\" -e \"s/$OPT4$//g\" | sed -e \"s/^\\(.\\+\\\
+    )$OPT5$//g\" -e \"s/^$OPT5//g\" -e \"s/$OPT5$//g\" | sed -e \"s/^\\(.\\+\\)$OPT6$//g\"\
+    \ -e \"s/^$OPT6//g\" -e \"s/$OPT6$//g\" | sed -e \"s/^\\(.\\+\\)$OP", "\tlocal\
+    \ prefix=''\n\tlocal str=$1\n\tlocal len=${#str}\n\tlocal start=0\n\twhile [ $start\
+    \ -lt $len ]; do\n\t\tprefix=\"${str%%$prefix}\"\n\t\tstart=$(($start+1))\n\t\
+    done\n\techo $prefix", "    local arg1=\"$1\"\n    local prefixes=()\n    local\
+    \ tmp\n    while [ \"${arg1}\" != \"\" ]; do\n        tmp=\"${arg1}\"\n      \
+    \  prefixes+=(\"$tmp\")\n        arg1=\"${arg1#*$tmp}\"\n    done\n    echo \"\
+    ${prefixes[@]}\"", "    local prefixes len\n    len=${#1}\n    prefixes=()\n \
+    \   for (( i = 0; i < ${#1}; i++ )); do\n        prefixes[$i]=\"${1:0:$((i + 1\
+    \ - len))}\"\n    done\n    echo ${prefixes[*]}", "    local l=\"$1\"\n    local\
+    \ prefix=\"\"\n    for (( i=0; i < ${#l}; i++ )); do\n        local j=$((i+1))\n\
+    \        prefix=\"${l}${prefix}${l:$j:1}\"\n    done\n    echo \"$prefix\"", " \
+    \ local prefixes\n  prefixes=()\n  for (( i=0; i<${#1}; i++ )); do\n    (( ${#prefixes[@]}\
+    \ < ${#1} - i )) && prefixes+=(\"${1:$i}\")\n  done\n  echo ${prefixes[@]}", " \
+    \   local prefixes=()\n    local -i i\n    for ((i=1; i<=$#; i++)); do\n     \
+    \   prefixes=(\"${prefixes[@]}\" \"$1\" ${1#\"${1%%\"${1#\"$i\"}\"}\"})\n    done\n\
+    \    echo \"${prefixes[@]}\"", "  local i prefixes\n  prefixes=()\n  for (( i=0;\
+    \ i<${#1}; i++ )); do\n    prefixes=(\"${prefixes[@]}\" \"$1\")\n    prefixes=(\"\
+    ${prefixes[@]}\" \"$2$i\")\n  done\n  echo \"${prefixes[@]}\"", "    local IFS='\"\
+    \ '\n    local str=\"$1\"\n    echo \"$str\" | sed 's/^/\"&\"/g' | cut -d '\"\
+    ' -f 2- | sed 's/\"//g'", "  local -r prefix=$1\n  shift\n  printf \"%s\" $prefix\n\
+    \  while [ -n \"$1\" ]\n  do\n    printf \" \\\"%s\\\"\" $prefix\n    prefix=\"\
+    ${1%%/*}\"\n    shift\n  done\n  printf \"\\n\"", "  local shortest prefixes longest\n\
+    \  shortest=\"$(cut -d: -f1 <<<\"${1}\")\"\n  prefixes=()\n  longest=${shortest}\n\
+    \  for c in \"${!shortest}\";\n  do\n    if [[ \"${shortest:0:1}\" == \"${c}\"\
+    \ ]] ; then\n      prefixes+=(${longest})\n      longest=${shortest:1}\n    elif\
+    \ [[ \"${shortest:0:1}\" > \"${c}\" ]] ; then\n      longest=${shortest:0:${c}}\n\
+    \    fi\n  done\n  prefixes+=(${longest})\n  echo \"${prefixes[*]}\"", "    local\
+    \ shortest longest prefixes i j length prefix\n    shortest=$1\n    longest=$shortest\
+    \ #reset\n    while [ $shortest != $longest ]; do\n        shortest=${#shortest}\n\
+    \        longest=${#longest}\n    done\n    longest=${longest}\n    prefixes=()\n\
+    \    j=0\n    while [ $shortest != 0 ]; do\n        prefix=\"${shortest}${longest#$1}\"\
+    \n        if [[ ${#prefix} -eq $shortest ]]; then\n            prefixes[$j]=${prefix}\n\
+    \            j=$((j+1))\n        fi\n        shortest=${#prefix}\n    done\n \
+    \   echo \"${prefixes[@]}\"", "  local s=$1\n  shift\n  while [ -n \"$1\" ]; do\n\
+    \    local prefix=\"$1\"\n    shift 1\n    local -a result=( )\n    for (( i =\
+    \ 1 ; i < ${#s}/${#prefix} ; i++ )); do\n      result+=( ${s:i:i+${#prefix}} )\n\
+    \    done\n    echo ${result[@]}\n  done", "  local prefixes=($(all_prefixes \"\
+    $1\" | tr -d '\\n'))\n  echo \"${prefixes[@]}\"", "    local str=\"$1\"\n    local\
+    \ prefixes=()\n    local i\n\n    for (( i = 0; i < ${#str}; i++ )); do\n    \
+    \    prefixes[$i]=\"${str:$i:1}\"\n    done\n    echo \"${prefixes[*]}\"", " \
+    \ local string=\"$1\"\n  local prefixes=( )\n  IFS=$'\\n' read -a array <<< \"\
+    $string\"\n  for string in \"${array[@]}\"; do\n    prefixes=( \"${prefixes[@]}\"\
+    \ $string )\n  done\n  echo \"${prefixes[*]}\"", "  local string=\"$1\"\n  local\
+    \ prefixes=()\n\n  while [[ $string ]]\n  do\n    prefixes[${#prefixes[*]}]=\"\
+    $string\"\n    string=${string#*\"$\"}\n  done\n\n  prefixes=(\"${prefixes[@]}\"\
+    )\n  echo \"${prefixes[@]}\"", "  local -r prefixes_str=$1\n\n  # remove double\
+    \ quotes from input\n  prefixes_str=$(echo \"${prefixes_str}\" | sed -e 's/\"\
+    //g' | sed -e \"s/'//g\")\n  # remove leading and trailing spaces\n  prefixes_str=$(echo\
+    \ -e \"${prefixes_str}\" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n\
+    \  # remove empty lines\n  prefixes_str=$(echo \"${prefixes_str}\" | sed -e '/^$/d')\n\
+    \  # remove empty entries\n  prefixes_str=$(echo \"${prefixes_str}\" | sed -e\
+    \ '/^ *$/d')\n  # trim whitespace\n  prefixes_str=$(echo -e \"${prefixes_str}\"\
+    \ | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n  local -r prefixes_array=(${prefixes_str//,/\
+    \ })\n  local -r prefixes_array_count=\"${#prefixes_array[@]}\"\n\n  if [[ ${prefixes_array_count}\
+    \ -eq 0 ]]; then\n    return 1\n  else\n    local -r first_prefix=\"${prefixes_array[0]}\"\
+    \n    local -r last_prefix=\"${prefixes_array[-1]}\"\n    prefixes_array_count=\"\
+    $((${prefixes_array_count} - 1))\"\n\n    for (( i=1; i <= ${prefixes_array_count};\
+    \ i++ )); do\n      local prefix=$(echo -n \"${first_prefix} ${prefixes_array[i-1]}\"\
+    \ | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n      prefixes_array[i-1]=\"\
+    ${prefix} ${prefixes_array[i-1]}\"\n    done\n\n    echo -n \"${first_prefix}\
+    \ \"\n    for (( i=1; i <= ${prefixes_array_count}; i++ )); do\n      echo \"\
+    ${prefixes_array[i-1]}\"\n    done\n    echo \" ${last_prefix}\"\n  fi", "   \
+    \ local string=$1\n    shift\n    local prefix=\"\"\n    while [[ $string ]];\
+    \ do\n        prefix+=\"${1//\"\\\\\"/'\\\\\\\\'} \"\n        string=\"${string#*}\"\
+    \n    done\n    echo \"${prefix}\"", "    local -r pattern=$1\n    local -a prefixes\n\
+    \    prefixes=()\n    local -r length=${#pattern}\n    local i prefix\n    for\
+    \ (( i=0; i<length; i++))\n    do\n        prefix=\"${pattern:$i:1}\"\n      \
+    \  (( i > 0 && prefixes[-1] == prefix )) && prefixes=(\"${prefixes[@]/#/${prefix}/}\"\
+    )\n        prefixes+=(\"$prefix\")\n    done\n    prefixes=( \"${prefixes[@]/#/}\"\
+    ) && printf '%s\\n' \"${prefixes[@]}\"", "    echo \"$1\" | sed 's/\\(.*\\)/\"\
+    \\1\"/'", "  local prefixes=()\n  while test \"$1\" != \"\"; do\n    local prefix=\"\
+    $1\"\n    shift\n    if test -n \"$prefix\"; then\n      prefixes+=(\\\"$prefix\\\
+    \")\n    fi\n  done\n  echo \\\"\\${prefixes[*]}\\\"", "  local input_string=\"\
+    $1\"\n  local prefix_string\n  local prefix_array\n  local prefix\n  local length\n\
+    \  prefix_string=\"${input_string#?}\"\n  prefix_array=( $prefix_string )\n  prefix=${prefix_array[0]}\n\
+    \  length=${#prefix_array[@]}\n  for i in $(seq $length); do\n    if [[ \"${prefix_array[i]}\"\
+    \ == \"$prefix\" ]]; then\n      prefix=\"${prefix_array[$((i-1))]}\"\n    fi\n\
+    \  done\n  printf '[\"%s\"]' \"$prefix\"", "    IFS=$'\\n'\n    local prefixes=()\n\
+    \    local prefix=''\n    local -n line=$'\\n'\n    while read line; do\n    \
+    \    [[ -z $line ]] && continue\n        prefix=${line#\"$prefix\"}\n        prefix=${prefix%%$'\\\
+    n'}\n        prefixes[${#prefixes[@]}]=\"$prefix\"\n    done < <(all_prefixes_in\
+    \ \"$1\")\n    echo \"${prefixes[@]}\"", "    IFS='' read -r -a arr <<< \"$1\"\
+    \n    IFS=$'\\n' read -r -a arr2 <<< \"$(\n        set -o pipefail; IFS=' '; echo\
+    \ \"${arr[@]#*,}\"\n    )\"\n    echo \"${arr2[@]#*,}\"", "  echo -n \"[ \"\n\
+    \  prefixes=$( echo -n $1 | sed 's/\\(.\\)/\"\\1\"/g' )\n  while read -r prefix\n\
+    \  do\n    prefixes=$(echo $prefixes | sed -e \"s/$prefix/\\\"$prefix\\\"/g\"\
+    )\n  done <<< \"$prefixes\"\n  echo -n $prefixes | tr ' ' '\\n' | sed 's/\\\"\
+    /\\/\\\"/g'\n  echo \"]\"", "  awk '{\n      printf( \"%s\", $1 );\n      for(\
+    \ i = 1; i <= NF; i++ ) {\n        printf( \" \\\"%s\\\"\", substr( $1, i, 1 )\
+    \ );\n      }\n      print \"\";\n    }' \"$1\"", "    local prefixes\n    prefixes=()\n\
+    \    while read -r line; do\n        prefixes=(\"${prefixes[@]/#/$line}\")\n \
+    \   done\n    echo \"${prefixes[@]}\"", "    local -i j=0\n    local i prefix=\"\
+    ${1:-}\"\n    local ret \n    ret=()\n\n    while [[ $prefix ]] && [[ $prefix\
+    \ != *\"\\\"\"* ]]; then\n        j=$((j+1))\n        prefix=\"${prefix:0:${#prefix}-1}\"\
+    \n        ret+=( \"\\\"${prefix}${j}\\\"\" ) \n    done\n\n    printf -v \"${FUNCNAME[0]}::all_prefixes_ret\"\
+    \ '%s' \"${ret[@]}\"\n    echo \"${all_prefixes_ret}\" ", "  local prefixes=()\n\
+    \  local IFS=$'\\n'\n  local input=\"$1\"\n  local line\n  while read -r line;\
+    \ do\n    case \"$line\" in\n    \"$input\") continue;;\n    *) prefixes+=(\"\
+    $line\");;\n    esac\n  done\n  IFS=$' \\t\\n'\n  return \"${prefixes[@]}\"",
+  "    local IFS=; \n    local -n array=$1\n    local prefixes=\"\"\n    # Add prefixes\
+    \ of current string to prefixes\n    for (( c=${#array}; c>0; )); do\n       \
+    \ prefixes+=\"${array:$c,1}\"\n        array=( ${array[@]:$c} )\n    done\n  \
+    \  # Add prefixes of last string to prefixes\n    for (( c=${#array}; c>0; ));\
+    \ do\n        prefixes+=\"${array:$c-1,1}\"\n        array=( ${array[@]:$c} )\n\
+    \    done\n    echo \"$prefixes\"", "    local prefixes=\"$1\"\n    shift\n  \
+    \  echo $(echo $prefixes | tr ' ' '\\n' | sort -nr | head -n -1 | tr '\\n' ' ')",
+  "  local -r input_string=\"$1\"\n  local -r prefixes=''\n  # Match longest prefix\
+    \ first\n  for prefix in $(echo \"${input_string}\" | cut -d'/' -f1); do\n   \
+    \ prefixes=\"${prefixes}\\\"${prefix}\\\"\"\n  done\n  # Match shortest prefix\
+    \ last\n  for prefix in $(echo \"${input_string}\" | cut -d'/' -f1 | tail -n +2);\
+    \ do\n    prefixes=\"${prefixes}\\\"${prefix}\\\"\"\n  done\n  echo \"${prefixes}\"",
+  "  local -a prefixes=(\"${1#\"$1\"}\")\n  local prefix\n  for prefix in \"${prefixes[@]}\"\
+    ; do\n    case \"$prefix\" in\n      \"$1\" )\n        echo \"$prefix\"\n    \
+    \    ;;\n      * )\n        prefixes=(\"${prefixes[@]}\" \"$prefix\")\n      \
+    \  ;;\n    esac\n  done", "  local prefixes=\"$1\";\n  echo $prefixes | sed \"\
+    s/$prefixes/$prefixes\\1/g\";", "\tlocal prefixes=()\n\tfor (( c=1 ; c<${#1} ;\
+    \ c++ )) ; do\n\t\tprefixes[$c]=\"$(head -n ${c} $1 | tail -n 1)\"\n\tdone\n\t\
+    echo \"${prefixes[*]}\"", "  local tmp=${1#$(echo \"$1\" | sed 's/^[[:space:]]*//')}\n\
+    \  echo \"$tmp\" | sed 's/^/\"/' | tr ' ' '\\n'", "  local IFS=$'\\n'\n  local\
+    \ string=$1\n  local prefixes=()\n\n  while [[ \"${#string}\" -gt 0 ]]; do\n \
+    \   local prefix\n    prefix=${string:0:1}\n    local suffix\n    suffix=${string:1}\n\
+    \    string=${prefix}${string#${prefix}}\n    prefixes+=(\"${prefix}\")\n    string=${suffix}${string#${suffix}}\n\
+    \  done\n  echo ${prefixes[*]}", "    local i prefixes \n    prefixes=\"\"\n \
+    \   \n    for ((i=1; i<=$1; i++)); do\n        prefixes=\"${prefixes}\\\"${1:$i:1}\\\
+    \"\"\n    done\n    \n    echo \"$prefixes\"", "    local n=$1; local prefixes=\"\
+    \"; local suffixes=\"\"\n    if [[ $n =~ ^.* ]]; then\n        prefixes=$n\n \
+    \       n=${n%?}\n    fi\n    for (( i=1; i <= ${#n}; i++ )); do\n        suffixes+=($n)\n\
+    \        prefixes+=$prefixes\"\"$i\n        suffixes+=($n)\n        prefixes+=$prefixes\"\
+    \"$i\n    done\n    echo $prefixes", "  local str=$1\n  shift\n  local prefix\n\
+    \  local prefixes\n  prefixes=()\n  while read -r prefix; do\n    prefixes+=(\
+    \ \"$prefix\" )\n  done < <(find -E . -type d -name \"$PREFIXES\" -print0)\n \
+    \ printf '%s\\n' \"${prefixes[@]}\"", "    local prefix_str=\"$1\"\n    local\
+    \ prefix=\"\"\n    local prefix_len=0\n    local prefixes=\"\"\n\n    while [[\
+    \ \"${prefix_str}\" != '' ]]; do\n        local prefix=\"${prefix_str#*$prefix_str}\"\
+    \n        if [[ \"${prefix_len}\" -lt ${#prefix} ]]; then\n            prefix=${prefix_str%%$prefix_str}\n\
+    \            prefix_len=$((${#prefix}))\n        elif [[ \"${prefix_len}\" -gt\
+    \ ${#prefix} ]]; then\n            prefix_len=$((${#prefix}))\n            prefix=\"\
+    ${prefix%$prefix}\"\n        fi\n        prefixes=\"${prefixes},${prefix}\"\n\
+    \        prefix_str=${prefix_str#*$prefix}\n    done\n    echo \"${prefixes}\"",
+  "    local str=$1\n    local prefixes=\"\"\n    local prefix\n    for prefix in\
+    \ \"${str:-}\" \"${str#?}\" \"${str%?}\"; do\n        prefixes=\"$prefixes \\\"\
+    $prefix\\\"\"\n    done\n    echo \"$prefixes\"", "\tlocal i prefix result shortest\
+    \ longest\n\tshortest=\"${1:0:1}\"\n\tlongest=\"${1:1:1}\"\n\tresult=( )\n\tfor\
+    \ ((i=1; i<${#1}; i++)); do\n\t\tprefix=\"${1:i:1}\"\n\t\tif [[ \"${shortest:0:1}\"\
+    \ != \"${prefix}\" ]]; then\n\t\t\tresult+=( \"$prefix\" )\n\t\tfi\n\t\tshortest=\"\
+    ${prefix}\"\n\tdone\n\techo \"${result[@]}\"", "  # Get all prefixes from shortest\
+    \ to longest of the input string.\n  # >>> all_prefixes \"abc\"\n  # ['\"a\"',\
+    \ '\"ab\"', '\"abc\"']\n  # >>> all_prefixes \"ab\"\n  # ['\"ab\"', '\"abc\"']\n\
+    \  # >>> all_prefixes \"a\"\n  # ['\"a\"', '\"ab\"', '\"abc\"']\n  #\n  # If $1\
+    \ is empty, it returns $2, otherwise it returns\n  # $1 $2 $3 $4 ... $n-1\n  #\
+    \ for $i=1 up to\n  # len($1)\n  local i=1\n  local result=\"\"\n  while [ \"\
+    $1\" ]; do\n    if [[ $1 =~ ^\\\"([^\\\"]*)\\\"$ ]]; then\n      result=\"${BASH_REMATCH[1]}\"\
+    \n      break\n    fi\n    local len=\"${#1}\"\n    if [ $i -lt $len ]; then\n\
+    \      i=$((i + 1))\n      result=\"${result} ${1:$((i - 1))}\"\n      break\n\
+    \    fi\n    shift\n  done\n  echo \"$result\"", "    local output\n    output=''\n\
+    \    for (( i=1; i<${#1}; i++ )); do\n        local prefix=\"${1:$i:1}\"\n   \
+    \     output+=\"\\\"\"$prefix\"\\\"\\n\"\n    done\n    echo \"$output\"", " \
+    \ local prefixes=$2\n  local string=$1\n  # Trim any quotes that may be present\
+    \ at the beginning\n  string=${string#\\\"}\n  # Trim any quotes that may be present\
+    \ at the end\n  string=${string%\\\"}\n  # Trim any spaces, tabs, newlines, etc.\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n\
+    \  string=${string// }\n  string=${string%}\n  string=${string// }\n  string=${string%}\n",
+  "    local input_prefix=$1\n    local output_prefixes=()\n\n    echo ${input_prefix}\
+    \ | grep -Eo '^\"[^\"]*\"' | sed -e 's/\"//g' >> \"${prefixes_file}\"\n    local\
+    \ input_prefix_length=${#input_prefix}\n    for (( input_prefix_length=$(($input_prefix_length-1));\
+    \ input_prefix_length>0; input_prefix_length=${input_prefix_length-1} )); do\n\
+    \        local output_prefix=`sed -n -e 's/^[^\"]*\"\\(.*\\)\"$/\\1/p' \"${prefixes_file}\"\
+    `\n        if [[ -z \"${output_prefix}\" ]]; then\n            break\n       \
+    \ fi\n        output_prefixes=(\"${output_prefixes[@]}\" ${output_prefix})\n \
+    \   done\n\n    echo \"${output_prefixes[@]}\"", "  local -i max_len=${1:-10}\n\
+    \  local prefixes\n  prefixes=()\n  for (( i=0; i<${#1}; i++ )); do\n    local\
+    \ str=${1:$i:1}\n    local i\n    for (( i=1; i<${#str}; i++ )); do\n      local\
+    \ prefix=${str:$i:1}\n      [[ -z $prefixes ]] || prefixes=( \"${prefixes[@]}\"\
+    \ \"$prefix\" )\n    done\n    (( ++max_len ))\n  done\n  echo ${prefixes[@]:0:max_len}",
+  "  local -n result=\"${1}\"\n  result=()\n  local -i i len prefix\n  for ((i=0;;));\
+    \ do\n    ((i++))\n    len=${#result[*]}\n    [[ -z \"${result[$((len-1))]}\"\
+    \ ]] || result[$((len-1))]+=\"-\"\n    result[$((len-1))]=\"${!i}\"\n    [[ -z\
+    \ \"${result[$((len-1))]}\" ]] && break\n  done\n  echo \"${result[*]}\"", " \
+    \ local str=$1\n  echo $(echo $str |sed -e 's/^/\"/' -e 's/.$//' -e 's/^/\"/'\
+    \ -e 's/.*/\"/\"')", "    local s=$1\n    local prefixes=()\n    local prefix\n\
+    \    local i\n    for ((i=1; i <= ${#s}; i++))\n    do\n        prefix=\"${s:0:i}\"\
+    \n        [[ ${prefix} == \"\" ]] && prefixes[${#prefixes[@]}]=\"${prefix}\"\n\
+    \    done\n    echo \"${prefixes[*]}\"", "    # $1 is assumed to be a string\n\
+    \    local prefix=\"\"\n    # loop through characters\n    for (( i=1; i <= ${#1};\
+    \ ++i )); do\n        # prefix += character\n        prefix=\"${prefix}${1}\"\n\
+    \        # loop through remaining characters\n        for (( j=0; j < $(( ${#1}\
+    \ - i)); ++j )); do\n            # add char to prefix\n            prefix=\"${prefix}${1}\"\
+    \n        done\n    done\n    # convert prefix to a list of strings\n    IFS=\"\
+    \\\" \" read -a prefixes <<< \"${prefix}\"\n    # return the list\n    echo \"\
+    ${prefixes[*]}\"", "  local string=$1\n  local output\n  output=$( echo $string\
+    \ | tr \" \" \"\\n\" )\n  while [ $# -gt 0 ]; do\n    output=\"$( echo $output\
+    \ | sed \"s/$1/$2/\" )\n    output=$( echo $output | sed \"s/$1/$2/\" )\n    shift\n\
+    \  done\n  echo $output", "  local -r shortest \"$1\" longer\n  shorter=\"${1}\"\
+    \n  longer=\"${2}\"\n  shift 2\n  local -r shorter_length longer_length\n  shorter_length=$(expr\
+    \ length \"$shorter\")\n  longer_length=$(expr length \"$longer\")\n  local shorter_index\n\
+    \  shorter_index=0\n  local longer_index\n  longer_index=0\n  local result\n \
+    \ result=()\n  while [[ $shorter_length -lt $longer_length ]]; do\n    shorter_index=$((shorter_index\
+    \ + 1))\n    result+=(${shorter:$shorter_index})\n    shorter=\"${shorter:$shorter_index:$shorter_length}\"\
+    \n    shorter_length=$(expr length \"$shorter\")\n  done\n  while [[ $longer_length\
+    \ -lt $shorter_length ]]; do\n    longer_index=$((longer_index + 1))\n    result+=(${longer:$longer_index})\n\
+    \    longer=\"${longer:$longer_index:$longer_length}\"\n    longer_length=$(expr\
+    \ length \"$longer\")\n  done\n  result+=(\"$shorter\")\n  result+=(\"$longer\"\
+    )\n  echo \"${result[@]}\"", "    local str=\"$1\"\n    local maxlen=${#str}\n\
+    \    local i=0\n    local prefixes=()\n    while [[ $i -lt $maxlen ]]; do\n  \
+    \      prefixes=(\"${prefixes[@]}\" \"$prefixes[$i]${str#$prefixes[$i]}\")\n \
+    \       let i++\n    done\n    echo \"${prefixes[@]}\"", "  # Check parameter\
+    \ consistency\n  [ ! \"$1\" ] && echo \"ERROR: input parameter is missing for\
+    \ function all_prefixes()\" && return 1\n  # Handle special cases\n  case \"$1\"\
+    \ in\n    \"[]\")\n      echo \"[]\"\n      ;;\n    \"{}\")\n      echo \"{}\"\
+    \n      ;;\n    \"{}{}{}\")\n      echo \"{}{}\"\n      ;;\n    *)\n      # Split\
+    \ $1 into individual characters\n      IFS=\"{}\" read -ra chars <<< \"$1\"\n\
+    \      # Echo the prefix for each char\n      echo \"${chars[*]:1}\"\n      ;;\n\
+    \  esac", "    local prefixes=\"$1\"\n    shift 1\n    local input=\"$1\"\n  \
+    \  local length=\"${#input}\"\n    local output=\"$1\"\n    local prefix=\"${input:0:length}\"\
+    \n    local suffix=\"${input:length}\"\n\n    # Remove prefix from input\n   \
+    \ input=\"${input:1:length-$((length+1))}\"\n    output+=($prefix)\n\n    # Add\
+    \ all prefixes\n    while [[ -n \"$input\" ]]; do\n        prefix=\"${prefix}$prefix\"\
+    \n        output+=($prefix)\n\n        input=\"${input:0:length-$((length+1))}\"\
+    \n    done\n\n    # Add suffix and return\n    output+=($suffix)\n    echo \"\
+    ${output[@]}\"", "  # Use $1 as the input string\n  local -i input=${1:-\"\"}\n\
+    \  # Set an empty array for results\n  local -a result=()\n  # Iterate over all\
+    \ possible prefixes of $input\n  for (( i=0; i<${#input}; i++ )); do\n    # Save\
+    \ current prefix length\n    local prefix_len=${#input}\n    # Iterate over all\
+    \ possible prefixes of $input with $i prefix length\n    for (( j=0; j<${#input};\
+    \ j++ )); do\n      # If the current prefix is the same as the previous prefix,\
+    \ skip it\n      if [[ $i == $j ]]; then\n        continue\n      fi\n      #\
+    \ Add current prefix to the result\n      result+=(\"${input:$i:$j}\")\n     \
+    \ # Update prefix length\n      prefix_len=$(( prefix_len + 1 ))\n    done\n \
+    \ done\n  # Return list of prefixes of $input\n  printf '%s\\n' \"${result[@]}\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"$0: empty input\" >&2\n        return\
+    \ 1\n    fi\n    local prefixes prefixes_sorted\n    local prefixes_str\n    prefixes_str=\"\
+    $1\"\n    shift\n    # sort prefixes with shortest string first\n    prefixes_sorted=(\
+    \ $(sort -- \"${prefixes_str}\" | awk '{print $1}') )\n    # remove all non-shortest\
+    \ prefixes\n    prefixes=( ${prefixes_sorted[@]} | sed -e 's/^[^\"']*//' )\n \
+    \   # remove all non-shortest prefixes\n    prefixes=( ${prefixes_sorted[@]} |\
+    \ sed -e 's/\"[^\"]*\"//' )\n    echo \"${prefixes[@]}\"\n    return 0", "  local\
+    \ prefix=\"\"\n  local prefixes=\"\"\n  local input_string=\"$1\"\n  local length=\"\
+    ${#input_string}\"\n\n  local i\n  local j\n  for (( i=0; i < length-1; i++ ));\
+    \ do\n    prefix=\"${input_string:$i:1}\"\n    for (( j=0; j < length-i; j++ ));\
+    \ do\n      prefixes=\"${prefixes:\\\"${input_string:$j:1}\\\"}\"\n    done\n\
+    \    prefixes=\"${prefixes:\\\"\\\"}\"\n  done\n  prefix=\"${prefix:$((length-1))}\"\
+    \n  prefix=\"${prefix:0:((length-1))}\"\n  prefix=\"${prefixes[${length}-1]}\"\
+    \n  echo \"$prefix\"", "\tlocal cur prev\n\tcur=${1:-\"\"}\n\tprev=\"\"\n\twhile\
+    \ [[ $cur != \"\" ]]; do\n\t\tprev=$cur\n\t\tcur=${prev#*\"$prev\"}\n\tdone\n\t\
+    printf '%s\\n' \"$cur\"", "  local shortest longest\n  shortest=$1\n  longest=$1\n\
+    \  # Iterate through the string\n  while [ \"${#shortest}\" -gt 0 ]; do\n    #\
+    \ Remove prefix from shortest string\n    shortest=\"${shortest#*\\\"}\"\n   \
+    \ # If shortest string is empty, exit\n    if [ -z \"${shortest}\" ]; then\n \
+    \     echo \"[ERROR] No more prefix to check. [all_prefixes]\"\n      exit 1\n\
+    \    fi\n    # Append to longest string\n    longest=\"${longest}${shortest}\\\
+    \"\n    # Iterate through the rest of the string\n    shortest=$1\n  done\n  #\
+    \ Remove last prefix from longest string\n  longest=\"${longest%\\\"}\"\n  echo\
+    \ \"[INFO] All prefixes: ${longest}\"", "    local i\n    local prefixes\n   \
+    \ local length\n    local word\n    local result\n    # Initialize prefixes as\
+    \ an empty array\n    prefixes=()\n    length=0\n    for i in $@; do\n       \
+    \ # Check if current element is a prefix of previous element\n        [[ \"$i\"\
+    \ == \"${prefixes[-1]}\" ]] && ((length++))\n        # If current element is NOT\
+    \ a prefix of previous element\n        [[ \"$i\" == \"$1\" ]] && ((length--))\n\
+    \        # If current element is NOT a prefix of previous element\n        [[\
+    \ \"$length\" -eq 0 ]] && prefixes=(\"${prefixes[@]}\" \"$i\")\n    done\n   \
+    \ # Return array containing all prefixes\n    echo \"${prefixes[@]}\"", "    echo\
+    \ \"${1}\" | sed -e 's/.*/\"&\"/' | sort | uniq", "    set -- \"$1\"\n    local\
+    \ prefix=\"\"\n    local prefixes=()\n    while [[ $1 ]]; do\n        prefix+=$1\n\
+    \        shift\n        if [[ $1 ]]; then\n            prefix+=\"\\\" \"\n   \
+    \         prefixes+=(\"$prefix\")\n            prefix=\"\"\n        fi\n    done\n\
+    \    echo \"${prefixes[@]}\"", "\tlocal input=$1; shift\n\tlocal prefix=\"\"\n\
+    \tlocal suffix=\"\"\n\tlocal last=\"${input:0:1}\"\n\tlocal i=2\n\twhile [[ \"\
+    $input\" != \"\" && $input != \"$last\" ]]; do\n\t\tsuffix=\"${input:0:i}\"\n\t\
+    \tprefix=\"${prefix}${suffix}\"\n\t\tlast=\"${input:$i}\"\n\t\ti=$((i+1))\n\t\
+    done\n\techo \"${prefix},${suffix}\"", "    local prefixes=\n    local prefix=''\n\
+    \    local i\n    local len=${#1}\n    for ((i=1; i<=len; i++)); do\n        prefix=${prefix}${1}\n\
+    \        prefixes=${prefixes}\"${prefix}\"\n        prefix=${prefix%?}\n    done\n\
+    \    echo \"$prefixes\"", "  local prefix=\"$1\"\n  shift\n  local shortest longest\
+    \ prefixes count\n  shortest=\"$(echo \"$prefix\" | sed -e 's/^\\(.\\{1,\\}\\\
+    ).*$/\\1/')\"\n  longest=\"$(echo \"$prefix\" | sed -e 's/^\\(.\\{1,\\}\\).*$/\\\
+    1/' -e 's/^[^\"^\\]*\"/\\1/')\"\n  prefixes=\"\"\n  count=0\n  until [ -z \"$longest\"\
+    \ ]; do\n    count=$(( count + 1 ))\n    prefixes=\"${prefixes}'\\\"'$shortest'\"\
+    _$count'\\\"'\"\n    shortest=\"$(echo \"$prefix\" | sed -e 's/^\\(.\\{1,\\}\\\
+    ).*$/\\1/' -e 's/^[^\"^\\]*\"/\\1/')\"\n    longest=\"$(echo \"$prefix\" | sed\
+    \ -e 's/^\\(.\\{1,\\}\\).*$/\\1/' -e 's/^[^\"^\\]*\"/\\1/' -e 's/^[^\"^\\]*\"\
+    /\\1/')\"\n  done\n  echo \"$prefixes\"", "  local str=\"$1\"\n  # Remove all\
+    \ prefixes from shortest to longest in $str\n  str=\"${str//,/}\"\n  local prefix=\"\
+    \"\n  local prefixes=\"$(printf '%s\\n' \"$str\" | sed -e '/^$/'d -e 's/^[^\"\
+    ]*//')\"\n  local prefixes2=\"$(( ${#prefixes}-1 ))\"\n  while [ $prefixes2 -gt\
+    \ 0 ]; do\n    prefix=\"${prefixes2#0}${prefix%,}\"\n    prefixes2=\"$(printf\
+    \ '%s\\n' \"${str//$prefix/,}\" | sed -e '/^$/'d -e 's/^[^\"]*//')\"\n  done\n\
+    \  printf '%s\\n' \"$prefix\"", "  local -i n maxlen\n  read -r _ $1\n  maxlen=$((\
+    \ ${#1} > ${#2} ? ${#2} : ${#1} ))\n  printf '%s\\n' \"${@:2}\"\n  for (( n =\
+    \ ${#1} - 1; n >= maxlen; n-- )); do\n    printf '%s' \"${1:$n:1}\"\n  done",
+  "\techo \"$1\" | grep -Po \"^\\\"[^\\\"]+\\\"$\" | sort -V | awk '{print \"\\\"\"\
+    $1\"\\\",\"}' | awk '{print substr($1,length($1)-2,length($1))}'", "\twhile [[\
+    \ $1 ]]; do\n\t\tall_prefixes=(\"${all_prefixes[@]}\" \"'$1'\")\n\t\tshift\n\t\
+    done\n\techo \"${all_prefixes[@]}\"", "  local prefix=''\n  local prefixes=()\n\
+    \n  local input=\"$1\"\n  local input_len=${#input}\n  local prefixes_len=${#prefixes}\n\
+    \n  local i\n  for (( i=input_len; i>0; i=i-1 )); do\n    prefix+=$(input)\n \
+    \   local j\n    for (( j=i; j>0; j=j-1 )); do\n      if [[ \"$prefix\" == \"\
+    $prefixes[j-1]\" ]] || [[ $j == 1 ]]; then\n        prefixes+=(\"$prefix\")\n\
+    \        break\n      fi\n    done\n  done\n\n  echo ${prefixes[@]}", "  if [\
+    \ \"${#}\" -eq 1 ]; then\n    echo \"${@}\"\n    return\n  fi\n  local result\n\
+    \  result=\"$(all_prefixes $(all_prefixes ${@:1:$#-1}) | sort -rn | tail -1)\"\
+    \n  printf \"${result}${@:$#}\"", "    local prefixes=$(echo \"$1\" | sed 's/[^a-zA-Z0-9_]/,/')\n\
+    \    echo \"\\\"${prefixes}\\\"\" ", "   echo -n '\"' $1 '\"' |\n      sort -u\
+    \ |\n      sed \"s/\\(['\"\"]\\?[a-z]\\?[\"\"]\\?[a-z]\\?\\)/$(all_prefixes_from_word\
+    \ $1)/g\"", "    local cur\n    for cur in \"${1}\"; do\n        local prev=\"\
+    ${cur}\"\n        local count=0\n        local ccount=\"${#prev}\"\n        local\
+    \ i=0\n        while [ $i -lt $ccount ]; do\n            if [ \"${prev:i:1}\"\
+    \ == \"$1\" ]; then\n                count=$((count+1))\n                i=$((i+1))\n\
+    \            else\n                if [ $count -gt 1 ]; then\n               \
+    \     echo \"$prev\"\n                fi\n                break\n            fi\n\
+    \        done\n        if [ $count -gt 1 ]; then\n            echo \"$prev\"\n\
+    \        fi\n    done", "  # If input is null or empty\n  [[ -z $1 || $1 == \"\
+    \" ]] && return 0\n\n  # Initialize all prefixes\n  all_prefixes=()\n  all_prefixes_hash=()\n\
+    \  \n  # For each character, add the prefix to the list\n  for i in $(seq 1 ${#1})\n\
+    \  do\n    all_prefixes_hash[$i]=$1\n  done\n  \n  # Append each prefix to the\
+    \ list until a unique prefix is found\n  while read -r line\n  do\n    prefix=$line\n\
+    \    for k in $all_prefixes_hash\n    do\n      if [[ ${prefix} == ${all_prefixes_hash[$k]}\
+    \ ]]\n      then\n        break\n      fi\n    done\n    all_prefixes_hash[$i]=$prefix\n\
+    \    i=$((i+1))\n  done < <(sort <<<\"${all_prefixes_hash[@]}\" | uniq -d)\n\n\
+    \  # Return the list\n  printf '%s\\n' \"${all_prefixes_hash[@]}\"", "  local\
+    \ result=\"$1=\"\n  for (( i = 0; i < ${#1}; i++ )); do\n    result+=\"\\\"${1:$i:1}\\\
+    \"\"\n  done\n  echo $result", "    local IFS=\n    local IFS=''\n    local prefixes=()\n\
+    \    while IFS=$'\\n' read -r line; do\n        local prefix=''\n        for ((i=0;\
+    \ i<${#line}; i++)); do\n            if [[ \"$line\" = \"${line//#/}*\" ]]; then\n\
+    \                prefix=\"${line#*}\"\n                break\n            fi\n\
+    \        done\n        prefixes=( \"${prefixes[@]}\" \"$prefix\" )\n    done <<<\
+    \ \"$(echo \"$1\" | sed 's/^\\(.*\\)$/\\1/')\"", "  local prefix=\"\"\n  local\
+    \ input=\"$1\"\n  local out\n  local i\n  shift\n\n  IFS=\"\\042\" read -r -d\
+    \ '' -a out <<<\"$input\"\n\n  for ((i=0; i<${#out[*]}; i++)); do\n    prefix+=\"\
+    ${out[$i]}\"\n  done\n\n  echo \"${prefix}\"", "    local x=\"${1:-}\"\n    echo\
+    \ $(echo $x |\n            sed -e \"\n                s|^|$x|\n            \"\
+    \ | tr ' ' '\\n' | sed -e \"\n                s|^|\\\"|\n                s|$|\\\
+    \"|\n            \" | tr -d '\\n')", "  test -z \"$1\"\n  test ! -z \"$2\"\n \
+    \ echo \"$2\"\n  sed -n '/^$1/s/^$1/\"&\"/'", "    local prefixes=()\n    local\
+    \ -i i prefix\n    local input=\"$1\"\n    for ((i = 0; i < ${#input}; i++));\
+    \ do\n        prefix=\"${input:0:i}\"\n        prefixes[${#prefixes[*]}]=\"$prefix\"\
+    \n    done\n    echo \"${prefixes[*]}\"", "    local prefix_list=\"$1\"\n    local\
+    \ prefix=\"\"\n    local prefix_len=${#prefix_list}\n\n    while [[ ${prefix_len}\
+    \ -gt 0 ]]; do\n        prefix=\"${prefix_list}${prefix}\"\n        prefix_len=$((${prefix_len}\
+    \ - 1))\n    done\n    echo -n ${prefix}", "    local -n prefixes=$1\n    local\
+    \ -a result=()\n    while [[ $prefixes ]]; do\n        local prefix=${prefixes[-1]}\n\
+    \        local -n prefixes=$prefix${prefixes[@]:1:$#-1}\n        result+=(\"$prefix\"\
+    )\n    done\n    printf '%s\\n' \"${result[@]}\"", "    prefixes=()\n    while\
+    \ [ -n \"$1\" ]; do\n      case \"$1\" in\n         '') break ;;\n         *)\n\
+    \           prefixes[${#prefixes[*]}]=\"$1\"\n           ;;\n      esac\n    \
+    \  shift\n    done\n    for ((i=${#prefixes[*]}; i>0; i--)); do\n      prefixes[${i}]=\"\
+    \\\"${prefixes[${i}]}\\\" \"\n    done\n    echo \"${prefixes[*]}\"", "  # We\
+    \ need a subshell so we can use backticks.\n  (for i in $(sed 's/\\(.\\)./\\U\\\
+    1/g; s/$/.*/g' <<< \"$1\"); do echo $i; done)", "  # get all prefixes from shortest\
+    \ to longest of the input string\n  local string=\"$1\"\n  local prefixes=()\n\
+    \  for (( i=0 ; i$(($#-2)) ; i++ )); do\n    local suffix=\"${!i}\"\n    local\
+    \ prefix=\"${string:$(( i + 1 )):$(( i + $#-2 ))}\"\n    prefixes=(\"${prefixes[@]/$prefix}\"\
+    \ \"$prefix\")\n    string=\"${suffix}\"\n  done\n  prefixes=(\"${prefixes[@]}\"\
+    )", "    local s='$'\n    local e\n    local ret\n\n    for e in $(echo $1 | sed\
+    \ 's/^\"//g;s/\"$//g')\n    do\n        echo -n -e $s$e$s\n        ret=$?\n  \
+    \      s=$s$e$s\n        if [[ $ret -eq 0 ]]\n        then\n            break\n\
+    \        fi\n    done\n    echo -n -e $s$e$s\n    return $ret", "    local a=\"\
+    $1\"\n    shift\n    local b=\"$(echo \"$a\" | sed -e \"s/^\\(.\\+\\)$/.\\1/g\"\
+    )\"\n    for c; do b=\"$(echo \"$b\" | sed -e \"s/^\\(.\\+\\)$/.\\1/g\")\"; done\n\
+    \    echo \"$b\"", "  local short=${1:?Usage: $(basename $0) short prefix}\n \
+    \ local long=${2:?Usage: $(basename $0) long prefix}\n  echo $short | grep -Eo\
+    \ \"^${short}[[:space:]]\" | sed 's/\"//g' | sed 's/^[[:space:]]*//g' | sed 's/[[:space:]]*$//g'",
+  "    local str=$1\n    local result=()\n    local len=${#str}\n    if [ $len ==\
+    \ 0 ]; then\n        return 0\n    fi\n    local i\n    for (( i = 0; i < len;\
+    \ i++ )); do\n        result+=(\"${str::i}\")\n    done\n    echo \"${result[@]}\"",
+  "\tlocal shortest longest\n\tshortest=\"${1:?}\"\n\tlongest=\"$(echo \"${1:?}\"\
+    \ | awk '{ print $1 }')\"\n\tlocal prefixes result\n\tprefixes=\"\"\n\tresult=\"\
+    $(for prefix in $(echo \"${shortest:0:${#longest}}\"|awk '{ print $2 }')\n\t\t\
+    do\n\t\t    prefixes=$prefixes,\"${prefix}\"\n\t\tdone)\"\n\techo \"$prefixes\"",
+  "    local result=\"$(echo \"$1\" | tr a-z A-Z)\"\n    local i count=0 prefix=\"\
+    ${result}\"\n\n    echo -n \"${prefix}\"\n    while [[ -z \"${prefix}\" ]]; do\n\
+    \        prefix=\"${result}\"\n        count=0\n        for i in $(seq ${#result});\
+    \ do\n            result=\"${result:0:i-1}\"\n            if [[ \"${result}\"\
+    \ != \"${prefix}\" ]]; then\n                prefix=\"${result}\"\n          \
+    \  fi\n            ((count++))\n        done\n    done\n\n    printf '\"%s\"'\
+    \ \"${result}\"", "\tlocal str=$1\n\tlocal prefixes=()\n\n\tfor prefix in $(seq\
+    \ ${#str}); do\n\t\tprefixes=(\"${prefixes[@]}\" \"${str:$prefix:1}\")\n\tdone\n\
+    \n\techo ${prefixes[@]}", "    if [ -z \"$1\" ]; then return 1; fi\n\n    local\
+    \ i\n    local result\n\n    result=()\n    local prefix=\"${1%%$1}\"\n    prefix=\"\
+    ${prefix#\\\"}\"\n    prefix=\"${prefix%\\\"}\"\n    local j\n\n    for (( j=0\
+    \ ; j<${#prefix} ; j++ )); do\n        i=$(expr index \"$prefix\" \".\")\n   \
+    \     i=$(( i >= 0 ? i : ${#prefix} - 1 ))\n        result+=${prefix:$j:$(( j+i\
+    \ ))}\n    done\n    result=( \"${result[@]}\" )\n\n    # remove the prefix from\
+    \ the input\n    local input=\"${2%%$1}\"\n    input=\"${input#\\\"}\"\n    input=\"\
+    ${input%\\\"}\"\n\n    # remove the last prefix from the input\n    local last=\"\
+    ${#result[@]}\"\n    last=$(( last > 0 ? last : 0 ))\n    input=\"${input:0:$((\
+    \ last-j ))}\"\n\n    result=( \"${result[@]}\" \"$input\" )", "  local prefix=''\n\
+    \  local suffix=''\n  while read -r s; do\n    [ -z \"$prefix\" ] && [ -z \"$suffix\"\
+    \ ] && [ -n \"$s\" ] && prefix=\"$(echo \"$s\" | head -n 1)\"\n    [ -n \"$suffix\"\
+    \ ] && [ -z \"$s\" ] && suffix=\"$(echo \"$s\" | tail -n 1)\"\n    [ -n \"$s\"\
+    \ ] && [ \"$prefix\" ] && [ \"$suffix\" ] && [ \"$prefix\" == \"$suffix\" ] &&\
+    \ prefix=\"\" && suffix=\"\"\n    [ -z \"$prefix\" ] && [ -n \"$s\" ] && prefix=\"\
+    $(echo \"$s\" | head -n 1)\"\n    [ -z \"$suffix\" ] && [ -n \"$s\" ] && suffix=\"\
+    $(echo \"$s\" | tail -n 1)\"\n    [ -n \"$s\" ] && [ \"$prefix\" ] && [ \"$suffix\"\
+    \ ] && [ \"$prefix\" == \"$suffix\" ] && prefix=\"\" && suffix=\"\"\n  done <\
+    \ <(echo \"$1\" | sed 's/^.//;s/.$//')\n  echo \"$prefix\"", "    local S=$1\n\
+    \    local PREFIXES\n    local LASTPREFIX\n    local PREPREFIX\n    local LAST\n\
+    \    local PREFIX\n    local COUNT=1\n\n    PREFIXES=()\n    for PREFIX in $S;\
+    \ do\n        LASTPREFIX=$(echo $PREFIX | sed 's/^\"\\(.*\\)\"$/\\1/')\n     \
+    \   PREPREFIX=$(echo $PREFIX | sed 's/^\"\\([^\"]*\\)\"$/\\1/')\n        LAST=$(echo\
+    \ $PREFIX | sed 's/^\"\\(.*\\)\"$/\\1/')\n        ((COUNT++))\n\n        if [\
+    \ $COUNT -eq 1 ]; then\n            PREFIXES+=(\"$LASTPREFIX\")\n        fi\n\n\
+    \        if [ $LASTPREFIX -ne $PREPREFIX ]; then\n            PREFIXES+=(\"$PREFIX\"\
+    )\n        fi\n    done\n\n    PREFIXES=($(echo ${PREFIXES[@]} | sort))\n\n  \
+    \  # Remove double quotes around the final prefixes\n    for PREFIX in ${PREFIXES[@]};\
+    \ do\n        eval \"PREFIX=${PREFIX//\\\"}\"\n    done\n\n    echo \"${PREFIXES[@]}\"",
+  "  local prefixes=()\n  local str=$1\n  local i len\n  len=\"${#str}\"\n  for ((i\
+    \ = 0; i <= $len; i++)); do\n    prefixes+=(\"${str:$i:1}\")\n  done\n  echo \"\
+    ${prefixes[*]}\"", "    local i=${#$1};\n    local prefixes=();\n    while ((\
+    \ $i > 0 )); do\n        prefixes[${#prefixes[@]}]=${1:0:i};\n        (( i = i\
+    \ - 1 ));\n    done", "  local prefix\n  local all_prefixes\n\n  # split string\
+    \ into lines and then add quotes\n  local all_prefixes_lines=()\n  while IFS=\
+    \ read -r line; do\n    all_prefixes_lines+=(\"\\\"$line\\\"\")\n  done < <(echo\
+    \ \"$1\")\n\n  # sort strings and add quotes\n  all_prefixes_lines=$(printf '\"\
+    %s\"' \"${all_prefixes_lines[@]}\" | sort | uniq)\n\n  # remove last quote\n \
+    \ all_prefixes=(\"${all_prefixes_lines[@]:0:-1}\")\n\n  # add last quote\n  all_prefixes+=('\"\
+    '+\"${all_prefixes_lines[@]:(-1)}\")\n\n  # return results\n  printf \"%s\\n\"\
+    \ \"${all_prefixes[@]}\"", "    local str=\"$1\"\n    local prefix_length=0\n\
+    \    local prefix=''\n    while [[ \"$prefix_length\" -lt \"${#str}\" ]]; do\n\
+    \        local prefix=\"'${str:0:$prefix_length}'\"\n        prefix=\"${prefix%'\"\
+    '}\"\n        prefix=\"${prefix%'\"'}\"\n        prefix_length=\"$((prefix_length\
+    \ + 1))\"\n    done\n    IFS='' '\\n' '\"' read -ra prefix <<< \"${prefix[@]}\"\
+    \n    prefix=($(printf \"%s\" \"${prefix[@]}\" | sort -k 1,1 -k 2,2 | tr -d '\
+    \ \"'))\n    echo \"${prefix[@]}\"", "\tlocal shortest longest prefix len\n\t\
+    shortest=\"$(echo ${1:0:1} | sed -e \"s/^\\./$shortest/\")\"\n\tlongest=\"$(echo\
+    \ ${1:1:length} | sed -e \"s/^\\./$longest/\")\"\n\tlen=\"${#1}\"\n\tfor (( i\
+    \ = 0; i < $len; i++ )); do\n\t\tprefix=\"$(echo ${1:i:$len} | sed -e \"s/^$shortest/$longest/\"\
+    )\"\n\t\techo \"${prefix}\"\n\tdone", "  local string=$1\n  local prefixes\n \
+    \ prefixes=$(for p in ${string}; do echo -n \"'$p'\"; done)\n  echo \"$prefixes\"",
+  "  local prefixes_str=$1\n  IFS=\"'\" read -r -a prefixes_arr <<<\"$prefixes_str\"\
+    \n  local prefixes_arr_size=${#prefixes_arr[@]}\n  if [ \"$prefixes_arr_size\"\
+    \ -eq 0 ]; then\n    return 0\n  fi\n  # Add quotes to each prefix and sort by\
+    \ length\n  local prefixes_with_quotes=()\n  for prefix in \"${prefixes_arr[@]}\"\
+    ; do\n    prefixes_with_quotes+=(\"'$prefix'\")\n  done\n  IFS=' ' read -r -a\
+    \ prefixes_sorted_with_quotes \\\n    <<<\"${prefixes_with_quotes[@]}\" \\\n \
+    \   | sort -n --reverse | sed 's/^\"//; s/\"$//'\n  local prefixes_sorted=${prefixes_sorted_with_quotes[@]}\n\
+    \  # Remove last quote\n  prefixes_sorted=( \"${prefixes_sorted%?}\" )\n  # Add\
+    \ double quotes around each prefix\n  local prefixes_with_double_quotes=()\n \
+    \ for prefix in \"${prefixes_sorted[@]}\"; do\n    prefixes_with_double_quotes+=(\"\
+    \\\"$prefix\\\"\")\n  done\n  IFS=' ' read -r -a prefixes_sorted_with_double_quotes\
+    \ \\\n    <<<\"${prefixes_with_double_quotes[@]}\" \\\n    | sed 's/^\"//; s/\"\
+    $//'\n  local prefixes_sorted_with_double_quotes=${prefixes_sorted_with_double_quotes[@]}\n\
+    \  # Remove last quote\n  prefixes_sorted_with_double_quotes=( \"${prefixes_sorted_with_double_quotes%?}\"\
+    \ )\n  # Add quotes to each prefix and sort by length\n  prefixes_with_quotes=(\
+    \ \"${prefixes_with_quotes[@]}\" )\n  prefixes_with_double_quotes=( \"${prefixes_with_double_quotes[@]}\"\
+    \ )\n  prefixes_with_quotes+=(\"${prefixes_sorted_with_quotes[@]}\")\n  prefixes_with_double_quotes+=(\"\
+    ${prefixes_sorted_with_double_quotes[@]}\")\n  # Remove last quote\n  prefixes_with_quotes=(\
+    \ \"${prefixes_with_quotes%?}\" )\n  prefixes_with_double_quotes=( \"${prefixes_with_double_quotes%?}\"\
+    \ )\n  # Add quotes to each prefix and sort by length\n  prefixes_with_quotes=(\
+    \ \"${prefixes_with_quotes[@]}\" )\n  prefixes_with_double_quotes=( \"${prefix",
+  "    local string=\"$1\"\n    shift 1\n    local prefixes=''\n    while [ \"$string\"\
+    \ ]; do\n        prefixes+=\"\\\"\"$1\"\\\"; \"\n        shift 1\n    done\n \
+    \   echo \"$prefixes\"", "  local shortest longest prefix\n  local n=1\n  read\
+    \ shortest longest prefix <<< \"$1\"\n  while true; do\n    read shortest longest\
+    \ prefix <<< \"$1\"\n    prefix=\"${prefix%$shortest}\"\n    ((n++))\n    if [[\
+    \ \"$prefix\" == \"$longest\" ]]; then\n      printf '%s\\n' \"$prefix\"\n   \
+    \ fi\n  done", "  local prefix=\"$1\"\n  local result=\"\"\n  while [[ $prefix\
+    \ != \"\" ]]; do\n    prefix=\"$(sed -E 's/^'\"$prefix\"'[[:blank:]]+(//g;s/[[:blank:]]+$//g')\"\
+    \ \"$2\")\"\n    result+=\"\\\"$prefix\\\"\"\n  done\n  echo \"$result\"", " \
+    \   local prefixes\n    local str\n    local len\n    str=\"${1}\"\n    len=\"\
+    ${#str}\"\n    # Remove prefix quotes\n    str=\"${str#\\\"}\"\n    if [ \"$len\"\
+    \ -eq 0 ] ; then return; fi\n    prefixes=\"\"\n    shift\n    for (( i=1; i<=$len;\
+    \ i++ )); do\n        prefixes=\"${prefixes}\\\"${str%$i}\\\"\"\n        (( i=len-1\
+    \ ))\n    done\n    echo \"$prefixes\"", "    local prefixes=\"$(echo -n \"${1}\"\
+    \ | sed 's/^[[:space:]]*\\([^[:space:]\\]*\\)[[:space:]]*/\\1/' | sort --unique\
+    \ | tr '\\n' ' ')\"\n    if [ -z \"${prefixes}\" ]; then\n        prefixes=\"\"\
+    \n    fi\n    echo ${prefixes}", "  local -n prefixes=$1\n  shift\n  local s=''\n\
+    \  local prefix=''\n  local -i len=0\n  while [ $# -gt 0 ]; do\n    prefix=$1\n\
+    \    shift\n    len=$(( ${#prefix} + $len + 1 ))\n    s=${s%\"${prefix}\"}\n \
+    \   prefixes+=($s)\n  done\n  echo \"${prefixes[@]:0:$len}\"", "    prefixes=\"\
+    $1\"\n    for s in \"${prefixes:0}\"; do\n        len=${#s}\n        echo \"\\\
+    \"${s}\\\"\"\n        if [ $len -gt 0 ]; then\n            for ((i=0; i<len; i++));\
+    \ do\n                echo -n \"\\\"${s:0:i}:\\\"\"\n            done\n      \
+    \  fi\n    done", "  local prefix=''\n  local i=1\n  local n\n  while [[ $i -le\
+    \ ${#1} ]]; do\n    if [[ ${1:$i:1} == *\"'\"* ]]; then\n      prefix=\"${prefix}\\\
+    \"${1:$i:1}\\\"\"\n      i=$((i+1))\n    else\n      prefix=\"${prefix}${1:$i}\"\
+    \n    fi\n    ((i++))\n  done\n  echo \"$prefix\"", "    local string=\"$1\"\n\
+    \    local prefixes=()\n    local i\n    i=0\n    while [ $i -lt ${#string} ];\
+    \ do\n        prefixes+=(\"${string:$i:$((${#string} - ${i}+1))}\")\n        let\
+    \ i++\n    done\n    prefixes=( \"${prefixes[@]}\" )\n    echo \"${prefixes[*]}\"",
+  "    local s=$1\n    local -n all_prefixes=\n\n    for (( i=0; i<${#s}; i++ ));\
+    \ do\n        local prefix=\"${s:i:1}\"\n        all_prefixes+=(\"$prefix\")\n\
+    \    done\n    all_prefixes", "\tlocal prefixes=\"${1:-}\"\n\tlocal -n max=$prefixes\n\
+    \tlocal i prefix\n\tmax=${max:-}\n\tfor (( i=0; i<${#prefixes}; i++ )); do\n\t\
+    \tprefix=$(echo \"${prefixes[i]}\" | sed -e \"s/\\\\/\\\\\\\\/g\" -e \"s/'/\\\\\
+    \\\\'/g\" -e \"s/^/'/\" -e \"s/$/\\\\'/g\")\n\t\tif (( ${#prefix} < ${#max} ));\
+    \ then\n\t\t\tmax=${prefix}\n\t\tfi\n\tdone\n\techo \"${max}\"", "  local PREFIXES=\"\
+    $1\"\n  shift\n  local PREFIX=\"\"\n  local PREFIXES_COMBINED=\"\"\n\n  while\
+    \ true; do\n    PREFIX=\"${PREFIXES}${PREFIX}\"\n    PREFIXES_COMBINED=\"${PREFIXES_COMBINED}${PREFIX}\"\
+    \n    if [[ ${#PREFIX} -eq ${#PREFIXES} ]]; then\n      PREFIXES_COMBINED=\"${PREFIXES_COMBINED}${PREFIXES}\"\
+    \n      PREFIXES=\"\"\n      break\n    else\n      PREFIXES=\"${PREFIX%?}\"\n\
+    \      PREFIX=\"?\"\n    fi\n  done\n\n  echo $PREFIXES_COMBINED", "  echo $1\
+    \ | awk '{for (i=2; i <= NF; i++) {print substr($1, 1, i-2)}}'", "    local tmp;\n\
+    \    local fname;\n    local prefix=\"\";\n    local fname=$(basename $1);\n \
+    \   local flength=${#fname};\n    local prelength=${#prefix};\n    local suffix;\n\
+    \n    for (( i = 0; i < flength; i++ )); do\n\tsuffix=\"${fname::$i}\";\n\tif\
+    \ [ ${#suffix} -eq ${prelength} ]; then\n\t    prefix=\"${prefix}${prefix:+$prefix'$suffix'}\"\
+    ;\n\tfi\n    done\n\n    echo \"${prefix}\"", "    local _all\n    local _prefixes\n\
+    \    local _prefixes_tmp\n    local _prefixes_i\n    local _prefixes_j\n    local\
+    \ _prefix\n    _all=\"$1\"\n    _prefixes=()\n    _prefixes_i=${#_all}\n    while\
+    \ [ $_prefixes_i -gt 0 ]; do\n        _prefixes_tmp=\"$_all\"\n        _all=\n\
+    \        for _prefixes_j in $(seq 0 $_prefixes_i); do\n            _prefix=\"\
+    ${_prefixes_tmp:$_prefixes_j:1}\"\n            if [ \"$_prefixes_j\" -eq \"$_prefixes_i\"\
+    \ ]; then\n                _all=\"$_all$_prefix\"\n            else\n        \
+    \        _all=\"$_all\\\"$_prefix\\\"\"\n            fi\n        done\n      \
+    \  _prefixes+=(\"$_all\")\n        _prefixes_i--\n    done\n    echo \"${_prefixes[@]}\"",
+  "    local -r string=\"$1\"\n    local -r prefix=\"\"\n    local -r result=\"\"\n\
+    \    # Walk through input string from back to front, adding prefix to output as\
+    \ we go\n    for (( index=\"${#string}\"; index>0; index-- )); do\n        result=\"\
+    ${prefix}${string::${index}}${result}\"\n        prefix=\"\\\"${prefix}\\\"\"\n\
+    \    done\n    echo \"${result}\"", "    if [ $# -eq 0 ]; then\n        echo \"\
+    Usage: all_prefixes string\"\n        return 1\n    fi\n\n    local string=\"\
+    $1\"\n    local result=()\n    local shortest shortestlen\n    local longest longestlen\n\
+    \    local i\n    shortestlen=$(expr ${#string} - 1)\n    longestlen=$(expr ${#string}\
+    \ + 1)\n\n    for ((i=1; i<=${shortestlen}; i++))\n    do\n        prefix=${string::$i}\n\
+    \        result+=(\"\\\"${prefix}\\\" \")\n    done\n    result+=(\"\\\"${string::$shortestlen}\\\
+    \" \")\n    for ((i=${shortestlen}; i<=${longestlen}; i++))\n    do\n        prefix=${string::$i}\n\
+    \        result+=(\"\\\"${prefix}\\\" \")\n    done\n\n    echo ${result[@]}\n\
+    \    return 0", "    IFS=:; set -- $1;\n    local shortest longest\n    while\
+    \ [ $# -gt 0 ]; do\n        local prefix=\"${1%%:*}\"\n        case \"${shortest,,}\"\
+    \ in\n            *$prefix*)\n                shortest=\"${prefix%%:*}\"\n   \
+    \             ;;\n            *)\n                shortest=${shortest%:*} longest=$prefix;;\n\
+    \        esac\n        shift\n    done\n    echo \"$shortest:$longest\"", "  \
+    \ local prefixes\n   if [ ! -e \"$1\" ]; then\n      echo \"$1 is not an existing\
+    \ file\"\n      return 1\n   fi\n   prefixes=$(\n      cat \"$1\" |\n      while\
+    \ read line; do\n         for prefix in $line; do\n            echo \"$prefix\"\
+    \n         done\n      done |\n      sort -u)\n   rm -f \"$1\"\n   echo \"$prefixes\"\
+    \n   return 0", "   set -- \"$1\"\n   declare -A prefixes\n   while [ -n \"${1:-}\"\
+    \ ]; do\n      prefixes[${1#*[[:space:]]}]=1\n      shift\n   done\n   printf\
+    \ '%s\\n' \"${!prefixes[@]}\"", "    # split input string into list of strings\n\
+    \    local i\n    local prefixes\n    IFS= read -r -d '' -a prefixes <<< \"$1\"\
+    \n    local max_prefix\n    for i in \"${!prefixes[@]}\"; do\n        max_prefix=${prefixes[$i]}\n\
+    \    done\n    local max_i\n    for ((i=${#prefixes[@]}-1; i>=0; i--)); do\n \
+    \       max_i=$((max_i+1))\n        max_prefix=${prefixes[$max_i]}\n    done\n\
+    \    echo -n \"${prefixes[@]:0:$max_i}\"", "  local prefixes=\"$1\"\n  shift\n\
+    \  # For each character in $prefixes, remove it from the input and recurse:\n\
+    \  while [[ \"$prefixes\" != \"\" ]]; do\n    [[ \"$prefixes\" =~ \"^[^\"]*\"\
+    \ ]]\n    prefixes=${BASH_REMATCH[0]}${prefixes%?}\n  done\n  echo $prefixes",
+  "\tlocal prefixes=\"\"\n\tlocal maxlength=0\n\tlocal length=$1\n\tshift\n\tif [\
+    \ \"$length\" == \"0\" ]; then\n\t\treturn\n\tfi\n\tfor prefix in $(echo $1 |\
+    \ grep -Eo \"^\\\"[0-9]\"); do\n\t\tif [ \"$prefix\" == \"$1\" ]; then\n\t\t\t\
+    prefixes=$prefixes$prefix\n\t\telse\n\t\t\tmaxlength=$(( maxlength < length ?\
+    \ length : maxlength ))\n\t\t\tprefixes=$prefixes$prefix\"\\\"$length\"\n\t\t\t\
+    prefixes=\"$prefixes \"\n\t\t\tlength=$(( length-1 ))\n\t\tfi\n\tdone\n\tprefixes=$prefixes\"\
+    \\\"$length\"\n\techo \"$prefixes\"", "    local prefixes\n    prefixes=()\n \
+    \   local longest_prefix=\"${1%%$1}\"\n    local last_prefix=\"\"\n    for prefix\
+    \ in $longest_prefix; do\n        prefixes+=($prefix)\n        last_prefix=\"\
+    $prefix\"\n    done\n    prefixes+=($last_prefix)\n    prefixes=($(echo ${prefixes[@]}))",
+  "    local IFS=$'\\n' set -- \"$1\"\n    local i prefix=''\n    local len=0\n  \
+    \  local prelen=0\n    local result=()\n    while IFS= read -r line; do\n    \
+    \    len=${#line}\n        if [ $prelen -eq $len ]; then\n            result+=(\"\
+    $prefix\")\n            prefix=''\n            prelen=0\n            len=0\n \
+    \       fi\n        if [ $len -lt $prelen ]; then\n            prefix+=\"$(head\
+    \ -n $len <<< \"$line\")\"\n        else\n            result+=(\"$prefix\")\n\
+    \            prefix=''\n            prelen=$len\n        fi\n    done <<< \"$1\"\
+    \n    result+=(\"$prefix\")\n    IFS=$' \\t\\n'\n    echo \"${result[*]}\"", " \
+    \ # If input is a string then convert it to an array so we can modify it\n  #\
+    \ to contain prefix data\n  if [ ${#1} -eq 0 ]; then\n    echo >&2 \"usage: all_prefixes\
+    \ <string>\"\n    exit 1\n  fi\n  local _prefix\n  local _prefixes\n  local _prefix_len\n\
+    \  local _last\n  local _last_len\n  _prefix=$1\n  _prefixes=()\n  _prefix_len=$((${#1}\
+    \ + 1))\n  _last=${_prefix}\n  _last_len=$_prefix_len\n  _prefixes=()\n  # Loop\
+    \ through all combinations of prefix length\n  while [ \"$_last_len\" -ge \"$_prefix_len\"\
+    \ ]; do\n    # Make sure that the current prefix is not the same as the current\
+    \ last\n    if [ \"$_last\" != \"${_prefix:0:$_prefix_len}\" ]; then\n      #\
+    \ Add the prefix to the array\n      _prefixes+=(\"${_prefix:0:$_prefix_len}\"\
+    )\n    fi\n    _last_len=$((_last_len - 1))\n    _last=${_prefix:$_last_len}\n\
+    \  done\n  # Add the prefix to the array\n  _prefixes+=(\"${_prefix:0:$_prefix_len}\"\
+    )\n  echo \"${_prefixes[@]}\"", "  local -a strings=(\"$@\")\n  local -a prefixes\n\
+    \  local -a prefixes_sorted\n\n  if [[ ${#strings[@]} -eq 0 ]]; then\n    return\
+    \ 0\n  fi\n\n  prefixes=()\n  prefixes_sorted=()\n\n  local prefix\n  local len\n\
+    \n  for prefix in \"${strings[@]}\"; do\n    len=\"${#prefix}\"\n    if [[ $len\
+    \ -gt 0 ]]; then\n      prefixes_sorted+=(\"$prefix\"/*.* \"$prefix\"/)\n    \
+    \  prefixes_sorted+=(\"$prefix\"/.* \"$prefix\"/)\n    fi\n  done\n\n  # sort\
+    \ in reverse order\n  prefixes_sorted=(\"${prefixes_sorted[@]}\")\n  prefixes_sorted=(\"\
+    ${prefixes_sorted[@]:1:${#prefixes_sorted[@]}}\")\n\n  printf '%s\\n' \"${prefixes_sorted[@]}\"",
+  "  local char=$1\n  local prefix\n  prefix=\"$char\"\n  while [ -n \"$prefix\" ];\
+    \ do\n    prefix=\"$(echo $prefix | sed -r \"s/^.\\\"(.+)\\\"$/\\\"\\1\\\"/\"\
+    )\"\n  done\n  echo \"$prefix\"", "  local i\n  local prefix\n  local prefixes\n\
+    \n  if [[ -z \"$1\" ]]; then\n    prefixes=\"\"\n  else\n    prefixes=( )\n  \
+    \  for ((i = 0; i < ${#1}; i++)); do\n      prefix=\"${1:$i:1}\"\n      [[ \"\
+    ${prefix}\" = \"$prefix\" ]]\n      if [[ -z ${prefixes[*]} ]]; then\n       \
+    \ prefixes[${#prefixes}]=\\\"$prefix\\\"\n      else\n        prefixes=( \"${prefixes[*]:0}\"\
+    \ \"${prefix}\" )\n      fi\n    done\n  fi\n\n  echo \"${prefixes[*]}\"", "\t\
+    local result=\"\"\n\tlocal l\n\tfor (( l=1; l<=$1; l++ )); do\n\t\tresult+=\"\\\
+    \"$2\\\"\"\n\tdone\n\techo \"$result\"", "  local tmp=\"\"\n  while [ -n \"$1\"\
+    \ ]; do\n    local tmp=\"$1\"\n    shift\n    printf '\"%s\"' \"$tmp\"\n  done\n\
+    \  echo", "  echo $1 | awk -F \"\\\"\" {'print $1\",\"$2'} | sed 's/,$//'", " \
+    \   local string=\"${1}\"\n    local prefixes=''\n    while [ \"${string}\" !=\
+    \ \"\" ] ; do\n        local count=0\n        local substring=''\n        while\
+    \ [[ \"${string}\" != \"\" && \"${count}\" -lt ${#string} ]] ; do\n          \
+    \  substring=\"${string#?}\"\n            prefixes=\"${prefixes}\\\"${substring}\"\
+    \n            string=\"${string%?}\"\n            ((count+=1))\n        done\n\
+    \        (( count-- ))\n        prefixes=\"${prefixes}\\\", \"\n    done\n   \
+    \ prefixes=\"${prefixes}\"\n    echo \"${prefixes}\"", "   local shortest longest=\"\
+    $1\" ;\n   IFS='' read -d '' -ra prefixes <<<\"${!shortest}\"\n   for p in \"\
+    ${prefixes[@]}\"; do\n      if [[ \"$p\" == \"$shortest\" ]]; then\n         prefixes=(\
+    \ ${prefixes[@]:0:((${#prefixes[@]} - 1))} )\n      else\n         longest=\"\
+    ${p}\"\n         break\n      fi\n   done\n   echo \"${prefixes[@]}\"", "    local\
+    \ prefixes=\"\"\n    local i=1\n    while [ $i -le ${#1} ]; do\n      prefixes+=\"\
+    \\\"${1:$i}\\\"\"\n      i=$(( $i + 1 ))\n    done\n    echo $prefixes", "  local\
+    \ str=\"$1\"\n  shift\n  local arr=()\n  while [[ \"$str\" ]]; do\n    arr+=(\"\
+    $str\")\n    str=\"${str#?}\"\n  done\n  echo \"${arr[@]}\"", "    local IFS=$'\\\
+    n'\n    local line\n    local output\n    local n\n    local len\n    local prefix\n\
+    \    local shortest\n    local longest\n    for n in $(seq 1 $#); do\n       \
+    \ line=$((n))\n        shortest=${line:0:$(( len = $#-n+1 ))}\n        longest=${shortest:0:$len}\n\
+    \        prefix=\"$(echo $line | sed 's/^'$shortest'\\(.*\\)$/\\1/')\"\n     \
+    \   output+=\"$prefix\"\n    done\n    echo \"$output\"", "    local input_string=\"\
+    $1\"\n    local prefix=''\n\n    # Get the longest input string length\n    local\
+    \ longest_prefix_length=$(longest_prefix_length \"${input_string}\")\n\n    #\
+    \ Loop through each prefix of the longest input string\n    for (( i=0; i<${longest_prefix_length};\
+    \ i++ )); do\n        prefix=\"${prefix}\\\"${input_string:0:i}\\\",\"\n     \
+    \   input_string=${input_string:$((i+1))}\n    done\n    prefix=\"${prefix}\\\"\
+    ${input_string}\"\n\n    # Remove trailing comma and space\n    prefix=\"${prefix%?},\"\
+    \n    prefix=\"${prefix%?}\"\n\n    # Remove leading and trailing quotes\n   \
+    \ prefix=\"${prefix#\\\"}\"\n    prefix=\"${prefix%\\\"}\"\n\n    # Remove comma\
+    \ and space\n    prefix=\"${prefix%,}\"\n    prefix=\"${prefix%,}\"\n\n    # Remove\
+    \ leading comma\n    prefix=\"${prefix#,}\"\n    prefix=\"${prefix%,}\"\n\n  \
+    \  # Remove trailing comma\n    prefix=\"${prefix%,}\"\n    prefix=\"${prefix#,}\"\
+    \n\n    echo ${prefix}", "  local i output prefix\n  i=0\n  output=''\n  while\
+    \ [[ $i -lt ${#1} ]]; do\n    prefix=\"${1:i:1}\"\n    [[ \"${prefix:0:1}\" ==\
+    \ \"/\" ]] && output=\"${prefix/#/\\\"}${output}/\"\n    ((i++))\n  done\n  echo\
+    \ \"${output}\"", "\tlocal prefix_length=${1:?}\n\techo \"$(tr '[:lower:]' '[:upper:]'\
+    \ <<< \"${1}\" | sed -e 's/^[[:upper:]]*//' -e 's/[[:upper:]]*$//')\"", "  local\
+    \ -i i\n  local -a prefixes\n  local length str\n  IFS=\"|\" read length str <<<\"\
+    $1\"\n  prefixes=()\n  for (( i = 1; i <= $length; i++ )); do\n    prefixes+=(\"\
+    ${str:$i}\")\n  done\n  echo \"${prefixes[*]}\"", "  local prefix_list\n  prefix_list=\"\
+    $1\"\n  local longest_length\n  longest_length=$(expr length \"$prefix_list\"\
+    )\n  local prefix\n  prefix=\"$2\"\n  while [[ $prefix ]] && [[ $prefix != \"\\\
+    \"\" ]]; do\n    prefix_list=\"$prefix_list,$prefix\"\n    longest_length=$(expr\
+    \ length \"$prefix_list\")\n    prefix=\"$3\"\n  done\n  echo \"$prefix_list\"",
+  "    local PREFIXSTR=\"${1:-}\"\n    local PREFIX=\"\"\n    local RESULT=\"\"\n\
+    \    # Escape all special characters (like \"\n    # Escape all special characters\
+    \ (like \"\n    # Escape all special characters (like \"\n    # Escape all special\
+    \ characters (like \"\n    while [[ $PREFIXSTR != \"\" ]]; do\n        RESULT=\"\
+    ${RESULT}\\\"${PREFIXSTR}\\\"\"\n        PREFIXSTR=\"${PREFIXSTR#*}\"\n      \
+    \  PREFIX=\"${PREFIX%*}\"\n    done\n    echo \"${RESULT}\"", "    # Check if\
+    \ string is empty\n    if [[ -z \"$1\" ]]; then\n        echo \"Empty string\"\
+    \n        exit 1\n    fi\n\n    local prefix=\"\"\n    local count=1\n\n    #\
+    \ Add first character\n    prefix+=\"$1{\"\n\n    # Loop over rest of string\n\
+    \    for i in $2\n    do\n        # Increment count\n        count=$((count+1))\n\
+    \n        # Loop over and add each character to the prefix\n        for j in `seq\
+    \ 1 $count`\n        do\n            prefix+=\"$i\"\n        done\n    done\n\n\
+    \    # Add last character to the prefix\n    prefix+=\"}\"\n\n    # Return prefix\n\
+    \    echo \"$prefix\"", "  local i\n  local prefixes\n  local str=$1\n  local\
+    \ length=\"${#str}\"\n  prefixes=()\n  for ((i=1; i<=$length; i+=1)); do\n   \
+    \ prefixes[${#prefixes[@]}]=\"$str$i\"\n  done\n  echo \"${prefixes[@]}\"", "\t\
+    local prefix=''\n\tlocal suffix=''\n\twhile [[ \"$1\" != \"$2\" ]]; do\n\t\tsuffix=\"\
+    $1\"\n\t\tprefix=\"$2\"\n\t\tshift\n\tdone\n\techo \"$prefix$suffix\"", "  local\
+    \ prefix prefix prefixes prefixes\n  local -a args\n  args=(\"$@\")\n  prefixes=()\n\
+    \  for prefix in \"${args[@]:1}\"; do\n    prefixes=(\"${prefixes[@]}\" \"$prefix\"\
+    )\n  done\n  printf '%s\\n' \"${prefixes[@]}\"", "  local shortest longest prefix\
+    \ remainder suffix\n  shortest=\"${1#\\\"}\"\n  longest=\"${1%\\\"}\"\n  remainder=\"\
+    ${1##*\\\"}\"\n  prefix=\"${1%$shortest}\"\n  suffix=\"${1#$longest}\"\n  prefix+=\"\
+    \\\"$shortest\"\n  suffix+=\"\\\"$longest\"\n  echo \"$prefix\" \"${!prefix:+$prefix}\"\
+    \ \"\\\"$suffix\"", "\tlocal prefixes=\n\twhile [ -n \"$1\" ] ; do\n\t\tprefixes=(\"\
+    ${prefixes[@]}\" \"$1\")\n\t\tshift\n\tdone\n\techo \"${prefixes[@]}\"", '    echo
+    "${1:0:$((${#1}-1))}"', "\tall_prefixes_results=()\n\tall_prefixes_prefixes=($1\
+    \ $2 $3)\n\tfor prefix in \"${all_prefixes_prefixes[@]}\"; do\n\t\tall_prefixes_results=(\"\
+    ${all_prefixes_results[@]}\" \\\n\t\t\t$(printf '%q' \"${prefix}\")\n\t\t)\n\t\
+    done\n\tprintf '[\\n%s]' \"${all_prefixes_results[@]}\"", "    local prefixes=\"\
+    \"\n    local prefix=\"\"\n    local suffix=\"\"\n    for ((i=0;i<$#;i++))\n \
+    \   do\n        prefix=\"${!i}\"\n        suffix=\"${!i//\"$prefix\"/}\n     \
+    \   prefixes=\"${prefixes}\\\"$prefix\\\",\"\n    done\n    prefixes=\"${prefixes:1}\"\
+    \n    echo \"${prefixes:1}\"", "  local input=\"$1\" output=\"$2\"\n  local -a\
+    \ prefixes\n\n  if [[ ${input:0:1} == '\"' ]] ; then\n    prefixes=()\n  else\n\
+    \    prefixes=(\"${!output}\")\n  fi\n\n  for prefix in \"${prefixes[@]}\"; do\n\
+    \    if [[ ${prefix:0:1} != '\"' ]]; then\n      prefix=\"\\\"${prefix}\\\"\"\n\
+    \    fi\n    local -a shortest longest\n    shortest=(\"${!output}\" \"$prefix\"\
+    )\n    longest=(\"${!output}\" \"$prefix\" \"${prefix:0:1}\")\n    shortest=(\"\
+    ${shortest[@]#*$longest[@]}\" \"${shortest[@]#*$prefix}\")\n    output=(\"${shortest[@]}\"\
+    )\n  done\n\n  if [[ ${input:0:1} == '\"' ]] ; then\n    echo -n \"${output[@]}\"\
+    \n  else\n    echo \"${output[@]}\"\n  fi", "    local IFS='' prefixes='' string=\"\
+    $1\" \n    while [[ $string != '' ]]; do\n        prefixes=$(printf \"%s\\n\"\
+    \ \"$prefixes\" \"$string\" | sort -u)\n        string=$(printf \"%s\\n\" \"$string\"\
+    \ | head -n 1)\n    done\n    echo $prefixes", "    # $2 will always be empty\n\
+    \    local prefix=''\n    local word=$1\n    IFS=''\n\n    while [[ $word ]];\
+    \ do\n      prefix=\"${prefix}$word\"\n      word=${word#*;}\n    done\n\n   \
+    \ IFS=$orig_IFS\n    echo \"${prefix}\"", "\tlocal prefixes=\"\"\n\tlocal string=\"\
+    $1\"\n\tIFS=$'\\n' read -r line; line=${line//$'\\n'/}\n\tIFS=$' ' read -r -a\
+    \ array <<< \"$line\"\n\tfor (( i=0; i < \"${#array[@]}\"; i++ )); do\n\t\tprefixes=\"\
+    ${prefixes}\\\"${array[i]}\\\",\"\n\tdone\n\techo \"$prefixes[${#prefixes[*]}]\"",
+  "    local prefixes=()\n    local input=\"${1}\"\n    local prefix=''\n\n    read\
+    \ -d '' -a parts <<< \"${input}\"\n\n    for part in \"${parts[@]}\"; do\n   \
+    \     if [ -z \"$part\" ]; then\n            break\n        fi\n        prefix=\"\
+    ${part}\"\n        prefixes+=(\\\"${prefix}\\\")\n    done\n    echo -n \"${prefixes[*]}\"",
+  "    local results=()\n    for prefix in \"$@\"\n    do\n        results+=\"\\\"\
+    $prefix\\\"\"\n    done\n    echo ${results[*]}", "  local prefixes_str=$1\n \
+    \ local prefixes_arr=()\n  local prefix prefix_len count\n\n  for prefix in $(echo\
+    \ $prefixes_str | sed 's/\"//g'); do\n    prefix_len=$(echo $prefix | sed -e \"\
+    s/ /\" | wc -c)\n    if [[ $prefix_len > $count ]]; then\n      prefixes_arr=(\"\
+    $prefix\")\n      count=$prefix_len\n    else\n      prefixes_arr+=(\"$prefix\"\
+    )\n    fi\n  done\n\n  echo \"${prefixes_arr[@]}\"", "    local PREFIXES=$1\n\
+    \    # No prefix -> empty list \n    [ -z \"$PREFIXES\" ] && return 0\n    \n\
+    \    # Loop over all chars in PREFIXES and add prefixes of length 1 to PREFIXES\
+    \ as needed\n    for CH in $(echo \"$PREFIXES\" | sed 's/ //g'); do\n        [[\
+    \ \"$PREFIXES\" =~ ^$PREFIXES$CH ]] && PREFIXES=\"$PREFIXES$CH\"\n    done\n\n\
+    \    # Return all prefixes\n    echo \"$PREFIXES\"", "  local -n prefixes=\"$1\"\
+    \n  shift\n  local shortest longest\n  shortest=\"$(echo \"$1\" | head -n 1)\"\
+    \n  longest=\"$(echo \"$1\" | tail -n 1)\"\n  local i\n  for ((i=1; i<\"${#prefixes[@]}\"\
+    ; i++ )); do\n    local prefix=\"${prefixes[i]}\"\n    local len=\"${#prefix}\"\
+    \n    if [[ \"$prefix\" == \"$shortest\" ]]; then\n      prefixes[i]=\"$shortest${len}\"\
+    \n    else\n      prefixes[i]=\"${shortest}${longest}${prefix}\"\n    fi\n   \
+    \ shortest=\"$longest\"\n    longest=\"$prefix\"\n  done\n  echo \"$prefixes\"",
+  "  local string=\"${1}\"\n  local prefixes\n  prefixes=\"\"\n  local i\n  for ((\
+    \ i = 1 ; i <= ${#string} ; i++))\n  do\n    if [[ $i == 1 ]]\n    then\n    \
+    \  prefixes=\"${prefixes\\\"${string:$i:1}\\\"}\"\n    elif [[ $i > 1 ]]\n   \
+    \ then\n      prefixes=\"${prefixes\\\"${string:$i:1}\\\"$i}\"\n    fi\n  done\n\
+    \  echo $prefixes", "  local shortest longest=$(echo -n \"$1\" | awk '{ printf\
+    \ $1 }')\n  local all_prefixes\n  while [[ $(echo -n \"$1\" | awk '{ printf $1\
+    \ }') != \"\" ]]; do\n    longest=$(echo \"$1\" | awk -v shortest=\"$shortest\"\
+    \ '{if (length($0) <= length($1)) print shortest; else print longest}')\n    shortest=$(echo\
+    \ \"$longest\" | awk '{ printf $1 }')\n  done\n  printf \"%s\\n\" \"$shortest\
+    \ $longest\"", "    local input=$1\n    IFS=$'\\n'\n    set --\n    for (( i=0;\
+    \ i<${#input}; i++ )); do\n        printf '\"%s\"' \"${input[$i:i]}\"\n    done",
+  "    # Split by whitespace and remove empty values\n    local items=${1//[\\ ]}\n\
+    \    local results=()\n    local prefix=''\n    while [ \"${#items}\" -gt 0 ]\
+    \ ; do\n        # Append current item to prefix and remove from items\n      \
+    \  prefix+=\"'${items[-1]}'\"\n        items=${items[@]:0:$((${#items[@]} - 1))}\n\
+    \        # If we've reached the end of the list then add it as a result\n    \
+    \    if [ \"${#items}\" -eq 0 ] ; then\n            results=\"${results[@]} '${prefix}'\"\
+    \n        fi\n    done\n    echo \"${results[@]}\"", "    local cur prefixes\n\
+    \    cur=\"${1}\"\n    prefixes=\"\"\n    until [[ $cur = \"${cur#*[!a-zA-Z]}\"\
+    \ && $cur != \"\" ]]; do\n        prefixes=\"$prefixes \\\"$cur\\\"\"\n      \
+    \  cur=\"${cur#*[a-zA-Z]}\";\n    done;\n    echo \"$prefixes\"", "  local result=()\n\
+    \  local -a input_args\n  IFS= read -r -d '' -a input_args <<<\"$1\"\n  while\
+    \ [ -n \"${input_args[*]}\" ]; do\n    local prefix=\"$(cat - <<<\"${input_args[*]}\"\
+    \ | head -n 1)\"\n    local -a input_args\n    IFS= read -r -d '' -a input_args\
+    \ <<<\"${input_args[@]:+${input_args[*]}}${prefix//\"~\"/~}\"\n    result+=(\"\
+    ${prefix//\"~\"/~}\")\n  done\n  printf '%s\\n' \"${result[@]}\"", "  # Input\
+    \ validation\n  if [ -z \"$1\" ]; then\n    echo \"$0: usage: all_prefixes [-v]\
+    \ string\" >&2\n    return 1\n  fi\n\n  # Add prefix if first character ($1{0})\
+    \ is alphabetic\n  if [ \"$1\" = 'a' -o \"$1\" = 'A' -o \"$1\" = 'b' -o \"$1\"\
+    \ = 'B' -o \"$1\" = 'c' -o \"$1\" = 'C' ]; then \n    echo \"\\\"$1\"\\\"\n  else\n\
+    \    echo \"\\\"$1\\\"$(($1{0})):\n  fi\n  # Add prefix for each other character\n\
+    \  for i in {1..\"${#1}\"}; do\n    if [ \"$i\" = '0' ]; then\n      echo \"$((i)).$1\"\
+    \n    elif [ \"$i\" = '1' ]; then\n      echo \"$((i)).$1\\\" \"\n    elif [ \"\
+    $i\" = '2' ]; then\n      echo \"$((i)).$1\\\",\"\n    elif [ \"$i\" = '3' ];\
+    \ then\n      echo \"$((i)).$1\\\";\"\n    else\n      echo \"$((i)).$1\\\";$((i-1)):\"\
+    \n    fi\n  done", "    local prefix=\"\"\n    local prefixes=()\n    for (( p=${#1}\
+    \ )\n         ; p; p-- )\n    do\n        prefix=\"${prefix}${1}\"\n        prefixes+=(\"\
+    ${prefix}\")\n    done\n    prefixes+=(\"$prefix\")\n    echo ${prefixes[@]}",
+  "  local prefix_list=\"()\"\n  for prefix in $*; do\n    prefix_list+=($prefix)\n\
+    \  done\n  echo \"${prefix_list[@]}\"", "    local string=\"$1\" prefix=''\n \
+    \   [[ \"$string\" =~ ^-?[0-9]+$ ]] || return 1\n    IFS=+ read -a array <<< \"\
+    $string\"\n    [[ \"${#array[@]}\" -eq 1 ]] || return 1\n    [[ \"$array[1]\"\
+    \ =~ ^-?[0-9]+$ ]] || return 1\n    prefix=\"$prefix${array[1]}\"\n    [ \"$prefix\"\
+    \ != \"\" ] && all_prefixes \"$prefix\"", "    local input_str=\"$1\"\n    local\
+    \ prefixes\n    local prefix\n    local input_str_len\n    for input_str_len in\
+    \ $(seq $((${#input_str}+1)) )\n    do\n        for prefix in $(seq $((${#input_str}-${#prefixes}))\
+    \ )\n        do\n            if [[ ${input_str: -${input_str_len},} == \"${input_str:0:$prefix}\"\
+    \ ]]\n            then\n                prefixes+=${prefix}\"${input_str:$prefix}\"\
+    \n                input_str=\"${input_str:$prefix}\"\n                break\n\
+    \            fi\n        done\n    done\n    echo \"$prefixes\"", "    local prefixes=\"\
+    $1\"\n    local prefix=\"\"\n    local suffix=\"\"\n    local prefixes2=\"\"\n\
+    \    while [ -n \"${prefix}\" ] ; do\n        prefixes=\"${prefix},${prefixes}\"\
+    \n        prefix=\"${prefix%,}\"\n    done\n    prefixes=\"${prefixes%,}\"\n \
+    \   for prefix in $prefixes ; do\n        suffix=\"${prefix##*,}\"\n        suffix=\"\
+    ${suffix%}\"\n        prefix=\"\\\"${prefix%,}\\\"\",\n        prefix=\"${prefix##*,}\"\
+    \n        prefix=\"${prefix%,}\"\n        prefix=\"\\\"${prefix}\\\"\",\n    \
+    \    prefix=\"${prefix%%,}\"\n        prefix=\"${prefix#*\\\"\",\n        prefix=\"\
+    ${prefix%%*,}\"\n        prefixes2=\"${prefixes2}${prefix}\"\n    done\n    echo\
+    \ \"${prefixes2}\"", "    echo \"$1\" | sed -e 's/[^a-zA-Z0-9]\\+\"//' -e 's/\"\
+    //g' | sort -n | uniq -d", "    # shellcheck disable=SC2034\n    echo $1 | awk\
+    \ -F'[\\\\/]+' -v OFS='\"' '{\n        for(i=2; i<=NF; i++) print substr($i,1,length($i)-3)\n\
+    \    }'", "    local IFS=$'\\n'\n    local cmd=$1\n    local all_prefixes=\"$2\"\
+    \n    local last_prefix=\"\"\n    local count=1\n    local prefix\n    local last_suffix=\"\
+    \"\n    local suffix\n    for prefix in $cmd\n    do\n        suffix=\"$(echo\
+    \ $prefix | sed -e 's/^\"//' -e 's/\"$//')\"\n        all_prefixes+=\"'$prefix$suffix'\"\
+    \n        if [ $count -eq 1 ]; then\n            last_prefix=$prefix\n       \
+    \     last_suffix=$suffix\n        fi\n        ((count++))\n    done\n    all_prefixes+=\"\
+    '$last_prefix$last_suffix'\"", "    local prefixes=()\n    local length=\"${#1}\"\
+    \n    for (( i = 0; i < length; i++ )); do\n        for (( j = 0 ; j < length;\
+    \ j++ )); do\n            prefixes+=(\"${1:$i:1}\")\n        done\n    done\n\
+    \    echo '${prefixes[*]}'", "    local shortest longest prefix output\n    shortest=\"\
+    ${1%%/*}\"\n    longest=\"${1#${shortest}}\"\n    output=\"$(echo \"${shortest}\"\
+    \ | sed -E 's/(.)(.*)/\\1\\2/g')\"\n    prefix=\"$(echo \"${longest}\" | sed -E\
+    \ 's/(.)(.*)/\\1\\2/g')\"\n    while [ \"$(echo \"${output}\" | grep \"${prefix}\"\
+    )\" ]\n    do\n        prefix=\"$(echo \"${longest}\" | sed -E 's/(.)(.*)/\\1\\\
+    2/g')\"\n    done\n    echo \"${output}\"", "    local input=\"$1\"\n    local\
+    \ prefixes=()\n    local prefix=''\n    while [[ \"$input\" != '' ]]; do\n   \
+    \     prefix=\"$prefix$input\"\n        prefixes+=($prefix)\n        input=\"\
+    ${input#?}\"\n    done\n    echo \"${prefixes[*]}\"", "  local -i n=${#1}\n  local\
+    \ -i p\n  local -i ret=()\n\n  if [ \"$n\" -lt 2 ]; then\n    echo 'usage: all_prefixes\
+    \ \"<string>\"'\n    return 1\n  fi\n  for (( p=1; p <= $n; p++ )); do\n    ret\
+    \ +=( \"${1:0:$((p-1))}\" )\n  done\n  echo \"${ret[@]}\"", "  local prefixes=\"\
+    $1\"\n  echo \"$prefixes\" | sed 's/'\"$prefixes\"'$/'\"$prefixes\"'\"'$'\\n'\"\
+    $prefixes\"'\"/g' | sed -e :a -e '/^$/N;s/\\n/'\"$prefixes\"'\\n/;ta'", "\tlocal\
+    \ prefixes\n\tprefixes=$(echo $1 | awk 'BEGIN { RS=\"[^\"]+\" } ; { print substr($1,1,length($1)-2)\
+    \ }')\n\techo $prefixes", "  local prefix=\"\"\n  local input_string=\"${1}\"\n\
+    \  local prefix_length=\"${#input_string}\"\n  local prefixes=\"\"\n  while [[\
+    \ \"${#input_string}\" -gt 0 ]]; do\n    prefix=\"${prefix}${input_string}\"\n\
+    \    input_string=\"${input_string#\"${prefix}\"}\"\n    prefix_length=\"${prefix_length}\
+    \ - ${#prefix}\"\n    prefixes=\"${prefixes} ${prefix}\"\n  done\n  if [[ \"${prefix_length}\"\
+    \ -gt 0 ]]; then\n    prefixes=\"${prefixes}...\"\n  fi\n  echo \"${prefixes}\""]
 stop_tokens:
 - "\n}"

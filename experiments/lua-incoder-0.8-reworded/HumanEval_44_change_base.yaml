@@ -12,7 +12,956 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \ 4), '3')\n    lu.assertEquals(candidate(4, 5), '4')\n    lu.assertEquals(candidate(5,\
   \ 6), '5')\n    lu.assertEquals(candidate(6, 7), '6')\n    lu.assertEquals(candidate(7,\
   \ 8), '7')\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["    if x < 10 then\n        return string.char(base - x + 10)\n   \
+    \ end\n    if x < 100 then\n        return string.char(base - x - 10 + 10)\n \
+    \   end\n    return string.char(base - x - 100)\nend", "    if x < 10 then\n \
+    \       return x\n    end\n    local t = {}\n    for i = 1, base-1 do\n      \
+    \  t[i] = (x%base) + 1\n        x = x/base\n    end\n    t[base] = x\n    return\
+    \ table.concat(t, \"\")\nend", "  local n = tonumber(x)\n  if n then\n    if base\
+    \ > 10 or base < 1 then\n      error('base is out of range')\n    end\n    return\
+    \ tostring(n:convert(base))\n  else\n    return x\n  end\nend", "  -- Change numerical\
+    \ base of input number x to base.\n  if x < 10 then\n    return tostring(x, '-'\
+    \ .. base) -- Convert x to string in base base, e.g. \"-\" for base 8.\n  elseif\
+    \ x < 0 then\n    local rem = x % base\n    if rem == 0 then\n      rem = base\n\
+    \    end\n    if rem == base then\n      return tostring(x, '-' .. base)\n   \
+    \ else\n      x = x - rem\n      return tostring(x, '-' .. base) -- Reverse digits\
+    \ after \"-\".\n    end\n  else\n    return tostring(x, base)\n  end\nend", " \
+    \ if x ~= x and base >= 2 and base <= 16 then\n    local factor = 1\n    while\
+    \ x >= factor do\n      x = x / factor\n      base = (base * factor) % base\n\
+    \      factor = factor * base\n    end\n  end\n  if base > 2 then\n    x = x %\
+    \ base\n  end\n  return x\nend", "\t-- The largest base is 36 (10 ^ 5), but some\
+    \ bases are smaller.\n\t-- This can lead to very long strings that would overflow\n\
+    \t-- if converted to a number (see `math.toNumber`). So we\n\t-- avoid using numbers\
+    \ at all. There are two solutions:\n\t-- convert numbers to strings (which loses\
+    \ the ability to treat\n\t-- bases that are bigger than 10), or use strings to\
+    \ store\n\t-- values as well (which can be an issue for bases greater than\n\t\
+    -- 10).\n\t-- We use the latter by converting to a string representation of a\n\
+    \t-- binary number, then converting that string back to a number by\n\t-- interpreting\
+    \ the string's digits as a number.\n\t-- We use \"e\" for the bases greater than\
+    \ 10, since that will\n\t-- give the correct number when converted back to a number.\n\
+    \t-- The \"0\" in the front is because we assume that\n\t-- the base is greater\
+    \ than 10. Since 10 is a factor of 36 (\n\t-- 10 to the power 5), the largest\
+    \ string representations of\n\t-- base 10 are all multiples of 36. Since 8 is\
+    \ factor of 36, we use\n\t-- the same conversion.\n\tif base > 36 then\n\t\tlocal\
+    \ s = \"\"\n\t\twhile x ~= 0 do\n\t\t\t-- Convert and add the power of x to the\
+    \ string.\n\t\t\ts = string.format(\"%s%.0fe\", s, math.pow(x, base))\n\t\t\t\
+    -- Divide x by base.\n\t\t\tx = math.floor(x / base)\n\t\tend\n\t\treturn s\n\t\
+    elseif base < 1 then\n\t\terror(\"Base must be at least 1.\")\n\tend\n\t-- Now\
+    \ that we've validated our input, we can safely convert it to\n\t-- a string.\n\
+    \t-- The reason we do this instead of just formatting the number is\n\t-- because\
+    \ the conversion doesn't give us a decimal point. This\n\t-- makes it possible\
+    \ to parse the input as a number.\n\t-- The conversion itself will preserve the\
+    \ exact value, but will\n\t-- not give us decimal points.\n\t-- The result will\
+    \ also be a string though, which means that\n\t-- it can be interpreted as a number\
+    \ when converted back to a number.\n\tlocal s = string.format(\"%.0fe\", math.pow(x,\
+    \ base))\n\treturn s\nend", "   if base < 10 then\n      if base == 0 then\n \
+    \        return x\n      elseif base % 2 == 0 then\n         return change_base(x\
+    \ / base, base * 10)\n      else\n         return change_base(x / base, base /\
+    \ 2)\n      end\n   end", "\tlocal t = x\n\tlocal digits = base\n\twhile digits\
+    \ > 0 and t > 0 do\n\t\tt = math.floor((t - digits) / (base))\n\t\tdigits = digits\
+    \ - base\n\tend\n\treturn tostring(t)\nend", "\tif x > 10 then\n\t\tx = math.floor(x/base)\
+    \ * base\n\tend\n\treturn x\nend", "  -- Convert from base-10 to base-N.\n  local\
+    \ s = ''\n  local n, i = 1, 0\n  while n > 0 do\n    i = i * base + x\n    x,\
+    \ y = divmod(i, base)\n    s = s..y\n    n = n-1\n  end\n  -- Return string with\
+    \ converted base.\n  return s\nend", "  -- Return zero for negative numbers\n\
+    \  if x < 0 then\n    return 0\n  end", "    local s = ''\n    local carry\n \
+    \   if x < 0 then\n        carry = false\n        x = -x\n    else\n        carry\
+    \ = true\n    end\n    local factor\n    if base == 10 then\n        factor =\
+    \ 1\n    else\n        factor = math.pow(10, base)\n    end\n    while x > 0 do\n\
+    \        s, carry = string.gsub(s, '%d%d%d%d%d%d',\n            math.floor(x /\
+    \ factor) * factor, math.floor(x % factor) * factor)\n        x = x - (math.floor(x\
+    \ / factor) * factor)\n    end\n    if carry then\n        s = s .. '0'\n    end\n\
+    \    if base == 10 then\n        s = s .. '0'\n    end\n    return s\nend", " \
+    \  assert(base > 0 and base < 10)\n   assert(tonumber(x) >= 0 and tonumber(x)\
+    \ < 256)\n   assert(tonumber(x) >= 0 and tonumber(x) < 256)\n   local ret\n  \
+    \ if tonumber(x) >= 32 then\n      ret = hex(x/base)\n   else\n      ret = bin_to_dec(x)\n\
+    \   end\n   ret = ret:reverse():sub(1,-2)\n   return ret\nend", "    local factor\
+    \ = 1\n    for i = 1, 10 do\n        factor = factor * base\n        if x >= factor\
+    \ then\n            x = x / factor\n        else\n            x = x - factor\n\
+    \            break\n        end\n    end\n    return x\nend", "  if base == nil\
+    \ then base = 10\n  elseif base < 2 then return \"Not a base 2 number\"\n  elseif\
+    \ base > 10 then return \"Not a base 10 number\"\n  end -- if base < 2 then return\
+    \ \"Not a base 2 number\"\n  local s = \"\"\n  while x >= 1 do\n    s = string.rep(\"\
+    0\", base-1) + s\n    x = x % base\n  end\n  local r = string.reverse(s)\n  r\
+    \ = string.sub(r, 1, base-1)\n  return r\nend", "\t-- if x is 0 then return 0\n\
+    \t-- if base is 0 then return \"\"\n\t-- if base is 1 then return x\n\tif x =\
+    \ 0 then\n\t\treturn 0\n\tend\n\tif base = 0 then\n\t\treturn \"\"\n\tend\n\t\
+    if base = 1 then\n\t\treturn x\n\tend", "    local digits = math.floor(x/base)\n\
+    \    x = x % base\n    return string.format('%d', base * digits)\nend\n</cell>\n\
+    <text>\nExercise: Convert numbers to different bases", "    local num\n    if\
+    \ x == nil or base == nil then\n        return\n    end\n    if base < 2 or base\
+    \ > 10 then\n        return\n    end\n    if x < 0 then\n        num = -x\n  \
+    \  else\n        num = x\n    end\n    local res = \"\"\n    local i = 1\n   \
+    \ while true do\n        local tmp = num / base\n        if num > 0 and tmp ==\
+    \ 1 then\n            return res\n        end\n        res = string.format(\"\
+    %d%c\", tmp, i % 2 == 0 and \"-\" or \"+\")\n        i = i + 1\n        if i >=\
+    \ 10 then\n            return res\n        end\n    end\nend", "  if x < base\
+    \ then return nil end\n  local str = x:tostring(base)\n  if #str == 0 then return\
+    \ nil end\n  str = string.sub(str,1,#str-1)\n  local new_str = str:byte(1, base-1)\n\
+    \  return new_str\nend", "  if x < 10 then\n    return tostring(base * x) or \"\
+    0\"\n  elseif x == 0:\n    return \"0\"\n  elseif x ~= x % base then\n    return\
+    \ change_base((x % base) + base, base)\n  else\n    return change_base(x / base,\
+    \ base)\n  end\nend", "   assert(x > 0 and base > 0, \"Both parameters for function\
+    \ change_base must be positive integers\")\n   if base == 1 then return x\n  \
+    \ end\n   local result\n   if x < 0 then x = x * -1 end\n   if x == 1 then return\
+    \ \"1\"\n   elseif x == 0 then return \"0\"\n   end\n   local xstr = string.format('%g',\
+    \ x)\n   if base <= 10 then\n      if xstr <= math.pow(10, base) then\n      \
+    \   result = xstr\n      elseif xstr < math.pow(10, base - 1) then\n         result\
+    \ = change_base(xstr, (base - 1))\n         result = result .. \"0\"\n       \
+    \  result = result .. xstr .. \"0\"\n         result = result .. \"1\";\n    \
+    \  else\n         result = change_base(xstr, (base - 1)); -- (base - 1) because\
+    \ the last digit is not 0\n         result = result .. \"0\"\n         result\
+    \ = result .. xstr .. \"0\"\n         result = result .. \"1\";\n         result\
+    \ = result .. xstr .. \"1\";\n      end\n   else\n      local reminder = x % base;\n\
+    \      if reminder == 0 then\n         result = \"0\";\n      elseif reminder\
+    \ == 1 then\n         result = \"1\";\n      else\n         result = xstr .. change_base(x\
+    \ - (x % base), base)\n      end\n   end\n   return result\nend", "  if x ~= x\
+    \ and base ~= nil then\n    assert(base > 1, \"base number must be greater than\
+    \ 1\")\n  elseif x ~= x then\n    assert(base ~= nil, \"base number is nil\")\n\
+    \  end\n  if base ~= nil then\n    local xstr = tostring(x)\n    if base < 0 then\n\
+    \      xstr = xstr:reverse()\n    end\n    local basestr = tostring(base)\n  \
+    \  local length = #xstr + #basestr + 1\n    local res = \"\"\n    for i = 1, length\
+    \ do\n      local a = xstr:sub(i, i)\n      local b = basestr:sub(i, i)\n    \
+    \  res = res .. tostring(a * tonumber(b, base))\n    end\n    return res\n  else\n\
+    \    return tostring(x)\n  end\nend", "  assert(base <= 10, \"Only support number\
+    \ base up to 10\")\n  local sx = string.format(\"%0*d\", base, x)\n  local y =\
+    \ tonumber(sx)\n  if y ~= nil then\n    return string.format(\"%0*d\", base, y)\n\
+    \  end\n  -- if x contains more than two digits\n  sx = string.format(\"%0*d\"\
+    , x, x)\n  y = tonumber(sx)\n  if y ~= nil then\n    return string.format(\"%0*d\"\
+    , base, y)\n  end\n  return sx\nend", "\tassert(base >= 2, 'Base must be at least\
+    \ 2.')\n\tif base == 10 then\n\t\treturn tostring(x)\n\tend\n\tlocal result =\
+    \ \"\"\n\twhile x > 0 do\n\t\tlocal t = math.floor(x / base)\n\t\tresult = string.format('%u%s',\
+    \ t, result)\n\t\tx = x - t * base\n\tend\n\treturn result\nend", "    if base\
+    \ < 10 then\n        return '0';\n    else\n        local digits = '';\n     \
+    \   for d = x:gmatch'%d+' do\n            digits = digits .. string.sub(d, 1,\
+    \ base);\n        end\n        return digits;\n    end\nend", "\tlocal str = x\n\
+    \tbase = tonumber(base) or 1\n\tlocal digits = math.floor(math.log(str, base))\n\
+    \tfor i = 1, digits do\n\t\tstr = math.floor((str / base) * base) + x\n\tend\n\
+    \treturn str\nend", "  if x >= base then\n    return tostring(x/base) + tostring(base):sub(2)\n\
+    \  end\n  return tostring(x)\nend", "  if x > base or x < 1 then return end\n\
+    \  local digits = x:digits(base):reverse()\n  local digits_length = digits:size()\n\
+    \  local new_digits = table.concat(digits, \" \")\n  -- Add 1 to accommodate negative\
+    \ numbers having 1 on the left and base is positive.\n  if base * x > 1 then new_digits\
+    \ = string.format(\"%s%d\", new_digits, 1 * (base * x)) end\n  -- Add 0 if the\
+    \ left part of the number is greater than base and left part is zero.\n  if digits_length\
+    \ > 1 and digits[digits_length - 2] > base and digits[digits_length - 1] == 0\
+    \ then\n    new_digits = string.format(\"%s0\", new_digits)\n  end\n  return new_digits\n\
+    end", "  -- assert x <= 10\n  -- assert base > 0\n  if base == 0 then\n    return\
+    \ \"0\"\n  end\n  -- assert base\n  local str = tostring(x)\n  local pos = 1\n\
+    \  while true do\n    local div, exp = str:sub(1, pos):sub(0, 1):find(\"/\")\n\
+    \    str = str:sub(exp + 1)\n    if div == \"0\" then\n      -- Base 10 case\n\
+    \      if str ~= \"\" then\n        -- assert exp > 0\n        if exp ~= 0 then\n\
+    \          pos = exp - 1\n          str = str:sub(1, pos)\n        else\n    \
+    \      pos = pos + 1\n          str = str:sub(1, pos)\n        end\n      else\n\
+    \        return \"0\"\n      end\n    else\n      -- Base n case\n      if str:sub(1,\
+    \ pos):sub(0, 1) ~= \"^\" then\n        pos = pos + 1\n      else\n        --\
+    \ assert exp > 0\n        if exp ~= 0 then\n          pos = exp - 1\n        \
+    \  str = str:sub(1, pos)\n        else\n          pos = pos + 1\n          str\
+    \ = str:sub(1, pos)\n        end\n      end\n    end\n  end\nend", "    if base\
+    \ == 10 then return tostring(x) else return tostring(base*x+x%base) end\nend\n\
+    </cell>\n<text>\nA function to reverse a string\nA function to reverse a string.",
+  "  if x < 10 then\n    return string.format('%d', x..base)\n  end\n  \n  local digits,\
+    \ rest = x:gsub('%d', '%d'):gsub('%d%d%d%d%d', '%1'):gsub('%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d', '%d'):gsub('%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d',\
+    \ '%d'):gsub('%d%d%d", "    if x < 10 then\n        return string.format(\"%u\"\
+    , x)\n    elseif x >= 10 then\n        local digits = string.format(\"%u\", x)\n\
+    \        local new_digits = string.sub(digits, 1, digits:len()-1)\n        --\
+    \ TODO: use Lua pow() function\n        new_digits = string.format(\"%u\", math.pow(10,\
+    \ base-1) * ( x - 10 ))\n        -- TODO: fix bug with base=0 (zero based)\n \
+    \       if base == 0 then\n            -- TODO: use Lua pow() function\n     \
+    \       new_digits = string.format(\"%u\", math.pow(10, x-1) * ( x - 10 ))\n \
+    \       end\n        return string.sub(new_digits, 1, new_digits:len()-1)\n  \
+    \  end\nend", "  local y = \"\"\n  local mod\n  if x == 0 then\n    return \"\
+    0\"\n  elseif x < 10 then\n    y = x -- this will be in string format\n  elseif\
+    \ x > 0 then\n    mod = x % base\n    -- if x is greater than or equal to 10\n\
+    \    if mod == 0 then\n      y = mod -- this will be in string format\n    elseif\
+    \ mod == base then\n      y = y .. \"0\" -- this will be in string format\n  \
+    \  else\n      y = y .. tostring(mod) -- this will be in integer format\n    end\n\
+    \  end\n  return y\nend", "    if x > base or base < 2 then return 'Out of range'\
+    \ end\n    local r = x % base\n    if r == 0 then\n        return ltoa(x)\n  \
+    \  else\n        return ltoa(x/base) + tostring(base^(r-1))\n    end\nend", " \
+    \ assert(base >= 10, 'Base must be greater than 10')\n  assert(x < 10, 'Cannot\
+    \ change base greater than 10')", "  if x < 10 then\n    return string.format('%0*d',\
+    \ base, x)\n  elseif base < 2 then\n    return string.format('%0*d', 2, x)\n \
+    \ else\n    -- base > 2, multiply by base and add 1\n    local rem = math.floor(x/base)\n\
+    \    local add_1 = x - rem * base\n    return change_base(rem, base) + string.format('%0*d',\
+    \ base, add_1)\n  end\nend", "  local result = x\n  if x >= base then\n    local\
+    \ div = math.log(x / (base * math.pow(2, base)))\n    local divisor = math.pow(2,\
+    \ base)\n    while result < divisor do\n      result = result + divisor\n    end\n\
+    \    result = result * div\n  end\n  return result\nend", "\tbase = 10 - base\
+    \ + 1\n\tif x ~= 0 then\n\t\tlocal digits, remainder\n\t\tif x > base then\n\t\
+    \t\tdigits, remainder = divmod(x, base)\n\t\t\tx = remainder\n\t\telse\n\t\t\t\
+    digits, x = divmod(x, base)\n\t\tend\n\t\treturn digits .. base\n\tend\n\treturn\
+    \ 0\nend", "    if base == 10 then\n        return x\n    elseif base == 2 then\n\
+    \        return string.format(\"%0*d\", 2, x)\n    else\n        assert(base >\
+    \ 0, \"base must be greater than zero.\")\n        local n = math.log(math.floor(x)/math.pow(base,\
+    \ base))\n        return string.format(\"%0*d\", base, x)\n    end\nend", "  if\
+    \ x < 10 then\n    if base == 0 then\n      return \"0\"\n    else\n      return\
+    \ string.format(\"%d\", x)\n    end\n  end\n  local res = \"\"\n  for i = 1, base-1\
+    \ do\n    res = string.format(\"%d%s\", (x/base), res)\n    x = (x % base)/base\n\
+    \  end\n  return res\nend", "  if x >= 10 then\n    return x\n  end\n  local div,\
+    \ mod = math.modf(x)\n  if mod then\n    x = math.floor(x / base)\n    div, mod\
+    \ = math.modf(x)\n  end\n  return x\nend", "  -- Check base case.\n  if x < 10\
+    \ and base < 10 then\n    return ('0'):rep(base) + string.format('%0*d', base,\
+    \ x)\n  end\n  -- Else recurse to check remaining cases.\n  if x < 10 and base\
+    \ == 10 then\n    return string.format('%0*d', base, x)\n  elseif x < 10 and base\
+    \ == 8 then\n    return string.format('%0*d', base, 10)\n  elseif base == 8 then\n\
+    \    return change_base(x - 10, base)\n  else\n    return string.format('%0*d',\
+    \ base, x - 10)\n  end\nend\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThis answer\
+    \ seems to have some issues: 1) `string.format()` does not appear to be a built-in\
+    \ Lua library function [see here](https://www.lua.org/manual/5.3/manual.html#pdf-string.format)\
+    \ so I believe this answer will not work in Lua 5.2, which was tagged in the question.\
+    \ 2) The `changebase` function is using `string.sub` to convert a number from\
+    \ one base to another [see here](https://www.lua.org/manual/5.3/manual.html#pdf-string.sub).\
+    \ Why not just `tonumber` and then `string.format`?\n<|/ c |>\n<| c |>\nYou're\
+    \ right, I missed the Lua version tag. Good call on `tonumber`. I've updated my\
+    \ answer.\n<|/ c |>\n<| a dscore=0 |>\nHere is my solution written in Lua 5.1\n\
+    <code>", "    if x > 0 then\n        local digits = string.format(\"%0d\", x)\n\
+    \        return change_base((math.floor(digits / base) * base) + digits % base,\
+    \ base)\n    else\n        local digits = string.format(\"%0d\", x)\n        return\
+    \ change_base((math.ceil(digits / base) * base) + digits % base, base)\n    end\n\
+    end", "\tlocal sign = 1\n\tif x >= 0 then\n\t\tif x ~= 0 then\n\t\t\tsign = x\
+    \ / base\n\t\t\tx = x % base\n\t\tend\n\telse\n\t\tsign = -x / base\n\t\tx = -x\
+    \ % base\n\tend\n\tx = x * sign\n\tx = tostring(x)\n\tlocal i = 1\n\twhile x:len()\
+    \ > 0 do\n\t\tx = tostring(x / base) .. tostring(i % base)\n\t\ti = i + 1\n\t\
+    end\n\treturn x\nend", "\t-- If base is greater than or equal to 10, we only change\
+    \ base to base - 1.\n\tif base >= 10 then\n\t\tbase = base - 1\n\tend\n\t-- Convert\
+    \ x from base-10 form to base-10 form.\n\tlocal x = tonumber(x)\n\tlocal base1\
+    \ = math.pow(base, math.floor(math.log(x) / math.log(base)))\n\t-- Return result\
+    \ after converting from base-10 form to base-10 form.\n\treturn (base1 * x) /\
+    \ base\nend", "  if x > 10 then\n    local t = math.floor(x/base)\n    return\
+    \ string.char(base * t) + change_base(t+1, base)\n  end\n  return string.char(x)\n\
+    end", "    local function calc_digits(number, base)\n        local digits = {}\n\
+    \        local i = 0\n        while number >= base do\n            digits[i] =\
+    \ number%base\n            number = math.floor(number/base)\n            i = i\
+    \ + 1\n        end\n        return table.concat(digits, \"\"):reverse()\n    end",
+  "  if x ~= 0 and x >= base then\n    return math.floor(x/base) * base\n  end\n \
+    \ return x\nend", "  if x == 0 then\n    return \"\"\n  end\n  if x > 0 and x\
+    \ < 10 then\n    return tostring(base * x) + tostring(x)\n  else\n    return tostring(x)\
+    \ + tostring(base)\n  end\nend\nreturn change_base\n}\n</code>\n<|/ a tags=lua\
+    \ dscore=3 |>\n<| c |>\nPlease consider adding an explanation of what the code\
+    \ does and why it solves the OP's problem.\n<|/ c |>\n<| c |>\nIt works perfectly.\
+    \ I was looking for a solution like this but couldn't. thanks anyways.\n<|/ c\
+    \ |>\n<| a dscore=2 tags=lua |>\n<code>", "  local nums, bases = string.rep('',\
+    \ '0', base), string.rep('', '0', base)\n  for i = base, 1, -1 do\n    local n\
+    \ = math.floor(x/i)\n    local digit = string.format('%d', math.modf(n/i)[1])\n\
+    \    if digit == '0' then\n      digit = ''\n    end\n    nums = string.rep(digit,\
+    \ nums, i)\n    x = math.floor(x-(i*n))\n  end\n  return nums\nend", "    -- Only\
+    \ change the first digit if necessary.\n    if x < base then\n        local n\
+    \ = math.floor(x / base)\n        x = x - (n * base)\n    end", "\tlocal res =\
+    \ tostring(x)\n\tif base < 0 then\n\t\terror(\"negative base\")\n\tend\n\twhile\
+    \ tostring(base) >= tostring(x) do\n\t\tres = string.format(\"%s%s\", tonumber(res),\
+    \ string.sub(res, -2))\n\tend\n\treturn tonumber(res, base)\nend", "  local power\
+    \ = math.pow(base, math.floor(math.log(x + 1) / math.log(base) + 1))\n  local\
+    \ str = string.format('%0*d', base, x)\n  if x ~= 0 then\n    return string.format('%d',\
+    \ x / power) * power -- return string representation of x after conversion\n \
+    \ else\n    return str\n  end\nend", "  local s = ''\n  local p = 1\n  repeat\n\
+    \    s = string.sub(s, 1, p*base-1) + tostring(x%base) .. string.sub(s, p*base+1)\n\
+    \    x = math.floor(x/base)\n  until x == 0\n  return s\nend", "    local base\
+    \ = base or 10\n    local digits = math.modf(x / base)\n    return tonumber(digits\
+    \ * base) or '0'\nend", "    if x<10 then\n        return x\n    end\n    \n \
+    \   local digits = math.floor(math.log(x, base))\n    local base = base^(digits+1)\n\
+    \    \n    return string.format(base%x..'0', x)\nend", "    if x == 0 then\n \
+    \       return ''\n    end\n    local str = tonumber(x)\n    if str ~= nil then\n\
+    \        str = str / base\n        str = str * base\n        str = str + 48\n\
+    \    end\n    return str\nend", "    if base < 2 or base > 10 then\n        return\
+    \ 'bad base ' .. base\n    end\n    if x > 10^base then\n        return 'Number\
+    \ too large to convert'\n    end\n    if base == 0 then\n        return tostring(x)\n\
+    \    end\n    local base10 = 10^base\n    if x < base10 then\n        return tostring(x)\
+    \ * base\n    else\n        return tostring(x) / base\n    end\nend", "  if x\
+    \ < 10 then\n    return tostring(base * x)\n  elseif x < 100 then\n    return\
+    \ change_base(x / base, base)\n  else\n    return tostring((base - 10) * x + (x\
+    \ / base))\n  end\nend", "  if base < 10 then\n    return '0' + x:reverse():gsub('%d',\
+    \ function(y)\n      return string.sub(y, -base+1)\n    end)\n  else\n    return\
+    \ x:reverse():gsub('%d', function(y)\n      return y\n    end)\n  end\nend", " \
+    \ assert(x ~= nil, 'nil')\n  if x == '0' then\n    return x\n  end\n  assert(base\
+    \ >= 0, 'base must be greater than 0')\n  assert(base <= 16, 'base must be less\
+    \ than 16')\n  local s = ''\n  while x ~= 0 do\n    local n = x % base\n    local\
+    \ p = base\n    while n ~= 0 do\n      n = n / 2\n      p = p * 2\n    end\n \
+    \   x = x - n\n    s = s .. string.format('%2d', p)\n  end\n  return s\nend",
+  "  if base < 0 then return nil end\n  local digits = {}\n  while x >= base do\n\
+    \    digits[#digits + 1] = string.sub(to_base(x, base), -base, 1)\n    x = x /\
+    \ base\n  end\n  if base > 0 then x = x * base end\n  return table.concat(digits,\
+    \ \"\") .. to_base(x, base)\nend", "  if x <= base then\n    return tostring(x)\n\
+    \  elseif x < 10 then\n    return tostring(base * x - base)\n  else\n    return\
+    \ tostring(base * x - 10)\n  end\nend", "  if x < 10 then\n    return string.format(\"\
+    %0\", base-1+x..base)\n  end\n  return x\nend", "\tif base == 0 then\n\t\treturn\
+    \ tostring(x)\n\tend\n\tlocal sx = tostring(x)\n\tlocal bx = math.floor(x)\n\t\
+    local ax = bx - ax\n\tlocal mod = ax % base\n\tif mod == 0 then\n\t\treturn bx\n\
+    \telse\n\t\treturn tostring(bx - base) + tostring(base - mod)\n\tend\nend", " \
+    \ local s = string.rep(\"0\", base):sub(1, base):rep(1,math.tointeger(x/base))\n\
+    \  return math.floor(x / base) + s\nend", "   assert(base >= 0, \"Base must be\
+    \ greater than zero\")\n   if base == 0 then\n      return x\n   else\n      x\
+    \ = ((x % base) + base):int()\n      return change_base(x, base)\n   end\nend",
+  "  local sign = nil\n  if x > 0\n  then\n    sign = \"+\"\n  end\n  if x < 0\n \
+    \ then\n    x = -x\n    sign = \"-\"\n  end\n  local y = math.abs(x)\n  local\
+    \ m = 10^base\n  local res = \"\"\n  while y > 0\n  do\n    res = (math.floor(y%m)/m)\
+    \ + res\n    y = math.floor(y*m) / m\n  end\n  res = math.abs(y) + res\n  if sign\n\
+    \  then\n    res = sign + res\n  end\n  return res\nend", "  if base < 2 then\n\
+    \    error(\"base must be greater than 1\")\n  end", "\tlocal str_x = tonumber(x)\n\
+    \tlocal str_base = \"\"\n\tlocal x_base = tonumber(base) \n\tfor i = 1, x_base\
+    \ do\n\t\tstr_base = str_x % base .. str_base\n\t\tx = x // base\n\tend\n\tstr_x\
+    \ = str_x // x_base\n\treturn str_x\nend", "    local digits = string.format('%d',\
+    \ x)\n    local zeros = ''\n    while #digits > 1 do\n        zeros = zeros ..\
+    \ '0'\n        digits = string.sub(digits, -#digits)\n    end\n    digits = digits\
+    \ .. zeros\n    return string.sub(digits, -base) .. digits\nend", "   if base\
+    \ > 10 or base < 1 then\n      return nil\n   end", "  return math.floor(x/base)*base\n\
+    end", "    if x == 0 then\n        return ''\n    end", "    if base < 2 then\n\
+    \        return nil\n    end\n    if x == 0 then\n        return \"\"\n    end\n\
+    \    local digits, sign = x:div(base):floor(), x:mod(base):floor()\n    if digits\
+    \ == 0 then\n        digits = base\n        sign = 1\n    end\n    local base10\
+    \ = (base * 10) - 1\n    if sign == 0 then\n        if digits < base10 then\n\
+    \            return x\n        end\n    else\n        if digits < base10 then\n\
+    \            return x\n        end\n    end\n    digits = digits - (base10 - digits)\n\
+    \    if digits > 0 then\n        return x:div(base):rem(base):add(digits * base)\n\
+    \    else\n        return x\n    end\nend", "  if x <= 0 then\n    return \"0\"\
+    \n  end\n  -- Change numerical, base of input number x to base.\n  -- base numbers\
+    \ are less than 10.\n  -- >>> change_base(2, 10)\n  -- '20'\n  -- >>> change_base(3,\
+    \ 10)\n  -- '30'\n  -- >>> change_base(8, 10)\n  -- '100'\n  -- >>> change_base(101,\
+    \ 10)\n  -- '1011'\n  local str = tostring(x)\n  local n = tonumber(str, 10)\n\
+    \  if n > 0 then\n    if n < base then\n      return str\n    else\n      local\
+    \ m = math.floor(math.log(n) / math.log(base))\n      return change_base(x / base^m,\
+    \ base)\n    end\n  end\n  return \"0\"\nend", "    if x > base then\n       \
+    \ return nil\n    end", "\tlocal new_str = tostring(x)\n\tlocal base_digit = 0\n\
+    \tlocal num_digits = 0\n\tlocal base_rest = base\n\tlocal old_digit", "  if x\
+    \ ~= x and x < 10 then\n    -- Base must be less than 10.\n    return nil\n  end",
+  "  if x < 10 then\n    return tonumber(x, '^' .. base)\n  else\n    local y = x\
+    \ / base\n    local r = base\n    -- We cannot use the number directly because\
+    \ it might be too big to fit in\n    -- a double precision float. This works well\
+    \ enough to handle hex and octal\n    -- numbers, but for anything more complicated\
+    \ it is better to use a string.\n    while y < 1 do\n      r = r * base\n    \
+    \  y = y / base\n    end\n    return r * tonumber(string.format('%g', y)) .. base\n\
+    \  end\nend", "    if x < 10 and base >= 0 then\n        return x\n    end\n \
+    \   if base > 10 then\n        error(\"base must be less than 10\")\n    end\n\
+    \    -- Compute number of digits in x\n    local len = 0\n    while x > 1 do\n\
+    \        x = x // base\n        len = len + 1\n    end\n    if len == 0 then\n\
+    \        error(\"base must contain at least one digit\")\n    end\n    -- Convert\
+    \ to a string\n    local str = tonumber(string.format(\"%.\"..len..\"f\", x))\n\
+    \    -- Reverse the string\n    local reversed = str:reverse()\n    -- Adjust\
+    \ base to match reversed string\n    if reverse ~= str then\n        base = base\
+    \ - len\n    end\n    -- return the converted number\n    return string.format(\"\
+    %d\"..base..\"%s\", tonumber(reversed), reversed)\nend", "  local s\n  local n\
+    \ = tonumber(x)\n  if x ~= nil then\n    if n < base then\n      s = math.floor(n/base)*base\n\
+    \      s = string.format(\"%d\",s)\n      s = string.sub(s,0,-3)\n    else\n \
+    \     s = math.floor(n/base)*base\n      s = string.format(\"%d\",s)\n    end\n\
+    \  end\n  return s\nend", "    -- if base < 10, it means the input is a string\n\
+    \    if base < 10 then\n        local str\n        for i = 1, base do\n      \
+    \      str = str .. '0'\n        end\n        return str..x\n    elseif base >\
+    \ 0 then\n        -- if input number is negative or positive,\n        -- it is\
+    \ possible to change to another base\n        if x < 0 then\n            x = x\
+    \ * -1\n        end\n        local str = ''\n        local digits = 0\n      \
+    \  while x >= 10 do\n            digits = digits + 1\n            str = str ..\
+    \ tostring(x % 10)\n            x = x / 10\n        end\n        -- change base\n\
+    \        -- if base<10, it is necessary change to another base.\n        if digits\
+    \ > 0 then\n            if digits == 1 then\n                local digit = base\n\
+    \                str = str .. tostring(digit)\n            elseif digits == 2\
+    \ then\n                local digit1 = base\n                local digit2 = base\n\
+    \                if x > 1 then\n                    digit1 = digit1 - 1\n    \
+    \                digit2 = digit2 - 1\n                end\n                str\
+    \ = str .. tostring(digit1 / (digit1 / digit2))\n            end\n        end\n\
+    \        return str..x\n    else\n        -- if input number is zero or negative,\n\
+    \        -- it is possible to get a new number in any base.\n        return '0'\n\
+    \    end\nend", "  if x >= base then\n    return nil\n  end\n  x = x * base\n\
+    \  x = math.floor(x) / base\n  x = x % base\n  return x\nend", "    local result\
+    \ = \"\"\n    if x < base then\n        result = string.format(\"%d\", (base *\
+    \ x) + base)\n    else\n        local div, mod = math.modf((base * x) / base)\n\
+    \        if mod > 0 then\n            result = string.format(\"%d\", (base * div)\
+    \ + base)\n        else\n            result = string.format(\"%d\", (base * x)\
+    \ + base)\n        end\n    end\n    return result\nend", "  local digits = string.gsub(string.gsub(x,\
+    \ \"^\", 1, base), \"%\", 1, base)\n  return string.gsub(digits, \"^\", \"1\"\
+    , base)\nend", "  local s = string.format(\"%0*d\", base, x)\n  return s..(string.rep(\"\
+    0\", base-1) + s)\nend", "    -- Convert to base 10.\n    local num = (x / base)\
+    \ * base\n    -- If num is negative, multiply by base.\n    -- Negative bases\
+    \ get sign prepended to front of number.\n    if num < 0 then\n        num = (num\
+    \ * -1) * base\n    end\n    -- Add negative sign back if needed\n    if num >=\
+    \ 0 then\n        num = num + base\n    end\n    -- Return number in base 10\n\
+    \    return num\nend", "    if base <= 0 then\n        error(\"Negative base.\"\
+    )\n    end\n    if x == 0 then\n        return nil\n    end\n    -- if base ==\
+    \ 10\n    --     return x\n    -- else\n    --     return string.format(\"%0.\"\
+    \ .. (base-2) .. (-x) .. \"d\", x)\n    -- end\n    if base == 10 then\n     \
+    \   return x\n    else\n        local digits = math.floor(math.log10(abs(x) +\
+    \ 1)) + 1\n        return string.format(\"%0.\" .. (base-1) .. (digits) .. \"\
+    d\", x)\n    end\nend", "\t-- This algorithm is O(log(n))\n\t-- It runs faster\
+    \ because we only perform the loops\n\t-- while the numbers are above 0\n\t--\
+    \ The result of the algorithm is a string with the base\n\t-- numbers in reverse\
+    \ order\n\t-- Example: change_base(17, 16) ---> '017'\n\t-- >>> change_base(21,\
+    \ 16) ---> '0D16'\n\t-- >>> change_base(8, 3) ---> '0370'\n\t-- >>> change_base(17,\
+    \ 16) ---> '017'", "\t-- Initialize base\n\tif base == nil then\n\t\treturn tostring(x)\n\
+    \tend\n\tbase = 10\n\t-- Make sure base is base 10\n\tif base ~= 10 then\n\t\t\
+    return nil\n\tend\n\t-- Make x a string\n\tlocal x_str = tostring(x)\n\t-- Convert\
+    \ to array of integers\n\tlocal x_arr = x_str:match('%d+')\n\t-- Make sure x has\
+    \ at least one integer\n\tif not x_arr then\n\t\treturn nil\n\tend\n\t-- Change\
+    \ each integer\n\tlocal new_arr = {}\n\tfor i = 1, #x_arr, 1 do\n\t\t-- Get the\
+    \ integer part\n\t\tlocal x_num = tonumber(x_arr[i])\n\t\t-- Convert it to base\
+    \ 10\n\t\tlocal x_new_num = tonumber(x_str:sub(i))\n\t\t-- Get the new integer\n\
+    \t\tlocal x_new\n\t\t-- If base is even, divide by 2\n\t\tif base % 2 == 0 then\n\
+    \t\t\tx_new = x_new_num / 2\n\t\t-- If base is odd, multiply by 3\n\t\telse\n\t\
+    \t\tx_new = x_new_num * 3\n\t\tend\n\t\t-- Convert it back to string\n\t\tnew_arr[i]\
+    \ = tostring(x_new)\n\tend\n\t-- Return string representation after changing base\n\
+    \treturn table.concat(new_arr, \"-\")\nend", "\t-- Bases less than 10 will need\
+    \ to be converted first.\n\t-- This function converts x to the largest base.\n\
+    \tlocal function to_base(x, base)\n\t\tlocal str = \"\"\n\t\tlocal i = 1\n\t\t\
+    while x > 0 do\n\t\t\tif i ~= base then\n\t\t\t\tstr = str .. string.format(\"\
+    %d\", math.floor(x/base))\n\t\t\t\tx = x % base\n\t\t\telse\n\t\t\t\tstr = str\
+    \ .. string.format(\"%d\", x)\n\t\t\t\tbreak\n\t\t\tend\n\t\t\ti = i +1\n\t\t\
+    end\n\t\treturn str\n\tend\n\tlocal ret = \"\"\n\t-- Convert x to the largest\
+    \ base.\n\tret = ret .. to_base(x, base)\n\t-- Convert x to the smallest base.\n\
+    \tx = x / base\n\tlocal i = 1\n\twhile x > 0 do\n\t\tif i ~= base then\n\t\t\t\
+    ret = ret .. to_base(x, base)\n\t\t\tx = x % base\n\t\telse\n\t\t\tret = ret ..\
+    \ to_base(x, base)\n\t\t\tbreak\n\t\tend\n\t\ti = i +1\n\tend\n\treturn ret\n\
+    end", "    local sign = x < 0 and -1 or 1\n    local digits = math.abs(x):pow(base):floor()\n\
+    \    local result = \"\"\n    while digits do\n        local digit = digits:mod(base):floor()\n\
+    \        digits = digits:sub(base)\n        if digit == 0 then\n            digit\
+    \ = base\n        end\n        result = string.format(base..\"%s\", digit, result)\n\
+    \    end\n    return sign * result\nend", "  local bases = {}\n  local digits\
+    \ = math.floor(math.log(x, base))\n  -- base is smaller than 10.\n  assert(base\
+    \ <= 10 and\n         \"Base number must be less than 10. Base number is: \" ..\
+    \ base)\n  assert(digits <= 0 and \"Base number must be less than 10. Base number\
+    \ is: \" .. base)\n  -- find first base and save it.\n  for i = 1, 10 do\n   \
+    \ if math.mod(x, base) == 0 then\n      bases[i] = math.floor(x / base)\n    end\n\
+    \    -- x is now in base 10.\n    x = math.mod(x, base)\n  end\n  -- append all\
+    \ base digits.\n  local result = \"\"\n  while digits > 0 do\n    local n = math.floor(x\
+    \ / bases[digits])\n    result = bases[digits] .. result\n    -- x is now in base\
+    \ bases[digits], so repeat the next digit.\n    digits = digits - 1\n    x = math.mod(x,\
+    \ bases[digits])\n  end\n  -- append the last digit.\n  result = bases[digits]\
+    \ .. result\n  return result\nend", "\tassert(base and base > 0)\n\tlocal digits\
+    \ = math.floor(x/base)\n\tx = x - digits * base\n\tlocal str = ''\n\twhile x >\
+    \ 0 do\n\t\tstr = str .. string.format(\"%0*d\", base, x / base)\n\t\tx = x %\
+    \ base\n\tend\n\treturn digits .. str\nend", "\tlocal s = ''\n\tfor i = 1, base-1\
+    \ do\n\t\ts = s .. string.format(\"%2d\", math.floor(x/base)*base)\n\t\tx = x\
+    \ - math.floor(x/base)*base\n\tend\n\treturn s\nend", "\tif base < 0 then\n\t\t\
+    error('Invalid base')\n\tend", "  if base == 10 then\n    if x >= 0 then\n   \
+    \   return tostring(x)\n    else\n      return \"-\" .. tostring(-x)\n    end\n\
+    \  end\n  assert(base >= 0, \"Invalid base value \"..tostring(base))\n  assert(x\
+    \ < 10, \"Cannot convert base \"..base..\" to number\")\n  local function format_number(n)\n\
+    \    local base = (base == 10) and \"0\" or \"00\"\n    if n < 0 then\n      n\
+    \ = -n\n      return \"-\" .. base..tostring(-n)\n    else\n      return base..tostring(n)\n\
+    \    end\n  end\n  local function str_part(s)\n    return s:gsub(\"%w\", function(c)\
+    \ return string.char(tonumber(c, base)) end)\n  end\n  return format_number(tonumber(str_part(x),\
+    \ base))\nend", "    if x > 10 then\n        return x\n    end\n    if base <\
+    \ 2 then\n        error(\"base must be 2 or higher\")\n    end\n    if base ==\
+    \ 10 then\n        return string.format(\"%010d\", x)\n    end\n    local digits\
+    \ = math.floor(math.log(x, base))\n    local str = ''\n    while x > 1 do\n  \
+    \      local digit = x % base\n        if digit == 0 then\n            return\
+    \ string.format(\"%0\" .. digits .. \"d\", x)\n        end\n        str = str\
+    \ .. string.format(\"%0\" .. digits .. \"d\", digit)\n        x = x / base\n \
+    \   end\n    return str .. string.format(\"%010d\", x)\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n\
+    return change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn\
+    \ change_base\nend\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\n\
+    end\nreturn change_base\nend\nreturn change_base\nend\nreturn change_base\nend\n",
+  "  -- The base of the input number is always smaller than the base of\n  -- our\
+    \ result. \n  local result = \"\"\n  -- If the input number is smaller than 10\
+    \ (the base of the input\n  -- number), we simply append it to our result. \n\
+    \  if x < 10 then\n    result = tostring(x)\n  else\n    local temp = tostring(x:sub(1,\
+    \ base))\n    temp = temp:reverse()\n    result = tostring(base * tonumber(temp))\n\
+    \  end\n  return result\nend", "    if x then\n        local x_str = x\n     \
+    \   if base then\n            local base_str = base\n            local _, x_str\
+    \ = base_str, base_str:sub(1,-#base_str)\n            while x_str:sub(1,#base_str)\
+    \ ~= '0' do base_str = base_str .. '0' end\n            x_str = base_str .. x_str:sub(1)\n\
+    \        end\n        return x_str\n    end\nend", "  if x < 10 then\n    return\
+    \ string.format('%d', x)\n  end", "\tlocal s = \"\"\n\tlocal power = math.floor(math.log(math.abs(x),\
+    \ base))\n\tlocal factor = base ** power\n\tlocal integer = math.trunc(x / factor)\n\
+    \twhile integer > 0 do\n\t\ts = string.format(\"%0*d\", power, string.format(\
+    \ \"%0*d\", base, (integer % base)))\n\t\tinteger = integer / base\n\tend\n\t\
+    if power < 0 then\n\t\ts = string.format(\"%0*d\", power, s)\n\tend\n\treturn\
+    \ s\nend", "\tlocal s = tostring(x)\n\tlocal z = 1\n\tlocal i = 1\n\twhile i <=\
+    \ len(s) and z * base <= tonumber(s[i]) do\n\t\tz = z * base\n\t\ti = i + 1\n\t\
+    end\n\ts = string.format('%0*d%s', i, z, s)\n\treturn s\nend", "  assert(base\
+    \ > 0 and base <= 10, \"base is wrong type\")\n  local ret = x\n  if x then\n\
+    \    local div = 1\n    if x > 1 then\n      div = base\n    end\n    ret = x\
+    \ / div\n  end\n  return ret\nend", "    local s = string.format(\"%0\", x)\n\
+    \    s = string.gsub(s, \"0\", \"~\")\n    s = string.gsub(s, \"1\", \"a\")\n\
+    \    s = string.gsub(s, \"2\", \"b\")\n    s = string.gsub(s, \"3\", \"c\")\n\
+    \    s = string.gsub(s, \"4\", \"d\")\n    s = string.gsub(s, \"5\", \"e\")\n\
+    \    s = string.gsub(s, \"6\", \"f\")\n    s = string.gsub(s, \"7\", \"g\")\n\
+    \    s = string.gsub(s, \"8\", \"h\")\n    s = string.gsub(s, \"9\", \"i\")\n\
+    \    s = string.gsub(s, \"~\", \"0\")\n    return string.gsub(s, \"a\", \"~1\"\
+    )\nend", "  if x < 10 then\n    return tostring(base * x)\n  else\n    return\
+    \ tostring(x%base) + tostring(base * math.floor(x/base))\n  end\nend", "\tlocal\
+    \ s = ''\n\tif x ~= nil then\n\t\tlocal i, f = tonumber(x), base\n\t\twhile i\
+    \ > 0 do\n\t\t\tif f >= 0 then\n\t\t\t\ti = math.floor(i * f) / f\n\t\t\t\ts =\
+    \ string.format('%2.d', i) + s\n\t\t\telse\n\t\t\t\ti = math.floor(i * 10) / 10\n\
+    \t\t\t\ts = string.format('%2.d', i) + s\n\t\t\tend\n\t\t\tf = f / 10\n\t\tend\n\
+    \tend\n\treturn s\nend", "  return tonumber(string.format(\"%0.\" .. (base-1)\
+    \ .. \"d\", x)) / tonumber(string.format(\"%0.\" .. base .. \"d\", 1))\nend",
+  "  local n = tonumber(x)\n  if n == nil then\n    return \"?\"\n  end\n  -- If base\
+    \ is 0, then just use x.\n  -- If n is negative, then convert to positive before\
+    \ calling math.floor.\n  if base == 0 then\n    return tostring(x)\n  else\n \
+    \   local sign = 1\n    if n >= 0 then\n      n = math.floor(n/base)*base\n  \
+    \  else\n      n = math.ceil(n/base)*base\n      sign = -1\n    end\n    if n\
+    \ < 0 then\n      n = -n\n    end\n    return tostring(n) * sign\n  end\nend",
+  "  local sign = x<0 and \"-\" or \"\"\n  x = x * sign\n  local digits = math.floor((math.log(x)\
+    \ * math.log(base))/math.log(10))\n  return x - (sign * digits)\nend", "   assert(base\
+    \ <= 10)\n   local result = tostring(x)", "\tlocal r = \"\"\n\tassert(base > 0\
+    \ and base < 10, \"Invalid base number for conversion.\")\n\tlocal div = math.floor(x/base)\n\
+    \tr = tostring(base) + tostring(div)\n\tx = x - div*base\n\twhile x >= base do\n\
+    \t\tr = tostring(base) + r\n\t\tx = x/base\n\tend\n\treturn r\nend", "  assert(base\
+    \ > 0 and base <= 36)\n  local s = \"\"\n  for i = 1, 9 do\n    local t = math.floor(x\
+    \ * base^(9 - i)) / base\n    s = \"0\" .. tostring(t) .. s\n  end\n  return s\n\
+    end", "  x = tonumber(x)\n  if x ~= nil then\n    base = tonumber(base)\n    if\
+    \ base ~= nil then\n      if base > 0 then\n        local nums = string.rep(\"\
+    0\", base+2)\n        return string.format(\"%s%s\", nums:sub(1,base), x:tostring(base))\n\
+    \      else\n        local nums = string.rep(\"0\", base+2)\n        return x:tostring(base):sub(1,base):concat(nums)\n\
+    \      end\n    else\n      return x\n    end\n  else\n    return \"invalid input\"\
+    \n  end\nend", "  if x < 10 then\n    return tostring(x)\n  end\n  local digits\
+    \ = math.floor((math.log(x) / math.log(base))) + 1\n  -- round off digits if necessary\n\
+    \  local factor = 1\n  for i=0,digits do\n    factor = base^i\n    if math.floor(x/factor)\
+    \ == x then\n      break\n    end\n  end\n  -- append the digits\n  x = math.floor(x/factor)\n\
+    \  local lastDigit = x%factor\n  if lastDigit == 0 then\n    digits = digits -\
+    \ 1\n  end\n  x = math.floor(x/(factor/digits))\n  return tostring(x) + tostring(digits)\n\
+    end", "\t-- The base of the input number must be less than the base of the output\
+    \ number.\n\tassert(base:sub(1, 1) <= base and base < 10, 'The input number is\
+    \ not within the valid range.')\n\t-- Get the number of digits in the number in\
+    \ base 10.\n\tlocal digits = math.ceil(math.log(base:sub(1,1), 10))\n\t-- Multiply\
+    \ the input number by digits / base.\n\t-- The remainder will be divided by base\
+    \ to give us digits to the right of the decimal point.\n\t-- We can now round\
+    \ upwards one place to match the precision of the input.\n\treturn (math.floor(x\
+    \ * digits / base:sub(1,1)) + digits % base:sub(1,1)):string()\nend", "    local\
+    \ result = 0\n    local power = 0\n    for i = 1, 10 do\n        if i > base then\n\
+    \            result = result + (x % base) * base\n            x = x / base\n \
+    \           power = 1\n        else\n            result = result + (x % i)\n \
+    \           x = x / i\n            power = power * 10\n        end\n    end\n\
+    \    return tostring(result) + tostring(power)\nend", "    if x < 10 then return\
+    \ x\n    elseif x == 0 then\n        -- do nothing\n    elseif base < 2 then return\
+    \ 0\n    elseif x%base == 0 then\n        x = x/base\n        local temp\n   \
+    \     -- check for recursion\n        if x>1 then\n            -- if x is greater\
+    \ than 1, change base\n            temp = change_base(x, base*10)\n          \
+    \  x = temp/base\n        else\n            -- if x is 1, return the number of\
+    \ digits in the base\n            -- otherwise, return 0\n            temp = math.floor(math.log(math.abs(x))/math.log(base))\n\
+    \        end\n        return x * base^temp\n    else\n        return x%base\n\
+    \    end\nend", "    local y = tonumber(x)\n    if y == x then return '0' end\n\
+    \    if base > 10 then return '0' end\n    local digits = ''\n    while y > 0\
+    \ do\n        digits = string.format('%s%0*d', digits, base, y/base)\n       \
+    \ y = math.floor(y/base)\n    end\n    return digits .. '0'\nend", "\tbase = tonumber(base)\n\
+    \tif base == nil then\n\t\tbase.base = 10\n\telseif base > 10 then\n\t\tbase.base\
+    \ = base\n\t\treturn base\n\tend", "\tlocal digits = '0123456789ABCDEF'\n\tlocal\
+    \ xs = string.gsub(string.rep('.', base), '.', digits[base])\n\t-- remove leading\
+    \ zero.\n\txs = string.sub(xs, 1, xs-1)\n\t-- add leading zero.\n\txs = digits[base]\
+    \ .. xs .. digits[base]\n\treturn xs\nend", "  return string.format(\"%g\", base\
+    \ * x)\nend", "  -- base10 to base\n  local digits = {\n    [0] = '',\n    [1]\
+    \ = 1,\n    [2] = 10,\n    [3] = 100,\n    [4] = 1000,\n    [5] = 10000,\n   \
+    \ [6] = 100000,\n    [7] = 1000000,\n    [8] = 10000000,\n    [9] = 100000000,\n\
+    \  }", "    if base < 2 then return '' end\n    local digits = math.floor(math.log(x,\
+    \ base))\n    local power = math.pow(base, digits)\n    local answer = tonumber(x\
+    \ % power) + ''\n    while #answer > 0 do\n        answer = string.reverse(answer)\n\
+    \    end\n    return string.sub(answer, 1, digits)\nend", "  local digits = x:reverse()\n\
+    \  if digits:sub(1, 1) ~= '0' then\n    return '0'\n  end\n  local i = 0\n  local\
+    \ new_digits = {}\n  while i < #digits do\n    local d = tonumber(digits:sub(i,\
+    \ i+1))\n    if d ~= nil then\n      d = d * base\n      if d < 10 then\n    \
+    \    new_digits = new_digits .. ('0' .. d)\n      else\n        new_digits = new_digits\
+    \ .. d\n      end\n    else\n      break\n    end\n    i = i + 1\n  end\n  return\
+    \ new_digits:reverse()\nend", "  x = tonumber(x)\n  base = tonumber(base)\n  if\
+    \ x ~= x and base ~= base and base>10 then\n    return nil\n  end\n  -- base is\
+    \ greater than 10, so just do base conversion.\n  -- The last digit of x is \"\
+    digits\" - 1.\n  local digits = math.floor((x:div(base)):mod(base))\n  local result\
+    \ = x:div(base)\n  -- If the last digit is > 5, we must add one to the result\
+    \ before\n  -- the next digit.  We can't add 1 directly to result, since that\n\
+    \  -- would result in an infinite loop (9 + 9 = 100, then 9 + 9 = 1,\n  -- then\
+    \ 9 + 9 = 100, etc, forever).\n  if digits > 5 then\n    -- If the first digit\
+    \ is odd, we must subtract 1 before adding\n    -- the next digit.\n    if digits:mod(2)\
+    \ ~= 1 then\n      digits = digits - 1\n    end\n    -- Now we can safely add\
+    \ our new digit.\n    result = result + digits\n  end\n  -- And now we convert\
+    \ to a string.\n  return tostring(result)\nend", "\tif x >= base then\n\t\treturn\
+    \ x\n\tend\n\tif x < 10 then\n\t\treturn x\n\tend\n\tx = x / base % base\n\tx\
+    \ = x * base\n\treturn x\nend", "    if x <= 10 then\n        return base * x\n\
+    \    else\n        local y = math.floor(math.log10(x)) + base - 1\n        return\
+    \ base * math.pow(10, y)\n    end\nend", "  if x == 0 then return 1 end\n  if\
+    \ base == 0 then return string.format(\"%d\",x) end\n  if base > 10 then return\
+    \ change_base(x * 256 + x, base) end\n  local digits = string.format(\"%d\", x\
+    \ / base) + string.format(\"%d\", (x % base) * base)\n  while #digits > 1 do\n\
+    \    digits = string.format(\"%d\", digits % base) + digits\n  end\n  return digits\n\
+    end", "  local base_str = string.format(\"%0\", base) or \"\"\n  if base <= 0\
+    \ then\n    return base_str\n  else\n    return base_str .. string.format(\"%0\"\
+    , x / base)\n  end\nend", "  -- TODO: this could be optimized by using multiplication\
+    \ with a base < 10.\n  -- This would require shifting instead of division.\n \
+    \ local result\n  -- Compute result by multiplying input by (base / 10).\n  --\
+    \ We use integer division since base is a power of 10.\n  -- This prevents any\
+    \ numerical errors.\n  local numerator = math.floor(x * 1.0 / base) / 10\n  --\
+    \ Convert the remainder to a string and subtract it from the input.\n  local remainder\
+    \ = x % base\n  -- Convert numerator to a string and add it to the remainder.\n\
+    \  numerator = string.format('%0*d', base, remainder)\n  -- The result is the\
+    \ concatenation of the numerator and denominator.\n  -- The first character of\
+    \ the numerator is zero because the numerator is\n  -- prepended to the remainder.\n\
+    \  result = string.format('%s%s', numerator, tostring(base))\n  -- Clean up numerator\
+    \ and remainder.\n  numerator, base, remainder = nil, nil, nil\n  return result\n\
+    end", "  -- Convert input to string\n  local x = tostring(x)", "  -- convert from\
+    \ decimal to binary\n  local function to_binary(x)\n    local s = \"\"\n    for\
+    \ i = 1, math.ceil(math.log(x, base) + 1) do\n      local ix = math.mod(x, base^i)\n\
+    \      if ix > 1 then\n\tix = math.floor(ix)\n      else\n\tix = ix + 1\n    \
+    \  end\n      s = s .. string.format(\"%d\", ix)\n    end\n    return s\n  end\n\
+    \  -- convert from binary to decimal\n  local function from_binary(s)\n    local\
+    \ d = base\n    local n = 1\n    local m = base^0\n    for i = 1, #s do\n    \
+    \  n = n*base + tonumber(s[i])\n      m = m*base^2 + tonumber(s[i])\n    end\n\
+    \    return n / m\n  end\n  -- convert to binary\n  local b = to_binary(x)\n \
+    \ -- convert to decimal\n  local d = from_binary(b)\n  return d -- convert to\
+    \ string representation\nend", "   if base < 2 then return x end\n   if base ==\
+    \ 0 then return '0' end\n   if base < 10 then return tostring(x) end\n   if base\
+    \ == 10 then return '10' end\n   local ret = ''\n   for i = 1, base do\n     \
+    \ ret = ret * 10 + tostring((x % base))\n      x = x / base\n   end\n   return\
+    \ ret\nend", "    if x ~= nil then\n        if base > 10 then\n            assert(base\
+    \ <= 16, \"Base is out of range.\")\n        else\n            assert(base <=\
+    \ 36, \"Base is out of range.\")\n        end\n        return math.floor(x * math.log(base)\
+    \ / math.log(10))\n    end\n    return nil\nend", "  if base < 2 then\n    error('base\
+    \ < 2')\n  elseif x == '' then\n    ''\n  elseif base > 10 then\n    error('base\
+    \ > 10')\n  elseif x == '0' then\n    '0'\n  else\n    local t = x\n    for b\
+    \ = 10, 1, -1 do\n      t = ((math.floor((x:sub(1, -1))) % b) + b) .. t\n    end\n\
+    \    return x\n  end\nend", "\tif x ~= tonumber(x) then\n\t\treturn nil\n\tend\n\
+    \tif base == 10 then\n\t\treturn tostring(x)\n\tend\n\tif base < 1 or base > 36\
+    \ then\n\t\treturn nil\n\tend\n\tlocal s = \"\"\n\tfor i=base, -1, -1 do\n\t\t\
+    s = tostring(x%base) + s\n\t\tx = math.floor(x/base)\n\tend\n\treturn s\nend",
+  "  local factor = 1\n  if base > 10 then \n    factor = 2\n  elseif base < 0 then\
+    \ \n    factor = -1\n    base = 10\n  elseif base == 0 then \n    factor = 1\n\
+    \  end", "  local y = string.sub(tostring(x), 2, 1)\n  return string.format('%1.'\
+    \ .. tostring(base) .. 's', x)\nend", "    if x < 10 then\n        return x\n\
+    \    elseif base < 2 then\n        return tostring(base)\n    end", "    if base\
+    \ < 2 or base > 36 or base==0 then\n        error('invalid base')\n    end\n \
+    \   if x==0 then\n        return ''\n    end\n    local digits={}\n    for i =\
+    \ 1, 32 do\n        digits[base]=i\n    end\n    local digits2={}\n    for i =\
+    \ 1, 32 do\n        digits2[base]=i\n    end\n    local digits2m={} -- digits2m\
+    \ contains mappings to remove digits when converting to base base\n    for i =\
+    \ 1, digits do\n        digits2m[digits[i]]=i\n    end\n    for i = 1, digits\
+    \ do\n        digits[i]=digits2m[digits[i]] -- convert base from digits to base\n\
+    \    end\n    local digits2n={}\n    for i = 1, digits do\n        digits2n[digits2m[digits[i]]]=i\n\
+    \    end\n    local out=''\n    for i = 1, 3 do\n        if x>=base^i then\n \
+    \           out=out..x%base^(i-1)\n        else\n            out=out..digits[i]\n\
+    \        end\n        x=(x-(x%base^i))/base^(i-1)\n    end\n    if x>0 then\n\
+    \        out=out..digits[i]\n    end\n    return out\nend", "  local b = ''\n\
+    \  repeat\n    if x % base == 0 then b = b .. tostring(base) end\n    x = x /\
+    \ base\n  until x ~= 0\n  return b\nend", "  assert(base >= 2, 'base must be >\
+    \ 0')\n  assert(x < base, 'base must be < input')\n  local xstr = tostring(x)\n\
+    \  if xstr:sub(1, base) == '0' then\n    return ''\n  end\n  local digits = xstr:sub(base):reverse()\n\
+    \  local basex = base\n  -- if the last digit is 0 then the base is 10\n  while\
+    \ digits:sub(1, 1) == 0 do\n    -- remove last digit\n    digits = digits:sub(2)\n\
+    \    -- double base\n    basex = basex * 2\n  end\n  return '0' .. digits:reverse()\
+    \ .. '^' .. tostring(basex)\nend", "  assert(x < base, 'base cannot be greater\
+    \ than input number')\n  assert(base > 0, 'base cannot be zero')\n  local bases\
+    \ = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}\n  local i = 0\n  local\
+    \ digits = ''\n  while x > 0 do\n    digits = bases[i % #bases]..digits\n    i\
+    \ = i + 1\n    x = math.floor(x / base)\n  end\n  return digits\nend", "    local\
+    \ xstr = x:tostring()\n    local digits = xstr:reverse()\n    local result = \"\
+    \"\n    for i = 1, #digits do\n        local d = tonumber(digits, i)\n       \
+    \ if d < 10 then\n            -- Numerical base change\n            -- >>> change_base(8,\
+    \ 5)\n            -- 5\n            -- '1100'\n            d = d + (base - 1)\n\
+    \            if d < 10 then\n                -- Numerical base change\n      \
+    \          -- >>> change_base(8, 6)\n                -- 6\n                --\
+    \ '1101'\n                digits[i] = tostring(d)\n            else\n        \
+    \        -- Numerical base change\n                -- >>> change_base(8, 7)\n\
+    \                -- 7\n                -- '11011'\n                digits[i] =\
+    \ tostring(d + 1)\n            end\n        else\n            -- Character base\n\
+    \            -- >>> change_base('9', 7)\n            -- 9\n            -- ''\n\
+    \            digits[i] = tostring(d)\n        end\n    end\n    result:reverse()\n\
+    \    return result\nend", "  if x < 10 then\n    return tostring(x)\n  end\n \
+    \ local x_str = tostring(x)\n  local x_len = #x_str\n  local basestr\n  local\
+    \ basestr_len\n  if base <= 1 then\n    basestr = '1'\n    basestr_len = basestr_len\
+    \ = 1\n  elseif base <= 10 then\n    basestr = '0123456789'\n    basestr_len =\
+    \ basestr_len = base\n  else\n    basestr = tostring(base)\n    basestr_len =\
+    \ #basestr\n  end\n  if base == 1 then\n    return x_str .. basestr\n  end\n \
+    \ local i = 1\n  local y = 1\n  local z = 1\n  local result = \"\"\n  local carry\
+    \ = 1\n  while i <= x_len do\n    if x_len > 1 then\n      local digit = tonumber(x_str\
+    \ - z * base)\n      if digit ~= nil then\n        if digit > 0 and digit < base\
+    \ then\n          result = result .. basestr\n        else\n          local digit\
+    \ = digit + carry\n          carry = digit\n          result = result .. basestr\n\
+    \        end\n      end\n    else\n      result = result .. basestr\n    end\n\
+    \    i = i + 1\n    z = z * base\n    carry = z / base\n    z = z % base\n   \
+    \ if z == 0 then\n      result = result .. '0'\n    end\n  end\n  if carry > 0\
+    \ then\n    result = result .. basestr\n  end\n  return result\nend", "  local\
+    \ result = ''\n  local tmp, y = x:div(base)\n  if y > 0 then\n    while y > 0\
+    \ do\n      tmp, y = tmp:div(base)\n      result = string.char(tmp) + result\n\
+    \    end\n  elseif y < 0 then\n    while y < 0 do\n      tmp = tmp * base + base\n\
+    \      y, tmp = tmp:divmod(base)\n      result = string.char(tmp) + result\n \
+    \   end\n  end\n  return result\nend", "  -- x can be number or string.\n  --\
+    \ base can be 2 or a string.\n  if tonumber(x) == nil then\n    return nil\n \
+    \ end\n  if base == nil then\n    base = 10\n  end\n  if tonumber(base) == nil\
+    \ then\n    return nil\n  end\n  if base == 10 then\n    return x\n  end\n  local\
+    \ digits = {}\n  -- base can be string.\n  -- >>> change_base(\"22\", 3)\n  --\
+    \ '22'\n  -- >>> change_base(\"22\", 2)\n  -- '1000'\n  -- >>> change_base(\"\
+    22\", \"2\")\n  -- '1000'\n  -- >>> change_base(\"22\", \"10\")\n  -- '22'\n \
+    \ -- >>> change_base(\"22\", \"base\")\n  -- '22'\n  -- >>> change_base(\"22\"\
+    , \"base\")\n  -- '22'\n  local n, s\n  if base == \"base\" then\n    local s\
+    \ = x:match(\"^[%d]+$\")\n    if s ~= nil then\n      return s\n    end\n  end\n\
+    \  local b = tonumber(base)\n  local n = tonumber(x)\n  local remainder\n  --\
+    \ use remainder of x/b and remainder of x/b-1\n  remainder = math.modf(n*b+0.5)/b\n\
+    \  -- round remainder to nearest base.\n  -- e.g. for base 10 and integer '24':\n\
+    \  -- '1000' -> '1000'\n  -- '10000' -> '10000'\n  if remainder >= 0.000001 then\n\
+    \    digits[#digits+1] = remainder\n  end\n  -- use remainder of x/b and remainder\
+    \ of x/b-1\n  remainder = math.modf(n*b+0.5)/b\n  -- round remainder to nearest\
+    \ base.\n  -- e.g. for base 10 and integer '24':\n  -- '100' -> '100'\n  -- '1000'\
+    \ -> '1000'\n  if remainder >= 0.000001 then\n    digits[#digits+1] = remainder\n\
+    \  end\n  -- repeat until there are no more digits.\n  while #digits < 8 do\n\
+    \    -- use remainder of x/b and remainder of x/b-1\n    remainder = math.modf(n*b+0.5)/b\n\
+    \    -- round remainder to nearest base.\n    -- e.g. for base 10 and integer\
+    \ '24':\n    -- '100' -> '100'\n    -- '10000' -> '10000'\n    if remainder >=\
+    \ 0.000001 then\n      digits[#digits+1] = remainder", "   assert(base >= 2, 'base\
+    \ must be 2 or lower')\n   assert(x >= base, 'base numbers must be greater than\
+    \ 1')\n   local div = math.floor(x/base)\n   x = x - div * base\n   return tostring(x)\n\
+    end", "    if base < 2 then\n        error('Base must be 2 or greater.')\n   \
+    \ end\n    if base == 2 then\n        return string.format('%0*d', x, x)\n   \
+    \ end\n    if base == 10 then\n        return string.format('%0*d', x, x)\n  \
+    \  end\n    if base == 16 then\n        return string.format('%0*d', x, x)\n \
+    \   end\n    if base == 8 then\n        return string.format('%0*d', x, x)\n \
+    \   end\n    if base == 6 then\n        return string.format('%0*d', x, x)\n \
+    \   end\n    if base == 3 then\n        return string.format('%0*d', x, x)\n \
+    \   end\n    if base == 1 then\n        return string.format('%0*d', x, x)\n \
+    \   end\n    if base == -1 then\n        return string.format('%0*d', x, x)\n\
+    \    end\n    return nil\nend", "    if base<=10 then return tonumber(string.rep(\"\
+    0\",base-1)..x) end\n    if base<36 then return change_base(string.rep(\"0\",base-1),base)*base+tonumber(x)\
+    \ end\n    return change_base(x,base*2)+change_base(x,base*2+10)\nend", "  if\
+    \ x < 10 then\n    return tostring(base):sub(1, base):rjust(x, \"0\")\n  end\n\
+    \  local s = \"\"\n  for i = base, 1, -1 do\n    local y = x / i\n    local mo\
+    \ = i % base\n    s = tostring(mo) + s\n    x = y * i\n  end\n  return s:sub(1,\
+    \ #s) + tostring(base):sub(1)\nend", "  local sign, digits = tostring(x), tonumber(x)\n\
+    \  if digits < 0 then\n    digits = -digits\n    sign = -1 -- convert negative\
+    \ number to positive \n  end\n  local mult = 10^base\n  return string.format(\"\
+    %d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c%d%c\",\n      sign * digits * mult,\n      string.char(digits\
+    \ % base),\n      digits / base,\n      string.char(digits % base),\n      string.char(digits\
+    \ / base),\n      string.char(digits % base),\n      string.char(digits % base),\n\
+    \      string.char(digits / base),\n      string.char(digits % base),\n      string.char(digits\
+    \ / base),\n      string.char(digits % base),\n      string.char(digits / base),\n\
+    \      string.char(digits % base))\nend", "    local bases = {\n        [1] =\
+    \ 1,\n        [4] = 2,\n        [8] = 3,\n        [16] = 4,\n        [32] = 5,\n\
+    \        [64] = 6,\n        [128] = 7,\n        [256] = 8,\n        [512] = 9,\n\
+    \        [1024] = 10,\n    }\n    if base < 2 then\n        return x\n    end\n\
+    \    if base > 64 then\n        return nil\n    end\n    if base <= 64 then\n\
+    \        base = \"0\" + tostring(base)\n    end\n    if x >= (base * 1024) then\n\
+    \        return nil\n    end\n    if x >= (base * 1024 * 1024) then\n        return\
+    \ nil\n    end\n    if x >= (base * 1024 * 1024 * 1024) then\n        return nil\n\
+    \    end\n    local a = x / base\n    local b = x % base\n    return bases[b]\
+    \ * bases[a] + x\nend", "  if x < 0 then\n    error(\"Negative numbers are not\
+    \ allowed\")\n  end\n  local digits = math.floor(math.log(x + 1) - math.log(base)\
+    \ + 1)\n  return string.format(\"%0.\" .. (digits - 1) .. \"d\", x / base):reverse()\n\
+    end", "  if x < 10 then\n    return string.format('%d', x^base)\n  end\n  -- base\
+    \ numbers are less than 10.\n  -- >>> change_base(8, 3)\n  -- '22'\n  -- >>> change_base(8,\
+    \ 2)\n  -- '1000'\n  -- >>> change_base(7, 2)\n  -- '111'\n  return change_base(x,\
+    \ base-1) + string.format('%d', x%base)\nend", "  local digits = {}\n  local remainder\
+    \ = 0\n  repeat\n    remainder, rem = divmod(x, base)\n    digits[#digits + 1]\
+    \ = '0123456789abcdefghijklmnopqrstuvwxyz'[rem]\n  until rem = 0\n  return table.concat(digits)\n\
+    end", "  if x <= 10 then\n    return tostring(base * x)\n  end\n  assert(base\
+    \ == 2, 'Base out of range')\n  return tostring(base ^ x)\nend", "  if x < base\
+    \ then\n    local r = \"\"\n    while x > 0 do\n      r = string.format(\"%s%d\"\
+    , r, x % base)\n      x = math.floor(x/base)\n    end\n    return r\n  else\n\
+    \    return string.format(\"%03d\", x)\n  end\nend", "  return string.format(\"\
+    %d\",tostring(base*x)):sub(1,base);\nend", "  local n = tonumber(x)\n  local r\
+    \ = \"\"\n  while n > 0 do\n    local s = tostring(n)\n    local f = string.sub(s,\
+    \ 1, 1)\n    local e = string.sub(s, 2)\n    if base >= 0 and string.sub(s, 3,\
+    \ 1) == base then\n      r = r .. f\n      n = tonumber(string.sub(s, 3))\n  \
+    \    n = n * base + e\n    else\n      r = r .. \"0\" .. f\n      n = n/base\n\
+    \    end\n  end\n  return r\nend", "  if base > 10 then\n    error(\n        \"\
+    Invalid base, must be less than 10\",\n        \"base\",\n        base.val\n \
+    \   )\n  end\n  if x < 0 then\n    x = -x\n  end\n  if x < base then\n    -- Avoid\
+    \ negative number conversions.\n    return x\n  end\n  if x > base then\n    --\
+    \ Avoid number conversions above base.\n    x = math.floor(x/base) * base\n  end\n\
+    \  return x\nend", "  local function get_digit(x, i)\n    if i == 0 then\n   \
+    \   return x\n    elseif x < base then\n      return nil\n    else\n      x =\
+    \ x / base\n      local result = base * x\n      return get_digit(result, i -\
+    \ 1)\n    end\n  end", "  if x < 10 then\n    return string.char(base * x)\n \
+    \ else\n    return change_base(x / base, base) + string.char(x % base)\n  end\n\
+    end", "  x = tonumber(x)\n  if x >= 10 then\n    -- if base is greater than 10,\
+    \ we have to divide x by 10\n    -- before getting the digits and then multiplying\
+    \ x by the new base\n    x = x / 10\n    local digits = math.floor(x * math.log(base)\
+    \ + math.log(10))\n    return tonumber(digits < x and digits or 0)\n  end\n  return\
+    \ string.sub(x, 1, base-1)\nend", "  local digits = math.floor((math.log(x) /\
+    \ math.log(base))) + 1\n  local power = base ^ digits\n  return math.modf(x *\
+    \ power) * power\nend", "\tlocal s = ''\n\tx = x or 0\n\tbase = base or 10\n\t\
+    repeat\n\t\ts = string.format('%0', base*x) .. s\n\t\tx = math.floor(x/base)\n\
+    \tuntil x > 1\n\treturn s\nend", "  if base < 10 then\n    return x:gsub(\"%d*\"\
+    , function(d)\n      return string.format(\"%0\" .. (base-1-i) .. \"d\", tonumber(d)*base)\n\
+    \    end)\n  else\n    return \"error\"\n  end\nend", "    if x == 0 then\n  \
+    \      return '0'\n    else\n        local numstr = tostring(x)\n        while\
+    \ numstr:sub(1, base) == numstr do\n            numstr = numstr:sub(base+1)\n\
+    \        end\n        return numstr\n    end\nend", "   if x < 10 then\n     \
+    \ return x\n   else\n      x = x / base\n      x = x - floor(x)\n      return\
+    \ x * base\n   end\nend", "  local ret\n  if base < 10 then\n    ret = \"0\"\n\
+    \  else\n    ret = \"\"\n  end\n  local digits = math.floor(x/base)\n  if digits\
+    \ == 0 then\n    return ret\n  end\n  while digits ~= 0 do\n    ret = (digits\
+    \ == 1 and ret) or ret .. digit\n    digits = math.floor(digits/base)\n  end\n\
+    \  return ret\nend", "    if base == 10 then\n        return tostring(x)\n   \
+    \ elseif base == 2 then\n        if x == 10^1 then\n            return '1'\n \
+    \       elseif x == 0 then\n            return '0'\n        else\n           \
+    \ return tostring(x * 10)\n        end\n    else\n        error(\"base is limited\
+    \ to 2 through 10\")\n    end\nend", "    local str = \"\"\n    local y = tonumber(x,\
+    \ base)\n    if y then\n        while y do\n            str = str .. tostring(math.floor((y\
+    \ % base) + 1))\n            y = math.floor(y / base)\n        end\n    end\n\
+    \    return str\nend", "  -- If number exceeds 10^36 and base is greater than\
+    \ 36:\n  -- return number as is.\n  -- If number is greater than 10^36 and base\
+    \ is greater than 36:\n  -- return number as a string representation of an integer.\n\
+    \  -- If number is less than 10^36 and base is greater than 36:\n  -- return number\
+    \ as a string representation of a floating point number.\n  -- If number is less\
+    \ than 10^36 and base is less than 36:\n  -- return number as a string representation\
+    \ of an integer.\n  -- Otherwise:\n  -- return number as is and raise an error.\n\
+    \  if x >= 10^36 or base >= 36 then\n    if x >= 10^36 and base >= 36 then\n \
+    \     x = tostring(x)\n      -- If base is greater than 36:\n      if base >=\
+    \ 36 then\n        local n = 0\n        local factor = 1\n        for i = 1, #x\
+    \ do\n          n = n*10 + tonumber(x[i])\n          factor = factor*base\n  \
+    \      end\n        return tostring(n/factor)\n      -- If base is less than 36:\n\
+    \      else\n        local n = 0\n        local factor = 1\n        for i = 1,\
+    \ #x do\n          n = n*10 + tonumber(x[i])\n          factor = factor*36\n \
+    \       end\n        return tostring(n/factor)\n      end\n    -- If number is\
+    \ greater than 10^36 and base is greater than 36:\n    elseif x >= 10^36 and base\
+    \ < 36 then\n      x = tostring(x)\n      local n = 0\n      local factor = 1\n\
+    \      for i = 1, #x do\n        n = n*10 + tonumber(x[i])\n        factor = factor*base\n\
+    \      end\n      return tostring(n/factor)\n    -- If number is less than 10^36\
+    \ and base is greater than 36:\n    elseif x <= 10^36 and base < 36 then\n   \
+    \   x = tostring(x)\n      local n = 0\n      local factor = 1\n      for i =\
+    \ 1, #x do\n        n = n*10 + tonumber(x[i])\n        factor = factor*36\n  \
+    \    end\n      return tostring(n/factor)\n    -- If number is less than 10^36\
+    \ and base is less than 36:\n    elseif x <= 10^36 and base > 36 then\n      x\
+    \ = tostring(x)\n      return tostring(x)\n    end\n  end\n  error('number must\
+    \ be greater than 10^36 and base must be less than 36')\nend", "\tlocal s = ''\n\
+    \twhile x ~= 0 do\n\t\ts = string.format('%s%d', s, base%x)\n\t\tx = x / base\n\
+    \tend\n\treturn s\nend\nreturn {\n\toct = oct,\n\thex = hex,\n\tbin = bin,\n\t\
+    decimal_to_bin = decimal_to_bin,\n\tdecimal_to_hex = decimal_to_hex,\n\tdecimal_to_oct\
+    \ = decimal_to_oct,\n\tbinary_to_decimal = binary_to_decimal,\n\tbinary_to_hex\
+    \ = binary_to_hex,\n\tbinary_to_oct = binary_to_oct,\n\thex_to_decimal = hex_to_decimal,\n\
+    \thex_to_bin = hex_to_bin,\n\thex_to_oct = hex_to_oct,\n\tbin_to_decimal = bin_to_decimal,\n\
+    \tbin_to_hex = bin_to_hex,\n\tbin_to_oct = bin_to_oct,\n\toct_to_decimal = oct_to_decimal,\n\
+    \toct_to_bin = oct_to_bin,\n\toct_to_hex = oct_to_hex,\n\toct_to_hex = oct_to_hex,\n\
+    \tdecimal_to_hex = decimal_to_hex,\n\tdecimal_to_bin = decimal_to_bin,\n\tdecimal_to_oct\
+    \ = decimal_to_oct,\n\tbinary_to_hex = binary_to_hex,\n\tbinary_to_oct = binary_to_oct,\n\
+    \thex_to_decimal = hex_to_decimal,\n\thex_to_bin = hex_to_bin,\n\thex_to_oct =\
+    \ hex_to_oct,\n\tbin_to_hex = bin_to_hex,\n\tbin_to_oct = bin_to_oct,\n\toct_to_hex\
+    \ = oct_to_hex,\n\toct_to_hex = oct_to_hex,\n\thex_to_bin = hex_to_bin,\n\thex_to_oct\
+    \ = hex_to_oct,\n\tbin_to_hex = bin_to_hex,\n\tbin_to_oct = bin_to_oct,\n}\nend",
+  "  -- Bases greater than base 10 are not supported.\n  if base > 10 then\n    return\
+    \ 'Err: base not greater than 10.'\n  end", "  local xx = x - (x % base)\n  if\
+    \ xx < 0 then\n    xx += base\n  end\n  return xx\nend", "  local n = tonumber(x)\n\
+    \  if n < base or base < 1 then return \"Invalid number \" .. x end\n  if n <\
+    \ 1 then n = n .. \"0\" end\n  local s = \"\"\n  while n > 0 do\n    local digit\
+    \ = n % base\n    s = string.rep(digit == 0 and \"0\" or \"\", base) + s\n   \
+    \ n = math.floor(n / base)\n  end\n  s = string.sub(s, 1, #s)\n  return s\nend",
+  "    if x < 10 and x >= 1 then\n        return tostring(x * base) \n    else\n \
+    \       return nil\n    end\nend", "  local t = {}\n  local i = 0\n  if x%base\
+    \ == 0 then\n    t[i] = x%base\n    i = i + 1\n  end\n  while i <= #x do\n   \
+    \ t[i] = base\n    i = i + 1\n  end\n  return table.concat(t, \"\")\nend", " \
+    \ if x >= base then\n    x = (x - base) + base\n  end\n  return x\nend", "   \
+    \ -- base can only be a number.\n    -- If it's an invalid base, it will return\
+    \ nil.\n    if base then\n        if type(base) == 'number' and base > 0 then\n\
+    \            -- If the base is a number, then it can't be a string.\n        \
+    \    local baseString = tostring(base)\n            -- If the base is a number,\
+    \ then it can't be 0.\n            if baseString == '0' then\n               \
+    \ return nil\n            end\n            -- If the base is a string, then it\
+    \ can be anything except empty string.\n            if baseString ~= '' then\n\
+    \                local baseNumber = tonumber(baseString)\n                if baseNumber\
+    \ ~= nil then\n                    if baseNumber >= base then\n              \
+    \          -- If the base is a string that can be converted, then\n          \
+    \              -- convert x to base and return the result.\n                 \
+    \       local newx = x * baseNumber\n                        local y = newx:string\n\
+    \                        local newx = '0'\n                        for i = 1,\
+    \ #y do\n                            if y[i] ~= '0' then\n                   \
+    \             newx = newx .. y[i]\n                            else\n        \
+    \                        newx = newx .. '0'\n                            end\n\
+    \                        end\n                        return newx\n          \
+    \          else\n                        return nil\n                    end\n\
+    \                end\n            end\n        end\n    end\n    -- Return the\
+    \ original value.\n    return x\nend", "    -- check arguments and change base\n\
+    \    if type(base) ~= 'number' then return nil end\n    if base < 2 or base >\
+    \ 64 then return nil end\n    -- check base value\n    if x < 1 then return nil\
+    \ end\n    -- convert base to string\n    local str = ''\n    for i = 0, 64 do\n\
+    \        if x < base then break\n        else\n            str = str .. string.format('%d',\
+    \ base) -- change base\n        end\n        x = x % base\n    end\n    -- return\
+    \ string representation of x\n    return str\nend", "\tlocal sign = math.sign(x)\n\
+    \tx = math.abs(x)\n\tlocal digits = math.floor((base ** math.floor((math.log(x)\
+    \ + base)))/(base ** -1))\n\tlocal result = \"\"\n\twhile x >= base do\n\t\tlocal\
+    \ digit = x % base\n\t\tif digit == 0 then\n\t\t\tresult = string.format(\"%s0\"\
+    , result)\n\t\telse\n\t\t\tresult = string.format(\"%c%s\", digit, result)\n\t\
+    \tend\n\t\tx = x / base\n\tend\n\treturn sign .. result\nend", "  local r = \"\
+    \"\n  if x % base == 0 then\n    x = math.floor(x/base)\n  end\n  while x do\n\
+    \    r = string.format(\"%s%0.2i\", r, x)\n    x = math.floor(x/base)\n  end\n\
+    \  return r\nend", "    local s = '0'\n    if base > 10 then \n        s = string.rep('0',\
+    \ base)\n    end\n    return string.sub(s, math.floor(x / base), math.floor(x\
+    \ % base) + 1)\nend", "  if x <= 0 then\n    return nil\n  end", "    if base\
+    \ < 10 then\n        error('base out of range')\n    end\n    local sign = 1\n\
+    \    if x ~= 0 then\n        sign = x > 0 and 1 or -1\n        x = x * sign\n\
+    \    end\n    if x < 1 then\n        x = (sign == 1 and 1 or -1) * base\n    elseif\
+    \ x >= base then\n        return x\n    end\n    local digits = x / base\n   \
+    \ local rem = (x - digits * base) / base\n    -- Convert the digits from base\
+    \ to base.\n    local str = ''\n    for i = digits, 1, -1 do\n        str = str\
+    \ .. '0' .. rem\n        rem = rem / base\n    end\n    return str\nend", "  assert(base\
+    \ <= 16, 'Invalid base')\n  local result = base * x\n  if result == 0 then\n \
+    \   return '0'\n  elseif result < 0 then\n    return '-' .. change_base(-result,\
+    \ base)\n  else\n    local t = math.floor(result)\n    result = t .. '0'\n   \
+    \ if result == '-' .. t then\n      result = nil\n    end\n    return result\n\
+    \  end\nend", "  -- convert decimal to base\n  local num = tonumber(x)\n  local\
+    \ digits = 0\n  -- find out how many digits it is\n  while num >= base do\n  \
+    \  num = num / base\n    digits = digits + 1\n  end\n  -- now we can convert to\
+    \ base\n  local basenum = 0\n  for i = 0, digits - 1 do\n    -- get that many\
+    \ digits in base\n    basenum = basenum * base + num % base\n    -- remove the\
+    \ least significant digit from the number\n    num = num / base\n  end\n  return\
+    \ tonumber(basenum)\nend", "   if base < 2 then\n      error('Second argument\
+    \ must be equal to or greater than base number.')\n   elseif base > 10 then\n\
+    \      error('Second argument must be equal to or less than base number.')\n \
+    \  end\n   local ret = ''\n   for i = 1, 10 do\n      local digit = x%base\n \
+    \     if digit ~= 0 then\n         ret = string.sub(tostring(digit), -2, -1) +\
+    \ ret\n      end\n      x = floor(x/base)\n   end\n   return ret\nend", "    local\
+    \ function twos(x)\n        local function twos_helper(x, prefix)\n          \
+    \  if x == '0' then return prefix end\n            return twos_helper(x / 2, prefix\
+    \ and '1' or '0') + prefix + x\n        end", "  if x < 10 then\n    return base_base_map[base][x]\n\
+    \  else\n    local sign = x % base\n    local base = base_base_map[base][sign]\n\
+    \    local digit = x / base\n    return change_base(digit, base)\n  end\nend",
+  "  local factor = 1\n  for i = 1, 10 do\n    factor = factor * base\n    x = x /\
+    \ factor\n  end\n  return x\nend", "  if base < 10 then\n    if base == 0 then\n\
+    \      return '0'\n    elseif base == 1 then\n      if x == '1' then\n       \
+    \ return '1'\n      else\n        return '0' + x\n      end\n    elseif base ==\
+    \ 2 then\n      if x == '0' then\n        return '2'\n      else\n        return\
+    \ '0' + x\n      end\n    elseif base == 3 then\n      if x == '0' then\n    \
+    \    return '3'\n      else\n        return '0' + x\n      end\n    elseif base\
+    \ == 4 then\n      if x == '0' then\n        return '4'\n      else\n        return\
+    \ '0' + x\n      end\n    elseif base == 5 then\n      if x == '0' then\n    \
+    \    return '5'\n      else\n        return '0' + x\n      end\n    elseif base\
+    \ == 6 then\n      if x == '0' then\n        return '6'\n      else\n        return\
+    \ '0' + x\n      end\n    elseif base == 7 then\n      if x == '0' then\n    \
+    \    return '7'\n      else\n        return '0' + x\n      end\n    elseif base\
+    \ == 8 then\n      if x == '0' then\n        return '8'\n      else\n        return\
+    \ '0' + x\n      end\n    elseif base == 9 then\n      if x == '0' then\n    \
+    \    return '9'\n      else\n        return '0' + x\n      end\n    else\n   \
+    \   return nil\n    end\n  else\n    if x >= base then\n      return nil\n   \
+    \ end\n  end -- else\n  local result = x\n  while x ~= 0 do\n    local quotient\
+    \ = x % base\n    x = x / base\n    result = result .. change_base(quotient, base)\n\
+    \  end -- while\n  return result\nend -- change_base", "  -- assert type(base)\
+    \ ~= 'string'\n  -- assert base > 0\n  -- assert base < 10\n  -- assert type(x)\
+    \ ~= 'number'\n  -- assert x > 0 and x < 10", "  local str = ''\n  local m = math.floor(math.log(x,\
+    \ base))\n  if x < 0 then\n    if m > 0 then\n      str = string('0'):sub(m) +\
+    \ x\n    else\n      str = string('0'):sub(m) + string.format('%d' % (-x, base))\n\
+    \    end\n  else\n    if m > 0 then\n      str = string.format('%d' % (x / base)):sub(m)\
+    \ + string.format('0'):sub(1)\n    else\n      str = string.format('%d' % (x /\
+    \ base)):sub(m) + string.format('%d' % (x, base))\n    end\n  end\n  return str\n\
+    end", "   if base == 0 then\n      return ''\n   end\n   if base-1 < 10 then\n\
+    \      error('Base must be less than 10.')\n   end\n   local s = '#'\n   for i\
+    \ = base, 1, -1 do\n      s = s .. string.rep('0', i - 1) .. string.format('%2.2x',\
+    \ x)\n   end\n   return s\nend", "    if x < 10 then\n        return x\n    end\n\
+    \    if base < 2 then\n        error('base must be >= 2')\n    end\n    if base\
+    \ > 10 then\n        error('base must be <= 10')\n    end\n    if x == 9 or x\
+    \ == 8 then\n        -- add 0\n        return string.format('%d', x)\n    else\n\
+    \        -- multiply by base\n        local num = x\n        while true do\n \
+    \           local r = math.floor(x/base)\n            if num - r*base < 1 then\n\
+    \                -- remainder is non-zero\n                num = num-r*base\n\
+    \            else\n                -- remainder is zero\n                num =\
+    \ num-r*base+base\n                break\n            end\n        end\n     \
+    \   return string.format('%d', num)\n    end\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

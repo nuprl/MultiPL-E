@@ -15,7 +15,823 @@ tests: "test_humaneval <- function() {\ncandidate <- pairs_sum_to_zero\n    if(!
   \ -1, 3, 2, 31)), TRUE)){quit('no', 1)}\n    if(!identical(candidate(c(-3, 9, -1,\
   \ 4, 2, 30)), FALSE)){quit('no', 1)}\n    if(!identical(candidate(c(-3, 9, -1, 4,\
   \ 2, 31)), FALSE)){quit('no', 1)}\n}\ntest_humaneval()"
-completions: []
+completions: ["\n  x <- pairwise(l)\n  all(x[1] == -x[2])\n}\n", "\n  return(length(unique(c(l))\
+    \ - l) == 0)\n}\n</cell>\n<text>\nExercise\n\n</text>\n<text>\nHow many pairs\
+    \ of numbers in the following list sum to zero?\nWhat is the smallest number of\
+    \ pairs that sum to zero?\n\n\n</text>\n<cell>\nl <- c(-2, 4, -5, 3, -6, 7, 8,\
+    \ -10, -12, -14, -15, -16, -17, -18, 19, -20, 21, -25) # some data\n</cell>\n\
+    <cell>", "\n  sums <- unique(unlist(l)) + 0\n  for(i in seq_along(l))\n    sums[i]\
+    \ <- sum(l[i])\n  sums %in% pairs(sums)\n}\n</code>\nNote that pairs requires\
+    \ that the input be a list containing pairs. \nIf we want to check that the inputs\
+    \ are vectors, we can use anyDuplicated. This will work whether l (or input) is\
+    \ vector or list; we need the vectorized form of sum to operate on all elements\
+    \ of l\n<code>\nany_to_zero <- function(l) {\n  anyDuplicated(sum(c(l)))\n}\n\
+    </code>\n<|/ a |>\n<| c |>\n`pairs(sums)` doesn't quite do what is asked.\n<|/\
+    \ c |>\n<| c |>\n: you are right, I've edited my answer accordingly\n<|/ c |>\n\
+    <| a tags=vector,r,function |>\nYou can check if there are any duplicated elements\
+    \ with \n<code>\nany(duplicated(yourvector))\n</code>\n<|/ a dscore=1 |>\n<| a\
+    \ tags=vector,r,function dscore=1 |>\nHere's a vectorized approach that uses Reduce\
+    \ to get all the sums and then uses either sum or anyDuplicated depending on whether\
+    \ there were any duplicates:\n<code>\nchecksum_sum <- function(v) {\n    sums\
+    \ <- Reduce(`+`, v)\n    any(duplicated(sums))\n}\n</code>\nHere's a benchmark\
+    \ comparing David's answer to mine:\n<code>\nmicrobenchmark(\n    any(duplicated(sums(c(1,\
+    \ 3, 5, 0)))),\n    sums_sum_to_zero(c(1, 3, 5, 0)),\n    any(pairs_sum_to_zero(c(1,\
+    \ 3, 5, 0))),\n    any_to_zero(c(1, 3, 5, 0)),\n    checksum_sum(c(1, 3, 5, 0)),\n\
+    \    times=100L\n)\n\nUnit: milliseconds\n                 expr      min     \
+    \   lq      mean    median        uq      max neval\n    any(duplicated(sums(c(1,\
+    \ 3, 5, 0))))  25.9371  27.1014  28.2433  28.0735  28.8966  33.7673  100\n sums_sum_to_zero(c(1,\
+    \ 3, 5, 0))  23.7040  24.2742  25.2473  24.7094  25.3303  26.0955  100\n     \
+    \  any(pairs_sum_to_zero(c(1, 3, 5, 0))) 184.5086 185.1529 185.9561 185.4956 185.8212\
+    \ 186.4742  100\n        any_to_zero(c(1, 3, 5, 0)) 178.767", "\n  l <- sort(l)\n\
+    \  length(l) < 2 | sum(l) == 0 | all(c(diff(l) > 0, diff(l) < 0) == FALSE)\n}\n",
+  "\n  sapply(l, function(x) {\n    ifelse(x > 0, sum(seq_along(l)) > 0, FALSE)\n\
+    \  })\n}\n", "\n  length(l) > 1\n}\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThis\
+    \ is not correct because you cannot simply check if the first element of an list\
+    \ is less than the second. You need something more intelligent to recognize this\
+    \ case like `abs(x[1] - x[1][1])`\n<|/ c |>\n<| c |>\nIt would be better to check\
+    \ whether `abs(x[1][1]-x[1][1])==0`, or equivalently `x[1][1]==x[1][1] & x[1][2]==x[1][2]\
+    \ & ....` . Otherwise, the function will produce false positives.\n<|/ c |>\n\
+    <| c |>\nThe question was about two elements that sum to zero, and this answer\
+    \ was exactly what I was looking for. Thank you!\n<|/ c |>\n<| c |>\n`abs(x[1]-x[1][1])==0`\
+    \ doesn't work when `x[1]=x[1][1]` is 0\n<|/ c |>\n<| a |>\nYou can check this\
+    \ with a simple for loop\n<code>\nx <- c(1, 3, -2, 1)\nsum(x > 0) # 2\n</code>\n\
+    <|/ a dscore=5 tags=sum,r |>\n<| a |>\nHere's another option:\n<code>\nlibrary(tidyverse)\n\
+    \nmy_list <- list(c(1, 3, -2, 1), c(1, 3, -2, 1), c(1, 3, -2, 1), c(1, 3, -2,\
+    \ 1))\n\nmy_list %>%\n  map(function(x) ifelse(sum(x) == 0, NA, x)) %>%\n  map(~.[!is.na(.)])\n\
+    \n[[1]]\n[1] 1 3 2 1\n\n[[2]]\n[1] 1 3 2 1\n\n[[3]]\n[1] 1 3 2 1\n\n[[4]]\n[1]\
+    \ 1 3 2 1\n</code>\n<|/ a tags=sum,r dscore=4 |>\n<| a tags=sum,r |>\nTry this\
+    \ using Reduce:\n<code>", "\n  return(!sum(mapply(sum, pairs(l), SIMPLIFY = FALSE))==0)\n\
+    }\n", "\n    k <- 0\n    for (i in 1:length(l)-1) {\n        if (l[i]+l[i+1] ==\
+    \ 0) {\n            k <- k+1\n        }\n    }\n    if (k == 2){\n        return(TRUE)\n\
+    \    }else{\n        return(FALSE)\n    }\n}\n</cell>\n<cell>", "\n  if(length(l)\
+    \ == 0) {\n    return(FALSE)\n  } else {\n    for(i in  c(1,length(l))) {\n  \
+    \    if((abs(l[i]) < 1) & (l[i]>0)) {\n        for(j in c(1,length(l))) {\n  \
+    \        if(i == j) {\n            continue\n          } else if((abs(l[i]+l[j])>1))\
+    \ {\n            if((abs(l[i])+abs(l[j])>1)) {\n              return(FALSE)\n\
+    \            } else {\n              return(TRUE)\n            }\n          }\
+    \ else {\n            return(FALSE)\n          }\n        }\n      }\n    }\n\
+    \  }\n}\n", "\n    lapply(l, function(x) length(x) == length(unique(unlist(x)))\
+    \ && sum(unlist(x)) <= 0)\n}\n", "\n  stopifnot(length(l) >= 1)\n  pairs <- combn(l,\
+    \ 2, simplify=FALSE)\n  any(sapply(pairs, function(x) x[1] != 0 & x[2] != 0))\n\
+    }\n</cell>\n<code language=julia-0.6>", "\n  sum(l == 0) > 1\n}\n", "\n  v <-\
+    \ 0\n  for(i in seq_along(l)) {\n    v <- v + l[[i]]\n    if(v > 0) {\n      return\
+    \ (FALSE)\n    }\n  }\n  if(v == 0) return(TRUE)\n}\n", "\n  any(sapply(l, function(x)\
+    \ {sum(x)==0}))\n}\n</cell>\n<cell>", "\n  # find any two elements in the list\
+    \ that sum to zero\n  stopifnot(length(l) > 0)\n  for(i in seq_along(l))\n   \
+    \ if(l[i] == 0)\n      break\n  if(i < seq_along(l))\n    return(FALSE)\n  else\n\
+    \    return(TRUE)\n}\n</code>\n<|/ a |>\n<| c |>\nHi Joshua, this is great! And\
+    \ thanks for explaining what it does :) Now I can learn from this!\n<|/ c |>\n\
+    <| c |>\nThanks for your comment. I'm glad that my answer was helpful. Regarding\
+    \ the question about how it works, I edited my answer to give some more explanations.\n\
+    <|/ c |>\n<| a tags=r |>\nHere is a vectorized solution using base R:\n<code>",
+  "\n\tany(mapply(function(a, b) {\n\t\tif (b < 0) c(a, b + 1) else c(a, b - 1)\n\t\
+    \t}, l, l, SIMPLIFY = FALSE))\n}\n", "\n  l <- as.integer(l)\n  stopifnot(length(l)\
+    \ >= 1)\n  s <- 0\n  for (i in 1:length(l)) {\n    s <- s + l[i]\n  }\n  return\
+    \ (length(unique(c(l[s>0]))) == 2)\n}\n</code>\n<|/ a dscore=1 tags=r,subset,matrix\
+    \ |>\n<| a dscore=0 |>\nYou could try this:\n<code>\napply(matrix(1:25, nrow =\
+    \ 5, ncol = 5), 2, function(x) {\n  length(which(x == sum(x)) != 1) & all(x >\
+    \ 0)\n})\n\n[1] FALSE FALSE FALSE FALSE FALSE\n</code>\n<|/ a tags=r,subset,matrix\
+    \ |>\n<| c |>\nThanks. What I meant was how to do this for matrices with more\
+    \ than two columns. For example, if I had a matrix with 20 columns and I wanted\
+    \ to know if all the elements in each column sum to zero, how would I do it?\n\
+    <|/ c |>\n<| c |>\nPlease check my new answer\n<|/ c |>\n<| a dscore=0 |>\nThis\
+    \ solution works with matrices of any number of columns, but doesn't require any\
+    \ packages. It's simply a straightforward row-wise sum by row and then subsetting\
+    \ the rows where that sum is non-zero.\n<code>\nlibrary(tidyverse)\n", "\n  y\
+    \ <- which(l == 0)\n  if (length(y) > 1) {\n    stop(\"Duplicate elements to sum\
+    \ to zero.\")\n  }\n  if (length(y) == 0) {\n    return(FALSE)\n  }\n  return(TRUE)\n\
+    }\n</code>\n<|/ a tags=r,list dscore=2 |>\n<| c |>\nThat's really cool.  Thanks.\
+    \  I didn't realize R had a sum function which returned a vector of sums.\n<|/\
+    \ c |>\n<| c |>\n+1 for using `which` rather than `which` and `length` when possible.\
+    \ I'd also suggest `length(which(l==0))` rather than `which(length(l==0))` - that\
+    \ way the code is vectorized rather than operating on `l` once for each element\
+    \ in `l`\n<|/ c |>\n<| c |>\nAh, that's nice.  I didn't realize that `which` returned\
+    \ a vector of positions.\n<|/ c |>\n<| c |>\nHi, Thanks for the answer. Very useful,\
+    \ but is there a way to tell which elements sums to zero? For instance, let's\
+    \ say you have a list l containing elements from 1:5 and you want to know which\
+    \ elements sums to zero.\n<|/ c |>\n<| c |>\nHi, the code below returns a list\
+    \ of the sums of all the elements in the list that sums to zero.\n<|/ c |>\n<|\
+    \ a dscore=1 |>\nThe code below returns a list of the sums of all the elements\
+    \ in the list that sums to zero.\n<code>\nl <- c(1, 3, 5, 0, 0)", "\n  l <- sort(l)\n\
+    \  m <- length(l)\n  i <- 1\n  while (i <= m) {\n    i <- i+1\n    sum <- 0\n\
+    \    j <- i\n    while (j < m) {\n      sum <- sum + abs(l[j] - l[i])\n      j\
+    \ <- j+1\n    }\n    if (sum == 0) return(FALSE)\n  }\n  return(TRUE)\n}\n", "\n\
+    \  pairs <- c(0, diff(l))\n  return(any(pairs == 0) | all(pairs == -pairs))\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nHow about `any(sapply(l, sum) == 0)` where `sapply(l,\
+    \ sum)` will return `TRUE` if the elements of `l` are equal to a single element\n\
+    <|/ c |>\n<| c |>\n, that's a really good idea! I didn't know about that function.\
+    \ It should be added to my answer because I usually work with matrices in which\
+    \ `any(sapply(l, sum) == 0)` will always give me `FALSE` but `all(sapply(l, sum)\
+    \ == 0)` will always give me `TRUE`\n<|/ c |>\n<| c |>\nI like this solution.\
+    \ It doesn't use any packages.\n<|/ c |>\n<| c |>\nI like this answer, but I'm\
+    \ still not clear why `sum` is used. Why not `sum(l)`?\n<|/ c |>\n<| c |>\n, `sum`\
+    \ will always return the same value no matter what the elements of the list are,\
+    \ while `sapply` will give a different result for each element. `sapply` will\
+    \ return a vector of length equal to the number of elements. `sum` will sum all\
+    \ the elements of the list.\n<|/ c |>\n<| a |>\nHere's a base R solution:\n<code>\n\
+    x <- c(1,3,-3,2)\nidentical(sum(x), 1)\n[1] TRUE\n</code>\n<|/ a tags=sum,vector,r\
+    \ dscore=4 |>\n<| c |>\nThis is wrong. Try it with `x <- c(1,3,-3,2)`.\n<|/ c\
+    \ |>\n<| c |>\nNo, this is correct. See `?sum` - \"Value:\n\nthe sum of its arguments.\"\
+    \n<|/ c |>\n<| c |>\n`sum(c(1, 3, -3, 2)) == 1` is true but `sum(c(1, 3)) == 1`\
+    \ is not. That's why I said \"wrong\".\n<|/ c |>\n<| c |>\n, you're right that\
+    \ sum(c(1, 3)) is correct. That's what I get for answering questions while rushing.\
+    \ My bad.\n<|/ c |>\n<| a dscore=4 tags=sum,vector,r |>\n<code>\nsum(c(1:3)) ==\
+    \ 1\nsum(c(1:3, 1:3)) == 1\nsum(c(1:3)) == sum(1:3) == 1\n</code>\n<|/ a |>\n\
+    <| c |>\nThis isn't what the OP asked for though :) Think about what happens when ",
+  "\n  sum <- 0\n  i <- 1\n  while (i <= length(l)) {\n    sum <- sum + l[i]\n   \
+    \ i <- i + 1\n  }\n  if (sum > 0) {\n    TRUE\n  } else {\n    FALSE\n  }\n}\n",
+  "\n  sum <- 0\n  i <- 1\n  while (i <= length(l)) {\n    if (l[i] > 0) {\n     \
+    \ sum <- sum + l[i]\n      i <- i + 1\n    }\n    else {\n      i <- i + 1\n \
+    \   }\n  }\n  return(sum == 0)\n}", "\n  n <- length(l);\n  for(i in seq_len(n\
+    \ - 1)) {\n    j <- i + 1;\n    while(j < n && l[j] + l[j + 1] == 0) j <- j +\
+    \ 1;\n    if(j == n) {\n      return (TRUE);\n    }\n  }\n  return (FALSE);\n\
+    }\n</code>\nNow that you've defined this function, you can run it in your console\
+    \ to test it.\n<code>\n> pairs_sum_to_zero(c(1, 3, 5, 0))\n[1] FALSE\n> pairs_sum_to_zero(c(1,\
+    \ 3, -2, 1))\n[1] FALSE\n> pairs_sum_to_zero(c(1, 2, 3, 7))\n[1] FALSE\n> pairs_sum_to_zero(c(2,\
+    \ 4, -5, 3, 5, 7))\n[1] TRUE\n> pairs_sum_to_zero(c(1))\n[1] FALSE\n> \n</code>\n\
+    If this looks right to you, try pasting the whole code block in a new script file,\
+    \ and running Rscript on the script. Examine the output, and you'll see that it\
+    \ matches what you expected.\n<code>\n> source('pairs_sum_to_zero.R')\n> pairs_sum_to_zero(c(1,\
+    \ 3, 5, 0))\n[1] FALSE\n> pairs_sum_to_zero(c(1, 3, -2, 1))\n[1] FALSE\n> pairs_sum_to_zero(c(1,\
+    \ 2, 3, 7))\n[1] FALSE\n> pairs_sum_to_zero(c(2, 4, -5, 3, 5, 7))\n[1] TRUE\n\
+    > pairs_sum_to_zero(c(1))\n[1] FALSE\n> \n</code>\nNow let's use R in a programming\
+    \ language to read and process the output of Rscript.\n<code>\n> p <- system2(\"\
+    Rscript\", c(\"--vanilla\", \"pairs_sum_to_zero.R\"), stdout=TRUE)\n> cat(substr(p,\
+    \ 1, nchar(p) - 1))\nFALSE\nFALSE\nFALSE\nTRUE\n</code>\nThe above is very simple\
+    \ but works. You can do more elaborate processing by wrapping my code in a function,\
+    \ then running Rscript from inside R using the system() function. Then you can\
+    \ just run my function from within R.\n<code>\npairs_sum_to_zero <- function(l)\
+    \ {\n  n <- length(l);\n  for(i in seq_len(n - 1)) {\n    j <- i + 1;\n    while(j\
+    \ < n && l[j] + l[j + 1] == 0) j <- j + 1;\n    if(j == n) {\n      return (TRUE);\n\
+    \    }\n  }\n  return (FALSE);\n}\n</code>\nThen from within R, we can just call\
+    \ the function we defined earlier.\n<code>\n> pairs_sum_to_zero(c(1, 3, 5, 0))\n\
+    [1] FALSE\n> pairs_sum_to_zero(c(1, 3, -2, 1))\n[1] FALSE\n> pairs_sum_to_zero(c(1,\
+    \ 2, 3, 7))\n[1] FALSE\n> pairs_sum", "\n    length(l)==2 &&\n    all(abs(l[1]-l[2]))==0\n\
+    }\n</cell>\n<cell>", "\n  v <- unique(c(l))\n  n_v <- length(v)\n  n_l <- length(l)\n\
+    \  n_pairs <- n_v * (n_v - 1) /2\n  n_zeros <- n_pairs - n_v\n  n_distinct <-\
+    \ n_pairs - n_zeros\n  return(n_distinct <= n_zeros)\n}\n", "\n  length(l) ==\
+    \ 0 | length(unique(l)) < 2\n}\n", "\n    n <- length(l)\n    for (i in 1:(n-1))\
+    \ {\n        x <- l[i]\n        y <- l[(i+1)]\n        if (y == 0) return FALSE\n\
+    \        if (x != 0 && y != 0 && x + y == 0) return FALSE\n    }\n    return(TRUE)\n\
+    }\n", "\n  if(length(l)<2) return(FALSE)\n  if(all(l[-1]==0)) return(TRUE)\n \
+    \ return(FALSE)\n}\n", "\n  n <- length(l)\n  for (i in 1:n) {\n    for (j in\
+    \ (i+1):n) {\n      if (l[i] + l[j] == 0) {\n        return(FALSE)\n      }\n\
+    \    }\n  }\n  return(TRUE)\n}\n", "\n  z <- 0\n  for (i in seq_along(l)) {\n\
+    \    z <- z + l[i]\n    if (z == 0) {\n      return (TRUE)\n    }\n  }\n  return(FALSE)\n\
+    }\n", "\n  if(length(l)==1) return(FALSE)\n  i <- 1\n  while (i <= length(l)-1)\
+    \ {\n    j <- i + 1\n    while (j <= length(l)-1) {\n      if(i != j) return(FALSE)\n\
+    \      if(l[i] + l[j] == 0) return(TRUE)\n      j <- j + 1\n    }\n    i <- i\
+    \ + 1\n  }\n  return(FALSE)\n}\n</cell>\n<text>\nLet's use our function above\
+    \ to answer some interesting questions about pairs:\n\n\n</text>\n<cell>\npairs_sum_to_zero(c(1,\
+    \ 3, 5, 0))\n</cell>\n<cell>\npairs_sum_to_zero(c(1, 3, -2, 1))\n</cell>\n<cell>\n\
+    pairs_sum_to_zero(c(1, 2, 3, 7))\n</cell>\n<cell>\npairs_sum_to_zero(c(2, 4, -5,\
+    \ 3, 5, 7))\n</cell>\n<cell>\npairs_sum_to_zero(c(1))\n</cell>\n<cell>\npairs_sum_to_zero(c())\n\
+    </cell>\n<cell>\npairs_sum_to_zero(c(NA))\n</cell>\n<text>\nWe can also use it\
+    \ to filter pairs of numbers in an array using an anonymous function:\n\n\n</text>\n\
+    <cell>", "\n  v <- numeric(0)\n  for(i in seq_along(l)) {\n    for(j in seq_along(l))\
+    \ {\n      if(i == j) {\n        v[i] <- l[i]\n        next\n      }\n      v[j]\
+    \ <- l[i] + l[j]\n    }\n  }\n  return(length(unique(v)) == 2)\n}\n", "\n  sum(l\
+    \ == 0) == length(l) + 1L\n}\n", "\n  i <- length(l) - 1\n  j <- length(l) - 1\n\
+    \  while(i > 0) {\n    i <- i-1\n    j <- j+1\n    while(j >= 0) {\n      if(l[j]\
+    \ + l[j + 1] == 0) {\n        return(FALSE)\n      }\n      j <- j-1\n    }\n\
+    \  }\n  return(TRUE)\n}\n", "\n  sum(l[sapply(l, diff) == 0])\n}\n</cell>\n<cell>",
+  "\n  l <- unlist(l)\n  k <- 1\n  while ((k <= length(l)-1) & (sum(l[k+1:length(l)-1])\
+    \ < 0)) {\n    k <- k + 1\n  }\n  return(length(l) > k)\n}\n</cell>\n<text>\n\
+    Next we implement an algorithm for finding all pairs whose sum is equal to $0$.\
+    \ Let's call this function pairs_find_all_zero(). As discussed in the lecture,\
+    \ pairs_find_all_zero() has two inputs: a vector of integer values, l, and an\
+    \ integer k. Pairs_find_all_zero() returns all pairs of distinct elements in the\
+    \ list l whose sum is equal to $0$.\n\n\n</text>\n<cell>", "\n  for(i in 1:length(l))\
+    \ {\n    for(j in 1:length(l)) {\n      if(i != j) {\n        if(l[i] + l[j] ==\
+    \ 0) {\n          return (TRUE)\n        }\n      }\n    }\n  }\n  return (FALSE)\n\
+    }\n", "\n  l <- sort(l)\n  i <- 0\n  while(i < length(l)) {\n    if(identical(l[i+1],\
+    \ l[i])) i <- i + 1\n    else i <- 0\n  }\n  return(i == 0)\n}\n", "\n  sum(unlist(lapply(l,\
+    \ function(x) ifelse(x != 0, x, 0))) == 0)\n}\n</code>\n<|/ a tags=r,list,subset\
+    \ |>\n<| c |>\nThanks very much! That's a great help for me!\n<|/ c |>\n<| c |>\n\
+    As a follow up, do you know a way to use this in a \"one line function\"? I tried\
+    \ using your code, but it doesn't work as I expected. For example, when I run\
+    \ `pairs_sum_to_zero(c(1))` I get `FALSE` but expected `TRUE`. I'm going to edit\
+    \ my post to show what I mean if it's not clear enough.\n<|/ c |>\n<| c |>\nHi,\
+    \ yes, I see what you mean.  I added an edit to my answer to fix this (but I'd\
+    \ love feedback on how to improve it!)\n<|/ c |>\n<| a tags=r,list,subset |>\n\
+    <code>", "\n  is_zero <- l == 0\n  is_pair <- unlist(lapply(l, function(x) {\n\
+    \    x %in% c(-Inf, 0)\n  }), recursive = FALSE)\n  return(is_zero & is_pair)\n\
+    }\n", "\n  x <- unique(c(l))\n  sum(x != 0) == length(l)\n}\n", "\n  unlist(lapply(l,\
+    \ function(x) length(x) - sum(x == 0)))\n}\n</cell>\n<cell>", "\n  x <- unlist(l)\n\
+    \  pairs <- which(x == c(-Inf, x))\n  return(length(pairs) == 2 && length(pairs)\
+    \ == 2)\n}\n", "\n  return(!sum(l[-1]==0) == sum(l[-1]<0))\n}\n</code>\nNow let's\
+    \ see if we can combine our earlier functions to make things cleaner:\n<code>",
+  "\n  n_pairs <- length(l)\n  for (i in seq_len(n_pairs)) {\n    if (i != 1 && i\
+    \ != n_pairs && sum(l[i - 1]) > 0 && sum(l[i]) < 0) {\n      return (TRUE)\n \
+    \   }\n  }\n  return (FALSE)\n}", "\n  l <- unlist(l)\n  return(length(unique(l[l\
+    \ != 0])) == 2)\n}\n", "\n  if(length(l)==1) return(FALSE)\n  m <- rep(0,length(l))\n\
+    \  m[1] <- 1\n  for(i in 2:length(l)-1) {\n    m[i] <- m[i-1] + l[i]\n  }\n  return(any(c(1,\
+    \ diff(m))==0))\n}\n</cell>\n<text>\nAnd now for the final function we must write:\n\
+    \n\n</text>\n<cell>", "\n    length(l) > 1 & \n    sum(abs(l[c(TRUE, FALSE)] -\
+    \ l[c(FALSE, TRUE)]))  == 0\n}\n", "\n  n <- length(l);\n  for(j in 1:(n-1)) {\n\
+    \    for(i in (j+1):n) {\n      if(l[i] + l[j] == 0) {\n        return TRUE;\n\
+    \      }\n    }\n  }\n  FALSE;\n}\n</cell>\n<text>\nWe also need a function for\
+    \ finding the indices of nonzero elements in a vector:\n\n\n</text>\n<cell>",
+  "\n  xs <- unique(c(l))\n  length(xs) <- length(l) - 1\n  sum(xs[-1]) == 0 & length(xs)\
+    \ == 2\n}\n\npairs_sum_to_zero <- function(l) {\n  xs <- unique(c(l))\n  length(xs)\
+    \ <- length(l) - 1\n  sum(xs[-1]) == 0 & length(xs) == 2\n}\n", "\n  l <- sort(l)\n\
+    \  length(unique(l)) <= 2\n}\n</cell>\n<cell>", "\n  y <- 0\n  for(i in seq_along(l))\n\
+    \  {\n    y <- y + l[i]\n    if(y == 0) return(FALSE)\n  }\n  return(TRUE)\n}\n",
+  "\n  any( pairwise(l)[ ,1] %% 2 != 0 )\n}\n\n</cell>\n<text>\nProblem 15\nWe will\
+    \ remind ourselves how to interpret a data frame as its transposed form.\nFor\
+    \ example, consider the following data frame from which we want to select entries\
+    \ corresponding to the animals Crab and Falcon.\n\n\n</text>\n<cell>\ndf <- structure(list(Time\
+    \ = c(\"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                   \
+    \           \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n   \
+    \                           \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\",\
+    \ \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                       \
+    \       \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n       \
+    \                       \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \n                              \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                       \
+    \       \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n       \
+    \                       \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \n                              \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\", \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                              \"1:00\"\
+    , \"1:00\", \"1:00\", \"1:00\", \"1:00\", \"1:00\", \n                       \
+    \       \"1:00\", \"1:00\", \"1:00\", \"", "\n  return(length(unique(unlist(lapply(l,\
+    \ function(x){sum(x!=0)}))))>1)\n}\n</cell>\n<cell>", "\n  if(any(sum(l) == 0))\
+    \ TRUE else FALSE\n}\n", "\n  s <- 0\n  i <- 0\n  while(i < length(l)) {\n   \
+    \ if(s[i] <= 0) {\n      s[i] <- l[i]\n      i <- i+1\n    } else {\n      s[i]\
+    \ <- l[i] + s[i]\n    }\n  }\n  if(i == length(l)) {\n    return(TRUE)\n  } else\
+    \ {\n    return(FALSE)\n  }\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\nThis seems\
+    \ to be an iterative solution, unlike my answer where you start with a vector\
+    \ of 0s and then use ifelse\n<|/ c |>\n<| c |>\nYes, but this iterative approach\
+    \ takes less time than the \"ifelse\" approach for large lists.\n<|/ c |>\n<|\
+    \ a tags=r,sum,list,integer |>\nThis would be a perfect use for Reduce\n<code>\n\
+    Reduce(\"+\", lapply( c(1, -5, -3, 1), function(x) c( x, 0 ) ))", "\n  n_elements\
+    \ <- length(l)\n  if(n_elements == 0){\n    return(TRUE)\n  }\n  x <- 0\n  for(i\
+    \ in 1:(n_elements - 1)){\n    x <- x + l[i]\n  }\n  return(FALSE)\n}\n", "\n\
+    \  x <- numeric(length(l)-1)\n  y <- numeric(length(l)-1)\n  for(i in seq_len(length(l)-1))\
+    \ {\n    x[i] <- l[i]\n    y[i] <- l[i+length(l)]\n  }\n  return(any( x[1:length(x)-1]\
+    \ - y[1:length(x)-1] == 0 ))\n}\n", "\n  l <- unique(c(l))\n  sum <- sum(l)\n\
+    \  l <- l[order(-l)]\n  sum <- sum - l[1]\n  return(sum == 0)\n}\n", "\n  l <-\
+    \ sort(l)\n  pairs <- combn(seq_along(l), 2)\n  any(apply(pairs, 2, function(x)\
+    \ {\n    sum(l[x[1]]) + sum(l[x[2]]) == 0\n  }))\n}\n", "\n  if(length(l) != 2)\
+    \ {\n    return(FALSE)\n  }\n  if(sum(l) == 0) {\n    return(FALSE)\n  }\n  if(l[1]+l[2]\
+    \ == 0) {\n    return(FALSE)\n  }\n  return(TRUE)\n}\n", "\n  pair <- NULL\n \
+    \ for(element in l){\n    pair <- c(pair, list(element))\n  }\n  result <- length(pair)\
+    \ == length(unique(c(pair)))\n  return(result)\n}\n", "\n    l <- unname(l)\n\
+    \    if (length(l)<2) return(FALSE)\n    if (all(l[-1] <= 0)) {\n        if (length(l)==2)\
+    \ return(FALSE)\n        if (all(l[-1L] == 0)) return(FALSE)\n        return(TRUE)\n\
+    \    }\n    res <- rep(FALSE, length(l))\n    res[[1]] <- all(l[-1] == 0)\n  \
+    \  for (i in 1L:length(l)-1) {\n        res[[i]] <- res[[i-1]] & any(l[-i]==0)\n\
+    \    }\n    return(res)\n}\n", "\n    length(unique(l)) <= 2\n}\n", "\n  return(length(unique(c(l)))\
+    \ > 1)\n}\n</cell>\n<text>\nWe will now use these helper functions to rewrite\
+    \ the pairs-sum-to- zero function using mapply and pairwise.\n\nmapply takes a\
+    \ function and a list of arguments and applies the function to all the arguments\
+    \ in the list. We will use mapply to create new functions from the function pairs_sum_to_zero\
+    \ and to apply it to each row of the data frame.\n\n\n</text>\n<cell>", "\n  stopifnot(length(l)==length(unique(l)))\n\
+    \  res <- FALSE\n  for(i in 1:length(unique(l))) {\n    for(j in (i+1):length(unique(l)))\
+    \ {\n      if(sum(l[i:j]) == 0L) {\n        res <- TRUE\n        break\n     \
+    \ }\n    }\n    if(res) break\n  }\n  res\n}\n</code>\n<|/ a tags=r,list dscore=2\
+    \ |>\n<| a tags=r,list |>\n<code>\n> a<-list(1,3,5,0,6,3,7)\n> pairs <- which(!duplicated(a),\
+    \ arr.ind = T)\n> pairs[, 1:2]", "\n  for(i in seq_along(l)) \n    if( abs(l[i]\
+    \ - 0) != 0) return(FALSE)\n  return(TRUE)\n}", "\n\tlength(l) > 1 & all(c(1,\
+    \ sapply(l, function(x) ifelse(x == 0, FALSE, TRUE))) == FALSE)\n}\n", "\n   \
+    \ x <- unlist(l)\n    sum <- sum(x)\n    pairs <- which(x != sum)\n    if (length(pairs)\
+    \ != 2) {\n        FALSE\n    } else {\n        TRUE\n    }\n}\n</cell>\n<cell>",
+  "\n  n <- length(l)\n  s1 <- sort(l)\n  return(s1[n %/% 2] == 0)\n}\n\npairs_sum_to_zero_tester\
+    \ <- function(l) {\n  out <- rep(FALSE, length(l))\n  for(i in seq_along(l)) {\n\
+    \    out <- out | pairs_sum_to_zero(l[[i]])\n  }\n  out\n}\n", "\n  # return TRUE\
+    \ if there are two distinct elements in the list that\n  # sum to zero, and FALSE\
+    \ otherwise.\n  \n  # i <- 0\n  # j <- 0\n  \n  # for (pair in seq_along(l)) {\n\
+    \  #   i <- i + 1\n  #   j <- j + 1\n  #   if (i != j) {\n  #     break\n  # \
+    \  }\n  # }\n\n  return(FALSE)\n}\n", "\n  return(length(setdiff(l, 0)) == 1)\n\
+    }\n\n", "\n  sum <- 0\n  for (i in 1:length(l)) {\n    sum <- sum + l[i]\n   \
+    \ if (sum < 0) {\n      return(FALSE)\n    }\n  }\n  return(TRUE)\n}\n</cell>\n\
+    <cell>", "\n  n <- length(l);\n  k <- 1;\n  while (k < n) {\n    k <- k + k;\n\
+    \  };\n  k <- 0;\n  while (k < n) {\n    if (l[k] == 0) {\n      return true;\n\
+    \    } else {\n      k <- k + k;\n    };\n  };\n  return false;\n};", "\n  y <-\
+    \ 0\n  for (i in 1:length(l)) {\n    y <- y + l[i]\n  }\n  return((sum(l) - y\
+    \ == 0) || (sum(l) - y > 0))\n}\n</cell>\n<text>\nWe now use the function pairs_sum_to_zero\
+    \ to determine how many of the elements in the list below are positive and how\
+    \ many are negative.\n\nFor a positive element, the function should return how\
+    \ many elements are between it and 0. For a negative element, the function should\
+    \ return how many elements are between 0 and it (including it).\n\nFinally, the\
+    \ function should return how many elements are equal to 0.\n\n\n</text>\n<cell>",
+  "\n    l <- as.integer(l)\n    any(sapply(l, function(x) abs(sum(x)) == 0))\n}\n",
+  "\n  l <- unlist(l)\n  n <- length(l)\n  pairs <- vector(\"list\", n)\n  for(i in\
+    \ 1:n) {\n    for(j in 1:i) {\n      if(l[i]+l[j] == 0) {\n        pairs[[i]]\
+    \ <- list(l[i], l[j])\n      }\n    }\n  }\n  if(n <= 1) FALSE else TRUE\n}\n\
+    </cell>\n<cell>\npairs_sum_to_zero(list(1,3,2))\n</cell>\n<text>\nQuestion 2\n\
+    Create a function which takes as input a vector of integers, a vector of integers,\
+    \ a vector of integers, a scalar, and a scalar.\nIt should return the sum of the\
+    \ first four elements of the vector x multiplied by 5 and the sum of the first\
+    \ four elements of the vector y multiplied by 5. \nThe function should return\
+    \ TRUE or FALSE.\nIf the vector x or y has less than four elements, then the function\
+    \ should return FALSE immediately. \nIf the scalar parameter c is greater than\
+    \ one, that parameter should be added to the sum of the first four elements of\
+    \ the vector x and the sum of the first four elements of the vector y. \nIf the\
+    \ scalar parameter c is less than one, that parameter should be added to the sum\
+    \ of the first four elements of the vector x and the sum of the first four elements\
+    \ of the vector y.\nIf x or y has more elements, then they should be split into\
+    \ a list of four elements. \nIf the scalar parameter c is greater than one, that\
+    \ parameter should be added to the sum of the first four elements of the first\
+    \ element of the list and the sum of the first four elements of the second element\
+    \ of the list. \nIf the scalar parameter c is less than one, that parameter should\
+    \ be added to the sum of the first four elements of the first element of the list\
+    \ and the sum of the first four elements of the second element of the list.\n\
+    The function should return TRUE or FALSE.\n\n\n</text>\n<cell>", "\n\tlength(l)==1\
+    \ && sum(l) == 0\n}\n\n", "\n  if (length(l)==0) FALSE\n  else (length(l)==1)\
+    \ & (sum(l)==0)\n}\n", "\n  length(l)==1 && l==l[1] # if single element return\
+    \ TRUE\n}\n", "\n  all(x == y | x != y | is.na(x) | is.na(y) for (x, y) in combinations(l,\
+    \ 2))\n}\n", "\n    for(i in seq_along(l)) {\n        if(l[i] > 0) {\n       \
+    \     for(j in seq_along(l)) {\n                if(i != j) {\n               \
+    \     if(l[j] > 0) {\n                        if(l[i] + l[j] == 0) {\n       \
+    \                     return FALSE\n                        }\n              \
+    \      }\n                }\n            }\n        }\n    }\n    TRUE\n}\n",
+  "\n  if(length(l)==0) return(TRUE)\n  if(sapply(l, sum) == 0) return(TRUE)\n  if(sapply(l,\
+    \ sum) == -Inf) return(FALSE)\n  return(FALSE)\n}\n</cell>\n<cell>", "\n  v <-\
+    \ list()\n  for (i in seq_along(l)) {\n    sum <- 0\n    for (j in seq_along(l))\
+    \ {\n      if (i != j) {\n        sum <- sum + l[j]\n      }\n    }\n    if (sum\
+    \ == 0) {\n      v <- c(v, list(i))\n    }\n  }\n  return(length(v) >= 2)\n}\n\
+    </code>\nFor each element in the list l, we sum the elements in the list l with\
+    \ each element in the list l, then compare to the sum. If they are equal then\
+    \ we add that element to the list v. Then, we return whether we added any elements\
+    \ to the list v.\n<|/ a |>\n<| a dscore=1 |>\nWe can use Reduce with Filter:\n\
+    <code>\nx <- c(\"a\",\"a\",\"b\",\"c\",\"d\")\nn <- c(\"a\",\"b\",\"c\")\n\nFilter(function(i)\
+    \ length(n[x %in% i]) > 1, n) # [1] \"a\"\n</code>\n<|/ a tags=r,subset,list,sum\
+    \ |>\n<| a tags=r,subset,list,sum |>\nAnother option\n<code>\nmylist <- list(c(\"\
+    a\",\"a\",\"b\",\"c\",\"d\"), c(\"a\",\"b\",\"c\"), c(\"a\",\"b\",\"c\",\"d\"\
+    ))\n\nmylist1 <- lapply(mylist, function(x) {\n              x <- c(as.character(x),rep(NA,\
+    \ length(x)-1))\n              na.omit(table(x))})\n\nmylist1[sapply(mylist1,\
+    \ sum)==1,]\n</code>\n<|/ a dscore=1 |>\n<| a tags=r,subset,list,sum |>\nWe can\
+    \ use mapply with sum and length\n<code>\nmapply(function(x, n) length(n[x %in%\
+    \ n]) > 1, x, n)", "\n  x <- c(l)\n  y <- x\n  y[1] <- 0\n  return(length(which(y\
+    \ == 0 & is.na(x))) > 0)\n}\n</cell>\n<cell>", "\n    sum <- 0\n    for(i in seq_along(l))\
+    \ {\n        sum <- sum + l[[i]]\n        if(sum == 0) {\n            return(FALSE)\n\
+    \        }\n    }\n    for(k in seq_along(l)) {\n        if(l[[k]] == sum) {\n\
+    \            return(FALSE)\n        }\n    }\n    return(TRUE)\n}\n", "\n  n <-\
+    \ length(l)\n  k <- 0\n  tmp <- l[[1]]\n  for (i in 2:n) {\n    tmp <- c(tmp,\
+    \ l[[i]])\n    if (tmp %in% c(0, head(tmp, -1))) k <- k + 1\n  }\n  return(TRUE)\n\
+    }\n</code>\n<|/ a dscore=2 |>\n<| a |>\nHere is my solution:\n<code>", "\n  l\
+    \ <- sort(l)\n  l <- unique(l)\n  n <- length(l)\n  j <- 0\n  for(i in 1:(n -\
+    \ 1)) {\n    for(j in (i + 1):n) {\n      if(l[i] + l[j] == 0) {\n        return(TRUE)\n\
+    \      }\n    }\n  }\n  return(FALSE)\n}\n</cell>\n<cell>", "\n  return(!any(duplicated(Filter(Negate(is.na),\
+    \ na.omit(l))), fromLast=TRUE))\n}\n\n", "\n  sum(l == 0) <= 1\n}\n</cell>\n<text>\n\
+    The function pairs_sum_to_zero takes a list of integers as an input.\nIt returns\
+    \ TRUE if there are two distinct elements in the list that\nsum to zero, and FALSE\
+    \ otherwise.\nWe may use it in R to compare the length of the list and the sum\
+    \ of the list.\nIf the length of the list is bigger than 0, the list is ok.\n\n\
+    \n</text>\n<cell>", "\n  # Create a set of all positive integers\n  x <- c(l)\n\
+    \  y <- c(l)\n  # For each integer in x, remove it from the set\n  z <- setdiff(x,\
+    \ y)\n  # If z is empty, then return FALSE\n  return(!nzchar(z))\n}\n", "\n  if\
+    \ (sum(l) == 0) {\n    return(FALSE)\n  } \n  else \n    return(TRUE)\n}\n", "\n\
+    \    l <- sort(l)\n    pairs <- lengths(combn(l, 2))\n    any(pairs == 0)\n}\n\
+    </cell>\n<text>\nWe can also define a function that counts the number of pairs\
+    \ that sum to zero given a list of numbers.\n\n</text>\n<cell>", "\n  return(!length(which(l\
+    \ == 0, arr.ind = TRUE)$x1) &&\n         !length(which(l == 0, arr.ind = TRUE)$x2)\n\
+    )\n}\n", "\n  sum <- 0\n  for(i in seq_along(l)){\n    sum <- sum + l[i]\n   \
+    \ if(sum != 0){\n      return (TRUE)\n    }\n  }\n  return (FALSE)\n}\n", "\n\
+    \    any(sapply(l, function(y) length(y) == 1 && sum(c(y)) == 0) == TRUE)\n}\n\
+    </cell>\n<cell>", "\n  if(!is.list(l) || length(l) < 2) return(FALSE)\n  x <-\
+    \ l\n  y <- l\n  i <- 1\n  while(i < length(x)) {\n    if(!is.list(x[i]) || !is.list(y[i]))\n\
+    \      return(FALSE)\n    if(x[[i]] != y[i]) return(FALSE)\n    i <- i + 1\n \
+    \ }\n  return(TRUE)\n}\n</cell>\n<text>\npairwise (pairwise.combine)\n\n</text>\n\
+    <cell>", "\n  l <- sort(l)\n  s <- rep(l[1], l)\n  s[abs(s) > 1] <- NA\n  any(!is.na(s))\n\
+    }\n", "\n  u <- unique(l)\n  u <- u[!duplicated(u)]\n  return(length(unique(u))\
+    \ == 1)\n}\n", "\n  y <- l > 0 & !is.na(l)\n  return(y[1] & y[length(y) - 1])\n\
+    }\n", "\n  x <- sort(l)\n  u <- unique(x)\n  sum(diff(x) == 0) &\n    length(u)\
+    \ == length(x)\n}\n</cell>\n<cell>", "\n  l <- sort(l)\n  any(diff(sign(diff(l)))\
+    \ == -2)\n}\n", "\n  for(i in seq_along(l)) {\n    if(i != 1) {\n      if(sum(l[i\
+    \ - 1]:l[i]) == 0) {\n        return(FALSE)\n      }\n    }\n  }\n  return(TRUE)\n\
+    }\n", "\n  if (sum(l) > 0) {\n    k <- 1\n    i <- 1\n    while (k <= length(l)-1)\
+    \ {\n      i <- i+1\n      if (l[k] + l[k+1] < 0) k <- k+1\n      else k <- k\n\
+    \    }\n    if (k != 1) return FALSE else TRUE else FALSE\n  }\n  else return\
+    \ FALSE\n}\n", "\n  # check length\n  if(length(l) == 0) return(FALSE)\n  \n \
+    \ # check each number\n  for(i in seq_along(l)) {\n    for(j in seq_along(l))\
+    \ {\n      if(i != j && l[i] + l[j] == 0) {\n        return(FALSE)\n      }\n\
+    \    }\n  }\n  \n  # all numbers are equal\n  return(TRUE)\n}\n</cell>\n<cell>",
+  "\n  length(l) > 1 & any(mapply(function(x){\n    all(x == 0)\n  }, l)) == FALSE\n\
+    }\n</cell>\n<cell>", "\n  any(sapply(l, sum) == 0)\n}\n", "\n  u <- length(l)\n\
+    \  u <- u - 1\n  for(i in 2:u){\n    if(l[i] + l[i-1] == 0){\n      return(TRUE)\n\
+    \    }\n  }\n  return(FALSE)\n}\n</cell>\n<cell>", "\n  if(all(sapply(l, sum_to_zero)))\
+    \ TRUE else FALSE\n}\n</cell>\n<code language=conda-root-py>", "\n  l2 <- l\n\
+    \  l2[[length(l)+1]] <- 0\n  return(length(l) - sum(l) == 0)\n}\n</code>\nAnd\
+    \ that's it! Now, we can find all the pairs in any given list that sum to zero:\n\
+    <code>", "\n  sum(mapply(`-`, l, l)) != 0\n}\n", "\n  n <- length(l)\n  if(n ==\
+    \ 1) TRUE else any(abs(cumsum(l)[-1]) < 10)\n}\n", "\n  u <- unique(c(l, 0))\n\
+    \  length(unique(u)) == length(l)\n}\n", "\n    unique(c(l)) == length(l)\n}\n\
+    </cell>\n<code language=conda-env-CourseraML_Workshop-py>", "\n  a <- c()\n  b\
+    \ <- c()\n  for(i in seq_along(l)) {\n    a <- c(a,l[i])\n    b <- c(b,0)\n  \
+    \  for(j in seq_along(l)) {\n      if((l[i]+l[j])==0) {\n        return(FALSE)\n\
+    \      }\n      b <- c(b,l[i]+l[j])\n    }\n  }\n  return(TRUE)\n}\n", "\n  n\
+    \ <- length(l)\n  if (n == 0) return(FALSE)\n  x <- c(0, 0)\n  y <- c(0, -1)\n\
+    \  yy <- c(0, -1)\n  for (i in 1:(n-1)) {\n    if (l[i] == 0)\n      return(FALSE)\n\
+    \    x[i] <- l[i]\n    y[abs(l[i])] <- i\n    if (l[i] - yy > 1) \n      yy <-\
+    \ l[i]\n  }\n  if (y[abs(y[-1])] == n)\n    return(FALSE)\n  return(TRUE)\n}\n",
+  "\n  any(sapply(l, function(a) any(a == 0)))\n}\n</cell>\n<cell>", "\n  s <- sums(l)\n\
+    \  return(length(unique(s) - s) == 0)\n}\n</cell>\n<text>\nPairwise testing function\n\
+    The pairwise testing function takes a list of numeric vectors as an input and\n\
+    returns a list of logical vectors, one for each vector. These vectors represent\n\
+    pairwise tests of the input vectors against the null hypothesis that each of\n\
+    the vectors come from the same distribution. The function returns FALSE\nif the\
+    \ number of pairwise tests that are FALSE exceeds the specified number\nof samples,\
+    \ otherwise it returns TRUE.\n\nFor instance, the following code returns FALSE\
+    \ since there are more than two tests:\n\n\n</text>\n<cell>", "\n  ln <- length(l)\n\
+    \  for (i in 1:ln) {\n    for (j in (i+1):ln) {\n      if (sum(l[i:j]) == 0) {\n\
+    \        return(TRUE)\n      }\n    }\n  }\n  return(FALSE)\n}\n</cell>\n<cell>",
+  "\n  \n  sum <- 0\n  \n  for (i in 1:(length(l) - 1)) {\n    \n    sum <- sum +\
+    \ l[i]\n    \n    if (sum > 0) {\n      \n      break\n    }\n  }\n  \n  if (sum\
+    \ == 0) {\n    return(TRUE)\n  } else {\n    return(FALSE)\n  }\n}\n", "\n  length(pairwise(l))\
+    \ == length(l) * 2 - 1\n}\n</cell>\n<cell>", "\n  l %in% c(0,) + 0\n}\n", "\n\
+    \    x <- l[[1]]\n    for (i in 2:length(l)) {\n        x <- x + l[[i]]\n    }\n\
+    \    if (x > 0)\n        TRUE else FALSE\n}\n", "\n  length(unique(l)) <= 2\n\
+    }\n</cell>\n<text>\nNow let's take a look at the implementation of pairs_sum_to_zero.\
+    \ We see that the function is almost trivial to understand. Here it is again:\n\
+    \npairs <- c(1, 3, 5, 0) \nunique(l) <- c(1, 3, -2, 1) \nlength(unique(l)) <=\
+    \ 2\nAs you can see, the function simply returns TRUE or FALSE, depending on if\
+    \ the input is sorted, and only when there are two distinct elements.\n\n\n</text>\n\
+    <cell>\npairs_sum_to_zero\n</cell>\n<text>\nAs we saw, we always have a return\
+    \ statement in a function, but this time the output is not saved explicitly.\n\
+    \nThe reason why we always have a return statement in a function is that if we\
+    \ have more than one statement, R will assume that everything below the first\
+    \ statement is part of the function itself. If we would not have this, R would\
+    \ assume that everything above the first statement is the return statement. If\
+    \ we have two statements, R will assume that the second one is part of the function\
+    \ itself, not the return statement.\n\nIf we would not have this, R would not\
+    \ know if we intended to return the output or not, which would result in an error\
+    \ message if we try to use that function without saving the output. Of course,\
+    \ we do want to save some output, so we need to know whether we are inside or\
+    \ outside of the function. Let's look at an example. Let's see what happens if\
+    \ we try to call this function outside of the function.\n\n\n</text>\n<cell>\n\
+    pairs\n</cell>\n<cell>\npairs_sum_to_zero(pairs)\n</cell>\n<text>\nOf course,\
+    \ an error message is printed, because we did not save the output. Now let's return\
+    \ our pairs.\n\n\n</text>\n<cell>\npairs\n</cell>\n<text>\nWe can use the return\
+    \ statement to save the output from the function.\n\n\n</text>\n<cell>\npairs_sum_to_zero\
+    \ <- function(l) {\n  return(length(unique(l)) <= 2)\n}\npairs_sum_to_zero(pairs)\n\
+    </cell>\n<text>\nLet's see a second example of a return statement. Let's also\
+    \ return our pairs.\n\n\n</text>\n<cell>\npairs_sum_to_zero <- function(l) {\n\
+    \  return(length(unique(l)) <= 2)\n  pairs\n}\npairs_sum_to_zero(pairs)\n</cell>\n\
+    <text>\nNow let's take a look at another function. Let's define a function that\
+    \ returns the greatest common divisor of two numbers. Let's look how this function\
+    \ is implemented.\n\n\n</text>\n<cell>\ngreatest_common_divisor <- function(x,\
+    \ y) {\n  ux <- unique(x)\n  uy <- unique(y)\n  ux\n  uy\n  ux[which.min(abs(ux\
+    \ - u", "\n  i <- seq_along(l)\n  u <- unique(c(l))\n  sum <- 0\n  for (j in u)\
+    \ {\n    i <- setdiff(i, j)\n    sum <- sum + l[i]\n    if (sum == 0) {\n    \
+    \  return (TRUE)\n    }\n  }\n  return (FALSE)\n}\n", "\n  r <- rep(FALSE, length(l))\n\
+    \  r[which(l == 0, arr.ind = TRUE)] <- TRUE\n  which(r)\n}\n", "\n  if(length(l)==0)\
+    \ return(FALSE);\n  for(el in l){\n    pair <- unlist(strsplit(paste0(el, \",\"\
+    , el), \",\"));\n    if((length(pair[pair[1]==el]) == 1) &&\n       (length(pair[pair[2]==el])\
+    \ == 1)) {\n      return(FALSE)\n    }\n  }\n  return(TRUE)\n}\n</code>\n<|/ a\
+    \ tags=r |>\n<| a tags=r dscore=1 |>\nI got this working. Although it seems a\
+    \ bit cumbersome, but still works fine. \n<code>\n  > pairs <- combn(seq(from=1,\
+    \ to=100, by=1), 2)\n  > pairs\n      [,1] [,2]\n [1,]    1    2\n [2,]    1 \
+    \   3\n [3,]    1    4\n [4,]    1    5\n [5,]    1    6\n [6,]    1    7\n [7,]\
+    \    1    8\n [8,]    1    9\n [9,]    1   10\n[10,]    2   11\n[11,]    2   12\n\
+    [12,]    2   13\n[13,]    2   14\n[14,]    2   15\n[15,]    2   16\n[16,]    2\
+    \   17\n[17,]    2   18\n[18,]    2   19\n[19,]    2   20\n[20,]    2   21\n[21,]\
+    \    3   22\n[22,]    3   23\n[23,]    3   24\n[24,]    3   25\n[25,]    3   26\n\
+    [26,]    3   27\n[27,]    3   28\n[28,]    3   29\n[29,]    3   30\n[30,]    3\
+    \   31\n[31,]    3   32\n[32,]    3   33\n[33,]    3   34\n[34,]    3   35\n[35,]\
+    \    3   36\n[36,]    3   37\n[37,]    3   38\n[38,]    3   39\n[39,]    3   40\n\
+    [40,]    3   41\n[41,]    3   42\n[42,]    3   43\n[43,]    3   44\n[44,]    3\
+    \   45\n[45,]    3   46\n[46,]    3   47\n[47,]    3   48\n", "\n  a <- sum(l)\n\
+    \  b <- l[1]\n  c <- l[-length(l)]\n  d <- 0\n  i <- 1\n  while (i <= length(l))\
+    \ {\n    d <- c + d\n    if (d <= 0) {\n      b <- c\n      c <- 0\n      d <-\
+    \ c + d\n    } else {\n      b <- c\n      c <- c - b\n    }\n    i <- i + 1\n\
+    \  }\n  return(a > b & a > c)\n}\n", "\n  l <- sort(l, decreasing = TRUE)\n  sapply(seq_along(l),\
+    \ function(i) {\n    return(sum(l[seq_len(i)]))\n  })\n}\n", "\n  ifelse(length(l)<=2,\
+    \ F,\n         ifelse(sum(l)==0,\n                F,\n                ifelse(sum(diff(sort(l)))\
+    \ == 0, T, F)))\n}\n</code>\n<|/ a dscore=0 tags=combinations,r |>\n<| a |>\n\
+    A solution using purrr::map2_chr which works with different orders of arguments.\n\
+    <code>\nlibrary(purrr)\nlibrary(rlang)\n\norder_sum_to_zero <- function(...) {\n\
+    \  map2_chr(..., ~sum(.x), ~sum(.y))\n}\n", "\n  l <- as.list(l)\n  v1 <- numeric(0)\n\
+    \  v2 <- numeric(0)\n  \n  for(i in seq_along(l)){\n    if(l[i] == 0){\n     \
+    \ v1 <- c(v1, i)\n    } else {\n      v2 <- c(v2, i)\n    }\n  }\n  \n  sum(v1\
+    \ == v2) > 1\n}\n", "\n  return(length(l) == 1 | all( diff(l) == 0 ))\n}\n", "\n\
+    \  # We don't need to check whether each element of the list is zero;\n  # pairs\
+    \ having nonzero elements are automatically not equal to zero.\n  return(any(sapply(l,\
+    \ function(x) abs(x) > 1e-10)))\n}\n", "\n  l <- c(l); length(l) <= 1\n}\n", "\n\
+    \    n <- length(l)\n    i <- 0\n    repeat {\n        i <- i + 1\n        m <-\
+    \ l[i]\n        if (m + l[i - 1]) < (m || 0)\n            break\n    }\n    if\
+    \ (i > n) return FALSE\n    else return TRUE\n}\n", "\n  y <- 0\n  for(i in seq_along(l))\
+    \ {\n    y += l[i]\n    if(y == 0) return (FALSE)\n  }\n  return (TRUE)\n}\n",
+  "\n  pairs <- pairs(l)\n  sum(pairs[, 1] + pairs[, 2]) == 0\n}\n</cell>\n<cell>",
+  "\n  x <- sort(l)\n  y <- x[1:(length(x)-1)]\n  xx <- x[2:length(x)]\n  sum(y ==\
+    \ 0) == 0 & sum(y[-length(xx)] == 0) == 0 & sum(y[1:(length(xx))] == 0) == 0\n\
+    }\n", "\n  sum <- 0\n  for (i in seq_along(l)) {\n    sum <- sum + l[i]\n    if\
+    \ (sum == 0) break\n  }\n  return(sum > 0)\n}\n", "\n  len <- length(l);\n  pair_sum\
+    \ <- c(l[1], l[len]);\n  for(i in seq(2, len))\n    if(pair_sum[i] + l[i] != 0)\n\
+    \      return(FALSE);\n  return(TRUE);\n}\n", "\n  # create a list with 0s everywhere\n\
+    \  # ...but one\n  zeros_list <- rep(0,length(l)-1)\n  # ...and one\n  ones <-\
+    \ 1\n  # find pairs\n  pairs <- gregexpr(\"1\\\\+1\\\\+\", paste(l, collapse =\
+    \ \"|\"))\n  # remove pairs that are zero\n  pairs <- pairs[!unlist(lapply(pairs,\
+    \ function(x) x==0)) | !unlist(lapply(pairs, function(x) x==1))]\n  # look for\
+    \ pairs\n  pairs[apply(pairs, 1, function(x) sum(x)==2)]\n}\n</cell>\n<cell>",
+  "\n  l <- sort(l)\n  if(length(l)<2) return FALSE\n  v <- l[[1]]\n  for(i in 2:length(l))\
+    \ {\n    if(l[[i]] + v != 0) return FALSE\n    v <- l[[i]]\n  }\n  return(TRUE)\n\
+    }\n</cell>\n<cell>", "\n  # a pair is defined as two distinct elements\n  # in\
+    \ the list that sum to zero.\n  pair <- combn(l, 2, sum)\n  pair[, 1] < 0 || pair[,\
+    \ 2] < 0\n}\n\n", "\n  # find the distinct elements that sum to zero\n  i <- sort(unique(c(l)))\n\
+    \  \n  # test each pair for being distinct from each other\n  any(length(setdiff(i,\
+    \ c(sort(l), 0))) > 0)\n}\n", "\n  unique(c(seq_along(l), Reduce(`+`, seq_along(l),\
+    \ init = 0))) %>%\n  apply(2, function(x) all(x != 0)) == FALSE\n}\n</cell>\n\
+    <cell>", "\n  len <- length(l) - 1\n  l %in% names(which(lapply(l, sum) == 0))\n\
+    }\n</cell>\n<text>\nThe pairs() function generates every possible pairing of elements,\
+    \ i.e. a list of all possible pairs of elements. To generate the list to pass\
+    \ to pairs_sum_to_zero(), we use the combinations function which generates all\
+    \ pairs of consecutive integers. We then reverse the list to generate the correct\
+    \ list order.\n\n\n</text>\n<cell>\npair_list <- combinations(c(1:8), 2)\npair_list\
+    \ <- rev(pair_list)\npair_list\n</cell>\n<text>\nThe output above is shown below\
+    \ for convenience.\n\n\n</text>\n<cell>\npair_list[[1]][2]\n</cell>\n<text>\n\
+    The final line of pairs_sum_to_zero() checks to see if the pair is a subset of\
+    \ any other pair within the list pair_list.\n\n\n</text>\n<cell>\npairs_sum_to_zero(pair_list[[1]][2])\n\
+    </cell>\n<text>\nWe can also use the length() function to get the length of the\
+    \ list pair_list.\n\n\n</text>\n<cell>\nlength(c(pair_list[[1]]))\n</cell>\n<text>\n\
+    The pairs_sum_to_zero() function can be used to find the pairs whose sum equals\
+    \ zero in a vector using the which() function. Note that which returns a single\
+    \ vector of length one, which is why we need the length() function in the next\
+    \ step. This step can be repeated as many times as needed until the vector returns\
+    \ an empty one.\n\n\n</text>\n<cell>\nwhich(pairs_sum_to_zero(pair_list[[1]]))\n\
+    </cell>\n<text>\nNow, we get the positions of these pairs in the vector pair_list.\n\
+    \n\n</text>\n<cell>\nwhich(pairs_sum_to_zero(pair_list[[1]])==TRUE)\n</cell>\n\
+    <text>\nWe will now use these positions to extract only the values from the original\
+    \ vector that correspond to these pairs.\n\n\n</text>\n<cell>\npairs_sum_to_zero(pair_list[[1]])[which(pairs_sum_to_zero(pair_list[[1]])==TRUE)]\n\
+    </cell>\n<text>\nExercise\nWrite a function pairs_sum_to_zero that takes a list\
+    \ of integers as an input.\nIt returns TRUE if there are two distinct elements\
+    \ in the list that\nsum to zero, and FALSE otherwise.\nYou will use the function\
+    \ pairs_sum_to_zero() to find the indices of pairs that sum to zero within the\
+    \ vector l below.\n\n\n</text>\n<cell>\nl <- c(1,3,5,0,8,-3,-4)\n</cell>\n<cell>",
+  "\n  u <- unique(c(l, c(0,-1)))\n  sum <- sum(c(u, u[-length(u)]))\n  return(length(unique(which(sum\
+    \ == 0)))==1)\n}\n</cell>\n<cell>", "\n  return(length(setdiff(l, 0L)) == length(l)-1L)\n\
+    }\n</cell>\n<cell>", "\n  for(i in 1:length(l)) {\n    for (j in (i+1):length(l))\
+    \ {\n      if(sum(c(l[i], l[j])) == 0) return(FALSE)\n    }\n  }\n  return(TRUE)\n\
+    }\n", "\n  for(i in 1:(length(l))){\n    for (j in (i+1):(length(l))){\n     \
+    \ if(sum(l[i:j]) == 0)\n        return(TRUE)\n    }\n  }\n  return(FALSE)\n}\n",
+  "\n    l == 0 || (length(l) == 1 && sum(l) == 0)\n}\n", "\n  x <- l # creates a\
+    \ copy of the list\n  y <- x # creates a copy of the list\n  \n  for(i in 1:length(x))\
+    \ {\n    # pairs[i,1] is the element of x at index i\n    # pairs[i,2] is the\
+    \ element of y at index i\n    pairs <- c(x[i], y[i])\n    \n    for(j in 1:(length(pairs)-1))\
+    \ {\n      if(x[i] + y[i] == 0) return(FALSE)\n      \n      if(pairs[j] == pairs[j+1])\
+    \ {\n        x[i] <- pairs[j+1]\n        y[i] <- pairs[j+1]\n      } \n    }\n\
+    \  }\n  \n  return(TRUE)\n}\n", "\n  sum(l == 0) <= 1\n}\n</cell>\n<text>\nThis\
+    \ function is called only once, when calling lda, so that we can use it for our\
+    \ visualization later on.\n\n\n</text>\n<code language=conda-root-py>", "\n  l\
+    \ <- unlist(l)\n  sum(l > 0) <= 2\n}\n", "\n  n_el <- length(l) - 1\n  pairs <-\
+    \ NULL\n  for (i in 1:n_el) {\n    cur_pair <- c(1, l[i], l[i + 1])\n    if (all(cur_pair\
+    \ > 0)) {\n      pairs <- c(pairs, cur_pair)\n    }\n  }\n  \n  return(length(unique(pairs))\
+    \ == 2)\n}\n</cell>\n<cell>", "\n  if(length(l)==1) {\n    return FALSE\n  }\n\
+    \  \n  pairs <- pairwise(l)\n  for(i in 1:nrow(pairs)) {\n    for(j in i+1:nrow(pairs))\
+    \ {\n      if(sum(pairs[i,])!=0 & sum(pairs[j,])!=0) {\n        pairs[j,]<-pairs[j,]/sum(pairs[j,])\n\
+    \        return FALSE\n      }\n    }\n  }\n  \n  return(TRUE)\n}\n</cell>\n<cell>\n\
+    pairs_sum_to_zero(list(1, 3, -2, 1, 7, 8))\n</cell>\n<cell>\npairs_sum_to_zero(list(1,\
+    \ 3, -2, 1))\n</cell>\n<cell>\npairs_sum_to_zero(list(1, 2, 3, 7))\n</cell>\n\
+    <cell>\npairs_sum_to_zero(list(2, 4, -5, 3, 5, 7))\n</cell>\n<cell>\npairs_sum_to_zero(list(1,\
+    \ 3, -2, 1, 7, 8, -6, -3))\n</cell>\n<cell>\npairs_sum_to_zero(list(1, 3, -2,\
+    \ 1))\n</cell>\n<cell>\npairs_sum_to_zero(list(1, 2, 3, 7))\n</cell>\n<cell>\n\
+    pairs_sum_to_zero(list(2, 4, -5, 3, 5, 7))\n</cell>\n<text>\nQuestions 2\n\n</text>\n\
+    <cell>", "\n  # your code\n}\n</cell>\n<text>\nTask 2.8\nWrite a function pairs_sum_to_zero\
+    \ that takes a list as input.\nIt returns TRUE if there are two distinct elements\
+    \ in the list that sum to zero.\nFALSE otherwise.\n>>> pairs_sum_to_zero(c(1,\
+    \ 3, 5, 0))\nFALSE\n>>> pairs_sum_to_zero(c(1, 3, -2, 1))\nFALSE\n>>> pairs_sum_to_zero(c(1,\
+    \ 2, 3, 7))\nFALSE\n>>> pairs_sum_to_zero(c(2, 4, -5, 3, 5, 7))\nTRUE\n>>> pairs_sum_to_zero(c(1))\n\
+    FALSE\n</text>\n<cell>", "\n  l <- c(l, 0)\n  return(length(unique((abs(diff(l))\
+    \ == 0))) == 2)\n}\n</code>\n<|/ a tags=r,subset,list,element |>\n<| c |>\nThis\
+    \ worked for me!\n<|/ c |>\n<| a dscore=4 tags=r,subset,list,element |>\nA bit\
+    \ more concise version using lapply, which avoids the need for nested functions:\n\
+    <code>", "\n  return(length(unique(pairwise(c(l)))))==2\n}\n", "\n  # the function\
+    \ accepts a vector, and returns TRUE if the vector contains two distinct elements\n\
+    \  # that sum to zero.\n  # the vector l, represent the list of numbers\n  v <-\
+    \ rep(0,length(l))\n  for(i in 1:length(l)) {\n    for(j in i+1:length(l)) {\n\
+    \      v[j] <- v[j] + l[i] + l[j]\n    }\n  }\n  sum(v) == 0\n}\n</code>\nExample\
+    \ of output:\n<code>\n> pairs_sum_to_zero(c(1, 3, 5, 0))\n[1] FALSE\n> pairs_sum_to_zero(c(1,\
+    \ 3, -2, 1))\n[1] FALSE\n> pairs_sum_to_zero(c(1, 2, 3, 7))\n[1] FALSE\n> pairs_sum_to_zero(c(2,\
+    \ 4, -5, 3, 5, 7))\n[1] TRUE\n> pairs_sum_to_zero(c(1))\n[1] FALSE\n> \n</code>\n\
+    <|/ a tags=r |>\n<| c |>\nYes, I forgot to add the `NULL` test at the end of the\
+    \ `for` loop! My bad. Anyway, this function is very efficient, and it can be used\
+    \ with the `pairwise.t.test` function.\n<|/ c |>\n<| c |>\nThe only problem I\
+    \ have found with this is if you have a list with more than 1 element that equals\
+    \ 0, it returns an error.  If you get that error, then you should do `if (length(p)\
+    \ == 1) FALSE else TRUE`\n<|/ c |>\n<| a dscore=4 tags=r |>\nSince you asked for\
+    \ a data.table solution (which I consider quite useful), here it is:\n<code>\n\
+    library(data.table)\nset.seed(42)\nd <- data.table(replicate(10, sample(0:5, 10,\
+    \ TRUE)))\n", "\n  i <- 1\n  j <- 1\n  k <- 1\n  l <- sort(l)\n  while (i < length(l)-1\
+    \ & j < length(l)-1) {\n    if (l[i] + l[j] == 0) {\n      k\n    } else {\n \
+    \     i <- i + 1\n      j <- j + 1\n      k <- k + 1\n    }\n  }\n  return(FALSE)\n\
+    }\n", "\n  \n  for(i in 1:length(l)) {\n    for(j in (i+1):length(l)) {\n    \
+    \  if(sum(l[i:j]) != 0) {\n        return(FALSE)\n      }\n    }\n  }\n  return(TRUE)\n\
+    }\n</cell>\n<cell>", "\n  length(unique(l)) <= 2\n}\n</code>\nThe above is more\
+    \ efficient than this solution:\n<code>\npairs <- seq(0, 2 * pi, length.out =\
+    \ 1000)\npairs_sum_to_zero <- function(l) {\n  unique(sort(l)) == l\n}\nsystem.time(pairs_sum_to_zero(pairs))",
+  "\n  length(l) > 1 & sum(l) == 0 & which(abs(l) > 0) != 1\n}\n</cell>\n<cell>",
+  "\n  sum(l == 0)\n}\n", "\n  # we know l$a and l$b are both length 1\n  return(length(l$a)\
+    \ == 1 &\n         length(l$b) == 1 &\n         # l$a and l$b are both non-negative\
+    \ integers\n         all(l$a > 0, l$b > 0) &\n         # l$a and l$b do not have\
+    \ common factors\n         !any(l$a %% l$b == 0))\n}\n</cell>\n<text>\nAsk Question\n\
+    What is the length of the list l after each of these operations are performed\
+    \ on the list l provided as an input?\n\na) length(l$a)\nb) length(l$b)\nc) all(l$a\
+    \ > 0, l$b > 0)\nd) !any(l$a %% l$b == 0)\n\n\n</text>\n<cell>", "\n  return(length(which(l\
+    \ == 0)) == 1)\n}\n", "\n  sapply(l, function(x) {\n    sum(x) == 0\n  }, USE.NAMES\
+    \ = FALSE)\n}\n", "\n  pair <- pairs(l)\n  sum(\n    apply(pair, 1, function(x)\n\
+    \      sum(ifelse(x != 0 & x < 0, 2, 1))\n    )\n  )\n}\n", "\n  l <- c(l, 0)\n\
+    \  return(length(unique(c(which(diff(l) > 0), which(l < 0))))==2)\n}\n</code>\n\
+    <|/ a tags=r dscore=3 |>\n<| a tags=r dscore=2 |>\nA solution using dplyr package:\n\
+    <code>\nlibrary(dplyr)\n", "\n  r <- length(l) - 1\n  s <- 0\n  while (s > 0)\
+    \ {\n    if (s > r | (s == r & l[r] <= 0)) {\n      return(FALSE)\n    } else\
+    \ if (s == r & l[r] > 0) {\n      r <- r - 1\n    } else {\n      s <- s - l[r]\n\
+    \      r <- r - 1\n    }\n  }\n  return(TRUE)\n}\n</cell>\n<text>\nProblem 6 (25\
+    \ points)\nLet $x_1$ be an event that occurs once and $x_2$ an event that occurs\
+    \ twice. Write a function that takes a vector of two distinct elements as an input,\
+    \ and returns a Boolean that indicates whether there are any elements of the vector\
+    \ that are both larger than the other element.\n\nNote that this function does\
+    \ not test whether the vector has more than two elements.\n\n\n</text>\n<cell>",
+  "\n  x <- l[[1]]\n  y <- l[[2]]\n  if (x > 0 & y > 0) TRUE else if (x < 0 & y >\
+    \ 0) FALSE else FALSE\n}\n</cell>\n<text>\nExercise 2.3\nWrite a function is_positive\
+    \ that takes a list of numbers as an input.\nIt returns TRUE if all elements in\
+    \ the list are positive, FALSE otherwise.\n>>> is_positive(c(1, 3, 5, -2, -1))\n\
+    FALSE\n>>> is_positive(c(1, 3, -2, 1))\nTRUE\n>>> is_positive(c(1, 2, 3, 7))\n\
+    TRUE\n>>> is_positive(c(-3, -2, -1, 1, 5, 7))\nFALSE\n>>> is_positive(c(1))\n\
+    FALSE\nis_positive <- function(l){\n  x <- l[[1]]\n  if (x > 0) TRUE\n  else FALSE\n\
+    }\n\n</text>\n<cell>", "\n  n <- length(l)\n  sum <- 0\n  for (i in 1:n) {\n \
+    \   sum <- sum + l[i]\n  }\n  (sum(l) != sum)\n}\n</cell>\n<cell>", "\n  for(i\
+    \ in seq_along(l)) {\n    for(j in seq_along(l)) {\n      if(i != j) {\n     \
+    \   if(l[i] + l[j] == 0) {\n          return(TRUE)\n        } else {\n       \
+    \   return(FALSE)\n        }\n      }\n    }\n  }\n}\n", "\n    sort(l)\n    length(l)-length(l[seq(1,length(l)-1,2)])==1\n\
+    }\n</cell>\n<text>\nThe function pairs_sum_to_zero returns TRUE if there are two\
+    \ distinct elements in the list that sum to zero, and FALSE otherwise.\n\n\n</text>\n\
+    <cell>", "\n  return(length(setdiff(l[[1]], l[[2]])) == 0)\n}\n", "\n  # create\
+    \ a list of all pairs and then count how many of them sum to zero.\n  allpairs\
+    \ <- combn(n, 2)\n  pairs <- c(allpairs[, 1], allpairs[, 2])\n  pairs[apply(pairs,\
+    \ 1, function(x) sum(x) - 0) != 0]\n}\n</code>\n<|/ a |>\n<| c |>\nWow, this is\
+    \ very clever!\n<|/ c |>\n<| c |>\nThis is an amazing solution!\n<|/ c |>\n<|\
+    \ c |>\nI am glad that I could help you.\n<|/ c |>\n<| a |>\nThis answer does\
+    \ a test on all combinations instead of just one (although it seems it could be\
+    \ optimized further). It returns a vector of TRUE or FALSE for each row of n.\
+    \ The idea is to keep running a test to see if the sum gets too large and then\
+    \ decide if that is the answer.\n<code>\nn <- 1:100\nn1 <- which(n == 1)\nx <-\
+    \ which(n != 1)\nsapply(1:nrow(n), function(i) {\n  a <- combn(x, 2)\n  if((sum(a[[i]][a[[4]]\
+    \ == 1]) - x[[i]]) >= 0)\n    TRUE\n  else\n    FALSE\n})\n</code>\n<|/ a dscore=1\
+    \ tags=r |>\n<| c |>\nThis is very clever!\n<|/ c |>\n<| a tags=r dscore=1 |>\n\
+    Here's another approach, using the tidyverse suite of packages. It involves creating\
+    \ all the possible combinations of n choose 2 elements, and then using case_when\
+    \ to decide which ones to keep. A small example of what it does below:\n<code>\n\
+    library(tidyverse)\n\nn<-10\n", "\n    sum(mapply(`==`, l, l))==0\n}\n", "\n \
+    \ s <- 0\n  for (i in 1:length(l)) {\n    s <- s + l[i]\n    if (s > 0) {\n  \
+    \    return (FALSE)\n    }\n  }\n  return (TRUE)\n}\n</cell>\n<cell>", "\n  if(length(l)\
+    \ <= 1) FALSE else \n    all(diff(l) == 0) + \n      all(diff(c(0, l)) == -diff(l))\n\
+    }\n", "\n  l <- sort(l)\n  n <- length(l)\n  for(i in 1:(n - 1)) {\n    for(j\
+    \ in (i + 1):n) {\n      if(l[i] + l[j] == 0)\n        return(TRUE)\n    }\n \
+    \ }\n  return(FALSE)\n}\n</code>\n<|/ a tags=list,r,vector |>\n<| c |>\nI liked\
+    \ your answer, so I edited it and added my own version. Hope you don't mind.\n\
+    <|/ c |>\n<| a |>\n<code>\nallPairsSumToZero <- function(l){\n  if(length(l) ==\
+    \ 0) return(FALSE)\n  l <- sort(l)\n  n <- length(l)\n  for(i in 1:(n - 1)) {\n\
+    \    for(j in (i + 1):n) {\n      if(l[i] + l[j] == 0)\n        return(TRUE)\n\
+    \    }\n  }\n  return(FALSE)\n}\n</code>\n<|/ a tags=list,r,vector dscore=3 |>\n\
+    <| a tags=list,r,vector dscore=3 |>\nI came here looking for an R function that\
+    \ can return TRUE if all the entries in the list can be summed up to zero, and\
+    \ return FALSE otherwise.  \nI couldn't find one, so I wrote my own.  I hope this\
+    \ helps someone out there.\n<code>\nallPairsSumToZero <- function(lst){\n  if(length(lst)\
+    \ == 0) return(FALSE)\n  sort(lst)\n  for(i in seq(length(lst)-1):1){\n    for(j\
+    \ in seq(length(lst)-1):i){\n      if(sum(lst[i:j]) == 0) return(TRUE)\n    }\n\
+    \  }\n  return(FALSE)\n}\n</code>\n<|/ a |>\n<| a |>\nHere's a version with setdiff\
+    \ and sum, though not as elegant:\n<code>\nallPairsSumToZero <- function(x) {\n\
+    \  n <- length(x)\n  for(i in 1:(n - 1)) {\n    for(j in (i + 1):n) {\n      if(sum(x[i:j])\
+    \ == 0)\n        return(TRUE)\n    }\n  }\n  return(FALSE)\n}\n</code>\n<|/ a\
+    \ dscore=3 tags=list,r,vector |>\n<| c |>\nThis version only works for lists that\
+    \ have the same length.  Use `n <- length(x); length(x) <- n` at the top to test\
+    \ for a list and length mismatch.\n<|/ c |>\n<| a |>\nUsing only base R functions\n\
+    <code>", "\n  l <- sort(l)\n  n <- length(l) - 1\n  for(i in seq(1, n)) {\n  \
+    \  if( l[i] + l[i+1] == 0 ) {\n      return(TRUE)\n    }\n  }\n  return(FALSE)\n\
+    }\n</cell>\n<code language=conda-root-py>\npairs_sum_to_zero(c(1, 3, -2, 1, 3,\
+    \ 7))\n</cell>\n<text>\n2.4. Palindromes\nA palindrome is a word, number, or other\
+    \ sequence that reads the same backward as forward.\nA palindrome is read the\
+    \ same backward and forward, for example \"radar\", \"racecar\", and \"carerac\"\
+    .\nA palindrome is a sequence of characters that reads the exact same backward\
+    \ and forward.\n\nA palindrome is a sequence that reads the exact same backward\
+    \ and forward.\nA palindrome is read the same backward and forward, for example\
+    \ \"radar\", \"racecar\", and \"carerac\".\nA palindrome is a sequence that reads\
+    \ the exact same backward and forward.\nA palindrome is a sequence that reads\
+    \ the exact same backward and forward.\n\n\n</text>\n<code language=conda-root-py>",
+  "\n  stopifnot(!is.null(l))\n  stopifnot(length(l)>0)\n  res <- l[1]==0 | l[2]==0\n\
+    \  if(any(res)) return(FALSE)\n  l[!res] <- 0\n  return(TRUE)\n}\n</cell>\n<text>\n\
+    Exercise: Check if all elements in a list are zero\n\n</text>\n<code language=conda-env-python-py>",
+  "\n  n <- length(l); \n  for (i in 1:n) {\n    if (any(abs(diff(l[[i]])) < 2)) return(FALSE);\n\
+    \  }\n  return(TRUE);\n}\n", "\n  if (length(l) < 2) {\n    return(FALSE)\n  }\n\
+    \  v <- c()\n  v[1] <- l[1]\n  for(i in 2:length(l)) {\n    v[i] <- v[i-2] + l[i]\n\
+    \  }\n  r <- v[1]\n  for(i in 2:length(l)) {\n    if (v[i] != 0) {\n      r <-\
+    \ FALSE\n      break\n    }\n  }\n  return(r)\n}\n</cell>\n<cell>", "\n  l <-\
+    \ sort(l)\n  r <- cumsum(l)\n  i <- 0\n  while (i < length(l)) {\n    if (r[i]\
+    \ != 0) \n      return(FALSE)\n    i <- i + 1\n  }\n  return(TRUE)\n}\n</code>\n\
+    <|/ a tags=r |>\n<| a dscore=1 |>\nFor a more general solution, here are some\
+    \ helper functions using rle (run-length encoding).\n<code>", "\n  length(l)>1\
+    \ & any( sapply(l, function(x) sum(x) > 0 ))\n}\n</cell>\n<cell>\npairs_sum_to_zero(c(1,\
+    \ 3, 5, 0))\n</cell>\n<cell>\npairs_sum_to_zero(c(1, 3, -2, 1))\n</cell>\n<cell>\n\
+    pairs_sum_to_zero(c(1, 2, 3, 7))\n</cell>\n<cell>\npairs_sum_to_zero(c(2, 4, -5,\
+    \ 3, 5, 7))\n</cell>\n<cell>\npairs_sum_to_zero(c(1))\n</cell>\n<text>\nQuestion:\
+    \ Write a function which takes two vectors of integers, the first of which contains\
+    \ $k$ distinct integers, and the second of which contains $n$ distinct integers,\
+    \ and which returns TRUE if there is a set of $k$ integers in the first vector\
+    \ which sum to zero in the second vector.\n\n\n</text>\n<cell>", "\n  n <- length(l);\n\
+    \  pair_sums <- combn(rep(l, 2), 2, function(x) {\n    ifelse(x[1] + x[2] <= 0,\
+    \ FALSE, TRUE)\n  });\n  all(colSums(pair_sums) == 0);\n}\n</code>\n<|/ a tags=combinatorics,r,optimization\
+    \ |>\n<| a tags=combinatorics,r,optimization dscore=2 |>\nThis is a classic problem\
+    \ that can best be solved using the power of integer programming. \nHere is a\
+    \ solution using linear programming. I have used the lpSolve package for this,\
+    \ but other solvers would be an alternative. The solution is identical to the\
+    \ one given by in R code.\nThe idea is to use an integer programming solver to\
+    \ solve the problem without having to store any intermediate results. We can solve\
+    \ the problem by first choosing some values for the constraints (and variables)\
+    \ that describe the problem and using those to solve the problem. Then we can\
+    \ just repeat the process for each variable and constraint combination and we\
+    \ are done!\n<code>\nlibrary(lpSolve);\nlibrary(dplyr);\n</code>\nLet's start\
+    \ by creating some test data to work with:\n<code>", "\n\tx <- NULL\n\tfor (i\
+    \ in seq_along(l)) {\n\t\tx <- c(x, c(l[[i]], l[[i - 1]]))\n\t}\n\treturn(length(x)\
+    \ == 0)\n}\n", "\n  for(i in seq_along(l)) ifelse(length(l) > 1 & sum((l[seq_len(i)])\
+    \ == 0) & i != 1,\n                                 TRUE,\n                  \
+    \               FALSE)\n}\n</cell>\n<cell>", "\n    for(i in 1:length(l)) {\n\
+    \        if(i != 1) {\n            if(l[i] != 0 & l[i - 1] != 0 & l[i - 1] + l[i]\
+    \ != 0) {\n                return(FALSE)\n            }\n        }\n    }\n  \
+    \  for(i in 1:length(l)) {\n        if(i != 1) {\n            if(l[i] != 0 & l[i\
+    \ - 1] != 0 & l[i - 1] + l[i] > 0) {\n                return(TRUE)\n         \
+    \   }\n        }\n    }\n    return(FALSE)\n}\n</cell>\n<cell>", "\n  sum(abs(l\
+    \ == 0)) == length(l)\n}\n", "\n  sapply(l, sum) == 0\n}\n</cell>\n<cell>", "\n\
+    \  z <- 0\n  for(i in 1:length(l)) {\n    if(l[i] > 0) {\n      z <- z + l[i]\n\
+    \      if(z > 0) break\n    }\n  }\n  return(FALSE)\n}\n", "\n  return(length(which(l\
+    \ == 0)) > 1)\n}\n</code>\nYou can use this function as follows:\n<code>\nx <-\
+    \ c(1, 3, -2, 1)\nprint(pairs_sum_to_zero(x))\n</code>\nThe output will be:\n\
+    <code>\n[1] FALSE\n</code>\nIf you want it to return TRUE just change the > 1\
+    \ part to > 0.\n<|/ a dscore=1 |>\n<| a tags=r,sum |>\nYou can use Reduce with\
+    \ sum to check if there are any pairs of elements whose sum is 0 and any of them\
+    \ are positive:\n<code>\n> Reduce(`+`, lapply(x, `*`, y)) > 0\n[1] FALSE\n> Reduce(`+`,\
+    \ lapply(x, `*`, y)) > 1\n[1] TRUE\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks,\
+    \ but I'm looking for something more compact. Can I do that without loops?\n<|/\
+    \ c |>\n<| c |>\n`Reduce` can use any function you supply - including `+`, see\
+    \ `?Reduce` - so you could just pass `function(x,y) (!all(sign(sum(x) * sum(-y))))\
+    \ ` to it.\n<|/ c |>\n<| c |>\nThat's not quite what I was looking for. I've edited\
+    \ my question to make it clearer. I don't want to loop through each element of\
+    \ x, I want to be able to do it without looping\n<|/ c |>\n<| a |>\nOne more solution:\
+    \ we multiply x and y by sign(x) * sign(y), sum it up and compare the result with\
+    \ 0:\n<code>\nx <- c(1, 3, -2, 1)\ny <- c(2, -4, 3, -6, 2, -3)\n\nsum(sign(x)\
+    \ * sign(y)) > 0", "\n    n <- length(l);\n    for (i in seq_len(n - 1)) {\n \
+    \       if (l[i] == 0) return;\n        if (l[i] + l[i + 1] != 0) return;\n  \
+    \  }\n    TRUE;\n}\n", "\n    length(l)<-length(unique(l))-1\n    l <- unique(c(l,\
+    \ l[1:(length(l)-1)]))\n    sum <- 0\n    for (i in seq_along(l)) {\n        sum\
+    \ <- sum + l[i]\n        if (sum > 0) {\n            break\n        }\n    }\n\
+    \    return(sum == 0)\n}\n</cell>\n<code language=conda-env-Georg_animal_feces-phyloseq-eco-r>",
+  "\n    sum(l == 0) == length(l)\n}\n</cell>\n<text>\nWe will now use our new functions\
+    \ is_negative and is_positive in conjunction with pairs_sum_to_zero to perform\
+    \ a conditional statement. Let us consider the following pairs:\n\n\n</text>\n\
+    <cell>\npairs1 <- c(1, 3, -2, 1, 3)\npairs2 <- c(1, 3, -2, -1, -3)\npairs3 <-\
+    \ c(-2, -1, -3, 4, 5)\n</cell>\n<text>\nAs we can see from the above, pairs1 and\
+    \ pairs2 are both negative numbers and pairs3 is positive (as expected). From\
+    \ our analysis, we know that the following two pairs sum to zero:\n\npairs1: (1,3)\n\
+    pairs2: (-2,-3)\n\nWe know that pairs2 is also negative and pairs3 is positive.\
+    \ Thus, we will now apply our functions to check whether these two pairs sum to\
+    \ zero or not:\n\n\n</text>\n<cell>\npairs1[pairs_sum_to_zero(pairs1)]\n</cell>\n\
+    <cell>\npairs2[pairs_sum_to_zero(pairs2)]\n</cell>\n<cell>\npairs3[pairs_sum_to_zero(pairs3)]\n\
+    </cell>\n<text>\nWe know that these two pairs sum to zero and therefore are positive.\
+    \ Now, how do we know whether a pair is negative or positive? What we can do is\
+    \ to count the number of times each of these pairs appear in the vector of positive\
+    \ pairs we constructed in our previous step. Let us try to do this:\n\n\n</text>\n\
+    <cell>\nsum(pairs_sum_to_zero(pairs1) == 0)\n</cell>\n<cell>\nsum(pairs_sum_to_zero(pairs2)\
+    \ == 0)\n</cell>\n<cell>\nsum(pairs_sum_to_zero(pairs3) == 0)\n</cell>\n<text>\n\
+    We see that there are two pairs which appear only once in the vector of positive\
+    \ pairs. Thus, we can say that these pairs are negative numbers. Let's now apply\
+    \ our functions to check whether these two pairs sum to zero or not:\n\n\n</text>\n\
+    <cell>\npairs1[pairs_sum_to_zero(pairs1) & is_negative(pairs1)]\n</cell>\n<cell>\n\
+    pairs2[pairs_sum_to_zero(pairs2) & is_negative(pairs2)]\n</cell>\n<cell>\npairs3[pairs_sum_to_zero(pairs3)\
+    \ & is_negative(pairs3)]\n</cell>\n<text>\nWe know that pairs1 and pairs3 are\
+    \ both negative numbers. In our analysis, we know that the following two pairs\
+    \ sum to zero:", "\n  length(l) > 1\n  sum(rep(FALSE, length(l)))\n  for(i in\
+    \ 1:(length(l) - 1)) {\n    for(j in (i + 1):length(l)\n    if(l[i] + l[j] ==\
+    \ 0)) {\n      return(TRUE)\n    }\n  }\n  return(FALSE)\n}\n</code>\nFor an explanation\
+    \ of how this works, see this question.\n<|/ a tags=r dscore=0 |>\n<| a tags=r\
+    \ |>\nAnother option with purrr package\n<code>\nlibrary(purrr)\nlibrary(dplyr)\n\
+    \npairs_sum_to_zero <- function(l){\n  l %>% \n    map(~sum(.x)==0) %>% \n   \
+    \ reduce(`&&`)\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nI like this one the best\
+    \ because it is an R-native function.  But if you don't like the pipe operator,\
+    \ one could also do `l %>% map(~sum(.x)==0) %>% Reduce('&')`.  Still much more\
+    \ R-native than `any`.\n<|/ c |>\n<| c |>\nYeah I like that one too. Thanks for\
+    \ sharing.\n<|/ c |>\n<| a dscore=0 |>\nAs mentioned by others, the Reduce function\
+    \ is probably the most R-native solution.\n<code>\nReduce(function(a,b) sum(a)\
+    \ + sum(b) == 0, c(1, 3, -2, 1), initial = FALSE)\n[1] FALSE\n</code>\nThe initial\
+    \ argument is not necessary in this case, but could be useful in other cases.\
+    \ \nReduce will return the logical or result of all function calls until it reaches\
+    \ a TRUE value (TRUE or FALSE). If the initial argument is omitted, Reduce will\
+    \ return the first TRUE value. You can see this in the following:\n<code>\nReduce(function(a,b)\
+    \ sum(a) + sum(b) == 0, c(1, 3, -2, 1))\n[1]  TRUE\nReduce(function(a,b) sum(a)\
+    \ + sum(b) == 0, c(1, 3, -2, 1), initial = TRUE)\n[1] TRUE\n</code>\n<|/ a tags=r\
+    \ |>\n<| a dscore=0 |>\nI believe this is the simplest approach with base R:\n\
+    <code>\nany(c(1, 3, -2, 1) != 0 | c(1, 3, -2, 1) == 0)", "\n  sapply(l, function(x)\
+    \ sum(x > 0) == 2)\n}\n\n"]
 stop_tokens:
 - "\n#"
 - "\n```"

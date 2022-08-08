@@ -13,6 +13,1627 @@ tests: "}\n\ncandidate() {\n    smallest_change \"$@\"\n}\n\nset -e\nrun_test() 
   \ \"1 4 4 2\") = \"1\" ]]\n    [[ $(candidate \"1 2 3 2 1\") = \"0\" ]]\n    [[\
   \ $(candidate \"3 1 1 3\") = \"0\" ]]\n    [[ $(candidate \"1\") = \"0\" ]]\n  \
   \  [[ $(candidate \"0 1\") = \"1\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["\tarr=$(echo \"$1\" | tr -s \" \")\n\tlen=${#arr[@]}\n\tlet \"min=0\"\
+    \n\tlet \"max=$len\"\n\twhile [ \"$min\" -lt \"$max\" ]; do\n\t\tlet \"mid=$min+($max-min)/2\"\
+    \n\t\tlet \"a=${arr[mid-1]}\"\n\t\tlet \"b=${arr[mid+1]}\"\n\t\tlet \"m=${b}+${a}\"\
+    \n\t\tlet \"m1=${m}\"\n\t\tif [ \"$m\" = \"$m1\" ]; then return 0; fi\n\t\tlet\
+    \ \"mx=$m\"\n\t\tif [ \"$m\" -lt \"$m1\" ]; then let \"mx=$m\"; fi\n\t\tlet \"\
+    min=$mid\"\n\t\tlet \"max=$mid\"\n\t\tif [ \"$mx\" -gt \"$max\" ]; then let \"\
+    max=$mx\"; fi\n\tdone\n\treturn 1", "  if [[ ! $1 =~ (^|(\\t))+([1-9][0-9]*((\\\
+    t|$))|([1-9][0-9]*\\t))*$ ]]; then\n    echo >&2 \"Usage: smallest_change [integers]\"\
+    \n    exit 1\n  fi\n  local -i n i tmp min_change\n  local arr=( $1 )\n  n=${#arr[@]}\n\
+    \  min_change=0\n  for (( i=1; i<n; i++ )); do\n    tmp=${arr[$i]}\n    for ((\
+    \ j=$(( i-1 )); j>=0; j-- )); do\n      arr[j]=${arr[$(( $i + 1 ))]}\n    done\n\
+    \    arr[$i]=$tmp\n    tmp=${arr[$i]}\n    if [[ $tmp == $(( tmp | sed -e 's/\\\
+    (.*\\)/\\1/g' -e 's/\\t/-/g') ]]; then\n      min_change=$(( $min_change + 1 ))\n\
+    \    fi\n  done\n  echo -n $min_change", "    local arr=($*)\n\n    # $1: array\
+    \ elements to compare\n    local n=$#\n\n    # $1: minimum number of elements\
+    \ changed\n    local m=0\n\n    for((i=0;i<n-1;++i)); do\n        if(( \"${arr[i]}\"\
+    \ = \"${arr[n-1-i]}\" )); then\n            m=$(( m - 1 ))\n        else\n   \
+    \         break\n        fi\n    done\n\n    echo \"$m\"", "  local array=\"$1\"\
+    \n\n  local min=0\n  local i\n  local j\n  local len\n  local max_i\n  local max_j\n\
+    \n  for i in \"${array[@]}\"; do\n    len=\"${#array[@]}\"\n    if [[ $i -eq $len\
+    \ ]]; then\n      break\n    fi\n  done\n\n  local temp=$len\n  local min_idx\n\
+    \  local min_diff\n  local min_length\n  for j in $(seq $len - 1); do\n    max_i=$((j\
+    \ - 1))\n    max_j=$((len - j))\n    diff=$((max_i - max_j))\n    if [[ diff -eq\
+    \ 0 ]]; then\n      continue\n    fi\n    min_diff=$((diff / 2))\n    temp=$((temp\
+    \ + min_diff))\n    if [[ temp -eq $len ]]; then\n      break\n    fi\n  done\n\
+    \n  min_length=$temp\n  min_idx=$((j - min_length))\n  echo \"$min_length\"",
+  "    local arr=( \"${@}\" )\n    local i j k\n    local min_changed\n    local flag=0\n\
+    \    local count=0\n\n    local max_index=${#arr[@]}\n\n    for ((i=0; i<max_index;\
+    \ i++)); do\n        j=$(( max_index-i-1 ))\n        if [ $i -eq 0 ]; then\n \
+    \           k=$(expr $j + 1 )\n        else\n            k=$(( i - 1 ))\n    \
+    \    fi\n\n        if [ \"${arr[$i]}\" != \"${arr[$k-1]}\" ]; then\n         \
+    \   count=$(( count + 1 ))\n            if [ $count -eq $j ]; then\n         \
+    \       min_changed=$(( min_changed + 1 ))\n            fi\n        fi\n    done\n\
+    \n    return $min_changed", "  local arr=$1\n  local i min max\n  min=max=$(echo\
+    \ $arr | tr -d ' ' | tr ' ' '\\n' | wc -l)\n  for (( i=1; i<max; i++ )); do\n\
+    \    arr[$i]=$(echo $arr | sed -n \"${i}p\")\n    test $arr[${#arr[@]} - 1] ==\
+    \ $arr[$i]\n    if [ $? -ne 0 ]; then\n      min=$(echo $min + 1)\n    fi\n  done\n\
+    \  echo $min", "\tlocal arr=\"$1\"\n\tlocal count=1\n\tlocal max_count=0\n\tlocal\
+    \ smallest_change=0\n\tlocal i\n\t\n\tfor (( i=0; i<${#arr[@]}-1; i++ )); do\n\
+    \t\tlocal val=${arr[$i]}\n\t\tlocal val_reverse=${arr[$(( $i-1 ))]}\n\t\t\n\t\t\
+    (( val_reverse > val )) && count=$(( $count+1 ))\n\t\t(( max_count > count ))\
+    \ && max_count=$count\n\t\t(( count > 0 && count > $smallest_change )) && smallest_change=$count\n\
+    \tdone\n\n\t(( $smallest_change > 0 )) && printf '%s\\n' \"${arr[$smallest_change]}\"",
+  "    arr=$1\n    head -n 1 <<< \"$arr\" > tmp || exit 1\n    head -n -1 <<< \"$arr\"\
+    \ | tail -n 1 > tmp || exit 1\n    awk '{print \"'$( cat tmp | tr '\\n' '-' )\
+    \ '\"}' > tmp || exit 1\n    rm tmp || exit 1\n    echo \"$( cat tmp | wc -l )\"",
+  "  if (( $# != 1 ))\n  then\n    echo \"Usage: smallest_change <list>\"\n    exit\
+    \ 1\n  fi\n\n  local arr=\"$1\"\n  local min=1\n  local c=1\n  local last=0\n\
+    \  while [ $c -lt ${#arr} ]\n  do\n    if [ \"${arr[$c]}\" != \"$last\" ]\n  \
+    \  then\n      last=\"${arr[$c]}\"\n      ((min++))\n    fi\n    ((c++))\n  done\n\
+    \  echo \"$min\"", "    local -r arr=($1)\n    local -i i len min_length\n   \
+    \ len=${#arr[@]}\n    local -r min_length=0\n    declare -A map\n    map=(\n \
+    \       [\"$((len-1))\"]=\"${arr[$((len-1))]}\"\n        [\"$((len-2))\"]=\"${arr[$((len-2))]}\"\
+    \n        [\"$((len-1))\"]=\"${arr[$((len-1))]}\"\n    )\n    for ((i=len-1; i\
+    \ > 0; i--)); do\n        map[\"$((i-1))\"]=\"${arr[$((i-1))]}\"\n    done\n \
+    \   local -r tmp=$arr[len]\n    map[\"$((len))\"]=\"$tmp\"\n    for ((i=1; i <=\
+    \ len; i++ )); do\n        if ! [[ ${!map[$i]} == ${!map[$((i-1))]} ]]; then\n\
+    \            local -r next_arr=(\"${!map[$i]}\")\n            smallest_change\
+    \ \"${next_arr[@]}\"\n        fi\n    done\n    echo \"$min_length\"", "  arr=($(eval\
+    \ echo \"$1\" | tr ' ' '\\n'))\n  echo \"${#arr[@]}\"\n  for i in \"${!arr[@]}\"\
+    ; do\n    arr[i]=$(echo \"${arr[$i]}\" | tr ' ' '\\n')\n    temp=$i\n    count=1\n\
+    \    while (( temp > 0 )) && (( ${arr[$temp]} != ${arr[$temp-1]} ));\n      do\n\
+    \        arr[$temp]=${arr[$temp-1]}\n        let temp=temp-1\n        (( count++\
+    \ ))\n      done\n    arr[$i]=${arr[$i]}\n    let \"i-=count\"\n  done\n  echo\
+    \ \"${arr[@]}\"", "    arr=$1\n    shift\n    min_change=${#arr}\n    for ((i=1;\
+    \ i<${#arr}; i++)); do\n        if [[ ${arr[$i]} == ${arr[$((i-1))] } ]]; then\n\
+    \            ((min_change=((min_change-1)))\n        elif [[ ${arr[$i]} > ${arr[$((i-1))]\
+    \ }]] ; then\n            ((min_change=((min_change+1)))\n        fi\n    done\n\
+    \    echo \"$min_change\"", "    echo \"$1\" | awk '{\n        for(i=NF;i>0;i--){\n\
+    \            for(j=i-1;j>=0;j--){\n                if($j!=tolower($j)){\n    \
+    \                next\n                }\n                else if($j==tolower($j)){\n\
+    \                    if($i==1){\n                        break\n             \
+    \       }\n                    else if($i!=1){\n                        if($i!=$j)\
+    \ {\n                            i=0;\n                            break\n   \
+    \                     }\n                        else{\n                     \
+    \       i=1;\n                        }\n                    }\n             \
+    \   }\n                else{\n                    i=0;\n                    break\n\
+    \                }\n            }\n        }\n        print\n    }'", "    local\
+    \ arr=($@);\n    local i=0;\n    local j=$((${#arr[@]}-1));\n    while (( i <\
+    \ $j )); do\n        if (( arr[i] < arr[j] )); then\n            arr[i]=arr[j];\n\
+    \        else\n            arr[j]=arr[i];\n        fi;\n        (( i=j+1 ));\n\
+    \        (( j-=1 ));\n    done;\n    echo ${#arr[@]};", "  local arr=\"${1}\"\n\
+    \  echo \"${#arr}\"\n  local size=0\n  for num in ${arr} ; do\n    (( size++ ))\n\
+    \  done\n  echo \"$size\"\n  echo \"$size\" | bc -l | sed -e \"s/^[[:digit:]]*//g\"\
+    \ -e \"s/^[[:alpha:]]*//g\"", "    arr=$1\n    arr_reversed=$(echo \"$arr\" |\
+    \ rev | cut -d \" \" -f 1-)\n    len_arr=$(echo \"$arr\" | wc -c)\n    smallest=$len_arr\n\
+    \    for ((i=1; i<$len_arr; i++)); do\n        if [ \"$arr[$i]\" != \"$arr_reversed[$i]\"\
+    \ ]; then\n            smallest=$((smallest-1))\n        fi\n    done\n    echo\
+    \ \"$smallest\"", "  local i ret=0 arr=\"${1}\"\n  echo \"${arr}\"\n  for i in\
+    \ \"${arr[@]}\"; do\n    while [ \"$i\" != \"${arr[@]:$(( i + 1 ))}\" ]; do\n\
+    \      if [ $i -eq 0 ]; then\n        i=$(( i - 1 ))\n      else\n        i=$((\
+    \ i + 1 ))\n      fi\n    done\n    i=$(( i - 1 ))\n  done\n  echo \"$ret\"",
+  "  local arr=$1\n  local temp\n  local num_changes=0\n  # Initialize min and max\
+    \ to -1 and N\n  local min_num=-1\n  local max_num=N\n  # We are only concerned\
+    \ about single digit numbers and 0\n  local min_num=-1\n  local max_num=N\n  #\
+    \ Iterate through the array and increment the count\n  for ((i=0;i<${#arr[@]};i++))\
+    \ ; do\n    if [[ ${arr[i]} == 0 ]]; then\n      num_changes=${#arr[@]-i+1}\n\
+    \      break\n    else\n      temp=${arr[i]}\n      # We only need to change if\
+    \ the current element is the smallest number\n      if [[ ${min_num} == -1 ]];\
+    \ then\n        min_num=${temp}\n      else\n        if [[ ${min_num} -gt ${temp}\
+    \ ]]; then\n          min_num=${temp}\n        fi\n      fi\n      # We only need\
+    \ to change if the current element is the largest number\n      if [[ ${max_num}\
+    \ == -1 ]]; then\n        max_num=${temp}\n      else\n        if [[ ${max_num}\
+    \ -lt ${temp} ]]; then\n          max_num=${temp}\n        fi\n      fi\n    fi\n\
+    \  done\n  if [[ ${min_num} -eq -1 ]]; then\n    num_changes=0\n  else\n    if\
+    \ [[ ${max_num} -eq N ]]; then\n      num_changes=${#arr[@]-i+1}\n    else\n \
+    \     num_changes=${#arr[@]-i+1}\n    fi\n  fi\n  # Print the result\n  echo \"\
+    ${num_changes}\"", "\tlocal arr=$1\n\tlocal result\n\tlocal i\n\tlocal count\n\
+    \tlocal last\n\n\tcount=$((${#arr} - 1))\n\tlast=${arr[$count]}\n\tresult=$count\n\
+    \tfor ((i=1; i<$count; i++)); do\n\t\tresult=$((${result} + 1))\n\t\tcount=$((${count}\
+    \ - 1))\n\t\tif [ \"${arr[$i]}\" == \"${arr[$count]}\" ]; then\n\t\t\tif [ \"\
+    $last\" == \"${arr[$i]}\" ]; then\n\t\t\t\tlast=$((${last} - 1))\n\t\t\tfi\n\t\
+    \t\tresult=$((${result} + 1))\n\t\telse\n\t\t\tlast=$((${last} - 1))\n\t\tfi\n\
+    \tdone\n\n\tif [ \"$last\" == \"\" ]; then\n\t\treturn 0\n\tfi\n\n\techo -n \"\
+    $last\"", "  local arr=\"$1\"\n  local n count\n  n=$( echo \"$arr\" | sort -u\
+    \ )\n  count=$(echo $n | wc -l )\n  if (( $count <= 0 )); then\n    echo \"0\"\
+    \n    return\n  fi\n  arr=$( echo \"$arr\" | sed -e 's/^ *//' -e 's/ *$//' -e\
+    \ 's/ /\\n/g' -e 's/ \\([^ ]\\) \\([^ ]\\) \\(.*\\)/\\1 \\2 \\3/' -e 's/ \\([^\
+    \ ]\\) \\([^ ]\\) \\([^ ]\\) \\(.*\\)/\\1 \\3 \\2 \\4/' )\n  while read -r line;\
+    \ do\n    arr=$( echo \"$arr\" | sed -n -e 's/^\\(.*\\)$/\\1/p' -e 's/^\\(.*\\\
+    ) \\(.*\\)$/\\1 \\2/p' -e \"s/^\\(.*\\) \\(.*\\) \\(.*\\)$/\\1 \\2 \\3/p\" -e\
+    \ \"s/^\\(.*\\) \\(.*\\) \\(.*\\) \\(.*\\)$/\\1 \\3 \\2 \\4/p\" )\n    arr=$(\
+    \ echo \"$arr\" | sed 's/ \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\(.*\\)/\\1 \\3 \\\
+    2 \\4/' )\n    arr=$( echo \"$arr\" | sed 's/ \\([^ ]\\) \\([^ ]\\) \\([^ ]\\\
+    ) \\([^ ]\\) \\(.*\\)/\\1 \\3 \\4 \\2 \\3/' )\n    arr=$( echo \"$arr\" | sed\
+    \ 's/ \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\(.*\\)/\\1 \\3\
+    \ \\4 \\5 \\2 \\3/' )\n    arr=$( echo \"$arr\" | sed 's/ \\([^ ]\\) \\([^ ]\\\
+    ) \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\([^ ]\\) \\(.*\\)/\\1 \\3 \\4 \\5 \\2 \\\
+    4/' )\n  done <<< \"$arr\"\n  arr=$( echo \"$arr\" | sort -u )\n  arr=$( echo\
+    \ \"$arr\" | sed -e 's/^ *//' -e 's/ *$//' )\n  arr=$( echo \"$arr\" | sed 's/\
+    \ \\([^", "  local -a arr=$1 diff\n  local i tmp len\n  for ((len=${#arr[@]}-1;\
+    \ len >= 0; len--)); do\n    # reverse the array\n    read -d '' tmp < <(printf\
+    \ '%s\\n' \"${arr[@]:len}\")\n    # find the difference between new and old arrays\n\
+    \    diff=\n    for (( i=0; i<${#tmp[@]}; i++ )); do\n      [[ \"${tmp[i]}\" !=\
+    \ \"${arr[i]}\" ]] && diff+=\"${i}=\"\n    done\n    [[ -z ${diff} == \"\" ]]\
+    \ && break\n    # remove the difference from the old array\n    for ((i=0; i<${#diff[@]};\
+    \ i++)); do\n      arr=(${arr[@]:0:i} ${arr[@]:i+1})\n    done\n  done\n  echo\
+    \ ${#arr[@]}", "    local numbers=$1\n    local count\n    local min_count\n \
+    \   local i\n\n    IFS=$'\\n'\n    count=0\n    for number in $numbers; do\n \
+    \       if [ \"$number\" -gt \"$numbers\" ]; then\n            count=$((count+1))\n\
+    \        fi\n    done\n\n    min_count=$((count+1))\n\n    for i in $(seq 0 $min_count);\
+    \ do\n        number=$(echo $numbers | sed \"s/^$((i-1)).*/\\1/\")\n        if\
+    \ [ \"$number\" != $numbers ]; then\n            if [ \"$number\" -lt \"$numbers\"\
+    \ ]; then\n                numbers=$number\n            else\n               \
+    \ numbers=$(echo $numbers | sed \"s/^$((i-1)).*/$number/\") \n            fi\n\
+    \        fi\n    done", "    local arr=$1\n    local n=${#arr[@]}\n    local i\
+    \ j\n    local output\n    output=0\n    for ((i=1; i<n; i++)); do\n        for\
+    \ ((j=$((n-i-1)); j>=0; j--)); do\n            ((output++))\n            arr[j]=${arr[j]}${arr[j+1]}\n\
+    \        done\n    done\n    echo $output", "\tlocal arr=( $1 )\n\tarr=( \"${arr[@]:1}\"\
+    \ )\n\tarr=( \"${arr[@]:0:${#arr[@]}-1}\" )\n\tarr=( \"${arr[@]:1:${#arr[@]}-1}\"\
+    \ )\n\tlocal min=0\n\tlocal i=${#arr[@]}\n\twhile [ $i -gt 0 ]; do\n\t\t(( min\
+    \ = min > arr[ $i ] ? min : arr[ $i ] ))\n\t\ti=$(( i - 1 ))\n\tdone\n\techo $min",
+  "    declare -a arr=(\"${@}\")\n    echo \"${#arr[@]}\"", "  local -n arr=$1\n \
+    \ local i j k min max\n  min=max=0\n  for i in \"${arr[@]}\"; do\n    [[ -z \"\
+    $i\" ]] && continue\n    for j in \"${arr[@]:0:$((${#i}-1))}\"; do\n      [[ $j\
+    \ != $i ]] && continue\n      ((min++))\n      arr[$i]=$j\n      arr[$((j+1))]=$i\n\
+    \      ((max++))\n      break\n    done\n  done\n  if [[ $min == $max ]]; then\n\
+    \    echo $min\n  else\n    echo $(($max-$min))\n  fi", "  declare -r arr=$1\n\
+    \  smallest=0\n  for i in $(seq ${#arr[@]}); do\n    declare -i j=$((${#arr[@]}\
+    \ - ${i} - 1))\n    while (( j > 0 && ${arr[j]} != ${arr[j-1]} ));\n    smallest=$((\
+    \ $smallest > ${arr[j]} ? $smallest : ${arr[j]} ))\n    arr[$i]=${arr[$i]}\n \
+    \   (( j-- ))\n  done\n  echo $smallest", "  local arr=\"$1\"\n  local p=\"${arr#*(\
+    \ )\"; local q=\"${p% }\"; local r=\"${q#* }\"\n  local -i j=$((${#arr}-1))\n\n\
+    \  if [[ \"$p\" == \"$r\" && \"$r\" != \"$arr\" ]]; then\n    return 0\n  elif\
+    \ [[ \"$p\" != \"$r\" && \"$r\" == \"$arr\" ]]; then\n    return 0\n  fi\n\n \
+    \ local -i i\n  local s=0 rs=1\n  local len\n  local -a s\n\n  for ((i=0; i<${#arr};\
+    \ i+=1)); do\n    if [[ \"${arr:$j:1}\" == \"$arr\" ]]; then\n      s=0\n    \
+    \  break\n    fi\n    if [[ \"${arr:$i:1}\" == \"$r\" ]]; then\n      s=1\n  \
+    \    break\n    fi\n    s=$((s<<1)|(${arr:$i:1}))\n    rs=$((rs<<1)|(${r}<<1))\n\
+    \  done\n\n  len=$((${#arr} - ${#r} - 1))\n  ((len%2==0)) && len=1\n\n  echo \"\
+    $len\"", "    # Convert the given space-separated list into an array in bash\n\
+    \    local arr=( $1 )\n\n    # Initialise min to an arbitrarily high number\n\
+    \    local min=\"9223372036854775808\"\n\n    # Iterate over the array, comparing\
+    \ each item with the next one\n    for (( i=1; i<${#arr[@]}; i++ )); do\n    \
+    \    for (( j=${#arr[@]-1}; j>0; j-- )); do\n            # Check whether arr[j]\
+    \ <= arr[j-1]\n            if [ ${arr[j]} -gt ${arr[j-1]} ]; then\n          \
+    \      # If so, set min to min(j and j-1)\n                if [[ ${min} > ${j}\
+    \ && ${j} -gt ${j-1} ]]; then\n                    min=${j}\n                fi\n\
+    \            # Otherwise, set min to j\n            elif [[ ${min} -eq ${j} ]];\
+    \ then\n                min=${j}\n            fi\n        done\n    done\n\n \
+    \   echo \"${min}\"", "    local arr=$1\n    local i=${#arr[@]}\n    local j=${#arr[@]}\n\
+    \    local min=${#arr[@]}\n    while ((i > 0)); do\n        if [[ \"${arr[i]}\"\
+    \ == \"${arr[${#arr[@]} - 1]}\" ]]; then\n            (( min-- ))\n        else\n\
+    \            (( arr[i]=${arr[${#arr[@]} - 1]} ))\n        fi\n        (( i-- ))\n\
+    \    done\n    return ${min}", "  local arr=(\"$1\")\n  local result=0\n  local\
+    \ i=0\n  local j=0\n  local k=0\n\n  while [[ $i -lt ${#arr[@]} ]]; do\n    local\
+    \ tmp=${arr[$i]}\n    for ((j=$i; j>0; j--)); do\n      if [[ ${arr[$j-1]} ==\
+    \ ${arr[$j]} * ${tmp} ]]; then\n        k=$j-1\n        break\n      fi\n    done\n\
+    \n    if [[ $k != $i ]]; then\n      if (( result > 0 )); then\n        result=$((result-1))\n\
+    \      else\n        result=$((result+1))\n      fi\n    fi\n\n    i=$((i+1))\n\
+    \  done\n\n  echo \"$result\"", "    local -r arr=$1\n    local -i num_elements\n\
+    \n    # if the array length is odd, return 0\n    num_elements=${#arr[@]}\n  \
+    \  if [ $num_elements -eq 0 ] ; then\n        echo \"0\"\n        return 0\n \
+    \   fi\n\n    # sort the array\n    local -r sorted_arr=( $(sort -g <<<${arr[@]})\
+    \ )\n\n    # if the array is odd, return 0\n    if [ $num_elements -eq 1 ] ; then\n\
+    \        echo \"0\"\n        return 0\n    fi\n\n    # initialize a temp array\
+    \ to store the minimum number of elements to reverse\n    local -r min_elements=$(expr\
+    \ $num_elements - 1)\n\n    # loop through the sorted array, starting at 2nd element\
+    \ and reversing each time\n    for ((i=1; i<$num_elements; i++)); do\n       \
+    \ local element=${sorted_arr[$i]}\n        local elements_to_change=$((num_elements\
+    \ - i))\n        local min_element_to_change=$(expr $min_elements - $elements_to_change)\n\
+    \n        # if the element needs to be changed, increment the min_elements till\
+    \ the element\n        # isn't incremented, then decrement the min_elements and\
+    \ continue\n        while [ $min_element_to_change -gt 0 ]; do\n            local\
+    \ element=${sorted_arr[$((i - 1))]}\n            local elements_to_change=$((num_elements\
+    \ - i - 1))\n            ((min_elements += $elements_to_change))\n           \
+    \ ((min_elements -= $min_element_to_change))\n            ((i--))\n        done\n\
+    \        ((min_elements--))\n    done\n\n    # return minimum elements to change\n\
+    \    echo \"$min_elements\"", "  local arr=( $1 )\n  local len=${#arr[@]}\n  local\
+    \ count=0\n  local first=1\n  local last=${len}\n  local diff\n  while [ $first\
+    \ -lt $last ]; do\n    diff=${len-$last}\n    if [ $diff -eq 0 ]; then\n     \
+    \ first=$(( first + diff ))\n      last=$(( $last - diff ))\n      count=${count}\n\
+    \      continue\n    fi\n    first=$(( $first + 1 ))\n    last=$(( $last - 1 ))\n\
+    \    count=${count}\n  done\n  echo $count", "  local arr=$1\n  local min count\
+    \ start mid\n\n  min=-1\n  count=$(echo ${arr} | wc -w)\n  if [[ $count < 10 ]];\
+    \ then\n    echo \"0\"\n    return\n  fi\n  start=$(echo ${arr} | head -n 1)\n\
+    \  mid=$(echo ${arr} | tail -n 1)\n\n  while [[ $count -gt 0 ]]; do\n    for ((\
+    \ i=0; i < count; i++ )); do\n      if [[ ${arr:i:1} = ${mid:i:1} ]]; then\n \
+    \       arr=${arr:0:i}${mid:1:i}${arr:i+1:i}\n      fi\n    done\n    count=$(echo\
+    \ ${arr} | wc -w)\n    mid=$(echo ${arr} | tail -n 1)\n  done\n  echo $(echo $((\
+    \ ${#arr} - ${#arr} % 2 )) | bc)", "    echo \"$1\" | sed -e 's/^[^0-9]*//' -e\
+    \ 's/ .*$//' -e 's/ /\\n/g' -e 's/^/smallest_change/' -e 's/$/\\n/' | sort -n\
+    \ | head -n 1", "  local i\n  local len=${#1}\n  local p\n  local r\n  local len1\n\
+    \  local len2\n  local len3\n  local len4\n  local len5\n  local len6\n  local\
+    \ len7\n  local len8\n  local len9\n  local len10\n  local len11\n  local len12\n\
+    \  local len13\n  local len14\n  local len15\n  local len16\n  local len17\n \
+    \ local len18\n  local len19\n  local len20\n  local len21\n  local len22\n  local\
+    \ len23\n  local len24\n  local len25\n  local len26\n  local len27\n  local len28\n\
+    \  local len29\n  local len30\n  local len31\n  local len32\n  local len33\n \
+    \ local len34\n  local len35\n  local len36\n  local len37\n  local len38\n  local\
+    \ len39\n  local len40\n  local len41\n  local len42\n  local len43\n  local len44\n\
+    \  local len45\n  local len46\n  local len47\n  local len48\n  local len49\n \
+    \ local len50\n  local len51\n  local len52\n  local len53\n  local len54\n  local\
+    \ len55\n  local len56\n  local len57\n  local len58\n  local len59\n  local len60\n\
+    \  local len61\n  local len62\n  local len63\n  local len64\n  local len65\n \
+    \ local len66\n  local len67\n  local len68\n  local len69\n  local len70\n  local\
+    \ len71\n  local len72\n  local len73\n  local len74\n  local len75\n  local len76\n\
+    \  local len77\n  local len78\n  local len79\n  local len80\n  local len81\n \
+    \ local len82\n  local len83\n  local len84\n  local len85\n  local len86\n  local\
+    \ len87\n  local len88\n  local len89\n  local len90\n  local len91\n  local len92\n\
+    \  local len93\n  local len94\n  local len95\n  local len96\n  local len97\n \
+    \ local len98\n  local len", "  local -n arr=\"$1\"\n\n  if [[ \"$#\" -ne 1 ]];\
+    \ then\n    echo \"ERROR: This script takes exactly one argument: $0\"\n    exit\
+    \ 1\n  fi\n\n  local max_count=0\n  local min_count=0\n  local count=0\n  local\
+    \ i\n  local j\n  local result\n\n  for i in $(seq 0 \"${#arr[@]}\")\n  do\n \
+    \   count=$(echo $i | sed 's/\\([0-9]*\\)/ \\1 /g' | sort -n | uniq)\n    if [[\
+    \ $i -gt $count ]]; then\n      max_count=$i\n    fi\n  done\n\n  for i in $(seq\
+    \ 0 \"${#arr[@]}\")\n  do\n    count=$(echo $i | sed 's/\\([0-9]*\\)/ \\1 /g'\
+    \ | sort -n | uniq)\n    if [[ $i -lt $count ]]; then\n      min_count=$i\n  \
+    \  fi\n  done\n\n  if [[ -z $max_count ]]; then\n    echo \"ERROR: No elements\
+    \ are palindromic in $1\"\n    exit 1\n  fi\n\n  if [[ -z $min_count ]]; then\n\
+    \    echo \"ERROR: No elements are palindromic in $1\"\n    exit 1\n  fi\n\n \
+    \ for i in $(seq 0 \"${#arr[@]}\")\n  do\n    count=$(echo $i | sed 's/\\([0-9]*\\\
+    )/ \\1 /g' | sort -n | uniq)\n    if [[ $i -lt $count ]]; then\n      result=$(echo\
+    \ \"${arr[$i]}\" | sed \"s/\\([0-9]*\\)/$1/g\")\n    fi\n  done\n\n  result=$(echo\
+    \ \"${arr[$min_count]}\" | sed \"s/\\([0-9]*\\)/$1/g\")\n\n  echo \"$result\"",
+  "\tlocal -r arr=\"$1\"\n\tlocal -r n count=0\n\tlocal -r min=1\n\n\techo -n \"$arr\"\
+    \ | while read -r elem; do\n\t\t(( count++ ))\n\t\t(( min++ ))\n\tdone\n\n\techo\
+    \ \"$min\"", "  local arr=$1\n  local length=$((${#arr} / 2))\n  local i=1\n \
+    \ while [[ $i -lt $length ]]; do\n    if [[ ${arr[$i]} != ${arr[$((${#arr} - $i\
+    \ + 1))]} ]]; then\n      local j=$((${#arr} - $i - 1))\n      local tmp=${arr[$i]}\n\
+    \      arr[$i]=${arr[$((${#arr} - $i + 1))]}\n      arr[$j]=${tmp}\n      i=$((i\
+    \ + 1))\n    fi\n  done\n  echo ${#arr}", "    IFS=$'\\n' arr=($1) # read the\
+    \ array in as a space-separated list\n    length=\"${#arr[@]}\" # get the length\
+    \ of this list\n    smallest=0\n    i=0\n    while [ $i -lt $length ]; do\n  \
+    \      j=$((i-1))\n        if [[ $arr[$i] == \"$arr[$j]\" ]]; then\n         \
+    \   smallest=$(($smallest + 1))\n            i=$(($i+1))\n        fi\n       \
+    \ j=$((i-1))\n        if [[ $arr[$j] == \"$arr[$i]\" ]]; then\n            smallest=$(($smallest\
+    \ + 1))\n            i=$(($i+1))\n        fi\n        i=$((i+1))\n    done\n \
+    \   echo \"$smallest\"", "  local arr p\n  arr=$1; shift\n  p=\"$(echo \"$1\"\
+    \ | sed -e 's/ /, /g' -e 's/^/0/' -e 's/$/0/')\" # print 0's so sed can match\
+    \ it\n  echo \"$(echo \"$p\" | sed -e 's/\\(.\\)/\\1/g' -e 's/,$//' -e 's/.//')\"",
+  "  local arr\n  local min_element\n  arr=\"$1\"\n  min_element=$(echo \"$arr\" |\
+    \ tr \" \" \"\\n\" | sort -n | head -1)\n  local count\n  count=0\n  while [ \"\
+    $arr\" != \"$arr\" ] && [ \"$count\" -lt \"$min_element\" ]; do\n    if [ \"$arr\"\
+    \ == \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"\
+    $arr\" ]; then\n      arr=$(($arr+1))\n      count=$((count+1))\n      arr=$(($arr-1))\n\
+    \      count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n \
+    \     arr=$(($arr-1))\n      count=$((count+1))\n    elif [ \"$arr\" == \"$arr\"\
+    \ -a \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"\
+    $arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\"\
+    \ != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" -a \"$arr\" != \"\
+    $arr\" ]; then\n      arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n\
+    \      count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n \
+    \     arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n     \
+    \ count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n\
+    \      count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n \
+    \     arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n     \
+    \ count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n\
+    \      count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n \
+    \     arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n     \
+    \ count=$((count+1))\n      arr=$(($arr-1))\n      count=$((count+1))\n      arr=$(($arr-1))\n\
+    \      count=$((count", "    local arr=$1\n    local n=${#arr[@]}\n    local max\n\
+    \    local min\n    local result=0\n    local p\n    local j\n    local i\n\n\
+    \    # Find the maximum palindrome starting with first element\n    max=${arr[0]}\n\
+    \    for ((j=1; j<n; j++)); do\n        if [ ${arr[j]} -gt ${max} ]; then\n  \
+    \          max=${arr[j]}\n        fi\n    done\n\n    # Find the minimum number\
+    \ of elements needed to make it palindrome\n    for ((j=1; j<n; j++)); do\n  \
+    \      if [ ${arr[j]} == ${max} ]; then\n            min=j\n            break\n\
+    \        fi\n    done\n\n    # Backtrack to find all possible palindromes\n  \
+    \  for ((j=0; j<n; j++)); do\n        if [ ${arr[j]} == ${max} ]; then\n     \
+    \       if ((j==min-1)); then\n                result=1\n                break\n\
+    \            else\n                result=0\n                break\n         \
+    \   fi\n        fi\n        if [ ${arr[j]} -gt ${max} ]; then\n            # Need\
+    \ to change one number\n            p=0\n            i=j\n            while [\
+    \ \"${arr[i]}\" -eq \"${arr[i]}\" ]; do\n                if (( ${i}+1 )); then\n\
+    \                    p=$(( ${p}+1 ))\n                    i=$(( ${i}+1 ))\n  \
+    \              else\n                    i=$(( ${n}-1 ))\n                fi\n\
+    \            done\n            arr[i]=${arr[j]}\n            if (( $(p) < $((\
+    \ ${min}-1 )) )); then\n                result=$(( ${result} + $(p) ))\n     \
+    \       fi\n        fi\n    done\n\n    echo \"$result\"", "  local arr\n  arr=$1\n\
+    \  if (( ${#arr} <= 1 )); then\n    return\n  fi\n  local p\n  local x\n  local\
+    \ n\n  local i\n  local l\n  local i1\n  local l2\n  local j\n  local l3\n  local\
+    \ j2\n  local narr\n  local n\n  local i\n  local l1\n  local l3\n  local j3\n\
+    \  local k\n  local l4\n  local n2\n  local i1\n  local l1\n  local j3\n  local\
+    \ k\n  local l5\n  local j2\n  local n2\n  local i3\n  local l2\n  local k\n \
+    \ local l6\n  local j4\n  local j1\n  local j5\n  local j3\n  local j2\n  local\
+    \ j6\n  local l7\n  local i1\n  local i2\n  local j4\n  local j1\n  local j5\n\
+    \  local j3\n  local j2\n  local i3\n  local l8\n  local i2\n  local j4\n  local\
+    \ j1\n  local j5\n  local j3\n  local j2\n  local i3\n  local l9\n  local i2\n\
+    \  local j4\n  local j1\n  local j5\n  local j3\n  local j2\n  local i3\n  local\
+    \ l10\n  local i4\n  local j5\n  local j6\n  local j7\n  local j8\n  local l11\n\
+    \  local i4\n  local j5\n  local j6\n  local j7\n  local j8\n  local l12\n  local\
+    \ i4\n  local j5\n  local j6\n  local j7\n  local j8\n  local l13\n  local i4\n\
+    \  local j5\n  local j6\n  local j7\n  local j8\n  local l14\n  local i4\n  local\
+    \ j5\n  local j6\n  local j7\n  local j8\n  local l15\n  local i4\n  local j5\n\
+    \  local j6\n  local j7\n  local j8\n  local l16\n  local i4\n  local j5\n  local\
+    \ j6\n", "  local arr=\"${@}\"\n  local palindromic=\n  # The \"read -a arr\"\
+    \ statement is necessary to handle multi-character inputs\n  # in the array properly.\n\
+    \  IFS=' ' read -r -a arr <<< \"${arr[@]}\"\n  # If the input array contains less\
+    \ than two elements, return 0\n  [ ${#arr[@]} -le 2 ] && return 0\n  # Loop through\
+    \ arr from end to beginning in descending order.\n  for (( i = ${#arr[@]}; i >=\
+    \ 0; i-- )); do\n    if [[ \"${arr[i]}\" == \"${arr[i]}\" ]]; then\n      # If\
+    \ the current element is equal to the element it precedes, decrement the\n   \
+    \   # counter by one. If the counter becomes zero after decrementing, the\n  \
+    \    # current element is the only element to change. So, replace the element\n\
+    \      # with the counter and break out of the loop.\n      if (( i == 0 )); then\n\
+    \        (( palindromic-- ))\n        break\n      fi\n    fi\n  done\n  # If\
+    \ palindromic is non-zero, return the decremented value of palindromic. Otherwise,\n\
+    \  # return 0.\n  return $palindromic || 0", "    local numbers=$1\n    local\
+    \ smallest_length=$2\n    local temp\n    local output\n    local temp_length\n\
+    \    local index\n\n    for index in ${#numbers}; do\n        temp_length=$(echo\
+    \ ${numbers[$index]} | wc -w)\n        smallest_length=$(echo \"$smallest_length\"\
+    \ < \"$temp_length\")\n        if [[ $smallest_length == 0 ]]; then\n        \
+    \    smallest_length=$temp_length\n        fi\n    done", "  local arr=($1)\n\
+    \  local i j=0\n  local count=0\n  for ((i=0; i<${#arr[@]}; i++)) ; do\n    local\
+    \ temp\n    temp=\"${arr[i]}\"\n    while [ \"$temp\" != \"${arr[$(($j+1))]}\"\
+    \ ] ; do\n      if [[ ${#arr[@]} -eq 1 ]] ; then\n        arr[0]=\"${arr[0]}\"\
+    \n        break\n      fi\n      arr[$((j+1))]=\"${arr[$((j+1))]}\"\n      j=$((j+1))\n\
+    \    done\n    if [[ \"${arr[i]}\" == \"${arr[$((j-1))]}\" ]] ; then\n      count=$((count+1))\n\
+    \    fi\n  done\n  echo \"${count}\"", "    local arr=$1\n    local min=$2\n \
+    \   local shift\n    local len\n    local tmp\n    local i\n    shift\n    for\
+    \ ((i=${#arr[@]}-1;i>=0;i--)); do\n        shift\n        len=$((${#arr[@]}/2))\n\
+    \        ((len>min)) && shift\n        if ((len==min)); then\n            shift\n\
+    \        else\n            shift\n            shift\n            ((min+=len))\
+    \ && shift\n        fi\n    done\n    ((${#arr[@]}>min)) && shift\n    return\
+    \ $min", "    local arr i\n    IFS=' ' read -r -a arr <<<\"$1\"\n    local len\n\
+    \    len=${#arr[@]}\n    local i\n    for (( i = 0; i < len-1; i++ )); do\n  \
+    \      arr[i]=$((arr[i]+arr[i+1]))\n    done\n    arr[$((len-1))]=$((arr[$((len-1))]-arr[$((len-2))]))\n\
+    \    echo \"${arr[*]}\"", "    local arr len $1 i tmp result\n    IFS=$'\\n' arr=$1\n\
+    \    len=$(expr ${#arr} - 1)\n    for ((i=1; i<len; i++)); do\n        # Check\
+    \ if the current element is equal to its reverse\n        tmp=${arr[$i]}\n   \
+    \     tmp=${tmp#0}\n        if [ \"$tmp\" != \"${arr[$((len-i))]}\" ]; then\n\
+    \            break\n        fi\n    done\n    if [ $i -eq $((len-2)) ]; then\n\
+    \        result=0\n    else\n        result=$((len-i))\n    fi\n    echo \"$result\"",
+  "  local arr=$1\n  if ! arr=(\"$arr\"); then\n    echo \"$arr is not a space-separated\
+    \ list\"\n    return 1\n  fi\n\n  # We always need to check from the end (because\
+    \ we are always adding to\n  # arr and we are always removing from arr).\n  local\
+    \ palindromic\n  for idx in ${#arr[@]}; do\n    palindromic=\"$(smallest_change\
+    \ \"${arr[@]:$(( idx-1 )):$(( idx-1 ))}\")\"\n    if [ \"${palindromic}\" -gt\
+    \ \"$idx\" ]; then break; fi\n  done\n\n  echo -n \"$(pwd)/$1\"\n  local ret=1\n\
+    \  echo \"$(pwd)/$1\" >> \"$1\"\n  if [ \"${palindromic}\" -gt \"${#arr[@]}\"\
+    \ ]; then\n    ret=0\n  fi\n  echo \"$ret\"", "\tlocal arr=( \"${@}\" )\n\n\t\
+    # We need a copy of this array to work with in case arr is changed by another\n\
+    \t# function call\n\tarr=( \"${arr[@]}\" )\n\n\t# Iterate over the array backwards\n\
+    \tfor i in ${#arr[@]}; do\n\t\tlocal first=\"${arr[$(( ${#arr[@]} - 1 - i ))]}\"\
+    \n\n\t\tif [[ ${first} == ${first}${first} ]]; then\n\t\t\t# We found a palindrome.\
+    \ Reverse the entire array (so it is read\n\t\t\t# forwards)\n\t\t\tarr=( \"${arr[@]}\"\
+    \ )\n\n\t\t\t# Then find the minimum number of elements needed to\n\t\t\t# make\
+    \ the array palindromic\n\t\t\tlocal j=$(( $i + 1 ))\n\n\t\t\tif [[ -z ${arr[$i]}\
+    \ ]]; then\n\t\t\t\t# No more elements need changing - return 0\n\t\t\t\treturn\
+    \ 0\n\t\t\telse\n\t\t\t\t# Return number of elements needed to change array\n\t\
+    \t\t\treturn $(($j - $i))\n\t\t\tfi\n\t\tfi\n\tdone", "    arr=( $1 )\n    arr_size=$#\n\
+    \    smallest=0\n    for (( i=0; i < arr_size; i++ )); do\n        smallest=$((\
+    \ $( expr $smallest + $( expr $arr[ $i ] ) ) \\\n                         > $(\
+    \ expr $( expr $arr[ $(( $i + 1 )) ] ) \\\n                            > $( expr\
+    \ $( expr $arr[ $(( $i - 1 )) ] ) ) \\\n                         ? $i + 1 : $smallest\
+    \ ))\n    done\n    printf \"%s\" \"$smallest\"", "  # This doesn't use arr, so\
+    \ we can't save memory here\n  read -r arr <<< \"$1\"\n  local arr_size\n  arr_size=\"\
+    ${#arr}\"\n  if (( arr_size == 0 )); then\n    return 0\n  fi\n\n  local min_change\n\
+    \  min_change=0\n  for (( i=0; i < arr_size; i++ )); do\n    local tmp_i\n   \
+    \ tmp_i=$(( arr_size - i - 1 ))\n    if [[ \"${arr[$tmp_i]}\" != \"${arr[$i]}\"\
+    \ ]]; then\n      local j\n      for (( j=0; j < i; j++ )); do\n        local\
+    \ tmp_j\n        tmp_j=$(( i - j - 1 ))\n        if [[ \"${arr[$tmp_j]}\" != \"\
+    ${arr[$j]}\" ]]; then\n          min_change=$(( min_change + 1 ))\n          break\n\
+    \        fi\n      done\n    fi\n  done\n\n  return $min_change", "    declare\
+    \ -a arr=$1\n    if [ ${#arr[@]} -eq 0 ]; then\n        echo \"0\"\n        return\
+    \ 0\n    fi\n\n    local tmp=$(( ${#arr[@]} - 1 ))\n    local tmp2=$(( ${#arr[@]}\
+    \ - 2 ))\n    local min=${#arr[@]}\n\n    while [[ $min -gt 0 ]]; do\n       \
+    \ local i\n        local j\n        for i in $(seq 0 $(( ${#arr[@]} - 1 ))); do\n\
+    \            if [[ ${arr[$i]} != ${arr[$i + $tmp]} ]]; then\n                break\n\
+    \            fi\n        done\n        j=$(( ${#arr[@]} - 1 ))\n        for j\
+    \ in $(seq 0 $(( ${#arr[@]} - 1 ))); do\n            if [[ ${arr[$j]} != ${arr[$j\
+    \ + $tmp2]} ]]; then\n                break\n            fi\n        done\n  \
+    \      if [[ $i -eq $j ]]; then\n            if [[ $tmp -gt $tmp2 ]]; then\n \
+    \               tmp=$(( ${#arr[@]} - 1 ))\n            else\n                tmp2=$((\
+    \ ${#arr[@]} - 1 ))\n            fi\n        else\n            tmp=$(( ${#arr[@]}\
+    \ - 1 ))\n            tmp2=$(( ${#arr[@]} - 1 ))\n        fi\n        if [[ $i\
+    \ -gt $j ]]; then\n            min=$(($min - 1))\n        fi\n    done\n    echo\
+    \ \"$min\"", "  arr=($1)\n  len=${#arr[@]}\n  res=$(smallest_change_n \"$len\"\
+    )\n  if [[ $res == 0 ]]; then\n    echo \"0\"\n  else\n    echo \"$res\"\n  fi",
+  "    IFS=' ' read -a arr <<< \"$1\"\n\n    len=${#arr[@]}\n    local len2=${len}\n\
+    \    local start=$((len2/2))\n    local end=$((len/2))\n    local changes=0\n\n\
+    \    while ((start > 0)); do\n        if [[ $arr[$start] == $arr[$end] ]]; then\n\
+    \            ((start--))\n            ((end--))\n            ((changes++))\n \
+    \       else\n            ((start--))\n        fi\n    done\n\n    ((end++))\n\
+    \    while ((start < len)); do\n        if [[ $arr[$start] != $arr[$end] ]]; then\n\
+    \            ((end++))\n        else\n            ((start++))\n        fi\n  \
+    \  done\n\n    echo \"$changes\"", "    arr=$1\n    shift 1\n    smallest=0\n\
+    \    for el in $arr; do\n        smallest=$(($smallest + $el))\n    done\n   \
+    \ smallest=$(($smallest + 1))\n    echo \"$smallest\"", "\tlocal arr=\"$1\"\n\t\
+    local p=\"$(echo \"$arr\" | rev | cut -d ' ' -f 1 | rev)\"\n\techo \"$p\" | wc\
+    \ -c", "    local -n arr=$1\n    local min_len=0\n    local cur_val=${arr[0]}\n\
+    \    local cur_len=${#cur_val}\n\n    for val in ${arr[@]:1}; do\n        if [[\
+    \ $cur_len == $cur_val ]]; then\n            cur_len=$(( $cur_len + 1 ))\n   \
+    \     elif [ $cur_len > $min_len ]; then\n            min_len=$cur_len\n     \
+    \   fi\n        cur_val=$val\n        cur_len=${#val}\n    done\n    echo \"$min_len\"",
+  "    local i j\n    local min=${1:-1000}\n    local output=0\n    for (( i=0; i<${#arr[@]};\
+    \ i++ )); do\n        j=$(( ${#arr[@]} - i ))\n        local tmp=${arr[$(( ${#arr[@]}\
+    \ - $j ))]}\n        while (( ${#tmp} > 0 )); do\n            tmp=${tmp/10}\n\
+    \            let output++\n        done\n        arr[$i]=${arr[$(( ${#arr[@]}\
+    \ - $j ))]}\n        arr[$i]=$tmp\n    done\n    if [[ $output -gt $min ]]; then\n\
+    \        min=$output\n    fi\n    echo $min", "    local i diff arr\n    arr=(\
+    \ $@ )\n    diff=$(expr ${#arr[@]} / 2)\n    smallest=0\n    for ((i=${#arr[@]}-1;\
+    \ i>=$diff ; i--)); do\n        if [ \"$arr[$i]\" == \"$arr[$((i-1))\" ]; then\n\
+    \            arr[$i]=0\n            smallest=$(( i - 1 ))\n        fi\n    done\n\
+    \    echo \"$smallest\"", "  local arr\n  local i\n  arr=$1\n  shift\n  for i\
+    \ in $(seq $((${#arr}-1))); do\n    local tmp\n    tmp=$((${arr[$i]}+${arr[$((${#arr}-i-1))]}))\n\
+    \    arr[$i]=$tmp\n  done\n  echo $((${arr[@]}))", "    local arr=$1\n    local\
+    \ len=${#arr[@]}\n    local i\n    for (( i=1; i<len; i++ )); do\n        if [\
+    \ $(( ${arr[$i]}-1 )) -eq 0 ]; then\n            arr[$i]=${arr[$i-1]}\n      \
+    \      arr[$i-1]=-1\n        fi\n        if [ $(( ${arr[$i]} )) -eq ${arr[$i-1]}\
+    \ ]; then\n            arr[$i]=${arr[$i-1]}\n            arr[$i-1]=-1\n      \
+    \  fi\n    done\n    echo $(( ${arr[0]} + 1 ))", "    # Initialize result\n  \
+    \  result=$1\n    # Check for single element\n    if [[ ${#result} -eq 1 ]]; then\n\
+    \        # Return result\n        return result\n    fi\n    # Initialize count\n\
+    \    count=0\n    # Loop through each element of array\n    for element in $@;\
+    \ do\n        # Increment count for palindromic array\n        count=$((count+1))\n\
+    \        # Compare the element to itself reversed\n        if [ \"$element\" ==\
+    \ \"$element\" * \"$element\" ]; then\n            # Update result\n         \
+    \   result=$((result-1))\n        fi\n    done\n    # Return result\n    return\
+    \ $result", "  local arr=$1\n  local min_change=0\n  local start=0\n  local end=0\n\
+    \  while [ \"$start\" -lt \"${#arr}\" ]; do\n    local end=$(( ${end} + 1 ))\n\
+    \    local tmp_start=$(( $start + 1 ))\n    local tmp_end=$(( $end + 1 ))\n  \
+    \  while [ \"$tmp_start\" -lt \"$tmp_end\" ]; do\n      if [ ${arr:$tmp_start}:${arr:$tmp_end}\
+    \ != ${arr:$start}:${arr:$end} ]; then\n        local tmp_change=( ${arr:$tmp_start}:${arr:$tmp_end}\
+    \ )\n        if [ ${tmp_change[1]} -gt $min_change ]; then\n          min_change=${tmp_change[1]}\n\
+    \        fi\n      fi\n      local tmp_start=$(( $tmp_start + 1 ))\n      local\
+    \ tmp_end=$(( $tmp_end + 1 ))\n    done\n    local start=$(( $start + 1 ))\n \
+    \ done\n  echo \"$min_change\"", "    local arr=\"$1\"\n    local i=0 j=0 result=0\
+    \ prev=0 prev_value=0\n    until [[ $i -eq $((${#arr[@]} - 1)) ]]; do\n      \
+    \  result=$((result+${arr[i]}))\n        i=$(($i+1))\n        prev=$((${arr[i]}-${prev}))\n\
+    \        prev_value=$((${arr[i]}+${prev_value}))\n        if [[ ${#arr[@]} -gt\
+    \ $((${#arr[@]}/2)) ]]; then\n            ((j=($j+1)%${#arr[@]}))\n        fi\n\
+    \    done\n    echo \"$result\"", "    local arr=$1\n    arr=${arr// /}\n    arr=${arr//\
+    \ /}\n    local i=1\n    while [ \"$i\" -lt \"${#arr}\" ]; do\n        if [ ${arr:$i:1}\
+    \ = \"$arr\" ]; then\n            arr=${arr:0:$i}\n        else\n            arr=\"\
+    ${arr:0:$i} ${arr:$i:1}\"\n        fi\n        let i++\n    done\n    echo \"\
+    $i\"", "  if [[ \"$1\" =~ \"^[0-9]+$\" ]] 2>/dev/null; then\n    local arr=(\"\
+    ${1//[[:space:]]/}\")\n    local min=0\n    while [[ ${#arr[@]} -gt ${#min} ]]\
+    \ ; do\n      local max=0\n      local mid # middle index\n      for (( mid=${#arr[@]}-1;\
+    \ mid >= 0; mid--)) ; do\n        if [[ ${arr[$mid]} -gt ${arr[$mid+1]} ]] ; then\n\
+    \          max=$((max+1))\n          arr[$mid+1]=\"${arr[$mid]}\"\n        else\n\
+    \          arr[$mid]=\"${arr[$mid+1]}\"\n        fi\n      done\n      min=$((min+max))\n\
+    \    done\n    echo \"$min\"\n  else\n    echo \"0\"\n  fi", "    local arr=\"\
+    $1\"\n    local min_count=\"${arr#* }\"\n    arr=${arr% *}\n    arr=${arr#* }\n\
+    \    while [ -n \"$arr\" ] ; do\n        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\"\
+    \ != \"$arr\" -a \"$arr\" != \"$arr\" ]; then\n            arr=\"-$arr\"\n   \
+    \     fi\n        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"\
+    $arr\" != \"$arr\" ]; then\n            arr=\"+$arr\"\n        fi\n        if\
+    \ [ \"$arr\" != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" ];\
+    \ then\n            arr=\"*$arr\"\n        fi\n        arr=$(echo \"$arr\" | sed\
+    \ 's/ //g')\n        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a\
+    \ \"$arr\" != \"$arr\" ]; then\n            arr=\"-$arr\"\n        fi\n      \
+    \  arr=$(echo \"$arr\" | sed 's/ //g')\n        if [ \"$arr\" != \"$arr\" ] &&\
+    \ [ \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" ]; then\n            arr=\"+$arr\"\
+    \n        fi\n        arr=$(echo \"$arr\" | sed 's/ //g')\n        if [ \"$arr\"\
+    \ != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" ]; then\n  \
+    \          arr=\"*$arr\"\n        fi\n        arr=$(echo \"$arr\" | sed 's/ //g')\n\
+    \        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"$arr\" !=\
+    \ \"$arr\" ]; then\n            arr=\"-$arr\"\n        fi\n        arr=$(echo\
+    \ \"$arr\" | sed 's/ //g')\n        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\"\
+    \ != \"$arr\" -a \"$arr\" != \"$arr\" ]; then\n            arr=\"+$arr\"\n   \
+    \     fi\n        arr=$(echo \"$arr\" | sed 's/ //g')\n        if [ \"$arr\" !=\
+    \ \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"$arr\" != \"$arr\" ]; then\n     \
+    \       arr=\"*$arr\"\n        fi\n        arr=$(echo \"$arr\" | sed 's/ //g')\n\
+    \        if [ \"$arr\" != \"$arr\" ] && [ \"$arr\" != \"$arr\" -a \"$arr\" !=\
+    \ \"$arr\" ]; then\n            arr=\"-$arr", "    local arr=($(echo \"$1\" |\
+    \ tr \" \" \"\\n\"))\n    local i=${#arr[@]}\n    local j=$(( ${#arr[@]} - 1 ))\n\
+    \    local len\n    local change\n    local min\n\n    while [ $i -gt 0 ]; do\n\
+    \        len=${#arr[$i]}\n        if [ $len -gt $j ]; then\n            len=$j\n\
+    \        fi\n        change=0\n        min=$(( ${#arr[@]} - $j + 1 ))\n      \
+    \  while [ $change -lt $min ]; do\n            if [ $len -gt 0 ]; then\n     \
+    \           arr[$i]=${arr[$len]}\n                len=$len-1\n            else\n\
+    \                arr[$i]=${arr[$len]}\n                break\n            fi\n\
+    \            change=$change+1\n        done\n        i=$(( ${#arr[@]} - 1 ))\n\
+    \    done\n    echo ${arr[@]}", "  local arr=\"$1\"\n  local i\n  local j\n  local\
+    \ min_change\n  local max_change\n\n  # Find the minimum number of changes in\
+    \ order to make the list palindromic\n  min_change=1\n  max_change=$(echo \"$arr\"\
+    \ | wc -w)\n  while [[ $min_change -lt $max_change ]]; do\n    i=$((max_change-min_change+1))\n\
+    \    j=$((max_change-i+1))\n    [[ \"${arr: -$i: 1}\" =~ ^([0-9]+[ *])$ ]] ||\n\
+    \      { echo \"ERROR: Array must be composed of numbers, not spaces\" >&2; return\
+    \ 1; }\n    if [[ $j -gt 0 ]]; then\n      if [[ ${arr: -$i: 1} = ${arr: -1: $j}\
+    \ ]]; then\n        arr=${arr:1:$i} ${arr:$i:$j} ${arr:$((max_change-i)) ${arr:$((max_change-j))}\n\
+    \      else\n        arr=${arr:1:$i} ${arr:$i:$j} ${arr:$((max_change-i)) ${arr:$((max_change-j))}\
+    \ ${arr:$((max_change-j-1))}\n      fi\n    else\n      if [[ ${arr: -$i: 1} =\
+    \ ${arr: -1} ]]; then\n        arr=${arr:0:$i} ${arr:$i:$j} ${arr:$((max_change-i))\
+    \ ${arr:$((max_change-j))}\n      else\n        arr=${arr:0:$i} ${arr:$i:$j} ${arr:$((max_change-i))\
+    \ ${arr:$((max_change-j))} ${arr:$((max_change-j-1))}\n      fi\n    fi\n    let\
+    \ \"min_change+=$i\"\n    let \"max_change-=$j\"\n  done\n  return $min_change",
+  "  local arr=( \"${@}\" )\n  local len=\"${#arr[@]}\"\n  local count=1\n  local\
+    \ start\n  local end\n  local result\n\n  start=$(expr $len - 1)\n  end=0\n  while\
+    \ [ \"$start\" != \"$end\" ] && [ \"$start\" != 0 ]; do\n    count=$(( count *\
+    \ $( bc <<< \"10#$len\" / $start ) ))\n    len=$(( len - 1 ))\n    start=$(( end\
+    \ - 1 ))\n  end=$(( start + 1 ))\n  result=\"$count\"\n  if [ \"$start\" != 0\
+    \ ]; then\n    result=\"$result\"\n  fi\n  if [ \"$end\" != \"$len\" ]; then\n\
+    \    result=\"$result\"\n  fi\n\n  echo \"$result\"", "  arr=$(echo \"${1}\" |\
+    \ tr ' ' ' ')\n  result=0\n  if [[ \"${arr}\" =~ ^(-?)([0-9]+)$ ]]; then\n   \
+    \ arr=${BASH_REMATCH[2]}\n  fi\n  arr=${arr//[!0-9]/}\n  arr=${arr//[^0-9]/}\n\
+    \  arr=${arr//^-/}\n  arr=${arr//-$arr/}\n  for (( i=${#arr}-1; i>=0; i-- ));\
+    \ do\n    if [[ \"${arr}\" = \"${arr:i:1}\" ]]; then\n      arr=${arr:0:i}\n \
+    \     if [[ \"${arr}\" = \"${arr:0:i}\" ]]; then\n        result=$i\n        break\n\
+    \      fi\n    fi\n  done\n  echo \"${result}\"", "  local arr=$1\n  local count=0\n\
+    \  local min=0\n  local max=0\n  local i\n  local j\n  local maxpos\n  local maxneg\n\
+    \  local neg\n  local pos\n  local negpos\n  local imax\n  local jmax\n  local\
+    \ pos2\n  local neg2\n  local negneg\n  local negpos2\n  local posneg\n  local\
+    \ p\n  local pos\n  local negpos\n  local negneg2\n  local negnegpos\n  local\
+    \ negpos2\n  local negnegpos\n  local negnegnegpos\n  local negnegnegnegpos\n\
+    \  local negnegnegnegnegpos\n  local negnegnegnegnegnegpos\n  local negnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local\
+    \ negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n  local\
+    \ negnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegnegpos\n\
+    \  local negnegnegnegnegnegnegnegnegnegnegnegnegneg", "  local arr=$1\n\n  local\
+    \ min_change\n  local change_count\n  local change\n\n  for change in ${arr[*]};\
+    \ do\n    change_count=0\n    while [ $change -gt ${#arr[@]} ]; do\n      arr[$change]=$change\n\
+    \      change_count=$((change_count + 1))\n      change=${arr[change_count - 1]}\n\
+    \    done\n\n    if [ ${change_count} == ${#arr[@]} ] ; then\n      min_change=$change\n\
+    \      break\n    fi\n  done\n\n  echo $min_change", "    arr=($1)\n    length=${#arr[@]}\n\
+    \    for ((i=0; i<length; i++));\n    do\n        palindromic_arr=()\n       \
+    \ curr_num=${arr[i]}\n        while [[ $i -eq 0 ]]; do\n            palindromic_arr+=(\"\
+    $curr_num\")\n            curr_num=$(echo \"$curr_num $curr_num\" | bc)\n    \
+    \        ((i--))\n        done\n        if [[ ${#palindromic_arr[@]} -gt 1 ]];\
+    \ then\n            smallest_change_palindromic \"$palindromic_arr\"\n       \
+    \ fi\n    done", "    local array=$1\n    local length=\"${#array}\"\n    local\
+    \ current\n    local previous=$(expr $length + 1 \\* $length)\n    local changed\n\
+    \    local min\n\n    if [[ $length -lt 2 ]]; then\n        return 0\n    fi\n\
+    \n    for (( min = -$previous; min <= $previous; min++ )); do\n        current=0\n\
+    \        changed=0\n\n        previous=0\n        for (( i=0; i<length; i++ ));\
+    \ do\n            if [ $i -eq $min ]; then\n                continue\n       \
+    \     fi\n            current=$(( current + ${array[$i]} ))\n            if [\
+    \ $current -gt $previous ]; then\n                if [ $changed -eq 0 ]; then\n\
+    \                    previous=$(expr $length + 1 \\* $length)\n              \
+    \      changed=1\n                fi\n                changed=0\n            fi\n\
+    \        done\n        if [ $changed -eq 1 ]; then\n            if [ $current\
+    \ -eq $previous ]; then\n                min=$min\n            fi\n        fi\n\
+    \    done\n\n    echo ${min}", "    local arr=( \"$@\" )\n    local len=${#arr[@]}\n\
+    \    local i\n    local j\n    local min\n    local res=0\n    local c\n    while\
+    \ [ $res -lt 1 ]; do\n        min=1\n        for (( i=1; i<len; i++ )); do\n \
+    \           j=$(( len - i - 1 ))\n            if [ ${arr[$i]} -gt ${arr[$j]} ];\
+    \ then\n                ((min++))\n            fi\n        done\n        if [\
+    \ $min -gt $res ]; then\n            res=$min\n        fi\n    done\n    echo\
+    \ \"$res\"", "  local arr=(\"$@\")\n  local p1=${arr[0]}\n  local p2=${arr[1]}\n\
+    \  local i=2\n  local j=${#arr[@]}\n\n  while (( i <= j )); do\n    if (( p1 !=\
+    \ p2 )); then\n      p1=$p2\n      p1=$p1\" \"\n    fi\n    p2=${arr[$i]}\n  \
+    \  (( i += 1 ))\n  done\n  echo $(expr ${#arr[@]} - 1)", "   local arr=( $1 )\n\
+    \   if (( ${#arr[@]} == 1 )); then\n      echo \"0\"\n   else\n      local p=$((\
+    \ ${#arr[@]} - 1 ))\n      local j=0\n      local k=0\n      local sum=0\n   \
+    \   while (( j < p )); do\n         if (( ${arr[j]} == ${arr[(k)]} )); then\n\
+    \            sum=$(( sum + 1 ))\n         else\n            sum=$(( sum - 1 ))\n\
+    \         fi\n         k=(( k + 1 ))\n         j=$(( j + 1 ))\n      done\n  \
+    \    echo \"$sum\"\n   fi", "    local -n arr=$1\n    local n min_change\n   \
+    \ local i i2 j2 min\n    for i in $(seq ${#arr[@]})\n    do\n        # Find out\
+    \ how many elements need to be changed to make the\n        # array palindromic.\n\
+    \        local j=0\n        n=0\n        while [ $((i+j)) -lt ${#arr[@]} ]\n \
+    \       do\n            local j2\n            while [ $((j2+1) -lt ${#arr[@]}\
+    \ ) ]\n            do\n                if [ $j2 -eq ${#arr[@]} ]\n           \
+    \     then\n                    j2=0\n                else\n                 \
+    \   j2+=1\n                fi\n            done\n            if [ $i -eq ${#arr[@]}\
+    \ ]\n            then\n                if [ $j2 -eq ${#arr[@]} ]\n           \
+    \     then\n                    ((j2=1))\n                else\n             \
+    \       ((j2+=1))\n                fi\n            fi\n            ((j+=j2))\n\
+    \        done\n        ((n-=j))\n\n        # Do the actual work\n        min_change=0\n\
+    \        ((min=(${#arr[@]}+${n})/2))\n        if [ $min -gt 0 ]\n        then\n\
+    \            while [ $((n-=min)) -ne 0 ]\n            do\n                arr[$i]=${arr[$((i-min+1))]}\n\
+    \            done\n            ((min=(${#arr[@]}+${n})/2))\n            if [ $min\
+    \ -gt 0 ]\n            then\n                while [ $((min-=1) -ne 0 ]\n    \
+    \            do\n                    arr[$i]=${arr[$((i-min+1))]}\n          \
+    \      done\n            fi\n        fi\n    done\n    echo \"${arr[@]}\"", " \
+    \ local arr=($1);\n  local min_change=${arr[0]};\n  local curr_element=${arr[1]};\n\
+    \  local last_element=${arr[2]};\n  for (( i = 3; i < ${#arr[@]}; i++ )); do\n\
+    \    local temp=${arr[i]};\n    arr[i]=${last_element};\n    last_element=${temp};\n\
+    \    curr_element=${arr[i]};\n    arr[i]=${curr_element};\n  done\n  if [[ ${arr[@]}\
+    \ != *\"1 2\"* ]]; then\n    echo \"Not a palindromic!\";\n  else\n    echo \"\
+    ${min_change}\";\n  fi", "    local input_str=\"$1\" smallest_change\n\n    smallest_change=0\
+    \ \n    read -r -a arr <<<\"$input_str\" arr\n\n    for i in \"${arr[@]}\"; do\n\
+    \        if [[ \"$i\" -eq \"${arr[$((${#arr[@]}-1))]}\" ]] ; then\n          \
+    \  smallest_change=$((smallest_change+1))\n        fi\n    done\n\n    echo \"\
+    $smallest_change\"", "    declare -a arr=$1\n    smallest=0\n    smallestlen=${#arr[@]}\n\
+    \    for i in \"${!arr[@]}\"; do\n        diff <(echo \"${arr[$i]}\") <(echo \"\
+    ${arr[$((${i}-1))]}\")\n        if [ $? -ne 0 ]; then\n            ((smallestlen=$((smallestlen+1)))\n\
+    \            smallest=${i}\n        fi\n    done\n    echo \"${smallestlen}\"",
+  "    local arr\n    read -a arr <<< \"$1\"\n\n    # Find the first and last element\n\
+    \    local first\n    local last\n\n    first=${arr[0]}\n    last=${arr[-1]}\n\
+    \n    # If there is a palindromic subarray, then return\n    if [[ $first == $last\
+    \ ]]; then\n        return 0\n    fi\n\n    # Otherwise find the min number of\
+    \ changes in arr needed to make it a palindromic\n    local min_changes=0\n  \
+    \  local arr2\n    arr2=($arr)\n\n    # First loop: count how many changes we\
+    \ need to make arr a palindromic\n    while [[ $arr2[${#arr2[@]}-1] != $first\
+    \ ]]; do\n        (( min_changes + 1 ))\n        arr2[${#arr2[@]}-1]=$first\n\
+    \    done\n\n    # Second loop: count how many changes we need to make arr2 a\
+    \ palindromic\n    while [[ $arr2[${#arr2[@]}-2] != $last ]]; do\n        arr2[${#arr2[@]}-2]=$last\n\
+    \        (( min_changes + 1 ))\n    done\n\n    # Third loop: count how many changes\
+    \ we need to make arr2 a palindromic\n    while [[ $arr2[0] != $first ]]; do\n\
+    \        arr2[0]=$first\n        (( min_changes + 1 ))\n    done\n\n    # Fourth\
+    \ loop: count how many changes we need to make arr2 a palindromic\n    while [[\
+    \ $arr2[-1] != $last ]]; do\n        arr2[-1]=$last\n        (( min_changes +\
+    \ 1 ))\n    done\n\n    echo \"$min_changes\"", "  local -n arr=$1\n  # $2 may\
+    \ be unset\n  [[ ! -n $2 ]] && return 0\n  local -i min=$2\n  while (( ${#arr[@]}\
+    \ > 0 )); do\n    local -i num=${arr[$((${#arr[@]}-1))]}\n    arr=${arr[@]:1:$((${#arr[@]}-1)):1}\n\
+    \    local -i p=0\n    local -i c=0\n    while (( ${#arr[@]} > 0 )); do\n    \
+    \  if [[ $((c % 2)) == 0 ]]; then\n        if [[ \"${arr[$c]}\" == \"${arr[$((${#arr[@]}-1))]}\"\
+    \ ]]; then\n          p=1\n          c=$((c+1))\n        else\n          arr[$c]=\"\
+    ${arr[$((${#arr[@]}-1))]}\"\n          c=$((c+1))\n        fi\n      else\n  \
+    \      if [[ \"${arr[$((c-1))]}\" == \"${arr[$c]}\" ]]; then\n          p=1\n\
+    \          c=$((c-1))\n        else\n          arr[$((c-1))]=\"${arr[$c]}\"\n\
+    \          c=$((c-1))\n        fi\n      fi\n    done\n    if (( p )); then\n\
+    \      (( min = min + 1))\n    fi\n  done\n  echo $min", "  local arr=\"$1\"\n\
+    \  # The answer is 1 because we only need one change to get it all palindromic\n\
+    \  local answer\n  if [[ \"$arr\" =~ ([0-9]*) ]]; then\n    answer=\"${BASH_REMATCH[1]}\"\
+    \n  elif [[ \"$arr\" =~ ([0-9]*\\s*) ]]; then\n    answer=\"${BASH_REMATCH[1]}\"\
+    \n  else\n    answer=0\n  fi\n  echo $answer", "    local -a arr=( \"$1\" )\n\
+    \    local len=${#arr[@]}\n    local i min_diff\n    for (( i = 0; i < len; i++\
+    \ )); do\n        min_diff=0\n        for (( j = (len - i); j > 0; j-- )); do\n\
+    \            if [ \"$arr[$j-1]\" == \"$arr[$j]\" ]; then\n                min_diff=1\n\
+    \                break\n            fi\n        done\n        if [ \"$min_diff\"\
+    \ -eq 0 ]; then\n            return 0\n        fi\n    done\n    return 1", " \
+    \   local i=1\n    local j=$(( $#-2 ))\n    local arr=$1\n    local result=0\n\
+    \    local x\n    local t\n\n    echo \"$arr\" | while read x ; do\n        echo\
+    \ \"$x\" | while read t ; do\n            if [ $x != $t ] && [ $i -eq $j ]; then\n\
+    \                if [ $x -gt $t ]; then\n                    (( result = $result\
+    \ + 1 ))\n                else\n                    (( result = $result - 1 ))\n\
+    \                fi\n                i=$(( i + 1 ))\n            fi\n        done\n\
+    \        i=$(( i + 1 ))\n    done\n    echo \"$result\"", "  local arr=( \"$@\"\
+    \ )\n  local min_change=0\n  local reversed=($(cycle \"${arr[@]:1}\"))\n  local\
+    \ i j\n  for ((i = 0; i < ${#arr[@]}; i++)); do\n    if (( \"${arr[i]}\" != \"\
+    ${reversed[i]}\" )); then\n      j=$((i + 1))\n      break\n    fi\n  done\n \
+    \ if [ $i -eq $j ]; then\n    echo \"0\"\n  else\n    while (( \"${min_change}\"\
+    \ < \"$j\" )) ; do\n      if (( \"${arr[i]}\" != \"${reversed[i]}\" )); then\n\
+    \        min_change=$((min_change + 1))\n      fi\n      (( i = j - 1 ))\n   \
+    \ done\n  fi", "\tlocal arr=\"$1\"\n\tlocal arr_size=\"${#arr[@]}\"\n\tlocal min_change=\"\
+    $2\"\n\tlocal i tmp\n\tlocal min_change i\n\n\tfor ((i = 0; i < arr_size ; i+=1\
+    \ )); do\n\t\ttmp=${arr:$i:1}\n\t\tif [ \"$tmp\" != \"$tmp\" ]; then\n\t\t\tarr[$i]=$tmp\n\
+    \t\t\tmin_change=$((min_change + 1))\n\t\tfi\n\tdone\n\n\tlocal max_change 1\n\
+    \tfor ((i = arr_size -1 ; i >= 0 ; i--)); do\n\t\ttmp=${arr:$i:1}\n\t\tif [ \"\
+    $tmp\" != \"$tmp\" ]; then\n\t\t\tarr[i]=$tmp\n\t\t\tmax_change=$((max_change\
+    \ + 1))\n\t\tfi\n\tdone\n\n\tif [ \"$min_change\" == \"$max_change\" ]; then\n\
+    \t\techo \"0\"\n\telse\n\t\techo \"$min_change\"\n\tfi", "    local arr=\"$1\"\
+    \n\n    # Count how many numbers are in the list\n    local count=0\n    for i\
+    \ in $arr; do\n        ((count++))\n    done\n\n    # If the count is odd, then\
+    \ add one to the count\n    if [ $((count%2)) -eq 0 ]; then\n        count=$((count+1))\n\
+    \    fi\n\n    # Store all the elements of the list except the last one into an\
+    \ array\n    local list=($arr ${arr[-1]})\n\n    # If the list is even longer,\
+    \ then add one to the count\n    if [ $((count%2)) -eq 1 ]; then\n        count=$((count+1))\n\
+    \    fi\n\n    # If the list is odd, then subtract one from the count\n    if\
+    \ [ $((count%2)) -eq 2 ]; then\n        count=$((count-1))\n    fi\n\n    # If\
+    \ the list has more than one element, then find the minimum change to make it\
+    \ palindromic\n    if [ $((count-1)) -gt 1 ]; then\n        local min_change=0\n\
+    \n        # If the list has even number of elements, find the minimum\n      \
+    \  if [ $((count-1)) -eq 0 ]; then\n            for i in $list; do\n         \
+    \       min_change=$((min_change+1))\n            done\n        else\n       \
+    \     for i in $(seq 0 $((count-1)) -1); do\n                min_change=$((min_change+1))\n\
+    \            done\n        fi\n\n        # Return the minimum\n        echo \"\
+    $min_change\"\n    else\n        # Return the number of elements in the list\n\
+    \        echo \"$count\"\n    fi", "    arr=(${@//,/ })\n    arrlen=${#arr[@]}\n\
+    \    result=0\n    smallest=$(( ${arrlen} / 2))\n    # Traverse the array from\
+    \ the end\n    for (( i=(${#arr[@]}-1); i>=0; i-- )); do\n        # If current\
+    \ element is smaller than the smallest\n        if [[ ${arr[i]} -le ${arr[i-1]}\
+    \ ]]; then\n            # Increase the smallest\n            smallest=$(( ${smallest}\
+    \ + 1 ))\n            # Decrease the smallest at the end\n            arrlen=$((\
+    \ ${arrlen} / 2 ))\n        fi\n    done\n    # Traverse the array from the front\n\
+    \    for (( i=0; i<${arrlen}; i++ )); do\n        # If current element is smaller\
+    \ than the smallest\n        if [[ ${arr[i]} -le ${arr[i+1]} ]]; then\n      \
+    \      # Increase the smallest\n            smallest=$(( ${smallest} + 1 ))\n\
+    \            # Decrease the smallest at the beginning\n            arrlen=$((\
+    \ ${arrlen} / 2 ))\n        fi\n    done\n    echo \"$smallest\"", "    local\
+    \ input=\"${1:-}\"\n    local inputArray=( $( echo \"$input\" | tr \"[a-z]\" \"\
+    [A-Z]\" ) )\n    local currentMin=0\n    local lastNum=${input[${#inputArray[@]}-1]}\n\
+    \    for (( i=1; i<${#inputArray[@]}; i++ )); do\n        currentMin=${inputArray[$((i-1))]}\n\
+    \        currentMin=$(( ${currentMin}+1 ))\n        if [ $currentMin -eq $lastNum\
+    \ ]; then\n            currentMin=0\n        fi\n        lastNum=${inputArray[$i]}\n\
+    \    done\n    echo $currentMin", "  arr=( $1 )\n  len=${#arr[@]}\n  for i in\
+    \ $(seq 0 $(($len-1))); do\n    local j=$(( $i + 1 ))\n    local k=$(( $len -1\
+    \ ))\n    while [[ ${arr[i]} == ${arr[j]} ]] && [[ ${arr[i]} == ${arr[k]} ]];\
+    \ do\n      (( j-- ))\n      (( k-- ))\n    done\n    if [[ ${j} -le ${len} ]];\
+    \ then\n      arr[j]=$arr[i]\n      arr[i]=\n      (( len-- ))\n      break\n\
+    \    fi\n  done\n  echo ${len}", "    arr=()\n    IFS=\" \" read -ra arr <<<\"\
+    $1\"\n    smallest=0\n    largest=${#arr[@]}\n    for ((i=0; i < $(( $(expr $largest\
+    \ \\* 2 ) - 1 )); ++i)); do\n      (( $(expr $largest \\* 2 ) )) || break\n  \
+    \    num=${arr[$(( i + 1 ))]}\n      if (( num > $(expr $num $num) ))\n      then\n\
+    \        largest=$i\n      else\n        smallest=$i\n      fi\n    done\n   \
+    \ for ((i=$smallest; $i <= $largest; ++i)); do\n      (( ${arr[$i]} < ${arr[$(($i\
+    \ - 1))]} )) && break || continue\n      (( smallest = $i )) && break\n    done\n\
+    \    echo -n ${smallest}", "    arr=$1\n    while [ -n \"$arr\" ]; do\n      \
+    \  arr=${arr//$'\\n'/ }\n    done\n    arr=($arr)\n    len=${#arr[@]}\n    shift\n\
+    \    i=$((len-1))\n    while [ -n \"$arr\" ]; do\n        if [[ $i != $len ]];\
+    \ then\n            arr[$i]=$arr[$((len-1))]\n            i=$(($i-1))\n      \
+    \  fi\n        arr[$i]=$1\n        shift\n        i=$(($i-1))\n    done\n    if\
+    \ [[ $len != 0 ]]; then\n        arr[$i]=$arr[$len-1]\n    fi\n    echo \"${arr[@]}\"",
+  "    local arr=$1\n    local arr_len=${#arr[@]}\n    local arr_rev=(${arr[@]})\n\
+    \    local arr_end=$((arr_len+1))\n    # Loop while there are enough elements\n\
+    \    while [ $arr_len -gt 0 ]; do\n        # Loop while there is an odd number\
+    \ of elements\n        while [ $((arr_len % 2)) -eq 0 ]; do\n            # Loop\
+    \ while we are not at the middle of the array\n            for ((i=arr_len-1;\
+    \ i>=0; i--)); do\n                # If this element is different, then we must\
+    \ change it\n                local cur_element=${arr_rev[i]}\n               \
+    \ local next_element=${arr_rev[i-1]}\n                if [[ \"$cur_element\" !=\
+    \ \"$next_element\" ]]; then\n                    local change_count=1\n     \
+    \               # Loop while we haven't yet found the difference\n           \
+    \         while (( change_count > 0 )); do\n                        arr_rev[$i+1]=${arr_rev[$i]}\n\
+    \                        change_count=$((change_count-1))\n                  \
+    \  done\n                    arr_len=$((arr_len+1))\n                else\n  \
+    \                  arr_len=$((arr_len-1))\n                fi\n            done\n\
+    \        done\n    done\n    echo \"${arr_len}\"", "    echo \"$1\"\n    read\
+    \ -r _arr <<< \"$1\"\n    arr=( ${_arr} ); len=${#arr[@]}\n    smallest=0\n  \
+    \  for i in {1..$((len-1)); do\n        if [[ \"$i\" -gt \"0\" ]]; then continue;\
+    \ fi\n        if [[ \"$i\" -lt \"$len\" ]]; then continue; fi\n        if [[ \"\
+    $i\" -gt \"$len\" ]]; then smallest=$i; fi\n        smallest=$((smallest+i))\n\
+    \    done\n    echo \"$smallest\"", "    local arr=$1\n    local length count\
+    \ min\n    length=${#arr}\n    min=0\n    for count in $(seq 0 $((length-1)));\
+    \ do\n        [[ $arr[count] == \"${arr[length]}\" ]] && min=1 && break\n    \
+    \    [[ $arr[count] -gt ${arr[length]} ]] && min=$((min+1)) || min=0\n    done\n\
+    \    echo ${min}", "  local array=\"$1\"\n  local i min_len min_change\n  min_len=$(echo\
+    \ \"${array}\" | wc -w)\n  min_change=$(echo \"${array}\" | sort -rn | head -n\
+    \ 1)\n  for i in $(echo \"${array}\" | sed -e 's/ //g' | awk '{print $1}'); do\n\
+    \    if [ \"$i\" == \"$min_change\" ]; then\n      min_len=\"$((min_len-1))\"\n\
+    \    else\n      if [ \"$min_len\" -lt 1 ]; then\n        echo \"0\"\n      else\n\
+    \        echo \"$((min_len-1))\"\n      fi\n    fi\n  done", "  local arr=(\"\
+    ${@}\")\n  local min_length=0\n  local min_change=0\n  local min_element\n\n \
+    \ arr=(\"${arr[@]/#/}\")\n  arr=(\"${arr[@]/%/}\")\n\n  for ((i=0; i<${#arr[@]};\
+    \ i++)); do\n    arr[i]=${arr[i]}\n  done\n\n  # \"2 4 3 1\" (1) is smallest.\
+    \ Remove it. No change.\n  if [ \"$arr\" = \"${arr[@]}\" ]\n  then\n    echo \"\
+    0\"\n    return\n  fi\n\n  # \"2 3 4 1 5\" (2) is smallest. Remove it. No change.\n\
+    \  local length=\"${#arr[@]}\"\n  if [ \"$length\" -gt 0 ]\n  then\n    if [ \"\
+    $length\" -eq \"$min_length\" ]\n    then\n      echo \"0\"\n      return\n  \
+    \  fi\n  fi\n\n  # \"1 2 3 4 5\" (3) is smallest. Remove it. No change.\n  length=\"\
+    ${#arr[@]}\"\n  if [ \"$length\" -eq \"$min_length\" ]\n  then\n    echo \"0\"\
+    \n    return\n  fi\n\n  # \"1 2 3 4 5\" (3) is smallest. Remove it. No change.\n\
+    \  length=\"${#arr[@]}\"\n  if [ \"$length\" -eq \"$min_length\" ]\n  then\n \
+    \   echo \"0\"\n    return\n  fi\n\n  # \"1 2 3 4 5 6\" (4) is smallest. Remove\
+    \ it. No change.\n  length=\"${#arr[@]}\"\n  if [ \"$length\" -eq \"$min_length\"\
+    \ ]\n  then\n    echo \"0\"\n    return\n  fi\n\n  # \"1 2 3 4 5 6\" (4) is smallest.\
+    \ Remove it. No change.\n  length=\"${#arr[@]}\"\n  if [ \"$length\" -eq \"$min_length\"\
+    \ ]\n  then\n    echo \"0\"\n    return\n  fi\n\n  # \"1 2 3 5 4 7 9 6\" (5) is\
+    \ smallest. Remove it. No change.\n  length=\"${#arr[@]}\"\n  if [ \"$length\"\
+    \ -eq \"$min_length\" ]\n  then\n    echo \"0\"\n    return\n  fi\n\n  # \"1 2\
+    \ 3 5 4 7 9 6\" (5) is smallest. Remove it. No change.\n  length=\"${#arr[@]}\"\
+    \n  if [ \"$length\" -eq \"$min_length\" ]\n  then\n    echo \"0\"\n    return\n\
+    \  fi\n\n  # \"1 2 3 5 4 7 9 6\" (5) is smallest. Remove it. No change.\n  length=\"\
+    ${#arr[@]}\"\n  if ", "    local arr=\"$1\"\n    local i j min_change reversed_arr\n\
+    \    local min_num=0\n    while [[ $i -lt ${#arr} ]]; do\n        reversed_arr=`echo\
+    \ \"$arr\" | rev`\n        j=$(( ${#reversed_arr} - $i ))\n        (( j < 1 ))\
+    \ || break\n        (( ${reversed_arr:$j:1} == ${reversed_arr:$i:1} )) || continue\n\
+    \        (( min_num < $j )) || continue\n        (( min_num == $j )) && continue\n\
+    \        (( min_num > $j )) && continue\n        min_num=$j\n    done\n    echo\
+    \ \"$min_num\"", "    local arr\n    local length\n    local min\n    local min_index\n\
+    \    local index\n    local result\n    local last\n\n    arr=\"${1}\"\n    length=${#arr[@]}\n\
+    \    min=1\n    min_index=0\n\n    # Find smallest length palindromic array\n\
+    \    for index in $(seq 1 \"$((length / 2))\"); do\n        result=0\n       \
+    \ for last in $arr; do\n            if [[ $last == ${arr[index]}* ]]; then\n \
+    \               result=$((result+1))\n            fi\n        done\n        if\
+    \ ((result < min)) ; then\n            min=$result\n            min_index=$index\n\
+    \        fi\n    done\n\n    # If the array is too long, we cannot solve it, so\
+    \ return 0\n    if ((length <= 2)); then\n        return 0\n    fi\n\n    # If\
+    \ the array is too short, return 0\n    if [[ $length -lt $min ]] then\n     \
+    \   return 0\n    fi\n\n    # If the array is a palindromic, return $min\n   \
+    \ if [[ $arr[$min_index] -eq ${arr[$min_index-1]}* ]]; then\n        echo \"$min\"\
+    \n        return 0\n    fi\n\n    # If the array is not palindromic, find the\
+    \ smallest number of elements that\n    # need to be changed to make it palindromic\n\
+    \    for index in $(seq 0 \"$((length / 2))\"); do\n        result=0\n       \
+    \ for last in $arr; do\n            if [[ $last != ${arr[$min_index]}* ]]; then\n\
+    \                if [[ $last == ${arr[$index]}* ]]; then\n                   \
+    \ result=$((result+1))\n                fi\n            fi\n        done\n   \
+    \     if ((result < min)) ; then\n            min=$result\n        fi\n    done\n\
+    \n    # If the array is too long, we cannot solve it, so return 0\n    if ((length\
+    \ <= 2)); then\n        return 0\n    fi\n\n    # If the array is too short, return\
+    \ 0\n    if [[ $length -lt $min ]] then\n        return 0\n    fi\n\n    # If\
+    \ the array is a palindromic, return $min\n    if [[ $arr[$min_index] -eq ${arr[$min_index-1]}*\
+    \ ]]; then\n        echo \"$min\"\n        return 0\n    fi\n\n    # If the array\
+    \ is not palindromic, find the smallest number of elements that\n    # need to\
+    \ be changed to make it palindromic\n    for index in $(seq 0 \"$((length / 2))\"\
+    ); do\n        result=0\n        for last in $arr; do\n            if [[ $last\
+    \ != ${arr[$min_index]}* ]]; then\n                if [[ $last == ${arr[$index]}",
+  "    local arr=$1\n    local min_cnt=0\n    local min_i\n    local max_i\n    local\
+    \ min_len\n    local max_len\n    local cur_i\n    local cur_len\n    local i\n\
+    \    local j\n    local cur_val\n    local prev_val\n    local change_cnt_cnt\n\
+    \    local cur_change_cnt\n    local prev_change_cnt\n\n    for i in $arr; do\n\
+    \        max_len=$(echo $i | wc -c)\n        if [ ${max_len} -gt 0 ]; then\n \
+    \           max_i=$(($max_len - 1))\n        else\n            max_i=0\n     \
+    \   fi\n        if [ ${max_len} -lt 2 ]; then\n            echo \"ERROR: ${i}\
+    \ is an invalid array\" >&2\n            return 1\n        fi\n    done\n\n  \
+    \  # Find the minimum number of changes from i to i+1 where the value changes\n\
+    \    prev_change_cnt=0\n    cur_change_cnt=0\n    for i in $arr; do\n        cur_i=$(($i\
+    \ - 1))\n        cur_len=$(echo $i | wc -c)\n        if [ ${max_len} -gt 0 ];\
+    \ then\n            max_len=$(echo $i | wc -c)\n            max_i=$(($max_len\
+    \ - 1))\n        else\n            max_i=0\n        fi\n        if [ ${max_len}\
+    \ -lt 2 ]; then\n            echo \"ERROR: ${i} is an invalid array\" >&2\n  \
+    \          return 1\n        fi\n        if [ \"${i}\" = \"${i}\" ]; then\n  \
+    \          change_cnt_cnt=$(($max_i - $((max_i - cur_i))))\n        else\n   \
+    \         change_cnt_cnt=$(echo $i | awk '{print ($max_i - $((cur_i + 1)))}')\n\
+    \        fi\n        if [ $change_cnt_cnt -ne 0 ]; then\n            cur_change_cnt=$(($change_cnt_cnt\
+    \ + $prev_change_cnt))\n            prev_change_cnt=$change_cnt_cnt\n        fi\n\
+    \    done\n\n    if [ $change_cnt_cnt -eq 0 ]; then\n        return 0\n    elif\
+    \ [ $change_cnt_cnt -lt $min_cnt ]; then\n        min_cnt=$change_cnt_cnt\n  \
+    \      min_i\n    elif [ $change_cnt_cnt -ge $min_cnt ]; then\n        for i in\
+    \ $arr; do\n            cur_i=$(($i - 1))\n            cur_len=$(echo $i | wc\
+    \ -c)\n            if [ ${max_len} -gt 0 ]; then\n                max_len=$(echo\
+    \ $i | wc -c)\n                max_i=$(($max_len - 1))\n            else\n   \
+    \             max_i=0\n            fi\n            if [ ${max_len} -lt 2 ]; then\n\
+    \                echo \"ERROR: ${i", "  local -n arr=$1 palindromic_arr=()\n \
+    \ # sort arr\n  local arr_len=${#arr[@]}\n  (( arr_len >= 2 )) && sort -n <<<\"\
+    ${arr[@]}\" | while read -r elem; do\n    arr_len=${#arr[@]}\n    palindromic_arr+=(\"\
+    ${arr[@]:$arr_len-$(($elem-1))}\")\n    arr+=(\"$elem\")\n    arr_len-=1\n  done\n\
+    \  arr_len=${#arr[@]}\n  # reverse palindromic_arr\n  palindromic_arr=( \"${palindromic_arr[@]:0:${#palindromic_arr[@]}}\"\
+    \ )\n  # find minimum number of changes\n  local -i min_changes=1\n  while [[\
+    \ ${#palindromic_arr[@]} -gt 0 ]]; do\n    local changes=0\n    local last_elem=${palindromic_arr[0]}\n\
+    \    palindromic_arr=( \"${palindromic_arr[@]:1:${#palindromic_arr[@]}}\" )\n\
+    \    local first_elem=${palindromic_arr[0]}\n    # find the longest substring\n\
+    \    while [[ ${#palindromic_arr[@]} -gt 1 ]] && [[ \"${palindromic_arr[0]}\"\
+    \ != \"${last_elem}\" ]]; then\n      local elem=${palindromic_arr[@]:1}\n   \
+    \   palindromic_arr=( \"${palindromic_arr[@]:2}\" )\n      (( changes+=(${#elem}-${#last_elem})\
+    \ ))\n      last_elem=\"${elem}\"\n    done\n    local elem_len=${#last_elem}\n\
+    \    local last_elem_len=${#palindromic_arr[@]-1}\n    local cur_elem_len=${#palindromic_arr[0]}\n\
+    \    # restore the palindromic array\n    palindromic_arr+=( \"${palindromic_arr[@]:0:${#palindromic_arr[@]-cur_elem_len}}\"\
+    \ )\n    # find a new longest substring\n    while [[ ${#palindromic_arr[@]} -gt\
+    \ 1 ]] && [[ \"${palindromic_arr[0]}\" != \"${last_elem}\" ]] && [[ ${changes}\
+    \ == 0 ]]; then\n      local elem=${palindromic_arr[@]:", "    local arr=($1)\n\
+    \n    # Special case: a single element array\n    if [[ ${#arr[@]} -eq 1 ]]; then\n\
+    \        return 0\n    fi\n\n    # Special case: empty array\n    if [[ ${#arr[@]}\
+    \ -eq 0 ]]; then\n        return 1\n    fi\n\n    # Special case: only 1 element\n\
+    \    if [[ ${#arr[@]} -eq 1 ]]; then\n        return 0\n    fi\n\n    local result=${arr[0]}\n\
+    \    for (( i=1; i<${#arr[@]}; i++ )); do\n        local element=${arr[$i]}\n\
+    \        local element_reverse=${arr[$(( $i - 1 ))]}\n        if [[ ${element}\
+    \ -ne ${element_reverse} ]]; then\n            result=$(( $result + 1 ))\n   \
+    \     fi\n    done\n\n    echo \"$result\"", "  local arr=\"$1\" changes=1\n \
+    \ while read element; do\n    if [[ \"$element\" == \"$arr\" ]]; then\n      ((changes=changes+1))\n\
+    \      arr=$(cat $arr)\n    elif [[ \"$element\" == \"$arr\" ]]; then\n      arr=$(echo\
+    \ \"$arr\" | sed 's/ /\\n/')\n      arr=$(cat $arr)\n    elif [[ \"$element\"\
+    \ != \"$arr\" ]]; then\n      arr=$(cat $arr <<< \"$element\")\n    fi\n  done\n\
+    \  echo $changes", "    local arr=( $1 )\n    local i j\n    local smallest\n\
+    \    for (( j=0; j<${#arr[@]}; j=j+1 )); do\n        if [ $j -eq 0 ]; then\n \
+    \           smallest=$j\n            continue\n        fi\n\n        # Check if\
+    \ first and last are equal\n        if [ $j -eq ${#arr[@]} ]; then\n         \
+    \   smallest=$j\n            continue\n        fi\n\n        # Check if current\
+    \ element equals last element (backwards)\n        if [ \"$arr[$j]\" \"$arr[$j-1]\"\
+    \ != 0 ]; then\n            smallest=$j\n            continue\n        fi\n\n\
+    \        # Check if current element equals first element (forwards)\n        if\
+    \ [ \"$arr[$j]\" \"$arr[$j+1]\" != 0 ]; then\n            smallest=$j\n      \
+    \      continue\n        fi\n    done\n    echo $smallest", "    arr=($1)\n  \
+    \  len=${#arr[@]}\n    smallest=0\n    for i in $(seq 0 $((${#arr[@]} - 1)));\
+    \ do\n        smallest=$(expr $smallest + $((arr[$i] - ${arr[$(($i - 1))]})))\n\
+    \    done\n    echo $smallest", "  if [ \"$#\" -ne 1 ]; then\n    echo \"Usage:\
+    \ $(basename $0) <space-separated list with integers>\" 1>&2\n    exit 1\n  fi\n\
+    \n  local arr\n  read -r -a arr <<< \"${1// /}\"\n  if [ \"${arr[0]}\" -lt \"\
+    ${arr[-1]}\" ]; then\n    echo \"Minimum number of changes not possible: ${arr[0]}\"\
+    \ >&2\n    exit 1\n  fi\n\n  # \"1 2 3 4 3 2 2\" -> \"1 2 3 2 2\" or \"1 2 3 2\
+    \ 1\"\n  arr1=( \"${arr[@]}\" )\n  arr2=( \"${arr1[@]:1}\" )\n  arr3=( \"${arr2[@]}\"\
+    \ )\n  arr4=( \"${arr3[@]:1}\" )\n  arr5=( \"${arr4[@]}\" )\n  arr6=( \"${arr5[@]:1}\"\
+    \ )\n  arr7=( \"${arr6[@]}\" )\n  arr8=( \"${arr7[@]}\" )\n  arr9=( \"${arr8[@]}\"\
+    \ )\n\n  # \"1 2 3 2 2\" -> \"1 2 3 2 2\"\n  if [ \"${arr5[0]}\" -eq \"${arr9[0]}\"\
+    \ ]; then\n    exit 0\n  fi\n\n  # \"1 2 3 4 3 2 2\" -> \"1 2 3 2 2\"\n  if [\
+    \ \"${arr7[0]}\" -eq \"${arr9[0]}\" ]; then\n    exit 0\n  fi\n\n  # \"1 2 3 4\
+    \ 3 2 1\" -> \"1 2 3 2 1\"\n  if [ \"${arr7[0]}\" -eq \"${arr5[0]}\" ]; then\n\
+    \    exit 0\n  fi\n\n  # \"1 2 3 2 1\" -> \"1 2 3 2 1\"\n  if [ \"${arr8[0]}\"\
+    \ -eq \"${arr5[0]}\" ]; then\n    exit 0\n  fi\n\n  # \"1 2 3 2 2\" -> \"1 2 3\
+    \ 2 2\"\n  if [ \"${arr8[0]}\" -eq \"${arr9[0]}\" ]; then\n    exit 0\n  fi\n\n\
+    \  # \"1 2 3 4 3 2 1\" -> \"1 2 3 4 3 2 1\"\n  if [ \"${arr7[0]}\" -eq \"${arr8[0]}\"\
+    \ ]; then\n    exit 0\n  fi\n\n  # \"1 2 3 4 3 2 2\" -> \"1 2 3 4 3 2 2\"\n  if\
+    \ [ \"${arr8[0]}\" -eq \"${arr7[0]}\" ]; then\n    exit 0\n  fi\n\n  # \"1 2 3\
+    \ 2 2\" -> \"", "  local arr\n  read -r -a arr <<< \"$1\"\n  local len=\"${#arr[@]}\"\
+    \n  (( len > 0 )) || return\n  local min\n  min=0\n  local i\n  for i in \"${!arr[@]}\"\
+    ; do\n    (( arr[i] != arr[(len-1)-i] )) && return 1\n    (( ++min )) && break\n\
+    \  done\n  (( min > 0 )) && return 0", "    local arr=$1\n    local arr1=$arr\n\
+    \    local n\n    local diff\n    local i\n    local j\n    local k\n    local\
+    \ p\n    local arr2\n    local i1\n    local j1\n    local k1\n    local i2\n\
+    \    local j2\n    local k2\n    local m\n    local n1\n    local n2\n    local\
+    \ n1i\n    local n1j\n    local n2i\n    local n2j\n    local k\n    local p\n\
+    \    local m\n\n    while read line; do\n        n1=$(echo $line | tr -s ' ' |\
+    \ cut -d ' ' -f 1)\n        n2=$(echo $line | tr -s ' ' | cut -d ' ' -f 2)\n \
+    \       n1i=$(echo $line | tr -s ' ' | cut -d ' ' -f 1)\n        n1j=$(echo $line\
+    \ | tr -s ' ' | cut -d ' ' -f 2)\n        n2i=$(echo $line | tr -s ' ' | cut -d\
+    \ ' ' -f 1)\n        n2j=$(echo $line | tr -s ' ' | cut -d ' ' -f 2)\n       \
+    \ ((j=$n2))\n        ((i=$n1))\n        ((k=$n1))\n        ((p=$n))\n        arr1=$arr1$i$j$k$p\n\
+    \    done < <(echo \"$arr\" | sed 's/ /\\n/g')\n    arr2=$arr1\n\n    arr2=\"\
+    ${arr2//[!0-9]/}\"\n    arr2=\"${arr2//[!a-z]/}\"\n    arr2=\"${arr2//[!A-Z]/}\"\
+    \n    arr2=\"${arr2//[!A-Za-z]/}\"\n    arr2=\"${arr2//[!-]/}\"\n\n    arr2=\"\
+    ${arr2//[!0-9]/}\"\n    arr2=\"${arr2//[!a-z]/}\"\n    arr2=\"${arr2//[!A-Z]/}\"\
+    \n    arr2=\"${arr2//[!A-Za-z]/}\"\n    arr2=\"${arr2//[!-]/}\"\n\n    arr2=\"\
+    ${arr2//[!0-9]/}\"\n    arr2=\"${arr2//[!a-z]/}\"\n    arr2=\"${arr2//[!A-Z]/}\"\
+    \n    arr2=\"${arr2//[!A-Za-z]/}\"\n    arr2=\"${arr2//[!-]/}\"\n\n    arr2=\"\
+    ${arr2//[!0-9]/}\"\n    arr2", "    local IFS=\" \"\n    local i\n    local arr\n\
+    \    local count=0\n    arr=$1\n    for i in $(seq 0 $(( ${#arr[@]} - 1 )) );\n\
+    \    do\n        count=$(( $count + 1 ))\n        local j\n        j=$(( ${#arr[@]}\
+    \ - 1 ))\n        if [[ $i -eq $(( ${#arr[@]} - 1 )) ]]; then\n            arr[i]=$arr[j]\n\
+    \        else\n            arr[i]=$(( ${arr[i]} + ${arr[j]} ))\n        fi\n \
+    \       arr[$i]=$(( ${arr[$i]} % 10 ))\n        j=$(( ${j} - 1 ))\n    done\n\
+    \    for j in $(seq 0 $(( ${#arr[@]} - 1 )) );\n    do\n        arr[$j]=$(( ${arr[$j]}\
+    \ % 10 ))\n    done\n    arr=(${arr[*]})\n    if [[ \"${#arr[@]}\" != 0 ]]; then\n\
+    \        echo \"$count\"\n    else\n        echo \"0\"\n    fi", "  local -r arr=\"\
+    $1\"\n  local min\n  local i j\n  local len=\"${#arr}\"\n  local orig\n\n  for\
+    \ ((i=len; i>0; i--)); do\n    orig=$arr[i-1]\n    for ((j=len-i; j>i; j--));\
+    \ do\n      arr[j]=$((orig+arr[j-1]))\n    done\n    ((min=min+1))\n    arr[i-1]=orig\n\
+    \  done\n  echo \"$min\"", "    local i tmp\n    tmp=\"${1}\"\n    shift 1\n \
+    \   for ((i=0; i < ${#tmp}; i++)); do\n        [[ ${tmp:i:1} = ${tmp:i:1}${tmp:i+1:-1}\
+    \ ]] || return 1\n    done\n    return 0", "    local IFS=' '\n    local arr=($1)\n\
+    \    local i\n    local count=0\n    local min_num=0\n    for ((i=0; i < ${#arr[@]};++i));\
+    \ do\n        count=$((count+arr[i]))\n        if ((count >= min_num)); then\n\
+    \            min_num=$count\n        fi\n    done\n    if ((min_num == 0)); then\n\
+    \        echo $((0))\n    else\n        echo $((min_num))\n    fi", "    local\
+    \ input=\"$1\"\n    local output=\"$(smallest_change_helper \"$input\")\"\n\n\
+    \    if test \"$output\" = \"-1\"; then\n        echo \"$0\"\n    else\n     \
+    \   echo \"$output\"\n    fi", "\tlocal arr=\"$1\"\n\tlocal len=\"${#arr}\"\n\n\
+    \tlocal i\n\tlocal j\n\tlocal count\n\tlocal length\n\tlocal last\n\tlocal previous\n\
+    \tlocal j2\n\tlocal j3\n\tlocal i3\n\tlocal min\n\n\tlocal count2\n\tlocal count3\n\
+    \tlocal length2\n\tlocal length3\n\tlocal i4\n\tlocal i5\n\tlocal j4\n\tlocal\
+    \ j5\n\tlocal i6\n\tlocal min2\n\n\tcount=0\n\tmin=0\n\twhile (( \"$count\" <\
+    \ \"$len\" )) ; do\n\t\tlast=\"${arr[count]}\"\n\t\tcount=$(( count + 1 ))\n\t\
+    \tif [ \"$count\" -gt \"$len\" ]; then\n\t\t\tcount=$(( $count - 1 ))\n\t\t\t\
+    last=\"${arr[count]}\"\n\t\tfi\n\t\tprevious=\"${arr[count-1]}\"\n\n\t\t# If current\
+    \ element is the same as the last element, no need to make change\n\t\tif [ \"\
+    $previous\" == \"$last\" ] ; then\n\t\t\t(( count = count + 1 ))\n\t\t\tcontinue\n\
+    \t\tfi\n\n\t\t# Calculate minimum number of changes\n\t\tj2=$(( count + 1 ))\n\
+    \t\tj3=$(( j2 + 1 ))\n\t\tif [ $j2 -le \"$j\" ]; then\n\t\t\tj=$j2\n\t\tfi\n\t\
+    \tif [ $j3 -le \"$j\" ]; then\n\t\t\tj=$j3\n\t\tfi\n\n\t\tif [ -z \"$i\" ]; then\n\
+    \t\t\ti=1\n\t\telse\n\t\t\ti=$(( $i + 1 ))\n\t\tfi\n\n\t\tif [ \"$last\" == \"\
+    $previous\" ] ; then\n\t\t\t(( count = count + 1 ))\n\t\t\tcontinue\n\t\tfi\n\n\
+    \t\t# Compare previous element to current element\n\t\tif [ \"$last\" == \"$previous\"\
+    \ ] ; then\n\t\t\tcount=$(( count + 1 ))\n\t\t\tcontinue\n\t\tfi\n\t\twhile [\
+    \ \"$last\" == \"$previous\" ] ; do\n\t\t\tprevious=\"${arr[count-1]}\"\n\t\t\t\
+    count=$(expr $count - 1)\n\t\t\tif [ \"$count\" -lt 0 ] ; then\n\t\t\t\tcontinue\n\
+    \t\t\tfi\n\t\tdone\n\n\t\tcount2=0\n\t\tlength2=0\n\t\tcount3=0\n\t\tlength3=0\n\
+    \t\ti4=1\n\t\ti5=$(( $i - 1 ))\n\t\tj4=1\n\t\tj5=$(( $j - 1 ))\n\t\twhile [ \"\
+    $count2\" -le \"$j\" ] ; do\n\t\t\tcount2=$(( $count2 + 1 ))\n\t\t\tlength2=$((\
+    \ $length", "    # Read in array and convert to a string\n    arr=( $1 )\n   \
+    \ arrStr=\"\"\n    for i in \"${arr[@]}\"; do\n        arrStr+=\"$i\"\n    done\n\
+    \n    # Get the length of the array\n    arrLen=${#arr[@]}\n\n    # Check if array\
+    \ is palindromic\n    if [ $(( $arrLen % 2 )) -gt 0 ]; then\n        return 0\n\
+    \    fi\n\n    # Store the starting position of the first element in the array\n\
+    \    arrStart=${#arr[0]}\n\n    # Get the ending position of the last element\
+    \ in the array\n    arrEnd=${arrLen}\n\n    # Start checking from the end until\
+    \ we hit the start\n    change=0\n    while [ $change -le $arrLen ]; do\n    \
+    \    change=`expr $change + 1`\n        i=$change\n        if [ ${arr[$i]} ==\
+    \ ${arr[$arrLen-1]} ]; then\n            arrEnd=$i\n            change=0\n   \
+    \     else\n            # swap the values\n            arr[$i]=${arr[$arrLen-1]}\n\
+    \            arr[$arrLen-1]=${arr[$i]}\n            change=0\n        fi\n   \
+    \ done\n\n    # Check if the end is the same as the start\n    if [[ $change -eq\
+    \ $arrLen ]]; then\n        echo $change\n    else\n        echo $change\n   \
+    \ fi", "    local array=\"$1\"\n    local len=$((${#array}-1))\n    local min_len\n\
+    \    local index\n    while [ \"${len}\" -gt 0 ]; do\n        min_len=1\n    \
+    \    index=0\n        while [ \"${index}\" -lt \"${len}\" ]; do\n            local\
+    \ val=\"${array}[${index}]\"\n            if [ \"${val}\" -ne \"${array}[${len}-1]\"\
+    \ ]; then\n                val=\"${val} ${array}[${len}-1]\"\n            fi\n\
+    \            array=\"${val}\"\n            if [ \"$(diff -y --suppress-common-lines\
+    \ -W 2 <(echo \"${array}\") <(echo \"${array}\") | wc -l)\" -gt \"0\" ]; then\n\
+    \                min_len=$((${min_len}+1))\n            fi\n            ((index++))\n\
+    \        done\n        len=$((${len}-1))\n    done\n    echo \"${min_len}\"",
+  "  IFS=\" \" read -a arr <<< \"$1\"\n  local -n size=${#arr[@]}\n  local -n max=${#arr[@]}\n\
+    \  local -n min=${#arr[@]}\n  local -n pmin=$min\n  local -n pmax=$max\n  local\
+    \ -i i\n\n  echo $(pwd)\n\n  # First find max and min lengths\n  local i\n  for\
+    \ i in $(seq $min); do\n    arr[i]=$((${arr[i]}+1))\n  done\n  local i\n  for\
+    \ i in $(seq $max); do\n    arr[i]=$((${arr[i]}-1))\n  done\n\n  # Now find how\
+    \ many elements we need to increase to make it palindromic\n  local i\n  for i\
+    \ in $(seq $min); do\n    local j=$((${i}-1))\n    arr[i]=$((${arr[i]}+${arr[j]}))\n\
+    \  done\n  local i\n  for i in $(seq $max); do\n    local j=$((${i}+1))\n    arr[i]=$((${arr[i]}-${arr[j]}))\n\
+    \  done\n  local i\n\n  # Now print out final answer\n  for i in $(seq $min);\
+    \ do\n    local j=$((${i}-1))\n    local k=$((${i}+1))\n    local sum=$((${arr[i]}*${arr[j]}))\n\
+    \    local diff=$((${arr[i]}*${arr[k]}))\n    arr[i]=$((${diff}-${sum}))\n  done\n\
+    \  for i in $(seq $max); do\n    local j=$((${i}+1))\n    local k=$((${i}-1))\n\
+    \    local sum=$((${arr[i]}*${arr[j]}))\n    local diff=$((${arr[i]}*${arr[k]}))\n\
+    \    arr[i]=$((${diff}-${sum}))\n  done\n\n  echo $(pwd)\n\n  # Then go through\
+    \ array and keep track of smallest change\n  local i\n  local changed=0\n  for\
+    \ i in $(seq $min); do\n    local j=$((${i}-1))\n    local k=$((${i}+1))\n   \
+    \ local sum=$((${arr[i]}*${arr[j]}))\n    local diff=$((${arr[i]}*${arr[k]}))\n\
+    \    if [[ $diff -gt $pmin ]]; then\n      local changed=1\n      pmin=$diff\n\
+    \    fi\n    arr[i]=$", "    local arr=$1\n    local i j k min\n    local arr2=\"\
+    $( printf \"%s\\n\" \"${arr}\" | sed \"s/ //g\" )\"\n    for ((j=${#arr2};j>=0;j--));\n\
+    \    do\n        arr1=\"${arr2// /$'\\n'}\"\n        if [ -z \"$arr1\" ]; then\n\
+    \            return 0\n        fi\n        arr1=\"${arr1/$arr2}\"\n        arr1=\"\
+    ${arr1/$'\\n'/$'\\n'}\"\n        k=\"$( echo $arr1 | cut -d $'\\n' -f 1 )\"\n\
+    \        if [ -z \"$k\" ]; then\n            return 0\n        fi\n        arr2=\"\
+    ${arr2//$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2//$'\\n'/$'\\n'}\"\n        arr2=\"\
+    ${arr1/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr1/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"\
+    ${arr2/$k/$'\\n'$k}\\n\"\n        arr2=\"${arr2/$k/$'\\n'$k}", "    local arr\n\
+    \    arr=( \"$1\" )\n    local i ret\n    local len\n    len=${#arr[@]}\n    ret=0\n\
+    \    for (( i=1; i<=len; i++ )); do\n        if [ \"$arr[$i]\" == \"${arr[$len-i]}\"\
+    \ ]; then\n            ret=$((ret+1))\n        fi\n    done\n    echo $ret", " \
+    \   local -n arr=$1\n    local max=${#arr[*]}\n    local len=${#arr[@]}\n    local\
+    \ smallest=-1\n    local i j k\n    # loop through the array\n    for (( i=0;\
+    \ i < len; i++ )); do\n        local tmp=${arr[i]}\n        # loop through the\
+    \ array from the end\n        for (( j=${#arr[@]}-1; j>=0; j-- )); do\n      \
+    \      local current=${arr[j]}\n            # if the current element matches the\
+    \ current element, no change\n            if [ \"$current\" == \"$tmp\" ]; then\n\
+    \                continue\n            fi\n            # if the current element\
+    \ is the same as the temporary element\n            if [ \"$current\" == \"$tmp\"\
+    \ ]; then\n                # check to see if the current array element is greater\
+    \ than the temporary element and change if true\n                if [ \"$current\"\
+    \ -gt \"$tmp\" ]; then\n                    arr[i]=$current\n                \
+    \    (( smallest=i+1 ))\n                    break\n                fi\n     \
+    \           # check to see if the current array element is less than the temporary\
+    \ element and change if true\n                if [ \"$current\" -lt \"$tmp\" ];\
+    \ then\n                    arr[j]=$current\n                    (( smallest=j+1\
+    \ ))\n                    break\n                fi\n            fi\n        done\n\
+    \    done\n    if [ \"$smallest\" == -1 ]; then\n        echo 0\n    else\n  \
+    \      echo \"$smallest\"\n    fi", "    local arr=$1\n\n    # reverse the array\n\
+    \    local rev=${arr[@]}\n    local i=0\n    local max_len=$(echo $rev | wc -w)\n\
+    \    local max_len2=$((max_len - 1))\n    while [ $i -lt $max_len2 ]\n    do\n\
+    \        (( rev[max_len2--] ))\n    done\n\n    # find the first and last element\
+    \ of the array\n    local first=$rev[0]\n    local last=$rev[${#rev[@]} - 1]\n\
+    \n    # compare them\n    local changes=0\n    if [ \"$first\" == \"$last\" ]\n\
+    \    then\n        echo \"0\"\n    elif [ \"$first\" == \"$last\" ] || [ \"$last\"\
+    \ == \"$first\" ]\n    then\n        echo \"0\"\n    else\n        echo \"1\"\n\
+    \    fi", "\tlocal arr=()\n\twhile IFS=$'\\t' read -r line; do\n\t\tarr+=(\"$line\"\
+    )\n\tdone < <(\n\t\techo $1 | sort -n -k 1,1nr | head -n 1\n\t)\n\tlocal min_num=0\n\
+    \tlocal first_pos=0\n\tlocal last_pos=${#arr[@]}\n\tfor ((i=0;i<last_pos;i++));\
+    \ do\n\t\tlocal c=arr[i]\n\t\tlet c=${c#?}\n\t\tlet c=${c%?}\n\t\tif [ \"$c\"\
+    \ -gt \"$first_pos\" ]; then\n\t\t\tfirst_pos=$i\n\t\tfi\n\t\tif [ \"$c\" -lt\
+    \ \"$last_pos\" ]; then\n\t\t\tlast_pos=$i\n\t\tfi\n\tdone\n\tlocal last_num=${arr[$last_pos]#?}\n\
+    \tfor ((i=0;i<last_pos;i++)); do\n\t\tlocal c=arr[$i]\n\t\tlet c=${c#?}\n\t\t\
+    let c=${c%?}\n\t\tif [ \"$c\" -eq \"$last_num\" ]; then\n\t\t\tbreak\n\t\tfi\n\
+    \t\tif [ \"$c\" -le \"$first_pos\" ]; then\n\t\t\tbreak\n\t\tfi\n\tdone\n\techo\
+    \ $((first_pos-last_pos+1))", "    local arr=\"$1\"\n    local result=$(echo \"\
+    ${arr}\" | tr \" \" \"\\n\" | sort --reverse | tr \" \" \"\\n\" | wc -l | tr -d\
+    \ \"\\n\" )\n    echo \"$result\"", "\tlocal IFS=' ' arr=$1\n\tlocal min=0\n\t\
+    local p\n\tfor ((i=0; i<${#arr}; i++))\n\tdo\n\t\tp=${arr[i]}\n\t\tfor ((j=$((i-1));\
+    \ j>0; j--))\n\t\tdo\n\t\t\tp=${p#?}${arr[j]}\n\t\tdone\n\t\tmin=$((min+1))\n\t\
+    \tarr[i]=${p}\n\tdone\n\tprintf \"%d\\n\" $min", "  arr=($1)\n  len=${#arr[@]}\n\
+    \  i=0\n  min=${len}\n\n  while [ $i -lt $len ]\n  do\n    mid=$(($i+$(($len-1))))\n\
+    \    if [ $arr[$mid] -gt $arr[$i] ]\n    then\n      min=$mid\n    else\n    \
+    \  i=$mid\n    fi\n  done\n\n  echo \"$min\"", "    local arr=\"${1:?Variable\
+    \ $1 not set}\"\n    # convert arr to an array to preserve spaces and commas\n\
+    \    local IFS=\" \"\n    arr=($arr)\n    local len=${#arr[*]}\n    local min=0\n\
+    \    local i j min_i min_j\n    local is_first\n    # loop through array in reverse\
+    \ to find the minimal change to make it palindromic\n    for ((i=len-2; i>=0;\
+    \ i--)); do\n        is_first=1\n        min_i=$i\n        min_j=$i\n        #\
+    \ loop through array from end to start changing array elements\n        for ((j=len-1;\
+    \ j>=0; j--)); do\n            # if the element is equal to the current one\n\
+    \            if [ \"${arr[i]}\" == \"${arr[j]}\" ]; then\n                if [\
+    \ ! \"$is_first\" ]; then\n                    min=$((min-arr[i]))\n         \
+    \       fi\n                is_first=0\n            else\n                if [\
+    \ -z \"$is_first\" ]; then\n                    min=$((min-arr[j]))\n        \
+    \        fi\n                is_first=1\n            fi\n        done\n    done\n\
+    \    echo \"$min\"", "    local -n arr=( \"$@\" )\n    local -i i\n    local -i\
+    \ len=${#arr[@]}\n    local -i maxlen\n    local -i minlen\n    local -i len2\n\
+    \    local -i len3\n\n    maxlen=0\n    minlen=0\n    len2=0\n    len3=0\n   \
+    \ for ((i=0; i < len; ++i)); do\n        len2+=1\n        len3=$(($len2+1))\n\
+    \        if [[ $i -ne $len3 ]]; then\n            if [[ $arr[i] -gt $arr[$len]\
+    \ ]]; then\n                maxlen=$(($maxlen+1))\n            else\n        \
+    \        minlen=$(($minlen+1))\n            fi\n        fi\n    done\n\n    echo\
+    \ \"$maxlen\"", "  local arr=\"${1:-}\"\n  local min=\"${2:-0}\"\n  local count=\"\
+    ${3:-0}\"\n\n  local i ii j jj kk kkk kl kll\n  local diff diffk diffl\n  local\
+    \ jk kl ll\n\n  echo \"${arr}\" | while read i j; do\n    # i is the left side\
+    \ of the k, and j is the right side of the k\n    i=${i//,/}\n    j=${j//,/}\n\
+    \    diff -y \"${arr}\" | awk \"{print \\$\\$i\\${\\$\\j}; exit}\" \\\n    | while\
+    \ read diff ; do\n      ((count++))\n      if [[ ${diff} -ge ${min} ]]; then\n\
+    \        min=${diff}\n      fi\n    done\n  done\n\n  echo \"${min}\"", "    local\
+    \ arr=$1\n    local len=${#arr[@]}\n    local palindromic\n    local i\n    local\
+    \ j\n    local min\n    local count\n\n    echo \"$arr\"\n    echo \"$len\"\n\n\
+    \    # check if arr is palindromic\n    if [[ $arr == *\"1220\"* ]]; then\n  \
+    \      palindromic=true\n    else\n        palindromic=false\n    fi\n\n    #\
+    \ check if arr is empty\n    if [ -z \"$arr\" ]; then\n        min=0\n       \
+    \ count=${#arr[@]}\n    else\n        min=${#arr[@]}\n        count=1\n    fi\n\
+    \n    # loop through the array and add min to count if it meets criteria\n   \
+    \ for (( i = 0; i < len; i++ )); do\n        local cur=${arr[$i]}\n\n        #\
+    \ loop through the array backwards\n        for (( j = (len - 1) - i; j >= 0;\
+    \ j-- )); do\n            local last=${arr[$j]}\n            echo \"${last}\"\n\
+    \n            # loop through the array forwards\n            for (( k = 0; k <=\
+    \ i; k++ )); do\n                local first=${arr[$k]}\n                echo\
+    \ \"${first}\"\n                let \"count = count + 1\"\n                let\
+    \ \"min = min + ((${first} > ${last}) == ${palindromic})\"\n\n               \
+    \ if (( min > count )); then\n                    echo \"${min}\"\n          \
+    \          break\n                fi\n            done\n        done\n    done\n",
+  "   local arr=\"${1:?}\"\n   # Remove first element if it's the only element\n \
+    \  local i=${#arr[@]}\n   if [ $i -eq 1 ]; then\n      arr=( \"${arr[@]:1}\" )\n\
+    \      i=${#arr[@]}\n   fi\n   local j=$(( $i - 1 ))\n   local k=$(( $i + 1 ))\n\
+    \   while [ $j -le $k ]; do\n      # Check if k-1 and k are the same\n      if\
+    \ [ \"$k\" != \"$k-1\" ]; then\n         local j=$(( $j + 1 ))\n      fi\n   \
+    \   # Check if k and j are the same and k-1 and j are different\n      if [ \"\
+    $j\" != \"$j-1\" ] && [ \"$j\" != \"$j\" ] && [ \"$k\" != \"$k-1\" ] && [ \"$k\"\
+    \ != \"$k\" ]; then\n         local k=$(( $k + 1 ))\n         local j=$(( $j -\
+    \ 1 ))\n      fi\n   done\n   echo \"$j\"", "  local arr\n  arr=($1)\n\n  local\
+    \ maxlen\n  maxlen=${#arr[@]}\n  local minlen\n  minlen=1\n\n  local i\n  local\
+    \ j\n  local count\n  local j2\n  local k2\n  local diff\n  local maxdiff\n  local\
+    \ maxdiff2\n\n  for ((i=0; i<maxlen; i++)); do\n    count=0\n    maxdiff=-1\n\
+    \    maxdiff2=-1\n    for (j=0; j<maxlen; j++) {\n      if [[ $i == $j ]]; then\n\
+    \        count=$(expr ${count} + 1)\n      else\n        if [ $count == 0 ]; then\n\
+    \          minlen=$((minlen + 1))\n          count=$((count + 1))\n          maxdiff=$j\n\
+    \          maxdiff2=$j\n        else\n          if [[ $maxdiff -lt $j ]]; then\n\
+    \            maxdiff=$j\n          fi\n          if [[ $maxdiff2 -lt $j ]]; then\n\
+    \            maxdiff2=$j\n          fi\n        fi\n      fi\n    done\n  done\n\
+    \n  echo ${minlen}", "\tlocal arr=$1 count\n\tcount=0\n\tlocal mincount\n\tmincount=0\n\
+    \tlocal i\n\tfor i in ${arr[@]}; do\n\t\tlet count+=$i\n\t\tif [ ${count} -gt\
+    \ $mincount ]; then\n\t\t\tmincount=$count\n\t\tfi\n\tdone\n\techo \"$mincount\"",
+  "    local arr=(${1//[, ]/ })\n    local length=\"${#arr[@]}\"\n    local length=\"\
+    ${length/#/ }\"\n    local length=\"${length/#/ }\"\n\n    local start=0\n   \
+    \ local end=\"${length}\"\n    while true; do\n        local start=0\n       \
+    \ local end=\"${length}\"\n        while [ \"${start}\" -le \"$end\" ]; do\n \
+    \           local p=$( echo \"${arr[*]}\" | sed \"s#$start#$end\" | bc)\n    \
+    \        if [[ \"$p\" < \"$arr[$start]\" ]]; then\n                arr[$start]=$p\n\
+    \                start=$((start+1))\n            else\n                end=$((end-1))\n\
+    \            fi\n        done\n        if [[ $start -eq $end ]]; then\n      \
+    \      break\n        fi\n        local length=\"${end}\"\n    done\n    echo\
+    \ \"${arr[*]}\"", "    local -r arr=(${1:?Missing array})\n    local -r n=${#arr[@]}\n\
+    \    local -r min_change=1\n    local i j k\n    for ((i=0; i < n; ++i)); do\n\
+    \        if [[ \"${arr[i]}\" == \"${arr[n]}\" ]]; then\n            ((min_change++))\n\
+    \        fi\n    done\n    echo \"${min_change}\"", "  arr=($1)\n  arrlen=${#arr[@]}\n\
+    \  smallest=-1\n  if [ \"${arrlen}\" -lt 1 ] ; then\n    echo \"Usage: $(basename\
+    \ $0) <space-separated list>\"\n    echo \"  Example: $(basename $0) 1 2 3 4 5\
+    \ 6 7 9 11\"\n    echo \"  Example: $(basename $0) 1 2 3 4 3 2 2\"\n    echo \"\
+    \  Example: $(basename $0) 1 2 3 2 1\"\n  else\n    arrlen=$(($arrlen / 2))\n\
+    \  fi\n  for i in $(seq 0 $(($arrlen - 1))); do\n    smallest=$((smallest + ${arr[$i]}\
+    \ ${arr[$(($i - 1))]}))\n  done\n  smallest=$((smallest + ${arr[$arrlen]}))\n\
+    \  echo $(echo \"${arr[$smallest]}\" | sed -e 's/ //')", "    local i=1\n    local\
+    \ arr=($1)\n    local min=0\n    local cur=$(head -n 1 <<< $1 | tail -n 1)\n \
+    \   for ((i=${#arr[@]}-1; i>=0; i--)); do\n        if [[ \"${arr[i]}\" == \"$cur\"\
+    \ ]]; then\n            min=$((min+1))\n        else\n            arr[$i]=$cur\n\
+    \        fi\n        cur=$((${arr[i]%??}))\n    done\n    echo ${min}", "  read\
+    \ -r -a array <<< \"$1\"\n  length=\"${#array[@]}\"\n  for i in $(seq 0 \"$((\
+    \ $length - 1 ))\");\n  do\n    array[$i]=\"${array[$i]#?}\"\n  done\n  result=\"\
+    ${array[$length]#?}\"\n  echo \"$result\"", "    IFS=$' '\n    # read all the\
+    \ input into an array \n    read -a arr <<< \"$1\"\n    echo \"${#arr[@]}\"\n\
+    \    # reverse the array\n    arr=(\"${arr[@]}\"\n    for (( i = ${#arr[@]}; $((\
+    \ i / 2 )) > 0; i-- )); do\n        arr[i]=\"${arr[i]}\"\n    done\n    # rebuild\
+    \ the array\n    arr=(\"${arr[@]}\"\n    i=${#arr[@]}\n    while [[ $i -ne 0 ]];\
+    \ do\n        echo \"${arr[i]}\"\n        i=$(( $i - 1 ))\n    done\n    echo\
+    \ \"${arr[i]}\"", "    local arr=(\"$@\")\n    local len=${#arr[@]}\n    if [[\
+    \ ${len} < 2 ]]; then\n        echo \"No array provided\" >&2\n        return\
+    \ 1\n    fi\n    local i=0\n    local c=0\n    local min=${len}\n    while [[\
+    \ $((c % 2)) -eq 0 ]]; do\n        local a=${arr[i]}\n        arr[i]=${arr[i-1]}\n\
+    \        arr[i-1]=${arr[i]}\n        ((i++))\n        local b=${arr[i]}\n    \
+    \    c=$((c + ((b == a) || $((b > a))))\n        arr[i]=${arr[i-1]}\n        arr[i-1]=${arr[i]}\n\
+    \        if [[ ${c} -gt min ]]; then\n            min=${c}\n        fi\n    done\n\
+    \    echo \"$min\"", "    local array=\"$1\"\n    local length=$(echo \"$array\"\
+    \ | wc -w)\n    local index=0\n    local count=0\n    while [ $index -lt $length\
+    \ ]; do\n        local next=$((index+1))\n        if [[ \"$array\" == \"$(echo\
+    \ \"$array\" | cut -c $index-)$(echo \"$array\" | cut -c $next-)\" ]]; then\n\
+    \            (( ++count ))\n        else\n            array=$(echo \"$array\"\
+    \ | sed \"s/\\(.*\\)$/\\1-$((index+1))/\")\n        fi\n        index=$next\n\
+    \    done\n    echo \"$count\"", "  declare -a arr=$1\n  declare -i i j\n  declare\
+    \ -a smallest_changes=()\n\n  smallest_changes=($(perl -ne 'printf \"%s\",$F[-1]'\
+    \ <<< \"$1\"))\n  if [[ $smallest_changes == *\"2\"* ]]; then\n    echo \"0\"\n\
+    \    return\n  fi\n\n  smallest_changes=($(perl -ne 'printf \"%s\",$F[-1]' <<<\
+    \ \"$1\"))\n  echo \"0\"\n  if [[ $smallest_changes == *\"1\"* ]]; then\n    echo\
+    \ \"0\"\n    return\n  fi\n\n  for i in $(seq 0 $((${#arr[@]}-1)/2)); do\n   \
+    \ j=$(expr $i * 2)\n    echo \"$smallest_changes[$i]\"\n    if [[ $smallest_changes[$i]\
+    \ == *\"${smallest_changes[@]:j:1}\"* ]]; then\n      smallest_changes[$i]=\"\
+    1\"\n    fi\n  done", "    local arr p\n    arr=$1\n    for p in $arr; do\n  \
+    \      arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n\
+    \    for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n \
+    \   done\n    p=${arr#*}\n    for p in $arr; do\n        arr=`echo $p | sed -e\
+    \ 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n    for p in $arr; do\n    \
+    \    arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n  \
+    \  for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n   \
+    \ done\n    p=${arr#*}\n    for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\\
+    (.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n    for p in $arr; do\n        arr=`echo\
+    \ $p | sed -e 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n    for p in $arr;\
+    \ do\n        arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n\
+    \    for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n \
+    \   done\n    p=${arr#*}\n    for p in $arr; do\n        arr=`echo $p | sed -e\
+    \ 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n    for p in $arr; do\n    \
+    \    arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n    done\n    p=${arr#*}\n  \
+    \  for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\(.\\)$/\\1/g'`\n   \
+    \ done\n    p=${arr#*}\n    for p in $arr; do\n        arr=`echo $p | sed -e 's/^\\\
+    (.\\)$/\\1/g'`\n    done\n    p", "    IFS=$' '\n    set -- $1 #remove space from\
+    \ start\n    local s=0\n    while [ \"$#\" -gt 1 ]; do\n        s=$((s+$#))\n\
+    \        shift\n    done\n    echo \"$s\"", "  local arr=($1)\n\n  local arr_padded=\"\
+    \"\n  local arr_length=$((${#arr[@]} - 1))\n\n  for (( i=0; i<$arr_length; i++\
+    \ )); do\n    arr_padded=\"$arr_padded ${arr[$i]}\"\n  done\n\n  echo $(($arr_length+$arr_padded/2))",
+  "  local -r arr=$1\n  local -r len_arr=${#arr[@]}\n  local -a min_arr=()\n  local\
+    \ -i j=0\n  local -a tmp\n  local -r len_min=0\n\n  echo \"Starting with ${arr[@]}\"\
+    \n\n  # Walk through the array from end to beginning\n  for (( i=${len_arr}; i>0;\
+    \ i-- )); do\n    local val=${arr[i]}\n\n    (( j < len_arr )) && [[ $val != ${arr[j]}\
+    \ ]] && tmp=(\"${min_arr[j%${#min_arr[@]}]}\" \"${val}\" \"${arr[j]}\") || tmp=(\"\
+    ${min_arr[j%${#min_arr[@]}]}\" \"${val}\" \"${arr[i]}\")\n    (( j++ ))\n\n  \
+    \  # Compare the current value with the current min in the min_arr\n    [[ ${min_arr[j%${#min_arr[@]}]}\
+    \ == ${val} ]] && len_min=$i || len_min=$len_min\n  done\n\n  echo \"Found ${len_min}\
+    \ minimum changes\"", "  local str=\"$1\"\n  local i j\n  local len\n  local result\n\
+    \  result=\"$((${#str}-2))\"\n  for ((i=0; i < ${#str}; i++)); do\n    len=\"\
+    ${#str}\"\n    for ((j=${i}; j < len; j++)); do\n      [[ \"${str:$j:1}\" != \"\
+    ${str:$j-1:1}\" ]] || continue\n      if [ \"$result\" -ge \"$((len-i))\" ]; then\n\
+    \        result=\"$((len-i))\"\n      fi\n      ((len--))\n      ((i--))\n   \
+    \ done\n  done\n  echo \"$result\"", "    IFS=' ' read -r -a array <<< \"$1\"\n\
+    \    local -i size=${#array[@]}\n    local -i min_change=0\n    local -i i\n\n\
+    \    while (( i < size )); do\n        (( min_change = min_change == 0 )) && min_change=1\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > array[size - 1 - i] )) || min_change=0\n\
+    \        (( min_change = min_change && array[i] > ", "  local arr=\"${1:-}\"\n\
+    \  local i output=0\n  for i in $(seq 1 \"${#arr[@]}\"); do\n    local tmp=${arr[$i]}\n\
+    \    arr[$i]=${arr[$((i-1))]}\n    arr[$((i-1))]=${tmp}\n    output=$(echo \"\
+    ${arr[@]}\" | tr ' ' '\\n' | grep -v \"^$i$\" | grep -v \"^$((i-1))$\" | wc -l)\n\
+    \  done\n  echo \"$output\"", "    local arr=()\n    local maxlen=0\n    local\
+    \ start=0\n    local end=0\n\n    shift\n    arr+=(\"$1\")\n\n    # Check if array\
+    \ contains only 1s (i.e. is palindromic)\n    if [[ \"$#\" -lt 2 ]]; then\n  \
+    \      return 0\n    fi\n\n    # Get the length of the array\n    len=${#arr[@]}\n\
+    \n    # Set the starting index\n    start=len-1\n\n    # Set the ending index\n\
+    \    end=len\n    while (( start >= 0 )); do\n        local elem=${arr[$start]}\n\
+    \        local i\n        for (( i = start-1; i >= 0; i-- )); do\n           \
+    \ if [[ $elem == ${arr[$i]} ]]; then\n                break\n            else\n\
+    \                arr[$i]=${elem}\n            fi\n        done\n\n        if ((\
+    \ start < end - 1 )); then\n            end=$(( end - 1 ))\n        else\n   \
+    \         end=0\n        fi\n\n        maxlen=$(( maxlen + 1 ))\n        arr+=(\"\
+    ${arr[$start]}\")\n        (( start = end - 1 ))\n    done\n\n    echo $maxlen",
+  "  local arr=\"$1\"\n  # echo \"${arr}\" | tr '[:lower:]' '[:upper:]' | tr ' ' '+'\
+    \ | tr '+' '-'\n  # echo \"${arr}\" | sed \"s/ /\\\\n/g\" | xargs -I % echo \"\
+    %\" | sort -n | head -1\n  echo \"$arr\" | sed \"s/ /\\\\n/g\" | xargs -I % echo\
+    \ \"%\" | sort -n | head -1 | tr '[:lower:]' '[:upper:]' | tr ' ' '+' | tr '+'\
+    \ '-'\n  # echo \"${arr}\" | sed \"s/ /\\\\n/g\" | xargs -I % echo \"%\" | sort\
+    \ -n | head -1 | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr '-' '+'", "  local\
+    \ arr=\"$1\"\n\n  # split into individual numbers\n  local nums=( $arr )\n\n \
+    \ # reverse each one\n  local rnums=()\n  for i in \"${nums[@]}\"; do\n    rnums+=($i)\n\
+    \  done\n\n  # find difference between min and max values\n  local min=${#nums[@]}\n\
+    \  local max=0\n  for i in \"${rnums[@]}\"; do\n    (( max < i )) && max=$i\n\
+    \  done\n\n  # subtract min from max\n  (( max - min )) && return $(( max - min\
+    \ ))", "    local arr=\"$1\"\n    local min=0\n    local i\n    local j\n    local\
+    \ len\n\n    len=${#arr[@]}\n\n    for ((i = 0; i < len / 2; i++)); do\n     \
+    \   min=$(expr $min + $(( ${arr[$i]} < ${arr[$len-i]} ? ${arr[$i]} : ${arr[$len-i]}\
+    \ )))\n    done\n\n    for ((j = len - 1; j > 0; j--)); do\n        min=$(expr\
+    \ $min + $(( ${arr[$j]} < ${arr[$len-j]} ? ${arr[$j]} : ${arr[$len-j]} )))\n \
+    \   done\n\n    echo \"$min\"", "  local arr=$1\n  local n\n  local min\n  local\
+    \ max\n  local minlen\n  local maxlen\n  local i\n  local j\n  local p\n  local\
+    \ t\n  local len\n  local len2\n  local minlen\n  local t\n  local s\n  local\
+    \ len\n  local m\n  local min\n  local max\n  local maxlen\n  local minlen\n \
+    \ local s\n  local len\n  local m\n  local max\n  local maxlen\n  local minlen\n\
+    \  local t\n  local s\n  local len\n  local m\n  local max\n  local maxlen\n \
+    \ local minlen\n  local minlen\n  local len\n  local m\n  local max\n  local maxlen\n\
+    \  local minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n  local\
+    \ m\n  local max\n  local maxlen\n  local minlen\n  local m\n  local max\n  local\
+    \ maxlen\n  local minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n\
+    \  local m\n  local max\n  local maxlen\n  local minlen\n  local m\n  local max\n\
+    \  local maxlen\n  local minlen\n  local m\n  local max\n  local maxlen\n  local\
+    \ minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n  local m\n\
+    \  local max\n  local maxlen\n  local minlen\n  local m\n  local max\n  local\
+    \ maxlen\n  local minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n\
+    \  local m\n  local max\n  local maxlen\n  local minlen\n  local m\n  local max\n\
+    \  local maxlen\n  local minlen\n  local m\n  local max\n  local maxlen\n  local\
+    \ minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n  local m\n\
+    \  local max\n  local maxlen\n  local minlen\n  local m\n  local max\n  local\
+    \ maxlen\n  local minlen\n  local m\n  local max\n  local maxlen\n  local minlen\n\
+    \  local m\n  local max\n  local maxlen\n", "  declare -a arr\n  arr=( $1 )\n\
+    \  local -i len i min_len\n  len=${#arr[@]}\n  min_len=0\n  for (( i=0; i<len;\
+    \ i++ )); do\n    arr[$i]=${arr[$i]#*}\n    arr[$i]=${arr[$i]%*}\n  done\n  min_len=${#arr[@]}\n\
+    \  echo \"$min_len\"", "  local arr=($1)\n  local len=\"${#arr[@]}\"\n\n  for\
+    \ i in $(seq 0 $((len-1)); do\n    local first=${arr[i]}\n    local second=${arr[$((len-1-i))]}\n\
+    \    local diff=$(($first < $second ? $first - $second : $second - $first))\n\
+    \    if [ $diff -gt 0 ]; then\n      echo \"$diff\"\n      return 0\n    fi\n\
+    \  done\n  return 1", "    local arr=(\"$@\")\n    local p=0\n    local count=0\n\
+    \    local tmp=${arr[0]}\n\n    while [ $p -lt ${#arr[@]} ]; do\n        tmp=${arr[$p]}\n\
+    \        count=$(( count + 1 ))\n\n        local tmp2=$(echo \"$tmp\" | sed -r\
+    \ \"s/(.*$tmp)(.*$tmp)/\\2\\1/\" | sort | uniq)\n        local tmp3=$(echo \"\
+    $tmp\" | sed -r \"s/(.*$tmp)(.*$tmp2)/\\1/\" | sort | uniq)\n\n        if [ \"\
+    $tmp\" = \"$tmp2\" ] || [ \"$tmp\" = \"$tmp3\" ]; then\n            local tmp4=$(echo\
+    \ \"$tmp\" | sed -r \"s/(.*$tmp)(.*$tmp2)/\\1/\" | sort | uniq)\n            arr[$p]=$tmp4\n\
+    \        fi\n\n        p=$(( p + 1 ))\n    done\n\n    echo $count", "  local\
+    \ arr\n  arr=$1\n  local -n arrlen\n  arrlen=($(eval echo \"\\${#arr[@]}\")) #\
+    \ This is to prevent arrlen from being empty.\n\n  local changes=0\n  local change\n\
+    \  local i\n  local j\n  local minlen\n\n  for i in \"${!arr[@]}\"; do\n    local\
+    \ len=${#arr[i]}\n    minlen=$(expr $len / 2)\n\n    # First step is to make each\
+    \ element half of its current length, to make\n    # it palindromicized.\n   \
+    \ for j in $(expr $minlen - 1 \\* 2); do\n      arr[i]=$(expr ${arr[i]} + ${arr[i]})\n\
+    \      arr[i]=$(expr ${arr[i]} % 10)\n    done\n\n    # Now we check if the current\
+    \ array is a palindromic array.\n    if [[ ${arr[i]} == ${arrlen[i]} ]]; then\n\
+    \      echo \"$changes\"\n      return 0\n    fi\n\n    # Now we compare the current\
+    \ array to the previous one, and find out the minimum\n    # number of changes\
+    \ that we need to make.\n    if [[ ${arr[i]} == ${arrlen[$i - 1]} ]]; then\n \
+    \     # We need to increase a letter by 1.\n      changes=$(expr $changes + 1)\n\
+    \    else\n      # We need to decrease a letter by 1.\n      changes=$(expr $changes\
+    \ - 1)\n    fi\n  done", "  local array=\"$1\"\n  local palindromic\n  local n\n\
+    \  local x\n  local y\n  local s\n  local i\n  local j\n  local length\n  local\
+    \ min_change\n\n  (( n = ${#array[@]} - 1 ))\n\n  # Set up a variable to hold\
+    \ the first element that needs changing\n  min_change=${array[0]}\n  \n  # Set\
+    \ up variables so that we can use \"for\" loops\n  i=1\n  j=$n\n  palindromic=true\n\
+    \  \n  # while loop will keep iterating while i <= j\n  while [[ $i -le $j ]];\
+    \ do\n    # Store the current element in variable \"x\"\n    x=${array[$i]}\n\
+    \    \n    # Store the remaining elements into variable \"y\" using \"for\"\n\
+    \    for (( j=$i; j -le $n; j++ )); do\n      y=${array[$j]}\n    \n      # If\
+    \ x (the first element that needs changing) is the same as y backwards\n     \
+    \ # and forwards (the palindrome) then increment the variable \"min_change\"\n\
+    \      if [ $x == $y -a $x == ${y#*} -a $x == ${${y#*}#*} ]; then\n        ((\
+    \ min_change++))\n      fi\n    done\n    \n    # Swap the current element and\
+    \ the first element that needs changing\n    s=$x\n    x=$y\n    y=$s\n    \n\
+    \    # Swap the first element that needs changing with the current element\n \
+    \   s=${array[0]}\n    array[0]=$x\n    x=${array[0]}\n    y=$s\n    \n    i=$((\
+    \ $i + 1 ))\n  done\n\n  # Remove leading zeros so that we don't have \"0\"\n\
+    \  length=${#array[@]}\n  if (( $length == 1 )); then\n    array=${array[@]:1}\n\
+    \  fi\n\n  echo \"$min_change\"", "    local a b\n    local n\n    local res\n\
+    \n    a=${1//,/ }\n    if [ \"$a\" == \"\" ]; then\n        return 0\n    fi\n\
+    \n    for (( n=1; n<${#a}; n++ )); do\n        b=${a:$n:${#a}} # b starts with\
+    \ first n elements of a, ending with last n elements of a\n        if [ \"$a\"\
+    \ == $b\" ]; then\n            res=\"$n\"\n            break\n        fi\n   \
+    \ done\n\n    echo \"$res\"", "  local arr=\"$1\"\n  local i j k min_count palindromic_count\n\
+    \  palindromic_count=0\n  min_count=${#arr[@]}\n  for i in \"${!arr[@]}\"; do\n\
+    \    # i is index of the current element\n    # j is index of first element to\
+    \ change\n    # k is index of first element to not change\n    j=1\n    k=i\n\
+    \    while ((j<=k) && (${arr[$j]} != ${arr[$k]}); j=$((k+1)));\n    if ((${arr[$i]}\
+    \ == ${arr[$j]}) && ($j == ${#arr[@]}-1)) ; then\n      palindromic_count=$((palindromic_count+1))\n\
+    \      i=$((k+1))\n      j=$((k+1))\n      k=i\n      break\n    fi\n    if ((j>k)\
+    \ && (${arr[$j]} != ${arr[$i]})) ; then\n      ((k++))\n      j=$((i+1))\n   \
+    \ fi\n  done\n  echo \"$palindromic_count\"", "    local arr=$1 n=0\n    local\
+    \ nm num\n    while read -r num; do\n        nm=$num\n        n=0\n        while\
+    \ [[ $nm != ${nm//\\// } ]]; do\n            n=$(( $n + 1 ))\n            nm=$nm${num:${#num}-1:1}\n\
+    \        done\n        if [[ $n == 0 ]]; then\n            return 0\n        fi\n\
+    \        arr=( \"${arr[@]:0:$(( n - 1 ))}\" \"$num\" \"$arr[@]:$(( $n - 1 ))\"\
+    \ )\n    done < <(printf '%s\\n' \"${arr[@]}\" | sort -n)", "    local -r input=\"\
+    ${1}\"\n    local -r output=\"\"\n\n    for (( i=0; i < ${#input}; i++ )); do\n\
+    \        local -r current=\"${input:${i}}\"\n        local -r previous=\"${input:$((i-1))}\"\
+    \n        local -r next=\"${input:$((i+1))}\"\n\n        if [ -n \"${previous}\"\
+    \ ] && [ -n \"${next}\" ]; then\n            if [ \"${previous}\" == \"${next}\"\
+    \ ]; then\n                output=\"${output} ${previous}\"\n            else\n\
+    \                output=\"${output} ${current} ${previous}\"\n            fi\n\
+    \        fi\n    done\n\n    local -r smallest=\"${output}\"\n    local -r num=\"\
+    ${#output}\"\n    [[ \"${smallest}\" =~ ^-?[0-9]+$ ]] || exit 1\n    local -r\
+    \ length=$(expr \"${num}\" : \"^${smallest}[0-9]*$\")\n\n    [[ ${length} -gt\
+    \ 0 ]] || exit 0\n    echo \"${smallest}\"", "    local arr=( \"$@\" )\n\n   \
+    \ # reverse arr\n    arr=( \"${arr[@]}\" )\n    arr=( \"${arr[@]:0:${#arr[@]}-2}\"\
+    \ )\n\n    # iterate through and find minimum number of swaps\n    local min_swaps\n\
+    \    min_swaps=1\n    for (( i=0; i < ${#arr[@]}-1; i++ )); do\n        if [ ${arr[i]}\
+    \ == ${arr[i+1]} ]; then\n            arr[i]=${arr[i+1]}\n            arr[i+1]=${arr[i]}\n\
+    \            min_swaps=$(expr $min_swaps + 1)\n        else\n            break\n\
+    \        fi\n    done\n\n    # output result\n    echo \"$min_swaps\"", "  local\
+    \ arr=\"$1\"\n  local n c\n\n  c=\"${arr##* }\"\n  arr=\"${arr% }\"\n\n  (( n\
+    \ = ${#arr} ))\n  arr=\"${arr#* }\"\n\n  (( n = ${#arr} ))\n  arr=\"${arr%* }\"\
+    \n\n  (( n = ${#arr} ))\n  arr=\"${arr%* }\"\n\n  (( n = ${#arr} ))\n\n  echo\
+    \ \"$n\"", "    local arr=\"$1\"\n    local size=${#arr}\n    local count=0\n\
+    \    local i\n    local j\n    local min\n    local change\n    local result\n\
+    \    local s\n    local x\n    local y\n    \n    # Find the smallest change to\
+    \ make this array palindromic\n    while [ $count -lt $size ]; do\n        i=$((count\
+    \ - 1))\n        j=$((count + 1))\n        s=$((i+j))\n        x=$arr[$i]\n  \
+    \      y=$arr[$j]\n        if [ $x != $y ]; then\n            echo $x\n      \
+    \      echo $y\n            echo $(smallest_change \"$(echo $x $y)\")\n      \
+    \      echo $(smallest_change \"$(echo $x $x $y $y)\")\n            echo $(smallest_change\
+    \ \"$(echo $x $x $y $x $y)\")\n            echo $(smallest_change \"$(echo $x\
+    \ $x $x $x $y $y $y)\")\n            echo $(smallest_change \"$(echo $x $x $x\
+    \ $x $x $y $y $y $y)\")\n        fi\n    done", "  local arr=\"$1\";\n  if [ \"\
+    $#\" -lt 2 ]; then\n    echo \"Usage: $0 arr1 arr2 ... arrN\";\n    return 1;\n\
+    \  fi\n  local smallest;\n  local count=0;\n  local i;\n  for (( i=${#arr}-1;\
+    \ i>=0; i-- )); do\n    count=0;\n    local j;\n    for (( j=${#arr}-1; j>=0;\
+    \ j-- )); do\n      if [ \"${arr:j:1}\" = \"${arr:j:1}\" -a \"${arr:i:1}\" = \"\
+    ${arr:i:1}\" ]; then\n        count=$(expr ${count} + 1);\n      fi\n    done\n\
+    \    if [ \"${count}\" -le \"$smallest\" ]; then\n      smallest=$count;\n   \
+    \ fi\n  done\n  echo $smallest;", "  local arr=($1)\n  local i\n  local len=${#arr[@]}\n\
+    \  local c=0\n\n  for i in $(seq 0 $((len-1))); do\n    local j=$((len-1-i))\n\
+    \    local x=$((arr[$i]>arr[$j]) ? $i : $j)\n    ((c++))\n    arr[$i]=${arr[$x]}\n\
+    \    arr[$x]=${arr[$i]}\n  done\n\n  echo $c", "    local arr=$1\n    # Sort the\
+    \ array\n    local tmp=${arr##* }\n    arr=${arr%% *}\n    for (( i=1; i<${#arr};\
+    \ i++ )); do\n        local val=${arr[i]}\n        arr[i]=${arr[${#arr[@]} - $i]}\n\
+    \        arr[${#arr[@]} - $i]=${val}\n    done\n    arr=${arr// /}\n    local\
+    \ tmp\n    tmp=${arr##* }\n    arr=${arr%% *}\n    # Iterate through it\n    local\
+    \ count=0\n    while [[ $count -lt ${#arr} ]]; do\n        # Is the current item\
+    \ in the middle of the array the same?\n        if [[ ${arr[$count]} == ${arr[$((${#arr[@]}-1)/2)]}\
+    \ ]]; then\n            (( count++ ))\n            # Get rid of the element (change\
+    \ it)\n            arr=${arr/$count/${arr[$((${#arr[@]}/2))]}\n        else\n\
+    \            arr=${arr/$count/$count}\n        fi\n    done\n    # Show what we\
+    \ found\n    echo -n \"${arr}\"", "  local arr=\"$1\"\n  local len=${#arr}\n \
+    \ local i=1\n  local j=0\n  local result=0\n  local last=${arr[i]}\n  local last2=0\n\
+    \n  while [ \"$i\" -le \"$len\" ] && [ \"$j\" -lt \"$len\" ]\n  do\n    if [ \"\
+    $last\" != \"${arr[$j]}\" ]\n    then\n      if [ \"$last\" -gt \"$last2\" ]\n\
+    \      then\n        result=$(($result + 1))\n      fi\n    fi\n    last=$arr[$j]\n\
+    \    last2=$arr[$j-1]\n    ((j++))\n    ((i++))\n  done\n\n  if [ \"$i\" -le \"\
+    $len\" ]\n  then\n    if [ \"$last\" -gt \"$last2\" ]\n    then\n      result=$(($result\
+    \ + 1))\n    fi\n  fi\n  echo $result", "\tlocal n=$1\n\tlocal p\n\tlocal c=$n\n\
+    \tlocal i\n\tlocal e\n\tlocal j\n\tlocal k\n\tlocal m\n\tlocal x\n\tlocal s\n\n\
+    \t[ $n -gt 100 ] && return 1\n\tn=${n//[\\ ]//g}\n\tp=$(echo $n | rev | cut -c1-$((${#n}-1)))\n\
+    \ts=0\n\tx=0\n\tk=$((${#p} - 1))\n\ti=$(echo $p | cut -c1-$((${#p}-1)))\n\te=$((${#p}\
+    \ - 1))\n\tj=$(echo $p | cut -c1-$((${#p}-1)))\n\twhile [ $e -ge 0 ]; do\n\t\t\
+    [ $e -eq 1 ] && break\n\t\tlet \"e--\"\n\t\tlet \"j++\"\n\t\tlet \"x++\"\n\t\t\
+    [ $x -gt $n ] && let \"x=$n\"\n\t\tm=$((j-j+1))\n\t\tif [ $m -gt $s ]; then\n\t\
+    \t\ts=$m\n\t\t\tm=$((j-j+1))\n\t\tfi\n\tdone\n\techo $s", "  # Read input from\
+    \ stdin\n  local arr=$(cat)\n  # Pad array with -1 so it's length is even\n  arr=(\
+    \ \"${arr[@]}\" -1 )\n  # Read backward from last element to first\n  for i in\
+    \ $(seq ${#arr[@]} - 1 0 -1); do\n    # Look at the current element and the next\
+    \ element\n    local cur_el=$(echo ${arr[$i]} | cut -c1); local next_el=$(echo\
+    \ ${arr[$i+1]} | cut -c1); # Print current element if it's not palindromic\n \
+    \   if [ \"${cur_el}\" != \"${next_el}\" ]; then # Print current element if it's\
+    \ not palindromic\n      echo \"${cur_el}\"; fi; # Print current element if it's\
+    \ not palindromic\n  done\n  echo", "\tlocal arr=$1\n\tlocal min=0\n\tlocal max=0\n\
+    \tlocal index=0\n\tlocal c=0\n\tlocal len=$#\n\tlocal p=0\n\tlocal s=0\n\tlocal\
+    \ t\n\n\twhile [ \"$p\" -lt \"$len\" -a \"$c\" -lt \"$min\" ] do\n\t\ts=0\n\t\t\
+    t=$((len-p))\n\t\twhile [ \"$p\" -le \"$t\" -a \"$c\" -lt \"$min\" ] do\n\t\t\t\
+    ((c++))\n\t\t\t((s++))\n\t\t\tp=$((p+1))\n\t\tdone\n\t\t((min=$c))\n\t\t((max=$s))\n\
+    \tdone\n\t((c--))\n\n\t((p=0))\n\twhile [ \"$p\" -lt \"$len\" -a \"$c\" -lt \"\
+    $min\" ] do\n\t\t((c++))\n\t\t((p++))\n\tdone\n\t((min=$c))\n\n\techo $min", " \
+    \   arr=$1\n    smallest=0\n    for i in $arr; do\n        i=${i//[^ ]}\n    \
+    \    i=${i//$arr}\n        if [ \"$i\" = \"$i\" ]; then\n            smallest=1\n\
+    \            break\n        fi\n    done\n    echo \"$smallest\"", "  local arr=(\
+    \ $1 )\n  local i=${#arr[@]}\n  local j\n  local k\n  local min_change\n  local\
+    \ tmp\n  local is_palindromic\n\n  is_palindromic=0\n  min_change=0\n  while [\
+    \ $i -gt 1 ]; do\n    j=$(( $i - 1 ))\n    k=$(( $i + 1 ))\n\n    if [ \"$j\"\
+    \ -eq \"$i\" ]; then\n      is_palindromic=1\n      arr[ $j ]=$arr[ $k ]\n   \
+    \   arr[ $k ]=$arr[ $j ]\n    fi\n\n    tmp=$arr[ $j ]\n    arr[ $j ]=$arr[ $i\
+    \ ]\n    arr[ $i ]=$tmp\n\n    if [ \"$is_palindromic\" = 1 ]; then\n      ((\
+    \ min_change++ ))\n    fi\n\n    (( i-- ))\n  done\n\n  echo $min_change", " \
+    \   local arr\n    arr=$1\n    echo \"$1\" | grep -q '^[0-9]+$'\n    if [ $? -eq\
+    \ 0 ]; then\n        echo \"${arr//[^0-9]/}\"\n        echo \"${arr//[^0-9]/}\"\
+    \ | sort -n | head -1\n    else\n        echo \"0\"\n    fi", "    local -n arr=$1\
+    \ palindromic\n    local -i min_len i\n    local max=0\n    # reverse the list\n\
+    \    arr=(${arr[@]}) \n    # count the number of change\n    for ((i=${#arr[@]}-1;i>=0;i--))\
+    \ ; do\n        local j=0\n        while [[ \"$arr[$((i-1))]\" == \"$arr[$i]\"\
+    \ ]] ; do\n            ((j++))\n        done\n        if ((j > max)) ; then\n\
+    \            ((max=j))\n        fi\n    done\n    if ((max < min_len)) ; then\n\
+    \        echo \"$max\"\n    elif ((max > min_len)) ; then\n        # a change\
+    \ is required\n        while (( min <= max )) ; do\n            local palindromic=0\n\
+    \            local i\n            # count the number of change\n            for\
+    \ (i=${#arr[@]}-1;i>=0;i--) ; do\n                local j=0\n                while\
+    \ [[ \"$arr[$((i-1))]\" == \"$arr[$i]\" ]] ; do\n                    ((j++))\n\
+    \                done\n                if ((j == max)) ; then\n              \
+    \      palindromic=1\n                    break\n                fi\n        \
+    \    done\n            if ((palindromic == 0)) ; then\n                # no more\
+    \ change required\n                break\n            fi\n            ((i++))\n\
+    \            ((min++))\n        done\n        if ((i)) ; then\n            # print\
+    \ all change\n            echo \"$i\"\n        fi\n    fi", "  local arr=($1)\n\
+    \n  local min=\"1\"\n  local index=\"0\"\n  local size=\"${#arr[@]}\"\n  local\
+    \ temp\n\n  # If there are not enough elements in arr to make the array palindromic,\n\
+    \  # return the smallest number of elements that need to be changed to make it\
+    \ so.\n  if [ $size -eq 0 ]; then\n    return 0\n  fi\n\n  # Keep adding 1 to\
+    \ index and checking if arr[index] is equal to\n  # arr[size-1]. Until you find\
+    \ a difference, increment index.\n  while [ $index -lt $size ]; do\n    temp=$arr[$index]\n\
+    \    arr[$index]=$arr[$size-1]\n    arr[$size-1]=$temp\n    index=$(expr $index\
+    \ + 1)\n    if [ $index -eq $size ]; then\n      index=\"0\"\n    fi\n  done\n\
+    \n  # If arr is palindromic, return the number of elements needed to make arr\
+    \ a palindromic array.\n  if [ \"$arr\" != \"${arr[@]:0:$((size-1))}\" ]; then\n\
+    \    return 0\n  fi\n\n  # Otherwise, return the smallest number of elements that\
+    \ need to be changed to make arr a palindromic array.\n  local index1=0\n  local\
+    \ index2=0\n  local size2=\"${#arr[@]}\"\n\n  # Keep moving both index forwards\
+    \ and backwards until arr[index1] is equal to\n  # arr[index2]. Increment both\
+    \ indexes until they are equal.\n  while [ \"$index1\" -lt $size2 ]; do\n    while\
+    \ [ \"$index2\" -lt $size2 ]; do\n      temp=$arr[$index1]\n      arr[$index1]=$arr[$index2]\n\
+    \      arr[$index2]=$temp\n      index2=$(expr $index2 + 1)\n      if [ \"$index2\"\
+    \ -eq $size2 ]; then\n        index2=\"0\"\n      fi\n    done\n\n    temp=$arr[$index1]\n\
+    \    arr[$index1]=$arr[$index2]\n    arr[$index2]=$temp\n    index1=$(expr $index1\
+    \ + 1)\n    if [ \"$index1\" -eq $size2 ]; then\n      index1=\"0\"\n    fi\n\
+    \  done\n\n  # Return arr[index1]\n  return \"${arr[index1]}\"", "    local array=\"\
+    ${1:-}\"\n    local i\n    local count\n    local minimum=0\n    local j\n   \
+    \ local temp\n\n    # Find the minimum number of elements that need to change\
+    \ to make them palindromic\n    for i in $(seq 1 \"${#array[@]}\")\n    do\n \
+    \       count=$(echo $array | tr \" \" \"\\n\" | wc -c)\n        if [[ $count\
+    \ -gt 0 ]]; then\n            count=$((${count} / 2))\n        else\n        \
+    \    count=${count}\n        fi\n        for j in $(seq 0 $count)\n        do\n\
+    \            temp=$(echo $array | sed -n \"${i}p\")\n            if [[ $temp ==\
+    \ *$array[${j}]* ]]; then\n                (( minimum = minimum +1 ))\n      \
+    \          break\n            fi\n        done\n    done\n    if [[ $minimum -eq\
+    \ 0 ]]; then\n        return 0\n    else\n        echo \"$minimum\"\n    fi",
+  "    local arg\n    local -i num_changes=0\n    for arg in \"$@\"; do\n        ((num_changes\
+    \ > 0) && echo \"$num_changes\")\n        reverse=\"$(echo \"$arg\" | sed 's/\
+    \ /\\n/g')\"\n        if [ \"$reverse\" = \"$arg\" ]; then\n            num_changes=0\n\
+    \        else\n            num_changes=$((num_changes + 1))\n        fi\n    done",
+  "    local -i p=0\n    local -i m=1\n    local -i n=${#1}\n    local -i max=$n\n\
+    \    local -i i\n    local -s\n    local array\n    local res\n\n    while ((\
+    \ p < max )); do\n        # Find current minimum number of elements needed to\
+    \ make an array palindromic\n        # by going from left to right and right to\
+    \ left (from both directions)\n        i=$(( $m + $n - 1 ))\n        array=(${1:i:n})\n\
+    \        res=$(( $array[($n-1)] ))\n        if (( $res == $1 )); then\n      \
+    \      (( m = m ))\n        elif (( $res == $array[($n-1)] )); then\n        \
+    \    (( n = n ))\n        elif (( $res < (( $array[($n-1)] )))); then\n      \
+    \      m=$(( $m + 1 ))\n        else\n            n=$(( $n - 1 ))\n        fi\n\
+    \        p=$(( $p + 1 ))\n    done\n    res=$(( $n - $m ))\n    if (( $res ==\
+    \ 0 )); then\n        return 0\n    else\n        return $res\n    fi", "    local\
+    \ arr=( $1 )\n    local min_len=${#arr[@]}\n    local i=0\n    local prev_len=$((\
+    \ ${#arr[@]} - 1 ))\n    while [ $i -lt $min_len ]; do\n        local j=0\n  \
+    \      local curr=${arr[i]}\n        local prev=${arr[$prev_len]}\n        local\
+    \ j=(( ${#curr} - 1 ))\n        while [ $j -lt $min_len ]; do\n            local\
+    \ k=${#prev}\n            local diff=$(( ${#curr} - ${#prev} ))\n            if\
+    \ [ $diff -gt 0 ]; then\n                local tmp=$(( ${#prev} - 1 ))\n     \
+    \           while [ $tmp -gt 0 ]; do\n                    prev=${prev:0:$(( ${#prev}\
+    \ - 1 ))}\n                    j=$(( $j - 1 ))\n                    tmp=$(( $tmp\
+    \ - 1 ))\n                done\n            else\n                prev=${prev:0:$((\
+    \ ${#prev} - 1 ))}\n            fi\n            j=$(( $j + 1 ))\n            k=$((\
+    \ $k + 1 ))\n        done\n        arr[i]=$prev\n        i=$(( $i + 1 ))\n   \
+    \     prev_len=$(( $prev_len - 1 ))\n    done\n    echo ${arr[@]}", "    local\
+    \ arr=( \"$1\" )\n    # Count the number of elements in arr\n    local size=${#arr[@]}\n\
+    \n    # The smallest number of elements that need to be changed is\n    # always\
+    \ 0 or 1.\n    local min=0\n\n    # The index of the first non-negative element\
+    \ in arr.\n    local index=0\n\n    # The index of the last non-negative element\
+    \ in arr.\n    local end=0\n\n    # Loop through the array backwards\n    for\
+    \ (( index=1; index<size; index++ )); do\n        if [[ ${arr[index]} -eq ${arr[index-1]}\
+    \ ]]; then\n            # An element is equal to its mirror, change it\n     \
+    \       min=$(( min + 1 ))\n            arr[index-1]=${arr[index]}\n         \
+    \   arr[index]=${arr[index-1]}\n        else\n            # Find the first non-negative\
+    \ element in arr\n            if [[ -z ${arr[index]} ]]; then\n              \
+    \  min=$(( min + 1 ))\n                index=${index}\n                end=${index}\n\
+    \            fi\n        fi\n    done\n\n    # Loop through the array forward\n\
+    \    for (( index=end; index>0; index-- )); do\n        if [[ ${arr[index]} -eq\
+    \ ${arr[index-1]} ]]; then\n            # An element is equal to its mirror, change\
+    \ it\n            min=$(( min + 1 ))\n            arr[index-1]=${arr[index]}\n\
+    \            arr[index]=${arr[index-1]}\n        else\n            # Find the\
+    \ first non-negative element in arr\n            if [[ -z ${arr[index]} ]]; then\n\
+    \                min=$(( min + 1 ))\n                index=${index}\n        \
+    \        end=${index}\n            fi\n        fi\n    done\n\n    echo \"$min\"",
+  "    declare -a arr=(\"${@}\")\n    local len=\"${#arr[@]}\"\n    local i j\n  \
+    \  for ((i=0; i < len; i++)); do\n        j=$(($len - i))\n        arr[i]=${arr[i]}\n\
+    \        arr[$i]=${arr[$i]}\n        if (( i == j )); then\n            echo \"\
+    ${#arr[@]}\"\n            echo \"$((${arr[i]}+1))\"\n            break\n     \
+    \   fi\n    done", "    local IFS=' ' read -r -a arr <<< \"$1\"\n    local i j\
+    \ k min\n    min=0\n    for ((i=0; i < ${#arr[@]}; i++)); do\n        if [[ ${arr[i]}\
+    \ == ${arr[@]::$((i-min))} ]]; then\n            j=$((i + 1))\n            k=i\n\
+    \            while [[ ${arr[j]} == ${arr[@]::$((j-k))} ]] && ((j > k)); do\n \
+    \               j=$((j + 1))\n                k=$((i + 1))\n            done\n\
+    \            if ((j == k)); then\n                min=$((min+1))\n           \
+    \ fi\n        fi\n    done\n    echo \"$min\"", "    local arr=( \"$@\" )\n  \
+    \  local i p\n    local len=${#arr[@]}\n    p=$((${#arr[@]}-1))\n    local k\n\
+    \    local min\n    local diff\n    local count\n    min=-1\n    for ((i=p-1;\
+    \ i >= 0; i--)); do\n\tk=$(echo $arr[i] | rev | cut -c1)\n\tif [ \"$k\" != \"\
+    $arr[$((i-1))]\" ]; then\n\t    min=$((min+1))\n\t    count=$(echo $arr[i] | rev\
+    \ | cut -c1)\n\telse\n\t    count=$(echo $arr[i] | rev | cut -c1)\n\tfi\n\tarr[i]=$count\n\
+    \    done\n    diff=$((${#arr[@]}-1))\n    ((diff > min)) && echo \"$diff\" ||\
+    \ echo \"$min\"", "  arr=()\n  for el in $*; do\n    arr+=(\"$el\")\n  done\n\
+    \  echo \"${arr[@]}\"\n  if [[ ${#arr[@]} -eq 0 ]]; then\n    echo \"0\"\n  else\n\
+    \    echo \"${#arr[@]}\" | bc -l\n  fi", "  local a b n max=0\n\n  while read\
+    \ -r a; do\n    (( n=0; max=$(( a > max )) ))\n    b=${a//[^ ]/}\n    (( n+=(\
+    \ $a != b )) ))\n  done\n\n  echo \"$n\"", "    local arr=$1\n    local result\n\
+    \    local i\n    local c\n    local k\n    local min\n    local size\n\n    for\
+    \ ((i = 0; i < ${#arr}; i++)) ; do\n        c=\"${arr[i]}\"\n        size=${#arr}\n\
+    \        min=0\n        for ((k = (size - 1); k >= 0; k--)) ; do\n           \
+    \ if [[ \"${arr[k]}\" != \"${arr[k+1]}\" ]]; then\n                if ((c < ${arr[k]}));\
+    \ then\n                    min=$((min+1))\n                fi\n             \
+    \   if ((c > ${arr[k]})); then\n                    min=$((min+1))\n         \
+    \       fi\n            fi\n        done\n        if (( min > 0 )); then\n   \
+    \         echo \"$min\"\n            return 0\n        fi\n    done\n    echo\
+    \ \"0\"", "  local arr=\"$1\"\n  local min_size=$2\n\n  echo \"${#arr} elements\"\
+    \n  echo \"${arr}\" | sort -n | uniq -c | sed -e 's/^  *//' -e 's/ *$//' -e 's/^\
+    \  *//' | sort -nr | head -$min_size | tail -$1", "  local arr=\"$1\"\n  local\
+    \ palindrome=\n  for number in $arr; do\n    local prefix=$number\n    local suffix_left=\"\
+    \"\n    local suffix_right=\"\"\n    local remainder\n    while [[ \"$number\"\
+    \ -gt 0 ]]; do\n      remainder=$((number % 10))\n      if [ \"$remainder\" -eq\
+    \ 0 ]; then\n        suffix_left=$((10#$number))\n      else\n        suffix_left=$((10#$remainder))\n\
+    \      fi\n      number=$((number / 10))\n    done\n    if [ \"$number\" -eq 0\
+    \ ]; then\n      palindrome=$prefix$suffix_left$suffix_right\n    fi\n  done\n\
+    \  echo \"$palindrome\"", "    local str=\"${1:-}\"\n    local nums=$(echo \"\
+    $str\" | sed -n \"s/^\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9]*\\\
+    )\\s*\\([0-9]*\\)\\s*\\([0-9]*\\)\\s*\\([0-9", "    local arr=\"$1\";\n    local\
+    \ i=0;\n    local j=0;\n    local min_changes=0;\n    while (( i < ${#arr} ));\
+    \ do\n        (( min_changes = $(echo \"$min_changes + $(echo $(( ${#arr} - i\
+    \ + $j )) | bc -l)\" | bc -l ) );\n        if (( $( echo $(( ${#arr} - i + $j\
+    \ )) | bc -l ) > $min_changes )); then\n            i=$(( ${#arr} - $i + 1 ));\n\
+    \        else\n            i=$i;\n            (( min_changes = $(echo \"$min_changes\
+    \ + 1\" | bc -l ) ));\n        fi\n        j=$i;\n    done\n    echo $min_changes;",
+  "    local a\n    local i j\n    local min_palindromic_length\n    local min_palindromics\n\
+    \    IFS=$'\\n' read -r -a a <<<\"$1\"\n    min_palindromic_length=${#a[@]}\n\
+    \    [[ ${#a[@]} -eq 0 ]] && echo \"$min_palindromic_length\" || return $min_palindromic_length\n\
+    \    for (( i = 0; i < ${#a[@]}; i++ )); do\n        local temp\n        temp=${a[i]}\n\
+    \        for (( j = (${#temp} - 1); j >= 0; j-- )); do\n            local t\n\
+    \            local j2\n            t=${temp}\n            j2=$((${#t}-1))\n  \
+    \          local j3\n            j3=$((${#t}-2))\n            if [[ \"${t}\" !=\
+    \ \"${t%?}\" ]]; then\n                if [[ \"${t}\" == \"${t%?}${t#?}\" ]];\
+    \ then\n                    if [[ \"${t}\" != \"${t#?}${t%?}\" ]]; then\n    \
+    \                    temp=${temp%?}${t#?}\n                    fi\n          \
+    \      fi\n            fi\n        done\n        if [[ \"${temp}\" != \"${temp%?}\"\
+    \ ]]; then\n            arr=( \"${a[@]}\" \"$temp\" )\n            min_palindromics=${#arr[@]}\n\
+    \            if [[ \"$min_palindromics\" -eq \"$min_palindromic_length\" ]]; then\n\
+    \                min_palindromic_length=$min_palindromics\n            fi\n  \
+    \      fi\n    done\n    echo $min_palindromic_length", "    local arr=\"$1\"\n\
+    \    local size=$(echo \"$arr\" | wc -w)\n    local result=\"$size\"\n    for\
+    \ ((i=1; i<$size; i++)); do\n        local idx=$(expr $i - 1)\n        if [[ $idx\
+    \ -ne $((size-1)) ]]; then\n            local elem=\"$(echo \"$arr\" | sed -n\
+    \ \"$idx{p}\")\"\n            if [[ $elem != $(echo \"$arr\" | sed \"s/$elem//\"\
+    ) ]]; then\n                result=$((result-1))\n            fi\n        fi\n\
+    \    done\n    echo \"$result\""]
 stop_tokens:
 - "\n}"

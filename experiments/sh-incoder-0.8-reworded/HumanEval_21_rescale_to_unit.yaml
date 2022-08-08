@@ -11,6 +11,1762 @@ tests: "}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() 
   \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    numbers=$1\n    numbers=$(echo \"$numbers\" | tr -d ' ')\n    echo\
+    \ \"$numbers\" | awk '{ print $1 / $2 }'", "\tlocal IFS=, read -r -a array <<<\"\
+    $1\"\n\tlocal count\n\tcount=${#array[@]}\n\n\tif [ \"$count\" -lt 2 ] || [ \"\
+    $count\" -gt 2 ]; then\n\t\techo \"Expected input list to have at least two elements,\
+    \ got $count\" >&2\n\t\treturn 1\n\tfi\n\n\tlocal min\n\tmin=${array[0]}\n\tlocal\
+    \ max\n\tmax=${array[-1]}\n\n\tlocal factor\n\tfactor=`echo \"$max $min\" | awk\
+    \ '{ print $2 - $1 }'`\n\tlocal result\n\tresult=$(\n\t\tfor x in $(seq 0 $count);\
+    \ do\n\t\t\tarray[$x]=\"$(echo \"$array[$x] / $factor\" | bc)\"\n\t\tdone\n\t\
+    )\n\n\tprintf '%s\\n' \"${array[@]}\"\n\tprintf '\\n'\n\tprintf '%s\\n' \"${result[@]}\"\
+    \n\tprintf '%s\\n' \"${array[0]} ${result[0]}\"\n\tprintf '%s\\n' \"${array[-1]}\
+    \ ${result[-1]}\"\n\tprintf '%s\\n' \"The smallest number will become 0 and the\
+    \ largest will become 1\"", "  local -a args\n  IFS=' ' read -r -a args <<<\"\
+    $1\"\n  echo \"[$(echo \"${args[@]}\" | tr ' ' \"\\n\")]\"", "  local arg\n  local\
+    \ array=( )\n  local length=0\n\n  for arg in \"$@\"; do\n    array=( ${array[@]}\
+    \ \"$arg\" )\n    length=$(( ${#array[@]} + 1 ))\n  done\n\n  local range\n  range=$(\
+    \ for i in $(seq \"$length\"); do echo -n \"$((i-1))\"; done | bc )\n\n  local\
+    \ output\n  output=$( bc <<< \"$range / length\" )\n  local i\n  for i in $(seq\
+    \ \"$length\"); do\n    output=$( echo \"$output * ${array[$i]}\" | bc )\n  done\n\
+    \n  # Add '\"'\n  output=$( printf \"'%s'\"  \"$output\" )\n\n  printf '%s\\n'\
+    \ \"$output\"", "    local -r array_of_numbers=\"$1\"\n    local -r output_array=()\n\
+    \n    for (( i=0; i<${#array_of_numbers[@]}; i++ )); do\n        local current_number=${array_of_numbers[i]}\n\
+    \        if (( $(echo \"${current_number}\" | grep -Eo '^[0-9]+$') > 0 )); then\n\
+    \            rescale_array=()\n            for (( j=0; j<${#array_of_numbers[@]};\
+    \ j++ )); do\n                rescale_array+=( ${array_of_numbers[j]} * ${current_number}\
+    \ )\n            done\n\n            output_array+=(\"${rescale_array[@]}\")\n\
+    \        fi\n    done\n\n    echo \"${output_array[@]}\"", "  local numbers=\"\
+    $1\"\n  local units=\"$2\"\n  local numbers_str=\"$(echo \"$numbers\" | tr \"\
+    \ \" \",\")\"\n  local out_str=\"\"\n\n  while read -r number unit; do\n    if\
+    \ [[ \"$number\" != \"-\" && \"$number\" != \"0\" ]]; then\n      out_str=\"$out_str\
+    \ \\\"${number}\\\" \\\"${units}\\\"\"\n    fi\n  done <<< \"$numbers_str\" |\n\
+    \    while read -r number unit; do\n      if [[ \"$number\" != \"-\" && \"$number\"\
+    \ != \"0\" ]]; then\n        out_str=\"$out_str ${number} * ${unit}\"\n      fi\n\
+    \    done |\n      awk '{printf \"\\\"%s\\\" \\\"%s\\\"\", $(NF-3), $NF}'\n\n\
+    \  printf \"$out_str\"", "  local numbers=\"${@}\"\n\n  # If there's no numbers\
+    \ then do nothing\n  [ -z \"${numbers}\" ] && return 0\n\n  local min=\"${numbers[0]}\"\
+    \n  local max=\"${numbers[-1]}\"\n\n  local output\n  output=$(printf \"[\" )\n\
+    \n  for (( i = 0; i < ${#numbers[@]}; i++ )); do\n    # Don't divide by 0\n  \
+    \  if [[ \"${numbers[$i]}\" -eq 0 ]]; then\n      echo \"Bad number: ${numbers[$i]}\"\
+    \n      return 1\n    fi\n\n    (( output+=(\"${numbers[$i]}/(${max} - ${min})\"\
+    )))\n  done\n\n  output+=(${min})\"[\" ]\n  output+=(0)\n  output+=(1 )\n  output+=(\"\
+    )\")\n\n  echo \"${output[@]}\"", "  local numbers=$(echo \"$1\" | sed 's/[[:space:]]//g')\n\
+    \  local first=$(echo \"$numbers\" | head -1 | awk '{print $1}')\n  if [[ $first\
+    \ == \"\" ]]; then\n    first=0\n  fi\n  local last=$(echo \"$numbers\" | tail\
+    \ -1 | awk '{print $1}')\n  if [[ $last == \"\" ]]; then\n    last=1\n  fi\n \
+    \ local scaler=\"$(echo \"$numbers\" | awk '{print ($1-$first)/($last-$first)}')\"\
+    \n  echo \"$first $last $scaler\"", "    local xs=$1\n    local min_value=$(echo\
+    \ $xs | awk '{ print $2 }')\n    local max_value=$(echo $xs | awk '{ print $3\
+    \ }')\n    local result=''\n    local count=0\n    local total=0\n    local index=0\n\
+    \    local x\n    while read x; do\n        if (( $index == 0 )) ; then\n    \
+    \        result=$x\n            total=$max_value\n        fi\n        if (( $index\
+    \ == 1 )) ; then\n            (( total+=$x ))\n        else\n            result=$result\"\
+    '\"'$(echo \"scale=3; $x/$total*$min_value+$min_value\" | bc)'\"'\"'\n       \
+    \     total=$total\n        fi\n        (( count++ ))\n    done < <(echo \"$xs\"\
+    )\n    echo \"$result\"", "    local -r numbers=$1\n    local -r output\n    local\
+    \ -r max\n    local -r min\n    local -r outputs=()\n    min=$(echo $numbers |\
+    \ awk '{print $1}')\n    max=$(echo $numbers | awk '{print $2}')\n    output=$(echo\
+    \ \"$min\" \"$max\" | awk '{printf \"%.2g\", ($1 * $2)}')\n    while read -r value;\
+    \ do\n        ((outputs+=($(echo \"$value*$output\" | bc -l)))\n    done <<< \"\
+    $numbers\"\n    echo \"${outputs[*]}\"", "    local input=\"$1\"\n    if [[ $#\
+    \ -eq 0 ]] ; then\n        echo \"Usage: $0 [-t float]\" ; exit 1\n    fi\n  \
+    \  # Split elements into separate lists\n    local arg1=\"$input\" arg2=\"$input\"\
+    \ arg3=\"$input\"\n    if [[ $# -gt 2 ]] ; then\n        arg1=\"$2\"\n       \
+    \ arg2=\"$3\"\n        arg3=\"$4\"\n    fi\n    # First transform the smallest\
+    \ number\n    local min_elem=$(echo $arg1 | tr \" \" \"\\n\" | sort -rn | head\
+    \ -n 1)\n    local new_arg1=\"\\\"$min_elem\\\"\"\n    # Second transform the\
+    \ largest number\n    local max_elem=$(echo $arg1 | tr \" \" \"\\n\" | sort -rn\
+    \ | tail -n 1)\n    local new_arg2=\"\\\"$max_elem\\\"\"\n    # Third rescale\
+    \ the rest of the elements from $arg1 through $arg3\n    local new_arg3=\"\\\"\
+    $(echo $arg1 | tr \" \" \"\\n\" | sed \"s/$min_elem/ $((1.0 / $min_elem)) /\"\
+    )\"\n    # Return new list of elements\n    echo \"$new_arg1\" \"$new_arg2\" \"\
+    $new_arg3\"", "  # Convert to array\n  arr=($1)\n\n  # Sort array\n  for i in\
+    \ `seq 1 $((${#arr[@]} - 1))`; do\n    tmp=${arr[i]}\n    arr[i]=${arr[i+1]}\n\
+    \    arr[i+1]=${tmp}\n  done\n\n  # Apply transform\n  for i in `seq 1 $((${#arr[@]}\
+    \ - 1))`; do\n    arr[i]=$(echo \"${arr[i]}\" | cut -f1 -d\\ )\n  done\n\n  #\
+    \ Restore order\n  for i in `seq 0 $((${#arr[@]} - 1))`; do\n    arr[i]=$(echo\
+    \ \"${arr[i]}\" | cut -f2 -d\\ )\n  done\n\n  # Restore spaces in strings\n  for\
+    \ i in `seq 0 $((${#arr[@]} - 1))`; do\n    arr[i]=\"${arr[i]// /}\"\n  done\n\
+    \n  # Return result\n  echo ${arr[@]}", "    local tmp=${1// / }\n    local ret=()\n\
+    \    for i in $tmp; do\n        echo -n $i | cut -d \" \" -f 1 | xargs -I {} echo\
+    \ -n '{}' | cut -d '\"' -f 2 | sed -e 's/ //g'\n        echo -n \"' '\"\n    done",
+  "  local ns=\"$1\"\n  [[ -n $ns ]] || return 1\n  local min=0\n  local max=1\n \
+    \ while read -r n _; do\n    (( n > max )) && max=$n\n    (( n < min )) && min=$n\n\
+    \  done\n  echo \"$min\" \"${max}\"", "  local LIST=\"$1\"\n  local MIN=$(echo\
+    \ \"$LIST\" | sed \"s/ //g\" | sed \"s/^/-/\" | sed \"s/$/ 0/\")\n  local MAX=$(echo\
+    \ \"$LIST\" | sed \"s/ //g\" | sed \"s/^/-/\" | sed \"s/$/ 1/\")\n  echo \"$LIST\"\
+    \ | sed \"s/$MIN/$MAX/g\"", "  local -n array=( )\n  local -n list=( )\n  while\
+    \ [[ $# -gt 0 ]]; do\n    case \"$1\" in\n      *[!0-9.]*) echo \"'$1' is not\
+    \ a valid input number\" 1>&2; exit 1;;\n      *) list+=( \"${1#*[!0-9.]}\" );;\n\
+    \    esac\n    shift\n  done\n\n  array=( \"$@\" )\n  local min max\n  min=${array[0]}\n\
+    \  max=${array[0]}\n  for element in \"${array[@]:1}\"; do\n    if [ \"$element\"\
+    \ < \"$min\" ]; then\n      min=\"$element\"\n    fi\n    if [ \"$element\" >\
+    \ \"$max\" ]; then\n      max=\"$element\"\n    fi\n  done\n  array=()\n  local\
+    \ i\n  for element in \"${list[@]:1}\"; do\n    if [ \"$element\" != \"$min\"\
+    \ ] && [ \"$element\" != \"$max\" ]; then\n      array+=( \"$(echo \"$element*($max-$min)/($max-$min+0.01)\"\
+    )\" )\n    fi\n  done\n\n  echo \"${array[*]}\"", "  local numbers=$1\n  local\
+    \ out_numbers=\n  while read line; do\n    numbers+=\" $line\"\n  done\n  echo\
+    \ \"$numbers\" | awk '{\n    if ($1 < $2) {\n      $1 = 0\n    } else {\n    \
+    \  $1 = 1\n    }\n    print\n  }'", "    local IFS=$'\\n';\n    local scale=\"\
+    $1\"\n    shift 1\n    local list=\"$*\"\n    local index=0\n\n    echo \"$list\"\
+    \ | awk 'BEGIN {\n        scale = $1\n        shift 1\n    }\n    {\n        if\
+    \ (index < length(list)) {\n            $0 = sprintf(\"%.2f %s\", $1 / scale,\
+    \ $0)\n            index++\n        }\n    }\n    END {\n        for (index =\
+    \ 1; index < length(list); index++) {\n            $0 = sprintf(\"%.2f %s\", $1\
+    \ / scale, $0)\n        }\n        print $0\n    }' | tr '\\n' '\\0' | tr -d '\\\
+    0'", "  local numbers=$1\n\n  local function is_num() {\n    # returns true for\
+    \ non-floats, and false otherwise\n    case \"${1}\" in\n      *[!0-9.]* ) return\
+    \ 1\n      ;;\n    esac\n    return 0\n  }\n\n  local function get_smallest_num()\
+    \ {\n    local smallest=$(echo \"${numbers}\" | grep -v '^-' | head -1)\n    local\
+    \ smallest_num=$(echo \"${smallest}\" | sed -e 's/^[-+]?//')\n    local smallest_num_length=$(echo\
+    \ \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed\
+    \ -e \"s/^[-+]?//\")\n    local smallest_num_length=$(echo \"${smallest_num}\"\
+    \ | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed -e 's/^-+//')\n    local\
+    \ smallest_num_length=$(echo \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo\
+    \ \"${smallest}\" | sed -e 's/^-[0-9]*//')\n    local smallest_num_length=$(echo\
+    \ \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed\
+    \ -e 's/^-[0-9]*//')\n    local smallest_num_length=$(echo \"${smallest_num}\"\
+    \ | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed -e 's/^-[0-9]*//')\n\
+    \    local smallest_num_length=$(echo \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo\
+    \ \"${smallest}\" | sed -e 's/^-[0-9]*//')\n    local smallest_num_length=$(echo\
+    \ \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed\
+    \ -e 's/^-[0-9]*//')\n    local smallest_num_length=$(echo \"${smallest_num}\"\
+    \ | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed -e 's/^-[0-9]*//')\n\
+    \    local smallest_num_length=$(echo \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo\
+    \ \"${smallest}\" | sed -e 's/^-[0-9]*//')\n    local smallest_num_length=$(echo\
+    \ \"${smallest_num}\" | wc -c)\n    smallest_num=$(echo \"${smallest}\" | sed\
+    \ -e 's/^-[0-9]*//')\n    ", "    local xs=$1\n    local out\n    local smallest\n\
+    \    local largest\n    smallest=$(echo $xs | head -n 1)\n    largest=$(echo $xs\
+    \ | tail -n 1)\n    out=\"[\"\n    # normalize (min-max) by smallest to largest\
+    \ and subtract the smallest\n    # $((...)) is a bash extension - it allows us\
+    \ to subtract variables\n    for i in $(seq 0 $(( $(( $(echo $xs | wc -l | awk\
+    \ '{print $1}') - 1 )) )); do\n        local i\n        local i_in\n        local\
+    \ i_out\n        (( i += 1 ))\n        i_in=$(( $i + 1 ))\n        (( i_out +=\
+    \ 1 ))\n        i_out=$(( $i + 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( i_out += 1 ))\n        (( i_in -= 1 ))\n        (( i_out\
+    \ += 1 ))\n        (( i_in -= 1 ))\n        (( i_out += 1 ))\n        (( i_in\
+    \ -= 1 ))\n        (( ", "  # We take the first element as numerator and the rest\
+    \ as denominator\n  local numerator=\"${1}\"; shift\n  local denominator=\"${@}\"\
+    \n\n  local numerator_split=(${numerator//[, ]/})\n  local denominator_split=(${denominator//[,\
+    \ ]/})\n\n  # Make sure both lists have at least two elements\n  if [[ ${#numerator_split[@]}\
+    \ -eq 1 && ${#denominator_split[@]} -lt 2 ]]; then\n    echo \"Could not rescale\
+    \ list to unit. List has too few elements\"\n    return 1\n  fi\n\n  # Make sure\
+    \ the denominator is non-zero\n  if [[ ${denominator_split[@]} -eq 0 ]]; then\n\
+    \    echo \"Could not rescale list to unit. List has zero denominator\"\n    return\
+    \ 1\n  fi\n\n  # The smallest element in the list will be 0 and the largest\n\
+    \  # element will be 1\n  local min=${numerator_split[0]}\n  local max=${denominator_split[0]}\n\
+    \n  # We need to subtract min from max to account for rounding errors\n  # This\
+    \ also handles non-integer numbers properly\n  # (ie, 1.05 is 0.95000000000000004\
+    \ and thus becomes 0.95)\n  for ((i=1; i<${#numerator_split[@]}; ++i)); do\n \
+    \   local current=${numerator_split[i]}\n    local diff=${max-current}\n    diff=$((\
+    \ ${diff} / ${denominator_split[i]} ))\n    max=$(( ${max} - diff ))\n  done\n\
+    \n  # Make sure the smallest element in the list becomes 0\n  if [[ \"${min}\"\
+    \ == \"0\" ]]; then\n    echo \"Could not rescale list to unit. List has zero\
+    \ smallest element\"\n    return 1\n  fi\n\n  # Make sure the largest element\
+    \ in the list becomes 1\n  if [[ \"${max}\" == \"1\" ]]; then\n    echo \"Could\
+    \ not rescale list to unit. List has one largest element\"\n    return 1\n  fi\n\
+    \n  # Apply the transform\n  local transformed_list=()\n  for element in \"${numerator_split[@]}\"\
+    ; do\n    local transformed_element=$(( ${element} - ${min} / ${max} ))\n    transformed_list+=(\"\
+    ${transformed_element}\")\n  done\n\n  # Remove the spaces around commas\n  local\
+    \ final_list=$(IFS=,; echo \"${transformed_list[*]}\")\n\n  # Replace all commas\
+    \ inside the quotes\n  local cleaned=$(echo \"${final_list}\" | sed 's/\",/\"\
+    ,\"/g')\n\n  # Add quotes around it\n  local final_value=$(echo \"${clean", " \
+    \   local LIST=\"$1\"\n    local OUT=\"$(echo \"$LIST\" | awk '{s=0; for (i=1;i<=NF;++i)\
+    \ s+=$i; print s/NF}')\"\n    echo \"$OUT\"", "  local LIST=\"$1\"\n  local TMP=\"\
+    \"\n  local VAL=\"\"\n  local RES=\"\"\n  local MINVAL=\"100\"\n\n  LIST=\"$(echo\
+    \ \"${LIST}\" | sed -e 's/ /,/g')\"\n  LIST=\"$(echo \"${LIST}\" | sed -e 's/^\\\
+    (.*\\)[\\t ]*/\\1/')\"\n  LIST=\"$(echo \"${LIST}\" | sed -e 's/ .*//')\"\n\n\
+    \  if [[ -z ${LIST} ]]; then\n    return \"\"\n  fi\n\n  for val in ${LIST}; do\n\
+    \    VAL=\"$(echo \"${val}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\1/')\"\n    VAL=\"\
+    ${VAL}\"\n    if [[ ${VAL} =~ ^[0-9.]+$ ]]; then\n      RES=\"${RES}$(echo \"\
+    ${VAL}\" | bc -l)\"\n    else\n      TMP=\"${TMP}${VAL} \"\n    fi\n  done\n\n\
+    \  RES=\"${RES}100\"\n  RES=\"$(echo \"${RES}\" | bc -l)\"\n  RES=\"${RES}0\"\n\
+    \  RES=\"$(echo \"${RES}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\1/')\"\n\n  for val\
+    \ in ${LIST}; do\n    VAL=\"$(echo \"${val}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\\
+    1/')\"\n    VAL=\"${VAL}\"\n    if [[ ${VAL} =~ ^[0-9.]+$ ]]; then\n      RES=\"\
+    ${RES}$(echo \"${VAL}\" | bc -l)\"\n    else\n      TMP=\"${TMP}${VAL} \"\n  \
+    \  fi\n  done\n\n  RES=\"$(echo \"${RES}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\1/')\"\
+    \n  RES=\"${RES}\"\n  RES=\"$(echo \"${RES}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\\
+    1/')\"\n\n  MINVAL=\"$(echo \"${MINVAL}\" | bc -l)\"\n  MINVAL=\"$(echo \"${MINVAL}\"\
+    \ | sed -e 's/^\\(.*\\)[\\t ]*/\\1/')\"\n  MINVAL=\"${MINVAL}\"\n  MINVAL=\"$(echo\
+    \ \"${MINVAL}\" | sed -e 's/^\\(.*\\)[\\t ]*/\\1/')\"\n  MINVAL=\"${MINVAL}\"\n\
+    \n  RES=\"${RES}${MINVAL}\"\n\n  echo \"${RES}\"", "    local list_string=\"$1\"\
+    \n\n    local first_number=\"$(echo \"$list_string\" | head -n 1)\"\n    local\
+    \ remainder=\"$(echo \"$list_string\" | tail -n 1)\"\n    local new_list=\"$(\"\
+    $first_number/100.0\" \"$remainder\")\"\n\n    echo \"$new_list\"", "    local\
+    \ in_nums=\"$1\"\n    local in_min=\"${in_nums}.0\"\n    local in_max=\"${in_nums}\"\
+    \n    local in_min_index=0\n    local in_max_index=0\n    local out_nums=\"\"\n\
+    \    local out_min=\"\"\n    local out_max=\"\"\n    while read -r in_num; do\n\
+    \        if [ \"${in_num}\" == \"${in_min}\" ]; then\n            in_min_index=$((\
+    \ in_min_index + 1 ))\n        elif [ \"${in_num}\" == \"${in_max}\" ]; then\n\
+    \            in_max_index=$(( in_max_index + 1 ))\n        else\n            #\
+    \ For now just accept that there's at least one number\n            out_nums=\"\
+    ${out_nums} \\\"${in_num}\\\"\"\n        fi\n    done <<< \"${in_nums}\"\n   \
+    \ if [ \"${in_min_index}\" -eq 0 ]; then\n        out_nums=\"${out_nums} \\\"\
+    ${in_min}\\\"\"\n    elif [ \"${in_max_index}\" -eq 0 ]; then\n        out_nums=\"\
+    ${out_nums} \\\"${in_max}\\\"\"\n    else\n        out_min=\"${in_min}-0.0\"\n\
+    \        out_max=\"${in_max}+0.0\"\n        while read -r in_num; do\n       \
+    \     if [ \"${in_num}\" < \"${out_min}\" ]; then\n                out_min=\"\
+    ${in_num}\"\n            fi\n            if [ \"${in_num}\" > \"${out_max}\" ];\
+    \ then\n                out_max=\"${in_num}\"\n            fi\n        done <<<\
+    \ \"${in_nums}\"\n        out_nums=\"${out_nums} \\\"${out_min}\\\" \\\"${out_max}\\\
+    \"\"\n    fi\n    echo \"${out_nums}\"", "    local list_string=\"$1\"\n    local\
+    \ numbers_array=($list_string)\n    local smallest=$(echo \"${numbers_array[0]}\"\
+    \ | cut -d\" \" -f1)\n    local largest=$(echo \"${numbers_array[0]}\" | cut -d\"\
+    \ \" -f2)\n    for number in \"${numbers_array[@]:1}\"\n    do\n        smallest=$((\
+    \ smallest < number ? smallest : number ))\n        largest=$(( largest > number\
+    \ ? largest : number ))\n    done\n    printf -v rescale_string \"%s\" \"$smallest\
+    \ $largest\"\n    echo \"${rescale_string}\"", "  local LIST=\"$1\"\n  shift 1\n\
+    \  local OUT\n  local MIN\n  local MAX\n\n  LIST=$(echo $LIST | tr ' ' ',')\n\
+    \  IFS=', '\n  MIN=$(echo $LIST | sort -n | tail -n 1)\n  MAX=$(echo $LIST | sort\
+    \ -n | head -n 1)\n  OUT=\"$(echo $LIST | \\\n    awk -F, 'BEGIN{\n      FS=\"\
+    \ \";\n      OFS=\" \";\n    } {\n      gsub(/,/, \"\\n\", $1);\n      for (i=1;\
+    \ i<=NF; i++) {\n        if ($i < $MIN) {\n          $i = \"0\";\n        } else\
+    \ if ($i > $MAX) {\n          $i = \"1\";\n        }\n        print $i;\n    \
+    \  }\n    }')\"\n  echo \"$OUT\"", "\tlocal list=\"$1\"\n\tlocal numlist\n\tnumlist=$(echo\
+    \ -n \"${list}\" | sed -e 's/^\\s*//g' -e 's/\\s*$//g')\n\tlocal min\n\tmin=$(\
+    \ echo \"${numlist}\" | sed -e 's/^\\s*//g' -e 's/\\s*$//g' | head -n 1 )\n\t\
+    local max\n\tmax=$( echo \"${numlist}\" | sed -e 's/^\\s*//g' -e 's/\\s*$//g'\
+    \ | tail -n 1 )\n\t\n\tlocal i\n\tfor i in $(seq 0 $(( ${#numlist} - 1 )))\n\t\
+    do\n\t\tlocal j\n\t\tfor j in $(seq 0 $(( ${#numlist} - 1 )))\n\t\tdo\n\t\t\t\
+    local i\n\t\t\ti=\"$(( j - 1 ))\"\n\t\t\tlocal j\n\t\t\tj=\"$(( i - 1 ))\"\n\t\
+    \t\tif [[ ${numlist[$i]} > ${numlist[$j]} ]]\n\t\t\tthen\n\t\t\t\tlocal x\n\t\t\
+    \t\tx=\"$(( ${numlist[$i]} - ${min} ))\"\n\t\t\t\tlocal y\n\t\t\t\ty=\"$(( ${numlist[$j]}\
+    \ - ${min} ))\"\n\t\t\t\tlocal z\n\t\t\t\tz=\"$(( ${max} - ${min} ))\"\n\t\t\t\
+    \tnumlist[$i]=\"$(( ${numlist[$i]} + x ))\"\n\t\t\t\tnumlist[$j]=\"$(( ${numlist[$j]}\
+    \ + y ))\"\n\t\t\t\tnumlist[$z]=\"$(( ${numlist[$z]} + z ))\"\n\t\t\tfi\n\t\t\
+    done\n\tdone\n\techo \"${numlist[*]}\"", "  local x=\"$1\"\n\n  x=($x)\n  local\
+    \ y\n  y=0\n  for d in ${x[@]}; do\n    y=$((y + d))\n  done\n  local ys=(\"${y[@]}\"\
+    )\n  ys=$(echo $ys | xargs printf \"%f\")\n  echo \"$ys\"", "    local arr=( $1\
+    \ )\n    local -a arr\n    arr=( $( eval echo \\( \"${arr[*]}\" | tr \" \" \"\\\
+    n\" ) )); arr=( \"${arr[@]}\" )\n    local xmin xmax ymin ymax \n    xmin=$((\
+    \ arr[0]+arr[1] )); xmax=$(( arr[2]+arr[3] )); xmin=$(( xmin < 0 ? xmin+1 : xmin\
+    \ )); xmax=$(( xmax > 0 ? xmax+1 : xmax ))\n    ymin=$(( arr[4]+arr[5] )); ymax=$((\
+    \ arr[6]+arr[7] )); ymin=$(( ymin < 0 ? ymin+1 : ymin )); ymax=$(( ymax > 0 ?\
+    \ ymax+1 : ymax ))\n    local xmin xmax ymin ymax xarr yarr xrange yrange\n  \
+    \  xarr=( $( eval echo \\( \"${arr[*]}\" | tr \" \" \"\\n\" ) )); xarr=( \"${xarr[@]}\"\
+    \ )\n    yarr=( $( eval echo \\( \"${arr[*]}\" | tr \" \" \"\\n\" ) )); yarr=(\
+    \ \"${yarr[@]}\" )\n    xrange=$(( xmax - xmin )); yrange=$(( ymax - ymin ))\n\
+    \    local xmin xmax ymin ymax xarr yarr xrange yrange\n    xmin=$(( xmin > 0\
+    \ ? xmin : -1 )); xmax=$(( xmax < 0 ? xmax : -1 )); ymin=$(( ymin > 0 ? ymin :\
+    \ -1 )); ymax=$(( ymax < 0 ? ymax : -1 ))\n    xarr=( $( eval echo \\( \"${arr[*]}\"\
+    \ | tr \" \" \"\\n\" ) )); xarr=( \"${xarr[@]}\" )\n    yarr=( $( eval echo \\\
+    ( \"${arr[*]}\" | tr \" \" \"\\n\" ) )); yarr=( \"${yarr[@]}\" )\n    xrange=$((\
+    \ xmax - xmin )); yrange=$(( ymax - ymin ))\n    if [ $xrange -lt 0 ]; then xarr=(\
+    \ $( eval echo \\( \"${xarr[*]}\" | tr \" \" \"\\n\" ) )); xarr=( \"${xarr[@]}\"\
+    \ ); xrange=$(( 0 ));\n    fi\n    if [ $yrange -l", "  local arr new_arr\n  read\
+    \ -r -a arr <<< \"$1\"\n  read -r -a new_arr <<< \"$1\"\n  local min\n  min=${arr[0]}\n\
+    \  for k in \"${arr[@]:1}\"; do\n    ((new_arr[k]-=min))\n    ((new_arr[k])=min+1)\n\
+    \  done\n  echo \"${new_arr[@]}\"", "  local numbers=$1\n  local max=$2\n  local\
+    \ min=$3\n  if [ -z \"$max\" ] || [ -z \"$min\" ] ; then\n    echo \"Error: min\
+    \ or max missing from call to rescale_to_unit\"\n    return 1\n  fi\n  local newnumbers=$(echo\
+    \ $numbers | tr \" \" \"\\n\" | sort -n | uniq)\n  if [ -z \"$newnumbers\" ] ;\
+    \ then\n    echo \"Error: empty list given to rescale_to_unit\"\n    return 1\n\
+    \  fi\n  local first=$(echo $newnumbers | head -1)\n  local last=$(echo $newnumbers\
+    \ | tail -1)\n  if [ -z \"$first\" ] ; then\n    echo \"Error: first number in\
+    \ list is empty\"\n    return 1\n  fi\n  if [ -z \"$last\" ] ; then\n    echo\
+    \ \"Error: last number in list is empty\"\n    return 1\n  fi\n  local difference=$(($last-$min))\n\
+    \  if [ -z \"$difference\" ] ; then\n    echo \"Error: difference in number of\
+    \ numbers is 0\"\n    return 1\n  fi\n  local ratio=$(($last-$first))\n  if [\
+    \ -z \"$ratio\" ] ; then\n    echo \"Error: ratio is 0\"\n    return 1\n  fi\n\
+    \  local new_num=$(($max-$min*$difference/$ratio))\n  if [ -z \"$new_num\" ] ;\
+    \ then\n    echo \"Error: new number $new_num is 0\"\n    return 1\n  fi\n  local\
+    \ i=0\n  for n in $newnumbers ; do\n    echo $(($(echo $n|bc) / $new_num))\n \
+    \   ((i++))\n  done\n  echo $newnumbers", "  local LIST=\"$1\"\n\n  local MAX_VAL=\"\
+    ${LIST%%.*}\"\n  LIST=\"${LIST#*${MAX_VAL}}\"\n\n  local MIN_X=\"$(echo \"${LIST}\"\
+    \ | cut -d - -f1)\"\n  local MAX_X=\"$(echo \"${LIST}\" | cut -d - -f2)\"\n  local\
+    \ MIN_Y=\"$(echo \"${LIST}\" | cut -d - -f3)\"\n  local MAX_Y=\"$(echo \"${LIST}\"\
+    \ | cut -d - -f4)\"\n  local SCALE_X=\"$((${MIN_X} + ${MAX_X}) / 2)\"\n  local\
+    \ SCALE_Y=\"$((${MIN_Y} + ${MAX_Y}) / 2)\"\n\n  local SCALED\n  SCALED=\"$(echo\
+    \ \"${LIST}\" | sed -e \"s/^\\([0-9]\\).*${MIN_X}\\(.*\\)$/\\1${MAX_X}\\2/\" -e\
+    \ \"s/^\\([0-9]\\).*${MIN_Y}\\(.*\\)$/\\1${MAX_Y}\\2/\")\"\n\n  echo \"\\\"${SCALED}\\\
+    \"\"", "  if [ -z \"$1\" ]; then\n    echo \"Usage: $(basename $0) <numbers>\"\
+    \n    exit 1\n  fi\n  local NUMBERS=$1\n  if [ -z \"$NUMBERS\" ]; then\n    echo\
+    \ \"Usage: $(basename $0) <numbers>\"\n    exit 1\n  fi\n  if [ -z \"$2\" ]; then\n\
+    \    echo \"Usage: $(basename $0) <numbers>\"\n    exit 1\n  fi\n  # Split up\
+    \ the input list by space-separated numbers into an array.\n  local LIST=($NUMBERS)\n\
+    \  # Convert the first element into integers since bash cannot do floating point.\n\
+    \  LIST[0]=$(bc <<< \"$LIST[0]\")\n  # Loop through the remaining elements and\
+    \ divide by max number - min number to produce scaled numbers.\n  for i in ${!LIST[@]};\
+    \ do\n    LIST[$i]=$(bc <<< \"scale=3; $(bc <<< \"scale=10; $(bc <<< \"scale=1;\
+    \ $LIST[$i] / $(bc <<< \"scale=9; ${LIST[$i]} - $(bc <<< \"scale=9; ${LIST[0]}\"\
+    )\")\")\")\")\n  done\n  # Format the output list into a string.\n  echo \"${LIST[@]}\"",
+  "    local xs=( $1 )\n    local min=$( xargs -n 1 echo | xargs -n 1 echo | xargs\
+    \ -n 1 echo \"$min\" | xargs -n 1 echo \"$max\" )\n    local max=$( xargs -n 1\
+    \ echo | xargs -n 1 echo | xargs -n 1 echo \"$min\" | xargs -n 1 echo \"$max\"\
+    \ )\n    local i\n    local result\n    # loop through all elements in xs\n  \
+    \  for ((i=1; i<${#xs[@]}; i++)); do\n        result+=(${xs[$i]}/(${max}-1))\n\
+    \    done\n    echo \"${result[@]}\"", "    local L\n    read -a L <<< \"$1\"\n\
+    \    local i x\n    for ((i=1; i<${#L[@]}; i++)); do\n        x=$(echo \"${L[$i]}\"\
+    \ | cut -d \" \" -f 1)\n        if [[ $x -eq \"\" ]]; then\n            echo \"\
+    Invalid number: $L[$i]\" >&2\n            return 1\n        fi\n        local\
+    \ xs=$(echo \"$x\" | awk '{print $1}')\n        local xe=$(echo \"$x\" | awk '{print\
+    \ $1}')\n        if [[ xe -gt 1 ]]; then\n            echo \"Invalid number: $L[$i]\"\
+    \ >&2\n            return 1\n        fi\n        if [[ xe -lt 0 ]]; then\n   \
+    \         echo \"Invalid number: $L[$i]\" >&2\n            return 1\n        fi\n\
+    \        if [[ xs -lt 1 ]]; then\n            echo \"Invalid number: $L[$i]\"\
+    \ >&2\n            return 1\n        fi\n        if [[ xs -gt $xe ]]; then\n \
+    \           echo \"Invalid number: $L[$i]\" >&2\n            return 1\n      \
+    \  fi\n        local minx=\"$x\"\n        for ((j=$xe; j>0; j--)); do\n      \
+    \      local mx=$(echo \"${L[$j]}\" | awk '{print $1}')\n            if [[ mx\
+    \ -gt $minx ]]; then\n                minx=\"$mx\"\n            fi\n        done\n\
+    \        ((xs=xs-1))\n        if [[ $xs -eq 1 ]]; then\n            minx=0\n \
+    \       fi\n        ((xe=xe-1))\n        if [[ $xe -eq 1 ]]; then\n          \
+    \  minx=1\n        fi\n        echo \"$minx $L[$i] $xe $xs\" | sed -e \"s/ \\\
+    + / /g\" | sed -e \"s/^/${L[$i]} /\"\n    done", "  local list_str=$1\n  local\
+    \ scale\n\n  scale=$( echo \"$list_str\" | awk '{\n    min=min=1000000000000\n\
+    \    max=max=1000000000000\n    for (i=1;i<=NF;i++) {\n      if ($i < min) min=$i\n\
+    \      if ($i > max) max=$i\n    }\n    if (max==min) max=min+1\n    scale=max-min\n\
+    \    for (i=2;i<NF;i++) {\n      printf \"%f\", ($i/scale)+min\n    }\n  }' )\
+    \  # Scale list from 1 to 100\n  printf \"$scale\"", "  if [[ ${#} -eq 0 ]]; then\n\
+    \    echo \"USAGE: rescale_to_unit <list of numbers>\"\n    exit 1;\n  fi\n\n\
+    \  if [[ ${#} -eq 1 ]]; then\n    echo \"Rescaling ${1} to range [0, 1]\"\n  \
+    \  exit 1\n  fi\n\n  local x\n  x=$(echo \"${1}\" | sed 's/[ \\t]*//g' | sed 's/^\
+    \ *//g' | sed 's/ *$//g')\n  local i\n  i=1\n  while [[ $x != \"\" ]]; do\n  \
+    \  echo ${x} | awk -v i=\"${i}\" -v x=\"${x}\" '{if($0 < x) { $1 = i; $0 = x;\
+    \ }} 1'\n    x=$(echo \"${x}\" | sed 's/[ \\t]*//g' | sed 's/^ *//g' | sed 's/\
+    \ *$//g')\n    ((i++))\n  done", "  local list_str temp_str\n  IFS=' ' read -r\
+    \ -a list_arr <<<\"$1\"\n\n  while read -r temp_str; do\n    local curr_min curr_max\n\
+    \    curr_min=$(( ${list_arr[0]} - 0.5 ))\n    curr_max=$(( ${list_arr[0]} + 0.5\
+    \ ))\n    for i in \"${list_arr[@]:1}\"; do\n      local val=\"$(( ${i} - curr_min\
+    \ ))\"\n      if [ \"$val\" -lt 0 ]; then\n        val=\"$(( ${i} + 0.5 ))\"\n\
+    \        curr_min=$(( ${i} - 0.5 ))\n      elif [ \"$val\" -gt 0 ]; then\n   \
+    \     curr_max=$(( ${i} + 0.5 ))\n      fi\n    done\n    list_arr=( $(echo \"\
+    ${list_arr[*]} $val\" ) )\n  done\n  IFS=' '\n  echo \"${list_arr[*]}\"", "  \
+    \  local input_list=$1\n    local output_list=\"\"\n\n    if [[ -n \"$input_list\"\
+    \ ]]; then\n        # Split into tokens and convert to ints\n        local list_parts=($input_list)\n\
+    \        local num_elements=${#list_parts[@]}\n\n        local first_element=${list_parts[0]}\n\
+    \        local last_element=${list_parts[$num_elements - 1]}\n\n        local\
+    \ curr_min=0\n        local curr_max=1\n\n        # Scale down each number until\
+    \ it becomes the largest or smallest number possible\n        for i in $(seq 0\
+    \ $num_elements - 1); do\n            local current_element=${list_parts[i]}\n\
+    \n            if [[ ${current_element} -lt \"$first_element\" ]]; then\n     \
+    \           local new_min=$((curr_min + 1))\n            else\n              \
+    \  local new_max=$((curr_max - 1))\n            fi\n\n            curr_min=new_min\n\
+    \            curr_max=new_max\n\n            local current_element=\"$new_min\"\
+    \n        done\n\n        # Join again to output list\n        for i in $(seq\
+    \ 0 $num_elements - 1); do\n            local current_element=${list_parts[i]}\n\
+    \            output_list=\"$output_list ${current_element}\"\n        done\n \
+    \   fi\n\n    echo \"${output_list}\"", "    local input=\"$1\"\n\n    local inputs=($input)\n\
+    \    local min=\"${inputs[0]}\"\n    local max=\"${inputs[-1]}\"\n\n    local\
+    \ newinputs=()\n    for i in $(seq 0 \"${#inputs[@]}\" 1)\n    do\n        newinputs+=(\"\
+    $(echo \"${inputs[i]}\" | bc | awk '{print $1/($2-$1)*100}')\")\n    done\n\n\
+    \    local outputs=()\n    for i in $(seq 0 \"${#newinputs[@]}\" 1)\n    do\n\
+    \        outputs+=($newinputs[$i])\n    done\n\n    local output\n    for output\
+    \ in \"${outputs[@]}\"; do\n        if [ -z \"$output\" ]; then\n            echo\
+    \ \"ERROR: Empty output list\"\n            exit 1\n        fi\n    done\n\n \
+    \   IFS=' ' read -r -a outputs <<<\"${outputs[@]}\"\n    echo \"${outputs[@]}\"",
+  "    local input=$1\n    local input_array=($input)\n    local output_array=()\n\
+    \    local min=${input_array[0]}\n    local max=${input_array[${#input_array[@]}\
+    \ - 1]}\n\n    local num_units_used=0\n    for element in \"${input_array[@]:1}\"\
+    ; do\n        local ratio=${element}/${max}\n        local scale=$(echo \"$ratio\
+    \ * 255\" |bc)\n        local unit=\"$(echo \"scale=2; $scale/255\" | bc)\"\n\
+    \        output_array+=(\"$(echo \"$element * $unit\" | bc)\")\n        num_units_used=$((num_units_used\
+    \ + 1))\n    done\n\n    if [ \"$num_units_used\" -ge 2 ]; then\n        local\
+    \ input_array_sorted=(${input_array[@]})\n        local output_array_sorted=(${output_array[@]})\n\
+    \n        local smallest_element=$(echo \"$input_array_sorted[0]\" | bc)\n   \
+    \     local index_smallest=0\n        local smallest_element=$(echo \"$smallest_element\
+    \ * 255\" |bc)\n        while [ ${input_array_sorted[${index_smallest}]} -gt ${smallest_element}\
+    \ ]; do\n            index_smallest=$((index_smallest + 1))\n        done\n  \
+    \      local smallest_element_index=${index_smallest}\n\n        local largest_element=$(echo\
+    \ \"$input_array_sorted[${#input_array_sorted[@]} - 1]\" | bc)\n        local\
+    \ index_largest_end=$((${#input_array_sorted[@]} - 1))\n        local largest_element=$(echo\
+    \ \"$largest_element * 255\" |bc)\n        while [ ${input_array_sorted[${index_largest_end}]}\
+    \ -gt ${largest_element} ]; do\n            index_largest_end=$((index_largest_end\
+    \ - 1))\n        done\n        local largest_element_index=${index_largest_end}\n\
+    \n        local first_element=${input_array_sorted[smallest_element_index]}\n\
+    \        local last_element=${input_array_sorted[largest_element_index]}\n   \
+    \     if [[ ${last_element} -lt ${max} ]]; then\n            local last_element_ratio=$(echo\
+    \ \"$last_element / $max\" | bc)\n            local last_element_scale=$(echo\
+    \ \"$last_element_ratio * 255\" |bc)\n            local last_element_unit=\"$(echo\
+    \ \"scale=2; $last_element_scale/255\" | bc)\"\n            output_array_sorted[$smallest_element_index]=\"\
+    $(echo \"$last_element * $last_element_unit\" | bc)\"\n            output_array_sorted[$largest_",
+  "    local list=$(echo $1 | sed 's/ /\" \"/g')\n    local minval=${list[0]}\n  \
+    \  local maxval=${list[-1]}\n    if [[ $maxval -gt $minval ]]; then\n        local\
+    \ num=$(echo \"($maxval-$minval)/($maxval+$minval)\" | bc)\n        while [[ ${num}\
+    \ -gt 1 ]]; do\n            local newval=$(($maxval-$minval*${num}))\n       \
+    \     minval=$newval\n            num=$(echo \"($maxval-$minval)/($maxval+$minval)\"\
+    \ | bc)\n        done\n        echo \"$minval\"\n    else\n        echo \"$minval\"\
+    \n    fi", "    local array=\"$1\"\n    local min_val\n    local max_val\n   \
+    \ local unit\n    local scale\n    local output\n\n    array=\"$array\" ; shift\n\
+    \    array=\"${array% *}\" ; array=\"${array##* }\"\n    shift\n\n    # split\
+    \ into space-separated tokens\n    IFS=\" \" read -r -a array <<< \"$array\"\n\
+    \n    # get the smallest and largest values\n    local smallest=`echo \"${array[@]}\"\
+    \ | sort -n | head -1`\n    local largest=`echo \"${array[@]}\" | sort -n | tail\
+    \ -1`\n\n    # apply the transformation to the array\n    min_val=\"${smallest%\
+    \ *}\"\n    unit=\"${smallest##* }\"\n    min_val=\"$min_val\" ; smallest=\"${smallest#$min_val\
+    \ }\"\n\n    max_val=\"${largest% *}\"\n    unit=\"${largest##* }\"\n    max_val=\"\
+    $max_val\" ; largest=\"${largest#$max_val }\"\n\n    # get the scale factor\n\
+    \    scale=1\n    if [ \"$smallest\" -gt \"$largest\" ]; then\n        scale=10\n\
+    \    elif [ \"$smallest\" -ge \"$max_val\" ]; then\n        scale=1\n    elif\
+    \ [ \"$largest\" -ge \"$min_val\" ]; then\n        scale=10\n    elif [ \"$smallest\"\
+    \ -le \"$min_val\" ]; then\n        scale=10\n    elif [ \"$largest\" -le \"$max_val\"\
+    \ ]; then\n        scale=1\n    fi\n\n    # apply the transformation and create\
+    \ the output\n    IFS=\" \" read -r -a output <<< \"${array[@]}\" ; output=\"\
+    ${output[@]%.*}\"\n    output=\"[\"\n    local i\n    for ((i=0;i<${#output[@]};i++));\
+    \ do\n        case \"${output[$i]}\" in\n            *\".\"*)\n              \
+    \  echo \"$min_val${output[$i]}\"\n                ;;\n            *\",\"*)\n\
+    \                echo \"\\\"${scale}\\\"\"\n                ;;\n            *)\n\
+    \                echo \"${output[$i]}\"\n                ;;\n        esac\n  \
+    \  done\n    echo \"${output[@]##* }\"\n    echo \"]\"", "  # $1 is a list of\
+    \ numbers (of at least two elements)\n  echo \"$1\"\n  output=$(echo \"$1\" |\
+    \ xargs | cut -d ' ' -f 1)\n  if [ -z \"$output\" ]; then\n    return 0\n  fi\n\
+    \  echo \"$output\" | xargs -I % echo \"%\" | sed 's/^\\s*//' | sed 's/\\s*$//'",
+  "  local lst_str=$1\n  local lst_arr=(${lst_str// / })\n  local min=${lst_arr[0]}\n\
+    \  local max=${lst_arr[1]}\n  local step\n  if [[ ${min} -lt ${max} ]]; then\n\
+    \    step=${max}/10\n    min=$((max-step))\n    max=$((min+step))\n  else\n  \
+    \  step=${min}/10\n    max=$((min+step))\n    min=$((max-step))\n  fi\n  local\
+    \ lst_new=()\n  for ((i=min; i<max; i+=step)); do\n    lst_new+=(`echo \"$i\"\
+    \ | bc -l`)\n  done\n  echo \"${lst_new[@]}\"", "    local xs=\"$1\"\n    local\
+    \ xs=( $( echo $xs ) )\n    local xmin=$(( ${xs[0]} ))\n    local xmax=$(( ${xs[-1]}\
+    \ ))\n    local xwidth=$(( $xmax - $xmin ))\n    local xs=( \"${xs[@]:0:2}\";\
+    \ \"$(( ${xs[-1]} / $xwidth ))\" )\n    local xs=( \"${xs[@]/%/%:*}\" )\n    local\
+    \ xs=( \"${xs[@]:2:${#xs[@]}}\" )\n    local xmin=\"$xmin\"\n    local xmax=\"\
+    $xmax\"\n    local xwidth=\"$xwidth\"\n    echo \"${xs[@]}\"", "    local LIST=$1\n\
+    \    local N=$#\n    local SCALE=1.0\n    if [ $N -lt 2 ]; then\n        echo\
+    \ \"Usage: `basename $0` list of numbers\"\n        return 1\n    fi\n    if [\
+    \ $N -lt 3 ]; then\n        SCALE=$1/2\n    else\n        SCALE=$1\n    fi\n \
+    \   echo \"$LIST\" | awk '{print ($1-$2)*$SCALE}' FS=' '", "  local input=\"$1\"\
+    \n\n  if [ \"${#input}\" -lt \"2\" ]; then\n    echo \"Usage: $(basename $0) [\
+    \ \\\"<number> [<number>\\\"]\\\" ]\" >&2\n    return 1\n  fi\n\n  local output=$(\n\
+    \    awk 'BEGIN{min = $1; max = $1; for (i = 2; i <= NF; i++) min = min($i); max\
+    \ = max($i)} \n           {for(i=1; i<=NF; i++) {printf \"%s%s\", $i/min, $i/(max-min)\
+    \ \n                              == $i ? sprintf(\"%g\", $i/min) : sprintf(\"\
+    \\\"%g\\\"\", $i/min) \n                              == $i ? sprintf(\"%g\",\
+    \ $i/(max-min)) : sprintf(\"\\\"%g\\\"\", $i/(max-min))}}'\n  )\n\n  printf \"\
+    '%s'\\n\" \"$output\"\n  return 0", "    local l=$1\n    local b=$2\n    local\
+    \ min=$(($(( $b - $l )) % $(( $b - $b )) ))\n    local max=$(($(( $b - $l )) %\
+    \ $(( $b - $b )) ))\n    local c=$(($(( $b - $min )) % $(( $b - $max )) ))\n \
+    \   local d=$(($(( $max - $c )) % $(( $max - $max )) ))\n    local e=$(($(( $min\
+    \ - $d )) % $(( $min - $min )) ))\n    local f=$(($(( $max - $e )) % $(( $max\
+    \ - $max )) ))\n    local g=$(($(( $max - $f )) % $(( $max - $max )) ))\n    local\
+    \ h=$(($(( $f - $g )) % $(( $f - $f )) ))\n    local i=$(($(( $max - $h )) % $((\
+    \ $max - $max )) ))\n    local j=$(($(( $min - $i )) % $(( $min - $min )) ))\n\
+    \n    if [ $g -lt $b ]; then\n        echo \"$g $b\"\n        return\n    fi\n\
+    \    local m=$(($(( $b - $g )) % $(( $b - $b )) ))\n    local n=$(($(( $min -\
+    \ $m )) % $(( $min - $min )) ))\n    local o=$(($(( $m - $n )) % $(( $m - $m ))\
+    \ ))\n    local p=$(($(( $max - $o )) % $(( $max - $max )) ))\n    local q=$(($((\
+    \ $min - $p )) % $(( $min - $min )) ))\n    local r=$(echo $j | awk 'BEGIN {print\
+    \ \"\\\"\"$q\"\\\"\"}')\n    local s=$(echo $r\n    | awk 'BEGIN {print \"\\\"\
+    \"$p\"\\\"\"}'\n    | awk 'BEGIN {print \"\\\"\"$o\"\\\"\"}')\n    local t=$(echo\
+    \ $s\n    | awk 'BEGIN {print \"\\\"\"$n\"\\\"\"}'\n    | awk 'BEGIN {print \"\
+    \\\"\"$m\"\\\"\"}')\n    local u=$(echo $t\n    | awk 'BEGIN {print \"\\\"\"$h\"\
+    \\\"\"}'\n    | awk 'BEGIN {print \"\\\"\"$i\"\\\"\"}')\n    local v=$(echo $u\n\
+    \    | awk 'BEGIN {print \"\\\"\"$j\"\\\"\"}')\n    echo $v", "    local input_list=\"\
+    $1\"\n    local max_val\n    local min_val\n    local result\n    # Split input\
+    \ into list\n    IFS=' ' read -r -a input_array <<< \"$input_list\"\n    # Make\
+    \ sure that at least one value exists (i.e. no empty values)\n    if [[ \"${#input_array[@]}\"\
+    \ -eq 0 ]]; then\n        echo \"$input_list: No valid elements found\"\n    \
+    \    return 1\n    fi\n    # Make sure that all values are numeric\n    for element\
+    \ in \"${input_array[@]}\"; do\n        [[ \"${element: -0}\" =~ ^[0-9]+\\.?[0-9]$\
+    \ ]] || return 1\n    done\n    # Find max and min values\n    max_val=\"${input_array[0]}\"\
+    \n    min_val=\"${input_array[*]}\"\n    # Apply transform\n    for element in\
+    \ \"${input_array[@]:1}\"; do\n        result+=\"\\\"$((element - min_val)/ (max_val\
+    \ - min_val) + 0.5)\\\"  \"\n    done\n    # Return result to caller\n    echo\
+    \ \"$result\"", "  local l=$1\n  shift\n\n  local -r max=$1; shift\n  local -r\
+    \ min=$1; shift\n\n  local -r arr=( $l )\n  local -r res=( )\n\n  for ((i=0; i<${#arr[@]};\
+    \ i++)); do\n    let \"arr[i]*=$((max-min))+min\"\n    res+=($((arr[i]/${max}-min)))\
+    \ # array concatenation\n  done\n  echo \"${res[*]}\"", "    # Parse arguments:\
+    \ scale units\n    local scale_units_str=$1\n    shift\n\n    # Scale all numbers\
+    \ to range [0, 1]\n    local new_scale_value=0\n    local new_scale_units=\"1\"\
+    \n\n    for scale_unit in ${scale_units_str}; do\n        case \"${scale_unit}\"\
+    \ in\n            \"\" | *\"*) # No units provided\n                echo \"rescale_to_unit:\
+    \ No units specified. Setting all numbers to 1\"\n                new_scale_value=1\n\
+    \                new_scale_units=\"1\"\n                ;;\n            percent)\n\
+    \                echo \"rescale_to_unit: Percentage units specified: ${scale_unit}\"\
+    \n                # Get percentage\n                local percent=${scale_unit#*%}\n\
+    \                # Convert percentage to decimal number\n                local\
+    \ percentage_as_int=`echo \"scale = 10; ${percent} / 100\" | bc`\n           \
+    \     echo \"percentage_as_int: ${percentage_as_int}\"\n                # Scale\
+    \ value to range [0, 1]\n                local new_scale_value=$(( ${percentage_as_int}\
+    \ / 10 ))\n                new_scale_units=\"percent\"\n                ;;\n \
+    \           *)\n                echo \"Unknown scale unit: ${scale_unit}\"\n \
+    \               exit 1\n                ;;\n        esac\n    done\n\n    local\
+    \ new_array_str\n    new_array_str=$(\n        python -c \\\n            '\nimport\
+    \ json\nimport sys\n# Read array from stdin or JSON file\ntry:\n    arr = json.load(sys.stdin)\n\
+    except:\n    arr = json.load(open(sys.argv[1]))\n\n# Convert array to str\nstr_list\
+    \ = []\nfor num in arr:\n    str_list.append(\"'${num}'\")\nnew_array_str = \"\
+    ,\".join(str_list)\nprint(new_array_str)\n'\n    )\n\n    echo $new_array_str",
+  "\tlocal input_list=\"$1\"\n\tlocal output_list=\"\"\n\tlocal MINIMUM=$(echo ${input_list}\
+    \ | awk '{print $1*2}')\n\tlocal MAXIMUM=$(echo ${input_list} | awk '{print $1*2}')\n\
+    \tlocal SCALE=$(echo ${input_list} | awk '{print $1}')\n\tlocal SCALED_SIZE=$(echo\
+    \ ${input_list} | awk '{print NF}')\n\tlocal MINIMUM_TMP=\"$(echo \"${MINIMUM}\"\
+    \ | cut -f1 -d\")\"\n\tlocal MAXIMUM_TMP=\"$(echo \"${MAXIMUM}\" | cut -f1 -d\"\
+    )\"\n\tfor (( c=1; c<=${SCALED_SIZE}; c++ )); do\n\t\tlocal CURRENT_VALUE=\"${MINIMUM}\"\
+    \n\t\tlocal CURRENT_LENGTH=$(echo ${MINIMUM} | awk '{print $1*$2}')\n\t\tlocal\
+    \ CURRENT_INDEX=$(echo ${MINIMUM} | awk '{print $1}')\n\t\tif [ \"${SCALED_SIZE}\"\
+    \ -eq 1 ]; then\n\t\t\tCURRENT_VALUE=\"0\"\n\t\tfi\n\t\tif [ \"${c}\" -eq \"${SCALED_SIZE}\"\
+    \ ]; then\n\t\t\tCURRENT_VALUE=\"${MAXIMUM}\"\n\t\tfi\n\t\tlocal CURRENT_TMP=\"\
+    $(echo \"${CURRENT_VALUE}\" | cut -f1 -d\")\"\n\t\tif [ \"${CURRENT_LENGTH}\"\
+    \ -gt \"${MINIMUM_TMP}\" ]; then\n\t\t\tif [ \"${CURRENT_TMP}\" -le \"${MINIMUM_TMP}\"\
+    \ ]; then\n\t\t\t\tCURRENT_VALUE=\"1\"\n\t\t\tfi\n\t\tfi\n\t\tif [ \"${CURRENT_LENGTH}\"\
+    \ -gt \"${MAXIMUM_TMP}\" ]; then\n\t\t\tif [ \"${CURRENT_TMP}\" -ge \"${MAXIMUM_TMP}\"\
+    \ ]; then\n\t\t\t\tCURRENT_VALUE=\"1\"\n\t\t\tfi\n\t\tfi\n\t\tlocal CURRENT_TMP=\"\
+    $(echo \"${CURRENT_VALUE}\" | cut -f1 -d\")\"\n\t\tlocal CURRENT_INDEX=$(echo\
+    \ ${CURRENT_TMP} | awk '{print $1*$2}')\n\t\tlocal CURRENT_LENGTH=$(echo ${CURRENT_TMP}\
+    \ | awk '{print $1*$2}')\n\t\tlocal CURRENT_NUMBER=$(echo ${CURRENT_TMP} | awk\
+    \ '{print $1}')\n\t\tlocal CURRENT_FORMATTED_NUMBER=$(echo ${CURRENT_NUMBER} |\
+    \ awk '{printf(\"%.2f\", $1/$2)}')\n\t\tlocal CURRENT_FORMATTED_NUMBER=\"${CURRENT_FORMATTED_NUMBER%.*}\"\
+    \n\t\toutput_list=\"${output_list} \\\"${CURRENT_FORMATTED_NUMBER}\\\" \"\n\t\
+    done\n\techo \"${output_list}\"", "    local numbers=${1//\" \"}\n    local length=${#numbers}\
+    \ # count the number of elements before transformation\n    local result=${numbers[0]}\
+    \ # start with result\n    local unit=\"0.0\" # start with unit\n    local step\n\
+    \    for ((i=1; i<${length}; i+=1)); do # apply transformation until all elements\
+    \ are transformed\n        step=$(echo \"scale=3; ${numbers[i]}\" | bc)\n    \
+    \    result=$(echo \"${result} + ${step} * ${unit}\" | bc)\n        unit=\"$(echo\
+    \ \"${unit} * 10\" |bc)\" # advance unit\n    done\n    # print result\n    echo\
+    \ \"${result//,/ }\"", "    local list_=\"$1\"\n    # Convert list to a list\n\
+    \    IFS=$' ' read -r -a numbers <<<\"$list_\"\n    # Sort list for easier handling\n\
+    \    local -a sorted_list=( )\n    for i in \"${!numbers[@]}\"; do\n        local\
+    \ val=\"${numbers[i]}\"\n        if [[ $val -lt $i ]]; then\n            local\
+    \ temp_val=\"${numbers[i]}\"\n            numbers[i]=\"${val}\"\n            numbers[$temp_val]=\"\
+    $temp_val\"\n        fi\n        sorted_list+=( \"$numbers[i]\" )\n    done\n\
+    \    # Print result and exit\n    echo \"${sorted_list[@]}\"", "\tlocal list result\n\
+    \n\tlist=( $1 )\n\twhile [ \"$#\" -gt 1 ]\n\tdo\n\t\techo \"$1\" | sed -E -e \"\
+    s/^\\s*([0-9]+)\\s*([-+]?[0-9]*\\.[0-9]+)\\s*([-+]?[0-9]*\\.[0-9]+)\\s*([-+]?[0-9]*\\\
+    .[0-9]+)\\s*([0-9]+).*/\\1$2 $3 $4 $5/\"\n\t\tshift 1\n\tdone\n\n\techo \"$list\"",
+  "  local array=\"$1\"\n  local output=()\n  for element in \"${array[@]}\"; do\n\
+    \    local ratio=$(echo \"$element/$MAX_VALUE\" | bc -l)\n    echo \"${ratio}\"\
+    \ | bc -l | sed 's/^0*//'\n  done", "    local list_string=$1\n    local list=$(echo\
+    \ $list_string | sed -e \"s/ /\" \"/g\")\n    local min=$( echo $list | head -1\
+    \ | sed -e 's/^[ \\t]*//' )\n    local max=$( echo $list | tail -1 | sed -e 's/^[\
+    \ \\t]*//' )\n    local tmp=$( echo $list | paste -sd \"|\" )\n    local tmp1=$(echo\
+    \ $tmp | sed -e 's/|/\\n/' | sed -e 's/[[:space:]]/\"/' | sed -e 's/$/\"/')\n\
+    \    local tmp2=$(echo $tmp1 | sed -e 's/$/,/')\n    local tmp3=$(echo $tmp2 |\
+    \ sed -e 's/$/\"/' | sed -e 's/$/,/')\n    local tmp4=$(echo $tmp3 | sed -e 's/$/,/')\n\
+    \    local tmp5=$(echo $tmp4 | sed -e 's/$/,/')\n    local tmp6=$(echo $tmp5 |\
+    \ sed -e 's/$/,/')\n    local tmp7=$(echo $tmp6 | sed -e 's/$/,/')\n    local\
+    \ tmp8=$(echo $tmp7 | sed -e 's/$/,/')\n    local tmp9=$(echo $tmp8 | sed -e 's/$/,/')\n\
+    \    local tmp10=$(echo $tmp9 | sed -e 's/$/,/')\n    local tmp11=$(echo $tmp10\
+    \ | sed -e 's/$/,/')\n    local tmp12=$(echo $tmp11 | sed -e 's/$/,/')\n    local\
+    \ tmp13=$(echo $tmp12 | sed -e 's/$/,/')\n    local tmp14=$(echo $tmp13 | sed\
+    \ -e 's/$/,/')\n    local tmp15=$(echo $tmp14 | sed -e 's/$/,/')\n    local tmp16=$(echo\
+    \ $tmp15 | sed -e 's/$/,/')\n    local tmp17=$(echo $tmp16 | sed -e 's/$/,/')\n\
+    \    local tmp18=$(echo $tmp17 | sed -e 's/$/,/')\n    local tmp19=$(echo $tmp18\
+    \ | sed -e 's/$/,/')\n    local tmp20=$(echo $tmp19 | sed -e 's/$/,/')\n    local\
+    \ tmp21=$(echo $tmp20 | sed -e 's/$/,/')\n    local tmp22=$(echo $tmp21 | sed\
+    \ -e 's/$/,/')\n    local tmp23=$(echo $tmp22 | sed -e 's/$/,/')\n    local tmp24=$(echo\
+    \ $tmp23 | sed -e ", "    local IFS=$'\\n'\n    local array=($1)\n    local min=${array[0]}\n\
+    \    local max=${array[-1]}\n    local scale=0\n    for element in \"${array[@]:1}\"\
+    ; do\n        if (( $(echo $element | cut -d \" \" -f 1) > $(echo $min | cut -d\
+    \ \" \" -f 1) )); then\n            scale=-1\n        fi\n        (( $scale ==\
+    \ 0 )) && min=$element && break\n    done\n    for element in \"${array[@]:-1}\"\
+    ; do\n        if (( $(echo $element | cut -d \" \" -f 1) < $(echo $max | cut -d\
+    \ \" \" -f 1) )); then\n            scale=+1\n        fi\n        (( $scale ==\
+    \ 0 )) && max=$element && break\n    done\n    scale=$(( scale == -1 ? 1 : -1\
+    \ ))\n    local ret=()\n    for element in \"${array[@]:1}\"; do\n        if ((\
+    \ $element == $(echo $element | cut -d \" \" -f 1) )); then\n            echo\
+    \ \"$element\"\n        else\n            echo \"$min$scale$max\"\n        fi\n\
+    \    done", "    local orig_list=$1\n    local list\n    list=$(echo \"$orig_list\"\
+    \ | sed 's/ /\" \"/g')\n    echo \"$(echo \"$list\" | sed 's/ /0/g' | sed 's/\
+    \ /0.25/g' | sed 's/ /0.5/g' | sed 's/ /0.75/g' | sed 's/ /1.0/g')\"", "    local\
+    \ -r input=${1:?Variable \"$1 must be a list of numbers\"}\n    local -r size=${#input}\n\
+    \    local -r count=$(($size-1))\n    local -r output=\"\"\n    local -r result\n\
+    \n    for ((i=0; i<$count; i++)); do\n        result=$((($i + 1))/$size)\n   \
+    \     output += \"\\\"$((${result}*$size + 1))\\\" \"\n    done\n    echo $output",
+  "    local arg\n    for arg; do\n        local -n array=\"$arg\"\n        local\
+    \ i imax=${#array[@]}\n        local j\n        for (( j=0; j<imax; j++ )); do\n\
+    \            local value=${array[j]}\n            local k=`echo $value | awk '{print\
+    \ -$1*$2}'`\n            if [ $k -lt 0 ]\n            then\n                echo\
+    \ \"$value: ERROR, negative\"\n                exit 1\n            fi\n      \
+    \      if [ $k -gt 1 ]\n            then\n                echo \"$value: ERROR,\
+    \ greater than 1\"\n                exit 1\n            fi\n            array[j]=\"\
+    $k\"\n        done\n        echo \"${array[@]}\"\n    done", "  local num_string=\"\
+    $1\"\n  local nums=()\n  local num\n  local tmp\n  while IFS= read -r -d '' num;\
+    \ do\n    tmp=\"${num%.*}\"\n    nums+=(\"${tmp}\")\n  done <<< \"$num_string\"\
+    \n  local num_elements=${#nums[@]}\n  if [ ${num_elements} -lt 2 ]; then\n   \
+    \ echo \"Usage: $0 [a b c d...] [a b c d...] ...\"\n    return 1\n  fi\n  local\
+    \ min=\"${nums[0]}\"\n  local max=\"${nums[num_elements-1]}\"\n  local scale\n\
+    \  local scale_string\n  if [ ${num_elements} -eq 2 ]; then\n    scale=0\n   \
+    \ scale_string=\"1\"\n  elif [ ${num_elements} -eq 3 ]; then\n    scale=1\n  \
+    \  scale_string=\"0.\"\n  elif [ ${num_elements} -eq 4 ]; then\n    scale=0.25\n\
+    \    scale_string=\"0.25\"\n  elif [ ${num_elements} -eq 5 ]; then\n    scale=0.50\n\
+    \    scale_string=\"0.5\"\n  elif [ ${num_elements} -eq 6 ]; then\n    scale=0.75\n\
+    \    scale_string=\"0.75\"\n  else\n    echo \"Unsupported number of elements:\
+    \ ${num_elements}\"\n    return 1\n  fi\n  local scale_string=\"$scale_string\"\
+    \n  for ((i=num_elements; i>1; i--)); do\n    local elem=\"${nums[i]}\"\n    ((\
+    \ elem < min )) && min=\"$elem\"\n    (( elem > max )) && max=\"$elem\"\n    local\
+    \ tmp\n    tmp=${elem}\n    scale=$(echo \"${scale}\" | cut -d \".\" -f1)\n  \
+    \  scale=$(echo \"${scale}\" * $scale_string)\n    tmp=$(echo \"${tmp}\" | cut\
+    \ -d \".\" -f1)\n    tmp=$(echo \"${tmp}\" / $scale)\n    nums[i-1]=\"${tmp}\"\
+    \n  done\n  local num_elements_out=${#nums[@]}\n  if [ \"${num_elements_out}\"\
+    \ -gt 1 ]; then\n    echo -n \"[\"\n    for ((i=0; i<${num_elements_out}; i++));\
+    \ do\n      if [ \"${i}\" = \"0\" ]; then\n        echo -n \"\\\"\"\n      else\n\
+    \        echo -n \"\\\"\"\n      fi\n      printf \"\\\"${nums[i]}\\\"\"\n   \
+    \   if [ \"${i}\" -eq \"${num_elements_out}\" ]; then\n        echo -n \"\\\"\"\
+    \n      else\n        echo -n \",\"\n      fi\n    done", "  local input_list=$1\n\
+    \  local output_list=\"\"\n  local num_elements=$(echo \"${input_list}\" | wc\
+    \ -w)\n  local num_zeros=0\n  local num_ones=0\n  local num_factor=1\n  local\
+    \ num_space=0\n\n  for element in \"${input_list}\"; do\n    if [[ $element ==\
+    \ *\"0\"* ]]; then\n      num_zeros=$(echo \"${element}\" | wc -w) + 1\n    fi\n\
+    \    if [[ $element == *\"1\"* ]]; then\n      num_ones=$(echo \"${element}\"\
+    \ | wc -w) + 1\n    fi\n  done\n\n  for element in \"${input_list}\"; do\n   \
+    \ local new_factor=$(echo \"scale=6; ${element}\" | bc)\n    if [[ $new_factor\
+    \ -gt $num_factor ]]; then\n      num_factor=$new_factor\n    fi\n  done\n\n \
+    \ for element in \"${input_list}\"; do\n    local new_space=$(echo \"scale=6;\
+    \ ${element}\" | bc)\n    if [[ $new_space -gt $num_space ]]; then\n      num_space=$new_space\n\
+    \    fi\n  done\n\n  if [[ $num_zeros > 0 ]]; then\n    local element_list=\"\"\
+    \n    for element in \"${input_list}\"; do\n      local new_element=$(bc -l <<<\
+    \ \"${element}\")\n      if [[ $new_element > 0.0 ]]; then\n        element_list=\"\
+    ${element_list} ${new_element}\"\n      fi\n    done\n    local num_zeros_string=\"\
+    $num_zeros\"\n  else\n    local element_list=\"${input_list}\"\n    local num_zeros_string=\"\
+    $num_ones\"\n  fi\n\n  local first_element=$(echo \"${element_list}\" | head -1)\n\
+    \  local last_element=$(echo \"${element_list}\" | tail -1)\n\n  if [[ $first_element\
+    \ == $last_element ]]; then\n    output_list=\"${first_element}\"\n  elif [[ $num_factor\
+    \ > 1 ]]; then\n    output_list=\"$(echo \"${element_list}\" | sed 's/^/0./;s/^/0./'${num_factor})\"\
+    \ \n  else\n    output_list=\"$(echo \"${element_list}\" | sed 's/^/0./'${num_factor})\"\
+    \ \n  fi\n\n  echo -n \"${output_list}\"", "    local xs=\"$1\"\n    local m=\"\
+    $2\"\n    local c=\"$3\"\n\n    local x=\"$(echo \"$xs\" | awk -F'[ .]+' '{ print\
+    \ $1 }')\"\n    local y=\"$(echo \"$xs\" | awk -F'[ .]+' '{ print $2 }')\"\n \
+    \   local z=\"$(echo \"$xs\" | awk -F'[ .]+' '{ print $3 }')\"\n\n    local min=\"\
+    $(( ${x%.*} * ${m} ))\"\n    local max=\"$(( ${x%.*} * ${c} ))\"\n    local delta=\"\
+    $(( ${max} - ${min} ))\"\n\n    echo \"[$(echo \"$min\"*${m} + ${max}*${c})\"\n\
+    \    for (( i=0; i<${#xs}; i++ )); do\n        echo -n \"${xs:$i:1}\"\n    done\n\
+    \    echo \"]\"", "    local numbers=$1\n    local -r output_numbers=$(( $(echo\
+    \ $numbers | tr \" \" \"\\n\") | sort -rn | head -1 | awk '{print \"[\" $2 \"\
+    ]\"}' | sed -e 's/[\",]//g' | sed 's/^\\[//;s/ \\]$//;s/ /\",\"/g;s/^\\[//;s/\
+    \ \\]$//;s/^\"//;s/\"$//' ))\n    echo \"$output_numbers\" | sed 's/ /\",\"/g;s/^\\\
+    [//;s/ \\]$//'", "  if [ \"$#\" -lt \"2\" ]; then\n    echo \"Usage: $(basename\
+    \ $0) [numbers...]\" >&2\n    return 1\n  fi\n\n  local numbers=(\"$@\")\n  local\
+    \ scale\n  local output\n  local -n scale=\"${numbers[*]:1}\"\n  local -n output=\"\
+    ${numbers[@]:2}\"\n  for n in \"${numbers[@]:1}\"; do\n    output+=\"${n} \"\n\
+    \  done\n  output+=\"1.0\"\n  output+=\" \"\n  output+=\"1.0\"\n  output+=\" \"\
+    \n\n  printf '%s\\n' \"${output[@]}\"", "\tlocal list=( \"$@\" )\n\tlocal -i size\
+    \ i=0\n\tlocal -r result=()\n\n\twhile [[ ${#list[*]} -gt 0 ]]; do\n\t\tlet size+=1\n\
+    \t\tlet i++\n\tdone\n\n\tlist=\"$list\"\n\twhile [[ ${size} -gt 0 ]]; do\n\t\t\
+    result+=(\"${list[${i}]}\")\n\t\tlet size--\n\t\tlet i--\n\tdone\n\tresult+=(\"\
+    0.0\")\n\tresult+=(\"1.0\")\n\n\tprintf \"%s\" \"${result[@]}\"", "  local -n\
+    \ list=${1+\"$@\"}\n\n  if [[ -z \"$list\" ]]; then\n    return 1\n  fi\n\n  local\
+    \ -a numbers=(\"${!list[@]}\")\n  if [[ ${#list[@]} < 2 ]]; then\n    return 1\n\
+    \  fi\n\n  local -a new_numbers=()\n  local min=0\n  local max=0\n  for number\
+    \ in \"${numbers[@]}\"; do\n    ((min+=number))\n    ((max+=number))\n  done\n\
+    \  local scale=($(echo \"${max} - ${min}\"))\n  (( scale[${#scale[@]}-1]+=(1-scale[${#scale[@]}-1])\
+    \ ))\n  local normalized=()\n  for number in \"${numbers[@]}\"; do\n    ((normalized+=(\"\
+    ${number}*${scale[@]}\"))))\n  done\n\n  local -n result=\n  local number\n  for\
+    \ number in \"${new_numbers[@]}\"; do\n    result+=(\"$(( number * ${scale[0]}\
+    \ ))\")\n  done\n\n  local -n result2\n  for number in \"${new_numbers[@]}\";\
+    \ do\n    result2+=(\"$(( number / ${scale[0]} ))\")\n  done\n\n  echo -n \"${result[@]}\"\
+    \ \"${result2[@]}\"", "  local in_list in_num out_list\n  local -a args\n  in_list=$1\n\
+    \  shift\n  while [ $# -gt 0 ]\n  do\n    case \"$1\" in\n    (-*)\n      in_num=\"\
+    ${1#-}\"\n      in_list=\"$in_list $in_num\"\n      ;;\n    *)\n      out_list=\"\
+    $out_list $1\"\n      ;;\n    esac\n    shift\n  done\n  out_list=\"$(echo \"\
+    $out_list\" | sed -e 's/ /\", \"/g')\"\n  echo \"\\\"$out_list\\\"\"", "    local\
+    \ numbers=\"$1\"\n\n    local max=\"$(awk '{print $1}' <<< \"$(echo \"$numbers\"\
+    \ | head -n 1)\")\"\n    local min=\"$(awk '{print $1}' <<< \"$(echo \"$numbers\"\
+    \ | tail -n 1)\")\"\n\n    local rescaled\n    rescaled=()\n    for number in\
+    \ $numbers\n    do\n        rescaled+=($(echo \"$number*$(($max-$min)/($max-$min+$1))+$min\"\
+    \ | bc ))\n    done\n\n    printf '%s\\n' \"${rescaled[@]}\"", "  local -r scale=\"\
+    $1\"\n  local -r n=$#\n  shift $((n-1))\n\n  if [[ $n == 0 || $n == 1 ]]; then\n\
+    \    echo \"$scale\" # no scaling necessary\n    return\n  fi\n\n  # Add zeros\
+    \ to scale\n  local -a scale_with_zeros=()\n  for ((i=0; i < $n; i++)); do\n \
+    \   scale_with_zeros+=( $((${scale[i]} + 0)) )  # +0 makes it a number\n  done\n\
+    \n  # Sort so smallest is 0 and largest is 1, and then\n  # remove zeros again\n\
+    \  local sorted_with_zeros=($(sort <<< \"${scale_with_zeros[*]}\" | sed 's/^0/\"\
+    0\"/g'))\n  sorted_with_zeros=(\"${sorted_with_zeros[@]/#/}\")\n\n  # Rejoin array\n\
+    \  echo \"${sorted_with_zeros[*]}\"", "  numbers=\"${1}\"\n  numbers=( $numbers\
+    \ )\n  declare -i total_sum\n  for number in \"${numbers[@]}\"; do\n    (( total_sum\
+    \ += number ))\n  done\n  if (( total_sum > 1.0 )); then\n    rescale_multiplier=1.0\
+    \ # if sum of numbers exceeds 1.0\n  else\n    rescale_multiplier=1.0 / $total_sum\n\
+    \  fi\n  printf '%s\\n' \"${numbers[@]/$rescale_multiplier}\"", "    local numbers=\"\
+    $1\"\n    local smallest=\"$(head -n 1 <<<\"$numbers\") \"\n    local largest=\"\
+    $(tail -n 1 <<<\"$numbers\") \"\n\n    # we also want to have no space between\
+    \ numbers -> \" \"\n    numbers=$(sed -E 's/\\s/ /g' <<<\"$numbers\")\n    smallest=$(sed\
+    \ -E 's/\\s/ /g' <<<\"$smallest\")\n    largest=$(sed -E 's/\\s/ /g' <<<\"$largest\"\
+    )\n\n    # transform the numbers\n    local result=\"$(\n        echo \"$smallest\"\
+    \n        local smallest=0\n        while read -r number; do\n            echo\
+    \ \"$(( 100 * $number / $largest - $smallest ))\"\n        done\n        \"$numbers\"\
+    \n        echo \"$largest\"\n    )\"\n\n    # and replace them\n    echo \"$result\"\
+    \ | sed -E 's/^/\"${smallest} \"/g' | sed -E 's/$/\" \"/g'", "  # Check whether\
+    \ we have the arguments we need\n  if [[ $# -lt 2 ]]; then\n    echo \"Usage:\
+    \ $0 <list>\"\n    exit 1\n  fi\n  # Make sure we have the arguments in an array\n\
+    \  list=$( echo \"$1\" | sed -e 's/ /, /g' )\n  # Get the first number\n  first_number=$(echo\
+    \ \"$list\" | head -1)\n  # Remove the first element\n  shift\n  # Do the rescaling\n\
+    \  echo \"$first_number ${list[@]}\"", "    local in_list i j output curr min\n\
+    \    in_list=$1\n    output=()\n\n    for j in ${!in_list[@]}; do\n        curr=$(echo\
+    \ \"scale=4; ${in_list[$j]} + 0.25\" | bc)\n        if [ ${#curr} -lt 2 ]; then\n\
+    \            curr=\"0.0\"\n        fi\n        if [ ${#curr} -gt 2 ]; then\n \
+    \           curr=\"${curr%.*}\"\n        fi\n        output[$j]=\"${curr}\"\n\
+    \    done\n    echo ${output[@]}", "  local in_list=\"$1\"\n\n  if [[ \"${#in_list}\"\
+    \ == 0 ]]; then\n    local out_list\n    local n\n    for n in \"${!out_list}\"\
+    ; do\n      out_list=\"${out_list} \\\"${!n}\\\",\"\n    done\n\n    out_list=\"\
+    ${out_list%,}\\\"\"\n\n    echo \"${out_list}\"\n    return 0\n  fi\n\n  # Split\
+    \ into several variables\n  local input_list=\"${in_list}\" \"input_${#input_list}\"\
+    \n  local out_list output n result\n\n  # Reverse the list\n  input_list=\"$(echo\
+    \ \"${input_list}\" | sed -e \"s/ /\\n/g\")\"\n\n  # Split into several variables\n\
+    \  local input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_list_reverse\
+    \ input_list_reverse input_list_reverse input_list_reverse input_", "  local numbers=$1\n\
+    \  local min=${2:-0}\n  local max=${3:-0}\n  shift 3\n  local scale=${1:-0}\n\n\
+    \  # The minimum list elements will get zero scale\n  [ $min -lt 0 ] && min=0\n\
+    \  [ $min -gt $numbers ] && min=$numbers\n\n  # The maximum list elements will\
+    \ get one scale\n  [ $max -lt 0 ] && max=1\n  [ $max -gt $numbers ] && max=$numbers\n\
+    \n  # Do the rescaling\n  local scales=$(seq 0 $scale 1 $max)\n  printf \"$(IFS='\
+    \ '; for n in $numbers; do echo \"scale=$scale:$n\"; done)\"", "    local x=\"\
+    $1\"\n    local i=0\n    while read -d \" \" x ; do\n        [ \"${x%%[!-0-9.]*}\"\
+    \ != \"$x\" ] || { echo \"Invalid input: cannot convert $x to a valid float\"\
+    \ >&2; exit 1; }\n        ((i=i+1))\n    done < <(echo \"$x\" |\n            \
+    \   tr ' ' '\\n' |\n               grep -E \"^[0-9]+(\\.[0-9]*)?$\" |\n      \
+    \         sort -n)\n    if [ \"$i\" -lt 2 ] ; then\n        echo \"$x\"\n    else\n\
+    \        echo \"${x%.*}\"\n    fi", "    local x y z\n    x=\"$1\" ; shift\n \
+    \   y=$(( RANDOM % 100 )) ; z=$(( RANDOM % 100 ))\n    echo \"$x $y $z\" ; shift\n\
+    \    local i=0\n    echo \"$x $y $z\" ; while [ \"$#\" -gt 0 ]; do\n        echo\
+    \ \"$x $y $z\"\n        local d=$(( RANDOM % 7 ))\n        local e=$(( RANDOM\
+    \ % 7 ))\n        (( i++ ))\n        (( x = x + \"$(( $d )%$x ))\" ))\n      \
+    \  (( y = y + \"$(( $e )%$y ))\" ))\n        (( z = z + \"$(( $e )%$z ))\" ))\n\
+    \        shift\n    done", "  local numbers=\"$1\"\n  local output\n  if [[ !\
+    \ ${numbers} =~ ' [0-9]+' ]]; then\n    echo \"rescale_to_unit: '$numbers' is\
+    \ NOT space-separated\"\n    return 1\n  fi\n  output=$(echo \"$numbers\" | awk\
+    \ '{ print $1 / $2 }')\n  # make sure we have at least two numbers\n  if [[ ${#output}\
+    \ -lt 2 ]]; then\n    echo \"rescale_to_unit: '$numbers' has < 2 numbers\"\n \
+    \   return 1\n  fi\n  # output will now be space-separated with smallest number\
+    \ first\n  echo \"$output\"", "    local xs=\"$1\"\n    local min=\"$(echo \"\
+    $xs\" | cut -d\" \" -f1)\"\n    local max=\"$(echo \"$xs\" | cut -d\" \" -f2)\"\
+    \n    local arr=($(for n in \"${xs[@]}\"; do echo \"$n\"; done))\n    local new_arr\n\
+    \    if [ \"$min\" -gt \"$max\" ]\n    then\n        new_arr=($(echo \"$arr\"\
+    \ | \\\n                tr \" \" \"\\n\" | sort -n | \\\n                awk -v\
+    \ min=\"$min\" -v max=\"$max\" 'BEGIN {print min} {print $1}' | \\\n         \
+    \       paste -s -d \" \")))\n    else\n        new_arr=($(echo \"$arr\" | \\\n\
+    \                tr \" \" \"\\n\" | sort -n | \\\n                awk -v min=\"\
+    $min\" -v max=\"$max\" 'BEGIN {print max} {print $1}' | \\\n                paste\
+    \ -s -d \" \")))\n    fi\n    echo \"${new_arr[@]}\"", "    local arg=$1\n   \
+    \ shift\n    local min=$1; shift\n    local max=$1; shift\n    local output\n\
+    \    # Convert string to floating point list\n    local -a arg=( $arg )\n    local\
+    \ min=( $min )\n    local max=( $max )\n    # Ensure that all numbers in list\
+    \ are numbers\n    for (( i = 0; i < ${#max[@]}; i++ )); do\n        [[ ! ${arg[i]}\
+    \ =~ ^[0-9]+$ ]] && echo \"ERROR: all numbers in list must be numbers.\" && exit\
+    \ 1\n        if [[ ${arg[i]} -le 0 ]]; then\n            echo \"ERROR: argument\
+    \ #${i} of $arg has a non-negative number!\" && exit 1\n        elif [[ ${arg[i]}\
+    \ -ge ${max[i]} ]]; then\n            echo \"ERROR: argument #${i} of $arg has\
+    \ a number greater than or equal to ${max[i]}!\" && exit 1\n        elif [[ ${arg[i]}\
+    \ -lt ${min[i]} ]]; then\n            echo \"ERROR: argument #${i} of $arg has\
+    \ a number less than or equal to ${min[i]}!\" && exit 1\n        fi\n    done\n\
+    \    # Calculate rescaled list\n    local -a rescale=( $(seq 0 ${#max[@]} - 1\
+    \ 1) )\n    for (( i = 0; i < ${#max[@]}; i++ )); do\n        rescale[i]=${max[i]}-${min[i]}\n\
+    \    done\n    local result\n    for (( i = 0; i < ${#arg[@]}; i++ )); do\n  \
+    \      result=${arg[i]}\n        for (( j = (i + 1) % ${#arg[@]}; j > 0; j-- ));\
+    \ do\n            result=${result} + ${rescale[j]}\n        done\n        output[$i]=${result%.*}\n\
+    \    done\n    # Print result\n    for (( i = 0; i < ${#output[@]}; i++ )); do\n\
+    \        echo -n \"\\\"${output[$i]}\\\"\"\n    done", "    numbers=\"$1\";\n\
+    \    for number in $numbers; do\n        number=`echo $number | cut -d \" \" -f2`;\n\
+    \        smallest=`echo $number | cut -d \" \" -f1`;\n        largest=`echo $number\
+    \ | cut -d \" \" -f3`;\n        if [ \"$smallest\" -gt \"$largest\" ]; then\n\
+    \            smallest=$largest;\n        fi;\n        if [ \"$largest\" -eq \"\
+    $smallest\" ]; then\n            smallest=0;\n        fi;\n        smallest=`echo\
+    \ \"$smallest * 0.9\" | bc`;\n        largest=`echo \"$largest * 1.1\" | bc`;\n\
+    \        if [ \"$smallest\" -lt \"$largest\" ]; then\n            smallest=$largest;\n\
+    \        fi;\n        if [ \"$largest\" -lt \"$smallest\" ]; then\n          \
+    \  largest=$smallest;\n        fi;\n        echo $smallest;\n    done;", "  local\
+    \ input=$1 output=\"$2\"\n  local -a arr=()\n  local -a minmax=()\n  while read\
+    \ -r val; do\n    minmax+=(\"$val\" \"0\")\n  done < <(echo \"$input\" | tr \"\
+    \ \" \"\\n\")\n  for val in \"$@\"; do\n    minmax+=(\"$val\" \"1\")\n  done\n\
+    \  local -a out=()\n  while IFS='' read -r val val2; do\n    arr+=(\"$val\")\n\
+    \    out+=(\"$(echo \"$val2\" | awk '{print $1/$2}')\")\n  done < <(\n    for\
+    \ val in \"${arr[@]}\"; do\n      awk -v min=\"$minmax[$val][1]\" -v max=\"$minmax[$val][2]\"\
+    \ 'BEGIN{printf'\"%.2f\"'\"/\"$max'\"}'\n    done\n  )\n  printf '\"%s\"\\n' \"\
+    ${out[@]}\"", "  if [ -z \"$1\" ] ; then\n    echo \"ERROR: rescale_to_unit expects\
+    \ at least 2 arguments\"\n    echo \"Usage: $0 list | $0 list | ...\"\n    return\
+    \ 1\n  fi\n\n  local L=($(echo $1 | sed -e \"s/ /' '/g\" | sed -e \"s/^/\\\"/\"\
+    ))\n  local N=$(echo $L | wc -l)\n  if [ $N -ne 2 ] ; then\n    echo \"ERROR:\
+    \ rescale_to_unit expects list of at least 2 elements\"\n    echo \"Usage: $0\
+    \ list | $0 list | ...\"\n    return 1\n  fi\n\n  # sort so smallest number is\
+    \ 0\n  L=($(echo $L | sort))\n\n  # linear transform\n  for v in \"${L[@]}\"\n\
+    \  do\n    echo \"$v\"\n  done", "  local x=\"$1\"\n  echo \"$(echo \"${x}\" |\
+    \ tr -s ' ' | cut -d\" \" -f1,2 | sed -e 's/\\..*/0&/' | sort -n | uniq | sed\
+    \ -e 's/0$//')\"", "    local list=\"$1\"\n    local min=\"${list::1}\"\n    local\
+    \ max=\"${list::2}\"\n    if [[ \"$min\" == \"$max\" ]]; then\n        echo \"\
+    $list\"\n    else\n        local scale=\"$((max - min))\"\n        echo \"$list[${min}..${max}]*($scale/$((${#list}-1)))\"\
+    \n    fi", "  local list=\"$1\"\n  if [ \"$list\" == \"\" ]; then\n    return\
+    \ \"\"\n  fi\n  local result\n  for item in $list; do\n    local item2\n    item2=$(echo\
+    \ \"$item\" | cut -d \" \" -f 1)\n    if [ \"$item2\" == \"1\" ]; then\n     \
+    \ result=\"\\\"${item}\\\"\"\n    fi\n  done\n  echo \"$result\"", "  numbers=$1\n\
+    \  local number\n  local min\n  local max\n\n  read -a numbers <<< \"${numbers}\"\
+    \ || return 1\n  for number in \"${numbers[@]}\"; do\n    (( min+=number ))\n\
+    \    (( max+=number ))\n  done\n  min=${min/-1.0}\n  max=${max/-1.0}\n  echo -n\
+    \ \"${min}\"\n  for (( i=1; i<${#numbers[@]}; i++ )); do\n    (( numbers[$i]=${numbers[$i]*$min/$max}\
+    \ ))\n    echo -n \" \\\"${numbers[$i]}\\\"\"\n  done\n  echo -n \"${max}\"",
+  "    local numbers=$@\n    local result=()\n    local min=`echo ${numbers[0]} |\
+    \ cut -c2- | cut -d/ -f1`\n    local max=`echo ${numbers[-1]} | cut -c2- | cut\
+    \ -d/ -f1`\n    for number in ${numbers[@]}; do\n        result+=(\"$((min + (number\
+    \ / max)*$max))\")\n    done\n    printf \"%s\\n\" \"${result[@]}\"", "\tlocal\
+    \ i j min=0; max=0; sum=0\n\tmin=$1[i]; max=$1[j]\n\tfor ((i=1; i<$#; i++)); do\n\
+    \t\tsum+=$1[i]\n\t\tj=$((i+1))\n\t\tif [ -z ${max} ] || [ \"$(echo \"${max} -\
+    \ ${sum}\" | bc)\" -lt 0 ]; then\n\t\t\tmax=$sum\n\t\tfi\n\t\tif [ -z ${min} ]\
+    \ || [ \"$(echo \"${sum} - ${min}\" | bc)\" -gt 0 ]; then\n\t\t\tmin=$sum\n\t\t\
+    fi\n\tdone\n\techo \"${min} ${max}\"", "    local arr=( \"$@\" )\n    local newarr=()\n\
+    \    # sort the list, smallest first\n    sort <<< \"${arr[@]}\"\n    # find smallest\
+    \ and largest values\n    largest=$(echo ${arr[@]} | awk 'END{print $1}')\n  \
+    \  smallest=$(echo ${arr[@]} | awk 'END{print $2}')\n    # convert smallest number\
+    \ to 0\n    smallest=0\n\n    # convert smallest number to 1\n    smallest=1\n\
+    \n    # apply the transformation\n    for el in \"${arr[@]}\"; do\n        # ignore\
+    \ elements smaller than smallest and larger than largest\n        if [ $el -gt\
+    \ $largest ] || [ $el -lt $smallest ]; then\n            newarr+=( $el )\n   \
+    \     else\n            newarr+=( $smallest )\n        fi\n    done\n\n    # remove\
+    \ quotes\n    echo \"${newarr[@]}\"", "  echo \"$1\" | while read num; do\n  \
+    \  (( num < 1 && num > 0 ))\n    local scale=1\n    while (( num > 1 )); do\n\
+    \      (( num *= 2 ))\n      scale=$(( scale * 2 ))\n    done\n    echo \"$(($num\
+    \ / $scale))\"\n  done", "    local list=\"$1\"\n    if [[ ${#list} -lt 2 ]];\
+    \ then\n        echo \"$list is not an appropriate list for the rescale_to_unit()\
+    \ function\"\n        exit 1\n    fi\n\n    # Convert each element to the form\
+    \ \"x\" where x is the smallest number in the list\n    # and -1 is the largest\
+    \ number in the list\n    # Then apply the linear transform to each one\n    #\
+    \ e.g. \"3.0 2.0 1.0\" -> \"0.0 2.0 1.0\"\n    local rescaled_list=\"\"\n    for\
+    \ element in $list; do\n        local smallest_number=\"$(echo $element | cut\
+    \ -d \" \" -f 1)\"\n        local transformed_number=$(( $smallest_number - $(echo\
+    \ $smallest_number | cut -d \".\" -f 2) ))\n        local transformed_element=\"\
+    $(echo $element | sed \"s/ $smallest_number / $transformed_number/; s/ $transformed_number/-1/;\
+    \ s/$smallest_number/0/; s/$/1/\")\"\n        rescaled_list=\"$rescaled_list $transformed_element\"\
+    \n    done\n\n    # Remove double quotes (needed if list is space-separated but\
+    \ not comma-separated\n    rescaled_list=\"${rescaled_list//\\\"/}\"\n\n    #\
+    \ Put double quotes around it\n    echo \"$rescaled_list\"", "  local -n numbers=\"\
+    ${1}\"\n  local -a out\n  local i\n\n  out=()\n\n  for i in \"${!numbers[@]}\"\
+    ; do\n    out+=(\"${numbers[i]}\")\n  done\n  out+=(\"1\")\n\n  echo \"${out[@]}\"",
+  "  local arr=( $1 )\n  local len=${#arr[*]}\n  if [ $len -eq 1 ]; then\n    echo\
+    \ \"$1\"\n    return 0\n  fi\n  local min=${arr[0]}\n  local max=${arr[1]}\n \
+    \ local tmp\n  for (( i=1; i<len; i++ )); do\n    tmp=${arr[i]}\n    if [ -z $min\
+    \ ]; then\n      min=$tmp\n    elif [ -z $max ]; then\n      max=$tmp\n    elif\
+    \ [ \"$tmp\" -gt \"$max\" ]; then\n      max=$tmp\n    elif [ \"$tmp\" -lt \"\
+    $min\" ]; then\n      min=$tmp\n    fi\n  done\n  local tmp1\n  local tmp2\n \
+    \ for (( i=0; i<len; i++ )); do\n    tmp1=$min\n    tmp2=$max\n    local ratio=$((\
+    \ ${tmp} / ${tmp2} ))\n    local tmp3\n    if [ $ratio -gt 1 ]; then\n      tmp3=$((\
+    \ $tmp + $ratio ))\n    elif [ $ratio -lt 1 ]; then\n      tmp3=$(( $tmp - $ratio\
+    \ ))\n    fi\n    arr[i]=$tmp3\n  done\n  echo \"${arr[@]}\"\n  return 0", " \
+    \ local input_list min_max output_list\n  input_list=\"$1\"\n  shift\n  min_max=$1\n\
+    \  shift\n  output_list=$1\n  shift\n  [[ -z \"$output_list\" ]] && output_list=\"\
+    $(echo \"$min_max\" | tr -d ' ')\"\n  [[ -z \"$output_list\" ]] && output_list=\"\
+    $(echo \"$min_max\" | tr -d ' ')\"\n  # convert input list to numbers (spaces\
+    \ removed) and sort them\n  input_list=$(echo \"$input_list\" | tr -d ' ')\n \
+    \ input_list=$(echo \"$input_list\" | sort -n )\n  # compute cumulative sum and\
+    \ store it in an array\n  cumulative_list=$( echo $input_list | awk '{print $1+$2+$3+$4+$5}')\n\
+    \  # compute min and max from cumulative list\n  min_max=$( echo $cumulative_list\
+    \ | awk '{print $1 > $2 ? $1 : $2}')\n  # remove cumulative elements smaller than\
+    \ the min from the list\n  output_list=$(echo \"$output_list\" | sed -e \"s/$min_max.*/$min_max/g\"\
+    )\n  echo $output_list", "  echo \"$1\" | xargs -n 1 -P 0 bash -c '\n    function\
+    \ rescale() {\n      local n=\"$1\"\n      local m=\"$2\"\n      local d=\"$3\"\
+    \n      local ds=\"\"\n      while [[ -n \"$d\" ]]; do\n        ds=\"$ds $d\"\n\
+    \        d=\"$((d+1))\"\n      done\n      printf \"%.${m}f\" \"$ds\"\n    }\n\
+    \    declare -i n\n    n=\"${#1}\"\n    if [[ \"$n\" -le 2 ]]; then\n      echo\
+    \ \"$1\"\n    else\n      declare -i min_n=0\n      declare -i max_n=0\n     \
+    \ for d in \"$1\"; do\n        if [[ -z \"$min_n\" ]]; then\n          min_n=$d\n\
+    \          max_n=$d\n        else\n          if [[ \"$d\" -lt \"$min_n\" ]]; then\n\
+    \            min_n=$d\n          elif [[ \"$d\" -gt \"$max_n\" ]]; then\n    \
+    \        max_n=$d\n          fi\n        fi\n      done\n      min_n=\"$((min_n-1))\"\
+    \n      max_n=\"$((max_n+1))\"\n      declare -i min_d=\"$min_n\"\n      declare\
+    \ -i max_d=\"$max_n\"\n      declare -i i\n      declare -i step\n      if [[\
+    \ \"$min_n\" == 1 ]]; then\n        min_d=\"0.0\"\n        max_d=\"1.0\"\n   \
+    \   elif [[ \"$max_n\" == 1 ]]; then\n        min_d=\"1.0\"\n        max_d=\"\
+    0.0\"\n      else\n        step=\"1\";\n        while [[ \"$min_d\" -lt \"$max_d\"\
+    \ ]]; do\n          printf -v i '%.0f' \"$min_n\"\n          min_n=\"$((i + 1))\"\
+    \n          printf -v i '%.0f' \"$max_n\"\n          max_n=\"$((i + 1))\"\n  \
+    \      done\n        min_d=\"$((min_n - step))\"\n        max_d=\"$((max_n + step))\"\
+    \n      fi\n      local c=0\n      while [[ -n \"$min_d\" ]]; do\n        local\
+    \ t\n        if [[ \"$min_n\" == 1 ]]; then\n          t=\"$min_d\"\n        else\n\
+    \          printf -v i '%.0f' \"$min_n\"\n          printf -v t \"%.${m}f\" \"\
+    $i\"\n        fi\n        local e\n        if [[ \"$max_n\" == 1 ]]; then\n  \
+    \        e=\"$max_d\"\n        else\n          printf -v i '%.0f' \"$max_n\"\n\
+    \          printf -v", "  local arr=$1 n=$(echo $1 | cut -d ' ' -f 1) min=0\n\
+    \  local tmp=$(echo ${arr[@]} | tr \" \" \"\\n\")\n  for (( i = 1; i <= $n; ++i\
+    \ )); do\n    local tmp2=$(echo \"$tmp\" | cut -d \" \" -f $i)\n    local res=$(echo\
+    \ \"$tmp2\" | awk '{print $1/$i}')\n    if [[ \"$min\" == \"0\" ]]; then\n   \
+    \   min=$res\n    elif [[ \"$min\" -gt \"$res\" ]]; then\n      min=$res\n   \
+    \ fi\n  done\n  echo \"$min\"", "  echo \"$1\" | sed 's/ /\" \"/g' | \\\n    perl\
+    \ -pe 's/^\\s*(-?\\d+(?:\\.\\d*)?)\\s*$/\\1\"/' | \\\n    perl -pe 's/^\\s*(-?\\\
+    d+\\.\\d*)/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+)\\s*$/\\1/' | \\\n    perl\
+    \ -pe 's/^\\s*(-?\\d+)/0/g' | \\\n    sed 's/^\\s*0$/\\1/' | \\\n    perl -pe\
+    \ 's/^\\s*(-?\\d+)\\s*$/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)/\\1/'\
+    \ | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)\\s*$/\\1/' | \\\n    perl -pe 's/^\\\
+    s*(-?\\d+\\.*\\d*)/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)\\s*$/\\1/'\
+    \ | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)/0/g' | \\\n    sed 's/^\\s*0$/\\\
+    1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)/\\1/' | \\\n    perl -pe 's/^\\\
+    s*(-?\\d+\\.*\\d*)\\s*$/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)/0/g'\
+    \ | \\\n    sed 's/^\\s*0$/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)/\\\
+    1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\d*)\\s*$/\\1/' | \\\n    perl -pe\
+    \ 's/^\\s*(-?\\d+\\.*\\d*)\\s*$/\\1/' | \\\n    perl -pe 's/^\\s*(-?\\d+\\.*\\\
+    d*)\\s*$/\\1/'", "    local numbers=\"${1}\"\n    local factor\n    local i\n\
+    \    local n\n    local first\n    local last\n    IFS=\" \" read -a numbers <<<\
+    \ \"$numbers\"\n    first=\"${numbers[0]}\"\n    last=\"${numbers[-1]}\"\n\n \
+    \   n=$((last-first+1))\n    factor=$((last-first+1)/n)\n    local i\n    for\
+    \ ((i=0;i<n;i++)); do\n        numbers[$i]=\"$((${numbers[$i]} - first*factor))\"\
+    \n    done\n\n    echo \"${numbers[*]}\"", "  echo $1 | awk '{ x = $1; for(i=2;\
+    \ i<=NF; i++) x = x*i; print $1, x/$NF }' | sed 's/ /, /g'", "  local tmp=()\n\
+    \  read -a tmp <<< \"$1\"\n  local min_max_list\n  min_max_list=( ${tmp[0]} ${tmp[1]}\
+    \ )\n  shift 1 2 \"${@:2}\"\n  for element in \"${@:3}\"; do\n    local tmp\n\
+    \    read -a tmp <<< \"$element\"\n    local min_max_element\n    min_max_element=(\
+    \ ${tmp[0]} ${tmp[1]} )\n    if [ ${min_max_element[0]} -gt ${min_max_list[0]}\
+    \ ]; then\n      min_max_list=( ${min_max_list[0]} ${min_max_element[0]} )\n \
+    \   elif [ ${min_max_element[0]} -lt ${min_max_list[0]} ]; then\n      min_max_list=(\
+    \ ${min_max_element[0]} ${min_max_list[0]} )\n    fi\n    if [ ${min_max_element[1]}\
+    \ -gt ${min_max_list[1]} ]; then\n      min_max_list=( ${min_max_list[1]} ${min_max_element[1]}\
+    \ )\n    elif [ ${min_max_element[1]} -lt ${min_max_list[1]} ]; then\n      min_max_list=(\
+    \ ${min_max_element[1]} ${min_max_list[1]} )\n    fi\n  done\n  echo -n \"${min_max_list[@]}\"",
+  "    local numbers=$1\n\n    local min_max\n    if [[ ${#numbers} -eq 1 ]]; then\n\
+    \        echo \"Error: Number of elements must be greater than 0\"\n        return\
+    \ 1\n    else\n        min_max=$(min \"${numbers[@]}\")\n    fi\n\n    local scale_max\n\
+    \    scale_max=$(max \"${numbers[@]}\")\n\n    local scale\n    scale=$((scale_max\
+    \ - min_max))\n\n    for number in \"${numbers[@]}\"; do\n        printf \"$number\"\
+    \n        printf \".$scale\"\n        printf \"\\n\"\n    done", "    local input_array=(\
+    \ $1 )\n    local min=${input_array[0]}\n    local max=${input_array[-1]}\n  \
+    \  local output_array=()\n\n    for element in \"${input_array[@]}\"; do\n   \
+    \     if (( element > max )) ; then\n            max=element\n        fi\n   \
+    \     if (( element < min )) ; then\n            min=element\n        fi\n   \
+    \ done\n\n    local index=0\n    local scale=$(echo \"(${max} - ${min})\" |bc)\n\
+    \n    for element in \"${input_array[@]}\"; do\n        output_array[index]=$(echo\
+    \ \"(${element} - ${min}) *  $scale\" |bc)\n        index=$((index+1))\n    done\n\
+    \n    echo \"${output_array[*]}\"", "  local l\n  local n x\n  local -i i j k\
+    \ l m n\n\n  n=$(echo \"$1\" | wc -w)\n  if [ \"$n\" -eq 0 ]; then\n    echo ''\n\
+    \    return\n  fi\n\n  x=$(echo \"$1\" | sed \"s/ /\",\"/\")\n  n=$(( $n - 1 ))\n\
+    \n  for ((i = 1; i <= n; i++)); do\n    local m\n    m=$(( $n - i ))\n    for\
+    \ ((j = 1; j <= n; j++)); do\n      m=$(( m + j - 1 ))\n    done\n\n    if [ \"\
+    $i\" -lt \"$m\" ]; then\n      echo \"$x\"\n    else\n      j=$(( $n - i ))\n\
+    \      while [ \"$j\" -ge \"$m\" ]; do\n        j=$(( j - 1 ))\n      done\n \
+    \     l=$(( $(echo \"$j - $i\" | bc | sed \"s/0//\") ))\n      echo $(echo \"\
+    $x\" | sed \"s/$i,$j/$l\")\n    fi\n  done", "    local -a list=\"$1\"\n    local\
+    \ unit=\"$2\"\n    local -a output\n    output=()\n    for ((i=1; i<=${#list[@]};\
+    \ i++)); do\n        local val=\"${list[$i]}\"\n        if [[ -z \"$unit\" ]];\
+    \ then\n            local -a tmp_array=($(echo \"$val\" |awk '{s+=$1; t+=$1}END{print\
+    \ s/(t+s);}' OFS=\".\"))\n            local tmp_val=\"${tmp_array[0]}\"\n    \
+    \    else\n            local -a tmp_array=($(echo \"$val\" |awk '{s+=$1; t+=$1}END{print\
+    \ s/(t+s); print s/($unit*$unit)}' OFS=\".\"))\n            local tmp_val=\"${tmp_array[0]}\"\
+    \n        fi\n        output+=(\\\"\\\"\\\"$tmp_val\\\"\\\"\\\")\n    done\n \
+    \   echo \"${output[@]}\"", "  local input_array=($1)\n  if [ $# -ne 1 ]\n  then\n\
+    \    echo \"Illegal number of parameters ($#). Exiting.\"\n    exit 1\n  fi\n\n\
+    \  local output\n  for element in ${input_array[@]}; do\n    element=$(echo \"\
+    $element\" | sed -e 's/^\"//' -e 's/\"$//')\n    local scale=0\n    local min=0\n\
+    \    local max=0\n\n    if [[ $element =~ ^[0-9]+$ ]] ; then\n      scale=$element\n\
+    \    elif [[ $element =~ ^[0-9]+\\.[0-9]+$ ]] ; then\n      scale=$(echo \"$element\"\
+    \ | sed -e 's/\\./ /g' -e 's/^[0-9]+//g')\n    elif [[ $element =~ ^[0-9]+\\.[0-9]+\\\
+    .[0-9]+$ ]] ; then\n      scale=$(echo \"$element\" | sed -e 's/\\./ /g' -e 's/^[0-9]+//g'\
+    \ -e 's/^\\.//g')\n    elif [[ $element =~ ^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$\
+    \ ]] ; then\n      scale=$(echo \"$element\" | sed -e 's/\\./ /g' -e 's/^[0-9]+//g'\
+    \ -e 's/^\\.//g' -e 's/^[0-9]+\\.//g')\n    elif [[ $element =~ ^[0-9]+\\.[0-9]+\\\
+    .[0-9]+\\.[0-9]+\\.[0-9]+$ ]] ; then\n      scale=$(echo \"$element\" | sed -e\
+    \ 's/\\./ /g' -e 's/^[0-9]+//g' -e 's/^\\.//g' -e 's/^[0-9]+\\.//g' -e 's/^[0-9]+\\\
+    .//g' -e 's/^[0-9]+\\.//g')\n    elif [[ $element =~ ^[0-9]+\\.[0-9]+\\.[0-9]+\\\
+    .[0-9]+\\.[0-9]+\\.[0-9]+$ ]] ; then\n      scale=$(echo \"$element\" | sed -e\
+    \ 's/\\./ /g' -e 's/^[0-9]+//g' -e 's/^\\.//g' -e 's/^[0-9]+\\.//g' -e 's/^[0-9]+\\\
+    .//g' -e 's/^[0-9]+\\.//g' -e 's/^[0-9]+\\.//g')\n    elif [[ $element =~ ^[0-9]+\\\
+    .[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$ ]] ; then\n      scale=$(echo\
+    \ \"$element\" | sed -e 's/\\./ /g' -e 's/^[0-9]+//g' -e 's/^\\.//g' -e 's/^[0-9]+\\\
+    .//g' -e 's/^[0-9]+\\.//g' -e 's/^[0-9]+\\.//g' -e 's/^", "    local num_list=\"\
+    $1\"\n    local max_num=\"${num_list##* }\"\n    local min_num=\"${num_list%%\
+    \ *}\"\n\n    local num_list=\"$max_num $min_num\"\n    local num_list=\"${num_list//\
+    \ / }\"\n\n    local num_list=\"$num_list\"\n    local num_list=\"${num_list/\
+    \ / }\"\n    local num_list=\"${num_list//\\% /}\"\n    local num_list=\"${num_list//\\\
+    # /}\"\n    local num_list=\"${num_list//\\$ /}\"\n    local num_list=\"${num_list//\\\
+    ( /}\"\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    - /}\"\n    local num_list=\"${num_list//\\+ /}\"\n    local num_list=\"${num_list//\\\
+    / /}\"\n    local num_list=\"${num_list//\\? /}\"\n    local num_list=\"${num_list//\\\
+    ! /}\"\n    local num_list=\"${num_list//\\@ /}\"\n    local num_list=\"${num_list//\\\
+    # /}\"\n    local num_list=\"${num_list//\\% /}\"\n    local num_list=\"${num_list//\\\
+    / /}\"\n\n    local num_list=\"${num_list//\\* /}\"\n    local num_list=\"${num_list//\\\
+    / /}\"\n    local num_list=\"${num_list//\\/ /}\"\n\n    local num_list=\"${num_list//\
+    \ /}\"\n\n    local num_list=\"${num_list// /}\"\n    local num_list=\"${num_list//\
+    \ /}\"\n\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list=\"${num_list//\\) /}\"\n    local num_list=\"${num_list//\\\
+    ) /}\"\n    local num_list", "    local arr=( $1 )\n    for ((i=0; i<${#arr[@]};\
+    \ ++i)); do\n        arr[$i]=$(echo \"${arr[$i]}\" | awk '{print $(echo \"${arr[$i]}\"\
+    \ | awk '{print $1/$2}')}')\n    done\n    echo -n \"${arr[@]}\"", "  local LIST=\"\
+    $1\";\n  local MIN=\"$(echo \"$LIST\" | head -n 1 |cut -d\" \" -f1)\";\n  local\
+    \ MAX=\"$(echo \"$LIST\" | tail -n 1 |cut -d\" \" -f1)\";\n  local LIST2=\"\"\
+    ;\n  local INDEX;\n  local FACTOR;\n  local TOTAL;\n  local ELEMENTS;\n  local\
+    \ TEMP;\n  local UNIT;\n  local MAX_PAIRS;\n  local TEMP_ELEMENTS;\n  local TEMP_ELEMENTS_LIST;\n\
+    \  local TEMP_PAIRS;\n  local TEMP_PAIRS_LIST;\n\n  # Split the list into pairs\
+    \ of 2 elements, where each pair is an element of the list\n  TEMP_ELEMENTS=$(echo\
+    \ \"$LIST\" | sed 's/ /\\n/g' | paste -s -d \"\\n\" |tr \"\\n\" \" \");\n  TEMP_ELEMENTS_LIST=$(echo\
+    \ \"$TEMP_ELEMENTS\" | sed 's/ /\\n/g' | paste -s -d \"\\n\" | tr \"\\n\" \" \"\
+    );\n  TEMP_PAIRS=$(echo \"$TEMP_ELEMENTS\" | sed 's/ /\\n/g' | paste -s -d \"\\\
+    n\" | tr \"\\n\" \" \");\n  TEMP_PAIRS_LIST=$(echo \"$TEMP_PAIRS\" | sed 's/ /\\\
+    n/g' | paste -s -d \"\\n\" | tr \"\\n\" \" \");\n\n  # Iterate through the pairs\
+    \ of elements and calculate the factor and total\n  for INDEX in \"${!TEMP_PAIRS_LIST}\"\
+    \n  do\n    ELEMENTS=$(echo \"$TEMP_PAIRS_LIST\" | cut -d \" \" -f $INDEX | sed\
+    \ 's/ /\\n/g' | paste -s -d \"\\n\" | tr \"\\n\" \" \");\n    FACTOR=$(echo \"\
+    $ELEMENTS\" | awk '{print $1/$2}');\n    TOTAL=$(echo \"$ELEMENTS\" | awk '{print\
+    \ $2+$1}');\n    ELEMENTS=$(echo \"$TEMP_ELEMENTS_LIST\" | cut -d \" \" -f $INDEX\
+    \ | sed 's/ /\\n/g' | paste -s -d \"\\n\" | tr \"\\n\" \" \");\n    ELEMENTS=$(echo\
+    \ \"$ELEMENTS\" | awk '{print $1/$2}');\n    ELEMENTS=$(echo \"$ELEMENTS\" | awk\
+    \ '{print $2+$1}');\n    UNIT=$(echo \"$ELEMENTS\" | awk '{print $1/$2}');\n \
+    \   ELEMENTS=$(echo \"$ELEMENTS\" | awk '{print $2+$1}');\n    ELEMENTS", "  \
+    \  local -r numbers=\"$1\"\n    local -r start=0\n    local -r stop=1\n\n    local\
+    \ -r scale\n    scale=$(IFS=$' \\t\\n'; echo \"scale=3; $start-$stop\" | bc -l)\n\
+    \n    # Add quotes and return\n    echo \"'${numbers}'\" | (while read -r line;\
+    \ do\n        echo \"$line*$scale\"\n    done)", "    # $1 must be space-separated\
+    \ numbers\n    local -a x=($1)\n    local -a min_max\n    min_max=()\n    for\
+    \ x in \"${x[@]}\"; do\n        case \"${x}\" in\n            (*[!0-9]*) echo\
+    \ \"error: invalid number $x in rescale_to_unit\"; exit 1;;\n            (*)\n\
+    \            case \"${x}\" in\n                [0-9]*) x=$(echo \"${x}\" | bc\
+    \ | sed -e 's/^0/\"0.0\"/')\n                    ;;\n                *) x=$(echo\
+    \ \"${x}\" | bc | sed -e 's/^1/\"1.0\"/')\n                    ;;\n          \
+    \  esac\n            min_max+=(${x})\n            ;;\n        esac\n    done\n\
+    \    if [[ ${#min_max[@]} != 2 ]]; then\n        echo \"error: invalid number\
+    \ of elements (${#min_max[@]}) in rescale_to_unit\"\n        exit 1\n    fi\n\
+    \    shift\n    echo \"${min_max[@]}\"", "    local X=\"$1\"\n    local d=\"$(\
+    \ echo \"$X\" | cut -d\" \" -f1 )\"\n    local t=\"$( echo \"$X\" | cut -d\" \"\
+    \ -f2 )\"\n\n    local dmin=$( echo \"$X\" | cut -d\" \" -f1 | sort -h | head\
+    \ -1 )\n    local dmax=$( echo \"$X\" | cut -d\" \" -f1 | tail -1 | head -1 )\n\
+    \    local xmin=$( echo \"$X\" | cut -d\" \" -f2 | head -1 )\n    local xmax=$(\
+    \ echo \"$X\" | cut -d\" \" -f2 | tail -1 | head -1 )\n    local tmp\n\n    #\
+    \ dmin=0\n    # dmax=100\n    # xmin=0\n    # xmax=100\n    # d=$(dmax-dmin)\n\
+    \    # x=$(xmax-xmin)\n    # tmp=$(echo \"$d*$d\" | bc)\n    # echo \"scale=2;\
+    \ $tmp*$x-$xmax\" | bc\n    tmp=$(echo \"scale=2; $dmax*($dmax-dmin)*($xmax-$xmin)/($dmax-$dmin)/100.0\"\
+    \ | bc)\n    echo \"$tmp\" | bc", "  local num_list=\"$1\"\n  local list=($num_list)\n\
+    \  local min_list=${list[0]}\n  local max_list=${list[1]}\n  local scaled_list=(0)\n\
+    \  local min_val=\"${max_list}/${min_list}\"\n\n  for (( i=0; i<${#list[@]}; i++\
+    \ )); do\n    scaled_list[i]=\"${max_list}-${min_val}*${list[i]}\"\n  done\n\n\
+    \  # convert list to string and remove all double quotes\n  local new_list=\"\"\
+    \n  for (( i=0; i<${#scaled_list[@]}; i++ )); do\n    new_list=\"${new_list}\\\
+    \"${scaled_list[i]}\\\"\n  done\n\n  echo $new_list", "    local numbers=$1\n\
+    \    local result\n    while read -r number; do\n        # convert to floating\
+    \ point number\n        number=$(echo \"$number\" | tr -d '[[:space:]]')\n   \
+    \     result=$(\"$number\" / 1)\n        echo \"$result\"\n    done < <(echo \"\
+    $numbers\" | tr -d '[[:space:]]')", "    local -r list_of_numbers=\"$1\"\n   \
+    \ local -r new_max=\"${list_of_numbers[0]}\"\n    local -r new_min=\"${list_of_numbers[-1]}\"\
+    \n    if [[ ${#list_of_numbers} -eq 2 ]]; then\n        local -r last_num=$(echo\
+    \ \"${list_of_numbers[*]}\" | tail -n 1)\n        if [[ ${last_num} -gt ${new_max}\
+    \ ]]; then\n            new_max=\"${last_num}\"\n        fi\n        if [[ ${last_num}\
+    \ -lt ${new_min} ]]; then\n            new_min=\"${last_num}\"\n        fi\n \
+    \   fi\n    echo \"[${new_min} : ${new_max}] * [${list_of_numbers[*]}] = ${list_of_numbers[*]}\"\
+    \ >&2\n    local -r result=\n    for element in ${list_of_numbers[@]}; do\n  \
+    \      result+=\"[${new_min} : ${new_max}] * [${element}]\"\n    done\n    echo\
+    \ -n \"${result}\" >&2", "    local numbers=\"$1\"\n    local min max\n\n    #\
+    \ First split the list into two lists, each with 2 elements\n    numbers=($numbers)\n\
+    \    numbers=(\"${numbers[@]/#/ }\") # Remove all leading spaces, if any\n   \
+    \ echo \"numbers=$numbers\" # Debugging\n\n    min=${numbers[0]}\n    max=${numbers[-1]}\n\
+    \    echo \"min=$min max=$max\" # Debugging\n\n    # Now rebuild the list with\
+    \ 0 as min and 1 as max\n    numbers=()\n    for i in \"${numbers[@]:1}\" ; do\n\
+    \        numbers+=($(eval echo \"$min+(1/$max)*(${i})\"))\n    done\n\n    # Now\
+    \ replace the zeros with the new min and 1s with the new max\n    numbers=(\"\
+    ${numbers[@]/#/ }\") # Remove all leading spaces, if any\n    numbers=(\"${numbers[@]/%/${min}/${max}/}\"\
+    ) # Replace all zeros with min, and 1s with max\n    echo \"numbers=$numbers\"\
+    \ # Debugging\n\n    # Then convert the array into a space-separated list\n  \
+    \  numbers=$(IFS=' '; echo \"${numbers[*]}\")", "  # We assume at least two arguments\n\
+    \  local list_to_rescale=$1\n\n  IFS=$'\\n' read -r -a list <<< \"${list_to_rescale}\"\
+    \n\n  if [ \"${#list[@]}\" -eq 0 ]; then\n    echo \"No numbers were supplied\
+    \ to rescale_to_unit\"\n    return 1\n  fi\n\n  local smallest=0\n  local largest=0\n\
+    \  local counter=0\n\n  for element in \"${list[@]}\"; do\n    case \"${smallest}\"\
+    \ in\n      0)\n        smallest=\"${element}\"\n        ;;\n      *)\n      \
+    \  if [ \"${element}\" -gt \"${largest}\" ]; then\n          largest=\"${element}\"\
+    \n        fi\n        ;;\n    esac\n    ((counter++))\n  done\n\n  if [ \"${smallest}\"\
+    \ -eq \"${largest}\" ]; then\n    # All numbers are identical\n    echo -n \"\
+    ${list[*]}\"\n  elif [ \"${smallest}\" -gt \"${largest}\" ]; then\n    # One number\
+    \ larger than the other\n    counter=0\n    for element in \"${list[@]}\"; do\n\
+    \      case \"${smallest}\" in\n        \"${element}\")\n          echo \"${smallest}\
+    \ ${element}\"\n          smallest=\"${element}\"\n          ;;\n        *)\n\
+    \          ((counter++))\n          echo \"${smallest} ${element}\"\n        \
+    \  smallest=\"${element}\"\n          ;;\n      esac\n    done\n  else\n    #\
+    \ One number smaller than the other\n    counter=0\n    for element in \"${list[@]}\"\
+    ; do\n      case \"${largest}\" in\n        \"${element}\")\n          echo \"\
+    ${element} ${largest}\"\n          largest=\"${element}\"\n          ;;\n    \
+    \    *)\n          ((counter++))\n          echo \"${element} ${largest}\"\n \
+    \         largest=\"${element}\"\n          ;;\n      esac\n    done\n  fi", " \
+    \   local L=\"$1\"\n    local NUMS=$(echo \"$L\" | sed -e 's/^\"\\(.*\\)\"$/\\\
+    1/')\n    if [ -z \"$NUMS\" ]; then\n        return\n    fi\n    local MIN=$(echo\
+    \ \"$L\" | sed -e 's/^\"\\(.*\\)\"$/\\1/')\n    local MAX=$(echo \"$L\" | sed\
+    \ -e 's/^\"\\(.*\\)\"$/\\1/')\n    local CUM_MIN=0\n    local CUM_MAX=1\n    local\
+    \ NEW_NUMS=\"\"\n    local NEXT_MIN\n    local NEXT_MAX\n    local NUM\n    local\
+    \ MIN_INC\n    local MAX_INC\n    local CUM_INC\n    local NEW_NUM\n    local\
+    \ INC\n    local INC_MAX\n    local INC_MIN\n    local INC_INC\n    local NEW_CUM_MIN\n\
+    \    local NEW_CUM_MAX\n\n    local MIN_CUMPROD\n    local MAX_CUMPROD\n    local\
+    \ CUMPROD_NEW\n    local NEW_NUMS\n\n    local NUM_CUMPROD\n\n    for NUM in $NUMS;\
+    \ do\n        MIN_INC=$(echo $NUM | cut -d\\\" -f1)\n        MAX_INC=$(echo $NUM\
+    \ | cut -d\\\" -f2)\n        if [ \"$MIN_INC\" -lt \"$CUM_MIN\" ]; then\n    \
+    \        MIN_CUMPROD=$MIN_INC\n        else\n            MIN_CUMPROD=$CUM_MIN\n\
+    \        fi\n        if [ \"$MAX_INC\" -gt \"$CUM_MAX\" ]; then\n            MAX_CUMPROD=$MAX_INC\n\
+    \        else\n            MAX_CUMPROD=$CUM_MAX\n        fi\n        CUM_INC=$(echo\
+    \ \"$CUM_MAX - $CUM_MIN\" | bc)\n        INC=$(echo \"$MIN_CUMPROD + $CUM_INC\"\
+    \ | bc)\n        INC_MIN=$(echo \"$MIN_CUMPROD - $INC\" | bc)\n        INC_MAX=$(echo\
+    \ \"$MAX_CUMPROD - $INC\" | bc)\n        INC_INC=$(echo \"$INC / $INC_MAX\" |\
+    \ bc)\n\n        NEW_NUM=\"$((INC * $NUM))\"\n        NEW_NUMS=\"$NEW_NUMS $NEW_NUM\"\
+    \n\n        NUM_CUMPROD=\"$((INC_CUMPROD * $NUM))", "  if [ $# -lt 2 ]; then\n\
+    \    echo \"Usage: $(basename $0) <list>\"\n    return 1\n  fi\n\n  # Convert\
+    \ all numbers to floats\n  arr=(\"${@/#/\\\"}\")\n  for n in \"${arr[@]}\"; do\n\
+    \    eval n=$(echo $n | sed \"s/,/ /g\")\n  done\n\n  # Sum all numbers\n  local\
+    \ n=\"$( echo $(( ${#arr[@]} - 1 )) )\"\n  local total\n  total=0\n  for n in\
+    \ \"${arr[@]}\"; do\n    total=$(( total + $n ))\n  done\n\n  # Normalize the\
+    \ numbers by dividing all numbers by their sum\n  local i=0\n  while [ $i -lt\
+    \ $n ]; do\n    arr[$i]=$(( ${arr[$i]} / $total ))\n    i=$(( i + 1 ))\n  done\n\
+    \n  # Convert back to string\n  arr=($( IFS=\" \"; echo \"${arr[@]}\"))\n\n  #\
+    \ Convert back to space-separated list\n  printf \"%s\\n\" \"${arr[@]}\"", " \
+    \   local i j cur min max x\n    IFS=' ' read -ra xs <<<\"$1\"\n    for ((i=0;\
+    \ i<${#xs[@]}; i++));\n    do\n\tmin=$(( ${xs[i]} ))\n\tmax=$(( ${xs[(($i+1)%${#xs[@]})]}\
+    \ ))\n\tprintf -v x  \"%.*f\" \"$min\" \"(${xs[i]} - $min) / ($max - $min)\"\n\
+    \tprintf -v x  \"%.*f\" \"$max\" \"$max\"\n\tprintf -v cur '\"%.*f\"' \"$i\" \"\
+    ${xs[i]}\"\n\tprintf -v x  \"%.*f\" \"$x\" \"$cur\"\n    done\n    printf \"[%s]\"\
+    \ ${xs[@]}", "  IFS=$'\\n' read -r -a array <<<\"$1\"\n  while read -r num; do\n\
+    \    num=$(bc <<< \"$num % ((2 - 1) * 1)\")\n    array=(\"${array[@]/%/ $num}\"\
+    )\n  done <<<\"$array\"\n  printf '%s\\n' \"${array[@]/%/ 0.0}\"", "  if [ \"\
+    $1\" == '' ]; then\n    echo 'empty argument, nothing to do'\n    exit 1\n  fi\n\
+    \  A=( $(echo $1 | tr \".\" \" \") )\n  n=${#A[@]}\n  if [ $n -lt 2 ]; then\n\
+    \    echo 'first argument must be space-separated list of at least 2 elements'\n\
+    \    exit 1\n  fi\n  for i in `seq 1 $n`\n  do\n    s=$(echo \"${A[$i]}\" | cut\
+    \ -d \" \" -f 1)\n    A[$i]=\"$(echo \"${A[$i]}\" | cut -d \" \" -f 2- | cut -d\
+    \ \".\" -f 1 | bc)\"\n  done\n  A=($(echo ${A[@]} | tr \" \" \"\\n\"))\n  echo\
+    \ ${A[@]}", "    local input_list=$(printf \"%s\" \"$1\") # put arguments into\
+    \ a single string for easy split\n    local output_list=() # output list will\
+    \ be stored in this variable\n    local input_elements=() # input list will be\
+    \ stored here\n    local output_element=() # output element will be stored in\
+    \ this variable\n    local element_index=0\n    local element_count=0\n    local\
+    \ element_weight=0\n    local element_weight_index=0\n    local element_weight_max=0\n\
+    \    local output_element_max=0\n    local output_element_min=0\n    local output_element_weight=0\n\
+    \    local output_element_weight_max=0\n    local output_element_weight_min=0\n\
+    \    local input_element_max=0\n    local input_element_min=0\n    local input_element_weight=0\n\
+    \n    for input_element in $input_list; do\n        input_elements[element_index]=\"\
+    \\\"$input_element\\\"\"\n        element_count=$((element_count + 1))\n     \
+    \   element_weight_index=$((element_weight_index + 1))\n        element_weight_max=$((element_weight_max\
+    \ + 1))\n        element_index=$((element_index + 1))\n    done\n\n    local output_index=0\n\
+    \    for input_element in $input_list; do\n        element_index=$((element_index\
+    \ + 1))\n\n        input_element_max=$((input_element_max + input_element))\n\
+    \        input_element_min=$((input_element_min + input_element))\n\n        input_element_weight=$((input_element_weight\
+    \ + (input_element * element_count)))\n\n        if [ $((element_weight_index\
+    \ % 2)) -ne 0 ]; then\n            output_element_max=$((output_element_max +\
+    \ input_element))\n            output_element_min=$((output_element_min + input_element))\n\
+    \            output_element_weight=$((output_element_weight + (input_element *\
+    \ element_count)))\n        fi\n    done\n\n    element_weight_index=$((element_weight_index\
+    \ - 1))\n    element_weight_max=$((element_weight_max - 1))\n    element_weight_min=$((element_weight_min\
+    \ - 1))\n\n    output_index=$((output_index - 1))\n    output_elements[output_index]=\"\
+    $output_element_min\"\n    output_elements[output_index]=\"$output_element_max\"\
+    \n    output_elements[output_index]=\"$output_element_weight\"\n\n    while ((element_weight_index\
+    \ <= element_weight_max)); do\n        element_weight_index=$((element_weight_index\
+    \ + 1))\n        element_weight_max=$((element_weight_max + 1))\n        element_weight_min=$((element_weight_min\
+    \ - 1))\n        output_index=$((output_index + 1))\n        output_elements[output_index]=\"\
+    $output_element_min\"\n        output_elements[output_index]=\"$output_element_max\"\
+    \n        output_elements[output_index]=\"$output_element_weight\"\n    done\n\
+    \n    echo \"", "  local list_str=\"$1\"\n  local list=( ${list_str// /' '}) #\
+    \ replace all spaces by single ones\n  local min_val=999999999999 # something\
+    \ big enough to never be an integer\n  local min_idx=0\n  local max_idx=0\n  local\
+    \ val=0\n  local i=0\n  local scale=1\n\n  for idx in \"${!list[@]}\"; do\n  \
+    \  val=${list[$idx]}\n    if [[ $val -gt $min_val ]]; then\n      min_val=$val\n\
+    \      min_idx=$idx\n    fi\n    if [[ $val -le $max_val ]]; then\n      max_val=$val\n\
+    \      max_idx=$idx\n    fi\n  done\n\n  # Now we have a min-max pair, decide\
+    \ which one is smaller\n  if [[ $min_idx -gt $max_idx ]]; then\n    scale=-1\n\
+    \    max_idx=$min_idx\n  else\n    scale=1\n    min_idx=$max_idx\n  fi\n\n  #\
+    \ Now apply the scale\n  local list_new=()\n  for idx in \"${!list[@]}\"; do\n\
+    \    val=${list[$idx]}\n    list_new[$idx]=$(( ${scale} * val ))\n  done\n  echo\
+    \ ${list_new[@]}", "  local numbers=\"$1\"\n  local -r scale=0\n\n  echo \"$numbers\"\
+    \ | sed 's/ /\" \"/' | sed 's/^/\"${scale}\"/' | sed 's/$/\"/' > /tmp/numbers\n\
+    \n  local -a nums=()\n  while read -r line; do\n    if [[ \"${line}\" =~ ^\"${scale}\"\
+    \ \"*\" ]]; then\n      nums+=($(( ${line%%\" \"} / $scale )))\n    fi\n  done\
+    \ < /tmp/numbers\n\n  local -r new_numbers=()\n  local -r new_scale=0\n  while\
+    \ read -r line; do\n    if [[ -n \"${new_scale}\" ]]; then\n      new_numbers+=($((\
+    \ ${line%%\" \"} / $scale )))\n      new_scale=0\n    fi\n  done < /tmp/numbers\n\
+    \n  rm -f /tmp/numbers\n\n  echo \"${new_numbers[@]}\"", "\tlocal -r input_list=\"\
+    ${1}\"\n\tlocal -r output_list=\"\"\n\twhile IFS= read -r elem; do\n\t\tlocal\
+    \ min=1000000000\n\t\tlocal max=-1\n\t\tlocal elem elem elem elem elem\n\n\t\t\
+    for ((i=0; i < ${#input_list[@]}; i++)); do\n\t\t\tlocal elem=\"${input_list[$i]}\"\
+    \n\t\t\tif [[ ${elem} -gt ${max} ]]; then\n\t\t\t\tmax=${elem}\n\t\t\telif [[\
+    \ ${elem} -lt ${min} ]]; then\n\t\t\t\tmin=${elem}\n\t\t\tfi\n\t\tdone\n\n\t\t\
+    ((max - min)/2)\n\n\t\tlocal -r tmp_min=\"${min}\"\n\t\tlocal -r tmp_max=\"${max}\"\
+    \n\n\t\twhile ((tmp_max - tmp_min) > 0.0001); do\n\t\t\tlocal -r tmp_min=$((tmp_min\
+    \ + min/2))\n\t\t\tlocal -r tmp_max=$((tmp_max + min/2))\n\t\t\toutput_list=\"\
+    ${output_list} \\\"${tmp_min}\\\"\"\n\t\tdone\n\t\toutput_list=\"${output_list}\
+    \ \\\"${tmp_max}\\\"\"\n\tdone\n\n\techo \"${output_list}\"", "  local LIST=\"\
+    $1\"\n  local TMPLIST=\" \"\n  local TOLDLIST=\" \"\n  local RESULT=\" \"\n\n\
+    \  for l in $LIST ; do\n    if [ -z \"$TOLDLIST\" ] ; then\n      TOLDLIST=$l\n\
+    \    elif [ \"$l\" -ge \"$TOLDLIST\" ] ; then\n      RESULT=$l\n    else\n   \
+    \   TMPLIST=\"$TMPLIST $TOLDLIST $l\"\n      TOLDLIST=$l\n    fi\n  done\n\n \
+    \ if [ -z \"$TMPLIST\" ] ; then\n    echo \"$TMPLIST\"\n  else\n    if [ \"$TMPLIST\"\
+    \ -ge \"$TOLDLIST\" ] ; then\n      RESULT=\"$TMPLIST\"\n    else\n      RESULT=\"\
+    $TMPLIST $TOLDLIST\"\n    fi\n    echo \"$RESULT\"\n  fi", "    local numbers\
+    \ shift\n    numbers=($@)\n    while [[ ${#numbers} -ge 2 ]]\n    do\n       \
+    \ numbers[0]=`echo \"${numbers[0]} ${numbers[1]}\"|bc -l`\n        numbers[1]=`echo\
+    \ \"${numbers[1]} ${numbers[2]}\"|bc -l`\n        numbers=($(seq 2 $((${#numbers[@]}-1))))\n\
+    \    done\n    numbers=(\"${numbers[@]:1}\")\n    echo \"${numbers[@]}\"", " \
+    \   local LIST=\"$1\"\n    local TEMPLIST\n\n    TEMPLIST=$(echo $LIST | tr '\
+    \ ' ',')\n    local MINVAL=$(echo $TEMPLIST | tr ',' '\\n' | sort -nr | head -n\
+    \ 1)\n    local MAXVAL=$(echo $TEMPLIST | tr ',' '\\n' | sort -nr | tail -n 1)\n\
+    \    local RESCALE=\"$(($MAXVAL - $MINVAL))\"\n\n    echo $TEMPLIST | tr ',' '\\\
+    n' | sort -n -r | \\\n\tsed \"s/$MINVAL/$RESCALE/g\" | tr '\\n' ' '", "  local\
+    \ LIST=\"$1\"\n  local MIN=\"$2\"\n  local MAX=\"$3\"\n\n  local TEMP=()\n  local\
+    \ LIST2=()\n  local LIST3=()\n  local LIST4=()\n\n  for ((i=0; i<${#LIST}; i++));\
+    \ do\n    TEMP+=(\"${LIST[i]}\")\n  done\n\n  local i\n  for ((i=0; i<${#TEMP[@]};\
+    \ i++)); do\n    local j\n    LIST3[${i}]=$(echo \"${TEMP[i]}\" | sed \"s/[0-9]\\\
+    +/\\\"\\\"/g\")\n    LIST4[${i}]=$(echo \"${TEMP[i]}\" | sed \"s/[0-9]\\+-/\\\"\
+    \\\"/g\")\n    LIST2[i]=$(echo \"${TEMP[i]}\" | sed \"s/\\+/-/g\")\n  done\n\n\
+    \  LIST=\"${LIST2[*]}\"\n  LIST=\"${LIST3[*]}\"\n  LIST=\"${LIST[*]}\"\n\n  local\
+    \ X=\"\"\n  local X1=\"\"\n  local X2=\"\"\n  local X3=\"\"\n  local Y=\"\"\n\
+    \  local Y1=\"\"\n  local Y2=\"\"\n  local Y3=\"\"\n\n  for ((i=0; i<${#LIST[@]};\
+    \ i++)); do\n    if [ \"${LIST[i]}\" = \"$MIN\" ]; then\n      X1=${LIST[i]}\n\
+    \    elif [ \"${LIST[i]}\" = \"$MAX\" ]; then\n      X2=${LIST[i]}\n    elif [\
+    \ \"${LIST[i]}\" = \"$((${LIST[i]} - 1))\" ]; then\n      X3=${LIST[i]}\n    fi\n\
+    \  done\n\n  for ((i=0; i<${#LIST[@]}; i++)); do\n    if [ \"${LIST[i]}\" = \"\
+    $MIN\" ]; then\n      Y1=${LIST[i]}\n    elif [ \"${LIST[i]}\" = \"$MAX\" ]; then\n\
+    \      Y2=${LIST[i]}\n    elif [ \"${LIST[i]}\" = \"$((${LIST[i]} - 1))\" ]; then\n\
+    \      Y3=${LIST[i]}\n    fi\n  done\n\n  local NUM=\"\"\n  local NUM1=\"\"\n\
+    \  local NUM2=\"\"\n  local NUM3=\"\"\n\n  for ((i=0; i<${#LIST[@]}; i++)); do\n\
+    \    if [ \"${LIST[i]}\" = \"$((${LIST[i]} - 1))\" ]; then\n      NUM2=${LIST[i]}\n\
+    \    elif [ \"${LIST[i]}\" = \"$((${LIST[i]} - 1))\" ]; then\n      NUM3=${LIST[i]}\n\
+    \    elif [ \"${LIST[i]}\" = \"$((${LIST[i]} - 1))\" ]; then\n      NUM=${LIST[i]}\n\
+    \    fi\n  done\n\n  local NUM2=\"\"\n  local NUM", "  local inlist=$1\n  local\
+    \ minval=$2\n  local maxval=$3\n  local outlist\n  outlist=$( echo \"$minval\"\
+    \ > \"$maxval\" && echo \"$maxval\" > \"$minval\" || echo \"$minval\" > \"$maxval\"\
+    \ && echo \"$maxval\" > \"$minval\" )\n  # Now we can simply apply the transform\
+    \ to the list\n  echo $inlist | sed 's/^/\"/; s/$/\"/; s/\\([-]\\)/\\1\"/; s/\\\
+    ([0-9]\\)/\\1/; s/ /\"/; s/\\([0-9.]\\)/\\1/' > $outlist", "    local list=$1\n\
+    \    local min=$(head -n 1 <<< \"$list\")\n    local max=$(tail -n 1 <<< \"$list\"\
+    )\n    local output=$(eval echo {0..$max} / {0..$min})\n    if [[ \"${output}\"\
+    \ != *\".0\"* ]]; then\n        eval \"$list=('${output}')\"\n    fi", "  local\
+    \ numbers=$1\n  local result\n  result=$(echo \"$numbers\" | xargs -n 1 -P $NUM_PARTITIONS\
+    \ echo \"$numbers\" | sort -n | awk '{print $1}' |\n    xargs -n 1 -P $NUM_PARTITIONS\
+    \ echo \"$numbers\" | sort -n | awk '{print $1}' | xargs -n 1 -P $NUM_PARTITIONS\
+    \ echo \"$numbers\" | sort -n | awk '{print $1}')\n  echo -n \"[\"\n  for i in\
+    \ ${result[@]}; do\n    echo -n \"\\\"\"\n    echo \"$(( $(echo \"$numbers\" |\
+    \ awk '{print $2 * $i + $1}' |\n      awk '{print $1 < $2 ? $1 : $2}') + 0 ))\"\
+    \n    echo \"\\\"\"\n  done\n  echo \"]\"", "  # Convert $1 into space-separated\
+    \ list\n  local -a list=\"$1\"\n  # Remove quotes\n  list=(${list[@]//\\\"})\n\
+    \  # Make sure we have at least two elements\n  if [[ ${#list[@]} < 2 ]]; then\n\
+    \    echo \"Usage: $(basename $0) \\\"1 2 3 4 5\\\"\"\n    return 1\n  fi\n  #\
+    \ If list is even, just return it\n  if [[ ${#list[@]} -eq 0 ]]; then\n    echo\
+    \ \"$list\"\n    return 0\n  fi\n  # Convert to double-precision floats\n  local\
+    \ i n n2 d\n  for ((i=1; i<${#list[@]}; i++)); do\n    n=$(echo \"${list[i]}\"\
+    \ | awk '{printf \"%.6f\", $1}')\n    n2=$(echo \"${list[i]}\" | awk '{printf\
+    \ \"%.6f\", $1}')\n    d=$(echo \"${list[i]}\" | awk '{printf \"%.6f\", $1}')\n\
+    \    if [[ $d -gt 1 ]]; then\n      # Increase n\n      n=$(( n*d + $(n2) ))\n\
+    \    else\n      # Increase n\n      n=$(( n + $(n2) ))\n    fi\n  done\n  # Convert\
+    \ to single-precision floats\n  n=$(( n*0.5 ))\n  # Append a space and newline\n\
+    \  n+=\" \"\n  echo \"$n\"", "    local NUMBERS=\"$1\"\n    local NUMBERS_STR=\n\
+    \    for NUMBER in $NUMBERS; do\n        if [ -z \"$NUMBERS_STR\" ]; then\n  \
+    \          NUMBERS_STR=\"$NUMBER\"\n        else\n            NUMBERS_STR=\"$NUMBERS_STR\
+    \ $NUMBER\"\n        fi\n    done\n    echo $NUMBERS_STR | sed -e 's/ /\" \"/g'\
+    \ | awk -F\\\" '{print \"\\\"\"$3\"\\\"\" }'", "\tlocal a=$1\n\tshift 1\n\tlocal\
+    \ tst=$(awk \"BEGIN { for (i = 0; i < ${#a[@]}; ++i) printf \\\"%.0f \\\", ${a[i]};\
+    \ }\")\n\tlocal mx=$(awk \"BEGIN { mx=${a[$#]}; }; END { print mx; }\")\n\tlocal\
+    \ ret=$(\n\t\twhile read line\n\t\tdo\n\t\t\tarr=($line)\n\t\t\tif [ \"${#arr[@]}\"\
+    \ -le 1 ]; then\n\t\t\t\tarr=()\n\t\t\tfi\n\t\t\t\n\t\t\tlocal tmp=${arr[0]}\n\
+    \t\t\tlocal mx=${arr[$#]}\n\t\t\tfor (( n=1; n < ${#arr[@]}; ++n )); do\n\t\t\t\
+    \tlocal x=${arr[$n]} # $n should start at 1 here\n\t\t\t\tlocal scale=$(( ${x:+1}\
+    \ * ${mx} ))\n\t\t\t\ttmp=$(( ${tmp} + ${scale} ))\n\t\t\tdone\n\t\t\t\n\t\t\t\
+    echo -n \"'\"\n\t\t\tprintf \"${tmp:-0}\"\n\t\t\techo -n \"'\"\n\t\tdone<<<\"\
+    $tst\")\n\techo \"\"\n\techo \"$ret\"", "  # Escape the list elements to avoid\
+    \ problems\n  local numbers=$1\n  local numbers_tmp=()\n  local first=1\n  while\
+    \ ((${#numbers})); do\n    numbers_tmp+=(\"${numbers%:*}\")\n    numbers=${numbers#*:}\n\
+    \  done\n  local n=$((${#numbers_tmp}-1))\n  for ((i = 0; i < n; i++))\n  do\n\
+    \    numbers_tmp[i]=\"${numbers_tmp[i]/}${first}\"\n    first=0\n  done\n  # Remove\
+    \ the '\"'\n  local numbers_tmp2=(${numbers_tmp[@]})\n  local numbers_tmp3=(${numbers_tmp2[@]})\n\
+    \  local numbers_tmp4=()\n  for ((i = 0; i < n; i++)); do\n    numbers_tmp4+=(${numbers_tmp3[i]//\\\
+    \"})\n  done\n  local numbers_tmp5=()\n  for ((i = n; i >= 0; i--)); do\n    numbers_tmp5+=(${numbers_tmp4[i]//\\\
+    \"})\n  done\n  local numbers_tmp6=()\n  for ((i = 0; i < n; i++)); do\n    numbers_tmp6+=(${numbers_tmp5[i]//\\\
+    \"})\n  done\n  local numbers_tmp7=()\n  for ((i = n; i >= 0; i--)); do\n    numbers_tmp7+=(${numbers_tmp6[i]//\\\
+    \"})\n  done\n  local numbers_tmp8=()\n  for ((i = 0; i < n; i++)); do\n    numbers_tmp8+=(${numbers_tmp7[i]//\\\
+    \"})\n  done\n  local numbers_tmp9=()\n  for ((i = n; i >= 0; i--)); do\n    numbers_tmp9+=(${numbers_tmp8[i]//\\\
+    \"})\n  done\n  local numbers_tmp10=()\n  for ((i = 0; i < n; i++)); do\n    numbers_tmp10+=(${numbers_tmp9[i]//\\\
+    \"})\n  done\n  local numbers_tmp11=()\n  for ((i = 0; i < n; i++)); do\n    numbers_tmp11+=(${numbers_tmp10[i]//\\\
+    \"})\n  done\n  local numbers_tmp12=()\n  for ((i = n; i >= 0; i--)); do\n   \
+    \ numbers_tmp12+=(${numbers_tmp11[i]//\\\"})\n  done\n  local numbers_tmp13=()\n\
+    \  for ((", "  local L=$1\n  local MIN=$(echo ${L} | awk '{print $1}')\n  local\
+    \ MAX=$(echo ${L} | awk '{print $2}')\n\n  if [ ${#MIN} -eq 1 ] || [ ${#MAX} -eq\
+    \ 1 ]; then\n    echo \"${MIN} ${MAX}\"\n    return\n  fi\n\n  local MAX1=${MAX}\n\
+    \  local MIN1=${MIN}\n\n  while [ ${#MAX} -ge 1 ]; do\n    MAX1=${MAX%1}\n   \
+    \ MAX=\"${MAX#?}\"\n    MIN=\"${MIN%1}\"\n    MIN1=\"${MIN#?}\"\n\n    if [ $MIN\
+    \ -gt ${MIN1} ]; then\n      MIN=${MIN1}\n    elif [ $MAX -le ${MAX1} ]; then\n\
+    \      MAX=${MAX1}\n    else\n      break\n    fi\n  done\n\n  echo \"${MIN} ${MAX}\"",
+  "    local n=\"$(echo $1 | cut -d ' ' -f 1-2 | sort -n -g | uniq | tr '\\n' ' ')\"\
+    \n    for (( i = 0; i < ${#n[@]}; i++ )); do\n        (( n[i] > 0 ? n[i]+=0 :\
+    \ n[i]=1 )) # normalize to between 0 and 1\n    done\n    echo \"${n[@]}\"", " \
+    \   local _numbers=$1\n    local _unit=$2\n    local _new=\"[]\"\n\n    while\
+    \ read -r line; do\n        _new=\"${line/ /$_unit}\"\n    done <<< \"$_numbers\"\
+    \n    echo $_new", "    local array=($1)\n    local min=${array[0]}\n    local\
+    \ max=${array[0]}\n\n    for i in $(seq 1 ${#array[@]}); do\n        if [[ ${array[i]}\
+    \ -gt ${max} ]]; then\n            max=${array[i]}\n        fi\n        if [[\
+    \ ${array[i]} -lt ${min} ]]; then\n            min=${array[i]}\n        fi\n \
+    \   done\n\n    local result=()\n    for i in $(seq 1 ${#array[@]}); do\n    \
+    \    result+=(\"${array[i]}/(${max} - ${min})\")\n    done\n\n    echo -n \"$result\"",
+  "    local array=$1\n    local new_array=()\n    for element in ${array[@]};\n \
+    \   do\n        local value=$(echo \"${element}\" | awk '{printf \"%.2g\", $1/length($1)}')\n\
+    \        new_array+=($(echo \"${new_array[@]}\" | sed -r \"s/${element}/'${value}'/\"\
+    ))\n    done\n    printf '[\"%s\"]' \"${new_array[@]}\"", "  local MIN=$1\n  local\
+    \ MAX=$(\n    echo $1 | awk '{print min($1, max($1, $2))}'\n  )\n  local IFS='\
+    \ '\n  local LIST=$(echo $1 | awk '{for (i=2; i<=NF; i++) print $i}')\n  local\
+    \ SCALE=$(bc <<< \"scale=2; $MAX / $MIN\")\n  echo \"$SCALE $LIST\" | bc | tr\
+    \ ' ' '\"' | sed -e \"s/$MIN/$MIN/g\" \\\n    -e \"s/$MAX/$MAX/g\" -e \"s/$LIST/$SCALE/g\"",
+  "  local numbers=$1\n  local output_array\n  output_array=($(sort -n <<<\"${numbers//./\
+    \ }\"; IFS=' ' read -r -a output_array <<<\"${output_array[0]}\"))\n\n  if [[\
+    \ ${#output_array[@]} -le 2 ]]; then\n    echo -n '['\n  else\n    echo -n '['\n\
+    \    for (( i=0; i<${#output_array[@]}; i++ )); do\n      echo -n \"${output_array[i]}\"\
+    \n      if (( i < ${#output_array[@]} - 1 )); then\n        echo -n ' '\n    \
+    \  fi\n    done\n    echo -n ']'\n  fi", "  local list_size=${#1}\n  if (( $list_size\
+    \ == 0 )); then\n    echo \"error: scaling to zero requires at least one argument\"\
+    \ >&2\n    return 1\n  fi\n  local smallest_number=${1[0]}\n  local latest_number=${1[-1]}\n\
+    \  if (( $list_size == 1 )); then\n    echo \"error: scaling to zero requires\
+    \ at least two arguments\" >&2\n    return 1\n  fi\n  local result=($1)\n  for\
+    \ (( i=${#result[@]} -1 ; i >= 1 ; i-- )); do\n    local next_element=${result[i]}\n\
+    \    if (( ( $next_element < $smallest_number ) ); then\n      smallest_number=$next_element\n\
+    \    fi\n    if (( ( $next_element > $latest_number ) ); then\n      latest_number=$next_element\n\
+    \    fi\n  done\n  printf \"[\\\"${smallest_number}\\\"\\n\" \"\\\"${latest_number}\\\
+    \"\\n\" \"\\\"1.0\\\"\\n\" ]", "    local x=\"$1\"\n    shift\n    local -a output\n\
+    \    output=$(\n        xargs < <(\n            IFS=\" \"\n            set --\
+    \ $(IFS=\" \"; echo \"$x\")\n            echo \"$1\"\n            echo \"$2\"\n\
+    \            echo \"$3\"\n            echo \"$4\"\n            echo \"$5\"\n \
+    \       ) |\n        awk '{print \"\\\"\"$1\"\\\",\"}'\n    )\n    echo \"${output[*]}\"",
+  "    local numbers=$1\n    local min=$(echo $numbers | head -1)\n    local max=$(echo\
+    \ $numbers | tail -1)\n    # Transform to 0-1 scale\n    local scale\n    if [\
+    \ $min -le $max ]\n    then\n        scale=\"$min\"\n    else\n        scale=\"\
+    $max\"\n    fi\n    # Apply the scale\n    for number in $(echo $numbers | sed\
+    \ -e 's/ /\" \"/g')\n    do\n        # Strip quotes\n        number=$(echo $number\
+    \ | sed -e 's/^\"\\(.*\\)\"$/\\1/')\n        number=$(echo $number | sed -e 's/^\"\
+    \\(.*\\)\"$/\\1/')\n        scale=$(echo $number | sed -e 's/^\"\\(.*\\)\"$/\\\
+    1/')\n        scale=$(echo $scale | sed -e 's/ /\\./')\n        scale=$(echo $scale\
+    \ | sed -e 's/^\\./')\n        scale=$(echo $scale | sed -e 's/\\.$//')\n    \
+    \    number=$(echo $number | sed -e 's/^\\./')\n        number=$(echo $number\
+    \ | sed -e 's/\\.$//')\n        number=$(echo $number | sed -e 's/^\"\\(.*\\)\"\
+    $/\\1/')\n        number=$(echo $number | sed -e 's/^\"\\(.*\\)\"$/\\1/')\n  \
+    \      number=$(echo $number | sed -e 's/^\\(.*\\)\"$/\\1/')\n        number=$(echo\
+    \ $number | sed -e 's/^\\(.*\\)\"$/\\1/')\n        number=$(echo $number | sed\
+    \ -e 's/^\"\\(.*\\)\"$/\\1/')\n        number=$(echo $number | sed -e 's/^\"\\\
+    (.*\\)\"$/\\1/')\n        number=$(echo $number | sed -e 's/^\\(.*\\)\"$/\\1/')\n\
+    \        number=$(echo $number | sed -e 's/^\\(.*\\)\"$/\\1/')\n        number=$(echo\
+    \ $number | sed -e 's/^\"\\(.*\\)\"$/\\1/')\n        number=$(echo $number | sed\
+    \ -e 's/^\"\\(.*\\)\"$/\\1/')\n        number=$(echo $number | sed -e 's/^\\(.*\\\
+    )\"$/\\1/')\n        number=$(echo $number | sed -e 's/^\\(.*\\)\"$/\\1/')\n \
+    \       number=$(echo $number | sed -e 's/^\"\\(.*\\)\"$/\\1/')\n        number=$(echo\
+    \ $number | sed -e 's/", "  # First make sure we're given an array\n  local list=\"\
+    $1\" || return\n\n  # Now we assume we have a range like \"0.0 1.0\" and convert\
+    \ that to\n  # an array like '([0] \"0.0\" [1] \"1.0\")'\n  local range=\"$2\"\
+    \n  IFS=$'\\n'\n  local numbers=($range)\n  IFS=$' \\t\\n'\n  local range=($range)\n\
+    \n  # If there's only one number, we apply no transformation\n  if [ \"$#\" -eq\
+    \ \"1\" ]; then\n    echo \"${numbers[@]}\"\n    return\n  fi\n\n  # Now we build\
+    \ up the list of strings to output\n  local output\n  for number in \"${numbers[@]}\"\
+    ; do\n    # We're going to split out each part, and convert it to\n    # a floating\
+    \ point number\n    local factor=1\n    local part\n    for part in $(echo $number\
+    \ | sed -r \"s/^(-?[0-9]+\\.[0-9]+)/\\1/\"); do\n      factor=$(( factor * part\
+    \ ))\n    done\n    local part_string=$(echo $factor | bc)\n    if [ \"$part_string\"\
+    \ != \"1\" ]; then\n      part_string=\"$(( part_string - 1 ))\"\n    fi\n\n \
+    \   output+=\"$part_string\"\n  done\n\n  # Finally we format the output in a\
+    \ way that doesn't require single quotes\n  echo \"[${output[@]}]\"", "    local\
+    \ scale=\"$1\"\n\n    local scale_array=( $scale )\n    local scale_array_length=${#scale_array[@]}\n\
+    \    local scale_array_last=${scale_array_length}\n    local scale_array_last=$((scale_array_length-1))\n\
+    \    local scale_array_first_nonzero=0\n\n    local result=\"\"\n    for ((i=0;\
+    \ i < scale_array_length; i++)); do\n        if [ $i -eq 0 ]; then\n         \
+    \   echo \"$i\"\n        fi\n\n        if [ $i -eq $scale_array_first ]; then\n\
+    \            scale_array_first_nonzero=$i\n        fi\n\n        if [ $i -eq $scale_array_last\
+    \ ]; then\n            scale_array_last=$i\n        fi\n\n        if [ $i -eq\
+    \ 0 ] || [ $i -eq $scale_array_length ] || [ $scale_array[i] -lt 0 ]; then\n \
+    \           result=$result\" \"\n        fi\n\n        if [ $scale_array[i] -lt\
+    \ $scale_array_first_nonzero ]; then\n            result=$result\"0\" \"\n   \
+    \     else\n            result=$result\"1\" \"\n        fi\n\n    done\n    echo\
+    \ \"$result\"", "  local input=\"$1\"\n  local output=\"$(echo \"${input}\" |\
+    \ sed -E 's/^\\s*(([0-9]+(\\.[0-9]+)?)\\s*.*)\\s*$/\\1/' | sed 's/ /\" \"/g' |\
+    \ tr '[:upper:]' '[:lower:]')\"\n  if [ ${#output} -eq 0 ]; then\n    output=\"\
+    $(echo \"${input}\" | sed -E 's/^\\s*(([0-9]+(\\.[0-9]+)?)\\s*.*)\\s*$/\\1/')\"\
+    \n  fi\n\n  local min=\"${output#*( }\"\n  local max=\"${output##*( }\"\n  local\
+    \ min=\"${min%) }\"\n  local max=\"${max%) }\"\n\n  if [ -z \"$min\" -a -z \"\
+    $max\" ]; then\n    # we can't do anything useful with this\n    echo \"$input\"\
+    \n  else\n    # we can do a linear rescaling\n    local start=\"${min%.*( }\"\n\
+    \    local end=\"${max%.*( }\"\n    local start=\"${start%) }\"\n    local end=\"\
+    ${end%) }\"\n    local vals=()\n    local count=0\n    while read val; do\n  \
+    \    if [ \"$start\" -le \"$val\" ] && [ \"$val\" -le \"$end\" ]; then\n     \
+    \   vals[$count]=\"$val\"\n        ((count++))\n      else\n        break\n  \
+    \    fi\n    done < <(echo \"${output}\")\n    for val in \"${vals[@]}\"; do\n\
+    \      echo \"$val\"\n    done\n  fi", "    local array=( \"$@\" )\n    local\
+    \ min max\n    min=\"${array[@]:0:2}\" ; max=\"${array[@]:2:2}\" ; shift 2\n \
+    \   local -i length index\n    length=${#array[@]}\n    for index in \"${!array[@]}\"\
+    ; do\n        array[$index]=\"${min}+($(echo \"${max}-${min}\"|bc -l)/${length}*$index)\"\
+    \n    done\n    echo \"${array[@]}\"", "  local numbers=$1\n  local min=$2\n \
+    \ local max=$3\n  local factor=$4\n  local sign=1\n  local result\n  local tmp\n\
+    \  result=$(eval echo '[' \\\n    $numbers \\\n    ']')\n  for i in $(seq 0 $((${#result[@]}-1))\
+    \ -1 ); do\n    tmp=$(echo \"scale=6; ${result[$i]}\" | bc)\n    sign=$(( sign\
+    \ * tmp ))\n    factor=$(( $factor * tmp ))\n  done\n  result=($(echo \"${result[*]}\"\
+    \ | sed \"s/ /${factor} /g\" | bc -l))\n  result=\"$sign ${result[@]}\"\n  echo\
+    \ \"${result[@]}\"", "    local IFS=$1; shift\n\n    local MIN=$1; shift\n   \
+    \ local MAX=$1; shift\n    local ARRAY=($@); local ARRAYLEN=${#ARRAY[@]}\n\n \
+    \   local REMAINING=${#MIN}\n    while [ $REMAINING -gt 0 ]; do\n\tlocal TOT=`echo\
+    \ $((MAX-$MIN+1))`\n\tlocal SCALE_FACTOR=`echo $((MIN/TOT))`\n\tlocal TOT_ARRAY=($(for\
+    \ ((i=0;i<$REMAINING;i++)); do echo -n \"${ARRAY[${i}]} * $SCALE_FACTOR\"; done))\n\
+    \tMIN=$((MIN-$TOT))\n\tMAX=$((MAX+$TOT))\n\tARRAY=(\"${ARRAY[@]}\" ${TOT_ARRAY[@]})\n\
+    \tARRAYLEN=${#ARRAY[@]}\n\tREMAINING=${#MIN}\n    done\n\n    echo \"${ARRAY[@]}\"",
+  "  local arg=\"$1\"\n  echo \"$(\n    IFS=' ' read -ra arr <<< \"$arg\"\n    local\
+    \ i=0\n    local min=${arr[0]}\n    local max=${arr[0]}\n    local x\n    for\
+    \ x in \"${arr[@]:1}\"; do\n      [ \"$x\" -gt \"$max\" ] && max=\"$x\"\n    \
+    \  [ \"$x\" -lt \"$min\" ] && min=\"$x\"\n    done\n    for x in \"${arr[@]:1}\"\
+    ; do\n      [ \"$x\" -gt \"$min\" ] && [ \"$x\" -lt \"$max\" ] && printf \"%s%s\"\
+    \ \"${x}\" \"${max}\"\n      [ \"$x\" -lt \"$min\" ] && printf \"%s\" \"${x}\"\
+    \n    done\n    printf \"\\\"%s\\\"\" \"\" \"$min\" \"$max\"\n  )\"", "    local\
+    \ arg1=$1\n    local IFS=' '\n    local x=0\n    local last_x=0\n    local output=''\n\
+    \    local output1=''\n    local x=$(echo $arg1 | cut -d ' ' -f 1)\n    local\
+    \ IFS=' '\n    echo $arg1 | cut -d ' ' -f $((${#arg1}-1)) | while read x; do\n\
+    \        if [ $(( $x - $last_x )) -gt 0 ]; then\n            output=$output\"\\\
+    \"$(( $x /$x))\\\"\"'\\''\n        else\n            output=$output\"\\\"$x\\\"\
+    \"'\\''\n        fi\n        last_x=$x\n    done\n    echo $output", "    local\
+    \ n=$1\n    local min_val=${n%* }\n    local max_val=${n#* }\n    for ((i = 0;\
+    \ $i < n; i++))\n    do\n        echo \"${i/*/$min_val} $min_val ${i/%/($max_val\
+    \ - $min_val)} $max_val\"\n    done", "    local list=\"$1\"\n    local unit=\"\
+    $(echo $list | cut -d\" \" -f2)\"\n\n    local numbers=$( echo $list | awk '{printf\
+    \ \"%s \", $1} END {print \"\"}' | sed \"s/$/ 1\"| sed \"s/$/ 0\"| sed \"s/$/\
+    \ 0.25/\" | sed \"s/$/ 0.50/\" | sed \"s/$/ 0.75/\" | sed \"s/$/ 1.0/ \" | sed\
+    \ \"s/$/ 0.75/\" | sed \"s/$/ 0.25/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed\
+    \ \"s/$/ 1/\" | sed \"s/$/ 0.25/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"\
+    s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\"\
+    \ | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed\
+    \ \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/\
+    \ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\"\
+    \ | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed\
+    \ \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/\
+    \ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\"\
+    \ | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed\
+    \ \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/\
+    \ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\"\
+    \ | sed \"s/$/ 1/\" | sed \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed\
+    \ \"s/$/ 1/\" | sed \"s/$/ 0/\" | sed \"s/$/ 1/\" | sed \"s/", "    local input=${1:-}\n\
+    \    local numbers=${input:- }\n\n    local output=\"\"\n    local current=0\n\
+    \    for number in $numbers; do\n        current=$((current * 10 + ${number})\
+    \ / 100)\n        output=\"${output} \\\"${current}\\\"\"\n    done\n\n    echo\
+    \ \"$output\"", "    local L=\"$1\"\n    local NUMS=()\n    for n in $L; do\n\
+    \        NUMS+=($n)\n    done\n    local MINNUM=0\n    local MAXNUM=0\n    local\
+    \ MIN=\"\"\n    local MAX=\"\"\n    local i\n    for n in $NUMS; do\n        if\
+    \ [ \"$n\" -lt \"$MINNUM\" ]; then\n            MINNUM=\"$n\"\n            MIN=\"\
+    $MINNUM\"\n        fi\n        if [ \"$n\" -gt \"$MAXNUM\" ]; then\n         \
+    \   MAXNUM=\"$n\"\n            MAX=\"$MAXNUM\"\n        fi\n    done\n\n    local\
+    \ M=$((MAXNUM - MINNUM))\n    local N=$((MINNUM + M))\n\n    local RES=()\n  \
+    \  for n in $L; do\n        if [ \"$n\" -ge \"$M\" ]; then\n            RES+=($(echo\
+    \ \"$n*$M\" | bc | sed 's/\\..*$//'))\n        elif [ \"$n\" -le \"$N\" ]; then\n\
+    \            RES+=($(echo \"$n*$N\" | bc | sed 's/\\..*$//'))\n        else\n\
+    \            RES+=($(echo \"$n*$((MINNUM+M))\" | bc | sed 's/\\..*$//'))\n   \
+    \     fi\n    done\n    echo -n \"${RES[*]}\"", "  local list=$1\n  local out_list=\"\
+    $(\n    python -c 'import sys, math; print(\"[\\\"\" + min(float(v) for v in sys.stdin.read().split()).__str__()\
+    \ + \"\\\"]\")' < <(\n      python -c \"import sys, math; print '[\" + \" \".join(map(str,\
+    \ map(lambda x: float(x - min(map(float, sys.stdin.read().split()))), map(float,\
+    \ list.split()))) + \"]'\"\n    )\n  )\"\n  echo \"$out_list\"", "  local IFS=,\
+    \ read -a array <<<\"$1\"\n  local min=${array[0]}\n  local max=${array[0]}\n\
+    \  local factor\n  for el in \"${array[@]:1}\"; do\n    factor=$(echo \"${el}\
+    \ - ${min}\" | bc)\n    if [[ \"${factor}\" -eq 1 ]]; then\n      min=0\n    \
+    \  max=1\n      break\n    elif [[ \"${min}\" -gt \"${el}\" ]]; then\n      min=\"\
+    ${el}\"\n    elif [[ \"${max}\" -lt \"${el}\" ]]; then\n      max=\"${el}\"\n\
+    \    fi\n  done\n  IFS=' ' read -ra NEW_ARRAY <<<\"$(printf '%q ' \"${array[*]}\"\
+    )\"\n  printf \"[\\\"%s\\\"]\" \"${NEW_ARRAY[*]}\"", "  local i\n  for i in $(echo\
+    \ $1 | tr \" \" \"\\n\") ; do\n    echo $(($(echo $i | cut -d \" \" -f 2) * ($(($(echo\
+    \ $i | cut -d \" \" -f 3)) / 1.0))))\n  done", "\tlocal arr=($1)\n\tlocal min=$((${#arr[@]}\
+    \ < 2 ? ${#arr[@]}: 2))\n\tlocal max=${#arr[@]}\n\tlocal delta=max/$min\n\tlocal\
+    \ tmp=()\n\tlocal i\n\tlocal j\n\tfor ((i=0; i<${max}; i++)); do\n\t\ttmp+=(\"\
+    ${arr[i]}/$delta\")\n\tdone\n\tfor ((j=$max; j>0; j--)); do\n\t\ttmp+=(\"$((${arr[j]}-${arr[j-1]}))/$delta\"\
+    )\n\tdone\n\techo -n \"[${tmp[*]}] \"", "  local _IFS=\"$IFS\" _OFS=\"$OFS\"\n\
+    \  local numbers=$(IFS=' ' read -r -a numbers <<< \"$1\")\n  local -a out\n  IFS=\"\
+    \ \"\n  read -ra out <<< \"${numbers[0]} ${numbers[-1]}\"\n  IFS=\"$_IFS\"\n \
+    \ echo \"${out[@]}\"", "    local array min\n    IFS=' ' read -a array <<< \"\
+    $1\"\n    min=\"${array[0]}\"\n    shift 1\n    for elem in \"${array[@]}\"; do\n\
+    \        if [[ ! ${elem} == ${min} ]]; then\n            min=\"${elem}\"\n   \
+    \     fi\n    done\n    local max=\"${array[0]}\"\n    shift 1\n    for elem in\
+    \ \"${array[@]}\"; do\n        if [[ ! ${elem} == ${max} ]]; then\n          \
+    \  max=\"${elem}\"\n        fi\n    done\n    for elem in \"${array[@]}\"; do\n\
+    \        local factor\n        factor=$(echo \"${elem}\" | bc | sed -E 's/^([0-9]*)\\\
+    .([0-9]*).*/\\1/')\n        if [[ ! ${elem} == ${min} ]]; then\n            elem=\"\
+    0\"\n        elif [[ ! ${elem} == ${max} ]]; then\n            elem=\"1\"\n  \
+    \      fi\n        array=\"$elem $((${array%/*} / $factor))\"\n    done\n    echo\
+    \ \"${array[@]}\"", "    local orig=$1 numlist=$(echo $1 | sed 's/ /\" \"/g')\n\
+    \    local min=$(echo $numlist | sed 's/^[0-9.]*//') max=$min\n    for num in\
+    \ $numlist; do\n        [ $num = $min ] && { echo \"$num\" ; break; }\n      \
+    \  [ $num = $max ] && { echo \"$num\" ; break; }\n        ((min+=$min))\n    \
+    \    ((max+=$min))\n    done\n    echo \"${orig//[0-9.]/ }\"", "  local x y min_x\
+    \ min_y max_x max_y\n  local -a xs ys tmp tmp2 tmp3\n  xs=(\"$@\")\n  ys=()\n\
+    \  for x; do\n    if [ -z \"$x\" ]; then\n      ys+=$y\n      continue\n    fi\n\
+    \    xs+=$x\n  done\n  ((${#xs[@]} == ${#ys[@]}))\n  if ((${#xs[@]} < 2)); then\n\
+    \    printf \"Expected at least two elements in input list, got ${#xs[@]}\"\n\
+    \    return 1\n  fi\n  min_x=${xs[0]}\n  max_x=${xs[$((${#xs[@]} - 1))]}\n  for\
+    \ x; do\n    tmp=$((max_x-x))\n    min_y=($tmp / min_x)\n    max_y=(x / tmp)\n\
+    \  done\n  ((max_x < 1))\n  printf \"['\\\"'\"$min_x\"'\\\"', '\\\"'\"$max_x\"\
+    '\\\"', '\\\"'\"$min_y\"'\\\"', '\\\"'\"$max_y\"'\\\"']\"", "    local n=$1; shift\n\
+    \    local a b\n    for (( b=0; b<${#n}; b++))\n    do\n        a=${b}\n     \
+    \   for (( c=0; c<${#n}; c++))\n        do\n            local d=${#n}\n      \
+    \      local e=${d}\n            local f\n            (( e > c )) && e=c\n   \
+    \         f=\"${a[b]}\"\n            (( a > b )) && a=b\n            f=\"${f:0:${e}-${c}}\"\
+    \n            (( ${#f} > ${#n} )) && f=\"${f:0:${#n}}\"\n            a=\"${a}${f}\"\
+    \n        done\n        echo \"${a:0:${#n}}\"\n    done", "  local xs=\"$1\"\n\
+    \  local x=\"\"\n  local ys=\"${xs}\"\n  local y=0\n  local i=0\n  while [[ \"\
+    ${ys}\" =~ ^[0-9]+\\\\.[0-9]+$ ]] && [[ ${#ys} == 1 ]]; do\n    let \"i+=1\"\n\
+    \    let \"x=\"${xs%%.*}\"\n    let \"y=\"${ys%%.*}\"\n    let \"ys/=1.0\"\n \
+    \   ys=\"${y%%.*}\"\n  done\n  ys=\"${ys%%.*}\"\n  xs=\"$x\"\n  ys=\"$y\"\n  echo\
+    \ \"$xs ${ys}\"", "\tlocal numbers x\n\tIFS=' ' read -a numbers <<< \"$1\"\n\t\
+    for x in \"${numbers[@]}\"; do\n\t\tif [[ ! -e \"$x\" ]]; then\n\t\t\techo \"\\\
+    \"$x\\\" does not exist\"\n\t\t\texit 1\n\t\tfi\n\tdone\n\tunset IFS\n\techo \"\
+    ${numbers[0]} ${numbers[*]/#/ 1}\"", "    local MINVAL=\"$1\"\n    shift\n   \
+    \ local NUMVALS=\"$*\"\n    echo \"[$(printf \"%0.2f\" $(echo \"$MINVAL ${NUMVALS}\"\
+    |awk '{print ($1*$2 + $2)/2}'))]\"", "  local inlist=$1\n  local outlist\n  local\
+    \ last\n  local lastpart\n  local firstpart\n  local first\n  local second\n \
+    \ local firstpart2\n  local lastpart2\n  local firstpart3\n  local secondpart3\n\
+    \  local lastpart3\n  local firstpart4\n  local secondpart4\n  local lastpart4\n\
+    \  local firstpart5\n  local secondpart5\n  local lastpart5\n\n  outlist=\"$(echo\
+    \ $inlist | tr \"\\\\n\" \" \")\"\n  last=\"$outlist\"\n  lastpart=\"$(echo $last\
+    \ | cut -d\" \" -f1)\"\n  firstpart=\"$(echo $last | cut -d\" \" -f2)\"\n  secondpart=\"\
+    $(echo $last | cut -d\" \" -f3)\"\n  firstpart2=\"$(echo $firstpart | cut -d\"\
+    \ \" -f1)\"\n  lastpart2=\"$(echo $firstpart | cut -d\" \" -f2)\"\n  firstpart3=\"\
+    $(echo $firstpart | cut -d\" \" -f3)\"\n  secondpart3=\"$(echo $firstpart | cut\
+    \ -d\" \" -f4)\"\n  lastpart3=\"$(echo $firstpart | cut -d\" \" -f5)\"\n  firstpart4=\"\
+    $(echo $firstpart | cut -d\" \" -f6)\"\n  secondpart4=\"$(echo $firstpart | cut\
+    \ -d\" \" -f7)\"\n  lastpart4=\"$(echo $firstpart | cut -d\" \" -f8)\"\n  firstpart5=\"\
+    $(echo $firstpart | cut -d\" \" -f9)\"\n  secondpart5=\"$(echo $firstpart | cut\
+    \ -d\" \" -f10)\"\n  lastpart5=\"$(echo $firstpart | cut -d\" \" -f11)\"\n\n \
+    \ echo \"$firstpart2 $firstpart3 $firstpart4 $firstpart5 $secondpart3 $secondpart4\
+    \ $secondpart5 $lastpart2 $lastpart3 $lastpart4 $lastpart5\"", "  local in_list=\"\
+    $1\"\n  local out\n  local i j\n  local new_array\n\n  # remove whitespace from\
+    \ all elements\n  in_list=$(tr -d ' ' <<< \"$in_list\")\n\n  # convert elements\
+    \ to numbers and sort them\n  in_list=$(echo \"$in_list\" | tr -d '[:space:]')\n\
+    \  in_list=$(echo \"$in_list\" | tr '[:upper:]' '[:lower:]')\n  in_list=$(echo\
+    \ \"$in_list\" | tr '[:space:]' '\\n')\n  in_list=$(echo \"$in_list\" | sed 's/[[:space:]]//g')\n\
+    \  in_list=$(echo \"$in_list\" | tr ' ' ',')\n  in_list=$(echo \"$in_list\" |\
+    \ sed 's/,$//')\n\n  # initialize out\n  out=()\n  new_array=$(echo \"$in_list\"\
+    \ | tr -d ',')\n  while read i || [[ -n \"$i\" ]]; do\n    j=0\n    for j in $(seq\
+    \ 0 $((${#new_array[@]} - 1))); do\n      if [[ ${new_array[j]} > $i ]]; then\n\
+    \        new_array[j+1]=${new_array[j]}\n      fi\n    done\n    out+=(\"${new_array[@]:0:$j}\"\
+    )\n    new_array=$(echo \"$new_array\" | tr ',' '\\n')\n  done <<< \"$in_list\"\
+    \n\n  # print array elements as space-separated list\n  out=$(echo \"${out[*]}\"\
+    )\n\n  # print array elements joined with commas\n  out=$(echo \"$out\" | tr '\\\
+    n' ' ')\n\n  # return result\n  echo \"$out\"", "    local list_elements=\"${1}\"\
+    \n    local array_elements=()\n    local array_length=${#list_elements[@]}\n \
+    \   local i=0\n    while [ $i -lt $array_length ]; do\n        local array_element=$(cut\
+    \ -d' ' -f1 <<<\"${list_elements[$i]}\")\n        array_elements[$i]=$(echo \"\
+    ${array_element}\" | cut -d'\"' -f2)\n        i=$(( $i + 1 ))\n    done\n    local\
+    \ array_length=${#array_elements[@]}\n    local smallest_element=$(echo \"${array_elements[$array_length-1]}\"\
+    \ | cut -d'\"' -f1)\n    local smallest_element_value=$(echo \"${array_elements[$array_length-1]}\"\
+    \ | cut -d'\"' -f2)\n    local scale_factor=$(echo \"$smallest_element_value/$smallest_element\"\
+    )\n    local i=0\n    while [ $i -lt $array_length ]; do\n        local array_element=$(cut\
+    \ -d' ' -f1 <<<\"${list_elements[$i]}\")\n        array_elements[$i]=$(echo \"\
+    ${array_element}\" | cut -d'\"' -f2 | bc -l | cut -d'm' -f1)\n        i=$(( $i\
+    \ + 1 ))\n    done\n    local array_element=$(cut -d' ' -f1 <<<\"${list_elements[$i]}\"\
+    )\n    array_elements[$i]=$(echo \"${array_element}\" | cut -d'\"' -f2 | bc -l\
+    \ | cut -d'm' -f1)\n    i=$(( $i + 1 ))\n    rescale_elements=()\n    rescale_elements=(\"\
+    ${rescale_elements[@]}\" \"$array_element\")\n    rescale_elements=(\"${rescale_elements[@]}\"\
+    \ 0)\n    echo \"${rescale_elements[@]}\"", "  local L=$1\n  local tmp\n  local\
+    \ output\n  output=$(echo $L | tr \" \" \"\\n\")\n  # remove empty items\n  output=$(echo\
+    \ $output | sed -e 's/^ *//' -e 's/ *$//')\n  # split output into items\n  IFS=\"\
+    \ \"\n  for item in $output; do\n    tmp=$(echo $item | tr \" \" \"\\n\")\n  \
+    \  # remove empty items\n    tmp=$(echo $tmp | sed -e 's/^ *//' -e 's/ *$//')\n\
+    \    if [ ! -z \"$tmp\" ]; then\n      tmp=$(echo $tmp | cut -d \" \" -f 1)\n\
+    \      if [ -z \"$tmp\" ]; then\n        continue\n      fi\n      tmp=$(echo\
+    \ $tmp | tr \".\" \",\")\n      tmp=$(echo $tmp | sed -e 's/^ *//' -e 's/ *$//')\n\
+    \      if [ ! -z \"$tmp\" ]; then\n        output=\"$output \\\"$tmp\\\"\"\n \
+    \     fi\n    fi\n  done\n  echo \"$output\"", "    local x=\"$1\"\n    local\
+    \ x_arr=(${x// / })\n    for y in ${x_arr[@]:2}; do\n        local y_arr=(${y//\
+    \ / })\n        for z in ${y_arr[@]:2}; do\n            local z_cut=$(printf \"\
+    %s\" ${z})\n            case \"${z_cut}\" in\n                '\"0.0\"') z_cut='0.0'\
+    \ ;;\n                '\"1.0\"') z_cut='1.0' ;;\n                '\"-1.0\"') z_cut='-1.0'\
+    \ ;;\n                '\"-1.0\"') z_cut='-1.0' ;;\n                '\"0.0\"')\n\
+    \                # If the value is zero, convert it to \"0\" to avoid an error\
+    \ when reformatting\n                y_arr[0]='\"0.0\"'\n                z_cut='0.0'\n\
+    \                ;;\n            esac\n            x_arr[1]=${y_arr[0]}\n    \
+    \        x_arr[2]=${y_arr[1]}\n            x_arr[3]=${z_cut}\n        done\n \
+    \       local x_cut=$(printf \"%s\" \"${x_arr[@]:1}\")\n        echo \"${x_cut}\"\
+    \n    done", "  IFS=' ' read -r -a array <<<\"$1\"\n  local new_array=()\n  local\
+    \ min\n  local max\n  min=${array[0]}\n  max=${array[0]}\n  for number in \"${array[@]:1}\"\
+    ; do\n    local temp\n    temp=$(echo \"$number * $(echo \"$max / $min\" | bc)\"\
+    \ | bc -l)\n    new_array+=(\"\\\"$temp\\\"\")\n    max=${max}\n    min=${min}\n\
+    \  done\n  new_array+=(\"\\\"$max\\\"\")\n  printf '%s\\n' \"${new_array[@]}\"",
+  "    set -e\n    array=( $1 )\n    length=${#array[@]}\n    if [ $length -eq 0 ];\
+    \ then\n        echo \"error: Empty list provided\"\n        exit 1\n    fi\n\n\
+    \    for i in $(seq 0 $(( $length - 1 ))); do\n        echo \"$((${array[i]} *\
+    \ 100))%\"\n    done", "  if [[ $# -eq 0 ]]; then\n    echo \"Missing argument\
+    \ list.\"\n    exit 1\n  fi\n\n  local numbers=$1 # List of numbers to transform.\n\
+    \  # Split $numbers into array (numbers), then perform the transform\n  local\
+    \ numbers_tmp=$(echo \"$numbers\" | tr \" \" \"\\n\")\n  local numbers_tmp_sorted=$(echo\
+    \ \"$numbers_tmp\" | sort -g)\n  local numbers_tmp_sorted_min=$(( ${numbers_tmp_sorted[0]}\
+    \ - 1 ))\n  local numbers_tmp_sorted_max=$(( ${numbers_tmp_sorted[$(( ${#numbers_tmp_sorted[@]}\
+    \ - 1 ))]} + 1 ))\n  local numbers_tmp_sorted_minus_1=$(( ${numbers_tmp_sorted_min}\
+    \ - 1 ))\n\n  local numbers_tmp_sorted_plus1=$(( ${numbers_tmp_sorted_max} + 1\
+    \ ))\n  local numbers_tmp_sorted_minus_2=$(( ${numbers_tmp_sorted_minus_1} + 1\
+    \ ))\n\n  local numbers_rescaled=()\n  local numbers_rescaled_plus1=()\n  local\
+    \ numbers_rescaled_minus_2=()\n\n  local number_of_elements=${#numbers_tmp[@]}\n\
+    \n  for i in $(seq 0 $number_of_elements); do\n    local numbers_rescaled_plus_1=$((\
+    \ ${numbers_tmp_sorted_plus1} + 1 ))\n    local numbers_rescaled_minus_2=$(( ${numbers_tmp_sorted_minus_2}\
+    \ + 1 ))\n    if (( ${#numbers_rescaled_plus1[@]} > 0 )); then\n      numbers_rescaled_plus1[$((\
+    \ ${#numbers_rescaled_plus1[@]} - 1 ))]=$(( ${numbers_tmp_sorted_plus1} + 1 ))\n\
+    \      numbers_rescaled_minus_2[$(( ${#numbers_rescaled_minus_2[@]} - 1 ))]=$((\
+    \ ${numbers_tmp_sorted_minus_2} + 1 ))\n    fi\n\n    local numbers_rescaled[$((\
+    \ ${#numbers_rescaled_plus1[@]} - 1 ))]=$numbers_tmp_sorted_plus1\n    local numbers_rescaled_minus_2[$((\
+    \ ${#numbers_rescaled_minus_2[@]} - 1 ))]=$numbers_tmp_sorted_minus_2\n\n    #\
+    \ Now do the actual transform\n    if (( ${#numbers_rescaled_plus1[@]} > 0 ));\
+    \ then\n      numbers_tmp_sorted_plus1=$numbers_rescaled_plus1[$(( ${#numbers_rescaled_plus",
+  "    local L=(${1//[/ ]})  # convert to array (remove spaces, if any)\n    local\
+    \ N=${#L[@]}  # number of arguments\n    if [ $N -gt 1 ]; then\n        for ((\
+    \ i=1; i<=$(( $N-1 )); i++ )); do\n            L[i]=$(echo \"${L[$i]} | bc -l\"\
+    )  # convert to integer\n        done\n        L[0]=\"\\\"0.0\\\"\"\n        L[($N-1)]=\"\
+    \\\"1.0\\\"\"\n    fi\n    echo ${L[@]}", "    local input=\"$1\" # [ \"${@:2}\"\
+    \ = \"-\" ] && input=\"${@:1}\"\n    local output=\"$(echo $input | sed 's/^\\\
+    ([0-9.]*\\)\\s\\([0-9.]*\\)\\s\\([0-9.]*\\)\\s\\([0-9.]*\\)\\s\\([0-9.]*\\)\\\
+    s[0-9.]*$/\\0.\\2\\3/;s/\\([0-9.]*\\)$/\\1/')\"\n    # output could be '0.00'\
+    \ or \"0.00\" if input is '0.000'\n    # Need to add double quotes around it if\
+    \ it's not a string\n    # Need to add single quotes if it's a string but contains\
+    \ spaces\n    # Need to add double quotes if it's not numeric\n    # Need to add\
+    \ single quotes if it's not numeric\n    echo \"'$output'\"", "    local list_string=\"\
+    $1\"\n    local numbers=\"${list_string}\"\n    local new_numbers\n    local new_number\n\
+    \    local last_number\n    local num_digits_before\n    local num_digits_after\n\
+    \    local digits_before\n    local digits_after\n    local index\n\n    IFS=\"\
+    \ \" read -a numbers <<< \"${numbers}\"\n\n    num_digits_before=$(echo \"${#numbers[@]}\"\
+    \ | awk '{print $1}')\n    num_digits_after=$(echo \"${#numbers[@]}\" | awk '{print\
+    \ $1}')\n\n    # If the number of digits before and after the decimal point differ\n\
+    \    if [ \"${num_digits_before}\" != \"${num_digits_after}\" ]; then\n      \
+    \  if (( num_digits_before > num_digits_after )); then\n            digits_before=\"\
+    ${num_digits_before}\"\n            digits_after=\"${num_digits_after}\"\n   \
+    \     else\n            digits_before=\"${num_digits_after}\"\n            digits_after=\"\
+    ${num_digits_before}\"\n        fi\n    else\n        digits_before=\"${num_digits_before}\"\
+    \n        digits_after=\"${num_digits_after}\"\n    fi\n\n    # Iterate through\
+    \ the numbers from the smallest to the largest\n    for (( index = 0; index <\
+    \ ${#numbers[@]}; index++ )); do\n\n        # Determine the current number and\
+    \ its rounded equivalent\n        new_number=${numbers[$index]}\n        last_number=${numbers[$(($index-1))]}\n\
+    \n        # Add the difference between the current and last number to the current\
+    \ number\n        new_number=$((${new_number} + ${last_number} - ${last_number}))\n\
+    \n        # Divide the current number by it's last number, so that the smallest\
+    \ number becomes 0 and the largest becomes 1\n        new_number=$((${new_number}\
+    \ / ${last_number}))\n\n        # Apply the change\n        numbers[$index]=\"\
+    $new_number\"\n    done\n\n    IFS=\" \"\n    new_numbers=\"${numbers[@]}\"\n\n\
+    \    # Convert list to string\n    IFS=\" \" read -a new_numbers <<< \"${new_numbers}\"\
+    \n    new_numbers=\"${new_numbers[@]}\"\n\n    # Add the quote marks around the\
+    \ numbers in the list\n    new_numbers=(\"${new_numbers//$'\\n'/\\\"\\\"}\")\n\
+    \n    # Add quotes around the whole string\n    new_numbers=(\"${new_numbers[@]}\"\
+    )\n\n    echo \"${new_numbers[@]}\"", "    local numbers=\"$1\"\n\n    # make\
+    \ sure the input is a list of numbers\n    numbers=\"$(echo -n \"${numbers}\"\
+    \ | sed -e 's/^ *//g' -e 's/ *$//g')\"\n    numbers=\"$(echo ${numbers} | tr \"\
+    \ \" \"\\n\")\"\n\n    # make sure the number of elements >= 2\n    local count=\"\
+    $(echo ${numbers} | wc -w)\"\n    if [ \"${count}\" -eq \"0\" ]; then\n      \
+    \  echo \"No elements in the list provided\"\n        exit 1;\n    fi\n\n    #\
+    \ make sure the first number is non-negative\n    if [[ \"${numbers}\" =~ ^\\\
+    \ *-?[0-9\\.]+ ]]; then\n        echo \"Invalid number. First element must be\
+    \ a non-negative number\"\n        exit 1;\n    fi\n\n    # make sure the last\
+    \ number is positive\n    if [[ \"${numbers}\" =~ ^\\ *-?[0-9\\.]+ ]]; then\n\
+    \        echo \"Invalid number. Last element must be positive\"\n        exit\
+    \ 1;\n    fi\n\n    # calculate the scaling factor\n    local scale=\"$(echo \"\
+    ${numbers}\" | sort -n | head -1)\"\n    local scale=\"$(bc <<< \"${scale}/2\"\
+    )\"\n    local scale=\"$(bc <<< \"scale=1 * ${scale}\")\"\n    local scale=\"\
+    $(bc <<< \"${scale} / ${count}\")\"\n\n    # convert the list into a list of numbers\n\
+    \    numbers=\"$(echo \"${numbers}\" | sed -e 's/^ *//g' -e 's/ *$//g' | sed -e\
+    \ 's/ /\" \"/g' | tr '\" \"' '\"' | sed -e 's/^ *//g' -e 's/ *$//g' | sed -e 's/\
+    \ /\",\"/g')\"\n    numbers=\"$(echo -n \"${numbers} | sed -e 's/^ *//g' -e 's/\
+    \ *$//g')\"\n    numbers=\"$(echo ${numbers} | tr \" \" \"\\n\")\"\n\n    # put\
+    \ the scaling factor in place\n    local newnumbers=\"${numbers}\"\n    newnumbers=\"\
+    $(echo ${newnumbers} | sed -e \"s/^ *${scale}/\")\"\n\n    # put back the starting\
+    \ and ending \"\n    newnumbers=\"$(echo ${newnumbers} | sed -e \"s/^ *[0-9\\\
+    .]*/\\\"/\" -e \"s/ *[0-9\\.]*/ \\\"/\")\"\n\n    # return the list\n    echo\
+    \ \"${newnumbers}\"", "  local x=\"${1#*( )}\"\n  local xs=\"${x%/*}\"\n  x=\"\
+    ${x#*( )}\"\n  local xw=( \"${x}\" )\n  local xws=${#xw[@]}\n  if [ ${xws} -lt\
+    \ 2 ] || [[ $xws == 0 ]]; then\n    echo >&2 \"Usage: `basename ${0}` [space-separated\
+    \ list of numbers]\"\n    return 1\n  fi\n  local x\n  local xmin xmax xr xw\n\
+    \  local xminw=${xws[0]}\n  local xmaxw=${xws[${#xws[@]} - 1]}\n  local x xr\n\
+    \  for ((x=0;x<${#xw[@]};x++)); do\n    xw=${xw[x]} xminw=${xminw} xmaxw=${xmaxw}\n\
+    \    if [ ${xw} -lt ${xminw} ] || [ ${xw} -gt ${xmaxw} ]; then\n      xminw=${xw}\
+    \ xmin=${x}\n    fi\n    if [ ${xw} -lt ${xmaxw} ]; then\n      xmaxw=${xw} xmax=${x}\n\
+    \    fi\n  done\n  xmin=${xmin} xminw=${xminw} xmax=${xmax} xmaxw=${xmaxw}\n \
+    \ xr=$(xmaxw - xminw)\n  xr=${xr}\n  for x in ${xw[@]}; do\n    xw=${xw[x]} xminw=${xminw}\
+    \ xmaxw=${xmaxw}\n    xminw=${xminw} xmaxw=${xmaxw}\n    if [ ${xw} -lt ${xminw}\
+    \ ]; then\n      xminw=${xw}\n    fi\n    if [ ${xw} -lt ${xmaxw} ]; then\n  \
+    \    xmaxw=${xw}\n    fi\n  done\n  if [ ${xminw} -gt ${xmin} ]; then\n    xminw=${xmin}\n\
+    \  fi\n  if [ ${xmaxw} -lt ${xmax} ]; then\n    xmaxw=${xmax}\n  fi\n  xmin=${xminw}\
+    \ xminw=${xminw} xmax=${xmaxw} xmaxw=${xmaxw}\n  xminw=0\n  xmaxw=${#xw[@]}\n\
+    \  for x in ${xw[@]}; do\n    x", "  local x y z\n  local output\n  output=\"\
+    $1\"\n  shift\n  for y in $*; do\n    if [ \"$y\" -gt \"$z\" ]; then\n      x=\"\
+    $y\"\n      z=\"$y\"\n    fi\n  done\n  for x in $output; do\n    y=$(( \"$x\"\
+    \ / \"$z\" ))\n    output=\"$output \\\"$y\\\"\"\n  done\n  echo \"$output\"",
+  "  local list_size=$(echo \"${#1}\" | cut -d' ' -f1)\n  local list=\"\"\n  for i\
+    \ in $(seq \"${list_size}\"); do\n    list=\"${list} $(echo \"${1}\" | cut -d'\
+    \ ' -f${i})\"\n  done\n  echo \"\\\"$(echo \"${list}\" | sed 's/ /\\\",\\\"/g'\
+    \ | sort -n | sed 's/^/\\\"/' | sed 's/$/\\\"/' | tr '\\n' ' ' | sed 's/^/\\\"\
+    /' | sed 's/$/\\\"/')\\\"\n\"", "    local x y minval maxval ret=()\n    x=\"\
+    $1\"\n    # Split on spaces\n    IFS=$'\\n' read -r -a x <<< \"$x\"\n    if [[\
+    \ ${#x[@]} -eq 1 ]]; then\n       ret=($(echo \"${x[*]}\" | xargs -I {} echo \"\
+    '$(( ${1}/$((${1}%$((${#x[@]}-1))) ))')\"))\n    else\n       ret=($(echo \"${x[*]}\"\
+    \ | xargs -I {} echo \"'$(( $1/$(($1%$((${#x[@]}-1))) ))')\"))\n    fi\n    echo\
+    \ \"${ret[@]}\"", "    local numbers=$1\n\n    if [[ ${#numbers} < 2 ]]; then\n\
+    \        return 0\n    fi\n\n    local result=()\n\n    local -a tmp_numbers=()\n\
+    \    local number min_number max_number tmp\n\n    local i min_i max_i\n\n   \
+    \ max_i=$(($#numbers - 1))\n    min_i=0\n\n    for ((i=0;i<$max_i;i++)); do\n\
+    \        tmp_numbers[$i]=$(($numbers[$i] + 1))\n    done\n\n    for ((i=0;i<$max_i;i++));\
+    \ do\n        number=$tmp_numbers[$i]\n        max_number=$tmp_numbers[$max_i]\n\
+    \        min_number=$tmp_numbers[$min_i]\n        tmp=$$min_number\n        $$min_number=$$number\n\
+    \        $$number=$$tmp\n\n        result+=(\"\\\"$$min_number\\\"\")\n    done\n\
+    \n    result+=(\"\\\"1.0\\\"\")\n    echo \"${result[@]}\"", "  if [[ $# < 2 ]];\
+    \ then\n    echo \"Usage: $0 [-s] list ...\" >&2\n    return 1\n  fi\n\n  # $2\
+    \ will have the original string\n  local input=$1\n  # $3 is the output list\n\
+    \  local output=$3\n\n  local s=$(( ${#input} * ${#output} - 1 ))\n  local i=0\n\
+    \  while (( i < ${#input} )); do\n    local x=\"${input:$i:1}\"\n    local y=$(echo\
+    \ $x | sed -e 's/ /\\n/g')\n    local z=$(echo $y | sed -e 's/ /\\n/g' | sed -e\
+    \ 's/ /\\n/g')\n    echo \"$z\"\n    (( i++ ))\n  done\n\n  local tmp1=$(echo\
+    \ $output | sed -e 's/ /\\n/g')\n  local tmp2=$(echo $output | sed -e 's/ /\\\
+    n/g' | sed -e 's/ /\\n/g')\n  local tmp3=$(( ${#tmp1} * ${#tmp2} - 1 ))\n  local\
+    \ tmp4=$(( ${#tmp1} * ${#tmp3} - 1 ))\n  local tmp5=$(( ${#tmp2} * ${#tmp3} -\
+    \ 1 ))\n  local tmp6=$(( ${#tmp3} * ${#output} - 1 ))\n\n  # we already have tmp2\
+    \ defined\n  local j=0\n  while (( j < ${#tmp2} )); do\n    local tmp1i=$(( ${#tmp1}\
+    \ * ${#output} - 1 ))\n    local tmp1j=$(( ${#tmp1} * ${#tmp2} ))\n    local tmp2i=$((\
+    \ ${#tmp2} * ${#output} - 1 ))\n    local tmp2j=$(( ${#tmp2} * ${#tmp3} ))\n \
+    \   local tmp3i=$(( ${#tmp3} * ${#output} - 1 ))\n    local tmp3j=$(( ${#tmp3}\
+    \ * ${#tmp4} ))\n    local tmp4i=$(( ${#tmp4} * ${#output} - 1 ))\n    local tmp4j=$((\
+    \ ${#tmp4} * ${#tmp5} ))\n    local tmp5i=$(( ${#tmp5} * ${#output} - 1 ))\n \
+    \   local tmp5j=$(( ${#tmp5} * ${#tmp6} ))\n    local tmp6i=$((", "  # Input validation\n\
+    \  if [[ $# -eq 1 ]]; then\n    echo \"Usage: $0 LIST\"\n    return 1\n  fi\n\n\
+    \  # Get list of numbers\n  local list=$(echo $1 | sed \"s/ /' /g\")\n\n  # Apply\
+    \ transformation\n  local smallest=$(echo $list | xargs)\n  local largest=$(echo\
+    \ $list | xargs -n 1 -I % echo $(( $smallest + $% )))\n  echo \"$smallest\" \"\
+    $largest\"", "    local x=\"$1\"\n    shift\n    # convert \"$1\" from string\
+    \ into array\n    local -a xarr=( $x )\n    # convert each array element into\
+    \ float\n    local xout\n    for xi in \"${xarr[@]}\"; do\n        xout=\"$( echo\
+    \ \"$xi\" | bc | sed -e 's/^[ ]*\\([0-9.]*\\).*/\"\\1\"/' )\" # get rid of leading\
+    \ zero\n        # make smallest element 0, largest element 1\n        xout=\"\
+    $( echo $xout | bc )\"\n        (( $xout > 1.0 )) && xout=\"1.0\" || xout=\"0.0\"\
+    \n        # replace xi with xout\n        xarr[$(($#xarr))-1]=\"$xout\"\n    done\n\
+    \    echo \"${xarr[@]}\"", "  local input_array=\"$1\"\n  local min_val=\"$2\"\
+    \n  local max_val=\"$3\"\n  local out_array\n  out_array=()\n  for element in\
+    \ \"${input_array[@]}\"; do\n    local num=\"${element//[[:space:]]*}\"\n    if\
+    \ [ -z \"$num\" ] ; then\n      out_array+=(\"$element\")\n      continue\n  \
+    \  fi\n    local num=\"${num//[[:space:]]*}\"\n    if [ \"$num\" -gt \"$max_val\"\
+    \ ] ; then\n      out_array+=(\"$max_val\")\n    elif [ \"$num\" -lt \"$min_val\"\
+    \ ] ; then\n      out_array+=(\"$min_val\")\n    elif [ \"$num\" -eq \"$min_val\"\
+    \ ] ; then\n      out_array+=(\"0.0\")\n    elif [ \"$num\" -eq \"$max_val\" ]\
+    \ ; then\n      out_array+=(\"1.0\")\n    else\n      out_array+=(\"$(echo \"\
+    $num - $min_val - $max_val\" | bc)\")\n    fi\n  done\n  echo \"${out_array[@]}\"",
+  "    local xs=\"$1\"\n    local min_value=$(echo \"${xs}\" | awk '{print $1}' |\
+    \ head -n1)\n    local max_value=$(echo \"${xs}\" | awk '{print $1}' | tail -n1)\n\
+    \    local res=\"$min_value\" \"$(echo \"${xs}\" | awk '{print $2\"/\"$1}')\"\n\
+    \    echo \"$res\"", "    local items=\"${1}\"\n    local result\n    for idx\
+    \ in $(seq 0 $(echo \"${#items}\" | cut -d ' ' -f 1) -1); do\n        result=\"\
+    $(echo \"${items}\" | sed -E 's/^'${idx}'\\s?\\(.*\\)/'\"$(echo \"${items}\" |\
+    \ sed -E 's/^'${idx}'\\s?/\\1/')\"'/;t;d' | head -1)\"\n        echo \"${result}\"\
+    \n    done", "    local numbers=$1\n    local MIN=${numbers%%-*}\n    local MAX=${numbers##*-}\n\
+    \    local SCALE=$(( $MAX - $MIN ))\n    echo $(( $(echo \"${numbers//,/ } * $SCALE\
+    \ + 1\" | bc -l) ))", "  local array=$1\n  local min_value=$(echo $array | awk\
+    \ '{print $1}' | sort -n | tail -1)\n  local max_value=$(echo $array | awk '{print\
+    \ $1}' | sort -n | head -1)\n\n  for i in $(seq $((${#array[@]} - 1))); do\n \
+    \   local array_element=${array[i]}\n    if [ $array_element -gt $max_value ]\
+    \ ; then\n      echo \"Error while rescaling list: all elements must be below\
+    \ $max_value !\"\n      exit 1\n    fi\n    if [ $array_element -lt $min_value\
+    \ ] ; then\n      echo \"Error while rescaling list: all elements must be above\
+    \ $min_value !\"\n      exit 1\n    fi\n    array[i]=$((array_element - $min_value))\n\
+    \  done\n  echo \"${array[@]}\""]
 stop_tokens:
 - "\n}"

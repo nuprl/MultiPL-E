@@ -13,6 +13,1337 @@ tests: "}\n\ncandidate() {\n    factorize \"$@\"\n}\n\nset -e\nrun_test() {\n   
   \    [[ $(candidate \"3249\") = \"3 3 19 19\" ]]\n    [[ $(candidate \"185193\"\
   ) = \"3 3 3 19 19 19\" ]]\n    [[ $(candidate \"20577\") = \"3 19 19 19\" ]]\n \
   \   [[ $(candidate \"18\") = \"2 3 3\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  read input < $1 || return\n  local factors=''\n  local inputInt\n\
+    \  for inputInt in $(seq 2 $input) ; do\n    (( inputInt%$inputInt )) && {\n \
+    \     factors=\"$factors \\\"$inputInt\\\"\"\n      inputInt=$inputInt/$inputInt\n\
+    \    }\n  done\n  echo \"$factors\"", "  if [ $# -eq 1 ]; then\n    local input=\"\
+    $1\"\n    if ! is_integer \"$input\" ; then\n      echo \"$input: value not an\
+    \ integer\" >&2\n      return 1\n    fi\n    if ! is_prime \"$input\" ; then\n\
+    \      echo \"$input: not a prime number\" >&2\n      return 1\n    fi\n    echo\
+    \ \"$input\"\n    return 0\n  else\n    echo usage: factorize <integer>\n    return\
+    \ 1\n  fi", "\tnumber=\"$1\"\n\n\t# if input is empty\n\tif [[ -z \"$number\"\
+    \ ]]; then\n\t\techo \"ERROR: The input number cannot be empty\"\n\t\texit 1\n\
+    \tfi\n\n\t# if input is not an integer, exit\n\tif ! [[ \"$number\" =~ ^[0-9]+$\
+    \ ]]; then\n\t\techo \"ERROR: The input number is not an integer\"\n\t\texit 1\n\
+    \tfi\n\n\t# if input is zero\n\tif [[ $number == 0 ]]; then\n\t\techo \"The input\
+    \ number is 0\"\n\t\texit 1\n\tfi\n\n\t# if input number is a prime\n\tif [[ $number\
+    \ == 1 ]]; then\n\t\techo \"$number\"\n\t\treturn\n\tfi\n\n\t# prime factorization\
+    \ from scratch\n\tfactors=()\n\tfactor_count=1\n\n\t# add all factors to factors\
+    \ list\n\tfactors=( $( factorize \"$number\" ) )\n\n\t# if there are factors left\
+    \ (non-prime)\n\tif [[ ${#factors[@]} -gt 0 ]]; then\n\t\techo \"$number\"\n\t\
+    \treturn\n\tfi\n\n\t# if there are no factors, exit\n\tif [[ ${#factors[@]} -eq\
+    \ 0 ]]; then\n\t\techo \"ERROR: The input number has no factors\"\n\t\texit 1\n\
+    \tfi\n\n\t# add all factors to factors list\n\tfactors=( $( factorize \"$number\"\
+    \ ) )\n\n\t# loop through factors\n\tfor factor in ${factors[@]}\n\tdo\n\t\t#\
+    \ if factor occurs again, increment count by factor and remove factor\n\t\twhile\
+    \ [[ $(( ${#factors[@]} )) -gt 0 ]]\n\t\tdo\n\t\t\tfactor_count=$(( ${factor_count}\
+    \ + 1 ))\n\t\t\tfactors=( \"${factors[@]:0:$(( ${#factors[@]} - 1 ))}\" )\n\t\t\
+    done\n\n\t\t# add factor to factors list\n\t\tfactors=( $( printf \"\\\"%s\\\"\
+    \ \\\"$factor\\\" \" ${factors[@]} ) )\n\tdone\n\n\t# if there are factors left\
+    \ (non-prime)\n\tif [[ ${#factors[@]} -gt 0 ]]; then\n\t\techo \"$number\"\n\t\
+    \treturn\n\tfi\n\n\t# if there are no factors, exit\n\tif [[ ${#factors[@]} -eq\
+    \ 0 ]]; then\n\t\techo \"ERROR: The input number has no factors\"\n\t\texit 1\n\
+    \tfi", "\tlet FACTORS=$1\n\tlet FACTORS_COUNT=`python -c \"from math import sqrt;print\
+    \ sqrt($FACTORS);\"`\n\tlet FACTORS_DENOMINATOR=`python -c \"from math import\
+    \ sqrt;print 1/sqrt($FACTORS);\"`\n\t# Find factors factorization\n\tlet MAX=`python\
+    \ -c \"print int('$FACTORS_COUNT'*$FACTORS_DENOMINATOR);\"`\n\tlet FACTORS=(`python\
+    \ -c \"for x in range($FACTORS_COUNT);print x*$FACTORS_DENOMINATOR;\"`)\n\t# Sort\
+    \ factors\n\tlet ORDER=`sort -n -k 1,1 <<< ${FACTORS}`\n\t# Count number of factors\
+    \ appearing in each permutation\n\tlet FACTORS_EXPRESSION=(`python -c \"\n\timport\
+    \ sys;\n\tcount=0\n\tfor t in range(${ORDER}):\n\t   count+=(${COUNT[$t]})\n\t\
+    print count\n\t\" `)\n\tIFS=' ' read -r -a COUNT <<< \"${FACTORS_EXPRESSION[*]}\"\
+    \n\techo ${ORDER[*]}\n\techo ${COUNT[*]}", "    if [[ \"$1\" =~ ^[0-9]+$ ]]; then\n\
+    \        echo \"$1\"\n        declare -a factors=()\n        declare -a temp=()\n\
+    \        while [[ $1 -gt 1 ]]; do\n            ((temp[0]=$1))\n            ((temp[1]=$1/2))\n\
+    \            factors+=($temp)\n            ((temp[0]=$temp[1]))\n        done\n\
+    \        echo \"${factors[@]}\"\n    else\n        echo \"Not a number\"\n   \
+    \ fi", "  local i=$1\n  local primes=$(prime_divisors $i)\n  local factors=()\n\
+    \  local factor\n  local factor_count\n  local prime_count\n\n  local prime\n\
+    \  local count\n  for prime in ${primes[@]}; do\n    factor_count=0\n    for factor\
+    \ in ${prime_factors[$prime]}; do\n      if [ \"$i\" -eq \"${factor}\" ]; then\
+    \ factor_count=`expr $factor_count + 1`; fi\n    done\n\n    if [ \"$factor_count\"\
+    \ -gt \"$prime_count\" ]; then\n      prime_count=$factor_count\n      factor=\"\
+    ${prime}\"\n    fi\n  done\n\n  factors=( \"${factors[@]}\" \"$factor\" )\n  echo\
+    \ \"${factors[@]}\"", "    local factors=$(factorize $1 $2 $3)\n    while read\
+    \ line; do\n        echo $line \"\\t\"\n    done <<< \"$factors\"", "  local N=$1\n\
+    \  local F\n  local OPT\n\n  while [ $# -gt 0 ]; do\n    case \"$1\" in\n    \
+    \    --help)\n          OPT=\"--help\"\n          shift\n          ;;\n      \
+    \  --debug)\n          OPT=\"--debug\"\n          shift\n          ;;\n      \
+    \  --)\n          shift\n          break\n          ;;\n        *)\n         \
+    \ shift\n          N=$(( $N * $1 ))\n          ;;\n    esac\n  done\n\n  N=$((\
+    \ $N / 2 ))\n\n  F=()\n  while [ $N != 1 ]; do\n    local i\n    local j\n   \
+    \ local k\n    local N\n    local F\n    local OPT\n\n    # check if there are\
+    \ factors\n    OPT=\"--\"\n    for (( i = 3; i <= $N; i++ )) do\n      if [[ $($OPT\
+    \ $OPT $OPT $OPT $OPT $OPT factor -- \"$i\" 2>/dev/null) ]]; then\n        F+=($i)\n\
+    \      fi\n    done\n\n    if [ -z \"${F}\" ]; then\n      F+=(1)\n    fi\n  \
+    \  # check if there are factors\n    OPT=\"--\"\n    for (( j = 3; j <= $N; j++\
+    \ )) do\n      if [[ $($OPT $OPT $OPT $OPT $OPT $OPT factor -- \"$j\" 2>/dev/null)\
+    \ ]]; then\n        F+=($j)\n      fi\n    done\n\n    if [ -z \"${F}\" ]; then\n\
+    \      F+=(1)\n    fi\n\n    # check if there are factors\n    OPT=\"--\"\n  \
+    \  for (( k = 3; k <= $N; k++ )) do\n      if [[ $($OPT $OPT $OPT $OPT $OPT $OPT\
+    \ factor -- \"$k\" 2>/dev/null) ]]; then\n        F+=($k)\n      fi\n    done\n\
+    \n    if [ -z \"${F}\" ]; then\n      F+=(1)\n    fi\n\n    N=$(( $N / 2 ))\n\
+    \  done\n\n  echo ${F[@]}", "    local factors=()\n    local num=${1}\n    local\
+    \ count=1\n    for factor in $(echo \"$num\" | awk '{print $1}'); do\n       \
+    \ count=$(( $count * $factor ))\n    done\n    if [ $num -ne $count ] ; then\n\
+    \        factors=(\"$count\" \"$factors\")\n    fi\n    echo \"${factors[@]}\"",
+  "\tlocal number=$1\n\tlocal primes\n\n\tprimes=$( factorize \"$number\" $(factorize\
+    \ \"$number\" | awk '{print $NF}') )\n\n\tfor p in $primes; do\n\t\tlocal pcount\n\
+    \t\tpcount=0\n\t\tlocal i\n\t\tfor i in  $(factorize \"$number\" | grep $p); do\n\
+    \t\t\tpcount=$(echo \"$pcount + $(factorize \"$number\" | grep $i | wc -l)\" |\
+    \ bc)\n\t\tdone\n\t\techo \"\\\"$p\\\"\\\"$pcount\"\n\tdone", "    local N=\"\
+    $1\"\n    local factors=\"$2\"\n    if [ \"$factors\" != \"\" ]\n    then\n  \
+    \      echo \"$( cut -d '\"' -f 2 <<< $factors)\"\n    else\n        echo \"$(\
+    \ factorize $N )\"\n    fi", "    # https://stackoverflow.com/questions/52448647/factorize-integers-in-shell-script\n\
+    \    if [ $# -ne 1 ]; then\n      echo \"Usage: $0 number\"\n      exit 0\n  \
+    \  fi\n    \n    read number || exit 0\n    \n    set -- $(echo $number | xargs\
+    \ -n1 | xargs -I '{}' printf '%q ' $(factor \"{}\"))\n    \n    echo -n \"\"\n\
+    \    for ((i=1; i<=$(( $#-1)); i++)); do\n        echo \"$(( ${#ARGV[$i]} )) $ARGV[$i]\"\
+    \n    done", "    if [ \"$#\" -eq 1 ]\n    then\n        echo \"Usage: `basename\
+    \ $0` $1\"\n        return\n    fi\n\n    local num=\"$1\"\n\n    local factors=()\n\
+    \    for (( i = 0; i < num; i++ )); do\n        if [ $(( num % i )) -eq 0 ]; then\n\
+    \            factors+=( $(( i + 1 )) )\n        fi\n    done\n\n    local factor_string=\"\
+    '\"${factors[*]}\n    local prime_string=\"'\"${factors[*]}'\n    if [ \"${#factors[*]}\"\
+    \ -eq 1 ]; then\n        echo \"$factor_string\"\n    else\n        echo \"$prime_string\"\
+    \n    fi", "  local i n str\n  read n str < <(printf '%s\\n' \"$1\") && { echo\
+    \ \"$n\"; } || { echo \"$1\"; }\n  echo $(( $(printf '%d' \"$1\" * \"$n\" | sort\
+    \ -nu | uniq -u) )) | sed 's/.$//'", "\tlocal n=\"$1\"\n\tlocal r=\"$(\n\t\tlocal\
+    \ v=0\n\t\tlocal i\n\t\tfor ((i=1; i<$n; ++i)); do\n\t\t\t((v++))\n\t\t\tlocal\
+    \ j\n\t\t\tfor (j=$((i * 2)); j <= $n; j+=i); do\n\t\t\t\t[[ $v -lt $((j / i))\
+    \ ]] && break\n\t\t\tdone\n\t\tdone\n\t\techo \"$((v-1))\"\n\t)\"\n\techo $r",
+  "  local n=$1\n  local f\n  local factors\n  local fcount\n  local i\n  local j\n\
+    \  local p\n  local result\n  if [ $n -gt 1 ]; then\n    factors=()\n    p=$((2\
+    \ * n - 1))\n    fcount=1\n    for ((i=1; i<=p; i++)) ; do\n      if (( n % i\
+    \ == 0 )); then\n        f=\"\\\"$i\\\"\"\n        factors+=($f)\n        fcount=$((fcount\
+    \ * i))\n      fi\n    done\n  else\n    factors=(\"1\")\n    fcount=1\n  fi\n\
+    \  result=$(fc -l $n | awk '{if ($3 >= 2){print}}' | grep '^[0-9]*$')\n  for i\
+    \ in $(seq 0 $((${#factors[@]}-1))); do\n    if [[ ${#result} -eq ${fcount} ]];\
+    \ then\n      result=${factors[$i]}\n    fi\n  done\n  echo \"$result\"", "\t\
+    local f=$1\n\tlocal d=${f//[!0-9]/}\n\tlocal x=$(( $d + 1 ))\n\tlocal arr=()\n\
+    \tlocal i\n\tlocal j\n\tfor i in $(seq 2 $(( x -1 ))); do\n\t\tif [ $(($i / $f))\
+    \ -gt 1 ] ; then\n\t\t\tfor j in $(seq 2 $(($i / $f))); do\n\t\t\t\tarr+=($(($i\
+    \ * $j)))\n\t\t\tdone\n\t\tfi\n\tdone\n\tunset arr\n\techo \"${arr[@]}\"", " \
+    \ local input=\"$1\"\n  local primes=$(primes $input)\n  local factors=$(factors\
+    \ $input)\n  local factorCount=$#factors\n  for prime in $primes; do\n    local\
+    \ count\n    for factor in $factors; do\n      count=$(echo \"$factorCount\" |\
+    \ awk -v prime=\"$prime\" '{print prime * $1}')\n      factorCount=$(echo \"$factorCount\"\
+    \ | awk -v prime=\"$prime\" '{print $1 - ($1 * $2)}')\n      [ $count -eq 0 ]\
+    \ && break\n      [ $(($count % prime)) -eq $prime ] && break\n    done\n  done\n\
+    \  local primeString\n  for prime in $primes; do\n    primeString=$(echo \"$primeString\"\
+    \ | sed \"s/,$prime,$prime,/,$prime,/g\")\n  done\n  echo \"$primeString,$factors\"",
+  "\tlocal number=$1\n\tlocal factor=\"\"\n\n\t# Iterate through every possible factor\
+    \ of number\n\tfor factor in $(seq 2 $(($number/2))); do\n\t\t# Check if current\
+    \ factor of number is divisble by any number already in factors list\n\t\t[ \"\
+    $(( $number%$factor ))\" -eq 0 ] && echo $factor\n\tdone", "\tlocal x\n\tlocal\
+    \ factors\n\tlocal prime\n\tlocal count\n\tlocal i\n\n\tx=$1\n\n\tfactors=()\n\
+    \tprime=()\n\tcount=()\n\ti=2\n\n\t[ \"$x\" -lt \"1\" ] && exit 1\n\n\t[ \"$x\"\
+    \ -gt \"10\" ] && x=10\n\n\twhile [ $x -le \"$(( $x/2 )) \" ]; do\n\t\tif [[ $((\
+    \ $x % $i )) == 0 ]]; then\n\t\t\tcount[i]=$(( $count[i] || 1 ))\n\t\t\tprime[i]=$((\
+    \ $prime[i] || 1 ))\n\t\t\tfactors+=( \"$i\" )\n\t\t\tx=$(($x / $i ))\n\t\t\t\
+    i=$(( $i + 1 ))\n\t\telse\n\t\t\tx=$(($x / $i ))\n\t\t\ti=$(( $i + 1 ))\n\t\t\
+    fi\n\tdone\n\n\tfor i in \"${!count[@]}\"; do\n\t\tfactors+=( \"$count[$i]\" )\n\
+    \tdone\n\tfactors+=( \"$x\" )\n\n\t[ \"$x\" -gt \"1\" ] && exit 1\n\techo \"${factors[@]}\"",
+  "\tlocal num=$1\n\tlocal factors=$(factorize $num)\n\tlocal count=1\n\tfor (( i=0;\
+    \ i<${#factors[@]}; i++ )); do\n\t\tlocal tmp=${factors[$i]}\n\t\tlocal tmpnum=${!tmp}\n\
+    \t\tlocal tmpcount=$(echo $tmpnum | grep -c \"$num\")\n\t\t(( count+=tmpcount\
+    \ ))\n\t\tunset -v tmpcount\n\t\tunset -v tmpnum\n\tdone\n\techo $count", "  factorization\n\
+    \  local number=$1\n  local factors=()\n\n  local i=1\n  while [ $i -le ${#factorization[@]}\
+    \ ]; do\n    local f=${factorization[$i]}\n    while [ $f -gt 1 ]; do\n      ((factors[$f]+=1))\n\
+    \      f=$(( $f / 2 ))\n    done\n    i=$(( $i + 1 ))\n  done\n\n  printf '%s\\\
+    n' \"${factors[@]}\"", "  local i\n  for i in $(seq 1 $1); do\n    if [[ $(($1%$i))\
+    \ -ne 0 ]]; then\n      if [[ -z $2 ]]; then\n        echo \"\\\"$i\\\"\"\n  \
+    \    else\n        echo \"\\\"$i\\\", \\\"$2\\\"\"\n      fi\n    fi\n  done",
+  "    local i=$1\n\n    local factor\n    local count\n\n    if [ $i -eq 1 ]\n  \
+    \  then\n        echo \"1\"\n        return\n    fi\n\n    factor=`expr $i \\\
+    % 2`\n    while [ $factor -eq 0 ]\n    do\n        ((i++))\n        factor=`expr\
+    \ $i \\% 2`\n    done\n\n    count=$((i*2))\n    while [ $i -gt 1 ]\n    do\n\
+    \        factor=`expr $i \\% 2`\n        i=`expr $i \\/ 2`\n        if [ $factor\
+    \ -eq 1 ]\n        then\n            echo \"$count\"\n            return\n   \
+    \     fi\n\n        count=$((count+i*2))\n    done\n\n    count=$((count+i*2))\n\
+    \    echo \"$count\"", "   local n=\"$1\" count=$2 factors=( )\n   if [ $n -gt\
+    \ 1 ]; then\n      while [ $n -gt 1 ]; do\n         if [ ! $(factorize \"$((n\
+    \ / 2))\") ]; then\n            (( count += 1 ))\n         else\n            ((\
+    \ n = $(( $n / 2 ) ) ))\n         fi\n         factors+=($(( $n | sed \"s/ /\\\
+    \"/g\" )) )\n      done\n   fi\n   echo ${factors[@]}", "    local n i j result\n\
+    \    for (( i = 1; i <= $1; i++ )); do\n        n=$(( $1 / i ))\n        for ((\
+    \ j = 2; j <= n; j++ )); do\n            if [ $(( $n % j )) -eq 0 ]; then\n  \
+    \              n=$(expr $n / $j)\n            else\n                if [ $(( $j\
+    \ % i )) -eq 0 ]; then\n                    n=$j\n                else\n     \
+    \               n=$(( $n / $j ))\n                fi\n                break\n\
+    \            fi\n        done\n        result=\"$result \\\"$n\\\"\"\n    done\n\
+    \    echo \"$result\"", "  if [ $1 -eq 0 ]\n    then\n      echo \"0\"\n     \
+    \ return 0;\n  fi\n  local factors=$( echo \"$(factorize $(( $1 / 2 )))\"|sed\
+    \ 's/^\"//;s/\"$//'|sed 's/$/\"/g' );\n  local factorscount=${#factors};\n  local\
+    \ primefactors=$( factorize \"$1\" )\n  local primefactorscount=${#primefactors};\n\
+    \  local primefactorslist='';\n  local factorslist='';\n  local count='';\n  local\
+    \ primefactors='';\n  local primefactorscount='';\n\n  for ((i=0;i<$(( ${primefactorscount}\
+    \ + ${factorscount} ));i++))\n    do\n      count=0;\n      if [ \"$i\" -gt \"\
+    $primefactorscount\" ]\n        then\n          factorslist=\"${primefactorslist}\"\
+    \n          primefactorscount=$i\n          primefactorslist=\"$primefactors\"\
+    \n          primefactors=\"$primefactors $primefactorslist\"\n      else\n   \
+    \     for ((j=0;j<$(( ${primefactorscount} - $i ));j++))\n          do\n     \
+    \       count=$(($count + 1));\n            factorslist=\"$primefactorslist ${factorslist}\"\
+    \n          done\n      primefactorslist=\"$primefactorslist $factorslist\"\n\
+    \      factorscount=$(($factorscount + $count));\n      factorslist=\"$factorslist\
+    \ ${factorslist}\"\n      fi\n    done\n  echo \"$primefactorscount\"", "  # $2\
+    \ is a temp array to store result\n  local IFS=$'\\n' factors=()\n  local n=1\n\
+    \  local k=0\n  local d=1\n\n  while [ $n -le $1 ]; do\n    factors[$n]=$k\n \
+    \   while [ $k -lt $n ]; do\n      (( k+=d ))\n      (( d*=2 ))\n    done\n  \
+    \  (( n=n*$2 ))\n    (( k+=1 ))\n    (( d*=2 ))\n  done\n\n  for i in \"${!factors[@]}\"\
+    ; do\n    echo \"\\\"${factors[$i]}\\\"\"\n  done", "    number=$1\n    factors=$(echo\
+    \ \"${number}\" | awk '{print $1}')\n    for i in $(seq 1 $number); do\n     \
+    \   if [ $((number%i)) -gt 0 ]; then\n            factors=$(echo $factors | $(cat\
+    \ <<EOF\n\"$i\"\nEOF\n))\n        fi\n    done\n    echo $factors", "    echo\
+    \ \"$1\" | while read -r factor && [[ -n $factor ]]; do\n        local factor_count=$(echo\
+    \ \"$1\" | factor \"$factor\" | wc -w)\n        printf '\"%s\"' \"$factor\" \"\
+    $factor_count\"\n    done", "    local NUMBER=$1\n    local PRIME_FACTORS\n  \
+    \  PRIME_FACTORS=$(factorize NUMBER)\n    echo \"$(echo $PRIME_FACTORS | xargs)\"",
+  "\tlocal i j\n\tfor ((i=1; i<$1; i+=1)); do\n\t\tlocal j\n\t\tfor ((j=2; j<=i; j+=1));\
+    \ do\n\t\t\t[[ \"$i\" == \"$j\" ]] && continue\n\t\t\t[[ \"$j\" == \"$i\" ]] &&\
+    \ continue\n\t\t\tif [[ $(grep \"^\\\"$j\\\"\" factorization.txt) && $(grep \"\
+    ^\\\"$i\\\"\" factorization.txt) ]]; then\n\t\t\t\tread -p \"\\\"$j\\\" appears\
+    \ $[$(grep \"^\\\"$j\\\"\" factorization.txt | wc -l) -1] time in factorization.\
+    \ Continue?(y/n) \" -n1 -r\n\t\t\t\t[[ \"$REPLY\" =~ ^[Yy]$ ]] || break\n\t\t\t\
+    else\n\t\t\t\tbreak\n\t\t\tfi\n\t\tdone\n\t\tif [[ $j -lt $i ]]; then\n\t\t\t\
+    echo $j\n\t\tfi\n\tdone", "    local x factor count=0\n    factor=\n    local\
+    \ f\n\n    local num=$1\n    local factors=()\n\n    while [ $x -gt 1 ]; do\n\
+    \        x=$(expr $x / 2)\n        factor=$x\n        if [ $x -eq 1 ]; then\n\
+    \            factors=( \"${factors[@]}\" \"$factor\" )\n            ((count++))\n\
+    \        fi\n    done\n\n    if [ $count -gt 0 ]; then\n        for x in ${factors[@]};\
+    \ do\n            x=$(expr $x \\* 2 \\* $count)\n            factor=$x\n     \
+    \       factors=( \"${factors[@]}\" \"$factor\" )\n        done\n    fi\n\n  \
+    \  if [ $count -ne 0 ]; then\n        echo \"${factors[@]}\"\n    fi", "  local\
+    \ factor count\n\n  local -i factor count\n  for (( factor=1; factor <= $1; factor++\
+    \ )); do\n    local i\n    for i in $(seq 1 $factor); do\n      local factorization\n\
+    \      factorization=$(factorize $factor $count)\n      if [ \"$factorization\"\
+    \ = \"$factor\" ]; then\n        echo \"$factor\"\n      else\n        echo \"\
+    $factor,$factorization\"\n      fi\n    done\n  done", "    local NUMBER=$1\n\
+    \    local primes=\"$(factorize \"$NUMBER\" | cut -d '\"' -f 2,3)\"\n    local\
+    \ factors=$(factorize \"$NUMBER\" | cut -d '\"' -f 1,3 | tr '\\n' ' ')\n    echo\
+    \ \"$primes $factors\"", "    local factors=\"$1\"\n    local factors_len=${#factors}\n\
+    \    if [ $# -gt 1 ]; then\n        echo \"Error: expected one argument\"\n  \
+    \      return 1\n    fi\n    if [ $factors_len -eq 0 ]; then\n        echo \"\
+    Error: zero or empty number\"\n        return 1\n    fi\n    for ((i = 0; i <\
+    \ ${factors_len}; ++i)); do\n        if [ $((i%2)) -eq 0 ]; then\n           \
+    \ echo $((factors[i]))\n        else\n            echo $((factors[i]))\n     \
+    \       for ((j = i + 1; j < ${factors_len}; ++j)); do\n                if [ $((factors[i]*factors[j]))\
+    \ == $((factors[j])) ]; then\n                    echo \" \\\"$((factors[i]*factors[j]))\\\
+    \"\"\n                fi\n            done\n        fi\n    done", "  if [ ! $1\
+    \ -eq \"$1\" ] 2>/dev/null; then\n    echo \"Usage: $(basename $0) <number>\"\
+    \ >&2\n    return 1\n  fi\n  if [ \"$1\" = \"1\" ]; then\n    return 1\n  fi\n\
+    \  \n  local maxNum=\"$1\" numFactors=$((${maxNum}*2))\n  local factors=()\n \
+    \ local i\n\n  for ((i=1; i <= maxNum; i=(${i}+1))); do\n    local factor=\"$((${maxNum}%i))\"\
+    \n    if [ \"$factor\" = \"0\" ]; then\n      factors[${#factors[@]}]=\"$i\"\n\
+    \    fi\n  done\n\n  # convert factors to string\n  local numFactorsString=\"\
+    $numFactors\"\n  local factorsString=\"\"\n  while [ \"$numFactorsString\" = \"\
+    0\" ]; do\n    factorsString+=\"\\\"$((${#factors[@]})-1)\\\"\"\n    numFactorsString=\"\
+    $((${numFactorsString}-1))\"\n  done\n  \n  echo \"${factors[@]}\"", "\tfactors=()\n\
+    \tfactor=${1//,/}\n\tfor ((i=$factor;i<$#1;i++)); do\n\t\tfactors[${#factors[*]}-1]=$((\
+    \ ${factors[$(($i-1))]} )) \n\tdone\n\techo ${factors[*]}", "    local -i factors=\"\
+    $1\" factorscount=0 factor\n    while [ $factors -ge 1 ]; do\n        factorscount=`echo\
+    \ \"$factors\" | awk '{print length}/$1'`\n        if [ $factorscount -eq 0 ];\
+    \ then\n            echo \"$factors\"\n            return 0;\n        fi\n   \
+    \     factor=$(echo $factors | awk -v factorscount=$factorscount '{print $1}'\
+    \ | head -n $(($factorscount - 1)))\n        factors=`expr $factors - $factor`\n\
+    \        factorscount=$(($factorscount - 1))\n    done\n    echo \"$factors\"",
+  "  local num=$1\n\n  local FACTORS\n  FACTORS=$(factorize \"$num\" \"$num\" | tr\
+    \ -d '\\n') && \\\n  echo $FACTORS || return 0\n\n  local FACTOR\n  FACTOR=$(echo\
+    \ \"$FACTORS\" | grep '^\"' | tr '\\n' ' ') || \\\n  echo $FACTORS || return 0\n\
+    \n  local COUNT\n  COUNT=$(echo \"$FACTORS\" | grep '^\"' | tr '\\n' ' ' | cut\
+    \ -d' ' -f2 ) || \\\n  echo $FACTORS || return 0\n\n  echo \"$FACTORS $COUNT $FACTOR\"",
+  "  local num=$1\n  local factors=()\n  local factor=1\n  while [ $num != 1 ]; do\n\
+    \    while [ $num != 1 ] && [ $factor -ne 1 ]; then\n      (( factor++ ))\n  \
+    \    factors=( \"${factors[@]}\" \"$factor\" )\n      num=$(echo \"$num / $factor\"\
+    \ | bc)\n    done\n    factor=1\n    factors=( \"${factors[@]}\" \"$factor\" )\n\
+    \    num=$(echo \"$num / $factor\" | bc)\n  done\n  echo ${factors[*]}", "   \
+    \ local num=$1\n    local factorization\n    factorization=($(factorize $num))\n\
+    \    local factors\n    factors=\"${factorization[@]}\"\n    local factor\n  \
+    \  for factor in ${factors[@]}; do\n        factors=\"$factors \\\"$factor\\\"\
+    \"\n    done\n    echo \"$factors\"", "    local factors=\"$1\";\n    if [[ $factors\
+    \ == *\"-\"* ]] || [[ $factors == *\"+\"* ]]; then\n        echo \"'$factors'\
+    \ cannot be factorized. Use integers only.\";\n        exit 1;\n    fi\n\n   \
+    \ # Input validation\n    if [[ ! $factors =~ ^[0-9]+$ ]]; then\n        echo\
+    \ \"'$factors' is not a valid integer\";\n        exit 1;\n    fi\n\n    local\
+    \ prime_factors=\"$2\";\n    if [[ $prime_factors == \"\" ]]; then\n        prime_factors=\"\
+    1\";\n    fi\n\n    if [[ $prime_factors =~ ^[0-9]+$ ]]; then\n        echo \"\
+    '$prime_factors' is not a valid integer\";\n        exit 1;\n    fi\n\n    if\
+    \ [[ $prime_factors -ge 1 ]] || [[ $prime_factors -le -1 ]]; then\n        echo\
+    \ \"'$prime_factors' is not a valid positive integer\";\n        exit 1;\n   \
+    \ fi\n\n    # Prime factorization\n    local factorization=\"`python -c 'from\
+    \ sys import argv; print(argv)' \"$factors\"`\"\n\n    # Count how many times\
+    \ each prime factor appeared in the factorization.\n    local factor_count=\"\"\
+    ;\n    for factor in $factorization; do\n        (( factor_count+=1 ));\n    done\n\
+    \n    local factorized_factors=\"$factors\"\n    # Sort the prime factors list,\
+    \ and remove duplicates from list\n    local sorted_factors=$(echo \"$factor_count\"\
+    \ | sort -r)\n    local sorted_prime_factors=$(echo \"$sorted_factors\" | sed\
+    \ 's/\\([0-9]*\\)//g')\n    # Remove trailing duplicates (in case some factors\
+    \ were duplicated on output)\n    local sorted_prime_factors=$(echo \"$sorted_prime_factors\"\
+    \ | sed 's/\\([+]*\\)\\(.*\\)$/\\2/' | sed 's/-/ /g')\n    echo \"$sorted_prime_factors\"",
+  "    local factors\n    factors=\"$(factorize \"$1\")\"\n    if [ \"${factors}\"\
+    \ = \"\" ]; then\n        factors=\"1\"\n    fi\n\n    for factor in $factors;\
+    \ do\n        factors=\"$factor $factors\"\n    done\n    echo $factors", "  \
+    \  local factors i\n    IFS='' read -r -a factors <<< \"$1\"\n    i=1\n    \n\
+    \    while [ ${#factors[@]} -gt 0 ]; do\n        if [[ ${factors[i]} == 1 ]];\
+    \ then\n            factors[i]=$((${factors[i]})+i)\n        fi\n        i=$((${i}+1))\n\
+    \    done\n    echo \"${factors[@]}\"", "    if [ \"$1\" -eq \"$1\" ]\n    then\n\
+    \        echo \"No input given to factorize!\"\n    else\n        local number=\"\
+    $1\"\n        local factors=\"\"\n        local factors_count=0\n        if [\
+    \ $number -eq 1 ]\n        then\n            echo $1\n        else\n         \
+    \   local factor=1\n            while [ $number -gt \"$factor\" ]\n          \
+    \  do\n                let factor+=2\n                if [ $factor -le \"$number\"\
+    \ ]\n                then\n                    factors=$factors$factor\n     \
+    \               factors_count=$((factors_count+1))\n                fi\n     \
+    \       done\n        fi\n        if [ $factors_count -gt 1 ]\n        then\n\
+    \            echo \"$factors\"\n        else\n            echo \"\"\n        fi\n\
+    \    fi", "    local n=$1\n    local factors=()\n    local pfactors=()\n    local\
+    \ i\n    local j\n    local factor\n    local f\n    local fcount\n    local fprev\n\
+    \    local count\n    local ffactor\n    local ffactor_count\n    local fprevfactor\n\
+    \    local factor_count\n    local prev\n    local prevfactor\n    local factor_name\n\
+    \    local temp\n    local prime\n    local prime_factors\n    local prime_factor\n\
+    \    local prime_factor_flag\n    local prime_check\n\n    prime=$((n-1)) #initialize\
+    \ prime as ceiling n by 1, so as to not miss any factors\n    prime_check=true\n\
+    \    while [ \"$prime_check\" == true ] ; do\n        prime_factors=$(factor $prime)\n\
+    \        prime_factor_count=$(wc -l <<< \"$prime_factors\")\n        prime_check=$((prime_factor\
+    \ -eq 0))\n        prime=$((prime*$prime))\n    done\n    factor_count=$(wc -l\
+    \ <<< \"$prime_factors\")\n\n    if [ \"$factor_count\" -gt \"$n\" ] ; then\n\
+    \        factors=()\n        factor_names=()\n        prime_flag=true\n      \
+    \  while [ \"$prime_flag\" == true ] ; do\n            pfactors=$(factor $prime)\n\
+    \            prime_flag=$((pfactor -eq 0))\n            pfactor_count=$(wc -l\
+    \ <<< \"$pfactors\")\n            factors=($(pfactors \"$factors\")$pfactor)\n\
+    \            factor_names=($(pfactors \"$factor_names\")\"factor\"$pfactor_count)\n\
+    \            prime=$((prime*$prime))\n        done\n        factors=($(echo ${factors[@]}\
+    \ | tr \" \" \"\\n\")$factor)\n        factor_names=($(echo ${factor_names[@]}\
+    \ | tr \" \" \"\\n\")\"factor\"$factor_count)\n        echo $((factor_count-1))\n\
+    \    else\n        factors=($(echo ${factors[@]} | tr \" \" \"\\n\")$factor)\n\
+    \        factor_names=($(echo ${factor_names[@]} | tr \" \" \"\\n\")\"factor\"\
+    $factor_count)\n        echo $((factor_count))\n    fi\n    echo \"$factor_names\"",
+  "    local IFS=$'\\n'\n    local factors=()\n    # read factors line by line and\
+    \ store into local array\n    local factor\n    while read -r factor; do\n   \
+    \     ((factors[${#factors[@]}]=$factor))\n    done < <(factorize \"$1\" 2>/dev/null)\n\
+    \    # remove empty elements from the factors array\n    local index\n    for\
+    \ index in ${!factors[@]}; do\n        [[ ${factors[index]} == \"\" ]] && unset\
+    \ \"factors[$index]\" >/dev/null\n    done\n    # convert array elements into\
+    \ string and append quotation marks\n    local factorsString\n    for index in\
+    \ ${!factors[@]}; do\n        factorsString+=\"\\\"\"$(printf \"%q\" \"${factors[$index]}\"\
+    )\"\\\"\\n\"\n    done\n    # remove quotation marks from the final string\n \
+    \   local factorsStringTrimmed\n    factorsStringTrimmed=\"${factorsString%\\\"\
+    }\"\n    echo \"$factorsStringTrimmed\"", "    local IFS=$'\\n' arr=()\n    for\
+    \ num in $(factorize \"$1\"); do arr+=(\"$num\"); done\n    echo \"${arr[@]}\"",
+  "  local factors=()\n  local factor=''\n\n  local count=1\n  local factorization=\"\
+    $(factorize $1 $2 $3 $4)\"\n  for (( i=0; i < ${#factorization}; i++ )); do\n\
+    \    (( count++ ))\n    factor=\"${factorization[$i]}\"\n    factors[$i]=\"\\\"\
+    $factor\\\"\"\n  done\n\n  echo \"${factors[*]}\"", "  echo $1\n  num=$(factorize\
+    \ $1)\n  for num in ${num[*]}; do\n    echo $num\n  done", "  if [[ $# -ne 1 ]];\
+    \ then\n    echo \"Usage: $0 integer(s)\" >&2\n    return 1\n  fi\n  local n=$1\n\
+    \  local factors=\"$(factorize $n 1)\"\n  local i\n  local j\n  local factor\n\
+    \  local found\n  found=0\n  for ((i=1; i<=n; i++)); do\n    found=0\n    for\
+    \ ((j=0; j<$(($#factors)); j++)); do\n      factor=\"${factors[$j]}\"\n      if\
+    \ [[ $n -ge ${#factor} ]]; then\n        found=1\n        break\n      fi\n  \
+    \  done\n    if [[ $found -ne 1 ]]; then\n      factors+=($i)\n    fi\n  done\n\
+    \  echo \"${factors[@]}\"", "    local i pw factors fname factor\n    # Make sure\
+    \ we have an even integer\n    if ! [ \"$1\" -eq \"$1\" ] || [[ $1 -lt 2 ]]; then\n\
+    \        echo \"ERROR. Factorize needs an even integer as input\"\n        exit\
+    \ 1\n    fi\n\n    echo \"$1\" | tr '\\n' ' '\n    echo \"$1\" | cut -c2-\n  \
+    \  i=2\n    # Initialize factors to an empty list\n    factors=()\n    factor=1\n\
+    \    pw=$1\n    while [[ $i -le $pw ]]; do\n        # Remove factors from our\
+    \ current number pw\n        pw=$(( $pw/$factor ))\n        factor=$(($factor+1))\n\
+    \        factors+=( \"$factor\" )\n        # Check if pw==1\n        if [[ $pw\
+    \ -eq 1 ]]; then\n            factors+=( \"$factor\" )\n        fi\n        ((i++))\n\
+    \    done\n\n    echo \"${factors[@]}\"", "  local n=\"$1\"\n  local factors=\"\
+    $2\"\n  local lines=\"$3\"\n  local num=0\n  local factor=\"\"\n  while [ \"$n\"\
+    \ -gt \"$num\" ]\n  do\n    (( n-- ))\n  done\n  if [ \"$n\" -eq 1 ]\n  then\n\
+    \    echo \"$factor\"\n    return\n  fi\n  if [ \"$factors\" == \"\" ]\n  then\n\
+    \    echo \"$factor\"\n    return\n  fi\n  if [ \"$lines\" == \"\" ]\n  then\n\
+    \    local lines=\"$(nproc --all)\"\n  fi\n  if [ \"$lines\" == \"\" ]\n  then\n\
+    \    lines=\"$(nproc --all | grep \"^1\\|^2\\|^3\\|^4\\|^5\\|^6\\|^7\\|^8\\|^9\\\
+    |^\\*$\")\n  fi\n  while [ \"$n\" -gt \"$num\" ]\n  do\n    factor=\"$((factor*$(nproc\
+    \ --all)))\"\n    (( n-- ))\n  done\n  echo \"$factor\"", "    local number=$1\n\
+    \    if [[ -z $number ]]; then\n        echo \"[Error] Input number cannot be\
+    \ blank\"\n        return 1\n    fi\n    factors=$(factorize $number)\n    while\
+    \ [[ -z $factors ]]; do\n        factors=$(factorize $number)\n    done\n    echo\
+    \ \"$factors\"", "    local factors=\n    local factor=1\n    local i=$1\n   \
+    \ while (( i < $2 )); do\n        factor=$(( factor * $1 ))\n        (( i++ ))\n\
+    \        factors=$(($factors $( factorize $factor ) $( factorize $(( $factor /\
+    \ $1 )) ) $( factorize $(( $factor / $i )) )))\n    done\n    echo $factors",
+  "\tlocal -i n=$1\n\tlocal factors\n\tlocal -i count\n\tlocal i\n\tlocal i\n\tlocal\
+    \ i\n\tfactors=()\n\tcount=1\n\tfor ((i=2;i<=n;i+=1)); do\n\t\t((count=count))\n\
+    \t\t((i<<=1))\n\t\tif [[ $((i%2)) -eq 0 ]]; then\n\t\t\t((n=n*i)) # factor of\
+    \ i\n\t\t\tfactors+=($i)\n\t\tfi\n\tdone\n\tprintf '%s\\n' \"${factors[*]}\"",
+  "\tlocal -r factors=\"$1\";shift\n\tlocal -r factors_num=$(echo \"$factors\" | sed\
+    \ \"s/ /,/g\" | paste -s -d',' -)\n\tlocal -r numbers=$(echo \"$factors_num\"\
+    \ | sed \"s/ /,/g\" | paste -s -d',' -)\n\n\tlocal -r all_factors=\"$( echo \"\
+    $numbers\" | sed \"s/'//g\" )\"\n\tlocal -r factors_string=\"$( echo \"$all_factors\"\
+    \ | sed \"s/,//g\" )\"\n\tlocal -r factors_array=$( echo \"$factors_string\" |\
+    \ sed \"s/'//g\" |sed \"s/,//g\" |tr -d '\\n' |tr '\\n' ',' )\"\n\techo \"$factors_array\"",
+  "\tlocal i\n\tlocal factors\n\tlocal factor\n\tlocal factorial\n\tlocal factorial_i\n\
+    \tlocal icount\n\tlocal number\n\tlocal factors_i\n\tlocal j\n\tlocal jcount\n\
+    \tlocal factors_j\n\tlocal max\n\n\tnumber=$1\n\tfactors=\"\"\n\n\t# Get all prime\
+    \ numbers with one loop\n\tfor ((i = 1; i <= number; i++)); do\n\t\tfactorial=0\n\
+    \t\tfactorial_i=1\n\t\ticount=1\n\t\twhile (( factorial_i <=  i )); do\n\t\t\t\
+    factorial_i=$(( factorial_i * factorial ))\n\t\t\ticount=$(( icount+1 ))\n\t\t\
+    done\n\t\t# If i is prime, add it to list of factors\n\t\tif [[ $icount == $i\
+    \ ]]; then\n\t\t\tfactors=\"$factors \\\"$i\\\"\"\n\t\tfi\n\tdone\n\tmax=${#factors}\n\
+    \tfactors=$( echo $factors | tr \" \" \"\\n\" )\n\techo \"$factors\"", "\tlet\
+    \ $x=\"$1\"\n\tlet $count=0\n\tlet $i=0\n\tlet $factors=\"\"\n\twhile [ $i -lt\
+    \ $x ]\n\tdo\n\t\tlet $count+=1\n\t\tlet $i$count=$i+1\n\t\tlet $factors=$factors+$i$count\n\
+    \tdone\n\techo \"$factors\"", "    if [[ -z \"$1\" ]]; then\n        echo \"No\
+    \ input given. Usage: $0 [integer]\"\n        return 1\n    fi\n\n    local x=\"\
+    ${1}\"\n    local ret\n    local count=0\n    local factor=\"\"\n    local tmp=\"\
+    \"\n    local tmp2=\"\"\n    local tmp3=\"\"\n    local xc=\"\"\n    local f\n\
+    \n    # remove \" from string if present\n    local number=\"${x//\\\"/}\"\n \
+    \   # remove whitespace characters from beginning/end string\n    local number=\"\
+    ${number//[[:space:]]/}\"\n    local number=\"${number//^[[:space:]]*//}\"\n \
+    \   local number=\"${number//[[:space:]]*$//}\"\n    local number=\"${number//[[:digit:]]/}\"\
+    \n\n    if [[ -z $number ]]; then\n        echo \"No input given. Usage: $0 [integer]\"\
+    \n        return 1\n    fi\n\n    # calculate number of multiplications needed\
+    \ to find prime factors\n    local multiplications=$(echo \"$number\" | bc)\n\
+    \    # generate prime factors of number\n    local i=1\n    local counter=1\n\
+    \    while [[ $multiplications -gt $counter ]]; do\n        tmp=$(echo \"$number/$i\"\
+    \ | bc)\n        tmp=$(echo \"$tmp\" | bc)\n        if [[ $tmp -lt $number ]];\
+    \ then\n            tmp2=$number\n        else\n            tmp2=$tmp\n      \
+    \  fi\n        if [[ -z \"$tmp2\" ]]; then\n            # if no factor found,\
+    \ then set counter to 1 and break loop\n            counter=1\n            break\n\
+    \        fi\n        tmp3=\"\"\n        xc=\"\"\n        while [[ -n \"$tmp2\"\
+    \ ]]; do\n            if [[ \"$xc\" == \"$tmp2\" ]]; then\n                if\
+    \ [[ ! \"$xc\" ]]; then\n                    xc=\"$xc$tmp2\"\n               \
+    \     tmp3=\"$tmp3$tmp2\"\n                else\n                    xc=\"$xc$tmp3\"\
+    \n                    tmp3=\"\"\n                fi\n                break\n \
+    \           else\n                if [[ ! \"$xc\" ]]; then\n                 \
+    \   xc=\"$tmp2\"\n                    tmp3=\"$tmp3$tmp2\"\n                else\n\
+    \                    xc=\"$xc$tmp3\"\n                    tmp3=\"\"\n        \
+    \        fi\n            fi\n        done\n        # remove quotes from beginning\
+    \ and end of list\n        xc=\"${xc//\\\"/}\"\n        xc=\"${xc//\\\"/}\"\n\
+    \        # if first factor is larger than input number, return an empty list\n\
+    \        if [[ \"$xc\" > \"$number\" ]]; then\n            break", "    factor=$1\n\
+    \    factors=$(factorize $2 $factor $3)\n    echo $factors $factor", "    local\
+    \ n=$1\n    local factors=()\n\n    for f in $(seq 2 $((n-1))); do\n        [[\
+    \ $((n%i)) -eq 0 ]] && factors+=($i)\n        n=$((n-1))\n    done\n\n    echo\
+    \ \"${factors[*]}\"", "   local number=$1\n   local primes=()\n\n   if [[ $number\
+    \ == 1 ]]; then\n      primes+=(\"1\")\n      return \"${primes[@]}\"\n   fi\n\
+    \n   local factors=()\n   local i\n   for ((i=2; i<number; i++)); do\n      for\
+    \ ((j=0; j<$(($i-1)); j++)); do\n         if [[ $(($number % $i) == 0) ]]; then\n\
+    \            factors+=(\"$i\")\n         fi\n      done\n   done\n\n   local prime_number\n\
+    \   prime_number=1\n   for ((i=$((${#factors[@]})); i>0; i--)); do\n      local\
+    \ next_prime=\"$((${#primes[@]}+1))\"\n      primes+=(\"${primes[$next_prime]}\"\
+    )\n      local prime_factors\n      prime_factors=$(factorize ${factors[$i]})\n\
+    \      prime_factors=$(printf \"\\\"${prime_factors[@]}\\\"\")\n      echo ${factors[$i]}\
+    \ \"*\" ${prime_factors} >> $prime_number\n   done\n\n   echo $prime_number >>\
+    \ $prime_number\n   return \"${primes[@]}\"", "  # Avoid \"[: too many arguments\"\
+    \ error\n  factorize \"$1\" && return\n  # Test for prime numbers\n  if [ \"$1\"\
+    \ -eq $((1<<24-1)) ]\n  then\n    echo \"1\"\n    return\n  fi\n  # Test for positive\
+    \ integer only\n  test $1 -gt 0 && echo \"$1\"\n  # Test for positive integer\
+    \ and multiply it with 2\n  test $1 -eq $((1<<24-1)) && echo \"$1\"\n  # If it\
+    \ reaches this point then all factors were checked and returned in correct order\n\
+    \  factors=\"$(factorize \"$1\" && return)\" # Get factors\n  for i in $(seq 1\
+    \ $((${#factors}-1)) && echo \"$factors[i]\") # Sort factors\n  do\n    if [ ${#factors[*]}\
+    \ -eq 0 ]\n    then\n      factors=\"1\"\n      break\n    fi\n    if [ $((factors[i]*2))\
+    \ -eq $1 ]\n    then\n      factors=\"$factors $i\"\n    fi\n  done\n  # Reverse\
+    \ factorization of factors\n  for i in $(seq 0 $((${#factors}-1)) && echo \"${factors[$i]}\"\
+    ) # Reverse sorting\n  do\n    factors=\"$i ${factors[$((${#factors}-1))]}\"\n\
+    \  done\n  echo \"$factors\"", "\t[ -z \"$1\" ] && { echo \"usage: $0 number\"\
+    \ ; return 1; }\n\tlocal factors=()\n\tlocal prime=$1\n\tlocal factor=1\n\tlocal\
+    \ i\n\t\n\tfor i in $(seq 2 $((sqrt $prime))); do\n\t\t((factor*=$prime))\n\t\t\
+    if [ $i -eq $factor ]; then\n\t\t\tfactors+=(\"$factor\")\n\t\t\tfactor=1\n\t\t\
+    fi\n\tdone\n\t((factor*=$prime))\n\tfactors+=(\"$factor\")\n\techo \"${factors[@]}\"",
+  "    local i=1\n    local factors=( )\n\n    while [ $i -le $1 ]; do\n        if\
+    \ (( i % $1 )); then\n            (( factors[$i] += 1 ))\n        fi\n       \
+    \ (( i += 1 ))\n    done\n\n    for f in ${!factors[@]}; do\n        echo \"\\\
+    \"$f\\\"\"\n    done", "    if [ \"$1\" -eq \"$1\" ] 2>/dev/null; then\n     \
+    \   echo \"$1\"\n    else\n        factorize \"$1\" + 1 | while read num; do\n\
+    \            factorize_recur \"$num\" \"$2\" || exit $?\n        done\n    fi",
+  "    if [ \"$1\" -eq \"$1\" ]; then\n        return 1\n    fi\n    if [ \"$1\" -eq\
+    \ \"1\" ]; then\n        return 1\n    fi\n    factor=1\n    factors=$(echo \"\
+    $1\" | sed 's/ //g' | awk '{print \"1\"; for (i = 2; i <= NF; ++i) if ($i %% 2\
+    \ == 0) { print \"2\"; break }; print \"1\"}')\n    echo \"$factors $factor\"\
+    \ | tr \" \" ,\n    factor=$(( factor + 1 ))\n    factors=$(( factors - factor\
+    \ ))\n    while [ \"$factor\" -le \"$factors\" ]; do\n        factors=$(( factors\
+    \ - factor ))\n        factor=$(echo $factors | sed 's/1//g')\n        factor=$(echo\
+    \ $factor | sed 's/1//g')\n        if [ \"$factor\" -eq \"$1\" ]; then\n     \
+    \       break\n        fi\n        echo \"$factor $factors\" | tr \" \" ,\n  \
+    \  done", "    local x=\"$1\"\n    if [ $x -eq 1 ]; then\n       return '\"1\"\
+    '\n    fi\n    if [ $x -eq 2 ]; then\n       return '\"2\"'\n    fi\n    if [\
+    \ $x -le 1001 ]; then\n       # O(logN) for logN < 10\n       local f\n      \
+    \ for factor in $(seq 2 $(( ( 10#$x ) - 1 ))); do\n          f=$(( $x / $factor\
+    \ ))\n          if [ \"$f\" -eq 0 ]; then\n             return '\"0\"'\n     \
+    \     fi\n          if [ \"$f\" -eq \"$x\" ]; then\n             return \"\\\"\
+    $factor\\\"\"\n          fi\n          if [ \"$f\" -le \"$x\" ]; then\n      \
+    \       if [ \"$(factorize \"$f\")\" != \"\\\"$factor\\\"\" -a -n \"$f\" ]; then\n\
+    \                echo \"$x\"\n                return $(cygwin-getproperty \"(%i)\"\
+    \n                            $(cygwin-getproperty \"(%A)\"\n                \
+    \            $(cygwin-getproperty \"(%a)\"\n                            $(cygwin-getproperty\
+    \ \"(%p)\"\n                            $(cygwin-getproperty \"(%P)\"\n      \
+    \                      $(cygwin-getproperty \"(%f\"\n                        \
+    \    $(cygwin-getproperty \"(%fL)\"\n                            $(cygwin-getproperty\
+    \ \"(%f\"\n                            $(cygwin-getproperty \"(%L)\"\n       \
+    \                     $(cygwin-getproperty \"(%L)\"\n                        \
+    \    $(cygwin-getproperty \"(%i\"\n                            $(cygwin-getproperty\
+    \ \"(%I)\"\n                            $(cygwin-getproperty \"(%U)\"\n      \
+    \                      $(cygwin-getproperty \"(%u\"\n                        \
+    \    $(cygwin-getproperty \"(%U)\"\n                            $(cygwin-getproperty\
+    \ \"(%o)\"\n                            $(cygwin-getproperty \"(%O)\"\n      \
+    \                      $(cygwin-getproperty \"(%u\"\n                        \
+    \    $(cygwin-getproperty \"(%u\"\n                            $(cygwin-getproperty\
+    \ \"(%o)\"\n                            $(cygwin-getproperty \"(%O)\"\n      \
+    \                      $(cygwin-getproperty \"(%U)\"\n                       \
+    \     $(cygwin-getproperty \"(%u\"", "    local factors=\"$1\"\n    factors=$(echo\
+    \ \"$factors\" | awk '{print $1\"'}\")\n    factors=$(echo \"$factors\" | sed\
+    \ -r 's/\\s+//g')\n    factors=$(echo \"$factors\" | sed -r 's/^([0-9]+).*$/\\\
+    1/')\n    factors=$(echo \"$factors\" | sed -r 's/^([0-9]+).*$/\\1/')\n\n    factors=$(cat\
+    \ <<-EOF\n    $factors\n    EOF\n    )\n    echo $factors", "\tlocal x=\"$1\"\n\
+    \techo \"[$(factorize $x | sort -n)]\"", "\tlocal i factors nfactors factor count\n\
+    \n\tfactors=\"$1\"\n\tif [[ ! \"$factors\" =~ \"^[0-9]+$\" ]]; then\n\t\techo\
+    \ \"invalid argument\"\n\t\treturn 1\n\tfi\n\tn=$(echo \"$factors\" | bc)\n\t\
+    factors=$(echo \"$factors\" | tr \" \" \"\\n\")\n\tfactors=$(echo \"$factors\"\
+    \ | sed -e 's/^.//' | sed -e 's/^-$//')\n\tcount=0\n\tnfactors=${#factors}\n\t\
+    [ \"$nfactors\" -eq 1 ] && factors=\"$factors 1\"\n\tnfactors=${#factors}\n\t\
+    [ \"$nfactors\" -eq 1 ] && echo \"invalid argument\"\n\twhile [ \"$nfactors\"\
+    \ -ge 1 ]; do\n\t\tfactor=\"${factors:0:$((nfactors-1))}\"\n\t\tif [[ \"$nfactors\"\
+    \ -eq 2 ]]; then\n\t\t\t[ \"$factor\" -eq \"$factors\" ] && echo \"$factor $count\"\
+    \n\t\t\tcount=$((count+1))\n\t\t\tcontinue\n\t\tfi\n\t\tif ! [[ $((n-1)/n) -eq\
+    \ $factor ]]; then\n\t\t\techo \"invalid argument\"\n\t\t\treturn 1\n\t\tfi\n\t\
+    \t[ \"$factor\" -eq \"$factors\" ] && echo \"$factor $count\"\n\t\tcount=$((count+1))\n\
+    \t\tfactors=$(echo \"$factors\" | sed -e 's/^[^0-9]*\\([0-9]*\\)[^0-9]*$/\\1 /g')\n\
+    \t\tnfactors=${#factors}\n\tdone\n\t[ \"$nfactors\" -ge 1 ] && echo \"invalid\
+    \ argument\"\n\treturn 0", "    local x=\"$1\"\n    local fac\n    local factors\n\
+    \    local f\n\n    if [ $x -eq 1 ]; then\n        factors=\"1\"\n    elif [ $x\
+    \ -eq 2 ]; then\n        factors=\"2\"\n    elif [ $x -ge 2 ] && [ $x -le (sqrt[$x])\
+    \ ]; then\n        factors=\"\"\n        for f in $(seq 2 $x); do\n          \
+    \  if [ $f -eq (sqrt[$x]) ]; then\n                factors=\"$factors \\\"$f\\\
+    \"\"\n            else\n                factors=\"$factors \\\"$f\\\" \"\n   \
+    \         fi\n        done\n        factors=\"\\\"$factors\\\"\\\"\"\n    elif\
+    \ [ $x -ge (sqrt[$x]) ] && [ $x -le (sqrt[$x] + 1) ]; then\n        factors=\"\
+    \"\n        for f in $(seq 2 $x); do\n            if [ $f -eq (sqrt[$x] + 1) ];\
+    \ then\n                factors=\"$factors \\\"$f\\\"\"\n            else\n  \
+    \              factors=\"$factors \\\"$f\\\" \"\n            fi\n        done\n\
+    \        factors=\"\\\"$factors\\\"\\\"\"\n    else\n        factors=\"\\\"$x\\\
+    \"\"\n    fi\n\n    echo \"$factors\"", "\t# Check if number exists in factorization\n\
+    \tlocal number=\"$1\"\n\tif [[ ! \"$number\" =~ ^[0-9]+$ ]]; then\n\t\techo \"\
+    invalid number\"\n\t\treturn\n\tfi\n\n\tlocal factors=\"$2\"\n\n\tif [[ ! \"$factors\"\
+    \ =~ ^\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[ ]*\"[0-9]+\"[ ]*,[\
+    \ ]*\"[0-9]+\"[ ]*,[ ", "\tif [ $1 -eq 1 ]\n\tthen\n\t\treturn \"1\"\n\tfi\n\n\
+    \tlocal factors=$(echo\"$1\")\n\tlocal count=1\n\n\twhile [ $count -le \"$factors\"\
+    \ ]\n\tdo\n\t\tif [ $(echo$factors) -eq $(echo$count) ]\n\t\tthen\n\t\t\tfactors=$((factors-1))\n\
+    \t\t\tcount=$((count+1))\n\t\telse\n\t\t\tfactors=$((factors-1))\n\t\t\tcount=$((count+1))\n\
+    \t\t\tfactors=\"$factors '$(echo$count)'\"\n\t\tfi\n\tdone\n\n\tfactors=\"$factors\
+    \ '$(echo$count)'\"\n\n\techo \"$factors\"", "    factors=()\n    number=$1\n\
+    \    shift\n    for factor in `factorize \"$number\"`; do\n        factors=\"\
+    ${factors},${factor}\"\n    done\n    echo \"${factors}\"", "        local factors=$2\n\
+    \        local input=$1\n        local primes=$(factorize \"$input\" \"$3\")\n\
+    \        local output=\"\"\n\n        if [ -n \"$primes\" ]; then\n          \
+    \      for prime in $primes; do\n                        if [ $prime -le $input\
+    \ ]; then\n                                output=\"$prime,$output\"\n       \
+    \                 fi\n                done\n                IFS=','; echo \"$output\"\
+    \n        fi", "  local number=$1\n  local factors=\n  for factor in $(seq 2 $((${#number}\
+    \ / 2 + 1))); do\n    if [ $((factor * 2)) -eq $number ]; then\n      factors=\"\
+    $factors \\\"$factor\\\"\";\n    fi\n  done\n  echo $factors", "\tlocal num=$1\n\
+    \tlocal factors=\"\"\n\tfor (( i = 2; i <= num; i++ )); do\n\t\tif [ $(( num %\
+    \ i )) -eq 0 ]; then\n\t\t\tfactors=$factors\"$i\"\n\t\tfi\n\tdone\n\techo \"\
+    $factors\"", "    local number=$1\n    local primeFactors=\n    local primeFactorsCount\n\
+    \    local factors\n    local factorCount\n    local factorsString=\"\"\n    local\
+    \ factorsStringCount\n\n    # Checking if input number is an integer\n    if [[\
+    \ ! ${number##* } =~ ^[0-9]+$ ]]; then\n        echo \"Usage: $0 <number>\";\n\
+    \        return 1\n    fi\n\n    # Checking if input number is a prime number\n\
+    \    if [[ ${number} -eq 1 ]]; then\n        return $primeFactors\n    fi\n\n\
+    \    # Checking if input number is square\n    if [[ ${number} -eq ${number}**2\
+    \ ]]; then\n        primeFactorsCount=2\n    else\n        primeFactorsCount=1\n\
+    \    fi\n\n    # Calculating factorization using Sieve of Eratosthenes\n    for\
+    \ ((factorCount = 2; factorCount <= ${number} / 2; factorCount++))\n    do\n \
+    \       if [[ ${number} %% $factorCount -eq 0 ]]; then\n            factors=$factors\
+    \ $factorCount\n        fi\n    done\n    factors=$factors $(echo \"$factors\"\
+    \ | sed 's/^\"//g' | sed 's/\"//g' | wc -w)\n    # echo \"Factors count: $factorsCount\"\
+    \n    # echo \"Factors count: $factors\"\n\n    # Printing factors in decreasing\
+    \ order\n    factorsString=\"\"\n    factorsStringCount=0\n    for ((factorCount\
+    \ = ${#factors}; factorsStringCount -lt ${#primeFactors}; factorCount--))\n  \
+    \  do\n        factorsString=${factorsString}$((factorCount))\n        factorsStringCount=$((factorsStringCount+1))\n\
+    \    done\n    factorsString=${factorsString}${factorsStringCount}\n\n    # Adding\
+    \ factor number to the array in decreasing order of appearances\n    for ((factorCount\
+    \ = ${#factors}; factorCount >= 0; factorCount--))\n    do\n        primeFactorsCount=$((primeFactorsCount-1))\n\
+    \        if [[ ${factorsString} == ${primeFactors[$primeFactorsCount]} ]]; then\n\
+    \            primeFactorsCount=$((primeFactorsCount+1))\n        fi\n        primeFactorsCount=$((primeFactorsCount-1))\n\
+    \        primeFactors[$primeFactorsCount]=\"${factors[$factorCount]}\"\n     \
+    \   factors[$factorCount]=\"\"\n    done\n\n    # Looping through prime factors\
+    \ array\n    for ((primeFactorsCount = 0; primeFactors", "  local i number\n \
+    \ number=$1\n  [[ -z \"$number\" ]] && echo \"Usage: $(basename $0) integer\"\
+    \ >&2 && exit 1\n  local list\n  list=\"\"\n  i=1\n  while [ $i -le ${number/1/}\
+    \ ]\n  do\n    [[ \"${number/$i}\" -eq \"$number\" ]] && (( i++ ))\n    list=\"\
+    $list '$i'\"\n  done\n  echo \"$list\"", "    local number=\"$1\"\n    # check\
+    \ if number is prime number\n    if [ \"`expr $number % 1 \\== 0`\" = \"1\" ];\
+    \ then\n        return ${1:-}\n    fi\n    # find greatest factor to give us smallest\
+    \ possible number that can give us the given number\n    local factor=0\n    while\
+    \ [ $number % $factor -eq 0 ]; do\n        factor=$(( $factor + 1 ))\n    done\n\
+    \    local factors=$(seq 0 $factor | uniq -u) # find factors of given number\n\
+    \    local factorized_number=1 # factorized number is number times each of its\
+    \ factors\n    for factor in ${factors}; do\n        factorized_number=$(( $factorized_number\
+    \ * $factor ))\n    done\n    echo \"$factorized_number\"", "\tlocal number=$1\n\
+    \tlocal factors=$(gmpy2 <<< \"$number\"*\"$number\"|sed \"s/./ \\\"$number\\\"\
+    ,\"|sed \"s/,$//g\")\n\techo \"$factors\"", "    local NUMBER=$1\n    local PRIME=\"\
+    $(factorize $NUMBER | sort -nr)\"\n    local COUNT=0\n    local LIST\n    \n \
+    \   for PRIME in ${PRIME}; do\n        LIST=\"$(factorize $NUMBER $PRIME | sort\
+    \ -nr)\"\n        COUNT=0\n        for VALUE in ${LIST}; do\n            COUNT=$((COUNT+1))\n\
+    \        done\n        LIST=\"${NUMBER} \\\"${PRIME}\\\" \\\"${COUNT}\\\"\"\n\
+    \    done\n    echo ${LIST}", "    factorizations=()\n    for ((i=$1; i>1; i--));\
+    \ do\n        factor=$(factorize $i)\n        if [[ -z $factor ]]; then\n    \
+    \        factor=$(printf \"%i\" $i)\n        fi\n        factor=\"${factor// /\\\
+    \"}\"\n        factor=\"${factor//\\//\\/}\"\n        factor=\"${factor//\\\\\
+    /\\\\\\\\}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n    \
+    \    factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\
+    \\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n    \
+    \    factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\
+    \\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n    \
+    \    factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\
+    \\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n    \
+    \    factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\
+    \\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n    \
+    \    factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\
+    \\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\
+    \"/\\\\\\\"}\"\n        factor=\"${factor//\\\"/\\\\\\\"}\"\n        factor=\"\
+    ${factor//\\\"/\\\\\\\"}\"\n        factor=\"${factor//\\\"", "    local n=$1\n\
+    \    local count=1\n    local factors=()\n    for factor in $(factorize \"$n\"\
+    ); do\n        ((count++))\n        factors+=($factor)\n    done\n    local output\n\
+    \    for factor in \"${factors[@]}\"; do\n        output=\"$output$factor'$count'\"\
+    \n    done\n    echo \"$output\"", "    local input=\"$1\"\n    local prime_factorization=$(factorize\
+    \ \"$input\")\n    local temp=\"\"\n    local factors=\"\"\n    for factor in\
+    \ $prime_factorization; do\n        let \"counter++\"\n        temp+=\"\\\"$factor\\\
+    \"\"\n    done\n    if [ \"$temp\" = \"\\\"$1\\\"\"]; then\n        factors=\"\
+    $factors\"\n    else\n        factors=\"$factors \\\"$temp\\\"\"\n    fi\n   \
+    \ echo \"$factors\"", "  local number=$1\n  local factors=()\n  # Factorize number\
+    \ starting from 1.\n  # First check if number is a power of 2.\n  # If it is,\
+    \ return it as the only factor.\n  if [[ \"$number\" == 0 ]]; then\n    factors=\"\
+    $number\"\n    return 0\n  fi\n  local prime_factor\n  prime_factor=2\n  local\
+    \ i\n  while [ $prime_factor -lt \"$number\" ]\n  do\n    factor=`echo $number/$prime_factor\
+    \ | awk '{ print }'`\n    # If factor is a factor, then add factor to factors\
+    \ array.\n    if [ \"$factor\" != $number ]; then\n      factors=\"$factors $factor\"\
+    \n    fi\n    number=$(( $number/$prime_factor ))\n    prime_factor=$(( $prime_factor\
+    \ + 1 ))\n  done\n  factors=\"$factors $number\"\n  # Return factors in the order\
+    \ from smallest to largest.\n  echo ${factors[*]}", "    local number=$1\n   \
+    \ local factors=\"\"\n    while [ $number -le $(( (( $number % 2 )) + 1 )) ];\
+    \ do\n        factors=\"${factors},\\\"$(( $number % 2 ))\\\"\"\n        number=$((\
+    \ $number / 2 ))\n    done\n    echo \"${factors}\"", "    local factor factors_list\
+    \ i imax\n    factors_list=()\n    imax=-1\n    while [ $# -gt 0 ]; do\n\ti=$1\n\
+    \tfactor=$(factorize \"$i\")\n\tfactors_list+=( \"$factor\" )\n\timax=$(( imax\
+    \ + 1 ))\n\tshift\n    done\n    echo \"${factors_list[@]}\"", "    local number=$1\n\
+    \    local factors=$2\n\n    IFS=$'\\n' read -ra factors_array <<< $factors\n\
+    \    local i\n    for ((i=0;i<${#factors_array[@]};++i)); do\n        factors_array[i]=${factors_array[i]//\\\
+    \"}\n        factors_array[i]=${factors_array[i]//\\\"\\\"}\n    done\n    sort\
+    \ -u <<< \"${factors_array[@]}\"", "    local i\n    local factors\n    local\
+    \ max\n    local min\n    local number\n\n    number=$1\n    factors=\"\"\n\n\
+    \    if [ $# -gt 0 ]; then\n        max=$(echo $number | awk '{print sqrt($1)}')\n\
+    \        min=$((number-1))\n        while [ $min -le $max ]\n        do\n    \
+    \        factors+='\"' $((number/$min)) '\"'\n            ((min+=1))\n       \
+    \ done\n        factors='\"' ${factors} '\"' #add the last one\n    fi\n    echo\
+    \ $factors", "    local input=\"$1\"\n    local factors\n    local factor\n  \
+    \  local i\n    local prime\n    local count\n    local j\n    factors=()\n  \
+    \  while [ -n \"$input\" ]; do\n        prime=true\n        factor=\n        count=0\n\
+    \        for (( i = 0; i < ${#input}; i++ )); do\n            if [ ${input:$i:1}\
+    \ -eq ${input:$i:1} -a ${input:$i:1} -ge 1 ]; then\n                if [ \"$prime\"\
+    \ = true ]; then\n                    factor=\"${factor}${input:$i:1}\"\n    \
+    \                prime=false\n                else\n                    factor=\"\
+    ${factor}${input:$i:1}${count}${input:$i:1}\"\n                    count=$((count+1))\n\
+    \                fi\n            fi\n        done\n        if [ \"$prime\" = true\
+    \ ]; then\n            factors+=(${factor})\n        fi\n        input=\"${input:0:$((${#input}-1))}\"\
+    \n    done\n    echo ${factors[@]}", "  factor=\"$(factorize $1 | cut -c3-)\"\n\
+    \  if [ \"$factor\" = \"$1\" ]\n  then\n    echo \"$factor\"\n  else\n    echo\
+    \ \"$factor,$1\"\n  fi", "  local n=$1\n  local factors=\"$2\" || return $?\n\
+    \  if [[ $n -le 1 ]]; then\n    return $factors\n  fi\n  local factor_count=0\n\
+    \  local factor\n  local factors_string=\"\"\n  local i j\n  for factor in $factors;\
+    \ do\n    ((factor_count+=1))\n    if [[ $(($factor_count*$n)) -le $n ]]; then\n\
+    \      factors_string+=\"$factor \"\n    fi\n  done\n  factors=\"$factors_string\"\
+    \n  for (( i = 1; i <= $n; i++ )); do\n    factors=\"$factors $i\"\n  done\n \
+    \ for factor in $factors; do\n    ((factor_count+=1))\n    if [[ $(($factor_count*$n))\
+    \ -le $n ]]; then\n      factors=\"$factors $factor\"\n    fi\n  done\n  echo\
+    \ $factors", "    local factors=\"$(factorize \"$1\")\"\n    local factors_sorted=(\
+    \ $(sort -u <<<\"$factors\") )\n    local factors_str=''\n    local factors_count=0\n\
+    \    for factor in \"${factors_sorted[@]}\"; do\n        factors_str+=\"'$factor'\
+    \ $(($factors_count++))\"\n    done\n    echo \"$factors_str\"", "    local number=\"\
+    $1\"\n    local factors=()\n\n    # loop through factors of number\n    for factor\
+    \ in {1..$((number/2))}\n    do\n        if [ $((number/factor)) -eq $((number/2)\
+    \ ) ]; then\n            # factor is a factor of number\n            factors+=(${factor})\n\
+    \            number=$((number/${factor}))\n        else\n            factors+=(${factor})\n\
+    \        fi\n    done\n    # add 1 to the end of the factors\n    factors+=(${number})\n\
+    \n    echo \"${factors[*]}\"", "  if [[ \"$#\" -ne 1 ]] ; then\n    echo \"Invalid\
+    \ arguments\"\n    return 1\n  fi\n  echo -n \"$(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -nr | uniq | awk '{print $2}' | paste -s -d '\\n')\"\n  exit 0", "    local\
+    \ number=$1\n    if [ $number -eq 1 ] ; then\n        # Special case\n       \
+    \ echo \"1\"\n    elif [ $number -eq 2 ] ; then\n        # Special case\n    \
+    \    echo \"1\"\n    elif [ $number -eq 3 ] ; then\n        echo \"2\"\n    elif\
+    \ [ $number -eq 4 ] ; then\n        echo \"2\"\n    elif [ $number -eq 5 ] ; then\n\
+    \        echo \"3\"\n    elif [ $number -eq 6 ] ; then\n        echo \"3\"\n \
+    \   elif [ $number -eq 7 ] ; then\n        echo \"5\"\n    elif [ $number -eq\
+    \ 8 ] ; then\n        echo \"5\"\n    elif [ $number -eq 9 ] ; then\n        echo\
+    \ \"7\"\n    elif [ $number -eq 10 ] ; then\n        echo \"7\"\n    elif [ $number\
+    \ -eq 11 ] ; then\n        echo \"11\"\n    elif [ $number -eq 12 ] ; then\n \
+    \       echo \"11\"\n    elif [ $number -eq 13 ] ; then\n        echo \"13\"\n\
+    \    elif [ $number -eq 14 ] ; then\n        echo \"13\"\n    elif [ $number -eq\
+    \ 15 ] ; then\n        echo \"15\"\n    elif [ $number -eq 16 ] ; then\n     \
+    \   echo \"15\"\n    elif [ $number -eq 17 ] ; then\n        echo \"17\"\n   \
+    \ elif [ $number -eq 18 ] ; then\n        echo \"17\"\n    elif [ $number -eq\
+    \ 19 ] ; then\n        echo \"19\"\n    elif [ $number -eq 20 ] ; then\n     \
+    \   echo \"19\"\n    elif [ $number -eq 21 ] ; then\n        echo \"21\"\n   \
+    \ elif [ $number -eq 22 ] ; then\n        echo \"21\"\n    elif [ $number -eq\
+    \ 23 ] ; then\n        echo \"23\"\n    elif [ $number -eq 24 ] ; then\n     \
+    \   echo \"23\"\n    elif [ $number -eq 25 ] ; then\n        echo \"25\"\n   \
+    \ elif [ $number -eq 26 ] ; then\n        echo \"25\"\n    elif [ $number -eq\
+    \ 27 ] ; then\n        echo \"27\"\n    elif [ $number -eq 28 ] ; then\n     \
+    \   echo \"27\"\n    elif [ $number -eq 29 ] ; then\n        echo \"29\"\n   \
+    \ elif [ $number -eq 30 ] ; then\n        echo \"29\"\n    elif [ $number -eq\
+    \ 31 ] ; then\n        echo \"31\"\n    elif [ $number -eq 32 ] ; then\n     \
+    \   echo \"", "\t(( $# != 1 )) && echo \"Invalid number of arguments.\" && exit\
+    \ 1\n\tlocal num=$1\n\tlocal factor\n\tlocal factors\n\tlocal i\n\tfactors=()\n\
+    \tfactor=$(factorize $num | tr '\\n' '')\n\t[ \"$factor\" == \"\" ] && return\
+    \ 0\n\t[ \"$factor\" == \"$num\" ] && return 0\n\ti=$(( $num % $factor ))\n\t\
+    [ \"$i\" == 0 ] && return 0\n\t[ \"$i\" == 1 ] && factors+=($factor)\n\t[ \"$i\"\
+    \ == 2 ] && factors+=($factor)\n\t[ \"$i\" == 3 ] && factors+=($factor)\n\t[ \"\
+    $i\" == 4 ] && factors+=($factor)\n\t[ \"$i\" == 5 ] && factors+=($factor)\n\t\
+    [ \"$i\" == 6 ] && factors+=($factor)\n\t[ \"$i\" == 7 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 8 ] && factors+=($factor)\n\t[ \"$i\" == 9 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 10 ] && factors+=($factor)\n\t[ \"$i\" == 11 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 12 ] && factors+=($factor)\n\t[ \"$i\" == 13 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 14 ] && factors+=($factor)\n\t[ \"$i\" == 15 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 16 ] && factors+=($factor)\n\t[ \"$i\" == 17 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 18 ] && factors+=($factor)\n\t[ \"$i\" == 19 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 20 ] && factors+=($factor)\n\t[ \"$i\" == 21 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 22 ] && factors+=($factor)\n\t[ \"$i\" == 23 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 24 ] && factors+=($factor)\n\t[ \"$i\" == 25 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 26 ] && factors+=($factor)\n\t[ \"$i\" == 27 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 28 ] && factors+=($factor)\n\t[ \"$i\" == 29 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 30 ] && factors+=($factor)\n\t[ \"$i\" == 31 ] && factors+=($factor)\n\
+    \t[ \"$i\" == 32 ] && factors+=($factor)\n", "  local factor=\"1 2 5 7\"\n  local\
+    \ integer=\"$1\"\n  local count=1\n\n  while true; do\n    local num=`echo $factor\
+    \ | grep -o \"\\\"$integer\\\"\" |cut -d \"\\\"\" -f 2`\n    if [[ -z \"$num\"\
+    \ ]]; then\n      echo \"$factor\"\n      return 0\n    fi\n\n    count=$(( $count\
+    \ * $(echo $factor | grep -o \"\\\"$num\\\"\" |cut -d \"\\\"\" -f 1) ))\n    factor=\"\
+    ${factor/$num/\\\"$num\\\"}\"\n  done", "    local -r num=${1}\n    local -r factors=()\n\
+    \n    for factor in ${num}; do\n        local -r factors_count=$(echo \"${factors}\"\
+    \ | grep \"$factor\" | wc -l)\n        if [[ ${factors_count} -eq 0 ]]; then\n\
+    \            factors+=(\"$factor\")\n        fi\n    done\n\n    echo \"${factors[@]}\"",
+  "    local factor factors=\"$1\" factors=\"$factors\" num=\"$2\" num=\"$num\"\n\
+    \    if [[ \"$num\" -eq 1 ]]; then\n        printf '%s\\n' \"$factor\"\n     \
+    \   return\n    fi\n    if [[ -z \"$factors\" ]]; then\n        factors=$(prime_factor\
+    \ \"$num\")\n        echo \"${factors[@]}\"\n        return\n    fi\n    local\
+    \ factor\n    for factor in $factors; do\n        if [[ \"$num\" -gt \"$factor\"\
+    \ ]]; then\n            break\n        fi\n    done\n    factors=\"$factors $factor\"\
+    \n    num=\"$((num/$factor))\"\n    factorize  \"$factors\" \"$num\"", "\tlocal\
+    \ num=$1\n\tlocal p\n\tlocal i\n\tlocal factors\n\tfactors=()\n\tfor (( i=2; i\
+    \ <= num; i++ )); do\n\t\t(( p=$((num % i)) ))\n\t\tif (( p != 0 )); then\n\t\t\
+    \tfactors=( \"${factors[@]}\" \"$p\" \"${i}\" \"${num}\" )\n\t\tfi\n\tdone\n\t\
+    echo ${factors[*]}", "    if [ $1 -gt 1 ]; then\n        factors=(1 $(factorize\
+    \ $(($1/2))) | sed 's/ /\\n/g' | grep \"^\\\"$2\\\"\" |\\\n            sed 's/\\\
+    \"/\\n/g' | sed -E 's/^.*\"([0-9]+)\".*/echo \"\\1\"/g' | sort -n | uniq -u)\n\
+    \    else\n        factors=()\n    fi\n\n    for i in ${!factors[@]}; do\n   \
+    \     factors[i]=$(echo \"$factors\" | grep \"${i}\")\n    done\n\n    echo \"\
+    ${factors[*]}\"", "    local i\n\n    # $2 is $1 multiplied by all primes in factorization\n\
+    \    i=$1\n    # $3 holds all prime factors\n    local p=$3\n    # $4 holds number\
+    \ of times each prime factor appeared in factorization\n    local f=$4\n\n   \
+    \ while (( i > 1 )); do\n        # $5 is current prime factor\n        local p=$(pfactor\
+    \ $i)\n        # $6 contains current number after multiplication of this prime\
+    \ factor\n        i=$(mul $i $p)\n        # $7 contains list of all prime factors\n\
+    \        p=${!p}\n        # $8 contains number of times prime factor appears in\
+    \ factorization\n        f=${!p}\n    done\n    # print only factors that appear\
+    \ more than once in factorization\n    [[ \"$f\" -gt 1 ]] && return $(( ${!f}\
+    \ - 1 ))", "  local input=\"$1\"\n\n  # Convert input to integer with single quotes\n\
+    \  local inputStr=\"${input//\\\"}\"\n\n  # If inputStr is empty\n  if [ \"$inputStr\"\
+    \ = \"\" ]; then\n    return 1\n  fi\n\n  # If inputStr is an integer\n  if [\
+    \ \"${inputStr:0:1}\" = \"-\" ]; then\n    return 0\n  fi\n\n  # Create empty\
+    \ array to store results\n  local results[]\n\n  # Factor inputStr with factors\
+    \ 3, 5, 7 and 9 and store result in array\n  for factor in \"${factors[@]}\"\n\
+    \  do\n    results=( \"${results[@]}\" \"${inputStr%%$factor}\" )\n    inputStr=\"\
+    ${inputStr/$factor}\"\n  done\n\n  # Return list of results in the order from\
+    \ smallest to largest\n  echo \"${results[@]}\"", "    local i\n    local factors\n\
+    \    local factors_array\n    local factor\n    local line\n    local num\n\n\
+    \    local is_prime\n\n    read -r line\n\n    while read -r line; do\n      \
+    \  num=${line//[^[:digit:]]}\n\n        is_prime=true\n\n        if [ $num -eq\
+    \ 1 ]; then\n            factors=$((factors<<1) || factors)\n            continue\n\
+    \        fi\n\n        for factor in $(factorize $num); do\n            ((factors_array[$factor]=$((factors_array[$factor]<<1)\
+    \ || factors_array[$factor]))) &>/dev/null\n\n            if [ $((factors_array[$factor])\
+    \ > 1) ]; then\n                is_prime=false\n                break\n      \
+    \      fi\n        done\n\n        if is_prime -eq true ]; then\n            factors=\"\
+    $factors $num\"\n        fi\n    done\n\n    echo \"$factors\"", "\tlocal factors=$(factorize\
+    \ \"$1\")\n\tprintf -v factor '%q' \"$1\"\n\t\n\tlocal count=$(printf '%s\\n'\
+    \ \"${factors[@]}\" | wc -w)\n\tprintf '%s\\n' \"${factors[@]}\"\n\t\n\tif [ \"\
+    $count\" -gt 0 ]; then\n\t\tlocal i=$count\n\t\tfor (( i = 0; i <= $count; i++\
+    \ )); do\n\t\t\tprintf \"\\\"$(( i + 1 ))\\\":\"\n\t\t\t\n\t\t\tif [ $i -gt $count\
+    \ ]; then\n\t\t\t\tlocal j=$(( i - $count + 1 ))\n\t\t\t\tfor (( j = 0; j <= $count;\
+    \ j++ )); do\n\t\t\t\t\tprintf '\"%s\"' \"${factors[$j][$i]}\"\n\t\t\t\tdone\n\
+    \t\t\telse\n\t\t\t\tlocal j=$(( i - 1 ))\n\t\t\t\tfor (( j = 0; j <= $count; j++\
+    \ )); do\n\t\t\t\t\tprintf '\"%s\"' \"${factors[$j][$i]}\"\n\t\t\t\tdone\n\t\t\
+    \tfi\n\t\t\t\n\t\t\tprintf \",\"\n\t\tdone\n\t\tprintf '\\n'\n\tfi", "    # check\
+    \ if $1 is an integer\n    if ! [[ $1 =~ ^[0-9]+$ ]]; then\n        echo \"Error:\
+    \ number should be an integer!\" > /dev/stderr\n        exit 1\n    fi\n\n   \
+    \ # declare list of factors\n    factors=()\n\n    # list of factors of given\
+    \ number\n    for (( num = $1; num > 1; num-- )) ; do\n        factors+=(\"$num\"\
+    )\n    done\n\n    # print factors\n    echo \"${factors[*]}\" | sort", "  local\
+    \ num=$1\n  local factors=()\n  local factor count\n\n  local -i count=0\n\n \
+    \ # For each number in factorization find all the numbers in factorization\n \
+    \ # and count how many times they appeared then add them to factors array.\n \
+    \ for i in $(seq 1 ${#num}); do\n    factor=$(echo ${num} | sed -n \"s/[^0-9]*\\\
+    ([0-9]\\+\\)/\\1/p\")\n    count=$(( ${#factors[@]} + (${#factors[@]} > ${count}?\
+    \ 1 : 0)))\n    factors[${count}]=${factor}\n  done\n\n  for i in ${!factors[@]};\
+    \ do\n    factor=\"${factors[$i]}\"\n    num=\"${num/${factor}}\"\n  done\n\n\
+    \  echo \"${factors[*]}\"", "    local x=\"$1\"\n    local i=2\n    local res=()\n\
+    \    local max=0\n\n    while [ $i -lt \"$max\" ]; do\n        local factor\n\
+    \        factor=$(echo \"$x/$i\" | bc)\n        if [ \"$factor\" -gt 0 ]; then\n\
+    \            res+=( \"\\\"$factor\\\"\" );\n        fi\n        let \"i+=1\"\n\
+    \        let \"max+=1\"\n    done\n\n    echo \"${res[@]}\"", "    local number=$1\n\
+    \    # List of prime factors\n    local factors=()\n\n    # Primes up to square\
+    \ root of number\n    local i=2\n    while [ $(($i % $number)) -eq 0 ]; do\n \
+    \       factors+=( \"\\\"$i\\\"\" ) # Factor as string\n        i=$(($i + 1))\n\
+    \    done\n    # All factors of given number\n    local j=1\n    while [ $(($j\
+    \ % $number)) -eq 0 ]; do\n        factors+=( \"\\\"$j\\\"\" ) # Factor as string\n\
+    \        j=$(($j + 1))\n    done\n\n    echo \"${factors[*]}\"", "    local num=\"\
+    ${1}\"\n    local arr=($(factorize $num $((${num}/2)))); arr+=(${arr[@]/%/});\
+    \ arr+=(${arr[@]/%/%}); arr+=(${arr[@]/%/%/%}); arr+=(${arr[@]/%/%/%/%}); arr+=(${arr[@]/%/%/%/%/%});\n\
+    \    echo ${arr[@]}", "  local arg\n  local count\n  local factors\n  local x\n\
+    \  local last\n  local factor\n  local i\n  local prime\n\n  x=\"$1\"\n  x=\"\
+    ${x//\\\"/}\"\n  x=\"${x//\\//}\"\n  x=\"${x//-/}\"\n\n  factors=()\n  last=\"\
+    $1\"\n\n  factor=$((last%2))\n  prime=\"1\";\n  count=\"1\";\n  until [ \"$prime\"\
+    \ -gt \"$last\" ]\n  do\n    ((prime*=2))\n    ((count+=1))\n  done\n  last=$prime\n\
+    \n  for ((i=1; i<=count; i++)); do\n    factor=\"$((last/2))\";\n    if [[ $x\
+    \ -le \"$factor\" ]]; then\n      last=$factor\n      factors=\"$factors \\\"\
+    $factor\\\"\";\n    fi\n  done\n\n  echo \"$factors\"", "  local n=$1\n  local\
+    \ factors=()\n\n  (( n > 1 )) && return 1\n\n  local factor=0\n  local result=2\n\
+    \n  while [ $factor -lt $n ]; do\n    if (( n % $factor == 0 )); then\n      (($factor\
+    \ > result)) && result=$factor\n    fi\n    ((factor++))\n  done\n  (( factor\
+    \ > result )) && result=$factor\n  (( factor > 1 )) && return 1\n\n  while ((\
+    \ $factor <= $result )); do\n    factors=( \"${factors[@]}\" \"$factor\" )\n \
+    \   (( factor += 2 ))\n  done\n  (( factor != n )) && return 1\n\n  echo ${factors[@]}",
+  "    local number=\"$1\"\n    local i j\n    # Check for positive number\n    if\
+    \ [[ \"$number\" =~ (^-?[0-9]+\\.?[0-9]*)$ ]]; then\n        echo \"Error: negative\
+    \ number is detected.\"\n        return 1\n    fi\n    # Factor number\n    factors=(\
+    \ $(for j in $(seq 2 $(expr $number / 2)); do echo \"$j\"; done) )\n    num=$(expr\
+    \ $number \\* $(expr $number \\% $j))\n    for j in \"${factors[@]}\"; do\n  \
+    \      if [ $num -ge 2 ];then\n            factors+=($j)\n            num=$(expr\
+    \ $num \\% $j)\n        else\n            break\n        fi\n    done\n    # Return\
+    \ factors\n    echo \"${factors[*]}\"", "    if [ $# -lt 1 ]; then\n        return\
+    \ 1\n    fi\n\n    factors=()\n    \n    # Find factors of given number\n    [\
+    \ $1 -gt 1 ] || {\n        return 1\n    }\n\n    product=$1\n    count=1\n  \
+    \  for factor in $(factorize $product | awk '{print $2}'); do\n        ((count++))\n\
+    \        factors+=(\"$factor\")\n    done\n\n    [ $count -eq 1 ] || {\n     \
+    \   return 1\n    }\n\n    # Sort factors and return list\n    factors=$(sort\
+    \ <<< \"${factors[*]}\")\n    echo \"${factors[*]}\"", "  local factor factor\
+    \ factors\n  # Get all factors of integer\n  factors=\"$(getfactors $1)\"\n  #\
+    \ Reverse order of factors list\n  factors=\"$(printf \"%s\" \"${factors[@]}\"\
+    \ | tac | tr -d ' ' | tr '\\n' ' ')\"\n  # If factors are given with double quotes,\
+    \ remove them\n  factors=\"${factors//\\\"}\"\n  # Remove trailing comma\n  factors=\"\
+    ${factors%,}\"\n  # Add double-quotes to all factors\n  factors=\"\\\"${factors}\\\
+    \"\"\n  # Reverse the order of factors list\n  factors=\"$(printf \"%s\" \"${factors[@]}\"\
+    \ | tac | tr -d ' ' | tr '\\n' ' ')\"\n  # Get all factors and store them in array\n\
+    \  factors=($factors)\n  echo $factors", "\tif [ \"$#\" -ne 1 ]; then\n\t\techo\
+    \ \"Usage: $(basename $0) <integer>\"\n\t\texit 1\n\tfi\n\tfactors=$(factorize\
+    \ \"$1\") # Generate list of prime factors\n\techo \"${factors[*]}\" # Return\
+    \ list of factors\n\techo \"${factors[@]}\" # Return list of factors in order\
+    \ from smallest to largest\n\techo \"${#factors[@]}\" # Return number of factors\
+    \ in order from smallest to largest", "\t[ \"$#\" -eq 1 ] && echo \"$1\" || echo\
+    \ \"$@\"\n\tlocal num=\"$1\"\n\tlocal factors=''\n\tlocal factor=\"\"\n\tlocal\
+    \ factors=$(for factor in $(factorize \"$num\"); do echo $factor; done)\n\tfor\
+    \ i in $(seq 0 $(($#factors))); do\n\t\t[ -z \"$factors\" ] || [ \"$num\" -lt\
+    \ \"$factors\" ] && break\n\t\tlocal factor=$(echo \"$factors\" | cut -d' ' -f\
+    \ $((i * 2 + 1)))\n\t\tlocal count=$(echo \"$factors\" | cut -d' ' -f $((i + 1)))\n\
+    \t\tfactors=\"$factors \\\"$factor\\\" \"\n\t\tnum=$((num / $factor))\n\tdone\n\
+    \techo $factors", "\t# Set default values\n\tfactors=()\n\tfactor=0\n\t# Get all\
+    \ factors\n\tfor((i=0;i<$1;i++)); do\n\t\tfor((j=0;j<$1;j++)); do\n\t\t\t((factor=$i%$j))\n\
+    \t\t\t((factors[${#factors[*]}]=\"$factor\"))\n\t\tdone\n\tdone\n\t# Sort the\
+    \ factors\n\tfactors=(${factors[*]})\n\t# Convert to string\n\tfactors=\"${factors[@]}\"\
+    \n\t# Remove duplicates\n\tunset -v factor\n\tfactors=($(echo \"$factors\" | tr\
+    \ ' ' '\\n' | sort | uniq))\n\techo \"${factors[@]}\"", "\t# Initialize variables\
+    \ we need for factorization\n\tfactors=()\n\tnum=$1\n\tfactor=1\n\n\t# Initialize\
+    \ list of factors and check input\n\tfor i in $(seq 1 $(($num-1)))\n\tdo\n\t\t\
+    # If this number mod i is zero, increment factor by i\n\t\tif [[ $(( $(echo \"\
+    $num % $i\" | bc -l) )) -ne 0 ]]; then\n\t\t\tfactor=\"$i\"\n\t\t\t(( factors[${#factors[@]}]=$factor\
+    \ ))\n\t\tfi\n\tdone\n\n\t# Return sorted list of factors\n\tprintf '%s\\n' \"\
+    ${factors[@]}\"", "  local n=$1 factors=() i\n  [[ -z $1 ]] && return 1\n  while\
+    \ [ $n -gt 1 ]; do\n    (( n *= 2 ))\n    for ((i=0; i<n; i++)); do\n      factors+=($((n//i)))\n\
+    \    done\n  done\n  factors+=(1)\n  printf '[%s]' \"${factors[@]}\" | sed 's/\\\
+    ^/\"/' | sed 's/\\//\",\"/g'", "    local line=$1\n    local i=2\n    local factors=()\n\
+    \    while [[ $line != 1 ]]; do\n        if [[ -z $line ]]; then\n           \
+    \ break\n        fi\n        if [[ $line == 1 ]]; then\n            factors+=($i)\n\
+    \            i=2\n            continue\n        fi\n        local factor=$(factorize\
+    \ $((line / $i)))\n        if [[ -z \"$factor\" ]]; then\n            break\n\
+    \        fi\n        factors+=($factor)\n        i=$((i+1))\n    done\n    echo\
+    \ \"${factors[@]}\"", "  local -r factorizable_number=$1\n  local -r factorized_number=$((factorizable_number))\n\
+    \  local -r factorized_array=()\n\n  factorized_array=($(echo \"$factorized_number\"\
+    \ | sed -e 's/\\\\/\\\\\\\\/g' -e 's/\"/\\\\\"/g' | \\\n    awk 'BEGIN{num=3}\n\
+    \       {\n         for (i=2;i<=NF;i++) {\n           if ($i == num) {\n     \
+    \        if (num == factorized_number) {\n               print($i)\n         \
+    \    } else {\n               num *= $i\n             }\n           }\n      \
+    \   }\n       }'))\n\n  echo \"$factorized_array\"", "\tlocal num=$1\n\tlocal\
+    \ i=2\n\tlocal factors=()\n\tlocal factor\n\tlocal count\n\tlocal cur\n\twhile\
+    \ (( i <= ${#num} ))\n\tdo\n\t\tcur=\"${num}#$i\"\n\t\tif [ -z \"$cur\" ]; then\n\
+    \t\t\tbreak\n\t\telse\n\t\t\tcount=\"$(factorize \"$cur\")\"\n\t\t\t[[ ${#count}\
+    \ -gt 0 ]] && break\n\t\tfi\n\t\t(( i++ ))\n\tdone\n\tif [ \"$count\" = \"${#factors}\"\
+    \ ]; then\n\t\tfactors=( \"${factors[@]}\" \"$cur\" )\n\tfi\n\techo \"${factors[@]}\"",
+  "    local number=$1\n    local factors=()\n    local count=0\n    local i=2\n \
+    \   while [ $i -lt $number ]; do\n        if [ $number % $i == 0 ]; then\n   \
+    \         count=$(( $count + 1 ))\n            factors+=($i)\n        fi\n   \
+    \     i=$(( $i + 1 ))\n    done\n    echo \"${factors[@]/#\\\"/}\"", "    local\
+    \ factors count\n    factors=()\n    count=0\n    while [ \"$1\" -gt 1 ]\n   \
+    \ do\n        factor=$1\n        factors+=( \"$factor\" )\n        while (( \"\
+    $factor\" != 1 )); do\n            (( factor-- == 1 )) && break\n            ((\
+    \ count++ ))\n        done\n        shift\n    done\n    echo \"${factors[@]}\"",
+  "    local arg=$1\n    local i j k l n f p\n    local factor factors factors_str\n\
+    \    local count\n    local factors_size\n    factors_size=0\n    factors=()\n\
+    \    factors_str=\n    factor=\n    i=\n    factor=\n    j=\n    factor=\n   \
+    \ k=\n    factor=\n    l=\n    for (( n=$arg; n>0; n/=2 )); do\n        if [ ${#factors}\
+    \ -le $n ]; then\n            factors_size=$n\n            factors_str=\n    \
+    \        factors=(\"${factors[@]}\" \"${arg}\" \"${arg}\")\n        fi\n     \
+    \   factor=\n        i=\n        j=\n        factor=\n        k=0\n        for\
+    \ (( i=$n; i>0; i-- )); do\n            if [ $(( ${i}*$n / 2 )) -le $n ]; then\n\
+    \                (( k++ ))\n                factor=$(( $i*$n / 2 ))\n        \
+    \        (( factor+1 ))\n                factor=\"${factor//$arg/$(( ${factor//$arg}+1\
+    \ ))}\"\n                factors=\"${factors}\" \"${factor}\"\n              \
+    \  factor=\"${factor//$arg/$(( ${factor//$arg}+1 ))}\"\n            else\n   \
+    \             break\n            fi\n        done\n        (( l=$(( $n - $k ))\
+    \ ))\n        factor=\"${factor//$arg/$(( ${factor//$arg}+1 ))}\"\n        factors=\"\
+    ${factors}\" \"${factor}\"\n        factor=\"${factor//$arg/$(( ${factor//$arg}+1\
+    \ ))}\"\n        factors=\"${factors[@]}\"\n        factors_str=\"${factors_str}\"\
+    \ \"${factors//$arg/$(( ${factors//$arg}+1 ))}\"\n    done\n    echo \"${factors_str}\"",
+  "    local number=$1\n    local factors=()\n    while [[ $number -eq 1 ]]; do\n\
+    \        factors+=( \"$number\" )\n        number=$(($number/2))\n    done\n \
+    \   for (( i = 1 ; i <= $( echo \"${#factors[@]}\" ); i++ )); do\n        for\
+    \ factor in \"${factors[@]}\"; do\n            case \"${number}\" in\n       \
+    \         $factor)\n                    factors+=( \"$factor\" \"$i\" )\n    \
+    \                (( number *= $factor ))\n                    (( i *= 2 ))\n \
+    \                   ;;\n            *) ;; # ignore unknown numbers\n         \
+    \   esac\n        done\n    done\n    echo \"${factors[@]}\"", "    echo $1 |\
+    \ tr ' ' '\\n' | sed -e \"s/ /, /g\" | sed -e \"s/^/ \\\"/\" -e \"s/$/\\\"/\"\
+    \ | tr '\\n' ' ' | grep -E -v '^$' | sort -u | sed -e 's/, $/\\\"\\\"/g'", " \
+    \   number=$1\n    factorization=($(factorize \"$number\"))\n    echo \"${factorization[@]}\"",
+  "    if [[ $(echo \"$1\" | grep -w '^[0-9]+$') ]]; then\n        factorization=$(factorize\
+    \ $1)\n        echo \"\\\"$factorization\\\"\"\n    else\n        factorization=$(echo\
+    \ $1 | sed -e 's/^\\([0-9]*\\)$/\\1/g')\n        factorization=\"\\\"$factorization\\\
+    \"\"\n        factorization=$(echo $1 | awk -F$factorization '{ for(i=2;i<=NF;i++)\
+    \ { if($i%$1 == 0) { print $i}}}')\n        echo \"$factorization\"\n    fi",
+  "  local number=$1\n  local factors=()\n  local factorCount=0\n  local primes=()\n\
+    \n  for factor in $(factorize ${number} ); do\n    (( factorCount+=1 ))\n    factors+=(\
+    \ $factor )\n  done\n\n  local primeCount=0\n  for prime in $(factorize ${number}\
+    \ ); do\n    (( primeCount+=1 ))\n    primes+=( $prime )\n  done\n\n  # sort factors\
+    \ in descending order of their occurrence in factorization\n  for i in \"${!factors[@]}\"\
+    ; do\n    local position=$(( i + 1 ))\n    local factor=\"${factors[$i]}\"\n \
+    \   if (( $factor == 1 )); then\n      (( factorCount--))\n    elif (( $factor\
+    \ > 1 )); then\n      while [[ $(( position > 1 )) ]] && [ \"$factor\" == \"${primes[$position-1]}\"\
+    \ ]; do\n        (( position--))\n      done\n      (( primeCount--))\n      primes+=(\
+    \ \"$factor\" )\n      factors+=( \"$factor\" )\n    fi\n  done\n  echo \"${primes[*]}\"",
+  "    local IFS=\" \"\n    local number=$1\n    local factors=()\n    # Echo all\
+    \ prime factors of number until number becomes 1\n    for factor in $(factorize\
+    \ \"$number\"); do\n        if [ \"$number\" -eq \"1\" ]; then\n            factors+=(\
+    \ \"$factor\" )\n            break\n        fi\n        local i=1\n        while\
+    \ [ \"$number\" -eq \"$factor\" ]; do\n            number=$(( $number / $factor\
+    \ ))\n            (( i++ ))\n        done\n        factors+=( \"$i\" \"$factor\"\
+    \ )\n    done\n    echo \"${factors[*]}\"", "  IFS='-' read -r -a array <<< \"\
+    $1\"\n  factors=()\n  for i in \"${array[@]}\"; do\n    while (( $(echo \"$i\"\
+    \ | grep \"$i\" | wc -l) > 0 )); do\n      ((factors[$i]++))\n      ((factors[$i]--))\n\
+    \      ((--i))\n    done\n  done\n  printf \"%s\\n\" \"${array[@]}\"\n  printf\
+    \ \"%s\\n\" \"${factors[@]}\"", "    local x=$1\n    if [ $x -eq $1 ]; then\n\
+    \        printf \"%s\\n\" \"$x\"\n        return\n    fi\n    local factors=()\n\
+    \    while [ $x -gt 1 ]; do\n        while [ $x -le $(( x / 2 )) ]; do\n     \
+    \       factors+=(\"$((x / 2))\")\n            x=$(( x / 2 ))\n        done\n\
+    \        x=$(( 2 * x + 1 ))\n    done\n    printf \"%s\\n\" \"${factors[@]}\"",
+  "\tlocal n i\n\tIFS=$'\\n' read n i\n\tlet 'n %= $i' | bc\n\twhile [ $n -gt 1 ];\
+    \ do\n\t\tlet 'n %= $i' | bc\n\t\tfor i in $(seq $n); do\n\t\t\tlocal c=$(($i*$i))\n\
+    \t\t\tif [ $c -eq $n ]; then\n\t\t\t\techo \"\\\"$i\\\"\"\n\t\t\t\tbreak\n\t\t\
+    \tfi\n\t\t\techo \"\\\"$i\\\",\"\n\t\tdone\n\tdone", "  local num=$1\n  local\
+    \ factors=()\n\n  factors+=( $(for ((i=2; i <= num; i++)); do echo \"$i\"; done\
+    \ | sort -u) )\n\n  while [[ $# > 0 ]]; do\n    if [[ \"$1\" = *\"-\"* ]]; then\n\
+    \      factors+=( $(echo $1 | sed 's/-/ /g' | sort -u) )\n      shift\n      continue\n\
+    \    fi\n    factors+=( $(echo $1 | sort -u) )\n    shift\n  done\n\n  echo \"\
+    ${factors[*]}\"", "\techo \"$1 $2\"\n\tfactorization=$(( $1 % $2 ))\n\tuntil [\
+    \ $factorization -eq 0 ]; do\n\t\tfactorization=$(( $factorization / $2 ))\n\t\
+    \techo \" $factorization\"\n\tdone\n\techo \"\"", "  local number factors\n  number=$1\n\
+    \  if [ -z $number ]; then\n    exit 0\n  fi\n  factors=\"$(factorize $number\
+    \ $2 $3)\"\n  while read -r factor; do\n    case \"$factor\" in\n      0)\n  \
+    \      echo \"$number\"\n        break\n        ;;\n      *)\n        echo \"\
+    $factor\"\n        ((count++))\n        echo \"$count\"\n        break\n     \
+    \   ;;\n    esac\n  done <<< \"$factors\"", "    local number=$1\n    local factors=()\n\
+    \    local factor\n    for factor in $(factorize $number); do\n        (( ${#factors[@]}\
+    \ += 1 ))\n        factors+=($factor)\n    done\n    echo ${factors[@]}", "  \
+    \  local i primes\n    local prime\n    primes=($(factorize \"$1\" | wc -w))\n\
+    \    for ((i=0; i<${primes[@]}; i++))\n    do\n        prime=\"${!i}\"\n     \
+    \   ((primes[$prime]++)) # increase count by 1 for each occurrence.\n    done\n\
+    \    local factor\n    local factors\n    factors=()\n    for ((i=0; i<${primes[@]};\
+    \ i++))\n    do\n        prime=\"${!i}\"\n        factor=\"${prime}\"\n      \
+    \  ((factors[$factor]++)) # increase count by 1 for each occurrence.\n       \
+    \ local j\n        j=$((i + 1))\n        while [ $j -le ${#primes[@]} ]\n    \
+    \    do\n            factor=\"${prime} * ${primes[$j]}\"\n            ((factors[$factor]++))\
+    \ # increase count by 1 for each occurrence.\n            j=$((j + 1))\n     \
+    \   done\n    done\n    for ((i=0; i<${#factors[@]}; i++))\n    do\n        factor=\"\
+    ${!i}\"\n        ((factors[$factor]++)) # increase count by 1 for each occurrence.\n\
+    \    done\n    for i in \"${!factors[@]}\"\n    do\n        echo \"${!i}\"\n \
+    \   done", "  local line=$1\n  local factors=()\n\n  local factor=0\n  local factor_string=\n\
+    \  local factor_strings=\n\n  # First check small numbers\n  if [ \"$line\" -eq\
+    \ 1 ]; then\n    factors=( \"1\" )\n  elif [ \"$line\" -eq 3 ]; then\n    factors=(\
+    \ \"3\" )\n  elif [ \"$line\" -le 7 ]; then\n    factors=()\n    for ((factor=2\
+    \ ; factor <= 7 ; factor++ ))\n    do\n      if [ \"$line\" -le \"$((factor *\
+    \ 3))\" ]; then\n        factors=( \"${factors[@]}\" \"$factor\" )\n      fi\n\
+    \    done\n  else\n    factors=()\n    for ((factor=2 ; factor <= 7 ; factor++\
+    \ ))\n    do\n      if [ \"$line\" -le \"$((factor * 4))\" ]; then\n        factors=(\
+    \ \"${factors[@]}\" \"$factor\" )\n      fi\n    done\n  fi\n\n  if [ -n \"${factors[@]}\"\
+    \ ]; then\n    while read -r factor_string\n    do\n      if [ -n \"$factor_string\"\
+    \ ]\n      then\n        factor_strings=( \"$factor_strings\" \"$factor_string\"\
+    \ )\n      fi\n    done < <(echo \"$factors\" | sort -nr)\n  else\n    echo \"\
+    error: number $line is not prime.\"\n  fi\n\n  # Return result\n  echo \"${factor_strings[@]}\"",
+  "  local number=$1\n  local factors=$(for i in $(seq 1 $((number % $2)); do echo\
+    \ \\\"\\\"; done)\n  (( number /= $2 ))\n  echo $factors", "\tlocal number=\"\
+    ${1}\"\n\tlocal factors=()\n\n\t# All prime factors of n are those that have no\
+    \ prime factors larger than n/2\n\tfor i in $(seq 3 \"${number}\" 3); do\n\t\t\
+    local factor=`echo \"${number}%${i}\" | bc`\n\t\t[[ \"${factor}\" -eq 0 ]] ||\
+    \ factors+=(\"${factor}\")\n\tdone\n\n\techo \"${factors[@]}\"", "\twhile read\
+    \ n; do\n\t\tfactors=()\n\t\ts=0\n\t\tfor (( i=0; i<${#n}; i++ )); do\n\t\t\t\
+    let s+=${n#*\\^$i}\n\t\tdone\n\t\tif [[ ${#s} == 0 ]]; then\n\t\t\techo $(( $n\
+    \ ))\n\t\telse\n\t\t\tfor (( i=0; i<${#n}; i++ )); do\n\t\t\t\tlet s+=${s//${n#*\\\
+    ^$i}/${n#*\\^$i}}\n\t\t\tdone\n\t\t\techo $(( $s ))\n\t\tfi\n\tdone <<< $(echo\
+    \ $1 | tr ' ' '\\n' | xargs -n1 basename | tr ' ' '\\n' | sort -nr)", "\techo\
+    \ \"$1\" | while read -r var; do\n\t\techo \"\\\"$var\\\"\" >> factorization\n\
+    \t\tcat factorization | sort -n | uniq -c | awk '{print $2/$1}'\n\tdone > factorization",
+  "  local x n i=$1\n  n=`python -c 'print \"'$i'*\"*'\"$(( $x / $i ))\"''`\n  while\
+    \ [ $n -gt 1 ]; do\n    i=`expr $i + 1`\n    n=`python -c 'print \"'$i'*\"*'\"\
+    $(( $x / $i ))\"''`\n  done\n  echo '\"'$i\"' \"'$n\"'", "    local number=$1\n\
+    \    local primes=$(factorize $number)\n    local tmp\n    primes=()\n    while\
+    \ read -r tmp; do\n        primes+=(\"$tmp\")\n    done <<< \"$primes\"\n    echo\
+    \ \"${primes[@]}\"", "    local i ret=()\n    while [ \"$1\" -gt 1 ]; do\n   \
+    \     i=$1; while [ $(( $1 % $i )) -gt 0 ]; do i=$(( $i+1 )); done\n        if\
+    \ [ $i -eq 1 ]; then ret=( \"$1\" ); break; fi\n        if [ $i -gt 1 ]; then\
+    \ ret=( \"${ret[@]}\" \"$i\" ); break; fi\n        i=$(( $i / 2 )); ret=( \"${ret[@]}\"\
+    \ \"$i\" ); done\n    echo \"${ret[@]}\"", "    local integer factors factor_list_string\n\
+    \    integer=$1\n    if [ $# -lt 2 ]\n        then\n        echo \"Not enough\
+    \ arguments\"\n        echo \"Usage: $0 integer\" >&2\n        return 1\n    fi\n\
+    \    factors=()\n    while read factor && [[ $factor ]]\n    do\n        (( factors+=(\"\
+    $factor\") ))\n    done < <(factorize \"$integer\")\n    factor_list_string=\"\
+    $(printf '%s\\n' \"${factors[@]}\" )\"\n    echo \"$factor_list_string\"", "\t\
+    local var=\"$1\"\n\tlocal factors=\"$2\"\n\tlocal factors_array=( )\n\tlocal factors_count=${#factors[@]}\n\
+    \tlocal factor\n\tlocal i\n\tlocal count\n\tlocal temp\n\t\n\t# Convert string\
+    \ \"1,2,3\" to array \"1 2 3\"\n\tIFS=, local factors_array=( ${factors[@]} )\n\
+    \t\n\tfor i in \"${!factors_array[@]}\"; do\n\t\tfactor=\"${factors_array[i]}\"\
+    \n\t\tif [ \"$factor\" -eq \"$var\" ]; then\n\t\t\t# Skip factor which equals\
+    \ given number\n\t\t\tcontinue\n\t\tfi\n\t\t\n\t\tcount=${!factors_array[@]} #count\
+    \ factor in array\n\t\t\n\t\tfor ((i=0; i<${count}; i=$i+1)); do\n\t\t\ttemp=\"\
+    $i\"\n\t\t\ttemp=${temp/*/}\n\t\t\n\t\t\t# Check if this factor is even or odd\n\
+    \t\t\twhile [ \"$temp\" -eq \"0\" ]; do\n\t\t\t\ttemp=\"$(expr \"$temp\" + 1)\"\
+    \n\t\t\t\ttemp=\"${temp/*/}\"\n\t\t\tdone\n\t\t\t\n\t\t\t# If this is even then\
+    \ increase factors count by one\n\t\t\tif [ \"$temp\" -eq \"0\" ]; then\n\t\t\t\
+    \tlet count=$count+1\n\t\t\telif [ \"$temp\" -eq \"1\" ]; then\n\t\t\t\tlet count=$count-1\n\
+    \t\t\tfi\n\t\tdone\n\t\t\n\t\t# Append this factor to factors array\n\t\tfactors_array+=(\
+    \ \"${var}/$i\" )\n\tdone\n\t\n\t# Convert factors array to string\n\tIFS=, local\
+    \ factors_string=\"( ${factors_array[@]} )\"\n\t\n\t# Return factors string\n\t\
+    echo \"$factors_string\"", "  local factors=()\n\n  for (( i=1; i<= $1; i++ ));\
+    \ do\n    factors+=( \"$(( $1 / $i ))\" )\n  done\n\n  echo \"$factors\"", " \
+    \   local number factor\n    while read -r number; do\n        for factor in $(\
+    \ factorize $number ); do\n            echo $number\"\\\"$factor\"\n        done\n\
+    \    done", "\tlocal -i n a b i j\n\tread n >&2\n\tif ((n <= 1)); then\n\t\techo\
+    \ \"1\"\n\t\treturn\n\tfi\n\ta=\n\tfor i in $(seq 1 $n); do\n\t\tj=$((i*n))\n\t\
+    \tif ((n >= j));then\n\t\t\tb=$((j))\n\t\t\ta=\"${a}\\\"$j\\\"\"\n\t\t\t((a++))\n\
+    \t\telse\n\t\t\tb=$((n))\n\t\tfi\n\tdone\n\techo \"$a\"", "    local -i fd factors\
+    \ i k factor temp\n\n    # Initialize list of factors to empty and fill it with\
+    \ the prime factors\n    factors=($(seq -f '\"%d\"' $1))\n    for factor in \"\
+    ${factors[@]}\"; do\n        # Check if factor is already in list of factors and\
+    \ if not add it to the list\n        if ! grep -q \"${factor}\" <<< \"${factors[@]}\"\
+    ;then\n            factors+=(\"${factor}\")\n        fi\n    done\n    for ((i=${#ffactors[@]}-2;\
+    \ i>=0; i--)); do\n        # Fill temp array with factors from factors array that\
+    \ are not smaller than i and that are larger than i\n        for ((j=0; j<$((${ffactors[i]}\
+    \ <= $1 ? ${ffactors[i]} : $1)); j++)); do\n            temp+=($ffactors[i]) #\
+    \ Fill array with factor from factors array\n        done\n        # Check if\
+    \ any factor of temp was already in factors array\n        if ! grep -q \"${temp[1]}\"\
+    \ <<< \"${factors[@]}\";then\n            factors+=(\"${temp[1]}\")\n        fi\n\
+    \        # Remove factor from temp array\n        temp=()\n    done\n    echo\
+    \ ${factors[@]}", "    local factors=\"\"\n    for (( i=2; i<=$1; i++))\n    do\n\
+    \        for (( j=i; j<$1; j=j*2))\n        do\n            if [ $(($j % $i))\
+    \ -gt 0 ]; then\n                factors=\"$factors \\\"$j\\\",\"\n          \
+    \  fi\n        done\n    done\n    echo ${factors:0:(-1)}", "  local n=\"$1\"\n\
+    \  local primes=()\n  local count=1\n  local maxcount=$((n-1))\n  local factors=()\n\
+    \  local counts=()\n  local factor=$((n-1))\n\n  until [ $factor -eq 1 ]; do\n\
+    \    factors=(\"${factors[@]}\" \"$factor\")\n    counts=(\"${counts[@]}\" \"\
+    $count\")\n    count=`expr $count + 1`\n    factor=$(( $factor - 1 ))\n  done\n\
+    \n  for (( i=$(( ${#factors[@]} - 1 )); i >= 0; i-- )); do\n    primes=(\"${primes[@]}\"\
+    \ \"$((factors[$i]*$counts[$i]))\")\n  done\n\n  echo \"${primes[@]}\"", "   \
+    \ local IFS='\"' read -a arr <<< \"$(factorize \"$1\")\"\n    local N=\"${arr[0]}\"\
+    \n    for ((i=1; i<\"${#arr[@]}\"; i++)); do\n        local F=\"${arr[$i]}\"\n\
+    \        (( N *= F ))\n    done\n    echo $N", "  local i temp\n  for i in \"\
+    ${1//[!0-9]}\"; do\n    temp=$(factorize \"$i\" ${!i[@]})\n    if [[ -n \"$temp\"\
+    \ ]]; then\n      echo \"$i ${temp[@]}\"\n    fi\n  done", "\t# Check if input\
+    \ is number\n\tif [[ ! $1 =~ ([0-9]+) ]]; then\n\t\techo 1>&2 \"Usage: $(basename\
+    \ ${0}) number\"\n\t\texit 1\n\tfi\n\n\t# Calculate factorization\n\tlocal factors=$(factorize\
+    \ \"$1\")\n\tif [[ -z $factors ]]; then\n\t\techo 1>&2 \"Fatal error: Factorization\
+    \ not found\"\n\t\texit 1\n\tfi\n\n\t# Check if factor is not prime\n\tif [[ \"\
+    $1\" = *\"^\"* ]]; then\n\t\techo 1>&2 \"Fatal error: Input number should be equal\
+    \ to the product of all factors\"\n\t\texit 1\n\tfi\n\n\t# Convert factors to\
+    \ strings\n\tfactors=\"${factors//\\\"/}\"\n\tfactors=\"${factors//,/\\n}\"\n\n\
+    \t# Count number of times each factor appears\n\tlocal counts=$(echo \"$factors\"\
+    \ | tr \" \" \"\\n\" | sort | uniq -c | sort -n)\n\t# Print result in the order\
+    \ from smallest to largest\n\techo \"$counts\" | sed \"s/^[ ]*//;s/^/$1/;s/ /=/\"",
+  "  local i=\"$1\"\n  local f=\"$(factorize \"$i\" \"$i\")\"\n  if [[ $i -eq $f ]];\
+    \ then\n    echo \"$f\"\n  else\n    for ((j=f; $j<$i; j++)); do\n      echo \"\
+    $j\"\n    done\n  fi", "  local FACTORIZATION\n  FACTORIZATION=$(factorize \"\
+    $1\")\n\n  echo \"$FACTORIZATION\"", "    local x=\"${1}\"\n    local factors=$(echo\
+    \ \"$x\" | grep -o '\".*\"')\n    local count=1\n\n    echo \"$factors\" | while\
+    \ read -r f; do\n        echo $count\n        local c=$((count+1))\n        echo\
+    \ \"$f\" | grep -o \"\\\"${f}\\\"\" | sort | uniq -c\n        echo \"$f\" | grep\
+    \ -o \"\\\"${f}\\\"\" | sort | uniq -c | sort -n\n        count=$c\n    done",
+  "\tlocal number=$1\n\tlocal primes\n\tprimes=\"\"\n\tlocal max\n\tmax=\"$(factorize\
+    \ $number|tail -n1|head -n1)\"\n\twhile [ \"$max\" -gt 1 ]\n\tdo\n\t\tlocal factors=\"\
+    $(factorize \"$max\")\"\n\t\tlocal current\n\t\tfor current in $factors\n\t\t\
+    do\n\t\t\tlocal count\n\t\t\tif [ \"$max\" -eq \"$current\" ]\n\t\t\tthen\n\t\t\
+    \t\tcount=$(($max ))\n\t\t\telse\n\t\t\t\tcount=$(($max * $current ))\n\t\t\t\
+    fi\n\t\t\tprimes=\"$primes$(( ${primes:0:-1} + $count ))\"\n\t\t\tmax=\"$(factorize\
+    \ \"$count\")\"\n\t\tdone\n\tdone\n\techo \"$primes\"", "  local i\n  local factors=\"\
+    $1\"\n  IFS=' '\n  for (( i=1; i<\"${#factors}\"; i++ )); do\n    if [ \"${factors:i:1}\"\
+    \ -eq \"1\" ] ; then\n      factors=${factors:0:i-1}\n    else\n      factors=\"\
+    ${factors},${factors:i:1}\"\n    fi\n  done\n  echo \"${factors//\\\"/}\"", " \
+    \ if [ \"$#\" -eq 1 ]; then\n    factors=$(factorize \"$1\")\n    for p in $factors;\
+    \ do\n      if [ \"$p\" != \"1\" ]; then echo \"$p\"; fi\n    done\n  else\n \
+    \   factor=$(echo \"$1\" | awk '{print $1}')\n    while [ \"$factor\" != 1 ];\
+    \ do\n      factors=$(factorize \"$factor\")\n      for p in $factors; do\n  \
+    \      echo \"$p\"\n      done\n      factor=$(echo \"$factor * $1\" | awk '{print\
+    \ $1}')\n    done\n  fi", "    local number=\"$1\"\n    local factor\n    local\
+    \ string='\"2\"'\n    local factors=\"${string}\"\n\n    # Check if number is\
+    \ a factor of 2 by checking if it is a prime number\n    if (( $(echo \"$number%2\"\
+    \ | bc) != 0 ))\n    then\n        echo \"$number\"\n        return 0\n    fi\n\
+    \n    while (( \"$number\" > 2 ))\n    do\n        factor=\"$(($number % 2))\"\
+    \n        factors=\"$(($factors $'\\\"'$factor))\"\n        number=\"$(($number\
+    \ / 2))\"\n    done\n\n    # Check if given number is a factor of 2\n    if ((\
+    \ $(echo \"$number%2\" | bc) == 0 ))\n    then\n        echo \"$factors\"\n  \
+    \      return 0\n    fi\n\n    # Recursive call to factorize function until number\
+    \ reaches 1 (2 being a prime number)\n    while (( \"$number\" > 1 ))\n    do\n\
+    \        factor=\"$(($number % 2))\"\n        factors=\"$(($factors $'\\\"'$factor))\"\
+    \n        number=\"$(($number / 2))\"\n    done\n\n    echo $factors\n    return\
+    \ 0", "  local factor factor factors tmp res\n  factors=( )\n  while [ \"$1\"\
+    \ -gt 1 ] ; do\n    factor=( $(factorize \"$1\") )\n    for ((i=0; i < ${#factor[@]}\
+    \ ; i++)); do\n      if (( \"${factors[i]}\" )); then\n        factors[i]=\"${factors[i]}$((factor+1))\"\
+    \n      else\n        factors[i]=\"1\"\n      fi\n    done\n    factors=( \"${factors[@]}\"\
+    \ )\n    shift\n  done\n  for i in \"${!factors[@]}\"; do\n    factor=( $( echo\
+    \ \"${factors[$i]}\" ) )\n    factor=( $(echo \"${factors[$i]}\" | tr ' ' '\\\
+    n' | sort -n | uniq ) )\n    res=( $(echo \"${factors[$i]}\" | tr ' ' '\\n' |\
+    \ sort -n | uniq) )\n    echo \"${res[@]}\"\n  done", "    echo \"Input number\
+    \ should be equal to the product of all factors\"\n    factor_count=0\n    factorization=$(factorize\
+    \ \"$1\")\n    factorization=${factorization/\\\"}\n    factorization=${factorization/\\\
+    \"}\n    echo $factorization\n    for factor in $factorization; do\n        factor_count=$((factor_count+1))\n\
+    \        if [ $((factor_count)) -eq $1 ]; then\n            echo \"$factor\"\n\
+    \        fi\n    done", "    factors=()\n    for (( i=$1\n          ; test ((\
+    \ i % $1 ), 0)\n          ; i=$(( $i % $1 ))\n        )); do\n        (( $i %\
+    \ $1 )) && \\\n            (( factors+=(\"$i\") )) || \\\n            (( factors+=(\"\
+    1\") ))\n    done\n    echo \"${factors[*]}\"", "  if [ $1 -lt 2 ] || [ $1 -gt\
+    \ 10 **9 ] ; then\n    echo \"Bad input: only numbers up to 10^9 (inclusive) accepted.\"\
+    \n    exit 1\n  fi\n  local factor count\n  local factors i maxfactor factor countstr\
+    \ maxcountstr factorstr maxfactorstr tmpcount maxtmpcount\n  local istr maxistr\
+    \ factor countstr maxcountstr factorstr maxfactorstr\n  factors=($(factorize $1\
+    \ $2))\n  maxfactor=${#factors[@]}\n  maxfactorstr=$(printf \"%${maxfactor}s\"\
+    \ \"\")\n  maxistr=$(printf \"%${maxfactor}d\" -1)\n  echo -n \"[\" \n  i=0\n\
+    \  while [ $i -lt $maxfactor ]; do\n    factor=${factors[i]}\n    count=1\n  \
+    \  for (( istr=$i; istr<$maxistr; istr++ )); do\n      tmpcount=$(expr $count\
+    \ \\* $factor)\n      countstr=$(printf \"%${tmpcount}s\" \"\")\n      factorstr=${countstr}/${factor}\n\
+    \      echo -n \"${factorstr},\"\n      ((count++))\n    done\n    echo -n \"\
+    \ ${factor},\"\n    ((i++))\n  done\n  echo \"]\"", "  factorization=$(factorize\
+    \ $1)\n  for factor in $factorization\n  do\n    factorization=$(echo $factor\
+    \ $factorization | sed \"s/$factor/$((factor * 1))/g\")\n  done\n  echo \"$factorization\"",
+  "    local n factor count\n    read n && [ \"$n\" -eq 0 ] && return 0\n    local\
+    \ max\n    max=$(( 2**${#n} - 1 ))\n    count=1\n    factors=()\n    while [ $n\
+    \ -gt $max ]; do\n        factor=$(echo $n | rev | sed \"s/\\(.\\)\\(.\\)\\(.*\\\
+    )/\\1\\3/\")\n        [ ! \"$factor\" ] && { echo \"$factor\" | awk -F'\" \"'\
+    \ '{print $1, $3, $2}'; return 0; }\n        [ ${#factors[*]} -lt $count ] &&\
+    \ { count=$(( ${#factors[*]} + 1)); factors[$count]=$factor; }\n        n=$((\
+    \ n - $factor ))\n    done", "  local -r input=\"$1\"\n  if [[ $input =~ ^[0-9]+$\
+    \ ]]; then\n    local -r input=\"$1\"\n    if [[ -z $input ]]; then\n      echo\
+    \ \"Usage: $0 number\" >&2\n      exit 1\n    fi\n    local -r factors=\"$2\"\n\
+    \    if [[ -z $factors ]]; then\n      echo \"Usage: $0 number factorization\"\
+    \ >&2\n      exit 1\n    fi\n    local -r factor_count\n    factor_count=$(printf\
+    \ \"%.0f\" \"$input\"|bc)\n    local -r factors_count\n    factors_count=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    if [[ $factor_count != $factors_count\
+    \ ]]; then\n      echo \"Usage: $0 number factorization\" >&2\n      exit 1\n\
+    \    fi\n    local -r input=\"$input\"\n    local -r factors=\"$factors\"\n  \
+    \  local -r factor\n    factor=$(echo $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n\
+    \    local -r factor_count\n    factor_count=$(echo $factors|sed 's/^\"//g;s/\"\
+    //g;s/, / /g')\n    local -r factor\n    factor=$(echo $factors|sed 's/^\"//g;s/\"\
+    //g;s/, / /g')\n    local -r factor_count\n    factor_count=$(echo $factors|sed\
+    \ 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor\n    factor=$(echo $factors|sed\
+    \ 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor_count\n    factor_count=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor\n    factor=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor_count\n    factor_count=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor\n    factor=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor_count\n    factor_count=$(echo\
+    \ $factors|sed 's/^\"//g;s/\"//g;s/, / /g')\n    local -r factor\n    factor=$(echo\
+    \ $factors|sed 's/^\"//g;", "    local factors=''\n    local num=$1\n    if [\
+    \ \"$1\" -eq \"0\" ]; then\n        echo \"[]\"\n    else\n        local f\n \
+    \       for f in $(factorize \"$((num / 2))\"); do\n            if [ \"$num\"\
+    \ -eq \"$f\" ]; then\n                ((num % 2 == 0) && (factors=\"$factors $f\"\
+    ))\n            else\n                ((num % 2 != 0) && (factors=\"$factors $f\"\
+    ))\n            fi\n        done\n        if [ \"$num\" -ne \"$((num / 2))\" ];\
+    \ then\n            ((num % 2 != 0)) && (factors=\"$factors $num\")\n        fi\n\
+    \    fi\n    echo \"$factors\"", "\t# Input number should be equal to the product\
+    \ of all factors\n\techo $1\n\tfactors=$(factorize $1)\n\tfactors=$(echo $factors\
+    \ | sed 's/\"//g')\n\techo $factors", "  local N=\"${1##*/}\"\n  # Sanitize input\n\
+    \  read -r -d '' N <<<\"${N}\" || return 1\n  local RESULT=\"\"\n  local factors=$(\
+    \ echo \"$N\" | awk '{ for (i=2; i*i<= $1; i++) if ($1 % i == 0) print $i; }'\
+    \ )\n  if [[ -z ${factors} ]]; then\n    echo \"$N is not a multiple of any primes.\"\
+    \n    return\n  fi\n  for factor in $( echo \"${factors}\" | sed 's/ //g' ); do\n\
+    \    RESULT+=\"\\\"${factor}\\\" \"\n  done\n  echo \"${RESULT}\"", "    local\
+    \ factors=\"$(cat factors_$1 | paste - -)\"\n    echo \"$factors\"", "    if [\
+    \ $# -eq 1 ]\n    then\n        echo \"Usage: $(basename $0) integer\"\n     \
+    \   exit 1\n    fi\n\n    local i=1\n    local result=$1\n    local prime=\"\"\
+    \n    local multiples=$(printf \"%d.\" $result) # list of integers from smallest\
+    \ to largest\n    while [ $i -lt $((${#multiples[*]})) ]\n    do\n        local\
+    \ multiple=$multiples[$i]\n        if [ $(($i % $multiple)) -ne 0 ]\n        then\n\
+    \            prime=\"$prime$multiple\"\n        fi\n        i=$(($i+1))\n    done\n\
+    \    echo \"$prime\"", "  # if given number is zero then do nothing\n  (( $1 ==\
+    \ 0 )) && return 1\n  # get factorial\n  nFactors=$(($(nFactors=$(factorial $1))))\n\
+    \  (( nFactors % 2 )) && return 0\n  # generate all factors\n  factors=()\n  factor=0\n\
+    \  # use for loop to generate factors\n  for i in $(seq 1 $nFactors); do\n   \
+    \ (( factor = $i * $nFactors ))\n    (( factor <= $1 )) && continue\n    (( factor\
+    \ > $1 )) && return\n    factors+=($factor)\n  done\n  # output factors\n  echo\
+    \ \"${factors[@]}\"", "    local f\n    local i\n    local j\n    local factors\n\
+    \    local num\n    local p\n    for ((i=1; i<$1; i++))\n    do\n        p=$(echo\
+    \ \"$i\" | cut -c1)\n        factors=$(echo \"$p*$i\" | bc -l | xargs echo)\n\
+    \        num=$(echo \"$p*$i\" | bc -l | xargs echo)\n        for ((j=0; j<$#;\
+    \ j++))\n        do\n            [[ \"${factors}\" | grep \"$((${factors[j]}-1))\"\
+    \ ]]\n            if [ $? -eq 0 ]\n            then\n                echo \"$((${factors[j]}-1))\"\
+    \n                break\n            fi\n        done\n    done", "    if [ $1\
+    \ != $1 ]\n    then\n        echo \"$1\" is not an integer.\"\n        return\n\
+    \    fi\n\n    set -o nounset\n    # Initialize variables\n    factors=\"\"\n\
+    \    factors_numbers=\"\"\n    factorization=\"\"\n    count=0\n    count1=0\n\
+    \    count2=0\n    count3=0\n\n    # Get factors\n    while [ $1 ]; do\n     \
+    \   factor=$(( $1 % 2 ))\n        factors=$factors\"$factor\"\n        (( count++))\n\
+    \n        if [ $count -eq $3 ]\n        then\n            if [ $factor -eq 1 ]\n\
+    \            then\n                if [ $count1 -eq 0 ]\n                then\n\
+    \                    factorization=$factors\n                    count1=$count\n\
+    \                else\n                    factorization=$factorization\",\"$factors\n\
+    \                    count1=$count1\n                fi\n            else\n  \
+    \              if [ $count2 -eq 0 ]\n                then\n                  \
+    \  factorization=$factorization\",\"$factors\n                    count2=$count\n\
+    \                else\n                    factorization=$factorization\",\"$factors\n\
+    \                    count2=$count2\n                fi\n            fi\n    \
+    \    fi\n        factors=$factors\",\"\n        factors_numbers=$factors_numbers\"\
+    ,\"$count\n        (( count++))\n        (( count1--))\n    done\n\n    if [ $count1\
+    \ -eq 1 ]\n    then\n        if [ $count2 -eq 0 ]\n        then\n            factorization=$factorization\"\
+    ,\"$factors_numbers\n        else\n            factorization=$factorization\"\
+    ,\"$factors_numbers\",\"$count2\n        fi\n    elif [ $count1 -eq 0 ]\n    then\n\
+    \        if [ $count2 -eq 0 ]\n        then\n            factorization=$factorization\"\
+    ,\"$factors\n        else\n            factorization=$factorization\",\"$factors\"\
+    ,\"$count2\n        fi\n    else\n        if [ $count2 -eq 0 ]\n        then\n\
+    \            factorization=$factorization\",\"$factors\",\"$count1\n        else\n\
+    \            factorization=$factorization\",\"$factors\",\"$count1\",\"$count2\n\
+    \        fi\n    fi\n\n    echo \"$factorization\"", "    local x=\"$1\"\n   \
+    \ local f\n    local p q\n    local count\n    # Count factors\n    for f in `seq\
+    \ 1 $x`; do\n        count=`expr ${x} / $f`\n        if [[ $count -eq 0 ]]; then\n\
+    \            echo \"\"\n        else\n            echo -n \"$f,\"\n        fi\n\
+    \    done\n    # Remove last comma\n    echo ${x%,}", "  local number=$1\n  shift\n\
+    \  local factors=()\n  local factor=1\n  local factor_count=1\n\n  for factor\
+    \ in $(seq 1 $number); do\n    local factor_product=$((number/factor))\n    local\
+    \ factor_count=$(expr $(echo \"$factor_product\" | wc -w) -1 )\n    if [ \"$factor_count\"\
+    \ -gt 0 ]; then\n      factor_count=$(expr $factor_count * 2)\n      factors+=($(echo\
+    \ $factor | tr ' ' '\\n' | sed 's/\"/ /g'))\n    fi\n  done\n  echo $factors",
+  "  if [ $# -eq 0 ]; then\n    echo \"Usage: factorize <number>\";\n    exit 1;\n\
+    \  fi\n  \n  # Get prime factors\n  P=\"$(prime_factors \"$1\")\"\n  if [ ${#P}\
+    \ -eq 0 ]; then\n    echo \"Factors of $1 ($1) are not prime!\";\n    exit 1;\n\
+    \  fi\n  \n  # Count number of each factor\n  F=\"${P[@]}\"\n  F=\"${F//[[:space:]]/}\"\
+    \n  N=\"${F//[![:space:]]/}\"\n  for ((I = 0; I < ${#P[@]}; I++)); do\n    \n\
+    \    if [[ -z ${N[I]} ]]; then\n      echo \"No such factor in $1: ${P[I]}\"\n\
+    \      exit 1;\n    fi\n    \n    case \"${N[I]}\" in \"1\")\n      echo \"$1\
+    \ is prime number with 1 $N[I]\";;\n      *)\n      # Use N[I] times each factor\n\
+    \      echo ${F[@]}\" \"${N[I]}\" \"${P[I]}\";;\n    esac\n  done", "  if [ $1\
+    \ -eq 1 ]; then\n    return 1\n  fi\n  \n  local primes=(1 2 3 5 7 11 13 17 19\
+    \ 23 29)\n  local primes_num=$(echo \"${primes[*]}\" | grep -E \"^$1$\") || return\
+    \ 1\n\n  local factors=(1 2 3 5 7 11 13 17 19)\n  local factors_num=$(( ${primes_num}\
+    \ / ${factors[*]} ))\n\n  local factors_list=()\n  local factors_num=$(echo \"\
+    ${factors[*]}\" | sed \"s/'/'\\\\\\\\'/g\")\n  local primes_num=$(echo \"${primes[*]}\"\
+    \ | sed \"s/'/'\\\\\\\\'/g\")\n\n  local max_factors=$(($factors_num+1))\n  local\
+    \ max_factors_num=$(($max_factors-1))\n  for (( i=0; i<$max_factors_num; i++ ));\
+    \ do\n    local factor=$(( ${factors_num}/$i ))\n    local prime=$(( ${primes_num}/$factor\
+    \ ))\n    local prime_str=\"$prime\"\n    if [ ${#factors_list[@]} -eq 0 ]; then\n\
+    \      if [ $prime_num -gt 1 ]; then\n        echo \"'$prime_str'\"\n      fi\n\
+    \      factors_list+=(\"$prime_str\")\n    elif [ $i -eq $max_factors ]; then\n\
+    \      echo \"'$prime_str'\"\n    elif [ $prime -eq $(( ${#primes_list[@]}-1 ))\
+    \ ]; then\n      echo \"'$prime_str'\"\n    elif [ $prime_num -gt 1 ]; then\n\
+    \      prime_str=\"$prime_str\"'\"'\n    fi\n    factors_list+=(\"$prime_str\"\
+    )\n    (( prime_num-=prime ))\n  done\n\n  echo ${factors_list[@]}", "    local\
+    \ factors\n    local factor\n    local i\n    factors=()\n\n    # Check if number\
+    \ is prime or not\n    if [ $1 -le 2 ]; then\n        echo \"number should be\
+    \ greater than 1\"\n        exit 1\n    fi\n    if [[ $1 -eq 1 ]]; then\n    \
+    \    echo \"number should be equal to 1\"\n        exit 1\n    fi\n\n    # Check\
+    \ for factors (from 2 to $(($1-1))\n    for ((i = 2; i <= $1; i++ )); do\n   \
+    \     factor=false\n\n        # Check if each factor is divisble by itself and\
+    \ by $1\n        for ((j = 2; j < i; j++ )); do\n            if [[ $(($i%$j))\
+    \ -eq 0 ]]; then\n                factor=true\n                break\n       \
+    \     fi\n        done\n        # If there is no factor, then add to our list\n\
+    \        if [[ ! $factor ]]; then\n            factors+=(\"$i\")\n        fi\n\
+    \    done\n\n    # Print out our list of factors\n    echo \"${factors[*]}\"",
+  "\techo \"$1\" | awk -F'[()]' '{\n\t\tn = split($1,a,\"(\")\n\t\tif (a[1]==\"\"\
+    ) a[i]=a[2]\n\t\telse a[i]=a[1]\"(\"a[2]\n\t\tfor (j=3; j<=length(a); j+=2) {\n\
+    \t\t\tfactor=0\n\t\t\tfor (i=j+1; i<=length(a); i++) {\n\t\t\t\tif (a[i] == a[j])\
+    \ factor++\n\t\t\t}\n\t\t\ta[i]=factor\n\t\t}\n\t\tn=split(a[n],b,\"[\")\n\t\t\
+    b[n]=$NF\n\t\tprint b[1]\"(\"b[2]\n\t\tfor (j=3; j<=length(b); j+=2) {\n\t\t\t\
+    print b[j]\n\t\t}\n\t}'", "    local factors=()\n    local factor=\n\n    # Iterate\
+    \ over all possible factors of given number\n    for factor in $(seq 1 $1); do\n\
+    \        # Check if number can be divided by factor\n        if [ $(($1 % $factor))\
+    \ -eq 0 ]; then\n            # If it can be divided, add it to factors\n     \
+    \       factors+=($factor)\n            # Remove factor from given number\n  \
+    \          factor=$(echo $factor | sed -e 's/\"'$factor'\"'/\"/')\n        fi\n\
+    \    done\n\n    # Return list of factors\n    echo \"${factors[@]}\"", "  local\
+    \ number=$1 factor=1 count=0\n  echo \"$number\"\n  while [ $number -eq 1 ]\n\
+    \  do\n    count=$((count+1))\n    factor=$((factor+1))\n    number=$((number/2))\n\
+    \    if [ $number -eq 1 ]\n    then\n      echo \"\\\"$factor\\\"\"\n    fi\n\
+    \  done\n  echo \"\\\"$count\\\"\" >> factorization.txt\n  while [ $factor -le\
+    \ $number ]\n  do\n    number=$((number/factor))\n    factor=$((factor+1))\n \
+    \   if [ $factor -le $number ]\n    then\n      echo \"\\\"$factor\\\"\"\n   \
+    \ fi\n  done\n  for i in $(seq 1 $factor)\n  do\n    count=$((count+1))\n    echo\
+    \ \"\\\"$i\\\"\"\n  done\n  echo \"\\\"$count\\\"\"", "    local num=$1\n    local\
+    \ factors=\"$(factorize $num | sort | sed \"s/'/'\\\"'\\\"'/g;s/, /','/g;s/ //g;s/$/','/g\"\
+    )\"\n    echo -n \"['$factors'\"\n    local count\n    for factor in $factors;\
+    \ do\n        count=0\n        while [[ ${#factors[$count]} -gt 0 && $factor -eq\
+    \ \"${factors[$count]}\" ]]; do\n            count=$(($count+1))\n        done\n\
+    \        echo -n \",\\\"$count\"\n    done\n    echo -n \"]\"", "  local factors=()\n\
+    \  local n=$1\n  local factor\n  local count\n\n  for factor in {1..n}; do\n \
+    \   (( count=$(n-$factor)))\n    [ $count -gt 0 ] &&\n      (( factors[$factor]=$((factors[$factor]+1))\
+    \ ))\n  done\n\n  echo \"${factors[*]}\"", "    # Input validation\n    if [ \"\
+    $1\" -eq \"$1\" ]; then echo \"Argument 1 must be an integer!\"; exit 1; fi\n\
+    \    # Find prime factors\n    echo \"# Prime factors of $1...\"\n    echo \"\
+    $1\" | awk '{ print $1 }'\n    echo \"$1\" | awk -F '[()]' '{ print $1 }'\n  \
+    \  # Divide up factors\n    echo \"# Divising factors of $1...\"\n    echo \"\
+    $1\" | awk '{ for (i=2; i<=$1; i++) { $i/= $1 } printf $i }'\n    echo \"$1\"\
+    \ | awk -F '[()]' '{ for (i=2; i<=$1; i++) { $i/= $1 } printf $i }'", "    factors=\"\
+    \"\n    if [ $1 -eq 1 ]\n    then\n        echo \"1\"\n        return\n    fi\n\
+    \    while [ $1 -gt 1 ]\n    do\n        echo \"$1\"\n        factors=`echo \"\
+    $factors $1\" | sed \"s/ $1 //\"`\n        factors=`echo \"$factors $1\" | sed\
+    \ \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors $1\" |\
+    \ sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors $1\"\
+    \ | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*\\)$1/\\\"\\1\\\"/g\"`\n        factors=`echo \"$factors\
+    \ $1\" | sed \"s/\\([0-9]*", "    local factors=()\n    local i=$1\n    while\
+    \ [ $i -gt 1 ] ; do\n        factors=(\"${factors[@]}\" \"$i\"; i=$(( $i - 1 )))\n\
+    \    done\n    for (( i = 1 ; i <= $(($#factors)) ; i++ )) ; do\n        factors=(\"\
+    ${factors[@]}\" \"$(( $factors[$(( i - 1 ))] * $1 ))\")\n    done\n    echo $factors",
+  "\tlocal i j\n\tlocal factors\n\tlocal n=$1\n\tfactors=()\n\tfor ((i=1; i<=n; i++));\
+    \ do\n\t\tfor ((j=2; j<=((n-1)/i)+1; j++)); do\n\t\t\tif (( $(n/i)*$j == n ));\
+    \ then\n\t\t\t\tfactors+=($i)\n\t\t\t\tbreak\n\t\t\tfi\n\t\tdone\n\tdone\n\techo\
+    \ ${factors[@]}"]
 stop_tokens:
 - "\n}"

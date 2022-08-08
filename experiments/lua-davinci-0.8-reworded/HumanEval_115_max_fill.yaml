@@ -200,7 +200,1294 @@ completions: ["  local function add_top(grid, i, j)\n    if i >= 1 and grid[i][j
     \ == 1 then\n          water = water - 1\n          filled = filled + 1\n    \
     \      grid[wells[1].row][wells[1].column] = 0\n        end\n        table.remove(wells,\
     \ 1)\n      end\n      if filled > 0 then\n        empties = empties + 1\n   \
-    \   end\n    end\n  end\n  return empties\nend"]
+    \   end\n    end\n  end\n  return empties\nend", "  local max_row = 1\n  local\
+    \ filled = 0\n  while max_row > 0 do\n    max_row = 0\n    for r=1,#grid do\n\
+    \      local row = grid[r]\n      local sum = 0\n      for i=1,#row do\n     \
+    \   sum = sum + row[i]\n      end\n      if sum > 0 then\n        max_row = r\n\
+    \        grid[r] = {}\n        filled = filled + 1\n      end\n    end\n  end\n\
+    \  return filled\nend", "    local rows = #grid\n    local cols = #grid[1]\n \
+    \   local result = 0\n    for row = 1, rows do\n        local fill = 0\n     \
+    \   for col = 1, cols do\n            fill = fill + grid[row][col]\n        end\n\
+    \        result = result + math.ceil(fill / capacity)\n    end\n    return result\n\
+    end", "    local function create_states(states, state, cap)\n        local new_states\
+    \ = {}\n        for _, s in ipairs(states) do\n            for i = 1, #s - cap\
+    \ + 1 do\n                local new_state = {}\n                for j = 1, #s\
+    \ do\n                    new_state[j] = math.max(s[j], state[j])\n          \
+    \      end\n                table.insert(new_states, new_state)\n            end\n\
+    \        end\n        return new_states\n    end", "    return grid.map(function(row)\
+    \ return row.filter(function(cell) return cell == 1 end).length end).sum() * capacity\n\
+    end", end, "\tlocal total_water = 0\n\t\n\t-- max_water == sum(grid)\n\tfor i\
+    \ = 1, #grid do\n\t\tfor j = 1, #grid[i] do\n\t\t\ttotal_water = total_water +\
+    \ grid[i][j]\n\t\tend\n\tend\n\t\n\treturn math.ceil(total_water / capacity)\n\
+    end", "    local result = 0\n    local m = #grid\n    local n = #grid[1]\n   \
+    \ local level = 0\n    local water = 0\n    local stack = {}\n    local stack_top\
+    \ = 0\n    local used = {}\n    local used_top = 0\n    local function visit(r,\
+    \ c)\n        water = water + 1\n        stack_top = stack_top + 1\n        stack[stack_top]\
+    \ = r * n + c\n        used_top = used_top + 1\n        used[used_top] = r * n\
+    \ + c\n    end\n    local function fill()\n        local i\n        for i = 1,\
+    \ used_top do\n            local r = math.floor(used[i] / n)\n            local\
+    \ c = used[i] % n\n            grid[r][c] = 1\n        end\n        used_top =\
+    \ 0\n    end\n    local function empty()\n        local i\n        for i = 1,\
+    \ stack_top do\n            local r = math.floor(stack[i] / n)\n            local\
+    \ c = stack[i] % n\n            grid[r][c] = 0\n        end\n        stack_top\
+    \ = 0\n    end\n    while true do\n        local i\n        local j\n        water\
+    \ = 0\n        level = level + 1\n        -- fill wells\n        for i = 1, m\
+    \ do\n            for j = 1, n do\n                if grid[i][j] == 0 then\n \
+    \                   visit(i, j)\n                end\n            end\n      \
+    \  end\n        if water == 0 then\n            break\n        end\n        if\
+    \ water <= capacity then\n            fill()\n            result = result + 1\n\
+    \        else\n            -- empty wells\n            empty()\n            local\
+    \ last_level = level\n            -- find next wells\n            for i = 1, m\
+    \ do\n                for j = 1, n do\n                    if grid[i][j] == 1\
+    \ then\n                        visit(i, j)\n                    end\n       \
+    \         end\n            end\n            if last_level == level then\n    \
+    \            break\n            end\n        end\n    end\n    return result\n\
+    end", "    local rows = #grid\n    local cols = #grid[1]\n    local visited =\
+    \ {}\n    local times = 0\n    for i = 1, rows do\n        for j = 1, cols do\n\
+    \            if grid[i][j] == 1 and not visited[i] then\n                times\
+    \ = times + 1\n                local bucket = capacity\n                local\
+    \ row = i\n                while bucket > 0 and row <= rows do\n             \
+    \       if grid[row][j] == 1 then\n                        bucket = bucket - 1\n\
+    \                    end\n                    visited[row] = true\n          \
+    \          row = row + 1\n                end\n            end\n        end\n\
+    \    end\n    return times\nend", "    local wells = {}\n    for _, row in ipairs(grid)\
+    \ do\n        wells[#wells + 1] = row\n    end\n    table.sort(wells, function(w1,\
+    \ w2)\n        local w1_s = w1:sum()\n        local w2_s = w2:sum()\n        if\
+    \ w1_s == w2_s then\n            return w1[1] < w2[1]\n        end\n        return\
+    \ w1_s > w2_s\n    end)\n    local num_lowers = 0\n    for i = #wells, 1, -1 do\n\
+    \        local fill_col = 1\n        local well = wells[i]\n        while capacity\
+    \ > 0 and fill_col <= #well do\n            local fill_amount = math.min(capacity,\
+    \ well[fill_col])\n            capacity = capacity - fill_amount\n           \
+    \ well[fill_col] = well[fill_col] - fill_amount\n            fill_col = fill_col\
+    \ + 1\n            num_lowers = num_lowers + 1\n        end\n    end\n    return\
+    \ num_lowers\nend", "  local row = #grid\n  local column = #grid[1]\n  local count\
+    \ = 0\n  local max_value = 0\n  local i, j\n  for i = 1, row do\n    local max_row\
+    \ = 0\n    for j = 1, column do\n      max_row = max_row + grid[i][j]\n    end\n\
+    \    count = count + max_row\n    max_value = max(max_value, max_row)\n  end\n\
+    \  return count + (max_value - 1) * (row - 1)\nend", "  return 0\nend", "    local\
+    \ rows = #grid\n    local cols = #grid[1]\n    local visited = {}\n    local function\
+    \ dfs(row, col)\n        local key = tostring(row) .. tostring(col)\n        if\
+    \ visited[key] then\n            return\n        end\n        visited[key] = true\n\
+    \        local row_above = row - 1\n        local row_below = row + 1\n      \
+    \  local col_left = col - 1\n        local col_right = col + 1\n        if row_above\
+    \ >= 1 and grid[row_above][col] == 1 then\n            dfs(row_above, col)\n \
+    \       end\n        if row_below <= rows and grid[row_below][col] == 1 then\n\
+    \            dfs(row_below, col)\n        end\n        if col_left >= 1 and grid[row][col_left]\
+    \ == 1 then\n            dfs(row, col_left)\n        end\n        if col_right\
+    \ <= cols and grid[row][col_right] == 1 then\n            dfs(row, col_right)\n\
+    \        end\n    end\n    local components = 0\n    for row = 1, rows do\n  \
+    \      for col = 1, cols do\n            if grid[row][col] == 1 then\n       \
+    \         dfs(row, col)\n                components = components + 1\n       \
+    \     end\n        end\n    end\n    return (components * capacity)\nend", " \
+    \ local rows = #grid\n  local cols = #grid[1]\n  local wells = {}\n  for _, row\
+    \ in ipairs(grid) do\n    table.insert(wells, row)\n  end\n  local i = 1\n  local\
+    \ j = 1\n  local count = 0\n  local current_row = 0\n  local next_row = 0\n  while\
+    \ i <= rows and j <= cols do\n    current_row = wells[i][j]\n    next_row = 0\n\
+    \    if current_row > 0 then\n      wells[i][j] = current_row - capacity\n   \
+    \   if i < rows then\n        next_row = wells[i + 1][j]\n        wells[i + 1][j]\
+    \ = next_row + capacity\n      end\n      count = count + 1\n    end\n    if j\
+    \ == cols then\n      j = 1\n      i = i + 1\n    else\n      j = j + 1\n    end\n\
+    \  end\n  return count\nend", "    local rows = #grid\n    local height = #grid[1]\n\
+    \    local function is_full(row, col)\n        return grid[row][col] == 1\n  \
+    \  end\n    local function lower_bucket(row, col)\n        if not is_full(row,\
+    \ col) then\n            return\n        end\n        grid[row][col] = 0\n   \
+    \     local max_row = height - 1\n        if row < max_row then\n            grid[row\
+    \ + 1][col] = 1\n        end\n        if col < rows then\n            grid[row][col\
+    \ + 1] = 1\n        end\n    end\n    local total = rows * height\n    local result\
+    \ = 0\n    for i = 1, total do\n        if is_full(1, i) then\n            lower_bucket(1,\
+    \ i)\n            result = result + 1\n        end\n    end\n    for i = 1, total\
+    \ do\n        for j = 1, capacity do\n            if is_full(j, i) then\n    \
+    \            lower_bucket(j, i)\n                result = result + 1\n       \
+    \     end\n        end\n    end\n    return result\nend", "    -- Fill in the\
+    \ code here\nend", "  -- fill in lines we already did\n  local lines_done = {}\n\
+    \  local rows = #grid\n  local cols = #grid[1]\n  local max_count = 0\n  for col\
+    \ = 1, cols do\n    for row = 1, rows do\n      if grid[row][col] == 1 and not\
+    \ lines_done[row] then\n        lines_done[row] = true\n        max_count = max_count\
+    \ + 1\n      end\n    end\n  end\n  local last_col = cols\n  while last_col >\
+    \ 0 do\n    local best_row = -1\n    local best_count = -1\n    for row = 1, rows\
+    \ do\n      if lines_done[row] then\n        local count = 0\n        for col\
+    \ = last_col, 1, -1 do\n          if grid[row][col] == 1 then\n            count\
+    \ = count + 1\n          end\n          if count == capacity then\n          \
+    \  break\n          end\n        end\n        if count > best_count then\n   \
+    \       best_count = count\n          best_row = row\n        end\n      end\n\
+    \    end\n    if best_row == -1 then\n      break\n    end\n    for col = last_col,\
+    \ 1, -1 do\n      if grid[best_row][col] == 1 then\n        grid[best_row][col]\
+    \ = 0\n        last_col = col\n        break\n      end\n    end\n    max_count\
+    \ = max_count + 1\n  end\n  return max_count\nend", "  local function fill_row(row)\n\
+    \    local wells = {}\n    for i = 1,#row do\n      if row[i] == 1 then wells[#wells+1]\
+    \ = i end\n    end\n    return function()\n      if #wells > 0 then\n        local\
+    \ ret = wells[1]\n        table.remove(wells, 1)\n        return ret\n      end\n\
+    \    end\n  end\n  local function move_bucket(i, j)\n    local function helper(i,\
+    \ j)\n      if i == #grid and j == #grid[1] then return 0 end\n      if i < #grid\
+    \ and grid[i+1][j] == 1 then\n        return helper(i+1, j) + 1\n      elseif\
+    \ j < #grid[1] and grid[i][j+1] == 1 then\n        return helper(i, j+1) + 1\n\
+    \      elseif i > 1 and grid[i-1][j] == 1 then\n        return helper(i-1, j)\
+    \ + 1\n      elseif j > 1 and grid[i][j-1] == 1 then\n        return helper(i,\
+    \ j-1) + 1\n      else\n        return 1e99\n      end\n    end\n    return helper(i,\
+    \ j)\n  end\n  local moves = 0\n  local i = 1\n  local j = 1\n  local bucket =\
+    \ capacity\n  local fill = fill_row(grid[1])\n  while i <= #grid do\n    local\
+    \ next_move = fill()\n    if next_move then\n      moves = moves + move_bucket(i,\
+    \ j)\n      j = next_move\n      bucket = capacity\n    else\n      i = i + 1\n\
+    \      fill = fill_row(grid[i])\n    end\n    if bucket > 0 then\n      moves\
+    \ = moves + 1\n      bucket = bucket - 1\n    end\n  end\n  return moves\nend",
+  "  -- your code goes here\nend", "  local result = 0\n  local max_row = #grid\n\
+    \  local max_column = #grid[1]\n  local cur_row = 1\n  local cur_column = 1\n\
+    \  local num_of_buckets = 0\n  local is_visited = {}\n  for i = 1, max_row do\n\
+    \    is_visited[i] = {}\n    for j = 1, max_column do\n      is_visited[i][j]\
+    \ = false\n    end\n  end\n  while true do\n    if is_visited[cur_row][cur_column]\
+    \ == false then\n      is_visited[cur_row][cur_column] = true\n      if grid[cur_row][cur_column]\
+    \ == 1 then\n        num_of_buckets = num_of_buckets + 1\n        result = result\
+    \ + 1\n      end\n    end\n    if num_of_buckets == capacity then\n      num_of_buckets\
+    \ = 0\n      if (cur_row + 1 <= max_row) and (is_visited[cur_row + 1][cur_column]\
+    \ == false) then\n        cur_row = cur_row + 1\n      elseif (cur_column + 1\
+    \ <= max_column) and (is_visited[cur_row][cur_column + 1] == false) then\n   \
+    \     cur_column = cur_column + 1\n      elseif cur_row ~= 1 then\n        cur_row\
+    \ = cur_row - 1\n      else\n        break\n      end\n    else\n      if (cur_row\
+    \ + 1 <= max_row) and (is_visited[cur_row + 1][cur_column] == false) then\n  \
+    \      cur_row = cur_row + 1\n      elseif (cur_column + 1 <= max_column) and\
+    \ (is_visited[cur_row][cur_column + 1] == false) then\n        cur_column = cur_column\
+    \ + 1\n      elseif cur_row ~= 1 then\n        cur_row = cur_row - 1\n      else\n\
+    \        break\n      end\n    end\n  end\n  return result\nend", "    -- your\
+    \ code goes here\nend", "  local r = 0\n  for i = 1, #grid do\n    for j = 1,\
+    \ #grid[i] do\n      if grid[i][j] == 1 then\n        r = r + 1\n        local\
+    \ k = i + 1\n        while k <= #grid and capacity > 0 do\n          if grid[k][j]\
+    \ == 1 then\n            grid[k][j] = 0\n            capacity = capacity - 1\n\
+    \          end\n          k = k + 1\n        end\n      end\n    end\n    capacity\
+    \ = capacity - 1\n  end\n  return r\nend", "  local function _max_fill(grid, capacity,\
+    \ count)\n    local function _visit(grid, capacity, row, count)\n      if row\
+    \ == #grid + 1 then\n        return count\n      end\n      for i = 1, #grid[row]\
+    \ do\n        if grid[row][i] == 1 then\n          grid[row][i] = 0\n        \
+    \  capacity = capacity - 1\n          if capacity == 0 then\n            count\
+    \ = count + 1\n            capacity = capacity + 1\n          end\n        end\n\
+    \      end\n      return _visit(grid, capacity, row + 1, count)\n    end\n   \
+    \ return _visit(grid, capacity, 1, count)\n  end\n  return _max_fill(grid, capacity,\
+    \ 0)\nend", "  -- TODO\nend", "    -- TODO: add implementation\nend", "    local\
+    \ num_lowerings = 0\n    local height = #grid\n    local width = #grid[1]\n  \
+    \  local max_level = 0\n    for row = 1, height do\n        for col = 1, width\
+    \ do\n            max_level = math.max(max_level, grid[row][col])\n        end\n\
+    \    end\n    local cur_level = 0\n    while cur_level < max_level do\n      \
+    \  local water_level = {}\n        for col = 1, width do\n            water_level[col]\
+    \ = 0\n        end\n        cur_level = cur_level + 1\n        for row = 1, height\
+    \ do\n            for col = 1, width do\n                if grid[row][col] ==\
+    \ cur_level then\n                    water_level[col] = water_level[col] + 1\n\
+    \                end\n            end\n        end\n        for col = 1, width\
+    \ do\n            local buckets_to_fill = math.ceil(water_level[col] / capacity)\n\
+    \            num_lowerings = num_lowerings + buckets_to_fill\n        end\n  \
+    \  end\n    return num_lowerings\nend", "  local total_taps = 0\n  local rows\
+    \ = #grid\n  local cols = #grid[1]\n  local max = 0\n  for r = 1, rows do\n  \
+    \  for c = 1, cols do\n      if grid[r][c] == 1 then\n        total_taps = total_taps\
+    \ + 1\n      end\n    end\n  end\n  for c = 1, cols do\n    local bsize = 0\n\
+    \    for r = 1, rows do\n      if grid[r][c] == 1 then\n        bsize = bsize\
+    \ + 1\n      end\n    end\n    max = math.max(max, bsize)\n  end\n  max = math.min(max,\
+    \ capacity)\n  return total_taps - max\nend", "\tlocal water = 0\n\tlocal steps\
+    \ = 0\n\tfor i = 1, #grid do\n\t\tfor j = 1, #grid[i] do\n\t\t\tlocal current\
+    \ = grid[i][j]\n\t\t\tif current == 1 then\n\t\t\t\tlocal less = capacity - water\n\
+    \t\t\t\tif less > 0 then\n\t\t\t\t\twater = water + less\n\t\t\t\t\tsteps = steps\
+    \ + less\n\t\t\t\tend\n\t\t\t\twater = water - 1\n\t\t\tend\n\t\tend\n\tend\n\t\
+    return steps\nend", "  local max_col_val, max_col_pos = 0, 0\n  local max_row_val,\
+    \ max_row_pos = 0, 0\n  local times = 0\n  local last_max_pos = 0\n  local i =\
+    \ 0\n  while i < #grid do\n    max_col_val, max_col_pos = 0, 0\n    max_row_val,\
+    \ max_row_pos = 0, 0\n    local j = 1\n    while j <= #grid[i] do\n      if grid[i][j]\
+    \ > max_col_val then\n        max_col_val = grid[i][j]\n        max_col_pos =\
+    \ j\n      end\n      j = j + 1\n    end\n    if max_col_val > 0 then\n      j\
+    \ = 1\n      while j <= #grid[i] do\n        grid[i][j] = grid[i][j] - 1\n   \
+    \     j = j + 1\n      end\n      times = times + 1\n      if i > last_max_pos\
+    \ then\n        last_max_pos = i\n      end\n    end\n    i = i + 1\n  end\n \
+    \ i = 0\n  while i < #grid do\n    local j = 1\n    while j <= #grid[i] do\n \
+    \     if grid[i][j] > max_row_val then\n        max_row_val = grid[i][j]\n   \
+    \     max_row_pos = i\n      end\n      j = j + 1\n    end\n    if max_row_val\
+    \ > 0 then\n      j = 1\n      while j <= #grid[i] do\n        grid[i][j] = grid[i][j]\
+    \ - 1\n        j = j + 1\n      end\n      times = times + 1\n      if i > last_max_pos\
+    \ then\n        last_max_pos = i\n      end\n    end\n    i = i + 1\n  end\n \
+    \ return times\nend", "  -- TODO: Write this\nend", "  local rows = #grid\n  local\
+    \ cols = #grid[1]\n  local max_height = 0\n  local wells = {}\n  local buckets\
+    \ = {}\n  for row = 1, rows do\n    local level = 0\n    for col = 1, cols do\n\
+    \      if grid[row][col] == 1 then\n        level = level + 1\n      end\n   \
+    \   wells[row] = wells[row] or {}\n      wells[row][col] = level\n      max_height\
+    \ = math.max(max_height, level)\n    end\n  end\n  for row = 1, rows do\n    for\
+    \ col = 1, cols do\n      buckets[row] = buckets[row] or {}\n      buckets[row][col]\
+    \ = capacity\n    end\n  end\n  for height = max_height, 1, -1 do\n    for row\
+    \ = 1, rows do\n      for col = 1, cols do\n        local bucket = buckets[row][col]\n\
+    \        local well = wells[row][col]\n        if bucket > 0 and well == height\
+    \ then\n          local max_bucket = math.min(bucket, well)\n          buckets[row][col]\
+    \ = bucket - max_bucket\n          wells[row][col] = well - max_bucket\n     \
+    \     local max_fill = math.min(bucket, well)\n          buckets[row - 1] = buckets[row\
+    \ - 1] or {}\n          buckets[row - 1][col] = (buckets[row - 1][col] or 0) +\
+    \ max_fill\n          local max_fill = math.min(bucket, well)\n          buckets[row\
+    \ + 1] = buckets[row + 1] or {}\n          buckets[row + 1][col] = (buckets[row\
+    \ + 1][col] or 0) + max_fill\n          local max_fill = math.min(bucket, well)\n\
+    \          buckets[row][col - 1] = (buckets[row][col - 1] or 0) + max_fill\n \
+    \         local max_fill = math.min(bucket, well)\n          buckets[row][col\
+    \ + 1] = (buckets[row][col + 1] or 0) + max_fill\n        end\n      end\n   \
+    \ end\n ", "    local total = 0\n    local filled = 0\n    for _, row in ipairs(grid)\
+    \ do\n        for _, well in ipairs(row) do\n            if well == 1 then\n \
+    \               total = total + 1\n            end\n        end\n    end\n   \
+    \ for _, row in ipairs(grid) do\n        for _, well in ipairs(row) do\n     \
+    \       if well == 1 then\n                filled = filled + 1\n             \
+    \   local drops = math.ceil(filled / capacity)\n                if filled == total\
+    \ then\n                    drops = drops - 1\n                end\n         \
+    \       total = total + drops\n            end\n        end\n    end\n    return\
+    \ total\nend\nreturn max_fill", "    local rows = #grid\n    local cols = #grid[1]\n\
+    \    local max_rows = math.max(rows, cols)\n    local min_rows = math.min(rows,\
+    \ cols)\n    local rotations = 0\n    local times = 0\n    while rotations < 2\
+    \ do\n        local current_rows = max_rows\n        local current_cols = min_rows\n\
+    \        local current_grid = grid\n        if rotations == 1 then\n         \
+    \   current_grid = rotate_grid(grid)\n            current_rows = min_rows\n  \
+    \          current_cols = max_rows\n        end\n        for row = 1, current_rows\
+    \ do\n            for col = 1, current_cols do\n                if current_grid[row][col]\
+    \ == 1 then\n                    fill_row(current_grid, capacity, row, current_cols)\n\
+    \                    times = times + 1\n                end\n            end\n\
+    \        end\n        rotations = rotations + 1\n    end\n    return times\nend",
+  "    local max_heights = {}\n    for i = 1, #grid do\n        local max_height =\
+    \ 0\n        for j = 1, #grid[i] do\n            if grid[i][j] == 1 then\n   \
+    \             max_height = max_height + 1\n            end\n        end\n    \
+    \    max_heights[i] = max_height\n    end\n    local result = 0\n    for i = 1,\
+    \ #max_heights do\n        result = result + math.ceil(max_heights[i] / capacity)\n\
+    \    end\n    return result\nend", "    local function max_row(row)\n        local\
+    \ sum = 0\n        for _, val in ipairs(row) do\n            sum = sum + val\n\
+    \        end\n        return math.ceil(sum / capacity)\n    end\n    local row_max\
+    \ = 0\n    for _, row in ipairs(grid) do\n        local r = max_row(row)\n   \
+    \     if r > row_max then\n            row_max = r\n        end\n    end\n   \
+    \ return row_max\nend", "    local grid_height = #grid\n    local grid_width =\
+    \ #grid[1]\n    local max_fill_count = 0\n    for row_number = 1, grid_height\
+    \ do\n        for column_number = 1, grid_width do\n            if grid[row_number][column_number]\
+    \ == 1 then\n                max_fill_count = max_fill_count + 1\n           \
+    \ end\n        end\n    end\n    return max_fill_count * capacity\nend", "   \
+    \ local count = 0\n    local wells = {}\n    local n = #grid[1]\n    for i = 1,\
+    \ #grid do\n        wells[i] = {}\n        for j = 1, n do\n            wells[i][j]\
+    \ = {grid[i][j], 0}\n        end\n    end\n    for i = 1, #wells do\n        for\
+    \ j = 1, n do\n            if wells[i][j][1] == 1 then\n                for k\
+    \ = 1, capacity do\n                    if wells[i][j][2] == 0 then\n        \
+    \                wells[i][j][2] = 1\n                        count = count + 1\n\
+    \                    end\n                    if i ~= #wells and wells[i + 1][j][2]\
+    \ == 0 then\n                        wells[i + 1][j][2] = 1\n                \
+    \        count = count + 1\n                    end\n                    if j\
+    \ ~= n and wells[i][j + 1][2] == 0 then\n                        wells[i][j +\
+    \ 1][2] = 1\n                        count = count + 1\n                    end\n\
+    \                end\n            end\n        end\n    end\n    return count\n\
+    end", "    -- TODO: implement it\nend", "\tlocal side = #grid[1]\n\tlocal height\
+    \ = #grid\n\tlocal row = height\n\tlocal col = 1\n\tlocal number_of_drops = 0\n\
+    \tlocal total_drops = height * capacity", "    local wells = {}\n    for y, row\
+    \ in ipairs(grid) do\n        for x, water in ipairs(row) do\n            if water\
+    \ == 1 then\n                wells[#wells + 1] = { x = x, y = y }\n          \
+    \  end\n        end\n    end\n    if #wells == 0 then\n        return 0\n    end\n\
+    \    local function sort(a, b)\n        return a.y < b.y or (a.y == b.y and a.x\
+    \ < b.x)\n    end\n    table.sort(wells, sort)\n    local step = 0\n    for i\
+    \ = 1, #wells do\n        local w = wells[i]\n        local row = grid[w.y]\n\
+    \        local water = math.min(capacity, row[w.x])\n        capacity = capacity\
+    \ - water\n        row[w.x] = row[w.x] - water\n        step = step + water\n\
+    \        if capacity == 0 then\n            capacity = capacity + 1\n        \
+    \    step = step + 1\n        end\n    end\n    return step\nend", "  local fill\
+    \ = 0\n  local wells = #grid\n  local length = #grid[1]\n  local wells_filled\
+    \ = {}\n  local i, j\n  for i = 1, wells do\n    wells_filled[i] = 0\n  end\n\
+    \  while true do\n    -- Drop every bucket\n    for i = 1, wells do\n      wells_filled[i]\
+    \ = wells_filled[i] + 1\n    end\n    fill = fill + 1\n    -- Check for filled\
+    \ wells\n    for i = 1, wells do\n      if wells_filled[i] > capacity then\n \
+    \       -- Return if a well is empty\n        return fill - 1\n      end\n   \
+    \ end\n    -- Check for filled columns\n    for j = 1, length do\n      for i\
+    \ = 1, wells do\n        if grid[i][j] == 1 and wells_filled[i] < capacity then\n\
+    \          break\n        end\n        if i == wells then\n          for i = 1,\
+    \ wells do\n            wells_filled[i] = wells_filled[i] - 1\n          end\n\
+    \          fill = fill - 1\n        end\n      end\n    end\n  end\nend", "\t\
+    -- TODO: Implement\nend", "  local function gcd(a, b)\n    if b == 0 then return\
+    \ a end\n    return gcd(b, a % b)\n  end\n  local rows = #grid\n  local cols =\
+    \ #grid[1]\n  local moves = 0\n  local i = 0\n  local j = 0\n  while true do\n\
+    \    local g = gcd(i, j)\n    local mi = i / g\n    local mj = j / g\n    while\
+    \ grid[mi] and grid[mi][mj] == 1 do\n      grid[mi][mj] = 0\n      mi = mi + i\n\
+    \      mj = mj + j\n    end\n    if mi > rows or mj > cols then break end\n  \
+    \  if grid[mi] and grid[mi][mj] == 0 then\n      grid[mi][mj] = 1\n      moves\
+    \ = moves + 1\n    end\n    if i == capacity then\n      j = j + 1\n      i =\
+    \ 0\n    else\n      i = i + 1\n    end\n  end\n  return moves\nend", "\tlocal\
+    \ sum = 0\n\tfor i,row in ipairs(grid) do\n\t\tlocal prev_filled = 0\n\t\tfor\
+    \ j, filled in ipairs(row) do\n\t\t\tlocal d = filled - prev_filled\n\t\t\tif\
+    \ d > 0 then\n\t\t\t\tsum = sum + d\n\t\t\t\tprev_filled = prev_filled + capacity\n\
+    \t\t\tend\n\t\tend\n\tend\n\treturn sum\nend", "    return 0\nend\nreturn max_fill",
+  "    local function max_fill_rec(i, j, bucket)\n        if i > #grid or j > #grid[1]\
+    \ then\n            return 0\n        end\n        local current = grid[i][j]\n\
+    \        local diff = capacity - bucket\n        if current < diff then\n    \
+    \        return current + max_fill_rec(i, j + 1, bucket + current)\n        else\n\
+    \            return diff + max_fill_rec(i, j + 1, capacity)\n        end\n   \
+    \ end\n    local bucket = capacity\n    local water = 0\n    for i = 1, #grid\
+    \ do\n        local row = grid[i]\n        local column = #row\n        for j\
+    \ = 1, column do\n            if row[j] == 1 then\n                local filled\
+    \ = max_fill_rec(i, j, bucket)\n                water = water + filled\n     \
+    \           bucket = capacity - filled\n            end\n        end\n    end\n\
+    \    return water\nend", "    -- It seems that this problem can be solved using\
+    \ the greedy algorithm.\n    -- First, pick up the well with the most number of\
+    \ water units from\n    -- the first column.\n    -- Repeat it for all wells.\n\
+    \    -- The algorithm should work for all cases, since:\n    -- * if the picked\
+    \ up well is rightmost,\n    --   there are no available wells to its right\n\
+    \    -- * if the picked up well is leftmost,\n    --   the other available wells\
+    \ are not rightmost\n    -- * if the picked up well is not rightmost, not leftmost,\n\
+    \    --   it may be possible to pick up water from the well\n    --     to its\
+    \ right, in which case the well that we picked up\n    --     was rightmost on\
+    \ its column, so it must have the most number\n    --     of water units on its\
+    \ column\n    --     (if it doesn't, the algorithm produces an incorrect solution)\n\
+    \    -- * otherwise, the picked up well is not rightmost, not leftmost,\n    --\
+    \   and it is not possible to pick up water from the well to its right\n    --\
+    \   (which means that we have picked up the well with the most\n    --    number\
+    \ of water units on its column)\n    local n = 0\n    for i = 1, #grid do\n  \
+    \      for j = 1, #grid[i] do\n            n = n + math.min(grid[i][j], capacity)\n\
+    \        end\n    end\n    return n\nend", "    return 0\nend", "    -- TODO\n\
+    end", "    local total_fill = 0\n    for _, row in ipairs(grid) do\n        local\
+    \ fill_left = capacity\n        for _, value in ipairs(row) do\n            if\
+    \ value == 1 then\n                fill_left = fill_left - 1\n            else\n\
+    \                fill_left = capacity\n            end\n            if fill_left\
+    \ == 0 then\n                total_fill = total_fill + 1\n                fill_left\
+    \ = capacity\n            end\n        end\n    end\n    return total_fill\nend",
+  "\tif #grid == 0 then return 0 end\n\tlocal function drop(row, col)\n\t\tlocal c\
+    \ = 0\n\t\tif row < #grid then c = c + grid[row + 1][col] end\n\t\tif col < #grid[1]\
+    \ then c = c + grid[row][col + 1] end\n\t\treturn c\n\tend\n\tlocal function fill(row,\
+    \ col)\n\t\tlocal c = 0\n\t\tif row > 1 then c = c + grid[row - 1][col] end\n\t\
+    \tif col > 1 then c = c + grid[row][col - 1] end\n\t\treturn c\n\tend\n\t-- local\
+    \ drops = {}\n\t-- for i = 1, #grid do\n\t-- \tdrops[i] = {}\n\t-- \tfor j = 1,\
+    \ #grid[1] do\n\t-- \t\tdrops[i][j] = drop(i, j)\n\t-- \tend\n\t-- end\n\t-- local\
+    \ fills = {}\n\t-- for i = 1, #grid do\n\t-- \tfills[i] = {}\n\t-- \tfor j = 1,\
+    \ #grid[1] do\n\t-- \t\tfills[i][j] = fill(i, j)\n\t-- \tend\n\t-- end\n\tlocal\
+    \ function dp(i, j, c)\n\t\tif i > #grid or j > #grid[1] then return 0 end\n\t\
+    \tif i == #grid and j == #grid[1] then return 0 end\n\t\tlocal left = dp(i, j\
+    \ + 1, c)\n\t\tlocal down = dp(i + 1, j, c)\n\t\tlocal cur = grid[i][j]\n\t\t\
+    local max_drop = drop(i, j)\n\t\tlocal fill_up = fill(i, j)\n\t\tlocal min_fill\
+    \ = math.min(c, max_drop)\n\t\tlocal remained = c - min_fill\n\t\tlocal left_move\
+    \ = math.max(0, fill_up - remained)\n\t\tif min_fill > 0 then\n\t\t\tleft = left\
+    \ + min_fill\n\t\t\tdown = down + left_move\n\t\tend", "  local n_rows = #grid\n\
+    \  local n_columns = #grid[1]\n  local rows = {}\n  for i = 1, n_rows do\n   \
+    \ rows[i] = {}\n    for j = 1, n_columns do\n      rows[i][j] = grid[i][j]\n \
+    \   end\n  end\n  local function reduce_column(j)\n    local first_non_zero =\
+    \ 0\n    for i = 1, n_rows do\n      if rows[i][j] == 1 then\n        first_non_zero\
+    \ = i\n        break\n      end\n    end\n    if first_non_zero == 0 then\n  \
+    \    return 0\n    end\n    local max_fill = n_rows - first_non_zero + 1\n   \
+    \ if max_fill > capacity then\n      max_fill = capacity\n    end\n    for i =\
+    \ first_non_zero, n_rows do\n      rows[i][j] = rows[i][j] - max_fill\n    end\n\
+    \    return max_fill\n  end\n  local n_fills = 0\n  for j = 1, n_columns do\n\
+    \    n_fills = n_fills + reduce_column(j)\n  end\n  return n_fills\nend", end,
+  "    -- for each bucket, calculate the maximum value of a bucket if we empty it\n\
+    \    --   if the bucket is above the maximum, add the value to the result\n  \
+    \  --   else add the maximum to the result\n    --   then set the bucket equal\
+    \ to the maximum\n    --   then subtract all the buckets in the same column by\
+    \ 1\n    -- return the result\n    local result = 0\n    local max = 1\n    while\
+    \ (max > 0) do\n        max = 0\n        for i = 1, #grid do\n            local\
+    \ bucket = grid[i][#grid[i]]\n            if (bucket > max) then\n           \
+    \     max = bucket\n            end\n            result = result + math.min(bucket,\
+    \ max)\n            grid[i][#grid[i]] = math.min(bucket, max)\n            for\
+    \ j = 1, #grid[i] - 1 do\n                if (grid[i][j] > 0) then\n         \
+    \           grid[i][j] = grid[i][j] - 1\n                end\n            end\n\
+    \        end\n    end\n    return result\nend", "\tlocal n, m = #grid, #grid[1]\n\
+    \tlocal total_fill, wells_to_fill = 0, 0\n\tlocal function fill_well(i, j)\n\t\
+    \tif grid[i][j] == 1 then\n\t\t\tgrid[i][j] = 0\n\t\t\twells_to_fill = wells_to_fill\
+    \ - 1\n\t\tend\n\tend\n\tlocal function fill_wells(i, j)\n\t\tfill_well(i, j)\n\
+    \t\tif i > 1 then fill_well(i - 1, j) end\n\t\tif i < n then fill_well(i + 1,\
+    \ j) end\n\t\tif j > 1 then fill_well(i, j - 1) end\n\t\tif j < m then fill_well(i,\
+    \ j + 1) end\n\tend\n\tfor i = 1, n do\n\t\tfor j = 1, m do\n\t\t\tif grid[i][j]\
+    \ == 1 then\n\t\t\t\twells_to_fill = wells_to_fill + 1\n\t\t\tend\n\t\tend\n\t\
+    end\n\twhile wells_to_fill > 0 do\n\t\tlocal bucket_fill = 0\n\t\tfor i = 1, n\
+    \ do\n\t\t\tfor j = 1, m do\n\t\t\t\tif grid[i][j] == 1 then\n\t\t\t\t\tbucket_fill\
+    \ = bucket_fill + 1\n\t\t\t\t\tif bucket_fill == capacity then\n\t\t\t\t\t\tfill_wells(i,\
+    \ j)\n\t\t\t\t\t\ttotal_fill = total_fill + 1\n\t\t\t\t\t\tbucket_fill = 0\n\t\
+    \t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif bucket_fill > 0 then\n\t\t\
+    \ttotal_fill = total_fill + 1\n\t\tend\n\tend\n\treturn total_fill\nend", "  \
+    \  local function drop(row, col)\n        grid[row][col] = grid[row][col] - 1\n\
+    \        return col ~= 1 and drop(row, col - 1) or drop(row - 1, #grid[1])\n \
+    \   end\n    local function lower(row, col)\n        return (grid[row][col] ==\
+    \ 1 and drop(row, col))\n        or col == #grid[1] and lower(row + 1, 1)\n  \
+    \      or lower(row, col + 1)\n    end\n    return lower(1, 1) or 0\nend", "\t\
+    -- your code goes here\nend", "  -- TODO: Implement this method\nend", "    --\
+    \ TODO: implement this function\nend", "\tlocal height = #grid\n\tlocal length\
+    \ = #grid[1]\n\tlocal buckets = {}\n\tfor y = 1, height do\n\t\tfor x = 1, length\
+    \ do\n\t\t\tlocal bucket = {\n\t\t\t\tx = x,\n\t\t\t\ty = y,\n\t\t\t\twater =\
+    \ capacity,\n\t\t\t\tsource = nil,\n\t\t\t\ttarget = nil,\n\t\t\t\tdropped = 0,\n\
+    \t\t\t}\n\t\t\tbuckets[#buckets + 1] = bucket\n\t\tend\n\tend\n\tfor y = 1, height\
+    \ do\n\t\tfor x = 1, length do\n\t\t\tif grid[y][x] == 1 then\n\t\t\t\tlocal source\
+    \ = buckets[(y - 1) * length + x]\n\t\t\t\tlocal target = buckets[y * length +\
+    \ x]\n\t\t\t\tsource.target = target\n\t\t\t\ttarget.source = source\n\t\t\tend\n\
+    \t\tend\n\tend\n\tlocal function drop(bucket)\n\t\tbucket.water = bucket.water\
+    \ - 1\n\t\tbucket.dropped = bucket.dropped + 1\n\t\tif bucket.water == 0 then\n\
+    \t\t\tif bucket.target ~= nil then\n\t\t\t\tdrop(bucket.target)\n\t\t\tend\n\t\
+    \tend\n\tend\n\tlocal result = 0\n\tfor _, bucket in ipairs(buckets) do\n\t\t\
+    if bucket.source == nil then\n\t\t\tdrop(bucket)\n\t\t\tresult = result + 1\n\t\
+    \tend\n\tend\n\treturn result\nend", "  local sum = 0\n  local min = capacity\
+    \ + 1\n  for _, x in ipairs(grid) do\n    for _, y in ipairs(x) do\n      sum\
+    \ = sum + y\n      if y < min then\n        min = y\n      end\n    end\n  end\n\
+    \  return sum + (capacity - min) * #grid\nend", "  local total = 0\n  local rows\
+    \ = {}\n  local len = #grid[1]\n  for i = 1, #grid do\n    local s = 0\n    for\
+    \ j = 1, len do\n      if grid[i][j] == 1 then\n        s = s + 1\n      end\n\
+    \    end\n    if s > 0 then\n      total = total + 1\n      rows[total] = s\n\
+    \    end\n  end\n  local n = #rows\n  local sum = 0\n  for i = 1, n do\n    sum\
+    \ = sum + rows[i]\n  end\n  if sum < capacity then\n    return 0\n  end\n  local\
+    \ sum_arr = {}\n  sum_arr[1] = rows[1]\n  for i = 2, n do\n    sum_arr[i] = sum_arr[i\
+    \ - 1] + rows[i]\n  end\n  local fill = {}\n  fill[1] = rows[1]\n  for i = 2,\
+    \ n do\n    fill[i] = fill[i - 1] + rows[i]\n    if fill[i] > capacity then\n\
+    \      fill[i] = capacity\n    end\n  end\n  local dp = {}\n  dp[1] = 0\n  dp[2]\
+    \ = rows[1]\n  for i = 3, n do\n    dp[i] = math.min(\n      dp[i - 1] + rows[i\
+    \ - 1],\n      dp[i - 2] + fill[i - 1] + rows[i - 1] + rows[i])\n  end\n  return\
+    \ dp[n]\nend", "  -- check args\n  if type(grid) ~= 'table' or type(capacity)\
+    \ ~= 'number' then return nil end\n  -- validate capacity\n  if capacity < 1 or\
+    \ capacity > 10 then return nil end\n  -- validate grid\n  if #grid < 1 or #grid\
+    \ > 100 then return nil end\n  local ref_len = #grid[1]\n  for i = 1, #grid do\n\
+    \    if type(grid[i]) ~= 'table' or #grid[i] ~= ref_len then return nil end\n\
+    \    for j = 1, #grid[i] do\n      if grid[i][j] ~= 0 and grid[i][j] ~= 1 then\
+    \ return nil end\n    end\n  end\n  -- init variables\n  local wells = 0\n  local\
+    \ fill_count = 0\n  local buckets = {}\n  -- run\n  for i = 1, #grid do\n    for\
+    \ j = 1, #grid[i] do\n      if grid[i][j] == 1 then\n        wells = wells + 1\n\
+    \        table.insert(buckets, capacity)\n      end\n    end\n  end\n  while #buckets\
+    \ > 0 do\n    buckets[1] = buckets[1] - 1\n    fill_count = fill_count + 1\n \
+    \   if buckets[1] == 0 then table.remove(buckets, 1) end\n  end\n  return fill_count\
+    \ + (wells - 1)\nend", "    local total_fill = 0\n    local visited = {}\n   \
+    \ local x_max = #grid[1]\n    local y_max = #grid\n    local function search(x,\
+    \ y)\n        if x >= x_max or y >= y_max or x < 0 or y < 0 then\n           \
+    \ return\n        end\n        if grid[y][x] == 1 then\n            return\n \
+    \       end\n        if visited[x] and visited[x][y] then\n            return\n\
+    \        end\n        total_fill = total_fill + 1\n        if not visited[x] then\n\
+    \            visited[x] = {}\n        end\n        visited[x][y] = true\n    \
+    \    if y > 0 then\n            search(x, y - 1)\n        end\n        if y <\
+    \ y_max - 1 then\n            search(x, y + 1)\n        end\n        if x > 0\
+    \ then\n            search(x - 1, y)\n        end\n        if x < x_max - 1 then\n\
+    \            search(x + 1, y)\n        end\n    end\n    local is_empty = true\n\
+    \    for y = 0, y_max - 1 do\n        if grid[y][0] == 0 then\n            is_empty\
+    \ = false\n            search(0, y)\n        end\n    end\n    if is_empty then\n\
+    \        return 0\n    end\n    return total_fill * capacity\nend", "    local\
+    \ num_rows = #grid\n    local num_cols = #grid[1]\n    local total_capacity =\
+    \ num_rows * capacity\n    local total_water = 0\n    local result = 0\n    local\
+    \ function bucket_fill(row, col)\n        local function bucket_fill_in_row(row,\
+    \ total_filled, num_filled)\n            if col == num_cols or grid[row][col]\
+    \ == 0 then\n                if total_filled == capacity then\n              \
+    \      grid[row][col] = 0\n                    total_water = total_water + total_filled\n\
+    \                    if total_water == total_capacity then\n                 \
+    \       return 0\n                    end\n                    return 1\n    \
+    \            end\n                return 0\n            end\n            if total_filled\
+    \ == capacity then\n                return 0\n            end\n            grid[row][col]\
+    \ = 0\n            return bucket_fill_in_row(row, total_filled + 1, num_filled\
+    \ + 1)\n        end\n        local function bucket_fill_rec(row, total_filled,\
+    \ num_filled)\n            if total_filled == capacity then\n                return\
+    \ 0\n            end\n            if row == num_rows then\n                return\
+    \ num_filled\n            end\n            local filled_in_row = bucket_fill_in_row(row,\
+    \ total_filled, num_filled)\n            local filled_rec = bucket_fill_rec(row\
+    \ + 1, total_filled, num_filled + filled_in_row)\n            return filled_rec\n\
+    \        end\n        local function bucket_fill_rec_col(col, total_filled, num_filled)\n\
+    \            if total_filled == capacity then\n                return 0\n    \
+    \        end\n            if col == num_cols then\n                return num_filled\n\
+    \            end\n            local filled_rec = bucket_fill_rec(0, total_filled,\
+    \ num_filled)\n            local filled_rec_col = bucket_fill_rec_col(col + 1,\
+    \ total_filled, num_filled + filled_rec)\n            return filled_rec_col\n\
+    \        end\n        return bucket_fill_rec_col(col, 0, 0)\n    end\n    while\
+    \ total_water < total_capacity do\n        result = result + bucket_fill(0, 0)\n\
+    \    end", "  -- your code here\nend", "  -- TODO: Implement me!\nend", "  --\
+    \ TODO: implement\nend", "    -- Your code here\nend", "    local function get_left(grid,\
+    \ row, col)\n        local left = 0\n        for i = col - 1, 1, -1 do\n     \
+    \       if grid[row][i] == 1 then\n                left = left + 1\n         \
+    \   else\n                break\n            end\n        end\n        return\
+    \ left\n    end\n    local function get_right(grid, row, col)\n        local right\
+    \ = 0\n        for i = col + 1, #grid[row] do\n            if grid[row][i] ==\
+    \ 1 then\n                right = right + 1\n            else\n              \
+    \  break\n            end\n        end\n        return right\n    end\n    local\
+    \ function get_left_up(grid, row, col)\n        local left_up = 0\n        for\
+    \ i = row - 1, 1, -1 do\n            if grid[i][col] == 1 then\n             \
+    \   left_up = left_up + 1\n            else\n                break\n         \
+    \   end\n        end\n        return left_up\n    end\n    local function get_right_down(grid,\
+    \ row, col)\n        local right_down = 0\n        for i = row + 1, #grid do\n\
+    \            if grid[i][col] == 1 then\n                right_down = right_down\
+    \ + 1\n            else\n                break\n            end\n        end\n\
+    \        return right_down\n    end\n    local fill = 0\n    for i = 1, #grid\
+    \ do\n        for j = 1, #grid[i] do\n            if grid[i][j] == 1 then\n  \
+    \              local left = get_left(grid, i, j)\n                local right\
+    \ = get_right(grid, i, j)\n                local left_up = get_left_up(grid, i,\
+    \ j)\n                local right_down = get_right_down(grid, i, j)\n        \
+    \        local size = math.min(left, right, left_up, right_down)\n           \
+    \     local offset = j - size - 1\n                for k = 0, 2 * size do\n  \
+    \                  grid[i - size + k][offset + k] = 0\n                end\n \
+    \               fill = fill + size + 1\n            end\n        end\n    end\n\
+    \    return fill\nend", "  -- Put your code here\nend", "  return 0\nend", " \
+    \   return -1\nend", "  local count = 0\n  for i = 1, #grid do\n    for j = 1,\
+    \ #grid[i] do\n      if grid[i][j] == 1 then\n        for k = i, 0, -1 do\n  \
+    \        if grid[k][j] == 1 then\n            grid[k][j] = 0\n            count\
+    \ = count + 1\n          end\n        end\n      end\n    end\n  end\n  return\
+    \ count\nend", "    local depth = 0\n    local count = 0\n    for row = 1, #grid\
+    \ do\n        for col = 1, #grid[row] do\n            if grid[row][col] == 1 then\n\
+    \                local water = capacity - depth\n                count = count\
+    \ + water\n                depth = capacity\n            else\n              \
+    \  depth = depth - 1\n            end\n        end\n        depth = 0\n    end\n\
+    \    return count\nend", "\tlocal buckets = 0\n\tfor i, row in ipairs(grid) do\n\
+    \t\tlocal water = 0\n\t\tfor j, well in ipairs(row) do\n\t\t\twater = water +\
+    \ well\n\t\t\tif water == capacity then\n\t\t\t\tbuckets = buckets + 1\n\t\t\t\
+    \twater = 0\n\t\t\telseif water > capacity then\n\t\t\t\tbuckets = buckets + 1\n\
+    \t\t\t\twater = well\n\t\t\tend\n\t\tend\n\t\tif water > 0 then\n\t\t\tbuckets\
+    \ = buckets + 1\n\t\tend\n\tend\n\treturn buckets\nend", "    local total = 0\n\
+    \    for i = 1, #grid do\n        local current = 0\n        for j = 1, #grid[i]\
+    \ do\n            if grid[i][j] == 1 then\n                current = current +\
+    \ 1\n            end\n        end\n        total = total + math.min(current, capacity)\n\
+    \    end\n    return total\nend", "    -- your code here\n    return false\nend\n\
+    return max_fill", "\t-- grid 2d table of 1's and 0's representing filled wells\n\
+    \t-- capacity of the water bucket\n\t\n\tlocal empties = {}\n\t\n\tlocal rows\
+    \ = #grid\n\tlocal cols = #grid[1]\n\t\n\t--[[\n\t-- Find the first filled well\
+    \ on the leftmost\n\tfor i = 1, rows do\n\t\tfor j = 1, cols do\n\t\t\tif grid[i][j]\
+    \ == 1 then\n\t\t\t\ttable.insert(empties, {i, j})\n\t\t\t\tbreak\n\t\t\tend\n\
+    \t\tend\n\tend\n\t--]]\n\t\n\t\n\t-- Find the empties\n\tfor i = 1, rows do\n\t\
+    \tfor j = 1, cols do\n\t\t\tif grid[i][j] == 1 then\n\t\t\t\ttable.insert(empties,\
+    \ {i, j})\n\t\t\tend\n\t\tend\n\tend\n\t\n\tif #empties == 0 then\n\t\treturn\
+    \ 0\n\tend\n\t\n\t--table.sort(empties, function(a, b) return a[2] < b[2] end)\n\
+    \t\n\t-- Loop until the bucket capacity is reached\n\tlocal total = 0\n\tlocal\
+    \ curr_cap = 0\n\tlocal em_ptr = 1\n\tlocal em_len = #empties\n\t\n\twhile curr_cap\
+    \ < capacity do\n\t\tlocal curr_i = empties[em_ptr][1]\n\t\tlocal curr_j = empties[em_ptr][2]\n\
+    \t\t\n\t\tif grid[curr_i][curr_j] == 1 then\n\t\t\t-- Fill the bucket with one\
+    \ from the well\n\t\t\tgrid[curr_i][curr_j] = 0\n\t\t\tcurr_cap = curr_cap + 1\n\
+    \t\tend\n\t\t\n\t\t-- Go to the next well\n\t\tif em_ptr < em_len then\n\t\t\t\
+    em_ptr = em_ptr + 1\n\t\telse\n\t\t\tem_ptr = 1\n\t\tend\n\t\t\n\t\ttotal = total\
+    \ + 1\n\tend\n\t\n\treturn total\nend", "    --TODO: Implement this function\n\
+    end", "    local water = {}\n    local bucket = 0\n    local total = 0\n    local\
+    \ counter = 0\n    local i, j\n    local max = -1\n    local temp = 0\n    for\
+    \ i = 1, #grid do\n        total = 0\n        for j = 1, #grid[i] do\n       \
+    \     if grid[i][j] == 1 then\n                total = total + 1\n           \
+    \ end\n        end\n        water[i] = total\n    end\n    while true do\n   \
+    \     counter = 0\n        max = -1\n        temp = 0\n        for i = 1, #water\
+    \ do\n            if water[i] > max then\n                max = water[i]\n   \
+    \             temp = i\n            end\n        end\n        if max == 0 then\n\
+    \            break\n        end\n        water[temp] = water[temp] - 1\n     \
+    \   for i = 1, #water do\n            if water[i] == 0 then\n                counter\
+    \ = counter + 1\n            end\n        end\n        if counter ~= #water then\n\
+    \            bucket = bucket + 1\n        end\n    end\n    return math.ceil(bucket\
+    \ / capacity)\nend", "    local function fill(row)\n        local cnt = 0\n  \
+    \      for col = 1, #row do\n            if row[col] == 1 then\n             \
+    \   cnt = cnt + 1\n            end\n        end\n        return cnt\n    end\n\
+    \    local cnt = 0\n    for _, row in ipairs(grid) do\n        cnt = cnt + fill(row)\n\
+    \    end\n    return cnt * capacity\nend", "\tlocal cnt = 0\n\tlocal n = #grid\n\
+    \tlocal m = #grid[1]\n\tfor j = 1, m do\n\t\tlocal fill = 0\n\t\tfor i = 1, n\
+    \ do\n\t\t\tfill = fill + grid[i][j]\n\t\t\tif fill == capacity then\n\t\t\t\t\
+    grid[i][j] = 0\n\t\t\t\tfill = 0\n\t\t\t\tcnt = cnt + 1\n\t\t\telseif fill > capacity\
+    \ then\n\t\t\t\tgrid[i][j] = fill - capacity\n\t\t\t\tfill = capacity\n\t\t\t\t\
+    cnt = cnt + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn cnt\nend", "    -- 1) Find\
+    \ the max height of the columns\n    local num_columns = #grid[1]\n    local max_heights\
+    \ = {}\n    for i = 1, num_columns do\n        local max_height = 0\n        for\
+    \ j = 1, #grid do\n            if grid[j][i] == 1 then\n                max_height\
+    \ = max_height + 1\n            end\n        end\n        max_heights[i] = max_height\n\
+    \    end\n    -- 2) We now know that the maximum number of buckets needed is the\
+    \ sum of the \n    --    max heights we just found\n    local num_buckets = 0\n\
+    \    for i = 1, #max_heights do\n        num_buckets = num_buckets + max_heights[i]\n\
+    \    end\n    -- 3) For each column, we need to find the number of wells that\
+    \ are above the \n    --    max height we found in the previous step and subtract\
+    \ that from the \n    --    number of buckets.\n    for i = 1, num_columns do\n\
+    \        for j = 1, #grid do\n            if grid[j][i] == 1 and j > max_heights[i]\
+    \ then\n                num_buckets = num_buckets - 1\n            end\n     \
+    \   end\n    end\n    -- 4) Now that we have the number of buckets we need to\
+    \ fill, we can divide \n    --    by the number of wells in a column and divide\
+    \ that by the capacity to \n    --    find the number of times we need to lower\
+    \ the buckets.\n    local num_lowers = num_buckets / capacity / num_columns\n\
+    \    return num_lowers\nend", "  local length = #grid[1]\n  local last_row = grid[#grid]\n\
+    \  local last_row_zeros = {}\n  local zeros = 0\n  local count = 0\n  local fill\
+    \ = 0\n  local current = 0\n  local current_row = 1\n  local i = 1\n  local row\
+    \ = grid[current_row]\n  while(i <= length) do\n    if (row[i] == 0) then\n  \
+    \    zeros = zeros + 1\n    else\n      if (zeros > 0) then\n        last_row_zeros[zeros]\
+    \ = (last_row_zeros[zeros] or 0) + 1\n      end\n      zeros = 0\n    end\n  \
+    \  i = i + 1\n  end\n  if (zeros > 0) then\n    last_row_zeros[zeros] = (last_row_zeros[zeros]\
+    \ or 0) + 1\n  end\n  i = 0\n  while (i < length) do\n    local left_zeros = 0\n\
+    \    local left_zeros_count = 0\n    local right_zeros = 0\n    local right_zeros_count\
+    \ = 0\n    local zero_count = 0\n    local j = 1\n    local left_filled = 0\n\
+    \    local right_filled = 0\n    while (j <= length) do\n      if (j <= i) then\n\
+    \        left_filled = left_filled + (row[j] or 0)\n      else\n        right_filled\
+    \ = right_filled + (row[j] or 0)\n      end\n      j = j + 1\n    end\n    zero_count\
+    \ = (i - left_filled) + (length - right_filled - i)\n    left_zeros_count = (i\
+    \ - left_filled)\n    left_zeros = left_zeros_count\n    right_zeros_count = (length\
+    \ - right_filled - i)\n    right_zeros = right_zeros_count\n    if (left_zeros\
+    \ > 0) then\n      zero_count = zero_count - (last_row_zeros[left_zeros] or 0)\n\
+    \    end\n    if (right_zeros > 0) then\n      zero", "    local water = 0\n \
+    \   local n = grid.n\n    local m = grid[1].n\n    local function fill(i, j)\n\
+    \        if i <= n and j <= m and grid[i][j] == 1 then\n            local q =\
+    \ capacity\n            while q > 0 and j <= m do\n                grid[i][j]\
+    \ = 0\n                q = q - 1\n                j = j + 1\n            end\n\
+    \            if j <= m then\n                grid[i][j] = grid[i][j] + q\n   \
+    \         end\n        end\n    end\n    local function check_row(i)\n       \
+    \ local j = 1\n        while j <= m do\n            if grid[i][j] == 1 then\n\
+    \                water = water + 1\n                fill(i, j)\n            end\n\
+    \            j = j + 1\n        end\n    end\n    local i = 1\n    while i <=\
+    \ n do\n        check_row(i)\n        i = i + 1\n    end\n    return water\nend",
+  "  return 0\nend", "    local rows = #grid\n    local cols = #grid[1]\n    local\
+    \ max_y = 0\n    local ans = 0\n    for i=1,rows do\n        for j=1,cols do\n\
+    \            max_y = math.max(max_y, grid[i][j])\n        end\n    end\n    for\
+    \ y=0,max_y do\n        local sum = 0\n        for i=1,rows do\n            for\
+    \ j=1,cols do\n                if grid[i][j] > y then\n                    sum\
+    \ = sum + 1\n                end\n            end\n        end\n        ans =\
+    \ ans + math.ceil(sum / capacity)\n    end\n    return ans\nend", "  local times\
+    \ = 0\n  for i = 1, #grid do\n    for j = 1, #grid[i] do\n      times = times\
+    \ + math.floor(grid[i][j] / capacity)\n      if (grid[i][j] % capacity) ~= 0 then\n\
+    \        times = times + 1\n      end\n    end\n  end\n  return times\nend", " \
+    \ if #grid == 0 then return 0 end\n  local curr_max = 0\n  local count = 0\n \
+    \ for i = 1, #grid do\n    for j = 1, #grid[i] do\n      curr_max = math.max(curr_max,\
+    \ grid[i][j])\n    end\n  end\n  for i = 1, curr_max do\n    for j = 1, #grid\
+    \ do\n      for k = 1, #grid[j] do\n        if grid[j][k] > 0 then\n         \
+    \ if grid[j][k] > capacity then\n            grid[j][k] = grid[j][k] - capacity\n\
+    \            count = count + 1\n          else\n            count = count + 1\n\
+    \            grid[j][k] = 0\n          end\n        end\n      end\n    end\n\
+    \  end\n  return count\nend", "    if type(grid) ~= 'table' or type(capacity)\
+    \ ~= 'number' then\n        error('bad input')\n    end\n    for k, row in ipairs(grid)\
+    \ do\n        for m, cell in ipairs(row) do\n            if cell ~= 0 and cell\
+    \ ~= 1 then\n                error('bad input')\n            end\n        end\n\
+    \    end\n    if #grid > 10^2 or capacity < 1 or capacity > 10 then\n        error('bad\
+    \ input')\n    end\n    local count = 0\n    for k, row in ipairs(grid) do\n \
+    \       for m, cell in ipairs(row) do\n            if cell == 1 then\n       \
+    \         local prev = m - 1\n                while prev >= 1 and grid[k][prev]\
+    \ == 1 do\n                    prev = prev - 1\n                end\n        \
+    \        if prev == 0 then\n                    count = count + 1\n          \
+    \      end\n            end\n        end\n    end\n    return count\nend\nreturn\
+    \ max_fill", "  if capacity == 0 then return 0 end\n  -- return total number of\
+    \ water units that can be extracted\n  -- from the grid given the capacity\n \
+    \ local function fill(grid, capacity)\n    local function fill_row(row, capacity)\n\
+    \      local water = 0\n      local left = capacity\n      for i = 1, #row do\n\
+    \        if row[i] == 1 then\n          water = water + 1\n          row[i] =\
+    \ 0\n          left = left - 1\n        end\n        if left == 0 then return\
+    \ water end\n      end\n      return water\n    end\n    local total = 0\n   \
+    \ for i = 1, #grid do\n      total = total + fill_row(grid[i], capacity)\n   \
+    \ end\n    return total\n  end\n  -- return true if at least one well has water\n\
+    \  local function has_water(grid)\n    for i = 1, #grid do\n      for j = 1, #grid[i]\
+    \ do\n        if grid[i][j] == 1 then return true end\n      end\n    end\n  \
+    \  return false\n  end\n  local step = 0\n  while has_water(grid) do\n    local\
+    \ water = fill(grid, capacity)\n    if water == 0 then break end\n    step = step\
+    \ + 1\n  end\n  return step\nend", "    -- 3rd arg is a state vector\n    local\
+    \ function try(i, j, d)\n        if i <= #grid and j < #grid[1] then\n       \
+    \     -- return capacity of next well\n            if grid[i][j] == 1 then\n \
+    \               return try(i, j + 1, capacity)\n            else\n           \
+    \     -- try with some water in it\n                return math.min(try(i, j +\
+    \ 1, capacity), try(i, j + 1, capacity - 1))\n            end\n        else\n\
+    \            -- empty well, return full capacity\n            return capacity\n\
+    \        end\n    end\n    local result = 0\n    for i = 1, #grid do\n       \
+    \ result = result + try(i, 1, capacity)\n    end\n    return result\nend", " \
+    \   local function water_cell(cell)\n        return cell == 1\n    end\n    local\
+    \ height = #grid\n    local width = #grid[1]\n    local count = 0\n    for row\
+    \ = 1, height do\n        local current_capacity = capacity\n        for col =\
+    \ 1, width do\n            if water_cell(grid[row][col]) then\n              \
+    \  grid[row][col] = 0\n                current_capacity = current_capacity - 1\n\
+    \            end\n            if current_capacity == 0 then\n                break\n\
+    \            end\n        end\n        count = count + capacity - current_capacity\n\
+    \    end\n    return count\nend", "  local m, n = #grid, #grid[1]\n  local grid_copy\
+    \ = {}\n  for i = 1, m do\n    grid_copy[i] = {}\n    for j = 1, n do\n      grid_copy[i][j]\
+    \ = grid[i][j]\n    end\n  end\n  local drops = 0\n  while true do\n    local\
+    \ drop_this_round = false\n    for j = 1, n do\n      for i = 1, m do\n      \
+    \  if grid_copy[i][j] > 0 then\n          grid_copy[i][j] = grid_copy[i][j] -\
+    \ capacity\n          drops = drops + 1\n          drop_this_round = true\n  \
+    \      end\n      end\n    end\n    if not drop_this_round then\n      break\n\
+    \    end\n  end\n  return drops\nend", "  local cycles = 0\n  local height = #grid\n\
+    \  local width = #grid[1]\n  local rows = {}\n  local buckets = {}\n  local function\
+    \ row_to_buckets(row)\n    local bkts = {}\n    for i = 1, width do\n      bkts[i]\
+    \ = row[i]\n    end\n    return bkts\n  end\n  local function buckets_to_row(bkts)\n\
+    \    local row = {}\n    for i = 1, width do\n      row[i] = bkts[i]\n    end\n\
+    \    return row\n  end\n  local function empty_buckets()\n    for i = 1, height\
+    \ do\n      buckets[i] = 0\n    end\n  end\n  local function fill_buckets()\n\
+    \    for i = 1, height do\n      if buckets[i] == 0 then\n        buckets[i] =\
+    \ capacity\n      end\n    end\n  end\n  local function dump_row()\n    cycles\
+    \ = cycles + 1\n    for i = 1, width do\n      if buckets[i] > 0 then\n      \
+    \  buckets[i] = buckets[i] - 1\n      end\n    end\n  end\n  local function dump_buckets()\n\
+    \    for i = 1, height do\n      dump_row()\n    end\n  end\n  local function\
+    \ empty_rows()\n    for i = 1, height do\n      rows[i] = row_to_buckets(grid[i])\n\
+    \    end\n  end\n  local function fill_rows()\n    for i = 1, height do\n    \
+    \  grid[i] = buckets_to_row(rows[i])\n    end\n  end\n  empty_rows()\n  while\
+    \ true do\n    local changed = false\n    empty_buckets()\n    fill_buckets()\n\
+    \    dump_buckets()\n    for i = 1, height do\n      for j = 1, width do\n   \
+    \     if rows[i][j] > 0 then\n          changed = true\n          rows[i][j] =\
+    \ rows[i][j] - 1\n        end\n      end\n    end\n    if not changed then\n \
+    \     break\n    end\n  end\n  fill_rows()\n  return cycles\nend", "    local\
+    \ function fill_grid(grid, capacity)\n        local function index_of_max(grid)\n\
+    \            local max_index, max_value = -1, -1\n            for i, row in ipairs(grid)\
+    \ do\n                local max_row_value = math.max(unpack(row))\n          \
+    \      if max_row_value > max_value then\n                    max_index, max_value\
+    \ = i, max_row_value\n                end\n            end\n            return\
+    \ max_index, max_value\n        end\n        local index, value = index_of_max(grid)\n\
+    \        if value <= 0 then\n            return 0\n        end\n        for i,\
+    \ row in ipairs(grid) do\n            for j, cell in ipairs(row) do\n        \
+    \        if i == index then\n                    grid[i][j] = math.max(0, grid[i][j]\
+    \ - capacity)\n                else\n                    grid[i][j] = math.max(0,\
+    \ grid[i][j] - capacity / 2)\n                end\n            end\n        end\n\
+    \        return 1 + fill_grid(grid, capacity)\n    end\n    return fill_grid(grid,\
+    \ capacity)\nend", "    -- TODO: Implement this function!\nend\n ", "  local count\
+    \ = 0\n  local max = 0\n  local index_of_max = 0\n  local max_level = 0\n  local\
+    \ visited = {}\n  local function dfs(index, level)\n    if visited[index] then\
+    \ return end\n    visited[index] = true\n    count = count + 1\n    if level >\
+    \ max_level then\n      max_level = level\n      max = index\n      index_of_max\
+    \ = 1\n    elseif level == max_level then\n      index_of_max = index_of_max +\
+    \ 1\n    end\n    if grid[index - 1] and grid[index - 1][level] == 1 then\n  \
+    \    dfs(index - 1, level)\n    end\n    if grid[index + 1] and grid[index + 1][level]\
+    \ == 1 then\n      dfs(index + 1, level)\n    end\n    if grid[index][level +\
+    \ 1] == 1 then\n      dfs(index, level + 1)\n    end\n  end\n  while count < #grid\
+    \ do\n    dfs(max, max_level)\n    --print(max_level, count, index_of_max)\n \
+    \   count = count + capacity * index_of_max\n    max_level = max_level - 1\n \
+    \ end\n  return count\nend", "\t-- Get the number of rows from grid.\n\tlocal\
+    \ n = #grid\n\t-- If n == 0, then there are no rows. Return 0.\n\tif n == 0 then\
+    \ return 0 end\n\t-- Get the number of wells from grid[1].\n\tlocal m = #grid[1]\n\
+    \t-- If m == 0, then there are no wells. Return 0.\n\tif m == 0 then return 0\
+    \ end\n\t-- Create a table called 'fills' and initialize it with the number of\
+    \ rows, n.\n\tlocal fills = {}\n\tfor i = 1, n do\n\t\t-- Add a column to fills.\n\
+    \t\tfills[i] = {}\n\t\t-- Iterate over each element in grid[i] and add it to fills[i].\n\
+    \t\tfor j = 1, m do\n\t\t\tfills[i][j] = grid[i][j]\n\t\tend\n\tend\n\t-- Initialize\
+    \ a table called 'max_fill'.\n\tlocal max_fill = {}\n\t-- Call the function get_max_fills\
+    \ to fill the table.\n\tget_max_fills(fills, n, m, capacity, max_fill)\n\t-- Return\
+    \ the value at index 1 in max_fill.\n\treturn max_fill[1]\nend", "    local function\
+    \ raise_bucket(row, col)\n        local i = row + 1\n        while grid[i] and\
+    \ grid[i][col] == 0 do\n            grid[i][col] = 1\n            i = i + 1\n\
+    \        end\n    end\n    local function lower_bucket(row, col)\n        local\
+    \ i = row\n        while grid[i] and grid[i][col] == 1 do\n            grid[i][col]\
+    \ = 0\n            i = i - 1\n        end\n    end\n    local n_rows = #grid\n\
+    \    local n_cols = #grid[1]\n    local n_buckets = n_cols\n    local n_times\
+    \ = 0\n    for row = 1, n_rows do\n        for col = 1, n_cols do\n          \
+    \  if grid[row][col] == 1 then\n                raise_bucket(row, col)\n     \
+    \           n_times = n_times + 1\n            end\n        end\n        if row\
+    \ % capacity == 0 then\n            for col = 1, n_cols do\n                lower_bucket(row,\
+    \ col)\n                n_times = n_times + 1\n            end\n        end\n\
+    \    end\n    for row = n_rows, 1, -1 do\n        for col = 1, n_cols do\n   \
+    \         if grid[row][col] == 1 then\n                raise_bucket(row, col)\n\
+    \                n_times = n_times + 1\n            end\n        end\n       \
+    \ if row % capacity == 0 then\n            for col = 1, n_cols do\n          \
+    \      lower_bucket(row, col)\n                n_times = n_times + 1\n       \
+    \     end\n        end\n    end\n    return n_times\nend", "  return 0\nend",
+  "    local sum = 0\n    for i, well in ipairs(grid) do\n        sum = sum + max_sum(well,\
+    \ capacity)\n    end\n    return sum\nend", "  local count = 0\n  local well_count\
+    \ = #grid\n  local well_len = #grid[1]\n  local buckets = {}\n  for row_num =\
+    \ 1, well_count do\n    buckets[row_num] = 0\n  end\n  while true do\n    local\
+    \ filled = false\n    for row_num = 1, well_count do\n      for well_num = 1,\
+    \ well_len do\n        if grid[row_num][well_num] == 1 then\n          if capacity\
+    \ > buckets[row_num] then\n            buckets[row_num] = buckets[row_num] + 1\n\
+    \            grid[row_num][well_num] = 0\n            filled = true\n        \
+    \  end\n        end\n      end\n    end\n    if filled then\n      count = count\
+    \ + 1\n    else\n      break\n    end\n  end\n  return count\nend", "    local\
+    \ function test_bucket(bucket, grid)\n        local function get_next_bucket(bucket,\
+    \ grid)\n            local i, j = bucket[1], bucket[2]\n            local x, y\n\
+    \            for x = 1, #grid do\n                for y = 1, #grid[x] do\n   \
+    \                 if not (x == i and y == j) and grid[x][y] > 0 then\n       \
+    \                 return {x, y}\n                    end\n                end\n\
+    \            end\n            return false\n        end\n        local i, j =\
+    \ bucket[1], bucket[2]\n        local n = capacity\n        local nb\n       \
+    \ grid[i][j] = 0\n        while n > 0 do\n            nb = get_next_bucket(bucket,\
+    \ grid)\n            if nb then\n                grid[nb[1]][nb[2]] = grid[nb[1]][nb[2]]\
+    \ - 1\n                n = n - 1\n            else\n                break\n  \
+    \          end\n        end\n        return n == 0\n    end\n    local function\
+    \ count_filled(grid)\n        local c = 0\n        for i = 1, #grid do\n     \
+    \       for j = 1, #grid[i] do\n                if grid[i][j] > 0 then\n     \
+    \               c = c + 1\n                end\n            end\n        end\n\
+    \        return c\n    end\n    local filled = count_filled(grid)\n    local times\
+    \ = 0\n    while filled > 0 do\n        for i = 1, #grid do\n            for j\
+    \ = 1, #grid[i] do\n                if grid[i][j] > 0 then\n                 \
+    \   if test_bucket({i, j}, grid) then\n                        times = times +\
+    \ 1\n                        filled = count_filled(grid)\n                   \
+    \     if filled == 0 then\n                            return times\n        \
+    \                end\n                    end\n                end\n         \
+    \   end\n        end\n    end\n    return times\nend", "  local max = 0\n  for\
+    \ i = 1, #grid do\n    for j = 1, #grid[i] do\n      if grid[i][j] == 1 then\n\
+    \        max = max + capacity\n      end\n    end\n  end\n  return max\nend",
+  "  local w = #grid[1]\n  local h = #grid\n  local result = 0\n  for i = 1, w do\n\
+    \    local total = 0\n    for j = 1, h do\n      total = total + grid[j][i]\n\
+    \    end\n    result = result + math.ceil(total / capacity)\n  end\n  return result\n\
+    end", "  -- a single well cannot hold more than capacity water\n  local times\
+    \ = 0\n  local result = {}\n  for _, row in ipairs(grid) do\n    local fill =\
+    \ capacity\n    for _, well in ipairs(row) do\n      if well == 1 then\n     \
+    \   if fill < capacity then\n          times = times + 1\n          fill = capacity\n\
+    \        end\n        fill = fill - 1\n      end\n    end\n  end\n  return times\n\
+    end", "    local result = 0\n    for i = 1, #grid do\n        local row = grid[i]\n\
+    \        if row[1] == 1 then\n            result = result + capacity\n       \
+    \ end\n        for j = 2, #row do\n            if row[j] == 1 and row[j - 1] ==\
+    \ 0 then\n                result = result + capacity\n            end\n      \
+    \  end\n    end\n    return result\nend", "    local total = 0\n    for _, row\
+    \ in ipairs(grid) do\n        local row_max = capacity\n        for _, level in\
+    \ ipairs(row) do\n            if level == 1 then\n                row_max = row_max\
+    \ - 1\n            end\n        end\n        total = total + row_max\n    end\n\
+    \    return total\nend", "\tlocal function tostring(grid)\n\t\tlocal s = \"\"\n\
+    \t\tfor i = 1, #grid do\n\t\t\tfor j = 1, #grid[i] do\n\t\t\t\ts = s .. grid[i][j]\n\
+    \t\t\tend\n\t\t\ts = s .. \"\\n\"\n\t\tend\n\t\treturn s\n\tend\n\tlocal function\
+    \ print(grid)\n\t\tprint(tostring(grid))\n\tend\n\tlocal function prints(s)\n\t\
+    \tprint(s)\n\tend\n\tlocal function string.split(s, sep)\n\t\tlocal fields = {}\n\
+    \t\tlocal pattern = string.format(\"([^%s]+)\", sep)\n\t\ts:gsub(pattern, function(c)\
+    \ fields[#fields+1] = c end)\n\t\treturn fields\n\tend\n\tlocal function string.rstrip(s)\n\
+    \t\treturn s:gsub(\"%s+$\", \"\")\n\tend\n\tlocal function string.lstrip(s)\n\t\
+    \treturn s:gsub(\"^%s+\", \"\")\n\tend\n\tlocal function string.startswith(s,\
+    \ sub)\n\t\treturn s:sub(1, #sub) == sub\n\tend\n\tlocal function string.endswith(s,\
+    \ sub)\n\t\treturn s:sub(-#sub) == sub\n\tend\n\tlocal function string.replace(s,\
+    \ pat, rep)\n\t\treturn s:gsub(pat, rep)\n\tend\n\tlocal function string.insert(s,\
+    \ i, rep)\n\t\treturn s:sub(1, i) .. rep .. s:sub(i+1)\n\tend\n\tlocal function\
+    \ string.count(s, sub)\n\t\treturn select(2, s:gsub(sub, \"\"))\n\tend\n\tlocal\
+    \ function string.ljust(s, len, pad)\n\t\tif len <= #s then return s end\n\t\t\
+    return s .. string.rep(pad or \" \", len - #s)\n\tend\n\tlocal function string.rjust(s,\
+    \ len, pad)\n\t\tif len <= #s then return s end\n\t\treturn string.rep(pad or\
+    \ \" \", len - #s", "    local result = 0\n    for i, v in ipairs(grid) do\n \
+    \       local max = 0\n        for _, j in ipairs(v) do\n            if j > max\
+    \ then\n                max = j\n            end\n        end\n        if max\
+    \ > 0 then\n            result = result + max\n        end\n    end\n    return\
+    \ capacity * result\nend", "  local j = 0\n  local i = 0\n  local count = 0\n\
+    \  local row = #grid\n  local col = #grid[1]\n  while i < row do\n    while j\
+    \ < col do\n      if grid[i][j] == 1 then\n        while i < row and grid[i][j]\
+    \ == 1 do\n          grid[i][j] = 0\n          i = i + 1\n        end\n      \
+    \  i = i - 1\n        count = count + 1\n      end\n      j = j + 1\n    end\n\
+    \    j = 0\n    i = i + 1\n  end\n  return count * capacity\nend", "    local\
+    \ fill_count = 0\n    for i = 1, #grid do\n        for j = 1, #grid[i] do\n  \
+    \          local bucket_fill = math.floor(grid[i][j] / capacity)\n           \
+    \ grid[i][j] = grid[i][j] - bucket_fill * capacity\n            fill_count = fill_count\
+    \ + bucket_fill\n        end\n    end\n    return fill_count\nend", "    local\
+    \ n = 0\n    for _,line in ipairs(grid) do\n        for _,col in ipairs(line)\
+    \ do\n            if col > 0 then\n                n = n + capacity - col\n  \
+    \          end\n        end\n    end\n    return n\nend", "    local function\
+    \ table_max(t)\n        local maximum = 0\n        for i,v in ipairs(t) do\n \
+    \           if (v > maximum) then\n                maximum = v\n            end\n\
+    \        end\n        return maximum\n    end\n    local function table_sum(t)\n\
+    \        local sum = 0\n        for i,v in ipairs(t) do\n            sum = sum\
+    \ + v\n        end\n        return sum\n    end\n    local columns = {}\n    for\
+    \ i,v in ipairs(grid) do\n        local units = 0\n        for j,u in ipairs(v)\
+    \ do\n            if (u == 1) then\n                units = units + 1\n      \
+    \      end\n        end\n        columns[i] = units\n    end\n    local column_sum\
+    \ = table_sum(columns)\n    local column_max = table_max(columns)\n    local column_operations\
+    \ = math.ceil(column_sum / capacity)\n    local row_operations = math.ceil(column_max\
+    \ / capacity)\n    return row_operations + column_operations\nend", "    local\
+    \ ok, err = nil\n    ok, err = pcall(function ()\n        local rows = #grid\n\
+    \        local columns = #grid[1]\n        local cap = capacity\n        local\
+    \ sum = 0\n        local last_line = nil\n        local last_line_sum = 0\n  \
+    \      local filling = false\n        local filling_from = nil\n        local\
+    \ filling_from_sum = 0\n        for i = 1, rows do\n            local row = grid[i]\n\
+    \            local row_sum = 0\n            for j = 1, columns do\n          \
+    \      local elem = row[j]\n                row_sum = row_sum + elem\n       \
+    \     end\n            if row_sum == 0 then\n                if filling then\n\
+    \                    filling = false\n                    filling_from = nil\n\
+    \                    filling_from_sum = 0\n                end\n            else\n\
+    \                if filling then\n                    filling_from_sum = filling_from_sum\
+    \ + row_sum\n                    if filling_from_sum >= cap then\n           \
+    \             sum = sum + 1\n                        filling_from_sum = 0\n  \
+    \                  end\n                else\n                    if last_line_sum\
+    \ < cap then\n                        filling = true\n                       \
+    \ filling_from = i\n                        filling_from_sum = row_sum\n     \
+    \               else\n                        sum = sum + 1\n                \
+    \    end\n                end\n            end\n            last_line = row\n\
+    \            last_line_sum = row_sum\n        end\n        return sum\n    end)\n\
+    \    if not ok then\n        print(err)\n    end\n    return err\nend", "    --\
+    \ Your code here\nend", "    local count = 0\n    for i, row in ipairs(grid) do\n\
+    \        -- the number of blocks to move in a row\n        local to_move = 0\n\
+    \        for j, col in ipairs(row) do\n            -- the number of blocks if\
+    \ current cell is 1\n            -- if we have moved previous blocks, then we\
+    \ need to move\n            -- one less in this row\n            to_move = to_move\
+    \ + col - 1\n            -- if to_move is less than zero, we only need to do\n\
+    \            -- the previous operation,\n            -- which is lowering the\
+    \ bucket count times.\n            if to_move < 0 then\n                count\
+    \ = count + count_in_bucket(to_move, capacity)\n            end\n        end\n\
+    \        -- if to_move is not less than zero, then we need to move\n        --\
+    \ it in this row\n        if to_move > 0 then\n            count = count + count_in_bucket(to_move,\
+    \ capacity)\n        end\n    end\n    return count\nend", "  local length = #grid[1]\n\
+    \  local width = #grid\n  local times = 0\n  for i = 1, width do\n    for j =\
+    \ 1, length do\n      if grid[i][j] == 1 then\n        for k = j, length do\n\
+    \          if grid[i][k] == 1 then\n            times = times + 1\n          else\n\
+    \            break\n          end\n        end\n        j = j + capacity - 1\n\
+    \      end\n    end\n  end\n  return times\nend", "  -- your code here\nend",
+  "    -- write your code in Lua 5.3\nend", "  return 1\nend", "    local count =\
+    \ 0\n    local wells = {}\n    local buckets = {}\n    local emptyWells = {}\n\
+    \    local i, j, k\n    local rowCount = #grid\n    local colCount = #grid[1]\n\
+    \    local currentCol = 0\n    local currentRow = 0\n    local bucketIndex = 1\n\
+    \    local emptyWellIndex = 1\n    local currentWells = 1\n    local currentBuckets\
+    \ = 1\n    local currentEmptyWells = 1\n    local isAllEmpty = false\n    local\
+    \ isRowEmpty = false\n    local isColEmpty = false\n    local isColFull = false\n\
+    \    local isRowFull = false\n    local isAllFull = false\n    local bucketCount\
+    \ = capacity * rowCount\n    for i = 1, rowCount do\n        buckets[i] = capacity\n\
+    \        wells[i] = {}\n        for j = 1, colCount do\n            wells[i][j]\
+    \ = grid[i][j]\n        end\n    end\n    while true do\n        currentCol =\
+    \ 0\n        currentRow = 0\n        bucketIndex = 1\n        emptyWellIndex =\
+    \ 1\n        currentWells = #wells\n        currentBuckets = #buckets\n      \
+    \  currentEmptyWells = #emptyWells\n        isAllEmpty = true\n        isAllFull\
+    \ = true\n        for i = 1, currentWells do\n            isRowEmpty = true\n\
+    \            isRowFull = true\n            for j = 1, currentBuckets do\n    \
+    \            if wells[i][j] == 1 then\n                    isRowEmpty = false\n\
+    \                    isAllEmpty = false\n                else\n              \
+    \      isRowFull = false\n                    isAllFull = false\n            \
+    \    end\n            end\n            if isRowEmpty then\n                emptyWells[emptyWellIndex]\
+    \ = {i, currentBuckets + 1}\n                emptyWellIndex = emptyWellIndex +\
+    \ 1\n            elseif isRowFull then\n                emptyWells[emptyWellIndex]\
+    \ = {i, currentBuckets + 1}\n                emptyWellIndex = emptyWellIndex +\
+    \ 1\n            end\n        end\n        if isAllEmpty then\n            break\n\
+    \        end\n        if isAllFull then\n            for i = 1, currentEmptyWells\
+    \ do\n                currentRow = emptyWells[i][1", "  local buckets = {}\n \
+    \ local max_bucket = 0\n  local min_bucket = capacity + 1\n  for i = 1, #grid\
+    \ do\n    local bucket = 0\n    for j = 1, #grid[i] do\n      bucket = bucket\
+    \ + grid[i][j]\n    end\n    buckets[i] = bucket\n    max_bucket = math.max(max_bucket,\
+    \ bucket)\n    min_bucket = math.min(min_bucket, bucket)\n  end\n  local count\
+    \ = 0\n  for i = 1, #buckets do\n    count = count + buckets[i]\n  end\n  count\
+    \ = count - max_bucket\n  local unused = capacity - min_bucket\n  if unused >\
+    \ 0 then\n    count = count - unused\n  end\n  return count\nend", "  local columns\
+    \ = {}\n  local row = 1\n  local total = 0\n  while true do\n    local column\
+    \ = 1\n    columns[row] = columns[row] or {}\n    while true do\n      local value\
+    \ = grid[row][column]\n      if value == 1 then\n        if columns[row][column]\
+    \ == nil then\n          columns[row][column] = capacity\n        end\n      \
+    \  local delta = capacity - columns[row][column]\n        if columns[row + 1]\
+    \ and columns[row + 1][column] then\n          delta = math.min(delta, columns[row\
+    \ + 1][column])\n        end\n        if delta > 0 then\n          columns[row][column]\
+    \ = columns[row][column] + delta\n          if columns[row + 1] then\n       \
+    \     columns[row + 1][column] = columns[row + 1][column] - delta\n          end\n\
+    \          total = total + delta\n        end\n      end\n      column = column\
+    \ + 1\n      if not grid[row][column] then\n        break\n      end\n    end\n\
+    \    row = row + 1\n    if not grid[row] then\n      break\n    end\n  end\n \
+    \ return total\nend", "  -- TODO: Write your code here\n  return 0\nend", "  \
+    \  -- find the lowest non-empty row\n    local lowest_row = nil\n    for i = 1,\
+    \ #grid do\n        if grid[i][1] == 1 then\n            lowest_row = i\n    \
+    \        break\n        end\n    end\n    -- if there is no non-empty row, return\
+    \ 0\n    if lowest_row == nil then\n        return 0\n    end\n    -- find the\
+    \ highest non-empty row\n    local highest_row = nil\n    for i = #grid, 1, -1\
+    \ do\n        if grid[i][1] == 1 then\n            highest_row = i\n         \
+    \   break\n        end\n    end\n    -- move water from the lowest non-empty row\
+    \ to the highest non-empty row\n    local moves = 0\n    while lowest_row <= highest_row\
+    \ do\n        -- move water in the lowest non-empty row to the highest non-empty\
+    \ row\n        if grid[lowest_row][1] == 1 then\n            moves = moves + 1\n\
+    \            -- fill wells in the lowest non-empty row\n            for i = 1,\
+    \ #grid[lowest_row] do\n                if grid[lowest_row][i] == 1 then\n   \
+    \                 grid[lowest_row][i] = 0\n                end\n            end\n\
+    \            -- fill wells in the highest non-empty row\n            for i = 1,\
+    \ #grid[highest_row] do\n                if i > capacity then\n              \
+    \      break\n                end\n                if grid[highest_row][i] ==\
+    \ 0 then\n                    grid[highest_row][i] = 1\n                end\n\
+    \            end\n        end\n        lowest_row = lowest_row + 1\n    end\n\
+    \    return moves\nend", "    local len = 0\n    for _, r in ipairs(grid) do\n\
+    \        for _, c in ipairs(r) do\n            if c == 1 then\n              \
+    \  len = len + 1\n            end\n        end\n    end\n    return capacity *\
+    \ len\nend", "  local w, h = #grid[1], #grid\n  local count = 0\n  local row_counts\
+    \ = {}\n  for row = 1, h do\n    local sum = 0\n    for col = 1, w do\n      sum\
+    \ = sum + grid[row][col]\n    end\n    count = count + sum\n    table.insert(row_counts,\
+    \ sum)\n  end\n  if capacity >= count then\n    return 0\n  end\n  local max =\
+    \ math.max(unpack(row_counts))\n  if capacity < max then\n    return count - capacity\
+    \ * h\n  end\n  return count - capacity * h + max - capacity\nend", "  --\nend",
+  "    local bucket = capacity\n    local count = 0\n    for i = 1, #grid do\n   \
+    \     for j = 1, #grid[i] do\n            if grid[i][j] == 1 then\n          \
+    \      if bucket == 0 then\n                    bucket = capacity\n          \
+    \          count = count + 1\n                end\n                bucket = bucket\
+    \ - 1\n            end\n        end\n    end\n    return count\nend", "\t-- body\n\
+    end", "  local n = #grid\n  local m = #grid[1]\n  local max_depth = 0\n  local\
+    \ water_count = 0\n  for i=1,n do\n    local depth = 0\n    for j=1,m do\n   \
+    \   depth = depth + grid[i][j]\n    end\n    max_depth = math.max(max_depth, depth)\n\
+    \    water_count = water_count + depth\n  end\n  local bucket_count = math.ceil(water_count\
+    \ / capacity)\n  local well_count = math.ceil(max_depth / capacity)\n  return\
+    \ bucket_count * well_count\nend", "    local rows, cols = #grid, #grid[1]\n \
+    \   local answer = 0\n    local visited = {}\n    local queue = {}\n    local\
+    \ top = 1\n    local function enqueue(x, y)\n        queue[top] = {x, y}\n   \
+    \     top = top + 1\n    end\n    local function dequeue()\n        local head\
+    \ = queue[1]\n        top = top - 1\n        queue[1] = queue[top]\n        return\
+    \ head\n    end\n    local function isValid(x, y)\n        return x > 0 and x\
+    \ <= rows and y > 0 and y <= cols\n    end\n    for i=1,rows do\n        for j=1,cols\
+    \ do\n            if grid[i][j] == 1 and not visited[i..'-'..j] then\n       \
+    \         enqueue(i, j)\n                visited[i..'-'..j] = true\n         \
+    \       local count = 1\n                while count > 0 do\n                \
+    \    local u = dequeue()\n                    count = count - 1\n            \
+    \        if grid[u[1]][u[2]] == 1 then\n                        grid[u[1]][u[2]]\
+    \ = 0\n                        answer = answer + 1\n                        if\
+    \ isValid(u[1]+1, u[2]) and not visited[(u[1]+1)..'-'..u[2]] then\n          \
+    \                  enqueue(u[1]+1, u[2])\n                            visited[(u[1]+1)..'-'..u[2]]\
+    \ = true\n                            count = count + 1\n                    \
+    \    end\n                        if isValid(u[1]-1, u[2]) and not visited[(u[1]-1)..'-'..u[2]]\
+    \ then\n                            enqueue(u[1]-1, u[2])\n                  \
+    \          visited[(u[1]-1)..'-'..u[2]] = true\n                            count\
+    \ = count + 1\n                        end\n                        if isValid(u[1],\
+    \ u[2]+1) and not visited[u[1]..'-'..(u[2]+1)] then\n                        \
+    \    enqueue(u[1], u[2]+1)\n                            visited[u[1]..'-'", " \
+    \   -- your code here\n    -- returns the number of times you need to lower the\
+    \ buckets\nend\nreturn max_fill", "  local wells = {}\n  local rows = #grid\n\
+    \  local cols = #grid[1]\n  for i=1, rows do\n    wells[i] = {value = 0, filled\
+    \ = false}\n    for j=1, cols do\n      if grid[i][j] == 1 then\n        wells[i].value\
+    \ = wells[i].value + 1\n      end\n    end\n  end\n  local i = 1\n  local res\
+    \ = 0\n  local function update()\n    local max_v = 0\n    local max_i = 0\n \
+    \   for j=1, rows do\n      if wells[j].value > max_v then\n        max_v = wells[j].value\n\
+    \        max_i = j\n      end\n    end\n    if max_v > 0 then\n      wells[max_i].value\
+    \ = wells[max_i].value - capacity\n      wells[max_i].filled = true\n      res\
+    \ = res + 1\n    end\n  end\n  while true do\n    update()\n    i = i + 1\n  \
+    \  if i > rows then i = 1 end\n    if wells[i].filled then\n      wells[i].filled\
+    \ = false\n    else\n      break\n    end\n  end\n  return res\nend", "    local\
+    \ max_fill_so_far = 0\n    local count = 0\n    for i = 1, #grid do\n        for\
+    \ j = 1, #grid[i] do\n            if grid[i][j] == 1 then\n                if\
+    \ max_fill_so_far < capacity then\n                    grid[i][j] = 0\n      \
+    \              max_fill_so_far = max_fill_so_far + 1\n                else\n \
+    \                   count = count + 1\n                    max_fill_so_far = 0\n\
+    \                end\n            end\n        end\n    end\n    return count\n\
+    end", "    if capacity == 0 then\n        return 0\n    end\n    local num_rows\
+    \ = #grid\n    local num_cols = #grid[1]\n    local well_stack = {}\n    local\
+    \ row_indices = {}\n    local col_indices = {}\n    local num_wells = 0\n    local\
+    \ total_water = 0\n    for row = 1, num_rows do\n        for col = 1, num_cols\
+    \ do\n            if grid[row][col] == 1 then\n                num_wells = num_wells\
+    \ + 1\n                row_indices[num_wells] = row\n                col_indices[num_wells]\
+    \ = col\n                well_stack[num_wells] = 0\n            end\n        end\n\
+    \    end\n    local num_cycles = 0\n    while num_wells > 0 do\n        num_cycles\
+    \ = num_cycles + 1\n        local num_wells_to_fill = 0\n        for i = 1, num_wells\
+    \ do\n            local well_index = i\n            local num_units_of_water =\
+    \ well_stack[well_index]\n            local row = row_indices[well_index]\n  \
+    \          local col = col_indices[well_index]\n            if num_units_of_water\
+    \ < capacity then\n                local num_cols_above = col - 1\n          \
+    \      local num_cols_below = num_cols - col\n                local num_cols_to_fill\
+    \ = num_cols_above + num_cols_below\n                local num_units_to_fill =\
+    \ math.min(capacity - num_units_of_water, num_cols_to_fill)\n                local\
+    \ num_cols_above_to_fill = math.floor(num_units_to_fill / 2)\n               \
+    \ local num_cols_below_to_fill = num_units_to_fill - num_cols_above_to_fill\n\
+    \                total_water = total_water + num_units_to_fill\n             \
+    \   num_units_of_water = num_units_of_water + num_units_to_fill\n            \
+    \    well_stack[well_index] = num_units_of_water\n                if num_", " \
+    \   local sum = 0\n    for _, row in ipairs(grid) do\n        local max_well =\
+    \ math.max(unpack(row))\n        sum = sum + max_well\n    end\n    return math.ceil(sum\
+    \ / capacity)\nend", "  local max_rows, max_cols = #grid, #grid[1]\n  local row_counts\
+    \ = {}\n  for i = 1, max_rows do\n    row_counts[i] = 0\n    for j = 1, max_cols\
+    \ do\n      row_counts[i] = row_counts[i] + grid[i][j]\n    end\n  end\n  local\
+    \ move_count = 0\n  local current_row = 1\n  while current_row <= max_rows do\n\
+    \    if row_counts[current_row] == 0 then\n      current_row = current_row + 1\n\
+    \    else\n      local row_to_remove_from = current_row\n      while current_row\
+    \ <= max_rows and\n            row_counts[current_row] == row_counts[row_to_remove_from]\
+    \ do\n        row_counts[current_row] = row_counts[current_row] - capacity\n \
+    \       current_row = current_row + 1\n      end\n      move_count = move_count\
+    \ + 1\n    end\n  end\n  return move_count\nend", "    -- your solution here\n\
+    end", "    local desc = {}\n    local level = {}\n    local r = #grid\n    local\
+    \ c = #grid[1]\n    local g = {}\n    for i = 1, r do\n        g[i] = {}\n   \
+    \     level[i] = 0\n        desc[i] = 0\n        for j = 1, c do\n           \
+    \ g[i][j] = grid[i][j]\n        end\n    end\n    for i = 1, r do\n        for\
+    \ j = 1, c do\n            if g[i][j] == 1 then\n                if level[i] <\
+    \ capacity then\n                    level[i] = level[i] + 1\n               \
+    \ else\n                    desc[i] = desc[i] + 1\n                end\n     \
+    \       end\n        end\n    end\n    local function next_step()\n        local\
+    \ max_desc = 0\n        local min_desc = 0\n        local max_desc_i = -1\n  \
+    \      local min_desc_i = -1\n        for i = 1, r do\n            if desc[i]\
+    \ > max_desc then\n                max_desc = desc[i]\n                max_desc_i\
+    \ = i\n            end\n            if desc[i] < min_desc then\n             \
+    \   min_desc = desc[i]\n                min_desc_i = i\n            end\n    \
+    \    end\n        if max_desc_i ~= -1 and min_desc_i ~= -1 then\n            level[max_desc_i]\
+    \ = level[max_desc_i] - 1\n            level[min_desc_i] = level[min_desc_i] +\
+    \ 1\n            desc[max_desc_i] = desc[max_desc_i] - 1\n            desc[min_desc_i]\
+    \ = desc[min_desc_i] + 1\n            return true\n        end\n        return\
+    \ false\n    end\n    local count = 0\n    while next_step() do\n        count\
+    \ = count + 1\n    end\n    return count\nend", "  local sum = 0\n  local g_max\
+    \ = 0\n  local drops = 0\n  local work = true\n  while work do\n    work = false\n\
+    \    for i = 1, #grid do\n      if grid[i][#grid[i]] == 1 then\n        sum =\
+    \ sum + 1\n        grid[i][#grid[i]] = 0\n        work = true\n      end\n   \
+    \ end\n    if sum > 0 then\n      drops = drops + 1\n      sum = sum - capacity\n\
+    \      if sum > 0 then\n        sum = sum - 1\n        g_max = g_max + 1\n   \
+    \   end\n    end\n  end\n  return g_max + drops\nend", "    local function min_fill(wells)\n\
+    \        local min_fill_value = 0\n        for _, well in ipairs(wells) do\n \
+    \           min_fill_value = math.max(min_fill_value, well)\n        end\n   \
+    \     return min_fill_value\n    end", "    local num_buckets_lowered = 0\n  \
+    \  local nrows = #grid\n    local ncols = #grid[1]\n    for i = 1, nrows do\n\
+    \        for j = 1, ncols do\n            local well_water = grid[i][j]\n    \
+    \        if well_water > 0 then\n                local num_buckets_to_extract\
+    \ = math.ceil(well_water / capacity)\n                grid[i][j] = grid[i][j]\
+    \ - capacity * num_buckets_to_extract\n                num_buckets_lowered = num_buckets_lowered\
+    \ + num_buckets_to_extract\n            end\n        end\n    end\n    return\
+    \ num_buckets_lowered\nend", "  local grid_length = #grid\n  local row_length\
+    \ = #grid[1]\n  local sum = 0\n  -- \u0441\u0443\u043C\u043C\u0430 \u0435\u0434\
+    \u0438\u043D\u0438\u0446 \u0432 \u0432\u044B\u0448\u043A\u0430\u0445\n  for i\
+    \ = 1, grid_length do\n    for j = 1, row_length do\n      sum = sum + grid[i][j]\n\
+    \    end\n  end\n  return (grid_length - 1) * capacity + sum\nend", "  -- grid\
+    \ : 2d table of ints -> well matrix\n  -- capacity : int -> bucket capacity\n\
+    \  local n_wells = #grid\n  local n_units = #grid[1]\n  local n_cycles = 0\n \
+    \ local curr_unit = 1\n  -- for each well, pour the water into the bucket\n  for\
+    \ i = 1, n_wells do\n    -- for each unit in the well,\n    for j = 1, n_units\
+    \ do\n      -- if the unit contains water\n      if grid[i][j] == 1 then\n   \
+    \     -- pour the water from the unit into the bucket,\n        -- incrementing\
+    \ the number of cycles\n        grid[i][j] = 0\n        n_cycles = n_cycles +\
+    \ 1\n      end\n    end\n  end\n  return n_cycles\nend", "    local n = #grid\n\
+    \    local m = #grid[1]\n    local result = 0\n    for i = 1, n do\n        for\
+    \ j = 1, m do\n            local water = 0\n            for x = i - 1, 0, -1 do\n\
+    \                water = water + grid[x][j]\n            end\n            if water\
+    \ > capacity then\n                result = result + water - capacity\n      \
+    \      end\n        end\n    end\n    return result\nend", "  local m = #grid\n\
+    \  local n = #grid[1]\n  local visited = {}\n  local function dfs(i, j)\n    if\
+    \ i < 1 or i > m or j < 1 or j > n or visited[i] and visited[i][j] or grid[i][j]\
+    \ == 0 then\n      return\n    end\n    visited[i] = visited[i] or {}\n    visited[i][j]\
+    \ = true\n    return true\n  end\n  local function get_wet_cell_count()\n    local\
+    \ wet_cell_count = 0\n    for i = 1, m do\n      for j = 1, n do\n        if grid[i][j]\
+    \ == 1 then\n          wet_cell_count = wet_cell_count + 1\n        end\n    \
+    \  end\n    end\n    return wet_cell_count\n  end\n  local function remove_water()\n\
+    \    for i = 1, m do\n      for j = 1, n do\n        if grid[i][j] == 1 then\n\
+    \          grid[i][j] = 0\n        end\n      end\n    end\n  end\n  local function\
+    \ pour_water(i, j)\n    grid[i][j] = 1\n    dfs(i + 1, j)\n    dfs(i - 1, j)\n\
+    \    dfs(i, j + 1)\n    dfs(i, j - 1)\n  end\n  local function sink_bucket(i,\
+    \ j)\n    pour_water(i, j)\n    if get_wet_cell_count() == m * n then\n      return\
+    \ true\n    end\n    if capacity > 1 then\n      return sink_bucket(i + 1, j)\
+    \ or sink_bucket(i - 1, j) or sink_bucket(i, j + 1) or sink_bucket(i, j - 1)\n\
+    \    end\n    return false\n  end\n  local function bucket_count()\n    local\
+    \ count = 0\n    for i = 1, m do\n      for j = 1, n do\n        if dfs(i, j)\
+    \ then\n          count = count + 1\n        end\n      end\n    end\n    return\
+    \ count\n  end\n  local count =", "    local counter = 0\n    local function fill_rows(row_index)\n\
+    \        while true do\n            local full = true\n            for i = 1,\
+    \ #grid[row_index] do\n                if grid[row_index][i] == 1 then\n     \
+    \               full = false\n                    break\n                end\n\
+    \            end\n            if full then\n                return\n         \
+    \   end\n            for i = 1, #grid[row_index] do\n                if grid[row_index][i]\
+    \ == 1 then\n                    local bucket = capacity\n                   \
+    \ for j = row_index, 1, -1 do\n                        if grid[j][i] == 1 then\n\
+    \                            bucket = bucket - 1\n                           \
+    \ grid[j][i] = 0\n                        end\n                        if bucket\
+    \ == 0 then\n                            break\n                        end\n\
+    \                    end\n                    counter = counter + 1\n        \
+    \        end\n            end\n        end\n    end\n    for i = 1, #grid do\n\
+    \        fill_rows(i)\n    end\n    return counter\nend", "\t\nend", "  local\
+    \ n_rows = #grid\n  local n_cols = #grid[1]\n  local row_accumulators = {}\n \
+    \ local col_accumulators = {}\n  for row_i = 1, n_rows do\n    for col_i = 1,\
+    \ n_cols do\n      if grid[row_i][col_i] == 1 then\n        row_accumulators[row_i]\
+    \ = (row_accumulators[row_i] or 0) + 1\n        col_accumulators[col_i] = (col_accumulators[col_i]\
+    \ or 0) + 1\n      end\n    end\n  end\n  local row_fills = 0\n  for i = 1, n_rows\
+    \ do\n    if row_accumulators[i] ~= nil then\n      row_fills = row_fills + math.ceil(row_accumulators[i]\
+    \ / capacity)\n    end\n  end\n  local col_fills = 0\n  for i = 1, n_cols do\n\
+    \    if col_accumulators[i] ~= nil then\n      col_fills = col_fills + math.ceil(col_accumulators[i]\
+    \ / capacity)\n    end\n  end\n  return row_fills + col_fills\nend", "  local\
+    \ function get_number_of_fill_holes(well)\n    local count = 0\n    for i, v in\
+    \ ipairs(well) do\n      if v == 1 then\n        count = count + 1\n      end\n\
+    \    end\n    return count\n  end", "    -- TODO: add implementation here\nend",
+  "  -- do stuff\nend", "    -- TODO\nend", "    local count = 0\n    for i = 1, #grid\
+    \ do\n        local row = grid[i]\n        for j = 1, #row do\n            local\
+    \ cell = row[j]\n            if cell == 1 then\n                local bucket =\
+    \ capacity\n                while bucket > 0 do\n                    if i - 1\
+    \ < 1 or grid[i - 1][j] == 0 then\n                        bucket = bucket - 1\n\
+    \                        grid[i][j] = 0\n                    end\n           \
+    \         if bucket == 0 then\n                        count = count + 1\n   \
+    \                 end\n                    i = i - 1\n                end\n  \
+    \          end\n        end\n    end\n    return count\nend", "    return capacity\
+    \ * (grid.length - 2)\nend", "    local answers = {}\n    local iterations = 0\n\
+    \    while true do\n        iterations = iterations + 1\n        local columns\
+    \ = #grid[1]\n        local rows = #grid\n        local row_index = 1\n      \
+    \  local column_index = 1\n        local previous_index = 0\n        local previous_column_index\
+    \ = 0\n        local answer = 0\n        while column_index <= columns do\n  \
+    \          while row_index <= rows do\n                if grid[row_index][column_index]\
+    \ == 1 then\n                    if capacity == 0 then\n                     \
+    \   table.insert(answers, answer)\n                        return answers\n  \
+    \                  end\n                    grid[row_index][column_index] = 0\n\
+    \                    row_index = row_index + 1\n                    capacity =\
+    \ capacity - 1\n                    answer = answer + 1\n                else\n\
+    \                    row_index = row_index + 1\n                end\n        \
+    \    end\n            column_index = column_index + 1\n            row_index =\
+    \ 1\n        end\n        table.insert(answers, answer)\n    end\nend", "    local\
+    \ i, j = 1, 1\n    local times = 0\n    for i = 1, #grid do\n        local j =\
+    \ 1\n        local k = 1\n        local count = 0\n        local current_capacity\
+    \ = capacity\n        while j <= #grid[i] do\n            if grid[i][j] == 1 then\n\
+    \                count = count + 1\n                current_capacity = current_capacity\
+    \ - 1\n                j = j + 1\n            else\n                if count >\
+    \ 0 then\n                    k = k + 1\n                    current_capacity\
+    \ = capacity\n                    count = 0\n                else\n          \
+    \          j = j + 1\n                end\n            end\n            if current_capacity\
+    \ == 0 then\n                times = times + 1\n                current_capacity\
+    \ = capacity\n            end\n        end\n        if count > 0 then\n      \
+    \      times = times + 1\n        end\n    end\n    return times\nend", "    local\
+    \ function min(a, b) return a < b and a or b end\n    local function sum(x)\n\
+    \        local s = 0\n        for _, y in ipairs(x) do s = s + y end\n       \
+    \ return s\n    end\n    local fills = {}\n    for i, row in ipairs(grid) do\n\
+    \        local fills_in_row = {}\n        local sum_row = sum(row)\n        local\
+    \ num_fills = sum_row // capacity\n        local remainder = sum_row % capacity\n\
+    \        for j = 1, #row do\n            if row[j] == 1 then\n               \
+    \ fills_in_row[j] = capacity\n            else\n                fills_in_row[j]\
+    \ = 0\n            end\n        end\n        for j = 1, remainder do\n       \
+    \     fills_in_row[j] = fills_in_row[j] + 1\n        end\n        fills[i] = fills_in_row\n\
+    \    end\n    local function max_fill_in_column(j)\n        local m = 0\n    \
+    \    for i = 1, #fills do\n            m = max(m, fills[i][j])\n        end\n\
+    \        return m\n    end\n    local s = 0\n    for j = 1, #fills[1] do\n   \
+    \     s = s + max_fill_in_column(j)\n    end\n    return s\nend", '    local result
+    = 0', "  local function min(a, b)\n    if a < b then\n      return a\n    else\n\
+    \      return b\n    end\n  end\n  local filled = 0\n  for i = 1, #grid do\n \
+    \   local well = grid[i]\n    local water = 0\n    for j = 1, #well do\n     \
+    \ if well[j] == 1 then\n        water = water + 1\n      end\n    end\n    filled\
+    \ = filled + capacity - min(capacity, water)\n  end\n  return filled\nend", " \
+    \   local cache = {}\n    local function path(row, col)\n        if row == #grid\
+    \ and col == #grid[1] then\n            return 0\n        end\n        if row\
+    \ > #grid or col > #grid[1] then\n            return math.huge\n        end\n\
+    \        if cache[row] and cache[row][col] then\n            return cache[row][col]\n\
+    \        end\n        local result = math.min(\n            path(row + 1, col)\
+    \ + 1,\n            path(row, col + 1) + 1,\n            path(row + 1, col + 1)\
+    \ + 1,\n            grid[row][col] == 1 and path(row + 1, col + 1) or math.huge\n\
+    \        )\n        if not cache[row] then\n            cache[row] = {}\n    \
+    \    end\n        cache[row][col] = result\n        return result\n    end\n \
+    \   return math.floor(path(1, 1) / capacity)\nend", "  -- TODO\nend", "  -- your\
+    \ code here\nend", "    local rows = #grid\n    local columns = #grid[1]\n   \
+    \ local result = 0\n    local remaining = 0\n    for column = 1, columns do\n\
+    \        local min_height = 0\n        for row = 1, rows do\n            local\
+    \ well = grid[row][column]\n            if well == 1 then\n                if\
+    \ row > min_height then\n                    if remaining >= row - min_height\
+    \ then\n                        remaining = remaining - (row - min_height)\n \
+    \                   else\n                        result = result + 1\n      \
+    \                  remaining = capacity - (row - min_height)\n               \
+    \     end\n                end\n                min_height = row\n           \
+    \ end\n        end\n    end\n    return result\nend", "  -- need to implement\
+    \ this\n  return 0\nend", "    -- TODO: Implement the solution\nend", "    local\
+    \ wells_num = #grid[1]\n    local rows_num = #grid\n    local max_level = 0\n\
+    \    local wells_status = {}\n    local water_level = 0\n    local time = 0\n\
+    \    local rows_filled = 0\n    -- find the maximum level\n    for i=1,rows_num\
+    \ do\n        for j=1,wells_num do\n            if grid[i][j] > 0 then\n     \
+    \           max_level = max_level + 1\n            end\n        end\n    end\n\
+    \    while water_level < max_level do\n        water_level = water_level + 1\n\
+    \        time = time + 1\n        rows_filled = 0\n        for i=1,rows_num do\n\
+    \            local row_filled = true\n            for j=1,wells_num do\n     \
+    \           if grid[i][j] > 0 then\n                    if wells_status[j] < capacity\
+    \ then\n                        row_filled = false\n                        wells_status[j]\
+    \ = wells_status[j] + 1\n                    end\n                end\n      \
+    \      end\n            if row_filled then\n                rows_filled = rows_filled\
+    \ + 1\n            end\n        end\n        if rows_filled == rows_num then\n\
+    \            for i=1,wells_num do\n                wells_status[i] = 0\n     \
+    \       end\n        end\n    end\n    return time\nend", "  local function fill_once(grid,\
+    \ capacity)\n    local num_rows = #grid\n    local num_cols = #grid[1]\n    local\
+    \ fill_count = 0\n    for i = 1, num_rows do\n      local num_units = 0\n    \
+    \  for j = 1, num_cols do\n        num_units = num_units + grid[i][j]\n      end\n\
+    \      if num_units > 0 then\n        if num_units > capacity then\n         \
+    \ for j = 1, num_cols do\n            grid[i][j] = grid[i][j] - 1\n          end\n\
+    \          fill_count = fill_count + 1\n        else\n          for j = 1, num_cols\
+    \ do\n            grid[i][j] = 0\n          end\n          fill_count = fill_count\
+    \ + num_units\n        end\n      end\n    end\n    return fill_count\n  end\n\
+    \  local total_fill_count = 0\n  repeat\n    local fill_count = fill_once(grid,\
+    \ capacity)\n    total_fill_count = total_fill_count + fill_count\n  until fill_count\
+    \ == 0\n  return total_fill_count\nend", "  local count = 0\n  local function\
+    \ recurse(row, col)\n    count = count + 1\n    grid[row][col] = 0\n    if row\
+    \ == #grid and col == #grid[row] then\n      return count\n    end\n    if row\
+    \ < #grid and grid[row + 1][col] == 1 then\n      recurse(row + 1, col)\n    end\n\
+    \    if col < #grid[row] and grid[row][col + 1] == 1 then\n      recurse(row,\
+    \ col + 1)\n    end\n  end\n  recurse(1, 1)\n  return count\nend", "    local\
+    \ function recurse(grid, row, columns)\n        if row == #grid then\n       \
+    \     return 0\n        end\n        local count = 0\n        for column = 1,\
+    \ #grid[row] do\n            if grid[row][column] == 1 then\n                local\
+    \ search = row + 1\n                while search <= #grid and grid[search][column]\
+    \ == 0 do\n                    search = search + 1\n                end\n    \
+    \            if search <= #grid then\n                    grid[search][column]\
+    \ = 0\n                    count = count + 1\n                end\n          \
+    \  end\n        end\n        local search = row + 1\n        while search <= #grid\
+    \ and count < capacity do\n            for column = 1, #grid[search] do\n    \
+    \            if grid[search][column] == 1 then\n                    grid[search][column]\
+    \ = 0\n                    count = count + 1\n                end\n          \
+    \  end\n            search = search + 1\n        end\n        count = count +\
+    \ recurse(grid, row + 1, columns)\n        return count\n    end\n    return recurse(grid,\
+    \ 1, #grid[1])\nend", "  -- Empty wells.\n  local empty_wells = {}\n  for row_i,\
+    \ row in ipairs(grid) do\n    local row_empty_wells = {}\n    for well_i, well\
+    \ in ipairs(row) do\n      if well == 0 then\n        table.insert(row_empty_wells,\
+    \ well_i)\n      end\n    end\n    table.insert(empty_wells, row_empty_wells)\n\
+    \  end", "  -- your code goes here\nend", "\tlocal rows = #grid\n\tlocal cols\
+    \ = #grid[1]\n\tlocal count = 0\n\tlocal i = 1\n\twhile i <= rows do\n\t\tlocal\
+    \ j = 1\n\t\twhile j <= cols do\n\t\t\tif grid[i][j] == 1 then\n\t\t\t\tlocal\
+    \ c = capacity\n\t\t\t\twhile c > 0 do\n\t\t\t\t\tif i + c <= rows then\n\t\t\t\
+    \t\t\tgrid[i + c][j] = 0\n\t\t\t\t\t\tc = c - 1\n\t\t\t\t\telse\n\t\t\t\t\t\t\
+    break\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tcount = count + 1\n\t\t\tend\n\t\t\t\
+    j = j + 1\n\t\tend\n\t\ti = i + 1\n\tend\n\treturn count\nend", "    local n =\
+    \ #grid\n    local m = #grid[1]\n    local cnt = 0\n    local max_height = 0\n\
+    \    for i = 1, n do\n        local row = grid[i]\n        local sum = 0\n   \
+    \     for j = 1, m do\n            if row[j] == 1 then\n                sum =\
+    \ sum + 1\n            end\n        end\n        local height = math.floor(sum\
+    \ / capacity)\n        local rest = sum % capacity\n        local water = rest\
+    \ > 0 and height + 1 or height\n        max_height = math.max(max_height, water)\n\
+    \        cnt = cnt + water\n    end\n    return cnt\nend", "  local function max_depth(grid)\n\
+    \    local r = {}\n    for i = 1, #grid do\n      local d = 0\n      for j = 1,\
+    \ #grid[i] do\n        if grid[i][j] == 1 then\n          d = d + 1\n        end\n\
+    \      end\n      table.insert(r, d)\n    end\n    return r\n  end\n  local function\
+    \ min_in_row(row)\n    local r = math.huge\n    for i = 1, #row do\n      if row[i]\
+    \ < r then\n        r = row[i]\n      end\n    end\n    return r\n  end\n  local\
+    \ function max_in_row(row)\n    local r = 0\n    for i = 1, #row do\n      if\
+    \ row[i] > r then\n        r = row[i]\n      end\n    end\n    return r\n  end\n\
+    \  local function find_max_in_row(row)\n    local r = 0\n    for i = 1, #row do\n\
+    \      if row[i] > r then\n        r = row[i]\n      end\n    end\n    return\
+    \ r\n  end\n  local function all_depths_in_row(row)\n    local r = {}\n    for\
+    \ i = 1, #row do\n      if row[i] > 0 then\n        table.insert(r, row[i])\n\
+    \      end\n    end\n    return r\n  end\n  local function find_min_height(row)\n\
+    \    return math.min(unpack(all_depths_in_row(row)))\n  end\n  local function\
+    \ find_max_height(row)\n    return math.max(unpack(all_depths_in_row(row)))\n\
+    \  end\n  local function make_average_row(row, depth)\n    local r = {}\n    for\
+    \ i = 1, #row do\n      if row[i] > 0 then\n        table.insert(r, depth)\n \
+    \     else\n        table.insert(r, 0)\n      end\n    end\n    return r\n  end\n\
+    \  local function times_repeated(v, row)\n    local r = 0\n    for i = 1, #",
+  "    local n = #grid\n    local m = #grid[1]\n    local buckets = m\n    local res\
+    \ = 0\n    local max_fill = math.floor(capacity / buckets)\n    for i = 1, n do\n\
+    \        local sum = 0\n        for j = 1, m do\n            sum = sum + grid[i][j]\n\
+    \        end\n        local fill = math.floor(sum / buckets)\n        if fill\
+    \ > max_fill then\n            res = res + (fill - max_fill) * buckets\n     \
+    \   end\n    end\n    return res\nend", "    local rows = #grid\n    local columns\
+    \ = #grid[1]\n    local buckets = 0\n    local fill_row\n    for j = 1, columns\
+    \ do\n        buckets = buckets + grid[1][j]\n    end\n    while true do\n   \
+    \     fill_row = false\n        for i = 2, rows do\n            local empty_count\
+    \ = 0\n            for j = 1, columns do\n                if grid[i][j] == 0 then\n\
+    \                    empty_count = empty_count + 1\n                end\n    \
+    \        end\n            if empty_count <= capacity then\n                for\
+    \ j = 1, columns do\n                    if grid[i][j] == 1 then\n           \
+    \             grid[i][j] = 0\n                        buckets = buckets + 1\n\
+    \                    end\n                end\n                fill_row = true\n\
+    \            end\n        end\n        if not fill_row then\n            break\n\
+    \        end\n    end\n    return buckets\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

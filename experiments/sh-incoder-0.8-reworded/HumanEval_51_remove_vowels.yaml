@@ -10,6 +10,703 @@ tests: "}\n\ncandidate() {\n    remove_vowels \"$@\"\n}\n\nset -e\nrun_test() {\
   \ \"bcdf\\nghjklm\" ]]\n    [[ $(candidate \"fedcba\") = \"fdcb\" ]]\n    [[ $(candidate\
   \ \"eeeee\") = \"\" ]]\n    [[ $(candidate \"acBAA\") = \"cB\" ]]\n    [[ $(candidate\
   \ \"EcBOO\") = \"cB\" ]]\n    [[ $(candidate \"ybcd\") = \"ybcd\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local string=\"$1\"\n  local vowels=\"aeiuoAeiuo\"\n  local output=\"\
+    ${string}\"\n  while [ -n \"${output}\" ]; do\n    while [ \"${output}\" != \"\
+    ${vowels}\" ]; do\n      output=\"${output//[^aIuO]}\"\n    done\n  done\n  echo\
+    \ \"${output}\"", '  echo "$1" | grep -v "$1"', "  local string=${1}\n  local\
+    \ i=${#string}\n  local output=\"\"\n  while [  $i -ge 0 ]; do\n    case \"${string:$i:1}\"\
+    \ in\n      \"a\" |\"e\" |\"i\" |\"o\" |\"u\")\n        # Do nothing\n       \
+    \ ;;\n      *)\n        # Append to the output\n        output+=\"${string:$i:1}\"\
+    \n        ;;\n    esac\n    ((i--))\n  done\n  echo $output", "  # This solution\
+    \ only works with ASCII letters.\n  # For EBCDIC letters, use iconv:\n  # $ iconv\
+    \ -f utf-16 --ignore-garbage < \"$1\" | sed 's/[\\x00-\\x08]//g'\n  # $ iconv\
+    \ -f utf-8 --ignore-garbage < \"$1\" | sed 's/[\\x00-\\x09]//g'\n  LC_ALL=C tr\
+    \ -dc '[:alpha:]' < \"$1\" | sed 's/[\\x00-\\x08]//g'", "    local input=\"$1\"\
+    \n    echo \"$input\" | tr -cd \"aeiouAEIOU\"", "    local arg1=\"$1\"\n    local\
+    \ arg2=\"\"\n    local c=0\n    local i=0\n\n    while [ $i -lt ${#arg1} ]\n \
+    \   do\n        local c=\"${arg1:$i:1}\"\n        if [ \"$c\" == \"a\" ] || [\
+    \ \"$c\" == \"e\" ] || [ \"$c\" == \"i\" ] || [ \"$c\" == \"o\" ] || [ \"$c\"\
+    \ == \"u\" ]\n        then\n            echo \"$arg2:$c\"\n            arg2=\"\
+    ${arg2:$c}\"\n        fi\n        ((i++))\n    done\n    echo \"$arg2\"", "  \
+    \  local string=\"$1\"\n    # loop through each letter in the string\n    for\
+    \ i in {a..z}; do\n        # if we find that letter in the string,\n        if\
+    \ [[ $string == ${string:i:1} ]]; then\n            # remove that letter from\
+    \ the string\n            string=${string:0:i}${string:i+1}\n        fi\n    done\n\
+    \    # return the string\n    echo \"$string\"", "    # Removes vowels from $1\
+    \ string.\n    # $1 = string to remove vowels from\n    # Returns string without\
+    \ vowels\n    local vowels=\"aeiouAEIOU\"\n    local str=\"${1}\"\n    echo \"\
+    ${str//[${vowels}]}\"", "    local string=\"$1\"\n    local vowels=($(echo \"\
+    ${string}\" | tr [A-Z] \\\\n | grep -v \"a\" | grep -v \"e\" | grep -v \"i\" |\
+    \ grep -v \"o\" | grep -v \"u\"))\n    echo \"${string// /}\" | tr \" \" \"\\\
+    n\"", "    local IFS='' s=$1 output=''\n    for ((i=0;i<${#s};++i)); do\n    \
+    \    if [[ ${s:$i:1} == [aeiouAEIOU] ]]; then\n            output+=\"${s:$i:1}\"\
+    \n        fi\n    done\n    echo \"$output\"", "    sed 's/[aeiouAEIOU]//g' \"\
+    $1\"", "  local string=$1\n\n  # Use $-expansion instead of bare $1 so that the\
+    \ string is re-scanned each time\n  # and in case of globbing, also the case is\
+    \ preserved.\n  [[ -n \"$string\" ]] && echo \"${string/$1/}\"", "    local STR=\"\
+    $1\"\n    local STR_NEW=\"\"\n    local NUM_VOWELS=0\n\n    # count number of\
+    \ vowels in $STR\n    for i in $STR; do\n        [[ \"$i\" =~ [aeiou] ]] && ((NUM_VOWELS++))\n\
+    \    done\n\n    # remove all the vowels\n    for i in $STR; do\n        [[ \"\
+    $i\" =~ [aeiou] ]] && STR_NEW+=\"$i\"\n    done\n\n    # replace all the vowels\
+    \ with empty strings\n    if [ \"$NUM_VOWELS\" -eq 0 ]; then\n        STR_NEW=\"\
+    \"\n    fi\n\n    echo \"$STR_NEW\"", "    local string=$1\n    local vowels=\"\
+    aeiou\"\n\n    for char in ${string//[!$vowels]/}\n    do\n      echo \"$char\"\
+    \n    done", "    echo $1 | grep -o '[aeiouAEIOU]'", "\tsed 's/[AEIOUaeiou]//g'",
+  "  echo \"$1\" | tr 'aeiuoAEIUO' 'aeiou' | sed -e 's/^[aeiouAEIOU].*$//'", "   local\
+    \ string=$1\n   local vowels=\"aeiouAEIOU\"\n   local new_string=\"\"\n\n   for\
+    \ char in $(echo $string | tr [a-z] [A-Z]); do\n      local i=$((${#vowels} +\
+    \ 1))\n      while [ \"$char\" != \"\\0\" ]; do\n         local j=$((${#vowels}\
+    \ + 1))\n         if [ $char = \"$vowels\" ]; then\n            local j=0\n  \
+    \       fi\n         if [ $char = \"$vowels\" -a \"$new_string\" == \"\" ]; then\n\
+    \            local j=0\n         fi\n         if [ $j -eq 0 ]; then\n        \
+    \    new_string=\"$new_string$char\"\n         else\n            if [ \"$j\" -eq\
+    \ \"$i\" ]; then\n               new_string=\"$new_string$char\"\n           \
+    \    break\n            else\n               new_string=\"$new_string$char\"\n\
+    \            fi\n         fi\n         i=$((i + 1))\n         char=${char:$j:1}\n\
+    \      done\n   done\n   echo $new_string", "  local vowels=\"aeiouAEIOU\"\n \
+    \ local input=$1\n  local output\n  output=${input//[aA]/$vowels}\n  output=${output//[eE]/$vowels}\n\
+    \  output=${output//[iI]/$vowels}\n  output=${output//[uU]/$vowels}\n  output=${output//oO/$vowels}\n\
+    \  output=${output//[Aa]/$vowels}\n  output=${output//[Ee]/$vowels}\n  output=${output//[IiI]/$vowels}\n\
+    \  output=${output//[Uu]/$vowels}\n  output=${output//[oO]/$vowels}\n  output=${output//[AaA]/$vowels}\n\
+    \  output=${output//[EeE]/$vowels}\n  output=${output//[IiIiIiI]/$vowels}\n  output=${output//[UuUu]/$vowels}\n\
+    \  output=${output//[oOoO]/$vowels}\n  output=${output//[AaAaAaAaA]/$vowels}\n\
+    \  output=${output//[EeEeEeEeEeE]/$vowels}\n  output=${output//[IiIiIiIiIiIi]/$vowels}\n\
+    \  output=${output//[UuUuUuUuUuUu]/$vowels}\n  output=${output//[oOoOoOoOoOoO]/$vowels}\n\
+    \  output=${output//[AaAaAaAaAaAaA]/$vowels}\n  output=${output//[EeEeEeEeEeEeE]/$vowels}\n\
+    \  output=${output//[IiIiIiIiIiIiIiIi]/$vowels}\n  output=${output//[UuUuUuUuUuUuUu]/$vowels}\n\
+    \  output=${output//[oOoOoOoOoOoOoO]/$vowels}\n  output=${output//[AaAaAaAaAaAaAaA]/$vowels}\n\
+    \  output=${output//[EeEeEeEeEeEeEeE]/$vowels}\n  output=${output//[IiIiIiIiIiIiIiIiIi]/$vowels}\n\
+    \  output=${output", "  local string=\"$1\"\n  local vowels=\"aeiou\"\n\n  # for\
+    \ loop that removes vowels from string\n  for vowel in ${vowels}; do\n    echo\
+    \ \"$string\" | tr -d \"${vowel}\"\n  done", "\tlocal char=\"$1\"\n\tlocal vowels=\"\
+    aeiouAEIOU\"\n\tlocal res\n\tfor c in \"${char[@]}\"; do\n\t\tres=\"${res:+${res}${vowels:+${vowels:}${c}}\"\
+    \n\tdone\n\techo \"${res}\"", "  echo \"$1\" | sed 's/[aeiouAEIOU]//g'", "  echo\
+    \ -n \"$1|grep -Ev '[aeiou]'\"\n  shift\n  echo $*", "  tr 'aeiouAEIOU' '' '${1}'",
+  "  local chars=$1\n  local tmp=${chars:1}\n  while [[ $tmp ]]; do\n    [[ $tmp =~\
+    \ [aeiouAEIOU] ]] && return 0\n    chars=${chars:0:1}${chars:1:1}\n    tmp=${chars:1}\n\
+    \  done\n  echo $1", "  perl -Mutf8 -MList::Util=first -MList::Util::Escape -ne\
+    \ 'print $1 if !first(grep{uc($_) ne uc($_)} split //, $_)' \"$1\"", '  echo "$1"
+    | tr -cd "$@" # removes $1 from all other characters in the input string.', " \
+    \   # Write your code here.\n    echo $1 | sed -e \"s/[aeiouAEIOU]/\"\"/g\"",
+  "    local str=$1\n\n    local no_vowels=\"\"\n    local vowel_chars=\"aeiouAEIOU\"\
+    \n\n    for char in ${str:0:1}; do\n        local i=${str:index:1}\n        if\
+    \ [[ ${vowel_chars:i:1} == \"$char\" ]]; then\n            no_vowels=\"${no_vowels}${str:$((i\
+    \ + 1))}\"\n        fi\n    done\n\n    echo \"$no_vowels\"", "  local string=${1//[aeiou]/}\n\
+    \  echo $string", "    local string=\"$1\"\n    local newString=\"${string//[aeiouAEIOU]/}\"\
+    \n    printf \"$newString\"", "    local input_string=\"$1\"\n    local vowels=\"\
+    aeiouAEIOU\"\n    local filtered_string=\"\"\n\n    for i in \"${!vowels}\"; do\n\
+    \        if [[ ${input_string:0:1} =~ \"${vowels}$i\" ]]; then\n            filtered_string+=\"\
+    ${input_string:0:1}\"\n        fi\n    done\n\n    echo \"$filtered_string\"",
+  "    local vowels=(\"a\" \"e\" \"i\" \"o\" \"u\" \"A\" \"E\" \"I\" \"O\" \"U\")\n\
+    \    local str=$1\n    local newstr=\"\"\n    for (( i = 0; i < ${#str}; i++ ));\
+    \ do\n        local letter=${str[i]}\n        if [[ -z ${vowels[*]} && $letter\
+    \ =~ [aeiou] ]]; then\n            echo ${newstr}${letter}\n        else\n   \
+    \         newstr=\"${newstr}${letter}\"\n        fi\n    done", "    string=$1\n\
+    \    string=$( echo $string | tr a-z \"\" )\n    string=$( echo $string | tr A-Z\
+    \ \"\" )\n    string=$( echo $string | tr 'aeiouAEIOU' 'A' )\n    echo $string",
+  "  local string=$1\n  local no_vowels=''\n  for char in $(echo $string | tr [a-z]\
+    \ [A-Z]); do\n    no_vowels=${no_vowels}$char\n  done\n  echo $no_vowels", "\t\
+    echo \"$1\" | sed -e 's/[aeiouAEIOU]/' \\\n\t| sed -e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g'\
+    \ -e 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e\
+    \ 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/'\
+    \ \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\
+    \n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\n\t\
+    -e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/'\
+    \ -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e\
+    \ 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g'\
+    \ -e 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e\
+    \ 's/[AEIOUaeiouAEIOU]/' \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/'\
+    \ \\\n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/' \\\
+    \n\t-e 's/[aeiouAEIOU]/' -e 's/aeiouAEIOU//g' -e 's/[AEIOUaeiouAEIOU]/", "\techo\
+    \ $1 | awk '{for (i=1; i<=NF; i++) if ($i ~ /[aeiou]/) $i=\"\" }'", "    if [[\
+    \ -z $1 ]]; then\n        echo \"$1\"\n    elif [[ \"$1\" =~ [aeiou] ]]; then\n\
+    \        echo \"$1\"\n    elif [[ \"$1\" =~ [aeiouAEIOU] ]]; then\n        echo\
+    \ \"\"\n    else\n        echo \"$1\"\n    fi", "\techo ${1//[aeiouAEIOU]\"\"}",
+  "    # Declare vowels list\n    declare -i count\n    declare -i j\n    declare\
+    \ -i k\n    declare -i length\n\n    # Declare input variable and vowels\n   \
+    \ local string=${1:-\"\"}\n    local vowels=\"aeiou\"\n\n    # Length input\n\
+    \    length=${#string/} || return 1\n\n    # Loop for count of vowels\n    for\
+    \ (( count = 0; count <= length; count++ )); do\n\n        # Loop for j index\n\
+    \        for (( j = 0; j <= count; j++ )); do\n\n            # Loop for k index\n\
+    \            for (( k = 0; k <= length - j - 1; k++ )); do\n\n               \
+    \ # If char is vowel then remove from j to j+k-1\n                if [[ ${string:$j:$k}\
+    \ == $vowels ]]; then\n                    string=${string:0:$j-1}${string:$j+k}\n\
+    \                fi\n\n            done\n        done\n    done\n\n    # Return\
+    \ result\n    echo \"$string\"", "    local input=\"$1\"\n    local output=\"\"\
+    \n\n    echo \"$input\" | sed 's/[aeiouAEIOU]//g'", "  local STRING=$1\n  local\
+    \ VOWELS='aeiou'\n  local V=''\n  # loop through string, substitute vowels for\
+    \ empty string.\n  for (( i=0; i<${#STRING}; i++ )); do\n    if [[ ${STRING:$i:1}\
+    \ = ${VOWELS} ]]; then\n      V=\"${V}${STRING:$i:1}\"\n    else\n      STRING=${STRING:0:i}\n\
+    \    fi\n  done\n  echo ${STRING}", "    local vowels=\"aeiou\"\n    local string=\"\
+    $1\"\n    echo $(grep \"^[^\\\"$vowels\\\"]*$\" <<< \"$string\" | tr '[:upper:]'\
+    \ '[:lower:]')", "  # Remove vowels from $1, return result\n  sed -e 's/[aeiouAEIOU]//g'\
+    \ -e 's/^[aeiouAEIOU]//g'", "\tstring=$1\n\techo \"$string\" | sed 's/[aeiouAEIOU]//g'",
+  "    local result=$1\n    local string=\"${2:-}\"\n    local vowels=(\"a\" \"e\"\
+    \ \"i\" \"o\" \"u\" \"A\" \"E\" \"I\" \"O\" \"U\")\n    for vowel in \"${vowels[@]}\"\
+    \n    do\n        result=\"${result//$vowel/}\"\n    done\n    echo \"$result\"",
+  "  local -i vowels=\"${1}\"\n  local -i i=0 str=\"${2}\"\n  local str=\"${str//[^a-zA-Z]}\"\
+    ;\n\n  while (( i < ${#str} )) ; do\n    case \"${str[i]}\" in\n      \"a\" \"\
+    e\" \"i\" \"o\" \"u\")\n        continue;;\n      \"b\")\n        i=$(expr $i\
+    \ + 1);;\n      \"c\")\n        i=$(expr $i + 1);;\n      \"d\")\n        i=$(expr\
+    \ $i + 1);;\n      \"f\")\n        i=$(expr $i + 1);;\n      \"g\")\n        i=$(expr\
+    \ $i + 1);;\n      \"h\")\n        i=$(expr $i + 1);;\n      \"j\")\n        i=$(expr\
+    \ $i + 1);;\n      \"k\")\n        i=$(expr $i + 1);;\n      \"l\")\n        i=$(expr\
+    \ $i + 1);;\n      \"m\")\n        i=$(expr $i + 1);;\n      \"n\")\n        i=$(expr\
+    \ $i + 1);;\n      \"p\")\n        i=$(expr $i + 1);;\n      \"q\")\n        i=$(expr\
+    \ $i + 1);;\n      \"r\")\n        i=$(expr $i + 1);;\n      \"s\")\n        i=$(expr\
+    \ $i + 1);;\n      \"t\")\n        i=$(expr $i + 1);;\n      \"v\")\n        i=$(expr\
+    \ $i + 1);;\n      \"w\")\n        i=$(expr $i + 1);;\n      \"x\")\n        i=$(expr\
+    \ $i + 1);;\n      \"y\")\n        i=$(expr $i + 1);;\n      \"z\")\n        i=$(expr\
+    \ $i + 1);;\n      *)\n        (( ${vowels:-0} == 1 )) && (( vowels=\"${str[i]}\"\
+    \ )); i=$(expr $i + 1);;\n    esac\n  done\n\n  echo \"${str:0:$i}\"", "\tlocal\
+    \ x=\"${1%[aeiouAEIOU]}\"\n\tlocal y=\"${1#${x}}\" # removes first vowel from\
+    \ string\n\techo \"${y}\"", "    local string=\"$1\"\n    if [[ \"$string\" =~\
+    \ [AEIOUaeiou] ]]; then\n        echo \"${string#?}\"\n    else\n        echo\
+    \ \"$string\"\n    fi", '  echo $1 | tr [:lower:] [:upper:]', "    # loop through\
+    \ the word\n    for var in \"$@\"; do\n        # if the word doesn't contain any\
+    \ vowels\n        [[ \"$var\" == *[aeiou]* ]] && { echo \"$var\"; return; }\n\
+    \    done", "    local string=$1\n\n    for vowel in \"aeiouAEIOU\"; do\n    \
+    \    string=\"${string/$vowel/}\"\n    done\n    echo \"$string\"", "  awk '{\n\
+    \    for (i = 1; i <= NF; i++) {\n      if ($i ~ \"[aAeEiIoOuU]\")\n        printf\
+    \ \"%s\",$i\n    }\n  }'", "    local STRING=$1\n    local STRLEN=${#STRING}\n\
+    \    # ${#} returns length of $1 string\n    # ${#STRING} returns length of string\
+    \ $STRING\n    for (( i=0; i<$STRLEN; i++ ));\n    do\n        case \"${STRING[i]}\"\
+    \ in\n        [aeiouyAEIOUY])\n            STRING=${STRING:0:i}\n            ;;\n\
+    \        [aeiouyAEIOUY]*)\n            STRING=${STRING//${STRING[i]//[eiouy]/}}\n\
+    \            ;;\n        *)\n            ;;\n        esac\n    done\n    echo\
+    \ \"$STRING\"", "  local STR=\"$1\"\n\n  local STR_ESCAPED=\"${STR// /_}\"\n \
+    \ local STR_VOWELS=\"${STR_ESCAPED/[aeiou]/_}\"\n\n  echo \"${STR_VOWELS}\"",
+  "  echo \"$1\" | sed 's/[aeiou]//g'", "    local string=${1:-}\n    local vowels=\"\
+    aeiouAEIOU\"\n    local new=\"\"\n\n    for (( i = 0; i < ${#string} ); i++ )\n\
+    \    do\n        local char=${string:$i:1}\n        if [[ ${vowels} == *$char\
+    \ ]]\n        then\n            new=\"$new$char\"\n        else\n            new=\"\
+    $new$char\"\n        fi\n    done\n\n    new=\"${new::-1}\"\n    echo \"$new\"",
+  "    local string=$1\n    local count=0\n    local vowels=\"aeiou\"\n    local output=\"\
+    \"\n    \n    for (( c=0; c<${#string}; c++ ))\n    do\n        if [[ \"$string\"\
+    \ =~ $vowels ]]; then\n            count=$(( $count+1 ))\n        else\n     \
+    \       output=$output${string::c}\n        fi\n    done\n    \n    if [[ $count\
+    \ -gt 1 ]]; then\n        echo \"$output\"\n    else\n        echo $output\n \
+    \   fi", '  echo "$1" | tr [a-z] [A-Z]', "\tlocal string=$1\n\tlocal output\n\n\
+    \toutput=$( sed \"s/[aeiouAEIOU]//g\" <<< $1 )\n\toutput=$( sed \"s/^[aeiouAEIOU]*//\"\
+    \ <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]$//\" <<< $output )\n\toutput=$(\
+    \ printf \"%s\\n\" $output )\n\n\toutput=$( printf \"%s\\n\" $1 )\n\toutput=$(\
+    \ sed \"s/^[aeiouAEIOU]*//\" <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]$//\"\
+    \ <<< $output )\n\toutput=$( printf \"%s\\n\" $output )\n\n\toutput=$( sed \"\
+    s/[aeiouAEIOU]//g\" <<< $1 )\n\toutput=$( printf \"%s\\n\" $output )\n\toutput=$(\
+    \ sed \"s/^[aeiouAEIOU]*//\" <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]$//\"\
+    \ <<< $output )\n\toutput=$( printf \"%s\\n\" $output )\n\n\toutput=$( sed \"\
+    s/[aeiouAEIOU]//g\" <<< $1 )\n\toutput=$( printf \"%s\\n\" $output )\n\toutput=$(\
+    \ sed \"s/^[aeiouAEIOU]*//\" <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]$//\"\
+    \ <<< $output )\n\toutput=$( printf \"%s\\n\" $output )\n\n\toutput=$( sed \"\
+    s/[aeiouAEIOU]//g\" <<< $1 )\n\toutput=$( printf \"%s\\n\" $output )\n\toutput=$(\
+    \ sed \"s/^[aeiouAEIOU]*//\" <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]$//\"\
+    \ <<< $output )\n\toutput=$( printf \"%s\\n\" $output )\n\n\toutput=$( sed \"\
+    s/[aeiouAEIOU]//g\" <<< $1 )\n\toutput=$( printf \"%s\\n\" $output )\n\toutput=$(\
+    \ sed \"s/^[aeiouAEIOU]*//\" <<< $output )\n\toutput=$( sed \"s/[aeiouAEIOU]",
+  "    local remove_vowels=$(echo \"$1\" | sed 's/[^aeiouAEIOU]//g')\n    echo \"\
+    $remove_vowels\"", "    local STRING=$1\n    local newstring=\"\"\n    local firstchar=${STRING%?}\n\
+    \    if [[ \"$firstchar\" == \"a\" || \"$firstchar\" == \"e\" || \"$firstchar\"\
+    \ == \"i\" || \"$firstchar\" == \"o\" || \"$firstchar\" == \"u\" ]]; then\n  \
+    \      newstring=$STRING\n    else\n        newstring=\"${firstchar}\"\n    fi\n\
+    \    for char in $STRING; do\n        if [[ $char != \"$firstchar\" ]]; then\n\
+    \            newstring=$newstring${char}\n        fi\n    done\n    echo \"$newstring\"",
+  "    sed -e 's/[aeiouAEIOU]/' -e 's/[aeiou]/-/g' -e 's/-/[AEIOU]/' -e 's/^-|-.//'\
+    \ -e 's/|-$//' -e 's/^|-.//' -e 's/-$//'", "    local str=\"${1:-}\"\n    local\
+    \ vowels=\"AEIOU\"\n    for vowel in ${vowels}; do\n        local replace=${vowel}\n\
+    \        str=${str//$vowel/$replace}\n    done\n    echo \"$str\"", "\techo \"\
+    $1\" | awk 'BEGIN {IGNORECASE=1} { for(i=1;i<=NF;i++) {if($i in \"aeiouAEIOU\"\
+    ) {$i=\"\"}}; print}'", "    local string=\"$1\"\n    local result=\"\"\n    local\
+    \ i\n    for (( i = 0; i <= ${#string}; i++ )); do\n        result=\"${result}${string[i]}\"\
+    \n        if [[ ${string[i]} != \"a\" && ${string[i]} != \"e\" && ${string[i]}\
+    \ != \"i\" && ${string[i]} != \"o\" && ${string[i]} != \"u\" ]]; then\n      \
+    \      result=\"${result}${string[i]}\"\n        fi\n    done\n    echo \"$result\"",
+  "    # $1 is a string\n    sed 's/[aeiouAEIOU]//g'", "   local string=$1\n   local\
+    \ vowels=\"aAyYUoOuU\"\n   for vowel in ${vowels}; do\n      string=${string//$vowel/}\n\
+    \   done\n   echo $string", '    grep -v "[aeiouAEIOU]" $1', "  local string=\"\
+    $1\"\n  # Loop over every character in the string\n  for ((i=0; i<${#string[@]};\
+    \ i++))\n  do\n    if [[ ${string[i]} = \"a\" || ${string[i]} = \"e\" || ${string[i]}\
+    \ = \"i\" || ${string[i]} = \"o\" || ${string[i]} = \"u\" || ${string[i]} = \"\
+    A\" || ${string[i]} = \"E\" || ${string[i]} = \"I\" || ${string[i]} = \"O\" ||\
+    \ ${string[i]} = \"U\" ]]; then\n      string=${string/${string[i]}/${''}}\n \
+    \   fi\n  done\n  echo \"${string}\"", "    local input=$1\n    local output=$(echo\
+    \ $input | tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]' | sed 's/[aeiou]//g')\n\
+    \    echo \"$output\"", "    local a\n    a=${1:g; s/[aeiou]//g; s/^[aeiou]//g;\
+    \ s/[aeiou]$//g; s/^[aeiou]$//g; s/^[aeiou]*$//g; s/[aeiou]*$//g; s/^$//g; s/$//g;\
+    \ s/[aeiou]{2,}//g;}\n    echo $a", '   echo $1 | sed "s/[AEIOUYaeiouy]/&/g"',
+  "    local string=\"$1\"\n    local vowels=\"aeiou\"\n    local stringWithoutVowels=\"\
+    \"\n\n    for char in $string; do\n        case \"$char\" in\n        $vowels)\
+    \ ;;\n        *) stringWithoutVowels=\"$stringWithoutVowels $char\";;\n      \
+    \  esac\n    done\n    echo \"$stringWithoutVowels\"", "    local string=\"$1\"\
+    \n    [[ \"${string}\" =~ ^[aeiouAEIOU].*$ ]] || return 1\n    [[ \"${string}\"\
+    \ =~ ^[b-z].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[c-g].*$ ]] || return\
+    \ 1\n    [[ \"${string}\" =~ ^[d-z].*$ ]] || return 1\n    [[ \"${string}\" =~\
+    \ ^[e-h].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[i-j].*$ ]] || return 1\n\
+    \    [[ \"${string}\" =~ ^[k-l].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[m-o].*$\
+    \ ]] || return 1\n    [[ \"${string}\" =~ ^[p-q].*$ ]] || return 1\n    [[ \"\
+    ${string}\" =~ ^[r-s].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[t-u].*$ ]]\
+    \ || return 1\n    [[ \"${string}\" =~ ^[v-w].*$ ]] || return 1\n    [[ \"${string}\"\
+    \ =~ ^[x-z].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xC0-\xD6\xD8-\xDE].*$\
+    \ ]] || return 1\n    [[ \"${string}\" =~ ^[\xDF].*$ ]] || return 1\n    [[ \"\
+    ${string}\" =~ ^[\xFF].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xE6].*$ ]]\
+    \ || return 1\n    [[ \"${string}\" =~ ^[\xC6].*$ ]] || return 1\n    [[ \"${string}\"\
+    \ =~ ^[\xF8].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xD8].*$ ]] || return\
+    \ 1\n    [[ \"${string}\" =~ ^[\xF8].*$ ]] || return 1\n    [[ \"${string}\" =~\
+    \ ^[\xF8].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xF8].*$ ]] || return 1\n\
+    \    [[ \"${string}\" =~ ^[\xF8].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xF8\
+    ].*$ ]] || return 1\n    [[ \"${string}\" =~ ^[\xF8].*$ ]] || return 1\n    [[\
+    \ \"${string}\" =", '    echo ${1//[aeiouAEIOU]}', "    local input=\"$1\"\n \
+    \   local output=\"\"\n    local i\n    local j\n\n    for (( i = 0; i < ${#input};\
+    \ i++ )); do\n        for (( j = 0; j < ${#VOWELS}; j++ )); do\n            if\
+    \ [[ ${input:$i} = ${VOWELS:$j} ]]; then\n                echo \"${input:$i:1}\"\
+    \n                break\n            fi\n        done\n    done", "    echo $1\
+    \ | grep -o '[aeiou]'", "  local string=\"${1}\"\n  local no_vowels=\"${string//[aeiou]/}\"\
+    \n  echo \"${no_vowels}\"", "  local vowels=\"aeiouAEIOU\"\n  local i\n  local\
+    \ str=\"$1\"\n  local str_no_vowels=\n  for ((i=0; i<${#str}; i++)); do\n    str[$i]=\"\
+    ${str[$i]^}\"\n    if [[ \"${str[$i]}\" == \"[aeiouAEIOU]\" ]]; then\n      str_no_vowels=\"\
+    ${str_no_vowels}${str[$i]}\"\n    fi\n  done\n  echo \"$str_no_vowels\"", "  \
+    \  local string=\"$1\"\n    local vowels=\"aeiou\"\n    local output\n    for\
+    \ vowel in $vowels; do\n        output=\"${string//$vowel/$vowel}\"\n    done\n\
+    \    echo \"$output\"", "\tlocal string=${1}\n\tlocal newString=`echo $string\
+    \ | tr -cd 'aeiouAEIOU'`\n\techo ${newString}", "  local tmp=${1:-}\n  local tmp2=${tmp//[aeiou]/}\n\
+    \  echo \"${tmp2}\"", "    local IFS=$'\\n'\n    echo \"${1//[aeiouAEIOU]/}\"",
+  "  local string=\"$1\"\n  echo \"${string}\" | awk '{for (i=2; i <= length($0);\
+    \ i++) {\n  if ($i == \"a\" || $i == \"e\" || $i == \"i\" || $i == \"o\" || $i\
+    \ == \"u\") \n   $i=\"\"; else \n   $i=\"a\"; }}'", "  local string=\"$1\"\n\n\
+    \  local vowels=\"aeiou\"\n  # Remove all vowels and store in new var\n  local\
+    \ no_vowels=\"${string//$vowels//}\"\n  # Return new variable with vowels removed\n\
+    \  echo \"$no_vowels\"", "\tstr=$(echo \"$1\" | sed 's/[aeiouAEIOU]//g')\n\techo\
+    \ \"$str\"", "  sed 's/[aeiou]//g'", "    echo \"$1\" | tr -cd '[aeiouAEIOU]'",
+  "  local vowels=\"aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ\"\n  local\
+    \ _vowels=\"\"\n  local _vowel_count=0\n\n  for i in $*; do\n    _vowel_count=$((${#i}\
+    \ - 1))\n    for j in $vowels; do\n      _vowel_count=$((${#i} - 1))\n      if\
+    \ [ \"$i\" = \"$j\" ];then\n          break\n      fi\n    done\n    if [ ${_vowel_count}\
+    \ -eq 0 ]; then\n      _vowels=\"$_vowels$i\"\n    fi\n  done\n  echo \"$_vowels\"",
+  "    local vowels=\"aeiouy\"\n    echo -n \"${1:0:1}\"\n    for char in $vowels;\
+    \ do\n        echo -n \"${1:1:${#1}-2}\"\n    done", "    local chars=\"$1\" #\
+    \ local for \"chars\" so this function has local scope.\n    local filtered=\"\
+    $2\"\n    local i\n    # iterate through string in char by char fashion\n    for\
+    \ ((i=0; i < ${#chars}; i++)); do\n        # replace char with \"\" if it is an\
+    \ a\n        if [ \"${char:i:1}\" == \"a\" ]; then\n            # don't bother\
+    \ if char isn't a vowel\n            if [ \"${chars[i+1]:i:1}\" == \"a\" ]; then\n\
+    \                continue\n            fi\n        fi\n        # replace char\
+    \ with \"\" if it is a n\n        if [ \"${char:i:1}\" == \"n\" ]; then\n    \
+    \        # don't bother if char isn't a vowel\n            if [ \"${chars[i+1]:i:1}\"\
+    \ == \"n\" ]; then\n                continue\n            fi\n        fi\n   \
+    \     # replace char with \"\" if it is a u\n        if [ \"${char:i:1}\" == \"\
+    u\" ]; then\n            # don't bother if char isn't a vowel\n            if\
+    \ [ \"${chars[i+1]:i:1}\" == \"u\" ]; then\n                continue\n       \
+    \     fi\n        fi\n        # replace char with \"\" if it is an o\n       \
+    \ if [ \"${char:i:1}\" == \"o\" ]; then\n            # don't bother if char isn't\
+    \ a vowel\n            if [ \"${chars[i+1]:i:1}\" == \"o\" ]; then\n         \
+    \       continue\n            fi\n        fi\n        # replace char with \"\"\
+    \ if it is a e\n        if [ \"${char:i:1}\" == \"e\" ]; then\n            # don't\
+    \ bother if char isn't a vowel\n            if [ \"${chars[i+1]:i:1}\" == \"e\"\
+    \ ]; then\n                continue\n            fi\n        fi\n        # replace\
+    \ char with \"\" if it is a i\n        if [ \"${char:i:1}\" == \"i\" ]; then\n\
+    \            # don't bother if char isn't a vowel\n            if [ \"${chars[i+1]:i:1}\"\
+    \ == \"i\" ]; then\n                continue\n            fi\n        fi\n   \
+    \     # replace char with \"\" if it is a l\n        if [ \"${char:i:1}\" == \"\
+    l\" ]; then\n            # don't bother if char isn't a vowel\n            if\
+    \ [ \"${chars[i+1]:i:1}\" == \"l\" ]; then\n                continue\n       \
+    \     fi\n        fi\n        # replace char with \"\" if it is a s\n        if\
+    \ [ \"${char:i:1}\" == \"s\" ]; then\n            # don't bother if char isn't\
+    \ a vowel\n            if [ \"${chars[i+1]:i:1}\" == \"s\" ]; then\n         \
+    \       continue\n            fi\n        fi\n        filtered=\"${filtered}${char:i-1:1}\"\
+    \n    done\n    echo \"$filtered\"", "\tlocal remove_string=$1\n\tlocal remove_count=1\n\
+    \tlocal remove_vowels=()\n\tlocal remove_vowel_count=1\n\tfor ((i=0;i<${#remove_string};i++));\
+    \ do\n\t\tlocal remove_char=${remove_string:i:1}\n\t\tremove_vowel_count=${#remove_vowels[@]}\n\
+    \t\tif [[ ${remove_char} == \"a\" || ${remove_char} == \"e\" || ${remove_char}\
+    \ == \"i\" || ${remove_char} == \"o\" || ${remove_char} == \"u\" ]]; then\n\t\t\
+    \tremove_count=$((${remove_count} - 1))\n\t\t\tremove_vowel_count=$((${remove_vowel_count}\
+    \ - 1))\n\t\telse\n\t\t\tremove_count=$((${remove_count} - 1))\n\t\tfi\n\tdone\n\
+    \tremove_string=${remove_string:0:$((${#remove_string}-1)) }\n\tfor ((i=0;i<${#remove_vowels[@]};i++));\
+    \ do\n\t\tlocal remove_char=${remove_vowels[i]:i:1}\n\t\tremove_count=${#remove_string}\n\
+    \t\tif [[ ${remove_char} == \"a\" || ${remove_char} == \"e\" || ${remove_char}\
+    \ == \"i\" || ${remove_char} == \"o\" || ${remove_char} == \"u\" ]]; then\n\t\t\
+    \tremove_count=$((${remove_count} - 1))\n\t\tfi\n\tdone\n\tremove_vowels=${remove_vowels:0:$((${#remove_vowels[@]}-1))\
+    \ }\n\tremove_string=${remove_string:-\"\" }\n\tremove_string=${remove_string::$((${remove_count}))\
+    \ }\n\tremove_string=${remove_string::$((${remove_vowel_count})) }\n\tremove_string=${remove_string::$((${#remove_string}))\
+    \ }\n\techo \"${remove_string}\"", "  # if string contains vowels, return empty\
+    \ string\n  [[ \"$1\" =~ [aeiou] ]] || return 1\n  local vowels=\"$(awk '{print\
+    \ $1}' <<< \"$1\")\"\n  # remove vowels from string\n  sed -e \"s/[${vowels}]//g\"\
+    \ <<< \"$1\"", "\techo ${1//[aeiouAEIOU]}", "  str=$1\n  str=${str,,}\n  str=${str#?}\n\
+    \  str=${str%?}\n  str=${str:,}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n\
+    \  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n\
+    \  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n\
+    \  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n\
+    \  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n\
+    \  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n\
+    \  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n\
+    \  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n\
+    \  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n\
+    \  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n\
+    \  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n\
+    \  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n\
+    \  str=${str#?}\n  str=${str%?}\n  str=${str:,}\n  str=${str#?}\n  str", "  #\
+    \ Remove vowels\n  local vowels=\"aeiou\"\n  echo \"${1}\" | tr -cd \"$vowels\"\
+    \ | sed 's/^[^aeiou]*//'", "  local chars\n  chars=$1\n  local result\n  result=${chars/[aeiou]//g}\n\
+    \  return $result", '  echo "${1//[aeiouAEIOU]/}"', "  local STRING=$1\n  local\
+    \ NO_VOWELS=\"[AEIOUaeiou]\"\n  local NO_VOWELS_REGEXP=\"($NO_VOWELS)\"\n  local\
+    \ VOWELS=\"[AEIOUaeiouAEIOU]\"\n  local VOWELS_REGEXP=\"($VOWELS)\"\n  echo \"\
+    ${STRING}\" | sed -e \"s/$NO_VOWELS_REGEXP//\" -e \"s/$VOWELS_REGEXP//\"", " \
+    \   local STR=$1\n    local STR2=\"\"\n\n    for (( i=0; i<${#STR}; i++ )); do\n\
+    \        STR2=${STR:$i:1}\n\n        for (( j=0; j<${#STR2}; j++ )); do\n    \
+    \        # Eliminate all vowels in STR2.\n            if [[ ${STR2:$j:1} = \"\
+    a\" ]] || [[ ${STR2:$j:1} = \"e\" ]] || [[ ${STR2:$j:1} = \"i\" ]] || [[ ${STR2:$j:1}\
+    \ = \"o\" ]] || [[ ${STR2:$j:1} = \"u\" ]]; then\n                STR2=\"${STR2:0:$j}${STR2:$j+1}\"\
+    \n            fi\n        done\n        STR=\"${STR:0:$i}${STR2}\"\n    done\n\
+    \    echo \"$STR\"", "    local string=\"${1}\"\n    local no_vowels=\"aeiou\"\
+    \n    local no_vowels_str=\"\"\n    for char in $no_vowels; do\n        no_vowels_str+=$char\n\
+    \    done\n    # Trim whitespace.\n    # Remove all vowels.\n    # Slurp only\
+    \ the first character.\n    # Trim whitespace.\n    echo ${string} | tr -cd \"\
+    $no_vowels_str\" |  head -n 1", "\tlocal string=\"$1\"\n\tlocal result=\"\"\n\t\
+    for ((i=0; i<${#string}; i++)); do\n\t\tif [[ ${string[i]} == \"a\"* ]]; then\n\
+    \t\t\tcontinue\n\t\tfi\n\t\tif [[ ${string[i]} == \"e\"* ]]; then\n\t\t\tcontinue\n\
+    \t\tfi\n\t\tif [[ ${string[i]} == \"i\"* ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\t\
+    if [[ ${string[i]} == \"o\"* ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\tif [[ ${string[i]}\
+    \ == \"u\"* ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\tif [[ ${string[i]} == \"y\"\
+    * ]]; then\n\t\t\tcontinue\n\t\tfi\n\t\tresult+=\"${string[i]}\"\n\tdone\n\techo\
+    \ -n \"${result}\"", "\tlocal string=$1\n\tlocal length=\"${#string}\"\n\tlocal\
+    \ i=0\n\n\twhile [ $i -lt $length ]; do\n\t\tlocal c=\"${string:$i:1}\"\n\t\t\
+    [[ \"$c\" == \"a\" -o \"$c\" == \"e\" -o \"$c\" == \"i\" -o \"$c\" == \"o\" -o\
+    \ \"$c\" == \"u\" -o \"$c\" == \"y\" ]] || echo \"$c\"\n\t\ti=$((i+1))\n\tdone\n\
+    \techo \"$string\"", "  local i str=\"$1\"\n\n  for ((i = 0; i < ${#str}; i++));\
+    \ do\n    if [[ $str[i] != [aeiouAEIOU] ]]; then\n      str=\"${str/${str[i]/}\"\
+    \n    fi\n  done\n  echo \"$str\"", "  local string=\"${1}\"\n  local vowels=\"\
+    aeiouAEIOU\"\n  local i=0\n\n  while [[ \"$string\" =~ ^\"${vowels}${vowels}\"\
+    \ ]]; do\n    string=\"${string:0:${#string}-1}\"\n    i=$((i+1))\n    if [[ ${i}\
+    \ -eq ${#vowels} ]]; then\n      string=\"${string:0:1}\"\n      i=0\n    fi\n\
+    \  done\n\n  echo \"${string}\"", "  # If there are no vowels, return the original\
+    \ string\n  [ -z \"$1\" ] && return\n  local c; # character from the string\n\
+    \  local i; # integer index of the current character\n  local vowels=\"aeiouAEIOU\"\
+    \n\n  # Initialize the new string\n  local newstr=\"$1\"\n  for i in \"${!newstr}\"\
+    ; do\n    # Loop through all characters in the original string\n    c=\"${newstr:$i:1}\"\
+    \n    case \"$c\" in\n      \"a\" ) c=\"a\" ;;\n      \"e\" ) c=\"e\" ;;\n   \
+    \   \"i\" ) c=\"i\" ;;\n      \"o\" ) c=\"o\" ;;\n      \"u\" ) c=\"u\" ;;\n \
+    \     \"A\" ) c=\"A\" ;;\n      \"E\" ) c=\"E\" ;;\n      \"I\" ) c=\"I\" ;;\n\
+    \      \"O\" ) c=\"O\" ;;\n      \"U\" ) c=\"U\" ;;\n      \"Z\" ) c=\"Z\" ;;\n\
+    \      \"S\" ) c=\"S\" ;;\n      \"T\" ) c=\"T\" ;;\n      \"Z\" ) c=\"Z\" ;;\n\
+    \      \"^\" ) c=\"^\" ;;\n      \"_\" ) c=\"_\" ;;\n      * ) c=\".\" # don't\
+    \ change anything\n    esac\n    newstr=\"$newstr$c\"\n  done\n  echo \"$newstr\"",
+  "  echo $1 | tr [:upper:] [:lower:] | tr [:lower:] [:upper:] | tr -c '[aeiouAEIOU]'",
+  "  local string=\"${1}\"\n  local vowels=\"aeiouAEIOU\"\n  while [[ ${#string} -gt\
+    \ 0 ]]; do\n    local i\n    for (( i=0; i<${#vowels}; i++ )); do\n      local\
+    \ c=\"${string:$i:1}\"\n      if [[ \"${vowels}\" == \"${c}\" ]]; then\n     \
+    \   string=\"${string:0:$i} \"\n        break\n      fi\n    done\n  done\n  echo\
+    \ \"${string}\"", "\tsed -i -e 's/[aeiouAEIOU]/' $1", "    local STR=$1\n    STR=${STR//[aeiou]/}\n\
+    \    echo ${STR}", "    local string=\"${1}\"\n    local remove_chars=\"AEIOUYaeiouyAaBbCcDdEeFfGgHhIijKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz\"\
+    \n\n    for char in ${remove_chars}\n    do\n        string=${string} ${char}\n\
+    \    done\n\n    echo \"${string}\"", "    local -r input=$1\n    local output=\"\
+    \"\n    for c in ${input:g:a}; do\n        case \"${c}\" in\n        [aeiouy])\n\
+    \            continue\n            ;;\n        [A-Z])\n            continue\n\
+    \            ;;\n        *)\n            output=\"${output}${c}\"\n          \
+    \  ;;\n        esac\n    done\n    echo \"${output}\"", "    [[ -z \"$1\" ]] &&\
+    \ return 1\n    # replace $1 with the first non-vowel character\n    [[ \"$1\"\
+    \ =~ ^[aeiouAEIOU].* ]] && return 1\n    # replace $1 with an empty string\n \
+    \   [[ \"$1\" =~ ^[aeiouAEIOU].+$ ]] && return 1\n    # replace $1 with an empty\
+    \ string\n    [[ \"$1\" =~ ^[aeiouAEIOU].*$ ]] && return 1\n    # replace $1 with\
+    \ the first character in the set ${2:-aeiouAEIOU}\n    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}].\
+    \ ]] && return 1\n    # replace $1 with the first character in the set ${2:-aeiouAEIOU}\n\
+    \    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}]$. ]] && return 1\n    # replace $1 with\
+    \ the first character in the set ${2:-aeiouAEIOU}\n    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}].$\
+    \ ]] && return 1\n    # replace $1 with the first character in the set ${2:-aeiouAEIOU}\n\
+    \    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}].$. ]] && return 1\n    # replace $1 with\
+    \ the first character in the set ${2:-aeiouAEIOU}\n    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}].$\
+    \ ]] && return 1\n    # replace $1 with the first character in the set ${2:-aeiouAEIOU}\n\
+    \    [[ \"$1\" =~ ^[${2:-aeiouAEIOU}].$ ]] && return 1", "    local vowels=\"\
+    aAyY\"\n    local c=$1; shift\n    for v\n    do\n        [[ \"$c\" =~ $vowels\
+    \ ]] || c=\"${c//$v/}\"\n    done\n    echo $c", '    echo $1 | tr [a-z] [A-Z]',
+  "    local vowels=\"aA\"\n    local input=\"$1\"\n    local output=\"\"\n\n    for\
+    \ char in ${input:(-1)}; do\n        if [[ ${input:${#char}-1} == \"e\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"i\" ]] || [[ ${input:${#char}-1} == \"o\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"u\" ]] || [[ ${input:${#char}-1} == \"A\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"E\" ]] || [[ ${input:${#char}-1} == \"I\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"O\" ]] || [[ ${input:${#char}-1} == \"U\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"a\" ]] || [[ ${input:${#char}-1} == \"e\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"i\" ]] || [[ ${input:${#char}-1} == \"o\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"u\" ]] || [[ ${input:${#char}-1} == \"A\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"E\" ]] || [[ ${input:${#char}-1} == \"I\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"O\" ]] || [[ ${input:${#char}-1} == \"U\" ]] ||\
+    \ [[ ${input:${#char}-1} == \"\xE4\" ]] || [[ ${input:${#char}-1} == \"\xEB\"\
+    \ ]] || [[ ${input:${#char}-1} == \"\xF6\" ]] || [[ ${input:${#char}-1} == \"\xFC\
+    \" ]]; then\n            echo \"ERROR: non-ASCII characters in ${1}\"\n      \
+    \      exit 1\n        fi\n    done\n    \n    # remove vowels\n    for char in\
+    \ ${input:(-1)}; do\n        if [[ ${input:${#char}-1} == \"a\" ]] || [[ ${input:${#char}-1}\
+    \ == \"e\" ]] || [[ ${input:${#char}-1} == \"i\" ]] || [[ ${input:${#char}-1}\
+    \ == \"o\" ]] || [[ ${input:${#char}-1} == \"u\" ]] || [[ ${input:${#char}-1}\
+    \ == \"A\" ]] || [[ ${input:${#char}-1} == \"E\" ]] || [[ ${input:${#char}-1}\
+    \ == \"I\" ]] || [[ ${input:${#char}-1} == \"", '  echo "$1" | sed -r "s/[AEIOUaeiou]/""/g"',
+  '    echo "${@}" | tr [a-z] [A-Z]', "  # Initialize vowels array.\n  local vowels=(\
+    \ a e i o u )\n\n  # For each character, check if the character is in the vowels\
+    \ array.\n  for i in $@; do\n    if ! [[ ${vowels[*]} =~ $i ]]; then\n      printf\
+    \ '%s\\n' \"$i\"\n    fi\n  done", "    local var=\"$1\"\n\n    if [[ \"$var\"\
+    \ =~ [aeiou] ]]; then\n        var=${var//[aeiou]/}\n    fi\n\n    if [[ \"$var\"\
+    \ =~ [a-z] ]]; then\n        var=${var//[a-z]/}\n    fi\n\n    echo \"$var\"",
+  "  local chars=$1\n  local i=${#chars}\n  local result=\"\"\n  while [ $i -gt 0\
+    \ ]\n  do\n      if [ \"${chars:$i:1}\" == \"a\" -o \"${chars:$i:1}\" == \"e\"\
+    \ -o \"${chars:$i:1}\" == \"i\" -o \"${chars:$i:1}\" == \"o\" -o \"${chars:$i:1}\"\
+    \ == \"u\" ]; then\n           result=\"$result ${chars:$i:1}\"\n      fi\n  \
+    \    i=$(( i - 1 ))\n  done\n  echo -en \"$result\"", "    local i j\n\n    for\
+    \ (( i = 0; i < ${#1}; i++ )); do\n        j=\"${1[i]}\"\n        # Remove vowels\
+    \ from $j.\n        # Use a for loop instead of grep, because grep will exit after\
+    \ first non-vowel match.\n        # See http://stackoverflow.com/questions/6369926/how-can-i-remove-vowels-from-a-string-using-grep\n\
+    \        echo \"$j\" | awk '{for(i=1;i<=NF;i++)if(!($i~/[aeiou]$/)){print $i}}'\n\
+    \    done", "    local string=$1\n    echo \"${string//[aeiouAEIOU]}\"", "   \
+    \ local string=$1\n    local no_vowels=\"aeiouAEIOU\"\n    local length=${#string}\n\
+    \n    # Loop from start to end and check if current character is a vowel\n   \
+    \ for i in {0..${length}}; do\n        if [[ ${string:$i:1} = ${no_vowels} ]];\
+    \ then\n            string=${string:0:i}\n            echo ${string} # Print out\
+    \ character\n        fi\n    done\n    return ${string}", "  awk 'BEGIN{IGNORECASE=1}\
+    \ {gsub(/[aeiou]/, \"\", $1); print substr($1, 0, length($1))}' $1", "    sed\
+    \ -ie 's/[aeiouAEIOU]//g' $1", "    local string=$1\n\n    string=${string//[aeiouAEIOU]//}\n\
+    \    string=${string//[aeiouAEIOU]//}\n    string=${string//[aeiouAEIOU]//}\n\
+    \    string=${string//[aeiouAEIOU]//}\n    string=${string//[aeiouAEIOU]//}\n\
+    \    string=${string//[aeiouAEIOU]//}\n\n    echo \"${string}\"", "    local str=$1\n\
+    \    echo ${str//[aeiou]/ }", "\tlocal char=${1:?}\n\techo \"${char//[aeiouy]}\"",
+  "    local i char\n    for ((i=0; i<${#1}; i++)); do\n        char=${1:i:1}\n  \
+    \      case \"$char\" in\n            [aeiouAEIOU])\n                continue\n\
+    \                ;;\n        esac\n        echo ${1:0:i-1}\n    done", "\tlocal\
+    \ string=\"$1\"\n\tlocal vowels=\"aeiuoy\"\n\n\twhile [[ ${#string} -gt 0 ]]\n\
+    \tdo\n\t\tlocal index=\"${string:0:1}\"\n\n\t\t# If $string is empty, return empty\
+    \ string\n\t\tif [[ \"$string\" == \"\" ]] ; then\n\t\t\treturn \"\"\n\t\tfi\n\
+    \n\t\t# If the first character is a vowel, remove it from the string\n\t\tif [[\
+    \ \"$index\" == \"$vowels\" ]] ; then\n\t\t\tstring=\"${string:1}\"\n\t\telse\n\
+    \t\t\t# Remove the rest of the string including the first character\n\t\t\tstring=\"\
+    ${string#$index}\"\n\t\tfi\n\tdone\n\treturn \"$string\"", "    local str=\"$1\"\
+    \n    echo \"${str//[aeiou]//g}\"", "    echo $1 | sed 's/[aeiou]//g'", "    local\
+    \ string=${1:-}\n    local no_vowels=${2:-}\n    if [[ $no_vowels =~ [aeiouAEIOU]\
+    \ ]]; then\n        string=${string//$no_vowels/}\n    fi\n    echo $string",
+  "    tr 'aeiouAEIOU' 'A' * \"${#1}\"", "  local string=\"${1}\"\n  echo \"${string//[AEIOUYaeiouy]}\"",
+  '  echo "${1//[aeiou]}"', "  local string=\"$1\"\n  local vowels=\"a e i o u\"\n\
+    \  local output=''\n  for vowel in $vowels; do\n    output=\"${string//$vowel/$vowel}\"\
+    \n  done\n  echo \"$output\"", "  local vowels=\"AEIOUYaeiouy\"\n  local str=\"\
+    ${1}\"\n  local result=\"\"\n  echo \"$str\" | sed 's/[AEIOUYaeiouy]/\\n/g' >\
+    \ tmp.$$\n  cat tmp.$$ | sed 's/\\n//g' > tmp.$$.tmp\n  mv tmp.$$.tmp tmp.$$\n\
+    \  for line in `cat tmp.$$`; do\n    if [[ \"${vowels}\" =~ ${line} ]]; then\n\
+    \      continue\n    fi\n    echo \"${result}${line}\"\n    result=\"${result}${line}\"\
+    \n  done\n  rm tmp.$$\n  rm tmp.$$.tmp\n  echo \"${result}\"", "    local str=\"\
+    $1\"\n    echo \"${str//[AEIOUaeiou]/}\"", "    local string=\"$1\"\n\n    # Initialize\
+    \ vowels array as empty array\n    local vowels=\"\"\n\n    # Initialize counter\n\
+    \    local count=0\n\n    for char in \"${string//[^[:alpha:]]/}\"; do\n     \
+    \   # Increment count variable\n        count=$(( $count + 1 ))\n\n        # Skip\
+    \ the first character (which is already in vowels)\n        if [ \"$count\" -eq\
+    \ 1 ]; then\n            continue\n        fi\n\n        # Skip vowel characters\n\
+    \        if [ \"$char\" == \"$1\" ]; then\n            continue\n        fi\n\n\
+    \        # Add vowel character to the end of vowels array\n        vowels=\"${vowels}${char}\"\
+    \n    done\n\n    # Return string with vowels removed\n    echo \"${string//$1/${vowels}}\"",
+  "    local str=\"$1\"\n    local vowels=\"aeiouyAEIOUY\"\n    echo \"$str\" | sed\
+    \ -e \"s/[${vowels}]//g\"", "        local line=$1\n        # Removes vowels from\
+    \ the given string.\n        # Assumption: No letter has more than two consonants.\n\
+    \        echo \"${line//[aeiouAEIOUaA]/}\"", "  while [ $1 ]\n  do\n    echo $(echo\
+    \ \"$1\" | sed 's/[aeiouAEIOU]/\"\"/g')\n    shift\n  done", "    local vowels=\"\
+    aeiouAEIOU\"\n    local word=$1\n    local output=''\n\n    for c in \"${word}\"\
+    ; do\n        [[ \"${vowels}\" =~ \"${c}\" ]] && continue\n        output+=\"\
+    ${c}\"\n    done\n    echo \"$output\"", "    echo $1 | tr -cd '[aeiouAEIOU]'",
+  "\tstring=$1\n\t\n\tfor i in $(seq 0 2 ${#string})\n\tdo\n\t\tcase \"${string:$i:1}\"\
+    \ in\n\t\t[aeiou])\n\t\t\tstring=${string:0:$i}\n\t\t\t;;\n\t\t*)\n\t\t\tstring=${string:0:$i}\
+    \ \n\t\t\t;;\n\t\tesac\n\tdone\n\t\n\techo $string", "    local STR=$1\n\n   \
+    \ local STR_NEW=\"\"\n    for (( i=0; i<${#STR}; i++ )); do\n        local C=${STR:i:1}\n\
+    \        local V=$(awk -F \"aeiou\" '{print $1}' <<< $C)\n        [ \"$V\" !=\
+    \ \"a\" ] && [ \"$V\" != \"e\" ] && [ \"$V\" != \"i\" ] && [ \"$V\" != \"o\" ]\
+    \ && [ \"$V\" != \"u\" ] && STR_NEW+=\"$C\"\n    done\n    echo \"$STR_NEW\"",
+  "  local string vowels\n  string=\"$1\"\n  # convert $1 to a lowercase string\n\
+    \  string=\"$(echo \"$string\" | tr A-Z a-z)\"\n  # split string into individual\
+    \ characters and get rid of duplicates\n  string=\"$(echo \"$string\" | tr a-z\
+    \ A-Z)\"\n  string=\"$(echo \"$string\" | tr A-Z a-z)\"\n  string=\"$(echo \"\
+    $string\" | tr a-z A-Z)\"\n  # if $string contains at least one vowel, return\
+    \ $string without the vowels\n  vowels=\"$(echo \"$string\" | grep -i \"[aeiouy]\"\
+    ; printf '$string')\"\n  echo \"$vowels\"", "    local IFS=$'\\n'\n    local str=\"\
+    $1\"\n    echo \"${str//[^aeiouAEIOU]}\"", "    local string=\"$1\"\n    string=${string//[aeiouAEIOU]/}\n\
+    \    string=${string//[aeiouAEIOU\\&\\#\\@]/}\n    string=${string//\\&\\#\\@/}\n\
+    \    string=${string//[aeiouAEIOU\\&\\#\\@\\#\\&\\#]/}\n    string=${string//\\\
+    #\\@\\#\\&\\#/}\n    string=${string//[aeiouAEIOU\\&]/}\n    string=${string//[aeiouAEIOU]/}\n\
+    \    string=${string//[\\#\\@\\&]/}\n    string=${string//[\\#\\@]/}\n    string=${string//[aeiouAEIOU\\\
+    &\\#]/}\n    string=${string//[aeiouAEIOU]/}\n    string=${string//[\\#\\@\\&\\\
+    #\\#]/}\n    string=${string//[\\#\\@]/}\n    string=${string//[aeiouAEIOU\\&\\\
+    #\\#\\@\\#\\&\\#\\&\\#\\&\\#\\&]/}\n    string=${string//[aeiouAEIOU\\&\\#\\@\\\
+    #\\&\\#\\&\\#\\&\\#\\&\\#\\&\\#]/}\n    string=${string//[\\#\\@\\&\\#\\#\\&\\\
+    #\\&\\#\\&\\#\\&\\#\\&\\#\\&\\#\\&\\#\\#\\#\\&\\#\\&\\#\\#\\&\\#\\#\\&\\#\\&\\\
+    #\\#\\&\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\\
+    #\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\\
+    #\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\#\\", "    local _ret=${1:-}\n\
+    \    # loop over all chars in string $1 and check if it contains vowels or not\n\
+    \    for (( i=0; i < ${#_ret}; i++ )); do\n        if [[ $_ret[$i] == \"a\" ||\
+    \ $_ret[$i] == \"e\" || $_ret[$i] == \"i\" || $_ret[$i] == \"o\" || $_ret[$i]\
+    \ == \"u\" ]]; then\n            _remove_vowels_helper=$((_remove_vowels_helper+1))\n\
+    \        fi\n    done\n    _remove_vowels_helper=$((_remove_vowels_helper+1))\n\
+    \    _remove_vowels_helper=$((_remove_vowels_helper-1))\n    # return what we\
+    \ collected in _remove_vowels_helper\n    echo ${_ret:_remove_vowels_helper}",
+  "    echo \"$1\" | sed 's/[aeiou]//g'", "  local string=$1\n  [[ -n $string ]] ||\
+    \ return 1\n  local vowels=\"aeiouAEIOU\"\n  local length=\"${#string}\"\n  for\
+    \ (( i=0; i<${#vowels}; i++ )); do\n    local c=\"${string:$i:1}\"\n    [[ \"\
+    $c\" == \"$vowels\" ]] && return 0\n  done\n  return 1", "    local string=\"\
+    $1\"\n    local vowels=\"a e i o u\"\n    for v in $vowels; do\n        string=${string:-v}\n\
+    \    done\n    echo \"$string\"", "  local str=$1\n  local vowels=\"aeiouy\"\n\
+    \  local str_new=\"\"\n  local count\n  for (( count=0; count<${#str}; count++\
+    \ )); do\n    if [[ \"${vowels}\" =~ \"${str:$count:1}\" ]]; then\n      str_new=\"\
+    ${str_new}${str:$count:1}\"\n    fi\n  done\n  echo \"${str_new}\"", "    local\
+    \ str=$1\n    if [ \"$str\" == \"\" ]; then\n        echo \"$str\"\n    else\n\
+    \        echo \"${str//[^aeiouAEIOU]}\";\n    fi", "\tawk -v string=\"$1\" '{for(i=1;i<=length(string);i++){if(substr(string,i,1)==\"\
+    a\"||substr(string,i,1)==\"e\"||substr(string,i,1)==\"i\"||substr(string,i,1)==\"\
+    o\"||substr(string,i,1)==\"u\"||substr(string,i,1)==\"y\"){gsub(\"[aieuoy]\",\
+    \ \"\", string)}}; return string}'", "  # $1 - first argument\n  local str=$1\n\
+    \n  # We don't modify str if it contains no vowels\n  if [[ $(echo \"$str\" |\
+    \ grep -o \"[aeiou]\" | wc -l | tr -d \"\\n\") -eq 0 ]]; then\n    echo $str\n\
+    \  else\n    echo $(echo \"$str\" | sed -e 's/[aeiou]//g')\n  fi", "  local string=$1\
+    \ vowels=$2 string=${string//$vowels/}\n  echo $string", '  sed "s/[aeiouAEIOU]/\\&/g"
+    <<< "$1"', "    # Remove vowels from a string if they exist\n    [[ $1 =~ [aeiou]\
+    \ ]] || return $1;\n    \n    # Otherwise, remove all vowels\n    sed 's/[aeiou]//g'",
+  "    local string=$1\n    local outstring\n\n    outstring=\"${string//a/}\"\n \
+    \   outstring=\"${outstring//e/}\"\n    outstring=\"${outstring//i/}\"\n    outstring=\"\
+    ${outstring//o/}\"\n    outstring=\"${outstring//u/}\"\n    outstring=\"${outstring//y/}\"\
+    \n\n    outstring=\"${outstring//A/}\"\n    outstring=\"${outstring//E/}\"\n \
+    \   outstring=\"${outstring//I/}\"\n    outstring=\"${outstring//O/}\"\n    outstring=\"\
+    ${outstring//U/}\"\n    outstring=\"${outstring//Y/}\"\n\n    outstring=\"${outstring//B/}\"\
+    \n    outstring=\"${outstring//Z/}\"\n    outstring=\"${outstring//C/}\"\n   \
+    \ outstring=\"${outstring//D/}\"\n    outstring=\"${outstring//F/}\"\n\n    outstring=\"\
+    ${outstring//I/}\"\n    outstring=\"${outstring//K/}\"\n    outstring=\"${outstring//L/}\"\
+    \n    outstring=\"${outstring//M/}\"\n    outstring=\"${outstring//N/}\"\n\n \
+    \   outstring=\"${outstring//O/}\"\n    outstring=\"${outstring//Q/}\"\n    outstring=\"\
+    ${outstring//S/}\"\n    outstring=\"${outstring//T/}\"\n    outstring=\"${outstring//U/}\"\
+    \n    outstring=\"${outstring//V/}\"\n\n    outstring=\"${outstring//V/}\"\n \
+    \   outstring=\"${outstring//Y/}\"\n    outstring=\"${outstring//W/}\"\n\n   \
+    \ outstring=\"${outstring//X/}\"\n\n    outstring=\"${outstring//b/}\"\n    outstring=\"\
+    ${outstring//d/}\"\n    outstring=\"${outstring//f/}\"\n    outstring=\"${outstring//l/}\"\
+    \n    outstring=\"${outstring//m/}\"\n    outstring=\"${outstring//n/}\"\n   \
+    \ outstring=\"${outstring//o/}\"\n    outstring=\"${outstring//q/}\"\n    outstring=\"\
+    ${outstring//s/}\"\n    outstring=\"${outstring//t/}\"\n    outstring=\"${outstring//u/}\"\
+    \n    outstring=\"${outstring//v/}\"\n    outstring=\"${outstring//w/}\"\n\n \
+    \   outstring=\"${outstring//v/}\"\n\n    outstring=\"${outstring//y/}\"\n   \
+    \ outstring=\"${outstring//w/}\"\n\n    outstring=\"${outstring//z/}\"\n\n   \
+    \ echo $outstring", "  sed -e 's/[aeiouAEIOU]/\"\"/g'", "    [[ \"$1\" == \"\"\
+    \ ]] && return 1\n    local remove_vowels_command=''\n    for (( i=0; i<${#1};\
+    \ i++ )); do\n        local char=${1:$i:1}\n        [[ \"$char\" == \"a\" || \"\
+    $char\" == \"e\" || \"$char\" == \"i\" || \"$char\" == \"o\" || \"$char\" == \"\
+    u\" ]] && remove_vowels_command+=\" -e $char\"\n    done\n    remove_vowels_command+=\"\
+    \ | sed 's/[aeiouAEIOU]//g'\"\n    echo \"$remove_vowels_command\"", "    local\
+    \ input_string=$1\n    local vowels=\"aeiouAEIOU\"\n    local output_string=\"\
+    \"\n    local i\n    \n    for i in \"${input_string}\"; do\n        [[ \"$i\"\
+    \ =~ [AEIOU] ]] && output_string=\"$i\"\n    done\n\n    echo $output_string",
+  "  while read -r line; do\n    echo -n ${line/\\a*/} || echo ${line}\n  done", " \
+    \ sed 's/[aeiouy]+//g' $1;", "    awk -F \"[aeiou]\" '{\n        for (i=1; i<=NF;\
+    \ i++) {\n            $i = substr($i, 1, 1)\n        }\n        print\n    }'",
+  '  echo "${1//[aeiouAEIOU]/}"', "  echo \"$1\" | sed -e 's/[AEIOUaeiouAEIOU]/''/g'",
+  "    local string=$1\n    local newstring=\"\"\n    if [[ \"$string\" == \"\" ]];\
+    \ then\n        echo \"$string\"\n    else\n        echo \"${string:0:1}\"\n \
+    \       for ((i=0; i<${#string}; i++)); do\n            case \"${string:$i:1}\"\
+    \ in\n                a|A|e|E|i|I|o|O|u|U|y|Y|)\n                    newstring=\"\
+    $newstring ${string:$i:1}\"\n                    ;;\n                *)\n    \
+    \                newstring=\"$newstring ${string:$i:1}\"\n                   \
+    \ ;;\n            esac\n        done\n        echo \"$newstring\"\n    fi", "\t\
+    local vowels=\"aAeEiIoOuU\"\n\tlocal i\n\tlocal char\n\tlocal output=\"\"\n\t\
+    for i=\"$#\" ; do\n\t\tchar=\"$1\"\n\t\toutput+=\"${char//[$vowels]/}\"\n\t\t\
+    shift\n\tdone\n\techo \"${output}\"", "    local string=\"$1\"\n    echo \"${string}\"\
+    \ | sed -n 's/[aeiouAEIOU]//g'", '  echo "$1" | tr [b-z] ""', "    local var\n\
+    \    var=\"${1}\"\n    local string\n    string=\"${var}\"\n    echo \"${string//[aeiouAEIOUaeiou]}\"",
+  "  grep -Eo '[aeiouAEIOU]+' <<< $1 | tr 'aeiouAEIOU' 'A'", "    local STR=\"$1\"\
+    \n    local STR2=${STR//[aeiouAEIOU]+/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIOU]/}\n\
+    \    local STR2=${STR2//[aeiouAEIOU]/}\n    local STR2=${STR2//[aeiouAEIO", " \
+    \ local str=\"$1\"\n  local vowels=\"aieouy\" # put here vowels you want to remove.\n\
+    \  local result=\"\"\n\n  for (( i = 0; i <= ${#str}; i++ )); do\n    local c=${str:$i:1}\n\
+    \    if [[ \"${vowels}\" =~ \"${c}\" ]]; then\n      result=\"${result}${c}\"\n\
+    \    fi\n  done\n  echo \"${result}\"", "    local input=$1\n    echo \"${input//[AEIOUaeiou]/}\"",
+  '  echo "$1" | tr A-Z a-z', "  # $1\n  local output\n  output=${1}\n  local -i i\n\
+    \  local alphabet=\"aa ae ao au ay eu ey eo oe oo oa uu uy ehh aeh eth aoh aou\"\
+    \n  output=${output,,} # convert to lower case\n  output=${output::1}  # remove\
+    \ first character\n  output=${output::2}  # remove second character\n  output=${output::3}\
+    \  # remove third character\n  output=${output::4}  # remove fourth character\n\
+    \  output=${output::5}  # remove fifth character\n  output=${output::6}  # remove\
+    \ sixth character\n  output=${output::7}  # remove seventh character\n  output=${output::8}\
+    \  # remove eighth character\n  output=${output::9}  # remove ninth character\n\
+    \  output=${output::10}  # remove tenth character\n  output=${output::11}  # remove\
+    \ eleventh character\n  output=${output::12}  # remove twelfth character\n  output=${output::13}\
+    \  # remove thirteenth character\n  output=${output::14}  # remove fourteenth\
+    \ character\n  output=${output::15}  # remove fifteenth character\n  output=${output::16}\
+    \  # remove sixteenth character\n  output=${output::17}  # remove seventeenth\
+    \ character\n  output=${output::18}  # remove eighteenth character\n  output=${output::19}\
+    \  # remove nineteenth character\n  output=${output::20}  # remove twentyfirst\
+    \ character\n  output=${output::21}  # remove twentysecond character\n  output=${output::22}\
+    \  # remove twentythird character\n  output=${output::23}  # remove twentyfourth\
+    \ character\n  output=${output::24}  # remove twentyfifth character\n  output=${output::25}\
+    \  # remove twentysixth character\n  output=${output::26}  # remove twentyseventh\
+    \ character\n  output=${output::27}  # remove twentyeighth character\n  output=${output::28}\
+    \  # remove twentyninth character\n  output=${output::29}  # remove thirtyfirst\
+    \ character\n  output=${output::30}  # remove thirtysecond character\n  output=${output::31}\
+    \  # remove thirtythird character\n  ", "    if [[ $1 == \"\" ]]; then\n     \
+    \   echo \"$1\"\n    else\n        echo \"$1\" | tr -d 'aeiouAEIOU'\n    fi",
+  '    echo "$1" | tr [a-z] [A-Z]', "  local string=\"${1}\"\n  local vowels=\"aeiouAEIOU\"\
+    \n\n  echo \"$string\" | while read -r char; do\n    echo \"$char\" | grep -i\
+    \ \"$vowels\" && {\n      echo \"$char\"\n    }\n  done", "    local var\n   \
+    \ IFS= read -r -d '' var\n    echo \"${var//[aeiouAEIOU]}\"", "  local str=$1\n\
+    \  local newstr=\"\"\n  for ((i = 0; i < ${#str}; i++)); do\n    if [[ ${str:$i:1}\
+    \ =~ $vowel_regex ]]; then\n      newstr+=\"${str:$i:1}\"\n    fi\n  done\n  echo\
+    \ \"$newstr\"", "  local string=\"$1\"\n  local vowels=\"aeiouyAEIOUY\"\n  echo\
+    \ \"${string//[${vowels}]}\"", "    while [ -n \"$1\" ]; do\n        local STR=\"\
+    $1\"\n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}${STR,,}\"\
+    \n        STR=\"${STR,,}", "    local str=$1\n    str=$(echo \"$str\" | awk '{for(i=1;i<=length($0);i++){\n\
+    \        if($i !~ /^[aeiouAEIOU]{1}/){\n            gsub(/[aeiouAEIOU]/,\"\",$i)}}\n\
+    \         {print $0}')\n    echo \"$str\"", "    local string=\"${1}\"\n    local\
+    \ vowels=\"aeiouAEIOU\"\n\n    if [[ -z \"${string}\" ]]; then\n        return\
+    \ 0\n    fi\n\n    local stringWithoutVowels=$(remove_vowels_function \"${string}\"\
+    )\n\n    echo \"${stringWithoutVowels}\"", "  local vowels='a e i o u'\n  local\
+    \ str=\"${1}\"\n  echo \"${str//[${vowels}]}\"", "   cat <<EOF\n$1 | sed -e \"\
+    s/[aeiouAEIOU]/\\0/g\"\nEOF", "    sed 's/[AEIOUaeiouAEIOU]/U/g' <<<\"$1\"", "\t\
+    local string i\n\tstring=$1\n\tstring+=\" \"\n\tfor i in {a..z} #iterate from\
+    \ a-z\n\tdo\n\t\tstring=${string//$i/} #remove all occurrences of $i from $string\n\
+    \tdone\n\tstring=${string//[!a..z,]\"} #remove all occurrences of letters other\
+    \ than a-z and A-Z\n\tstring=${string//[!A..Z,]\"} #remove all occurrences of\
+    \ letters other than A-Z and a-z\n\tstring=${string//[!0-1-9,]\"} #remove all\
+    \ occurrences of letters other than 0-9\n\tstring=${string//[!\"#$%&'()*+,-./:;<=>?@[\\\
+    \\\\]^_`{|}~]\"} #remove all occurrences of letters other than a-z, A-Z, 0-9,\
+    \ space, #, %, &, ' (, ), *, +, -, ., /, :, ;, <, =, >, ?, @, [, \\], ^, _, `,\
+    \ {, }, [, ], ^, `, }\n\tstring=${string//[!\"#$%&'()*+,-./:;<=>?@\\[\\\\\\]^_`{|}~]/\
+    \ } #remove all occurrences of letters other than a-z, A-Z, 0-9, space, #, %,\
+    \ &, ' (, ), *, +, -, ., /, :, ;, <, =, >, ?, @, [, \\], ^, _, `, {, }, [, ],\
+    \ ^, `, }\n\tstring=${string// } #remove all occurrences of space\n\tstring=${string//\
+    \ } #remove all occurrences of space\n\tstring=${string// } #remove all occurrences\
+    \ of space\n\tstring=${string// } #remove all occurrences of space\n\tstring=${string//\
+    \ } #remove all occurrences of space\n\tstring=${string// } #remove all occurrences\
+    \ of space\n\tstring=${string// } #remove all occurrences of space\n\tstring=${string//\
+    \ } #remove all occurrences of space\n\tstring=${string// } #remove all occurrences\
+    \ of space\n\tstring=${string// } #remove all occurrences of space\n\tstring=${string//\
+    \ } #remove all occurrences of space\n\tstring=${string// } #remove all occurrences\
+    \ of space\n\tstring=${string// } #remove all occurrences of space\n\tstring=${string//\
+    \ } #remove all occurrences of space\n\tstring=${string// } #remove all occurrences\
+    \ of space\n\tstring=${string// } #remove all occurrences of ", "  local vowels=\"\
+    aeiouy\"\n  local i=$#\n  while ((i--)); do\n    [ \"$1\" == $vowels ] || return\n\
+    \    local j=$i\n    while ((j--)); do\n      local c=\"$1\"\n      [ \"$c\" !=\
+    \ \"${1:$j:1}\" ] && break\n      shift\n    done\n    shift\n  done", "    #\
+    \ Only print vowels in string\n    local string=${1//$( echo \"[aeiou]\" )} #\
+    \ removes vowels\n    local result=${string//$( echo \"[aeiouAEIOU]\" )} # removes\
+    \ vowels without consonants\n    echo ${result# } # removes space at end of string",
+  "    local string=\"$1\"\n    echo \"${string//[AEIOUaeiou]}\"", "    local string=$1\n\
+    \    echo $string | sed 's/[aeiouAEIOU]/\"\"/g' | sed 's/[aeiouAEIOU]/\"\"/g'\
+    \ | sed 's/[aeiouAEIOU]/\"\"/g'"]
 stop_tokens:
 - "\n}"

@@ -12,6 +12,1048 @@ tests: "}\n\ncandidate() {\n    double_the_difference \"$@\"\n}\n\nset -e\nrun_t
   \ -20.0 -30.0\") = \"0\" ]]\n    [[ $(candidate \"-1.0 -2.0 8.0\") = \"0\" ]]\n\
   \    [[ $(candidate \"0.2 3.0 5.0\") = \"34\" ]]\n    [[ $(candidate \"-9.0 -7.0\
   \ -5.0 -3.0 -1.0 1.0 3.0 5.0 7.0 9.0\") = \"165\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local x\n  x=\"${1}\"\n  # ignore negative numbers and non-integer\
+    \ values\n  echo \"$x\" | awk '{\n    for (i = 1; i <= NF; i++) {\n      a[i]+=$i;\n\
+    \    }\n  }\n  END {\n    for(i = 1; i <= NF; i++) {\n      if (a[i]%2 == 0) {\n\
+    \        s+=$i;\n      }\n    }\n    print s;\n  }'", "  local IFS=\" \"\n  local\
+    \ result\n  for arg; do\n    if [ -z \"$arg\" ] || [[ $arg == (-*|0\\+) ]]; then\n\
+    \      continue\n    elif (( $arg % 2 == 1 )); then\n      result=$(($result +\
+    \ $arg))\n    fi\n  done\n  echo \"$result\"", "  local list=\"${1}\"\n  local\
+    \ sum=\"$(echo \"${list}\" | xargs printf '%s\\n' | sort | uniq | grep -v '^ *$'\
+    \ | xargs printf '%d\\n' )\"\n  echo \"${sum}\" | bc -l", "  if [ ! -z $1 ] ;\
+    \ then\n    # Convert the list to an integer array.\n    IFS=$'\\n' read -a array\
+    \ <<< $1 # Avoid splitting on spaces\n    # Get the sum of the squares of the\
+    \ odd numbers.\n    sum=0\n    for i in \"${array[@]:1}\" ; do\n      if [[ $i\
+    \ -gt 0 ]] ; then # Filter out negatives and integers\n        ((sum += i*i))\n\
+    \      fi\n    done\n    # Return it\n    echo \"$sum\"\n  else\n    echo \"0\"\
+    \n  fi", "\tlocal numbers=$1\n\tlocal sum=0\n\tlocal digit\n\tlocal result=0\n\
+    \n\tfor (( i=0; i < ${#numbers}; i++ )); do\n\t\tdigit=${numbers:$i:1}\n\t\tresult=$((\
+    \ 10#$result + $digit ))\n\tdone\n\n\tsum=$(( 10#$sum + result ))\n\tif [[ $sum\
+    \ -gt 0 ]]; then\n\t\techo $sum\n\telse\n\t\techo \"0\"\n\tfi", "    local list=\"\
+    $1\"\n\n    # Ignore empty lists.\n    [ -z \"$list\" ] && return 0\n\n    # Convert\
+    \ list to array so we can iterate over the array and sum things.\n    local list_array=($list)\n\
+    \n    # Sum the squares of the odd numbers only. Ignore negative numbers.\n  \
+    \  local sum=0\n    for i in \"${list_array[@]}\"; do\n        if [[ $i -gt 0\
+    \ ]]; then\n            # Sum squares of odd numbers only.\n            (( sum\
+    \ += i**2 ))\n        fi\n    done\n\n    echo \"$sum\"", "    set -- \"$1\"\n\
+    \    if [ \"$#\" -eq 0 ]\n    then\n        echo 0\n        return 0\n    fi\n\
+    \    local sum=0\n    local number\n    for number in \"$@\"; do\n        if [\
+    \ \"$number\" -eq 0 ]\n        then\n            continue\n        fi\n      \
+    \  if [ \"$number\" -gt 0 ]\n        then\n            (( sum+=number*number ))\n\
+    \        fi\n    done\n    echo \"$sum\"", "  local numbers=$1\n  local sum\n\
+    \  local i\n  sum=0\n  for i in $numbers; do\n    local temp\n    temp=$(echo\
+    \ $i | tr \" \" \"\\n\")\n    if [[ $i =~ ^-?[0-9]+$ ]]; then\n      temp=${temp//\
+    \ /}\n      if [[ $i -ne 0 ]]; then\n        sum=$((sum+temp))\n      fi\n   \
+    \ fi\n  done\n  echo \"$sum\"", "  local numbers sum\n\n  numbers=$( echo $1 |\
+    \ tr \" \" \"\\n\" )\n  if [ -z \"$numbers\" ]\n  then\n    echo \"0\"\n    return\n\
+    \  fi\n\n  # Make sure we only have integers\n  local n\n  for n in $numbers\n\
+    \  do\n    if ! [[ $n =~ ^-?[0-9]+$ ]]\n    then\n      echo \"Invalid input:\
+    \ all numbers must be integers.\"\n      echo \"Usage: $(basename $0) [-d | --double]\
+    \ [-s SUM] [-n NUMBERS] [-h | --help]\" >&2\n      exit 1\n    fi\n  done\n\n\
+    \  # Find the sum of all the numbers\n  sum=$( echo \"$numbers\" | tr \" \" \"\
+    \\n\" | rev | cut -d\" \" -f1 | rev | rev | sed 's/^/+/g' | rev | paste -sd+ |\
+    \ tr '\\n' '-' | rev | cut -d- -f1 | rev)\n\n  # Loop through the numbers and\
+    \ double them\n  while read -r number; do\n    if [[ $number == *-** ]]; then\n\
+    \      echo \"Invalid input: all numbers must be integers.\"\n      echo \"Usage:\
+    \ $(basename $0) [-d | --double] [-s SUM] [-n NUMBERS] [-h | --help]\" >&2\n \
+    \     exit 1\n    fi\n    if [[ $number == *-** ]]; then\n      echo \"Invalid\
+    \ input: all numbers must be integers.\"\n      echo \"Usage: $(basename $0) [-d\
+    \ | --double] [-s SUM] [-n NUMBERS] [-h | --help]\" >&2\n      exit 1\n    fi\n\
+    \    sum=$( expr \"$sum\" + $number )\n  done <<< \"$numbers\"\n\n  # We have\
+    \ a sum, so double the difference between each number and the sum\n  # to find\
+    \ the first odd number\n  local first\n  first=$( echo \"$numbers\" | tr \" \"\
+    \ \"\\n\" | rev | cut -d\" \" -f1 | rev | rev | sed 's/^/+/g' | rev | cut -d-\
+    \ -f1 | rev)\n  local sum\n  sum=$( echo \"$numbers\" | tr \" \" \"\\n\" | rev\
+    \ | cut -d\" \" -f1 | rev | rev | sed 's/^/+/g' | rev | cut -d- -f1 | rev)\n \
+    \ local i\n  for i in $(seq $first $sum)\n  do\n    if [[ $(($i - $sum)) % 2 ==\
+    \ 0 ]]\n    then\n      sum=$( expr \"$sum\" + $i )", "  local sum=0\n  local\
+    \ numbers=($1)\n  echo \"${numbers[@]}\" | grep -E '^-?[0-9]+$' > /dev/null 2>&1\n\
+    \  if [ \"$?\" == \"1\" ]; then\n    echo \"0\"\n  else\n    for n in \"${numbers[@]}\"\
+    ; do\n      if [ \"$n\" -gt 0 ]; then\n        ((sum+=$((n*n)))\n      fi\n  \
+    \  done\n    echo \"$sum\"\n  fi", "  local numbers\n  local sum\n\n  numbers=(\
+    \ \"$@\" )\n  if [ ${#numbers[*]} -eq 0 ]; then\n    echo \"0\"\n    return\n\
+    \  fi\n\n  sum=\"$(echo \"${numbers[*]}\" | tr ' ' '\\n' | sort -n | uniq | tail\
+    \ -n 1)\"\n  echo \"$((${sum} ** 2))\"", "    local numlist=${1//[! ]/}\n    local\
+    \ res=0\n    for num in $numlist; do\n        if [[ $num -gt 0 ]]; then\n    \
+    \        if [[ $num -mod 2 == 0 ]]; then\n                res=\"$(($res + $num))\"\
+    \n            fi\n        fi\n    done\n    echo \"$res\"", "  local NUMBERS=${1//[/\
+    \ ]/}  # Remove the spaces.\n  local NUMBERS_COPY=${NUMBERS//./_}\n  local NUMBERS_COPY_SORTED=${NUMBERS_COPY}\n\
+    \  local SUM\n  local COUNTER\n\n  if [[ -z \"$NUMBERS\" ]]; then\n    SUM=0\n\
+    \  else\n    SUM=0\n    COUNTER=0\n    while [[ \"$COUNTER\" -lt \"$((${#NUMBERS_COPY}-1))\"\
+    \ ]]; do\n      (( SUM+=${NUMBERS_COPY_SORTED:$COUNTER}*${NUMBERS_COPY_SORTED:$COUNTER}\
+    \ ))\n      (( COUNTER++ ))\n    done\n  fi\n  echo \"$SUM\"", "    local x\n\
+    \    # Loop through the input list, adding values as we go along.\n    # Add numbers\
+    \ to the sum as we go, even if the values are negative or\n    # non-integers.\n\
+    \    local sum=0\n    local count=0\n    for x in \"${@}\"; do\n        ((count+=1))\n\
+    \        if [[ $x =~ ^-?[0-9]+$ ]]; then\n            ((sum+=x))\n        else\n\
+    \            ((sum+=x*x))\n        fi\n    done\n    # If the input list is empty,\
+    \ return 0.\n    if [[ ! \"${#@}\" -eq 0 ]]; then\n        echo \"$sum\"\n   \
+    \ else\n        echo \"0\"\n    fi", "  local numbers=\"$1\"\n  if [[ \"$numbers\"\
+    \ == *\" \"* ]]; then\n    numbers=\"$(echo \"$numbers\" | sed 's/ /\" 0 \"/g')\"\
+    \n  fi\n  echo $(( $(echo $numbers |\n      sed 's/ 0/\" 1 \"/g'\n      | sed\
+    \ 's/ /\" 2 \"/g'\n      | sed 's/ 3/\" 3 \"/g'\n      | sed 's/ 6/\" 6 \"/g'\n\
+    \      | sed 's/ 9/\" 9 \"/g'\n      | sed 's/ -/\" -2 \"/g'\n      | sed 's/\
+    \ 1/\" 1 \"/g'\n      | sed 's/ 2/\" 4 \"/g'\n      | sed 's/ 3/\" 9 \"/g'\n \
+    \     | sed 's/ 4/\" 16 \"/g'\n      | sed 's/ 5/\" 25 \"/g'\n      | sed 's/\
+    \ 6/\" 36 \"/g'\n      | sed 's/ 7/\" 49 \"/g'\n      | sed 's/ 8/\" 64 \"/g'\n\
+    \      | sed 's/ 9/\" 81 \"/g'\n      | sed 's/ 1/\" 1 \"/g'\n      | sed 's/\
+    \ 2/\" 4 \"/g'\n      | sed 's/ 3/\" 9 \"/g'\n      | sed 's/ 4/\" 16 \"/g'\n\
+    \      | sed 's/ 5/\" 25 \"/g'\n      | sed 's/ 6/\" 36 \"/g'\n      | sed 's/\
+    \ 7/\" 49 \"/g'\n      | sed 's/ 8/\" 64 \"/g'\n      | sed 's/ 9/\" 81 \"/g'\n\
+    \      | sed 's/ 1/\" 1 \"/g'\n      | sed 's/ 2/\" 4 \"/g'\n      | sed 's/ 3/\"\
+    \ 9 \"/g'\n      | sed 's/ 4/\" 16 \"/g'\n      | sed 's/ 5/\" 25 \"/g'\n    \
+    \  | sed 's/ 6/\" 36 \"/g'\n      | sed 's/ 7/\" 49 \"/g'\n      | sed 's/ 8/\"\
+    \ 64 \"/g'\n      | sed 's/ 9/\" 81 \"/g'\n      | sed 's/ 1/\" 1 \"/g'\n    \
+    \  | sed 's/ 2/\" 4 \"/g'\n      | sed ", "  local numbers=${1?Missing numbers\
+    \ to differentiate.}\n  local sum=0\n  local n\n  for n in $numbers\n  do\n  \
+    \  if test \"x$n\" != \"x\"\n    then\n      if [[ $n -lt 0 ]]; then\n       \
+    \ sum=0\n        continue\n      elif [[ $n -lt 1 ]]; then\n        sum=-1\n \
+    \       continue\n      fi\n      sum=$(( sum + $n**2 ))\n    fi\n  done\n  echo\
+    \ $sum", "\tlocal input_list=\"$1\"\n\tif [ -z \"$input_list\" ]\n\tthen\n\t\t\
+    echo \"0\"\n\telse\n\t\tlocal sum=0\n\t\tfor (( i=0; i<${#input_list[@]};  i++\
+    \ ))\n\t\tdo\n\t\t\t(( sum+=$(( $input_list[$i] % 2 )) ))\n\t\tdone\n\t\techo\
+    \ \"$sum\"\n\tfi", "    local items=$1\n    local total=0\n    for item in $items;\
+    \ do\n        (( total += $((item**2) | 0)) ))\n    done\n    echo $((total |\
+    \ 0))", "  local -r list=\"$1\"\n  if [[ -z \"$list\" ]]; then\n    echo \"0\"\
+    \n    return\n  fi\n  # If there are no odd numbers return 0\n  local sum=\"${list:\
+    \ -2:1}\"\n  [[ -z \"$sum\" ]]\n  echo \"$sum\"", "    local numbers=( \"${!1}\"\
+    \ )\n    local sum=0\n    for number in \"${numbers[@]}\"; do\n        if [ $number\
+    \ -gt 0 ] && [ $number -lt 10 ]; then\n            sum=$(($sum + $number))\n \
+    \       fi\n    done\n    echo -n $sum", "    local input=\"$1\"\n    local sum=0\n\
+    \    local number\n    while IFS= read -r number; do\n        if [ \"${number}\"\
+    \ -eq \"$number\" ] 2>/dev/null; then\n            # No need to check whether\
+    \ $number is a number.\n            # We already know it's not a number.\n   \
+    \         echo \"$number\"\n        elif (( $number < 0 )); then\n           \
+    \ echo \"$number\"\n        else\n            (( sum += $number**2 ))\n      \
+    \  fi\n    done\n    echo \"$sum\"", "    local x=0\n    local y=$(cat <<-EOF\n\
+    $1\nEOF\n)\n    local list=$(echo \"$y\" | tr \" \" \"\\n\")\n    for x in $list;\
+    \ do\n        if [[ \"$x\" =~ ^-?[0-9]+$ ]]; then\n            x=$(( $x + $x ))\n\
+    \        fi\n    done\n    echo \"$x\"", "  # The result should be an integer\n\
+    \  local n=$1\n  [[ -z \"$n\" ]] && return 0\n  # The input is expected to be\
+    \ a space separated list\n  [[ \"${n:0:1}\" != \" \" ]] || return 0\n  # Convert\
+    \ the string to a list of integers\n  local numbers\n  read -r -a numbers <<<\"\
+    ${n// /-}\" || return 0\n  # Convert each string in the list to an integer\n \
+    \ for n in \"${numbers[@]}\"; do\n    [[ \"$n\" =~ ^-?[0-9]+$ ]] || return 0\n\
+    \  done\n  # Reverse the list so we can remove items in-place\n  local i imax\n\
+    \  for (( i = ${#numbers[@]}-1; i >= 0; i-- )); do\n    (( imax = imax - numbers[i]\
+    \ ))\n    [[ $imax -eq 0 ]] && break\n  done\n  # Add up the squares of the remaining\
+    \ numbers. Reverse the list so we\n  # can remove items in-place.\n  for (( i\
+    \ = ${#numbers[@]}-1; i >= 0; i-- )); do\n    (( numbers[i] + numbers[i+1] ))\
+    \ && return 0\n  done\n  # Return the sum\n  printf %s \"${numbers[@]:0:imax}\"",
+  "  local numbers=$1\n  local sum=0\n  for i in $numbers\n  do\n    if [ -n \"${!i}\"\
+    \ ]\n    then\n      if [[ ${!i} =~ ^[0-9]+$ ]]\n      then\n        sum=$(( ${sum}\
+    \ + ${!i}))\n      fi\n    fi\n  done\n  echo \"${sum}\"", "    local list_string=$(\n\
+    \        echo \"$1\"\n        | awk -F\"[,\\\"]+\" '\n            { for (i=1;\
+    \ i<=NF; i++) {\n                if ($i % 2 == 1)\n                    printf\
+    \ \"%s \", $i\n            } }\n            END{ printf \"\\n\"; }'\n    )\n \
+    \   local list_integers=$(echo \"$list_string\" | cut -d \" \" -f 1-)\n    local\
+    \ list_sum=$(echo \"$list_integers\" | paste -s -d +) # +\n    echo \"$list_sum\"",
+  "    local numbers=(\"$@\")\n    local sum=0\n    local number\n    local odd\n\
+    \    local skipped_number=0\n\n    for number in \"${numbers[@]}\"; do\n     \
+    \   if [[ -n \"$number\" && ! -n \"$numbers\" ]]; then\n            echo \"$number:\
+    \ not a number!\"\n            skipped_number=1\n        elif [[ \"$number\" =~\
+    \ ^-[0-9]+$ ]]; then\n            echo \"$number: negative number!\"\n       \
+    \     skipped_number=1\n        elif [[ \"$number\" =~ ^[0-9]+$ ]]; then\n   \
+    \         odd=0\n            if (( \"$number\" > 0 )) ; then\n               \
+    \ for (( i=1; i<=$number; i++ )); do\n                    if (( \"$i % 2\" !=\
+    \ 0 )); then\n                        odd=1\n                    fi\n        \
+    \        done\n            else\n                echo \"$number: integer not positive!\"\
+    \n                skipped_number=1\n            fi\n        elif [[ -z \"$number\"\
+    \ ]]; then\n            echo \"$number: empty list!\"\n            skipped_number=1\n\
+    \        else\n            echo \"$number: not positive integer!\"\n         \
+    \   skipped_number=1\n        fi\n    done\n\n    if [[ $skipped_number -eq 1\
+    \ ]]; then\n        echo \"No negative or integers found in input!\"\n       \
+    \ return 0\n    elif [[ $skipped_number -eq 2 ]]; then\n        echo \"No positive\
+    \ integers found in input!\"\n        return 0\n    elif (( \"$skipped_number\"\
+    \ > 0 )); then\n        echo \"Not all numbers were found!\"\n        return 0\n\
+    \    elif [[ $odd -eq 1 ]]; then\n        sum=$(( sum + number ))\n    elif [[\
+    \ $odd -eq 0 ]]; then\n        sum=$(( sum + number ))\n    fi\n    sum=$(( sum\
+    \ + $sum ))", "  local sum=0\n  local n=$1\n  local i=0\n  for i in $(echo $n\
+    \ | sed \"s/ /,/g\")\n  do\n    if [ $i -eq 0 ]\n    then\n      sum=$((sum+$i))\n\
+    \    elif [ $i -eq 1 ]\n    then\n      sum=$((sum+$i*$i))\n    elif [ $i -eq\
+    \ 2 ]\n    then\n      sum=$((sum+$i*$i*$i))\n    elif [ $i -eq 3 ]\n    then\n\
+    \      sum=$((sum+$i*$i*$i*$i))\n    elif [ $i -eq 4 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i))\n\
+    \    elif [ $i -eq 5 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i))\n    elif\
+    \ [ $i -eq 6 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i))\n    elif [\
+    \ $i -eq 7 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i))\n    elif [\
+    \ $i -eq 8 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i))\n    elif\
+    \ [ $i -eq 9 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i*$i))\n \
+    \   elif [ $i -eq 10 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i))\n\
+    \    elif [ $i -eq 11 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i))\n\
+    \    elif [ $i -eq 12 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i))\n\
+    \    elif [ $i -eq 13 ]\n    then\n      sum=$((sum+$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i*$i))\n\
+    \    elif [ $i -", "    local input_list=\"${1}\"\n    local sum=0\n    local\
+    \ number\n    local i\n\n    for i do\n        number=\"${input_list[i]}\"\n \
+    \       if [ -z \"$number\" -o \"$number\" -lt 0 ]; then\n            continue\n\
+    \        fi\n        sum=$((sum + number*number))\n    done\n    if [ -z \"$input_list\"\
+    \ ]; then\n        echo \"0\"\n        return\n    fi\n    echo \"$sum\"", " \
+    \ local a=\"$1\"\n  local sum=0\n  local i\n  for ((i=0; i<${#a[@]}; i++)); do\n\
+    \    [[ ${a[i]} -eq 0 ]] && continue # skip 0 values\n    [[ -z ${a[i]} ]] &&\
+    \ continue  # skip empty strings\n    if [[ ${a[i+1]} -ne ${a[i]} ]]; then\n \
+    \     sum=$((sum + ${a[i]}))\n    fi\n  done\n  echo ${sum}", "    local list_str\
+    \ sum\n    list_str=\"$1\"\n    sum=0\n    while [ -n \"$list_str\" ] ; do\n \
+    \       sum=$((sum+$list_str))\n        list_str=$(echo \"$list_str $list_str\"\
+    \ | sed 's/ /+ /' | sed 's/^[ \\t]*//')\n    done\n    echo \"$sum\"", "  local\
+    \ numbers=$1\n  local sum=0\n  local square=0\n  for number in $numbers; do\n\
+    \    if [[ \"$number\" =~ ^-?[0-9]+$ ]]; then\n      ((square += number))\n  \
+    \    ((sum += square))\n    fi\n  done\n  echo \"$sum\"", "  local numbers=\"\
+    $1\"\n  if [ ${#numbers} -eq 0 ]; then\n    echo \"0\"\n  else\n    echo \"$((${numbers%%\
+    \ *} + ${numbers##* }))\"\n  fi", "  echo \"$1\" | tr \"-\" \"+\" | grep -v \"\
+    ^$\" | cut -d \"+\" -f 1 \\\n    | xargs -I % echo \"$(echo \"% % %\" | bc -l)\"",
+  "  local LIST=\"$1\"\n  echo \"$( IFS=' ' read -r -a elements <<<\"$LIST\" )\" |\n\
+    \    sed -e 's/^/${sum_squares_array[@]} = '\n  IFS=' ' read -r -a sum_squares_array\
+    \ < <(\n    IFS=' ' printf -v sum_squares_array_str '%s' \"${sum_squares_array[@]}\"\
+    \n    echo $sum_squares_array_str | sed 's/ = / & /'\n  )\n  echo \"$sum_squares_array_str\"",
+  "    local numbers=$1\n    local sum=0\n    local count=0\n    local number\n  \
+    \  for number in $numbers\n    do\n        if [ $number -ge 0 ]\n        then\n\
+    \            count=$(($count + 1))\n            sum=$(($sum + $number))\n    \
+    \    else\n            count=$(($count + 1))\n        fi\n    done\n    if [ $count\
+    \ -gt 0 ]\n    then\n        return $(($sum / $count))\n    else\n        return\
+    \ 0\n    fi", "    local numbers=$1 sum=0\n    # Check that $1 contains something\
+    \ other than whitespace\n    if [ -z \"$numbers\" ]; then\n        return 0\n\
+    \    fi\n    # Parse the numbers\n    for number in $numbers; do\n        # If\
+    \ the number is negative, ignore it\n        if [ \"$number\" -lt 0 ]; then\n\
+    \            continue\n        fi\n        # If it isn't an integer, ignore it\n\
+    \        if [ \"$number\" -gt 0 ]; then\n            IFS=\"$(echo -n $number |\
+    \ cut -d \".\" -f 1 | cut -d \"e\" -f 1)\"\n            case \"$number\" in\n\
+    \                *) continue\n                    ;;\n            esac\n     \
+    \   else\n            # If the number is 0, skip it\n            continue\n  \
+    \      fi\n        # Add the number to the sum\n        sum=$((sum+number))\n\
+    \    done\n    # Return the sum of the squares of the numbers\n    echo \"$((sum*sum))\"",
+  "  local numbers=$1\n  echo \"${numbers// / }\"\n  if [ -z \"${numbers}\" ]; then\
+    \ return 0; fi\n  local sum=0\n  for number in ${numbers}; do\n    (( sum+=( $number\
+    \ & 1 ) ))\n  done\n  echo \"${sum}\"", "  # Trim whitespace and convert to lower\
+    \ case\n  local input=\"$1\" ; shift\n  local output=\"$(echo \"$input\" | sed\
+    \ -e 's/^\\s*//' -e 's/\\s*$//' | sed -e 's/^ *//' -e 's/ *$//' | tr '[:upper:]'\
+    \ '[:lower:]')\"\n\n  # If there's nothing in the input list, return 0\n  if [[\
+    \ -z \"$input\" ]]; then\n    echo \"0\"\n    return\n  fi\n\n  # Convert input\
+    \ to an array using IFS=' '\n  local -a arr=( $input )\n\n  # Sum all odd numbers\n\
+    \  local sum=0\n  local -i index=0\n  for number in \"${arr[@]}\"; do\n    ((\
+    \ index += 1 ))\n    if [ \"$number\" -eq \"$number\" ] && [ \"$index\" -eq \"\
+    $index\" ]; then\n      (( sum += $number ))\n    fi\n  done\n\n  # Return sum\
+    \ of squares of odd numbers less than input\n  if [ \"$sum\" -lt \"$input\" ];\
+    \ then\n    echo \"0\"\n  else\n    echo \"$sum\"\n  fi", "    local IFS=' ' #Field\
+    \ Separator Variable\n    local total=0\n    local input=\"$1\"\n    local -n\
+    \ items=\"${input:-}\"\n    local item i=0\n    while [[ -n \"${items[$i]}\" ]];\
+    \ do\n        if [[ \"${items[$i]}\" -gt 0 ]]; then\n            ((total+=items[$i]))\n\
+    \        fi\n        ((i++))\n    done\n    total=\"${total:-0}\"\n    echo -n\
+    \ \"${total}\"", "  local numbers=$1\n\n  # The first entry of the list is 0 so\
+    \ we start at 1 instead of 0\n  local start=1\n\n  # The sum of the squares is\
+    \ 0.\n  local sum=0\n\n  # This loop will stop when we reach the end of the list,\
+    \ or when the\n  # first number is negative, or when the first number is non-integer.\n\
+    \  while [[ $numbers ]]; do\n    local this=${numbers#* }\n    if [[ $this -gt\
+    \ 0 ]]; then\n      local sum=$(( $sum + $this * $this ))\n    fi\n\n    # Only\
+    \ count odd numbers\n    local odd=${this%?}\n    if [[ $odd -gt 1 ]]; then\n\
+    \      break\n    fi\n\n    # Move the start of the list forward\n    numbers=$start$numbers\n\
+    \n    # Move the start of the sum forward\n    sum=$start$sum\n  done\n\n  # Return\
+    \ the sum\n  echo \"$sum\"", "  local list_arg=\"$1\" list_count=\"$2\" sum\n\
+    \  list_arg=\"${list_arg// /-}\"  # replace spaces with dashes\n  list_arg=\"\
+    $(echo $list_arg | tr ' ' '-')\"  # convert dashes to spaces\n  list_arg=\"${list_arg//-/\
+    \ }\"  # remove dashes from spaces\n  list_arg=\"$(echo $list_arg | tr ' ' '-')\"\
+    \  # convert dashes to spaces\n  list_arg=\"${list_arg//-/ }\"  # remove dashes\
+    \ from spaces\n  if [ \"${list_arg}\" = \"\" ]; then\n    list_count=0\n  fi\n\
+    \  for list_element in $list_arg; do\n    if [ \"$list_element\" -ge 0 ]; then\n\
+    \      list_count=$((list_count+list_element))\n    fi\n  done\n  sum=$((list_count\
+    \ * list_count))\n  if [ \"$list_count\" -eq 0 ]; then\n    sum=0\n  fi\n  echo\
+    \ $sum", "  local numbers=\"${1}\"\n  [[ -z \"${numbers}\" ]] && return 0\n  local\
+    \ sum=0\n  for i in $numbers; do\n    if [[ $i =~ ^-?[0-9]+$ ]]; then\n      ((sum+=$i))\n\
+    \    else\n      ((sum+=$i))\n    fi\n  done\n  echo \"${sum}\"", "    local numbers=$1\n\
+    \n    local sum=0\n    local lastnumber=0\n    for i in $numbers\n    do\n   \
+    \     echo $i | tr -d \"\\n\"\n        sum=$(( $sum + $i ))\n        echo $sum\n\
+    \        echo -n $sum\n        (( lastnumber += $i ))\n        echo $lastnumber\n\
+    \    done", "  local -n arr=$1\n  arr=${arr[*]} # Remove whitespace\n  arr=(${arr[@]/#/\
+    \ }) # Remove leading '#'\n  arr=(${arr[@]/-/ }) # Remove leading '-'\n  arr=(${arr[@]/%/\
+    \ }) # Remove trailing %\n  arr=(${arr[@]/%/ }) # Remove trailing %\n  arr=(${arr[@]/%/\
+    \ }) # Remove trailing %\n  echo \"${arr[*]}\" | \\\n    grep -q -v -e '^-$' -e\
+    \ '^-' -e '^0' && return 0 || return $((${arr[*]#0} ^ (${arr[*]%*}-${arr[*]%*})))\
+    \ || return 0", "\t\n\tlocal -n list=\"$1\"\n\tlocal -i sum=0\n\tlocal x\n\n\t\
+    # If there are no numbers in the list, return 0.\n\tif [[ ${#list[@]} -eq 0 ]];\
+    \ then\n\t\t\n\t\techo \"0\"\n\t\n\t# If the first number in the list is negative,\
+    \ ignore it.\n\telif [[ ${list[0]} -eq 0 ]]; then\n\t\n\t\techo \"0\"\n\t\n\t\
+    # Otherwise, do the sum of the squares.\n\telse\n\t\n\t\t# Sum all the numbers\
+    \ in the list, and square them.\n\t\tfor x; do\n\t\t\t((sum+=x*x))\n\t\tdone\n\
+    \t\n\t\t# If the sum is odd, ignore it.\n\t\t[[ \"${sum}\" % 2 -eq 1 ]]\n\t\n\t\
+    \t# If not, return it.\n\t\techo \"${sum}\"\n\t\n\t# Finally, exit the function.\n\
+    \tfi", "    local input=$1\n\n    # Be sure to preserve any leading spaces.\n\
+    \    local input_trimmed=\"$(echo \"${input}\" | tr -d ' \\t\\n')\"\n\n    local\
+    \ input_numbers=${input_trimmed}\n\n    # Strip empty strings.\n    local input_numbers_stripped=\"\
+    ${input_numbers//[[:space:]]//}\"\n    local input_numbers_stripped_length=$(echo\
+    \ \"${input_numbers_stripped}\" | wc -l)\n\n    # Echo the original input for\
+    \ debugging.\n    echo \"${input_numbers}\" >&2\n    echo \"${input_numbers_stripped}\"\
+    \ >&2\n\n    local sum=0\n    for i in $(seq 0 $((${input_numbers_stripped_length}\
+    \ - 1))); do\n        local ii=${input_numbers_stripped[$i]}\n        local iii=${input_numbers_stripped[$((i\
+    \ + 1))]}\n\n        if (( ${ii:0:1} == \"-\" )) || \\\n            (( ${ii:0:1}\
+    \ == \"#\" )) || \\\n            (( ${iii:0:1} == \"-\" )) || \\\n           \
+    \ (( ${iii:0:1} == \"#\" )) || \\\n            (( ${iii:0:1} == \"$\" )) || \\\
+    \n            (( ${ii:0:1} == \"$\" )) ; then\n            # Don't add if either\
+    \ number is negative or is a hex or dollar.\n            local iiii=${input_numbers_stripped[$((i\
+    \ + 2))]}\n            (( ${iiii:0:1} == \"-\" )) || \\\n                (( ${iiii:0:1}\
+    \ == \"#\" )) || \\\n                (( ${iiii:0:1} == \"$\" )) || \\\n      \
+    \          (( ${iiii:0:1} == \"$\" )) || \\\n                (( ${iiii:0:1} ==\
+    \ \"$\" )) || \\\n                (( ${iiii:0:1} == \"$\" )) || \\\n         \
+    \       (( ${iiii:0:1} == \"$\" )) || \\\n                (( ${iiii:0:1} == \"\
+    $\" )) || \\\n                (( ${iiii:0:1} == \"$\" )) || \\\n             \
+    \   (( ${iiii:0:1} == \"$\" )) || \\\n                (( ${iiii:0:1} == \"$\"\
+    \ )) || \\\n                (( ${iiii:0:1} == \"$\" )) || \\\n               \
+    \ (( ${iiii:0:1} == \"$\" )) || \\\n                (( ", "  local numbers=$1\n\
+    \  local sum=0\n  for number in $numbers; do\n    (( sum+=number*number ))\n \
+    \ done\n  if [ $sum -eq $sum ]; then\n    echo $sum\n  else\n    echo $sum\n \
+    \ fi", "    local IFS=\" \"\n    local list=\"$1\"\n    if [ x$list != x ]; then\n\
+    \        echo \"$list\" | sed 's/^/echo \"/g' | sed 's/ $//g' | sed 's/^/echo\
+    \ \"/g' | sed 's/$//g' | grep -v '^[0-9]*$' | sort | uniq | awk '{sum=$1; for\
+    \ (i = 2; i <= NF; i++) if ($i%2) sum += $i; print sum}'\n    fi", "  local -n\
+    \ arr=$1\n  local sum=$(echo $arr | sed 's/ /+/g' | sed 's/^\\(\\([-+]\\)\\?\\\
+    )/\\1/g')\n  echo $(( ${sum//[+-]} ))", "  # This should be done in a way that\
+    \ will work with any version of bash.\n  local i a sum\n  IFS=$'\\n' read -d ''\
+    \ -ra a<<<\"$1\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    ((a[i] += 0))\n    if\
+    \ [ \"$a\" ] &> /dev/null; then\n      ((a[i] += 0))\n    fi\n    sum=\"$((sum\
+    \ + a[i]))\"\n  done\n  echo \"$sum\"", "  local arg\n  if [[ -z \"${1+x}\" ]];\
+    \ then\n    echo \"0\"\n    return\n  fi\n  arg=\"${@:1}\"\n  local -a nums\n\
+    \  read -ra nums <<< \"$arg\"\n  local sum\n  for num in \"${nums[@]}\"; do\n\
+    \    if (( num )); then\n      if (( num % 2 )); then\n        sum=\"$((sum +\
+    \ num))\"\n      fi\n    fi\n  done\n  echo \"$sum\"", "\tlocal NUMBERS=\"${1}\"\
+    \n\n\tNUMBER_OF_ELEMENTS=${#NUMBERS}\n\tif [[ ${NUMBER_OF_ELEMENTS} == \"0\" ]];\
+    \ then\n\t\techo \"0\"\n\t\treturn 0\n\tfi\n\t\n\tSUM=0\n\t\n\tfor i in $(seq\
+    \ 0 $((${NUMBER_OF_ELEMENTS} - 1))); do\n\t\tis_odd=false\n\t\tif [[ ${NUMBERS[i]}\
+    \ -eq 0 ]]; then\n\t\t\tis_odd=true\n\t\telse\n\t\t\tis_odd=$(expr $NUMBERS[i]\
+    \ % 2 -eq 0)\n\t\tfi\n\t\tif [[ ${is_odd} == true ]]; then\n\t\t\tSUM=$((${SUM}\
+    \ + ${NUMBERS[i]}))\n\t\tfi\n\tdone\n\t\n\treturn ${SUM}", "  local list_string=\"\
+    $1\"\n  local sum=\"0\"\n  local number_string\n  while IFS=\" \" read -r number_string;\
+    \ do\n    (( sum += $(( ${number_string} )) ))\n  done <<< \"$list_string\"\n\
+    \  echo \"$sum\"", "  local items=( \"${1}\" )\n  local sum=0\n  local tmp\n \
+    \ local sum_square\n  local i\n\n  for item in \"${items[@]}\"; do\n    if [ \"\
+    ${item}\" -lt 0 ]; then\n      continue\n    elif [ \"${item}\" -gt 0 ]; then\n\
+    \      tmp=$(echo \"${item} * ${item}\" | bc)\n      sum=$(echo \"${sum} + ${tmp}\"\
+    \ | bc)\n      sum_square=$(echo \"${sum_square} + ${tmp} * ${tmp}\" | bc)\n \
+    \   else\n      sum=${sum}\n      sum_square=${sum_square}\n    fi\n  done\n\n\
+    \  # If no items, return 0\n  if [ \"${#items[@]}\" -eq 0 ]; then\n    echo 0\n\
+    \  fi\n\n  # Divide by the number of items to get the average\n  echo \"${sum\
+    \ / ${#items[@]}}\"", "    set -- \"$1\" \"$2\"\n    sum=0\n    for i in $(seq\
+    \ 0 $(( $# - 1)))\n    do\n        (( i % 2 == 1 )) && sum=`expr $sum + $i`\n\
+    \    done\n    if [ $? -gt 0 ]\n    then\n        echo $sum\n    else\n      \
+    \  echo \"0\"\n    fi", "  local l\n  local -i n\n  local sum\n  if [[ \"$1\"\
+    \ =~ ^[0-9]+$ ]]; then\n    for l in $@; do\n      if [[ \"$l\" =~ ^-?[0-9]+$\
+    \ ]]; then\n        sum=$((sum+$l))\n      else\n        if [[ \"$l\" =~ ^-?[0-9]+.[0-9]+$\
+    \ ]]; then\n          sum=$((sum+$l*$l))\n        else\n          if [[ \"$l\"\
+    \ =~ ^-?[0-9]+\\.[0-9]+$ ]]; then\n            sum=$((sum+$l*$l))\n          else\n\
+    \            if [[ \"$l\" =~ ^-?[0-9]+\\.[0-9]+ ]]; then\n              sum=$((sum+$l*$l))\n\
+    \            else\n              sum=$((sum+$l))\n            fi\n          fi\n\
+    \        fi\n      fi\n    done\n    echo $((sum))\n  else\n    echo \"0\"\n \
+    \ fi", "  local input=\"$(echo \"$1\" | sed 's/^ *//')\"\n\n  # If there are no\
+    \ numbers, return 0\n  [ -z \"$input\" ] && echo \"0\" || \\\n  local total=0\n\
+    \n  for (( i=1; i <= ${#input}; i++ )); do\n    if [ \"$i\" -eq \"${input:$i:1}\"\
+    \ ] && [ \"$i\" -ne \"0\" ] && [ \"$i\" -ne \"$input\" ]; then\n      (( total+=${input:$i:1}\
+    \ ))\n    fi\n  done\n\n  echo \"$total\"", "  local input=$(echo $1 | tr -d '[]')\n\
+    \  if [ -z \"$input\" ]; then echo 0; else for i in $input; do if [ ! $((i % 2))\
+    \ ]; then echo $((($i * $i)) | bc -l); fi; done; fi", "    local numbers=$1\n\
+    \    local sum=0\n\n    while read number; do\n        (( ${number:0:1} == -0\
+    \ )) || continue  # Skip negative numbers\n        (( ${number:0:1} % 2 == 0 ))\
+    \ || continue  # Skip even numbers\n        (( ${number:0:1} < 0 )) || continue\
+    \  # Skip negative numbers\n        (( ${#number} < 1 )) || continue  # Skip empty\
+    \ lines\n        (( ${numbers[0]} != ${number} )) && continue # Skip duplicated\
+    \ numbers\n        sum=$(( ${sum} + ${number} ))\n    done <<< \"$numbers\"\n\n\
+    \    echo \"$sum\"", "    local numbers=$1;\n    local sum=0;\n    if [[ -z \"\
+    $numbers\" ]]; then\n        echo \"$sum\";\n    else\n        for number in $numbers;\
+    \ do\n            if [[ $number =~ ^-?[0-9]+$ ]]; then\n                let sum+=${number}**2;\n\
+    \            fi;\n        done;\n        echo \"$sum\";\n    fi;", "    local\
+    \ i\n    local sum=0\n    local num_str=\"$1\"\n\n    for (( i = 0; i < ${#num_str};\
+    \ i++ )); do\n        (( i % 2 != 0 )) && echo \"$num_str\" && sum=$(( $sum +\
+    \ ${num_str[$i]} ))\n    done\n    echo \"$sum\"", "  local array=\"$1\"\n  local\
+    \ sum=0\n  local n=0\n  local odd\n  while IFS= read -r line; do\n    ((n++))\n\
+    \    odd=false\n    for ((i=0; i<${#array[@]}; i++)) {\n      if (( ${array[i]}\
+    \ > 0 )) { odd=true; }\n      (( ${array[i]} > 0 )) && break\n    }\n    sum=$((\
+    \ $sum + $(( ${array[i]} * ${array[i]} )) ))\n  done < <(echo \"$array\")\n  if\
+    \ (( ${n} <= 0 )) { sum=0; }\n  echo \"$sum\"", "\tlocal numbers=\"$1\"\n\tlocal\
+    \ sum=0\n\tlocal odd=0\n\tlocal negative=0\n\n\t# Strip off any leading negative\
+    \ and trailing zeroes\n\tnumbers=\"${numbers//[!-0-9.]}\" && numbers=\"${numbers//.0//}\"\
+    \ # remove leading zeroes\n\n\t# Trim whitespace from the left and right of the\
+    \ numbers\n\tnumbers=\"${numbers//[[:space:]]*}\"  # remove leading whitespace\n\
+    \tnumbers=\"${numbers//[[:space:]]*}\"  # remove trailing whitespace\n\tnumbers=\"\
+    ${numbers//[[:space:]]*}\"  # remove leading and trailing whitespace\n\n\t# Turn\
+    \ the space-separated list into a list\n\tnumbers=\"${numbers//[!-0-9.]/}\"  #\
+    \ remove non-numerics and non-decimals\n\n\tfor number in $numbers; do\n\t\t#\
+    \ Only add numbers that are odd\n\t\tif [ \"$number\" -eq \"$number\" ] 2>/dev/null;\
+    \ then\n\t\t\tlet \"sum += $number\"\n\t\t\tlet \"odd += 1\"\n\t\telse\n\t\t\t\
+    let \"negative += 1\"\n\t\tfi\n\tdone\n\t\n\t# If there were no numbers in the\
+    \ list, return 0\n\t[ ! -z \"$numbers\" ] && [ \"$sum\" -gt 0 ] && [ \"$odd\"\
+    \ -gt 0 ] && [ \"$negative\" -eq 0 ] && [ \"$sum\" != 0 ] && echo \"$sum\"", " \
+    \ if [[ -z \"$1\" ]]\n  then\n    echo \"0\"\n  else\n    SUM=0\n    IFS=' '\n\
+    \    read -r -a array <<< \"$1\"\n    for var in \"${array[@]}\"\n    do\n   \
+    \   if (( $var % 2 ))\n      then\n        SUM=\"$SUM + $var\"\n      fi\n   \
+    \ done\n    echo $(( SUM / 2 ))\n  fi", "    local IFS=' '\n    local nums=$1\n\
+    \    local sum=0\n    for num in $nums; do\n        if [[ $num -ge 0 ]]; then\n\
+    \            if [[ $num -ne $(( num % 2 )) ]]; then\n                sum=$(( $sum\
+    \ + $num ))\n            fi\n        fi\n    done\n    echo $(( 10#$sum % 10 ))",
+  "  # $1 is a space-separated list\n  # $2 is the second argument to the function\n\
+    \  # $3 is the return value (optional)\n  local x\n  local -i sum\n  sum=0\n \
+    \ for x; do\n    sum=$((sum+x^2))\n  done\n  # $1 is empty or all elements are\
+    \ integers, so return 0\n  # $2 is not set, so return $sum\n  test \"$1\" != \"\
+    \" || return \"$sum\"\n  return \"$sum\"", "    local list=\"$1\"\n    local sum=\"\
+    $2\"\n    # Double the sum for each element\n    for element in $list; do\n  \
+    \      if [[ ${element} -gt 0 ]]; then\n            # If the element is greater\
+    \ than zero, add it to the sum.\n            # Remember that ${list} is passed\
+    \ as a single string (no spaces).\n            sum=$((${sum} + ${element}))\n\
+    \        elif [[ ${element} -eq 0 ]]; then\n            # The element was 0, so\
+    \ we ignore it.\n            # Remember that ${list} is passed as a single string\
+    \ (no spaces).\n            sum=$((${sum}))\n        elif [[ ${element} -lt 0\
+    \ ]]; then\n            # The element was negative or not an integer.\n      \
+    \      # Remember that ${list} is passed as a single string (no spaces).\n   \
+    \         sum=$((${sum}))\n        else\n            # The element is an integer\
+    \ (i.e. not negative).\n            # Remember that ${list} is passed as a single\
+    \ string (no spaces).\n            sum=$((${sum} + ${element}))\n        fi\n\
+    \    done\n    echo \"$sum\"", "  local input_list=\"$1\";\n  local result=0;\n\
+    \  for number in $input_list; do\n    if [ \"$number\" -eq \"0\" ]; then\n   \
+    \   continue;\n    fi\n    if [ \"$number\" -eq \"-1\" ]; then\n      return 0;\n\
+    \    fi\n    if [ \"$number\" -eq \"-2\" ]; then\n      return 0;\n    fi\n  \
+    \  if [ \"$number\" -a \"$number\" -eq \"$number\" ] || [ \"$number\" -eq \"$number\"\
+    \ ]; then\n      continue;\n    fi\n    if [ \"$number\" -lt 0 ]; then\n     \
+    \ return 0;\n    fi\n    if [ \"$number\" -gt 0 ]; then\n      result=$((result\
+    \ + $number));\n    fi\n  done\n  return $result;", "    local x=\"$(echo \"$1\"\
+    \ | tr \" \" '\\n' | sort -n | head -n 1)\"\n    local sum=0\n    while read x;\
+    \ do\n        if [[ $x =~ ^-?[0-9]+$ ]]; then\n            sum=$(expr $sum + $x)\n\
+    \        elif [[ $x =~ ^[0-9]+$ ]]; then\n            sum=$(expr $sum + $x)\n\
+    \        fi\n    done <<< \"$x\"\n    echo $sum", "    local my_list=$(echo \"\
+    ${@}\" | tr ' ' '\\n' | grep -v '^[0-9]$')\n    if [[ -z \"${my_list}\" ]]; then\n\
+    \        return 0\n    fi\n    echo \"${my_list}\" | awk '{for (i=2; i <= NF;\
+    \ i++) if ($i % 2) sum += $i}; END {print sum}'", "    local LIST\n    LIST=\"\
+    $1\"\n    local RESULT=0\n    for NUMBER in $LIST; do\n        if [ -n \"$NUMBER\"\
+    \ -a \"$NUMBER\" -ge 0 ]; then\n            if [ \"$NUMBER\" -le 0 -o \"$NUMBER\"\
+    \ -gt 9 ]; then\n                if [ $((RESULT = $RESULT + $NUMBER)) -eq 0 ];\
+    \ then\n                    RESULT=$((RESULT + $NUMBER))\n                fi\n\
+    \            else\n                RESULT=$((RESULT + $NUMBER))\n            fi\n\
+    \        fi\n    done\n    echo \"$RESULT\"", "  local i\n  local sum=0\n  for\
+    \ i in \"$1\"; do\n    if [[ $i -gt 0 ]]; then\n      sum=$((sum+$i**2))\n   \
+    \ fi\n  done\n  echo $sum", "\tlocal -r numbers=\"$1\"\n\tlocal -a sum\n\tlocal\
+    \ sum=0\n\n\tif [[ $numbers =~ ^[0-9]*$ ]]; then\n\t\tlocal i\n\t\tfor i in $(seq\
+    \ 0 $(( ${#numbers} - 1 )))\n\t\tdo\n\t\t\tif [[ $(( ${numbers[i]} % 2 )) -eq\
+    \ 1 ]]; then\n\t\t\t\t(( sum += numbers[i] ))\n\t\t\tfi\n\t\tdone\n\telse\n\t\t\
+    sum=0\n\tfi\n\n\techo \"$sum\"", "  local string=\"${1}\"\n  local sum=0\n  local\
+    \ n=0\n  local a=0\n\n  for num in $string; do\n    if [[ $num -gt 0 ]]; then\n\
+    \      if [[ $num -lt 2 ]]; then\n        sum=0\n      else\n        ((n++))\n\
+    \        sum=$((sum + num*num))\n      fi\n    fi\n  done\n\n  if [[ $n -gt 0\
+    \ ]]; then\n    if [[ $sum -gt 0 ]]; then\n      echo $sum\n    else\n      echo\
+    \ 0\n    fi\n  else\n    echo \"0\"\n  fi", "  if [[ \"$1\" =~ (^|\\s)(\\-?[0-9]+)(\\\
+    s|$) ]]; then\n    local sum=${BASH_REMATCH[1]}\n    local integers=${BASH_REMATCH[2]}\n\
+    \    local odd_sum\n    local length=\"${#integers}\"\n\n    for (( i = 0; i <\
+    \ ${length}; i++ )); do\n      local j=${i}\n      local digit=${integers[${i}]}\n\
+    \n      # Ignore non-integers\n      if [[ ! $digit =~ ^-?[0-9]+$ ]]; then\n \
+    \       continue\n      fi\n\n      # Ignore negative numbers\n      if [[ ${digit}\
+    \ == -${integers} ]]; then\n        continue\n      fi\n\n      # Compute sum\
+    \ of the digits in the odd positions and add to total sum\n      odd_sum=\"${odd_sum}\
+    \ + $digit\"\n\n      # Skip the digit in the sum if the number is already in\
+    \ the sum\n      if [[ ${sum} != ${integers} ]]; then\n        sum=\"${sum} +\
+    \ $digit\"\n      fi\n    done\n\n    local sum=\"${sum} + ${odd_sum}\"\n    local\
+    \ new_sum\n\n    # Only want to return negative numbers, ignore zero\n    if [[\
+    \ ${sum} =~ ^-?[0-9]+$ ]]; then\n      new_sum=$(( ${sum} + ${integers} ))\n \
+    \   else\n      new_sum=$(( ${sum} ))\n    fi\n  fi\n\n  echo \"$new_sum\"", "\t\
+    local list_string=$1\n\tlocal sum=$(echo $list_string | grep -o \"^[+-]?[0-9]*$\"\
+    )\n\tlet \"sum+=sum\"\n\techo $sum", "    local nums=\"${1}\"\n    local num\n\
+    \    local result\n\n    for num in $nums; do\n        if [ \"${num}\" -eq \"\
+    ${num}\" ] 2>/dev/null; then\n            echo \"${num}\"\n        fi\n    done\n\
+    \n    echo \"${nums}\"\n\n    result=0\n\n    for num in $nums; do\n        if\
+    \ [ \"${num}\" -eq \"${num}\" ] 2>/dev/null; then\n            echo \"${num}\"\
+    \n            result=$((result+${num}))\n        fi\n    done\n\n    echo \"${result}\"\
+    \n\n    echo \"${result}\"\n\n    echo \"${result}\"\n\n    echo \"${result}\"\
+    \n\n    echo \"${result}\"\n\n    eval result=$(expr \"${result}\" '*2')\n\n \
+    \   echo \"${result}\"\n\n    echo \"${result}\"\n\n    eval result=$(expr \"\
+    ${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\"\
+    \ '-')\n\n    echo \"${result}\"\n\n    eval result=$(expr \"${result}\" '+')\n\
+    \n    echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\" '-')\n\n  \
+    \  echo \"${result}\"\n\n    echo \"${result}\"\n\n    echo \"${result}\"\n\n\
+    \    eval result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval\
+    \ \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"\
+    result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr\
+    \ \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr \"\
+    ${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\"\
+    \ '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\" '+')\n\
+    \n    echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\" '+')\n\n  \
+    \  echo \"${result}\"\n\n    eval \"result=$(expr \"${result}\" '+')\n\n    echo\
+    \ \"${result}\"\n\n    eval \"result=$(expr \"${result}\" '+')\n\n    echo \"\
+    ${result}\"\n\n    eval \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\
+    \n\n    eval \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n\
+    \    eval \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n   \
+    \ eval \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval\
+    \ \"result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"\
+    result=$(expr \"${result}\" '+')\n\n    echo \"${result}\"\n\n    eval \"result=$(expr\
+    \ \"${result}\" '+')", "  local list=\"$1\"\n  local sum=0\n  local i\n  for i;\
+    \ do\n    if [[ \"$i\" == [0-9] ]]; then\n      (( sum += $(( $i * $i )) ))\n\
+    \    elif [[ \"$i\" == [0-9]* ]]; then\n      (( sum += $(( $i * $i )) ))\n  \
+    \  elif [[ \"$i\" == [0-9]+ ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif\
+    \ [[ \"$i\" == -* ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif [[ \"\
+    $i\" == -[0-9]* ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\"\
+    \ == -[0-9]+ ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" ==\
+    \ -[0-9]* ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == -[0-9]+\
+    \ ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == -* ]]; then\n\
+    \      (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --* ]]; then\n     \
+    \ (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --[0-9]* ]]; then\n     \
+    \ (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --[0-9]+ ]]; then\n     \
+    \ (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --[0-9]* ]]; then\n     \
+    \ (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --[0-9]+ ]]; then\n     \
+    \ (( sum += $(( $i * $i )) ))\n    elif [[ \"$i\" == --* ]]; then\n      (( sum\
+    \ += $(( $i * $i )) ))\n    elif [[ \"$i\" == --+ ]]; then\n      (( sum += $((\
+    \ $i * $i )) ))\n    elif [[ \"$i\" == --+ ]]; then\n      (( sum += $(( $i *\
+    \ $i )) ))\n    elif [[ \"$i\" == --+ ]]; then\n      (( sum += $(( $i * $i ))\
+    \ ))\n    elif [[ \"$i\" == --* ]]; then\n      (( sum += $(( $i * $i )) ))\n\
+    \    elif [[ \"$i\" == --* ]]; then\n      (( sum += $(( $i * $i )) ))\n    elif\
+    \ [[ \"$i\" == --* ]]; then\n      (( sum += ", "  local numbers=$1\n  local sum=0\n\
+    \  local count=0\n  for number in $numbers\n  do\n    (( count++ ))\n    if [[\
+    \ $number == -?* ]] || [[ $number != $number ]]\n    then\n      continue\n  \
+    \  fi\n    (( sum += number * number ))\n  done\n  echo $sum", "  # This uses\
+    \ associative array notation, so bash version 4 or newer is\n  # required.\n \
+    \ mapfile -t numbers < <(echo \"$1\" | tr ' ' \"\\n\")\n  local sum=0\n  for i\
+    \ in \"${numbers[@]}\"; do\n    if (( ${i} % 2 )); then\n      sum=$(( $sum +\
+    \ $i ))\n    fi\n  done\n  echo \"$sum\"", "  local -i sum=0\n  for ((i=0; i<${#1};\
+    \ i++)); do\n    ((sum+=${1:i:1}))\n  done\n  if [[ ${sum} -eq 0 ]]; then\n  \
+    \  sum=0\n  fi\n  echo \"${sum}\"", "    local l=\"$1\"\n    if [ -z \"$l\" ]\
+    \ || [ \"${l: -1}\" == \"0\" ]; then\n        return 0\n    fi\n\n    # Convert\
+    \ the input list to an array\n    local -a nums=\"$l\"\n\n    # Store the sum\
+    \ of squares in total\n    local total=0\n\n    # Iterate over the array\n   \
+    \ for num in \"${nums[@]}\"; do\n        ((total += num * num))\n    done\n\n\
+    \    # Square the sum, ignoring any negative numbers or non-integers\n    local\
+    \ -a squares=()\n    for ((i=${#nums[@]} - 1; i>=0; i--)); do\n        if [[ ${nums[i]}\
+    \ -le 0 ]]; then\n            continue\n        elif [[ $nums[i] =~ ^-?[0-9]+$\
+    \ ]]; then\n            squares+=( ${nums[i]} )\n        fi\n    done\n\n    #\
+    \ Return the sum of the squares of the elements that are odd\n    echo \"${total}+${total%?}\"\
+    \ | bc -l", "    if [ -z \"$1\" ]\n    then\n        return 0\n    else\n    \
+    \    (( result = 0 ))\n        IFS=\" \" read -a a <<< \"$1\"\n        for n in\
+    \ \"${a[@]}\"\n        do\n            if [ \"$n\" -ne 0 ]\n            then\n\
+    \                (( result += $n*$n ))\n            fi\n        done\n       \
+    \ return $result\n    fi", "    local x\n    local total=0\n    local xlist=${1:-$(echo\
+    \ \"${@}\" | tr -d ' ' | cut -d' ' -f 2)}\n\n    if [[ $# -eq 0 ]]; then\n   \
+    \     echo \"0\"\n    else\n        for x in $xlist; do\n            # echo \"\
+    $x $xlist\"\n            [[ \"$x\" =~ ^-?[0-9]+$ ]] || continue # ignore negative\
+    \ or non-integer numbers\n            total=$(( total + $x * $x ))\n        done\n\
+    \        echo \"$total\"\n    fi", "    local input_array=\"$1\"\n    local output=\"\
+    $2\"\n    shift 2\n    if [ \"${#input_array[@]}\" = 0 ]; then\n        echo \"\
+    0\"\n        return\n    fi\n    local input\n    for input in \"${input_array[@]}\"\
+    ; do\n        if (( \"$input\" > 0 )); then\n            if (( \"$input\" != \"\
+    ${input%?}\" )); then\n                echo \"$(( $output + $input ))\"\n    \
+    \        else\n                echo \"$(( $output + $input ))\"\n            fi\n\
+    \        else\n            echo \"$output\"\n        fi\n    done", "    local\
+    \ input_list=\"${1}\"\n\n    # Convert input list to an integer list\n    local\
+    \ integer_list=\"${input_list//$'\\n' ,}\"\n    integer_list=\"${integer_list//[!0-9.-]}\"\
+    \n    integer_list=\"${integer_list//$'\\t' ,}\"\n    integer_list=\"${integer_list//$'\\\
+    v' ,}\"\n    integer_list=\"${integer_list//$'\\f' ,}\"\n    integer_list=\"${integer_list//$'\\\
+    r' ,}\"\n\n    local sum=0\n    local i=0\n    local num\n    for num in \"${integer_list}\"\
+    ; do\n        if (( num % 2 )); then\n            sum=\"$sum + $num\"\n      \
+    \  fi\n        (( i++ ))\n    done\n\n    echo $sum", "  local input=\"$1\"\n\
+    \  local sum=0\n  for number in $input; do\n    if (( number != 0 )); then\n \
+    \     sum=$(($sum+$((number**2))))\n    fi\n  done\n  echo $(($sum))", "    local\
+    \ -n list=\"${1-}\"\n    local sum=$(( ${#list[@]} > 0 ? \"${list[0]}\" : 0 ))\n\
+    \    for number in \"${list[@]}\"; do\n        if (( ${number} < 0 )); then\n\
+    \            echo \"${number} is an invalid negative number in function double_the_difference.\"\
+    \n            return 0\n        fi\n        ((sum += ${number} * ${number}))\n\
+    \    done\n    echo \"${sum}\"", "\tlocal my_list=\"$(echo \"$1\" | sed -e 's/\
+    \ /\" \"/g')\"\n\tlocal sum=0\n\tfor (( i=0; i < ${#my_list[@]} ; i++ )); do\n\
+    \t\tlocal val=\"${my_list[i]}\"\n\t\tif [ \"$val\" -gt 0 ]; then\n\t\t\tif [ \"\
+    $val\" -eq \"$val\" ]; then\n\t\t\t\tcontinue\n\t\t\telif [ \"$val\" -le 0 ];\
+    \ then\n\t\t\t\tmy_list[i]=0\n\t\t\telif [ \"$val\" -lt 0 ]; then\n\t\t\t\tmy_list[i]=0\n\
+    \t\t\tfi\n\t\tfi\n\t\t(( sum += val*val ))\n\tdone\n\techo \"$sum\"", "    local\
+    \ IFS=' ' items=($(echo $1 | tr ' ' '\\n'))\n\n    local sum=0\n    for item in\
+    \ \"${items[@]}\"\n    do\n        if [[ \"$item\" =~ ^-?[0-9]+$ ]] && (( item\
+    \ % 2 ))\n        then\n            (( sum += item ))\n        fi\n    done\n\
+    \    echo $(( sum * sum))", "  echo \"$@\" | tr ' ' '\\n' | grep -v -E '^-[0-9]+$'\n\
+    \  echo \"$@\" | tr ' ' '\\n' | grep -v -E '^[0-9]+$'\n  echo \"$@\" | tr ' '\
+    \ '\\n' | grep -v -E '^$' | xargs -n 1 -I {} echo $(( $(echo \"$1\" | tr ' ' '\\\
+    n' | grep -v -E '^[0-9]+$' | grep -E '^-[0-9]+$' | grep -Eq '^[0-9]+$' | grep\
+    \ -v -E '^-[0-9]+$' | grep -v -E '^[0-9]+$' | grep -Eq '^[0-9]+$' | sed 's/^-\\\
+    ([0-9]\\+\\).*$/\\1/g' | sed 's/^[0-9]\\+.*$/\\1/g') ** $(( $(echo \"$1\" | tr\
+    \ ' ' '\\n' | grep -v -E '^-[0-9]+$' | grep -Eq '^[0-9]+$' | grep -v -E '^-[0-9]+$'\
+    \ | grep -v -E '^[0-9]+$' | grep -Eq '^[0-9]+$' | sed 's/^-\\([0-9]\\+\\).*$/\\\
+    1/g' | sed 's/^[0-9]\\+.*$/\\1/g') )", "  echo \"$1\"\n  if [[ -z $1 ]]; then\n\
+    \    echo \"0\"\n  else\n    local numbers=\"$1\"\n    echo \"$(echo \"$numbers\"\
+    \ | tr \" \" \"\\n\" | sort -n | tr -d \"\\n\" | awk '{sum += $0}; END {print\
+    \ sum}' | bc)\"\n  fi", "    local in=$1 out=0\n    local -a nums\n    read -a\
+    \ nums <<<\"$in\"\n    while [ -n \"$in\" ] && [ -n \"$nums\" ] ; do\n       \
+    \ if (( ${#nums[@]} % 2 )); then\n            out=$(( out + ${nums[@]/-/+} ))\n\
+    \        fi\n        (( ${#nums[@]} -= 2 ))\n        (( in=${in%?} ))\n      \
+    \  (( nums=${nums[@]/-/+} ))\n    done\n    echo \"$out\"", "    local numbers=\"\
+    ${1}\"\n    if [[ ${numbers} ]]; then\n        local sum\n        sum=$(\n   \
+    \         echo \"${numbers}\"\n            | xargs -I {} -- sh -c 'if [[ ! $(echo\
+    \ \"${1}\" | grep -q \"^-*$\") ]]; then\n                                (( sum\
+    \ + {} ))\n                            else\n                                ((\
+    \ sum - {} ))\n                            fi'\n        )\n        echo \"${sum}\"\
+    \n    else\n        echo 0\n    fi", "    if [[ \"$#\" -eq 0 ]]; then\n      \
+    \  echo \"0\"\n        return 0\n    fi\n    if [[ \"$#\" -eq 1 ]]; then\n   \
+    \     echo \"0\"\n        return 0\n    fi\n    local numbers=$(echo $1 | sed\
+    \ \"s/ /\" \"/g\")\n    local sum=0\n    for i in $numbers; do\n        if [[\
+    \ \"$i\" -eq 0 ]]; then\n            continue\n        fi\n        sum=$(( ${sum}\
+    \ + $(( i * i )) ))\n    done\n    echo ${sum}", "  # Convert the input string\
+    \ into an array\n  IFS=' ' read -r -a list <<< \"$1\"\n  # Reverse the order of\
+    \ the array elements\n  for i in \"${list[@]}\"; do\n    if test \"$i\" -lt 0;\
+    \ then\n      echo 0\n      return\n    elif test \"$i\" -eq 0; then\n      echo\
+    \ 0\n      return\n    fi\n  done\n  # Sum up all the numbers less than the length\
+    \ of the array\n  sum=0\n  for i in \"${list[@]:1}\"; do\n    sum=\"$((sum + $i))\"\
+    \n  done\n  # Square the sum and return\n  echo $((sum * sum))", "    local input=\"\
+    $1\"\n\n    # Strip whitespace from the input string.\n    local input_cleaned=$(sed\
+    \ 's/^ *//' <<< \"$input\")\n\n    # Split the input string into a list of integers\n\
+    \    local numbers=$(echo \"$input_cleaned\" | sed 's/ *$//g' <<< \"$input_cleaned\"\
+    )\n\n    # If the list is empty, return 0\n    if [[ -z \"$numbers\" ]]\n    then\n\
+    \        return 0\n    fi\n\n    # Sum of squares of odd and even numbers separately\
+    \ and sum the results.\n    local even_squares=0\n    local odd_squares=0\n\n\
+    \    for i in $(seq 1 \"$#\"); do\n        local value=$((${numbers[i]} * ${numbers[i]}))\n\
+    \n        if [[ \"$i\" -eq 1 ]]; then\n            even_squares=\"$even_squares\
+    \ + $value\"\n        else\n            odd_squares=\"$odd_squares + $value\"\n\
+    \        fi\n    done\n\n    local sum=$((even_squares + odd_squares))\n\n   \
+    \ # Format the sum and return it.\n    echo \"$sum\"", "    local -r input=\"\
+    ${1}\"\n    # Double the values which are even.\n    # Ignore negative numbers\
+    \ and non-integer values.\n    local -r sum=$(echo \"${input}\" | tr '[:space:]'\
+    \ '\\n' | sed 's/^/1/g' | sed 's/$/\\n/' | awk '{sum+=($1*$1)}END{print sum}')\n\
+    \    echo \"${sum}\"", "    if [ -z \"$1\" ]; then\n        return 0\n    fi\n\
+    \    \n    local IFS=$'\\n'\n    local list_input\n    list_input=$1\n    shift\n\
+    \    \n    local sum=0\n    local i=0 j=0\n    while [ $i -lt ${#list_input} ];\
+    \ do\n        if [ ${list_input[$i]} -gt 0 ]; then\n            (( sum+=${list_input[$i]}\
+    \ ))\n            j=$(( j+1 ))\n        fi\n        (( i++ ))\n    done\n    \n\
+    \    # At this point sum holds your answer, but we still need to convert it.\n\
+    \    # To do this, we use the Bash arithmetic evaluation commands: $((...))\n\
+    \    # and ${...}\n    # Using these two commands, we can evaluate the expression\
+    \ 'sum' and\n    # store its result in our answer. The resulting expression is\
+    \ in fact:\n    # \"$(( sum << 1 ))\"\n    # The double ampersand in front of\
+    \ the 'sum' command is for Bash to\n    # perform string concatenation.\n    #\
+    \ We also need to do something to ensure 'sum' isn't interpreted as a\n    # number.\n\
+    \    # The first argument to $(( )) is our variable. We tell Bash\n    # that\
+    \ we're expecting an arithmetic expression (using the '<<' operator),\n    # and\
+    \ Bash will perform the arithmetic evaluation for us using the\n    # value of\
+    \ the variable as its left hand argument, in this case sum.\n    # Since Bash\
+    \ will perform the arithmetic evaluation on our variable,\n    # we need to tell\
+    \ Bash that the variable is an integer. We do this\n    # using our double-ampersand\
+    \ syntax.\n    # Lastly, we need to tell Bash we're expecting a string as the\
+    \ argument\n    # to our variable. We do this by enclosing the 'sum' argument\
+    \ in double\n    # quotes.\n    # As a side note, Bash can perform arithmetic\
+    \ evaluations on its own\n    # without having to use $(( )), but doing so requires\
+    \ us to\n    # remember to put single quotes around the argument to Bash. For\n\
+    \    # example:\n    # >>> $(echo '$(( 9-5 ))')\n    # -bash: ((: 9 - 5: syntax\
+    \ error: operand expected (error token is \"9 - 5\")\n    # While the above example\
+    \ is valid, it would be invalid if we did\n    # not add single quotes around\
+    \ the argument.\n    # As a final note, this code also works with other bash arithmetic\n\
+    \    # evaluation commands, such as '(($i))', and even '((", "    set -- $1 \"\
+    $@\"\n    local sum=\"${!2}\"\n    local odd=\"$(printf '%s\\n' \"${@:3}\" | sort\
+    \ -n | tail -n 1)\"\n    sum=\"${sum:-$((0))}\"\n    odd=\"${odd:-$((0))}\"\n\
+    \    if [ -n \"$odd\" -a \"$sum\" -lt \"$odd\" ]; then sum=\"$((sum + $((odd))))\"\
+    ; fi\n    echo \"$sum\"", "    local numbers=\"$1\"\n    if [[ \"$numbers\" =~\
+    \ ^-?[0-9]+$ ]]; then\n        IFS=' ' read -ra nums <<< \"$numbers\"\n    else\n\
+    \        nums=()\n    fi\n    local sum=0\n    for n in \"${nums[@]}\"; do\n \
+    \       if [[ $n -lt 0 ]]; then\n            sum=0\n            break\n      \
+    \  fi\n        if [[ $(( n % 2 )) == 1 ]]; then\n            sum=$(( sum + $n\
+    \ ))\n        fi\n    done\n    echo \"$sum\"", "  # The first argument is the\
+    \ list\n  local list_numbers=\"$1\"\n  # Initialize a list to hold the result\n\
+    \  local result=0\n  # Loop over the list\n  for i in $(echo $list_numbers | sed\
+    \ \"s/ /\\n/g\"); do\n    # Skip empty strings\n    if [ -z \"$i\" ]; then continue;\
+    \ fi\n    # Skip negative numbers\n    if [ \"$i\" -lt 0 ]; then continue; fi\n\
+    \    # Skip non-integers\n    if [ \"$i\" -gt 0 ]; then continue; fi\n    # Keep\
+    \ adding squares of odd numbers\n    if [ \"$i\" -eq $((i*i)) ]; then result=$((result\
+    \ + i)); fi\n  done\n  echo $result", "  local NUMBERS=\"$1\"\n  local RESULT=0\n\
+    \  while read -r line; do\n    # Strip leading whitespace and any trailing newlines\n\
+    \    LINE=\"${line#\"${line%%[![:space:]]*}\"}\"\n    if [[ -z \"${LINE}\" ]];\
+    \ then\n      continue\n    fi\n    # Ignore non-integer and negative numbers\n\
+    \    if [[ \"${LINE}\" =~ ^-?[0-9]+$ ]]; then\n      if (( ${LINE} % 2 )); then\n\
+    \        # Sum all the evens\n        RESULT=$(( RESULT + ${LINE} ))\n      fi\n\
+    \      # If all evens, reset result to 0\n      if (( ${#LINE} % 2 )); then\n\
+    \        RESULT=0\n      fi\n    fi\n  done <<< \"$NUMBERS\"\n  # Return empty\
+    \ result if there are no numbers\n  if [[ -z \"$RESULT\" ]]; then\n    echo \"\
+    0\"\n  else\n    echo \"$RESULT\"\n  fi", "    local numbers=$1\n    local sum=0\n\
+    \    local result=0\n\n    while read -r number; do\n        if (( number < 0\
+    \ || number != number / 0 )) ; then\n            # ignore non-integer and negative\
+    \ numbers\n            continue\n        fi\n\n        sum=$(( sum + number ))\n\
+    \    done <<< \"$numbers\"\n\n    result=$(( sum * sum / 2 ))\n\n    echo \"$result\"",
+  "  local numbers\n  numbers=( $1 )\n  if [ \"${#numbers[@]}\" -eq 0 ]; then\n  \
+    \  return 0\n  fi\n  local sum\n  sum=0\n  for i in \"${numbers[@]}\"; do\n  \
+    \  [ $(( i % 2 )) -eq 0 ] && let \"sum+=$i\"\n  done\n  echo $sum", "  local input_list=$1\n\
+    \  local sum_square=0\n  local current_number\n  for current_number in $input_list;\
+    \ do\n    if [[ $current_number =~ ^-?[0-9]+$ ]]; then\n      if (( $current_number\
+    \ % 2 )); then\n        sum_square=$(( $sum_square + $current_number ))\n    \
+    \  fi\n    elif [[ $current_number =~ ^[0-9]+$ ]]; then\n      if (( $current_number\
+    \ % 2 )); then\n        sum_square=$(( $sum_square + $current_number ))\n    \
+    \  fi\n    else\n      echo \"Unrecognized number '$current_number'\"\n      return\n\
+    \    fi\n  done\n\n  echo \"$sum_square\"", "  local sum=0\n  for (( i=0; i <\
+    \ ${#1}; i++ )); do\n    test $((${1:i} % 2)) == 0 && let sum+=$((${1:i} * ${1:i}))\n\
+    \  done\n  echo $sum", "    local sum=0\n    local input\n    while read input;\
+    \ do\n        (( sum += $input ))\n    done\n    echo \"$sum\"", "  local NUMBERS=\"\
+    $1\"\n  local SUM=0\n  local VALUE\n  # Remove leading spaces and trailing commas\n\
+    \  NUMBERS=\"$(echo \"$NUMBERS\" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\"\
+    \n  for NUMBER in $NUMBERS; do\n    VALUE=\"$(echo \"$NUMBER\" | sed -e 's/^[[:space:]]*//'\
+    \ -e 's/[[:space:]]*$//')\"\n    if [[ $VALUE =~ ^-?[0-9]+$ ]]; then\n      if\
+    \ [ $VALUE -eq 0 ]; then\n        SUM+=\"$VALUE\"\n      elif [ $VALUE -ne 0 ];\
+    \ then\n        SUM+=\"$VALUE^2^\"\n      fi\n    fi\n  done\n  echo \"$SUM\"",
+  "  local list=\"$(echo \"$1\" | tr ' ' '\\n' | sort -n)\"\n  local sum=0\n  for\
+    \ num in $list; do\n    (( (num % 2) != 0)) && sum+=$((num*num))\n  done\n  echo\
+    \ \"$sum\"", "  local numbers=$1\n  ((${#numbers} == 0)) || return 0\n  local\
+    \ sum=0\n  for number in ${numbers}; do\n    ((${number}%2)) && let sum+=${number}\n\
+    \  done\n  echo \"$sum\"", "  local input_list=$1\n  local sum=0\n  local tmp\n\
+    \n  echo $input_list | while read num\n  do\n    case \"$num\" in\n      -* )\
+    \ continue\n      ;;\n      \"*\" ) sum=$(( $sum + $num ))\n      ;;\n      \"\
+    0\" ) continue\n      ;;\n      * ) tmp=$(echo $num | cut -d ' ' -f 1)\n     \
+    \   if (( $tmp % 2 != 0 )); then sum=$(( $sum + $tmp ))\n        fi\n      ;;\n\
+    \    esac\n  done\n\n  echo $sum", "  local list_string sum\n  list_string=$1\n\
+    \  sum=0\n  for i in $list_string; do\n    (( sum+=( $i & 1 ) ))\n  done\n  echo\
+    \ $sum", "  local sum=0\n  local integers=$@\n  if [[ $integers == \"\" ]]\n \
+    \ then\n    integers=\"0\"\n  fi\n  for integer in $integers\n  do\n    if [[\
+    \ $integer != $((integer%2)) ]]\n    then\n      sum=$(( sum + $((integer*integer))\
+    \ ))\n    fi\n  done\n  echo \"$sum\"", "  if [[ -z $1 ]]; then\n    echo \"0\"\
+    \n    return\n  fi\n  local sum=$(echo $1 | sed -e 's/^\\([0-9]\\+\\)\\(\\s\\\
+    )\\?\\([0-9]\\+\\)\\(\\s\\)\\?\\([0-9]\\+\\)\\(\\s\\)\\?\\([0-9]\\+\\)\\(\\s\\\
+    )\\?\\([0-9]\\+\\)\\(\\s\\)\\?\\([0-9]\\+\\)$/\\1 \\2 \\3 \\4 \\5 \\6 \\7 \\8/')\n\
+    \  sum=$(echo $sum | tr ' ' '\\0' | sed -e 's/ /+/g' | sed -e 's/+$//')\n  if\
+    \ [[ -z $sum ]]; then\n    sum=0\n  fi\n  echo \"$(( ($sum / 2) ** 2 ))\"", " \
+    \ local numbers=$1\n  [[ -z \"$numbers\" ]] && echo \"0\" && return 0\n  # $2\
+    \ is the output variable, empty if none\n  local output=$2\n  local sum=$(echo\
+    \ \"$numbers\" | awk '{sum+=$1} END {print sum}')\n  echo \"$sum\"", "  local\
+    \ numbers=\"$1\"\n  [[ -z \"$numbers\" ]] && return 0\n  local sum=0\n  for number\
+    \ in $numbers; do\n    (( sum+=$number**2 ))\n  done\n  [[ $sum -gt $(( $numbers\
+    \ | bc -l )) ]] && return $sum", "    local numbers=$1\n    # Strip whitespace\n\
+    \    numbers=$(echo \"$numbers\" | sed 's/^[ \\t]*//g' | sed 's/[ \\t]*$//g')\n\
+    \    if [ -z \"$numbers\" ]; then\n        return 0\n    fi\n    if [ -z \"$numbers\"\
+    \ ]; then\n        return 0\n    fi\n    # Convert the numbers into integers\n\
+    \    numbers=$(echo \"$numbers\" | sed 's/^[ \\t]*//g' | sed 's/[ \\t]*$//g')\n\
+    \    numbers=$(echo \"$numbers\" | sed 's/ /+/g')\n    numbers=$(echo \"$numbers\"\
+    \ | sed 's/ +$//g')\n    # Calculate the sum of the squares of the numbers\n \
+    \   sum=0\n    while [ \"$numbers\" != \"0\" ]; do\n        sum=$((sum + $(( $(echo\
+    \ \"$numbers\" | sed 's/^[ \\t]*//g' | sed 's/[ \\t]*$//g') ** 2 ))))\n      \
+    \  numbers=$(echo \"$numbers\" | sed 's/ /+/g')\n        numbers=$(echo \"$numbers\"\
+    \ | sed 's/ +$//g')\n    done\n    echo \"$sum\"", "\tlocal IFS=$1\n\tlocal RESULT=0\n\
+    \tfor i in $*\n\tdo\n\t\tRESULT=$(($RESULT + $i * $i))\n\tdone\n\techo $RESULT",
+  "  local list=\"${1}\"\n  local sum\n  local i\n  for (( i=0; i<${#list}; i++ ));\
+    \ do\n    if [[ ${list[i]} -gt 0 ]]; then\n      sum=$(($sum + $((${list[i]} *\
+    \ ${list[i]}))))\n    elif [[ ${list[i]} -lt 0 ]]; then\n      sum=$(($sum + 0))\n\
+    \    else\n      sum=$(($sum + 0))\n    fi\n  done\n  echo $sum", "    set -e\
+    \ # exit on the first error\n    set +o pipefail # exit on a command failure\n\
+    \    local list_input=$1\n    # Make sure we get something sensible in the empty\
+    \ case\n    if [[ -z ${list_input} ]]; then\n        echo \"0\";\n        return\
+    \ 0\n    fi\n    # Turn the string into an array of numbers\n    IFS=' ' read\
+    \ -r -a numbers_input <<<\"${list_input}\"\n    # Make sure the array is non-empty\n\
+    \    if [[ -z ${numbers_input[@]} ]]; then\n        echo \"0\"\n        return\
+    \ 0\n    fi\n    # Sum up the squares of each number\n    local sum_square=0\n\
+    \    for number in \"${numbers_input[@]}\"; do\n        # Don't try to square\
+    \ non-integers\n        if [[ ${number} != \"*\" ]]; then\n            local temp=$((${number}\
+    \ * ${number}))\n            sum_square=$((${sum_square}+${temp}))\n        fi\n\
+    \    done\n    # Return the sum of the squares of even numbers\n    echo ${sum_square}",
+  "    local list=\"$1\"\n    # No input at all or no integers at all\n    if [ -z\
+    \ \"$list\" -o \"$(echo \"$list\" | sed 's/^ *//g' | sed 's/ *$//g')\" ]\n   \
+    \ then\n        return 0\n    fi\n\n    # Sum squares for the odd numbers.\n \
+    \   local square_of_odd=\"$(echo \"$list\" | sed 's/^ *//g' | sed 's/ *$//g' |\
+    \ awk '{print $1}' | sort -n | uniq -d)\"\n    square_of_odd=\"$(echo \"$square_of_odd\"\
+    \ | sed 's/^ *//g' | sed 's/ *$//g' | awk '{print $1}')\"\n\n    # Calculate the\
+    \ sum of the squares for the even numbers.\n    local sum=\"$(echo \"$list\" |\
+    \ sed 's/^ *//g' | sed 's/ *$//g' | awk '{sum+=$1} END {print sum}')\"\n\n   \
+    \ # Sum of squares for the odd numbers.\n    local square_of_even=\"$(echo \"\
+    $list\" | sed 's/^ *//g' | sed 's/ *$//g' | awk '{print $1}' | sort -n | uniq\
+    \ -d | sed 's/^ *//g' | sed 's/ *$//g')\"\n\n    # Subtract the two sums to get\
+    \ the difference of the odd numbers.\n    local difference=\"$(echo \"$sum-$square_of_odd\"\
+    \ | sed 's/^ *//g' | sed 's/ *$//g')\"\n\n    # Sum of squares for the even numbers.\n\
+    \    local square_of_odd_even=\"$(echo \"$list\" | sed 's/^ *//g' | sed 's/ *$//g'\
+    \ | awk '{print $1}' | sort -n | uniq -d | sed 's/^ *//g' | sed 's/ *$//g' | sed\
+    \ 's/^ *//g' | sed 's/ *$//g')\"\n\n    # Subtract the two sums to get the difference\
+    \ of the even numbers.\n    local difference_of_even=\"$(echo \"$sum-$square_of_odd_even\"\
+    \ | sed 's/^ *//g' | sed 's/ *$//g')\"\n\n    # Sum of squares for the odd numbers.\n\
+    \    local square_of_even_odd=\"$(echo \"$list\" | sed 's/^ *//g' | sed 's/ *$//g'\
+    \ | awk '{print $1}' | sort -n | uniq -d | sed 's/^ *//g' | sed 's/ *$//g' | ",
+  "  local numbers=( \"${1:-}\" )\n  local answer=0\n  for (( i=0; i<${#numbers[@]};\
+    \ ++i )); do\n    (( i % 2 )) || answer+=$(( numbers[i] ))\n  done\n  echo $answer",
+  "    local list=\"$1\"\n    local sum\n    local i\n    sum=0\n    for i=\"$( list_to_string\
+    \ \"$list\" )\"; do\n        [[ $i =~ ^-?[0-9]+$ ]] || continue\n        (( sum\
+    \ += $i ))\n    done\n    echo \"$sum\"", "    local IFS=' '\n    local x=0\n\
+    \    local out=0\n    local num\n    IFS=$'\\t'\n    for num in \"$@\"; do\n \
+    \       [ -n \"$num\" ] \\\n            && [ \"$(echo \"$num\" | cut -c 1-1)\"\
+    \ == \"-\" ] \\\n            && continue\n        num=$(echo \"$num\" | awk '{printf\
+    \ \"%d%+d\", $1, $1 + 1}')\n        [ \"$num\" != 0 ] && out=$(echo \"$out+$num\"\
+    \ | bc)\n    done\n    echo \"$out\"", "    local x=0\n    local i ilist sum\n\
+    \    local -a numbers=($1)\n    numbers=( \"${numbers[@]:1}\" )\n    for ((i=0;\
+    \ i<${#numbers[@]}; i++)); do\n        if [[ $numbers[$i]  -le 0 || $numbers[$i]\
+    \  -lt 0 ]]; then\n            echo \"${numbers[$i]}\"\n            return 0\n\
+    \        fi\n        x=$(($x + ${numbers[$i]}*${numbers[$i]}))\n    done\n   \
+    \ sum=$(($x*$x))\n    echo $sum\n    return $sum", "    local input=\"${1}\"\n\
+    \    if [[ \"${#input}\" -eq 0 ]]; then\n        echo \"0\"\n        return 0\n\
+    \    fi\n    local sum=0\n    while read -r line; do\n        if (( $(echo \"\
+    ${line}\" | grep -c \"^[[:digit:]]\\+$\") )); then\n            ((sum += ${line}))\n\
+    \        fi\n    done <<< \"${input}\"\n    echo \"${sum}\"", "  local LIST\n\
+    \  LIST=\"$1\"\n  local RESULT\n  RESULT=0\n  for x in $(echo \"$LIST\" | sed\
+    \ \"s/ //g\"); do\n    RESULT=$((RESULT + $((2 * $x))))\n  done\n  echo $RESULT",
+  "  local x\n  x=\"$1\"\n  echo \"$x\" | grep -v '^-$' && echo \"$x\" | grep -v '^$'\
+    \ && echo \"$x\" | while read x ; do\n    echo \"$x\" | grep -v '^-$' && echo\
+    \ \"$x\" | grep -v '^$' && echo \"$x\" | sed '/^-/d' | sed '/^$/d' | sed '/^-//'\
+    \ | bc\n  done", "    local i\n    local list=\"$1\"\n    local sum=0\n    for\
+    \ i in $list; do\n        if (( i < 0 )); then\n            echo \"Error: $1 contains\
+    \ negative numbers. Ignoring $i.\" >&2\n            continue\n        fi\n   \
+    \     if (( ! test \"$i\" -eq $i )); then\n            echo \"Error: $1 contains\
+    \ non-integers. Ignoring $i.\" >&2\n            continue\n        fi\n       \
+    \ (( sum+=i*i ))\n    done\n    echo \"$sum\"", "  local item\n  # Make sure $1\
+    \ is set to a non-empty string\n  if [ -z $1 ]; then\n    echo \"0\"\n    return\
+    \ 0\n  fi\n  # Make sure $1 contains at least one element\n  if [ -z \"${1// }\"\
+    \ ]; then\n    echo \"0\"\n    return 0\n  fi\n  # Convert the first argument\
+    \ to an array\n  IFS=' ' read -r -a items <<< \"$1\"\n  # Now loop the array\n\
+    \  local sum=0\n  for item in \"${items[@]}\"; do\n    if [ \"${item}\" -ge 0\
+    \ ] && [ \"${item}\" -le 9 ]; then\n      (( sum+=${item}**2 ))\n    elif [ \"\
+    ${item}\" -eq 0 ] || [ \"${item}\" -eq 1 ] || [ \"${item}\" -eq 2 ]; then\n  \
+    \    (( sum+=0 ))\n    fi\n  done\n  echo $sum", "  local list=\"$1\"\n  local\
+    \ sum=0\n  local i j\n\n  list=\"$(cat <<< \"$list\")\"\n  for i in  \"$list\"\
+    \n  do\n    if [[ ! \"$i\" =~ ^-?[0-9]+$ ]] || [ \"$i\" == \"0\" ]\n    then\n\
+    \      continue\n    fi\n\n    sum=$((sum + $i))\n  done\n\n  sum=$((sum % 2))\n\
+    \  echo \"$sum\"", "  local ns=$(echo \"$1\" | sed \"s/\\s/ /g\")\n  local sum=0\n\
+    \  local n\n  local odd\n  for n in $ns; do\n    if [[ $n =~ ^-?[0-9]+$ ]]; then\n\
+    \      if (( n % 2 == 0 )); then\n        (( sum += $n ))\n      fi\n    fi\n\
+    \  done\n  echo \"$sum\"", "  local list=$(echo \"$1\" | tr \" \" \"\\n\")\n \
+    \ if [ -z \"$list\" ]; then\n    echo \"0\"\n  else\n    sum=$(echo \"$list\"\
+    \ | awk '{sum+=$1} END {print sum}')\n    sum=$(echo \"$list\" | awk '{sum+=$1}\
+    \ END {print sum}')\n    echo $(( $sum * $sum ))\n  fi", "  local list_arg=$(echo\
+    \ $1 | tr \" \" \"\\n\" | grep \"^-?[0-9]*$\" | tr \"\\n\" \"-\") # filter out\
+    \ negatives\n  local sum=0\n  if [[ -z \"$list_arg\" ]]\n  then\n    sum=0\n \
+    \ else\n    list_arg=$(echo $list_arg | tr \" \" \"\\n\" | grep \"^-?[0-9]*$\"\
+    \ | tr \"\\n\" \"-\")\n    local list_arg=$(echo $list_arg | tr \" \" \"\\n\"\
+    \ | grep \"^-?[0-9]*$\" | tr \"\\n\" \"-\")\n    for el in $list_arg\n    do\n\
+    \      (( sum += $el * $el ))\n    done\n  fi\n  echo $sum", "  local input_list=\"\
+    $1\"\n\n  local total=0\n  local sum=0\n  for entry in $input_list; do\n    if\
+    \ [ \"$entry\" -gt 0 ] || [ \"$entry\" -lt 0 ]; then\n      echo \"$entry\"\n\
+    \    else\n      sum=$(( sum + \"$entry\" ))\n    fi\n  done\n  total=$(( sum\
+    \ * sum / 2 ))\n  return $total", "    IFS=$'\\n' read -r -a array <<< \"$1\"\n\
+    \    local n=0\n    for n in \"${array[@]}\"; do\n        [[ $n -lt 0 || $n -gt\
+    \ 36 || ! $(( n % 2 )) ]] || break\n    done\n    echo $(( ${array[n]} + ${array[n-1]}\
+    \ )^2)", "    local numbers=\"$1\"\n    local sum=0\n    local i=0 j=1\n    for\
+    \ number in $numbers; do\n        (( sum += $number ))\n        if (( number %\
+    \ 2 == 1 )); then\n            (( sum -= $sum ))\n        fi\n        (( i +=\
+    \ 1 ))\n        (( j += 1 ))\n    done\n    echo \"$sum\"", "    local list=\"\
+    $1\"\n    local sum=0\n    if [ -z \"$list\" ]; then\n        return 0\n    fi\n\
+    \    for ((i=0;i<${#list};++i)); do\n        local item=\"${list[i]}\"\n     \
+    \   if [ \"${item}\" -gt 0 ] \\\n            || ([ \"${item}\" -eq -1 ] \\\n \
+    \           && [ \"${list[i+1]}\" -eq -1 ]); then\n            local val=\"${item}*\"\
+    \n            ((sum+=$val))\n        fi\n    done\n    echo $sum", "  local input_list=\"\
+    $(echo \"$1\" | sed -e 's/^ *//' -e 's/ *$//')\"\n  local sum=$(echo \"$input_list\"\
+    \ | sed -e 's/ .*//' -e 's/ .*//')\n  local i=$(echo \"$input_list\" | sed -e\
+    \ 's/^ *//' -e 's/ *$//')\n  local num\n  while (( \"$i\" )) ; do\n    num=$(i<<2)\n\
+    \    if (( \"$num\" )) ; then\n      (( sum += num ))\n      (( i &= 0xFFFFFFFF\
+    \ ))\n    else\n      (( sum += i ))\n      (( i >>= 32 ))\n    fi\n  done\n \
+    \ echo \"$sum\"", "  local list=$1 sum\n  sum=0\n  for item in $list; do\n   \
+    \ (( item > 0 )) && [[ $item -eq 0 ]] && continue\n    (( item > 0 )) && [[ $item\
+    \ -lt 2 ]] && continue\n    (( item > 0 )) && [[ $item -gt 2 ]] && continue\n\
+    \    (( item > 0 )) && [[ $item -lt 0 ]] || continue\n    (( item > 0 )) && [[\
+    \ $item -gt 0 ]] || continue\n    (( item > 0 )) && sum=$((sum+item*item))\n \
+    \ done\n  echo -n $sum", "  local numbers=$1\n  local sum\n  local sum_square\n\
+    \  local result\n  local index\n  local n\n  IFS=$'\\n' read -d '' -a numbers\
+    \ <<< \"$numbers\"\n  for index in \"${!numbers[@]}\"; do\n    n=${numbers[index]}\n\
+    \    if [[ $n =~ ^-?[0-9]+$ ]]; then\n      sum=$(expr $n + $sum)\n    fi\n  done\n\
+    \  sum_square=$(expr $sum * $sum)\n  if [[ $sum_square -eq 0 ]]; then\n    echo\
+    \ \"0\"\n  else\n    result=$(expr $sum_square - $n)\n    echo \"$result\"\n \
+    \ fi", "    set -- $1 || (echo \"$0: missing arguments\" >&2; return 0)\n    [\
+    \ \"$#\" -eq 0 ] && return 0\n    sum=0\n    for i; do\n        (( i % 2 == 1\
+    \ )) && sum+=i*i\n    done\n    echo \"$sum\"", "  local list=$1\n  local sum=0\n\
+    \  local num=${list[0]}\n  shift\n\n  for i in $list; do\n    if [[ $num =~ ^-?[0-9]+$\
+    \ ]]; then\n      sum=$((sum+num))\n    fi\n    num=$((num+2))\n  done\n\n  echo\
+    \ $((sum))", "  local IFS=$'\\n' arr=( \"$1\" ); shift\n  local sum=0\n  local\
+    \ -a odds\n  for n in \"${arr[@]}\"; do\n    (( n >= 0 )) && odds+=( \"$n\" )\n\
+    \  done\n  printf '%s\\n' \"${odds[*]}\" | sort -n | uniq | xargs -n1 echo -n\
+    \ $sum", "  IFS=' ' read -r -a array <<< \"$1\"\n  sum=0\n  for x in \"${array[@]}\"\
+    ; do\n    if [[ ! \"$x\" =~ ^-?[0-9]+$ ]]; then\n      continue\n    fi\n    ((sum+=x))\n\
+    \  done\n  echo $sum", "  local list_str=\"$1\"\n  local list_array=($list_str)\n\
+    \  local list_len=${#list_array[@]}\n  local sum=0\n  local i\n\n  for i in \"\
+    ${list_array[@]}\"; do\n    test \"$i\" -ge 0 && test \"$i\" -le 101 && let sum=\"\
+    $sum\" + \"$i\" || return\n  done\n\n  echo \"$sum\"", "  if [ -z \"$1\" ]; then\
+    \ return 0; fi\n  local sum=0\n  for n in \"$1\"; do\n    test \"$(expr \"$n\"\
+    \ : '^-?[0-9]+$')\" && continue\n    ((sum+=n*n))\n  done\n  echo $sum", "  if\
+    \ [ ${#1} -eq 0 ]\n  then\n    return 0\n  fi\n\n  local sum=0\n  local n=0\n\
+    \  while read number\n  do\n    (( n++ ))\n\n    if [ \"$number\" -gt 0 ]\n  \
+    \  then\n      (( sum += number*number ))\n    fi\n\n  done <<< \"$1\"\n\n  echo\
+    \ \"$(( sum % $2 ))\"", "    local L=${1// /}\n    local result=0\n    for number\
+    \ in $L; do\n        if [[ \"$number\" =~ ^-?[0-9]+$ ]]; then\n            ((\
+    \ result = result + $number*$number ))\n        fi\n    done\n    echo \"$result\"",
+  "\tlocal list=\"$1\";\n\tlocal result=`echo \"$list\" | xargs printf \"%d\" 2>/dev/null\
+    \ | xargs printf \"%d\" 2>/dev/null | wc -l 2>/dev/null`;\n\tif [[ \"$result\"\
+    \ -gt \"0\" ]]; then\n\t\treturn 0;\n\telse\n\t\tlocal sum=0;\n\t\tlocal i=0;\n\
+    \t\twhile [[ \"$i\" -lt \"$list\" ]]; do\n\t\t\t((sum+=((${list[$i]} % 2)?${list[$i]}:0)));\n\
+    \t\t\t((i++));\n\t\tdone\n\t\techo $((sum*sum));\n\tfi", "  [[ \"$#\" -gt 0 ]]\
+    \ || return 0\n  # convert string list to array\n  local arr=(\"$@\")\n  # filter\
+    \ out negative numbers and non-integers\n  arr=($(echo \"${arr[*]}\" | tr ' '\
+    \ '\\n' | grep -v '^-\\?[0-9]*$'))\n  # loop over array and sum the squares of\
+    \ the odd numbers\n  local sum=0\n  local n=$((${#arr[@]}-1))\n  for i in $(seq\
+    \ 0 $n); do\n    (( i % 2 )) && sum=$((sum + ${arr[i]}*${arr[i]}))\n  done\n \
+    \ echo $sum", "    # Convert the arguments into integers.\n    local numbers=$1\n\
+    \    local number_count=\"${#numbers}\"\n\n    # Return 0 if there are no numbers\
+    \ to process.\n    if [ \"${number_count}\" -eq 0 ]; then\n        echo \"0\"\n\
+    \        return\n    fi\n\n    local numbers_in_array=($numbers)\n    local number_count=${#numbers_in_array[@]}\n\
+    \    local sum=0\n\n    for (( i=0; i<${number_count}; i++ )); do\n        # Skip\
+    \ the number if it is not an integer.\n        if [ ! -z \"$numbers_in_array[$i]\"\
+    \ ]; then\n            # Double the squared value and add to sum.\n          \
+    \  (( sum += numbers_in_array[$i] ** 2 ))\n        fi\n    done\n\n    # Return\
+    \ sum.\n    echo \"${sum}\"", "  local sum=$1\n  while (( ${#sum} >= 1 )); do\n\
+    \    if (( ${sum[0]} < 0 )); then\n      sum=\"0$sum\"\n    elif (( ${sum[0]}\
+    \ > 9 )); then\n      sum=\"$((sum / 10))$sum\"\n    else\n      sum=\"$((sum\
+    \ / 10)$((sum % 10)))$((sum % 10))\"\n    fi\n  done\n  echo \"$sum\"", "  local\
+    \ numbers=$@\n  local sum=0\n  local index=0\n  while [ $index -lt ${#numbers}\
+    \ ]; do\n    local current_number=${numbers[$index]}\n    if [ ${current_number}\
+    \ -gt 0 ]; then\n      local difference=$((${current_number} - 1))\n      if [\
+    \ ${current_number} -eq ${difference} ]; then\n        local square=$((${current_number}\
+    \ * ${current_number}))\n        local sum=$((${sum}+$square))\n      fi\n   \
+    \ fi\n    index=$((index+1))\n  done\n  if [ \"${#numbers}\" -eq 0 ]; then\n \
+    \   echo 0\n  fi\n  echo ${sum}", "  local -n list=$1\n  echo \"$(( $(( ${#list[@]}\
+    \ > 0 ? ${list[@]:1} : 0) - ${#list[@]} ) * 2 ))\"", "  local numbers sum\n  numbers=\"\
+    $1\" ; shift\n  if [ -z \"$numbers\" ]; then\n    return 0\n  fi\n\n  # Convert\
+    \ input list to an array and remove non-numerics.\n  IFS=' ' read -a numbers <<<\
+    \ \"$numbers\"\n  numbers+=( )\n  # Eliminate negative numbers.\n  for i in \"\
+    ${!numbers[@]}\"; do\n    if [[ ${numbers[$i]} -ge 0 ]]; then\n      numbers[$i]=${numbers[$i]%?}\n\
+    \    fi\n  done\n  # Sum the squares.\n  sum=0\n  for number in \"${numbers[@]}\"\
+    ; do\n    ((sum += number*number))\n  done\n  # Return the sum.\n  echo \"$sum\"",
+  "  local num_list=$1\n  if [ -z \"$num_list\" ]; then\n    echo 0\n    return\n\
+    \  fi\n  local num_sum=0\n  for i in $num_list; do\n    [ \"$i\" -eq 0 ] && continue\n\
+    \    [ \"$i\" -eq -1 ] && break\n    [ \"$i\" -gt 0 ] || echo \"$i: not a positive\
+    \ integer\" >&2\n    [ \"$i\" -lt 1 ] || echo \"$i: not a non-negative integer\"\
+    \ >&2\n    (( num_sum += i * i ))\n  done\n  echo $num_sum", "    set -f\n   \
+    \ set -x\n    if [ -z \"$1\" ] ; then\n        return 0\n    fi\n    \n    local\
+    \ result=0\n    for num in \"$@\" ; do\n        if [ -z \"$num\" ] || [ \"$num\"\
+    \ == \"-\" ] ; then\n            continue\n        fi\n        result=$((result+num*num))\n\
+    \    done\n    \n    result=$((result+2))\n    \n    echo $result", "    local\
+    \ i sum=0\n    if [ \"$#\" -lt 1 ]; then\n        echo \"No arguments supplied\"\
+    \n        return 0\n    fi\n    for i in $@; do\n        if [ \"$i\" -lt 0 ];\
+    \ then\n            # ignore negative numbers\n            continue\n        elif\
+    \ [ \"$i\" -lt 1 ]; then\n            # ignore single positive number\n      \
+    \      continue\n        elif [ \"$i\" -gt 1 ]; then\n            # add squares\
+    \ of even numbers\n            sum=$(( (sum + i*i) ))\n        fi\n    done\n\
+    \    echo \"$sum\"", "  local numbers=''\n  while read -r number; do\n    (( ${number}\
+    \ % 2 != 0 )) && numbers+=${number}\n  done <<< \"$1\"\n\n  if [ -z \"$numbers\"\
+    \ ]; then\n    echo \"0\"\n  else\n    echo \"$(($numbers * $numbers))\"\n  fi",
+  "    local list=\"$1\"\n    local sum result\n\n    sum=$(echo \"$list\" | sed -E\
+    \ 's/^(-[0-9]+|[0-9]+(\\.[0-9]+)?)$/+\\1/')\n    if [[ \"$sum\" == \"+\" || \"\
+    $sum\" == \"-\" ]]; then\n        echo \"$sum\"\n    else\n        result=$(echo\
+    \ \"$list\" | awk '{sum=0; for(i=1;i<=NF;i++){ if($i%2 == 1) sum+=$i; else sum-=$i;\
+    \ } print sum}')\n        result=$(( result > 0 ? result : 0 ))\n        echo\
+    \ \"$result\"\n    fi", "    local array=(${1// / })\n    local sum=0\n    for\
+    \ number in \"${array[@]}\"; do\n        if [[ \"$number\" =~ ^(-?[0-9]+)$ ]];\
+    \ then\n            (( sum += $number ))\n        elif [ \"$number\" == \"0\"\
+    \ ]; then\n            (( sum += 0 ))\n        elif [ \"$number\" == \"\" ]; then\n\
+    \            (( sum += 0 ))\n        else\n            (( sum += $number * $number\
+    \ ))\n        fi\n    done\n    echo \"$sum\"", "  local n=\"${1#*[![:space:]]}\"\
+    \n  if [ \"${n}\" != \"\" ]; then\n    echo -n \"$(( ${n} | ${n} * ${n} ))\"\n\
+    \  else\n    echo 0\n  fi", "  local sum=$(eval ${1#-} \"+\")\n  local list=\"\
+    $2\"\n  for i in $list; do\n    if [ \"${i%%[!0-9]}\" != \"$i\" ]; then\n    \
+    \  sum=$((sum*i))\n    fi\n  done\n  echo $sum", "  local list=\"$1\"\n  [[ -z\
+    \ \"$list\" ]] && return 0\n  local sum\n  sum=0\n  for n in $list; do\n    ((sum+=n\
+    \ & 1))\n  done\n  echo $sum", "  local numbers result=0\n  for number in \"$1\"\
+    ; do\n    if (( $(echo \"$number\" | bc -l) )); then\n      echo \"$number\"\n\
+    \      result=$(( $result + $number ))\n    else\n      result=$(( $result + 0\
+    \ ))\n    fi\n  done\n  echo \"$result\"", "  local num_sum=0\n  local nums=$@\n\
+    \  for num in $nums; do\n    ((num_sum+=$num))\n  done\n  echo -n \"The sum of\
+    \ odd numbers is $num_sum\"", "    local IFS=\" [ -n \\\"$2\\\" ]\" # space or\
+    \ tab\n    local -r numbers=$(echo $1 | sed \"s/$IFS/ /g\")\n    local result=$(for\
+    \ number in $numbers\n    do\n        (( $number % 2 )) && result+=$number\n \
+    \   done)\n    echo \"$result\"", "    local -n list=\"${1}\"\n    if [ -z \"\
+    ${list}\" ]; then return 0; fi\n    local sum\n    for num in ${list[@]}; do\n\
+    \        if [ \"${num}\" -lt 0 ] || [ \"${num}\" -gt ${#list[@]} ]; then continue;\
+    \ fi\n        (( sum+=num*num))\n    done\n    return $sum", "\tlocal sum=0\n\t\
+    for item in \"$@\"; do\n\t\tif [ \"$item\" -gt 0 ]; then\n\t\t\t(( sum += item*item\
+    \ ))\n\t\telse\n\t\t\t(( sum += item ))\n\t\tfi\n\tdone\n\techo \"$sum\"", " \
+    \ local list=\"$1\"\n  shift\n  local sum=0\n  local integers=0\n  local odds=0\n\
+    \  for i in $list; do\n    if test \"$i\" -a \"$i\" -le 0; then\n      integers+=1\n\
+    \    elif test \"$i\" -a \"$i\" -ge 0; then\n      odds+=1\n    fi\n  done\n \
+    \ if [ \"$list\" == \"\" ]; then\n    return 0\n  fi\n  if [ \"$integers\" -eq\
+    \ 0 ]; then\n    sum=0\n  elif [ \"$odds\" -eq 0 ]; then\n    sum=$(($integers+1))\n\
+    \  else\n    sum=$(($integers+$odds))\n  fi\n  sum=$(($sum*$integers))\n  echo\
+    \ $sum", "  local IFS= IFS=$'\\n' list\n  local sum\n  sum=0\n  while read -a\
+    \ elem; do\n    if (( ${elem[${#elem[@]}]} % 2 )); then\n      sum=$((sum + ${elem[${#elem[@]}\
+    \ - 1]}))\n    fi\n  done <<<\"$1\"\n  echo $sum", "    local numbers=\"$1\"\n\
+    \    local sum_of_squares=0\n    if [ -z \"$numbers\" ]\n    then\n        return\
+    \ 0\n    else\n        while read -r number\n        do\n            if [ $number\
+    \ -gt 0 ]\n            then\n                if [ $number -eq $((number%2)) ]\n\
+    \                then\n                    sum_of_squares+=$((number*number))\n\
+    \                fi\n            fi\n        done\n\n        echo \"$sum_of_squares\"\
+    \n    }", "  local result=\"$(echo \"$1\" | awk '{\n    sum=0;\n    for (i=1;\
+    \ i<NF; i++) {\n      if ((i % 2) != 0) {\n        sum += $i\n      }\n    }\n\
+    \    sum\n  }')\"\n\n  [ \"$result\" = \"0\" ] && return 0\n\n  echo \"$result\"",
+  "  local list=\"$1\"\n  echo \"${list}\" | sed -e '/^ *$/d' -e '/^ *-*$/d' -e '/^\
+    \ *--*$/d' -e '/^ *-*-* +-*$/ d' -e '/^ *-*-* +-*-* +-*$/ d' -e '/^ *-*-* +-*-*\
+    \ +-*-* +-*$/ d'\n  local sum=0\n  while read -r line; do\n    if [ \"$(echo \"\
+    ${line}\" | cut -d' ' -f 1)\" == \"0\" ]; then\n      continue\n    fi\n    sum=$((${sum}\
+    \ + ${line}))\n  done\n  echo \"${sum}\"", "    local list=\"$1\"\n    echo \"\
+    $list\" | tr -s \" \" | sed 's/ -/ -/ g' | awk '{\n      sum += $1 * $1;\n   \
+    \   count++;\n    }\n    END {\n      if (count == 0) {\n        exit 0;\n   \
+    \   }\n      exit sum / count;\n    }\n    '", "  local sum=0\n  while [[ $1 ]];\
+    \ do\n    sum=$((sum + $(($1*$1)))); shift\n  done\n  echo \"$sum\"", "    local\
+    \ list=$1\n    shift\n    if [ -z \"$list\" ]; then\n        return 0\n    fi\n\
+    \n    local sum=0\n    for element in ${list}; do\n        if [ ${element} -gt\
+    \ 0 ]; then\n            sum=$((sum + element*element))\n        fi\n    done\n\
+    \n    echo $sum", "  local numbers=$1\n  if [ x$numbers != x ]; then\n    local\
+    \ numbers_array=( $numbers )\n  else\n    numbers_array=( 0 $numbers )\n  fi\n\
+    \  # Don't try to use array slicing if the input array is empty.\n  local sum=0\n\
+    \  for number in \"${numbers_array[@]}\"; do\n    if [ $number -ne 0 ]; then\n\
+    \      if [ $number -eq 1 ]; then\n        sum=$(( sum + number ))\n      else\n\
+    \        sum=$(( sum + number * number ))\n      fi\n    fi\n  done\n  echo $sum",
+  "  local num_list=\"$1\"\n  local total_num\n  total_num=0\n  local -i i\n  for\
+    \ (( i=0; i < ${#num_list[@]} && ${num_list[$i]} -ne 0 ); ++i)\n  do\n    if [[\
+    \ ${num_list[$i]} -ne 0 ]]\n    then\n      total_num=$(echo \"${total_num}+${num_list[$i]}\"\
+    \ | bc)\n    fi\n  done\n  echo $(echo \"${total_num}+${num_list[0]}\" | bc)",
+  "  local sum=0\n  for i in $@; do\n    if [ \"$i\" -gt 0 ] && [ \"$i\" -lt 10 ];\
+    \ then\n      ((sum+=i**2))\n    elif [ \"$i\" -eq 0 ]; then\n      sum=0\n  \
+    \  else\n      sum=\n    fi\n  done\n  echo \"$sum\"", "    sum=0\n    echo $1\
+    \ | tr \" \" ',' | sed 's/,$//g' | while read i; do\n        if [ $i -gt 0 ] ;\
+    \ then \n            sum=$(( $sum + $i ))\n        fi\n    done\n    echo $sum",
+  "  local numbers=${1:-}\n  local sum=0\n  local count\n  for number in $numbers;\
+    \ do\n    ((count++))\n    if ! [ $number -ge 0 ]; then\n      sum=$((sum+number))\n\
+    \    fi\n  done\n  if [ \"$count\" -eq 0 ]; then\n    return 0\n  else\n    return\
+    \ $sum\n  fi", "  local numbers=( \"${@}\" )\n  local sum=0\n  local last_number=0\n\
+    \  local odds=0\n  local index=0\n  for number in \"${numbers[@]}\"; do\n    ((\
+    \ index++ ))\n    if [[ ${number} =~ ^-?[0-9]+$ ]]; then\n      (( last_number=\
+    \ ${number} ))\n    elif [[ ${number} =~ ^[0-9]+$ ]]; then\n      (( odds+=${number}\
+    \ ))\n    fi\n  done\n\n  if [[ ${index} -gt 0 ]]; then\n    (( index++ ))\n \
+    \ fi\n  (( index++ ))\n  (( odds+=${last_number} ))\n\n  sum=$(( odds*odds ))\n\
+    \  echo \"${sum}\"", "    local numbers=$*\n    local sum=0\n    local num\n \
+    \   for number in $numbers; do\n        ((num=$number))\n        if test $num\
+    \ -lt 0; then\n            echo \"Error: negative number ignored\" >&2\n     \
+    \       ((num=0))\n        fi\n        if test $num -lt 1; then\n            echo\
+    \ \"Error: negative numbers ignored\" >&2\n        fi\n        if test $num -lt\
+    \ 2; then\n            echo \"Error: negative numbers ignored\" >&2\n        fi\n\
+    \        if test $num -lt 4; then\n            echo \"Error: negative numbers\
+    \ ignored\" >&2\n        fi\n        sum=$(( sum + num ** 2 ))\n    done\n   \
+    \ echo $sum", "    local list_string=\"$1\"\n    local sum\n    sum=0\n    IFS='\
+    \ ' read -r -a list <<< \"$list_string\"\n    for num in \"${list[@]}\"; do\n\
+    \        if (( num % 2 == 1 )); then\n            (( sum += num*num ))\n     \
+    \   fi\n    done\n    echo \"$sum\"", "\tlocal my_list=$(echo $1 |tr '\\n' ' ')\n\
+    \tmy_list=${my_list//[!0-9]/}\n\techo $((${my_list} % 2 != 0)*${my_list}+0)",
+  "  # Make sure the given list contains at least one item.\n  [[ -z $1 ]] && return\
+    \ 0\n\n  # Convert the input list to a space-separated string.\n  local list_string=$1\n\
+    \  list_string=${list_string// /}\n  list_string=${list_string/ /}\n\n  # Set\
+    \ the sum variable to 0.\n  local sum=0\n\n  # Loop over the elements in the list.\n\
+    \  for element in ${list_string}; do\n    # If the element is odd, add it to the\
+    \ sum.\n    (( element % 2 )) && let sum=sum+element\n  done\n\n  # Return the\
+    \ sum of the squares of the odd elements in the list.\n  echo $(( sum * sum))",
+  "  local IFS=$1\n  local LIST\n  local SUM\n  LIST=$(echo \"$@\" | tr ' ' \"\\n\"\
+    \ | grep -v '^0' | grep -v '^#' | grep -v '^$' | sed \"s/^/-/g\")\n  if [ -z \"\
+    $LIST\" ]; then\n    echo \"0\"\n  else\n    SUM=0\n    for ITEM in $LIST; do\n\
+    \      if [[ $(( $(echo \"$ITEM\" | grep -v '^0') )) == 0 ]]; then\n        SUM=\"\
+    $SUM + $ITEM\"\n      fi\n    done\n    echo \"$(( ${SUM} ))\"\n  fi", "    local\
+    \ numbers=$1\n    local sum=0\n    for (( i=0; i<${#numbers}\"; i++ )); do\n \
+    \       if [[ ${numbers[$i]} -gt 0 ]]; then\n            if (( ${numbers[$i]}\
+    \ % 2 )); then\n                sum=$(( ${sum} + ${numbers[$i]} ))\n         \
+    \   fi\n        fi\n    done\n    echo \"$sum\"", "  local n=\"$1\"\n  # If no\
+    \ arguments, return 0\n  if [ \"${#n}\" == \"0\" ]; then\n    echo \"0\"\n   \
+    \ return\n  fi\n  # If the first item is not a number, return 0\n  if [ \"${n%?}\"\
+    \ != \"number\" ]; then\n    echo \"0\"\n    return\n  fi\n  # If the first item\
+    \ is negative, return 0\n  if [ \"${n%?}\" == \"-\" ]; then\n    echo \"0\"\n\
+    \    return\n  fi\n  # If the first item is 0\n  if [ \"${n}\" == \"0\" ]; then\n\
+    \    echo \"0\"\n    return\n  fi\n  # If the first item is positive, add it without\
+    \ squaring it\n  # and add the result to itself.\n  local sum=\"${n}\"\n  local\
+    \ sum2=\"${sum}\"\n  while [ \"${sum}\" != \"\" ]; do\n    sum=\"${sum%?}\"\n\
+    \    sum2=\"${sum2%?}\"\n  done\n  echo \"$(( $sum2 + $sum*$sum2 ))\"", "  local\
+    \ IFS=' ' sum=$(expr $1 '+')\n  local items=( $1 )\n  local sum=0\n  local i=0\n\
+    \n  for i in \"${!items[@]}\"; do\n    case \"${items[i]}\" in\n      -* | [1-9])\n\
+    \        sum=$(( sum+$(expr $items[i+1] '*') ))\n        i=$(( i+2 ))\n      \
+    \  ;;\n      *)\n        sum=$(( sum+$(expr $items[i+1] '*') ))\n        i=$((\
+    \ i+1 ))\n        ;;\n    esac\n  done\n  echo $sum", "    local numbers=$(echo\
+    \ $1 | sed \"s/ /,/g\")\n    local sum=0\n    for number in $numbers; do\n   \
+    \     if (( $(expr n % 2) == 0 )); then\n            sum=$(( sum + $number ))\n\
+    \        fi\n    done\n    echo $sum", "  if [ -z \"$1\" ]; then\n    echo \"\
+    0\"\n    return\n  fi\n  echo \"$(($1 + $(( ${1//[!-0-9]} )) ))\"", "  IFS=\"\
+    \ \" read -r -a list <<< \"$1\"\n  for x in \"${list[@]}\"; do\n    if [ -z \"\
+    $x\" ] || [ \"$x\" -lt 0 ]; then\n      echo \"0\"\n      continue\n    elif [\
+    \ \"$x\" -eq 1 ]; then\n      echo \"0\"\n      continue\n    fi\n    echo \"\
+    $(( (x*x)+x*x ))\"\n  done", "  local array=\"$1\"\n  local sum=0\n  local count=0\n\
+    \  local cur\n\n  while read -r cur; do\n    if [ \"${cur}\" = \"-1\" ]; then\
+    \ continue; fi\n    count=`expr ${count} + 1`\n    if [ \"${cur}\" -ge 0 ] &&\
+    \ [ \"${cur}\" -le 9 ]; then\n      sum=`expr $sum + ${cur}^2`\n      if (( ${count}\
+    \ % 2 == 1 )); then\n        sum=`expr $sum - ${cur}^2`\n      fi\n    elif [\
+    \ \"${cur}\" = \"0\" ]; then\n      sum=0\n    fi\n  done <<< \"$array\"\n\n \
+    \ echo \"$sum\"", "  local number=$1\n  local sum=0\n  local i=0\n  local num_sum=0\n\
+    \  for n in $number; do\n    (( ${n} % 2 )) && sum=$((sum+n)) || continue\n  \
+    \  (( i )) && num_sum=$((num_sum+i)) || num_sum=$((num_sum+sum))\n    (( i++ ))\n\
+    \  done\n  echo $num_sum", "  local IFS=' '\n  local N=0\n  local S=0\n  for i\
+    \ in $(echo $1 | sed 's/ /\" \"/g'); do\n    ((N++))\n    ((S += $i && $i != -2\
+    \ && $i !~ ^(-)?[0-9]+$ && $i != -$((2*$N))))\n  done\n  echo $S", "  local sum=0\n\
+    \  local input=$1\n  for i in $input; do\n    test $(( i % 2 )) -eq 0\n    if\
+    \ test $? -eq 0; then\n      sum=$(($sum + $i))\n    fi\n  done\n  echo $sum"]
 stop_tokens:
 - "\n}"

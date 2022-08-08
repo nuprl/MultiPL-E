@@ -9,7 +9,477 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \    candidate = method(:mean_absolute_deviation)\n    assert_equal(0.5, candidate.call([1.0,\
   \ 2.0]))\n    assert_equal(1.0, candidate.call([1.0, 2.0, 3.0, 4.0]))\n    assert_equal(1.2,\
   \ candidate.call([1.0, 2.0, 3.0, 4.0, 5.0]))\n  end\nend\n"
-completions: []
+completions: ["  return _mean_absolute_deviation(*numbers)\nend\nfunction _mean_absolute_deviation(numbers)\n\
+    \  return _mean_absolute_deviation_avg(numbers)\nend\nfunction _mean_absolute_deviation_avg(numbers)\n\
+    \  return _mean_absolute_deviation_sum((_mean_absolute_deviation_avg(numbers))\
+    \ / numbers.length)\nend\nfunction _mean_absolute_deviation_sum(sum)\n  local\
+    \ avg = sum / numbers.length\n  for i, value in ipairs(numbers) do\n    sum =\
+    \ sum + math.abs(value - avg)\n  end\n  return sum\nend", "  numbers.inject(0)\
+    \ do |sum, number|\n    sum += number.abs\n    sum\n  end\nend", "  numbers.inject(0.0)\
+    \ do |sum, number|\n    sum += number.abs\n    sum\n  end\nend", "  mean = numbers.inject(0)\
+    \ {|sum, number| sum += number; sum / numbers.length}\n  numbers.inject(0) {|sum,\
+    \ number|\n    sum += (number - mean) ** 2\n  }\nend", "  # mean absolute deviation\
+    \ aka mean distance from mean\n  # (aka MAPD):\n  n = numbers.inject(0){ |sum,\
+    \ n| sum + n.to_f } / (numbers.size)\n  mad = Array.new(n) do |i|\n    n = numbers.inject(0){\
+    \ |sum, n| sum + n.to_f }\n    (n - n[i.to_s]).abs / (n - n[i.to_s])\n  end\n\
+    \  mad # return an array\nend", "  numbers.inject(0) do |sum, element|\n    sum\
+    \ + abs element - numbers.reduce(:+) / numbers.size\n  end\nend", "  numbers.inject(0)\
+    \ {|sum, num| sum + abs num}\n  numbers.inject(0) {|sum, num| sum + num} / numbers.size\n\
+    end", "  numbers.inject { |sum, element| sum + abs (element - sum) }\nend", " \
+    \ numbers.inject(0) do |sum, value|\n    sum + abs(value - numbers.reduce(:+))\n\
+    \  end\nend\n</code>\n<|/ a dscore=0 |>\n<| c |>\nYour code is not using [inject\
+    \ method](http://ruby-doc.org/core-2.2.0/Enumerable.html#method-i-inject).\n<|/\
+    \ c |>\n<| c |>\nThanks, that's a great catch!\n<|/ c |>\n<| a dscore=0 |>\nYou\
+    \ can write your own:\n<code>", "  mean     = numbers.inject(:+) / numbers.size\n\
+    \  deviations = numbers.map { |n| n - mean }\n  deviations.inject(:+) / deviations.size\
+    \ ** 0.5\nend", "  numbers.inject(0.0) do |sum, number|\n    sum + Math.sqrt(sum\
+    \ + 2.0 * Math.pow(number, 2))\n  end\nend", "  mean = numbers.inject(0.0) { |sum,\
+    \ number| sum += number }\n  squared_mean = numbers.inject(0.0) { |sum, number|\
+    \ sum += number**2 }\n  squared_sum = 0.0\n  numbers.each { |number|\n    squared_sum\
+    \ += number**2\n  }\n  return squared_sum / numbers.size**(1.0/2.0) - mean**2\
+    \ if numbers.size > 1\n  return squared_sum / numbers.size - mean \nend", "  return\
+    \ [mean_absolute_deviation.call(number) for number in numbers]\nend", "  numbers.inject([0.0])\
+    \ { |sum, x| sum + Math.abs (x-mean(x)) }\nend", "  result = 0.0\n  sum_of_numbers\
+    \ = numbers.inject(:+) rescue 0\n  numbers.each { |n|\n    result += (n - sum_of_numbers)\
+    \ / (numbers.size - sum_of_numbers)\n  }\n  result\nend", "  numbers.reduce(:+)\
+    \ - numbers.reduce(:+).to_f / numbers.size\nend", "  numbers = [NumberParser.new(n).value\
+    \ for n in numbers]\n  mean = numbers.inject(:+).to_f / numbers.size\n  mean =\
+    \ NumberParser.new(mean)\n  numbers.map { |n| n.to_f - mean }.reduce(:+)\nend",
+  "  numbers.inject(0) {|sum, e| sum += (e - numbers.mean) ** 2}\nend", "  numbers.inject(0)\
+    \ {|sum,x| sum + (x - numbers.mean)**2}\nend", "  numbers.inject(0, :+).map {\
+    \ |n| n / (numbers.size - 1) }\nend", "  numbers.inject(0) { |sum, value| sum\
+    \ + Math.abs value }\n  numbers.inject { |sum, value| sum + Math.sqrt value }\n\
+    \  numbers.inject { |sum, value| sum / numbers.size }\nend", "  numbers.inject(0.0)\
+    \ do |sum, el|\n    sum += abs(el - sum)\n    sum\n  end\nend", "  numbers = convert_to_list(numbers)\n\
+    \  numbers = numbers.collect {|x| x.to_f}\n  abs = numbers.inject {|sum, el| sum\
+    \ + el}\n  abs /= numbers.size\n  abs.to_f\nend", "  numbers = numbers.to_a\n\
+    \  if numbers.is_a?(Array) or numbers.is_a?(Enumerable)\n    sum = numbers.inject(0)\
+    \ {|sum,number| sum + number.abs}\n    sum / (numbers.size-1)\n  else\n    numbers\n\
+    \  end\nend", "  numbers.inject(0) {|sum, x| sum + (x - x.mean) }\n  numbers.reduce(0)\
+    \ {|sum, el| sum + Math::sqrt((el - numbers.mean)**2) }\nend\n</code>\n<|/ a dscore=4\
+    \ tags=ruby |>\n<| c |>\nIn your solution, you're taking the square root of the\
+    \ difference squared instead of just taking the square root of the difference.\
+    \ You'll end up with 0 when numbers are exactly equal, instead of 1.\n<|/ c |>\n\
+    <| c |>\n: You said this was for \"real numbers\", and I agree with you that it's\
+    \ better to take the square root of the difference rather than the square of the\
+    \ difference. That said, my solution still works fine.\n<|/ c |>\n<| c |>\nYes,\
+    \ you're right. My comment was incomplete. I meant that the solution would fail\
+    \ to take square root of the difference, for example, if the difference is very\
+    \ small. My mistake though.\n<|/ c |>\n<| c |>\nI love the use of `inject` - I\
+    \ never knew it existed!\n<|/ c |>\n<| c |>\n: I'm glad you found it useful. I'm\
+    \ still a Ruby beginner, so I'm sure that I can do better.\n<|/ c |>\n<| a dscore=3\
+    \ tags=ruby |>\n<code>", "  numbers.inject(0) {|sum, x| sum + Math.abs x - x.mean}\n\
+    \  numbers.inject(0) {|sum, x| sum + (x - numbers[numbers.length-1]).abs}\n  numbers.inject(0.0)\
+    \ {|sum, x| sum + Math.pow(x, 2)}\n  numbers.sum / numbers.length\nend", "  #\
+    \ Create array\n  abs = Array.new(numbers.size)\n  \n  # Calculate mean value\n\
+    \  mean = numbers.reduce(:+) / numbers.size\n  \n  # Calculate absolute deviation\
+    \ from mean\n  numbers.each_with_index do |element, i|\n    abs[i] = element -\
+    \ mean\n  end\n  \n  # Find mean of array\n  ma = abs.reduce(:+)\n  \n  # Calculate\
+    \ MAD\n  mad =\n    abs.reduce(0) do |sum, value|\n      sum += value * value\n\
+    \    end\n  mad / ma\nend\n</code>\n<|/ a |>\n<| a dscore=2 tags=ruby,average,deviation\
+    \ |>\nThe question seems to have been edited to ask about calculating the MAD\
+    \ instead of the MAD. \nIn that case this would do:\n<code>\na = [10, 7, 5, 8,\
+    \ 12, 20, 30, 5, 9, 18, 25]\nb = [11, 10, 7, 9, 16, 23, 33, 5, 9, 18, 25]\naverage\
+    \ = (a.sum + b.sum) / 2.0\na.select {|x| x != average }.map(&:abs).inject(:+)\
+    \ / a.size ", "    ma = numbers.inject(0) {|sum, number| sum += (number - number\
+    \ * number.mean) / number.mean}\n    ma\nend\n</cell>\n<cell>", "  # Initialize\
+    \ sum and total\n  sum = numbers.inject(0) do |sum, number|\n    sum + number\n\
+    \  end\n  total = numbers.inject(0) do |sum, number|\n    sum + number\n  end",
+  "  numbers.inject(:+).reduce(:abs) / numbers.size.to_f\nend", "  numbers.inject(0.0)\
+    \ { |sum, number| sum + Math.abs number }\n  math.sqrt(numbers.inject(0.0) { |sum,\
+    \ number| sum + Math.pow(number, 2) })\nend\n</code>\n<|/ a dscore=3 |>\n<| a\
+    \ tags=ruby dscore=3 |>\nI wrote a method that uses inject to calculate a running\
+    \ sum, just for fun:\n<code>", "  if numbers.empty?\n    0.0\n  else\n    numbers.inject(0.0)\
+    \ {|sum, number| sum + Math.abs number }\n    numbers.inject(0.0) {|sum, number|\
+    \ sum + Math.abs number / numbers.size }\n  end\nend\n</code>\n<|/ a dscore=4\
+    \ tags=ruby,statistics |>\n<| c |>\nHow is this different from [Hansen's answer](http://stackoverflow.com/a/24347019/247763)?\
+    \ It seems to me like you could just copy and paste that one into your code?\n\
+    <|/ c |>\n<| c |>\nI suppose it may be different, but I like the ability to re-use\
+    \ code without copy/paste, especially as I tend to write a lot of the same code\
+    \ I wrote in the past. Additionally, the code is quite readable and thus can be\
+    \ easily debugged quickly.\n<|/ c |>\n<| c |>\nI see. That makes sense in general.\
+    \ Thanks for sharing your insight!\n<|/ c |>\n<| a dscore=3 |>\nHere is an alternative\
+    \ way using ruby's built-in Enumerable#inject\n<code>", "  abs = Array.new\n \
+    \ numbers.each {|n| abs << Math.abs n }\n  abs.inject {|sum, e| sum + e }\nend",
+  "    sum = numbers.inject(0.0) { |sum, number| sum + number }\n    sum = sum / numbers.size\n\
+    \    sum2 = numbers.inject(0.0) { |sum2, number| sum2 + number**2 }\n    sum2\
+    \ = sum2 / numbers.size\n    Math.sqrt(sum2 - sum * sum)\nend", "  # Initialize\
+    \ MAD and sum\n  mad_sum = 0.0\n  \n  # Calculate the mean for this dataset\n\
+    \  sum_of_numbers = numbers.inject(0) do |sum, number|\n    sum += number\n  end\n\
+    \  \n  # Calculate the mean for the differences of numbers \n  mean_of_numbers\
+    \ = numbers.inject(0) do |sum, number|\n    sum += number\n  end\n  \n  # Calculate\
+    \ MAD using the above equation and return it\n  mad_sum = numbers.inject(0) do\
+    \ |sum, number|\n    sum += number\n  end\n  mad_sum / sum_of_numbers - mean_of_numbers\n\
+    end\n</cell>\n<cell>", "  numbers.inject(0.0) do |sum, number|\n    sum = sum\
+    \ + Math.abs (number)\n  end\n  numbers.inject(0.0) do |sum, number|\n    sum\
+    \ = sum + Math.pow (number - mean, 2)\n  end\n  sum / (numbers.length - 1)\nend",
+  "  numbers.inject {|sum, number| sum + pow(number - mean, 2) }\n  numbers.inject\
+    \ {|sum, number| sum + number - mean }\n  numbers.inject {|sum, number| sum +\
+    \ 1 } / numbers.size\nend", "  mean    = numbers.inject([numbers.sum.to_f]) {\
+    \ |sum, e| sum += e }\n  diffs   = (numbers.map{ |e| e - mean }).to_a\n  mean_mad\
+    \ = diffs.map { |d| d.abs }.mean\n  mean_mad\nend\n</cell>\n<text>\nCalculating\
+    \ mean and median absolute deviation for a set of numbers from a set of unequal\
+    \ length\nThis is a generic method that allows both datasets with equal length\
+    \ and datasets of unequal length. The input can be any array of numbers, and it\
+    \ can be of different sizes.", "  mean = numbers.reduce(:+)\n  numbers.reduce(:+)\
+    \ - mean\nend", "  numbers.inject(0.0) do |sum, el|\n    sum += (el - numbers.mean)\
+    \ ** 2\n  end\n  numbers.inject(0.0) do |sum, el|\n    sum += (el - numbers.mean)\n\
+    \  end\nend\nend", "    mad = 0.0\n    numbers.each do |number|\n        mad +=\
+    \ abs(number - mean)\n    end\n    mad / numbers.length\nend", "    numbers.inject(0.0)\
+    \ { |sum, e| sum + Math.ab(e) }\n    numbers.inject(0.0) { |sum, e| sum + e *\
+    \ (e - numbers.mean) }\n    numbers.length.times { |i| numbers[i] -= numbers.mean\
+    \ }\n    Math.sqrt(numbers.length.times.inject(0.0) { |sum, e| sum + e * e })\n\
+    end\n</code>\n<|/ a dscore=5 |>\n<| c |>\nVery interesting, thank you. I'll definitely\
+    \ check it out. It looks as though I may be able to use the information provided\
+    \ to use it to derive a better method than what I have. I'm also trying to learn\
+    \ ruby so it'll take me some time to get comfortable with the syntax and such.\
+    \ I'd love to see a more rubyish solution but I'll wait a little longer before\
+    \ accepting this answer just to see if anyone else has any suggestions. Thanks\
+    \ again!\n<|/ c |>\n<| c |>\n: I really don't think it'll be a lot better to have\
+    \ a different method to calculate the averages than to have a different method\
+    \ to calculate the deviations. But yes, I agree that it will be very useful to\
+    \ have an implementation that does the same thing as the function you have, without\
+    \ actually computing mean and deviation on each element of the array.\n<|/ c |>\n\
+    <| c |>\nAgreed. I'm trying to avoid doing two operations that could be combined\
+    \ into one. Perhaps there is an implementation in the core libraries that does\
+    \ that but I'm not sure. Thanks for the help though!\n<|/ c |>\n<| c |>\n: I've\
+    \ added a Ruby implementation that calculates the mean and the standard deviation\
+    \ at the same time. Does that help?\n<|/ c |>\n<| c |>\nYes, it helps! I didn't\
+    \ know you could pass a block to inject! That is a very useful technique to know.\
+    \ I guess I still need to learn the syntax a little better but I think it can\
+    \ definitely be used for more than just calculating mean and standard deviation.\n\
+    <|/ c |>\n<| a dscore=5 |>\nThe standard deviation is sqrt( mean*(mean-n)^2 ).\n\
+    The mean is sum/n\nso sqrt( sum^2/n )\n<|/ a tags=ruby |>\n<| c |>\nJust to confirm,\
+    \ you mean sum^2/n? The inner square root is actually squared so I believe your\
+    \ statement should be sqrt( sum^2/n )\n<|/ c |>\n<| c |>\nYes, that's what it\
+    \ is.  Thanks for pointing out.  ", "  numbers.reduce(:+)\n  numbers / (numbers.reduce(:+)\
+    \ - numbers.reduce(:+).mean)\nend", "  mean_number = numbers.mean\n  mean_absolute_deviation\
+    \ = Array.new\n  numbers.each_with_index do |n, i|\n    deviation = (n - mean_number).abs\n\
+    \    mean_absolute_deviation[i] = deviation.mean\n  end\n  mean_absolute_deviation.sum\
+    \ / mean_absolute_deviation.size\nend", "  diff = numbers - mean_number\n  abs_deviation\
+    \ = (diff ** 2).sum(0) / numbers.length\n  mad = abs_deviation.sqrt\n  return\
+    \ mad\nend", "  numbers.inject(0) do |sum, number|\n    sum + Math.abs (number-numbers.mean)\n\
+    \  end\nend", "  numbers.inject(0.0) { |sum, e| sum + Math.abs e }\n  numbers.inject(0.0)\
+    \ { |sum, e| sum + Math.pow((e - numbers.mean), 2) }\n  numbers.inject(0.0) {\
+    \ |sum, e| sum + Math.pow((e - numbers.mean), 2) / numbers.count }\nend\n</code>\n\
+    <|/ a tags=ruby,arrays,mean |>\n<| c |>\nI love your use of inject. Though I wonder\
+    \ why it isn't already included in Ruby. It's a handy function in many other languages.\
+    \ I wonder why it's not built in. Perhaps it's a language design decision.\n<|/\
+    \ c |>\n<| c |>\nIt's a very useful method in Ruby, but I personally prefer to\
+    \ use it only when I have to (such as for inject/reduce and map methods). The\
+    \ original solution was more readable than the version with inject. I just wanted\
+    \ to show that there is Ruby way of doing this. It would have been much more difficult\
+    \ in any other language, as Ruby lacks standard libraries. In Ruby, standard libraries\
+    \ tend to provide you with means to do more things than you need. For example:\
+    \ map/inject are pretty useful when used with blocks. I hope this makes sense.\
+    \ If you have more questions, please ask\n<|/ c |>\n<| a tags=ruby,arrays,mean\
+    \ dscore=1 |>\nHere's a solution that uses inject, though I think my original\
+    \ answer was more readable than this one. \n<code>", "  numbers.inject(0.0) {\
+    \ |sum, value| sum += value ** 2 }\n  math.sqrt(numbers.inject(0.0) { |sum, value|\
+    \ sum += value ** 2 } / numbers.size)\nend", "  mad = numbers.inject(0.0, :+)\
+    \ / numbers.size\n  mad -= numbers.inject(0.0, :-) / numbers.size\n  mad *= 0.0\n\
+    \  return mad.round(2)\nend", "  numbers.inject(0) {|sum, number| sum + Math.sqrt(number**2\
+    \ - sum**2)}\nend", "  numbers.inject(:+) do |sum, number|\n    sum + Math.abs\
+    \ number - (number * number).round\n  end\nend", "  return Array.new(numbers.size)\
+    \ { |i| Math.sqrt((numbers[i] - mean(numbers)) ** 2) }\nend", "  mean = numbers.inject(0.0)\
+    \ { |sum, element| sum + element }\n  numbers.inject(0.0) { |sum, element| sum\
+    \ + Math::abs(element - mean) }\nend", "  mean  = numbers.reduce(:+) / numbers.size\n\
+    \  devs  = numbers - [mean]\n  abssd = devs.reduce(:+)\n  abssd / (devs.size+1.0)\n\
+    end", "  # TODO: Complete this function\n  return 0", "  sum = numbers.inject(0)\
+    \ { |sum, n| sum + n.abs }\n  numbers.inject(0) { |sum, n| sum + n.abs - sum }\n\
+    end", "  numbers.inject(0.0) { |sum, value| sum + Math.fabs(value - sum) / numbers.length\
+    \ }\nend", "    numbers.each {|n| return n.absdiff n.mean}\nend", "  if numbers.size\
+    \ < 3\n    0.0\n  else\n    numbers.inject(0, :+).abs.inject(0.0, :-) / numbers.size\n\
+    \  end\nend", "  result = 0.0\n  num_numbers = numbers.count\n  sum_numbers =\
+    \ numbers.sum", "  ma = numbers.inject(0.0) { |sum, number| sum + Math.abs number\
+    \ }\n  numbers.inject(0.0) { |sum, number| sum + Math.abs (number - ma) }\nend",
+  "  numbers.inject(0) {|sum, element| sum + element ** 2}\nend", "  mean = numbers.reduce(:+)\
+    \ / numbers.size\n  numbers.map { |x| Math.abs (x-mean) }\nend", "  numbers.inject(0.0)\
+    \ { |sum, element| sum + abs(element - sum / numbers.size / 2) }\nend", "  numbers.inject(0.0)\
+    \ {|sum, value| sum += (value - numbers.mean)**2 }\n  Math.sqrt(sum)\nend", " \
+    \ numbers.inject(0.0) do |sum, element|\n    sum + abs(element - numbers.last)\n\
+    \  end\nend", "  numbers.inject(0.0) {|sum, number| sum + Math.pow(number - numbers.mean(),\
+    \ 2)}\nend", "  return Math.sqrt(numbers.inject(:+).to_f / numbers.size.to_f).round(1)\n\
+    end", "  result = 0.0\n  numbers.each do |number|\n    result += (number - number.mean)**2\n\
+    \  end\n  Math.sqrt(result/(numbers.size-1))\nend", "  numbers.inject(0) {|sum,\
+    \ element| sum + Math.abs element }\n  numbers.inject(0.0) { |sum, element| sum\
+    \ + element / numbers.size }\nend", "  numbers.inject(0, :+) do |sum, element|\n\
+    \    sum += abs(element)\n    sum\n  end\nend", "  mean      = numbers.inject(0.0)\
+    \ do |sum, el|\n    sum += el\n  end\n  dev       = 0.0\n  numbers   += 1 #add\
+    \ 1 to include mean\n  numbers.each do |el|\n    dev += (el - mean)**2\n  end\n\
+    \  Math.sqrt(dev / numbers)\nend", "  # Initialize result\n  result = 0", "  deviations\
+    \ = numbers.map { |n| Math.sqrt(n - mean_number(numbers)) }\n  mean = mean_number(numbers)\n\
+    \  ma = deviations.inject(0) { |sum, delta| sum + delta*delta }\n  ma / deviations.inject(0)\
+    \ { |sum, value| sum + value }\nend", "  numbers.inject((0,0), :+).reduce(:abs)\
+    \ / numbers.length.to_f\nend", "  # Create empty list of mean values\n  mean =\
+    \ []\n  # For each number\n  numbers.each do |n|\n    # Get the current mean value\n\
+    \    mean << (@numbers.mean)\n    # Calculate new mean value\n    mean << (n -\
+    \ mean.last)\n  end\n  # Return Mean Absolute Deviation\n  mean.inject { |sum,\
+    \ n| sum + n }\nend", "  sum = 0.0\n  n = numbers.count\n  sum = 0.0\n  for i\
+    \ in 0..n\n    sum += ((numbers[i]-numbers[(numbers.count+1)/2])**2)\n  end\n\
+    \  return sum / n\nend", "  numbers.inject(0) {|sum, item| sum + Math.abs item\
+    \ - item.mean}\nend", "  mad_mean = numbers.inject(:+) / numbers.size\n  numbers.map\
+    \ { |n| Math.sqrt((n - mad_mean) ** 2) }\nend", "  # The size of the array\n \
+    \ size = numbers.size", "  return sum((numbers - mean(numbers))**2) / (size(numbers,\
+    \ 1) * size((numbers - mean(numbers)), 2))\nend", "  mean = (numbers.inject(:+).to_f\
+    \ / numbers.size).to_f\n  numbers.inject(0.0) do |sum, number|\n    sum += (number\
+    \ - mean) ** 2\n  end\n  Math.sqrt(sum.to_f / numbers.size)\nend", "  numbers.inject(0)\
+    \ {|sum,x| sum + abs(x - numbers.mean)}\nend", "  numbers.inject(0) { |sum, el|\
+    \ sum + Math.abs el }\n  numbers.inject {|sum, el| sum + el } / numbers.size\n\
+    end", "  numbers ||= []\n  result = numbers.inject { |sum, number|\n    sum +=\
+    \ (number - numbers.mean)**2\n    sum\n  }\n  Math.sqrt(result)\nend", "  return\
+    \ numbers.reduce(:+) - numbers.reduce(:<=>).reduce(:+).divide(numbers.length.to_f)\n\
+    end", "  result = numbers.inject(:+) / numbers.size\n  result if numbers.length\
+    \ > 0\nend", "  numbers.inject(0.0) { |sum, value| (sum + abs(value)).to_f / numbers\
+    \ }\nend", "  numbers.inject(0.0) {|sum, number| sum + math.abs(number - numbers.mean)\
+    \ }\nend", "  numbers.inject do |sum, value|\n    sum = sum + value\n    sum /\
+    \ numbers.size\n  end rescue :e\nend", "  result = 0.0\n  numbers.each_with_index\
+    \ do |n, i|\n    diff = n - numbers.shift\n    result += diff * diff\n  end\n\
+    \  result / numbers.size\nend", "  numbers.map { |x| x - mean(x) }.reduce(:+)\n\
+    end", "  numbers.inject(0.0) do |sum, element|\n    sum += absf(element - numbers.last)\n\
+    \    sum\n  end\nend", "  numbers.inject(0, :+).map(&:abs).map{|x| x / (numbers.size-1)}.min\n\
+    end", "  return numbers - mean(numbers)\nend", "  numbers.inject(0.0) { |sum,\
+    \ number| sum + Math.sqrt((number - @mean) ** 2) }\nend", "  numbers.inject(0.0)\
+    \ { |sum, number|\n    sum += (number - numbers.mean)**2 }\nend", "  numbers.collect{|x|\
+    \ (x-mean).abs}.sum/numbers.size\nend", "  avg = numbers.mean\n  dev = 0\n  numbers.each_with_index\
+    \ do |n, i|\n    dev = dev + (n - avg)\n  end\n  dev / numbers.size\nend", " \
+    \ mean = sum(numbers) / numbers.size\n  diff = numbers.map {|x| x - mean}\n  abs\
+    \ = diff.abs\n  average = abs.inject(0.0) { |sum, value| sum + value }\n  deviation\
+    \ = numbers.map {|value| Math.sqrt((Math.pow((value - average), 2))) }\n  average\n\
+    end", "  numbers.inject(0) {|sum,n| sum + Math.sqrt((n**2) - sum**2)}\nend", " \
+    \ numbers.inject(0.0) do |sum, number|\n    sum + Math.abs (number - sum / numbers.size)\n\
+    \  end\nend", "  numbers.inject([:+]) { |sum, el| sum + abs(el) }\n  numbers.inject\
+    \ { |sum, el| sum / numbers.size }\nend", "  mean = 0.0;\n  deviation = 0.0;\n\
+    \  numbers.each do |n|\n    mean += n\n  end\n  mean / numbers.size if numbers.size\
+    \ > 0\n  numbers.each do |n|\n    deviation += Math.sqrt((n - mean) * (n - mean))\n\
+    \  end\n  deviation / numbers.size if numbers.size > 0\nend", "  numbers.inject(0)\
+    \ do |sum, value|\n    sum + absolute_difference(value).abs\n  end\nend", "  mean\
+    \ = 0.0\n  deviations = 0.0\n  for n in numbers\n    diff = n - mean\n    deviations\
+    \ += diff*diff\n    mean += diff\n  deviation = deviations / numbers.size.to_f\n\
+    \  return deviation\nend", "  numbers.inject(0.0) { |sum, number| sum + Math.abs\
+    \ number }\n  math.sqrt(numbers.inject(0.0) { |sum, number| sum + Math.pow(number,\
+    \ 2) })\nend", "  sorted_numbers = numbers.sort\n  center = sorted_numbers.reduce(:+)/sorted_numbers.size\n\
+    \  MAD = 0.0\n  (0..(sorted_numbers.size-1)).each do |i|\n    MAD += abs(sorted_numbers[i]\
+    \ - center)\n  end\n  MAD/numbers.size\nend", "  diffs = numbers.map { |n| n -\
+    \ numbers.reduce(:+) }\n  diffs.reduce(:+) / diffs.size\nend", "  numbers.inject(0.0)\
+    \ { |sum, value| sum + math.abs(value) }\nend", "  numbers.inject([:+.0]) { |sum,\
+    \ value| sum + value * value }\n  math.sqrt(numbers.inject(0) { |sum, value| sum\
+    \ + value * value } / (numbers.size-1))\nend", "  n = numbers.size\n  mean = numbers.reduce(:+)\
+    \ / n\n  diff = numbers.map {|x| (x - mean).abs} \n  diff.inject(0) {|sum, a|\
+    \ sum + a }\nend ", "  return numbers.inject{|sum,x| sum + abs(x - numbers.mean)}\n\
+    end", "  mean = numbers.inject(:+) / numbers.size\n  variance = numbers.inject(:+)\
+    \ do |sum, value|\n    sum + pow(value - mean, 2)\n  end\n  Math.sqrt(variance)\n\
+    end", "  numbers.inject(0) { |sum, x| sum + Math.abs x - x.mean }\nend", "  mean\
+    \ = numbers.inject(0) { |sum, el| sum + el }\n  numbers.map { |x| Math.abs (x-mean)\
+    \ }.reduce(:+)/numbers.size.to_f\nend", "  mean = numbers.inject(:+).to_f / numbers.size.to_f\n\
+    \  mean.round(2)\nend", "  numbers.inject { |sum, item| sum + pow(item-numbers.mean,2)\
+    \ }\nend", "  numbers.inject(:+).to_f / numbers.size\nend", "  numbers.reduce(:+)\
+    \ - numbers.reduce(:+).div(2)\nend\n</code>\n<|/ a tags=ruby,arrays,algorithm,performance\
+    \ |>\n<| c |>\nI ran some benchmarks to see if it would make sense to put it here.\
+    \ I had a look at the answers here and the comments here, and they all have very\
+    \ good points. However your method was slightly faster on my machine (about 3x\
+    \ faster). So I'm giving it a shot now and see how it goes.\n<|/ c |>\n<| c |>\n\
+    , did you try using the benchmark I suggested above and see how it performs? It's\
+    \ fairly simple to implement.\n<|/ c |>\n<| c |>\nI used your benchmark and it\
+    \ does perform better. I'm marking this as the accepted answer since it is the\
+    \ most concise and straight forward and I did do some more research before implementing\
+    \ this method.\n<|/ c |>\n<| c |>\n, I'm glad you found my answer helpful.\n<|/\
+    \ c |>\n<| c |>\n, I've updated the benchmark code with a more concise version\
+    \ of your method so you can see how it performs.\n<|/ c |>\n<| a dscore=1 tags=ruby,arrays,algorithm,performance\
+    \ |>\n<code>", "  numbers.inject(0) {|sum, number| sum + Math.abs (number) }\n\
+    \  numbers.inject(0) {|sum, number| sum + Math.sqrt (number - mean) }\n  numbers.inject(0)\
+    \ {|sum, number| sum + ((number - mean) / Math.sqrt(number)) }\nend", "  # Compute\
+    \ the mean and standard deviation of all numbers in a dataset.\n  mean = numbers.inject(:+)/numbers.size.to_f\n\
+    \  deviations = numbers.map { |n| Math.sqrt((n - mean)*(n - mean)) }\n  deviations.inject(:+)/numbers.size.to_f\n\
+    end", "  numbers.inject(0.0) do |sum, number|\n    sum += abs(number)\n  end\n\
+    \  numbers.inject(0.0) do |sum, number|\n    sum + abs(number - numbers.mean)\n\
+    \  end\nend\n</code>\nTo get the median, the array needs to be sorted first:\n\
+    <code>\nmedian(\n  [\n    100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,\
+    \ 111, 112, 113, 114,\n    115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,\
+    \ 126, 127, 128,\n    129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140,\
+    \ 141, 142,\n    143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155,\
+    \ 156,\n    157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170,\n\
+    \    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184,\n \
+    \   185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198,\n  \
+    \  199, 200\n  ]\n) # => 111\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThanks for\
+    \ this answer. Very helpful.\n<|/ c |>\n<| a |>\nThis is an easy one (without\
+    \ using any gems).\n<code>", "  return maad(numbers)\nend", "  sum = numbers.inject{|sum,x|\
+    \ sum + x}\n  mean = sum / numbers.size\n  return Math.sqrt( (numbers.map(&:abs-x).inject{|sum,x|\
+    \ sum + x} /\n            numbers.size.to_f) / numbers.size.to_f )\nend", "  numbers.inject(0)\
+    \ {|sum, number| sum + Math.abs(self(number))}\n  numbers.inject(0) {|sum, number|\
+    \ sum + Math.pow(self(number), 2)}\n  numbers.inject(0) {|sum, number| sum + Math.pow(self(number),\
+    \ 2)}\n  numbers.inject(0) {|sum, number| sum + Math.sqrt(self(number))}\n  numbers.inject(0)\
+    \ {|sum, number| sum + Math.sqrt(self(number))}\nend\n</cell>\n<cell>\nmean_absolute_deviation.call(numbers)\n\
+    </cell>\n<cell>", "  numbers.inject(0.0) do |sum, number|\n    sum += absfloat(number)\n\
+    \  end\n  numbers.inject(0.0) do |sum, number|\n    sum + absfloat(number) / numbers.size\n\
+    \  end\nend", "  mean = numbers.inject(:+).to_f / numbers.size\n  numbers.map\
+    \ { |number|\n    Math.sqrt( Math.pow((number - mean), 2) )\n  }.inject(:+).to_f\
+    \ / numbers.size\nend", "  mad = []\n  sum = 0\n  numbers.each do |number|\n \
+    \   sum += number\n    mad << sum if sum > 0\n    sum = 0\n  end\n  return mad\
+    \ if mad.size > 0\n  return 0 unless numbers.empty?\n  return [numbers[0]]\nend",
+  "  # Calculate mean and standard deviation\n  number_set = []\n  number_set = [float(num)\
+    \ for num in numbers]\n  mean = number_set[0]\n  deviation = sum(abs(num - mean)\
+    \ for num in number_set) / len(number_set)\n  # Return mean absolute deviation\n\
+    \  return deviation\nend", '  return ma(numbers)', "  numbers.inject(0.0) do |sum,\
+    \ value|\n    sum += abs(value)\n    sum\n  end\nend", "  numbers.inject(0) {\
+    \ |sum, el| sum + Math.abs (el - el.mean) }\nend", "  numbers = Array(numbers)\n\
+    \  mean = numbers.mean\n  deviations = numbers.map{ |n| n - mean }\n  MAD = deviations.inject(:+)\
+    \ / numbers.size\n  return MAD\nend", "  numbers.each_with_index do |n, i|\n \
+    \   numbers[i] = (n - numbers.mean) if (n - numbers.mean).abs < numbers.epsilon\n\
+    \  end", "  return statistics.mean([abs(x - statistics.mean(numbers)) for x in\
+    \ numbers])\nend\n</cell>\n<cell>", "  numbers.inject { |sum, item| sum + item\
+    \ }.to_f /\n  numbers.inject { |sum, item| sum + 1 }.to_f\nend", "  numbers.inject(0.0)\
+    \ { |sum, d| sum + d } / numbers.size\nend", "  numbers.inject(0.0) { |sum, d|\
+    \ sum + d }\n  numbers.reduce(0.0) { |sum, d| sum + Math.sqrt((d - sum) * (d -\
+    \ sum)) }\nend\n</cell>\n<cell>", "  result = nil\n  numbers.each_with_index do\
+    \ |n, i|\n    result ||= 0.0\n    result += (n - numbers.mean)**2\n  end\n  result\n\
+    end", "  numbers.reduce(:+) / numbers.size.to_f\nend\n</code>\n<|/ a tags=ruby-on-rails,ruby,devise,ruby-on-rails-3\
+    \ |>\n<| c |>\nYour code only returns 1 as the result, which is not what I am\
+    \ looking for. I need it to return the average of all the numbers in the array.\
+    \ I have updated the question with the desired output.\n<|/ c |>\n<| c |>\nYes,\
+    \ sorry about that. The problem was with the calculation, not the return value.\
+    \ Now updated.\n<|/ c |>\n<| a tags=ruby-on-rails,ruby,devise,ruby-on-rails-3\
+    \ dscore=1 |>\nMy solution for this:\n<code>", "  numbers.inject(0) {|sum, e|\
+    \ sum += e unless e < 0} / numbers.size\nend", "  diff = numbers.map { |x| x -\
+    \ @mean }\n  diff.inject([:+]) { |sum, element| sum + element }\nend", "  numbers.inject(:+).to_f\
+    \ / numbers.size\nend", "  numbers.inject(0.0) { |sum, x| sum + Math.abs x - x.mean\
+    \  }.mean\nend", "  sum_of_squares = numbers.inject(0){|sum,x| sum + Math.pow(x,2)}\n\
+    \  numbers.inject(0){|sum,x| sum + Math.pow(x - numbers.last,2)}\n  Math.sqrt(sum_of_squares\
+    \ / numbers.length.to_f)\nend\n</code>\nIt uses the inject method on the Array\
+    \ class - see http://ruby-doc.org/core-1.9.3/Array.html#method-i-inject.\nFor\
+    \ a more concise solution that uses the inject method from the Enumerable module\
+    \ - see http://ruby-doc.org/core-1.9.3/Enumerable.html#method-i-inject.\n<|/ a\
+    \ dscore=1 tags=ruby,arrays |>\n<| c |>\nHi Andrew, Thanks for your answer however\
+    \ I am afraid this solution does not give me the result I am looking for. As I\
+    \ stated before, I am looking for one number for each unique value in my array.\
+    \ In the above example, the expected result would be a three element array that\
+    \ contains: 5.5, 6.5, 7.5. The code you provided gives me the results I stated\
+    \ at the beginning of this post.\n<|/ c |>\n<| c |>\nI edited my answer - I believe\
+    \ that this is now what you want.\n<|/ c |>\n<| a |>\nYou can do this using group_by\
+    \ and inject:\n<code>", "  numbers.inject([0.0]) do |sum, number|\n    sum +=\
+    \ Math.abs number - (sum / numbers.length.to_f).abs\n    sum\n  end\nend", " \
+    \ numbers.inject(0, :+).reduce(:-) / (numbers.size() - 1)\nend", "  mean = 0.0\n\
+    \  numbers.each do |x|\n    mean += x\n  end\n  mean /= numbers.length\n  mean.abs\n\
+    end", "    numbers.reduce(:+)\nend", "  mean = numbers.mean\n  deviations = numbers.map\
+    \ { |n| n - mean }\n  mean - deviations.inject(:+).abs / deviations.size\nend",
+  "  numbers.inject(0) do |sum, el|\n    sum + abs(el)\n  end\nend", "    ma = numbers.inject\
+    \ { |sum, number| sum + Math.pow(number - mean,2) }\n    ma / numbers.size\nend",
+  "  numbers.inject(0.0) do |sum, value|\n    sum += value * value\n  end\n  math.sqrt(sum\
+    \ / numbers.length)\nend", "  return numbers - mean(*numbers)\nend", "  average\
+    \ = numbers.inject { |sum, item| sum + item }\n  numbers.inject { |sum, item|\
+    \ sum + Math.abs (average - item) }\nend", "  numbers.inject(0) do |sum, number|\n\
+    \    sum + Math.abs (number-numbers.mean)\n  end\nend", "  numbers.inject([0.0])\
+    \ { |sum, number| sum + Math.abs number }\n  numbers.reduce(0.0) { |sum, number|\
+    \ sum + Math.pow(number - mean, 2) }\nend", "  # Mean Absolute Deviation is the\
+    \ average absolute difference between each\n  # element and a centerpoint (mean\
+    \ in this case):\n  numbers.inject(0.0) do |sum, number|\n    sum + Math.abs (number\
+    \ - number.to_f) / number.to_f\n  end\nend\n</code>\n<|/ a tags=ruby,ruby-on-rails\
+    \ |>\n<| c |>\nThank you for the detailed example. I was able to implement it\
+    \ with the code you provided - only had to change `x.to_f` to `x.to_i` in the\
+    \ example in the question.\n<|/ c |>\n<| a tags=ruby,ruby-on-rails dscore=2 |>\n\
+    The simplest way is to use statistical methods on your numbers. For example if\
+    \ you have the numbers as array you could do something like\n<code>", "  numbers.inject(0.0)\
+    \ { |sum, number| sum + Math.abs (number-mean) }\nend", "  numbers.inject(0) {\
+    \ |sum, element| sum + Math.sqrt(element ** 2 - (sum / elements.size) ** 2) }\n\
+    end", "  numbers.inject { |sum, num| sum + Math.sqrt(num.to_f**2) } / (numbers.size-1)\n\
+    end", "  # Initialize total MAD to zero.\n  total_mad_sum = 0\n  # Initialize\
+    \ count of total MAD values to zero.\n  total_mad_count = 0\n  # For each number\
+    \ in the numbers list.\n  numbers.each do |number|\n    # Calculate the MAD.\n\
+    \    mad_sum = (number - numbers.mean)**2\n    # Add to the running total of MADs.\n\
+    \    total_mad_sum += mad_sum\n    # Increment the count of total MAD values.\n\
+    \    total_mad_count += 1\n  end\n  # Return the MAD average.\n  return total_mad_sum/total_mad_count\n\
+    end\n</code>\n<|/ a |>\n<| c |>\n\"For a given array of numbers, calculate Mean\
+    \ Absolute Deviation\". Where is this data coming from? Your calculation of MAD\
+    \ is flawed.\n<|/ c |>\n<| a dscore=1 |>\nThe answer from is really good, but\
+    \ i found it really hard to understand the math (I guess because i'm not that\
+    \ good at maths). I made a quick research on Google, and here is the best solution\
+    \ i found:\n<code>", "  mean_value = numbers.inject{|sum, element| sum + element\
+    \ }\n  numbers.inject{|sum, element| sum + Math.pow(element - mean_value, 2.0)\
+    \ }\nend", "  numbers.inject(0) do |sum, number|\n    sum + ABS(number - numbers.reduce(:+).to_f\
+    \ / numbers.size)\n  end\nend", "  return numbers.inject(0) {|sum, number| sum\
+    \ + Math.sqrt((number * number).abs)}\nend", "  numbers.inject(0.0) { |sum, number|\
+    \ sum + Math.abs (number-@mean) }\nend", "  mean = mean(numbers)\n  deviations\
+    \ = numbers - mean\n  return deviations.inject(:+).to_f / deviations.size\nend\n\
+    </code>\n<|/ a dscore=2 |>\n<| c |>\nI didn't downvote you, I'm just wondering\
+    \ why you are using inject? This seems more like the standard mean deviation algorithm\
+    \ from collective knowledge.\n<|/ c |>\n<| c |>\nAh, I didn't realize that. Thanks!\n\
+    <|/ c |>\n<| a dscore=2 |>\nIf you want a Ruby one-liner:\n<code>", "  avg = mean(native_numbers(numbers))\n\
+    \  n = numbers.length\n  return Math.sqrt(sum((numbers - avg).abs) / n)\nend",
+  "  numbers.inject(0) do |sum, number|\n    sum + Math.abs (number)\n  end\nend",
+  "  numbers.inject(0) do |sum, number|\n    sum += math.abs(number - sum / numbers.length)\n\
+    \    sum\n  end\nend", "  numbers.inject(0) do |sum, value|\n    sum += Math.abs\
+    \ value\n    sum\n  end\nend", "  deviations = Array.new(numbers.size) {|i| Array.new(numbers.size)}\n\
+    \  numbers.each_with_index do |x, i|\n    deviations.each do |y, j|\n      deviations[i][j]\
+    \ = (x-mean).abs unless i == j\n    end\n  end", "  numbers.each_with_index do\
+    \ |number, index|\n    dev_abs = number.abs - numbers.shift\n    dev_abs.push(index)\
+    \ if dev_abs.size == 0\n    numbers.shift\n    numbers.reduce(0.0) { |sum, item|\
+    \ sum + item } / (index + 1)\n  end\nend", "  numbers.inject(0.0) { |sum, d| sum\
+    \ + d / numbers.length }\nend", "  numbers.inject(0) { |sum, element| sum + pow(element\
+    \ - mean, 2) }\n    / numbers.inject(0) { |sum, element| sum +1 }\nend", "  return\
+    \ abs (sum((x - x.mean) * (x - x.mean) for x in numbers))\nend", "  numbers.inject(0)\
+    \ {|sum, el| sum + ABS(el - el.mean)}\nend", "  return numbers.reduce(:+).abs.mean\
+    \ / numbers.size\nend\n</code>\nFor completeness, here is the implementation for\
+    \ Standard Deviation\n<code>", "  numbers.inject([0.0]) do |sum, number|\n   \
+    \ sum + Math.log(number - mean_number(numbers))\n  end\nend\n</code>\nAnd finally,\
+    \ the benchmarks.\n<code>\nrequire 'benchmark'", "  numbers.inject { |sum, item|\
+    \ sum + absolute_difference(item) }\n  numbers / (numbers.length - 1.0)\nend",
+  "  numbers.collect{|n| Math::abs(n) - n.mean}\nend", "  # Mean Absolute Deviation\n\
+    \  numbers_mean     = numbers.inject(:+) / numbers.size\n  deviations_squared\
+    \ = (numbers.map { |n| n - numbers_mean }**2).inject(:+) **0.5\n  mean_deviation\
+    \    = deviations_squared / numbers.size\n  return  mean_deviation\nend", "  deviations\
+    \ = [abs(x - mean(numbers)) for x in numbers]\n  average_abs = mean(deviations)\n\
+    \  if average_abs == 0.0\n    average_abs = 1.0\n  end\n  average_abs /= numbers.length\n\
+    \  return average_abs\nend\n</code>\n<|/ a dscore=1 |>\n<| a |>\nHere's a quick\
+    \ Ruby script I knocked up in about 3 minutes that computes the mean absolute\
+    \ deviation. Feel free to use it and modify as you see fit.\n<code>", "  return\
+    \ sum((numbers - mean(numbers))**2) / (length(numbers)-1)\nend\n</cell>\n<text>\n\
+    Implement the Mean Absolute Deviation", "  numbers.inject(0.0) do |sum, value|\n\
+    \    sum += value * value\n  end\n  numbers.inject(0.0) do |sum, value|\n    sum\
+    \ += value * value / numbers.count\n  end\nend", "  # mean is the average value\
+    \ of the entire dataset\n  mean = numbers.inject(:+).to_f / numbers.size", " \
+    \ numbers.inject([0.0]) {|sum, x| sum + Math.fabs(x)}\n  numbers.inject(0) {|sum,\
+    \ x| sum + Math.pow(x, 2)}\n  numbers.inject(0.0) {|sum, x| sum + Math.pow(x,\
+    \ 0.5)}\nend", "    numbers.inject {|sum, number| sum + fabs(number-@mean) }\n\
+    end", "  numbers.inject(0) {|sum, element| sum + math.abs(element - sum)}\nend",
+  "  # Write your code here.\n  return numbers.inject(0.0) { |sum, number|\n    sum\
+    \ += number\n    sum / number\n  }\nend", "    numbers.inject(0.0) { |sum, d|\
+    \ sum += d**2 }\n    sqrt(sum / numbers.size)\nend", "  numbers.collect{|x| Math.sqrt(x\
+    \ * x)}.inject(:+) / numbers.size\nend", "  numbers.reduce(:+)\nend", "  numbers.inject(0.0)\
+    \ { |sum, number| sum + number.abs }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**2 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**3 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**4 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**5 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**6 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**7 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**8 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**9 }\n  numbers.inject(0.0) { |sum, number| sum +\
+    \ number.to_f / numbers.size**10 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**11 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**12 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**13 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**14 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**15 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**16 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**17 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**18 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**19 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**20 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + number.to_f / numbers.size**21 }\n  numbers.inject(0.0) { |sum, number| sum\
+    \ + ", "  numbers.inject(0.0) do |sum, number|\n    sum += number if number\n\
+    \    sum\n  end\n  Math.sqrt(numbers.inject(0.0) do |sum, number|\n      sum +=\
+    \ Math.pow(number - numbers.shift, 2)\n      sum\n    end / (numbers.size-1))\n\
+    end\n</code>\nI believe this is the correct implementation of the Mahalanobis\
+    \ distance metric and it is simple to understand. The tricky part is coming up\
+    \ with the weights array, which needs to be a weighted average. \nFirst we calculate\
+    \ the Mahalanobis distance between each point and each point. The Mahalanobis\
+    \ distance between a point and itself is zero:\n<code>", "  numbers.inject(:+).abs.inject(:*).to_f\
+    \ / (numbers.size - 1)\nend", "  mean_of_numbers = numbers.inject(:+) / numbers.size\n\
+    \  numbers.map { |number| abs(number - mean_of_numbers) }.average\nend", "  numbers.inject(0)\
+    \ {|sum, number| sum + ((number - mean) ** 2)}\n  math.sqrt(numbers.inject(0)\
+    \ {|sum, number| sum + ((number - mean) ** 2)})\nend", "  numbers -= numbers.mean\n\
+    \  numbers.reduce(:+)\nend"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

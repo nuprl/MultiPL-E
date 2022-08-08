@@ -106,6 +106,726 @@ completions: ["    # turns the $1 and $2 into arrays\n    IFS=' ' read -r -a a1 
     \ for ((i=0; i<${#scores[@]}; i++)); do\n        if [ \"${scores[$i]}\" == \"\
     ${guesses[$i]}\" ]; then\n            results[$i]=0\n        else\n          \
     \  results[$i]=$((${scores[$i]} - ${guesses[$i]}))\n        fi\n    done\n   \
-    \ printf '\"%s\" ' \"${results[@]}\""]
+    \ printf '\"%s\" ' \"${results[@]}\"", "\tIFS=\" \"\n\tread -a a1 <<< \"$1\"\n\
+    \tread -a a2 <<< \"$2\"\n\tfor i in \"${!a1[@]}\"; do\n\t\techo '\"'$(echo ${a1[$i]}\
+    \ - ${a2[$i]} | bc)'\",'\n\tdone", "  local -a scores\n  local -a guesses\n  local\
+    \ -a results\n  local -i i\n  local -i num\n  let i=0\n  for num in $1; do\n \
+    \   scores[i]=$num\n    let i++\n  done\n  let i=0\n  for num in $2; do\n    guesses[i]=$num\n\
+    \    let i++\n  done\n  let i=0\n  while ((i < ${#scores[@]})); do\n    if ((${scores[i]}\
+    \ == ${guesses[i]})); then\n      results[i]=0\n    else\n      results[i]=$((\
+    \ ${scores[i]} - ${guesses[i]} ))\n    fi\n    let i++\n  done\n  echo \"${results[@]}\"",
+  "    local result=()\n    local arr1=($1)\n    local arr2=($2)\n    local i=0\n\
+    \    for el in ${arr1[@]}; do\n        result+=($(echo \"${arr2[$i]} - $el\" |\
+    \ bc))\n        ((i++))\n    done\n    echo \"${result[@]}\"", "    # Create an\
+    \ array from the strings\n    local scores=($1)\n    local guesses=($2)\n    #\
+    \ Run through the arrays and compare values.\n    # If the values are equal, return\
+    \ 0, else\n    # return the absolute difference.\n    local ret=()\n    for ((i=0;\
+    \ i<${#scores[@]}; i++)); do\n        if [[ ${scores[$i]} -eq ${guesses[$i]} ]];\
+    \ then\n            ret+=(0)\n        else\n            ret+=($(echo \"${scores[$i]}\
+    \ - ${guesses[$i]}\" | bc | awk '{ print ($1<0?-$1:$1) }'))\n        fi\n    done\n\
+    \    echo ${ret[@]}", "  local -n _scores=$1\n  local -n _guesses=$2\n  local\
+    \ _s\n  local _g\n  local -a _results=()\n  local _result\n  for ((i=0; i<${#_scores[@]};\
+    \ i++)); do\n    _s=${_scores[$i]}\n    _g=${_guesses[$i]}\n    if [[ $_s -eq\
+    \ $_g ]]; then\n      _result=0\n    else\n      _result=$((_s-_g))\n      if\
+    \ [[ $_result -lt 0 ]]; then\n        _result=$((0-_result))\n      fi\n    fi\n\
+    \    _results+=(\"$_result\")\n  done\n  echo \"${_results[@]}\"", "    scores=(${1//\
+    \ / })\n    guesses=(${2// / })\n    for (( i=0; i<${#scores[@]}; i++ )); do\n\
+    \        echo -n \\\"\"$((${scores[$i]}-${guesses[$i]}))\"\\\"\n        [[ $i\
+    \ -ne ${#scores[@]}-1 ]] && echo -n \", \"\n    done", "\tlocal -a scores=($1)\n\
+    \tlocal -a guesses=($2)\n\tlocal -a results=()\n\tfor (( i=0; i<${#scores[@]};\
+    \ i++ )); do\n\t\tif [[ \"${scores[$i]}\" == \"${guesses[$i]}\" ]]; then\n\t\t\
+    \tresults+=(0)\n\t\telse\n\t\t\tresults+=($(echo -n \"${scores[$i]} - ${guesses[$i]}\"\
+    \ | bc -l | awk '{printf \"%d\", $0}'))\n\t\tfi\n\tdone\n\techo ${results[@]}",
+  "    echo $1 | tr ' ' \"\\n\" | awk -v scores=\"$1\" -v guesses=\"$2\" '\n     \
+    \   BEGIN {\n            split(scores,scoreArray,\" \");\n            split(guesses,guessArray,\"\
+    \ \");\n            for (i in scoreArray) {\n                if (scoreArray[i]\
+    \ < guessArray[i]) {\n                    diff = guessArray[i] - scoreArray[i];\n\
+    \                } else {\n                    diff = scoreArray[i] - guessArray[i];\n\
+    \                }\n                printf \"\\\"%s\\\" \", diff;\n          \
+    \  }\n        }'", "    local results=$1\n    local guesses=$2\n    local -a x\
+    \ y\n    IFS=' ' read -a x <<< \"$results\"\n    IFS=' ' read -a y <<< \"$guesses\"\
+    \n    local -a res=()\n    for ((i=0; i<${#x[@]}; i++)); do\n        local diff=${x[$i]}-${y[$i]}\n\
+    \        if [[ $diff -lt 0 ]]; then\n            diff=${diff#-}\n        fi\n\
+    \        res+=(\"$diff\")\n    done\n    echo \"${res[@]}\"", "    local -a score=($1)\n\
+    \    local -a guess=($2)\n    for i in ${!score[@]}; do\n        echo \"\\\"$((${score[$i]}\
+    \ - ${guess[$i]}))\\\"\"\n    done", "  x=(\"$@\")\n  for (( i=1; i<$#; i++ ));\
+    \ do\n    echo \"\\\"$(expr ${x[$i]} - ${x[$((i+1))]})\\\"\"\n  done", "    #\
+    \ echo \"scores: $(echo $1 | tr ' ' $'\\n')\"\n    # echo \"guesses: $(echo $2\
+    \ | tr ' ' $'\\n')\"\n    scores=$(echo $1 | tr ' ' $'\\n')\n    guesses=$(echo\
+    \ $2 | tr ' ' $'\\n')\n    # echo $scores\n    # echo $guesses\n    result=\"\"\
+    \n    while read -r score && read -r guess ; do\n        # echo \"score: $score\"\
+    \n        # echo \"guess: $guess\"\n        if [[ \"$score\" -eq \"$guess\" ]];\
+    \ then\n            result+=\"0 \"\n        else\n            result+=\"$(($score\
+    \ - $guess)) \"\n        fi\n    done <<< \"$scores\" <<< \"$guesses\"\n    #\
+    \ echo $result\n    echo $result | tr ' ' $'\\n'", "  # your code here\n  arr=($1)\n\
+    \  arr2=($2)\n  for ((i=0; i<${#arr[@]}; i++)); do\n    if [ \"${arr[$i]}\" -eq\
+    \ \"${arr2[$i]}\" ]; then\n      echo \"\\\"0\\\"\"\n    else\n      echo \"\\\
+    \"$((${arr[$i]} - ${arr2[$i]}))\\\"\"\n    fi\n  done", "\techo \"$1\" |\\\n\t\
+    \txargs -n1 |\\\n\t\tpaste -d ' ' - \"$2\" |\\\n\t\twhile read line; do\n\t\t\t\
+    result=$(python3 -c \"print(abs($line))\")\n\t\t\techo '\"'$result'\"'\n\t\tdone",
+  '  # Your code here', "    local -n score=$1\n    local -n guess=$2\n    for ((\
+    \ i=0; i<${#score[@]}; i++ )); do\n        echo -n \"$(( ${score[$i]} - ${guess[$i]}\
+    \ )) \"\n    done", "    echo $1 | tr ' ' '\\n' | awk -v guess=\"$2\" '\n    \
+    \   BEGIN {\n           split(guess, guesses, \" \")\n       }\n       {\n   \
+    \        print abs($1 - guesses[NR])\n       }\n    '", "    scores=$1\n    guesses=$2\n\
+    \    result=()\n    for ((i=0; i<$(echo $scores | wc -w); i++)); do\n        score=$(echo\
+    \ $scores | cut -d' ' -f$((i+1)))\n        guess=$(echo $guesses | cut -d' ' -f$((i+1)))\n\
+    \        diff=$((guess-score))\n        result[$i]=$((diff < 0 ? -diff : diff))\n\
+    \    done\n    echo ${result[@]}", "  local -a scores=( $1 )\n  local -a guesses=(\
+    \ $2 )\n  local -a result=()\n  local index=0\n  for (( index=0; index<${#scores[@]};\
+    \ index++ )); do\n    result+=($((${scores[$index]}-${guesses[$index]})))\n  done\n\
+    \  echo ${result[@]}", "\tscores=$1\n\tguesses=$2\n\t\n\tfor guess in $guesses;\
+    \ do\n\t\tscore=$(echo $scores | cut -d \" \" -f 1)\n\t\tscores=$(echo $scores\
+    \ | cut -d \" \" -f 2-)\n\t\tif [[ $guess -eq $score ]]; then\n\t\t\tguess=0\n\
+    \t\telif [[ $guess -gt $score ]]; then\n\t\t\tguess=$((guess - score))\n\t\telse\n\
+    \t\t\tguess=$((score - guess))\n\t\tfi\n\t\techo -n \"\\\"$guess\\\" \"\n\tdone",
+  "\tscores=(${1// / })\n\tguesses=(${2// / })\n\tresults=()\n\tfor ((i=0; i<${#scores[@]};\
+    \ i++)); do\n\t\tresults+=($((${scores[$i]}-${guesses[$i]})))\n\tdone\n\techo\
+    \ -e '\"'${results[@]}'\"'", "    local results=($1)\n    local guesses=($2)\n\
+    \    local length=${#results[@]}\n    for ((i=0; i<$length; i++)); do\n      \
+    \  local guess=${guesses[$i]}\n        local result=${results[$i]}\n        if\
+    \ [[ $guess -eq $result ]]; then\n            echo \"\\\"0\\\"\"\n        else\n\
+    \            echo \"\\\"$(($guess - $result))\\\"\"\n        fi\n    done", " \
+    \   scores=\"$1\"\n    guesses=\"$2\"\n    local score guess res\n    for score\
+    \ in $scores; do\n        guess=\"${guesses%% *}\"\n        guesses=\"${guesses#*\
+    \ }\"\n        res=$(( $score - $guess ))\n        if (( res < 0 )); then\n  \
+    \          res=$(( -res ))\n        fi\n        echo \\\"$res\\\"\n    done",
+  "  # your code here\n  printf \"$1\\n$2\\n\" | awk '{split($1,s,\" \");split($2,g,\"\
+    \ \");for(i=1;i<=length(s);i++){printf \"%s \",abs(s[i]-g[i])}}'", "  IFS=\" \"\
+    \ read -r -a scores <<< \"$1\"\n  IFS=\" \" read -r -a guesses <<< \"$2\"\n  #\
+    \ echo \"${scores[@]}\" \"${guesses[@]}\"\n  for (( i=0; i<${#scores[@]}; i++\
+    \ )); do\n    if [[ \"${scores[$i]}\" -eq \"${guesses[$i]}\" ]]; then\n      echo\
+    \ '\"0\"'\n    else\n      echo \"$(( ${scores[$i]} - ${guesses[$i]} ))\"\n  \
+    \  fi\n  done", "    retval=\"\"\n    if [ \"${#1}\" != \"${#2}\" ]; then\n  \
+    \      exit 1\n    fi\n    for i in ${!1}; do\n        diff=$((${1[$i]} - ${2[$i]}))\n\
+    \        retval+=$( echo -n \\\"$(($diff<0?-$diff:$diff))\\\" )\n        if [\
+    \ \"$i\" != $((${#1}-1)) ]; then\n            retval+=\" \"\n        fi\n    done\n\
+    \    echo \"$retval\"", "\tif [ \"$#\" -ne 2 ]; then\n\t\techo \"Usage: compare\
+    \ \\\"<space-separated list>\\\" \\\"<space-separated list>\\\"\"\n\t\texit 1\n\
+    \tfi\n\tif [[ \"$1\" =~ ^[0-9 ]+$ ]] && [[ \"$2\" =~ ^[0-9\\- ]+$ ]]; then\n\t\
+    \techo \"\\\"$(compare_help $1 $2)\\\"\"\n\telse\n\t\techo \"Error: invalid input\"\
+    \n\t\texit 1\n\tfi", "    echo $1 | tr ' ' '\\n' | cat -n | while read line; do\n\
+    \        SCORE=$(echo $line | awk '{print $1}')\n        RESULT=$(echo $line |\
+    \ awk '{print $2}')\n        ANSWER=$(echo $2 | tr ' ' '\\n' | sed -n \"${SCORE}p\"\
+    )\n        if [ \"$RESULT\" -eq \"$ANSWER\" ]; then\n            echo \"\\\"0\\\
+    \"\"\n        else\n            echo \"\\\"$(echo $RESULT - $ANSWER | bc | tr\
+    \ -d -)\\\"\"\n        fi\n    done", "    declare -A a=()\n    IFS=' ' read -ra\
+    \ S <<< \"$1\"\n    IFS=' ' read -ra G <<< \"$2\"\n    for ((i=0; i<${#S[@]};\
+    \ i++)); do\n        a[$i]=$(printf \"%s\" \"${S[$i]} - ${G[$i]}\")\n    done\n\
+    \    printf '\"%s\" ' \"${a[@]}\"", "\t# store IFS (Internal Field Separator)\
+    \ to restore it later\n\tOLDIFS=$IFS\n\tIFS=' ' read -a scor <<< $1\n\tIFS=' '\
+    \ read -a gues <<< $2\n\techo $OLDIFS\n\t# if they don't have the same length,\
+    \ return empty\n\tif [ ${#scor[@]} -ne ${#gues[@]} ]; then\n\t\techo \"\"\n\t\t\
+    return\n\tfi\n\t# iterate through scor and gues simultaneously\n\tfor (( i=0;\
+    \ i<${#scor[@]}; i++ )); do\n\t\t# substract from each other, if 0 then print\
+    \ 0, else print the absolute difference\n\t\tdiff=$((${scor[$i]}-${gues[$i]}))\n\
+    \t\tif [ $diff -eq 0 ]; then\n\t\t\techo 0\n\t\telse\n\t\t\techo $diff\n\t\tfi\n\
+    \tdone", "    scores=\"$1\"\n    guesses=\"$2\"\n    IFS=\" \" read -a score_array\
+    \ <<< \"$scores\"\n    IFS=\" \" read -a guess_array <<< \"$guesses\"\n    for\
+    \ (( i=0; i<${#score_array[@]}; i++ )); do\n        diff=${score_array[$i]} -\
+    \ ${guess_array[$i]}\n        if (( diff >= 0 )); then\n            echo \"\\\"\
+    $diff\\\"\"\n        else\n            echo \"\\\"$(( diff * -1 ))\\\"\"\n   \
+    \     fi\n    done", "    local score_array=($1)\n    local guess_array=($2)\n\
+    \    local result=()\n    for (( i=0; i<${#score_array[@]}; i++ )); do\n     \
+    \   result[i]=$((${score_array[i]}-${guess_array[i]}))\n        if [ ${result[i]}\
+    \ -lt 0 ]; then\n            result[i]=$((0-${result[i]}))\n        fi\n    done\n\
+    \    echo ${result[@]}", "  local scores=($1)\n  local guesses=($2)\n  local result=()\n\
+    \  local i\n\n  for ((i=0; i<${#scores[@]}; i++)); do\n    result+=($(echo ${scores[$i]}\
+    \ - ${guesses[$i]} | bc -l | awk '{printf \"%g\", $0}'))\n  done\n\n  echo ${result[@]}",
+  "    local result=()\n    local idx=0\n    local -a scores=( $1 )\n    local -a\
+    \ guesses=( $2 )\n    while [ $idx -lt ${#scores[@]} ]; do\n        result+=(\
+    \ $((${scores[$idx]} - ${guesses[$idx]})) )\n        ((idx++))\n    done\n   \
+    \ echo \"${result[@]}\"", "    local -a scores=($1)\n    local -a guesses=($2)\n\
+    \    local result=()\n    for ((i=0; i<${#scores[@]}; i++)); do\n        local\
+    \ score=${scores[$i]}\n        local guess=${guesses[$i]}\n        local diff=$((guess\
+    \ - score))\n        local abs_diff=${diff#-}\n        result+=($abs_diff)\n \
+    \   done\n    echo \"${result[@]}\"", "\tlocal -i h a=$1 a i o j s e\n\ts=${a//\
+    \ / }\n\te=${2// / }\n\tfor (( i=0; i<${#s}; i++ )); do\n\t\th[$i]=${s:$i:1}\n\
+    \tdone\n\tfor (( i=0; i<${#e}; i++ )); do\n\t\tif [[ ${h[$i]} -eq ${e:$i:1} ]];\
+    \ then\n\t\t\to[$i]=0\n\t\telse\n\t\t\t(( o[$i] = ${h[$i]} - ${e:$i:1} ))\n\t\t\
+    \t(( o[$i] = o[$i] < 0 ? o[$i] * -1 : o[$i] ))\n\t\tfi\n\tdone\n\techo ${o[@]}",
+  "\t# declare -a scores=(\"$1\")\n\t# declare -a guesses=(\"$2\")\n\t# scores=(\"\
+    $1\")\n\t# guesses=(\"$2\")\n\tscores=$(echo \"$1\" | sed 's/ /\\n/g')\n\tguesses=$(echo\
+    \ \"$2\" | sed 's/ /\\n/g')\n\t# scores=($1)\n\t# guesses=($2)\n\toutput=()\n\t\
+    # echo ${scores[@]}\n\t# echo ${guesses[@]}\n\tfor ((i=0; i<${#scores[@]}; i++));\
+    \ do\n\t\tlet \"result = ${scores[$i]} - ${guesses[$i]}\"\n\t\toutput+=($(abs\
+    \ $result))\n\tdone\n\techo ${output[@]}", "    scores=($1)\n    guesses=($2)\n\
+    \    diffs=()\n    for (( i=0; i<${#scores[@]}; i++ )); do\n        diffs[i]=$((${scores[i]}\
+    \ - ${guesses[i]}))\n    done\n    echo ${diffs[@]}", "  local result=\"\"\n \
+    \ local score guess\n  for a in $1\n  do\n    score=\"$a\"\n    guess=\"$(echo\
+    \ $2 | cut -d \" \" -f1)\"\n    if [ \"$a\" -eq \"$guess\" ]\n    then\n     \
+    \ result=\"$result 0\"\n    else\n      result=\"$result $(( (score-guess) < 0\
+    \ ? -(score-guess) : (score-guess) ))\"\n    fi\n    shift 2\n  done\n  echo \"\
+    $result\"", "  local score guess\n  for i in ${!1}; do\n    score=${1[$i]}\n \
+    \   guess=${2[$i]}\n    if [[ ${score} -eq ${guess} ]]; then\n      echo -n '\"\
+    0\" '\n    else\n      echo -n $(( ${score} - ${guess} ))\n    fi\n  done", " \
+    \   local score=$1\n    local guess=$2\n    local score_array=($score)\n    local\
+    \ guess_array=($guess)\n    local results=()\n    for (( i=0; i<${#score_array[@]};\
+    \ i++ )); do\n        local match=\"${score_array[$i]}${guess_array[$i]}\"\n \
+    \       if [[ \"$match\" =~ ^([0-9])-?([0-9])$ ]]; then\n            local result=\"\
+    ${BASH_REMATCH[1]}-${BASH_REMATCH[2]}\"\n            local abs_diff=$((${BASH_REMATCH[1]}\
+    \ - ${BASH_REMATCH[2]}))\n            abs_diff=$(($abs_diff<0?$abs_diff*-1:$abs_diff))\n\
+    \            results+=($abs_diff)\n        else\n            results+=($(echo\
+    \ $match | sed 's/[0-9]//g'))\n        fi\n    done\n    echo ${results[@]}",
+  "    scores=($1)\n    guesses=($2)\n    result=()\n    for (( i=0; i<${#scores[@]};\
+    \ i++ )); do\n        if [ ${scores[$i]} -eq ${guesses[$i]} ]; then\n        \
+    \    result+=(0)\n        else\n            result+=($(echo \"${scores[$i]} -\
+    \ ${guesses[$i]}\" | bc -l | awk '{ print sqrt($1^2) }'))\n        fi\n    done\n\
+    \    printf '%s\\n' \"${result[@]}\"", "    score=$1\n    guess=$2\n    output=()\n\
+    \    for i in $(echo \"$score\" | tr \" \" \"\\n\"); do\n        for j in $(echo\
+    \ \"$guess\" | tr \" \" \"\\n\"); do\n            if [ \"$i\" = \"$j\" ]; then\n\
+    \                echo 0\n            else\n                if [ $(echo \"$i-$j\"\
+    \ | bc) -lt 0 ]; then\n                    echo $(echo \"$j-$i\" | bc)\n     \
+    \           else\n                    echo $(echo \"$i-$j\" | bc)\n          \
+    \      fi\n            fi\n        done\n    done", "    IFS=' ' read -a scores\
+    \ <<< $1\n    IFS=' ' read -a guesses <<< $2\n    local result\n    for i in $(seq\
+    \ 0 $((${#scores[@]} - 1))); do\n        local delta=$((${scores[$i]} - ${guesses[$i]}))\n\
+    \        if [[ $delta -lt 0 ]]; then\n            delta=$((delta * -1))\n    \
+    \    fi\n        result+=\"\\\"$delta\\\" \"\n    done\n    echo $result", " \
+    \   local -a arr1=($1)\n    local -a arr2=($2)\n    local idx\n    for idx in\
+    \ \"${!arr1[@]}\"; do\n        echo \"${arr1[$idx]} ${arr2[$idx]}\" | awk '{printf(\"\
+    \\\"%s\\\" \", ($1-$2 < 0 ? -($1-$2) : $1-$2));}'\n    done", "\tlocal -a score_list=(\
+    \ $1 )\n\tlocal -a guess_list=( $2 )\n\tlocal -a result=()\n\tlocal i=0\n\tfor\
+    \ score in ${score_list[@]}; do\n\t\tresult+=( $((${score} - ${guess_list[$i]}))\
+    \ )\n\t\ti=$((i+1))\n\tdone\n\techo \"${result[@]}\"", "  local IFS=\" \"\n  local\
+    \ -n score=$1\n  local -n guess=$2\n  local total=${#score[@]}\n  local diff\n\
+    \  local value\n  local -a output\n  for ((i=0; i<$total; i++)); do\n    value=$((${score[$i]}\
+    \ - ${guess[$i]}))\n    if [[ $value -ge 0 ]]; then\n      value=$(($value))\n\
+    \    else\n      value=$(($value * -1))\n    fi\n    output[$i]=\"$value\"\n \
+    \ done\n  printf '\"%s\" ' \"${output[@]}\"", "    local IFS=' ' read -r -a scores\
+    \ <<< \"$1\"\n    local IFS=' ' read -r -a guesses <<< \"$2\"\n    local results=()\n\
+    \    for ((i=0; i<${#scores[@]}; i++)); do\n        results+=(\"$(printf '%d'\
+    \ \"${guesses[$i]}\")\")\n    done\n    echo \"[$(join , \"${results[@]}\")]\"",
+  "  # declare -A dict=$(printf \"%s %s\\n\" $1 $2 | sort -n)\n  # for k in \"${!dict[@]}\"\
+    ; do echo \"$k -> ${dict[$k]}\"; done\n\n  read -a scores <<< \"$1\"\n  read -a\
+    \ guesses <<< \"$2\"\n  echo -n \"[\"\n  for i in \"${!scores[@]}\"; do\n    #\
+    \ echo \"$i -> ${scores[$i]} vs ${guesses[$i]}\"\n    if [[ ${scores[$i]} -eq\
+    \ ${guesses[$i]} ]]; then\n      echo -n '\"0\", '\n    else\n      echo -n '\"\
+    '$((${scores[$i]} - ${guesses[$i]}))'\", '\n    fi\n  done\n  echo -n \"]\"",
+  "    # your solution here\n    # \n    local -n ref_a=$1\n    local -n ref_b=$2\n\
+    \    for((i=0;i<${#ref_a[@]};i++));do\n      echo $[${ref_a[$i]}-${ref_b[$i]}]\n\
+    \    done", "  #set -x\n  IFS=' ' read -r -a scores <<< \"$1\"\n  IFS=' ' read\
+    \ -r -a guesses <<< \"$2\"\n  for (( i=0; i<${#scores[@]}; i++ ))\n  do\n    if\
+    \ [ $i -ne 0 ]; then printf ' '; fi\n    if [ ${scores[$i]} -eq ${guesses[$i]}\
+    \ ]; then\n      printf 0\n    else\n      printf \"%d\" \"$((${scores[$i]} -\
+    \ ${guesses[$i]}))\"\n    fi\n  done\n  printf \"\\n\"", "    string=\"\"\n  \
+    \  local IFS=' '\n    read -a array1 <<< $1\n    read -a array2 <<< $2\n    for\
+    \ ((i=0; i<${#array1[@]}; i++)); do\n        if [[ ${array1[$i]} -eq ${array2[$i]}\
+    \ ]]; then\n            string=\"$string\\\"0\\\" \"\n        else\n         \
+    \   string=\"$string\\\"$((${array1[$i]} - ${array2[$i]}))\\\" \"\n        fi\n\
+    \    done\n    echo \"$string\"", "  set -f\n  set -- $1\n  set -- $2\n  local\
+    \ a=($1)\n  local b=($2)\n  for i in ${!a[@]}; do\n    echo $((a[i] - b[i]))\n\
+    \  done", "    local -a arr1=($1)\n    local -a arr2=($2)\n    local -a result=()\n\
+    \    local -i n=${#arr1[@]}\n    local -i i\n    for ((i=0; i<n; i++)); do\n \
+    \       if (( arr1[i] == arr2[i] )); then\n            result+=(0)\n        else\n\
+    \            result+=($(( ${arr1[i]} - ${arr2[i]} )))\n        fi\n    done\n\
+    \    local -a quoted=( $(printf \"\\\"%s\\\" \" \"${result[@]}\") )\n    printf\
+    \ \"%s\\n\" \"${quoted[@]}\"", "\tif [[ $# -ne 2 ]]; then\n\t\treturn 1\n\tfi\n\
+    \tif [[ -z $1 || -z $2 ]]; then\n\t\treturn 2\n\tfi\n\tlocal -n scores=$1\n\t\
+    local -n guesses=$2\n\tlocal -a diffs=($(diff -qrq <(echo \"${scores[@]}\") <(echo\
+    \ \"${guesses[@]}\") | awk '{print $2}'))\n\tfor i in ${!scores[@]}; do\n\t\t\
+    if [[ ${scores[$i]} -eq ${guesses[$i]} ]]; then\n\t\t\tdiffs[$i]=0\n\t\telse\n\
+    \t\t\tdiffs[$i]=$(expr ${scores[$i]} - ${guesses[$i]})\n\t\tfi\n\tdone\n\techo\
+    \ \"${diffs[@]}\"", "    local -a scores=($1)\n    local -a guesses=($2)\n   \
+    \ local -a scores_len=${#scores[@]}\n    local -a guesses_len=${#guesses[@]}\n\
+    \    local -a result\n    if [ $scores_len -ne $guesses_len ]; then\n        echo\
+    \ \"Wrong input\"\n        return 1\n    fi\n    for ((i=0; i<$scores_len; i++));\
+    \ do\n        echo $((${scores[$i]} - ${guesses[$i]}))\n    done", "    echo \"\
+    $1\" | sed 's/[0-9]*/$(($0))/g' | sed 's/\\$(($0)) - \\$(($0))/0/g' | xargs echo",
+  "    scores=($1)\n    guesses=($2)\n    for ((i=0; i<${#scores[@]}; i++)); do\n\
+    \        echo \\\"$((${scores[$i]}-${guesses[$i]}))\\\"\n    done", "  while read\
+    \ -r -a s && read -r -a g; do\n    printf '[%s]\\n' \"$((${s} - ${g}))\"\n  done\
+    \ <<<\"$1\" <<<\"$2\"", "    # echo \"Comparing $1 to $2\"\n    scores=($1)\n\
+    \    guesses=($2)\n    result=\"[\"\n    for ((i=0; i<${#scores[@]}; i++)); do\n\
+    \        if [ ${scores[$i]} -eq ${guesses[$i]} ]; then\n            result+=\"\
+    \\\"0\\\",\"\n        else\n            result+=\"\\\"$((${scores[$i]} - ${guesses[$i]}))\\\
+    \",\"\n        fi\n    done\n    echo ${result::-1}\"]\"", "    first_array=($1)\n\
+    \    second_array=($2)\n    for i in \"${!first_array[@]}\"; do\n        echo\
+    \ \"\\\"$((${first_array[$i]} - ${second_array[$i]}))\\\"\"\n    done", "    IFS='\
+    \ ' # set the field separator to space\n    read -a scores <<< $1\n    read -a\
+    \ guesses <<< $2\n    declare -a result\n    for i in {0..5}; do\n        result[$i]=$(expr\
+    \ ${scores[$i]} - ${guesses[$i]})\n        if [ ${result[$i]} -lt 0 ]; then\n\
+    \            result[$i]=$(expr ${result[$i]} \\* -1)\n        fi\n    done\n \
+    \   echo ${result[@]}", "\tIFS=' ' read -a scores <<< \"$1\"\n\tIFS=' ' read -a\
+    \ guesses <<< \"$2\"\n\tfor ((i=0; i<${#scores[@]}; i++)); do\n\t\tdiff=$((${scores[$i]}\
+    \ - ${guesses[$i]}))\n\t\tif [ $diff -lt 0 ]; then\n\t\t\techo -n \"\\\"$((-1\
+    \ * $diff))\\\" \"\n\t\telse\n\t\t\techo -n \"\\\"$diff\\\" \"\n\t\tfi\n\tdone",
+  "  local i\n  local IFS=$' ' # split on space\n  local -a a=($1) # store space-separated\
+    \ items in array\n  local -a b=($2)\n  for ((i=0; i<${#a[@]}; i++)); do\n    echo\
+    \ \"\\\"$((${a[$i]}-${b[$i]}))\\\"\"\n  done", "    # Choose a language and implement\
+    \ your solution.\n    # <<< is a bash \"here-string\" that passes the words on\
+    \ the next line to the stdin of the command that follows\n    # i.e. $(...)\n\
+    \    # The command $(..) executes the code in the parens and returns the result\n\
+    \    # The read command reads a single line from stdin and assigns each word to\
+    \ a separate variable\n    # Finally, the while loop iterates over the variables\
+    \ and prints the result of the math\n    read -r scores <<<\"$1\"\n    read -r\
+    \ guesses <<<\"$2\"\n    while read -r score guess; do\n        if [ $score -eq\
+    \ $guess ]; then\n            echo 0\n        else\n            echo $(( score\
+    \ - guess ))\n        fi\n    done <<<\"$scores $guesses\"", "\t# This is a really\
+    \ cool part of bash. The array expansion is really useful.\n\t# it is similar\
+    \ to doing something like:\n\t# for(i=0; i<${#1}; i++) {\n\t#   echo ${1[i]}\n\
+    \t# }\n\t# This would be the same as doing\n\t# for(i=0; i<${#1}; i++) {\n\t#\
+    \   echo $1 | cut -d ' ' -f i\n\t# }\n\t# if $1 is a string of space separated\
+    \ elements.\n\t# This can also be used to expand variables.\n\t# For example,\
+    \ if $1 was 'a b c' and ${#1} == 3, then ${1:2:1} would expand to 'c'\n\t# because\
+    \ it is selecting the character at index 2 (counting from 0), with the size of\
+    \ the selection being 1.\n\t# This is like doing\n\t# echo $1 | cut -d ' ' -f\
+    \ 3 | cut -c 1\n\t#\n\t# I could have easily written this program like this:\n\
+    \t# scores=($1)\n\t# guesses=($2)\n\t# for i in {0..${#scores[@]}}\n\t# do\n\t\
+    #   echo $((${scores[i]} - ${guesses[i]}))\n\t# done\n\t# The output would be\
+    \ the same, but the program would be much slower. The reason is that\n\t# everything\
+    \ is done by bash, and it is nowhere near as fast as a compiled language.\n\t\
+    #\n\t# The program as I've written it is in almost pure C. The only bash part\
+    \ is the $((...)) part.\n\t# This is because every other part of it is just a\
+    \ string. When I use\n\t# compare \"3 4 5 3 1 4\" \"2 1 3 1 1 -1\"\n\t# the program\
+    \ gets passed \"3 4 5 3 1 4\" and \"2 1 3 1 1 -1\" as command line arguments.\n\
+    \t# Then I have the main part of the program, which is\n\t# scores=($1)\n\t# guesses=($2)\n\
+    \t# n=${#scores[@]}\n\t# This is just an array expansion, and the string \"$1\"\
+    \ becomes '3 4", "    scores=$1\n    guesses=$2\n    scores=($scores)\n    guesses=($guesses)\n\
+    \    for i in \"${!scores[@]}\"; do\n        echo -n '\"'\n        echo -n $((\
+    \ ${scores[$i]} > ${guesses[$i]} ? ${scores[$i]} - ${guesses[$i]} : ${guesses[$i]}\
+    \ - ${scores[$i]} ))\n        echo -n '\"'\n        echo -n \" \"\n    done",
+  "    local _result=0\n    local _res=()\n    local _args=()\n    local _i=0\n  \
+    \  local _ar1=($1)\n    local _ar2=($2)\n    for _i in ${!_ar1[@]}; do\n     \
+    \   _res[$_i]=$((${_ar1[$_i]} - ${_ar2[$_i]}))\n        _res[$_i]=$((${_res[$_i]}\
+    \ < 0 ? ${_res[$_i]} * -1 : ${_res[$_i]}))\n    done\n    echo ${_res[@]}", "\t\
+    eval \"ret=( $1 )\"\n\teval \"ret2=( $2 )\"\n\tfor i in \"${!ret[@]}\"; do\n\t\
+    \techo \"${ret[$i]} ${ret2[$i]}\" | awk '{print(abs($1-$2))}'\n\tdone", "  scores=\"\
+    $1\"\n  guesses=\"$2\"\n  scores=($scores)\n  guesses=($guesses)\n  for (( i=0;\
+    \ i<${#scores[@]}; i++ )); do\n    if [[ ${scores[$i]} -ne ${guesses[$i]} ]];\
+    \ then\n      echo -n \"\\\"$((${scores[$i]} - ${guesses[$i]}))\\\" \"\n    else\n\
+    \      echo -n \"\\\"0\\\" \"\n    fi\n  done", "  local -a l1=($1)\n  local -a\
+    \ l2=($2)\n  local -a res=()\n  for (( i=0; i<${#l1[@]}; i++ )); do\n    res[$i]=$((${l1[$i]}-${l2[$i]}))\n\
+    \    if [ ${res[$i]} -lt 0 ]; then\n      res[$i]=$((-1*${res[$i]}))\n    fi\n\
+    \  done\n  local -i count=0\n  for (( i=0; i<${#res[@]}; i++ )); do\n    count+=${res[$i]}\n\
+    \  done\n  echo ${count}", "    for i in $1; do\n        j=$(echo $2 | cut -d\
+    \ ' ' -f $count)\n        let count++\n        if [ $i -gt $j ]; then\n      \
+    \      let diff=i-j\n        else\n            let diff=j-i\n        fi\n    \
+    \    echo \\\"$diff\\\"\n    done", "    local arr1=$1\n    local arr2=$2\n  \
+    \  local ret\n    local i=0\n    local l1\n    local l2\n    for l1 in $arr1;\
+    \ do\n        l2=$(echo $arr2 | cut -d' ' -f$((i+1)))\n        if [ $l1 -eq $l2\
+    \ ]; then\n            ret=\"$ret \\\"0\\\"\"\n        else\n            ret=\"\
+    $ret \\\"$((l1 - l2))\\\"\"\n        fi\n        ((i++))\n    done\n    echo $ret",
+  "  first=$1\n  second=$2\n  while read -r f; do\n    read -r s\n    if [[ $f ==\
+    \ $s ]]; then\n      echo \"\\\"0\\\"\"\n    else\n      echo $(( $f - $s )) |\
+    \ sed -e 's/^-/\"/' -e 's/$/\"/'\n    fi\n  done <<< \"$first\" <<< \"$second\"",
+  "    score=\"$1\"\n    guess=\"$2\"\n    out=()\n    for ((i=0; i<${#score[@]};\
+    \ i++)); do\n        j=$(($i+1))\n        s=$(echo $score | cut -d' ' -f$j)\n\
+    \        g=$(echo $guess | cut -d' ' -f$j)\n        o=$(($s - $g))\n        out[$i]=$(echo\
+    \ $o | awk '{if($1<0) { $1=$1*-1 }; print $1}')\n    done\n    echo ${out[@]}",
+  "    local -n s=$1\n    local -n g=$2\n    local result=\"\"\n    local n=${#s[@]}\n\
+    \    local i\n    for ((i=0; i<n; i++)); do\n        result=\"$result \\\"$(get_diff\
+    \ ${s[$i]} ${g[$i]})\\\"\"\n    done\n    echo \"[$result]\"", "    local n=$(compare_num\
+    \ $1 $2)\n    if (( $n == 0 )); then\n        return 0\n    fi\n    declare -a\
+    \ \n    local out=()\n    while read -r line; do\n        out+=(\"\\\"$line\\\"\
+    \")\n    done < <(compare_list $1 $2)\n    echo \"${out[@]}\"", "    eval \"results=($1)\"\
+    \n    eval \"guesses=($2)\"\n    for i in $(seq 0 $((${#results[@]} - 1))); do\n\
+    \        let num=$((${results[$i]} - ${guesses[$i]}))\n        if [ $num -lt 0\
+    \ ]; then\n            let num=$num*-1\n        fi\n        echo -n \"\\\"$num\\\
+    \" \"\n    done", "  score=(${1})\n  guess=(${2})\n  result=()\n  for (( i=0;\
+    \ i<${#score[@]}; i++ )); do\n    if [[ ${score[$i]} -eq ${guess[$i]} ]]; then\n\
+    \      result+=(0)\n    else\n      result+=($((${score[$i]} - ${guess[$i]})))\n\
+    \    fi\n  done\n  echo \"${result[@]}\"", "    result=()\n    for i in $(seq\
+    \ 0 $(( ${#1} - 1 )) ); do\n        result+=( \"$( abs \"${1:$i:1}\" \"${2:$i:1}\"\
+    \ )\" )\n    done\n    echo \"${result[@]}\"", "    # shellcheck disable=SC2206\n\
+    \    local scores=($1)\n    # shellcheck disable=SC2206\n    local guesses=($2)\n\
+    \    local result=\"\"\n    for i in \"${!scores[@]}\"; do\n        # shellcheck\
+    \ disable=SC2206\n        local diff=${scores[$i]}-${guesses[$i]}\n        if\
+    \ [[ $diff -lt 0 ]]; then\n            diff=$(( -diff ))\n        fi\n       \
+    \ result+=\"\\\"${diff}\\\" \"\n    done\n    echo \"${result}\"", "  local scores=($1)\n\
+    \  local guesses=($2)\n  local differences\n  for index in ${!scores[@]}; do\n\
+    \    differences[index]=$(echo ${scores[index]} - ${guesses[index]} | bc)\n  done\n\
+    \  echo ${differences[@]}", "\tlocal IFS=$' '\n\techo $1 | while read -r score;\
+    \ do\n\t\tread -r guess\n\t\tif [[ $score -eq $guess ]]; then\n\t\t\techo \"0\"\
+    \n\t\telse\n\t\t\techo $(( $score - $guess ))\n\t\tfi\n\tdone", "    #remove spaces\
+    \ and extract arrays from input\n    OIFS=$IFS;\n    IFS=\" \";\n    local array1=($1);\n\
+    \    local array2=($2);\n    IFS=$OIFS;\n    #declare and initialize the array\
+    \ to be returned\n    local output=($(printf '\"0\" '));\n    #gawk takes $i and\
+    \ calculates the difference between it and\n    #$(i+1) and replaces $i with the\
+    \ result. then it replaces all\n    #spaces with commas and removes the last comma.\n\
+    \    for ((i=0; i<${#array1[@]}; i++)); do\n        local temp=${array1[$i]};\n\
+    \        local num=${array2[$i]};\n        output[$i]=$(echo $temp $num | gawk\
+    \ '{print abs($1-$2)}');\n    done\n    echo \"[${output[@]}]\";", "    IFS='\
+    \ ' read -r -a scores <<< \"$1\"\n    IFS=' ' read -r -a guesses <<< \"$2\"\n\
+    \    printf \"%s\\n\" \"${scores[@]}\"\n    printf \"%s\\n\" \"${guesses[@]}\"\
+    \n    for i in ${!scores[@]}; do\n        d=$((${scores[$i]} - ${guesses[$i]}))\n\
+    \        if [ \"$d\" -lt 0 ]; then\n            d=$((0 - $d))\n        fi\n  \
+    \      printf \"%s\\n\" $d\n    done", "  local score\n  local guess\n  local\
+    \ index=0\n  for score in $1; do\n    guess=$(echo $2 | cut -d ' ' -f $((index+1)))\n\
+    \    echo '\"'$((${score}-${guess}))'\"'\n    index=$((index+1))\n  done", " \
+    \   SCORES=($1)\n    GUESSES=($2)\n    RESULTS=()\n    for (( i=0; i<${#SCORES[@]};\
+    \ i++ )); do\n        RESULTS+=($(awk \"BEGIN {printf \\\"%.0f\\\",${GUESSES[$i]}-${SCORES[$i]}}\"\
+    ))\n    done\n    echo ${RESULTS[@]}", '    # TODO: your solution here', "   \
+    \ scores=($1)\n    guesses=($2)\n    for (( i=0; i<${#scores[@]}; i++ )); do\n\
+    \        if [ ${scores[$i]} -gt ${guesses[$i]} ]; then\n            echo $(( ${scores[$i]}\
+    \ - ${guesses[$i]} ))\n        elif [ ${scores[$i]} -lt ${guesses[$i]} ]; then\n\
+    \            echo $(( ${guesses[$i]} - ${scores[$i]} ))\n        else\n      \
+    \      echo 0\n        fi\n    done", "    local score=$1\n    local guess=$2\n\
+    \    local score_len=$(printf \"$1\" | wc -w)\n    local guess_len=$(printf \"\
+    $2\" | wc -w)\n    if [[ $score_len -ne $guess_len ]]; then\n        echo \"incorrect\
+    \ input\" >&2\n        return 1\n    fi\n    local i=0\n    local result\n   \
+    \ for guess_int in $guess; do\n        if [[ $guess_int -ne 0 ]]; then\n     \
+    \       local score_int=$(echo $score | cut -d' ' -f$(($i+1)))\n            let\
+    \ result=$(($guess_int - $score_int))\n            result=$(($result < 0 ? $(($result\
+    \ * -1)) : $result))\n        else\n            result=0\n        fi\n       \
+    \ echo -n '\"'$result'\"'\n        let i=$i+1\n        if [[ $i -lt $score_len\
+    \ ]]; then\n            echo -n ' '\n        fi\n    done", "    local scores\n\
+    \    local guesses\n    local result=()\n    mapfile -t scores < <(seq -s \" \"\
+    \ $1)\n    mapfile -t guesses < <(seq -s \" \" $2)\n    for i in \"${!scores[@]}\"\
+    ; do\n        if [ ${scores[$i]} -eq ${guesses[$i]} ]; then\n            result+=(0)\n\
+    \        else\n            result+=($(abs ${scores[$i]} - ${guesses[$i]}))\n \
+    \       fi\n    done\n    echo \"${result[@]}\"", "    IFS=' ' read -a a <<< $1\n\
+    \    IFS=' ' read -a b <<< $2\n    for ((i=0; i<${#a[@]}; i++)); do\n        if\
+    \ [ ${a[$i]} -gt ${b[$i]} ]; then\n            printf \"\\\"$((${a[$i]} - ${b[$i]}))\\\
+    \" \"\n        else\n            printf \"\\\"$((${b[$i]} - ${a[$i]}))\\\" \"\n\
+    \        fi\n    done", "    local -a scores=($1)\n    local -a guesses=($2)\n\
+    \    local result=\"\"\n    local i=0\n    while [ $i -lt ${#scores[@]} ]; do\n\
+    \        local diff=$(echo \"${scores[$i]} - ${guesses[$i]}\" | bc)\n        if\
+    \ [[ \"$diff\" -eq 0 ]]; then\n            result=\"$result 0\"\n        else\n\
+    \            result=\"$result $diff\"\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"[$result]\"", "    local res=\"\"\n    for arg1 in $1\n    do\n  \
+    \      for arg2 in $2\n        do\n            # Check that there's one argument\
+    \ per call:\n            if [ -z \"$arg2\" ]\n            then\n             \
+    \   echo \"You are missing an argument, please try again.\"\n                exit\
+    \ 1\n            fi\n            local tmp=$(expr $arg1 - $arg2)\n           \
+    \ if [ $tmp -lt 0 ]\n            then\n                local tmp=$(expr $tmp \\\
+    * -1)\n            fi\n            if [ $tmp = 0 ]\n            then\n       \
+    \         tmp=\"'\\\"0\\\"'\"\n            else\n                tmp=\"'\\\"$tmp\\\
+    \"'\"\n            fi\n            res=\"$res $tmp\"\n            break\n    \
+    \    done\n    done\n    echo $res", "    scores=$1\n    guesses=$2\n    echo\
+    \ \"$scores\" | tr \" \" \"\\n\" | awk -v g=\"$guesses\" '\n        BEGIN {\n\
+    \            split(g, aguesses, \" \")\n        }\n        {\n            if($1\
+    \ > aguesses[i]) {\n                print $1 - aguesses[i]\n            } else\
+    \ {\n                print aguesses[i] - $1\n            }\n            i++\n\
+    \        }\n    '", "\tfor i in ${!1}; do\n\t\tscore=${1[$i]}\n\t\tguess=${2[$i]}\n\
+    \t\techo $(($score-$guess))\n\tdone", "    local -a results=()\n    local -i score\
+    \ guess\n    for i in $1; do\n        results+=(\"$(($i - ${2:i-1:1}))\")\n  \
+    \  done\n    echo ${results[@]}", "  while (( \"$#\" )); do\n    echo \"$1 - $2\"\
+    \ | bc -l\n    shift\n    shift\n  done", "    local result=\"\"\n    for i in\
+    \ $1; do\n        for j in $2; do\n            if [ $i -eq $j ]; then\n      \
+    \          result+='\"0\" '\n            else\n                result+=\"\\\"\
+    $(($i-$j))\\\" \"\n            fi\n        done\n    done\n    echo $result",
+  "  local -n ARR1=$1\n  local -n ARR2=$2\n  local OUT1=()\n  local OUT2=()\n  local\
+    \ -i len=${#ARR1[@]}\n  local -i n=0\n  # shellcheck disable=SC2034\n  while [\
+    \ $n -lt len ]; do\n    OUT1+=(${ARR1[n]})\n    OUT2+=(${ARR2[n]})\n    n=$n+1\n\
+    \  done\n  local -i i=0\n  for i in $(seq 0 $len); do\n    [ ${OUT1[i]} -eq ${OUT2[i]}\
+    \ ] && OUT2[i]=0 || OUT2[i]=$(( ${OUT1[i]} - ${OUT2[i]} ))\n  done\n  echo ${OUT2[@]}",
+  "  local -a score=($1)\n  local -a guess=($2)\n  for (( i=0; i<${#score[@]}; i++\
+    \ )) ; do\n    local result=$(diff \"${score[$i]}\" \"${guess[$i]}\")\n    if\
+    \ [[ $result == 0 ]] ; then\n      echo \"\\\"$result\\\"\"\n    else\n      echo\
+    \ \"\\\"$((${score[$i]} - ${guess[$i]}))\\\"\"\n    fi\n  done", "  local -n scores=$1\n\
+    \  local -n guesses=$2\n  local result=()\n  for (( i=0; i<${#scores[@]}; i++\
+    \ )); do\n    result+=($((${scores[$i]} - ${guesses[$i]})))\n  done\n  echo \"\
+    ${result[@]}\"", "  RESULT=\"\"\n  for i in $1\n  do\n    for j in $2\n    do\n\
+    \      RESULT=\"$RESULT$(($i - $j)) \"\n    done\n  done\n  echo $RESULT", " \
+    \   scores=($1)\n    guesses=($2)\n    ret=\"\"\n    for i in \"${!scores[@]}\"\
+    ; do\n        ret=\"$ret \\\"$((${guesses[$i]} - ${scores[$i]}))\\\"\"\n    done\n\
+    \    echo $ret", "    declare -a scores=($1)\n    declare -a guesses=($2)\n  \
+    \  declare -a res\n    local i=0\n    for i in $(seq 0 $((${#scores[@]} - 1)));\
+    \ do\n        local diff=$((${scores[$i]} - ${guesses[$i]}))\n        diff=${diff#-}\n\
+    \        res[$i]=\"$diff\"\n    done\n    printf '\"%s\" ' \"${res[@]}\"", " \
+    \   declare -a score\n    declare -a guess\n    declare -a diff\n\n    score=($1)\n\
+    \    guess=($2)\n\n    for ((i=0; i<${#score[@]}; i++)); do\n        diff[$i]=$((${score[$i]}\
+    \ - ${guess[$i]}))\n        diff[$i]=$(printf '%d' ${diff[$i]})\n        if [\
+    \ ${diff[$i]} -lt 0 ]; then\n            diff[$i]=$((0 - ${diff[$i]}))\n     \
+    \   fi\n    done\n\n    echo ${diff[@]}", "  scores=($1)\n  guesses=($2)\n  output=\"\
+    \"\n  for i in \"${!scores[@]}\"; do\n    score=${scores[$i]}\n    guess=${guesses[$i]}\n\
+    \    diff=$(($guess - $score))\n    diff=${diff#-}\n    output+=\"$diff \"\n \
+    \ done\n  echo $output", "  local score=($1)\n  local guess=($2)\n  for ((i=0;\
+    \ i<${#score[@]}; i++)); do\n    if [[ ${score[$i]} -eq ${guess[$i]} ]]; then\n\
+    \      echo '\"0\"'\n    else\n      echo '\"'$((${score[$i]} - ${guess[$i]}))'\"\
+    '\n    fi\n  done", "    local str_result=\n    local str_score=$1\n    local\
+    \ str_guess=$2\n    local -i num_score=\n    local -i num_guess=\n    local -i\
+    \ num_diff=\n    for ((i=0; i<$(echo ${str_score} | wc -w); i++)); do\n      \
+    \  num_score=$(echo ${str_score} | cut -d \" \" -f $((i+1)))\n        num_guess=$(echo\
+    \ ${str_guess} | cut -d \" \" -f $((i+1)))\n        num_diff=$(( num_score - num_guess\
+    \ ))\n        if (( ${num_diff#-} > ${num_diff} )); then\n            str_result=\"\
+    ${str_result} ${num_diff#-}\"\n        else\n            str_result=\"${str_result}\
+    \ ${num_diff}\"\n        fi\n    done\n    echo ${str_result}", "\tlocal result=\"\
+    \"\n\tlocal score\n\tlocal guess\n\tlocal sum\n\tread -a score < <(echo $1)\n\t\
+    read -a guess < <(echo $2)\n\tfor ((i=0; i<${#score[@]}; i++)); do\n\t\tsum=$((${score[$i]}-${guess[$i]}))\n\
+    \t\tresult=\"$result $sum\"\n\tdone\n\techo $result", "    local scores=$1\n \
+    \   local guesses=$2\n    local i score guess\n\n    IFS=' ' read -a scores <<<\
+    \ $scores\n    IFS=' ' read -a guesses <<< $guesses\n\n    for ((i=0; i<${#scores[@]};\
+    \ i++)); do\n        score=${scores[$i]}\n        guess=${guesses[$i]}\n     \
+    \   if [ $score -eq $guess ]; then\n            echo \"\\\"0\\\"\"\n        else\n\
+    \            echo \"\\\"$(($score-$guess))\\\"\"\n        fi\n    done", "   \
+    \ echo \"$1\" | tr \" \" \"\\n\" | awk '\n        BEGIN {\n            OFS = FS\
+    \ = \" \"\n        }\n        NR==FNR {\n            score[NR] = $1\n        \
+    \    next\n        }\n        {\n            print (score[FNR] == $1 ? 0 : abs(score[FNR]\
+    \ - $1))\n        }\n    ' - $2", "    arr_1=$1\n    arr_2=$2\n    # write your\
+    \ code here", "    scores=($1)\n    guesses=($2)\n    for i in \"${!scores[@]}\"\
+    ; do\n        if [[ ${scores[$i]} -eq ${guesses[$i]} ]]; then\n            echo\
+    \ -n '\"0\" '\n        else\n            echo -n \"\\\"$((${scores[$i]} - ${guesses[$i]}))\\\
+    \" \"\n        fi\n    done", "  local score=($1)\n  local guess=($2)\n  local\
+    \ result\n  for ((i=0; i<${#score[@]}; i++)); do\n    result[$i]=$((${score[$i]}-${guess[$i]}))\n\
+    \    if [[ ${result[$i]} -lt 0 ]]; then\n      result[$i]=$((-${result[$i]}))\n\
+    \    fi\n  done\n  printf '\"%s\" ' \"${result[@]}\"", "    for ((i=0; i<$(echo\
+    \ $1 | wc -w); i++)); do\n        echo \"$(echo $(echo $1 | cut -d ' ' -f$((i+1))))\"\
+    \ - \"$(echo $(echo $2 | cut -d ' ' -f$((i+1))))\" | bc\n    done", "  score=($1)\n\
+    \  guess=($2)\n  for (( i=0; i<${#score[@]}; i++ )); do\n    result=$((${score[$i]}\
+    \ - ${guess[$i]}))\n    if [ \"$result\" -lt 0 ]; then\n      result=$((-1 * $result))\n\
+    \    fi\n    echo -n \\\"\"$result\"\\\"\n    if (( i<$((${#score[@]}-1)) ));\
+    \ then\n      echo -n \", \"\n    fi\n  done", "  IFS=' ' read -r -a f <<< \"\
+    $1\"\n  IFS=' ' read -r -a s <<< \"$2\"\n  for ((n=0; n<${#f[@]}; n++)); do\n\
+    \    if [[ $(( ${f[$n]} - ${s[$n]} )) -lt 0 ]]; then\n      echo '\"'\"$(( ${s[$n]}\
+    \ - ${f[$n]} ))\"'\"'\n    else\n      echo '\"'\"$(( ${f[$n]} - ${s[$n]} ))\"\
+    '\"'\n    fi\n  done", "\tscore=($1)\n\tguess=($2)\n\techo -n \"[\"\n\tfor ((i=0;\
+    \ i<${#score[@]}; i++)); do\n\t\tresult=$((${score[$i]} - ${guess[$i]}))\n\t\t\
+    if [ $result -lt 0 ]; then\n\t\t\tresult=$((-$result))\n\t\tfi\n\t\techo -n \"\
+    \\\"$result\\\"\"\n\t\tif [ $i -lt $((${#score[@]} - 1)) ]; then\n\t\t\techo -n\
+    \ \", \"\n\t\tfi\n\tdone\n\techo \"]\"", "    scores=$1\n    guesses=$2\n    IFS='\
+    \ ' read -r -a scores_arr <<< \"$scores\"\n    IFS=' ' read -r -a guesses_arr\
+    \ <<< \"$guesses\"\n    result=\"\"\n    for i in \"${!scores_arr[@]}\"; do\n\
+    \        diff=$((${scores_arr[$i]} - ${guesses_arr[$i]}))\n        result=\"$result\
+    \ $diff\"\n    done\n    echo $result", "\tlocal i\n\tlocal ret\n\tfor i in $(seq\
+    \ 0 $((${#1} - 1))); do\n\t\tret=\"$ret $((${1:$i:1} - ${2:$i:1}))\"\n\tdone\n\
+    \tprintf \"[%s]\" \"$(echo \"$ret\" | sed 's/ /\", \"/g')\"", "\tlocal arg1=\"\
+    $1\"\n\tlocal arg2=\"$2\"\n\tlocal list_of_args1=$(echo \"$arg1\" | tr ' ' '\\\
+    n')\n\tlocal list_of_args2=$(echo \"$arg2\" | tr ' ' '\\n')\n\tlocal result\n\t\
+    \n\tfor i in $list_of_args1\n\tdo\n\t\tif [[ $i -eq $list_of_args2 ]]\n\t\tthen\n\
+    \t\t\tresult+=0\n\t\telse\n\t\t\tresult+=${i}-${list_of_args2}\n\t\tfi\n\tdone\n\
+    \techo $result", "    for (( i=0; i<$#; i++ )) do\n        diff=$(echo $1 | cut\
+    \ -d ' ' -f $((i+1)))\n        guess=$(echo $2 | cut -d ' ' -f $((i+1)))\n   \
+    \     ans=$(expr $diff - $guess)\n        if [[ $ans -lt 0 ]]; then\n        \
+    \    echo $((-$ans))\n        else\n            echo $ans\n        fi\n    done",
+  "  local score=(\"$@\")\n  local guess=(\"$@\")\n  local result=\"\"\n  local i\n\
+    \  for ((i=0; i<${#score[@]}; i++)); do\n    result+=\"\\\"$((${score[$i]}-${guess[$i]}))\\\
+    \" \"\n  done\n  echo \"$result\"", "    local IFS=' '\n    local scores=($1)\n\
+    \    local guesses=($2)\n    local result\n    for (( i=0; i<${#scores[@]}; i++\
+    \ )); do\n        result+=$(echo \"${scores[$i]} - ${guesses[$i]}\" | bc)\n  \
+    \      result+=' '\n    done\n    echo \"$result\"", "    IFS=\" \" read -a array1\
+    \ <<< \"$1\"\n    IFS=\" \" read -a array2 <<< \"$2\"\n    for (( i=0; i<${#array1[@]};\
+    \ i++ )); do\n        if [ ${array1[$i]} -gt ${array2[$i]} ]; then\n         \
+    \   echo \\\"$(( ${array1[$i]} - ${array2[$i]} ))\\\"\n        else\n        \
+    \    echo \\\"$(( ${array2[$i]} - ${array1[$i]} ))\\\"\n        fi\n    done",
+  "\tlocal -a s\n\tlocal -a g\n\tlocal oIFS=$IFS\n\tIFS=' '\n\ts=($1)\n\tg=($2)\n\t\
+    for ((i=0; i<${#s[@]}; i++)); do\n\t\techo -n '\"'\n\t\tif [[ ${s[$i]} -eq ${g[$i]}\
+    \ ]]; then\n\t\t\techo -n \"0\"\n\t\telse\n\t\t\techo -n \"$((${s[$i]} - ${g[$i]}))\"\
+    \n\t\tfi\n\t\techo -n '\" '\n\tdone\n\tIFS=$oIFS", "\t# get number of elements\n\
+    \tcount=$(echo $1 | wc -w)\n\tcount=$(($count-1))\n\t# array for output\n\tresult=(\
+    \ )\n\t# read list element by element\n\tfor (( i=0; i<=$count; i++ ))\n\tdo\n\
+    \t\t# get the values\n\t\tscore=$(echo $1 | cut -d \" \" -f$(($i+1)))\n\t\tguess=$(echo\
+    \ $2 | cut -d \" \" -f$(($i+1)))\n\t\t# calculate the absolute difference\n\t\t\
+    abs=$(echo $score-$guess | bc)\n\t\tif [ $abs -lt 0 ]\n\t\tthen\n\t\t\tabs=$(echo\
+    \ $abs*-1 | bc)\n\t\tfi\n\t\t# add to list\n\t\tresult=( \"${result[@]}\" \"$abs\"\
+    \ )\n\tdone\n\t# print result\n\techo ${result[@]}", "  IFS=\" \" read -r -a scores\
+    \ <<< \"$1\"\n  IFS=\" \" read -r -a guesses <<< \"$2\"\n  scores=(\"${scores[@]}\"\
+    )\n  guesses=(\"${guesses[@]}\")\n  # Write your code here.\n  n=${#scores[@]}\n\
+    \  result=\"\"\n  for ((i=0; i<n; i++)); do\n    tmp=$((${scores[$i]} - ${guesses[$i]}))\n\
+    \    tmp=$(awk \"BEGIN {printf(\\\"%.f\\\",sqrt($tmp*$tmp))}\")\n    result=\"\
+    $result \\\"$tmp\\\"\"\n  done\n  echo [$result]", "    # YOUR CODE HERE\n   \
+    \ arr1=( $1 )\n    arr2=( $2 )\n    result=\"\"\n    n=${#arr1[@]}\n    for ((\
+    \ i=0; i<n; i++ ))\n    do\n        result=\"$result $(( arr1[$i] - arr2[$i] ))\"\
+    \n    done\n    echo $result", "    # assume 0 arguments or 3 arguments\n    if\
+    \ [[ $# -eq 0 ]] || [[ $# -eq 3 ]]; then\n        echo \"usage: compare <space-separated\
+    \ list> <space-separated list>\"\n        return 1\n    fi\n\n    # assume 2 arguments\n\
+    \    local list1=\"$1\"\n    local list2=\"$2\"\n    local result=()\n    local\
+    \ IFS=' '\n    local list1=($list1)\n    local list2=($list2)\n    local i=0\n\
+    \    local len=${#list1[@]}\n    while [ $i -lt $len ]; do\n        result[$i]=$(echo\
+    \ \"${list1[$i]} - ${list2[$i]}\" | bc)\n        i=$(expr $i + 1)\n    done\n\
+    \    echo \"${result[@]}\"", "    scores=($1)\n    guesses=($2)\n    diff=()\n\
+    \    for i in ${!scores[@]}; do\n        if [[ ${scores[$i]} -eq ${guesses[$i]}\
+    \ ]]; then\n            diff+=(0)\n        else\n            diff+=($((${scores[$i]}\
+    \ - ${guesses[$i]})))\n        fi\n    done\n    echo ${diff[@]}", "\tset -f\n\
+    \tread -ra scores <<< \"$1\"\n\tread -ra guesses <<< \"$2\"\n\tfor i in \"${!scores[@]}\"\
+    ; do\n\t\tdiff=$(( scores[i] - guesses[i] ))\n\t\tif (( diff < 0 )); then\n\t\t\
+    \tdiff=$(( -diff ))\n\t\tfi\n\t\techo \"\\\"$diff\\\"\"\n\tdone", "    if [[ \"\
+    ${#1}\" != \"${#2}\" ]]; then\n        echo \"Both lists must be of equal length.\"\
+    \n        return 1\n    fi\n    for (( i=0; i<${#1}; i++ )); do\n        echo\
+    \ -n $[${1:$i:1} - ${2:$i:1}]\n        if [[ $i != $[${#1} - 1] ]]; then\n   \
+    \         echo -n ' '\n        fi\n    done", "  score=($1)\n  guess=($2)\n  for\
+    \ ((i=0; i<${#score[@]}; i++)); do\n    echo $(( ${score[$i]} - ${guess[$i]} ))\n\
+    \  done", "\tlet i=0\n\twhile read -r score; do\n\t\tlet guess=$(echo $2 | cut\
+    \ -d' ' -f $((i+1)))\n\t\techo \"\\\"$((${score} - ${guess}))\\\"\"\n\t\tlet i++\n\
+    \tdone <<< \"$1\"", "\t# if the number of arguments is not 2, display a usage\
+    \ statement and abort the script\n\t# by returning the error code 1\n\tif [ $#\
+    \ -ne 2 ]; then\n\t\techo \"Usage: $0 scores guesses\"\n\t\treturn 1\n\tfi\n\t\
+    # replace spaces with newline characters\n\t# store the modified string in the\
+    \ variable scores\n\t# and the variable guesses\n\tscores=$(echo \"$1\" | tr '\
+    \ ' '\\n')\n\tguesses=$(echo \"$2\" | tr ' ' '\\n')\n\t# read the scores and guesses\
+    \ from variables \n\t# scores and guesses respectively\n\twhile read score; do\n\
+    \t\t# read the guess from the variable guesses\n\t\tread guess\n\t\t# if the guess\
+    \ equals to the score\n\t\t# then print 0\n\t\t# if the guess is not equal to\
+    \ the score\n\t\t# then print the absolute difference between the guess and the\
+    \ score\n\t\t# and append a newline character at the end\n\t\tif [ \"$guess\"\
+    \ -eq \"$score\" ]; then\n\t\t\techo \"0\"\n\t\telse\n\t\t\techo \"$(( $guess\
+    \ - $score ))\"\n\t\tfi\n\tdone <<< \"$scores\" <<< \"$guesses\"", "    array1=($1)\n\
+    \    array2=($2)\n    array_len=$(echo \"${#array1[@]}\")\n    for ((i=0; i<$array_len;\
+    \ i++)); do\n        if [[ ${array1[$i]} == ${array2[$i]} ]]; then\n         \
+    \   echo '\"0\"'\n        else\n            echo $((${array1[$i]} - ${array2[$i]}))\n\
+    \        fi\n    done", "\t(( $# == 2 )) || return 1\n\t[[ $1 =~ ^([0-9]+[ ]*)+$\
+    \ ]] || return 1\n\t[[ $2 =~ ^([0-9]+[ ]*)+$ ]] || return 1\n\t\n\t# don't read\
+    \ these lines, it's just a way to get an array\n\tread -a SCORES <<< \"$1\"\n\t\
+    read -a GUESSES <<< \"$2\"\n\t\n\t# extract the length of the arrays\n\t(( SCORES_LENGTH\
+    \ = ${#SCORES[@]} ))\n\t(( GUESSES_LENGTH = ${#GUESSES[@]} ))\n\t\n\t# check if\
+    \ the arrays have the same length\n\t(( SCORES_LENGTH == GUESSES_LENGTH )) ||\
+    \ return 1\n\t\n\tfor ((i=0; i<SCORES_LENGTH; i++)); do\n\t\t(( GUESS = GUESSES[i]\
+    \ ))\n\t\t(( SCORE = SCORES[i] ))\n\t\t\n\t\t# check if a guess is valid\n\t\t\
+    (( -2 <= GUESS && GUESS <= 2 )) || return 1\n\t\t\n\t\t# check if a score is valid\n\
+    \t\t(( 0 <= SCORE && SCORE <= 5 )) || return 1\n\t\t\n\t\t(( DIFFERENCE = SCORE\
+    \ - GUESS ))\n\t\t\n\t\tif (( DIFFERENCE < 0 )); then\n\t\t\t(( DIFFERENCE = -DIFFERENCE\
+    \ ))\n\t\tfi\n\t\t\n\t\techo \"\\\"$DIFFERENCE\\\"\"\n\tdone", "    local score_list=$1\n\
+    \    local guess_list=$2\n    for score in $score_list; do\n        if [ -z \"\
+    $guess\" ]; then\n            guess=$(echo $guess_list | cut -d ' ' -f 1)\n  \
+    \          guess_list=$(echo $guess_list | cut -d ' ' -f 2-)\n        else\n \
+    \           guess=$(echo $guess_list | cut -d ' ' -f 1)\n            guess_list=$(echo\
+    \ $guess_list | cut -d ' ' -f 2-)\n        fi\n        if [ $score -eq $guess\
+    \ ]; then\n            echo \"\\\"0\\\"\"\n        else\n            echo \"\\\
+    \"$(($(($score))-$(($guess))))\\\"\"\n        fi\n    done", "  local -a score=($1)\n\
+    \  local -a guess=($2)\n  local -a result=()\n  local idx=0\n  while [ $idx -lt\
+    \ ${#score[@]} ]; do\n    result+=($(mathjs -e \"abs(${score[$idx]} - ${guess[$idx]})\"\
+    ))\n    idx=$((idx + 1))\n  done\n  echo \"${result[@]}\"", "    declare -a scores=$1\n\
+    \    declare -a guesses=$2\n    declare -a result\n    for i in {0..${#scores[@]}};\
+    \ do\n        result[$i]=$((${scores[$i]}-${guesses[$i]}))\n    done\n    echo\
+    \ ${result[@]}", "  # $1 is a space-separated list\n  # $2 is a space-separated\
+    \ list\n  scores=(\"$@\")\n  scores=(\"${scores[@]:0:$((${#scores[@]}/2))}\")\n\
+    \  guesses=(\"$@\")\n  guesses=(\"${guesses[@]:$((${#guesses[@]}/2)):${#guesses[@]}}\"\
+    )\n  printf \" [ \"\n  for ((i=0; i<${#scores[@]}; i++)); do\n    printf '\"%s\"\
+    \ ' $((${guesses[$i]}-${scores[$i]}))\n  done\n  printf \"]\\n\"", "    echo \"\
+    $1\" | tr ' ' '\\n' | paste -d ' ' - \"$2\" | \\\n        awk '{if ($1>$2) print\
+    \ abs($1-$2); else print $1-$2}' | \\\n        tr '\\n' ' ' | sed 's/ //g'", " \
+    \ local scorers=\"$1\"\n  local guessers=\"$2\"\n  local scorers_arr\n  local\
+    \ guessers_arr\n  scorers_arr=($scorers)\n  guessers_arr=($guessers)\n  result=()\n\
+    \  for ((i=0; i<${#scorers_arr[@]}; i++)); do\n    let diff=${scorers_arr[$i]}-${guessers_arr[$i]}\n\
+    \    if [ $diff -lt 0 ]; then\n      let diff=${diff}*-1\n    fi\n    result+=($diff)\n\
+    \  done\n  echo \"${result[@]}\"", "  local i res\n  # Convert to arrays\n  declare\
+    \ -a results=($1)\n  declare -a guesses=($2)\n  # Assume they are equal in length\n\
+    \  for ((i=0; i<${#results[@]}; i++)); do\n    res[$i]=$(expr ${results[$i]} -\
+    \ ${guesses[$i]})\n    if [ ${res[$i]} -lt 0 ]; then\n      res[$i]=$(expr ${res[$i]}\
+    \ \\* -1)\n    fi\n  done\n  echo \"${res[@]}\"", "    declare -a score=(${1//\
+    \ / })\n    declare -a guess=(${2// / })\n    declare -a result=()\n    for ((\
+    \ i=0; i<${#score[@]}; i++ )); do\n        result+=($(abs $((${score[$i]} - ${guess[$i]}))))\n\
+    \    done\n    echo -n \"[\"\n    for i in ${result[@]}; do\n        echo -n \"\
+    \\\"$i\\\" \"\n    done\n    echo -n \"]\"", "  A=($1)\n  B=($2)\n  for ((i=0;\
+    \ i<${#A[@]}; i++)); do\n    echo -n \"\\\"$((${A[$i]} - ${B[$i]}))\\\"\"\n  \
+    \  if [ \"$i\" -lt \"$((${#A[@]} - 1))\" ]; then\n      echo -n \" \"\n    fi\n\
+    \  done\n  echo", "\t# Get arrays\n\tscores=($1)\n\tguesses=($2)\n\t\n\t# Loop\
+    \ over all elements\n\tfor (( i=0; i<${#scores[@]}; i++ )); do\n\t\t# Calculate\
+    \ the difference\n\t\tdiff=$((${scores[$i]} - ${guesses[$i]}))\n\t\t# If the difference\
+    \ is negative, make it positive\n\t\tif [ $diff -lt 0 ]; then\n\t\t\tdiff=$((-$diff))\n\
+    \t\tfi\n\t\t# Print the difference\n\t\techo \\\"$diff\\\"\n\tdone", "    local\
+    \ -a score\n    local -a guess\n    local -a results\n    score=($1)\n    guess=($2)\n\
+    \    for i in ${!score[@]}; do\n        if [ \"${score[$i]}\" -eq \"${guess[$i]}\"\
+    \ ]; then\n            echo '\"0\"'\n        else\n            echo \"\\\"$((${score[$i]}-${guess[$i]}))\\\
+    \"\"\n        fi\n    done", "    declare -a guess\n    declare -a score\n   \
+    \ IFS=' ' read -r -a guess <<< \"$1\"\n    IFS=' ' read -r -a score <<< \"$2\"\
+    \n    result=()\n    for ((i=0; i<${#guess[@]}; i++)); do\n        diff=$((${guess[$i]}\
+    \ - ${score[$i]}))\n        abs=$(python -c \"import math; print(math.fabs($diff))\"\
+    )\n        result+=(\"$abs\")\n    done\n    echo \"${result[@]}\"", "    local\
+    \ results=($1)\n    local guesses=($2)\n    local num_matches=${#results[@]}\n\
+    \    local i=0\n    local result\n    local guess\n    local diff\n    while [\
+    \ $i -lt $num_matches ]; do\n        result=${results[$i]}\n        guess=${guesses[$i]}\n\
+    \        diff=$(($result - $guess))\n        printf '\"%s\" ' \"${diff#-}\"\n\
+    \        ((i++))\n    done", "   local scores=($1)\n   local guesses=($2)\n  \
+    \ local results=()\n   local score guess\n   for (( i=0; i<\"${#scores[@]}\";\
+    \ i++ ))\n   do\n      score=\"${scores[$i]}\"\n      guess=\"${guesses[$i]}\"\
+    \n      if [ \"$score\" -eq \"$guess\" ]\n      then\n         results[$i]=0\n\
+    \      else\n         results[$i]=$(( score - guess ))\n      fi\n   done\n  \
+    \ echo \"${results[@]}\"", "    res=\"\"\n    for ((i=0; i<${#1}; i++)); do\n\
+    \        if [[ ${1:$i:1} -eq ${2:$i:1} ]]; then\n            res+=\"0 \"\n   \
+    \     else\n            res+=\"$((${1:$i:1} - ${2:$i:1})) \"\n        fi\n   \
+    \ done\n    echo $res", "    IFS=' ' read -a scores <<< \"$1\"\n    IFS=' ' read\
+    \ -a guesses <<< \"$2\"\n    for ((i=0; i<${#scores[@]}; i++)); do\n        diff=$((${scores[$i]}\
+    \ - ${guesses[$i]}))\n        if [ $diff -lt 0 ]; then\n            echo -n '\"\
+    '$((-1 * $diff))'\"'\n        else\n            echo -n '\"'$diff'\"'\n      \
+    \  fi\n        if [ $i -lt $(( ${#scores[@]} - 1 )) ]; then\n            echo\
+    \ -n \", \"\n        fi\n    done", " \n  local val result=()\n \n  # Convert\
+    \ $1 and $2 into arrays\n  IFS=' ' read -r -a arr1 <<< $1\n  IFS=' ' read -r -a\
+    \ arr2 <<< $2\n \n  # Loop through each element of $1 and $2, comparing values.\n\
+    \  for ((i=0; i<${#arr1[@]}; i++)); do\n    # Calculate the absolute difference,\
+    \ using bash's $(( )) syntax.\n    val=$(( ${arr1[$i]} - ${arr2[$i]} ))\n    #\
+    \ If $val is negative, multiply by -1 to make it positive.\n    [[ $val -lt 0\
+    \ ]] && val=$(( -1 * $val ))\n    # Add $val to the result array\n    result+=(\"\
+    $val\")\n  done\n \n  # Echo the result array, separated by spaces.\n  printf\
+    \ '%s\\n' \"${result[@]}\"", "\tif [ $# -ne 2 ]; then\n\t\techo \"compare: invalid\
+    \ number of arguments\"\n\t\treturn 1\n\tfi\n\techo \"$1\" | tr \" \" \"\\n\"\
+    \ | paste -d \" \" - <(echo \"$2\" | tr \" \" \"\\n\") | \\\n\t\tawk '{if ($1\
+    \ - $2 >= 0) print $1 - $2; else print $2 - $1}' | tr \"\\n\" \" \"", "    local\
+    \ result=\"\"\n    local i=0\n    local score result\n    for score in $1; do\n\
+    \        result=$(echo \"$2\" | cut -d \" \" -f $((i+1)))\n        printf \"[\\\
+    \"%s\\\"] \" \"$(abs $((score-result)))\"\n        i=$((i+1))\n    done", "  \
+    \  local scores=$1\n    local guesses=$2\n    local result=\"$(diff <(echo $scores)\
+    \ <(echo $guesses) | awk '/^</ { print $2 }')\"\n    if [ -z \"$result\" ]; then\n\
+    \        result=\"0\"\n    fi\n    echo $result", "    n=0\n    result=\"\"\n\
+    \    for x in $1; do\n        res=$(difference $x ${2[$n]})\n        result=\"\
+    $result $res\"\n        n=$((n+1))\n    done\n    echo $result", "  local scores=(\
+    \ $1 )\n  local guesses=( $2 )\n  local result\n  for ((i=0; i<${#scores[@]};\
+    \ i++)); do\n    local difference=$(expr ${scores[$i]} - ${guesses[$i]})\n   \
+    \ if [ $difference -lt 0 ]; then\n      difference=$(expr -1 \\* $difference)\n\
+    \    fi\n    result+=\"\\\"$difference\\\" \"\n  done\n  echo $result", "  # (p)acman\n\
+    \  local p=$(echo $1)\n  # (g)host\n  local g=$(echo $2)\n  # (o)utput list\n\
+    \  local o=\"\"\n  # Get length of input list by counting the number of spaces\n\
+    \  local len=$(($(echo $p | tr -cd ' ' | wc -c) + 1))\n  # Loop over every element\
+    \ of the list, add the absolute difference\n  # between the elements of the input\
+    \ lists to the output list\n  for ((i=0; i<$len; i++)); do\n    o=\"$o $((($(echo\
+    \ $p | cut -d ' ' -f $(($i+1))) - $(echo $g | cut -d ' ' -f $(($i+1))))))\"\n\
+    \  done\n  # Remove the leading space\n  echo $o | cut -c 2-", "    score=$1\n\
+    \    guess=$2\n    for i in $score\n    do\n        score[$i]=$i\n    done\n \
+    \   for i in $guess\n    do\n        guess[$i]=$i\n    done\n    for (( i=0; i<${#score[@]};\
+    \ i++ ))\n    do\n        echo $((${score[$i]}-${guess[$i]}))\n    done", "  local\
+    \ guess=\"$1\"\n  local score=\"$2\"\n  local arr_guess=( $guess )\n  local arr_score=(\
+    \ $score )\n  local ret_arr=()\n  local i=0\n  while [ $i -lt ${#arr_guess[@]}\
+    \ ]; do\n    local diff=`expr ${arr_guess[$i]} - ${arr_score[$i]}`\n    if [ $diff\
+    \ -lt 0 ]; then\n      diff=`expr $diff \\* -1`\n    fi\n    ret_arr+=( $diff\
+    \ )\n    let i++\n  done\n  echo -n \"[\"\n  printf '\"%s\" ' \"${ret_arr[@]}\"\
+    \n  echo \"]\"", "\tlocal -a scores=($1)\n\tlocal -a guesses=($2)\n\tlocal -a\
+    \ results=()\n\tfor i in ${!scores[@]}; do\n\t\tlocal result=$((${scores[$i]}\
+    \ - ${guesses[$i]}))\n\t\tif [[ $result -lt 0 ]]; then\n\t\t\tresult=${result#-}\n\
+    \t\tfi\n\t\tresults+=(\"$result\")\n\tdone\n\techo \"${results[@]}\"", "    local\
+    \ score=$1\n    local guess=$2\n    local score_arr=($score)\n    local guess_arr=($guess)\n\
+    \    local output=\"\"\n    local diff\n    for i in $(seq 0 $((${#score_arr[@]}\
+    \ - 1))); do\n        if [[ ${score_arr[$i]} -eq ${guess_arr[$i]} ]]; then\n \
+    \           output+=\"\\\"0\\\" \"\n        else\n            diff=$((${score_arr[$i]}\
+    \ - ${guess_arr[$i]}))\n            output+=\"\\\"${diff#-}\\\" \"\n        fi\n\
+    \    done\n    echo $output", "  for x in $(echo $1); do\n    for y in $(echo\
+    \ $2); do\n      echo $(($x-$y));\n    done\n  done", "    scores=($1)\n    guesses=($2)\n\
+    \    echo ${scores[@]}\n    echo ${guesses[@]}\n    for ((i=0; i<${#scores[@]};\
+    \ i++)); do\n        score=${scores[$i]}\n        guess=${guesses[$i]}\n     \
+    \   echo $score\n        echo $guess\n        if [ $score -eq $guess ]; then\n\
+    \            differences=\"$differences 0\"\n        else\n            differences=\"\
+    $differences $(($score - $guess))\"\n        fi\n    done\n    echo $differences",
+  "    read -a scores <<< \"$1\"\n    read -a guesses <<< \"$2\"\n    score_len=${#scores[@]}\n\
+    \    guess_len=${#guesses[@]}\n    if [ $score_len -ne $guess_len ]; then\n  \
+    \      echo \"ERROR, size of arrays are not equal\"\n        return 1\n    fi\n\
+    \    for (( i=0; i<$score_len; i++ )); do\n        echo -n $(( ${scores[$i]} -\
+    \ ${guesses[$i]} ))\n        if [ $i -lt $(( $score_len - 1 )) ]; then\n     \
+    \       echo -n \" \"\n        fi\n    done", '  echo $1 | tr " " "\n" | zip $2
+    | map absdiff', "    local score=\"$1\"\n    local guess=\"$2\"\n    local score_a=($score)\n\
+    \    local guess_a=($guess)\n    local result=()\n    for ((i=0; i<${#score_a[@]};\
+    \ i++)); do\n        result[i]=$((${score_a[i]}-${guess_a[i]}))\n        result[i]=$((${result[i]}<0?${result[i]}*-1:${result[i]}))\n\
+    \    done\n    echo ${result[@]}", "    # IFS= read -r -a scores <<< \"$1\"\n\
+    \    # IFS= read -r -a guesses <<< \"$2\"\n    scores=$1\n    guesses=$2\n   \
+    \ for i in {0..5}; do\n        if [ \"${scores[$i]}\" == \"${guesses[$i]}\" ];\
+    \ then\n            echo \"0\"\n        else\n            # echo $((scores[$i]\
+    \ - guesses[$i]))\n            echo $((scores[$i] - guesses[$i]))\n        fi\n\
+    \    done", "    local arr1=($1)\n    local arr2=($2)\n    local result=()\n \
+    \   for ((i=0; i<${#arr1[@]}; i++)); do\n        result[$i]=$((${arr1[$i]}-${arr2[$i]}))\n\
+    \        if [ ${result[$i]} -lt 0 ]; then\n            result[$i]=$((-${result[$i]}))\n\
+    \        fi\n    done\n    echo ${result[@]}", "\tlocal result=\"\"\n\t# loop\
+    \ throug the scores\n\tfor i in $1; do\n\t\t# get the difference\n\t\tlocal dif=$(abs\
+    \ $i)\n\t\t# get the prediction\n\t\tlocal pre=$(sed -n \"${dif}p\" <(echo $2))\n\
+    \t\t# get the absolute difference\n\t\tlocal abs=$(abs $((dif - pre)))\n\t\t#\
+    \ add it to the resulting list\n\t\tresult=\"${result} ${abs}\"\n\tdone\n\t# remove\
+    \ the first space and return the result\n\techo \"${result}\" | cut -c 2-", " \
+    \   eval \"v=($1)\"\n    eval \"w=($2)\"\n    for ((i=0; i<${#v[@]}; i++)); do\n\
+    \        echo $((${v[$i]}-${w[$i]}))\n    done", "    local scores=( $1 )\n  \
+    \  local guesses=( $2 )\n    local -a diffs\n    # there must be a nicer way to\
+    \ do this - a loop in a loop?\n    diffs=( ${scores[0]} ${scores[1]} ${scores[2]}\
+    \ ${scores[3]} ${scores[4]} ${scores[5]} )\n    echo \"${diffs[*]}\"", "    read\
+    \ -r -a scores <<< \"$1\"\n    read -r -a guesses <<< \"$2\"\n    for ((i=0; i<${#scores[@]};\
+    \ i++)); do\n        if [[ \"${scores[$i]}\" != \"${guesses[$i]}\" ]]; then\n\
+    \            echo '\"'\"$((${scores[$i]} - ${guesses[$i]}))\"'\"'\n        else\n\
+    \            echo '\"0\"'\n        fi\n    done", "\tif [ \"$#\" -ne 2 ]; then\n\
+    \t\techo \"Usage: $0 <space-separated list of scores> <space-separated list of\
+    \ guesses>\"\n\t\texit 1\n\tfi\n\tlocal score=($1)\n\tlocal guess=($2)\n\tlocal\
+    \ output=()\n\tfor i in ${!score[@]}; do\n\t\tlocal diff=$((${score[$i]} - ${guess[$i]}))\n\
+    \t\toutput+=(\"$((${diff#-}))\")\n\tdone\n\techo \"${output[@]}\"", "    scores=\"\
+    $1\"\n    guesses=\"$2\"\n    for (( i=0; i<${#scores[@]}; i++ )); do\n      \
+    \  score=\"${scores[$i]}\"\n        guess=\"${guesses[$i]}\"\n        result=$(($score\
+    \ - $guess))\n        echo $result\n    done", "    local ret\n    local -a a1\n\
+    \    local -a a2\n    local i\n    a1=($1)\n    a2=($2)\n    for ((i=0; i<${#a1[@]};\
+    \ i++)); do\n        ((ret=${a1[$i]}-${a2[$i]}))\n        if (($ret<0)); then\n\
+    \            ((ret*=-1))\n        fi\n        echo \"\\\"$ret\\\"\"\n    done"]
 stop_tokens:
 - "\n}"

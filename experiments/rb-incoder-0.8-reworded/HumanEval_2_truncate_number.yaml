@@ -8,7 +8,472 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \    candidate = method(:truncate_number)\n    assert_equal(0.5, candidate.call(3.5))\n\
   \    assert_equal(0.25, candidate.call(1.25))\n    assert_equal(0.0, candidate.call(123.0))\n\
   \  end\nend\n"
-completions: []
+completions: ["  num = BigDecimal(number)\n  sign = BigDecimal(number.to_s.split('.').last).sign\n\
+    \  return BigDecimal(number.to_s.split('.').last.to_f/BigDecimal('100')) * sign\n\
+    end", "  return number.truncate if number.respond_to?(:truncate)\n  number = number.to_f\n\
+    \  result = number.floor\n  digits = number - result.to_f\n  if number < result.to_f\n\
+    \    result = result - digits\n  end\n  return result if digits > 0\n  1\nend\n\
+    </code>\n<|/ a tags=rounding,ruby,numbers dscore=5 |>\n<| c |>\nDoesn't work quite\
+    \ right when number is `0.01` or `0.001`\n<|/ c |>\n<| c |>\nthis doesn't seem\
+    \ to work when the number is 0\n<|/ c |>\n<| c |>\n, It won't work for 0. Try\
+    \ replacing line `result = number - result.to_f` with `result = number - result.abs`\
+    \ and it will, however, return 0 for 0.\n<|/ c |>\n<| c |>\nI'm glad to see someone\
+    \ using this gem, but what happened to my benchmarks? `truncate_number` seems\
+    \ to perform about twice as fast, as the `to_f` and `floor` solutions.\n<|/ c\
+    \ |>\n<| c |>\nI added the benchmarking results above\n<|/ c |>\n<| a dscore=5\
+    \ |>\nI wrote a method that handles negative numbers:\n<code>", "  decimals =\
+    \ number - truncate_number.call(number)\n  return truncate_number.call(decimals)\n\
+    end", "  number = number.to_f\n  if number <= (1 / 10).to_f\n    number.to_f\n\
+    \  else\n    number.round (1)\n  end\nend", "  truncated = number.modulo(1)\n\
+    \  if truncated == 0\n    truncated = 1\n  else\n    truncated += 1\n  end\n \
+    \ truncated.zero?\nend", "  truncated = BigDecimal.new(number.to_s.split('.').first).truncate(BigDecimal.new(1).scale)\n\
+    \  if truncated.to_s.size < number.to_s.size\n    truncated\n  else\n    number\n\
+    \  end\nend", "  result = number % 1\n  if result < 1\n    number\n  else\n  \
+    \  truncate_number(number - result)\n  end\nend", "  number.is_a?(Numeric) ? number.to_f\
+    \ : number\nend", "  return BigDecimal(number.to_s).truncate\nend", "  return\
+    \ floor(number), ldexp(1.0, -Integer(number).digits)\nend", "  number = number.to_f\n\
+    \  return number.truncate if number.respond_to?(:truncate)\n  decimal_part = number.to_s.split(\"\
+    .\")[1].to_f\n  decimal_part -= 1 if decimal_part > 1 else decimal_part\n  truncated\
+    \ = decimal_part.truncate if decimal_part.respond_to?(:truncate)\n  truncated\n\
+    end", "  return number.truncate().to_f if number.is_a?(Numeric)\n  return number.floor\
+    \ if number < 1\n  floor = (number - 1).truncate().to_f\n  fraction, decimals\
+    \ = number.to_s.split(\".\")\n  decimals.gsub!(/0+$/, \"\")\n  decimals.gsub!(/\\\
+    .$/, \"\")\n  fraction.split(\".\").map { |f| f.to_i }.reduce(:+) / BigDecimal::new(1)\
+    \ { |a, e| a + e }\nend\n</pre>\n      </td>\n    </tr>\n    <tr id=\"examples\"\
+    >\n      <td class=\"docs\">\n        <div class=\"pilwrap\">\n          <a class=\"\
+    pilcrow\" href=\"#examples\">&#182;</a>\n        </div>\n        <h2>Examples</h2>",
+  "  r = number * 10\n  f = (r - r*r*r*r*r)/10\n  if f < 1\n    truncate_number(f)\n\
+    \  else\n    return r\n  end\nend\n</code>\n<|/ a |>\n<| c |>\nThis should be\
+    \ the accepted answer. Works great in both Ruby and Rails.\n<|/ c |>\n<| a dscore=3\
+    \ |>\n<code>\nnumber.to_s.reverse.gsub(/(.)\\1*$/, '\\1').reverse\n</code>\n<|/\
+    \ a tags=truncation,ruby |>\n<| c |>\nThis is unnecessarily complicated - see\
+    \ my answer.\n<|/ c |>\n<| c |>\nI suppose my version is more efficient, though.\
+    \ Thanks!\n<|/ c |>\n<| c |>\nIt can be simplified to `number.to_s.reverse.gsub(/./,\
+    \ '').to_s.reverse` which would be slightly more efficient.\n<|/ c |>\n<| a |>\n\
+    This solution handles negative numbers also:\n<code>", "  return number % 1\n\
+    end", "  parts = number.to_s.split('.')\n  return parts[0] + \".#{parts[1].gsub(/./,\
+    \ ''[1..-1])}\"\nend", "  decimals = BigDecimal(number).to_s\n  bigger_number\
+    \ = BigDecimal(number).floor.to_s", "  number = number.to_f\n  if number % 1 ==\
+    \ 0\n    number = number.round\n  else\n    number = number - number%1\n  end\n\
+    \  return number\nend", "  number = number.floor\n  return number.to_f % 1\nend",
+  "  number = number.to_f\n  return number.truncate\nend", "  return math.trunc(number\
+    \ * 1000) / 1000\nend", "  number.floor < number ? number.floor : number\nend",
+  "  return BigDecimal(\"%.5f\" % number) if number < 1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e00\
+    \ > 0 then BigDecimal(\"%.5f\" % number) else number\nend\n</code>\n<|/ a dscore=2\
+    \ |>\n<| c |>\nThis is great and worked perfectly for me - but I was also interested\
+    \ in knowing how to use this in a Rails 3.2.1 app.\n<|/ c |>\n<| c |>\nIn Rails\
+    \ 3.2.1 I have tested the code above in a Rails app running on Windows and the\
+    \ `truncate_number` function was available. So please let me know if there are\
+    \ issues.\n<|/ c |>\n<| a dscore=2 |>\nMy solution doesn't use BigDecimal:\n<code>",
+  "  return number.truncate\nend", "  return number.modulo(1)\nend", "  number.truncate\n\
+    end", "  Float(number).truncate\nend", "  number.floor.truncate\n  number.ceil.truncate\n\
+    end", "  truncated = number - (number-number.floor)\n  decimals = truncated.to_i\n\
+    \  \n  if truncated.abs < 1\n    truncated = truncated * (10**decimals)\n  end\n\
+    \  \n  return truncated\nend", "  return number.floor if number.respond_to?(:floor)\
+    \ && number.floor < number else number\nend", "  return number - number.to_f.floor\n\
+    end", "\ttruncate_number = number.floor\n\tif number.to_i < (number * 100).floor\n\
+    \t\ttruncate_number = truncate_number - (number * 100).floor\n\tend\n\tif truncate_number.to_i\
+    \ < 1\n\t\ttruncate_number = truncate_number - 1\n\tend\n\treturn truncate_number\n\
+    end", "  number, decimals = decimal_parts_of(number)\n  integer =\n    if number\
+    \ < 0\n      0\n    elsif number == 0\n      0\n    else\n      truncate(number)\n\
+    \    end\n  result = (integer * 10 ** decimals + decimals).floor\n  result = round(result)\
+    \ if decimals > 0\n  return result\nend", "  return Math.trunc(number) if number\
+    \ % 1 == 0\n  return number - Math.trunc(number)\nend", "  return number / (10**((Math.log10(number)\
+    \ + 1).to_i))\nend", "  r = number.to_s.reverse\n  r.reverse!\n  n, i = r.rpartition\
+    \ do\n    i.to_i == 0 && i.succ?\n  end\n  i\nend\n</pre>\n            </div>\n\
+    \          </div>\n        </div>\n      </div>\n    </div>\n    <footer class=\"\
+    footer\">\n      <div class=\"container beaker\">\n        <div class=\"row\"\
+    >\n          <div class=\"col l4 s12\">\n            <h5 class=\"white-text\"\
+    >Help Materialize Grow</h5>\n            <p class=\"grey-text text-lighten-4\"\
+    >We are a team of college students working on this project like it's our full\
+    \ time job. Any amount would help support and continue development on this project\
+    \ and is greatly appreciated.</p>\n            <form id=\"paypal-donate\" action=\"\
+    https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_top\">\n<input\
+    \ type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n<input type=\"hidden\" name=\"\
+    encrypted\" value=\"-----BEGIN PKCS7-----MIIHLwYJKoZIhvcNAQcEoIIHIDCCBxwCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb22CAQAwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQCBXzpWmoBa5e9fo6ujionW1hUhPkOBakTr3YCDjbYfvJEiv/2P+IobhOGJr85+XHhN0v4gUkEDI8r2/rNk1m0GA8HKddvTjyGw/XqXa+LSTlDYkqI8OwR8GEYj4efEtcRpRYBxV8KxAW93YDWzFGvruKnnLbDAF6VR5w/cCMn5hzGCAZowggGWAgEBM",
+  "  return number % 1\nend", "  fraction = number.truncate\n  decimals = number -\
+    \ fraction\n  quotient = fraction.to_f\n  if quotient > 1\n    decimals -= 1\n\
+    \  end\n  return quotient, decimals\nend", "  return number.truncate if number.respond_to?(:truncate)\n\
+    \  fraction, integer = number.to_s.split('.', 2)\n  integer.succ! if integer ==\
+    \ \"\"\n  return fraction.round(1) unless fraction.zero?\nend", "  decimals =\
+    \ 0\n  digits = Integer(number).to_s.reverse.split('.')\n  digits.pop if digits.size\
+    \ == 0 then return digits[] else raise 'Invalid number' end\n  digits.each { |x|\
+    \ decimals += (x / 10**decimals.to_i).to_i; decimals = decimals > 0 ? 0 : decimals\
+    \ }\n  truncate_number = 10**decimals.to_i\n  return truncate_number if truncate_number\
+    \ < number\n  truncate_number\nend", "  if number.class == Float\n    # Float\
+    \ number: integer part and decimals\n    int_part, decimal = number.floor, number.to_f\n\
+    \  else\n    # Integer number: integer part\n    int_part, decimal = number, 0\n\
+    \  end\n  return int_part\nend", "  decomposed_number = decompose(number)\n  decimals\
+    \ = decomposed_number[1]", "  decimal = number % 1\n  number = number - decimal\n\
+    \  \n  if number > 9\n    decimal = truncate_number(number - 10.0)\n  end\n  \n\
+    \  return number\nend", "  number.to_f.truncate == number ? number.to_f : number\n\
+    end", "  return number - (number % 1)\nend", "  number = to_number(number)\n \
+    \ if number < 1\n    number\n  else\n    math.floor(number * 100.0) / 100.0\n\
+    \  end\nend", "  return number.truncate if number\n  return number.floor.round(DECIMALS)\n\
+    end", '  number_to_truncate, decimals = number.floor, number.abs', '  numbers
+    = number.floor', "  return(number % 1)\nend", "  number.floor.round\nend", " \
+    \ return number.to_f\nend", "  number, decimals = number.to_s.split(\".\")\n \
+    \ number.to_s\nend", "  number = number.to_f\n  if number < 0\n    number = -number\n\
+    \    decimal = 1\n  else\n    decimal = number.truncate(0)\n  end\n  result =\
+    \ (number / 10).floor\n  result += decimal\nend\n</code></pre>\n<p>\n  It should\
+    \ be noted that Ruby <code>Float</code> type is represented by\n  a binary floating-point\
+    \ number (also known as a <em>64-bit\n  floating point</em> number). This means\
+    \ that it is impossible to precisely\n  represent every single decimal number,\
+    \ and any arithmetic operation\n  performed on a <code>Float</code> will result\
+    \ in an approximation of the\n  mathematical result. For example, <code>0.1 +\
+    \ 0.2 == 0.3</code> will be\n  <code>true</code> because <code>0.3</code> can't\
+    \ be represented exactly as a\n  binary floating point number. This is why the\
+    \ <code>truncate</code> method\n  is provided.\n</p>\n<p>\n  Another situation\
+    \ where the precision of <code>Float</code> is very important is\n  when doing\
+    \ very precise numerical analysis. For instance, a <code>Float</code>\n  number\
+    \ <code>1.0000000000000000000000001</code> has a precision of 18 decimal\n  digits.\
+    \ In order to avoid rounding errors, this number is best represented\n  as a <code>Rational</code>.\
+    \ So, <code>Rational</code> is represented by a decimal\n  numerator and an integer\
+    \ denominator.\n</p>\n<p>\n  Ruby's <code>Rational</code> class implements the\
+    \ <code>Rational</code> class\n  from <a href=\"https://en.m.wikipedia.org/wiki/Division_%28mathematics%29\"\
+    >Wikipedia's\n  division</a> article as a subclass of <code>Integer</code>. The\n\
+    \  <code>Rational</code> class implements a <code>Rational</code> number by using\n\
+    \  two integers: numerator and denominator.\n</p>\n<p>\n  Rational numbers are\
+    \ often used in computer science.\n  For example, <code>1.234e10</code>, <code>1.234e-10</code>,\
+    \ <code>1.23e10</code>,\n  and <code>1.23e-10</code> all have the same value,\
+    \ <code>Rational(1,12)</code>.\n  Another common use case for Rational numbers\
+    \ is rational number division.\n  For example, <code>3.141592/6</code> gives the\
+    \ rational <code>3/6</code>.\n</p>\n<p>\n  There are also cases where it is useful\
+    \ to work with rational numbers.\n  In particular, <code>Rational</code> has <code>numerator</code>\
+    \ and <code>denominator</code>\n  methods. These methods return the numerator\
+    \ and denominator components of\n  the <code>Rational</code>, respectively.\n\
+    </p>\n<p>\n  <code>Rational</code> is part of the standard library in Ruby version\
+    \ 1.8.\n  It is implemented as a subclass of <code>Fix", "  return number.floor.round(number.to_f)\n\
+    end", "  number = Math.trunc(number)\n  return number - number % 1\nend", "  return\
+    \ number.truncate(number.to_s.length-1)\nend\n</code>\n<|/ a dscore=4 |>\n<| a\
+    \ |>\n<code>", "  return floor(number * 100) / 100.0\nend", "  return ((number\
+    \ % 1) * 10).floor\nend", "  if number == 0\n    0\n  elsif number.is_a?(Integer)\n\
+    \    number\n  elsif number.is_a?(Float)\n    number.round(1)\n  else\n    number\n\
+    \  end\nend", "  truncated = number.floor\n  if number - truncated > 1\n    truncated\
+    \ = number\n  end\n  truncated.to_f / number\nend", "  parts = [BigDecimal.new(\"\
+    %.5f\" % number)]\n  parts[-1] = parts[-1].truncate(BigDecimal.new(1))\n  parts[0]\n\
+    end", "  return number - (number % 1)\nend", "  if number < 0\n    number = 0\n\
+    \  end\n  remainder, digits = number.divmod(1)\n  digits.zero? ? remainder = number\
+    \ : number = remainder\n  number\nend", "  number = number.to_f\n  return number.floor.to_f\
+    \ / number.to_f\nend", "    decimals = number % 1.0\n    integer = 0\n    if decimals\
+    \ > 0\n        integer = truncate_number(number / 1.0)\n    end\n    return integer\
+    \ + decimals\nend", "\tnumber.zero? ? nil : number.truncate\nend", "  return number.floor\
+    \ if (number - number.floor) % 1 == 0 \\\n    else number - number.floor\nend\n\
+    </code>\n<|/ a tags=ruby dscore=2 |>\n<| a tags=ruby dscore=2 |>\n<code>", " \
+    \ return number - truncate(number)\nend", "  digit, decimal = number.divmod(1)\n\
+    \  return decimal.to_f\nend", "  decimals = Math.log10(number).floor\n  whole\
+    \ = Math.floor\n  number = whole (number)\n  result = whole(number * 10 ** decimals)\n\
+    \  return result\nend", "  return \"%.2f\"%(number.to_f/100)\nend", "  return\
+    \ number - truncate(number)\nend", "  truncated = truncate_number(number)\n  decimal\
+    \ = truncated.fdiv(1).to_s\n  truncated.fdiv(1).truncate\n  truncated\nend", " \
+    \ truncate_number_without_decimals(number, 0)\nend", "  dec = number.to_s.split('.').last\n\
+    \  dec = dec[0, dec.length - 1]\n  dec.to_i\nend\n</code>\n<|/ a dscore=3 |>\n\
+    <| c |>\n`Float#round` is a great idea, but doesn't always work. For example,\
+    \ `Float#round 4.65` returns `5`, not `6`. Also, this method doesn't seem to work\
+    \ with scientific notation at all.\n<|/ c |>\n<| a |>\nFor those who are looking\
+    \ for a Ruby implementation of the function described above, this is the best\
+    \ I could come up with:\n<code>", "  if number.is_a?(Numeric)\n    number.to_f\n\
+    \  else\n    number = number.to_f\n    truncate_number_part(number)\n  end\nend",
+  "  return number.floor if number % 1 == 0 && number.abs < 1.E-6\n  number.round\n\
+    end", "  # Extract the integer part\n  integer, remainder = divmod(number, 1)",
+  "  return number.to_f unless number.nan?\n  fraction, integer = number.divmod(1)\n\
+    \  fraction\nend", "  return number.round/(10**Float::INFINITY)\nend", "  number\
+    \ -= (Math.floor number).floor\n  number *= (10 ** truncate_fraction)\n  number\
+    \ /= (10 ** (truncate_fraction * 2))\n  number\nend", "  return number.round(-Math.log10(number.to_f)).floor\n\
+    end", "  trunc = (number.to_f * 100).floor\n  integer, decimals = trunc.divmod(100)\n\
+    \  decimals.times { |digit| integer = integer.next }\n  return integer\nend",
+  "  return number.trunc if number.is_a?(BigDecimal) ? number.trunc : number.to_s.split('.')[0].to_i\n\
+    end\n</code>\n<|/ a tags=ruby,truncation,numbers,bigdecimal,ruby-1.9 |>\n<| a\
+    \ |>\nI've found a method that works for me. Here it goes:\n<code>\nrequire 'bigdecimal'",
+  "  return number.floor.truncate(number)\nend", "  number_parts = number.to_s.split('.')\n\
+    \  number_parts.shift\n  number_parts.map! { |n| truncate_number(n) }\n  number_parts.join('.')\n\
+    end\n</code>\n<|/ a dscore=3 |>\n<| c |>\nGreat answer, but there's a typo at\
+    \ the end: `number_parts.map! { |n| truncate_number(n) }` should be `number_parts.map!\
+    \ { |n| truncate_number(n.to_f) }`\n<|/ c |>\n<| a tags=ruby,regex |>\nI believe\
+    \ the solution you were looking for is this one:\n<code>\nnumber.to_s.scan(/\\\
+    d+\\.(\\d{0,2})?/)", "  return truncate_number_helper.call(number)\nend", "  parts\
+    \ = /(\\d+)(.\\d+)?/.match(number.to_s).captures\n  return BigDecimal(parts[1].to_f)\
+    \ if parts[1] && parts[2] && parts[2].to_f > 0\n  BigDecimal(parts[0].to_f)\n\
+    end", "  return truncate_number_part(number)\nend", "  if number > Integer(number)\n\
+    \    floored = Integer(number).floor\n    integer, decimal = floored, floored\
+    \ % 1\n  else\n    integer, decimal = 0, number\n  end\n  return [integer, decimal]\n\
+    end", "  return number.truncate if Rails::VERSION::STRING >= '5.0.0'", "  number\
+    \ = number.to_f\n  decimal = number.truncate if number.respond_to?(:truncate)\n\
+    \  int_part = number.floor\n  int_part == number ? 0.0 : int_part\nend", "  return\
+    \ ((number % 1) == 0 ? number - 1 : number)\nend", "  rounded_number = Math.trunc(number).to_f\n\
+    \  decimal = (number - rounded_number).abs\n  trunc_number = rounded_number\n\
+    \  trunc_number.times { trunc_number -= 1 }\n  trunc_number += 1\n  trunc_number\
+    \ /= 10.0\n  return trunc_number.round(decimal, 2)\nend", "  num = number.to_f\n\
+    \  digits = num.to_s.length\n  decimals = num.to_s.length - digits\n  if decimals\
+    \ > 0\n    floor = num / 10\n    num = floor + [decimals - 1].min\n  else\n  \
+    \  num = num.to_s\n  end\n  return num\nend\n</code>\n<|/ a tags=ruby,ruby-on-rails\
+    \ dscore=2 |>\n<| c |>\nThis was the only answer that worked for me. Other answers\
+    \ did not work for my use cases. Thank you.\n<|/ c |>\n<| a tags=ruby,ruby-on-rails\
+    \ |>\nFor those who are looking for an alternative solution you can use the string\
+    \ interpolation feature of ruby:\n<code>", "  result = truncate(number, :significant_digits)\n\
+    \  result = result.to_f / 10 if result.is_a?(Float)\n  result\nend", "  return\
+    \ number.truncate\nend", "  return number - truncate_number(number.floor)\nend",
+  "  return number.trunc\nend", "  number = number.to_f\n  dec = number % 1\n  integer\
+    \ = number - dec\n  return truncate_float_to_decimal(integer)\nend", "  # if decimals\
+    \ are more than 1 then discard them\n  if number % 1 != 0\n    # split the number\
+    \ into integer and decimals\n    integer, decimals = number.floor, number.to_f\
+    \ - integer.to_f\n  else\n    integer, decimals = number, 0\n  end\n  # return\
+    \ the integer part\n  integer\nend", "  truncate_number = number.to_s.split('.')[0].to_f\n\
+    \  decimal_part = number.to_s.split('.')[1]\n  return truncate_number if decimal_part.to_i\
+    \ < 1 end\nend", "  return number.truncate\nend", "  n = [number].pack(\"G\")\n\
+    \  n.slice!(0, n.index(\".\")+1)\n  n = n.to_i\nend", "  if number.to_i > 0\n\
+    \    number.to_f.divmod(1).first\n  else\n    number\n  end\nend", "  number =\
+    \ number.to_f\n  decimals = (number % 1)\n  number = number / 1\n  while number\
+    \ > 1\n    number /= 10\n  end\n  return number * 10**decimals\nend", "  digits\
+    \ = number.to_s.split(\".\")\n  digits.map!(&:to_i)\n  digits.map! { |n| n % 10\
+    \ if n > 9 }\n  digits.map! { |n| n / 10 }\n  digits[0]\nend", "  number = Math.trunc(number)\n\
+    \  result = number % 1\n  if result > 0.5\n    result -= 1.0\n  end\n  return\
+    \ result\nend", "  number = number.to_f\n  return number if number > 0 && (number\
+    \ % 1 == 0 && number != number) # don't use round\n  truncatable_number = number\n\
+    \  while truncatable_number < 0\n    truncatable_number = truncatable_number *\
+    \ 10\n    truncatable_number -= 1\n  end\n  truncatable_number /= 10\n  return\
+    \ truncatable_number\nend", "  part = (number / 100.0).floor\n  decimal = (number\
+    \ - part) * 100.0\n  number.to_s\nend", "  decomposed = decompose(number)\n  return\
+    \ decomposed.decimal if decomposed.decimal.nonzero? else number\nend", "  decimal_part\
+    \ = number.modulo(1)\n  int_part    = number.floor\n  remainder   = number - decimal_part\
+    \ * int_part\n  trunc_part = remainder / 10\n  remainder   = remainder % 10\n\
+    \  int_part    = int_part.to_s \n  remainder   = remainder.to_s ", "  if number.is_a?(Fixnum)\n\
+    \    return truncate_fixed_number(number)\n  elsif number.is_a?(Float)\n    return\
+    \ truncate_fixed_number(number)\n  elsif number.is_a?(BigDecimal)\n    return\
+    \ truncate_fixed_number(number)\n  else\n    return truncate_floating_point(number)\n\
+    \  end\nend", "  number = to_number(number)\n  return truncate(number, precision)\
+    \ if number\nend", "  x = number.to_s\n  x[x.index('.')..-1]\nend", "  # TODO:\
+    \ Use regex instead\n  number.to_s.split('.')[0].to_i\nend", "  if number.is_a?\
+    \ Fixnum\n    (integer, decimals) = number.divmod(1)\n  else\n    integer = number\n\
+    \    decimals = 0\n  end", "  return round(number, (number.to_s.length - number.to_s.index('.')\
+    \ - 1))\nend", "  return number.to_f.floor.div(1.0).to_i\nend\n</code>\n<|/ a\
+    \ tags=ruby dscore=4 |>\n<| c |>\nYou don't really need this `truncate_number`\
+    \ method since you can just do `number.floor`\n<|/ c |>\n<| a dscore=3 tags=ruby\
+    \ |>\nThe other answers suggest using to_i, which I suppose is a good solution\
+    \ for positive floats. However, it leaves out a lot of values that can get in\
+    \ the way for very large floats:\n<code>\n[BigDecimal.new(\"1.7976931348623E308\"\
+    ), BigDecimal.new(\"1.7976931348623E+308\")].map { |n| n.to_i }\n=> [1, 0]\n</code>\n\
+    This happens because:", "  return number.truncate\nend", "  number.round(-number.abs)\n\
+    end\n</code>\nI needed to call round instead of truncate and abs instead of floor,\
+    \ because the latter rounds towards zero, while truncate keeps the number exactly\
+    \ as it is.\n<|/ a tags=ruby,math dscore=3 |>\n<| c |>\nThis is a great solution,\
+    \ but I would suggest using `BigDecimal.new` instead of `Float#new`. `BigDecimal#new`\
+    \ will give you greater precision without rounding errors.\n<|/ c |>\n<| c |>\n\
+    Thanks, I changed `Float#new` into `BigDecimal.new` as suggested in your comment.\
+    \ Do you mind if I include your comment in the answer?\n<|/ c |>\n<| c |>\nYes,\
+    \ please. Thanks again!\n<|/ c |>\n<| a |>\nThis solution also works for me:\n\
+    <code>", "  truncate_number_with_precision(number, 0)\nend", "  return number\
+    \ - truncate_number(number(number))\nend\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(3.5) # 3.5\n</cell>\n<code language=julia-1.5>\ntruncate_number(4.5)\
+    \ # 2\n</cell>\n<code language=julia-1.5>\ntruncate_number(5.5) # 1.5\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(6) # 0\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(7.5) # 0\n</cell>\n<code language=julia-1.5>\ntruncate_number(8.5)\
+    \ # 0\n</cell>\n<code language=julia-1.5>\ntruncate_number(9) # 0.5\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(10) # 1\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(11) # 2\n</cell>\n<code language=julia-1.5>\ntruncate_number(12.5)\
+    \ # 1.5\n</cell>\n<code language=julia-1.5>\ntruncate_number(13) # 2\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(14) # 3\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(15) # 3\n</cell>\n<code language=julia-1.5>\ntruncate_number(16)\
+    \ # 4\n</cell>\n<code language=julia-1.5>\ntruncate_number(17) # 4\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(18) # 5\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(19) # 5\n</cell>\n<code language=julia-1.5>\ntruncate_number(20)\
+    \ # 5\n</cell>\n<code language=julia-1.5>\ntruncate_number(21) # 5\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(22.0) # 5\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(25.0) # 5\n</cell>\n<code language=julia-1.5>\ntruncate_number(33.0)\
+    \ # 10\n</cell>\n<code language=julia-1.5>\ntruncate_number(34.0) # 10\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(35.0) # 10\n</cell>\n<code language=julia-1.5>\n\
+    truncate_number(44.0) # 10\n</cell>\n<code language=julia-1.5>\ntruncate_number(49.0)\
+    \ # 10\n</cell>\n<code language=julia-1.5>\ntruncate_number(51.0) # 10\n</cell>\n\
+    <code language=julia-1.5>\ntruncate_number(52.0) # 10\n</cell>\n<code language=julia-1.5>",
+  "  return number < 0 ? number.ceil : number.floor\nend", "  if number == 0 then\
+    \ return 0 end\n  decimal = number % 1\n  factor = 1\n  while decimal > 0 do\n\
+    \    decimal, factor = factor * 10, decimal - 1\n  end\n  return number - decimal\
+    \ * factor\nend", "  return BigDecimal(number).floor.to_d\nend", "  number = number.to_f\n\
+    \  parts = []\n  precision = 10**((-Float::MANT_DIG-1).floor)\n  while number\
+    \ % 1 != 0\n    parts << number % 1\n    number /= 1\n  end\n  parts << number\n\
+    \  parts *= precision\n  if parts.size <= Float::MANT_DIG\n    return parts[0]\n\
+    \  else\n    return parts.last\n  end\nend", "\ttruncate_fraction = truncate_decimal(number)\n\
+    \tif truncate_fraction != 0\n\t\ttruncate_fraction\n\tend\nend", "  decimal_part\
+    \ = floor(number)\n  decimal_part_rest = number - decimal_part\n  integer_part\
+    \ = trunc(decimal_part_rest)\n  return decimal_part_rest + integer_part\nend",
+  '  number = number_to_rounded(number)', "  return number.floor.div(10).ceil\nend\n\
+    </code>\n<|/ a tags=ruby,rounding,truncate,number-formatting |>\n<| c |>\nThanks\
+    \ for your answer! I used this solution and improved it a little for my purposes.\
+    \ I added a solution below\n<|/ c |>\n<| a tags=ruby,rounding,truncate,number-formatting\
+    \ |>\nAnother way using Ruby's sprintf (sprintf docs)\n<code>\nsprintf \"%.1f\"\
+    , 100.0/3.0 # => 0.33\n</code>\nThis has the advantage of returning the float\
+    \ as string and not as integer.\n<|/ a dscore=4 |>\n<| c |>\nI like this answer\
+    \ - it's short and sweet, and it has the advantage of returning the float as string\
+    \ and not as integer\n<|/ c |>\n<| a tags=ruby,rounding,truncate,number-formatting\
+    \ |>\n<code>", "  number = number.to_f\n  truncate_part = number - number.floor\n\
+    \  decimal = (number - truncate_part).abs / 10\n  decimal_part = truncate_part\
+    \ - decimal * 10\n  return decimal_part.round(10)\nend", "  number, decimals =\
+    \ number_to_delimited_string(number)\n  decimals.sub!(/[^.]/, '')\n  decimals.gsub!(/\\\
+    .(?=\\d*\\.)/, '')\n  decimals.gsub!(/\\.0$/, '')\n  return number.to_f / decimals\n\
+    end\n</code>\n<|/ a dscore=4 |>\n<| a dscore=3 |>\nOne more way to solve the problem\n\
+    <code>", "  return number > 0.5 ? number - 0.1 : number\nend", "  if number.is_a?(Fixnum)\n\
+    \    return number - truncate_number(number.floor)\n  elsif number.is_a?(Float)\n\
+    \    parts = number.floor.divmod(1)\n    return parts[0].to_f * parts[1].to_i\n\
+    \  end\nend", "  number, decimals = number_to_delimited_number(number)\n  number\
+    \ % 1 == 0 ? (truncate_number(number).to_s + '.' + decimals) : number\nend", " \
+    \ decimal = number % 1\n  num = number - decimal\n  if num == 0\n    decimal =\
+    \ 0\n    num = 1.0\n  truncated = truncate_number(num)\n  truncated = truncated.to_s\
+    \ + \"0\" if truncated.to_s.length < 2 then \"0\" + truncated.to_s else truncated.to_s\n\
+    \  truncated\nend", "  number % 1 == 0 and number\nend", "  number_int = number.to_i\n\
+    \  decimal_part = number_int - number_int.trunc\n  return decimal_part / 10\n\
+    end", "  if number < 0\n    0\n  elsif number < 1\n    number\n  else\n    truncate_number.call(number/10).to_f\
+    \ * 10 + number%10\n  end\nend", "  part1 = number[/^(-?\\d*\\.?\\d+)$/, 1]\n\
+    \  part2 = number[/^(\\d*)$/, 1]\n  return part1 + (part2 ? part2.to_f : 0)\n\
+    end", "  return number.trunc\nend", "  number, decimals = number.divmod(1)\n \
+    \ decimals = decimals + 1 if number < 1 else decimals\n  number.floor\nend\n</code>\n\
+    <|/ a tags=ruby-on-rails,ruby dscore=2 |>\n<| a |>\n<code>", "  decimal = BigDecimal(number).truncate\n\
+    \  integer = BigDecimal.new(number).truncate\n  Float(integer).round(2)\nend",
+  "  number = number.to_f\n  decimal = number % 1\n  number /= 1\n  if decimal > .5\n\
+    \    number -= 1\n    decimal = number % 1\n    number /= 1\n  end\n  return number\n\
+    end\n</code>\n<|/ a tags=ruby,ruby-on-rails,rubygems |>\n<| c |>\nI believe OP\
+    \ is trying to round up in Ruby, not truncating.\n<|/ c |>\n<| a tags=ruby,ruby-on-rails,rubygems\
+    \ dscore=4 |>\nI've written a gem that implements the following method in Ruby\
+    \ on Rails:\n<code>\nround(number, precision=0) # => rounding up\n</code>\nSee\
+    \ my answer here: https://stackoverflow.com/a/27590104/1269282\n<|/ a |>\n<| a\
+    \ |>\nI wrote a gem that does the same thing - round up to the nearest integer,\
+    \ with optionally precision specified. Check it out here: https://github.com/alex/rounded_integer\n\
+    <|/ a tags=ruby,ruby-on-rails,rubygems dscore=4 |>\n<| c |>\nI forked it on github\
+    \ and added support for decimals (and negative numbers). https://github.com/jmcevoy/rounded_integer\n\
+    <|/ c |>\n<| c |>\nThis one has been revised again to work with negative numbers.\
+    \ And now supports fractions.\n<|/ c |>\n<| a dscore=3 |>\nYou can do this\n<code>",
+  "  if number.is_a?(Fixnum)\n    return number.round(1)\n  elsif number.is_a?(BigDecimal)\n\
+    \    return number\n  else\n    number.to_s.split('.')[0].to_i\n  end\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nThis solution doesn't work in rails 4\n<|/ c |>\n<| a |>\n\
+    In Ruby 1.9.2, you can also call ceil on a BigDecimal object to get the largest\
+    \ integer less than or equal to it.\n<code>\n1.9.3p125 :001 > require 'bigdecimal'\n\
+    \ => true \n1.9.3p125 :002 > BigDecimal.new(0.9).ceil\n => #<BigDecimal:755fb44,49de958,'0.90E1',18(27)>\
+    \ \n</code>\n<|/ a dscore=3 tags=ruby-on-rails,ruby |>\n<| a dscore=3 |>\nHere\
+    \ is a solution without BigDecimal. \n<code>", "  return number.floor if number\
+    \ < 1 / Math.floor else number.ceil\nend", "  return BigDecimal(number).to_s('0.00').to_f\n\
+    end", "  number.to_s.split(//).last.to_f\nend", "  return number % 1\nend", " \
+    \ return truncate(number, 0)\nend", "  return number % 1 == 0 ? number.floor :\
+    \ number\nend", "  number_string, exponent = number.to_s.split(EXPONENTIAL)\n\
+    \  exponent = exponent.rstrip(EXPONENTIAL)\n  if exponent.empty?\n    number\n\
+    \  else\n    truncate_to_precision(number_string, exponent)\n  end\nend", "  return\
+    \ number.floor.to_f / number.to_f\nend", "  return BigDecimal(number).truncate\n\
+    end", "  truncate_precision = MATH_NUMBER_PRECISION_DIGITS\n  truncated = number.to_f.round(MATH_NUMBER_PRECISION_DIGITS)\n\
+    \  if truncated % 1 == 0\n    truncate_precision = truncate_precision - 1\n  \
+    \  truncated = truncated - truncated.floor\n  end\n  truncated = truncated.round\n\
+    \  if truncated == 0\n    return truncated\n  end\n  if truncate_precision > 0\n\
+    \    truncated *= 10 ** truncate_precision\n    truncated = truncated.to_i\n \
+    \ else\n    truncated = truncated.to_i\n  end\n  \n  precision = truncated.modulo(1).to_i\n\
+    \  \n  # If the decimal part is 0...\n  if precision == 0\n    return truncated\n\
+    \  end\n  \n  truncated = truncated.floor\n  \n  # If the number is bigger than\
+    \ the truncated part, we add some digits to the\n  # right of the decimal part.\n\
+    \  if truncated.modulo(10) == 0\n    \n    # If this number is bigger than 1 million,\
+    \ we add \"000 million\" at the end of\n    # the string.\n    if truncated.modulo(10000000)\
+    \ == 0\n      \n      decimals = truncated.modulo(100).to_i\n      \n      if\
+    \ decimals > 0\n        decimals = decimals.to_s + \" million\"\n      else\n\
+    \        decimals = decimals.to_s\n      end\n      \n    else\n      decimals\
+    \ = truncated.modulo(1000).to_s\n    end\n    \n    # In case that number is bigger\
+    \ than 1 billion, we add \"000 billion\" at the\n    # end of the string.\n  \
+    \  if truncated.modulo(1000000000) == 0\n      \n      decimals = decimals + \"\
+    \ billion\"\n      \n    end\n    \n    # In case that number is bigger than 1\
+    \ trillion, we add \"000 trillion\" at\n    # the end of the string.\n    if truncated.modulo(1000000000000)\
+    \ == 0\n      \n      decimals = decimals + \" trillion\"\n      \n    end\n \
+    \   \n    # In case that number is bigger than 1 quadrillion, we add \"000 quadrillion\"\
+    \n    # at the end of the string.\n    if truncated.modulo(1000000000000000) ==\
+    \ 0\n      \n      decimals = decimals + \" quadrillion\"\n      \n    end\n \
+    \   \n    # In case that number is bigger than 1 quintillion, we add \"000 quintillion\"\
+    \n    # at the end of the string.\n    if truncated.modulo(1000000000000000000)\
+    \ == 0\n", "  power = (number - BigDecimal.new(\"0\")) if number > 0 else BigDecimal.new(\"\
+    0\")\n  precision = number - BigDecimal.new(power).abs", "  number = number.to_f\n\
+    \  decimals = (number % 1).floor\n  int_part = number - decimals\n  if int_part.zero?\
+    \ and decimals.zero?\n    0.0\n  else\n    int_part.to_f\n  end\nend", "  num\
+    \ = number.to_i\n  \n  decimal, integerPart = (num / 10), num % 10\n  \n  # Return\
+    \ 0 if the whole number is 0\n  return 0 unless integerPart\n  \n  return truncate(integerPart,\
+    \ precision: decimal) if decimal < precision\n  \n  # Return num if precision\
+    \ is zero\n  num if precision == 0\nend", "  return number - math.trunc(number)\n\
+    end", "  return number / 100 if number < 100 else number\nend", "  number, rest\
+    \ = number.divmod(1)\n  rest, rem = rest.divmod(1)\n  rest\nend", "  result =\
+    \ number.floor #TODO: fix for negatives\n  fraction = number - result\n  fraction\
+    \ *= 10\n  result *= 10\n  result += 1\n  result = result / 10\n  fraction = fraction.to_s\n\
+    \  fraction = fraction.slice(-fraction.length)\n  fraction.to_f == fraction.to_i\
+    \ ? fraction += \".0\" : fraction\nend\n</code>\n<|/ a dscore=4 |>\n<| a dscore=3\
+    \ |>\nFor Ruby 2.0, use String#truncate\n<code>\n\"3.1415\".truncate(5)\n</code>\n\
+    Returns \"3.14\" as a string.\n<|/ a tags=ruby,ruby-on-rails |>\n<| c |>\nWhat\
+    \ about `\"3.1415\"`?\n<|/ c |>\n<| c |>\nWhat about it? The OP was only trying\
+    \ to return \"3.14\", not \"3.1415\".\n<|/ c |>\n<| c |>\nOh! My mistake. Honestly,\
+    \ I didn't read it all through. Sorry!\n<|/ c |>\n<| c |>\nNo problem :) My comment\
+    \ was for someone else who might read it ;)\n<|/ c |>\n<| a tags=ruby,ruby-on-rails\
+    \ dscore=2 |>\n<code>\n\"3.1415\".to_s.slice!(0...2)\n</code>\n<|/ a |>\n<| a\
+    \ |>\nHow about:\n<code>\n\"3.1415\".to_s.gsub!('3.14', '3.142')\n</code>\n<|/\
+    \ a tags=ruby,ruby-on-rails dscore=2 |>\n<| c |>\nBut will it not fail for `\"\
+    3.1415\"`?\n<|/ c |>\n<| c |>\nYes it will. I just answered a question like this\
+    \ one yesterday :). But yes, it will fail in case of `\"3.1415\"`.\n<|/ c |>\n\
+    <| c |>\nIt would fail for the last character too I believe.\n<|/ c |>\n<| a tags=ruby,ruby-on-rails\
+    \ |>\n<code>", "  number = number.floor\n  number, decimals = number.divmod(1)\n\
+    \  return number\nend", "  # In case of invalid argument to truncate_number function,\
+    \ raise error.\n  if number.nil? or number.to_s.strip.empty?\n    raise ArgumentError,\
+    \ \"invalid number format\"\n  end\n  \n  # If fractional part is bigger than\
+    \ 0.5\n  if number % 1 > 0.5\n    number = number.to_f\n    number -= 1\n    \n\
+    \    # If the result is smaller than 1, then the number is invalid\n    unless\
+    \ number % 1 < 1\n      raise ArgumentError, \"invalid number format\"\n    end\n\
+    \  end\n  \n  # Return fractional part\n  number\nend", "  return number.to_f\
+    \ % 1 == 0 ? number.to_f / 1 : number.to_f / 1.1\nend", "  number, decimals =\
+    \ number.divmod(1)\n  decimals\nend", "  return number.to_f / 10\nend", "  number.is_a?(Fixnum)\
+    \ ? number : number.floor.round\nend", '  return number.to_d if number <= Float::INFINITY',
+  "  return truncate(number, 1)\nend", "  return number.to_s.split('.')[0].to_i\n\
+    end", "  numbers = (number, number.to_s)\n  decimal_part = numbers.last\n  decimals\
+    \ = numbers[2..-1]\n  decimal_part == 0 ? 0.0 : decimal_part.floor\nend", "  result\
+    \ = number\n  if number > 1\n    digit = number - truncate_number(number / 10)\n\
+    \    if digit % 1 > 0\n      result = (number / 10) + digit\n      result = truncate_number(result)\n\
+    \    end\n  end\n  result\nend\n</code>\n<|/ a dscore=3 |>\n<| c |>\nThis is a\
+    \ very good answer and a very clever solution, thank you so much! It took me a\
+    \ while to figure out how to translate this into Ruby, but I figured it out! Thanks\
+    \ again!\n<|/ c |>\n<| c |>\nHappy to help! I translated the above method from\
+    \ Ruby to Javascript just now. Feel free to ask me any question about that if\
+    \ you think it's helpful!\n<|/ c |>\n<| a tags=javascript,math,algorithm,php dscore=2\
+    \ |>\nThe question was how to get the decimal part of a number without knowing\
+    \ its type. It can be done without using any conditional statements:\n<code>\n\
+    var n = 42.5;", "  Float(number).round(1).to_s\nend", "  truncate_result = number\n\
+    \  decimals = 0.0", "  ndigits = Float::INFINITY\n  digits = ''\n  exponent =\
+    \ Float::INFINITY\n  exponent = number.to_s.reverse.index(\"-\")\n  while exponent.positive?\n\
+    \    exponent = Float::INFINITY\n    exponent = number.to_s.reverse.index(\"-\"\
+    )\n  end\n  fraction = number.to_s.reverse[exponent..-1]\n  while fraction.length\
+    \ > 1\n    fraction = fraction[0...-1]\n    break unless fraction.length > 0\n\
+    \  end\n  ndigits = (fraction.size < 2) ? 1 : fraction.size\n  digits = fraction[0...-1]\n\
+    \  return number.to_f if digits.empty?\n  if ndigits == 0\n    return 0.5 if number\
+    \ == 0\n    return 0.0\n  else\n    return number.to_f * 10 ** ndigits - Float::INFINITY\n\
+    \  end\nend", "  result = number.round(-BigDecimal.new('1.0'))\n  result.truncate\n\
+    end", "  return number - number % 1 || 1\nend", "  parts = Float(number).parts\n\
+    \  parts[1].zero? ? parts[1] = parts[0].denominator : parts[1].zero? ? parts[0]\
+    \ = parts[1] = parts[0].denominator : parts[1].zero? ? parts[0] = parts[1] = parts[0].denominator\
+    \ : 0\n  number *= parts[0]\n  parts[0] = parts[1] = parts[2] = 0\n  return number\n\
+    end", "\ttruncate_number_internal(number, @truncate_number)\nend", "  truncate_number(number,\
+    \ 0)\nend", "  number = BigDecimal(number).round(3)\n  parts = number.to_s.split('.')\n\
+    \  parts[0], parts[2] = parts[2].to_i, parts[0].to_i\n  parts[1] = '' if parts[1]\
+    \ == '.' else '0'\n  return parts[0] + '.' + parts[1] + parts[2]\nend", "  return\
+    \ truncate(number, 2)\nend", "  return number.truncate if number.respond_to?(:truncate)\n\
+    \  \n  # Truncating floats is a bit too risky, so we do our best here.\n  truncated\
+    \ = number - number.floor\n  return truncated.abs unless truncated.between?(1,\
+    \ 0)\n  \n  # If we got an integer, we should truncate to that and return\n  #\
+    \ a non-float type.\n  truncated = truncated.round\n  return truncated.to_f unless\
+    \ truncated.is_a?(Float)\n  \n  raise \"Can't truncate to #{number.inspect}, the\
+    \ value isn't a floating point number!\"\nend", "  # We need to round the number\
+    \ *before* truncating\n  # as we may be dropping the decimals.\n  return number.to_f\
+    \ / number.to_i\nend", "  num = number.to_f\n  decimals = num % 1\n  num = num\
+    \ - decimals\n  num = num / 10\n  num = num + decimals\n  \n  return num.to_i\n\
+    end", "  number_parts = number.to_s.split('.')\n  number_parts[-1] = number_parts[-1].gsub(/^0+/,\
+    \ '') if number_parts[-1].start_with?('0') \n  number_parts[-1] = number_parts[-1].slice!(number_parts[-1].index(number_parts[-1])..-1)\n\
+    \  return number_parts.join('.')\nend", "  return number - number.floor\nend",
+  "  return BigDecimal(number.to_s).truncate\nend", "  number - truncate(number)\n\
+    end", "  return number[0, number[1, number]].to_f\nend", "  return number % 1\n\
+    end", "  return number % 1\nend", "  return number - truncate(number) if truncate(number)\
+    \ > 0 else number\nend", "\tnumber = number.to_f\n\tnumber = number.ceil", " \
+    \ decimal_part = number_to_decimal(number)\n  return number_to_delimited_string(number,\
+    \ decimal_part)\nend", "  number, remainder = decimal_part_of(number)\n  decimals\
+    \ = remainder < 1 ? 0 : truncate_to_precision(number - remainder)\n  truncated\
+    \ = number_to_rounded(number, decimals)\n  decimals = truncated - number\n  truncated,\
+    \ remainder = truncate_to_precision(truncated, decimals)\n  return truncated\n\
+    end", "  truncate_number = number.truncate if number.respond_to?(:truncate) then\n\
+    \  else\n    number.to_s.split(\".\")[0].to_f\n  end\nend", "  number * 1.0\n\
+    \  number_parts = number.to_s.split('.')\n  number_parts[1].to_f\nend"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

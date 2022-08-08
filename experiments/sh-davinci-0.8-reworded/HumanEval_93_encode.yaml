@@ -109,6 +109,875 @@ completions: ["    INPUT=$1\n    # This is a comment\n    # INPUT=`echo $1 | tr 
     \            ;;\n                        esac\n                        encoded=\"\
     $encoded$char\"\n                done\n                encoded=\"$encoded \"\n\
     \        done\n        echo $encoded", "    echo \"${1}\" | tr \"A-Za-z\" \"N-ZA-Mn-za-m\"\
-    \ | sed 's/[aeiou]/\\U&/g'", '  echo "Please complete this exercise"']
+    \ | sed 's/[aeiou]/\\U&/g'", '  echo "Please complete this exercise"', "    local\
+    \ input=\"$1\"\n    local output=\"\"\n    local char=\"\"\n    local ascii=0\n\
+    \    for char in ${input[@]}; do\n        # Swap case of letters\n        if [[\
+    \ \"$char\" =~ [a-z] ]]; then\n            ascii=$(printf \"%d\" \"'$char\")\n\
+    \            ascii=$((ascii - 32))\n            char=$(printf \"\\x$(printf %x\
+    \ $ascii)\")\n        elif [[ \"$char\" =~ [A-Z] ]]; then\n            ascii=$(printf\
+    \ \"%d\" \"'$char\")\n            ascii=$((ascii + 32))\n            char=$(printf\
+    \ \"\\x$(printf %x $ascii)\")\n        fi\n        # Replace vowels\n        if\
+    \ [[ \"$char\" =~ [aeiou] ]]; then\n            ascii=$(printf \"%d\" \"'$char\"\
+    )\n            ascii=$((ascii + 2))\n            char=$(printf \"\\x$(printf %x\
+    \ $ascii)\")\n        elif [[ \"$char\" =~ [AEIOU] ]]; then\n            ascii=$(printf\
+    \ \"%d\" \"'$char\")\n            ascii=$((ascii + 2))\n            char=$(printf\
+    \ \"\\x$(printf %x $ascii)\")\n        fi\n        output=\"$output$char\"\n \
+    \   done\n    echo \"$output\"", "\t# insert your code here", '   # CODE GOES
+    HERE', "    # default to argument, if not given\n    local string=\"${1:-$string}\"\
+    \n    local result=\"\"\n    local chr=\"\"\n    local index=\"\"\n    local replace=\"\
+    \"\n    local vowels=\"aeiou\"\n    local alphabet=\"abcdefghijklmnopqrstuvwxyz\"\
+    \n    local offset=2\n\n    # loop through all letters\n    for (( i=0; i<${#string};\
+    \ i++ )); do\n        chr=\"${string:$i:1}\"\n        # if character is an uppercase\
+    \ letter, then we need to\n        # replace it with a lowercase letter, and vice\
+    \ versa\n        if [[ $chr =~ [A-Z] ]]; then\n            chr=$( tr '[:upper:]'\
+    \ '[:lower:]' <<< \"$chr\" )\n        else\n            chr=$( tr '[:lower:]'\
+    \ '[:upper:]' <<< \"$chr\" )\n        fi\n        # now, we need to check if the\
+    \ character is a vowel\n        if [[ $vowels =~ (^|[[:space:]])$chr($|[[:space:]])\
+    \ ]]; then\n            # get position in alphabet\n            index=$(awk -v\
+    \ a=\"$alphabet\" -v b=\"$chr\" 'BEGIN{print index(a,b)}')\n            # get\
+    \ index of character after the offset, and wrap around\n            replace=\"\
+    ${alphabet:((index+offset)%26):1}\"\n            # replace the character with\
+    \ the replacement\n            chr=\"$replace\"\n        fi\n        # append\
+    \ the character to the result\n        result+=\"$chr\"\n    done\n    # return\
+    \ the result\n    echo \"$result\"", "  # tr is translate, it translates each\
+    \ letter in the first argument to the letter in the second argument.\n  local\
+    \ str=\"$(echo $1 | tr 'aeiou' 'cdfgh')\"\n  # We use the -pe to turn each character\
+    \ into a single line. \n  # The lc option means \"convert to lowercase\". The\
+    \ tr 'a-z' 'b-za' means \"for all lowercase letters, convert them to a letter\
+    \ in the alphabet that comes after them\".\n  # The /y option to tr means that\
+    \ the first argument is interpreted as a list of \"characters to translate\",\
+    \ not as a range.\n  # The tr -d '/n' is a hack to delete the newlines that were\
+    \ added by the -pe option.\n  # The -e option to sed is a hack because sed is\
+    \ not fully compatible with perl.\n  echo \"$str\" | sed -e 's/./\\L&/' | tr 'a-z'\
+    \ 'b-za' -y | tr -d '/n'", "    echo $1 | tr 'a-zA-Z' 'n-za-mN-ZA-M'", '    echo
+    "$1" | tr "a-zA-Z" "c-za-bC-ZA-B" | tr "aeiouAEIOU" "c-za-bC-ZA-B"', "  # Replace\
+    \ all vowels with the letter that appears two places ahead\n  # of that vowel\
+    \ in the english alphabet\n  echo \"$1\" | tr \"aeiou\" \"eggii\" | tr \"AEIOU\"\
+    \ \"EGGII\" | tr \"[:lower:]\" \"[:upper:]\"", "    echo $1 | sed 's/[AEIOUaeiou]/\\\
+    U&/g'", "    arr=(a b c d e f g h i j k l m n o p q r s t u v w x y z)\n    #echo\
+    \ ${arr[@]}\n    #echo ${#arr[@]}\n    echo $1 | tr '[:upper:]' '[:lower:]' |\
+    \ tr 'a-z' \"${arr[*]:2:26}${arr[*]:0:2}\" | tr 'aeiou' 'AEIOU'", "# set up an\
+    \ array with the vowels\nvowels=(a e i o u)\n# go through the string, character\
+    \ by character\nfor (( i=0; i<${#1}; i++ )); do\n# check if it's a letter, with\
+    \ a regex. If it is, it sets the\n# match value to 1. Otherwise, it matches nothing\
+    \ and sets it\n# to 0.\n#\n# This means that if it is a letter, $match will be\
+    \ 1.\nmatch=$(echo ${1:$i:1} | grep -Eq \"[a-zA-Z]\"; echo $?)\n# if it is a letter,\
+    \ then it will go into the if\nif [ $match -eq 1 ]; then\n# we need to check if\
+    \ it's a vowel\n# check whether the character is in the vowels array\n# if it\
+    \ is, then it will change the character to the character\n# 2 indices further\
+    \ on in the alphabet.\n#\n# if it's not a vowel, then we change the case\n#\n\
+    # if the character is \"z\", then it needs to be changed to \"b\"\nif [[ \"${vowels[@]}\"\
+    \ =~ \"${1:$i:1}\" ]]; then\n# we need to change the character to the character\
+    \ 2 indices \n# further on in the alphabet\n#\n# set up an array with the letters\
+    \ of the alphabet\nalphabet=(a b c d e f g h i j k l m n o p q r s t u v w x y\
+    \ z)\n# set up a variable to hold the value of the index\nletter_index=0\n# loop\
+    \ through the alphabet array to find the index of the\n# character in the array\n\
+    for (( x=0; x<${#alphabet[@]}; x++ )); do\nif [ \"${1:$i:1}\" == \"${alphabet[$x]}\"\
+    \ ]; then\nletter_index=$x\nfi\ndone\n# change the index of the letter to the\
+    \ index of the letter 2\n# indices further on in the alphabet.\n#\n# if the letter\
+    \ is y, the index is 25. We need the character\n# 2 indices further on in the\
+    \ alphabet, which would be \"b\"\n#\n# we add 2 to the index of the letter, and\
+    \ %26 it to get the", "  echo -n \"$1\" | tr '[a-z]' '[h-za-g]' | tr '[aeiou]'\
+    \ '[cdfgjk]'", '    # TODO:', "    # echo \"input string is: $1\"\n    # echo\
+    \ \"input length is: ${#1}\"\n    local encmsg=\"\"\n    for ((i=0; i<${#1}; i++));\
+    \ do\n        c=${1:$i:1}\n        # echo \"current char is: $c\"\n        if\
+    \ [[ $c =~ [A-Z] ]]; then\n            encmsg+=$(echo $c | tr '[A-Z]' '[a-z]')\n\
+    \        elif [[ $c =~ [a-z] ]]; then\n            encmsg+=$(echo $c | tr '[a-z]'\
+    \ '[A-Z]')\n        else\n            encmsg+=$c\n        fi\n    done\n    echo\
+    \ \"$encmsg\"", "    echo $1 | sed -e 's/[a-z]/\\U&/g' -e 's/[aeiou]/\\(.\\)\\\
+    1/g' -e 's/[A-Z]/\\l&/g'", "    local msg=\"$1\"\n    local first_char=$(echo\
+    \ \"$msg\" | head -c 1)\n    local first_char_upper=$(echo \"$msg\" | head -c\
+    \ 1 | tr \"[a-z]\" \"[A-Z]\")\n    local char_range=$(echo \"$msg\" | head -c\
+    \ 1 | tr \"[A-Z]\" \"[a-z]\")\n    local msg_rest=$(echo \"$msg\" | tail -c +2)\n\
+    \    local string_length=$(echo \"$msg\" | wc -c)\n    local char_index\n    local\
+    \ current_char\n\n    # Convert the first character to lowercase\n    if [ \"\
+    $first_char\" = \"$first_char_upper\" ]; then\n        msg=$(echo \"$msg\" | tr\
+    \ \"[A-Z]\" \"[a-z]\")\n    fi\n\n    for (( char_index=1; char_index<string_length;\
+    \ char_index++ )); do\n        current_char=$(echo \"$msg\" | head -c $char_index\
+    \ | tail -c 1)\n        current_char_upper=$(echo \"$current_char\" | tr \"[a-z]\"\
+    \ \"[A-Z]\")\n        if [ \"$current_char\" = \"$current_char_upper\" ]; then\n\
+    \            msg=$(echo \"$msg\" | sed \"s/^\\(.\\{$char_index\\}\\)\\(.\\{1\\\
+    }\\)/\\1\\L\\2/\")\n        fi\n    done\n\n    # Encode message:\n    #  1. Convert\
+    \ all vowels to upper case\n    #  2. Swap all letters (a->b, c->d, etc)\n   \
+    \ #  3. Convert all vowels to lower case\n    msg=$(echo \"$msg\" | tr \"[aeiou]\"\
+    \ \"[AEIOU]\" | tr \"$char_range\" \"$(echo \"$char_range\" | tr -d \"[aeiou]\"\
+    \ | tr -d \"[AEIOU]\" | tr \"$char_range\" \"$(echo \"$char_range\" | tail -c\
+    \ +2)${char_range:0:1}\")\" | tr \"[AEIOU]\" \"[aeiou]\")\n\n    echo \"$msg\"",
+  "\t# replace all vowels with letter that appears 2 places ahead\n\t# (in lowercase\
+    \ alphabet)\n\tencoded=$(echo $1 | sed -e 's/a/c/g' -e 's/e/g/g' -e 's/i/k/g'\
+    \ -e 's/o/q/g' -e 's/u/s/g')\n\t# change case\n\techo $encoded | tr 'a-z' 'A-Z'\
+    \ | tr 'A-Z' 'a-z'", "  # Write your code here\n  echo $1 | tr a-zA-Z n-za-mN-ZA-M\
+    \ | tr  aeiou  cegilc", "  # vars\n  local vowels=\"aeiouAEIOU\"\n  local message=$1\n\
+    \  local len=$(expr length \"$message\")\n  local char\n  local new_char\n  local\
+    \ i\n  local result\n\n  # validate params\n  if [ -z \"$message\" ]; then\n \
+    \   echo \"Usage: $(basename $0) <message>\"\n    return 1\n  fi\n\n  # encode\n\
+    \  for (( i=0; i<len; i++ )); do\n    char=${message:$i:1}\n    if [ $char ==\
+    \ \"$char\" | tr [:lower:] [:upper:] ]; then\n      new_char=${char,,}\n    else\n\
+    \      new_char=${char^^}\n    fi\n    if [ \"$(echo $vowels | tr ' ' '\\n' |\
+    \ grep -w $new_char)\" ]; then\n      new_char=$(echo $vowels | tr ' ' '\\n' |\
+    \ grep -w $new_char | sed -e \"s/$new_char//\" -e 's/^[ \\t]*//;s/[ \\t]*$//'\
+    \ | tr '\\n' ' ' | awk '{print $2}')\n    fi\n    result=\"$result$new_char\"\n\
+    \  done\n\n  # output\n  echo $result", "    ENCODED=\"\"\n    for ((i=0; i<${#1};\
+    \ i++)); do\n        LETTER=${1:$i:1}\n        case $LETTER in\n            [a-z])\n\
+    \                ENCODED=\"$ENCODED$(echo $LETTER | tr [a-z] [A-Z])\"\n      \
+    \          ;;\n            [A-Z])\n                ENCODED=\"$ENCODED$(echo $LETTER\
+    \ | tr [A-Z] [a-z])\"\n                ;;\n            [aeiou])\n            \
+    \    case $LETTER in\n                    [aeiou])\n                        NUM=0\n\
+    \                        ;;\n                    [AEIOU])\n                  \
+    \      NUM=1\n                        ;;\n                esac\n             \
+    \   REPLACEMENT=$(echo {b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}[$NUM]\
+    \ | tr [a-z] [A-Z])\n                ENCODED=\"$ENCODED$REPLACEMENT\"\n      \
+    \          ;;\n            *)\n                ENCODED=\"$ENCODED$LETTER\"\n \
+    \               ;;\n        esac\n    done\n    echo $ENCODED", "\techo -n $1\
+    \ | tr [a-z] [c-za-b] | tr \"aeiou\" \"eioua\"", '    echo "This function is not
+    implemented yet"', "    echo \"$1\" | sed 's/[aA]/c/g;s/[eE]/g/g;s/[iI]/k/g;s/[oO]/m/g;s/[uU]/o/g;y/abcdefghijklmnopqrstuvwxyz/BCDEFGHIJKLMNOPQRSTUVWXYZA/'",
+  "\techo -n $(tr '[:lower:]' '[:upper:]' <<< $1 | tr '[:upper:]' '[:lower:]' | tr\
+    \ '[AEIOUaeiou]' '[CGFKLcgfkl]')", "    # INSERT CODE HERE\n    echo \"TODO\"",
+  "    echo \"$1\" | tr \"A-Za-z\" \"a-zA-Z\" | tr 'a-z' 'c-za-b' | tr 'aeiou' 'eioua'",
+  "    local message=$1\n    local encoded=\"\"\n    local alphabet=(a b c d e f g\
+    \ h i j k l m n o p q r s t u v w x y z)\n    local alphabet_upper=(A B C D E\
+    \ F G H I J K L M N O P Q R S T U V W X Y Z)\n    local alphabet_length=${#alphabet[@]}\n\
+    \    local s e r\n    local i j\n\n    for (( i=0; i<${#message}; i++ )); do\n\
+    \        s=${message:$i:1}\n        for (( j=0; j<${alphabet_length}; j++ ));\
+    \ do\n            r=${alphabet[$j]}\n            e=${alphabet_upper[$j]}\n   \
+    \         if [[ \"$s\" == \"$r\" ]]; then\n                e=$(echo $e | tr '[A-Z]'\
+    \ '[B-ZA]')\n                encoded=${encoded}${e}\n                break\n \
+    \           elif [[ \"$s\" == \"$e\" ]]; then\n                r=$(echo $r | tr\
+    \ '[a-z]' '[b-za]')\n                encoded=${encoded}${r}\n                break\n\
+    \            fi\n        done\n    done\n\n    echo $encoded", "\t# Convert to\
+    \ lowercase\n\tlocal str=$(echo $1 | tr [:upper:] [:lower:])\n\t# Replace vowels\
+    \ with letter two places ahead in the alphabet\n\tstr=$(echo $str | tr \"a\" \"\
+    c\" | tr \"e\" \"g\" | tr \"i\" \"k\" | tr \"o\" \"q\" | tr \"u\" \"w\")\n\t#\
+    \ Convert to uppercase\n\tstr=$(echo $str | tr [:lower:] [:upper:])\n\techo $str",
+  "    #change to uppercase and replace vowels\n    local string=\"$(tr '[:lower:]'\
+    \ '[:upper:]' <<< ${1})\"\n    string=\"${string//A/C}\"\n    string=\"${string//E/G}\"\
+    \n    string=\"${string//I/K}\"\n    string=\"${string//O/Q}\"\n    string=\"\
+    ${string//U/W}\"\n    #change back to lowercase\n    string=\"$(tr '[:upper:]'\
+    \ '[:lower:]' <<< ${string})\"\n    echo \"${string}\"", "    local VOWELS=\"\
+    aeiou\"\n    local LETTERS=\"abcdefghijklmnopqrstuvwxyz\"\n    local ENGLISH=\"\
+    zabcdefghijklmnopqrstuvwxy\"\n    local result=\"\"\n    local c=\"\"\n    local\
+    \ idx=\"\"\n    local str=\"\"\n    local length=\"\"\n    local i=\"\"\n    local\
+    \ var=\"\"\n    str=\"$1\"\n    var=$(echo \"$str\" | tr '[:upper:]' '[:lower:]')\n\
+    \    for (( i=0; i<${#var}; i++ )); do\n        c=${var:$i:1}\n        idx=$(expr\
+    \ index \"${VOWELS}\" \"${c}\")\n        if [[ \"$idx\" == \"0\" ]]; then\n  \
+    \          idx=$(expr index \"${LETTERS}\" \"${c}\")\n            if [[ \"$idx\"\
+    \ == \"0\" ]]; then\n                result=$result$c\n            else\n    \
+    \            idx=$(expr $idx % 26)\n                c=${ENGLISH:$idx:1}\n    \
+    \            result=$result$c\n            fi\n        else\n            c=${var:$i:2}\n\
+    \            c=${c:1:1}\n            idx=$(expr index \"${VOWELS}\" \"${c}\")\n\
+    \            c=${VOWELS:$idx:1}\n            result=$result$c\n            i=$(expr\
+    \ $i + 1)\n        fi\n    done\n    length=${#result}\n    for (( i=0; i<${#result};\
+    \ i++ )); do\n        c=${result:$i:1}\n        idx=$(expr index \"${LETTERS}\"\
+    \ \"${c}\")\n        if [[ \"$idx\" == \"0\" ]]; then\n            result=$result$c\n\
+    \        else\n            result=${result:0:$i}${result:$i:1^^}${result:$i+1:$length}\n\
+    \        fi\n    done\n    echo \"$result\"", "  \n  res=\"$1\"\n  res=\"${res,,}\"\
+    \n  res=\"${res^^}\"\n  res=\"${res//a/c}\"\n  res=\"${res//e/g}\"\n  res=\"${res//i/k}\"\
+    \n  res=\"${res//o/q}\"\n  res=\"${res//u/w}\"\n  echo $res", "    # TODO: Your\
+    \ code here.\n    local str=$1\n    local len=${#str}\n    local res=''\n    for\
+    \ (( i=0; i<$len; i++ )); do\n        char=${str:$i:1}\n        if [[ $char =~\
+    \ [A-Z] ]]; then\n            res=$res${char,,}\n        elif [[ $char =~ [a-z]\
+    \ ]]; then\n            res=$res${char^^}\n        else\n            res=$res$char\n\
+    \        fi\n    done\n    str=$res\n    len=${#str}\n    res=''\n    for (( i=0;\
+    \ i<$len; i++ )); do\n        char=${str:$i:1}\n        if [[ $char =~ [aeiou]\
+    \ ]]; then\n            j=$((i+2))\n            char=${str:$j:1}\n           \
+    \ j=$((j+1))\n            if [[ $char =~ [A-Z] ]]; then\n                res=$res${char,,}\n\
+    \            elif [[ $char =~ [a-z] ]]; then\n                res=$res${char^^}\n\
+    \            else\n                res=$res$char\n            fi\n        else\n\
+    \            res=$res$char\n        fi\n    done\n    echo $res", '    echo "$1"
+    | tr "[:lower:]" "[:upper:]" | tr "AEIOU" "EGIKOS"', '  echo "Not implemented"',
+  "  # your code here\n  echo \"$1\" | tr '[:lower:]' '[:upper:]' | tr 'AEIOU' 'ECIGB'\
+    \ | tr '[:upper:]' '[:lower:]'", "    # Generate a string that contains all vowels\
+    \ in upper and lower case\n    vowels=`echo {a..z} | sed 's/[^aeiou]//g'`\n  \
+    \  vowelsUpper=`echo ${vowels^^}`\n\n    # echo \"${vowels}${vowelsUpper}\"\n\n\
+    \    # Do a substitution of all characters in the string\n    echo $1 | sed -E\
+    \ \"s/[a-z]/\\U&/g\" | sed -E \"s/[A-Z]/\\L&/g\" | sed -E \"s/[$vowels$vowelsUpper]/\\\
+    L&\\U&/g\"", "  # your code here\n  echo \"$1\"", '    echo $1 | tr "[:lower:]"
+    "[:upper:]" | tr "AEGIOSZ" "CFIQVTX"', "\tif [[ -z $1 ]]; then\n\t\techo \"No\
+    \ args given\"\n\t\treturn\n\tfi\n\tmsg=\"$1\"\n\techo \"${msg}\" | tr [a-z] [A-Z]\n\
+    \techo \"${msg}\" | tr [A-Z] [a-z]\n\techo \"${msg}\" | tr [A-Za-z] 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'",
+  "    echo \"$1\" | tr '[:lower:]' '[:upper:]' | tr '[A-Z]' '[C-ZA-B]' | tr 'AEIOU'\
+    \ 'aeiou'", "  # Your code here\n  # Example usage:\n  #   $(encode \"test\")\n\
+    \  echo $(echo $1 | tr [:lower:] [:upper:] | tr \"AEIOU\" \"EGITW\")", "\t# #\
+    \ substitute for each letter\n\t# for letter in {a..z}; do\n\t# \t# uppercase\
+    \ ltr\n\t# \tup_ltr=$(echo $letter | tr '[:lower:]' '[:upper:]')\n\t# \t# substitute\
+    \ letters\n\t# \tnew_msg=$(echo $1 | sed -e \"s/$letter/$up_ltr/\")\n\t# \t# new_msg=$(echo\
+    \ $new_msg | sed -e \"s/$up_ltr/$letter/\")\n\t# done\n\t# # output\n\t# echo\
+    \ $new_msg\n\n\t# bad because we have to handle special cases\n\techo $1 | tr\
+    \ '[:lower:]' '[:upper:]' | tr '[AEIOU]' '[CFKPTV]'", "    # initialize an empty\
+    \ string\n    local message=\"\"\n    # iterate over all characters in the string\n\
+    \    for (( i=0; i<${#1}; i++ )); do\n        # initialize a string of all the\
+    \ vowels\n        local vowels=\"AEIOUaeiou\"\n        # initialize a string of\
+    \ all the consonants\n        local consonants=\"BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz\"\
+    \n        # if the $i'th character is a vowel,\n        if [[ $vowels =~ ${1:$i:1}\
+    \ ]]; then\n            # append the $i'th character plus 2 characters, mod 26\n\
+    \            message+=\"${1:$(((i+2)%26)):1}\"\n        # if the $i'th character\
+    \ is a consonant,\n        elif [[ $consonants =~ ${1:$i:1} ]]; then\n       \
+    \     # append the uppercase version of the $i'th character\n            message+=\"\
+    ${1:$i:1^^}\"\n        # otherwise,\n        else\n            # append the $i'th\
+    \ character\n            message+=\"${1:$i:1}\"\n        fi\n    done\n    # print\
+    \ the message\n    echo \"$message\"", "    #encode.py $1 | tr 'A-Z' 'a-z'\n \
+    \   python3 - <<EOF\nimport string\nmessage = \"$1\"\n\nnew_message = []\n\nalphabet\
+    \ = string.ascii_lowercase\n\nfor x in message:\n    if x in \"aeiou\":\n    \
+    \    new_message.append(alphabet[alphabet.index(x) + 2])\n    elif x.isupper():\n\
+    \        new_message.append(x.lower())\n    else:\n        new_message.append(x)\n\
+    \        \nprint(''.join(new_message))\nEOF", "  if [ $# -eq 0 ]; then\n    return;\n\
+    \  fi\n  str=$1\n  encoded=''\n  for i in $(seq 0 $((${#str} - 1))); do\n    char=${str:$i:1}\n\
+    \    if [[ $char =~ [A-Z] ]]; then\n      encoded+=${char,,}\n    elif [[ $char\
+    \ =~ [a-z] ]]; then\n      encoded+=${char^^}\n    else\n      encoded+=$char\n\
+    \    fi\n  done\n  echo $encoded", "    echo \"$1\" | tr 'a-zA-Z' 'N-ZA-Mn-za-m'\
+    \ | tr 'aeiou' 'cdfghj'", "  local s=$1\n  s=$(echo \"$s\" | tr [a-z] [n-za-m])\n\
+    \  s=$(echo \"$s\" | tr [A-Z] [N-ZA-M])\n  s=$(echo \"$s\" | tr [aeiou] [cegikmoqsuwy])\n\
+    \  s=$(echo \"$s\" | tr [AEIOU] [CEGIKMOQSUWY])\n  echo \"$s\"", "\t# Since there\
+    \ is no error handling for args, assume good arg\n\t# Change all letters to lower\
+    \ case\n\t# Change all \"a\" to \"c\"\n\t# Change all \"e\" to \"g\"\n\t# Change\
+    \ all \"i\" to \"k\"\n\t# Change all \"o\" to \"q\"\n\t# Change all \"u\" to \"\
+    w\"\n\t# Change all \"A\" to \"C\"\n\t# Change all \"E\" to \"G\"\n\t# Change\
+    \ all \"I\" to \"K\"\n\t# Change all \"O\" to \"Q\"\n\t# Change all \"U\" to \"\
+    W\"\n\techo $1 | tr [:upper:] [:lower:] | tr 'aAeEiIoOuU' 'cCgGkKqQwW'", "  echo\
+    \ $1 | tr '[:lower:]' '[:upper:]' | sed 's/[AEIOU]/\\U&/g' | tr 'AEIOU' 'CGFKP'\
+    \ | tr '[:upper:]' '[:lower:]'", "\t#change the case\n\tlocal string=\"$1\"\n\t\
+    local c\n\tlocal out=''\n\tfor ((i=0; i<${#string}; i++)); do\n\t\tc=${string:$i:1}\n\
+    \t\t[[ $c =~ [a-z] ]] && out+=\"$(tr '[:lower:]' '[:upper:]' <<< $c)\"\n\t\t[[\
+    \ $c =~ [A-Z] ]] && out+=\"$(tr '[:upper:]' '[:lower:]' <<< $c)\"\n\tdone\n\t\
+    #replace vowels\n\tlocal c\n\tlocal out=''\n\tfor ((i=0; i<${#string}; i++));\
+    \ do\n\t\tc=${string:$i:1}\n\t\t[[ $c =~ [a] ]] && out+=\"c\"\n\t\t[[ $c =~ [e]\
+    \ ]] && out+=\"g\"\n\t\t[[ $c =~ [i] ]] && out+=\"k\"\n\t\t[[ $c =~ [o] ]] &&\
+    \ out+=\"s\"\n\t\t[[ $c =~ [u] ]] && out+=\"y\"\n\t\t[[ $c =~ [A] ]] && out+=\"\
+    C\"\n\t\t[[ $c =~ [E] ]] && out+=\"G\"\n\t\t[[ $c =~ [I] ]] && out+=\"K\"\n\t\t\
+    [[ $c =~ [O] ]] && out+=\"S\"\n\t\t[[ $c =~ [U] ]] && out+=\"Y\"\n\tdone\n\techo\
+    \ $out", "\t# Get the first letter\n\t# Get the first letter in lowercase\n\t\
+    # Get the lowercase representation of the character after the first char\n\t#\
+    \ Get the lowercase representation of the character after the third char\n\t#\
+    \ Print them in the desired order\n\techo -n \"$1\" | sed 's/^\\(.\\)\\(.\\)\\\
+    (.\\)/\\2\\1\\3/' | sed 's/\\([aeiou]\\)/\\1\\1/g' | tr '[:lower:]' '[:upper:]'",
+  "    local input\n    input=\"$1\"\n    # swap case\n    echo \"$input\" | tr '[a-z]'\
+    \ '[A-Z]' | tr '[A-Z]' '[a-z]'\n    # replace vowels with 2 steps ahead\n    echo\
+    \ \"$input\" | tr 'aeiou' 'cfilor'", '    echo $1 | tr "[a-z]" "[c-za-b]" | tr
+    "[aeiouAEIOU]" "[cdhjlCDHJL]"', "    local string=$1\n    local length=${#string}\n\
+    \    for((j=0;j<$length;j++)); do\n        local ch=${string:$j:1}\n        for((i=0;i<${#vowels};i++));\
+    \ do\n            if [[ \"$ch\" == \"${vowels:$i:1}\" ]]; then\n             \
+    \   ch=\"${vowels:$(($i+2)):1}\"\n                break\n            fi\n    \
+    \    done\n        ch=${ch,,*}\n        encoded=\"$encoded$ch\"\n    done\n  \
+    \  echo $encoded", "  # The goal is to capture all the arguments in a string\n\
+    \  local sArg=\"\"\n\n  # For each argument\n  for sArgument in \"$@\"\n  do\n\
+    \    # concatenate the arguments\n    sArg+=\"$sArgument \"\n  done\n\n  # Make\
+    \ the argument all lower case\n  sArg=$( echo \"$sArg\" | tr \"[:upper:]\" \"\
+    [:lower:]\" )\n\n  # Replace the vowels with the character 2 spaces ahead\n  #\
+    \ of them in the alphabet\n  sArg=$( echo \"$sArg\" | tr \"aeiou\" \"cglnx\" )\n\
+    \n  # Make the argument all upper case\n  sArg=$( echo \"$sArg\" | tr \"[:lower:]\"\
+    \ \"[:upper:]\" )\n\n  # Remove the extra space we added\n  sArg=${sArg% }\n\n\
+    \  # Return the string\n  echo \"$sArg\"", "  if [ $# -lt 1 ]; then\n      echo\
+    \ \"No arguments supplied\"\n      return 1\n  fi\n  \n  echo \"$1\" | sed -E\
+    \ \\\n    -e 's/[a-z]/\\U&/g' \\\n    -e 's/[aA]/[Cc]/g' \\\n    -e 's/[eE]/[Gg]/g'\
+    \ \\\n    -e 's/[iI]/[Kk]/g' \\\n    -e 's/[oO]/[Mm]/g' \\\n    -e 's/[uU]/[Oo]/g'\n\
+    \  \n  return 0", '    echo $1 | tr "[:lower:]" "[:upper:]" | tr "AEOIU" "CGRVN"',
+  "\tchar=''\n\tvowels='a e i o u'\n\tpos=1\n\twhile [ $pos -le ${#1} ]; do\n\t\t\
+    char=${1:$pos-1:1}\n\t\tif [[ \"$char\" =~ [a-z] ]]; then\n\t\t\tif [[ \"$char\"\
+    \ =~ [a-z] ]]; then\n\t\t\t\tif [[ \"$char\" =~ [a-z] ]]; then\n\t\t\t\t\tval=$(($(($char+3))%26))\n\
+    \t\t\t\t\tif [[ \"$char\" =~ [A-Z] ]]; then\n\t\t\t\t\t\techo -n ${string:$val:1}\
+    \ | tr \"[a-z]\" \"[A-Z]\"\n\t\t\t\t\telse\n\t\t\t\t\t\techo -n ${string:$val:1}\n\
+    \t\t\t\t\tfi\n\t\t\t\telse\n\t\t\t\t\techo -n \"$char\"\n\t\t\t\tfi\n\t\t\telse\n\
+    \t\t\t\techo -n \"$char\"\n\t\t\tfi\n\t\telse\n\t\t\techo -n \"$char\"\n\t\tfi\n\
+    \t\t((pos++))\n\tdone\n\techo \"\"", "\t# Convert $1 to uppercase (returns a copy\
+    \ of string in uppercase)\n\tlocal str=\"$(echo $1 | tr '[:lower:]' '[:upper:]')\"\
+    \n\t# Replace all vowels with the letter that appears 2 places ahead\n\tstr=\"\
+    ${str//A/C}\"\n\tstr=\"${str//E/G}\"\n\tstr=\"${str//I/K}\"\n\tstr=\"${str//O/Q}\"\
+    \n\tstr=\"${str//U/W}\"\n\t# Return value of function\n\techo \"$str\"", "  #\
+    \ convert to uppercase\n  enc_str=$(echo $1 | tr '[:lower:]' '[:upper:]')\n  #\
+    \ replace vowels with letter 2 ahead\n  enc_str=$(echo $enc_str | sed -e 's/A/C/g'\
+    \ -e 's/E/G/g' -e 's/I/K/g' -e 's/O/Q/g' -e 's/U/W/g')\n  # convert back to lowercase\n\
+    \  enc_str=$(echo $enc_str | tr '[:upper:]' '[:lower:]')\n  echo $enc_str", " \
+    \   # Write your code here\n    echo \"$@\" | sed -r 's/[a-z]/\\U&/g' | sed -r\
+    \ 's/[a-z]/\\L&/g' | tr '[A-Z]' '[C-ZA-B]' | tr '[aeiou]' '[eoiu]'", "  local\
+    \ message=$1\n  # Your code here", "    # TODO: Your code here!\n\techo $1 | tr\
+    \ [a-z] [b-za] | tr [aeiou] [cdgikmoqsuwy]", "\nnew_letter_func() {\n    l=$1\n\
+    \    if [ $(echo $l | tr \"[A-Z]\" \"[a-z]\") == \"a\" ]; then\n        echo \"\
+    c\"\n    elif [ $(echo $l | tr \"[A-Z]\" \"[a-z]\") == \"e\" ]; then\n       \
+    \ echo \"g\"\n    elif [ $(echo $l | tr \"[A-Z]\" \"[a-z]\") == \"i\" ]; then\n\
+    \        echo \"k\"\n    elif [ $(echo $l | tr \"[A-Z]\" \"[a-z]\") == \"o\" ];\
+    \ then\n        echo \"q\"\n    elif [ $(echo $l | tr \"[A-Z]\" \"[a-z]\") ==\
+    \ \"u\" ]; then\n        echo \"y\"\n    else\n        echo $l\n    fi", "\tlocal\
+    \ answer=\"\"\n\tlocal temp_letter=\"\"\n\t# loop through each letter of the string\n\
+    \tfor (( i=0; i<${#1}; i++ )); do\n\t\t# get the current letter\n\t\ttemp_letter=\"\
+    ${1:$i:1}\"\n\t\t# if lowercase\n\t\tif [[ $temp_letter =~ [a-z] ]]; then\n\t\t\
+    \t# switch to uppercase\n\t\t\ttemp_letter=$(echo \"$temp_letter\" | tr 'a-z'\
+    \ 'A-Z')\n\t\t# if uppercase\n\t\telif [[ $temp_letter =~ [A-Z] ]]; then\n\t\t\
+    \t# switch to lowercase\n\t\t\ttemp_letter=$(echo \"$temp_letter\" | tr 'A-Z'\
+    \ 'a-z')\n\t\tfi\n\t\t# if vowel, change to 2 ahead\n\t\tif [[ $temp_letter =~\
+    \ [aeiou] ]]; then\n\t\t\t# convert to number representation\n\t\t\ttemp_letter=$(echo\
+    \ \"$temp_letter\" | tr 'aeiou' '01234')\n\t\t\t# add 2\n\t\t\ttemp_letter=$((temp_letter+2))\n\
+    \t\t\t# get modulus 5 number\n\t\t\ttemp_letter=$((temp_letter%5))\n\t\t\t# switch\
+    \ to letter\n\t\t\ttemp_letter=$(echo \"$temp_letter\" | tr '01234' 'aeiou')\n\
+    \t\tfi\n\t\t# add to answer\n\t\tanswer=\"$answer$temp_letter\"\n\tdone\n\t# return\
+    \ answer\n\techo \"$answer\"", "    msg=`echo $1 | tr '[:lower:]' '[:upper:]'`\n\
+    \    msg=`echo $msg | tr 'AEIOU' 'CGKQS'`\n    echo $msg", "# YOUR CODE HERE\n\
+    \    echo $1 | tr '[:lower:]' '[:upper:]' | sed -e 's/A/C/g' -e 's/E/G/g' -e 's/I/K/g'\
+    \ -e 's/O/Q/g' -e 's/U/W/g' | tr '[:upper:]' '[:lower:]' | sed -e 's/a/c/g' -e\
+    \ 's/e/g/g' -e 's/i/k/g' -e 's/o/q/g' -e 's/u/w/g'", "  local data=\"$1\"\n\n\
+    \  # Swap case\n  # echo \"$data\" | tr '[:lower:]' '[:upper:]' | tr '[:upper:]'\
+    \ '[:lower:]'\n\n  # Replace with the letter that appears 2 places ahead of that\
+    \ vowel\n  echo \"$data\" | tr '[:lower:]' '[:upper:]' | tr \"[:upper:]\" \"[:lower:]\"\
+    \ | tr \"aeiou\" \"cfilor\"", "    echo \"$1\" | tr 'a-zA-Z' 'e-za-dE-ZA-D' |\
+    \ tr 'aeiou' 'cfgjk'", "  local vowels=\"aeiou\"\n  local upper_vowels=\"AEIOU\"\
+    \n  local encoded=\n  local letter\n  local str=$1\n  # loop through string\n\
+    \  for (( index=0; index<${#str}; index++ ))\n  do\n    letter=${str:$index:1}\n\
+    \    # check for vowel\n    if [[ \"$vowels\" =~ \"$letter\" ]] || [[ \"$upper_vowels\"\
+    \ =~ \"$letter\" ]]\n    then\n      # get next 2 letters\n      encoded=\"$encoded\"\
+    ${str:$((index+2)):1}\n    else\n      # switch case and add\n      if [[ \"$letter\"\
+    \ =~ [A-Z] ]]\n      then\n        encoded=\"$encoded\"${letter,,}\n      else\n\
+    \        encoded=\"$encoded\"${letter^^}\n      fi\n    fi\n  done\n  echo \"\
+    $encoded\"", "    echo $1 | sed 'y/aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ/cCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZaAbB/'",
+  "  echo $1 | tr '[:lower:]' '[:upper:]' | sed 's/[AEIOU]/\\U&/g' | tr 'AEIOU' 'CGFKP'\
+    \ | tr '[:upper:]' '[:lower:]'", "    echo $1 | tr 'A-Za-z' 'N-ZA-Mn-za-m' | sed\
+    \ 's/[aeiou]/&\\{2\\}/g' | tr 'aeiou' 'ABDFHJLNPRTVX'", "    # $tmp is not visible\n\
+    \    # outside of this function\n    local tmp=$1\n    # replace vowels with 2-letters-ahead\n\
+    \    tmp=$(sed 's/a/c/g;s/e/g/g;s/i/k/g;s/o/q/g;s/u/s/g;s/A/C/g;s/E/G/g;s/I/K/g;s/O/Q/g;s/U/S/g'\
+    \ <<< \"$tmp\")\n    # swap case\n    tmp=$(tr '[:lower:]' '[:upper:]' <<< \"\
+    $tmp\")\n    # return the result\n    echo \"$tmp\"", "    # Transform the string\
+    \ to upper case\n    input_string=$(echo $1 | tr '[:lower:]' '[:upper:]')\n  \
+    \  # Replace all vowels with the letter that appears two places ahead of it\n\
+    \    encoded_string=$(echo $input_string | tr 'AEGIOU' 'CFHKSW')\n    # Echo the\
+    \ result\n    echo $encoded_string", "  # Your code here:\n  return 0", "    declare\
+    \ -A alpha\n    alpha=([a]=c [e]=g [i]=k [o]=q [u]=s [A]=C [E]=G [I]=K [O]=Q [U]=S)\n\
+    \    local encoded\n    local char\n    for (( i=0; i<${#1}; i++ )); do\n    \
+    \    char=${1:$i:1}\n        if [[ ${alpha[$char]} ]]; then\n            encoded+=\"\
+    ${alpha[$char]}\"\n        else\n            encoded+=\"$char\"\n        fi\n\
+    \    done\n    echo \"$encoded\"", "    # read the string and split each character\
+    \ into an array\n    arr=($(echo $1 | fold -w1))\n    # create an array with the\
+    \ vowels in the alphabet\n    vowels=(\"a\" \"e\" \"i\" \"o\" \"u\")\n    # create\
+    \ an array with the alphabet\n    alphabet=(\"a\" \"b\" \"c\" \"d\" \"e\" \"f\"\
+    \ \"g\" \"h\" \"i\" \"j\" \"k\" \"l\" \"m\" \"n\" \"o\" \"p\" \"q\" \"r\" \"s\"\
+    \ \"t\" \"u\" \"v\" \"w\" \"x\" \"y\" \"z\")\n    # create an array with the result\n\
+    \    result=()\n    # for each character in the string\n    for char in \"${arr[@]}\"\
+    \n    do\n        # if its not a letter\n        if [[ $char =~ [^a-zA-Z] ]];\
+    \ then\n            # add it to the result array\n            result+=($char)\n\
+    \        else\n            # loop through the alphabet array\n            for\
+    \ i in \"${!alphabet[@]}\"\n            do\n                # if the character\
+    \ is equal to the alphabet letter\n                if [[ $char == ${alphabet[$i]}\
+    \ ]]; then\n                    # if the alphabet letter is lowercase\n      \
+    \              if [[ $char =~ [a-z] ]]; then\n                        # if the\
+    \ alphabet letter is in the vowel array\n                        if [[ ${vowels[*]}\
+    \ =~ $char ]]; then\n                            # if its the last letter of the\
+    \ alphabet\n                            if [[ $i -eq 25 ]]; then\n           \
+    \                     # add the first letter in the alphabet to the result array\n\
+    \                                result+=(${alphabet[0]})\n                  \
+    \          else\n                                # add the 2nd next letter in\
+    \ the alphabet to the result array\n                                result+=(${alphabet[$i+2]})\n\
+    \                            fi\n                        else\n              \
+    \              # if its the last letter of the alphabet\n                    \
+    \        if [[ $i -eq 25 ]]; then\n                                # add the first\
+    \ uppercase letter in the alphabet to the result array\n                     \
+    \           result+=(${alphabet[0]} | tr [:lower:] [:upper:])\n", "\t# TODO: Implement\
+    \ this function", '    # Add code here', "  local key=\"aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ\"\
+    \n  local input=$1\n  local output=\"\"\n  echo $input\n  # echo $key\n  for ((\
+    \ i=0; i<${#input}; i++ )); do\n    # echo $i\n    # echo ${input:$i:1}\n    #\
+    \ echo ${key:$(($i*2)):1}\n    # echo ${key:$(($i*2+1)):1}\n    if [[ ${input:$i:1}\
+    \ =~ [a-z] ]]; then\n      # echo ${key:$(($i*2)):1}\n      output+=\"${key:$(($i*2)):1}\"\
+    \n    elif [[ ${input:$i:1} =~ [A-Z] ]]; then\n      # echo ${key:$(($i*2+1)):1}\n\
+    \      output+=\"${key:$(($i*2+1)):1}\"\n    else\n      output+=\"${input:$i:1}\"\
+    \n    fi\n  done\n  echo $output", "  local test=\"$1\"\n  local test2=\"\"\n\
+    \  for (( i=0; i<${#test}; i++ )); do\n    char=${test:$i:1}\n    char_ascii=$(printf\
+    \ '%d' \"'$char\")\n    if [[ $char_ascii -ge 65 && $char_ascii -le 90 ]]; then\n\
+    \      # Uppercase\n      if [[ $char == [Aa] ]]; then\n        test2+=\"C\"\n\
+    \      elif [[ $char == [Ee] ]]; then\n        test2+=\"G\"\n      elif [[ $char\
+    \ == [Ii] ]]; then\n        test2+=\"K\"\n      elif [[ $char == [Oo] ]]; then\n\
+    \        test2+=\"Q\"\n      elif [[ $char == [Uu] ]]; then\n        test2+=\"\
+    S\"\n      else\n        test2+=$(tr [A-Z] [a-z] <<< $char)\n      fi\n    elif\
+    \ [[ $char_ascii -ge 97 && $char_ascii -le 122 ]]; then\n      # Lowercase\n \
+    \     if [[ $char == [Aa] ]]; then\n        test2+=\"c\"\n      elif [[ $char\
+    \ == [Ee] ]]; then\n        test2+=\"g\"\n      elif [[ $char == [Ii] ]]; then\n\
+    \        test2+=\"k\"\n      elif [[ $char == [Oo] ]]; then\n        test2+=\"\
+    q\"\n      elif [[ $char == [Uu] ]]; then\n        test2+=\"s\"\n      else\n\
+    \        test2+=$(tr [a-z] [A-Z] <<< $char)\n      fi\n    else\n      test2+=$char\n\
+    \    fi\n  done\n  echo $test2", '', "  if [ $# -ne 1 ]; then\n    echo \"You\
+    \ must enter a valid string\"\n    exit 1\n  fi\n  mystring=$1\n  mystring=${mystring,,}\n\
+    \  echo $mystring | tr [a-z] [c-za-b] | tr [aeiou] [eiuoa] | tr [A-Z] [C-ZA-B]\
+    \ | tr [AEIOU] [EIUOA]", "  # FILL IN CODE HERE\n  echo \"$@\" | tr '[:lower:]'\
+    \ '[:upper:]' | sed 's/A/C/g;s/E/G/g;s/I/K/g;s/O/Q/g;s/U/W/g;s/Y/A/g' | tr '[:upper:]'\
+    \ '[:lower:]'", "    echo \"$1\" | tr a-zA-Z 'bcdefghijklmnopqrstuvwxyzaBCDEFGHIJKLMNOPQRSTUVWXYZA'",
+  "    if [[ ! -z \"$1\" ]]; then\n        awk -v msg=\"$1\" 'BEGIN {\n          \
+    \  alphabet = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\";\n            vowels = \"AEIOU\"\
+    ;\n            enc_alphabet = \"\";\n            map = \"\";\n            l =\
+    \ length(alphabet);\n            n = length(vowels);\n            # Make a copy\
+    \ of alphabet\n            for (i = 1; i <= l; i++) {\n                c = substr(alphabet,\
+    \ i, 1);\n                if (c == c ~ /[a-z]/) {\n                    c = toupper(c);\n\
+    \                } else {\n                    c = tolower(c);\n             \
+    \   }\n                enc_alphabet = enc_alphabet c;\n            }\n       \
+    \     # Make a char mapping of alphabet to enc_alphabet\n            for (i =\
+    \ 1; i <= l; i++) {\n                map[substr(alphabet, i, 1)] = substr(enc_alphabet,\
+    \ i, 1);\n            }\n            # For each char in msg replace with the encoded\
+    \ one\n            for (i = 1; i <= length(msg); i++) {\n                c = substr(msg,\
+    \ i, 1);\n                if (index(vowels, toupper(c)) > 0) {\n             \
+    \       # Encode vowel\n                    printf map[toupper(c)];\n        \
+    \        } else {\n                    # Encode consonant\n                  \
+    \  printf map[c];\n                }\n            }\n            print \"\";\n\
+    \        }'\n    fi", "  if [[ \"$#\" -ne 1 ]]; then\n    echo \"Usage: $(basename\
+    \ $0) <message>\"\n    exit 1\n  fi\n  message=$1\n  echo $message | tr '[:lower:]'\
+    \ '[:upper:]' | tr 'AEGIOT' 'CFKPUV'", "    if [ -z \"$1\" ]; then\n        return\
+    \ 1\n    fi\n    echo \"$1\" | tr [a-z] [A-Z] | tr [AEIOU] [EOUAI]", "\t#\n\t\
+    # YOUR CODE HERE\n\t#\n\tnewString=\"\"\n\tfor (( i=0; i<${#1}; i++ )); do\n\t\
+    \tchar=${1:$i:1}\n\t\tif [[ $char =~ [a-z] ]]; then\n\t\t\tif [[ $char =~ [A-Z]\
+    \ ]]; then\n\t\t\t\tchar=${char,,}\n\t\t\telse\n\t\t\t\tchar=${char^^}\n\t\t\t\
+    fi\n\t\tfi\n\t\tif [[ $char =~ [aeiou] ]]; then\n\t\t\tcase $char in\n\t\t\t\t\
+    a) char=\"c\";;\n\t\t\t\te) char=\"g\";;\n\t\t\t\ti) char=\"k\";;\n\t\t\t\to)\
+    \ char=\"s\";;\n\t\t\t\tu) char=\"y\";;\n\t\t\tesac\n\t\tfi\n\t\tnewString+=$char\n\
+    \tdone\n\techo $newString", "\techo $1 | tr a-zA-Z 'A-Za-z' | tr A-Z n-za-mN-ZA-M\
+    \ | tr a-z k-za-jK-ZA-J", '  echo $1 | tr "[A-Z]" "[N-ZA-M]"', "  echo \"$1\"\
+    \ | tr '[:lower:]' '[:upper:]' | tr 'AEGIOSUBCDFGHJKLMNPQRTVWXYZ' 'CFIORUYBJHXDSMVNGQZLAWPTEK'\
+    \ | tr '[:upper:]' '[:lower:]' ", "    lowercase='abcdefghijklmnopqrstuvwxyz'\n\
+    \    uppercase='ABCDEFGHIJKLMNOPQRSTUVWXYZ'\n    len=${#lowercase}\n    #echo\
+    \ $len\n    #echo ${lowercase:0:1}\n    #echo ${lowercase:1:1}\n    #echo ${lowercase:2:1}\n\
+    \    #echo ${lowercase:3:1}\n    #echo ${lowercase:4:1}\n    #echo ${lowercase:25:1}\n\
+    \    #echo ${lowercase:26:1}\n    #echo ${lowercase:27:1}\n    #echo ${lowercase:28:1}\n\
+    \    #echo ${lowercase:29:1}\n    #echo ${lowercase:30:1}\n    #echo ${lowercase:31:1}\n\
+    \    #echo ${lowercase:32:1}\n    #echo ${lowercase:33:1}\n    #echo ${lowercase:34:1}\n\
+    \    #echo ${lowercase:35:1}\n    #echo ${lowercase:36:1}\n    #echo ${lowercase:37:1}\n\
+    \    #echo ${lowercase:38:1}\n    #echo ${lowercase:39:1}\n    #echo ${lowercase:40:1}\n\
+    \    #echo ${lowercase:41:1}\n    #echo ${lowercase:42:1}\n    #echo ${lowercase:43:1}\n\
+    \    #echo ${lowercase:44:1}\n    #echo ${lowercase:45:1}\n    #echo ${lowercase:46:1}\n\
+    \    #echo ${lowercase:47:1}\n    #echo ${lowercase:48:1}\n    #echo ${lowercase:49:1}\n\
+    \    #echo ${lowercase:50:1}\n    #echo ${lowercase:51:1}\n    #echo ${lowercase:52:1}\n\
+    \    #echo ${lowercase:53:1}\n    #echo ${lowercase:54:1}\n    #echo ${lowercase:55:1}\n\
+    \    #echo ${lowercase:56:1}\n    #echo ${lowercase:57:1", "    # TODO: Fill this\
+    \ function.\n    message=$1\n    echo \"$message\" | tr '[:lower:]' '[:upper:]'\
+    \ \\\n    | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'cdefghijklmnopqrstuvwxyzab' \\\n\
+    \    | tr 'aeiou' 'BCDFGHJKLMNPQRSTVWXYZ'", "    echo $1 | tr A-Z a-z | tr 'aeiou'\
+    \ 'eioua' | tr a-z A-Z", "\tencode_result=''\n\tfor(( i=0; i<${#1}; i++ )); do\n\
+    \t\tchar=\"${1:$i:1}\"\n\t\tis_upper=$(echo \"$char\" | grep -P '[[:upper:]]')\n\
+    \t\tis_lower=$(echo \"$char\" | grep -P '[[:lower:]]')\n\t\tif [ \"$is_upper\"\
+    \ ]; then\n\t\t\t# character is upper case\n\t\t\tif [ \"$char\" == \"A\" ]; then\n\
+    \t\t\t\tchar=\"C\"\n\t\t\telif [ \"$char\" == \"E\" ]; then\n\t\t\t\tchar=\"G\"\
+    \n\t\t\telif [ \"$char\" == \"I\" ]; then\n\t\t\t\tchar=\"K\"\n\t\t\telif [ \"\
+    $char\" == \"O\" ]; then\n\t\t\t\tchar=\"Q\"\n\t\t\telif [ \"$char\" == \"U\"\
+    \ ]; then\n\t\t\t\tchar=\"S\"\n\t\t\telse\n\t\t\t\t# encode letter\n\t\t\t\tcase\
+    \ \"$char\" in\n\t\t\t\t\t\"B\") char=\"D\" ;;\n\t\t\t\t\t\"C\") char=\"F\" ;;\n\
+    \t\t\t\t\t\"D\") char=\"H\" ;;\n\t\t\t\t\t\"F\") char=\"J\" ;;\n\t\t\t\t\t\"G\"\
+    ) char=\"L\" ;;\n\t\t\t\t\t\"H\") char=\"N\" ;;\n\t\t\t\t\t\"J\") char=\"P\" ;;\n\
+    \t\t\t\t\t\"K\") char=\"R\" ;;\n\t\t\t\t\t\"L\") char=\"T\" ;;\n\t\t\t\t\t\"M\"\
+    ) char=\"V\" ;;\n\t\t\t\t\t\"N\") char=\"X\" ;;\n\t\t\t\t\t\"P\") char=\"Z\" ;;\n\
+    \t\t\t\t\t\"Q\") char=\"B\" ;;\n\t\t\t\t\t\"R\") char=\"D\" ;;\n\t\t\t\t\t\"S\"\
+    ) char=\"F\" ;;\n\t\t\t\t\t\"T\") char=\"H\" ;;\n\t\t\t\t\t\"V\") char=\"J\" ;;\n\
+    \t\t\t\t\t\"W\") char=\"L\" ;;\n\t\t\t\t\t\"", "  local msg=$1\n  local -i len=${#msg}\n\
+    \  local -i i=0\n  local character\n  local chars=''\n  for ((i=0; i<len; i++));\
+    \ do\n    character=${msg:$i:1}\n    if [[ $character =~ [a-z] ]]; then\n    \
+    \  chars=$chars$(encode_lower $character)\n    elif [[ $character =~ [A-Z] ]];\
+    \ then\n      chars=$chars$(encode_upper $character)\n    else\n      chars=$chars$character\n\
+    \    fi\n  done\n  echo $chars", "  echo $1 | tr 'a-zA-Z' 'c-za-bC-ZA-B' | tr\
+    \ 'aeiou' 'cfilor'", "    # Swap case\n    local out=$(echo $1 | tr '[:lower:]'\
+    \ '[:upper:]' | tr '[:upper:]' '[:lower:]')\n    # Swap vowels\n    out=$(echo\
+    \ $out | tr 'aeiou' 'eioaa')\n    echo $out", '    echo $1 | tr [a-z] [b-za] |
+    tr [aeiou] [cdfgjkmnpqtvwxz]', "    echo \"$1\" | awk '{\n        for (i=1; i<=length;\
+    \ i++) {\n            c = substr($0, i, 1)\n            if (c ~ /[A-Z]/)\n   \
+    \             printf(\"%c\", tolower(c))\n            else if (c ~ /[a-z]/)\n\
+    \                printf(\"%c\", toupper(c))\n            else\n              \
+    \  printf(\"%c\", c)\n        }\n    }'", "  local OUTPUT=''\n  local CHARACTER=''\n\
+    \  local TEMP=''\n  local VOWELS='aeiou'\n  local INDEX=0\n  local LAST=0\n  local\
+    \ LAST_CHARACTER=''\n  local FIRST_CHARACTER=''\n  local SECOND_CHARACTER=''\n\
+    \  local START=0\n  local END=0\n  local INPUT=\"$1\"\n  local LENGTH=${#INPUT}\n\
+    \  local VOWEL_INDEX=0\n  for (( i=0; i<${LENGTH}; i++ )); do\n    CHARACTER=\"\
+    ${INPUT:i:1}\"\n    TEMP=$(echo $CHARACTER | tr '[:upper:]' '[:lower:]')\n   \
+    \ INDEX=$(expr index \"$VOWELS\" \"$TEMP\")\n    if [[ $INDEX -gt 0 ]]; then\n\
+    \      VOWEL_INDEX=$(($VOWEL_INDEX+1))\n      INDEX=$(($INDEX+2))\n      if [[\
+    \ $INDEX -gt 5 ]]; then\n        INDEX=$(($INDEX-5))\n      fi\n      TEMP=$(echo\
+    \ $VOWELS | cut -c $INDEX)\n      if [[ $TEMP = 'a' ]]; then\n        TEMP='A'\n\
+    \      elif [[ $TEMP = 'e' ]]; then\n        TEMP='E'\n      elif [[ $TEMP = 'i'\
+    \ ]]; then\n        TEMP='I'\n      elif [[ $TEMP = 'o' ]]; then\n        TEMP='O'\n\
+    \      elif [[ $TEMP = 'u' ]]; then\n        TEMP='U'\n      fi\n      TEMP=$(echo\
+    \ $TEMP | tr '[:lower:]' '[:upper:]')\n      CHARACTER=$TEMP\n    else\n     \
+    \ CHARACTER=$(echo $CHARACTER | tr '[:lower:]' '[:upper:]')\n    fi\n    OUTPUT=\"\
+    $OUTPUT$CHARACTER\"\n  done\n  echo $OUTPUT", "    # Vowels\n    message=$(echo\
+    \ $1 | tr a-z A-Z | tr bcdfghjklmnpqrstvwxyz BCDFGHJKLMNPQRSTVWXYZ)\n    # Swaps\
+    \ cases of letters\n    message=$(echo $message | tr \"[:upper:]\" \"[:lower:]\"\
+    \ | tr \"[:lower:]\" \"[:upper:]\")\n    echo $message", "    local chars\n  \
+    \  local output\n    chars=( a b c d e f g h i j k l m n o p q r s t u v w x y\
+    \ z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z )\n    for (( i=0; i<${#1};\
+    \ i++ )); do\n        c=${1:$i:1}\n        if [[ \"${chars[*]}\" =~ \"$c\" ]];\
+    \ then\n            n=$((${#chars[@]}-2))\n            if [[ ${chars[$n]} == $c\
+    \ ]]; then\n                output+=\"${chars[@]:0:1}\"\n            elif [[ ${chars[$(($n+1))]}\
+    \ == $c ]]; then\n                output+=\"${chars[@]:1:1}\"\n            else\n\
+    \                output+=\"${chars[@]:$((${#chars[@]}-2)):2}\"\n            fi\n\
+    \        else\n            output+=\"$c\"\n        fi\n    done\n    echo \"$output\"",
+  "   # This is a shorthand for creating an array\n   # Declare the array\n   declare\
+    \ -a arr=(\"a\" \"b\" \"c\" \"d\" \"e\" \"f\" \"g\" \"h\" \"i\" \"j\" \"k\" \"\
+    l\" \"m\" \"n\" \"o\" \"p\" \"q\" \"r\" \"s\" \"t\" \"u\" \"v\" \"w\" \"x\" \"\
+    y\" \"z\")\n   # Set the total number of elements in the array\n   len=${#arr[@]}\n\
+    \   # Iterate through the string passed\n   while read -n1 c; do\n      # Change\
+    \ the case of each character\n      if [[ $c =~ [A-Z] ]]; then\n         c=`echo\
+    \ $c | tr '[:upper:]' '[:lower:]'`\n      else\n         c=`echo $c | tr '[:lower:]'\
+    \ '[:upper:]'`\n      fi\n      # Check to see if the character is a vowel.\n\
+    \      if [[ $c =~ [aeiou] ]]; then\n         # Get the index of the array that\
+    \ matches the current character\n         for i in \"${!arr[@]}\"; do\n      \
+    \      if [[ \"${arr[$i]}\" = \"$c\" ]]; then\n               # Increment by 2\
+    \ to get the next vowel.\n               ((i=i+2))\n               # Change the\
+    \ index if it reaches the end of the array\n               if [[ $i -gt $len ]];\
+    \ then\n                  ((i=i-len))\n               fi\n               # Replace\
+    \ the character with the next vowel in the array\n               c=${arr[$i]}\n\
+    \            fi\n         done\n      fi\n      # Append the encoded character\
+    \ to the output\n      OUT=\"$OUT$c\"\n   done <<< \"$1\"\n   # Print the encoded\
+    \ string\n   echo $OUT", "    if [[ $# -ne 1 ]]; then\n        echo \"Invalid\
+    \ number of arguments, need 1\"\n        return 1\n    fi\n    # tr '[a-z]' '[A-Z]'\
+    \ swaps case for the lower case letters in $1\n    string=$(echo $1 | tr '[a-z]'\
+    \ '[A-Z]')\n    # tr '[A-Z]' '[A-Z]' performs the rotation on the upper case\n\
+    \    # letters\n    echo $string | tr '[A-Z]' '[N-ZA-M]'", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"No input given\"\n        return\n    fi\n    echo \"\
+    $1\" | tr '[:lower:]' '[:upper:]' | tr 'AaEeIiOoUu' 'CcGgKkOoSs'", "    echo \"\
+    $1\" | sed -e 's/\\(.\\)/\\1 /g' -e 's/ //g' | tr '[:lower:]' '[:upper:]' | sed\
+    \ 's/A/C/g;s/E/G/g;s/I/K/g;s/O/M/g;s/U/O/g'", "  echo $1 | tr '[a-z]' '[c-za-b]'\
+    \ | tr '[aeiou]' '[eiuoag]'", "    echo $1 | tr 'A-Za-z' 'N-ZA-Mn-za-m' | sed\
+    \ -E 's/[AEIOUaeiou]/\\x$(echo $((\\x{1}+1)))$(echo $((\\x{1}+2)))/g'", "    #\
+    \ convert input string to lowercase\n    local msg=$(echo $1 | tr '[:upper:]'\
+    \ '[:lower:]')\n    # use sed to swap cases and to replace vowels\n    echo \"\
+    $msg\" | sed -e 's/[aeiou]/\\U&/g' -e 'y/bdfghjklmnpqrstvwxyz/acegikmoqsuwybdfhjlnprtvxz/'\
+    \ -e 's/[aeiou]/\\L&/g'", "  # create a new string to put the result in\n  newstring=\"\
+    \"\n  # check if the argument is passed\n  if [ -z \"$1\" ]; then\n    echo \"\
+    Argument not passed\"\n    exit 1\n  else\n    # loop through the argument, char\
+    \ by char\n    # i.e., for each character in the argument\n    for (( i=0; i<${#1};\
+    \ i++ )); do\n      # check if the char is a lower case letter\n      if [[ \"\
+    ${1:$i:1}\" =~ [a-z] ]]; then\n        # convert it to upper case\n        newstring+=\"\
+    $(echo \"${1:$i:1}\" | tr '[:lower:]' '[:upper:]')\"\n      # check if the char\
+    \ is an upper case letter\n      elif [[ \"${1:$i:1}\" =~ [A-Z] ]]; then\n   \
+    \     # convert it to lower case\n        newstring+=\"$(echo \"${1:$i:1}\" |\
+    \ tr '[:upper:]' '[:lower:]')\"\n      # check if the char is an upper case vowel\n\
+    \      elif [[ \"${1:$i:1}\" =~ [AEIOU] ]]; then\n        # shift the char two\
+    \ places ahead\n        newstring+=\"$(echo \"${1:$i:1}\" | tr 'AEIOU' 'CGLRV')\"\
+    \n      # check if the char is a lower case vowel\n      elif [[ \"${1:$i:1}\"\
+    \ =~ [aeiou] ]]; then\n        # shift the char two places ahead\n        newstring+=\"\
+    $(echo \"${1:$i:1}\" | tr 'aeiou' 'cglrv')\"\n      # if it is something else\
+    \ other than a letter, just add that\n      else\n        newstring+=\"${1:$i:1}\"\
+    \n      fi\n    done\n    # print the resulting new string\n    echo \"$newstring\"\
+    \n  fi", "    echo -n $1 | tr 'a-zA-Z' 'b-zaB-ZA' | tr 'aeiou' 'cdfokr'", "  \
+    \  # Check that the given argument is in the correct format\n    if [ -z \"$1\"\
+    \ ]; then\n        echo \"No argument was given\"\n        return 1\n    elif\
+    \ [[ ! \"$1\" =~ ^[a-zA-Z ]+$ ]]; then\n        echo \"The argument given has\
+    \ to be alphabetic and/or spaces\"\n        return 1\n    fi\n\n    # convert\
+    \ string to upper case\n    local toUpper=\"$(echo \"$1\" | tr \"[:lower:]\" \"\
+    [:upper:]\")\"\n\n    # Set up arrays with letters and vowels\n    local letters=(A\
+    \ B C D E F G H I J K L M N O P Q R S T U V W X Y Z)\n    local vowels=(A E I\
+    \ O U)\n\n    # Loop through string and convert characters to encode format\n\
+    \    local output=\"\"\n    for ((i=0; i<${#toUpper}; i++)); do\n        # If\
+    \ a space is encountered, it is left in the string\n        if [[ \"${toUpper:$i:1}\"\
+    \ == \" \" ]]; then\n            output=\"$output \"\n        # If a vowel is\
+    \ encountered, it is replaced with the second next vowel\n        elif [ \"${toUpper:$i:1}\"\
+    \ == \"${vowels[0]}\" ]; then\n            output=\"$output${vowels[1]}\"\n  \
+    \      elif [ \"${toUpper:$i:1}\" == \"${vowels[1]}\" ]; then\n            output=\"\
+    $output${vowels[2]}\"\n        elif [ \"${toUpper:$i:1}\" == \"${vowels[2]}\"\
+    \ ]; then\n            output=\"$output${vowels[3]}\"\n        elif [ \"${toUpper:$i:1}\"\
+    \ == \"${vowels[3]}\" ]; then\n            output=\"$output${vowels[0]}\"\n  \
+    \      # If a letter that is not a vowel is encountered, it is replaced with the\
+    \ next letter\n        else\n            for ((j=0; j<26; j++)); do\n        \
+    \        if [ \"${toUpper:$i:1}\" == \"${letters[$j]}\" ]; then\n            \
+    \        if [ \"$", "  echo $1 | tr 'a-zA-Z' 'c-za-bC-ZA-B' | tr 'aeiou' 'egikr'",
+  "  echo \"${1}\" | tr '[:lower:]' '[:upper:]' | tr 'AEIOU' 'CGFKPS'", "\t# Remove\
+    \ everything that isn't a letter\n\tSTRING=`echo $1 | sed 's/[^a-zA-Z]//g'`\n\t\
+    # Swap the case\n\tSTRING=`echo $STRING | tr '[:upper:]' '[:lower:]' | tr '[:lower:]'\
+    \ '[:upper:]'`\n\t# Replace the vowels\n\tSTRING=`echo $STRING | sed 's/[aeiou]/\\\
+    U&/g'`\n\t# Replace a with c\n\tSTRING=`echo $STRING | sed 's/A/C/g'`\n\t# Replace\
+    \ e with g\n\tSTRING=`echo $STRING | sed 's/E/G/g'`\n\t# Replace i with k\n\t\
+    STRING=`echo $STRING | sed 's/I/K/g'`\n\t# Replace o with q\n\tSTRING=`echo $STRING\
+    \ | sed 's/O/Q/g'`\n\t# Replace u with s\n\tSTRING=`echo $STRING | sed 's/U/S/g'`\n\
+    \t# Print the string\n\techo $STRING", "\t# Write your code here", "  echo $1\
+    \ | tr '[:lower:]' '[:upper:]' | tr 'A E I O U' 'C E K Q Y' | tr '[:upper:]' '[:lower:]'",
+  "    local string=\"$1\"\n    # Remove lower case letters\n    string=\"${string//[a-z]/}\"\
+    \n    # Remove upper case letters\n    string=\"${string//[A-Z]/}\"\n    # Remove\
+    \ vowels\n    string=\"${string//[aeiou]/}\"\n    # Lower case string\n    local\
+    \ lowercase=\"${string,,}\"\n    # Swap case\n    local uppercase=\"${lowercase^^}\"\
+    \n    # Return encoded string\n    echo \"${uppercase//[a-z]/}\"", "  local message=\"\
+    $@\"\n  # use awk to translate message\n  local result=$(echo \"$message\" | awk\
+    \ '\n    {\n      line = toupper($0) \n      gsub(/[AEIOU]/, \"A\" \"E\" \"I\"\
+    \ \"O\" \"U\", line) \n      gsub(/B/, \"A\", line) \n      gsub(/C/, \"B\", line)\
+    \ \n      gsub(/D/, \"C\", line) \n      gsub(/F/, \"E\", line) \n      gsub(/G/,\
+    \ \"F\", line) \n      gsub(/H/, \"G\", line) \n      gsub(/J/, \"I\", line) \n\
+    \      gsub(/K/, \"J\", line) \n      gsub(/L/, \"K\", line) \n      gsub(/M/,\
+    \ \"L\", line) \n      gsub(/N/, \"M\", line) \n      gsub(/P/, \"O\", line) \n\
+    \      gsub(/Q/, \"P\", line) \n      gsub(/R/, \"Q\", line) \n      gsub(/S/,\
+    \ \"R\", line) \n      gsub(/T/, \"S\", line) \n      gsub(/V/, \"U\", line) \n\
+    \      gsub(/W/, \"V\", line) \n      gsub(/X/, \"W\", line) \n      gsub(/Y/,\
+    \ \"X\", line) \n      gsub(/Z/, \"Y\", line) \n      gsub(/A/, \"Z\", line) \n\
+    \      print line\n    }')\n  echo \"$result\"", "    # declare function variables\n\
+    \    local letters=(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)\n   \
+    \ local vowels=(A E I O U)\n    local input=$1\n    local lowerInput=\"${input,,}\"\
+    \n    local index\n    local output=\"\"\n    local vowelIndex\n    local indexWithinVowels\n\
+    \    local lowercaseChar\n    local uppercaseChar\n    # loop through string\n\
+    \    for ((index=0; index<${#lowerInput}; index++)); do\n        # if uppercase\n\
+    \        if [[ \"${input:$index:1}\" == [A-Z] ]]; then\n            lowercaseChar=\"\
+    ${lowerInput:$index:1}\"\n            # check if lowercase character is a vowel\n\
+    \            if [[ \" ${vowels[@]} \" =~ \" ${lowercaseChar} \" ]]; then\n   \
+    \             # if so, swap\n                vowelIndex=0\n                for\
+    \ vowel in ${vowels[@]}; do\n                    if [[ $vowel == $lowercaseChar\
+    \ ]]; then\n                        indexWithinVowels=$vowelIndex\n          \
+    \          fi\n                    ((vowelIndex++))\n                done\n  \
+    \              output+=\"${vowels[$(((indexWithinVowels+2)%5))]}\"\n         \
+    \   else\n                # else, just swap case\n                uppercaseChar=\"\
+    ${input:$index:1}\"\n                output+=\"${lowercaseChar^^}\"\n        \
+    \    fi\n        # if lowercase\n        elif [[ \"${input:$index:1}\" == [a-z]\
+    \ ]]; then\n            lowercaseChar=\"${lowerInput:$index:1}\"\n           \
+    \ # check if lowercase character is a vowel\n            if [[ \" ${vowels[@]}\
+    \ \" =~ \" ${lowercaseChar} \" ]]; then\n                # if so, swap\n     \
+    \           vowelIndex=0\n                for vowel in ${vowels[@]}; do\n    \
+    \                if [[ $vowel == $lowercaseChar ]]; then\n                   \
+    \     indexWithinVowels=$vowelIndex\n                    fi\n                \
+    \    ((vowelIndex++))\n                done\n                output+=\"${vowels[$(((indexWithinVowels+2",
+  "    local temp=\"\"\n    # take each letter and make it upper case\n    for ((\
+    \ i=0; i<${#1}; i++ )); do\n        # if $1 is already a char, make it upper case\n\
+    \        if [[ ${1:$i:1} =~ [a-z] ]]; then\n            temp+=\"$(echo ${1:$i:1}\
+    \ | tr [a-z] [A-Z])\"\n        else\n            temp+=\"$(echo ${1:$i:1} | tr\
+    \ [A-Z] [a-z])\"\n        fi\n    done\n    # swap vowels and add two letters\n\
+    \    for (( i=0; i<${#temp}; i++ )); do\n        # if $1 is already a char, make\
+    \ it upper case\n        if [[ ${temp:$i:1} =~ [aeiou] ]]; then\n            temp=\"\
+    ${temp:0:$i}$(echo ${temp:$i:1} | tr [aeiou] [CEGIKMOQSUWY] )${temp:$((i+1))}\"\
+    \n        elif [[ ${temp:$i:1} =~ [AEIOU] ]]; then\n            temp=\"${temp:0:$i}$(echo\
+    \ ${temp:$i:1} | tr [AEIOU] [cegikmoqsuwy] )${temp:$((i+1))}\"\n        fi\n \
+    \   done\n    echo $temp", "  echo \"$1\" | tr '[:lower:]' '[:upper:]' | tr '[:upper:]'\
+    \ '[:lower:]' \\\n    | tr 'bcdfghjklmnpqrstvwxyz' 'cegikmoqsuwy|bdfhjlnprtvxz'\
+    \ | tr '|' 'a'", "    echo $1 | tr '[:lower:]' '[:upper:]' | tr '[A-Z]' '[N-ZA-M]'",
+  "    echo \"$1\" | tr a-zA-Z 'zebras' | tr eiouEIOU a-zA-Z ", "  local str=\"$1\"\
+    \n  local encoded=\"\"\n  local ch\n  for ((i=0; i<${#str}; i++)); do\n    ch=\"\
+    ${str:$i:1}\"\n    case \"$ch\" in\n      a)\n        ch=\"c\"\n        ;;\n \
+    \     b)\n        ch=\"d\"\n        ;;\n      c)\n        ch=\"e\"\n        ;;\n\
+    \      d)\n        ch=\"f\"\n        ;;\n      e)\n        ch=\"g\"\n        ;;\n\
+    \      f)\n        ch=\"h\"\n        ;;\n      g)\n        ch=\"i\"\n        ;;\n\
+    \      h)\n        ch=\"j\"\n        ;;\n      i)\n        ch=\"k\"\n        ;;\n\
+    \      j)\n        ch=\"l\"\n        ;;\n      k)\n        ch=\"m\"\n        ;;\n\
+    \      l)\n        ch=\"n\"\n        ;;\n      m)\n        ch=\"o\"\n        ;;\n\
+    \      n)\n        ch=\"p\"\n        ;;\n      o)\n        ch=\"q\"\n        ;;\n\
+    \      p)\n        ch=\"r\"\n        ;;\n      q)\n        ch=\"s\"\n        ;;\n\
+    \      r)\n        ch=\"t\"\n        ;;\n      s)\n        ch=\"u\"\n        ;;\n\
+    \      t)\n        ch=\"v\"\n        ;;\n      u)\n        ch=\"w\"\n        ;;\n\
+    \      v)\n        ch=\"x\"\n        ;;\n      w)\n        ch=\"y\"\n        ;;\n\
+    \      x)\n        ch=\"z\"\n        ;;\n      y)\n        ch=\"a\"\n        ;;\n\
+    \      z)\n        ch=\"b\"\n        ;;\n      A)\n        ch=\"C\"\n        ;;\n\
+    \      B)\n        ch=\"D\"\n        ;;\n      C)\n        ch=\"E\"\n        ;;\n\
+    \      D)\n        ch=\"F\"\n        ;;\n      E)\n        ch=\"G\"\n        ;;\n\
+    \      F)\n        ch=\"H\"\n        ;;\n      G)\n        ch=\"I\"\n        ;;\n\
+    \      H)\n        ch=\"J\"\n        ;;\n      I)\n        ch=\"K\"\n        ;;\n\
+    \      J", "  # split the string into an array of characters\n  local chars=(\
+    \ $(echo $1 | grep -o .) )\n  local encoded_chars=()\n  local vowels=( a e i o\
+    \ u )\n  local is_upper=0\n  for c in \"${chars[@]}\"; do\n    # if the character\
+    \ is upper case, set a flag for later\n    if [[ \"$c\" =~ [A-Z] ]]; then\n  \
+    \    is_upper=1\n    fi\n    # switch the case of the character\n    c=${c,,}\n\
+    \    # if the character is a vowel, encode it\n    if [[ \" ${vowels[@]} \" =~\
+    \ \" ${c} \" ]]; then\n      idx=$((${#vowels[@]} - $((${#vowels[@]} - $((${#vowels[@]}\
+    \ - $((${#vowels[@]} - $((${#vowels[@]} - $((${#vowels[@]} - $((${#vowels[@]}\
+    \ - $((${#vowels[@]} - $((${#vowels[@]} - $((${#vowels[@]} - ${vowels[@]//*$c*/}))))))))))))))))))\n\
+    \      c=${vowels[$idx]}\n    fi\n    # if the character was previously upper\
+    \ case, switch it back\n    if [[ $is_upper == 1 ]]; then\n      c=${c^^}\n  \
+    \    is_upper=0\n    fi\n    # add the character to the output array\n    encoded_chars+=($c)\n\
+    \  done\n  # join the array back into a string\n  echo \"${encoded_chars[@]}\"",
+  "  encoded_message=\"\"\n  local message=$1\n  local message_length=${#message}\n\
+    \  for (( i=0; i<${message_length}; i++ )); do\n    char=${message:$i:1}\n   \
+    \ if [[ \"$char\" =~ [aeiou] ]]; then\n      local encoded_char=$(echo $char |\
+    \ tr 'aeiou' 'efghj')\n    elif [[ \"$char\" =~ [AEIOU] ]]; then\n      local\
+    \ encoded_char=$(echo $char | tr 'AEIOU' 'EFGHJ')\n    else\n      local encoded_char=$(echo\
+    \ $char | tr '[a-z]' '[A-Z]')\n    fi\n    encoded_message=\"$encoded_message$encoded_char\"\
+    \n  done\n  echo $encoded_message", "\t# TODO: Fill out this function so that\
+    \ it works as described.\n\t# Your function should be called encode\n\ttext=$1\n\
+    \tlowcase=abcdefghijklmnopqrstuvwxyz\n\tuppcase=ABCDEFGHIJKLMNOPQRSTUVWXYZ\n\t\
+    new_lowcase=cdefghijklmnopqrstuvwxyzab\n\tnew_uppcase=CDEFGHIJKLMNOPQRSTUVWXYZAB\n\
+    \techo $text | sed \"y/$lowcase/$new_lowcase/;y/$uppcase/$new_uppcase/\"", " \
+    \ # replace all vowels with a character two places ahead in the alphabet\n  res1=$(echo\
+    \ $1 | sed 's/[aeiou]/\\U&/g' | sed 's/A/C/g' | sed 's/E/G/g' | sed 's/I/K/g'\
+    \ | sed 's/O/Q/g' | sed 's/U/W/g')\n  # replace all uppercase characters with\
+    \ lowercase\n  res2=$(echo $res1 | sed 's/[A-Z]/\\L&/g')\n  # replace all lowercase\
+    \ characters with uppercase\n  res3=$(echo $res2 | sed 's/[a-z]/\\U&/g')\n  echo\
+    \ $res3", "\tencodedMessage=\"\"\n\tfor ((i=0; i<${#1}; i++)); do\n\t\tif [[ ${1:$i:1}\
+    \ =~ [a-z] ]]; then\n\t\t\tif [[ ${1:$i:1} =~ [aeiou] ]]; then\n\t\t\t\tcase ${1:$i:1}\
+    \ in\n\t\t\t\t\ta) encodedMessage=${encodedMessage}c ;;\n\t\t\t\t\te) encodedMessage=${encodedMessage}i\
+    \ ;;\n\t\t\t\t\ti) encodedMessage=${encodedMessage}o ;;\n\t\t\t\t\to) encodedMessage=${encodedMessage}u\
+    \ ;;\n\t\t\t\t\tu) encodedMessage=${encodedMessage}a ;;\n\t\t\t\tesac\n\t\t\t\
+    else\n\t\t\t\tencodedMessage=${encodedMessage}$(tr [a-z] [A-Z] <<< ${1:$i:1})\n\
+    \t\t\tfi\n\t\telif [[ ${1:$i:1} =~ [A-Z] ]]; then\n\t\t\tif [[ ${1:$i:1} =~ [AEIOU]\
+    \ ]]; then\n\t\t\t\tcase ${1:$i:1} in\n\t\t\t\t\tA) encodedMessage=${encodedMessage}C\
+    \ ;;\n\t\t\t\t\tE) encodedMessage=${encodedMessage}I ;;\n\t\t\t\t\tI) encodedMessage=${encodedMessage}O\
+    \ ;;\n\t\t\t\t\tO) encodedMessage=${encodedMessage}U ;;\n\t\t\t\t\tU) encodedMessage=${encodedMessage}A\
+    \ ;;\n\t\t\t\tesac\n\t\t\telse\n\t\t\t\tencodedMessage=${encodedMessage}$(tr [A-Z]\
+    \ [a-z] <<< ${1:$i:1})\n\t\t\tfi\n\t\telse\n\t\t\tencodedMessage=${encodedMessage}${1:$i:1}\n\
+    \t\tfi\n\tdone\n\techo $encodedMessage", "  if [ -z \"$1\" ]; then\n    echo \"\
+    Please enter a string to encode\"\n    exit 1\n  fi\n  echo \"$1\" | tr '[:lower:]'\
+    \ '[:upper:]' | tr '[:upper:]' '[:lower:]' | tr '[AaEeIiOoUu]' '[CcGgKkOoSs]'",
+  "    if [[ ! -n $1 ]]; then \n        echo \"Error: missing string.\";\n       \
+    \ return;\n    fi\n\n    input=$1;\n    output=\"\";\n    for (( i=0; i<${#input};\
+    \ i++ )); do\n        current=${input:$i:1};\n        current_ascii=`ord $current`;\n\
+    \        if [[ $current_ascii -ge 65 && $current_ascii -le 90 ]]; then\n     \
+    \       output+=`chr $((current_ascii + 32))`;\n        elif [[ $current_ascii\
+    \ -ge 97 && $current_ascii -le 122 ]]; then\n            output+=`chr $((current_ascii\
+    \ - 32))`;\n        else\n            output+=$current;\n        fi\n    done\n\
+    \n    echo $output;", "\tif [ $# -eq 0 ]; then\n\t\techo \"No message given!\"\
+    \n\t\treturn 1\n\tfi\n\techo $1 | tr 'A-Za-z' 'N-ZA-Mn-za-m' | tr 'AEIOUaeiou'\
+    \ 'CGKOScgkos'", "    for word in $1\n    do\n        newword=\"\"\n        for\
+    \ (( i=0; i<${#word}; i++ ))\n        do\n            case \"${word:$i:1}\" in\n\
+    \                [aA] ) newword+=\"c\";;\n                [eE] ) newword+=\"g\"\
+    ;;\n                [iI] ) newword+=\"k\";;\n                [oO] ) newword+=\"\
+    n\";;\n                [uU] ) newword+=\"r\";;\n                [A-Z] ) newword+=\"\
+    $(tr [A-Z] [a-z] <<< ${word:$i:1})\";;\n                [a-z] ) newword+=\"$(tr\
+    \ [a-z] [A-Z] <<< ${word:$i:1})\";;\n                *) newword+=\"${word:$i:1}\"\
+    ;;\n            esac\n        done\n        newword+=\" \"\n        echo -n \"\
+    $newword\"\n    done\n    echo", "    local to_encode=$1\n    local encoded=\"\
+    \"\n    local char=\"\"\n    local new_char=\"\"\n    for (( i=0; i<${#to_encode};\
+    \ i++ )); do\n        char=${to_encode:$i:1}\n        if [[ \"$char\" =~ [A-Z]\
+    \ ]]; then\n            new_char=$(printf \"\\\\$(printf '%03o' $(( ${char,,}\
+    \ - 32 )))\")\n        elif [[ \"$char\" =~ [a-z] ]]; then\n            new_char=$(printf\
+    \ \"\\\\$(printf '%03o' $(( ${char^^} + 32 )))\")\n        else\n            new_char=$char\n\
+    \        fi\n        encoded=\"$encoded$new_char\"\n    done\n    echo \"$encoded\"",
+  '    echo "$1" | tr "a-zA-Z" "A-Za-z" | tr "aeiou" "ecaou"', "\techo $1 | tr '[a-z]'\
+    \ '[c-za-b]' | tr '[aeiou]' '[eoiu]' | tr '[A-Z]' '[C-ZA-B]' | tr '[AEIOU]' '[EOIU]'",
+  '  # YOUR CODE HERE', "    # use tr to swap case\n    txt=$(echo $1 | tr 'a-zA-Z'\
+    \ 'A-Za-z')\n    # use sed to replace vowels with next two letters\n    echo $txt\
+    \ | sed -E 's/[aeiou]/\\U&\\E/g' | sed -E 's/[AEIOU]/\\L&\\E/g'", "  local string=$1\n\
+    \  local encoded=\"\"\n  local i=0\n  while [ $i -lt ${#string} ]; do\n    char=${string:$i:1}\n\
+    \    case $char in\n      [A-Z])\n        char=$(echo \"$char\" | tr A-Z a-z)\n\
+    \        char=$(echo \"$char\" | tr a-z A-Z)\n        encoded+=$char\n       \
+    \ ;;\n      [a-z])\n        char=$(echo \"$char\" | tr a-z A-Z)\n        encoded+=$char\n\
+    \        ;;\n      [aeiouAEIOU])\n        char=$(echo \"$char\" | tr aeiouAeiou\
+    \ bcdfghBcdfgh)\n        encoded+=$char\n        ;;\n      *)\n        encoded+=$char\n\
+    \        ;;\n    esac\n    ((i++))\n  done\n  echo $encoded", "    local result=\"\
+    \"\n    for (( i=0; i<${#1}; i++ )); do\n        char=${1:$i:1}\n        char=$(echo\
+    \ $char | tr '[:lower:]' '[:upper:]')\n        case $char in\n            [AEIOU])\
+    \ char=${ALPHABET:$(( ${ALPHABET%%${char}*} ))+2:1};;\n            *) char=$(echo\
+    \ $char | tr '[:upper:]' '[:lower:]') ;;\n        esac\n        result+=$char\n\
+    \    done\n    echo $result", "    #convert all letters to upper case\n    my_string=$(echo\
+    \ $1 | tr [:lower:] [:upper:])\n    #replace the vowels\n    my_string=$(echo\
+    \ $my_string | sed \"s/A/C/g\" | sed \"s/E/G/g\" | sed \"s/I/K/g\" | sed \"s/O/Q/g\"\
+    \ | sed \"s/U/S/g\")\n    #swap the case\n    my_string=$(echo $my_string | tr\
+    \ [:upper:] [:lower:] | tr [:lower:] [:upper:])\n    echo $my_string", "\t#\n\t\
+    # Place your code below this line\n\t#\n\tlocal var_uppercase=$(echo $1 | tr [a-z]\
+    \ [A-Z])\n\tlocal var_vowels_uppercase=$(echo $var_uppercase | tr [AEIOU] [BDFGJKLMNPQRSTVWXYZ])\n\
+    \tlocal var_lowercase=$(echo $1 | tr [A-Z] [a-z])\n\tlocal var_vowels_lowercase=$(echo\
+    \ $var_lowercase | tr [aeiou] [bdfgjklmnpqrstvwxyz])\n\tvar_return=$(echo $var_vowels_uppercase\
+    \ | tr [A-Z] [a-z] | tr [a-z] [A-Z])\n\techo $var_return\n\t#\n\t# Place your\
+    \ code above this line\n\t#", "    # Grab the first character of the string\n\
+    \    local firstChar=${1:0:1}\n    # Grab the rest of the string\n    local rest=${1:1}\n\
+    \    # If the first character is uppercase, make it lowercase\n    # Otherwise\
+    \ make it uppercase\n    local letter=$(echo \"$firstChar\" | tr [:upper:] [:lower:])\n\
+    \    if [[ \"$letter\" =~ [a-z] ]]; then\n        case \"$letter\" in\n      \
+    \      a)\n                letter=\"c\"\n                ;;\n            e)\n\
+    \                letter=\"g\"\n                ;;\n            i)\n          \
+    \      letter=\"k\"\n                ;;\n            o)\n                letter=\"\
+    q\"\n                ;;\n            u)\n                letter=\"y\"\n      \
+    \          ;;\n            *)\n                letter=$firstChar\n           \
+    \     ;;\n        esac\n    fi\n    # If the string is empty, just return the\
+    \ letter\n    if [[ -z \"$rest\" ]]; then\n        echo \"$letter\"\n    # Otherwise\
+    \ encode the rest of the string and prepend the letter\n    else\n        local\
+    \ encoded=$(encode \"$rest\")\n        echo \"$letter$encoded\"\n    fi", "  \
+    \  if [ \"$#\" -ne 1 ]; then\n        echo \"Usage: encode <string>\"\n      \
+    \  return 1\n    fi\n    local -r STRING=$1\n    # Make everything lowercase\n\
+    \    local LOWERSTRING=${STRING,,}\n    # Make everything uppercase\n    local\
+    \ UPSTRING=${STRING^^}\n    # Create 2 arrays to store letters\n    # lower and\
+    \ uppercase\n    local -a lower=(\n        a b c d e f g h i j k l m n o p q r\
+    \ s t u v w x y z\n    )\n    local -a upper=(\n        A B C D E F G H I J K\
+    \ L M N O P Q R S T U V W X Y Z\n    )\n    # Store the number of elements in\
+    \ the array\n    local -r LOWERNUM=\"${#lower[@]}\"\n    local -r UPPERNUM=\"\
+    ${#upper[@]}\"\n    # The number to skip\n    local -r SKIP=2\n    # The encoded\
+    \ string\n    local encoded=\"\"\n    for (( i=0; i<${#LOWERSTRING}; i++ )); do\n\
+    \        local letter=${LOWERSTRING:$i:1}\n        # Check if lowercase\n    \
+    \    if [[ \"$letter\" =~ [a-z] ]]; then\n            # Find index of the letter\
+    \ in the lowercase array\n            local -r index=$(\n                printf\
+    \ '%s\\n' \"${lower[@]}\" |\n                grep -n \"^$letter$\" |\n       \
+    \         cut -d ':' -f 1\n            )\n            # If index + SKIP is greater\
+    \ than the number of elements\n            # in the array, subtract the number\
+    \ of elements\n            if (( $index + $SKIP > $LOWERNUM )); then\n       \
+    \         local -r encodedLetter=\"${lower[$(($index + $SKIP - $LOWERNUM))]}\"\
+    \n            else\n                local -r encodedLetter=\"${lower[$(($index\
+    \ + $SKIP))]}\"\n            fi\n        # Check if uppercase\n        elif [[\
+    \ \"$letter\" =~ [A-Z] ]]; then\n            # Find index of the letter in the\
+    \ uppercase array\n            local -r", "\tVOWELS=\"aAeEiIoOuU\"\n\techo $1\
+    \ | tr $VOWELS \"cdefghijklnortuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\"\
+    \ | tr '[:lower:]' '[:upper:]'", "    local str=$1\n    local tmp=$(echo $str\
+    \ | tr '[a-z]' '[A-Z]')\n    tmp=$(echo $tmp | tr 'AEIOU' 'BDFHJKLMNPSVWXYZ')\n\
+    \    echo $tmp", "\techo \"$1\" | tr '[:lower:]' '[:upper:]' | tr \"AEIOU\" \"\
+    CGKOS\"", "    echo $1 | tr 'a-zA-Z' 'c-za-bC-ZA-B' | tr 'aeiou' 'eoiua'", " \
+    \ echo -n $1 | tr '[:lower:]' '[:upper:]' | sed -e 's/[AEIOU]/\\0\\0/g' | sed\
+    \ -e 's/A/C/g' -e 's/E/G/g' -e 's/I/K/g' -e 's/O/Q/g' -e 's/U/W/g' | sed -e 's/B/A/g'\
+    \ -e 's/D/E/g' -e 's/F/I/g' -e 's/H/O/g' -e 's/J/U/g' -e 's/L/B/g' -e 's/N/D/g'\
+    \ -e 's/P/F/g' -e 's/R/H/g' -e 's/T/J/g' -e 's/V/L/g' -e 's/X/N/g' -e 's/Z/P/g'\
+    \ -e 's/C/R/g' -e 's/G/T/g' -e 's/K/V/g' -e 's/Q/X/g' -e 's/W/Z/g' | tr '[:upper:]'\
+    \ '[:lower:]'", "    echo $1 | sed 'y/aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ/cCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYaAbB/'\
+    \ | tr '[:lower:]' '[:upper:]'", '    # Your code here', "  local string=$1\n\
+    \  local output=\"\"\n  for (( i=0; i<${#string}; i++ )); do\n    local tmp=\"\
+    ${string:$i:1}\"\n    if [[ \"$tmp\" =~ [aeiou] ]]; then\n      if [ \"$tmp\"\
+    \ == \"u\" ]; then\n        output+=\"a\"\n      else\n        output+=\"$(printf\
+    \ \"$tmp\" | tr 'aeiou' 'bcdfgh')\"\n      fi\n    elif [[ \"$tmp\" =~ [AEIOU]\
+    \ ]]; then\n      if [ \"$tmp\" == \"U\" ]; then\n        output+=\"A\"\n    \
+    \  else\n        output+=\"$(printf \"$tmp\" | tr 'AEIOU' 'BCDFGH')\"\n      fi\n\
+    \    else\n      output+=\"$tmp\"\n    fi\n  done\n  echo \"$output\"", "    #\
+    \ BEGIN YOUR CODE HERE\n    return 0\n    # END YOUR CODE HERE", "    # vowels\n\
+    \    # \"a\" -> \"c\"\n    # \"e\" -> \"g\"\n    # \"i\" -> \"k\"\n    # \"o\"\
+    \ -> \"q\"\n    # \"u\" -> \"w\"\n    # \"y\" -> \"a\"\n    echo \"$1\" | tr 'A-Za-z'\
+    \ 'a-zA-Z' | tr 'aeiouy' 'eaiouyz'", "  echo \"$1\" | tr '[a-z]' '[C-ZA-B]' |\
+    \ tr 'aeiou' 'cegik'", "\ttr '[a-z]' '[z-a]' <<< $1 | sed 's/a/c/g;s/e/g/g;s/i/k/g;s/o/q/g;s/u/w/g'",
+  "    echo $1 | tr '[:lower:]' '[:upper:]' | tr 'AEGIOU' 'CPQTXY' | tr '[:upper:]'\
+    \ '[:lower:]'", "\techo -n $1 | tr 'a-zA-Z' 'n-za-mN-ZA-M' | sed 's/a/c/g;s/e/g/g;s/i/k/g;s/o/q/g;s/u/s/g'",
+  "  # write your code here\n  input=$1\n\n  # make everything uppercase\n  input=${input^^}\n\
+    \n  # replace the vowels with their counterparts\n  input=${input/A/C}\n  input=${input/E/G}\n\
+    \  input=${input/I/K}\n  input=${input/O/Q}\n  input=${input/U/W}\n\n  # make\
+    \ everything lowercase\n  input=${input,,}\n\n  # replace the vowels with their\
+    \ counterparts\n  input=${input/a/c}\n  input=${input/e/g}\n  input=${input/i/k}\n\
+    \  input=${input/o/q}\n  input=${input/u/w}\n\n  echo $input", "    if [ \"$#\"\
+    \ -ne 1 ]; then\n        return 1\n    fi\n    echo \"$1\" | tr \"a-zA-Z\" \"\
+    c-za-bC-ZA-B\" | tr \"[aeiou]\" \"[cgkjqx]\"", "    echo \"$1\" | tr '[:lower:]'\
+    \ '[:upper:]' | tr '[:upper:]' '[:lower:]' | sed 's/[aeiou]/\\U&/g' | tr 'abcdefghijklmnopqrstuvwxyz'\
+    \ 'cdefghijklmnopqrstuvwxyzab'", "  #echo $1 | tr '[a-z]' '[n-za-m]' | tr '[A-Z]'\
+    \ '[N-ZA-M]'\n  echo $1 | tr '[A-Za-z]' '[C-ZA-Bc-za-b]'", "    # Replace the\
+    \ logic of this function\n    printf \"TGST\"", "\tif [ -z \"$1\" ]; then\n\t\t\
+    # If we get here, no arguments were passed. So we echo\n\t\t# an appropriate message\
+    \ and set the exit status to 1.\n\t\techo \"ERROR: The encode function needs an\
+    \ argument to work properly.\"\n\t\treturn 1\n\telse\n\t\t# Set IFS to newline\
+    \ to make sure we don't split on spaces.\n\t\tIFS=$'\\n'\n\t\tencoded_string=\"\
+    \"\n\t\tfor word in $1; do\n\t\t\t# For each word in the provided input\n\t\t\t\
+    new_word=\"\"\n\t\t\tfor (( i=0; i<${#word}; i++ )); do\n\t\t\t\t# For each letter\
+    \ in the current word\n\t\t\t\tletter=${word:$i:1}\n\t\t\t\tif [[ \"$letter\"\
+    \ =~ [a-zA-Z] ]]; then\n\t\t\t\t\t# If the letter is an alphabetic character\n\
+    \t\t\t\t\tif [[ \"$letter\" =~ [a-z] ]]; then\n\t\t\t\t\t\t# If it's lowercase\n\
+    \t\t\t\t\t\tletter=$(tr \"[a-z]\" \"[A-Z]\" <<< \"$letter\")\n\t\t\t\t\telse\n\
+    \t\t\t\t\t\t# If it's uppercase\n\t\t\t\t\t\tletter=$(tr \"[A-Z]\" \"[a-z]\" <<<\
+    \ \"$letter\")\n\t\t\t\t\tfi\n\t\t\t\t\tcase \"$letter\" in\n\t\t\t\t\t\t\"a\"\
+    )\n\t\t\t\t\t\t\tletter=\"c\"\n\t\t\t\t\t\t\t;;\n\t\t\t\t\t\t\"b\")\n\t\t\t\t\t\
+    \t\tletter=\"d\"\n\t\t\t\t\t\t\t;;\n\t\t\t\t\t\t\"c\")\n\t\t\t\t\t\t\tletter=\"\
+    e\"\n\t\t\t\t\t\t\t;;\n\t\t\t\t\t\t\"d\")\n\t\t\t\t\t\t\tletter=\"f\"\n\t\t\t\t\
+    \t\t\t;;\n\t\t\t\t\t\t\"e\")\n\t\t\t\t\t\t\tletter=\"g\"\n\t\t\t\t\t\t\t;;\n\t\
+    \t\t\t\t\t\"f", "    local word=$1\n    local lowercase=abcdefghijklmnopqrstuvwxyz\n\
+    \    local uppercase=ABCDEFGHIJKLMNOPQRSTUVWXYZ\n    local vowels=aeiou\n    local\
+    \ translated\n    local len=${#word}\n    local index\n    local letter\n    local\
+    \ next_letter\n    local encoded\n    for (( i=0; i<len; i++ )); do\n        letter=${word:$i:1}\n\
+    \        index=$(strpos \"$lowercase\" \"$letter\")\n        if [ \"$index\" -ne\
+    \ -1 ]; then\n            next_letter=$(nextchar \"$lowercase\" \"$index\")\n\
+    \            encoded=${encoded}${next_letter}\n        else\n            index=$(strpos\
+    \ \"$uppercase\" \"$letter\")\n            if [ \"$index\" -ne -1 ]; then\n  \
+    \              next_letter=$(nextchar \"$uppercase\" \"$index\")\n           \
+    \     encoded=${encoded}${next_letter}\n            else\n                encoded=${encoded}${letter}\n\
+    \            fi\n        fi\n    done\n    echo \"$encoded\"", "        echo \"\
+    $1\" | tr 'a-zA-Z' 'b-zaB-ZA' | tr 'aeiou' 'cgjkr'", "\t# Use tr to get upper/lowercase\
+    \ versions of all letters\n\techo \"$1\" | tr \"[:lower:]\" \"[:upper:]\" | tr\
+    \ \"[:upper:]\" \"[:lower:]\"\n\t# Replace vowels with letters that come two letters\
+    \ after that vowel\n\t# TODO: This only works for vowels at the end of a word.\n\
+    \t#       How do I replace vowels for vowels anywhere in a word?\n\techo \"$1\"\
+    \ | tr \"[a,e,i,o,u]\" \"[c,g,k,o,s]\"", "  local -i i=0\n  local -i ival=0\n\
+    \  local -i ascii_offset=64\n  local -i vowels_offset=2\n  local out=\"\"\n  for\
+    \ (( i=0; i<${#1}; i++ )); do\n    ival=${1:$i:1}\n    case \"$ival\" in\n   \
+    \   [[:upper:]])\n        out=$out${ival,,}\n        ;;\n      [[:lower:]])\n\
+    \        out=$out${ival^^}\n        ;;\n      [aeiouAEIOU])\n        out=$out$(printf\
+    \ '%c' $(( $ival + $vowels_offset - $ascii_offset )))\n        ;;\n      *)\n\
+    \        out=$out$ival\n        ;;\n    esac\n  done\n  echo \"$out\"", "    if\
+    \ [[ \"$#\" -ne 1 ]]; then\n        echo \"encode: error: the number of arguments\
+    \ is $#, expected is 1\"\n        exit 1\n    fi\n    echo \"$1\" | sed -E \"\
+    y/aeiou/eioaa/; y/AEOIU/EIOAA/; s/[a-z]/\\L&/g; s/[A-Z]/\\U&/g\"", "  echo $1\
+    \ | tr '[:lower:]' '[:upper:]' | tr 'AEOIU' 'CGLRX'", "  declare -a vowels=('a'\
+    \ 'e' 'i' 'o' 'u')\n  # set the string to lower case\n  string=\"${1,,}\"\n  #\
+    \ encode the string\n  for i in $(seq 0 $(( ${#string} - 1 )))\n  do\n    char=\"\
+    ${string:$i:1}\"\n    # check whether the char is in the vowels array\n    if\
+    \ [[ \" ${vowels[@]} \" =~ \" ${char} \" ]]; then\n      # find the position of\
+    \ the char in the vowels array\n      pos=$(printf '%s\\n' \"${vowels[@]}\" |\
+    \ grep -n \"^${char}$\" | cut -d: -f1)\n      # add two to the position\n    \
+    \  pos=$(( pos + 2 ))\n      # check whether the pos is out of bounds\n      if\
+    \ [[ $pos -gt 4 ]]; then\n        pos=$(( pos - 5 ))\n      fi\n      # swap the\
+    \ vowel to the one that is 2 places ahead\n      char=\"${vowels[$pos]}\"\n  \
+    \  fi\n    # swap the case of the char\n    if [[ \"$char\" =~ ^[A-Z]$ ]]; then\n\
+    \      char=\"${char,,}\"\n    else\n      char=\"${char^^}\"\n    fi\n    # store\
+    \ the encoded char\n    string2+=\"$char\"\n  done\n  # echo the encoded string\n\
+    \  echo \"$string2\"", "    #your code here\n    input=\"$1\"\n    echo \"${input}\"\
+    \ | tr '[:lower:]' '[:upper:]' | tr \"AEIOU\" \"ECGTA\" | tr '[:upper:]' '[:lower:]'",
+  "  echo \"$1\" | tr '[a-z]' '[c-zab]' | tr '[aeiou]' '[eiwuo]'", "    # TODO: complete\
+    \ this function\n    echo \"TODO\"", "    local args=\"$@\"\n    echo $args |\
+    \ tr '[a-z]' '[A-Z]' | tr '[A-Z]' '[N-ZA-Mn-za-m]' | tr '[aeiou]' '[eoiu]'", " \
+    \       echo \"$1\" | tr '[:lower:]' '[:upper:]' | tr '[A,E,I,O,U]' '[C,G,K,O,S]'"]
 stop_tokens:
 - "\n}"

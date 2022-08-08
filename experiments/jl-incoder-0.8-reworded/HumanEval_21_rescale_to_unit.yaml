@@ -10,7 +10,887 @@ tests: "using Test\n\n@testset begin\n\ncandidate = rescale_to_unit;\n\t@test(ca
   \ 2.0, 3.0, 4.0, 5.0]) == [0.0, 0.25, 0.5, 0.75, 1.0])\n\t@test(candidate([2.0,\
   \ 1.0, 5.0, 3.0, 4.0]) == [0.25, 0.0, 1.0, 0.5, 0.75])\n\t@test(candidate([12.0,\
   \ 11.0, 15.0, 13.0, 14.0]) == [0.25, 0.0, 1.0, 0.5, 0.75])\nend\n"
-completions: []
+completions: ["    return copy(numbers)\nend\n</code>\n<|/ a |>\n<| a tags=julia dscore=0\
+    \ |>\nYou can use mapslices, e.g.,\n<code>\njulia> mapslices(x -> 2*x, eachcol(x));\n\
+    6-element Vector{Vector{Float64}}:\n 0.0\n 2.0\n 4.0\n 6.0\n 8.0\n</code>\nor,\
+    \ if you want the column vector\n<code>\njulia> mapslices(x -> x, eachcol(x),\
+    \ 1)\n6-element Vector{Float64}:\n 0.0\n 2.0\n 4.0\n 6.0\n 8.0\n</code>\n<|/ a\
+    \ |>\n<| c |>\n`mapslices` is cool, but what does `eachcol` do? Why do you need\
+    \ the second argument?\n<|/ c |>\n<| c |>\neachcol is just an alias to reshape,\
+    \ which is just a shortcut for reshape followed by a column extraction.\n<|/ c\
+    \ |>\n<| c |>\nReshaping and column extraction are different things, right? So\
+    \ why do you need the second argument to reshape?\n<|/ c |>\n<| c |>\n`eachcol`\
+    \ extracts the column vector from the matrix. Reshape is the opposite.\n<|/ c\
+    \ |>\n<| a dscore=0 |>\nI tend to use simple functions (especially ones that don't\
+    \ need global state, such as your example rescale_to_unit) when working with large\
+    \ matrices. I find this makes functions simpler to test, and less likely to accidentally\
+    \ overwrite something I'm relying on elsewhere.\nThe function below will scale\
+    \ a column vector in the range 0:1 to the range 0:n-1 by rounding and then adding\
+    \ 1.\n<code>", "    # make sure that the vector is non-empty\n    if isempty(numbers)\n\
+    \        error(\"Vector is empty.\")\n    end", "    \"\"\"\n    Given vector\
+    \ of numbers (of at least two elements), apply a linear transform to that vector,\n\
+    \    such that the smallest number will become 0 and the largest will become 1\n\
+    \    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75,\
+    \ 1.0]\n    \"\"\"\n    length = numbers.length()\n    if length < 2 \n      \
+    \  throw(ArgumentError(\"Number of elements must be greater than zero\"))\n  \
+    \  end\n    min = numbers[1]\n    max = numbers[length]\n    range = (max-min)/length\n\
+    \    return min+range*(numbers-min) \nend", "    sum::Float64 = 0.0\n    largest::Float64\
+    \ = numbers[1]\n    for i in 1:length(numbers)\n        sum = sum + numbers[i]\n\
+    \        if numbers[i] > largest\n            largest = numbers[i]\n        end\n\
+    \    end\n    # rescale\n    for i in 1:length(numbers)\n        numbers[i] =\
+    \ numbers[i] / sum\n    end\n    return numbers\nend\n</code>\n<|/ a tags=julia,numpy,python\
+    \ |>\n<| c |>\nThanks, this was helpful.\n<|/ c |>\n<| c |>\n`map(x -> x/sum(x),\
+    \ numbers)` should be equivalent to the Pythonic `[x / sum(x) for x in  numbers]`.\n\
+    <|/ c |>\n<| c |>\nthanks, I did not know that one (will edit my answer). I am\
+    \ sure I used it before and it worked (did not even think about using map for\
+    \ that), but it is nice to know that this is indeed the julianic way.\n<|/ c |>\n\
+    <| c |>\nOh, I see what you mean. You're right, this works. I got some odd results\
+    \ when I tried it because I was using it before and had some typos. Thanks again!\n\
+    <|/ c |>\n<| c |>\nI think it's important to note that this is different than\
+    \ the Python implementation in that it takes the `sum` of each vector before the\
+    \ division - the OP's implementation takes the sum after division. This might\
+    \ make a difference for arrays of length `10^4` - `sum([ i/sum(i) for i in numbers])`\
+    \ doesn't work so well for such arrays!\n<|/ c |>\n<| a dscore=2 |>\nOne of the\
+    \ main differences between Julia and Python is the flexibility that they offer\
+    \ on how to write functions. It looks like you've written a function that does\
+    \ what you want, but it's a bit obfuscated and not very idiomatic. Here's how\
+    \ I would write it:\n<code>", "    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n\
+    \    scaled = numbers .- minimum\n    scaled ./= maximum - minimum\n    return\
+    \ scaled\nend\n</cell>\n<code language=julia-1.5>\nrescale_to_unit([1.0, 2.0,\
+    \ 3.0, 4.0, 5.0])\n</cell>\n<code language=julia-1.5>\n# Practice Problem 2\n\
+    # Create a function that will take a vector of numbers (of at least two elements),\
+    \ and \n# return a new vector of numbers (with minimum number set to 0 and maximum\
+    \ number set to 1)", "    minimum = min(numbers)\n    maximum = max(numbers)\n\
+    \    minimum == 0 ? minimum : (maximum - minimum) / (maximum - minimum) * minimum\
+    \ \nend\n</cell>\n<text>\nNow let's see what this does for the data we've got\
+    \ (I won't be using the full data set).", "    numbers = numbers.minmax(numbers)\
+    \ \n    numbers\nend\n</cell>\n<text>\nThis implementation is slightly different\
+    \ than Julia's implementation that rescales the vector to unit length using minmax.\
+    \ \nJulia's version rescales the vector to unit length using sum, while this one\
+    \ uses minmax. This difference only arises when you have vectors with different\
+    \ lengths. If you have equal lengths, minmax should be equivalent to sum.", " \
+    \   # assert length(numbers) >= 2\n    minimum = min(numbers)\n    maximum = max(numbers)\n\
+    \    numbers = (numbers - minimum)/(maximum - minimum)\n    return numbers\nend\n\
+    </code>\n<|/ a |>\n<| a tags=julia,math |>\nThis answer only makes sense if you\
+    \ have only one vector and you do not know the minimum or maximum value of that\
+    \ vector.\n<code>", "    if numbers.length < 2 \n        return numbers;\n   \
+    \ end\n    minimum = min(numbers);\n    maximum = max(numbers);\n    delta = maximum-minimum;\n\
+    \    result = Vector{Float64}(length(numbers));\n    for i in 1:length(numbers)\n\
+    \        result[i] = numbers[i] - minimum;\n        result[i]/=(maximum - minimum);\n\
+    \    end\n    return result\nend \n</cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n\
+    </cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n\
+    <code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code\
+    \ language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n\
+    @time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time\
+    \ rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n\
+    </cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n\
+    <code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code\
+    \ language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n\
+    @time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time\
+    \ rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n\
+    </cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n\
+    <code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code\
+    \ language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n\
+    @time rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time\
+    \ rescale_to_unit([1,2,3,4,5])\n</cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n\
+    </cell>\n<code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</cell>\n\
+    <code language=julia-0.5>\n@time rescale_to_unit([1,2,3,4,5])\n</", "    length\
+    \ = length(numbers)\n    if length < 2 \n        return numbers\n    min = minimum(numbers)\n\
+    \    max = maximum(numbers)\n    minimum = (min < 0) ? 0 : min\n    maximum =\
+    \ (max < 0) ? 0 : max\n    if max < min \n        minimum = -minimum\n       \
+    \ maximum = -maximum\n    end", "    \n    min = numbers[1]\n    max = numbers[1]\n\
+    \    for i in numbers[2:end]\n        if min > i\n            min = i\n      \
+    \  end\n        if max < i\n            max = i\n        end\n    end\n    \n\
+    \    return (numbers - min) / (max - min)\nend", "    \"\"\"\n    Takes in a vector\
+    \ of numbers and returns a vector with numbers rescaled to lie between 0 and 1.\n\
+    \    The rescaled vector contains at least two elements.\n    \"\"\"\n    for\
+    \ num in numbers:\n        if num < 0 or num > 1:\n            raise ArgumentError(\"\
+    Input vector is expected to contain elements from 0 to 1\")\n    for num in numbers:\n\
+    \        if num == 0:\n            numbers.remove(num)\n    return numbers", " \
+    \   assert(length(numbers) > 0)\n    assert(numbers[1] >= numbers[0])\n    return\
+    \ Vector{Float64}(map(minmax, numbers))\nend\n</cell>\n<code language=julia-1.0>\n\
+    @assert round(rescale_to_unit([0.0, 0.25, 0.5, 0.75, 1.0]), 2) == [0.0,  0.25,\
+    \  0.50,  0.75, 1.0]\n</cell>\n<text>\nExercise\nHow would you implement the rescale\
+    \ function, such that:\n$$\nx_{i} = a * x_{i} + b\n$$\nfor $i \\in [1,n]$, with\
+    \ $a$ being a positive float and the range of numbers $x_{i}$ being $[0, 1]$?",
+  "    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n    numbers = map(x\
+    \ -> x / (maximum - minimum), numbers)\n    return numbers\nend", "\trescaled\
+    \ = []\n\tfor element in numbers\n\t\trescaled.append(element / max(rescaled))\n\
+    \trescaled\nend", "    smallest = min(numbers)\n    largest = max(numbers)\n \
+    \   length = (largest - smallest)/length(numbers)\n    rescaled_numbers = Vector{Float64}(undef,\
+    \ length(numbers))\n    for i in 1:length(numbers)\n        rescaled_numbers[i]\
+    \ = numbers[i]/length\n    end\n    return rescaled_numbers\nend\n</cell>\n<text>\n\
+    Recall that the sigmoid function takes the form:", "    rescaled = numbers |>\
+    \ sort() |> take(-1) |> collect() \n    rescaled[end] = 1.0 \n    rescaled\nend\n\
+    </cell>\n<text>\nLet's test our function", "    rescaled_numbers = copy(numbers)\n\
+    \    for n in numbers\n        if n > 1.0 \n            rescaled_numbers[find(rescaled_numbers==n)]\
+    \ = 1.0\n            rescaled_numbers[find(rescaled_numbers==n+1.0)] = 0.0\n \
+    \       end\n    end\n    rescaled_numbers\nend\n</code>\n<|/ a |>\n<| a dscore=1\
+    \ tags=julia,arrays |>\nIn general, you cannot expect a linear transformation\
+    \ to preserve the original distribution of numbers. That's because the transformed\
+    \ numbers must add up to 1. Even if you choose to make the transformed numbers\
+    \ sum to 1, if you chose to make it sum to 10 you cannot expect the numbers to\
+    \ be exactly 10 from each other, because they are rounded to 10 when they are\
+    \ converted to a float. So the linear transformation will not map them to the\
+    \ same number.\nHowever, this won't be the case for most numbers that you might\
+    \ want to transform. The distribution of numbers is likely skewed and skewed-normal\
+    \ (https://en.wikipedia.org/wiki/Skewed-normal_distribution). For example, the\
+    \ numbers [1, 2, 3] are quite skewed compared to the numbers [10, 2, 3]. Both\
+    \ distributions have mean of 10 and variance of 2, so the mean of the transformed\
+    \ numbers would be 10 while the original numbers are [10, 2, 3]. \nA good way\
+    \ to solve this problem is to use a random sample. The random sample will give\
+    \ you an approximate answer (mean = 0, variance = 1) for all numbers. If you want\
+    \ the exact answer you can use the inverse of the transformation (divide each\
+    \ element by 10).\n<|/ a |>\n<| a dscore=0 |>\nUsing Julia 1.5.3\n<code>\nusing\
+    \ Distributions, StatsPlots", "    \n    length = numbers[1]-numbers[0]\n    return\
+    \ numbers../length\nend\n</cell>\n<text>\nThis function will take in a vector\
+    \ of numbers, and return a vector where all of the numbers become between 0 and\
+    \ 1", "    min = minimum(numbers)\n    max = maximum(numbers)\n    scaled = (numbers\
+    \ - min) / (max - min)\n    return scaled\nend\n</cell>\n<text>\nNow let's test\
+    \ our rescaled function", "    rescaled_numbers = numbers\n    if numbers.iszero()\n\
+    \        return numbers\n    else\n        rescaled_numbers .= 1. / numbers\n\
+    \    end\nend", "\tnew_vec = Vector{Float64}(length(numbers))\n\tnew_vec[:] =\
+    \ min(numbers)\n\tnew_vec[:] = max(numbers)\n\tnew_vec\nend\n</cell>\n<text>\n\
+    5.6 Multiplication\n5.6.1 Operator overloading with broadcasting\nIn Julia, the\
+    \ * operator is overloaded for scalar multiplication. If we were to write:", " \
+    \   largest = minimum(numbers)\n    smallest = maximum(numbers)\n    delta = (largest\
+    \ - smallest)/(length(numbers) - 1)\n    return map(x -> x * delta, numbers)\n\
+    end", "    max = maximum(numbers)\n    min = minimum(numbers)\n    scaled_numbers\
+    \ = (numbers - min) / (max - min)\n    scaled_numbers\nend\n</cell>\n<text>\n\
+    Re-scaling our data will now result in our data becoming more linear. We can see\
+    \ this by computing the covariance matrix for the data", "        \n    if length(numbers)\
+    \ < 2\n        error(\"Numbers must have at least 2 elements\")\n    end\n   \
+    \ \n    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n    length\
+    \ = length(numbers)\n    \n    if minimum == maximum\n        error(\"Numbers\
+    \ must have at least 2 elements\")\n    end\n    \n    if length == 1\n      \
+    \  return minimum\n    else\n        return minimum + maximum * (1. / length)\n\
+    \    end\nend\n</cell>\n<text>\nWe will now use the function defined above to\
+    \ rescale the original data to unit intervals.", "    if len(numbers)==0\n   \
+    \     return Vector{Float64}([])\n    end\n    # find min, max of numbers\n  \
+    \  minval, maxval = minimum(numbers), maximum(numbers)\n    # rescale numbers\
+    \ to be between 0 and 1\n    rescaled = map(x->x/(maxval-minval), numbers)\n \
+    \   return Vector{Float64}(rescaled)\nend", "    rescaled_numbers = Vector{Float64}(length(numbers))\n\
+    \    for i in 1:length(numbers)\n        rescaled_numbers[i] = numbers[i] / maximum(numbers)\n\
+    \    end\n    return rescaled_numbers\nend\n</cell>\n<code language=julia-1.3>",
+  "        rescaled_numbers = numbers.map((x) -> min(max(x, min), max))\n        return\
+    \ rescaled_numbers\nend\n</cell>\n<code language=julia-1.4>\n# Test our function\n\
+    rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n</cell>\n<text>\nNow let's use our\
+    \ function to convert our input data to our desired output format", "    largest\
+    \ = maximum(numbers)\n    largest = min(largest, 1.0)\n    return (numbers - largest)\
+    \ / (largest)\nend", "    if length(numbers) == 0 \n        return numbers\n \
+    \   end\n    min = numbers[1]\n    max = numbers[length(numbers)]\n    \n    #\
+    \ Check if there is only one number\n    if min == max\n        return numbers[2:end]\n\
+    \    end\n    \n    # Check if min is larger than max\n    if min > max \n   \
+    \     diff = max - min\n        numbers = [min, min + diff * 0.5, min + diff *\
+    \ 1.5, ...]\n    end\n    \n    # Check if max is smaller than min\n    if max\
+    \ < min \n        diff = min - max\n        numbers = [max - diff * 0.5, max,\
+    \ max - diff * 1.5, ...]\n    end\n    \n    return numbers\nend", "    rescaled_numbers\
+    \ = Vector{Float64}(numbers)\n    if length(numbers)==1\n        rescaled_numbers[1]=0.0\n\
+    \        rescaled_numbers[length(numbers)-1] = 1.0\n    else \n        rescaled_numbers[1]=0.0\n\
+    \        rescaled_numbers[length(numbers)-1] = 1.0\n        for i in 2:length(numbers)\n\
+    \            rescaled_numbers[i] = rescaled_numbers[i-1] + (numbers[i] - numbers[i-1])*(rescaled_numbers[i-1]\
+    \ - rescaled_numbers[i])/(numbers[i-1] - numbers[i])\n        end\n    end\n \
+    \   return rescaled_numbers\nend", "    rescale_to_unit(numbers, 0.0, 1.0)\nend\n\
+    </cell>\n<text>\nThe final step would be to call the rescale_to_unit function",
+  "    return numbers ./ minimum(numbers)\nend", "    @assert length(values(numbers))\
+    \ == 2, \"Numbers must be vectors of at least two elements\"\n    @assert all(isfinite,\
+    \ numbers), \"Numbers must be finite\"\n    @assert all(numbers >= 0, numbers\
+    \ < 1), \"Numbers must be non-negative\"\n    # make sure numbers is of Float64\n\
+    \    numbers = copy(numbers)\n    # create normalized array\n    numbers = numbers\
+    \ ./ max(numbers)\n    # apply transformation\n    numbers = numbers .* 2 - 1\n\
+    \    \n    return numbers\nend", "    if length(numbers) < 2 \n        return\
+    \ numbers\n    end\n    smallest = numbers[1]\n    largest = numbers[end]\n  \
+    \  difference = largest - smallest\n    scaled = numbers ./ difference\n    return\
+    \ Vector{Float64}(map((x -> x - smallest) .* scaled, numbers))\nend\n</cell>\n\
+    <text>\nIn other words, rescale the vector to convert its min to 0, and max to\
+    \ 1.", "    assert(length(numbers) > 2)\n    smallest = numbers[1]\n    largest\
+    \ = numbers[end]\n    delta = largest - smallest\n    return [numbers[i]/delta\
+    \ for i in numbers]\nend", "    smallest = min(numbers)\n    largest = max(numbers)\n\
+    \    length = length(numbers)\n    if length == 1\n        return Vector{Float64}([1.0])\n\
+    \    else\n        scale = largest - smallest\n        return Vector{Float64}([((numbers[1]\
+    \ - smallest) / scale) .. 1]')\n    end\nend", "    minimum = minimum(numbers)\n\
+    \    maximum = maximum(numbers)\n    minimum = minimum * 0.9999999\n    maximum\
+    \ = maximum * 1.0000001\n    if maximum - minimum > 1e-10\n        # Scale it\
+    \ by dividing each number by the difference between the maximum and the minimum\
+    \ \n        return (numbers - minimum) / (maximum - minimum) \n    else \n   \
+    \     return numbers / maximum\n    end\nend", "    minimum = min(numbers)\n \
+    \   maximum = max(numbers)\n    if maximum == minimum\n        minimum == minimum\
+    \ + 1\n    end\n    return (numbers - minimum)/(maximum - minimum) \nend ", " \
+    \   scale = 1.0 / maximum(numbers)\n    numbers.* scale\nend\n</cell>\n<text>\n\
+    Let's now see a couple of examples of rescaling to unit that might come in handy",
+  "    rescale_min = 0\n    rescale_max = 1 \n    rescaled_numbers = copy(numbers)\n\
+    \    for i = 1:length(rescaled_numbers)\n        if rescaled_numbers[i] < rescale_min\n\
+    \            rescaled_numbers[i] = rescale_min\n        elseif rescaled_numbers[i]\
+    \ > rescale_max\n            rescaled_numbers[i] = rescale_max\n        end\n\
+    \    end\n    return rescaled_numbers\nend\n</cell>\n<text>\nThe function rescale_to_unit\
+    \ transforms the input vector into the unit vector, by rescaling the smallest\
+    \ number in the vector to the new smaller number (rescale_min) and the largest\
+    \ number (rescale_max).", "    rescaled = min(numbers)\n    residual = max(numbers)\n\
+    \    return Float64[]\nend\n</cell>\n<code language=julia-1.5>", "    rescaled_numbers\
+    \ = numbers .- (numbers .== 0) .* minimum(numbers)\n    return rescaled_numbers\n\
+    end\n</cell>\n<text>\nThe next two functions convert a vector to lower and upper\
+    \ quartiles.", "    if length(numbers) < 2\n        error(\"Numbers must have\
+    \ at least two elements\")\n    end\n    \n    min = numbers[1]\n    max = numbers[length(numbers)]\n\
+    \    \n    for i in (2:length(numbers))\n        numbers[i] = (numbers[i] - min)\
+    \ / (max - min)\n    end\n    \n    return numbers\nend\n</cell>\n<text>\nNext,\
+    \ we're going to write a function that takes two vectors as arguments, and returns\
+    \ their dot product. Again, we're going to do this using Julia's vectorization.",
+  "    scaling = 1.0 / maximum(numbers)\n    numbers .* scaling\nend\n</cell>\n<code\
+    \ language=julia-1.2>", "    minimum = min(numbers)\n    maximum = max(numbers)\n\
+    \    scale = maximum - minimum\n    scaled = [minimum + scale * i for i in numbers]\n\
+    \    return scaled\nend\n</cell>\n<code language=julia-1.5>\n# show that rescaling\
+    \ can help\nrescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n</cell>\n<code language=julia-1.5>\n\
+    # show that it can scale to a specific range\nrescale_to_unit([1.0, 2.0, 3.0,\
+    \ 4.0, 5.0], minimum=2.0, maximum=5.0)\n</cell>\n<text>\nMultiplying matrices\
+    \ (and arrays)\nJulia has built in multiplication operators to do matrix multiplication.",
+  "    max = -Float64Inf\n    for number in numbers\n        max = max > number ?\
+    \ max : number\n    end\n    return (numbers - min) / (max - min)\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nThis is incorrect; it produces an incorrect result if the range\
+    \ of numbers is very large. For instance, try rescale_to_unit([1,100,101,102,103,104,105,106,107,108,109,110]).\
+    \ You'll see that the max is 1, and the smallest is 0.\n<|/ c |>\n<| c |>\nYour\
+    \ comment is wrong. The largest number is not 1, but `Inf` (or even `Float64Inf`).\n\
+    <|/ c |>\n<| c |>\nYou're right. `max` is indeed `Inf` in the case I posted (thanks\
+    \ for that). However, it turns out that the `min` was indeed 0, and `Float64Inf`\
+    \ is the correct result.\n<|/ c |>\n<| a tags=julia,arrays dscore=3 |>\nThis is\
+    \ pretty easy with the StatsBase package:\n<code>\nusing StatsBase", "    min_value\
+    \ = minimum(numbers)\n    max_value = maximum(numbers)\n    return [min_value/max_value]*length(numbers)\n\
+    end", "    minimum = min(numbers)\n    maximum = max(numbers)\n    length = length(numbers)\n\
+    \    rescaled::Vector{Float64} = Float64[]\n    \n    # rescaled numbers are 0\
+    \ up to length-1\n    # and 1 up to length\n    for i in 1:length\n        if\
+    \ numbers[i] < minimum\n            rescaled[i] = minimum\n        elseif numbers[i]\
+    \ > maximum\n            rescaled[i] = maximum\n        else\n            rescaled[i]\
+    \ = numbers[i] - minimum\n        end\n    end\n    return rescaled\nend", " \
+    \   rescaled = numbers ./ maximum(numbers)\n    rescaled\nend", "    diff = max(numbers)\
+    \ - min(numbers)\n    return numbers .- diff\nend", "\"\"\"\n    rescaled =\n\
+    \        (numbers[1]-numbers[0])\n        .^(1/size(numbers,1))\n        .*(numbers)\n\
+    end", "    \"\"\"\n    Scale the numbers to a vector with units between 0-1\n\
+    \    \"\"\"\n    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n\
+    \    rescaled = [ ((numbers[i] - minimum)/(maximum - minimum)) for i in 1:length(numbers)\
+    \ ]\n    return rescaled\nend\n</code>\n<|/ a tags=julia |>\n<| c |>\nI cannot\
+    \ understand how this answers the question?\n<|/ c |>\n<| a |>\nHere is a version\
+    \ that returns the range [min, max] of a given vector with rescaling (linear)\n\
+    <code>\nusing LinearAlgebra", "    largest = maximum(numbers)\n    smallest =\
+    \ minimum(numbers)\n    return largest-smallest+1.0/(largest-smallest)\nend\n\
+    </cell>\n<code language=julia-1.5>\nnumbers = [1.0, 2.0, 3.0, 4.0, 5.0]\nrescale_to_unit(numbers)\n\
+    </cell>\n<code language=julia-1.5>\n# Plot the results\n# plt.scatter(X,Y,label='Data')\n\
+    # plt.plot(X, rescale_to_unit(X),'r-',label='Rescaled')\n# plt.legend()\n# plt.xlabel(\"\
+    X\")\n# plt.ylabel(\"y\")\n# plt.show()\n</cell>\n<text>\nNormalization\nNormalization\
+    \ is a common requirement in machine learning. Normalization can be applied in\
+    \ 2 ways:", "    number_min = minimum(numbers)\n    number_max = maximum(numbers)\n\
+    \    numbers = (numbers - number_min) / (number_max - number_min) * 2 - 1\n  \
+    \  return numbers\nend", "    # this code is based on the MATLAB function rescale\n\
+    \    \n    # convert input into an array to improve performance\n    numbers =\
+    \ numbers .* ones(length(numbers));", "    rescaled = map(x -> x / maximum(numbers),\
+    \ numbers)\n    return Vector{Float64}(rescaled);\nend", "    maximum = maximum(numbers)\n\
+    \    minimum = minimum(numbers)\n    \n    maximum = min(maximum, 1)\n    minimum\
+    \ = max(minimum, 0)\n    \n    rescaled_numbers = numbers .- minimum\n    rescaled_numbers\
+    \ ./= (maximum - minimum)\n    \n    return rescaled_numbers\nend\n</cell>\n<code\
+    \ language=julia-1.5>\n# test rescale_to_unit\nrescale_to_unit([0.0, 0.25, 0.5,\
+    \ 0.75, 1.0])\n</cell>\n<code language=julia-1.5>\n# test rescale_to_unit\nrescale_to_unit([-0.0,\
+    \ 0.25, 0.5, 0.75, 1.0])\n</cell>\n<text>\nExercise 2", "    rescaled_numbers\
+    \ = numbers.map(x => (x - min(numbers)) / (max(numbers) - min(numbers))) \nend\n\
+    </code>\n<|/ a |>\n<| c |>\nThis answer is not helpful to me, as it does not scale\
+    \ any numbers, it just rescales them. This is the opposite of what the OP requested.\n\
+    <|/ c |>\n<| a dscore=0 tags=julia |>\nThis also works and is a bit more succinct:\n\
+    <code>\njulia> using StatsBase", "    minimum = min(numbers)\n    maximum = max(numbers)\n\
+    \    \n    numbers = (numbers - minimum) / (maximum - minimum)\n    numbers =\
+    \ numbers .* maximum\n    \n    return numbers\nend", "    return numbers .- minimum(numbers)\
+    \ .+ 0.5 ./ maximum(numbers)\nend ", "    rescaled = numbers .- minimum(numbers)\n\
+    \    rescaled ./= maximum(rescaled)\n    return rescaled\nend\n</code>\n<|/ a\
+    \ tags=julia dscore=2 |>\n<| c |>\nI'm getting an error for the `rescale_to_unit`\
+    \ function: `MethodError: no method matching rescale_to_unit(::Float64)`. I think\
+    \ it must be because of the `Vector{Float64}` parameter. I changed it to be `Vector{Any}`\
+    \ and it works now. I'm going to add this as the answer to my question since it\
+    \ works.\n<|/ c |>\n<| a tags=julia dscore=0 |>\nThis seems to be working now:\
+    \ \n<code>", "\tassert(size(numbers)>1)\n\tnew_numbers = zeros(size(numbers))\n\
+    \tfor i in 1:size(numbers)[1]\n\t\tnew_numbers[:,i] = numbers[:,i] - min(numbers[:,i])\n\
+    \t\tnew_numbers[:,i] = new_numbers[:,i] / max(numbers[:,i])\n\tend\n\treturn(new_numbers)\n\
+    end", "    numbers_sorted = sort(numbers)\n    minimum = numbers_sorted[1]\n \
+    \   maximum = numbers_sorted[end]\n    return (numbers-minimum)/(maximum-minimum)\n\
+    end\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThe reason I posted this as a comment\
+    \ is because I honestly do not know what you are trying to accomplish. I was just\
+    \ trying to help you solve your problem of getting a unit vector in the range.\
+    \ Now that you have explained your problem, I think that my comment above should\
+    \ now be completely irrelevant.\n<|/ c |>\n<| c |>\nI was trying to rescale a\
+    \ vector. the vector is a position in cartesian space. the range of the vector\
+    \ (the maximum distance between consecutive cartesian coordinates) is 1. I need\
+    \ to scale the positions so that the minimum distance between consecutive cartesian\
+    \ coordinates has 0 and the maximum distance between consecutive cartesian coordinates\
+    \ has 1. I thought my original question was clear enough to help the audience.\n\
+    <|/ c |>\n<| c |>\nAnd then this answer is not really what you want to be doing.\
+    \ Why not just use two vectors, one for x and one for y, and apply the same function\
+    \ to the two vectors?\n<|/ c |>\n<| c |>\nThe vectors are in two separate frames\
+    \ (different frames), so I can't just use the vectors directly. The positions\
+    \ also have to be transformed.\n<|/ c |>\n<| c |>\nOkay, I understand now. But\
+    \ just to clarify, you have a position vector in one frame and a position vector\
+    \ in another frame, and you want to get the difference of these vectors in a third\
+    \ frame. Did I understand that correctly?\n<|/ c |>\n<| a tags=julia dscore=0\
+    \ |>\nI'm sure this is more efficient (and more general) than your code, but I've\
+    \ left it here in case it's useful for anyone else.\n<code>", "    maximum = maximum(numbers)\n\
+    \    minimum = minimum(numbers)\n    range = maximum - minimum\n    new_numbers\
+    \ = numbers .- minimum\n    new_numbers = new_numbers ./ range\n    new_numbers\
+    \ = new_numbers .* 2.0\n    return new_numbers\nend\n</cell>\n<code language=julia-1.4>\n\
+    @code_native(rescale_to_unit)\n</cell>\n<code language=julia-1.4>\n@code_native(rescale_to_unit)\n\
+    </cell>\n<text>\n\u0422\u0430\u043A\u0436\u0435 \u0438\u0441\u043F\u043E\u043B\
+    \u044C\u0437\u0443\u0439\u0442\u0435 \u043C\u0435\u0442\u043E\u0434 .-\u043C\u0435\
+    \u0442\u043E\u0434, \u0447\u0442\u043E\u0431\u044B \u0443\u043C\u0435\u043D\u044C\
+    \u0448\u0438\u0442\u044C \u0432\u0441\u0435 \u044D\u043B\u0435\u043C\u0435\u043D\
+    \u0442\u044B \u0447\u0438\u0441\u0435\u043B \u0440\u0430\u0437\u043C\u0435\u0440\
+    \u0430 $n$, \u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\
+    \u0435 \u0432 \u043D\u0430\u0448\u0435\u043C \u043C\u0430\u0442\u0440\u0438\u0447\
+    \u0435\u0441\u043A\u043E\u043C \u0444\u043E\u0440\u043C\u0430\u0442\u0435 $\\\
+    mathbb{R}^{n+1}$. \u0422\u043E\u0447\u043D\u0435\u0435 \u043C\u043E\u0436\u0435\
+    \u0442 \u0431\u044B\u0442\u044C, \u0447\u0442\u043E \u043C\u0430\u0442\u0440\u0438\
+    \u0446\u0430 \u0431\u0443\u0434\u0435\u0442 \u0434\u043E\u0431\u0430\u0432\u043B\
+    \u0435\u043D\u0430 \u043A\u0430\u043A $\\begin{bmatrix}1 & 1 & ... & 1\\end{bmatrix}$\
+    \ \u0438 $\\begin{bmatrix}x_1\\x_2\\x_3\\...\\x_n\\end{bmatrix}$, \u0433\u0434\
+    \u0435 $ x_i \\in \\mathbb{R}^n$.", "    \"\"\"\n    From a vector of numbers\
+    \ (of at least two elements), apply a linear transform to that vector,\n    such\
+    \ that the smallest number will become 0 and the largest will become 1\n    \"\
+    \"\"\n    numbers.sort()\n    lower = numbers[1]\n    upper = numbers[length(numbers)-1]\n\
+    \    unit = (upper-lower)/length(numbers)\n    return Array{Float64}((numbers+1)/unit+1)\n\
+    end\n</cell>\n<text>\nAs a simple example consider the case where we wish to rescale\
+    \ our input image so that its smallest element becomes 0\nand the largest element\
+    \ becomes 1. In this case, our input image will have a size of $1280\\times 1024$.\
+    \ We will apply our function to a random vector of numbers between 0 and $1280\\\
+    times 1024$ such that the smallest number will become 0 and the largest will become\
+    \ 1.", "    length = length(numbers)\n    new_numbers = zeros(Float64, length)\n\
+    \    for i in 1:length\n        if numbers[i] != 0.0\n            new_numbers[i]\
+    \ = numbers[i] / length\n        else\n            new_numbers[i] = 0.0\n    \
+    \    end\n    end\n    return new_numbers\nend", "    if length(numbers) < 2\n\
+    \        return numbers\n    maximum = maximum(numbers)\n    minimum = minimum(numbers)\n\
+    \    return ((numbers - minimum) / (maximum - minimum)).^(1/length(numbers))\n\
+    end\n</cell>\n<code language=julia-1.5>\n\"\"\"\n    Given a vector of numbers\
+    \ (of at least two elements), apply a linear transform to that vector,\n    such\
+    \ that the smallest number will become 0 and the largest will become 1\n    \n\
+    \    The length of the vector is assumed to be equal to or greater than 2\n  \
+    \  \"\"\"", "    minimum = min(numbers)\n    maximum = max(numbers)\n    minimum\
+    \ == 0 ? minimum = 1 : minimum\n    maximum == 1 ? maximum = 1 : maximum\n   \
+    \ numbers..<=(minimum+maximum)/2 .|> map(x->(x-minimum)/maximum) \nend\n</code>\n\
+    <|/ a dscore=5 |>\n<| a dscore=4 |>\nFor vectors and matrices, you could also\
+    \ use the clamp function.\n<code>\njulia> clamp([1, 2, 3, 4], 0, 2)\n1\xD74 Array{Int64,2}:\n\
+    \ 1  0  0  1", "    for num in numbers \n        if num == 0.0 \n            num\
+    \ = 1.0 \n        elseif num == 1.0 \n            num = 0.0\n        elseif num\
+    \ < 0.0 \n            num = num + 1.0 \n        elseif num > 1.0 \n          \
+    \  num = num - 1.0\n        end\n    end\n    return numbers\nend\n</code>\n<|/\
+    \ a tags=julia,arrays,rescale,numbers dscore=4 |>\n<| c |>\nThanks for the answer.\
+    \ I tried it, and I'm getting an error message saying `ERROR: LoadError: MethodError:\
+    \ no method matching getindex(::Type{Vector{Float64}}, ::Symbol)\nClosest candidates\
+    \ are:\n  getindex(::Any, ::Symbol) at /Users/tsorminaris/.jl/julia/src/generic.jl:566\n\
+    \  getindex(::Any, ::Symbol) at /Users/tsorminaris/.jl/julia/src/dictionary.jl:499\n\
+    \  getindex(::Any, ::Symbol) at /Users/tsorminaris/.jl/julia/src/dictionary.jl:504\n\
+    \  getindex(::Type{T}, ::Symbol) where T at /Users/tsorminaris/.jl/julia/src/dictionary.jl:506\n\
+    \  getindex(::AbstractArray{T,N} where N, ::Symbol) where T at /Users/tsorminaris/.jl/julia/src/dictionary.jl:509\n\
+    \  getindex(::AbstractArray{T,N} where N, ::Symbol) where T at /Users/tsorminaris/.jl/julia/src/dictionary.jl:511\n\
+    \  ...\nStacktrace:\n [1] top-level scope at none:0\nin expression starting at\
+    \ /Users/tsorminaris/Documents/Julia/juliaPrograms/ArrayRescale.jl:3`\n<|/ c |>\n\
+    <| c |>\nHmm, that seems like a separate problem. Can you add the full error message\
+    \ to your question? I suspect that `getindex` has been deprecated, so you'd want\
+    \ to use `[]` instead of `getindex` but I'm not sure why that would make `rescale_to_unit`\
+    \ fail.\n<|/ c |>\n<| c |>\nDone. I realized that I had forgotten to add a semicolon\
+    \ at the end for the end of the function definition. Now I'm getting a new error\
+    \ message when I run the code `in expression starting at /Users/tsorminaris/Documents/Julia/juliaPrograms/ArrayRescale.jl:3\n\
+    ERROR: LoadError: MethodError: no method matching getindex(::Type{Vector{Float64}},\
+    \ ::Symbol)\nClosest candidates are:\n  getindex(::Any, ::Symbol) ", "    \"\"\
+    \"\n    Apply a linear transformation to the input vector.", "\tresult = []\n\t\
+    min_number = minimum(numbers)\n\tmax_number = maximum(numbers)\n\tfor number in\
+    \ numbers\n\t\tif number < min_number \n\t\t\tnumber = min_number\n\t\telseif\
+    \ number > max_number\n\t\t\tnumber = max_number\n\t\tend\n\t\tpush!(result, number)\n\
+    \tend\n\treturn result\nend", "    if length(numbers) < 2 \n        throw(ErrorException(\"\
+    Cannot rescale to unit vector if input vector has fewer than two elements\"))\n\
+    \    elseif length(numbers) == 2 \n        numbers[1] = 1\n        return numbers\n\
+    \    else\n        (smallest, largest) = minimum(numbers), maximum(numbers)\n\
+    \        numbers[1] /= smallest\n        numbers[end] /= largest\n        return\
+    \ numbers\n    end\nend\n</cell>\n<code language=julia-1.6>\n# Example function\
+    \ \n\"\"\"\n    Rescale the input vector such that the smallest number will become\
+    \ 0 and the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"", "    maximum = maximum(numbers)\n\
+    \    minimum = minimum(numbers)\n    numbers = numbers.map((x-minimum)/(maximum-minimum))\n\
+    \    return numbers\nend\n</code>\nThe rescale function takes a vector of numbers\
+    \ and returns the rescaled version\n<|/ a tags=julia,statistics,python dscore=2\
+    \ |>\n<| c |>\n`maximum` and `minimum` are not vectorized, so this approach won't\
+    \ work.\n<|/ c |>\n<| a |>\nThe OP asks specifically for Julia, so here is an\
+    \ answer for that:\n<code>\njulia> using Statistics", "    numbers = map(x ->\
+    \ x/maximum(numbers), numbers) \n    return numbers\nend", "    return numbers.min(dims=1).max(dims=1)\
+    \ |> float\nend\n</cell>\n<code language=julia-1.2>", "    if length(numbers)\
+    \ == 0\n        return numbers;\n    end", "    #make sure we have at least two\
+    \ numbers\n    if length(numbers) < 2\n        error(\"Vectors of at least two\
+    \ elements are required.\")\n    end", "    sorted_numbers = sort(numbers)\n \
+    \   rescaled_numbers = Float64[numbers[1]]\n    for n in sorted_numbers[2:end]\n\
+    \        rescaled_numbers += (n-numbers[1]) / n\n    end\n    return rescaled_numbers\n\
+    end\n</cell>\n<text>\nFor each of the data points, we have its original range:",
+  "    len = length(numbers)\n    zero = numbers[1]\n    one = numbers[len]\n    numbers\
+    \ = numbers .- zero\n    numbers = numbers ./ one\n    return numbers\nend \n\
+    </code>\n<|/ a dscore=0 |>\n<| c |>\nThis does not seem to be valid Rust code.\n\
+    <|/ c |>\n<| c |>\nThis is valid rust code. It is just that i didn't know about\
+    \ rust's array operators, and i thought this would be pretty basic stuff.\n<|/\
+    \ c |>\n<| c |>\n\"This is valid rust code\" is true and true ... but it also\
+    \ appears to be a code golf question.\n<|/ c |>\n<| c |>\nHow is this not golf\
+    \ question? If it appears to be code golf then it is probably because you are\
+    \ trying to be efficient by avoiding loops ... but i don't think that's what you\
+    \ are saying. Your answer doesn't actually answer the question, which is about\
+    \ avoiding loops.\n<|/ c |>\n<| c |>\nYou are correct, it is not a golf question.\
+    \ The answer by Raccardia does actually answer the question so I'll edit it with\
+    \ the code I actually used.\n<|/ c |>\n<| a tags=optimization,julia,performance,vectorization\
+    \ |>\nI thought about this problem some more, and wrote a version with no loops,\
+    \ and only a loop with a single assignment:\n<code>", "    if numbers.len==2 \n\
+    \        smallest, largest = numbers[1], numbers[2]\n        numbers[0] = (largest\
+    \ - smallest)/(largest-smallest)*1.0\n        numbers[1] = (smallest - largest)/(largest-smallest)*1.0\n\
+    \        return numbers \n    else \n        error(\"Vector to rescale must have\
+    \ at least two elements\")\n    end\nend\n</code>\n<|/ a |>\n<| c |>\nFor a vector,\
+    \ `minimum(numbers)` is simpler.\n<|/ c |>\n<| c |>\nOh yeah, that should be `if\
+    \ length(numbers) >= 2`.\n<|/ c |>\n<| a |>\nHere's a generalized version of the\
+    \ answer of Julian in Julia 1.0:\n<code>\nrescale_to_unit(numbers::Vector{Float64})::Vector{Float64}\
+    \ where {T <: Real} = \n    if length(numbers) >= 2\n        min_val = minimum(numbers)\n\
+    \        scale = (max_val - min_val)/maximum(numbers)\n        map(x -> x*scale,\
+    \ numbers)\n    else\n        error(\"Vector to rescale must have at least two\
+    \ elements\")\n    end\n</code>\n<|/ a tags=julia,rescale,vector,math dscore=2\
+    \ |>\n<| a dscore=2 |>\nAnother version (from here):\n<code>", "\t\n    length\
+    \ = length(numbers)\n    if length < 2\n    \treturn numbers\n    end\n    smallest_number\
+    \ = numbers[1]\n    largest = numbers[length-1]\n    \n    scaled_numbers = Vector{Float64}(length,\
+    \ 0)\n    \n    for i in 1:length\n    \tscaled_numbers[i] = smallest_number/(largest-smallest_number)*(i-smallest_number+1.0)\n\
+    \    \tsmallest_number += scaled_numbers[i]\n    end\n    return scaled_numbers\n\
+    end\n</cell>\n<code language=julia-1.4>\n@time rescale_to_unit(range(0,10))\n\
+    </cell>\n<text>\nExercise 1\nWrite a function which takes a vector of numbers\
+    \ and a function that takes a single argument and returns a vector of numbers\
+    \ and apply that function to the vector of numbers.  Make sure that your function\
+    \ scales and wraps around the vector properly.", "    rescaled_numbers = numbers[1]\
+    \ / (numbers[1] + numbers[2])\n    return rescaled_numbers\nend\n</cell>\n<text>\n\
+    This looks just like the previous function, but let's test it out on some test\
+    \ cases.", "    maximum = min(numbers)\n    minimum = max(numbers)\n    length\
+    \ = length(numbers)\n    scale = maximum - minimum\n    return Vector{Float64}(minimum\
+    \ + scale .* numbers)\nend\n</cell>\n<code language=julia-1.5>\n@assert Vector{Float64}(minimum\
+    \ + scale .* numbers) == rescale_to_unit(numbers) \u2248 numbers\n</cell>\n<code\
+    \ language=julia-1.5>", "    sum = reduce(add, numbers)\n    largest = numbers[end]\n\
+    \    if sum != largest\n        smallest = numbers[1]\n        for n in numbers[2:end]\n\
+    \            n/n\n            largest = n\n        end\n        largest/smallest\n\
+    \        return numbers\n    else\n        largest\n    end\nend", "  min_number\
+    \ = min(numbers)\n  max_number = max(numbers)\n  return [min_number / max_number]\
+    \ * length(numbers)\nend", "    smallest = min(numbers)\n    largest = max(numbers)\n\
+    \    if smallest == 0.0\n        rescaled_numbers = numbers\n    elseif largest\
+    \ == 1.0\n        rescaled_numbers = numbers + 1.0\n    else\n        rescaled_numbers\
+    \ = numbers ./ largest .+ 1.0\n    end\n    return rescaled_numbers\nend", "\"\"\
+    \"\n    rescales the inputs to lie between 0 and 1\n\"\"\"\n    numbers = check_number_vector(numbers)\n\
+    \    if isempty(numbers)\n        error(\"Input is empty\")\n    end\n    return\
+    \ numbers\nend", "    \"\"\"Scale the numbers so that min becomes 0 and max becomes\
+    \ 1\"\"\"\n    if length(numbers) < 2 \n        return numbers \n    min = numbers[1]\n\
+    \    max = numbers[end]\n    numbers = map(i -> i - min * (max - i), numbers)\n\
+    \    return numbers\nend", "    mini = min(numbers)\n    maxi = max(numbers)\n\
+    \    norm_range = (maxi - mini) / (maxi + mini)\n    numbers = map(mini, numbers)\
+    \ - map(mini, numbers) * norm_range \n    return numbers\nend", "        rescaled_numbers\
+    \ = numbers .- min(numbers)\n        rescaled_numbers ./= max(rescaled_numbers)\n\
+    \        return rescaled_numbers\nend", "    number = numbers[end]\n    numbers[end]\
+    \ = 1.0 - number\n    number\nend", "    if length(numbers) < 2 \n        error(\"\
+    Can only rescale vectors of 2 or more elements!\")\n    end\n    smallest = min(numbers)\n\
+    \    largest = max(numbers)\n    smallest_index = find(numbers .== smallest)\n\
+    \    largest_index = find(numbers .== largest)\n    vector = numbers[smallest_index:largest_index]\n\
+    \    vector = (vector .- smallest) ./ maximum(numbers .- smallest)\n    return\
+    \ vector\nend", "    len = numbers[end] - numbers[1]\n    numbers[1] = 0.0\n \
+    \   numbers[end] = 1.0\n    return numbers[2:end]/len\nend", "    sum_ = sum(numbers)\n\
+    \    if sum_ == 0.0\n        numbers\n    else\n        numbers ./ sum_\n    end\n\
+    end\n</cell>\n<text>\nAnd that's all there is to it. The rest of the notebook\
+    \ is optional, but I try to make it as readable as possible.", "    rescaled =\
+    \ numbers[2] - numbers[1]\n    if rescaled > 1e-10\n        rescaled\n    else\n\
+    \        1.0\n    end\nend", "    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n\
+    \    minimum.clamp!(-maximum)\n    maximum.clamp!(minimum)\n    return minimum\
+    \ + maximum * (numbers - minimum) / (maximum - minimum)\nend\n</code>\n<|/ a |>\n\
+    <| c |>\nYeah I came across this but was unsure if it was the right tool for the\
+    \ job. Thanks!\n<|/ c |>\n<| c |>\nThis is essentially the second solution of\
+    \ my answer. My solution only uses base packages and my solution is slightly different\
+    \ since my solution doesn't require any import. Also, my solution doesn't modify\
+    \ the original vector, but a copy of `numbers` is created which I believe is what\
+    \ the OP wants. So I think yours is more correct.\n<|/ c |>\n<| c |>\nOh yeah,\
+    \ this second solution is essentially yours, just that I used `minimum` instead\
+    \ of `minimum(x)` and I didn't bother to import anything. But I like your solution\
+    \ too.\n<|/ c |>\n<| a |>\nI like this solution because it's fairly readable,\
+    \ but I thought I would mention that Julia's minimum and maximum functions will\
+    \ operate on arrays, so they can be used as part of an apply function, as in:\n\
+    <code>\njulia> minimum([1,2,3,4,5])\n1", "    maximum = maximum(numbers)\n   \
+    \ minimum = minimum(numbers)\n    if maximum == minimum\n        return numbers\n\
+    \    \n    return minimum + maximum * (numbers - minimum) / (maximum - minimum)\n\
+    end", "    scale = max(numbers)-min(numbers)\n    numbers = numbers .* 1/scale\
+    \ \n    return numbers\nend", "\"\"\"\n    Function used to rescale the given\
+    \ input numbers to a vector in the range [0,1].\n    \n    Arguments:\n    numbers\
+    \ - The list of numbers to be rescaled\n    \n    Returns:\n    The list of numbers\
+    \ in the range [0,1] \n    \"\"\"\n    maximum = maximum(numbers)\n    minimum\
+    \ = minimum(numbers)\n    maximum = maximum * 100\n    minimum = minimum * 100\n\
+    \    return minimum+((numbers-minimum)/(maximum-minimum))*100\nend", "    if length(numbers)\
+    \ < 2\n        return numbers\n    \n    min_value = minimum(numbers)\n    max_value\
+    \ = maximum(numbers)\n    \n    if min_value == max_value\n        return [min_value]\n\
+    \    \n    range_value = max_value - min_value\n    \n    rescaled_numbers = [min_value\
+    \ + (range_value * numbers[i]) / length(numbers) - min_value for i in 1:length(numbers)]\n\
+    \    \n    return rescaled_numbers\nend", "    # check input\n    assert(length(numbers)\
+    \ >= 2)\n    minimum = min(numbers)\n    maximum = max(numbers)", "    rescale_to_unit_impl(numbers,\
+    \ length(numbers))\nend", "    smaller = numbers[1] - numbers[0]\n    largest\
+    \ = numbers[length(numbers) - 1] - numbers[length(numbers)]\n    return (numbers\
+    \ - smallest) / (largest - smallest).^2\nend\n</cell>\n<text>\nWe will now have\
+    \ a look at a more efficient implementation of linear transforms, where we replace\
+    \ the division by a multiplication by a matrix that is the inverse of the one\
+    \ we used when creating the original linear transform. For this we will use Julia's\
+    \ Matrix type for this, which also has some nice functionality. We will see later\
+    \ how this can be used to apply linear transforms to multiple vectors.", "   \
+    \ # Normalize the given numbers by dividing them by their L2 norm\n    normed_numbers\
+    \ = numbers ./ sqrt(numbers .^ 2)\n    return normed_numbers\nend", "    \"\"\"\
+    \n    Apply a linear transformation to the given vector such that the smallest\
+    \ number becomes 0 and the largest\n    becomes 1. \n    \"\"\"\n    \n    rescaled_numbers\
+    \ = numbers.map(x => (x - min(numbers)) / (max(numbers) - min(numbers))) \n  \
+    \  return rescaled_numbers\nend", "    \"\"\"\n    Convert numbers to have unitary\
+    \ scale\n    \"\"\"\n    if length(numbers) < 2\n        error(\"rescale_to_unit\
+    \ requires at least 2 elements\")\n    end\n    number_smallest = minimum(numbers)\n\
+    \    number_largest = maximum(numbers)\n    rescaled_numbers = Vector{Float64}(number_smallest\
+    \ : number_largest : 0)\n    for number in numbers\n        rescaled_numbers[number]\
+    \ = number/number_largest\n    end\n    return rescaled_numbers\nend", "    assert(length(numbers)\
+    \ == 2)\n    \n    rescaled_numbers = numbers[1] * numbers[1] - numbers[0] * numbers[0]\n\
+    \    if abs(rescaled_numbers) < 1e-5\n        return Vector{Float64}(undef, 0)\n\
+    \    else\n        rescaled_numbers = 1.0 / rescaled_numbers\n    end\n    numbers[1]\
+    \ = numbers[1] * rescaled_numbers\n    numbers[2] = numbers[2] * rescaled_numbers\n\
+    \    numbers[3] = numbers[3] * rescaled_numbers\n    return numbers\nend", " \
+    \   rescaled_numbers = numbers - minimum(numbers)\n    rescaled_numbers .+= maximum(-minimum(numbers),\
+    \ 0) / length(numbers)\n    return rescaled_numbers\nend", "    minimum = minimum(numbers)\n\
+    \    maximum = maximum(numbers)\n    scaled = minimum:(-maximum)\n    rescaled\
+    \ = (numbers - minimum) / maximum(numbers)\n    return rescaled * maximum\nend ",
+  "    if length(numbers) < 2\n        error(\"The input vector must have at least\
+    \ two numbers.\")\n    end\n    return numbers .- minimum(numbers)\nend", "  \
+    \  minimum = min(numbers)\n    maximum = max(numbers)\n    return [minimum-maximum,\
+    \ maximum-minimum]\nend", "    min = minimum(numbers)\n    max = maximum(numbers)\n\
+    \    return (numbers-min)/(max-min)\nend\n</cell>\n<text>\nNow we can go ahead\
+    \ and use the function defined above to rescale the training data into units:",
+  "    return Vector{Float64}(numbers .- minimum(numbers)) ./ maximum(numbers)\nend",
+  "    local result = Vector{Float64}()\n    for n in numbers\n        push!(result,\
+    \ n / max(n))\n    end\n    result\nend\n</code>\n<|/ a dscore=1 |>\n<| c |>\n\
+    I believe that the question was about a general function for rescaling arbitrarily\
+    \ sized lists. Yours assumes that `numbers` will always be a list of 2 or more\
+    \ elements.\n<|/ c |>\n<| c |>\nI think this is a very general solution that would\
+    \ work in any case.\n<|/ c |>\n<| c |>\nThe solution below works best for me because\
+    \ it also ensures that the returned value is a vector. Thanks for your help!\n\
+    <|/ c |>\n<| a dscore=1 tags=julia,arrays,list |>\nThis should do the trick:\n\
+    <code>\njulia> function rescale_to_unit(numbers::Vector{Float64})::Vector{Float64}\n\
+    \             return map(x -> x/maximum(x), numbers)\n       end\nrescale_to_unit\
+    \ (generic function with 1 method)", "    length = length(numbers)\n    if length\
+    \ < 2\n        throw(ArgumentError(\"Can only rescale arrays of two or more elements\"\
+    ))\n    end", "    numbers = numbers ./ maximum(numbers)\n    return numbers\n\
+    end\n</cell>\n<text>\nTo do this, we call rescale_to_unit on each element in numbers,\
+    \ and then append the resulting array to xs.", "        local num_range = map(max,\
+    \ numbers)\n        return map(x -> (x - min(numbers)) / (num_range), numbers)\n\
+    end\n</cell>\n<text>\nExercise 10 - Applying Linear Transforms", "    sum_number\
+    \ = sum(numbers)\n    scaled_numbers = numbers ./ sum_number\n    scaled_numbers.^2\n\
+    end", "    numbers.min == numbers.max && return numbers\n    numbers == 0 && (return\
+    \ numbers)\n    numbers /= maximum(numbers)\n    return numbers\nend\n</cell>\n\
+    <code language=julia-1.3>", "    largest = maximum(numbers)\n    smallest = minimum(numbers)\n\
+    \    range = largest - smallest\n    result = (numbers - smallest) / range\n \
+    \   return result\nend\n</code>\n<|/ a tags=julia |>\n<| a dscore=3 |>\nI think\
+    \ most of the other answers use maximum, minimum, range, and / operators, which\
+    \ are slow and expensive operations. I came up with the following solution:\n\
+    <code>", "    rescale = 1.0 / (maximum(numbers) - minimum(numbers))\n    return\
+    \ numbers .* rescale\nend\n</cell>\n<code language=julia-1.0>\n# let's test our\
+    \ function\njulia> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n0.0  0.125  0.5\
+    \  0.75  1.0\n</cell>\n<code language=julia-1.0>\n# and let's test our function\n\
+    julia> rescale_to_unit([0.5, 0.75, 1.0, 2.0])\n0.5  0.875  1.0  2.0\n</cell>\n\
+    <code language=julia-1.0>\n# and let's test our function\njulia> rescale_to_unit([1.0,\
+    \ 5.0, 8.0, 10.0])\n1.0  5.008  8.01  10.0\n</cell>\n<code language=julia-1.0>\n\
+    # and let's test our function\njulia> rescale_to_unit([1.0, 3.0, 4.0, 6.0])\n\
+    1.0  2.6  5.0  8.0\n</cell>\n<code language=julia-1.0>\n# let's test our function\n\
+    julia> rescale_to_unit([3.0, 4.0, 6.0, 8.0])\n3.0  4.0  6.0  8.0\n</cell>\n<code\
+    \ language=julia-1.0>\n# let's test our function\njulia> rescale_to_unit([0.5,\
+    \ 0.5, 3.5])\n0.5  0.5  3.5\n</cell>\n<code language=julia-1.0>\n# let's test\
+    \ our function\njulia> rescale_to_unit([0.5, 3.5])\n0.5  3.5\n</cell>\n<code language=julia-1.0>\n\
+    # let's test our function\njulia> rescale_to_unit([0.5, 3.5, 5.0])\n0.5  3.5 \
+    \ 5.0\n</cell>\n<code language=julia-1.0>\n# let's test our function\njulia> rescale_to_unit([0.5,\
+    \ 3.5, 5.0])\n0.5  3.5  5.0\n</cell>\n<code language=julia-1.0>\n# let's test\
+    \ our function\njulia> rescale_to_unit([0.5, 3.5, 5.0])\n0.5  3.5  5.0\n</cell>\n\
+    <code language=julia-1.0>\n# let's test our function\njulia> rescale_to_unit([0.5,\
+    \ 3.5, 5.0])\n0.5  3.5  5.0\n</cell>\n<code language=julia-1.0>\n# let's test\
+    \ our function\njulia> rescale_to_unit([0.5, 3.5, 5.0])\n0.5  3.5  5.0\n</cell>\n\
+    <code language=julia-1.0>\n# let's test our function\njulia> rescale_to_unit([0.5,\
+    \ 3.5, 5.0])\n0.5  3.5  5.0\n", "    smallest = numbers[numbers .< numbers[end]]\n\
+    \    largest = numbers[numbers .> numbers[end]]\n    smallest.zero()\n    largest.one()\n\
+    \    numbers[numbers .< numbers[end]] .= smallest\n    numbers[numbers .> numbers[end]]\
+    \ .= largest\n    return numbers\nend\n</cell>\n<text>\nThe following function\
+    \ performs PCA (Principal Component Analysis) on the given data, with the number\
+    \ of dimensions given by the second argument.", "    \"\"\"\n    Given vector\
+    \ of numbers (of at least two elements), apply a linear transform to that vector,\n\
+    \    such that the smallest number will become 0 and the largest will become 1\n\
+    \    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75,\
+    \ 1.0]\n    \"\"\"\n    if length(numbers) < 2\n        return numbers\n    rescaled\
+    \ = numbers .- minimum(numbers)\n    rescaled = rescaled ./ maximum (rescaled)\n\
+    \    return rescaled\nend\n</cell>\n<code language=julia-1.3>", "    length =\
+    \ length(numbers)\n    minimum = minimum(numbers)\n    maximum = maximum(numbers)\n\
+    \    if maximum == minimum\n        return Vector{Float64}((minimum + 1.0) / 2.0,\
+    \ (minimum + 1.0) / 2.0)\n    end\n    return (numbers - minimum) / (maximum -\
+    \ minimum)\nend", "    rescaled_numbers = numbers - min(numbers)\n    rescaled_numbers\
+    \ = rescaled_numbers / max(numbers)\n    return rescaled_numbers\nend\n</code>\n\
+    <|/ a |>\n<| a dscore=1 tags=julia |>\nAn additional alternative would be to use\
+    \ range. E.g.:\n<code>\njulia> x = 1:0.1:10\n1-element Vector{Float64}:\n 0.100000000000000012",
+  "    \n    # check that input vector has at least two elements\n    if length(numbers)\
+    \ < 2\n        return numbers\n    end", "    rescaled_numbers = numbers .* [1.0\
+    \ ./ maximum(numbers), 0.0 ./ minimum(numbers)]\n    return rescaled_numbers\n\
+    end", "    if length(numbers) < 2\n        throw(DomainError(\"Input vector must\
+    \ be of at least two elements\"))\n    elseif min(numbers) <0 || max(numbers)\
+    \ >1\n        throw(DomainError(\"Input vector must have values in between 0 and\
+    \ 1\"))\n    else\n        numbers = numbers ./ min(numbers)\n    end\n    numbers\n\
+    end", "    numbers  = numbers - minimum(numbers)\n    numbers = numbers / maximum(numbers)\n\
+    \    return numbers\nend\n</cell>\n<text>\nNext we define two convenience functions\
+    \ to create plots for various problems. We will then use the plot_problems function\
+    \ to display and compare the solutions to various problems.", "    unit_numbers\
+    \ = rescale(numbers)\n    smallest = minimum(unit_numbers)\n    largest = maximum(unit_numbers)\n\
+    \    if smallest < 0.0 || largest > 1.0\n        error(\"Unrepresentable range\"\
+    )\n    end\n    rescaled = [smallest] .+ largest\n    return rescaled\nend\n</cell>\n\
+    <text>\nNow let's compare the two implementations:", "    mini = min(numbers)\n\
+    \    maxim = max(numbers)\n    mini / maxim\nend\n</cell>\n<text>\nNow let's test\
+    \ this function", "  if length(numbers) < 2 \n    return numbers \n  elseif min(numbers)\
+    \ < 0.0 || max(numbers) > 1.0 \n    # rescale all numbers to range [0, 1]\n  \
+    \  rescaled = (numbers - min(numbers)) / (max(numbers) - min(numbers))\n  else\
+    \ \n    # rescale all numbers to range [0, 1]\n    rescaled = (numbers - min(numbers))\
+    \ / (1.0 - max(numbers))\n  end", "\tsum_of_squares = 0.0;\n\tfor i in numbers:\n\
+    \t\tsum_of_squares += i ** 2\n\treturn numbers / sqrt(sum_of_squares)\nend", " \
+    \   smallest = min(numbers)\n    largest = max(numbers)\n    diff = largest -\
+    \ smallest\n    norm = 1.0 / diff\n    result = copy(numbers)\n    for i in numbers\n\
+    \        result[i] = result[i] * norm\n    end\n    result\nend\n</cell>\n<code\
+    \ language=julia-1.5>\n#export", "    rescaled = numbers.minmax().*0.5+0.5\n \
+    \   rescaled = filter((x)->x!=0.0,rescaled)\n    rescaled = map(x->x*2/length(x),rescaled)\n\
+    \    rescaled = sort(rescaled,lt=<)\n    return rescaled\nend # rescale_to_unit",
+  "    largest = maximum(reshape(numbers, -1))\n    smallest = minimum(reshape(numbers,\
+    \ -1))\n    scale = largest-smallest\n    rescaled = (numbers - smallest) / scale\n\
+    \    return rescaled + smallest\nend", "    \"\"\"\n    Given vector of numbers\
+    \ (of at least two elements), apply a linear transform to that vector,\n    such\
+    \ that the smallest number will become 0 and the largest will become 1\n    \"\
+    \"\"\n    number = minimum(numbers)\n    numbers = numbers - number\n    numbers\
+    \ = numbers / maximum(numbers)\n    return numbers\nend\n</cell>\n<code language=julia-0.4>\n\
+    #=\n>>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n[0.0 0.25 0.5 0.75 1.0]\n\
+    =#\n</cell>\n<text>\nThe linear transform above is called \"rescaling\" because\
+    \ it transforms a vector so that its min becomes 0 and its max becomes 1.\nTo\
+    \ compute the inverse transform, we simply invert the rescaling operation.", " \
+    \   \"\"\" Given vector of numbers (of at least two elements), apply a linear\
+    \ transform to that vector,\n    such that the smallest number will become 0 and\
+    \ the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n\
+    \    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"", "    \n    if length(numbers) <\
+    \ 2\n        return numbers\n    end\n    \n    # find minimum \n    min_val =\
+    \ numbers[1]\n    for i in 2:length(numbers)\n        if numbers[i] < min_val\n\
+    \            min_val = numbers[i]\n        end\n    end\n    \n    # find the\
+    \ largest number\n    max_val = numbers[1]\n    for i in 2:length(numbers)\n \
+    \       if numbers[i] > max_val\n            max_val = numbers[i]\n        end\n\
+    \    end\n    \n    # scale each element\n    for i in 1:length(numbers)\n   \
+    \     numbers[i] = (numbers[i] - min_val) / (max_val - min_val)\n    end\n   \
+    \ return numbers\nend\n</cell>\n<code language=julia-1.4>\n\"\"\"\n    rescale_to_unit([1.0,2.0,3.0,4.0,5.0])\n\
+    \    rescale_to_unit([1,2,3,4,5])\n\"\"\"", "    rescaled_numbers = numbers .-\
+    \ minimum(numbers)\n    rescaled_numbers ./= maximum(numbers)\n    return rescaled_numbers\n\
+    end", "    maximum = min(numbers)\n    minimum = max(numbers)\n    \n    rescaled_numbers\
+    \ = numbers - minimum\n    rescaled_numbers = (rescaled_numbers / maximum - 1.0)\n\
+    \    rescaled_numbers = rescaled_numbers * maximum\n    return rescaled_numbers\n\
+    end", "    \"\"\"Given vector of numbers (of at least two elements), apply a linear\
+    \ transform to that vector,\n    such that the smallest number will become 0 and\
+    \ the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n\
+    \    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"\n    numbers = (numbers - minimum(numbers))\
+    \ / (maximum(numbers) - minimum(numbers)) * 2 - 1\n    return numbers\nend", " \
+    \   minimum = minimum(numbers)\n    maximum = maximum(numbers)\n    numbers =\
+    \ numbers .- minimum\n    numbers = numbers / maximum\n    return numbers\nend\
+    \ \n</cell>\n<code language=julia-1.5>\n#export", "    rescaled_numbers = numbers\
+    \ .- min(numbers)\n    rescaled_numbers ./= maximum(rescaled_numbers)\n    return\
+    \ rescaled_numbers\nend", "    rescale_to_unit_(numbers)\nend\n</cell>\n<code\
+    \ language=julia-1.0>\nusing Distributions\nusing LinearAlgebra", "    rescale(numbers,\
+    \ 0, 1)\nend\n</cell>\n<code language=julia-1.5>\n@time rescale_to_unit([1,2,3,4,5,6,7,8,9,10])\n\
+    </cell>\n<text>\nLet's implement it ourselves", "    max = max(numbers)\n    min\
+    \ = min(numbers)\n    \n    numbers = map(x -> (x - min) / (max - min), numbers)\n\
+    \    return numbers\nend", "    numbers = (numbers - min(numbers)) ./ (max(numbers)\
+    \ - min(numbers))\n    \nend\n</cell>\n<code language=julia-1.5>\nrescale_to_unit(numbers)\n\
+    </cell>\n<text>\nThe rescale function takes the vector of numbers as input and\
+    \ outputs a vector of floats containing the same numbers, rescaled according to\
+    \ the rule described above. The numbers are rescaled so as to produce vectors\
+    \ of length 1.", "    return numbers.minmax() |> collect |> collect{|n| n * scale}\n\
+    end", "    \n    if numbers.length != 2\n        throw(ArgumentError(\"numbers\
+    \ must have two elements, but got $(numbers.length)\"))\n    end", "    # First\
+    \ find min and max values in numbers array\n    smallest_number = minimum(numbers)\n\
+    \    largest_number = maximum(numbers)\n    \n    # Normalize numbers to range\
+    \ [0, 1]\n    numbers = (numbers - smallest_number) / (largest_number - smallest_number)\n\
+    \    # Return array of rescaled numbers\n    return numbers\nend", "    numbers[numbers\
+    \ < numbers[1]] = numbers[1]\n    numbers[numbers > numbers[end]] = numbers[end]\n\
+    \    return numbers\nend\n</cell>\n<text>\nNow let's apply the rescaling function\
+    \ to the numbers that we collected above:", "    smallest, largest = min(numbers),\
+    \ max(numbers)\n    numbers.map(n => (n - smallest)/(largest - smallest))\nend\n\
+    </cell>\n<text>\nThis function is essentially the function we saw in the previous\
+    \ section. Just a few lines to define that function.", "    n = numbers[1]\n \
+    \   for i in 2:length(numbers)\n        n = numbers[i] / n\n    end\n    return\
+    \ numbers / n\nend\n</cell>\n<text>\nExercise 17\nWrite a function to return the\
+    \ number of elements of a vector that are greater than a given threshold (exclusive).\
+    \ \nHere we assume that the vector is sorted in ascending order.", "        rescaled\
+    \ = map(Float64, numbers) / maximum(numbers)\n        return Array(rescaled)\n\
+    end\n</cell>\n<text>\nWe can now call the function by passing an array of numbers:",
+  "    return numbers.min ./ numbers .* numbers .+ numbers.max ./ numbers .* numbers\n\
+    end\n</cell>\n<text>\nImplement a sigmoid function\nImplement a sigmoid function\n\
+    $sigmoid_1(x) = \\frac{1}{1+e^{-x}}$\ne.g. the sigmoid function for the value\
+    \ 0.5 should return the value 0.75", "    #@trace\n    # make sure numbers is\
+    \ size 2\n    assert(length(numbers) == 2) \n    #@trace\n    \n    # create an\
+    \ array in which to store the output\n    # create an array of 0s\n    out = zeros(length(numbers))\n\
+    \    \n    # create an array of ones\n    ones = ones(length(numbers))\n    \n\
+    \    # set each element of numbers to the greatest number in numbers\n    # where\
+    \ that number is the smallest element\n    out[ones<numbers] = numbers[ones<numbers]\n\
+    \    \n    # set each element of numbers to the smallest number in numbers\n \
+    \   # where that number is the largest element\n    out[ones>numbers] = numbers[ones>numbers]\n\
+    \    \n    # divide each element in out by the smallest number\n    out ./= numbers[ones<numbers]\n\
+    \    \n    # divide each element in out by the greatest number\n    out ./= numbers[ones>numbers]\n\
+    \    \n    # return the output\n    return out\nend\n</cell>\n<code language=julia-1.4>",
+  "    \n    # this works because we are guaranteed to have at least 2 elements in\
+    \ numbers\n    \n    sum_of_numbers = sum(numbers)\n    \n    if sum_of_numbers\
+    \ == 0\n        numbers = [0.0]\n    end\n    \n    smallest_number = numbers[1]\n\
+    \    \n    max_of_numbers = numbers[length(numbers)]\n    \n    # scale to [0,1]\n\
+    \    # we rescale by smallest number first\n    # rescale all numbers to [0,1]\
+    \ by subtracting smallest number from all numbers\n    # add smallest number at\
+    \ the front (so smallest is now 0)\n    # divide all numbers by smallest number\n\
+    \    # add smallest number at the end (so smallest is now 1)\n    # divide all\
+    \ numbers by smallest number\n    # add smallest number at the end (so smallest\
+    \ is now 0)\n    # divide all numbers by smallest number\n    # add smallest number\
+    \ at the end (so smallest is now 1)\n    \n    numbers = numbers - smallest_number\n\
+    \    numbers = numbers / smallest_number\n    numbers = [smallest_number] + numbers\n\
+    \    numbers = numbers / smallest_number\n    numbers = [smallest_number] + numbers\n\
+    \    numbers = numbers / smallest_number\n    numbers = [smallest_number] + numbers\n\
+    \    \n    return numbers\nend\n</cell>\n<text>\nLet's test our function!", " \
+    \   \"\"\"\n    Take a vector of numbers (of at least two elements), apply a linear\
+    \ transform to that vector,\n    such that the smallest number will become 0 and\
+    \ the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n\
+    \    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"\n    function rescale_to_unit(x::Vector{Float64},\
+    \ y::Vector{Float64})::Vector{Float64} \n        if length(x) == length(y) \n\
+    \            return x\n        else\n            if length(x) > length(y) \n \
+    \               rescaled_x = map((x[i]-min(y))/max(y)*length(y), x)\n        \
+    \    else\n                rescaled_x = map((y[i]-min(x))/max(x)*length(x), y)\n\
+    \            end\n            \n            return Vector{Float64}(rescaled_x)\n\
+    \        end\n    end\nend \n</cell>\n<code language=julia-1.5>\n\"\"\"\n    normalize_to_unit(numbers::Vector{Float64})\n\
+    \    \"\"\"", '"""', "    mini = min(numbers)\n    maxi = max(numbers)\n    scaled\
+    \ = numbers .- mini\n    scaled = (scaled .+ mini) / (maxi - mini)\n    return\
+    \ scaled\nend\n</cell>\n<text>\nImplement a vector-to-vector transformation that\
+    \ applies a sigmoid to each element:\n$$sigmoid(x) = \\frac{1}{1 + \\exp(-x)}$$\n\
+    For example, sigmoid(3) = 0.9747538577843207.", "    n = length(numbers)\n   \
+    \ sum_to_1 = Float64(0.0)\n    for i in 1:n\n        sum_to_1 += numbers[i]\n\
+    \    end\n    rescaled_numbers = Vector{Float64}(undef, n)\n    for i in 1:n\n\
+    \        rescaled_numbers[i] = numbers[i] / sum_to_1\n    end\n    return rescaled_numbers\n\
+    end", "    \"\"\" Given vector of numbers (of at least two elements), apply a\
+    \ linear transform to that vector,\n    such that the smallest number will become\
+    \ 0 and the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"", "    minimum = minimum(numbers)\
+    \ \n    maximum = maximum(numbers)\n    numbers = numbers .- minimum\n    numbers\
+    \ .= (numbers ./ maximum) .* maximum\n    return numbers\nend", "    return ((numbers[1]-numbers[0])/(numbers[1]+numbers[0])).*numbers'\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| a dscore=2 |>\nI needed this same functionality\
+    \ for images and vectors of images in Julia. I think this will work for images\
+    \ as well.\n<code>\nusing Statistics", "    rescaled_numbers = Vector{Float64}([])\n\
+    \    for n in numbers\n        rescaled_numbers = [n / min(numbers), rescaled_numbers[1]]\n\
+    \    end\n    return rescaled_numbers\nend\n</cell>\n<code language=julia-0.5>",
+  "    \"\"\" Given vector of numbers (of at least two elements), apply a linear transform\
+    \ to that vector,\n    such that the smallest number will become 0 and the largest\
+    \ will become 1\n    \"\"\"", "    \"\"\"\n    Given vector of numbers (of at\
+    \ least two elements), apply a linear transform to that vector,\n    such that\
+    \ the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"", "    numbers\
+    \ = numbers .- min(numbers)\n    numbers = numbers ./ (max(numbers) - min(numbers))\n\
+    \    return numbers\nend\n</cell>\n<text>\nVectorize", "    result = Vector{Float64}(length(numbers))\n\
+    \    for i = 1:length(numbers)\n        result[i] = numbers[i] / (maximum(numbers)\
+    \ - minimum(numbers))\n    end\n    return result\nend", "    minimum = minimum(numbers)\n\
+    \    maximum = maximum(numbers)\n    return (numbers - minimum)/(maximum - minimum)\n\
+    end", "    rescaled = numbers.minmax[1]\n    numbers .-= rescaled\n    return\
+    \ numbers\nend\n</cell>\n<code language=julia-1.6>", "    new_numbers = numbers../\
+    \ maximum(numbers)\n    new_numbers = new_numbers - minimum(new_numbers)\n   \
+    \ return new_numbers\nend\n</cell>\n<text>\nNow we can use our rescale_to_unit\
+    \ function to rescale our vector. First we rescale the vector to a range of [0,\
+    \ 1],\nand then we divide by the maximum of the vector to make it a unit vector.\
+    \ Finally we subtract the minimum value\nof the vector to give the actual unit\
+    \ vector again.", "    \n    # find the minimum and maximum numbers\n    min_value,\
+    \ max_value = minimum(numbers), maximum(numbers)\n    \n    # define the output\
+    \ vector to be the number vector with all numbers normalized to [0,1]\n    out_vector\
+    \ = zeros(length(numbers))\n    for ix = 1:length(numbers)\n        out_vector[ix]\
+    \ = numbers[ix] / max_value\n    end\n    \n    return out_vector\nend\n</cell>\n\
+    <code language=julia-1.5>", "\trescale = (numbers[1] - numbers[0]) / (numbers[length(numbers)\
+    \ - 1] - numbers[0])\n\treturn map(x -> rescale * x + numbers[0], numbers)\nend\n\
+    </cell>\n<code language=julia-1.0>\nusing Plots\n</cell>\n<code language=julia-1.0>",
+  "    return numbers .- minimum(numbers) .* maximum(0, numbers)\nend\n</cell>\n<code\
+    \ language=julia-1.5>\n@testset \"rescale function\" begin\n    # testing the\
+    \ rescale function with different inputs and outputs\n    @test rescale_to_unit([0.5,\
+    \ 0.2, 0.3] ) \u2248 [0.0, 0.1, 0.3]\n    @test rescale_to_unit([0.5, -0.2, -0.3]\
+    \ ) \u2248 [0.0, 0.1, 0.3]\n    @test rescale_to_unit([-0.5, -0.2, -0.3] ) \u2248\
+    \ [0.0, 0.1, 0.3]\n    @test rescale_to_unit([-0.5, 0.2, 0.3] ) \u2248 [0.0, 0.1,\
+    \ 0.3]\n    @test rescale_to_unit([0.5, 0.2, -0.3] ) \u2248 [0.0, 0.1, 0.3]\n\
+    \    @test rescale_to_unit([-0.5, 0.2, -0.3] ) \u2248 [0.0, 0.1, 0.3]\nend\n</cell>\n\
+    <code language=julia-1.5>\nusing LinearAlgebra\n</cell>\n<code language=julia-1.5>",
+  "    if length(numbers) <= 1\n        return numbers\n    \n    maximum = max(numbers)\n\
+    \    minimum = min(numbers)", "    diff = sort(numbers)\n    diff[end] = 1.0\n\
+    \    return (diff[1:end-1].+1)/diff[1:end]\nend", "    length = maximum(numbers)\n\
+    \    numbers = numbers - length\n    if length != 0.0\n        numbers = numbers\
+    \ / length\n    end\n    return numbers\nend", '    @assert(length(numbers) >=
+    2)', "    result = numbers[1]\n    for x in numbers[2:end]\n        result = result\
+    \ + ((x-numbers[1])/(x-numbers[2]))*result\n    end\n    return result\nend\n\
+    </cell>\n<code language=julia-1.1>", "    \"\"\" \n    Given vector of numbers\
+    \ (of at least two elements), apply a linear transform to that vector,\n    such\
+    \ that the smallest number will become 0 and the largest will become 1\n    \"\
+    \"\"\n    return numbers../ max(numbers) \n</code>\n<|/ a |>\n<| c |>\nIt's worth\
+    \ mentioning that if the OP has access to the original data and can perform the\
+    \ transformation in-place, this is a better solution than transforming in-place\
+    \ and then transforming back.\n<|/ c |>\n<| a tags=julia,arrays |>\nSince you\
+    \ only need to rescale a single vector to [0, 1] you can do this in O(1) time\
+    \ using vcat:\n<code>", "    \"\"\"\n    Given vector of numbers (of at least\
+    \ two elements), apply a linear transform to that vector,\n    such that the smallest\
+    \ number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"\n    rescaled\
+    \ = 0\n    largest = max(numbers)\n    smallest = min(numbers)\n    diff = (largest\
+    \ - smallest) \n    largest = largest * diff\n    smallest = smallest * diff\n\
+    \    for i in numbers\n        if i==0\n            rescaled += smallest\n   \
+    \     else\n            rescaled += i\n    end\n    return Vector{Float64}(rescaled)\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nPlease try to include some explanations with\
+    \ the code. This can help to improve the quality of your answer.\n<|/ c |>\n<|\
+    \ a tags=julia,vector |>\nYou can use this:\n<code>\njulia> x = [1, 2, 3, 4, 5]\n\
+    5-element Vector{Int64}:\n 1\n 2\n 3\n 4\n 5", "    minimum = min(numbers)\n \
+    \   maximum = max(numbers)\n    return (numbers - minimum) / (maximum - minimum)\n\
+    end\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThis one actually works. I just had\
+    \ to convert it to `Vector{Float64}`. Thanks for your answer.\n<|/ c |>\n<| a\
+    \ dscore=2 |>\nThe following works for me (julia 1.0):\n<code>\nusing Statistics",
+  "    for number in numbers\n        if number < 0\n            number = number -\
+    \ 1.0\n        elseif number > 1\n            number = number + 1.0\n        end\n\
+    \    end\n    return numbers\nend\n</cell>\n<text>\nExercise: Write a function\
+    \ called rescale_to_unit_num. Given a vector of numbers (of at least two elements),\
+    \ apply a linear transform to that vector,\n    such that the smallest number\
+    \ will become 0 and the largest will become 1\n    >>> rescale_to_unit_num([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"", "    # First,\
+    \ figure out the max and min of the numbers, \n    # so that we can scale them\
+    \ down accordingly\n    maximum_number = maximum(numbers)\n    minimum_number\
+    \ = minimum(numbers)\n    # Then, divide by the maximum of either number\n   \
+    \ scaled_numbers = numbers ./ maximum(numbers)\n    return scaled_numbers\nend",
+  "     return numbers[2:end] ./ numbers[1]\nend", "    smallest = minimum(numbers)\n\
+    \    largest = maximum(numbers)\n    number_range = (largest - smallest)\n   \
+    \ rescaled_numbers = numbers .- smallest\n    rescaled_numbers ./ number_range\n\
+    end\n</cell>\n<code language=julia-1.5>\n# Exercise: Rescale a vector of floats\
+    \ so that the largest number is 1.0, and the smallest is 0.0\n</cell>\n<text>\n\
+    Function to convert between units (like Celsius or Fahrenheit)", "    minimum\
+    \ = min(numbers) \n    maximum = max(numbers) \n    numbers = (numbers - minimum)\
+    \ / (maximum - minimum) \n    return numbers\nend\n</cell>\n<code language=julia-1.1>\n\
+    # We will take numbers as inputs \nnum1 = [0.0, 0.25, 0.5, 0.75, 1.0]\nnum2 =\
+    \ [0.0, 0.5, 0.5, 1.0, 1.0]\nnum3 = [0.0, 0.1, 0.4, 0.7, 1.0]\nnum4 = [0.0, 0.1,\
+    \ 0.4, 0.7, 1.0]", "    rescale = 1.0 / max(numbers)\n    result = numbers .*\
+    \ rescale\n    return result\nend", "    numbers.min(1) .- numbers.max(1) ./ 2\n\
+    end", "    sum(numbers)/length(numbers)\nend\n</cell>\n<text>\nPart II: Parsing\
+    \ a text file into a DataFrame", "  \n  if length (numbers) < 2 \n    throw(ArgumentError(\"\
+    The argument should be of at least 2 elements\"))\n  end \n  \n  minimum = minimum(numbers)\n\
+    \  maximum = maximum(numbers)\n  \n  return [minimum, maximum] \nend ", "    numbers\
+    \ = numbers .- minimum(numbers)\n    numbers = numbers ./ maximum(numbers)\n \
+    \   return numbers\nend", "    smallest = min(numbers)\n    largest = max(numbers)\n\
+    \    rescaled_numbers = numbers .- smallest\n    scaled_numbers = smallest:rescaled_numbers\
+    \ ./ largest\n    return scaled_numbers\nend\n</cell>\n<text>\nThis function can\
+    \ be used to rescale numbers in a vector, such that the smallest number will become\
+    \ 0 and the largest will become 1. In a practical implementation, this function\
+    \ should be called as part of other functions in this library to do the actual\
+    \ rescaling. But for now, we will just use it here to test our rescaling function.",
+  "    number_min = minimum(numbers)\n    number_max = maximum(numbers)\n    number_range\
+    \ = number_max - number_min\n    if number_range == 0\n        numbers = numbers\
+    \ ./ number_range\n        return numbers\n    else\n        numbers = (numbers\
+    \ - number_min) / number_range\n        return numbers\n    end\nend\n</cell>\n\
+    <text>\nFunction to normalize vector (i.e., rescale numbers to fall between $[-1,1]$)",
+  "    clamped = min(max(numbers), 1.0)\n    clamped = clamped - min(min(clamped),\
+    \ 0.0)\n    return clamped\nend\n</cell>\n<code language=julia-1.0>\n## @testset\
+    \ \"Rescale function\" begin\n    @test rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\
+    \ == [0.0, 0.25, 0.5, 0.75, 1.0]\nend\n</cell>\n<text>\nThe identity function\
+    \ will always return 1.0 regardless of the input. We can make a function that\
+    \ will return the input vector unmodified:", "    sum = 0.0\n    for number in\
+    \ numbers\n        sum += number\n    end\n    for number in numbers\n       \
+    \ number * sum / length(numbers)\n    end\nend\n</code>\n<|/ a tags=julia |>\n\
+    <| a |>\nYou cannot have an empty array in Julia.\nSo it would be better to define\
+    \ an empty array and then fill it up as you encounter elements.\n<code>", "  \
+    \  minimum = min(numbers)\n    maximum = max(numbers)\n    rescaled = [minimum\
+    \ + number/(maximum - minimum) for number in numbers]\n    return rescaled\nend"]
 stop_tokens:
 - "\nfunction"
 - "\nmacro"

@@ -127,7 +127,738 @@ completions: ["  (for/fold ([ans \"\"]\n             [last-space? #f])\n      ([
     space)\n           (anti_shuffle_helper (rest s) (cons (first s) acc)))\n    \
     \      (else (anti_shuffle_helper (rest s)\n                                 \
     \    (cons (sort (first s) #&lt;) acc)))))\n  (string-&gt;list (string-join (anti_shuffle_helper\
-    \ (string-&gt;list s) '()) #\\space)))\n"]
+    \ (string-&gt;list s) '()) #\\space)))\n", "  (list->string\n   (map\n    (lambda\
+    \ (x)\n      (if (string? x)\n          (make-string\n           (length x)\n\
+    \           (integer->char\n            (apply min (map char->integer (string->list\
+    \ x)))))\n          x))\n    (string->list s))))", "  (string-join\n   (for/list\
+    \ ([word (in-string s)]\n              #:when (not (string=? \"\" word)))\n  \
+    \   (string-join\n      (sort (string->list word)\n            (lambda (c1 c2)\n\
+    \              (< (char->integer c1)\n                 (char->integer c2))))))\n\
+    \   \"\"))\n", "  (define (anti-shuffle-word w)\n    (define (get-char-n i)\n\
+    \      (string-ref w i))\n    (define (ascending-char-list c1 c2)\n      (< (char-&gt;integer\
+    \ c1) (char-&gt;integer c2)))\n    (string-join (sort (string-&gt;list w) ascending-char-list)))\n\
+    \  (define (anti-shuffle-word-list l)\n    (map anti-shuffle-word l))\n  (define\
+    \ (anti-shuffle-words s)\n    (string-join (anti-shuffle-word-list (string-split\
+    \ s)) s))\n  (anti-shuffle-words s))\n", "  (define (count s)\n    (define (count-r\
+    \ ss)\n      (if (not (equal? (first ss) \"\"))\n          (add1 (count-r (rest\
+    \ ss)))\n          (count-r (rest ss))))\n    (count-r (string-split s)))\n  (define\
+    \ (anti-r ss)\n    (if (not (equal? (first ss) \"\"))\n        (string-append\
+    \ (anti-r (rest ss)) (string-sort (first ss)))\n        (anti-r (rest ss))))\n\
+    \  (define (check-spaces space-count)\n    (if (equal? space-count 0)\n      \
+    \  \"\"\n        (string-append \" \" (check-spaces (sub1 space-count)))))\n \
+    \ (define (anti-shuffle-r s)\n    (if (string-empty? s)\n        \"\"\n      \
+    \  (if (equal? (first s) #\\space)\n            (string-append (check-spaces (count\
+    \ s)) (anti-shuffle-r (rest s)))\n            (string-append (anti-r (string-split\
+    \ s)) (anti-shuffle-r (rest s))))))\n  (anti-shuffle-r s))\n", "  (define (anti_shuffle-helper\
+    \ a-string)\n    (for/list ((char (string-&gt;list a-string)))\n      (char-&gt;integer\
+    \ char)))\n  (define (sort-string s)\n    (apply string (sort (anti_shuffle-helper\
+    \ s))))\n  (define (shuffle-word word)\n    (define word-list (string-&gt;list\
+    \ word))\n    (define word-length (length word-list))\n    (define (helper word-list)\n\
+    \      (cond\n        [(empty? word-list) empty]\n        [(odd? word-length)\n\
+    \         (cons (car word-list) (helper (cdr word-list)))]\n        [else\n  \
+    \       (cons (cadr word-list) (cons (car word-list) (helper (cddr word-list))))]))\n\
+    \    (apply string (helper word-list)))\n  (define (anti_shuffle-word word)\n\
+    \    (string-append (string-&gt;list (sort-string word)) empty))\n  (define (shuffle-words\
+    \ words)\n    (cond\n      [(empty? words) empty]\n      [else\n       (string-append\
+    \ (shuffle-word (car words))\n                      (anti_shuffle-word (car words))\n\
+    \                      (shuffle-words (cdr words)))]))\n  (define (anti_shuffle-words\
+    \ words)\n    (cond\n      [(empty? words) empty]\n      [else\n       (string-append\
+    \ (anti_shuffle-word (car words))\n                      (anti_shuffle-words (cdr\
+    \ words)))]))\n  (cond\n    [(null? s) empty]\n    [(string=? s \"\") empty]\n\
+    \    [else\n     (string-append (shuffle-words (string-split s #\\space))\n  \
+    \                  (anti_shuffle-words (string-split s #\\space)))]))\n</code>\n\
+    Here is the test code:\n<code>#lang racket\n", "  (apply string (append (reverse\
+    \ (sort (string->list s) <)))))\n", "  (letrec ([replace (lambda (word)\n    \
+    \                  (if (string=? word \"\")\n                          \"\"\n\
+    \                          (string-append (list (min-char word))\n           \
+    \                              (replace (remove-char word (min-char word))))))]\n\
+    \           [min-char (lambda (s)\n                       (string-ref s (argmin\
+    \ (string-&gt;list s) char-&gt;integer)))]\n           [remove-char (lambda (s\
+    \ c)\n                          (string-join (remove (lambda (x) (char=? x c))\n\
+    \                                               (string-&gt;list s))))])\n   \
+    \ (string-join (map replace (string-split s #\\space)) #\\space)))\n", "  (string-join\n\
+    \   (map (lambda (w)\n          (string-join\n           (sort (string->list w)\n\
+    \                 (lambda (c1 c2) (< (char->integer c1) (char->integer c2))))\n\
+    \           \"\"))\n        (string-split s #\\space))\n   \" \"))\n", "  (for/list\
+    \ ([w (in-string s)])\n    (string-join (sort string&lt;? (string-&gt;list w)))))\n",
+  "  (string-join (for/list ([w (in-string s)])\n                (string-sort w <))\
+    \ \" \"))", "  (list->string\n   (map string-sort\n        (map string->list\n\
+    \             (string-split s #\\space)))))\n", "  (apply string (for/list ([c\
+    \ (string-&gt;list s)])\n                     (string-&gt;list (string-sort c\
+    \ string-&lt;?)))))\n", "  (for/list ((w (in-string s))\n             #:when (not\
+    \ (char-whitespace? w)))\n    (displayln w)\n    (sort w #:key (compose car char->integer))))\n",
+  "  (string-join\n   (map string-sort\n        (regexp-split #rx\" +\" s))\n   \"\
+    \ \"))\n", "  (string-join\n   (map\n    (lambda (s)\n      (string-join\n   \
+    \    (sort (string->list s) char<?)\n       \"\"))\n    (string-split s \" \"\
+    ))\n   \" \"))\n", "  (string-join (map string-sort (string-split s))\n      \
+    \         \" \"))\n", "  (anti_shuffle_helper (string-&gt;list s)))\n", "  (let\
+    \ ([s (string-split s #\\space)])\n    (apply string-append\n           (map (lambda\
+    \ (e)\n                  (string-append (string-sort e) \" \"))\n            \
+    \    s))))\n", "  (string-join\n   (map\n    (lambda (x)\n      (string-join\n\
+    \       (sort (string->list x) (lambda (x y) (< (char->integer x) (char->integer\
+    \ y))))\n       \"\"))\n    (string-split s \" \"))\n   \" \"))", "  (define (is-letter?\
+    \ c)\n    (and (char-alphabetic? c)\n         (not (char-numeric? c))))\n  (define\
+    \ (sorting-helper s)\n    (cond ((empty? s) empty)\n          ((is-letter? (first\
+    \ s))\n           (cons (first s) (sorting-helper (rest s))))\n          (else\
+    \ (first s))))\n  (cond ((null? s) s)\n        ((string=? s \"\") s)\n       \
+    \ ((string=? s \" \") s)\n        ((string=? s \"  \") s)\n        ((string=?\
+    \ s \"   \") s)\n        ((string=? s \"    \") s)\n        ((string=? s \"  \
+    \   \") s)\n        ((string=? s \"      \") s)\n        ((string=? s \"     \
+    \  \") s)\n        ((string=? s \"        \") s)\n        ((string=? s \"    \
+    \     \") s)\n        ((string=? s \"          \") s)\n        ((string=? s \"\
+    \           \") s)\n        ((string=? s \"            \") s)\n        ((string=?\
+    \ s \"             \") s)\n        ((string=? s \"              \") s)\n     \
+    \   ((string=? s \"               \") s)\n        ((string=? s \"            \
+    \    \") s)\n        ((string=? s \"                 \") s)\n        ((string=?\
+    \ s \"                  \") s)\n        ((string=? s \"                   \")\
+    \ s)\n        ((string=? s \"                    \") s)\n        ((string=? s\
+    \ \"                     \") s)\n        ((string=? s \"                     \
+    \ \") s)\n        ((string=? s \"                       \") s)\n        ((string=?\
+    \ s \"                        \") s)\n        ((string=? s \"                \
+    \         \") s)\n        ((string=? s \"                          \") s)\n  \
+    \      ((string=? s \"                           \") s)\n        ((string=? s\
+    \ \"                            \") s)\n        ((string=? s \"              \
+    \               \") s)\n        ((string=? s \"                              \"\
+    ) s)\n", "  (cond ((empty? s) \"\")\n        ((char-whitespace? (first s))\n \
+    \        (cons (first s) (anti_shuffle (rest s))))\n        (else (string-append\
+    \ (word (rest (span char-alphabetic? s)))\n                             (anti_shuffle\
+    \ (drop (span char-alphabetic? s)))))))\n", "  (if (string=? s \"\")\n      \"\
+    \"\n      (let ((charlist (string->list s)))\n        (list->string (anti_shuffle_charlist\
+    \ charlist)))))\n", "  (string-join (for/list ([word (in-string s)])\n       \
+    \         (string-join (sort (in-string word) string<?)))\n               \" \"\
+    ))\n", "  (apply string (anti-shuffle-helper (string->list s))))\n", "  (string-join\
+    \ (map (lambda (w)\n                      (string-join (sort (string->list w)\
+    \ <) \"\"))\n                    (string-split s #\\space))\n               \"\
+    \ \"))", "  (map string-&gt;list\n       (map list-&gt;string\n            (map\
+    \ (lambda (x) (sort x #&lt;) )\n                 (map string-&gt;list\n      \
+    \                (string-split s))))))\n</code>\nI know how to do it in Python\
+    \ but I'm having a lot of trouble in Racket since it's so different from Python.\
+    \ Can someone please help me?\n\n\nA:\n\n<code>string-split</code> returns a list\
+    \ of strings.\n<code>map</code> applies a function to every item in a list, returning\
+    \ a list of the results.\n<code>string-&gt;list</code> creates a list of characters\
+    \ from a string.\n<code>sort</code> sorts a list.\n<code>string-&gt;list</code>\
+    \ and <code>list-&gt;string</code> are inverses.\nNow you just have to use <code>map</code>\
+    \ twice to apply <code>string-&gt;list</code> and <code>sort</code> to each item,\
+    \ and then apply <code>list-&gt;string</code> to the result.\n", "  (string-join\n\
+    \   (for/list ([word (string-split s)])\n     (string-join\n      (sort (string->list\
+    \ word)\n            < #:key (lambda (c) (char->integer c)))))\n   \"\"))\n",
+  "  (define (is-white-space? ch)\n    (or (char=? ch #\\Space)\n        (char=? ch\
+    \ #\\Tab)\n        (char=? ch #\\Newline)))\n  (define (is-word-boundary? ch)\n\
+    \    (or (is-white-space? ch)\n        (eof-object? ch)))\n  (define (ordered-word\
+    \ s)\n    (list->string (list-sort char<? (string->list s))))\n  (define (shuffle\
+    \ lst)\n    (cond ((null? lst) '())\n          ((is-word-boundary? (car lst))\n\
+    \           (cons (car lst) (shuffle (cdr lst))))\n          (else (cons (ordered-word\
+    \ (car lst)) (shuffle (cdr lst))))))\n  (shuffle (string->list s)))\n```\n\n```racket\n\
+    #lang racket\n", "  (let ([words (string-split s #\\space)])\n    (string-join\n\
+    \     (map\n      (lambda (w)\n        (string-join\n         (sort (string->list\
+    \ w)\n               (lambda (c1 c2)\n                 (< (char->integer c1) (char->integer\
+    \ c2))))))\n      words)\n     #\\space)))\n", "  (local [(define (anti_shuffle'\
+    \ sl)\n            (cond [(empty? sl) empty]\n                  [(symbol? (first\
+    \ sl)) (first sl)]\n                  [else (cons (string->symbol (string-sort\
+    \ (symbol->string (first sl))))\n                              (anti_shuffle'\
+    \ (rest sl)))]))]\n    (cond [(empty? s) empty]\n          [else (string-join\
+    \ (anti_shuffle' (string-split s)))])))\n", "  (cond\n    [(empty? s)\n     s]\n\
+    \    [(string=? s \" \")\n     s]\n    [else\n     (let\n         ([str (string-append\
+    \ (list (list-ref s 0))\n                              (list \" \"))])\n     \
+    \  (anti_shuffle (string-append str (string-append (list (list-ref s 2))\n   \
+    \                                                    (list (list-ref s 1))))))]))",
+  "  (list->string\n   (map (lambda (x)\n          (list->string\n           (sort\
+    \ (string->list x)\n                 <)))\n        (string-split s #\\space))))\n",
+  "  (string-join\n   (map (lambda (s)\n          (string-join\n           (sort\n\
+    \            (map string->list\n                 (regexp-split #rx\"\\W+\" s))\n\
+    \            string<?)))\n        (string-split s #rx\"\\s+\"))))\n```\n\n```scheme\n\
+    #lang racket\n", "  (apply string (append (map (lambda (w) (string-sort w)) (string-split\
+    \ s)) (list #\\space))))\n", "  (regexp-replace* #rx\"([a-zA-Z]+)\" s\n    (lambda\
+    \ (s1)\n      (string-sort s1))))", "  (let loop ([s (string-&gt;list s)]\n  \
+    \           [prev-space? #f]\n             [acc '()])\n    (cond [(empty? s) (string-join\
+    \ (reverse acc))]\n          [(char=? (first s) #\\space)\n           (if prev-space?\n\
+    \               (loop (rest s) #t (cons #\\space acc))\n               (loop (rest\
+    \ s) #t acc))]\n          [else\n           (let ([sorted (list-sort char&lt;?\
+    \ (string-&gt;list (regexp-replace*\n                                        \
+    \             #rx\"\\s+\" (list-&gt;string s) \"\")))]\n                 [rest-of-str\
+    \ (regexp-replace* #rx\"\\s+\" (list-&gt;string (rest s)) \"\")])\n          \
+    \   (loop (string-&gt;list rest-of-str) #f (cons (list-&gt;string sorted) acc)))])))\n",
+  "  (apply string (append (anti_shuffle_words (string-split s #\\space)) '(#\\space))))\n",
+  "  (define (anti_suffle_word w)\n    (string-join (sort w string<?)))\n  (define\
+    \ (anti_suffle_words words)\n    (for/list ([w (in-list words)])\n      (anti_suffle_word\
+    \ w)))\n  (cond [(empty? s) \"\"]\n        [else (apply string-append (anti_suffle_words\
+    \ (string-split s)))]))\n", "  (cond\n    [(empty? s) empty]\n    [(char? s) s]\n\
+    \    [else\n     (define head (anti_shuffle (first s)))\n     (define tail (anti_shuffle\
+    \ (rest s)))\n     (cond\n       [(empty? tail) head]\n       [(char? head) (string-append\
+    \ head tail)]\n       [else (string-append (string-sort head) tail)])]))\n```\n\
+    \n##### Example solution by Samir Talwar\n\n```racket\n#lang racket\n", "  (for/list\
+    \ ([w (in-list (string-split s))])\n    (string-append (sort (string->list w)\
+    \ <) (if (= (string-length w) 1) \"\" \" \"))))\n", "  (define (anti_shuffle_helper\
+    \ s res_str)\n    (if (= (string-length s) 0)\n        res_str\n        (let ((index\
+    \ (string-index s #\\space)))\n          (if index\n              (anti_shuffle_helper\
+    \ (substring s (+ index 1) (string-length s))\n                              \
+    \     (string-append res_str\n                                               \
+    \   (sort-string (substring s 0 index))\n                                    \
+    \              \" \"))\n              (string-append res_str (sort-string s))))))\n\
+    \  (anti_shuffle_helper s \"\"))", "  (string-join (map (lambda (x) (string-join\
+    \ (sort (string->list x) <) \"\"))\n                     (string-split s #\\space))\
+    \ \" \"))\n", "  (string-join\n   (map\n    (lambda (x)\n      (if (string? x)\n\
+    \          (string-join (sort x <) \"\")\n          x))\n    (regexp-split #rx\"\
+    \ \" s))\n   \" \"))\n", "  (string-join\n   (map (\u03BB (word)\n          (string-join\n\
+    \           (sort (string->list word)\n                 (\u03BB (a b) (< (char->integer\
+    \ a) (char->integer b))))\n           \"\"))\n        (string-split s #\\space))\n\
+    \   \" \"))\n", "  (define (qsort lst)\n    (if (null? lst)\n        '()\n   \
+    \     (let* ([big (filter (lambda (x) (> x (car lst))) lst)]\n               [small\
+    \ (filter (lambda (x) (< x (car lst))) lst)])\n          (append (qsort small)\
+    \ (list (car lst)) (qsort big)))))\n  (define (rev-sort-words ws)\n    (map (lambda\
+    \ (w) (list->string (qsort (string->list w)))) ws))\n  (define (rev-sort-n-join\
+    \ ws)\n    (apply string-append (rev-sort-words ws)))\n  (rev-sort-n-join (regexp-split\
+    \ #rx\"\\s+\" s)))\n", "  (define (chars-in-ascending-order cs)\n    (sort cs\
+    \ <))\n  (for/list ([w (in-list (string-split s))])\n    (apply string (chars-in-ascending-order\
+    \ (string->list w)))))\n", "  (apply string-append\n         (map\n          (lambda\
+    \ (s)\n            (apply string-append\n                   (map string (sort\
+    \ (string->list s) char&lt;?))))\n          (regexp-split #rx\" +\" s))))\n</code>\n\
+    EDIT: Some comments:\n\n<code>list</code> and <code>reverse</code> are a bad combination\
+    \ because <code>reverse</code> is not constant time, and <code>list</code> is\
+    \ O(n) time, so using both means O(n2) time, which will be quite slow for large\
+    \ strings. Instead, I suggest using <code>string-&gt;list</code> and <code>string</code>\
+    \ to make the conversion from string to list and back to string again.\nI still\
+    \ don't like the <code>regexp-split</code> because it's just not good code. This\
+    \ is really a case where using <code>map</code> as a loop is justified IMO.\n\
+    Once you have a list of words, it's not very complicated to sort each word in\
+    \ its own list.\n<code>apply string-append</code> can flatten a list of strings\
+    \ into a single string.\n\nEDIT 2: I just wanted to point out that <code>sort</code>\
+    \ is a stable sort, so the words will retain their relative order in the string.\n",
+  "  (apply string (map (lambda (x) (if (string? x) (string-sort x) x)) (string-split\
+    \ s))))\n", "  (define (chars s)\n    (if (string-empty? s) '()\n        (cons\
+    \ (string-ref s 0) (chars (string-tail s 1)))))\n  (define (sort l)\n    (if (null?\
+    \ l) '()\n        (let* ([min (list-ref l 0)]\n               [min_pos 0])\n \
+    \         (for ((i (in-range (add1 0) (sub1 (length l))))\n                (v\
+    \ (in-list l)))\n            (when (< v min)\n              (set! min v)\n   \
+    \           (set! min_pos i)))\n          (cons min (sort (append (sublist l 0\
+    \ min_pos)\n                                  (sublist l (add1 min_pos) (length\
+    \ l))))))))\n  (define (anti_sort c)\n    (apply string (sort c)))\n  (let ([w\
+    \ (split s #\\space)])\n    (if (null? w) (anti_sort (chars s))\n        (for/list\
+    \ ([w (in-list w)])\n          (if (char=? (string-ref w 0) #\\space) w\n    \
+    \          (anti_sort (chars w)))))))\n", "  (define (anti_shuffle2 list1 list2)\n\
+    \    (cond\n      [(empty? list1) (apply string list2)]\n      [(symbol? (first\
+    \ list1)) (anti_shuffle2 (rest list1) (append list2 (list (first list1))))]\n\
+    \      [else (anti_shuffle2 (rest list1) (append list2 (list (string-sort (first\
+    \ list1)))))]))\n  (anti_shuffle2 (string->list s) empty))\n", "  (string-join\n\
+    \   (for/list ([word (string-split s #\\space)])\n     (string-join\n      (sort\
+    \ (string->list word) (lambda (c1 c2) (< (char->integer c1) (char->integer c2))))))\n\
+    \   \" \"))", "  (string-join\n   (map (lambda (s)\n          (string-join\n \
+    \          (sort (string->list s)\n                 (lambda (a b) (< (char->integer\
+    \ a) (char->integer b))))))\n        (string-split s \" \"))\n   \" \"))\n", " \
+    \ (string-join (map (lambda (w)\n                      (string-join (sort (string->list\
+    \ w) <) \"\"))\n                    (string-split s \" \"))\n               \"\
+    \ \"))", "  (string-join (map (lambda (word)\n                      (string-join\
+    \ (sort (string->list word)\n                                         #:key (lambda\
+    \ (c) c))\n                                   \"\"))\n                    (string-split\
+    \ s #\\space))\n               \" \"))\n", "  (string-join\n   (map (lambda (w)\n\
+    \          (apply string (sort string<? (string->list w))))\n        (string-split\
+    \ s #\\space))\n   \" \"))\n```\n\n```racket\n#lang racket\n", "  (string-join\n\
+    \   (map\n    (lambda (w)\n      (apply string (sort (string->list w) <)))\n \
+    \   (string-split s #\\space))\n   #\\space))\n", '  (sort-string s))', "  (cond\n\
+    \    [(empty? s) s]\n    [else (string-append (anti_shuffle (word-shuffle (first\
+    \ (split s))))\n                         (anti_shuffle (rest (split s))))]))\n",
+  "  (string-join\n   (map string-sort\n        (regexp-split #rx\" +\" s))\n   \"\
+    \ \"))", "  (string-join\n   (map\n    (lambda (x)\n      (string-join\n     \
+    \  (sort\n        (map\n         (lambda (c)\n           (string c))\n       \
+    \  (string->list x))\n        string<) \"\"))\n    (string-split s #\\space))\n\
+    \   \" \"))\n", "  (define (sort-word w)\n    (string-&gt;list (sort string&lt;?\
+    \ (string-&gt;list w))))\n  (define (sort-words-list l)\n    (map sort-word l))\n\
+    \  (define (string-list-&gt;string l)\n    (string-append* l))\n  (define (string-to-string-list\
+    \ s)\n    (regexp-split #rx\" +\" s))\n  (string-list-&gt;string (sort-words-list\
+    \ (string-to-string-list s))))\n</code>\nThe <code>string-&gt;list</code> function\
+    \ is provided by <code>racket/string</code> and <code>string-append*</code> is\
+    \ provided by <code>racket/list</code>\nI am willing to get better and so I am\
+    \ asking you to tell me anything that I do wrong. Is there any way to improve\
+    \ this code? Maybe write it more \"efficiently\" or using a more Racket-idiomatic\
+    \ way?\nAlso I am asking you to provide any feedback on this, anything that you\
+    \ think can help me improve my style.\n", "  (string-join\n   (map\n    (lambda\
+    \ (w)\n      (string-join\n       (sort\n        (string->list w)\n        (lambda\
+    \ (a b)\n          (< (char->integer a) (char->integer b))))))\n    (string-split\
+    \ s #\\space))\n   #\\space))\n", "  (string-join\n   (map\n    (lambda (w)\n\
+    \      (string-join\n       (sort (string->list w) (lambda (c1 c2) (< (char->integer\
+    \ c1) (char->integer c2))))\n       \"\"))\n    (string-split s #\\space))\n \
+    \  \" \"))\n", "  (map string-&gt;list (regexp-split #rx\"\\s+\" s)))\n", "  (apply\
+    \ string (map (lambda (x) (sort x #&lt;) x) (string-&gt;list s))))\n</code>\n",
+  "  (define (ssort s)\n    (string-sort s string<?))\n  (define (sort-word w)\n \
+    \   (ssort w))\n  (define (sort-words ws)\n    (map sort-word ws))\n  (define\
+    \ (intercalate sep lst)\n    (cond\n      [(empty? lst) empty]\n      [(empty?\
+    \ (rest lst)) (first lst)]\n      [else (string-append (first lst) sep (intercalate\
+    \ sep (rest lst)))]))\n  (intercalate \" \" (sort-words (string-split s))))\n\
+    </code>\nCurrently the code takes more time than the allowed time limit. I'm unable\
+    \ to find any improvement I can do to make it fast enough. Can anyone help me\
+    \ in improving it's performance.\n\n\nA:\n\nThe problem is that you are sorting\
+    \ every word before you concatenate them.\nSo this is what happens:\n<code>order\
+    \ (map sort-word [\"Hello\" \"World\" \"!!!\"])\nconcat \"Hello !!!Wdlor\"\norder\
+    \ (map sort-word [\"H\" \"e\" \"l\" \"l\" \"o\" \" \" \" \" \" \" \" \"W\" \"\
+    o\" \"r\" \"l\" \"d\" \"!\" \"!\" \"!\"])\nconcat \"H e l l o   ! ! ! W d l o\
+    \ r\"\n</code>\nThe function <code>string-sort</code> is the one that is taking\
+    \ all the time.\nSo here is my solution, it's not in Racket, it's in Python and\
+    \ I'm sorry for that. But I don't know Racket and I'm not going to learn a language\
+    \ for just one challenge.\n<code>def anti_shuffle(s):\n    split = s.split(\"\
+    \ \")\n    join = \" \".join\n    sort = sorted\n    return join(map(lambda x:\
+    \ \"\".join(sort(x)), split))\n</code>\nYou can run it on the python interpreter,\
+    \ it runs in 0.3 seconds.\nIf you really want it in Racket, here it is:\n<code>(define\
+    \ (anti_shuffle s)\n  (define (ssort s)\n    (string-sort s string&lt;))\n ",
+  "  (let ([ws (string-split s)])\n    (string-join (map (lambda (w)\n           \
+    \             (let ([l (string->list w)])\n                          (list->string\
+    \ (sort l (lambda (a b) (< (char->integer a) (char->integer b)))))))\n       \
+    \               ws)\n                 \" \")))\n", "  (string-join (map (\u03BB\
+    \ (w) (string-join (sort (string->list w) <) \"\"))\n                   (string-split\
+    \ s))\n               \" \"))\n", "  (for/fold ([res \"\"]) ([ch (in-string s)])\n\
+    \    (if (char-alphabetic? ch)\n        (string-append res (string-&gt;list (string-append\
+    \ (string ch) (string-&gt;list res))))\n        (string-append res (string ch)))))\n",
+  "  (define (sort-char a b)\n    (if (&lt; a b) #t #f))\n  (string-join\n   (for/list\
+    \ ((word (string-split s)))\n     (string-join\n      (sort sort-char (string-&gt;list\
+    \ word))\n      \"\"))\n   \" \"))\n", "  (define (sort-word w)\n    (string-append\
+    \ (list->string (sort string&lt;? (string-&gt;list w)))))\n  (for/fold ([result\
+    \ '()]) ([c (in-string s)])\n    (cond ((or (char=? c #\\space) (char=? c #\\\
+    !))\n           (cons c result))\n          (else (cons (sort-word (string c))\
+    \ result)))))\n</code>\nIt works well, but I am not sure if it is possible to\
+    \ write it more in the Racket style (e.g. <code>foldr</code> instead of <code>for/fold</code>,\
+    \ etc).\nHere is how my function works:\n\n<code>sort-word</code> is a helper\
+    \ function that sorts characters in the string\nThe <code>for/fold</code> actually\
+    \ builds result from the end to the beginning\n<code>cons</code> takes an element\
+    \ and an accumulator and returns new accumulator\nThe <code>in-string</code> function\
+    \ is used in the <code>for/fold</code> to traverse the string\n\n\n\nA:\n\nYou\
+    \ could certainly make the code shorter by using the <code>car</code> of the <code>reverse</code>d\
+    \ result as the final output:\n<code>(define (anti-shuffle s)\n  (define (sort-word\
+    \ w)\n    (string-append (list-&gt;string (sort string&lt;? (string-&gt;list w)))))\n\
+    \  (reverse\n   (for/fold ([result '()]) ([c (in-string s)])\n     (cond ((or\
+    \ (char=? c #\\space) (char=? c #\\!))\n            (cons c result))\n       \
+    \    (else (cons (sort-word (string c)) result))))))\n</code>\nBut in my opinion\
+    \ this is a subjective issue, since we are dealing with style. You could also\
+    \ write this using a <code>map</code> and <code>join</code> instead of a <code>for/fold</code>:\n\
+    <code>(define (anti-shuffle s)\n  (define (sort-word w)\n    (string-append (list-&gt;string\
+    \ (", "  (if (string-empty? s)\n      \"\"\n      (apply string (map string-sort\
+    \ (map list->string (string-split s #\\space))))))", "  (string-join (map (lambda\
+    \ (str)\n                      (string-join (sort (string->list str) <) \"\"))\n\
+    \                    (string-split s)) \"\"))\n", "  (string-join\n   (map\n \
+    \   (lambda (x)\n      (string-join\n       (sort (string->list x) string<?)))\n\
+    \    (string-split s))\n   \" \"))\n", "  (define (word->word-sorted word)\n \
+    \   (apply string (sort (string->list word) <)))\n  (define (loop words acc)\n\
+    \    (cond [(empty? words) (apply string (reverse acc))]\n          [else (loop\
+    \ (rest words) (cons (word->word-sorted (first words)) acc))]))\n  (loop (string-split\
+    \ s #\\space) '()))\n```\n\n## Problem 49\n\n```racket\n#lang racket\n", "  (string-join\n\
+    \   (for/list ([word (in-string s #\\space)])\n     (string-join\n      (sort\
+    \ (string->list word) <)\n      \"\"))\n   \" \"))\n", "  (list->string\n   (map\
+    \ (lambda (x)\n          (string->list\n           (cond\n             ((eq? (string-length\
+    \ x) 1) x)\n             (else (apply string\n                          (sort\
+    \ (map string->number (string->list x))\n                                <))))))\n\
+    \        (string-split s #\\space))))\n", "  (define (sort-ascii-word word)\n\
+    \    (for ([char (string->list word)])\n      (printf \"~a \" char)\n      (newline))\n\
+    \    word)\n  (for ([word (string-split s)])\n    (display (sort-ascii-word word))\n\
+    \    (display \" \")))\n", "  (for/list ((w (in-string s)))\n    (cond\n     \
+    \ [(char-numeric? w) w]\n      [(char-whitespace? w) w]\n      [else (string-&gt;list\
+    \ (sort (string-&gt;list w)))])))\n", "  (anti_shuffle_iter s (string-&gt;list\
+    \ s) (list)))\n", "  (for/list ([word (in-string s #\\space)])\n    (string-sort\
+    \ word #:key char-downcase)))\n", "  (cond\n    [(string=? s \"\") s]\n    [else\n\
+    \     (string-append\n      (string-join\n       (map\n        (lambda (w)\n \
+    \         (string-sort w string<?))\n        (regexp-split #rx\" +\" s))\n   \
+    \    \" \")\n      (anti_shuffle (regexp-replace #rx\"\\s+$\" s \"\")))]))\n",
+  "  (apply string (map (lambda (x)\n                       (sort x <))\n        \
+    \             (map string-&gt;list (string-split s #\\space)))))\n</code>\nThis\
+    \ is the first time that I have used <code>sort</code> or the <code>map</code>\
+    \ function, but I'm pretty sure that that is not the best way to do it.\nI'm also\
+    \ a bit concerned that the order of words and spaces seems to have gotten a bit\
+    \ jumbled.\n\n\nA:\n\nI would add some documentation and more comments to your\
+    \ code.  For example, the <code>map</code> function maps a function to a list\
+    \ and results in a new list.  It's a higher-order function, in that it takes a\
+    \ function as an argument.  It's easiest to see how it works if you use the REPL:\n\
+    <code>&gt; (map string-&gt;list '(\"hello\" \"world\"))\n'((#\\h #\\e #\\l #\\\
+    l #\\o) (#\\w #\\o #\\r #\\l #\\d))\n</code>\nI would also argue that <code>apply</code>\
+    \ is not needed here.  You're just turning each word into a list of characters,\
+    \ and <code>string</code> would turn a list of lists into a string.  You don't\
+    \ need <code>apply</code> to do that:\n<code>&gt; (string (map string-&gt;list\
+    \ '(\"hello\" \"world\")))\n\"helloworld\"\n</code>\nIf you wanted to use <code>apply</code>,\
+    \ you would do something like this:\n<code>&gt; (apply string (map string-&gt;list\
+    \ '(\"hello\" \"world\")))\n\"helloworld\"\n</code>\nAnd the function would look\
+    \ like this:\n<code>(define (anti_shuffle s)\n  (apply string (map (lambda (x)\n\
+    \                       (sort x &lt;))\n                     (map string-&gt;list\
+    \ (string-split s #\\space)))))\n</code>\nWhy use <code>apply</code> at all? \
+    \ Because it's a simpler way to express a call with a variable number of arguments.\
+    \  If you wrote a function that had variable arguments", "  (apply string-append\n\
+    \         (map (lambda (x)\n                (if (equal? (string-length x) 1)\n\
+    \                    x\n                    (apply string-append\n           \
+    \                (map string\n                                (sort\n        \
+    \                         (build-list (string-length x)\n                    \
+    \                         (lambda (x) (string-ref x 0)))\n                   \
+    \              <)))))\n              (string-split s))))\n", "  (string-join\n\
+    \   (for/list ([w (in-string s)])\n     (string-join\n      (sort string&lt;?\
+    \ (list-&gt;vector w))\n      (string w)))\n   (string #\\space)))\n</code>\n\
+    My Question Is: How can I improve this code or is there a better way to do this?\n\
+    \n\nA:\n\n<code>#lang racket\n", "  (map (lambda (w)\n         (string-sort w))\n\
+    \       (string-split s #\\space)))\n", "  (string-join\n   (map\n    (lambda\
+    \ (s)\n      (string-join\n       (sort (string->list s) <)\n       \"\"))\n \
+    \   (string-split s #\\space))\n   \" \"))", "  (string-join\n   (map (\u03BB\
+    \ (w)\n          (string-append (string-sort w) \" \"))\n        (string-split\
+    \ s))\n   \"\"))\n", "  (cond\n    [(empty? s) empty]\n    [(empty? (rest s))\
+    \ (anti_shuffle (first s))]\n    [else (string-append (anti_shuffle (first s))\
+    \ (anti_shuffle (rest s)))]))\n", "  (string-join\n   (map\n    (lambda (x)\n\
+    \      (if (string? x)\n          (string-join (sort (string->list x) <) \"\"\
+    )\n          x))\n    (string-split s))\n   \"\"))\n", "  (anti_shuffle_helper\
+    \ (string-split s)))\n", "  (define (sorting lst)\n    (cond\n      [(empty? lst)\
+    \ empty]\n      [else (cons (min lst) (sorting (remove min lst)))]))\n  (define\
+    \ (replacement lst)\n    (cond\n      [(empty? lst) empty]\n      [(string? (first\
+    \ lst)) (cons (string (sorting (string->list (first lst)))) (replacement (rest\
+    \ lst)))]\n      [else (cons (first lst) (replacement (rest lst)))]))\n  (string-join\
+    \ (replacement (string-split s)) \"\"))", "  (foldl\n   (lambda (char s)\n   \
+    \  (if (char-alphabetic? char)\n         (string-append (string (sort char (lambda\
+    \ (a b)\n                                             (< (char-&gt;integer a)\n\
+    \                                                (char-&gt;integer b))))\n   \
+    \                             s)\n                        (string char))\n   \
+    \      s))\n   \"\" s))\n</code>\nWhen I run this code I get the error:\n<code>#lang\
+    \ racket\n", "  (list->string\n   (map (lambda (w)\n          (string-join\n \
+    \          (sort (string->list w) #:key (lambda (x) (char->integer x)))\n    \
+    \       \"\"))\n        (string-split s \" \")\n        )))\n", "  (let loop ([s\
+    \ (string-&gt;list s)]\n             [r '()])\n    (if (null? s)\n        (list-&gt;string\
+    \ (reverse r))\n        (loop (cdr s)\n              (if (char-whitespace? (car\
+    \ s))\n                  (cons (car s) r)\n                  (cons (list-&gt;string\
+    \ (sort string-ci&lt;? (list-&gt;string (car s)))) r))))))\n", "  (define (anti_shuffle_aux\
+    \ s1 acc)\n    (if (string-empty? s1)\n        acc\n        (let* ((ws (string-index\
+    \ s1 #\\space))\n               (new-word (string-sort (substring s1 0 (or ws\
+    \ (string-length s1)))))\n               (rest (substring s1 (or ws (string-length\
+    \ s1)) (string-length s1))))\n          (anti_shuffle_aux rest (string-append\
+    \ acc new-word)))))\n  (anti_shuffle_aux s \"\"))\n```\n\n### Exercise 4\n```#lang\
+    \ racket\n", "  (apply string-append\n         (map\n          (lambda (word)\n\
+    \            (apply string-append\n                   (map\n                 \
+    \   (lambda (char)\n                      (string-append char))\n            \
+    \        (sort (string->list word)\n                          (lambda (char1 char2)\
+    \ (< (char->integer char1)\n                                                 \
+    \  (char->integer char2)))))))\n          (regexp-split #rx\"\\s+\" s))))\n```\n\
+    \n```racket\n#lang racket\n", "  (define (anti-chars chars)\n    (sort chars <))\n\
+    \  (define (anti-word word)\n    (string-append (anti-chars (string->list word))\
+    \ \"\"))\n  (map anti-word (string-split s #\\Space)))\n", "  (sort s #:key (compose\
+    \ string-&gt;symbol symbol-&gt;string)))\n</code>\n", "  (anti_shuffle_helper\
+    \ s #f))\n", "  (for/fold ([accum \"\"]\n             [word-number 0])\n     \
+    \       ([word (in-list (string-split s #\\space))])\n    (string-append accum\n\
+    \                   (if (= word-number 0)\n                       \"\"\n     \
+    \                  \" \")\n                   (string-sort word <)\n         \
+    \          (set! word-number (+ word-number 1)))))\n", "  (for/fold ([shuffled\
+    \ \"\"]) ([word (in-string (string-split s #\\space))])\n    (string-append shuffled\n\
+    \                   (string-join (sort (in-string word) #:key car) \"\")\n   \
+    \                \" \")))\n", "  (foldl (lambda (c acc)\n           (if (char=?\
+    \ #\\  c)\n               (string-append acc (string c))\n               (string-append\
+    \ acc (string-sort (string c)))))\n         \"\"\n         s))\n", "  (cond\n\
+    \    [(empty? s) empty]\n    [(not (char-alphabetic? (first s)))\n     (cons (first\
+    \ s) (anti_shuffle (rest s)))]\n    [else\n     (append (sort (first s) #:key\
+    \ char-&gt;integer)\n             (anti_shuffle (rest s)))]))\n", "  (if (string-empty?\
+    \ s)\n      \"\"\n      (string-append\n       (anti_shuffle (string-trim-right\
+    \ (string-between (string-trim-left s) #\\Space #\\Space)))\n       (sort-string\
+    \ (string-before (string-trim-left s) #\\Space))\n       (string-before (string-after\
+    \ (string-trim-left s) #\\Space) #\\Space))))\n", "  (apply string (for/list ([c\
+    \ (in-string s)])\n                  (if (char-whitespace? c)\n              \
+    \        c\n                      (list->string (sort (string->list c) char-&lt;?))))))\n\
+    </code>\n", "  (for/fold ([retval s])\n            ([c (in-string s)])\n    (if\
+    \ (char-whitespace? c)\n        (string-append retval (string c))\n        (let\
+    \ ([s (string-contains c s)])\n          (regexp-replace #rx\".\" (sort (string->list\
+    \ s) <) (string c))))))\n", "  (apply string (append (map (lambda (x) (apply string\
+    \ (sort string<? x)))\n                              (regexp-split #rx\" +\" s))\n\
+    \                         (list \" \"))))", "  (apply string (flatten\n      \
+    \           (map (lambda (w)\n                        (append w (list #\\space)))\n\
+    \                      (map (lambda (w)\n                             (sort\n\
+    \                              (string->list w)\n                            \
+    \  <))\n                           (regexp-split #rx\" \" s))))))\n", "  (define\
+    \ (string-sort st)\n    (sort (string->list st) string<?))\n  (define (is-space?\
+    \ c)\n    (cond\n      ((char=? c #\\ ) #t)\n      (else #f)))\n  (define (append-spaces\
+    \ lst)\n    (cond\n      ((null? lst) '())\n      ((null? (cdr lst)) lst)\n  \
+    \    ((is-space? (car lst)) (cons (car lst) (append-spaces (cdr lst))))\n    \
+    \  ((is-space? (cadr lst)) (cons (car lst) (cons (cadr lst) (append-spaces (cdr\
+    \ lst)))))\n      (else (cons (car lst) (append-spaces (cdr lst))))))\n  (define\
+    \ (reverse-word lst)\n    (cond\n      ((null? lst) '())\n      ((is-space? (car\
+    \ lst)) (cons (car lst) (reverse-word (cdr lst))))\n      (else (append (reverse-word\
+    \ (cdr lst)) (list (car lst))))))\n  (define (reverse-sort str)\n    (cond\n \
+    \     ((null? str) '())\n      ((is-space? (car str)) (cons (car str) (reverse-sort\
+    \ (cdr str))))\n      (else (append (reverse-sort (cdr str)) (list (car str))))))\n\
+    \  (string-join (append-spaces (map string-sort (map list->string (map reverse-word\
+    \ (map string->list (string-split s #\\space)))))) \"\"))\n", "  (apply string-append\
+    \ (map (lambda (s) (apply string-append (list (list-ref s 0) (sort (substring\
+    \ s 1) char-&lt;?)))) (string-split s #\\space))))\n", "  (map (\u03BB (x) (reduce\
+    \ string-append (sort (string->list x) <)))\n       (split-at #\\space s)))\n",
+  "  (let loop ([s (string-split s)]\n             [r ''])\n    (cond [(empty? s)\
+    \ (string-join (reverse r))]\n          [else (let* ([w (first s)]\n         \
+    \              [ws (rest s)]\n                       [w (regexp-replace* #rx\"\
+    [^a-zA-Z]\" w \"\")]\n                       [w (string-sort w)]\n           \
+    \            [r (cons w r)])\n                  (loop ws r))])))\n", "  (string-join\n\
+    \   (map (lambda (x)\n           (if (string? x)\n               (anti_shuffle_word\
+    \ x)\n               x))\n        (string-split s #\\space))\n   #\\space))\n",
+  "  (define (anti_shuffle_lst lst)\n    (map (lambda (x) (string-sort x)) lst))\n\
+    \  (define (string-sort s)\n    (if (string=? s \"\")\n        \"\"\n        (string-append\
+    \ (list (string-ref s 0))\n                       (string-sort (substring s 1)))))\n\
+    \  (define (char-&gt;string c)\n    (string c))\n  (map string-&gt;list\n    \
+    \   (string-split s)\n       (anti_shuffle_lst (string-split s))))\n</code>\n\n\
+    I appreciate any help. \nThanks in advance.\n\n\nA:\n\nYour problem is that <code>string-split</code>\
+    \ returns a list of strings, and you're then calling <code>string-sort</code>\
+    \ on each of those strings.\n<code>&gt; (string-split \"This is a test\")\n'(\"\
+    This\" \"is\" \"a\" \"test\")\n&gt; (map string-sort '(\"This\" \"is\" \"a\" \"\
+    test\"))\n'(\"This\" \"is\" \"a\" \"test\")\n</code>\nWhat you want to do is split\
+    \ the input into a list of characters, sort that list, then join the characters\
+    \ back into a string.\n", "  (string-join\n   (map\n    (lambda (x)\n      (if\
+    \ (number? x) x\n          (string-join\n           (sort (string->list x) (lambda\
+    \ (x y) (< (char->integer x) (char->integer y)))))))\n    (string-split s #\\\
+    space))\n   #\\space))\n", "  (cond\n    [(empty? s) \"\" ]\n    [else\n     (if\
+    \ (equal? (last s) #\\space)\n         (let-values ([(word new-string) (span string-ref?\
+    \ s)])\n           (string-append (anti_shuffle word) \" \" new-string))\n   \
+    \      (let-values ([(word new-string) (span string-ref? s)])\n           (string-append\
+    \ (anti_shuffle word) (string-sort (string->list word)) new-string)))]))\n", " \
+    \ (apply string (append-map\n                 (\u03BB (w) (string-sort (symbol->string\
+    \ w)))\n                 (regexp-match* #rx\"\\w+\" s))))", "  (let loop ([s (string-&gt;list\
+    \ s)]\n             [buff nil])\n    (cond [(null? s) (list-&gt;string (reverse\
+    \ buff))]\n          [(char-whitespace? (car s))\n           (loop (cdr s) (cons\
+    \ (car s) buff))]\n          [else\n           (loop (cdr s) (cons (car s) (list-&gt;string\
+    \ (sort (string-&gt;list (list-&gt;string (reverse buff)))\n                 \
+    \                                           #:key char-&gt;integer)))))\n    \
+    \       ])))\n", "  (apply string-append\n         (for/list ((str (string-split\
+    \ s)))\n           (string-append (string-sort str) \" \"))))\n", "  (define (anti_shuffle-helper\
+    \ s result)\n    (if (= s \"\")\n        result\n        (begin\n          (define\
+    \ space? (regexp-match? #rx\" \" s))\n          (if space?\n              (anti_shuffle-helper\
+    \ (substring s 1) (string-append result \" \"))\n              (begin\n      \
+    \          (define next-space (regexp-match #rx\" \" s))\n                (if\
+    \ next-space\n                    (anti_shuffle-helper (substring s (car next-space))\n\
+    \                                         (string-append result\n            \
+    \                                            (string-&gt;list (substring s 0 (car\
+    \ next-space)))\n                                                        ))\n\
+    \                    (anti_shuffle-helper (substring s (string-length s))\n  \
+    \                                       (string-append result\n              \
+    \                                          (string-&gt;list s)\n             \
+    \                                           ))\n                    ))))\n   \
+    \       )\n    )\n  (anti_shuffle-helper s \"\")\n  )\n</code>\nI have problems\
+    \ with the last test of the exercise because the expected result is:\n<code>=&gt;\
+    \ (anti_shuffle \"Hello World!!!\")\n\"Hello !!!Wdlor\"\n</code>\nAnd it is:\n\
+    <code>=&gt; (anti_shuffle \"Hello World!!!\")\n\"Hello !!!Wdolr\"\n</code>\nI\
+    \ tried to find the reason but I'm stuck and I do not know what is going on.\n\
+    Any help will be appreciated.\nThank you!\n\n\nA:\n\nI think your problem here\
+    \ is that you're discarding the spaces between the words, and trying to reconstruct\
+    \ them again later. It's much easier to build a list of words and then sort them,\
+    \ and finally concatenate the list. \n<code>(define (anti-shuffle s)\n  (define\
+    \ (words s)\n    (regexp-match* #rx\"[^ ]+\" s))\n  (let ([words (words s)])\n\
+    \    (string-join (map string-sort words) \" \")))\n</code>\n", "  (let ([lst\
+    \ (string-&gt;list s)])\n    (string-join (map\n                  (lambda (chr)\n\
+    \                    (if (char-alphabetic? chr)\n                        (string-&gt;list\
+    \ (sort (string chr) string&lt;?))\n                        (list chr)))\n   \
+    \               lst)\n                 \"\")))\n", "  (define (helper s)\n   \
+    \ (if (eq? s \"\")\n        s\n        (append (list (list->string (sort (string->list\
+    \ (string-ref s 0)) <)))\n                (helper (substring s 1)))))\n  (helper\
+    \ s))\n", "  (string-join\n   (for/list ([word (in-string s #\\space)])\n    \
+    \ (string-join\n      (sort (string->list word)\n            (\u03BB (x y) (<\
+    \ (char->integer x) (char->integer y))))))\n   #\\space))\n", "  (apply string\
+    \ (map (lambda (x) (apply string (sort (string->list x) <)))\n               \
+    \      (string-split s #\\space))))\n", "  (foldl\n   (lambda (c acc)\n     (cond\n\
+    \       [(char=? c #\\ ) acc]\n       [else (string-append acc (list c))]))\n\
+    \   \"\"\n   (apply string-append (map (lambda (word) (sort (string->list word)\
+    \ (lambda (c1 c2) (< (char->integer c1) (char->integer c2))))) (string-split s\
+    \ #\\space)))))\n", "  (let ([lst (string-&gt;list s)])\n    (string-join (map\
+    \ (lambda (x)\n                        (string-&gt;list (string-sort x &lt;)))\n\
+    \                      (regexp-split #rx\" \" s)) \"\")))\n", "  (foldl (lambda\
+    \ (s1 s2)\n           (string-append (string-join (sort (string-split s1 #\\space)\
+    \ string<?)) s2))\n         \"\"\n         (string-split s #\\newline)))\n", " \
+    \ (define (c2i c) (- (integer->char c) (integer->char #\\a)))\n  (define (i2c\
+    \ i) (+ (integer->char i) (integer->char #\\a)))\n  (define (i2s num)\n    (string-append\n\
+    \     (map (lambda (digit) (integer->char (+ (integer->char #\\a) digit))) num)))\n\
+    \  (define (sort-str s)\n    (i2s (sort (map c2i (string->list s)) <)))\n  (define\
+    \ (anti-sort-str s)\n    (define (swap-at-position lst pos)\n      (if (= pos\
+    \ 0)\n          (list (cadr lst) (car lst))\n          (append (list (car lst))\n\
+    \                  (list (list-ref lst pos))\n                  (list (list-ref\
+    \ lst 1))\n                  (drop lst 2))))\n    (define (anti-sort lst)\n  \
+    \    (cond ((null? lst) '())\n            ((null? (cdr lst)) lst)\n          \
+    \  (else (append (swap-at-position lst 0)\n                          (anti-sort\
+    \ (cdr lst))))))\n    (i2s (anti-sort (sort (map c2i (string->list s)) <))))\n\
+    \  (for/list ([word (in-string s #\\space)]\n             #:when (not (string=?\
+    \ word \"\")))\n    (cond ((equal? (sort-str word) word) word)\n          (else\
+    \ (anti-sort-str word)))))\n", "  (define (anti_shuffle-helper s k)\n    (if (=\
+    \ k 0)\n        \"\"\n        (string-append (anti_shuffle-helper s (- k 1))\n\
+    \                       (string-sort (string-take s k)))))\n  (anti_shuffle-helper\
+    \ s (string-length s)))\n```\n\n```\n#lang racket\n", "  (string-join\n   (map\
+    \ (lambda (w)\n          (list->string (sort (string->list w) #<?)))\n       \
+    \ (string-split s #\\space))\n   #\\space))\n", "  (define (sort-string str)\n\
+    \    (string-&gt;list (sort (string-&gt;list str) char&lt;?)))\n  (define (anti_shuffle-word\
+    \ str)\n    (regexp-replace #rx\"([^ ]+)\" str\n                    (lambda (m)\
+    \ (apply string (sort-string (string-&gt;list (cadr m)))))))\n  (anti_shuffle-word\
+    \ s))\n</code>\n", "  (for/fold ([acc \"\"]) ([x (in-string s)])\n    (cond\n\
+    \      [(space? x) (string-append acc x)]\n      [else (string-append acc (order-in-string\
+    \ x))])))\n", "  (define (get-words s)\n    (if (string-empty? s)\n        '()\n\
+    \        (cons (word s) (get-words (substring s (add1 (string-index s #\\space)))))))\n\
+    \  (define (word s)\n    (if (string-index s #\\space)\n        (substring s 0\
+    \ (string-index s #\\space))\n        s))\n  (define (sort-word s)\n    (string-append\
+    \ (sort (string->list s) <) \" \"))\n  (define (sort-words l)\n    (if (null?\
+    \ l)\n        \"\"\n        (string-append (sort-word (car l)) (sort-words (cdr\
+    \ l)))))\n  (string-trim (sort-words (get-words s))))\n", "  (string-join\n  \
+    \ (map (\u03BB (w)\n          (string-join\n           (sort string-alphabetic?\n\
+    \                 (string->list w))))\n        (string-split s \" \"))))\n```\n\
+    \nWrite a function that takes a string and returns an ordered version of it. Ordered\
+    \ version of string, is a string where all words (separated by space) are replaced\
+    \ by a new word where all the characters arranged in ascending order based on\
+    \ ascii value. Note: You should keep the order of words and blank spaces in the\
+    \ sentence.\n\n```racket\n#lang racket\n", "  (map (lambda (x)\n         (if (string?\
+    \ x)\n             (string-sort x)\n             x))\n       (string-split s)))",
+  "  (define (sort-word s)\n    (sort s char&lt;?))\n  (define (sort-words s)\n  \
+    \  (map sort-word (regexp-split #rx\" +\" s)))\n  (apply string-append (sort-words\
+    \ s)))\n</code>\n", "  (string-join (map (lambda (x) (string-join (sort x <) \"\
+    \"))\n                   (regexp-split #rx\"\\s+\" s))\n               \" \"))\n",
+  "  (string-join (anti-sort (string-split s #\\space)) \" \"))\n", "  (string-join\n\
+    \   (for/list ([w (in-string s)]\n              #:when (not (char=? #\\space w)))\n\
+    \     (string-append w (make-string (random 9) #\\!)))\n   \" \"))\n", "  (local\
+    \ [(define (anti-shuffle-word w)\n            (sort (string->list w) (\u03BB (c1\
+    \ c2) (< (char->integer c1) (char->integer c2)))))\n          (define (is-word?\
+    \ c)\n            (and (not (char=? c #\\space)) (not (char=? c #\\!)) (not (char=?\
+    \ c #\\?))))\n          (define (is-separator? c)\n            (or (char=? c #\\\
+    space) (char=? c #\\!) (char=? c #\\?)))]\n    (define (iter s result)\n     \
+    \ (cond [(empty? s) result]\n            [(is-word? (first s))\n             (let\
+    \ ([word (take-while is-word? s)])\n               (iter (drop-while is-word?\
+    \ s) (append result (anti-shuffle-word word))))]\n            [(is-separator?\
+    \ (first s))\n             (let ([separator (take-while is-separator? s)])\n \
+    \              (iter (drop-while is-separator? s) (append result separator)))]))\n\
+    \    (string-&gt;symbol (list-&gt;string (iter (string-&gt;list s) '())))))\n\
+    </code>\n", "  (define (anti-shuffle-word s)\n    (define (chars->ascii l)\n \
+    \     (map char->ascii l))\n    (define (ascii->chars l)\n      (map ascii->char\
+    \ l))\n    (define (chars-min-max l)\n      (list (apply min (chars->ascii l))\n\
+    \            (apply max (chars->ascii l))))\n    (define (chars-range l)\n   \
+    \   (list->list (chars-min-max l)))\n    (define (char-in-range? char min max)\n\
+    \      (and (<= min char) (<= char max)))\n    (define (remove-space s)\n    \
+    \  (filter (lambda (x) (not (char=? x #\\ ))) (string->list s)))\n    (define\
+    \ (remove-not-in-range s min max)\n      (filter (lambda (x) (char-in-range? x\
+    \ min max)) s))\n    (define (to-sorted-string l)\n      (list->string (remove-not-in-range\n\
+    \                     (merge (remove-space s)\n                            (sort\n\
+    \                             (remove-space s) char<?))\n                    \
+    \ (car (chars-min-max l))\n                     (cadr (chars-min-max l)))))\n\
+    \    (to-sorted-string s))\n  (define (anti-shuffle-words s)\n    (map anti-shuffle-word\
+    \ (string-split s #\\space)))\n  (apply string-join (anti-shuffle-words s)))\n",
+  "  (apply string-append\n         (map (lambda (w)\n                (let ((chars\
+    \ (string->list w)))\n                  (apply string (sort chars <))))\n    \
+    \          (string-split s #\\space))))\n", "  (string-join\n   (map\n    (lambda\
+    \ (xs)\n      (string-join\n       (map (lambda (x) (string-append \"\" x))\n\
+    \            (sort (map string-&gt;symbol (string-&gt;list xs))\n            \
+    \      (lambda (a b) (&lt; (char-&gt;integer a) (char-&gt;integer b)))))\n   \
+    \    \"\"))\n    (regexp-split #rx\"\\s+\" s))\n   \" \"))\n</code>\nit's verbose,\
+    \ but it works.\n", "  (apply string (reverse (map list->string (reverse (map\
+    \ string->list s))))))\n", "  (string-join\n   (for/list ([w (in-string s)])\n\
+    \     (string-&gt;list (string-trim w))\n     (sort (curry string-&gt;list &lt;)\
+    \ w))\n   \" \"))\n</code>\nAnd here is the error I got:\n<code>string-&gt;list:\
+    \ contract violation\n  expected: string?\n  given: 'h\n  in: (string-&gt;list\
+    \ 'h)\n</code>\nThe issue is that <code>sort</code> is expecting a <code>list?</code>\
+    \ as input, not a <code>string?</code>. I've tried many ways to make it work,\
+    \ but none of them works.\n\n\nA:\n\nYou're calling <code>string-&gt;list</code>\
+    \ on the <code>w</code> word, but it should be called on each of the characters\
+    \ in the word, this can be done using <code>string-&gt;list/partial</code>:\n\
+    <code>(define (anti_shuffle s)\n  (string-join\n   (for/list ([w (in-string s)])\n\
+    \     (sort string-&lt;? (string-&gt;list/partial w)))\n   \" \"))\n</code>\n\
+    The following should work too:\n<code>(define (anti_shuffle s)\n  (string-join\n\
+    \   (for/list ([w (in-string s)])\n     (sort string-&lt;? (string-&gt;list w)))\n\
+    \   \" \"))\n</code>\nEither way, the following is the result:\n<code>(anti_shuffle\
+    \ \"Hello World!!!\")\n=&gt; \"Hello !!!Wdlor\"\n</code>\n", "  (define (anti_shuffle_rec\
+    \ s accum)\n    (cond\n      [(empty? s) (reverse accum)]\n      [(char=? (first\
+    \ s) #\\ )\n       (anti_shuffle_rec (rest s) (cons (first s) accum))]\n     \
+    \ [else\n       (anti_shuffle_rec (rest s) (cons (sort (first s) <) accum))]))\n\
+    \  (string-join (anti_shuffle_rec (string->list s) '()) \"\"))\n", "  (define\
+    \ (str-chars s)\n    (map char->integer (string->list s)))\n  (define (sort-str\
+    \ s)\n    (list->string (map integer->char (sort (str-chars s)))))\n  (for/fold\
+    \ ([acc \"\" ]) ([w (in-list (string-split s))])\n    (string-append acc (sort-str\
+    \ w))))\n", "  (define (shuffle lst)\n    (map string-sort lst))\n  (map* string-join\n\
+    \        (lambda (word)\n          (string->list word))\n        (shuffle (string-split\
+    \ s #\\space))))", '  (apply string (map list->string (map sort (map string->list
+    (regexp-split #rx" " s))))))', "  (define (sorted-str-of-str s)\n    (apply string\
+    \ (sort (string->list s) (lambda (x y) (< (char->integer x) (char->integer y))))))\n\
+    \  (for/fold ([result \"\"]) ([word (in-list (string-split s))])\n    (string-append\
+    \ result (sorted-str-of-str word))))\n", "  (apply string-append\n   (map (lambda\
+    \ (w)\n          (string-append (sort-string w) \" \"))\n        (string-split\
+    \ s #\\space))))\n", "  (string-join (map (lambda (word)\n                   \
+    \   (if (zero? (string-length word))\n                          word\n       \
+    \                   (string-join (sort (string->list word)\n                 \
+    \                            <)\n                                       \"\")))\n\
+    \                    (string-split s))\n               \"\"))", "  (apply string\
+    \ (append (apply string (map (lambda (c)\n                                   \
+    \          (if (char-alphabetic? c)\n                                        \
+    \         (apply string (sort (list->vector c) <))\n                         \
+    \                        c))\n                                           (string->list\
+    \ s)))\n                         (list #\\space))))\n", "  (string-join\n   (for/list\
+    \ ([word (in-string s)])\n     (let ([chars (in-string word)])\n       (string-join\
+    \ (sort chars string<?))))\n   \" \"))\n", "  (define (chars-sort c)\n    (apply\
+    \ string (sort (map char->integer (string->list c)) <)))\n  (define (word-sort\
+    \ w)\n    (apply string (map chars-sort (string-split w))))\n  (apply string (map\
+    \ word-sort (string-split s))))\n", "  (define (to_list s)\n    (string-&gt;list\
+    \ s))\n  (define (sort-ascend s)\n    (sort s &lt;))\n  (define (to_string l)\n\
+    \    (list-&gt;string l))\n  (define (in_order s)\n    (to_string (sort-ascend\
+    \ (to_list s))))\n  (define (splitter s)\n    (regexp-split #rx\"\\s+\" s))\n\
+    \  (define (mapper f l)\n    (map f l))\n  (define (joiner s)\n    (string-join\
+    \ s \" \"))\n  (define (rearrange s)\n    (joiner (mapper in_order (splitter s))))\n\
+    \  (rearrange s))\n", "  (string-join (map (lambda (x) (string-sort x)) (string-split\
+    \ s)) \"\"))\n", "  (define (anti_shuffle-words ws)\n    (if (null? ws)\n    \
+    \    \"\"\n        (string-append (anti_shuffle-word (car ws))\n             \
+    \          (anti_shuffle-words (cdr ws)))))\n  (define (anti_shuffle-word w)\n\
+    \    (string-append (string-sort w) \"\"))\n  (anti_shuffle-words (string-split\
+    \ s)))\n", "  (let loop ([s (string-split s #\\space)]\n             [result '()])\n\
+    \    (cond [(empty? s) (string-join (reverse result) #\\space)]\n          [else\
+    \ (loop (rest s)\n                      (cons (string-sort (first s)) result))])))\n",
+  "  (define (anti_shuffle_word s)\n    (if (empty? s)\n        \"\"\n        (begin\n\
+    \          (string-append (sort (string->list s)) (anti_shuffle_word (rest s))))))\n\
+    \  (foldl (lambda (x y)\n           (if (equal? \" \" x)\n               (string-append\
+    \ x y)\n               (string-append (anti_shuffle_word x) y)))\n         \"\"\
+    \n         (string-split s)))\n", "  (string-join (map (lambda (x) (string-sort\
+    \ x)) (string-split s)) \" \"))\n", "  (define (anti-shuffle-inner s current-res)\n\
+    \    (if (string-null? s)\n        current-res\n        (let* ([first-word (string-tokenize\
+    \ s #\\space)]\n               [rest-of-string (if (string-null? (cdr first-word))\n\
+    \                                   \"\"\n                                   (cdr\
+    \ first-word))]\n               [first-word-str (car first-word)])\n         \
+    \ (anti-shuffle-inner rest-of-string\n                              (string-append\
+    \ current-res\n                                             (string-sort first-word-str)\n\
+    \                                             \" \")))))\n  (string-trim (anti-shuffle-inner\
+    \ s \"\")))\n", "  (string-join\n   (for/list ([w (string-split s #\\space)])\n\
+    \     (string-append (list->string (sort string<? (string->list w))) \" \"))\n\
+    \   \"\"))\n", "  (string-join\n   (map\n    (lambda (x)\n      (string-join\n\
+    \       (sort (string->list x)\n             (lambda (a b)\n               (&lt;\
+    \ (char-&gt;integer a) (char-&gt;integer b))))))\n    (string-split s #\\space))\n\
+    \   #\\space))\n", "  (define (sort-string s)\n    (apply string (sort < (string->list\
+    \ s))))\n  (define (sort-word w)\n    (if (word? w)\n        (sort-string w)\n\
+    \        w))\n  (apply string\n         (map sort-word\n              (string-split\
+    \ s))))\n", "  (apply string-append\n         (map (lambda (e)\n             \
+    \   (if (string? e)\n                    (apply string-append\n              \
+    \             (sort (string->list e)\n                                 <))\n \
+    \                   e))\n              (string-split s #\\space))))\n", "  (cond\n\
+    \    [(empty? s)\n     '()]\n    [(equal? (first s) #\\space)\n     (cons (first\
+    \ s) (anti_shuffle (rest s)))]\n    [else\n     (append (anti_shuffle (regexp-match\
+    \ #rx\"\\s+\" s))\n             (sort (regexp-match #rx\"[^\\s]+\" s) #:key string&lt;?))]))\n\
+    </code>\n", "  (build-string (map (lambda (ch)\n                       (if (char-alphabetic?\
+    \ ch)\n                           (first (sort (string->list (string ch))\n  \
+    \                                      <))\n                           ch))\n\
+    \                     (string->list s))))\n", "  (map (lambda (x) (apply string\
+    \ (sort (string->list x) (lambda (x y) (< x y)))))\n       (regexp-split #rx\"\
+    \ \" s)))\n", "  (string-join\n   (for/list ([w (in-string s)]\n             \
+    \ #:when (not (string=? (string-trim w) \"\")))\n     (string-join\n      (sort\
+    \ (string-&gt;list w)\n            &lt;)\n      \"\"))\n   \" \"))\n", "  (string-join\n\
+    \   (map\n    (lambda (w)\n      (string-join\n       (sort\n        (string->list\
+    \ w)\n        (lambda (a b) (char<? a b)))\n       \"\"))\n    (string-split s\
+    \ #\\space))\n   \" \"))\n", "  (displayln s)\n  )\n", "  (string-append (anti_shuffle2\
+    \ (string-split s #\\space)) (string #\\space)))\n", "  (map (lambda (x)\n   \
+    \      (if (string? x)\n             (string-append (string-sort x))\n       \
+    \      x))\n       (string-split s)))\n", "  (define (anti_shuffle_word s)\n \
+    \   (apply string (sort < (string->list s))))\n  (define (anti_shuffle_words ss)\n\
+    \    (let loop ([ss ss] [acc '()])\n      (cond [(empty? ss) (reverse acc)]\n\
+    \            [(string=? (first ss) \" \")\n             (loop (rest ss) (cons\
+    \ (first ss) acc))]\n            [else (loop (rest ss) (cons (anti_shuffle_word\
+    \ (first ss)) acc))])))\n  (list->string (anti_shuffle_words (string-split s))))\n",
+  "  (define (sort-string str)\n    (string-join (sort (string-&gt;list str) (\u03BB\
+    \ (c1 c2) (&lt; (char-&gt;integer c1) (char-&gt;integer c2))))))\n  (foldl (\u03BB\
+    \ (s acc) (string-append acc (sort-string s) \" \")) \"\" (regexp-split #rx\"\
+    \ \" s)))\n</code>\nLet me know what you think of this solution, what could be\
+    \ better, and why.\n\n\nA:\n\nYour solution is simple, but it's also long. A solution\
+    \ that I came up with is this one:\n<code>(define (anti-shuffle s)\n  (define\
+    \ (sort str)\n    (string-sort str &lt;=?))\n  (map sort (regexp-split #rx\" \"\
+    \ s)))\n</code>\nAs you can see it's much shorter, but much more obscure. Using\
+    \ <code>string-sort</code> was a good idea, but (as far as I know) it needs a\
+    \ procedure to sort a string, and in Racket (and in most of the functional languages)\
+    \ a procedure is a \"function that takes a function and returns a function\".\n\
+    Since strings aren't functions, we need to wrap <code>&lt;=?</code> (which is\
+    \ a function) into a lambda.\n", "  (apply string (cons '#\\space\n          \
+    \            (apply append\n                             (map (lambda (w)\n  \
+    \                                  (string->list (apply string (sort w string<?))))\n\
+    \                                  (string-split s #\\space))))))\n", "  (cond\
+    \ [(empty? s) s]\n        [else (string-append (string-join (map (lambda (ch)\
+    \ (list-ref (sort (list->vector ch) <) 0))\n                                 \
+    \               (string-split s #\\space)) #\\space)\n                       \
+    \       (anti_shuffle (string-drop-right s 1)))]))\n```\n\n### <a name=\"tri-paren\"\
+    >Tri-Paren</a>\n\n```#lang racket\n", "  (string-join\n   (map\n    (lambda (w)\n\
+    \      (string-sort (string->list w) (lambda (c1 c2)\n                       \
+    \                (< (char->integer c1)\n                                     \
+    \     (char->integer c2)))))\n    (string-split s #\\space))\n   #\\space))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -9,6 +9,1198 @@ tests: "}\n\ncandidate() {\n    derivative \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ [[ $(candidate \"3 1 2 4 5\") = \"1 4 12 20\" ]]\n    [[ $(candidate \"1 2 3\"\
   ) = \"2 6\" ]]\n    [[ $(candidate \"3 2 1\") = \"2 2\" ]]\n    [[ $(candidate \"\
   3 2 1 0 4\") = \"2 2 0 16\" ]]\n    [[ $(candidate \"1\") = \"\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local vars=$(echo $1 | tr \"[a-z]\" \"[A-Z]\")\n    local dvar\n\
+    \    local dval\n    local dvals=()\n    for dvar in ${vars}; do\n        dval=\"\
+    $(echo $dvar | cut -c1-1)\"\n        if [ \"$dval\" == \"0\" ]; then\n       \
+    \     dval=\"1\"\n        else\n            dval=\"$dval\"\n        fi\n     \
+    \   dvals+=($dval)\n    done\n    local result\n    result=$(echo $1 | sed -n\
+    \ \"s/^${vars}$/\\1\\n/g\" | paste -sd ' ')\n    for dval in ${dvals[@]}; do\n\
+    \        result+=\"$(echo $dval * $result | sed -n \"s/^$dval$/\\1\\n/g\" | paste\
+    \ -sd ' ')\"\n    done\n    result+=$'\\n\\n'\n    if [ $# -eq 0 ]; then\n   \
+    \     echo $result\n    else\n        echo $result | sed 's/^/\"'\"${vars}\" '\
+    \ | sed 's/$/\\1/'\n    fi", "\tlocal -r degree=$1\n\tshift\n\n\tlocal -r sign=$1\n\
+    \tshift\n\tlocal -r term=$1\n\n\tlocal -r lines=$(eval echo $(perl -pe \"($term)x^$((${#term}\
+    \ - $(($degree + 1))))\"))\n\tlocal -r result=\"\"\n\tfor ((i=0;i<${#lines};i++));\
+    \ do\n\t\tlocal -r line=${lines[i]}\n\t\tif [[ ${line:0:1} == \"x\" ]]; then\n\
+    \t\t\tlocal -r coef=${line:1}\n\t\t\tresult+=\"'$coef'\"\n\t\telse\n\t\t\tresult+=\"\
+    ${line}\"\n\t\tfi\n\tdone\n\n\tif [[ $sign == \"-\" ]]; then\n\t\tresult=\"-$result\"\
+    \n\tfi\n\techo \"$result\"", "\tlocal variables=$( echo \"$1\" | tr -s ' ' | cut\
+    \ -d ' ' -f 1 )\n\tlocal xs=$( echo \"$1\" | tr -s ' ' | cut -d ' ' -f 2- )\n\t\
+    local result=\"\"\n\tlocal x\n\tfor (( i=0; i<${#xs[@]}; i++ )); do\n\t\tx=$((\
+    \ i + 1 ))\n\t\tresult+=\"\\\"${x}\\\"\"\n\t\tif (( i < ${#variables[@]}-1 ));\
+    \ then\n\t\t\tresult+=\" \"\n\t\tfi\n\tdone\n\techo \"${result}\"", "  local -n\
+    \ xs=$1\n  shift\n  echo \"$(xs \"$@\")\"", "    local result=\"\"\n    local\
+    \ terms=$1\n    local i=1\n    while [[ -n \"$2\" ]] ; do\n        result+=\"\\\
+    \"$((${terms[*]} * $i))\\\"  \"\n        i=$(( i+1 ))\n        terms=\"$terms\
+    \ $2\"\n        shift\n        shift\n    done\n    echo $result", "    local\
+    \ -r start_id=\"$1\"\n    shift\n    local -r end_id=\"$1\"\n    shift\n    local\
+    \ -r start_idx=`echo $start_id | cut -d: -f1`\n    local -r end_idx=`echo $end_id\
+    \ | cut -d: -f1`\n    local -r res=()\n    for i in `seq $start_id` `seq $end_idx`;\
+    \ do\n        res+=(`echo $i | sed -n \"s/^$start_idx\\([0-9]*\\).*$/\\1/p\"`)\n\
+    \    done\n    echo \"${res[@]}\"", "    local xs=$1\n    local d=\"\"\n    local\
+    \ k=0\n    while [ $k -lt $#xs ]; do\n        local ds=$(echo $d; echo -n \"${xs[k]}\
+    \ * x^${k+1}\")\n        d=$(echo $d; echo $ds)\n        k=$((k+1))\n    done\n\
+    \    echo $d", "    if [ $# -eq 0 ] || [ $1 = '' ]; then return 1; fi\n    # remove\
+    \ spaces and quotes\n    local vars=`echo $1 | tr \" \" \"\\n\" | sed 's/^\"//'\
+    \ | sed 's/\"$//'`\n    local x=0;\n    for var in $vars; do\n        x=$(($x*$var));\n\
+    \    done\n    echo $(($x*$vars))", "    local poly=\"$1\"\n    local polyStr=\"\
+    $(polyStr \"$poly\" \"0\" \"1\")\"\n    local polyStr=\"${polyStr// / }\"\n  \
+    \  local polyArr=()\n    local polyArrStr=\n    for ((i=${#polyStr}-1; i>0; i--));\
+    \ do\n        local idx=\"$(expr ${i} - 1)\"\n        local j=\"${idx}\"\n   \
+    \     local idx2=\"$((j+1))\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArrStr'${polyStr:$idx:1}'\"\n        polyArrStr=\"\
+    $polyArrStr'${polyStr:$idx2:1}'\"\n        polyArrStr=\"$polyArrStr'${polyStr:$j:1}'\"\
+    \n        polyArrStr=\"$polyArr", "    local xs=$1\n    local result\n    for\
+    \ x in $xs\n    do\n        result+=\"\\\"$x\\\" * x\"\n    done\n    echo $result",
+  "  local -r s=\"$1\"\n  shift\n  local a=0\n  local n=0\n  local i\n  local j\n\
+    \  local k\n  local s2 # used to remove spaces from $s\n  local s3 # used to remove\
+    \ spaces from $s\n  local n2 # used to remove spaces from $a\n  local n3 # used\
+    \ to remove spaces from $n\n  local n4 # used to remove spaces from $n\n  local\
+    \ n5 # used to remove spaces from $n\n  local n6 # used to remove spaces from\
+    \ $n\n  local d\n  local f2\n  local f3\n  local f5\n  local f6\n  while [ -n\
+    \ \"$s\" ]; do\n    s+=\" \"\n  done\n  f2=$(echo $s | awk '{ for(i=1;i<=NF;i++)\
+    \ {\n    for (j=i+1;j<=NF;j++) {\n      print $i \" \" $j \" \" $i*$j; }}\n  \
+    \  }')\n  f3=$(echo $s | awk '{ for(i=1;i<=NF;i++) {\n    for (j=i+1;j<=NF;j++)\
+    \ {\n      for (k=j+1;k<=NF;k++) {\n        print $i \" \" $j \" \" $i*$j \" \"\
+    \ $k*$j; }}\n    }\n  }')\n  f5=$(echo $f2 | sed -e 's/ //g')\n  f6=$(echo $f3\
+    \ | sed -e 's/ //g')\n  d=$(echo $f5 | sed -e 's/ //g')\n  n2=$(echo $f6 | sed\
+    \ -e 's/ //g')\n  n3=$(echo $d | sed -e 's/ //g')\n  n4=$(echo $n2 | sed -e 's/\
+    \ //g')\n  n5=$(echo $n3 | sed -e 's/ //g')\n  n6=$(echo $n4 | sed -e 's/ //g')\n\
+    \  d=$(echo $n5 | sed -e 's/ //g')\n  s2=$(echo $n | sed -e 's/ //g')\n  s3=$(echo\
+    \ $s2 | sed -e 's/ //g')\n  n2=$(echo $n2 | sed -e 's/ //g')\n  n3=$(echo $n3\
+    \ | sed -e 's/ //g')\n  n4=$(echo $n4 | sed -e 's/ //g')\n  n5=$(echo $n5 | ",
+  "  xs=(${1//[/ ]})\n  n=$(( ${#xs[@]} - 1 ))\n  d=1\n  ds=()\n  for(( i=0; i<$n;\
+    \ i++ ))\n  do\n    ds=\"$ds $(echo $(( ${ds[*]} + d*xs[i] )))\"\n  done\n  echo\
+    \ $ds", "    local IFS=\n    local N=$#\n    local xs=()\n    for (( i=0; i <\
+    \ $N; i++ )); do\n        xs+=($(echo $1 | grep \"^-$i\"|cut -d ' ' -f1 ))\n \
+    \   done\n    echo \"$xs[@]\"", "  local xs poly\n  local -i n j\n  local -r deg=3\n\
+    \  local -r result=\"[]\"\n  eval \"poly=\\${$#}\"\n  xs=\"$poly\"\n  shift\n\
+    \  for ((i=1; i<\"$poly\"; i+=1))\n  do\n    ((j=$i))\n    for ((k=0; k<$deg;\
+    \ k++))\n    do\n      xs=\"$xs \\${$((j+k))}\"\n    done\n    eval \"xs=\\\"\
+    $xs *\\$((${#xs}-1))\\\"\"\n    eval \"result=\\${result} \\\"\\$xs\\\"\"\n  done\n\
+    \  eval \"result=\\\"\\${result}\\\"\"\n  echo -n \"$result\"", "  local ds=${1:-\"\
+    \"}\n  [[ -z \"${ds}\" ]] && return 1\n\n  ds=$(echo \"${ds}\" | sed 's/ /+/g')\n\
+    \n  local d\n  while read -u 3 -d $'\\n' x; do\n    d=\"\\\"${x}\\\"\"\n    printf\
+    \ -v \"${ds}\" \"${ds}\" \"${d} \"\n  done 3< <(\n      awk -v ds=\"${ds}\" '{\
+    \ for(i = 1; i <= NF; i++) print d }' <<< \"${ds}\"\n  )\n\n  echo \"${ds}\"",
+  "    local xs x\n    xs=(\"${1// / }\")\n    echo \"[$(head -n 1 <<<\"${xs[@]}\"\
+    )]\"\n    for i in {2..$#xs[@]}\n    do\n        echo \"\\\"$(head -n $i <<<\"\
+    ${xs[@]}\")\\\"\" >> \"$1\"\n    done", "  if [ -z \"$1\" ] ; then\n    echo \"\
+    No argument supplied\"\n    exit 1\n  fi\n  local xs d i ix j=0 ret=()\n  # Convert\
+    \ to array\n  read -ra xs <<<\"$1\"\n  # First coefficient is constant.\n  ret+=($xs[0])\n\
+    \  # Iterate over remaining coefficients\n  for (( i=1; i<$#; i++ )); do\n   \
+    \ (( ix = i+1 ))\n    # Multiply by previous coefficient.\n    d=$(($i*$xs[ix]))\n\
+    \    # Add current coefficient to previous term.\n    ret+=(${ret[i-1]}${d})\n\
+    \  done\n  echo \"${ret[@]}\"", "  xs=$($1 -g | sed 's/^ *//; s/ *$//; s/ *\\\
+    ([^ ]*\\) .*/\"&\"/; s/^ *//' | sed 's/ / + /')\n  echo \"['${xs}']\"", "    local\
+    \ f\n    while read -r f; do\n        echo $f\n        local xs=$(echo $f | sed\
+    \ \"s/ / + / | x\")\n        echo -n '['\n        for (( i=1; i<${#xs[@]}; i++\
+    \ )); do\n            printf '\"%s\"' \"${xs[$i]}\"\n            if [ $i -lt ${#xs[@]}\
+    \ ]; then\n                echo ','\n            fi\n        done\n        echo\
+    \ ']'\n    done <<< \"$1\"", "  local d=1\n  local xs=$1\n  local out=$xs[0]\n\
+    \  for x in ${xs[@]}; do\n    d=$(($d * x))\n    out=$(($out + \" $d\"))\n  done\n\
+    \  echo \"$out\"", "  local xs result\n  IFS=$'\\n' read -r -a xs <<< \"$1\"\n\
+    \  result=$(xs | sed -E 's/^([^0-9]+)([0-9]+)(.*)/\"\\2\"/;s/^([0-9]+)([^0-9]+)(.*)/\"\
+    \\1\"/;s/^/-\"/;s/$/-/' | sort -u)\n  echo \"[\\\"${result//\\\"/\\\"\\\", \\\"\
+    ${result//-/\\\"-\\\"}\\\"\"]", "    local xs=\"$1\"\n    local deg=$((${#xs}\
+    \ - 1))\n\n    if [ -z \"$xs\" ]; then\n        echo \"$deg\"\n        return\n\
+    \    fi\n    local darr=\"\"\n    local farr=\"\"\n    local cs=$((${#xs} + 1))\n\
+    \    for (( d=0; d <= deg; d++ )); do\n        local c=$((d+1))\n        local\
+    \ f=\"$c\"\n        for (( c++; c <= cs; c++ )); do\n            local nx=$xs\n\
+    \            local ny=$((c-1))\n            nx=$((c+1))\n            ny=$((c+1))\n\
+    \            darr+=\"$nx $ny \"\n            farr+=\"-$ny \"\n        done\n \
+    \       darr+=\"0 \"\n        farr+=\"0 \"\n    done\n\n    echo \"$darr$farr\"",
+  "  local n=$#\n  local xs=$*\n  echo $(n|awk -F\" \" '{ for (i=0; i<n; i++) {\n\
+    \    xs=$(xs) \"$(echo \"$xs[i] * x^\" $(i+1))\"}; print $xs }')", "\tlocal -r\
+    \ script=\"$1\"\n\tshift\n\tlocal -r poly=\"$(eval \"echo $script | cut -d ' '\
+    \ -f 1 -d\"\n\tfor x; do\n\t\tlocal -r term=\"$(eval \"echo $script | cut -d '\
+    \ ' -f $x -d\"\n\t\techo \"$term\"\n\tdone\n\techo \"\"\n)\"\n\tlocal -r dterm=\"\
+    $(eval \"echo $script | cut -d ' ' -f 1 -d\"\n\tfor x; do\n\t\tlocal -r dterm=\"\
+    $(eval \"echo $script | cut -d ' ' -f $(($x+1)) -d\"\n\t\techo \"$dterm\"\n\t\
+    done\n\techo \"\"\n)\"\n\techo \"[\" ${poly[@]} | sed 's/^/\"/; s/$/\"/' > $poly\n\
+    \techo \"[\" ${dterm[@]} | sed 's/^/\"/; s/$/\"/' >> $poly\n\techo \"]\"", " \
+    \   local xs=\"$1\"\n    local res=\"$2\"\n    echo \"$xs $(for ((i=1; i<$#; i=i+2))\
+    \ do echo \"x$i * $xs[i+1]\"; done)\"", "  declare -a xs=(\"$@\")\n  declare -a\
+    \ deriv\n  for (( i=0; i<${#xs[@]}-1; i++ )); do\n    deriv+=($(echo \"${xs[i]}\
+    \ * ${xs[i+1]} * x^${i+2}\" | bc))\n  done\n  deriv+=($(echo \"${xs[${#xs[@]}]}\
+    \ * x^${#xs[@]}\"| bc))\n  printf '[%s]' \"${deriv[@]}\"", "    local xs=( $1\
+    \ )\n    local n=0\n    # Iterate through each coefficient of the polynomial\n\
+    \    for (( n=1; n<${#xs[@]} ; n++ )); do\n        # Increase the derivative of\
+    \ n-th element by n-th power\n        xs[n]=$(( $xs[n-1] * $xs[n] ))\n    done\n\
+    \    # Remove first element as it should not be used\n    xs=( \"${xs[@]:1}\"\
+    \ )\n    # Return elements as an array\n    local IFS=\" \"\n    echo ${xs[*]}",
+  "    local x=\"$1\"\n    local d=\"\"\n    local i=1\n    local count=\"1\"\n  \
+    \  while [ \"$i\" -le \"$#\" ]; do\n        case \"$x\" in\n            -?*([0-9]*))\
+    \ ;;\n            \"\") ;;\n            -*) echo \"Bad argument: $x\" >&2; exit\
+    \ 1;;\n            +*) echo \"Bad argument: $x\" >&2; exit 1;;\n            *)\n\
+    \                if [ \"$count\" -eq \"$i\" ]; then\n                    x=$x${x%?}\n\
+    \                    d=\"$d $x\"\n                else\n                    x=$x${x#*}\n\
+    \                    d=\"$d $x\"\n                fi\n                count=$((\
+    \ 1 + count ))\n                i=$(( i + 1 ))\n            ;;\n        esac\n\
+    \    done\n    echo \"$d\"", "    local d\n    local x\n\n    # Remove trailing\
+    \ spaces from each line\n    while read -d ' ' x; do\n        echo \"${x}${x%%+*/}\"\
+    \ | while read -d ' ' d; do\n            echo \"$d/$d${d%%+*/}\"\n        done\n\
+    \    done | tr '\\n' ' '", "\tlocal varNames=$1\n\tlocal last\n\tlocal terms=$(echo\
+    \ $varNames | sed 's/ / + /g')\n\twhile read var; do\n\t\tlast=$(echo \"$terms\
+    \ $var\" | sed 's/ + / -/g')\n\t\tterms=$(echo $varNames | sed 's/ / + /g')\n\t\
+    \t[ \"$last\" = \"$var\" ] && echo \"$last\"\n\tdone <<< \"$terms\"\n\tprintf\
+    \ '[\\n' $terms ']'", "  if [ -z \"$1\" ] ; then\n    echo \"Must supply a list\
+    \ of coefficients\"\n    return 1\n  fi\n  local xs=\"$1\"\n  local x\n  local\
+    \ f\n  local f=\"$(eval \"echo \\\"$xs\\\" | sed 's/ / + \\\"/g'\")\"\n  x=\"\
+    $(($(eval \"echo \\\"$f\\\" | cut -d \\\" \\\" -f 1\") ))\"\n  while [ $x -gt\
+    \ 1 ]; do\n    x=\"$(($(eval \"echo \\\"$f\\\" | cut -d \\\" \\\" -f 1\") ))\"\
+    \n    f=\"$(eval \"echo \\\"$xs\\\" | sed 's/ / + \\\"/g' | sed 's/^.*\\($x\\\
+    )$/\\1/'\")\"\n  done\n  f=\"$f\"\n  echo \"$f\"", "    local x=\"$1\" # coefficients\
+    \ of a polynomial\n    local f=\"$2\" # base polynomial\n\n    local xs=()\n \
+    \   for ((i=0;i<${#x};++i)); do\n        xs+=($(eval ${f//$x/${x[i]}})) # ${f//$x/${x[i]}}\n\
+    \    done\n\n    local res=${xs[*]}\n    res+=($(eval $f))\n    res+=(${f//$x/${x[*]}})\n\
+    \n    echo ${res[@]}", "    local -n XS=$1\n    local d='\"'\n    local xs=\"\
+    ${XS[@]}\"\n    local x=\"${xs[0]}\"\n    # Simplify the polynomial\n    while\
+    \ [[ \"$x\" != \"\" ]]; do\n        local -n x=$x\n        xs=\"${XS[@]}\"\n \
+    \       x=\"${xs[0]}\"\n    done\n    local f=\"\"\n    local last\n    for x\
+    \ in $xs\n    do\n        local -n xs=$xs\n        local ds=\"${XS[@]}\"\n   \
+    \     local xs=\"${ds[@]}\"\n        local d=\"\"\n        local a=\"\"\n    \
+    \    local b=\"\"\n        if [[ ${#ds[@]} -eq 1 ]]; then\n            a=$d\n\
+    \        else\n            d=\"${ds[0]}\"\n            a=\"${ds[1]}\"\n      \
+    \      b=\"${ds[2]}\"\n        fi\n        local ds=\"$(ds -s -1)\"\n        if\
+    \ [[ \"${ds}\" != \"\" ]]; then\n            local -n x=$d\n            local\
+    \ ds=\"${XS[@]}\"\n            local xs=\"${ds[@]}\"\n            local a=\"\"\
+    \n            local b=\"\"\n            if [[ ${#ds[@]} -eq 1 ]]; then\n     \
+    \           a=$d\n            else\n                d=\"${ds[0]}\"\n         \
+    \       a=\"${ds[1]}\"\n                b=\"${ds[2]}\"\n            fi\n     \
+    \       local ds=\"$(ds -s -1)\"\n        fi\n        if [[ \"${xs}\" != \"\"\
+    \ ]]; then\n            local -n x=$x\n            local xs=\"${XS[@]}\"\n   \
+    \         local d=\"\"\n            local a=\"\"\n            local b=\"\"\n \
+    \           if [[ ${#ds[@]} -eq 1 ]]; then\n                d=$d\n           \
+    \ else\n                a=\"${ds[0]}\"\n                b=\"${ds[1]}\"\n     \
+    \       fi\n            local ds=\"$(ds -s -1)\"\n        fi\n        local -n\
+    \ f=\"$f${d}x^${a}\"\n    done\n    echo $f", "    local xs c x\n    xs=( $1 )\n\
+    \    set -- $xs 0\n    while [[ $1 ]]; do\n        x=$1\n        if [ $2 -eq 0\
+    \ ]; then\n            echo \"$x 0\"\n        else\n            c=$(( $x + $2\
+    \ * $x ))\n            echo \"$x $(( c + $3 ))\"\n        fi\n        shift\n\
+    \        shift\n    done", "    # Convert $1 to an array\n    IFS=' ' read -r\
+    \ -a arr <<< \"$1\"\n    # Empty input is an error\n    [ -z \"${arr[0]}\" ] &&\
+    \ echo >&2 \"error: no input arguments\" && exit 1\n    # Calculate derivative\n\
+    \    local i deriv\n    deriv=\"\"\n    for ((i=1; i<${#arr[@]}; i++)); do\n \
+    \       if [ \"${arr[i-1]}\" == \"+\" ]; then\n            deriv+=\"+\"\n    \
+    \    elif [ \"${arr[i-1]}\" == \"-\" ]; then\n            deriv+=\"-\"\n     \
+    \   elif [ \"${arr[i-1]}\" == \"*\" ]; then\n            deriv+=\"*\"\n      \
+    \  elif [ \"${arr[i-1]}\" == \"/\" ]; then\n            deriv+=\"/\"\n       \
+    \ fi\n        deriv+=\"${arr[i]}\"\n    done\n    # Remove trailing \"+\"\n  \
+    \  deriv=\"${deriv:0:${#deriv}-1}\"\n    # Remove leading \"-\"\n    deriv=\"\
+    ${deriv:1:${#deriv}-1}\"\n    # Remove leading \"*\"\n    deriv=\"${deriv:2:${#deriv}-1}\"\
+    \n    # Remove leading \"/\"\n    deriv=\"${deriv:4:${#deriv}-1}\"\n    # Remove\
+    \ leading spaces and double quotes\n    deriv=\"${deriv: -2}\"\n    # Convert\
+    \ string to list\n    arr=( $(echo \"${deriv}\" ) )\n    echo \"${arr[@]}\"",
+  "  local xs d\n  xs=($1)\n  d=$((($#xs > 1) && $xs[$#xs-1] * $((${#xs[@]} - 1))\
+    \ || 1))\n  echo $xs $d", "  local x=$1[@]\n  xs=${x/ / }\n  xs=${xs#* }\n  xs=${xs%%\
+    \ }\n  echo \"\\\"$xs\\\"'\"", "    local s=\"$1\"\n    local d=\"\"\n    local\
+    \ count=0\n    while IFS= read -r line; do\n        if [ \"$line\" = \"x\" ];\
+    \ then\n            ((count++))\n            s=\"$s\"\n            continue\n\
+    \        fi\n        d=\"${d} \\\"$line\\\"\"\n    done < <(echo \"$s\")\n   \
+    \ if [ \"$count\" -eq 0 ]; then\n        echo \"$d\"\n    else\n        d=\"x\"\
+    \n        for i in $(seq 1 $count); do\n            d=\"$(echo \"$d\" | sed \"\
+    s/ x^$i /${d%x^$i}x^$i/\")\"\n        done\n        d=\"$(echo \"$d\" | sed \"\
+    s/ x^$count /${d%x^$count}x^$count/\")\"\n        echo \"$d\"\n    fi", "    echo\
+    \ \"$1\"\n    local -n derivatives=\"$1\"\n    shift\n    echo \"$derivatives\
+    \ $1\"", "  local xs=($(echo $1 | sed \"s/ / + \\\"x\\\" \\* x \\* x \\* \\\"\
+    /;s/^/-/;s/$/\\\"/;s/ +$//\"))\n  echo $(echo \"${xs[@]}\" | xargs)", "  declare\
+    \ -a xs=($(echo \"$1\"|sed 's/ /\" \"/g'))\n  declare -a derivatives=()\n  declare\
+    \ -i i\n\n  i=0\n  while [ $i -lt ${#xs[*]} ]; do\n    derivatives[$i]=$(echo\
+    \ \"${xs[$i]} ${xs[$(($i - 1))]} ${xs[$(($i - 2))]}\"|bc)\n    i=$(($i + 1))\n\
+    \  done\n\n  echo \"${derivatives[*]}\"", "    # parse input\n    read -r xs <<<\
+    \ \"$1\"\n    # convert space separated list into array to calculate derivative\n\
+    \    IFS=\" \" read -r -a x_array <<< \"$xs\"\n    IFS=\" \" read -r -a result\
+    \ <<< \"${x_array[@]}\"\n    # calculate derivative\n    for ((i=${#result[@]}-1;\
+    \ i>=0; i--)); do\n        result[i]=\"${result[i]} ${result[i-1]}\"\n    done\n\
+    \    # reverse result\n    for ((i=0; i<${#result[@]}; i++)) do\n        result[i]=\"\
+    ${result[i]%?}\"\n    done\n    # convert result back to space-separated list\n\
+    \    IFS=\" \" read -r -a result <<< \"${result[@]}\"\n    # return result\n \
+    \   echo \"${result[@]}\"", "    local xs=\"$1\"\n    local a\n    local b\n \
+    \   local d\n    local x\n    for (( i = 1; i <= ${#xs[@]} - 1; i++ )); do\n \
+    \       x=${xs[$i]}\n        a=${xs[$((i - 1))]}\n        b=${xs[$i-1]}\n    \
+    \    d=$(awk 'BEGIN{print '\"${a}\" + '\"${b}\"' * \"${x}\"'}' <<< \"1 2 3 4 5\"\
+    )\n    done\n    echo \"${d[@]}\"", "    local poly=\"$1\" poly2\n    local poly2=\"\
+    $(echo \"$poly\" | sed 's/[0-9]* \\(.*\\) [0-9]*/\\1/')\"\n    local poly3=\"\
+    $(echo \"$poly\" | sed 's/[0-9]* (.*) [0-9]*$/1/')\"\n    local poly4=\"$(echo\
+    \ \"$poly\" | sed 's/[0-9]* (.*) [0-9]*$/\\1/')\"\n    poly2=\"$(echo \"$poly2\"\
+    \ | sed 's/[0-9]* \\(.*\\) [0-9]*/\\1/')\"\n    poly3=\"$(echo \"$poly3\" | sed\
+    \ 's/[0-9]* (.*) [0-9]*$/1/')\"\n    poly4=\"$(echo \"$poly4\" | sed 's/[0-9]*\
+    \ (.*) [0-9]*$/\\1/')\"\n    poly2=\"$(($poly2*$poly))\"\n    poly3=\"$(($poly3*$poly))\"\
+    \n    poly4=\"$(($poly4*$poly))\"\n    poly3=\"$(($poly2*$poly3))\"\n    poly4=\"\
+    $(($poly4*$poly4))\"\n    poly2=\"$(($poly2*$poly2))\"\n    poly3=\"$(($poly3*$poly3))\"\
+    \n    poly4=\"$(($poly4*$poly4))\"\n    poly2=\"$(($poly2*$poly2))\"\n    poly3=\"\
+    $(($poly3*$poly3))\"\n    poly4=\"$(($poly4*$poly4))\"\n    poly2=\"$(($poly2*$poly2))\"\
+    \n    poly3=\"$(($poly3*$poly3))\"\n    poly4=\"$(($poly4*$poly4))\"\n    echo\
+    \ \"$poly2 $poly3 $poly4\"", "    local -n args=$1\n    local poly=\"$2\"\n  \
+    \  local deriv=\"$3\"\n    local xs=()\n    local ds=()\n    local dx=()\n   \
+    \ local i=1\n    while [[ $i -le $((${#poly} - 1)) ]]; do\n        xs+=( $((${poly[i]}\
+    \ * ${#args})) )\n        ds+=( $((${deriv[i]} * ${#args})) )\n        dx+=( $(echo\
+    \ \"${poly[i]} ${deriv[i]} * ${args}\"| bc -l) )\n        i=$((i + 1))\n    done\n\
+    \    echo ${xs[@]}\n    echo ${ds[@]}\n    echo ${dx[@]}", "    local -n list=$1\n\
+    \    local n=\"${#list[@]}\"\n    local d=\"${list[1]}\"\n    shift\n\n    for\
+    \ (( c=1; c<=n; c++ )); do\n\tlocal d=\"$d ${list[$c]}^${c}\"\n    done\n    echo\
+    \ \"$d\"", "    local xs=\"$1\"\n    local g\n    local result=()\n    while read\
+    \ -r g; do\n        local g1=$(echo \"$g\" | tr -d '\"')\n        local g2=$(echo\
+    \ \"$g\" | sed -e 's/^ *//' -e 's/ *$//')\n        result+=(\"$g1\")\n       \
+    \ result+=(\"\\\"$g2\\\"\")\n    done <<< \"$xs\"\n    echo \"${result[*]}\"",
+  "    local IFS=\" \"\n    local xs=\"$(echo \"$1\" | sed \"s/^\\([^ ]*\\) .*/\\\
+    1/\")\"\n    local xs_len=$((${#xs}-1))\n    echo \"$(eval echo $xs | awk '{print\
+    \ $'\"$xs_len\"'}')\"", "    local -r s=\"${1}\"\n    local ds=\"$(echo \"${s%\
+    \ *}\" | sed -e \"s/ /\" \"/\")\"\n    local d=\"${ds% *}\"\n    local xs=\"$(echo\
+    \ \"${d}\" | sed -e \"s/ /\" + \"$'\\t'/g\")\"\n    echo \"${xs[*]:1}\"", "  \
+    \  local x\n    local xs\n    local derivative\n    IFS=' ' read -r -a xs <<<\
+    \ \"$1\"\n    derivative=''\n    for x in \"${xs[@]}\"; do\n        derivative+=\"\
+    \\\"$x\\\" + $(printf \"%0.2f\" \"$x\")*\"\n    done\n    IFS=' ' read -r -a xs\
+    \ <<< \"$1\"\n    for x in \"${xs[@]}\"; do\n        derivative+=\"\\\"$x\\\"\
+    \ + $(printf \"%0.2f\" \"$x\")*\"\n    done\n    derivative=\"$(echo $derivative\
+    \ | sed 's/ //g')\"\n    echo \"${derivative}\"", "    local xs=\"$1\";\n    local\
+    \ d=${xs% *};\n    local sum=\"\";\n    for x in ${xs// */ }; do\n        sum=\"\
+    ${sum}${sum}${sum}${x}*\";\n    done;\n    d=\"${sum:1-2}\"\n    if [ \"$d\" =\
+    \ \"0\" ] ; then\n        # $d is the constant term -- no derivative\n       \
+    \ return 0;\n    fi\n    echo $d;", "    local polygon_list polygon_list polygon_list\
+    \ polygon_list\n    polygon_list=$1\n    polygon_list=$(echo $polygon_list | tr\
+    \ \" \" \"\\n\")\n    polygon_list=\"$polygon_list x\"\n    polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n    while [ \"$polygon_list\" != \"\" ];\
+    \ do\n        polygon_list=$(echo $polygon_list | tr \" \" \"\\n\")\n        polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n        polygon_list=\"$polygon_list x^${polygon_list}\"\
+    \n        polygon_list=$(echo $polygon_list | tr \" \" \"\\n\")\n    done\n  \
+    \  polygon_list=$(echo $polygon_list | tr \" \" \"\\n\")\n    polygon_list=\"\
+    $polygon_list 1\"\n    polygon_list=$(echo $polygon_list | tr \" \" \"\\n\")\n\
+    \    while [ \"$polygon_list\" != \"\" ]; do\n        polygon_list=$(echo $polygon_list\
+    \ | tr \" \" \"\\n\")\n        polygon_list=$(echo $polygon_list | tr \" \" \"\
+    \\n\")\n        polygon_list=\"$polygon_list x\"\n        polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n    done\n    polygon_list=$(echo $polygon_list\
+    \ | tr \" \" \"\\n\")\n    polygon_list=\"$polygon_list 1\"\n    polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n    polygon_list=$(echo $polygon_list | tr\
+    \ \" \" \"\\n\")\n    while [ \"$polygon_list\" != \"\" ]; do\n        polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n        polygon_list=$(echo $polygon_list\
+    \ | tr \" \" \"\\n\")\n        polygon_list=\"$polygon_list x\"\n        polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n    done\n    polygon_list=$(echo $polygon_list\
+    \ | tr \" \" \"\\n\")\n    polygon_list=\"$polygon_list 1\"\n    polygon_list=$(echo\
+    \ $polygon_list | tr \" \" \"\\n\")\n    while [ \"$polygon_list\" != \"\" ];\
+    \ do\n        polygon_list=$(echo $polygon_list | tr \" \" \"\\n\")\n        polygon_list=$(echo\
+    \ $", "    local n=$1\n    local x=2\n    local d=\"\"\n    while [ $x -le $n\
+    \ ]\n    do\n        local tmp=$(eval \"echo $(($1*$x*$x))\")\n        if [ \"\
+    $tmp\" != \"$1\" ]\n        then\n            local tmp2=$(eval \"echo $(($1*$x*$x))\"\
+    )\n            local tmp3=$(eval \"echo $(($1*$x*$x))\")\n            local tmp4=$(eval\
+    \ \"echo $(($1*$x*$x))\")\n            local tmp5=$(eval \"echo $(($1*$x*$x))\"\
+    )\n            local tmp6=$(eval \"echo $(($1*$x*$x))\")\n            d=\"$d $(echo\
+    \ $tmp | tr '[:upper:]' '[:lower:]')\"\n            d=\"$d $(echo $tmp2 | tr '[:upper:]'\
+    \ '[:lower:]')\"\n            d=\"$d $(echo $tmp3 | tr '[:upper:]' '[:lower:]')\"\
+    \n            d=\"$d $(echo $tmp4 | tr '[:upper:]' '[:lower:]')\"\n          \
+    \  d=\"$d $(echo $tmp5 | tr '[:upper:]' '[:lower:]')\"\n            d=\"$d $(echo\
+    \ $tmp6 | tr '[:upper:]' '[:lower:]')\"\n        else\n            d=\"$d $(echo\
+    \ $tmp | tr '[:upper:]' '[:lower:]')\"\n        fi\n        let x=$x+1\n    done\n\
+    \    echo $d", "    local xs=\"$1\"\n    local i=0\n    local j=0\n    local d\n\
+    \    while [ $i -lt ${#xs[@]} ]\n    do\n        d=$((${xs[i]} * ${xs[j]}))\n\
+    \        j=$((j + 1))\n        i=$((i + 1))\n        d=\"$d \\\"${xs[j]} \"\n\
+    \    done\n    echo \"${d%? }\"", "  local xs=\"$1\"\n  local result='['\n  for\
+    \ x in \"${xs[@]}\"; do\n    local n=\"$((${x#*x*}))\"\n    result+=\"'$((${x#*x*}-1))'\"\
+    \n    if [ \"${#n}\" -gt 0 ]; then\n      result+=${n}\n      result+=\"*\"\n\
+    \    fi\n  done\n  echo \"$result\"", "  local xs n val\n  n=\"${#1}\"\n  if [\
+    \ \"${n}\" -lt 2 ]; then\n    echo \"error: missing argument\"\n  fi\n  xs=\"\
+    ${1}\"\n  val=\"$(eval \"echo '${xs}'\")\"\n  val=\"$(eval \"echo '${val}'\" |\
+    \ grep -Po '\\d+(?=\\s*$)' | sort -n | head -n 1)\"\n  if [ -z \"${val}\" ]; then\n\
+    \    echo \"error: no value found\"\n  fi\n  val=\"$(eval \"echo '${val}'\")\"\
+    \n  if [ \"${n}\" -gt 2 ]; then\n    val=\"$(eval \"echo '${val} + '${val} * '${xs}'\"\
+    )\"\n  fi\n  val=\"$(eval \"echo '${val}'\")\"\n  if [ \"${n}\" -gt 1 ]; then\n\
+    \    val=\"$(eval \"echo '${val} + '${val} * '${xs} * '${xs}'\")\"\n  fi\n  echo\
+    \ \"${val}\"", "    local xs result\n\n    xs=\"$1\"\n\n    # xs[0] is degree,\
+    \ remove it from the list\n    xs=\"${xs:0:1}\"\n\n    # Append first element\
+    \ of the list\n    xs=\"${xs}${xs:1}\"\n\n    # Remove last element of the list\n\
+    \    result=()\n    while [[ $xs =~ ^(-*)$ ]]; do\n        case \"${BASH_REMATCH[1]}\"\
+    \ in\n            *)\n                x=${BASH_REMATCH[1]}\n                x=${x%?}\n\
+    \                if [ \"$x\" != \"\" ]; then\n                    result+=(\"\
+    $x\")\n                fi\n                ;;\n        esac\n        xs=\"${BASH_REMATCH[2]}\"\
+    \n    done\n\n    echo \"${result[@]}\"", "\tlocal d=$1\n\tshift\n\tlocal x=\"\
+    $1\"\n\tlocal ds=\"\"\n\tlocal n=0\n\tlocal i=0\n\twhile [ -n \"$1\" ]; do\n\t\
+    \t((++i))\n\t\tlocal ds=$ds \"$d$i\"\n\t\tshift\n\tdone\n\techo \"$ds\"", "\t\
+    local xs=\"$1\";\n\tlocal xs_size=${#xs[@]}\n\tlocal xs_sum=0\n\tlocal xs_new=()\n\
+    \n\tfor x in $xs; do\n\t\txs_sum=$((xs_sum + ${x}*x))\n\tdone\n\n\tif [ $xs_size\
+    \ -gt 1 ]; then\n\t\t# Add last term and multiply by (xs_size - 1)\n\t\txs_new[$xs_size]=\"\
+    \\\"${xs_sum}\\\"\"\n\t\txs_new[$xs_size+1]=\"\\\"${xs_sum}\\\"\"\n\t\tfor i in\
+    \ $(seq 0 $((${xs_size}-2))); do\n\t\t\txs_new[$i]=\"${xs_new[$i]} * $((${xs_size}-${i}+1))\"\
+    \n\t\tdone\n\telse\n\t\t# No need to multiply by (xs_size - 1) if only one term\n\
+    \t\txs_new[0]=\"\\\"${xs_sum}\\\"\"\n\tfi\n\n\techo \"${xs_new[@]}\"", "    local\
+    \ l=$1\n    local xs y z\n    for (( z=0; z<$#-l+1; z++ )); do\n        xs=\"\
+    $xs $l[$z]\"\n    done\n    echo \"$xs\"", "\techo -n '\"'\n\txs=($1)\n\tfor ((\
+    \ i=2; i<${#xs[@]} ; i++))\n\tdo\n\t\techo -n ${xs[i]} * '\"'\n\tdone\n\techo\
+    \ '\"' >> $1\n\tshift\n\twhile (( ${#xs[@]} > 0 ))\n\tdo\n\t\techo -n '\"'\n\t\
+    \txs=($(interpolate ${xs[@]} ${1:-1:1})) \n\t\tfor (( i=2; i<${#xs[@]} ; i++));\
+    \ do\n\t\t\techo -n ${xs[i]} * '\"'\n\t\tdone\n\t\techo '\"' >> $1\n\t\tshift\n\
+    \tdone\n\techo -n '\"'", "  local dp p i x a y b\n  dp=$1\n  for p in $dp; do\n\
+    \    for ((i=0; i < $#-1; i++)); do\n      x=\"$p$i\"\n      a=\"$(echo $x | cut\
+    \ -d\" \" -f1)\"\n      b=\"$(echo $x | cut -d\" \" -f2)\"\n      y=\"$a$(((b-1)/a))$b\"\
+    \n      echo $y\n    done\n  done", "    local n=$1 d=$2\n\n    # Handle empty\
+    \ case\n    if [ \"${#n}\" -eq 0 ]; then\n        echo \"$d\"\n        return\n\
+    \    fi\n\n    # Handle non-list input\n    if [ \"${n##*[![:space:]]}\" = \"\
+    $n\" ]; then\n        echo \"$d\"\n        return\n    fi\n\n    # Make sure it\
+    \ is a valid polynomial\n    if [[ -z \"$d\" ]]; then\n        echo \"$d\"\n \
+    \       return\n    fi\n\n    # Make sure the polynomial is valid\n    n=\"${n}\
+    \ 0\"\n    for d in $d; do\n        if [ \"$d\" = \"'\" ]; then d=\"$n\"; fi\n\
+    \        n=\"$(echo $n | cut -d' ' -f${#d})\"\n    done\n    n=\"${n} 1\"\n  \
+    \  for d in $d; do\n        if [ \"$d\" = \"'\" ]; then d=\"$n\"; fi\n       \
+    \ n=\"$(echo $n | cut -d' ' -f${#d})\"\n    done\n\n    # Handle polynomial with\
+    \ single variable\n    if [ \"${#n}\" -eq 1 ]; then\n        echo \"$d\"\n   \
+    \     return\n    fi\n\n    # Compute derivative\n    d=\"$d\"\n    for (( i=1;\
+    \ i<${#n}; i++ )); do\n        d=\"$d $(echo $d | cut -d' ' -f${#n}-${i})\"\n\
+    \    done\n    echo \"$d\"", "    local -a xs d\n    xs=($1)\n    d=(\"${xs[@]:1}\"\
+    )\n    for ((i=1;i<${#xs[@]};i++)); do\n        d+=(${xs[$((i-1)):$i]})\n    done\n\
+    \    d+=(\"$((${#xs[@]} - 1))\")\n    d+=(0)\n    echo \"${d[@]}\"", "  local\
+    \ f=\"$1\"\n  echo \"$f\" | awk '{ n=split($1,a,\" \"); for (i=1; i<=n; i++) {\
+    \ b[i]=a[i] } for (j=0; j<=n; j++) print b[j]*j }'", "  local xs=\"$1\";\n  local\
+    \ ds=\"1\";\n  while [[ $xs != \"\" ]]; do\n    local xs=\"${xs}x$ds\";\n    ds=\"\
+    $((ds+1))\";\n  done;\n  echo \"$xs\"", "    local d=$1\n    local xs=($(echo\
+    \ $d | sed -e 's/^ //' -e 's/ *$//'))\n    local ds=''\n    local i=0\n    while\
+    \ [ $i -lt $((${#xs[@]}-1)) ]\n    do\n        ds=\"${ds} ${xs[i]} \"\n      \
+    \  (( i=i+1 ))\n    done\n    ds=\"${ds} ${xs[i]}\"\n    echo $ds", "    if [[\
+    \ ! \"$1\" =~ ^[[:digit:]]+$ ]]; then\n        echo \"Not a polynomial expression:\
+    \ $1\"\n        return -1\n    fi\n    # remove space from start of list\n   \
+    \ local list=\"${1#\"$1( \" }\"\n    # split list into elements\n    local elements=(\
+    \ $list )\n    # remove everything after and including the closing parenthesis\n\
+    \    local elements=\"${elements%)}\"\n    # create empty list\n    local res\n\
+    \    # iterate over the elements starting from the second element\n    for ((\
+    \ i=1; i<${#elements[@]}; i++ )); do\n        # if second element is 0, we are\
+    \ done\n        if [[ \"$i\" == \"$(( i+1 ))\" ]]; then\n            res=$elements\n\
+    \            break\n        fi\n        # calculate derivative\n        local\
+    \ tmp=$(( $i*$elements[$i] ))\n        # add element to list\n        res+=( \"\
+    $tmp\" )\n    done\n    # remove space from start and end of list\n    local res=\"\
+    ${res#\"$res( \" }\"\n    local res=\"${res%)}\"\n    # convert list to string\n\
+    \    local res=\"${res// /\"}\"\n    # print result\n    echo \"$res\"", "  local\
+    \ n=$1 # number of coefficients, i.e. polynomial order\n  local i\n  local x\n\
+    \  local j\n  local xs=()\n\n  # create list of coefficients\n  for ((i=1; i<=$n;\
+    \ i++)); do\n    xs+=($i)\n  done\n\n  # create array of coefficients\n  local\
+    \ derv=(0)\n  for ((i=0; i<$n; i++)); do\n    x=${xs[i]}\n    for ((j=0; j<$n;\
+    \ j++)); do\n      if [ $i == $j ]; then\n        derv+=( $x )\n        break\n\
+    \      fi\n    done\n  done\n\n  echo $($(printf \"[%s]\" ${derv[@]}))", "   \
+    \ xs=($1)\n    echo $(xs[*]) | head -1", "  echo \"$1\" | tr ' ' '\\n' | grep\
+    \ -F -v \"^$\" -w | tr ' ' '\\n' | xargs -I{} echo \"$(jq -r .[1]) $(jq -r .[2])x$(jq\
+    \ -r .[3])x$(jq -r .[4])x$(jq -r .[5])\"", "    local n=$1 d=0\n    if [ \"$#\"\
+    \ -lt 2 ]\n    then\n        echo \"Usage: $0 <list> <x>\"\n        return 1\n\
+    \    fi\n    while [ $# -gt 0 ]\n    do\n        local x=\"${1}$2\"\n        if\
+    \ [ $(eval \"$3=$x\") ]; then\n            (( d = d + 1 ))\n        fi\n     \
+    \   shift\n    done\n    eval \"x$d=$3\"\n    echo \"$x$d\"", "    local IFS=$'\\\
+    n'\n    local xs=$(echo $1 | tr \"[:space:]\" \"\\n\")\n    local d=$( echo $1\
+    \ | tr \" \" \"+\" )\n    local dx=$(echo $d | tr \" \" \"x\" )\n    local dx2=$(echo\
+    \ $d | tr \" \" \"*\" )\n    local d3=$(echo $d | tr \" \" \"**\" )\n    local\
+    \ result=\"\"\n    for (( i = 1; i <=${#xs[@]}; i++ ))\n    do\n        result+=\"\
+    \\\"${xs[$i]}\\\"+$dx$((${#xs[@]} - $i)*$i)+$dx2$i$((${#xs[@]} - $i)*$i)$((${#xs[@]}\
+    \ - $i)*$i)\"\n    done\n    echo ${result%\"+\"+*}", "  local input=$1\n  local\
+    \ output=$( echo $input | tr -d '\\n' | tr '[:space:]' '\\n' )\n  local degree=$(echo\
+    \ $input | awk '{print $1}')\n  local powers=$(echo $input | awk '{print $2}')\n\
+    \  local output=$( echo $output | sed \"s/^\\./$powers/\" | sed \"s/^[^\\+]\\\
+    +//\" )\n  local output=$( echo $output | sed \"s/^[+]/$powers/\" )\n  local output=$(\
+    \ echo $output | sed \"s/^\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\\
+    +\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+", "  local i\n  local str1=\"${1:-}\"\
+    \n  local str2=\"\"\n  local last1=\"$(expr \"${str1}\" : '[^ ]*')\"\n  local\
+    \ last2=\"$(expr \"${str1}\" : '[0-9]*$')\"\n  local last\n  local str1len\n \
+    \ local last1len\n  local last2len\n  for ((i=1; i<${#str1}; i++)); do\n    local\
+    \ c=\"${str1:$i:1}\"\n    str1len=\"${#str1}\"\n    if [[ \"${c}\" != \" \" ]];\
+    \ then\n      last1len=\"${#last1}\"\n      last2len=\"${#last2}\"\n      if [[\
+    \ $last1len -gt $last2len ]]; then\n        local last2=\"$last2\"\n      else\n\
+    \        local last1=\"$last1\"\n      fi\n      if [[ ${#last1} -gt ${#last2}\
+    \ ]]; then\n        local last=\"$last\"\n      else\n        local last1=\"$last1\"\
+    \n      fi\n      local clast1=\"${last1:$last1len-1:1}\"\n      local clast2=\"\
+    ${last2:$last2len-1:1}\"\n      local clast\n      if [[ $clast1 = $clast2 ]];\
+    \ then\n        # last1 is a prefix of last2\n        clast=\"$c\"\n      else\n\
+    \        local clast1len=\"${#clast1}\"\n        local clast2len=\"${#clast2}\"\
+    \n        local clast1=\"${clast1:0:${clast1len-1}}\"\n        local clast2=\"\
+    ${clast2:0:${clast2len-1}}\"\n        if [[ $clast1 == $clast2 ]]; then\n    \
+    \      # last1 is a suffix of last2\n          clast=\"$clast1\"\n        else\n\
+    \          local clast1len=\"${#clast1}\"\n          local clast2len=\"${#clast2}\"\
+    \n          local clast1=\"${clast1:0:${clast1len-1}}\"\n          local clast2=\"\
+    ${clast2:0:${clast2len-1}}\"\n          clast=\"$clast1 $c\"\n        fi\n   \
+    \   fi\n      str1=\"${str1:0:$i} $clast\"\n      last2=\"$c\"\n      last2len=\"\
+    ${#last2}\"\n      last1=\"$clast\"\n      last1len=\"${#last1}\"\n    fi\n  done\n\
+    \  local str1len=\"${#str", "\tlocal xs=$1\n\tlocal n=$#\n\tif [ $n -gt 1 ]; then\n\
+    \t\techo \"derivative only works one level deep where n=$n\"\n\t\texit 1\n\tfi\n\
+    \tlocal derivs=()\n\tif [ $n -eq 0 ]; then\n\t\tderivs=\"1\"\n\t\treturn\n\tfi\n\
+    \tfor (( i = 0; i < $n; i++ )); do\n\t\tlocal j=$(( i + 1 ))\n\t\tlocal coefs=$(\
+    \ echo $xs | cut -d ' ' -f $(( i + 1 )) )\n\t\tif [ $i -eq 0 ]; then\n\t\t\tfor\
+    \ (( j = 1; j < $n; j++ )); do\n\t\t\t\tlocal k=$(( j + 1 ))\n\t\t\t\tlocal tmp=$(\
+    \ echo $xs | cut -d ' ' -f $(( i + j + 1 )) )\n\t\t\t\tderivs+=\"\\\"$tmp\\\"\"\
+    \n\t\t\tdone\n\t\telse\n\t\t\tfor (( j = 1; j < $n; j++ )); do\n\t\t\t\tlocal\
+    \ k=$(( j + 1 ))\n\t\t\t\tlocal tmp=$( echo $xs | cut -d ' ' -f $(( i + j + 1\
+    \ )) )\n\t\t\t\tderivs+=\"\\\"$tmp\\\" - $( echo $derivs | cut -d ' ' -f $(( i\
+    \ + j + 1 )) )\"\n\t\t\tdone\n\t\tfi\n\tdone\n\techo \"[$( echo $derivs | sed\
+    \ 's/\" -\"//g' )]\"", "  if [ $# -lt 1 ]; then\n    echo \"Usage: $(basename\
+    \ $0) 'x1 x2 ...'\" >&2\n    exit 1\n  fi\n\n  local -n xs=$1\n  xs=\"${xs// /\
+    \ }\"\n  xs=\"${xs// x}\"\n  xs=\"${xs:0:-1}\"\n  xs=\"$(echo \"$xs\" | sed \"\
+    s/ x//g\")\"\n  xs=\"$( echo \"$xs\" | sed 's/ x\\([0-9]*\\) /\\1/' | sed 's/\
+    \ x\\(.*\\) /\\1/' | sed 's/^/ /' | sed 's/$/ /' | sed 's/x/ x/g')\"\n  xs=\"\
+    $( echo \"$xs\" | sed 's/ x\\([0-9]*\\) /\\1/' | sed 's/ x\\(.*\\) /\\1/' | sed\
+    \ 's/^/ /' | sed 's/$/ /' | sed 's/x/ x/g')\"\n  xs=\"$( echo \"$xs\" | sed 's/\
+    \ x\\([0-9]*\\) /\\1/' | sed 's/ x\\(.*\\) /\\1/' | sed 's/^/ /' | sed 's/$/ /'\
+    \ | sed 's/x/ x/g')\"\n  xs=\"$( echo \"$xs\" | sed 's/ x\\([0-9]*\\) /\\1/' |\
+    \ sed 's/ x\\(.*\\) /\\1/' | sed 's/^/ /' | sed 's/$/ /' | sed 's/x/ x/g')\"\n\
+    \n  local -n derivative=$1\n  local -r xs=$2\n  derivative=\"$derivative$( echo\
+    \ \"$derivative\" | sed \"s/ x\\([0-9]*\\) /$xs/\" | sed 's/^/ /' | sed 's/$/\
+    \ /' | sed 's/x/ x/g')\"\n\n  printf \"%s\" \"$derivative\"", "\tlocal xs=\"$1\"\
+    \n\tlocal fs=\"${xs% *}\"\n\tlocal fss=$(echo $fs | sed 's/ / + /g' | sed 's/^\
+    \ /- /g' | sed 's/ / + /g')\n\techo \"$fss\"", "    local s=$1\n    local i\n\
+    \    local result\n    local tmp\n\n    if [ -z \"$s\" ] || [ -z \"$s\" ]; then\n\
+    \        echo 'Error: no input supplied'\n        return 1\n    fi\n\n    local\
+    \ p\n\n    # remove leading/trailing quotes\n    if [[ $s =~ '^\"(.*)\"$'    \
+    \     ]]; then\n        tmp=${BASH_REMATCH[1]}\n        s='${tmp%\"}\"}'\n   \
+    \ fi\n    s=${s%'\"*}'\n    s=${s%'*'$'}\n\n    # convert to array\n    IFS='\
+    \ ' read -a a <<< \"$s\"\n\n    # first derivative\n    result='1'\n    for ((i=0;i<${#a[@]};++i));\
+    \ do\n        result=\"${result} ${a[i]}\"\n    done\n    result=\"${result}\"\
+    \n\n    # 2nd derivative\n    for ((i=0;i<${#a[@]};++i)); do\n        result=\"\
+    ${result} ${a[i]}^2\"\n    done\n    result=\"${result}\"\n\n    # 3rd derivative\n\
+    \    for ((i=0;i<${#a[@]};++i)); do\n        result=\"${result} ${a[i]}^3\"\n\
+    \    done\n    result=\"${result}\"\n    # remove trailing space\n    result=\"\
+    ${result%' '}\"\n\n    # print output\n    echo \"${result}\"", "    local i result\n\
+    \    IFS=\" \" read -a args <<< \"$1\"\n    for ((i = 1; i < ${#args[@]}; i++));\
+    \ do\n        result+=(\"${args[$i]}\" \"${args[$(($i - 1))]}\")\n    done\n \
+    \   echo \"${result[@]}\"", "\tlocal xs=${1}\n\n\txs=(${xs}) # split xs into an\
+    \ array by space\n\t[ -z ${xs[0]} ] && return # invalid expression\n\t(( $# <\
+    \ 2 )) && return # only 1 arg\n\n\txs=${xs[1]}\n\txs=\"$( echo $xs $( xs sed -e\
+    \ 's/.*/\"&\"/g' -e 's/^/0/' -e 's/$/0/' ) )\"\n\txs=$( echo $xs $( xs sed -e\
+    \ 's/^/1/' -e 's/$/1/' ) ) # reverse order of elements\n\txs=$( echo $xs $( xs\
+    \ sed -e 's/^/0/' -e 's/$/0/' ) ) # reverse order of elements\n\n\txs=$( echo\
+    \ $xs $( xs sed -e 's/^/1/' -e 's/$/1/' ) ) # reverse order of elements\n\n\t\
+    echo $xs", "  local -n arr=$1\n  local -n arrLength=$#\n  arrLength=$((arrLength-1))\n\
+    \  local -n offset=0\n\n  local -n currentValue=0\n  local -n currentDerivative=0\n\
+    \  local -n currentDerivativeCount=0\n  local -n currentDerivativeLength=0\n\n\
+    \  local -n isDoubled=false\n  local -n coefficientCount=0\n\n  local -n nextValue=$1\n\
+    \  local -n nextDerivative=$1\n  local -n nextDerivativeCount=$((nextDerivativeCount+1))\n\
+    \  local -n nextDerivativeLength=$((nextDerivativeLength+1))\n\n  local -n lastValue=$1\n\
+    \  local -n lastDerivative=$1\n  local -n lastDerivativeCount=$((lastDerivativeCount+1))\n\
+    \  local -n lastDerivativeLength=$((lastDerivativeLength+1))\n\n  local -n nextValueNumber=0\n\
+    \  local -n nextDerivativeNumber=0\n  local -n nextDerivativeNumberLength=0\n\n\
+    \  while [ $((offset+1)) -lt $arrLength ]; do\n    currentValue=$((currentValue+arr[offset]))\n\
+    \    currentDerivative=$((currentDerivative+arr[offset]*currentValue))\n    currentDerivativeCount=$((currentDerivativeCount+1))\n\
+    \    currentDerivativeLength=$((currentDerivativeLength+1))\n    ((offset++))\n\
+    \  done\n\n  if [ $((currentDerivativeCount==0)) -eq $((isDoubled)) ]; then isDoubled=true;\
+    \ fi\n\n  while [ $((offset+1)) -lt $arrLength ]; do\n    currentValue=$((currentValue+arr[offset]))\n\
+    \    currentDerivative=$((currentDerivative+arr[offset]*currentValue))\n    currentDerivativeCount=$((currentDerivativeCount+1))\n\
+    \    currentDerivativeLength=$((currentDerivativeLength+1))\n    ((offset++))\n\
+    \  done\n\n  if [ $((currentDerivativeCount==1)) -eq $((isDoubled)) ]; then isDoubled=true;\
+    \ fi\n\n  if [ $((currentDerivativeCount==2)) -eq $((isDoubled)) ]; then isDoubled=true;\
+    \ fi\n\n  if [ $((currentDerivativeCount==3)) -eq $((isDoubled)) ]; then isDoubled=true;\
+    \ fi\n\n  if [ $((currentDerivativeCount==4)) -eq $((isDoubled)) ]; then isDoubled=true;\
+    \ fi\n\n  if [ $((currentDerivativeCount==5)) -eq $((isDoubled)) ", "  local xs=$(echo\
+    \ $1 | awk '{print $1*$2+$3*$4+$5*$6}')\n  echo $xs", "  local -n list=$1\n  local\
+    \ -a xs=(\"${list[@]:1}\")\n  local c=0\n  local n=1\n  local ret=\n  while [[\
+    \ $n -lt $# ]]; do\n    (( c+=1 ))\n    xs[$c]=${!c}\n    (( n++ ))\n    ret+=($(cat\
+    \ <<EOF\n\"${xs[*]}\"\nEOF\n))\n  done\n  echo \"${ret[@]}\"", "\tlocal x xs dx\
+    \ x\n\txs=( \"$@\" )\n\tdx=0\n\tfor x in \"${xs[@]}\"; do\n\t\tcase \"$x\" in\n\
+    \t\t0)\n\t\t\t;;\n\t\t*)\n\t\t\t(( dx *= x ))\n\t\t\t;;\n\t\tesac\n\tdone\n\t\
+    echo \"$dx\"", "    local xs out\n    for x in $1; do\n        if [[ \"$x\" =~\
+    \ ^-?[0-9]+$ ]]; then\n            if (( x > 0 )); then\n                out=(\
+    \ $(echo \"$x\"|sed \"s/^-?[0-9]*//;$xs/+\\(\\^{}\\)$/\\1/\") )\n            else\n\
+    \                out=( $(echo \"$x\"|sed \"s/^-?[0-9]*//;$xs/\\(\\^{}\\)$/\\+/\"\
+    ) )\n            fi\n        else\n            out=( $(echo \"$x\"|sed \"s/^-?[0-9]*//;$xs/\\\
+    (\\^{}\\)$/\\+/\") )\n        fi\n    done\n    echo \"${out[*]}\"", "\tlocal\
+    \ xs=\"$1\"\n\tlocal d\n\td=\"[\"\n\txs=\"$(xs tr '[:upper:]' '[:lower:]' | sed\
+    \ \"s/^'\\(.*\\)'/''\\1'/')\"\n\tfor n in $xs; do\n\t\tlocal dx=$(echo \"($n *\
+    \ x)\" | bc)\n\t\td=\"$d '${dx}', '\"\n\tdone\n\techo ${d%?}\n\techo \"]\"", " \
+    \ local xs=( $1 )\n  local terms=( ${xs[@]} )\n  local last_term=$(( ${#terms}\
+    \ - 1 ))\n  local last_x=$(( ${#xs[@]} - 1 ))\n  if [ \"$last_x\" -lt 0 ]; then\n\
+    \    echo \"\"\n    return\n  fi\n  last_term=$(( ${#xs[@]} - 1 ))\n  last_x=$((\
+    \ ${#xs[@]} - 1 ))\n  while [ $last_term -gt 0 ]; do\n    local first_term=${xs[0]}\n\
+    \    local first_x=${#xs[@]}\n    local first_terms=( ${xs[@]} )\n    local first_term_last=${first_terms[$((\
+    \ ${#first_terms} - 1 ))]}\n    local first_term_last_x=${#first_term_last}\n\
+    \    local first_term_last_term_x=${first_term_last#*x}\n    local first_term_last_term_x_2=${first_term_last_term_x#*x}\n\
+    \    if [ \"$first_term_last_term_x_2\" -eq 0 ]; then\n      if [ \"$first_term_last_term_x\"\
+    \ -gt 0 ]; then\n        first_term_last=${first_term_last%x}\n        local first_term_last_term_last_x=${#first_term_last}\n\
+    \        if [ \"$first_term_last_term_last_x\" -eq 0 ]; then\n          echo \"\
+    \"\n        else\n          first_term_last=${first_term_last#*x}\n          local\
+    \ first_term_last_term_last=${first_term_last_term_last%x}\n          local first_term_last_term_last_term_x=${#first_term_last_term_last}\n\
+    \          local first_term_last_term_last_term_x_2=${first_term_last_term_last_term_x#*x}\n\
+    \          if [ \"$first_term_last_term_last_term_x_2\" -eq 0 ]; then\n      \
+    \      echo $first_term_last\n          else\n            echo $first_term_last\
+    \ $(( ${#first_term_last} - 1 )) \"*x*\" $(( ${#xs[@]} - 1 )) \"*x^$first_term_last_term_x_2\"\
+    \n          fi\n        fi\n      fi\n    else\n      local first_term_last_term_last_term_x_2=${first_term_last_term_last_x#*x}\n\
+    \      if [ \"$first_term_last_term_last_term_x_2\" -eq 0 ]; then\n        local\
+    \ first_term_last_term_last_term_last_x=${#first_term_last_term_last_term_x_2}\n\
+    \        echo $first_term_last $(( ${#first_term_last} - 1 ", "  local xs=$1\n\
+    \  local res=\"\"\n  for (( i=0; i < $#; i++ )); do\n    (( res=\"${res}${xs[i]}\
+    \ ${xs[i]}*x ${xs[i]}*x^2 ${xs[i]}*x^3 ${xs[i]}*x^4 ${xs[i]}*x^5 ${xs[i]}*x^6\"\
+    \n    ))\n  done\n  echo \"$res\"", "    local x\n    x=\"$1\"\n    # xs represent\
+    \ coefficients of a polynomial.\n    # xs[0] + xs[1] * x + xs[2] * x^2 + ....\n\
+    \    # Return derivative of this polynomial in the same form.\n    # >>> $(derivative\
+    \ \"3 1 2 4 5\")\n    # ['\"1\"', '\"4\"', '\"12\"', '\"20\"']\n    # >>> $(derivative\
+    \ \"1 2 3\")\n    # ['\"2\"', '\"6\"']\n    local xs=\"$(xs $x)\"\n    local result\n\
+    \    result=$(echo $xs | sed 's/ //g')\n    # Remove space around result.\n  \
+    \  # Remove quotes.\n    # >>> $(echo \"\\\"1\\\" \\\"4\\\" \\\"12\\\" \\\"20\\\
+    \"\")\n    # 1 4 12 20\n    result=$(echo \"$result\" | sed 's/\\\"//g')\n   \
+    \ # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\" \\\"4\\\" \\\"12\\\" \\\
+    \"20\\\"\")\n    # 1 4 12 20\n    local result\n    result=$(echo $result | sed\
+    \ 's/\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\" \\\"4\\\
+    \" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo \"$result\"\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')\n    # Remove double quotes.\n    # >>> $(echo \"\\\"1\\\"\
+    \ \\\"4\\\" \\\"12\\\" \\\"20\\\"\")\n    # 1 4 12 20\n    # result=$(echo $result\
+    \ | sed 's/\\\"//g')", "    local xs=$(echo $1 | sed \"s/ /-/g\")\n    xsLength=${#xs[@]}\n\
+    \    local result=\"\"\n    for i in $(seq 0 $(($xsLength - 1))); do\n       \
+    \ result=\"${result}${xs[i]}*x^${i}\"\n    done\n    echo \"$result\"", "    local\
+    \ -n arr=$1; shift\n    local n; local i\n    # Parse coefficients of polynomial\
+    \ x^n+a\n    for((i=0; i<n; i++)) ; do\n        # $arr[1]\n        arr=${arr[1]}\n\
+    \        # $arr[1] is not empty -> error\n        # $arr is empty -> error\n \
+    \       [ -z \"$arr\" ] && return 1\n        # $arr is a valid coefficient of\
+    \ polynomial -> error\n        [ -n \"$arr\" ] || return 1\n        # $arr is\
+    \ valid coefficient of polynomial -> append it\n        arr+=$arr\n    done\n\
+    \    # Remove leading and trailing spaces\n    arr=\"$(echo $arr | sed 's/^ *//;s/\
+    \ *$//g')\"\n    # Convert it to an array\n    IFS=' ' read -ra arr <<<\"$arr\"\
+    \n    # Return it in the same form as $1 as it was passed\n    echo \"$arr\"",
+  "  # convert string into array\n  IFS=\" \"\n  array=($(echo $1 | sed 's/^ *//;s/\
+    \ *$//'))\n  # return derivative\n  echo $(echo \"${array[@]:1:(${#array[@]} -\
+    \ 2)}\" | awk '{print $0 * $1;}'| sed 's/ *$//')", "  local xs=$1;\n  local res=[];\n\
+    \  while ((${#xs}>1)); do\n    local x=\"$xs$1\";\n    local d=\"$(( ${x%x} ))\"\
+    ;\n    local e=${x#*x*};\n    local p=$(( ${x%x*} ));\n    local ps=$(derivative\
+    \ $p);\n    local s=$(( ${#ps} ));\n    local x=$(( ${x#*x*} ));\n    local ss=$(derivative\
+    \ $s);\n    local g=\"\";\n    for (( i=0; i<$ss; i++ )); do\n      g=$g\"$x\"\
+    ;\n    done;\n    local gs=$(echo $g| sed -e \"s/$x$/$e/\");\n    local ss=$(echo\
+    \ $g| sed -e \"s/$x$/\\$d/\");\n    local gg=$(( ${#gs} + ${#ss} ));\n    local\
+    \ xs=$(echo $x| sed -e \"s/$e$/\\$d/\");\n    for (( i=$gg; i<$s; i++ )); do\n\
+    \      res+=[\"\\\"$g\\\"\";\"\\\"${x%x*}/\\$$i\"];\n    done;\n  done;\n  echo\
+    \ $res;", "  local d=\"$(echo \"$1\" | tr -s ' ' ',')\"\n  local t=\"$d\"\n  local\
+    \ a=\"$(echo \"$d\" | cut -d' ' -f1)\"\n  local b=\"$(echo \"$d\" | cut -d' '\
+    \ -f2)\"\n  local c=\"$(echo \"$d\" | cut -d' ' -f3)\"\n  local d=\"$(echo \"\
+    $d\" | cut -d' ' -f4)\"\n  local r=\"$a$d$b\"\n  echo $r", "    local -n A=$1\n\
+    \    local -n B=()\n    local -n N=$(echo $A | wc -c)\n    local i j k val\n \
+    \   if [ \"$N\" -lt 2 ]; then\n        echo 0\n    else\n        k=$(echo $A |\
+    \ awk -F' ' '{print $1}')\n        i=$(echo $A | awk -F' ' '{print $2}')\n   \
+    \     while [ $i -ge 1 ]; do\n            ((j=i*i))\n            if [ \"$j\" -gt\
+    \ $N ]; then break; fi\n            val=$((A[k]*$j+B[k]))\n            k=$((k+1))\n\
+    \            i=$((i+1))\n        done\n        echo $val\n    fi", "  echo \"\
+    $($(echo \"$1\" | sed 's/ *[^ ]*/ /g') | sed 's/ [^ ]* / /' | sed 's/ /+- /g'\
+    \ | sed 's/^/-/' | sed 's/^/+/g' | sed 's/$/+/g')\"", "    set -- $1 $2 $3 $4\
+    \ $5 $6 $7 $8 $9 $10 $11 $12 $13 $14 $15 $16\n    declare -a derivatives=($(\n\
+    \        echo \"$xs[0] + $xs[1] * x + $xs[2] * x^2 + $xs[3] * x^3 + $xs[4] * x^4\"\
+    \n        echo \"$xs[1] * x + $xs[5] * x^2 + $xs[6] * x^3 + $xs[7] * x^4\"\n \
+    \       echo \"$xs[2] * x^2 + $xs[8] * x^3 + $xs[9] * x^4\"\n        echo \"$xs[3]\
+    \ * x^3 + $xs[10] * x^4\"\n        echo \"$xs[4] * x^4\"\n    ))\n    echo ${derivatives[@]}",
+  "    local xs=$1\n    local j=1\n    local result=()\n    while [ \"$j\" -lt \"\
+    $#\" ];do\n        result+=(\"\\\"$xs[j-1]\\\"\" \"$(( $xs[j-1] + $xs[j-2] * $xs[j-1]\
+    \ + $xs[j-3] * $xs[j-2] + $xs[j-4] * $xs[j-3] + $xs[j-5] * $xs[j-4] ))\")\n  \
+    \      j=$(( j + 1 ))\n    done\n    echo \"${result[@]}\"", "    x=$1\n    [\
+    \ $# -lt 2 ]  && return 1\n    [ $# -gt 1 ]  && return 1\n    [ $# -eq 1 ] &&\
+    \ xs=\"$x\" && shift\n    xs=\"$xs $(eval echo \\\"$xs\\\" | sed -re 's/[+-]([0-9]*\\\
+    .[0-9]+)/& \\1/g')\"\n    echo -n '[\"'\n    echo $xs\n    echo ']'", "  local\
+    \ x=\"$1\"\n  shift\n\n  local d=\"$(echo \"$1\" | sed 's/^\\([^ ]*\\)[ ]*/\\\
+    1/ \\\n                  s/^[^ ]*[ ]*\\(.*\\)[ ]*$/\\1/')\"\n  for ((i=1 ; i<=\"\
+    ${#x}\" ; i=i+1)); do\n    local n=\"$(echo \"$1\" | sed 's/^\\([^ ]*\\)[ ]*\\\
+    (.*\\)[ ]*$/\\1/')\"\n    x=\"$((${x}+${d}*$n)) ${x}\"\n    d=\"$((${d}-1))\"\n\
+    \  done\n  echo \"$x\"", "    if [[ -z \"$1\" ]]; then\n        echo \"$0: error:\
+    \ argument is not a number\"\n        exit 1\n    fi\n\n    local xs=( \"$@\"\
+    \ )\n    local der=\"$1\"\n\n    local xs_size=${#xs[@]}\n    local der_size=${#der}\n\
+    \n    if [ \"$xs_size\" -ne \"$der_size\" ]; then\n        echo \"$0: error: argument\
+    \ is not a polynomial\"\n        exit 1\n    fi\n\n    if [ \"$der_size\" -eq\
+    \ 1 ]; then\n        echo \"$der\"\n        return\n    fi\n\n    if [ \"$xs_size\"\
+    \ -eq 1 ]; then\n        echo \"$der\"\n        return\n    fi\n\n    if [ \"\
+    $der_size\" -gt 2 ]; then\n        echo \"$0: error: argument is not a polynomial\"\
+    \n        exit 1\n    fi\n\n    local c=0\n    local b=\"1\"\n    for (( i=0;\
+    \ i<$der_size; i++ )); do\n        local c=$((c+1))\n        if [[ $c -gt \"$xs_size\"\
+    \ ]]; then\n            echo \"$0: error: argument is not a polynomial\"\n   \
+    \         exit 1\n        fi\n\n        b=$((b+$xs[c]))\n    done\n\n    # If\
+    \ the coefficient at the highest power is nonzero, add it to the\n    # derivative.\
+    \ \n    if [[ \"$b\" -gt 1 ]]; then\n        der=\"$der $b\"\n    fi\n\n    echo\
+    \ \"$der\"", "    local xs=\"$1\"\n    local x\n    local result=\"[]\"\n    for\
+    \ x in $xs\n    do\n        local i\n        for ((i=1;i<$#xs;i++))\n        do\n\
+    \            if (( $(echo \"${result[i]}*${x}\" | bc) ))\n            then\n \
+    \               continue\n            else\n                local j\n        \
+    \        for ((j=0;j<$#result+1;j++))\n                do\n                  \
+    \  result[j]=\"$result[j-1]$x\"\n                done\n                result+=($(echo\
+    \ \"${result[i]}*${x}\" | bc -l))\n                break\n            fi\n   \
+    \     done\n    done\n    echo \"${result[@]}\"", "    local xs result\n    IFS='\
+    \ ' read -r -a xs <<< \"$1\"\n    local i=0\n    result=()\n    while ((i < \"\
+    ${#xs[@]}\")); do\n        result+=(\"${xs[$((i+1))]}\")\n        ((i++))\n  \
+    \  done\n    echo \"${result[@]}\"", "  xs=(\"$1\")\n  n=$((${#xs[@]}-1))\n  res=()\n\
+    \  i=0\n  while (( i < n )); do\n    (( i++ ))\n    res+=($((${#res[*]}*${xs[$i]})))\n\
+    \  done\n  res+=(${#res[@]})\n  echo \"${res[*]}\"", "    local dx=$1\n    shift\n\
+    \    echo $(dx \\* $@ | bc -l)", "    local xs d d1 d2 d d3 d1\n    local _\n\
+    \    for _; do\n        d=3\n        d1=2\n        d2=1\n        d3=2\n      \
+    \  d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d=$((${d} + ${d2} * ${d3}))\n\
+    \        d1=$((${d1} + 1))\n        d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n\
+    \        d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d=$((${d} + ${d2} * ${d3}))\n\
+    \        d1=$((${d1} + 1))\n        d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n\
+    \        d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d=$((${d} + ${d2} * ${d3}))\n\
+    \        d1=$((${d1} + 1))\n        d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n\
+    \        d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d=$((${d} + ${d2} * ${d3}))\n\
+    \        d1=$((${d1} + 1))\n        d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n\
+    \        d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d1=$((${d1} + 1))\n    \
+    \    d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n        d=$((${d} + ${d1} *\
+    \ ${d2} * ${d3}))\n        d1=$((${d1} + 1))\n        d2=$((${d2} + 1))\n    \
+    \    d3=$((${d3} + 1))\n        d=$((${d} + ${d1} * ${d2} * ${d3}))\n        d1=$((${d1}\
+    \ + 1))\n        d2=$((${d2} + 1))\n        d3=$((${d3} + 1))\n        d=$((${d}\
+    \ + ${d1} * ${d2} * ${d3}))\n        d1=$((${d1} + 1))\n        d2=$((${d2} +\
+    \ 1))\n        d3=$((${d3} + 1))\n        d=$((${d} + ${d1} * ${d2} * ${d3}))\n\
+    \        d1", "  local poly=\"$1\"\n  local dpoly=\"$2\"\n  shift\n  local x\n\
+    \  for ((x=0; x<\"${#poly[@]}\"; x++));\n  do\n    case \"$x\" in\n      0) xs=\"\
+    $poly[x]\"\n         dpoly=\"$dpoly$xs\"\n         ;;\n      1) xs=\"$poly[x]\"\
+    \n         xs=\"$xs $poly[$((x-1))]\"\n         dpoly=\"$dpoly$xs\"\n        \
+    \ ;;\n      *) xs=\"$poly[x]\"\n         xs=\"$xs $poly[$((x-1))] $poly[$((x-2))]\"\
+    \n         dpoly=\"$dpoly$xs\"\n         ;;\n    esac\n  done\n  dpoly=\"$dpoly\"\
+    \n  echo \"$dpoly\"", "  local xs ret\n  xs=$1\n  if [[ $# -eq 0 ]]; then\n  \
+    \  ret=()\n    for x; do ret+=(\"$x\"); done\n    echo $ret\n    return\n  fi\n\
+    \  local i\n  ret=()\n  for i in $(seq 0 $(($#xs - 1))); do\n    local x\n   \
+    \ x=$(echo $xs | sed 's/\\* //')\n    if [[ $x =~ \\* ]]; then\n      x=$( echo\
+    \ $x | sed 's/\\*//' )\n      ret+=(\"$x^$i\")\n    else\n      ret+=(\"$x $i\"\
+    )\n    fi\n  done\n  echo $ret", "    local -r c=$1; shift\n    local -r x=$@\n\
+    \    local -a d\n    d=( $(for s in ${c}; do echo $s $x*$s; done | sed 's/ /+/g')\
+    \ )\n    echo \"${d[@]}\"", "    local dx dx_str deg i\n    dx_str=$1\n    read\
+    \ -d' ' dx && read -a dx_arr <<< \"$dx_str\"\n    [[ -z \"$dx\" ]] && return 1\n\
+    \    [[ \"$dx\" = \"0\" ]] && return 0\n    read -a dx_arr <<< \"$dx\"\n    [[\
+    \ -z \"${dx_arr[@]}\" ]] && return 1\n    [[ \"$dx\" = \"0\" ]] && return 0\n\
+    \    read -d' ' deg && read -d' ' dx_str <<< \"$deg\" || return 1\n    for i in\
+    \ \"${dx_arr[@]}\"; do\n        [[ \"$i\" = \"-\" ]] && return 1\n    done\n \
+    \   local fx fy\n    local fx_str fy_str\n    fx_str=\"${dx_arr[@]}\"\n    read\
+    \ -d' ' fx && read -d' ' fy_str <<< \"$fx\" || return 1\n    fx_str=\"${fx_str/%*/$fx}\"\
+    \n    fy=\"${fx_str/%/}\"\n    fx_str=\"${fx_str/*/$fx}\"\n    fx_str=\"${fx_str/%/}\"\
+    \n    echo \"[$fx$fy]\"", "    local poly=\"$1\"\n    local sum=\"\"\n    local\
+    \ c=0\n    local first=1\n    for var in $poly; do\n        if [ \"$first\" =\
+    \ \"1\" ]; then\n            sum=\"$var \"\n            c=$((c+1))\n         \
+    \   first=0\n        else\n            sum=\"$sum$((c+1)) $var \"\n          \
+    \  c=$((c+1))\n        fi\n    done\n\n    sum=\"${sum% }\"\n    echo \"$sum\"",
+  "  local xs result\n  xs=($1)\n  result=()\n  for x in $xs; do\n    result+=($((x*x)))\n\
+    \  done\n  echo $result", "\tlocal -r x=$1 y sum=1\n\t[[ -z \"$x\" ]] && return\
+    \ 1\n\tfor x in $x; do\n\t\ty=\"$sum $x\"\n\t\tsum=$(( $sum * $x ))\n\tdone\n\t\
+    echo \"$y\"", "\tlocal xs=\"${1}\"\n\tlocal s=\"$((${#xs}-1))\"\n\n\tlocal d='['\n\
+    \twhile (( $s > 0 )); do\n\t\tlocal r=$(( ${xs:$s:1} ))\n\t\tlocal l=$(( $s -\
+    \ 1 ))\n\t\td+=\"'${r}',\"\n\t\txs=\"${xs:0:$s}\"\n\t\ts=\"$l\"\n\tdone\n\n\t\
+    d+=\"]\"\n\techo \"$d\"", "  local xs=$1\n  local result='['\n  local i=0\n  while\
+    \ [ $i -lt $((${#xs[*]} - 1)) ]; do\n    local next=$((i + 1))\n    if [ $i -eq\
+    \ 0 ] ; then\n      result+=$((${xs[$i]} * $next))\n    else\n      result+=$((${xs[$i]}\
+    \ * $next))\n    fi\n    i=$next\n  done\n  result+=$((${xs[$i]} * $i))\n  result+=\"\
+    ]\"\n  echo $result", "    echo \"$1\" | sed -E 's/^([[:space:]]+)(.*)\\1$/\\\
+    2/' | sed -E 's/^ //g'", "\tlocal xs=(\"$@\")\n\tlocal result=()\n\tlocal index=0\n\
+    \twhile [ $((index++)) -lt $((${#xs[@]}-1)) ]; do\n\t\tresult+=(\"\\\"${xs[index]}\\\
+    \"\")\n\tdone\n\techo \"${result[@]}\\\"\"", "    local xs=\"$1\"\n    local dx=$(echo\
+    \ \"$xs\" | sed \"s/\\([0-9]*\\) /\\1/\" | xargs -I{} echo \"{}\" | \\\n\tsed\
+    \ 's/^\\([0-9]*\\)$/\\1/')\n    local result=\"$(echo $dx | sed \"s/\\([0-9]*\\\
+    )\\$/\\1/\" | xargs -I{} echo \"{}\" | \\\n\tsed 's/^\\(.*\\)$/\"&\"/g')\"\n\n\
+    \    # remove leading blanks\n    result=$(echo $result | sed \"s/^ *//\")\n \
+    \   # remove trailing blanks\n    result=$(echo $result | sed \"s/ *$//\")\n \
+    \   # remove leading zeros\n    result=$(echo $result | sed \"s/^0*//\")\n   \
+    \ # remove leading zeroes\n    result=$(echo $result | sed \"s/^0*//\")\n    #\
+    \ remove trailing zeroes\n    result=$(echo $result | sed \"s/ *0*$//\")\n   \
+    \ # remove trailing dot\n    result=$(echo $result | sed \"s/ *\\.$//\")\n   \
+    \ # remove trailing zeroes\n    result=$(echo $result | sed \"s/ 0 $//\")\n\n\
+    \    # remove spaces from numbers\n    sed \"s/ /\\\\\\\\ /g\" <<< \"$result\"",
+  "    local d=$1\n    local x=0\n    local j=0\n    local c\n    local dArray\n \
+    \   local temp\n    local res\n    local dArrayCount\n\n    # split list into\
+    \ array\n    dArray=( $d )\n    dArrayCount=${#dArray[@]}\n    # initialize res\n\
+    \    res=\"\"\n    # Loop through array backwards to remove duplicates\n    for\
+    \ (( i = $dArrayCount; i > 0; i-- )); do\n        if [ $i -eq 0 ]; then break;\
+    \ fi\n        c=${dArray[i-1]}\n        temp=${d}\n        temp=${temp// /$c}\n\
+    \        res+=\"\\\"$temp\\\"\"\n    done\n    # return result\n    echo \"$res\"",
+  "  local s=\"$1\"\n  local -a d\n  eval \"d=(\"\n  for k in ${s// */ }; do\n   \
+    \ echo \"$k\"\n    d+=( $(eval echo \\\"$(echo \"$k\" | sed -e 's/^/'\\\"'/g'\
+    \ -e 's/ $//g')\\\")\n  )\n  echo \"${d[@]}\"", "    local xs=$1 # space-separated\
+    \ list\n    local xs\n    local n=$2\n    local x\n    local dx=$(echo $1 | sed\
+    \ 's/ /\\\" \"/g') # replace spaces with double-quotes\n    dx=$(echo $dx | sed\
+    \ 's/\\ /\\\"\"/g') # replace spaces with double-quotes\n    xs=\"$xs $x\"\n \
+    \   if [ $n -gt 1 ]; then\n        local dx2=\"$(echo $xs | sed 's/ /\\\" \"/g')\
+    \ # replace spaces with double-quotes\"\n        dx2=\"$(echo $dx2 | sed 's/\\\
+    \ /\\\"\"/g') # replace spaces with double-quotes\"\n        dx2=\"$dx2 $dx2\"\
+    \n        dx2=\"$(echo $dx2 | sed 's/^/\"/') # replace leading whitespace with\
+    \ double-quotes\n        dx2=\"$dx2 $dx2\"\n        local d3=\"$(echo $dx2 | sed\
+    \ 's/\\ /\\\"\"/g') # replace spaces with double-quotes\n        d3=\"$d3 $d3\"\
+    \n        d3=\"$(echo $d3 | sed 's/^/\"/') # replace leading whitespace with double-quotes\n\
+    \        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3 | sed 's/\\ /\\\"\"/g') # replace\
+    \ spaces with double-quotes\n        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3 |\
+    \ sed 's/^/\"/') # replace leading whitespace with double-quotes\n        d3=\"\
+    $d3 $d3\"\n        d3=\"$(echo $d3 | sed 's/\\ /\\\"\"/g') # replace spaces with\
+    \ double-quotes\n        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3 | sed 's/^/\"\
+    /') # replace leading whitespace with double-quotes\n        d3=\"$d3 $d3\"\n\
+    \        d3=\"$(echo $d3 | sed 's/\\ /\\\"\"/g') # replace spaces with double-quotes\n\
+    \        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3 | sed 's/^/\"/') # replace leading\
+    \ whitespace with double-quotes\n        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3\
+    \ | sed 's/\\ /\\\"\"/g') # replace spaces with double-quotes\n        d3=\"$d3\
+    \ $d3\"\n        d3=\"$(echo $d3 | sed 's/^/\"/') # replace leading whitespace\
+    \ with double-quotes\n        d3=\"$d3 $d3\"\n        d3=\"$(echo $d3 | sed 's/\\\
+    \ /\\\"\"/g') # ", "  local xs=$1\n  local result=()\n  local i=1\n  while ((\
+    \ $# > 0 ))\n  do\n    if [ $i -ge $#xs ]\n    then\n      (( i++ ))\n    else\n\
+    \      result+=(\"$xs$i\")\n      i=1\n    fi\n  done\n  printf \"%s\\n\" \"${result[@]}\"\
+    \n  return 0", "  # if there is no space, don't do anything\n  IFS=' ' read -ra\
+    \ arr $1 || return\n  # return derivative\n  local n=0\n  local ret=()\n  for\
+    \ num in \"${arr[@]}\"; do\n    ((n++))\n    local x\n    if [[ $n -eq 1 ]]; then\n\
+    \      # $1 is just number\n      x=$num\n    else\n      # $1 is a polynomial\
+    \ of form \"x^n + x^(n-1) + x^(n-2) + ...\"\n      x=$((num*num))\n    fi\n  \
+    \  local ret+=($x)\n  done\n  echo \"${ret[@]}\"", "  local x xs result\n  # remove\
+    \ spaces around $1 by surrounding it in quotes.\n  xs=\"$(echo \"$1\" | sed -e\
+    \ 's/ /\" \" /g')\"\n  # remove leading zeroes\n  xs=\"${xs:1}\"\n  # convert\
+    \ numbers into strings\n  xs=\"$(echo \"$xs\" | sed -e 's/^0/\"0\"/g' -e 's/^1/\"\
+    1\"/g' -e 's/^2/\"2\"/g' -e 's/^3/\"3\"/g' -e 's/^4/\"4\"/g' -e 's/^5/\"5\"/g'\
+    \ -e 's/^6/\"6\"/g' -e 's/^7/\"7\"/g' -e 's/^8/\"8\"/g' -e 's/^9/\"9\"/g' -e 's/^10/\"\
+    10\"/g' -e 's/^11/\"11\"/g' -e 's/^12/\"'\"'\"'\"'\"'\"12\"'\"'\"'\"/g' -e 's/^13/'\"\
+    '\"'\"'\"'\"13\"'\"'\"'\"/g' -e 's/^14/'\"'\"'\"'\"'\"14\"' \"15\"/g' -e 's/^15/'\"\
+    '\"'\"'\"'\"15\"' \"16\"/g' -e 's/^16/\"'\"'\"'\"'\"16\"' \"17\"/g' -e 's/^17/'\"\
+    '\"'\"'\"'\"17\"' \"18\"/g' -e 's/^18/'\"'\"'\"'\"'\"18\"' \"19\"/g' -e 's/^19/'\"\
+    '\"'\"'\"'\"19\"' \"20\"/g')\"\n  # reverse xs to get highest derivative\n  xs=\"\
+    ${xs:1}\"\n  while read -r x; do\n    xs=\"$x $xs\"\n  done\n  xs=\"$(echo \"\
+    $xs\" | sed -e 's/^0/\"'\"'\"'\"'\"0\"'\"'\"'\"/g' -e 's/^1/\"'\"'\"'\"'\"1\"\
+    '\"'\"'\"/g' -e 's/^2/\"'\"'\"'\"'\"2\"'\"'\"'\"/g' -e 's/^3/\"'\"'\"'\"'\"3\"\
+    '\"'\"'\"/g' -e 's/^4/\"'\"'\"'\"'\"4\"'\"'\"/g' -e 's/^5/\"'\"'\"'\"'\"5\"' \"\
+    6\"/g' -e 's/^6/\"'\"'\"'\"'\"6\"' \"7\"/g' -e 's/^7/\"'\"'", "  local input=\"\
+    $1\"\n  local coefs=$(echo \"$input\" | tr \" \" \"\\n\" | xargs)\n  local xs=${coefs[@]}\n\
+    \  local result\n  while [ \"$xs\" ]; do\n    echo \"$xs\" | xargs -n 1 gawk '{print\
+    \ $0 * $2}'\n    result=$(echo \"$xs\" | xargs -n 1 gawk '{print $0 * $2}')\n\
+    \    echo \"$result\" | tr \" \" \"\\n\" | xargs -n 1 gawk '{print $0}' >> derivative.result\n\
+    \    xs=${result[@]}\n  done\n  rm derivative.result", "    local xs y\n    for\
+    \ y in $@; do\n        [ -n \"$y\" ] || continue # skip empty strings.\n     \
+    \   local x\n        for x in $@; do\n            [ -z \"$x\" ] || continue #\
+    \ skip empty strings.\n            [[ \"$x\" = *\"^\"$y\" ]] && continue\n   \
+    \         echo -n \"\\\"$x\"\n        done\n        echo \"\"\n    done", "  \
+    \  local xs d\n    xs=( $1 )\n    d=0\n    for x in \"${xs[@]}\"; do\n       \
+    \ d=\"$d+${x}*x^${#x}\"\n    done\n    echo \"\\\"${d}\\\"\"", "  local f=$1;\
+    \ shift\n\n  echo \"$(($#)) $(eval echo -n \"$(python -c \"from sympy import Symbol;\
+    \ from sympy.matrices import Matrix;\n    from sympy import MatrixSymbol;\n  \
+    \  from sympy import Function;\n    from sympy import Symbol;\n    x = Symbol('x');\n\
+    \    mat = MatrixSymbol('mat', 3, 3);\n    f = Function('f');\n    mat[1][0] =\
+    \ Symbol('1');\n    mat[1][1] = Symbol('2');\n    mat[1][2] = Symbol('3');\n \
+    \   mat[2][1] = Symbol('4');\n    mat[2][2] = Symbol('5');\n    mat[3][1] = Symbol('6');\n\
+    \    mat[3][2] = Symbol('7');\n    mat[3][3] = Symbol('8');\n    mat[0][1] = Symbol('9');\n\
+    \    mat[0][2] = Symbol('10');\n    mat[2][0] = Symbol('11');\n    mat[2][3] =\
+    \ Symbol('12');\n    mat[0][0] = Symbol('13');\n    mat[1][2] = Symbol('14');\n\
+    \    mat[2][1] = Symbol('15');\n    mat[0][3] = Symbol('16');\n    mat[3][2] =\
+    \ Symbol('17');\n    print(mat)\" | python -c \"from sympy import expand; import\
+    \ sympy; from sympy import Symbol; from sympy.matrices import Matrix; from sympy\
+    \ import Function; from sympy import Symbol;\n    from sympy import simplify;\
+    \ from sympy import simplify;\n    from sympy import expand; from sympy import\
+    \ simplify;\n    from sympy import diff; from sympy import simplify;\n    from\
+    \ sympy import simplify, expand; from sympy import simplify;\n    from sympy import\
+    \ simplify;\n    from sympy import diff; from sympy import simplify;\n    from\
+    \ sympy import simplify; from sympy import expand; from sympy import simplify;\n\
+    \    from sympy import simplify;\n    from sympy import expand; from sympy import\
+    \ simplify;\n    from sympy import simplify;\n    from sympy import diff; from\
+    \ sympy import simplify;\n    from sympy import simplify;\n    from sympy import\
+    \ simplify; from sympy import expand; from sympy import simplify;\n    from sympy\
+    \ import simplify;\n    from sympy import expand; from sympy import simplify;\n\
+    \    from sympy import simplify;\n    from sympy import diff; from sympy import\
+    \ simplify;\n    from sympy import simplify;\n    from sympy import simplify;\
+    \ from sympy import expand; from sympy import simplify;\n    from sympy import\
+    \ simplify;\n    from sympy import diff; from sympy import simplify;\n    from\
+    \ sympy import simplify;\n    from sympy import simplify; from sympy import expand;\
+    \ from sympy import simplify;\n    from sympy import simplify;\n    from sympy\
+    \ import expand; from sympy import simplify;\n    from sympy import simplify;\n\
+    \    from sympy import diff; from sympy import simplify;\n    from sympy import\
+    \ simplify;\n    from sympy import simplify; from sympy import expand; from sympy\
+    \ import simplify;\n    from sympy import simplify;\n    from sympy import diff;\
+    \ from sympy import simplify;\n    from sympy import simplify;\n    from sympy\
+    \ import simplify;\n    from sympy import expand; from sympy import simplify;\n\
+    \    from sympy import simplify;\n    from sympy import diff; from sympy import\
+    \ simplify;\n    from sympy import simplify;\n    from sympy import simplify;\n\
+    \    from sympy import expand; from sympy import simplify;\n    from sympy import ",
+  "    local d=$1\n    shift\n    local s=\"\"\n    while [ $# -gt 0 ]; do\n     \
+    \   s=$s \" \" $1\n        shift\n    done\n    local res\n    eval res=\"$(echo\
+    \ $d $s)\"\n    echo $res", "    local xs=\"$1\";\n    local output=\"\";\n  \
+    \  while [ \"${#xs}\" -gt \"0\" ]\n    do\n        local x=$(echo \"${xs}\" |\
+    \ cut -d' ' -f1);\n        local y=$(echo \"${xs}\" | cut -d' ' -f2);\n      \
+    \  local output=\"$output '\\\"'$x'\\\"'$y'\\\"'$(echo \"${xs}\" | cut -d' ' -f3)'\\\
+    \"'\";\n        xs=$(echo \"${xs}\" | cut -d' ' -f3); # remove next coefficient.\n\
+    \    done;\n    echo $output", "    local xs=\"$1\"\n\n    local d\n    if [[\
+    \ $xs = \"0\" ]]; then\n        d=\"\"\n    elif [[ $xs == \"1\" ]]; then\n  \
+    \      d=\"1\"\n    elif [[ $xs == \"2\" ]]; then\n        d=\"2\"\n    elif [[\
+    \ $xs == \"3\" ]]; then\n        d=\"3\"\n    elif [[ $xs == \"4\" ]]; then\n\
+    \        d=\"4\"\n    elif [[ $xs == \"5\" ]]; then\n        d=\"5\"\n    elif\
+    \ [[ $xs == \"6\" ]]; then\n        d=\"6\"\n    elif [[ $xs == \"7\" ]]; then\n\
+    \        d=\"7\"\n    elif [[ $xs == \"8\" ]]; then\n        d=\"8\"\n    elif\
+    \ [[ $xs == \"9\" ]]; then\n        d=\"9\"\n    else\n        d=\"$(echo \"$xs\"\
+    \ | cut -c4- | paste -sd+ | bc)\"\n    fi\n    echo \"\\\"$d\\\"\"", "  local\
+    \ xs=${1//[[:space:]]/}\n  xs=${xs// /+}\n  xs=${xs//$/ }\n  xs=${xs// +/-}\n\
+    \  xs=${xs:+${xs}}\n  xs=${xs//+/-}\n  echo \"$xs\"", "  local xs=$1\n  shift\
+    \ 1\n  local result\n  local coeff=1\n  local x\n  local first\n  local last\n\
+    \  local tmp\n  local lastTmp\n\n  for ((i=0; i < $#; i+=2))\n  do\n    first=$((i+1))\n\
+    \    last=$((i+2))\n    firstTmp=$((first-1))\n    lastTmp=$((last-1))\n    last=$((last-1))\n\
+    \    tmp=$((coeff*$xs))\n    if [[ $first -gt 0 ]]\n    then\n      result=($(tmp))\n\
+    \      tmp=$((tmp*$xs))\n    fi\n    if [[ $last -lt $firstTmp ]]\n    then\n\
+    \      result+=(-$(tmp))\n      tmp=$((tmp*$xs))\n    fi\n    result+=(\"$lastTmp\
+    \ $firstTmp \")\n    coeff=$((coeff*$xs))\n  done\n\n  echo ${result[*]}", " \
+    \ echo \"$(head -n1 $0)\"\n  echo \"$(tail -n1 $0)\" | sed -e \"s/\\( [0-9]\\\
+    +\\)/ '\\1'/g\"\n  echo \"$(head -n2 $0)\"\n  echo \"$(tail -n2 $0)\"\n  echo\
+    \ \"$(head -n3 $0)\"\n  echo \"$(tail -n3 $0)\"\n  echo \"$(head -n4 $0)\"\n \
+    \ echo \"$(tail -n4 $0)\"\n  echo \"$(head -n5 $0)\"\n  echo \"$(tail -n5 $0)\"\
+    \n  echo \"$(head -n6 $0)\"\n  echo \"$(tail -n6 $0)\"\n  echo \"$(head -n7 $0)\"\
+    \n  echo \"$(tail -n7 $0)\"\n  echo \"$(head -n8 $0)\"\n  echo \"$(tail -n8 $0)\"\
+    \n  echo \"$(head -n9 $0)\"\n  echo \"$(tail -n9 $0)\"", "  local -n list=\"$1\"\
+    \n  local -n count\n  list=${list[@]/#/}\n  list=$(echo \"$list\" | tr -d '[:space:]')\n\
+    \  if [ \"$list\" = \"${list[@]}\" ]; then\n    return 0\n  fi\n  count=1\n  local\
+    \ -a result\n  result=()\n  for item in $list; do\n    if [ \"$item\" = \"1\"\
+    \ ]; then\n      result+=(\"$count\")\n      count=`expr $count + 1`\n    elif\
+    \ [ \"$item\" = \"0\" ]; then\n      result+=(\"0\")\n    else\n      result+=(\"\
+    $item\")\n    fi\n  done\n  result=(\"${result[@]}\")\n  echo ${result[@]}", " \
+    \ local darr=( $( echo $1 | tr ' ' '\\n' | sed 's/ / + /xg' ) )\n  echo $darr",
+  "  echo \"${1}\" | while read x do\n    local xs=$(printf \"%s\" \"${x}\")\n   \
+    \ local deriv=$(xs+\"0\")\n    for ((i=$((${#xs[*]} -1)); i>=0; i--)); do\n  \
+    \    deriv=\"${deriv}*x+${xs[i]}\"\n    done\n    echo \"${deriv}\"\n  done",
+  "    echo \"$(echo \"$1\" | sed 's/ /\" \\\\* \"/g' | tr '\\n' ' ' | sed 's/^/-/g'\
+    \ | sed 's/-$//g' | sed 's/\\(\\([0-9]\\+\\)-\\*\\([0-9]\\+\\)-\\*\\([0-9]\\+\\\
+    )\\)/\\1\\'$'\\2\\'$3\\'/' | sed 's/-/\\^/')\"", "    local -n list=\\$(echo \"\
+    $1\")\n    local -n start=\\$1\n    local -n limit=\\$1\n    local -n num=\\$1\n\
+    \n    local term\n\n    while [[ $num -lt 1 ]]; do\n        term=\"\\\"$start$list\\\
+    \"${start/$list/ }\"\n        start=\"${start/$list/-}\"\n        start=\"${start/$list/-}\"\
+    \n        num=1\n    done\n\n    term=\"\\\"$start$list\\\"${start/$list/ }\"\n\
+    \n    local -a out\n    out=($term)\n    while [[ $num -lt $limit ]]; do\n   \
+    \     term=\"\\\"$start$list\\\"${start/$list/ }\"\n        start=\"${start/$list/-}\"\
+    \n        start=\"${start/$list/-}\"\n        ((num++))\n        out+=($term)\n\
+    \    done\n\n    echo \"${out[*]}\"", "  local xs=( $1 );\n  local result=();\n\
+    \  for (( i=0; i < ${#xs[@]}-1; i++ )); do\n    result+=( \"${xs[$i]}\" )\n  done\n\
+    \  result+=( \"${xs[$i]}\" )\n  echo $result;", "\tlocal d\n\td=$(echo \"$1\"\
+    \ | sed \"s/ /, /\" | sed \"s/^\\(.*\\)$/'\\1'/\")\n\teval \"d=$d\"\n\techo $d",
+  "\tlocal xs x\n\tread xs <<< \"$1\"\n\txs=\"${xs#* }\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\
+    \n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\
+    \n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\
+    \n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\
+    \n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\
+    \n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"\
+    $xs $xs\"\n\txs=\"$xs $xs\"\n\txs=\"$xs $x", "    local polynomials=\"$1\"\n \
+    \   local derivatives=\"$2\"\n\n    local polynomial\n    local x\n\n    # Remove\
+    \ leading zeros from polynomial\n    while polynomial=\"$(echo -e \"${polynomials}\"\
+    \ | awk '{printf $1;}')\"\n    do\n        polynomial=\"${polynomial:0:1}\"\n\
+    \    done\n\n    # Parse polynomials\n    while polynomial\n    do\n        local\
+    \ result\n        local value\n\n        # Find coefficient of polynomial\n  \
+    \      result=\"$(echo -e \"${polynomials}\" | awk -F \"[ ,]\" '{print $NF;}')\"\
+    \n        polynomial=\"$(echo -e \"${polynomials}\" | awk -F \"[ ,]\" '{print\
+    \ $1;}')\"\n\n        # Handle polynomials that do not have at least one coefficient\n\
+    \        if [[ \"$result\" =~ ^- ]]; then\n            derivatives=\"${derivatives}${polynomial}\"\
+    \n        else\n            value=\"$((${polynomial:1} * x))\"\n\n           \
+    \ # Add this coefficient to derivatives\n            derivatives=\"${derivatives}${value}\"\
+    \n        fi\n    done\n\n    # Remove leading zeros from derivatives\n    while\
+    \ derivative=\"$(echo -e \"${derivatives}\" | awk '{printf $1;}')\"\n    do\n\
+    \        derivative=\"${derivative:0:1}\"\n    done\n\n    echo \"$derivatives\"",
+  "    local xs=\"$1\"\n    local s=\n    local i=0\n    while [ -n \"$xs\" ]; do\n\
+    \        local d=$(( $(echo \"$s\" | wc -l) - 1 ))\n        local s=\"$(echo \"\
+    $s\" | sed -r \"s/ (.+) x/\\1 * x/\")\"\n        (( i++ ))\n        (( s += \"\
+    ^$d\" ))\n    done\n    echo \"$s\"", "\tlocal poly=$1\n\tlocal result=()\n\t\
+    local xs=${poly// */ }\n\tlocal idx=0\n\tlocal xidx\n\txidx=0\n\twhile [ $idx\
+    \ -lt $# ]; do\n\t\txidx=$((xidx + 1))\n\t\tif [ $xidx -eq 1 ]; then\n\t\t\txs=${xs/\
+    \ $/ ${xs:$idx}}\n\t\telse\n\t\t\tresult=( ${result[@]} ${xs:$idx} )\n\t\tfi\n\
+    \t\tidx=$((idx+1))\n\tdone\n\tresult=( ${result[@]} $xs )\n\techo ${result[@]}",
+  "    local xs res\n    # First we split the input string into \"x\" and \"y\" parts.\n\
+    \    xs=( $1 )\n    # Then we count how many times each xs[i] appears.\n    local\
+    \ n m tmp\n    n=0\n    while read tmp; do\n        n=$(( n+1 ))\n        m=$((\
+    \ m+1 ))\n    done < <(echo $xs | grep -o \"[0-9]\" | wc -l)\n    # Then we create\
+    \ an empty array and fill it with \"xs\" as many elements as many times each xs[i]\
+    \ appears.\n    # The last xs[i] doesn't count and hence is empty and the array\
+    \ ends with \"n+1 x[n]\".\n    res=( $(for ((i=0; i < n; i++)); do echo x[$i];\
+    \ done) )\n    # Lastly, we append the remaining \"xs\" and calculate the difference.\n\
+    \    for ((i=m; i<$n; i++)); do\n        res[$((i-1))]=\"\\\"${xs[i]}\"\n    done\n\
+    \    # Remove the first and last elements from the array and return the resulting\
+    \ list.\n    res=( \"${res[@]:1}\" )\n    echo $res", "  local poly=\"$1\"\n \
+    \ local poly=\"$poly\" #strip quotes\n  local -a d\n  local x\n  local d\n  local\
+    \ -i n\n  local last\n  local d\n  local i\n  local c\n  local p\n  local j\n\
+    \  local s\n  local last\n  local -a x\n\n  if [ \"$#\" -lt 1 ]; then\n    echo\
+    \ \"No polynomial argument passed to derivative.\"\n    return 1\n  fi\n\n  printf\
+    \ -v polys \"%q \" \"$poly\"\n  for p in $polys; do\n    if [[ \"$p\" =~ \"^[0-9]+\"\
+    \ ]]; then\n      # No point in processing this as a polynomial with a coefficient.\n\
+    \      continue\n    fi\n    # Strip leading digit\n    p=${p:0:1}\n    # Check\
+    \ if last character was a space\n    if [[ \"$p\" == \" \" ]]; then\n      # Remove\
+    \ space\n      p=${p:1}\n      # Check if first character was a space\n      if\
+    \ [[ \"$p\" == \" \" ]]; then\n        # Remove space\n        p=${p:1}\n    \
+    \  fi\n    fi\n    # Check if first character is a \"-\"\n    if [[ \"$p\" ==\
+    \ \"-\" ]]; then\n      p=${p:1}\n      i=0\n      d=\"\"\n      while [[ \"$p\"\
+    \ != \"\" ]]; do\n        if [[ \"$i\" -gt \"0\" ]]; then\n          d+=$p\n \
+    \       fi\n        p=${p:2:1}\n        i=$((i+1))\n      done\n      d+=\"-\"\
+    \n      p=$(echo $d | xargs)\n      poly=$(echo $poly | xargs)\n      n=$(echo\
+    \ $p | wc -c)\n      last=$(echo $p | tail -1)\n      if [[ \"$n\" == \"0\" ]];\
+    \ then\n        printf -v polys \"%s\" \"$p\"\n      else\n        printf -v polys\
+    \ \"%q \" \"$p\"\n      fi\n      continue\n    fi\n    # Strip leading \"-\"\n\
+    \    p=${p:1}\n    # Check if first character was a space\n    if [[ \"$p\" ==\
+    \ \" \" ]]; then\n      # Remove space\n      p=${p:1}\n      # Check if first\
+    \ character was a space\n      if [[ \"$p\" == \" \" ]]; then\n        # Remove\
+    \ space\n        p=${p:1}\n      fi\n    fi\n    # Check if first character is\
+    \ a \"+\"\n    if [[ \"$p\" == \"+\" ]]; then\n      # Remove \"+\".\n      p=${p:2}\n\
+    \      i=0\n      d=\"\"\n      while [[ \"$p\" != \"\" ]]; do\n        if [[\
+    \ \"$i\" ", "    xs=$1\n    \n    IFS=' ' read -a array <<<\"$xs\"\n    \n   \
+    \ i=0\n    ders=()\n    while [ $i -lt ${#array[@]} ]; do\n        if [ $i -eq\
+    \ 0 ]; then\n            ders[i]=$array[i+1]\n            i=$((i + 1))\n     \
+    \   else\n            ders[i]=$((${array[i+1]} * $i) + ${array[i-1]})\n      \
+    \      i=$((i + 1))\n        fi\n    done\n    echo \"${ders[@]}\"", "    local\
+    \ xs=$1\n    local x=0\n    local ds=\"\"\n    for x in $xs; do\n        ds=\"\
+    $ds \\\"$(xs * $x + 1)\\\"\"\n    done\n    echo $ds", "    local xs deriv\n \
+    \   xs=($1)\n    deriv=()\n    for x in \"${xs[@]}\"; do\n        deriv+=(\"$x\"\
+    )\n    done\n    echo ${deriv[@]}", "    local IFS=$'\\n'\n    local xs=( $1 )\n\
+    \    local d=$1\n    local sum1=$0\n    local sum2=$1\n    local sum3=$2\n   \
+    \ while [[ ${#xs[@]} -eq 0 ]]; do\n        xs+=( $0 )\n    done\n    if [[ ${#xs[@]}\
+    \ -eq 1 ]]; then\n        d=$sum1\n        sum1=$sum2\n        sum2=$sum3\n  \
+    \      sum3=$d\n    fi\n    while [[ ${#xs[@]} -gt 1 ]]; do\n        local i=0\n\
+    \        local m=$(xs[i])\n        local l=$(xs[i+1])\n        local j=0\n   \
+    \     local n=$(xs[j])\n        local k=$(xs[j+1])\n        while (( $i < ${#xs[@]}\
+    \ -1 )); do\n            sum1=$(( sum1*m - sum2*l ))\n            sum2=$(( sum2*n\
+    \ + sum3*k ))\n            sum3=$(( sum3*n + sum3*k ))\n            sum3=$(( sum3\
+    \ + 1 ))\n            (( i++ ))\n            (( j++ ))\n        done\n       \
+    \ (( j++ ))\n        (( i++ ))\n    done\n    local m=$(xs[i])\n    local l=$(xs[i+1])\n\
+    \    local j=0\n    local n=$(xs[j])\n    local k=$(xs[j+1])\n    while (( $i\
+    \ < ${#xs[@]} -1 )); do\n        sum1=$(( sum1*m + sum2*l ))\n        sum2=$((\
+    \ sum2*n + sum3*k ))\n        sum3=$(( sum3*n + sum3*k ))\n        sum3=$(( sum3\
+    \ + 1 ))\n        (( i++ ))\n        (( j++ ))\n    done\n    local l=$(xs[i])\n\
+    \    local j=0\n    local n=$(xs[j])\n    local k=$(xs[j+1])\n    while (( $i\
+    \ < ${#xs[@]} -1 )); do\n        sum1=$(( sum1*m + sum2*l ))\n        sum2=$((\
+    \ sum2*n + sum3*k ))\n        sum3=$(( sum3*n + sum3*k ))\n        sum3=$(( sum3\
+    \ + 1 ))\n        (( i++ ))\n        (( j++ ))\n    done\n    local n=$", "  \
+    \  local n=$1\n    local xs=()\n    local x\n    while [ $# -gt 0 ]; do\n\tx=\"\
+    $1\"\n\tread x\n\t((n--))\n\txs+=( \"$x\" )\n    done\n    local a\n    a=( $(printf\
+    \ \"%s\\n\" \"${xs[@]}\" | sort -r) )\n    local b\n    b=( $(printf \"%s\\n\"\
+    \ \"${xs[@]}\" | sort -g | head -n1) )\n    for (( i=0; i<n; i++ )); do\n\tb[$i]=$((a[$i]*$(b[$i]))\
+    \ |bgrep)\n    done\n    local c\n    c=( $(printf \"%s\\n\" \"${xs[@]}\" | sort\
+    \ -g) )\n    for (( i=0; i<n; i++ )); do\n\tc[$i]=$((a[$i]*$(c[$i])) |bgrep)\n\
+    \    done\n    for (( i=0; i<n; i++ )); do\n\techo \"${b[$i]} ${c[$i]}\"\n   \
+    \ done", "    xs=($1)\n    deriv=`echo $xs | sed 's/ /+/g' | sed 's/^ /-/g' |\
+    \ sed 's/ /+/g' | sed 's/^ /-/g' | sed 's/^ /+/g'`\n    echo $deriv", "    local\
+    \ xs dstr=\n    # Split xs into list by space\n    for x in \"$@\"; do\n     \
+    \   xs+=(\"$x\")\n    done\n    dstr=\"[\"\n    for x in \"${xs[@]}\"; do\n  \
+    \      dstr+=\"\\\"$x\\\" + $((${#xs}-1)) * \\\"$x\\\" + $((${#xs}-2)) * \\\"\
+    $x\\\" + $((${#xs}-3)) * \\\"$x\\\" + $((${#xs}-4)) * \\\"$x\\\" + $((${#xs}-5))\
+    \ * \\\"$x\\\" + \"\n    done\n    dstr+=\"]\"\n    echo $dstr", "    local d=0\n\
+    \    local xs=($1)\n    for x in \"${xs[@]}\"; do\n        d=$(($d + $x*$x))\n\
+    \    done\n    echo \"$d\"", "    local num_iters=$1\n    local xs=$2\n    local\
+    \ result\n    num_iters=$(($num_iters - 1))\n    result=$( echo $xs | tr ' ' '\\\
+    n' | awk -v xs=\"$xs\" 'BEGIN{for(i=1;i<=num_iters;i++){a[i]=xs;b[i]=xs}END{for(i=1;i<=num_iters;i++){print\
+    \ b[i]-a[(i-1)%(num_iters-1)]+a[i]*b[(i+1)%(num_iters-1)]/a[i]}}')\n    echo \"\
+    $result\"", "    local fname=\"$1\"\n    local xs out\n    xs=$2\n    out=()\n\
+    \    local p\n    # Find the coefficient for x^2\n    p=${xs/2 /}\n    while ((\
+    \ $# > 1 )); do\n\txs=$xs\n\tout+=($p)\n\tp=${xs/ /}\n\t(( --i ))\n    done\n\
+    \    # Return the polynomial derivative.\n    echo $out[@]", "    if [[ $# -lt\
+    \ 2 ]]; then\n        echo \"Invalid number of arguments\"\n        exit -1\n\
+    \    fi\n\n    local xs\n    xs=\"$1\"\n    echo \"$(xs $2)\"", "  local -r xs=\"\
+    $1\"\n  shift\n  local d=\"$( echo $xs | jq -r 'map(. / .[0]) | join(\" \")' )\"\
+    \ # divide in to single items\n  local x\n  echo \"$( echo $d | jq -r '.[0]')\"\
+    \ | while read x; do\n    echo \"$( echo \"$d\" | jq -r \"$( jq -r \".[$(( $(\
+    \ echo \"$d\" | jq -r \".[0]\" | bc | awk '{print int($0) + int($1)}') ))-1]\"\
+    \ )\"\n  done", "  local x=\"$1\"\n  shift\n  # Convert into a space-separated\
+    \ string if necessary\n  # This allows $1, which might not have quotes, to be\
+    \ passed\n  # to the shell, since it could be any whitespace-separated list\n\
+    \  if [[ \"$x\" =~ \"^[[:space:]]*[\\\"\\']\" ]]\n  then\n    x=\"'$x'\"\n  fi\n\
+    \n  # Remove whitespace from $x\n  x=${x// /}\n\n  local d=\"\"\n  for x in $x\n\
+    \  do\n    d+=\" $(x**$((${#d}-1)))\"\n  done\n  echo \"$d\"", "  local d=\"${1//\
+    \ /\\\\ }\"\n  local xs=\"${d// / }\"\n  local y=\"${xs// ^ }\"\n  local result\n\
+    \  result=\"${y// + }\"\n  result=\"${result// - }\"\n  result=\"${result// ^\
+    \ }\"\n  echo \"[${result//, / }]\"", "\tlocal xs=$1\n\tlocal ds=\"\"\n\tfor ((i=0;i<${#xs[@]};++i));\
+    \ do\n\t\tds=\"${ds} ${xs[i]}\"\n\tdone\n\techo \"${ds}\"", "  local xs=\"$1\"\
+    \n  local s=\"\n$(eval \"echo '[' '\\\"${xs// /+\\\"\\'+\\\"+\\\"+\\\"\\\"}\\\"\
+    ']'\") \"\n  echo -n $(eval echo \"'\\\"$(echo $s | sed -E 's/^.* //;s/\\(\\-?[0-9]+\\\
+    )[^0-9]/\\1*/g')\\\"'\")", "  local xs p c\n  local j=0 k=0\n  xs=(\"$1\")\n\n\
+    \  printf '%s\\n' \"${xs[@]:0:${#xs[@]} - 1}\"\n  while [ \"$j\" -le \"${#xs[@]}\"\
+    \ ] ; do\n    p=${xs[$j]}\n    k=${j}\n    while [ \"${k}\" -lt \"$j\" ] ; do\n\
+    \      p=$((p * ${xs[$k]}))\n      k=$((k + 1))\n    done\n    p=${p}\n    printf\
+    \ '%s' \"${p:+$p}\"\n    j=$((j + 1))\n  done\n  printf '%s\\n' \"${xs[@]:0:${#xs[@]}\
+    \ - 1}\"", "    local d i n\n    declare -a d\n    n=$1\n    shift\n    d=()\n\
+    \    for ((i=0; i<$n; i++)); do\n        d+=($(sed -n \"$((i+1))p | sed -n \"\
+    $((i+2))p\" <<< $(head -n 1 <<< \"$1\") | tr -d '\"'))\n    done\n    echo \"\
+    ${d[*]}\"", "  local xs=($1)\n  shift\n  local dx=$1;\n  while [[ $# -gt 0 ]]\n\
+    \  do\n    case \"$2\" in\n      \"\" | \"1\")\n        dx=\"$dx $1\";;\n    \
+    \  \"\" | \"2\")\n        dx=\"$dx $1\";;\n      \"\" | \"3\")\n        dx=\"\
+    $dx $1\";;\n      \"\" | \"4\")\n        dx=\"$dx $1\";;\n      \"\" | \"5\")\n\
+    \        dx=\"$dx $1\";;\n      \"\")\n        dx=\"$dx $1\";;\n      *)\n   \
+    \     dx=\"$dx $2\";;\n    esac\n    shift\n  done\n  echo \"$dx\"", "    local\
+    \ d=\"['\\\"'$1'\\\"'\"\n    local n=1\n    for x in \"$@\"\n    do\n        let\
+    \ n=$n*$x\n        d+=\",'\\\"'$x'\\\"'\"\n    done\n    d+=\"]\" # close quote\n\
+    \    echo \"$d\"", "    local x=\"$1\"\n    shift 1\n    local s\n    local n\n\
+    \    local str\n    local d\n    local m\n    for ((n=0 ; n<$# ; n++)); do\n \
+    \       s=\"$1\"\n        if [[ $n == 0 ]]; then n=$(echo $s | wc -w); fi\n  \
+    \      s=$(n-${#s}+1)\n        m=$(echo $s | cut -c$s)\n        shift\n      \
+    \  d=()\n        for ((i=1 ; i <= $m; i++)) do\n            str=$( eval echo \\\
+    \"$s[${#s}]\\\")\n            d+=($str)\n        done\n        echo ${d[@]}\n\
+    \    done", "    local xs=($(echo \"$1\" | sed 's/ /\" \"/'))\n    local output\n\
+    \    output=()\n    for (( i=2; i<$((${#xs[@]} - 1)); i++ )); do\n        xs[i]=$(eval\
+    \ echo \"${xs[i]} * x^$i\" | bc)\n    done\n    echo \"${output[@]}\"", "  local\
+    \ xs=\"$1\"\n  shift\n  local d=$(( (\"$#\" > 1) ? \"$#\" : 0 ))\n  local ds=\"\
+    $(echo \"$d\" | sed 's/[^ ]//g')\"\n  if [[ $d -lt 2 ]]; then\n    echo -n \"\
+    '${ds}'\"\n  else\n    local fs=\n    for x in $xs\n    do\n      local f=\n \
+    \     local s=\n      for (( p=0; p<=$d; p++ )); do\n        if [[ -z \"${xs[$((\
+    \ p+1 ))]}\" ]]; then\n          f=$(( f + 1))\n        else\n          s=$((\
+    \ s + xs[$(( p+1 ))] ))\n        fi\n      done\n      fs=$(( fs + f ))\n    done\n\
+    \    echo -n \"'${ds}/${fs}\"\n  fi", "    local arg; local xs; local result;\
+    \ local arglen; local arglen2; local c=0\n    while [[ $# -gt 0 ]]; do\n     \
+    \   case $1 in\n            --*)\n                # A command-line argument\n\
+    \                arg=\"$1\"\n                shift\n            case $arg in\n\
+    \                -[a-z]*)\n                    # A command-line argument\n   \
+    \                 arglen=\"$(printf '%q' \"$arg\" | wc -c)\"\n               \
+    \     arglen2=$(( ${arglen} - 1))\n                    if [ $arglen2 -gt 1 ] ;\
+    \ then\n                        xs=\"$arg\"\n                        xs=\"$xs\
+    \ $(derivative \"$xs\")\"\n                    else\n                        xs=\"\
+    $arg\"\n                    fi\n                ;;\n                *)\n     \
+    \               # A variable on the command line\n                    xs=\"$xs\
+    \ $1\"\n                ;;\n            esac\n        done\n        result=\"\
+    $(xs $(eval \"printf '%s ' \\\"$xs\\\"\"))\"\n        echo \"$result\"", "  local\
+    \ xs=$1\n  local last\n  local poly=\"[\"\n\n  for (( i=1 ; i<$((${#xs[@]} - 1))\
+    \ ; i++ )); do\n    if [ \"$i\" -gt \"1\" ]; then\n      last=\"$i\"\n      poly=\"\
+    $poly \\\"${xs[$i]}\\\" +\\\"\"\n    else\n      poly=\"$poly \\\"${xs[$last]}\\\
+    \" \"\n    fi\n  done\n  poly=\"$poly \\\"1\\\"]\"\n  echo $poly", "    local\
+    \ xs=(\"$@\")\n\n    echo \"${xs[@]:2:${#xs[@]} - 1}\"", "  local xs=$1\n  shift\n\
+    \  local result=\n  for v in $xs\n  do\n    result+=($(head -n 1 <<< $v))\n  done\n\
+    \  echo $(head -n 1 <<< ${result[@]})", "  local xs=$1\n  local d=$1\n  while\
+    \ [ ${#xs[@]} -gt 0 ]; do\n    ((d+=xs[0]))\n    xs=${xs[@]:1}\n  done\n  echo\
+    \ \"$d\"", "  echo \"$1\" | while read xs; do\n    expr=$(xs -dm)\n    expr=\"\
+    ${expr//\\\"}\"\n    echo \"$expr\"\n  done", "    local xs=\"$1\"\n    local\
+    \ i=0\n    echo \"$xs\"\n    for x in $xs\n    do\n        let i++\n        echo\
+    \ \"$xs[i] * x^$i\"\n    done", "  local dx=$1\n  local i=$2\n  local xs=($3)\n\
+    \  local ds=\"\"\n  local s=$2\n  while [ $i -gt 0 ]; do\n    ds=\"$ds$xs[$((\
+    \ $i - 1 ))]\"\n    (( $i -= 1 ))\n    xs[$(( $i - 1 ))]=\"$(( $s * xs[$(( $i\
+    \ - 1 ))] ))\"\n  done\n  echo $ds", "  local input=\"$1\"\n  local xs=\"${input//[^0-9.+-]/}\"\
+    \n  local result=\"\"\n  for x in \"${xs[@]}\"; do\n    result+=\"\\\"$x\\\"\"\
+    \n  done\n  echo \"$result\"", "    local xs dx d dx dx dx dx\n    xs=( $(echo\
+    \ $1 | tr -s ' ' ) )\n    dx=${#xs[@]}\n    d=\"\\\"${xs[$((dx-1))]}\\\"\"\n \
+    \   for (( i=1; $(( i<dx )-1) ));\n    do\n        d=\"${d} \\\"${xs[$((dx-1-i))]}\\\
+    \" \"\n    done\n    d=\"${d} \\\"${xs[$((dx-1))]}\\\"\"\n    echo \"$d\"", " \
+    \ local -n arr=$1\n  local xs dstr\n  xs=()\n  dstr=\"\"\n  for item in ${arr[*]};\
+    \ do\n    local tmp=\n    [ ${item} -eq 0 ] && continue\n    if [[ $item == -1\
+    \ ]]; then\n      xs=(\"${xs[@]}\" $tmp)\n      continue\n    fi\n    tmp=${item}\n\
+    \    for (( i=1; ${#xs[*]} < ${#tmp}; i++ )); do\n      xs[${#xs[@]}]=$tmp\n \
+    \   done\n    arr=(\"${arr[@]}\" $item)\n  done\n  xs=(\"${xs[@]}\" $tmp)\n  while\
+    \ [ \"${#arr[@]}\" -gt 0 ]; do\n    dstr+=\"\\\"${arr[0]}\\\" \"\n    arr=(\"\
+    ${arr[@]:1:${#arr[@]}}\")\n  done\n  dstr=${dstr::-1}\n  echo $dstr", "  local\
+    \ -n xs=$1\n  local d=$(xs $(seq 0 $#-1)) \\\n       xs=\"${xs// / + }\" && eval\
+    \ printf '%q' \"${xs// / + }\" | sed 's/ / * /'\n  echo $d", "    local -n _x=$1\n\
+    \    local -n _des=${_x:1}\n    for ((i=1 ; i<${#_x[@]} ; i+=1)); do\n       \
+    \ _des+=\"${_x[$i]} * x^$((i-1))\"\n    done\n    echo \"$_des\"", "  local n=$1\n\
+    \  shift\n  local d=$1\n  shift\n  local res\n  local i\n  res=$(echo \"$d\" |\
+    \ awk \"{ print \\$1^$n }\")\n  for i in $(seq 0 $((${#res} - 1))); do\n    res[i]=\"\
+    \\\"${res[i]}\\\"\"\n  done\n  echo \"$res\"", "\tlocal xs=$1\n\tlocal d=$1\n\t\
+    shift\n\techo $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $(( $((\
+    \ $(( $(( $(( $((", "\tlocal xs ds n r\n\txs=($1)\n\tn=$((${#xs[@]}-1))\n\tds=\"\
+    \"\n\tfor i in $(seq 1 $n); do\n\t\tr=$((xs[$i] + xs[$((i+1))] * x))\n\t\tds=\"\
+    $ds \\\"$r\\\"\"\n\tdone\n\techo $ds", "  local OPTS=$1\n  shift\n  echo \"$(eval\
+    \ echo \"${OPTS}\")\"", "  local xs=($@)\n  local result=\n  local coef=1\n  local\
+    \ i=$((${#xs[@]} - 1))\n  while [[ ${#xs[@]} > 0 ]]\n  do\n    if [[ ${xs[0]}\
+    \ == \"\" ]]; then\n      result+=(\"${xs[1]}\")\n      xs=(\"${xs[@]:1}\")\n\
+    \      coef=1\n    elif [[ ${xs[0]} < ${coef} ]]; then\n      result+=(\"${xs[0]}\
+    \ * ${xs[1]}\")\n      coef=${xs[0]}\n    elif [[ ${xs[0]} > ${coef} ]]; then\n\
+    \      result+=(\"${xs[1]} * ${xs[0]}\")\n      coef=${xs[1]}\n    else\n    \
+    \  result+=(\"${xs[1]}\")\n      xs=(\"${xs[@]:1}\")\n      coef=1\n    fi\n \
+    \   i=$((i - 1))\n  done\n  result+=(${xs[0]})\n  echo ${result[@]}", "  xs=\"\
+    ${1}\"\n  xs=${xs// / }\n  xs=$(xs -1 | tr '\\n' ' ')\n  echo $xs\n  result=$(echo\
+    \ $xs | tr ' ' '*' | tr ',' '+' | xargs echo -n)\n  echo \"$result\"", "  local\
+    \ xs d r\n  xs=$( echo \"$1\"; echo \"$2\" )\n  d=$(eval echo \"$1\"; echo \"\
+    $2\")\n  r=\"$(( d*d*d*d*d ))\"\n  while (( ${#xs[@]} > 0 )); do\n    d=\"$((\
+    \ d*d*d ))\"\n    xs=$(echo \"${xs[@]:0:$(( ${#xs[@]} - 1 ))}\" | paste -s -d\
+    \ \" \" -)\n  done\n  echo $r", "    xs=\"${1}\"\n    xs=\"${xs#\"${xs}\"\"}\"\
+    \n    IFS=' ' read -r -a xs <<< \"$xs\"\n    IFS='x' echo \"${xs[@]}\"", "  local\
+    \ -r input_list=$(echo \"$1\" | sed 's/ /\",\"/g')\n  local -r input_list_no_spaces=$(echo\
+    \ \"$1\" | sed 's/^ //g' | sed 's/ $//g')\n  local -r input_list_no_spaces_no_spaces=$(echo\
+    \ \"$input_list_no_spaces\" | sed 's/^ //g' | sed 's/ $//g')\n  local -r input_list_no_spaces_no_spaces_no_spaces=$(echo\
+    \ \"$input_list_no_spaces_no_spaces\" | sed 's/^ //g' | sed 's/ $//g')\n  local\
+    \ -r input_list_no_spaces_no_spaces_no_spaces_no_spaces=$(echo \"$input_list_no_spaces_no_spaces_no_spaces\"\
+    \ | sed 's/^ //g' | sed 's/ $//g')\n  local -r input_list_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces=$(echo\
+    \ \"$input_list_no_spaces_no_spaces_no_spaces_no_spaces\" | sed 's/^ //g' | sed\
+    \ 's/ $//g')\n  local -r input_list_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces=$(echo\
+    \ \"$input_list_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces\" | sed 's/^\
+    \ //g' | sed 's/ $//g')\n  local -r input_list_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces=$(echo\
+    \ \"$input_list_no_spaces_no_spaces_no_spaces_no_spaces_no_spaces\" | sed 's/^\
+    \ //g' | sed 's/ $//g')\n\n  local -r output=$(\n    echo $(($(echo \"${input_list}\"\
+    \ | sed 's/^ //g' | sed 's/ $//g') | xargs -n 1 echo \"${input_list_no_spaces}\"\
+    \  | xargs -n 1 echo \"${input_list_no_spaces_no_spaces}\"))\n    echo $(($(echo\
+    \ \"${input_list}\" | sed 's/^ //g' | sed 's/ $//g') | xargs -n 1 echo \"${input_list_no_spaces_no_spaces_no_spaces}\"\
+    ))\n    echo $(($(echo \"${input_list}\" | sed 's/^ //g' | sed 's/ $//g') | xargs\
+    \ -n 1 echo \"${input_list_no_spaces_no_spaces_no_spaces_no_spaces}\"))\n    echo\
+    \ $(($(echo \"${input_list}\" | sed 's/^ //g' | sed 's/ $//g') | x", "    local\
+    \ s=$1\n    local d=$2\n    local last=0\n    local ds=\"\"\n    local i=0\n \
+    \   local temp\n    while (( i < ${#s} )) ; do\n        case \"${s[i]}\" in\n\
+    \            \"$last\") ;; # last term already in derivative.\n              \
+    \  [ -z \"$ds\" ] && ds=\"$d \"\n                (( i-- ))\n                ;;\n\
+    \            *)\n                temp=$(eval echo \"\\$$i\")\n               \
+    \ case \"$temp\" in\n                    \"\") ;;\n                    *)\n  \
+    \                      ds=\"$ds \\\"$temp\\\"\"\n                        (( i++\
+    \ ))\n                        ;;\n                esac\n                ;;\n \
+    \       esac\n        (( i++ ))\n    done\n    echo \"$ds\"", "\tset -f\n\tIFS='\
+    \ ' read -ra ADDR <<< \"$1\"\n\tIFS='^'\n\techo \"${ADDR[*]:(-$#ADDR)}\"", " \
+    \   local poly=\"$1\"\n    local d=$( \\\n        echo \"$poly\" | sed -r \"s/^([[:space:]]+)\\\
+    s(\\S+)\\s(\\S+)\\s(\\S+)\\s(\\S+)/'\\\"'\\\"'\\\"\\1'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"\\1\\2'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\
+    \"'\\\"'\\\"'\\1\\3'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\1\\4'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\1\\5'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\1\\6'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"'\\1\\7'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"'\\1\\8'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"'\\1\\9'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"'\\10'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\
+    \"'\\\"'\\\"'\\\"'\\11'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\12'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\
+    \"'\\\"'\\\"'\\\"'\\13'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"\
+    '\\\"'\\\"'\\\"'\\\"'\\14'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\
+    \"'\\\"'\\\"'\\15'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'\\\"'", "  local\
+    \ x=$1  ys=()\n  read -a xs <<< \"$1\" \n  while ((${#xs[@]})); do\n    echo \"\
+    $xs[$((${#xs[@]} - 1))]$(\n      while ((${#xs[@]} - 1)) ; do\n        (( ${#ys[@]}\
+    \ < ${#xs[@]} )) && ys+=(\"0\")\n        (( ${#ys[@]} < ${#xs[@]} )) && ys+=(\"\
+    0\")\n      done\n      echo \"$xs[$((${#xs[@]} - 1))]\" \\\n        | sed -e\
+    \ 's/^/\"${ys[@]}\"/' -e 's/ $/\"${ys[@]}^\"/'\n    )\"\n    shift\n  done", " \
+    \   set -x # enable debugging\n    # Convert the argument to a list\n    set --\
+    \ $1 \n    local first=1\n\n    # Convert the first element to numbers\n    while\
+    \ [ $# -gt 0 ]; do\n        case \"$1\" in\n            # Handle \"x^n\" as \"\
+    x**n\" where n is an integer\n            \"^\") shift; break ;;\n           \
+    \ # Handle \"x^n\" as \"x**n\" where n is a float\n            *\".\"*) local\
+    \ n=\"${1#*.}\"; shift; break ;;\n            # Handle \"x^n\" as \"x**n\" where\
+    \ n is a string\n            *\") local n=\"$(echo \"$1\" | sed 's/^\\^//')\"\
+    \ ; shift; break ;;\n            # Handle \"x^n\" as \"x**n\" where n is negative\n\
+    \            *[-]) local n=\"-${1#-}\"; shift; break ;;\n            # Handle\
+    \ \"x^n\" as \"x**n\" where n is positive\n            *[+]) local n=\"+${1#$+}\"\
+    ; shift; break ;;\n            # Handle \"x^n\" as \"x**n\" where n is negative\n\
+    \            *[-]*) local n=\"$(echo \"$1\" | sed 's/^-//')\" ; shift; break ;;\n\
+    \            # Handle \"x^n\" as \"x**n\" where n is positive\n            *[+]*)\
+    \ local n=\"$(echo \"$1\" | sed 's/^+//')\" ; shift; break ;;\n            *)\n\
+    \                if [ \"$first\" = 1 ] ; then \n                    echo \"$1\"\
+    \ # return the argument unchanged\n                else\n                    echo\
+    \ \"$1^\"\n                fi\n                first=0\n                break\n\
+    \            ;;\n        esac\n    done\n\n    # Convert the first element to\
+    \ a string \"n\"\n    local n=\"$1\"\n    # Remove the \"^\"\n    set -- $n\n\
+    \    local exp=\"$1\"\n    # Convert the first element to a number\n    local\
+    \ n=\"$1\"\n    # Remove the \"+\"\n    set -- $n\n    local pos=\"$1\"\n\n  \
+    \  # Convert the first element to a number \"n\"\n    local n=\"$1\"\n    # Remove\
+    \ the \"-\"\n    set -- $n\n    local neg=\"$1\"\n\n    # Handle \"x^n\" as \"\
+    x**n\" where n is an integer\n    if [ \"$exp\" = \"$n\" ] ; then\n        echo\
+    \ \"$n\"\n    # Handle \"x^n\" as \"x**n\" where n is a float\n    elif [ \"$exp\"\
+    \ = \"$n", "    local xs i n m result\n    xs=$(reverse)\n    IFS=' ' read -a\
+    \ x <<< \"$1\"\n    result=()\n    for ((i=0; i<${#xs[@]}; i+=1)); do\n      \
+    \  n=x[i]\n        m=i+1\n        while [[ $(( m+1 )) -le ${#xs[@]} ]] && [[ $n\
+    \ -gt $xs[m] ]]; then\n            n=$((n*$xs[m]))\n            m=$((m+1))\n \
+    \       done\n        result=(\"${result[@]}\" $n)\n    done\n    echo \"${result[@]}\"",
+  "  local xs=$1 d\n  d=$(dd if=\"$1\" bs=1 count=5 2>/dev/null)\n  echo \"$d\""]
 stop_tokens:
 - "\n}"

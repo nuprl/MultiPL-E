@@ -10,6 +10,1945 @@ tests: "}\n\ncandidate() {\n    parse_nested_parens \"$@\"\n}\n\nset -e\nrun_tes
   \ {\n    [[ $(candidate \"(()()) ((())) () ((())()())\") = \"2 3 1 3\" ]]\n    [[\
   \ $(candidate \"() (()) ((())) (((())))\") = \"1 2 3 4\" ]]\n    [[ $(candidate\
   \ \"(()(())((())))\") = \"4\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local in_parens=false\n  local opening_bracket=0\n  local closing_bracket=0\n\
+    \  local level=0\n  local levels=()\n  while read -r line; do\n    levels+=(\"\
+    ${level}\")\n    if [[ ${line} == '(' || ${line} == ')' ]]; then\n      in_parens=!in_parens\n\
+    \    elif  ${in_parens} ; then\n      if [[ ${line} == '(' && ${opening_bracket}\
+    \ > 0 ]]; then\n        level=$((${level} + 1))\n      elif [[ ${line} == ')'\
+    \ && ${closing_bracket} > 0 ]]; then\n        level=$((${level} - 1))\n      fi\n\
+    \      if [[ ${level} == 0 ]]; then\n        level=$((${level} + 1))\n      fi\n\
+    \    else \n      level=$((${level} + 1))\n    fi\n  done < <(echo \"$1\" | tr\
+    \ '()' '{}' | sort --field-separator=' ' --key=2,3)\n  for (( i=0; i<${#levels[@]};\
+    \ i++ )); do\n    echo ${levels[$i]}\n  done", "  local paren_level=0\n  local\
+    \ paren_pairs=()\n  local paren_char=\"${1#()}\"\n  local i=0 count=0\n  while\
+    \ [ ${i} -le ${#1} ]\n  do\n    local char=\"${1:i:1}\"\n    if [ \"${paren_char}\"\
+    \ == \"${char}\" ]\n    then\n      ((i++))\n      ((paren_level++))\n    elif\
+    \ [ \"${paren_char}\" == \"}\" ]\n    then\n      ((i--))\n      ((paren_level--))\n\
+    \      if [ \"$paren_level\" -eq 0 ]\n      then\n        paren_pairs+=(${paren_pairs[@]})\n\
+    \        ((count++))\n      fi\n    elif [ \"${paren_char}\" == \")\" ]\n    then\n\
+    \      if [ \"$paren_level\" -eq 0 ]\n      then\n        ((count++))\n      else\n\
+    \        ((paren_level++))\n      fi\n    else\n      ((paren_level++))\n    \
+    \  ((i--))\n    fi\n  done\n  if [ \"$paren_level\" -eq 0 ]\n  then\n    paren_pairs+=(${paren_pairs[@]})\n\
+    \    count=$((${count}+1))\n  fi\n  echo \"${paren_pairs[@]}\"", "  local -n arr=(\
+    \ )\n  while read line; do\n    arr+=( $(echo $line | cut -d' ' -f1) )\n  done\
+    \ < <(echo $1 | sed 's/\\([^)]*\\)\\( *\\)\\(\\( *\\)\\( *\\)\\( *\\)\\( *\\)\\\
+    ( *\\)\\( *\\)/\\2/g' | sort -n)\n  echo \"${arr[@]}\"", "  local paren_groups=\"\
+    $1\";\n  local depth=\"0\"\n  local max_depth=\"$(expr ${#paren_groups} / 2)\"\
+    ;\n  local current_depth=\"$(expr ${depth} + 1)\"\n\n  # initialize return value\n\
+    \  local ret=\"()\";\n\n  # process first half of paren_groups to find the deepest\
+    \ paren group\n  while [[ $current_depth -le $max_depth ]]; do\n    local paren_group=\"\
+    ${paren_groups:$((current_depth * 2))}\"\n    local paren_group_length=$(expr\
+    \ length \"$paren_group\")\n\n    if [[ \"$paren_group\" == *\\( ]]; then\n  \
+    \    # we have a left paren group, increment current_depth\n      current_depth=$(expr\
+    \ ${current_depth} + 1)\n    else\n      # we have a right paren group, decrement\
+    \ current_depth\n      current_depth=$(expr ${current_depth} - 1)\n    fi\n\n\
+    \    local paren_group_left_length=$(expr length \"$paren_group\") - $((paren_group_length-1))\n\
+    \    local left_paren_group=${paren_group:$((current_depth * 2))}\n\n    if [[\
+    \ \"$paren_group_left_length\" == *[^(] ]]; then\n      ret=\"${ret},${left_paren_group}\"\
+    \n    else\n      ret=\"${ret},\\\"${left_paren_group}\\\"\";\n    fi\n  done\n\
+    \n  # process second half of paren_groups to find inner paren group\n  for paren_group\
+    \ in \"${paren_groups:$((current_depth * 2 + 1))}\"; do\n    local paren_group_length=$(expr\
+    \ length \"$paren_group\")\n\n    if [[ \"$paren_group\" == *\\( ]]; then\n  \
+    \    # we have a left paren group, increment current_depth\n      current_depth=$(expr\
+    \ ${current_depth} + 1)\n    else\n      # we have a right paren group, decrement\
+    \ current_depth\n      current_depth=$(expr ${current_depth} - 1)\n    fi\n\n\
+    \    local paren_group_left_length=$(expr length \"$paren_group\") - $((paren_group_length-1))\n\
+    \    local left_paren_group=${paren_group:$((current_depth * 2))}\n\n    if [[\
+    \ \"$paren_group_left_length\" == *[^(] ]]; then\n      ret=\"${ret},${left_paren_group}\"\
+    \n    else\n      ret=\"${ret},\\\"${left_paren_group}\\\"\";\n    fi\n  done\n\
+    \n  # remove trailing comma\n  ret=${ret:0:-1};\n\n  # return value\n  echo \"\
+    $ret\";", "    local parens_group=$1\n\n    local level=1\n    local paren_level=0\n\
+    \    local max_level=0\n    local parens=\"\"\n    while [[ $parens_group ]];\
+    \ do\n        if [[ -n \"${paren_level}\" ]]; then\n            level=$((level+paren_level))\n\
+    \        fi\n        if [[ -n \"${level}\" ]]; then\n            if [[ $((level\
+    \ > max_level)) ]]; then\n                max_level=$level\n                parens=$parens\n\
+    \            fi\n        fi\n        if [[ \"${parens_group:0:1}\" == \"(\" ]]\
+    \ && [[ \"${parens_group:0:1}\" != \")\" ]]; then\n            paren_level=$((paren_level+1))\n\
+    \        fi\n        if [[ \"${parens_group:0:1}\" == \")\" ]]; then\n       \
+    \     paren_level=$((paren_level-1))\n        fi\n        parens_group=${parens_group:1}\n\
+    \    done\n    echo \"$max_level\" # Return maximum level\n    echo \"$parens\"\
+    \  # Return deepest level of nesting", "    local max_level level level_stack\n\
+    \    local nested_paren_count paren_count paren_level\n\n    level_stack=()\n\
+    \    max_level=0\n    nested_paren_count=0\n    paren_count=0\n    paren_level=0\n\
+    \    level=0\n    while read line; do\n        case \"$line\" in\n           \
+    \ (\\()) paren_level=$((++paren_level)) ;;\n            \\)) paren_level=$((paren_level>max_level?max_level:paren_level))\
+    \ ;;\n            *)\n                if [[ $paren_level -eq 0 ]] ; then\n   \
+    \                 level_stack=(\"${level_stack[@]}\" \"$level\")\n           \
+    \     else\n                    level_stack=(\"${level_stack[@]:0:$((level_stack[@]-1))}\"\
+    \ \"$level\")\n                    max_level=$((++level))\n                fi\n\
+    \                level_stack=(\"${level_stack[@]}\" \"$level\")\n            \
+    \    level_stack=(\"${level_stack[@]}\" \"$level\")\n                level_stack=(\"\
+    ${level_stack[@]}\" \"$level\")\n                level_stack=(\"${level_stack[@]}\"\
+    \ \"$level\")\n                level_stack=(\"${level_stack[@]}\" \"$level\")\n\
+    \                level_stack=(\"${level_stack[@]}\" \"$level\")\n            \
+    \    level_stack=(\"${level_stack[@]}\" \"$level\")\n                level_stack=(\"\
+    ${level_stack[@]}\" \"$level\")\n                level_stack=(\"${level_stack[@]}\"\
+    \ \"$level\")\n                level_stack=(\"${level_stack[@]}\" \"$level\")\n\
+    \                level_stack=(\"${level_stack[@]}\" \"$level\")\n            \
+    \    level_stack=(\"${level_stack[@]}\" \"$level\")\n                level_stack=(\"\
+    ${level_stack[@]}\" \"$level\")\n                level_stack=(\"${level_stack[@]}\"\
+    \ \"$level\")\n                level_stack=(\"${level_stack[@]}\" \"$level\")\n\
+    \                level_stack=(\"${level_stack[@]}\" \"$level\")\n            \
+    \    level_stack=(\"${level_stack[@]}\" \"$level\")\n                level_stack=(\"\
+    ${level_stack[@]}\" \"$level\")\n                level_stack=(\"${level_stack[@]}\"\
+    \ \"$level\")\n                level_stack=(\"${level_stack[@]}\" \"$level\")\n\
+    \                level_stack=(\"${level_stack[@]}\" \"$level\")\n            \
+    \    level_stack=(\"${level_stack[@]}\" \"$level\")\n                level_stack=(\"\
+    ${level_", "  local parens=\"${1:-()()}\"\n  local levels=0\n  while [[ \"${parens}\"\
+    \ =~ [^()]*\\( ]]; do\n    local levels=$(expr ${levels} + 1)\n    parens=\"${parens%%\\\
+    ([^()]*\\)}\"\n  done\n  echo \"$levels\"", "    local group=\"\"\n    local count=0\n\
+    \    for c in $1; do\n        if [[ \"$c\" =~ ^'(' && \"$group\" ]]; then\n  \
+    \          ((count++))\n        elif [[ \"$c\" =~ ^'(' && ! \"$group\" ]]; then\n\
+    \            group=\"$c\"\n        elif [[ \"$c\" =~ ^')' && ! \"$group\" ]];\
+    \ then\n            group=\"$c\"\n        fi\n    done\n    echo \"$count\"",
+  "    local IFS=$'\\n'\n    local group\n    local max_nesting=0\n    groups=($1)\n\
+    \    while [ -n \"${groups[*]}\" ]; do\n        group=${groups[*]}\n        local\
+    \ i\n        nesting=$((${#group} - 1))\n        local j\n        for (( i = 0;\
+    \ i < nesting; ++i )); do\n            for (( j = i + 1; j < nesting; ++j ));\
+    \ do\n                if [ \"${groups[i]}\" = \"(\" && \"${groups[j]}\" = \")\"\
+    \ ]; then\n                    max_nesting=$((max_nesting + 1))\n            \
+    \        break\n                fi\n            done\n        done\n        groups=(\"\
+    ${groups[@]:${nesting}:${nesting}}\"/*)\n    done\n    echo \"${groups[*]}\"",
+  "\tlocal -i i\n\tlocal -a result=()\n\tlocal -a groups=()\n\tlocal -a nested_paren_levels=()\n\
+    \tlocal -i max_level=0\n\tlocal -i num_parens=0\n\tlocal -i paren_level=0\n\t\
+    local in_parens=0\n\tlocal i\n\n\twhile [[ $1 ]]; do\n\t\tin_parens=1\n\t\tgroups[num_parens]=$1\n\
+    \t\tnum_parens+=1\n\t\twhile [[ \"$groups[num_parens]\" =~ ^\\(.*\\)$ ]]; do\n\
+    \t\t\tgroups[num_parens]=$( eval echo \\\"\\${BASH_REMATCH[1]}\\\" )\n\t\t\tnum_parens+=1\n\
+    \t\tdone\n\t\tif [[ -n ${groups[num_parens]} ]]; then\n\t\t\tnested_paren_levels[paren_level]=\"\
+    ${groups[num_parens]}\"\n\t\t\twhile [[ $nested_paren_levels[$paren_level] ]];\
+    \ do\n\t\t\t\tmax_level=$(( ${max_level} + 1 ))\n\t\t\t\tparen_level=$(( ${paren_level}\
+    \ + 1 ))\n\t\t\t\tnested_paren_levels[$paren_level]=\"${nested_paren_levels[$paren_level]}\"\
+    \n\t\t\tdone\n\t\telse\n\t\t\tmax_level=$(( ${max_level} + 1 ))\n\t\tfi\n\t\t\
+    result[$i]=\"${max_level}\"\n\t\tshift\n\tdone\n\t[[ -n ${nested_paren_levels[*]}\
+    \ ]] || return 1\n\techo \"${nested_paren_levels[*]}\"\n\techo \"${result[@]}\"",
+  "    local parens\n    parens=$($1 |\n    awk -F'()' '{\n        num=split($2, temp,\
+    \ \"\");\n        if (num==0) {\n            print $2\n        } else {\n    \
+    \        for (i=1; i<=num; i++) {\n                printf(\"\\\"%s\\\"\", temp[i])\n\
+    \            }\n            print \"\"\n        }\n    }'\n    )\n    echo $parens",
+  "  local -n parens_levels=\"${1}\"\n  local level=0\n  local max_level=0\n  local\
+    \ group=\"\"\n\n  # Remove leading and trailing spaces.\n  parens_levels=\"${parens_levels#\"\
+    ${1}\"}\"\n  parens_levels=\"${parens_levels%\"${1}\"}\"\n\n  for paren in \"\
+    ${parens_levels}\" ; do\n    case \"${paren}\" in\n      \"(\") ;;\n      \"(\"\
+    \ \")\") ;;\n      \"(()\") ;;\n      \"((\")) ;;\n      \"(()()\") ;;\n     \
+    \ \"((())\") ;;\n      \"(()()()\") ;;\n      \"((())()\") ;;\n      \"((())()()\"\
+    ) ;;\n      \"((())()()()\") ;;\n      \"(((()))\") ;;\n      \"(()(((()))) ;;\n\
+    \      \"((()(()))) ;;\n      \"(()((()(()))) ;;\n      \"((()(()(()))) ;;\n \
+    \     \"(((()(()(())))) ;;\n      \"((()(((()(())))) ;;\n      \"(()((()(()((()(()))))))\
+    \ ;;\n      \"((()(()(((()(()((()))))))) ;;\n      \"(((()(()((()(((()(()((()))))))))))))\
+    \ ;;\n      \"((()(()(((()(((()(((()(((()(((()(()(())))))))))))))))))))) ;;\n\
+    \    esac\n\n    (( ++level )) || continue\n\n    case \"${paren}\" in\n     \
+    \ \"(\") max_level=\"$(( max_level + 1 ))\" ;;\n      \"(\" \")\" max_level=\"\
+    $(( max_level + 2 ))\" ;;\n      \"(()\" max_level=\"$(( max_level + 3 ))\" ;;\n\
+    \      \"((\") max_level=\"$(( max_level + 4 ))\" ;;\n      \"(()()\" max_level=\"\
+    $(( max_level + 5 ))\" ;;\n      \"((())\" max_level=\"$(( max_level + 6 ))\"\
+    \ ;;\n      \"(()()()\" max_level=\"$(( max_level + 7 ))\" ;;\n      \"((())()\"\
+    \ max_level=\"$(( max_level + 8 ))\" ;;\n      \"((())()()\" max_level=\"$(( max_level\
+    \ + 9 ))\" ;;\n      \"((())()()()\" max_level=\"$(( max_level + 10 ))\" ;;\n\
+    \      \"((())()()()()\" max_level=\"$(( max_level + 11 ))\" ;;\n      \"(((()))\"\
+    \ max_level=\"$(( max_level + 12 ))\" ;;", "  local max_level=\"-1\"\n  while\
+    \ IFS= read -r; do\n    IFS=' '\n    local level=$(( $( echo $1 | sed 's/\\([^)]*\\\
+    )//g' | awk -F'()' '{ print \"\\\"$1\"-\"length($1)-$2 }\" }' | sort -n | tail\
+    \ -1 ) ))\n    if [ \"$level\" -le \"$max_level\" ] ; then\n      max_level=$level\n\
+    \      echo \"$level\"\n    fi\n  done", "    local str=\"$1\"\n    local depth=0\n\
+    \    local output\n    local i\n\n    for (( i=1; i<${#str}; i++ )); do\n    \
+    \    if [[ \"${str:$i:1}\" == \"(\" ]] && (( depth < 1 )); then\n            output=\"\
+    $output${str:$i:1}\"\n            depth=${#output}\n        fi\n    done\n   \
+    \ echo \"$output\"", "  echo \"$1\" | sed -E 's/^[^(]*\\((?<n>)\\)[^(]*\\((?<n>)\\\
+    )[^(]*\\((?<n>)\\)[^(]*\\((?<n>)\\)$/\\\n    \"'${n//(/2}\"', '\"2\"'\"'\"${n//\\\
+    ((/}'\"${n//\\))/}'\"${n//\\)/}'\"${n//\\)/}'\"${n//\\)/}'\"", "    local paren_level=0\n\
+    \    local paren_contents=()\n\n    while IFS= read -r line; do\n        if [[\
+    \ $line =~ ^[(]([^()]|$)$ ]]; then\n            paren_contents=(\"${paren_contents[@]/#/$line}\"\
+    )\n        elif [[ $line =~ ^[)]$ ]]; then\n            ((paren_level--))\n  \
+    \      else\n            paren_contents=(\"${paren_contents[@]/#/$line}\")\n \
+    \       fi\n    done <<< \"$1\"\n\n    echo \"${paren_contents[@]/#/$paren_level}\"",
+  "  local tmp\n  tmp=\"$(echo \"$1\" | sed 's/[(]\\(.*\\)[(]/\\1/' | sed 's/[)]/\\\
+    1/' | sed 's/[(]\\([^(]*\\)[(]/\\1/' | sed 's/[)]\\([^(]*\\)[(]/\\1/' | sed 's/[(]\\\
+    ([^(]*\\)[)]/\\1/' | sed 's/[)]\\([^(]*\\)[)]/\\1/')\"\n  echo \"$tmp\"", "  \
+    \  local nested_parens_stack=\"$1\"\n    if [ \"$nested_parens_stack\" == \"()\"\
+    \ ]; then\n        echo \"0\"\n        return\n    fi\n\n    local nested_parens_stack_count=\"\
+    ${nested_parens_stack##*()}\"\n    if [ \"$nested_parens_stack_count\" == \"0\"\
+    \ ]; then\n        echo 1\n        return\n    fi\n    local nested_parens_stack_depth=\"\
+    ${nested_parens_stack_count%}\"\n\n    local nested_parens_stack_top=\"${nested_parens_stack:0:nested_parens_stack_depth}\"\
+    \n\n    local nested_parens_stack_further_depth=\"${nested_parens_stack_count#*()}\"\
+    \n    local nested_parens_stack_further_top=\"${nested_parens_stack:nested_parens_stack_depth}\"\
+    \n    if [ \"$nested_parens_stack_further_depth\" == \"0\" ]; then\n        echo\
+    \ \"$nested_parens_stack_top\"\n        return\n    fi\n    local nested_parens_stack_further_top=\"\
+    ${nested_parens_stack:nested_parens_stack_depth+1}\"\n    local nested_parens_stack_next_level_top=\"\
+    $nested_parens_stack_further_top:nested_parens_stack_further_depth\"\n    local\
+    \ nested_parens_stack_next_level_top_count=\"${nested_parens_stack_next_level_top##*()}\"\
+    \n\n    local nested_parens_stack_next_level_top_depth=\"${nested_parens_stack_next_level_top%}\"\
+    \n    local nested_parens_stack_next_level_top_further_depth=\"${nested_parens_stack_next_level_top_count#*()}\"\
+    \n    local nested_parens_stack_next_level_top_further_top=\"${nested_parens_stack_next_level_top:nested_parens_stack_next_level_top_depth}\"\
+    \n    if [ \"$nested_parens_stack_next_level_top_further_depth\" == \"0\" ]; then\n\
+    \        echo \"$nested_parens_stack_next_level_top_further_top\"\n        return\n\
+    \    fi\n    local nested_parens_stack_next_level_top_further_top_count=\"${nested_parens_stack_next_level_top_further_top##*()}\"\
+    \n\n    local nested_parens_stack_next_level_top_further_top_depth=\"${nested_parens_stack_next_level_top_further_top_count%}\"\
+    \n    local nested_parens_stack_next_level_top_further_top_further_depth=\"${nested_parens_stack_next_level_top_further_top_count#*()}\"\
+    \n    local nested_parens_stack_next_level_top_further_top_further_top=\"${nested_parens_stack_next_level_top_further_top_count:nested_parens_stack_next_level_top_further_top_depth",
+  "    local str=\"$1\"\n    local max_depth=0\n    local depth=0\n    local i=0\n\
+    \    while [ $i -lt ${#str} ]; do\n        local c=${str:$i:1}\n        if [ \"\
+    $c\" = \"(\" ] && [ \"$depth\" -lt \"$max_depth\" ]; then\n            depth=$((depth+1))\n\
+    \        elif [ \"$c\" = \")\" ] && [ \"$depth\" -gt \"$max_depth\" ]; then\n\
+    \            depth=$((depth-1))\n        fi\n        i=$((i+1))\n    done\n  \
+    \  echo $depth", "  local str=$1\n  local paren_stack=0\n  local max_depth=0\n\
+    \n  while [[ $str != '' ]]; do\n    if [[ \"$str\" =~ (\\([^)]*\\)) ]]; then\n\
+    \      local depth=${#BASH_REMATCH[0]}\n      if (( depth > max_depth )); then\n\
+    \        max_depth=$depth\n      fi\n      (( paren_stack += depth ))\n    fi\n\
+    \n    local i\n    for (( i=1; i<=paren_stack; i++ )); do\n      local j=1\n \
+    \     while [[ $str != '' ]]; do\n        if [[ \"$str\" =~ (\\([^)]*\\)[^)]*)\
+    \ ]]; then\n          local new_depth=${#BASH_REMATCH[0]}\n          if (( new_depth\
+    \ > max_depth )); then\n            max_depth=$new_depth\n          fi\n     \
+    \     (( j += new_depth ))\n        fi\n        let j=$j-1\n        (( i-=j ))\n\
+    \        str=${str%)} # Pop last matching parenthesis\n      done\n      if ((\
+    \ i < 0 )); then\n        break\n      fi\n    done\n\n    if [[ $str != '' ]];\
+    \ then\n      echo \"\\\"$max_depth\\\"\"\n    fi\n    str=${str%%)} # Pop last\
+    \ matching parenthesis\n  done", "    local IFS=$'\\n'\n    local max_nesting=0\n\
+    \    local level\n    while read -r line; do\n        if [[ $line =~ ^\\(\\(.*\\\
+    )\\) ]]; then\n            # Find largest level of nesting in the parentheses.\n\
+    \            level=${line#*\\(}\n            max_nesting=$((level > max_nesting\
+    \ ? level : max_nesting))\n        fi\n    done <<< \"$1\"\n\n    # Output the\
+    \ result to the terminal\n    echo \"$max_nesting\"", "    local IFS='('\n   \
+    \ local nested_paren_group\n    while read -r -d '' nested_paren_group; do\n \
+    \       local num_paren=0\n        read -r -d '' num_paren <&${nested_paren_group}\n\
+    \        num_paren=(\"$num_paren\")\n        if (( \"${num_paren}\" )); then\n\
+    \            for (( i=0; i<${#num_paren}; i++ )); do\n                (( \"${i}\"\
+    \ > \"${num_paren}\" )) && nested_paren_group+=\" \"\n            done\n     \
+    \   fi\n        echo \"${nested_paren_group}\"\n    done <<<\"$1\"", "    local\
+    \ STR=$1\n    local max_depth =0\n    local max_depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _\n    local depth _\n    local depth _\n \
+    \   local depth _\n    local depth _", "    local parens=$1\n\n    local level=0\n\
+    \    local tmp\n    while read -r tmp ; do\n        if [[ $parens =~ (\\()((\\\
+    ()){0,$level}([^()]*)(\\())? ]]; then\n            local max_level=\"${BASH_REMATCH[2]}\"\
+    \n            if [[ $max_level -ge $level ]]; then\n                level=$max_level\n\
+    \            fi\n        fi\n    done <<<\"$parens\"\n\n    echo \"$level\"",
+  "  # Parsing is done in two stages: first we split the string by parentheses\n \
+    \ # and then we count nesting levels.\n  local tmp\n  local num_parens\n  local\
+    \ parens\n  local nesting_levels\n  tmp=${1//[^()]+/ }\n  # Make sure there is\
+    \ a set of parentheses in the string.\n  if [[ ! \"$tmp\" =~ ^(\\([^()]+\\)|\\\
+    {\\{[^{}]+\\}\\})* ]]; then\n    return 0\n  fi\n  num_parens=${#tmp}\n  parens=${tmp:\
+    \ -1}\n  nesting_levels=${parens:0:$num_parens}\n  # Print the nested levels\n\
+    \  echo \"$nesting_levels\"", "    local input=\"${1}\"\n    local max_level=0\n\
+    \    local levels=()\n    while read -r level_str; do\n        local level_int=\"\
+    ${level_str% *}\"\n        local level_str=\"${level_str#* }\"\n        if [[\
+    \ \"${level_int}\" -gt \"${max_level}\" ]]; then\n            levels=( \"${levels[@]}\"\
+    \ \"${level_int}\" )\n            max_level=\"${level_int}\"\n        fi\n   \
+    \ done < <(echo \"${input}\" | sed \"s/^ *//g\" | grep -o \"\\( *\\)\" | sed 's/\
+    \ *\\)/\\1/g' | sort -n)\n\n    local result=\"\"\n    for level in \"${levels[@]}\"\
+    ; do\n        local inner_levels=()\n        for inner_level in \"${levels[@]:0:${level}-1}\"\
+    ; do\n            inner_levels=( \"${inner_levels[@]}\" $(echo \"${levels}\" |\
+    \ sed \"s/^ *//g\" | grep -o \"\\( *\\)\" | sed \"s/ *\\)/\\1/g\" | sort -n |\
+    \ uniq | wc -l) )\n        done\n        if [[ \"${#inner_levels[@]}\" -gt \"\
+    ${max_level}\" ]]; then\n            inner_levels=( \"${inner_levels[@]}\" \"\
+    ${max_level}\" )\n        fi\n        result=\"$(IFS=\",\"; echo \"${result},${inner_levels[@]:0:${level}-1}\"\
+    )\"\n    done\n    echo ${result}", "    local s=$1\n    local r=0\n    while\
+    \ [[ \"$s\" =~ (\\()(.+)\\) ]]\n    do\n        local c=$BASH_REMATCH\n      \
+    \  r=$((r+1))\n        s=${BASH_REMATCH#\\}\n        if [[ -n $s ]]\n        then\n\
+    \            s='\"$(echo \"$s\" | wc -c)\"'\n            s=$((${#s}+1))\n    \
+    \    fi\n        s=$((${s//\\} $((${r}))}))\n    done\n    echo \"$s\"", "   \
+    \ local parens deepest depth depths\n    parens=\"$1\"\n    deepest=\n    depths=()\n\
+    \    depth=0\n    while [ -n \"$parens\" ]; do\n        if expr \"$parens\" :\
+    \ '[()]' > /dev/null; then\n            depths[$depth]=\"$deepest\"\n        \
+    \    deepest=$depth\n            depth=0\n        else\n            depth=$((depth+1))\n\
+    \        fi\n        parens=\"${parens:${#parens}}\" # skip spaces\n    done\n\
+    \    echo \"${depths[*]}\"", "    local MAX=\"$(parse_nested_parens_max $1)\"\n\
+    \    local SIFS=$IFS\n    IFS=$(echo -en \"\\n\\b\")\n    local LAST_LEVEL=\"\
+    $(echo \"$1\" | sed -e 's/^\\(.*\\)$/\\1/' | sed -e 's/^\\((.*)\\)$/\\1/' -e 's/^\\\
+    (.*\\)\\(.*\\)\\(.*\\)$/\\3/')\"\n    local LEVELS=\"$(echo \"$LAST_LEVEL\" |\
+    \ sed -e 's/^\\(.*\\)\\(.*\\)$/\\1/' -e 's/^\\(.*\\)\\(.*\\)$/\\2/')\"\n    IFS=$SIFS\n\
+    \    echo \"$LEVELS\"\n    echo \"$MAX\"", "    local nested=0\n    local last_level=()\n\
+    \    for level in $1 #split string into groups separated by spaces\n    do\n \
+    \       local level_num=$(expr $level | wc -w)\n        local cur_level=$(expr\
+    \ $nested + $level_num - 1)\n        last_level=(\"${last_level[@]:0:cur_level}\"\
+    )\n        last_level+=($level)\n        nested=$level_num\n    done\n    echo\
+    \ \"${last_level[@]}\"", "    local groups=\"$1\"\n    if [[ \"$groups\" == \"\
+    \" ]] ; then\n        echo \"Invalid groups\"\n        return 1\n    fi\n    if\
+    \ [[ \"$groups\" =~ \"^ *$\" ]] ; then\n        echo \"Empty groups\"\n      \
+    \  return 1\n    fi\n    groups=\"${groups//(/ }\"\n    groups=\"${groups//)/\
+    \ }\"\n    groups=\"${groups//[/ }\"\n    groups=\"${groups//]/ }\"\n    groups=\"\
+    ${groups// }\"\n    groups=\"${groups// }\"\n    groups=\"${groups// }\"\n   \
+    \ local depth\n    while [[ \"$groups\" != \"\" ]] ; do\n        depth=0\n   \
+    \     while [[ \"$groups\" != \"\" ]] ; do\n            if [[ \"$groups\" =~ (.*\\\
+    ) ]] ; then\n                groups=\"${BASH_REMATCH[1]}\"\n                depth=$((\
+    \ ${depth} + 1 ))\n                groups=\"${groups//\\( }\"\n            else\n\
+    \                groups=\"${groups//[^\\(] }\"\n            fi\n        done\n\
+    \        echo \"$depth\"\n        local next\n        next=\"$(parse_nested_parens\
+    \ \"${groups}\")\"\n        local group=\"${next}\"\n        groups=\"${groups//$group}\"\
+    \n        groups=\"${groups//\\( }\"\n        groups=\"${groups// }\"\n    done",
+  "    local str=$1\n    local n=1\n    local max=0\n    local level=0\n    while\
+    \ [[ $str =~ ([()]) ]]; do\n        local s=${BASH_REMATCH[1]}\n        if [[\
+    \ \"$s\" == () ]]; then\n            level=$((level + 1))\n        else\n    \
+    \        if [[ \"$s\" == \\() ]]; then\n                level=$((level - 1))\n\
+    \            else\n                if [[ \"$s\" == \\) ]]; then\n            \
+    \        level=$((level + 1))\n                else\n                    level=$((level))\n\
+    \                fi\n            fi\n        fi\n        max=$((max+level))\n\
+    \        n=$((n+1))\n        str=${str//\"${s}\"/}\n    done\n    echo ${max}",
+  "    local nested_levels=$(parse_nested_levels $1)\n    echo $nested_levels", " \
+    \   local MAX_NESTING=\"3\"\n    echo \"$1\" | \\\n    sed -r -e \"s/^(([(]\\\
+    (.*\\))[)]))+/\\1 \\\\\\n/g\" | \\\n    sed -r -e \"s/^[(]\\(.*\\))$/\\1 \\\\\\\
+    n/g\" | \\\n    sed -r -e \"s/^[(](.*)[)]$/\\1 \\\\\\n/g\" | \\\n    sed -r -e\
+    \ \"s/^(\\(.*\\))$/\\1 \\\\\\n/g\" | \\\n    sed -r -e \"s/^(\\(.*\\))+$/\\1 \\\
+    \\\\n/g\" | \\\n    sed -r -e \"s/^[\\)]$//g\" | \\\n    sed -r -e \"s/^[(]//g\"\
+    \ | \\\n    sed -r -e \"s/^[)]$//g\" | \\\n    sed -r -e \"s/^\\(//g\" | \\\n\
+    \    sed -r -e \"s/\\)$//g\" | \\\n    sed -r -e \"s/^\\[//g\" | \\\n    sed -r\
+    \ -e \"s/\\]$//g\" | \\\n    sed -r -e \"s/^\\(//g\" | \\\n    sed -r -e \"s/\\\
+    )$//g\" | \\\n    sed -r -e \"s/^\\[//g\" | \\\n    sed -r -e \"s/\\]$//g\" |\
+    \ \\\n    sed -r -e \"s/^(([(]\\(.*\\))[)]))+/\\1 \\\\\\n/g\" | \\\n    sed -r\
+    \ -e \"s/^[(]\\(.*\\))$/\\1 \\\\\\n/g\" | \\\n    sed -r -e \"s/^[(](.*)[)]$/\\\
+    1 \\\\\\n/g\" | \\\n    sed -r -e \"s/^(\\(.*\\))$/\\1 \\\\\\n/g\" | \\\n    sed\
+    \ -r -e \"s/^(\\(.*\\))+$/\\1 \\\\\\n/g\" | \\\n    sed -r -e \"s/^[\\)]$//g\"\
+    \ | \\\n    sed -r -e \"s/^[(]//g\" | \\\n    sed -r -e \"s/^[)]$//g\" | \\\n\
+    \    sed -r -e \"s/^\\(//g\" | \\\n    sed -r -e \"s/\\)$//g\" | \\\n    sed -r\
+    \ -e \"s/^\\[//g\" | \\\n    sed -r -e \"s/\\]$", "    local nestedlevel\n   \
+    \ nestedlevel=0\n    while [ -n \"$1\" ]\n    do\n        (( nestedlevel+=1 ))\n\
+    \        local group=\"$1\"\n        local gstr\n        gstr=$(echo $group |\
+    \ sed \"s/^\\([^)]*\\)\\(.*\\)/\\1/\")\n        gstr=$(echo $gstr | sed \"s/\\\
+    ([^ ]*\\) \\(.*\\)/\\1/\")\n        if [ \"$gstr\" == \"\" ]; then\n         \
+    \   echo \"$group\"\n        else\n            echo \"\\\"$nestedlevel\\\"-\\\"\
+    $gstr\\\"\"\n        fi\n        shift\n    done", "    local level=0\n    local\
+    \ group_count=0\n    local string=\"${1}\"\n    local substring=\"\"\n    local\
+    \ output\n    while [[ ${#string} > 0 ]]; do\n        local char=\"${string:0:1}\"\
+    \n        local output=\"\"\n        case \"${char}\" in\n            (()) \n\
+    \                level=$(($level + 1))\n                output=\"\\\"${level}\\\
+    \"\"\n                ;;\n            ($) \n                level=$(($level -\
+    \ 1))\n                if [[ ${level} == 0 ]]; then\n                    echo\
+    \ \"Empty group\"\n                    break\n                fi\n           \
+    \     output=\"\\\"${level}\\\"\"\n                ;;\n            (\\) \n   \
+    \             if [[ ${level} == 0 ]]; then\n                    echo \"Empty group\"\
+    \n                    break\n                fi\n                group_count=$(($group_count\
+    \ + 1))\n                output=\"\\\"${group_count}\\\"\"\n                ;;\n\
+    \            (*)\n                if [[ ${group_count} -eq 0 ]]; then\n      \
+    \              echo \"Empty group\"\n                    break\n             \
+    \   fi\n                output=\"\\\"${group_count}\\\"\"\n                ;;\n\
+    \            (\\*) \n                if [[ ${group_count} -eq 0 ]]; then\n   \
+    \                 echo \"Empty group\"\n                    break\n          \
+    \      fi\n                output=\"\\\"${group_count}\\\"\"\n               \
+    \ ;;\n            (*\\) \n                if [[ ${group_count} -eq 0 ]]; then\n\
+    \                    echo \"Empty group\"\n                    break\n       \
+    \         fi\n                output=\"\\\"${group_count}\\\"\"\n            \
+    \    ;;\n            (*\\()\n                output=\"\\\"${group_count}\\\"\"\
+    \n                ;;\n            (*\\(\\)) \n                output=\"\\\"${group_count}\\\
+    \"\"\n                ;;\n            (*\\\\)\n                output=\"\\\"${group_count}\\\
+    \"\"\n                ;;\n            (*\\\\\\)\n                output=\"\\\"\
+    ${group_count}\\\"\"\n                ;;\n            (*\\\\\\() \n          \
+    \      output=\"\\\"${group_count}\\\"\"\n                ;;\n            (*\\\
+    \\\\(\\)) \n                output=\"\\\"${group_count}\\\"\"\n              \
+    \  ;;\n            (*\\\\\\(\\()\n                output=\"\\\"${group_count}\\\
+    \"\"\n                ;;\n            (*\\\\\\(\\(\\)) \n                output=\"\
+    \\\"${group_count}\\\"\"\n                ;;\n            (*\\\\\\(\\(\\())\n\
+    \                output=\"\\\"${group_count}\\\"\"\n                ;;\n     \
+    \       (*\\\\\\(\\(\\(\\())\n                output=\"\\\"${group_count}\\\"\"\
+    \n                ;;\n            (*\\\\\\(\\(\\(\\(\\()))\n                output=\"\
+    \\\"${group_count}\\\"\"\n                ;;\n            (*\\\\\\(\\(\\(\\(\\",
+  "  local nested_parens\n  nested_parens=\"$1\"\n  for i in $(echo \"$nested_parens\"\
+    \ | sed 's/ /\\\\ /g' | sed \"s/'\\)'/\\\\\\)\\\\'/g\") ; do\n    if [[ \"$i\"\
+    \ = \"\\\\(\" ]] ; then\n      nested_parens=\"$(echo \"$nested_parens\" | sed\
+    \ \"s/\\\\('$i'\\\\)//g\")\"\n      continue\n    fi\n    nested_parens=\"$(echo\
+    \ \"$nested_parens\" | sed \"s/\\\\('\"$i\"'\\\\)//g\")\"\n  done\n  echo \"$nested_parens\"",
+  "    echo $1 |\n    awk -F\"\\\\(|\\\\)\" '{\n        level = 1;\n        for (i\
+    \ = 2; i <= NF; i++) {\n            $(level > levels ? levels = level : levels\
+    \ = levels-1);\n            level=$i\n        }\n    }'", "    local paren_list\
+    \ nested_paren_list depth\n    local depths max_depths\n    local depths_cnt max_depths_cnt\n\
+    \n    IFS=$'()' read -r -a paren_list <<< \"$1\"\n    nested_paren_list=($(for\
+    \ i in \"${!paren_list[@]}\"; do echo \"$i\"; done))\n    depths=$(echo \"${#nested_paren_list[@]}\"\
+    \ | sed -e 's/\\([0-9]\\)/\\1/g')\n    depths_cnt=$(echo \"$depths\" | wc -c)\n\
+    \    max_depths_cnt=$(echo \"$depths\" | sort -n | tail -1)\n\n    for i in $(seq\
+    \ 1 \"$depths_cnt\"); do\n        depths_str=$(\"$depths\" | sed -n -e \"$((i-1))p\"\
+    \ -e \"$i\"p | tr '()' '\\0' | sed 's/\\([^)]*\\)\\(/\\1/')\n        depth=${depths_str}\n\
+    \        max_depth=${max_depths}\n        echo \"${depths_str}\"\n        local\
+    \ max=0\n        local max_depths_str\n        for j in $(seq 0 \"$max_depths_cnt\"\
+    ); do\n            local depths_str=\"$depths\"\n            if [ $j -gt 0 ];\
+    \ then\n                depths_str=$(\"$depths\" | sed -n -e \"$((j-1))p\" -e\
+    \ \"$j\"p | tr '()' '\\0' | sed 's/\\([^)]*\\)\\(/\\1/')\n            fi\n   \
+    \         depth=${depths_str}\n            IFS=$'()' read -r -a paren_list <<<\
+    \ \"$depth\"\n            nested_paren_list=($(for i in \"${!paren_list[@]}\"\
+    ; do echo \"$i\"; done))\n            depth=${depths_str}\n            IFS=$'()'\
+    \ read -r -a nested_paren_list <<< \"$depth\"\n            depths_str=${nested_paren_list[0]}\n\
+    \            depth=$(echo \"$depth\" | cut -d '(' -f 2)\n            IFS=$'()'\
+    \ read -r -a nested_paren_list <<< \"$depth\"\n            nested_paren_list=($(for\
+    \ i in \"${!nested_paren_list[@]}\"; do echo \"$i\"; done))\n            depth=${depths_str}\n\
+    \            IFS=$'()' read -r -a nested_paren_list <<< \"$depth\"\n         \
+    \   depths_str=${nested_paren_list[0]}\n            depth=$(echo \"$depth\" |\
+    \ cut -d ')' -f 2)\n            IFS=$", "  echo \"$1\" | sed -r 's/(([^()]*(?:\\\
+    ((?>[^()]*|(?1))*\\)))+)/ \"&\" | xargs -n1 echo | sed -r 's/\"[^\"]*\"//g' |\
+    \ sed -r 's/((?!))/ \"&\" | xargs -n1 echo'", "    # $1 is assumed to be a single\
+    \ string that represents multiple groups\n    #\n    # E.g. (()()) has maximum\
+    \ two levels of nesting while ((())) has three.\n    #\n    # Example:\n    #\
+    \ >>> $(parse_nested_parens \"(()()) ((())) () ((())()())\")\n    # ['\"2\"',\
+    \ '\"3\"', '\"1\"', '\"3\"']\n    #\n    # Each group should be separated by spaces.\n\
+    \    # Any number of groups can be present.\n    #\n    # Each group of parentheses\
+    \ should be a sequence of nested parentheses.\n    # A nested parentheses is defined\
+    \ by \"(\" and \")\".\n    # The deepest level of nesting is the longest chain\
+    \ of \"(\" and \")\".\n    #\n    # E.g.\n    # >>> $(parse_nested_parens \"(()())\
+    \ ((())) () ((())()())\")\n    # ['\"2\"', '\"3\"', '\"1\"', '\"3\"']\n    #\n\
+    \    # The longest chain of \"(\" and \")\" is 3.\n    # The longest chain of\
+    \ \"(\" and \")\" is 4.\n    # The longest chain of \"(\" and \")\" is 1.\n  \
+    \  # Maximum levels of nesting are 3, 2 and 1 respectively.\n    #\n    # Note\
+    \ that an empty string has one level of nesting.\n    # \"\" is a single level.\n\
+    \    #\n    # A level of nesting is the maximum of one level of nesting in a given\
+    \ group.\n    # Hence, the output array will have a level of nesting equal to\
+    \ the maximum\n    # level of nesting in the input string.\n    #\n    # Note\
+    \ that empty parentheses chain is allowed.  That is ((())) is a valid expression.\n\
+    \    local input=$1\n    local count=0\n    local max=0\n    local output\n  \
+    \  local open_brackets=()\n    local close_brackets=()\n    local level_of_nesting\n\
+    \    local nesting_open\n    local nesting_close\n    local open_bracket\n   \
+    \ local close_bracket\n    local open_bracket_level\n    local close_bracket_level\n\
+    \n    # Convert input into array of single level nesting strings\n    # E.g.\n\
+    \    # >>> $(parse_nested_parens \"(()()) ((())) () ((())()())\")\n    # ['\"\
+    2\"', '\"3\"', '\"1\"', '\"3\"']\n    IFS=' ' read -a input <<< \"$input\"\n\n\
+    \    # Iterate over the groups of parentheses\n    for group in \"${input[@]}\"\
+    ; do\n        # Iterate over the groups of nested parentheses within the group\n\
+    \        IFS=() read -a nesting_open <<< \"${group}\"", "  local parens=$1\n \
+    \ local i\n  local parens_level=0\n  local parens_depths=\"\"\n  local parens_last_depth=0\n\
+    \n  for (( i=0; i<${#parens}\"; i++ )); do\n    case \"${parens:$i:1}\" in\n \
+    \     \"(\") parens_depths+=${#parens_depths};;\n      \")\") parens_depths=${parens_depths:0:((${#parens_depths}-1))};;\n\
+    \      \"(\")\n        if (( ${#parens_depths} > parens_last_depth )); then\n\
+    \          parens_level=${#parens_depths}\n          parens_last_depth=${#parens_depths}\n\
+    \        else\n          parens_level=$((${#parens_depths}+1))\n        fi\n \
+    \       parens_depths+=${parens_level};;\n      \")\")\n        parens_depths=${parens_depths:0:((${#parens_depths}-1))};;\n\
+    \    esac\n  done\n\n  echo -n \"$parens_depths\"", "  local input=\"$1\"\n\n\
+    \  # If input is null, just return empty string\n  if [ -z \"$input\" ] ; then\n\
+    \    return \"\"\n  fi\n\n  local paren_count=0 opening_parentheses=0\n  local\
+    \ paren_max_depth=0 paren_current_depth=0 paren_current_depth_string=\"\"\n\n\
+    \  for c in \"${input//[()]/}\"; do\n    # Open a new parenthese\n    case \"\
+    $c\" in\n      \"(\") opening_parentheses+=1;;\n      \")\") opening_parentheses-=1;;\n\
+    \      *) paren_count+=1;;\n    esac\n\n    # If the count is equal or higher\
+    \ than the max depth then reset max depth and string\n    if [[ $paren_count -ge\
+    \ $paren_max_depth ]]; then\n      paren_count=0 paren_max_depth=$paren_count\
+    \ paren_current_depth=0 paren_current_depth_string=\"\"\n    fi\n\n    # Increment\
+    \ count if current character is opening parenthese\n    case \"$c\" in\n     \
+    \ \"(\") paren_count+=1;;\n    esac\n\n    # Update string with depth level of\
+    \ current parenthese\n    if [[ $paren_count -eq 1 ]]; then\n      # Keep track\
+    \ of string representation\n      paren_current_depth_string+=$(printf \"%02d\"\
+    \ $opening_parentheses)\n      paren_current_depth=$opening_parentheses\n    fi\n\
+    \n    # Update max depth if current character is closing parenthese\n    case\
+    \ \"$c\" in\n      \"(\") paren_count-=1;;\n    esac\n\n    # Append closing parentheses\n\
+    \    if [[ $paren_count -eq 0 ]]; then\n      # Keep track of string representation\n\
+    \      paren_current_depth_string+=$(printf \"%02d\" $opening_parentheses)\n \
+    \     paren_current_depth=$opening_parentheses\n    fi\n  done\n\n  # Return string\
+    \ representation of deepest depth of nested parentheses\n  return \"$paren_current_depth_string\"",
+  "\tlocal MAXDEPTH=0\n\tlocal DEPTH=0\n\tlocal TAIL\n\twhile read -r TAIL\n\tdo\n\
+    \t\tif [[ $TAIL =~ ^[^(]*$ ]]\n\t\tthen\n\t\t\tDEPTH=${#TAIL}\n\t\t\tif [[ $MAXDEPTH\
+    \ -gt $DEPTH ]]\n\t\t\tthen\n\t\t\t\tMAXDEPTH=$DEPTH\n\t\t\tfi\n\t\tfi\n\tdone\
+    \ <<< \"$1\"\n\techo \"$MAXDEPTH\"", "\twhile [ $# -gt 0 ]; do\n\t\tcase \"$1\"\
+    \ in\n\t\t\t()*)\n\t\t\t\techo $1\n\t\t\t\tshift\n\t\t\t\tparse_nested_parens\
+    \ \"${1#()}\"\n\t\t\t\t;;\n\t\t\t(())*)\n\t\t\t\techo $1\n\t\t\t\tshift\n\t\t\t\
+    \tparse_nested_parens \"${1#(())}\"\n\t\t\t\t;;\n\t\t\t(*)\n\t\t\t\techo $1\n\t\
+    \t\t\tshift\n\t\t\t\t;;\n\t\t\t*)\n\t\t\t\techo \"\"\n\t\t\t\t;;\n\t\tesac\n\t\
+    done", "    if [ $# -lt 1 ]; then\n        echo \"parse_nested_parens called with\
+    \ 0 arguments\"\n        return 1\n    fi\n\n    echo \"${1//(/''}\" \"${1//)/''}\"\
+    \ | sed -e \"s/'//g\" -e \"s/)//g\" -e \"s/)/'/g\" | xargs -I % sh -c \"'echo\
+    \ $(parse_nested_parens_%)'\"", "  local group_count=0\n  local group_remainder=()\n\
+    \  local group_output=\"\"\n  while read -r line; do\n    # Read a line which\
+    \ has balanced parentheses\n    if [[ ${#line} -gt 0 ]]; then\n      # Count how\
+    \ many unbalanced parentheses exist\n      group_remainder=()\n      while [[\
+    \ ${#line} -gt 0 ]] && [[ ${line[0]} != ')' ]]; do\n        group_remainder+=(${line:0:1})\n\
+    \        line=${line#?}\n      done\n      # Add the unbalanced parentheses to\
+    \ the list of group\n      if [[ ${#group_remainder} -gt 0 ]]; then\n        group_count=$((\
+    \ group_count + ${#group_remainder} - 1 ))\n      fi\n      # Add the balanced\
+    \ parentheses to the output\n      group_output+=\"\\\"${group_count}\\\",\"\n\
+    \      group_count=$(( group_count + 1 ))\n      group_output+=\"\\\"${line}\\\
+    \",\"\n    fi\n  done <<< \"$1\"\n  echo \"${group_output:0:-1}\"", "  local input_str=$1\n\
+    \  local max_level=0\n  local max_level_string=\"\"\n  # Iterate through all groups\
+    \ and get the maximum nesting level\n  for group in ${input_str// *(()}); do\n\
+    \    if [[ \"${group}\" == \"(\" ]]; then\n      max_level=$((max_level + 1))\n\
+    \      max_level_string=\"${max_level_string}${max_level}) \"\n    elif [[ \"\
+    ${group}\" == \")\" ]]; then\n      max_level=$((max_level - 1))\n      if [[\
+    \ ${max_level} -gt 0 ]]; then\n        max_level_string=\"${max_level_string}${max_level}\"\
+    \n      else\n        max_level_string=\"\"\n      fi\n    fi\n  done\n  echo\
+    \ \"${max_level_string}\"", "    local group=\"$1\";\n    # $group is a string\
+    \ like \"(()()) ((())) () ((())()())\"\n    local count=\"${#group}\"\n    local\
+    \ level=\"${1}\"; # current nesting level\n    local output; # output for this\
+    \ level\n    for ((i = 0; i < ${count}; i++)); do\n        level=\"${level}${group:$i:1}\"\
+    \n        output=$(echo \"${level}\" | sed -e \"s/\\([()]*\\)/\\\"${level}\\\"\
+    /g\" | sed -e 's/\\([(]\\)/\"&\"/g' -e 's/[)]/\\\",\\\"/g')\n        # output\
+    \ for this level is like \"\\\"0\\\",\\\"1\\\",\\\"0\\\",\\\"1\\\",\\\"0\\\",\\\
+    \"1\\\"\"\n        # convert this into string like \"\\\"0\\\",\\\"1\\\",\\\"\
+    0\\\",\\\"1\\\",\\\"0\\\",\\\"1\\\"\"\n        echo \"${output}\"\n    done",
+  "    local input_string=\"${1}\"\n    if [ \"${input_string}\" = \"[No output]\"\
+    \ ]; then \n\techo \"[No output]\"\n\treturn\n\tfi\n    # Initialize a dictionary\
+    \ to store output string and level count\n    local output_string=\"\"\n    local\
+    \ level_count=0\n    # Iterate through each character in string\n    for input_char\
+    \ in \"${input_string}\"\n    do\n        if [[ \"${input_char}\" = \" \" ]] ||\
+    \ [[ \"${input_char}\" = \"(\" ]] || [[ \"${input_char}\" = \")\" ]] ; then\n\
+    \            # If a non-space character or a closing bracket is encountered\n\
+    \            if [[ ${level_count} -gt 1 ]]; then\n                # If level is\
+    \ greater than 1 then store the string and decrement level count\n           \
+    \     output_string+=\"\\\"${level_count}\\\"\"\n                level_count=$((${level_count}\
+    \ - 1))\n            else\n                # If level is 1, then store the string\
+    \ and increment level count\n                output_string+=\"\\\"${input_char}\\\
+    \"\"\n                level_count=$((${level_count} + 1))\n            fi\n  \
+    \      else\n            # If a non-space character is encountered, increment\
+    \ level count\n            level_count=$((${level_count} + 1))\n        fi\n \
+    \   done\n    # Return output string array to the calling function\n    echo \"\
+    [\\\"${output_string}\\\"]\"", "  local _nesting=0\n  local _groups=()\n  local\
+    \ _groups_len=0\n  local _group=''\n  local _nesting_string=''\n  local _nesting_string_len=0\n\
+    \  local _nesting_char=''\n  while [ $# -gt 0 ]; do\n    while [ $# -gt 0 ]; do\n\
+    \      local _group=(${1:0:1})\n      local _nesting_char=(${1:1:1})\n      if\
+    \ [[ \"$_nesting_char\" == \"(\" ]] || [[ \"$_nesting_char\" == \"{\" ]] || [[\
+    \ \"$_nesting_char\" == \"[\" ]]; then\n        ((_nesting++))\n      else\n \
+    \       ((_nesting--))\n        if [[ \"$_nesting_char\" == \")\" ]] || [[ \"\
+    $_nesting_char\" == \"]\" ]]; then\n          _groups[${#_groups[@]}]=\"$_nesting_string\"\
+    \n          _groups_len=$((${#_groups[@]}+1))\n          _nesting_string=''\n\
+    \          _nesting_string_len=0\n          _nesting_char=''\n        elif [[\
+    \ \"$_nesting_char\" == \"}\" ]]; then\n          if [[ \"$_nesting\" -eq 0 ]];\
+    \ then\n            _groups[${#_groups[@]}]=\"$_nesting_string\"\n           \
+    \ _groups_len=$((${#_groups[@]}+1))\n            _nesting_string=''\n        \
+    \    _nesting_string_len=0\n            _nesting_char=''\n          fi\n     \
+    \   fi\n      fi\n      shift\n    done\n  done\n  if [[ ${#_groups[@]} -gt 0\
+    \ ]]; then\n    _groups[${#_groups[@]}]=\"$_nesting_string\"\n    _groups_len=$((${#_groups[@]}+1))\n\
+    \  fi\n  echo \"${_groups[*]}\"", "    local num_parens=''\n    local str=$1\n\
+    \    local level=0\n    local i\n\n    for ((i=0; i<${#str[@]}; i++)) ; do\n \
+    \       if [[ ${str[i]} == ')' ]]; then\n            num_parens=\"${num_parens}$level\"\
+    \n            level=$((level-1))\n        else\n            num_parens=\"${num_parens}$((level+1))\"\
+    \n        fi\n    done\n\n    echo \"$num_parens\"", "    echo \"$1\" | sed -n\
+    \ -e ':a' -e 's/^\\(^\\)\\(^\\)\\(.*\\)\\(^\\)\\(^\\)\\(.*\\)\\(^\\)\\(^\\)$/\\\
+    1\\3\"\\2\"\\4\"/gp'", "    local _IFS=\"$1\"\n    local _a\n\n    _IFS=\" \"\n\
+    \    _a=($(echo \"$1\" | sed \"s/^\\(.*\\)|\\(.*\\)$/\\1/g\" | sed \"s/^\\(\\\
+    ([^)]*\\)\\(.*\\)$/\\1/g\" | sed \"s/^\\(\\(.*\\)\\)$/\\1/g\" | sed \"s/^\\(.*\\\
+    )\\(\\(.*\\)\\)$/\\1 \\2/g\" | sed \"s/^\\(.*\\)\\(\\([^)]*\\)\\)$/\\1 \\2/g\"\
+    ))\n\n    # Delete the intermediate empty parentheses (if any)\n    # i.e. convert\
+    \ [ (\"foo\") ] into [ \"foo\" ]\n    while [[ ${#_a[@]} -gt 0 ]]; do\n      \
+    \  _a[${#_a[@]} - 1]=$(echo \"$_a[${#_a[@]} - 1]\" | sed \"s/^\\(.*\\)$/\\1/g\"\
+    )\n    done\n\n    echo ${_a[@]}", "    local MAX_LEVELS=$1\n    shift\n    local\
+    \ NLEVEL=0\n    local NEST=''\n    for s in \"$@\"; do\n        if [[ \"$s\" =~\
+    \ ^$NEST ]]; then\n            NLEVEL=$((NLEVEL + 1))\n            if ((NLEVEL\
+    \ >= MAX_LEVELS)); then\n                echo \"$MAX_LEVELS\"\n              \
+    \  return 1\n            fi\n        fi\n        NEST=\"$NEST ${s//(//)\"}\"\n\
+    \    done\n    echo \"$NLEVEL\"\n    return 0", "\tlocal groups=\"$1\"\n\twhile\
+    \ [[ ${groups} != \"\" ]]; do\n\t\tcase \"${groups}\" in\n\t\t\t*(\"${groups//\
+    \ *}\")) groups=$(echo \"${groups// *}\");;\n\t\t\t*) break;;\n\t\tesac\n\tdone\n\
+    \techo \"${groups}\"", "  local n=\"$(echo \"$1\" | sed 's/\\(^\\( \\)\\(.*\\\
+    )\\( \\)\\(^\\) \\)\\/\\1\\2\\3/')\"\n  echo \"$n\"", "    local str=$1\n    local\
+    \ level=0\n    local parens_stack=()\n    while [[ $str != \"\" ]]; do\n     \
+    \   if [[ $str == \\( ]]; then level=$(( level + 1 )); parens_stack+=(\"$((level))\"\
+    ); elif [[ $str == \\) ]]; then level=$(( level - 1 )); parens_stack+=(\"$((level))\"\
+    ); else break; fi\n        str=${str#*)}\n    done\n    declare -a strs=()\n \
+    \   for ((i=0;i<${#parens_stack[@]};++i)); do\n        strs+=($(expr \"${parens_stack[i]}\"\
+    \ : '.* = 0$')); done\n    printf \"%s\" \"${strs[@]}\"", "    local parens=\"\
+    $1\"\n\n    local depth=0\n    local max_depth=0\n    local max_string=\"\"\n\
+    \    local max_string_depth=0\n    local paren_depth=0\n\n    while [[ $parens\
+    \ != \"\" ]]; do\n        local next_parens=$(expr \"$parens\" : '\\(.*\\)')\n\
+    \        local curr_string=$(expr \"$parens\" : '\\(.\\)')\n        local next_string=$(expr\
+    \ \"$next_parens\" : '\\(.\\)')\n\n        if [[ $curr_string != \"\" ]]; then\n\
+    \            if [[ \"$next_string\" == \"\" ]]; then\n                depth=$((\
+    \ depth + 1 ))\n                if [[ \"$max_string_depth\" -lt \"$depth\" ]];\
+    \ then\n                    max_string_depth=\"$depth\"\n                    max_string=\"\
+    $curr_string\"\n                fi\n                paren_depth=$(( depth + 1\
+    \ ))\n            else\n                depth=$(( depth + 1 ))\n             \
+    \   if [[ \"$max_string_depth\" -lt \"$depth\" ]]; then\n                    max_string_depth=\"\
+    $depth\"\n                    max_string=\"$curr_string\"\n                fi\n\
+    \                paren_depth=$(( depth + 1 ))\n            fi\n        fi\n\n\
+    \        if [[ $paren_depth -gt $max_string_depth ]]; then\n            max_string_depth=$((\
+    \ max_string_depth + 1 ))\n        fi\n\n        parens=$(expr \"$next_parens\"\
+    \ : '\\(.*\\)')\n    done\n\n    echo \"$max_string\"", "  local -a levels=()\n\
+    \  local level\n  local count\n  local -a groups=()\n\n  # Split $1\n  IFS=$'()'\
+    \ read -a groups <<<\"$1\"\n  IFS=$'()' read -a levels <<<\"${groups[@]:0:${#groups[@]}}\"\
+    \ # Remove leading empty groups\n\n  # Output the deepest levels of nesting for\
+    \ each group\n  for group in \"${groups[@]}\"; do\n    ((count=0))\n    while\
+    \ [[ $count -lt ${#levels[@]} && ${levels[$count]} != $group ]]; do\n      ((\
+    \ count++ ))\n    done\n    groups[$count]=\"$group\"\n  done\n\n  echo \"${groups[@]}\"",
+  "  local s=$1\n  echo \"$s\" | awk '\n  # \"()()\" has maximum two levels of nesting\
+    \ while \"((()))\" has three\n  # so find the last level while counting the opening\
+    \ and closing parenthesis\n  BEGIN { max_level=0; level=0; open=0; close=0; }\n\
+    \  ($1==\"(\") { level++; open++; close=0; }\n  ($1==\")\") {\n    if (level==0)\
+    \ {\n      # \"((()))\" has three levels while \"()()\" has only two\n      #\
+    \ so find the last level\n      max_level=$level\n      level=$max_level\n   \
+    \ }\n    level--\n    close++\n  }\n  END {\n    if (max_level==0) {\n      #\
+    \ \"((()))\" has three levels while \"()()\" has only two\n      # so find the\
+    \ last level\n      max_level=$level\n    }\n    for (i=max_level+1; i<=level;\
+    \ i++)\n      printf(\"%d%s\", i, (i==level)?\"\":\" \")\n    printf \" %s\"\n\
+    \  }\n  '", "    local paren_levels=\"$1\"\n    if [[ -z \"$paren_levels\" ]];\
+    \ then\n        echo \"No groups to parse.\"\n        return 1\n    fi\n    local\
+    \ i=0\n    local paren_level=0\n    local open_braces=false\n    local current_level=1\n\
+    \    local output\n    local count=0\n    while (( i < $(echo \"$paren_levels\"\
+    \ | wc -w) ))\n    do\n        if [[ \"$paren_level\" -gt \"$current_level\" ]];\
+    \ then\n            echo \"Invalid nesting level found: Expected maximum ${current_level}\
+    \ but found ${paren_level} in group ${i}.\"\n            return 1\n        fi\n\
+    \        if [[ \"$paren_levels\" == \"(())\" ]]; then\n            open_braces=true\n\
+    \            current_level=$(expr $current_level + 1)\n        elif [[ \"$paren_levels\"\
+    \ == \"()()\" ]]; then\n            open_braces=true\n            current_level=$(expr\
+    \ $current_level + 1)\n        elif [[ \"$paren_levels\" == \"((()))\" ]]; then\n\
+    \            open_braces=true\n            current_level=$(expr $current_level\
+    \ + 1)\n        elif [[ \"$paren_levels\" == \"(())\" ]]; then\n            open_braces=true\n\
+    \            current_level=$(expr $current_level + 1)\n        elif [[ \"$paren_levels\"\
+    \ == \"((()))\" ]]; then\n            open_braces=true\n            current_level=$(expr\
+    \ $current_level + 1)\n        fi\n        if [[ \"$open_braces\" == \"false\"\
+    \ ]]; then\n            echo \"Invalid nesting level found: Expected minimum ${current_level}\
+    \ but found ${paren_level} in group ${i}.\"\n            return 1\n        fi\n\
+    \        count=$(( $count + 1 ))\n        i=$(( $i + 1 ))\n        paren_level=\"\
+    $(echo \"$paren_levels\" | cut -d \" \" -f $i)\"\n        open_braces=$(echo \"\
+    $paren_levels\" | cut -d \" \" -f $i | awk '{print $NF}')\n        current_level=\"\
+    $(echo \"$paren_levels\" | cut -d \" \" -f $i)\"\n    done\n    while (( $count\
+    \ > 1 ))\n    do\n        count=$(expr $count - 1)\n        current_level=\"$(echo\
+    \ \"$paren_levels\" | cut -d \" \" -f $count)\"\n    done\n    while (( $count\
+    \ > 0 ))\n    do\n        if [[ \"$current_level\" == \"$open_braces\" ]]; then\n\
+    \            count=$(expr $count - 1)\n            current_level=\"$(echo \"$paren_level",
+  "    local groups=$1\n    local i=0 j=0 levels=0\n    local group_count=0\n    local\
+    \ max_level=0\n\n    while (( i++ < ${#groups[@]} )); do\n        local group=${groups[i]}\n\
+    \        if [[ ${#group} -eq 0 ]]; then\n            echo \"No group to parse\"\
+    \n            exit 1\n        fi\n        if [[ ${groups[++i]} == () ]]; then\n\
+    \            groups[++i]=\"(\"\n            (( levels++ ))\n            group_count=$((\
+    \ group_count + 1 ))\n        else\n            if (( levels > max_level )); then\n\
+    \                max_level=levels\n            fi\n        fi\n    done\n\n  \
+    \  if [[ ${#groups[@]} -eq 0 ]]; then\n        echo \"No group to parse\"\n  \
+    \      exit 1\n    fi\n    if [[ ${group_count} -eq 0 ]]; then\n        echo \"\
+    No groups with nesting\"\n        exit 1\n    fi\n    echo \"${groups[@]}\"\n\n\
+    \    for (( i=0; i<${#groups[@]} && j<${#groups[@]} ); ++i )); do\n        if\
+    \ (( i == j )); then\n            echo \"${groups[@]:0:i}\"\n        elif (( levels[${i}]\
+    \ == \"0\" && levels[${j}] == \"0\" )); then\n            echo \"${groups[@]:0:i}\"\
+    \n        else\n            echo \"${groups[@]:0:i}\" \"${groups[@]:i:j}\"\n \
+    \       fi\n        j=$(( j + 1 ))\n    done\n", "    local string=$1\n    local\
+    \ nested_parens=$2\n    local nested_parens_len=${#nested_parens}\n    local output_string=''\n\
+    \    while [ ${nested_parens_len} -gt 0 ]; do\n        output_string+='\"' ${nested_parens:$nested_parens_len}\n\
+    \        nested_parens_len=$((${nested_parens_len} - 1))\n    done\n    # Strip\
+    \ trailing quote.\n    output_string=${output_string:0:-1}\n    echo ${output_string}",
+  "    local max_depth=$1\n    local depth=$2\n    local paren_depth_str=${3:-''}\n\
+    \    local paren_depth=0\n\n    if [[ -n $max_depth && $depth -lt $max_depth ]];\
+    \ then\n        for paren in ${paren_depth_str}; do\n            [[ \"$paren\"\
+    \ == '(' || \"$paren\" == '[' || \"$paren\" == '{' ]] && paren_depth=$((paren_depth+1))\n\
+    \        done\n\n        [[ \"$paren_depth\" -eq $depth ]] && return 0\n\n   \
+    \     local paren_depth_str=\n        local paren_depth=$((depth - paren_depth))\n\
+    \        local depth=$((depth - 1))\n    fi\n\n    local max_depth=$1\n    local\
+    \ depth=$2\n\n    local paren_depth_str=${3:-''}\n    local paren_depth=0\n\n\
+    \    if [[ -n $max_depth && $depth -lt $max_depth ]]; then\n        for paren\
+    \ in ${paren_depth_str}; do\n            [[ \"$paren\" == '(' || \"$paren\" ==\
+    \ '[' || \"$paren\" == '{' ]] && paren_depth=$((paren_depth+1))\n        done\n\
+    \n        [[ \"$paren_depth\" -eq $depth ]] && return 0\n\n        local paren_depth_str=\n\
+    \        local paren_depth=$((depth - paren_depth))\n        local depth=$((depth\
+    \ - 1))\n    fi\n\n    local max_depth=$1\n    local depth=$2\n\n    local paren_depth_str=${3:-''}\n\
+    \    local paren_depth=0\n\n    if [[ -n $max_depth && $depth -lt $max_depth ]];\
+    \ then\n        for paren in ${paren_depth_str}; do\n            [[ \"$paren\"\
+    \ == '(' || \"$paren\" == '[' || \"$paren\" == '{' ]] && paren_depth=$((paren_depth+1))\n\
+    \        done\n\n        [[ \"$paren_depth\" -eq $depth ]] && return 0\n\n   \
+    \     local paren_depth_str=\n        local paren_depth=$((depth - paren_depth))\n\
+    \        local depth=$((depth - 1))\n    fi\n\n    local max_depth=$1\n    local\
+    \ depth=$2\n\n    local paren_depth_str=${3:-''}\n    local paren_depth=0\n\n\
+    \    if [[ -n $max_depth && $depth -lt $max_depth ]]; then\n        for paren\
+    \ in ${paren_depth_str}; do\n            [[ \"$paren\" == '(' || \"$paren\" ==\
+    \ '[' || \"$paren\" == '{' ]] && paren_depth=$((paren_depth+1))\n        ", " \
+    \ local parens=$(echo $1 | sed -e 's/\\(.*\\)\\s*/\"&\"/g' | sed -e 's/\\(.*\\\
+    )\\s*\\(.*\\)\\s*/\"\\2\"/g' | sed -e 's/\\(.*\\)\\s*\\(.*\\)\\s*\\(.*\\)\\s*/\"\
+    \\3\"/g')\n  echo \"$parens\"", "  local str=$1\n  local levels=\"\"\n  local\
+    \ max=0\n  for g in ${str// */ }\n  do\n    level=$(echo $g | tr ' ' '\"' | jq\
+    \ -r '.level' | sed -e 's/[\"[()]//g' | sed -e 's/^[[:space:]]//g' -e 's/\"$//g'\
+    \ | tr -d '[:space:]')\n    levels+=\"\\\"\"$level\"\\\"\"\n    if [ $((level+1))\
+    \ > $max ]\n    then\n      max=$((level+1))\n    fi\n  done\n  echo $max", " \
+    \   local parens depth depth depth2\n    parens=$1\n    depth=0\n    depth2=0\n\
+    \    local maxlevel\n    while [[ \"$parens\" =~ ([^ ]+) ]]; do\n        local\
+    \ t=$( echo $parens | awk -F '(' -v depth=$depth ' -v depth2=$depth2 '\n     \
+    \       BEGIN { maxlevel=$depth }\n            {\n                depth2=$depth\n\
+    \                if (depth != $depth2) depth2=0\n                if (maxlevel\
+    \ > $depth2) {maxlevel=$depth2}\n            }\n        ' )\n        depth=$((depth+1))\n\
+    \        depth2=$((depth2+1))\n        parens=$( echo $parens | sed -E 's/\\(([^()]+)\\\
+    )/\"\\1\"/g' )\n        echo $t\n    done\n    echo $maxlevel", "    local parens=$1\n\
+    \    local max_level=0\n    local level=0 # level is from 1 to the deepest nesting\
+    \ level of parens\n    local parens_stack # a stack for paren level history\n\
+    \    local depth=0\n    local quote_depth=0\n    local quotes=$parens\n    local\
+    \ quotes_stack # a stack for quotes in parens\n\n    IFS=()\n    while [[ $parens\
+    \ =~ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\\
+    ) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\) \\(+(.*) *(.*) \\)\
+    \ \\(+(.*) ", "  local parens_group=1\n  local parens_level\n  local paren_levels=()\n\
+    \  while [[ \"$1\" =~ (\\([^\\)]*\\)|\\(\\([^\\)]*\\))*) ]]; do\n    if [[ ! \"\
+    ${BASH_REMATCH[1]}\" =~ (\\([^\\)]*\\)|\\(\\([^\\)]*\\))*) ]]; then\n      parens_level=\"\
+    $((parens_level + 1))\"\n      paren_levels[$parens_level]=\"$parens_group\"\n\
+    \      parens_group=1\n      echo \"${BASH_REMATCH[1]}\"\n    else\n      if [[\
+    \ ! -z \"${BASH_REMATCH[2]}\" ]]; then\n        parens_level=\"$((parens_level\
+    \ + 1))\"\n        paren_levels[$parens_level]=\"$parens_group\"\n        parens_group=$((parens_group\
+    \ + 1))\n      else\n        parens_group=$((parens_group + 1))\n      fi\n  \
+    \    echo \"${BASH_REMATCH[2]}\"\n    fi\n    shift\n  done\n  paren_levels",
+  "    local NESTED_GROUPS=\"$(echo \"$1\" | sed -e 's/ /\\ (&) \\ /g')\"\n    local\
+    \ NESTED_GROUPS_COUNT=$(echo \"$NESTED_GROUPS\" | grep -c '(')\n    local NESTED_GROUPS_MAX=$(echo\
+    \ $NESTED_GROUPS | awk '{print \"'$((NESTED_GROUPS_COUNT + 1))'\"; print $0}'\
+    \ | sort -n)\n    local NESTED_GROUPS_MAX_INDEX=$(echo \"$NESTED_GROUPS_MAX\"\
+    \ | head -1)\n    local NESTED_GROUPS_SUBSTR=$(echo \"$NESTED_GROUPS\" | awk -v\
+    \ index=\"$NESTED_GROUPS_MAX_INDEX\" '{print substr($0, index+1, length($0))}')\n\
+    \    echo $NESTED_GROUPS_SUBSTR", "  # Remove extra spaces in $1\n  local trimmed_1=$(echo\
+    \ $1 | sed 's/ //g' | sed 's/^\\( *\\)\\( *\\)*/\\1\\2*/')\n  # For each group,\
+    \ output the deepest level of nesting of parentheses.\n  local level=0\n  local\
+    \ current_level=0\n  local parens=\"\"\n  while [ $level -lt ${#trimmed_1} ];\
+    \ do\n    if [ $level -lt $current_level ]; then\n      # We found a level above\
+    \ the current one\n      parens=\"$parens\"\n      current_level=$level\n    fi\n\
+    \    if [ $level -lt $current_level ]; then\n      (( level=level + 1 ))\n   \
+    \ fi\n  done\n  echo $parens", "  local i\n  local max_level=0\n  local level=0\n\
+    \  local output\n  local str=$1\n\n  i=$((${#str}-1))\n  while [ $i -ge 0 ]; do\n\
+    \    case \"${str:$i:1}\" in\n      ('(') level=$((level+1)) ;;\n      (')') level=$((level-1))\
+    \ ;;\n      (*) continue ;;\n    esac\n    if [ \"$level\" -gt \"$max_level\"\
+    \ ]; then\n      max_level=$level\n      output=\"${str:$(($i-1))}\"\n    fi\n\
+    \    i=$((${i-1}))\n  done\n  echo \"$output\"", "  # Convert \"$1\" to a list\
+    \ to make it easier to iterate through.\n  local parens=\"${1#()}\"\n  local opening_count=0\n\
+    \  local i\n  local depth\n  local depth_string=\"\"\n  for i in $(seq 1 ${#parens})\n\
+    \  do\n    local opening_count=\"$(echo \"$parens\" | wc -l | grep -o \")\" |\
+    \ sed -e 's/[^ ]//g')\"\n    if [ \"${opening_count}\" -gt \"$opening_count\"\
+    \ ]; then\n      depth=\"$(echo \"$parens\" | wc -l | grep -o \")\" | sed -e 's/[^()]//g')\"\
+    \n      depth_string=\"${depth_string}${depth}\"\n    elif [ \"${opening_count}\"\
+    \ -eq \"$opening_count\" ]; then\n      depth_string=\"${depth_string}${i}\"\n\
+    \    fi\n  done\n  echo \"$depth_string\"", "    local group=0\n    local lastgroup\n\
+    \    local max=0\n    local level=0\n    local nest_level=0\n    local output\n\
+    \    while [[ \"$1\" =~ ^(.*)\\s*\\((.*)\\)\\s*(.*)$ ]]; do\n        local item=\"\
+    ${BASH_REMATCH[1]}\"\n        local subgroups=$(parse_nested_parens \"${BASH_REMATCH[2]}\"\
+    )\n        local subitems=$(parse_nested_parens \"${BASH_REMATCH[3]}\")\n    \
+    \    local subitems_with_spaces=()\n        for subitem in $subitems; do\n   \
+    \         subitems_with_spaces+=($subitem)\n        done\n        if [ \"$subgroups\"\
+    \ -gt \"0\" ]; then\n            local subgroup=\"$subgroups\"\n            local\
+    \ subgroup_size=\"${#subgroups[@]}\"\n            local subgroup_size2=\"${#subitems_with_spaces[@]}\"\
+    \n            local max_group_size\n            local max_nest_level\n       \
+    \     if [ \"$subgroup_size\" -gt \"$subgroup_size2\" ]; then\n              \
+    \  max_group_size=$subgroup_size\n                nest_level=$max_group_size\n\
+    \            else\n                max_group_size=$subgroup_size2\n          \
+    \      nest_level=$max_group_size\n            fi\n            local item_level\n\
+    \            if [ \"$subgroup_size2\" -gt \"$max\" ]; then\n                max=$subgroup_size2\n\
+    \            fi\n            if [ \"$nest_level\" -lt \"$max\" ]; then\n     \
+    \           nest_level=$max\n            fi\n            local item_level2\n \
+    \           if [ \"$subgroup_size\" -gt \"$level\" ]; then\n                level=$subgroup_size\n\
+    \            fi\n            if [ \"$level\" -lt \"$item_level\" ]; then\n   \
+    \             level=$item_level\n            fi\n            if [ \"$subgroup_size\"\
+    \ -gt \"$item_level2\" ]; then\n                item_level2=$subgroup_size\n \
+    \           else\n                item_level2=$item_level\n            fi\n  \
+    \          if [ \"$item_level2\" -gt \"$max\" ]; then\n                max=$item_level2\n\
+    \            fi\n            if [ \"$max\" -lt \"$item_level\" ]; then\n     \
+    \           max=$item_level\n            fi\n            if [ \"$max\" -lt \"\
+    $max\" ]; then\n                max=$max\n            fi\n            if [ \"\
+    $group\" -lt \"$max_group_size\" ]; then\n                max=$max_group_size\n\
+    \                group=$max_group_size\n            fi\n            if [ \"$group\"\
+    \ -lt \"$max\" ]; then\n                max=$group\n            fi\n         \
+    \   if [ \"$nest_level\" -lt \"$max\" ]; then\n                max=$nest_level\n\
+    \            fi", "    local in_parens=0\n    local max_level=0\n\n    echo \"\
+    $1\" | tr -d '()' | while read line; do\n        if [[ $line =~ ([^)]*)\\(([^)]*)\\\
+    ) ]]; then\n            in_parens=$((in_parens + 1))\n            echo \"${BASH_REMATCH[2]}\"\
+    ;\n        fi\n\n        if [ $in_parens -gt $max_level ]; then\n            max_level=$in_parens\n\
+    \        fi\n    done\n    echo \"$max_level\"", "\tlocal NESTING_COUNT\n\tlocal\
+    \ NESTING_DEPTH\n\tlocal NESTING_START_COUNT\n\n\tNESTING_COUNT=0\n\tNESTING_DEPTH=0\n\
+    \tNESTING_START_COUNT=0\n\tlocal PARENT_GROUP\n\tlocal GROUP\n\tlocal NESTING\n\
+    \tlocal NESTING_GROUP\n\tlocal NESTING_DEPTH_IN_CLOSURE\n\n\twhile read -r LINE;\
+    \ do\n\t\tPARENT_GROUP=\"$LINE\"\n\t\tNESTING_GROUP=$((NESTING_COUNT+1))\n\t\t\
+    NESTING=\"$NESTING_GROUP\"\n\n\t\twhile test -n \"$LINE\" && test \"$LINE\" =\
+    \ \"$PARENT_GROUP\"; do\n\t\t\tNESTING=\"${NESTING}1\"\n\t\t\tPARENT_GROUP=\"\
+    $LINE\"\n\t\t\tNESTING_GROUP=\"$((NESTING_GROUP+1))\"\n\t\tdone\n\n\t\twhile test\
+    \ \"$LINE\" = \"$PARENT_GROUP\"; do\n\t\t\tNESTING=\"${NESTING}2\"\n\t\t\tPARENT_GROUP=\"\
+    $LINE\"\n\t\t\tNESTING_GROUP=\"$((NESTING_GROUP+1))\"\n\t\t\tNESTING_DEPTH_IN_CLOSURE=\"\
+    $((NESTING_DEPTH+1))\"\n\t\tdone\n\tdone <<< \"$1\"\n\tlocal NESTING_COUNT=\"\
+    $NESTING_GROUP\"\n\tlocal NESTING_DEPTH=\"$NESTING_DEPTH_IN_CLOSURE\"\n\tlocal\
+    \ NESTING_START_COUNT=\"$NESTING_COUNT\"", "  local nested_parens_str=$1\n  local\
+    \ max_level=0 count=0\n  local parens_groups=$(echo $nested_parens_str | sed -e\
+    \ 's/ //g' | awk -F\"()\" '{\n    for (i=1; i<=NF; i++) {\n      count++\n   \
+    \   if ( count > max_level ) {\n        max_level = count\n      }\n    }\n  }')\n\
+    \  echo ${parens_groups[*]}", "  local _nested_parens_str=$1\n  # convert nested\
+    \ parentheses to nested lists\n  local _nested_parens_str=\"${_nested_parens_str#(}\"\
+    \n  local _nested_parens_str=\"${_nested_parens_str%%)}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#( }\"\n  local _nested_parens_str=\"${_nested_parens_str#\
+    \ }\"\n  local _nested_parens_str=\"${_nested_parens_str#[}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#]}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\\
+    }\"\n  local _nested_parens_str=\"${_nested_parens_str%\\}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#\\(\"}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\\
+    )\"}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\[[}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#\\]]}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\\
+    {\\}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\}\\}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#\\[[0-9]}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\\
+    ]:}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\[\\[}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#\\]\\]\"\n  local _nested_parens_str=\"${_nested_parens_str#\\\
+    {\\[[0-9]}\"\n  local _nested_parens_str=\"${_nested_parens_str#\\}:}\"\n  local\
+    \ _nested_parens_str=\"${_nested_parens_str#\\[\\[\\[}\"\n  local _nested_parens_str=\"\
+    ${_nested_parens_str#\\]\\]\\}\"\n  # create empty lists\n  local _nested_parens_str_arr=($(_nested_parens_str))\n\
+    \  # create nested lists from the string list\n  for _item in \"${_nested_parens_str_arr[@]}\"\
+    \n  do\n    # add item to nested list\n    _nested_parens_str_arr_item=(${_item})\n\
+    \    _nested_parens_str_arr+=(${_nested_parens_str_arr_item})\n  done\n  # return\
+    \ array\n  printf '%s", "  local _max=\"-1\"\n  local _inner=\"-1\"\n  local _char=\"\
+    ()\"\n\n  local _last_char=\"${1:0:1}\"\n  local _len=\"${#1}\"\n  local _inner=\"\
+    ${_char:0:1}\"\n  local _char_count=\"${#_char}\"\n\n  while (( \"$_len\" > 0\
+    \ )) ; do\n    local _max_inn=\"${_inner:0:1}\"\n    local _inner_in=\"${_max_inn:0:1}\"\
+    \n    local _max_inn_in=\"${_inner_in:0:1}\"\n    local _max_inn_inn=\"${_max_inn_in:0:1}\"\
+    \n    local _max_inn_innn=\"${_max_inn_inn:0:1}\"\n\n    if (( \"$_char_count\"\
+    \ > 0 )) ; then\n      if [[ \"${_max_inn_innn}\" == \"$_inner_in\" ]] ; then\n\
+    \        _inner=\"${_char:1}\"\n        (( _char_count--))\n      elif [[ \"${_max_inn_inn}\"\
+    \ == \"$_inner_in\" ]] ; then\n        _inner=\"${_char:1:1}\"\n        (( _char_count--))\n\
+    \      else\n        _inner=\"${_char:2:1}\"\n        (( _char_count--))\n   \
+    \   fi\n    else\n      _inner=\"${_char:0:1}\"\n      (( _char_count--))\n  \
+    \  fi\n\n    local _last_char_in=\"${_char:0:1}\"\n    (( _len--))\n\n    (( _char=\"\
+    $_last_char_in\" ))\n  done\n\n  echo $_inner", "    local str=\"$1\"\n    echo\
+    \ \"${str#(\"} ${str#(\"})\"} | sed 's/ //g' | sed 's/^\\(\\(\"\\?\\)\\)$/\\1/g'",
+  "  local n=$1\n  local max_levels=0\n  local results=()\n  while [[ ! -z \"$n\"\
+    \ ]]; do\n    local levels=$(( ${n//(\\(\\([^()]*\\)))/\\#\\#\\#/} + 1 ))\n  \
+    \  if [[ $levels > max_levels ]]; then\n      max_levels=$levels\n    fi\n   \
+    \ if [[ $levels -gt 1 ]]; then\n      results=( \"${results[@]}\" \"$levels\"\
+    \ )\n    fi\n    n=\"${n#*\\(\\)\"\n  done\n  printf '%s\\n' \"${results[@]}\"",
+  "    local a\n    a=()\n    while [ $# -gt 0 ]\n    do\n        local b=$(awk '{\n\
+    \            s=$0;\n            gsub(/[()]/,\"&|\",s);\n            gsub(/(|&)(&)/,\"\
+    |$1$2\",s);\n            printf(\"\\\"%s\\\"\", s)\n        }'<<< $1)\n      \
+    \  a=(\"${a[@]}\" \"$b\")\n        shift\n    done\n    echo \"${a[@]}\"", " \
+    \   local depth=0\n    local count=0\n    local group=\"\\\"1\"\n\n    for c in\
+    \ $1;\n    do\n        if [[ $c != \"(\" ]];\n        then\n            group=\"\
+    $group\\\"$c\\\"\"\n        else\n            if [[ $depth -eq 0 ]];\n       \
+    \     then\n                depth=$((depth+1))\n            else\n           \
+    \     depth=$((depth-1))\n            fi\n            count=$((count+1))\n   \
+    \         if [[ $count -gt $depth ]];\n            then\n                group=\"\
+    $group\\\"$depth\\\"\"\n            fi\n        fi\n    done\n    echo \"$group\"",
+  "    local paren_groups=$1\n    local paren_str=${paren_groups}\n    local paren_count=0\n\
+    \    local paren_char\n\n    while true; do\n        paren_char=\"${paren_str}#\"\
+    \n        paren_char=${paren_char:0:1}\n        paren_count=$((paren_count + 1))\n\
+    \        if [[ \"$paren_char\" == \"(\" ]]; then\n            paren_str=\"${paren_str%)}\"\
+    \n            paren_str=\"${paren_str#*\\(}\"\n            ((paren_count--))\n\
+    \        elif [[ \"$paren_char\" == \")\" ]]; then\n            paren_str=\"${paren_str%#\\\
+    )}\"\n            paren_str=\"${paren_str#*\\)}\"\n            ((paren_count++))\n\
+    \        elif [[ \"$paren_char\" == \"#\" ]]; then\n            paren_str=\"${paren_str%#}\"\
+    \n            break\n        fi\n    done\n\n    echo ${paren_groups}", "    local\
+    \ group=$1\n    if [[ $group =~ ^((?(1).)+)$ ]]; then\n        local i=$1\n  \
+    \      local j=$(( ${#group}-1 ))\n        local count=0\n        while [[ $((\
+    \ j >= 1 )) -eq 0 ]]; do\n            i=$(expr $i - 1 )\n            if [[ $i\
+    \ -lt 1 ]]; then\n                local count=$(( count + 1 ))\n             \
+    \   echo \"$count\"\n                break\n            fi\n            if [[\
+    \ ${group:$i:1} == ( ) ]]; then\n                local count=$(( count + 1 ))\n\
+    \                local j=$i\n            else\n                local j=$i\n  \
+    \          fi\n        done\n    fi", "  local gstring=$1\n  local depth=0\n \
+    \ local paren_char\n  local levels=0\n  local output\n\n  while [[ $gstring ]];\
+    \ do\n    paren_char=$(echo $gstring | grep '^\\(.*\\)$' | head -1 | cut -d ')'\
+    \ -f 1)\n    if [[ $paren_char ]]; then\n      if [[ $paren_char == '(' ]]; then\n\
+    \        (( levels++ ))\n      else\n        (( levels-- ))\n        if (( levels\
+    \ == 0 )); then\n          output+=\"\\\"$depth\\\"\\n\"\n        fi\n      fi\n\
+    \    fi\n    gstring=$(echo $gstring | sed \"s/^\\($paren_char[^()]*\\)\\(.*\\\
+    )/\\1\\2/\" | sed \"s/^\\(.*\\)$/\\1/\")\n    depth=$(( depth + 1 ))\n  done\n\
+    \n  echo $(echo $output | tr '\\n' '\\1')", "    local parens_stack=\"1\"\n  \
+    \  local parens_group=\"1\"\n    local level=0\n    local count=0\n    local parens_groups=\"\
+    ${1}\"\n    while [[ $parens_groups != \"\" ]]; do\n        case \"${parens_groups}\"\
+    \ in\n            \"\") break;;\n            ()) level=$((level+1));;\n      \
+    \      ($(parse_nested_parens \"${parens_groups}\" \"$level\") \"$((level+1))\"\
+    )\n                parens_stack=\"${parens_stack}\" \"${level}\"\n           \
+    \     count=$((count+1))\n                parens_groups=\"${parens_groups:0:${#parens_groups}}\"\
+    ;;\n            (${parens_groups}) level=$((level+1));;\n            (${parens_groups}())\
+    \ level=$((level+1));;\n            (${parens_groups}($(parse_nested_parens \"\
+    ${parens_groups}\" \"$level\") \"$((level+1))\"))\n                parens_stack=\"\
+    ${parens_stack}\" \"${level}\"\n                count=$((count+1))\n         \
+    \       parens_groups=\"${parens_groups:0:${#parens_groups}}\";;\n           \
+    \ (*) level=$((level+1));;\n            (*()) level=$((level+1));;\n         \
+    \   (*($(parse_nested_parens \"${parens_groups}\" \"$level\") \"$((level+1))\"\
+    ))\n                parens_stack=\"${parens_stack}\" \"${level}\"\n          \
+    \      count=$((count+1))\n                parens_groups=\"${parens_groups:0:${#parens_groups}}\"\
+    ;;\n        done\n        if [[ \"${parens_groups}\" != \"\" ]]; then level=$((level-1))\
+    \ ; fi\n        parens_groups=\"${parens_groups:0:${#parens_groups}}\"\n     \
+    \   if [[ \"${level}\" -gt \"1\" ]]; then echo \"\\\"${count}\\\"\"; fi\n    done",
+  "    local groups=\"$1\"\n    local depth=0\n    local group\n    local str\n  \
+    \  while read -r group; do\n        if [[ $groups = *($group)* ]]; then\n    \
+    \        depth=\"$((depth + 1))\"\n        fi\n    done <<< \"$groups\"\n    local\
+    \ tmpstr=\"$groups\"\n    for ((depth-- >= 0; depth--)); do\n        group=\"\
+    ${tmpstr%% *}\"\n        str=\"${tmpstr#* }\"\n        tmpstr=\"$str\"\n    done\n\
+    \    echo \"$str\"", "  local max_level=$1\n  shift\n  local tmp\n  while read\
+    \ tmp; do\n    local level=0\n    while [[ $tmp =~ ((.*)) ]]; do\n      level=$((${BASH_REMATCH[2]}+1))\n\
+    \      tmp=${BASH_REMATCH[1]}\n    done\n    echo $((max_level - level))\n  done\
+    \ <<< \"$*\"", "    local s=$1 count=0 \n    # Count nested parentheses to calculate\
+    \ maximum number of nesting level\n    local max_count=0\n    while [[ $s ]];\
+    \ do\n        let count=$count+1\n        s=$(echo $s | sed \"s/ [^()]*\\([^()]*\\\
+    )/\\\\1/g\")\n        if [[ \"$count\" -gt \"$max_count\" ]]; then\n         \
+    \   max_count=$count\n        fi\n    done\n    # Store the level of nesting of\
+    \ each parentheses\n    local levels=()\n    while [[ $s ]]; do\n        levels+=(\"\
+    $max_count\")\n        max_count=$((max_count+1))\n        s=$(echo $s | sed \"\
+    s/ [^()]*\\([^()]*\\)/\\\\1/g\")\n    done\n    # Remove parentheses levels too\
+    \ deep\n    while [[ ${#levels[@]} -gt 1 ]]; do\n        local last_level=${levels[${#levels[@]}-1]}\n\
+    \        local last_level_i=${levels[0]}\n        local last_level_s=${levels[1]}\n\
+    \        # Search deepest level\n        while [[ ${levels[0]} -ge ${last_level}\
+    \ ]] && [[ ${levels[1]} -ge ${last_level} ]]; then\n            levels[0]=${levels[0]-1}\n\
+    \            levels[1]=${levels[1]-1}\n        done\n        # Remove excessive\
+    \ levels\n        levels=($(\n            IFS=' '\n            arr=(${levels[@]})\n\
+    \            for ((i=${#arr[@]}-1; i >=1; i--)); do\n                if [[ ${arr[$i]}\
+    \ -gt ${last_level} ]]; then\n                    arr=(\"${arr[@]:$i}\")\n   \
+    \             fi\n            done\n            echo ${arr[@]}\n        ))\n \
+    \   done\n    # Remove the leading space\n    levels=($(\n        IFS=' '\n  \
+    \      arr=(${levels[@]})\n        for ((i=${#arr[@]}-1; i >=1; i--)); do\n  \
+    \          echo ${arr[$i]}\n        done\n    ))\n    # Remove the last space\
+    \ or empty string\n    levels=($(\n        IFS=' '\n        arr=(${levels[@]})\n\
+    \        for ((i=${#arr[@]}-1; i >=1; i--)); do\n            if [[ -n ${arr[$i]}\
+    \ ]]; then\n                echo ${arr[$i]}\n            fi\n        done\n  \
+    \  ))\n    # Convert levels to ", "  local group_count\n  local group\n  group_count=0\n\
+    \  local result\n  while IFS= read -r line\n  do\n    [[ -n $line ]] || continue\n\
+    \    local new_group_count\n    local new_group\n    new_group_count=0\n    new_group=$(echo\
+    \ $line | sed 's/^\\([^ ]*\\) \\([^ ]*\\) \\(.*\\)/\\1 \\2/')\n    while IFS=\
+    \ read -r group\n    do\n      new_group_count=$(expr $group_count + $new_group_count)\n\
+    \      result=( $result \"$new_group_count\" \"$group\" )\n    done <<< $(echo\
+    \ $new_group | sed 's/^\\(.*\\) \\(.*\\)$/\\1/')\n    group_count=$new_group_count\n\
+    \  done <<< $(echo $1 | sed 's/^\\([^ ]*\\) \\([^ ]*\\) \\(.*\\)/\\1 \\2/')\n\
+    \  result=($(IFS=,; echo \"${result[*]}\" | sort -g | tail -n1))\n  echo \"${result[@]}\"",
+  "  IFS=' ' read -r -a arr <<< \"$1\"\n  n=${#arr[*]}\n  ((n==0)) && return $n\n\
+    \  s=0\n  for ((i=0; i < n; i++)); do\n    ((s>0)) && printf \"\\\"${arr[$i]}\\\
+    \"\"\n    ((s++))\n  done", "  local input=$1\n  local max_level=0\n  local max_level_in_chars=0\n\
+    \  local level=0\n  local level_char=0\n  local results=()\n  while true; do\n\
+    \    # find out how many levels of nesting we have\n    level=$(( (${#input} -\
+    \ level_char) / 2 ))\n    if [ \"$level\" -gt \"$max_level\" ]; then\n      max_level=$level\n\
+    \      max_level_in_chars=$(printf '%0.s' \"${input:${level_char}*}\")\n    fi\n\
+    \    level_char=$((level_char + ${#input} - 2*level))\n    if [ \"$level\" -gt\
+    \ 0 ]; then\n      results=(\"${results[@]}\" \"$max_level_in_chars\")\n    fi\n\
+    \    if [ \"$level\" -eq 0 ]; then\n      results=(\"${results[@]}\" \"$max_level\"\
+    )\n    fi\n    if [ \"$level_char\" -eq \"$#input\" ]; then\n      break\n   \
+    \ fi\n    input=\"${input:${level_char}}\"\n  done\n  printf '%s\\n' \"${results[@]}\"",
+  "  local arg=\"$1\"\n  echo \"${arg//[^()]+/}\"", "    local -r n=0\n    local -r\
+    \ level=0\n    local -r parens=\"\"\n    local -r result=()\n\n    while [ $#\
+    \ -gt 0 ]; do\n        if [[ \"$1\" == \"(\" ]] && [ $n -gt 0 ]; then\n      \
+    \      (( level++ ))\n            result+=\"\\\"$level\\\"\"\n        elif [[\
+    \ \"$1\" == \")\" ]]; then\n            (( level-- ))\n            if [[ \"$level\"\
+    \ -lt 1 ]]; then\n                result+=\"\\\"$level\\\"\"\n               \
+    \ (( n++ ))\n                level=0\n                parens+=( \"$parens\" )\n\
+    \            else\n                parens=\"${parens:1:$(( level - 1 ))}\\\"$level\\\
+    \"\"\n            fi\n        fi\n        shift\n    done\n    local -r result=($result)\n\
+    \    echo \"${result[@]}\"", "    local levels=0;\n    local output=\"\"\n   \
+    \ while read -r line; do\n        levels=$(expr \"$levels\" - 1);\n        if\
+    \ [ \"$line\" = \"()\" ]; then\n            echo \"$levels\"\n            return\n\
+    \        fi\n        output=\"$output$line\";\n    done\n    echo \"$output\";",
+  "  local x=\"$1\"\n  # Replace each space in $1 with '|' to separate nested groups\
+    \ of parentheses\n  # e.g. '(())' becomes '(|)'.\n  local nested_parens_string=\"\
+    ${x//[[:space:]]/|}\"\n  # Replace each '|' with '\\n' to delimit groups of parentheses\n\
+    \  # e.g. '(|)|' becomes '(\\n)|'.\n  local nested_parens_string=\"${nested_parens_string//\\\
+    |/\\\\n}\"\n  # Replace each '|' with '(|)' to add parentheses around the groups\
+    \ of parentheses\n  # e.g. '(|)|' becomes '( (|) \\n (|) ) ( (|) \\n (|) ) ( (|)\
+    \ ) ()'\n  local nested_parens_string=\"${nested_parens_string//\\|/\\(|)}\"\n\
+    \  local nested_parens_string=\"${nested_parens_string//\\\\n/\\)}\"\n  local\
+    \ nested_parens_array=(${nested_parens_string//\\([^()]*\\)/\\1/g})\n  local max_nesting_level=0\n\
+    \  local max_nested_string=''\n  for (( i=0; i<${#nested_parens_array[@]}; ++i\
+    \ )); do\n    local tmp_nesting_level=\"${nested_parens_array[i]}\"\n    if [[\
+    \ ${tmp_nesting_level} -gt ${max_nesting_level} ]]; then\n      max_nesting_level=\"\
+    ${tmp_nesting_level}\"\n      max_nested_string=\"${nested_parens_array[i]}\"\n\
+    \    fi\n  done\n  echo \"${max_nested_string}\"", "    local nested_parens=\"\
+    $1\"\n    local max_nested_depth=1\n    local last_open_parens=0\n\n    echo \"\
+    $nested_parens\" | while read -r line; do\n        if [[ \"$line\" == ( ]]; then\n\
+    \            if [[ ${#line} -gt \"$last_open_parens\" ]]; then\n             \
+    \   max_nested_depth=$(expr ${#line} - ${last_open_parens})\n            fi\n\
+    \        fi\n\n        last_open_parens=${#line}\n    done\n\n    echo \"$max_nested_depth\"",
+  "    local num_groups=\"$1\"\n    local IFS=$'\\n';\n    local parens=()\n    while\
+    \ read line; do\n        local group_count=0\n        local group_length=-1\n\
+    \        local group=''\n\n        while [[ \"$line\" =~ [^()]+$ ]] && [ \"$group_count\"\
+    \ -le \"$num_groups\" ]; do\n            local space=\"$(expr index \"$line\"\
+    \ ' ')\"\n            if [ \"$space\" -eq 0 ]; then\n                # No space\
+    \ in the line\n                echo \"$line\"\n            else\n            \
+    \    # Space in front of parens\n                local space=\"$(expr index \"\
+    $line\" ' \"$space\")\"\n                local part=\"$line\"\n              \
+    \  local part=$(expr \"$part\" : '\\(.*\\)$')\n                local space=\"\
+    $(expr index \"$part\" ' \"$space\")\"\n                if [ \"$group_length\"\
+    \ -eq 0 ]; then\n                    group=\"$part\"\n                else\n \
+    \                   group=\"$group\" \"${part:$group_length:$space}\"\n      \
+    \          fi\n            fi\n\n            group_length=$((group_length+1))\n\
+    \            group_count=$((group_count+1))\n\n            # Skip space in front\
+    \ of the parens\n            read line\n        done\n        parens+=($group)\n\
+    \    done\n    echo \"${parens[@]}\"", '    local curdepth maxdepth depth maxdepth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth depth depth depth depth
+    depth depth depth depth depth depth depth depth depth ', "  local s=$1\n  local\
+    \ brackets=$(echo $s | awk '{print $1}')\n  local parens=$(echo $s | awk '{print\
+    \ $2}')\n  local max=$((${#brackets}+1))\n  for i in $(seq 0 $max); do\n    if\
+    \ [[ \"${brackets[$i]}\" = \"(\" ]] || [[ \"${parens[$i]}\" = \"(\" ]] || [[ \"\
+    ${parens[$i]}\" = \"{\" ]]; then\n      max=$((max-1))\n    elif [[ \"${brackets[$i]}\"\
+    \ = \"}\" ]] || [[ \"${parens[$i]}\" = \"}\" ]] || [[ \"${parens[$i]}\" = \"}\"\
+    \ ]]; then\n      max=$((max))\n    fi\n  done\n  for i in $(seq 0 $max); do\n\
+    \    if [[ \"${brackets[$i]}\" = \"(\" ]] && [[ \"${parens[$i]}\" = \"(\" ]] &&\
+    \ [[ \"${parens[$i]}\" = \"{\" ]]; then\n      max=$((max-1))\n    elif [[ \"\
+    ${brackets[$i]}\" = \"}\" ]] && [[ \"${parens[$i]}\" = \"}\" ]] && [[ \"${parens[$i]}\"\
+    \ = \"}\" ]]; then\n      max=$((max))\n    fi\n  done\n  echo $max", "    echo\
+    \ \"$1\" | awk -F'\\\\(' '{\n        level[$1]++;\n        if (level[$1] == 1)\
+    \ {\n            arr[$1] = $2\n        }\n    }\n    printf \"%s\\n\" ${arr[@]}\
+    \ # print all entries of the array as one string", "    local paren_groups=$1;\n\
+    \    local paren_groups_len=$(echo \"${#paren_groups}\" | sed \"s/\\///g\");\n\
+    \    local max_level=0\n    local paren_groups_index=$(echo 0 $((paren_groups_len-1))\
+    \ | bc)\n    while [ \"${paren_groups_index:-0}\" -ne \"$max_level\" ]; do\n \
+    \       local current_level=$((paren_groups_index - 1));\n        current_level=$((current_level\
+    \ + 1));\n        local parent_level_of_parenthesis=$(echo \"${paren_groups}\"\
+    \ | sed \"${current_level}q;d\" | awk -F '[()]' '{print $2}')\n        if [[ ${#parent_level_of_parenthesis}\
+    \ -eq 1 ]]; then\n            max_level=$(echo ${current_level} ${#parent_level_of_parenthesis}\
+    \ | bc -l);\n        fi\n        paren_groups_index=$((paren_groups_index - 1))\n\
+    \    done\n    echo \"${paren_groups[*]}\"", "    local nested_levels=1\n    local\
+    \ group=1\n    local nested_level=0\n    local current_level=''\n    local parenthesis_level\n\
+    \    while [ $# -gt 0 ]; do\n        local i=$1\n        local j\n        j=$((${i#(}))\n\
+    \        if [[ $j -gt 0 ]]; then\n            current_level=$((${i%$1}))\n   \
+    \         if [[ ${nested_levels} -eq 0 ]]; then\n                parenthesis_level=$j\n\
+    \            else\n                nested_level=$((${nested_levels}+${j}))\n \
+    \               if [[ ${nested_level} -gt ${parenthesis_level} ]]; then\n    \
+    \                parenthesis_level=${nested_level}\n                fi\n     \
+    \       fi\n            nested_levels=${nested_level}\n        else\n        \
+    \    if [[ ${nested_levels} -eq 0 ]]; then\n                nested_levels=1\n\
+    \                group=$((${group}+1))\n            fi\n        fi\n        shift\n\
+    \    done\n    echo ${nested_levels}", "    local str=$1\n    local nestings=0\n\
+    \    local max_level=0\n    local level=0 # nested level\n    local levels=()\
+    \ # store the output string for each level\n    while [[ $str != '' ]]; do\n \
+    \       if [[ $nestings > 0 ]]; then\n            levels+=(\"$level\")\n     \
+    \   fi\n        level=$((level+1))\n        if [[ $str =~ \\( ]]; then # beginning\
+    \ of a group\n            if [[ $nestings == 0 ]]; then\n                nestings=$((nestings+1))\n\
+    \            fi\n            nestings=$((nestings-1))\n        fi\n        if\
+    \ [[ $str =~ \\) ]]; then # end of a group\n            if [[ $nestings == 0 ]];\
+    \ then\n                nestings=$((nestings+1))\n            else\n         \
+    \       nestings=$((nestings-1))\n            fi\n        fi\n        if [[ $nestings\
+    \ == 0 ]]; then\n            levels+=(\"$level\")\n        fi\n        str=${str#\\\
+    ( }\n        str=${str%\\) }\n    done\n    echo ${levels[@]}", "  local str=$1\n\
+    \  local len=$(( ${#str} - 1 ))\n  local i=0\n  local depth=$(( len / 2 ))\n \
+    \ local j=1\n  local paren_stack\n  local count=0\n\n  paren_stack=\"()\"\n\n\
+    \  for (( ; i <= len; i++ )); do\n    if [[ $str = $paren_stack ]]; then\n   \
+    \   if (( i == len )); then\n        count=$(expr $j - 1)\n      else\n      \
+    \  count=$(( count + 1 ))\n      fi\n      j=$count\n    fi\n    if [[ $str =~\
+    \ [\\(\\)]$ ]]; then\n      paren_stack+=\"()\"\n      j=1\n    else\n      paren_stack+=\"\
+    ${str}\"\n    fi\n  done\n\n  echo \"${paren_stack:(-$j)}\"", "    local parens=\"\
+    $1\"\n    local depth=\"1\"\n    local max_depth=\"1\"\n    local parens_depth=\"\
+    1\"\n    local num_parens=\"$((${#parens} - 1))\"\n\n    while (( num_parens >\
+    \ 0 )); do\n        if [[ -n \"${parens:0:1}\" ]]; then\n            local parens_char=\"\
+    ${parens:0:1}\"\n            if [[ \"${parens_char}\" == \"(\" ]] && [[ \"${parens_depth}\"\
+    \ -lt \"${max_depth}\" ]]; then\n                max_depth=\"${parens_depth}\"\
+    \n            elif [[ \"${parens_char}\" == \")\" ]] && [[ \"${parens_depth}\"\
+    \ -gt \"${max_depth}\" ]]; then\n                max_depth=\"${parens_depth}\"\
+    \n            elif [[ \"${parens_char}\" == \"(\" ]]; then\n                parens_depth=\"\
+    ${parens_depth}\"\n            elif [[ \"${parens_char}\" == \")\" ]]; then\n\
+    \                parens_depth=\"${parens_depth}\"\n            fi\n        fi\n\
+    \n        local num_parens_char=\"$(expr match \"${parens}\" '\\(' '\\)')\"\n\
+    \        if [[ \"${num_parens_char}\" -gt \"${num_parens}\" ]]; then\n       \
+    \     parens=\"${parens:${num_parens}}\"\"\n        fi\n\n        num_parens=\"\
+    $(expr match \"${parens}\" '\\(')\" \"${num_parens}\")\"\n    done\n\n    echo\
+    \ $max_depth", "\tlocal paren_str=$1\n\n\tlocal depth=0\n\tlocal opening_brackets=0\n\
+    \tlocal closing_brackets=0\n\n\twhile IFS= read -r char || [[ -n $char ]]; do\n\
+    \t\tcase \"$char\" in\n\t\t\t(\"[\"*) closing_brackets+=1;;\n\t\t\t(\"]\")* closing_brackets-=1;;\n\
+    \t\t\t(()) [[ $opening_brackets -eq ${closing_brackets} ]] && depth=$(( depth\
+    \ + 1 ));;\n\t\t\t(()) [[ $closing_brackets -eq ${opening_brackets} ]] && depth=$((\
+    \ depth - 1 ));;\n\t\t\t(()) [[ $closing_brackets -ge ${opening_brackets} ]] &&\n\
+    \t\t\t\tdepth=$(( ${opening_brackets}-${closing_brackets} ));;\n\t\t\t(()) [[\
+    \ $opening_brackets -ge ${closing_brackets} ]] &&\n\t\t\t\tdepth=$(( ${closing_brackets}-${opening_brackets}\
+    \ ));;\n\t\t\t*) depth=$(( depth + 1 ));;\n\t\tesac\n\tdone < <(printf '%s\\n'\
+    \ \"$paren_str\" | sed 's/^\\([\"a-zA-Z0-9]*\"\\)\\([0-9]*\\)/\\2/g' | sort -n\
+    \ | uniq -d)\n\tprintf '%s\\n' \"${depth}\"", "  local str=\"$1\"\n  local level=0\n\
+    \  local depth=0\n  while IFS= read -r line; do\n    if [[ \"${line}\" == *\\\
+    ( ]]; then\n      ((depth++))\n    elif [[ \"${line}\" == *\\)) ]]; then\n   \
+    \   ((depth--))\n      if (( depth < 0 )); then\n        break\n      fi\n   \
+    \ fi\n  done < <(grep -Eo '\\([^)]*\\)' <<< \"${str}\")\n  echo \"${level}${depth}\"",
+  "    local nested_parentheses=$(grep -o '[^)]*' <<<\"$1\" | sed -e 's/ \\([^)]*\\\
+    )$/\\1/')\n    local i=0\n    while read -r nested_parentheses_group; do\n   \
+    \     ((i++))\n        echo $nested_parentheses_group\n    done <<< \"$nested_parentheses\"",
+  "    local input=$1\n    local parens_index=0\n    local max_nesting=${2:-1000}\n\
+    \    local nest_count=0\n    local nest_level=0\n\n    local results=\n    while\
+    \ [[ $input =~ (\\([^()]*\\))? ]]; do\n        if (( ${#BASH_REMATCH[@]} > max_nesting\
+    \ )); then\n            nest_count=0\n            nest_level=${#BASH_REMATCH[@]}\n\
+    \        else\n            nest_count=$(( nest_count + 1 ))\n        fi\n    \
+    \    results+=$(eval echo ${BASH_REMATCH[$(( nest_count ))-1]})\n        input=${input%%${BASH_REMATCH[$((\
+    \ nest_count ))-1]}}\n    done\n\n    if (( nest_level > 0 )); then\n        results+=\"\
+    $(eval echo \\${${results[@]:0:nest_level}})\"\n    fi\n\n    echo \"${results}\"",
+  "  local max_level=0\n  local level group_count\n  local group\n  local last_level\n\
+    \  local group_count\n\n  level=0\n  group=\"$1\"\n  group_count=1\n  last_level=0\n\
+    \n  while [[ \"$group\" ]]; do\n    local next_level\n    local group_size\n\n\
+    \    next_level=$(expr $level + 1)\n    if [[ \"$group\" == *\"()\"* ]]; then\n\
+    \      group_size=$(($next_level - $last_level))\n      if [[ \"$group_size\"\
+    \ -gt \"$max_level\" ]]; then\n        max_level=$group_size\n      fi\n     \
+    \ last_level=$next_level\n    fi\n    group_count=$(($group_count + 1))\n    group=$(echo\
+    \ \"$group\" | sed -n \"s/^\\([^()]*\\)$/\\1/p\")\n  done\n\n  echo $max_level",
+  "  local groups=$(echo $1 | sed 's/[\\(\\)]/\\n/g')\n  local maxlevel=0\n  local\
+    \ group\n  local ngroups\n  for group in $groups; do\n    if [[ \"$group\" =~\
+    \ ^[ \\t]$ ]]; then\n      ngroups=$(expr $ngroups + 1)\n    else\n      ngroups=$(expr\
+    \ $ngroups + 1)\n    fi\n  done\n  for group in $groups; do\n    if [[ \"$group\"\
+    \ =~ ^[)]$ ]]; then\n      maxlevel=$(expr $maxlevel + 1)\n    fi\n  done\n  echo\
+    \ $maxlevel", "  local groups=\"$1\"\n  local max_levels=0\n  while read -r; do\n\
+    \    # Read a group of nested parentheses and find the deepest level of nesting\n\
+    \    (( max_levels = max_levels > ${#BASH_REMATCH[1]} || max_levels ) )\n  done\
+    \ <<< \"$groups\"\n  echo \"${max_levels}\"", "  local output=($(sed -r \"\\|(\
+    \ ([()]) +\\)|\\1|\" <<< \"$1\"))\n  local max_level=-1\n  local max_level_str=\"\
+    \"\n  local line_num=1\n  while read line; do\n    local level=\"${line/( /}\"\
+    \n    local level_str=\"${level: -1}\"\n    if [[ \"${level_str}\" -gt \"${max_level_str}\"\
+    \ ]]; then\n      max_level=\"${level_str}\"\n      max_level_str=\"${level_str}\"\
+    \n    elif [[ \"${level_str}\" -gt \"${max_level}\" ]]; then\n      max_level=\"\
+    ${level_str}\"\n      max_level_str=\"${level_str}\"\n    fi\n  done <<< \"${output[@]}\"\
+    \n  echo \"${output[@]}\"", "\tset -- $1 --\n\tlocal levels=0\n\tlocal paren_chars=\"\
+    \"\n\tlocal depth=0\n\twhile [[ $1 != \"\" ]]; do\n\t\t(( depth++ ))\n\t\tlocal\
+    \ c=${1%% *}\n\t\tlocal p=${1#* }\n\t\tcase \"${c}\" in\n\t\t\t(()|{}) paren_chars=\"\
+    $paren_chars\"\"${c}\" ;;\n\t\t\t(*) paren_chars=\"$paren_chars\"\"p\" ;;\n\t\t\
+    esac\n\t\tshift\n\tdone\n\tif [[ $paren_chars != \"\" ]]; then\n\t\tlet levels=$(echo\
+    \ \"${paren_chars}\" | wc -w)\n\tfi\n\techo \"$levels\"", "  local str=$1\n  str=$(parse_nested_parens_recurse\
+    \ \"$str\")\n  echo \"$str\"", "    local nested_parens_group\n    local max_nested_parens_group\n\
+    \    local number_of_parens_group\n    local index\n    local number_of_nested_parens_group\n\
+    \n    # Iterate over each group and find the number of nesting.\n    for nested_parens_group\
+    \ in $1; do\n        number_of_nested_parens_group=${#nested_parens_group}\n \
+    \       for (( index = 0; index < number_of_nested_parens_group; index++ )); do\n\
+    \            case \"${nested_parens_group:$index:1}\" in\n                (\"\
+    (\")\n                    number_of_parens_group=${nested_parens_group:$index:1}\n\
+    \                    ;;\n                (\")\") number_of_parens_group=${nested_parens_group:$index:1}\n\
+    \                    ;;\n                (*) number_of_parens_group=${nested_parens_group:$index:1}\n\
+    \                    ;;\n            esac\n        done\n        if [[ ${number_of_nested_parens_group}\
+    \ -gt ${max_nested_parens_group} ]]; then\n            max_nested_parens_group=${number_of_nested_parens_group}\n\
+    \        fi\n    done\n\n    echo \"${nested_parens_group}\"", "    # Remove surrounding\
+    \ parens\n    local input=\"$1\"\n    local output=''\n    while [[ \"$input\"\
+    \ =~ (\\([^)]*\\)|\\(\"[^\"]*\"\\)|\\([a-zA-Z0-9_]*\\)) ]]; do\n        local\
+    \ level=0\n        local depth=0\n        local i\n        for (( i=0; i < ${#BASH_REMATCH[@]};\
+    \ i++ )); do\n            local re=\"${BASH_REMATCH[i]}\"\n            case \"\
+    $re\" in\n                (\"\\(\") level=$(( level + 1 ));;\n               \
+    \ (\"\\)\")) level=$(( level - 1 ));;\n                (*) ;;\n            esac\n\
+    \            case \"$re\" in\n                (\"[a-zA-Z0-9_]*\") depth=$(( depth\
+    \ + 1 ));;\n            esac\n        done\n        output+=\"'$(( level * 2 +\
+    \ depth ))'\"\n        input=${input#*\"$re\"} # remove the first $re\n    done\n\
+    \    output+=\"'$(( level * 2 ))'\"\n    echo \"$output\"", "    echo \"$1\" |\
+    \ perl -ne '\n    while (s/^(\n        ((?: [^()]++ | (?: \\((?: [^()]++ | (?:\
+    \ \\((?: [^()]++ | (?: \\((?: [^()]++ | [^()]++ ) ) ) )? ) ) )? )\n        )\n\
+    \    )*$/$1/) {\n        s/ $//;\n        print\n    }'", "  local i j\n  local\
+    \ depth maxdepth depthstr\n  local -n array=( )\n\n  # parse the string recursively\n\
+    \  depth=0\n  maxdepth=0\n  depthstr=\"\"\n  for ((i = 0; i < ${#1}; i++)); do\n\
+    \    case \"${1:$i:1}\" in\n      ( ) depthstr=$depthstr depth=$((depth+1)) ;;\n\
+    \      ( () ) depthstr=$depthstr depth=$((depth+1)) ;;\n      ( ) depthstr=\"\
+    $depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"$depthstr$((depth+2))\" ;;\n\
+    \      ( ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( () ) depthstr=\"$depthstr$((depth+1))\"\
+    \ ;;\n      ( ) depthstr=\"$depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"\
+    $depthstr$((depth+2))\" ;;\n      ( ) depthstr=\"$depthstr$((depth+1))\" ;;\n\
+    \      ( () ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( () ) depthstr=\"\
+    $depthstr$((depth+2))\" ;;\n      ( ) depthstr=\"$depthstr$((depth+2))\" ;;\n\
+    \      ( () ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( () ) depthstr=\"\
+    $depthstr$((depth+1))\" ;;\n      ( ) depthstr=\"$depthstr$((depth+2))\" ;;\n\
+    \      ( ) depthstr=\"$depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"$depthstr$((depth+1))\"\
+    \ ;;\n      ( () ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( ) depthstr=\"\
+    $depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"$depthstr$((depth+2))\" ;;\n\
+    \      ( ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( ) depthstr=\"$depthstr$((depth+1))\"\
+    \ ;;\n      ( ) depthstr=\"$depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"\
+    $depthstr$((depth+2))\" ;;\n      ( () ) depthstr=\"$depthstr$((depth+1))\" ;;\n\
+    \      ( ) depthstr=\"$depthstr$((depth+1))\" ;;\n      ( ) depthstr=\"$depthstr$((depth+2))\"\
+    \ ;;\n      ( ) depth", "  local parens=$1\n  local out=\"$2\"\n  local level\n\
+    \  local i\n  local last\n  for i in $(echo $parens | tr '([]()' ' ')); do\n \
+    \   case $i in\n      '(') last=;;\n      ')') last='\"'$last'\"'\n        ;;\n\
+    \      '[') last=;;\n      ']') last='\"'$last'\"'\n        ;;\n      *) last=\"\
+    $i\"\n        ;;\n    esac\n    if [ $last ];\n    then\n      level=$(( $level\
+    \ + 1 ))\n    fi\n    if [ $level -eq $out ]; then\n      out=\"$last\"\n    fi\n\
+    \  done\n  echo \"$out\"", "\tlocal string=\"$1\"\n\twhile [[ $string =~ (([()]))\\\
+    1 ]]; then\n\t\tstring=\"${BASH_REMATCH[1]}\"\n\tdone\n\techo \"$string\"", " \
+    \   IFS=' ' read -ra GROUPS <<< \"$1\"\n\n    i=0\n    while (( \"${#GROUPS[@]}\"\
+    \ > 0 )); do\n        GROUPS[i]=${GROUPS[i]#()} # remove outer '()'\n        ((\
+    \ i++ ))\n    done\n    IFS=')' # restore IFS for reading the result later\n\n\
+    \    declare -A GROUPS_COUNT\n    for group in \"${GROUPS[@]}\"; do\n        if\
+    \ ! [ -z \"${GROUPS_COUNT[$group]}\" ]; then\n            (( GROUPS_COUNT[$group]\
+    \ += 1 ))\n        fi\n    done\n\n    declare -A COUNT\n    for group in \"${!GROUPS_COUNT[@]}\"\
+    ; do\n        if [ -n \"${COUNT[$group]}\" ]; then\n            if [ \"${GROUPS_COUNT[$group]}\"\
+    \ -gt \"${COUNT[$group]}\" ]; then\n                COUNT[$group]=\"${GROUPS_COUNT[$group]}\"\
+    \n            fi\n        fi\n    done\n\n    for group in \"${!COUNT[@]}\"; do\n\
+    \        echo \"$group\"\n    done", "    local input=${1}\n    local result=()\n\
+    \    local depth\n    # Look for \"(((\"\n    if [[ ${input:0:6} == \"(((\"; then\n\
+    \        local i=6\n        local found\n        local num_nested=0\n        while\
+    \ [[ $i -lt ${#input} ]]; do\n            found=false\n            if [[ ${input:$i:1}\
+    \ == \")\" ]]; then\n                local j=$(( i + 1 ))\n                while\
+    \ [[ $j -lt ${#input} ]] && [[ ${input:$j:1} == \"(\" ]] && [[ ${input:$j:2} ==\
+    \ \")\" ]]; then\n                    j=$(( j + 1 ))\n                    found=true\n\
+    \                done\n                depth=$(( $j - $i - 1 ))\n            \
+    \    found=true\n            fi\n            if [[ $found ]]; then\n         \
+    \       num_nested=$(( $num_nested + 1 ))\n                i=$(( $i + 1 ))\n \
+    \           fi\n        done\n        depth=$(( $num_nested + 1 ))\n        result=(\
+    \ $(\n            IFS=$'\\n'\n            echo $input\n            sed -e 's/\
+    \ \\(\\(.*\\) \\(.*\\)/\"\\1\"/g'\n        ) )\n    elif [[ ${input:0:4} == \"\
+    ((\"; then\n        local i=0\n        local found\n        local num_nested=0\n\
+    \        while [[ $i -lt ${#input} ]]; do\n            found=false\n         \
+    \   if [[ ${input:$i:1} == \")\" ]]; then\n                local j=$(( i + 1 ))\n\
+    \                while [[ $j -lt ${#input} ]] && [[ ${input:$j:1} == \"(\" ]]\
+    \ && [[ ${input:$j:2} == \")\" ]]; then\n                    j=$(( j + 1 ))\n\
+    \                    found=true\n                done\n                depth=$((\
+    \ $j - $i - 1 ))\n                found=true\n            fi\n            if [[\
+    \ $found ]]; then\n                num_nested=$(( $num_nested + 1 ))\n       \
+    \         i=$(( $i + 1 ))\n            fi\n        done\n        depth=$(( $num_nested\
+    \ + 1 ))\n        result=( $(\n            IFS=$'\\n'\n            echo $input\n\
+    \            sed -e 's/ \\(.*\\) \\(.*\\)/\"\\2\"/;s/ \\(.*\\)/\"\\2\"/'\n   \
+    \     ) )\n    elif [[ ${input:0:3} == \"(( \" ]]; then\n        result=( $(\n\
+    \            IFS=$'\\n'\n            echo $input\n            sed -e 's/", " \
+    \   local IFS=$'\\n'\n    local levels=0\n    local cur\n    local max_nesting=0\n\
+    \    local max_nesting_level=0\n    local prev_char=\"\"\n    local output\n \
+    \   local count\n    local open\n    local close\n    local is_open\n    for cur\
+    \ in $1; do\n        if [ \"$cur\" == \"(\" ]; then # Opening parentheses\n  \
+    \          open=1\n        fi\n        if [ \"$cur\" == \")\" ]; then # Closing\
+    \ parentheses\n            open=0\n        fi\n        if [ \"$open\" == 1 ];\
+    \ then\n            levels=$(($levels + 1))\n        fi\n        if [ \"$open\"\
+    \ == 0 ]; then\n            levels=$(($levels - 1))\n        fi\n        if [\
+    \ \"$levels\" -le \"$max_nesting_level\" ]; then\n            output=$cur\n  \
+    \      fi\n        if [ \"$cur\" == \" \" ]; then # Space\n            levels=$(($levels\
+    \ + 1))\n        fi\n        if [ \"$cur\" == \"(\" ]; then # Space\n        \
+    \    levels=$(($levels + 1))\n        fi\n        if [ \"$cur\" == \")\" ]; then\
+    \ # Space\n            levels=$(($levels - 1))\n        fi\n        if [ \"$cur\"\
+    \ == \"(\" ]; then # Space\n            levels=$(($levels + 1))\n        fi\n\
+    \        if [ \"$cur\" == \")\" ]; then # Space\n            levels=$(($levels\
+    \ - 1))\n        fi\n        if [ \"$open\" == 1 ]; then\n            levels=$(($levels\
+    \ - 1))\n        fi\n    done\n    echo \"${output}\"", "    local nested_parens=\"\
+    ${1}\"\n    local index=0\n\n    local count=0\n    local level=0\n    while [[\
+    \ $nested_parens != \"\" ]]; do\n        local char=\"${nested_parens:$index:1}\"\
+    \n        if [[ \"$char\" == \"(\" ]]; then\n            ((level++))\n       \
+    \ elif [[ \"$char\" == \")\" ]]; then\n            if ((level > count)) ; then\n\
+    \                count=\"$level\"\n            else\n                ((level--))\n\
+    \            fi\n        fi\n        index=$((index+1))\n    done\n\n    echo\
+    \ \"$count\"", "  local paren_levels=$(echo $1 | tr \" \" \"\\n\")\n  local paren_level_count=0\n\
+    \  local paren_level_0=\"\\\"${paren_level_count}\\\"\"\n  local current_level=\"\
+    \\\"0\\\"\"\n  local paren_level_1_array=()\n\n  for paren_level_1 in $paren_levels\n\
+    \  do\n    ((paren_level_count++))\n    local paren_level_2=\"\\\"${paren_level_count}\\\
+    \"\"\n    if [[ \"$current_level\" = \"\\\"0\\\"\" ]]\n    then\n      current_level=\"\
+    \\\"${paren_level_count}\\\"\"\n      paren_level_1_array+=(\"\\\"${current_level}\\\
+    \"\")\n    fi\n    if [[ \"$current_level\" = \"\\\"${paren_level_count}\\\"\"\
+    ]]\n    then\n      ((paren_level_count++))\n      local paren_level_3=\"\\\"\
+    ${paren_level_count}\\\"\"\n      current_level=\"\\\"${paren_level_count}\\\"\
+    \"\n      paren_level_1_array+=(\"\\\"${current_level}\\\"\")\n    fi\n  done\n\
+    \  echo ${paren_level_1_array[@]}", "  local levels=$1\n  # This code is modified\
+    \ from GNU Bash source code. It was originally written for\n  # GNU Bash, but\
+    \ with some modifications to handle multiple groups of parentheses.\n  local level=0\n\
+    \  local levels=$(( $levels + 1 ))\n  local num_levels=$(( $levels ))\n  local\
+    \ level_counter=0\n  local num_levels_seen=0\n  local num_levels_seen_local\n\
+    \  local level_counter_local\n  local max_num_levels\n  local max_num_levels_local\n\
+    \  local max_level_counter\n  local max_level_counter_local\n  local level_and_level_counter\n\
+    \  local level_and_level_counter_local\n  local i\n  local j\n  local k\n  local\
+    \ l\n  local len\n  local num_groups\n  local num_groups_local\n  local group_counter\n\
+    \  local group_counter_local\n  local g\n  local group_str\n  local group_str_local\n\
+    \  local opening_parens\n  local opening_parens_local\n  local closing_braces\n\
+    \  local closing_braces_local\n  local i\n\n  local -a pairs\n  local -a pairslen\n\
+    \  local -a pairsp\n  local -a parens\n  local -a parenslen\n  local -a parensp\n\
+    \  local -a groups\n  local -a groupslen\n  local -a groupsp\n\n  local -a levels\n\
+    \  local -a levelslen\n  local -a levelsp\n  local -a group\n\n  local parens_groups=$(echo\
+    \ \"$levels\"| sed \"s/,/ /g\")\n  local parens_groups_len=$(echo \"${#parens_groups}\"\
+    \ | wc -l)\n\n  local groups_groups=$(echo \"${levels}\" | sed \"s/ /,/g\")\n\
+    \  local groups_groups_len=$(echo \"${#groups_groups}\" | wc -l)\n\n  if [ -z\
+    \ \"${parens_groups}\" ]; then\n    levels=1\n    parens_groups=\"1\"\n  fi\n\n\
+    \  if [ -z \"${groups_groups}\" ]; then\n    levels=1\n    groups_groups=\"1\"\
+    \n  fi\n\n  max_num_levels=${#parens_groups}\n  max_num_levels=$(( $max_num_levels\
+    \ ))\n\n  max_level_counter=1\n  max_level_counter=$(( $max_level_counter + 1\
+    \ ))\n  local max_level_counter_local\n  local max_level_counter_local\n  local\
+    \ max_level_", "  local parens_str=$1\n  local max_level=0\n  local level\n  local\
+    \ parens_str_tmp\n  local tmp\n  local max_level_str\n\n  while IFS= read -r parens_str_tmp;\
+    \ do\n    level=$((parens_str_tmp.count(\"()\")-1))\n    if (( level > max_level\
+    \ )); then\n      max_level=level\n      max_level_str=\"$level\"\n    fi\n  done\
+    \ <<< \"$parens_str\"\n\n  tmp=$max_level_str\n  while (( tmp > 0 )); do\n   \
+    \ (( tmp-- ))\n  done <<< \"$max_level_str\"\n  echo \"$max_level_str\"", "  local\
+    \ num_level_of_parentheses=$1\n  local string_with_parenthesis=$2\n  \n  # Find\
+    \ the deepest level of nesting of parenthesis\n  local max_level_of_nesting=0\n\
+    \  local max_num_level_of_nestings=0\n  local string_to_analyze=$string_with_parenthesis\n\
+    \  while [[ $string_to_analyze =~ [^()]+\\(\\)[^()]*$ ]]; do\n    local current_level_of_nesting=0\n\
+    \    local num_to_append=$(expr $num_level_of_parentheses)\n    while [[ $num_to_append\
+    \ -gt $current_level_of_nesting ]]; do\n      current_level_of_nesting=$((num_to_append-1))\n\
+    \      num_to_append=$((num_to_append-1))\n    done\n    if [[ $num_level_of_parentheses\
+    \ -gt $current_level_of_nesting ]]; then\n      max_level_of_nesting=$current_level_of_nesting\n\
+    \      max_num_level_of_nestings=$num_level_of_parentheses\n    fi\n    string_to_analyze=${string_to_analyze%\\\
+    (\\)}\n  done\n  \n  echo \"$max_level_of_nesting\" # e.g. 3 for ((()))\n  echo\
+    \ \"$max_num_level_of_nestings\" # e.g. 2 for ((()()))\n  echo \"$string_to_analyze\"",
+  "  local nested_levels=$(($(($1|tr '() ' '\\n' | sed 's/ /\\n/g' | wc -l) - 1))\n\
+    \  local parens_levels\n  local parens_level_str\n  local parens_level_str_list\n\
+    \  local parens_level_str_num\n  local parens_level\n\n  if (( $#1 < 0 )) || [[\
+    \ $1 =~ [^()]+\\(\\) ]]; then\n    echo '\"0\"'\n  else\n    local parens_level_str=\"\
+    (\" ; for (( parens_level=1 ; parens_level<=$nested_levels ; parens_level++ ));\
+    \ do\n      parens_level_str+=$(($parens_level+1));\n    done\n    parens_level_str=\"\
+    ${parens_level_str%))}\"\n    echo $(( $#1 ))\n    local parens_level_str_num=$(echo\
+    \ $parens_level_str|sed 's/\\(.*\\)/\\1/'|wc -w)\n    echo $parens_level_str_num\n\
+    \    local parens_level_str_list=$(echo $parens_level_str|sed 's/\\(.*\\)/\\1/'|sed\
+    \ 's/^\\|$//')\n    local max_nesting_level=$(($parens_level_str_num*$parens_level_str_list))\n\
+    \    echo $max_nesting_level\n    local parens_level_str_list=($parens_level_str)\n\
+    \    local max_nesting_level_list=($(echo $max_nesting_level|sed 's/\\([0-9]*\\\
+    )\\/\\([0-9]*\\)\\/\\([0-9]*\\)/\\1-\\2-\\3/'|sed 's/-/\\n/g'))\n    local nested_parens_str=\"\
+    \"\n    local nested_parens_str_num=\"\"\n    for (( nested_parens_str=0 ; nested_parens_str<$max_nesting_level\
+    \ ; nested_parens_str++ )); do\n      local para_level=($(echo $max_nesting_level_list|sed\
+    \ 's/\\([0-9]*\\)\\/\\([0-9]*\\)\\/\\([0-9]*\\)/\\1-\\2-\\3/'|sed 's/-/\\n/g'))\n\
+    \      local para_level_list=($(echo $para_level|sed 's/\\([0-9]*\\)\\/\\([0-9]*\\\
+    )\\/\\([0-9]*\\)/\\1-\\2-\\3/'|sed 's/-/\\n/g'))\n      local nested_parens_str_num=\"\
+    \"\n      for (( nested_parens_str_num=0 ; nested_parens_str_num<${#para_level_list}\
+    \ ; nested_parens_str_", "    local level=0\n    local paren_level=0\n    local\
+    \ paren_open=1\n    local paren_open_p=${1%'('}\n    local paren_close_p=${1#')'}\n\
+    \n    while [[ ${1:-} ]]; do\n        local p=${1:0:1}\n        local c=${1:1:1}\n\
+    \        case \"${p}\" in\n            ${paren_open_p}) paren_open=1 ;;\n    \
+    \        ${paren_close_p}) paren_open=0 ;;\n            \\()\\) ;;\n         \
+    \   *)\n                if [[ $p != \"(\" ]] || [[ \"$c\" != $paren_open_p ]];\
+    \ then\n                    local level=$((${level}+1))\n                fi\n\
+    \                if [[ $p != \")\" ]] || [[ \"$c\" != $paren_close_p ]]; then\n\
+    \                    local level=$((${level}-1))\n                fi\n       \
+    \         ;;\n        esac\n        shift\n    done\n    echo \"$level\"", " \
+    \   local groups=\"$1\"\n    local groups=${groups:0:-1}\n    local len=$(( ${#groups}-1\
+    \ ))\n    local start=0\n    local end\n    local max=0\n    local stack\n   \
+    \ local result\n\n    while [ $start -lt $len ]\n    do\n    end=$(( start+1 ))\n\
+    \    stack=$groups\n    max $stack\n\n    start=$end\n    done\n\n    if [ $max\
+    \ -gt 1 ]\n    then\n        result=()\n        for (( i=0; i<$max; i++ ))\n \
+    \       do\n            result+=(\"${stack:$i}\")\n        done\n    else\n  \
+    \      result=${stack}\n    fi\n    result=\"${result[*]}\"\n    echo \"${result[@]}\"",
+  "    echo $1 | sed 's/\\([^()]*\\) \\([^()]*\\) \\([^()]*\\) \\([^()]*\\)/\\2/'",
+  "    local group_count depth\n    local group_count\n    local depth\n    local\
+    \ paren_group\n    local depth\n    local group\n    local max_depth=0\n    local\
+    \ group_string\n    local paren_group_array\n    local group_count\n    local\
+    \ depth\n    local max_depth\n\n    local group_string\n    local paren_group_array\n\
+    \    local group_count\n    local depth\n    local max_depth\n\n    local paren_group\n\
+    \    local depth\n\n    local group\n\n    local max_depth\n\n    depth=0\n  \
+    \  group_count=0\n    paren_group_array=()\n    group=$1\n    while [[ -n $group\
+    \ ]]; do\n        group_count=$((group_count+1))\n        depth=$((depth+1))\n\
+    \        group_string=`echo $group`\n        paren_group=$group_string\n     \
+    \   if [[ ${depth} == ${max_depth} ]]; then\n            paren_group_array=( \"\
+    ${paren_group_array[@]}\" \"\\\"$depth\\\"\")\n        elif [[ ${depth} > ${max_depth}\
+    \ ]]; then\n            paren_group_array=( \"${paren_group_array[@]}\" \"\\\"\
+    ${depth}\\\"\")\n        fi\n        group=`echo $group | sed \"s/$paren_group/\\\
+    (/;s/$group_string/\\)/\"`\n    done\n    paren_group_array=( \"${paren_group_array[@]}\"\
+    \ )\n    echo \"${paren_group_array[@]}\"", "    local IFS=\" \"\n    local group_count=0\n\
+    \    local paren_level=0\n    local result\n    while read line; do\n        group_count=$((group_count+1))\n\
+    \        if [[ $line == \\() ]]; then\n            paren_level=$((paren_level+1))\n\
+    \        fi\n        if [[ $paren_level -eq 0 ]]; then\n            result=$line\n\
+    \            break\n        fi\n    done <<< \"$1\"\n    echo \"$result\"", " \
+    \   local num_levels max_level level output j\n    num_levels=${#1}\n    max_level=$((num_levels\
+    \ - 1))\n    if [ ${num_levels} -eq 1 ]; then return; fi\n    level=$(expr $1\
+    \ \\* 2)\n    level=$(expr $level - 1)\n    output=()\n    echo $1 | while read\
+    \ -r j; do\n        if [ $level -lt $max_level ]; then output+=(\"$j\"); level=$((level\
+    \ + 1)); else output+=(\"\\\"$level\\\"\");\n        level=$((level + 2)); fi\n\
+    \    done\n    echo \"${output[@]}\"", "    local x\n    x=\"${1}\"\n    local\
+    \ nest=0\n    local nestlevel=0\n    local nestdepth=0\n    for x; do\n      \
+    \  if [[ \"${x:0:1}\" == \")\" ]]; then\n            ((nestdepth+=1))\n      \
+    \  elif [[ \"${x:0:1}\" == \"(\" ]];then\n            ((nestlevel+=1))\n     \
+    \       if ((nestdepth == nestlevel)) ; then # if current level is same as the\
+    \ one previously seen, move to next character\n                x=\"${x:1}\"\n\
+    \                continue\n            fi\n        else\n            ((nestdepth=nestlevel))\n\
+    \        fi\n    done\n    printf '%s\\n' \"${nestdepth}\"", "  # Parse the nested\
+    \ parenthesis\n  # We use a stack of strings to represent the parenthesis.\n \
+    \ # The string at index 0 represents the entire input string\n  # The string at\
+    \ index 1 represents the (())\n  # The string at index 2 represents the ((()))\n\
+    \  # The string at index 3 represents the ((()))\n  # ...\n  # The string at index\
+    \ n represents the n levels of nesting\n  # We start with the entire input string\n\
+    \  # and append each level of the parenthesis\n  local stack=( $1 )\n  local max_depth=$((\
+    \ ${#stack[@]} - 1 ))\n\n  # Traverse through each level of nesting and return\
+    \ the depth of the string\n  while [ $max_depth -gt 0 ]; do\n    # Remove one\
+    \ level of nesting from stack\n    stack=( ${stack[@]:0:$(( max_depth - 1 ))}\
+    \ )\n    # Update max_depth\n    max_depth=$(( ${#stack[@]} - 1 ))\n  done\n \
+    \ echo $stack", "    local tmp=\"${1//[()()] }\"\n    if [[ \"${#tmp}\" -ne \"\
+    1\" ]]; then\n        echo 1\n        return 1\n    fi\n    local max_level=0\n\
+    \    local tmp2\n    tmp2=\"${tmp// /\"}\"\n    while [[ $tmp2 ]]; do\n      \
+    \  max_level=$((max_level+1))\n        tmp2=\"${tmp2// /\"}\"\n    done\n    echo\
+    \ $max_level\n    return 0", "  local paren_count=0\n  local paren_group=0\n \
+    \ local paren_last_group=\"1\"\n  local paren_out=''\n  while [ \"$1\" != \"\"\
+    \ ]; do\n    # count parentheses as we find them\n    (( paren_count += ${1//(\\\
+    (\\(|\\)\\))//}))\n    # update the last group that we found\n    case \"${1}\"\
+    \ in\n      (\\(\\(|\\)\\))) paren_last_group=${1};;\n      *) ;;\n    esac\n\
+    \    # if the current group is nested with the last group found, output the deeper\
+    \ one\n    # e.g. the second set of parentheses in (((())))\n    if [ $paren_group\
+    \ -eq $paren_last_group ]; then\n      (( paren_out+=\"'$paren_count'\" ))\n \
+    \   else\n      # if we are at a new group (i.e. paren_group>0), output a new\
+    \ group\n      # and set the new group as the paren_last_group\n      if [ $paren_group\
+    \ -eq 0 ]; then\n        paren_group=$paren_last_group\n        paren_last_group=$paren_group\n\
+    \      else\n        # update the last group that we found for the next round\
+    \ of the loop\n        case \"${1}\" in\n          (\\(\\(|\\)\\))) paren_last_group=${1};;\n\
+    \          *) ;;\n        esac\n      fi\n      # and output the deepest group\n\
+    \      (( paren_out+=\"'$paren_group'\" ))\n      # reset paren_group\n      paren_group=0\n\
+    \    fi\n    # remove the first character of the string and repeat until done\n\
+    \    shift\n  done\n  echo \"$paren_out\"", "    local MAX_CNT_LEVELS=$1\n   \
+    \ local NESTING_LEVELS=$(\n        echo \"${MAX_CNT_LEVELS}\" \\\n        | grep\
+    \ -o \"()()\" | wc -l\n    )\n    local NESTING_LEVELS_BY_GROUP=$(\n        echo\
+    \ \"${MAX_CNT_LEVELS}\" \\\n        | grep -o \"()()\" | sed 's/\\(.*\\)/\"\\\
+    1\"/'\n    )\n    local MAX_LEVELS\n    if [ ${NESTING_LEVELS} -gt ${MAX_CNT_LEVELS}\
+    \ ]\n    then\n        local MAX_LEVELS=$(\n            echo \"${NESTING_LEVELS_BY_GROUP}\"\
+    \ \\\n                | sort -n \\\n                | tail -1 \\\n           \
+    \     | sed 's/^\\([^\"]*\\)\\(\"[^\"]*\"\\)\\(\"[^\"]*\"\\)$/\\1/'\n        )\n\
+    \    else\n        local MAX_LEVELS=$(\n            echo \"${NESTING_LEVELS_BY_GROUP}\"\
+    \ \\\n                | sort -n \\\n                | head -1 \\\n           \
+    \     | sed 's/^\\(\"[^\"]*\"\\)\\(\"[^\"]*\"\\)$/\\1/'\n        )\n    fi\n \
+    \   local FINAL_STR\n    for N in $(seq 1 ${MAX_LEVELS})\n    do\n        FINAL_STR+=\"\
+    ${NESTING_LEVELS_BY_GROUP}\";\n    done\n    echo \"${FINAL_STR}\"", "    # Python\
+    \ 3 compatibility\n    local IFS=$'\\n'\n    local -r nested_parens=$(echo $1\
+    \ | sed 's/^\"\\(.*\\)\"/\\1/')\n    local -r max_level_of_nesting=$(echo $nested_parens\
+    \ | tr -cd '()' | wc -c)\n\n    for level_of_nesting in $(seq 1 $max_level_of_nesting);\
+    \ do\n        echo -n \"$(echo $nested_parens | sed \"s/^\\(.*\\)$level_of_nesting\\\
+    (.*\\)$level_of_nesting/\\1/\")\"\n    done", "    local string=$1\n    local\
+    \ depth=0\n    local groups=( $string )\n    local nest_opens=0\n    local nest_closes=0\n\
+    \    while [ $#groups > 0 ]; do\n        if [[ -z \"${groups[$group]}\" ]]; then\n\
+    \            groups=(${groups[@]:0:$#groups})\n            continue\n        fi\n\
+    \        if [[ \"${groups[$group]}\" == ( ]]; then\n            ((nest_opens++))\n\
+    \        elif [[ \"${groups[$group]}\" == ) ]]; then\n            ((nest_closes++))\n\
+    \        elif [[ \"${groups[$group]}\" == (* ]]; then\n            ((nest_opens=$(expr\
+    \ $nest_opens + 1)))\n        elif [[ \"${groups[$group]}\" == )* ]]; then\n \
+    \           ((nest_closes=$(expr $nest_closes + 1)))\n        fi\n        ((groups--))\n\
+    \    done\n    echo \"${groups[@]:0:$((nest_opens+nest_closes))}\"", "  local\
+    \ paren_str=$1\n  local max_levels=0\n  local max_level=\"\"\n  # Extract the\
+    \ groups by splitting on spaces.\n  IFS=' ' read -ra par_strs <<< \"$paren_str\"\
+    \n  # Iterate over them and extract the deepest level.\n  for par_str in \"${par_strs[@]}\"\
+    ; do\n    ((max_levels++))\n    max_level=\"${par_str#(}\"\n  done\n  echo $max_levels",
+  "    local nested_parens=$(parse_nested_parens_string \"$1\")\n    echo $nested_parens",
+  "  local num_para_levels=1\n  local parens=''\n  while read -r; do\n    if [ \"\
+    $parens\" != \"\" ]; then\n      num_para_levels=$((num_para_levels + 1))\n  \
+    \    if [ \"$num_para_levels\" -eq \"$1\" ]; then\n        echo \"$parens\"\n\
+    \        break\n      fi\n    fi\n    if [ \"$parens\" != \"\" ] && [ \"$1\" !=\
+    \ \"0\" ]; then\n      num_para_levels=0\n    fi\n    if [ \"$parens\" != \"\"\
+    \ ]; then\n      parens=\"$parens$REPLY\"\n    else\n      parens=\"$REPLY\"\n\
+    \    fi\n  done < <(echo \"$1\")", "  local parens=$1\n  local nested=0\n  local\
+    \ level=0\n\n  echo \"$parens\" | sed 's/\\(\\([^)]*\\)\\)/\"\\1\"/g' | \\\n \
+    \   while read line; do\n      case \"$line\" in\n        \"(())\")\n        \
+    \  level=$(( $level + 1 ))\n          (( $nested >= $level )) && echo \"$level\"\
+    \n          ;;\n        \"((()))\")\n          level=$(( $level + 1 ))\n     \
+    \     (( $nested >= $level )) && echo \"$level\"\n          ;;\n        *)\n \
+    \         (( $nested < $level )) && echo \"$line\"\n          ;;\n      esac\n\
+    \    done", "  # For empty input\n  if [[ -z \"$1\" ]]; then\n    echo \"$1\"\n\
+    \    return 0\n  fi\n\n  # For input with only one group\n  if [[ $1 == \"(\"\
+    \ ]]; then\n    echo \"$1\"\n    return 0\n  fi\n\n  # For input with more than\
+    \ one group\n  # Escape all special characters in input string\n  echo \"$(echo\
+    \ \"$1\" | sed -r 's/([^a-zA-Z0-9_\\(\\)\\\"])/\\\\\\1/g')\"", "    local i\n\
+    \    local maxlen\n    maxlen=0\n    local level\n    local output\n    local\
+    \ j\n    local parencount\n    local parenlevel\n    for ((i=1; i<=NF; i++));\
+    \ do\n        if [[ \"${!i}\" == \"(\" ]] || [[ \"${!i}\" == \")\" ]]; then\n\
+    \            parencount=$(( ${parencount} + 1 ))\n        else\n            parencount=0\n\
+    \            if [[ \"${maxlen}\" -lt \"$i\" ]]; then\n                maxlen=$((\
+    \ ${maxlen} + 1 ))\n            fi\n            if (( ${parencount} > ${maxlen}\
+    \ )); then\n                if (( ${parenlevel} < 1 )); then\n               \
+    \     output=\"${!i}\"\n                    parenlevel=$(( ${parenlevel} + 1 ))\n\
+    \                else\n                    output=\"${!i}\"\n                fi\n\
+    \            fi\n        fi\n    done\n    echo \"${output}\"", "    local n=0\n\
+    \    local max=0\n    local parens=\"\"\n    local i=0\n    local str=\"$1\"\n\
+    \    local nesting\n    while [[ $i -lt ${#str[@]} ]]; do\n        if [[ $str\
+    \ = \"()\" ]]; then\n            parens=\"$parens\"\n        else\n          \
+    \  parens=\"$parens\"'\"$((++n)) '\"$((++max))\n        fi\n        if [[ \"$str\"\
+    \ = \"$str\"(\"* ]]; then\n            nesting=\"$max\"\n        fi\n        str=\"\
+    $((++i))\"\n    done\n    nesting=\"$((++n)) $((++max))\"\n    printf '%s\\n'\
+    \ \"$nesting\"", "  local string=\"$1\"\n  local levels=\"\"\n  while [[ $string\
+    \ ]]; do\n    # $levels now contains \"n\" where n is the number of (())\n   \
+    \ local levels\n    while [[ $string =~ (\\(\\([{,].*\\)\\)) ]]; then\n      levels=\"\
+    $levels $((${BASH_REMATCH[1]} + 1))\"\n      string=${BASH_REMATCH[2]}\n    done\n\
+    \    levels=\"$levels $((${BASH_REMATCH[1]} - 1))\"\n    string=${BASH_REMATCH[2]}\n\
+    \  done\n  echo \"$levels\"", "    local MAX_NESTING=$1\n    shift\n    local\
+    \ PARSING=$1\n    local NESTING\n    local PARENT_LEVEL\n    local INSIDE_PARENTHESES\n\
+    \    local PARENT_LEVEL_STR\n    local PARENT_LEVEL_STR_COUNT\n    local MAX_NESTING_COUNT\n\
+    \    local NESTING_COUNT\n    local NESTING_PARENTHESES\n\n    while [ \"$1\"\
+    \ ]; do\n        NESTING_PARENTHESES=\"( $1 )\"\n        INSIDE_PARENTHESES=\"\
+    ${NESTING_PARENTHESES}\"\n        PARENT_LEVEL_STR=\"${INSIDE_PARENTHESES%)}\"\
+    \n        PARENT_LEVEL_STR_COUNT=\"${PARENT_LEVEL_STR#* }\"\n        MAX_NESTING_COUNT=\"\
+    ${PARENT_LEVEL_STR_COUNT#* }\"\n        PARENT_LEVEL_STR_COUNT=\"${PARENT_LEVEL_STR_COUNT%)}\"\
+    \n        NESTING_COUNT=\"${MAX_NESTING_COUNT#* }\"\n\n        if [ \"$NESTING_COUNT\"\
+    \ -eq \"$MAX_NESTING\" ]; then\n            NESTING_COUNT=$MAX_NESTING_COUNT\n\
+    \        fi\n\n        MAX_NESTING_COUNT=$((MAX_NESTING_COUNT + 1))\n        NESTING_COUNT=$((NESTING_COUNT\
+    \ + 1))\n        NESTING_PARENTHESES=\"${NESTING_PARENTHESES%)\"}\"\n\n      \
+    \  if [ \"$NESTING_COUNT\" -lt \"$MAX_NESTING\" ]; then\n            PARSING=${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARSING%)\"\
+    }\"\n            PARSING=\"${PARSING%)\"}\"\n            PARSING=\"${PARS", " \
+    \   local input_str=$1\n    local max_level=0\n    local max_level_str=\" \"\n\
+    \    local paren_count=0\n    local count_of_paren=0\n    local count_of_left_paren=0\n\
+    \    local count_of_right_paren=0\n\n    while [[ $input_str != \"\" ]]; do\n\
+    \        if [[ $input_str == \"()()\" ]]; then\n            count_of_paren=$((count_of_paren+1))\n\
+    \        fi\n        if [[ $input_str == \"()\" ]]; then\n            count_of_paren=$((count_of_paren+1))\n\
+    \            count_of_left_paren=$((count_of_left_paren+1))\n        fi\n    \
+    \    if [[ $input_str == \")()\" ]]; then\n            count_of_paren=$((count_of_paren+1))\n\
+    \            count_of_right_paren=$((count_of_right_paren+1))\n        fi\n  \
+    \      if [[ $input_str == \"(\" ]]; then\n            count_of_paren=$((count_of_paren+1))\n\
+    \        fi\n        if [[ $input_str == \")\" ]]; then\n            count_of_paren=$((count_of_paren+1))\n\
+    \        fi\n        if [[ $count_of_paren == 0 ]]; then\n            count_of_paren=1\n\
+    \        fi\n        if [[ $count_of_paren > $max_level ]]; then\n           \
+    \ max_level_str=$input_str\n            max_level=$count_of_paren\n        fi\n\
+    \        input_str=${input_str%?}\n    done\n\n    echo \"$max_level_str\"", "\t\
+    echo \"$1\" | perl -ne 'BEGIN{my %stack=();my $max=0;}{\n\t\twhile (s/\\(([^()]*)\\\
+    )/g) { \n\t\t\tmy $s=$1; $stack{$s}=1 if (!exists($stack{$s})); \n\t\t\tif ($stack{$s}\
+    \ > $max) { $max=$stack{$s}; $max=$max+1 }; \n\t\t\t$1=\"\";\n\t\t}\n\t\tif ($stack{$_})\
+    \ { $max = $max+1 }; \n\t\tprint \"$max\\n\"; \n\t}'", "    local str=$1\n   \
+    \ local count result\n    local -i num_levels=0\n\n    while [[ $str != \"\" ]];\
+    \ do\n        if [[ $str =~ ^(\\(|)[^()]+(\\)|)$ ]]; then\n            count=$((count+1))\n\
+    \        fi\n        if [[ $str =~ ^(\\(|)([^()]+(\\)|))+$ ]]; then\n        \
+    \    if [[ $count -gt $num_levels ]]; then\n                count=$((count+1))\n\
+    \            else\n                count=$((num_levels))\n            fi\n   \
+    \     fi\n        shift\n    done\n    for ((i=0; i < count; i++)); do\n     \
+    \   echo -n \"$i\"\n    done", "    local input=\"${1}\"\n    local paren_counter=0\n\
+    \    local max_counter=0\n    local max=''\n    local max_string=''\n\n    while\
+    \ [[ $input != '' ]]; do\n        if [[ \"${input:0:1}\" == \"(\" ]]; then\n \
+    \           paren_counter=$((paren_counter + 1))\n        fi\n        if [[ \"\
+    ${input:0:1}\" == \")\" ]]; then\n            paren_counter=$((paren_counter -\
+    \ 1))\n        fi\n\n        if [[ $paren_counter -lt $max_counter ]]; then\n\
+    \            max_counter=$((paren_counter))\n            max=\"${input:0:1}\"\n\
+    \        else\n            max_string=\"${max_string}${input:0:1}\"\n        fi\n\
+    \n        input=\"${input:1}\"\n    done\n\n    echo \"${max}\"", "    local levels=$1\n\
+    \    local paren_level=$((${#levels}-1))\n    local output\n\n    while [[ ${levels}\
+    \ =~ ^([[:space:]]*)(.*)[[:space:]]\\1 ]]; do\n        levels=${BASH_REMATCH[2]}\n\
+    \        paren_level=$((${#levels}-1))\n    done\n\n    # output the deepest level\
+    \ of nesting\n    output=${levels:0:paren_level}\n\n    # remove extra whitespace\n\
+    \    output=${output// /}\n    output=${output//\"/}\"\n\n    # remove unnecessary\
+    \ \" from string\n    output=${output//\\\"/}\n\n    # remove unnecessary ' from\
+    \ string\n    output=${output//\\'/}\n\n    # remove unnecessary \\\\ from string\n\
+    \    output=${output//\\\\/}\n\n    # remove unnecessary \\ from string\n    output=${output//\\\
+    //}\n\n    # remove unnecessary \" from string\n    output=${output//\\\"/}\n\n\
+    \    # remove unnecessary \\' from string\n    output=${output//\\'/}\n\n    #\
+    \ remove unnecessary \\\\ from string\n    output=${output//\\\\/}\n\n    # remove\
+    \ unnecessary \\ from string\n    output=${output//\\//}\n\n    # remove unnecessary\
+    \ \" from string\n    output=${output//\\\"/}\n\n    # remove unnecessary \\'\
+    \ from string\n    output=${output//\\'/}\n\n    # remove unnecessary \\\\ from\
+    \ string\n    output=${output//\\\\/}\n\n    # remove unnecessary \\ from string\n\
+    \    output=${output//\\//}\n\n    # remove unnecessary \\\" from string\n   \
+    \ output=${output//\\\"/}\n\n    # remove unnecessary \\' from string\n    output=${output//\\\
+    '/}\n\n    # remove unnecessary \\\\ from string\n    output=${output//\\\\/}\n\
+    \n    # remove unnecessary \\ from string\n    output=${output//\\//}\n\n    #\
+    \ remove unnecessary \\\" from string\n    output=${output//\\\"/}\n\n    # remove\
+    \ unnecessary \\' from string\n    output=${output//\\'/}\n\n    # remove unnecessary\
+    \ \\\\ from string\n    output=${output//\\\\/}\n\n    # remove unnecessary \\\
+    \ from string\n    output=${output//\\//}\n\n    # remove unnecessary \\\" from\
+    \ string\n    output=${output//\\\"/}\n\n    # remove unnecessary \\' from string\n\
+    \    output=${output//\\'/}\n\n    # remove unnecessary \\\\ from string\n   \
+    \ output=${output//\\\\/}\n\n    # remove unnecessary \\ from string\n    output=${output//\\\
+    //}\n\n    # remove unnecessary \\\" from string\n    output=${output", "  local\
+    \ input=\"$1\"\n  local output_array=($(\n    local depth=0\n    while [[ \"$input\"\
+    \ ]]; do\n      if [[ \"$input\" == *\"(\"* ]]; then\n        (( depth++ ))\n\
+    \      else\n        (( depth-- ))\n      fi\n      output_array+=(\"$(( depth\
+    \ + 1 ))\")\n      input=\"${input##*[!()]}\"\n    done\n  ))\n  echo \"${output_array[*]}\"",
+  "    local results=\n    for parens in $1; do\n        local count=0\n        local\
+    \ last=\n        for char in $parens; do\n            if [ $char = $( ) ]; then\n\
+    \                count=`expr $count + 1`\n            else\n                if\
+    \ [ $count -eq $last ]; then\n                    results+=$count\n          \
+    \          count=0\n                else\n                    results+=\"\\\"\
+    $last\\\"\"\n                fi\n            fi\n            last=$char\n    \
+    \    done\n        if [ $count -eq $last ]; then\n            results+=$count\n\
+    \        fi\n    done\n    echo \"${results[@]}\"", "    local parens_depth result\n\
+    \    local depth=0\n    local parens_levels=($1)\n    local parens_levels_count\
+    \ # To count the number of levels of parens encountered\n\n    for parens_level\
+    \ in \"${parens_levels[@]}\"; do\n        if (( depth > parens_depth )); then\n\
+    \            result+=( \"$depth\" )\n            parens_depth=depth\n        \
+    \    parens_levels_count=0\n        fi\n        (( parens_levels_count++ ))\n\
+    \    done\n    if (( parens_levels_count > parens_depth )); then\n        result+=(\
+    \ \"$parens_depth\" )\n        (( parens_depth++ ))\n    fi\n    echo $result",
+  "    local arg\n    # Convert $1 to a string\n    arg=\"$1\"\n    # Convert the\
+    \ parens in the string to $1 surrounded by \"\n    arg=\"\\\"$arg\\\"\"\n    #\
+    \ Replace the parens in the string with space or empty string if they are the\
+    \ lowest level parens.\n    local arg2\n    for arg2 in $arg; do\n        if [[\
+    \ $arg2 =~ ^(\".*\")$ ]]; then\n            local arg3\n            for arg3 in\
+    \ $arg2; do\n                local arg4\n                for arg4 in $arg3; do\n\
+    \                    arg2=${arg2//$arg3/$arg4}\n                done\n       \
+    \     done\n        fi\n    done\n    # Strip off leading or trailing quotes and\
+    \ trailing spaces.\n    arg2=\"${arg2#\\\"}\"\n    arg2=\"${arg2%\\\"}\"\n   \
+    \ arg2=\"${arg2%\\\"}\"\n    echo \"$arg2\"", "    local IFS=\" \"\n    local\
+    \ nested_parens=$1 nested_parens_str=\"\"\n\n    while [[ $(echo \"$nested_parens\"\
+    \ | grep \"\\\\(\" | wc -l) -ge 1 ]]\n    do\n        nested_parens=$(echo \"\
+    $nested_parens\" | grep \"\\\\(\" | sed \"s/\\\\(//g\")\n        nested_parens_str=\"\
+    ${nested_parens_str}\\\"$(($(echo \"$nested_parens\" | grep \"\\\\)\" | wc -l)\
+    \ - 1))\\\"${nested_parens//\\\\(//g}\"\n    done\n\n    echo \"$nested_parens_str\"",
+  "  local MAX_LEVEL=$(echo \"${1//[^ ()]+}\" | wc -w)\n  local LEVEL=1\n  local NEST_LEVEL=''\n\
+    \  local NESTS=''\n  while [[ ${MAX_LEVEL} == ${LEVEL} ]]; do\n    local LAST_PAREN=\"\
+    ${NEST_LEVEL##*()}\"\n    NEST_LEVEL=\"${NEST_LEVEL%$LAST_PAREN}\"\n    NEST_LEVEL=\"\
+    ${NEST_LEVEL// *}\"\n    NESTS=\"${NESTS} '${LAST_PAREN}'\"\n    LEVEL=$(( ${LEVEL}\
+    \ + 1 ))\n  done\n  echo ${NESTS}", "    local tmp\n    local open\n    local\
+    \ nested\n    local level\n    local level_count\n    local level_str\n    local\
+    \ result\n\n    tmp=${1}\n    open=$(( ${#tmp} - 1 ))\n\n    level_str=''\n  \
+    \  level=0\n    level_count=0\n    result=( )\n    nested=0\n    while [ $open\
+    \ -ge 0 ]; do\n        if [ $open -eq 0 ]; then\n            level_str=$tmp\n\
+    \            level_count=$(( $level_count + 1 ))\n        else\n            level_str=$level_str$tmp\n\
+    \            level_count=$(( $level_count + 1 ))\n        fi\n\n        if [[\
+    \ $level_str =~ (\\() ]]; then\n            open=$(( $open - 1 ))\n          \
+    \  nested=$(( $nested + 1 ))\n        fi\n\n        if [[ $level_str =~ (\\))\
+    \ ]]; then\n            open=$(( $open - 1 ))\n            nested=$(( $nested\
+    \ - 1 ))\n        fi\n\n        if [ \"$open\" -eq 0 ]; then\n            result+=(\
+    \ \"$level_str\" )\n        fi\n\n        tmp=${tmp:0:1}\n    done\n\n    echo\
+    \ \"$result\"", "    local STRING=$1\n    local NESTED_PARENTHESIS_LEVEL=0\n \
+    \   local NESTED_LEFT_PARENTHESIS_LEVEL=0\n    local NESTED_RIGHT_PARENTHESIS_LEVEL=0\n\
+    \    local IN_PARENTHESIS_LEVEL=0\n    local NESTED_PARENTHESIS_STRING=''\n\n\
+    \    local NESTED_PARENTHESIS_STRING=''\n\n    for (( i=1; i<${#STRING}; i++ ));\
+    \ do\n        local CHAR=$(echo ${STRING} | sed -n $i'q;p')\n        if [[ \"\
+    $CHAR\" == \"(\" ]] &&\n            [[ \"${IN_PARENTHESIS_LEVEL}\" == 1 ]]; then\n\
+    \            local LEFT_PARENTHESIS_STRING=''\n\n            local NESTED_LEFT_PARENTHESIS_LEVEL=0\n\
+    \            for (( j=$i; j<${#STRING}; j++ )); do\n                local CHAR2=$(echo\
+    \ ${STRING} | sed -n $j'q;p')\n                if [[ \"$CHAR2\" == \")\" ]]; then\n\
+    \                    local RIGHT_PARENTHESIS_STRING=''\n\n                   \
+    \ local NESTED_RIGHT_PARENTHESIS_LEVEL=0\n                    for (( j=$j; j<${#STRING};\
+    \ j++ )); do\n                        local CHAR3=$(echo ${STRING} | sed -n $j'q;p')\n\
+    \                        if [[ \"$CHAR3\" == \")\" ]]; then\n                \
+    \            if [[ \"${IN_PARENTHESIS_LEVEL}\" == 0 ]]; then\n               \
+    \                 local NESTED_PARENTHESIS_LEVEL=$(( NESTED_PARENTHESIS_LEVEL\
+    \ + 1 ))\n                            fi\n                            local NESTED_PARENTHESIS_STRING=$((\
+    \ NESTED_PARENTHESIS_STRING + ${STRING} ))\n                        else\n   \
+    \                         if [[ \"${IN_PARENTHESIS_LEVEL}\" == 0 ]]; then\n  \
+    \                              local NESTED_LEFT_PARENTHESIS_LEVEL=$(( NESTED_LEFT_PARENTHESIS_LEVEL\
+    \ + 1 ))\n                            fi\n                            local NESTED_RIGHT_PARENTHESIS_LEVEL=$((\
+    \ NESTED_RIGHT_PARENTHESIS_LEVEL + 1 ))\n                            local RIGHT_PARENTHESIS_STRING=$((\
+    \ RIGHT_PARENTHESIS_STRING + ${STRING} ))\n                        fi\n      \
+    \              done\n\n                    if [[ \"${NESTED_LEFT_PARENTHESIS_LEVEL}\"\
+    \ == 0 ]]; then\n                        local NESTED_LEFT_PARENTHESIS_LEVEL=$",
+  "    local a=0\n    local b=$1\n    local c=\"\"\n    while [ $b != \"\" ]; do\n\
+    \        local d=$(parse_nested_parens_helper $b) # Recursive call\n        b=${b%?}\n\
+    \        c=$b\n        for e in $d; do\n            echo $c\n            c=$c$e\n\
+    \        done\n        echo $c\n        a=$((a+1))\n        if [ $a -gt $2 ];\
+    \ then break; fi\n    done\n    echo $c", "  local max_level=0\n  local level=0\n\
+    \  while read -r group; do\n    level=$(( $level + 1 ))\n    if [ $level -ge $max_level\
+    \ ] ; then\n      max_level=$level\n    fi\n    echo \"$max_level\"\n  done <<<\
+    \ \"$1\"", "  local NESTING=\"1\"\n  local NEST_STR=\"$(sed 's/\\([()]\\)/\\1\"\
+    /g' <<< $1)\"\n  local NESTED_STR=\"$(echo \"$NEST_STR\" | sed 's/(.*)/\"\\1\"\
+    /g')\"\n  echo $NESTED_STR | grep -P '^\"[^\"]*\"'", "  local group_str max_level\
+    \ max_level_count i depth level_str level_count par_depth\n  par_depth=0\n  max_level=0\n\
+    \  max_level_count=0\n  level_str=\"\"\n  level_count=0\n  IFS=$'\\n' read -r\
+    \ -d '' -a group_str <<< \"$1\"\n  for group in \"${group_str[@]}\"; do\n    depth=0\n\
+    \    for ((i = 0; i < ${#group}; i++)); do\n      if [[ ${group:$i:1} == \")\"\
+    \ ]]; then\n        ((depth++))\n      fi\n    done\n    if ((depth > max_level));\
+    \ then\n      level_str=\"${level_str}${group}\"\n      max_level=${depth}\n \
+    \     max_level_count=${level_count}\n      level_str=\"${level_str}${group:0:i}\"\
+    \n      level_count=${i}\n    fi\n    ((par_depth+=depth))\n  done\n  echo \"\
+    ${level_str}\"", "    local parens=\"$1\";\n    local parens_arr=($parens);\n\
+    \    local max_level=0\n    local max_level_str=\"\"\n    for paren in ${parens_arr[@]};\
+    \ do\n        if [[ \"${paren}\" =~ ([()])(\\()*(\\)) ]]; then\n            local\
+    \ level=$((${BASH_REMATCH[2]} + ${BASH_REMATCH[3]} - 1))\n            local level_str=${BASH_REMATCH[1]}\n\
+    \            if [[ ${level} -gt ${max_level} ]]; then\n                max_level=${level}\n\
+    \                max_level_str=\"${level_str}\"\n            fi\n        fi\n\
+    \    done\n    echo \"${max_level_str}\"", "\tlocal i\n\tlocal results=()\n\t\
+    local depth=0\n\tlocal parens=0\n\tlocal opens=0\n\tlocal closes=0\n\tlocal string=$1\n\
+    \tlocal words=()\n\n\tIFS=$'\\n' read -r i || { echo \"Error reading input\";\
+    \ exit 1; }\n\tIFS=$' \\t' read -r -a words <<<\"$string\"\n\n\t# Remove parens.\n\
+    \tfor i in \"${!words[@]}\"; do\n\t\tif [[ \"${words[i]}\" == \"(\" ]] && \\\n\
+    \t\t     [[ \"${words[i+1]}\" == \"(\" ]]; then\n\t\t\tlet parens+=1\n\t\telif\
+    \ [[ \"${words[i]}\" == \")\" ]]; then\n\t\t\tlet closes-=1\n\t\t\tif [[ $parens\
+    \ == 0 && $closes == 0 ]]; then\n\t\t\t\tresults=(\"${results[@]}\" \"$i\")\n\t\
+    \t\t\tbreak\n\t\t\telif [[ $parens == 0 && $closes == 1 ]]; then\n\t\t\t\tresults=(\"\
+    ${results[@]}\" \"$i\" '\"\"')\n\t\t\t\tbreak\n\t\t\telif [[ $parens == 1 && $closes\
+    \ == 0 ]]; then\n\t\t\t\tresults=(\"${results[@]}\" \"$i\" '\"0\"\"')\n\t\t\t\t\
+    break\n\t\t\telif [[ $parens == 1 && $closes == 1 ]]; then\n\t\t\t\tresults=(\"\
+    ${results[@]}\" \"$i\" '\"\" \"0\"')\n\t\t\t\tbreak\n\t\t\telif [[ $parens ==\
+    \ 2 && $closes == 0 ]]; then\n\t\t\t\tresults=(\"${results[@]}\" \"$i\" '\"1\"\
+    ')\n\t\t\t\tbreak\n\t\t\telif [[ $parens == 2 && $closes == 1 ]]; then\n\t\t\t\
+    \tresults=(\"${results[@]}\" \"$i\" '\"1\" \"0\"')\n\t\t\t\tbreak\n\t\t\telif\
+    \ [[ $parens == 3 && $closes == 0 ]]; then\n\t\t\t\tresults=(\"${results[@]}\"\
+    \ \"$i\" '\"2\"\"')\n\t\t\t\tbreak\n\t\t\telif [[ $parens == 3 && $closes == 1\
+    \ ]]; then\n\t\t\t\tresults=(\"${results[@]}\" \"$i\" '\"2\" \"0\"\"')\n\t\t\t\
+    \tbreak\n\t\t\telif [[ $parens == 4 && $closes == 0 ]]; then\n\t\t\t\tresults=(\"\
+    ${results[@]}\" \"$i\" '\"3\"\"')\n\t\t\t\tbreak\n\t\t\telif [[ $parens == 4 &&\
+    \ $closes == 1 ]]; then\n\t\t\t\tresults=(\"${results[@]}\" \"$i\" '\"3\" \"0\"\
+    \"')\n\t\t\t\tbreak\n\t\t\telif [[ $parens == 5 && $closes == 0 ]]; then\n\t\t\
+    \t\tresults=(\"${results[", "    local str=$1\n    local max_level=0\n    local\
+    \ level=0\n\n    local nesting_counter=0\n    local last_nesting_open=false\n\
+    \    local last_nesting_close=false\n    local last_nesting_count=0;\n\n    local\
+    \ open_p1\n    local open_p2\n    local close_p1\n    local close_p2\n    local\
+    \ close_p3\n    local close_p4\n\n    local depth_p1\n    local depth_p2\n   \
+    \ local depth_p3\n    local depth_p4\n\n    local nesting_p2\n\n    local open_p1_value\n\
+    \    local open_p2_value\n    local open_p3_value\n    local open_p4_value\n \
+    \   local close_p1_value\n    local close_p2_value\n    local close_p3_value\n\
+    \    local close_p4_value\n    local depth_p1_value\n    local depth_p2_value\n\
+    \    local depth_p3_value\n    local depth_p4_value\n    local nesting_p2_value\n\
+    \n    while [[ ${#str} -gt 0 ]]; do\n        open_p1=false\n        open_p2=false\n\
+    \        close_p1=false\n        close_p2=false\n        close_p3=false\n    \
+    \    close_p4=false\n        depth_p1=false\n        depth_p2=false\n        depth_p3=false\n\
+    \        depth_p4=false\n        nesting_p2=false\n\n        # First step is to\
+    \ find open parenthesis\n        for open_p1_value in $(seq $((${#str} - ${#open_p1})))\n\
+    \        do\n            if [[ ${str:$(($open_p1 + $open_p1_value)):1} == '('\
+    \ ]]\n            then\n                if [[ ${str:$(($open_p1 + $open_p1_value)):$(($open_p1\
+    \ + $open_p1_value)+1):1} == ')' ]]\n                then\n                  \
+    \  open_p1=true\n                fi\n            fi\n        done\n\n        #\
+    \ Second step is to find close parenthesis\n        for close_p1_value in $(seq\
+    \ $((${#str} - ${#close_p1})))\n        do\n            if [[ ${str:$(($close_p1\
+    \ + $close_p1_value)):1} == ')' ]]\n            then\n                if [[ ${str:$(($close_p1\
+    \ + $close_p1_value)):$(($close_p1 + $close_p1_value)+1):1} == ')' ]]\n      \
+    \          then\n                    close_p1=true\n                fi\n     \
+    \       fi\n        done\n\n        # Third step is to find ", "  local str=$1\n\
+    \  local depths=()\n  local nest=0\n  local max_depth=0\n  local count=0\n  local\
+    \ output=''\n  while [ $nest -le ${#str} ]; do\n    local c=$str[$nest]\n    case\
+    \ \"$c\" in\n      (\")\") depths+=(\"$nest\") ;;\n      (\"(\") ;;\n      (\"\
+    {\")) ;;\n      (\"[\")) ;;\n      (\"*\") max_depth=$((max_depth + nest)) ;;\n\
+    \      (\",\") ;;\n      (*) ;;\n    esac\n    (( nest++ ))\n  done\n  while [\
+    \ $count -le ${#depths[*]} ]; do\n    (( count++ ))\n    output+=\"${depths[$count]}:${#depths[$count]}\\\
+    n\"\n  done\n  output+=\"${depths[0]}:${#depths[0]}\"\n  echo \"$output\"", " \
+    \ local in_quotes=false\n  local num_parens=0\n  local paren_level=0\n  local\
+    \ max_level=0\n  local nesting_depth=0\n  local str=\"$1\"\n\n  while [ \"${str}\"\
+    \ != \"\" ]; do\n    local c=\"${str#( }\"\n    local d=\"${str%)}\"\n    local\
+    \ next_c=\"${str#${c}}\" # next_c is c without the extra space\n    local next_d=\"\
+    ${str#${d}}\"\n    local end_quotes=false\n    local quotes=false\n\n    if [[\
+    \ \"${in_quotes}\" == \"true\" ]]; then\n      in_quotes=false\n      nesting_depth=0\n\
+    \      num_parens=0\n      paren_level=0\n    else\n      case \"${c}\" in\n \
+    \       '\"'*)\n          in_quotes=true\n          nesting_depth=1\n        \
+    \  num_parens=0\n          paren_level=0\n        ;;\n        '('*)\n        \
+    \  nesting_depth=$((nesting_depth + 1))\n        ;;\n        ')')\n          nesting_depth=$((nesting_depth\
+    \ - 1))\n        ;;\n        *)\n          num_parens=$((num_parens + 1))\n  \
+    \        max_level=$((max_level))\n      ;;\n      esac\n    fi\n    if [[ \"\
+    ${num_parens}\" -eq \"0\" ]]; then\n      if [[ -z \"${max_level}\" ]]; then\n\
+    \        max_level=0\n      fi\n      if [[ \"${nesting_depth}\" -gt \"${max_level}\"\
+    \ ]]; then\n        nesting_depth=\"${nesting_depth}\"\n        max_level=\"${nesting_depth}\"\
+    \n      else\n        nesting_depth=\"$((nesting_depth + 1))\"\n        max_level=\"\
+    $((max_level + 1))\"\n      fi\n    fi\n\n    if [[ \"${c}\" == \"(\" ]]; then\n\
+    \      if [[ \"${num_parens}\" -eq 1 ]]; then\n        nesting_depth=$((nesting_depth\
+    \ + 1))\n      fi\n      num_parens=$((num_parens + 1))\n      paren_level=$((paren_level\
+    \ + 1))\n    elif [[ \"${c}\" == \")\" ]]; then\n      num_parens=$((num_parens\
+    \ - 1))\n      paren_level=$((paren_level - 1))\n    elif [[ \"${c}\" == \"'\"\
+    \ ]]; then\n      end_quotes=true\n      quotes=true\n    fi\n    str=\"${str#${next_c}}\"\
+    \n    str=\"${str#${next_d}}\"\n  done\n  echo \"${str}\"\n  [[ \"${quotes}\"\
+    \ == \"true\" ]] && echo 'true' || ", "  local parens=$1 count=$2 result level\n\
+    \  local paren\n\n  # Initialize variables\n  result=$(\n  while IFS= read -r\
+    \ paren; do\n    count+=\"${paren//[()(*)]/}\"\n    if [[ \"${count}\" -gt \"\
+    ${level}\" ]]; then\n      result+=\"${count}\\\"\"\n      ((level++))\n     \
+    \ count=\"${paren//[()()()]/}\"\n    fi\n  done <<< \"$parens\")\n\n  # Output\
+    \ the final result\n  echo \"${result}\"", "  # $1 is a string like \"(()()) ((()))\
+    \ () ((())()())\"\n  declare -i i=1\n  declare -i depth=0 j=0 k=0\n  declare -i\
+    \ paren_depth=0\n  declare -i open_parens=0\n  declare -i close_parens=0\n  declare\
+    \ -i paren_str\n  declare -a paren_strs=()\n  paren_strs=()\n\n  while [ $i -lt\
+    \ ${#1} ]; do\n    # Each character in the string is a paren\n    # Increase open_parens\
+    \ to increment the number of open parens.\n    while [ \"${1:i:1}\" = '(' ]; do\n\
+    \      (( open_parens++ ))\n      (( i++ ))\n    done\n\n    # Increase close_parens\
+    \ to increment the number of close parens.\n    while [ \"${1:i:1}\" = ')' ];\
+    \ do\n      (( close_parens++ ))\n      (( i++ ))\n    done\n\n    # If this character\
+    \ is a close paren,\n    # Increase the level of nesting and decrease the open_parens\n\
+    \    # Decrease the level of nesting and decrease the close_parens\n    if [ \"\
+    ${1:i:1}\" = ')' ]; then\n      # Check if this is a group\n      [[ -n ${paren_strs[${j}]}\
+    \ ]] || continue\n      # Increase the level of nesting\n      (( paren_depth++\
+    \ ))\n      # Keep track of number of open parens\n      (( open_parens-- ))\n\
+    \      # Remove this character from the string\n      (( i++ ))\n    fi\n\n  \
+    \  # Each character is a paren\n    # Increase the depth of nesting\n    (( depth++\
+    \ ))\n    # Keep track of number of open parens\n    (( open_parens++ ))\n   \
+    \ # Keep track of number of close parens\n    (( close_parens++ ))\n\n    # If\
+    \ depth is equal to number of open parens,\n    # Add this character to the paren_str\n\
+    \    if [ \"${depth}\" -eq \"${open_parens}\" ]; then\n      paren_str+=\"${1:i:1}\"\
+    \n      # Remove the character from the string\n      (( i++ ))\n    fi\n\n  \
+    \  # Add this character to the paren_strs\n    paren_strs[$j]=\"${paren_str}\"\
+    \n    (( j++ ))\n\n    if [ \"${#1}\" = \"$i\" ]; then\n      (( depth-- ))\n\
+    \      (( open_parens-- ))\n    fi\n  done\n\n  # Remove the closing paren from\
+    \ the paren_strs\n  paren_strs+=(${1:i})\n  # Remove the closing paren from the\
+    \ string", "    local nl levels maxlevel depths parens depth paren i j k s sublevel\n\
+    \    nl=IFS\n    levels=$(sed -e 's/[\\(\\)]//g' <<<\"$1\")\n    maxlevel=0\n\
+    \    for level in $levels; do\n        depths=$(sed -e 's/[\\(\\)]//g' <<<\"$level\"\
+    )\n        if [[ $(( $(echo ${#depths} | wc -w) )) -gt $maxlevel ]]; then\n  \
+    \          maxlevel=$(( $(echo ${#depths} | wc -w) ))\n        fi\n    done\n\
+    \    depths=$(sed -e 's/[\\(\\)]//g' <<<\"$levels\")\n    for depth in $depths;\
+    \ do\n        parens=$(sed -e \"s/${depth}//g\" <<<\"$levels\")\n        if [[\
+    \ $(( $(echo ${#parens} | wc -w) )) -gt $maxlevel ]]; then\n            maxlevel=$((\
+    \ $(echo ${#parens} | wc -w) ))\n        fi\n        for paren in $parens; do\n\
+    \            (( level++ ))\n            echo \"$level\"\n        done\n    done\n\
+    \    IFS=$nl", "\tlocal IFS=$'\\n';\n\tlocal depths=()\n\tlocal ndepths=$(( ${#1}\
+    \ / 2 ))\n\tlocal ncount=$(( ${#1} / $ndepths ))\n\tlocal i\n\tlocal result\n\n\
+    \tfor (( i=1; i <= $ncount; i++ )); do\n\t\tdepths+=(\"$i\")\n\t\tresult=$1\n\t\
+    \twhile (( ${#result} > 0 )); do\n\t\t\tlocal j\n\t\t\tlocal parens_depth=$((\
+    \ ${#result} / 2 ))\n\t\t\tlocal depth=$(( ${#depths[*]} - 1 ))\n\n\t\t\tresult=${result#*\\\
+    (}\n\t\t\twhile (( ${#result} > 0 )); do\n\t\t\t\tlocal parens_depth=$(( ${#result}\
+    \ / 2 ))\n\t\t\t\tif (( ${depths[$j]} == parens_depth )); then\n\t\t\t\t\tlocal\
+    \ parens_depth=$(( parens_depth + 1 ))\n\t\t\t\telse\n\t\t\t\t\tlocal depth=$((\
+    \ depth + 1 ))\n\t\t\t\t\tdepths+=(\"$depth\")\n\t\t\t\t\tresult=${result#*\\\
+    (}\n\t\t\t\tfi\n\t\t\t\tj=$(( ${#depths[*]} - 1 ))\n\t\t\tdone\n\t\tdone\n\tdone\n\
+    \n\techo \"${depths[*]}\"", "    # remove leading and trailing whitespace if any\n\
+    \    local str=$1\n    local trimmed=\"${str: -1}\"\n    local trimmed=\"${trimmed}\"\
+    \n    local trimmed=\"${trimmed}\"\n    echo \"$trimmed\"", "    local MAX_LEVELS=$1\n\
+    \    local SLICE=$2\n    local SLICE_LEN\n    local LEVELS # $LEVELS is initialized\
+    \ to []\n    local CURRENT # $CURRENT is initialized to \"\"\n    local NEXT_SLITE\
+    \ # $NEXT_SLICE is initialized to \"\"\n    local NEXT_SLITE_LEN # $NEXT_SLITE_LEN\
+    \ is initialized to 0\n    local STRING # $STRING is initialized to \"\"\n   \
+    \ local OUTPUT # $OUTPUT is initialized to \"\"\n    local OUTPUT_LEN # $OUTPUT_LEN\
+    \ is initialized to 0\n\n    if [ \"${MAX_LEVELS}\" = '' ]; then\n        MAX_LEVELS=1\
+    \ # maximum levels allowed\n    fi\n\n    for LEVELS in \"${SLICE}\"; do\n   \
+    \     NEXT_SLITE=${LEVELS}\n        NEXT_SLITE_LEN=${#LEVELS}\n        CURRENT=${LEVELS}\n\
+    \        CURRENT_LEN=${#CURRENT}\n\n        if [ $NEXT_SLITE_LEN -gt 0 ]; then\n\
+    \            if [ $NEXT_SLITE_LEN -gt $MAX_LEVELS ]; then\n                NEXT_SLITE=${SLICE:$((NEXT_SLITE_LEN\
+    \ - MAX_LEVELS)):$SLICE}\n                NEXT_SLITE_LEN=${#NEXT_SLITE}\n    \
+    \        fi\n        fi\n\n        STRING=${CURRENT}\n\n        if [ $CURRENT_LEN\
+    \ -gt $MAX_LEVELS ]; then\n            STRING=${STRING:0:$((MAX_LEVELS - CURRENT_LEN))}\n\
+    \        fi\n\n        if [ $OUTPUT_LEN -gt $MAX_LEVELS ]; then\n            OUTPUT=${OUTPUT:0:$((MAX_LEVELS\
+    \ - $OUTPUT_LEN))}\n        fi\n\n        if [ $STRING ]; then\n            OUTPUT=${OUTPUT:0:$OUTPUT_LEN}${STRING}\n\
+    \        fi\n\n        if [ $OUTPUT_LEN -gt $MAX_LEVELS ]; then\n            OUTPUT+=\"\
+    \\\"$MAX_LEVELS\\\"\"\n        fi\n\n        OUTPUT_LEN=$(( $OUTPUT_LEN + $STRING_NESTING_DIFF\
+    \ ))\n\n        if [ $OUTPUT_LEN -gt $MAX_LEVELS ]; then\n            OUTPUT+=\"\
+    \\\"$MAX_LEVELS\\\"\"\n        fi\n\n        LEVELS+=($STRING)\n    done\n\n \
+    \   echo \"${OUTPUT[@]}\"", "\tlocal i depth depth output depths outputs depth\n\
+    \tdepths=( $(echo -n \"$1\" | sed -E 's/\\(\\((\\(\\(|)\\)\\)\\)\\)\\)/\\1/')\
+    \ )\n\tdepth=${#depths[@]}\n\toutputs=( )\n\toutput=''\n\tfor i in \"${!depths[@]}\"\
+    ; do\n\t\tif [[ ${depths[$i]} == $depth ]]; then\n\t\t\toutput=$output${outputs[$i]}\n\
+    \t\telse\n\t\t\toutput=${output}${outputs[$i]}\n\t\tfi\n\tdone\n\techo \"$output\"",
+  "  local str=$1\n  local i=0\n  local levels=0\n  local counts=()\n  while [[ $str\
+    \ =~ (\\([^)]*\\)) && $i -lt ${#BASH_REMATCH[@]} ]]; do\n    local count=$((${#counts[@]}\
+    \ + 1))\n    counts[$i]=$count\n    levels=$((${levels} + 1))\n    i=$((i + 1))\n\
+    \    str=${BASH_REMATCH[$i]}\n  done\n  local max_level=${#counts[@]}\n  local\
+    \ max_count=${counts[$max_level]}\n  local max_i=0\n  local max_j=$max_level\n\
+    \  local max_counts=()\n  for j in $(seq 0 $((max_level - 1))); do\n    if [[\
+    \ \"${counts[$j]}\" -gt \"${max_count}\" ]]; then\n      max_count=${counts[$j]}\n\
+    \      max_i=$j\n      max_j=$((max_j - 1))\n      max_counts=(\"${max_counts[@]}\"\
+    \ $((${max_counts[@]} + ${counts[$j]} )))\n    fi\n  done\n  echo \"${max_counts[@]}\"",
+  "  # Parse the string $1\n  local _parens_regex='^\\('$'\\(\\)'\\)\\('$'\\(\\)'\\\
+    )\\('$'\\(\\)'\\)\\('$'\\(\\)'\\)\\('$'\\(\\)'\\)$'\n  local _parens_nesting=$(echo\
+    \ $1 | sed -r \"$_parens_regex\" | sed -r \"s#\\(\\)#\\\"$1\\\"#\")\n  echo -n\
+    \ \"$_parens_nesting\"", "  local input_str=\"${1}\"\n  local paren_group=\"\"\
+    \n  local num_of_parens=0\n  local num_of_max_level=0\n  local max_level_of_nesting_of_parens=0\n\
+    \  local group_num=0\n  while IFS= read -r; do\n    if [[ \"$input_str\" =~ (\\\
+    ([^(]*\\)) ]]; then\n      if [[ \"$num_of_parens\" -gt \"$num_of_max_level\"\
+    \ ]]; then\n        max_level_of_nesting_of_parens=$num_of_max_level\n      fi\n\
+    \      if [[ $num_of_max_level -eq 0 ]]; then\n        paren_group=\"${BASH_REMATCH[1]}\"\
+    \n      fi\n      if [[ \"$num_of_parens\" -eq \"$num_of_max_level\" ]]; then\n\
+    \        if [[ \"$group_num\" -eq \"$max_level_of_nesting_of_parens\" ]]; then\n\
+    \          num_of_parens=$((num_of_parens - 1))\n        else\n          num_of_parens=$((num_of_parens\
+    \ + 1))\n        fi\n      else\n        num_of_parens=$((num_of_parens + 1))\n\
+    \      fi\n    else\n      if [[ \"$group_num\" -eq \"$max_level_of_nesting_of_parens\"\
+    \ ]]; then\n        num_of_max_level=$((num_of_max_level + 1))\n      fi\n   \
+    \   if [[ \"$group_num\" -eq \"$max_level_of_nesting_of_parens\" ]]; then\n  \
+    \      echo \"$num_of_max_level\"\n        break\n      fi\n      num_of_parens=$((num_of_parens\
+    \ + 1))\n    fi\n  done <<< \"$input_str\"", "    local parens_groups=$1\n\n \
+    \   local nest_level=0\n    local nest_count=0\n\n    while [[ ${#parens_groups}\
+    \ -gt 0 ]] ; do\n        local open_parens=0\n        while [[ ${#parens_groups[nest_count]}\
+    \ -gt 0 ]] ; do\n            if [[ ${parens_groups[nest_count]} == '('  ]]; then\n\
+    \                open_parens=$((open_parens + 1))\n            else\n        \
+    \        open_parens=$((open_parens - 1))\n            fi\n        done\n    \
+    \    if [[ ${open_parens} -eq 0 ]]; then\n            nest_level=$((nest_level\
+    \ + 1))\n        fi\n        nest_count=$((nest_count + 1))\n        parens_groups=${parens_groups[nest_count]}\n\
+    \    done\n    \n    local output_array=($nest_level)\n    echo \"${output_array[@]}\"",
+  "    # Bash doesn't support unlimited parameter expansion, so we split it into multiple\
+    \ parameters.\n    local nested_paren_groups=($1 \"(\")\n    local level=0\n \
+    \   local paren_levels=()\n    while ((${#nested_paren_groups[@]} > level)) ;\
+    \ do\n        local paren_level=(${nested_paren_groups[$((level))]+1})\n     \
+    \   (( paren_levels[${paren_level}]=paren_levels[${paren_level}]+1 ))\n      \
+    \  (( level=${paren_level} ))\n        (( nested_paren_groups[$((level))]=${nested_paren_groups[$((level))]}${nested_paren_groups[$((level))+1]}\
+    \ ))\n    done\n    local all_levels=()\n    for (( i=0; i < ${#nested_paren_groups[@]}\
+    \ )) ; do\n        all_levels+=(${nested_paren_groups[$((i))]})\n    done\n  \
+    \  echo $all_levels", "    local S\n    S=\"$1\"\n    local L\n    for ((L=0;\
+    \ L<${#S}; L++)); do\n        if [[ ${S:L:1} == \\( ]]; then\n            S+=\"\
+    $(parse_nested_parens \"${S:L+1}\")\"\n        fi\n    done\n    echo \"$S\"",
+  "    # $1 is $1\n    # $2 is $2\n    # $3 is $3\n    # $4 is $4\n    # $5 is $5\n\
+    \    # $6 is $6\n    local nest cur prev level depth\n    nest=cur=\"\"\n    prev=$4\n\
+    \    level=1\n    depth=0\n    while [[ $1 ]]\n    do\n        if [[ $1 =~ ^\\\
+    (.*\\)$ ]]\n        then\n            if [[ -z \"$cur\" ]]\n            then\n\
+    \                nest=$(($level - 1))\n                cur=$1\n            else\n\
+    \                nest=$(($level - $prev))\n                cur=$(expr $prev +\
+    \ $nest + 1)\n            fi\n        fi\n        prev=$1\n        shift\n   \
+    \ done\n    echo $cur", "    local nested_parens=()\n    local nested_parens_level=0\n\
+    \    local i=$1\n    while (( $i )); do\n        case \"$i\" in\n            '(')\
+    \ nested_parens_level=$(( $nested_parens_level + 1 )) ;;\n            ')') nested_parens_level=$((\
+    \ $nested_parens_level - 1 )) ;;\n            '(') nested_parens[${#nested_parens[@]}]=$((\
+    \ $nested_parens_level + 1 )) ;;\n            ')') nested_parens[${#nested_parens[@]}]=$((\
+    \ $nested_parens_level - 1 )) ;;\n            esac\n            (( i < ${#1} ))\
+    \ && nested_parens[${#nested_parens[@]}]=$(( $nested_parens_level + 1 ))\n   \
+    \         (( nested_parens_level > 0 )) && nested_parens[${#nested_parens[@]}]=$((\
+    \ $nested_parens_level - 1 ))\n            (( nested_parens_level == 0 )) && nested_parens[${#nested_parens[@]}]=1\n\
+    \            i=\"${${i%?}}\"\n        done\n        echo \"${nested_parens[*]}\"",
+  "  local str=$1\n  local max_level=0\n  while [[ $str != \"\" ]]; do\n    if [[\
+    \ \"${str:0:1}\" == \"(\" ]] \\\n        && [[ \"${str:1:1}\" == \"(\" ]] \\\n\
+    \        && [[ \"${str:2:1}\" == \"(\" ]] \\\n        && [[ \"${str:3:1}\" ==\
+    \ \"(\" ]] \\\n        && [[ \"${str:4:1}\" == \"(\" ]] \\\n        && [[ \"${str:5:1}\"\
+    \ == \"(\" ]] \\\n        && [[ \"${str:6:1}\" == \"(\" ]] \\\n        && [[ \"\
+    ${str:7:1}\" == \"(\" ]]; then\n      (( max_level +=1 ))\n    elif [[ \"${str:0:1}\"\
+    \ == \")\" ]] \\\n        && [[ \"${str:1:1}\" == \")\" ]] \\\n        && [[ \"\
+    ${str:2:1}\" == \")\" ]] \\\n        && [[ \"${str:3:1}\" == \")\" ]] \\\n   \
+    \     && [[ \"${str:4:1}\" == \")\" ]] \\\n        && [[ \"${str:5:1}\" == \"\
+    )\" ]] \\\n        && [[ \"${str:6:1}\" == \")\" ]] \\\n        && [[ \"${str:7:1}\"\
+    \ == \")\" ]]; then\n      (( max_level +=1 ))\n    fi\n    str=${str:1}\n  done\n\
+    \  echo $max_level", "    local levels=0\n    local groups=$(echo \"$1\" | sed\
+    \ \"s/^.*\\(\\([^)]*\\)\\)\\(.*\\)/\\1 \\2/g\" | sed \"s/\\(\\([^)]*\\)\\)\\(.*\\\
+    )/\\1 \\2/g\" | sed \"s/\\(\\([^)]*\\)\\)$/\\1/\")\n    for i in $groups; do\n\
+    \        if [[ $i ]]; then\n            ((levels=$levels+1))\n        fi\n   \
+    \ done\n    echo \"$levels\"", "    IFS=' ' read -r -a array <<< \"$1\"\n    for\
+    \ element in \"${array[@]}\"; do\n        array=( $(parse_nested_parens \"$element\"\
+    ) )\n        [[ \"${array[0]}\" == \"$element\" ]] && echo \"${array[@]:0:1}\"\
+    \n    done", "    local in_paren_group=0\n    local level=0\n    local max_level=0\n\
+    \    local out=\"\"\n    while [ ${#1} -gt 0 ]; do\n        if [[ ${#1} -lt 2\
+    \ ]]; then\n            echo \"Invalid input\"\n            exit 1\n        fi\n\
+    \        local g=\"$1\"\n        shift\n        if [[ \"${g}\" == \"(\" ]]; then\n\
+    \            if [[ \"${in_paren_group}\" -eq 0 ]]; then\n                in_paren_group=1\n\
+    \                level=1\n                max_level=level\n                out+=(\"\
+    ${level}\")\n                shift\n            else\n                (( level++\
+    \ ))\n            fi\n        elif [[ \"${g}\" == \")\" ]]; then\n           \
+    \ if [[ \"${in_paren_group}\" -eq 1 ]]; then\n                in_paren_group=0\n\
+    \                (( level-- ))\n            else\n                echo \"Invalid\
+    \ input\"\n                exit 1\n            fi\n            if [[ \"${level}\"\
+    \ -gt \"${max_level}\" ]]; then\n                echo \"Invalid input\"\n    \
+    \            exit 1\n            fi\n            out+=(\"${level}\")\n       \
+    \ fi\n    done\n    echo \"${out[@]}\"", "    # http://stackoverflow.com/questions/222309/how-do-you-parse-math-expressions-in-a-shell-script\n\
+    \    # http://stackoverflow.com/questions/11806361/how-to-check-if-a-variable-is-null-in-a-bash-script\n\
+    \    # http://www.tldp.org/LDP/abs/html/arithexp.html\n    # http://www.tldp.org/LDP/abs/html/parameter-substitution.html\n\
+    \    # http://www.tldp.org/LDP/abs/html/special-chars.html\n    # http://wiki.bash-hackers.org/commands/classictest\n\
+    \    # http://unix.stackexchange.com/questions/15187/how-can-i-check-if-a-bash-string-is-not-empty\n\
+    \    # http://stackoverflow.com/questions/5609854/how-can-i-check-if-the-output-of-an-if-statement-is-empty\n\
+    \    # http://stackoverflow.com/questions/16723339/how-to-check-for-null-or-empty-strings-in-a-shell-script\n\
+    \    local IFS=\" \"\n    local paren_level=0\n    local paren_depth=0\n    local\
+    \ level=0\n    local depth=0\n    local result=()\n    while IFS= read -r line;\
+    \ do\n        if [[ $line == *\\( ]]; then\n            paren_level=$(expr $paren_level\
+    \ + 1)\n            paren_depth=$(expr $paren_depth + 1)\n            level=0\n\
+    \            depth=0\n        elif [[ $line == *\\) ]]; then\n            paren_level=$(expr\
+    \ $paren_level - 1)\n            paren_depth=$(expr $paren_depth - 1)\n      \
+    \      level=0\n            depth=0\n        elif [[ $line == *\\( && $paren_depth\
+    \ -eq 1 ]]; then\n            paren_level=$(expr $paren_level + 1)\n         \
+    \   paren_depth=0\n            level=0\n            depth=0\n        elif [[ $line\
+    \ == *\\) && $paren_depth -gt 1 ]]; then\n            paren_level=$(expr $paren_level\
+    \ - 1)\n            paren_depth=0\n            level=0\n            depth=0\n\
+    \        elif [[ $line == *\\(* ]]; then\n            paren_level=$(expr $paren_level\
+    \ + 1)\n            paren_depth=$(expr $paren_depth + 1)\n            level=0\n\
+    \            depth=0\n        elif [[ $line == *\\*\\(* ]]; then\n           \
+    \ paren_level=$(expr $paren_level + 1)\n            paren_depth=$(expr $paren_depth\
+    \ + 1)\n            level=0\n            depth=0\n        elif [[ $line == *\\\
+    *\\) ]]; then\n            paren_level=$(expr $paren_level - 1)\n            paren_depth=$(expr\
+    \ $paren_depth - 1)\n            level=0", "    local -n input=$1\n    local -n\
+    \ max_count=0\n    local -n max_level=0\n    local -n level\n    local -n i\n\
+    \    local -n output\n    local -n count\n    local -n levels\n    local -n nested_parens\n\
+    \    local -n nested_paren_count\n    local -n nested_paren_levels\n    local\
+    \ -n nested_paren_index\n    local -n paren\n    local -n paren_count\n    local\
+    \ -n paren_index\n    local -n output\n    local -n string\n\n    if [[ \"${input}\"\
+    \ == \"\" ]]; then\n        return 1\n    fi\n    nested_parens=()\n    levels=()\n\
+    \    nested_paren_count=0\n    nested_paren_index=0\n    paren_count=0\n    paren_index=0\n\
+    \    output=()\n\n    while [[ ${input} != \"\" ]]; do\n        level=\"${input:0:1}\"\
+    \n        if [[ ${level} == \"(\" ]]; then\n            nested_paren_levels=$((${nested_paren_count}+1))\n\
+    \            ((nested_paren_levels++))\n            levels=$((${levels}+1))\n\
+    \        elif [[ ${level} == \")\" ]]; then\n            ((nested_paren_levels--))\n\
+    \            levels=$((${levels}-1))\n            if [[ ${nested_paren_levels}\
+    \ -eq 0 ]]; then\n                ((nested_paren_count--))\n                if\
+    \ [[ ${nested_paren_count} -eq 0 ]]; then\n                    nested_paren_index=${nested_paren_index}+1\n\
+    \                    nested_paren_count=${nested_paren_count}\n              \
+    \  fi\n            fi\n        fi\n        nested_paren_count=$((${nested_paren_count}+1))\n\
+    \        nested_parens=${nested_parens[@]}\n        nested_paren_index=${nested_paren_index}+${nested_paren_levels}\n\
+    \        nested_parens[${nested_paren_index}]=\"${levels}:${nested_paren_levels}\"\
+    \n        levels=${levels:0:1}\n        input=${input:1}\n    done\n\n    nested_paren_index=$((${nested_paren_index}-1))\n\
+    \    output=(${nested_parens[${nested_paren_index}]})\n\n    if [[ -z ${output}\
+    \ ]]; then\n        return 1\n    fi\n    count=${output[0]}\n    for ((i=0; i\
+    \ < ${#output[@]}; i++)); do\n        count=$((count+1))\n    done\n    count=$((${count}+1))\n\
+    \    output[1]=\"${count}\"\n\n    echo ${output[@]}\n    return 0", "    local\
+    \ string=$1\n    local levels=$2\n    local count=0\n    local level=0\n    local\
+    \ counts=()\n    while [ $count -lt $levels ]\n    do\n        if [[ $string =~\
+    \ ([^()]+) ]]; then\n            counts+=($((count+1)));\n            string=${BASH_REMATCH[1]}\n\
+    \        fi\n        count=$(($count+1))\n    done\n    echo $counts", "  local\
+    \ x\n  # Find all nested parens\n  x=\"$1\"\n  # Remove nested parens if exist\n\
+    \  x=${x//\\([^)]*\\)//}\n  # Find all groups of nested parens\n  x=\"$x\"\n \
+    \ # Remove groups of nested parens if exist\n  x=${x//\\(([^)]*)\\)//}\n  # Remove\
+    \ all nested parens inside other parens if exist\n  x=${x//\\([^)]*\\)\\([^)]*\\\
+    )//}\n  # Find all groups of nested parens inside other parens if exist\n  x=\"\
+    $x\"\n  # Remove groups of nested parens inside other parens if exist\n  x=${x//\\\
+    (([^)]*)\\)\\([^)]*\\)//}\n  # Remove all nested parens inside brackets if exist\n\
+    \  x=${x//\\((.*)\\)//}\n  # Find all groups of nested parens inside brackets\
+    \ if exist\n  x=\"$x\"\n  # Remove groups of nested parens inside brackets if\
+    \ exist\n  x=${x//\\((.*)\\)\\([^)]*\\)//}\n  # Remove all nested parens inside\
+    \ curly brackets if exist\n  x=${x//\\((.*)\\)}/}\n  # Find all groups of nested\
+    \ parens inside curly brackets if exist\n  x=\"$x\"\n  # Remove groups of nested\
+    \ parens inside curly brackets if exist\n  x=${x//\\((.*)\\)}/}\n  # Remove all\
+    \ nested parens inside round brackets if exist\n  x=${x//\\((.*)\\)}/}\n  # Find\
+    \ all groups of nested parens inside round brackets if exist\n  x=\"$x\"\n  #\
+    \ Remove groups of nested parens inside round brackets if exist\n  x=${x//\\((.*)\\\
+    )}/}\n  # Remove all nested parens inside square brackets if exist\n  x=${x//\\\
+    ((.*)\\)}/}\n  # Find all groups of nested parens inside square brackets if exist\n\
+    \  x=\"$x\"\n  # Remove groups of nested parens inside square brackets if exist\n\
+    \  x=${x//\\((.*)\\)}/}\n  # Remove all nested parens inside parens if exist\n\
+    \  x=${x//\\((.*)\\)}/}\n  # Find all groups of nested parens inside parens if\
+    \ exist\n  x=\"$x\"\n  # Remove groups of nested parens inside parens if exist\n\
+    \  x=${x//\\((.*)\\)}/}\n"]
 stop_tokens:
 - "\n}"

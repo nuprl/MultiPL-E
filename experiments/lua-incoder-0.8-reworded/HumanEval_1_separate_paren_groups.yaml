@@ -12,7 +12,1676 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \ {'()', '(())', '((()))', '(((())))'})\n    lu.assertEquals(candidate('(()(())((())))'),\
   \ {'(()(())((())))'})\n    lu.assertEquals(candidate('( ) (( )) (( )( ))'), {'()',\
   \ '(())', '(()())'})\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["  local paren_groups = {}\n  local open_paren_count = 1", "  local\
+    \ stack = { }\n  local out = {}\n  for char in string.gmatch(paren_string, \"\
+    ([^()]+)\")\n    do\n      if stack[#stack] == nil then\n        stack[#stack]\
+    \ = char\n      else\n        if stack[#stack] == char then\n          stack[#stack]\
+    \ = nil\n        else\n          stack[#stack] = nil\n          table.insert(out,\
+    \ stack)\n          stack = { char }\n        end\n      end\n    end\n  table.insert(out,\
+    \ stack)\n  return out\nend", "    local paren_stack = {{paren_string}}\n    local\
+    \ result = {}\n    local groups = { }", "    local t = {}\n    local stack = {}\n\
+    \    local in_string = 0\n    for word in string.gmatch(paren_string, \"([^()]+)\"\
+    )\n    do\n        -- if we encountered a closing brace, save the last item and\
+    \ remove it\n        if word == \"}\" then\n            table.insert(stack, \"\
+    #\" .. table.concat(stack, '#'))\n            stack = {}\n            table.insert(t,\
+    \ table.concat(stack, '#'))\n            table.insert(t, table.concat(stack, '#'))\n\
+    \            in_string = in_string - 1\n        elseif word == \"(\" then\n  \
+    \          table.insert(stack, \"#\" .. table.concat(stack, '#'))\n          \
+    \  table.insert(stack, word)\n            in_string = in_string + 1\n        elseif\
+    \ in_string > 0 and word == \")\" then\n            table.insert(stack, \"#\"\
+    \ .. table.concat(stack, '#'))\n            table.insert(stack, word)\n      \
+    \  else\n            table.insert(stack, word)\n        end\n    end\n    table.insert(stack,\
+    \ \"#\" .. table.concat(stack, '#'))\n    table.insert(stack, '#')\n    table.insert(stack,\
+    \ '#')\n    table.insert(t, table.concat(stack, '#'))\n    return t\nend", " \
+    \  local paren_groups_table = {}\n   local paren_open = 0\n   local paren_open_index\
+    \ = 0\n   local paren_closed = false\n   local paren_open_string = \"\"\n   local\
+    \ paren_closed_string = \"\"\n   local group_open = true", "  local paren_groups\
+    \ = {}\n  local paren_open_braces = 0\n  local paren_count = 0\n  for paren in\
+    \ string.gmatch(paren_string, '%([()]*%d+%)') do\n    -- Handle the case where\
+    \ there are no open braces\n    if paren_open_braces == 0 then\n      table.insert(paren_groups,\
+    \ paren)\n      paren_count = paren_count+1\n      -- The only time this isn't\
+    \ an open brace is when it is nested within another open brace\n      -- (e.g.\
+    \ ((abc)). These will always be separated by at least one more set of braces\n\
+    \      -- so we just add them to the list and increment the paren_count.\n   \
+    \   if paren == '(' then\n        paren_open_braces = paren_open_braces+1\n  \
+    \    else\n        paren_open_braces = 0\n        table.insert(paren_groups, paren)\n\
+    \      end\n    else\n      -- If the current string ends with a closing paren,\
+    \ increase the count of open braces\n      -- by 1 and add it to the list\n  \
+    \    if paren ~= ')' then\n        paren_count = paren_count+1\n        if paren_count\
+    \ == paren_open_braces then\n          table.insert(paren_groups, paren)\n   \
+    \     else\n          paren_open_braces = paren_open_braces+1\n          table.insert(paren_groups,\
+    \ paren)\n        end\n      -- If the current string ends with a closing brace,\
+    \ increase the count of open braces\n      -- by 1 and add it to the list and\
+    \ decrease the count of open braces\n      else\n        paren_count = paren_count-1\n\
+    \        if paren_count == 0 then\n          table.insert(paren_groups, paren)\n\
+    \        else\n          paren_open_braces = paren_open_braces-1\n          table.insert(paren_groups,\
+    \ paren)\n        end\n      end\n    end\n  end\n  return paren_groups\nend",
+  "\tlocal groups = {}\n\tlocal open_brace_count = 0\n\tlocal open_braces = false\n\
+    \tlocal i = 1\n\tfor i = 1, #paren_string, 1 do\n\t\tlocal c = paren_string[i]\n\
+    \t\topen_brace_count = open_brace_count + 1\n\t\tif c == '(' then\n\t\t\topen_braces\
+    \ = true\n\t\t\topen_brace_count = open_brace_count - 1\n\t\telseif c == ')' then\n\
+    \t\t\topen_braces = false\n\t\t\topen_brace_count = open_brace_count + 1\n\t\t\
+    elseif open_braces then\n\t\t\tgroups[#groups+1] = c\n\t\tend\n\tend\n\treturn\
+    \ groups\nend", "\tlocal pattern = repeat('^%s*', paren_string)\n\tlocal match\
+    \ = paren_string:find(pattern)\n\twhile match do\n\t\tlocal pos = match:find(pattern)\n\
+    \t\tlocal len = #paren_string\n\t\tif pos ~= len then\n\t\t\t-- The closing paren\
+    \ was already found, try the next opening paren\n\t\t\tmatch = paren_string:sub(pos,\
+    \ pos + 1)\n\t\telse\n\t\t\t-- No closing paren found, so the parentheses are\
+    \ balanced\n\t\t\t-- Remove trailing spaces\n\t\t\tlocal trimmed_paren_string\
+    \ = paren_string:sub(match + 1, #paren_string)\n\t\t\t--print('match', match,\
+    \ 'len', len)\n\t\t\tlocal result = {}\n\t\t\tfor i, char_in_paren_group in ipairs(trimmed_paren_string)\
+    \ do\n\t\t\t\tif char_in_paren_group == '(' or char_in_paren_group == '{' or char_in_paren_group\
+    \ == '[' then\n\t\t\t\t\ttable.insert(result, trimmed_paren_string)\n\t\t\t\t\
+    end\n\t\t\tend\n\t\t\t-- Return the result\n\t\t\treturn result\n\t\tend\n\tend\n\
+    end", "  local groups = {}\n  local open_braces = 1\n  local open_parens = 0\n\
+    \  local balance = 0\n  local string = ''\n  for s in string.gmatch(paren_string,\
+    \ '%S+') do\n    string = string .. s\n    if open_braces > 0 and s == ')' then\n\
+    \      open_braces = open_braces - 1\n      if open_braces == 0 then\n       \
+    \ table.insert(groups, string)\n        string = ''\n      else\n        balance\
+    \ = balance\n      end\n    elseif s == '(' then\n      open_braces = open_braces\
+    \ + 1\n    end\n    if open_braces > 0 then\n      if s == '(' then\n        open_parens\
+    \ = open_parens + 1\n      end\n      if s == ')' then\n        open_parens =\
+    \ open_parens - 1\n        if open_parens == 0 then\n          balance = balance\
+    \ - 1\n        end\n      end\n    end\n  end\n  if open_braces > 0 then\n   \
+    \ error('Too many closing parentheses')\n  end\n  return groups\nend", "\tlocal\
+    \ parens = {}\n\tlocal open_braces = 0\n\tfor _, brace in pairs(paren_string:gsub('%[(%)](%*%)%+{0,%d*}%s',\
+    \ '\\0')):gmatch'(%?(%[(%)](%*%)%+{0,%d*}%s)')\n\tdo\n\t\tif open_braces ~= 0\
+    \ then\n\t\t\tif open_braces == 1 then\n\t\t\t\ttable.insert(parens, brace)\n\t\
+    \t\telse\n\t\t\t\ttable.insert(parens, table.concat(parens, ''))\n\t\t\t\ttable.insert(parens,\
+    \ brace)\n\t\t\t\topen_braces = 1\n\t\t\tend\n\t\telse\n\t\t\ttable.insert(parens,\
+    \ brace)\n\t\tend\n\tend\n\tif open_braces == 0 then parens = {parens} end\n\t\
+    return parens\nend", "    local result = {}\n    local pos = 1\n    local open_braces\
+    \ = '()'\n    local next_open_brace, next_close_brace = 1, 1\n    while true do\n\
+    \        local open_char = paren_string:sub(pos, pos)\n        pos = pos + 1\n\
+    \        if open_char == open_braces then\n            open_braces = open_char\n\
+    \            pos = pos + 1\n        elseif open_char == '(' then\n           \
+    \ open_braces = open_char\n            next_open_brace = next_open_brace + 1\n\
+    \        elseif open_char == ')' then\n            if next_open_brace ~= next_close_brace\
+    \ then\n                table.insert(result, open_braces)\n            else\n\
+    \                table.insert(result, open_braces)\n                next_open_brace,\
+    \ next_close_brace = 1, 1\n            end\n        else\n            assert(false)\n\
+    \        end\n    end\n    return table.remove(result)\nend", "   local t = {}\n\
+    \   local i = 1\n   while i <= #paren_string, 1 do\n      local char = paren_string:sub(i,\
+    \ i)\n      if char == '(' then\n         table.insert(t, char)\n         i =\
+    \ i + 1\n      elseif char == ')' then\n         if #t > 0 then\n            table.insert(t,\
+    \ ')')\n         else\n            table.insert(t, char)\n         end\n     \
+    \ elseif char == ' ' then\n         if #t > 0 then\n            table.insert(t,\
+    \ char)\n         end\n      end\n   end\n   return t\nend", "    local paren_groups\
+    \ = {}\n    local braces\n    for paren_str in string.gmatch(paren_string, '[()]')\
+    \ do\n        if paren_str ~= '()' then\n            -- Ignore any spaces within\
+    \ each paren_str\n            if string.find(paren_str, ' ') then\n          \
+    \      paren_groups[#paren_groups+1] = paren_str\n            else\n         \
+    \       -- This paren_str is open, so make sure it's closed before the next one\
+    \ is open\n                if string.find(paren_str, '(') ~= nil then\n      \
+    \              braces = string.find(paren_str, '(')\n                    local\
+    \ paren_str_to_add = paren_str:sub(1, braces-1) .. ')'\n                    paren_groups[#paren_groups+1]\
+    \ = paren_str_to_add\n                    paren_groups[#paren_groups+1] = paren_str\n\
+    \                else\n                    paren_groups[#paren_groups+1] = paren_str\n\
+    \                end\n            end\n        else\n            -- This paren_str\
+    \ is closed, so make sure it's closed before the next one is closed\n        \
+    \    if string.find(paren_str, '(') ~= nil then\n                -- If this paren_str\
+    \ is open, then make sure it is closed before the next one is open\n         \
+    \       local braces = string.find(paren_str, '(')\n                local paren_str_to_add\
+    \ = paren_str:sub(1, braces-1) .. ')'\n                paren_groups[#paren_groups+1]\
+    \ = paren_str_to_add\n            else\n                paren_groups[#paren_groups+1]\
+    \ = paren_str\n            end\n        end\n    end\n    return paren_groups\n\
+    end", "    local open_braces_table = {}\n    local num_open_braces = 0\n    local\
+    \ brace_count = 0\n    local brace_char = '['\n    local open_brace_count = 0\n\
+    \    local open_brace_char = '['\n    local close_brace_count = 0\n    local close_brace_char\
+    \ = '['\n    local output_string = \"\"\n    local next_char = ''\n    local open_brace_is_closing\
+    \ = nil\n    local closing_brace_is_opening = nil\n    local open_brace_is_opening\
+    \ = nil\n    local open_brace_is_closing = nil", "  local stack = { }\n  local\
+    \ paren_groups = { '', '' }\n  local index = 1\n  local i = 1\n  local balanced\
+    \ = false\n  local new_string\n  while i <= #paren_string:len() do\n    local\
+    \ char = paren_string[i]\n    if char == '(' then\n      table.insert(stack, char)\n\
+    \      paren_groups[#paren_groups+1] = paren_groups[#paren_groups+1] .. '()'\n\
+    \      i = i + 1\n      new_string = '('\n      if i > 1 then\n        local prev_char\
+    \ = paren_string[i-1]\n        if prev_char == ')' then\n          local prev_char_groups\
+    \ = paren_groups[#paren_groups+1]\n          paren_groups[#paren_groups+1] = prev_char_groups[#prev_char_groups]\n\
+    \        elseif prev_char == ' ' then\n          local prev_char_groups = paren_groups[#paren_groups+1]\n\
+    \          paren_groups[#paren_groups+1] = prev_char_groups[#prev_char_groups]\n\
+    \          table.insert(stack, ' ')\n        else\n          local prev_char_groups\
+    \ = paren_groups[#paren_groups+1]\n          paren_groups[#paren_groups+1] = prev_char_groups[#prev_char_groups]\n\
+    \          table.insert(stack, '(...)')\n        end\n      end\n    elseif char\
+    \ == ')' then\n      table.insert(stack, char)\n      paren_groups[#paren_groups+1]\
+    \ = paren_groups[#paren_groups+1] .. ')'\n      if #stack > 0 then\n        local\
+    \ prev_char = paren_string[stack[#stack]]\n        if prev_char == ' ' then\n\
+    \          local prev_char_groups = paren_groups[#paren_groups+1]\n          paren_groups[#paren_groups+1]\
+    \ = prev_char_groups[#prev_char_groups]\n          table.insert(stack, ' ')\n\
+    \        end\n      end\n      table.insert(stack, char)\n      i = i + 1\n  \
+    \    new_string = ')'\n    elseif char == ' ' then\n      table.insert(stack,\
+    \ char)\n      i = i + 1\n      new_string = ' '\n    else\n      table.insert(stack,\
+    \ char)\n      i = i + 1\n    end\n    if #stack > 0 then\n      local cur_char\
+    \ = paren_string[stack[#stack]]\n      if cur_char == ' ' then\n        local\
+    \ cur_char_groups = paren_groups[#paren_groups+1]\n        paren_groups[#paren_groups+1]\
+    \ = cur_char_groups[#cur_char_groups]\n        table.insert(stack, ' ')\n    \
+    \  end\n    end\n  end", "    local parsed_parens = {}\n    local group_stack\
+    \ = {}\n    local group = {}\n    local open_brace = 1\n    local closed_brace\
+    \ = 1\n    local current_group = nil\n    local paren_count = 0", "    local open_braces\
+    \ = {\n        [string.sub(paren_string, 1, 1)] = {string.sub(paren_string, 1,\
+    \ 1)},\n    }\n    local close_braces = {}\n    local parens = {\n        [string.sub(paren_string,\
+    \ 2, 1)] = {string.sub(paren_string, 2, 1)},\n    }", "    local paren_groups\
+    \ = {}\n    local open_braces = 0\n    local in_paren = false\n    local open_brace_char",
+  "  local paren_regex = paren_string .. \"|[^()]+\"\n  local paren_table = { }",
+  "   local open_braces = { }\n   local close_braces = { }\n   local groups = { }\n\
+    \   local current_group = \"\"\n   local i = 1\n   while true do\n      if paren_string[i]\
+    \ == \")\" then\n         if open_braces[#open_braces] == 1 then -- close the\
+    \ last open brace if it has only 1 open\n            close_braces[#close_braces]\
+    \ = paren_string[i]\n         else\n            open_braces[#open_braces] = 1\
+    \ -- open a brace for next group\n         end\n      elseif paren_string[i] ==\
+    \ \"(\" then\n         if open_braces[#open_braces] == 1 then -- close the last\
+    \ open brace if it has only 1 open\n            close_braces[#close_braces] =\
+    \ paren_string[i]\n         else\n            open_braces[#open_braces] = 1 --\
+    \ open a brace for next group\n         end\n      else\n         if open_braces[#open_braces]\
+    \ == 0 then\n            if paren_string[i] == '(' then -- this is the start of\
+    \ a new group\n               if #close_braces == 0 then -- this is a new group\
+    \ with just one open brace\n                  current_group = \"(\"\n        \
+    \          open_braces[#open_braces] = 1\n               else -- this is a new\
+    \ group with multiple open braces\n                  current_group = { }\n   \
+    \               for _, close_char in pairs(close_braces) do\n                \
+    \     current_group[#current_group + 1] = close_char\n                  end\n\
+    \                  close_braces = { }\n                  groups[#groups + 1] =\
+    \ current_group\n               end\n               current_group = \"\"\n   \
+    \            open_braces[#open_braces] = 1\n            end\n         elseif paren_string[i]\
+    \ == \")\" then\n            if #close_braces > 0 then -- close the last open\
+    \ brace if it has only 1 open\n               close_braces[#close_braces] = paren_string[i]\n\
+    \            else\n               close_braces[#close_braces] = paren_string[i]\n\
+    \            end\n         else\n            -- This should be the last character\
+    \ in a group or the start of a new group\n            if #current_group > 0 then\n\
+    \               current_group = { }\n               for _, close_char in pairs(close_braces)\
+    \ do\n                  current_group[#current_group + 1] = close_char\n     \
+    \          end\n               close_braces = { }\n               groups[#groups\
+    \ + 1] = current_group\n            end\n         end\n      end\n      if i ==\
+    \ #paren_", "   -- A stack of parentheses\n   local stack = {(paren_string)}",
+  "    local paren_groups = {}\n    local open_brace_idx\n    local next_open_brace_idx\n\
+    \    local open_brace_open\n    local last_open_brace_open\n    local next_open_brace_close\n\
+    \    local next_open_brace_close_idx\n    local closed_paren_group\n    local\
+    \ closed_paren_open\n    local closed_paren_close\n    local closed_paren_close_idx\n\
+    \    for idx, char_code in ipairs(paren_string:byte()) do\n        -- If the character\
+    \ is a brace, save it (unless it was already saved)\n        if char_code == open_brace_idx\
+    \ then\n            if not open_brace_open then\n                open_brace_open\
+    \ = true\n            else\n                open_brace_open = false\n        \
+    \    end\n        elseif char_code == next_open_brace_close then\n           \
+    \ open_brace_close = false\n        elseif char_code == closed_paren_close then\n\
+    \            if open_brace_open then\n                open_brace_open = false\n\
+    \            elseif open_brace_close then\n                open_brace_close =\
+    \ false\n            end\n        else\n            -- Otherwise, if the brace\
+    \ is not open, save it\n            if open_brace_open then\n                if\
+    \ not last_open_brace_open then\n                    last_open_brace_open = true\n\
+    \                else\n                    last_open_brace_open = false\n    \
+    \            end\n            elseif open_brace_close then\n                open_brace_close\
+    \ = true\n            else\n                local new_paren_group = table.concat(paren_groups,\
+    \ \"\")\n                local open_brace_idx = new_paren_group:len()\n      \
+    \          paren_groups[open_brace_idx] = new_paren_group\n                open_brace_open\
+    \ = false\n                last_open_brace_open = false\n                next_open_brace_idx\
+    \ = open_brace_idx\n                next_open_brace_close_idx = open_brace_idx\n\
+    \                open_brace_close = false\n            end\n        end\n    end\n\
+    \    return paren_groups\nend", "    local open_brackets = {}\n    local close_brackets\
+    \ = {}\n    local groups = {}", "  local groups = {}\n  local stack = {}\n  local\
+    \ open_brace = 1\n  local open_brace_count = 1\n  local close_brace = 1\n  local\
+    \ close_brace_count = 1", "  local group_counts = {}\n  for _,paren in ipairs(paren_string)\
+    \ do\n    local bracket_count = 0\n    for _,character in ipairs(paren) do\n \
+    \     local is_open = character == '(' or character == ')'\n      if is_open then\n\
+    \        bracket_count = bracket_count + 1\n      elseif character == ')' and\
+    \ bracket_count == 1 then\n        group_counts[#group_counts+1] = #group_counts\n\
+    \      else\n        bracket_count = 0\n      end\n    end\n  end\n  return group_counts\n\
+    end", "  local open_brace_groups = {}\n  local close_brace_groups = {}\n  local\
+    \ open_paren_groups = 0\n  local last_char = nil\n  for i, c in pairs(paren_string)\
+    \ do\n    if c == '(' or c == '{' then\n      open_paren_groups = open_paren_groups\
+    \ + 1\n      if c == ')' and open_paren_groups > 0 then\n        open_paren_groups\
+    \ = open_paren_groups - 1\n      end\n      table.insert(open_brace_groups, c)\n\
+    \    elseif c == '}' and open_paren_groups > 0 then\n      open_paren_groups =\
+    \ open_paren_groups - 1\n      table.insert(close_brace_groups, c)\n    else\n\
+    \      if c == '(' and open_paren_groups > 0 then\n        open_paren_groups =\
+    \ open_paren_groups - 1\n      end\n      table.insert(open_brace_groups, c)\n\
+    \    end\n  end\n  if #open_brace_groups == 0 then\n    return {}\n  end\n  for\
+    \ i, c in pairs(open_brace_groups) do\n    table.insert(close_brace_groups, c)\n\
+    \  end\n  local separate_paren_groups = {}\n  for i, c in pairs(close_brace_groups)\
+    \ do\n    separate_paren_groups[i] = c\n  end\n  return separate_paren_groups\n\
+    end", "    -- First separate groups from inside out\n    -- We want to split on\
+    \ balanced parens so we're going to keep track of the current paren we're in,\
+    \ and\n    -- which paren we're opening or closing\n    -- We also want to ignore\
+    \ spaces, since that's the only way we can separate out groups.\n    local paren_ins\
+    \ = {}\n    local open_paren = 0\n    local closed_paren = 0\n    local paren_group\
+    \ = {}", "\tlocal open_brackets = {}\n\tlocal close_brackets = {}\n\tlocal close_braces\n\
+    \tlocal open_braces", "    -- Split the string into tokens and then into each\
+    \ individual group.\n    -- For each group, find matching parentheses.\n    --\
+    \ If there are any matching parentheses, then group them together and\n    --\
+    \ return the result.\n    local tokens = paren_string:gsub('%w%', function(s)\n\
+    \        -- Remove any spaces or punctuation from the beginning and end of the\
+    \ string\n        local new_string = s:gsub('^[%w%.%p$]', '')\n        -- Remove\
+    \ any spaces or punctuation from the beginning or end of a group\n        local\
+    \ new_group   = s:gsub('([%p$])([%p$])', '$2')\n        return new_string .. new_group\n\
+    \    end)\n    -- Return an array of the resulting groups\n    return setmetatable({},\
+    \ { __index = table })\n        for token in tokens:gmatch('%%(%p+)') do\n   \
+    \         local group = token:gsub('%w+', '%')\n            group:gsub('%p+',\
+    \ '%')\n            group:gsub('%(%w+)', '%%')\n            group:gsub('%(%w%)',\
+    \ '%%')\n            setmetatable(group, { __index = {} })\n    end\nend", '    local
+    result = {}', "  local current_group = {}\n  local current_group_count = 1\n \
+    \ local current_group_parents = { }\n  for paren in string.gmatch(paren_string,\
+    \ '%[(%A)]') do\n    local paren = paren\n    if paren == '()' then\n      table.insert(current_group,\
+    \ '')\n    elseif paren ~= '' then\n      table.insert(current_group, paren)\n\
+    \    end\n  end -- end for paren in string.gmatch(paren_string, '%[(%A)]')\n \
+    \ -- We have extracted all the necessary groups into current_group, now return\
+    \ them\n  return current_group\nend", "    local function is_balanced( paren_string,\
+    \ index )\n        return paren_string:sub( index, index ) == paren_string:sub(\
+    \ 0, index ) \n    end", "\tassert(type(paren_string) == 'string')", "  return\
+    \ function()\n    local paren_count = paren_count:int()\n    local paren_groups\
+    \ = {}\n    local paren_level = 0\n    for paren_i = 1, #paren_string, 1 do\n\
+    \      if paren_level == 0 then\n        if paren_string[paren_i] == ')' then\n\
+    \          paren_count = paren_count - 1\n        elseif paren_string[paren_i]\
+    \ == '(' then\n          paren_count = paren_count + 1\n        end\n      elseif\
+    \ paren_level == 1 then\n        if paren_string[paren_i] == ')' then\n      \
+    \    paren_count = paren_count - 1\n        elseif paren_string[paren_i] == '('\
+    \ then\n          paren_count = paren_count + 1\n        elseif paren_string[paren_i]\
+    \ == ' ' then\n          paren_groups[#paren_groups + 1] = paren_groups[#paren_groups]\
+    \ .. paren_string[paren_i]\n        end\n      else\n        -- If it's not a\
+    \ space, check whether we've already processed this paren_level group\n      \
+    \  if paren_string[paren_i] == ' ' then\n          paren_groups[#paren_groups\
+    \ + 1] = paren_groups[#paren_groups] .. paren_string[paren_i]\n        end\n \
+    \     end\n      paren_level = paren_string[paren_i]\n    end\n    paren_count\
+    \ = paren_count + 1\n    if paren_count ~= 0 then\n      error('Parens unbalanced\
+    \ in input string')\n    end\n    return paren_groups\n  end\nend", "  local groups\
+    \ = {}\n  local open_brace = -1\n  for i = 1, #paren_string, 1 do\n    local c\
+    \ = paren_string[i]\n    if c == '(' then\n      if open_brace == -1 then\n  \
+    \      open_brace = i\n      else\n        groups[#groups+1] = paren_string[i]:sub(1,\
+    \ open_brace-1)\n      end\n    elseif c == ')' then\n      open_brace = -1\n\
+    \      if #groups > 0 then\n        groups[#groups+1] = paren_string[i]:sub(1,\
+    \ i)\n      end\n    end\n  end\n  return groups\nend", "\tlocal paren_groups\
+    \ = {}\n\tlocal open_braces = 0", "    local paren_count = 0\n    local paren_stack\
+    \ = {}\n    local parens = {}\n    local i = 0", "  local splitter = {\n    match\
+    \ = '()'\n  }", "  local in_paren_group = 0\n  local current_paren_group = {}\n\
+    \  local in_paren_group_string = ''\n  local i = 1\n  while i <= #paren_string:len()\
+    \ do\n    if paren_string:sub(i, i) == ')' then\n      if #current_paren_group\
+    \ > 0 then\n        current_paren_group = table.concat(current_paren_group, '\
+    \ ')\n      end\n      in_paren_group = 0\n    elseif paren_string:sub(i, i) ==\
+    \ '(' then\n      if #in_paren_group_string > 0 then\n        current_paren_group\
+    \ = table.concat(current_paren_group, in_paren_group_string)\n      end\n    \
+    \  in_paren_group_string = ''\n      in_paren_group = 1\n    end\n    i = i +\
+    \ 1\n  end\n  if #current_paren_group > 0 then\n    current_paren_group = table.concat(current_paren_group,\
+    \ ' ')\n  end\n  return current_paren_group\nend", "  local open_braces = { }\n\
+    \  local close_braces = { }\n  local close_brace_level = 0\n  local open_brace_level\
+    \ = 0\n  local open_paren = 0", "    local current_group = {}\n    local stack\
+    \ = {{stringx = paren_string}}\n    while true do\n        local next_group, next_group_string\
+    \ = stack:pop()\n        if not next_group then\n            break\n        end\n\
+    \        if next_group_string:sub(1, 1) == ')' then\n            current_group[#current_group\
+    \ + 1] = next_group\n        else\n            stack:insert({next_group, next_group_string})\n\
+    \        end\n    end\n    return table.concat(current_group)\nend", "    local\
+    \ open_braces = {}\n    local close_braces = {}\n    local paren_count = 0\n \
+    \   local brace_count = 0\n    local open_brace_count = 0\n    local brace_closed_count\
+    \ = 0\n    local current_char = ''\n    local groups = {}\n    local open_brace_is_unbalanced",
+  "  local open_chars = {}\n  local closing_chars = {}\n  local result = {}\n  for\
+    \ paren, closing, i in string.gmatch(paren_string, '%[(%)]') do\n    if opening\
+    \ == nil then\n      local opening_brace = paren:find('^%s+')\n      -- We found\
+    \ a matching opening brace, keep track of it so we don't add it to the result\
+    \ twice\n      if opening_brace ~= nil then\n        open_chars[i] = opening_brace\n\
+    \      else\n        local opening_brace_open = paren:find('%s+^%s+')\n      \
+    \  -- We found a matching opening brace followed by another opening brace, keep\
+    \ track of it\n        if opening_brace_open ~= nil then\n          open_chars[i]\
+    \ = opening_brace_open\n        else\n          error(\"paren_groups() failed\
+    \ to find matching opening brace for \", paren)\n        end\n      end\n    end\n\
+    \    if closing == nil then\n      local closing_brace = paren:find('%s+%s+$')\n\
+    \      -- We found a matching closing brace, keep track of it so we don't add\
+    \ it to the result twice\n      if closing_brace ~= nil then\n        closing_chars[i]\
+    \ = closing_brace\n      else\n        local closing_brace_close = paren:find('^%s+%s+$')\n\
+    \        -- We found a matching closing brace followed by another closing brace,\
+    \ keep track of it\n        if closing_brace_close ~= nil then\n          closing_chars[i]\
+    \ = closing_brace_close\n        else\n          error(\"paren_groups() failed\
+    \ to find matching closing brace for \", paren)\n        end\n      end\n    end\n\
+    \  end\n  local i = open_chars[#open_chars]\n  while i ~= nil do\n    -- Add any\
+    \ remaining opening or closing braces to the result\n    result[#result + 1] =\
+    \ open_chars[i]\n    i = open_chars[#open_chars]\n  end\n  i = closing_chars[#closing_chars]\n\
+    \  while i ~= nil do\n    -- Add any remaining opening or closing braces to the\
+    \ result\n    result[#result + 1] = closing_chars[i]\n    i = closing_chars[#closing_chars]\n\
+    \  end\n  return result\nend", "    local paren_stack = { }\n    local output_strings\
+    \ = { }\n    local inParens = 1\n    local braceCount = 0", "    local paren_stack\
+    \ = table()\n    local paren_groups = setmetatable({}, { __index = function(t,\
+    \ k)\n        if string.sub(paren_string, k) ~= ')' then\n            local open_brace\
+    \ = string.sub(paren_string, k + 1, k)\n            local close_brace = string.sub(paren_string,\
+    \ k)\n            if open_brace == '(' or close_brace == ')' then\n          \
+    \      paren_stack[#paren_stack+1] = open_brace -- Add a parent to our stack\n\
+    \            else\n                -- This group isn't nested within a parent\
+    \ group. Pop one from the stack\n                -- and insert it as the parent's\
+    \ children\n                local cur_paren = paren_stack[#paren_stack]\n    \
+    \            paren_stack[#paren_stack] = nil\n                local cur_children\
+    \ = cur_paren\n                for i = #paren_stack, 1, -1 do\n              \
+    \      table.insert(cur_children, paren_stack[i])\n                end\n     \
+    \           table.insert(paren_groups, cur_children)\n            end\n      \
+    \  end\n        return t[k]\n    end})\n    return paren_groups\nend", "  local\
+    \ paren_count = 0\n  local current_group = ''\n  local paren_pairs = {}\n  local\
+    \ paren_groups = {}\n  for _,c in ipairs(paren_string) do\n    if c == '(' and\
+    \ paren_count == 0 then\n      paren_count = paren_count + 1\n    elseif c ==\
+    \ ')' then\n      paren_count = paren_count - 1\n      if paren_count == 0 then\n\
+    \        table.insert(paren_pairs, current_group)\n      elseif paren_count <\
+    \ 0 then\n        -- the paren_pairs table is invalid, remove this element from\
+    \ the table\n        table.insert(paren_pairs, nil)\n      end\n    elseif c ==\
+    \ '(' and paren_count < 0 then\n      table.insert(paren_pairs, current_group)\n\
+    \      current_group = c\n      paren_count = 0\n    elseif c == ')' and paren_count\
+    \ > 0 then\n      -- the paren_pairs table is invalid, remove this element from\
+    \ the table\n      table.insert(paren_pairs, nil)\n      table.insert(paren_groups,\
+    \ table.concat(paren_pairs, ''))\n      table.clear(paren_pairs)\n      current_group\
+    \ = ''\n      paren_count = 0\n    end\n  end\n  return paren_groups\nend", " \
+    \   local groups = {}\n    local open_braces = 0\n    for paren in string.gmatch(paren_string,\
+    \ \"%[()]?%{()}\")\n    do\n        local clos = string.find(paren, \"%[()]?%{\"\
+    )\n        if clos then\n            local braces = string.len(paren) - clos\n\
+    \            if braces > open_braces then\n                table.insert(groups,\
+    \ paren:sub(1, clos))\n            else\n                table.insert(groups,\
+    \ paren:sub(1, clos))\n                open_braces = braces\n            end\n\
+    \        else\n            table.insert(groups, paren)\n        end\n    end\n\
+    \    return groups\nend", "    local brace_stack = { }\n    local open_braces\
+    \ = { }\n    local groups = { }\n    local parens_count = 0\n    local open_brace_count\
+    \ = 0\n    for c in string.gmatch(paren_string, \"()\") do\n        if c == \"\
+    (\" then\n            parens_count = parens_count + 1\n            open_brace_count\
+    \ = open_brace_count + 1\n            brace_stack[open_brace_count] = true\n \
+    \       else\n            local i = #brace_stack\n            while i > 0 and\
+    \ not brace_stack[i - 1] do\n                i = i - 1\n            end\n    \
+    \        if not brace_stack[i - 1] then\n                parens_count = parens_count\
+    \ - 1\n            end\n            if c == \")\" then\n                local\
+    \ index = open_braces[parens_count]\n                open_braces[parens_count]\
+    \ = open_braces[parens_count] + 1\n                brace_stack[index] = false\n\
+    \                open_brace_count = open_brace_count - 1\n                groups[#groups\
+    \ + 1] = string.sub(brace_stack, start + 1, index)\n                open_braces[parens_count]\
+    \ = open_braces[parens_count] - 1\n            end\n        end\n    end\n   \
+    \ table.sort(groups)\n    return groups\nend", "    local stack = { }\n    for\
+    \ paren_group in gmatch(\"%[(%a%)]*\", paren_string) do\n        table.insert(stack,\
+    \ \"()\")\n        table.insert(stack)\n        local current_group = \"()\"\n\
+    \        for char in paren_group do\n            table.insert(stack)\n       \
+    \     current_group = string.gsub(current_group, char, \"%1\")\n        end\n\
+    \        table.insert(stack, current_group)\n        table.insert(stack, \")\"\
+    )\n    end\n    return stack\nend", "  local pattern = '[%a+()()'..']:'\n  local\
+    \ function _recurse(paren_groups)\n    if paren_groups == \"\" then return nil\
+    \ end\n    local result = {}\n    local function _get_paren_groups()\n      local\
+    \ new_paren_groups = paren_groups:sub(1, paren_groups:len() - 2)\n      local\
+    \ closed_group = paren_groups:sub(-1)\n      if new_paren_groups:sub(1, 2) ~=\
+    \ '()' then return nil end\n      -- new_paren_groups:sub(2, new_paren_groups:len()):gsub(pattern,\
+    \ '_')\n      table.insert(result, new_paren_groups)\n      return closed_group\n\
+    \    end\n    local cur_paren_groups = ''\n    for i = 1, paren_groups:len() do\n\
+    \      local char = paren_groups:sub(i, i)\n      if char == '(' then\n      \
+    \  local closed = _get_paren_groups()\n        if closed ~= '' then\n        \
+    \  _recurse(cur_paren_groups)\n          cur_paren_groups = closed\n        end\n\
+    \      elseif char == ')' then\n        _recurse(cur_paren_groups)\n      else\n\
+    \        cur_paren_groups = cur_paren_groups .. char\n      end\n    end\n   \
+    \ _recurse(cur_paren_groups)\n    return result\n  end\n  return _recurse(paren_string)\n\
+    end", "    local stack = {paren_string}\n    local open_braces = { }\n    local\
+    \ current_group\n    local open_paren_found = false\n    local close_braces_found\
+    \ = false\n    local current_group_brace_level = 0\n    while true do\n      \
+    \  -- pop the first element from the stack to check\n        local current_element\
+    \ = stack[1]\n        assert(type(current_element) == 'string', 'current_element\
+    \ should be a string')\n        -- If stack element is an open paren, increase\
+    \ the brace count\n        if current_element == \"(\" then\n            current_group_brace_level\
+    \ = current_group_brace_level + 1\n        end\n        if current_element ==\
+    \ \"(\" then\n            open_paren_found = true\n        end\n        if current_element\
+    \ == \")\" then\n            current_group_brace_level = current_group_brace_level\
+    \ - 1\n        end\n        if current_element == \")\" then\n            open_braces[#open_braces+1]\
+    \ = open_paren_found\n            close_braces_found = true\n        end\n   \
+    \     if current_group_brace_level < 0 then\n            -- End of input\n   \
+    \         break\n        end\n        -- If this element is not an open paren,\
+    \ append it to the current group\n        if open_paren_found ~= true then\n \
+    \           current_group = current_group .. current_element .. \",\"\n      \
+    \  end\n        -- If this element is an open paren, append it to the current\
+    \ group\n        if open_braces[#open_braces] == true then\n            current_group\
+    \ = current_group .. current_element .. \")\"\n        end\n        -- Add the\
+    \ element to the stack\n        stack[#stack+1] = current_element\n    end\n \
+    \   local output_list = { }\n    local paren_string_length = #paren_string\n \
+    \   for i = 0, paren_string_length do\n        if current_group == \"\" then\n\
+    \            output_list[#output_list+1] = paren_string[i]\n        else\n   \
+    \         local output_element = output_list[#output_list+1]\n            if close_braces_found\
+    \ then\n                output_element = \"(\" .. output_element .. \")\"\n  \
+    \          end\n            output_list[#output_list+1] = current_group .. output_element\
+    \ .. \",\"\n            current_group = \"\"\n        end\n    end\n    return\
+    \ output_list\nend", "\tlocal open_brackets = ''\n\tlocal open_braces = ''\n\t\
+    local paren_string = paren_string:gsub('\\\\(|\\\\)', '')\n\tlocal function add_open_bracket(char)\n\
+    \t\topen_braces = open_braces .. char\n\t\tif open_braces ~= '' then\n\t\t\tif\
+    \ open_braces:match('%') ~= nil then\n\t\t\t\topen_braces = '(' .. open_braces\
+    \ .. ')'\n\t\t\tend\n\t\tend\n\tend\n\tlocal function add_close_bracket(char)\n\
+    \t\topen_brackets = open_brackets .. char\n\t\tif open_brackets:match('%') ~=\
+    \ nil then\n\t\t\topen_brackets = '(' .. open_brackets .. ')'\n\t\tend\n\tend\n\
+    \tlocal function get_open_brackets()\n\t\treturn open_brackets\n\tend\n\tlocal\
+    \ function get_open_brace()\n\t\treturn open_braces\n\tend\n\tlocal function get_close_brackets()\n\
+    \t\treturn open_brackets:gsub('(%)', ''):gsub('%)', '')\n\tend\n\tlocal function\
+    \ get_close_brace()\n\t\treturn open_braces:gsub('(%)', ''):gsub('%)', '')\n\t\
+    end\n\tlocal function get_balanced_parens()\n\t\treturn open_braces:gsub('(%[)]%)',\
+    \ '')\n\tend\n\tlocal function get_unbalanced_parens()\n\t\treturn open_braces:gsub('(%[(%)%)%)',\
+    \ '')\n\tend\n\tlocal function get_parens()\n\t\treturn open_braces:gsub('(%[(%)%)',\
+    \ '')\n\tend\n\tlocal function get_unbalanced_paren()\n\t\treturn open_braces:gsub('(%[(%)%)',\
+    \ '')\n\tend\n\tlocal function get_paren()\n\t\treturn open_braces:gsub('(%[(%)%)',\
+    \ '')\n\tend\n\tlocal function get_unbalanced_paren_groups()\n\t\treturn open_braces:gsub('(%[(%)%)',\
+    \ '')\n\tend\n\tlocal function get_paren_groups()\n\t\treturn open_braces:gsub('(%[(%)%)',\
+    \ '')\n\tend", "  local open_braces, close_braces = 1, 1\n  local open_brace_strings\
+    \ = {}\n  local close_brace_strings = {}\n  for token in string.gmatch(paren_string,\
+    \ \"%[(%a^()%a)]+\") do\n    if token == \"(\" then\n      if open_braces == 0\
+    \ then\n        open_braces = 1\n      else\n        open_braces = open_braces\
+    \ + 1\n      end\n    elseif token == \")\" then\n      if open_braces == 0 then\n\
+    \        -- TODO: Log an error or throw an error\n        print(\"ERROR: unbalanced\
+    \ parenthesis in string: \" .. paren_string)\n        -- return nil, 1\n     \
+    \ else\n        open_braces = open_braces - 1\n      end\n    elseif open_braces\
+    \ > 0 then\n      if token == \")\" then\n        close_braces = close_braces\
+    \ + 1\n      elseif open_braces < close_braces then\n        -- TODO: Log an error\
+    \ or throw an error\n        print(\"ERROR: unbalanced parenthesis in string:\
+    \ \" .. paren_string)\n        -- return nil, 1\n      end\n      open_brace_strings[#open_brace_strings\
+    \ + 1] = token\n    else\n      close_brace_strings[#close_brace_strings + 1]\
+    \ = token\n    end\n  end\n  return table.concat(open_brace_strings, \"\"), table.concat(close_brace_strings,\
+    \ \"\")\nend", "   local group_stack = {}\n   local function paren_closing_handler(match,\
+    \ rest_of_text)\n      -- If the entire input string was matched, return the list\
+    \ of groups\n      if rest_of_text == \"\" then\n         table.insert(group_stack,\
+    \ group_stack[1])\n         return\n      end\n      -- If there are still unmatched\
+    \ open/close braces in the input string, stop processing\n      if #group_stack\
+    \ > 0 then\n         return\n      end\n      -- If the current closing brace\
+    \ has no closing paired brace, add the closing brace to the stack\n      if not\
+    \ paren_stack[#paren_stack] then\n         table.insert(group_stack, match{\n\
+    \            str = match{\n               str = match{\n                  str\
+    \ = match{\n                     str = paren_string\n                  },\n  \
+    \                pattern = \"\\\\(\",\n                  group = 1\n         \
+    \      },\n               pattern = \"\\\\)\",\n               group = 2\n   \
+    \         }\n         })\n      end\n      -- If there are still unmatched open/close\
+    \ braces in the input string, stop processing\n      if #group_stack > 0 then\n\
+    \         return\n      end\n      -- When all the input string was processed,\
+    \ return the list of groups\n      table.insert(group_stack, group_stack[1])\n\
+    \   end\n   local paren_stack = {}\n   local function paren_opening_handler(match,\
+    \ rest_of_text)\n      -- If there are still unmatched open/close braces in the\
+    \ input string, stop processing\n      if #group_stack > 0 then\n         return\n\
+    \      end\n      -- If the current opening brace has no closing paired brace,\
+    \ add the opening brace to the stack\n      if not paren_stack[#paren_stack] then\n\
+    \         table.insert(paren_stack, match{\n            str = match{\n       \
+    \        str = match{\n                  str = match{\n                     str\
+    \ = rest_of_text,\n                  },\n                  pattern = \"\\\\(\"\
+    ,\n                  group = 1\n               },\n               pattern = \"\
+    \\\\)\",\n               group = 2\n            }\n         })\n      end\n  \
+    \    -- If there are still unmatched open/close braces in the input string, stop\
+    \ processing\n      if #paren_stack > 0 then\n         return\n      end\n   \
+    \   -- When all the input string was processed, return the list of groups\n  \
+    \    table.insert(group_stack, paren_stack[#paren_stack])\n   end\n   for i =\
+    \ 1, #paren_string, 1 do\n      paren_string:gsub(\"\\\\(\", paren_opening_handler,\
+    \ 1, i)\n      paren_string:gsub(\"\\\\)\", paren_closing_handler, 1, i)\n   end\n\
+    \   return group_stack\nend", "    local paren_string = paren_string:gsub(\"^%[(%D*)%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[%]%]\", \"\")\n\
+    \    local paren_string = paren_string:gsub(\"%[%]\", \"\")\n    local paren_string\
+    \ = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\", \"\")\n \
+    \   local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%D*)%]%]%]\"\
+    , \"\")\n    local paren_string = paren_string:gsub(\"%[(%D*)%[(%D*)%[(%D*)%[(%",
+  "    local groups = {}\n    local open_braces = 1\n    local string = ''\n    for\
+    \ c in paren_string:gmatch('%([()]|[[:cntrl:]]|[[:alpha:]])') do\n        if c\
+    \ == '(' and open_braces > 0 then\n            open_braces = open_braces - 1\n\
+    \            string = string .. c\n        elseif c == ')' and open_braces > 0\
+    \ then\n            open_braces = open_braces - 1\n            table.insert(groups,\
+    \ string)\n            string = ''\n        elseif open_braces > 0 then\n    \
+    \        string = string .. c\n        end\n    end\n    table.insert(groups,\
+    \ string)\n    return groups\nend", "  local open_brace_stack, open_braces, closed_braces\
+    \ = {}, 0, {}\n  local open_brace_counter = 1", '    local paren_groups = {}',
+  "   local paren_table = nil\n   local paren_count = 0\n   local current_paren_string\
+    \ = nil\n   local depth = 0\n   for char in string.gsub(paren_string, \"[()]\"\
+    ) do\n      if char == '(' and paren_count == 0 then\n         -- This is an open\
+    \ paren\n         if paren_count == 0 then\n            -- This is the first open\
+    \ paren\n            paren_count = paren_count + 1\n            current_paren_string\
+    \ = char\n         else\n            -- This is another open paren, increment\
+    \ counter\n            paren_count = paren_count + 1\n         end\n      elseif\
+    \ char == ')' and paren_count > 0 then\n         -- This is an open paren\n  \
+    \       if current_paren_string == nil then\n            -- This is NOT the first\
+    \ open paren\n            -- (We should already be out of the loop now)\n    \
+    \     else\n            -- This is another close paren, decrement counter\n  \
+    \          paren_count = paren_count - 1\n         end\n      elseif char == ')'\
+    \ then\n         -- This is the last close paren\n         if paren_count == 0\
+    \ then\n            -- This is NOT the first close paren\n            -- (We should\
+    \ already be out of the loop now)\n         else\n            -- This is an already\
+    \ closed paren, decrement counter\n            paren_count = paren_count - 1\n\
+    \         end\n      else\n         -- This is not an open or close paren\n  \
+    \       if current_paren_string == nil then\n            -- This is NOT the first\
+    \ open or close paren\n            -- (We should already be out of the loop now)\n\
+    \         else\n            -- This is NOT a close paren\n            -- (We should\
+    \ already be out of the loop now)\n         end\n      end\n      -- We are done\
+    \ processing this character at this depth\n      -- If we've reached the max depth\
+    \ we can't separate groups\n      -- Keep track of the current depth\n      if\
+    \ paren_count == 0 and depth ~= 0 then\n         -- We are no longer at the same\
+    \ depth\n         -- Increment the depth counter\n         depth = depth + 1\n\
+    \      elseif paren_count == 0 and depth > 0 then\n         -- We are at the same\
+    \ depth\n         -- Make sure the depth counter is zero\n         depth = 0\n\
+    \      else\n         -- We are at the same depth\n         -- Make sure the depth\
+    \ counter is zero\n         depth = 0\n      end\n   end\n   if paren_count ~=\
+    \ 0 then\n      -- If there are still open parens but we're at a depth of zero\n\
+    \      -- This is an error\n      error(\"Too many unclosed parens at depth \"\
+    \ .. depth)\n   end\n   -- Make sure the depth counter is ", "  local open_brace_stack\
+    \ = {}\n  local stack_count = {}\n  local strings_to_return = {}\n  local string_counter\
+    \ = 0\n  local current_string = ''", "  -- Matches all paren groups in a string\n\
+    \  local paren_groups = rexp.matches_parens(paren_string)\n  -- Separates each\
+    \ paren group into a separate string\n  local separated_groups = terralib.newlist()\n\
+    \  for _, paren_group in ipairs(paren_groups) do\n    local separated_group =\
+    \ string.sub(paren_group, 1, #paren_group)\n    separated_groups:insert(separated_group)\n\
+    \  end\n  return separated_groups\nend", "\tlocal open_braces = { }\n\tlocal close_braces\
+    \ = { }", "    local stack = {}\n    local groups = {}\n    local open_paren =\
+    \ 0\n    local open_curly = 0\n    local open_round = 0\n    local open_brace\
+    \ = 0\n    local open_bracket = 0\n    local open_square = 0\n    local open_brace_round\
+    \ = 0\n    local open_brace_curly = 0\n    local open_brace_square = 0\n    local\
+    \ open_round = 0\n    local open_curly = 0\n    local open_round = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local open_curly = 0\n    local\
+    \ open_curly = 0\n    local open_curly = 0\n    local ", "    local result = {}\n\
+    \    local current = ''\n    local group = {}\n    for c in string.gmatch(paren_string,\
+    \ '%[()%s]+') do\n        if c == '(' and group:len() > 0 then\n            table.insert(result,\
+    \ string.sub(current, 1, group:len()))\n            current = ''\n        elseif\
+    \ c == ')' and group:len() > 0 then\n            table.insert(result, string.sub(current,\
+    \ 1, group:len()))\n            group = {}\n        elseif c == ' ' then\n   \
+    \         current = string.sub(current, group:len() + 1)\n        else\n     \
+    \       group = string.sub(current, 1, group:len() + 1)\n        end\n    end\n\
+    \    if current ~= '' then\n        table.insert(result, string.sub(current, 1,\
+    \ group:len()))\n    end\n    return result\nend", "    local groups = {}\n  \
+    \  local open_bracket = 0\n    for i=1, #paren_string, 1 do\n        local char\
+    \ = paren_string[i]\n        if char == ')' then\n            open_bracket -=\
+    \ 1\n            if open_bracket == 0 then\n                table.append(groups,\
+    \ paren_string[i-1])\n            end\n        elseif open_bracket == 0 then\n\
+    \            groups[#groups+1] = paren_string[i]\n        end\n    end\n    return\
+    \ groups\nend", "   local open_chars = \"([{[\"\n   local close_chars = \"})]}\"\
+    \n   local open_brackets = open_chars .. close_chars\n   local close_brackets\
+    \ = close_chars .. open_chars\n   local open_paren = open_brackets .. open_chars\n\
+    \   local close_paren = close_brackets .. close_chars", "  local paren_dict =\
+    \ {}\n  local last_open = 0\n  local last_close = 0\n  for i, ch in ipairs(paren_string)\
+    \ do\n    if ch == '(' then\n      last_open = i\n    elseif ch == ')' then\n\
+    \      if last_open ~= last_close then\n        paren_dict[i] = paren_string[last_open:last_close]\n\
+    \      end\n      last_close = i\n    end\n  end\n  if last_open ~= last_close\
+    \ then\n    paren_dict[i] = paren_string[last_open:last_close]\n  end\n  return\
+    \ paren_dict\nend", "  local open_braces = {}\n  local closed_braces = {}\n  local\
+    \ braces_count = 0", '   local groups = { }', "  -- Create a stack of parentheses\n\
+    \  local parenStack = {}\n  -- A stack of characters we're working on\n  local\
+    \ workingStack = {}\n  -- While there are parentheses still open\n  while true\
+    \ do\n    -- Get a character from working stack\n    local char = workingStack[1]\n\
+    \    -- If the character is the closing parenthesis, we're done\n    if char ==\
+    \ '}' then\n      -- Return the string that we've built\n      --\n      -- A\
+    \ closing parenthesis is represented as a string ending in an extra closing parenthesis\n\
+    \      local final_string = table.concat(parenStack)\n      -- Remove the extra\
+    \ closing parenthesis from the stack\n      table.insert(parenStack, {})\n   \
+    \   return final_string\n    end\n    -- If there's a character in the input string\
+    \ that's not a closing parenthesis,\n    -- add it to the working stack\n    if\
+    \ char ~= ')' then\n      table.insert(workingStack, char)\n    end\n    -- If\
+    \ there's a character in the input string that's a closing parenthesis,\n    --\
+    \ add it to the working stack\n    if char == ')' then\n      table.insert(parenStack,\
+    \ {})\n    end\n    -- If there's nothing on the stack but a character in the\
+    \ input string\n    -- that's not a closing parenthesis, break the loop\n    if\
+    \ #parenStack == 0 then\n      break\n    end\n    -- If there's something in\
+    \ the stack that's a closing parenthesis,\n    -- break the loop\n    if #parenStack\
+    \ == 1 then\n      break\n    end\n  end\nend", "    local splits = paren_string:gsub('[(%b)]',\
+    \ '%s*'):gsub('[(%b)]%s*', '%s*'):gsub('[(%b)]%s*', '%s*')\n    local groups =\
+    \ splits:gsub('%S*{', '{')\n    local last_open_bracket = groups.sub(1, -1)\n\
+    \    local last_close_bracket = groups.sub(-1)\n    local balanced = balanced_parens(last_open_bracket,\
+    \ last_close_bracket)\n    return splits:gsub('%S*}', '}'):gsub('%S*\\\\}', '}'):gsub('%S*\\\
+    \\', ')'):gsub('%S*\\\\{', '('):gsub('%S*%{', '{'):gsub('%S*%\\\\(', '('):gsub('%S*%\\\
+    \\', '\\\\'):gsub('%S*%\\\\{', '('):gsub('%S*%', ''):gsub('%S*%{', '('):gsub('%S*{',\
+    \ ''):gsub('%S*', ''):gsub('%S*%', ''):gsub('%S*', ''):gsub('%S*%', ''):gsub('%S*',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%', ''):gsub('%S*%',\
+    \ ''):gsub('%S*%', ''):gsub('%S*%', ''):", "  local open_brace_stack = setmetatable({},\
+    \ {__mode=\"k\"});\n  local closed_brace_stack = setmetatable({}, {__mode=\"k\"\
+    });\n  local open_brace_group = {};\n  local closed_brace_group = {};\n  local\
+    \ paren_group = {};\n  local open_brace_count = 0;\n  local closed_brace_count\
+    \ = 0;\n  local paren_group_string = \"\";\n  for i = 1, #paren_string, 1 do\n\
+    \    if paren_string[i] == '(' or paren_string[i] == ')' then\n      if paren_string[i]\
+    \ == '(' then\n        if open_brace_stack[open_brace_count] == nil then\n   \
+    \       table.insert(open_brace_stack, open_brace_count);\n        end\n     \
+    \   table.insert(closed_brace_stack, closed_brace_count);\n        table.insert(open_brace_group,\
+    \ paren_group);\n        paren_group = {};\n        paren_group_string = \"\"\
+    ;\n        open_brace_count = 0;\n        closed_brace_count = 0;\n      elseif\
+    \ paren_string[i] == ')' then\n        table.insert(closed_brace_group, paren_group);\n\
+    \        table.insert(open_brace_stack, open_brace_count);\n        table.insert(closed_brace_stack,\
+    \ closed_brace_count);\n        open_brace_count = 0;\n        closed_brace_count\
+    \ = 0;\n      else\n        table.insert(paren_group, paren_string[i]);\n    \
+    \    paren_group_string = table.concat(paren_group, \",\");\n      end\n    elseif\
+    \ open_brace_stack[open_brace_count] ~= nil and closed_brace_stack[closed_brace_count]\
+    \ == nil then\n      table.insert(open_brace_group, paren_string[i]);\n      open_brace_count\
+    \ = open_brace_count + 1;\n    elseif open_brace_stack[open_brace_count] ~= nil\
+    \ and closed_brace_stack[closed_brace_count] ~= nil and open_brace_stack[open_brace_count]\
+    \ == closed_brace_stack[closed_brace_count] then\n      table.insert(open_brace_group,\
+    \ paren_string[i]);\n      open_brace_count = open_brace_count + 1;\n    elseif\
+    \ open_brace_stack[open_brace_count] ~= nil and closed_brace_stack[closed_brace_count]\
+    \ ~= nil and open_brace_stack[open_brace_count] < closed_brace_stack[closed_brace_count]\
+    \ then\n      table.insert(", "  -- Use a table to store our groups\n  local groups\
+    \ = {} -- Our table", "    local open_braces = string.gsub(paren_string, \"\\\
+    ([^)]*\\)\", \"\")\n    local open_braces1 = string.gsub(open_braces, \"){2,}\"\
+    , \"}\")\n    local open_braces2 = string.gsub(open_braces1, \"}{2,}\", \"}\"\
+    )\n    local open_braces3 = string.gsub(open_braces2, \"){2,\", \"}\")\n    local\
+    \ open_braces4 = string.gsub(open_braces3, \"}{2,\", \"}\")\n    local open_braces5\
+    \ = string.gsub(open_braces4, \"){\", \"}\")\n    local open_braces6 = string.gsub(open_braces5,\
+    \ \"}{\", \"}\")\n    local open_paren = string.gsub(open_braces6, \")\", \"(\"\
+    )\n    local close_paren = string.gsub(open_braces6, \")\", \")\")\n    local\
+    \ open_paren_2 = string.gsub(open_paren, \"{\", \"(\")\n    local close_paren_2\
+    \ = string.gsub(open_paren, \"}\", \")\")", "  local result = {}\n  local open_braces\n\
+    \  local closed_paren_braces = 1\n  local inside_group = 1\n  local open_paren_braces\
+    \ = 0\n  local open_parens = 0\n  for c in string.gmatch(paren_string, '[^()]+')\
+    \ do\n    if c == '(' and open_paren_braces == 1 then\n      open_paren_braces\
+    \ = open_paren_braces + 1\n    elseif c == ')' and open_paren_braces > 0 then\n\
+    \      open_paren_braces = open_paren_braces - 1\n      if open_paren_braces ==\
+    \ 0 then\n        closed_paren_braces = closed_paren_braces + 1\n      end\n \
+    \   elseif c == '(' and open_parens > 0 then\n      table.insert(result, c)\n\
+    \      open_parens = open_parens + 1\n      inside_group = inside_group + 1\n\
+    \    elseif c == ')' and closed_paren_braces == 1 then\n      table.insert(result,\
+    \ c)\n      closed_paren_braces = closed_paren_braces + 1\n      inside_group\
+    \ = inside_group - 1\n      if inside_group == 1 then\n        open_paren_braces\
+    \ = open_paren_braces - 1\n      end\n    end\n  end\n  return result\nend", '  local
+    paren_groups = {}', "  local open_braces = 0\n  local closed_groups = {}\n  local\
+    \ current_group = \"\"\n  local stack = {}\n  for char in string.gmatch(paren_string,\
+    \ \"([^()]*)(%s+)\") do\n    local next_char = char\n    if char == \"(\" then\n\
+    \      if open_braces > 0 then\n        table.insert(stack, current_group)\n \
+    \     else\n        open_braces = open_braces + 1\n        current_group = next_char\n\
+    \      end\n    elseif char == \")\" then\n      open_braces = open_braces - 1\n\
+    \      if open_braces > 0 then\n        current_group = stack[#stack]\n      else\n\
+    \        table.insert(closed_groups, current_group)\n      end\n    elseif char\
+    \ == \",\" then\n      table.insert(stack, current_group)\n    end\n  end\n  if\
+    \ open_braces > 0 then\n    table.insert(stack, current_group)\n  end\n  table.insert(closed_groups,\
+    \ current_group)\n  return closed_groups\nend", "  local groups = {}\n  local\
+    \ open_braces = 1\n  local closing_count = 1\n  local open_brace_count = 1\n \
+    \ local open_brace_group\n  local closing_paren\n  local open_brace_group_string\n\
+    \  local paren\n  for paren in string.gmatch(paren_string, \"%([%a^%c]+)(%[%a^%c]*)\"\
+    ) do\n    closing_paren = paren\n    closing_count = open_brace_count - 1\n  \
+    \  open_brace_count = 0\n    if open_braces > 0 then\n      open_brace_count =\
+    \ open_braces - 1\n    end\n    if open_braces > 0 then\n      open_brace_group\
+    \ = {\n        group = string.sub(paren, 1, open_brace_count + 1),\n        string_buffer\
+    \ = string.sub(paren, open_brace_count + 1),\n        level = open_brace_count\
+    \ + 1,\n      }\n      open_brace_group_string = string.format(\"%{(%{.group}.%{.level}).%{.string_buffer}}\"\
+    , open_brace_group)\n      groups[#groups + 1] = open_brace_group_string\n   \
+    \   open_brace_group_string = nil\n    end\n    if closing_paren then\n      open_braces\
+    \ = open_braces + 1\n      open_brace_count = open_braces + 1\n      open_brace_group_string\
+    \ = nil\n      closing_paren = nil\n    end\n  end\n  return groups\nend", " \
+    \   local open_braces = {}\n    local close_braces = {}\n    local groups = {}\n\
+    \    local open_brace_count = 0\n    local close_brace_count = 0\n    for token\
+    \ in string.gmatch(paren_string, '%v') do\n        -- Looking for open-brace groups\n\
+    \        if token == '(' then\n            if open_brace_count > 0 then\n    \
+    \            open_braces[open_brace_count] = token\n            end\n        \
+    \    open_brace_count = open_brace_count + 1\n        else\n            -- Looking\
+    \ for close-brace groups\n            if token == ')' then\n                if\
+    \ open_brace_count > 0 then\n                    open_brace_count = open_brace_count\
+    \ - 1\n                    if open_brace_count = 0 then\n                    \
+    \    close_brace_count = close_brace_count + 1\n                    end\n    \
+    \            end\n                if close_brace_count > 0 then\n            \
+    \        close_braces[close_brace_count] = token\n                end\n      \
+    \      end\n        end\n        -- Pushing current token if its not a comment\
+    \ or string\n        if token ~= '%' and token ~= '(%' and token ~= '%)' then\n\
+    \            if open_brace_count = 0 then\n                groups[#groups + 1]\
+    \ = token\n            else\n                groups[#groups+1] = groups[#groups+1]\
+    \ .. token\n            end\n        end\n    end\n    return groups\nend", " \
+    \  --\n   -- Separate a set of parentheses into their separate groups\n   --\n\
+    \   local current_group = {}", "   local open_stack = {}\n   local closed_stack\
+    \ = {}\n   local open_brace = 0\n   local open_brace_count = 0\n   local open_brace_level\
+    \ = 0\n   local closed_level = 0\n   local stack_strings = terralib.newlist()\n\
+    \   local stack_string = terralib.newsymbol(\n      data.newtype.struct(\"paren_string\"\
+    , \"stack_string\"))\n   local stack_string_p = terralib.newsymbol(\n      data.newtype.struct(\"\
+    paren_string\", \"stack_string_ptr\"))\n   local result = terralib.newsymbol(\n\
+    \      data.newtype.struct(\"separated_paren_groups\", \"group_list\"))\n   local\
+    \ result_p = terralib.newsymbol(\n      data.newtype.struct(\"separated_paren_groups\"\
+    , \"group_ptr\"))\n   local function get_paren_string()\n      if open_brace ==\
+    \ 0 then\n         return false\n      elseif open_brace ~= open_brace_count then\n\
+    \         return false\n      end\n      local start_pos = open_brace\n      open_brace_count\
+    \ = open_brace_count + 1\n      local open_group = terralib.newsymbol(\n     \
+    \    data.newtype.struct(\"open_paren_group\", data.newtuple(open_brace)))\n \
+    \     local close_group = terralib.newsymbol(\n         data.newtype.struct(\"\
+    close_paren_group\", data.newtuple(open_brace)))\n      local stack_string = terralib.newsymbol(\n\
+    \         data.newtype.struct(\"stack_string\", data.newtuple(open_brace)))\n\
+    \      local result_group = terralib.newsymbol(\n         data.newtype.struct(\"\
+    result_group\", data.newtuple(open_brace)))\n      local group_string = terralib.newsymbol(\n\
+    \         data.newtype.struct(\"group_string\", data.newtuple(open_brace)))\n\
+    \      local open_brace = open_brace + 1\n      local new_string = paren_string\n\
+    \      -- Push all opening brace strings to the stack\n      while open_brace\
+    \ > 0 do\n         open_stack[open_brace] = open_brace - 1\n         open_brace\
+    \ = open_brace - 1\n      end\n      -- Push all closing brace strings to the\
+    \ stack\n      while open_brace < #paren_string:len() do\n         closed_stack[open_brace]\
+    \ = open_brace\n         open_brace = open_brace + 1\n      end\n      -- Parse\
+    \ string until there are no more opening ", "    local result = {}\n    local\
+    \ paren_count = 0\n    local open_brace_count = 0\n    local close_brace_count\
+    \ = 0\n    local current_value\n    local open_paren", "  local open_braces =\
+    \ 0\n  local close_braces = 0\n  local string_stack = { paren_string }\n  local\
+    \ separated_groups = {}\n  local i = 1\n  while i <= #string_stack do\n    if\
+    \ open_braces > 0 and string_stack[i - 1].type == '(' then\n      close_braces\
+    \ = 1\n    elseif close_braces > 0 and string_stack[i - 1].type == ')' then\n\
+    \      open_braces = 1\n    end\n    if open_braces > 0 then\n      separated_groups[i]\
+    \ = string_stack[i - 1].value\n      open_braces = 0\n    end\n    if close_braces\
+    \ > 0 then\n      separated_groups[i] = string_stack[i - 1].value\n      close_braces\
+    \ = 0\n    end\n    i = i + 1\n  end\n  return separated_groups\nend", "    local\
+    \ open_brace_table = {}\n    local open_brace_count = 0\n    local closed_group\
+    \ = 0\n    local closed_paren_count = 0\n    local open_brace_start = false\n\
+    \    local closed_paren_start = false\n    for i = 1, #paren_string, 1 do\n  \
+    \      local character = paren_string[i]\n        if open_brace_start then\n \
+    \           if character == '(' then\n                open_brace_count = open_brace_count\
+    \ + 1\n            elseif character == ')' then\n                open_brace_count\
+    \ = open_brace_count - 1\n            elseif open_brace_count == 0 then\n    \
+    \            open_brace_start = false\n                closed_paren_start = false\n\
+    \            else\n                open_brace_start = false\n                closed_paren_start\
+    \ = false\n            end\n        elseif closed_paren_start then\n         \
+    \   if character == ')' then\n                closed_paren_count = closed_paren_count\
+    \ + 1\n            elseif character == '(' then\n                closed_paren_count\
+    \ = closed_paren_count - 1\n            elseif closed_paren_count == 0 then\n\
+    \                closed_paren_start = false\n                open_brace_start\
+    \ = false\n            else\n                closed_paren_start = false\n    \
+    \            open_brace_start = false\n            end\n        elseif character\
+    \ == '(' then\n            if open_brace_count == 0 then\n                open_brace_start\
+    \ = true\n                closed_paren_count = 0\n            end\n          \
+    \  closed_paren_count = 0\n            open_brace_table[i] = '('\n        elseif\
+    \ character == ')' then\n            if closed_paren_count == 0 then\n       \
+    \         closed_paren_start = true\n                open_brace_count = 0\n  \
+    \          end\n            open_brace_count = 0\n            closed_paren_count\
+    \ = 0\n            open_brace_table[i] = ')'\n        else\n            open_brace_count\
+    \ = open_brace_count + 1\n            closed_paren_count = 0\n            open_brace_table[i]\
+    \ = character\n        end\n    end\n    return open_brace_table\nend\n</code>\n\
+    <|/ a tags=parsing,lua dscore=1 |>\n<| a dscore=0 tags=parsing,lua |>\nFor a general\
+    \ solution it's possible to implement a recursive descent parser by hand. Here\
+    \ is an example:\n<code>", "  -- If the parenthesis is empty, just return an empty\
+    \ table\n  if not paren_string then return {} end\n  -- Store the opening parenthesis\n\
+    \  local paren_stack = {}\n  -- Store the resulting groups in the result table\n\
+    \  local paren_groups = {}\n  -- Iterate through each character in the string\n\
+    \  for i,c in ipairs(paren_string) do\n    -- If the character is an open parenthesis\
+    \ then push it to the stack\n    if c == '(' then\n      paren_stack:insert(i)\n\
+    \    -- If the character is a closing parenthesis then pop it off the stack\n\
+    \    elseif c == ')' then\n      -- If the stack is empty, there are unmatched\
+    \ parenthesis\n      if #paren_stack == 0 then\n        error('Unmatched parenthesis\
+    \ in \"' .. paren_string .. '\"')\n      -- Otherwise, the last parenthesis is\
+    \ closed, so add its corresponding group to the result table\n      else\n   \
+    \     -- If the stack is not empty then there are unmatched parenthesis\n    \
+    \    if #paren_stack > 0 then\n          paren_groups[#paren_groups + 1] = paren_string:sub(paren_stack[1],\
+    \ #paren_string)\n        else\n          paren_groups[#paren_groups + 1] = paren_string:sub(paren_stack[1])\n\
+    \        end\n      end\n      -- Empty the stack\n      paren_stack = {}\n  \
+    \  else\n      -- If the character is not a parenthesis or whitespace, just add\
+    \ it to the result table\n      paren_groups[#paren_groups + 1] = paren_string:sub(#paren_string)\n\
+    \    end\n  end\n  return paren_groups\nend", "\tlocal output = {}\n\tfor idx,\
+    \ c in ipairs(paren_string:gmatch('[^()]+')) do\n\t\tlocal next_c = paren_string:subidx(idx+1,\
+    \ idx+2)\n\t\tif c == '(' and next_c == '(' and not next_c:startswith((')%c) then\n\
+    \t\t\ttable.insert(output, c)\n\t\tend\n\tend\n\treturn output\nend", "    local\
+    \ paren_table = {}\n    local open_braces = 0\n    local paren_level = 0\n   \
+    \ local in_paren = false\n    local in_quote = false", "  local result = {}\n\
+    \  local open_brace_level = 1\n  local closing_curly_level = 0\n  local open_brace_character\n\
+    \  for open_brace_character in string.gmatch(paren_string, \"%c\") do\n    closing_curly_level\
+    \ = closing_curly_level + 1\n    if closing_curly_level > open_brace_level then\n\
+    \      result[#result + 1] = paren_string:sub(1, open_brace_character - 1)\n \
+    \   end\n    open_brace_level = open_brace_level + 1\n  end\n  return result\n\
+    end", "   local paren_groups = {}\n   local open_parens = 1\n   local open_parens_stack\
+    \ = {}\n   local i = 1\n   while true do\n      local char = paren_string:sub(i,\
+    \ i)\n      i = i + 1\n      if not char then\n         break\n      end\n   \
+    \   open_parens_stack[open_parens] = true\n      if char == '(' and open_parens\
+    \ == 1 then\n         open_parens = open_parens + 1\n      elseif char == ')'\
+    \ and open_parens > 1 then\n         open_parens = open_parens - 1\n      elseif\
+    \ char == ' ' and open_parens == 1 then\n         -- Ignore spaces within parens\n\
+    \      elseif char == ')' then\n         if open_parens_stack[open_parens] then\n\
+    \            paren_groups[#paren_groups + 1] = table.concat(paren_groups[#paren_groups],'')\n\
+    \         end\n         open_parens = open_parens - 1\n      end\n   end\n   if\
+    \ open_parens > 0 then\n      error(\"Unbalanced parenthesis in input string\"\
+    )\n   end\n   return paren_groups\nend", "    if paren_string == '' then\n   \
+    \     return {}\n    end", "   -- This solution is similar to the solution given\
+    \ by jtm at https://stackoverflow.com/a/17098101/125724\n   local open_braces,\
+    \ closed_braces, open_braces_count = paren_string:gsub('%[(%a)]+', '\\0*%1'):gsub('(.-)(.-)(.-)',\
+    \ '\\3\\2\\1'):gsub('(.-)\\0*%[(%a)]+', '\\2\\1')\n   if not (open_braces and\
+    \ closed_braces) then\n      return {paren_string}\n   end\n   local open_braces_strings\
+    \ = {}\n   local closed_braces_strings = {}\n   local last_open_brace, last_closed_brace\n\
+    \   local open_brace_index = -1\n   local closed_brace_index = -1\n   for open_brace_index,\
+    \ open_brace in ipairs(open_braces) do\n      if not open_brace then\n       \
+    \  if last_open_brace then\n            if open_brace_index > -1 and open_brace_index\
+    \ + 1 == open_braces_count then\n               open_braces_strings[open_brace_index\
+    \ + 1] = open_braces_strings[open_brace_index + 1] .. last_closed_brace\n    \
+    \        elseif open_brace_index + 1 > -1 then\n               open_braces_strings[open_brace_index\
+    \ + 1] = open_braces_strings[open_brace_index + 1] .. last_closed_brace\n    \
+    \        end\n         end\n         last_open_brace = nil\n         last_closed_brace\
+    \ = nil\n      elseif last_open_brace then\n         if open_brace_index + 1 ==\
+    \ open_braces_count then\n            last_closed_brace = closed_brace .. last_open_brace\n\
+    \         elseif open_brace_index + 1 > -1 then\n            last_closed_brace\
+    \ = closed_brace .. last_open_brace\n         end\n      end\n      open_braces_strings[open_brace_index\
+    \ + 1] = open_braces_strings[open_brace_index + 1] .. open_brace\n   end\n   for\
+    \ closed_brace_index, closed_brace in ipairs(closed_braces) do\n      if not closed_brace\
+    \ then\n         last_open_brace = nil\n         last_closed_brace = nil\n   \
+    \   elseif last_open_brace then\n         last_closed_brace = closed_brace ..\
+    \ last_open_brace\n      end\n   end\n   return open_braces_strings[#open_brace",
+  "  local open_paren_stack = {}\n  local open_braces_found = 0\n  local paren_string\
+    \ = paren_string:gsub('%([%{])', function(c) open_paren_stack[#open_paren_stack+1]\
+    \ = c; return '' end)\n  local groups = {}\n  for paren_group in paren_string:gmatch('%([%{]%)')\n\
+    \  do\n    local stack_index = #open_paren_stack\n    local paren_group_count\
+    \ = #(paren_group)\n    if paren_group_count ~= #open_paren_stack then\n     \
+    \ error('Group size mismatch in paren_group')\n    end\n    for i = 1, paren_group_count\
+    \ do\n      if paren_group[i] == '{' then\n        if open_braces_found ~= stack_index\
+    \ then\n          error('Unexpected open brace in paren_group')\n        end\n\
+    \        open_braces_found = stack_index\n      elseif paren_group[i] == '}' then\n\
+    \        if open_braces_found ~= stack_index + 1 then\n          error('Unexpected\
+    \ close brace in paren_group')\n        end\n        open_braces_found = stack_index\
+    \ + 1\n      else\n        if stack_index == open_braces_found then\n        \
+    \  error('Open brace cannot be found after closed brace in paren_group')\n   \
+    \     elseif stack_index + 1 == open_braces_found then\n          error('Open\
+    \ brace cannot be found before closed brace in paren_group')\n        end\n  \
+    \    end\n    end\n    table.insert(groups, table.concat(open_paren_stack))\n\
+    \  end -- for\n  table.insert(groups, table.concat(open_paren_stack))\n  return\
+    \ groups\nend", "\tlocal paren_stack = {paren_string}\n\tlocal paren_groups =\
+    \ {}\n\tlocal paren_group_len\n\tlocal paren_open\n\tlocal paren_close\n\twhile\
+    \ #paren_stack > 0 do\n\t\tparen_group_len = #paren_stack\n\t\tparen_open = false\n\
+    \t\tparen_close = false\n\t\tfor paren_group_len = 1, #paren_stack, 1 do\n\t\t\
+    \tlocal element = paren_stack[paren_group_len]\n\t\t\tif element == \"(\" then\n\
+    \t\t\t\tparen_open = true\n\t\t\t\tparen_group_len = paren_group_len - 1\n\t\t\
+    \telseif element == \")\" then\n\t\t\t\tparen_close = true\n\t\t\t\tparen_group_len\
+    \ = paren_group_len + 1\n\t\t\tend\n\t\t\tif paren_open then\n\t\t\t\ttable.insert(paren_groups,\
+    \ \"(\")\n\t\t\telseif paren_close then\n\t\t\t\ttable.insert(paren_groups, \"\
+    )\")\n\t\t\tend\n\t\tend\n\t\ttable.insert(paren_stack, \"\")\n\tend\n\treturn\
+    \ paren_groups\nend", "    local balanced_para_open = nil\n    local paren_string\
+    \ = paren_string:gsub(\"^<%([%w%.]*)%>$\", function(x) \n        local group_string\
+    \ = x:match(\"<%([%w%.]*)%>\")\n        local paren_open = group_string:match(\"\
+    %[%w%.]*$\")\n        local paren_close = group_string:match(\"%w%.*\")\n    \
+    \    if paren_close then\n            local balanced_groups = paren_close:gsub(\"\
+    %[(%a..)*%]\", function(x) return x:gsub(\"^%a(.*)$\", \n                function(y)\
+    \ return \"\"; end)\n            balanced_para_open = balanced_groups:match(\"\
+    ^%a(.*)$\")\n        else\n            balanced_para_open = paren_open\n     \
+    \   end\n        return \"\"\n    end)\n    local split_string = paren_string:gsub(\"\
+    %[%[(%a..)*%]\", function(x) return x:gsub(\"^%a(.*)$\", \n        function(y)\
+    \ return \"\"; end)\n    end)\n    return split_string:gsub(\"%a^(.*)$\", \n \
+    \       function(y) return balanced_para_open..y).gsub(\"%a(.*)$\", \n       \
+    \ function(y) return balanced_para_open..y\n    end)\nend", "  local groups =\
+    \ {}\n  for paren in string.gmatch(paren_string, \"[%[(]([^)]*)[)][%]]\") do\n\
+    \    table.insert(groups, paren)\n  end\n  return groups\nend", "  local function\
+    \ matcher(input, i)\n    if input[i] == ')' then\n      -- The character we just\
+    \ matched is a closing parenthesis.\n      return i - 1, paren_string, i + 1\n\
+    \    end\n    if input[i] == '(' then\n      -- The character we just matched\
+    \ is a beginning parenthesis.\n      return i - 1, paren_string, i + 1\n    end\n\
+    \    if input[i] == ' ' then\n      -- We need to ignore any spaces in the input\
+    \ string.\n      return i - 1, nil, i + 1\n    end\n  end", "    local groups\
+    \ = {}\n    local pos = 1\n    local group = 0\n    local open_brace = false\n\
+    \    while pos <= #paren_string:len() do\n        local char = paren_string:sub(pos,\
+    \ pos)\n        if char == '(' then\n            open_brace = not open_brace\n\
+    \            pos = pos + 1\n        elseif char == ')' then\n            if open_brace\
+    \ then\n                open_brace = false\n            else\n               \
+    \ pos = pos + 1\n            end\n        else\n            pos = pos + 1\n  \
+    \          group = group + 1\n            if open_brace then\n               \
+    \ groups[#groups + 1] = group\n            end\n        end\n    end\n    return\
+    \ groups\nend\n</code>\n<|/ a tags=lua |>\n<| a |>\nHere is an easy solution:\n\
+    <code>", "  local open_braces, close_braces, open_brace_positions = 0, 0, {}\n\
+    \  local groups = {}", "    local result = {}\n    local paren_depth = 0\n   \
+    \ local open_parens = 0\n    local current_paren_group\n    local open_braces\
+    \ = 0", "  local opening_braces = false\n  local paren_brace_count = 1\n  local\
+    \ groups = {}\n  local current_group = ''", "  -- Handle the case of an empty\
+    \ string\n  if not paren_string then return {} end", "  local result = {}\n  for\
+    \ paren_group in gmatch(paren_string, \"%[(%p%)]\") do\n    table.insert(result,\
+    \ paren_group)\n  end\n  return result\nend", "\tlocal open_paren_count = 0\n\t\
+    local open_paren_pairs = {}\n\tlocal close_paren_count = 0\n\tlocal close_paren_pairs\
+    \ = {}\n\tlocal paren_string = paren_string:gsub(\"[()]+\", ''):gsub(\"^%s*\"\
+    , \"\"):gsub(\"%s*$\", \"\"):gsub(\"(%S+)(%S+)\", function(_, s1, s2)\n\t\topen_paren_count\
+    \ = open_paren_count + 1\n\t\tif open_paren_count == 1 then\n\t\t\topen_paren_pairs[#open_paren_pairs\
+    \ + 1] = {s1,s2}\n\t\telse\n\t\t\tclose_paren_count = close_paren_count + 1\n\t\
+    \t\tif close_paren_count == 1 then\n\t\t\t\tclose_paren_pairs[#close_paren_pairs\
+    \ + 1] = {s1,s2}\n\t\t\telse\n\t\t\t\topen_paren_pairs[#open_paren_pairs + 1]\
+    \ = {s1,s2}\n\t\t\t\tclose_paren_pairs[#close_paren_pairs + 1] = {s1,s2}\n\t\t\
+    \tend\n\t\tend\n\tend)\n\tlocal paren_groups = paren_string:gsub(\"%S+\", function\
+    \ (_, token)\n\t\tif #open_paren_pairs == #close_paren_pairs then\n\t\t\treturn\
+    \ {token}\n\t\telse\n\t\t\treturn nil\n\t\tend\n\tend)\n\treturn {\n\t\topen =\
+    \ open_paren_pairs,\n\t\tclose = close_paren_pairs,\n\t\tgroups = paren_groups\n\
+    \t}\nend", "  local open_brace_stack = setmetatable({}, {__mode=\"kv\"})\n  local\
+    \ close_brace_stack = setmetatable({}, {__mode=\"kv\"})\n  local stack = setmetatable({},\
+    \ {__mode=\"kv\"})\n  local current_open_brace, current_close_brace, current_stack\
+    \ = unpack(stack)\n  local paren_groups = setmetatable({}, {__mode=\"kv\"})\n\
+    \  local open_brace_count = -1\n  for index, value in ipairs(paren_string:gmatch('^%[({]*%((.*)\\\
+    ))*[^()]*$')) do\n    if open_brace_count ~= nil then\n      local close_paren_group\
+    \ = #open_brace_stack > 0 and open_brace_stack[#open_brace_stack]\n      table.insert(paren_groups,\
+    \ close_paren_group and open_brace_stack[#open_brace_stack] or \"\")\n      close_brace_stack[close_paren_group]\
+    \ = current_close_brace\n      open_brace_stack = nil\n      stack = setmetatable({},\
+    \ {__mode=\"kv\"})\n      current_open_brace, current_close_brace, current_stack\
+    \ = unpack(stack)\n      open_brace_count = -1\n    end\n    open_brace_count\
+    \ = open_brace_count + 1\n    if open_brace_count == 0 then\n      table.insert(paren_groups,\
+    \ value)\n    elseif open_brace_count > 1 then\n      local open_paren_group =\
+    \ #open_brace_stack == 1 and open_brace_stack[1]\n      table.insert(paren_groups,\
+    \ open_paren_group and open_brace_stack[1] or \"\")\n      open_brace_stack[open_paren_group]\
+    \ = value\n    else\n      local open_paren_group = #open_brace_stack == 1 and\
+    \ open_brace_stack[1]\n      table.insert(paren_groups, open_paren_group and open_brace_stack[1]\
+    \ or \"\")\n      table.insert(open_brace_stack, value)\n    end\n  end\n  if\
+    \ open_brace_count ~= nil then\n    local close_paren_group = #open_brace_stack\
+    \ > 0 and open_brace_stack[#open_brace_stack]\n    table.insert(paren_groups,\
+    \ close_paren_group and open_brace_stack[#open_brace_stack] or \"\")\n    close_brace_stack[close_paren_group]\
+    \ = current_close_brace\n  end\n  return paren_groups\nend", "  local paren_groups\
+    \ = terralib.newlist()\n  local open_braces = terralib.newlist()\n  local close_braces\
+    \ = terralib.newlist()", "  local opening_braces = ''\n  local closing_braces\
+    \ = ''", "  -- If the string is empty or has no groups, return an empty table\n\
+    \  -- >>> separate_paren_groups('')\n  -- {''}\n  -- >>> separate_paren_groups('()')\n\
+    \  -- {''}\n  -- >>> separate_paren_groups('  ')\n  -- {''}\n  -- >>> separate_paren_groups('\
+    \   ')\n  -- {''}\n  -- >>> separate_paren_groups('()  ')\n  -- {''}\n  -- >>>\
+    \ separate_paren_groups('(   )   ')\n  -- {''}\n  -- >>> separate_paren_groups('(\
+    \   )   (   )')\n  -- {''}", "\tlocal results = {}\n\tlocal stack = { { } } --\
+    \ the stack of groups\n\tlocal depth = 0 -- the depth of nesting\n\tlocal bracket_count\
+    \ = 0 -- the number of open brackets in the current group\n\tlocal group = \"\"\
+    \ -- the current group text\n\tlocal open_bracket = 1 -- the number of open brackets",
+  "  local open_brace_groups = {}\n  local brace_groups = {}\n  local open_brace_count\
+    \ = 0\n  local brace_count = 0\n  for char in string.gmatch(paren_string, \"%b()\"\
+    ) do\n    if char == \"(\" then\n      open_brace_count = open_brace_count + 1\n\
+    \      if open_brace_count > 1 then\n        table.insert(open_brace_groups, \"\
+    \")\n      end\n    elseif char == \")\" then\n      brace_count = brace_count\
+    \ + 1\n      if brace_count > 1 then\n        table.insert(brace_groups, \"\"\
+    )\n      end\n    else\n      if open_brace_count > 0 then\n        open_brace_count\
+    \ = open_brace_count - 1\n        table.insert(open_brace_groups, open_brace_groups[#open_brace_groups]..char)\n\
+    \      elseif brace_count > 0 then\n        brace_count = brace_count - 1\n  \
+    \      table.insert(brace_groups, brace_groups[#brace_groups]..char)\n      else\n\
+    \        table.insert(brace_groups, char)\n      end\n    end\n  end", "  if paren_string:find('^%s*%(%s()')==0\
+    \ then\n    local paren_string = paren_string:gsub('^%s*(%s([%s():)%*])?%*%',\
+    \ '%%%1%%%2%%%2%%%3')\n    local paren_string = paren_string:gsub('(%s([%s():)%*])?%*%',\
+    \ '%%%1%%%2%%%2%%%3')\n  else\n    local paren_string = paren_string:gsub('%(%s()')\n\
+    \    local paren_string = paren_string:gsub('%(%s()([%s():)%*])?%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  end\n  local paren_string = paren_string:gsub('%%(%s()([%s():)%*])?%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%s()([%():)%*])?%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*])?%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local paren_string = paren_string:gsub('%(%([%():)%*][%():)%*%', '%%%1%%%2%%%2%%%3')\n\
+    \  local ", "   local open_braces = nil\n   local stack = {{string.rep(\" \",1),\
+    \ paren_string}}\n   while true do\n      local new_stack = {}\n      for i =\
+    \ 1, #stack do\n         if open_braces == nil then\n            if stack[i] ==\
+    \ \"(\" then\n               open_braces = true\n            elseif stack[i] ==\
+    \ \")\" then\n               open_braces = false\n            elseif open_braces\
+    \ == nil then\n               new_stack[#new_stack+1] = stack[i]\n           \
+    \ end\n         elseif open_braces == true and stack[i] == \"(\" then\n      \
+    \      new_stack[#new_stack+1] = stack[i]\n         elseif open_braces == true\
+    \ and stack[i] == \")\" then\n            new_stack[#new_stack+1] = stack[i]\n\
+    \         end\n      end\n      if #new_stack > 0 then\n         stack = new_stack\n\
+    \      else\n         break\n      end\n   end\n   if #stack > 0 then\n      return\
+    \ stack\n   else\n      return nil\n   end\nend", "   local split_groups = data.newtable()\n\
+    \   local position = 0\n   for group in string.gmatch(paren_string, \"[^()]+\"\
+    ) do\n      table.insert(split_groups, group)\n      position = string.find(group,\
+    \ \")\", position) + 1\n   end\n   return split_groups\nend", "   if paren_string:find(string.format('%s+',\
+    \ open_paren)) ~= nil then\n      -- Open paren is found at the beginning of the\
+    \ string\n      local open_p = paren_string:sub(1, 1)\n      local open_groups\
+    \ = string.format(\"%s+\", open_paren)\n      local open_groups_count = open_groups:len()\n\
+    \      local open_brace_count = open_p:len()", "    local result = {}\n    local\
+    \ stack = {paren_string}\n    repeat\n        local cur_stack = stack[#stack]\n\
+    \        if not cur_stack then\n            break\n        end\n        local\
+    \ open_paren = string.find(cur_stack, \"(\")\n        local close_paren = string.find(cur_stack,\
+    \ \")\")\n        if open_paren == 0 then\n            error(\"Malformed paren\
+    \ group\")\n        end\n        if close_paren == 0 then\n            error(\"\
+    Malformed paren group\")\n        end\n        local cur_stack = string.sub(cur_stack,\
+    \ open_paren + 1, close_paren - 1)\n        table.insert(result, cur_stack)\n\
+    \        stack[#stack] = string.sub(cur_stack, 1, close_paren - 1)\n    until\
+    \ cur_stack == \"\"\n    return result\nend", "  local paren_string_cleaned =\
+    \ paren_string:gsub(\"[\\(\\)]\", \"\")\n  local paren_string_pairs = paren_string_cleaned:gsub(\"\
+    ([^)]+)\", \" \")\n  local paren_string_pair_count = #paren_string_pairs\n  local\
+    \ paren_groups\n  local paren_group_strings", "    local groups = {}\n    local\
+    \ open_paren = 0\n    local open_count = 0\n    for char in paren_string:gmatch\
+    \ '()' do\n        if open_paren > 0 then\n            if open_count > open_paren\
+    \ then\n                open_count = 0\n            end\n            open_count\
+    \ = open_count + 1\n        else\n            open_paren = open_count + 1\n  \
+    \      end\n        table.insert(groups, char)\n    end\n    return groups\nend",
+  "    -- Use a regular expression to find all of the paren groups. \n    local pat\
+    \ = '%(%[(%)]%)' -- We want to find all groups of parens. \n    local matches\
+    \ = {}\n    local paren_table = {}", "  local num_open_braces = paren_string:match(\"\
+    [^()]+\"):gsub(\"[()]+\", \"\"):len()\n  return (num_open_braces == 0) and {}\
+    \ or {{paren_string}}\nend", "  if paren_string == nil then\n    return {}\n \
+    \ end", "  local paren_groups = {}\n  local open_braces = '{'\n  local close_braces\
+    \ = '}'\n  local open_braces_index = 1\n  local close_braces_index = 1\n  for\
+    \ i = 1, #paren_string, 1 do\n    if paren_string[i] == open_braces then\n   \
+    \   paren_groups[#paren_groups + 1] = paren_string[open_braces_index:i]\n    \
+    \  open_braces_index = i + 1\n    elseif paren_string[i] == close_braces then\n\
+    \      paren_groups[#paren_groups + 1] = paren_string[close_braces_index:i]\n\
+    \      close_braces_index = i + 1\n    elseif paren_string[i] == '(' then\n  \
+    \    open_braces_index = i + 1\n    elseif paren_string[i] == ')' then\n     \
+    \ close_braces_index = i + 1\n    end\n  end\n  return paren_groups\nend", " \
+    \   local nested_paren_string = paren_string\n    while true do\n        local\
+    \ open_brace_index = 1\n        local open_brace_count = 1\n        local paren_groups\
+    \ = {}\n        for i = 1, string.len(nested_paren_string) do\n            if\
+    \ nested_paren_string[i] == '(' then\n                open_brace_count = open_brace_count\
+    \ + 1\n            elseif nested_paren_string[i] == ')' then\n               \
+    \ open_brace_count = open_brace_count - 1\n                if open_brace_count\
+    \ < 0 then\n                    table.insert(paren_groups, nested_paren_string[open_brace_index:i])\n\
+    \                    open_brace_index = i + 1\n                end\n         \
+    \   elseif nested_paren_string[i] == '{' then\n                table.insert(paren_groups,\
+    \ '{')\n            elseif nested_paren_string[i] == '}' then\n              \
+    \  table.insert(paren_groups, '}')\n            elseif nested_paren_string[i]\
+    \ == '[' then\n                table.insert(paren_groups, '[')\n            elseif\
+    \ nested_paren_string[i] == ']' then\n                table.insert(paren_groups,\
+    \ ']')\n            else\n                table.insert(paren_groups, nested_paren_string[i])\n\
+    \            end\n        end\n        if #nested_paren_string[open_brace_index:i]\
+    \ == 0 then\n            table.insert(paren_groups, nested_paren_string[open_brace_index:i])\n\
+    \        end\n        nested_paren_string = nested_paren_string[open_brace_index:i]\n\
+    \    end\n    return paren_groups\nend", "   -- The outer loop is a table containing\
+    \ the contents of all open paren groups\n   local open_paren_groups = {}\n   --\
+    \ The inner loop is a table containing the contents of each nested paren group\n\
+    \   local nested_paren_groups = {}\n   -- Iterate through each character in the\
+    \ input string\n   for i = 1, string.len(paren_string) do\n      -- If there is\
+    \ a paren, add it to the open paren group table and start a new nested paren group\n\
+    \      if paren_string[i] == '(' or paren_string[i] == '{' then\n         if open_paren_groups[#open_paren_groups]\
+    \ ~= nil then\n            open_paren_groups[#open_paren_groups]:insert(paren_string[i])\n\
+    \            nested_paren_groups[#nested_paren_groups] = open_paren_groups[#open_paren_groups]\n\
+    \         else\n            open_paren_groups[#open_paren_groups] = setmetatable({},\
+    \ {__index = set})\n            open_paren_groups[#open_paren_groups]:insert(paren_string[i])\n\
+    \            nested_paren_groups[#nested_paren_groups] = {}\n         end\n  \
+    \    else\n         -- If there is a close paren, remove the last element from\
+    \ the nested paren group and add it to the open paren group\n         if nested_paren_groups[#nested_paren_groups]\
+    \ ~= nil then\n            if nested_paren_groups[#nested_paren_groups][#nested_paren_groups[#nested_paren_groups]\
+    \ -1] == '(' then\n               nested_paren_groups[#nested_paren_groups]:remove('(')\n\
+    \               nested_paren_groups[#nested_paren_groups]:remove(')')\n      \
+    \      end\n            if #nested_paren_groups[#nested_paren_groups] > 0 then\n\
+    \               open_paren_groups[#open_paren_groups]:insert(nested_paren_groups[#nested_paren_groups])\n\
+    \               nested_paren_groups[#nested_paren_groups] = nil\n            end\n\
+    \         end\n         -- If there was no nested paren group, then add it to\
+    \ the open paren group\n         if nested_paren_groups[#nested_paren_groups]\
+    \ ~= nil then\n            open_paren_groups[#open_paren_groups]:insert(nested_paren_groups[#nested_paren_groups])\n\
+    \            nested_paren_groups[#nested_paren_groups] = nil\n         end\n \
+    \     end\n   end\n   -- Return the contents of the open paren groups table\n\
+    \   return open_paren_groups\nend", "  local open_brace_table = {}\n  for char\
+    \ in string.gmatch(paren_string, \"()()*\") do\n    local char = string.sub(string,\
+    \ 1, string.len(char))\n    open_brace_table[#open_brace_table + 1] = char\n \
+    \ end\n  return open_brace_table\nend", "  local open_braces, close_braces = 1,\
+    \ 0\n  local paren_groups = {}", "    local result = {}\n    local stack = {{paren_string}}\n\
+    \    while #stack > 0 do\n        local new_stack = {}\n        local curr_pos\
+    \ = 1\n        while #stack > 0 and curr_pos < #stack[1] do\n            local\
+    \ char = stack[1][curr_pos]\n            if char == '(' and stack[#stack][curr_pos]\
+    \ == ')' then\n                new_stack[#new_stack + 1] = stack[1][curr_pos +\
+    \ 1]\n                stack[#stack] = stack[#stack] - 1\n                curr_pos\
+    \ = curr_pos + 2\n            elseif char == ')' then\n                table.insert(result,\
+    \ stack[1])\n                table.insert(new_stack, stack[2][1])\n          \
+    \      stack = stack[#stack] - 1\n            elseif char == ' ' then\n      \
+    \          curr_pos = curr_pos + 1\n            else\n                table.insert(new_stack,\
+    \ char)\n                curr_pos = curr_pos + 1\n            end\n        end\n\
+    \        stack = new_stack\n    end\n    return result\nend", "\t-- Handle empty\
+    \ strings before returning them.\n\tlocal group = { }\n\tif paren_string:sub(1,\
+    \ 1) == '' then\n\t\treturn group\n\tend", '  local stack = {}', "  local result\
+    \ = {}\n  local opening_braces = {}", "  if paren_string == nil then\n    return\
+    \ {}\n  end", "  local paren_groups = {}\n  local paren_open = 0\n  local paren_close\
+    \ = 0", "   local function count_open_brackets(string_to_count)\n      if paren_string\
+    \ == nil then return 0 end\n      local open_brackets = 0\n      for i = 1, #string_to_count\
+    \ do\n         if paren_string[i] == ')' then\n            open_brackets = open_brackets\
+    \ - 1\n         elseif paren_string[i] == '(' then\n            open_brackets\
+    \ = open_brackets + 1\n         end\n      end\n      return open_brackets\n \
+    \  end", "    local result = {}\n    local open_brace_level = 1\n    local open_paren_level\
+    \ = 1\n    local open_paren_index = 0\n    local paren_index = 1\n    for index,\
+    \ letter in ipairs(paren_string) do\n        if letter == '(' then\n         \
+    \   open_brace_level = open_brace_level + 1\n        end\n        if letter ==\
+    \ ')' then\n            open_brace_level = open_brace_level - 1\n        end\n\
+    \        if open_brace_level == 0 then\n            if letter == '(' then\n  \
+    \              open_paren_index = open_paren_index + 1\n            elseif letter\
+    \ == ')' then\n                open_paren_index = open_paren_index - 1\n     \
+    \       end\n            if open_paren_index > 0 then\n                local paren_string\
+    \ = paren_string:sub(1, paren_index - 1)\n                if paren_string ~= ''\
+    \ then\n                    result[paren_string] = nil\n                end\n\
+    \            end\n        end\n    end\n    if paren_index > 0 then\n        local\
+    \ paren_string = paren_string:sub(1, paren_index)\n        result[paren_string]\
+    \ = nil\n    end\n    return result\nend", "  local open_brace_stack = { }\n \
+    \ local close_brace_stack = { }\n  local string_stack = { paren_string }", " \
+    \ local groups = {}\n  local open_brace = 1\n  local closed_paren = 0\n  local\
+    \ i = 1 -- skip the opening parenthesis\n  local length = string.len(paren_string)",
+  "    local new_string = ''\n    local last_char = ''\n    local open_braces = 0\n\
+    \    for i = 1, #paren_string, 1 do\n        local char = paren_string[i]\n  \
+    \      if char == '(' then\n            open_braces = open_braces + 1\n      \
+    \  elseif char == ')' then\n            open_braces = open_braces - 1\n      \
+    \  end", "    local output_table = {}\n    local open_brace_stack = {[1]}\n  \
+    \  for c in paren_string:gmatch('[^()]+') do\n        -- If the current character\
+    \ is a closing brace, then pop it off the stack\n        if c:sub(1, 1) == '('\
+    \ then\n            table.insert(open_brace_stack, c:sub(1, 1))\n        elseif\
+    \ c:sub(1, 1) == '{' then\n            table.insert(open_brace_stack, c:sub(1,\
+    \ 1))\n        elseif c:sub(1, 1) == '[' then\n            table.insert(open_brace_stack,\
+    \ c:sub(1, 1))\n        else\n            -- If the current character is a opening\
+    \ brace, then add it to the stack and process it\n            if c:sub(1, 1) ==\
+    \ '{' then\n                table.insert(open_brace_stack, c:sub(1, 1))\n    \
+    \        else\n                table.insert(output_table, open_brace_stack)\n\
+    \                table.insert(open_brace_stack, c) -- Add the character to the\
+    \ stack\n            end\n        end\n    end\n    table.insert(output_table,\
+    \ open_brace_stack)\n    return output_table\nend", "  local bracket_stack\n \
+    \ local groups = {\"\"}\n  local open_brackets = paren_string:gsub(\"[(](%S+)\"\
+    , function(c) \n    local open_brackets = tonumber(c) - 1\n    local closed_brackets\
+    \ = open_brackets - #bracket_stack\n    local bracket_stack, groups:insert(\"\"\
+    ), nil\n    if open_brackets == 0 then\n      groups:insert(string.format(\" %s\
+    \ (%s)\", bracket_stack, bracket_stack))\n    else\n      groups:insert(string.format(\"\
+    (%s)\", bracket_stack))\n    end\n    bracket_stack = open_brackets\n  end)\n\
+    \  return groups\nend", "  local groups = {}\n  local last_open_brace = nil\n\
+    \  local last_close_brace = nil\n  for c in string.gmatch(paren_string, \"()\"\
+    ) do\n    if c == '(' then\n      if last_open_brace then\n        groups[#groups\
+    \ + 1] = '(...)'\n        last_open_brace = nil\n      else\n        last_open_brace\
+    \ = last_close_brace\n        last_close_brace = c\n      end\n    elseif c ==\
+    \ ')' then\n      if last_close_brace then\n        groups[#groups + 1] = '(...)'\n\
+    \        last_close_brace = nil\n      else\n        groups[#groups + 1] = last_open_brace\n\
+    \        last_open_brace = c\n      end\n    else\n      groups[#groups + 1] =\
+    \ last_open_brace\n      last_open_brace = c\n      groups[#groups + 1] = last_close_brace\n\
+    \      last_close_brace = c\n    end\n  end\n  return groups\nend", "    local\
+    \ groups = {{}}\n    for paren_pos, paren_char in find_parens(paren_string) do\n\
+    \        if paren_char == '(' then\n            table.insert(groups, paren_pos)\n\
+    \        elseif paren_char == ')' then\n            groups[#groups]:insert(paren_pos)\n\
+    \        end\n    end\n    return groups\nend", "  local result = {}\n  local\
+    \ paren_stack = {}\n  local open_braces = 0", "  -- Start with empty output table\n\
+    \  local output_table = {}", "  local pos = 1\n  local open_stack = {}\n  local\
+    \ stack = {}\n  local close_brace\n  repeat\n    close_brace = paren_string[pos]\n\
+    \    -- If we're at the beginning of a paren, start a new paren\n    -- Otherwise,\
+    \ just add this to the paren stack\n    if paren_string[pos] ~= '(' and open_stack\
+    \ == {} then\n      open_stack[#open_stack + 1] = paren_string[pos]\n      stack[#stack\
+    \ + 1] = paren_string[pos]\n    end\n    -- If we're at the end of a paren, pop\
+    \ it off the stack\n    if paren_string[pos] == ')' then\n      if #open_stack\
+    \ > 0 then\n        open_stack[#open_stack] = nil\n        stack[#stack] = nil\n\
+    \      else\n        -- We've reached the end of the paren group, but we haven't\
+    \ closed it\n        -- We need to close the paren group\n        if stack[#stack]\
+    \ ~= nil then\n          close_brace = stack[#stack]\n          stack[#stack]\
+    \ = nil\n        else\n          -- We've reached the end of the paren group,\
+    \ but there was no open paren group\n          -- This means that we reached the\
+    \ end of the input string\n          -- This means that we're done\n         \
+    \ close_brace = paren_string[pos]\n        end\n      end\n    end\n    -- Increment\
+    \ position by 1 (we're checking a new paren)\n    pos = pos + 1\n  until pos <\
+    \ #paren_string\n  -- Return stack of paren groups\n  return stack\nend", "  \
+    \ local open_braces = { }\n   local close_braces = { }\n   local current_open_brace\
+    \ = 1\n   local stack = { }\n   local result_table = { }", "  return setmetatable(\n\
+    \      {},\n      {\n        __index = function(t,index)\n            local open_braces,\
+    \ close_braces, open_parens, close_parens = {}, {}, {}, {}\n            local\
+    \ balanced = false\n            local paren_brace = nil\n            for i=1,\
+    \ string.len(paren_string) do\n              local c = string.sub(paren_string,\
+    \ i, i)\n              if c == '(' and balanced then\n                table.insert(open_parens,\
+    \ i)\n              elseif c == '[' and balanced then\n                table.insert(open_parens,\
+    \ i)\n              elseif c == '{' and balanced then\n                table.insert(open_parens,\
+    \ i)\n              elseif c == '}' and balanced then\n                table.insert(close_parens,\
+    \ i)\n              elseif c == '[' and (not balanced and (not paren_brace)) then\n\
+    \                table.insert(close_braces, i)\n              elseif c == '}'\
+    \ and (not balanced and (not paren_brace)) then\n                table.insert(close_braces,\
+    \ i)\n              elseif c == '{' and (not balanced and (paren_brace)) then\n\
+    \                table.insert(close_braces, i)\n              elseif c == '('\
+    \ and (not balanced and (paren_brace)) then\n                table.insert(open_braces,\
+    \ i)\n              elseif c == ')' and (not balanced and (paren_brace)) then\n\
+    \                table.insert(close_braces, i)\n              elseif balanced\
+    \ and c == '}' then\n                table.insert(close_braces, i)\n         \
+    \     elseif balanced and c == '}' then\n                table.insert(close_braces,\
+    \ i)\n              elseif balanced and (c == '[' or c == '(') then\n        \
+    \        table.insert(open_braces, i)\n              elseif balanced and (c ==\
+    \ ']' or c == ')') then\n                table.insert(open_braces, i)\n      \
+    \        elseif balanced and (not balanced and (c != '[' and not c == '(')) then\n\
+    \                table.insert(close_braces, i)\n              elseif balanced\
+    \ and (not balanced and (c != '[' and c == '(')) then\n                table.insert(close_braces,\
+    \ i)\n              elseif balanced and (not balanced and (c != '{' and not c\
+    \ == '[')) then\n                table.insert(close_braces, i)\n             \
+    \ elseif balanced and (not balanced and (c != '{' and c == '[')) then\n      \
+    \          table.insert(close_braces, i)\n              elseif balanced and (not\
+    \ balanced and (c != '}' and not c == '{')) then\n                table.insert(close_braces,\
+    \ i)\n              elseif balanced and (not balance", "    local open_braces\
+    \ = {} -- keep track of open braces\n    local closed_braces = {} -- keep track\
+    \ of closed braces\n    local strings = {} -- keep track of strings being added\
+    \ and returned", "    local open_brace_groups = setmetatable({}, {__mode='k'})\n\
+    \    local closed_brace_groups = setmetatable({}, {__mode='k'})\n    local paren_count\
+    \ = 0\n    local paren_string = paren_string:gsub('(%a+)( )()()', '\\1'..paren_count)\n\
+    \    local paren_string_groups = paren_string:gsub('(%a+)')\n    local new_paren_string\n\
+    \    local paren_closed\n    local brace_open\n    local brace_closed\n    local\
+    \ open_paren", "  local in_paren = 0\n  local in_paren_group = 0\n  local paren_group_char\n\
+    \  local paren_group_position = 0\n  local paren_groups = {}\n  local result =\
+    \ {}\n  for _, _ in string.gmatch(paren_string, \"%[(%[(%[(%[(%[%z()]*([()]))))*)%[%z()]]\"\
+    ) do\n    local pos = 1\n    if in_paren == 0 then\n      paren_group_char = \"\
+    (\"\n      paren_groups[#paren_groups+1] = {char=paren_group_char, position=1}\n\
+    \    else\n      paren_group_char = \"}\"\n    end\n    while pos <= #paren_group_char\
+    \ do\n      local char = paren_group_char:sub(1, pos)\n      if paren_groups[in_paren_group]\
+    \ and paren_groups[in_paren_group].char == char then\n        table.insert(result,\
+    \ paren_groups[in_paren_group].char)\n        paren_groups[in_paren_group].position\
+    \ = paren_groups[in_paren_group].position + 1\n      elseif paren_groups[in_paren_group]\
+    \ and paren_groups[in_paren_group].position > 1 then\n        local group_length\
+    \ = paren_groups[in_paren_group].position - 1\n        local last_char = paren_group_char:sub(1,\
+    \ paren_groups[in_paren_group].position)\n        if last_char == \",\" then\n\
+    \          table.insert(result, \",\")\n          paren_groups[in_paren_group].position\
+    \ = paren_groups[in_paren_group].position + 1\n        elseif last_char == \"\
+    }\" then\n          table.insert(result, char..\"}\")\n          in_paren_group\
+    \ = in_paren_group + 1\n          if in_paren_group > #paren_groups then\n   \
+    \         error(\"Too many closing paren groups \", paren_string)\n          end\n\
+    \        else\n          error(\"Invalid character \", last_char)\n        end\n\
+    \      elseif paren_groups[in_paren_group] then\n        error(\"Unexpected character\
+    \ \", char)\n      else\n        in_paren = in_paren + 1\n        table.insert(result,\
+    \ char)\n      end\n      pos = pos + 1\n    end\n  end\n  return result\nend",
+  "  local groups = {}\n  local paren_string_len = #paren_string\n  local paren_string_buffer\
+    \ = {}", "  local output = {}\n  for paren in string.gmatch(paren_string, '%([{(])([%z%z%w_.()]+)')\
+    \ do\n    table.insert(output, paren)\n  end\n  return output\nend", "   local\
+    \ groups = {}\n   local open_bracket = 1", "    local paren_groups = {} -- Table\
+    \ of groups to return\n    local open_brace = 1 -- Count of open parens, to properly\
+    \ group nested parens\n    local last_open_brace, last_close_brace -- Previous\
+    \ and current open brace and closing brace, respectively.\n    for c in string.gmatch(paren_string,\
+    \ \"%((.-)%c\") do\n        if c == \"(\" then\n            if open_brace ~= 1\
+    \ then\n                paren_groups[#paren_groups + 1] = c\n            end\n\
+    \            open_brace = open_brace + 1\n        elseif c == \")\" then\n   \
+    \         if open_brace == 1 then\n                paren_groups[#paren_groups\
+    \ + 1] = c\n            end\n            open_brace = open_brace - 1\n       \
+    \ elseif c == \"(\" then\n            last_open_brace = open_brace\n         \
+    \   last_close_brace = 1\n        elseif c == \")\" then\n            last_open_brace\
+    \ = open_brace\n            last_close_brace = -1\n        elseif open_brace ~=\
+    \ 0 then\n            paren_groups[#paren_groups + 1] = c\n        end\n    end\n\
+    \    return paren_groups\nend", "    local open_braces, closed_braces = {}, {}\n\
+    \    local open_brace_count, closed_brace_count = 0, 0\n    for i, c in ipairs(paren_string)\
+    \ do\n        if c == '{' then\n            open_braces[open_brace_count] = true\n\
+    \            open_brace_count = open_brace_count + 1\n        elseif c == '}'\
+    \ then\n            closed_braces[open_brace_count] = true\n            open_brace_count\
+    \ = open_brace_count - 1\n        end\n    end\n    if open_brace_count ~= 0 then\n\
+    \        error('unbalanced parentheses')\n    end\n    if #closed_braces != #open_braces\
+    \ then\n        error('unbalanced parentheses')\n    end\n    local new_paren_string\
+    \ = {}\n    for i = 1, #open_braces do\n        if open_braces[i] then\n     \
+    \       new_paren_string[#new_paren_string + 1] = '('\n        elseif closed_braces[i]\
+    \ then\n            new_paren_string[#new_paren_string + 1] = ')'\n        end\n\
+    \    end\n    return new_paren_string\nend", "    local paren_string = paren_string:gsub('(%[(%)]+)(%[(%)]+)',\
+    \ '\\1')\n    local paren_string = paren_string:gsub('(%[(%)]+)', '\\1')\n   \
+    \ local paren_string = paren_string:gsub('(%[(%)]+)(%[(%)]+)', '\\1')\n    local\
+    \ paren_string = paren_string:gsub('(%[(%)]+)', '\\1')\n    local paren_string\
+    \ = paren_string:gsub('(%[(%)]+)(%[(%)]+)', '\\1')", "   local paren_groups =\
+    \ {}\n   for paren in string.gmatch(paren_string, \"()\") do\n      local substring_start\
+    \ = 0\n      local substring_end = 1\n      local open_braces = 0\n      for i\
+    \ = 1, #paren do\n         if paren[i] == open_braces then\n            paren_groups[#paren_groups\
+    \ + 1] = paren[substring_start:substring_end]\n            substring_start = i\
+    \ + 1\n         end\n         if paren[i] == paren[#paren] then\n            paren_groups[#paren_groups\
+    \ + 1] = paren[substring_start:substring_end]\n            open_braces = 0\n \
+    \           substring_end = i + 1\n         else\n            if open_braces ==\
+    \ 0 then\n               open_braces = paren[i]\n               substring_start\
+    \ = i\n            end\n         end\n      end\n      if open_braces ~= 0 then\n\
+    \         paren_groups[#paren_groups + 1] = paren[substring_start:substring_end]\n\
+    \      end\n   end\n   return paren_groups\nend", "  local results = {}\n  local\
+    \ current_group = {} -- A table containing one element per \"group\" in the paren\
+    \ string.\n  local open_braces_count = 0", "    local result_set = set{}\n   \
+    \ local depth = 1\n    local num_open = 0\n    local open_brace_count = 0\n  \
+    \  local open_parentheses = 0\n    local in_paren = false", "    local stack,\
+    \ res = nil, {}\n    local paren_open = 1\n    local i = 1, #paren_string", " \
+    \ -- Make sure there's an initial set of parentheses\n  if not (paren_string:find('(%+')\
+    \ ~= nil) then paren_string = '(' .. paren_string:gsub('%+', '') .. ')' end\n\
+    \  -- Remove all spaces first\n  paren_string = paren_string:gsub('%S', '', '')\n\
+    \  -- Split the string into an array of parenthetical blocks\n  local groups =\
+    \ paren_string:gsub('%(%?)(%)(%)([^%]+?)(%)', '\\2\\3\\4')\n  -- Split the string\
+    \ into an array of individual parenthetical blocks\n  local groups = paren_string:gsub('%([^%]+)%',\
+    \ '\\2')\n  -- Join the array of individual blocks into an array of single parenthetical\
+    \ blocks\n  return groups..'()'\nend", "    local groups = {}\n    for _, paren\
+    \ in ipairs(paren_string:gsub(\"(%S+)\", function(paren)\n        local paren_match\
+    \ = paren:gsub(\"[(]\", \"\")\n        local paren_len = #paren_match", "\tlocal\
+    \ tokens = {}\n\tfor paren_string, i, paren in (string.gmatch(paren_string, '%[()%s]+(%[(]%([)%)]%*[)]%)')):gmatch'(%[(]%([)%)]%*[)]%)'\
+    \ do\n\t\ttable.insert(tokens, paren)\n\tend\n\treturn tokens\nend", "    local\
+    \ paren_groups = {}\n    local open_brace_count = 1\n    local paren_start = -1\n\
+    \    local paren_end = -1\n    for index, char1 in ipairs(paren_string) do\n \
+    \       if char1 ~= '(' then\n            paren_start = index\n        elseif\
+    \ char1 == ')' then\n            open_brace_count = open_brace_count - 1\n   \
+    \         paren_end = index\n            if open_brace_count == 0 then\n     \
+    \           table.insert(paren_groups, paren_string:sub(paren_start + 1, paren_end))\n\
+    \                paren_start = paren_end - 1\n            end\n        end\n \
+    \   end\n    if paren_start < 0 then\n        table.insert(paren_groups, paren_string)\n\
+    \    end\n    return paren_groups\nend", "  local open_parens = {}\n  local close_parens\
+    \ = {}\n  for paren in string.gmatch(paren_string, '%[(%a+)%s*]+') do\n    local\
+    \ open_paren = open_parens[paren] or {}\n    local close_paren = close_parens[paren]\
+    \ or {}\n    open_parens[paren] = open_paren\n    close_parens[paren] = close_paren\n\
+    \    local groups = paren:gsub('%a+', '%([%a]+)')\n    for group in groups:gmatch('%[%a]+')\
+    \ do\n      open_paren[group] = nil\n      close_paren[group] = nil\n    end\n\
+    \  end\n  return open_parens, close_parens\nend\n</cell>\n<text>\nNow that we\
+    \ have our open_parens, close_parens, and separate_paren_groups function we can\
+    \ use the function to\nwrite a function that parses a simple math expression and\
+    \ returns the results.", "  local open_brace_count = 0\n  local close_brace_count\
+    \ = 0\n  local cur_group = \"\"\n  local cur_group_len = 0\n  local cur_group_string\
+    \ = \"\"\n  local groups = {}\n  local group_index = -1\n  local open_braces =\
+    \ false\n  for i = 1, #paren_string, 1 do\n    if paren_string[i] ~= \" \" then\n\
+    \      if open_braces then\n        cur_group_string = cur_group_string .. paren_string[i]\n\
+    \      else\n        if paren_string[i] == \"(\" then\n          open_brace_count\
+    \ = open_brace_count + 1\n        elseif paren_string[i] == \")\" then\n     \
+    \     close_brace_count = close_brace_count - 1\n          if close_brace_count\
+    \ == 0 then\n            open_braces = not open_braces\n          end\n      \
+    \  end\n      end\n    else\n      if cur_group_len == 0 then\n        group_index\
+    \ = group_index + 1\n        groups[group_index] = cur_group_string\n        cur_group_string\
+    \ = \"\"\n      else\n        group_index = group_index + 1\n        cur_group_string\
+    \ = cur_group_string .. paren_string[i]\n      end\n    end\n    cur_group_len\
+    \ = cur_group_len + 1\n  end\n  if cur_group_len > 0 then\n    groups[group_index]\
+    \ = cur_group_string\n  end\n  return groups\nend", "    local groups = {}\n \
+    \   local open_braces_count = 0\n    local current_group = \"\"\n    for char\
+    \ in paren_string:gmatch \"()\" do\n        local _, _, char_, char__ =\n    \
+    \        string.find(paren_string, char, \"^[^()]*\") + 1, string.find(paren_string,\
+    \ char, \"^[^()]*$\"), \"^[^()]*\"\n        if char_ == \"(\" then\n         \
+    \   open_braces_count = open_braces_count + 1\n        elseif char_ == \")\" then\n\
+    \            open_braces_count = open_braces_count - 1\n        end\n        if\
+    \ open_braces_count == 0 then\n            current_group = current_group .. char\n\
+    \        elseif open_braces_count ~= 0 then\n            table.insert(groups,\
+    \ current_group)\n            current_group = char\n        end\n    end\n   \
+    \ if current_group ~= \"\" then\n        table.insert(groups, current_group)\n\
+    \    end\n    return groups\nend", "  local open_brace_stack = {}\n  local close_brace_stack\
+    \ = {}\n  local open_brace = nil\n  local close_brace = nil\n  local paren_strings\
+    \ = {}", "    local open_brace_stack = { }\n    local closed_brace_stack = { }\n\
+    \    local open_brace_balance_count = 0\n    local closed_brace_balance_count\
+    \ = 0", "    local open_brackets = {}\n    local closing_open_brackets = {}\n\
+    \    local closed_brackets = {}\n    local groups = {}\n    for token in string.gmatch(paren_string,\
+    \ \"%[(%)]()\") do\n        if token == \"(\" then\n            table.insert(open_brackets,\
+    \ #open_brackets + 1)\n        elseif token == \")\" then\n            if #open_brackets\
+    \ > 0 then\n                table.insert(closing_open_brackets, #open_brackets)\n\
+    \            elseif #closing_open_brackets > 0 then\n                table.insert(closed_brackets,\
+    \ #closing_open_brackets)\n            end\n        end\n    end\n    local depth\
+    \ = 0\n    for i = #open_brackets, 1, -1 do\n        local current_depth = #open_brackets\
+    \ - i\n        if #closing_open_brackets == 0 then\n            depth = current_depth\n\
+    \        elseif current_depth < depth then\n            depth = current_depth\n\
+    \        end\n    end\n    depth = depth - 1\n    for i = 1, depth do\n      \
+    \  table.insert(groups, \"\")\n    end\n    for i = 1, #open_brackets do\n   \
+    \     local current_open_bracket = open_brackets[i]\n        local current_closing_open_bracket\
+    \ = closing_open_brackets[i]\n        for j = 1, current_closing_open_bracket\
+    \ do\n            table.insert(groups[#groups], closed_brackets[j])\n        end\n\
+    \        if current_open_bracket > 1 then\n            for j = 1, current_open_bracket\
+    \ do\n                table.insert(groups[#groups], open_brackets[j])\n      \
+    \      end\n        end\n    end\n    return groups\nend", "    local num_open_brackets\
+    \ = 0\n    local num_closed_brackets = 0\n    local stack = {}\n    local groups\
+    \ = {}", "   local result = {}\n   local open_count = 0\n   local closed_count\
+    \ = 0\n   local open_braces = '{'\n   local closed_braces = '}'\n   local brackets\
+    \ = '()'", "  local stack = {}\n  for paren in pairs(paren_string:gmatch('%[(%a)]+'))\
+    \ do\n    table.insert(stack, '')\n    for c in paren:gmatch('%[()%a]+') do\n\
+    \      table.insert(stack, c) -- Insert opening parenthesis\n    end\n    table.insert(stack,\
+    \ paren) -- Insert closing parenthesis\n  end\n  local open_braces = false\n \
+    \ local strings = {}\n  for i = 1, #stack do\n    if stack[i] == '(' then\n  \
+    \    open_braces = not open_braces\n    elseif open_braces and stack[i] == '}'\
+    \ then\n      open_braces = false\n    end\n    table.insert(strings, stack[i])\n\
+    \  end\n  return strings\nend", "    local paren_groups = {}\n    local open_braces\
+    \ = 0\n    local char\n    local paren_count = 0\n    for char in paren_string:gmatch'()'\
+    \ do\n        if open_braces == 0 then\n            if char == '(' then\n    \
+    \            paren_count = paren_count + 1\n            elseif char == ')' then\n\
+    \                paren_count = paren_count - 1\n            end\n        elseif\
+    \ char == '(' then\n            paren_count = paren_count + 1\n        elseif\
+    \ char == ')' then\n            paren_count = paren_count - 1\n        elseif\
+    \ char == ',' then\n            if paren_count > 0 then\n                paren_groups[#paren_groups+1]\
+    \ = paren_string:sub(1, char-1)\n                paren_count = 0\n           \
+    \ end\n        else\n            paren_groups[#paren_groups+1] = paren_string:sub(1,\
+    \ char-1)\n        end\n    end\n    if open_braces > 0 then\n        paren_groups[#paren_groups+1]\
+    \ = paren_string:sub(1)\n    end\n    return paren_groups\nend", "  local open_brace_table\
+    \ = {}\n  local unclosed_parens = 0\n  for c in string.gmatch(paren_string, \"\
+    %({(%?([%w])*)*[%)}%\")\n  do\n    if c == \"(\" then\n      if unclosed_parens\
+    \ == 0 then\n        open_brace_table[\"(\" .. open_brace_table[\"(\" .. nil]\
+    \ = true\n      else\n        open_brace_table[\"(\" .. unclosed_parens] = true\n\
+    \        unclosed_parens = unclosed_parens + 1\n      end\n    elseif c == \"\
+    )\" then\n      if open_brace_table[\"(\" .. unclosed_parens > 0 then\n      \
+    \  unclosed_parens = unclosed_parens - 1\n      end\n      open_brace_table[\"\
+    (\" .. open_brace_table[\"(\" .. unclosed_parens] = nil\n    elseif open_brace_table[\"\
+    (\" .. unclosed_parens > 0 then\n      unclosed_parens = unclosed_parens - 1\n\
+    \    end\n  end\n  return open_brace_table\nend", "  local open_count = 0\n  local\
+    \ closed_count = 0\n  local separated_strings = {}", "   local groups = {}\n \
+    \  local open_braces = -1\n   local open_brace_count = 0\n   local closed_open_braces\
+    \ = -1\n   local closed_open_brace_count = 0\n   local paren_count = 0\n   local\
+    \ open_paren_count = 0\n   local closed_open_paren_count = 0\n   for char in string.gsub(paren_string,\
+    \ \"[(){} ]+\", \"%S\") do\n      -- ignore spaces\n      if char == \" \" then\n\
+    \         continue\n      end\n      if open_braces == -1 then\n         open_braces\
+    \ = char\n      else\n         open_braces = open_braces and open_braces == char\
+    \ or open_braces\n         if open_braces == \"(\" then\n            open_brace_count\
+    \ = open_brace_count + 1\n         elseif open_braces == \"{\" then\n        \
+    \    paren_count = paren_count + 1\n         elseif open_braces == \"}\" then\n\
+    \            closed_open_brace_count = closed_open_brace_count + 1\n         end\n\
+    \      end\n      if char == \"(\" then\n         open_paren_count = open_paren_count\
+    \ + 1\n      elseif char == \"}\" then\n         closed_open_paren_count = closed_open_paren_count\
+    \ + 1\n      end\n   end\n   if open_brace_count ~= closed_open_brace_count then\n\
+    \      error(\"Open brace count should be equal to closed brace count\")\n   end\n\
+    \   if open_paren_count ~= closed_open_paren_count then\n      error(\"Open paren\
+    \ count should be equal to closed paren count\")\n   end\n   if open_braces ~=\
+    \ nil and open_paren_count == 0 then\n      groups[#groups+1] = open_braces\n\
+    \   end\n   for i=1,(open_brace_count-1) do\n      local open_brace_string = string.sub(paren_string,\
+    \ i+1, i+1)\n      if open_brace_string == open_braces then\n         groups[#groups+1]\
+    \ = open_brace_string\n      end\n   end\n   local close_paren_string = string.sub(paren_string,\
+    \ i+1, i+(open_paren_count-1))\n   if close_paren_string ~= \")\" then\n     \
+    \ groups[#groups+1] = close_paren_string\n   end\n   for i = 1,(closed_open_brace_count-1)\
+    \ do\n      local closed_open_brace_string = string.sub(paren_string, i+1, i+1)\n\
+    \      if closed_open_bra", "\tlocal split_string = {}\n\tlocal stack = {}\n\t\
+    -- Split the string into individual parens\n\tfor char in string.gmatch(paren_string,\
+    \ \"%%(%a{2,})\") do\n\t\tsplit_string[#split_string + 1] = char\n\tend\n\t--\
+    \ Iterate over the split string\n\tfor i = 1, #split_string do\n\t\t-- Add an\
+    \ opening paren\n\t\tstack[#stack + 1] = '('\n\t\t-- If the last character in\
+    \ the string was an opening paren, we're done\n\t\tif split_string[i] ~= '(' and\
+    \ stack[#stack + 1] ~= ')' then\n\t\t\t-- Add that paren to the current group\
+    \ we're building\n\t\t\tsplit_string[i] = stack[#stack + 1]\n\t\telse\n\t\t\t\
+    -- Add a closing paren and move everything from that point forward\n\t\t\tstack[#stack\
+    \ + 1] = ')'\n\t\t\tfor j = 1, i - 1 do\n\t\t\t\tsplit_string[i] = split_string[i]\n\
+    \t\t\tend\n\t\tend\n\tend\n\t-- Return the string split into an array\n\treturn\
+    \ split_string\nend", "    local bracket_table = {} -- initialize a table\n  \
+    \  local open_count = 0", "  local paren_groups = {}\n  local open_braces = false\n\
+    \  for _, character in ipairs(paren_string) do\n    if character == \"(\" then\n\
+    \      if open_braces then break end\n      open_braces = true\n    elseif character\
+    \ == \")\" then\n      if not open_braces then break end\n      open_braces =\
+    \ false\n    elseif character == \" \" then\n      if not open_braces then\n \
+    \       if open_braces then break end\n      end\n    else\n      table.insert(paren_groups,\
+    \ character)\n    end\n  end\n  return paren_groups\nend", "    local open_brace_counts\
+    \ = {}\n    local nested_parentheses = {} -- A dictionary to store nested parentheses\n\
+    \    local paren_string = paren_string:gsub('(^[%[%)] +', function(c) paren_string\
+    \ = c end)\n    local paren_string_length = len(paren_string)\n    for i = 1,\
+    \ paren_string_length do\n        -- Get the current character at the i-th position\n\
+    \        local current_char = paren_string:sub(i, i)\n        if current_char\
+    \ == '(' or current_char == '[' then\n            -- If this character is opening\
+    \ brace, add it to the counts\n            open_brace_counts[current_char] = open_brace_counts[current_char]\
+    \ + 1 -- increment\n        else\n            -- Otherwise, if this character\
+    \ is closing brace, remove it from counts\n            local open_brace_count\
+    \ = open_brace_counts[current_char]\n            if open_brace_count > 0 then\n\
+    \                open_brace_counts[current_char] = open_brace_count -- decrement\n\
+    \            end\n        end\n    end\n    local final_string\n    for open_brace_count,\
+    \ chars in pairs(open_brace_counts) do\n        if open_brace_count == 0 then\n\
+    \            final_string = final_string .. chars\n        elseif open_brace_count\
+    \ == 1 then\n            -- If we have more than one open brace but we still have\
+    \ closing braces then we have to close all\n            -- the parentheses and\
+    \ reopen them afterwards\n            local open_brace_count = open_brace_counts[open_brace_count]\n\
+    \            nested_parentheses[open_brace_count] = nested_parentheses[open_brace_count]\
+    \ .. chars\n        elseif open_brace_count > 1 then\n            -- If we have\
+    \ more than one open brace and we have not yet closed all the parentheses, then\
+    \ we\n            -- have to close all the parentheses and reopen them afterwards\n\
+    \            local open_brace_count = open_brace_counts[open_brace_count]\n  \
+    \          nested_parentheses[open_brace_count] = chars .. nested_parentheses[open_brace_count]\n\
+    \        end\n    end\n    return final_string, nested_parentheses\nend\n</code>\n\
+    <|/ a tags=lua,string |>\n<| c |>\nI edited the code in the answer to make it\
+    \ more readable. Also, you may want to check this [answer](http://stackoverflow.com/a/22652520/113632)\
+    \ for a way to escape parenthesis.\n<|/ c |>\n<| a |>\n<code>", "    local groups\
+    \ = {}\n    -- We first need to separate all parentheses\n    for token in string.gmatch(paren_string,\
+    \ \"%[(%a%s*)]\") do\n        -- If it is a closed parentheses, then add that\
+    \ group to the list\n        -- If not, then add it to the last group in the list\n\
+    \        if token == \"(\" then\n            table.insert(groups, token)\n   \
+    \     else\n            table.append(groups, token)\n        end\n    end\n  \
+    \  -- Return each group in a separate string\n    return setmetatable({}, {__index\
+    \ = table.concat})(groups)\nend", "    local groups = {}\n    local open_brace_count\
+    \ = 0\n    for _, c in ipairs(paren_string) do\n        if c == '(' then\n   \
+    \         open_brace_count = open_brace_count + 1\n        elseif c == '}' then\n\
+    \            open_brace_count = open_brace_count - 1\n        elseif c == '('\
+    \ and open_brace_count == 0 then\n            table.insert(groups, c)\n      \
+    \  elseif c == '}' then\n            table.insert(groups, c)\n        end\n  \
+    \  end\n    return groups\nend", "  local parsed_paren_string = string.rep(paren_string,\
+    \ \"()\", -1)\n  local paren_balanced = \"((\" .. parsed_paren_string\n  local\
+    \ open_braces, close_braces = string.gsub(paren_balanced, \"()\", \"{}\"), string.gsub(paren_balanced,\
+    \ \"{}\", \"()\")\n  local open_braces_table, rest_of_paren_string = string.gsub(open_braces,\
+    \ \"{}\", \"()\"), string.gsub(parsed_paren_string, \"()\", \"()\")\n  local close_braces_table\
+    \ = string.gsub(close_braces, \"{}\", \"()\")\n  local open_brace_counter, close_brace_counter\
+    \ = 1, 1\n  local results = {}\n  local open_brace_count = open_braces_table:gsub(\"\
+    {}\", \"\"):gsub(\"()\", function()\n    open_brace_counter = open_brace_counter\
+    \ + 1\n    local open_brace_count = open_brace_counter - 1\n    local close_brace_count\
+    \ = close_braces_table:gsub(\"{}\", \"\"):gsub(\"()\", function()\n      open_brace_counter\
+    \ = open_brace_counter - 1\n      local open_brace_count = open_brace_counter\
+    \ - 1\n      local close_brace_count = close_brace_counter - 1\n      close_brace_counter\
+    \ = close_brace_count + 1\n      local result = string.format(\"{%d,%d}\", open_brace_count,\
+    \ close_brace_count)\n      local open_brace_counter_string = table.concat({\"\
+    {\"}, open_brace_counter, \",\")\n      local close_brace_counter_string = table.concat({\"\
+    }\"}, close_brace_counter, \",\")\n      if open_brace_counter == close_brace_counter\
+    \ then\n        local close_brace_count = close_braces_table:gsub(\"{}\", \"\"\
+    ):gsub(\"()\", function()\n          open_brace_counter = open_brace_counter -\
+    \ 1\n          local open_brace_count = open_brace_counter - 1\n          local\
+    \ close_brace_count = close_brace_counter - 1\n          close_brace_counter =\
+    \ close_brace_count - 1\n          local result = string.format(\"{%d,%d}\", open_brace_count,\
+    \ close_brace_count)\n          result[1] = string.format(\"{%d,%d}\", open_brace_count,\
+    \ close_brace_count)\n          results[#results + 1] = result\n          local\
+    \ open_brace_counter_string = table.concat({\"{\"}, open_brace_counter, \",\")",
+  "  -- Split by the empty string to handle cases like '(()())' or '((()))'\n  paren_string\
+    \ = string.gsub(paren_string, '\\s', '')\n  -- Ignore any parens within parens\n\
+    \  paren_string = string.gsub(paren_string, '\\(([^()]+)\\)', '()')\n  -- Remove\
+    \ multiple spaces\n  paren_string = string.gsub(paren_string, '\\s+', ' ')\n \
+    \ -- Convert all single characters to their corresponding symbols\n  -- This allows\
+    \ us to avoid doing additional checks later\n  paren_string = string.gsub(paren_string,\
+    \ '([()()])', convert_symbol)\n  local paren_groups = {}\n  local open_brace =\
+    \ -1\n  local i = 0\n  -- This loop finds each group of parens\n  -- The loop\
+    \ will terminate when we hit a nested paren group which does not have an open\
+    \ brace in it\n  -- This saves us from having to check each character individually\
+    \ which would take too long\n  -- A flag is set to true if a nested paren group\
+    \ has an open brace in it\n  -- and this loop ends because we know that the nested\
+    \ paren group will always have an open brace in it\n  while i <= #paren_string\
+    \ do\n    local open_paren = paren_string:sub(i, i)\n    -- We want to increment\
+    \ the value of i by 1 to skip over the first character of the next paren\n   \
+    \ i = i + 1\n    -- Check if the current character is a paren\n    -- The last\
+    \ thing we want to do if an open paren is encountered is check the value of open_brace\n\
+    \    -- If that value is -1, then we have encountered a nested paren and can break\
+    \ out\n    if open_paren:byte() == string.byte('(') then\n      open_brace = open_brace\
+    \ + 1\n      if open_brace > 1 then\n        local nested_paren = string.sub(paren_string,\
+    \ i, i)\n        i = i - 1\n        -- If we encounter a new open paren before\
+    \ any nested paren groups, then that is a syntax error\n        if nested_paren:byte()\
+    \ == string.byte('(') then\n          error\n        end\n      end\n    end\n\
+    \    if open_paren:byte() == string.byte(')') then\n      open_brace = open_brace\
+    \ - 1\n    end\n    -- This if statement checks if the current character is a\
+    \ closing paren and breaks out if it is\n    -- This allows us to avoid checking\
+    \ if the character is a nested paren group if it has a closing paren\n    -- Example:\
+    \ ((())) is invalid but ((()) is\n    if open_brace == 0 then\n      -- We want\
+    \ to break out of the loop\n      ", '  local paren_groups = {}', "\t-- The first\
+    \ paren group will be the whole thing\n\tlocal first_paren_group = paren_string\n\
+    \t-- The rest will be the groups of paren groups within\n\tlocal nested_paren_groups\
+    \ = {}\n\t-- Loop through each character in the string\n\tfor i = 1, string.len(paren_string)\
+    \ do\n\t\t-- If we're on the first paren group, just add the character to it\n\
+    \t\tif i == 1 then\n\t\t\tnested_paren_groups[1] = paren_string[i]\n\t\t-- If\
+    \ we're on a nested paren group, check if we're on the first group\n\t\telseif\
+    \ paren_string[i] ~= '(' and not i == 1 then\n\t\t\t-- If we've found a new first\
+    \ paren group, save the rest of the paren group\n\t\t\tif i ~= 1 then\n\t\t\t\t\
+    nested_paren_groups[#nested_paren_groups + 1] = paren_string[i - 1]\n\t\t\t--\
+    \ Otherwise, just save the character as the group\n\t\t\telse\n\t\t\t\tnested_paren_groups[#nested_paren_groups]\
+    \ = paren_string[i]\n\t\t\tend\n\t\t-- If we're on a second paren group, save\
+    \ any characters between\n\t\telseif paren_string[i] == '(' then\n\t\t\tnested_paren_groups[#nested_paren_groups+1]\
+    \ = paren_string[i]\n\t\t-- If we're on the last paren group, save any characters\
+    \ between\n\t\telseif paren_string[i] == ')' then\n\t\t\tnested_paren_groups[#nested_paren_groups+1]\
+    \ = paren_string[i]\n\t\t-- If the character is whitespace then ignore\n\t\telseif\
+    \ string.sub(paren_string, i) == ' ' then\n\t\t\ti = i - 1\n\t\tend\n\tend\n\t\
+    return nested_paren_groups\nend", "  local paren_groups = {}\n  local open_braces\
+    \ = false\n  local open_brace_index = -1\n  local paren_index = -1\n  for index,\
+    \ character in ipairs(paren_string) do\n    if character == '(' then\n      paren_index\
+    \ = index\n      open_braces = true\n      open_brace_index = index\n    elseif\
+    \ character == ')' then\n      if open_braces then\n        assert(open_brace_index\
+    \ >= paren_index, 'Expected closing paren before opening paren')\n        paren_index\
+    \ = open_brace_index\n        open_braces = false\n      else\n        paren_index\
+    \ = paren_index - 1\n      end\n    elseif open_braces then\n      paren_groups[paren_index]\
+    \ = paren_groups[paren_index] .. character\n    else\n      paren_groups[paren_index]\
+    \ = paren_groups[paren_index] .. character\n    end\n  end\n  return paren_groups\n\
+    end", "  local groups = { }\n  local open_brace_count = 0\n  local open_paren_count\
+    \ = 0\n  local close_brace_count = 0\n  local close_paren_count = 0", "    local\
+    \ groups = {}\n    local open_brace = 0\n    local close_brace = 0\n    local\
+    \ nested_paren = 0\n    for _, c in pairs(paren_string:gsub('(%S*)()', function(match)\
+    \ -- For each character\n        -- Capture the character\n        local capture\
+    \ = match\n        -- If the character is whitespace, ignore it\n        if c\
+    \ == ' ' then\n            return capture\n        end\n        -- If it is an\
+    \ open bracket, increase the open brace counter\n        if c == '(' then\n  \
+    \          open_brace = open_brace + 1\n        end\n        -- If it is a close\
+    \ bracket, decrease the open brace counter\n        if c == ')' then\n       \
+    \     close_brace = close_brace + 1\n        end\n        -- If it is the opposite\
+    \ of the closing bracket, ignore it\n        if open_brace ~= close_brace then\n\
+    \            if open_brace > close_brace then\n                -- The open brace\
+    \ was properly closed at this point\n                -- If the counter went up\
+    \ and it stayed the same, ignore it\n                if nested_paren == open_brace\
+    \ then\n                    return capture\n                end\n            \
+    \    -- Otherwise, increase the counter\n                nested_paren = open_brace\n\
+    \            elseif close_brace > open_brace then\n                -- The close\
+    \ brace was properly closed at this point\n                -- If the counter went\
+    \ down, increase the counter\n                if nested_paren == close_brace then\n\
+    \                    nested_paren = open_brace\n                end\n        \
+    \    end\n        end\n        -- If it is an open brace, increase the counter\n\
+    \        if c == '(' then\n            open_brace = open_brace + 1\n        end\n\
+    \        -- If it is a close brace, decrease the counter\n        if c == ')'\
+    \ then\n            close_brace = close_brace + 1\n        end\n        -- If\
+    \ it is a space and we're currently in nested parens, ignore it\n        if c\
+    \ == ' ' and nested_paren > 0 then\n            nested_paren = nested_paren -\
+    \ 1\n        end\n        -- Add the character to the capture group\n        return\
+    \ capture .. c\n    end)) do\n        groups[#groups + 1] = capture -- Append\
+    \ the capture group\n    end\n    return groups\nend", "    local open_braces\n\
+    \    local closed_braces\n    local open_parentheses = 0\n    local results =\
+    \ {}\n    local i = 1\n    while i <= #paren_string:len() do\n        if paren_string:sub(i,\
+    \ i) == '(' then\n            open_braces = open_braces or 1\n        elseif paren_string:sub(i,\
+    \ i) == ')' then\n            closed_braces = closed_braces or 1\n        elseif\
+    \ open_braces > closed_braces and not open_braces > 0 then\n            results[#results\
+    \ + 1] = '('..paren_string:sub(i, i)\n        elseif closed_braces > 0 and not\
+    \ closed_braces > 0 then\n            results[#results + 1] = paren_string:sub(i,\
+    \ i)\n        end\n        i = i + 1\n    end\n    return results\nend", "\tlocal\
+    \ open_brace_pos = 1\n\tlocal open_brace = false\n\tlocal strings = {}\n\tfor\
+    \ s in string.gmatch(paren_string, \"()\") do\n\t\tif open_brace then\n\t\t\t\
+    if s == '(' then open_brace_pos = open_brace_pos + 1 end\n\t\t\tif s == ')' then\
+    \ open_brace_pos = open_brace_pos - 1 end\n\t\t\topen_brace = false\n\t\telseif\
+    \ open_brace_pos > 0 and s == ')' then\n\t\t\topen_brace_pos = open_brace_pos\
+    \ - 1\n\t\t\tif open_brace_pos == 0 then\n\t\t\t\topen_brace = false\n\t\t\tend\n\
+    \t\telseif open_brace_pos > 0 and s == '(' then\n\t\t\topen_brace_pos = open_brace_pos\
+    \ + 1\n\t\t\topen_brace = true\n\t\telseif open_brace_pos == 0 then\n\t\t\topen_brace\
+    \ = false\n\t\tend\n\t\ttable.insert(strings, s)\n\tend\n\treturn strings\nend",
+  "  -- The code below is commented out because it takes a significantly longer time\
+    \ to run than the code above\n  -- for example: isolating the first paren group\
+    \ took more than 10 seconds and running this entire code\n  -- for the first paren\
+    \ group took more than 10 minutes (see time below)\n  --local paren_string = paren_string\n\
+    \  --local table = {}\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local open_brace_count\
+    \ = 0\n  --local close_brace_count = 0\n  --local nested_count = 0\n  --local\
+    \ paren_count = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local\
+    \ open_brace_count = 0\n  --local close_brace_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local nested_count = 0\n  --local paren_count\
+    \ = 0\n  --local open_brace_count = 0\n  --local close_brace_count = 0\n  --local\
+    \ nested_count = 0\n  --local paren_count = 0\n  --local nested_count = 0\n  --local\
+    \ paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --local paren_count = 0\n  --local open_brace_count = 0\n  --local close_brace_count\
+    \ = 0\n  --local nested_count = 0\n  --local paren_count = 0\n  --local nested_count\
+    \ = 0\n  --", "  local stack = {}\n  local results = {}\n  local open_braces =\
+    \ 0\n  local close_braces = 0\n  local paren_level = 0\n  local i = 1\n  local\
+    \ char = paren_string:sub(i, 1)\n  while i <= #paren_string do\n    char = paren_string:sub(i,\
+    \ 1)\n    if char == ')' then\n      if open_braces ~= 0 then\n        open_braces\
+    \ = open_braces - 1\n      elseif close_braces ~= 0 then\n        close_braces\
+    \ = close_braces - 1\n      end\n    end\n    if open_braces == 0 and char ==\
+    \ '(' then\n      if close_braces > 0 then\n        close_braces = close_braces\
+    \ - 1\n      end\n      if paren_level == 1 then\n        table.insert(stack,\
+    \ char)\n      else\n        table.insert(results, stack)\n        stack = {}\n\
+    \        table.insert(stack, char)\n      end\n      paren_level = paren_level\
+    \ + 1\n    elseif char == ')' then\n      open_braces = open_braces + 1\n    elseif\
+    \ char == '(' then\n      close_braces = close_braces + 1\n    end\n    i = i\
+    \ + 1\n  end\n  if close_braces > 0 then\n    table.insert(results, stack)\n \
+    \ end\n  return results\nend", "    local function is_balanced_group(group)\n\
+    \        local open_braces = 0\n        local close_braces = 0\n        for _,\
+    \ b in pairs(group) do\n            if b == '(' and open_braces > 0 then\n   \
+    \             close_braces = close_braces + 1\n            end\n            if\
+    \ b == ')' and open_braces > 0 then\n                open_braces = open_braces\
+    \ - 1\n            end\n        end\n        return open_braces ~= 0 and close_braces\
+    \ ~= 0\n    end", "    local groups = {}\n    local paren_count = 0\n    local\
+    \ paren_open_brace_count = 0\n    local bracket_count = 0", "  local bracket_pairs\
+    \ = paren_string:gsub('%(%(%[()]|%[()][()%])%(%[()]|%[()][()%])%', function(s)\n\
+    \    local open_bracket = s:sub(1, 1)\n    local close_bracket = s:sub(2)\n  \
+    \  if open_bracket ~= close_bracket then\n      return '(%('..open_bracket..'))'\n\
+    \    end\n    return ''\n  end)\n  local result = {}\n  for _, pair in ipairs(bracket_pairs)\
+    \ do\n    table.insert(result, bracket(pair))\n  end\n  return result\nend", '  local
+    result = {}', "    local result = {}\n    local open_brace_count = 0\n    local\
+    \ close_brace_count = 0\n    local paren_index = 0\n    for pos, charcode in string.gfind(paren_string,\
+    \ \"%[(%a)(%A)]\") do\n        if open_brace_count == 0 and charcode == '(' then\n\
+    \            open_brace_count = open_brace_count + 1\n        elseif open_brace_count\
+    \ == 1 and charcode == ')' then\n            open_brace_count = open_brace_count\
+    \ - 1\n        elseif open_brace_count > 0 and charcode == '(' then\n        \
+    \    open_brace_count = open_brace_count + 1\n        elseif open_brace_count\
+    \ < 0 and charcode == ')' then\n            close_brace_count = close_brace_count\
+    \ + 1\n        elseif close_brace_count > 0 and charcode == '(' then\n       \
+    \     close_brace_count = close_brace_count - 1\n        elseif close_brace_count\
+    \ == 0 and paren_index <= pos then\n            local group = string.sub(paren_string,\
+    \ paren_index, pos)\n            table.insert(result, group)\n        end\n  \
+    \      paren_index = paren_index + 1 -- Increment position of \"open\" paren group\n\
+    \    end\n    return result\nend", "   if paren_string == nil then\n      return\
+    \ {}\n   end\n   local stack = {}\n   local open_braces = { }\n   local closed_groups\
+    \ = {}\n   local open_groups = 0\n   local group_count = 0\n   local nested_paren_count\
+    \ = 0\n   local previous_group = '()'", "    local open_brackets = {\n       \
+    \ ['('] = true,\n        [')'] = true,\n    }", "  local paren_string_split =\
+    \ split(paren_string, ')')\n  for i, value in ipairs(paren_string_split) do\n\
+    \    paren_string_split[i] = split(value, '(')\n  end\n  local separated_paren_groups\
+    \ = {}\n  for i, value in ipairs(paren_string_split) do\n    local paren_groups\
+    \ = {}\n    for j = 1, #value do\n      local open_brace_count = 0\n      for\
+    \ k = 1, #value do\n        if value[k] == ')' then\n          open_brace_count\
+    \ = open_brace_count - 1\n        elseif value[k] == '(' then\n          open_brace_count\
+    \ = open_brace_count + 1\n        end\n      end\n      if open_brace_count <\
+    \ 1 then\n        table.insert(paren_groups, value[j])\n      end\n    end\n \
+    \   if #paren_groups == 1 then\n      table.insert(separated_paren_groups, paren_groups)\n\
+    \    end\n  end\n  return separated_paren_groups\nend", "  local open_braces =\
+    \ { }\n  local closed_brackets = { }\n  local open_brace_level = 0\n  local closed_brace_level\
+    \ = 0\n  local paren_groups = { }"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

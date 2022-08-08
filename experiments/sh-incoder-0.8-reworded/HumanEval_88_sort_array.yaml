@@ -15,6 +15,1988 @@ tests: "}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n  
   \ \"6 5 4 3 2 1 0\" ]]\n    [[ $(candidate \"2 1\") = \"1 2\" ]]\n    [[ $(candidate\
   \ \"15 42 87 32 11 0\") = \"0 11 15 32 42 87\" ]]\n    [[ $(candidate \"21 14 23\
   \ 11\") = \"23 21 14 11\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["\tlocal result=()\n\tlocal -a arr\n\tlocal s\n\tarr=( ${1//,/ } )\n\
+    \ts=${arr[0]}\n\tfor (( i=1; i<${#arr[@]}; i++ )); do\n\t\tlocal -a arr2\n\t\t\
+    arr2=( ${arr[@]:$i:1} )\n\t\tif (( i % 2 )); then\n\t\t\tlocal tmp\n\t\t\tfor\
+    \ (( j=0; j<${#arr[@]}; j++ )); do\n\t\t\t\ttmp=${arr2[j]}\n\t\t\t\tarr2[j]=${arr2[j+1]}\n\
+    \t\t\t\tarr2[j+1]=${tmp}\n\t\t\tdone\n\t\t\tarr2[0]=${s}\n\t\t\ts+=${arr2[${#arr2[@]}]}\n\
+    \t\telse\n\t\t\tlocal tmp\n\t\t\tfor (( j=0; j<${#arr2[@]}; j++ )); do\n\t\t\t\
+    \ttmp=${arr2[j]}\n\t\t\t\tarr2[j]=${arr2[j-1]}\n\t\t\t\tarr2[j-1]=${tmp}\n\t\t\
+    \tdone\n\t\t\tarr2[-1]=${s}\n\t\t\ts+=${arr2[${#arr2[@]}]}\n\t\tfi\n\tdone\n\t\
+    result=( ${arr[@]} )\n\tprintf '%s ' \"${result[@]}\"", "  local IFS=$'\\n'\n\
+    \  local sorted_array=()\n\n  for x in $1; do\n    local first_index=0\n    local\
+    \ last_index=0\n    local sum=$(( $x - $(( $(( $x + 1 )) | cut -d \" \" -f 1 )\
+    \ ))\n    if [ $sum -eq 0 ]; then\n      sorted_array+=( \"$x\" )\n    else\n\
+    \      while [ $(( $first_index <= $last_index )) -le $(($(( $last_index + 1 ))\
+    \ | cut -d \" \" -f 1)) ]; do\n        local current_index=$(( ${first_index}\
+    \ + $last_index ))\n        local temp=$(( $sum + $(( $current_index - $first_index\
+    \ )) ))\n        if [ $temp -eq 0 ]; then\n          sorted_array+=( \"$temp\"\
+    \ )\n          first_index=$current_index\n        else\n          sorted_array+=(\
+    \ \"$temp\" )\n          first_index=$current_index\n          last_index=$((\
+    \ $current_index - 1 ))\n        fi\n      done\n      sorted_array+=( \"$temp\"\
+    \ )\n      last_index=$(( $first_index + 1 ))\n      sorted_array+=( \"$first_index\"\
+    \ )\n      sorted_array+=( \"$last_index\" )\n    fi\n  done\n  echo ${sorted_array[@]}",
+  "    local str=$1\n\n    if [ -z \"$str\" ]; then\n        echo \"$1\"\n       \
+    \ echo \"$2\"\n        return\n    fi\n\n    local -n arr=$( echo \"$str\" | tr\
+    \ ' ' '\\n' | sort -n)\n    arr=(${(k)arr})\n    local -n arr=$( echo \"$str\"\
+    \ | tr ' ' '\\n' | sort -n -k ${arr[0]} -k ${arr[$((${#arr[@]} - 1))]}; exit ${!arr[@]}\
+    \ )\n    echo \"$( echo \"$str\" | tr ' ' '\\n' | sort -n -k ${arr[0]} -k ${arr[$((${#arr[@]}\
+    \ - 1))]} )", "    local arr=\"$1\"\n    local sum\n    local index\n    local\
+    \ max\n    local min\n    local i\n    sum=$(echo $arr | tr -s ' ' | cut -d\\\"\
+    \ -f1 | paste -s -d+- | bc)\n    # Sort array\n    if [ $sum -eq 0 ] ; then\n\
+    \        return\n    fi\n    for (( index=1 ; index<${#arr} ; index++ )); do\n\
+    \        arr[$index]=$(echo $arr[$index] | tr -s ' ' | cut -d\\\" -f1 | paste\
+    \ -s -d+- | bc)\n    done\n    max=$(echo $arr | sed 's/ //g' | paste -s -d+-\
+    \ | sort -n | head -1)\n    min=$(echo $arr | sed 's/ //g' | paste -s -d+- | sort\
+    \ -n | tail -1)\n    for (( i=0 ; i<${#arr} ; i++ )); do\n        if [[ ${arr[i]}\
+    \ == ${max} ]] && [[ \"${arr[$i]}\" -gt \"$max\" ]]; then\n            arr[i]=$max\n\
+    \        elif [[ ${arr[i]} == ${min} ]] && [[ \"${arr[$i]}\" -le \"$min\" ]];\
+    \ then\n            arr[i]=$min\n        fi\n    done\n    arr=(\"${arr[@]}\"\
+    )\n    echo \"${arr[@]}\"", "    local arr=(\"$@\")\n    local sum\n    local\
+    \ i\n    local tmp\n    local tmp2\n    local first=0\n    local last=${#arr[@]}\n\
+    \    for i in $(seq 0 $((last-1))); do\n        sum=$((${arr[$first]} + ${arr[$i]}))\n\
+    \        if [ $((sum % 2)) -eq 0 ] ; then\n            tmp=${arr[$i]}\n      \
+    \      tmp2=$((${arr[$first]} + ${arr[$i]}))\n        else\n            tmp=${arr[$last]}\n\
+    \            tmp2=$((${arr[$last-1]} + ${arr[$i]}))\n        fi\n        arr[$i]=${arr[$tmp]}\n\
+    \        arr[$first]=$tmp2\n        first=$(($first + 1))\n    done\n    arr[$first]=${arr[$last]}\n\
+    \    echo \"${arr[*]}\"", "    local array=\"$1\"\n    local i=0\n    local result=\"\
+    \"\n\n    # sort array in ascending order\n    for element in \"${array[@]}\"\
+    ; do\n        (( i % 2 == 1 )) && result=\"$result $element\"\n        (( i++\
+    \ ))\n    done\n\n    echo -n \"$result\"", "\tlocal arr=($@)\n\tarr=( $(sort\
+    \ -nr <<<\"${arr[*]}\") )\n\t# check if odd/even\n\tlocal sum=0\n\tfor n in \"\
+    ${arr[@]}\"; do\n\t\t((sum+=n))\n\tdone\n\tif (( sum%2 )); then\n\t\tarr=( \"\
+    ${arr[@]:0:${#arr[@]}}\" )\n\telse\n\t\tarr=( \"${arr[@]:1:${#arr[@]}}\" )\n\t\
+    fi\n\techo -n \"${arr[@]}\"", "    local arr=( $1 )\n    local num=${#arr[@]}\n\
+    \    local sum=0\n\n    # Sort the array in ascending order if the sum of the\
+    \ first and last element are odd\n    if [[ $((num % 2)) -eq 1 ]]; then\n    \
+    \  local t\n      for ((i=0; i < num; i++)); do\n        t=${arr[i]}\n       \
+    \ arr[i]=${arr[i+1]}\n        arr[i+1]=${t}\n      done\n    fi\n    # Sort the\
+    \ array in descending order if the sum of the first and last element are even\n\
+    \    if [[ $((num % 2)) -eq 0 ]]; then\n      local t\n      for ((i=0; i < num;\
+    \ i++)); do\n        t=${arr[i]}\n        arr[i]=${arr[i-1]}\n        arr[i-1]=${t}\n\
+    \      done\n    fi\n    echo \"${arr[@]}\"", "  IFS=$' '\n  local -a sorted=()\n\
+    \  local -a sum=()\n  local i sum=0\n  local j len\n\n  for ((i=0; i<${#1[@]};\
+    \ i++)); do\n    ((sum+=${1[i]}))\n    sorted+=(\"${1[i]}\")\n  done\n\n  sorted+=(\"\
+    $sum\")\n  local length=\"${#sorted[@]}\"\n  local last=\"${sorted[length - 1]}\"\
+    \n  local first=\"${sorted[0]}\"\n  local length1=\"${#first[@]}\"\n  local length2=\"\
+    ${#last[@]}\"\n\n  if ((length1 % 2) == 1 && (length2 % 2) == 1) {\n    sort -n\
+    \ -t: -k${length1#*} -k${length2#*} \"${sorted[@]}\"\n  elif ((length1 % 2) ==\
+    \ 0 && (length2 % 2) == 0) {\n    sort -n -t: -k${length1#*} -k${length2#*} -r\
+    \ \"${sorted[@]}\"\n  else\n    echo \"Invalid array input\"\n    exit 1\n  fi",
+  "    local array sum\n    array=( $1 )\n    sum=$(( ${#array[@]} > 1 ? ${array[0]}\
+    \ + ${array[${#array[@]} - 1]} : 0 ))\n\n    if [ $(($sum % 2)) -eq 0 ]; then\n\
+    \        echo ${array[@]}\n    else\n        echo -n ${array[@]} | sort -r\n \
+    \   fi", "    local list\n    list=( $(echo \"$1\" | sed 's/ /\" \"/g') )\n  \
+    \  IFS=' ' read -r -a array <<< \"$1\"\n    local res=()\n    local sum\n    local\
+    \ i\n    local j\n    for ((i=0; i<${#list[@]}; i++)); do\n        sum=0\n   \
+    \     for ((j=0; j<i; j++)); do\n            sum=$((sum+${array[j]}))\n      \
+    \  done\n        res[$i]=$((${list[i]}+${sum}))\n    done\n    IFS=' ' read -r\
+    \ -a array <<< \"${res[@]}\"\n    for ((i=0; i<${#list[@]}; i++)); do\n      \
+    \  list[i]=\"${list[i]}\"\n    done\n    for ((i=0; i<${#list[*]}; i++)); do\n\
+    \        array=( \"${array[@]:0:i}\" \"${array[@]:i}\" )\n    done\n    IFS='\
+    \ ' read -r -a array <<< \"${list[@]}\"\n    echo \"${list[*]}\"", "    local\
+    \ str=$1\n    local first=$(echo $str | awk '{print $1}')\n    local last=$(echo\
+    \ $str | awk '{print $NF}')\n    local sum=$(echo $first + $last | bc)\n    local\
+    \ sign=$(( sum % 2 ))\n    local str=\"$first\"\n    if [ $sign -eq 1 ]; then\n\
+    \        str=\"$last $str\"\n    fi\n    eval \"$str\"", "  local array=$1 sum=0\n\
+    \  local first_index_value\n  local last_index_value\n  while read -r line; do\n\
+    \    ((sum+=$(echo \"$line\" | awk '{print $1}')))\n  done < <(echo \"$array\"\
+    \ | sort -n | tr -d '\"')\n  first_index_value=\"$((sum%2))\"\n  last_index_value=\"\
+    $((sum))\"\n  if [[ $first_index_value == 1 && $last_index_value == 1 ]]; then\n\
+    \    echo \"$array\"\n  else\n    local temp=()\n    while read -r line; do\n\
+    \      temp+=(\"$line\")\n    done < <(echo \"${array[@]}\" | sort -n)\n    local\
+    \ result=()\n    while read -r line; do\n      if [[ \"$line\" == \"${temp[0]}\"\
+    \ ]]; then\n        result+=(\"$line\")\n      else\n        result+=(\"${temp[@]:1}\"\
+    )\n      fi\n    done < <(echo \"${result[@]}\" | sort -nr -k\"$((first_index_value*2+1)\"\
+    \ -k\"$((last_index_value*2))\" -t)\n    echo \"${result[@]}\"\n  fi", "  local\
+    \ str=$1\n  local sum1\n  local sum2\n  local num\n  local num2\n  local index\n\
+    \  local flag\n\n  if [[ $str == \"\" ]]; then\n    echo \"\"\n    return\n  fi\n\
+    \n  # get the sum of the array from 0 to len-1\n  sum1=0\n  for (( index = 0;\
+    \ index < ${#str}; index++)); do\n    sum1=$((${sum1} + ${str}))\n  done\n  num1=${sum1}\n\
+    \n  # sort the array in ascending order if the sum of the first and last element\
+    \ is odd\n  # or sort it in descending order if the sum of the first and last\
+    \ element is even\n  if [[ $((num1 & 1)) == 1 ]]; then\n    flag=0\n    for ((\
+    \ index = 0; index < ${#str}; index++)); do\n      if [[ $((${str[index]} > num1))\
+    \ == 1 ]]; then\n        flag=1\n        break\n      fi\n    done\n  else\n \
+    \   flag=1\n  fi\n\n  if [[ $flag == 1 ]]; then\n    # sort the array in ascending\
+    \ order if the sum of the first and last element is odd\n    for (( index = 0;\
+    \ index < ${#str}; index++)); do\n      sum2=$((${str[index]} + ${str[(index-1)]}))\n\
+    \      if [[ $((${sum2} & 1)) == 1 ]]; then\n        num2=$((${str[index]} + ${str[(index-1)]}))\n\
+    \        break\n      fi\n    done\n  else\n    # sort the array in descending\
+    \ order if the sum of the first and last element is even\n    for (( index = 0;\
+    \ index < ${#str}; index++)); do\n      sum2=$((${str[index]} + ${str[(index-1)]}))\n\
+    \      if [[ $((${sum2} & 1)) == 0 ]]; then\n        num2=$((${str[index]} + ${str[(index-1)]}))\n\
+    \        break\n      fi\n    done\n  fi\n\n  echo -n \"${str[@]:${index}:$((num2\
+    \ > ${num1} ? num2 : num1))}\"", "    local -r arr1=(${1})\n    local -r temp\n\
+    \    local -r i j len\n    local -r sum\n\n    local -r arr2=(${arr1[0]} ${arr1[-1]})\n\
+    \n    if [[ ${#arr1[@]} -eq 1 ]]; then\n        return\n    fi\n\n    local -r\
+    \ first_index=\"${arr2[0]}\"\n    local -r last_index=\"${arr2[-1]}\"\n\n    sum=$((first_index+last_index))\n\
+    \    if (( sum & 1 )); then\n        # sum is odd\n        arr2=$(echo \"${arr2[@]}\"\
+    \ | sed -e \"s/^/-/g\" -e \"s/$/-/g\")\n    else\n        # sum is even\n    \
+    \    arr2=$(echo \"${arr2[@]}\" | sed -e \"s/^/ /g\" -e \"s/$/-/g\")\n    fi\n\
+    \n    len=${#arr1[@]}\n\n    for ((i=1; i<len; i++)); do\n        temp=\"${arr2[i-1]}\"\
+    \n\n        for ((j=0; j<i; j++)); do\n            # jth element of the array\
+    \ is greater than j+1th element of the array\n            if [[ $arr1[j] > $arr1[j+1]\
+    \ ]]; then\n                # if jth element is greater than j+1th element\n \
+    \               arr1[j+1]=$arr1[j]\n                arr1[j]=$temp\n          \
+    \  fi\n        done\n    done\n\n    echo \"${arr1[@]}\"", "    local numbers=$1\n\
+    \    local sorted_numbers=()\n    local sum=$((${#numbers} + 1))\n    if [ $sum\
+    \ -eq 2 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n        sorted_numbers+=(${numbers[1]})\n\
+    \        sorted_numbers=$(sort -n -k 2 <<< ${sorted_numbers})\n    elif [ $sum\
+    \ -eq 3 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n        sorted_numbers+=(${numbers[1]})\n\
+    \        sorted_numbers+=(${numbers[2]})\n        sorted_numbers=$(sort -n -k\
+    \ 3 <<< ${sorted_numbers})\n    elif [ $sum -eq 5 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n\
+    \        sorted_numbers+=(${numbers[1]})\n        sorted_numbers+=(${numbers[2]})\n\
+    \        sorted_numbers+=(${numbers[3]})\n        sorted_numbers+=(${numbers[4]})\n\
+    \        sorted_numbers=$(sort -n -k 5 <<< ${sorted_numbers})\n    elif [ $sum\
+    \ -eq 6 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n        sorted_numbers+=(${numbers[1]})\n\
+    \        sorted_numbers+=(${numbers[2]})\n        sorted_numbers+=(${numbers[3]})\n\
+    \        sorted_numbers+=(${numbers[4]})\n        sorted_numbers+=(${numbers[5]})\n\
+    \        sorted_numbers=$(sort -n -k 6 <<< ${sorted_numbers})\n    elif [ $sum\
+    \ -eq 7 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n        sorted_numbers+=(${numbers[1]})\n\
+    \        sorted_numbers+=(${numbers[2]})\n        sorted_numbers+=(${numbers[3]})\n\
+    \        sorted_numbers+=(${numbers[4]})\n        sorted_numbers+=(${numbers[5]})\n\
+    \        sorted_numbers+=(${numbers[6]})\n        sorted_numbers=$(sort -n -k\
+    \ 7 <<< ${sorted_numbers})\n    elif [ $sum -eq 9 ]\n    then\n        sorted_numbers+=(${numbers[0]})\n\
+    \        sorted_numbers+=(${numbers[1]})\n        sorted_numbers+=(${numbers[2]})\n\
+    \        sorted_numbers+=(${numbers[3]})\n        sorted_numbers+=(${numbers[4]})\n\
+    \        sorted_numbers+=(${numbers[5]})\n        sorted_numbers+=(${numbers[6]})\n\
+    \        sorted_numbers+=(${numbers[7]})\n        sorted_numbers+=(", "  local\
+    \ first=$1\n  local sorted=\"\"\n  local tmp=$(eval echo \\$\\$first)\n  local\
+    \ tmp2\n  local last_idx\n  local last_val\n  local idx\n  local val\n  local\
+    \ i=0\n  local count\n  local is_even\n  local is_odd\n  local is_last_idx\n \
+    \ local is_last_val\n\n  while [[ ${#first} -gt 0 ]]; do\n    idx=0\n    count=$(expr\
+    \ ${#first} - 1)\n    while [[ ${count} -gt 0 ]]; do\n      val=$(( ${first}[idx]\
+    \ ))\n      ((idx++))\n      if [[ ${val} -gt ${tmp} ]]; then\n        tmp2=${tmp}\n\
+    \        tmp=${val}\n        tmp=${tmp2}\n      fi\n      ((count--))\n    done\n\
+    \    if [[ ${count} -eq 0 ]]; then\n      last_val=${first}[0]\n      last_idx=0\n\
+    \    else\n      last_val=${first}[${count}]\n      last_idx=${count}\n    fi\n\
+    \    is_last_idx=$(expr $count - 1)\n    is_last_val=${first}[${last_idx}]\n \
+    \   is_even=$(expr $tmp % 2)\n    if is_even; then\n      is_odd=$(expr $tmp %\
+    \ 2)\n      if [[ ${is_odd} = \"1\" ]]; then\n        sorted=\"${sorted} ${first}[${idx}..${last_idx}]\"\
+    \n        first=${first:0:${#first}-1}\n      else\n        sorted=\"${sorted}\
+    \ ${first}[${idx}..${last_idx}+1]\"\n        first=${first:0:${#first}-2}\n  \
+    \    fi\n    else\n      if [[ ${is_last_val} -gt ${is_last_idx} ]]; then\n  \
+    \      sorted=\"${sorted} ${first}[${idx}..${last_idx}]\"\n        first=${first:0:${#first}-1}\n\
+    \      else\n        sorted=\"${sorted} ${first}[${idx}..${last_idx}-1]\"\n  \
+    \      first=${first:0:${#first}-1}\n      fi\n    fi\n  done\n  echo \"${sorted}\"",
+  "    local array sum\n    local i\n    local temp\n    local result\n    IFS=\"\
+    \ \" read -r -a array <<< \"$1\"\n    sum=$(echo \"${array[@]}\" | sort -n | sed\
+    \ 's/^\\(.*\\)$/\\1/')\n    if [ \"$sum\" -eq \"0\" ]; then\n        array=()\n\
+    \    else\n        array=(\"${array[@]}\" | sort -n)\n    fi\n    result=$(echo\
+    \ \"${array[@]}\" | sed 's/^\\(.*\\)$/\\1/')\n    i=$(( $#array + 1 ))\n    temp=$(echo\
+    \ \"${array[$i]}\" | sed 's/^\\(.*\\)$/\\1/')\n    while [ $i -ne 0 ]; do\n  \
+    \      if [[ \"$sum\" -eq \"0\" ]]; then\n            array=(\"${array[@]:0:$i}\"\
+    \ \"${array[@]:$i}\")\n            sum=$(( $sum - $temp))\n            i=$(( $i\
+    \ - 1 ))\n            array=(\"${array[@]:0:$i}\" \"${array[@]:$i}\")\n      \
+    \  else\n            if [ \"$temp\" -ge \"$sum\" ]; then\n                array=(\"\
+    ${array[@]:0:$i}\" \"${array[@]:$i}\")\n                sum=$(( $sum + $temp))\n\
+    \                i=$(( $i - 1 ))\n                array=(\"${array[@]:0:$i}\"\
+    \ \"${array[@]:$i}\")\n            else\n                array=(\"${array[@]:0:$i}\"\
+    \ \"${array[@]:$i}\")\n                sum=$(( $sum - $temp))\n              \
+    \  i=$(( $i - 1 ))\n                array=(\"${array[@]:0:$i}\" \"${array[@]:$i}\"\
+    )\n            fi\n        fi\n        temp=$(echo \"${array[$i]}\" | sed 's/^\\\
+    (.*\\)$/\\1/')\n    done\n    echo \"${array[@]}\"", "    local -r array=\"$1\"\
+    \n    local -r sum\n    local -r index\n    sum=0\n    index=0\n    while [ $((\
+    \ index<${#array[@]} )) ]; do\n        (( sum+=${array[$index]} ))\n        ((\
+    \ index+=1 ))\n    done\n    if (( sum%2==1 )); then\n        declare -a sorted=()\n\
+    \        for (( index=0; index<${#array[@]} && $index < ${#sorted[@]}; index++\
+    \ )); do\n            sorted[$index]=\"${array[$index]}\"\n        done\n    \
+    \    declare -a sorted=( \"${sorted[@]}\" )\n        sort -nr \"${sorted[@]}\"\
+    \n    else\n        declare -a sorted=()\n        for (( index=0; index<${#array[@]}\
+    \ && $index < ${#sorted[@]}; index++ )); do\n            sorted[$index]=\"${array[$index]}\"\
+    \n        done\n        declare -a sorted=( \"${sorted[@]}\" )\n        sort -r\
+    \ \"${sorted[@]}\"\n    fi", "    # $1 is space-separated list\n    # sort it\
+    \ in ascending order if the sum( first index value, last index value) is odd,\n\
+    \    # or sort it in descending order if the sum( first index value, last index\
+    \ value) is even.\n    sum=$(($1+$1))\n    \n    array=($(echo \"${1}\" | tr '\
+    \ ' \"\\n\"))\n\n    if [ \"$sum\" -eq 2 ]; then \n        array=( ${array[@]}$(echo\
+    \ \"${array[@]}\" | tr ' ' '\\n' | sort -r) )\n    elif [ \"$sum\" -eq 4 ]; then\
+    \ \n        array=( ${array[@]}$(echo \"${array[@]}\" | tr ' ' '\\n' | sort -r)\
+    \ )\n        array=( ${array[@]}$(echo \"${array[@]}\" | tr ' ' '\\n' | sort -r)\
+    \ )\n    elif [ \"$sum\" -eq 6 ]; then \n        array=( ${array[@]}$(echo \"\
+    ${array[@]}\" | tr ' ' '\\n' | sort -r) )\n        array=( ${array[@]}$(echo \"\
+    ${array[@]}\" | tr ' ' '\\n' | sort -r) )\n        array=( ${array[@]}$(echo \"\
+    ${array[@]}\" | tr ' ' '\\n' | sort -r) )\n    fi\n    \n    echo ${array[@]}",
+  "    local numbers=(\"${@}\")\n    local sum=0\n    local max=0\n    local min=$((\
+    \ ${#numbers[*]} - 1))\n    local i=0\n    while [ $i -lt $min ]; do\n       \
+    \ sum=$(( sum + ${numbers[$i]} ))\n        i=$(( i + 1 ))\n    done\n    if [\
+    \ ${sum%2} -eq 1 ]; then\n        sort_array-desc $numbers\n    else\n       \
+    \ sort_array-asc $numbers\n    fi", "    local input_array=\"$1\"\n    local input_array_length=\"\
+    ${#input_array}\"\n    local output_array\n\n    if [[ \"${input_array_length}\"\
+    \ -lt 1 ]]; then\n        output_array=()\n    else\n        output_array=($(sort\
+    \ -r -n${input_array_length}))\n    fi\n    \n    echo $(IFS=\",\"; echo \"${output_array[@]}\"\
+    )", "    local -i result=0\n    local -a nums\n    local -a sorted_nums\n    local\
+    \ -a sums\n    local -i count_odd\n    local -i count_even\n    local -i count_max\n\
+    \    local i max\n    local -a strs\n    local str temp\n    local j str\n   \
+    \ local -i count_space\n    local -i count\n    local strlen len\n    local -i\
+    \ count_minus_space\n    local -i count_minus_strlen\n    local -a numstrs\n \
+    \   local -a num_strs\n    local -a num_str_len\n    local -a minus_str_len\n\
+    \    local -a space_index\n    local -a minus_space_index\n\n    set -- $( IFS='\
+    \ '; echo \"${@}\" )\n    nums=( ${!#} )\n    count_odd=0 count_even=0 count_max=0\n\
+    \    for ((i = 0; i < ${#nums[*]}; i++)); do\n        (( sorted_nums[count_odd]\
+    \ = nums[i] ))\n        (( count_odd += 1 ))\n        (( sorted_nums[count_even]\
+    \ = nums[${i}] ))\n        (( count_even += 1 ))\n        if (( count_odd > count_even\
+    \ )); then\n            (( count_max += 1 ))\n        elif (( count_even == count_odd\
+    \ )); then\n            (( count_max += 1 ))\n        else\n            (( count_max\
+    \ += 1 ))\n        fi\n    done\n\n    sums=( ${sorted_nums[@]} )\n    count_max=0\n\
+    \    for ((i = 0; i < ${#sums[*]}; i++)); do\n        (( sorted_nums[count_max]\
+    \ = sums[i] ))\n        (( count_max += 1 ))\n    done\n\n    strs=( ${sorted_nums[@]}\
+    \ )\n    for ((i = 0; i < ${#strs[*]}; i++)); do\n        len=$( strlen \"${strs[i]}\"\
+    \ )\n        count_space=0\n        count_minus_space=0\n        minus_space_index=()\n\
+    \        space_index=()\n        minus_strlen=()\n        for ((j = 0; j < len;\
+    \ j++)); do\n            (( count_space += 1 ))\n            if [[ ${strs[i][j]==\"\
+    \ \" } ]]; then\n                for ((k = 0; k < count_space; k++)); do\n   \
+    \                 (( space_index[count_space] = j ))\n                    (( count_space\
+    \ += 1 ))\n                done\n                for ((k = 0; k < count_space;\
+    \ k++)); do\n                    minus_", "  local IFS=' '\n  local i\n  local\
+    \ tmp\n  local output\n\n  output=$1\n  output+=\"[\"\n\n  for i in $output\n\
+    \  do\n    tmp=$(echo \"${i}\" | tr \"\\n\" \" \")\n    if [[ ${#tmp} -le 1 ]];\
+    \ then\n      tmp=\"\"\n    fi\n    sorted=$(echo \"${tmp}\" | sort -n | head\
+    \ -1)\n    if [[ ${#sorted} -gt 0 ]]; then\n      output+=\"${sorted}\"\n    else\n\
+    \      output+=\"${i}\"\n    fi\n  done\n\n  output+=\"]\"\n  echo \"${output}\"",
+  "    local IFS=$'\\n' arr=$1\n    IFS=$' \\t\\n'\n    local sorted_arr=()\n    local\
+    \ sum=0\n    local i\n    local j\n    local sorted=false\n    for (( i=0; i <\
+    \ ${#arr[@]}; i++ )); do\n        if [[ ${arr[i]} == \"\" ]]; then\n         \
+    \   sorted_arr+=(\"${arr[i]}\")\n            continue\n        fi\n        if\
+    \ (( ${sum} % 2 )); then\n            sorted_arr+=(\"${arr[i]}\")\n        else\n\
+    \            sorted_arr+=(\"${arr[i]}\" \"${arr[i-1]}\")\n        fi\n       \
+    \ sum=$(( $sum + ${arr[i]} ))\n    done\n    sorted_arr=( \"${sorted_arr[@]}\"\
+    \ )\n    return \"${sorted_arr[@]}\"", "\tlocal sorted_array=\"$1\"\n\techo \"\
+    $sorted_array\"\n\techo \"${sorted_array//[[:space:]]/}\"\n\tlocal sum=$(( $sorted_array[0]\
+    \ + $sorted_array[${#sorted_array[@]}-1] ))\n\techo \"$sum\"\n\tif [[ $sum -eq\
+    \ 1 || $sum -eq 0 ]]; then\n\t\techo \"No need to sort\"\n\telse\n\t\techo \"\
+    ${sorted_array[@]}\"\n\t\techo \"${sorted_array[@]} | sort | uniq -d\"\n\t\techo\
+    \ \"${sorted_array[@]}\" | sort -r\n\t\techo \"${sorted_array[@]}\" | sort -rn\
+    \ | sort -nr\n\tfi", "    local result=\"\"\n    for index in ${1//,/ }; do\n\
+    \        result+=\"'$index'\"\n    done\n    echo ${result//$'\\['/'['} ${result//$'\\\
+    ]'/\\]}", "    # Initialize a counter to track how many numbers are in the array\n\
+    \    local n=0\n    local output\n    # Sort the array in descending order\n \
+    \   for i in $(echo $1 | sed 's/ /\" \"/'); do\n        if (( $n % 2 == 0 ));\
+    \ then\n            output+=\"$i\"\n        else\n            output+=\" -$i\"\
+    \n        fi\n        n=$(( $n + 1 ))\n    done\n    # Print the output and return\n\
+    \    echo \"$output\"", "    local IFS=\" \"\n    local sorted\n    local first_index=0\n\
+    \    local last_index=0\n    local sum=0\n    local n=$#\n    local sorted_array\n\
+    \n    for ((i = 0; i < n; ++i)); do\n        if [ \"$i\" -eq \"0\" ]; then\n \
+    \           first_index=$((i-1))\n            sum=$(( $i + $first_index)) \n \
+    \       else\n            last_index=$((i))\n            sum=$(( sum + $last_index))\n\
+    \        fi\n    done\n\n    sorted=`sort -n -k ${first_index},${last_index} <<<\
+    \ \"$1\"`\n    if [ \"$(echo $sorted | awk '{print $2}')\" = \"$sum\" ]; then\n\
+    \        sorted_array=`echo $sorted | awk '{print $1}'`\n    else\n        sorted_array=`echo\
+    \ $sorted | awk '{print $2}'`\n    fi\n    echo \"$sorted_array\"", "    local\
+    \ arr\n    local arr_tmp\n\n    arr=$(cat <<EOF\n$1\nEOF\n)\n\n    arr_tmp=$(echo\
+    \ ${arr} | tr \" \" \"\\n\")\n    arr_tmp=$(echo $arr_tmp | sort -n -k)\n\n  \
+    \  for (( i = 0; i < ${#arr_tmp}; i++ )); do\n        echo ${arr_tmp[$i]}\n  \
+    \  done", "  local _ret=$(( $_num_val < 2 )) || return $?\n  declare -a arr\n\
+    \  arr=($(echo \"${1:-}\" | tr \" \" \"\\n\"))\n  local _max=0\n  local _min=0\n\
+    \  for (( i=1; i<${#arr[@]}; i++ )); do\n    local _m=\"$(( ${arr[i - 1]} + ${arr[i]}\
+    \ ))\"\n    _min=$(( _m < _min)) && _min=$_m\n    _max=$(( _m > _max)) && _max=$_m\n\
+    \  done\n  (( ${_max} % 2 )) || _max=$(( ${_max} - 1 ))\n  (( ${_min} % 2 )) &&\
+    \ _min=$(( ${_min} + 1 ))\n  printf '%s\\n' \"${arr[@]}\"", "    local arr=(${1//[[:space:]]/})\n\
+    \    local sum=${arr[0]}\n    for (( i = 2; i < ${#arr[@]}; i++ )); do\n     \
+    \   sum=$(expr $sum + ${arr[$i]})\n    done\n    if (( $(echo \"$sum % 2\" | bc)\
+    \ ));then\n        local sorted=()\n        for (( i = 2; i < ${#arr[@]}; i++\
+    \ )); do\n            if [[ ${arr[$i]} -gt ${arr[$((i - 1))} ]]; then sorted+=(\"\
+    ${arr[$i]}\"); fi\n        done\n        echo $(IFS=\" \"; echo \"${sorted[@]}\"\
+    )\n    else\n        local sorted=()\n        for (( i = 2; i < ${#arr[@]}; i++\
+    \ )); do\n            if [[ ${arr[$i]} -lt ${arr[$((i - 1))} ]]; then sorted+=(\"\
+    ${arr[$i]}\"); fi\n        done\n        echo $(IFS=\" \"; echo \"${sorted[@]}\"\
+    )\n    fi", "    local str=\"$1\";\n    echo \"${str// /\\\"}\";\n    local res=()\n\
+    \    local ress=()\n    for e in \"${str//,/ }\"; do\n        if [ -z \"${res[${#res[*]}]}\"\
+    \ ]; then\n            res[${#res[*]}]=\"${e}\";\n        fi\n    done\n    echo\
+    \ \"${res[@]}\"\n    for ((i=0;i<${#res[@]};i++)); do\n        ress[i+1]=\"${res[i]}\
+    \ ${res[i+1]}\";\n    done\n    ress=\"${ress[*]}\" | sort -n | awk '{print \"\
+    '$1'$0}';\n    echo \"${ress[*]}\"", "    # echo \"$1\"\n    local _tmp\n    local\
+    \ _out\n    local i\n    local j\n    local _outlen\n    local _len\n    local\
+    \ _sum\n    local _even\n    local _odd\n    local _odd_odd\n    local _evens\n\
+    \    local _evens_evens\n    local _odds\n    local _odds_odds\n    local _first_val\n\
+    \    local _last_val\n    local _even_index\n    local _odds_index\n    local\
+    \ _odd_odds\n    local _even\n    local _odd\n    # declare -i _len_of_list\n\
+    \    # declare -a _out\n    # declare -a _evens\n    # declare -a _odds\n    #\
+    \ declare -a _odd_odds\n    # declare -a _evens_evens\n    # declare -a _even\n\
+    \    # declare -a _odd\n    _out=$1\n    _len=${#_out}\n    if [[ \"$_len\" -eq\
+    \ 0 ]]; then\n        # echo \"_out=$_out\"\n        _out=\"[]\"\n    fi\n   \
+    \ _outlen=${#_out}\n    _sum=0\n    _even=0\n    _odd=0\n    _odd_odd=0\n    _evens=()\n\
+    \    _evens_evens=()\n    _odds=()\n    _odds_odds=()\n    _even=()\n    _odd=()\n\
+    \    _odd_odds=()\n    _even_index=()\n    _odds_index=()\n    _odd_odds=()\n\
+    \    _even=()\n    _odd=()\n    if [[ \"$_outlen\" -gt 1 ]]; then\n        # echo\
+    \ \"len=${_outlen}\"\n        for (( i=1; i<=\"$_len\"; i++ )); do\n         \
+    \   # echo \"i=$i\"\n            _tmp=${_out[$((i-1))]}\n            # echo \"\
+    _tmp=${_tmp}\"\n            # echo \"_tmp=${_tmp}\"\n            _sum=$((_sum+_tmp))\n\
+    \            # echo \"_sum=${_sum}\"\n            if [[ $_sum -eq 2 ]]; then\n\
+    \                # echo \"_evens=${_evens}\"\n                _even=0\n      \
+    \          _evens=(\"${_evens[@]}\" \"$_tmp\")\n                # echo \"_evens=${_evens}\"\
+    \n                _odd_odds=(\"${_odd_odds[@]}\" \"$_tmp\")\n                _even_index=(\"\
+    ${_even_index[@]}\" \"$i\")\n                _odds_index=(\"${_odds_index[@]}\"\
+    \ ", "    local arr=\"$1\"\n    local sum\n    local sum2\n    local count\n \
+    \   local i\n    local j\n    local tmp\n\n    sum=$(sum_array \"$arr\")\n   \
+    \ if [[ ${sum} -eq 0 ]]; then\n        echo \"$arr\" # return empty array when\
+    \ sum is 0\n        return 0 # return 0\n    fi\n    sum2=$(sum2 \"$sum\")\n \
+    \   arr=$(sort -r \"$arr\")\n    count=$(len_array \"$arr\")\n    if [[ ${count}\
+    \ -gt 1 ]]; then\n        local res\n        res=()\n        for ((i = 0; i <\
+    \ ${#arr[@]}; i++)); do\n            local tmp=$(get_sum \"$i\" \"$count\" \"\
+    $arr\")\n            res+=($tmp)\n        done\n        arr=$(printf '%s\\n' \"\
+    ${res[@]}\")\n    fi\n    for ((i = 0; i < ${#arr[@]}; i++)); do\n        if [[\
+    \ $(is_sum \"$i\" \"$count\" \"$arr\") ]]; then\n            arr[i]=$(get_sum\
+    \ \"$i\" \"$count\" \"$arr\")\n        fi\n    done\n    echo \"$arr\"", "   \
+    \     local list=${1[@]}\n        # convert list to int list\n        local int_list=\"\
+    $(echo \"${list}\" | sed 's/[^-0-9.]//g' | sort -n | sed 's/^-\\([0-9]*\\)$/\\\
+    1/')\"\n        # sum list as int number\n        local sum=\"$(echo \"${int_list}\"\
+    \ | sed 's/ /+/g' | bc)\"\n        # if sum is odd, sort ascending, else descending\n\
+    \        if [ \"$sum\" -eq \"1\" ]; then\n                echo \"${list}\"\n \
+    \       else\n                echo \"${list}\" | sort -r\n        fi", "    local\
+    \ str\n    local arr\n    arr=($*)\n    IFS=' ' read -ra str <<< \"${arr[*]}\"\
+    \n    for i in \"${arr[@]}\"; do\n        arr[i]=$((${str[i]}+1))\n    done\n\
+    \    local tmp\n    tmp=$(IFS=' ' echo \"${arr[*]}\")\n    IFS=' '\n    arr=($tmp)\n\
+    \    local i\n    for i in \"${arr[@]}\"; do\n        if [[ \"${i}\" -gt \"${arr[i-1]}\"\
+    \ ]]; then\n            arr[i-1]=$((${i}-1))\n        fi\n    done\n    for j\
+    \ in \"${arr[@]}\"; do\n        arr[j]=$(echo $((${j}+1))|bc)\n    done\n    printf\
+    \ '\"%s\"' \"${arr[@]}\"", "  local input_array=\"$1\"\n  local output_array=()\n\
+    \n  local first_index=0\n  local last_index=0\n  local sum=0\n\n  local prev_element=\"\
+    \"\n\n  while [[ ${#input_array} -gt 0 ]]; do\n    sum=$(echo \"${input_array[*]}\"\
+    \ | awk '{sum += $1}')\n\n    if [[ ${sum} -eq 1 ]]; then\n      if [[ ${#prev_element}\
+    \ -eq 0 ]]; then\n        prev_element=\"${input_array[0]}\"\n      else\n   \
+    \     output_array+=(\"${prev_element}\")\n        prev_element=\"${input_array[0]}\"\
+    \n      fi\n    elif [[ ${sum} -eq 0 ]]; then\n      output_array+=(\"${input_array[*]}\"\
+    )\n    else\n      if [[ ${sum} -eq 2 ]]; then\n        if [[ ${#prev_element}\
+    \ -eq 0 ]]; then\n          prev_element=\"${input_array[0]}\"\n        else\n\
+    \          output_array+=(\"${prev_element}\")\n          prev_element=\"${input_array[1]}\"\
+    \n        fi\n      else\n        if [[ ${#prev_element} -eq 0 ]]; then\n    \
+    \      prev_element=\"${input_array[last_index]}\"\n        else\n          output_array+=(\"\
+    ${prev_element}\")\n          prev_element=\"${input_array[last_index]}\"\n  \
+    \      fi\n      fi\n    fi\n\n    local last_index=$((last_index + 1))\n  done\n\
+    \n  if [[ ${#prev_element} -eq 0 ]]; then\n    output_array+=(\"${prev_element}\"\
+    )\n  else\n    output_array+=(\"${prev_element}\")\n  fi\n\n  echo ${output_array[@]}",
+  "    local array_string=\"$1\"\n    local sorted_array=()\n\n    for element in\
+    \ $array_string; do\n        if [[ ${#element} -gt 0 ]]; then\n            sorted_array+=(\"\
+    $element\")\n        fi\n    done\n\n    sorted_array=(\"${sorted_array[@]}\"\
+    )\n    local sum=0\n    for i in \"${sorted_array[@]}\"; do\n        sum=$((sum+i))\n\
+    \    done\n\n    if [[ ${sum} -eq 0 ]]; then\n        # empty array is always\
+    \ sorted\n        echo \"\"\n        return\n    fi\n\n    local reverse=0\n \
+    \   if [[ ${sum} -le 2 ]]; then\n        local array=(\"${sorted_array[@]}\")\n\
+    \        for i in \"${array[@]}\"; do\n            if [[ $((${i}%2)) -eq 0 ]];\
+    \ then\n                echo \"$i\"\n            else\n                echo \"\
+    $((${i}-1))\"\n            fi\n        done\n        reverse=0\n    elif [[ ${sum}\
+    \ -ge 3 ]]; then\n        local array=(\"${sorted_array[@]}\")\n        for i\
+    \ in \"${array[@]}\"; do\n            if [[ $((${i}%2)) -eq 0 ]]; then\n     \
+    \           echo \"$i\"\n            else\n                echo \"$((${i}+1))\"\
+    \n            fi\n        done\n        reverse=1\n    fi\n\n    if [[ $reverse\
+    \ -eq 0 ]]; then\n        echo \"${sorted_array[*]}\"\n    else\n        echo\
+    \ \"${sorted_array[@]}\"\n    fi", "    local i sum result\n    # Initialize sum\n\
+    \    sum=0\n    # Initialize result array\n    result=()\n    # Initialize array\
+    \ index\n    i=0\n    # Traverse through the array\n    while [ $i -lt ${#1[@]}\
+    \ ]\n    do\n        # Increment sum by the current number\n        sum=$(($sum\
+    \ + ${1[i]}))\n        i=$(($i + 1))\n    done\n    # Sort the result if sum is\
+    \ odd\n    if [ $((sum%2)) -eq 1 ]; then\n        # Sort the result in descending\
+    \ order\n        for i in ${!result[@]}; do\n            eval result[$i]=\\${$result[${i}][-1]}\n\
+    \        done\n        eval result[$i]=\"${1[i]}\"\n    fi\n    echo ${result[@]}",
+  "    local sorted_array=()\n    local sum=0\n    local sum1=0\n    for i in $(echo\
+    \ $1 |sed 's/ //g');\n    do\n        sum=$(echo \"$sum + $i\"|bc)\n        sum1=$(echo\
+    \ \"$sum1 + $i\"|bc)\n        sorted_array=($sorted_array $i)\n    done\n    if\
+    \ [[ $sum -eq 0 ]]\n    then\n        echo ${sorted_array[@]}\n    else\n    \
+    \    if [[ $sum1 -eq 0 ]]\n        then\n            echo ${sorted_array[@]}\n\
+    \        else\n            if [[ $(( ${#sorted_array[@]} % 2 )) -eq 1 ]]\n   \
+    \         then\n                echo ${sorted_array[@]}\n            else\n  \
+    \              if [[ $sum -eq 1 ]]\n                then\n                   \
+    \ echo ${sorted_array[@]}\n                else\n                    echo ${sorted_array[@]}\n\
+    \                fi\n            fi\n        fi\n    fi", "    local IFS=$'\\\
+    n'\n    local sorted_array=($(echo \"$1\" | sort -g))\n    local last_value\n\
+    \    local sum=0\n    local index=0\n    local is_odd\n    local is_even\n   \
+    \ local element_count\n    local count=0\n    local temp\n    local array\n  \
+    \  for element in \"${sorted_array[@]}\"; do\n        last_value=\"$element\"\n\
+    \        is_odd=false\n        is_even=false\n        element_count=$((element_count\
+    \ + 1))\n        count=$((count + 1))\n        sum=$((sum + element))\n      \
+    \  index=$((index + 1))\n        if is_odd; then\n            temp=\"\\\"$last_value\\\
+    \"\"\n            last_value=\"\\\"$element\\\"\"\n        fi\n        if is_even;\
+    \ then\n            temp=\"\\\"$element\\\"\"\n        fi\n        array+=(\"\
+    $temp\")\n    done\n    if [[ \"$sum\" == 0 ]]; then\n        array=(\"$array[@]\"\
+    )\n        echo $array\n    else\n        if is_odd; then\n            array=(\"\
+    $array[@]\")\n            echo \"$(echo \"${array[@]}\" | sort -n | sed -e 's/^/\\\
+    \"/' -e 's/$/\\\",\\\"/' -e 's/$/\\\"/')\"\n        elif is_even; then\n     \
+    \       array=(\"$array[@]\")\n            echo \"$(echo \"${array[@]}\" | sort\
+    \ -n | sed -e 's/^/\\\"/' -e 's/$/\\\",\\\"/' -e 's/$/\\\"/' -e 's/,$//')\"\n\
+    \        fi\n    fi", "    local IFS=\"$1\"\n    local items=(\"$@\")\n    local\
+    \ sum=$(( ( \"${#items[@]}\" / 2 ) - 1 ))\n\n    # sort array in descending order\
+    \ if the sum is even\n    if [ \"$sum\" -eq 0 ]; then\n        # sort array in\
+    \ descending order\n        sort -r --field-reverse \"${items[@]}\"\n    else\n\
+    \        # sort array in ascending order\n        sort -n --field-reverse \"${items[@]}\"\
+    \n    fi", "    if [ \"${#1}\" -eq 0 ]; then\n        echo \"$1\"\n        return\n\
+    \    fi\n\n    local arr=\"$1\"\n    local tmp\n\n    # sort it in descending\
+    \ order if the sum( first index value, last index value) is even\n    # or sort\
+    \ it in ascending order if the sum( first index value, last index value) is odd\n\
+    \    if [[ \"${arr[0]}\" -le \"${arr[-1]}\" ]]; then\n        for (( i=1; i<${#arr[@]};\
+    \ i++ )); do\n            tmp=${arr[i]}\n            (( i%2 )) && arr[i]=${arr[i-1]}\n\
+    \            arr[i-1]=$tmp\n        done\n\n    else\n        for (( i=1; i<${#arr[@]};\
+    \ i++ )); do\n            tmp=${arr[i]}\n            (( i%2 )) && arr[i]=${arr[i-1]}\n\
+    \            arr[i-1]=$tmp\n        done\n    fi\n\n    echo \"$arr\"", "    local\
+    \ a sum\n    sum=$(echo \"${1}\" | awk '{sum+=$1} END {print sum}')\n    IFS='\
+    \ ' read -r -a array <<< \"${1}\"\n    local temp\n    if [ $sum -gt ${#array[@]}\
+    \ ]\n    then\n        echo \"${array[@]}\"\n        return\n    fi\n    for i\
+    \ in \"${!array[@]}\"; do\n        temp=\"${array[i]} ${array[i+1]}\"\n      \
+    \  array[i]=${temp}\n        (( i++ ))\n    done\n    local j=0\n    for i in\
+    \ \"${!array[@]}\"; do\n        local index=$i-1\n        if [ $(( $sum%2 )) -eq\
+    \ 1 ]\n        then\n            echo \"${array[j]} ${array[i]}\"\n          \
+    \  j=$(( j+1 ))\n        fi\n    done", "    local arr=$1\n    local sum=0\n \
+    \   for (( i = 0; i < ${#arr}; i++ )); do\n        sum=$(( sum + ${arr:$i:1} ))\n\
+    \    done\n    local sort_type=1\n    if (( sum % 2 )); then\n        sort_type=2\n\
+    \    fi\n    local sorted_arr=$(sort -r -n -k 2,2 -k 3,3 -k 4,4 -k 5,5 <<< \"\
+    $arr\")\n    local result\n    if [[ \"$sort_type\" == 2 ]]; then\n        result=$(echo\
+    \ ${sorted_arr} | awk '{ print $4; print $5; print $6; print $7; print $8; print\
+    \ $9; print $10; print $11; print $12; print $13; print $14; print $15; print\
+    \ $16; print $17; print $18; print $19; print $20; print $21; print $22; print\
+    \ $23; print $24; print $25; print $26; print $27; print $28; print $29; print\
+    \ $30; print $31; print $32; print $33; print $34; print $35; print $36; print\
+    \ $37; print $38; print $39; print $40; print $41; print $42; print $43; print\
+    \ $44; print $45; print $46; print $47; print $48; print $49; print $50; print\
+    \ $51; print $52; print $53; print $54; print $55; print $56; print $57; print\
+    \ $58; print $59; print $60; print $61; print $62; print $63; print $64; print\
+    \ $65; print $66; print $67; print $68; print $69; print $70; print $71; print\
+    \ $72; print $73; print $74; print $75; print $76; print $77; print $78; print\
+    \ $79; print $80; print $81; print $82; print $83; print $84; print $85; print\
+    \ $86; print $87; print $88; print $89; print $90; print $91; print $92; print\
+    \ $93; print $94; print $95; print $96; print $97; print $98; print $99; print\
+    \ $100; print $101; print $102; print $103; print $104; print $105; print $106;\
+    \ print $107; print $108; print $109; print $110; print $111; print $112; print\
+    \ $113; print $114; print $115; print $116; print $117; print $118; print $119;\
+    \ print $120; print $121; print $122; print $123; print $124; print $125; print\
+    \ $126; print $127; print $128; print $129; print $130; print $131; print $132;\
+    \ print $133; print $134; ", "  local array=\"$1\"\n\n  if [[ \"${array}\" ==\
+    \ \"\" ]]; then\n    echo \"\"\n    return\n  fi\n\n  local n=$((${#array} - 1))\n\
+    \  local sum\n  local first\n  local last\n  local firstIndex\n  local lastIndex\n\
+    \  local swapped\n  local tmp\n\n  firstIndex=0\n  lastIndex=$n\n\n  sum=$((firstIndex\
+    \ + lastIndex))\n\n  first=\n  last=\n  swapped=\n\n  while (( $n != 0 )) ; do\n\
+    \    if (( ${sum} % 2 == 0 )); then\n      first=\" $array [$firstIndex]\"\n \
+    \     last=\" $array [$lastIndex]\"\n      (( sum-=2 ))\n    else\n      first=\"\
+    \ $array [$lastIndex]\"\n      last=\" $array [$firstIndex]\"\n      (( sum+=2\
+    \ ))\n    fi\n\n    if [ \"$first\" == \"$last\" ] ; then\n      (( n--))\n  \
+    \    continue\n    fi\n\n    tmp=$first\n    first=$last\n    last=$tmp\n\n  \
+    \  if [[ \"$swapped\" == \"true\" ]]; then\n      tmp=$firstIndex\n      firstIndex=$lastIndex\n\
+    \      lastIndex=$tmp\n      swapped=\"false\"\n    fi\n\n    (( firstIndex++\
+    \ ))\n    (( lastIndex-- ))\n\n    tmp=$swapped\n    swapped=$first\n    first=$last\n\
+    \    last=$tmp\n  done\n\n  echo \"$first\"", "  # Convert the elements of the\
+    \ given array to numbers.\n  # As a special case, if $1 is empty, return an empty\
+    \ list.\n  local -n arr=$1 res=()\n  for n in $arr; do\n    local x=${n%%[^0-9]}\n\
+    \    if (( ${#x} < 2 )); then\n      continue\n    fi\n    local m=${n#*[^0-9]}\n\
+    \    local m=$(echo \"$m\" | xargs printf '%s\\n' | sort -nr | head -1)\n    #\
+    \ use case to handle negative numbers\n    if (( m > 0 )); then\n      res+=(\
+    \ \"$m\" )\n    else\n      res+=( \"$n\" )\n    fi\n  done\n  # Sort the elements\
+    \ of $res in ascending order, if the\n  # sum of the first two elements is odd,\
+    \ or in descending order\n  # if the sum of the first two elements is even.\n\
+    \  case ${#res[*]} in\n    0)\n      return 0\n      ;;\n    1)\n      local n=${res[0]}\n\
+    \      local m=${res[1]}\n      (( m > n )) && res=( ${res[*]:1} ${res[*]:0:1}\
+    \ )\n      ;;\n    *)\n      local n=${res[0]}\n      local m=${res[1]}\n    \
+    \  local sum=$(( n + ( m / 2 ) ))\n      (( sum % 2 )) && res=( ${res[*]:1} ${res[*]:0:1}\
+    \ )\n      ;;\n  esac\n  # Convert each element of $res to a string.\n  local\
+    \ i res=()\n  for n in $res; do\n    local x=${n}\n    # handle single digit number\n\
+    \    if (( ${#x} < 2 )); then\n      res+=( \"$x\" )\n      continue\n    fi\n\
+    \    # Handle negative numbers\n    if (( ${x} == 0 )); then\n      res+=( \"\
+    $x\" )\n      continue\n    fi\n    local m=${x%[^0-9]}\n    local m=$(echo \"\
+    $m\" | xargs printf '%s\\n' | sort -nr | head -1)\n    # use case to handle negative\
+    \ numbers\n    if (( m > 0 )); then\n      res+=( \"$m\" )\n    else\n      res+=(\
+    \ \"$x\" )\n    fi\n  done\n  # Return an array of strings of the sorted elements\
+    \ of $res.\n  printf -v res \"%s\" \"${res[@]}\"\n  printf -v res \"%s\" \"$res\"\
+    \n  echo \"$res\"", "    local array=( ${1//[^ ]/ } )\n    local sum\n    sum=${array[0]}\
+    \ + ${array[-1]}\n    if [ \"$sum\" -gt 1 ]; then\n        echo \"$array\"\n \
+    \   else\n        local i=0\n        local imax=${#array[@]}\n        for (( i=1;\
+    \ i<imax; i++ )); do\n            local j=$(( i + 1 ))\n            if [ \"$sum\"\
+    \ -eq 2 ]; then\n                array=\"$array, $array[j]\"\n            else\n\
+    \                if [ \"$sum\" -eq 1 ]; then\n                    array=\"$array,\
+    \ $array[$i]\"\n                else\n                    array=\"$array, $array[$i],\
+    \ $array[$j]\"\n                fi\n            fi\n        done\n        echo\
+    \ \"$array\"\n    fi", "    local tmpArray=()\n    local tmpSum\n    local curIndex\n\
+    \    local tmpIndex\n\n    tmpArray=\"$1\"\n    tmpSum=\"$(get_sum \"${tmpArray[@]}\"\
+    )\"\n    sortedArray=()\n    if [[ $tmpSum -eq 0 ]]; then\n        echo \"$tmpArray\"\
+    \n    else\n        curIndex=0\n        while [[ $tmpIndex -le ${#tmpArray[@]}\
+    \ ]]; do\n            curIndex=$((curIndex + 1))\n            tmpIndex=$((curIndex))\n\
+    \            if [[ ${tmpSum} -eq 0 ]]; then\n                sortedArray+=(\"\
+    $tmpArray[${curIndex}]\")\n            elif [[ ${tmpSum} -eq 1 ]]; then\n    \
+    \            sortedArray+=(\"$tmpArray[${curIndex}]\")\n            else\n   \
+    \             if [[ ${tmpSum} -eq 0 ]]; then\n                    if [[ ${curIndex}\
+    \ -eq ${#tmpArray[@]} ]]; then\n                        sortedArray+=(\"$tmpArray[${curIndex}]\"\
+    )\n                    else\n                        tmpIndex=$((curIndex + 1))\n\
+    \                        sortedArray+=(\"$tmpArray[${curIndex}]\")\n         \
+    \               sortedArray+=(\"$tmpArray[${tmpIndex}]\")\n                  \
+    \  fi\n                elif [[ ${tmpSum} -eq 1 ]]; then\n                    if\
+    \ [[ ${curIndex} -eq ${#tmpArray[@]} ]]; then\n                        sortedArray+=(\"\
+    $tmpArray[${curIndex}]\")\n                    else\n                        tmpIndex=$((curIndex\
+    \ + 1))\n                        sortedArray+=(\"$tmpArray[${curIndex}]\")\n \
+    \                       sortedArray+=(\"$tmpArray[${tmpIndex}]\")\n          \
+    \          fi\n                else\n                    tmpIndex=$((curIndex\
+    \ + 1))\n                    sortedArray+=(\"$tmpArray[${curIndex}]\")\n     \
+    \               sortedArray+=(\"$tmpArray[${tmpIndex}]\")\n                  \
+    \  sortedArray+=(\"$tmpArray[${curIndex}]\")\n                fi\n           \
+    \ fi\n        done\n    fi\n    echo ${sortedArray[@]}", "    local _sorted=\"\
+    $1\"\n    local _sum=\"$2\"\n    local _first=\"$(eval echo \"$3\" | grep -o \"\
+    [0-9]*\")\"\n    local _last=\"$(eval echo \"$4\" | grep -o \"[0-9]*\")\"\n  \
+    \  local _index=\"$5\"\n    local _cnt=\"$(eval echo \"$6\" | grep -o \"[0-9]*\"\
+    )\"\n    local _cos=0\n    local _last1=\"$_first\"\n    local _last2=\"$_last\"\
+    \n    local _first1=\"$(eval echo \"$7\" | grep -o \"[0-9]*\")\"\n    local _first2=\"\
+    $(eval echo \"$8\" | grep -o \"[0-9]*\")\"\n    local _first3=\"$(eval echo \"\
+    $9\" | grep -o \"[0-9]*\")\"\n    local _first4=\"$(eval echo \"$10\" | grep -o\
+    \ \"[0-9]*\")\"\n    local _last3=\"$(eval echo \"$11\" | grep -o \"[0-9]*\")\"\
+    \n    local _last4=\"$(eval echo \"$12\" | grep -o \"[0-9]*\")\"\n    local _first5=\"\
+    $(eval echo \"$13\" | grep -o \"[0-9]*\")\"\n    local _first6=\"$(eval echo \"\
+    $14\" | grep -o \"[0-9]*\")\"\n    local _last5=\"$(eval echo \"$15\" | grep -o\
+    \ \"[0-9]*\")\"\n    local _last6=\"$(eval echo \"$16\" | grep -o \"[0-9]*\")\"\
+    \n    local _first7=\"$(eval echo \"$17\" | grep -o \"[0-9]*\")\"\n    local _first8=\"\
+    $(eval echo \"$18\" | grep -o \"[0-9]*\")\"\n    local _first9=\"$(eval echo \"\
+    $19\" | grep -o \"[0-9]*\")\"\n    local _first10=\"$(eval echo \"$20\" | grep\
+    \ -o \"[0-9]*\")\"\n    local _last7=\"$(eval echo \"$21\" | grep -o \"[0-9]*\"\
+    )\"\n    local _last8=\"$(eval echo \"$22\" | grep -o \"[0-9]*\")\"\n    local\
+    \ _last9=\"$(eval echo \"$23\" | grep -o \"[0-9]*\")\"\n    local _last10=\"$(eval\
+    \ echo \"$24\" | grep -o \"[0-9]*\")\"\n    if [[ \"$_sum\" == \"$_cnt\" ]]; then\n\
+    \      if [ \"$_sum\" -eq \"$_cnt\" ] && [ \"$_sum\" -lt \"$_last\" ]; then\n\
+    \        (( _cos += $_index ))\n        ", "  local array=${1:-}\n  local length=${#array}\n\
+    \  if [ $length -lt 1 ]; then\n    return 0\n  fi\n  local sum=$(sum_array \"\
+    ${array[@]}\")\n  if [ $sum -gt 0 ] && [ $sum -le $((length-1)) ]; then\n    local\
+    \ sorted=()\n    for ((i=0; i<length; i++)) ; do\n      local value=${array[$i]}\n\
+    \      if [ $((i % 2)) -eq 1 ]; then\n        sorted+=(${value})\n      elif [\
+    \ $((i % 2)) -eq 0 ]; then\n        sorted+=('\"' ${value} '\"')\n      fi\n \
+    \   done\n    local output\n    IFS=' '\n    for ((i=0; i<length; i++)) ; do\n\
+    \      output+=(\"${sorted[$i]}\")\n    done\n    echo \"${output[@]}\"\n  else\n\
+    \    local output\n    IFS=' '\n    for ((i=0; i<length; i++)) ; do\n      output+=(${array[$i]})\n\
+    \    done\n    echo \"${output[@]}\"\n  fi", "    local -n arr=$1\n    # Sort\
+    \ the array\n    local i=0 j=1\n    local -a arr2\n    local -a sorted\n    while\
+    \ [[ $j -le ${#arr[@]} ]]; do\n        arr2[i]=\"${arr[$j-1]}\"\n        sorted[i]=\"\
+    ${arr[$j]}\"\n        (( i++ ))\n        (( j++ ))\n    done\n    # sort array\
+    \ in ascending order if the sum is odd, sort it in descending order if the sum\
+    \ is even\n    local sum=${arr2[0]}\n    (( i-- ))\n    local -a tmp\n    for\
+    \ i in $(( $i + 1 )); do\n        tmp[i]=`expr $tmp[i] + $tmp[i-1]`\n    done\n\
+    \    local -n res=arr2\n    for i in $(( ${#arr[@]} - 1 )); do\n        tmp[i]=${sorted[$i]}\n\
+    \    done\n    for i in $(( $i + 1 )); do\n        if [[ $sum -eq 0 ]]; then\n\
+    \            tmp[i]=${sorted[i]}\n        elif [[ $sum -ne 0 ]]; then\n      \
+    \      tmp[i]=${sorted[i]}\n            tmp[i-1]=${sorted[$(( $i - 1 ))]}\n  \
+    \      fi\n        (( sum-- ))\n    done\n    res=( \"${res[@]}\" )\n    for i\
+    \ in $(( ${#arr[@]} - 1 )); do\n        res[$i]=${tmp[$i]}\n    done", "    local\
+    \ array=$1\n    local sorted_list=\"\"\n    local i=$((${#array[@]}-1))\n    local\
+    \ sum\n    local last\n    local j\n    local temp\n    local first\n\n    echo\
+    \ \"$array\" | while read line; do\n        sum=0\n        while (( i < 0 )) ;\
+    \ do\n            (( i++ ))\n            (( sum += ${array[$i]} ))\n        done\n\
+    \        last=${array[i]}\n        first=${array[0]}\n        (( array[i] = last\
+    \ ))\n        (( array[0] = first ))\n\n        j=$((${#array[@]}-2))\n      \
+    \  while (( j >0 )); do\n            temp=${array[$j]}\n            (( array[$j]\
+    \ = last ))\n            (( array[$j-1] = first ))\n            (( sum += temp\
+    \ ))\n            (( array[$j+1] = last ))\n            (( array[$j] = first ))\n\
+    \            (( j-- ))\n        done\n\n        sorted_list=\"${sorted_list} \\\
+    \"${sum}\\\"\"\n    done\n    echo \"$sorted_list\"", "        local array=\"\
+    $1\"\n        echo \"${array//[!0-9]}\"\n        # bash can't handle negative\
+    \ values\n        # so remove them here", "    local sorted_list=$1\n\n    # Sort\
+    \ the list with arithmetic sort\n    local -a sorted_list=($(arithmetic_sort ${sorted_list[@]}))\n\
+    \    local result=$(printf '%s\\n' \"${sorted_list[@]}\")\n\n    # Sort with shell\n\
+    \    local -a sorted_list_shell=($(sort -n -t \\; -k 1,1 -k 2,2 -k 3,3 -k 4,4\
+    \ -k 5,5 \"${sorted_list[@]}\"))\n    local result_shell=$(printf '%s\\n' \"${sorted_list_shell[@]}\"\
+    )\n\n    # Print the result\n    printf 'result:\\n%s\\n' \"${result}\"\n    printf\
+    \ 'result_shell:\\n%s\\n' \"${result_shell}\"\n    printf 'sort_array result:\\\
+    n%s\\n' \"${result}\"\n    printf 'sort_array result_shell:\\n%s\\n' \"${result_shell}\"",
+  "  local -n arr=$1\n  local -a sorted\n  local -n last\n  sorted=()\n\n  IFS=$'\\\
+    n' read -ra arr <<< \"$arr\"\n\n  # sort array in ascending order if sum( first\
+    \ index value, last index value) is odd\n  local i\n  for ((i=0; i<${#arr[@]};\
+    \ i++))\n  do\n    local value=${arr[i]}\n    last=${arr[$((${#arr[@]}-1))]}\n\
+    \    if [[ $((${value}+${last})%2) -eq 0 ]]; then\n      sorted+=(\"$value\")\n\
+    \    fi\n  done\n\n  # sort array in descending order if sum( first index value,\
+    \ last index value) is even\n  i=${#arr[@]}\n  for ((i=0; i<${#arr[@]}; i++))\n\
+    \  do\n    local value=${arr[i]}\n    last=${arr[$((${#arr[@]}-1))]}\n    if [[\
+    \ $((${value}+${last})%2) -eq 1 ]]; then\n      sorted+=(\"$value\")\n    fi\n\
+    \  done\n\n  printf '%s\\n' \"${sorted[@]}\"", "  # Convert string input into\
+    \ array\n  input=($1)\n  # Sum array (add them all up)\n  sum_array=$(echo \"\
+    ${input[*]}\" | sum)\n  # Compare sum (odd/even) to the length of the array\n\
+    \  if [ \"${sum_array%?}\" = \"0\" ]; then\n    # Sort array in ascending order\n\
+    \    arr=($(sort -n -k 1 \"${input[@]}\" | awk '{print $1}'))\n  else\n    # Sort\
+    \ array in descending order\n    arr=($(sort -n -k 6 \"${input[@]}\" | awk '{print\
+    \ $1}'))\n  fi\n  echo -n ${arr[@]}", "    local n=$1\n    local sorted_list\n\
+    \    local sum\n    local len\n    local odd_sum\n    local even_sum\n    local\
+    \ min_index\n    local max_index\n\n    sorted_list=$1\n    sum=$(expr $n + '0')\n\
+    \    len=${#sorted_list[@]}\n    odd_sum=$(expr $sum / 2)\n    even_sum=$(expr\
+    \ $sum - $odd_sum)\n\n    if [ $len -gt 0 ] ; then\n        min_index=0\n    \
+    \    max_index=$(( len - 1 ))\n\n        while  [ $min_index -lt $max_index ]\
+    \ ; do\n            if [[ $sorted_list[$min_index] -lt $sorted_list[$max_index]\
+    \ ]] ; then\n                (( odd_sum += $sorted_list[$min_index] ))\n     \
+    \           (( sum -= $sorted_list[$min_index] ))\n                (( sorted_list[$min_index]\
+    \ = sorted_list[$max_index] ))\n                (( sorted_list[$max_index] = sorted_list[$min_index]\
+    \ ))\n                (( len --))\n            else\n                (( even_sum\
+    \ += $sorted_list[$min_index] ))\n                (( sum -= $sorted_list[$min_index]\
+    \ ))\n                (( sorted_list[$min_index] = sorted_list[$max_index] ))\n\
+    \                (( sorted_list[$max_index] = sorted_list[$min_index] ))\n   \
+    \             (( len --))\n            fi\n        done\n    fi\n\n    echo $sorted_list",
+  "    local arr\n    arr=${1// /$'\\n'}\n    local sum\n    sum=$(IFS=+ read -rs\
+    \ \"$arr\" <<< \"$arr\")\n    local length\n    length=${#arr}\n    if (( $(echo\
+    \ \"$sum % 2\" | bc) )) ; then\n        local tmp idx\n        idx=0\n       \
+    \ while (( idx < length )); do\n            tmp=${arr[idx]}\n            arr[idx]=${arr[length-1]}\n\
+    \            arr[$(( ${#arr[@]} - 1 ))]=${tmp}\n            (( idx += 1 ))\n \
+    \       done\n    else\n        local tmp idx\n        idx=0\n        while ((\
+    \ idx < length )); do\n            tmp=${arr[idx]}\n            arr[idx]=${arr[$((\
+    \ length - 1 ))]}\n            arr[$(( ${#arr[@]} - 1 ))]=${tmp}\n           \
+    \ (( idx += 1 ))\n        done\n    fi\n    echo \"${arr[@]}\"", "    if [[ \"\
+    ${#1}\" -eq 0 ]]; then\n        echo \"[]\"\n        return\n    fi\n    # sort\
+    \ -n will sort the array in numerical order\n    # sort -g for GNU sort sorts\
+    \ in numerical order and uses the first and last values as keys\n    # sort -k\
+    \ means sort only on the first field\n    sort -n -g \\\n        <(echo \"${1}\"\
+    \ | sed 's/ /\",\"/g') | \n        sed 's/,$//' |\n        sort -k 1 -n -g | \n\
+    \        sed 's/,$//' |\n        tr '\\n' ' ' |\n        sed 's/^/\"/; s/$/\"\
+    /' |\n        sed 's/^/\"/; s/$/\"/' |\n        sed 's/^/\"/; s/$/\"/' |\n   \
+    \     sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n       \
+    \ sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed\
+    \ 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"\
+    /\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"\
+    /' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n\
+    \        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n    \
+    \    sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed\
+    \ 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"\
+    /\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"\
+    /' |\n        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n\
+    \        sed 's/^/\"/\"; s/$/\"/' |\n        sed 's/^/\"/\"; s/$/\"/' |\n    \
+    \    sed 's/^/\"/\"", "        local arr=$1\n\n        local output=\"\"\n\n \
+    \       if [[ ${#arr} -eq 0 ]]; then\n                echo \"[]\"\n          \
+    \      exit\n        fi\n\n        if [[ ${arr[0]} -eq 0 ]]; then\n          \
+    \      echo \"[\\\"${arr}\"]\"\n                exit\n        fi\n\n        local\
+    \ j=0\n        local k=0\n\n        local flag=0\n        local i\n        local\
+    \ sum\n        local tmp\n        local output1=\"\"\n        local output2=\"\
+    \"\n        local output3=\"\"\n\n        for i in ${arr[@]}; do\n           \
+    \     if [ $i -lt 0 ]; then\n                        flag=1\n                fi\n\
+    \                if [ $i -gt 0 ]; then\n                        if [ $flag -eq\
+    \ 1 ]; then\n                                sum=$(( ${i}+${arr[j-1]} ))\n   \
+    \                             flag=0\n                        else\n         \
+    \                       sum=$(( ${i}+${arr[j]} ))\n                        fi\n\
+    \                else\n                        sum=$(( ${i}+${arr[j]} ))\n   \
+    \             fi\n                if [ $sum -gt 0 ]; then\n                  \
+    \      output1=\"${output1}\\\"${i}\\\"\"\n                fi\n              \
+    \  if [ $sum -eq 0 ]; then\n                        output1=\"${output1}\\\"${i}\\\
+    \"\"\n                        output2=\"${output2}\\\"${i}\\\"\"\n           \
+    \     else\n                        output3=\"${output3}\\\"${i}\\\"\"\n     \
+    \           fi\n                j=$(( j+1 ))\n        done\n\n        if [ $sum\
+    \ -eq 0 ]; then\n                output1=\"${output1}\\\"${arr[j]}\\\"\"\n   \
+    \             output2=\"${output2}\\\"${arr[j]}\\\"\"\n                output3=\"\
+    ${output3}\\\"${arr[j]}\\\"\"\n        fi\n\n        echo \"[${output1},${output2},${output3}]\"",
+  "    local arr=\"$1\"\n    local sum_first\n    local sum_last\n    local arr_size\n\
+    \    local min_first\n    local max_last\n    local i\n    sum_first=$(( ${arr:0:1}\
+    \ + ${arr:1:1} ))\n    sum_last=$(( ${arr:${#arr}-1:1} + ${arr:0:${#arr}-1} ))\n\
+    \n    arr_size=$(( ${#arr} - 1 ))\n    if [ $[ $(( ${sum_first} % 2 )) -ne 0 ];\
+    \ then\n        arr_size=$(($arr_size - 1))\n    fi\n    if [ $(($arr_size % 2\
+    \ )) -ne 0 ]; then\n        arr_size=$(($arr_size - 1))\n    fi\n    if [ $((\
+    \ $arr_size > 0 )) -eq 0 ]; then\n        arr_size=1\n    fi\n    if [ $(( $arr_size\
+    \ < 0 )) -eq 0 ]; then\n        arr_size=$(expr $arr_size + 1)\n    fi\n\n   \
+    \ arr_size=$(( ${arr_size} + 1 ))\n    min_first=${arr:0:$arr_size}\n    max_last=${arr:${#arr}:$arr_size}\n\
+    \n    for (( i=1; $i <= $arr_size; i++ )); do\n        if [ $(( ${arr:$i:1} +\
+    \ ${arr:$(( $i + 1 )):$arr_size:1} )) -gt $sum_first ]; then\n            if [\
+    \ $(( ${arr:$i:1} + ${arr:$(( $i + 1 )):$arr_size:1} )) -gt $sum_last ]; then\n\
+    \                if [ $(( ${arr:$i:1} + ${arr:$(( $i + 1 )):$arr_size:1} )) -eq\
+    \ $sum_last ]; then\n                    arr=`echo \"${arr}\" | sed -e \"s/${arr:$i:1}//\"\
+    \ -e \"s/${arr:$(( $i + 1 )):$arr_size:1}//\"`\n                else\n       \
+    \             arr=`echo \"${arr}\" | sed -e \"s/${arr:$i:1}//\" -e \"s/${arr:$((\
+    \ $i + 1 )):$arr_size:1}//\"`\n                fi\n            else\n        \
+    \        arr=`echo \"${arr}\" | sed -e \"s/${arr:$i:1}//\" -e \"s/${arr:$(( $i\
+    \ + 1 )):$arr_size:1}//\"`\n            fi\n        fi\n    done\n\n    arr=\"\
+    $arr 0\"\n    return $arr", "    local -n arr=$1\n    IFS=' ' read -ra items <<<\
+    \ \"$arr\"\n\n    local -n first=\"${items[@]:0:2}\"\n    local -n last=\"${items[@]:2:2}\"\
+    \n    local -n sum=\"${items[0]} ${items[-1]}\"\n\n    local -n max_sum=\"${last}\
+    \ ${first}\"\n    local -n min_sum=\"${first} ${last}\"\n\n    if [[ $sum -eq\
+    \ 0 ]]; then\n        echo \"$arr\"\n        return\n    fi\n\n    if [[ $sum\
+    \ -gt 0 ]]; then\n        if ((sum % 2 == 1)); then\n            echo \"${items[@]}\"\
+    \n        else\n            echo \"${items[@]::-1}\"\n        fi\n        return\n\
+    \    fi\n\n    if [[ $sum -gt -1 ]]; then\n        if ((sum % 2 == 0)); then\n\
+    \            echo \"${items[@]}\"\n        else\n            echo \"${items[@]::-1}\"\
+    \n        fi\n        return\n    fi\n\n    local -n len=\"${#items[@]}\"\n  \
+    \  if [[ $len -eq 0 ]]; then\n        echo \"$arr\"\n        return\n    fi\n\n\
+    \    local -n max\n    local -n min\n\n    # find max sum\n    for ((i=1; i<$len;\
+    \ i++)); do\n        local -n curr=\"${items[$i]}\"\n        if ((sum < max_sum));\
+    \ then\n            max_sum=$curr\n        elif ((sum > max_sum)); then\n    \
+    \        max_sum=$max_sum\n        fi\n    done\n\n    # find min sum\n    for\
+    \ ((i=1; i<$len; i++)); do\n        local -n curr=\"${items[$i]}\"\n        if\
+    \ ((sum > min_sum)); then\n            min_sum=$curr\n        elif ((sum < min_sum));\
+    \ then\n            min_sum=$min_sum\n        fi\n    done\n\n    local -n arr2=\"\
+    ${arr::-1}\"\n    arr2=\"${arr2// /}\"\n    arr2=\"${arr2//$'\\n'/}\"\n    arr2=\"\
+    ${arr2//$'\\t'/}\"\n    echo \"$arr2\"", "        local array\n        array=$1\n\
+    \        local tmp sum1\n        sum1=0\n        for index in $array; do\n   \
+    \             sum1=$((sum1+index))\n        done\n        if (( sum1 % 2 )); then\n\
+    \                printf '%s' \"$array\"\n        else\n                local tmp2\n\
+    \                tmp2=$array\n                tmp2=${tmp2:0:(-1)}\n          \
+    \      tmp2=${tmp2:(-1)}\n                printf '%s' \"$tmp2\"\n        fi",
+  "    local -n arr=$1\n    if [ \"$#\" -ne 1 ]\n    then\n        echo \"Error: Wrong\
+    \ number of arguments\";\n        return 1;\n    fi\n    local sorted=()\n   \
+    \ local -a sums=()\n    local i\n    local -a result=()\n    local -a tmp\n  \
+    \  local -a tmp2\n    # sort the array\n    for ((i = 0; i < ${#arr[@]}; i++));\
+    \ do\n        tmp=\"${arr[$i]}\"\n        tmp2=\"${tmp} 0\"\n        sums+=(\"\
+    $tmp2\")\n        sorted+=(\"$tmp2\")\n    done\n    for ((i = 0; i < ${#arr[@]};\
+    \ i++)); do\n        tmp=\"${arr[$i]}\"\n        tmp2=\"${tmp} 0\"\n        if\
+    \ [ \"$tmp2\" -lt \"$sums[0]\" ] || [ \"$tmp2\" -gt \"$sums[-1]\" ]\n        then\n\
+    \            tmp2=\"${tmp2} 1\"\n            sums+=(\"$tmp2\")\n            sorted+=(\"\
+    $tmp2\")\n        else\n            tmp2=\"${tmp2} 0\"\n            sums+=(\"\
+    $tmp2\")\n            sorted+=(\"$tmp2\")\n        fi\n    done\n    # sort the\
+    \ array in descending order\n    for ((i = ${#arr[@] - 1}; i >= 0; i--)); do\n\
+    \        tmp=\"${arr[$i]}\"\n        tmp2=\"${tmp} 0\"\n        if [ \"$tmp2\"\
+    \ -gt \"$sums[0]\" ] || [ \"$tmp2\" -lt \"$sums[-1]\" ]\n        then\n      \
+    \      tmp2=\"${tmp2} 1\"\n            sums+=(\"$tmp2\")\n            sorted+=(\"\
+    $tmp2\")\n        else\n            tmp2=\"${tmp2} 0\"\n            sums+=(\"\
+    $tmp2\")\n            sorted+=(\"$tmp2\")\n        fi\n    done\n    # sort the\
+    \ array in ascending order\n    for ((i = 0; i < ${#arr[@]}; i++)); do\n     \
+    \   tmp=\"${arr[$i]}\"\n        tmp2=\"${tmp} 0\"\n        if [ \"$tmp2\" -lt\
+    \ \"$sums[0]\" ] || [ \"$tmp2\" -gt \"$sums[-1]\" ]\n        then\n          \
+    \  tmp2=\"${tmp2} 1\"\n            sums+=(\"$tmp2\")\n            sorted+=(\"\
+    $tmp2\")\n        else\n            tmp2=\"${tmp2} 0\"\n            sums+=(\"\
+    $tmp2\")\n            sorted+=(\"$tmp2\")\n        fi\n    done\n    # reverse\
+    \ the array\n    for ((i = 0; i < ${#arr[@]}; i++)); do\n        tmp=\"${arr[$i]}\"\
+    \n        tmp2=\"${tmp} 0\"\n        if [ \"$tmp2\" -lt \"$sums[0]\" ", "  local\
+    \ __tmp=$1\n  # echo $__tmp\n  # echo $__tmp | sed -e 's/^ *//' -e 's/ *$//'\n\
+    \  __tmp=`echo $__tmp | sed -e 's/^ *//' -e 's/ *$//'`\n  # echo $__tmp\n  # echo\
+    \ $__tmp | sed -e 's/^ *//' -e 's/ *$//'\n  local __lst=()\n  local __sum=0\n\
+    \  # echo ${__tmp}\n  local __index=0\n  local __total=0\n  for __item in $__tmp;\
+    \ do\n    __index=$((${__index}+1))\n    __total=$((${__total}+${__item}))\n \
+    \ done\n  if [ \"${__total}\" -gt 0 ]; then\n    if [ \"${__total}\" -eq \"1\"\
+    \ ]; then\n      # ${__lst[0]}='\"'\n      __lst[0]=\"${__total}\"\n    else\n\
+    \      # ${__lst[0]}=\"${__total}\"\n      __lst[0]=\"${__total}\"\n    fi\n \
+    \ fi\n  if [ \"$__total\" -gt 0 ]; then\n    if [ \"${__total}\" -eq \"1\" ];\
+    \ then\n      # ${__lst[${#__lst[@]}-1]}='\"'\n      __lst[${#__lst[@]}-1]=\"\
+    ${__total}\"\n    else\n      # ${__lst[${#__lst[@]}-1]}=\"${__total}\"\n    \
+    \  __lst[${#__lst[@]}-1]=\"${__total}\"\n    fi\n  fi\n  # echo ${__lst[@]}\n\
+    \  __tmp=()\n  for __item in ${__lst[@]}; do\n    if [ \"$__item\" -ge \"0\" ];\
+    \ then\n      # ${__tmp[@]}=\"\\\"${__item}\\\"\"\n      __tmp[${#__tmp[@]}-1]=\"\
+    ${__item}\"\n    fi\n  done\n  # echo ${__tmp[@]}\n  __tmp=`echo \"${__tmp[*]}\"\
+    `\n  # echo ${__tmp[*]}\n  return 0", "    local a sum\n    local tmp flag=0\n\
+    \    for a in $@; do\n        if [ $flag -eq 1 ]; then\n            sum=$a\n \
+    \       else\n            sum=$((sum+$a))\n        fi\n        flag=$((flag+1))\n\
+    \    done\n    if [ $sum -le 1 ]; then\n        tmp=`echo $@ | sed -r \"s/^([0-9]+).*$/\\\
+    1/g\"`\n        echo -n \"$tmp\"\n    elif [ $sum -ge 2 ]; then\n        tmp=`echo\
+    \ $@ | sed -r \"s/^([0-9]+).*$/\\1/\" | sed -r \"s/([0-9]+) ([0-9]+)$/\\2/g\"\
+    `\n        echo -n \"$tmp\"\n    else\n        echo \"$@\"\n    fi", "    local\
+    \ num_array=($*)\n    local sum=$(echo \"${num_array[@]}\" | tr ' ' '\\n' | sort\
+    \ | uniq)\n    local num_array=($(echo \"${num_array[@]}\" | tr ' ' '\\n' | sort\
+    \ | uniq | sed 's/^ *//' | sed 's/ *$//'))\n    local last_item=$(echo \"${num_array[@]}\"\
+    \ | tail -1)\n    local first_item=$(echo \"${num_array[@]}\" | head -1)\n   \
+    \ local sum_of_first_and_last=$(echo \"${num_array[@]}\" | cut -d ' ' -f 1+2)\n\
+    \    if [[ $sum % 2 -eq 1 ]]; then\n        local temp_array=($(echo \"${num_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"${temp_array[@]}\"\
+    \ | tr ' ' '\\n' | sort -n))\n        local temp_array=($(echo \"", "    local\
+    \ item\n    for (( i = 1 ; i <= \"$#\"; i++ )); do\n        item=\"$(eval \"echo\
+    \ \\${$i}\")\"\n        if (( \"$item\" == \"$item$item\" ))\n        then\n \
+    \           echo \"$item\"\n        fi\n    done", "    local IFS='  '\n    local\
+    \ sorted\n    local num\n    local str\n    local i\n\n    for str in \"$@\";\
+    \ do\n        num=$(expr \"$str\" : '^ *[0-9]+')\n        if [[ $num -gt 0 ]];\
+    \ then\n            sorted+=(\"$str\")\n        else\n            sorted+=(\"\
+    $num\")\n        fi\n    done\n\n    echo \"${sorted[*]}\"", "    local str=$1\n\
+    \    local sorted_array=()\n\n    for i in `echo $str |sed 's/ /, /g'`; do\n \
+    \       local first=0\n        local last=0\n        local sum_first=0\n     \
+    \   local sum_last=0\n        local tmp_array=()\n\n        for j in `echo $i\
+    \ |sed 's/ /, /g'`; do\n            if [ $(( $j -ne 0 )) -eq $(( $i - 1 )) ];\
+    \ then\n                local j=$(( $j + 1 ))\n                if [ $(($j % 2))\
+    \ -eq 0 ]; then\n                    tmp_array+=( $j )\n                else\n\
+    \                    tmp_array+=( $j )\n                    tmp_array+=( $(( $j\
+    \ - 1 )) )\n                fi\n                sum_first=$(( $sum_first + $j\
+    \ ))\n            else\n                if [ $(( $j % 2)) -eq 0 ]; then\n    \
+    \                tmp_array+=( $j )\n                    sum_last=$(( $sum_last\
+    \ + $j ))\n                else\n                    tmp_array+=( $j )\n     \
+    \               sum_last=$(( $sum_last + $j ))\n                    tmp_array+=(\
+    \ $(( $j + 1 )) )\n                    sum_first=$(( $sum_first + $j ))\n    \
+    \            fi\n            fi\n        done\n\n        if [ $(( $sum_last %\
+    \ 2)) -eq 0 ]; then\n            tmp_array+=( $sum_last )\n        else\n    \
+    \        tmp_array+=( $sum_last )\n            tmp_array+=( $(( $sum_last - 1\
+    \ )) )\n        fi\n\n        sorted_array+=( ${tmp_array[*]} )\n    done\n\n\
+    \    for j in `echo $str |sed 's/ /, /g'`; do\n        if [ $(( $j -ne 0 )) -eq\
+    \ $(( $sorted_array[-1] - 1 )) ]; then\n            local j=$(( $j + 1 ))\n  \
+    \          if [ $(($j % 2)) -eq 0 ]; then\n                sorted_array+=( $j\
+    \ )\n            else\n                sorted_array+=( $j )\n                sorted_array+=(\
+    \ $(( $j - 1 )) )\n            fi\n        fi\n    done\n\n    echo \"${sorted_array[*]}\"",
+  "    local a=$1 b=${a[0]} i=0 sum1=$(( $# % 2 )) sum2=$(( $# % 2 != 0 ))\n    for\
+    \ (( j=1 ; j<$# ; j+=2 )) ; do\n        if [ \"$sum1\" = \"1\" ] ; then\n    \
+    \        sum1=$(expr $j % 2)\n        elif [ \"$sum2\" = \"1\" ] ; then\n    \
+    \        sum2=$(expr $j % 2)\n        fi\n        a[$(( sum2 > sum1 ? sum2:sum1\
+    \ ))]=$(expr ${b} + $j)\n        b=$j\n        (( i=(i+1) ))\n    done\n    echo\
+    \ $a", "\tlocal numbers=( $( echo \"$1\" | tr \" \" \"\\n\" ) )\n\tlocal length=${#numbers[@]}\n\
+    \tlocal sort_count=0\n\tlocal numbers_string=''\n\tlocal sort_begin=0\n\tlocal\
+    \ sort_end=0\n\tlocal sort_end2=0\n\tlocal sort_begin2=0\n\tlocal sort_temp=0\n\
+    \tlocal sort_result=''\n\tlocal numbers_sorted='false'\n\tif [ $length -lt 2 ];\
+    \ then\n\t\treturn $numbers\n\tfi\n\tfor (( sort_count = 0; sort_count < length;\
+    \ sort_count++ )); do\n\t\tsort_begin=$sort_end\n\t\tsort_end=$(expr $sort_begin\
+    \ + 1 )\n\t\tsort_begin2=$sort_end2\n\t\tsort_end2=$(expr $sort_begin2 + 1 )\n\
+    \t\tsort_temp=${numbers[$sort_begin]} ${numbers[$sort_end]} ${numbers[$sort_begin2]}\
+    \ ${numbers[$sort_end2]}\n\t\tif [ \"$sort_temp\" = '\"5\"' ] || [ \"$sort_temp\"\
+    \ = '\"6\"' ]; then\n\t\t\tsort_temp=${numbers[$sort_begin]} ${numbers[$sort_end]}\
+    \ ${numbers[$sort_begin2]} ${numbers[$sort_end2]}\n\t\t\tsort_result=\"$sort_result$sort_temp\"\
+    \n\t\t\tsort_temp=0\n\t\telse\n\t\t\tsort_result=\"$sort_result${numbers[$sort_begin]}${numbers[$sort_end]}\"\
+    \n\t\tfi\n\tdone\n\tsort_result=$(echo \"$sort_result\" | tr \" \" \"\\n\")\n\t\
+    sort_result=$(echo \"$sort_result\" | sort -n -r)\n\tif [ \"$sort_begin\" != \"\
+    $sort_end\" ]; then\n\t\tnumbers_string=$(echo \"${numbers[@]}\" | sed \"s:^\\\
+    ($sort_begin\\)$sort_end:\\1$sort_end2:\")\n\t\tnumbers_string=\"$numbers_string$sort_result\"\
+    \n\t\tnumbers_string=\"$numbers_string$(echo \"${numbers[@]}\" | sed \"s:^\\($sort_end\\\
+    )$sort_begin:\\1$sort_begin2:\")\n\t\tnumbers_string=\"$numbers_string$sort_result\"\
+    \n\t\tnumbers_string=\"$numbers_string$(echo \"${numbers[@]}\" | sed \"s:^$sort_begin:\\\
+    1$sort_begin:\" | sed \"s:^$sort_end:\\1$sort_end:\" | sed \"s:^$sort_begin2:\\\
+    1$sort_begin2:\" | sed \"s:^$sort_end2:\\1$sort_end2:\")\n\t\tnumbers_", "   \
+    \ local IFS= read -r -a array <<< \"$1\"\n    local sum=\"$(( ( ${array[0]} +\
+    \ ${array[${#array[@]} -1]} ) % 2 ))\"\n\n    local first_index_value=${array[0]}\n\
+    \    local last_index_value=${array[${#array[@]} -1]}\n    local i=0\n    local\
+    \ j=1\n    local result=()\n\n    while [ $i -lt ${#array[@]} ] && [ $j -lt ${#array[@]}\
+    \ ]; then\n        if [ $sum -eq 0 ]; then\n            result+=(\"${array[j]}\"\
+    )\n            (( j++ ))\n        fi\n\n        if [ $sum -eq 1 ]; then\n    \
+    \        result+=(\"${array[i]}\")\n            (( i++ ))\n        fi\n\n    \
+    \    sum=$(( $sum % 2 ))\n    done\n\n    echo \"${result[@]}\"", "  local input\n\
+    \  if [[ -z $1 ]]; then\n    return 0\n  fi\n\n  input=$1\n  local input_array=(${input//[[:space:]]/})\n\
+    \  local sorted_array=()\n\n  for index in ${!input_array[@]}; do\n    local tmp_array=($input[@$index])\n\
+    \    if [[ \"$(( index * 2 ))\" -eq \"$index\" ]]; then\n      tmp_array+=( \"\
+    $input_array[$index]\" )\n      tmp_array+=( \"$input_array[$(( index + 1 ))]\"\
+    \ )\n    elif [[ \"$(( index + 1 ))\" -eq \"$index\" ]]; then\n      tmp_array+=(\
+    \ \"$input_array[$index]\" )\n      tmp_array+=( \"$input_array[$(( index - 1\
+    \ ))]\" )\n    else\n      tmp_array+=( \"$input_array[$index]\" )\n      tmp_array+=(\
+    \ \"$input_array[$(( index - 1 ))]\" )\n      tmp_array+=( \"$input_array[$((\
+    \ index + 1 ))]\" )\n    fi\n    sorted_array+=(\"${tmp_array[@]}\")\n  done\n\
+    \n  local final_array=()\n  local last_index=0\n  local tmp=\"\"\n  for index\
+    \ in ${!sorted_array[@]}; do\n    if (( last_index + 1 != index )); then\n   \
+    \   tmp=$sorted_array[last_index]\n    fi\n    final_array+=( \"\\\"$tmp\\\"\"\
+    \ ); last_index=index\n  done\n  final_array+=( \"\\\"$sorted_array[last_index]\\\
+    \"\" ); final_array=( \"${final_array[@]}\" )\n  local result=\"\"\n  for index\
+    \ in ${!final_array[@]}; do\n    result+=( \"${final_array[$index]}\" )\n  done\n\
+    \  printf '%s\\n' \"${result[@]}\"", "  local str=\"$1\"\n  local sum\n  local\
+    \ i\n  local result\n  IFS=' '\n  sum=$(cat <<< \"$str\" | tr '[:upper:]' '[:lower:]'\
+    \ | \\\n\tsed -n 's/^ *\\([0-9]*\\)$/\\1/p' | wc -w)\n  if [[ $sum -gt 1 ]]; then\n\
+    \    for i in $(seq 0 $((sum-1)); do\n      result=$(echo \"$str\" | sed -n \"\
+    s/^ *\\([0-9]*\\)$/\\1/p\" | tail -1)\n      if [[ $result != \"\" ]]; then\n\
+    \        sort_array \"$(echo \"$result\" \"$str\" | head -1)\"\n      else\n \
+    \       break\n      fi\n    done\n  fi\n  IFS=' ' >&\"${PIPESTATUS[@]}\"\n  echo\
+    \ \"$str\"", "  local array=\"$1\"\n  local sum=0\n  local sorted=0\n  local count=0\n\
+    \  local sorted=0\n  local i=0\n\n  for item in $array; do\n    sum=$((sum+item))\n\
+    \    ((i==0))\n  done\n\n  if [ $sum -eq 0 ]; then\n    echo \"[]\"\n  else\n\
+    \    while [ $i -le $(($#array)) ]; do\n      local  first=\"$i\"\n      local\
+    \  last=-1\n      local  sum=$((sum-$first))\n      ((i--))\n      if [ $first\
+    \ -eq 0 ]; then\n        ((sorted++))\n      else\n        if [ $sum -eq 0 ];\
+    \ then\n          echo \"${array[first]}${array[last]}\"\n        fi\n\n     \
+    \   if [ $sum -ne 0 ] && [ $sum -gt 0 ]; then\n          ((count++))\n       \
+    \   while [ $i -le $(($#array)) ]; do\n            ((last--))\n            sum=$((sum-$last))\n\
+    \            if [ $sum -eq 0 ]; then\n              echo \"${array[first]}${array[last]}\"\
+    \n            fi\n          done\n        fi\n      fi\n    done\n  fi", "  local\
+    \ sorted_array=\"$1\"\n  local sorted_array_length=${#sorted_array[@]}\n  if ((\
+    \ sorted_array_length > 0 )); then\n    for (( i=0; i<$sorted_array_length; i++\
+    \ )); do\n      if (( $i % 2 == 0 )); then\n        sorted_array_length=$(( $sorted_array_length\
+    \ - 1 ))\n      else\n        if (( $sorted_array_length > 0 )); then\n      \
+    \    sorted_array_length=$(( $sorted_array_length - 1 ))\n        else\n     \
+    \     sorted_array_length=$(( $sorted_array_length + 1 ))\n        fi\n      \
+    \  sorted_array+=(\"$sorted_array[$i]\")\n      fi\n    done\n  fi\n  printf '%s\\\
+    n' \"${sorted_array[@]}\"", "    local array=\"$1\"\n    local sum\n    sum=$(echo\
+    \ $((${#array[@]} * 2)) |bc -l |awk '{print $1}')\n    if [ $((sum % 2)) -eq 1\
+    \ ]; then\n        echo \"${array[@]}\"\n    else\n        echo \"${array[@]#*$((sum\
+    \ % 2))}\"\n    fi", "    local arr=( \"${@}\" )\n    local -A tmp_arr\n    for\
+    \ x in \"${arr[@]}\"; do\n        tmp_arr[$x]=1\n    done\n    local i\n    for\
+    \ ((i=0; i<${#tmp_arr[@]}; i++))\n    do\n        tmp_arr[$i]=\"\\\"$i\\\"\" \n\
+    \    done\n    local tmp\n    for ((i=(${#tmp_arr[@]}-2)); i>=0; i--)\n    do\n\
+    \        tmp=${tmp_arr[$i]}\n        tmp_arr[$i]=${tmp_arr[$i+1]}\n        tmp_arr[$i+1]=${tmp}\n\
+    \    done\n    local -n out=\n    out=( \"${tmp_arr[@]}\" )\n    eval \"sort -gk\
+    \ \\\"${out[@]}\\\"\"", "\tlocal arr=( $1 )\n\tlocal size=${#arr[@]}\n\tlocal\
+    \ first_index=-1\n\tlocal last_index=-1\n\tlocal sum=0\n\tfor ((i=0; i<$size;\
+    \ i++))\n\tdo\n\t\t((sum+=${arr[i]}))\n\tdone\n\tlocal i\n\tif [ $((sum%2)) -eq\
+    \ 0 ]; then\n\t\tfor i in $(seq 0 $((size-1))); do\n\t\t\t((first_index=i))\n\t\
+    \t\tbreak\n\t\tdone\n\telse\n\t\tfor i in $(seq 0 $((size-1))); do\n\t\t\t((last_index=i))\n\
+    \t\t\tbreak\n\t\tdone\n\tfi\n\tarr=( \"${arr[@]}\" )\n\tlocal arr_tmp=( \"${arr[@]}\"\
+    \ )\n\tlocal res\n\tlocal res_size=$(( ($last_index+1) - $first_index + 1 ))\n\
+    \tres=( $(printf '%s\\n' \"${arr_tmp[@]}\" | sort -g | cut -d' ' -f ${first_index}-${last_index+1}\
+    \ ))\n\techo \"${res[@]}\"", "    local -n arr=$1\n\n    echo \"$arr\"|awk 'BEGIN{srand();\
+    \ \n\tfor(i=1;i<=NF;i++){\n\t\ta[i]=rand()*100000+100000; \n\t\tfor(j=0;j<=i;j++){\n\
+    \t\t\ta[j+1]=a[j]; \n\t\t}\n\t\ta[i+1]=a[i]; \n\t} \n\tfor(i=1;i<=NF;i++){\n\t\
+    \tprintf(\"%s \", a[i]);\n\t} \n\tprintf(\"\\n\");}'", "  local sorted_array\n\
+    \  local sorted_array_to_print\n  local i\n  sorted_array=()\n  local sum\n  sum=$1\n\
+    \  for i in $(seq 0 $((${#1}-1)) )\n  do\n    sorted_array_to_print=$(eval 'echo\
+    \ \"${sorted_array[$i]}\"')\n    if [[ -z \"$sorted_array_to_print\" ]]\n    then\n\
+    \      sorted_array_to_print=$(eval 'echo \"0\"')\n    fi\n    sum=$(( $sum +\
+    \ $i ))\n    sorted_array[$i]=\"$sorted_array_to_print\"\n  done\n\n  if [ $sum\
+    \ -gt 1 ]\n  then\n    sorted_array=( $(eval \"echo ${sorted_array[@]/#/${sorted_array[0]}\
+    \ }\" ) )\n  else\n    sorted_array=( $(eval \"echo ${sorted_array[@]/#/${sorted_array[${#sorted_array[@]}\
+    \ -1]} }\" ) )\n  fi\n\n  echo ${sorted_array[@]}", "    local array=$1\n    local\
+    \ sort_direction=1\n    local sorted_array\n    local sum\n    local i\n\n   \
+    \ if [ \"$#\" -lt 1 ]; then\n        echo \"Usage: $(basename $0) <space-separated\
+    \ integer>\"\n        return 1\n    fi\n\n    sorted_array=()\n    sum=$(printf\
+    \ '%s\\n' \"$array\" | xargs -n 1 sum)\n\n    if [ $sum -gt 0 ]; then\n      \
+    \  sort_direction=1\n    fi\n\n    if [ $sum -eq 0 ]; then\n        sort_direction=-1\n\
+    \    fi\n\n    for i in $(seq 0 $(( ${#array[@]} - 1 ))); do\n        local index=$((\
+    \ i + 1 ))\n        if [ $i -eq 0 ]; then\n            sorted_array+=$(echo $array\
+    \ | tr ' ' '\\n' | sort -n -k $sort_direction | head -1)\n        elif [ $i -eq\
+    \ $(( ${#array[@]} - 1 )) ]; then\n            sorted_array+=$(echo $array | tr\
+    \ ' ' '\\n' | sort -n -k $sort_direction | tail -1)\n        else\n          \
+    \  if [ $(( ${#array[@]} - 1 )) -gt 0 ]; then\n                if [ $i -gt $((\
+    \ ${#array[@]} - 1 )) ]; then\n                    sorted_array+=$(echo $array\
+    \ | tr ' ' '\\n' | sort -n -k $sort_direction | head -$(( i + 1 )))\n        \
+    \        elif [ $i -eq $(( ${#array[@]} - 1 )) ]; then\n                    sorted_array+=$(echo\
+    \ $array | tr ' ' '\\n' | sort -n -k $sort_direction | tail -$(( i + 1 )))\n \
+    \               else\n                    sorted_array+=$(echo $array | tr ' '\
+    \ '\\n' | sort -n -k $sort_direction | head -$(( i + 1 )) - | tail -$(( i - 1\
+    \ )) + 1)\n                fi\n            fi\n        fi\n    done\n    echo\
+    \ \"${sorted_array[@]}\"", "    local arr=( $1 )\n    sort -n -r\n    local sum=0\n\
+    \    local i=0\n    while (( i < ${#arr[@]} )); do\n        sum=$(( sum + ${arr[i]}\
+    \ ))\n        (( i++ ))\n    done\n    if [[ ${sum:-0}%2 -eq 0 ]]; then\n    \
+    \    echo ${arr[@]}\n    else\n        echo ${arr[@]}\n        echo ${arr[@]}\
+    \ |sort -rn\n    fi", "  local i\n  local array=\"$1\"\n  local sum\n  local first\n\
+    \  local last\n  local tmp\n\n  local n\n  local s\n  local e\n\n  declare -a\
+    \ arr\n  IFS=$'\\t' read -a arr <<< \"$array\"\n\n  n=${#arr[@]}\n  if ((n % 2));\
+    \ then\n    s='0'\n    e='1'\n  else\n    s='1'\n    e='0'\n  fi\n\n  sum=$(printf\
+    \ \"%s\" \"$e$s$s\" | bc -l)\n  first=$(printf \"%s\" \"$e$s$s\" | bc -l)\n  last=$(printf\
+    \ \"%s\" \"$e$s$s\" | bc -l)\n  for ((i = 0; $i < n; i+=2)); do\n    first=$(printf\
+    \ \"%s\" \"$e$s$s\" | bc -l)\n    tmp=${arr[i+1]}\n    arr[i+1]=${arr[i]}\n  \
+    \  arr[i]=$tmp\n  done\n\n  for ((i = n-1; i >= 0; i-=2)); do\n    last=$(printf\
+    \ \"%s\" \"$e$s$s\" | bc -l)\n    tmp=${arr[i-1]}\n    arr[i-1]=${arr[i]}\n  \
+    \  arr[i]=$tmp\n  done\n\n  echo \"${arr[@]}\"", "\tlocal arr=( \"${@}\" )\n\t\
+    # arr stores strings in $1, not integers\n\t# the string in $1 will be something\
+    \ like '5' not 5, we need to convert to int first\n\tarr=($(echo \"${arr[@]}\"\
+    \ | tr \" \" \"\\n\" | sort -n -g | head -n -1 | tr -d \"\\n\"))\n\tarr=($(echo\
+    \ \"${arr[@]}\" | tr \" \" \"\\n\" | sort -n -g | tail -n +2 | tr -d \"\\n\"))\n\
+    \techo \"${arr[@]}\"", "\tlocal arr=( $1 )\n\tlocal sum=$(( ${arr[0]}+${arr[@]:(-1)}\
+    \ ))\n\n\tlocal sum2=$sum\n\tlocal odd=$(( sum2 % 2 ))\n\n\tlocal str=\n\tfor\
+    \ v in \"${arr[@]}\"; do\n\t\tif (( sum2 != $sum && ! $odd )); then\n\t\t\tstr=\"\
+    $str $v\"\n\t\telif (( sum2 != $sum &&  $odd)); then\n\t\t\tstr=\"$v $str\"\n\t\
+    \tfi\n\t\tsum2=$(( $sum2 + $v ))\n\tdone\n\n\techo \"$str\"", "    local arg=\"\
+    $1\"\n    local sorted_array=()\n    local last_val=\"$arg\"\n\n    while [[ $last_val\
+    \ != \"0\" ]]; do\n        last_val=\"$( echo \"$last_val + $last_val\" | bc )\"\
+    \n        sorted_array+=( \"\\\"$last_val\\\"\" );\n    done\n\n    local sum=\"\
+    $( echo \"$last_val + $last_val\" | bc )\"\n\n    if [ $sum -eq 1 ]; then\n  \
+    \      local ascending_flag=\"1\"\n    else\n        local ascending_flag=\"0\"\
+    \n    fi\n\n    local i=0\n\n    if [ \"$ascending_flag\" == \"1\" ]; then\n \
+    \       local j=0\n        for i in \"${sorted_array[@]}\"; do\n            local\
+    \ current_value=\"$i\"\n            local next_value=\"${sorted_array[j]}\"\n\n\
+    \            local current_sum_val=\"$( echo \"$current_value + $next_value\"\
+    \ | bc )\"\n            if [ \"$current_sum_val\" -eq 1 ]; then\n            \
+    \    sorted_array[j]=\"$next_value\"\n                (( j++ ))\n            else\n\
+    \                sorted_array[i]=\"$current_value\"\n                (( i++ ))\n\
+    \            fi\n        done\n    else\n        local j=0\n        for i in \"\
+    ${sorted_array[@]}\"; do\n            local current_value=\"$i\"\n           \
+    \ local next_value=\"${sorted_array[j]}\"\n\n            local current_sum_val=\"\
+    $( echo \"$current_value - $next_value\" | bc )\"\n            if [ \"$current_sum_val\"\
+    \ -eq 1 ]; then\n                sorted_array[j]=\"$next_value\"\n           \
+    \     (( j++ ))\n            else\n                sorted_array[i]=\"$current_value\"\
+    \n                (( i++ ))\n            fi\n        done\n    fi\n\n    echo\
+    \ \"$sorted_array\"", "    local arr=$1\n    echo \"${arr// / }\" \"${arr// /\
+    \ }\" | sort -n -k 2 -k 3 --field-separator=\"\\\"\" -t \\\" \\\"", "    local\
+    \ arr=\"($@)\"\n    # print out the first element\n    echo \"$arr[0]\"\n    #\
+    \ get the sum of the first and last element\n    local sum=$(echo \"$arr[0] +\
+    \ $arr[-1]\" | bc)\n    # if the sum is even, the array is sorted\n    if [ $sum\
+    \ -eq 0 ]\n    then\n        echo \"$arr\"\n        return\n    fi\n    # if the\
+    \ sum is odd, the array is sorted in descending order\n    if [ $sum -eq 1 ]\n\
+    \    then\n        echo \"${arr[@]} descending\"\n        return\n    fi\n   \
+    \ # sort it by decreasing order\n    sort -n -k 2r \"$arr\"", "  local input_array=$1\n\
+    \  local output_array=()\n  # Sort the array using insertion sort algorithm\n\
+    \  local -i i\n  local sum=0\n  local sum_squared\n  local last\n  local tmp_last\n\
+    \  while [[ $input_array ]]; do\n    read -r val\n    last=`expr $val + $sum`\n\
+    \    if [ $last -eq 0 ]; then\n      output_array+=(\"$val\")\n      last=`expr\
+    \ $val + $sum`\n    fi\n    sum=$(( sum + val ))\n    sum_squared=$(( sum_squared\
+    \ + val * val ))\n    tmp_last=`expr $sum_squared / $last`\n    for (( i=${#input_array}-1;\
+    \ i>0; i-- )); do\n      if [ $i -ge $i -a $tmp_last -le $tmp_last ]; then\n \
+    \       input_array[$i]=`expr $input_array[$i] - $last`\n        input_array[i-1]=`expr\
+    \ $input_array[i-1] - $val`\n        break\n      fi\n    done\n  done\n  printf\
+    \ '%s\\n' \"${output_array[@]}\"", "  # Parse the input as a space-separated list.\n\
+    \  local sortedArray\n  sortedArray=$(echo $1 | sed 's/ //g')\n  sortedArray=$(echo\
+    \ $sortedArray | tr \" \" \"\\n\")\n  sortedArray=$(echo $sortedArray | tr \"\
+    \ \" \"\\n\")\n  sortedArray=$(echo $sortedArray | tr \" \" \"\\n\")\n  # The\
+    \ sum of the first and the last element in the array is even.\n  if [ ${#sortedArray}\
+    \ -eq 0 ]\n  then\n    sortedArray=\"\"\n  else\n    sortedArray=$(echo $sortedArray\
+    \ | awk '{ print $1 + $NF }' | sort -n)\n  fi\n  echo \"$sortedArray\"", "  local\
+    \ -n arr=$1\n  local -a sorted\n  local -i sum=0\n  local i\n  IFS=\" \" read\
+    \ -ra sorted <<< \"${arr[*]}\"\n  for i in \"${sorted[@]:1}\" ; do\n    sum=$((\
+    \ sum + i ))\n  done\n  sum=$(( ( sum % 2 ) != 0 )) || sum=$(( sum / 2 ))\n  for\
+    \ (( i = ${#sorted[@]} - 2 ; i >= 0 ; i-- )); do\n    sorted[i]=\"${sorted[i]}\
+    \ ${sorted[i+1]}\"\n  done\n  (( sum == 2 )) && sorted+=(\"${sorted[0]}\")\n \
+    \ (( sum == 3 )) && sorted+=(\"${sorted[0]}\")\n  echo ${sorted[@]}", "  local\
+    \ first_index=0\n  local last_index=0\n  local sum=0\n  local sorted_array=( $1\
+    \ )\n  local last_element_flag=true\n  while [ $first_index -lt ${#sorted_array[@]}\
+    \ ]; do\n    sum=$(( ${sorted_array[$first_index]} + ${sorted_array[$last_index]}\
+    \ ))\n    if [ $last_element_flag = true ] && [ $sum -ne 0 ] && [ $sum -ne 1 ];\
+    \ then\n      last_element_flag=false\n    elif [ $sum -eq 1 ]; then\n      last_element_flag=true\n\
+    \    fi\n    if [ $last_element_flag = true ]; then\n      last_index=$(( last_index\
+    \ + 1 ))\n    else\n      first_index=$(( first_index + 1 ))\n    fi\n  done\n\
+    \  echo ${sorted_array[@]}", "    declare -a result=();\n    local sorted=(\"\
+    ${!1}\");\n\n    local tmpsum\n    local tmp\n    local i\n    local j\n    local\
+    \ sum\n    local tmp1\n    local tmp2\n    local tmp3\n\n    for i in \"${!sorted[@]}\"\
+    ; do\n        tmpsum=0\n        tmp=${sorted[i]}\n        for j in \"${!sorted[@]}\"\
+    ; do\n            tmpsum=$((${tmpsum}+${sorted[j]}))\n        done\n        if\
+    \ (( i % 2 == 0)); then\n            if (( tmpsum % 2 == 1)); then\n         \
+    \       result[i]=\"${sorted[i]}\"\n                break\n            else\n\
+    \                result[i]=\"${sorted[i]}\" \"${sorted[i+1]}\"\n             \
+    \   break\n            fi\n        else\n            if (( tmpsum % 2 == 0));\
+    \ then\n                result[i]=\"${sorted[i]}\" \"${sorted[i-1]}\"\n      \
+    \          break\n            else\n                result[i]=\"${sorted[i]}\"\
+    \n                break\n            fi\n        fi\n    done\n    echo \"${result[@]}\"",
+  "    local array=\"$1\"\n    # Remove all blanks\n    array=${array//[[:space:]]/}\n\
+    \    local sum=0\n    local i=0\n    # Sum all elements\n    while [ $i -lt ${#array}\
+    \ ]; do\n        (( sum+=${array[$i]} ))\n        (( i++ ))\n    done\n    # Sort\
+    \ by first element\n    sort -r \"$array\"\n    if [[ $((sum%2)) -eq 1 ]]; then\n\
+    \        sort -r \"$array\"\n    fi", "\tlocal arr=$1\n\tlocal len=${#arr[@]}\n\
+    \tlocal sum=0\n\tlocal i=0\n\tlocal j=0\n\tlocal temp=\"\"\n\tlocal sortorder=true\n\
+    \n\tif [[ ${arr[0]} -eq 0 ]]; then\n\t\tarr=()\n\t\techo \"[]\"\n\tfi\n\tfor i\
+    \ in $(seq 0 $((len-1))); do\n\t\tsum=$(( ${arr[i]} + ${arr[i+1]} ))\n\t\tif [[\
+    \ ${sum} -eq 0 ]]; then\n\t\t\techo \"${arr[i]}\"\n\t\telse\n\t\t\tif [[ ${sum}\
+    \ -eq 2 ]]; then\n\t\t\t\tarr[i]=\"${arr[i]}\"\n\t\t\t\tarr[i+1]=\"${arr[i+1]}\"\
+    \n\t\t\t\tsortorder=false\n\t\t\telif [[ ${sum} -eq 4 ]]; then\n\t\t\t\tarr[i]=\"\
+    ${arr[i]}\"\n\t\t\t\tarr[i+1]=\"${arr[i+1]}\"\n\t\t\t\tsortorder=true\n\t\t\t\
+    fi\n\t\tfi\n\tdone\n\n\techo \"${arr[@]}\"", "  local array=\"$1\" sum;\n  echo\
+    \ \"${array}\" | sort -rn | sed 's/^/\"$1[ ]\"/' | sed 's/$/\"$1[ ]\"/' | while\
+    \ read -r line ; do\n    sum=$(( $line + $(( $sum % 2 )) ))\n    echo \"$line[\
+    \ $sum ]\";\n  done", "    local numbers_array\n    numbers_array=$(echo $1 |\
+    \ tr \" \" \"\\n\")\n    echo \"$numbers_array\"\n\n    local array\n    array=$(sort\
+    \ -n <<< \"$numbers_array\")\n    echo \"$array\"\n\n    local sorted\n    sorted=$(echo\
+    \ \"$array\" | sed 's/^\\(.*\\),\\(.*\\)/\\2\\1 /' | sed 's/\"//g')\n    echo\
+    \ \"$sorted\"\n\n    local new_array\n    new_array=$(echo $sorted | tr \" \"\
+    \ \"\\n\")\n    echo \"$new_array\"\n\n    return 0", "    local n=$1 i\n    local\
+    \ sum=0\n    local arr=(\"$@\")\n    \n    for ((i=0; i<${#arr[@]}; i++)); do\n\
+    \        sum=$((sum + ${arr[i]}))\n    done\n\n    if [[ $((sum % 2)) -eq 1 ]];\
+    \ then\n        for i in ${arr[@]}; do\n            arr[i]=${arr[i]}\n       \
+    \ done\n        echo \"${arr[@]}\"\n    else\n        for i in ${arr[@]}; do\n\
+    \            arr[i]=${arr[i]}\n        done\n        echo \"${arr[@]}\" \"${arr[@]:(-1)}\"\
+    \n    fi", "    local IFS=' ' sorted=\"$(sort -g <<< \"$1\")\"\n    if [[ $sorted\
+    \ =~ ([+-]?\\d+) ]]; then\n        if [[ ${BASH_REMATCH[2]:+$BASH_REMATCH[2]}\
+    \ -eq 1 ]]; then\n            echo \"$sorted\"\n        else\n            echo\
+    \ \"${sorted[@]:#-${BASH_REMATCH[2]}}\"\n        fi\n    else\n        echo \"\
+    $sorted\"\n    fi", "  local array=\"$1\"\n  local output\n  local sum\n  local\
+    \ i\n  local sum2\n  local index1\n  local index2\n  local element\n  local output2\n\
+    \  local len\n  local odd\n  local even\n\n  output=\"$array\"\n  sum=$(echo \"\
+    $output\" | tr '[:upper:]' '[:lower:]' | awk '{a+=$1}END{print a}')\n  len=$(echo\
+    \ \"$output\" | tr '[:upper:]' '[:lower:]' | awk '{print length}')\n  odd=$(echo\
+    \ \"$sum % 2\" | bc)\n  even=$(echo \"$sum / 2\" | bc)\n\n  index1=0\n  index2=0\n\
+    \  while [ \"$index2\" -lt \"$len\" ]\n  do\n    element=$(echo \"$output\" |\
+    \ sed -n \"$index1 p\" | tr '[:upper:]' '[:lower:]')\n    if [ \"$odd\" = \"1\"\
+    \ ]\n    then\n      output2=\"$element\"\n      index1=$(($index1+1))\n    else\n\
+    \      output2=\"$output2 $element\"\n      index2=$(($index2+1))\n    fi\n  done\n\
+    \  echo \"$output2\"", "    local array=($@)\n    local len=${#array[@]}\n   \
+    \ local tmp\n\n    local min_array\n\n    local first_index last_index\n\n   \
+    \ local tmp_index\n\n    if [ ${len} -le 1 ]; then\n        return\n    fi\n\n\
+    \    if [ ${len} -eq 1 ]; then\n        return\n    fi\n\n    if [ ${len} -ge\
+    \ 2 ]; then\n        first_index=0\n        last_index=${len}\n    else\n    \
+    \    first_index=2\n        last_index=${len}\n    fi\n\n    # get the min index\
+    \ value\n\n    min_array=\"${array[1]}\"\n\n    for (( i=2; i<${len}; i++ ));\
+    \ do\n        tmp=\"${array[i]}\"\n        if [ \"${min_array}\" == \"${tmp}\"\
+    \ ]; then\n            continue\n        else\n            min_array=\"${tmp}\"\
+    \n        fi\n    done\n\n    # sort the min array by the second index value\n\
+    \n    sort_array \"${array[@]:0:$((first_index-1))} ${array[@]:$last_index}\"\n\
+    \n    # sort the min array by the last index value if the sum( first index value,\
+    \ last index value) is even\n\n    if [ \"${min_array}\" != \"${array[first_index]}\"\
+    \ ]; then\n        sort_array \"${array[@]:0:$((first_index-1))} ${array[@]:$((len-1))}\
+    \ ${array[first_index]}\"\n    fi", "  local -a nums\n  local -i i n sum\n  read\
+    \ -r -a nums <<< \"$1\"\n  n=${#nums[@]}\n  sum=${nums[0]}+${nums[n-1]}\n  i=0\n\
+    \  while [ $i -lt $n ]; do\n    # find max index\n    i=$(( i + 1 ))\n    sum=$((\
+    \ sum + nums[i] ))\n  done\n  unset nums[0]\n  unset nums[$(( n - 1 ))]\n  local\
+    \ j=0\n  for i in $( seq 0 $n ); do\n    j=$(( i + 1 ))\n    if [[ ${nums[i]}\
+    \ == $(( sum % 2 )) ]]; then\n      nums[i]=$(( sum % 2 ))\n      nums[j]=$((\
+    \ sum / 2 ))\n    fi\n  done\n  echo \"${nums[@]}\"", "    local IFS=' ' sorted=()\n\
+    \    local _IFS=$IFS\n    IFS=$'\\n' sorted=($(sort <<<\"$1\"))\n    IFS=$_IFS\n\
+    \    local _sorted\n    IFS=$'\\n' _sorted=($(echo \"${sorted[*]}\" | sed -e 's/^[0-9]*$//'\
+    \ -e 's/^[+-][0-9]*$//'))\n    IFS=$_IFS\n    local index=0\n    local last_index=0\n\
+    \    local sum\n    local _sum\n    local sign\n    while [ \"$index\" -lt \"\
+    ${#_sorted[@]}\" ]; do\n        sum=$(echo \"${_sorted[index]} + ${_sorted[last_index]}\"\
+    \ | bc)\n        sign=\"+$(expr \"$sum\" \"$sum\" 2>/dev/null \\\n           \
+    \ | sed -e 's/^\\+//' -e 's/^-+//' -e '/^$/d' -e 's/\\+//' -e 's/^0*//')\"\n \
+    \       sum=$(echo \"${sign}${sum}\" | bc)\n        last_index=$((index+1))\n\
+    \        sorted+=(\"${_sorted[$index]}\")\n        index=$((index+1))\n    done\n\
+    \    sorted+=(\"${_sorted[$index]}\")\n    sorted=($(echo \"${sorted[*]}\" | sed\
+    \ -e 's/^[0-9]*$//' -e 's/^[+-][0-9]*$//'))\n    sorted=($(echo \"${sorted[*]}\"\
+    \ | sort -n))\n    IFS=$_IFS\n    echo \"${sorted[@]}\"", "    local sorted_arr=\"\
+    \"\n    local arr=(\"${@}\" | tr '\\n' ' ')\n    local sum=$(IFS=$'\\n'; echo\
+    \ \"${arr[*]}\"| fold -w1); IFS=$' \\t\\n'\n    local sorted_arr_sorted=(\"${!sum}\"\
+    | sort -g | uniq)\n    for ((i=${#sorted_arr_sorted[@]}-1;i>=0;i--)); do\n   \
+    \     sorted_arr+=\"${sorted_arr_sorted[$i]}\"\n    done\n    echo \"${sorted_arr}\"",
+  "    local IFS=' ' #\n    local array=\"$1\" # an array\n    local sorted=\"\" #\
+    \ output array is empty\n    if [[ ${#array[@]} -gt 0 ]]; then\n        local\
+    \ sum=$(sum_array \"$array\")\n        local even=0 # even-sum\n        local\
+    \ odd=0 # odd-sum\n        if [[ $((sum % 2)) -eq 0 ]]; then\n            # sum\
+    \ is even\n            local even=$(sum_array \"$array\" \"$((sum / 2))\")\n \
+    \       else\n            # sum is odd\n            local odd=$(sum_array \"$array\"\
+    \ \"$((sum / 2))\")\n        fi\n        # sort by first index\n        local\
+    \ first_element=$(echo \"$array\" | sed -e 's/\\([^ ]\\+\\)\\( .*\\)/\\1/')\n\
+    \        local tmp_array=()\n        for element in $array\n        do\n     \
+    \       tmp_array+=(\"$element\")\n        done\n        tmp_array=( \"${tmp_array[@]%$first_element}\"\
+    \ )\n        sorted=\"$first_element ${tmp_array[@]}\"\n        sorted=$(echo\
+    \ \"$sorted\" | sort -n -k 2 | tr -d '[:space:]')\n        if [[ $((sum % 2))\
+    \ -eq 0 ]]; then\n            # reverse the order if sum is odd\n            sorted=\"\
+    $(echo \"$sorted\" | rev | sed -e 's/\\([^ ]\\+\\)\\( .*\\)/\\1/')\"\n       \
+    \ fi\n    else\n        sorted=\"\"\n    fi\n    echo \"$sorted\"", "  local sorted_list=()\n\
+    \  local sum=0\n  local i=0\n  local sum_tmp=0\n  local first_index=0 \n  local\
+    \ last_index=0;\n  local tmp_array=();\n\n  local -a input_list=\"$(IFS=\" \"\
+    \ ; echo \"$1\")\";\n\n  printf -v sorted_list  \"%s\" \"${input_list[@]}\" |\
+    \ sort -n -r | awk -F\" \" '{print $1 \" \" $2}'\n  IFS=' ' read -a tmp_array\
+    \ <<< \"${sorted_list[@]}\"\n\n  for element in \"${tmp_array[@]}\"; do\n    sum+=$(echo\
+    \ $element | cut -d ' ' -f1)\n    sum_tmp+=$(echo $element | cut -d ' ' -f2)\n\
+    \n    if [ $((sum%2)) -eq 1 ]; then\n      first_index+=1;\n      last_index+=1;\n\
+    \    fi\n  done\n\n  printf \"[\"\n  \n  for (( i = last_index; i<= first_index;\
+    \ i++ )); do\n    printf \" \\\"%s\\\" \" ${sorted_list[$i]}\n  done\n\n  printf\
+    \ \"]\"", "    if [[ \"$1\" == \"\" ]]; then\n        echo \"[]\"\n        return\n\
+    \    fi\n    IFS=' ' read -r -a array <<< \"$1\"\n    # sort in descending order\n\
+    \    array_sorted=(\"${array[@]}\")\n    array_sorted=(\"${array_sorted[@]:1}\"\
+    )\n    array_sorted=(\"${array_sorted[@]}\")\n    array_sorted=(\"${array_sorted[@]:0:1}\"\
+    )\n    array_sorted=(\"${array_sorted[@]:-1}\")\n    array_sorted=(\"${array_sorted[@]}\"\
+    )\n    # sort in ascending order\n    array_sorted=(\"${array_sorted[@]}\")\n\
+    \    array_sorted=(\"${array_sorted[@]:1}\")\n    array_sorted=(\"${array_sorted[@]}\"\
+    )\n    array_sorted=(\"${array_sorted[@]:0:1}\")\n    array_sorted=(\"${array_sorted[@]:-1}\"\
+    )\n    array_sorted=(\"${array_sorted[@]}\")\n    IFS=$' \\t\\n' print_array \"\
+    ${array_sorted[@]}\"", "  local input\n  input=\"$1\"\n\n  local sum\n  sum=$(sum_array\
+    \ $input)\n  if [[ \"$sum\" -gt \"0\" ]]; then\n    local tmp\n    local len\n\
+    \    len=\"${#input}\"\n    for (( i=0; i<$len; i++ )); do\n      tmp=\"$input[i]\"\
+    \n      (( sum-=tmp ))\n      if [[ \"$sum\" -eq \"0\" ]]; then\n        tmp=${tmp#-}\n\
+    \        input[i]=$tmp\n      fi\n    done\n  else\n    local tmp\n    local len\n\
+    \    len=\"${#input}\"\n    for (( i=0; i<$len; i++ )); do\n      tmp=\"$input[i]\"\
+    \n      (( sum+=tmp ))\n      if [[ \"$sum\" -eq \"0\" ]]; then\n        tmp=${tmp#-}\n\
+    \        input[i]=$tmp\n      fi\n    done\n  fi\n\n  printf '[\"%s\"]' \"${input[*]}\"",
+  "    local IFS=' '\n    local -n array=$1\n    local sum=0\n    local sorted=()\n\
+    \    while read x; do\n        sum=$(($sum+$x))\n        sorted+=( \"$x\" )\n\
+    \    done <<<\"$array\"\n    local odd_or_even\n    if [ $sum -gt ${#array[@]}\
+    \ ]; then\n        odd_or_even=1\n    elif [ $sum -le 0 ]; then\n        odd_or_even=0\n\
+    \    else\n        odd_or_even=$(($sum%2?0:1))\n    fi\n    if [ $odd_or_even\
+    \ -eq 1 ]; then\n        sorted=($(sort -nr <<<\"${sorted[@]}\" ))\n    else\n\
+    \        sorted=($(sort -nl <<<\"${sorted[@]}\" ))\n    fi\n    printf '%s\\n'\
+    \ \"${sorted[@]}\"", "\tlocal array=\"$1\"\n\t# split the array\n\tlocal sorted_array=\"\
+    $(IFS=$'\\n' echo \"$array\" | sed 's/[ \\t]*,[ \\t]*//g' | sort -n | tr '\\n'\
+    \ ',' | sed 's/,$//')\"\n\t# sort the array\n\tlocal sort_flag=true\n\tlocal sort_flag2=true\n\
+    \tlocal i=0\n\twhile [ \"$sort_flag\" == \"true\" ] || [ \"$sort_flag2\" == \"\
+    true\" ]; do\n\t\t# first check if the last element of the sorted array is odd/even\n\
+    \t\tif [ \"$sort_flag\" == \"true\" ]; then\n\t\t\tif [ \"$i\" -gt \"$(echo \"\
+    $sorted_array\" | wc -w)\" ]; then\n\t\t\t\tsort_flag=false\n\t\t\telse\n\t\t\t\
+    \tsort_flag2=false\n\t\t\tfi\n\t\telse\n\t\t\tif [ \"$i\" -gt \"$(echo \"$sorted_array\"\
+    \ | wc -w) - 1\" ]; then\n\t\t\t\tsort_flag2=false\n\t\t\telse\n\t\t\t\tsort_flag=false\n\
+    \t\t\tfi\n\t\tfi\n\t\t# if the sum of two consecutive elements in the sorted array\
+    \ is odd\n\t\tif [ \"$sort_flag2\" == \"true\" ]; then\n\t\t\tif [ \"$i\" -gt\
+    \ \"$(echo \"$sorted_array\" | wc -w)\" ]; then\n\t\t\t\tsort_flag2=false\n\t\t\
+    \telse\n\t\t\t\tsort_flag=false\n\t\t\tfi\n\t\telse\n\t\t\tif [ \"$i\" -gt \"\
+    $(echo \"$sorted_array\" | wc -w)\" ]; then\n\t\t\t\tsort_flag2=false\n\t\t\t\
+    else\n\t\t\t\tsort_flag=false\n\t\t\tfi\n\t\tfi\n\t\t# print the array\n\t\tsorted_array=\"\
+    $(echo \"$sorted_array\" | sed 's/^,//')\"\n\t\tsorted_array=\"$(echo \"$sorted_array\"\
+    \ | sed 's/,$//')\"\n\t\techo \"$sorted_array\"\n\t\ti=$((i+1))\n\tdone", "  \
+    \  local results=()\n    local n=$#\n    local i\n    for i in $(echo $1 | cut\
+    \ -d\" \" -f 1); do\n        local first=$(echo $i | cut -d\" \" -f 1)\n     \
+    \   local last=$(echo $i | cut -d\" \" -f 2)\n        if [ $first -eq 0 ]; then\n\
+    \            # handle first 0\n            first=$((n+1))\n        fi\n      \
+    \  if [ $last -eq 0 ]; then\n            # handle last 0\n            last=$((n+1))\n\
+    \        fi\n        ((last-first))\n        results[$((first-1))]=$(echo $i |\
+    \ sed 's/^\"//;s/\"$//')\n    done\n    echo ${results[*]}", "    local sorted_array\n\
+    \    IFS=\" \" read -ra sorted_array <<< \"$1\"\n    IFS=\".\" read -r -a sorted_array_parts\
+    \ <<< \"$sorted_array\"\n    local first_index last_index first_sum\n    first_index=0\n\
+    \    last_index=${#sorted_array[@]}-1\n    first_sum=\"${sorted_array_parts[0]}\
+    \ ${sorted_array_parts[$last_index]}\";\n    local first_sum_inverse\n    if [[\
+    \ ${first_sum:0:1} == \"-\" ]]; then\n        first_sum_inverse=\"-${first_sum}\"\
+    \n    else\n        first_sum_inverse=\"${first_sum}\"\n    fi\n    if [[ ${first_sum_inverse:0:1}\
+    \ == \"-\" ]]; then\n        local first_sum_inverse=\"${first_sum_inverse%+}\"\
+    \n    fi\n    local second_sum\n    if [[ ${first_sum:0:1} == \"-\" ]]; then\n\
+    \        second_sum=\"-${sorted_array_parts[$last_index]}\"\n    else\n      \
+    \  second_sum=\"${sorted_array_parts[$last_index]}\"\n    fi\n    if [[ ${second_sum:0:1}\
+    \ == \"-\" ]]; then\n        second_sum=\"-${second_sum%+}\"\n    fi\n    if [[\
+    \ ${second_sum:0:1} == \"-\" ]]; then\n        second_sum=\"-${second_sum}+${first_sum}\"\
+    \n    else\n        second_sum=\"${second_sum}+${first_sum}\"\n    fi\n    if\
+    \ [[ ${first_sum_inverse:0:1} == \"-\" ]]; then\n        second_sum=\"-${second_sum}\"\
+    \n    fi\n    if [[ ${second_sum:0:1} == \"-\" ]]; then\n        second_sum=\"\
+    -${second_sum}+${first_sum_inverse}\"\n    else\n        second_sum=\"${second_sum}+${first_sum_inverse}\"\
+    \n    fi\n    for (( i=1; i<last_index; i++ )); do\n        if [[ ${sorted_array_parts[i]}\
+    \ -gt ${second_sum} ]]; then\n            local tmp\n            tmp=${sorted_array[$first_index]};\n\
+    \            sorted_array[$first_index]=\"${sorted_array[$i]}\";\n           \
+    \ sorted_array[$i]=${tmp};\n        fi\n    done\n    echo \"${sorted_array[@]}\"",
+  "    local IFS='' sorted=()\n    local IFS=$1\n    for var in $@; do\n        sorted+=($var)\n\
+    \    done\n    sorted=$(IFS=$'\\n' echo \"${sorted[*]}\" | sort -nr | IFS=$'\\\
+    n' echo -)\n    for var in $@; do\n        sorted+=($var)\n    done\n    echo\
+    \ \"${sorted[*]}\"", "    local _array=\"$1\"\n    if [[ ! \"$_array\" =~ ^([-0-9]+)$\n\
+    \    || -z \"$_array\" ]];then\n        echo \"Error: Invalid input\"\n      \
+    \  return 1\n    fi\n    local _sum=0\n    local _elements=\"\"\n    for element\
+    \ in $_array;do\n        _elements+=\" \"$element\"\n        _sum=$(( $_sum +\
+    \ $element ))\n    done\n    local _odd_sum=0\n    local _even_sum=0\n    if [[\
+    \ $_sum -gt $(( 10#$(( $_sum % 2 )) )) ]];then\n        for element in $_array;do\n\
+    \            if [ $element -eq $_sum ];then\n                _odd_sum=$(( $_odd_sum\
+    \ + $element ))\n            elif [ $element -eq 0 ];then\n                _even_sum=$((\
+    \ $_even_sum + $element ))\n            fi\n        done\n        _odd_sum=$((\
+    \ 10#$(( ${_odd_sum} % 2 )) ))\n        _even_sum=$(( 10#$(( ${_even_sum} % 2\
+    \ )) ))\n    else\n        for element in $_array;do\n            if [ $element\
+    \ -eq $_sum ];then\n                _odd_sum=$(( $_odd_sum + $element ))\n   \
+    \         elif [ $element -eq 0 ];then\n                _even_sum=$(( $_even_sum\
+    \ + $element ))\n            fi\n        done\n        _odd_sum=$(( 10#$(( ${_odd_sum}\
+    \ % 2 )) ))\n        _even_sum=$(( 10#$(( ${_even_sum} % 2 )) ))\n    fi\n   \
+    \ if [ \"$_odd_sum\" -eq 0 ];then\n        _odd_sum=1\n    fi\n    if [ \"$_even_sum\"\
+    \ -eq 0 ];then\n        _even_sum=1\n    fi\n    local _odd_elements=\"\"\n  \
+    \  local _even_elements=\"\"\n    for element in $_array;do\n        if [ $element\
+    \ -eq $_odd_sum ];then\n            _odd_elements+=\" \"$element\"\n        elif\
+    \ [ $element -eq $_even_sum ];then\n            _even_elements+=\" \"$element\"\
+    \n        fi\n    done\n    echo \"${_odd_elements}${_even_elements}\" | sort",
+  "    # get the number of elements in $1\n    numElements=$(wc -w <<< $1)\n\n   \
+    \ # check if the given array has odd number of elements\n    if [[ $numElements\
+    \ -gt 1 ]]\n    then\n        # get the first and last elements\n        firstElement=$(head\
+    \ -n 1 <<< $1)\n        lastElement=$(tail -n 1 <<< $1)\n    else\n        # if\
+    \ array has only one element, return an array containing that element alone\n\
+    \        firstElement=$1\n        lastElement=$1\n    fi\n\n    if [[ ${firstElement:0:1}\
+    \ -eq ${lastElement:0:1} ]]\n    then\n        # if the first and last element\
+    \ are identical, return an empty\n        # array\n        echo \"[]\"\n    else\n\
+    \        # if first element is odd, sort the given array in ascending order\n\
+    \        echo \"$firstElement\"\n        sort_array $lastElement $numElements\n\
+    \    fi", "    local arr\n    local index\n    local sum\n    local temp_arr\n\
+    \    IFS=$' '\n    arr=$1\n    sum=0\n    for i in ${arr[@]}; do\n        sum=$((\
+    \ sum + i ))\n    done\n    if [ $(( sum % 2 )) -ne 0 ]; then\n        temp_arr=(\
+    \ \"${arr[@]}\" )\n        arr=( $(sort -t $'\\t' -nr -k 2,2 -k 3,3 -k 4,4 \"\
+    ${temp_arr[@]}\" ))\n    else\n        temp_arr=( \"${arr[@]}\" )\n        arr=(\
+    \ $(sort -t $'\\t' -r -k 2,2 -k 3,3 -k 4,4 \"${temp_arr[@]}\" ))\n    fi\n   \
+    \ IFS=$' \\t\\n'\n    printf '%s\\n' \"${arr[@]}\"", "  # if there are less than\
+    \ two items, return an empty list\n  len=${#1}\n  if [ \"${len}\" -le 1 ]\n  then\n\
+    \    echo \"[]\"\n    return\n  fi\n  # split the input into integers\n  IFS='\
+    \ ' read -r -a array <<< \"$1\"\n  # initialize the output array\n  out=()\n \
+    \ # initialize counters\n  n=0\n  first=0\n  last=0\n  # if the last number is\
+    \ not even, sort it in descending order\n  last_even=false\n  for val in \"${array[@]}\"\
+    ; do\n    if [ \"$val\" -ge 0 ]\n    then\n      n=$((n + val))\n    elif [ \"\
+    $val\" -le 0 ]\n    then\n      out+=($val)\n    fi\n  done\n  if [ \"$n\" -eq\
+    \ 0 ]\n  then\n    echo \"[]\"\n    return\n  fi\n  # if the last number is not\
+    \ odd, sort it in ascending order\n  last_odd=false\n  if [ \"$n\" -gt 0 ]\n \
+    \ then\n    if [ \"$(( n + 1 ))\" -le \"$n\" ]\n    then\n      last_odd=true\n\
+    \    else\n      last_odd=false\n    fi\n  fi\n  # if the sum of the first number\
+    \ is even\n  if [ \"$last_even\" = true ]\n  then\n    # sort the numbers in ascending\
+    \ order\n    out=( \"${array[@]}\" )\n  else\n    # sort the numbers in descending\
+    \ order\n    out=( $(sort_array ${array[@]:0:$(( n - 1 ))}) )\n  fi\n  if [ \"\
+    $last_odd\" = true ]\n  then\n    # return the sorted array\n    echo \"${out[@]}\"\
+    \n  else\n    # return the sorted array\n    echo \"${out[@]:0:$(( n - 1 ))}\"\
+    \n  fi", "  local sorted=()\n  local unsorted=$(echo $1 | tr \" \" \"\\n\")\n\n\
+    \  for ((i = 0; i < ${#unsorted}; i++))\n  do\n    local sum=0\n    local sum1=$(echo\
+    \ $unsorted[$i] | sed 's/^\"//g;s/\"$//g')\n\n    for ((j = i + 1; j < ${#unsorted};\
+    \ j++))\n    do\n      local sum2=$(echo $unsorted[$j] | sed 's/^\"//g;s/\"$//g')\n\
+    \      if ((sum1 < sum2))\n      then\n        sum=sum1+sum2\n        sorted+=$(echo\
+    \ \"$j\")\n        break\n      fi\n      sum=sum2+sum\n    done\n  done\n  echo\
+    \ $(printf \"%s,\" \"${sorted[@]}\")", "    local array=\"$1\"\n    if [[ ${#array}\
+    \ -eq 0 ]]; then\n        echo \"${array}\"\n        return\n    fi\n    # read\
+    \ space-separated list into an array and sort it\n    local -a sorted\n    IFS=\"\
+    \ \" read -r -a array <<< \"$1\"\n    for i in \"${array[@]}\"; do\n        if\
+    \ (( i % 2 )); then\n            sorted+=(\"$i\")\n        else\n            sorted+=(\"\
+    $((i + 1))\")\n        fi\n    done\n    IFS=\" \" read -r -a array <<< \"$sorted\"\
+    \n    echo \"${array[@]}\"", "    local IFS=\" \" # set IFS to a space\n    local\
+    \ output\n    local arr=( $1 )\n    local n=0\n    local i=0\n    local sum_first=0\n\
+    \    local sum_last=0\n    local minval\n    local maxval\n    local tmp\n   \
+    \ local tmp_first\n    local tmp_last\n\n    IFS=$(echo -en \"\\n\")\n    for\
+    \ val in \"${arr[@]}\"; do\n        sum_first=$(( sum_first + val ))\n       \
+    \ sum_last=$(( sum_last + val ))\n        echo \"$val $sum_first $sum_last\"\n\
+    \    done\n\n    # min and max is the min and max values of arr\n    minval=$((\
+    \ sum_first ))\n    maxval=$(( sum_last ))\n\n    echo \"$minval $maxval\"\n\n\
+    \    for (( i = 0; i < ${#arr[@]}; ++i )); do\n        echo \"i: ${i}\"\n    \
+    \    if [ ${sum_first} -le $minval ]; then\n            tmp=$(( sum_first + arr[i]\
+    \ ))\n            tmp_first=tmp\n            tmp_last=$(( sum_last + arr[i] ))\n\
+    \            echo \"tmp_first: $tmp_first tmp_last: $tmp_last\"\n        fi\n\
+    \        if [ ${sum_last} -le $maxval ]; then\n            tmp=$(( sum_last +\
+    \ arr[i] ))\n            tmp_first=$(( sum_first + arr[i] ))\n            tmp_last=tmp\n\
+    \            echo \"tmp_first: $tmp_first tmp_last: $tmp_last\"\n        fi\n\
+    \    done", "\tlocal -n array=\"${1}\"\n\n\tlocal arraySize=\"$(echo \"${array}\"\
+    \ | wc -c)\"\n\tlocal sortSize=\"$(( $arraySize - 1 ))\"\n\tlocal sortedArray=($(sort\
+    \ -g <<<\"${array}\" ))\n\n\tlocal odd=0\n\tlocal even=0\n\tfor (( i = 0; i <\
+    \ $arraySize; i++ )); do\n\t\tlocal sum=$(( ${sortedArray[i]} + ${sortedArray[((\
+    \ $i + 1 ))]} ))\n\t\tlocal first=\"$(( ${sortedArray[i]} ))\"\n\t\tlocal last=\"\
+    $(( ${sortedArray[(( $i + 1 ))]} ))\"\n\n\t\tif [ $(( ${sum} % 2 )) -ne 0 ]; then\n\
+    \t\t\t(( odd += 1 ))\n\t\telse\n\t\t\t(( even += 1 ))\n\t\tfi\n\tdone\n\n\tlocal\
+    \ newArray=()\n\tif [ \"$odd\" -eq 0 ]; then\n\t\tnewArray=($(echo \"${sortedArray[@]}\"\
+    \ | sort -g | cut -d \" \" -f 1 ))\n\t\tnewArray+=($(echo \"${sortedArray[@]}\"\
+    \ | sort -g | cut -d \" \" -f $(( $arraySize - 1 ))))\n\telse\n\t\tnewArray=($(echo\
+    \ \"${sortedArray[@]}\" | sort -g -n | cut -d \" \" -f 1 ))\n\t\tnewArray+=($(echo\
+    \ \"${sortedArray[@]}\" | sort -g -n | cut -d \" \" -f $(( $arraySize - 1 ))))\n\
+    \tfi\n\n\tlocal sortedArraySize=\"${#newArray[@]}\"\n\tlocal sortedArrayString=()\n\
+    \tlocal i\n\tfor (( i = 0; i < $sortSize; i++ )); do\n\t\tsortedArrayString+=($(echo\
+    \ \"${newArray[$(( i * 2 ))]}\" | sed -e 's/\"//g'))\n\tdone\n\n\techo \"${sortedArrayString[@]}\"",
+  "    local IFS=$'\\n'\n    local -n array=\"$1\"\n    local array=\"$array[@]\"\n\
+    \    echo \"$((${#array[@]}))\"\n    local n=0\n    local temp\n    local c\n\
+    \    for (( i=0; i<${#array[@]}; i++ )); do\n        c=\"${array[i]}\"\n     \
+    \   echo \"$c\"\n        ((n++))\n        temp=\"${#array[@]}\"\n        local\
+    \ j=0\n        for (( j=0; j<n; j++ )); do\n            echo \"$j\"\n        \
+    \    if [ \"$c\" -gt \"${array[$((j+1))]}\" ]; then\n                local l=$((j+1))\n\
+    \                temp=${array[$l]}\n                echo \"$temp\"\n         \
+    \       array[$((j+1))]=$temp\n                array[$l]=$c\n                ((n--))\n\
+    \                break\n            else\n                ((j++))\n          \
+    \  fi\n        done\n    done\n    echo \"$array\"", "    # Trim spaces\n    IFS=$'\\\
+    n' read -a arr <<< \"$1\"\n    # Sort and remove duplicates\n    sort -k 2 \"\
+    ${arr[@]}\"\n    # Remove duplicates\n    declare -a arr_sorted=()\n    for i\
+    \ in \"${arr[@]}\"; do\n        [[ -n $i ]] || continue\n        arr_sorted+=(\"\
+    $i\")\n    done\n    echo \"${arr_sorted[@]}\"", "    local -n arr=$1\n    local\
+    \ arrsize=${#arr[@]}\n\n    if [ $arrsize -eq 0 ]; then\n        echo \"\"\n \
+    \       return\n    fi\n\n    # Sort the given array\n    if [ $arrsize -eq 1\
+    \ ]; then\n        arr=(${arr[@]})\n        echo ${arr[@]}\n        return\n \
+    \   fi\n\n    local sum\n    sum=$((${arr[0]}+${arr[arrsize-1]}))\n    local i\n\
+    \    local j\n    local mid\n\n    if [ $sum -gt $arrsize ] || [ $sum -eq $arrsize\
+    \ ]; then\n        # Sort the given array in ascending order if the sum( first\
+    \ index value, last index value) is odd,\n        # or sort it in descending order\
+    \ if the sum( first index value, last index value) is even.\n        arr=(${arr[@]})\n\
+    \        sort -k 2 -n -r | sed -n '/'\"${sum}\"'/{h;d};$p'\n        return\n \
+    \   fi\n\n    mid=$((${sum}/2))\n    local k\n    k=0\n    for (( i=$((${arr[0]}+1));\
+    \ i<${arr[0]}+${arrsize}; i++ )); do\n        (( k++ ))\n        arr[$k]=${arr[i]}\n\
+    \    done\n    local l\n    l=0\n    for (( j=$((${arr[arrsize-1]}+1)); j<${arr[arrsize-1]}+${arrsize};\
+    \ j++ )); do\n        (( l++ ))\n        arr[$l]=${arr[j]}\n    done\n\n    local\
+    \ i\n    local j\n    local sum\n    local mid\n\n    while [ $i -le $arrsize\
+    \ ] && [ $j -le $arrsize ]; then\n        if [ \"$i\" -ge \"$j\" ]; then\n   \
+    \         sum=$((${arr[i]}+${arr[j]}))\n            [ $sum -gt $arrsize ] && sum=$((${arr[i]}+${arr[$arrsize-1]}))\n\
+    \            local mid\n            mid=$((${sum}/2))\n            arr[i]=${arr[$mid]}\n\
+    \            arr[$mid]=${arr[$i]}\n            arr[$i]=${arr[$mid]}\n        \
+    \    arr[$mid]=${arr[$j]}\n            (( j++ ))\n        elif [ \"$j\" -ge \"\
+    $i\" ]; then\n            sum=$((${arr[j]}+${arr[i]}))\n            [ $sum -gt\
+    \ $arrsize ] && sum=$((${arr[j]}+${", "    local first_index=0;\n    local last_index=0;\n\
+    \    local sum_value=0;\n    local max_value=0;\n    local array=( $1 );\n   \
+    \ for (( i=1; i<${#array[@]}; i++ ))\n    do\n        sum_value=$(( sum_value\
+    \ + ${array[$i]} ));\n        if [ $(( sum_value % 2 )) -ne 0 ]\n        then\n\
+    \            first_index=$i;\n            max_value=$(( max_value + ${array[$i]}\
+    \ ));\n        else\n            last_index=$i;\n            max_value=$(( max_value\
+    \ + ${array[$i]} ));\n        fi\n    done\n    local tmp_array=();\n    local\
+    \ tmp_max_value=\"\";\n    local tmp_first_index=0;\n    local tmp_last_index=0;\n\
+    \    for (( i=1; i<${#array[@]}; i++ ))\n    do\n        if [ $(( sum_value %\
+    \ 2 )) -ne 0 ]\n        then\n            tmp_array+=( \"${array[$i]}\" );\n \
+    \           tmp_max_value=$(( max_value + ${array[$i]} ));\n            tmp_first_index=$((\
+    \ first_index+i ));\n            tmp_last_index=$(( last_index+i ));\n       \
+    \ else\n            tmp_array+=( \"${array[$i]}\" );\n            tmp_max_value=$((\
+    \ max_value + ${array[$i]} ));\n            tmp_first_index=$(( first_index+i\
+    \ ));\n            tmp_last_index=$(( last_index+i ));\n        fi\n    done\n\
+    \    # sort descending\n    local tmp_first_index=$(( first_index-last_index ));\n\
+    \    local tmp_last_index=$(( first_index-first_index ));\n    local tmp_sum_value=$((\
+    \ sum_value ));\n    local tmp_max_value=$(( max_value ));\n    local tmp_array=(\
+    \ \"${tmp_array[@]}\" );\n    local sorted_array=();\n    for (( i=1; i<${#tmp_array[@]};\
+    \ i++ ))\n    do\n        if [ $(( sum_value % 2 )) -ne 0 ]\n        then\n  \
+    \          sorted_array+=( \"${tmp_array[$tmp_first_index+i]}\" );\n         \
+    \   sorted_array+=( \"${tmp_array[$tmp_last_index+i]}\" );\n            sum_value=$((\
+    \ sum_value - ${tmp_array[$tmp_first_index+i]} ));\n            sum_value=$((\
+    \ sum_value - ${tmp_array[$tmp_last_index+i]} ));\n        else\n            sorted_array+=(\
+    \ \"${tmp_array", "    local -a array=($1);\n    local -a sorted=();\n\n    local\
+    \ -i start=$1;\n    local -i end=$((${#array[@]}-1));\n    local -i sum=0;\n\n\
+    \    while (( start < end )); do\n        sum=$(( $sum + ${array[$start]} ));\n\
+    \        start=$(( start + 1 ));\n    done;\n    sum=$(( $sum + ${array[$start]}\
+    \ ));\n    (( sum > 1 )) && {\n        local -i i;\n        local -i j;\n\n  \
+    \      for (( i=1; i<=$(( $sum / 2 )); i++ )); do\n            local -a temp;\n\
+    \n            for (( j=$start; j<$end; j++ )); do\n                temp[$j]=$array[$j];\n\
+    \            done;\n\n            local -a sorted=();\n            for (( j=0;\
+    \ j<$i; j++ )); do\n                sorted+=( ${temp[j]} );\n            done;\n\
+    \            (( i%2 == 1 )) && {\n                sorted+=( ${temp[$i]} );\n \
+    \           };\n        done;\n    };\n    for (( i=1; i<$(( $sum % 2 )); i++\
+    \ )); do\n        local -a temp;\n\n        for (( j=$start; j<$end; j++ )); do\n\
+    \            temp[$j]=$array[$j];\n        done;\n\n        local -a sorted=();\n\
+    \        for (( j=0; j<$i; j++ )); do\n            sorted+=( ${temp[j]} );\n \
+    \       done;\n        sorted+=( ${temp[$i]} );\n    done;\n    echo \"${sorted[@]}\"",
+  "  # get arguments into a variable\n  declare -a array=\"$1\"\n  # declare a variable\
+    \ which saves the final result\n  declare -a result\n  # save the value of 'sum'\
+    \ into result\n  declare -i sum\n  # declare a variable which saves the minimum\
+    \ value\n  declare -i min\n  # declare a variable which saves the maximum value\n\
+    \  declare -i max\n\n  # calculate the sum of all numbers\n  sum=0\n  # iterate\
+    \ through the array\n  for element in \"${array[@]}\"; do\n    # add element to\
+    \ sum\n    sum=$((sum+element))\n  done\n  # if the sum of all numbers is odd\
+    \ then sort it in ascending order else in descending order\n  if [ $((sum % 2))\
+    \ -eq 0 ]; then\n    # sort it in ascending order\n    for element in \"${array[@]}\"\
+    ; do\n      result+=($element)\n    done\n    # sort the array\n    sort -n -k\
+    \ 1,1n -k 2,2n -k 3,3n -k 4,4n -k 5,5n -k 6,6n -k 7,7n -k 8,8n -k 9,9n -k 10,10n\
+    \ -k 11,11n -k 12,12n -k 13,13n -k 14,14n -k 15,15n -k 16,16n -k 17,17n -k 18,18n\
+    \ -k 19,19n -k 20,20n -k 21,21n -k 22,22n -k 23,23n -k 24,24n -k 25,25n -k 26,26n\
+    \ -k 27,27n -k 28,28n -k 29,29n -k 30,30n -k 31,31n -k 32,32n -k 33,33n -k 34,34n\
+    \ -k 35,35n -k 36,36n -k 37,37n -k 38,38n -k 39,39n -k 40,40n -k 41,41n -k 42,42n\
+    \ -k 43,43n -k 44,44n -k 45,45n -k 46,46n -k 47,47n -k 48,48n -k 49,49n -k 50,50n\
+    \ -k 51,51n -k 52,52n -k 53,53n -k 54,54n -k 55,55n -k 56,56n -k 57,57n -k 58,58n\
+    \ -k 59,59n -k 60,60n -k 61,61n -", "  local a=($(sort -n <<<\"${1}\"))\n  local\
+    \ first=(\"${a[0]}\")\n  local last=(\"${a[${#a[@]} - 1]}\")\n  local sum=0\n\
+    \  local i=0\n\n  for index in \"${!a[@]}\"; do\n    (( sum = $sum + $index *\
+    \ $first[$i] ))\n    (( $i % 2 != 0 )) && [ \"$sum\" -gt \"$last[$i]\" ] && last[$i]=$sum\n\
+    \    (( $i++ ))\n  done\n  echo \"${a[@]}\"", "    # Sort the given array in ascending\
+    \ order if the sum( first index value, last index value) is odd,\n    # or sort\
+    \ it in descending order if the sum( first index value, last index value) is even.\n\
+    \    local array=\"$1\"\n    local sum\n\n    # Iterate through the array\n  \
+    \  for element in \"${array[@]}\"; do\n        # Calculate the sum of the current\
+    \ element\n        sum=\"$(( sum + element ))\"\n    done\n\n    # Get the index\
+    \ of the max value\n    local max_index\n    max_index=\"$(( $sum % 2 ))\"\n \
+    \   local max_element\n\n    # Sort the current array\n    if [ \"$max_index\"\
+    \ -eq \"0\" ]; then\n        for element in \"${array[@]}\"; do\n            if\
+    \ [ \"$element\" -eq \"$max_element\" ]; then\n                # Add it to the\
+    \ output array\n                array=\"$array $element\"\n            fi\n  \
+    \      done\n    else\n        for element in \"${array[@]}\"; do\n          \
+    \  if [ \"$element\" -eq \"$max_element\" ]; then\n                # Swap the\
+    \ current element with the max element (swap position)\n                array=\"\
+    $(echo \"$array\" | sed \"s/$max_element/$element/g\")\"\n            fi\n   \
+    \     done\n    fi\n\n    # Return the sorted array\n    echo \"$array\"", " \
+    \ local list_=\"${1:-}\"\n  # the second element of a space-separated list is\
+    \ the last element\n  local array=(${list_} ${list_:(-1)})\n  local length=${#array[@]}\n\
+    \  local last_index\n  local sum\n  local sum_index\n\n  # sort in ascending order\n\
+    \  if [ \"${array[1]}\" -gt \"${array[$((length - 1))]}\" ]; then\n    local min_val=\"\
+    ${array[1]}\"\n    local max_val=\"${array[$((length - 1))]}\"\n    local index=\"\
+    ${1% *}\"\n    while true; do\n      # get max_val's first index\n      (( index++\
+    \ ))\n      sum=\"$(( sum + array[((length - index) + 1)]  ))\"\n      last_index=\"\
+    $(expr $index - 1)\"\n      sum_index=\"$(( sum_index + last_index ))\"\n    \
+    \  # if the sum of max_val and min_val is even, swap them and continue\n     \
+    \ if (( sum % 2 == 0 )); then\n        local tmp=\"${array[$sum_index+1]}\"\n\
+    \        array[$sum_index+1]=\"${array[$sum_index]}\"\n        array[$sum_index]=\"\
+    ${tmp}\"\n      else\n        break\n      fi\n    done\n  fi\n  # sort in descending\
+    \ order\n  if [ \"${array[1]}\" -lt \"${array[$((length - 1))]}\" ]; then\n  \
+    \  local min_val=\"${array[1]}\"\n    local max_val=\"${array[$((length - 1))]}\"\
+    \n    local index=\"${1% *}\"\n    while true; do\n      # get min_val's last\
+    \ index\n      (( index-- ))\n      sum=\"$(( sum + array[((length - index) +\
+    \ 1)]  ))\"\n      last_index=\"$(expr $index + 1)\"\n      sum_index=\"$(( sum_index\
+    \ + last_index ))\"\n      # if the sum of max_val and min_val is even, swap them\
+    \ and continue\n      if (( sum % 2 == 0 )); then\n        local tmp=\"${array[$sum_index+1]}\"\
+    \n        array[$sum_index+1]=\"${array[$sum_index]}\"\n        array[$sum_index]=\"\
+    ${tmp}\"\n      else\n        break\n      fi\n    done\n  fi\n  echo \"${array[@]}\"",
+  "  local array size i sum sum1 sum2\n  array=( $1 )\n  size=${#array[@]}\n  sum=$((\
+    \ ${array[1]}+${array[$((size-1))]} ))\n  sum1=$(( ${array[1]} ))\n  sum2=$((\
+    \ ${array[$((size-1))]} ))\n  echo $array | while read -r i; do\n    if [ $((\
+    \ sum % 2 )) -eq 0 ]; then\n      printf '%s\\n' \"${array[@]:$i:1}\"\n    fi\n\
+    \  done", "\tlocal IFS=\" \"\n\tread -a array <<< \"$1\"\n\tlocal result\n\tlocal\
+    \ index\n\tlocal sum\n\n\tsum=$(echo \"${array[@]}\" | awk '{s+=$1} END {print\
+    \ s}')\n\tif [ \"$sum\" -gt 0 ] && [ \"$sum\" -le $(( $(( ${#array[@]} + 1 ))\
+    \ - 1 )) ]; then\n\t\tresult=$(sort -n -k 2 -k1 <<< \"${array[@]}\" | awk '{print\
+    \ $1}')\n\telse\n\t\tresult=$(sort -n -k 2 -k1 -r  <<< \"${array[@]}\" | awk '{print\
+    \ $1}')\n\tfi\n\n\tresult=\"${result[@]}\"\n\tIFS=\" \"\n\techo \"${result[@]}\"",
+  "  declare -i sum\n  declare -i result\n  sum=$(echo $1 | sed -e 's/ //g' | awk\
+    \ '{ sum += $1 } END { print sum }') 2> /dev/null\n\n  if [[ $sum -gt $(( $(echo\
+    \ $1 | sed -e 's/ //g' | awk '{ sum += $1 } END { print sum }') + $1 )) ]]\n \
+    \ then\n    result=$(echo $1 | sed -e 's/ //g' | awk '{ sum += $1 } END { print\
+    \ sum }') 2> /dev/null\n    echo $result\n  else\n    result=$(echo $1 | sed -e\
+    \ 's/ //g' | awk '{ sum += $1 } END { print sum }') 2> /dev/null\n    echo $result\
+    \ | sed -e 's/ //g' -e 's/^/[\"&\"]/'\n  fi", "    local array=\"$1\"\n    echo\
+    \ \"${array[@]}\" | awk '{\n        sum += $1; first=$1; last=$1;\n        for\
+    \ (i = 2; i <= NF; i++) {\n            sum -= $i;\n            if (sum < 0) {\n\
+    \                last=$i;\n                sum=0;\n            } else {\n    \
+    \            first = $i;\n                sum++;\n            }\n        }\n \
+    \       print first \" \" last\n    }' | sort -nr | cut -d \" \" -f 2-", "   \
+    \ local arr\n    local i\n    local new_arr\n    local res\n\n    arr=( $( echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -nr) )\n\n    new_arr=()\n    res=\n    for i in\
+    \ ${arr[@]}; do\n        new_arr=( \"${new_arr[@]}\" \"$i\" )\n    done\n\n  \
+    \  res=$( IFS=$'\\n' echo \"${new_arr[*]}\" )\n\n    echo $res", '    echo "${@}"
+    | sort -nr', "\tlocal i\n\tlocal array\n\tlocal sorted_array\n\tlocal sum\n\n\t\
+    sum=$(echo $1 | awk '{print $1}')\n\n\techo \"$1\"\n\n\tarray=$1\n\tsorted_array=()\n\
+    \n\tfor i in $(seq 0 $(( ${#array[@]} - 1 ))); do\n\t\tsorted_array+=($(echo \"\
+    ${array[i]}\" | awk '{print $1}'))\n\tdone\n\n\tif [[ $sum -% 2 != 0 ]]; then\n\
+    \t\tfor i in $(seq 0 $(( ${#array[@]} - 1 ))); do\n\t\t\tsorted_array+=($(echo\
+    \ \"${array[i]}\" | awk '{print $1}'))\n\t\tdone\n\t\tfor i in $(seq 0 $(( ${#sorted_array[@]}\
+    \ - 1 ))); do\n\t\t\tsorted_array=(\"${sorted_array[@]:0:i}\" \"${sorted_array[@]:i}\"\
+    )\n\t\tdone\n\tfi\n\n\tsorted_array=(\"${sorted_array[@]:1:}\" \"${sorted_array[@]:0:-1}\"\
+    )\n\n\techo \"${sorted_array[@]}\"\n", "    local arg=$1\n    local sortedList=()\n\
+    \    for ((i=1;i<$#;i++)); do\n        local item=$((${#arg}-1)-i)\n        if\
+    \ [ $((${#arg}-1) - i ) == 0 ] ; then continue; fi\n        if [ -z \"${arg}\"\
+    \ ] ; then break; fi\n        local sum=$((${arg}+${arg}+item))\n        sortedList=(\
+    \ \"${sortedList[@]}\" \"$item\" )\n        if [ $((sum%2)) == 1 ] ; then\n  \
+    \          sortedList=( \"${sortedList[@]}\" \"$item\" )\n        else\n     \
+    \       sortedList=( \"${sortedList[@]}\" \"$arg\" )\n        fi\n    done\n \
+    \   echo \"${sortedList[@]}\"", "  # This takes care of a corner case where $1\
+    \ is empty\n  local arr=( $1 )\n  local sum=0\n  local min_index=0\n  local max_index=0\n\
+    \n  echo \"${arr[@]}\"\n\n  local first_index=0\n  local last_index=0\n  for index\
+    \ in \"${arr[@]}\"\n  do\n    sum=$(( sum + index ))\n    local current_index=$((\
+    \ last_index + 1 ))\n    if [ $current_index -eq $first_index ]\n    then\n  \
+    \    first_index=$current_index\n    fi\n    if [ $current_index -gt $last_index\
+    \ ]\n    then\n      last_index=$current_index\n    fi\n  done\n\n  if [ $(( sum\
+    \ %2 )) -eq 0 ]\n  then\n    echo \"${arr[@]}\" | sort -n -k $(( last_index +\
+    \ 1 ))\n  else\n    echo \"${arr[@]}\" | sort -n -k $(( first_index - 1 ))\n \
+    \ fi", "    if [ -z \"$1\" ] ; then\n        echo \"No arguments given, exit...\"\
+    \n        exit 1\n    fi\n\n    local tmp i sum\n    # read input array\n    IFS='\
+    \ ' read -a input <<< \"$1\"\n\n    # sort input array\n    local -a sorted\n\
+    \    for i in \"${input[@]}\"; do\n        # initialize first index\n        sum=0\n\
+    \        # sum up all value\n        sum=$((sum+i))\n        # check if sum is\
+    \ odd\n        if [ $((sum%2)) -eq 0 ]; then\n            sorted+=(\"$i\")\n \
+    \       else\n            sorted+=(\"$i\")\n            sorted+=(\"$((-i))\")\n\
+    \        fi\n    done\n    # sort result array\n    IFS=' ' read -r -a result\
+    \ <<< \"${sorted[@]}\"\n    echo \"${result[@]}\"", "    local array=($1)\n  \
+    \  local output\n    output=$(for ((i=0;i<${#array[@]};i++)) do\n        if [[\
+    \ \"${array[i]}\" =~ ^(-?[0-9]+|-?[0-9]*\\.[0-9]+) ]]; then\n            # sort\
+    \ in ascending order\n            if ((i % 2 == 1)); then\n                array+=(${array[i]})\n\
+    \            else\n                array+=(${array[i-1]})\n            fi\n  \
+    \      fi\n    done)\n    echo -n \"${output[@]}\"", "    if [ $# -eq 0 ]; then\n\
+    \        echo \"no arguments passed\"\n        return\n    fi\n    local -i i=0\n\
+    \    local -a arr\n    local -a result\n    arr=( $@ )\n    result=()\n    # sort\
+    \ arr ascending if sum(a[i] + arr[i]) is odd, or descending if sum(a[i] + arr[i])\
+    \ is even\n    for((i=0; i < ${#arr[@]}; i++)); do\n        result+=( \"${arr[i]}\"\
+    \ \"${arr[i]}\" )\n    done\n    if [ $(( ${#result[@]} % 2 )) -ne 0 ]; then\n\
+    \        for((j=0; j < ${#result[@]}; j++)); do\n            result[j]=${result[j]}\
+    \ ${result[j+1]}\n        done\n    else\n        result=( \"${result[@]:0:(${#result[@]}/2)}\"\
+    \ ${result[@]:-${#result[@]}/2} )  # slice from beginning to length/2, and from\
+    \ length/2 to length\n    fi\n    echo \"${result[@]}\"", "    local arr=$1\n\
+    \    local sum=0\n    local result=\n    for n in ${arr}\n    do\n        sum=$((\
+    \ $sum + $n ))\n    done\n    if [ $(( sum%2 )) -eq 0 ]; then\n        result=(\
+    \ $arr )\n        for (( i=1; i<${#arr[@]}; i++ ))\n        do\n            result[i]=${result[i]}\"\
+    \ \"\n        done\n        sort \"${result[@]}\"\n    else\n        result=(\
+    \ $arr )\n        for (( i=1; i<${#arr[@]}; i++ ))\n        do\n            result[${#result[@]}-1]=${result[${#result[@]}-1]}\"\
+    \ \"\n        done\n        sort -R \"${result[@]}\"\n    fi", "    local IFS=$'\\\
+    t' arr=( $(echo \"$1\" | sed 's/ /\\t/g') )\n    IFS=$'\\n'\n    local arrlen=${#arr[@]}\n\
+    \    for (( i = 0; i < $arrlen; i++ )); do\n        if [[ $(( $i+1 ) % 2 ) = \"\
+    $i\" ]]; then\n            local j=0\n            for (( j = $i; j < $arrlen;\
+    \ j++ )); do\n                if [[ $(( ${arr[j]:0:1} + ${arr[j]:$(( $j+1 ))}\
+    \ )) -gt $(( $(( ${arr[j]:0:1} + ${arr[j]:$(( $j+1 ))} )) % 2 )]]; then\n    \
+    \                local tmp=${arr[j]}\n                    arr[j]=${arr[j+1]}\n\
+    \                    arr[j+1]=${tmp}\n                fi\n            done\n \
+    \       fi\n    done\n    echo \"${arr[@]}\"", "    local arr=($1)\n    local\
+    \ sum\n    sum=$(expr $arr[@])\n\n    if [ \"$sum\" -eq 0 ]; then return 0; fi\n\
+    \n    if [ \"$sum\" -eq 1 ]; then return ${arr[*]}; fi\n\n    if [ \"$sum\" -gt\
+    \ 1 ]; then return 0; fi\n\n    local i=1\n    local tmp\n    while [ $i -le ${#arr[@]}\
+    \ ]; do\n        local num=$(( $i + 1 ))\n        local cur=$(( $arr[$i] + $arr[num]\
+    \ ))\n\n        if [ $(($cur % 2)) -eq 1 ]; then\n            tmp=${arr[$i]}\n\
+    \            arr[$i]=$arr[$num];\n            arr[$num]=$tmp;\n            i=$num\n\
+    \        else\n            tmp=${arr[num]};\n            arr[num]=$arr[$i];\n\
+    \            arr[$i]=$tmp;\n            i=$i\n        fi\n    done", "    local\
+    \ first=$1 last=${#1}\n    local sum=0;\n    local array=()\n    for value in\
+    \ $first; do\n        sum=$((sum+$value))\n    done\n    if [ $(($sum % 2)) -eq\
+    \ 1 ]; then\n        first=\"${first}\" \"${last}\"\n        first=\"${first//\
+    \ /}\"\n        first=\"${first// /}\"\n        first=\"${first// /}\"\n     \
+    \   first=\"${first// /}\"\n        first=\"${first// /}\"\n        last=\"${last//\
+    \ /}\"\n        last=\"${last// /}\"\n    fi\n    local i=0\n    while (( $i <\
+    \ $last )); do\n        array[$i]=$((${array[i]}+$first[$i]))\n        ((i++))\n\
+    \    done\n    echo ${array[@]}", "  local IFS=' ' sorted=()\n  for i in $@; do\n\
+    \    sorted+=($(eval echo \"\\$((${i}+${sorted[0]}))\"))\n  done\n  if [[ $((${sorted[0]}+${sorted[${#sorted[@]}\
+    \ - 1]})) -eq 0 ]]; then\n    sort -n -r\n  else\n    sort -n -k 2 -r\n  fi",
+  "    local input=\"$1\"\n    if [[ \"$input\" == \"\" ]]; then\n        echo \"\
+    $1\" 1>&2\n        return\n    fi\n    echo \"${input[*]}\" | sort -nr -k1,1nr\
+    \ -k2,2r", "    # convert \"$@\" to an array\n    local sorted_array=( $(echo\
+    \ \"$@\" | tr ' ' '\\n' | sort -r) )\n\n    # check whether the sum of the first\
+    \ and last element is odd or even\n    if [ $(( ${sorted_array[0]} + ${sorted_array[-1]}\
+    \ % 2 )) -eq 1 ]; then\n        # sort it in ascending order if the sum is odd\n\
+    \        local sorted_array=( \"${sorted_array[@]}\" )\n    else\n        # sort\
+    \ it in descending order if the sum is even\n        local sorted_array=( \"${sorted_array[@]}\"\
+    \ )\n    fi\n\n    # print the sorted array\n    printf '%s\\n' \"${sorted_array[@]}\"",
+  "    # Your code here\n    declare -a sorted_array\n    declare -a temp_array\n\n\
+    \    IFS=$'\\n' read -r -a temp_array <<< \"$1\"\n\n    temp_array=( ${temp_array[@]}\
+    \ )\n\n    # Ascending sort\n    if [[ ${#temp_array[@]} == 0 || ${#temp_array[@]}\
+    \ > 2 ]]; then\n        echo \"invalid input\"\n        return\n    fi\n\n   \
+    \ # Sum first and last index to check if odd or even\n    sum_first_last=`echo\
+    \ \"${temp_array[0]} + ${temp_array[*]} | bc\"`\n\n    # sort descending if odd\
+    \ sum\n    if [[ ${sum_first_last} -eq 0 ]]; then\n        temp_array=( ${temp_array[@]}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/#/-}\
+    \ )\n        temp_array=( ${temp_array[@]/#/-} )\n        temp_array=( ${temp_array[@]/",
+  "    local __sum=$1\n    local __arr=$2\n    local __len=$((${#__arr[@]}))\n\n \
+    \   local __result=()\n\n    if [ $((${#__arr[@]}%2)) -ne 0 ]; then\n        __arr=(\
+    \ \"${__arr[@]/%/0 }\" )\n        __len=$(expr ${#__arr[@]} / 2)\n    fi\n\n \
+    \   __arr=($(sort -n -k1nr -k${__len}n \"${__arr[@]}\")); __len=$(expr ${#__arr[@]}\
+    \ / 2)\n\n    for (( i = 0; i < ${__len}; i++ )); do\n        __result[i]=\"${__arr[$i]}\"\
+    \n        if [ -n \"${__result[i]}\" ]; then\n            if [[ ${__sum%2} -eq\
+    \ 1 ]]; then\n                __sum=$((${__sum} + ${__arr[$((${i}-1))]} + ${__arr[$((${i}+1))]}))\n\
+    \            elif [[ ${__sum%2} -ne 1 ]]; then\n                __sum=$((${__sum}\
+    \ + ${__arr[$((${i}-1))]} - ${__arr[$((${i}+1))]}))\n            fi\n        fi\n\
+    \    done\n\n    echo \"${__result[@]}\"", "    local i\n    declare -a A\n\n\
+    \    IFS=$'\\n'\n    A=($(sort -n))\n    IFS=$' \\t\\n'\n\n    for i in \"${A[@]}\"\
+    ; do\n        if [ $(( $i % 2 )) -eq 0 ]; then\n            A[$i]=\"$( echo \"\
+    $A[$i]\" | sed 's/^\"//g' )\"\n        else\n            A[$i]=\"$( echo \"$A[$i]\"\
+    \ | sed 's/^\"//g' )\"\n        fi\n    done\n\n    echo \"${A[@]}\"", "  local\
+    \ a b\n  local sum\n\n  a=$1\n  sum=$(awk '{s+=$1} END {print s}' <<< ${a})\n\
+    \  for i in ${a[@]}; do\n    for j in ${a[@]}; do\n      if [[ ${j} -gt ${i} ]];\
+    \ then\n        if (( ${sum} % 2 == 0 )); then\n          b=${a[@]}\n        \
+    \  b[${#b[@]}-1]=${j}\n          a=${a[@]}\n          a[${#a[@]}-1]=${b}\n   \
+    \     fi\n      fi\n    done\n  done\n\n  for i in ${a[@]}; do\n    echo \"$i\"\
+    \n  done", "    local IFS=$'\\n'\n    # sort will output a sorted list\n    sort\
+    \ -nr", "    # return empty string if empty array\n    local IFS=','\n    local\
+    \ array=($1)\n    local sum=0\n    local last=-1\n    local temp\n    local res\n\
+    \    local count\n    local min\n    local max\n    local key\n    local idx\n\
+    \    local i\n    local j\n    local k\n    local flag\n    local num\n    local\
+    \ sum0\n    local sum1\n    local sum2\n    local sum3\n    local sum4\n    local\
+    \ sum5\n    local sum6\n    local sum7\n    local sum8\n    local sum9\n    local\
+    \ sum10\n    local sum11\n    local sum12\n    local sum13\n    local sum14\n\
+    \    local sum15\n    local sum16\n    local sum17\n    local sum18\n    local\
+    \ sum19\n    local sum20\n    local sum21\n    local sum22\n    local sum23\n\
+    \    local sum24\n    local sum25\n    local sum26\n    local sum27\n    local\
+    \ sum28\n    local sum29\n    local sum30\n    local sum31\n    local sum32\n\
+    \    local sum33\n    local sum34\n    local sum35\n    local sum36\n    local\
+    \ sum37\n    local sum38\n    local sum39\n    local sum40\n    local sum41\n\
+    \    local sum42\n    local sum43\n    local sum44\n    local sum45\n    local\
+    \ sum46\n    local sum47\n    local sum48\n    local sum49\n    local sum50\n\
+    \    local sum51\n    local sum52\n    local sum53\n    local sum54\n    local\
+    \ sum55\n    local sum56\n    local sum57\n    local sum58\n    local sum59\n\
+    \    local sum60\n    local sum61\n    local sum62\n    local sum63\n    local\
+    \ sum64\n    local sum65\n    local sum66\n    local sum67\n    local sum68\n\
+    \    local sum69\n    local sum70\n    local sum71\n    local sum72\n    local\
+    \ sum73\n    local sum74\n    local sum75\n    local sum76\n    local sum77\n\
+    \    local sum78\n    local sum79\n    local sum80\n    local sum81\n    local\
+    \ sum82\n    local sum83\n    local sum84\n    local sum85\n    ", "  local list\n\
+    \  list=\"$*\"\n  sort --field-separator=\"$1\" --key=2 --reverse \"${list}\"",
+  "    echo \"$@\" | sort -n | sed 's/\\([^ ]\\)\\(.*\\)$/\\1 \\3/g'", "    local\
+    \ sorted_list=\"$1\"\n    local array_name=\"${sorted_list##* }\"\n    local sorted_array=()\n\
+    \    local first_index_value=\n    local last_index_value=\n    local tmp\n  \
+    \  local sum\n    local len\n\n    sorted_array=( $(sort -s -t \" \" -k1 <<< \"\
+    $sorted_list\") )\n    len=\"${#sorted_array[@]}\"\n\n    # handle the odd case\n\
+    \    if [ \"$len\" -ge \"2\" ] && [ \"${sorted_array[1]}\" -gt \"${sorted_array[0]}\"\
+    \ ]; then\n        tmp_first_index_value=${sorted_array[1]}\n        tmp_last_index_value=${sorted_array[0]}\n\
+    \        tmp_first_index_value='\"' + \"${tmp_first_index_value}\"\n        tmp_last_index_value='\"\
+    ' + \"${tmp_last_index_value}\"\n        first_index_value=\"${tmp_first_index_value}\"\
+    \n        last_index_value=\"${tmp_last_index_value}\"\n        sorted_list=$(echo\
+    \ \"$sorted_list\" | sed \"s/ $tmp_first_index_value / $first_index_value /\"\
+    )\n        sorted_list=$(echo \"$sorted_list\" | sed \"s/ $tmp_last_index_value\
+    \ / $last_index_value /\")\n    fi\n\n    # handle the even case\n    if [ \"\
+    $len\" -ge \"1\" ] && [ \"$len\" -le \"2\" ] && [ \"${sorted_array[0]}\" -gt \"\
+    ${sorted_array[1]}\" ]; then\n        tmp_first_index_value=${sorted_array[0]}\n\
+    \        tmp_last_index_value=${sorted_array[1]}\n        tmp_first_index_value='\"\
+    ' + \"${tmp_first_index_value}\"\n        tmp_last_index_value='\"' + \"${tmp_last_index_value}\"\
+    \n        first_index_value=\"${tmp_first_index_value}\"\n        last_index_value=\"\
+    ${tmp_last_index_value}\"\n        sorted_list=$(echo \"$sorted_list\" | sed \"\
+    s/ $tmp_first_index_value / $first_index_value /\")\n        sorted_list=$(echo\
+    \ \"$sorted_list\" | sed \"s/ $tmp_last_index_value / $last_index_value /\")\n\
+    \    fi\n\n    local result=\"$sorted_list\"\n    result=\"${result/ $first_index_value\
+    \ / $first_index_value}\"\n    result=\"${result/ $last_index_value / $last_index_value}\"\
+    \n    result=\"${result/ $array_name / $array_name}\"\n    result=\"${result/\
+    \ $sorted_array / $sorted_array}\"\n    result=\"${result/ $sorted_list / $sorted_list}\"\
+    \n    result=\"${result/ ${sorted_array[0]} / ${sorted_array[0]}\"\n    result=\"\
+    ${result/ ${sorted_array[1]} / ${sorted_array[1]}\"\n    result=\"${result/ ${sorted_array[@]:0:1}\
+    \ / ${sorted_array[@", "    local -n arr=$1\n    echo \"${arr[*]}\" | sort -n\
+    \ | sed 's/^\\(.*\\):\\(.*\\)$/\\1\\2/'", "    local arr=( $( echo $1 | tr '[:upper:]'\
+    \ '[:lower:]' ) )\n    local sum=$(( ${#arr[@]} ))\n    if [[ $sum % 2 == 0 ]];\
+    \ then\n        arr=(${arr[@]} ${arr[@]:(-1)})\n        sort -n -k 1\n    else\n\
+    \        arr=(${arr[@]} ${arr[@]:(-2)})\n        sort -n -k 2\n    fi\n    echo\
+    \ \"${arr[@]}\"", "    local -n arr=$1\n    local -a sorted\n\n    sorted=()\n\
+    \n    for x in $arr; do\n        local str=\"$(echo $x | sed 's/^\"\\(.*\\)\"\
+    $/\\1/')\"\n        local value=\"$(xxd -p $str 2>/dev/null)\"\n        sorted+=(\
+    \ \"$(echo $x | sed 's/^\"\\(.*\\)\"$/\\1/')\" \"$value\" )\n    done\n\n    local\
+    \ sum\n    sum=\"$(echo \"${sorted[*]}\" | awk '{sum+=$2} END {print sum}')\"\n\
+    \n    if [[ $sum -eq 0 ]]; then\n        echo \"${sorted[@]}\"\n    else\n   \
+    \     if [[ $(expr ${sum} % 2) == 0 ]]; then\n            echo \"${sorted[@]}\"\
+    \n        else\n            echo \"${sorted[@]}\" | sort -n -k 1,1 -k 2,2 -k 3,3\
+    \ -k 4,4 -k 5,5 -k 6,6 -k 7,7 -k 8,8 -k 9,9 -k 10,10 -k 11,11 -k 12,12 -k 13,13\
+    \ -k 14,14 -k 15,15 -k 16,16 -k 17,17 -k 18,18 -k 19,19 -k 20,20 -k 21,21 -k 22,22\
+    \ -k 23,23 -k 24,24 -k 25,25 -k 26,26 -k 27,27 -k 28,28 -k 29,29 -k 30,30 -k 31,31\
+    \ -k 32,32 -k 33,33 -k 34,34 -k 35,35 -k 36,36 -k 37,37 -k 38,38 -k 39,39 -k 40,40\
+    \ -k 41,41 -k 42,42 -k 43,43 -k 44,44 -k 45,45 -k 46,46 -k 47,47 -k 48,48 -k 49,49\
+    \ -k 50,50 -k 51,51 -k 52,52 -k 53,53 -k 54,54 -k 55,55 -k 56,56 -k 57,57 -k 58,58\
+    \ -k 59,59 -k 60,60 -k 61,61 -k 62,62 -k 63,63 -k 64,64 -k 65,65 -k 66,66 -k 67,67\
+    \ -k 68,68 -k 69,69 -k 70,70 -k 71,71 -k 72,72 -k 73,7", "    local sorted_array=()\n\
+    \    local last_number\n    for number in \"$1\"; do\n        last_number=$number\n\
+    \    done\n    sorted_array=($last_number)\n    local sum=\"${sorted_array[0]}\
+    \ ${sorted_array[-1]}\"\n    if [[ $sum -ge $(( $(echo \"${#sorted_array[@]}\"\
+    \ | cut -c1-2) )) ]]; then\n        local desc=true\n    else\n        local desc=false\n\
+    \    fi\n    if [[ $desc ]]; then\n        local i=0\n        while [ $i -lt ${#sorted_array[@]}\
+    \ ]; do\n            if [[ ${sorted_array[$i]} -gt ${sorted_array[$i + 1]} ]];\
+    \ then\n                local j=$(( i + 1 ))\n                local m=$(( i +\
+    \ 1 ))\n                while [ $j -le ${#sorted_array[@]} ] && \\\n         \
+    \              [[ ${sorted_array[$j]} -gt ${sorted_array[$m]} ]]; do\n       \
+    \             sorted_array[$m]=\"${sorted_array[$j]}${sorted_array[$m]}\"\n  \
+    \                  j=$(( j + 1 ))\n                    m=$(( m + 1 ))\n      \
+    \          done\n                sorted_array[$i]=\"${sorted_array[$m]}${sorted_array[$i]}\"\
+    \n            fi\n            i=$(( i + 1 ))\n        done\n    else\n       \
+    \ local i=0\n        while [ $i -lt ${#sorted_array[@]} ]; do\n            if\
+    \ [[ ${sorted_array[$i]} -lt ${sorted_array[$i + 1]} ]]; then\n              \
+    \  local j=$(( i + 1 ))\n                local m=$(( i + 1 ))\n              \
+    \  while [ $j -le ${#sorted_array[@]} ] && \\\n                       [[ ${sorted_array[$j]}\
+    \ -lt ${sorted_array[$m]} ]]; do\n                    sorted_array[$m]=\"${sorted_array[$j]}${sorted_array[$m]}\"\
+    \n                    j=$(( j + 1 ))\n                    m=$(( m + 1 ))\n   \
+    \             done\n                sorted_array[$i]=\"${sorted_array[$m]}${sorted_array[$i]}\"\
+    \n            fi\n            i=$(( i + 1 ))\n        done\n    fi\n    echo \"\
+    ${sorted_array[@]}\"", "    local array=$1\n    local sum=0\n    local i=0\n \
+    \   local output=\"\"\n    local elements_counter=0\n    # remove unwanted characters\
+    \ and sort\n    for element in $(echo $array | sed \"s/[\\\"(){}<>]/\\\\&/g\"\
+    ); do\n        sum=$(( $sum + $element ))\n        elements_counter=$(($elements_counter\
+    \ + 1))\n    done\n    # create an array with elements\n    for element in $(echo\
+    \ $array | sed \"s/[\\\"(){}<>]/\\\\&/g\"); do\n        local temp=\"$(( sum/$elements_counter\
+    \ ))\"\n        array[$i]=\"$temp\"\n        sum=$(( $sum - $temp * $i ))\n  \
+    \      i=$(($i + 1))\n    done\n    # sort the array\n    if [ $(( $sum % 2 ))\
+    \ -ne 1 ]; then\n        for element in $(echo $array | sed \"s/[\\\"(){}<>]/\\\
+    \\&/g\"); do\n            local element_2=$(( $element ))\n            local element_1=$((\
+    \ $array[(( $i - 1 ))] ))\n            local element_0=$(( $array[(( $i + 1 ))]\
+    \ ))\n            local output=\"$output\"  \"${element_2}\" \"${element_1}\"\
+    \ \"${element_0}\"\n        done\n    else\n        for element in $(echo $array\
+    \ | sed \"s/[\\\"(){}<>]/\\\\&/g\"); do\n            local element_2=$(( $element\
+    \ ))\n            local element_1=$(( $array[(( $i - 1 ))] ))\n            local\
+    \ element_0=$(( $array[(( $i + 1 ))] ))\n            local output=\"$output\"\
+    \  \"${element_0}\" \"${element_1}\" \"${element_2}\"\n        done\n    fi\n\
+    \    echo \"$output\"", "    local array=$1\n    local temparray\n    local sortorder\n\
+    \    local firstindex\n    local lastindex\n    local sum\n    local lastsum\n\
+    \    local i\n\n    firstindex=0\n    lastindex=0\n    sortorder=false\n    sum=0\n\
+    \    lastsum=0\n    for (( i = 1; i <= ${#array}; i++ )); do\n        firstindex=$i\n\
+    \        if [[ ${array:$i} =~ ([0-9]+)$ ]]; then\n            lastsum=$(expr $lastsum\
+    \ + ${BASH_REMATCH[1]})\n        else\n            lastsum=$(expr $lastsum + ${array:$i})\n\
+    \        fi\n        lastindex=$i\n    done\n\n    if [ $(( $(expr $lastsum %\
+    \ 2 )) == 1 ) ]; then\n        if [ $(( $(expr $lastsum % 2 )) == 0 ]; then\n\
+    \            sortorder=true\n        fi\n    else\n        if [ $(( $(expr $lastsum\
+    \ % 2 )) == 0 ]; then\n            sortorder=false\n        fi\n    fi\n\n   \
+    \ if [ $sortorder == false ]; then\n        if [ $(( $(expr $lastsum % 2 )) ==\
+    \ 0 ]; then\n            array=($(echo ${array[@]} | sed -re 's/[0-9]+/\"$&\"\
+    /'))\n        fi\n    else\n        if [ $(( $(expr $lastsum % 2 )) == 1 ]; then\n\
+    \            array=($(echo ${array[@]} | sed -re 's/[0-9]+/\"$&\"/'))\n      \
+    \  fi\n    fi\n\n    for i in \"${!array[@]}\"; do\n        if [[ ${array[$i]}\
+    \ =~ ([0-9]+)$ ]]; then\n            sum=$(expr $sum + ${BASH_REMATCH[1]})\n \
+    \       else\n            sum=$(expr $sum + ${array[$i]})\n        fi\n    done\n\
+    \n    if [ $(( $(expr $sum % 2 )) == 1 ) ]; then\n        if [ $(( $(expr $sum\
+    \ % 2 )) == 0 ]; then\n            array=($(echo ${array[@]} | sed -re 's/[0-9]+/\"\
+    $&\"/'))\n        fi\n    else\n        if [ $(( $(expr $sum % 2 )) == 0 ]; then\n\
+    \            array=($(echo ${array[@]} | sed -re 's/[0-9]+/\"$&\"/'))\n      \
+    \  fi\n    fi\n\n    for i in \"${!array[@]}\"; do\n        if [[ ${array[$i]}\
+    \ =~ ([0-9]+)$ ]]; then\n            sum=$(expr $sum + ${BASH_REMATCH[1]})\n \
+    \       else", "    if [ \"$#\" -eq 0 ]; then\n        echo \"[\\\"\\\"]\"\n \
+    \       return\n    fi\n\n    # Split the elements by space\n    IFS=' ' read\
+    \ -r -a array <<<\"$1\"\n\n    # Sum each element\n    sum_array=()\n    for element\
+    \ in \"${array[@]}\"; do\n        # Remove leading or trailing space\n       \
+    \ element=\"${element#\"${element%%[![:space:]]*}\"}\"\n        element=\"${element%\"\
+    ${element##*[![:space:]]}\"}\"\n\n        # Add element\n        if (( ${#element}\
+    \ > 0 )); then\n            sum_array+=( \"$element\" )\n        fi\n    done\n\
+    \n    # Sum all element\n    sum_array=(\"${sum_array[@]}\")\n\n    # Sort sum\
+    \ array\n    sum_array_sorted=()\n    while read -r element; do\n        sum_array_sorted+=(\
+    \ \"$element\" )\n    done < <(\n        IFS=+ read -a array <<<\"${sum_array[@]}\"\
+    \ | sort -g | uniq -u\n    )\n\n    # Join sorted elements\n    IFS=' '\n    printf\
+    \ '['\n    local i=0\n    for element in \"${sum_array_sorted[@]}\"; do\n    \
+    \    if [ -n \"$element\" ]; then\n            if [ \"$i\" -eq 0 ]; then\n   \
+    \             printf '%s\\n' \"$element\"\n            else\n                printf\
+    \ ' \"%s\"\\n' \"$element\"\n            fi\n        fi\n        (( i++ ))\n \
+    \   done\n    printf ']'", "    local arr=($1)\n    local len=\"${#arr[@]}\"\n\
+    \    for ((i=0; i<$len; i++)); do\n        local num=\"${arr[i]}\"\n        if\
+    \ [[ \"$num\" =~ ^[0-9]+$ ]]; then\n            arr[i]=$(printf \"%'d\" $num)\n\
+    \        fi\n    done\n    local first=\"${arr[0]}\"\n    local last=\"${arr[len-1]}\"\
+    \n    local sum=\"${first}${last}\"\n    if [[ \"$sum\" =~ ^[0-9]+$ ]]; then\n\
+    \        if [[ \"$sum\" == *[0-9][0-9] ]]; then\n            local num1=\"${sum/1000}\"\
+    \n            local num2=\"${sum/1000000}\"\n            local num3=\"${sum/1000000000}\"\
+    \n            if ((num1 & 1)); then\n                local newarr=(\"${arr[@]:0:1}\"\
+    \ \"${num2}\" \"${arr[@]:${#arr[@]}}\")\n                echo \"$newarr\"\n  \
+    \          else\n                local newarr=(\"${arr[@]:0:$((len-2)):1}\" \"\
+    ${num3}\" \"${arr[@]:$((len-1)):$((len))}\")\n                echo \"$newarr\"\
+    \n            fi\n        else\n            local newarr=(\"${arr[@]:0:$((len-2)):1}\"\
+    \ \"${first}\" \"${arr[@]:$((len-1)):$((len))}\")\n            echo \"$newarr\"\
+    \n        fi\n    else\n        echo \"$arr\"\n    fi", "  echo \"$1\" | tr '\
+    \ ' '\\n' | sort -n | xargs -n 1 echo ", "  local numbers_str=$1 numbers=()\n\
+    \  local result results=(\"\") sum=0\n\n  for number in $numbers_str; do\n   \
+    \ numbers+=( \"$number\" )\n    sum=$(( sum + $number ))\n  done\n  results=(${numbers[*]})\n\
+    \n  if [[ $sum -eq 0 || $sum -eq $(( ${#numbers} % 2 )) ]]; then\n    echo ${results[*]}\n\
+    \  else\n    echo $(echo ${results[*]} | sort -k 2 -n -r -t ' ' -o -k 1,1 -n -r\
+    \ | head -n1)\n  fi", "  local _first_index=0\n  local _last_index=0\n  local\
+    \ _result_array=()\n  local _last_sum_even_index=0\n  local _last_sum_odd_index=0\n\
+    \  local _sum_even=0\n  local _sum_odd=0\n  local _next_sum_even_index=0\n  local\
+    \ _next_sum_odd_index=0\n  local _next_first_index=0\n  local _next_last_index=0\n\
+    \n  _first_index=$1\n  _last_index=$2\n\n  if [ $# = 1 ]\n  then\n    _result_array=(\"\
+    $1\")\n  else\n    _result_array=($(sort -n <<<\"$1\" | head -n \"$(($#-1))\"\
+    ))\n  fi\n  _result_array=$(sort -n <<<\"$1\" | tail -n \"$(($#-1))\")\n\n  for\
+    \ (( i=1; i<=$#; i++ ))\n  do\n    _next_sum_even_index=$((_next_sum_even_index+_result_array[i]))\n\
+    \    _next_sum_odd_index=$((_next_sum_odd_index+_result_array[i]))\n    _next_first_index=$((_next_first_index+_first_index))\n\
+    \    _next_last_index=$((_next_last_index+_last_index))\n  done\n\n  for (( i=1;\
+    \ i<=$#; i++ ))\n  do\n    _last_sum_even_index=$((_last_sum_even_index+_result_array[i]))\n\
+    \    _last_sum_odd_index=$((_last_sum_odd_index+_result_array[i]))\n    _first_index=$((_first_index+_next_first_index))\n\
+    \    _last_index=$((_last_index+_next_last_index))\n  done\n\n  while [ $_next_sum_even_index\
+    \ -ne 0 ]\n  do\n    if [ $_next_sum_even_index -eq 1 ]\n    then\n      ((_sum_even+=1))\n\
+    \      ((_next_sum_even_index=0))\n    else\n      ((_sum_odd+=1))\n      ((_next_sum_even_index=0))\n\
+    \    fi\n  done\n\n  _last_sum_even_index=$((_sum_even+1))\n  while [ $_next_sum_odd_index\
+    \ -ne 0 ]\n  do\n    if [ $_next_sum_odd_index -eq 1 ]\n    then\n      ((_sum_odd+=1))\n\
+    \      ((_next_sum_odd_index=0))\n    else\n      ((_sum_even+=1))\n      ((_next_sum_odd_index=0))\n\
+    \    fi\n  done\n\n  _last_sum_odd_index=$", "    local sorted_list=()\n    local\
+    \ sum\n    local sum_inverse\n\n    for n in \"${@}\"\n    do\n        local value=$n\n\
+    \        if [ $((sum_inverse=$((sum=${value}+${sum_inverse})))) -eq 0 ]\n    \
+    \    then\n            sorted_list+=(\"$value\")\n        elif [ $((sum_inverse=$((sum=${value}+${sum_inverse}))))\
+    \ -eq $((sum%2)) ]\n        then\n            sorted_list+=(\"$((value*-1))\"\
+    )\n        else\n            sorted_list+=(\"$value\")\n        fi\n    done\n\
+    \    echo $sorted_list", "  local strings=( \"$1\" )\n  local sorted=()\n\n  while\
+    \ [[ ${#strings[@]} -gt 0 ]]; do\n    local sum=\"$(( ${strings[0]} + ${strings[-1]}\
+    \ ))\"\n\n    if [ $(( sum % 2 )) -eq 0 ]; then\n      # Odd sum, sort descending\n\
+    \      sorted+=( ${strings[@]} )\n    else\n      # Even sum, sort ascending\n\
+    \      sorted+=( ${strings[@]:0:1} )\n      sorted+=( ${strings[@]:(${#strings[@]}-1)}\
+    \ )\n    fi\n    strings+=( ${strings[-1]} )\n  done\n  printf '%s\\n' \"${sorted[@]}\"",
+  "    local sorted_array=()\n    for element in $1; do\n        local index=$(expr\
+    \ index \"$element\" +1) # get the index from the element\n        # get the first\
+    \ element\n        local first=$(expr sub \"$element\" 0 $index) # get the first\
+    \ element\n        # get the last element\n        local last=$(expr sub \"$element\"\
+    \ $index \"${#element}\")\n        local sum=$(( ${first}+${last} )) # sum the\
+    \ first and last element\n        if [ $sum -gt $(( ${last}+1 )) ]; then\n   \
+    \         sorted_array+=($last)\n        elif [ $sum -gt $(( ${first}+1 )) ];\
+    \ then\n            sorted_array+=($first)\n        elif [ $sum -eq $(( ${last}+1\
+    \ )) ]; then\n            sorted_array+=($first)\n            sorted_array+=($last)\n\
+    \        elif [ $sum -eq $(( ${first}+1 )) ]; then\n            sorted_array+=($last)\n\
+    \            sorted_array+=($first)\n        else\n            sorted_array+=($element)\n\
+    \        fi\n    done\n    echo \"${sorted_array[@]}\"", "    local n=$1 \n  \
+    \  local a\n    local b\n    local sum\n    local i\n    local j\n\n    if [[\
+    \ -z \"$n\" ]]; then\n        echo \"Error: empty array\"\n        echo \"Usage:\
+    \ $0 [input_list]\"\n        exit 1\n    fi\n\n    # Sort in ascending order if\
+    \ the sum of the first and last item is odd,\n    # or in descending order if\
+    \ the sum of the first and last item is even.\n    for ((i=0; i<n; i++))\n   \
+    \ do\n        a=${n[i]}\n        b=${n[$((${#n[@]} - 1))]}\n        sum=$((b+a))\n\
+    \        if [[ $((sum%2)) -eq 1 ]]; then\n            echo \"$i\" \"${n[i]} \\\
+    \"${n[$i]}\\\"\"\n        else\n            echo \"$i\" \"${n[$((${#n[@]} - 1))]}\
+    \ \\\"${n[i]}\\\"\"\n        fi\n    done", "    local IFS=','\n    local -n result=$1\n\
+    \n    local tmp=${result[@]}\n    local i=0\n    local sum=${tmp[0]} # first element\
+    \ is zero\n    local -n l=${tmp[@]:1}\n    local j=${#l} # length of given array\n\
+    \n    local cmp_odd\n    local cmp_even\n\n    [ $((j % 2)) -eq 0 ] && cmp_odd=gtr\
+    \ &&\n        cmp_even=gtr || cmp_odd=ltr &&\n        cmp_even=ltr || echo \"\
+    Invalid arguments supplied\"\n\n    while [ $i -lt $j ]; do\n        [ $(cmp_odd\
+    \ \"${l[$i]}\" \"${l[$((j-1)-1)]}\") ] ||\n        [ $(cmp_even \"${l[$i]}\" \"\
+    ${l[$((j-1)-1)]}\") ] || { \n            result+=(${l[$i]}); i=$((i+1)); \n  \
+    \      }\n    done", "    local item\n    local sum\n    local last\n    local\
+    \ tmp\n\n    sum=0\n    last=0\n    for item in ${1//,/ }; do\n        tmp=$((\
+    \ sum+item ))\n        if [ $(( $tmp % 2 )) -eq 1 ]; then\n            sum=$tmp\n\
+    \        else\n            sum=$(($sum+1))\n        fi\n        last=$item\n \
+    \   done\n    printf '%s\\n' \"${@:3}\"", "  local array new_array\n\n  array=\"\
+    $1\"\n  new_array=()\n  for i in $(eval echo {1..${#array}} | sort -n -r); do\n\
+    \    case \"$(eval echo \"${array[i]} + ${array[i-1]}+\")\" in\n      *odd*) new_array+=(\"\
+    ${array[i]}\");;\n      *even*) new_array+=(\"${array[i-1]}\");;\n      *) echo\
+    \ \"${array[i]} + ${array[i-1]}+\" >&2; return 1;;\n    esac\n  done\n\n  printf\
+    \ '%s\\n' \"${new_array[@]}\"", "    local sorted_array\n    sorted_array=$(echo\
+    \ \"$1\" | sed 's/[\",]/ /g' | sort -n -k 2 -k 1 -k 3)\n    echo \"$sorted_array\"",
+  "    local sorted_array=\"$1\"\n    if [ -z \"$sorted_array\" ] || [[ -z ${sorted_array//[[:space:]]}\
+    \ ]] ; then\n        echo \"$sorted_array is empty\"\n        return\n    fi\n\
+    \n    # sort from shortest to longest\n    local temp_array=$(echo -e \"$sorted_array\"\
+    \ | tr ' ' ',' | sort --field-separator=',' --key=2 --key=1 --numeric-sort) \\\
+    \n    && echo \"$temp_array\" \\\n    || echo \"$sorted_array is not sorted\"\n\
+    \n    # remove the sorted elements from the shortest length\n    sorted_array=$temp_array\n\
+    \    echo $sorted_array", "    local sorted_array=()\n    local last_value=$1\n\
+    \    local first_value=$1 first_index=0 last=${#last_value}\n    local sum=0\n\
+    \    if [[ $first ]]; then\n        sum=$first\n        first_value=$first\n \
+    \       first_index=1\n    fi\n    while [ $first_index -lt $last ]; do\n    \
+    \    sum=$(( sum + $last_value[$first_index] ))\n        sorted_array+=(\"$last_value[$first_index]\"\
+    )\n        sum=$(( sum - $last_value[$first_index] ))\n        (( first_index++\
+    \ ))\n    done\n    if [ $first_index -lt $last ]; then\n        sum=$(( sum +\
+    \ $last_value[$first_index] ))\n        sorted_array+=(\"$last_value[$first_index]\"\
+    )\n        sum=$(( sum - $last_value[$first_index] ))\n    fi\n    sorted_array+=(\"\
+    $sum\")\n    if [ $(( $(echo \"${#sorted_array[@]}\" | awk '{print $1/2}')%2 ))\
+    \ -eq 0 ]; then\n        sorted_array=(\"${sorted_array[@]:1}\" \"${sorted_array[@]:(${#sorted_array[@]}\
+    \ - 1)}\")\n    else\n        sorted_array=(\"${sorted_array[@]:(${#sorted_array[@]}\
+    \ - 1)}\")\n    fi\n    sorted_array=(\"${sorted_array[@]}\")\n    echo \"${sorted_array[@]}\"",
+  "    local items=$1\n\n    local sum=${items[0]} ${items[-1]}\n    if [ ${sum:1}\
+    \ -eq ${sum} ]; then\n        sort -n ${items[@]} |\n        if [ $((sum % 2))\
+    \ -eq 0 ]; then\n            sort -n\n        else\n            sort -n -k 2 |\
+    \ sort -n -k 1\n        fi\n    else\n        sort -n -k 2 ${items[@]} |\n   \
+    \     if [ $((sum % 2)) -eq 0 ]; then\n            sort -n -k 1 |\n          \
+    \  sort -n | sort -n\n        else\n            sort -n -k 2 |\n            sort\
+    \ -n -k 1 | sort -n | sort -n\n        fi\n    fi", "    local IFS=' '\n    local\
+    \ i\n    local j\n    local sorted\n    local temp\n    local sum\n    local count\n\
+    \    local len\n    sorted=( $(sort -n $1) )\n    len=$(expr ${#sorted[@]})\n\
+    \    sum=$(expr $sorted[$len-1] + $sorted[0])\n    if [ $((sum%2)) -eq 1 ]; then\
+    \ sorted +=( $(sort -n $1 -r)); fi\n    count=0\n    for (( i = 0; i < $len; i++\
+    \ )); do\n        if [ $((${sorted[$i]}+${sorted[$len-1]})) -eq $sum ]; then\n\
+    \            if [ $(( count % 2 )) -eq 1 ]; then sorted[count++]=$i; fi\n    \
+    \    fi\n    done\n    temp=()\n    for (( i = 0; i < $len; i++ )); do\n     \
+    \   temp+=( \"${sorted[$i]}\" )\n    done\n    sorted=( ${temp[@]} )\n    echo\
+    \ \"${sorted[@]}\"", "    # Initialize an empty array \"result\"\n    result=()\n\
+    \    # Initialize an empty variable \"sum\", which will store the sum of \"first\
+    \ index value\" and of \"last index value\"\n    sum=0\n    # Iterate over the\
+    \ array, each time \"i\" will be an element of the array\n    for i in $1; do\n\
+    \        # Compute the sum by \"i\"\n        ((sum+=i))\n        # Check if the\
+    \ sum is odd\n        if [ $((sum % 2)) -eq 1 ]; then\n            # Sort the\
+    \ array in ascending order\n            result=(\"${result[@]}\" \"$i\")\n   \
+    \     else\n            # Sort the array in descending order\n            result=(\"\
+    ${result[@]}\" \"${i}\")\n        fi\n    done\n    # Return \"result\"\n    echo\
+    \ ${result[@]}", "    declare -i cnt=0\n    declare -i sum=0\n    declare -i len=${#1}\n\
+    \    declare -i i\n    declare -a arr=(\"${@}\")\n\n    for ((i=0; i < len; i++));\
+    \ do\n        ((cnt++))\n        if (( cnt > 1 )); then\n            ((sum +=\
+    \ i))\n        fi\n    done\n    if (( cnt % 2 != 0 )); then\n        ((arr =\
+    \ ${arr[@]}))\n        ((len = ${#arr[@]}))\n        ((i = 1+len))\n        ((arr[len-1]))\n\
+    \        while ((i < len)); do\n            ((arr[i-1])=\"${arr[i]}\"\n      \
+    \      ((i++))\n        done\n    fi\n    arr=($(sort -nr -k 1,1 -k ${#arr[@]}\
+    \ - \"${arr[@]}\"))", "  local arr=$1 _sum\n  if [[ ${#arr[@]} -eq 0 ]]; then\n\
+    \    return\n  fi\n  arr=($arr)\n  _sum=$((${arr[0]}+${arr[${#arr[@]}-1]}))\n\
+    \  arr=($(_sort_array ${arr[@]}))\n  if [[ ${_sum} -eq 0 ]]; then\n    return\
+    \ ${arr[@]}\n  fi\n  arr=($(_sort_array ${arr[@]}))\n  if [[ ${_sum} -eq 1 ]];\
+    \ then\n    return ${arr[@]}\n  fi", "    local IFS=' ' arr=( $1 )\n    local\
+    \ sum=$(( ( ${#arr[@]} % 2 == 1 ) ? ( ${arr[0]} + ${arr[-1]} ) : ( ${arr[0]} +\
+    \ ${arr[-2]} ) ))\n    local temp\n    local i\n    local result\n\n    # Sort\
+    \ in ascending order if the sum is odd, in descending order if the sum is even.\n\
+    \    for (( i = 0; i < ${#arr[@]}; i++ )); do\n        if [ $i -eq 0 ]; then\n\
+    \            if [ $sum -gt $i ]; then\n                temp=${arr[i]}\n      \
+    \          arr[i]=${arr[i - 1]}\n                arr[i - 1]=$temp\n          \
+    \  fi\n        elif [ $sum -gt $i ]; then\n            arr[i]=${arr[i - 1]}\n\
+    \        elif [ $sum -eq $i ]; then\n            temp=${arr[i]}\n            arr[i]=${arr[i\
+    \ + 1]}\n            arr[i + 1]=$temp\n        fi\n    done\n    result=$(IFS=,;\
+    \ echo \"${arr[@]}\")", "\tset -x # echo on\n\tlocal arr=($1)\n\tunset -v max_sum\n\
+    \tlocal -i cnt=0\n\tlocal -i cnt2=1\n\tlocal -i max_sum_of_two\n\tlocal -i max_sum_of_one\n\
+    \tlocal -i max_sum_of_three\n\tlocal -i max_sum_of_two_tmp\n\tlocal -i max_sum_of_one_tmp\n\
+    \tlocal -i max_sum_of_three_tmp\n\tlocal -i max_sum_of_four\n\tlocal -i max_sum_of_four_tmp\n\
+    \tlocal -i max_sum_of_five\n\tlocal -i max_sum_of_five_tmp\n\tlocal -i max_sum_of_six\n\
+    \tlocal -i max_sum_of_six_tmp\n\tlocal -i max_sum_of_seven\n\tlocal -i max_sum_of_seven_tmp\n\
+    \tlocal -i max_sum_of_eight\n\tlocal -i max_sum_of_eight_tmp\n\tlocal -i max_sum_of_nine\n\
+    \tlocal -i max_sum_of_nine_tmp\n\tlocal -i max_sum_of_ten\n\tlocal -i max_sum_of_ten_tmp\n\
+    \tlocal -i max_sum_of_eleven\n\tlocal -i max_sum_of_eleven_tmp\n\tlocal -i max_sum_of_twelve\n\
+    \tlocal -i max_sum_of_twelve_tmp\n\tlocal -i max_sum_of_thirteen\n\tlocal -i max_sum_of_thirteen_tmp\n\
+    \tlocal -i max_sum_of_fourteen\n\tlocal -i max_sum_of_fourteen_tmp\n\tlocal -i\
+    \ max_sum_of_fifteen\n\tlocal -i max_sum_of_fifteen_tmp\n\tlocal -i max_sum_of_sixteen\n\
+    \tlocal -i max_sum_of_sixteen_tmp\n\tlocal -i max_sum_of_seventeen\n\tlocal -i\
+    \ max_sum_of_seventeen_tmp\n\tlocal -i max_sum_of_eighteen\n\tlocal -i max_sum_of_eighteen_tmp\n\
+    \tlocal -i max_sum_of_nineteen\n\tlocal -i max_sum_of_nineteen_tmp\n\tlocal -i\
+    \ max_sum_of_twenty\n\tlocal -i max_sum_of_twenty_tmp\n\tlocal -i max_sum_of_twenty_one\n\
+    \tlocal -i max_sum_of_twenty_two\n\tlocal -i max_sum_of_twenty_three\n\tlocal\
+    \ -i max_sum_of_twenty_four\n\tlocal -i max_sum_of_twenty_five\n\tlocal -i max_sum_of_twenty_six\n\
+    \tlocal -i max_sum_of_twenty_seven\n\tlocal -i max_sum_of_twenty_eight\n\tlocal\
+    \ -i max_sum_of_", "    local IFS=$'\\n'\n    local sum=$1\n    local array=(\
+    \ $2 )\n    local sorted=()\n\n    for (( i = 0; i < ${#array[@]} && sum > 0;\
+    \ i++ )); do\n        local first_val=${array[$i]}\n        local last_val=${array[$((\
+    \ i + 1 ))]}\n        local second_val=$(echo $first_val + $last_val | bc)\n \
+    \       local third_val=$(echo $second_val + $sum | bc)\n\n        if [ \"$third_val\"\
+    \ -eq \"0\" ]; then\n            sorted+=($first_val)\n            sum=$(echo\
+    \ $sum - $first_val | bc)\n        else\n            sorted+=($third_val)\n  \
+    \          sum=$(echo $sum - $third_val | bc)\n        fi\n    done\n\n    IFS=$'\
+    \ \\t\\n'\n    echo ${sorted[*]}", "    local -n arr=( \"$1\" )\n    local sum\n\
+    \    sum=0\n    for i in \"${arr[@]}\"; do\n        sum=$(( sum + i ))\n    done\n\
+    \    if (( sum % 2 )); then\n        sorted=( $(sort -r \"${arr[@]}\") )\n   \
+    \ else\n        sorted=( $(sort -r \"$( echo \"${arr[@]}\" )\" ) )\n    fi\n \
+    \   echo -n \"[$(echo \"${sorted[@]}\" | sed 's/^/\"/')]\"", "\tlocal -n res=$1\n\
+    \tlocal -i cnt=0\n\tlocal -i tmp=0 tmp1\n\tlocal -i len=${#res[*]}\n\tlocal -i\
+    \ first_index=0\n\tlocal -i last_index=0\n\tlocal -i sum\n\n\tlocal -a arr\n\t\
+    arr=(${res[@]})\n\n\t# We always have to sort in ascending order\n\tif [ ${#arr[@]}\
+    \ -lt 2 ]; then\n\t\techo \"No element to sort, returning an empty list\"\n\t\t\
+    return 0\n\tfi\n\n\t# The sum of first and last element is the array sum\n\tsum=$(expr\
+    \ $(( ${arr[0]} + ${arr[len-1]} )))\n\n\t# If the sum is even, sort it in descending\
+    \ order\n\tif [ $(( $(expr $sum / 2 )) % 2 ) = \"0\" ]; then\n\t\tlast_index=$(expr\
+    \ $len -1)\n\telse\n\t\tlast_index=$(expr $len -2)\n\tfi\n\n\t# Sort ascendingly\
+    \ if the sum is odd\n\tif [ $(expr $sum / 2 ) = \"0\" ]; then\n\t\tfirst_index=0\n\
+    \telse\n\t\tfirst_index=1\n\tfi\n\n\twhile [ $first_index -lt $last_index ]; do\n\
+    \t\ttmp=$(expr $first_index + $tmp)\n\t\ttmp1=$(expr $first_index + $last_index)\n\
+    \t\tif [ ${arr[tmp]} -gt ${arr[tmp1]} ]; then\n\t\t\t((cnt++))\n\t\t\tlocal -n\
+    \ tmp_res=$tmp\n\t\t\ttmp_res[$cnt]=\"${arr[tmp]}\"\n\t\t\ttmp_res[$cnt+1]=\"\
+    ${arr[tmp1]}\"\n\t\t\tarr=(\"${tmp_res[@]}\")\n\t\telse\n\t\t\tlocal -n tmp_res=$tmp\n\
+    \t\t\ttmp_res[$cnt]=\"${arr[tmp1]}\"\n\t\t\ttmp_res[$cnt+1]=\"${arr[tmp]}\"\n\t\
+    \t\tarr=(\"${tmp_res[@]}\")\n\t\tfi\n\t\tfirst_index=$(( $first_index + 1 ))\n\
+    \t\tlast_index=$(( $last_index + 1 ))\n\tdone\n\n\techo \"${arr[@]}\"", "    local\
+    \ i temp [[ ${#1} -gt 0 ]] || return 1\n    local sum=$(echo \"${@:1}\" | awk\
+    \ '{sum += $1; print sum}')\n    local arr\n    local sorted\n    IFS=$'\\n'\n\
+    \    arr=($(echo \"${@:1}\" | tr \" \" \"\\n\"))\n    IFS=$' \\t\\n'\n    sorted=($(echo\
+    \ \"${arr[*]}\" | sort -n))\n    if [ ${sum} -gt ${sorted[0]} ] && [ ${sum} -le\
+    \ ${sorted[${#sorted[@]}-1]} ]; then\n        echo ${sorted[*]}\n    else\n  \
+    \      echo ${sorted[*]}\n    fi", "    local IFS=\"$1\"\n\n    local arr=()\n\
+    \    local len=${#arr[@]}\n    for ((i = 0; i < len; i++) {\n        arr+=( $i\
+    \ )\n    }\n\n    local sum=0\n    for ((i = 0; i < len; i++) {\n        sum=$((sum\
+    \ + arr[i]))\n    }\n\n    if [[ $((sum % 2)) == 1 ]]; then\n        # Ascending\
+    \ order\n        arr=($(sort -n <<<\"${arr[@]}\" | tail +${len}))\n    else\n\
+    \        # Descending order\n        arr=($(sort -r -n <<<\"${arr[@]}\" | head\
+    \ +${len}))\n    fi\n\n    echo -n \"${arr[@]}\"", "    local array=\"$1\"\n \
+    \   if [ $(echo \"${array}\" | grep -E \"^[[:digit:]]*$\") ]\n    then\n     \
+    \   array=\"$(echo \"${array}\" | grep -Eo \"^[[:digit:]]*\")\"\n        local\
+    \ array_count=\"${#array[@]}\"\n        local array_sum=$(echo \"${array}\" |\
+    \ tr \"[:digit:]\" \"+\"| bc)\n        if [ \"$array_sum\" = \"0\" ]; then\n \
+    \           echo \"[]\"\n            return\n        fi\n        local first_element_idx=\"\
+    ${array_count}\"\n        local last_element_idx=\"${array_sum}\"\n\n        local\
+    \ is_last_element_odd_sum=\"1\"\n        local is_first_element_odd_sum=\"0\"\n\
+    \        if [ $(echo \"${array_sum}\" | grep -E \"^[[:digit:]]+$\") ]\n      \
+    \  then\n            array_sum=$(echo \"${array_sum}\" | grep -Eo \"^[[:digit:]]+\"\
+    )\n            local last_element_idx=\"${array_sum}\"\n            if [ $(( $array_sum\
+    \ % 2 )) -ne 0 ]; then\n                is_last_element_odd_sum=\"1\"\n      \
+    \      else\n                is_last_element_odd_sum=\"0\"\n            fi\n \
+    \       fi\n        if [ $(echo \"${array_sum}\" | grep -E \"^[[:digit:]]+$\"\
+    ) ]\n        then\n            array_sum=$(echo \"${array_sum}\" | grep -Eo \"\
+    ^[[:digit:]]+\")\n            local first_element_idx=\"${array_sum}\"\n     \
+    \       if [ $(( $array_sum % 2 )) -ne 0 ]; then\n                is_first_element_odd_sum=\"\
+    1\"\n            else\n                is_first_element_odd_sum=\"0\"\n      \
+    \      fi\n        fi\n\n        if [ \"$is_first_element_odd_sum\" = \"1\" ]\n\
+    \        then\n            local first_element_odd=\"${array[0]}\"\n         \
+    \   local last_element_odd=\"${array[last_element_idx]}\"\n            local array_odd=\"\
+    ${array[@]:1:$((first_element_idx-1))}\"\n            local array_even=\"${array[@]:$(($first_element_idx+1)):$(($last_element_idx))}\"\
+    \n\n            array_odd=\"${array_odd} \\\"${first_element_odd}\\\" \\\"${last_element_odd}\\\
+    \" \"\n            array_even=\"${array_even} \\\"${first_element_odd}\\\" \\\"\
+    ${last_element_odd}\\\" \"\n            array=\"${array_odd} ${array_even}\"\n\
+    \        elif [ \"$is_last_element_odd_sum\" = \"1\" ]\n        then\n       \
+    \     local first_element_odd=\"${array[first_element_idx]}\"\n            local\
+    \ last_", "    local IFS=' '\n    local -a num=(\"$@\")\n    local last\n    local\
+    \ max\n    local -a result=()\n    local sum\n    local i\n    local j\n    for\
+    \ (( i=0; i < ${#num[@]} - 1; i++ )); do\n        last=${num[i]}\n        max=${num[i+1]}\n\
+    \        for (( j=0; j < ${#num[@]} - ( i + 1 ); j++ )); do\n            if [\
+    \ ${num[j]} -gt max ]; then\n                max=${num[j]}\n            fi\n \
+    \       done\n        if [ $(( sum=$( eval $(( ( ${#last} + ${#max} ) / 2 ) )\
+    \ )) % 2 ) -eq 1 ]; then\n            result+=($last)\n        else\n        \
+    \    result+=($max)\n        fi\n    done\n    echo \"${result[@]}\"", "\tlocal\
+    \ IFS=$'\\n'\n\tlocal i\n\tlocal array=($(echo \"$1\" | sed 's/ //g'))\n\tlocal\
+    \ sum=$(echo \"${array[@]}\" | awk '{sum+=$1} END {print sum}')\n\tlocal rev\n\
+    \tif [ $sum -eq 0 ]\n\tthen\n\t\techo \"$1\"\n\t\treturn 0\n\tfi\n\tif [ $sum\
+    \ -eq 2 ]\n\tthen\n\t\trev=($(echo \"${array[@]}\" | awk '{if ($1>$2) print $0}'))\n\
+    \t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print $1}'))\n\t\trev=($(echo\
+    \ \"${rev[@]}\" | sort -n | awk '{print $2}'))\n\t\tif [ ${#rev[@]} -eq 1 ]\n\t\
+    \tthen\n\t\t\techo \"$rev\"\n\t\t\treturn 0\n\t\tfi\n\t\trev=($(echo \"${rev[@]}\"\
+    \ | sort -n | awk '{print $1}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk\
+    \ '{print $2}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print $1}'))\n\
+    \t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print $2}'))\n\t\trev=($(echo\
+    \ \"${rev[@]}\" | sort -n | awk '{print $1}'))\n\t\trev=($(echo \"${rev[@]}\"\
+    \ | sort -n | awk '{print $2}'))\n\t\tif [ ${#rev[@]} -eq 2 ]\n\t\tthen\n\t\t\t\
+    echo \"$rev\"\n\t\t\treturn 0\n\t\tfi\n\t\trev=($(echo \"${rev[@]}\" | sort -n\
+    \ | awk '{print $1}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print\
+    \ $2}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print $1}'))\n\t\trev=($(echo\
+    \ \"${rev[@]}\" | sort -n | awk '{print $2}'))\n\t\trev=($(echo \"${rev[@]}\"\
+    \ | sort -n | awk '{print $1}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk\
+    \ '{print $2}'))\n\t\trev=($(echo \"${rev[@]}\" | sort -n | awk '{print $1}'))\n\
+    \t\trev=($(echo \"${rev[@]", "  local items=$1\n  local -a sorted=()\n  local\
+    \ sum=0\n\n  for i in \"${items[@]}\"; do\n    sum=$((sum + i))\n  done\n\n  if\
+    \ (( sum % 2 == 1 )); then\n    sorted=(${items[@]})\n    sorted=($(sort -nr -k\
+    \ 2 <<<\"${sorted[@]}\"))\n    sorted=(${sorted[@]})\n  else\n    sorted=($(sort\
+    \ -nr -k 2 <<<\"${items[@]}\"))\n    sorted=(${sorted[@]})\n  fi\n\n  echo \"\
+    ${sorted[@]}\"", "  local IFS=$'\\n' sorted=()\n  for elm in $1;do\n    if [[\
+    \ \"$elm\" =~ ^[0-9]+$ ]]; then\n      sorted+=(\"$elm\")\n    fi\n  done\n\n\
+    \  IFS=$' '\n  local sum=\"$( echo ${sorted[@]} | sed 's/ \\+/ /g' | awk '{sum+=$1}\
+    \ END {print sum}' )\"\n  local is_odd=\"$(expr $sum % 2 )\"\n  local is_even=\"\
+    $(expr $sum / 2 )\"\n  if [ \"$is_odd\" = \"1\" ]; then\n    echo \"${sorted[@]}\"\
+    \n  else\n    echo \"${sorted[@]:-1:1}\"\n  fi"]
 stop_tokens:
 - "\n}"

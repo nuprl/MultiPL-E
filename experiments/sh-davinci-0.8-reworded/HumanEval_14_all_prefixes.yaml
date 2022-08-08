@@ -54,6 +54,454 @@ completions: ["    echo -n '['\n    for i in $(seq 1 ${#1}); do\n        echo -n
     \     dashes=\"${dashes}-\"\n        done\n        echo \"[\\\"${words[i]}\\\"\
     ]\"\n    done", "    jq -n --arg a \"$1\" --argjson len \"${#1}\" '[ range(0;\
     \ $len|tonumber) | . as $i | [$a[0:$i]] | tostring ]'", "  out=()\n  for (( i=0;\
-    \ i < ${#1}; i++ )); do\n    out+=(\"\\\"${1:0:$i}\\\"\")\n  done\n  echo \"${out[@]}\""]
+    \ i < ${#1}; i++ )); do\n    out+=(\"\\\"${1:0:$i}\\\"\")\n  done\n  echo \"${out[@]}\"",
+  "    [[ $# -ne 1 ]] && err \"all_prefixes takes exactly 1 argument\"\n\n    local\
+    \ seq=$(seq 1 ${#1})\n    echo $seq | jq -R . | jq -s -c '[.[] | .[] | . as $i\
+    \ | \"'${1:0:$i}'\"]'", "    local str=\"$1\"\n    local len=${#str}\n    local\
+    \ i=0\n    local res=\"\"\n    while [ $i -lt $len ]; do\n        res=\"$res\\\
+    \"${str:0:$((i+1))}\\\", \"\n        i=$((i+1))\n    done\n    # remove the last\
+    \ two characters\n    echo \"[${res:0:$((len*4-3))}]\"", "  local -r input=\"\
+    $1\"\n  local -i n=${#input}\n  local -i i\n  local -a prefixes\n  for ((i=1;\
+    \ i<=n; i++)); do\n    prefixes+=(\"$(printf \"%s\" \"${input:0:i}\" | json_string)\"\
+    )\n  done\n  echo \"${prefixes[@]}\"", "    local str=$1\n    python3 -c \"print(',\
+    \ '.join('\\\"' + str[:i+1] + '\\\"' for i in range(${#str})))\"", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local char=\"$(echo \"${str:0:1}\")\"\
+    \n    local prefixes\n    if [[ $len -eq 1 ]]; then\n        prefixes='[\"'\"\
+    $char\"'\"]'\n    else\n        prefixes=\"$(all_prefixes \"${str:1}\")\"\n  \
+    \      prefixes=\"${prefixes::-1}\"\n        prefixes=\"${prefixes}, '\\\"$char${str:1}\\\
+    \"']\"\n    fi\n    echo \"$prefixes\"", "    local str=$1\n    local len=${#str}\n\
+    \    if [ \"$len\" -eq 0 ]; then\n        echo -n \"[]\"\n    else\n        local\
+    \ i\n        for ((i=0; i<len; i++)); do\n            local char=${str:i:1}\n\
+    \            local prefix=${str:0:i+1}\n            local prefix_string='\"'$prefix'\"\
+    '\n            if [ \"$i\" -eq \"0\" ]; then\n                echo -n \"[$prefix_string\"\
+    \n            else\n                echo -n \", $prefix_string\"\n           \
+    \ fi\n        done\n        echo -n \"]\"\n    fi", "    local input=$1\n    local\
+    \ output=()\n    local s\n    for (( i=0; i<${#input}; i++ )); do\n        s=${input:0:$((i+1))}\n\
+    \        output+=($(json_quote \"$s\"))\n    done\n    printf \"%s\\n\" \"${output[@]}\"",
+  "    local string=$1\n    local length=$(expr length \"$string\")\n    local prefixes=()\n\
+    \    local i\n    for ((i=1; i<=$length; i++)); do\n        local prefix=$(expr\
+    \ substr \"$string\" 1 $i)\n        prefixes+=($prefix)\n    done\n    local output=\"\
+    \"\n    for prefix in \"${prefixes[@]}\"; do\n        output+=\"'$prefix', \"\n\
+    \    done\n    echo \"[${output%, }]\"", "  # Split the string into an array of\
+    \ chars.\n  # Join each element of the array (except the last) with the next.\n\
+    \  # This creates array of prefixes from shortest to longest\n  local IFS=\"\"\
+    \n  local chars=($1)\n  local -a prefixes=( \"${chars[0]}\" )\n  for (( i=1; i<${#chars[@]};\
+    \ i++ )); do\n    # for each prefix add the next char\n    prefixes[$i]=\"${prefixes[$i-1]}${chars[$i]}\"\
+    \n  done\n  echo ${prefixes[@]}", "  local str=\"$1\"\n  local len=$((${#str}\
+    \ - 1))\n  local i\n  local result=''\n  for ((i=0; i<=len; i++)); do\n    if\
+    \ [ $i -eq 0 ]; then\n      result=\"\\\"${str:0:1}\\\"\"\n    else\n      result=\"\
+    $result, \\\"${str:0:$((i+1))}\\\"\"\n    fi\n  done\n  echo \"[$result]\"", " \
+    \   local IFS=\n    local prefixes=\"[\"\n    local string=\"$1\"\n    for ((\
+    \ i=0; i<${#string}; i++ )); do\n        # echo \"$prefixes$string\"\n       \
+    \ prefixes+=\"$string,\"\n        string=\"${string%?}\"\n    done\n    echo \"\
+    ${prefixes:0:-1}]\"", "  local string=\"$1\"\n  local cut_length=1\n  local prefixes=''\n\
+    \  local prefix=''\n  for ((; cut_length <= ${#string}; cut_length++)); do\n \
+    \   prefix=$(echo \"$string\" | cut -c -$cut_length)\n    prefixes=\"$prefixes\
+    \ \\\"$prefix\\\"\"\n  done\n  echo $prefixes", "  local str=$1\n  local output\n\
+    \  for (( i=1; i<=${#str}; i++ )); do\n    output+=\"\\\"${str:0:i}\\\", \"\n\
+    \  done\n  echo \"[${output%, }]\"", "    local prefix=$1\n    local length=${#prefix}\n\
+    \    local result=()\n    for ((i=1; i<=$length; i++)); do\n        result+=(\"\
+    \\\"${prefix:0:$i}\\\"\")\n    done\n    echo \"[${result[*]}]\"", "    if [ $#\
+    \ -eq 0 ]; then\n        return\n    fi\n    echo -n \"[\\\"$1\\\"\"\n    for\
+    \ (( i=1; i<${#1}; i++ )); do\n        echo -n \", \\\"${1:0:$i}\\\"\"\n    done\n\
+    \    echo \"]\"", "  local prefix=\n  local input=\"$1\"\n  local output\n  for\
+    \ (( i=0; i<${#input}; i++ )); do\n    output+=\"\\\"${input:0:i+1}\\\", \"\n\
+    \  done\n  echo \"[${output::-2}]\"", "    local n=\"\"\n    for ((i=0; i < ${#1};\
+    \ i++)); do\n        n+=$(printf '%q' \"${1:0:$i}\")\n        if [[ $i -eq $((\
+    \ ${#1} - 1 )) ]]; then\n            printf '%s' \"$n\"\n        else\n      \
+    \      printf '%s, ' \"$n\"\n        fi\n    done", "    local -r s=$1\n    local\
+    \ -i i=0\n    local -i len=${#s}\n    local -a x=()\n    while (( i < len ));\
+    \ do\n        x+=($(printf '\"%s\"' \"${s:0:i+1}\"))\n        i+=1\n    done\n\
+    \    IFS=,; echo \"[${x[*]}]\"", "  local str=$1\n  local length=${#str}\n  local\
+    \ prefix=''\n  for (( i=0; i<$length; i++ )); do\n    prefix=\"$prefix${str:$i:1}\"\
+    \n    echo \"\\\"$prefix\\\"\"\n  done", '  echo "[$(for p in $(seq 1 $((${#1}))));
+    do echo -n \"$(echo $1 | cut -c 1-$p)\"\", "; done | rev | cut -c 4- | rev)]"',
+  "    for (( i=1; i<=$(length \"$1\"); i++ )); do\n        echo -n '\"'\n       \
+    \ substring \"$1\" 1 $i\n        echo -n '\"'\n    done", "    local INPUT=\"\
+    $1\"\n    local N\n    local LEN\n    LEN=${#INPUT}\n    for ((N=1; N<=LEN; N++));\
+    \ do\n        echo -n '\"'\n        echo -n \"${INPUT:0:N}\"\n        echo -n\
+    \ '\"'\n        [ $N -lt $LEN ] && echo -n ', '\n    done", "  local input=\"\
+    $1\"\n  local len=\"${#input}\"\n  local output=()\n  for (( i=1; i<=len; i++\
+    \ )); do\n    output+=(\"$(printf '\"%s\"' \"${input:0:i}\")\")\n  done\n  echo\
+    \ \"${output[@]}\"", "    local str=$1\n    local len=${#str}\n    local out=()\n\
+    \    for ((i=1; i<=$len; i++)); do\n        out+=(\"\\\"${str:0:i}\\\"\")\n  \
+    \  done\n    echo \"${out[@]}\"", "    local string\n    string=\"$1\"\n    local\
+    \ i\n    for ((i=1; i<=${#string}; i++)); do\n        echo '\"'${string:0:i}'\"\
+    '\n    done", "    local s=$1 i=0 prefixes=()\n    while [ $i -lt ${#s} ]; do\n\
+    \        prefixes+=(\"$(printf '\"%s\"' \"${s:0:$i+1}\")\")\n        ((i+=1))\n\
+    \    done\n    printf \"%s\" \"$(jq -R . <<< \"${prefixes[@]}\")\"", "    local\
+    \ str=\"$1\"\n    local str_length=${#str}\n    # For example: \"(0 1 2)\"\n \
+    \   local index_list=$(seq 0 $((str_length - 1)))\n    echo -n \"[\"\n    for\
+    \ index in $index_list; do\n        local prefix=\"${str:0:$((index + 1))}\"\n\
+    \        # Escape the double quotes\n        local prefix=$(echo \"$prefix\" |\
+    \ sed 's/\"/\\\\\"/g')\n        if [ $index -eq 0 ]; then\n            echo -n\
+    \ \"\\\"$prefix\\\"\"\n        else\n            echo -n \", \\\"$prefix\\\"\"\
+    \n        fi\n    done\n    echo -n \"]\"", "    echo -n '[ '\n    for ((i=1;\
+    \ i<=$((${#1})); i++)); do\n        echo -n '\"'\n        echo -n ${1:0:$i}\n\
+    \        echo -n '\" '\n    done\n    echo -n ']'", "    if [[ -z \"$1\" ]]; then\n\
+    \        echo \"''\"\n    else\n        printf '\"%s\"\\n' $(jot - 0 $((${#1}-1))\
+    \ | xargs -I{} -n1 printf '%s%.0s' $(echo $1 | cut -c1-{}))\n    fi", "    local\
+    \ str=\"$1\"\n    local out=\"\"\n    for (( i=0; i<${#str}; i++ )); do\n    \
+    \    if [ \"$out\" == \"\" ]; then\n            out='\"'${str:$i:1}'\"'\n    \
+    \    else\n            out=\"$out, \\\"\"${str:$i:1}\"\\\"\"\n        fi\n   \
+    \ done\n    echo \"[$out]\"", "    str=$1\n    len=${#str}\n    for i in $(seq\
+    \ 1 $len); do\n        echo \"\\\"${str:0:$i}\\\"\"\n    done", "    echo -n \"\
+    [\"\n    for (( i=1; i<=${#1}; i++ )); do\n        echo -n \"\\\"${1:0:i}\\\"\
+    , \"\n    done\n    echo -n \"]\"", "    local res\n    local arg=$1\n    for\
+    \ (( i=1; i<=${#arg}; i++ )); do\n        res=\"$res\\\"${arg:0:i}\\\", \"\n \
+    \   done\n    echo \"[${res%, }]\"", "    echo \"[\"\n    local word=$1\n    for\
+    \ ((i=0; i<${#word}; i++)); do\n        char=${word:$i:1}\n        echo '\"'$word:0:$((i+1))'\"\
+    '\n    done\n    echo \"]\"", "  local n=${#1}\n  local result=()\n  for ((i=1;\
+    \ i<=n; i++)); do\n    result+=(\"$(printf '\"%s\"' \"${1:0:i}\")\")\n  done\n\
+    \  printf \"%s\" \"$(echo \"${result[@]}\" | sed 's/ /, /g')\"", "  if [[ \"$1\"\
+    \ == \"\" ]]; then\n    echo \"[]\"\n  else\n    echo \"[\\\"$1\\\"]\"\n    all_prefixes\
+    \ \"${1%?}\"\n  fi", "    local input=$1\n    local length=${#input}\n    local\
+    \ prefix\n    for ((i=1; i<=length; i++)); do\n        prefix=$(echo $input |\
+    \ cut -c -$i)\n        echo '\"'$prefix'\"'\n    done", "    local str=\"$1\"\n\
+    \    local out=()\n    for (( i=0; i<${#str}; i++ )); do\n        out+=($(echo\
+    \ -n \"${str:0:$((i+1))}\" | jq -R .))\n    done\n    jq -c . <<< \"[${out[*]}]\"",
+  "  string=$1\n  echo \"[$(\n    for (( i=0; i<${#string}; i++ )); do\n      echo\
+    \ -n \"\\\"${string:0:$((i+1))}\\\"\"\n      if (( i+1 < ${#string} )); then\n\
+    \        echo -n \", \"\n      fi\n    done\n  )]\";", "  echo \"\\\"$1\\\"\"\n\
+    \  for (( i=1; i<${#1}; i++ )); do\n    echo \"\\\"${1:0:$i}\\\"\"\n  done", " \
+    \   if [[ \"$#\" -ne 1 ]]; then\n        echo \"usage: $0 string\"\n        exit\
+    \ 1\n    fi\n    local string=\"$1\"\n    local N=${#string}\n    for (( i=0;\
+    \ i<=$N; i++ )); do\n        echo \"\\\"${string:0:$i}\\\"\"\n    done", "  if\
+    \ [ \"$1\" == \"\" ]; then\n    echo '[]'\n  else\n    echo \"$(all_prefixes \"\
+    ${1%?}\")\" |\n      jq -c '.[0:-1]' |\n      jq -c '.[]' |\n      cat\n    echo\
+    \ '\"'$1'\"'\n  fi", "    [ $# -eq 1 ] || return 1\n    [ \"$1\" ] || echo '\"\
+    \"' && return\n    local prefix=$1\n    echo '\"'$prefix'\"'\n    all_prefixes\
+    \ \"${prefix%?}\"", "    prefixes=$(echo \"abcdefghijklmnopqrstuvwxyz\" | cut\
+    \ -c 1-${#1})\n    while read p\n    do\n        echo -n \"\\\"$p\\\" \"\n   \
+    \ done <<< $prefixes", "    local str=$1\n    local len=${#str}\n    local i=0\n\
+    \    local ret=\"\"\n    while [ $i -lt $len ]; do\n        ret=\"$ret \\\"${str:0:$i+1}\\\
+    \"\"\n        i=$((i+1))\n    done\n    echo -n \"[$ret]\"", "    local s=\"$1\"\
+    \n    local len=$((${#s}))\n    local i\n    local p\n    for ((i=1; i<=len; i++));\
+    \ do\n        p=$(echo $s | cut -c1-$i)\n        echo \"\\\"$p\\\"\"\n    done",
+  "    local str=\"$1\"\n    printf \"[\"\n    local first=true\n    for ((i=0; i<${#str};\
+    \ i++)); do\n        if $first; then\n            first=false\n        else\n\
+    \            printf \", \"\n        fi\n        printf '\"%s\"' \"${str:0:$((i+1))}\"\
+    \n    done\n    printf \"]\"", "  echo \"[\"\n  for (( length=1; length<=${#1};\
+    \ length++ )); do\n    echo \"\\\"${1:0:length}\\\"\"\n  done\n  echo \"]\"",
+  "    local prefixes=\"['$1']\"\n    for ((i=${#1}-1; i>0; i--)); do\n        prefixes=\"\
+    ['${1:0:i}'] + $prefixes\"\n    done\n    echo \"$prefixes\"", "  local output\n\
+    \  while [[ ${#1} -gt 0 ]]; do\n    output=\"${output:+${output}, }\\\"${1}\\\"\
+    \"\n    1=${1:0:$((${#1} - 1))}\n  done\n  echo \"[${output}]\"", "  local IFS=\n\
+    \  local i\n  local p\n  local prefixes=\"[\"\n  for ((i=0; i<${#1}; i++)); do\n\
+    \    p=$(printf '\"%s\"' \"${1:0:i+1}\")\n    if [ -n \"$p\" ]; then\n      prefixes=\"\
+    $prefixes$p,\"\n    fi\n  done\n  echo \"${prefixes%,}]\"", "  local str=\"$1\"\
+    \n  local len=${#str}\n  local leading='\"'\n  local ending='\"'\n  local separator=',\
+    \ '\n  local prefixes\n  for ((i=1; i<=len; i++)); do\n    prefixes+=\"${leading}${str:0:i}${ending}${separator}\"\
+    \n  done\n  prefixes=${prefixes%$separator}\n  echo \"$prefixes\"", "  res=$(echo\
+    \ '[\"\"'$1'\"]' | jq -r -c '.[] as $a | range(0;length) | $a[:.]')\n  if [ -z\
+    \ \"$res\" ]; then\n    echo '[]'\n  else\n    echo $res\n  fi", "  result=$(eval\
+    \ echo {1..${#1}} | xargs -I[] printf %s, '\"'\"${1:0:[]}\"'\"')\n  echo \"[$(echo\
+    \ \"$result\" | sed 's/,$//')]\"", "  local result\n  local string=\"$1\"\n  local\
+    \ i\n  # Do not use `for i in $(seq 1 $string); do ...`\n  # because if string\
+    \ is empty, the loop will not run.\n  for ((i=1; i<=${#string}; i++)); do\n  \
+    \  result+=\"\\\"${string:0:i}\\\", \"\n  done\n  echo \"[${result::-2}]\"", " \
+    \   local str=${1:?\"First argument (string) is required\"}\n    local res=\"\"\
+    \n    for (( i=0; i<${#str}; i++ )); do\n        local tmp=${str:0:$i}\n     \
+    \   [ -z \"$res\" ] && res=\"\\\"$tmp\\\"\" || res=\"$res, \\\"$tmp\\\"\"\n  \
+    \  done\n    echo \"[$res]\"", "    : \"${1:?missing argument to 'all_prefixes'\
+    \ (a string)}\"\n    echo \"[\"\n    local prefix\n    for ((i=1; i<=${#1}; i++));\
+    \ do\n        prefix=\"$(echo \"$1\" | cut -c -$i)\"\n        echo \"\\\"$prefix\\\
+    \"\"\n        [ $i -lt ${#1} ] && echo \",\"\n    done\n    echo \"]\"", "   \
+    \ printf \"[\"\n    for ((i=1; i<=${#1}; i++)); do\n        printf '\"%s\"' \"\
+    ${1:0:i}\"\n        ((i < ${#1})) && printf \", \"\n    done\n    printf \"]\"",
+  "    STR=$1\n    LEN=${#STR}\n    OUTPUT=[]\n    for i in $(seq 0 $(($LEN - 1)));\
+    \ do\n        PREF=$(echo \"$STR\" | cut -c1-$(($i + 1)))\n        OUTPUT+=(\\\
+    \"$PREF\\\")\n    done\n    echo \"${OUTPUT[@]}\"", "    local str=\"$1\"\n  \
+    \  local maxlen=${#str}\n    local preflist=\"\"\n    local -i len=0\n    while\
+    \ (( len < maxlen )); do\n        preflist=\"$preflist, \\\"${str:0:len}\\\"\"\
+    \n        (( len++ ))\n    done\n    echo -n \"[${preflist:2}]\"", "  local s=$1\n\
+    \  local n=${#s}\n  local list=()\n  for ((i=1; i<=n; i++)); do\n    list+=( \"\
+    \\\"${s:0:i}\\\"\" )\n  done\n  echo \"[${list[*]}]\"", "  local str=\"$1\"\n\
+    \  local len=\"${#str}\"\n  local result=\"\"\n  for ((i=1; i<=len; i++)); do\n\
+    \    result+=\"\\\"${str:0:i}\\\" \"\n  done\n  echo \"[${result% }]\"", "   \
+    \ array=()\n    for (( i=0; i<${#1}; i++ )); do\n        array+=(\"\\\"${1:0:$((i+1))}\\\
+    \"\")\n    done\n    echo \"[${array[*]}]\"", "    local word=$1\n    local i\n\
+    \    local arr=()\n    for ((i=1; i<=${#word}; i++)); do\n        arr+=($(printf\
+    \ '\"%s\"' \"${word:0:i}\"))\n    done\n    echo \"${arr[@]}\"", "  local -n prefixes=$1\n\
+    \  for ((i=0; i<${#prefixes}; i++)); do\n    printf '\"%s\" ' \"${prefixes:0:i+1}\"\
+    \n  done", "  local result=\"'\"$1\"'\"\n  local prefix\n  for ((i=0; i<${#1};\
+    \ i++)); do\n    prefix=${1:0:i}\n    result=\"$result,'\"$prefix\"'\"\n  done\n\
+    \  echo \"[$result]\"", "    s=\"$1\"\n    len=${#s}\n    for (( pos=0; pos<len;\
+    \ pos++ )) ; do\n        echo \\\"${s:0:$((pos+1))}\\\"\n    done", "  echo '['\
+    \ $(\n  for i in $(seq 1 ${#1}); do\n    echo \"\\\"${1:0:$i}\\\"\"\n  done\n\
+    \  ) ']'", "  local input=$1\n  local prefix=\"\"\n  local result=\"\"\n  for\
+    \ ((i=0; i<${#input}; i++)); do\n    if [ $i == 0 ]; then\n      prefix=\"${input:$i:1}\"\
+    \n    else\n      prefix=\"${prefix}${input:$i:1}\"\n    fi\n    if [ $i == 0\
+    \ ]; then\n      result=\"\\\"${prefix}\\\"\"\n    else\n      result=\"${result},\
+    \ \\\"${prefix}\\\"\"\n    fi\n  done\n  echo \"[${result}]\"", "    local len=$((${#1}\
+    \ - 1))\n    for i in $(seq 0 $len); do\n        echo '\"'${1:0:$i+1}'\"'\n  \
+    \  done", "    local input=\"$1\"\n    local prefix=\"\"\n    local result=\"\"\
+    \n    for ((i=0; i<${#input}; i++)); do\n        prefix=\"${prefix}${input:$i:1}\"\
+    \n        result=\"${result}[\\\"${prefix}\\\"], \"\n    done\n    echo \"${result}\"",
+  "  local str=\"$1\"\n  local -a prefixes=()\n  for ((i=0; i<=${#str}; i++)); do\n\
+    \    prefixes+=(\"\\\"${str:0:i}\\\"\")\n  done\n  printf '[%s]' \"$(join_by ',\
+    \ ' \"${prefixes[@]}\")\"", "    local word=\"$1\"\n    local word_len=\"${#word}\"\
+    \n    local ret_val=()\n    for ((i=1; i<=word_len; i++)); do\n        ret_val+=(\"\
+    $(printf '\"%s\"' \"${word:0:i}\")\")\n    done\n    printf '%s\\n' \"${ret_val[@]}\"",
+  "  jq -r 'reverse_each | tostring' <(jq -s '[substr(., 0, .-1) | select(length >\
+    \ 0) as $s | range(1; length+1) | . as $n | $s[0:$n]]' <<< \"$1\")", "    local\
+    \ prefix_list=\"[]\"\n    local prefix=''\n    for ((i=0; i < ${#1}; i++)); do\n\
+    \        prefix+=\"${1:$i:1}\"\n        prefix_list=$(jq --arg prefix \"$prefix\"\
+    \ '.[. | length] |= $prefix' <<< \"$prefix_list\")\n    done\n    echo \"$prefix_list\"",
+  "    echo -n \"[\"\n    echo -n '\"'${1:0:1}'\"'\n    for((i=2; i<=${#1}; i++));\
+    \ do\n        echo -n ', \"'${1:0:i}'\"'\n    done\n    echo -n \"]\"", "    local\
+    \ str=${1}\n    local words=()\n    for ((i=0; i<${#str}; i++)); do\n        words+=(\"\
+    \\\"${str:0:$i+1}\\\"\")\n    done\n    echo \"${words[@]}\"", "  __prefixes=()\n\
+    \  for (( i=0; i<${#1}; i++ )); do\n    __prefixes+=(${1:0:$i})\n  done\n  __prefixes+=($1)\n\
+    \  for i in \"${__prefixes[@]}\"; do\n    echo '\"'$i'\"'\n  done", "  local len=${#1}\n\
+    \  local LEN=$((len-1))\n  local prefixes=()\n  local prefix=\n  for (( i=0; i<=$LEN;\
+    \ i++ )); do\n    prefix=${1:0:$((i+1))}\n    prefixes+=($prefix)\n  done\n  echo\
+    \ ${prefixes[@]}", "  jq -r 'def prefixes(str): [str[0:0] + substr(str, 1, length-1)\
+    \ as $o| prefixes($o) | $o];\n         def join(lst): \"[\" + lst | tostring +\
+    \ \"]\";\n         join(prefixes(input))' <<<\"$1\"", "    local charlist=()\n\
+    \    local strlen=${#1}\n    for (( i=0; i<=$strlen; i++ )); do\n        charlist+=(\"\
+    $(python3 -c \"print('\\\"' + '$1'[:$i] + '\\\"')\")\")\n    done\n    echo -n\
+    \ \"${charlist[@]}\"", "  local -r str=\"$1\"\n  local -i len=${#str}\n  local\
+    \ -i idx\n\n  echo \"[\"\n  for ((idx=0; idx<len; idx++)); do\n    echo \"\\\"\
+    ${str:0:idx+1}\\\"\"\n  done\n  echo \"]\"", "    local s=${1?}\n    local result=\n\
+    \    for ((i=1; i<=${#s}; i++)); do\n        result=\"$result \\\"${s:0:i}\\\"\
+    \"\n    done\n    echo \"[$result]\"", "    local str=$1\n    local n=${#str}\n\
+    \    echo \"[$(printf '\"%.*s\" ' $(seq $n))]\"", "  local i\n\n  for ((i=0; i<${#1};\
+    \ i++)); do\n    echo '\"'${1:0:$i+1}'\"'\n  done", "  local _result=()\n  while\
+    \ read _line; do\n    _result+=(\"$_line\")\n  done < <(seq 1 ${#1})\n  echo \"\
+    ${_result[@]}\"", "    # returns a list\n    local prefixes=$(python -c \"print('['\
+    \ + ','.join(map(lambda n: '\\\"' + n + '\\\"', '\\\"' + '\\\" \\\"'.join(''.join(map(lambda\
+    \ x: x[:i], '$1'.split())) for i in range(1, len(max('$1'.split(), key=len)) +\
+    \ 1)) + '\\\"')) + ']')\")\n    echo $prefixes", "    local len=$(expr length\
+    \ \"$1\")\n    local lst=()\n    for ((i=1; i<=len; i++)); do\n        lst+=($(echo\
+    \ \"$1\" | cut -c-$i | awk '{printf \"%q\\n\", $0}'))\n    done\n    echo \"${lst[@]}\"",
+  "    local LEN=$((${#1}-1))\n    local RANGE=$(seq 0 1 $LEN)\n    local PREFIXES=()\n\
+    \    for i in $RANGE; do\n        PREFIXES+=(\"\\\"${1:0:$i}\\\"\")\n    done\n\
+    \    echo \"[${PREFIXES[*]}]\"", "  retval=\"[\"\n  for ((i=1; i<=${#1}; i++));\
+    \ do\n    retval=\"${retval} \\\"${1:0:$i}\\\",\"\n  done\n  retval=\"${retval%,}]\"\
+    \n  echo \"$retval\"", "    local str=$1\n    local str_length=${#str}\n    local\
+    \ all_prefixes=()\n    local i\n    for ((i=1; i<=str_length; i++)); do\n    \
+    \    all_prefixes+=(\"\\\"${str:0:i}\\\"\")\n    done\n    echo ${all_prefixes[@]}",
+  "    local prefixes\n    local prefix\n    local string=\"$1\"\n    prefixes=()\n\
+    \    for ((l=1; l<=${#string}; l++)); do\n        prefix=${string:0:l}\n     \
+    \   prefixes+=(\\\"$prefix\\\")\n    done\n    echo -n \"[\"\n    printf -- '%s,'\
+    \ \"${prefixes[@]}\"\n    echo -n \"]\"", "    local prefixes=($(echo -n \"$1\"\
+    \ | grep -o .))\n    echo \"${prefixes[@]}\"", "    local length=${#1}\n    local\
+    \ all_prefs=()\n    local i=0\n    while [ $i -lt $length ]; do\n        all_prefs+=(\\\
+    \"$(echo \"$1\" | cut -c-$(($i+1)))\\\")\n        ((i++))\n    done\n    echo\
+    \ \"${all_prefs[@]}\"", "    local str=\"$1\"\n    local len=${#str}\n    local\
+    \ i\n    for ((i=1; i<=len; i++)); do\n        echo \"\\\"${str:0:i}\\\"\"\n \
+    \   done", "    local string=$1; shift 1\n    local prefixes\n    for ((i=1; i<=${#string};\
+    \ i++)); do\n        prefixes=\"$prefixes \\\"${string:0:i}\\\"\"\n    done\n\
+    \    echo \"[$prefixes]\"", "    length=$(len \"$1\")\n    for (( pos=0; pos<=$length;\
+    \ pos++ )); do\n        echo \"${1:0:$pos}\"\n    done", "    local str=$1\n \
+    \   local prefix=\"\"\n    local ret=\"\"\n    for ((i=0; i < ${#str}; i++));\
+    \ do\n        prefix=${str:0:$i+1}\n        if [[ \"$ret\" ]]; then\n        \
+    \    ret=\"$ret,\\\"$prefix\\\"\"\n        else\n            ret=\"\\\"$prefix\\\
+    \"\"\n        fi\n    done\n    echo \"[$ret]\"", "    local -r string=\"$1\"\n\
+    \    local -r length=\"${#string}\"\n    local -r output=$(eval echo $(for ((i=1;\
+    \ i<=$length; i++)); do echo \"\\\"${string:0:$i}\\\"\"; done))\n    echo \"[${output//\
+    \ /, }]\"", "    local re=\"\\(\\\"\\[^\\\"]*\\)\\?$\"\n    echo $(sed -r \"s/$re//\"\
+    \ <<< \"$1\" | sed -r \"s/[^\\\"]*//\" | sed -r \"s/$re//\" | sed -r \"s/[^\\\"\
+    ]*//\" | tac | sed \"s/^/\\\"/\" | sed \"s/$/\\\"/\" | sed \"s/\\\"\\\"/\\\"/g\"\
+    )", "    local str\n    local prefix\n    str=\"$1\"\n    for ((i=0; i < ${#str};\
+    \ i++)); do\n        prefix=$(echo \"$str\" | cut -c1-$i)\n        echo \"\\\"\
+    $prefix\\\"\"\n    done", "    s=\"$1\"\n    LEN=${#s}\n    echo \"${s}\" | grep\
+    \ -oE \"^.{1,$LEN}\" | tr \"\\n\" \", \" | sed 's/,$//'", "    local sequence=\"\
+    $1\"\n    python3 -c \"print('[' + ', '.join('\\\"' + ''.join(sequence[:i]) +\
+    \ '\\\"' for i in range(1, len(\\\"$sequence\\\") + 1)) + ']')\"", "    echo -n\
+    \ \"[\"\n    for (( i=1; i<=${#1}; i++ )); do\n        echo -n '\"'\n        echo\
+    \ -n \"${1:0:$i}\"\n        echo -n '\"'\n        if (( $i < ${#1} )); then\n\
+    \            echo -n \", \"\n        fi\n    done\n    echo \"]\"", "    local\
+    \ string=$1\n    local l=$(echo $string | wc -c)\n    local -a result\n    local\
+    \ i\n    for ((i=1; i<=$l; i++)); do\n        result+=($(echo $string | cut -c\
+    \ -$i))\n    done\n    echo -n \"[\"\n    printf '\"%s\", ' \"${result[@]}\"\n\
+    \    echo \"]\"", "    if [[ -z \"$1\" ]]; then\n        echo \"[]\"\n       \
+    \ return 0\n    fi\n    local short_result=\"$(all_prefixes \"${1%?}\")\"\n  \
+    \  local short_line=\"$(echo \"$short_result\" | head -n1)\"\n    local long_result=\"\
+    $(echo \"$short_result\" | tail -n+2)\"\n    echo \"[\\\"${1:0:1}$long_line\\\"\
+    ]$long_result\"", "    # Required to get rid of the last space in the output\n\
+    \    echo \"[\"$(\n        for ((i=1; i<=${#1}; i++)); do\n            echo -n\
+    \ \\\"${1:0:i}\\\"\",\"\n        done\n    )\"]\"", "    local prefixes=()\n \
+    \   for ((i=0; i<=${#1}; i++)); do\n        prefixes+=(\"$(printf '\"%s\"' \"\
+    ${1:0:i}\")\")\n    done\n    printf '%s\\n' \"${prefixes[@]}\"", "    echo \"\
+    [$(echo $1 | grep -o . | awk 'BEGIN { FS = \"\" } ; { for (i=1; i<=NF; i++) {\
+    \ printf \"\\\"%s\\\" \", substr($0,1,i) } }')]\"", "    if [ \"$#\" -ne 1 ];\
+    \ then\n        echo \"Internal error calling all_prefixes()\"\n        exit 1\n\
+    \    fi\n    local str=\"$1\"\n    local len=\"${#str}\"\n    local res=()\n \
+    \   local ix\n    for ((ix=0; ix<len; ix++)); do\n        res+=(\"\\\"${str:0:$((ix+1))}\\\
+    \"\")\n    done\n    echo \"${res[@]}\"", "    local output\n    for ((i=1; i<=${#1};\
+    \ i++)); do\n        output+=\"\\\"${1:0:i}\\\", \"\n    done\n    echo \"${output:0:-2}\"",
+  "    local input=$1\n    local result=[]\n    local i=0\n    while [ $i -lt ${#input}\
+    \ ]; do\n        result+=(\\\"${input:0:$i}\\\")\n        ((i++))\n    done\n\
+    \    echo $result", "    local string=\"$1\"\n    local result=()\n    result+=(\
+    \ \"${string:0:1}\" )\n    result+=( \"${string:0:2}\" )\n    result+=( \"${string:0:3}\"\
+    \ )\n    result+=( \"${string:0:4}\" )\n    result+=( \"${string:0:5}\" )\n  \
+    \  echo \"${result[@]}\"", "  local s=\"$1\"\n  local n=${#s}\n  local -a a=()\n\
+    \  for (( i=0; i<n; i++ )); do\n    a+=($(printf \"%q\" \"${s:0:i+1}\"))\n  done\n\
+    \  echo \"${a[@]}\"", "  printf '[\"%s\"]' \"$1\" | sed -E 's/./[\"&\"]/g' | tr\
+    \ -d '\\n'", "    local a=\"[\\\"$1\\\"]\"\n    for ((i=${#1}-1; i>0; i--)); do\n\
+    \        local b=\"\\\"${1:0:i}\\\"\"\n        a=\"$b, $a\"\n    done\n    echo\
+    \ \"[$a]\"", "    local s=$1\n    local res=\"[\\\"$s\\\"]\"\n    local len=${#s}\n\
+    \    if [ $len -gt 1 ]; then\n        local s=$(echo \"$s\" | rev)\n        local\
+    \ res=\"\"\n        for(( i=0; i<$len; i++ )); do\n            res=\"$res\\\"\
+    $(echo \"$s\" | cut -c 1-$i | rev)\\\"\"\n            if [ $i -lt $len-1 ]; then\n\
+    \                res=\"$res,\"\n            fi\n        done\n        res=\"[$res]\"\
+    \n    fi\n    echo \"$res\"", "  len=$((${#1}-1))\n  for ((i=0; i<=len; i++));\
+    \ do\n    echo \"${1:0:$((i+1))}\"\n  done", "    [ $# -ne 1 ] && return 1\n \
+    \   [ -z \"$1\" ] && return 1\n    local input_string=$1\n    local input_string_size=${#input_string}\n\
+    \    local prefix_list\n    local max_index=$(($input_string_size - 1))\n    local\
+    \ index\n    for index in $(seq 0 $max_index); do\n        prefix_list=\"$prefix_list\\\
+    \"${input_string:0:$(($index + 1))\\\"\"\n        [ $index -lt $max_index ] &&\
+    \ prefix_list=\"$prefix_list,\"\n    done\n    echo \"[$prefix_list]\"", "  echo\
+    \ -n \"[\"\n  for (( i=1; i<=${#1}; i++ )); do\n    if [[ $i -eq 1 ]]; then\n\
+    \      echo -n \"\\\"${1:0:$i}\\\"\"\n    else\n      echo -n \", \\\"${1:0:$i}\\\
+    \"\"\n    fi\n  done\n  echo \"]\"", "    INPUT=$1\n    for ((I=0; I<${#INPUT};\
+    \ I++)); do\n        echo \"$(get_slice \"$INPUT\" \"$I\" \"$(($I+1))\")\"\n \
+    \   done", "  echo \"$1\" | awk '{ for (i=1; i<=length($0); i++) { print substr($0,\
+    \ 0, i) } }' | sed 's/\\(.*\\)/\"\\1\"/'", "    (\n        echo \"[\";\n     \
+    \   for n in $(seq 0 $(( ${#1} - 1 ))); do\n            echo '\"'${1:0:$(( n +\
+    \ 1 ))}'\"';\n        done;\n        echo \"]\";\n    )", "    local string=\"\
+    $1\"\n    local len=${#string}\n    local list=()\n    for (( i=1; i<=len; i++\
+    \ )); do\n        list+=(\"\\\"${string:0:i}\\\"\")\n    done\n    echo \"[$(join\
+    \ \", \" \"${list[@]}\")]\"", "  local input=$1\n  echo \"[\"\n  for ((i=1; i<=${#input};\
+    \ i++)); do\n    echo \\\"${input:0:i}\\\"\n  done\n  echo \"]\"", "    local\
+    \ seq=$(python -c \"print(\\\" \\\" + \\\" \\\".join([\\\"\\\\\\\"\\\" + \\\"\\\
+    $1\\\"[:i] + \\\"\\\\\\\"\\\" for i in range(1, len(\\\"\\$1\\\") + 1)]))\")\n\
+    \    eval \"printf \\\"[$seq]\\\"\"", "    len=${#1}\n    len=$((len-1))\n   \
+    \ local i\n    local result=\"\"\n    for ((i=0; i<=len; i++)); do\n        result=\"\
+    $result\\\"${1:0:$((i+1))}\\\", \"\n    done\n    echo \"[${result%, }]\"", " \
+    \   local prefixes=()\n    for ((len=1; len<=${#1}; len++)); do\n        prefixes+=(\"\
+    \\\"${1:0:len}\\\"\")\n    done\n    echo \"${prefixes[@]}\"", "  declare word=\"\
+    $1\"\n  for ((i=1; i<=${#word}; i++)); do\n    echo -n \"\\\"\"\n    echo -n \"\
+    ${word:0:$i}\"\n    echo -n \"\\\"\"\n    if (( i < ${#word} )); then\n      echo\
+    \ -n \", \"\n    fi\n  done", "  echo -n \"[\"\n  for (( i=1; i<=${#1}; i++ ));\
+    \ do\n    echo -n '\"'\n    echo -n \"${1:0:$i}\"\n    echo -n '\"'\n    if [\
+    \ $i -lt ${#1} ]; then\n      echo -n \", \"\n    fi\n  done\n  echo \"]\"", " \
+    \ local str=\"$1\"\n  local i=0\n  local result=()\n  while [ \"$i\" -lt \"${#str}\"\
+    \ ]; do\n    ((i++))\n    result+=(\"\\\"${str:0:i}\\\"\")\n  done\n  echo \"\
+    ${result[@]}\"", "    local s=$1\n    local p pfx\n    echo \"[\"\n    for ((\
+    \ p=0; p<${#s}; p++ )); do\n        pfx=\"${s:0:$(( p + 1 ))}\"\n        echo\
+    \ \"\\\"$pfx\\\"\"\n    done\n    echo \"]\"", "  local len=$((${#1}-1))\n  for\
+    \ i in $(seq 0 $len); do\n    echo \"\\\"${1:0:$((i+1))}\\\"\"\n  done", "   \
+    \ local words=($(words \"$1\"))\n    local prefixes=()\n    local prefix\n\n \
+    \   for i in $(seq 0 $((${#words[@]} - 1))); do\n        prefix=$(array_slice\
+    \ words 0 $(($i + 1)))\n        prefixes+=($(str \"$prefix\"))\n    done\n\n \
+    \   echo \"${prefixes[@]}\"", "  local source=$1\n\n  echo \"[\"\n  for (( i=0;\
+    \ i<${#source}; i++ )); do\n    printf '\"%s\"' \"${source:0:$(( i + 1 ))}\"\n\
+    \    if (( i < ${#source} - 1 )); then\n      echo \",\"\n    fi\n  done\n  echo\
+    \ \"]\"", "    len=${#1}\n    len=$((len - 1))\n    prefixes=\"\"\n    while [[\
+    \ len -ge 0 ]]; do\n        prefix=\"${1:0:len}\"\n        prefixes=\"$prefixes,\
+    \ '\\\"$prefix\\\"'\"\n        len=$((len - 1))\n    done\n    echo \"[$(echo\
+    \ $prefixes | sed 's/,//')]\"", "    local str=$1\n    if [[ -z \"$str\" ]]; then\n\
+    \        echo '[]'\n        return\n    fi\n    local index=0\n    local out=''\n\
+    \    while [[ $index -lt ${#str} ]]; do\n        out+='\"'${str:0:$index}'\"'\n\
+    \        if [[ $index -lt ${#str}-1 ]]; then\n            out+=', '\n        fi\n\
+    \        ((index+=1))\n    done\n    echo \"[$out]\"", "  res=()\n  for ((i=1;\
+    \ i<=${#1}; i++)); do\n    res+=(\"\\\"${1:0:i}\\\"\")\n  done\n  IFS=$'\\n'\n\
+    \  echo \"${res[*]}\"", "    local IFS=\"$1\"\n    echo $(echo | awk \"{for(i=1;i<=NF;i++)\
+    \ print \\$i}\")", "    if [ -z \"$1\" ]; then\n        echo \"[]\"\n        return\n\
+    \    fi\n    echo \"[\\\"${1:0:1}\\\"\"\n    prefixes=$(all_prefixes \"${1:1}\"\
+    )\n    echo \"   ${prefixes:1:-1}\"\n    echo \"]\"", "    python -c 'prefixes\
+    \ = [\"\"] + [\"\"'$1'\"\"]\n    while len(prefixes[-1]) < len(\"'$1'\"):\n  \
+    \      prefixes.append(prefixes[-1] + \"'$1'\"[len(prefixes[-1]):len(prefixes[-1])+1])\n\
+    \    print(prefixes[1:])'", "    echo $(echo $1 | sed 's/./&\"\\n\"/g' | awk '{print}'\
+    \ ORS=', ')", "    python -c \"\nfrom __future__ import print_function\n\nif __name__\
+    \ == '__main__':\n    string = '$1'\n    for length in range(1, len(string) +\
+    \ 1):\n        print('\\\"' + string[:length] + '\\\"', end=', ')\n\"", "  string=$1\n\
+    \  len=$((${#string}-1))\n  seq 0 $len | xargs -n1 | awk '{print \"\\\"\" substr(\"\
+    '\"$string\"'\", 0, $1+1) \"\\\"\"}'", "    local string=\"$1\"\n    local length=${#string}\n\
+    \    local result=\"[]\"\n    for i in $(seq 0 $((length - 1))); do\n        result=\"\
+    $(printf \"%s, %s\" \"$result\" \"\\\"${string:0:$((i + 1))}\\\"\")\"\n    done\n\
+    \    echo \"[$result]\"", "    local res=\"[\\\"${1:0:1}\\\"\"\n    for (( i=1;\
+    \ i<${#1}; i++ )); do\n        res=\"$res, \\\"${1:0:$((i+1))}\\\"\"\n    done\n\
+    \    echo \"$res]\"", "  local res=$(printf '\"%s\"' $(echo $1 | fold -w1))\n\
+    \  local curr=a\n  while [[ ${#curr} -lt ${#1} ]]; do\n    curr=${1:0:${#curr}+1}\n\
+    \    res=$(printf '%s, \"%s\"' \"$res\" \"$curr\")\n  done\n  echo \"[$res]\"",
+  "    prefixes=()\n    for (( i=1; i<${#1}; i++ )); do\n        prefixes+=\"\\\"\
+    ${1:0:i}\\\"\"\n    done\n    echo \"${prefixes[@]}\"", "  local input=$1\n  local\
+    \ output=\"[\"\n  for (( i=0; i<${#input}; i++ )); do\n    output=\"$output\"\"\
+    \\\"${input:0:$((i+1))}\\\"\"\n    if (( i != ${#input}-1 )); then\n      output=\"\
+    $output\"\", \"\n    fi\n  done\n  output=\"$output\"\"]\"\n  echo $output", " \
+    \ local input=\"$1\"\n  local out\n  for (( i=0; i<${#input}; i++ )); do\n   \
+    \ out+=\"'${input:0:$((i+1))}' \"\n  done\n  echo \"[${out}]\"", "    local input=$1\n\
+    \    local result=\"[\\\"${input:0:1}\\\"\"\n    for (( i=2; i<=${#input}; i++\
+    \ )); do\n        result=\"$result, \\\"${input:0:$i}\\\"\"\n    done\n    echo\
+    \ \"$result]\"", "    local prefixes=\"\"\n    local len=${#1}\n    for ((i=1;\
+    \ i<=$len; i++)); do\n        prefixes+='\"'\"${1:0:$i}\"'\"'\n        if [ $i\
+    \ -lt $len ]; then\n            prefixes+=\", \"\n        fi\n    done\n    echo\
+    \ \"$prefixes\"", "  local prefixes=\"$(printf \"[\\\"%s\\\"\" \"${1:0:1}\")\"\
+    \n  for i in $(seq 1 \"${#1}\"); do\n    prefixes=\"$prefixes, \\\"${1:0:$i}\\\
+    \"\"\n  done\n  echo \"$prefixes]\"", "    local s=$1\n    local i=0\n    local\
+    \ t=\"\"\n    local result=\"\"\n    while ((i < ${#s})); do\n        let i++\n\
+    \        t=$(printf '%s' \"${s:0:i}\")\n        result+=$(printf '[%s,\"%s\"],'\
+    \ \"$(printf '\"%s\"' \"$t\")\" \"$t\")\n    done\n    echo \"[${result:0:-1}]\"",
+  "    echo \"[$(jq -R -n --arg s \"$1\" 'split(\"\") | scan($s) | map(\"\\(.)\")\
+    \ | join(\",\")' | sed 's/,/\", \"/g')]\"", "  local prefixes=()\n  for ((i=0;\
+    \ i<${#1}; i++)); do\n    prefixes+=(\"\\\"${1:0:i+1}\\\"\")\n  done\n  echo \"\
+    ${prefixes[@]}\"", "    python -c \"print('[%s]' % (', '.join(\n        map(lambda\
+    \ s: '\\\"%s\\\"' % s, (\n            reduce(lambda acc, e: acc + [acc[-1] + e],\
+    \ '$1', [''])[1:]\n        )))\n    ))\"", "  declare -a result\n  for ((i=1;\
+    \ i<=${#1}; i++)); do\n    result+=(\"$(strcut $1 0 $i)\")\n  done\n  IFS=$'\\\
+    n' result=($(sort <<<\"${result[*]}\"))\n  IFS=$' ' echo \"${result[*]}\"", " \
+    \ local -n str=$1\n  local i\n  local prefixes=()\n  for ((i=0; i<=${#str}; i++));\
+    \ do\n    prefixes+=(\"${str:0:i}\")\n  done\n  echo -n \"[\"\n  echo -n \"$(join\
+    \ , \"${prefixes[@]}\")\"\n  echo -n \"]\"", "    local str=\"$1\"\n\n    echo\
+    \ \"[\"\n    for (( i=0; i<${#str}; i++ )); do\n        echo \"\\\"${str:0:$((\
+    \ i + 1 ))}\\\"\"\n        [[ $i -ne $(( ${#str} - 1 )) ]] && echo \",\"\n   \
+    \ done\n    echo \"]\"", "    local string=\"$1\"\n    local list=()\n    for\
+    \ (( i=0; i<${#string}; i++ )); do\n        local substring=\"${string:0:$((i+1))}\"\
+    \n        list+=(\"\\\"$substring\\\"\")\n    done\n    echo \"${list[@]}\"",
+  "    local str=\"$1\"\n    local out\n\n    for (( i=1; i<=\"${#str}\"; i++ ));\
+    \ do\n        local prefix=${str:0:i}\n        if [[ $out ]]; then\n         \
+    \   out=\"$out, \\\"$prefix\\\"\"\n        else\n            out=\"\\\"$prefix\\\
+    \"\"\n        fi\n    done\n\n    echo [$out]", "    local str=\"$1\"\n    for\
+    \ ((i=1; i<=${#str}; i++)); do\n        echo \"\\\"${str:0:i}\\\"\"\n    done",
+  "    if [ $# -ne 1 ]; then\n        echo \"all_prefixes: expecting 1 argument, got\
+    \ $#\"\n        exit 1\n    fi\n    all_prefixes=\"\"\n    string=$1\n    len=${#string}\n\
+    \    for ((i=1; i<=len; i++)); do\n        prefix=${string:0:i}\n        all_prefixes+=\"\
+    \\\"$prefix\\\" \"\n    done\n    echo \"$all_prefixes\"", "  local input_str=$1\n\
+    \  local output_str=\"[]\"\n  local sep=\"\"\n  for ((i=0; i<${#input_str}; i++));\
+    \ do\n    output_str+=\"${sep}\\\"${input_str:0:$((i+1))}\\\"\"\n    sep=\", \"\
+    \n  done\n  echo \"${output_str}\"", "  if [ -z \"$1\" ]; then\n    echo \"[]\"\
+    \n  else\n    echo \"[\\\"$1\\\"$(all_prefixes ${1:0:$((${#1}-1))}) ]\"\n  fi",
+  "  local args=()\n  for (( i=0; i<${#1}; i++ )); do\n    args+=( \"${1:0:$(( i +\
+    \ 1 ))}\" )\n  done\n  echo \"${args[@]}\"", "    local toks=()\n    for i in\
+    \ $(seq 0 $((${#1} - 1))); do\n        toks+=(\"$(printf \"%s\" \"${1:0:$(($i\
+    \ + 1))}\" | jq -R .)\")\n    done\n    echo \"${toks[@]}\"", "    [ $# -ne 1\
+    \ ] && echo \"usage: $0 string\" && exit 1\n    s=$1\n    n=$((${#s}-1))\n   \
+    \ result=\"\"\n    for i in $(seq 0 $n); do\n        result=\"$result \\\"${s:0:$((i+1))}\\\
+    \"\"\n    done\n    echo \"[$result]\"", "    local s=\"$1\"\n    local res=\"\
+    \"\n    for ((i=1; i<=${#s}; i++)); do\n        res=\"$res, \\\"${s:0:i}\\\"\"\
+    \n    done\n    echo \"[${res:1}]\"", "    local s\n    for (( i=0; i<${#1}; i++\
+    \ )); do\n        echo '\"'${1:0:$(( i + 1 ))}'\"'\n    done", "  echo \"[$(echo\
+    \ $(seq 0 ${#1}))] | map(. | \\\"'\\\" + \\\"\\(\\$1[:.])\\\" + \\\"'\\\") | join(\\\
+    \", \\\")\" | jq -R -s -f -", "  python -c \"import sys; ['\"'\"'{}'\"'\"'.format(sys.argv[1][:i])\
+    \ for i in range(1, len(sys.argv[1]) + 1)]\" \"$1\"", "    read -ra PREFIXES <\
+    \ <(\n        for ((i=0; i<=${#1}; i++)); do\n            printf '\"%s\"\\n' \"\
+    ${1:0:i}\"\n        done\n    )\n    if [[ \"$(printf '%s\\n' \"${PREFIXES[@]}\"\
+    \ | sort | uniq | wc -l)\" -eq \"${#PREFIXES[@]}\" ]]; then\n        echo \"${PREFIXES[@]}\"\
+    \n    else\n        echo \"echo WARNING $FUNCNAME ${PREFIXES[@]}\" >&2\n    fi",
+  "  local __resultvar=$2\n  local __list=''\n  local __i=0\n  local __len=\"${#1}\"\
+    \n  while [ $__i -lt $__len ]; do\n    __list=\"$__list,\\\"${1:0:$__i}\\\"\"\n\
+    \    ((__i++))\n  done\n  eval $__resultvar=\"'[${__list:1}]'\"", "  local output=()\n\
+    \  local string=\"$1\"\n  for ((len=1; len<=${#string}; len++)); do\n    output+=(\"\
+    $(printf '\"%s\"' \"${string:0:len}\")\")\n  done\n  printf '%s' \"$(printf '%s\\\
+    n' \"${output[@]}\" | tr '\\n' ' ')\"", "  local input=$1\n  local output=\n \
+    \ local i=\n  for ((i=0; i < ${#input}; i++)); do\n    if [[ -z $output ]]; then\n\
+    \      output=\"${input:0:i+1}\"\n    else\n      output=\"$output, ${input:0:i+1}\"\
+    \n    fi\n  done\n  echo -n \"[$output]\"", "  # http://stackoverflow.com/a/13380074/701527\n\
+    \  echo \"${1:0:$((${#1}+1))}\" | awk 'BEGIN{RS=\"\"}{for(i=1;i<=NF;i++)print\
+    \ i,substr($0,1,i)}' | awk '{printf(\"%s%s%s%s\\n\", \"[\\\"\", $2, \"\\\"]\"\
+    , (NR < NF ? \",\" : \"\"))}'", "  local str=\"$1\"\n\n  # When the input string\
+    \ is empty, there is no prefix.\n  if [[ -z \"$str\" ]]; then\n    echo \"()\"\
+    \n    return\n  fi\n\n  # Create a list of prefixes using a for loop.\n  # First\
+    \ append the empty string.\n  local prefixes=\"('\"\"'\"\n  local i\n  for ((i=0;\
+    \ i<${#str}; i++)); do\n    local prefix=\"${str:0:$((i+1))}\"\n    prefixes+=\"\
+    \ \\\"$prefix\\\"\"\n  done\n  # Finally add the whole string as the last element.\n\
+    \  prefixes+=\" \\\"$str\\\"\"\n  prefixes+=\")\"\n\n  echo \"$prefixes\"", " \
+    \   local string=${1}\n    local -a prefixes=()\n    for ((i=0; i<${#string};\
+    \ i++)); do\n        prefixes+=($(printf '\"%s\"' \"${string:0:$((i+1))}\"))\n\
+    \    done\n    printf \"[%s]\" \"$(printf '%s, ' \"${prefixes[@]}\")\""]
 stop_tokens:
 - "\n}"

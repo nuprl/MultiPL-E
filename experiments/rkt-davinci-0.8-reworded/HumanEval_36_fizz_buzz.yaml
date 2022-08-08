@@ -106,7 +106,878 @@ completions: ["  (let loop ([n n] [divs '(11 13)] [count 0])\n    (if (< n (car 
     </code>\nLet's evaluate the first step in <code>fizz_buzz</code>, <code>(in-range\
     \ n)</code>:\n<code>&gt; (in-range 4)", "  (cond\n    [(= n 0) 0]\n    [(and (zero?\
     \ (modulo n 11)) (zero? (modulo n 13)))\n     (+ (count 7 (number->string n))\
-    \ (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n"]
+    \ (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n", "  (define (helper\
+    \ acc i)\n    (cond ((&gt; i n) acc)\n          ((&lt; i 10) (helper acc (+ i\
+    \ 1)))\n          ((and (or (zero? (modulo i 11)) (zero? (modulo i 13))) (zero?\
+    \ (modulo i 7)))\n           (helper (+ acc 1) (+ i 1)))\n          (else (helper\
+    \ acc (+ i 1)))))\n  (helper 0 1))\n</code>\nIn particular, I'm wondering if the\
+    \ two following lines can be combined somehow, maybe using a <code>for/fold</code>\
+    \ statement:\n<code>  (define (helper acc i)\n    (cond ((&gt; i n) acc)\n   \
+    \       ((&lt; i 10) (helper acc (+ i 1)))\n          ((and (or (zero? (modulo\
+    \ i 11)) (zero? (modulo i 13))) (zero? (modulo i 7)))\n           (helper (+ acc\
+    \ 1) (+ i 1)))\n          (else (helper acc (+ i 1)))))\n</code>\nThis is not\
+    \ very clear to me since the <code>helper</code> function is recursive. Can someone\
+    \ help me?\n\n\nA:\n\nWhen you write a recursive function, it's best to think\
+    \ of the recursion as involving two cases: the base case and the recursive case.\
+    \ The recursive case is the one where you call the function recursively, and the\
+    \ base case is the one where you stop recursing.\n<code>(define (fizz-buzz n)\n\
+    \  (let loop ([i 1] [count 0])\n    (cond\n      [(&gt; i n) count]\n      [(and\
+    \ (zero? (modulo i 11)) (zero? (modulo i 13)) (zero? (modulo i 7)))\n       (loop\
+    \ (+ i 1) (+ count 1))]\n      [else (loop (+ i 1) count)])))\n</code>\nUsing\
+    \ a named let allows you to eliminate the need for an accumulator.\n", "  (if\
+    \ (< n 7) 0\n      (+ (if (and (not (zero? (modulo n 11))) (not (zero? (modulo\
+    \ n 13))))\n             (if (or (zero? (modulo n 11)) (zero? (modulo n 13)))\
+    \ 0 1)\n             0)\n         (fizz_buzz (- n 1)))))\n", "  (count 7 (filter\
+    \ (lambda (n) (and (equal? (modulo n 11) 0) (equal? (modulo n 13) 0))) (build-list\
+    \ n))))\n\n", "  (cond\n    [(= n 0) 0]\n    [(and (divisible-by? n 11) (divisible-by?\
+    \ n 13)) (+ (num-7s (truncate (/ n 10))) (fizz_buzz (- n 1)))]\n    [else (fizz_buzz\
+    \ (- n 1))]))\n</code>\nBut I get the following error:\n<code>car: expects argument\
+    \ of type &lt;pair&gt;; given 1\n  argument position: 1st\n  other arguments...:\n\
+    \   1\n</code>\nI also tried <code>(eq? last-digit 7)</code> but it won't work\
+    \ either.\nAny help is appreciated.\nThank you!\n\n\nA:\n\nLet's consider the\
+    \ base case of <code>n</code> being <code>1</code>.\nThe <code>cond</code> expression\
+    \ will check its first case, <code>(= n 0)</code>, and determine it's not <code>#t</code>,\
+    \ so it'll move on to the next case.\nThe second case, <code>(and (divisible-by?\
+    \ n 11) (divisible-by? n 13))</code>, will call <code>divisible-by?</code> twice.\
+    \ <code>divisible-by?</code> will try to take the remainder of <code>n</code>\
+    \ and <code>11</code> with <code>(remainder n 11)</code>. <code>remainder</code>\
+    \ requires that its second argument be an integer, but <code>n</code> is not an\
+    \ integer (it's <code>1</code>). <code>1</code> is not a pair, so <code>remainder</code>\
+    \ gives an error that <code>car</code> is not getting a pair.\nFor <code>divisible-by?</code>\
+    \ to work, you need to make sure that <code>n</code> is an integer. Since <code>n</code>\
+    \ is a positive integer, you can use <code>integer?</code> to ensure this.\n<code>(cond\n\
+    \  [(= n 0) ...]\n  [(and (integer? n) (divisible-by? n 11) (divisible-by? n 13))\
+    \ ...]\n ", "  (define (seven_count n)\n    (let ([n-mod-10 (modulo n 10)])\n\
+    \      (cond\n        [(= n-mod-10 7) 1]\n        [else 0])))\n  (define (count\
+    \ n a b)\n    (cond\n      [(= n a) 1]\n      [(= n b) 1]\n      [(< n a) 0]\n\
+    \      [(< n b) 0]\n      [else (+ (seven_count (- n a)) (seven_count (- n b))\
+    \ (count (- n a) a b))]))\n  (count n 11 13))\n```\n\n## 7.8\n\n```\n#lang racket\n",
+  "  (if (< n 10)\n      0\n      (+ (if (and (integer? (/ n 11)) (= (modulo n 11)\
+    \ 0))\n             (if (or (= (modulo (quotient n 11) 10) 7) (= (modulo n 10)\
+    \ 7))\n                 1\n                 0)\n             0)\n         (if\
+    \ (and (integer? (/ n 13)) (= (modulo n 13) 0))\n             (if (or (= (modulo\
+    \ (quotient n 13) 10) 7) (= (modulo n 10) 7))\n                 1\n          \
+    \       0)\n             0)\n         (fizz_buzz (- n 1)))))", "  (let ([counter\
+    \ (- n 3)])\n    (cond\n      [(<= n (- n 0)) 0]\n      [(= (modulo counter 11)\
+    \ 0) (+ 1 (fizz_buzz (- n 1)))]\n      [(= (modulo counter 13) 0) (+ 1 (fizz_buzz\
+    \ (- n 1)))]\n      [else (fizz_buzz (- n 1))])))\n```\n\n```racket\n#lang racket\n",
+  "  (cond [(< n 1) 0]\n        [(< n 2) 0]\n        [(or (zero? (modulo n 11)) (zero?\
+    \ (modulo n 13)))\n         (+ (fizz_buzz (- n 1))\n            (if (or (eq? (modulo\
+    \ n 10) 7) (eq? (/ n 10) 7)) 1 0))]\n        [else (fizz_buzz (- n 1))]))\n",
+  "  (define (fizz-or-buzz n)\n    (if (and (integer? n)\n             (= 0 (modulo\
+    \ n 11))\n             (= 0 (modulo n 13)))\n        1\n        0))\n  (define\
+    \ (num-sevens n)\n    (if (or (= 0 n)\n            (= 7 n))\n        1\n     \
+    \   0))\n  (define (sum-digits n)\n    (if (or (= 0 n)\n            (&lt; n 10))\n\
+    \        n\n        (+ (modulo n 10)\n           (sum-digits (quotient n 10)))))\n\
+    \  (if (= 0 n)\n      0\n      (+ (num-sevens (sum-digits n))\n         (fizz_buzz\
+    \ (- n 1)))))\n</code>\n", "  (count-digits n 7 3 11 13))\n", "  (if (< n 0)\n\
+    \      0\n      (define (recur i acc)\n        (if (< i n)\n            (recur\
+    \ (+ i 1)\n                   (if (or (and (number->string i) (string-contains\
+    \ #\"7\"))\n                           (and (number->string (* i 11)) (string-contains\
+    \ #\"7\"))\n                           (and (number->string (* i 13)) (string-contains\
+    \ #\"7\")))\n                       (+ acc 1)\n                       acc))\n\
+    \            acc))\n      (recur 0 0)))", "  (cond ((zero? n)\n         0)\n \
+    \       ((and (zero? (modulo n 11))\n              (zero? (modulo n 13)))\n  \
+    \       (+ (fizz_buzz (- n 1))\n            (count_sevens n)))\n        (else\n\
+    \         (fizz_buzz (- n 1)))))\n", "  (define (fizz_buzz_aux i count)\n    (cond\n\
+    \      [(= i n) count]\n      [(or (= (modulo i 11) 0) (= (modulo i 13) 0))\n\
+    \       (define str (number->string i))\n       (define str-len (string-length\
+    \ str))\n       (define str-chars (string->list str))\n       (define (count-sevens-in-str\
+    \ i count)\n         (cond\n           [(= i str-len) count]\n           [(= (string-ref\
+    \ str i) #\\7) (count-sevens-in-str (+ i 1) (+ count 1))]\n           [else (count-sevens-in-str\
+    \ (+ i 1) count)]))\n       (fizz_buzz_aux (+ i 1) (+ count (count-sevens-in-str\
+    \ 0 0)))]\n      [else (fizz_buzz_aux (+ i 1) count)]))\n  (fizz_buzz_aux 0 0))",
+  "  (for/sum ([i (in-range 1 n)])\n    (if (and (or (zero? (modulo i 11)) (zero?\
+    \ (modulo i 13)))\n             (or (eq? (modulo i 10) 7) (eq? (modulo (quotient\
+    \ i 10) 10) 7) (eq? (modulo (quotient i 100) 10) 7)))\n        1\n        0)))\n\
+    ```\n\n## Problem 4\n\nThe decimal number system is composed of ten digits,\n\
+    which we represent as \"0123456789\" (the digits are shown in order).\nEvery positive\
+    \ integer can thus be written as a string of digits from this set.\n\nConsider\
+    \ strings of digits with the following properties:\n\n1. The rightmost digit is\
+    \ nonzero.\n2. If you erase the rightmost digit of the string, the remaining string\
+    \ is still a positive integer.\n3. If you take the rightmost digit away from the\
+    \ number, and then take the resulting number and add it back in again by appending\
+    \ it to the end of the original number, the result will be a number that is divisible\
+    \ by the original rightmost digit.\n\nFor example, consider the number 4154.\n\
+    It has the properties 1-3 listed above, so it belongs to the set of special numbers.\n\
+    It can be generated by starting with the number 1 and repeatedly applying the\
+    \ operation described in 3.\nSo the sequence of numbers is 1, 14, 154, 4154.\n\
+    \nLet N(d, n) be the number of such strings of digits of length n,\nhaving d as\
+    \ the rightmost digit.\n\nFor example, N(1, 3) = 9, because the special strings\
+    \ of length 3 with d = 1 are\n101, 111, 121, 131, 141, 151, 161, 171, 181.\n\n\
+    We can also verify that N(6, 3) = 9, and N(6, 4) = 138.\n\nYou are given that\
+    \ S(1, 4) = 20, S(6, 4) = 325, S(6, 10) = 4419, and S(8, 10) = 4955.\n\nFind S(18,\
+    \ 10000).\n\n``` #lang racket\n", "  (cond\n    [(< n 0) (error \"wrong number\"\
+    )]\n    [(> n 0) (if (= (remainder n 11) 0) (+ 1 (fizz_buzz (- n 1)))\n      \
+    \          (if (= (remainder n 13) 0) (+ 1 (fizz_buzz (- n 1)))\n            \
+    \        (fizz_buzz (- n 1))))]\n    [else 0]))\n", "  (cond\n    [(= n 0) 0]\n\
+    \    [(or (= (modulo n 11) 0) (= (modulo n 13) 0))\n     (+ (is-seven-in-int?\
+    \ n) (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n", "  (cond\n  \
+    \  [(= n 0) 0]\n    [(and (= (modulo n 11) 0) (= (modulo n 13) 0))\n     (+ (contains-7?\
+    \ n) (fizz_buzz (- n 1)))]\n    [(or (= (modulo n 11) 0) (= (modulo n 13) 0))\n\
+    \     (+ (contains-7? n) (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n",
+  "  (cond ((< n 7) 0)\n        ((or (equal? (modulo n 11) 0) (equal? (modulo n 13)\
+    \ 0))\n         (+ (occurrences (quotient n 10) 7)\n            (occurrences (modulo\
+    \ n 10) 7)))\n        (else (fizz_buzz (- n 1)))))\n", "  (let loop ([i 0] [res\
+    \ 0])\n    (cond [(= i n) res]\n          [(and (or (zero? (modulo i 11)) (zero?\
+    \ (modulo i 13))) (zero? (modulo i 7))) (loop (+ i 1) (+ res 1))]\n          [else\
+    \ (loop (+ i 1) res)])))\n", "  (define (fizz_buzz_helper n x)\n    (cond ((>\
+    \ n x) 0)\n          ((or (zero? (modulo x 11)) (zero? (modulo x 13))) (+ (count\
+    \ 7 (number->string x)) (fizz_buzz_helper n (+ x 1))))\n          (else (fizz_buzz_helper\
+    \ n (+ x 1)))))\n  (fizz_buzz_helper n 0))\n", "  (cond ((= n 0) 0)\n        ((and\
+    \ (divisible? n 11) (divisible? n 13))\n         (+ (count-7s (number->string\
+    \ n))\n            (fizz_buzz (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n",
+  "  (define (helper n count)\n    (cond [(= n 0) count]\n          [(= n 1) count]\n\
+    \          [(and (= (modulo n 11) 0) (= (modulo n 13) 0))\n           (if (contains-7?\
+    \ n) (helper (- n 1) (+ count 1)) (helper (- n 1) count))]\n          [(= (modulo\
+    \ n 11) 0)\n           (if (contains-7? n) (helper (- n 1) (+ count 1)) (helper\
+    \ (- n 1) count))]\n          [(= (modulo n 13) 0)\n           (if (contains-7?\
+    \ n) (helper (- n 1) (+ count 1)) (helper (- n 1) count))]\n          [else (helper\
+    \ (- n 1) count)]))\n  (helper n 0))\n", "  (let ((count 0))\n    (define (fb\
+    \ i)\n      (cond [(= i n) count]\n            [(and (or (= (modulo i 11) 0) (=\
+    \ (modulo i 13) 0))\n                  (string-contains? (number->string i) \"\
+    7\"))\n             (set! count (+ count 1))]\n            [else (set! count count)]\n\
+    \            )\n      (fb (+ i 1))\n      )\n    (fb 0)\n    )\n  )\n", "  (for/sum\
+    \ ([i (in-range 1 n) :while (or (zero? (modulo i 11)) (zero? (modulo i 13)))])\n\
+    \            (count (string-contains (number->string i) \"7\"))))\n", "  (count-if\
+    \ (lambda (x)\n              (or (zero? (modulo x 11))\n                  (zero?\
+    \ (modulo x 13))))\n            (iota (sub1 n))))\n", "  (cond ((= n 0) 0)\n \
+    \       ((or (divisible? n 11) (divisible? n 13)) (+ (digit-count n 7) (fizz_buzz\
+    \ (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", "  (let fizz-buzz ([lst\
+    \ (range 0 n)])\n    (cond [(empty? lst) 0]\n          [(not (zero? (modulo (first\
+    \ lst) 11)))\n           (fizz-buzz (rest lst))]\n          [(not (zero? (modulo\
+    \ (first lst) 13)))\n           (fizz-buzz (rest lst))]\n          [else (+ (count\
+    \ (char-&gt;integer #\\7) (number-&gt;string (first lst)))\n                 \
+    \  (fizz-buzz (rest lst)))])))\n</code>\n", "    (cond\n      [(= 0 (modulo n\
+    \ 11))\n       (cond\n         [(= 0 (modulo n 13))\n          (+ 2 (fizz_buzz\
+    \ (- n 10)))]\n         [else\n          (+ 1 (fizz_buzz (- n 10)))])]\n     \
+    \ [(= 0 (modulo n 13))\n       (cond\n         [(= 0 (modulo n 11))\n        \
+    \  (+ 2 (fizz_buzz (- n 10)))]\n         [else\n          (+ 1 (fizz_buzz (- n\
+    \ 10)))])]\n      [else\n       (fizz_buzz (- n 1))]))\n", "  (define (count-sevens\
+    \ x acc)\n    (cond\n      ((< x 0) acc)\n      ((or (divisible? x 11) (divisible?\
+    \ x 13)) (count-sevens (- x 1) (+ acc (seven? x))))\n      (else (count-sevens\
+    \ (- x 1) acc))))\n  (count-sevens (- n 1) 0))\n", "  (define (loop current total)\n\
+    \    (cond ((= current n) total)\n          ((= (modulo current 11) 0) (loop (+\
+    \ current 1) (+ total (count 7 (number->string current)))))\n          ((= (modulo\
+    \ current 13) 0) (loop (+ current 1) (+ total (count 7 (number->string current)))))\n\
+    \          (else (loop (+ current 1) total))))\n  (loop 0 0))\n", "  (cond\n \
+    \   [(= n 7) 0]\n    [(= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1)))]\n    [(=\
+    \ (modulo n 13) 0) (+ 1 (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n\
+    ```\n\n## Task 2 - Static Analysis\n\n### Part 1\n\n```racket\n#lang racket\n",
+  "  (if (< n 11)\n      0\n      (+ (if (or (zero? (modulo n 11)) (zero? (modulo\
+    \ n 13)))\n             (if (string=? \"7\" (string-ref (number->string n) (sub1\
+    \ (string-length (number->string n)))))\n                 1\n                \
+    \ 0)\n             0)\n         (fizz_buzz (sub1 n)))))\n", "  (cond [(> n 0)\n\
+    \         (+ (cond [(and (zero? (modulo n 11))\n                     (member #\\\
+    7 (string->list (number->string n)))) 1 0])\n            (cond [(and (zero? (modulo\
+    \ n 13))\n                    (member #\\7 (string->list (number->string n))))\
+    \ 1 0])\n            (fizz_buzz (- n 1)))]\n        [else 0]))\n```\n\nThis is\
+    \ better, but there's still a lot of repetition. (And even worse, we may be doing\
+    \ a lot of unnecessary computations).\n\nWhat we actually want to do is extract\
+    \ a function that tells us whether a number contains the digit 7, and pass that\
+    \ function to a higher-order function that applies it to the numbers we want to\
+    \ test.\n\n```racket\n#lang racket\n", "  (define (fb i ac)\n    (cond\n     \
+    \ [(> i n) ac]\n      [(integer? (modulo (+ i i) 11)) (fb (+ i 1) (+ ac (count-7s\
+    \ (number->string i))))]\n      [(integer? (modulo (+ i i) 13)) (fb (+ i 1) (+\
+    \ ac (count-7s (number->string i))))]\n      [else (fb (+ i 1) ac)]))\n  (fb 2\
+    \ 0))\n", "  (let ([cnt 0])\n    (for ([i (in-range 1 n)] #:when (and (number-contains-digit-7?\
+    \ i) (or (divides? i 11) (divides? i 13))))\n      (set! cnt (+ cnt 1)))\n   \
+    \ cnt))\n", "  (cond ((&lt; n 11) 0)\n        ((equal? (modulo n 11) 0)\n    \
+    \     (+ (occurrences 7 (quotient n 11))\n            (fizz_buzz (- n 1))))\n\
+    \        ((equal? (modulo n 13) 0)\n         (+ (occurrences 7 (quotient n 13))\n\
+    \            (fizz_buzz (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", " \
+    \ (for/sum ([i (in-range n)])\n    (if (or (not (integer? (quotient i 11)))\n\
+    \            (not (integer? (quotient i 13))))\n        0\n        (count-digits-in-int\
+    \ i 7))))\n", "  (let ([total 0])\n    (for ([i (in-range 11 13 n)])\n      (if\
+    \ (eq? (modulo i 11) 0)\n          (set! total (+ total (count-7 (string-&gt;number\
+    \ (number-&gt;string i)))))))\n    total))\n", "  (if (< n 11)\n      0\n    \
+    \  (+ (if (and (= (modulo n 11) 0) (or (string-contains? (number->string n) \"\
+    7\") (string-contains? (number->string n) \"7\")))\n            1\n          \
+    \  0)\n         (if (and (= (modulo n 13) 0) (or (string-contains? (number->string\
+    \ n) \"7\") (string-contains? (number->string n) \"7\")))\n             1\n  \
+    \           0)\n         (fizz_buzz (- n 1)))))\n", "  (cond [(> n 0)\n      \
+    \   (+ (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n               (if (or\
+    \ (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                   (if (or (= 0 (modulo\
+    \ n 11)) (= 0 (modulo n 13)))\n                       (if (or (= 0 (modulo n 11))\
+    \ (= 0 (modulo n 13)))\n                           (if (or (= 0 (modulo n 11))\
+    \ (= 0 (modulo n 13)))\n                               (if (or (= 0 (modulo n\
+    \ 11)) (= 0 (modulo n 13)))\n                                   (if (or (= 0 (modulo\
+    \ n 11)) (= 0 (modulo n 13)))\n                                       (if (or\
+    \ (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                                 \
+    \          (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                \
+    \                               (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n\
+    \                                                   (if (or (= 0 (modulo n 11))\
+    \ (= 0 (modulo n 13)))\n                                                     \
+    \  (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                        \
+    \                                   (if (or (= 0 (modulo n 11)) (= 0 (modulo n\
+    \ 13)))\n                                                               (if (or\
+    \ (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                                 \
+    \                                  (if (or (= 0 (modulo n 11)) (= 0 (modulo n\
+    \ 13)))\n                                                                    \
+    \   (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                       \
+    \                                                    (if (or (= 0 (modulo n 11))\
+    \ (= 0 (modulo n 13)))\n                                                     \
+    \                          (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n\
+    \                                                                            \
+    \       (if (or (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n                   \
+    \                                                                    (if (or (=\
+    \ 0 (modulo n 11)) (= 0 (modulo n 13)))\n                                    \
+    \                                                       (if (or (= 0 (modulo n\
+    \ 11)) (= 0 (", "  (if (< n 7)\n      0\n      (+ (if (or (zero? (modulo n 11))\
+    \ (zero? (modulo n 13)))\n             1\n             0)\n         (fizz_buzz\
+    \ (- n 1)))))\n", "  (sum-digits-divisible-by-11-or-13 7 (range-counted n)))\n",
+  "  (define (fizz_buzz_iter count)\n    (cond\n      [(= count n)\n       0]\n  \
+    \    [(and (zero? (modulo count 11)) (zero? (modulo count 13)))\n       (+ 1 (fizz_buzz_iter\
+    \ (+ count 1)))]\n      [else\n       (fizz_buzz_iter (+ count 1))]))\n  (fizz_buzz_iter\
+    \ 0))\n```\n\n## Fizz Buzz [Hard]\n\n### Python\n\n```python\n#!/usr/bin/env python\n\
+    # -*- coding: utf-8 -*-\n\ndef fizz_buzz(n):\n    return ['FizzBuzz' if x % 15\
+    \ == 0 else 'Fizz' if x % 3 == 0 else 'Buzz' if x % 5 == 0 else x for x in range(1,\
+    \ n+1)]\n```\n\n### Haskell\n\n```haskell\n#!/usr/bin/env stack\n-- stack --resolver\
+    \ lts-14.0 script\n\nfizzBuzz :: Integer -> [String]\nfizzBuzz n = map stringify\
+    \ [1..n]\n  where\n    stringify x\n      | x `mod` 15 == 0 = \"FizzBuzz\"\n \
+    \     | x `mod` 3 == 0 = \"Fizz\"\n      | x `mod` 5 == 0 = \"Buzz\"\n      |\
+    \ otherwise = show x\n\nmain :: IO ()\nmain = print $ fizzBuzz 100\n```\n\n###\
+    \ Scala\n\n```scala\n#!/usr/bin/env scala\n\nimport scala.collection.immutable.Range\n\
+    \nobject FizzBuzz {\n  def fizzBuzz(n: Int): List[String] = {\n    (1 to n).map(n\
+    \ => (n % 3, n % 5) match {\n      case (0, 0) => \"FizzBuzz\"\n      case (0,\
+    \ _) => \"Fizz\"\n      case (_, 0) => \"Buzz\"\n      case _ => n.toString\n\
+    \    }).toList\n  }\n}\n```\n\n### Ruby\n\n```ruby\n#!/usr/bin/env ruby\n\ndef\
+    \ fizz_buzz(n)\n  (", "  (cond [(= n 11) 0]\n        [(= n 13) 0]\n        [(<\
+    \ n 11) 0]\n        [(= (modulo n 11) 0) (if (or (= (modulo n 7) 0) (= (modulo\
+    \ n 13) 0)) (+ 1 (fizz_buzz (- n 1))) 0)]\n        [(= (modulo n 13) 0) (if (or\
+    \ (= (modulo n 7) 0) (= (modulo n 11) 0)) (+ 1 (fizz_buzz (- n 1))) 0)]\n    \
+    \    [else (if (or (= (modulo n 7) 0) (= (modulo n 11) 0) (= (modulo n 13) 0))\
+    \ (+ 1 (fizz_buzz (- n 1))) 0)]))\n", "  (if (= n 0)\n      0\n      (add1 (fizz_buzz\
+    \ (sub1 n)))))\n```\n\n```racket\n#lang racket\n", "  (cond\n    [(= n 0) 0]\n\
+    \    [(and (= (modulo n 11) 0) (modulo n 13) 0)\n     (+ (cond\n          [(=\
+    \ (modulo n 1000) 0) 2]\n          [(= (modulo n 100) 0) 1]\n          [else 0])\n\
+    \        (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n", "  (let ([count\
+    \ (let ([num 0])\n                 (for ([i (in-range 1 n)])\n               \
+    \    (when (and (and (= (modulo i 11) 0) (not (= (modulo i 13) 0)))\n        \
+    \                      (not (= (modulo i 13) 0)))\n                     (set!\
+    \ num (+ num (count-occurrences 7 i))))\n                   (when (and (and (=\
+    \ (modulo i 13) 0) (not (= (modulo i 11) 0)))\n                              (not\
+    \ (= (modulo i 11) 0)))\n                     (set! num (+ num (count-occurrences\
+    \ 7 i)))))\n                 num))])\n    count))", "  (if (= n 0)\n      0\n\
+    \      (cond\n        [(or (zero? (modulo n 11)) (zero? (modulo n 13)))\n    \
+    \     (+ (if (zero? (modulo n 7)) 1 0) (fizz_buzz (- n 1)))]\n        [else (fizz_buzz\
+    \ (- n 1))])))\n```\n\n```\n#lang racket\n", "  (define (is-seven n)\n    (equal?\
+    \ (modulo n 10) 7))\n  (define (count-sevens n)\n    (cond\n      [(< n 1) 0]\n\
+    \      [(or (is-seven n) (is-seven (modulo n 11)) (is-seven (modulo n 13)))\n\
+    \       (+ 1 (count-sevens (- n 1)))]\n      [else (count-sevens (- n 1))]))\n\
+    \  (count-sevens n))\n", "  (define (helper result n)\n    (cond ((< n 78) result)\n\
+    \          ((and (divisible-by? n 11) (divisible-by? n 13)) (helper (+ result\
+    \ (number-of-7s (number->string n))) (- n 1)))\n          ((divisible-by? n 11)\
+    \ (helper result (- n 1)))\n          ((divisible-by? n 13) (helper result (-\
+    \ n 1)))\n          (else (helper result (- n 1)))))\n  (helper 0 n))\n", "  (count-all\n\
+    \   (lambda (x)\n     (and (or (zero? (modulo x 11))\n              (zero? (modulo\
+    \ x 13)))\n          (zero? (count-occurences 7 (integer->string x)))))\n   (range\
+    \ n)))\n", "  (define (loop i count)\n    (cond ((> i n) count)\n          ((and\
+    \ (or (zero? (modulo i 11)) (zero? (modulo i 13))) (member 7 (number->list i)))\
+    \ (loop (+ i 1) (+ count 1)))\n          (else (loop (+ i 1) count))))\n  (loop\
+    \ 1 0))\n```\n\n```racket\n#lang racket\n", "  (define (count7 x acc)\n    (cond\n\
+    \      [(< x 10)\n       (if (= x 7) (+ acc 1) acc)]\n      [(= x 7)\n       (+\
+    \ acc 1)]\n      [else\n       (count7 (quotient x 10) acc)]))\n  (define (fizz-buzz\
+    \ x acc)\n    (cond\n      [(< x 10)\n       acc]\n      [(or (zero? (modulo x\
+    \ 11)) (zero? (modulo x 13)))\n       (fizz-buzz (quotient x 10) (count7 x acc))]\n\
+    \      [else\n       (fizz-buzz (quotient x 10) acc)]))\n  (fizz-buzz n 0))\n",
+  "  (letrec ([count-7s (\u03BB (N)\n                        (if (&lt; N 10)\n   \
+    \                         (if (= N 7) 1 0)\n                            (+ (if\
+    \ (= (modulo N 10) 7) 1 0)\n                               (count-7s (quotient\
+    \ N 10)))))])\n    (let loop ([i 0] [total 0])\n      (if (&gt; i n)\n       \
+    \   total\n          (loop (+ i 1)\n                (+ total (if (or (zero? (modulo\
+    \ i 11))\n                                 (zero? (modulo i 13)))\n          \
+    \                   (count-7s i)\n                             0)))))))\n</code>\n",
+  "  (cond [(= n 7) 1]\n        [(or (= (modulo n 11) 0) (= (modulo n 13) 0)) (+ (fizz_buzz\
+    \ (- n 1)) (if (or (= (modulo n 10) 7) (= (modulo n 10) -7)) 1 0))]\n        [else\
+    \ (fizz_buzz (- n 1))]))\n", "    (define (sum-digits i count)\n        (cond\
+    \ ((< i 0) count)\n              ((= i 0) count)\n              ((= (modulo i\
+    \ 10) 7) (sum-digits (quotient i 10) (+ count 1)))\n              (else (sum-digits\
+    \ (quotient i 10) count))))\n    (define (fizz-buzz i count)\n        (cond ((<\
+    \ i 0) count)\n              ((= i 0) count)\n              ((and (zero? (modulo\
+    \ i 11)) (zero? (modulo i 13))) (fizz-buzz (- i 1) (+ count (sum-digits i 0))))\n\
+    \              (else (fizz-buzz (- i 1) count))))\n    (fizz-buzz (- n 1) 0))",
+  "  (cond [(= n 0) 0]\n        [(= (modulo n 10) 7) (+ 1 (fizz_buzz (- n 1)))]\n\
+    \        [else (fizz_buzz (- n 1))]))\n", "  (cond ((< n 1) 0)\n        ((and\
+    \ (or (divisible? n 11) (divisible? n 13))\n              (digit? n 7))\n    \
+    \     (+ 1 (fizz_buzz (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", " \
+    \ (define (count l n)\n    (cond\n      [(null? l) n]\n      [(equal? (number->string\
+    \ (car l)) \"7\") (count (cdr l) (+ n 1))]\n      [else (count (cdr l) n)]))\n\
+    \  (count (list-range 11 n 13) 0))\n```\n\nCorrect.\n\n### 2. \n\n```racket\n\
+    #lang racket\n", "  (if (= n 0)\n      0\n      (cond\n        [(or (= 0 (modulo\
+    \ n 11)) (= 0 (modulo n 13)))\n         (+ (if (= 7 (modulo n 10)) 1 0) (fizz_buzz\
+    \ (- n 1)))]\n        [else (fizz_buzz (- n 1))])))\n", "  (define (digit-found?\
+    \ n)\n    (cond ((= n 7) #t)\n          ((= n 0) #f)\n          (else (digit-found?\
+    \ (remainder n 10)))))\n  (define (divisible-by? n k)\n    (= (remainder n k)\
+    \ 0))\n  (define (seven-count n)\n    (if (< n 7)\n        0\n        (+ (if (and\
+    \ (digit-found? n)\n                    (or (divisible-by? n 11)\n           \
+    \             (divisible-by? n 13)))\n               1\n               0)\n  \
+    \         (seven-count (- n 1)))))\n  (seven-count n))\n", "  (define (count-7\
+    \ x c)\n    (cond [(zero? x) c]\n          [(> x n) c]\n          [(zero? (modulo\
+    \ x 11))\n           (cond [(zero? (modulo x 13)) (count-7 (- x 2) (+ c 2))]\n\
+    \                 [else (count-7 (- x 1) (+ c 1))])]\n          [(zero? (modulo\
+    \ x 13)) (count-7 (- x 2) (+ c 2))]\n          [else (count-7 (- x 1) c)]))\n\
+    \  (count-7 (- n 1) 0))\n", "  (define (helper n result)\n    (if (= n 0) result\n\
+    \        (if (or (zero? (modulo n 11)) (zero? (modulo n 13)))\n            (helper\
+    \ (- n 1) (+ result (count-7 (number->string n))))\n            (helper (- n 1)\
+    \ result))))\n  (helper n 0))\n", "  (define (count-sevens start count)\n    (if\
+    \ (zero? start)\n        count\n        (if (zero? (modulo start 11))\n      \
+    \      (if (zero? (modulo start 13))\n                (count-sevens (- start 1)\
+    \ (+ count (count-sevens-in-int start)))\n                (count-sevens (- start\
+    \ 1) (+ count (count-sevens-in-int start))))\n            (if (zero? (modulo start\
+    \ 13))\n                (count-sevens (- start 1) (+ count (count-sevens-in-int\
+    \ start)))\n                (count-sevens (- start 1) count)))))\n  (count-sevens\
+    \ (- n 1) 0))", "  (if (odd? n)\n      (fizz_buzz (- n 1))\n    (cond ((= n 1)\
+    \ 0)\n          ((= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1))))\n          ((=\
+    \ (modulo n 13) 0) (+ 1 (fizz_buzz (- n 1))))\n          (else (fizz_buzz (- n\
+    \ 1))))))\n", "  (define (check-num n count)\n    (cond ((= 0 n) count)\n    \
+    \      ((or (zerop? (modulo n 11)) (zerop? (modulo n 13)))\n           (check-num\
+    \ (- n 1) (check-seven n count)))\n          (else (check-num (- n 1) count))))\n\
+    \  (check-num (- n 1) 0))\n", "  (cond ((< n 0) 0)\n        ((= (modulo n 11)\
+    \ 0) (+ 1 (fizz_buzz (- n 1))))\n        ((= (modulo n 13) 0) (+ 1 (fizz_buzz\
+    \ (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", "  (cond\n    [(= n 0)\
+    \ 0]\n    [(= n 1) 0]\n    [(= n 2) 0]\n    [(= n 3) 0]\n    [(= n 4) 0]\n   \
+    \ [(= n 5) 0]\n    [(= n 6) 0]\n    [(= n 7) 0]\n    [(= n 8) 0]\n    [(= n 9)\
+    \ 0]\n    [(= n 10) 0]\n    [(= n 11) 0]\n    [(= n 12) 0]\n    [(= n 13) 0]\n\
+    \    [(= n 14) 0]\n    [(= n 15) 0]\n    [(= n 16) 0]\n    [(= n 17) 0]\n    [(=\
+    \ n 18) 0]\n    [(= n 19) 0]\n    [(= n 20) 0]\n    [(= n 21) 0]\n    [(= n 22)\
+    \ 0]\n    [(= n 23) 0]\n    [(= n 24) 0]\n    [(= n 25) 0]\n    [(= n 26) 0]\n\
+    \    [(= n 27) 0]\n    [(= n 28) 0]\n    [(= n 29) 0]\n    [(= n 30) 0]\n    [(=\
+    \ n 31) 0]\n    [(= n 32) 0]\n    [(= n 33) 0]\n    [(= n 34) 0]\n    [(= n 35)\
+    \ 0]\n    [(= n 36) 0]\n    [(= n 37) 0]\n    [(= n 38) 0]\n    [(= n 39) 0]\n\
+    \    [(= n 40) 0]\n    [(= n 41) 0]\n    [(= n 42) 0]\n    [(= n 43) 0]\n    [(=\
+    \ n 44) 0]\n    [(= n 45) 0]\n    [(= n 46) 0]\n    [(= n 47) 0]\n    [(= n 48)\
+    \ 0]\n    [(= n 49) 0]\n    [(= n 50) 0]\n    [(= n 51) 0]\n    [(= n 52) 0]\n\
+    \    [(= n 53) 0]\n    [(= n 54) 0]\n    [(= n 55) 0]\n    [(=", "  (define (count-divisible\
+    \ a b n)\n    (if (< a n)\n        (+ (if (zero? (modulo a b)) 1 0)\n        \
+    \   (count-divisible (+ a 1) b n))\n        0))\n  (define (count-7 n)\n    (if\
+    \ (< n 10)\n        (if (= n 7) 1 0)\n        (+ (if (= (modulo n 10) 7) 1 0)\n\
+    \           (count-7 (quotient n 10)))))\n  (+ (count-divisible 1 11 n)\n    \
+    \ (count-divisible 1 13 n)\n     (count-divisible 1 1113 n)\n     (count-divisible\
+    \ 1 1113 n)\n     (count-divisible 1 11131 n)\n     (count-divisible 1 111311\
+    \ n)\n     (count-divisible 1 1113111 n)\n     (count-divisible 1 11131111 n)\n\
+    \     (count-divisible 1 111311111 n)\n     (count-divisible 1 1113111111 n)\n\
+    \     (count-divisible 1 11131111111 n)\n     (count-divisible 1 111311111111\
+    \ n)\n     (count-divisible 1 1113111111111 n)\n     (count-divisible 1 11131111111111\
+    \ n)\n     (count-divisible 1 111311111111111 n)\n     (count-divisible 1 1113111111111111\
+    \ n)\n     (count-divisible 1 11131111111111111 n)\n     (count-divisible 1 111311111111111111\
+    \ n)\n     (count-divisible 1 1113111111111111111 n)\n     (count-divisible 1\
+    \ 11131111111111111111 n)\n     (count-divisible 1 111311111111111111111 n)\n\
+    \     (count-divisible 1 1113111111111111111111 n)\n     (count-divisible 1 11131111111111111111111\
+    \ n)\n     (count-divisible 1 111311111111111111111111 n)\n     (count-divisible\
+    \ 1 1113111111111111111111111 n)\n     (count-divisible 1 11131111111111111111111111\
+    \ n)\n     (count-divisible 1 111311111111111111111111111 n)\n    ", "  (count-matches\
+    \ 7 (filter (lambda (x) (or (equal? (modulo x 11) 0) (equal? (modulo x 13) 0)))\
+    \ (range 1 n))))\n", "  (if (< n 7)\n      0\n      (+ (if (or (divisible? 11\
+    \ n) (divisible? 13 n))\n             (count-in-list 7 (int->list n))\n      \
+    \       0)\n         (fizz_buzz (- n 1)))))\n", "  (cond ((< n 1) 0)\n       \
+    \ ((= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1))))\n        ((= (modulo n 13) 0)\
+    \ (+ 1 (fizz_buzz (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", "  (cond\n\
+    \    [(> n 100) 0]\n    [(and (zero? (modulo n 11)) (zero? (modulo n 13)))\n \
+    \     (+ (count-digit 7 n) (fizz_buzz (+ n 1)))]\n    [else (fizz_buzz (+ n 1))]))\n",
+  "  (let loop ([i 0] [x 0])\n    (cond\n      [(= i n) x]\n      [(or (= (modulo\
+    \ i 11) 0) (= (modulo i 13) 0))\n       (loop (+ i 1) (+ x (count-sevens i)))]\n\
+    \      [else (loop (+ i 1) x)])))\n", "  (define (fizz_buzz_helper i)\n    (if\
+    \ (< i n)\n        (if (or (zero? (modulo i 11)) (zero? (modulo i 13)))\n    \
+    \        (+ (count-7 i) (fizz_buzz_helper (+ i 1)))\n            (fizz_buzz_helper\
+    \ (+ i 1)))\n        0))\n  (fizz_buzz_helper 0))\n", "  (local [(define (fizz_buzz_iter\
+    \ start count)\n            (cond [(= start n) count]\n                  [(or\
+    \ (zero? (modulo start 11))\n                       (zero? (modulo start 13)))\n\
+    \                   (fizz_buzz_iter (+ start 1)\n                            \
+    \       (count-digits-7 start count))]\n                  [else (fizz_buzz_iter\
+    \ (+ start 1) count)]))]\n    (fizz_buzz_iter 1 0)))\n", "  (letrec ([loop (lambda\
+    \ (i)\n                   (cond [(zero? (modulo i 11))\n                     \
+    \     (if (zero? (modulo i 13))\n                              (+ (number-of-7\
+    \ i) (loop (+ i 1)))\n                              (loop (+ i 1)))]\n       \
+    \                  [(zero? (modulo i 13))\n                          (+ (number-of-7\
+    \ i) (loop (+ i 1)))]\n                         [else (loop (+ i 1))]))])\n  \
+    \  (loop 1)))\n", "  (cond\n    [(< n 0) \"Please enter a non-negative integer.\"\
+    ]\n    [(= n 0) 0]\n    [else\n     (let* ([x (modulo n 11)]\n            [y (modulo\
+    \ n 13)]\n            [s (string->number (number->string n))])\n       (cond\n\
+    \         [(and (= x 0) (= y 0)) (+ (fizz_buzz (- n 1)) (count-7s s))]\n     \
+    \    [(or (= x 0) (= y 0)) (+ (fizz_buzz (- n 1)) (count-7s s))]\n         [else\
+    \ (fizz_buzz (- n 1))]))]))\n", "  (define (is_divisible_by m n)\n    (= (modulo\
+    \ m n) 0))\n  (define (fizz_buzz_helper n count)\n    (cond [(= n 0) count]\n\
+    \          [(or (is_divisible_by n 11) (is_divisible_by n 13)) (fizz_buzz_helper\
+    \ (- n 1) (+ count (if (equal? (string-ref (number->string n) (- (string-length\
+    \ (number->string n)) 1)) #\\7) 1 0)))]\n          [else (fizz_buzz_helper (-\
+    \ n 1) count)]))\n  (fizz_buzz_helper n 0))\n```\n\n![](http://rachacuca.com.br/arquivos/sitenovo/instrucoes/exercicios/imagens/ass/easy_logo_128.png)\n\
+    \nN\xEDvel F\xE1cil\n\n### 1 - Maior divisor comum (MDC)\n\nEscreva uma fun\xE7\
+    \xE3o que receba dois n\xFAmeros e retorne o maior divisor comum (MDC) desses\
+    \ n\xFAmeros.\n\n```racket", "  (cond\n    [(< n 1) (error \"\")]\n    [(= n 1)\
+    \ 0]\n    [else (+ (sevens (- n 1))\n             (sevens_divisible_11_or_13 (-\
+    \ n 1)))]))\n", "  (for/sum ([i (in-range 1 n)] #:when (or (zero? (modulo i 11))\
+    \ (zero? (modulo i 13))))\n           (count-digits 7 i)))\n", "  (define (loop\
+    \ i count)\n    (cond [(> i n) count]\n          [(or (zero? (modulo i 11)) (zero?\
+    \ (modulo i 13)))\n           (loop (+ i 1) (cond [(zero? (modulo (string-length\
+    \ (number->string i)) 2))\n                                (+ count (string-ref\
+    \ (number->string i) 1))]\n                               [else (+ count (string-ref\
+    \ (number->string i) 0))]))]\n          [else (loop (+ i 1) count)]))\n  (loop\
+    \ 11 0))\n", "  (cond [(zero? n) 0]\n        [(or (zero? (modulo n 11)) (zero?\
+    \ (modulo n 13))) (+ (digit-occurrences 7 n) (fizz_buzz (- n 1)))]\n        [else\
+    \ (fizz_buzz (- n 1))]))\n", "  (cond\n    [(= n 0) 0]\n    [(= (modulo n 11)\
+    \ 0) (+ 1 (fizz_buzz (- n 1)))]\n    [(= (modulo n 13) 0) (+ 1 (fizz_buzz (- n\
+    \ 1)))]\n    [else (fizz_buzz (- n 1))]))\n", "  (local ((define (fizz_buzz-helper\
+    \ n count)\n            (cond\n              [(= 0 (modulo n 11)) (fizz_buzz-helper\
+    \ (- n 11) (+ count (number-of-7s n)))]\n              [(= 0 (modulo n 13)) (fizz_buzz-helper\
+    \ (- n 13) (+ count (number-of-7s n)))]\n              [else count])))\n    (fizz_buzz-helper\
+    \ n 0)))\n", "  (for/sum ([i (in-range n)]\n            #:when (or (integer? (/\
+    \ i 11))\n                       (integer? (/ i 13))))\n    (count-matches #\\\
+    7 (number->string i))))\n", "  (cond\n    [(= n 0) 0]\n    [(or (exact-integer?\
+    \ (modulo n 11))\n         (exact-integer? (modulo n 13)))\n     (+ (fizz_buzz\
+    \ (- n 1))\n        (if (string-contains? (number->string n) \"7\") 1 0))]\n \
+    \   [else (fizz_buzz (- n 1))]))\n", "  (for/sum ([i (in-range 1 n)])\n    (if\
+    \ (and (or (number-7? i) (number-7? (quotient i 10)))\n             (or (number-divisible?\
+    \ i 11) (number-divisible? i 13)))\n        1\n        0)))\n```\n\n```python\n\
+    # python\n\n# Return the number of times the digit 7 appears in integers less\
+    \ than n which are divisible by 11 or 13.\n# >>> (fizz_buzz 50)\n# 0\n# >>> (fizz_buzz\
+    \ 78)\n# 2\n# >>> (fizz_buzz 79)\n# 3\ndef fizz_buzz(n):\n    return sum(1 if\
+    \ (((i % 7 == 0) or (i // 10 % 7 == 0)) and ((i % 11 == 0) or (i % 13 == 0)))\
+    \ else 0 for i in range(1, n + 1))\n```\n\n```ruby\n#ruby\n\n# Return the number\
+    \ of times the digit 7 appears in integers less than n which are divisible by\
+    \ 11 or 13.\n# >>> (fizz_buzz 50)\n# 0\n# >>> (fizz_buzz 78)\n# 2\n# >>> (fizz_buzz\
+    \ 79)\n# 3\ndef fizz_buzz(n)\n  (1..n).select { |i| ((i % 7 == 0) or (i / 10 %\
+    \ 7 == 0)) and ((i % 11 == 0) or (i % 13 == 0)) }.count\nend\n```\n\n### Problem\
+    \ 15: `number-of-zeros`\n\nWrite a procedure `number-of-zeros` that takes in a\
+    \ `natural` and returns the number of zeros in its factorial.\n\n```racket\n#lang\
+    \ racket\n", "  (let loop ([x (- n 1)] [count 0])\n    (cond\n      [(= x 0) count]\n\
+    \      [(or (exact-integer? (/ x 11)) (exact-integer? (/ x 13))) (loop (- x 1)\
+    \ (+ count (sevens x)))]\n      [else (loop (- x 1) count)])))\n", "  (let loop\
+    \ ([i 0] [count 0])\n    (cond [(= i n) count]\n          [(or (divisible? i 11)\
+    \ (divisible? i 13))\n           (loop (+ i 1) (count-digit i 7))]\n         \
+    \ [else (loop (+ i 1) count)])))\n", "  (let loop ([sum 0] [i 11])\n    (cond\n\
+    \      [(= i n) sum]\n      [(or (= (modulo i 11) 0) (= (modulo i 13) 0))\n  \
+    \     (loop (+ sum (count-substring (number->string i) \"7\")) (+ i 2))]\n   \
+    \   [else (loop sum (+ i 2))])))\n", "  (letrec ([fizz (lambda (n)\n         \
+    \          (cond [(> n 0) (if (and (zero? (modulo n 11)) (or (zero? (modulo n\
+    \ 7)) (zero? (modulo n 13)))) (+ (fizz_buzz_helper n) (fizz (- n 1))) (fizz (-\
+    \ n 1)))]\n                         [else 0]))])\n    (fizz n)))\n", "  (let loop\
+    \ ([n n] [count 0])\n    (cond\n      [(= n 0) count]\n      [(or (= (modulo n\
+    \ 11) 0) (= (modulo n 13) 0))\n       (if (equal? (digit-count n) 7)\n       \
+    \    (loop (- n 1) (+ count 1))\n           (loop (- n 1) count))]\n      [else\
+    \ (loop (- n 1) count)])))\n```\n\n## Problem 6\n\n```racket\n#lang racket\n",
+  "  (letrec\n      ([iter (lambda (x)\n               (cond\n                 [(=\
+    \ x n) 0]\n                 [(and (or (= (modulo x 11) 0) (= (modulo x 13) 0))\n\
+    \                       (= (modulo x 10) 7))\n                  (+ 1 (iter (+\
+    \ x 1)))]\n                 [else (iter (+ x 1))]))])\n    (iter 1)))\n", "  (define\
+    \ (count_7s i)\n    (cond ((< i 0) 0)\n          ((= i 7) 1)\n          ((zero?\
+    \ (modulo i 10))\n           (count_7s (quotient i 10)))\n          ((or (zero?\
+    \ (modulo i 11))\n               (zero? (modulo i 13)))\n           (+ (count_7s\
+    \ (quotient i 10))\n              (count_7s (modulo i 10))))\n          (else\
+    \ (count_7s (quotient i 10)))))\n  (count_7s n))\n", "  (let ([tmp  (for/sum ([i\
+    \ (- n 1)])\n                 (if (or (= (modulo i 11) 0) (= (modulo i 13) 0))\n\
+    \                     (count-digit 7 i)))])\n    (if (zero? (modulo n 11))\n \
+    \       (add1 tmp))\n    (if (zero? (modulo n 13))\n        (add1 tmp))\n    tmp))\n\
+    </code>\nI think that my code works as intended but I have some doubts about its\
+    \ efficiency. So I'd like to know if there is any way to solve this exercise more\
+    \ efficiently.\n\n\nA:\n\nThis is an interesting question, and I think you're\
+    \ on the right track. The main problem is that the brute-force approach is too\
+    \ slow. There is a better way, though. If you think about it, you can easily calculate\
+    \ the number of digits 7 that appear in all the numbers between <code>11*k</code>\
+    \ and <code>11*(k+1)</code>, where <code>k</code> is some integer - try it and\
+    \ you'll see. Now if we generalize this to any number <code>m</code>, we can calculate\
+    \ the number of digits 7 that appear in the numbers between <code>m*k</code> and\
+    \ <code>m*(k+1)</code>. So, to solve the question we just need to get the numbers\
+    \ divisible by <code>11</code> and <code>13</code> that are less than <code>n</code>,\
+    \ and add up the number of digits 7 in each range.\nHere's my solution in Racket,\
+    \ I think it's self-explanatory:\n<code>(define (fizz-buzz n)\n  (define (count-7s\
+    \ m k)\n    (define (count-7s-inner m)\n      (if (&lt; m 10)\n          0\n \
+    \         (+ (if (= (modulo m 10) 7) 1 0)\n             (count-7s-inner (quotient\
+    \ m 10)))))\n    (let ([i (- n (remainder n m))])\n      (* k (count-7s-inner\
+    \ m))\n      (+ (* k (count-7s-inner m))\n         (count-7s-inner (- n i)))))\n\
+    \ ", "  (cond ((= n 0) 0)\n        ((= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1))))\n\
+    \        ((= (modulo n 13) 0) (+ 1 (fizz_buzz (- n 1))))\n        (else (fizz_buzz\
+    \ (- n 1)))))\n", "  (cond\n    [(< n 0) (error \"must be non-negative\")]\n \
+    \   [(= n 0) 0]\n    [else (+\n            (modulo n 11) (modulo n 13)\n     \
+    \       (modulo (quotient n 11) 7) (modulo (quotient n 13) 7)\n            (fizz_buzz\
+    \ (- n 1)))]))\n", "  (cond\n    [(= n 0) 0]\n    [(and (= (modulo n 11) 0) (=\
+    \ (modulo n 13) 0))\n     (+ 1 (fizz_buzz (- n 1)))]\n    [(or (= (modulo n 11)\
+    \ 0) (= (modulo n 13) 0))\n     (fizz_buzz (- n 1))]\n    [else (fizz_buzz (-\
+    \ n 1))]))\n\n", "  (let ([count 0])\n    (define (loop i)\n      (cond\n    \
+    \    [(> i n) count]\n        [(or (integer? (/ i 11)) (integer? (/ i 13)))\n\
+    \         (if (integer? (/ i 7))\n             (set! count (+ count 1))\n    \
+    \         (set! count count))\n         (loop (+ i 1))]\n        [else (loop (+\
+    \ i 1))]))\n    (loop 0)))\n```\n\n### \uBC30\uC5F4\uC744 \uAC70\uAFB8\uB85C \uC815\
+    \uB82C\n\n```racket\n#lang racket\n", "  (let loop ([n n] [s 0])\n    (cond\n\
+    \      [(= n 0) s]\n      [(and (= (modulo n 11) 0) (= (modulo n 13) 0)) (loop\
+    \ (- n 1) (+ s (count-7 (modulo n 10))))]\n      [(or (= (modulo n 11) 0) (= (modulo\
+    \ n 13) 0)) (loop (- n 1) s)]\n      [else (loop (- n 1) s)])))\n", "    (cond\n\
+    \        [(= n 0) 0]\n        [(= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1)))]\n\
+    \        [(= (modulo n 13) 0) (+ 1 (fizz_buzz (- n 1)))]\n        [else (fizz_buzz\
+    \ (- n 1))]))\n", "  (local [(define (helper i)\n            (cond [(= i n)\n\
+    \                   0]\n                  [(or (= (modulo i 11) 0)\n         \
+    \              (= (modulo i 13) 0))\n                   (add1\n              \
+    \      (helper (add1 i)))]\n                  [else\n                   (helper\
+    \ (add1 i))]))]\n    (helper 0)))\n```\n\n## 4.4 Binary Arithmetic\n\n### 4.4.1\
+    \ Review of Binary Numbers\n\nA binary number is a representation of a natural\
+    \ number using only two symbols: 0 and 1.\n\n\n### 4.4.2 Binary Addition\n\n```",
+  "  (let* ([mults-of-11-or-13 (range n 11 0)]\n         [mults-of-11-or-13-with-7\
+    \ (for/list ([x mults-of-11-or-13])\n                                       (and\
+    \ (member 7 (digits x)) x))])\n    (length mults-of-11-or-13-with-7)))\n", " \
+    \   (let loop ([i 11] [res 0])\n        (cond\n            [(= i n) res]\n   \
+    \         [(or (divides? 13 i) (divides? 11 i))\n             (if (find-7 i) (loop\
+    \ (+ i 1) (+ res 1)) (loop (+ i 1) res))]\n            [else (loop (+ i 1) res)])))\n",
+  "    (cond\n        ((= 0 (modulo n 13)) (fizz_buzz (- n 13)))\n        ((= 0 (modulo\
+    \ n 11)) (fizz_buzz (- n 11)))\n        ((= 0 (modulo n 7))  (+ 1 (fizz_buzz (-\
+    \ n 7))))\n        (else 0)))\n", "  (cond [(= n 7) 1]\n        [(< n 7) 0]\n\
+    \        [else (+ (fizz_buzz (- n 1))\n                 (cond [(= (modulo n 11)\
+    \ 0) (fizz_buzz n 7)]\n                       [(= (modulo n 13) 0) (fizz_buzz\
+    \ n 7)]\n                       [else 0]))]))\n", "  (cond\n    [(= n 0) 0]\n\
+    \    [(and (not (zero? (modulo n 11)))\n          (not (zero? (modulo n 13))))\
+    \ (fizz_buzz (- n 1))]\n    [(string-contains? (number->string n) \"7\") (+ 1\
+    \ (fizz_buzz (- n 1)))]\n    [else (fizz_buzz (- n 1))]))\n", "  (if (= n 0) 0\n\
+    \      (if (or (divisible? n 11) (divisible? n 13))\n        (+ (if (divisible?\
+    \ n 7) 1 0) (fizz_buzz (- n 1)))\n        (fizz_buzz (- n 1)))))\n", "  (cond\
+    \ ((or (zero? n) (< n 0)) -1)\n        ((not (integer? n)) -2)\n        (else\
+    \ (let ((count 0))\n                (for ([i (in-range 1 n)])\n              \
+    \    (if (and (or (zero? (modulo i 11)) (zero? (modulo i 13)))\n             \
+    \              (number-string-contains (number->string i) #\\7))\n           \
+    \           (set! count (+ count 1))))\n                count))))\n", "  (cond\n\
+    \    [(< n 11) 0]\n    [(< n 13) (if (equal? (modulo n 11) 0) 1 0)]\n    [(< n\
+    \ 78) (if (or (equal? (modulo n 11) 0) (equal? (modulo n 13) 0)) 1 0)]\n    [(<\
+    \ n 79) (if (and (equal? (modulo n 11) 0) (equal? (modulo n 13) 0)) 1 0)]\n  \
+    \  [else (+ (if (equal? (modulo n 11) 0) 1 0) (if (equal? (modulo n 13) 0) 1 0))]))\n\
+    ```\nThis will be O(n) time and O(1) space.\n\n## Problem 5\n``` #lang racket\n",
+  "  (let loop ([i n] [sum 0])\n    (cond [(= i 0) sum]\n          [(or (zero? (modulo\
+    \ i 11)) (zero? (modulo i 13)))\n           (if (string-contains (number->string\
+    \ i) \"7\")\n               (loop (- i 1) (+ sum 1))\n               (loop (-\
+    \ i 1) sum))]\n          [else (loop (- i 1) sum)])))\n", "  (cond ((= n 0) 0)\n\
+    \        ((or (divisible-by? n 11) (divisible-by? n 13))\n         (+ (sevens-in-n\
+    \ n) (fizz_buzz (- n 1))))\n        (else (fizz_buzz (- n 1)))))\n", "  (define\
+    \ (fizz_buzz_aux x acc)\n    (cond\n      [(= x n) acc]\n      [(or (= (modulo\
+    \ x 11) 0) (= (modulo x 13) 0)) (fizz_buzz_aux (+ x 1) (+ acc (count-7 x)))]\n\
+    \      [else (fizz_buzz_aux (+ x 1) acc)]))\n  (fizz_buzz_aux 0 0))\n", "  (define\
+    \ (match-7? x)\n    (cond [(equal? (remainder x 10) 7) 1]\n          [else 0]))\n\
+    \  (cond [(< n 11) 0]\n        [(= n 11) (match-7? n)]\n        [(> n 13) (+ (fizz_buzz\
+    \ (- n 1)) (match-7? n))]\n        [else (fizz_buzz 13)]))\n", "  (for/sum ([i\
+    \ (in-range 1 n)])\n    (if (or (zero? (modulo i 11)) (zero? (modulo i 13)))\n\
+    \        (if (regexp-match #rx\"7\" (number->string i))\n            1\n     \
+    \       0)\n        0)))\n", "  (cond\n    [(or (zero? (modulo n 11)) (zero? (modulo\
+    \ n 13))) (if (list=? (list->string (number->list n)) '(#\\7)) 1 0)]\n    [else\
+    \ (+ (fizz_buzz (- n 1)) (if (list=? (list->string (number->list n)) '(#\\7))\
+    \ 1 0))]))\n</code>\nThe problem is that when I run it, it exceeds the maximum\
+    \ recursion depth. I have tried the memoization approach and it doesn't work.\n\
+    <code>#lang racket\n", "  (cond\n    [(= n 0) 0]\n    [(< n 0) 'error]\n    [(=\
+    \ (modulo (modulo n 11) 10) 7)\n     (+ 1 (fizz_buzz (- n 1)))]\n    [(= (modulo\
+    \ (modulo n 13) 10) 7)\n     (+ 1 (fizz_buzz (- n 1)))]\n    [else (fizz_buzz\
+    \ (- n 1))]))\n", "  (cond ((= (modulo n 11) 0) (add1 (fizz_buzz (sub1 n))))\n\
+    \        ((= (modulo n 13) 0) (add1 (fizz_buzz (sub1 n))))\n        ((&lt; n 8)\
+    \ 0)\n        ((and (= (modulo n 7) 0) (= (modulo n 10) 7)) (add1 (fizz_buzz (sub1\
+    \ n))))\n        ((&lt; n 10) 0)\n        ((fizz_buzz (sub1 n))))\n</code>\nFor\
+    \ <code>fizz_buzz 79</code>, it gives:\n<code>0\n0\n0\n1\n1\n2\n3\n0\n</code>\n\
+    But I have no idea what these numbers represent, and I have no idea how to add\
+    \ them together.\n<code>racket</code> and <code>scheme</code> are very similar,\
+    \ although <code>racket</code> has a REPL and has more inbuilt functions. They\
+    \ are both functional programming languages, and I understand that <code>map</code>\
+    \ and <code>filter</code> are very good for this sort of problem, but I don't\
+    \ know what the list is that I'm supposed to be mapping to.\nI've looked at some\
+    \ of the recursive examples in the Racket documentation (here and here), but I\
+    \ haven't been able to see how I could use them to solve my problem.\nI've been\
+    \ working on this for a while, but haven't made much progress. I've barely touched\
+    \ functional programming, so even if you could lead me in the right direction,\
+    \ it would be much appreciated.\n\n\nA:\n\nThis is not a task that's easily solved\
+    \ using recursion. I'd write it using a simple <code>for</code> loop:\n<code>(define\
+    \ (fizz-buzz n)\n  (define (count-digit n digit)\n    (if (&lt; n 1) 0\n     \
+    \   (+ (if (= (modulo n 10) digit) 1 0)\n           (count-digit (quotient n 10)\
+    \ digit))))\n  (let loop ((i 0) (res 0))\n    (if (&gt; i n) res\n        (loop\
+    \ (+ i 1)\n              (if (or (zero? (modulo", "  (for/sum ([i (in-range 0\
+    \ n) :when (or (divisible? i 11) (divisible? i 13))])\n    (count-digits 7 i)))\n",
+  "  (cond [(= n 0) 0]\n        [(= (modulo n 11) 0) (+ 1 (fizz_buzz (- n 1)))]\n\
+    \        [(= (modulo n 13) 0) (+ 1 (fizz_buzz (- n 1)))]\n        [else (fizz_buzz\
+    \ (- n 1))]))\n</code>\nI would like to improve my code a little bit and I have\
+    \ a question. How to improve this line:\n<code>[(= (modulo n 11) 0) (+ 1 (fizz_buzz\
+    \ (- n 1)))]\n</code>\nBasically, I would like to have a regex type of thing that\
+    \ counts all the digits 7 inside of n, but I'm not sure how I would do that. In\
+    \ general, I'm not sure how to optimize this code. \n\n\nA:\n\nOK, I'm going to\
+    \ totally rewrite your code - and in just five lines! Here's the solution:\n<code>(define\
+    \ (fizz-buzz n)\n  (let loop ([n n] [res 0])\n    (if (zero? n)\n        res\n\
+    \        (let* ([m (modulo n 10)]\n               [res (if (or (=? m 7) (=? m\
+    \ -7))\n                        (+ res 1)\n                        res)])\n  \
+    \        (loop (quotient n 10) res)))))\n</code>\nHere's a test run:\n<code>(for\
+    \ ([i (in-range 10)])\n  (printf \"~a: ~a\\n\" (* i 11) (fizz-buzz (* i 11))))\n\
+    </code>\nAnd here's the output:\n<code>0: 0\n11: 1\n22: 1\n33: 1\n44: 1\n55: 2\n\
+    66: 2\n77: 3\n88: 2\n99: 1\n</code>\n", "  (for/sum ([i (- n 1)])\n    (if (or\
+    \ (zero? (modulo i 11)) (zero? (modulo i 13)))\n        (count 7 (number->string\
+    \ i))\n        0)))\n</code>\n", "  (for/sum ([i (in-range n)])\n    (cond\n \
+    \     [(divisible? i 11) (count-7s (number->string i))]\n      [(divisible? i\
+    \ 13) (count-7s (number->string i))]\n      [else 0])))\n", "  (define (div_by_eleven?\
+    \ n)\n    (not (not (remainder n 11))))\n  (define (div_by_thirteen? n)\n    (not\
+    \ (not (remainder n 13))))\n  (define (contains_seven? n)\n    (member 7 (map\
+    \ string->number (string-split (number->string n) #\\))))\n  (define (count num\
+    \ n)\n    (cond [(= n 0) num]\n          [(div_by_eleven? n) (count (+ num (contains_seven?\
+    \ n)) (- n 1))]\n          [(div_by_thirteen? n) (count (+ num (contains_seven?\
+    \ n)) (- n 1))]\n          [else (count num (- n 1))]))\n  (count 0 n))", "  (let\
+    \ loop ([i 1] [count 0])\n    (cond [(= i n) count]\n          [(or (= (modulo\
+    \ i 11) 0) (= (modulo i 13) 0)) (loop (+ i 1) (if (member 7 (number->list i))\
+    \ (+ count 1) count))]\n          [else (loop (+ i 1) count)])))\n", "  (let loop\
+    \ ([i 0] [c 0])\n    (cond\n      [(= i n) c]\n      [(and (or (zero? (modulo\
+    \ i 11)) (zero? (modulo i 13))) (zero? (modulo i 7))) (loop (+ i 1) (+ c 1))]\n\
+    \      [else (loop (+ i 1) c)])))\n", "  (if (= n 7) 1\n      (if (= (modulo n\
+    \ 11) 0) (if (string-contains? (number->string n) \"7\") (+ 1 (fizz_buzz (- n\
+    \ 1))) (fizz_buzz (- n 1)))\n          (if (= (modulo n 13) 0) (if (string-contains?\
+    \ (number->string n) \"7\") (+ 1 (fizz_buzz (- n 1))) (fizz_buzz (- n 1)))\n \
+    \             (fizz_buzz (- n 1))))))\n", "  (let fizzBuzzer ([i n] [ctr 0])\n\
+    \    (cond\n      [(= i 0) ctr]\n      [(or (multiple-of? 11 i) (multiple-of?\
+    \ 13 i))\n       (fizzBuzzer (- i 1) (if (contains-digit? 7 i) (+ ctr 1) ctr))]\n\
+    \      [else (fizzBuzzer (- i 1) ctr)])))\n", "  (for/sum ([i (in-range n)])\n\
+    \    (if (or (divisible-by? i 11) (divisible-by? i 13))\n        (count-7s i))))\n",
+  "  (if (eq? n 0)\n      0\n      (if (or (= (modulo n 11) 0) (= (modulo n 13) 0))\n\
+    \          (+ (if (eq? (modulo n 10) 7) 1 0) (fizz_buzz (- n 1)))\n          (fizz_buzz\
+    \ (- n 1)))))\n```\n\n```scheme\n#lang racket\n", "  (define (divisible n a)\n\
+    \    (= (remainder n a) 0))\n  (define (counter a)\n    (if (<= a n)\n       \
+    \ (begin\n          (add1 (if (or (divisible a 11) (divisible a 13))\n       \
+    \             (counter a)\n                    0))\n          (counter (+ a 1)))\n\
+    \        0))\n  (counter 1))\n", "  (cond ((< n 11) 0)\n        ((or (= (modulo\
+    \ n 11) 0) (= (modulo n 13) 0)) (+ (count7 n) (fizz_buzz (- n 1))))\n        (else\
+    \ (fizz_buzz (- n 1)))))\n", "  (let ((result 0))\n    (for ([i (in-range n)])\n\
+    \      (when (and (or (zero? (modulo i 11)) (zero? (modulo i 13)))\n         \
+    \         (positive? (string-index (number->string i) \"7\")))\n        (set!\
+    \ result (+ result 1))))\n    result))\n", "  (cond\n    [(= n 0) 0]\n    [(>\
+    \ n 0) (fizz_buzz (- n 1))]\n    [else 0]))\n", "  (cond ((= n 1) 0)\n       \
+    \ ((< n 7) 0)\n        ((and (= (modulo n 11) 0)\n              (= (modulo n 13)\
+    \ 0)) (+ (fizz_buzz (- n 1)) (count-7 (- n 1))))\n        ((= (modulo n 11) 0)\
+    \ (fizz_buzz (- n 1)))\n        ((= (modulo n 13) 0) (fizz_buzz (- n 1)))\n  \
+    \      (else (fizz_buzz (- n 1)))))\n", "  (cond\n    [(zero? n) 0]\n    [(or\
+    \ (= 0 (modulo n 11)) (= 0 (modulo n 13)))\n     (+ (count7 (quotient n 10)) (count7\
+    \ (remainder n 10)))]\n    [else\n     (fizz_buzz (- n 1))]))\n", "  (define (fizz_buzz_helper\
+    \ n x)\n    (cond ((= n 0) x)\n          ((and (= (modulo n 11) 0) (= (modulo\
+    \ n 13) 0)) (fizz_buzz_helper (- n 1) (+ x (count 7 (number->string n)))))\n \
+    \         ((= (modulo n 11) 0) (fizz_buzz_helper (- n 1) (+ x (count 7 (number->string\
+    \ n)))))\n          ((= (modulo n 13) 0) (fizz_buzz_helper (- n 1) (+ x (count\
+    \ 7 (number->string n)))))\n          (else (fizz_buzz_helper (- n 1) x))))\n\
+    \  (fizz_buzz_helper n 0))\n", "  (count (lambda (x) (and (and (= (modulo x 11)\
+    \ 0) (= (modulo x 13) 0)) (contains? 7 x))) (build-list (- n 1) add1)))\n", " \
+    \ (cond\n    [(< n 0) (error \"The input must be positive.\")]\n    [(integer?\
+    \ n) 0]\n    [else (cond\n            [(or (zero? (modulo n 11)) (zero? (modulo\
+    \ n 13)))\n             (+ (number-of-sevens n) (fizz_buzz (- n 1)))]\n      \
+    \      [else (fizz_buzz (- n 1))])]))\n", "  (define (count digits)\n    (cond\n\
+    \      [(= (car digits) 7) (+ 1 (count (cdr digits)))]\n      [else (count (cdr\
+    \ digits))]))\n  (define (check-num x)\n    (if (or (= (modulo x 11) 0) (= (modulo\
+    \ x 13) 0)) (count (number->list x))))\n  (define (acc x)\n    (if (= x n) 0 (+\
+    \ (check-num x) (acc (+ x 1)))))\n  (acc 1))\n", "  (define (divisible-by? n d)\n\
+    \    (= (remainder n d) 0))\n  (define (count-7s n)\n    (cond\n      [(zero?\
+    \ n) 0]\n      [(= (remainder n 10) 7) 1]\n      [else 0]))\n  (cond\n    [(zero?\
+    \ n) 0]\n    [(divisible-by? n 11) (add1 (fizz_buzz (sub1 n)))]\n    [(divisible-by?\
+    \ n 13) (add1 (fizz_buzz (sub1 n)))]\n    [else (+ (count-7s n) (fizz_buzz (sub1\
+    \ n)))]))\n", "  (if (= n 0)\n      0\n      (cond\n        ((= (modulo n 11)\
+    \ 0)\n         (+ (if (number-string-contains? (number->string n) \"7\") 1 0)\n\
+    \            (fizz_buzz (- n 1))))\n        ((= (modulo n 13) 0)\n         (+\
+    \ (if (number-string-contains? (number->string n) \"7\") 1 0)\n            (fizz_buzz\
+    \ (- n 1))))\n        (else\n         (fizz_buzz (- n 1))))))\n", "    (cond\n\
+    \        [(< n 7) 0]\n        [(< n 11) (if (= 7 (modulo n 10)) 1 0)]\n      \
+    \  [(< n 13) (if (= 7 (modulo n 10)) 2 0)]\n        [(< n 14) (if (= 7 (modulo\
+    \ n 10)) 2 1)]\n        [(< n 17) (if (= 7 (modulo n 10)) 2 0)]\n        [(< n\
+    \ 23) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n 37) (if (= 7 (modulo n 10))\
+    \ 3 0)]\n        [(< n 41) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n 47) (if\
+    \ (= 7 (modulo n 10)) 3 0)]\n        [(< n 52) (if (= 7 (modulo n 10)) 3 0)]\n\
+    \        [(< n 57) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n 63) (if (= 7 (modulo\
+    \ n 10)) 3 0)]\n        [(< n 67) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n\
+    \ 71) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n 77) (if (= 7 (modulo n 10))\
+    \ 3 0)]\n        [(< n 81) (if (= 7 (modulo n 10)) 3 0)]\n        [(< n 87) (if\
+    \ (= 7 (modulo n 10)) 3 0)]\n        [(< n 91) (if (= 7 (modulo n 10)) 3 0)]\n\
+    \        [(< n 97) (if (= 7 (modulo n 10)) 3 0)]\n        [else (if (= 7 (modulo\
+    \ n 10)) 4 0)]))\n", "  (cond\n    [(< n 13) 0]\n    [(= (modulo n 13) 0) (fizz_buzz\
+    \ (- n 13))]\n    [(= (modulo n 11) 0) (fizz_buzz (- n 11))]\n    [else (cond\n\
+    \            [(= (modulo n 10) 7) (+ 1 (fizz_buzz (- n 1)))]\n            [else\
+    \ (fizz_buzz (- n 1))])]))\n", "  (if (&lt; n 0)\n      0\n      (if (= (modulo\
+    \ n 11) 0)\n          (+ (count-digit 7 (modulo n 11)) (fizz_buzz (- n 1)))\n\
+    \          (if (= (modulo n 13) 0)\n              (+ (count-digit 7 (modulo n\
+    \ 13)) (fizz_buzz (- n 1)))\n              (fizz_buzz (- n 1))))))\n", "  (define\
+    \ (fizz_buzz_iter count)\n    (if (< count n)\n        (if (or (and (= (modulo\
+    \ count 11) 0) (= (modulo count 13) 0))\n                (and (= (modulo count\
+    \ 11) 7) (= (modulo count 13) 0))\n                (and (= (modulo count 11) 0)\
+    \ (= (modulo count 13) 7))\n                (and (= (modulo count 11) 7) (= (modulo\
+    \ count 13) 7)))\n            (+ 1 (fizz_buzz_iter (+ count 1)))\n           \
+    \ (fizz_buzz_iter (+ count 1)))\n        0))\n  (fizz_buzz_iter 0))\n", "  (count\
+    \ 7 (for/list ([i (in-range 1 n)])\n               (if (or (zero? (modulo i 11))\n\
+    \                       (zero? (modulo i 13)))\n                   (number->string\
+    \ i)))))\n", "  (define (remainder x)\n    (remainder x 11 13))\n  (cond\n   \
+    \ [(= n 0) 0]\n    [(= (remainder n) 7)\n     (+ 1 (fizz_buzz (- n 1)))]\n   \
+    \ [else\n     (fizz_buzz (- n 1))]))\n", "  (cond ((> n 77) (fizz_buzz (- n 1))\
+    \ )\n        ((< n 11) 0)\n        ((or (zero? (modulo n 11)) (zero? (modulo n\
+    \ 13)))\n         (+ (count_sevens n) (fizz_buzz (- n 1))))\n        (else (fizz_buzz\
+    \ (- n 1)))))\n", "  (define (check ds r)\n    (if (zero? ds) r\n      (check\
+    \ (quotient ds 10)\n             (if (or (= (remainder ds 10) 7)\n           \
+    \          (= (remainder ds 10) -7))\n                 (+ r 1)\n             \
+    \    r))))\n  (let loop ((cur n) (r 0))\n    (if (or (< cur 0)\n            (=\
+    \ cur 0))\n        r\n        (loop (- cur 1)\n              (if (or (zero? (remainder\
+    \ cur 11))\n                      (zero? (remainder cur 13)))\n              \
+    \    (check (remainder cur 10000) r)\n                  r)))))\n```\n\n**37. Vowel\
+    \ Count**\n\n```racket\n#lang racket\n", "  (cond [(< n 10) (cond [(= 7 n) 1]\
+    \ [else 0])]\n        [else (+ (cond [(= 7 (modulo n 10)) 1] [else 0])\n     \
+    \            (fizz_buzz (/ n 10)))]))", "  (cond [(= n 7) 1]\n        [(= n 77)\
+    \ 2]\n        [(= n 777) 3]\n        [(= n 7777) 4]\n        [(= n 77777) 5]\n\
+    \        [(= n 777777) 6]\n        [(= n 7777777) 7]\n        [(= n 77777777)\
+    \ 8]\n        [(= n 777777777) 9]\n        [(= n 7777777777) 10]\n        [(=\
+    \ n 77777777777) 11]\n        [(= n 777777777777) 12]\n        [(= n 7777777777777)\
+    \ 13]\n        [(= n 77777777777777) 14]\n        [(= n 777777777777777) 15]\n\
+    \        [(= n 7777777777777777) 16]\n        [(= n 77777777777777777) 17]\n \
+    \       [(= n 777777777777777777) 18]\n        [(= n 7777777777777777777) 19]\n\
+    \        [(= n 77777777777777777777) 20]\n        [(= n 777777777777777777777)\
+    \ 21]\n        [(= n 7777777777777777777777) 22]\n        [(= n 77777777777777777777777)\
+    \ 23]\n        [(= n 777777777777777777777777) 24]\n        [(= n 7777777777777777777777777)\
+    \ 25]\n        [(= n 77777777777777777777777777) 26]\n        [(= n 777777777777777777777777777)\
+    \ 27]\n        [(= n 7777777777777777777777777777) 28]\n        [(= n 77777777777777777777777777777)\
+    \ 29]\n        [(= n 777777777777777777777777777777) 30]\n        [(= n 7777777777777777777777777777777)\
+    \ 31]\n        [(= n 77777777777777777777777777777777) 32]\n        [(= n 7777777777777",
+  "    (if (or (= n 0) (= n 7))\n        0\n        (if (and (or (zero? (modulo n\
+    \ 11)) (zero? (modulo n 13)))\n                 (or (= (modulo n 10) 7) (= (quotient\
+    \ n 10) 7)))\n            (+ (fizz_buzz (quotient n 10)) 1)\n            (fizz_buzz\
+    \ (quotient n 10)))))\n</code>\nMy first problem is that I don't think it stops\
+    \ recursing when it gets to 0.  Also, I believe the <code>if</code> statement\
+    \ isn't catching when the quotient is 7 (e.g. 77,777).  What's the right way to\
+    \ do this?\n\n\nA:\n\nHere's a simpler solution, first we check if the number\
+    \ <code>n</code> is divisible by 11 or 13, and then we check if the number contains\
+    \ a <code>7</code>. Notice that at each step the recursive procedure is given\
+    \ the original number <code>n</code> and the quotient of <code>n</code> divided\
+    \ by 10:\n<code>(define (fizz-buzz n)\n  (cond\n    [(or (zero? (modulo n 11))\
+    \ (zero? (modulo n 13)))\n     (if (or (zero? (modulo n 10)) (= (quotient n 10)\
+    \ 7))\n         (+ 1 (fizz-buzz (quotient n 10) n))\n         (fizz-buzz (quotient\
+    \ n 10) n))]\n    [else 0]))\n</code>\nOr, avoiding a conditional and using only\
+    \ arithmetic predicates:\n<code>(define (fizz-buzz n)\n  (if (or (zero? (modulo\
+    \ n 11)) (zero? (modulo n 13)))\n      (if (or (zero? (modulo n 10)) (= (quotient\
+    \ n 10) 7))\n          (+ 1 (fizz-buzz (quotient n 10) n))\n          (fizz-buzz\
+    \ (quotient n 10) n))\n      0))\n</code>\nNote that it's not recommended to use\
+    \ a double name for a function, instead of:\n<code>(define (fizz_b", "  (local\
+    \ [(define (fizz_buzz_iter cur max accum)\n            (cond [(= cur max) accum]\n\
+    \                  [(divisible-by? 13 cur)\n                   (fizz_buzz_iter\
+    \ (+ cur 1) max (+ accum (sevens-in-int cur)))]\n                  [(divisible-by?\
+    \ 11 cur)\n                   (fizz_buzz_iter (+ cur 1) max (+ accum (sevens-in-int\
+    \ cur)))]\n                  [else (fizz_buzz_iter (+ cur 1) max accum)]))]\n\
+    \    (fizz_buzz_iter 1 n 0)))\n", "  (cond\n    [(> n 0)\n     (cond\n       [(>\
+    \ (modulo n 11) 0)\n        (cond\n          [(> (modulo n 13) 0)\n          \
+    \ (+ (fizz_buzz (- n 1)) 0)]\n          [else\n           (+ (fizz_buzz (- n 1))\
+    \ (count_7 (- n 1)))])]\n       [else\n        (+ (fizz_buzz (- n 1)) (count_7\
+    \ (- n 1)))])]\n    [else\n     0]))\n", "  (let ([i (add1 n)])\n    (define (fizz_buzz_iter\
+    \ count)\n      (cond\n        [(zero? i) count]\n        [(= (remainder i 11)\
+    \ 0) (fizz_buzz_iter (add1 count))]\n        [(= (remainder i 13) 0) (fizz_buzz_iter\
+    \ (add1 count))]\n        [else (fizz_buzz_iter count)]))\n    (fizz_buzz_iter\
+    \ 0)))\n", "  (cond\n    [(< n 0) 0]\n    [(= n 0) 0]\n    [(= (modulo n 7) 0)\n\
+    \     (+ (count-7s (quotient n 10))\n        (count-7s (remainder n 10)))]\n \
+    \   [else (count-7s (quotient n 10))]))\n```\n\n```racket\n#lang racket\n", " \
+    \ (define (remainder d n) (- n (* d (quotient n d))))\n  (define (how-many-7s\
+    \ i)\n    (cond\n      [(= (remainder 7 i) 0) (+ 1 (how-many-7s (quotient i 10)))]\n\
+    \      [else 0]))\n  (define (fb-iter i acc)\n    (cond\n      [(= i n) acc]\n\
+    \      [(or (= (remainder 11 i) 0) (= (remainder 13 i) 0)) (fb-iter (+ i 1) (+\
+    \ acc (how-many-7s i)))]\n      [else (fb-iter (+ i 1) acc)]))\n  (fb-iter 0 0))\n",
+  "  (cond [(= n 0) 0]\n        [(= n 7) 1]\n        [(= n 77) 2]\n        [(= n 777)\
+    \ 3]\n        [(= n 7777) 4]\n        [(= n 77777) 5]\n        [(= n 777777) 6]\n\
+    \        [(= n 7777777) 7]\n        [(= n 77777777) 8]\n        [(= n 777777777)\
+    \ 9]\n        [(= n 7777777777) 10]\n        [(= n 77777777777) 11]\n        [(=\
+    \ n 777777777777) 12]\n        [(= n 7777777777777) 13]\n        [(= n 77777777777777)\
+    \ 14]\n        [(= n 777777777777777) 15]\n        [(= n 7777777777777777) 16]\n\
+    \        [(= n 77777777777777777) 17]\n        [(= n 777777777777777777) 18]\n\
+    \        [(= n 7777777777777777777) 19]\n        [(= n 77777777777777777777) 20]\n\
+    \        [(= n 777777777777777777777) 21]\n        [(= n 7777777777777777777777)\
+    \ 22]\n        [(= n 77777777777777777777777) 23]\n        [(= n 777777777777777777777777)\
+    \ 24]\n        [(= n 7777777777777777777777777) 25]\n        [(= n 77777777777777777777777777)\
+    \ 26]\n        [(= n 777777777777777777777777777) 27]\n        [(= n 7777777777777777777777777777)\
+    \ 28]\n        [(= n 77777777777777777777777777777) 29]\n        [(= n 777777777777777777777777777777)\
+    \ 30]\n        [(= n 7777777777777777777777777777777) 31]\n        [(= n 77777777777777777777777777777777)\
+    \ 32]\n       ", "  (let loop ([n n] [count 0])\n    (cond [(zero? n) count]\n\
+    \          [(or (zero? (modulo n 11)) (zero? (modulo n 13)))\n           (let\
+    \ ([digits (number->list n)])\n             (if (member 7 digits)\n          \
+    \       (loop (- n 1) (+ count 1))\n                 (loop (- n 1) count)))]\n\
+    \          [else (loop (- n 1) count)])))\n```\n\n### Problem 4\n```racket\n#lang\
+    \ racket\n", "  (local [(define (sum? a n)\n            (cond [(> n a) (sum? a\
+    \ (+ n 1))]\n                  [(< n a) (sum? (+ a 1) n)]\n                  [(zero?\
+    \ (modulo n 11)) (if (zero? (modulo n 13)) (+ (count_7 n) (sum? a (+ n 1))) (sum?\
+    \ a (+ n 1)))]\n                  [(zero? (modulo n 13)) (if (zero? (modulo n\
+    \ 11)) (+ (count_7 n) (sum? a (+ n 1))) (sum? a (+ n 1)))]\n                 \
+    \ [else (sum? a (+ n 1))]))]\n    (sum? 2 n)))\n", "  (cond\n    [(> n 78) 0]\n\
+    \    [(or (= (modulo n 11) 0) (= (modulo n 13) 0))\n     (+ (substring-count (number->string\
+    \ n) \"7\") (fizz_buzz (+ n 1)))]\n    [else (fizz_buzz (+ n 1))]))\n", "  (cond\n\
+    \    [(< n 100)  (fizz_buzz (add1 n))]\n    [(= (modulo n 7) 0) (+ 1 (fizz_buzz\
+    \ (add1 n)))]\n    [else (fizz_buzz (add1 n))]))\n", "  (cond\n    [(= 0 (modulo\
+    \ n 11)) (count-sevens (quotient n 11))]\n    [(= 0 (modulo n 13)) (count-sevens\
+    \ (quotient n 13))]\n    [else 0]))\n", "  (cond\n    [(< n 10) 0]\n    [(= (modulo\
+    \ n 10) 7) (add1 (fizz_buzz (quotient n 10)))]\n    [else (fizz_buzz (quotient\
+    \ n 10))]))\n", "  (for/sum ([i (in-range n) :when (or (zero? (modulo i 11)) (zero?\
+    \ (modulo i 13)))])\n    (length (string-match \"7\" (number->string i)))))\n",
+  "  (let ([count 0])\n    (for/fold ([count 0]) ([i (in-range 1 n)])\n      (if (and\
+    \ (and (zero? (modulo i 11)) (zero? (modulo i 13))) (number-contains? 7 i))\n\
+    \          (add1 count)\n          count))))\n", "  (cond\n    [(< n 1) 0]\n \
+    \   [(and (= (modulo n 11) 0) (= (modulo n 13) 0))\n      (+ (char-count (number->string\
+    \ n) #\\7) (fizz_buzz (- n 1)))]\n    [(or (= (modulo n 11) 0) (= (modulo n 13)\
+    \ 0))\n      (+ (char-count (number->string n) #\\7) (fizz_buzz (- n 1)))]\n \
+    \   [else (fizz_buzz (- n 1))]))\n", "  (if (= n 0) 0\n      (if (and (or (zero?\
+    \ (modulo n 11)) (zero? (modulo n 13)))\n               (zero? (modulo n 7)))\
+    \ 1\n          (fizz_buzz (- n 1)))))\n", "  (cond [(= (modulo n 11) 0) (if (member\
+    \ 7 (string->list (number->string n))) (+ 1 (fizz_buzz (- n 1))) (fizz_buzz (-\
+    \ n 1)))]\n        [(= (modulo n 13) 0) (if (member 7 (string->list (number->string\
+    \ n))) (+ 1 (fizz_buzz (- n 1))) (fizz_buzz (- n 1)))]\n        [else (fizz_buzz\
+    \ (- n 1))]))\n```\n\n### Problem 5: Scrabble\n\n```racket\n#lang racket\n", " \
+    \ (define (count-7 i)\n    (cond\n      [(< i 10) (if (= i 7) 1 0)]\n      [(=\
+    \ (modulo i 10) 7) (+ 1 (count-7 (quotient i 10)))]\n      [else (count-7 (quotient\
+    \ i 10))]))\n  (define (fizz-buzz i acc)\n    (cond\n      [(= i n) acc]\n   \
+    \   [(or (= (modulo i 11) 0) (= (modulo i 13) 0)) (fizz-buzz (+ i 1) (+ acc (count-7\
+    \ i)))]\n      [else (fizz-buzz (+ i 1) acc)]))\n  (fizz-buzz 0 0))\n", "  (define\
+    \ (fizzbuzz-counter start end)\n    (cond ((< start end) (fizzbuzz-counter (+\
+    \ start 1) end))\n          ((and (or (divisible? start 11) (divisible? start\
+    \ 13))\n                (digit-in-integer? 7 start))\n           (+ 1 (fizzbuzz-counter\
+    \ (+ start 1) end)))\n          (else (fizzbuzz-counter (+ start 1) end))))\n\
+    \  (fizzbuzz-counter 0 n))\n", "  (define (digits x)\n    (if (= x 0)\n      \
+    \  '()\n        (cons (remainder x 10) (digits (quotient x 10)))))\n  (define\
+    \ (count-sev n)\n    (cond\n      [(= n 0) 0]\n      [(= (remainder n 10) 7) (+\
+    \ 1 (count-sev (quotient n 10)))]\n      [else (count-sev (quotient n 10))]))\n\
+    \  (define (count-fb acc n)\n    (cond\n      [(= n 0) acc]\n      [(and (= (remainder\
+    \ n 11) 0) (= (remainder n 13) 0)) (count-fb (+ (count-sev n) acc) (- n 1))]\n\
+    \      [(or (= (remainder n 11) 0) (= (remainder n 13) 0)) (count-fb acc (- n\
+    \ 1))]\n      [else (count-fb acc (- n 1))]))\n  (count-fb 0 n))\n", "  (letrec\
+    \ ([divisors (list 11 13)]\n           [count (lambda (n m acc)\n            \
+    \        (cond [(< n 1) acc]\n                          [(divides? n m) (if (has-digit?\
+    \ 7 n)\n                                              (count (- n 1) m (+ acc\
+    \ 1))\n                                              (count (- n 1) m acc))]\n\
+    \                          [else (count (- n 1) (rest divisors) acc)]))])\n  \
+    \  (count (- n 1) (first divisors) 0)))\n", "  (letrec ((fizz\n            (lambda\
+    \ (k)\n              (if (and (<= k n) (or (zero? (modulo k 11)) (zero? (modulo\
+    \ k 13))))\n                  (+ (if (or (zero? (modulo k 11)) (zero? (modulo\
+    \ k 13)))\n                          (if (or (zero? (modulo k 11)) (zero? (modulo\
+    \ k 13)))\n                              (if (or (zero? (modulo k 11)) (zero?\
+    \ (modulo k 13)))\n                                  (if (or (zero? (modulo k\
+    \ 11)) (zero? (modulo k 13)))\n                                      (if (or (zero?\
+    \ (modulo k 11)) (zero? (modulo k 13)))\n                                    \
+    \      (if (or (zero? (modulo k 11)) (zero? (modulo k 13)))\n                \
+    \                              (if (or (zero? (modulo k 11)) (zero? (modulo k\
+    \ 13)))\n                                                  (if (or (zero? (modulo\
+    \ k 11)) (zero? (modulo k 13)))\n                                            \
+    \          (if (or (zero? (modulo k 11)) (zero? (modulo k 13)))\n            \
+    \                                              (if (or (zero? (modulo k 11)) (zero?\
+    \ (modulo k 13)))\n                                                          \
+    \    (if (or (zero? (modulo k 11)) (zero? (modulo k 13)))\n                  \
+    \                                                (if (or (zero? (modulo k 11))\
+    \ (zero? (modulo k 13)))\n                                                   \
+    \                   (if (or (zero? (modulo k 11)) (zero? (modulo k 13)))\n   \
+    \                                                                       (if (or\
+    \ (zero? (modulo k 11)) (zero? (modulo k 13)))\n                             \
+    \                                                 (if (or (zero? (modulo k 11))\
+    \ (zero? (modulo k 13)))\n                                                   \
+    \                               (if (or (zero? (modulo k 11)) (zero? (modulo k\
+    \ 13)))\n                                                                    \
+    \                  (if (or (zero? (modulo k 11)) (zero? (modulo k 13)))\n    \
+    \                                                                            \
+    \          (if (or (zero? (modulo", "  (if (zero? n)\n      0\n      (if (or (zero?\
+    \ (modulo n 11)) (zero? (modulo n 13)))\n          (+ (fizz_buzz (- n 1)) (if\
+    \ (or (equal? (modulo n 7) 7) (equal? (modulo n 7) -7)) 1 0))\n          (fizz_buzz\
+    \ (- n 1)))))\n", "  (if (< n 7)\n      0\n      (+ (if (or (zero? (modulo n 11))\
+    \ (zero? (modulo n 13)))\n             (if (zero? (modulo n 7))\n            \
+    \     0\n                 1)\n             0)\n         (fizz_buzz (- n 1)))))\n",
+  "  (if (< n 7) 0\n      (+ (if (or (number-string-contains? (number->string n) \"\
+    7\")\n                 (number-string-contains? (number->string (/ n 11)) \"7\"\
+    )\n                 (number-string-contains? (number->string (/ n 13)) \"7\"))\
+    \ 1 0)\n         (fizz_buzz (- n 1)))))\n", "  (define (is_divisible_by divisor\
+    \ x)\n    (= (modulo x divisor) 0))\n  (define (sum_digits x)\n    (cond ((= x\
+    \ 0) 0)\n          (else (+ (modulo x 10) (sum_digits (quotient x 10))))))\n \
+    \ (define (count_sevens_in_nums_with_divisors_less_than n divisor)\n    (cond\
+    \ ((< divisor n) (let ((count 0))\n                        (for ((i (in-range\
+    \ divisor n divisor)))\n                          (if (is_divisible_by 7 (sum_digits\
+    \ i))\n                              (set! count (+ count 1))))\n            \
+    \            count))\n          (else 0)))\n  (if (is_divisible_by 7 (sum_digits\
+    \ n))\n      (+ (count_sevens_in_nums_with_divisors_less_than n 11) 1)\n     \
+    \ (count_sevens_in_nums_with_divisors_less_than n 11)))\n", "    (define counter\
+    \ 0)\n    (for ((i (in-range n)))\n        (cond ((= (modulo i 11) 0) (set! counter\
+    \ (+ counter (digit_seven? i))))\n              ((= (modulo i 13) 0) (set! counter\
+    \ (+ counter (digit_seven? i))))))\n    counter)\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

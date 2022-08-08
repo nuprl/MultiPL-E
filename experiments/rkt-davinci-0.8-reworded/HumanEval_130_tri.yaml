@@ -186,7 +186,796 @@ completions: ["  (let ([seq (list 3 1 1)])\n    (for ([i (in-range n)]\n        
     \ n 2)) (list-ref l (- n 3))))))))))\n", "\t(if (even? n)\n\t\t(if (= n 0)\n\t\
     \t\t'()\n\t\t\t(append (tri (- n 1)) (list (+ 1 (/ n 2)))))\n\t\t(if (= n 0)\n\
     \t\t\t'()\n\t\t\t(append (tri (- n 1)) (list (+ 1 (tri (- n 1)) (tri (- n 2))\
-    \ (tri (+ n 1))))))))\n"]
+    \ (tri (+ n 1))))))))\n", "  (let loop ((n n) (lst (list 1 3 2)))\n    (if (=\
+    \ n 0)\n      lst\n      (loop (- n 1) (append lst (list (+ (list-ref lst (- n\
+    \ 1))\n                                         (list-ref lst (- n 2))\n     \
+    \                                    (list-ref lst (+ n 1)))))))))\n</code>\n\
+    I don't know how to make <code>(list-ref lst (+ n 1))</code> work. Is there any\
+    \ way?\n\n\nA:\n\nIt's probably best to rewrite the definition of the function\
+    \ in terms of the two equivalent definitions you provided, rather than attempting\
+    \ to use <code>list-ref</code> to access elements that haven't been computed yet.\n\
+    If <code>n</code> is even, then the definition of the Tribonacci sequence is simply\
+    \ <code>1 + n/2</code>. Otherwise, the definition of the Tribonacci sequence is\
+    \ the sum of the previous three elements in the sequence, or <code>a + b + c</code>,\
+    \ where <code>a</code> is the element in the sequence before the previous element,\
+    \ <code>b</code> is the previous element in the sequence, and <code>c</code> is\
+    \ the current element in the sequence.\nWith that in mind, we can rewrite your\
+    \ definition using a loop:\n<code>(define (tri n)\n  (let loop ((n n) (a 1) (b\
+    \ 3) (c 2) (lst (list 1 3 2)))\n    (if (= n 0)\n        lst\n        (loop (-\
+    \ n 1) b c (+ b c a) (append lst (list (+ b c a)))))))\n</code>\nThis gives us\
+    \ the correct answer:\n<code>(tri 3)\n=&gt; '(1 3 2 8)\n</code>\nWe can also shorten\
+    \ the function definition by using the <code>cond</code> statement to compute\
+    \ the next element in the sequence:\n<code>(define (tri n)\n  (let loop ((n n)\
+    \ (a 1) (b 3) (c 2) (lst (list 1 3 2)))\n    (if (= n 0)\n        lst\n      \
+    \  (loop (- n 1) b c (cond ((even? n) (+ 1 (/", "  (cond\n    [(= n 0) (list 1)]\n\
+    \    [(= n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n    [else (cons 1 (append\
+    \ (tri (- n 1)) (tri (- n 2)) (tri (- n 3))))]))\n", "  (if (= n 0)\n      (list\
+    \ 1)\n      (list 1 3 2 8)))\n", "  (define (tri-rec n)\n    (cond ((= n 1) 3)\n\
+    \          ((= n 2) 2)\n          ((= n 3) 8)\n          ((even? n) (+ 1 (/ n\
+    \ 2)))\n          (else (+ (tri-rec (- n 1))\n                   (tri-rec (- n\
+    \ 2))\n                   (tri-rec (+ n 1))))))\n  (for/list ([i (in-range (+\
+    \ n 1))])\n    (tri-rec i)))\n", "  (cond ((< n 0) \"wrong parameter\")\n    \
+    \    ((= n 0) (list 1))\n        ((= n 1) (list 1 3))\n        ((= n 2) (list\
+    \ 1 3 2))\n        (else (tribonacci (add1 n)))))", "  (let loop ((i 0) (res (list\
+    \ 3 1 2)))\n    (if (= i n)\n        res\n        (if (even? i)\n            (loop\
+    \ (+ i 1) (cons (floor (/ (+ i 1) 2)) res))\n            (loop (+ i 1) (cons (+\
+    \ (car res) (cadr res) (caddr res)) res))))))\n", "  (local ((define (helper idx)\n\
+    \            (cond\n              [(= idx 1) (list 1 3 2)]\n              [(even?\
+    \ idx) (cons (+ 1 (/ idx 2)) (helper (- idx 1)))]\n              [else (cons (+\
+    \ (list-ref (helper (- idx 1)) 0)\n                             (list-ref (helper\
+    \ (- idx 1)) 1)\n                             (list-ref (helper (- idx 1)) 2))\n\
+    \                          (helper (- idx 1)))])))\n    (helper (+ n 1))))\n",
+  "  (cond [(= n 0) (list 3)]\n        [(= n 1) (list 3 2)]\n        [(= n 2) (list\
+    \ 3 2 1)]\n        [else\n         (append (tri (- n 1))\n                 (list\
+    \ (+ (list-ref (tri (- n 1)) (- n 1))\n                          (list-ref (tri\
+    \ (- n 1)) (- n 2))\n                          (list-ref (tri (- n 1)) (+ n 1))))])]))",
+  "  (define (trec n0 n1 n2 k)\n    (if (zero? k)\n      (list)\n      (cons n0 (trec\
+    \ n1 n2 (n0 + n1 + n2) (- k 1)))))\n  (trec 1 3 2 n))", "  (if (= n 0) \n    \
+    \  (list 1)\n      (list 1 3 2 8)))", "  (if (= n 0)\n      '()\n      (cons\n\
+    \       (if (= n 1)\n           3\n           (if (even? n)\n               (round\
+    \ (/ n 2))\n               (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))))\n \
+    \      (tri (- n 1)))))\n", "  (cond ((= n 0) '(0))\n        ((= n 1) '(0 1))\n\
+    \        ((= n 2) '(0 1 1))\n        (else (cons 0 (list-of-tribonacci (+ n 1))))))",
+  "  (letrec ([nth (lambda (i)\n                  (cond\n                    [(= i\
+    \ 0) 1]\n                    [(= i 1) 3]\n                    [(= i 2) 2]\n  \
+    \                  [(even? i) (/ i 2)]\n                    [else (+ (nth (- i\
+    \ 1)) (nth (- i 2)) (nth (+ i 1)))]))])\n    (let loop ([i 0] [lst '()])\n   \
+    \   (if (= i (+ n 1))\n          lst\n          (loop (+ i 1) (cons (nth i) lst))))))\n",
+  "  (if (= n 0)\n      empty\n      (cons 1 (cons 3 (cons 2 (cons 8 (tri (- n 1))))))))",
+  "  (if (= n 0)\n      empty\n      (cons 3 (if (= n 1)\n                  empty\n\
+    \                  (cons 2 (if (= n 2)\n                              empty\n\
+    \                              (cons 8 (tri (- n 3)))))))))\n", "  (local [(define\
+    \ (odd? n) (= (remainder n 2) 1))]\n    (local [(define (tri n)\n            \
+    \  (cond [(= n 1) 3]\n                    [(= n 2) 1]\n                    [(odd?\
+    \ n)\n                     (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))]\n  \
+    \                  [else (/ n 2)]))]\n      (list-of (tri i) i '(i 1 (+ i 1) (+\
+    \ i 1) n)))))\n", "  (cond\n    [(= n 0) (list 1)]\n    [(= n 1) (list 1 3)]\n\
+    \    [(= n 2) (list 1 3 2)]\n    [else (append (tri (- n 1)) (list (+ (tri (-\
+    \ n 1)) (tri (- n 2)) (tri (+ n 1)))))]))", "  (if (= n 0)\n      (list 1)\n \
+    \     (if (= n 1)\n          (list 1 3)\n          (if (= n 2)\n             \
+    \ (list 1 3 2)\n              (append (tri (- n 1)) (list (if (even? n) (+ 1 (/\
+    \ n 2)) (+ (list-ref (tri (- n 1)) (- n 1)) (list-ref (tri (- n 1)) (- n 2)) (list-ref\
+    \ (tri (- n 1)) (+ n 1))))))))))\n", "  (cond ((= n 0) (list 1))\n        ((=\
+    \ n 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else (cons 1 (cons\
+    \ 3 (cons 2 (map + (reverse (tri (- n 1))) (tri (- n 1)))))))))\n</code>\nI don't\
+    \ know what I did wrong, but it gives me wrong answer.\nSo this is what I have:\n\
+    <code>&gt; (tri 0)", "  (define (tri-aux n acc)\n    (if (= n 0)\n        acc\n\
+    \        (tri-aux (- n 1)\n                 (cons (cond\n                    \
+    \    ((even? n) (+ 1 (/ n 2)))\n                        (else (+ (car acc) (cadr\
+    \ acc) (caddr acc))))\n                       acc))))\n  (tri-aux n '(3 1 1)))\n",
+  "  (if (= n 0)\n      '(3)\n      (list (tri (- n 1)))))\n", "  (if (= n 0) \n \
+    \     '()\n      (cons (cond [(= n 1) 3]\n                  [(= n 2) 2]\n    \
+    \              [(even? n) (/ n 2)]\n                  [else (+ (tri (- n 1)) (tri\
+    \ (- n 2)) (tri (+ n 1)))])\n            (tri (- n 1)))))", "  (for/list ([i (in-range\
+    \ (+ n 1))])\n    (if (even? i)\n        (/ i 2)\n        (+ (tri (- i 1)) (tri\
+    \ (- i 2)) (tri (+ i 1))))))\n", "  (for/list ([i (in-range n)])\n    (if (even?\
+    \ i)\n        (/ (+ i 1) 2)\n        (+ (tri (- i 1)) (tri (- i 2)) (tri (+ i\
+    \ 1))))))\n", "  (let ((current-index 1)\n        (acc (list 3)))\n    (while\
+    \ (<= current-index n)\n      (let ((new-val (if (even? current-index) (+ current-index\
+    \ 2) (+ (list-ref acc (- current-index 1)) (list-ref acc (- current-index 2))\
+    \ (list-ref acc (+ current-index 1))))))\n        (set! acc (append acc (list\
+    \ new-val)))\n        (set! current-index (+ current-index 1))))\n    acc))\n",
+  "  (if (<= n 0)\n      empty\n      (if (equal? n 1)\n          (list 3)\n     \
+    \     (if (even? n)\n              (cons (+ 1 (/ n 2)) (tri (- n 1)))\n      \
+    \        (cons (+ (list-ref (tri (- n 1)) (- n 1)) (list-ref (tri (- n 1)) (-\
+    \ n 2)) (list-ref (tri (+ n 1)) (+ n 1))) (tri (- n 1)))))))\n", "  (trib n (list)))\n",
+  "  (if (= n 0)\n      (list 3)\n      (if (= n 1)\n          (list 3 1)\n      \
+    \    (if (= n 2)\n              (list 3 1 2)\n              (cons (car (tri (-\
+    \ n 1)))\n                    (cons (car (tri (- n 2)))\n                    \
+    \      (cons (car (tri (- n 3)))\n                                (tri (- n 1)))))))))\n\
+    </code>\nI was wondering if I could have done this in a better way, because my\
+    \ code is not very elegant.\n\n\nA:\n\nI'm not sure about elegant. However, if\
+    \ you look for a functional approach instead of an imperative approach, you can\
+    \ consider the following:\n<code>(define (tri n)\n  (if (= n 0)\n      '(3)\n\
+    \      (cons\n       (cond\n         [(= n 1) 3]\n         [(= n 2) 1]\n     \
+    \    [else\n          (+ (tri (- n 1))\n             (tri (- n 2))\n         \
+    \    (tri (- n 3)))])\n       (tri (- n 1)))))\n</code>\n", "  (cond\n    [(=\
+    \ n 0) '()]\n    [(= n 1) (list 3)]\n    [(= n 2) (list 3 2)]\n    [(= n 3) (list\
+    \ 3 2 8)]\n    [(= (remainder n 2) 0) (append (tri (- n 1)) (list (+ 1 (/ n 2))))]\n\
+    \    [else (append (tri (- n 1)) (list (+ (last (tri (- n 1)))\n             \
+    \                            (last (tri (- n 2)))\n                          \
+    \               (last (tri (+ n 1))))))]))\n```\n### Rot13\n```racket\n#lang racket\n",
+  "  (cond ((= n 0) '())\n        ((= n 1) '(1))\n        ((= n 2) '(1 3))\n     \
+    \   ((= n 3) '(1 3 2 8))\n        (else\n         (let* ((prev (tri (- n 1)))\n\
+    \                (new-first (if (even? n)\n                               (/ (+\
+    \ n 1) 2)\n                               (+ (car prev) (cadr prev) (car (tri\
+    \ (- n 2)))))))\n           (cons new-first prev)))))", "  ;; ...\n  )\n", " \
+    \ (define (tri2 n pre-pre-n pre-n nth)\n    (if (= n 0)\n        (list)\n    \
+    \    (cons nth (tri2 (- n 1) pre-n nth (+ pre-pre-n pre-n nth)))))\n  (tri2 n\
+    \ 3 2 1))\n", "  (local [(define (trii acc n)\n            (cond [(= n 0) (reverse\
+    \ acc)]\n                  [(= (remainder n 2) 0)\n                   (trii (cons\
+    \ (+ 1 (/ n 2)) acc) (- n 1))]\n                  [else\n                   (trii\
+    \ (cons (+ (trii acc (- n 1))\n                                  (trii acc (-\
+    \ n 2))\n                                  (trii acc (+ n 1)))\n             \
+    \                acc)\n                         (- n 1))]))]\n    (trii (list\
+    \ 3) n)))\n", "  (if (even? n)\n      (list 1 (/ n 2))\n      (list 1 (+ (- n\
+    \ 1) (- n 2) (tri (- n 1))))))", "    (if (even? n)\n        (tri-even n)\n  \
+    \      (tri-odd n)))\n", "  (if (= n 0)\n      (list 1)\n      (if (= n 1)\n \
+    \         (list 1 3)\n          (if (= n 2)\n              (list 1 3 2)\n    \
+    \          (append (tri (- n 1)) (list (+ (list-ref (tri (- n 1)) (- n 1)) (list-ref\
+    \ (tri (- n 1)) (- n 2)) (list-ref (tri (- n 1)) (- n 3))))))))))\n", "  (cond\n\
+    \    [(= n 0) (list 1)]\n    [(= n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n\
+    \    [else\n     (list-append\n      (list (tri-helper 3))\n      (tri (- n 1)))]))\n",
+  "  (if (< n 0)\n      0\n      (if (= n 0)\n          1\n          (if (= n 1)\n\
+    \              3\n              (if (= n 2)\n                  2\n           \
+    \       (if (even? n)\n                      (trin n)\n                      (tri\
+    \ (+ (- n 1) (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))))))))))\n", "  (define\
+    \ (tri-internal n1 n2 n3 n)\n    (if (= n 1)\n        (list n1 n2 n3)\n      \
+    \  (if (even? n)\n            (cons n1 (tri-internal n2 n3 (/ (+ n1 n2 n3) 2)\
+    \ (- n 1)))\n            (cons n1 (tri-internal n2 n3 (+ n1 n2 n3) (- n 1))))))\n\
+    \  (tri-internal 3 2 1 (+ n 1)))\n", "  (cond\n    [(= n 0) (list 0)]\n    [(=\
+    \ n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n    [else\n      (append\n   \
+    \     (tri (- n 1))\n        (list (+ (nth (- n 1) (tri (- n 1)))\n          \
+    \       (nth (- n 2) (tri (- n 2)))\n                 (nth (+ n 1) (tri (+ n 1))))))]))\n",
+  "  (list-ref (generate-tri-numbers n) n))\n", "  (if (= n 0) \n      (list 1)\n\
+    \      (if (= n 1)\n          (list 1 3)\n          (if (= n 2)\n            \
+    \  (list 1 3 2)\n              (if (= n 3)\n                  (list 1 3 2 8)\n\
+    \                  (if (= n 4)\n                      (list 1 3 2 8 21)\n    \
+    \                  (if (= n 5)\n                          (list 1 3 2 8 21 55)\n\
+    \                          (if (= n 6)\n                              (list 1\
+    \ 3 2 8 21 55 144)\n                              (if (= n 7)\n              \
+    \                    (list 1 3 2 8 21 55 144 377)\n                          \
+    \        (if (= n 8)\n                                      (list 1 3 2 8 21 55\
+    \ 144 377 987)\n                                      (if (= n 9)\n          \
+    \                                (list 1 3 2 8 21 55 144 377 987 2584)\n     \
+    \                                     (if (= n 10)\n                         \
+    \                     (list 1 3 2 8 21 55 144 377 987 2584 6765)\n           \
+    \                                   (if (= n 11)\n                           \
+    \                       (list 1 3 2 8 21 55 144 377 987 2584 6765 17711)\n   \
+    \                                               (if (= n 12)\n               \
+    \                                       (list 1 3 2 8 21 55 144 377 987 2584 6765\
+    \ 17711 46368)\n                                                      (if (= n\
+    \ 13)\n                                                          (list 1 3 2 8\
+    \ 21 55 144 377 987 2584 6765 17711 46368 121393)\n                          \
+    \                                (if (= n 14)\n                              \
+    \                                (list 1 3 2 8 21 55 144 377 987 2584 6765 17711\
+    \ 46368 121393 317811)\n                                                     \
+    \         (if (= n 15)\n                                                     \
+    \             (list 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811\
+    \ 832040)\n                                                                  (if\
+    \ (= n 16)\n                                                                 \
+    \     (list 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811 832040\
+    \ 2178309)\n                                                                 \
+    \     (if (= n 17)\n                                                         \
+    \                 (list 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368", "  (for/list\
+    \ ([i (in-range 1 (+ n 1))])\n    (tri-recur i)))\n", "  (if (= n 0) \n    '()\n\
+    \    (cons (tri-f n) (tri (- n 1)))))\n", "  (define (odd n) (not (equal? (remainder\
+    \ n 2) 0)))\n  (define (even n) (equal? (remainder n 2) 0))\n  (define (tri-help\
+    \ a b c counter)\n    (cond ((equal? counter 0) a)\n          ((even? counter)\
+    \ (tri-help c (+ a b c) counter (- counter 1)))\n          ((odd? counter) (tri-help\
+    \ a (+ a b c) c counter (- counter 1)))))\n  (tri-help 1 3 2 n))", "  (cond\n\
+    \    [(= n 0) \n     (list 1)]\n    [(= n 1) \n     (list 1 3)]\n    [(= n 2)\
+    \ \n     (list 1 3 2)]\n    [else \n     (let ([r (tri (- n 1))])\n       (cons\
+    \ (first r)\n             (cons (if (even? n)\n                       (+ 1 (/\
+    \ n 2))\n                       (+ (second r) (third r) (first r)))\n        \
+    \           (rest r))))]))\n", "  (cond ((= n 0) (list 3))\n        ((= n 1) (list\
+    \ 3 2))\n        ((= n 2) (list 3 2 8))\n        (else (let loop ([n n] [pre-pre-num\
+    \ 3] [pre-num 2] [cur-num 8])\n                 (if (= n 2)\n                \
+    \     (list pre-pre-num pre-num cur-num)\n                     (loop (- n 1) pre-num\
+    \ cur-num (+ pre-pre-num pre-num cur-num)))))))\n", "  (cond\n    [(= n 0) (list\
+    \ 0)]\n    [(= n 1) (list 0 1)]\n    [(= n 2) (list 0 1 1)]\n    [else (define\
+    \ l (tri (- n 1)))\n          (list-set! l n (+ (list-ref l (- n 1)) (list-ref\
+    \ l (- n 2)) (list-ref l (- n 3))))\n          l]))", "  (for/list ((i (in-range\
+    \ 0 n))\n             #:result (if (even? i)\n                          (+ 1 (/\
+    \ i 2))\n                          (+ (tri (- i 1)) (tri (- i 2)) (tri (+ i 1))))))\n\
+    \  )\n</code>\nIt is working perfectly fine when I run it on DrRacket. However,\
+    \ when I submit it to Codewars, it gets stuck on one test case and returns a timeout\
+    \ error. If there is anything that I am missing or any solutions that you guys\
+    \ can think of, please do let me know.\n\n\nA:\n\nYour code is overflowing the\
+    \ stack, and in some cases (probably depending on your machine's architecture)\
+    \ it produces a stack overflow error.\nThe problem is that you are using a recursive\
+    \ approach, and the recursion stack is getting too big, it'll eventually overflow\
+    \ if the problem size is large enough.\nTo fix it, use a tail-recursive approach,\
+    \ that is, don't do recursion from the top level, but instead from the tail. Here's\
+    \ a solution that I came up with:\n<code>(define (tri n)\n  (let loop ((i 0) (acc\
+    \ (list 1 3 2)))\n    (if (= i n)\n        acc\n        (loop (+ i 1)\n      \
+    \        (append acc\n                      (if (even? i)\n                  \
+    \        (list (+ 1 (/ i 2)))\n                          (list (+ (last acc) (second-last\
+    \ acc) (last (butlast acc))))))))))\n</code>\nThis is a tail-recursive implementation,\
+    \ and it should work fine.\n", "  (for/list ([i (in-range n)])\n    (if (even?\
+    \ i)\n        (1+ (/ i 2))\n        (+ (tri (- i 1)) (tri (- i 2)) (tri (+ i 1))))))",
+  "  (define (tribonacci n)\n    (cond ((= n 1) 3)\n          ((= n 2) 2)\n      \
+    \    ((even? n) (/ n 2))\n          (else (+ (tribonacci (- n 1)) (tribonacci\
+    \ (- n 2)) (tribonacci (- n 3))))))\n  (define (helper n lst)\n    (if (= n 0)\
+    \ lst\n        (helper (- n 1) (cons (tribonacci n) lst))))\n  (helper n '()))\n",
+  "  (cond [(zero? n) (list 1)]\n        [(= 1 n) (list 1 3)]\n        [(= 2 n) (list\
+    \ 1 3 2)]\n        [else (let ([n-1 (tri (- n 1))]\n                    [n-2 (tri\
+    \ (- n 2))]\n                    [n-3 (tri (- n 3))])\n                 (append\
+    \ n-1 (list (+ (+ (last n-1) (last n-2)) (last n-3)))))]))\n", "\t(cond\n\t\t\
+    [(= n 1) (list 3)]\n\t\t[(= n 2) (list 3 2)]\n\t\t[(= n 3) (list 3 2 8)]\n\t\t\
+    [(= (modulo n 2) 0) (list (+ 1 (/ n 2)))]\n\t\t[else (list (- (tri (- n 1)) (tri\
+    \ (- n 2)) (tri (+ n 1))))]))", "  (if (= n 0)\n      (list 1)\n      (if (= n\
+    \ 1)\n          (list 1 3)\n          (if (= n 2)\n              (list 1 3 2)\n\
+    \              (let* ((last-one (last (tri (- n 1))))\n                     (last-two\
+    \ (last (tri (- n 2))))\n                     (last-three (last (tri (- n 3)))))\n\
+    \                (append (tri (- n 1)) (list (+ (car last-one)\n             \
+    \                                  (car last-two)\n                          \
+    \                     (car last-three)))))))))", "  (cond ((= n 0) '())\n    \
+    \    ((= n 1) '(1))\n        ((= n 2) '(1 3))\n        ((= n 3) '(1 3 2 8))\n\
+    \        (else (let loop ([i (- n 2)] [l '(1 3 2 8)])\n                (cond ((=\
+    \ i 0) l)\n                      (else (loop (- i 1) (append l (list (+ (nth l\
+    \ (- i 1)) (nth l (- i 2)) (nth l (- i 3))))))))))))", "  (if (= n 0)\n      empty\n\
+    \      (cond ((= n 1) (list 3))\n            ((= n 2) (list 3 2))\n          \
+    \  ((= n 3) (list 3 2 8))\n            (else (if (even? n)\n                 \
+    \     (cons (quotient n 2) (tri (- n 1)))\n                      (append (tri\
+    \ (- n 1)) (list (+ (car (tri (- n 1))) (car (tri (- n 2))) (car (tri (+ n 1)))))))))))",
+  "  (cond ((= n 0) '())\n        ((= n 1) (list 3))\n        ((= n 2) (list 3 2))\n\
+    \        ((= n 3) (list 3 2 8))\n        (else (cons 3 (tri (- n 1))))))", " \
+    \ (cond ((= n 0) '())\n        ((= n 1) '(1))\n        ((= n 2) '(1 3))\n    \
+    \    ((even? n) (let ((n (round (/ n 2)))) (append (tri n) (list (+ n 1)))))\n\
+    \        (else (append (tri (- n 1)) (tri (- n 2)) (tri (+ n 1))))))", "  (if\
+    \ (= n 0)\n      '(3)\n      (cons\n       3\n       (if (= n 1)\n           '(1)\n\
+    \           (cons \n            1\n            (tri-helper 1 2 0 n))))))\n", " \
+    \ (if (equal? 0 n)\n      (list 1)\n      (if (equal? 1 n)\n          (list 1\
+    \ 3)\n          (if (equal? 2 n)\n              (list 1 3 2)\n              (if\
+    \ (equal? 3 n)\n                  (list 1 3 2 8)\n                  (if (equal?\
+    \ 4 n)\n                      (list 1 3 2 8)\n                      (if (equal?\
+    \ 5 n)\n                          (list 1 3 2 8 11)\n                        \
+    \  (if (equal? 6 n)\n                              (list 1 3 2 8 11 23)\n    \
+    \                          (if (equal? 7 n)\n                                \
+    \  (list 1 3 2 8 11 23 29)\n                                  (if (equal? 8 n)\n\
+    \                                      (list 1 3 2 8 11 23 29 51)\n          \
+    \                            (if (equal? 9 n)\n                              \
+    \            (list 1 3 2 8 11 23 29 51 64)\n                                 \
+    \         (if (equal? 10 n)\n                                              (list\
+    \ 1 3 2 8 11 23 29 51 64 107)\n                                              (if\
+    \ (equal? 11 n)\n                                                  (list 1 3 2\
+    \ 8 11 23 29 51 64 107 117)\n                                                \
+    \  (if (equal? 12 n)\n                                                      (list\
+    \ 1 3 2 8 11 23 29 51 64 107 117 134)\n                                      \
+    \                (if (equal? 13 n)\n                                         \
+    \                 (list 1 3 2 8 11 23 29 51 64 107 117 134 148)\n            \
+    \                                              (if (equal? 14 n)\n           \
+    \                                                   (list 1 3 2 8 11 23 29 51\
+    \ 64 107 117 134 148 214)\n                                                  \
+    \            (if (equal? 15 n)\n                                             \
+    \                     (list 1 3 2 8 11 23 29 51 64 107 117 134 148 214)\n    \
+    \                                                              (if (equal? 16\
+    \ n)\n                                                                      (list\
+    \ 1 3 2 8 11 23 29 51 64 107 117 134 148 214)\n                              \
+    \                                        (if (equal? 17 n)\n                 \
+    \                                                         (list 1 3 2 8 11 23\
+    \ 29 51 64 107 117 134 148 214)\n                                            \
+    \                              (if (equal? 18 n)\n                           \
+    \                                                   (list 1 3 2 8 11 23 29 51\
+    \ 64 107 117 134 148 214)\n                ", '  (map tribonacci (build-list (add1
+    n) id)))', "\t(for/list ([i (in-range (add1 n))])\n\t\t(cond\n\t\t\t[(= i 1) 3]\n\
+    \t\t\t[(= (remainder i 2) 0) (add1 (/ i 2))]\n\t\t\t[else (+ (tri (- i 1)) (tri\
+    \ (- i 2)) (tri (+ i 1)))])))\n\t\t\t", "  (if (= n 0)\n      (list 1)\n     \
+    \ (if (= n 1)\n          (list 1 3)\n          (if (= n 2)\n              (list\
+    \ 1 3 2)\n              (if (= (modulo n 2) 0)\n                  (cons (+ 1 (/\
+    \ n 2)) (tri (- n 1)))\n                  (cons (+ (car (tri (- n 1))) (car (tri\
+    \ (- n 2))) (car (tri (+ n 1)))) (tri (- n 1))))))))\n", "  (cond\n    [(= n 0)\
+    \ (list 1)]\n    [(= n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n    [else (append\
+    \ (tri (- n 1)) (list (+ (list-ref (tri (- n 1)) -3)\n                       \
+    \                  (list-ref (tri (- n 1)) -2)\n                             \
+    \            (list-ref (tri (- n 1)) -1))))]))", "  (define (tail-tri n lst)\n\
+    \    (if (= n 0) (reverse lst)\n        (tail-tri (- n 1) (cons (cond\n      \
+    \                            ((even? n) (+ 1 (/ n 2)))\n                     \
+    \             (else (+ (car lst) (cadr lst) (caddr lst))))\n                 \
+    \               lst))))\n  (tail-tri n '(3 2 1)))\n", "  (cond\n    [(zero? n)\
+    \ empty]\n    [(= n 1) (list 3)]\n    [(even? n) (append (tri (- n 1)) (list (/\
+    \ n 2)))]\n    [else\n     (append (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))]))\n",
+  "  (if (even? n)\n      (build-list (add1 n)\n                  (lambda (n)\n  \
+    \                  (if (zero? n)\n                        0\n                \
+    \        (if (equal? n 1)\n                            3\n                   \
+    \         (round (/ (+ n 1) 2)))))\n      (build-list (add1 n)\n             \
+    \     (lambda (n)\n                    (if (zero? n)\n                       \
+    \ 0\n                        (if (equal? n 1)\n                            3\n\
+    \                            (if (equal? n 2)\n                              \
+    \  2\n                                (+ (tri (- n 1))\n                     \
+    \              (tri (- n 2))\n                                   (tri (+ n 1))))))))))\n",
+  "    (cond ((= n 0) (list 0))\n          ((= n 1) (list 1 3))\n          ((= n 2)\
+    \ (list 1 3 2))\n          (else (list 1 3 2 (trin (sub1 n) 2 1)))))\n", "  (if\
+    \ (= n 0) '()\n      (if (= n 1) '(1)\n          (if (= n 2) '(1 3)\n        \
+    \      (if (= n 3) '(1 3 2 8)\n                  (if (= n 4) '(1 3 2 8 5)\n  \
+    \                    (if (= n 5) '(1 3 2 8 5 13)\n                          (if\
+    \ (= n 6) '(1 3 2 8 5 13 21)\n                              (if (= n 7) '(1 3\
+    \ 2 8 5 13 21 34)\n                                  (if (= n 8) '(1 3 2 8 5 13\
+    \ 21 34 55)\n                                      (if (= n 9) '(1 3 2 8 5 13\
+    \ 21 34 55 89)\n                                          (if (= n 10) '(1 3 2\
+    \ 8 5 13 21 34 55 89 144)\n                                              (if (=\
+    \ n 11) '(1 3 2 8 5 13 21 34 55 89 144 233)\n                                \
+    \                  (if (= n 12) '(1 3 2 8 5 13 21 34 55 89 144 233 377)\n    \
+    \                                                  (if (= n 13) '(1 3 2 8 5 13\
+    \ 21 34 55 89 144 233 377 610)\n                                             \
+    \             (if (= n 14) '(1 3 2 8 5 13 21 34 55 89 144 233 377 610 987)\n \
+    \                                                             (if (= n 15) '(1\
+    \ 3 2 8 5 13 21 34 55 89 144 233 377 610 987 1597)\n                         \
+    \                                         (if (= n 16) '(1 3 2 8 5 13 21 34 55\
+    \ 89 144 233 377 610 987 1597 2584)\n                                        \
+    \                              (if (= n 17) '(1 3 2 8 5 13 21 34 55 89 144 233\
+    \ 377 610 987 1597 2584 4181)\n                                              \
+    \                            (if (= n 18) '(1 3 2 8 5 13 21 34 55 89 144 233 377\
+    \ 610 987 1597 2584 4181 6765)\n                                             \
+    \                                 (if (= n 19) '(1 3 2 8 5 13 21 34 55 89 144\
+    \ 233 377 610 987 1597 2584 4181 6765 10946)\n                               \
+    \                                                   (if (= n 20) '(1 3 2 8 5 13\
+    \ 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711)\n         \
+    \                                                                            \
+    \ (if (= n", "  (if (= n 0)\n      (list 1)\n      (cons 1 (if (= n 1)\n     \
+    \             (list 3)\n                  (if (= n 2)\n                      (list\
+    \ 3 2)\n                      (if (even? n)\n                          (append\
+    \ (tri (- n 1)) (list (+ n 1)))\n                          (append (tri (- n 1))\
+    \ (list (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))))))))))\n", "  (define (tribonacci-helper\
+    \ n-1 n-2 n-3)\n    (if (= n 0) (list n-1 n-2 n-3)\n        (tribonacci-helper\
+    \ (+ n-1 n-2 n-3) n-1 n-2)))\n  (tribonacci-helper 1 3 2))\n", "  (if (= 0 n)\n\
+    \      (list 1)\n      (append (tri (- n 1)) (list (tri-n (- n 1))))))\n", " \
+    \ (define (triacc cur n acc)\n    (if (= n 0) \n        acc\n        (cond\n \
+    \        ((= (remainder cur 2) 0)\n          (triacc (+ cur 1) (- n 1) (cons (+\
+    \ (quotient cur 2) 1) acc)))\n         (else\n          (triacc (+ cur 1) (- n\
+    \ 1) (cons (+ (car acc) (car (cdr acc)) (car (cdr (cdr acc)))) acc))))))\n  (triacc\
+    \ 1 n (list 3)))\n", "    (define (rec n)\n        (cond [(even? n) (cons (/ n\
+    \ 2) (rec (- n 1)))]\n              [else (cons (+ (rec (- n 1)) (rec (- n 2))\
+    \ (rec (+ n 1))) (rec (- n 1)))]))\n    (rec n))\n", "  (cond [(= n 0) '()]\n\
+    \        [(= n 1) '(1)]\n        [(= n 2) '(1 3)]\n        [else (append (tri\
+    \ (- n 1)) (list (+ 3 (tri (- n 1)) (tri (- n 2)) (tri (- n 3))))])]))", "  (local\
+    \ [(define (f-even n)\n            (if (zero? n)\n                empty\n    \
+    \            (cons (add1 (/ n 2)) (f-even (sub1 n)))))\n          (define (f-odd\
+    \ n)\n            (if (zero? n)\n                empty\n                (cons\
+    \ (f-helper n) (f-odd (sub1 n)))))\n          (define (f-helper n)\n         \
+    \   (if (zero? n)\n                1\n                (+ (list-ref (f-odd n) (sub1\
+    \ n))\n                   (list-ref (f-even n) (sub1 n))\n                   (list-ref\
+    \ (f-odd n) n))))]\n    (if (zero? n)\n        empty\n        (cons 1 (f-odd n)))))",
+  "  (if (= n 0) \n    '()\n    (cons (tri-aux n) (tri (- n 1)))))\n", "  (if (= n\
+    \ 0) '()\n      (if (= n 1) '(1)\n          (if (= n 2) '(1 3)\n             \
+    \ (let ([n-1 (tri (- n 1))])\n                (append n-1 (list (+ (car n-1)\n\
+    \                                     (car (cdr n-1))\n                      \
+    \               (car (cdr (cdr n-1)))))))))))\n", '  (list-tabulate (lambda (x)
+    (tri-aux x)) (+ n 1)))', "  (cond ((= n 0) (list 1))\n        ((= n 1) (list 1\
+    \ 3))\n        ((= n 2) (list 1 3 2))\n        (else (list-append (list 1 3 2)\
+    \ (tri-aux 3 n)))))\n", "  (if (= n 0)\n      (list 1)\n      (if (= n 1)\n  \
+    \        (list 1 3)\n          (if (= n 2)\n              (list 1 3 2)\n     \
+    \         (if (= (remainder n 2) 0)\n                  (cons (- n 2) (tri (- n\
+    \ 1)))\n                  (append (tri (- n 1)) (tri (- n 2)) (tri (- n 3))))))))",
+  "  (cond ((= n 0) '(1))\n        ((= n 1) '(1 3))\n        ((= n 2) '(1 3 2))\n\
+    \        (else (append (tri (- n 1))\n                      (list (modulo (+ (list-ref\
+    \ (tri (- n 1)) (- n 1))\n                                       (list-ref (tri\
+    \ (- n 1)) (- n 2))\n                                       (list-ref (tri (-\
+    \ n 1)) n)) 2))))))\n```\n\n```\n#lang racket\n", "  (define (tri-iter n a b c\
+    \ i)\n    (cond [(= i n) (list a b c)]\n          [(= (remainder i 2) 0) (tri-iter\
+    \ n (+ i (/ i 2)) a b (+ i 1))]\n          [else (tri-iter n (+ a b c) a b (+\
+    \ i 1))]))\n  (cond [(= n 0) empty]\n        [(= n 1) (list 3)]\n        [(= n\
+    \ 2) (list 3 2)]\n        [else (tri-iter n 3 2 1 3)]))\n", "  (if (= n 0)\n \
+    \     '(3)\n      (let ((res (map (lambda (n) (/ n 2)) (tri (- n 1)))))\n    \
+    \    (append res (list (+ (car res) (car (cdr res)) (car (cdr (cdr res)))))))))",
+  "  (tri-helper n 1 1 1))\n", "  (let loop ((i 1) (current '(3)) (prev (list 1 2)))\n\
+    \    (if (= i n)\n        (append prev current)\n        (if (even? i)\n     \
+    \       (loop (+ i 1) (append current (list (add1 (/ i 2)))) current)\n      \
+    \      (loop (+ i 1) (append current (list (foldl + 0 (append current prev))))\
+    \ current)))))", "  (cond\n    [(= n 0) (list 1)]\n    [(= n 1) (list 1 3)]\n\
+    \    [(= n 2) (list 1 3 2)]\n    [else\n     (let* ([ls (tri (- n 1))]\n     \
+    \       [last (car (reverse ls))]\n            [second-last (car (reverse (reverse\
+    \ ls))))]\n            [third-last (car (reverse (reverse (reverse ls))))])\n\
+    \       (append ls (list (+ last second-last third-last))))]))\n", "  (define\
+    \ (helper current next1 next2 count)\n    (if (&lt;= count n)\n        (begin\n\
+    \          (display (list current next1 next2))\n          (newline)\n       \
+    \   (helper (+ next1 next2 current) current next1 (+ count 1)))\n        '()))\n\
+    \  (helper 3 1 1 1))\n</code>\nThe expected answer is to print (1 3 2 8), but\
+    \ I am getting:\n<code>(1 3 2)", "  (define (tri-iter i acc)\n    (if (= i n)\
+    \ acc\n      (define acc-iter (for/list ([j acc]) (tri-aux j)))\n      (tri-iter\
+    \ (+ i 1) acc-iter)))\n  (tri-iter 0 (list 3)))\n", "    (if (negative? n)\n \
+    \       (error \"no negative numbers allowed\")\n        (cond [(zero? n) '(1)]\n\
+    \              [(even? n) (cons (add1 (/ n 2)) (tri (sub1 n)))]\n            \
+    \  [else (cons (add1 (/ n 2)) (tri (sub1 n)))])))\n", "    (cond\n        [(=\
+    \ n 1) '(3)]\n        [(= n 2) '(3 2)]\n        [(= n 3) '(3 2 8)]\n        [else\
+    \ (tri-aux 0 1 2 n)]))\n", "  (if (zero? n) (list 1)\n      (define (loop k)\n\
+    \        (if (zero? k) (list 3)\n            (if (even? k) (cons (+ 1 (/ k 2))\
+    \ (loop (- k 1)))\n                (cons (+ (tri (- k 1)) (tri (- k 2)) (tri (+\
+    \ k 1))) (loop (- k 1))))))\n      (loop n)))", "  (define (tri-inner n1 n2 n3\
+    \ n)\n    (if (zero? n) empty\n        (cons n1 (tri-inner n2 n3 (+ n1 n2 n3)\
+    \ (- n 1)))))\n  (tri-inner 1 3 2 n))", "  (define (tri-h n acc)\n    (if (= n\
+    \ 0) acc\n        (cond [(= (remainder n 2) 0) (tri-h (- n 1) (cons (+ 1 (/ n\
+    \ 2)) acc))]\n              [else (tri-h (- n 1) (cons (+ (list-ref acc (- n 2))\
+    \ (list-ref acc (- n 1)) (list-ref acc (- n 3))) acc))])))\n  (tri-h n (list 3)))\n",
+  "  (for/list ([i (in-range (add1 n))])\n    (cond\n      [(zero? i) 1]\n      [(zero?\
+    \ (modulo i 2)) (floor (/ i 2))]\n      [else (+ (tri (- i 1)) (tri (- i 2)) (tri\
+    \ (+ i 1)))])))\n", "  (define (iter m accu)\n    (if (= m 0) accu\n        (iter\
+    \ (- m 1) (cons (tribonacci (- m 1) accu) accu))))\n  (iter (+ n 1) '()))\n",
+  "  (let loop ((m n) (r '()))\n    (cond\n      ((zero? m) (cons 1 r))\n      ((=\
+    \ m 1) (cons 3 r))\n      ((= m 2) (cons 2 r))\n      ((= (remainder m 2) 0) (loop\
+    \ (- m 1) (cons (+ 1 (/ m 2)) r)))\n      (else (loop (- m 1) (cons (+ (list-ref\
+    \ r (- m 1)) (list-ref r (- m 2)) (list-ref r (+ m 1))) r))))))\n</code>\n", " \
+    \ (if (= n 0)\n      (list 1)\n      (let ((n-1 (tri (- n 1))))\n        (append\
+    \ n-1\n                (list (if (even? n)\n                          (quotient\
+    \ n 2)\n                          (+ (list-ref n-1 (- n 2)) (list-ref n-1 (- n\
+    \ 1)) (list-ref n-1 n))))))))\n", "  (local [(define (go i lst)\n            (cond\
+    \ [(= i (+ n 1)) lst]\n                  [(= i 1) (go (+ i 1) (cons 3 lst))]\n\
+    \                  [(and (= (remainder i 2) 0) (= i 2)) (go (+ i 1) (cons (+ 1\
+    \ (/ i 2)) lst))]\n                  [(and (= (remainder i 2) 0) (> i 2)) (go\
+    \ (+ i 1) (cons (+ (car lst) (car (cdr lst)) (car (cdr (cdr lst)))) lst))]\n \
+    \                 [(= (remainder i 2) 1) (go (+ i 1) (cons (+ (car lst) (car (cdr\
+    \ lst)) (car (cdr (cdr lst)))) lst))]))]\n    (go 1 '())))\n", "  (cond\n    [(=\
+    \ n 0) (list 1)]\n    [(= n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n    [else\
+    \ (cons 1 (list-list (list 3 2) n))]))\n", "  (cond ((= n 0) (list 1))\n     \
+    \   ((= n 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else\n    \
+    \     (cons 1\n               (for/list ([i (in-range 1 (+ n 1))])\n         \
+    \        (cond\n                   [(even? i) (/ i 2)]\n                   [else\
+    \ (+ (list-ref (tri (- i 1)) (- i 1)) (list-ref (tri (- i 2)) (- i 2)) (list-ref\
+    \ (tri (+ i 1)) (+ i 1)))])))))\n", "  (define (t n)\n    (cond\n      [(zero?\
+    \ n) '()]\n      [(even? n) (cons (/ n 2) (t (- n 1)))]\n      [else (cons (t\
+    \ (- n 1)) (t (- n 2)) (t (+ n 1)))]))\n  (t n))\n", "  (define (triaux x)\n \
+    \   (if (&lt; x 1) '() (cons (if (even? x) (round (/ x 2)) (+ x 1 (triaux (- x\
+    \ 1)) (triaux (- x 2)))) (triaux (- x 1)))))\n  (triaux (+ n 1)))\n</code>\nI'm\
+    \ getting this error: <code>application: not a procedure; expected a procedure\
+    \ that can be applied to arguments</code>. It's obvious that <code>cons</code>\
+    \ expects a procedure and I'm giving it a number. How can I fix this?\n\n\nA:\n\
+    \nIn the middle of <code>+</code> expression you're invoking <code>triaux</code>,\
+    \ this returns a list (hence the error). I'm not sure what you're trying to do,\
+    \ but it should be something like this:\n<code>(define (tri n)\n  (define (triaux\
+    \ x)\n    (if (&lt; x 1) '() (cons (if (even? x) (round (/ x 2)) (+ x 1 (car (triaux\
+    \ (- x 1))) (car (triaux (- x 2))))) (triaux (- x 1)))))\n  (triaux (+ n 1)))\n\
+    </code>\nAnd I've added the <code>car</code> to pick only the first element of\
+    \ the list, otherwise we'll get a list inside another list (as the <code>+</code>\
+    \ is invoked recursively).\n", "\t(cond\n\t\t[(= n 1) (list 3)]\n\t\t[(= n 2)\
+    \ (list 3 1)]\n\t\t[(= n 3) (list 3 1 2 8)]\n\t\t[(even? n) (list 3 1 2 8)]\n\t\
+    \t[else (list 3 1 2 8 (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1))))]))", "  (if\
+    \ (= n 0)\n      (list 1)\n      (if (= n 1)\n          (list 1 3)\n         \
+    \ (if (= n 2)\n              (list 1 3 2)\n              (cons 1 (tri-rec (tri\
+    \ (sub1 n)) n))))))\n", "  (cond [(= n 0) '(0)]\n        [(= n 1) '(1)]\n    \
+    \    [(= n 2) '(1 1)]\n        [else (cons (fib n) (tri (- n 1)))]))\n", "  (local\
+    \ [(define (acc m a b c)\n             (if (= m n)\n                 (list a b\
+    \ c)\n                 (acc (+ m 1) b c (+ a b c))))]\n    (acc 0 3 1 2)))\n",
+  "  (let loop ((n n) (a 1) (b 3) (c 2) (result (list a b c)))\n    (if (= n 0)\n\
+    \        result\n        (cond ((even? n) (loop (- n 1) c b (+ 1 (/ n 2)) (append\
+    \ result (list (+ 1 (/ n 2))))))\n              (else (loop (- n 1) c b (+ a b\
+    \ c) (append result (list (+ a b c)))))))))", "  (define (tri-helper n)\n    (cond\n\
+    \      [(= n 1) 3]\n      [(= n 2) 2]\n      [(even? n) (/ (+ n 1) 2)]\n     \
+    \ [else\n       (+ (tri-helper (- n 1))\n          (tri-helper (- n 2))\n    \
+    \      (tri-helper (+ n 1)))]))\n  (for/list ([i (in-range (+ n 1))])\n    (tri-helper\
+    \ i)))", "  ;; Your code here.\n  (for/list ([i (in-range 1 (add1 n))])\n    (cond\n\
+    \      [(even? i) (add1 (/ i 2))]\n      [else (tri* (- i 1) 3 (list 0 0 0))])))\n",
+  "  (cond\n    [(= n 0) (list 3)]\n    [(even? n) (append (tri (- n 1)) (list (add1\
+    \ (/ n 2))))]\n    [else (append (tri (- n 1)) (list (+ (list-ref (tri (- n 1))\
+    \ (- n 1)) (list-ref (tri (- n 1)) (- n 2)) (list-ref (tri (+ n 1)) (- n 1)))))]))\n\
+    ```\n\n```\n#lang racket\n", "  (let recur ((n n) (lst '()))\n    (if (= n -1)\n\
+    \        lst\n        (if (even? n)\n            (recur (- n 1) (cons (/ (1+ n)\
+    \ 2) lst))\n            (recur (- n 1) (cons (- n 2) lst))))))\n</code>\nBut it\
+    \ doesn't pass all tests, I can't figure out what is wrong. Can anyone give me\
+    \ some hints? Thank you in advance!\n\n\nA:\n\nYour <code>recur</code> isn't doing\
+    \ what you want.  To get the first <code>n</code> elements of the Tribonacci sequence,\
+    \ you should be calculating the <code>n</code>th element and prepending it to\
+    \ the rest of the sequence.  But your <code>recur</code> does the opposite: it\
+    \ calculates the <code>n</code>th element and appends it to the rest of the sequence.\
+    \  So you get a backwards list.\nTo fix the problem, you should use <code>cons</code>\
+    \ for the even case, and <code>append</code> for the odd case.  That will give\
+    \ you the first <code>n</code> elements of the sequence.  You'll have to reverse\
+    \ the result to get the first <code>n</code> elements in order.\n", "  (cond [(=\
+    \ n 0) (list 1)]\n        [(= n 1) (list 1 3)]\n        [(= n 2) (list 1 3 2)]\n\
+    \        [else (append (tri (- n 1))\n                      (list (+ (list-ref\
+    \ (tri (- n 1)) (- n 1))\n                               (list-ref (tri (- n 1))\
+    \ (- n 2))\n                               (list-ref (tri (- n 1)) (- n 3)))))]))\n",
+  "  (cond\n    [(zero? n) empty]\n    [(= n 1) (list 3)]\n    [(= n 2) (list 3 1)]\n\
+    \    [(even? n) (cons 3 (tri (- n 1)))]\n    [else (append (tri (- n 1)) (tri\
+    \ (- n 2)) (tri (+ n 1)))]))\n", "  (if (= n 0)\n      '()\n      (if (= n 1)\n\
+    \          (list 3)\n          (if (= n 2)\n              (list 3 2)\n       \
+    \       (if (= n 3)\n                  (list 3 2 8)\n                  (let ([p\
+    \ (tri (- n 1))])\n                    (append p (list (+ (list-ref p (- n 2))\
+    \ (list-ref p (- n 3)) (list-ref p (- n 4)))))))))))", "  (cond ((= n 0) (list\
+    \ 0))\n        ((= n 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else\
+    \ (cons 1 (cons 3 (cons 2 (nthcdr 3 (fibonacci-list (add1 (add1 n))))))))))\n",
+  "  (define (helper count)\n    (cond ((&lt;= count n) (cond ((even? count) (cons\
+    \ (/ count 2) (helper (+ count 1))))\n                              ((odd? count)\
+    \ (cons (helper (- count 1)) (helper (- count 2)) (helper (+ count 1)))))\n  \
+    \        (else '())))\n  (helper 1))\n</code>\nI have an issue with the base case\
+    \ in the inner conditional expression when n is odd, it seems to run infinitely.\n\
+    \n\nA:\n\nLet's clarify the spec:\n<code>tri(1) = 3\ntri(n) = 1 + n / 2, if n\
+    \ is even.\ntri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.\n</code>\n\
+    First error: <code>tri(n) = 1 + n / 2, if n is even.</code> This is <code>tri(n)\
+    \ = 1 + (n / 2)</code> so we need to actually divide.\nSecond error: <code>tri(n)\
+    \ =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.</code> This is <code>tri(n)\
+    \ =  (tri(n - 1) + tri(n - 2)) + tri(n + 1)</code>. Can you see why <code>+</code>\
+    \ is a procedure in the spec but not in your code? The spec asks for the three\
+    \ values, summed.\nHere's a simple recursive version:\n<code>(define (tri n)\n\
+    \  (if (zero? n)\n      '()\n      (cons (if (even? n)\n                (+ 1 (/\
+    \ n 2))\n                (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1))))\n    \
+    \        (tri (- n 1)))))\n</code>\n", "  (if (equal? n 0)\n      '()\n      (cons\n\
+    \       (cond\n        ((even? n)\n         (quotient (+ 1 n) 2))\n        (else\n\
+    \         (let ((tri-n_1 (tri (- n 1)))\n               (tri-n_2 (tri (- n 2)))\n\
+    \               (tri-n_3 (tri (- n 3))))\n           (+ (car tri-n_1) (car tri-n_2)\
+    \ (car tri-n_3)))))\n       (tri (- n 1)))))\n", "  (cond ((= n 0) (list 1))\n\
+    \        ((= n 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else (cons\n\
+    \                (cond ((= (remainder n 2) 0) (+ 1 (/ n 2)))\n               \
+    \       (else (+ (list-ref (tri (- n 1)) (- n 1))\n                          \
+    \     (list-ref (tri (- n 2)) (- n 2))\n                               (list-ref\
+    \ (tri (+ n 1)) (+ n 1)))))\n                (tri (- n 1))))))", "  (cond\n  \
+    \  [(= n 0) (list 0)]\n    [(= n 1) (list 1 3)]\n    [(= n 2) (list 1 3 2)]\n\
+    \    [else\n     (cons (car (tri (- n 1)))\n           (cons (car (tri (- n 2)))\n\
+    \                 (cons (car (tri (- n 3)))\n                       (cond\n  \
+    \                       [(even? n)\n                          (list (+ 1 (/ n\
+    \ 2)))]\n                         [else\n                          (list (+ (car\
+    \ (tri (- n 1)))\n                                   (car (tri (- n 2)))\n   \
+    \                                (car (tri (- n 3)))))]))))]))\n", "    (list-of-lists\
+    \ n\n                   (lambda (x) (tri-rec x))\n                   (lambda (x)\
+    \ (= x 0))\n                   (lambda (x) (list x))\n                   (lambda\
+    \ (x) (list 3))\n                   (lambda (x) (list 1))\n                  \
+    \ (lambda (x) (list (int (/ x 2))))\n                   (lambda (x) (list (tri-rec\
+    \ (- x 1))\n                                     (tri-rec (- x 2))\n         \
+    \                            (tri-rec (+ x 1))))))\n", "  (if (zero? n)\n    \
+    \  (list)\n      (if (even? n)\n          (cons (quotient n 2) (tri (- n 1)))\n\
+    \          (cons (+ (tri (- n 2)) (tri (- n 1)) (tri (+ n 1))) (tri (- n 1))))))\n",
+  "  (define (recurse count result)\n    (if (= count n)\n        result\n       \
+    \ (recurse (+ count 1) (cons (tribonacci-of count) result))))\n  (recurse 0 (list\
+    \ 3)))\n", "  (define (tri-aux n)\n    (cond\n      [(= n 1) 3]\n      [(= n 2)\
+    \ 2]\n      [(= n 3) 8]\n      [(even? n) (/ n 2)]\n      [else (+ (tri-aux (-\
+    \ n 1))\n               (tri-aux (- n 2))\n               (tri-aux (+ n 1)))]))\n\
+    \  (for/list ([i (in-range (+ n 1))])\n    (tri-aux i)))\n", "  (define (tri-rec\
+    \ n)\n    (cond [(zero? n) 1]\n          [(even? n) (+ 1 (/ n 2))]\n         \
+    \ [else (+ (tri-rec (- n 1)) (tri-rec (- n 2)) (tri-rec (+ n 1)))]))\n  (for/list\
+    \ ([i (in-range (+ n 1))]) (tri-rec i)))\n", "  (for/list ([i (in-range 1 (+ n\
+    \ 1))])\n    (if (even? i)\n        (/ (+ i 1) 2)\n        (+ (tri (- i 1)) (tri\
+    \ (- i 2)) (tri (+ i 1))))))", "  (if (= n 0)\n      '()\n      (append (list\
+    \ (if (odd? n) \n                        (+ (tri (- n 1)) (tri (- n 2)) (tri (+\
+    \ n 1)))\n                        (+ (tri (- n 1)) (/ n 2))))\n              (tri\
+    \ (- n 1)))))\n", "    (local ((define (tri-aux i lst)\n             (cond\n \
+    \              [(= i 0) lst]\n               [(odd? i) (tri-aux (- i 1) (cons\
+    \ (+ (car lst) (cadr lst) (caddr lst)) lst))]\n               [else (tri-aux (-\
+    \ i 1) (cons (/ (+ 1 i) 2) lst))])))\n      (tri-aux n '(3 1 0))))", "  (define\
+    \ (iter n1 n2 n3 acc)\n    (if (= n 0)\n        acc\n        (iter n2 n3 (+ n1\
+    \ n2 n3) (cons n1 acc))))\n  (iter 3 2 1 (list 1)))\n", "  (define (inner n a\
+    \ b c)\n    (if (= n 1)\n        (list 1 a b c)\n        (let ((an (+ a b c))\n\
+    \              (bn (+ b c an))\n              (cn (+ c an bn)))\n          (inner\
+    \ (- n 1) an bn cn))))\n  (inner n 3 2 1))\n", "  (cond ((= n 0) null)\n     \
+    \   ((= n 1) (list 3))\n        ((= n 2) (list 3 2))\n        ((= n 3) (list 3\
+    \ 2 8))\n        (else (cons (tri (- n 1))\n                    (tri (- n 2))\n\
+    \                    (tri (- n 3))))))\n</code>\nBut, unfortunately, it does not\
+    \ run correctly for n > 3, what did I do wrong?\n\n\nA:\n\nThe <code>cond</code>\
+    \ expression has a number of problems:\n\nWhen <code>n</code> is <code>0</code>,\
+    \ <code>1</code>, or <code>2</code>, there's no <code>else</code> condition, but\
+    \ the <code>cond</code> expression needs one.\nThe <code>else</code> clause is\
+    \ not a proper condition, it needs a value to return.\nThe <code>else</code> clause\
+    \ needs to use <code>cons</code> to build the list, not just <code>list</code>.\n\
+    The <code>else</code> clause needs to do the division by <code>2</code> when <code>n</code>\
+    \ is even.\n\nHere's a fixed version:\n<code>(define (tri n)\n  (cond ((= n 0)\
+    \ '())\n        ((= n 1) (list 3))\n        ((= n 2) (list 3 2))\n        ((=\
+    \ n 3) (list 3 2 8))\n        ((even? n) (list (+ 1 (/ n 2))))\n        (else\
+    \ (cons (tri (- n 1))\n                    (cons (tri (- n 2))\n             \
+    \             (cons (tri (- n 3))\n                                '()))))))\n\
+    </code>\n", "  (cond ((<= n 0) (list 1))\n        ((= n 1) (list 1 3))\n     \
+    \   ((= n 2) (list 1 3 2))\n        (else (cons 1 (cons 3 (cons 2 (cons (- n 1)\
+    \ (tri (- n 1)))))))))\n", "  (if (zero? n) '()\n      (cond\n        [(= n 1)\
+    \ (list 3)]\n        [(= n 2) (list 3 1)]\n        [(= n 3) (list 3 1 2 8)]\n\
+    \        [(odd? n) (cons (+ (first (tri (- n 1))) (first (tri (- n 2))) (first\
+    \ (tri (+ n 1)))) (tri (- n 1)))]\n        [(even? n) (cons (+ (/ n 2) 1) (tri\
+    \ (- n 1)))])))\n", "  (cond\n    [(= n 0) (list 1)]\n    [(= n 1) (list 1 3)]\n\
+    \    [(= n 2) (list 1 3 2)]\n    [else (append (tri (- n 1))\n               \
+    \   (list (+\n                         (list-ref (tri (- n 1)) (- n 1))\n    \
+    \                     (list-ref (tri (- n 1)) (- n 2))\n                     \
+    \    (list-ref (tri (- n 1)) (+ n 1)))))]))\n", "  (list-ref (list-of-tribonacci\
+    \ n) n))\n", "  (for/list ((i (in-range n)))\n    (cond\n      [(even? i) (+ 1\
+    \ (/ i 2))]\n      [else (+ (tri (- i 1)) (tri (- i 2)) (tri (+ i 1)))])))\n",
+  "  (define (inner m acc)\n    (if (= m n)\n        (reverse acc)\n        (inner\
+    \ (+ m 1)\n               (cons (cond\n                      ((= m 0) 1)\n   \
+    \                   ((= m 1) 3)\n                      ((= m 2) 2)\n         \
+    \             ((even? m) (+ 1 (/ m 2)))\n                      (else (+ (list-ref\
+    \ acc (- m 1))\n                               (list-ref acc (- m 2))\n      \
+    \                         (list-ref acc (+ m 1)))))\n                     acc))))\n\
+    \  (inner 0 null))\n", "  (define (tri2 x k)\n    (cond ((= k 0) (list 0))\n \
+    \         ((= k 1) (list 1))\n          ((= k 2) (list 3))\n          ((= (remainder\
+    \ x 2) 0) (cons (add1 (/ x 2)) (tri2 x (sub1 k))))\n          (else (append (tri2\
+    \ x (sub1 k))\n                        (tri2 (sub1 x) (sub1 k))\n            \
+    \            (tri2 (add1 x) (sub1 k))))))\n  (tri2 n (add1 n)))\n", "  (cond [(=\
+    \ n 0) empty]\n        [(= n 1) (list 3)]\n        [(= n 2) (list 3 2)]\n    \
+    \    [else (define (help a b c n)\n                (cond [(= n 1) (append (list\
+    \ c) (list (+ a b c)))]\n                      [else (help b c (+ a b c) (- n\
+    \ 1))]))\n              (help 3 2 8 (- n 2))]))\n", "  (if (= n 0)\n      '()\n\
+    \      (if (= n 1)\n          '(1)\n          (if (= n 2)\n              '(1 3)\n\
+    \              (if (= n 3)\n                  '(1 3 2 8)\n                  (if\
+    \ (= n 4)\n                      '(1 3 2 8 13)\n                      (if (= n\
+    \ 5)\n                          '(1 3 2 8 13 21)\n                          (if\
+    \ (= n 6)\n                              '(1 3 2 8 13 21 34)\n               \
+    \               (if (= n 7)\n                                  '(1 3 2 8 13 21\
+    \ 34 55)\n                                  (if (= n 8)\n                    \
+    \                  '(1 3 2 8 13 21 34 55 89)\n                               \
+    \       (if (= n 9)\n                                          '(1 3 2 8 13 21\
+    \ 34 55 89 144)\n                                          (if (= n 10)\n    \
+    \                                          '(1 3 2 8 13 21 34 55 89 144 233)\n\
+    \                                              (if (= n 11)\n                \
+    \                                  '(1 3 2 8 13 21 34 55 89 144 233 377)\n   \
+    \                                               (if (= n 12)\n               \
+    \                                       '(1 3 2 8 13 21 34 55 89 144 233 377 610)\n\
+    \                                                      (if (= n 13)\n        \
+    \                                                  '(1 3 2 8 13 21 34 55 89 144\
+    \ 233 377 610 987)\n                                                         \
+    \ (if (= n 14)\n                                                             \
+    \ '(1 3 2 8 13 21 34 55 89 144 233 377 610 987 1597)\n                       \
+    \                                       (if (= n 15)\n                       \
+    \                                           '(1 3 2 8 13 21 34 55 89 144 233 377\
+    \ 610 987 1597 2584)\n                                                       \
+    \           (if (= n 16)\n                                                   \
+    \                   '(1 3 2 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181)\n\
+    \                                                                      (if (=\
+    \ n 17)\n                                                                    \
+    \      '(1 3 2 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765)\n   \
+    \                                                                       (if (=\
+    \ n 18)\n                                                                    \
+    \          '(1 3 2 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946)\n\
+    \                                                                            \
+    \  (if (= n 19)\n                                                ", "  (make-list-recur\
+    \ (+ n 1) (list 3 1 2) (list)))\n", "  (define (tribonacci-helper c n1 n2 n3 lst)\n\
+    \    (if (= n c)\n        lst\n        (if (even? c)\n            (tribonacci-helper\
+    \ (+ c 1) (+ n1 (/ c 2)) n2 n3 (append lst (list (+ n1 (/ c 2)))))\n         \
+    \   (tribonacci-helper (+ c 1) n1 n2 (+ n1 n2 n3) (append lst (list (+ n1 n2 n3)))))))\n\
+    \  (tribonacci-helper 0 3 0 0 (list 1 3)))\n", "    (if (= n 0)\n        (list\
+    \ 1)\n        (if (= n 1)\n            (list 1 3)\n            (if (= n 2)\n \
+    \               (list 1 3 2)\n                (cons 1 (cons 3 (cons 2 (tri (-\
+    \ n 3)))))))))", "    (if (= n 0)\n        (list 1)\n        (if (= n 1)\n   \
+    \         (list 1 3)\n            (if (= n 2)\n                (list 1 3 2)\n\
+    \                (if (= n 3)\n                    (list 1 3 2 8)\n           \
+    \         (if (= n 4)\n                        (list 1 3 2 8 33)\n           \
+    \             (if (= n 5)\n                            (list 1 3 2 8 33 21)\n\
+    \                            (list 1 3 2 8 33 21 55)\n                       \
+    \     )\n                        )\n                    )\n                )\n\
+    \            )\n        )\n    )\n)\n", "\t(cond [(zero? n) (list 1)]\n\t\t  [(even?\
+    \ n) (cons (+ 1 (/ n 2)) (tri (- n 1)))]\n\t\t  [else (cons (list-ref (tri (-\
+    \ n 1)) 0) (tri (- n 1)))]))", "  (tri-aux n 1))\n", "  (if (= n 0)\n      (list\
+    \ 1)\n      (if (= n 1)\n          (list 1 3)\n          (if (= n 2)\n       \
+    \       (list 1 3 2)\n              (let ((tri (tri (- n 1))))\n             \
+    \   (if (even? n)\n                    (cons (+ 1 (/ n 2)) tri)\n            \
+    \        (cons (+ (car tri) (cadr tri) (car (cddr tri))) tri)))))))\n", "  (cond\
+    \ [(even? n) (display (1+ (/ n 2)))]\n\t[(odd? n) (tri (- n 1))(tri (- n 2))(tri\
+    \ (+ n 1))]))", "  (cond [(= n 0) (list 1)]\n        [(= n 1) (list 1 3)]\n  \
+    \      [(= n 2) (list 1 3 2)]\n        [else\n         (let* ([a1 1]\n       \
+    \         [a2 3]\n                [a3 2]\n                [a4 (+ a1 a2 a3)]\n\
+    \                [n (- n 3)])\n           (cons a1 (cons a2 (cons a3 (cons a4\
+    \ (tri n))))))]))\n", "  (if (zero? n) (list 1)\n      (let ((tri-n-1 (tri (-\
+    \ n 1))))\n        (append tri-n-1 (if (even? n) (list (/ n 2))\n            \
+    \               (list (+ (last tri-n-1) (last (butlast tri-n-1)) (last (butlast\
+    \ (butlast tri-n-1))))))))))\n", "  (define tri-helper\n    (\u03BB (n pre-pre\
+    \ pre)\n      (if (= n 0)\n          (list pre-pre pre)\n          (if (even?\
+    \ n)\n              (cons (/ n 2) (tri-helper (- n 1) pre (+ pre-pre pre)))\n\
+    \              (cons (+ pre-pre pre) (tri-helper (- n 1) pre (+ pre-pre pre)))))))\n\
+    \  (cons 3 (tri-helper n 0 3)))\n", "  (cond ((= n 0) (list 1))\n        ((= n\
+    \ 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else (let ((odd? (even?\
+    \ n)))\n                (append (tri (- n 1))\n                        (list (+\
+    \ (nth (- n 2) (tri (- n 2)))\n                                 (nth (- n 1) (tri\
+    \ (- n 2)))\n                                 (if odd?\n                     \
+    \                (nth (+ n 1) (tri (+ n 1)))\n                               \
+    \      (+ (nth (- n 1) (tri (- n 1)))\n                                      \
+    \  (nth (+ n 1) (tri (+ n 1)))))))))))))\n", "  (for/list ([i (in-range (add1\
+    \ n))])\n    (trib i)))\n", "  (if (< n 1)\n      (list 1)\n      (list->list\
+    \ 1 \n                  (for/list ([i (in-range 1 (+ n 1))])\n               \
+    \     (cond [(even? i) (/ i 2)]\n                          [else (+ (tri (- i\
+    \ 1)) (tri (- i 2)) (tri (+ i 1)))])))))\n", "  (define (triHelp n)\n    (if (zero?\
+    \ n)\n        (list 1 3 2 8)\n        (if (even? n)\n            (cons (+ 1 (/\
+    \ n 2)) (triHelp (- n 1)))\n            (cons (+ (list-ref (triHelp (- n 1)) 0)\n\
+    \                      (list-ref (triHelp (- n 2)) 0)\n                      (list-ref\
+    \ (triHelp (+ n 1)) 0))\n                  (triHelp (- n 1))))))\n  (triHelp n))\n",
+  "  (define (tribonacci n)\n    (if (= n 1) \n        3\n        (if (even? n)\n\
+    \            (+ 1 (/ n 2))\n            (+ (tribonacci (- n 1)) (tribonacci (-\
+    \ n 2)) (tribonacci (+ n 1))))))\n  (let loop ((i n) (xs (list)))\n    (if (=\
+    \ i 0)\n        xs\n        (loop (- i 1) (cons (tribonacci i) xs)))))\n", " \
+    \ (cond ((= n 0) (list 1))\n        ((= n 1) (list 1 3))\n        ((= n 2) (list\
+    \ 1 3 2))\n        (else (tri-helper 1 3 2 n 3))))\n", "  (cond\n    [(zero? n)\
+    \ (list 3)]\n    [(even? n) (cons (round (/ n 2)) (tri (- n 1)))]\n    [else (append\
+    \ (tri (- n 1)) (tri (- n 2)) (tri (- n 1)))]))\n", "  (define (tri n i)\n   \
+    \ (if (>= i n)\n        empty\n        (cons (if (or (= i 0) (= i 1))\n      \
+    \            3\n                  (if (even? i)\n                      (+ 1 (/\
+    \ i 2))\n                      (+ (tri n (- i 1)) (tri n (- i 2)) (tri n (+ i\
+    \ 1)))))\n              (tri n (+ i 1)))))\n  (tri n 0))\n", "  (let ((s (list\
+    \ 3)))\n    (for ([i (in-range n)])\n      (let ((n (i + 1)))\n        (if (even?\
+    \ n)\n            (set! s (cons (+ 1 (/ n 2)) s))\n            (set! s (cons (+\
+    \ (list-ref s (- n 1)) (list-ref s (- n 2)) (list-ref s (+ n 1))) s)))))\n   \
+    \ (reverse s)))\n", "  (letrec ([triaux (lambda (i)\n                     (cond\
+    \ [(equal? i 1) (list 3)]\n                           [(equal? i 2) (list 3 2)]\n\
+    \                           [(even? i) (cons (+ 1 (/ i 2)) (triaux (- i 1)))]\n\
+    \                           [else (cons (+ (list-ref (triaux (- i 1)) 0)\n   \
+    \                                       (list-ref (triaux (- i 2)) 0)\n      \
+    \                                    (list-ref (triaux (+ i 1)) 0))\n        \
+    \                                (triaux (- i 1)))]))])\n    (triaux n)))\n",
+  "  (cond ((= n 0) 0)\n        ((= n 1) 3)\n        ((= n 2) 2)\n        ((even?\
+    \ n) (+ 1 (/ n 2)))\n        (else (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1))))))\n",
+  "  (cond [(= n 0) '()]\n        [(= n 1) '(1)]\n        [(= n 2) '(1 3)]\n     \
+    \   [else (cons 1\n                    (cons (+ (tri (- n 1)) (tri (- n 2)) (tri\
+    \ (- n 3)))\n                          (tri (- n 1))))]))\n", "  (define (tri-helper\
+    \ n first second third list)\n    (cond\n      [(zero? n) (list 1)]\n      [(equal?\
+    \ n 1) (list 1 3)]\n      [(equal? n 2) (list 1 3 2)]\n      [else (cond\n   \
+    \           [(even? n) (list-ref list (- n 1))]\n              [else (+ first\
+    \ second third)])]))\n  (define (even? x)\n    (= (remainder x 2) 0))\n  (define\
+    \ (odd? x)\n    (= (remainder x 2) 1))\n  (let loop ([n (- n 1)] [first 1] [second\
+    \ 3] [third 2] [list (list 3 2)])\n    (cond\n      [(zero? n) (append (list 1)\
+    \ list)]\n      [else (loop (- n 1) second third (tri-helper n first second third\
+    \ list) (append (list (tri-helper n first second third list)) list))])))", " \
+    \ (let ((a 3) (b 1) (c 1))\n    (build-list n (lambda (i)\n                  \
+    \  (cond ((even? i) (+ b (/ a 2)))\n                          ((odd? i) (+ a b\
+    \ c))\n                          (else a))))))\n", "  (define (rec n)\n    (cond\
+    \ [(zero? n) (list 1 3 2)]\n          [(even? n) (rec (- n 1))]\n          [else\
+    \ (append (rec (- n 1)) (list (+ (car (rec (- n 1))) (car (rec (- n 2))) (car\
+    \ (rec (+ n 1))))))]))\n  (map number->string (rec n)))\n", "  (if (= n 0)\n \
+    \     (list 0)\n      (if (= n 1)\n          (list 1 3)\n          (list 1 3 (list-ref\
+    \ (tri (- n 1)) 1)))))\n", "  (cond ((= n 0) '())\n        ((= n 1) '(1))\n  \
+    \      ((= n 2) '(1 3))\n        ((= n 3) '(1 3 2 8))\n        (else (append (tri\
+    \ (- n 1))\n                      (list (if (even? n)\n                      \
+    \          (+ 1 (/ n 2))\n                                (+ (list-ref (tri (-\
+    \ n 1)) (- n 1))\n                                   (list-ref (tri (- n 1)) (-\
+    \ n 2))\n                                   (list-ref (tri (- n 1)) (+ n 1)))))))))",
+  "  (define (iter n lst)\n    (cond\n      [(= n 0) (reverse lst)]\n      [(= n 1)\
+    \ (iter (- n 1) (append lst '(3)))]\n      [(= n 2) (iter (- n 1) (append lst\
+    \ '(1)))]\n      [(even? n) (iter (- n 1) (append lst (list (+ 1 (/ n 2)))))]\n\
+    \      [else (iter (- n 1) (append lst (list (+ (list-ref lst 0) (list-ref lst\
+    \ 1) (list-ref lst 2)))))]))\n  (iter n '()))\n", "  (cond [(= n 0) (list 1)]\n\
+    \        [(= n 1) (list 1 3)]\n        [(= n 2) (list 1 3 2)]\n        [else (cons\
+    \ 1 (map (lambda (n) (if (even? n) (/ n 2) (- n 1))) (range 3 (+ n 1))))]))\n",
+  "  (cond ((&lt;= n 1) (list 1 3))\n        ((= (modulo n 2) 0) (list 1 (+ n (/ n\
+    \ 2))))\n        (else (list 1 (+ (tri (- n 1)) (tri (- n 2)) (tri (+ n 1)))))))\n\
+    </code>\nIt's a bit hard to read, but I hope it's good enough to get the idea.\
+    \ I'm making my first steps in functional programming, so my solution may not\
+    \ be the best.\n", "  (if (= n 0) (list 1)\n      (if (= n 1) (list 1 3)\n   \
+    \       (if (= n 2) (list 1 3 2)\n              (if (= n 3) (list 1 3 2 8)\n \
+    \                 (if (= n 4) (list 1 3 2 8 21)\n                      (if (=\
+    \ n 5) (list 1 3 2 8 21 55)\n                          (if (= n 6) (list 1 3 2\
+    \ 8 21 55 144)\n                              (if (= n 7) (list 1 3 2 8 21 55\
+    \ 144 377)\n                                  (if (= n 8) (list 1 3 2 8 21 55\
+    \ 144 377 987)\n                                      (if (= n 9) (list 1 3 2\
+    \ 8 21 55 144 377 987 2584)\n                                          (if (=\
+    \ n 10) (list 1 3 2 8 21 55 144 377 987 2584 6765)\n                         \
+    \                     (if (= n 11) (list 1 3 2 8 21 55 144 377 987 2584 6765 17711)\n\
+    \                                                  (if (= n 12) (list 1 3 2 8\
+    \ 21 55 144 377 987 2584 6765 17711 46368)\n                                 \
+    \                     (if (= n 13) (list 1 3 2 8 21 55 144 377 987 2584 6765 17711\
+    \ 46368 121393)\n                                                          (if\
+    \ (= n 14) (list 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811)\n\
+    \                                                              (if (= n 15) (list\
+    \ 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811 832040)\n    \
+    \                                                              (if (= n 16) (list\
+    \ 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811 832040 2178309)\n\
+    \                                                                      (if (=\
+    \ n 17) (list 1 3 2 8 21 55 144 377 987 2584 6765 17711 46368 121393 317811 832040\
+    \ 2178309 5702887)\n                                                         \
+    \                 (if (= n 18) (list 1 3 2 8 21 55 144 377 987 2584 6765 17711\
+    \ 46368 121393 317811 832040 2178309 5702887)\n", "  (if (or (= n 0) (= n 1))\n\
+    \      (list 1)\n      (append\n       (tri (- n 1))\n       (list\n        (if\
+    \ (even? n)\n            (+ 1 (/ n 2))\n            (+ (list-ref (tri (- n 1))\
+    \ (- n 1))\n               (list-ref (tri (- n 1)) (- n 2))\n               (list-ref\
+    \ (tri (- n 1)) (+ n 1))))))))\n", "  (cond ((= n 0) (list 1))\n        ((= n\
+    \ 1) (list 1 3))\n        ((= n 2) (list 1 3 2))\n        (else (cons (car (tri\
+    \ (- n 1))) (tri (- n 1))))))\n", "  (cond [(= n 0) (list 3)]\n        [(= n 1)\
+    \ (list 3 1)]\n        [(= n 2) (list 3 1 2)]\n        [else\n         (define\
+    \ (get-n-th-tri n)\n           (cond [(= n 0) 3]\n                 [(= n 1) 1]\n\
+    \                 [(= n 2) 2]\n                 [else\n                  (let\
+    \ ([n-1 (get-n-th-tri (- n 1))]\n                        [n-2 (get-n-th-tri (-\
+    \ n 2))]\n                        [n-3 (get-n-th-tri (- n 3))])\n            \
+    \        (+ n-1 n-2 n-3))]))\n         (append (tri (- n 1)) (list (get-n-th-tri\
+    \ n)))]))\n", "  (define (tri-aux n acc)\n    (if (= n 0)\n        acc\n     \
+    \   (if (even? n)\n            (tri-aux (- n 1) (cons (quotient n 2) acc))\n \
+    \           (tri-aux (- n 1) (cons (+ (car acc) (car (cdr acc)) (car (cdr (cdr\
+    \ acc)))) acc)))))\n  (tri-aux (+ n 1) (list 3)))\n", "  (define (tri-aux n result)\n\
+    \    (cond ((= n 1) (cons 3 result))\n          ((= n 2) (cons 2 (cons 3 result)))\n\
+    \          ((= n 3) (cons 1 (cons 2 (cons 3 result))))\n          ((even? n) (tri-aux\
+    \ (- n 1) (cons (+ 1 (/ n 2)) result)))\n          (else (tri-aux (- n 1) (cons\
+    \ (+ (list-ref result 2) (list-ref result 1) (list-ref result 0)) result)))))\n\
+    \  (reverse (tri-aux (+ n 1) '())))", "  (if (zero? n)\n      '()\n      (if (odd?\
+    \ n)\n          (cons (tri (- n 1)) (tri (- n 2)) (tri (- n 1)))\n          (cons\
+    \ (/ n 2)))))\n", "  (let loop ((counter 1) (acc (list 3)))\n    (if (= counter\
+    \ (+ n 1))\n        acc\n        (loop (+ counter 1) (append acc (list (if (even?\
+    \ counter)\n                                                 (+ 1 (/ counter 2))\n\
+    \                                                 (+ (nth (- counter 1) acc)\n\
+    \                                                    (nth (- counter 2) acc)\n\
+    \                                                    (nth (+ counter 1) acc)))))))))",
+  "  (let loop ((i 1) (xs (list 3)))\n    (if (= i (+ n 1)) xs\n        (let ([x (if\
+    \ (even? i)\n                     (+ 1 (/ i 2))\n                     (+ (car\
+    \ xs) (second xs) (car (cddr xs))))])\n          (loop (+ i 1) (append xs (list\
+    \ x)))))))"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

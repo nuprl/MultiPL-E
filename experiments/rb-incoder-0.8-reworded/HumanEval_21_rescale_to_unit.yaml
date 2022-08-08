@@ -11,7 +11,855 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 0.0, 1.0, 0.5, 0.75], candidate.call([2.0, 1.0, 5.0, 3.0, 4.0]))\n    assert_equal([0.25,\
   \ 0.0, 1.0, 0.5, 0.75], candidate.call([12.0, 11.0, 15.0, 13.0, 14.0]))\n  end\n\
   end\n"
-completions: []
+completions: ["  numbers.each do |number|\n    if number > 1.0\n      number = (number\
+    \ - 1.0) * 2.0\n    end\n    if number < 0.0\n      number = (number - 1.0) *\
+    \ 2.0\n    end\n  end\n  return numbers\nend", "  numbers.map { |x| x / smallest_in_range\
+    \ }\nend", "  numbers.map! { |n| n * (1 - DEFAULT_MIN) / (1 - DEFAULT_MAX) }\n\
+    end\n</code>\nThe default value will be 1.0 for numbers that are not present,\
+    \ and DEFAULT_MIN and DEFAULT_MAX are constants defined in that same file.\n<|/\
+    \ a tags=ruby |>\n<| c |>\nAh, the only issue with that solution is that you're\
+    \ making the assumption that there is exactly one number in each range (which\
+    \ may not be the case). Of course, you can easily change that assumption. Also,\
+    \ in Ruby 2.4 you should be able to write `numbers.each_with_index.map { |n,i|\
+    \ n * DEFAULT_MIN / (1 - DEFAULT_MAX) }.each_cons(2).map { |n,(a,b)| a+b }`, but\
+    \ that is less readable.\n<|/ c |>\n<| c |>\nIt seems to me that that assumption\
+    \ can be changed, e.g. `numbers.each_with_index.map { |n,i| n * DEFAULT_MIN /\
+    \ (1-(DEFAULT_MAX-DEFAULT_MIN).abs) }`.\n<|/ c |>\n<| a dscore=4 |>\nHere is a\
+    \ simple and concise solution that is also thread-safe, uses only an enumerator\
+    \ (no #each):\n<code>", "  rescaled = numbers.map { |number|\n    number = number.round\n\
+    \    number = (number / number).floor * 1.0\n    number\n  }\n  rescaled.min\n\
+    end", "  numbers.min!\n  numbers.max!", "  numbers.min\nend", "  min = numbers.min\n\
+    \  max = numbers.max\n  [min, max] = [min, max].map { |x| x/numbers.size }\n \
+    \ numbers.map { |x| x - min }*max + min\nend", "  return numbers.map { |n| n /\
+    \ units.size }\nend", "  numbers = numbers.map{ |x| x / numbers.min }\n  numbers[numbers.min\
+    \ < 0.0] = 0.0 \n  numbers[numbers.max > 1.0] = 1.0\n  numbers\nend\n</code>\n\
+    <|/ a |>\n<| a |>\n<code>", "  return [numbers[0] - (numbers[1] - numbers[0])\
+    \ / 2, numbers[1] + (numbers[1] - numbers[0]) / 2]\nend", "  numbers.map { |n|\
+    \ n / units.max_abs }\nend", "  mins = numbers.map {|n| n}\n  maxs = numbers.map\
+    \ {|n| 1}\n  mins.max_by {|n| n} if mins.any?\n  maxs.min_by {|n| n} if maxs.any?\n\
+    \  (mins + [maxs.last]) * (1.0 - mins.min) / (maxs.max - mins.min)\nend", "  numbers.map\
+    \ { |n| n / numbers.max }\nend\n</code>\n<|/ a tags=ruby,arrays |>\n<| c |>\n\
+    thanks for your effort but I want to keep the array size as it is so that I don't\
+    \ need to worry about a case where there are no values greater than 1 in array\n\
+    <|/ c |>\n<| a tags=ruby,arrays |>\nHere's a little more generic solution.\n<code>",
+  "  first_num = numbers.first\n  last_num = numbers.last\n  return numbers.map {\
+    \ |num| num / first_num }.reverse if last_num == first_num\n  raise \"The largest\
+    \ number must be greater than the smallest number\" unless last_num > first_num\n\
+    \  numbers.map { |num| num / first_num }\nend", "  numbers.map { |number|\n  \
+    \  number / numbers.reduce(:+)\n  }\nend", "  numbers.each { |number| return number\
+    \ / numbers.max }\nend", "    numbers.each do |number|\n        number = (number\
+    \ - minimum(numbers)) / (maximum(numbers) - minimum(numbers))\n        number\n\
+    \    end\nend", "  scale = 1\n  numbers.each_with_index do |number, i|\n    if\
+    \ number > numbers[i+1]\n      scale /= (i+1)\n      numbers.delete(i+1)\n   \
+    \ end\n  end\n  numbers.delete(0) # ignore 0\n  numbers.each_with_index do |number,\
+    \ i|\n    numbers[i] += scale * number\n  end\n  return numbers\nend", "  min_value\
+    \ = numbers.min\n  max_value = numbers.max\n  if min_value == 0.0 && max_value\
+    \ == 0.0\n    return numbers\n  end\n  return numbers - (max_value - min_value)\
+    \ / (max_value + 1e-10)\nend", "  numbers = numbers.map(&:to_f)\n  max_number\
+    \ = numbers.max\n  if max_number == 0.0\n    numbers *= 100\n  else\n    numbers\
+    \ = (numbers - numbers.min) / (numbers.max - numbers.min)\n  end\n  numbers.map(&:round)\n\
+    end", "  numbers.map { |n| n / numbers.max + 0.5 }\nend\n</code>\n<|/ a dscore=0\
+    \ tags=ruby-on-rails |>\n<| a dscore=0 |>\nIn Rails 5, there is ActiveSupport::ArrayInflector:\n\
+    <code>\n>> ActiveSupport::ArrayInflector.singularize('posts')\n=> \"post\"\n</code>\n\
+    <|/ a tags=ruby-on-rails |>\n<| a dscore=0 tags=ruby-on-rails |>\nIn Rails 6 we\
+    \ can use humanize\n<code>\nActiveSupport::Inflector.inflections(:en) do |inflect|\n\
+    \  inflect.uncountable %w(\n    address\n    addressable\n    addressable_form\n\
+    \    email\n    newsletter\n    newsletters\n    post\n    posts\n    comment\n\
+    \    comments\n    category\n    categories\n  )\nend\n</code>\nIn English language\
+    \ it adds s after the words. But for Chinese, the Chinese language language it\
+    \ doesn't.\n<|/ a |>\n<| a tags=ruby-on-rails |>\nIn Rails 6.1, you can simply\
+    \ do this\n<code>\nActiveSupport::Inflector.inflections(:en) do |inflect|\n  inflect.irregular\
+    \ 'post', 'posts'\nend\n</code>\n<|/ a dscore=0 |>\n<| a tags=ruby-on-rails dscore=0\
+    \ |>\nFor some reason, I wasn't seeing this in the other answers. \n<code>\nActiveSupport::Inflector.inflections(:en)\
+    \ do |inflect|\n  inflect.irregular 'post', 'posts'\nend\n</code>\n<|/ a |>\n\
+    <| a dscore=0 |>\nFor Rails 6, the code should be:\n<code>", "  numbers = [number]\
+    \ unless numbers.is_a?(Array) || numbers.size == 1\n  smallest, largest = numbers.minmax\n\
+    \  smallest_value = smallest\n  largest = largest || 1.0\n  largest = largest\
+    \ - smallest\n  largest = 1.0 / largest\n  numbers.map! do |x|\n    x = x * largest\n\
+    \    smallest_value = smallest_value + (x - smallest_value) * largest\n    x\n\
+    \  end\nend\n</code>\n<|/ a tags=math,ruby,arrays dscore=4 |>\n<| a |>\nHere's\
+    \ an implementation of Rob's idea, using Enumerable#map:\n<code>", "  numbers.collect!\
+    \ do |n|\n    if n < 0\n      -n / n\n    else\n      n / n\n    end\n  end\n\
+    end", "  numbers.reduce(:+) / numbers.size\nend", "    numbers.each { |n| n /=\
+    \ maximum_of_unit(n) }\n    numbers\nend", "  min_index = 0\n  max_index = numbers.length-1\n\
+    \  while min_index <= max_index\n    diff = numbers[min_index] - numbers[max_index]\n\
+    \    if diff < 0\n      min_index += 1\n    el = numbers[min_index]\n    numbers[min_index]\
+    \ /= diff\n    numbers[max_index] -= el*diff\n  end\n  numbers\nend", "  numbers.inject(0)\
+    \ do |sum, number|\n    if number < 0\n      sum -= number\n    else\n      sum\
+    \ += number\n    end\n    sum\n  end\nend", "  maximum = numbers.max\n  minimum\
+    \ = numbers.min\n  maximum -= minimum\n  numbers -= minimum\n  numbers /= maximum\n\
+    \  return numbers\nend", "  numbers = numbers.map { |n| n if n > 0.0 }\n  min_number\
+    \ = numbers.min\n  max_number = numbers.max\n  unit = (min_number == 0.0) ? 1.0\
+    \ : (max_number == 0.0) ? 0.0 : 1.0\n  (numbers * unit).round(1)\nend\n</code>\n\
+    <|/ a dscore=4 |>\n<| a |>\n<code>", "  if numbers.empty?\n    numbers\n  else\n\
+    \    rescale = 1.0\n    numbers.each_with_index do |n, i|\n      rescale /= float(n)\n\
+    \      numbers[i] = rescale * n\n    end\n    numbers\n  end\nend", "  numbers.map\
+    \ { |x| x % 1.0 }\nend", "  minimum = numbers.min\n  maximum = numbers.max", " \
+    \ minimum = numbers.min\n  maximum = numbers.max\n  difference = maximum - minimum\n\
+    \  rescaled_numbers = []", "  numbers = numbers.map { |n| min(n, 1) }\n  numbers.map\
+    \ { |n| n * 1.0 }\nend\n</code>\n<|/ a tags=ruby,ruby-on-rails,ruby-on-rails-3,ruby-on-rails-3.2,ruby-on-rails-3.1\
+    \ dscore=2 |>\n<| c |>\nThanks for the answer. I'm currently using `NumberHelper#rescale_to_unit(numbers)`\
+    \ but I'm wondering if there is a more elegant way like an extension or a gem\
+    \ that would do the job. I'm doing this because I'm running a complex process\
+    \ and I need a consistent view of the data. As an example, if I have `numbers\
+    \ = [3.0, 4.0, 5.0]` and I want to scale it to `[0.0, 0.25, 0.5, 0.75, 1.0]`,\
+    \ the output would be `[0.0, 0.25, 0.5, 0.75, 1.0]`.\n<|/ c |>\n<| c |>\nNo. I\
+    \ am not aware of a gem which does this. But a gem might be overkill for just\
+    \ one method. Why don't you create a helper, which is part of your rails project?\
+    \ Or even a module, which you can then include in your controllers. If you do\
+    \ this, then it would be an _extension_, which can be easily reused elsewhere.\
+    \ Your current method would most likely only be used by this specific controller,\
+    \ so I assume your current method is just fine.\n<|/ c |>\n<| c |>\nThe thing\
+    \ is that I want this to be reusable in another controller. Having it in separate\
+    \ helper methods seems logical to me. But I guess I'll go with that for now.\n\
+    <|/ c |>\n<| c |>\nWell a gem is usually reusable in other controllers as well.\
+    \ But I guess you have found your solution ;)\n<|/ c |>\n<| c |>\nYeah, I thought\
+    \ about that. I think I'll go with your solution for now and let it be. Thanks\
+    \ again for the help.\n<|/ c |>\n<| a dscore=0 |>\nThis might not answer the question\
+    \ (it is not a solution though), but I had a similar issue and came up with this\
+    \ solution. Just in case someone needs it.\n<code>", "  return numbers.map { |n|\
+    \ min(1, n) }\nend\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThank you for your answer!\
+    \ I like the use of `min`, but I think the answer could be improved slightly if\
+    \ you change the `min` usage to `min 1, n`. I think this change would make the\
+    \ code clearer.\n<|/ c |>\n<| c |>\nThank you for pointing out my error.  I made\
+    \ the correction.\n<|/ c |>\n<| a |>\nIn Haskell I would do something like this\
+    \ - note that if you don't need to support negative numbers, you can skip the\
+    \ check for a negative number. \n<code>\nimport Data.List", "  return numbers.map\
+    \ { |n| n / scale_up_to_unit_max }\nend", "  numbers.sort!\n  first_number = numbers[0]\n\
+    \  last_number = numbers[-1]\n  new_array = [0.0] * (last_number - first_number\
+    \ + 1) + [1.0] * (first_number - last_number)\n  return new_array\nend", "  return\
+    \ numbers.map { |n| n/MAX_NUMBER }\nend", "  return numbers.map { |number| number\
+    \ / scale_to_unit(number) }\nend\n</code>\nIt works, except for one case:\n<code>",
+  "  smallest_number = numbers[0]\n  largest = numbers[-1]\n  smallest_number_width\
+    \ = smallest_number.bit_length\n  largest = largest - smallest_number\n  largest\
+    \ = largest >> 1\n  smallest_number_width = smallest_number_width >> 1\n  largest\
+    \ = (largest / smallest_number) << 1\n  smallest_number_width = smallest_number_width\
+    \ >> 1\n  smallest_number = (smallest_number / smallest_number_width) << 1\n \
+    \ smallest_number_width = smallest_number_width >> 1\n  numbers[0] = (largest\
+    \ - smallest_number) / largest\n  numbers[-1] = numbers[-1] / smallest_number\n\
+    \  return numbers\nend", "  array_of_numbers = numbers.map { |n| n / MAX_NUMBER\
+    \ }\n  array_of_numbers.max\nend", "  array = []\n  n = numbers.length\n  min\
+    \ = numbers.min\n  max = numbers.max\n  i = 1\n  while i <= n\n    array[i] =\
+    \ ((numbers[i] - min) / (max - min)) * 1.0\n    i += 1\n  end\n  array\nend",
+  "  min_number = numbers[0]\n  max_number = numbers[0]\n  min_nonzero = numbers[1]\n\
+    \  max_nonzero = numbers[1]\n  numbers.each do |number|\n    next if number ==\
+    \ 0\n    min_nonzero = number if number < min_nonzero\n    max_nonzero = number\
+    \ if number > max_nonzero\n    min_number = number if number > min_number\n  \
+    \  max_number = number if number < max_number\n  end\n  min_number / (max_number\
+    \ - min_number)\nend\n</cell>\n<code language=conda-env-ml4t-py>", "  numbers\
+    \ = numbers.flatten.map {|x| x/@unit_magnitude}\n  return numbers - numbers[-2]\n\
+    end", "  min = numbers.min\n  max = numbers.max\n  diff = max - min\n  min = 0\n\
+    \  max = 1.0", "  max = numbers.min\n  min = numbers.max", "  smallest_number\
+    \ = numbers[0]\n  max_number = numbers[-1]\n  smallest_number.is_a?(Numeric) ?\
+    \ smallest_number.to_f : smallest_number\n  max_number.is_a?(Numeric) ? max_number.to_f\
+    \ : max_number\n  rescaled_numbers = numbers.map { |number| number - (smallest_number\
+    \ * max_number).to_f / number.to_f}\n  rescaled_numbers.min_by { |number| number}\n\
+    end", "  return numbers.minmax.map(&:to_f) / numbers.max\nend\n</code>\n<|/ a\
+    \ dscore=2 |>\n<| a dscore=2 |>\n<code>", "  numbers.each_with_index do |number,\
+    \ index|\n    if index == 0\n      number = number\n    else\n      number /=\
+    \ numbers[index - 1]\n    end\n    numbers[index]  = number\n  end\nend", "  #\
+    \ Find smallest & largest values\n  smallest_number = numbers.min\n  largest_number\
+    \ = numbers.max\n  # Find difference in sizes (assuming integers)\n  smallest_size\
+    \ = smallest_number.to_i\n  largest_size = largest_number.to_i\n  # Compute the\
+    \ new values\n  new_numbers = []\n  for i in numbers\n    # Scale by smallest\
+    \ number or original number\n    if smallest_number <= i then\n      new_numbers.push(smallest_number)\n\
+    \    # Scale by largest number or original number\n    else if largest_number\
+    \ >= i then\n      new_numbers.push(largest_number)\n    # Scale by the difference\
+    \ between the largest & smallest or original number\n    else\n      new_numbers.push(i\
+    \ - smallest_size * largest_number / smallest_number)\n    end\n  end\n  return\
+    \ new_numbers\nend", "  min_number = numbers.min\n  max_number = numbers.max\n\
+    \  return numbers / max_number if max_number > 0 else min_number / max_number\n\
+    end", "  return numbers\nend", "    numbers.map! { |number| number / min }\nend\n\
+    </code>\n<|/ a tags=ruby-on-rails,ruby |>\n<| c |>\nThank you for this answer,\
+    \ it worked perfectly for me. Also thank you for the suggestion on how to improve\
+    \ the code\n<|/ c |>\n<| c |>\nNo problem, glad I could help.\n<|/ c |>\n<| a\
+    \ tags=ruby-on-rails,ruby dscore=3 |>\nThis is not an answer to your specific\
+    \ question, but a more general answer to your question of how you can convert\
+    \ a range of numbers into percentages.\nThe example below converts a given range\
+    \ into percentages, by dividing each number by the number of members of the array.\
+    \ So, for example, the range 0-10 gets divided by 10 to get percentages of 0-1,\
+    \ 1-2, 2-3, 3-4, 4-5, 5-10, and 10-10. In the example below, the resulting numbers\
+    \ are rounded to the closest percentage value. The method takes arguments of (min,\
+    \ max), and returns the percentage range as a two-element array [low, high].\n\
+    <code>", "  min, max = numbers.min, numbers.max\n  min, max = 0.0, 1.0 if min\
+    \ == max else (min + max) / 2.0\n  min = 0.0 if min < 0 else min\n  max = 1.0\
+    \ if max < 0 else max\n  (numbers - min).zero? ? 0.0 : (numbers - min) / (max\
+    \ - min)\nend", "  if numbers.nil?\n    nil\n  else\n    numbers.map do |number|\n\
+    \      (number / numbers).round\n    end\n  end\nend", "  min = 0.0\n  max = 1.0",
+  "  min = numbers.min\n  max = numbers.max\n  scale = ((max - min) / 2.0).to_f\n\
+    \  numbers.map { |x| x * scale }\nend", "  return numbers.map {|n| n / units.max}\n\
+    end\n</code>\n<|/ a tags=ruby,algorithm,math,arrays dscore=4 |>\n<| a dscore=4\
+    \ tags=ruby,algorithm,math,arrays |>\nIf you're using Rails, this works:\n<code>\n\
+    array = %w(1 2 3 4 5)", "  minimum = numbers.min\n  maximum = numbers.max\n  length\
+    \ = numbers.size", "  max_value = numbers.max\n  min_value = numbers.min\n  max_value_plus_one\
+    \ = max_value + 1\n  min_value_minus_one = min_value - 1\n  numbers.each_with_index\
+    \ { |n, i|\n    if n < min_value * (min_value_minus_one / max_value_plus_one)\n\
+    \      n = (max_value / min_value_minus_one) * (n - min_value) + min_value\n \
+    \   end\n    numbers[i] = n\n  }\n  numbers\nend\n</code>\n<|/ a tags=algorithm,ruby\
+    \ dscore=3 |>\n<| a tags=algorithm,ruby |>\nThis should do it: \n<code>\n def\
+    \ rescale(numbers)\n     numbers = (numbers - numbers.min).to_f / (numbers.max\
+    \ - numbers.min)\n     numbers.map { |num| num + numbers.min }\n end\n</code>\n\
+    <|/ a dscore=3 |>\n<| a dscore=2 |>\n<code>", "  # Find the minimum and maximum\
+    \ values\n  minimum = numbers.reduce(:min)\n  maximum = numbers.reduce(:max)",
+  "  min_value = numbers.min\n  max_value = numbers.max\n  difference = max_value\
+    \ - min_value\n  scaled_numbers = []\n  scale_factor = 1.0/difference\n  for i\
+    \ in numbers\n    scaled_numbers << i*scale_factor\n  end\n  scaled_numbers\n\
+    end\n</code>\n<|/ a |>\n<| a dscore=2 tags=ruby |>\nIn your particular case, you\
+    \ can also use map!:\n<code>", "  numbers.reduce(:+) / numbers.size\nend\n</code>\n\
+    Note that you can define your own transform functions (and transform the arrays\
+    \ in one call).\n<|/ a dscore=1 |>\n<| a tags=ruby dscore=0 |>\nI believe you\
+    \ are looking for the map method:\n<code>\n[1,2,3,4,5].map { |n| n/2 }\n</code>\n\
+    <|/ a |>\n<| a |>\nUsing Enumerable#inject:\n<code>\n[1,2,3,4,5].inject {|sum,\
+    \ e| sum/2 }\n</code>\n<|/ a tags=ruby dscore=0 |>\n<| c |>\nIt doesn't work as\
+    \ OP requested.\n<|/ c |>\n<| c |>\n: It does work. I think it is the same as\
+    \ the other answers, which is why I posted it here. I see no problem with it.\n\
+    <|/ c |>\n<| c |>\nIt *does* work when the OP requests it. It doesn't work when\
+    \ OP wants the smallest number to be 0 and the largest to be 1. But it does work\
+    \ when OP requests it. I think your answer works. But I must say, I'm not so sure\
+    \ that it's actually what the OP wants.\n<|/ c |>\n<| c |>\n: You are correct.\
+    \ I was being sloppy. :-)\n<|/ c |>\n<| a tags=ruby |>\n<code>\n[1,2,3,4,5].map\
+    \ {|n| n/2 }\n</code>\n<|/ a dscore=0 |>\n<| c |>\nIt doesn't work as OP requested.\n\
+    <|/ c |>\n<| c |>\nit does work. Try it yourself.\n<|/ c |>\n<| c |>\n, what exactly\
+    \ doesn't work? It does not divide the array evenly to begin with. That's why\
+    \ I said OP doesn't really want it, I think. Not sure though. I am just trying\
+    \ to answer his question. :)\n<|/ c |>\n<| c |>\nIt doesn't work as OP requested.\
+    \ That is why I said I wasn't sure about it. That said, I have now deleted my\
+    \ previous comment, because now I think I understand the difference between OP's\
+    \ request and what he really wants.\n<|/ c |>\n<| c |>\n: I guess I am not understanding\
+    \ the difference between OP's request and what he really wants. I must be missing\
+    \ something.\n<|/ c |>\n<| a |>\n<code>", "  min = numbers.min\n  max = numbers.max\n\
+    \  new_numbers = Array.new(numbers.size) do |i|\n    range = max - min\n    if\
+    \ numbers[i] > max\n      numbers[i] = (numbers[i] - min) / range * 2.0\n    end\n\
+    \    if numbers[i] < min\n      numbers[i] = (numbers[i] - max) / range * 2.0\n\
+    \    end\n    numbers[i]\n  end\nend\n</code>\n<|/ a tags=ruby,algorithm |>\n\
+    <| c |>\nIt's a great solution. Maybe this would be better if you replaced `numbers`\
+    \ and `min` with `array.to_a` and `range.min`.\n<|/ c |>\n<| c |>\nThanks for\
+    \ the comments. Yes, I agree that `min` should be replaced with `range.min`.\n\
+    <|/ c |>\n<| a |>\nThis problem can be reduced to finding the greatest common\
+    \ divisor of n1 and n2. Here's an approach using a simple recursion method\n<code>",
+  "  numbers.each do |number|\n    number = (number - numbers.min) / numbers.max\n\
+    \  end\nend", "  numbers.min!\n  numbers.max!\n  numbers -= numbers.min\n  numbers\
+    \ /= numbers.max\nend", "  numbers.sort\n  first_number = numbers.first\n  last_number\
+    \ = numbers.last\n  if first_number == 0 then return [] end\n  while first_number\
+    \ == last_number do\n    numbers[first_number] = first_number * 1.0\n    first_number\
+    \ -= 1\n    last_number += 1\n  end\n  res = []\n  first_number = numbers.first\n\
+    \  last_number = numbers.last\n  while first_number < last_number do\n    tmp\
+    \ = numbers[first_number]\n    numbers[first_number] = numbers[last_number]\n\
+    \    numbers[last_number] = tmp\n    res.push(numbers[first_number])\n    first_number\
+    \ += 1\n    last_number -= 1\n  end\n  res\nend", "  max = numbers.reduce(:+)\
+    \ || 1\n  min = numbers.reduce(:- || 1) == 0? min : -1", "  return (0.0 if numbers.empty?\
+    \ || numbers.size == 1 else\n          (numbers[numbers.size - 1] / numbers[numbers.size\
+    \ - 2])) # reverse and divide by last element\nend\n</cell>\n<text>\nThe method\
+    \ calls rescale_to_unit on every element of numbers, returning a new array containing\
+    \ the result of the calls.", "    numbers.min\n    numbers.max\n    numbers.each_index\
+    \ do |i|\n        numbers[i] = ((numbers[i]-numbers.min)/(numbers.max-numbers.min)).to_f\n\
+    \    end\n    numbers\nend", "  if numbers.size < 2\n    raise ArgumentError,\
+    \ 'Array must have at least two elements.'\n  end", "  minimum = numbers.min\n\
+    \  maximum = numbers.max\n  if minimum == maximum\n    minimum = 0\n    maximum\
+    \ = 1\n  end\n  midpoint = (maximum + minimum) / 2\n  rescaled_numbers = numbers.map\
+    \ do |number|\n    number - midpoint\n  end\n  rescaled_numbers.map { |n| n /\
+    \ minimum + 0.5 }\nend", "  smallest, largest = numbers.minmax\n  new_numbers\
+    \ = []\n  new_numbers.concat(numbers).sort { |a, b| b <=> a }\n  smallest_one\
+    \ = (new_numbers[0] + new_numbers[1]) / 2\n  new_numbers.each_with_index do |n,\
+    \ i|\n    difference = n - smallest_one\n    difference = smallest_one - difference\
+    \ if i == 0\n    new_numbers[i] = new_numbers[i] - difference if i % 2 == 0\n\
+    \    new_numbers[i + 1] = new_numbers[i + 1] + difference if i % 2 == 1\n  end\n\
+    \  new_numbers[0] += smallest if new_numbers[0] < smallest\n  new_numbers[-1]\
+    \ += largest if new_numbers[-1] > largest\n  new_numbers\nend", "  min, max =\
+    \ numbers.minmax\n  new_numbers = []\n  new_numbers.push((numbers[0] - min)/(max\
+    \ - min))\n  new_numbers.push((numbers[-1] - min)/(max - min))\n  new_numbers\n\
+    end", "  numbers.inject(0.0) do |sum, element|\n    sum += element / numbers.max()\n\
+    \  end\nend\n</code>\n<|/ a tags=ruby-on-rails,ruby |>\n<| c |>\nthanks for this\
+    \ - I like this. It would probably work, but i ended up using my own answer, and\
+    \ it's working very well.\n<|/ c |>\n<| a tags=ruby-on-rails,ruby |>\n<code>",
+  "  numbers.each_with_index { |n, i| numbers[i] = n - min_value(n) / (max_value(n)\
+    \ - min_value(n)) }\nend", "    numbers.map {|n| n / units.reduce(:+) }\nend",
+  "  return numbers.minmax[1..-1]\nend", "  numbers = numbers.map { |x| x * 100.0\
+    \ }\n  minimum = numbers.min\n  maximum = numbers.max\n  numbers.map { |x| x /\
+    \ minimum / maximum * 1.0 }\nend", "  numbers.map! { |x| x / units.sum }\nend",
+  "  rescaled_numbers = []\n  last_number = nil\n  numbers.each do |number|\n    if\
+    \ last_number.nil? || number <= last_number || number >= last_number * 2\n   \
+    \   rescaled_numbers.push(number)\n    elsif number >= last_number * 2\n     \
+    \ rescaled_numbers.push(number / 2)\n    else\n      rescaled_numbers.push(number\
+    \ / 2)\n    end\n    last_number = number\n  end\n  rescaled_numbers.reverse\n\
+    end", "  min= numbers.min\n  max= numbers.max\n  if min == max\n    range= 1.0\n\
+    \  else\n    range= (max-min)/2.0\n  end\n  numbers= numbers.map{|x| x/range}\n\
+    end", "    numbers.min.zero?\n    numbers.max.zero?\n    numbers.min == numbers.max\n\
+    \    numbers.each {|number| number.rescale_to_unit}\nend\n</code>\n<|/ a dscore=5\
+    \ |>\n<| c |>\nI like this answer and upvoted it, but can someone explain what's\
+    \ happening inside the method?  Specifically what is the function of the `min`\
+    \ and `max` methods, and how they fit with the `each_with_object` loop?  Thanks\n\
+    <|/ c |>\n<| a |>\nOne liner:\n<code>\n[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0].map(&:to_f).min\
+    \ #=> 0.0\n</code>\nThis converts the numbers into float and then find the minimum\
+    \ value of all the numbers. This is also the fastest method in terms of time complexity\
+    \ as compared to the other methods. \nThe method above is called splat operator\
+    \ & which returns the array. \nThe method .to_f is called on the number before\
+    \ it is applied on it. The return value from to_f is then applied on number in\
+    \ the splat operator.\n<|/ a dscore=5 tags=ruby,arrays |>\n<| c |>\nThat method\
+    \ `&:to_f` works only on Ruby 1.8.7 and above.\n<|/ c |>\n<| c |>\nThis works\
+    \ perfectly for me on Ruby 2.2.2.  Thanks!\n<|/ c |>\n<| a dscore=5 tags=ruby,arrays\
+    \ |>\nTry this:\n<code>\n[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0].min\n</code>\n<|/\
+    \ a |>\n<| c |>\nThis is one of the fastest methods in terms of time complexity.\
+    \ Other methods are like O(n^2) for large values of n.\n<|/ c |>\n<| c |>\nI agree\
+    \ with. `min` is O(n), but it is also the simplest and the fastest in terms of\
+    \ time complexity because Ruby has to iterate over each item in the array and\
+    \ compare it with the current minimum. On the other hand, `min` will stop iterating\
+    \ as soon as it finds a number which is not minimum, while iterating through the\
+    \ array is O(n), so `min` is slower than `each_with_object` by a lot.\n<|/ c |>\n\
+    <| c |>\nThis answer is correct and should be accepted as it works for `Float`,\
+    \ but is not correct in general. `min` on array of strings returns `\"1.0\"`,\
+    \ instead of `1.0`.\n<|/ c |>\n<| a dscore=5 |>\nRuby on Rails Arrays have a min!\
+    \ method that modifies the ", "  numbers.map { |n| n / numbers.min }\nend\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nThis looks great! I like it a lot, but I still have\
+    \ a question about it because I'm fairly new to Ruby. Why is it necessary to specify\
+    \ the min value when using the `divide_by method`? Also, I know that I'm supposed\
+    \ to use Ruby 1.8 to make this work. Is there any way of rewriting this for 1.8\
+    \ without using `#map`?\n<|/ c |>\n<| c |>\n- When you divide by `min`, you get\
+    \ a number that is equal to the minimum value from the array divided by the smallest\
+    \ possible value (i.e. the value that would be obtained by taking the minimum\
+    \ number in the array and dividing by that).  So in this case, dividing by `min`\
+    \ is equivalent to dividing by `1`.  You don't need `#map` for this at all, and\
+    \ it would be better if you could, since `#map` is relatively expensive.  If you\
+    \ want to do this in Ruby 1.8, I added a couple lines to my answer.\n<|/ c |>\n\
+    <| c |>\nOkay, I understand now. I appreciate the help. :)\n<|/ c |>\n<| c |>\n\
+    - I added a couple of comments to my answer.  I also added a couple lines to the\
+    \ first code sample to show how you can do this in 1.8.\n<|/ c |>\n<| a tags=ruby,arrays,algorithm\
+    \ |>\nHere is a one-liner that uses inject:\n<code>", "  return numbers.map {\
+    \ |number| number / min_value(numbers) }\nend\n</code>\n<|/ a dscore=2 |>\n<|\
+    \ a tags=ruby,ruby-on-rails,math |>\nThis is an older question and an old answer,\
+    \ but I like these answers because it provides some explanation of what to do\
+    \ in different scenarios and doesn't require a module or class definition (i.e.\
+    \ a method of Array).\nIn order to get a percentage of each number between min\
+    \ and max you can simply do:\n<code>\n(number - min) / (max - min)\n</code>\n\
+    However, when max is 0 you'll get an exception because a divide by zero exception\
+    \ occurs. To prevent that we can do this:\n<code>\n(number - min) / (max - min).nonzero?\
+    \ ? 1 : 0\n</code>\nNow that gives us some percentages that may be negative. To\
+    \ fix that we can take the absolute value of each percent and add 1:\n<code>\n\
+    (number - min) / (max - min).nonzero? ? (number - min).abs.round() / max.abs.round()\
+    \ + 1 : 0\n</code>\nNow if you wanted a percentage of the total range, you can\
+    \ do this:\n<code>\n(number - min) / (max - min).nonzero? ? ((number - min).abs.round()\
+    \ * 100 / max.abs.round()).ceil : 0\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1\
+    \ |>\n<code>", "  numbers = [number] unless numbers\n  numbers = numbers.map {\
+    \ |n| n / units.max }\n  numbers.inject { |sum, number| sum + number }\nend",
+  "  scales = numbers.inject({}, :[]) do |sum, number|\n    sum[number] ||= 1\n  \
+    \  sum[number] += 1\n  end\n  numbers.map { |n| n / scales[numbers.index(n)]}.sort\n\
+    end", "  max_val = numbers.max\n  min_val = numbers.min\n  if max_val == min_val\n\
+    \    numbers[numbers.indexof(max_val)] = 0\n    numbers[numbers.indexof(min_val)]\
+    \ = 1\n  else\n    numbers[numbers.indexof(max_val)] = numbers.max/max_val\n \
+    \   numbers[numbers.indexof(min_val)] = numbers.min/min_val\n  end\n  return numbers\n\
+    end", "  min_element = numbers.min\n  max_element = numbers.max\n  scaled_numbers\
+    \ = numbers.map { |num| (num - min_element) / (max_element - min_element) }\n\
+    \  scaled_numbers.min? ? scaled_numbers : scaled_numbers.min\nend\n</code>\n<|/\
+    \ a dscore=3 |>\n<| c |>\nThe question already has a working answer that isn't\
+    \ dependent on any gems.\n<|/ c |>\n<| c |>\nIt does. It doesn't require any gem\
+    \ to work. The only thing it does is scale the numbers to fit within the range\
+    \ [0, 1]. Think about it... the numbers are already within the range [0, 1]. Your\
+    \ answer is essentially a direct copy of that solution, but with less code.\n\
+    <|/ c |>\n<| a tags=ruby,algorithm dscore=3 |>\nA more general solution:\n<code>",
+  "  result = numbers.dup\n  min_x = numbers.min_by{|x| x}\n  max_x = numbers.max_by{|x|\
+    \ x}\n  while result.min_by != min_x\n    result.shift min_x\n  end\n  while result.max_by\
+    \ != max_x\n    result.shift max_x\n  end\n  result\nend", "  numbers.min.times\
+    \ { |x| x = 0 }\n  numbers.max.times { |x| x = 1 }\nend\n</code>\nAnd then you\
+    \ can use that function like this:\n<code>\nrescale_to_unit([1, 2, 3, 4, 5, 6,\
+    \ 7, 8, 9, 10])", "  max_value = numbers.max\n  min_value = numbers.min\n  scale\
+    \ = max_value - min_value\n  if scale == 0\n    rescaled = numbers\n  elsif scale\
+    \ > 1\n    rescaled = (numbers - min_value) / scale\n  else\n    rescaled = (numbers\
+    \ - min_value) * scale\n  end\n  return rescaled\nend", "  result = numbers[0]\n\
+    \  smaller_numbers = numbers[1..-1]\n  smaller_numbers.each_with_index do |number,\
+    \ i|\n    if number < result\n      result = number\n    end\n  end\n  result\n\
+    end", "  rescale = numbers.max - numbers.min\n  return numbers.map(&:*rescale).sort\n\
+    end", "  numbers.each_with_index { |x, i| numbers[i] = x / numbers[i - 1] if i\
+    \ > 0 }\nend\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThe question says \"Given array\
+    \ of numbers (of at least two elements), apply a linear transform to that array,\"\
+    \ so I suppose this would require that the array be in descending order, but +1\
+    \ for cleverness.\n<|/ c |>\n<| c |>\n, thanks, I missed that requirement from\
+    \ OP. Added a section for sorting in descending order.\n<|/ c |>\n<| c |>\nJust\
+    \ FYI, this is an O(N^2) algorithm, so unless you have a lot of data, I don't\
+    \ think this is necessarily a good idea.  There are O(N) sorting algorithms, e.g.\
+    \ http://en.wikipedia.org/wiki/Selection_algorithm and O(NlogN), but these require\
+    \ more coding effort.\n<|/ c |>\n<| c |>\n, O(NlogN) is a subset of O(N^2) algorithms.\
+    \ You need some sort of O(N) algorithm. Sorting in descending order is just one\
+    \ way of doing it. BTW, it's O(N) because it's done in-place, which is O(N).\n\
+    <|/ c |>\n<| a |>\nThis answer might be useful.\n<code>", "  min = (numbers[0]\
+    \ < numbers[1]) ? numbers[0] : numbers[1]\n  max = (numbers[0] > numbers[1]) ?\
+    \ numbers[0] : numbers[1]\n  return ((numbers[0] - min) / (max - min)) * 2.0\n\
+    end", "  numbers.each { |num| num = (num - numbers.min) / (numbers.max - numbers.min)\
+    \ }\nend\n</code>\n<|/ a tags=ruby,ruby-on-rails dscore=0 |>\n<| a |>\nThe most\
+    \ simplest way is to use a method from the Math library. For example:\n<code>",
+  "  numbers.each { |number| number = (number - number.min)/(number.max - number.min)\
+    \ }\n  numbers\nend", "  return ((numbers.min - numbers.max) / numbers.max).ceil\
+    \ * numbers.max\nend", "  return numbers.map { |n| 1.0 / n }\nend", "  numbers.map\
+    \ { |num| num / max(0...num) }\nend\n</cell>\n<cell>", "  min_number = numbers.min\n\
+    \  max_number = numbers.max\n  range_length = max_number - min_number\n  range_length_without_min_number\
+    \ = range_length - 1\n  linear_range_values = numbers.map do |number|\n    number\
+    \ / range_length_without_min_number\n  end\n  linear_range_values.map! { |linear_range_number|\
+    \ linear_range_number * (range_length / max_number) }\n  linear_range_values.unshift(min_number)\n\
+    \  linear_range_values.push(max_number)\n  linear_range_values\nend\n</code>\n\
+    The final method then calls the above methods to achieve the desired result:\n\
+    <code>", "    numbers, units = normalize_arrays(numbers)\n    numbers.shift\n\
+    \    if units.empty?\n        units.shift\n    end\n    factor = 1.0 / units.shift\n\
+    \    return numbers.map{ |n| n * factor }\nend", "  numbers.inject(0.0) { |sum,\
+    \ number| sum + number.to_f * unit.to_f }\nend", "  min_number = numbers.min\n\
+    \  max_number = numbers.max", "  numbers.min == 0 && numbers.max == 1 ?\n    numbers\
+    \ : numbers.map { |n| n / numbers.max }.map { |n| n * numbers.min }\nend", " \
+    \ numbers.map { |number| number / units.max }\nend\n</code>\n<|/ a |>\n<| c |>\n\
+    This doesn't work for me. `[10.0, 20.0, 30.0].max` gives `30.0`, not `30`.\n<|/\
+    \ c |>\n<| c |>\nIt only works for numbers that have a decimal part, or when `numbers`\
+    \ has a larger number of elements than `units`. I'll post an alternative answer.\n\
+    <|/ c |>\n<| a |>\nAs far as I know, you can't get round the floating point number\
+    \ with Ruby.\nThe solution is to use a decimal number instead of a floating point\
+    \ number\n<code>", "  min_max_differences = numbers.max - numbers.min\n  rescaled_numbers\
+    \ = numbers.map{|n| n / min_max_differences}\n  rescaled_numbers.min\nend", " \
+    \   smallest_number = numbers.min\n    numbers = numbers.each_with_index.map do\
+    \ |number, i|\n        (number - smallest_number) / (numbers.size - i)\n    end\n\
+    \    numbers.minmax\nend", "  minimum = numbers.min\n  maximum = numbers.max\n\
+    \  difference = maximum - minimum\n  scaled_numbers = numbers - minimum\n  transformed_numbers\
+    \ = scaled_numbers * difference / (maximum - minimum)\n  return transformed_numbers\n\
+    end", "  numbers.map(&:abs).min, numbers.map(&:abs).max\nend", "  numbers.collect\
+    \ do |number|\n    number / (numbers.uniq.sort.last)\n  end\nend\n</code>\n<|/\
+    \ a dscore=1 tags=ruby,arrays |>\n<| a tags=ruby,arrays |>\nYou probably want\
+    \ something like this:\n<code>", "  numbers = Array(numbers)\n  result = numbers[1]\
+    \ - numbers[0]\n  if numbers[0] != 0\n    result /= numbers[0]\n  end\n  if result\
+    \ < 0\n    result = -result\n  end\n  result\nend\n</pre>", "  return numbers\n\
+    end", "    min, max = numbers.minmax\n    numbers.map { |n| n / min }\nend\n</code>\n\
+    <|/ a |>\n<| c |>\nIt might be worth noting that the function will throw an exception\
+    \ if the input has zero length, in which case `minmax` will still return `[0,0]`\
+    \ which may or may not be the intended result. See [this comment](http://stackoverflow.com/a/22136039/497756).\n\
+    <|/ c |>\n<| a |>\nThe answers given so far don't take into account that your\
+    \ array may be empty, and that's a good thing. Here's my solution that handles\
+    \ both cases:\n<code>", "  minimum = numbers.min\n  maximum = numbers.max\n  minimum,\
+    \ maximum = maximum, minimum\n  new_numbers = numbers - minimum\n  new_numbers\
+    \ = new_numbers/maximum\n  new_numbers = new_numbers + minimum\n  return new_numbers\n\
+    end", "  return numbers / (maximum(numbers).abs + 1e-8)\nend", "    numbers_sorted\
+    \ = numbers.sort_by(&:abs)\n    (numbers_sorted - [numbers_sorted.first]).each_with_object([])\
+    \ do |number, new_array|\n        index =  (numbers_sorted - [number]).each_with_index.index(&:zero?).to_i\n\
+    \        new_array << numbers_sorted[index] / numbers_sorted.last\n    end\nend\n\
+    </code>\n<|/ a |>\n<| c |>\nI like this answer, but I am not entirely sure I understand.",
+  "  return numbers - (numbers.min * numbers.size) /\n      ((numbers.max || numbers.max\
+    \ * numbers.min) / numbers.size)\nend", "  array_size = numbers.size\n  smallest\
+    \ = numbers.min\n  largest = numbers.max\n  \n  if smallest == 0 then return [1.0]\
+    \ * array_size\n  \n  while smallest > largest\n    smallest = smallest / 2.0\n\
+    \  end\n  \n  return numbers.map{|number| number / smallest }\nend", "  sum =\
+    \ numbers.reduce(:+)\n  diff = numbers.reduce(:) - sum\n  avg = sum / numbers.length\n\
+    \  [diff * numbers.length / sum, avg]\nend", "  numbers.map! do |number|\n   \
+    \ number.nil? || number < 0 ? 0 : 1 * number\n  end\nend", "  # Convert to array\n\
+    \  numbers = Array.wrap(numbers)", "  array.scale(numbers, 1.0 / array.maximum(numbers))\n\
+    end\n</cell>\n<code language=julia-1.0>", "  array = [0.0]\n  array.concat(numbers)\n\
+    \  return array.map {|n| n * (1.0 / largest(array))}\nend", "  # Convert to array\
+    \ since it would be changed in a loop\n  return numbers.map(&:to_f)\nend", " \
+    \ numbers.map {|x| x/number.max}\nend\n</code>\n<|/ a |>\n<| c |>\nI believe you\
+    \ meant `numbers.map {|x| x/x.max}`, not `numbers.map {|x| x/number}`\n<|/ c |>\n\
+    <| c |>\nI believe you meant `numbers.map {|x| x/number.max}` not `numbers.map\
+    \ {|x| x/number}`\n<|/ c |>\n<| a tags=ruby,ruby-on-rails |>\nI used a helper\
+    \ method on the array class\n<code>\nmodule Array\n  def rescale_to(number_of_bins,\
+    \ number_per_unit)\n    self*self.number_of_bins/number_per_unit\n  end\nend\n\
+    </code>\nThen call\n<code>\nnumber_array.rescale_to(50, 10)\n</code>\n<|/ a dscore=5\
+    \ |>\n<| c |>\nThis is so much better than creating an arbitrary class method\n\
+    <|/ c |>\n<| c |>\nHappy to see that this is an actual rails answer.  One thing\
+    \ to note is that it will change other arrays that you pass into it.  If you just\
+    \ want to rescale the array to a given number of bins you should do `array.map\
+    \ { |x| x/number_per_unit }` or just `array * number_per_unit`.\n<|/ c |>\n<|\
+    \ a tags=ruby,ruby-on-rails dscore=4 |>\nIf you have a large number of numbers,\
+    \ you could use the histogram method to get the bin boundaries and then get the\
+    \ average of the bins:\n<code>\nnumbers = [5.2, 3.6, 2.2, 1.6, 1.8, 2.3, 3.5,\
+    \ 4.2]\nbins = numbers.histograms\nbins.reduce(0) do |sum, (number, bin)| \n \
+    \ sum + bin * (number.to_f / bins.max)\nend", "    minimum = numbers.min\n   \
+    \ maximum = numbers.max\n    if minimum > 0\n        maximum = maximum - minimum\n\
+    \    end\n    maximum = maximum * 1.0\n    minimum = -maximum\n    return [(maximum\
+    \ - minimum) / maximum, minimum]\nend", "    minimum = numbers.min\n    maximum\
+    \ = numbers.max\n    difference = maximum - minimum\n    if difference == 0\n\
+    \        return [minimum]\n    return [minimum / difference]\nend", "  numbers\
+    \ = numbers.map { |n| n / min_max_value[0] }\n  numbers = max_min_value[1].map\
+    \ { |m| m * numbers.reduce(:+) }\n  numbers\nend", "  min_number = numbers.min\n\
+    \  max_number = numbers.max\n  unit_range = (max_number - min_number) / (len(numbers)\
+    \ - 1.0)\n  rescaled = []\n  rescaled.push(min_number)\n  numbers.each_with_index\
+    \ do |number, index|\n    rescaled.push(number + unit_range * (index - 1))\n \
+    \ end\n  rescaled\nend", "  numbers.map {|n| n/numbers.max}\nend\n</code>\nI thought\
+    \ I didn't need to wrap the array in another array, but I guess it makes sense\
+    \ to do that.\n<|/ a tags=arrays,ruby,ruby-on-rails |>\n<| c |>\nWhat if your\
+    \ array has two or more numbers? You would get the wrong result when passing the\
+    \ array [1,2,3,4,5,5,6,7,8,9,0,2] as parameter to rescale_to_unit (it returns\
+    \ [0.5, 0.75, 1.0]) whereas it should return [0.5, 0.75, 1.0].\n<|/ c |>\n<| a\
+    \ dscore=2 |>\n<code>", "  min = numbers.min\n  max = numbers.max\n  factor =\
+    \ (max - min)/numbers.max_element # find min and max scales\n  numbers[numbers<min]\
+    \ = 0\n  numbers[numbers>max] = 1\n  numbers -= min\n  numbers = numbers.map(&:*factor)\
+    \ # scale the numbers\n  return numbers\nend", "  numbers.inject(0, :+).map {\
+    \ |n| n * 1.0 / numbers.max }\nend", "  return numbers.map { |n| scale_value(n,\
+    \ 1.0) }\nend", "  numbers_to_be_rescaled = numbers.dup\n  numbers_to_be_rescaled.sort!\n\
+    \  current_smallest = numbers_to_be_rescaled[0]\n  last_rescaled_number = numbers_to_be_rescaled[-1]\n\
+    \  current_scale_factor = 1.0 / current_smallest\n  last_scale_factor = 1.0 /\
+    \ last_rescaled_number\n  while numbers_to_be_rescaled.any?\n    numbers_to_be_rescaled\
+    \ = numbers_to_be_rescaled.map { |n| n * current_scale_factor }\n    last_rescaled_number\
+    \ *= last_scale_factor\n  end\n  numbers_to_be_rescaled\nend\n</code>\n<|/ a dscore=0\
+    \ |>\n<| c |>\nThis code doesn't work. `[1.0, 2.0, 3.0, 4.0, 5.0]` becomes `[1.0,\
+    \ 0.5, 1.0, 0.5, 1.0]`.\n<|/ c |>\n<| c |>\nI thought the question was about how\
+    \ to rescale numbers from one range to another. This does that. As far as I understand\
+    \ from the question OP does not need a linear scaling to implement the desired\
+    \ functionality, he/she needs something different than linear scaling.\n<|/ c\
+    \ |>\n<| c |>\nYes, linear scaling does that. Your code does not do that. It takes\
+    \ the input `[1.0, 2.0, 3.0, 4.0, 5.0]` and produces `[0.0, 0.25, 0.5, 0.75, 1.0]`\
+    \ which is *not* what the OP wanted.\n<|/ c |>\n<| c |>\n, my bad. I've fixed\
+    \ the code now. Thanks!\n<|/ c |>\n<| c |>\nThe OP's desired output was `[0.0,\
+    \ 0.25, 0.5, 0.75, 1.0]`, not `[0.0, 0.25, 0.5, 0.75, 0.5]`.\n<|/ c |>\n<| a dscore=0\
+    \ |>\nHere's an approach that's a bit more mathematical:\n<code>", "  # get min\n\
+    \  min = numbers[0]\n  # find max\n  max = numbers[0]\n  for i in 1..numbers.count\n\
+    \    max = numbers.max if numbers[i] > max else max\n    min = numbers.min if\
+    \ numbers[i] < min else min\n  # apply linear scale\n  return [((numbers[i] -\
+    \ min) / (max - min)) * factor for i in 0...numbers.count]\nend\n</code>\nIf you\
+    \ don't want to do any math you can just map each number to a unit of some fractional\
+    \ form (e.g., 1/16th of its current value), and then flatten the list.  There's\
+    \ no need for interpolation or any fancy math (though you could of course use\
+    \ an interpolator, if that matters for your specific use case).\n<code>", "  return\
+    \ numbers.map { |n| n / (unit_size * min_value) }\nend\n</code>\n<|/ a |>\n<|\
+    \ c |>\nThanks for the detailed explanation. Is there a way to do this for arrays\
+    \ of length `0` as well?\n<|/ c |>\n<| c |>\nWhat should happen when both `min_value`\
+    \ and `unit_size` are 0?\n<|/ c |>\n<| c |>\nI added an alternative implementation\
+    \ which allows arrays of length zero.\n<|/ c |>\n<| c |>\nIn your updated code,\
+    \ you still have `nil` values in the array for arrays of length `0`. For example,\
+    \ `unit_size` is 2 and `min_value` is 2, so the array would be `[2, 2]`.\n<|/\
+    \ c |>\n<| c |>\nGood catch, that should be fixed now\n<|/ c |>\n<| a tags=arrays,ruby,ruby-on-rails\
+    \ |>\nHere's another approach, using Enumerable#each_cons. \n<code>\nnumbers =\
+    \ [1, 2, 3, 4, 5]", "  numbers.map! { |n| n / units.min }\nend\n</code>\n<|/ a\
+    \ |>\n<| a tags=math,algorithm,ruby |>\nThis is a problem that occurs in physics\
+    \ all the time. The \"ideal\" solution is \"the average of the elements\" or \"\
+    the geometric mean of the elements\".\nI wanted to do this in Ruby, but this question\
+    \ is tagged \"math\", so I went for that.\n<code>\na = [1,5,3,6,2,7,4,8,9]\na.collect{|x|\
+    \ x}.inject{|s,e| s+e}.to_f/a.size\n</code>\n<|/ a dscore=4 |>\n<| c |>\nAhh,\
+    \ that `inject` method makes me shiver. Not only is it ugly, it is also a non-standard\
+    \ method (according to [this article](http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-inject)).\n\
+    <|/ c |>\n<| c |>\nSadly, it's standard and widely supported in any language,\
+    \ including Ruby.\n<|/ c |>\n<| c |>\nI agree, it's ugly, but the most elegant\
+    \ solution in my opinion and even more so in Ruby's `inject`\n<|/ c |>\n<| c |>\n\
+    I love the idea of using inject to find the average, but shouldn't `a.collect{|x|\
+    \ x}.inject{|s,e| s+e}.to_f/a.size` be `a.inject{|s,e| s+e}.to_f/a.size`?\n<|/\
+    \ c |>\n<| c |>\n: no, because `inject` doesn't accumulate the values.\n<|/ c\
+    \ |>\n<| a |>\nI came up with a solution that I think is pretty clear and simple:\n\
+    <code>", "  rescale_factor = numbers.min / numbers.max\n  numbers.map { |number|\
+    \ number * rescale_factor }\nend\n</code>\nExample of how you would use this in\
+    \ your application:\n<code>\nnumbers = [1, 2, 3, 4, 5]\nrescaled_numbers = rescale_to_unit(numbers)",
+  "  min_number = numbers.min\n  max_number = numbers.max\n  return [min_number, ((numbers\
+    \ - min_number) / (max_number - min_number)), (max_number - min_number)]\nend",
+  "  numbers = numbers.flatten\n  smallest = numbers.min\n  largest = numbers.max\n\
+    \  return ((largest-smallest) * (units-1)) + smallest\nend\n</cell>\n<code language=julia-1.5>",
+  "  numbers.map { |n| n * 1.0 / numbers.max }\nend", "  numbers = [num || 0 for num\
+    \ in numbers] # For Python3 compatibility\n  smallest_number = numbers.shift\n\
+    \  rescaled = numbers.map {|num| (num - smallest_number) / (numbers.max - smallest_number)}.flatten\n\
+    \  rescaled.push(1.0) if rescaled.last < 1.0\n  rescaled\nend", "  numbers.map\
+    \ { |n| n / numbers.max }\nend", "  sum = numbers.reduce(:+) # Sum all numbers\
+    \ in array\n  min = numbers.reduce(:<) # Minimum number in array\n  max = numbers.reduce(:>)\
+    \ # Maximum number in array\n  [min..max].each do |n|\n    sum = sum * n / sum\n\
+    \  end\n  sum\nend\n</pre>", "  numbers.map do |x| x * 100 / numbers.max end\n\
+    end", "  sorted_numbers = numbers.sort\n  smallest_number = sorted_numbers.first\n\
+    \  largest_number = sorted_numbers.last", "  numbers = [number] if numbers.is_a?(Array)\
+    \ # If no array, assume just a single number\n  numbers.map! {|x| x / numbers.min\
+    \ * 2.0}\nend\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThis answer is better than\
+    \ the chosen one, because it shows that this problem can indeed be solved with\
+    \ a simple linear transformation.\n<|/ c |>\n<| c |>\nThis is a much better solution\
+    \ to the problem.\n<|/ c |>\n<| c |>\nA very nice solution, thank you very much!\
+    \ The only thing I added was `numbers.min` so it's `numbers.min * numbers.map!{|x|\
+    \ x / numbers.min * 2.0}`.\n<|/ c |>\n<| c |>\nYes, it makes a huge difference\
+    \ on big arrays. But if you're looking for a more general solution, `min` won't\
+    \ work because it returns `nil`. Instead you can use `numbers.min.zero?` as condition.\n\
+    <|/ c |>\n<| c |>\nI like the way you handle this sort of problem by using a helper\
+    \ function rather than refactoring the original method (although I guess thats\
+    \ also a reasonable solution). Thanks for sharing.\n<|/ c |>\n<| a tags=algorithm,ruby,ruby-on-rails,ruby-on-rails-3\
+    \ |>\nThis problem is very similar to computing the interquartile range (IQR).\
+    \  There are a number of ways to solve this problem.\nThe first and most common\
+    \ method is simple linear interpolation.  The idea is that you use each number\
+    \ in your array as an input for a linear interpolation of two other numbers (the\
+    \ \"low\" and \"high\" value).  You then find the interquartile range by subtracting\
+    \ the highest number from the lowest number, and dividing by the total number\
+    \ of numbers in the array:\n<code>", "  numbers.reduce(:+) / numbers.length\n\
+    end", "  numbers.map { |n| n / min_value(n) }\nend", "  smallest = numbers.min\n\
+    \  largest = numbers.max\n  scaled_numbers = numbers.map { |n| n / largest }\n\
+    \  scaled_numbers.minmax\nend\n</pre>\n            </div>\n          \n      \
+    \    \n          \n            \n            <div class=\"sourcecode\">\n    \
+    \          \n              <p class=\"source-link\">\n                Source:\
+    \ \n                <a href=\"javascript:toggleSource('method-i-rescale_to_unit_source')\"\
+    \ id=\"l_method-i-rescale_to_unit_source\">show</a>\n                \n      \
+    \        </p>\n              <div id=\"method-i-rescale_to_unit_source\" class=\"\
+    dyn-source\">\n                <pre><span class=\"ruby-comment\"># File /usr/local/rvm/gems/ruby-2.0.0-p0/gems/activesupport-4.0.0/lib/active_support/core_ext/enumerable.rb,\
+    \ line 162</span>\n<span class=\"ruby-keyword\">def</span> <span class=\"ruby-keyword\
+    \ ruby-title\">rescale_to_unit</span>(<span class=\"ruby-identifier\">numbers</span>)\n\
+    \  <span class=\"ruby-keyword\">return</span> <span class=\"ruby-keyword\">if</span>\
+    \ <span class=\"ruby-identifier\">numbers</span>.<span class=\"ruby-identifier\"\
+    >blank?</span>\n  <span class=\"ruby-keyword\">if</span> <span class=\"ruby-identifier\"\
+    >numbers</span>.<span class=\"ruby-identifier\">min</span> <span class=\"ruby-operator\"\
+    >==</span> <span class=\"ruby-keyword\">self</span>.<span class=\"ruby-identifier\"\
+    >min</span>\n    <span class=\"ruby-identifier\">self</span>\n  <span class=\"\
+    ruby-keyword\">elsif</span> <span class=\"ruby-identifier\">numbers</span>.<span\
+    \ class=\"ruby-identifier\">max</span> <span class=\"ruby-operator\">==</span>\
+    \ <span class=\"ruby-keyword\">self</span>.<span class=\"ruby-identifier\">max</span>\n\
+    \    <span class=\"ruby-keyword\">self</span>.<span class=\"ruby-identifier\"\
+    >each</span> <span class=\"ruby-keyword\">do</span> <span class=\"ruby-operator\"\
+    >|</span><span class=\"ruby-identifier\">n</span><span class=\"ruby-operator\"\
+    >|</span> <span class=\"ruby-identifier\">n</span> <span class=\"ruby-operator\"\
+    >/=</span> <span class=\"ruby-keyword\">self</span>.<span class=\"ruby-identifier\"\
+    >max</span> <span class=\"ruby-operator\">}\n    <span class=\"ruby-keyword\"\
+    >self</span>\n  <span class=\"ruby-keyword\">else</span>\n    <span class=\"ruby-identifier\"\
+    >minmax</span> = <span class=\"ruby-identifier\">numbers</span>.<span class=\"\
+    ruby-identifier\">minmax</span>\n    <span class=\"ruby-keyword\">self</span>.<span\
+    \ class=\"ruby-identifier\">map</span>(&amp;<span class=\"ruby-value\">:divide_by_float</span>)\n\
+    \    <span class=\"ruby-keyword\">self</span>.<span class=\"ruby-identifier\"\
+    >each</span> <span class=\"ruby-keyword\">do</span> <span class=\"ruby-operator\"\
+    >|</span><span class=\"ruby-identifier\">n</span><span class=\"ruby-operator\"\
+    >|</span> <span class=\"ruby-identifier\">n</span> <span class=\"ruby-operator\"\
+    >*=</span> <span class=\"ruby-keyword\">self</span>.<span class=\"rub", "  numbers\n\
+    \  .map { |n| n * (max - min) / (max - min) }\nend", "  numbers.each do |n|\n\
+    \    n /= MAX\n  end\nend", "  min_number = numbers.min\n  max_number = numbers.max\n\
+    \  factor = (max_number - min_number) / (numbers.size - 1)\n  numbers.each_with_index\
+    \ do |number, index|\n    numbers[index] = number * factor\n  end\nend\n</code>\n\
+    <|/ a dscore=4 |>\n<| c |>\nI like the way you handled this with a single array.\
+    \ Clever!\n<|/ c |>\n<| a dscore=4 tags=algorithm,math,ruby,arrays |>\nIf you're\
+    \ looking for a Ruby solution here is a more concise solution which involves no\
+    \ recursion:\n<code>", "    numbers.collect! {|n| n / numbers.min}\n    numbers.collect!\
+    \ {|n| n * numbers.max}\n    numbers\nend", "  numbers.map { |num| num / min_unit\
+    \ }\nend", "  result = numbers.shift\n  numbers.each do |number|\n    result *=\
+    \ (number - numbers.min) / (numbers.max - numbers.min)\n  end\n  result\nend",
+  "  numbers = numbers.map(&:to_f) / numbers.map(&:to_f)\n  if numbers.min.zero? &&\
+    \ numbers.max.zero?\n    numbers.first\n  else\n    numbers.min\n  end\nend\n\
+    </code>\n<|/ a tags=ruby,ruby-on-rails,arrays |>\n<| c |>\nThanks for the nice\
+    \ example. It doesn't work for an array of strings for me. Can you provide some\
+    \ test data which doesn't work with the code?\n<|/ c |>\n<| c |>\nIt works for\
+    \ me with array of strings.  Try `[\"1.2\", \"3.2\", \"4.2\"].map(&:to_f) / [\"\
+    1.2\", \"3.2\", \"4.2\"].map(&:to_f)` and you'll see it works.  What exactly is\
+    \ `numbers` in that code?  Are you trying to `map` over an array of strings?\n\
+    <|/ c |>\n<| c |>\nIt works also with array of strings, please see my comment\
+    \ on OP. By the way thank you for the explanation, now I understand what is going\
+    \ on.\n<|/ c |>\n<| c |>\nYou're right, I was wrong then.  I deleted my comment\
+    \ since yours is clearly better.\n<|/ c |>\n<| c |>\nI updated the code a little\
+    \ to handle non-positive numbers.\n<|/ c |>\n<| a dscore=3 |>\nIn ruby you can\
+    \ do this:\n<code>\narr.select {|e| e > 0 }\n</code>\nAnd if your arr isn't a\
+    \ numeric array but an array, you can do the following:\n<code>\narr.select {|e|\
+    \ e > 0 }.map(&:to_f)\n</code>\nHope that helps.\n<|/ a tags=ruby,ruby-on-rails,arrays\
+    \ |>\n<| a |>\n<code>\narr = [1.2, 3.2, 4.2]", "  numbers.each_with_index do |num,\
+    \ i|\n    if num > numbers[i-1]\n      numbers[i] = numbers[i-1]/num\n      numbers[i-1]\
+    \ = 0\n    end\n  end\n  numbers\nend", "  numbers.map { |n| min n, max n }\n\
+    end", "  return map(lambda x: 0.0 if x > 1.0 else x, numbers)\nend\n</cell>\n\
+    <code language=julia-0.6>", "  return numbers.inject([0]) do |array, number|\n\
+    \    array.concat([number / array.max])\n  end\nend", "  numbers.map { |number|\
+    \ number / numbers.min }\nend", "  numbers.collect do |n|\n    if n < 0\n    \
+    \  n / 2\n    elsif n > 1\n      1 - (n - 1) / 2\n    else\n      n\n    end\n\
+    \  end\nend\n</code>\n<|/ a tags=ruby dscore=3 |>\n<| c |>\nFor what it's worth,\
+    \ this is also O(n) in the length of the input array. Slightly more concise, but\
+    \ this one still has its quirks, especially if you have negative numbers.\n<|/\
+    \ c |>\n<| c |>\nO(n) in the length of the input array is more reasonable than\
+    \ O(n) in the number of elements in the array.\n<|/ c |>\n<| a dscore=2 |>\nThe\
+    \ answer by Josh McHenry is nice. Just to complement it with a different approach.\n\
+    <code>", "  numbers.min.times { |x| x = 0 }\n  numbers.max.times { |x| x = 1 }\n\
+    \  numbers\nend\n</code></pre>\n            </div>\n          \n          \n \
+    \         \n          \n          \n            \n            <div class=\"sourcecode\"\
+    >\n              \n              <p class=\"source-link\">\n                Source:\
+    \ \n                <a href=\"javascript:toggleSource('method-i-rescale_to_unit_source')\"\
+    \ id=\"l_method-i-rescale_to_unit_source\">show</a>\n                \n      \
+    \        </p>\n              <div id=\"method-i-rescale_to_unit_source\" class=\"\
+    dyn-source\">\n                <pre><span class=\"ruby-comment\"># File /usr/local/rvm/gems/ruby-2.0.0-p0/gems/activesupport-4.0.0/lib/active_support/core_ext/numeric/time.rb,\
+    \ line 12</span>\n<span class=\"ruby-keyword\">def</span> <span class=\"ruby-keyword\
+    \ ruby-title\">rescale_to_unit</span>(<span class=\"ruby-identifier\">numbers</span>)\n\
+    \  <span class=\"ruby-identifier\">numbers</span>.<span class=\"ruby-identifier\"\
+    >min</span>.<span class=\"ruby-identifier\">times</span> { <span class=\"ruby-operator\"\
+    >|</span><span class=\"ruby-identifier\">x</span><span class=\"ruby-operator\"\
+    >|</span> <span class=\"ruby-identifier\">x</span> = <span class=\"ruby-value\"\
+    >0</span> }\n  <span class=\"ruby-identifier\">numbers</span>.<span class=\"ruby-identifier\"\
+    >max</span>.<span class=\"ruby-identifier\">times</span> { <span class=\"ruby-operator\"\
+    >|</span><span class=\"ruby-identifier\">x</span><span class=\"ruby-operator\"\
+    >|</span> <span class=\"ruby-identifier\">x</span> = <span class=\"ruby-value\"\
+    >1</span> }\n  <span class=\"ruby-identifier\">numbers</span>\n<span class=\"\
+    ruby-keyword\">end</span></pre>\n              </div>\n            </div>\n  \
+    \          \n          </div>\n                    </div>", "  result = []\n \
+    \ smallest_num = numbers.min\n  largest = numbers.max\n  result.push(smallest_num/largest)\n\
+    \  i = 1\n  while i < numbers.length\n    smallest = numbers.min\n    largest\
+    \ = numbers.max\n    number = smallest/largest\n    result.push(number)\n    i\
+    \ += 1\n  end\n  return result\nend\n</code>\nThis could then be used on any array\
+    \ of numbers you want, and you could even pass it an array of strings so it will\
+    \ convert numbers to whatever units they are. \n<code>", "  minimum = numbers.min\
+    \ * 1.0\n  maximum = numbers.max * 1.0\n  (minimum, maximum) = minimum.to_i, maximum.to_i\n\
+    \  new_array = Array.new(numbers.size)\n  (0...numbers.size).each do |i|\n   \
+    \ new_array[i] = ((numbers[i] - minimum) / (maximum - minimum)) * 2.0\n  end\n\
+    \  new_array\nend", "  numbers.min\n  numbers.max\n  scaled_numbers = (numbers\
+    \ - numbers.min) / (numbers.max - numbers.min)\n  scaled_numbers\nend\n</code>\n\
+    (I chose this name because it is what it does.)\nIf you had another method than\
+    \ this one, you can just call it like this:\n<code>", "  numbers.each_with_index\
+    \ do |number, index|\n    if number.nan? || number.infinite?\n      numbers[index]\
+    \ = 0.0\n      next\n    end\n    numbers[index] = float(numbers[index])\n  end\n\
+    end\n</code>\n<|/ a tags=ruby,arrays dscore=3 |>\n<| c |>\nThis is not the desired\
+    \ result, as explained in my answer.\n<|/ c |>\n<| c |>\nPlease see the updated\
+    \ question. I want minimum number to become 1 and maximum number to become 0\n\
+    <|/ c |>\n<| a |>\n<code>", "  max = numbers.max\n  min = numbers.min\n  diff\
+    \ = (max - min) / 2.0\n  result = (min + diff) / 2\n  return [result] * numbers.size\n\
+    end", "    smallest_number = numbers.min || 0.0\n    greatest_number = numbers.max\
+    \ || 1.0\n    numbers.map { |number| number / greatest_number - smallest / greatest_number\
+    \ }\nend\n</code>\n<|/ a |>\n<| c |>\nWhile this code may answer the question,\
+    \ providing additional context regarding *how* and *why* it solves the problem\
+    \ would improve the answer's long-term value.\n<|/ c |>\n<| a dscore=0 |>\nHere's\
+    \ a solution that works for an array of any type (Integer, Float, String, etc):\n\
+    <code>", "  numbers_sorted = numbers.sort_by { |n| n }\n  diff = numbers_sorted[1]\
+    \ - numbers_sorted[0]\n  numbers_sorted[0] = 0\n  numbers_sorted[-1] = 1\n  numbers_sorted.zip(diff).map\
+    \ { |n, d| n * d }\nend\n</code>\n<|/ a tags=ruby,ruby-on-rails,ruby-on-rails-3\
+    \ |>\n<| c |>\nYour code doesn't work for an array of zero: `[0, 0, 0, 0, 0]`.\n\
+    <|/ c |>\n<| c |>\nThis is awesome. Thanks. But I couldn't understand what `numbers.sort_by\
+    \ { |n| n }` and `numbers_sorted.zip(diff).map { |n, d| n * d }` doing. Can you\
+    \ please explain them to me?\n<|/ c |>\n<| c |>\nThe first `sort_by` sorts your\
+    \ array by increasing value, which I assume is what you want. The `zip` method\
+    \ zips together the two arrays, which means it will create a new array with the\
+    \ values in the first array followed by the values in the second array. Finally,\
+    \ the `map` method is applied to the zipped array.\n<|/ c |>\n<| c |>\nTo avoid\
+    \ the error when there are a lot of 0 elements, you can use: `numbers.select!(&:zero?)`\n\
+    <|/ c |>\n<| a dscore=5 |>\nThe best solution I came up with was based on this\
+    \ one\n<code>", "  smallest = numbers.min\n  largest = numbers.max\n  difference\
+    \ = largest - smallest\n  return Array.new([0, difference / largest]).concat(numbers)\n\
+    end\n</cell>\n<code language=julia-1.3>", "  min  = numbers.min\n  max  = numbers.max\n\
+    \  scale = max - min\n  return numbers.map(&:*1.0/scale)\nend\n</cell>\n<cell>",
+  "  numbers.min!\n  numbers.max!\n  numbers.map! {|x| x/numbers.max}\n  numbers\n\
+    end", "  numbers.each_with_index do |number, index|\n    normalized_number = (number\
+    \ - min_value) / (max_value - min_value)\n    numbers.delete_at(index)\n    numbers\
+    \ << normalized_number\n  end\nend", "  min, max = numbers.min, numbers.max\n\
+    \  numbers = numbers - min\n  min = 0 - min\n  max = 1 - max\n  numbers = numbers\
+    \ * max + min\n  numbers = numbers.round(1)\nend\n</code>\n<|/ a dscore=3 |>\n\
+    <| c |>\nThis is the best solution. Scaling by the minimum value and then rescaling\
+    \ by maximum value to get the correct range.\n<|/ c |>\n<| a |>\nJust scale and\
+    \ shift values by -1 and +1 respectively, using floor or ceil appropriately, and\
+    \ convert to an array:\n<code>\nnumbers = (numbers - numbers[0]) % (numbers[-1]\
+    \ - numbers[1]) + numbers[1]\n</code>\nThis works because -x % y returns x if\
+    \ y is the negative remainder of x divided by y, or x - x if y is zero; similarly,\
+    \ +x % y returns y if y is the positive remainder of x divided by y, or x + x\
+    \ if y is zero.\nIf your array contains floating point values, this won't always\
+    \ work. If your values can be negative, then the correct approach is to determine\
+    \ whether the values are all positive or negative, and use floor or ceil as appropriate:\n\
+    <code>\nnumbers = (numbers - numbers[0]) % (numbers[-1] - numbers[1]) + numbers[1]\n\
+    numbers = numbers[1] > numbers[0] ? numbers.ceil : numbers.floor\n</code>\n<|/\
+    \ a tags=arrays,ruby,range dscore=3 |>\n<| c |>\nI don't get it. I think you should\
+    \ put \"the smallest value will become 0 and the largest will become 1\" on the\
+    \ second line. Also the second line should use `floor` instead of `ceil`.\n<|/\
+    \ c |>\n<| c |>\n, `numbers` is the array of numbers, `numbers[0]` is the smallest\
+    \ value and the other end `numbers[-1]` is the largest value.  If the smallest\
+    \ number is `-1` and the largest number is `1`, then the smallest and largest\
+    \ values are `-1 + 1 = -0` and `1 - 1 = 1`.\n<|/ c |>\n<| c |>\n, thank you for\
+    \ your help, now I see it.\n<|/ c |>\n<| c |>\nYes, I see it now. Thanks.\n<|/\
+    \ c |>\n<| a |>\nIn Rust, this can be solved with a fold:\n<code>", "    numbers\
+    \ = numbers.collect { |x| x / numbers.length }\n    numbers.min_by { |x| x }\n\
+    end", "  numbers.min\nend", "  numbers.map { |n| n / min_max(numbers) }\nend\n\
+    </code>\n<|/ a dscore=2 |>\n<| a |>\nHere's a one liner based on this answer\n\
+    <code>", "  mins = numbers.min\n  maxs = numbers.max", "  numbers.each_with_index\
+    \ do |number, index|\n    (index > 0) ? (numbers[index] - numbers[index-1]) /\
+    \ numbers[index] : 1\n  end\nend\n</code>\n<|/ a tags=ruby-on-rails,ruby,algorithm,ruby-on-rails-3\
+    \ |>\n<| c |>\nthanks for your answer, but I'm looking for a way to do it for\
+    \ an array of floats, not for an array of integers. I should have been more explicit\
+    \ about that, I apologize!\n<|/ c |>\n<| c |>\nThank you for your updated answer!\
+    \ I added an example to the original post of what I'm looking for.\n<|/ c |>\n\
+    <| c |>\nYou're right. Sorry, I thought your question was about a linear transformation\
+    \ for an array of integers. I updated my answer to also answer your other question.\n\
+    <|/ c |>\n<| c |>\nI updated my answer to include the function you requested.\n\
+    <|/ c |>\n<| a tags=ruby-on-rails,ruby,algorithm,ruby-on-rails-3 |>\nHere's a\
+    \ very naive implementation (which doesn't do any checks for non-numeric input):\n\
+    <code>", "  array_min, array_max = numbers.minmax\n  [x_min, x_max] = numbers\n\
+    \  scale = (x_max - x_min) / array_max\n  offset = x_min - x_min * scale\n  return\
+    \ [offset + x_min * scale * x for x in numbers]\nend\n</cell>\n<text>\nNow that\
+    \ we have the rescale_to_unit function, we can use it to rescale our data.", " \
+    \ numbers = numbers.map(&:to_f)\n  smallest, largest = numbers.min, numbers.max\n\
+    \  if smallest == largest or smallest==0\n    return numbers\n  end\n  minimum\
+    \ = smallest - 0.1 if smallest != 0 and smallest != 1\n  maximum = largest + 0.1\
+    \ if largest != 1 and largest != 0\n  numbers.map { |number| number / maximum.to_f\
+    \ }\nend\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1 |>\nThe first example below\
+    \ is based on a function that converts degrees to radians.\n<code>\nrequire 'math'",
+  "    smallest, largest = numbers.minmax\n    return numbers / largest\nend", " \
+    \ rescaled_number = []\n  numbers.each_with_index { |number, index| rescaled_number\
+    \ << clamp_to_unit(number) }\nend", "  min_value = numbers.min\n  max_value =\
+    \ numbers.max", "    smallest_number = numbers.min\n    largest = numbers.max\n\
+    \    \n    smallest_number_unitless_percent = smallest_number / largest\n    \n\
+    \    scaled_numbers = numbers.map {|number| smallest_number_unitless_percent *\
+    \ number}\n    \n    return scaled_numbers\nend\n</code>\nIt might be more efficient\
+    \ to implement the above using just one pass in the array, but that is beyond\
+    \ the scope of this question.\n<|/ a tags=ruby |>\n<| c |>\nThis is great, thanks.\
+    \ I like the general idea, and I'm going to see if I can implement it using only\
+    \ one pass. If you have any thoughts on efficiency, please let me know. I'm doing\
+    \ this for a project, and there will be a large number of these arrays (each about\
+    \ 1 million or so), so I was wondering if implementing this in Ruby would be faster\
+    \ than Python.\n<|/ c |>\n<| c |>\nOne thing to note is that the `smallest_number_unitless_percent`\
+    \ calculation can be done once before the loop and then reused for each iteration.\
+    \ I think the `min` and `max` calls in the loop are also expensive. On the first\
+    \ iteration `min` and `max` will run in the same amount of time as `smallest_number_unitless_percent`.\
+    \ If that is good enough then I think this is good. On the second iteration `min`\
+    \ and `max` will have to spend a lot of time doing the same thing. So, the difference\
+    \ is between a factor of 1000 on one iteration and a factor of 100 on the second\
+    \ iteration. Depending on your data, this might be good enough though. Do you\
+    \ have any benchmarks on this implementation?\n<|/ c |>\n<| c |>\nI ran a quick\
+    \ benchmark and this is by far the fastest (by a factor of 10 or so). I am now\
+    \ going to go through my code and see how I can optimize it further but this definitely\
+    \ works. Thanks!\n<|/ c |>\n<| a tags=ruby dscore=1 |>\nHere's another approach\
+    \ that uses Enumerable#partition, which makes the code more readable and also\
+    \ more efficient:\n<code>", "  return numbers.map { |n| n / maximum(numbers) }\n\
+    end", "  numbers.inject(0.0) { |sum, number| sum + number.to_f * number }\nend\n\
+    </code>\n<|/ a dscore=5 |>\n<| c |>\nThis is an extremely inefficient algorithm.\
+    \ Especially when you are dealing with a large array with a high number of elements.\n\
+    <|/ c |>\n<| c |>\nI agree with you, that's why I mentioned the complexity of\
+    \ the function. It's not an exact one, but an approximation of one.\n<|/ c |>\n\
+    <| c |>\nI think this is better than my solution: http://stackoverflow.com/a/41017134/182590\n\
+    <|/ c |>\n<| c |>\nThanks for pointing this out. This function is now a top Google\
+    \ result for \"Scale a list to [0,1]\". Maybe it'd make sense to update your answer\
+    \ to reflect this? Just a thought :)\n<|/ c |>\n<| c |>\nI did update my answer.\
+    \ The function no longer works well when there are negative numbers. It is still\
+    \ an exact solution, though.\n<|/ c |>\n<| a dscore=5 |>\n<code>\na = [1, 2, 3,\
+    \ 4, 5]\na.map { |e| e / a.max }\n</code>\n<|/ a tags=ruby |>\n<| c |>\nThis does\
+    \ work, however I think it's inefficient. On a large array the performance will\
+    \ be horrible.\n<|/ c |>\n<| c |>\n- This is an inefficient function! What is\
+    \ wrong with it - it does exactly what the OP asks for. As you pointed out yourself,\
+    \ it only works if there are not negative numbers. I wonder how you came up with\
+    \ that solution that was so poor at it that my solution is so much better than\
+    \ it?\n<|/ c |>\n<| c |>\nI disagree. Your solution doesn't work when all values\
+    \ are negative - it just returns the original array.\n<|/ c |>\n<| c |>\nThe question\
+    \ clearly states that \"the smallest number will become 0 and the largest will\
+    \ become 1\".\n<|/ c |>\n<| c |>\n: Oh, I missed that. I assumed it was a requirement\
+    \ to handle negative numbers.\n<|/ c |>\n<| a |>\n<code>\na = [1, 2, 3, 4, 5]\n\
+    a.map { |e| e / a.max * 100 }\n</code>\n<|/ a dscore=4 tags=ruby |>\n<| c |>\n\
+    If all numbers are positive, this will return an array of arrays, where the individual\
+    \ arrays are the percentages of each number. Not ", "  numbers.each_with_index\
+    \ do |n, i|\n    if numbers.at(i) < numbers.at(i+1)\n      numbers.at(i) = numbers.at(i)\
+    \ - numbers.at(i+1)\n      numbers.at(i+1) = 0\n    end\n  end\nend", "  min_number\
+    \ = numbers.min\n  max_number = numbers.max\n  mid = (max_number + min_number)\
+    \ / 2\n  rescaled_numbers = numbers.map do |number|\n    number - mid\n  end\n\
+    \  rescaled_numbers.min\nend", "  return (0...numbers.length).collect { |n| numbers[n]\
+    \ / numbers.max }\nend\n</code>\n<|/ a dscore=4 |>\n<| c |>\nYour code does not\
+    \ return the same results for numbers = [1] and numbers = [1,2]\n<|/ c |>\n<|\
+    \ c |>\nAh, I see now. I assumed it would return the same results for single and\
+    \ double values. I added a fix that returns the same results as OP's code. Thanks\
+    \ for pointing this out.\n<|/ c |>\n<| c |>\n, what about `numbers = [1.0,2.0,3.0,4.0,5.0]`\
+    \ ? The return should be `[0.0, 0.25, 0.5, 0.75, 1.0]` but the actual output is\
+    \ `[0.0, 0.1875]`\n<|/ c |>\n<| c |>\nThat is because you asked for the minimum\
+    \ value to become 0, and the maximum value to become 1. But if you want the minimum\
+    \ value to become 0, and the maximum value to become 100, then you get the wrong\
+    \ results for `numbers = [1.0, 2.0, 3.0, 4.0, 5.0]`. You should instead ask for\
+    \ the minimum value to become 0, and the maximum value to become 100. If you want\
+    \ it to return the same results as OP's code, then you should not divide by `numbers.max`.\
+    \ Or you could divide by `numbers.sum`.\n<|/ c |>\n<| c |>\nThe question is about\
+    \ how to rescale the data to between 0 and 1.\n<|/ c |>\n<| a dscore=4 tags=ruby,ruby-on-rails,arrays,ruby-on-rails-4\
+    \ |>\nFor a solution that will work for any range and any number of elements,\
+    \ you can use the Enumerable method #chunk, which yields two elements for each\
+    \ chunk:\n<code>", "  numbers.each_with_index do |number, i|\n    numbers[i] =\
+    \ number / numbers[-1]\n  end\nend\n</code>\n<|/ a dscore=1 |>\n<| c |>\nIf `numbers`\
+    \ contains negative numbers, `numbers[-1]` would give an `IndexError`.\n<|/ c\
+    \ |>\n<| c |>\n, `numbers[-1]` will give the last element in the array without\
+    \ modifying the array, so you shouldn't have any issues with negative numbers.\
+    \ I guess the OP did say that the array had at least two elements, so I assumed\
+    \ that the array would have at least one number greater than zero.\n<|/ c |>\n\
+    <| c |>\nThe OP's code has `numbers.each_with_index do |number, i|` where `number`\
+    \ is the first number in the `numbers` array. Thus if `numbers` has a single element\
+    \ then `numbers[-1]` will raise an error.\n<|/ c |>\n<| c |>\nThanks all, appreciate\
+    \ the help and explanations.\n<|/ c |>\n<| c |>\nActually, it's not a good idea\
+    \ to assume that the input will be an array of length 2 or more (unless that's\
+    \ what it's supposed to be). The OP did say that `numbers` could be an array with\
+    \ any number of elements.\n<|/ c |>\n<| a |>\n<code>", "  min = 0\n  max = numbers.max\n\
+    \  numbers.map(&:to_f)\n  numbers = numbers.map(&:abs)\n  min = numbers.min\n\
+    \  numbers[numbers.index(min) + 1] = 0\n  numbers[numbers.index(max) - 1] = 1\n\
+    \  numbers.map(&:round)\nend", "  numbers.each_with_index { |n, i| n = (n - min_n)\
+    \ / (max_n - min_n) }\nend\n</code>\nThe key is the max_n and min_n variables.\
+    \ These are the maximum and minimum values of your original numbers. You can get\
+    \ them using an Enumerator on the original array:\n<code>\nmin_n = numbers.min\
+    \ \nmax_n = numbers.max \n</code>\nYou can then use it like this:\n<code>\nrescale_to_unit([1.0,\
+    \ 2.0, 3.0, 4.0, 5.0])", "  numbers.minmax\n  if numbers.minmax != [-1, 1]\n \
+    \   rescaled = numbers.minmax * 100\n    rescaled -= rescaled.min\n    rescaled\n\
+    \  end\nend", "  numbers.map(&:to_f)\nend", "  return numbers.map { |number| number\
+    \ / (numbers.reduce(:+) + 1e-10) }\nend"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

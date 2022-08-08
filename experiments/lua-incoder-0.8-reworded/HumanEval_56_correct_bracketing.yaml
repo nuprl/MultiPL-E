@@ -12,7 +12,881 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \ false)\n    lu.assertEquals(candidate('>'), false)\n    lu.assertEquals(candidate('<<>'),\
   \ false)\n    lu.assertEquals(candidate('<><><<><>><>><<>'), false)\n    lu.assertEquals(candidate('<><><<><>><>>><>'),\
   \ false)\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["  -- check every opening bracket to see if it has a corresponding closing\
+    \ bracket\n  for i = 1, #brackets do\n    local opening = brackets[i]\n    if\
+    \ not open_close_brackets[opening] then\n      return false\n    end\n  end\n\
+    \  return true\nend", "  local brackets = brackets or ''\n  local opening = false\n\
+    \  for i = 1, #brackets do\n    local character = brackets[i]\n    if character\
+    \ == '<' then\n      if not opening then\n        return false\n      end\n  \
+    \    opening = true\n    elseif character == '>' then\n      if not opening then\n\
+    \        return true\n      end\n      opening = false\n    elseif opening then\n\
+    \      return false\n    end\n  end\n  return true\nend", "\tlocal brackets =\
+    \ brackets:gsub(\"<(%a+%b)\", function(_, a, b)\n\t\treturn a .. b:upper()\n\t\
+    end):gsub(\"(%a+%b)\", function(_, a, b)\n\t\treturn a .. b:lower()\n\tend)",
+  "  local open_brackets = brackets:gsub('()', '')\n  return open_brackets:len() ==\
+    \ brackets:len()\nend", "    local opening_brackets, closing_brackets =\n    \
+    \    brackets:gsub('%.', \"\"):gsub('%<', '><'):gsub('%>', '><')\n    local count\
+    \ = 0\n    for i = 1, #opening_brackets do\n        if opening_brackets[i]:sub(1,\
+    \ 1) == opening_brackets[i]:sub(-1) and opening_brackets[i]:sub(1, 1) ~= opening_brackets[i]:sub(-1)\
+    \ and opening_brackets[i]:sub(1, 1) ~= '<' and opening_brackets[i]:sub(1, 1) ~=\
+    \ '>' then\n            count = count + 1\n        end\n    end\n    return count\
+    \ == #opening_brackets\nend", "  brackets = brackets:gsub('%.', '%%%')\n  local\
+    \ opening = brackets:match('<(.-)')\n  if opening == nil then\n    return false\n\
+    \  end\n  local closing = brackets:match('%(.-)>')\n  if closing == nil then\n\
+    \    return true\n  end\n  return opening ~= closing\nend", "  -- TODO: This is\
+    \ wrong in most cases\n  -- >>> correct_bracketing('<>')\n  -- false\n  return\
+    \ not brackets:match('%^<>%')\nend", "  local openingbrackets, closingbrackets\
+    \ = string.gsub(brackets, '[(<>)]', '')\n  local bracketcounts = openingbrackets:gsub('%D+',\
+    \ function(count)\n    count = tonumber(count) + 1\n    count = count and math.max(count,\
+    \ 1) or 1\n    return count\n  end)\n  if #bracketcounts < 1 then\n    return\
+    \ false\n  end\n  for i, v in pairs(bracketcounts) do\n    if v < 1 then\n   \
+    \   return false\n    end\n  end\n  -- now bracketcounts has the counts of each\
+    \ bracket\n  -- check each bracket to see if its a valid bracket\n  -- only count\
+    \ the brackets that have been opened\n  for i, v in pairs(bracketcounts) do\n\
+    \    -- brackets is the original string without the opening bracket\n    local\
+    \ brackets = brackets:gsub('%D+' .. i, '') -- remove bracket from bracketcounts\n\
+    \    if brackets ~= '<' then\n      -- if brackets doesn't start with a '<', it's\
+    \ not a valid bracket\n      return false\n    end\n    -- brackets now starts\
+    \ with a '<' and now it's an opening bracket\n    -- check if closing bracket\
+    \ is valid\n    -- if not, return false\n    local closebrackets = brackets:match('<%D+')\n\
+    \    if closebrackets ~= '' then\n      -- if closing bracket is valid, check\
+    \ if closing bracket is actually closing\n      if closebrackets ~= '</' then\n\
+    \        return false\n      end\n    end\n  end\n  return true\nend", "  local\
+    \ index = 1\n  local opening_count = 1\n  local closing_bracket = nil\n  local\
+    \ correct_bracket = false\n  while true do\n    index = brackets:find('<', index)\n\
+    \    if index == nil then\n      -- we reached the end of the string without finding\
+    \ a closing bracket\n      if opening_count == 1 then\n        correct_bracket\
+    \ = true\n      end\n      break\n    end\n    if opening_count == 0 then\n  \
+    \    -- this is the first opening bracket, so make it a closing bracket\n    \
+    \  closing_bracket = index\n      opening_count = opening_count + 1\n    end\n\
+    \    -- if we have found a closing bracket, check it and the previous one\n  \
+    \  if closing_bracket ~= nil then\n      if index > closing_bracket and brackets:sub(closing_bracket,index)\
+    \ == '>' then\n        -- we have a closing bracket\n        opening_count = opening_count\
+    \ - 1\n        if opening_count == 0 then\n          -- we found the closing bracket\
+    \ and it has no previous one\n          correct_bracket = true\n        end\n\
+    \      else\n        -- this is not a closing bracket\n        correct_bracket\
+    \ = false\n        break\n      end\n    end\n    index = index + 1\n  end\n \
+    \ return correct_bracket\nend", "    return #brackets > 0 and #brackets == (#brackets\
+    \ - 1) and brackets[#brackets] or false\nend", "   if brackets == nil then\n \
+    \     return true\n   elseif #brackets == 0 then\n      return false\n   else\n\
+    \      local closed = {}\n      for i = 1, #brackets do\n         local start\
+    \ = brackets[i]\n         if start ~= '<' then\n            return false\n   \
+    \      end\n         if closed[#closed + 1] == nil then\n            table.insert(closed,\
+    \ start + '>')\n         else\n            table.insert(closed, start + '>' +\
+    \ closed[#closed])\n         end\n      end\n      return true\n   end\nend",
+  "  if brackets == nil then\n    return false\n  end\n  local opening = brackets:find('[<>]')\n\
+    \  if opening == nil then\n    return true\n  end\n  local closing = brackets:find('[]>')\n\
+    \  if closing == nil then\n    return true\n  end\n  return opening ~= closing\n\
+    end", "    for i = 1, #brackets do\n        if brackets[i] != brackets[i+1] then\n\
+    \            return false\n        end\n    end\n    return true\nend", "  brackets\
+    \ = brackets:gsub('^<','<')\n  brackets = brackets:gsub('>$','>')\n  brackets\
+    \ = brackets:gsub('>$','>')\n  brackets = brackets:gsub('([^<]*)$','\\\\1>')\n\
+    \  brackets = brackets:gsub('([^<]*)$','\\\\1>')\n  brackets = brackets:gsub('([^<]*)$','\\\
+    \\1>')\n  brackets = brackets:gsub('([^<]*)$','\\\\1>')\n  return brackets:sub(2,-2)\n\
+    end", "  -- brackets is a string of \"<\" and \">\".\n  -- return true if every\
+    \ opening bracket has a corresponding closing bracket.\n  local opening_brackets,\
+    \ closing_brackets = brackets:gsub(\"[<>]\", \"\"), brackets\n  -- return true\
+    \ if every opening bracket has a corresponding closing bracket.\n  for _,opening_bracket\
+    \ in ipairs(opening_brackets) do\n    if closing_brackets ~= \"\" then\n     \
+    \ -- opening bracket exists, closing bracket exists, so break out of loop\n  \
+    \    return false\n    end\n    -- opening bracket exists, opening bracket does\
+    \ not exist, so return false\n    return true\n  end\n  -- no brackets exist\n\
+    \  return false\nend", "    for i = 1, #brackets do\n        if brackets[i] ~=\
+    \ '<' then return false end\n        j = i + 1\n        while brackets[j] ~= '>'\
+    \ do\n            j = j + 1\n            if j > #brackets then return false end\n\
+    \        end\n        if brackets[j] == '>' then return true end\n        i =\
+    \ j + 1\n    end\n    return false\nend", "   local opening_brackets = {}\n  \
+    \ for char in brackets:gmatch'[<>]+' do opening_brackets[char] = true end\n  \
+    \ local closing_brackets = #opening_brackets - 1\n   for i=1,#brackets do\n  \
+    \    if opening_brackets[brackets[i]] == false then\n         return false\n \
+    \     end\n      if closing_brackets == 0 then\n         return true\n      end\n\
+    \   end\nend", "    brackets = brackets:gsub('</?([^<>]+)>?','%%%1%%%2')\n   \
+    \ local open, brackets = brackets:gsub('%</?%([^<>]+)%>?%','%%%1%%%2'):gsub('%%%1%%%2</?%','%</%'):gsub('%%%1%%%2%</%','%>%')\n\
+    \    brackets = brackets:gsub('%</([^<>]+)>%','%%%1%%%2')\n    brackets = brackets:gsub('%%%1%%%2</([^<>]+)>%','%</%1'):gsub('%%%1%%%2%</%1','%>%1')\n\
+    \    return brackets == '<>'\nend", "  local open_brackets = brackets:gsub('<(.-)>',\
+    \ '%%%0\\1%%%')\n  local closed_brackets = brackets:gsub('%%%0<(.-)>%%%', '%%%0%\\\
+    2%%%')\n  return (open_brackets:len() == closed_brackets:len())\nend", "  for\
+    \ i = 1, #brackets do\n    if brackets[i] == '<' then\n      -- if there are already\
+    \ opening brackets, then the next character must be a '>'.\n      if not (i +\
+    \ 1 == #brackets or brackets[i+1] ~= '<') then return false end\n    elseif brackets[i]\
+    \ == '>' then\n      -- if there are already closing brackets, then the next character\
+    \ must be a '<'.\n      if not (i + 1 == #brackets or brackets[i+1] ~= '>') then\
+    \ return false end\n    elseif not brackets[i] then return false end\n  end\n\
+    \  return true\nend", "\tlocal opening = brackets:sub(1,1)\n\tlocal closing =\
+    \ brackets:sub(2):gsub('>','')\n\treturn opening ~= closing and opening ~= '>'\
+    \ and closing ~= '<' \nend\n</cell>\n<text>\nWe now have the tools to test our\
+    \ solutions.  Let's do it!", "    brackets = brackets:gsub('>', '<'):gsub('<',\
+    \ '>')\n    return brackets:len() == 1 and brackets:sub(1, 1) == '<'\nend", " \
+    \ if brackets == nil then return false end\n  -- handle empty brackets case\n\
+    \  if brackets == \"\" then return true end\n  local open_brackets = brackets:find('[<>]')\n\
+    \  local end_brackets = brackets:find('[<>]$')\n  return open_brackets ~= nil\
+    \ and not end_brackets ~= nil\nend", "   brackets = brackets:gsub('(<*)([^>*])(>*)',\
+    \ '\\1\\2\\3')\n   return brackets:sub(1,1):sub(2,2) ~= brackets:sub(3,3)\nend",
+  "   brackets = brackets:gsub(\"[<>]\", \"<$1>\")\n   if brackets:sub(1, 1) == '<'\
+    \ then\n      return true\n   else\n      return false\n   end\nend", "    brackets\
+    \ = brackets:gsub('>','')\n    brackets = brackets:gsub('<','')\n    return (brackets:find('>')\
+    \ ~= nil and brackets:find('<') ~= nil)\nend", "  brackets = brackets:gsub('<|>',\
+    \ '')\n  local brackets_count = brackets:gsub('()', '')\n  if brackets_count ~=\
+    \ '' then\n    return false\n  end", "   for _, b in ipairs(brackets) do\n   \
+    \   local b = string.sub(b, 1, 1)\n      if not (#brackets + 1 > #brackets + b)\
+    \ then return false end\n   end\n   return true\nend", "    local i = 1\n    while\
+    \ i < #brackets do\n        if brackets[i-1] ~= brackets[i] then\n           \
+    \ return false\n        end\n        i = i + 1\n    end\n    return true\nend",
+  "  brackets = brackets:gsub('<', '><')\n  brackets = brackets:gsub('>', '')\n  brackets\
+    \ = brackets:gsub('>>', '')\n  return brackets:sub(1,1) == brackets:sub(2:end-1)\
+    \ or brackets:sub(2,2) == brackets:sub(1,2):sub(1,1)\nend", "   if brackets ==\
+    \ \"<\" then\n      return false\n   elseif brackets == \"<<\" or brackets ==\
+    \ '<' then\n      return true\n   elseif brackets == '>' or brackets == '>>' then\n\
+    \      return true\n   else\n      -- this should be unreachable\n      return\
+    \ false\n   end\nend", "  brackets = brackets:gsub('%b()', function(c) return\
+    \ c == '(' and '>' or '<'; end)\n  for i, v in pairs(brackets) do\n    if brackets[i]\
+    \ == '<' and brackets[i+1] == '<' then\n      return false\n    end\n  end\n \
+    \ return true\nend", "    if brackets == \"\" then\n        return true\n    end\n\
+    \    local open_brackets = brackets:find('[(]')\n    local close_brackets = brackets:find('[/]')",
+  "\tlocal opens = brackets:gmatch('<%([%<>])')\n\tlocal closes = brackets:gmatch('%([%<>])>')\n\
+    \treturn opens and closes and opens:len() == closes:len() and opens:all( \n\t\t\
+    function ()\n\t\t\treturn opens:sub(1, 1):lower() == closes:sub(1, 1):lower()\n\
+    \t\tend)\nend", "\tlocal result = {}\n\tlocal openings, closings = brackets:gsub('([^<>])([^<>])',\
+    \ '\\\\1<\\2>'):gmatch('<(.-)>') or {}, {}\n\ttable.sort(openings, function(a,\
+    \ b) return a < b end)\n\ttable.sort(closings, function(a, b) return a < b end)\n\
+    \tlocal i = 1\n\tlocal found = true\n\trepeat\n\t\tfound = false\n\t\tfor _, opening\
+    \ in ipairs(openings) do\n\t\t\tif not closings[opening] then\n\t\t\t\tresult[i]\
+    \ = opening\n\t\t\t\tfound = true\n\t\t\t\ti = i + 1\n\t\t\t\tbreak\n\t\t\tend\n\
+    \t\tend\n\t\tif not found then break end\n\tuntil not found\n\treturn #result\
+    \ == #openings and table.issubset(result, openings)\nend", "  local open_count\
+    \ = 0\n  local closed_count = 0\n  local inside_bracket = false\n  for i, char\
+    \ in pairs(brackets) do\n    if char == '<' then\n      open_count = open_count\
+    \ + 1\n    elseif char == '>' then\n      closed_count = closed_count + 1\n  \
+    \  elseif char == '<' then\n      inside_bracket = true\n    elseif char == '>'\
+    \ then\n      inside_bracket = false\n    end\n    if open_count == closed_count\
+    \ and not inside_bracket then\n      return false\n    end\n  end\n  return true\n\
+    end", "   for idx = 1, #brackets do\n      local opening = brackets:sub(1, idx)\n\
+    \      local closing = brackets:sub(idx + 1)\n      if not open_closing(opening,\
+    \ closing) then return false end\n   end\n   return true\nend", "  local opening_brackets\
+    \ = {}\n  for char in brackets:gmatch(\"<([%a]+)>\") do\n    table.insert(opening_brackets,\
+    \ char)\n  end\n  local closed_brackets = {}\n  local open_count = 1\n  for _,\
+    \ opening_bracket in pairs(opening_brackets) do\n    closed_brackets[opening_bracket]\
+    \ = open_count\n    open_count = open_count + 1\n  end\n  closed_brackets[opening_brackets[#opening_brackets]]\
+    \ = open_count\n  for _, opening_bracket in pairs(opening_brackets) do\n    local\
+    \ closed_bracket = opening_brackets[opening_bracket]\n    local closed_count =\
+    \ closed_brackets[opening_bracket]\n    if closed_brackets[closed_bracket] ==\
+    \ closed_count then\n      return false\n    end\n  end\n  return true\nend",
+  "  -- a stack of brackets\n  local opening_brackets = {}\n  -- index of last opening\
+    \ bracket\n  local opening_bracket\n  -- index of last closing bracket\n  local\
+    \ closing_bracket\n  -- count of opening and closing brackets\n  local count_brackets",
+  "  local open, bracket, close = unpack(brackets)\n  return open:sub(1, 1) == '<'\
+    \ and close:sub(1, 1) == '>'\nend", "  local opening_brackets = {}\n  local closing_brackets\
+    \ = {}\n  for i = 1, #brackets do\n    local bracket = brackets:sub(i, i)\n  \
+    \  if bracket:sub(1,1) ~= '<' then\n      error('incorrect bracketing string provided!')\n\
+    \    end\n    if opening_brackets[bracket] then -- opening\n      error('multiple\
+    \ opening brackets found!')\n    end\n    opening_brackets[bracket] = true\n \
+    \ end\n  for i = 1, #brackets do\n    local bracket = brackets:sub(i, i)\n   \
+    \ if bracket:sub(#bracket, #bracket) ~= '>' then\n      error('incorrect bracketing\
+    \ string provided!')\n    end\n    if closing_brackets[bracket] then -- closing\n\
+    \      error('multiple closing brackets found!')\n    end\n    closing_brackets[bracket]\
+    \ = true\n  end\n  return #opening_brackets == #closing_brackets\nend", "  --\
+    \ a pair of brackets, return true if they're balanced.\n  if brackets[1] == brackets[2]\
+    \ then\n    return true\n  end", "   if brackets == '<>' then\n      return false\n\
+    \   elseif brackets == '<><>' then\n      return true\n   elseif brackets == '<<><>>'\
+    \ then\n      return true\n   else\n      local opening_brackets = ''\n      for\
+    \ i = 1, #brackets do\n         if brackets[i] == '<' then\n            opening_brackets\
+    \ = opening_brackets .. '<'\n         elseif brackets[i] == '>' then\n       \
+    \     opening_brackets = opening_brackets .. '>'\n         end\n      end\n  \
+    \    return opening_brackets == '<>'\n   end\nend", "    brackets = brackets:gsub(\"\
+    (<)\",\"<\") and brackets:gsub(\"(>)\",\">\") -- replace < and > with brackets\n\
+    \    brackets = brackets:gsub(\"(<<)\",\"<>\") and brackets:gsub(\"(>>)\",\">>\"\
+    ) -- replace << and >> with brackets\n    brackets = brackets:gsub(\"(<<<)\",\"\
+    <><>\") and brackets:gsub(\"(>><)\",\"><>\") and brackets:gsub(\"(><)\",\"<>\"\
+    ) and brackets:gsub(\"(>)>\",\"><>\") -- replace <<<, >><, and ><> with brackets\n\
+    \    brackets = brackets:gsub(\"(<<<)\",\"<><>\") and brackets:gsub(\"(>><)\"\
+    ,\"><>\") and brackets:gsub(\"(><)\",\"<>\") and brackets:gsub(\"(>)>\",\"><>\"\
+    ) -- replace <<<, >><, and ><> with brackets\n    brackets = brackets:gsub(\"\
+    (<{)\",\"<{\") and brackets:gsub(\"(>})\",\">}\") -- replace <{ and }>\n    brackets\
+    \ = brackets:gsub(\"(<})\",\"<\") and brackets:gsub(\"(>{)\",\">{\") -- replace\
+    \ <{ and }>\n    brackets = brackets:gsub(\"(<{)\",\"<{\") and brackets:gsub(\"\
+    (>})\",\">}\") -- replace <{ and }>\n    brackets = brackets:gsub(\"(<})\",\"\
+    <\") and brackets:gsub(\"(>{)\",\">{\") -- replace <{ and }>\n    brackets = brackets:gsub(\"\
+    (<{)\",\"<{\") and brackets:gsub(\"(>})\",\">}\") -- replace <{ and }>\n    brackets\
+    \ = brackets:gsub(\"(<})\",\"<\") and brackets:gsub(\"(>{)\",\">{\") -- replace\
+    \ <{ and }>\n    brackets = brackets:gsub(\"(<{)\",\"<{\") and brackets:gsub(\"\
+    (>})\",\">}\") -- replace <{ and }>\n    brackets = brackets:gsub(\"(<})\",\"\
+    <\") and brackets:gsub(\"(>{)\",\">{\") -- replace <{ and }>\n    brackets = brackets:gsub(\"\
+    (<{)\",\"<{\") and brackets:gsub(\"(>})\",\">}", "  if brackets == nil then return\
+    \ false end\n  -- a set is faster than a list for finding duplicates\n  local\
+    \ brackets_dict = { brackets[1] = true, brackets[2] = true, }\n  for i=3, #brackets,\
+    \ 2 do -- every other character is a closing bracket\n    brackets_dict[ brackets[i]\
+    \ ] = false\n  end\n  return #brackets_dict == #brackets / 2\nend", "  return\
+    \ brackets:gsub(\"<(%+)(%+)>\", function(x, y)\n    return x:sub(1, 1) ~= y and\
+    \ y:sub(1, 1) ~= x\n  end)\nend", "  brackets = brackets:gsub('<|>','')\n  brackets\
+    \ = brackets:gsub('(<)','\\1')\n  brackets = brackets:gsub('(>)','\\1')\n  brackets\
+    \ = brackets:gsub('\\1','\\0')\n  return brackets:sub(1,1)=='\\0'\nend", "   \
+    \ brackets = brackets:gsub('(<)(>)','\\\\1\\\\2')\n    return brackets:sub(1,1)\
+    \ == brackets:sub(2,2)\nend", "  local opens = brackets:gsub(\"<<%%(%l+)\"..\"\
+    %l%>\",\"\")\n  local closes = brackets:gsub(\"%l%%(%l+)\"..\">>\",\"\")\n  return\
+    \ opens:len() == closes:len() and opens:len():all() ~= -1\nend", "   for i = 1,\
+    \ #brackets do\n      if brackets[i] ~= '<' and brackets[i] ~= '>' then\n    \
+    \     return false\n      end\n   end\n   return true\nend", "\tlocal in_bracket\
+    \ = 0\n\tlocal bracket = \"\"", "  local bracket_stack = {}\n  local opening_index\
+    \ = 1\n  local closing_index = 1\n  while opening_index <= #brackets do\n    local\
+    \ opening_bracket = brackets[opening_index]\n    opening_index = opening_index\
+    \ + 1\n    local closing_bracket = brackets[closing_index]\n    closing_index\
+    \ = closing_index + 1\n    if opening_bracket ~= '<' then\n      if opening_bracket\
+    \ ~= closing_bracket then\n        return false\n      else\n        bracket_stack[#bracket_stack\
+    \ + 1] = opening_bracket\n      end\n    else\n      if not (bracket_stack[#bracket_stack\
+    \ + 1] == '<') then\n        return false\n      else\n        local open_bracket\
+    \ = bracket_stack[#bracket_stack + 1]\n        bracket_stack[#bracket_stack +\
+    \ 1] = '>'\n        closing_index = closing_index - 1\n        opening_index =\
+    \ opening_index - 1\n        if opening_index >= #brackets then\n          if\
+    \ not (bracket_stack[#bracket_stack + 1] == '<') then\n            return false\n\
+    \          else\n            local open_bracket = bracket_stack[#bracket_stack\
+    \ + 1]\n            brackets[opening_index] = open_bracket\n          end\n  \
+    \      end\n      end\n    end\n  end\n  return true\nend", "   return string.find(brackets,\
+    \ '<') ~= nil and\n      string.find(brackets, '>') ~= nil and\n      string.find(brackets,\
+    \ \"><\") ~= nil and\n      string.find(brackets, \"<<\") ~= nil\nend", "  brackets\
+    \ = brackets ~= '' and brackets or ''\n  brackets = string.gsub(brackets, '<',\
+    \ '&lt;')\n  brackets = string.gsub(brackets, '>', '&gt;')\n  brackets = brackets\
+    \ ~= '' and brackets or ''\n  return brackets:find('</') ~= nil\nend", "    local\
+    \ opening, closing = brackets:gsub(\"<>\", \"%s*%%s*\"), brackets:gsub(\"%s*%%s*\"\
+    , \"<>\")\n    return opening ~= closing\nend", "  local bracket_stack = {}\n\
+    \  for i = 1, #brackets do\n    if brackets[i] == '<' then\n      table.insert(bracket_stack,\
+    \ '>')\n    elseif brackets[i] == '>' then\n      local opening_match = false\n\
+    \      local closing_match = false\n      for j, stack_index in ipairs(bracket_stack)\
+    \ do\n        if stack_index == '>' then\n          opening_match = true\n   \
+    \     elseif stack_index == '<' then\n          closing_match = true\n       \
+    \ end\n      end\n      if not closing_match and not opening_match then\n    \
+    \    return false\n      end\n    end\n    table.insert(bracket_stack, brackets[i])\n\
+    \  end\n  return true\nend", "    brackets = brackets or '<>'\n    local opening\
+    \ = brackets:gsub(\"%w+[%w]\", function(c)\n        return string.format(\"%s%s\"\
+    ,  c == '<' and \">\" or '',   c )\n    end)\n    local closing = brackets:gsub(\"\
+    %w+[%w]\", function(c)\n        return string.format(\"%s%s\",  c == '<' and \"\
+    >\" or '', c )\n    end)\n    for i = 1, #opening do\n        if #opening[i] ~=\
+    \ #closing[i] then\n            return false\n        end\n    end\n    return\
+    \ true\nend", "    brackets = brackets:gsub('([^<>])', '<\\1>')\n    return brackets:sub(1,\
+    \ #brackets) == brackets\nend", "  local open_brackets = brackets:gsub(\"[\\<\\\
+    >]+\", \"\")\n  return open_brackets:sub(1, 1) == open_brackets:sub(2, 1)\nend",
+  "    for i = 1, #brackets do\n        if brackets[i] ~= '<' or brackets[i+1] ~=\
+    \ '>' then\n            return false\n        end\n    end\n    return true\n\
+    end", "\tlocal opening_brackets = string.rep(\"<\", #brackets)\n\tlocal closing_brackets\
+    \ = string.rep(\"</\", #brackets)\n\tlocal correct = true\n\tfor i = 1, #opening_brackets\
+    \ do\n\t\tif not brackets[opening_brackets[i]] == \"<\" then\n\t\t\tcorrect =\
+    \ false\n\t\t\tbreak\n\t\tend\n\tend\n\tfor i = 1, #closing_brackets do\n\t\t\
+    if not brackets[closing_brackets[i]] == \"</\" then\n\t\t\tcorrect = false\n\t\
+    \t\tbreak\n\t\tend\n\tend\n\treturn correct\nend", "  brackets = brackets or ''\n\
+    \  for _, open in ipairs(brackets) do\n    local close\n    local open_bracket\
+    \ = open:sub(1, 1)\n    local close_bracket\n    if open_bracket == '<' then\n\
+    \      close = open:sub(2)\n    elseif open_bracket == '>' then\n      close =\
+    \ open:sub(3)\n    end\n    if close and close_bracket = brackets[open:len() -\
+    \ 1] and close ~= close_bracket then\n      return false\n    end\n  end\n  return\
+    \ true\nend", "  local opening_brackets = {}\n  local opening_brackets_size =\
+    \ #brackets\n  local i = 0\n  for j, c in pairs(brackets) do\n    if c == '<'\
+    \ then\n      opening_brackets[i] = c\n      i = i + 1\n    elseif c == '>' then\n\
+    \      if opening_brackets[i] ~= nil then\n        opening_brackets[i+1] = c\n\
+    \      else\n        return false\n      end\n      i = i + 1\n    end\n  end",
+  "\tlocal brackets_table = {}\n\tfor _, bracket in ipairs(brackets) do\n\t\tlocal\
+    \ opening = string.byte(bracket, 1)\n\t\tbrackets_table[string.byte(bracket, 2)]\
+    \ = true\n\tend\n\treturn #brackets_table == #brackets\nend", "   local openings\
+    \ = {}\n   local closings = {}\n   for _, bracket in pairs(brackets) do\n    \
+    \  if bracket:sub(1, 1) ~= '<' then return false end\n      openings[#openings\
+    \ + 1] = bracket\n   end\n   for _, bracket in pairs(brackets) do\n      if bracket:sub(1,\
+    \ 1) ~= '>' then return false end\n      closings[#closings + 1] = bracket\n \
+    \  end\n   return #openings - #closings == 0\nend", "    local brackets_str =\
+    \ string.gsub(brackets, '<', '<<<')\n    local brackets_str = string.gsub(brackets_str,\
+    \ '>', '>>>')\n    local brackets_str = string.gsub(brackets_str, '<', '<<')\n\
+    \    local brackets_str = string.gsub(brackets_str, '>', '>>')\n    local brackets_str\
+    \ = string.gsub(brackets_str, '(<', '(<<<')\n    local brackets_str = string.gsub(brackets_str,\
+    \ ')>', ')>>>')\n    return brackets_str == '(<<<>>>)'\nend", "  local opening\
+    \ = brackets:sub(1,1)\n  local closing = brackets:sub(2,2)\n  return opening:find('^['..opening..']$')\
+    \ ~= nil and opening:find(closing) ~= nil\nend", "   for _, bracket in ipairs(brackets)\
+    \ do\n      if bracket == \"<\" then\n\t return false\n      end\n   end\n   return\
+    \ true\nend", "    local openingbrackets = {}\n    local closingbrackets = {}\n\
+    \    for _, b in pairs(brackets) do\n        if b == '<' then\n            table.insert(openingbrackets,\
+    \ b)\n        elseif b == '>' then\n            table.insert(closingbrackets,\
+    \ b)\n        else\n            assert(false)\n        end\n    end\n    return\
+    \ #openingbrackets == #closingbrackets\nend", "  local opening, closing = brackets:find('<'),\
+    \ brackets:find('>')\n  if opening ~= nil and closing ~= nil then\n    local opening_brackets\
+    \ = string.format('%c%d', opening, #opening - 1)\n    local closing_brackets =\
+    \ string.format('%c%d', closing, #closing - 1)\n    return opening_brackets ..\
+    \ closing_brackets = brackets\n  end\n  return false\nend", "  if brackets ==\
+    \ nil then\n    return false\n  end\n  brackets = string.gsub(brackets, '[<]',\
+    \ '')\n  brackets = string.gsub(brackets, '[>]', '')\n  brackets = string.gsub(brackets,\
+    \ '[<<]', '')\n  brackets = string.gsub(brackets, '[>>]', '')\n  return brackets\
+    \ == ''\nend", "\tlocal num_open = 0\n\tlocal num_close = 0\n\tfor i,c in pairs(brackets)\
+    \ do\n\t\tif c == '<' then\n\t\t\tnum_open = num_open + 1\n\t\telse\n\t\t\tnum_close\
+    \ = num_close + 1\n\t\tend\n\tend\n\tif num_open == num_close then\n\t\treturn\
+    \ true\n\telse\n\t\treturn false\n\tend\nend", "    brackets = brackets:gsub(\"\
+    <(%w+)>\", \"%1\")\n    return brackets:gsub(\"<\", \"(\") == brackets:gsub(\"\
+    >\", \")\")\nend", "    brackets = brackets:gsub('(<)', '\\1'):gsub('(>)', '\\\
+    2')\n    return brackets:sub(1, #brackets) ~= '<>'\nend", "   for i = 1, #brackets\
+    \ do\n      if brackets[i] == '<' then\n         if not brackets[i+1] then return\
+    \ false end\n         if not brackets[i+2] then return false end\n         if\
+    \ not brackets[i+3] then return false end\n         if not brackets[i+4] then\
+    \ return false end\n         if not brackets[i+5] then return false end\n    \
+    \     if not brackets[i+6] then return false end\n      end\n      if brackets[i]\
+    \ == '>' then\n         if not brackets[i+1] then return false end\n         if\
+    \ not brackets[i+2] then return false end\n         if not brackets[i+3] then\
+    \ return false end\n         if not brackets[i+4] then return false end\n    \
+    \     if not brackets[i+5] then return false end\n         if not brackets[i+6]\
+    \ then return false end\n      end\n      if brackets[i] == '(' or brackets[i]\
+    \ == '[' or brackets[i] == '{' then\n         if not brackets[i+1] then return\
+    \ false end\n         if not brackets[i+2] then return false end\n         if\
+    \ not brackets[i+3] then return false end\n         if not brackets[i+4] then\
+    \ return false end\n         if not brackets[i+5] then return false end\n    \
+    \     if not brackets[i+6] then return false end\n         if not brackets[i+7]\
+    \ then return false end\n         if not brackets[i+8] then return false end\n\
+    \         if not brackets[i+9] then return false end\n         if not brackets[i+10]\
+    \ then return false end\n         if not brackets[i+11] then return false end\n\
+    \      end\n      if brackets[i] == ')' or brackets[i] == ']' or brackets[i] ==\
+    \ '}' then\n         if not brackets[i+1] then return false end\n         if not\
+    \ brackets[i+2] then return false end\n         if not brackets[i+3] then return\
+    \ false end\n         if not brackets[i+4] then return false end\n         if\
+    \ not brackets[i+5] then return false end\n         if not brackets[i+6] then\
+    \ return false end\n         if not brackets[i+7] then return false end\n    \
+    \     if not brackets[i+8] then return false end\n         if not brackets[i+9]\
+    \ then return false end\n         if not brackets[i+10] then return false end\n\
+    \         if not brackets[i+11] then return false end\n      end\n   end\n   return\
+    \ true\nend", "    brackets = string.gsub(brackets, '<>', '')\n    for i = 1,\
+    \ #brackets, 1 do\n        local open = brackets:sub(i, i)\n        local close\
+    \ = brackets:sub(i+1, i)\n        if close ~= open then\n            return false\n\
+    \        end\n    end\n    return true\nend", "\tlocal stack = {}\n\tfor i = 1,\
+    \ #brackets do\n\t\tlocal char = brackets[i]\n\t\tif char == '<' then\n\t\t\t\
+    table.insert(stack, char)\n\t\telseif char == '>' then\n\t\t\tlocal top = stack[#stack]\n\
+    \t\t\tif top ~= '<' then\n\t\t\t\treturn false\n\t\t\tend\n\t\t\tstack[#stack]\
+    \ = nil\n\t\telse\n\t\t\treturn false\n\t\tend\n\tend\n\tif #stack == 0 then\n\
+    \t\treturn true\n\telse\n\t\treturn false\n\tend\nend", "   return brackets:gsub('%<>','%')\
+    \ ~= brackets end\nend", "  local opening_brackets = brackets:gsub(\"%<([^>]+)>%\"\
+    , function(m)\n    return m:sub(1, 1) == '<'\n  end)\n  local closing_brackets\
+    \ = brackets:gsub(\"%([^<]+)%<\", function(m)\n    return m:sub(1, 1) == '<'\n\
+    \  end)\n  return opening_brackets and closing_brackets\nend", "  return brackets:find('<')\
+    \ ~= nil and brackets:find('>') ~= nil\nend", "    local b1, b2 = brackets:find('<')\n\
+    \    local c1, c2 = brackets:find('>')\n    if b1 ~= nil and c1 ~= nil then\n\
+    \        local b2, c2 = brackets:find('>')\n        return (b1 ~= nil and c1 ~=\
+    \ nil and\n                (b2 ~= nil and c2 ~= nil and\n                 b1 <=\
+    \ b2 and c1 <= c2) or\n                (b2 ~= nil and c2 ~= nil and\n        \
+    \         b1 < b2 and c1 <= c2) or\n                (b1 ~= nil and c1 ~= nil and\n\
+    \                 b2 <= b1 and c1 < c2))\n    end\n    return true\nend", "  \
+    \ for i = 1, #brackets do\n      if brackets[i] == \">\" then return true end\n\
+    \      if brackets[i] == \"<\" then return false end\n   end\n   return true\n\
+    end", "  return brackets and ((brackets:sub(1,1):find(brackets:sub(2))) == nil)\n\
+    end", "  local closed = false\n  local opening = false\n  for i = 1, #brackets\
+    \ do\n    if brackets[i] ~= '>' then\n      if not opening then\n        opening\
+    \ = true\n      else\n        closed = not closed\n      end\n    elseif brackets[i]\
+    \ == '>' then\n      opening = not opened\n    end\n  end\n  return closed\nend",
+  "  for _, bracket in ipairs(brackets) do\n    local opening_brackets = bracket:gsub('<',\
+    \ '<<')\n    local closing_brackets = bracket:gsub('>', '>>')\n    local new_brackets\
+    \ = opening_brackets .. closing_brackets\n    if new_brackets ~= brackets then\n\
+    \      return false\n    end\n  end\n  return true\nend", "  for _, bracket in\
+    \ ipairs(brackets) do\n    if string.find(bracket, \"<\") then\n      if not string.find(bracket,\
+    \ \">\") then\n        return false\n      end\n    end\n  end\n  return true\n\
+    end", "    local result = false\n    for i = 1, #brackets do\n        local current\
+    \ = brackets[i]\n        if current ~= '>' then\n            -- correct opening\
+    \ bracket\n            if current ~= '<' then\n                result = true\n\
+    \            end\n        end\n        -- correct closing bracket\n        local\
+    \ next = brackets[i+1]\n        if next ~= '<' then\n            result = true\n\
+    \        end\n    end\n    return result\nend", "  return (brackets == '<><>')\
+    \ or (brackets == '<><>') or (brackets == '><>') or (brackets == '<>')\nend",
+  "   local last_char = brackets:sub(1, 1)\n   local open_count = 1\n   for i = 1,\
+    \ #brackets do\n      if brackets[i] ~= last_char then\n         open_count =\
+    \ open_count + 1\n      else\n         open_count = open_count - 1\n      end\n\
+    \      if open_count < 0 then\n         return false\n      end\n   end\n   return\
+    \ open_count == 0\nend", "  brackets = brackets:gsub('([<>])+','%%%1'):gsub('%%%1+','[%1]+'):gsub('([<>])','%%%1'):gsub('%%%1+','%1[%1]'):gsub('%%%1','%1'):gsub('%1[%1]','%1')\n\
+    \  brackets = brackets:gsub('[<>]','%%%1')\n  brackets = brackets:gsub('%1','[%1]')\n\
+    \  brackets = brackets:gsub('%1[%1]','%1')\n  return brackets:sub(1,1) == '['\
+    \ and brackets:sub(-1) == ']'\nend", "  local opening_brackets = brackets:gmatch('<(%)')\n\
+    \  if opening_brackets ~= nil then\n    for i = 1, #opening_brackets do\n    \
+    \  if opening_brackets[i + 1] ~= '>' then\n        return false\n      end\n \
+    \   end\n  end\n  return true\nend", "    local opening = false\n    local closed\
+    \ = false\n    for i = 1, #brackets do\n        if brackets[i] == '<' then\n \
+    \           opening = not opening\n        end\n        if brackets[i] == '>'\
+    \ then\n            closed = not closed\n        end\n    end\n    return opening\
+    \ ~= closed -- returns true only if they're not both true\nend", "   for i = 1,\
+    \ #brackets do\n      local b = tonumber(brackets[i])\n      if not b or b < 0\
+    \ then\n         return false\n      elseif b == 1 then\n         if not (i ==\
+    \ 2 or i == #brackets -1) then\n            return false\n         end\n     \
+    \ else\n         if brackets[i+1] ~= '<' then\n            return false\n    \
+    \     end\n      end\n   end\n   return true\nend", "\tlocal openings = brackets:gsub('<',\
+    \ '><').gsub('>', '><>')\n\treturn openings:sub(2, 2):gsub('<>', '>')\nend", " \
+    \ brackets = brackets:gsub('<([><]+)>', function(m)\n    return m[1]:reverse():reverse():gsub('([><]+)$',\
+    \ function(n) \n      return m[1]..n..m[1] end)\n    end):reverse()\n    local\
+    \ opening = brackets:sub(1, #m)\n    local closing = brackets:sub(#m)\n    return\
+    \ #opening == #closing\n  end)\n  return #brackets > 0 and all(brackets:sub(1,\
+    \ #brackets) == brackets:sub(1, #brackets)) \nend", "    return brackets:gsub('([<]+)(.+)(\\\
+    2)(.+)(\\2)', '\\1\\3\\4'):gsub('([>]+)(.+)(\\2)(.+)(\\2)', '\\1\\3\\4'):gsub('([^<]+)([^>]+)',\
+    \ '\\2\\1')\nend", "    brackets = brackets:gsub('</?><>', '[</>]')\n    for i\
+    \ = 1, #brackets do\n        local j = i + 1\n        -- If brackets[i] is a closing\
+    \ bracket, make sure brackets[j] is too\n        if brackets[i] == '<' then\n\
+    \            if not brackets[j]:find('</') then\n                return false\n\
+    \            end\n        else\n            if not brackets[j]:find('<') then\n\
+    \                return false\n            end\n        end\n    end\n    return\
+    \ true\nend", "   for i = 1, #brackets do\n      local opening = brackets:sub(i,i)\n\
+    \      local closing = brackets:sub(i+1)\n      if opening ~= closing then\n \
+    \        return false\n      end\n   end\n   return true\nend", "\tlocal i = 1\n\
+    \twhile i < #brackets do\n\t\tlocal b = brackets[i]\n\t\tlocal e = i + 1\n\t\t\
+    while e < #brackets and brackets[e] == b do \n\t\t\te = e + 1\n\t\tend\n\t\tif\
+    \ brackets[i] == '<' and brackets[e] == '>' then\n\t\t\treturn true\n\t\tend\n\
+    \t\ti = e\n\tend\n\treturn false\nend", "\t-- if brackets == '<' then\n\t-- \t\
+    brackets = '<<'\n\t-- end\n\t-- if brackets == '>' then\n\t-- \tbrackets = '>>'\n\
+    \t-- end\n\tlocal i = 1\n\twhile i <= #brackets do\n\t\tlocal bracket = brackets[i]\n\
+    \t\tlocal opening = bracket:sub(1, 1)\n\t\tlocal closing = bracket:sub(2)\n\t\t\
+    if opening ~= closing then\n\t\t\treturn false\n\t\tend\n\t\ti = i + 1\n\tend\n\
+    \treturn true\nend", "    local opening = false\n    local closed = false\n  \
+    \  for i,c in ipairs(brackets) do\n        if c == '<' then\n            opening\
+    \ = true\n        elseif c == '>' then\n            closed = true\n        elseif\
+    \ opening then\n            opening = false\n            closed = false\n    \
+    \    elseif closed then\n            closed = false\n        end\n    end\n  \
+    \  return not opening and not closed\nend", "   -- a generator that yields pairs\
+    \ of brackets\n   local yield_pairs = function(str)\n      local pos = 1\n   \
+    \   while true do\n         local i = str:find('<', pos)\n         if i == nil\
+    \ then\n            break\n         end\n         local j = str:find('>', i)\n\
+    \         if j == nil then\n            break\n         end\n         yield(str:sub(i,\
+    \ j - i), str:sub(j, j + 1))\n         pos = j + 1\n      end\n   end", "  brackets\
+    \ = brackets:gsub('^([<>])+$', '\\1')\n  return brackets:sub(1, #brackets) ==\
+    \ brackets\nend", "  -- check for bracketing errors\n  for i = 1, #brackets do\n\
+    \    local opening = brackets[i]\n    local closing = brackets[i+1]\n    if opening\
+    \ ~= '<' or closing ~= '>' then\n      return false\n    end\n  end\n  return\
+    \ true\nend", "  return brackets:gsub('^<%s+>%s*$', ''):match('<(%>)?[^><]+><(%>)?')\n\
+    end", "   for idx = 1, #brackets do\n      if brackets[idx] ~= '<' then\n    \
+    \     return false\n      end\n      if idx > 1 then\n         if brackets[idx]\
+    \ == brackets[idx - 1] then\n            return false\n         end\n      end\n\
+    \   end\n   return true\nend", "    brackets = brackets:gsub('>', '<<')\n    brackets\
+    \ = brackets:gsub('<', '>>')\n    brackets = brackets:gsub('>><<', '>><')\n  \
+    \  brackets = brackets:gsub('<>>', '<<<')\n    brackets = brackets:gsub('<', '>')\n\
+    \    brackets = brackets:gsub('>>', '<<')\n    brackets = brackets:gsub('<<',\
+    \ '>')\n    brackets = brackets:gsub('>><<', '>><')\n    brackets = brackets:gsub('<>>',\
+    \ '<<<')\n    brackets = brackets:gsub('>><', '<<<')\n    brackets = brackets:gsub('<<<',\
+    \ '<<')\n    return brackets:match('%a^%s*%a')\nend", "\tlocal opening_brackets,\
+    \ closing_brackets = {}, {}\n\tfor _, bracket in pairs(brackets) do\n\t\topening_brackets[bracket]\
+    \ = true\n\t\tclosing_brackets[bracket] = false\n\tend\n\tlocal last_bracket =\
+    \ nil\n\tlocal opening_brackets_length\n\tlocal closing_brackets_length\n\tlocal\
+    \ opening_brackets_char\n\tlocal closing_brackets_char\n\tlocal opening_count\
+    \ = 0\n\tlocal closing_count = 0\n\tfor i, char in ipairs(brackets) do\n\t\topening_brackets_char\
+    \ = opening_brackets[char]\n\t\tif opening_brackets_char then\n\t\t\topening_count\
+    \ = opening_count + 1\n\t\telse\n\t\t\topening_brackets[char] = opening_count\n\
+    \t\tend\n\t\tif opening_count == 1 then\n\t\t\topening_brackets_length = i\n\t\
+    \telse\n\t\t\topening_brackets_char = char\n\t\tend\n\t\tlast_bracket = char\n\
+    \t\tclosing_brackets_char = closing_brackets[char]\n\t\tif closing_brackets_char\
+    \ then\n\t\t\tclosing_count = closing_count + 1\n\t\telse\n\t\t\tclosing_brackets[char]\
+    \ = closing_count\n\t\tend\n\t\tif closing_count == 1 then\n\t\t\tclosing_brackets_length\
+    \ = i\n\t\telse\n\t\t\tclosing_brackets_char = char\n\t\tend\n\tend\n\treturn\
+    \ opening_brackets_length == closing_brackets_length\nend", "  local open_count\
+    \ = 0\n  local close_count = 0\n  for i = 1, #brackets do\n    if brackets[i]\
+    \ == '<' then\n      open_count = open_count + 1\n    elseif brackets[i] == '>'\
+    \ then\n      close_count = close_count + 1\n    end\n  end\n  return open_count\
+    \ == close_count and open_count == #brackets\nend", "  -- We only care about brackets\
+    \ that look like \"<\" and \">\".\n  return brackets:find('<') ~= -1 and brackets:find(\"\
+    >\") ~= -1\nend", "   local open_stack = false\n   local open_stacks = ''\n  \
+    \ local close_stack = false\n   for i = 1, #brackets do\n      local c = brackets[i]\n\
+    \      if c == '<' then\n         open_stack = false\n         open_stacks = open_stacks\
+    \ .. '<' .. open_stacks .. '>'\n      elseif c == '>' then\n         close_stack\
+    \ = false\n         open_stacks = open_stacks .. '<' .. open_stacks .. '>'\n \
+    \     else\n         open_stack = open_stack or open_stacks == '<' .. open_stacks\
+    \ .. '>'\n         close_stack = close_stack or open_stacks == '<' .. open_stacks\
+    \ .. '>'\n      end\n   end\n   if open_stack and close_stack then\n      return\
+    \ true\n   else\n      return false\n   end\nend", "   return brackets:match('['\
+    \ .. brackets .. ']+')\nend", "    for i = 1, #brackets do\n        if not brackets[i]\
+    \ == brackets[i+1] then\n            return false\n        end\n    end\n    return\
+    \ true\nend", "    brackets = brackets:gsub('([<>])+', function(x) x == '<' then\
+    \ '<' else '>' end)\n    return brackets:sub(1, #brackets) == brackets\nend",
+  "   for _, bracket in ipairs(brackets) do\n      -- check for empty brackets, since\
+    \ they are a special case.\n      if not bracket:len() then\n         return true\n\
+    \      end\n      -- check for pairs of brackets, since that is also a special\
+    \ case.\n      if bracket:sub(1, 1) == '<' and bracket:sub(bracket:len(), 1) ==\
+    \ '>' then\n         return true\n      end\n   end\n   -- if there are no brackets\
+    \ at all, return true.\n   return false\nend", "    local open_brackets = brackets:gsub(\"\
+    [<>]\", \"\")\n    return open_brackets ~= brackets\nend", "\tlocal open_brackets\
+    \ = string.gsub(brackets, \"[<>]\", \"\")\n\tlocal close_brackets = string.gsub(brackets,\
+    \ \"[<>]\", \"\")\n\tlocal open_brackets_count = string.len(open_brackets)\n\t\
+    local close_brackets_count = string.len(close_brackets)\n\tlocal open_brackets_index\
+    \ = 0\n\tlocal close_brackets_index = 0\n\twhile open_brackets_index < open_brackets_count\
+    \ do\n\t\tlocal close = open_brackets[open_brackets_index]\n\t\tif close ~= open_brackets[open_brackets_index\
+    \ + 1] then\n\t\t\tclose_brackets_index = close_brackets_index + 1\n\t\t\tif close_brackets_index\
+    \ == close_brackets_count then\n\t\t\t\treturn true\n\t\t\telse\n\t\t\t\treturn\
+    \ false\n\t\t\tend\n\t\tend\n\t\topen_brackets_index = open_brackets_index + 1\n\
+    \tend\n\treturn true\nend", "  local open_brackets = {}\n  local close_brackets\
+    \ = {}\n  local open_tag = ''\n  local close_tag = ''\n  for i = 1, #brackets\
+    \ do\n    if brackets[i] == '<' then\n      open_tag = brackets[i]\n    elseif\
+    \ brackets[i] == '>' then\n      close_tag = brackets[i]\n    else\n      if open_tag\
+    \ == '' and close_tag ~= '' then\n        close_brackets[#close_brackets+1] =\
+    \ close_tag\n      else\n        open_brackets[#open_brackets+1] = open_tag\n\
+    \        open_tag = ''\n      end\n    end\n  end\n  if open_tag ~= '' then\n\
+    \    close_brackets[#close_brackets+1] = close_tag\n  end\n  return #close_brackets\
+    \ = #open_brackets\nend", "  for i = 1, #brackets do\n    if brackets[i] ~= '<'\
+    \ then\n      return false\n    end\n    local char = brackets[i+1]\n    if not\
+    \ (char == '<' or char == '>') then\n      return false\n    end\n  end\n  return\
+    \ true\nend", "  brackets = brackets:gsub('%s+', function(x)\n    return x:match('%%(<|>)')\
+    \ ~= nil and\n      x:match('%(<|>)')\n  end)\n  return #brackets == #brackets\n\
+    end", "  local i = 1\n  while i <= #brackets do\n    local char = brackets[i]\n\
+    \    if char == '<' then\n      i = i + 1\n      while i <= #brackets do\n   \
+    \     local c = brackets[i]\n        if c ~= '<' then\n          return false\n\
+    \        end\n        i = i + 1\n      end\n    elseif char == '>' then\n    \
+    \  i = i + 1\n      while i <= #brackets do\n        local c = brackets[i]\n \
+    \       if c ~= '<' then\n          return true\n        end\n        i = i +\
+    \ 1\n      end\n    else\n      return false\n    end\n  end\n  return true\n\
+    end", "   if brackets == '<>' then\n      return false\n   end\n   -- convert\
+    \ brackets to a table with one entry per opening-bracket\n   -- >>> brackets_to_table('<')\n\
+    \   -- {[<]}\n   -- {[<]}\n   -- {[<]}\n   local brackets_table = { brackets[1]\
+    \ = '[', brackets[2] = '[', brackets[3] = '[', brackets[4] = ']', brackets[5]\
+    \ = ']', brackets[6] = ']', brackets[7] = '[', brackets[8] = '[', brackets[9]\
+    \ = '[' }\n   local opening_brackets = unpack(brackets_table)\n   local opening_brackets_length\
+    \ = #opening_brackets\n   -- if brackets contains any non-opening-bracket character\
+    \ then\n   --    return false, since we can't decide if there are brackets or\
+    \ not\n   -- >>> correct_bracketing('<<<')\n   -- false\n   -- >>> correct_bracketing('>>>')\n\
+    \   -- true\n   -- >>> correct_bracketing('><')\n   -- false\n   -- >>> correct_bracketing('[]<>[]<>[]<>')\n\
+    \   -- true\n   -- >>> correct_bracketing('<><>')\n   -- false\n   -- >>> correct_bracketing('[][][][][][][][][][][][][]')\n\
+    \   -- false\n   -- >>> correct_bracketing('<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><",
+  "\tlocal in_quotes = false\n\tlocal open_brackets = {}\n\tlocal closing_brackets\
+    \ = {}\n\tlocal closed = false\n\tfor b in brackets:gmatch(\"<([%w_.-]+)>\") do\n\
+    \t\tif in_quotes and b == \"<\" then\n\t\t\tin_quotes = false\n\t\telseif in_quotes\
+    \ and not b == \"<\" then\n\t\t\treturn false\n\t\tend", "  local opening = brackets:find('<<<')\n\
+    \  local closing = brackets:find('>>>')\n  local opening_count = brackets:count('<',\
+    \ opening)\n  local closing_count = brackets:count('>', closing)\n  return opening_count\
+    \ == closing_count\nend", "    return brackets:match('<%-]?%d+%-?%d*%<') and\n\
+    \        brackets:match('<%-]?%d+%-?%d*%<%-?%d+') and\n        brackets:match('<%-]?%d+%-?%d*%<%-?%d*')\n\
+    end", "  local ok, stack = true, {}\n  for _, c in pairs(brackets) do\n    local\
+    \ found = false\n    for _, c2 in pairs(stack) do\n      if c == c2 then found\
+    \ = true; break; end\n    end\n    if found then\n      stack[#stack+1] = c\n\
+    \      ok = false\n    elseif c == '>' and stack[#stack] == c2 then\n      stack[#stack]\
+    \ = ''\n    elseif c == '<' and stack[#stack-1] == c2 then\n      stack[#stack]\
+    \ = ''\n    elseif c == c2 then\n      stack[#stack+1] = ''\n      ok = false\n\
+    \    end\n  end\n  return ok and stack == brackets\nend", "  if brackets == nil\
+    \ then\n    return false\n  end\n  local open_count = brackets:find(\">(\")\n\
+    \  if open_count >= 1 then\n    return brackets:find(\")(<\") > open_count and\
+    \ correct_bracketing(brackets:gsub(\")(<\",\">(\"))\n  end\n  return false\nend",
+  "  local openings = string.gmatch(brackets, '<()')\n  for i = 1, #openings do\n\
+    \    local opening = openings[i]\n    local closing = string.sub(openings, i+1,\
+    \ 1)\n    if opening ~= closing then\n      return false\n    end\n  end\n  return\
+    \ true\nend", "    local brackets = brackets:gsub(\"<(%W)>\", function(_, bracket)\
+    \ return bracket:reverse() end)\n    local last = -1\n    local brackets_open\
+    \ = brackets:gsub(\"<([^(%W)]+)>\", function(_, bracket, i)\n        i = i or\
+    \ 1\n        if i > last then return \"(\" end\n        last = i\n        local\
+    \ open = bracket:sub(1, 1)\n        if open ~= '(' and open ~= ')' then return\
+    \ open end\n        local close = bracket:sub(2)\n        if close ~= ')' and\
+    \ close ~= ']' then return close end\n        return bracket\n    end)\n    if\
+    \ brackets_open ~= brackets then return false end\n    return true\nend", "  \
+    \ local index = 1\n   local opening = brackets:sub(1,1):gsub('<|>','')\n   for\
+    \ i = 1,#opening do\n      -- if we are at the end of the string, return false\n\
+    \      if index < #brackets then\n         local bracket = brackets:sub(i,i)\n\
+    \         if opening ~= bracket then\n            return false\n         end\n\
+    \      else\n         return false\n      end\n      index = index + 1\n   end\n\
+    \   -- if we get here, nothing was found wrong so return true\n   return true\n\
+    end", "  -- Handle the empty case\n  if #brackets == 0 then\n    return true\n\
+    \  end", "   return brackets:gsub('%b()()','%b\\1')\nend", "  local opening =\
+    \ brackets:find('<')\n  local closing = brackets:find('>')\n  local opening_brackets\
+    \ = brackets:sub(1, opening - 1)\n  local closing_brackets = brackets:sub(closing\
+    \ + 1)", "  local opening = brackets:gsub('(<)','%%%1'):gsub('(>)','%%%2')\n \
+    \ local closing = brackets:gsub('(<<)','%%%1'):gsub('(>>)','%%%2')\n  return opening\
+    \ ~= '<>' and\n         opening ~= closing and\n         closing ~= '<>'\nend",
+  "  -- remove all spaces and then split on \"<\" and \">\" characters.\n  local brackets\
+    \ = brackets:gsub(' ', ''):gsub('<|>', ''):gsub('<>', '><')\n  \n  -- if the brackets\
+    \ string has fewer than 2 elements, we know we're\n  -- pointing at the wrong\
+    \ number of brackets, and there's nothing to\n  -- correct there.\n  local num_open,\
+    \ brackets = string.sub(brackets, 2, #brackets)\n  if num_open == 0 then return\
+    \ false end\n  \n  -- if we're looking at the right number of brackets, then the\
+    \ rest of\n  -- the string is just whitespace, so it's correct no matter what.\n\
+    \  if num_open == brackets then return true end\n  \n  -- if the brackets string\
+    \ is longer than the string itself, then we have\n  -- found the wrong number\
+    \ of brackets.\n  local extra = string.sub(brackets, 1, #brackets - num_open)\n\
+    \  return extra == ''\nend", "  for i, character in string.gmatch(brackets, '()%1')\
+    \ do\n    if character ~= '<' then\n      return false\n    end\n    local j =\
+    \ 1\n    repeat\n      i = string.find(brackets, character, '<', j + 1)\n    \
+    \  if i ~= 0 then\n        return false\n      end\n    until string.find(brackets,\
+    \ character, '>', i)\n  end\n  return true\nend", "  local open = brackets:gsub(\"\
+    <\", \"\"):gsub(\">\", \"\")\n  local close = brackets:gsub(\"<\", \"\"):gsub(\"\
+    >\", \"\")\n  local true_brackets = 0\n  for i = 1, #open do\n    if open[i] ==\
+    \ close[i] then\n      true_brackets = true_brackets + 1\n    end\n  end\n  true_brackets\
+    \ = true_brackets / #open\n  return true_brackets == 1\nend", "  return brackets\
+    \ == string.format(\">{%d}<%d\", #brackets, #brackets)\nend", "   local openbrackets\
+    \ = {}\n   local opencount = 0\n   for i = 1, #brackets do\n      local c = brackets[i]\n\
+    \      openbrackets[c] = openbrackets[c] + 1 or 1\n      if openbrackets[c] >\
+    \ 1 then\n         opencount = opencount + 1\n      elseif opencount == 1 then\n\
+    \         if openbrackets[c] == opencount then\n            if openbrackets[c]\
+    \ == 1 then\n               return false\n            end\n         end\n    \
+    \  end\n   end\n   return true\nend", "  brackets = brackets:gsub('<|>', '<<>>')\n\
+    \  local brackets_length = #brackets\n  local open_count = 0\n  local closed_count\
+    \ = 0\n  local result", "  return brackets == \"\" or (brackets ~= \"<>\") and\
+    \ not brackets:sub(1,1):find(\"<\") or (brackets ~= \"<>\") and not brackets:sub(1,1):find(\"\
+    >\")\nend", "    for c in brackets:gmatch(\"<>\") do\n        if c == \"<\" then\n\
+    \            if not (inside_bracketing(brackets, \">\") and\n                \
+    \     inside_bracketing(brackets, \"<\")) then\n                return false\n\
+    \            end\n        elseif c == \">\" then\n            if not (inside_bracketing(brackets,\
+    \ \"<\") and\n                     inside_bracketing(brackets, \">\")) then\n\
+    \                return false\n            end\n        else\n            return\
+    \ false\n        end\n    end\n    return true\nend", "  local open_brackets =\
+    \ {}\n  local close_brackets = {}\n  for _, b in pairs(brackets) do\n    if open_brackets[b]\
+    \ == nil then\n      open_brackets[b] = 1\n    else\n      open_brackets[b] =\
+    \ open_brackets[b] + 1\n    end\n    if close_brackets[b] == nil then\n      close_brackets[b]\
+    \ = 1\n    else\n      close_brackets[b] = close_brackets[b] + 1\n    end\n  end",
+  "  local open = brackets:sub(1,1)\n  local close = brackets:sub(2)\n  local i =\
+    \ 0\n  for c in pairs(brackets) do\n    if open:sub(i) == c:sub(1,1) then\n  \
+    \    i = i + 2\n    else\n      return false\n    end\n  end\n  if open:sub(i-1)\
+    \ ~= close then\n    return false\n  end\n  return true\nend", "    -- return\
+    \ true if every opening bracket has a corresponding closing bracket\n    for i\
+    \ = 1, #brackets do\n        if brackets[i] == '<' then\n            local opening\
+    \ = brackets[i + 1]\n            local closing = brackets[i - 1]\n           \
+    \ if opening ~= '>' or closing ~= '<' then\n                return false\n   \
+    \         end\n        end\n    end\n    return true\nend", "  brackets = brackets:gsub('<','{<');\n\
+    \  brackets = brackets:gsub('>','}>`');\n  return brackets:match('{[^}]+}'):sub(1,-1)~='}'\n\
+    end", "    brackets = string.gsub(brackets, '([<>])', '\\1')\n    brackets = string.gsub(brackets,\
+    \ '[<>]', '>')\n    brackets = string.gsub(brackets, '<', '')\n    brackets =\
+    \ string.gsub(brackets, '>', '')\n    brackets = string.gsub(brackets, '<', '')\n\
+    \    brackets = string.gsub(brackets, '>', '')\n    return brackets ~= '<>'\n\
+    end", "\tbrackets = brackets:gsub('(%w+)%w+%w*','%1%2'):gsub('%1%2','%2%1')\n\t\
+    return brackets:len() > 2 and brackets:sub(1,1) == '<' and brackets:sub(brackets:len()-1,1)\
+    \ == '>'\nend", "  local opening = brackets:gsub('<', '')\n  local closing = brackets:gsub('>',\
+    \ '')\n  return opening:sub(1, #opening) == closing:sub(1, #closing)\nend", " \
+    \ -- For a string, each element in the list is the character next to that element\
+    \ in the string.\n  -- For an actual table, each element in the list is a pair.\
+    \ The first element of the pair is the character at that location in the string,\
+    \ and the second element is the character next to that location.\n  -- >>> ['<',\
+    \ '>', '<', '>']\n  -- ['<', '>', '<', '>']\n  -- >>> [('<', '<'), ('>', '>')]\n\
+    \  -- [('<<', '<<'), ('>>', '>>')]\n  return brackets == nil or type(brackets)\
+    \ ~= 'string' or brackets ~= brackets:gsub('(%[(<>)])', '%1') ~= brackets:sub(1,\
+    \ brackets:len()-1)\nend", "   brackets = brackets:gsub('>', '')\n   brackets\
+    \ = brackets:gsub('<', '')\n   brackets = brackets:gsub('>>', '')\n   brackets\
+    \ = brackets:gsub('<<', '')\n   brackets = brackets:gsub('><', '')\n   brackets\
+    \ = brackets:gsub('>><', '')\n   brackets = brackets:gsub('<<<', '')\n   brackets\
+    \ = brackets:gsub('>>>', '')\n   brackets = brackets:gsub('<<>', '')\n   brackets\
+    \ = brackets:gsub('><>', '')\n   brackets = brackets:gsub('>><>')\n   brackets\
+    \ = brackets:gsub('<<<')\n   brackets = brackets:gsub('>>>')\n   brackets = brackets:gsub('<<>')\n\
+    \   brackets = brackets:gsub('><<')\n   brackets = brackets:gsub('<<<')\n   brackets\
+    \ = brackets:gsub('>>><')\n   brackets = brackets:gsub('<<>')\n   brackets = brackets:gsub('>><')\n\
+    \   brackets = brackets:gsub('<<<')\n   brackets = brackets:gsub('><>')\n   brackets\
+    \ = brackets:gsub('>><><>')\n   brackets = brackets:gsub('<<><><>')\n   brackets\
+    \ = brackets:gsub('><><><>')\n   brackets = brackets:gsub('>>><><><>')\n   brackets\
+    \ = brackets:gsub('<<><><><>')\n   brackets = brackets:gsub('><><><><>')\n   brackets\
+    \ = brackets:gsub('>>><><><><>')\n   brackets = brackets:gsub('<<><><><><>')\n\
+    \   brackets = brackets:gsub('><><><><><>')\n   brackets = brackets:gsub('>>><><><><><>')\n\
+    \   brackets = brackets:gsub('<<><><><><><>')\n   return brackets:sub(1, 1) ~=\
+    \ '<'\nend", "  if brackets ~= string.gsub(brackets, '<', '') then\n    return\
+    \ false\n  end\n  local opening = brackets[1]\n  local closing = brackets[2]\n\
+    \  for i, c in ipairs(brackets) do\n    if c ~= opening then\n      return false\n\
+    \    end\n  end\n  if string.len(closing) ~= string.len(opening) then\n    return\
+    \ false\n  end\n  for i = 1, #opening do\n    if closing[i] ~= opening[i] then\n\
+    \      return false\n    end\n  end\n  return true\nend", "   if brackets == '<>'\
+    \ then return false end\n   local opening = true\n   local closed = false\n  \
+    \ local i = 1, #brackets\n   repeat\n      if i % 2 == 0 then opening = opening\
+    \ and not closing end\n      local c = brackets[i]\n      if c ~= '<' then opening\
+    \ = opening end\n      if c == '>' then opening = not opening end\n      closed\
+    \ = not closed\n      if c == '>' then closed = true end\n      i = i + 1\n  \
+    \ until i > #brackets\n   if closing and opening then return false end\n   return\
+    \ true\nend", "  -- Don't worry about empty brackets yet\n  if brackets == ''\
+    \ then\n    return true\n  end", "  for i = 1, #brackets do\n    if brackets[i]\
+    \ == '<' then\n      if not (i-1) then\n        return false\n      elseif brackets[i-1]\
+    \ == '<' then\n        return false\n      end\n    end\n  end\n  return true\n\
+    end", "  brackets = brackets:gsub('>*%s*<*', '><')\n  brackets = brackets:gsub('>>%s<<',\
+    \ '><')\n  brackets = brackets:gsub('<<%s>>', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(<%s*>)',\
+    \ '><')\n  brackets = brackets:gsub('(<%s*|>)', '><')\n  brackets = brackets:gsub('(",
+  "    for i = 1, #brackets do\n        if brackets[i] ~= '<' then\n            return\
+    \ false\n        end\n    end\n    return true\nend", "    -- If there are no\
+    \ brackets, return true\n    if not brackets then\n        return true\n    end",
+  "   for idx = 1, #brackets do\n      local char = brackets[idx]:byte()\n      if\
+    \ char == \"<\" then\n         local has_closing = not (brackets[idx+1])\n   \
+    \      if has_closing then\n            assert(false, \"Unclosed bracket!\")\n\
+    \         end\n      elseif char == \">\" then\n         local has_opening = not\
+    \ (brackets[idx-1])\n         if has_opening then\n            assert(false, \"\
+    Unopened bracket!\")\n         end\n      else\n         assert(false, \"Unrecognized\
+    \ symbol in bracketing string!\")\n      end\n   end\n   return true\nend", " \
+    \   for i = 1, #brackets do\n        if brackets[i] ~= '<' then\n            return\
+    \ false\n        end\n    end\n    for i = 1, #brackets do\n        if brackets[i]\
+    \ != '>' then\n            return false\n        end\n    end\n    return true\n\
+    end", "  brackets = brackets or ''\n  local opening = {}\n  for i = 1, #brackets\
+    \ do\n    local char = brackets:sub(i,i)\n    if opening.has_key(char) then\n\
+    \      opening[char] = true\n    elseif char == '<' then\n      table.insert(opening,\
+    \ '>')\n    else\n      table.insert(opening, char)\n    end\n  end", "  local\
+    \ opening = brackets:find('[<>]')\n  local closing = brackets:find('[]>')\n  local\
+    \ same\n  if opening ~= nil then\n    same = brackets:sub(1,opening)\n    brackets\
+    \ = brackets:sub((opening + 1):len())\n  elseif closing ~= nil then\n    same\
+    \ = brackets:sub(1,closing)\n    brackets = brackets:sub((closing + 1):len())\n\
+    \  end\n  return opening ~= nil and opening ~= closing and opening ~= same and\
+    \ closing ~= nil and closing ~= same\nend", "  return brackets:find(string.sub(\n\
+    \    brackets, 1, string.len(brackets) - 1), 1, true) ~= nil\nend", "  brackets\
+    \ = string.gsub(brackets, '</?[<>]', '');\n  brackets = string.gsub(brackets,\
+    \ '[<>]</?', '');\n  return brackets ~= brackets;\nend", "  local brackets = brackets:gsub('(<)(>)',\
+    \ '$2$1') -- make pairs of brackets\n  brackets = brackets:gsub('<>+', '$>$')\
+    \ -- remove any unbalanced brackets\n  brackets = brackets:gsub('</$>+', '$<$')\
+    \ -- remove any unbalanced brackets\n  return brackets:find('</$') -- find if\
+    \ any unbalanced brackets exist\nend", "    for i = 1, #brackets do\n        if\
+    \ brackets[i]:find('<') ~= nil then\n            if brackets[i]:find('>')  ~=\
+    \ nil then\n                return false\n            end\n        end\n    end\n\
+    \    return true\nend", "   for i = 1, #brackets do\n      local c = brackets[i]\n\
+    \      if not c then\n         return false\n      end\n      if c == '<' then\n\
+    \         if i >= #brackets then return false end\n         if not brackets[i\
+    \ + 1] then return false end\n         if brackets[i + 1] == '>' then return false\
+    \ end\n      elseif c == '>' then\n         if i >= #brackets then return false\
+    \ end\n         if not brackets[i + 1] then return false end\n         if brackets[i\
+    \ + 1] == '<' then return false end\n      else\n         return false\n     \
+    \ end\n   end\n   return true\nend", "\tfor i = 1, #brackets do\n\t\tif not is_open_bracket(brackets[i])\
+    \ then\n\t\t\treturn false\n\t\tend\n\tend\n\treturn true\nend", "    local depth\
+    \ = 1\n    local depths = {}\n    local stack = {}\n    local opened = {}\n  \
+    \  local closed = {}\n    for i = 1, #brackets do\n        local c = brackets[i]\n\
+    \        if c ~= '<' and c ~= '>' then\n            if c == ')' then\n       \
+    \         if #opened > 0 then\n                    table.insert(stack, depth)\n\
+    \                    depths[depth] = true\n                end\n            elseif\
+    \ c == '(' or c == '[' or c == '{' then\n                table.insert(stack, 1)\n\
+    \            end\n        elseif c == '<' then\n            if #closed > 0 then\n\
+    \                depth = depth + 1\n                if depths[depth] then\n  \
+    \                  depths[depth] = true\n                else\n              \
+    \      table.insert(stack, depth)\n                    depths[depth] = true\n\
+    \                end\n            end\n        elseif c == '>' then\n        \
+    \    if #opened > 0 then\n                depth = depth - 1\n                if\
+    \ depths[depth] then\n                    depths[depth] = true\n             \
+    \   else\n                    table.insert(stack, depth)\n                   \
+    \ depths[depth] = true\n                end\n            end\n        end\n  \
+    \      if #opened > 0 and #closed > 0 then\n            if opened.last < closed.last\
+    \ then\n                return false\n            end\n        end\n        if\
+    \ opened.last == nil then\n            opened.last = i\n        else\n       \
+    \     closed.last = i\n        end\n    end\n    if #opened > 0 and #closed >\
+    \ 0 then\n        return false\n    end\n    return true\nend", "  brackets =\
+    \ brackets:gsub('%b','<%1%>')\n  local opening_brackets = brackets:gsub('<%1','%1\\\
+    1>')\n  local closing_brackets = brackets:gsub('%1\\1>','%1>')\n  return opening_brackets\
+    \ == closing_brackets\nend", "  local open = brackets:find('[<>]')\n  local close\
+    \ = brackets:find('[]>')\n  local result = open ~= nil and close ~= nil\n  return\
+    \ result\nend", "  return brackets == string.gsub(brackets, '<', '{')\n    and\
+    \ string.gsub(brackets, '>', '}')\n    and string.gsub(brackets, '{', '>')\n \
+    \   and string.gsub(brackets, '}', '<')\nend", "\t-- Check every opening bracket.\n\
+    \tfor _, bracket in pairs(brackets) do\n\t\tif not check_open_bracket(bracket)\
+    \ then\n\t\t\treturn false\n\t\tend\n\tend\n\t-- Check every closing bracket.\n\
+    \tfor _, bracket in pairs(brackets) do\n\t\tif not check_close_bracket(bracket)\
+    \ then\n\t\t\treturn false\n\t\tend\n\tend\n\treturn true\nend", "  return brackets\
+    \ == string:gsub(brackets, '</?([^<>]+)>')\nend", "  local opening_brackets =\
+    \ brackets:gmatch('['..'<=]')\n  local closed_brackets = brackets:gmatch('['..'<=]')\n\
+    \  if #opening_brackets ~= #closed_brackets then\n    return false\n  end\n  local\
+    \ i = 1\n  for _, opening_bracket in ipairs(opening_brackets) do\n    if not opening_bracket\
+    \ then\n      break\n    end\n    if not closed_brackets[i] then\n      return\
+    \ false\n    end\n    i = i + 1\n  end\n  return true\nend", "  brackets = brackets\
+    \ or ''\n  local opening = brackets:find('>')\n  local closing = brackets:find('<')\n\
+    \  local left_open = brackets:find('<<')\n  local right_open = brackets:find('>>')\n\
+    \  local left_close = brackets:find('<>')\n  local right_close = brackets:find('>>>')",
+  "   for i = 1, #brackets do\n      if brackets[i] == '<' then\n         for j =\
+    \ i + 1, #brackets do\n            if brackets[j] == '>' then\n              \
+    \ return true\n            end\n         end\n      end\n   end", "  for _, b\
+    \ in ipairs(brackets) do\n    local next_open = brackets:find(string.format('([%w_]+)',\
+    \ b))\n    if next_open ~= nil then\n      if next_open > -1 then\n        brackets:replace(next_open,\
+    \ string.format('%s+', b))\n      else\n        brackets:replace(string.format('%s+',\
+    \ b), '')\n      end\n    end\n  end\n  local next_close = brackets:find('>')\n\
+    \  return next_close ~= nil\nend", "    local opening_brackets = {}\n    local\
+    \ closing_brackets = {}\n    for i=1,#brackets do\n        if brackets[i]:find('<')\
+    \ then\n            table.insert(opening_brackets, brackets[i])\n        else\n\
+    \            table.insert(closing_brackets, brackets[i])\n        end\n    end\n\
+    \    return #opening_brackets == #closing_brackets\nend", "    local open = brackets:match(\"\
+    <\")\n    local close = brackets:match(\">\")\n    return open ~= nil and close\
+    \ ~= nil and open ~= close and close ~= open\nend", "    local opens = brackets:gsub(\"\
+    (<%..%)\", function(n)\n        return n ~= '<' and n or '>'\n    end)\n    local\
+    \ closes = opens:gsub(\"(%..%>)\", function(n)\n        return n ~= '<' and n\
+    \ or '>'\n    end)\n    return opens == closes or closes == ''\nend", "    --\
+    \ If the string is empty then it has no correct brackets\n    if #brackets ==\
+    \ 0 then return false end\n    local opening_brackets = brackets:gsub('<', '')\n\
+    \    local closing_brackets = brackets:gsub('>', '')\n    local count = 0\n  \
+    \  local opening_bracket\n    local closing_bracket\n    for i = 1, #opening_brackets\
+    \ do\n        opening_bracket = opening_brackets[i]\n        closing_bracket =\
+    \ closing_brackets[i]\n        if opening_bracket ~= closing_bracket then\n  \
+    \          count = count + 1\n        end\n    end\n    return count == #opening_brackets\n\
+    end", "  local brackets = {} -- brackets is an associative array -- brackets[opening_bracket]\
+    \ = closing_bracket\n  local closed = false\n  local open_count = 0\n  for c in\
+    \ string.gmatch(brackets, '<()') do -- this loops through the string and splits\
+    \ it into an array of brackets\n    brackets[c] = '' -- brackets is an associative\
+    \ array -- brackets[opening_bracket] = closing_bracket\n    closed = false --\
+    \ set closed false because the first time through the loop, it should be closed\n\
+    \    open_count = open_count + 1 -- open_count is the number of brackets opened\
+    \ up to the current bracket\n  end -- brackets is an associative array -- brackets[opening_bracket]\
+    \ = closing_bracket\n  -- open brackets that are not closed:\n  for opening_bracket,\
+    \ closing_bracket in pairs(brackets) do -- this loops through brackets again (because\
+    \ brackets is an associative array)\n    if brackets[opening_bracket] ~= '' then\
+    \ -- if brackets[opening_bracket] has a value, it is closed\n      closed = closed\
+    \ or false -- set closed equal to false if brackets[opening_bracket] is closed,\
+    \ or equal to true if brackets[opening_bracket] is open\n    end -- brackets[opening_bracket]\
+    \ is closed\n  end -- brackets is an associative array -- brackets[opening_bracket]\
+    \ = closing_bracket\n  -- loop through brackets again, checking to see if every\
+    \ opening bracket has a corresponding closing bracket\n  for opening_bracket,\
+    \ closing_bracket in pairs(brackets) do -- this loops through brackets again (because\
+    \ brackets is an associative array)\n    local open_count = 0 -- set open_count\
+    \ equal to the number of brackets opened up to the current bracket\n    for c\
+    \ in string.gmatch(brackets[opening_bracket], '()') do -- this loops through the\
+    \ string and splits it into an array of brackets\n      if c == brackets[closing_bracket]\
+    \ then -- if the closing bracket is the same as the opening bracket, it is corrected\n\
+    \        open_count = open_count + 1 -- increment open_count by 1\n      else\
+    \ -- if the closing bracket does not match the opening bracket, the brackets are\
+    \ incorrect\n        return false\n      end -- brackets[closing_bracket] != brackets[opening_bracket]\n\
+    \    end -- brackets[opening_bracket] is corrected\n    -- if brackets[closing_bracket]\
+    \ is equal to brackets[opening_bracket], then brackets are correct\n", "  brackets\
+    \ = string.gsub(brackets, '<', '</')\n  brackets = string.gsub(brackets, '>>',\
+    \ '></')\n  brackets = string.gsub(brackets, '<', '<<')\n  return brackets ==\
+    \ brackets\nend", "  local opening = 0\n  local closing = 0\n  local closing_index\
+    \ = 1\n  for i, x in ipairs(brackets) do\n    if x == '<' then\n      opening\
+    \ = opening + 1\n    elseif x == '>' then\n      closing = closing + 1\n     \
+    \ closing_index = i\n    end\n  end\n  return opening and opening == closing\n\
+    end", "  local opened = {}\n  local openedCount = 0\n  local closed = {}\n  local\
+    \ closedCount = 0", "   if brackets == '<' then\n      return false\n   elseif\
+    \ brackets == '>' then\n      return true\n   elseif brackets == '<<' then\n \
+    \     return true\n   elseif brackets == '>>' then\n      return false\n   else\n\
+    \      assert(false, \"unknown bracketing '\" .. brackets .. \"'\")\n   end\n\
+    end", "   if brackets == nil then\n      return false\n   end\n   brackets = brackets:gsub('<','<'):gsub('>','>')\n\
+    \   local open_brackets = {}\n   local open_brackets_len = 0\n   local opening_brackets\
+    \ = brackets:gsub('[<>]','%1'):gsub('%d','%d'):gsub('%2','%s'):gsub('%3','%1'):gsub('%4','%s'):gsub('%5','%2'):gsub('%6','%3'):gsub('%7','%1'):gsub('%8','%2'):gsub('%9','%3'):gsub('%10','%1'):gsub('%11','%s'):gsub('%12','%2'):gsub('%13','%3'):gsub('%14','%1'):gsub('%15','%2'):gsub('%16','%3')\n\
+    \   for _,b in ipairs(opening_brackets) do\n      if not open_brackets[open_brackets_len]\
+    \ then\n         open_brackets[open_brackets_len] = b\n         open_brackets_len\
+    \ = open_brackets_len+1\n      else\n         open_brackets[open_brackets_len]\
+    \ = open_brackets[open_brackets_len] .. b\n      end\n   end\n   return open_brackets_len\
+    \ == #open_brackets\nend", "  return #brackets > 0 and {brackets[1, 1] = '>',\
+    \ brackets[1, #brackets] = '>'} == {brackets}\nend", "    local s = brackets\n\
+    \    local brackets = ''\n    while s ~= '' do\n        if s == '<' then\n   \
+    \         brackets = brackets .. '>'\n            s = string.sub(s,2,2)\n    \
+    \    elseif s == '>' then\n            brackets = brackets .. '<'\n          \
+    \  s = string.sub(s,2,2)\n        elseif s == '[' then\n            brackets =\
+    \ brackets .. '['\n            s = string.sub(s,2,1)\n        elseif s == ']'\
+    \ then\n            brackets = brackets .. ']'\n            s = string.sub(s,2,1)\n\
+    \        elseif s == '{' then\n            brackets = brackets .. '{'\n      \
+    \      s = string.sub(s,2,1)\n        elseif s == '}' then\n            brackets\
+    \ = brackets .. '{'\n            s = string.sub(s,2,1)\n        elseif s == '('\
+    \ then\n            brackets = brackets .. '('\n            s = string.sub(s,2,1)\n\
+    \        elseif s == ')' then\n            brackets = brackets .. ')'\n      \
+    \      s = string.sub(s,2,1)\n        end\n    end\n    return brackets == '<>'\n\
+    end", "  local openings = {}\n  local closings = {}\n  for i = 1, #brackets do\n\
+    \    if brackets[i] ~= '<' then\n      openings[#openings + 1] = b[i]\n    end\n\
+    \    if brackets[i] ~= '>' then\n      closings[#closings + 1] = b[i]\n    end\n\
+    \  end", "  local opening = brackets:gsub(\"<\", \"\"):gsub(\"[^<>]+\", \"\"):gsub(\"\
+    [<>]+\", \"\")\n  local closing = brackets:gsub(\"%[<>]\", \"\")\n  local correct\
+    \ = true\n  for _, b in ipairs(opening) do\n    if opening ~= closing then\n \
+    \     correct = false\n    end\n  end\n  return correct\nend", "  brackets = brackets:gsub('<|>',\
+    \ '<<><>>')\n  brackets = brackets:gsub('[<>]', '<<><>>')\n  brackets = brackets:gsub('<<><>>',\
+    \ '><>')\n  return brackets:find('<') == 0 and brackets:find('>') == (brackets:count('<')\
+    \ - 1):byte()\nend", "  -- split into tokens\n  local tokens = brackets:match('<(%a+)>')\n\
+    \  -- check each token\n  for _,token in ipairs(tokens) do\n    local opening_bracket\
+    \ = token:sub(1,1):upper()\n    local closing_bracket = token:sub(2)\n    local\
+    \ index = #brackets\n    while index > 1 do\n      if brackets[index] == opening_bracket\
+    \ then\n        index = index - 1\n      elseif brackets[index] == closing_bracket\
+    \ then\n        index = index - 1\n      else\n        return false\n      end\n\
+    \    end\n    return true\n  end\n  return false\nend", "  brackets = brackets:gsub(\"\
+    <>\", \"\")\n  for i, bracket_1 in ipairs(brackets) do\n    for _, _bracket_2\
+    \ in ipairs(brackets[i:end]) do\n      if bracket_1 == _bracket_2 then\n     \
+    \   return false\n      end\n    end\n  end\n  return true\nend", "  brackets\
+    \ = brackets:gsub('<(%)(%)>', function(match)\n    return match[#match - 1]\n\
+    \  end)\n  return brackets:sub(1, #brackets) * brackets:sub((#brackets + 1), #brackets)\
+    \ == brackets\nend", "  local open_brackets = string.gsub(brackets, \"><\", \"\
+    \ \")\n  local close_brackets = string.gsub(open_brackets, \" <\", \">\")\n  return\
+    \ open_brackets ~= close_brackets\nend", "   if brackets == nil then\n      return\
+    \ true\n   end\n   if string.len(brackets) <= 1 then\n      return true\n   end\n\
+    \   local open_bracket = string.sub(brackets, 1, 1)\n   local close_bracket =\
+    \ string.sub(brackets, string.len(brackets) - 1, 1)\n   return open_bracket ~=\
+    \ '<' or close_bracket ~= '<'\nend", "  local open_brackets = brackets:gsub('<',\
+    \ '')\n  local close_brackets = brackets:gsub('>', '')\n  for _, opening in ipairs(open_brackets)\
+    \ do\n    local closed = false\n    for _, closings in ipairs(close_brackets)\
+    \ do\n      if opening:sub(1, 1) == closings:sub(1, 1) then\n        closed =\
+    \ true\n        break\n      end\n    end\n    if not closed then\n      return\
+    \ false\n    end\n  end\n  return true\nend", "  local open_brackets = table.find(brackets,\
+    \ 2, true)\n  local close_brackets = table.find(brackets, 2, false)\n  return\
+    \ #open_brackets == #close_brackets\nend"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

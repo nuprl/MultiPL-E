@@ -135,6 +135,1281 @@ completions: ["  # Put your code here\n  echo '[]'", "    local data=\"$1\"\n   
     i}')\"\n  if [ ${#arr[@]} -gt 0 ]; then\n    IFS=\"\\t\" arr=($(echo \"${arr[*]}\"\
     \ | sort -k1,1n -k2,2nr))\n    IFS=\"\\n\" output=(\"[$(for row in \"${arr[@]}\"\
     ; do echo \"[\\\"${row//$'\\t'/\\\", \\\"}\\\"]\"; done)]\")\n    echo \"${output[*]}\"\
-    \n  else\n    echo \"[]\"\n  fi"]
+    \n  else\n    echo \"[]\"\n  fi", "    local list=$1\n    local x=$2\n    local\
+    \ -a result=()\n    local y\n    for y in $(seq 0 $(( $(echo \"$list\" | wc -l)\
+    \ - 1)) ); do\n        local i\n        for i in $(seq 0 $(( $(echo \"$list\"\
+    \ | head -n $((y + 1)) | tail -n 1 | wc -w) - 1)) ); do\n            if [[ $(echo\
+    \ \"$list\" | awk -v row=$y -v col=$i '{print $col}' | head -n $(($row + 1)) |\
+    \ tail -n 1) == $x ]]; then\n                result+=([\"$y\"]=\"$i\")\n     \
+    \       fi\n        done\n    done\n    if [[ ${#result[@]} > 0 ]]; then\n   \
+    \     for y in $(seq 0 $(( ${#result[@]} - 1 )) | sort -n); do\n            for\
+    \ i in $(seq 0 $(( ${#result[@]} - 1 )) | sort -n); do\n                if [[\
+    \ $y == ${result[$i]/:*/} ]]; then\n                    echo -n ['\"'$y'\"', '\"\
+    ${result[$i]/*:/}\"']\n                    echo -n ' '\n                fi\n \
+    \           done\n        done\n    fi\n    echo", "    echo \"$1\" | awk '{\n\
+    \    if ($2 == \"'\"$2\"'\") {\n        print NR-1, NR\n    }", "  local row_result=()\n\
+    \  local row=0\n  local row_item=0\n  local row_items=()\n  local row_count=0\n\
+    \  local row_max=0\n  local result=()\n  local item=0\n  for line in ${1}; do\n\
+    \    row_count=0\n    for row_item in ${line}; do\n      row_items[$item]=$row_item\n\
+    \      if [ \"$row_item\" == \"$2\" ]; then\n        row_result[$row_count]=\"\
+    [\\\"$row\\\", \\\"$item\\\"]\"\n      fi\n      ((item++))\n      ((row_count++))\n\
+    \    done\n    if [ $row_count -gt $row_max ]; then\n      row_max=$row_count\n\
+    \    fi\n    ((row++))\n  done\n  for i in $(seq 0 $(($row_max - 1))); do\n  \
+    \  if [ \"${row_result[$i]}\" != \"\" ]; then\n      result[$i]=${row_result[$i]}\n\
+    \    fi\n  done\n  echo \"[$(join_by \", \" ${result[@]})]\"", "    if [ -z \"\
+    $1\" ] || [ -z \"$2\" ]; then\n        printf \"[]\"\n        return\n    fi\n\
+    \    local rows=$(printf \"$1\" | wc -l)\n    local cols=$(printf \"$1\" | sed\
+    \ -n 1p | wc -w)\n    local res=\"\"\n    for i in $(seq 0 $((rows - 1))); do\n\
+    \        for j in $(seq 0 $((cols - 1))); do\n            if [ $(echo \"$1\" |\
+    \ cut -d \" \" -f $((j + 1)) | sed -n $((i + 1))p) == \"$2\" ]; then\n       \
+    \         res=\"$res $i $j\"\n            fi\n        done\n    done\n    if [\
+    \ -z \"$res\" ]; then\n        printf \"[]\"\n        return\n    fi\n    res=$(printf\
+    \ \"$res\" | awk '{printf(\"%s\\n\", $0)}' | sort -rn | awk '{printf(\"[%s]\\\
+    n\", $0)}' | tr \"\\n\" \",\" | sed 's/,$//')\n    printf \"[$res]\"", "\tawk\
+    \ -v target=\"$2\" '\n\t\tBEGIN {\n\t\t\tprint \"[\";\n\t\t}\n\n\t\t{\n\t\t\t\
+    n=split($0, row);\n\t\t\tfor (i=1; i<=n; i++) {\n\t\t\t\tif (row[i] == target)\
+    \ {\n\t\t\t\t\tprintf \"[\\\"%s\\\", \\\"%s\\\"], \", NR - 1, i - 1;\n\t\t\t\t\
+    }\n\t\t\t}\n\t\t}\n\n\t\tEND {\n\t\t\tprintf \"\\b\\b]\\n\";\n\t\t}\n\t'", " \
+    \   local list=\"$1\"\n    local x=\"$2\"\n    local -i index\n    local -i row\n\
+    \    local -i columns\n    local -i index_columns\n    local -i max_columns\n\
+    \    local -i rows=$(echo \"$list\" | wc -l)\n    echo \"$list\" | while read\
+    \ row; do\n        columns=$(echo \"$row\" | wc -w)\n        index_columns=0\n\
+    \        max_columns=$columns\n        echo \"$row\" | while read x; do\n    \
+    \        if [ \"$x\" == \"$2\" ]; then\n                echo \"['\\\"$row\\\"\
+    ', '\\\"$index_columns\\\"']\"\n            fi\n            index_columns=$index_columns+1\n\
+    \        done\n    done | sort -g -t '\"' -k 1 | sort -g -t '\"' -k 2 -r", " \
+    \ # Replace newlines with spaces, remove leading and trailing whitespace\n  lst=$(echo\
+    \ \"$1\" | tr '\\n' ' ' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n\
+    \  # Use a loop here instead of awk 'split($0, a, \" \")' because\n  # awk 'split()'\
+    \ uses bash 3.2 regex that does not support\n  # '{x,y}' quantifiers\n  # Use\
+    \ word boundary to split on whitespace\n  # To support multiple spaces\n  IFS=$'\\\
+    n'\n  arr=($(echo \"$lst\" | sed -r -e 's/[[:space:]]+/\\n/g'))\n  unset IFS\n\
+    \  # Use bash array instead of python list to enable\n  # later bash processing\
+    \ (no need to convert to json)\n  result=()\n  for ((i=0; i<${#arr[@]}; i++));\
+    \ do\n    str=\"${arr[$i]}\"\n    IFS=' ' read -r -a ints <<< \"$str\"\n    #\
+    \ Loop over elements in subarray\n    for ((j=0; j<${#ints[@]}; j++)); do\n  \
+    \    if [ \"${ints[$j]}\" == \"$2\" ]; then\n        # Append the row,column to\
+    \ result\n        result+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n      fi\n    done\n\
+    \  done\n  # Sort result, first by row and then by column\n  # using bash \"sort\"\
+    \n  result=($(echo \"${result[@]}\" | tr ' ' '\\n' | sort -t ',' -k1,1n -k2,2nr))\n\
+    \  # Join result elements by comma\n  echo \"[$(echo \"${result[@]}\" | tr ' '\
+    \ ',')]\"", "    awk -vx=$2 'BEGIN {\n        OFS=\"\\\", \\\"\";\n        n=split(x,\
+    \ a, \"\");\n        m=x;\n        x=\"\"\n        for (i=n; i>0; i--)\n     \
+    \       x=x a[i];\n        if (x==\"\") x=0;\n    } {\n        if (x in $0) {\n\
+    \            for (i=1; i<=NF; i++)\n                if ($i==x) {\n           \
+    \         row=NR-1;\n                    col=i-1;\n                    print \"\
+    [\\\"\" row \"\\\", \\\"\" col \"\\\"]\";\n                }\n        }\n    }'\
+    \ <<< \"$1\" | sort -t',' -k1n -k2n", "  declare -A coord\n  declare -a coords\n\
+    \  # Iterate over rows\n  row=0\n  while read line; do\n    # Iterate over columns\n\
+    \    col=0\n    while read -ra words; do\n      # Iterate over words\n      for\
+    \ word in \"${words[@]}\"; do\n        if [[ \"$word\" -eq \"$2\" ]]; then\n \
+    \         coord[\"$row\"]=\"$coord[$row] $col\"\n        fi\n        col=$((col+1))\n\
+    \      done\n    done <<< \"$line\"\n    row=$((row+1))\n  done <<< \"$1\"\n \
+    \ for row in \"${!coord[@]}\"; do\n    for col in ${coord[$row]}; do\n      coords+=(\"\
+    [\\\"$row\\\", \\\"$col\\\"]\")\n    done\n  done\n  coords_str=\"[\"\n  for ((i=0;\
+    \ i<${#coords[@]}; i++)); do\n    coords_str=\"$coords_str ${coords[$i]}\"\n \
+    \   if [[ $i -lt $((${#coords[@]}-1)) ]]; then\n      coords_str=\"$coords_str,\"\
+    \n    fi\n  done\n  coords_str=\"$coords_str ]\"\n  echo \"$coords_str\"", " \
+    \   local -i lst=$1 x=$2 i=0 j=0\n    local -a result=()\n\n    echo \"$lst\"\
+    \ | (\n        while read row; do\n            j=0\n            for col in $row;\
+    \ do\n                if [[ $col -eq $x ]]; then\n                    result+=(\"\
+    [\\\"$i\\\", \\\"$j\\\"]\")\n                fi\n                ((j++))\n   \
+    \         done\n            ((i++))\n        done\n        echo \"${result[@]}\"\
+    \ | sort -t '\"' -k 1n -k 3nr\n    )", "    local -r arr=($(echo \"$1\" | tr '\
+    \ ' ','))\n    local -r x=\"$2\"\n    local -r n=\"${#arr[@]}\"\n    local -r\
+    \ nrows=$(echo \"$1\" | grep -c '^')\n    local row=0\n    local i=0\n    local\
+    \ out=()\n    while [ $i -lt $n ]; do\n        if [ \"${arr[$i]}\" = \"$x\" ];\
+    \ then\n            out+=(\"[\\\"$row\\\", \\\"$((i%nrows))\\\"]\")\n        fi\n\
+    \        ((i++))\n        ((i%nrows==0)) && ((row++))\n    done\n    echo \"[${out[*]}]\"",
+  "  local lines=( ${1} )\n  local indices=()\n  for (( i=0; i<${#lines[@]}; i++ ));\
+    \ do\n    local row=( ${lines[i]} )\n    for (( j=0; j<${#row[@]}; j++ )); do\n\
+    \      if [[ ${row[j]} == $2 ]]; then\n        indices+=( \"$i $j\" )\n      fi\n\
+    \    done\n  done\n  indices=( $(printf \"%s\\n\" \"${indices[@]}\" | sort -n)\
+    \ )\n  local result=()\n  for (( i=0; i<${#indices[@]}; i++ )); do\n    local\
+    \ row_and_col=( ${indices[i]} )\n    result+=( \"\\\"${row_and_col[0]}\\\" \\\"\
+    ${row_and_col[1]}\\\"\" )\n  done\n  local joined=( $(printf \"%s, \" \"${result[@]}\"\
+    ) )\n  joined=${joined%\", \"}\n  echo \"[$joined]\"", "  local integer=\"$2\"\
+    \n  echo \"$1\" | {\n    while read line; do\n      local i=0\n      local row=$(echo\
+    \ \"$line\" | {\n        while read word; do\n          if [ \"$word\" = \"$integer\"\
+    \ ]; then\n            printf '[%s, %s] ' \"$(($i / $line_size))\" \"$i\"\n  \
+    \        fi\n          ((i++))\n        done\n      })\n      if [ -n \"$row\"\
+    \ ]; then\n        echo \"$row\"\n      fi\n    done\n  } | \\\n  sort -k1n -k2nr\
+    \ | \\\n  cut -d ' ' -f 2- | \\\n  sed -e 's/^/[/' -e 's/ /, /' -e 's/$/]/'",
+  "  printf \"%s\" \"$1\" | awk -v x=\"$2\" '\n  BEGIN { RS=\"\\n\"; FS=\" \"; OFS=\"\
+    \ \"; }\n  {\n    delete l;\n    for (i=1; i<=NF; i++)\n      if ($i == x)\n \
+    \       l[NR-1, NF-i] = NR-1 OFS NF-i;\n  }\n  END {\n    delete a;\n    n = 0;\n\
+    \    for (r in l) {\n      a[r] = l[r];\n      n++;\n    }\n    PROCINFO[\"sorted_in\"\
+    ] = \"@ind_num_asc\";\n    for (r in a)\n      print \"[\" \"\\\"\" r \"\\\"\"\
+    \ \",\" a[r] \"]\";\n  }'", "    list=\"$1\"\n    number=\"$2\"\n    echo \"$list\"\
+    \ | awk 'BEGIN {FS=\" \"; OFS=\" \"} {for (i=1; i<=NF; i++) if ($i == \"'\"$number\"\
+    '\") print NR-1, i-1}' | sort -k1n -k2nr", "\tlocal -a row=()\n\tlocal -a x_coordinates=()\n\
+    \tlocal x=$2\n\tlocal lines=$(echo \"$1\" | wc -l)\n\tlocal y_index=0\n\tlocal\
+    \ x_index=0\n\twhile IFS= read -r line; do\n\t\tIFS=\" \" read -r -a row <<< \"\
+    $line\"\n\t\tx_index=0\n\t\tfor cell in \"${row[@]}\"; do\n\t\t\tif [[ \"$cell\"\
+    \ == \"$x\" ]]; then\n\t\t\t\tx_coordinates+=(\"[\\\"$y_index\\\", \\\"$x_index\\\
+    \"]\")\n\t\t\tfi\n\t\t\tx_index=$((x_index + 1))\n\t\tdone\n\t\ty_index=$((y_index\
+    \ + 1))\n\tdone <<< \"$1\"\n\tIFS=$'\\n' sorted=($(sort -k 1 <<< \"${x_coordinates[*]}\"\
+    ))\n\tIFS=$'\\n' sorted=($(sort -k 2 -r <<< \"${sorted[*]}\"))\n\tprintf \"%s\
+    \ \" \"${sorted[@]}\"", "    row=0\n    result=()\n    for r in $(echo \"$1\"\
+    \ | tr ' ' '\\n'); do\n        col=0\n        for c in $(echo \"$r\" | tr ' '\
+    \ '\\n'); do\n            if [[ \"$c\" == \"$2\" ]]; then\n                result+=(\
+    \ \"${row}\" \"${col}\" )\n            fi\n            col=$((col+1))\n      \
+    \  done\n        row=$((row+1))\n    done\n    echo ${result[@]} | sed -e 's/\
+    \ /,/g' -e 's/^/[/' -e 's/$/]/'", "    echo $1 | tr ' ' '\\n' | \\\n        awk\
+    \ -v x=$2 -v OFS=' ' '{for(i=1;i<=NF;i++) if ($i==x) print NR-1, i-1}' | \\\n\
+    \        sort -n -k1,1 -k2,2r | tr ' ' ',' | sed -e 's/^/[/' -e 's/$/]/'", " \
+    \   lst=$1\n    x=$2\n    awk -v x=$x '\n        BEGIN {FS = \"[ \\n]\"}\n   \
+    \     {\n            for (i = 1; i <= NF; i++) {\n                if ($i == x)\
+    \ {\n                    printf \"[\\\"%s\\\", \\\"%s\\\"]\\n\", NR - 1, i - 1\n\
+    \                }\n            }\n        }\n    ' <<< \"$lst\" | sort | paste\
+    \ -s -d ',' -", "    local lst=\"$1\"\n    local x=\"$2\"\n    if [[ -z \"$lst\"\
+    \ ]]; then\n        echo \"[]\"\n    else\n        local out=\"\"\n        local\
+    \ x_indices=($(echo \"$lst\" | grep -ob \"$x\" | cut -d \":\" -f 1))\n       \
+    \ local x_index_next=0\n        local newline_indices=($(echo \"$lst\" | grep\
+    \ -ob '$' | cut -d \":\" -f 1))\n        local newline_index_next=0\n        local\
+    \ row=0\n        local column=0\n        for i in ${x_indices[@]}; do\n      \
+    \      while [[ ${newline_indices[$newline_index_next]} -lt $i ]]; do\n      \
+    \          row=$((row + 1))\n                newline_index_next=$((newline_index_next\
+    \ + 1))\n            done\n            local x_index=${x_indices[$x_index_next]}\n\
+    \            local x_before_char=\"${lst:$((x_index - 1)):1}\"\n            local\
+    \ x_after_char=\"${lst:$((x_index + 1)):1}\"\n            if [[ \"$x_before_char\"\
+    \ =~ [0-9] ]] || [[ \"$x_after_char\" =~ [0-9] ]]; then\n                x_index_next=$((x_index_next\
+    \ + 1))\n                continue\n            fi\n            local tmp=\"${lst:$((x_index\
+    \ - 1)):1}\"\n            local char_indices=($(echo \"$lst\" | grep -ob \"$tmp\"\
+    \ | cut -d \":\" -f 1))\n            local char_index_next=0\n            for\
+    \ j in ${char_indices[@]}; do\n                while [[ ${newline_indices[$newline_index_next]}\
+    \ -lt $j ]]; do\n                    row=$((row + 1))\n                    newline_index_next=$((newline_index_next\
+    \ + 1))\n                done\n                local char_index=${char_indices[$char_index_next]}\n\
+    \                if [[ $char_index -ge $i ]]; then", "    row=0\n    while read\
+    \ -r line; do\n        col=0\n        IFS=' ' read -ra ARR <<< \"$line\"\n   \
+    \     for value in \"${ARR[@]}\"; do\n            if [[ \"$value\" == \"$2\" ]];\
+    \ then\n                printf '[\"%s\", \"%s\"] ' \"$row\" \"$col\"\n       \
+    \     fi\n            col=$((col+1))\n        done\n        row=$((row+1))\n \
+    \   done <<< \"$1\"", "    local IFS=$'\\n'\n    local rows=($1)\n    local result=()\n\
+    \    local x=$2\n    for ((i=0; i<${#rows[@]}; i++)); do\n        for y in ${rows[$i]};\
+    \ do\n            if [[ $y -eq $x ]]; then\n                result+=(\"\\\"$i\\\
+    \" \\\"$y\\\"\")\n            fi\n        done\n    done\n    echo \"[${result[@]}]\"",
+  "  declare -a rows\n  if [[ \"${1}\" ]]; then\n    rows=($(echo \"${1}\" | tr '\
+    \ ' '\\n'))\n  fi\n  declare -a results\n  for ((i=0; i<${#rows[@]}; i++)); do\n\
+    \    declare -a cols\n    cols=($(echo \"${rows[${i}]}\" | tr ' ' '\\n'))\n  \
+    \  for ((j=0; j<${#cols[@]}; j++)); do\n      if [[ \"${cols[${j}]}\" -eq \"${2}\"\
+    \ ]]; then\n        results+=(\"[\\\"${i}\\\", \\\"${j}\\\"]\")\n      fi\n  \
+    \  done\n  done\n  echo \"${results[@]}\" | \\\n    tr ' ' '\\n' | \\\n    sort\
+    \ -t'[' -k2 -n -r -t'\"' -k1 -n -r | \\\n    tr '\\n' ' '", "    # you code here\n\
+    \    python3 -c \"\n# you code here\nimport sys\n\ndef main():\n    input = sys.argv[1].split('\\\
+    n')\n    search = sys.argv[2]\n    result = []\n    for index, line in enumerate(input):\n\
+    \        try:\n            for idx, num in enumerate(line.split(' ')):\n     \
+    \           if num == search:\n                    result.append(str([index, idx]))\n\
+    \        except:\n            continue\n    print(result)\n\nif __name__ == '__main__':\n\
+    \    main()\n\" \"$1\" \"$2\" | python3 -c \"\nimport sys\nimport json\n\ndef\
+    \ main():\n    result = json.loads(' '.join(sys.argv[1:]))\n    print(result)\n\
+    \nif __name__ == '__main__':\n    main()\n\"", "    local rows=\"$1\"\n    local\
+    \ cols=\"$2\"\n    local all=\"$3\"\n    local -a found\n    local -a new_found\n\
+    \    local row\n    local -i row_n\n    local -i row_len\n    local -i row_pos\n\
+    \    local found_n\n    if [ -z \"$rows\" ]; then\n        echo \"[]\"\n     \
+    \   return\n    fi\n    if [ -z \"$cols\" ]; then\n        echo \"[]\"\n     \
+    \   return\n    fi\n    if [ -z \"$all\" ]; then\n        echo \"[]\"\n      \
+    \  return\n    fi\n    row_n=0\n    found_n=0\n    IFS=\"\\n\"\n    for row in\
+    \ $rows; do\n        IFS=\" \"\n        row_len=0\n        row_pos=0\n       \
+    \ for col in $row; do\n            if [ \"$col\" == \"$cols\" ]; then\n      \
+    \          found[$found_n]=\"[\\\"$row_n\\\", \\\"$row_pos\\\"]\"\n          \
+    \      found_n=$found_n+1\n            fi\n            row_len=$row_len+1\n  \
+    \          row_pos=$row_pos+1\n        done\n        row_n=$row_n+1\n    done\n\
+    \    IFS=\" \"\n    if [ \"$all\" == \"1\" ]; then\n        echo \"[$(join , \"\
+    ${found[@]}\")]\"\n        return\n    fi\n    row_n=0\n    for row in $rows;\
+    \ do\n        row_len=0\n        for col in $row; do\n            row_len=$row_len+1\n\
+    \        done\n        if [ \"$row_len\" == \"${#found[*]}\" ]; then\n       \
+    \     new_found[$row_n]=\"[$(join , \"${found[@]}\")]\"\n        fi\n        row_n=$row_n+1\n\
+    \    done\n    echo \"[$(join , \"${new_found[@]}\")]\"", "  local lst=$1\n  local\
+    \ x=$2\n  awk -v x=$x 'BEGIN {\n    split(x, xa, \"\")\n    n = length(xa)\n \
+    \   nx = sprintf(\"[^ ]{%d}\", n)\n  }\n  {\n    for (i = 1; i <= NF; i++) {\n\
+    \      if ($i ~ nx) {\n        l = sprintf(\"[%s]\", $i)\n        split(l, xi,\
+    \ \"\")\n        m = length(xi)\n        k = 1\n        found = 1\n        while\
+    \ (k <= m && found) {\n          if (xi[k] != xa[k]) {\n            found = 0\n\
+    \          }\n          k++\n        }\n        if (found) {\n          printf\
+    \ \"[%s, %s]\\n\", NR-1, i-1\n        }\n      }\n    }\n  }' <<< \"$lst\"", " \
+    \   [[ -z \"$1\" ]] && { echo \"[]\"; return; }\n    tmp=()\n    for ((i=0; i<$(wc\
+    \ -l <<< \"$1\"); i++)); do\n        for ((j=0; j<$(wc -w <<< \"${1[i]}\"); j++));\
+    \ do\n            [[ $(echo \"${1[i]}\" | awk '{print $1}') == \"$2\" ]] && {\n\
+    \                tmp+=([\"$i\"]=\"$j\")\n            }\n        done\n    done\n\
+    \    echo \"${tmp[@]}\" | sed -r \"s/ /\\n/g\" | grep -v \"\\[\" | grep -v \"\\\
+    ]\" | grep -v \"^\\$\" | sort -r -k2 -n | sort -k1 -n | sed -r \"s/^(.*)$/\\[\\\
+    \"\\1\\\"\\]/g\" | awk -F: '{print $1}' | paste -sd \",\" | sed -r \"s/^(.*)$/\\\
+    [\\1\\]/g\"", "  local -r INT=$2\n  echo \"$1\" | awk -v INT=\"$INT\" '{\n   \
+    \ for (i = 1; i <= NF; i++) {\n      if ($i == INT) {\n        print '\"'$NR'\"\
+    ','\"'i-1'\"'\n      }\n    }\n  }' | sort -n | awk '{print \"[\"$0\"]\"}' | tr\
+    \ '\\n' ',' | sed 's/,$//'", "    [ -z \"$1\" ] && echo \"[]\" && return\n   \
+    \ lst=($(echo \"$1\" | tr ' ' '\\n'))\n    len_lst=${#lst[@]}\n    last_index=$((len_lst\
+    \ - 1))\n    last_index=$((last_index / 2))\n    tmp=()\n    index=0\n    for\
+    \ (( i = 0; i <= last_index; i++ )); do\n        for (( j = 0; j <= last_index;\
+    \ j++ )); do\n            if [ \"${lst[index]}\" = \"$2\" ]; then\n          \
+    \      tmp+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n            fi\n            index=$((index\
+    \ + 1))\n        done\n    done\n    echo \"[\"$(echo \"${tmp[@]}\" | tr ' ' ',')\"\
+    ]\"", "  lst=\"$1\"\n  x=\"$2\"\n  declare -a rows\n  while read -r line; do\n\
+    \    row=()\n    while read -r col; do\n      if [ \"$col\" == \"$x\" ]; then\n\
+    \        row+=(\"$col\")\n      fi\n    done <<< \"$line\"\n    if [ ${#row[@]}\
+    \ -gt 0 ]; then\n      rows+=(\"$line\")\n    fi\n  done <<< \"$lst\"\n  row_index=0\n\
+    \  col_index=0\n  coords=()\n  while read -r row; do\n    col_index=0\n    while\
+    \ read -r col; do\n      if [ \"$col\" == \"$x\" ]; then\n        coords+=(\"\
+    [\\\"$row_index\\\", \\\"$col_index\\\"]\")\n      fi\n      col_index=$((col_index\
+    \ + 1))\n    done <<< \"$row\"\n    row_index=$((row_index + 1))\n  done <<< \"\
+    $lst\"\n  echo \"[${coords[@]}]\"", "    if [ -z \"$1\" ]; then\n        echo\
+    \ []\n        return\n    fi\n    echo \"$1\" |\n    awk 'BEGIN {FS=\" \"} {\n\
+    \        for (i=1; i<=NF; i++) {\n            if ($i == '\"$2\"') {\n        \
+    \        printf \"[%s, %s]\", NR-1, i-1\n            }\n        }\n    }' |\n\
+    \    sort -k1 -n -k2 -r |\n    tr -d '\\n' |\n    sed -e 's/\\[/[/g' -e 's/\\\
+    ]/], [/g' |\n    sed -e 's/\\], \\[/],\\n[/g' -e 's/\\]$/]/g'", "  row=$(expr\
+    \ $2 + 1)\n  echo $(grep -n $row <(echo -e $1) | cut -d \":\" -f1 | tr \"\\n\"\
+    \ \" \")", "    local row=0 col=0\n    local a=($(echo $1 | tr -s \" \"))\n  \
+    \  local l=${#a[@]}\n    local b=()\n    local ans=()\n    for (( i=0; i<l; i++\
+    \ ))\n    do\n        if [[ ${a[$i]} =~ ^[0-9]+$ ]] && (( ${a[$i]} == $2 ))\n\
+    \        then\n            b+=($row)\n            b+=($col)\n        fi\n    \
+    \    (( col++ ))\n        if [[ ${a[$i]} == \"\" ]]\n        then\n          \
+    \  (( row++ ))\n            col=0\n        fi\n    done\n    l=${#b[@]}\n    for\
+    \ (( i=0; i<l; i+=2 ))\n    do\n        for (( j=i+2; j<l; j+=2 ))\n        do\n\
+    \            if (( ${b[$i]} > ${b[$j]} ))\n            then\n                local\
+    \ t=${b[$i]}\n                b[$i]=${b[$j]}\n                b[$j]=$t\n     \
+    \           t=${b[$i+1]}\n                b[$i+1]=${b[$j+1]}\n               \
+    \ b[$j+1]=$t\n            fi\n        done\n    done\n    for (( i=0; i<l; i+=2\
+    \ ))\n    do\n        ans+=(\\\"${b[$i]}\\\")\n        ans+=(\\\"${b[$i+1]}\\\"\
+    )\n    done\n    echo ${ans[@]}", "  local -r input=$1\n  local -r target=$2\n\
+    \  local -r row_list=$(echo \"$input\" |\\\n  awk -v x=$target '{\n    for (i\
+    \ = 1; i <= NF; i++) {\n      if ($i == x) {\n        printf \"%s \", NR;\n  \
+    \      printf \"%s \", i;\n      }\n    }\n  }')\n  local -r row_list_array=($row_list)\n\
+    \  local -r row_pair_list=$(echo ${row_list_array[@]} |\\\n  sed -e 's/ /\\n/g'\
+    \ |\\\n  sort -n |\\\n  awk 'BEGIN {\n    len = length($0);\n    len_to_del =\
+    \ 1;\n    for (i = 1; i <= len; i += 2) {\n      printf \"[\";\n      printf \"\
+    \\\"%s\\\"\", $(i);\n      printf \", \";\n      printf \"\\\"%s\\\"\", $(i +\
+    \ 1);\n      printf \"]\";\n      if (i + 2 <= len) {\n        printf \", \";\n\
+    \      }\n    }\n  }')\n  echo \"[$row_pair_list]\"", "  local -a arr=()\n  local\
+    \ -a tmp=()\n  local i=0\n  local item=0\n  local row=0\n  local col=0\n  while\
+    \ read -r line; do\n    while read -ra arr; do\n      for item in \"${arr[@]}\"\
+    ; do\n        if [[ \"$item\" -eq \"$2\" ]]; then\n          tmp+=(${row},${col})\n\
+    \        fi\n        col=$((col+1))\n      done\n    done <<< \"$line\"\n    row=$((row+1))\n\
+    \    col=0\n  done <<< \"$1\"\n  for i in \"${!tmp[@]}\"; do\n    if [[ $((i%2))\
+    \ -eq 0 ]]; then\n      tmp[$i]=\"\\\"${tmp[$i]}\\\"\"\n    fi\n  done\n  echo\
+    \ \"[${tmp[@]}]\"", "\tawk -v x=\"$2\" 'BEGIN { RS = \"\\n\"; i = 0; s = \"\"\
+    ; }\n\t\t{ if ($0 ~ x) {for (k = 1; k <= NF; k++) {\n\t\t\tif ($k == x) { s =\
+    \ s \"\" \"[\\\"\" i \"\\\",\\\"\" k-1 \"\\\"],\"; }\n\t\t} } i++; }\n\t\tEND\
+    \ { print \"[\" substr(s, 0, length(s)-1) \"]\"; }' \\\n\t<<< \"$1\"", "    local\
+    \ list=\"$1\"\n    local x=\"$2\"\n    local row=0\n    local col=0\n    local\
+    \ olist=\"\"\n    local orow=\"\"\n    local ocol=\"\"\n    local rownum=0\n \
+    \   local colnum=0\n    local olistarr=()\n    local olistarrlen=0\n    local\
+    \ outarr=()\n    while read -r row; do\n        while read -r col; do\n      \
+    \      if [[ \"$col\" == \"$x\" ]]; then\n                olist=\"[\\\"$row\\\"\
+    , \\\"$col\\\"]\"\n                olistarr+=(\"$olist\")\n            fi\n  \
+    \      done <<< \"$row\"\n    done <<< \"$list\"\n    IFS=$'\\n'\n    olistarr=($(sort\
+    \ -r -t\\\" -k3n -k1n <<< \"${olistarr[*]}\"))\n    unset IFS\n    olistarrlen=${#olistarr[@]}\n\
+    \    while [[ $rownum -lt $olistarrlen ]]; do\n        echo \"${olistarr[$rownum]}\"\
+    \n        let rownum++\n    done", "  local rows=($(echo \"$1\" | sed '/^$/d'))\n\
+    \  local columns=$(echo \"$1\" | sed '/^$/d' | head -n 1 | awk '{print NF}')\n\
+    \  local i=0\n  local result=()\n  for row in \"${rows[@]}\"; do\n    for ((j=0;\
+    \ j<columns; j++)); do\n      if [[ $(echo \"$row\" | cut -d \" \" -f $((j+1)))\
+    \ -eq $2 ]]; then\n        result+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n      fi\n\
+    \    done\n    i=$((i+1))\n  done\n  echo \"${result[@]}\" | jq -s 'sort_by(.[0])\
+    \ | reverse'", "  awk '{\n    for (i = 1; i <= NF; i++) {\n      if ($i == \"\
+    '\"$2\"'\") {\n        printf \"[\\\"%s\\\", \\\"%s\\\"], \", NR - 1, i - 1\n\
+    \      }\n    }\n  } END {\n    if (NR > 0) {\n      printf(\"\\b\\b\")\n    }\n\
+    \  }' <<< \"$1\"", "  if [[ -z \"$1\" ]]; then\n    echo \"[]\"\n    return\n\
+    \  fi\n  IFS='\n'\n  local lines=(\"$1\")\n  local output=()\n  local index=0\n\
+    \  for line in \"${lines[@]}\"; do\n    local line_items=($line)\n    local line_item_index=0\n\
+    \    for line_item in \"${line_items[@]}\"; do\n      if [[ \"$line_item\" ==\
+    \ \"$2\" ]]; then\n        local item=(\"$index\" \"$line_item_index\")\n    \
+    \    output+=($(echo \"$item\" | sed 's/ /\", \"/g'))\n      fi\n      line_item_index=$((line_item_index\
+    \ + 1))\n    done\n    index=$((index + 1))\n  done\n  echo \"[$(echo \"${output[@]}\"\
+    \ | tr ' ' ',' | sed 's/^/[/;s/$/]/')]\"", "    declare -a list\n    printf \"\
+    %s\\n\" \"$1\" |\n    while IFS= read -r line\n    do\n        col=0\n       \
+    \ for n in $line\n        do\n            if [[ $n == $2 ]]\n            then\n\
+    \                list=(\"${list[@]}\" \"[\\\"$row\\\", \\\"$col\\\"]\")\n    \
+    \        fi\n            ((col++))\n        done\n        ((row++))\n    done\n\
+    \    # sort first by row in ascending order, then by column in descending order\n\
+    \    declare -a sorted\n    for row in \"${!list[@]}\"\n    do\n        sorted=(\"\
+    ${sorted[@]}\" \"${list[$row]}\")\n    done\n    IFS=$'\\n' sorted=($(sort -k1,1n\
+    \ -k2,2nr <<<\"${sorted[*]}\"))\n    IFS=$'\\n' sorted=($(sort -k1,1n -k2,2nr\
+    \ <<<\"${sorted[*]}\"))\n    echo \"${sorted[@]}\"", "\trows=()\n\twhile read\
+    \ -r line; do\n\t\trow=()\n\t\tfor field in $line; do\n\t\t\tif [ \"$field\" ==\
+    \ \"$2\" ]; then\n\t\t\t\trow+=(\"$field\")\n\t\t\tfi\n\t\tdone\n\t\tif [ \"${#row[@]}\"\
+    \ -gt 0 ]; then\n\t\t\trows+=(\"${row[@]}\")\n\t\tfi\n\tdone <<< \"$1\"\n\techo\
+    \ $(eval echo \"[[$(printf ',%s' \"${rows[@]}\")]]\")", "  local lst=$1\n  local\
+    \ x=$2\n  if [ -z \"${lst}\" ]; then\n    echo \"[]\"\n    return\n  fi\n  echo\
+    \ \"${lst}\" | awk \"{for(i=1;i<=NF;i++) if(\\$i==${x}) print \\\"['\\\\\\\"\\\
+    \"NR-1\\\"\\\\\\\"', '\\\\\\\"\\\"i-1\\\"\\\\\\\"']\\\"}\"", "    # Setting Internal\
+    \ Field Separator to newline, then space\n    IFS=$'\\n '\n\n    # Reading lines\n\
+    \    declare -a lines=()\n    while read -r line; do\n        lines+=(\"$line\"\
+    )\n    done <<< \"$1\"\n\n    declare -a results=()\n    for ((i=0; i<${#lines[@]};\
+    \ i++)); do\n        # Setting Internal Field Separator to space\n        IFS='\
+    \ '\n\n        # Reading words\n        declare -a words=()\n        for word\
+    \ in ${lines[$i]}; do\n            words+=(\"$word\")\n        done\n\n      \
+    \  # Finding coordinates\n        for ((j=0; j<${#words[@]}; j++)); do\n     \
+    \       if [[ \"${words[$j]}\" == \"$2\" ]]; then\n                # Match found\n\
+    \                results+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n            fi\n   \
+    \     done\n    done\n\n    # Sorting coordinates by rows in ascending order\n\
+    \    # and by columns in descending order\n    declare -a sorted_results=()\n\
+    \    for ((i=0; i<${#results[@]}; i++)); do\n        # Setting Internal Field\
+    \ Separator to comma\n        IFS=','\n\n        # Reading coordinates\n     \
+    \   declare -a coordinates=()\n        for coordinate in ${results[$i]}; do\n\
+    \            coordinates+=(\"$coordinate\")\n        done\n\n        # Splitting\
+    \ row and column\n        declare -a row_column=($(echo \"${coordinates[0]}\"\
+    \ | tr -d '\"'))\n\n        # Converting row and column from string to integer\n\
+    \        row=$((10#${row_column[0]}))\n        column=$((10#${row_column[1]}))\n\
+    \n        # Saving row and column\n        sorted_results+=(\"$row $column\")\n\
+    \    done\n\n    # Sorting by row in ascending order and by column in descending\
+    \ order\n    # using Process Substitution and Sort\n    sorted_results=($(for\
+    \ i in \"${sorted_results[@]}\"; do echo \"$i\"; done | sort -n -k1 -k2 -r))\n\
+    \n    # Converting the sorted array of row and column to array of coordinates\n\
+    \    sorted_results=(", "    # Makes the input a valid string,\n    # i.e. replaces\
+    \ newlines with spaces\n    INPUT=\"$(echo \"$1\" | tr '\\n' ' ')\"\n    # Grep\
+    \ for the integer in the string\n    # of the list, and output in position-format\n\
+    \    echo \"$INPUT\" | grep -Eob \"$2\"", "    echo $1 | tr -s ' ' '\\n' | awk\
+    \ -v x=$2 '{\n        for (i = 1; i <= NF; i++) {\n            if ($i == x) {\n\
+    \                print \"[\"NR - 1 \", \" i - 1 \"]\"\n            }\n       \
+    \ }\n    }' | sort -n -t',' -k1,1 -k2,2 -r | tr -d '[' | tr -d ']' | tr -d ','\
+    \ | tr -d '\\n' | sed 's/ /\", \"/g' | sed 's/^/[\"/' | sed 's/$/\"]/'", "  echo\
+    \ $1 | sed -n \"/[$(echo ${2} | sed 's/\\([^0-9]\\)/\\\\\\1/g')]/=\" | awk '{\n\
+    \    for (i = 1; i <= NF; i++)\n      if ($i == \"'\"$2\"'\")\n        print \"\
+    \\\"\"NR-1\"\\\"\", \"\\\"\"i-1\"\\\"\"\n  }' | sort -n -k 1,1 -t '\"' | sort\
+    \ -r -k 2,2 -t '\"'", "    local -r lst=\"$1\"\n    local -r x=\"$2\"\n    echo\
+    \ \"$lst\" | tr \" \" \"\\n\" | grep -n \"$x\" | sort -t \":\" -k 1n -k 2nr |\
+    \ sed 's/:/ /g' | sed 's/^/[/g' | sed 's/$/]/g'", "    printf '['\n    IFS=$'\\\
+    n' read -ra lines <<< \"$1\"\n    for ((i=0; i<${#lines[@]}; i++)); do\n     \
+    \   IFS=$' ' read -ra columns <<< \"${lines[$i]}\"\n        for ((j=0; j<${#columns[@]};\
+    \ j++)); do\n            if [ \"${columns[$j]}\" -eq \"$2\" ]; then\n        \
+    \        printf '[\"%s\"', \"$i\"\n                printf ', \"%s\"]' \"$j\"\n\
+    \                [ \"$i\" -ne \"${#lines[@]}\" ] && printf ','\n            fi\n\
+    \        done\n    done\n    printf ']'", "  echo \"$1\" |\n  awk -v x=\"$2\"\
+    \ '{\n    for (i = 1; i <= NF; i++) {\n      if ($i == x) {\n        print NR\
+    \ - 1, i - 1\n      }\n    }\n  }' |\n  sort -n |\n  awk '{\n    split($0, a,\
+    \ \" \")\n    print \"['\"a[1]\"'\", '\"'\"'\"a[2]\"'\"'\"']\"\n  }' |\n  tr '\\\
+    n' ',' |\n  sed 's/,$//' |\n  sed 's/\\(.*\\)/[\\1]/'", "\tif [[ -z \"$1\" ]];\
+    \ then\n\t\techo \"[]\"\n\telse\n\t\t# remove newline with sed and replace space\
+    \ with comma\n\t\t# to format it to a list of list\n\t\tlocal lst=$(echo $1 |\
+    \ sed ':a;N;$!ba;s/\\n/ /g' | sed 's/ /,/g')\n\t\tlocal dic=$(echo $lst | sed\
+    \ 's/\\[//g' | sed 's/\\]//g' | sed 's/,/\\n/g')\n\t\tlocal res=\"\"\n\t\tlocal\
+    \ r=0\n\t\tfor i in $dic; do\n\t\t\tif [[ $i == $2 ]]; then\n\t\t\t\tres+=\"[\\\
+    \"$r\\\",\\\"$c\\\"],\"\n\t\t\tfi\n\t\t\tc=$((c+1))\n\t\t\tif [[ $i == \",\" ]];\
+    \ then\n\t\t\t\tc=0\n\t\t\t\tr=$((r+1))\n\t\t\tfi\n\t\tdone\n\t\tif [[ -z \"$res\"\
+    \ ]]; then\n\t\t\techo \"[]\"\n\t\telse\n\t\t\t# sort by row in ascending order\n\
+    \t\t\tlocal sorted_by_row=$(echo $res | sort -h | sed 's/\\n/ /g')\n\t\t\tlocal\
+    \ r=0\n\t\t\tlocal c=0\n\t\t\tfor i in $sorted_by_row; do\n\t\t\t\tif [[ $i ==\
+    \ \"[\" ]]; then\n\t\t\t\t\tr=$((r+1))\n\t\t\t\t\tc=0\n\t\t\t\telif [[ $i == \"\
+    ,\" ]]; then\n\t\t\t\t\tc=$((c+1))\n\t\t\t\tfi\n\t\t\tdone\n\t\t\tlocal res_row=$(echo\
+    \ $sorted_by_row | sed 's/\\[/\"/g' | sed 's/\\]/ \"/g' | sed 's/,/\\n/g')\n\t\
+    \t\tlocal res=\"\"\n\t\t\tlocal r=0\n\t\t\tfor i in $res_row; do\n\t\t\t\tif [[\
+    \ $i != \",\" ]", "  local lst=\"$1\"\n  local x=\"$2\"\n  awk -v x=\"$x\" '\n\
+    \    BEGIN {\n      OFS=\"\\\"\";\n      n = 0;\n    }\n    {\n      for (i =\
+    \ 1; i <= NF; i++) {\n        if ($i == x) {\n          printf \"[\\\"%d\\\",\
+    \ \\\"%d\\\"]\", n, i - 1;\n          if (i != NF || NR != NR) {\n           \
+    \ printf \", \";\n          }\n        }\n      }\n      n++;\n    }\n    END\
+    \ {\n      print \"\";\n    }\n  ' <<< \"$lst\"", "  list=$1\n  value=$2\n  #\
+    \ Split list into rows\n  IFS=$'\\n' read -rd '' -a rows <<< \"$list\"\n  # Resulting\
+    \ list\n  result=()\n  for row in \"${!rows[@]}\"; do\n    # Split rows into columns\n\
+    \    IFS=' ' read -ra columns <<< \"${rows[$row]}\"\n    for column in \"${!columns[@]}\"\
+    ; do\n      # Add coordinate if it contains value\n      if [[ \"${columns[$column]}\"\
+    \ == \"$value\" ]]; then\n        result+=(\"[\\\"$row\\\", \\\"$column\\\"]\"\
+    )\n      fi\n    done\n  done\n  # Sort rows in ascending order\n  sort -t: -k1,1n\
+    \ <<< \"${result[*]}\" |\n  # Sort columns in descending order\n  sort -t: -k2,2nr\
+    \ |\n  # Format result\n  tr -d \":\"", "  local rows=($(echo \"$1\" | grep -n\
+    \ '.'))\n  local x=\"$2\"\n  local result=\"\"\n  for pair in \"${rows[@]}\";\
+    \ do\n    if [ ! -z \"$(echo \"$pair\" | sed -e \"s/\\([0-9]*\\):.*$x.*/\\1/\"\
+    )\" ]; then\n      local row=$(echo \"$pair\" | sed -e \"s/\\([0-9]*\\):.*$x.*/\\\
+    1/\")\n      local columns=($(echo \"$pair\" | sed -e \"s/^[0-9]*:\\([0-9 ]*\\\
+    ).*/\\1/\"))\n      for column in \"${columns[@]}\"; do\n        if [ \"$column\"\
+    \ == \"$x\" ]; then\n          result+=\"['\\\"$(($row - 1))\\\"', '\\\"$(($column\
+    \ - 1))\\\"'], \"\n        fi\n      done\n    fi\n  done\n  if [ -z \"$result\"\
+    \ ]; then\n    echo \"[]\"\n  else\n    echo \"[${result::-2}]\"\n  fi", "   \
+    \ local data=$1\n    local x=$2\n    # echo \"Data = $data, x = $x\" >&2\n   \
+    \ [[ -z \"$data\" ]] && echo \"[]\" && return\n    # echo \"Data = $data, x =\
+    \ $x\" >&2\n    local out=\"\"\n    local row=0\n    for row_data in $data; do\n\
+    \        local col=0\n        for x_ in $row_data; do\n            if [[ \"$x_\"\
+    \ == \"$x\" ]]; then\n                # echo \"Row = $row, Column = $col\" >&2\n\
+    \                out=\"$out $row $col\"\n            fi\n            col=$((col+1))\n\
+    \        done\n        row=$((row+1))\n    done\n    if [[ -z \"$out\" ]]; then\n\
+    \        echo \"[]\"\n    else\n        out=$(echo \"$out\" | sort -n)\n     \
+    \   # echo \"Row = $row, Column = $col\" >&2\n        echo \"$out\" | awk 'BEGIN\
+    \ { row_prev=-1; printf(\"[\"); }\n        {\n            if ($1 != row_prev)\
+    \ {\n                if (row_prev > -1) {\n                    printf(\"]],[\"\
+    );\n                }\n                row_prev = $1;\n                printf(\"\
+    [\")\n            } else {\n                printf(\",\");\n            }\n  \
+    \          printf(\"[\\\"%s\\\",\\\"%s\\\"]\", $1, $2);\n        }\n        END\
+    \ { printf(\"]]\"); }'\n    fi", "  local list=\"$1\"\n  local integer=\"$2\"\n\
+    \  local coordinates=\"$(echo \"$list\" | awk '\n    BEGIN {\n      integer =\
+    \ \"'\"$integer\"'\"\n    }\n    {\n      for (i = 1; i <= NF; i++) {\n      \
+    \  if ($i == integer) {\n          print NR - 1 \" \" i - 1\n        }\n     \
+    \ }\n    }\n  ' | LC_ALL=C sort -n -t ' ' -k1,1 -k2,2r | awk '\n    {\n      print\
+    \ \"[\\\"\" $1 \"\\\", \\\"\" $2 \"\\\"]\"\n    }\n  ' | paste -sd,)\"\n  echo\
+    \ \"[$coordinates]\"", "    local rows=$(echo \"$1\" | wc -l)\n    local i=0\n\
+    \    local j=0\n    echo \"$1\" | while read line; do\n        local nums=$(echo\
+    \ \"$line\" | wc -w)\n        echo \"$line\" | while read num; do\n          \
+    \  if [ \"$num\" == \"$2\" ]; then\n                echo \"[\\\"$i\\\", \\\"$j\\\
+    \"]\"\n            fi\n            j=$((j+1))\n        done\n        i=$((i+1))\n\
+    \        j=0\n    done | sort -k1,1n -k2,2rn", "  local data=$1\n  local item=$2\n\
+    \  local row=0\n  local col=0\n  local result=()\n  IFS=$'\\n'\n  for line in\
+    \ $data; do\n    row=$((row + 1))\n    col=0\n    IFS=' '\n    for element in\
+    \ $line; do\n      col=$((col + 1))\n      if [[ $element == $item ]]; then\n\
+    \        result+=([\"$row\"]=\"$col\")\n      fi\n    done\n  done\n  echo \"\
+    ${result[@]}\" | sed 's/ //g' | \\\n    sort -k 1n -k 2nr | \\\n    awk 'BEGIN\
+    \ { print \"[\" } { print \"[\\\"\"$1\"\\\", \\\"\"$2\"\\\"]\" } END { print \"\
+    ]\" }'", "  lst=$1\n  val=$2\n  row_num=0\n  echo \"$lst\" | while read row; do\n\
+    \    col_num=0\n    for col in $row; do\n      if [ \"$col\" == \"$val\" ]; then\n\
+    \        echo \"[\\\"$row_num\\\", \\\"$col_num\\\"]\"\n      fi\n      col_num=$((col_num\
+    \ + 1))\n    done\n    row_num=$((row_num + 1))\n  done |\n  sort -t, -k1,1g -k2,2r\
+    \ | tr '\\n' ',' | sed 's/,$//' | sed 's/^/[/' | sed 's/$/]/'", "  local dat=$1\n\
+    \  local x=$2\n  python -c \"import re; print([re.findall(r'\\b{}\\b'.format($x),\
+    \ s) for s in '$dat'.splitlines() if $x in s]);\" | python -c \"import sys; import\
+    \ ast; print(ast.literal_eval(sys.stdin.read()));\" | python -c \"import sys;\
+    \ import re; print([[re.search(r'\\b{}\\b'.format($x), s).start(), i] for i, s\
+    \ in enumerate('$dat'.splitlines()) if $x in s]);\" | python -c \"import sys;\
+    \ print(sorted(ast.literal_eval(sys.stdin.read()), key=lambda x:x[0]));\" | python\
+    \ -c \"import sys; print(sorted(ast.literal_eval(sys.stdin.read()), key=lambda\
+    \ x:x[1], reverse=True));\" | python -c \"import sys; print(sorted(ast.literal_eval(sys.stdin.read()),\
+    \ key=lambda x:x[0]));\" | python -c \"import sys; print(sorted(ast.literal_eval(sys.stdin.read()),\
+    \ key=lambda x:x[1], reverse=True));\" | python -c \"import sys; print(ast.literal_eval(sys.stdin.read()));\"\
+    \ | python -c \"import sys; print(['[\\\"{}\\\", \\\\\\\"{}\\\\\\\"]'.format(s[0],\
+    \ s[1]) for s in ast.literal_eval(sys.stdin.read())]);\" | python -c \"import\
+    \ sys; print(ast.literal_eval(sys.stdin.read()));\" | python -c \"import sys;\
+    \ print(', '.join(ast.literal_eval(sys.stdin.read())));\" | python -c \"import\
+    \ sys; print('[{}]'.format(sys.stdin.read()));\"", "\tlocal row=\"\" col=\"\"\
+    \ ret=\"\"\n\t[[ $1 == \"\" ]] && echo \"[]\" && return 1\n\tIFS=\"\\n\"\n\tfor\
+    \ row in $1; do\n\t\tIFS=\" \"\n\t\tcol=0\n\t\tfor i in $row; do\n\t\t\t[[ $i\
+    \ -eq $2 ]] && ret=\"$ret [\\\"$row\\\", \\\"$col\\\"]\"\n\t\t\tcol=$((col+1))\n\
+    \t\tdone\n\tdone\n\techo \"$ret\"", "  if [[ -z \"$1\" ]]; then\n    echo \"[]\"\
+    \n    return\n  fi\n  local readarray -t arr < <(echo \"$1\" | sort -t ' ' -k\
+    \ 1,1 -n | awk -v x=\"$2\" '{for(i=NF;i>0;i--)if($i==x)print NR\" \"$i}')\n  local\
+    \ d_out=\"$(echo \"$1\" | awk -v x=\"$2\" '{for(i=NF;i>0;i--)if($i==x)print NR\"\
+    \ \"$i}')\"\n  local ret_val=()\n  for i in \"${arr[@]}\"; do\n    ret_val+=(\"\
+    [\\\"$(echo \"$i\" | cut -d ' ' -f 1)\\\"\" \"\\\"$(echo \"$i\" | cut -d ' ' -f\
+    \ 2)\\\"]\")\n  done\n  echo \"[${ret_val[*]}]\"", "    local row=0\n    local\
+    \ col=0\n    local out=''\n    local -a current_row=( )\n    echo \"$1\" | while\
+    \ read -r line; do\n        col=0\n        current_row=($line)\n        for value\
+    \ in \"${current_row[@]}\"; do\n            if [[ \"$value\" -eq \"$2\" ]]; then\n\
+    \                out=\"$out [\\\"$row\\\", \\\"$col\\\"]\"\n            fi\n \
+    \           (( col += 1 ))\n        done\n        (( row += 1 ))\n    done\n \
+    \   echo \"$out\"", "    row=0\n    final_row=0\n    final_col=0\n    for line\
+    \ in $(echo \"$1\"); do\n        col=0\n        for num in $(echo \"$line\");\
+    \ do\n            if [ \"$num\" == \"$2\" ]; then\n                echo \"['\\\
+    \"$row\\\"', '\\\"$col\\\"']\"\n            fi\n            col=$((col+1))\n \
+    \       done\n        row=$((row+1))\n    done | sort -t\\\" -k2 -n -r | sort\
+    \ -t\\\" -k1 -n", "  local row=0\n  local col=0\n  local coordinates\n  while\
+    \ read -r line\n  do\n    col=0\n    while read -r cell\n    do\n      if [[ \"\
+    $cell\" == \"$2\" ]]\n      then\n        coordinates+=(\"$row $col\")\n     \
+    \ fi\n      col=$((col+1))\n    done <<< $(echo \"$line\")\n    row=$((row+1))\n\
+    \  done <<< $(echo \"$1\")\n  echo \"[$(\n    IFS=', '; echo \"${coordinates[*]}\"\
+    \ | tr ' ' ':' |\n    while read -r i\n    do\n      echo \"[\\\"$(echo \"$i\"\
+    \ | cut -d ':' -f 1)\\\", \\\"$(echo \"$i\" | cut -d ':' -f 2)\\\"]\"\n    done\
+    \ | sort -t ':' -k 1,1n -k 2,2rn | tr '\\n' ',' | sed 's/,$//'\n  )]\")", "  #\
+    \ \"filtered\" contains all lines in which the given int is present.\n  local\
+    \ filtered=$(grep \"$2\" <<< \"$1\")\n  # \"rows\" contains all rows in which\
+    \ the given int is present.\n  local rows=$(sed -e 's/^[0-9]\\+ //' <<< \"$filtered\"\
+    )\n  # \"trimmed\" contains leading zeros trimmed.\n  local trimmed=$(sed -e 's/^0\\\
+    +//' <<< \"$rows\")\n  # \"lengths\" contains lengths of all trimmed elements.\n\
+    \  local lengths=$(wc -w <<< \"$trimmed\")\n  # \"positions\" contains positions\
+    \ of the given int in all trimmed elements.\n  local positions=$(grep -b -o \"\
+    $2\" <<< \"$trimmed\")\n  # \"position_numbers\" contains only numbers from \"\
+    positions\".\n  local position_numbers=$(sed -e 's/[^0-9]\\+//g' <<< \"$positions\"\
+    )\n  # \"position_lengths\" contains lengths of all positions.\n  local position_lengths=$(wc\
+    \ -w <<< \"$position_numbers\")\n  # \"row_numbers\" contains row numbers in which\
+    \ the given int is present.\n  local row_numbers=$(awk -v len=\"$position_lengths\"\
+    \ 'BEGIN {\n    split(len, lengths, \" \")\n    while(getline < \"filtered\")\
+    \ {\n      line_number++\n      if (line_number < length(lengths)) {\n       \
+    \ printf(\"%d\\n\", line_number - 1)\n      } else {\n        printf(\"%d \",\
+    \ line_number - 1)\n      }\n    }\n  }' <<< \"$filtered\")\n  # \"row_numbers_trimmed\"\
+    \ contains leading zeros trimmed.\n  local row_numbers_trimmed=$(sed -e 's/^0\\\
+    +//' <<< \"$row_numbers\")\n  # \"row_numbers_lengths\" contains lengths of all\
+    \ trimmed elements.\n  local row_numbers_lengths=$(wc -w <<< \"$row_numbers_trimmed\"\
+    )\n  # \"row", "  local lst=\"$1\" num=\"$2\"\n  local -i i j n=0\n  echo \"$lst\"\
+    \ | while read line; do\n    i=0\n    set -- $line\n    for val in \"$@\"; do\n\
+    \      if [ \"$val\" = \"$num\" ]; then\n        echo \"[\\\"$n\\\", \\\"$i\\\"\
+    ]\"\n      fi\n      (( i++ ))\n    done\n    (( n++ ))\n  done | sort -s -t,\
+    \ -k1,1n -k2,2nr", "  lst=$1\n  x=$2\n  IFS=$'\\n' rows=($lst)\n  row_idx=0\n\
+    \  result=()\n  for row in \"${rows[@]}\"; do\n    row_len=${#row}\n    if [[\
+    \ $row_len -eq 0 ]]; then\n      row_idx=$((row_idx + 1))\n      continue\n  \
+    \  fi\n    # Let's use ifs to check the integer.\n    # Convert the row to a list.\n\
+    \    # Use array \"read\" to convert the list.\n    IFS=$' ' read -a ints <<<\
+    \ \"$row\"\n    col_idx=0\n    for i in \"${ints[@]}\"; do\n      # Let's use\
+    \ ifs to check the integer.\n      # Set to \"1\" if it is an integer.\n     \
+    \ if [[ $i =~ ^[0-9]+$ ]]; then\n        if [[ $i -eq $x ]]; then\n          result+=(\"\
+    [\\\"$row_idx\\\", \\\"$col_idx\\\"]\")\n        fi\n      fi\n      col_idx=$((col_idx\
+    \ + 1))\n    done\n    row_idx=$((row_idx + 1))\n  done\n  IFS=$'\\n' sorted=($(sort\
+    \ <<<\"${result[*]}\"))\n  echo \"${sorted[*]}\"", "    ###################################################################\n\
+    \    # 1. read input parameters\n    # 2. find entries in the list\n    # 3. sort\
+    \ the result by row (asc) and column (desc)\n    # 4. print the coordinates as\
+    \ a list of lists\n    ###################################################################\n\
+    \    # <YOUR CODE HERE>\n    # STEP 1 - READ INPUT PARAMETERS\n    ###################################################################\n\
+    \    local -r list=\"$1\"\n    local -r num=\"$2\"\n    ###################################################################\n\
+    \    # STEP 2 - FIND ENTRIES IN THE LIST\n    ###################################################################\n\
+    \    local -r coordinates=$(\n        ###################################################################\n\
+    \        # 1. convert the string to an array of arrays\n        # 2. find entries\
+    \ in each subarray\n        # 3. print as a list of lists\n        ###################################################################\n\
+    \        # <YOUR CODE HERE>\n        # STEP 1 - CONVERT THE STRING TO AN ARRAY\
+    \ OF ARRAYS\n        ###################################################################\n\
+    \        IFS=$'\\n' read -d '' -r -a array <<<\"$list\"\n        ###################################################################\n\
+    \        # STEP 2 - FIND ENTRIES IN EACH SUBARRAY\n        ###################################################################\n\
+    \        printf '%s\\n' \"${array[@]}\" |\n            awk 'BEGIN {\n        \
+    \        RS=\" \"\n                }\n                {\n                for (i=1;\
+    \ i<=NF; i++) {\n                    if ($i == \"'\"$num\"'\") {\n           \
+    \             print NR-1, i-1\n                    }\n                }\n    \
+    \        }'\n    )\n    ###################################################################\n\
+    \    # STEP 3 - SORT THE RESULT BY ROW (ASC) AND COLUMN (DESC)\n    ###################################################################\n\
+    \    IFS=$'\\n' read -d '' -r -a sorted_coordinates <<<\"$(\n        printf '%s\\\
+    n' \"${coordinates[@]}\" |\n            sort -t ' ' -k 1 -n -k 2 -nr\n    )\"\n\
+    \    ###################################################################\n   \
+    \ # STEP 4 - PRINT THE COORDINATES AS A LIST OF LISTS\n    ###################################################################\n\
+    \    local -r result=$(\n        #################################################################",
+  "    local result=()\n    local row=0\n    while read line; do\n        if [[ \"\
+    $line\" =~ \" $2 \" ]]; then\n            result+=(\"[$row, $col]\")\n       \
+    \ fi\n        ((row++))\n    done < <(sed 's/ /\\n/g' <(echo \"$1\"))\n    echo\
+    \ \"${result[@]}\"", "  local INPUT=\"$1\"\n  local X=\"$2\"\n  # local OUTPUT=($(echo\
+    \ \"${INPUT}\" | tr ' ' '\\n' | awk -v x=\"${X}\" '{\n  #   if (NR % 2 == 0) {\n\
+    \  #     print \"\\\"\"NR/2\"\\\"\", \"\\\"\"x\"\\\"\"\n  #   }\n  # }'))\n  local\
+    \ OUTPUT=($(echo \"${INPUT}\" | tr ' ' '\\n' | awk -v x=\"${X}\" '{\n    if (NR\
+    \ % 2 == 0) {\n      print NR/2, x\n    }\n  }'))\n  echo ${OUTPUT[@]}", "  lst=\"\
+    $1\"\n  x=\"$2\"\n  for i in $(seq 0 $(($(echo \"$lst\" | wc -l) - 1))); do\n\
+    \    for j in $(seq 0 $(($(echo \"$lst\" | head -n \"$(($i + 1))\" | tail -n 1\
+    \ | wc -w) - 1))); do\n      num=$(echo \"$lst\" | head -n \"$(($i + 1))\" | tail\
+    \ -n 1 | cut -d \" \" -f \"$(($j + 1))\")\n      if [ \"$num\" == \"$x\" ]; then\n\
+    \        echo \"[\\\"\"$i\"\\\", \\\"\"$j\"\\\"]\"\n      fi\n    done\n  done\
+    \ | sort | sort -r -k 1", "    local rows=$(echo \"$1\" | wc -l)\n    local columns=$(echo\
+    \ \"$1\" | sed 's/[^ ]//g' | wc -m)\n    local row=\n    local column=\n    local\
+    \ result=()\n    for row in $(seq 0 $((rows - 1))); do\n        for column in\
+    \ $(seq 0 $((columns - 1))); do\n            if [ \"$(echo \"$1\" | cut -d' '\
+    \ -f$((column + 1)))\" == \"$2\" ]; then\n                result+=(\"[\\\"$row\\\
+    \", \\\"$column\\\"]\")\n            fi\n        done\n    done\n    echo \"${result[@]}\"\
+    \ | sort -n | tr ' ' ','", "  # wc -l -a is not in posix, but this does the trick\n\
+    \  local rows=`echo \"$1\" | wc -l`\n  local res=()\n  for ((i=0; i<rows; i++));\
+    \ do\n    local row=`echo \"$1\" | head -n$((i+1)) | tail -n1`\n    local cols=`echo\
+    \ \"$row\" | wc -w`\n    for ((j=0; j<cols; j++)); do\n      local col=`echo \"\
+    $row\" | cut -d\" \" -f$((j+1))`\n      if [[ \"$col\" -eq \"$2\" ]]; then\n \
+    \       res+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n      fi\n    done\n  done\n  res=($(IFS=$'\\\
+    n'; echo \"${res[*]}\" | sort -k1 -n -k2 -r -k3 | sed 's/\\[/\"/g' | sed 's/\\\
+    ]/\"/g'))\n  echo \"[${res[*]}]\"", "  local -r list=\"$1\"\n  local -r integer=\"\
+    $2\"\n  local row=0\n  local col=0\n  local line=0\n  local arr=()\n  local rr=()\n\
+    \  while read -r line; do\n    arr=($line)\n    col=0\n    while [ \"$col\" -lt\
+    \ \"${#arr[@]}\" ]; do\n      if [ \"${arr[$col]}\" = \"$integer\" ]; then\n \
+    \       rr+=(\"[\\\"$row\\\", \\\"$col\\\"]\")\n      fi\n      col=$((col + 1))\n\
+    \    done\n    row=$((row + 1))\n  done <<< \"$list\"\n  echo \"${rr[@]}\"", " \
+    \   [[ $# -ne 2 ]] && { echo \"Usage: $0 <list> <integer>\"; exit 1; }\n    [[\
+    \ -z $1 ]] && echo [] && exit 0\n    local matrix=\"$1\"\n    local target=\"\
+    $2\"\n    local result=$(echo \"$matrix\" | awk '{for(i=1;i<=NF;i++)if($i==target)printf\
+    \ \"%s %s\\n\",NR-1,i-1}' target=\"$target\" | sort -n | awk '{printf \"[[\\\"\
+    %s\\\", \\\"%s\\\"]]\",$1,$2}')\n    echo \"[$result]\"", "    local x=\"$2\"\n\
+    \    local rows=\"\"\n    local row_num=0\n    for row in $(echo \"$1\" | tr '\
+    \ ' '\\n'); do\n        local col_num=0\n        for col in $(echo \"$row\" |\
+    \ tr ' ' '\\n'); do\n            if [[ \"$col\" == \"$x\" ]]; then\n         \
+    \       rows+=\"[\\\"$row_num\\\", \\\"$col_num\\\"] \"\n            fi\n    \
+    \        ((col_num++))\n        done\n        ((row_num++))\n    done\n    echo\
+    \ \"[$rows]\"", "    local lst=$1\n    local target=$2\n    local rows=$(echo\
+    \ $lst | awk '{print NF}')\n    local cols=$(echo $lst | awk '{print NF}' | sort\
+    \ -n | tail -n 1)\n    local result=\"\"\n    local r=$rows\n    local c=0\n \
+    \   while [ $r -gt 0 ]; do\n        while [ $c -lt $cols ]; do\n            local\
+    \ i=$(echo $lst | awk \"{print \\$$c}\" | sed -n ${r}p)\n            if [ \"$i\"\
+    \ = \"$target\" ]; then\n                result=\"$result [\\\"$((r-1))\\\", \\\
+    \"$((c-1))\\\"],\"\n            fi\n            ((c++))\n        done\n      \
+    \  ((r--))\n        c=0\n    done\n    echo -n \"[${result%?}]\"", "    local\
+    \ lst=$1\n    local elem=$2\n    if [[ -z $lst ]]; then\n        echo '[]'\n \
+    \       return\n    fi\n    if [[ -z $elem ]]; then\n        echo '[]'\n     \
+    \   return\n    fi\n    local row=0\n    local col=0\n    local ans=()\n    for\
+    \ i in $(echo $lst | tr \" \" \"\\n\" | tr \"\\n\" \" \"); do\n        if [[ $i\
+    \ == $elem ]]; then\n            ans+=([\"$row,$col\"])\n        fi\n        col=$((col+1))\n\
+    \        if [[ $i == $'\\n' ]]; then\n            row=$((row+1))\n           \
+    \ col=0\n        fi\n    done\n    ans=$(printf \"%s\\n\" \"${ans[@]}\" | sort\
+    \ | sed -e 's/\\(.*\\)/[\\1]/g' | tr '\\n' ' ')\n    echo \"[$ans]\"", "    local\
+    \ list=$1\n    local item=$2\n    if [[ -z \"${list}\" ]]; then\n        echo\
+    \ \"[]\"\n        return\n    fi\n    local row_num=0\n    local row_cols\n  \
+    \  local col_num\n    local idx\n    local item_idx\n    local results=()\n  \
+    \  while read -r line; do\n        row_cols=(${line})\n        col_num=0\n   \
+    \     for idx in \"${!row_cols[@]}\"; do\n            item_idx=\"${row_cols[idx]}\"\
+    \n            if [[ \"${item_idx}\" -eq \"${item}\" ]]; then\n               \
+    \ results+=(\"[\\\"${row_num}\\\", \\\"${col_num}\\\"]\")\n            fi\n  \
+    \          ((col_num++))\n        done\n        ((row_num++))\n    done <<< \"\
+    ${list}\"\n    echo ${results[@]} | jq -R .", "    # your code goes here\n   \
+    \ if [ -z \"$1\" ] || [ -z \"$2\" ]; then\n        echo \"[]\"\n        return\n\
+    \    fi\n    local res\n    IFS=$'\\n' read -rd '' -a lines <<< \"$1\"\n    for\
+    \ ((i=0; i<${#lines[@]}; i++)); do\n        local line=\"${lines[$i]}\"\n    \
+    \    # Split space\n        IFS=' ' read -r -a nums <<< \"$line\"\n        for\
+    \ ((j=0; j<${#nums[@]}; j++)); do\n            if [ \"${nums[$j]}\" -eq \"$2\"\
+    \ ]; then\n                res=\"$res\\n[\\\"$i\\\", \\\"$j\\\"]\"\n         \
+    \   fi\n        done\n    done\n    if [ -z \"$res\" ]; then\n        echo \"\
+    []\"\n    else\n        echo \"[${res:1}]\"\n    fi", "    local -r lst=\"$1\"\
+    \n    local -r key=\"$2\"\n    local -r row_pattern=\"^$key[ ]\"\n    local -r\
+    \ col_pattern=\"[ ]$key\\$\"\n    local -r row_col_pattern=\"$row_pattern|$col_pattern\"\
+    \n    local -r row_cols_pattern=\"^$row_col_pattern$\"\n    local -r row_cols_pattern_with_padding=\"\
+    \ $row_cols_pattern$\"\n    local -r row_cols_pattern_with_padding2=\"^$row_cols_pattern\
+    \ \"\n    local -r row_cols_pattern_with_padding3=\"^$row_cols_pattern$\"\n  \
+    \  local -r row_cols_pattern_with_padding4=\"^$row_cols_pattern\"\n    local -r\
+    \ rows_pattern=\"^$row_pattern.*$\"\n    local -r cols_pattern=\"^.*[ ]$col_pattern$\"\
+    \n    local -r row_num_elem_pattern=\"^[0-9]\\+$\"\n    local -r row_num_elem_pattern_with_padding=\"\
+    \ $row_num_elem_pattern$\"\n    local -r row_num_elem_pattern_with_padding2=\"\
+    ^$row_num_elem_pattern \"\n    local -r row_num_elem_pattern_with_padding3=\"\
+    ^$row_num_elem_pattern$\"\n    local -r row_num_elem_pattern_with_padding4=\"\
+    ^$row_num_elem_pattern\"\n    local -a rows=()\n    local -a row_nums=()\n   \
+    \ local -a cols=()\n    local -a row_cols=()\n    local -a row_cols_num=()\n \
+    \   local -a row_cols_num_sorted=()\n    local -a row_cols_num_sorted_final=()\n\
+    \    local -a row_cols_sorted=()\n    local -a row_cols_sorted_final=()\n    local\
+    \ -a row_cols_final=()\n    local -", "    local -r list=\"$1\"\n    local -r\
+    \ integer=\"$2\"\n    local -r columns=$(echo \"$list\" | awk 'END {print NF}')\n\
+    \    local rows=0\n    local -r output=$(awk -v integer=\"$integer\" -v rows=\"\
+    $rows\" -v columns=\"$columns\" '\n    {\n        for (i = 1; i <= NF; i++) {\n\
+    \            if ($i == integer) {\n                printf(\"[\\\"%d\\\", \\\"\
+    %d\\\"], \", rows, i - 1)\n            }\n        }\n        rows++\n    }\n \
+    \   END {\n        rows--\n        printf(\"[\\\"%d\\\", \\\"%d\\\"]\", rows,\
+    \ columns - 1)\n    }' <<< \"$list\")\n    eval \"echo $output\"", "\tresult=()\n\
+    \tfor row in $1; do\n\t\tfor ((i=0; i<${#row}; i++)); do\n\t\t\tif [[ \"${row:$i:1}\"\
+    \ = \"$2\" ]]; then\n\t\t\t\tresult+=([\"$(($(echo \"$row\" | wc -w)-1))\"]=\"\
+    $i\")\n\t\t\tfi\n\t\tdone\n\tdone\n\techo \"${!result[@]}\" | tr \" \" \"\\n\"\
+    \ | sort -n | sed 's/.*/[\"&\", \"'${result[$(cat)]}'\"]/' | tr \"\\n\" \" \"\
+    \ | sed 's/^/[/; s/ $/]/'", "    lst=$1\n    x=$2\n    counter=0\n    echo $lst\
+    \ | while read line; do\n        # Use awk to find $x in the line\n        # awk\
+    \ 'index($0, \"[[:space:]]\" str \"[[:space:]]\")' <<< \"This is a simple test\"\
+    \n        awk -v str=\"$x\" 'index($0, \" \" str \" \") || index($0, str \" \"\
+    ) || index($0, \" \" str)' <<< \"$line\" > /dev/null\n        if [[ $? -eq 0 ]];\
+    \ then\n            # Find all matches of $x in the line\n            # sed -n\
+    \ 's/.*\\( \\|^\\)x\\( \\|$\\).*/\\1\\2/p'\n            # -n     suppress automatic\
+    \ printing of pattern space\n            # s      substitute\n            # .*\
+    \     zero or more characters\n            # \\1     backreference 1, \\2 backreference\
+    \ 2\n            # p      print\n            # while read char; do\n         \
+    \   #     # Append results to a list\n            #     list=(\"${list[@]}\" $counter\
+    \ '\"'$char'\"')\n            # done <<< \"$(sed -n 's/.*\\( \\|^\\)x\\( \\|$\\\
+    ).*/\\1\\2/p' <<< \"$line\")\"\n            # Use sed to find all matches of $x\
+    \ in the line\n            sed -n 's/.*\\( \\|^\\)x\\( \\|$\\).*/\\1\\2/p' <<<\
+    \ \"$line\" | while read char; do\n                # Append results to a list\n\
+    \                list=(\"${list[@]}\" $counter '\"'$char'\"')\n            done\n\
+    \        fi\n        counter=$((counter + 1))\n    done\n    # Sort by rows, then\
+    \ by columns in reverse order\n    echo \"${list[@]}\" | tr ' ' '\\n' | sort -t\\\
+    \" -k1,1n -k2,2nr | awk '{print \"[\" $0 \"]\"}' | tr '\\n' ' ' | sed 's/  *$//'",
+  "  local lst=$1\n  local x=$2\n  grep -nx $x <<< $lst |\\\n  awk -F: '{print \"\
+    [\\\"\"$1\"\\\", \\\"\"$2\"\\\"]\"}' |\\\n  sort -t'\"' -k1,1n -k2,2r |\\\n  tr\
+    \ '\\n' ',' |\\\n  sed -E 's/,$//'", "\tlocal -a matrix=($(echo \"$1\"))\n\tlocal\
+    \ found=\"\"\n\tlocal count=0\n\tfor ((i=0; i<${#matrix[@]}; i++)); do\n\t\tlocal\
+    \ row=(${matrix[$i]})\n\t\tfor ((j=0; j<${#row[@]}; j++)); do\n\t\t\tif [[ \"\
+    ${row[$j]}\" == \"$2\" ]]; then\n\t\t\t\tcount=$((count+1))\n\t\t\t\tif [[ \"\
+    $found\" == \"\" ]]; then\n\t\t\t\t\tfound=$i\" \"$j\n\t\t\t\telse\n\t\t\t\t\t\
+    found=$found\" \"$i\" \"$j\n\t\t\t\tfi\n\t\t\tfi\n\t\tdone\n\tdone\n\tfound=($found)\n\
+    \tif [[ \"$found\" == \"\" ]]; then\n\t\techo -n \"[]\"\n\telse\n\t\tlocal  -a\
+    \ result=()\n\t\twhile [[ \"$found\" != \"\" ]]; do\n\t\t\tlocal -a tmp=()\n\t\
+    \t\tfor ((i=0; i<$count; i++)); do\n\t\t\t\tif [[ \"${found[$i*2]}\" == \"${found[$((i+1))*2]}\"\
+    \ ]]; then\n\t\t\t\t\tif [[ \"${found[$i*2+1]}\" -gt \"${found[$((i+1))*2+1]}\"\
+    \ ]]; then\n\t\t\t\t\t\ttmp=(\"${found[$i*2]}\" \"${found[$i*2+1]}\" \"${found[$((i+1))*2]}\"\
+    \ \"${found[$((i+1))*2+1]}\")\n\t\t\t\t\t\tfound[$i*2]=\"${tmp[2]}\"\n\t\t\t\t\
+    \t\tfound[$i*2+1]=\"${tmp[3]}\"\n\t\t\t\t\t\tfound[$((i+1))*2]=\"${tmp[0]}\"\n\
+    \t\t\t\t\t\tfound[$((i+1))*2+1]=\"${tmp[1]}\"\n\t\t\t\t\tfi\n\t\t\t\telse\n\t\t",
+  "  awk -v OFS='\" \"' -v q=$2 '\n    BEGIN {\n      n = 0;\n      split(q, qq, \"\
+    \");\n      printf \"[\";\n    }\n    {\n      for (i = 1; i <= NF; i++) {\n \
+    \       if ($i == q) {\n          printf \"[\\\"%d\\\", \\\"%d\\\"]\", n, i -\
+    \ 1;\n          if (NR != FNR) {\n            printf \", \";\n          }\n  \
+    \      }\n      }\n      n++;\n    }\n    END {\n      printf \"]\";\n    }\n\
+    \  ' <<< \"$1\"", "    # Write your code here\n    # To print results to the standard\
+    \ output you can use echo\n    # Example: echo \"Hello world\"\n    rows=$(echo\
+    \ $1 | tr \" \" \"\\n\")\n    echo $rows\n    result=()\n    for ((i=0; i<$(echo\
+    \ \"$rows\" | wc -l); i++)); do\n        for ((j=0; j<$(echo \"$rows\" | head\
+    \ -n $((i+1)) | tail -n 1 | wc -w); j++)); do\n            if [[ $(echo \"$rows\"\
+    \ | head -n $((i+1)) | tail -n 1 | awk -v index=$((j+1)) '{print $index}') -eq\
+    \ $2 ]]; then\n                result+=([\"$i\", \"$j\"])\n            fi\n  \
+    \      done\n    done\n    echo \"${result[@]}\"", "\tlocal lst=$1 \n\tlocal x=$2\n\
+    \tlocal rows=(${lst//' '/'\\n'})\n\tfor (( i=0; i<${#rows[@]}; i++ )); do\n\t\t\
+    local cols=(${rows[$i]//' '/'\\n'})\n\t\tfor (( j=0; j<${#cols[@]}; j++ )); do\n\
+    \t\t\tif [[ \"${cols[$j]}\" -eq \"$x\" ]]; then\n\t\t\t\techo $i $j\n\t\t\tfi\n\
+    \t\tdone\n\tdone | sort -t' ' -n -k1,1 -k2,2r | sed -E 's/([0-9]{1,})/\"\\1\"\
+    /g'", "    local _row=0\n    local _lst=\"$1\"\n    local _x=\"$2\"\n    local\
+    \ _max_col=0\n    local _buf\n    local _pair\n    local _out\n    # get max col\n\
+    \    while read -r _pair; do\n        _buf=\"$(echo \"$_pair\" | tr \" \" \"\\\
+    n\" | wc -l)\"\n        if [[ \"$_buf\" -gt \"$_max_col\" ]]; then\n         \
+    \   _max_col=\"$_buf\"\n        fi\n    done <<< \"$(echo \"$_lst\" | tr \"\\\
+    n\" \" \")\"\n    # search\n    while read -r _pair; do\n        while read -r\
+    \ _x; do\n            if [[ \"$_x\" -eq \"$_x\" ]]; then\n                _out=\"\
+    $_out\"$'\\n'\"$_row\" \"$_col\"\n            fi\n            _col=$((_col+1))\n\
+    \        done <<< \"$(echo \"$_pair\" | tr \" \" \"\\n\")\"\n        _row=$((_row+1))\n\
+    \        _col=0\n    done <<< \"$(echo \"$_lst\" | tr \"\\n\" \" \")\"\n    #\
+    \ sort\n    _out=\"$(sort -k1n -k2nr <<< \"$_out\")\"\n    _out=\"$(echo \"$_out\"\
+    \ | sed -e 's/^/\\[/' -e 's/ $/\\]/' | tr '\\n' ',' | sed -e 's/,$//')\"\n   \
+    \ echo \"[$_out]\"", "    echo \"$1\" |\n    awk -v OFS=' ' '{for (i=1; i<=NF;\
+    \ i++) if ($i == '$2') print NR-1, i-1}' |\n    sort -n |\n    awk '{printf \"\
+    [[\\\"%s\\\",\\\"%s\\\"]]\", $1, $2}'", "    first=$(echo \"$1\" | tr -s '\\n'\
+    \ ' ')\n    second=$(echo $first | tr -s ' ' '\\n')\n    third=$(echo \"$second\"\
+    \ | tr -s ' ' ',')\n    four=$(echo \"$third\" | tr -s '\\n' ' ')\n    five=$(echo\
+    \ \"$four\" | grep -o \"$2\")\n    six=$(echo \"$five\" | wc -l)\n    seven=$(seq\
+    \ 1 $six)\n    eight=$(echo \"$seven\" | tr -s '\\n' ' ')\n    nine=$(echo \"\
+    $eight\" | tr -s ' ' '\\n')\n    echo \"$nine\"", "    local lst=\"$1\"\n    local\
+    \ x=\"$2\"\n    local entry_ln\n    local entry_rn\n    for entry_ln in $(seq\
+    \ $(wc -l <<< \"$lst\")); do\n        for entry_rn in $(seq $(wc -w <<< \"$(sed\
+    \ -n \"${entry_ln}p\" <<< \"$lst\")\")); do\n            if [[ \"$(sed -n \"${entry_ln}p\"\
+    \ <<< \"$lst\" | awk \"{print \\$${entry_rn}}\")\" -eq \"$x\" ]]; then\n     \
+    \           echo -n \"[\"\n                echo -n \"[\\\"$((entry_ln - 1))\\\"\
+    , \\\"$((entry_rn - 1))\\\"]\"\n                echo -n \"]\"\n            fi\n\
+    \        done\n    done", "    local row=0 column=0\n    local result=()\n   \
+    \ for row in $1; do\n        column=0\n        for item in $row; do\n        \
+    \    [[ $item -eq $2 ]] && result+=(\"$row $column\")\n            column=$((column\
+    \ + 1))\n        done\n        row=$((row + 1))\n    done\n    echo ${result[@]}\
+    \ |\n        xargs -n 2 -d ' ' |\n        tr -d '[' |\n        tr -d ']' |\n \
+    \       tr -d ',' |\n        sort -t ' ' -k1 -n |\n        tr ' ' ',' |\n    \
+    \    awk '{ print \"[\" $0 \"]\" }'", "  echo \"$1\" | \n    awk \"{for(i=1;i<=NF;i++)\
+    \ { if(\\$i==$2) { print \\\"[\\\\\\\"\\\"NR-1\\\"\\\\\\\", \\\\\\\"\\\"i-1\\\"\
+    \\\\\\\"]\\\" } }}\" |\n    sort -r", "    echo \"$1\" |\n    awk '{ $2 == s ?\
+    \ o = o \",[\\\"\" NR-1 \"\\\",\\\"\" NF-1 \"\\\"]\" : o = \"[\\\"\" NR-1 \"\\\
+    \",\\\"\" NF-1 \"\\\"]\"; s = $2 } END { print \"[\" substr(o, 2) \"]\" }' s=\"\
+    $2\" o=''", "  IFS=\" \"\n  read -r -a data <<< \"${1}\"\n  read -r -a results\
+    \ <<< \"\"\n  for (( index = 0; index < ${#data[@]}; index++ )); do\n    for ((\
+    \ index2 = 0; index2 < ${#data[index]}; index2++ )); do\n      if [[ ${data[index][index2]}\
+    \ -eq $2 ]]; then\n        data=\"${data[@]}\"\n        read -r -a results <<<\
+    \ \"${results[@]} $index:$index2\"\n      fi\n    done\n  done\n  IFS=$'\\n'\n\
+    \  read -r -a coordinates <<< \"${results[@]}\"\n  IFS=\" \"\n  IFS=$'\\n'\n \
+    \ read -r -a coordinates <<< \"$(for item in \"${coordinates[@]}\"; do\n    echo\
+    \ \"$item\"\n  done | sort -k 1,1 -t: -n)\"\n  IFS=\" \"\n  read -r -a rows <<<\
+    \ \"$(for item in \"${coordinates[@]}\"; do\n    echo \"$item\" | cut -d: -f1\n\
+    \  done)\"\n  read -r -a unique_rows <<< \"$(for item in \"${rows[@]}\"; do\n\
+    \    echo \"$item\"\n  done | sort -u)\"\n  for (( index = 0; index < ${#unique_rows[@]};\
+    \ index++ )); do\n    for (( index2 = 0; index2 < ${#coordinates[@]}; index2++\
+    \ )); do\n      if [[ $(echo \"${coordinates[index2]}\" | cut -d: -f1) -eq ${unique_rows[index]}\
+    \ ]]; then\n        coordinates2+=(${coordinates[index2]})\n      fi\n    done\n\
+    \    coordinates2=($(for item in \"${coordinates2[@]}\"; do\n      echo \"$item\"\
+    \n    done | sort -k 2,2 -t: -n))\n    read -r -a rows2 <<< \"$(for item in \"\
+    ${coordinates2[@]}\"; do\n      echo \"$item\" | cut -d: -f1\n    done)\"\n  \
+    \  read -r -a unique_rows2", "    lst=$1\n    x=$2\n    echo \"$lst\" | while\
+    \ read row\n    do\n        row_index=$(echo \"$row\" | awk '{print NR-1}')\n\
+    \        echo \"$row\" | awk -v x=\"$x\" -v row_index=\"$row_index\" '{ for (i=1;\
+    \ i<=NF; i++) { if ($i == x) { printf \"[\\\"%d\\\", \\\"%d\\\"] \", row_index,\
+    \ i-1 } } }'\n    done | sort -t ' ' -k 1,1 -n -k 2,2 -r", "    local lst=$1\n\
+    \    local n=$2\n    local -a result\n    local row=0\n    while read -r; do\n\
+    \        local col=0\n        for i in $REPLY; do\n            if [[ $i == $n\
+    \ ]]; then\n                result+=([\"$row,$col\"])\n            fi\n      \
+    \      ((col++))\n        done\n        ((row++))\n    done <<< \"$lst\"\n   \
+    \ for i in \"${!result[@]}\"; do\n        IFS=, read row col <<< \"$i\"\n    \
+    \    printf '[%s, %s]' \"$row\" \"$col\"\n        [[ $i != \"${!result[-1]}\"\
+    \ ]] && echo -n ','\n    done\n    echo", "    local lst\n    local x\n    lst=\"\
+    $1\"\n    x=\"$2\"\n    local IFS=$'\\n'\n    local list=($lst)\n    local row\
+    \ col\n    local list_of_lists\n    for ((row=0; row<${#list[@]}; row++)); do\n\
+    \        local IFS=$' '\n        local list2=(${list[$row]})\n        for ((col=0;\
+    \ col<${#list2[@]}; col++)); do\n            if [[ \"${list2[$col]}\" == \"$x\"\
+    \ ]]; then\n                local list_of_lists=\"$list_of_lists [['\"$row\"',\
+    \ '\"$col\"']]\"\n            fi\n        done\n    done\n    # 1. sort by row\
+    \ in ascending order\n    list_of_lists=$(echo \"$list_of_lists\" | sort | uniq)\n\
+    \    # 2. sort by col in descending order\n    local IFS=$'\\n'\n    local list_of_lists=($list_of_lists)\n\
+    \    local sort_by_col\n    for ((i=0; i<${#list_of_lists[@]}; i++)); do\n   \
+    \     local IFS=$'\\n'\n        local list_of_lists2=(${list_of_lists[$i]})\n\
+    \        # extract row and col\n        local IFS=$' '\n        local row=(${list_of_lists2[0]})\n\
+    \        local col=(${list_of_lists2[1]})\n        local row=\"${row[0]}\"\n \
+    \       local col=\"${col[0]}\"\n        sort_by_col=\"$sort_by_col [['\"$row\"\
+    ', '\"$col\"']]\"\n    done\n    sort_by_col=$(echo \"$sort_by_col\" | sort -r)\n\
+    \    echo \"$sort_by_col\"", "    local -a res=()\n    while read -r line; do\n\
+    \        local col=0\n        for x in $line; do\n            if [[ $x == $2 ]];\
+    \ then\n                res+=(\"\\\"$row\\\"\" \"\\\"$col\\\"\")\n           \
+    \ fi\n            (( col++ ))\n        done\n        (( row++ ))\n    done <<<\
+    \ \"$1\"\n    echo \"[\"$(IFS=,; echo \"${res[*]}\")\"]\"", "\tlocal n=0\n\tlocal\
+    \ col\n\tlocal i\n\tlocal j\n\tlocal out\n\tfor i in $(echo \"$1\" | tr ' ' '\\\
+    n'); do\n\t\tif [ \"$i\" == \"$2\" ]; then\n\t\t\tj=$(($(echo \"$1\" | sed -n\
+    \ \"${n}p\" | awk '{print NF}') - 1))\n\t\t\tout=\"${out}['\\\"${n}\\\"', '\\\"\
+    ${j}\\\"'], \"\n\t\tfi\n\t\tn=$(($n + 1))\n\tdone\n\techo \"[${out%%,*}]\"", " \
+    \ local lst=\"$1\"\n  local x=\"$2\"\n  (( $# == 2 )) || return 1\n  # your code\
+    \ here\n  local arr_of_arr=( $(echo \"$lst\" | xargs -n1) )\n  local result_arr=()\n\
+    \  for(( i=0; i<${#arr_of_arr[@]}; i++ )); do\n    local arr=( $(echo \"${arr_of_arr[$i]}\"\
+    \ | tr ' ' '\\n') )\n    for(( j=0; j<${#arr[@]}; j++ )); do\n      [[ \"${arr[$j]}\"\
+    \ -eq \"$x\" ]] && result_arr+=(\"[\\\"$i\\\", \\\"$j\\\"]\")\n    done\n  done\n\
+    \  echo \"${result_arr[@]}\" | tr ' ' '\\n' | sort -r -t ',' -k2 | sort -t ','\
+    \ -k1 | tr '\\n' ' '", "    [[ -z \"$1\" ]] && echo \"[]\" && return\n    [[ \"\
+    $2\" =~ ^[0-9]+$ ]] || echo \"[]\" && return\n    declare -A p\n    local i=0\n\
+    \    local j=0\n    for r in $(echo \"$1\"); do\n        j=0\n        for c in\
+    \ $r; do\n            if [[ \"$c\" == \"$2\" ]]; then\n                p[$i,$j]=1\n\
+    \            fi\n            j=$((j+1))\n        done\n        i=$((i+1))\n  \
+    \  done\n    # echo \"i=$i j=$j\"\n    local n=$i\n    local m=$j\n    i=0\n \
+    \   j=0\n    local out=\"\"\n    while [[ \"$i\" -lt \"$n\" ]]; do\n        while\
+    \ [[ \"$j\" -lt \"$m\" ]]; do\n            if [[ -n \"${p[$i,$j]}\" ]]; then\n\
+    \                out+=\"[\\\"'$i'\\\", \\\"'$j'\\\"], \"\n            fi\n   \
+    \         j=$((j+1))\n        done\n        j=0\n        i=$((i+1))\n    done\n\
+    \    if [[ -n \"$out\" ]]; then\n        out=\"[${out%, }]\"\n    else\n     \
+    \   out=\"[]\"\n    fi\n    echo \"$out\"", "  # if $1 is empty then print empty\
+    \ list\n  if [[ -z \"$1\" ]]; then\n    echo \"[]\"\n  else\n    # if $2 is empty\
+    \ then print empty list\n    if [[ -z \"$2\" ]]; then\n      echo \"[]\"\n   \
+    \ else\n      # split $1 into lines\n      declare -a lines=($(echo \"$1\" | tr\
+    \ \"\\n\" \" \"))\n      # declare an empty array\n      declare -a coordinates=()\n\
+    \      # initialize row index\n      declare -i row=0\n      # loop through each\
+    \ line\n      for line in \"${lines[@]}\"; do\n        # split line into numbers\n\
+    \        declare -a numbers=($(echo \"$line\" | tr \" \" \"\\n\"))\n        #\
+    \ find indices of $2 in numbers\n        indices=($(seq 0 $((${#numbers[@]} -\
+    \ 1)) | grep -E -n ${2} | cut -d\":\" -f1))\n        # if indices is not empty\
+    \ then print coordinates\n        if [[ -n \"${indices[@]}\" ]]; then\n      \
+    \    for index in \"${indices[@]}\"; do\n            echo \"[\\\"$row\\\", \\\"\
+    $index\\\"]\"\n          done\n        fi\n        # increment row index\n   \
+    \     ((row += 1))\n      done\n    fi\n  fi", "    # Your code here\n    printf\
+    \ \"%s\" \"$1\" | awk -v x=\"$2\" '{\n        i = 0;\n        while ((getline)\
+    \ > 0) {\n            gsub(/[ ]+/, \" \", $0);\n            split($0, a, \" \"\
+    );\n            for (j in a) {\n                if (a[j] == x) {\n           \
+    \         printf \"[[\\\"%d\\\", \\\"%d\\\"]\", i, j - 1;\n                  \
+    \  if (i != NR - 1 || j != length(a))\n                        printf \", \";\n\
+    \                }\n            }\n            i++;\n        }\n        print\
+    \ \"]\";\n    }'", "  local -a row_num\n  local -a col_num\n  local row=0\n  local\
+    \ col\n  for i in $(echo \"$1\" | awk '{print $0}'); do\n    col=0\n    for j\
+    \ in $i; do\n      if [ \"$j\" -eq \"$2\" ]; then\n        row_num+=(\"$row\"\
+    )\n        col_num+=(\"$col\")\n      fi\n      col=$((col+1))\n    done\n   \
+    \ row=$((row+1))\n  done\n  local array_size=${#row_num[@]}\n  local i\n  local\
+    \ j\n  local k\n  local -a row_num_sorted\n  local -a col_num_sorted\n  local\
+    \ row_diff\n  local col_diff\n  for ((i=0; i<$array_size; i++)); do\n    row_diff=$((row_num[$i]-row_num[$((i+1))]))\n\
+    \    col_diff=$((col_num[$i]-col_num[$((i+1))]))\n    if [ \"$i\" -eq \"$((array_size-1))\"\
+    \ ]; then\n      row_num_sorted+=(\"${row_num[$i]}\")\n      col_num_sorted+=(\"\
+    ${col_num[$i]}\")\n    elif [ \"$row_diff\" -lt 0 ]; then\n      k=$((i+1))\n\
+    \      for ((j=i; j>=0; j--)); do\n        if [ \"$k\" -eq \"$((array_size))\"\
+    \ ]; then\n          row_num_sorted+=(\"${row_num[$j]}\")\n          col_num_sorted+=(\"\
+    ${col_num[$j]}\")\n        elif [ \"$((row_num[$j]-row_num[$k]))\" -lt 0 ]; then\n\
+    \          row_num_sorted+=(\"${row_num[$j]}\")\n          col_num_sorted+=(\"\
+    ${col_num[$j]}\")\n        else\n          row_num_sorted+=(\"${row_num[$k]}\"\
+    )\n          col_num_sorted+=(\"${col_num[", "    local lst=$1\n    local x=$2\n\
+    \    local IFS=$'\\n' # set the newline as a field separator\n    local n=0 m=0\n\
+    \    for i in $lst\n    do\n        local m=0\n        for j in $i\n        do\n\
+    \            if [ $j == $x ]\n            then\n                echo \"[[\\\"\
+    ${n}\\\"\\\",\\\"\\\"\\\"${m}\\\"]]\"\n            fi\n            local m=$((m+1))\n\
+    \        done\n        local n=$((n+1))\n    done", "\tif [[ \"$1\" = \"\" ]];\
+    \ then\n\t\techo \"[]\"\n\t\treturn 0\n\tfi\n\tgrep \" $2 \" <<< \"$1\" | \\\n\
+    \tawk -v x=\"$2\" '{\n\t\ta[FNR] = $0\n\t\t# row_number = FNR\n\t\t# print row_number\n\
+    \t\t# print a[FNR]\n\t\tsplit(a[FNR], b, \" \")\n\t\tfor (i = 1; i <= length(b);\
+    \ i++) {\n\t\t\tif (b[i] == x) {\n\t\t\t\tprint \"[\\\"\"FNR\"\\\", \\\"\"i\"\
+    -1\\\"]\"\n\t\t\t}\n\t\t}\n\t}' | \\\n\tsort | \\\n\tawk '{\n\t\t# print $0\n\t\
+    \t# split($0, a, \"\\\"\")\n\t\t# print a[2], a[4]\n\t\ta[$2, $4] = $0\n\t} END\
+    \ {\n\t\tfor (i = 0; i < 100; i++) {\n\t\t\tfor (j = 0; j < 100; j++) {\n\t\t\t\
+    \tprint a[i, j]\n\t\t\t}\n\t\t}\n\t}' | \\\n\tsort | \\\n\tsed 's/^[[:space:]]*$//g'\
+    \ | \\\n\ttr '\\n' ',' | \\\n\tsed 's/,$//g' | \\\n\tawk '{\n\t\tprint \"[\"$0\"\
+    ]\"\n\t}'", "    local x=\"$2\"\n    local input=(\"$1\")\n    local lst\n   \
+    \ lst=()\n    for ((i=0; i<${#input[@]}; i++)); do\n        for ((j=0; j<${#input[$i]};\
+    \ j++)); do\n            if [[ \"${input[$i]:$j:1}\" == \"$x\" ]]; then\n    \
+    \            lst+=(\"$i $j\")\n            fi\n        done\n    done\n    lst=($(printf\
+    \ \"%s\\n\" \"${lst[@]}\" | sort -n -k1))\n    echo -n \"[\"\n    if [[ \"${#lst[@]}\"\
+    \ -gt 0 ]]; then\n        for ((i=0; i<${#lst[@]}; i++)); do\n            echo\
+    \ -n \"[\"\n            echo -n \"\\\"${lst[$i]:0:1}\\\"\"\n            echo -n\
+    \ \", \"\n            echo -n \"\\\"${lst[$i]:2:1}\\\"\"\n            echo -n\
+    \ \"]\"\n            if [[ \"$i\" -lt \"$((${#lst[@]} - 1))\" ]]; then\n     \
+    \           echo -n \", \"\n            fi\n        done\n    fi\n    echo -n\
+    \ \"]\"", "  local i j\n  for i in $(seq 0 $(echo -e \"$1\" | wc -l)); do\n  \
+    \  for j in $(seq 0 $(echo -e \"$1\" | head -n $i | tail -n 1 | wc -w)); do\n\
+    \      echo -e \"$1\" | head -n $i | tail -n 1 | cut -d ' ' -f $j | grep -q -w\
+    \ \"$2\" &&\n        echo \"[\\\"$i\\\", \\\"$j\\\"]\"\n    done\n  done | sort\
+    \ -t ',' -k 1 -k 2 -nr", "\tIFS=$'\\n'\n\tlocal rows=($1)\n\tlocal first_index=0\n\
+    \tlocal second_index=0\n\tlocal result=\"\"\n\tfor row in \"${rows[@]}\"; do\n\
+    \t\tIFS=$' '\n\t\tcolumns=($row)\n\t\tfor column in \"${columns[@]}\"; do\n\t\t\
+    \tif [[ $column == $2 ]]; then\n\t\t\t\tif [[ -z $result ]]; then\n\t\t\t\t\t\
+    result=\"[['\\\"$first_index\\\"', '\\\"$second_index\\\"']\"\n\t\t\t\telse\n\t\
+    \t\t\t\tresult=\"$result, ['\\\"$first_index\\\"', '\\\"$second_index\\\"']\"\n\
+    \t\t\t\tfi\n\t\t\tfi\n\t\t\tsecond_index=$(( $second_index + 1 ))\n\t\tdone\n\t\
+    \tfirst_index=$(( $first_index + 1 ))\n\t\tsecond_index=0\n\tdone\n\techo $result\"\
+    ]\"", "    row=0\n    echo \"$1\" | \\\n    while read line; do\n        col=0\n\
+    \        echo \"$line\" | \\\n        while read val; do\n            if [[ \"\
+    $val\" == \"$2\" ]]; then\n                echo \"['\\\"$row\\\"', '\\\"$col\\\
+    \"']\"\n            fi\n            col=$((col+1))\n        done\n        row=$((row+1))\n\
+    \    done | sort -s -t, -k1,1n -k2,2rn", "  local -a list=($(echo $1 | tr ' '\
+    \ '\\n'))\n  local -a x_coord=($(awk -v var=$2 '{ if ( $1 == var ) { print NR-1\
+    \ \" \" } }' <<< ${list[@]}))\n  local -a y_coord=($(awk -v var=$2 '{ if ( $1\
+    \ == var ) { print NF-1 \" \" } }' <<< ${list[@]}))\n  local -a result=()\n  local\
+    \ -i i\n\n  for ((i=0; i<${#x_coord[@]}; i++)); do\n    if (( x_coord[i] < x_coord[i+1]\
+    \ )); then\n      result=(${result[@]} ${x_coord[i]} ${y_coord[i]})\n    else\n\
+    \      result=(${result[@]} ${x_coord[i]} ${y_coord[i]} ${x_coord[i+1]} ${y_coord[i+1]})\n\
+    \      ((i++))\n    fi\n  done\n\n  local -a xy_result=()\n  for ((i=0; i<${#result[@]};\
+    \ i+=2)); do\n    xy_result=(${xy_result[@]} \"[\\\"\"${result[i]}\"\\\", \\\"\
+    \"${result[i+1]}\"\\\"]\")\n  done\n\n  if (( ${#xy_result[@]} > 0 )); then\n\
+    \    echo \"${xy_result[@]}\"\n  else\n    echo \"[]\"\n  fi", "    row=0\n  \
+    \  echo $1 | while read l; do\n        c=0\n        for i in $l; do\n        \
+    \    if [[ $i -eq $2 ]]; then\n                echo -n \"[\\\"\"$row\"\\\", \\\
+    \"\"$c\"\\\"],\"\n            fi\n            c=$(($c+1))\n        done\n    \
+    \    row=$(($row+1))\n    done | rev | cut -c 2- | rev", "    local lst\n    lst=\"\
+    $1\"\n    if [[ -z \"$lst\" ]]; then\n        echo \"[]\"\n        return\n  \
+    \  fi\n    local num\n    num=\"$2\"\n    if [[ -z \"$num\" ]]; then\n       \
+    \ echo \"[]\"\n        return\n    fi\n    if [[ \"$num\" =~ [a-zA-Z] ]]; then\n\
+    \        echo \"[]\"\n        return\n    fi\n    local row col\n    row=0\n \
+    \   col=0\n    local row_cnt max_col_cnt\n    row_cnt=0\n    max_col_cnt=0\n \
+    \   local row_cnt_col_cnt_list\n    row_cnt_col_cnt_list=()\n    while read -ra\
+    \ line; do\n        col=0\n        for num_str in \"${line[@]}\"; do\n       \
+    \     if [[ \"$num_str\" == \"$num\" ]]; then\n                row_cnt_col_cnt_list+=(\"\
+    $row\" \"$col\")\n            fi\n            col=$((col+1))\n        done\n \
+    \       row=$((row+1))\n        row_cnt=$((row_cnt+1))\n        if [[ \"$col\"\
+    \ -gt \"$max_col_cnt\" ]]; then\n            max_col_cnt=\"$col\"\n        fi\n\
+    \    done <<< \"$lst\"\n    # row_cnt_col_cnt_list is list of the format:\n  \
+    \  # row_cnt_0, col_cnt_0, row_cnt_1, col_cnt_1, ...\n    # create list of lists\
+    \ of the format:\n    # [['\"0\"', '\"0\"'], ['\"1\"', '\"4\"'], ['\"1\"', '\"\
+    0\"'], ['\"2\"', '\"5\"'], ['\"2\"', '\"0\"']]\n    # so, sort list of lists by\
+    \ row_cnt in ascending order,\n    # and if same row_cnt, then sort by col_cnt\
+    \ in descending order\n    local coordinate_list\n    coordinate_list=\"\"\n \
+    \   local row_cnt_col_cnt_list_len\n    row", "    declare -gA cells\n    local\
+    \ row=0 column\n    for line in $(echo \"$1\" | tr ' ' '\\n'); do\n        column=0\n\
+    \        for cell in $(echo \"$line\" | tr ' ' '\\n'); do\n            if [[ \"\
+    $cell\" == \"$2\" ]]; then\n                cells[$row,$column]=\"\\\"$row\\\"\
+    \ \\\"$column\\\"\"\n            fi\n            column=$((column + 1))\n    \
+    \    done\n        row=$((row + 1))\n    done\n    local -a row_cols\n    for\
+    \ cell in \"${cells[@]}\"; do\n        row_cols+=(\"$cell\")\n    done\n    if\
+    \ [[ ${#row_cols[@]} -eq 0 ]]; then\n        echo \"[]\"\n    else\n        local\
+    \ -a result\n        for row_col in $(echo \"${row_cols[@]}\" | tr ' ' '\\n' |\
+    \ sort -k1n -k2nr | tr '\\n' ' '); do\n            result+=(\"[$row_col]\")\n\
+    \        done\n        echo \"${result[@]}\"\n    fi", "  # Write your code here\n\
+    \  # Use echo to output the result\n  # To debug: echo \"Debug messages...\" >&2\n\
+    \  python /main.py \"$1\" \"$2\"", "\techo \"$1\" |\n\tawk '{\n\t\tfor (i = 1;\
+    \ i <= NF; i++) {\n\t\t\tif ($i == '\"$2\"') {\n\t\t\t\tprintf(\"[\\\"\\\"%d\\\
+    \"\\\", \\\"\\\"%d\\\"\\\"] \", NR - 1, i - 1)\n\t\t\t}\n\t\t}\n\t}' |\n\tsort\
+    \ -k2 -k1 -n |\n\tpaste -s -d ' ' - |\n\ttr -d '\\n'", "  local row col sep\n\
+    \  sep=','\n  while read row; do\n    col=0\n    for num in $row; do\n      if\
+    \ [ \"$num\" = \"$2\" ]; then\n        echo '[\"'\"$row\"'\", \"'\"$col\"'\"]'\
+    \ |\n        tr -d '[]' |\n        sed 's/^/\"/g' |\n        sed 's/$/\"/g' |\n\
+    \        sed 's/^/\"/g' |\n        sed 's/$/\"/g' |\n        sed 's/^/[/g' |\n\
+    \        sed 's/$/]/g'\n      fi\n      ((col++))\n    done\n  done < <(echo \"\
+    $1\") | tr '\\n' ',' | tr -d ' ' | sed 's/,$//g'", "  sed -n \"s/\\(.*\\)\\( $2\\\
+    )$/'[\\\"'\\\"\\1\\\"'\\\"', '\\\"'\\\"\\2\\\"'\\\"']' \\1\\2/p\" |\n  sort -k2,2\
+    \ -s -t\"'\" |\n  sort -k3nr,3nr -k1n,1 |\n  sort -k3,3 -s -t\"'\" |\n  sed -n\
+    \ \"s/\\[\\\"\\([0-9]*\\)\\\"\\, \\\"\\([0-9]*\\)\\\"\\]/[\\\"\\1\\\", \\\"\\\
+    2\\\"]/p\"", "    [[ -z \"$1\" ]] && echo \"[]\" && return\n    [[ -z \"$2\" ]]\
+    \ && echo \"[]\" && return\n    local rows=\"$(echo \"$1\" | wc -l)\"\n    [[\
+    \ \"$rows\" == \"0\" ]] && echo \"[]\" && return\n    local cols=\"$(echo \"$1\"\
+    \ | head -n 1 | wc -w)\"\n    local x=\"$2\"\n    local result=\"\"\n    local\
+    \ i=0\n    local j=0\n    local row\n    local col\n    while read row; do\n \
+    \       j=0\n        while read col; do\n            if [[ \"$col\" == \"$x\"\
+    \ ]]; then\n                result=\"$result [\\\"$i\\\", \\\"$j\\\"]\"\n    \
+    \        fi\n            ((j++))\n        done <<< \"$row\"\n        ((i++))\n\
+    \    done <<< \"$1\"\n    echo \"[$result]\"", "  local lst=\"$1\"\n  local x=\"\
+    $2\"\n  local res=()\n  local row=0\n  local col=0\n  for line in $(echo -e \"\
+    $lst\"); do\n    for y in $(echo \"$line\"); do\n      if [[ \"$y\" -eq \"$x\"\
+    \ ]]; then\n        res+=(\"[\\\"$row\\\", \\\"$col\\\"]\")\n      fi\n      col=$((col\
+    \ + 1))\n    done\n    col=0\n    row=$((row + 1))\n  done\n  echo \"${res[@]}\"\
+    \ | tr ' ' '\\n' | sort -t '\"' -k 2,2n -k 1,1n | tr '\\n' ' '", "  echo \"$1\"\
+    \ | awk '{\n    for (i = 1; i <= NF; i++) {\n      if ($i == ENVIRON[\"n\"]) {\n\
+    \        print NR, i\n      }\n    }\n  }' | sort -n | sed 's/\\([0-9]\\+\\) \\\
+    ([0-9]\\+\\)/\\[\"\\1\"\\, \"\\2\"\\]/g' |\n    sed 's/^/[/g' | sed 's/$/]/g'\
+    \ | tr '\\n' ',' | sed 's/,$//g'", "    if [ -z \"$1\" ] || [ -z \"$2\" ]; then\n\
+    \        echo \"[]\"\n        return\n    fi\n    x=$2\n    echo \"$1\" |\n  \
+    \  tr ' ' '\\n' |\n    grep -n \"$x\" |\n    sort -t ':' -k 1 -n |\n    cut -d\
+    \ ':' -f 1,2 |\n    tr '\\n' ' ' |\n    sed 's/[^0-9 ]//g' |\n    tr ' ' '\\n'\
+    \ |\n    paste -d ',' - - |\n    sed \"s/^/[\\\"/g\" |\n    sed \"s/$/\\\"]/g\"\
+    \ |\n    paste -d ' ' -s |\n    sed 's/ /],\\[/g' |\n    sed 's/^/[/g' |\n   \
+    \ sed 's/$/]/g'", "  echo \"$1\" |\n  awk \"{\n    for (i = 1; i <= NF; i++)\n\
+    \      if (\\$i == $2)\n        print NR, i, -i;\n  }\" |\n  sort -n |\n  awk\
+    \ '{\n    print \"[\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"$1\"'\"'\"'\"'\"'\"'\"'\"\
+    '\"'\"'\"'\"\", \"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"$2\"'\"'\"'\"'\"'\"'\"'\"'\"\
+    '\"'\"'\"\"]\";\n  }' |\n  awk \"{\n    printf(\\\"%s, \\\" , \\$0);\n  }\" |\n\
+    \  awk '{\n    $0 = substr($0, 1, length($0) - 2);\n    print \"[\"$0\"]\";\n\
+    \  }'", "  local old_IFS=$IFS\n  local lst=$1\n  local needle=$2\n  local row=0\n\
+    \  local col=0\n  local ret=()\n  IFS=$'\\n'\n  for l in $lst; do\n    local new_row=0\n\
+    \    col=0\n    for n in $l; do\n      if [[ $n -eq $needle ]]; then\n       \
+    \ ret+=([\"$row,$col\"]=\"\\\"$row\\\" \\\"$col\\\"\")\n      fi\n      col=$((col+1))\n\
+    \    done\n    row=$((row+1))\n  done\n  IFS=$old_IFS\n  # sort by row ascending\n\
+    \  # sort by col descending\n  for entry in $(printf \"%s\\n\" \"${!ret[@]}\"\
+    \ | sort -t, -n -k1 | sort -t, -r -k2); do\n    echo \"[${ret[$entry]}]\"\n  done",
+  "  lst=\"$1\"\n  x=\"$2\"\n  x=\"${x//\\\\/\\\\\\\\}\"\n  x=\"${x//\\\"/\\\\\\\"\
+    }\"\n  echo \"\nimport sys\nlines = sys.stdin.readlines()\nprint(sorted([['\\\"\
+    {0}\\\"', '\\\"{1}\\\"'] for i, l in enumerate(lines) for j, s in enumerate(l.split())\
+    \ if s == \\\"${x}\\\"], key=lambda x: (int(x[0].strip('\\\"')), -int(x[1].strip('\\\
+    \"')))))\" | python3", "  local x=$(echo \"$1\" | awk '{$1=$1};1' | sed -E \"\
+    s/\\ {2,}/ /g\")\n  local y=$2\n  local arr=()\n  local -i i=0\n\n  while IFS=\
+    \ read -r line; do\n    if [[ \"$line\" =~ (.*)$y(.*) ]]; then\n      for field\
+    \ in $line; do\n        if [[ \"$field\" =~ ^$y$ ]]; then\n          arr+=(\"\
+    [\\\"$i\\\", \\\"${field_index[$i]}\\\"]\")\n        fi\n        ((field_index[$i]++))\n\
+    \      done\n    fi\n    ((i++))\n  done <<< \"$x\"\n\n  local v=$(echo \"${arr[@]}\"\
+    \ | sed -E \"s/ /, /g\")\n  echo \"[$v]\"", "    awk -v x=\"$2\" -v OFS='\" \"\
+    ' '\n        BEGIN {\n            print \"[\";\n        }\n        {\n       \
+    \     num_cols = NF;\n            for (i = 1; i <= num_cols; i++) {\n        \
+    \        if ($i == x) {\n                    printf \"[\\\"%s\\\", \\\"%s\\\"\
+    ], \", NR - 1, i - 1;\n                }\n            }\n        }\n        END\
+    \ {\n            print \"]\";\n        }\n    ' <<< \"$1\"", "    local rows=()\n\
+    \    local r=0\n    while read row; do\n        local row=()\n        local c=0\n\
+    \        for col in $row; do\n            if [[ $col -eq $2 ]]; then\n       \
+    \         row+=(\"\\\"$r\\\" \\\"$c\\\"\")\n            fi\n            c=$((c+1))\n\
+    \        done\n        if [[ ${#row[@]} -gt 0 ]]; then\n            rows+=(\"\
+    [${row[@]}]\")\n        fi\n        r=$((r+1))\n    done <<< \"$1\"\n    # Convert\
+    \ all elements of rows to a single string,\n    # then sort them by row numbers,\
+    \ then by column numbers.\n    echo \"[$(printf '%s' \"${rows[@]}\" | sort -t\
+    \ ' ' -k 1n -k 2nr)]\"", "\tif [[ $1 == \"\" ]]; then\n\t\techo \"[]\"\n\t\treturn\
+    \ 0\n\tfi\n\tlocal row_num=0\n\twhile read -r line; do\n\t\tlocal col_num=0\n\t\
+    \tfor i in $line; do\n\t\t\tif [[ $i == $2 ]]; then\n\t\t\t\tprintf \"[[\\\"%s\\\
+    \", \\\"%s\\\"], \" \"$row_num\" \"$col_num\"\n\t\t\tfi\n\t\t\tcol_num=$((col_num\
+    \ + 1))\n\t\tdone\n\t\trow_num=$((row_num + 1))\n\tdone <<< \"$1\"\n\techo \"\
+    ]\"", "    local x=$2\n    local pos=0\n    local res=()\n    while IFS=$'\\n'\
+    \ read -ra line; do\n        local len=\"${#line[@]}\"\n        local i=0\n  \
+    \      while [ $i -lt $len ]; do\n            if [ ${line[$i]} -eq $x ]; then\n\
+    \                res+=( \"[\\\"$pos\\\", \\\"$i\\\"]\" )\n            fi\n   \
+    \         i=$(($i+1))\n        done\n        pos=$(($pos+1))\n    done <<< \"\
+    $1\"\n    echo \"${res[@]}\"", "    local row=0\n    local r=\n    local c=\n\
+    \    local result=()\n    local -a s\n    local data=${1// /}\n    data=${data//$'\\\
+    n'/ }\n    while read -a s; do\n        col=0\n        for i in \"${s[@]}\"; do\n\
+    \            if [ \"$i\" == \"$2\" ]; then\n                result+=(\"[\\\"$row\\\
+    \"\" \"$col\\\"]\")\n            fi\n            col=$((col+1))\n        done\n\
+    \        row=$((row+1))\n    done <<< \"$data\"\n    echo ${result[@]} | sed -e\
+    \ 's/ /, /g'", "    python -c 'print(\n        sorted(\n            sorted(\n\
+    \                [[i, j] for i, row in enumerate(\n                    [\"\".join(row.split()).split(\"\
+    \\n\")[:-1] for row in \"'\"$1\"'\".split(\"\\n\")]\n                ) for j,\
+    \ cell in enumerate(row) if cell == \"'\"$2\"'\"]\n            )\n        )\n\
+    \    )' | sed 's/\\[\\[/\\[/g' | sed 's/\\]\\]/\\]/g' | sed 's/\\]\\[/\\],\\[/g'\
+    \ | sed 's/\\[\\[/\\[/g' | sed 's/\\]\\]/\\]/g'", "    awk '\n        BEGIN {\
+    \ FS = \" \" }\n        {\n            for (i = 1; i <= NF; i++) {\n         \
+    \       if ($i == \"'$2'\") {\n                    printf \"%s \", NR - 1\n  \
+    \                  printf \"%s\\n\", i - 1\n                }\n            }\n\
+    \        }\n    ' <(echo \"$1\") | sort -n -k 1,1 -k 2,2r | tr ' ' ','", "  if\
+    \ [ -z \"$1\" ]; then\n    echo \"[]\"\n    return\n  fi\n  echo \"$1\" |\n  cut\
+    \ -d ' ' -f\"$2\" |\n  awk '\n    BEGIN { RS=\"\"; FS=\"\\n\" }\n    {\n     \
+    \ n = split($0, cols)\n      if (n > 0) {\n        for (i = 1; i <= n; i++) {\n\
+    \          if (cols[i] != \"\") {\n            print i-1, NR-1\n          }\n\
+    \        }\n      }\n    }' |\n  sort -t' ' -k1,1n -k2,2rn |\n  sed -E 's/^ *([0-9]+)\
+    \ +([0-9]+) *$/[\\\"\\1\\\", \\2\\\"]/' |\n  tr '\\n' ',' |\n  sed -E 's/,$//'\
+    \ |\n  sed -E 's/,/], [/g' |\n  sed -E 's/^/[/' |\n  sed -E 's/$/]/'", "  str=\"\
+    $1\"\n  value=\"$2\"\n  start=\"$3\"\n  end=\"$4\"\n  if [ -z \"$str\" ]; then\n\
+    \    echo '[]'\n    return\n  fi\n  if [ -z \"$start\" ]; then\n    start=0\n\
+    \  fi\n  if [ -z \"$end\" ]; then\n    end=$(wc -l <<< \"$str\")\n  fi\n  if [\
+    \ \"$end\" -le \"$start\" ]; then\n    echo '[]'\n    return\n  fi\n  mid=$((start\
+    \ + (end - start) / 2))\n  row=$(sed -n \"${mid}p\" <<< \"$str\")\n  row_length=$(wc\
+    \ -w <<< \"$row\")\n  for ((i = 0; i < $row_length; i++)); do\n    number=$(cut\
+    \ -d ' ' -f \"$((i + 1))\" <<< \"$row\")\n    if [ \"$number\" = \"$value\" ];\
+    \ then\n      echo '['\n      echo \"\\\"$mid\\\"\"\n      echo \"\\\"$i\\\"\"\
+    \n      echo ']'\n      break\n    fi\n  done\n  next_start=$((mid + 1))\n  next_end=$((end\
+    \ - 1))\n  get_row \"$str\" \"$value\" \"$next_start\" \"$next_end\"", "    eval\
+    \ printf %s \"$1\" | python -c '\nimport sys\nimport json\ndata = sys.stdin.read().strip().split(\"\
+    \\n\")\ncount = 1\nresult = list()\nfor row in data:\n    row = list(map(int,\
+    \ row.split()))\n    try:\n        column = row.index(int(sys.argv[1]))\n    \
+    \    result.append([str(count - 1), str(column)])\n    except ValueError:\n  \
+    \      pass\n    count += 1\nprint(json.dumps(result))\n' \"$2\"", "  declare\
+    \ -a rows=($(echo \"$1\" | tr \"\\n\" \" \"))\n  declare -a coords=()\n  for idx\
+    \ in \"${!rows[@]}\"; do\n    coords+=($(echo ${rows[$idx]} | tr \" \" \"\\n\"\
+    \ | grep -n \"$2\" | cut -d: -f1))\n  done\n  echo $'['\"$(paste -d' ' <(printf\
+    \ \"%s\\n\" \"${!coords[@]}\") <(printf '\"%s\"' \"${coords[@]}\"))\"$']'", " \
+    \   local matrix=$1\n    local target=$2\n    echo -n \"[\"\n    IFS=$'\\n'\n\
+    \    for i in $matrix; do\n        local row=0\n        IFS=$' '\n        for\
+    \ j in $i; do\n            if [[ $j -eq $target ]]; then\n                echo\
+    \ -n \"[\\\"$row\\\", \\\"$col\\\"], \"\n            fi\n            let col+=1\n\
+    \        done\n        let row+=1\n        col=0\n    done\n    echo -n \"]\"",
+  "    local lst=\"$1\"\n    local x=\"$2\"\n    awk -v x=\"$x\" 'BEGIN { \n     \
+    \       FS = \" \";\n            OFS = \",\";\n            } \n        {\n   \
+    \         for (i = 1; i <= NF; i++)\n                if ($i == x)\n          \
+    \          print \"[\\\"\" NR - 1 \"\\\",\\\"\" i - 1 \"\\\"]\";\n        }\n\
+    \        ' <<< \"$lst\"", "    if [[ -z \"$1\" ]]; then\n        echo \"[]\"\n\
+    \        return\n    fi\n    echo \"$1\" | \\\n        awk '{\n            for\
+    \ (i = 1; i <= NF; i++) {\n                if ($i == '\"$2\"') {\n           \
+    \         printf(\"[\\\"%s\\\", \\\"%s\\\"]\\n\", NR-1, i-1)\n               \
+    \ }\n            }\n        }' | \\\n        sort -rn | \\\n        tr -d '\\\
+    n' | \\\n        sed 's/\\]\\[/], [/g' | \\\n        sed 's/^/[/' | \\\n     \
+    \   sed 's/$/]/'", "    local rows=\"$1\"\n    local search=\"$2\"\n    local\
+    \ row index\n    index=0\n    # Process lines\n    while read -r row; do\n   \
+    \     if [[ -z \"$row\" ]]; then\n            (( index++ ))\n            continue\n\
+    \        fi\n        if [[ ! -z \"$(echo \"$row\" | grep \" $search \")\" ]];\
+    \ then\n            echo \"$row\" | awk -v i=\"$index\" '{\n                for\
+    \ (c=1; c<=NF; c++) {\n                    if ($c=='$search') {\n            \
+    \            printf \"[\\\"%d\\\", \\\"%d\\\"] \", i, c-1\n                  \
+    \  }\n                }\n            }'\n        fi\n        (( index++ ))\n \
+    \   done <<< \"$rows\"", "  # Write your code here\n  # Use echo to output the\
+    \ result\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n \"${2}\" | cut -d ':' -f\
+    \ 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g' | sed 's/^/[/'\
+    \ | sed 's/$/]/')\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n \"${2}\" | cut\
+    \ -d ':' -f 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g' | sed\
+    \ 's/^/[/' | sed 's/$/]/')\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n \"${2}\"\
+    \ | cut -d ':' -f 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g'\
+    \ | sed 's/^/[/' | sed 's/$/]/')\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n\
+    \ \"${2}\" | cut -d ':' -f 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g'\
+    \ | sed 's/^/[/' | sed 's/$/]/')\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n\
+    \ \"${2}\" | cut -d ':' -f 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g'\
+    \ | sed 's/^/[/' | sed 's/$/]/')\n  #$(echo \"${1}\" | tr ' ' '\\n' | grep -n\
+    \ \"${2}\" | cut -d ':' -f 1 | rev | tr '\\n' ',' | rev | sed 's/,$//' | sed 's/,/],[/g'\
+    \ | sed 's/^/[/' | sed 's/$/]", "    if [ -z \"$1\" ]; then\n        echo \"[]\"\
+    \n        return\n    fi\n    local row=0\n    local col=0\n    local sorted=()\n\
+    \    local new_line=$'\\n'\n    local list=\"$1\"\n    local x=\"$2\"\n    local\
+    \ output=\"[\"\n    local is_first=true\n    while [ ! -z \"$list\" ]; do\n  \
+    \      local row_length=0\n        row=$((row + 1))\n        col=0\n        for\
+    \ n in $list; do\n            col=$((col + 1))\n            if [ \"$n\" == \"\
+    $x\" ]; then\n                sorted+=(\"[\\\"$row\\\", \\\"$col\\\"]\")\n   \
+    \         fi\n            list=\"${list:${#n}+1}\"\n            row_length=$((row_length\
+    \ + 1))\n        done\n        if [ -z \"$list\" ]; then\n            break\n\
+    \        fi\n        if [ \"${list:0:1}\" == \"$new_line\" ]; then\n         \
+    \   list=\"${list:1}\"\n        fi\n    done\n    IFS=$'\\n' sorted=($(sort -k1\
+    \ -t $'\\n' <<<\"${sorted[*]}\"))\n    IFS=$'\\n' sorted=($(sort -k1 -k2 -r -t\
+    \ $'\\n' <<<\"${sorted[*]}\"))\n    IFS=$'\\n' sorted=($(sort -k1 -k2 -r -t $'\\\
+    n' <<<\"${sorted[*]}\"))\n    for c in \"${sorted[@]}\"; do\n        if $is_first;\
+    \ then\n            is_first=false\n        else\n            output+=\"$new_line,\"\
+    \n        fi\n        output+=\"$c\"\n    done\n    output+=\"]\"\n    echo \"\
+    $output\"", "  local -r lst=\"$1\"\n  local -r x=\"$2\"\n  local -r res=$(grep\
+    \ -n \"$x\" <(echo \"$lst\" | sed \"s/\\([^ ]*\\)/\\1 $x/g\"))\n  #local -r n=$(echo\
+    \ \"$res\" | wc -l)\n  local -r ret=$(echo \"$res\" |\n  awk '{if (NF > 2) print\
+    \ \"[\\\"\"$1\"\\\", \\\"\"$NF\"\\\"]\"}' |\n  sort -t \" \" -k1,1n -k2,2nr)\n\
+    \  echo \"[$ret]\"", "    awk -v x=\"$2\" 'BEGIN { ORS=\"], [\"} {\n        for\
+    \ (i = 1; i <= NF; i++)\n            if ($i == x)\n                print \"[\\\
+    \"\"NR\"-1\\\", \\\"\"i\"-1\\\"\"\n    }' <(echo \"$1\") | sort -n -k1 -k2", " \
+    \   if [[ $# -ne 2 ]]; then\n        echo \"Usage: $(basename \"$0\") $(tr '\\\
+    n' ' ' < \"$0\")\" >&2\n        exit 1\n    fi\n    local lst=$1\n    local x=$2\n\
+    \    local out=()\n    local row=0\n    while read -r line; do\n        col=0\n\
+    \        for el in $line; do\n            if [[ $el -eq $x ]]; then\n        \
+    \        out+=(\"[\\\"$row\\\", \\\"$col\\\"]\")\n            fi\n           \
+    \ col=$((col + 1))\n        done\n        row=$((row + 1))\n    done <<< \"$lst\"\
+    \n    sort -t , -k1 -n -r <<< \"${out[*]}\" | sort -t , -k2 -n -r", "  if [ -z\
+    \ \"$1\" ] || [ -z \"$2\" ]; then\n    echo []\n    return\n  fi\n  echo -n \"\
+    [\"\n  local row=0\n  local col=0\n  local result\n  while read -r line; do\n\
+    \    col=0\n    for x in $line; do\n      if [ \"$x\" == \"$2\" ]; then\n    \
+    \    if [ -n \"$result\" ]; then\n          echo -n \", \"\n        fi\n     \
+    \   echo -n \"[\\\"$row\\\", \\\"$col\\\"]\"\n        result=1\n      fi\n   \
+    \   col=$((col+1))\n    done\n    row=$((row+1))\n  done <<< \"$1\"\n  echo \"\
+    ]\"", "  awk \"BEGIN {n=0} {for (i=1; i<=NF; i++) if (\\$i==$2) {l=split(\\$0,\
+    \ a, \\\" \\\"); printf \\\"['\\\"%s\\\"', '\\\"%s\\\"']\\n\\\", n, i-1} n++}\"\
+    \  <<< $1 | sort -t \"'\" -k 1,1n -k 2,2nr", "    result=()\n    rows=$(echo \"\
+    $1\" | grep -n \"$2\" -)\n    for row in $rows; do\n        row_number=$(echo\
+    \ \"$row\" | cut -d':' -f1)\n        col_number=$(echo \"$row\" | cut -d':' -f2\
+    \ | wc -w)\n        result+=(\"[\\\"$row_number\\\", \\\"$col_number\\\"]\")\n\
+    \    done\n    result=($(for i in \"${result[@]}\"; do echo \"$i\"; done | sort\
+    \ -n))\n    echo \"${result[@]}\"", "    if [[ -z \"$1\" ]]; then\n        echo\
+    \ \"[]\"\n        return\n    fi\n    local row=0\n    local col=0\n    local\
+    \ list=()\n    while read -r x; do\n        local col=0\n        for y in $x;\
+    \ do\n            if [[ \"$y\" -eq \"$2\" ]]; then\n                list+=(\"\
+    [\\\"$row\\\", \\\"$col\\\"]\")\n            fi\n            col=$((col+1))\n\
+    \        done\n        row=$((row+1))\n    done <<< \"$1\"\n    for i in {0..$((${#list[@]}-1))};\
+    \ do\n        for j in {$(($i+1))..$((${#list[@]}-1))}; do\n            if [[\
+    \ \"${list[$i]}\" \\> \"${list[$j]}\" ]]; then\n                local tmp=\"${list[$i]}\"\
+    \n                list[$i]=\"${list[$j]}\"\n                list[$j]=\"$tmp\"\n\
+    \            fi\n        done\n    done\n    echo \"${list[@]}\"", "    (($# !=\
+    \ 2)) && echo 'function takes exactly 2 arguments' >&2 && return 1\n    local\
+    \ IFS=$'\\n'\n    local row=\"$(awk 'BEGIN { RS = \"\\n\"; FS = \" \" } { for\
+    \ ( i = 1; i <= NF; i++ ) if ( $i == '\"$2\"' ) print NR - 1 \" \" i - 1 }' <<<\
+    \ \"$1\")\"\n    local array=($row)\n    local result='['\n    local count=${#array[@]}\n\
+    \    for i in ${!array[@]}; do\n        (($i < $count - 1)) && result+='[\"'${array[$i]}'\"\
+    ], ' || result+='[\"'${array[$i]}'\"]'\n    done\n    echo $result']'", "  python\
+    \ -c \"\nimport sys\nx, lst = sys.argv[1:]\nfor i, row in enumerate(lst.split('\\\
+    n')):\n  for j, elem in enumerate(row.split()):\n    if elem == x:\n      print('{}\
+    \ {}'.format(i, j))\n\" \"$2\" \"$1\" | sort -n -k1 -k2 | awk '{print \"[\\\"\"\
+    $1\"\\\", \\\"\"$2\"\\\"]\"}' | tr '\\n' ',' | sed 's/.$//'", "  local output\
+    \ row col\n  local -i x y\n  output=()\n  local IFS=$'\\n'\n  for ((y=0; y<$(echo\
+    \ \"$1\" | wc -l); y++)); do\n    row=$(echo \"$1\" | sed -n \"${y}p\")\n    col=()\n\
+    \    for ((x=0; x<$(echo \"$row\" | wc -w); x++)); do\n      if [[ \"$2\" == \"\
+    $(echo \"$row\" | awk -v col=\"$((x+1))\" '{print $col}')\" ]]; then\n       \
+    \ col+=(\"$x\")\n      fi\n    done\n    if [[ ${#col[@]} -gt 0 ]]; then\n   \
+    \   for ((x=0; x<${#col[@]}; x++)); do\n        output+=(\"[\\\"$y\\\", \\\"${col[$x]}\\\
+    \"]\")\n      done\n    fi\n  done\n  echo \"[${output[*]}]\"", "    [[ -z \"\
+    $1\" ]] && { echo \"[]\"; return; }\n    [[ -z \"$2\" ]] && { echo \"Error: \\\
+    $2 missing\"; return; }\n    local rows=$(wc -l <<< \"$1\")\n    ((rows--))\n\
+    \    local columns=$(wc -w <<< \"$1\")\n    local result=\"\"\n    for ((i=0;\
+    \ i<rows; i++)); do\n        result+=\"[$(sed -e \"$((i+1))q;d\" <<< \"$1\" |\
+    \ tr \" \" \"\\n\" | awk -v x=\"$2\" '{ if ($1 == x) print \"\\\"\"NR-1\"\\\"\"\
+    }')] \"\n    done\n    echo -n \"$result\" | tr \" \" \"\\n\" | jq -s -c --arg\
+    \ x \"$2\" 'map( split(\" \") | sort_by(.[1]) | reverse | .[0]) | sort_by(.[0])\
+    \ | map(\"\\(.[0]),\\(.[1])\")'", "  local input=$1\n  local data=$2\n  local\
+    \ arr=()\n  local i=0\n  local j=0\n  for line in $(echo \"$input\" | tr ' ' '\\\
+    n'); do\n    if [[ \"$line\" == \"$data\" ]]; then\n      arr+=([\"$i\"])\n  \
+    \    arr[\"$i\"]+=([\"$j\"])\n    fi\n    if [[ \"$line\" == \"\\n\" ]]; then\n\
+    \      ((i++))\n      j=0\n    else\n      ((j++))\n    fi\n  done\n  local result=\"\
+    \"\n  for (( i=0; i<=${#arr[@]}; i++ )); do\n    for (( j=0; j<=${#arr[$i]} ;\
+    \ j++ )); do\n      result+='[\"'$i'\", \"'${arr[$i]:$j:1}'\"],'\n    done\n \
+    \ done\n  echo \"[${result::-1}]\"", "  local rows\n  rows=$(echo \"$1\" | tr\
+    \ ' ' '\\n')\n  echo \"$rows\" |\n    awk -v \"num=$2\" '\n      BEGIN {\n   \
+    \     r=0;\n        c=0;\n      }\n      NF {\n        for (; c < NF; c++) {\n\
+    \          if ($c == num) {\n            print \"\\\"\" r \"\\\"\" \" \" \"\\\"\
+    \" c \"\\\"\";\n          }\n        }\n        c=0;\n        r++;\n      }\n\
+    \    ' | sort -t ' ' -k 1n -k 2nr", "    if [[ -z \"$1\" ]]; then\n        echo\
+    \ \"[]\"\n        return\n    fi\n    local rows\n    rows=$(echo \"$1\" | awk\
+    \ '{for(i=1;i<=NF;i++) if($i==\"'$2'\") print NR,i}')\n    if [[ -z \"$rows\"\
+    \ ]]; then\n        echo \"[]\"\n        return\n    fi\n    echo -n \"[\"\n \
+    \   local first\n    first=1\n    while read -r row; do\n        local row_idx\n\
+    \        local col_idx\n        row_idx=$(echo \"$row\" | awk '{print $1}')\n\
+    \        col_idx=$(echo \"$row\" | awk '{print $2}')\n        if [[ $first -eq\
+    \ 1 ]]; then\n            first=0\n        else\n            echo -n \", \"\n\
+    \        fi\n        echo -n \"[\\\"$row_idx\\\", \\\"$col_idx\\\"]\"\n    done\
+    \ <<< \"$rows\"\n    echo \"]\"", "    # TODO: implement this function\n    if\
+    \ [ \"$1\" = \"\" ]\n    then\n        echo \"[]\"\n    else\n        lst=($(echo\
+    \ $1 | tr \" \" \"\\n\"))\n        num=$2\n        # echo $num\n        # echo\
+    \ ${lst[*]}\n        i=0\n        j=0\n        # echo \"rachael\"\n        # echo\
+    \ ${lst[0]}\n        while [ $i -lt ${#lst[@]} ]\n        do\n            # echo\
+    \ ${lst[$i]}\n            # echo \"rachael1\"\n            # echo $i\n       \
+    \     # echo $j\n            if [ \"${lst[$i]}\" = \"$num\" ]\n            then\n\
+    \                r[$j]=$i\n                ((j++))\n            fi\n         \
+    \   ((i++))\n        done\n        if [ $j -eq 0 ]\n        then\n           \
+    \ echo \"[]\"\n        else\n            i=0\n            j=0\n            while\
+    \ [ $i -lt ${#r[@]} ]\n            do\n                if [ $j -lt $((r[$i]/7))\
+    \ ]\n                then\n                    echo \"['\"$j\"', '\"$((r[$i]%7))\"\
+    ']\"\n                    ((j++))\n                else\n                    echo\
+    \ \"['\"$j\"', '\"$((r[$i]%7))\"']\"\n                fi\n                ((i++))\n\
+    \            done\n        fi\n    fi", "  local -a points=()\n  local i=$(echo\
+    \ \"$1\" | wc -l)\n\n  for line in $(echo \"$1\"); do\n    local j=0\n    for\
+    \ item in $(echo \"$line\"); do\n      if [[ \"$item\" -eq \"$2\" ]]; then\n \
+    \       points+=($i$j)\n      fi\n      ((j++))\n    done\n    ((i--))\n  done\n\
+    \n  # Print the points with reversed order\n  for ((k=${#points[@]}-1; k>=0; k--));\
+    \ do\n    echo \"[\\\"${points[k]:0:1}\\\", \\\"${points[k]:1:1}\\\"]\"\n  done",
+  "  rows=0\n  for line in $(echo \"$1\" | tr \" \" \"\\n\"); do\n    if [[ \"$line\"\
+    \ == \"$2\" ]]; then\n      echo \"[[\\\"${rows}\\\"\\\", \\\"\\\"\\\"${cols}\\\
+    \"\\\"\\\"]],\"\n    fi\n    cols=0\n    for col in $line; do\n      if [[ \"\
+    $col\" == \"$2\" ]]; then\n        echo \"[[\\\"${rows}\\\"\\\", \\\"\\\"\\\"\
+    ${cols}\\\"\\\"\\\"]],\"\n      fi\n      cols=$((cols+1))\n    done\n    rows=$((rows+1))\n\
+    \  done", "    if [ -z \"$1\" ]; then\n        echo \"[]\"\n        return\n \
+    \   fi\n    if [ -z \"$2\" ]; then\n        echo \"[]\"\n        return\n    fi\n\
+    \    local -r list=\"$1\"\n    local -r x=\"$2\"\n    local -r list_len=$(wc -l\
+    \ <<< \"$list\")\n    local -r max_columns=$(sed 's/[^ ]* *//g' <<< \"$list\"\
+    \ | wc -L)\n    # max_columns - 1 lines should be skipped,\n    # 1 extra line,\
+    \ a newline-separated, space-separated list of\n    # $x coordinates - is the\
+    \ output\n    local -r x_count=$(grep -c \"$x\" <<< \"$list\")\n    local -r indices_count=$((x_count\
+    \ + max_columns))\n    local -r max_string_len=$((max_columns + list_len))\n \
+    \   local -r max_element_len=$((max_string_len + 2))\n    local -r max_arguments_count=$((indices_count\
+    \ * 2))\n    # shellcheck disable=SC2034\n    local -r max_command_len=$((max_arguments_count\
+    \ * max_element_len))\n    local -r output_array_name=\n    function get_row()\
+    \ {\n        local -n output_array=\"$1\"\n        local -r list=\"$2\"\n    \
+    \    local -r x=\"$3\"\n        local -r list_len=$(wc -l <<< \"$list\")\n   \
+    \     local -r max_columns=$(sed 's/[^ ]* *//g' <<< \"$list\" | wc -L)\n     \
+    \   local -r x_count=$(grep -c \"$x\" <<< \"$list\")\n        local -r indices_count=$((x_count\
+    \ + max_columns))\n        local -r max_string_len=$((max_columns + list_len))\n\
+    \        local -r max_element_len=$((max_string_len + 2))\n        local -r max_arguments_count=$((indices_count\
+    \ * 2))\n        local -r max_command", "    local lst=$1\n    local item=$2\n\
+    \    local rows=$(echo \"$lst\" | wc -l)\n    local columns=$(echo \"$lst\" |\
+    \ wc -w)\n    local res=\n    for ((r=0; r<rows; r++)); do\n        for ((c=0;\
+    \ c<columns; c++)); do\n            local element=$(echo \"$lst\" | awk \"{print\
+    \ \\$$((c+1))}\" | head -n $((r+1)) | tail -n 1)\n            if [[ \"$element\"\
+    \ -eq \"$item\" ]]; then\n                res+=\"[\\\"$r\\\", \\\"$c\\\"] \"\n\
+    \            fi\n        done\n    done\n    echo \"[$res]\"", "    row=$1\n \
+    \   x=$2\n    local mylist=()\n    local y=0\n    while read -ra mylist; do\n\
+    \        if [[ -z \"$row\" ]]; then\n            echo \"($x, $y)\" > /dev/null\n\
+    \        else\n            n=0\n            for i in \"${mylist[@]}\"; do\n  \
+    \              if [ \"$i\" == \"$x\" ]; then\n                    echo \"($y,\
+    \ $n)\"\n                fi\n                ((n++))\n            done\n     \
+    \   fi\n        ((y++))\n    done <<< \"$row\"", "    lst=\"$1\"\n    x=\"$2\"\
+    \n    rows=$(echo \"$lst\" | wc -l)\n    coords=()\n    for ((i=0; i<rows; i++));\
+    \ do\n        cols=$(echo \"$lst\" | sed -n \"$((i+1))p\" | wc -w)\n        for\
+    \ ((j=0; j<cols; j++)); do\n            if [[ $(echo \"$lst\" | sed -n \"$((i+1))p\"\
+    \ | cut -d ' ' -f $((j+1))) == \"$x\" ]]; then\n                coords+=(\"[\\\
+    \"$i\\\", \\\"$j\\\"]\")\n            fi\n        done\n    done\n    printf \"\
+    %s\\n\" \"${coords[@]}\" | sort -t, -k1 -k2 -r", "    IFS=$'\\n' read -d '' -r\
+    \ -a rows <<< \"$1\"\n\n    local row_num=0\n    for row in \"${rows[@]}\"; do\n\
+    \        IFS=$' ' read -r -a row_split <<< \"$row\"\n        local col_num=0\n\
+    \        for element in \"${row_split[@]}\"; do\n            if [[ \"$element\"\
+    \ == \"$2\" ]]; then\n                echo -n \"['\"\\\"$row_num\\\"\"', '\\\"\
+    $col_num\\\"'], \"\n            fi\n            col_num=$((col_num + 1))\n   \
+    \     done\n        row_num=$((row_num + 1))\n    done", "    lst=$1\n    x=$2\n\
+    \    # your code here\n    # use tr, grep, sort, xargs\n    echo $lst | tr \"\
+    \ \" \"\\n\" | grep -nEw $x | \\\n    tr \"\\n\" \" \" | tr \":\" \" \" | \\\n\
+    \    xargs -n 2 | sort -t \" \" -k 1 -g -k 2 -g", "    local list=$1; shift\n\
+    \    local x=$1; shift\n    local result=()\n    for i in $(seq 0 $(wc -l <<<\
+    \ \"$list\" | sed 's/^\\s*//'))\n    do\n        local row=$(head -n $i <<< \"\
+    $list\" | tail -n 1)\n        local j=0\n        for y in $row\n        do\n \
+    \           if [ \"$y\" == \"$x\" ]\n            then\n                result+=(\"\
+    [\\\"$i\\\", \\\"$j\\\"]\")\n            fi\n            j=$((j+1))\n        done\n\
+    \    done\n    python -c \"print(sorted(sorted($(IFS=,; echo \"[${result[*]}]\"\
+    )), key=lambda x: int(x[0])))\"", "  awk -v awkvar=\"$2\" 'BEGIN {\n    RS=\"\\\
+    n\";\n    FS=\" \";\n    OFS=\"\\\", \\\"\";\n    ORS=\"], [\";\n  } {\n    for\
+    \ (i = 1; i <= NF; i++) {\n      if ($i == awkvar) {\n        print NR-1, i-1;\n\
+    \      }\n    }\n  }' <(echo \"$1\") | tr -d '\\n' | sed 's/^/[[\\\"/;s/$/\\\"\
+    ]]/'", "    if [[ \"$1\" = \"\" ]]; then\n        echo \"[]\"\n    else\n    \
+    \    local counter=0\n        while read line; do\n            local row=$(echo\
+    \ $line | tr ' ' '\\n' |\n                awk \"BEGIN {FS=\\\" \\\"} {if (\\$1\
+    \ == $2) {print \\\"['\\\"\\$0\\\"', '\\\"counter\\\"']\\\"}}\")\n           \
+    \ if [[ \"$row\" != \"\" ]]; then\n                echo -n \"$row\"\n        \
+    \    fi\n            (( counter++ ))\n        done <<< \"$1\"\n    fi", "  local\
+    \ lst=\"$1\"\n  local x=\"$2\"\n  local result=\"\"\n  local i=0\n  for row in\
+    \ $lst; do\n    local j=0\n    for cell in $row; do\n      if [[ \"$cell\" ==\
+    \ \"$x\" ]]; then\n        result=\"$result [\\\"$i\\\", \\\"$j\\\"]\"\n     \
+    \ fi\n      ((j++))\n    done\n    ((i++))\n  done\n  echo $result", "    local\
+    \ input_rows=\"$1\"\n    local target=\"$2\"\n    local output=\"\"\n    # write\
+    \ your code here\n    while read row; do\n        local col=0\n        for cell\
+    \ in $row; do\n            if [ \"$cell\" = \"$target\" ]; then\n            \
+    \    output+=\"[\\\"$ROW\\\", \\\"$col\\\"], \"\n            fi\n            col=$((col+1))\n\
+    \        done\n        ROW=$((ROW+1))\n    done <<< \"$input_rows\"\n    output=${output%,\
+    \ }\n    echo \"[$output]\"", "    local table=\"$1\"\n    local number=\"$2\"\
+    \n    local row\n    local column\n    local IFS=$'\\n'\n    for row in $(seq\
+    \ $(echo \"$table\" | wc -l) -1 0); do\n        for column in $(seq 0 100); do\n\
+    \            [[ $(echo \"$table\" | awk -v row=\"$row\" -v column=\"$column\"\
+    \ 'NR==row{print $column}') == \"$number\" ]] && echo \"\\\"$row\\\" \\\"$column\\\
+    \"\"\n        done\n    done | sort -r -k1,1n -k2,2nr", "  local x=$(echo $1 |\
+    \ sed 's/\\s\\+/\\n/g' | grep -n \"^$2$\" | cut -d':' -f1)\n  local y=$(echo $1\
+    \ | awk 'NR==1 { n=split($0,A,\" \"); for (i=1; i<=n; i++) B[i]=0 } { n=split($0,A,\"\
+    \ \"); for (i=1; i<=n; i++) B[i]++ } END { for (i=1; i<=n; i++) printf B[i] \"\
+    \ \" }')\n  echo \"${x}\" | sed 's/\\n/ /g' | awk -v y=\"${y}\" '{ split(y, Y,\
+    \ \" \"); N=split($0, X, \" \"); printf \"[\" } { for (i=1; i<=N; i++) printf\
+    \ \"[\\\"\" Y[X[i]] \"\\\", \\\"\" X[i] \"\\\"], \" } END { print \"]\" }'", " \
+    \ echo $1 | grep -n $2 | sed -e 's/:/ /g' | sort -nk1 -k2 -r | tr ' ' ':' | awk\
+    \ -F: '{print \"[\\\"\"$1\"\\\", \\\"\"$2\"\\\"]\"}' | tr '\\n' ','", "  # your\
+    \ code here\n  x=$2\n  inp=$1\n  #echo $inp\n  #echo $x\n  res=()\n  IFS=$'\\\
+    n' read -d '' -r -a lines < <(printf '%s\\0' \"$inp\")\n  for (( i=0; i<${#lines[@]};\
+    \ i++ )); do\n    IFS=$' ' read -d '' -r -a row < <(printf '%s\\0' \"${lines[$i]}\"\
+    )\n    #echo ${row[@]}\n    for (( j=0; j<${#row[@]}; j++ )); do\n      #echo\
+    \ $j\n      #echo ${row[$j]}\n      if [[ ${row[$j]} -eq $x ]]; then\n       \
+    \ res+=( \"[\\\"$i\\\", \\\"$j\\\"]\" )\n      fi\n    done\n  done\n  IFS=$'\\\
+    n' read -d '' -r -a res < <(printf '%s\\0' \"${res[@]}\" | sort -t '\"' -k 1n\
+    \ -k 2nr -t '\"')\n  echo ${res[@]}", "    # Write a function body here\n    echo\
+    \ \"Not implemented yet\""]
 stop_tokens:
 - "\n}"

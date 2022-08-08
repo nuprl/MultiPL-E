@@ -9,7 +9,1255 @@ tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = 
   \    lu.assertEquals(candidate('(()()) ((())) () ((())()())'), {2, 3, 1, 3})\n \
   \   lu.assertEquals(candidate('() (()) ((())) (((())))'), {1, 2, 3, 4})\n    lu.assertEquals(candidate('(()(())((())))'),\
   \ {4})\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: []
+completions: ["\tlocal max_level = -1\n\tlocal level = 0\n\tlocal last_index = 1\n\
+    \tlocal max_level_by_level = {}", "    local nested_levels = {}\n    for _, paren_group\
+    \ in string.gmatch(paren_string, \"%S+\") do\n        local paren_level = 0\n\
+    \        for _, char in string.gmatch(paren_group, \"[^()]+\") do\n          \
+    \  if char == '(' or char == '[' or char == '{' then\n                paren_level\
+    \ = paren_level + 1\n            elseif char == ')' or char == ']' or char ==\
+    \ '}' then\n                paren_level = paren_level - 1\n            end\n \
+    \       end\n        table.insert(nested_levels, paren_level)\n    end\n    return\
+    \ table.maximum(nested_levels)\nend\n</cell>\n<cell>", "   local levels = { }\n\
+    \   local stack = { }\n   for level = 0,  #paren_string, 1 do\n      local parens\
+    \ = paren_string:sub(1, level-1)\n      if parens ~= '()' then\n         local\
+    \ num_parens = #parens\n         if levels[num_parens] ~= num_parens then\n  \
+    \          levels[num_parens] = num_parens\n         end\n      end\n      stack[#stack+1]\
+    \ = level\n   end\n   stack[#stack] = #paren_string\n   return stack\nend", " \
+    \ local max_level = 0\n  local paren_nesting = {}\n  for paren in string.gmatch(paren_string,\
+    \ '%w+') do\n    paren = paren:gsub('%%%c+', '')\n    local level = 0\n    for\
+    \ c in paren:gmatch('.') do\n      level = level * 10 + tonumber(c)\n    end\n\
+    \    if level > max_level then\n      max_level = level\n      paren_nesting =\
+    \ {paren}\n    else\n      paren_nesting = {paren, table.concat(paren_nesting,\
+    \ ' ')}\n    end\n  end\n  return max_level, table.concat(paren_nesting, ' ')\n\
+    end", "\tlocal groups = {}\n\tlocal nested_level = 0\n\tlocal group_start = 1\n\
+    \tfor i, v in ipairs(paren_string:gmatch'()()()?') do\n\t\tlocal group_index =\
+    \ group_start\n\t\twhile group_index <= #paren_string do\n\t\t\tif paren_string[group_index]\
+    \ == '(' then\n\t\t\t\tnested_level = nested_level + 1\n\t\t\t\tgroup_index =\
+    \ group_index + 1\n\t\t\telseif paren_string[group_index] == ')' then\n\t\t\t\t\
+    nested_level = nested_level - 1\n\t\t\t\tgroup_index = group_index + 1\n\t\t\t\
+    else\n\t\t\t\tgroup_index = group_index + 1\n\t\t\tend\n\t\tend\n\t\tif nested_level\
+    \ > 0 then\n\t\t\tgroups[#groups+1] = nested_level\n\t\tend\n\t\tgroup_start =\
+    \ i\n\tend\n\ttable.sort(groups)\n\treturn groups\nend", "  local paren_groups\
+    \ = {}\n  for paren in string.gmatch(paren_string, \"([^()]*)(%S+)\") do\n   \
+    \ table.insert(paren_groups, paren:gsub('%S', ''))\n  end\n  local nested_paren_groups\
+    \ = {}\n  for paren in paren_groups do\n    local num_parens = 1\n    local curr_paren\
+    \ = paren\n    while string.len(curr_paren) > 0 do\n      if curr_paren[1] ==\
+    \ \"(\" then\n        num_parens = num_parens + 1\n      elseif curr_paren[1]\
+    \ == \")\" then\n        num_parens = num_parens - 1\n      else\n        break\
+    \ -- can't count this one.\n      end\n      curr_paren = curr_paren:gsub('%S')\n\
+    \    end\n    table.insert(nested_paren_groups, num_parens)\n  end\n  table.sort(nested_paren_groups)\n\
+    \  local max_levels = table.remove(nested_paren_groups, 1)\n  return max_levels\n\
+    end", "   local count = 1\n   local num_paren = 0\n   local paren_level = 1\n\
+    \   local paren_depth = 1\n   local paren_nesting_string = ''\n   local nested_count\
+    \ = 0\n   local depth_count = 0\n   local depth = 0\n   local paren_count = 0\n\
+    \   local paren_paren_count = 0\n   local strings = paren_string:gsub(\"([^()]+)\"\
+    ,\n      function(char)\n         if paren_paren_count > 0 then\n            if\
+    \ char == '(' or char == ')' then\n               paren_paren_count = paren_paren_count\
+    \ - 1\n            else\n               paren_paren_count = paren_paren_count\
+    \ + 1\n            end\n         end\n         if paren_count > 0 then\n     \
+    \       if char == ')' then\n               paren_count = paren_count - 1\n  \
+    \             if paren_paren_count > 0 then\n                  if paren_paren_count\
+    \ == 1 then\n                     paren_nesting_string = strings[paren_nesting_string:len()-1:len()]\n\
+    \                     paren_depth = paren_depth - 1\n                     paren_paren_count\
+    \ = paren_paren_count - 1\n                     paren_count = paren_count + 1\n\
+    \                  end\n               end\n            elseif char == '(' or\
+    \ char == '[' or char == '{' or char == '<' or char == '>' then\n            \
+    \   paren_count = paren_count + 1\n            else\n               paren_count\
+    \ = paren_count + 1\n            end\n         else\n            if char == ')'\
+    \ then\n               num_paren = num_paren - 1\n               if num_paren\
+    \ == 0 then\n                  if paren_depth == 1 then\n                    \
+    \ nested_count = nested_count + 1\n                  end\n               end\n\
+    \            elseif char == '(' or char == '[' or char == '{' or char == '<' or\
+    \ char == '>' then\n               num_paren = num_paren + 1\n            else\n\
+    \               num_paren = num_paren + 1\n            end\n         end\n   \
+    \      if paren_nesting_string ~= '' then\n            strings = strings[paren_nesting_string:len():len()]\n\
+    \         end\n         if paren_depth > 1 then\n            depth_count = depth_count\n\
+    \               + ((depth_count*2)*char)\n               + char\n            \
+    \   + char\n               + char\n               + char\n               + char\n\
+    \               + char\n               + char\n               + char\n       \
+    \        + char\n               + char\n               + char\n              \
+    \ + char\n               + char\n               + char\n               + char\n\
+    \               + char\n               + char\n               + char\n       \
+    \        ", "  local paren_stack = {}\n  for _, groups in pairs(string.gmatch(paren_string,\
+    \ '%[(%w+)%]')) do\n    for _, group in pairs(string.gmatch(groups, '%((%w+)%)'))\
+    \ do\n      paren_stack[#paren_stack+1] = group\n    end\n  end", "    local levels\
+    \ = {0, 0, 0, 0, 0}\n    local paren_stack = {}\n    for c in string.gmatch(paren_string,\
+    \ '%S+') do\n        if c == '(' or c == '{' then\n            table.insert(paren_stack,\
+    \ c)\n            levels[#levels + 1] = 1\n        elseif c == '}' or c == ')'\
+    \ then\n            local cur = table.take(paren_stack)\n            if levels[cur]\
+    \ == 0 then\n                levels[#levels + 1] = 0\n            else\n     \
+    \           levels[#levels + 1] = levels[cur] - 1\n            end\n         \
+    \   levels[#levels + 1] = #levels + 1\n            table.insert(paren_stack, #levels)\n\
+    \        elseif c == ')' and #levels > 1 then\n            table.insert(paren_stack,\
+    \ #levels)\n        end\n    end\n    return table.unpack(levels)\nend", "   \
+    \ if #paren_string > 0 then\n        local level = 1\n        local paren_count\
+    \ = 0\n        for char in string.gmatch(paren_string, \"()\") do\n          \
+    \  if char == '(' or char == '{' or char == '[' then\n                paren_count\
+    \ = paren_count + 1\n            elseif char == ')' or char == '}' or char ==\
+    \ ']' then\n                paren_count = paren_count - 1\n            elseif\
+    \ paren_count == 0 then\n                level = level + 1\n            end\n\
+    \        end\n        return level\n    end\n    return 0\nend", "\t-- For each\
+    \ of the group, output the deepest level of nesting of parentheses.\n\t-- E.g.\
+    \ (()()) has maximum two levels of nesting while ((())) has three.\n\treturn (\n\
+    \t\tunpack(\n\t\t\tmap_to_index_table_with_paren_opening_closing(\n\t\t\t\tmap_to_index_table(paren_string))\n\
+    \t\t):reverse()\n\t)\nend", "  local opening_parens_levels = {} -- level for each\
+    \ opening parenthesis\n  local max_level = 1 -- max level of nesting for each\
+    \ opening parenthesis\n  local paren_string = paren_string:gsub('([^ ]+)( +)([^\
+    \ ]+)','%1 %3 %2')", "  local num_nested_parens = {}\n  local result = 0", " \
+    \   -- Handle the empty case.\n    if paren_string == nil then\n        return\
+    \ {}\n    end", "  local max_level = 0\n  local paren_chars\n  local paren_nesting\n\
+    \  local paren_levels\n  local level\n  local nesting_level\n  local nested_level\n\
+    \  local nested_paren_string\n  local paren_char_index\n  local paren\n  for i,\
+    \ char in ipairs(paren_string) do\n    paren_char_index = i\n    paren_chars =\
+    \ char\n    paren_nesting = false\n    paren_levels = nil\n    level = 1\n   \
+    \ nesting_level = 1\n    nested_level = 1\n    nested_paren_string = nil\n   \
+    \ while nesting_level ~= 0 do\n      paren = char:sub(1, 1)\n      --print(nesting_level,\
+    \ level)\n      --print(paren, paren_nesting, level)\n      if paren_nesting then\n\
+    \        if paren_levels then\n          paren_levels = paren_levels + 1\n   \
+    \     else\n          paren_levels = 1\n        end\n      elseif paren_levels\
+    \ then\n        if level == 0 then\n          --print('NESTING_LEVEL', nesting_level)\n\
+    \          level = 1\n          paren_nesting = true\n          nesting_level\
+    \ = nesting_level - 1\n        else\n          level = level + 1\n        end\n\
+    \      elseif level == 0 then\n        if paren == '(' or paren == '{' or paren\
+    \ == '[' then\n          level = level + 1\n        elseif paren == ')' or paren\
+    \ == '}' or paren == ']' then\n          level = level - 1\n        elseif paren\
+    \ == '\"' then\n          --print('nested_level', nested_level)\n          --print('nested_paren_string',\
+    \ nested_paren_string)\n          if nested_paren_string ~= nil then\n       \
+    \     nested_paren_string = nested_paren_string .. paren\n          else\n   \
+    \         nested_paren_string = paren\n          end\n        else\n         \
+    \ --print('level', level)\n          --print('nested_paren_string', nested_paren_string)\n\
+    \          if nested_paren_string ~= nil then\n            nested_paren_string\
+    \ = nested_paren_string .. paren\n          else\n            nested_paren_string\
+    \ = paren\n          end\n        end\n      else\n        if level > 0 then\n\
+    \          if paren == '(' or paren == '[' then\n            level = level + 1\n\
+    \          elseif paren == ')' or paren == ']' then\n            level = level\
+    \ - 1\n          elseif paren == '\"' then\n            if nested_paren_string\
+    \ ~= nil then\n              nested_paren_string = nested_paren_string .. paren\n\
+    \            else\n              nested_paren_string = paren\n            end\n\
+    \          else\n", "    local paren_depths = {0}\n    local depth = 0\n    local\
+    \ string_index = 1 -- Skip first char.\n    local opening_count = 1 -- Counter\
+    \ for number of open parentheses.\n    local level = 0 -- Counter for level of\
+    \ nesting.\n    local paren_start = 1 -- Start index for parsing the string.\n\
+    \    local closed = {false} -- Used as a flag.", "  if paren_string:find('()')\
+    \ then\n    local depth = 0\n    local max_level = 0\n    local max_level_index\n\
+    \    for i,v in ipairs(paren_string:gmatch('%[(%d+)([()%w])%]%')) do\n      local\
+    \ cur_level = v:len()\n      if cur_level > max_level then\n        max_level\
+    \ = cur_level\n        max_level_index = i\n      end\n    end\n    return max_level_index\n\
+    \  else\n    return nil\n  end\nend", "\tlocal levels = { 1 }\n\tlocal level =\
+    \ 1\n\tlocal current_level = 1\n\tlocal paren_stack = {{ 0 }}\n\tlocal open_braces\
+    \ = 1\n\tfor paren_string, level, current_level in pairs(paren_string:gmatch('%[\
+    \ (]*(%S+)[)]*(%S+)[ (]*%+?'))\n\tdo\n\t\tif paren_stack[#paren_stack].level ==\
+    \ 0 then\n\t\t\tlocal new_level = level + current_level\n\t\t\tlevels[#levels+1]\
+    \ = new_level\n\t\t\tparen_stack[#paren_stack+1] = { level = new_level, paren\
+    \ = paren_string }\n\t\telse\n\t\t\tlocal current_level = levels[#levels+1]\n\t\
+    \t\tif current_level == paren_stack[#paren_stack].level + 1 then\n\t\t\t\tlocal\
+    \ new_level = levels[#levels+1] + 1\n\t\t\t\tlevels[#levels+1] = new_level\n\t\
+    \t\t\tparen_stack[#paren_stack+1] = { level = new_level, paren = paren_string\
+    \ }\n\t\t\telse\n\t\t\t\tlocal new_level = levels[#levels+1]\n\t\t\t\tparen_stack[#paren_stack+1]\
+    \ = { level = new_level, paren = paren_string }\n\t\t\tend\n\t\tend\n\tend\n\t\
+    return levels\nend", "  local level = {}\n  local depth = 0\n  local cur_str =\
+    \ \"\"\n  local open = 0\n  for i, c in ipairs(paren_string) do\n    if c == '('\
+    \ and open == 0 then\n      open = 1\n      cur_str = c\n      level[i] = cur_str\n\
+    \      depth = depth + 1\n    elseif c == ')' and open == 1 then\n      open =\
+    \ 0\n      depth = depth - 1\n      if depth == 0 then\n        level[i] = cur_str\n\
+    \      end\n    end\n    cur_str = cur_str .. c\n  end\n  return level\nend",
+  "  local max_level = 0\n  for _, group in string.gmatch(paren_string, \"[^()]+\"\
+    ) do\n    local level = max_level + 1\n    local level_group = parse_nested_parens(group)\n\
+    \    if level_group > level then max_level = level end\n  end\n  return max_level\n\
+    end", "  local groups = {}\n  for part in str:gmatch('[^()]+') do\n    if paren_string:find('(%A%)([^()]+)(%A%)')\
+    \ then\n      local max_level_of_nesting = -1\n      for level_of_nesting in pairs(groups)\
+    \ do\n        if paren_string:find('(%A%)%A%', level_of_nesting) then\n      \
+    \    max_level_of_nesting = level_of_nesting\n          break\n        end\n \
+    \     end\n      if max_level_of_nesting == -1 then\n        max_level_of_nesting\
+    \ = #groups\n      end\n      local level_of_nesting = max_level_of_nesting +\
+    \ 1\n      table.insert(groups, level_of_nesting)\n    end\n  end\n  return #groups\n\
+    end", "   local nested_level = 0\n   local paren_count = 0\n   local paren_string\
+    \ = paren_string:gsub('[()()]', ' ')\n   for paren_list in paren_string:gmatch('(%S+)')\
+    \ do\n      -- If this paren_list has a leading space, remove it.\n      if paren_list\
+    \ == '' then\n         paren_count = paren_count + 1\n      else\n         paren_count\
+    \ = paren_count + 1\n         nested_level = nested_level + 1\n      end\n   \
+    \   paren_count = paren_count - 1\n      -- Add the new nesting level if the paren_list\
+    \ has more than just one element.\n      if paren_list ~= '()' then\n        \
+    \ nested_level = nested_level + 1\n      end\n   end\n   return nested_level\n\
+    end", "  local groups = {}\n  for paren_symbol in string.gmatch(paren_string,\
+    \ '%[(%a)]+') do\n    local current_group = groups[#groups+1]\n    groups[#groups+1]\
+    \ = tonumber(paren_symbol)\n  end\n  return groups\nend", "  local result = {}\n\
+    \  local depth = 0\n  local current_group = 1\n  local current_level = 1\n  for\
+    \ paren_group in string.gmatch(paren_string, ')()(') do\n    local group_open\
+    \ = paren_group:find('(', 1, 1)\n    local group_close = paren_group:find(')',\
+    \ 1, 1)\n    if group_open ~= nil then\n      if current_level > depth then\n\
+    \        depth = current_level\n      end\n      current_group = current_group\
+    \ + 1\n    end\n    if group_close ~= nil then\n      current_group = current_group\
+    \ - 1\n      current_level = current_level - 1\n    end\n    table.insert(result,\
+    \ current_level)\n  end\n  return result\nend", "  local max_level = -1\n  local\
+    \ parens = {}\n  local level = 0", "  local num_groups = #(paren_string)\n  local\
+    \ max_group = 0\n  local max_nesting_level = 0", "  -- Parse string to get groups\
+    \ of nested parentheses\n  local groups = paren_string:gsub('( +)', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('( +)$', ' '):gsub('(\
+    \ +)$', ' ')\n  -- Find out how many groups are in the string.\n  local number_of_groups\
+    \ = groups:gsub('( +)'):match('[0-9]+'):gsub('[^0-9]+'):match('[^0-9]'):gsub('[^0-9]+'):match('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('[^0-9]+'):gsub('[^0-9]+'):match('",
+  "  local paren_levels, paren_groups = {}, {}\n  local paren_level = 0\n  local max_level\
+    \ = 0\n  local paren_count = 0\n  for s in string.gmatch(paren_string, \"([^(%)])\"\
+    ) do\n    if s == \"(\" then\n      paren_level = paren_level + 1\n    elseif\
+    \ s == \"(\" then\n      paren_level = paren_level - 1\n      max_level = max_level\
+    \ or (paren_level and paren_level)\n      if paren_level > 0 then\n        paren_levels[paren_level]\
+    \ = paren_levels[paren_level] or {}\n        paren_levels[paren_level][paren_count]\
+    \ = true\n      end\n      paren_count = 1 + paren_count\n    else\n      if paren_level\
+    \ ~= 0 then\n        paren_levels[paren_level] = paren_levels[paren_level] or\
+    \ {}\n        paren_levels[paren_level][paren_count] = true\n      end\n    end\n\
+    \  end", "   assert(type(paren_string) == 'string')\n   local level = 0\n   local\
+    \ stack = { paren_string, '' }\n   while #stack > 0 do\n      local s = stack[1]\n\
+    \      if s == '(' then\n         level = level + 1\n         if level > max_level\
+    \ then\n            max_level = level\n         end\n         stack[2] = stack[2]\
+    \ == '' and s or stack[2] .. ' '\n         stack = stack[3] == '' and stack[2]\
+    \ or stack[3] .. ' '\n      elseif s == '{' then\n         level = level + 1\n\
+    \         if level > max_level then\n            max_level = level\n         end\n\
+    \         stack[2] = stack[2] == '' and s or stack[2] .. ' '\n         stack =\
+    \ stack[3] == '' and stack[2] or stack[3] .. ' '\n      elseif s == '}' then\n\
+    \         level = level - 1\n         if level < 0 then\n            max_level\
+    \ = max_level - 1\n         end\n         stack = stack[3] == '' and stack[2]\
+    \ or stack[3] .. ' '\n      elseif s == ')' then\n         level = level - 1\n\
+    \         if level < 0 then\n            max_level = max_level - 1\n         end\n\
+    \         stack = stack[3] == '' and stack[2] or stack[3] .. ' '\n      elseif\
+    \ s == '[' then\n         level = level + 1\n         if level > max_level then\n\
+    \            max_level = level\n         end\n         stack[2] = stack[2] ==\
+    \ '' and s or stack[2] .. ' '\n         stack = stack[3] == '' and stack[2] or\
+    \ stack[3] .. ' '\n      else\n         stack = stack[2] == '' and stack[1] or\
+    \ stack[2] .. ' '\n      end\n   end\n   return max_level\nend", "    local groups\
+    \ = {}\n    for c in paren_string:gmatch'([^()]*) ?([^()]*) ?([^()]*)'\n    do\n\
+    \        local level = tonumber(c)\n        if level then\n            for i =\
+    \ 1, level do\n                table.insert(groups, level - 1)\n            end\n\
+    \        end\n    end\n    return table.max(groups)\nend", "   local groups =\
+    \ {}\n   local opening = 1\n   local closing = 0\n   local stack = {opening, closing}\n\
+    \   local depth = 1", "  local nested = 0\n  local open = 0\n  local closed =\
+    \ 0\n  local result = 0\n  for paren in string.gmatch(paren_string, '%([([{])([%a]*)}])')\
+    \ do\n    if open == nested then\n      open = closed + 1\n    end\n    if paren\
+    \ == '(' then\n      open = open + 1\n    end\n    if paren == ')' then\n    \
+    \  closed = closed + 1\n    end\n    if open == closed then\n      result = result\
+    \ + 1\n    end\n    nested = nested + 1\n  end\n  return result\nend", "  local\
+    \ paren_string = paren_string:gsub('^ +$','')\n  local bracket_stack = { }\n \
+    \ local level_stack = { }\n  local max_level = 0\n  for i,c in ipairs(paren_string)\
+    \ do\n    if c == '(' then table.insert(bracket_stack,i) end\n    if c == ')'\
+    \ then\n      local level = #bracket_stack\n      local index = #level_stack",
+  "    local groups = {}\n    for paren in paren_string:gmatch('[^()]+') do\n    \
+    \    if paren ~= '()' then\n            table.insert(groups, 1)\n        else\n\
+    \            table.insert(groups, 0)\n        end\n    end\n    return table.remove(groups)\n\
+    end", "  local parsed_parens = {}\n  local paren_stack = {}\n  local open_braces\
+    \ = 0\n  local open_brace_level = 0\n  local close_braces = 0\n  local close_brace_level\
+    \ = 0\n  for paren in string.gmatch(paren_string, '%{(%{((%{(%((%{([%{%((%{%{%((%{([%{%{%((%{([%{%{%((%{(%((%{([%{%{%((%{%((%{[%{%((%{%((%{%((%{%((%{[%{%((%{%((%{%((%{%((%{[%{%((%{%((%{%((%{%((%{%((%{%((%{[%{%((%{%((%{%((%{%((%{%((%{[%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%((%{%",
+  "  local groups = paren_string:gsub('(%s)+', function(x) x:gsub('[^%s]+', ' ') end)\n\
+    \  local levels = {}\n  for _, x in pairs(groups) do\n    levels[#levels + 1]\
+    \ = 0\n    for level = _1, #x + 1 do\n      levels[#levels + 1] = level\n    end\n\
+    \  end\n  local nest_level = 0\n  for _, x in pairs(groups) do\n    nest_level\
+    \ = levels[nest_level + 1]\n  end\n  return nest_level\nend", "  local parsed_table\
+    \ = {}\n  local parsed_string\n  local paren_count = 0\n  for paren_string in\
+    \ string.gmatch(paren_string, '([^()]+)')\n  do\n    if paren_count > 0 then\n\
+    \      parsed_string = parsed_string .. paren_string\n      paren_count = 0\n\
+    \    else\n      parsed_string = parsed_string .. paren_count .. paren_string\n\
+    \      paren_count = paren_count + 1\n    end\n  end", "    local paren_count\
+    \ = 0\n    local paren_level = { }", "  local max_level = 1\n  local groups =\
+    \ {}\n  for paren in string.gmatch(paren_string, '%[(%a)(%a)]*(%a*)') do\n   \
+    \ local group = paren\n    local count = #group\n    while count > 0 do\n    \
+    \  if count == 1 then\n        groups[#groups+1] = group\n      else\n       \
+    \ group = group:gsub('%a(?=[^()]*\\))', '')\n        groups[#groups + 1] = group\n\
+    \      end\n      count = count - 1\n    end\n    max_level = max(max_level, #group)\n\
+    \  end\n  return max_level, groups\nend", "  local paren_stack = {}\n  local paren_level\
+    \ = 1", "  local function get_max(level, groups)\n    if level == 0 then\n   \
+    \   return 1\n    end\n    local max_groups = groups[level]\n    if max_groups\
+    \ == nil then\n      return level\n    end\n    if max_groups > level then\n \
+    \     return max_groups\n    end\n    return level + get_max(level - 1, groups)\n\
+    \  end\n  local max_groups = {}\n  for i = 1, #paren_string do\n    local open_count\
+    \ = paren_string:sub(i, i):match(\"[^()]+\")\n    local close_count = paren_string:sub(i,\
+    \ i + open_count):match(\"[^()]+\")\n    if open_count ~= close_count then\n \
+    \     return nil\n    end\n    local max_level = get_max(open_count, max_groups)\n\
+    \    max_groups[max_level] = open_count + 1\n  end\n  return max_groups\nend",
+  "  local max_level = 1\n  local stack = { paren_string:sub(1, #paren_string) }\n\
+    \  while #stack > 1 do\n    local size = #stack\n    local popped_size = size\
+    \ - 1\n    local popped_group = stack[popped_size]\n    stack[popped_size] = nil\n\
+    \    for i = 1, size do\n      local next_group = stack[i]\n      if popped_group\
+    \ == next_group then\n        popped_size = i\n        break\n      end\n    end\n\
+    \    stack[popped_size] = popped_group\n    max_level = math.max(max_level, popped_size)\n\
+    \  end\n  return max_level\nend", "  local stack_count = {}\n  for paren in (string.gsub(paren_string,\
+    \ '[^()]+', '()*()') .. ')()')\n    do\n      if paren == '('\n        then\n\
+    \          stack_count[#stack_count+1] = 1\n      elseif paren == '('\n      \
+    \  then\n          stack_count[#stack_count] = stack_count[#stack_count]+1\n \
+    \     else\n        stack_count[#stack_count] = stack_count[#stack_count]-1\n\
+    \      end\n  end\n  return table.remove_value(stack_count, 0)\nend", "  local\
+    \ groups = paren_string:gmatch('[^()]+')\n  local nested_level = 1\n  local max_level\
+    \ = groups[#groups]:gsub('%[(%a)]+', ''):match('[^()]+')\n  while max_level ~=\
+    \ nested_level and #groups do\n    nested_level = max_level\n    max_level = groups[#groups]:gsub('%[(%a)]+',\
+    \ ''):match('[^()]+')\n  end\n  return nested_level\nend", "  -- The output will\
+    \ be a hash to store the nesting level for parentheses.\n  local output = {}",
+  "    local n1, n2, n3, n4, n5, n6 = {}, {}, {}, {}, {}, {}\n    local open = 1\n\
+    \    local opening = 0\n    local closed = {}\n    local closing = 0\n    local\
+    \ i = 1\n    for _,c in ipairs(paren_string) do\n        if c == '(' then\n  \
+    \          opening = opening + 1\n            open = open+1\n        elseif c\
+    \ == ')' then\n            closing = closing + 1\n            closed[open] = closing\n\
+    \            opening = opening - 1\n            closed = {}\n        elseif open\
+    \ == opening then\n            if opening > 0 then\n                table.insert(n1,\
+    \ opening)\n            end\n            table.insert(n2, i)\n            open\
+    \ = open - 1\n        else\n            table.insert(n6, i)\n            open\
+    \ = open + 1\n        end\n        i = i+1\n    end\n    for i=#n1-1,1,-1 do\n\
+    \        local current_count = n1[i]\n        local previous_count = n2[i-1]\n\
+    \        local max_count = math.max(current_count,previous_count)\n        for\
+    \ j = current_count+1,max_count do\n            table.insert(n3,j)\n        end\n\
+    \    end\n    for i=#n6-1,1,-1 do\n        local current_count = n6[i]\n     \
+    \   local previous_count = n5[i-1]\n        local max_count = math.max(current_count,previous_count)\n\
+    \        for j = current_count+1,max_count do\n            table.insert(n4,j)\n\
+    \        end\n    end\n    for i=#n3-1,1,-1 do\n        table.insert(n5,i)\n \
+    \   end\n    return n1,n2,n3,n4,n5,n6\nend", "    local level = 0\n    local max\
+    \ = 0", "   -- Use this instead of recursive `parse_nested_parens` because this\
+    \ does not require additional stack frames\n   local parsed_values = {}\n   local\
+    \ current_level_stack = {}\n   for paren in string.gmatch(paren_string, '([^()]+)')\n\
+    \   do\n      if paren ~= '' then\n         if paren:sub(1, 1) ~= '(' then\n \
+    \           table.insert(current_level_stack, -1)\n         else\n           \
+    \ table.insert(current_level_stack, #current_level_stack)\n         end\n    \
+    \  end\n   end", "  local parsed_string = {}\n  local nesting_level = 0\n  for\
+    \ _, string in ipairs(split(paren_string)) do\n    if string == ')' then\n   \
+    \   parsed_string[nesting_level] = nesting_level + 1\n    elseif string == '('\
+    \ then\n      nesting_level = nesting_level - 1\n    else\n      nesting_level\
+    \ = nesting_level + 1\n      parsed_string[nesting_level] = nesting_level\n  \
+    \  end\n  end\n  return parsed_string\nend", "    local paren_count = {}\n   \
+    \ local max_level = 0\n    for i, v in ipairs(paren_string) do\n        local\
+    \ open_bracket = v:sub(1,1)\n        local close_bracket = v:sub(2,2)\n      \
+    \  local open_bracket = open_bracket == \"(\" and 1 or 0\n        local close_bracket\
+    \ = close_bracket == \")\" and -1 or 0\n        paren_count[open_bracket] = paren_count[open_bracket]\
+    \ + 1\n        if paren_count[open_bracket] > max_level then\n            max_level\
+    \ = paren_count[open_bracket]\n        end\n        paren_count[close_bracket]\
+    \ = paren_count[close_bracket] - 1\n        if paren_count[close_bracket] < 0\
+    \ then\n            error(\"parentheses mismatch: unbalanced parentheses at \"\
+    \ .. i)\n        end\n    end\n    return max_level\nend", "    local max_level\
+    \ = 0\n    local output_string = ''\n    for paren_string, paren_level in pairs(paren_string:gsub('(%[(](%[)][^)]*)',\
+    \ ''):gsub('%[(]', '[').gsub('%[)]', ']')):gmatch('(%[(][^)]+%)') do\n       \
+    \ if paren_level > max_level then\n            max_level = paren_level\n     \
+    \       output_string = paren_string\n        end\n    end\n    return max_level,\
+    \ output_string\nend", "   local max_level = 0\n   local max_level_groups = {\
+    \ } -- We store the group numbers for every level of nesting we find\n   local\
+    \ last_group = 1\n   for paren in string.gmatch(paren_string, '%([()]+)')\n  \
+    \ do\n      if max_level > 1 then\n         -- If the parentheses level has increased,\
+    \ then check if it is the max level we are looking for\n         if string.sub(paren,\
+    \ 1, 1) == ')' then\n            -- If the level has increased, then add the group\
+    \ number to the list for that level\n            if max_level_groups[max_level]\
+    \ == nil then\n               max_level_groups[max_level] = last_group\n     \
+    \       else\n               max_level_groups[max_level] = max_level_groups[max_level]\
+    \ .. ','\n               max_level_groups[max_level] = max_level_groups[max_level]\
+    \ .. last_group\n            end\n            max_level = max_level - 1\n    \
+    \     elseif max_level == 1 then\n            -- If the level has decreased, then\
+    \ remove the oldest group number from the list\n            max_level_groups[max_level]\
+    \ = string.sub(paren, 2)\n         end\n      end\n      last_group = last_group\
+    \ + 1\n   end\n   return max_level_groups\nend", "  if paren_string == nil then\n\
+    \    return 0\n  end\n  local brackets = 0\n  local open_bracket = 0\n  local\
+    \ close_bracket = 0\n  local level = 0", "  local max_level = 0\n  local max_level_stack\
+    \ = {}\n  for paren_char in string.gmatch(paren_string, '%[(%a)]') do\n    local\
+    \ level = 1\n    if paren_char == ')' then\n      level = max_level\n    elseif\
+    \ paren_char == '(' then\n      level = max_level - 1\n    end\n    max_level_stack[#max_level_stack\
+    \ + 1] = level\n  end\n  return max_level_stack\nend", "  local levels = { }\n\
+    \  local parens  = { }", "  -- Use a dict to store the stack of nested parens\n\
+    \  -- Initialize it with empty paren array\n  local stack = {}\n  -- Initialize\
+    \ maximum level of nesting\n  local max_level = 1\n  -- Iterate over each character\
+    \ in the paren string\n  for i, c in ipairs(paren_string) do\n    -- If the character\
+    \ is a left parenthesis, add it to the stack\n    -- If the character is a right\
+    \ parenthesis, remove the top most element from the stack\n    if c == '(' then\n\
+    \      table.insert(stack, c)\n    -- If the character is a space, remove all\
+    \ elements from the stack\n    -- Otherwise, push it to the stack\n    elseif\
+    \ c == ' ' then\n      for j = 1, #stack do\n        table.remove(stack, 1)\n\
+    \      end\n    else\n      table.insert(stack, c)\n    end\n    -- Check if the\
+    \ current level of nesting is the maximum\n    if #stack > max_level then\n  \
+    \    max_level = #stack\n    end\n  end\n  return max_level\nend", "   local levels\
+    \ = { }\n   local paren_stack = { }", "   local parsed_parens = {}\n   for s in\
+    \ string.gmatch(paren_string, \"([^()]+)(%[(.-)])\") do\n      local num_paren\
+    \ = s[1]\n      local paren = string.sub(s[2], 1, num_paren - 1)\n      table.insert(parsed_parens,\
+    \ paren)\n   end\n   return table.max(parsed_parens)\nend", "    local result\
+    \ = {}\n    for paren_group in pairs(split(paren_string, ' '))\n    do\n     \
+    \   local level = 1\n        for paren in pairs(paren_group) do\n            if\
+    \ paren ~= '(' and paren ~= ')' then\n                level = level + 1\n    \
+    \        end\n        end\n        table.insert(result, level)\n    end\n    return\
+    \ result\nend", "    if type(paren_string) ~= 'string' then\n        error('Nested\
+    \ parens string should be string')\n    end", "  -- We use Lua's own parser for\
+    \ handling nested-parentheses because Lua can only do recursion on its own syntax.\n\
+    \  local parser = require(\"parser.c\")\n  return parser:parse([paren_string])\n\
+    end", "    local level = 0\n    local current_group = 0\n    local output_vector\
+    \ = {}\n    for paren in split(paren_string, \" \") do\n        if paren == \"\
+    (\" then\n            level = level + 1\n            current_group = current_group\
+    \ + 1\n            output_vector[current_group] = level\n        elseif paren\
+    \ == \")\" then\n            level = level - 1\n            current_group = current_group\
+    \ - 1\n            output_vector[current_group] = level\n        elseif level\
+    \ == 0 then\n            output_vector[current_group] = level\n        end\n \
+    \   end\n    return output_vector\nend", "    local result = 0\n    local current_level\
+    \ = 0\n    local group_string = ''\n    for c in string.gmatch(paren_string, \"\
+    %W\") do\n        if c == '(' then\n            current_level = current_level\
+    \ + 1\n            group_string = group_string .. c\n        elseif c == ')' then\n\
+    \            current_level = current_level - 1\n            group_string = group_string\
+    \ .. c\n        else\n            current_level = current_level\n            group_string\
+    \ = group_string .. c\n        end\n    end\n    for c in string.gmatch(group_string,\
+    \ \"%W\") do\n        if current_level == 0 then\n            result = result\
+    \ + 1\n        end\n    end\n    return result\nend", "   local max_level = 0\n\
+    \   local counts = {}\n   local paren_stacks = {}\n   for paren in string.gmatch(paren_string,\
+    \ '%[(%a*)%s*(%a*)%]') do\n      local paren_stack = paren_stacks[#paren_stacks]\n\
+    \      local level, paren = string.match(paren, '(%a*)%s*(%a*)')\n      if level\
+    \ == 0 then\n         -- Level 0 indicates an empty group.\n         paren_stack\
+    \ = nil\n      elseif level == max_level then\n         -- This paren group is\
+    \ nested one level higher than the previous one.\n         paren_stacks[#paren_stacks\
+    \ + 1] = paren_stack\n      else\n         -- This paren group is nested one level\
+    \ lower than the previous one.\n         paren_stacks[#paren_stacks + 1] = paren_stack\
+    \ or {}\n         paren_stacks[#paren_stacks][1] = paren\n         max_level =\
+    \ level\n      end\n      local counts[#counts + 1] = level -- Level counter\n\
+    \   end\n   return counts\nend", "  local nested_levels  = {}\n  local paren_index\
+    \ = 1", "  local parens = { }\n  local i = 1\n  while i <= #paren_string do\n\
+    \    local start = i\n    local level = 1\n    while i <= #paren_string do\n \
+    \     if paren_string[i] ~= '(' and paren_string[i] ~= ')' then\n        level\
+    \ = level + 1\n        i = i + 1\n      else\n        local end = i\n        level\
+    \ = level - 1\n        i = i + 1\n        if level == 0 then\n          parens[#parens\
+    \ + 1] = end - start\n        end\n      end\n    end\n  end\n  return parens\n\
+    end", "  local level = 0\n  local paren_count = 0\n  local bracket_count = 0\n\
+    \  local depth = 1\n  local groups = {}\n  local in_group\n  local last_group\n\
+    \  local last_group_bracket\n  local last_group_count\n  local last_group_counts\n\
+    \  local last_group_brackets", "  local results = {}\n  local max_level = 0\n\
+    \  for s in str:gmatch('%(%((%[^()]*))%(%((%[^()]*))%(%((%[^()]*)))%)')do\n  \
+    \  results[#results+1] = #results + 1\n    if s ~= '' then\n      if s:sub(1,\
+    \ 1) ~= '(' and s:sub(1, 1) ~= ')' then\n        return results(#results+1)\n\
+    \      end\n      local level = s:find(')', 1, true) + 2\n      if level > max_level\
+    \ then\n        max_level = level\n      end\n    end\n  end\n  return max_level\n\
+    end", "  local result = {}\n  for k, v in pairs(paren_string) do\n    if v ==\
+    \ \"(\" then\n      if #result > 0 then\n        result[#result + 1] = #k\n  \
+    \    else\n        result[#result+1] = #k\n      end\n    elseif v == \")\" then\n\
+    \      local j = result[1]\n      if result[1] ~= 0 then\n        result[1] =\
+    \ j\n      else\n        result[1] = nil\n      end\n    else\n      result[#result\
+    \ + 1] = #k\n    end\n  end\n  return result\nend", "  local parsed_paren = {}\n\
+    \  local level = 1\n  local current_level = 0\n  local open_paren = 1\n  local\
+    \ open_paren_count = 1\n  for char in paren_string:gmatch(\"[^()]+\") do\n   \
+    \ if char == '(' then\n      open_paren_count = open_paren_count + 1\n      level\
+    \ = level + 1\n      open_paren = open_paren + 1\n    elseif char == ')' then\n\
+    \      level = level - 1\n      if level == 0 then\n        current_level = current_level\
+    \ + 1\n      else\n        open_paren = open_paren - open_paren_count\n      \
+    \  current_level = current_level - 1\n      end\n    elseif char == '(' then\n\
+    \      open_paren_count = open_paren_count + 1\n      level = level + 1\n    end\n\
+    \    table.insert(parsed_paren, level)\n  end\n  return parsed_paren\nend", " \
+    \ local nested = 0\n  local level = {}\n  local paren_stack = {}\n  local open_bracket\
+    \ = 1", "    local opening = 0\n    local opening_symbol = paren_string:sub(1,1)\n\
+    \    local opening_count = 1\n    local opening_symbol_index = 1\n    local opening_symbols\
+    \ = {}\n    local opening_symbols_index = 1\n    local current_symbol = nil\n\
+    \    local current_symbol_index = 1\n    local opening_symbol = paren_string:sub(1,1)\n\
+    \    local opening_count = 1\n    local opening_symbol_index = 1\n    local opening_symbols\
+    \ = {}\n    local opening_symbols_index = 1\n    local current_symbol = nil\n\
+    \    local current_symbol_index = 1\n    local closing = 0\n    local closing_symbol\
+    \ = paren_string:sub(1,1)\n    local closing_count = 1\n    local closing_symbol_index\
+    \ = 1\n    local closing_symbols = {}\n    local closing_symbols_index = 1\n \
+    \   local current_symbol = nil\n    local current_symbol_index = 1\n    local\
+    \ depth = 1\n    local depth_max = 0\n    local depth_index = 1\n    local group_size\
+    \ = 1\n    local groups = []\n    local groups_index = 1\n    local group_symbol\
+    \ = nil\n    local group_symbol_index = 1\n    local group_open_count = 0\n  \
+    \  local group_open_count_index = 1\n    local group_open_symbol = nil\n    local\
+    \ group_open_symbol_index = 1\n    local group_close_count = 0\n    local group_close_count_index\
+    \ = 1\n    local group_close_symbol = nil\n    local group_close_symbol_index\
+    \ = 1\n    while opening_symbol_index <= #paren_string\n        do\n         \
+    \   if opening_symbol:byte(0) == opening_symbol_index then\n                opening\
+    \ = opening_symbol_index\n                opening_count = 1\n                opening_symbol_index\
+    \ = opening_symbol_index + 1\n                opening_symbols[opening_symbol_index]\
+    \ = opening_count\n            else\n                opening = opening_symbols[opening_symbol_index\
+    \ - 1]\n                opening_count = opening_symbols[opening_symbol_index -\
+    \ 1] + 1\n                opening_symbol_index = opening_symbol_index + 1\n  \
+    \              opening_symbols[opening_symbol_index] = opening_count\n       \
+    \     end\n            if opening_symbol:byte(0) == closing_symbol_index then\n\
+    \                closing = closing_symbol_index\n                closing_count\
+    \ = 1\n                closing_symbol_index = closing_symbol_index + 1\n     \
+    \           closing_symbols[closing_symbol_index] = closing_count\n          \
+    \  else\n                closing = closing_symbols[closing_symbol_index - 1]\n\
+    \                closing_count = closing_symbols[closing_symbol_index - 1] + 1\n\
+    \                closing_symbol_index = closing_symbol_index", "    local count\
+    \ = 1\n    local level = 0\n    local max_level = 0\n    local index = 0\n   \
+    \ local groups = {}\n    local group = ''\n    for i = 1, #paren_string, 1 do\n\
+    \        local char = paren_string[i]\n        if char == '(' then\n         \
+    \   count = count + 1\n            level = level + 1\n            if count > max_level\
+    \ then\n                max_level = count\n                index = i\n       \
+    \     end\n        elseif char == ')' then\n            count = count - 1\n  \
+    \          if level > 1 then\n                level = level - 1\n            end\n\
+    \        elseif char == ' ' then\n            if level <= max_level then\n   \
+    \             if group == '' then\n                    group = groups:new()\n\
+    \                end\n                group = group:new(char)\n            elseif\
+    \ level ~= 0 then\n                group = groups:new()\n            end\n   \
+    \     elseif char == '(' or char == '[' or char == ']' then\n            if level\
+    \ ~= 0 then\n                level = level - 1\n                group:new(char)\n\
+    \            end\n        elseif level > 0 then\n            level = level + 1\n\
+    \            group:new(char)\n        end\n    end\n    return groups:len()\n\
+    end", "  local num_groups = #paren_string\n  local groups = {}", "  local levels\
+    \ = { 0 }\n  local groups = { 1 }\n  local group = 0\n  local paren_char = 0\n\
+    \  for c in string.gmatch(paren_string, '()()') do\n    if c == '(' then\n   \
+    \   if paren_char == 1 then\n        groups[group] = levels[group] + 1\n     \
+    \ else\n        levels[group] = levels[group] + 1\n      end\n      group = group\
+    \ + 1\n      levels[group] = 1\n      groups[group] = levels[group] + 1\n    \
+    \  paren_char = 0\n    elseif c == ')' then\n      levels[group] = levels[group]\
+    \ - 1\n      if group > 1 then\n        groups[group] = levels[group] + 1\n  \
+    \    elseif group == 1 and levels[group] == 0 then\n        groups[group] = levels[group]\
+    \ + 1\n      end\n      if group > groups[group] then\n        groups[group] =\
+    \ groups[group] - 1\n      end\n      group = group - 1\n      paren_char = 1\n\
+    \    end\n  end\n  return table.concat(groups)\nend", "  if paren_string == nil\
+    \ then\n    return nil\n  end", "\t-- Initialize our result to an empty table.\n\
+    \tlocal result = {}", "  local nesting = 0\n  local result = {length = 0}", "\t\
+    local nested_level = {}\n\tfor _, group in ipairs(split(paren_string, \" \"))\n\
+    \tdo\n\t\tlocal max_level = 1\n\t\tfor i, item in ipairs(split(group, \"(\"))\
+    \ do\n\t\t\tlocal level = split(item, \"()\")\n\t\t\tif not nested_level[i] then\n\
+    \t\t\t\tnested_level[i] = level\n\t\t\telse\n\t\t\t\tmax_level = tonumber(max(nested_level[i],\
+    \ level[1]))\n\t\t\tend\n\t\tend\n\t\tnested_level[#nested_level + 1] = max_level\n\
+    \tend\n\treturn nested_level\nend", "  local result = {}\n  for s in str:gmatch'(%[(%[(%[(%[(%[(%[)])])])])]+)\
+    \ do\n    local level = 1\n    if s ~= '(' and s ~= ')' then\n      level = 0\n\
+    \    end\n    result[#result + 1] = level\n  end\n  return result\nend", "   local\
+    \ max_level = -2\n   local level = 0\n   for paren in string.gmatch(paren_string,\
+    \ \"()\"..paren_string) do\n      if level > max_level then\n         max_level\
+    \ = level\n      end\n      if paren == '(' or paren == ')' then\n         level\
+    \ = level + 1\n      elseif paren == '{' then\n         level = level + 1\n  \
+    \    elseif paren == '}' then\n         level = level - 1\n      end\n   end\n\
+    \   return max_level\nend", "  local stack = {}\n  local level = 0\n  local max_level\
+    \ = 0\n  for i, char in ipairs(paren_string) do\n    if char == '(' or char ==\
+    \ ')' then\n      if stack[#stack] == nil then\n        stack[#stack + 1] = level\n\
+    \      elseif stack[#stack] ~= nil then\n        level = stack[#stack]\n     \
+    \ else\n        stack[#stack + 1] = level\n        level = level + 1\n      end\n\
+    \      level = level - 1\n      max_level = math.max(max_level, level)\n    else\n\
+    \      stack[#stack + 1] = level\n      level = level + 1\n    end\n  end\n  return\
+    \ max_level\nend", "    local max_level = 0\n    local level = 0\n    for _,char,_\
+    \ in ipairs(paren_string) do\n        if char == '(' or char == '{' then\n   \
+    \         level = level + 1\n            if level > max_level then\n         \
+    \       max_level = level\n            end\n        elseif char == ')' or char\
+    \ == '}' then\n            level = level - 1\n        end\n    end\n    return\
+    \ max_level\nend", "  local paren_level = { }\n  local current_depth = 1\n  local\
+    \ max_depth = 0", "  local paren_string = paren_string\n    or ''\n  local i,\
+    \ j, open_count, open_tab\n  local max_level = -1\n  local open_paren = 0", " \
+    \ local max_level = -1\n  local groups = {}\n  local paren_stacks = {}\n  for\
+    \ paren in string.gmatch(paren_string, \"(%[(%a)]+)\")\n    do\n      local paren_level\
+    \ = #paren", "  if type(paren_string) ~= 'string' then\n    error(string.format('Nested\
+    \ parens argument should be a string, but got %s. Please provide a valid string.',\
+    \ type(paren_string)))\n  end", "    local parsed_string = {}\n    local current_level\
+    \ = 0\n    for i, c in ipairs(paren_string) do\n        if c == '(' then\n   \
+    \         current_level = current_level + 1\n        end\n        if c == ') then\n\
+    \            current_level = current_level - 1\n        end\n        parsed_string[#parsed_string\
+    \ + 1] = current_level\n    end\n    return parsed_string\nend", "   -- First\
+    \ we split the string on whitespaces.\n   local group_counts = {}\n   for _, group\
+    \ in ipairs(string.gmatch(paren_string, \"%S+\")) do\n      group_counts[#group_counts\
+    \ + 1] = nil\n   end\n   -- Then we add one to the count for each opening parenthesis.\n\
+    \   for i = 1, #paren_string:gmatch(\"[(]\") do\n      group_counts[#group_counts\
+    \ + 1] = i\n   end\n   -- The final output is the deepest level of nesting of\
+    \ parentheses.\n   return #group_counts\nend", "  local result = {{}}\n  local\
+    \ depth = 1\n  local pos = 1\n  local c = paren_string:sub(1, paren_string:find(\"\
+    \ \"))\n  repeat\n    table.insert(result, c)\n    pos = pos + 1\n    c = paren_string:sub(pos,\
+    \ paren_string:find(\" \", pos))\n  until c == nil\n  depth = #result - 1\n  return\
+    \ result, depth\nend", "   local function is_pair(group)\n      return (type(group)\
+    \ == 'table' and (#group > 0)) or\n             (type(group) == 'string' and group:find('%^%')\
+    \ ~= nil)\n   end", "  local levels\n  local paren_pairs = paren_string:gmatch('%([%w%)]+(?:[%w%)]*)*)')\n\
+    \  if paren_pairs ~= nil then\n    local level = 0\n    local paren_pairs = paren_pairs:gsub('%([%w%)]+)',\
+    \ function(s) return level = level + 1 end)\n    local parsed_pairs = paren_pairs:gsub('%([%w%)]+(?:[%w%)]*)*)',\
+    \ function(s) return level = level - 1 end)\n    levels = parsed_pairs:gsub('%[%w%]',\
+    \ function(s) return level = level + 1 end)\n  else\n    levels = paren_string:gsub('%[%w%]',\
+    \ function(s) return level = level + 1 end)\n  end\n  return levels\nend", " \
+    \ -- The idea is to parse the input string recursively, and record the deepest\
+    \ level of nesting of parentheses.\n  local parsed_brackets = {}\n  local opening_cnt\
+    \ = 0", "    local level = 0\n    local output = {}\n    for paren_string in string.gmatch(paren_string,\
+    \ \"(%S+)\") do\n        -- If level becomes greater than 1, then this is the\
+    \ deepest level of nesting\n        if level == 1 then\n            level = tonumber(paren_string)\n\
+    \        else\n            level = level - 1\n        end\n        table.insert(output,\
+    \ level)\n    end\n    return output\nend", "  local max = 0\n  local max_depth\
+    \ = -1\n  local current_depth = 0\n  for token in string.gmatch(paren_string,\
+    \ '()()') do\n    local depth = string.len(token)\n    if depth > max then\n \
+    \     max = depth\n      max_depth = current_depth\n    end\n    current_depth\
+    \ = current_depth + 1\n  end\n  return max_depth\nend", "    local nesting = 0\n\
+    \    local max_nesting = 0\n    local group = {}\n    for c in string.gmatch(paren_string,\
+    \ '()()') do\n        if c == '(' then\n            nesting = nesting + 1\n  \
+    \      elseif c == ')' then\n            nesting = nesting - 1\n        elseif\
+    \ nesting > max_nesting then\n            max_nesting = nesting\n            group\
+    \ = {}\n        end\n        table.insert(group, c)\n    end\n    return max_nesting,\
+    \ group\nend\n</code>\n<|/ a dscore=3 tags=lua,lua-patterns,string |>\n<| c |>\n\
+    This is a much better answer! Thank you very much!\n<|/ c |>\n<| a dscore=3 |>\n\
+    As long as you're OK with an approximation, you can do it with a pattern match:\n\
+    <code>", "  local levels = {} -- Dictionary of levels for each group of parentheses\n\
+    \  local groups = {} -- Dictionary of groups for each parentheses", "  -- Keep\
+    \ track of the current level \n  local level = 1\n  -- Keep track of the paren\
+    \ depth \n  local depth = 0\n  -- Store the paren depth \n  local paren_depth\n\
+    \  -- Iterate over each char in the string\n  for i, paren_char in ipairs(paren_string)\
+    \ do\n    -- Increment the depth \n    depth = depth + 1\n    -- If the current\
+    \ char is a paren \n    if paren_char == '(' then\n      -- Push the paren depth\
+    \ onto the stack \n      paren_depth = paren_depth + 1\n      -- If we have an\
+    \ outer level \n      if paren_depth > level then\n        -- Reset the depth\
+    \ \n        level = 0\n        -- If this current level is deeper than the deepest\
+    \ paren depth \n        if paren_depth > depth then\n          -- Store the deepest\
+    \ level\n          level = paren_depth\n        end\n      end\n    -- If the\
+    \ current char is a closing paren \n    elseif paren_char == ')' then\n      --\
+    \ Pop the paren depth \n      paren_depth = paren_depth - 1\n      -- If this\
+    \ current level is shallower than the paren depth \n      if paren_depth <= level\
+    \ then\n        -- Reset the depth to 1 \n        level = paren_depth\n      end\n\
+    \    end\n    -- If the current char is a space \n    else if paren_char == '\
+    \ ' then\n      -- If we're not in an outer-most level \n      if depth <= level\
+    \ then\n        -- Reset the depth to 0 \n        depth = 0\n      end\n    end\n\
+    \  end\n  return level\nend", "  local paren_depth = 1\n  local parens = {}\n\
+    \  for paren_name in string.gmatch(paren_string, \"%w(%a*)\")\n  do\n    local\
+    \ level = 1\n    local open_bracket = string.find(paren_name, \")(\", 1)\n   \
+    \ if open_bracket ~= nil then\n      level = paren_depth + 1\n      paren_depth\
+    \ =  paren_depth + 1\n      parens[paren_depth] = level\n    elseif open_bracket\
+    \ == nil then\n      level = paren_depth + 1\n      paren_depth = paren_depth\
+    \ + 1\n      parens[paren_depth] = level\n    end\n  end\n  return parens\nend",
+  "  local stack = {}\n  local max_nesting = 0\n  for word in paren_string:gmatch('([()()]+)')\
+    \ do\n    local num_paren = word:len()\n    local max_level_of_nesting = #stack",
+  "  local level = 0\n  local paren_stack = {}\n  local depth = 0\n  for paren in\
+    \ pairs(paren_string) do\n    local opening = paren\n    local opening_paren_level\
+    \ = 0\n    while opening:sub(1,1) == '(' do\n      opening = opening:sub(2)\n\
+    \      opening_paren_level = opening_paren_level + 1\n    end\n    local closing\n\
+    \    if opening == '(' then\n      closing = ')'\n    else\n      closing = '()'\n\
+    \    end\n    while opening:sub(1,1) ~= closing do\n      opening = opening:sub(1)\n\
+    \    end\n    if opening_paren_level > level then\n      level = opening_paren_level\n\
+    \    end\n    table.insert(paren_stack, opening)\n  end\n  return level\nend",
+  "  -- Add one to include the parentheses.\n  local depth = 1 + paren_string:find('()',\
+    \ 1, true) -- Add one to include the parentheses.\n  local levels_of_nesting =\
+    \ { }\n  local last_index = 1\n  local index = 1 -- Skip opening parentheses.\n\
+    \  repeat\n    -- Skip all whitespace before parentheses.\n    while paren_string:sub(1,\
+    \ index) == ' ' do\n      index = index + 1\n    end\n    local open_par = paren_string:sub(1,\
+    \ index)\n    local close_par = paren_string:sub(index)\n    if open_par == '('\
+    \ then\n      index = index + 1\n      local depth = depth + 1\n      levels_of_nesting[depth]\
+    \ = levels_of_nesting[depth] or {}\n      local new_level = levels_of_nesting[depth]\n\
+    \      new_level[open_par] = new_level[open_par] or 0\n      new_level[open_par]\
+    \ = new_level[open_par] + 1\n      last_index = index + open_par:len()\n     \
+    \ index = last_index\n    elseif open_par == ')' then\n      index = index + 1\n\
+    \      local depth = depth - 1\n      if depth ~= 0 then\n        levels_of_nesting[depth]\
+    \ = levels_of_nesting[depth] or {}\n        local new_level = levels_of_nesting[depth]\n\
+    \        new_level[close_par] = new_level[close_par] or 0\n        new_level[close_par]\
+    \ = new_level[close_par] + 1\n      else\n        levels_of_nesting[depth] = levels_of_nesting[depth]\
+    \ or {}\n        levels_of_nesting[depth][close_par] = levels_of_nesting[depth][close_par]\
+    \ or 0\n        levels_of_nesting[depth][close_par] = levels_of_nesting[depth][close_par]\
+    \ + 1\n      end\n      -- If the closed parenthesis is already the deepest level\
+    \ of nesting, don't add new levels.\n      if levels_of_nesting[depth][close_par]\
+    \ == levels_of_nesting[depth][close_par] then\n        last_index = index + close_par:len()\n\
+    \      end\n    end\n  until paren_string:sub(1, index) ~= '()'\n  return last_index,\
+    \ levels_of_nesting\nend", "  local max_level = 0\n  local stack = {}\n  for paren\
+    \ in split(paren_string) do\n    if paren == '(' or paren == ')' then\n      if\
+    \ #stack == 0 then\n        max_level = max_level + 1 -- Only one level of nesting\
+    \ allowed as per OP specification.\n      else\n        stack[#stack] = paren\
+    \ -- Add the element to stack\n      end\n    elseif paren == '[' then\n     \
+    \ stack[#stack] = paren -- Add the element to stack\n    elseif paren == ']' then\n\
+    \      local element = stack[#stack+1] -- Remove element from stack\n      if\
+    \ element ~= '(' then -- Make sure that element exists at last level of nesting\n\
+    \        -- Only one level of nesting allowed as per OP specification.\n     \
+    \   max_level = max_level + 1 -- Only one level of nesting allowed as per OP specification.\n\
+    \      elseif #stack > max_level then -- If nesting level is greater than maximum\
+    \ level then error.\n        -- Max level of nesting per OP specification is one\
+    \ level deeper than maximum nesting level.\n        error('Max level of nesting\
+    \ per OP specification is one level deeper than maximum nesting level.')\n   \
+    \   end\n      stack[#stack] = element -- Add element to stack\n      stack[#stack]\
+    \ = ')' -- Add closing parenthesis to stack\n    end\n  end\n  return max_level\n\
+    end", "    local current_group = 1\n    local max_group = 1\n    local paren_levels\
+    \ = {}\n    for paren_string in split(paren_string, '()') do\n        -- Count\
+    \ number of opening and closing parens\n        local opening_parens = paren_string:find('[()')\n\
+    \        local closing_parens = paren_string:find('[)]')\n        if opening_parens\
+    \ > 0 then\n            local num_groups = opening_parens - closing_parens + 1\n\
+    \            if num_groups > max_group then\n                max_group = num_groups\n\
+    \                current_group = num_groups\n            end\n        end\n  \
+    \      local closing_parens = paren_string:find(')')\n        if closing_parens\
+    \ > 0 then\n            local num_groups = closing_parens - opening_parens + 1\n\
+    \            if num_groups > current_group then\n                current_group\
+    \ = num_groups\n            end\n        end", "    local groups = {} -- Keep\
+    \ track of nested parentheses groups\n    local depth = 0 -- Keep track of the\
+    \ deepest level of nesting in the parentheses\n    local group = 0 -- Keep track\
+    \ of which group of parentheses we're working on\n    for paren in string.gmatch(paren_string,\
+    \ '%()[(](%w+)') do\n        if paren then\n            groups[group] = paren\
+    \ -- If we've found an opening parentheses, remember it for later\n        elseif\
+    \ groups[group] then\n            groups[group] = groups[group] .. ' ' .. paren\
+    \ -- Else if we've found a closing parentheses, remember the closing parentheses\n\
+    \        else\n            -- If we haven't yet seen the closing parentheses,\
+    \ increment the depth\n            groups[group] = ''\n        end\n        group\
+    \ = group + 1\n    end\n    return { group = group, groups = groups, depth = depth\
+    \ }\nend", '  local depth = { }', "  local levels\n  local nesting\n  local paren_groups\
+    \ = paren_string:gsub('(%b)(%a+)([^%a]*)', '%1,%2,%3')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  local paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  local paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  local paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  local paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('(%b)(%a+)([^%a]+)(%b*)',\
+    \ '%1,%2,%3,%4,%4')\n  paren_groups = paren_groups:gsub('", "    -- Split string\
+    \ by parens\n    local parens = string.gsub(paren_string, \"[()]\", \"%1%\")\n\
+    \    local nested_parens = {}\n    for idx, paren in ipairs(parens) do\n     \
+    \   -- If paren is empty, ignore it and continue\n        if paren == \"\" then\n\
+    \            -- If there are still group of same kind, ignore this group\n   \
+    \         if idx+1 ~= #parens then\n                local last_level = 1\n   \
+    \             local last_level_paren = parens\n                local last_level_paren_idx\
+    \ = idx\n                while idx+1 < #parens and\n                        string.sub(\
+    \ parens, idx, idx+1 ) ~= last_level_paren do\n                    last_level\
+    \ = last_level + 1\n                    last_level_paren = parens\n          \
+    \          last_level_paren_idx = idx\n                end\n                nested_parens[#nested_parens+1]\
+    \ = last_level\n                nested_parens[#nested_parens+1] = last_level_paren\n\
+    \                nested_parens[#nested_parens+1] = last_level_paren_idx\n    \
+    \        end\n        else\n            -- If there are groups of different kind,\
+    \ this group should be ignored\n            if idx == #parens then\n         \
+    \       nested_parens[#nested_parens+1] = nil\n            else\n            \
+    \    local last_level = 1\n                local last_level_paren = parens\n \
+    \               local last_level_paren_idx = idx\n                while idx+1\
+    \ < #parens and\n                        string.sub( parens, idx, idx+1 ) ~= last_level_paren\
+    \ do\n                    last_level = last_level + 1\n                    last_level_paren\
+    \ = parens\n                    last_level_paren_idx = idx\n                end\n\
+    \                nested_parens[#nested_parens+1] = last_level\n              \
+    \  nested_parens[#nested_parens+1] = last_level_paren\n                nested_parens[#nested_parens+1]\
+    \ = last_level_paren_idx\n            end\n        end\n    end\n    return nested_parens\n\
+    end", "  local paren_groups = string.gsub(paren_string, '[^()]+', ' '):gsub('()',\
+    \ '{}')\n  local function check_group(group)\n    if string.find(group, '(%S+)')\
+    \ then\n      local last_index = string.len(group)\n      local last_group = group\n\
+    \      local nested = 0\n      -- Find the index of the group that starts with\
+    \ %S\n      -- The loop is exited when the group is found and nested is 0.\n \
+    \     while nested == 0 and string.find(group, '%S') do\n        nested = 1\n\
+    \        local index = string.find(group, '(%S+)')\n        group = string.sub(group,\
+    \ index + 2)\n        last_index = index\n      end\n      return {index, nested\
+    \ == 0}\n    end\n  end\n  local index = 1\n  local group = paren_groups[index]\n\
+    \  while group do\n    index = index + 1\n    group = paren_groups[index]\n  end\n\
+    \  assert(index > 1)\n  local max_nested = 1\n  local max_index = 1\n  local max_group\
+    \ = ''\n  local index = 1\n  while index do\n    local group = paren_groups[index]\n\
+    \    if not group then\n      break\n    end\n    if string.find(group, '(') then\n\
+    \      local nested, found = check_group(group)\n      if nested then\n      \
+    \  local subgroup = string.sub(group, found)\n        local nested = nested -\
+    \ 1\n        if nested > max_nested then\n          max_nested = nested\n    \
+    \      max_index = index\n          max_group = subgroup\n        end\n      end\n\
+    \    end\n    index = index + 1\n  end\n  return {max_index, max_nested, max_group}\n\
+    end", "  local groups = {}\n  local current_level = 0\n  local stack = {}", " \
+    \ local function count_level(paren_groups)\n    local level = 0\n    for _, paren_group\
+    \ in ipairs(paren_groups) do\n      if paren_group == '(' then\n        level\
+    \ = level + 1\n      elseif paren_group == ')' then\n        level = level - 1\n\
+    \      end\n    end\n    return level\n  end\n  local paren_groups, paren_string\
+    \ = paren_string:gsub('(%w+)( )([()])', function(a, b, c)\n    local nested_groups\
+    \ = c:gsub('(%w+)( )(%w+)( )(%w+)( )(%w+)( )([()])', function(a, b, c, d, e, f)\n\
+    \      local last_group = d or e or f\n      local level_count = count_level({a,\
+    \ b, c})\n      if level_count > 1 then\n        return {last_group, level_count}\n\
+    \      elseif level_count < 1 then\n        -- Remove the whole parentheses.\n\
+    \        return {last_group}\n      else\n        -- Remove the one group and\
+    \ keep the other.\n        return {last_group:sub(1, last_group:len()), level_count}\n\
+    \      end\n    end)\n    return {a, b}\n  end)\n  return count_level(paren_groups)\n\
+    end", "    if paren_string:match('^(%a+%b+)\\(%a\\)\\((%a\\)\\(%b\\)\\)$') then\n\
+    \        -- print('nested parens')\n        local a = {0}\n        local i = 0\n\
+    \        while i <= #paren_string:gmatch('[^()]+') do\n            -- print('i=',i)\n\
+    \            local count = paren_string:sub(i,i) == '(' and 1 or -1\n        \
+    \    i = i + count\n            i = i - 1\n            table.insert(a,count)\n\
+    \        end\n        return a\n    end\n    -- print('no nested parens')\n  \
+    \  return nil\nend", "    local levels = {}\n    local level_stack = {}", "  --\
+    \ Store the deepest level of parentheses encountered so far.\n  local max_level\
+    \ = 0\n  -- Store the list of groups of parentheses encountered so far.\n  local\
+    \ groups = {}\n  -- Iterate through the string and add the parentheses group to\
+    \ the list.\n  for _, charcode in ipairs(paren_string) do\n    if charcode ==\
+    \ '(' then\n      max_level = max_level + 1\n    elseif charcode == ')' then\n\
+    \      max_level = max_level - 1\n    end\n    -- Append the group to the list\
+    \ when parentheses are encountered.\n    if max_level ~= 0 then\n      table.insert(groups,\
+    \ max_level)\n    end\n  end\n  -- Return the deepest level of nesting.\n  return\
+    \ max_level, groups\nend", "  local parsed = {}\n  local stack = {}\n  local level\
+    \ = tonumber(1)\n  local opening_braces = 1", '  local nested_parens = {}', " \
+    \   local stack = { 0 }\n    local level = 0\n    local output = {}", "   local\
+    \ result = {}\n   local depth = 0\n   for paren in string.gmatch(paren_string,\
+    \ '%w(%w(%w(%w(')) do\n      if paren then\n         local level = string.len(paren)\n\
+    \         if result[level] == nil then\n            result[level] = level\n  \
+    \       else\n            result[level] = math.max(result[level], level)\n   \
+    \      end\n      end\n   end\n   return result\nend", "  local current_level\
+    \ = 1 -- Nested parentheses level is 1 for the innermost parentheses.\n  local\
+    \ max_level = 0", "  if paren_string:match('^%[(.-)%]') then\n    local opening_bracket\
+    \ = paren_string:sub(1, 1)\n    local nested_level = 1\n    while opening_bracket\
+    \ ~= ')' do\n      nested_level = nested_level + 1\n      opening_bracket = paren_string:sub(1,\
+    \ opening_bracket:len())\n    end\n    return {nested_level}\n  end\nend", " \
+    \ local levels = { 0 }\n  local result = 0", "   local levels, stack, level =\
+    \ {}, {}, 0\n   for token in string.gmatch(paren_string, '()()') do\n      levels[#levels\
+    \ + 1] = level\n      stack[#stack + 1] = token\n      level = level + 1\n   end\n\
+    \   return levels\nend\n</code>\nTo check if a string is valid, you could then\
+    \ do:\n<code>", "  local paren_stack = 1\n  local paren_groups = {}\n  local paren_depths\
+    \ = {}\n  local paren_nesting = 0", "  local levels = {}\n  local depth = 0\n\
+    \  local paren = 0\n  local in_parentheses = false\n  local level\n  for i = 1,\
+    \ #paren_string do\n    if paren_string[i] ~= ')' then\n      if in_parentheses\
+    \ then\n        level = levels[level]\n        level = level + 1 or 1\n      elseif\
+    \ paren_string[i] == '(' then\n        level = levels[level] or 0\n        levels[level]\
+    \ = level\n      else\n        levels[level] = level\n      end\n      level =\
+    \ level + 1\n    end\n    in_parentheses = paren_string[i] == '('\n    if paren_string[i]\
+    \ == '(' and not in_parentheses then\n      depth = depth + 1 or 1\n    end\n\
+    \    if paren_string[i] == ')' and in_parentheses then\n      depth = depth -\
+    \ 1 or 0\n    end\n  end\n  return depth\nend", "  local parsed_string = paren_string:gsub(\"\
+    ([^()]+)\")\n  local nested_count = 0\n  local results = {}\n  for _, substring\
+    \ in ipairs(parsed_string) do\n    if substring ~= ')' then\n      local open_bracket\
+    \ = substring:sub(1, 1)\n      if open_bracket == '(' or open_bracket == '{' or\
+    \ open_bracket == '[' then\n        nested_count = nested_count + 1\n      end\n\
+    \      if nested_count == 0 then\n        results[#results + 1] = 1\n      elseif\
+    \ nested_count == 1 then\n        results[#results + 1] = 2\n      else\n    \
+    \    results[#results + 1] = 3\n      end\n    end\n  end\n  return results\n\
+    end", "    local depth = 0\n    local max = 0\n    local result = 0\n    for paren_char\
+    \ in string.gmatch(paren_string, '%()()') do\n        if paren_char == '(' or\
+    \ paren_char == ')' then\n            depth = depth + 1\n        elseif paren_char\
+    \ == '{' or paren_char == '}' then\n            depth = depth - 1\n        end\n\
+    \        if depth > max then\n            max = depth\n            result = paren_char\
+    \ == '(' and 1 or -1\n        end\n    end\n    return result and max + 1 or 0\n\
+    end", "    local paren_pairs = {}\n    for paren_group in string.gmatch(paren_string,\
+    \ '(%S+)') do\n        table.insert(paren_pairs, 1)\n        if paren_group:sub(1,1)\
+    \ == '(' and paren_group:sub(-1) ~= '('\n        then\n            table.insert(paren_pairs,\
+    \ 0)\n        end\n    end", "    local paren_levels = {}\n    for _, paren_group\
+    \ in ipairs(split(paren_string, ' ')) do\n        local paren_level = 1\n    \
+    \    for _, paren in ipairs(split(paren_group, '()')) do\n            paren_level\
+    \ = paren_level + 1\n            table.insert(paren_levels, paren_level)\n   \
+    \     end\n    end\n    local max_level = table.max(paren_levels)\n    local max_level_nested_parens\
+    \ = max_level\n    local max_level_nested_parens_string = ''\n    for paren_level\
+    \ in paren_levels do\n        max_level_nested_parens = max_level_nested_parens\
+    \ - paren_level\n        if max_level_nested_parens == 0 then\n            break\n\
+    \        end\n        max_level_nested_parens_string = table.concat(paren_levels,\
+    \ ', ') .. ')' .. max_level_nested_parens_string\n    end\n    return max_level_nested_parens,\
+    \ max_level_nested_parens_string\nend", "  local level_stack = {}\n  local max_level_stack\
+    \ = {}", "    local paren_nest = 0\n    local paren_depth = 1\n    local paren_max_depth\
+    \ = 0\n    local paren_max_depth_count = 0\n    local paren_str = paren_string\n\
+    \    local paren_depth_string = ''", "  local result = {0}\n  local stack = {1}\n\
+    \  for paren_char in string.gmatch(paren_string, '()') do\n    local nest_level\
+    \ = stack[#stack]\n    local child_level = nest_level + 1\n    if child_level\
+    \ > result[#result] then\n      result[#result] = child_level\n    end\n    stack[#stack]\
+    \ = child_level\n  end\n  return result\nend", "    local groups = string.gmatch(paren_string,\
+    \ \"%[(%a*)%]\")\n    assert(#groups == 1)\n    local groups = string.gsub(groups[1],\
+    \ '()', ' ')\n    local levels_of_nesting = { }\n    local curr = 1\n    for char\
+    \ in string.gmatch(groups, \"()\") do\n        levels_of_nesting[curr] = levels_of_nesting[curr]\
+    \ or 1\n        curr = curr + 1\n    end\n    return table.max(levels_of_nesting)\n\
+    end", "    local function get_levels(paren_string)\n        local levels = {}\n\
+    \        for paren in pairs(paren_string:gsub('%[(%[(%[(%[%)%)%)]*)]', '()')):gmatch('%A')\n\
+    \            do\n                table.insert(levels, #levels)\n            end\n\
+    \        end\n        return levels\n    end", "   local max_count = 0\n   local\
+    \ max_level = 0\n   local paren_levels = {}\n   for _, _, _, paren_string in string.gmatch(paren_string,\
+    \ \"%[(%)] ()\") do\n      local paren_level = #(paren_string) - #(paren_string)\n\
+    \      if max_level < paren_level then\n         max_level = paren_level\n   \
+    \      max_count = paren_level\n      end\n      if paren_levels[paren_level]\
+    \ > 0 then\n         max_count = max_count\n      else\n         paren_levels[paren_level]\
+    \ = paren_levels[paren_level] + 1\n      end\n   end\n   return max_count, max_level\n\
+    end", "  local stack = {}\n  for _,paren in ipairs(paren_string) do\n    if paren\
+    \ ~= '(' then\n      stack[#stack + 1] = paren\n    end\n  end\n  return stack\n\
+    end", "  local paren_stack = Set()\n  local nest_level = 0", "  local paren_string\
+    \ = paren_string:gsub('(%a)(%a)(%a)', '\\2')\n  local level = 0\n  local result\
+    \ = 0\n  for paren in paren_string:gmatch('%S+') do\n    level = level + 1\n \
+    \   if paren:sub(1, 1) == ')' then\n      level = level - 1\n    end\n    result\
+    \ = max(level, result)\n  end\n  return result\nend", "  local paren_string =\
+    \ paren_string\n  local max_level_of_nesting = 1\n  local levels_of_nesting =\
+    \ {}\n  local index = 0\n  local level = 0", "    local max_level, paren_level\
+    \ = {0}, 0\n    for paren in string.gmatch(paren_string, '((%S+)) ')\n    do\n\
+    \        paren_level = max_level[paren_level]\n        max_level[paren_level +\
+    \ 1] = max_level[paren_level] + 1\n    end\n    return max_level\nend", "  --\
+    \ Recursive case\n  if string.sub(paren_string, 1, 1) == \"(\" then\n    local\
+    \ function helper(levels_so_far, paren_string)\n      local function find_next_paren_pair()\n\
+    \        return string.find(paren_string, \")\", true)\n      end", "    local\
+    \ counts = {} -- A dictionary of paren counts\n    local max_depth = 0 -- The\
+    \ maximum depth of the parentheses\n    local parentheses_depths = {} -- A dictionary\
+    \ of parentheses depths\n    local stack = {} -- Stack of open parentheses (for\
+    \ nested parentheses counting)\n    local stack_depth = 0 -- The depth of open\
+    \ parentheses in the stack", "  local max_nesting_level = 0\n  local level = 0\n\
+    \  local open_count = 0\n  local closed_count = 0\n  local results = {}\n  for\
+    \ char in paren_string:gmatch'()()' do\n    if char == '(' then\n      open_count\
+    \ = open_count + 1\n    elseif char == ')' then\n      closed_count = closed_count\
+    \ + 1\n    elseif char == ' ' then\n      level = level + 1\n      if open_count\
+    \ == closed_count then\n        results[#results + 1] = level\n      elseif level\
+    \ > max_nesting_level then\n        max_nesting_level = level\n        results[#results\
+    \ + 1] = 1\n      end\n      open_count = 0\n      closed_count = 0\n    else\n\
+    \      open_count = 0\n      closed_count = 0\n    end\n  end\n  return results\n\
+    end", "    local level_stack = [1]\n    local parent_level_stack = [1]\n    local\
+    \ paren_count = 0\n    local max_paren_count = 0\n    local paren_count = 0\n\
+    \    local paren_groups = {}\n    local paren_group_count = 0\n    local paren_group_paren_counts\
+    \ = {}\n    local paren_group_paren_levels = {}", "   local result = {}\n   local\
+    \ opening_bracket_count = 0\n   local opening_paranthesis_count = 0\n   for s\
+    \ in string.gmatch(paren_string, \"[^()]*\") do\n      if s == '(' and opening_paranthesis_count\
+    \ == 0 then\n         opening_paranthesis_count = opening_bracket_count\n    \
+    \  elseif s == ')' and opening_paranthesis_count == opening_bracket_count then\n\
+    \         result[#result + 1] = opening_bracket_count\n         opening_bracket_count\
+    \ = 0\n      elseif s == '(' and opening_paranthesis_count ~= 0 then\n       \
+    \  opening_bracket_count = opening_bracket_count + 1\n      elseif s == ')' and\
+    \ opening_paranthesis_count ~= opening_bracket_count then\n         opening_bracket_count\
+    \ = opening_bracket_count - 1\n      elseif s == ')' then\n         opening_paranthesis_count\
+    \ = opening_paranthesis_count - 1\n      elseif s == '(' then\n         opening_paranthesis_count\
+    \ = opening_paranthesis_count + 1\n      else\n         result[#result + 1] =\
+    \ opening_paranthesis_count\n      end\n   end\n   if opening_bracket_count ~=\
+    \ 0 then\n      error('Mismatched parentheses ')\n   end\n   return result\nend",
+  "    local max_level = 0\n    local max_level_levels = {}", "  local max_level =\
+    \ 0\n  local paren_stack = {}\n  local parens = {}", "    local num_open = nil\n\
+    \    local num_close = nil\n    local current_paren = nil\n    local current_depth\
+    \ = 0\n    local nested_parens = {}\n    for paren in string.gmatch(paren_string,\
+    \ '%b()()()()()()()()()') do\n        if paren == '(' or paren == '{' then\n \
+    \           -- New group\n            if current_depth == 0 then\n           \
+    \     current_depth = 1\n                current_paren = paren\n            else\n\
+    \                current_depth = current_depth + 1\n            end\n        elseif\
+    \ paren == ')' or paren == '}' then\n            -- Closing paren\n          \
+    \  if current_depth == 1 then\n                table.insert(nested_parens, current_depth)\n\
+    \                if num_open ~= nil and current_depth ~= num_open then\n     \
+    \               table.insert(nested_parens, nil)\n                end\n      \
+    \          num_open = nil\n                num_close = nil\n            else\n\
+    \                current_depth = current_depth - 1\n            end\n        else\n\
+    \            -- Opening paren\n            if current_depth == 1 then\n      \
+    \          if current_paren == '(' or current_paren == '{' then\n            \
+    \        num_open = current_depth\n                end\n            else\n   \
+    \             num_close = current_depth\n            end\n        end\n    end\n\
+    \    if num_open ~= nil then\n        table.insert(nested_parens, num_open)\n\
+    \    end\n    if num_close ~= nil then\n        table.insert(nested_parens, num_close)\n\
+    \    end\n    return table.concat(nested_parens, nil)\nend", "  local paren_levels\
+    \ = {}\n  local paren_level_stack = [1]", "    local level = 0\n    local nestings\
+    \ = {}\n    local levels_map = {}\n    local opening_parens = 0\n    for _, paren\
+    \ in ipairs(paren_string:gmatch('(([^()]+)|([^()]*%)*)')) do\n        if levels_map[paren]\
+    \ == nil then\n            nestings[level] = nestings[level + 1] + 1\n       \
+    \     levels_map[paren] = level\n        end\n        level = levels_map[paren]\n\
+    \    end\n    for i = 1, #nestings do\n        nestings[i] = level\n    end\n\
+    \    return nestings\nend", "  if paren_string == '' or paren_string:len() ==\
+    \ 0 then\n    return 0\n  end\n  local num_nested_par = 0\n  local bracket_level\
+    \ = 0\n  local last_char\n  for i=1,#paren_string,1 do\n    local char = paren_string:sub(i,i)\n\
+    \    local is_closed_par = last_char == '(' and char == ')'\n    local is_opened_par\
+    \ = last_char == '(' and char:sub(-1) == '('\n    local is_closed_bracket = last_char\
+    \ == '(' and char == ')'\n    local is_opened_bracket = last_char == '(' and char:sub(-1)\
+    \ == '('\n    if is_closed_par or is_closed_bracket then\n      bracket_level\
+    \ = bracket_level - 1\n    end\n    if is_opened_par or is_opened_bracket then\n\
+    \      bracket_level = bracket_level + 1\n    end\n    last_char = char\n    num_nested_par\
+    \ = num_nested_par + bracket_level\n  end\n  return num_nested_par\nend", "  local\
+    \ function parse_paren(nested_paren_string)\n    local last_position = 0\n   \
+    \ local nested_paren_level = 1\n    local paren_strings = nested_paren_string:gmatch('%[())]*%D+%[())]')\n\
+    \    local depth = 0\n    for _ in paren_strings do\n      local paren_string\
+    \ = paren_strings:sub(1, last_position - depth)\n      -- find the deepest group\n\
+    \      if paren_string == '(' or paren_string == '{' or paren_string == '[' then\n\
+    \        depth = depth + 1\n      else\n        depth = depth - 1\n      end\n\
+    \      if depth > nested_paren_level then\n        nested_paren_level = depth\n\
+    \      end\n      last_position = last_position + nested_paren_level + 1\n   \
+    \ end\n    return nested_paren_level\n  end\n  local function parse_nested_parens_helper(string,\
+    \ depth, paren_strings)\n    local nested_paren_level = parse_paren(paren_strings)\n\
+    \    for i = 1, depth do\n      string = string[nested_paren_level + 1]\n    end\n\
+    \    local new_string = string\n    if new_string ~= '' then\n      new_strings\
+    \ = new_string:gmatch('%[())]*%D+%[())]')\n      if #new_strings > 0 then\n  \
+    \      return parse_nested_parens_helper(string, depth + 1, new_strings)\n   \
+    \   else\n        return depth\n      end\n    end\n  end\n  return parse_nested_parens_helper(paren_string,\
+    \ 0, {})\nend", "    local groups = {}\n    local level = 0\n    for paren in\
+    \ string.gmatch(paren_string, '()()') do\n        groups[level] = level\n    \
+    \    level = level + 1\n    end\n    local result = {}\n    for _, group in ipairs(groups)\
+    \ do\n        result[group] = level\n    end\n    return result\nend", "  local\
+    \ levels = terralib.newlist()\n  local stack = terralib.newlist()\n  local level\
+    \ = 0\n  stack:insert(level)\n  levels:insert(level - 1)\n  while true do\n  \
+    \  if paren_string:sub(1, 1):match \"^[%[(]\" then\n      stack[#stack + 1] =\
+    \ stack[#stack] + 1\n      level = stack[#stack]\n      paren_string = paren_string:sub(2)\n\
+    \    end\n    if paren_string:sub(1, 1):match \"^[%[)]\" then\n      local level\
+    \ = stack[#stack]\n      levels[#levels + 1] = level\n      stack[#stack] = level\
+    \ - 1\n      paren_string = paren_string:sub(2)\n    end\n    if level == 0 then\n\
+    \      break\n    end\n  end\n  return levels\nend", "  local paren_table = {}\n\
+    \  local paren_count = 0\n  local opening_paren_idx = 0\n  local opening_paren_char_idx\
+    \ = 0\n  local depth = 0\n  local paren_depth = 0\n  for idx, c in ipairs(paren_string)\
+    \ do\n    if c == '(' and paren_count < depth+1 then\n      paren_table[paren_count]\
+    \ = {}\n      paren_count = paren_count + 1\n      opening_paren_idx = idx\n \
+    \     opening_paren_char_idx = idx\n      paren_depth = paren_depth + 1\n    end\n\
+    \    depth = depth + 1\n    if c == ')' then\n      paren_count = paren_count\
+    \ - 1\n      if paren_depth > 0 then\n        depth = depth - 1\n      end\n \
+    \     if paren_count == 0 then\n        paren_depth = paren_depth - 1\n      end\n\
+    \      if paren_count ~= 0 then\n        table.insert(paren_table, paren_depth,\
+    \ opening_paren_idx)\n      end\n    end\n  end\n  return paren_table\nend", " \
+    \ local level = 1\n  local stack = {}\n  local stack_size = 0\n  for c in paren_string:gmatch('[^()]+')\
+    \ do\n    local curr_level = 1\n    local curr_size = stack_size\n    stack[stack_size]\
+    \ = c\n    stack_size = stack_size + 1\n    while curr_size > stack_size do\n\
+    \      stack_size = stack_size + 1\n      curr_level = curr_level + 1\n      local\
+    \ curr_size = stack_size\n      stack[stack_size] = c\n      stack_size = stack_size\
+    \ + 1\n    end\n    if curr_level > level then\n      level = curr_level\n   \
+    \ end\n  end\n  return level\nend", "   local levels = { }\n   local stack = {}\n\
+    \   for _ in string.gmatch(paren_string, \"(%S+)\") do stack[#stack+1] = nil end\n\
+    \   for paren in string.gmatch(paren_string, \"(%S+)\") do\n      if paren ==\
+    \ \"(\" then\n         stack[#stack+1] = #stack\n      elseif paren == \")\" then\n\
+    \         local popped\n         if #stack > 1 then\n            popped = stack[#stack-1]\n\
+    \            stack[#stack-1] = nil\n         else\n            popped = nil\n\
+    \         end\n         levels[#levels + 1] = popped\n      elseif paren == \"\
+    ,\" then\n         stack[#stack+1] = nil\n      else\n         assert(false, \"\
+    unknown character '\" .. paren .. \"'\")\n      end\n   end\n   assert(#stack\
+    \ == 1)\n   return levels\nend", "    local nesting = 1\n    local paren_count\
+    \ = 0\n    local open_paren = 1\n    local close_paren = 1\n    local nested_paren_stack\
+    \ = {paren_string}\n    while nested_paren_stack:len() > 0 do\n        local nested_string\
+    \ = nested_paren_stack:pop()\n        for _, _, c in string.gmatch(nested_string,\
+    \ '()()') do\n            paren_count = paren_count + 1\n            if c == ')'\
+    \ then\n                nesting = nesting - 1\n            elseif c == '(' then\n\
+    \                nesting = nesting + 1\n            elseif nesting > open_paren\
+    \ and nesting <= close_paren then\n                nesting = nesting\n       \
+    \     end\n        end\n        open_paren, close_paren = nesting, paren_count\n\
+    \    end\n    return nesting\nend", "  local result = {}\n  local depth = 0\n\
+    \  for p in string.gmatch(paren_string, \"([^()]+)|(%R)\")\n  do\n    if string.find(p,\
+    \ \")(\", 1) then\n      depth = depth + 1\n    else\n      depth = depth - 1\n\
+    \    end\n    table.insert(result, depth)\n  end\n  return result\nend", "  local\
+    \ levels = {} -- Keep track of the levels of nesting.\n  local max_levels = {}\
+    \ -- Keep track of the maximum levels of nesting.\n  local paren_string = paren_string:gsub(\"\
+    \\\\(\", \"( \")\n  local paren_string = paren_string:gsub(\"\\\\)\", \" ) \"\
+    )\n  local paren_string = paren_string:gsub(\"[()]\", \"\")\n  local opening_brackets\
+    \ = #paren_string\n  local closing_brackets = 0\n  for i = 1, opening_brackets\
+    \ do\n    local char = paren_string[i]\n    local opening_count = levels[i] +\
+    \ 1\n    local closing_bracket = char:len()\n    local closing_count = closing_brackets\
+    \ - closing_brackets + 1\n    levels[i] = opening_count\n    max_levels[i] = closing_count\n\
+    \    closing_brackets = closing_brackets + 1\n  end\n  return max_levels\nend",
+  "  local max_level = 0\n  local max_level_paren = 0\n  local paren_count = 0\n \
+    \ local paren_groups = {}", "    local parens_level = {}\n    local last_paren_level\
+    \ = 0\n    for paren in pairs(paren_string:gmatch('%[(%)%]([()]+)')) do\n    \
+    \    local current_level_of_nesting = parens_level[paren]:len()\n        if last_paren_level\
+    \ == current_level_of_nesting then\n            last_paren_level = 1\n       \
+    \ else\n            last_paren_level = current_level_of_nesting\n        end\n\
+    \        parens_level[paren] = last_paren_level\n    end\n    return parens_level\n\
+    end", "  local level = 1\n  local max_level = #paren_string\n  local stack = {}\n\
+    \  local nesting = 1\n  local parens_count = 0\n  for paren in paren_string:gmatch'()'\
+    \ do\n    if paren == '(' or paren == '[' then\n      nesting = nesting + 1\n\
+    \      parens_count = parens_count + 1\n      stack[#stack + 1] = nesting\n  \
+    \  elseif paren == ')' then\n      nesting = nesting - 1\n      parens_count =\
+    \ parens_count - 1\n      stack[#stack + 1] = nesting\n    end\n    if nesting\
+    \ > max_level then\n      max_level = nesting\n    end\n  end\n  return max_level\n\
+    end", "   local level_of_nesting = -1\n   local open_parens = 0\n   for token\
+    \ in string.gmatch(paren_string, \"%[(.)(%D)]\")\n   do\n      local cur_open_parens\
+    \ = open_parens\n      if token == '(' then\n         level_of_nesting = level_of_nesting\
+    \ + 1\n         open_parens = open_parens + 1\n      elseif token == ')' then\n\
+    \         open_parens = open_parens - 1\n      elseif token == '(' then\n    \
+    \     level_of_nesting = level_of_nesting - 1\n      end\n      if open_parens\
+    \ == cur_open_parens then\n         return level_of_nesting\n      end\n   end\n\
+    \   assert(level_of_nesting == -1)\nend", "  local paren_count = 0\n  local paren_level\
+    \ = 0\n  local paren_max = 0\n  local paren_maxlevel = 0\n  local parens = {}",
+  "\t-- The first parentheses to match will be the outer most parentheses\n\tlocal\
+    \ paren_level = 0", "  local levels = { }\n  local paren_count = { }\n  local\
+    \ level = 0\n  local max_level = 0\n  for paren_string in string.gmatch(paren_string,\
+    \ '%((%+)) %*[()%+]') do\n    local paren_level = levels[paren_count[level]] +\
+    \ 1\n    if levels[paren_level] ~= 0 then\n      level = paren_level\n    end\n\
+    \    max_level = max(max_level, levels[paren_level])\n    levels[level] = level\n\
+    \    levels[paren_level] = level\n    paren_count[level] = paren_count[level]\
+    \ + 1\n  end\n  assert(max_level == levels[level])\n  return levels\nend", " \
+    \   local levels = { }\n    local paren_count = 1\n    local max_level = -1\n\
+    \    local open_paren = -1", "  if paren_string:match('%[(%[(%[(%[%[[(%[%[%[[%[%[(%[%[)]%]%[)])%]%[)]%[)]%[)]%[)]%[)]')\
+    \ then\n    return paren_string:match('[%[(%[(%[%[[(%[%[%[[%[%[%[(%[%[)]%]%[)])%]%[)]%[)]%[)]%[)]%[)]%[)]'):gsub(\"\
+    %+\", 0)\n  else\n    return 0\n  end\nend", "  local result = {}\n  local stack\
+    \ = { {0, paren_string} }\n  local depth = 0\n  local nested_level = 0\n  repeat\n\
+    \    local last_depth = depth\n    local last_nested_level = nested_level\n  \
+    \  depth = stack[#stack].depth\n    nested_level = stack[#stack].nested_level\n\
+    \    local new_level = depth - last_depth\n    local new_nested_level = nested_level\
+    \ - last_nested_level\n    if new_level ~= 0 then\n      local new_string = '{'\n\
+    \      for i = 1, new_level do\n        new_string = new_string .. stack[#stack].string\
+    \ .. '('\n      end\n      new_string = new_string .. ')'\n      table.insert(result,\
+    \ new_string)\n    end\n    if new_nested_level ~= 0 then\n      local new_string\
+    \ = '{'\n      for i = 1, new_nested_level do\n        new_string = new_string\
+    \ .. stack[#stack].string .. '('\n      end\n      new_string = new_string ..\
+    \ ')'\n      table.insert(result, new_string)\n    end\n    table.insert(stack,\
+    \ { depth + 1, paren_string:sub(1, paren_string:find('()')-1) })\n  until stack[#stack].depth\
+    \ ~= last_depth\n  return result\nend", "   -- Use a stack to keep track of nested\
+    \ parens.\n   -- The stack is an array of indexes into the paren_string.\n   local\
+    \ stack = {0}\n   local parens = 0\n   for i = 1, #paren_string, 1 do\n      if\
+    \ paren_string:sub(i, i) == '(' then\n         -- Push the current index of the\
+    \ paren_string.\n         -- The stack begins with the index of the last open\
+    \ parens.\n         -- So if you push 0 here you will end up with the second open\
+    \ parens.\n         -- If you push 1 here you will end up with the first open\
+    \ parens.\n         table.insert(stack, i)\n         parens = parens + 1\n   \
+    \   elseif paren_string:sub(i, i) == ')' then\n         -- If the current index\
+    \ of the paren_string is in the stack,\n         -- pop it and get the current\
+    \ index (from the top of the stack).\n         local new_stack = table.concat(stack)\n\
+    \         if table.includes(new_stack, #new_stack - 1) then\n            stack\
+    \ = table.concat(stack)\n            table.insert(stack, i)\n            parens\
+    \ = parens - 1\n         end\n      elseif paren_string:sub(i, i) ~= '(' then\n\
+    \         -- The end of the parantheses.\n         parens = parens - 1\n     \
+    \    if parens == 0 then\n            -- Pop off the last element from the stack\n\
+    \            -- That is how we get the deepest level.\n            local last_index\
+    \ = table.concat(stack)\n            table.insert(stack, last_index)\n       \
+    \  end\n      end\n   end\n   return #stack\nend", "    local nesting_levels =\
+    \ { 0 }\n    local level = 0\n    local paren_count = 1\n    local last_paren_match\
+    \ = 0\n    local last_paren_start_pos = 0\n    local last_paren_end_pos = 0\n\
+    \    for i = 1, #paren_string, 1 do\n        local char = string.sub(paren_string,\
+    \ i, i)\n        if char == '(' then\n            nesting_levels[level] = nesting_levels[level]\
+    \ + 1\n            level = level + 1\n        elseif char == ')' then\n      \
+    \      nesting_levels[level] = nesting_levels[level] - 1\n            if nesting_levels[level]\
+    \ == 0 then\n                level = level - 1\n                paren_count =\
+    \ paren_count - 1\n            else\n                paren_count = paren_count\
+    \ + 1\n            end\n        elseif char == '\\n' then\n            nesting_levels[level]\
+    \ = 0\n        end\n    end\n    return paren_count\nend", "   local max_nested_level\
+    \ = 0\n   local levels = {}\n   for parens in string.gmatch(paren_string, \"%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%%(%",
+  "    local nested_levels = nil\n    local parens = false\n    local paren_level\
+    \ = 1", "  -- If the input string is empty, return an empty set.\n  -- If there\
+    \ are multiple (, then the minimum nesting level is 1.\n  -- If the input string\
+    \ contains no nested parentheses, return 1.\n  -- If there are multiple ( or no\
+    \ nested parentheses, return 1.\n  if paren_string == nil then\n    return 1\n\
+    \  elseif paren_string ~= '()' then\n    return 1\n  end", "    local openings\
+    \ = {\n        '{',\n        '(',\n        '[',\n        '<',\n        '>',\n\
+    \        '^',\n        '|',\n        '~',\n    }\n    local closings = {\n   \
+    \     '}',\n        ')',\n        ']',\n        '>',\n        '<',\n        '^',\n\
+    \        '|',\n        '~',\n    }\n    local levels = {}\n    local levels_buffer\
+    \ = {}\n    local parens = {}\n    local parens_buffer = {}\n    local parens_stack\
+    \ = {}\n    local i = 0\n    local opening_parens = 1\n    local parens_count\
+    \ = 0\n    local parens_level = 0\n    local closings_level = 1", "  local levels\
+    \ = { 0 }\n  local open_brackets = 0\n  local open_brackets_stack = { 0 }\n  local\
+    \ depth = 0\n  local group = 0\n  local group_string = ''\n  local bracket_pairs\
+    \ = { }", "  local level_of_nesting = 0\n  local max_level_of_nesting = 1\n  local\
+    \ group_of_nestings = {}\n  for parens in string.gmatch(paren_string, '()()')\
+    \ do\n    local group_of_parens = string.sub(parens, 1, string.len(parens) - 1)\n\
+    \    if group_of_nestings[group_of_parens] ~= nil then\n      group_of_nestings[group_of_parens]\
+    \ = group_of_nestings[group_of_parens] + 1\n    else\n      group_of_nestings[group_of_parens]\
+    \ = 1\n    end\n    if group_of_nestings[group_of_parens] > max_level_of_nesting\
+    \ then\n      max_level_of_nesting = group_of_nestings[group_of_parens]\n    end\n\
+    \  end\n  return max_level_of_nesting\nend", "  local group_count = #paren_string\n\
+    \  local paren_count = {}\n  local current_level = 1\n  local stack = {{}}", " \
+    \ local max_group = 1\n  local paren_level = 0\n  for paren in string.gmatch(paren_string,\
+    \ '[()]+') do\n    -- If we are currently in a group of parentheses\n    if paren_level\
+    \ > 0 then\n      -- Add the current opening parenthesis group level to the current\
+    \ level\n      paren_level = paren_level + 1\n    -- If we are currently in a\
+    \ group of nested parentheses groups\n    else if paren ~= '(' and paren ~= ')'\
+    \ then\n      -- If this is the first group we see\n      if paren == ')' then\n\
+    \        -- If this group is the deepest level of nesting we see, save this group\
+    \ level\n        if paren_level > max_group then\n          max_group = paren_level\n\
+    \        end\n        -- If the current level is less than the saved one save\
+    \ the current level\n        if paren_level < max_group then\n          max_group\
+    \ = paren_level\n        end\n      -- If this group was the deepest level of\
+    \ nesting so far, save this group level\n      else\n        paren_level = paren_level\
+    \ + 1\n      end\n    end\n  end\n  return max_group\nend", "  -- Count how many\
+    \ groups have opening and closing parentheses.\n  local open_count = 0\n  local\
+    \ close_count = 0\n  -- Iterate through the parentheses and count the levels.\n\
+    \  for i, c in ipairs(paren_string) do\n    if c == '(' then\n      open_count\
+    \ = open_count + 1\n    elseif c == ')' then\n      close_count = close_count\
+    \ + 1\n    end\n  end\n  -- If the number of closing parentheses is larger than\
+    \ the opening parentheses\n  -- or the number of opening parentheses is larger\
+    \ than the number of closing\n  -- parentheses, a parsing error has occurred.\n\
+    \  -- If it equals to 0, the parentheses are balanced.\n  if open_count > close_count\
+    \ or open_count == close_count then\n    return nil\n  end\n  -- If the number\
+    \ of opening parentheses is smaller than the number of closing\n  -- parentheses,\
+    \ a parsing error has occurred.\n  if open_count < close_count then\n    return\
+    \ nil\n  end\n  -- Count the number of closing parentheses.\n  local close_count\
+    \ = #paren_string\n  -- Count the number of opening parentheses.\n  local open_count\
+    \ = #paren_string\n  -- Iterate through the parentheses and count the number of\
+    \ opening and closing parentheses.\n  for i, c in ipairs(paren_string) do\n  \
+    \  if c == ')' then\n      close_count = close_count - 1\n    elseif c == '('\
+    \ then\n      open_count = open_count - 1\n    end\n  end\n  -- If the number\
+    \ of closing parentheses is smaller than the number of opening\n  -- parentheses,\
+    \ a parsing error has occurred.\n  if close_count < open_count then\n    return\
+    \ nil\n  end\n  -- The length of the string of parentheses.\n  local length =\
+    \ (#paren_string)\n  -- The maximum number of opening and closing parentheses.\n\
+    \  -- We assume a balanced parentheses expression.\n  local max_count = (length\
+    \ - (close_count + open_count))\n  -- If the number of opening and closing parentheses\
+    \ is greater than the maximum\n  -- count of parentheses, a parsing error has\
+    \ occurred.\n  if open_count > max_count or close_count > max_count then\n   \
+    \ return nil\n  end\n  -- The deepest level of nesting based on the number of\
+    \ opening and closing parentheses.\n  local nested_level = math.max(open_count,\
+    \ close_count)\n  return nested_level\nend", "   local level = 1\n   local paren_stack\
+    \ = {}\n   local paren_count = {}\n   local paren_level\n   local paren_nest_count",
+  "  -- If the input string is empty, return an empty set.\n  if not paren_string\
+    \ then\n    return setmetatable({}, { __tostring = function() return '()' end\
+    \ })\n  end", "   local levels = {{1, 1}}\n   local opening_pairs = {}\n   local\
+    \ nested_count = 0\n   for char in string.gmatch(paren_string, \"%[()%[(%[(%[((%[(%[)%[)%[(%[(\"\
+    ) do\n      local opening = char:sub(1, 1)\n      if opening:lower() == '(' and\
+    \ levels[#levels].level >= opening_pairs[#opening_pairs].level then\n        \
+    \ local open_level = levels[#levels].level\n         local new_opening_pairs =\
+    \ opening_pairs[#opening_pairs]:insert(open_level, open_level + opening:len()\
+    \ - 1 - open_level)\n         levels[#levels].level = open_level + opening:len()\
+    \ - 1 - open_level\n         if #new_opening_pairs == 1 then\n            opening_pairs[#opening_pairs].level\
+    \ = open_level\n         else\n            levels[#levels].level = open_level\n\
+    \            levels[#levels].nesting = #new_opening_pairs\n         end\n    \
+    \  elseif opening:lower() == '(' and not opening_pairs[#opening_pairs].level then\n\
+    \         levels[#levels].level = levels[#levels].level + opening:len() - 1\n\
+    \      end\n      if opening:lower() == ')' and levels[#levels].level >= opening_pairs[#opening_pairs].level\
+    \ - 1 then\n         local close_level = levels[#levels].level\n         local\
+    \ new_opening_pairs = opening_pairs[#opening_pairs]:remove(opening_pairs[#opening_pairs].level)\n\
+    \         levels[#levels].level = close_level + opening:len() - 1 - close_level\n\
+    \         levels[#levels].nesting = #new_opening_pairs\n      end\n   end\n  \
+    \ return levels\nend", "   local nested_paren_string = paren_string\n      :gsub('[(]([()][(])*[)]',\
+    \ '')\n      :gsub('[()]', '')\n      :gsub('[)]', '')\n      :gsub('[(][)]+$',\
+    \ '()')\n   return (nested_paren_string ~= ''):gsub('()()$', ''):gsub('()()',\
+    \ '')\n      :gsub('([()][(])', '{')\n      :gsub('([)]][(])', '}')\n      :gsub('[(]',\
+    \ '{')\n      :gsub('[)]', '}')\n      :gsub('[(][)]+$', '()')\nend", "\tlocal\
+    \ nested_level = {} -- Dictionary of paren nesting level.\n\tfor str in string.gmatch(paren_string,\
+    \ \"%[(%A%)]+\") do\n\t\tlocal level_str = str:sub(1, 1)\n\t\tnested_level[level_str]\
+    \ = tonumber(level_str)\n\tend\n\treturn nested_level\nend", "    local max_level\
+    \ = 1\n    local max_level_string = paren_string\n    local level = 1", "  --\
+    \ Parse parenthesis groups and find deepest level of nesting\n  local groups =\
+    \ {}\n  local level = 1\n  for paren in string.gmatch(paren_string, \"(%A()%A()+)\"\
+    ) do\n    local paren_group = paren:gsub('%A', '()'):gsub('%+', ' ')\n    if groups.find(paren_group)\
+    \ ~= nil then\n      level = math.max(level, groups.find(paren_group):get() -\
+    \ 1)\n    else\n      local group = groups.insert(paren_group, level)\n    end\n\
+    \  end\n  return level\nend", "  local max_level_of_nesting = -1\n  local nesting_count\
+    \ = 0\n  local max_nesting_level_at_index\n  local nesting_level\n  for level_of_nesting,\
+    \ parens in pairs(paren_string:gsub('([()])', '%1'):gsub('(%1$)', ''))\n  do\n\
+    \    if nesting_count >= max_level_of_nesting then\n      max_nesting_level_at_index\
+    \ = level_of_nesting - 1\n    end\n    nesting_count = nesting_count + 1\n   \
+    \ if nesting_count == 1 then\n      nesting_level = level_of_nesting\n    end\n\
+    \  end\n  if nesting_count > max_level_of_nesting then\n    max_level_of_nesting\
+    \ = nesting_count\n  end\n  return max_nesting_level_at_index\nend", "  local\
+    \ nestings = { 0 }\n  for _, _, _, paren_count, _, _ in string.gmatch(paren_string,\
+    \ '%[(%[(%[^)]+)%)]+)')\n    do\n      if paren_count > nestings[#nestings] then\
+    \ nestings[#nestings] = paren_count end\n    end\n  return nestings\nend", " \
+    \ local parsed = {}\n  local stack = {}\n  for _, paren in ipairs(paren_string:gsub('()',\
+    \ ' ( ')):gmatch'()( )()') do\n    table.insert(stack, paren)\n    local nested\
+    \ = 0\n    while #stack > 0 do\n      if stack[#stack] == paren then\n       \
+    \ nested = nested + 1\n      end\n      table.remove(stack, 1)\n    end\n    table.insert(parsed,\
+    \ nested)\n  end\n  return parsed\nend", "  local groups = paren_string:gmatch(\"\
+    [^ ()]+\")\n  local max_nesting = -1\n  for _, group in pairs(groups) do\n   \
+    \ local nesting = 0\n    local opening_char\n    for char in group do\n      if\
+    \ char == '(' then\n        nesting = nesting + 1\n        opening_char = char\n\
+    \      elseif char == ')' then\n        nesting = nesting - 1\n      elseif char\
+    \ == ' ' then\n        if nesting > max_nesting then\n          max_nesting =\
+    \ nesting\n        end\n      end\n    end\n  end\n  return max_nesting\nend",
+  "  local nesting_levels = { }\n  local paren_depth = 0 -- Tracks how many open parentheses\
+    \ have been encountered.\n  local paren_pairs = { } -- Pairs of open parentheses\
+    \ and their depth.\n  local opening_parens_count = 0\n  for paren in string.gmatch(paren_string,\
+    \ '%((%w+)%s)*') do\n    paren_pairs[#paren_pairs + 1] = {\n      start = paren,\n\
+    \      depth = paren_depth,\n    }\n    nesting_levels[#nesting_levels + 1] =\
+    \ paren_depth\n    opening_parens_count = opening_parens_count + 1\n    if opening_parens_count\
+    \ == 2 then\n      nesting_levels[#nesting_levels + 1] = paren_depth + 1\n   \
+    \ end\n    paren_depth = paren_depth + 1\n  end\n  if opening_parens_count ~=\
+    \ 2 then\n    error('unexpected number of opening parenthesis')\n  end\n  return\
+    \ nesting_levels\nend", "  local levels = {}\n  local paren_stack = {}\n  for\
+    \ paren in string.gmatch(paren_string, \"%[(%a+)%b]+\") do\n    table.insert(paren_stack,\
+    \ paren)\n  end\n  local count = 0\n  local stack = []\n  while 1 do\n    local\
+    \ paren = table.unpack(paren_stack)\n    local has_paren_open = string.sub(paren,\
+    \ 1, 1) == \"(\"\n    table.insert(stack, paren)\n    if has_paren_open then\n\
+    \      table.insert(levels, 0)\n    end\n    local has_paren_close = string.sub(paren,\
+    \ -1, 1) == \")\"\n    table.insert(paren_stack, paren)\n    if has_paren_close\
+    \ then\n      if #levels == 0 then\n        break -- reached the last level of\
+    \ nesting\n      elseif #levels < #stack then\n        break -- some levels of\
+    \ nesting are missing\n      elseif #levels > #stack then\n        table.insert(levels,\
+    \ #levels - #stack + 1) -- add current level of nesting\n      end\n      stack[#stack\
+    \ + 1] = nil -- pop level\n      count = count + 1\n    end\n  end\n  return count\n\
+    end", "    local num_groups = #paren_string\n    local max_depth = 0\n    local\
+    \ depth = 0", "   local paren_stack = {}\n   local paren_nesting = {}\n   local\
+    \ paren_count = 1\n   local new_paren_count = 1\n   local stack = { paren_stack\
+    \ }\n   local function check_paren_levels()\n      while true do\n         local\
+    \ stack_size = #stack\n         if stack_size == 0 then\n            break\n \
+    \        end\n         local current_level = stack[stack_size-1]\n         if\
+    \ current_level == nil then\n            stack_size = stack_size - 1\n       \
+    \     stack[stack_size] = { paren_stack }\n         else\n            stack[stack_size]\
+    \ = current_level\n         end\n      end\n   end\n   check_paren_levels()\n\
+    \   while true do\n      if #paren_stack == 0 then\n         break\n      end\n\
+    \      local current_level = stack[#stack]\n      local current_level_paren_stack\
+    \ = paren_stack[#paren_stack]\n      local current_level_paren_nesting = paren_nesting[#paren_nesting]\n\
+    \      local new_paren_count = #current_level_paren_nesting + 1\n      local new_paren_stack\
+    \ = {}\n      local level_counter = 0\n      for i, child in pairs(current_level)\
+    \ do\n         local child_paren_stack = child[2]\n         if child_paren_stack\
+    \ == current_level_paren_stack\n         and #child_paren_nesting <= new_paren_count\n\
+    \         then\n            new_paren_stack[#new_paren_stack+1] = #child_paren_nesting\
+    \ + 2\n            new_paren_count = #child_paren_nesting + 2\n            level_counter\
+    \ = level_counter + 1\n         else\n            new_paren_stack[#new_paren_stack+1]\
+    \ = #child_paren_nesting + 1\n            new_paren_count = #child_paren_nesting\
+    \ + 1\n            level_counter = level_counter + 1\n         end\n      end\n\
+    \      paren_stack[#paren_stack+1] = new_paren_stack\n      paren_nesting[#paren_nesting+1]\
+    \ = level_counter\n      paren_count = #new_paren_stack\n      check_paren_levels()\n\
+    \   end\n   return paren_count\nend\n</code>\nExample results:\n<code>\n(()())\
+    \ has maximum two levels of nesting while ((())) has three.\n  paren_count: 2\n\
+    \  stack: { {[0]} }  paren_stack: {[0]}  paren_nesting: {0}\n  new_paren_count:\
+    \ 3\n  stack: { {[0]} }  paren_stack: {[0]}  paren_nesting: {1}\n  stack: { {",
+  "  local level_stack = {}\n  local max_level = 1\n  local paren_levels = { '(' =\
+    \ 0, ')' = 1 }\n  local new_paren_level = { paren_levels['('], paren_levels[')']\
+    \ }\n  local paren_nesting_level = { 1, 0 }\n  for paren_string, paren_level,\
+    \ paren_nesting_level,\n    level_stack in pairs(paren_string:gmatch('(%A)(%A)(%A)(%A)(%A*)'))\
+    \ do\n    local paren_level = paren_levels[paren_string]\n    local level_diff\
+    \ = paren_nesting_level - paren_level\n    local level_pushed = level_diff > max_level\n\
+    \    if level_pushed then\n      max_level = level_diff\n    end\n    local level_stack\
+    \ = table.insert(level_stack, paren_nesting_level)\n  end\n  local max_level_pushed\
+    \ = max_level > max_level\n  if max_level_pushed then\n    max_level = max_level\n\
+    \  end\n  local max_level_stack = table.insert(level_stack, max_level)\n  for\
+    \ level_pushed, max_level in pairs(max_level_stack) do\n    if level_pushed then\n\
+    \      level_stack[max_level] = max_level\n    end\n  end\n  local level_diff\
+    \ = max_level_stack - level_stack\n  return level_diff\nend", "  local groups\
+    \ = paren_string:gsub(\"([^()]+)(\\\\(([^()]+)(\\\\(([^()]+)(\\\\(([^()]+))?)\\\
+    \\)\\\\))?)\", \"%1%4\"):gsub(\"()\", \"\")\n  local num = 1\n  local level =\
+    \ 1\n  local max_level = 0\n  local result = {}\n  for group in groups do\n  \
+    \  if group:match(\"(\") ~= nil then\n      level = level + 1\n    elseif group:match(\"\
+    )\") ~= nil then\n      level = level - 1\n      if level > max_level then max_level\
+    \ = level end\n    end\n    local tmp = {}\n    for i = 1, level do table.insert(tmp,\
+    \ num) end\n    table.insert(result, num)\n    num = num + 1\n  end\n  if max_level\
+    \ > 1 then\n    return max_level\n  end\n  return result\nend", "    local paren_stack\
+    \ = { 0 }\n    local cur_level = 0\n    local cur_pos = 0\n    for _, char in\
+    \ pairs(paren_string) do\n        if char == '(' then\n            paren_stack[cur_level]\
+    \ = cur_pos\n            cur_level = cur_level + 1\n        elseif char == ')'\
+    \ then\n            cur_level = cur_level - 1\n            cur_pos = paren_stack[cur_level]\n\
+    \        end\n    end\n    return cur_level\nend", "  local stack = { { 0 } }\n\
+    \  local i = 1\n  for group, _ in string.gmatch(paren_string, \"([^()]+)\")  do\n\
+    \    local current_level = stack[#stack]\n    local new_level = #stack", "   local\
+    \ max_level = 0\n   local level_stack = {}\n   local open_brackets = { '(', ')'\
+    \ }"]
 stop_tokens:
 - "\nlocal"
 - "\nfunction"

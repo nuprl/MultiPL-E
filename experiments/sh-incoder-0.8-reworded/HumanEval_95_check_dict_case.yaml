@@ -15,6 +15,2140 @@ tests: "}\n\ncandidate() {\n    check_dict_case \"$@\"\n}\n\nset -e\nrun_test() 
   nCity,Houston\") = \"false\" ]]\n    [[ $(candidate \"STATE,NC\\nZIP,12345\") =\
   \ \"true\" ]]\n    [[ $(candidate \"fruit,Orange\\ntaste,Sweet\") = \"true\" ]]\n\
   \    [[ $(candidate \"\") = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local key=$1 value=$2\n  # if there are no items in $1, return false\n\
+    \  test -z \"$value\" && return 0\n  # go through each line in the CSV\n  for\
+    \ line\n  do\n    local key=`echo $line | cut -d',' -f 1`\n    local value=`echo\
+    \ $line | cut -d',' -f 2`\n    # if the key is not in lower case, return false\n\
+    \    test -n \"$key\" && test \"$key\" = $(echo \"$key\" | tr '[:lower:]' '[:upper:]')\
+    \ && return 0\n    # if the value is in lower case, return true\n    test -n \"\
+    $value\" && test \"$value\" = $(echo \"$value\" | tr '[:lower:]' '[:upper:]')\
+    \ && return 0\n  done\n  # if there are no lines in the CSV, return true\n  return\
+    \ 1", "  local str=\"$1\"\n  local lower=\"$(echo \"$str\" | sed 's/,/\\n/g' |\
+    \ sort | uniq -c | wc -l)\"\n  local upper=\"$(echo \"$str\" | sed 's/,/\\n/g'\
+    \ | sort | uniq -c | awk '{print $2}' | wc -l)\"\n  [[ \"$lower\" == \"$upper\"\
+    \ ]]", "    local CSV=$1\n    if [ -z \"$CSV\" ]; then\n        return false\n\
+    \    fi\n    local LINE_COUNT=$(echo $CSV | wc -l)\n    local KEY_COUNT=$(echo\
+    \ $CSV | awk -F',' '{print $1}' | wc -l)\n    local VALUE_COUNT=$(echo $CSV |\
+    \ awk -F',' '{print $2}' | wc -l)\n    if [ \"$KEY_COUNT\" -eq \"$VALUE_COUNT\"\
+    \ ]; then\n        for KEY in $(echo $CSV | awk -F',' '{print $1}'); do\n    \
+    \        local VALUE=$(echo $CSV | awk -F',' '{print $2}' | awk -F',' '{print\
+    \ $1}' | awk -F',' '{print $2}')\n            if [ \"$VALUE\" -eq \"$VALUE\" ];\
+    \ then\n                return true\n            fi\n        done\n        return\
+    \ false\n    else\n        echo \"ERROR: CSV must have 2 columns in order to be\
+    \ able to determine all keys are strings in lower case or all keys are strings\
+    \ in upper case. CSV contents were: $CSV\"\n        return false\n    fi", " \
+    \   # Read first line to check number of columns\n    read -r FIRSTLINE\n\n  \
+    \  FIRSTCOL=0\n    CHECKCASE=\"false\"\n\n    IFS=',' read -ra FIRSTLINE <<< \"\
+    $FIRSTLINE\"\n\n    # Loop through rest of CSV\n    for LINE in \"${FIRSTLINE[@]:1}\"\
+    ; do\n        # Read first item to count the number of columns\n        IFS=','\
+    \ read -ra FIRSTLINE <<< \"$LINE\"\n\n        # Loop through rest of items\n \
+    \       for ITEM in \"${FIRSTLINE[@]:1}\"; do\n            # Count number of columns\n\
+    \            ((FIRSTCOL++))\n\n            # If we have reached end of first column\
+    \ or hit a string\n            # that is not a string, return false\n        \
+    \    if [[ $FIRSTCOL -eq $FIRSTLINE[0] ]] || [[ $FIRSTCOL -lt $FIRSTLINE[0] ]];\
+    \ then\n                CHECKCASE=\"false\"\n                break\n         \
+    \   fi\n        done\n    done\n\n    echo \"$CHECKCASE\"", "    local csv=$1\n\
+    \    local key=$2\n    local key=${key%.*}\n    local value=${3%.*}\n    local\
+    \ value=${value%.*}\n    local lower=0\n    local upper=0\n    local num_items=0\n\
+    \    local items=($(echo $csv))\n    local lowercase_keys=()\n    local uppercase_keys=()\n\
+    \    local not_found=1\n    local found=1\n    local line\n\n    while [ $line\
+    \ != \"\" ]; do\n        num_items=$((num_items + 1))\n        line=$(echo $line\
+    \ | cut -d \",\" -f 2)\n        keys=($(echo $line | cut -d \",\" -f 1))\n\n \
+    \       if [ $key != $keys ]; then\n            not_found=0\n        fi\n\n  \
+    \      if [ $not_found -eq 0 ]; then\n            lower=$((lower + 1))\n     \
+    \       found=0\n        else\n            upper=$((upper + 1))\n        fi\n\n\
+    \        if [ $lower -eq $upper ]; then\n            if [ $lower -gt 0 ]; then\n\
+    \                lowercase_keys+=($keys)\n            fi\n            if [ $upper\
+    \ -gt 0 ]; then\n                uppercase_keys+=($keys)\n            fi\n   \
+    \     fi\n    done\n\n    if [ ${#lowercase_keys} -gt 0 ]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n\
+    \    local case=\"$2\"\n\n    if [ -z \"$str\" ]; then\n        echo \"$case:\
+    \ empty CSV\"\n        exit 1\n    fi\n\n    local key=\"$str\"\n    local keys=$(cat\
+    \ \"$case\" | sed \"s/,/ /g\" | awk -F, '{print $1}')\n    local value=\"$str\"\
+    \n    local values=$(cat \"$case\" | sed \"s/,/ /g\" | awk -F, '{print $2}')\n\
+    \n    for key in $keys; do\n        [ \"$key\" = \"$keys\" ] && { echo \"$case:\
+    \ key $key has upper case\"; exit 1; }\n    done\n\n    for value in $values;\
+    \ do\n        [ \"$value\" = \"$values\" ] && { echo \"$case: value $value has\
+    \ upper case\"; exit 1; }\n    done\n\n    echo \"$case: no upper-case or lower-case\
+    \ keys or values\"\n    exit 0", "  local input=\"$1\" # CSV input\n  local headers=$(cat\
+    \ $1 | cut -d, -f1 >&2) # Extract header column\n  local output=$(cat $1 | cut\
+    \ -d, -f2- >&2) # Extract column with key values\n  local lower=$(cat $1 | cut\
+    \ -d, -f1 | tr '[:upper:]' '[:lower:]')\n  local upper=$(cat $1 | cut -d, -f1\
+    \ | tr '[:lower:]' '[:upper:]')\n  local keys=$(echo \"$headers\" | tr ',' '\\\
+    n' | sort -u | tr '\\n' ',' | sed -e \"s/$lower,/,'$lower',/\" -e \"s/$upper,/,'$upper',/\"\
+    \ | sed -e \"s/$headers,/,'$headers',/\")\n\n  # Return true if no keys\n  if\
+    \ [ -z \"$keys\" ]\n  then\n    echo \"$output\"\n  else\n    # Return true if\
+    \ keys are all lower case\n    if [ $(echo \"$keys\" | tr '\\n' ',' | sort | uniq\
+    \ | grep -c \"${lower},\") -eq 0 ]\n    then\n      echo \"$output\"\n    else\n\
+    \      echo \"false\"\n    fi\n  fi", "    local csv=\"$1\"\n    local lower=false\n\
+    \    local upper=false\n    local keys=\"${csv//$'\\n'/,}\"\n    local vals=\"\
+    ${csv//,/$'\\n'/}\"\n    keys=$(echo \"$keys\" | tr ',' '\\n')\n    vals=$(echo\
+    \ \"$vals\" | tr ',' '\\n')\n    for k in $(echo \"$keys\" | tr \",\" \"\\n\"\
+    ); do \n        echo \"$k\" | tr '[:upper:]' '[:lower:]'\n        lower=$(echo\
+    \ \"$k\" | tr '[:upper:]' '[:lower:]') \n        upper=$(echo \"$k\" | tr '[:lower:]'\
+    \ '[:upper:]')\n        if [ \"$lower\" == \"$k\" ]; then \n            lower=true\n\
+    \        fi\n        if [ \"$upper\" == \"$k\" ]; then \n            upper=true\n\
+    \        fi\n        if [ \"$lower\" == \"true\" ]; then \n            lower=false\n\
+    \        fi\n        if [ \"$upper\" == \"true\" ]; then \n            upper=false\n\
+    \        fi\n    done\n    if [ \"$lower\" == \"true\" ]; then \n        echo\
+    \ \"$csv\" returns true\n    elif [ \"$upper\" == \"true\" ]; then \n        echo\
+    \ \"$csv\" returns true\n    elif [ \"$lower\" == \"false\" ]; then \n       \
+    \ echo \"$csv\" returns false\n    elif [ \"$upper\" == \"false\" ]; then \n \
+    \       echo \"$csv\" returns false\n    elif [ \"$lower\" == \"$keys\" ]; then\
+    \ \n        echo \"$csv\" returns true\n    elif [ \"$upper\" == \"$keys\" ];\
+    \ then \n        echo \"$csv\" returns true\n    elif [ \"$lower\" == \"$vals\"\
+    \ ]; then \n        echo \"$csv\" returns true\n    elif [ \"$upper\" == \"$vals\"\
+    \ ]; then \n        echo \"$csv\" returns true\n    else \n        echo \"$csv\"\
+    \ returns false\n    fi", "\tCSV=$1\n\tif [ ! -z $CSV ]; then\n\t\tread -ra array\
+    \ <<< \"$CSV\"\n\t\tfor i in \"${array[@]}\"; do\n\t\t\tk=\"$i\"\n\t\t\tv=\"${array[i+1]}\"\
+    \n\t\t\tif [ \"${k}\" == \"state\" ] && [ \"$v\" != \"NC\" ]; then\n\t\t\t\techo\
+    \ \"false\"\n\t\t\t\treturn 1\n\t\t\telif [ \"${k}\" == \"zip\" ] && [ \"$v\"\
+    \ != \"12345\" ]; then\n\t\t\t\techo \"false\"\n\t\t\t\treturn 1\n\t\t\telif [\
+    \ \"${k}\" == \"age\" ] && [ \"$v\" != \"36\" ]; then\n\t\t\t\techo \"false\"\n\
+    \t\t\t\treturn 1\n\t\t\telif [ \"${k}\" == \"city\" ] && [ \"$v\" != \"Houston\"\
+    \ ]; then\n\t\t\t\techo \"false\"\n\t\t\t\treturn 1\n\t\t\telif [ \"${k}\" ==\
+    \ \"Name\" ] && [ \"$v\" != \"John\" ]; then\n\t\t\t\techo \"false\"\n\t\t\t\t\
+    return 1\n\t\t\telse\n\t\t\t\techo \"true\"\n\t\t\t\treturn 0\n\t\t\tfi\n\t\t\
+    done\n\telse\n\t\techo \"true\"\n\t\treturn 0\n\tfi", "  csv=$1\n  case $csv in\n\
+    \    *[A,a] ) echo \"true\" ;;\n    *[B,b] ) echo \"false\" ;;\n    *' ' ) echo\
+    \ \"false\" ;;\n    *([^,]*,*) echo \"false\" ;;\n    * ) echo \"false\" ;;\n\
+    \  esac", "  local line=${1:-}\n  local headers=$(head -n 1 <<< \"${line}\")\n\
+    \  local header_count=$((${#headers} - 1))\n  local lowercase_headers=$(head -n\
+    \ $header_count <<< \"${headers}\")\n  local uppercase_headers=$(head -n $((header_count\
+    \ + 1)) <<< \"${headers}\")\n  local count=0\n  local has_empty_csv=true\n  local\
+    \ has_header=false\n  local has_header_in_lowercase_only=false\n  local has_header_in_uppercase_only=false\n\
+    \  local has_header_in_both=false\n  local has_header_in_mixed=false\n  local\
+    \ has_header_in_lowercase_and_uppercase_only=false\n  local has_header_in_mixed=false\n\
+    \  local has_header_in_mixed_case=false\n  local has_header_lowercase_only=false\n\
+    \  local has_header_uppercase_only=false\n  local has_header_mixed=false\n\n \
+    \ for header in $lowercase_headers; do\n    count=$(expr $count + 1)\n    has_header_lowercase_only=$(expr\
+    \ $has_header_lowercase_only + \\\n      $((${header} =~ ^[a-z]*$)))\n    has_header_mixed=$(expr\
+    \ $has_header_mixed + \\\n      $((${header} =~ ^[a-z]*$)&&${header} =~ ^[A-Z]*$))\n\
+    \    has_header_mixed=$(expr $has_header_mixed + \\\n      $((${header} =~ ^[A-Z]*$)&&${header}\
+    \ =~ ^[a-z]*$))\n  done\n\n  for header in $uppercase_headers; do\n    count=$(expr\
+    \ $count + 1)\n    has_header_uppercase_only=$(expr $has_header_uppercase_only\
+    \ + \\\n      $((${header} =~ ^[A-Z]*$)))\n    has_header_mixed=$(expr $has_header_mixed\
+    \ + \\\n      $((${header} =~ ^[A-Z]*$)&&${header} =~ ^[a-z]*$))\n    has_header_mixed=$(expr\
+    \ $has_header_mixed + \\\n      $((${header} =~ ^[a-z]*$)&&${header} =~ ^[A-Z]*$))\n\
+    \  done\n\n  for header in $lowercase_headers; do\n    count=$(expr $count + 1)\n\
+    \    has_header_both=$(expr $has_header_both + \\\n      $((${header} =~ ^[a-z]*$)&&${header}\
+    \ =~ ^[A-Z]*$)))\n    has_header_mixed=$(expr $has_header_mixed + \\\n", "   \
+    \ local input=\"${1:-}\"\n    if [ -z \"$input\" ]; then\n        return 0\n \
+    \   fi\n\n    # set -o nocasematch; doesn't work for empty lines\n    local keys=\"\
+    $(head -n 1 <<< \"$input\" |\n        sed -e 's/^[^,]*,//' -e 's/,[^,]*$//')\"\
+    \n    local vals=\"$(head -n 1 <<< \"$input\" |\n        sed -e 's/^[^,]*,//'\
+    \ -e 's/,[^,]*$//' |\n        sed -e 's/,/\\n/g' -e 's/^/[[:lower:][:upper:]]/'\
+    \ -e 's/$/\\\n/' -e 's/\\n/, /g')\"\n\n    for k in $keys; do\n        if [ !\
+    \ -z \"$k\" ]; then\n            case \"$k\" in\n                $vals)\n    \
+    \                echo \"true\"\n                    return 0\n               \
+    \     ;;\n                *)\n                    echo \"false\"\n           \
+    \         return 1\n                    ;;\n            esac\n        fi\n   \
+    \ done\n\n    echo \"false\"\n    return 1", "    local csv_line=\"$1\"\n    local\
+    \ out_of_keys=0\n    local key_found\n    local value_found\n    local i\n   \
+    \ local len\n\n    # empty CSV? fail\n    if [[ ${#csv_line} -eq 0 ]]; then\n\
+    \       return 1\n    fi\n\n    # split into key,value CSVs\n    IFS=',' read\
+    \ -ra csv_array <<< \"$csv_line\"\n\n    # check each line to see if all keys\
+    \ found\n    for ((i=0; i<${#csv_array[@]}; i++)); do\n        key_found=false\n\
+    \        value_found=false\n        len=${#csv_array[$i]}\n\n        # go through\
+    \ CSV line and see if key found\n        for ((j=0; j<len; j++)); do\n       \
+    \     if [[ ${csv_array[$i][j]} =~ ^[a-z0-9]$ ]]; then\n                key_found=true\n\
+    \                break\n            fi\n            if [[ ${csv_array[$i][j]}\
+    \ =~ ^[A-Z]$ ]]; then\n                value_found=true\n                break\n\
+    \            fi\n        done\n\n        if [[ ${key_found} == \"false\" ]]; then\n\
+    \            out_of_keys=$((out_of_keys+1))\n        fi\n\n        if [[ ${value_found}\
+    \ == \"false\" ]]; then\n            out_of_keys=$((out_of_keys+1))\n        fi\n\
+    \    done\n    # all keys found? return true\n    if [[ ${out_of_keys} == \"0\"\
+    \ ]]; then\n        return 0;\n    else\n        return 1;\n    fi", "    # Split\
+    \ each line into key and value with commas removed\n    mapfile -t lines <<< \"\
+    $1\"\n    local k=\"$lines[0]\"\n    local v=\"$lines[1]\"\n    # Convert each\
+    \ key in the list to lower case\n    local k_lower=\"$(echo \"$k\" | tr '[:upper:]'\
+    \ '[:lower:]')\"\n    local k_upper=\"$(echo \"$k\" | tr '[:lower:]' '[:upper:]')\"\
+    \n    local k_count=$(echo $k | tr ',' '\\n' | wc -l)\n    local v_count=$(echo\
+    \ $v | tr ',' '\\n' | wc -l)\n    if [ $k_count -ne $v_count ]; then\n       \
+    \ return false\n    elif [ $k_count -eq 0 ]; then\n        # Empty input\n   \
+    \     return true\n    elif [ \"$k_lower\" == \"$k_upper\" ]; then\n        return\
+    \ true\n    else\n        return false\n    fi", "  local dict_key=\"$1\"\n  #\
+    \ read each line\n  local IFS=,\n  for key in $(echo \"$dict_key\" | cut -d','\
+    \ -f1); do\n    # convert to lower case\n    local lower_key=$(echo \"$key\" |\
+    \ tr '[:upper:]' '[:lower:]')\n    local lower_val=\"$(echo \"$dict_key\" | tr\
+    \ '[:upper:]' '[:lower:]')\"\n    local upper_val=\"$(echo \"$key\" | tr '[:lower:]'\
+    \ '[:upper:]')\"\n    if [ \"$(echo \"$lower_val\" == \"$upper_val\" | bc -l)\"\
+    \ -eq 0 ]; then\n      echo \"$lower_key $lower_val\"\n      return 1\n    fi\n\
+    \  done\n  echo \"$lower_key $lower_val\"\n  return 0", "    local KEY=( $1 )\n\
+    \    local VALUE=( $2 )\n    local ALL_KEYS=()\n    local ALL_KEYS_UPPER=()\n\
+    \    local ALL_KEYS_LOWER=()\n    local KEY_COUNT\n    local KEY_UPPER_COUNT\n\
+    \    local KEY_LOWER_COUNT\n    local IS_LOWER=false\n    local IS_UPPER=false\n\
+    \    local IS_LOWER_KEY\n    local IS_UPPER_KEY\n    local RESULT\n    local KEY_LOWER\n\
+    \    local KEY_UPPER\n    local KEY\n    local VALUE\n    local KEY\n    \n  \
+    \  KEY_COUNT=`echo $KEY | wc -w`\n    KEY_UPPER_COUNT=`echo $KEY | tr A-Z a-z\
+    \ | wc -w`\n    KEY_LOWER_COUNT=`echo $KEY | tr a-z A-Z | wc -w`\n    if [ $KEY_COUNT\
+    \ -gt 0 ]; then \n        ALL_KEYS+=( $KEY )\n        ALL_KEYS_UPPER+=( ${KEY^^}\
+    \ )\n        ALL_KEYS_LOWER+=( ${KEY^^} )\n    else \n        RESULT=\"true\"\n\
+    \        exit 0\n    fi\n    \n    if [ $KEY_UPPER_COUNT -gt 0 ]; then \n    \
+    \    IS_UPPER=true\n        ALL_KEYS+=( $KEY )\n        ALL_KEYS_UPPER+=( ${KEY^^}\
+    \ )\n        ALL_KEYS_LOWER+=( ${KEY^^} )\n    else \n        RESULT=\"true\"\n\
+    \        exit 0\n    fi\n    \n    if [ $KEY_LOWER_COUNT -gt 0 ]; then \n    \
+    \    IS_LOWER=true\n        ALL_KEYS+=( $KEY )\n        ALL_KEYS_UPPER+=( ${KEY^^}\
+    \ )\n        ALL_KEYS_LOWER+=( ${KEY^^} )\n    else \n        RESULT=\"true\"\n\
+    \        exit 0\n    fi\n    \n    for i in \"${!ALL_KEYS[@]}\"; do\n        KEY_LOWER=${ALL_KEYS[i]}\n\
+    \        KEY_UPPER=${ALL_KEYS_UPPER[i]}\n        KEY=${ALL_KEYS_LOWER[i]}\n  \
+    \  \n        if [ $IS_LOWER ]; then \n            if [ \"$KEY_LOWER\" != \"$KEY_UPPER\"\
+    \ ]; then \n                RESULT=\"false\"\n                exit 0\n       \
+    \     fi\n        fi\n        \n        if [ $IS_UPPER ]; then \n            if\
+    \ [ \"$KEY_LOWER\" != \"$KEY_UPPER\" ]; then \n                RESULT", "    local\
+    \ csv_line\n    local key\n    local value\n    local case_insensitive\n\n   \
+    \ # Read a line from the CSV\n    while IFS='' read -r csv_line; do\n        #\
+    \ Skip empty lines\n        if [[ -z $csv_line ]]; then\n            echo \"$csv_line\"\
+    \n            continue\n        fi\n\n        # Remove trailing comma\n      \
+    \  if [[ \"$csv_line\" =~ \"\\,\" ]]; then\n            csv_line=${csv_line%?}\n\
+    \        fi\n\n        # Skip blank line\n        if [[ -z $csv_line ]]; then\n\
+    \            echo \"$csv_line\"\n            continue\n        fi\n\n        #\
+    \ Convert keys to lower case\n        if [[ \"$csv_line\" =~ \"^[a-z]*,\" ]];\
+    \ then\n            csv_line=${csv_line%,}\n        fi\n\n        # Convert keys\
+    \ to upper case\n        if [[ \"$csv_line\" =~ \"^[A-Z]*,\" ]]; then\n      \
+    \      csv_line=${csv_line%,}\n        fi\n\n        # Split line\n        # Skip\
+    \ lines that start with comma\n        if [[ \"$csv_line\" =~ \",\" ]]; then\n\
+    \            if [[ \"$csv_line\" =~ \",\" ]]; then\n                # Remove leading\
+    \ comma\n                csv_line=${csv_line#,}\n            fi\n\n          \
+    \  # Split line\n            IFS=, read -r -a keys <<< \"$csv_line\"\n       \
+    \ else\n            IFS=, read -r -a keys <<< \"$csv_line,,,\"\n        fi\n\n\
+    \        # Convert keys to lower case\n        for (( index=0; index < \"${#keys[@]}\"\
+    ; index++ )); do\n            key=\"${keys[index]}\"\n            if [[ \"$key\"\
+    \ =~ \"^[a-z]*$\" ]]; then\n                key=${key%?}\n            fi\n   \
+    \         key=\"${key^^}\"\n        done\n\n        # Convert keys to upper case\n\
+    \        for (( index=0; index < \"${#keys[@]}\"; index++ )); do\n           \
+    \ key=\"${keys[index]}\"\n            if [[ \"$key\" =~ \"^[A-Z]*$\" ]]; then\n\
+    \                key=${key%?}\n            fi\n            key=\"${key^^}\"\n\
+    \        done\n\n        # Return true if the keys contains only strings\n   \
+    \     # and there are no commas in the value\n        if [[ \"${#keys[@]}\" -eq\
+    \ 1 ]]; then\n            if [[ \"$csv_line\" =~ \"^[a-z]*$\" ]]; then\n     \
+    \           if [[ \"$csv_line\" =~ \"^[a-z]*$\" ]]; then\n                   \
+    \ case_insensitive=true\n                    value=\"${csv_line%?}\"\n       \
+    \         fi", "\tcsv=$1\n\tif [ -z \"$csv\" ] ; then\n\t\treturn 0\n\tfi\n\t\n\
+    \tIFS=, read -ra array <<< \"$csv\"\n\tfor (( i = 0; i < ${#array[@]}; i++ ));\
+    \ do\n\t\t# check if array[i] contains only lower case\n\t\tlower=${array[$i]%,*}\n\
+    \t\tif [ \"$lower\" != \"$lower\" ]; then\n\t\t\treturn 0\n\t\tfi\n\tdone\n\n\t\
+    for (( i = 0; i < ${#array[@]}; i++ )); do\n\t\t# check if array[i] contains only\
+    \ upper case\n\t\tupper=${array[$i]##*,}\n\t\tif [ \"$upper\" != \"$upper\" ];\
+    \ then\n\t\t\treturn 0\n\t\tfi\n\tdone\n\treturn 1", "    local header=$1 # a\
+    \ line of header\n    local data=$2 # contents of a CSV file\n    local result=\"\
+    $3\"\n    local header1=\"$header\"\n    local header2=\"$header\"\n\n    # remove\
+    \ leading and trailing whitespace from the header line\n    read -r -d '' header1\
+    \ <<< \"$header1\"\n    read -r -d '' header2 <<< \"$header2\"\n\n    if [[ \"\
+    $header\" != \"$header1\" ]]; then\n        header=\"'$header'\"\n    fi\n   \
+    \ if [[ \"$header\" != \"$header2\" ]]; then\n        header=\"'$header'\"\n \
+    \   fi\n\n    # check if the first line is all lower case\n    if [[ \"${header1:0:1}\"\
+    \ != \"${header1:0:1}\" ]]; then\n        echo \"false\" > \"$result\"\n     \
+    \   return\n    fi\n    if [[ \"${header2:0:1}\" != \"${header2:0:1}\" ]]; then\n\
+    \        echo \"false\" > \"$result\"\n        return\n    fi\n    \n    # check\
+    \ if the first line is all upper case\n    if [[ \"${header1:0:1}\" != \"${header1:0:1}\"\
+    \ ]]; then\n        echo \"true\" > \"$result\"\n        return\n    fi\n    if\
+    \ [[ \"${header2:0:1}\" != \"${header2:0:1}\" ]]; then\n        echo \"true\"\
+    \ > \"$result\"\n        return\n    fi\n\n    # check if the first two lines\
+    \ are equal\n    if [[ ${#header1} == \"${#header2}\" ]]; then\n        for ((\
+    \ i=0; i<${#header1}; i++ )); do\n            case \"${header1:$i:1}\" in\n  \
+    \              [0-9]) continue;;\n                [a-z]) continue;;\n        \
+    \        [A-Z]) continue;;\n                [a-zA-Z]) continue;;\n           \
+    \     [[:lower:]]) continue;;\n                [[:upper:]])\n            echo\
+    \ \"false\" > \"$result\";\n            return;;\n            esac\n        done\n\
+    \        echo \"true\" > \"$result\"\n        return\n    fi\n\n    echo \"false\"\
+    \ > \"$result\"", "    local line\n    local key\n    local key1\n    local key2\n\
+    \    local val1\n    local val2\n    local msg\n    IFS=',' read -r key val1 <<<\
+    \ \"$1\"\n    IFS=',' read -r key1 val2 <<< \"$2\"\n    msg=\"Expected first column\
+    \ to be lower case (${key1}, ${key2}) and second column to be upper case (${key1},\
+    \ ${key2})\"\n    if [ -z \"$val1\" -o -z \"$val2\" ]; then\n        echo \"true\"\
+    \n    elif [ \"$val1\" != \"$val2\" ]; then\n        echo \"false\"\n    else\n\
+    \        echo \"$msg\"\n    fi", "    local key=\"$1\"\n    local values=$(head\
+    \ -1 \"$1\")\n    local value\n    local key\n    local value\n    local key_lower\n\
+    \    local value_lower\n    local value_upper\n    local result\n\n    # Skip\
+    \ the first line as the header line.\n    head -n +2 \"$1\" > /dev/null\n\n  \
+    \  # Loop through the rest of the CSV.\n    while IFS=\",\" read -r key value\
+    \ || [[ -n \"$key\" ]]; then\n        key_lower=$(echo \"$key\" | tr \"[:upper:]\"\
+    \ \"[:lower:]\")\n        value_lower=$(echo \"$value\" | tr \"[:upper:]\" \"\
+    [:lower:]\")\n        value_upper=$(echo \"$value\" | tr \"[:upper:]\" \"[:upper:]\"\
+    )\n\n        # Check if all keys are upper or all keys are lower.\n        if\
+    \ [[ \"$key_lower\" == *\"$value_lower\"* ]]; then\n            result=\"true\"\
+    \n        fi\n        if [[ \"$key_lower\" == *\"$value_upper\"* ]]; then\n  \
+    \          result=\"false\"\n            break\n        fi\n\n        # Check\
+    \ if all keys are upper or all keys are lower.\n        if [[ \"$key_upper\" ==\
+    \ *\"$value_lower\"* ]]; then\n            result=\"true\"\n        fi\n     \
+    \   if [[ \"$key_upper\" == *\"$value_upper\"* ]]; then\n            result=\"\
+    false\"\n            break\n        fi\n    done < \"$1\"\n\n    echo $result",
+  "    local key val check\n    local key_len val_len\n    local check_func check_func_arg\
+    \ csv_len\n    \n    if [[ -z \"$1\" ]]; then\n        echo \"$0: an empty string\
+    \ is not a valid input\"\n        exit 1\n    fi\n    \n    check_func='check_equal'\n\
+    \    check_func_arg='0'\n    \n    csv_len=0\n    while IFS=, read -r key val;\
+    \ do\n        csv_len=$((csv_len+1))\n    done < <(echo \"$1\" | tr ',' '\\n'\
+    \ | sort -u | wc -l)\n    \n    key_len=$(echo \"$1\" | tr ',' '\\n' | sort -u\
+    \ | wc -l)\n    val_len=$(echo \"$1\" | tr ',' '\\n' | sort -u | wc -l)\n    \n\
+    \    if [[ $key_len -eq 0 ]]; then\n        echo \"$0: empty dictionary given\"\
+    \n        exit 1\n    fi\n    \n    key_len=$(echo \"$1\" | tr ',' '\\n' | sort\
+    \ -u | wc -l)\n    val_len=$(echo \"$1\" | tr ',' '\\n' | sort -u | wc -l)\n \
+    \   \n    if [[ $val_len -gt 0 ]]; then\n        if [[ $check_func == 'check_equal'\
+    \ ]]; then\n            check='='\n        else\n            check='=='\n    \
+    \    fi\n        echo \"$0: dictionary key length ($key_len) should be $check_func_arg\
+    \ ($csv_len), not $val_len\"\n        exit 1\n    fi\n    \n    if [[ $check_func\
+    \ == 'check_equal' ]]; then\n        if [[ $key_len -eq $val_len ]]; then\n  \
+    \          return 0\n        fi\n    fi\n    \n    if [[ $check_func == 'check_equal'\
+    \ ]]; then\n        if [[ $key_len -gt $val_len ]]; then\n            echo \"\
+    $0: dictionary key length ($key_len) should be $check_func_arg ($csv_len), not\
+    \ $val_len\"\n            exit 1\n        fi\n    fi\n    \n    true", "  local\
+    \ string=\"$1\" ; shift\n  local key=value ; shift\n  local i\n  for (( i=1; i<${#string};\
+    \ i++ )); do\n    IFS=',' read -ra arr <<< \"${string:$i:1}\"\n    if [ \"${#arr[@]}\"\
+    \ != 2 ] ; then return \"false\" ; fi\n    key=$(echo \"${arr[0]}\" | tr '[:lower:]'\
+    \ '[:upper:]')\n    value=$(echo \"${arr[1]}\" | tr '[:lower:]' '[:upper:]')\n\
+    \    [ \"${key}\" == \"${value}\" ]\n  done\n  return \"true\"", "  local csv_keys=$1\n\
+    \  local csv_values=$2\n  local lower=false\n  local upper=false\n  local i=0\
+    \ j=0\n  # First line is keys, next lines are values\n  local key=$(echo $csv_keys\
+    \ | cut -d',' -f1)\n  local value=$(echo $csv_values | cut -d',' -f2)\n\n  # Loop\
+    \ through each line of CSV\n  while read -r line\n  do\n    # Skip the header\
+    \ line\n    [[ -z \"$line\" ]] || continue\n\n    # Loop through each field in\
+    \ the line\n    while read -r field\n    do\n      # Convert keys to lowercase\n\
+    \      if [[ \"$field\" =~ ([a-z][A-Z]) ]]\n      then\n        key=${BASH_REMATCH[1]}\n\
+    \      else\n        key=${BASH_REMATCH[1]^^}\n      fi\n\n      # Convert values\
+    \ to lowercase\n      if [[ \"$field\" =~ ([a-z][A-Z]) ]]\n      then\n      \
+    \  value=${BASH_REMATCH[1]}\n      else\n        value=${BASH_REMATCH[1]^^}\n\
+    \      fi\n\n      # Check if the field in the key is lower case\n      if [[\
+    \ \"$key\" =~ ^([a-z]{1}) ]]\n      then\n        lower=true\n      elif [[ \"\
+    $key\" =~ ^([A-Z]{1}) ]]\n      then\n        upper=true\n      fi\n\n      #\
+    \ Check if the field in the value is upper case\n      if [[ \"$value\" =~ ^([a-z]{1})\
+    \ ]]\n      then\n        lower=true\n      elif [[ \"$value\" =~ ^([A-Z]{1})\
+    \ ]]\n      then\n        upper=true\n      fi\n\n      # Check both keys\n  \
+    \    if [[ \"$lower\" == \"$upper\" ]]\n      then\n        echo \"$key has mixed\
+    \ case: $value\"\n        echo \"CSV keys: $csv_keys\"\n        echo \"CSV values:\
+    \ $csv_values\"\n        return false\n      fi\n\n      # Check both values\n\
+    \      if [[ \"$lower\" == \"true\" ]]\n      then\n        lower=true\n     \
+    \   upper=false\n      fi\n\n      if [[ \"$upper\" == \"true\" ]]\n      then\n\
+    \        lower=false\n        upper=true\n      fi\n\n      # If both keys and\
+    \ values are equal, then return true\n      if [[ \"$lower\" == \"true\" ]]\n\
+    \      then\n        echo \"Key $key and value $value are equal\"\n        echo\
+    \ \"CSV keys: $csv_keys\"\n        echo \"CSV values: $csv_values\"\n        return\
+    \ true\n      fi\n\n      # If ", "  local line\n  local key\n  local value\n\
+    \  while IFS=, read -r key value; do\n    if [[ ! $key =~ ^[a-z]*$ ]]; then\n\
+    \      return 0\n    fi\n    if [[ ! $value =~ ^[a-z]*$ ]]; then\n      return\
+    \ 0\n    fi\n  done <<< \"$1\"\n  return 1", "\tlocal IFS=','\n\tlocal lower_dict_keys=$(awk\
+    \ -F',' '{print $1}' $1)\n\tlocal upper_dict_keys=$(awk -F',' '{print $2}' $1)\n\
+    \tlocal key_count=${#lower_dict_keys[@]}\n\tlocal upper_key_count=${#upper_dict_keys[@]}\n\
+    \tlocal diff_count=$((upper_key_count - key_count))\n\tlocal false_count=$((key_count\
+    \ - lower_dict_keys))\n\tlocal true_count=$((upper_key_count - false_count))\n\
+    \techo \"diff_count=$diff_count\"\n\techo \"false_count=$false_count\"\n\techo\
+    \ \"true_count=$true_count\"\n\techo \"key_count=$key_count\"\n\techo \"upper_key_count=$upper_key_count\"\
+    \n\techo \"lower_dict_keys[$key_count]=${lower_dict_keys[$key_count]}\"\n\techo\
+    \ \"upper_dict_keys[$upper_key_count]=${upper_dict_keys[$upper_key_count]}\"\n\
+    \tif (( $diff_count > 0 )); then\n\t\techo \"diff_count=$diff_count\"\n\t\treturn\
+    \ false\n\tfi\n\tif (( $false_count > 0 )); then\n\t\techo \"false_count=$false_count\"\
+    \n\t\treturn false\n\tfi\n\tif (( $true_count > 0 )); then\n\t\techo \"true_count=$true_count\"\
+    \n\t\treturn true\n\tfi\n\treturn false", "    local CSV=\"$1\"\n    if [ -z \"\
+    $CSV\" ]\n    then\n        echo \"Empty CSV given for check_dict_case\"\n   \
+    \     exit 1\n    fi\n    local lower=0\n    local upper=0\n    for row in $CSV\n\
+    \    do\n        local keys=$(echo $row | tr \",\" \"\\n\" | tr \",\" \"\\t\"\
+    \ | awk -F \",\" '{print $1}')\n        local values=$(echo $row | tr \",\" \"\
+    \\n\" | tr \",\" \"\\t\" | awk -F \",\" '{print $2}')\n        lower=0\n     \
+    \   upper=0\n        for value in $values\n        do\n            if [ \"$value\"\
+    \ = \"a\" ] || [ \"$value\" = \"A\" ]\n            then\n                lower=1\n\
+    \            else\n                upper=1\n            fi\n        done\n   \
+    \     if [ \"$lower\" -eq 0 ] && [ \"$upper\" -eq 0 ]\n        then\n        \
+    \    echo \"Empty CSV given for check_dict_case\"\n            exit 1\n      \
+    \  fi\n        lower=0\n        upper=0\n        for value in $keys\n        do\n\
+    \            if [ \"$value\" = \"a\" ] || [ \"$value\" = \"A\" ]\n           \
+    \ then\n                lower=1\n            else\n                upper=1\n \
+    \           fi\n        done\n        if [ \"$lower\" -eq 0 ] && [ \"$upper\"\
+    \ -eq 0 ]\n        then\n            echo \"Empty CSV given for check_dict_case\"\
+    \n            exit 1\n        fi\n    done\n    true", "    local line=$1\n  \
+    \  local key\n    local value\n    \n    for key in $(echo $line | cut -d',' -f\
+    \ 1); do\n\tvalue=$(echo $line | cut -d',' -f 2)\n\t[[ $key =~ [a-z] ]] && [[\
+    \ $value =~ [a-z] ]] || \\\n\t[[ $key =~ [A-Z] ]] && [[ $value =~ [A-Z] ]]\n \
+    \   done\n    \n    return $?", "    local csv=$1\n    # Trim whitespace from\
+    \ the end of the line.\n    # csv=${csv#*[[:space:]]} \n    csv=${csv%$'\\n'}\n\
+    \    # Convert both sides to lower case.\n    csv=$(echo \"$csv\" | tr [:upper:]\
+    \ [:lower:])\n    csv=$(echo \"$csv\" | tr [:lower:] [:upper:])\n    if [[ -z\
+    \ $csv ]]; then \n        echo \"false\"\n    else \n        echo \"true\"\n \
+    \   fi", "    local lines=$(cat ${1} | head -1)\n    if [ \"${#lines}\" -eq \"\
+    0\" ]; then return 1; fi\n    lines=$(tr \",\" \"\\n\" <<< ${lines})\n    local\
+    \ lower\n    local upper\n    for ((i = 0; i < ${#lines[@]}; i++)); do\n     \
+    \   line=${lines[$i]}\n        lower=$(echo \"${line}\" | tr \"[:upper:]\" \"\
+    [:lower:]\")\n        upper=$(echo \"${line}\" | tr \"[:lower:]\" \"[:upper:]\"\
+    )\n        if [ \"$lower\" != \"$upper\" ]; then\n            return 1\n     \
+    \   fi\n    done\n    return 0", "    local IFS=$'\\n'\n    local lower=$(echo\
+    \ $1 | tr ',' '\\n' | tr ' ' '_' | tr ' ' '-' | tr '-' '_')\n    local upper=$(echo\
+    \ $1 | tr ',' '\\n' | tr ' ' '_' | tr ' ' '-' | tr '-' '_' | tr '_' '-')\n   \
+    \ local upper_keys=$(echo $1 | tr ',' '\\n' | tr ' ' '_' | tr ' ' '-' | tr '-'\
+    \ '_')\n    local lower=$(echo $1 | tr ',' '\\n' | tr ' ' '_' | tr ' ' '-' | tr\
+    \ '-' '_' | tr '_' '-')\n    local lower_keys=$(echo $1 | tr ',' '\\n' | tr '\
+    \ ' '_' | tr ' ' '-' | tr '-' '_')\n    local no_match=$(echo $1 | tr ',' '\\\
+    n' | tr ' ' '_' | tr ' ' '-' | tr '-' '_' | tr '_' '-' | tr ' ' '-')\n    local\
+    \ no_match_keys=$(echo $no_match | tr ',' '\\n' | tr ' ' '_' | tr ' ' '-' | tr\
+    \ '-' '_')\n    if [ -z \"$no_match_keys\" ]\n    then\n        if [[ \"$lower_keys\"\
+    \ != *\"$lower\"* ]] || [[ \"$upper_keys\" != *\"$upper\"* ]]\n        then\n\
+    \            echo \"false\"\n        else\n            echo \"true\"\n       \
+    \ fi\n    else\n        if [[ \"$lower_keys\" != *\"$lower\"* ]] || [[ \"$no_match_keys\"\
+    \ != *\"$no_match\"* ]] || [[ \"$upper_keys\" != *\"$upper\"* ]]\n        then\n\
+    \            echo \"false\"\n        else\n            echo \"true\"\n       \
+    \ fi\n    fi", "  echo \"$1\" | grep -E \"^([^,]+,[^,]+)$\"\n  [ $? -ne 0 ] &&\
+    \ return 0\n  echo \"$1\" | grep -E \"^([^,]+,[^,]+)$\" | grep -E \"^([^,]+,[^,]+)$\"\
+    \n  [ $? -ne 0 ] && return 0\n  echo \"$1\" | grep -E \"^([^,]+,[^,]+)$\" | grep\
+    \ -E \"^([^,]+,[^,]+)$\" | grep -E \"^([^,]+,[^,]+)$\"\n  [ $? -eq 0 ] || return\
+    \ 0\n  return 1", "    local csv=$1\n    if [ -z \"$csv\" ];\n    then\n     \
+    \   echo \"$0: CSV not given\"\n        return 1\n    fi\n    local key\n    local\
+    \ value\n    local lower\n    local upper\n    local keycase\n    local valuecase\n\
+    \n    echo \"$0: $csv\"\n    while read -r key value; do\n        lower=$key\n\
+    \        upper=$(echo $key | tr [:lower:] [:upper:])\n        if [ -z \"$lower\"\
+    \ ];\n        then\n            keycase='false'\n        else\n            keycase='true'\n\
+    \        fi\n        if [ -z \"$upper\" ];\n        then\n            valuecase='false'\n\
+    \        else\n            valuecase='true'\n        fi\n        echo \"$keycase,$valuecase\"\
+    \n    done", "  local dict=\"$1\"\n  local keys=\"$(sort $dict | cut -f1 -d','\
+    \ | uniq)\"\n  local case=\"$(sort $dict | cut -f2 -d',' | uniq)\"\n  local found=\"\
+    $(true)\"\n  if [[ \"$keys\" =~ ^$case$ ]]; then\n    for entry in \"$@\"; do\n\
+    \      found=false\n      for i in $keys; do\n        if [[ $entry =~ $i,*[[:upper:]],*[[:upper:]],*\
+    \ ]]; then\n          found=true\n          break\n        fi\n      done\n  \
+    \    if [[ \"$found\" == \"true\" ]]; then\n        break\n      fi\n    done\n\
+    \  fi\n  [[ \"$found\" == \"true\" ]] || return 1\n  return 0", "    local first_col_key=\"\
+    $1\"\n    local first_col_val=\"$2\"\n    local second_col_key=\"$3\"\n    local\
+    \ second_col_val=\"$4\"\n    local keys_in_lower=()\n    local keys_in_upper=()\n\
+    \    local values_in_lower=()\n    local values_in_upper=()\n    IFS=$'\\n' read\
+    \ -ra first_col_keys <<< \"$first_col_key\"\n    IFS=$'\\n' read -ra first_col_values\
+    \ <<< \"$first_col_val\"\n    IFS=$'\\n' read -ra second_col_keys <<< \"$second_col_key\"\
+    \n    IFS=$'\\n' read -ra second_col_values <<< \"$second_col_val\"\n    for ((\
+    \ idx = 0; idx < ${#first_col_keys[@]}; idx++ )); do\n        if [[ \"${first_col_keys[$idx]}\"\
+    \ =~ ^[a-zA-Z]$ ]]; then\n            values_in_lower+=(\"${first_col_values[$idx]}\"\
+    )\n        else\n            keys_in_lower+=(\"${first_col_keys[$idx]}\")\n  \
+    \      fi\n    done\n    for (( idx = 0; idx < ${#second_col_keys[@]}; idx++ ));\
+    \ do\n        if [[ \"${second_col_keys[$idx]}\" =~ ^[a-zA-Z]$ ]]; then\n    \
+    \        values_in_upper+=(\"${second_col_values[$idx]}\")\n        else\n   \
+    \         keys_in_upper+=(\"${second_col_keys[$idx]}\")\n        fi\n    done\n\
+    \    if [[ \"${#keys_in_lower[@]}\" == \"${#keys_in_upper[@]}\" ]] && \\\n   \
+    \    [[ \"${#values_in_lower[@]}\" == \"${#values_in_upper[@]}\" ]]; then\n  \
+    \      return \"true\"\n    else\n        return \"false\"\n    fi", "  local\
+    \ csv=$1\n  local truestr=\"true\"\n  local falsestr=\"false\"\n  local count=$(echo\
+    \ $csv | wc -l | sed 's/^ *//g')\n  local countint=$(echo $csv | wc -l | sed 's/^\
+    \ *//g' | sed 's/[[:space:]]*$//g')\n  local counttrue=$(echo $csv | wc -l | sed\
+    \ 's/^ *//g' | sed 's/[[:space:]]*$//g' | sed '/^$/d')\n  local countfalse=$(echo\
+    \ $csv | wc -l | sed 's/^ *//g' | sed 's/[[:space:]]*$//g' | sed '/^$/d')\n  if\
+    \ [ $countint -eq $count ]; then\n    if [ $counttrue -eq $count ]; then\n   \
+    \   if [ $countfalse -eq $count ]; then\n        echo $falsestr\n      else\n\
+    \        echo $truestr\n      fi\n    else\n      echo $truestr\n    fi\n  else\n\
+    \    echo $falsestr\n  fi", "    local strings=$( IFS=\";\" read -a cols <<< \"\
+    $1\" )\n    local headers=$( IFS=\",\" read -a headers <<< \"$2\" )\n    local\
+    \ result=false\n    local i=0 j=0\n    while [ $i -lt ${#cols[@]} ]\n    do\n\
+    \        if [[ ${headers[j]} == \"Name\" ]] || [[ ${headers[j]} == \"Age\" ]]\n\
+    \        then\n            strings[i]=\"${cols[i]}\"\n        elif [[ ${headers[j]}\
+    \ == \"City\" ]]\n        then\n            strings[i]=\"${cols[i]}\"\n      \
+    \      strings[i]=\"${strings[i]//,/ }\"\n        fi\n        j=$(( j + 1 ))\n\
+    \        i=$(( i + 1 ))\n    done\n    result=$( echo \"${strings[@]}\" | grep\
+    \ -c \"^[[:lower:]]*$\" | grep -c \"^[[:upper:]]*$\" )\n    echo \"${result}\"",
+  "  if [ -z \"$1\" ] ; then\n    echo \"$0: check_dict_case: empty input file\"\n\
+    \    return 0\n  fi\n  head -n 1 $1 | cut -d',' -f 1,2 | sort | uniq -c | \\\n\
+    \      awk '{ print $2 \"\\t\" $1 }'", "\tlocal csv_string=$1\n\t\n\tif [[ $csv_string\
+    \ == \"\" ]]; then\n\t\treturn false\n\tfi\n\n\tlocal csv_arr=(${csv_string//,/\
+    \ })\n\tfor value in \"${csv_arr[@]}\"; do\n\t\tlocal key=${value%%,*}\n\t\tlocal\
+    \ value=${value##*,}\n\t\tlocal case_value\n\t\tif [[ $key == \"\" ]]; then\n\t\
+    \t\treturn false\n\t\tfi\n\t\t\n\t\tif [[ \"$key\" == [A-Z] ]]; then\n\t\t\tcase_value=1\n\
+    \t\telif [[ \"$key\" == [a-z] ]]; then\n\t\t\tcase_value=1\n\t\telse\n\t\t\treturn\
+    \ false\n\t\tfi\n\t\t\n\t\tif [[ \"$value\" == \"\" ]]; then\n\t\t\treturn false\n\
+    \t\tfi\n\t\t\n\t\tif [[ \"$case_value\" -eq 1 ]]; then\n\t\t\tcase_value=$(echo\
+    \ \"$value\" | tr -d '[:space:]')\n\t\telse\n\t\t\tcase_value=$(echo \"$value\"\
+    \ | tr '[:upper:]' '[:lower:]')\n\t\tfi\n\tdone\n\t\n\treturn true", "    local\
+    \ KEYVAL\n    local KEY\n    local VAL\n    local KEY_LOWER\n    local KEY_UPPER\n\
+    \    local STATUS\n\n    KEYVAL=\"$1\"\n    KEYVAL=${KEYVAL//,/ }\n    KEYVAL=${KEYVAL//$'\\\
+    n'/ }\n\n    for KEY in $KEYVAL; do\n        KEY_LOWER=${KEY%,*}\n        VAL=${KEY#*,}\n\
+    \        KEY_UPPER=${KEY%%,*}\n\n        if [ \"X$KEY_LOWER\" != \"X\" ] && [\
+    \ \"X$KEY_UPPER\" != \"X\" ]; then\n            if [ \"$KEY_LOWER\" != \"x\" ]\
+    \ && [ \"$KEY_UPPER\" != \"x\" ]; then\n                STATUS=\"false\"\n   \
+    \         else\n                STATUS=\"true\"\n            fi\n        else\n\
+    \            STATUS=\"false\"\n        fi\n\n        echo \"$STATUS\"\n    done",
+  "  local str=`echo -n \"$1\" | cut -d, -f1,2`\n  if [[ -z ${str} ]]; then\n    echo\
+    \ \"[ERROR] check_dict_case(): '$1' is empty\" > /dev/stderr\n    return 1\n \
+    \ fi\n\n  # The current dict we're checking\n  local check=$(echo \"$str\" | tr\
+    \ ',' '\\n' | sort | uniq -d)\n\n  # The current field we're on\n  local field=''\n\
+    \n  # The current line we're on\n  local line=''\n\n  # If not all keys are strings,\
+    \ return false\n  local ok=true\n\n  # Loop through each key in the dict\n  while\
+    \ [[ -n \"${check}\" ]]; do\n    field=${check%%,*}\n\n    # If the current field\
+    \ is empty\n    if [[ ${field} == *'' ]]; then\n      # If we're done with all\
+    \ the lines, return false\n      if [[ -z ${line} ]]; then\n        echo \"[ERROR]\
+    \ check_dict_case(): dictionary entry '${check}' is in bad format\" > /dev/stderr\n\
+    \        ok=false\n      else\n        # Move on to the next\n        ((line++))\n\
+    \      fi\n      continue\n    fi\n\n    line=0\n    field=${field,,}\n    while\
+    \ [[ ${line} -lt ${#check} ]]; do\n      if [[ ${check:$line:1} == \"${field}\"\
+    \ ]]; then\n        check=${check:$line:1}\n        break\n      fi\n      ((line++))\n\
+    \    done\n\n    # If the current field is a string\n    if [[ ${check} == *''\
+    \ ]]; then\n      echo \"[ERROR] check_dict_case(): dictionary entry '${check}'\
+    \ is in bad format\" > /dev/stderr\n      ok=false\n    fi\n    # If the current\
+    \ field is an uppercase string\n    if [[ ${check} =~ [A-Z] ]]; then\n      echo\
+    \ \"[ERROR] check_dict_case(): dictionary entry '${check}' is in bad format\"\
+    \ > /dev/stderr\n      ok=false\n    fi\n    # If the current field is a lowercase\
+    \ string\n    if [[ ${check} =~ [a-z] ]]; then\n      echo \"[ERROR] check_dict_case():\
+    \ dictionary entry '${check}' is in bad format\" > /dev/stderr\n      ok=false\n\
+    \    fi\n  done\n\n  echo \"$ok\"", "    local input_file=$1\n    local dict_file=${input_file%.csv}.dict\n\
+    \    local header_line=0\n    local dict_key=\n    local dict_val=\n    local\
+    \ key_type=\n    local val_type=\n    local status=0\n    local key_val=\n   \
+    \ while IFS=\";\" read -r key val\n    do\n        # strip spaces from the key\n\
+    \        key_val=${key// /}\n        # strip spaces from the value\n        val_type=$(echo\
+    \ $val | sed -e 's/[[:space:]]//g' -e 's/[^A-Z]//g')\n        val_type=${val_type//\
+    \ /}\n        \n        echo \"Processing key $key_val\"\n        # if the key\
+    \ exists in the dictionary, return true\n        if [ -f $dict_file ]\n      \
+    \  then\n            echo \"Checking key $key_val in $dict_file\"\n          \
+    \  IFS=',' read -ra arr <<< \"$val\"\n            arr=(${arr[@]//,/ })\n     \
+    \       arr=(${arr[@]//-/ })\n            if [[ ${arr[0]} == \"$key_val\" ]]\n\
+    \            then\n                key_type=$key_type\n                key_val=$key_val\n\
+    \            elif [[ ${arr[0]} == \"$key_val\" ]]\n            then\n        \
+    \        key_type=$key_val\n                key_val=$key_type\n            fi\n\
+    \        fi\n    done < $input_file\n    if [ -z $key_val ]\n    then\n      \
+    \  status=1\n    else\n        if [ \"$key_type\" == \"string\" ]\n        then\n\
+    \            if [ \"$key_val\" == \"\" ]\n            then\n                status=1\n\
+    \            else\n                status=0\n            fi\n        else\n  \
+    \          if [ \"$key_type\" == \"string\" ]\n            then\n            \
+    \    status=0\n            else\n                status=1\n            fi\n  \
+    \      fi\n    fi\n    return $status", "   local dict_string=\"$1\"\n   if [\
+    \ ${#dict_string} -eq 0 ] ; then\n      return 1\n   fi\n\n   local dict_entries=$(echo\
+    \ $dict_string | sed -e 's/,/ /g' | sort -k 1,1 -k 2,2 -k 3,3 -k 4,4 | awk '{print\
+    \ $1}')\n   local dict_entries_upper=$(echo $dict_entries | sed -e 's/,/ /g' |\
+    \ sort -k 1,1 -k 2,2 -k 3,3 -k 4,4 | awk '{print $2}')\n   local dict_entries_lower=$(echo\
+    \ $dict_entries | sed -e 's/,/ /g' | sort -k 1,1 -k 2,2 -k 3,3 -k 4,4 | awk '{print\
+    \ tolower($1)}')\n   local dict_entries_upper_to_lower=$(echo $dict_entries |\
+    \ sed -e 's/,/ /g' | sort -k 1,1 -k 2,2 -k 3,3 -k 4,4 | awk '{print toupper($1)}')\n\
+    \n   if [ ${#dict_entries} -eq 0 ] ; then\n      return 1\n   elif [ ${#dict_entries_lower}\
+    \ -eq 0 ] ; then\n      return 1\n   elif [ ${#dict_entries_upper} -eq 0 ] ; then\n\
+    \      return 1\n   elif [ ${#dict_entries_upper_to_lower} -eq 0 ] ; then\n  \
+    \    return 1\n   fi\n   return 0", "  local keys=($(echo \"$1\" | cut -d \",\"\
+    \ -f 1 ))\n  local values=($(echo \"$1\" | cut -d \",\" -f 2 ))\n  if [ -z \"\
+    $keys\" ]; then \n    echo \"$1 is an empty CSV\"; \n    return 1; \n  fi\n  for\
+    \ i in \"${!keys[@]}\"; do\n    local key=\"${keys[i]}\"\n    local value=\"${values[i]}\"\
+    \n    if [ \"$key\" != \"${key^^}\" ]; then\n      if [ \"$value\" != \"${value^^}\"\
+    \ ]; then\n        echo \"$1 contains key $key with value $value\" \n        return\
+    \ 1; \n      fi\n    fi\n  done\n  echo \"$1 contains all strings in lower case\"\
+    \ \n  return 0", "  CSV=\"$(echo $1 | tr \",\" \"\\n\" | sort -n | head -n 1)\"\
+    \n  if [ -z \"$CSV\" ]; then\n    echo \"false\"\n  else\n    KEYS=\"$(echo $CSV\
+    \ | tr \",\" \"\\n\" | sort -n | head -n 1)\"\n    VALUE=\"$(echo $CSV | tr \"\
+    ,\" \"\\n\" | sort -n | head -n 2)\"\n    declare -i KEYS_LENGTH=${#KEYS}\n  \
+    \  declare -i VALUE_LENGTH=${#VALUE}\n    declare -i IS_LOWER=0\n    declare -i\
+    \ IS_UPPER=0\n    if [ $KEYS_LENGTH -ge 1 ] && [ $KEYS_LENGTH -le 2 ]; then\n\
+    \      IS_LOWER=0\n      IS_UPPER=0\n      IFS=\",\"\n      for KEY in ${KEYS[@]};\
+    \ do\n        lower=$(echo $KEY | tr '[A-Z]' '[a-z]')\n        upper=$(echo $KEY\
+    \ | tr '[a-z]' '[A-Z]')\n        if [ \"${KEYS[IS_LOWER]}\" = \"${lower}\" ];\
+    \ then\n          IS_LOWER=1\n        elif [ \"${KEYS[IS_UPPER]}\" = \"${upper}\"\
+    \ ]; then\n          IS_UPPER=1\n        fi\n      done\n      if [ \"${IS_LOWER}\"\
+    \ = \"1\" ] && [ \"${IS_UPPER}\" = \"1\" ]; then\n        echo \"true\"\n    \
+    \  else\n        echo \"false\"\n      fi\n    else\n      echo \"false\"\n  \
+    \  fi\n  fi", "    local keys=$($1 cut -d',' -f1)\n    local value=$($1 cut -d','\
+    \ -f2)\n\n    # all keys should be lower case or all keys should be upper case.\n\
+    \    if [[ $(echo $keys | tr '[:upper:]' '[:lower:]') =~ ^([A-Za-z0-9]+)$ ]];\
+    \ then\n        local num_upper_case=$(echo \"$keys\" | tr '[:upper:]' '[:lower:]'\
+    \ | wc -l | bc)\n        if [[ $num_upper_case -eq $(echo $keys | tr '[:upper:]'\
+    \ '[:lower:]') ]]; then\n            echo $value is in lower case\n        else\n\
+    \            echo $value is in upper case\n        fi\n    else\n        echo\
+    \ $value is not in lower/upper case\n    fi", "  local key=${1:0:1}\n  local value=${1:2}\n\
+    \  local found\n  found=false\n  # Check if all values are strings\n  for value\
+    \ in $value; do\n    if ! [[ \"$value\" = *[A-z]*$ ]]; then\n      found=true\n\
+    \    fi\n  done\n  # Check if all keys are strings\n  if ! $found; then\n    echo\
+    \ \"$key is not a string.\"\n    return 1\n  fi\n  # Check if all keys are in\
+    \ lower case\n  for value in $value; do\n    if [[ \"$value\" = *[a-Z]*$ ]]; then\n\
+    \      found=true\n    fi\n  done\n  if ! $found; then\n    echo \"$key is not\
+    \ a lowercase string.\"\n    return 1\n  fi\n  # Check if all keys are in upper\
+    \ case\n  for value in $value; do\n    if [[ \"$value\" = *[A-Z]*$ ]]; then\n\
+    \      found=true\n    fi\n  done\n  if ! $found; then\n    echo \"$key is not\
+    \ a uppercase string.\"\n    return 1\n  fi\n  # If all keys and values are strings,\
+    \ return true\n  return 0", "  local -n dict=\"$1\"\n  local -n line=\"${dict[*]}\"\
+    \n  local -i len=\"${#dict[*]}\"\n\n  # empty dict is always okay\n  if [ \"$len\"\
+    \ -eq 0 ]; then \n    return 0\n  fi\n\n  # if the first line is a header line\
+    \ then \n  # return true if all the other lines are lower case\n  # or if all\
+    \ the other lines are upper case\n  if [[ \"$line\" =~ ^([[:lower:]])[[:space:]]+([[:upper:]])[[:space:]]+$\
+    \ ]]; then\n    local -i upper=0\n    local -i lower=0\n    local -i i=1 \n  \
+    \  while [ \"$i\" -lt \"$len\" ]; do\n      if [[ \"$line\" =~ ([[:upper:]])[[:space:]]+([[:lower:]])[[:space:]]+$\
+    \ ]]; then\n        upper=1;\n      else\n        lower=1;\n      fi\n      line=\"\
+    ${dict[$i]}\"\n      (( i++ ))\n    done\n\n    return \"$lower $upper\"\n  fi\n\
+    \n  # if the first line isn't a header line then \n  # return false if the rest\
+    \ of the lines are lower case \n  # or if the rest of the lines are upper case\n\
+    \  local -i lower=0\n  local -i upper=0\n  local -i i=1 \n  while [ \"$i\" -lt\
+    \ \"$len\" ]; do\n    if [[ \"$line\" =~ ^([[:upper:]])[[:space:]]+([[:lower:]])[[:space:]]+$\
+    \ ]]; then\n      upper=1;\n    else\n      lower=1;\n    fi\n    line=\"${dict[$i]}\"\
+    \n    (( i++ ))\n  done\n  \n  return \"$lower $upper\"", "  if [ ! \"$1\" ];\
+    \ then\n    echo \"check_dict_case() received an empty CSV as argument ($1)\"\n\
+    \    echo \"The CSV will be ignored.\"\n    exit 1\n  fi\n  \n  local -n arr=$1\n\
+    \  local -n is_upper=\n  local -n all_lower=\n  local -n all_upper=\n\n  # Read\
+    \ the csv in as a 2 dimensional array whose first \n  # dimension contains keys\
+    \ and whose second dimension \n  # contains values.\n  while IFS=',' read -r -a\
+    \ fields; do\n    local -n arr_keys=${fields[0]}\n    local -n arr_values=${fields[1]}\n\
+    \    \n    if is_upper; then\n      is_upper=false\n    elif all_lower; then\n\
+    \      all_lower=false\n    elif all_upper; then\n      all_upper=false\n    else\n\
+    \      local -n string_keys=$(printf '%s\\n' \"${arr_keys[@]}\" | sort | uniq\
+    \ -u)\n      local -n string_values=$(printf '%s\\n' \"${arr_values[@]}\" | sort\
+    \ | uniq -u)\n      if [ ! -z \"$string_keys\" ] && [ ! -z \"$string_values\"\
+    \ ]; then\n        all_lower=true\n        all_upper=true\n      fi\n    fi\n\
+    \  done < <(head -n 1 \"$1\")\n\n  if [ \"$all_lower\" == \"true\" ]; then\n \
+    \   true\n  elif [ \"$all_upper\" == \"true\" ]; then\n    true\n  else\n    false\n\
+    \  fi", "    local csv_lines=$1\n    if [[ $csv_lines ]]; then\n        # Remove\
+    \ leading and trailing spaces.\n        csv_lines=${csv_lines#\"${csv_lines%%[![:space:]]*}\"\
+    }\n        csv_lines=${csv_lines%%\"$'\\n'*}\"\n        csv_lines=${csv_lines/,/\
+    \ }\n        local lower_case_keys=false\n        local upper_case_keys=false\n\
+    \        # Check if all the keys are lower case or all are upper case\n      \
+    \  for csv_line in ${csv_lines}; do\n            local key=${csv_line%%,*}\n \
+    \           local value=${csv_line#*,}\n            # Lowercase keys\n       \
+    \     if [[ ${value,,} == *[A-Z]* ]]; then\n                lower_case_keys=true\n\
+    \                break\n            fi\n            # Upper case keys\n      \
+    \      if [[ ${value,,} == *[a-z]* ]]; then\n                upper_case_keys=true\n\
+    \                break\n            fi\n        done\n        local expected_results=false\n\
+    \        # If all the keys are either lowercase or uppercase\n        if [[ ${lower_case_keys}\
+    \ == true || ${upper_case_keys} == true ]]; then\n            expected_results=true\n\
+    \        fi\n        if [[ ${expected_results} == \"false\" ]]; then\n       \
+    \     echo \"false\"\n        fi\n    else\n        echo \"false\"\n    fi", " \
+    \   local CSV=\"$1\"\n    # Check that CSV is non-empty\n    if [ -z \"$CSV\"\
+    \ ]; then\n        echo \"Empty CSV\"\n        return 0\n    fi\n    local header\n\
+    \    headers=( $( cut -d ',' -f1 <<< \"$CSV\" ) )\n    # Check that each row has\
+    \ 2 elements\n    local key\n    for header in \"${headers[@]}\"; do\n       \
+    \ key=\"$( cut -d ',' -f2 <<< \"$header\" )\" \n        if [ \"$(type -t \"$key\"\
+    )\" != \"string\" ]; then\n            return 1\n        fi\n    done\n    headers=(\
+    \ $( cut -d ',' -f2 <<< \"$CSV\" ) )\n    # Check that each row has 2 elements\n\
+    \    for header in \"${headers[@]}\"; do\n        key=\"$( cut -d ',' -f1 <<<\
+    \ \"$header\" )\" \n        if [ \"$(type -t \"$key\")\" != \"string\" ]; then\n\
+    \            return 1\n        fi\n    done\n    # Passed\n    return 0", "  local\
+    \ input=$1\n  if [[ -z \"$input\" ]]; then\n    return 0\n  fi\n  local key=$1\n\
+    \  local value=$2\n  local num_cols=$(echo $input | tr \",\" \"\\n\" | wc -l)\n\
+    \  (( $num_cols > 2 )) && return 1\n  local num_lines=$(echo $input | tr \",\"\
+    \ \"\\n\" | tr \" \" \"\\n\" | wc -l)\n  (( $num_lines > 0 )) && return 0\n  local\
+    \ i=0 \n  while read -r line\n  do\n    local key=$(echo $line | tr \",\" \"\\\
+    n\" | cut -d \",\" -f 1)\n    local value=$(echo $line | tr \",\" \"\\n\" | cut\
+    \ -d \",\" -f 2)\n    [[ -z $key ]] && continue\n    [[ \"$key\" =~ ^[[:alpha:]]+$\
+    \ ]] && return 0\n    [[ \"$key\" =~ ^[[:upper:]]+$ ]] && return 0\n    [[ \"\
+    $value\" =~ ^[[:alpha:]]+$ ]] && return 0\n    [[ \"$value\" =~ ^[[:upper:]]+$\
+    \ ]] && return 0\n    (( i++ ))\n  done < \"$input\"\n  return 1", "    local\
+    \ IFS=,\n    local dict=\"$1\"\n    if [ -z \"$dict\" ];\n    then\n        #\
+    \ empty or no dict\n        return false\n    fi\n    local lowerdict=$(echo $dict\
+    \ | tr \",\" \"\\n\")\n    local lowerdictsize=${#lowerdict}\n    local upperdict=$(echo\
+    \ $dict | tr \",\" \"\\n\" | tr \"\\n\" \",\")\n    local upperdictsize=${#upperdict}\n\
+    \    local lowerkeys\n    local upperkeys\n    lowerkeys=$(echo $lowerdict | tr\
+    \ \",\" \"\\n\" | cut -d \",\" -f1)\n    lowerkeysize=${#lowerkeys}\n    upperkeys=$(echo\
+    \ $upperdict | tr \",\" \"\\n\" | cut -d \",\" -f1)\n    upperkeysize=${#upperkeys}\n\
+    \    # check keys are all lower\n    if [ $lowerkeysize -eq 0 ]\n    then\n  \
+    \      return true\n    fi\n    # check keys are all upper\n    if [ $upperkeysize\
+    \ -eq 0 ]\n    then\n        return false\n    fi\n    # check keys are in the\
+    \ correct order\n    if [ $lowerkeysize -eq $upperkeysize ]\n    then\n      \
+    \  for (( x=0; x<lowerkeysize; x=x+1));\n        do\n            if [ $x -lt $lowerkeysize\
+    \ ]\n            then\n                return true\n            fi\n        done\n\
+    \        for (( x=0; x<upperkeysize; x=x+1));\n        do\n            if [ $x\
+    \ -lt $upperkeysize ]\n            then\n                return false\n      \
+    \      fi\n        done\n    fi\n    return false", "    local csv=$1\n    local\
+    \ key_type=${2:-str}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n\
+    \    local key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local\
+    \ key_type=${key_type%,*}\n    local key_type=${key_type%,*}\n    local key_type=",
+  "  if [ ${#} -eq 0 ]\n  then\n    echo \"Usage: $(basename $0) csvfile \" \n   \
+    \ echo \"  CSV file must contain two columns of data.\"\n    return 1\n  fi\n\n\
+    \  key=$(head -n 1 $1)\n  value=$(head -n 2 $1)\n  case $key in\n    # Keys are\
+    \ always strings in lower case\n    # Values are always strings in upper case\n\
+    \    # \n    # Notes:\n    # - bash case statements are case-sensitive\n    #\
+    \ - awk case statements are not case-sensitive\n    # - bash case statements support\
+    \ \"-\" to test for\n    #   a range of values (i.e. \"a -eq 3 -a -ge 2\")\n \
+    \   # - awk case statements are case sensitive only when the \n    #   first letter\
+    \ is uppercase\n    #   e.g. \"A -eq 3\" would match \"a\",\"A\",\"ab\"\n    #\
+    \ - bash case statements can match strings against\n    #   patterns using the\
+    \ \"~\" metacharacter\n    #   e.g. \"a -eq ~3\" would match \"a\",\"A\",\"ab\"\
+    \n    #   \n    # - bash case statements cannot test patterns\n    #   e.g. \"\
+    a -eq ~p\" would match \"a\",\"A\",\"ab\"\n    #\n    # - bash case statements\
+    \ can test against strings\n    #   that contain special characters, including\
+    \ spaces\n    #   e.g. (case insensitive)\n    #   \"a -eq ~a -a -eq ~1\"\n  \
+    \  #\n    # - bash case statements cannot test against patterns\n    #   e.g.\
+    \ \"a -eq ~p\" would match \"a\",\"A\",\"ab\"\n    #\n    #   However, bash case\
+    \ statements can test against\n    #   patterns that may contain special characters\n\
+    \    #   e.g. (case sensitive)\n    #   \"a -eq ~P -a -eq ~1\"\n    #   \n   \
+    \ #   Note: \n    #   - \"~\" metacharacter must be the first character in the\n\
+    \    #      pattern string\n    #   - bash case statements will not recognize\
+    \ the pattern\n    #      unless it is surrounded by double quotes\n    #   -\
+    \ an escaped \"~\" character must appear as a\n    #      character in the pattern\
+    \ string\n    #   - \"~\" metacharacter must be escaped with an \"\\\\\"\n   \
+    \ #      when it is first in the pattern string\n    #   - bash case statements\
+    \ will not recognize the pattern\n    #      unless it is surrounded by double\
+    \ quotes\n    #   - an escaped \"~\" character must appear as a\n    #", "  local\
+    \ csv=$1\n  local keys=$(echo $csv | awk -F, '{ print $1 }')\n  local values=$(echo\
+    \ $csv | awk -F, '{ print $2 }')\n\n  if [ -z \"$csv\" ]; then\n    return 0\n\
+    \  fi\n\n  if [ \"$(echo $keys | wc -l)\" -eq \"0\" ]; then\n    return 0\n  fi\n\
+    \n  # For each column, check if all keys are lower case\n  for k in $keys; do\n\
+    \    local v\n    v=$(echo $values) | awk -F, '{ print $1 }'\n    if [[ $v ==\
+    \ *[a-z]*$ ]]; then\n      return 0\n    fi\n  done\n\n  # For each column, check\
+    \ if all keys are upper case\n  for k in $keys; do\n    local v\n    v=$(echo\
+    \ $values) | awk -F, '{ print $1 }'\n    if [[ $v == *[A-Z]*$ ]]; then\n     \
+    \ return 0\n    fi\n  done\n  return 1", "    local line=\n    local count=0;\n\
+    \    local key=\n    local val=\n    while IFS=\",\" read -r key val; do\n   \
+    \     count=$((count+1))\n    done\n    echo \"$count\" #DEBUG\n    if [ \"$count\"\
+    \ -eq 1 ]; then\n        local value=\n        IFS=\"|\" read -r key value <<<\
+    \ \"$key\"\n        echo \"$key,$value\" #DEBUG\n        if [[ \"$key\" =~ ^[A-Z0-9_]*$\
+    \ ]] ; then\n            echo \"true\" #DEBUG\n        else\n            echo\
+    \ \"false\" #DEBUG\n        fi\n    else\n        echo \"false\" #DEBUG\n    fi",
+  "    local file=$1\n    local lower=false\n    local upper=false\n\n    # Read first\
+    \ line\n    read line || return 1\n    # Skip comma\n    read line\n    # Read\
+    \ remaining lines\n    while read line\n    do\n        # Skip double quote\n\
+    \        read line\n        # Skip comma\n        read line\n        if [[ $line\
+    \ =~ \\\"\" ]] \n        then\n            # Check for lower case\n          \
+    \  if [[ $line =~ ^([a-z]) ]] \n            then\n                if [[ $lower\
+    \ == true ]]\n                then\n                    return 0\n           \
+    \     else\n                    lower=true\n                fi\n            #\
+    \ Check for upper case\n            elif [[ $line =~ ^([A-Z]) ]] \n          \
+    \  then\n                if [[ $upper == true ]]\n                then\n     \
+    \               return 0\n                else\n                    upper=true\n\
+    \                fi\n            else\n                return 0\n            fi\n\
+    \        else\n            return 0\n        fi\n    done < \"$file\"\n    return\
+    \ 1", "    local line=$1\n    local keys=$2\n    local lower=$3\n    local upper=$4\n\
+    \    local string_keys=$5\n    local string_keys_upper=$6\n    local values=$7\n\
+    \    local check_vals=\"false\"\n    local check_keys_lower=\"false\"\n    local\
+    \ check_keys_upper=\"false\"\n    # Make sure the given CSV is at least 2 cols.\n\
+    \    case \"${#line}\" in\n        0)\n            echo \"The given CSV is empty.\"\
+    \n            exit 1\n            ;;\n        1)\n            echo \"The given\
+    \ CSV is missing at least 2 columns\"\n            exit 1\n            ;;\n  \
+    \  esac\n    # Read CSV in key,value order into an associative array.\n    read\
+    \ -ra array <<< \"$line\"\n    # Convert the given keys to lower case or upper\
+    \ case.\n    if [ -z \"$string_keys\" ]; then\n        if [ \"$lower\" == \"true\"\
+    \ ]; then\n            string_keys=\"$(echo \"${keys}\" | tr [A-Z] [a-z]|tr [a-z]\
+    \ [A-Z]|sed 's/,//g')\"\n        else\n            string_keys=\"$(echo \"${keys}\"\
+    \ | tr [a-z] [A-Z]|tr [A-Z] [a-z]|sed 's/,//g')\"\n        fi\n    fi\n    if\
+    \ [ -z \"$string_keys_upper\" ]; then\n        if [ \"$upper\" == \"true\" ];\
+    \ then\n            string_keys_upper=\"$(echo \"${keys}\" | tr [A-Z] [A-Z]|tr\
+    \ [a-z] [A-Z]|sed 's/,//g')\"\n        else\n            string_keys_upper=\"\
+    $(echo \"${keys}\" | tr [a-z] [A-Z]|tr [A-Z] [a-z]|sed 's/,//g')\"\n        fi\n\
+    \    fi\n    # Make sure the values are either all lowercase or all uppercase.\n\
+    \    if [ -z \"$values\" ]; then\n        echo \"The given CSV is missing values\
+    \ for some keys\"\n        exit 1\n    fi\n    # Convert the given values from\
+    \ lowercase or uppercase.\n    if [ \"$lower\" == \"true\" ]; then\n        values=\"\
+    $(echo \"$values\" | tr [A-Z] [a-z]|tr [a-z] [A-Z]|sed 's/,//g')\"\n    else\n\
+    \        values=\"$(echo \"$values\" | tr [a-z] [A-Z]|tr [A-Z] [a-z]|sed 's/,//g')\"\
+    \n    fi\n    # Check that each value is either all lowercase or all uppercase.\n\
+    \    for value in $values; do\n        if [ \"$string_keys\" == \"true\" ]; then\n\
+    \            if [ \"${value##*[!A-Za-z]}\" == \"$value\" ]; then\n           \
+    \     check_vals=\"false\"\n", "  local csv=$1\n  if [ -z \"$csv\" ]; then\n \
+    \   echo \"$0: argument to check_dict_case() cannot be empty\"\n    return 1\n\
+    \  fi\n  local lower=${csv%,*}\n  local upper=${csv#*,}\n  local count=$(wc -l\
+    \ <<< \"$lower\" | cut -d\" \" -f1)\n  local lowercount=$(wc -l <<< \"$lower\"\
+    \ | cut -d\" \" -f2)\n  local uppercount=$(wc -l <<< \"$upper\" | cut -d\" \"\
+    \ -f1)\n  if [ $count -eq $lowercount ] || [ $count -eq $uppercount ]; then\n\
+    \    echo -n \"true\"\n  else\n    echo -n \"false\"\n  fi", "    local d=$1\n\
+    \    local k\n    local v\n    local fail=0\n    while read k v; do\n        if\
+    \ [ \"${k}\" = \"$k\" ]; then\n            fail=1\n        fi\n    done < <(echo\
+    \ \"$d\")\n    if [[ $fail -eq 0 ]]; then\n        return 0\n    fi\n    local\
+    \ upper=$(echo \"$d\" | tr \" \" \"\\n\" | sort -k 2 | tr \" \" \"\\n\")\n   \
+    \ local lower=$(echo \"$d\" | tr \" \" \"\\n\" | sort -k 1 | tr \" \" \"\\n\"\
+    )\n    local upper_keys=$(echo \"$upper\" | awk '{print $1}')\n    local lower_keys=$(echo\
+    \ \"$lower\" | awk '{print $1}')\n    local upper_count=0\n    local lower_count=0\n\
+    \    local fail=0\n    for k in $upper_keys; do\n        if [ \"${k}\" = \"$k\"\
+    \ ]; then\n            fail=1\n        fi\n    done\n    for k in $lower_keys;\
+    \ do\n        if [ \"${k}\" = \"$k\" ]; then\n            fail=1\n        fi\n\
+    \    done\n    if [[ $fail -eq 0 ]]; then\n        return 0\n    fi\n    if [[\
+    \ $upper_count -ne ${#upper_keys[@]} || $lower_count -ne ${#lower_keys[@]} ]];\
+    \ then\n        return 1\n    fi\n    return 0", "\tcsv=$1\n\texpected=$2\n\t\
+    declare -A expected_lower\n\tdeclare -A expected_upper\n\tdeclare -A keyvalue\n\
+    \tlocal key\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//\\n/ }\"\
+    \n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"\
+    ${expected//,/ }\"\n\texpected=\"${expected//,/ }\"\n\texpected=\"${expected//,/\
+    \ }\"\n\texpected=\"${expected//,/ }\"\n", "  local csv=$1\n  local key\n  local\
+    \ value\n  local i\n  local found\n  local msg\n\n  if [[ -z \"$csv\" ]]; then\n\
+    \    echo \"$0: check_dict_case: empty CSV\"\n    return 0\n  fi\n\n  found=1\n\
+    \n  # check if all keys are all strings in lower case\n  for key in $(echo $csv\
+    \ | cut -d \",\" -f 1); do\n    value=$(echo $csv | sed -n -e \"s/^$key,//p\"\
+    )\n    if [[ \"$value\" != \"$value\" ]]; then\n      found=0\n      msg=\"Key\
+    \ $key is a string but not a string\"\n    fi\n  done\n\n  # check if all keys\
+    \ are all strings in upper case\n  for key in $(echo $csv | cut -d \",\" -f 2);\
+    \ do\n    value=$(echo $csv | sed -n -e \"s/^$key,//p\")\n    if [[ \"$value\"\
+    \ != \"$value\" ]]; then\n      found=0\n      msg=\"Key $key is a string but\
+    \ not a string\"\n    fi\n  done\n\n  if [[ \"$found\" -eq 0 ]]; then\n    echo\
+    \ \"$0: check_dict_case: $msg\"\n    return 1\n  fi", "  local lines=$(echo $1\
+    \ | sed -e 's/,/\\n/g')\n  local result=$(echo $lines | awk -F, '{print $1 \"\
+    =\" tolower($2)}')\n  if [[ $result = \"true\" ]]; then\n    echo \"true\"\n \
+    \ else\n    echo \"false\"\n  fi", "  local CSV=\"$1\"\n  local FLAG=false\n \
+    \ while IFS=, read -ra line; do\n    if [[ \"${line[1]}\" =~ ^[[:lower:]] ]];\
+    \ then\n      FLAG=true\n      break\n    elif [[ \"${line[1]}\" =~ ^[[:upper:]]\
+    \ ]]; then\n      FLAG=true\n      break\n    else\n      FLAG=false\n      break\n\
+    \    fi\n  done < <(echo \"$CSV\")\n  echo \"$FLAG\"", "  csv_string=$1\n  if\
+    \ [ -z \"$csv_string\" ]\n  then\n    echo 1\n  else\n    IFS=',' read -ra csv\
+    \ <<< \"$csv_string\"\n    for entry in \"${csv[@]}\"\n    do\n      # check if\
+    \ every element in entry is string in lower case\n      if [ $(echo \"$entry\"\
+    \ | grep -i -c '[a-z]') -ne 0 ]\n      then\n        echo 1\n        break\n \
+    \     fi\n      # check if every element in entry is string in upper case\n  \
+    \    if [ $(echo \"$entry\" | grep -i -c '[A-Z]') -ne 0 ]\n      then\n      \
+    \  echo 1\n        break\n      fi\n    done\n  fi", "\tlocal csv_file=\"$1\"\n\
+    \n\tlocal line=$(tail -1 $csv_file | head -1)\n\twhile IFS=',' read -ra fields;\
+    \ do\n\t\tlocal key=\"${fields[0]}\"\n\t\tlocal value=\"${fields[1]}\"\n\t\tcase\
+    \ \"$key\" in\n\t\t\t[A-Z]*) \n\t\t\t\tlocal upper_key=$(echo \"$key\" | tr '[:upper:]'\
+    \ '[:lower:]')\n\t\t\t\tif ! [[ ${value::1} =~ ${upper_key::1} ]]; then\n\t\t\t\
+    \t\treturn false\n\t\t\t\tfi\n\t\t\t\t;;\n\t\t\t[a-z]*) \n\t\t\t\tlocal lower_key=$(echo\
+    \ \"$key\" | tr '[:lower:]' '[:upper:]')\n\t\t\t\tif ! [[ ${value::1} =~ ${lower_key::1}\
+    \ ]]; then\n\t\t\t\t\treturn false\n\t\t\t\tfi\n\t\t\t\t;;\n\t\t\t*) \n\t\t\t\t\
+    local upper_key=$(echo \"$key\" | tr '[:upper:]' '[:lower:]')\n\t\t\t\tif ! [[\
+    \ ${value::1} =~ ${upper_key::1} ]]; then\n\t\t\t\t\treturn false\n\t\t\t\tfi\n\
+    \t\t\t\t;;\n\t\tesac\n\tdone < $csv_file\n\treturn true", "  local key\n  local\
+    \ value\n  local count\n  while read key ; do\n    if [[ \"$key\" =~ ^\"(.*)\"\
+    $ ]]; then\n      value=\"${BASH_REMATCH[1]}\"\n    else\n      value=\"${key}\"\
+    \n    fi\n    if [[ \"$value\" =~ ^\"(.*)\"$ ]]; then\n      value=\"${BASH_REMATCH[1]}\"\
+    \n    else\n      value=\"${value}\"\n    fi\n    if [[ -z \"$value\" ]]; then\n\
+    \      return 0\n    fi\n    if [[ ${key} == ${value} ]]; then\n      count=$((count\
+    \ + 1))\n    fi\n  done < \"$1\"\n  if [[ \"$count\" != \"2\" ]]; then\n    return\
+    \ 1\n  fi\n  count=0\n  while read key ; do\n    if [[ \"$key\" =~ ^\"(.*)\"$\
+    \ ]]; then\n      value=\"${BASH_REMATCH[1]}\"\n    else\n      value=\"${key}\"\
+    \n    fi\n    if [[ \"$value\" =~ ^\"(.*)\"$ ]]; then\n      value=\"${BASH_REMATCH[1]}\"\
+    \n    else\n      value=\"${value}\"\n    fi\n    if [[ -z \"$value\" ]]; then\n\
+    \      return 0\n    fi\n    if [[ ${key} != ${value} ]]; then\n      count=$((count\
+    \ + 1))\n    fi\n  done < \"$1\"\n  if [[ \"$count\" != \"2\" ]]; then\n    return\
+    \ 1\n  fi\n  return 0", "\tlocal IFS=\",\"\n\tlocal input=$1\n\tlocal result=$(cat\
+    \ <<-EOF\n$input\nEOF\n)\n\t# Split on newline and check whether every value is\
+    \ a string in lower or upper case\n\tlocal lowercase uppercase=$(echo \"$result\"\
+    \ | tr -s ' ' | awk -F'\\n' '{print $2}' | tr ',' '\\n' | sort | uniq | tr '\\\
+    n' ' ')\n\tif [ \"$(echo \"$lowercase\" | wc -c)\" == \"$(echo \"$lowercase\"\
+    \ | tr ' ' '\\n' | sort | uniq | wc -c)\" ]; then\n\t\techo \"true\"\n\telse\n\
+    \t\techo \"false\"\n\tfi", "  local key=$(echo \"$1\" | cut -d'=' -f1)\n  local\
+    \ value=$(echo \"$1\" | cut -d'=' -f2)\n  [[ -z \"$1\" ]] || [[ -z \"$2\" ]] ||\
+    \ [[ -z \"$key\" ]] || [[ -z \"$value\" ]]", "    if [[ \"$#\" -ne 2 ]]; then\n\
+    \        echo \"Usage: $(basename $0) <path to CSV>\"\n        return 1\n    fi\n\
+    \    declare -a arr\n    while IFS=',' read -ra words; do\n        arr+=($(echo\
+    \ \"${words[*]}\" | tr '[:upper:]' '[:lower:]'))\n    done < <(sort -k 1 -n -k2\
+    \ \"$1\" | \\\n           sed 's/^\\(.*\\),\\(.*\\)/\\1,\\2/' | \\\n         \
+    \  sed 's/^\\(.*\\),\\(.*\\)/\\1,\\2/' | \\\n           awk -F, '{print $1 FS\
+    \ $2}')\n    [[ \"${#arr[@]}\" -eq 0 ]] && return 1 || return 0", "  local csv_line=$1\n\
+    \n  local first_key=$(head -n 1 <<< $csv_line)\n  local second_key=$(head -n 2\
+    \ <<< $csv_line)\n\n  local first_key2=$(echo \"$first_key,$second_key\" | tr\
+    \ \",\" \"\\n\")\n\n  first_key2=${first_key2//,/\\n}\n  first_key2=${first_key2//,/\\\
+    n}\n\n  local lower_case_check=$(echo \"$first_key2,$second_key\" | tr \" \" \"\
+    \\n\" | sort -k 1,1 > /dev/null)\n  local upper_case_check=$(echo \"$first_key2,$second_key\"\
+    \ | tr \" \" \"\\n\" | sort -k 2,2 > /dev/null)\n  local empty_check=$(echo \"\
+    $first_key2,$second_key\" | tr \" \" \"\\n\" | sort -k 1,1 > /dev/null && echo\
+    \ \"true\" || echo \"false\")\n\n  echo \"$empty_check\"\n  echo \"$lower_case_check\"\
+    \n  echo \"$upper_case_check\"", "\tlocal key\n\tlocal value\n\tlocal tmp\n\t\
+    local fail=1\n\tlocal i\n\tlocal count=0\n\n\tIFS=$'\\n'\n\tfor key in $(cat $1);\
+    \ do\n\t\ttmp=\"${key},\"\n\t\tIFS=','\n\t\tfor value in $(cat $1); do\n\t\t\t\
+    if [[ $value =~ $tmp ]]; then\n\t\t\t\tcount=$((count+1))\n\t\t\tfi\n\t\tdone\n\
+    \t\tif (( count < 2 )); then\n\t\t\tfail=0\n\t\tfi\n\tdone\n\tIFS=$'\\n'\n\tif\
+    \ (( $fail )); then\n\t\treturn 0\n\telse\n\t\treturn 1\n\tfi", "    local file=\"\
+    $1\"\n    local keys=$(head -n 1 \"$file\" | awk -F ',' '{print $1}')\n    local\
+    \ values=$(head -n 1 \"$file\" | awk -F ',' '{print $2}')\n    local found=\"\
+    false\"\n    for i in $keys; do\n        found=\"true\"\n        lower=$(echo\
+    \ \"$i\" | tr '[:upper:]' '[:lower:]')\n        upper=$(echo \"$i\" | tr '[:lower:]'\
+    \ '[:upper:]')\n        if [[ $lower == $i && $upper == $i ]]; then\n        \
+    \    found=\"false\"\n        fi\n    done\n    echo \"$found\"", "    local key=\"\
+    $1\"\n    local val=\"$2\"\n    local lower=\"\"\n    local upper=\"\"\n    local\
+    \ ok=1\n    while [ $ok -lt 2 ]; do\n      lower=\"${val//[a-z]/}\"\n      upper=\"\
+    ${val//[A-Z]/}\"\n      if [ ! \"$lower\" ];  then\n        lower=\"NONE\"\n \
+    \       ok=0\n      fi\n      if [ ! \"$upper\" ];  then\n        upper=\"NONE\"\
+    \n        ok=0\n      fi\n      [ \"$lower\" != \"$val\" ] && [ \"$upper\" !=\
+    \ \"$val\" ] && [ \"$lower\" != \"NONE\" ] && [ \"$upper\" != \"NONE\" ] && [\
+    \ \"$lower\" != \"$upper\" ] && [ \"$upper\" != \"$upper\" ]\n    done\n    echo\
+    \ -n \"check_dict_case: ok=$ok lower=$lower upper=$upper key=\"$key\"\n    return\
+    \ $ok", "  local csv=$1\n  if [ $(echo \"$csv\" | wc -l | awk '{print $1}') -eq\
+    \ 0 ]; then\n    echo \"$csv is empty\"\n    return 1\n  fi\n  local first_key=$(echo\
+    \ \"$csv\" | head -n 1)\n  local first_value=$(echo \"$csv\" | head -n 2 | tail\
+    \ -n 1)\n  local second_key=$(echo \"$csv\" | tail -n 1)\n  local second_value=$(echo\
+    \ \"$csv\" | head -n 2 | tail -n 2)\n  local is_case_insensitive=$(echo $first_key\
+    \ | awk '{print tolower($0)}' | grep -q '[A-Z]')\n  local is_upper_case=$(echo\
+    \ $first_key | awk '{print toupper($0)}' | grep -q '[A-Z]')\n  local is_lower_case=$(echo\
+    \ $first_key | awk '{print tolower($0)}' | grep -q '[a-z]')\n\n  if [ $is_case_insensitive\
+    \ -eq 1 ]; then\n    if [[ $first_value =~ $first_key ]]; then\n      echo \"\
+    $csv is in lower case\"\n      return 1\n    fi\n  fi\n  if [ $is_upper_case -eq\
+    \ 1 ]; then\n    if [[ $first_value =~ $first_key ]]; then\n      echo \"$csv\
+    \ is in upper case\"\n      return 1\n    fi\n  fi\n  if [ $is_lower_case -eq\
+    \ 1 ]; then\n    if [[ $first_value =~ $first_key ]]; then\n      echo \"$csv\
+    \ is in lower case\"\n      return 1\n    fi\n  fi\n  return 0", "  local CSV=$1\n\
+    \  local KEY=$2\n  local VALUE\n\n  local key\n  local value\n  local KEYUPPER=false\n\
+    \  local KEYLOWER=false\n  local VALUELOWER=false\n  \n  for key in $(echo $CSV\
+    \ | tr ',' '\\n' | awk -F \",\" '{print $1}')\n  do\n    VALUE=$(echo $CSV | tr\
+    \ \",\" '\\n' | awk -F \",\" '{print $2}')\n\n    if [ \"$KEY\" == \"$key\" ];\
+    \ then\n      if [ \"$KEYUPPER\" = false ]; then\n        KEYUPPER=true\n    \
+    \    KEY=$(echo $KEY | tr 'A-Z' 'a-z')\n      fi\n\n      if [ \"$KEYLOWER\" =\
+    \ false ]; then\n        KEYLOWER=true\n        KEY=$(echo $KEY | tr 'a-z' 'A-Z')\n\
+    \      fi\n\n      if [ \"$KEYLOWER\" = false ]; then\n        KEYLOWER=true\n\
+    \        KEY=$(echo $KEY | tr 'A-Z' 'a-z')\n      fi\n\n      if [ \"$KEYUPPER\"\
+    \ = false ]; then\n        KEYUPPER=true\n        KEY=$(echo $KEY | tr 'a-z' 'A-Z')\n\
+    \      fi\n\n      if [ \"$VALUE\" == \"$VALUE\" ]; then\n        VALUELOWER=true\n\
+    \      else\n        VALUELOWER=false\n      fi\n\n    elif [ \"$KEY\" == \"$VALUE\"\
+    \ ]; then\n      if [ \"$KEYUPPER\" = false ]; then\n        KEYUPPER=true\n \
+    \       KEY=$(echo $KEY | tr 'A-Z' 'a-z')\n      fi\n\n      if [ \"$KEYLOWER\"\
+    \ = false ]; then\n        KEYLOWER=true\n        KEY=$(echo $KEY | tr 'a-z' 'A-Z')\n\
+    \      fi\n\n      if [ \"$KEYUPPER\" = false ]; then\n        KEYUPPER=true\n\
+    \        KEY=$(echo $KEY | tr 'A-Z' 'a-z')\n      fi\n\n      if [ \"$VALUELOWER\"\
+    \ = false ]; then\n        VALUELOWER=true\n      fi\n    fi\n  done\n\n  if [\
+    \ \"$KEYUPPER\" = false ]; then\n    echo \"false\"\n    return 1\n  fi\n\n  if\
+    \ [ \"$KEYLOWER\" = false ]; then\n    echo \"false\"\n    return 1\n  fi\n\n\
+    \  if [ \"$VALUELOWER\" = false ]; then\n    echo \"true\"\n    return 0\n  fi\n\
+    \n  echo \"false\"\n  return 1", "  local csv_arr=($1)\n  # Check to see if array\
+    \ is empty\n  if [ \"${#csv_arr[@]}\" -eq 0 ]; then\n    echo false # Return false\
+    \ if the array is empty\n    return\n  fi\n  # Initialize a variable called keys\n\
+    \  local keys=\"\"\n  # Loop through the array and add keys to keys\n  for ((\
+    \ i=0; i< \"${#csv_arr[@]}\"; i++ )); do\n    keys+=\"${csv_arr[$i]},\"\n  done\n\
+    \  # Strip last comma from keys\n  keys=${keys%,}\n  # Check each character to\
+    \ see if it's upper or lower\n  for (( i=0; i<${#keys}; i++ )); do\n    # Add\
+    \ char to keys_lower and keys_upper\n    local char=${keys[i]}\n    local keys_lower=$(echo\
+    \ ${char} | tr '[:upper:]' '[:lower:]')\n    local keys_upper=$(echo ${char} |\
+    \ tr '[:lower:]' '[:upper:]')\n    # If the character is upper case, then add\
+    \ it to keys_upper\n    if [ \"${keys_upper}\" != \"${char}\" ]; then\n      keys_upper+=\"\
+    ${char},\"\n    fi\n    # If the character is lower case, then add it to keys_lower\n\
+    \    if [ \"${keys_lower}\" != \"${char}\" ]; then\n      keys_lower+=\"${char},\"\
+    \n    fi\n  done\n  # Strip last comma from keys\n  keys=${keys%,}\n  # If keys\
+    \ are same length, then all keys are strings\n  # If not, then some keys are not\
+    \ strings\n  local len=${#keys}\n  if [ \"${len}\" -eq ${#keys_lower} ]; then\n\
+    \    echo true # Return true if all keys are strings\n  else\n    echo false #\
+    \ Return false if some keys are strings\n  fi", "  # Check whether the given csv\
+    \ is empty.\n  test -z \"$1\"\n  return 0", "  local CSV=\"$1\"\n  if [ -z \"\
+    $CSV\" ]\n  then\n    echo \"Empty CSV passed\"\n    return false\n  fi\n  local\
+    \ IFS=',' VALID=\"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz\"\n  local\
+    \ ALL_UPPER=\"AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz\" \n  local\
+    \ ALL_LOWER=\"aaa_bbb_ccc_ddd__eee_fff__ggg_hhh__iii_jjj_kkk_lll_mmm_nnn_ooo_ppp_qqq_rrr_sss_ttt_uuu_vvv_www_xxx_yyy_zzz\"\
+    \n  local VALID_LENGTH=\"${VALID// /_}\"\n  local VALID_LENGTH_LENGTH=\"${VALID_LENGTH//\
+    \ /_}\"\n  local KEYS=()\n  local VALS=()\n  local MATCH_ALL=0\n  for KEY in $CSV\n\
+    \  do\n    KEY=${KEY//,/ }\n    KEY=${KEY//^[^=]*=}\n    KEY=${KEY//[^a-zA-Z0-9_\\\
+    -\\.]/ }\n    KEYS+=(\"${KEY}\")\n  done\n  for VAL in $CSV\n  do\n    VAL=${VAL//,/\
+    \ }\n    VAL=${VAL//^[^=]*=}\n    VAL=${VAL//[^a-zA-Z0-9_\\-\\.]/ }\n    VALS+=(\"\
+    ${VAL}\")\n  done\n  for VAL in $VALS\n  do\n    if [[ ${VAL} == *\"_\"* ]]\n\
+    \    then\n      VAL=${VAL//_/ }\n    fi\n    VAL=${VAL//[^a-zA-Z0-9_\\-\\.]/\
+    \ }\n    VALID=\"${VALID}${VAL}\"\n  done\n  VALID=${VALID//${VALID_LENGTH_LENGTH}/\
+    \ }\n  if [[ ${VALID} == *\"_\"* ]]\n  then\n    VALID=${VALID//_/ }\n  fi\n \
+    \ if [[ ${VALID} == *\"\\n\"* ]]\n  then\n    VALID=${VALID//\\n/ }\n  fi\n  if\
+    \ [ ${VALID} == *\"\\n\"* ]\n  ", "    local csv=\"$1\"\n    # echo \"DEBUG: check_dict_case\
+    \ $csv\"\n    local num_keys=$(echo \"$csv\" | awk -F, '{print NF}')\n    if [\
+    \ $num_keys != 2 ]; then\n        echo \"check_dict_case: given CSV $csv is not\
+    \ a CSV\"\n        return 0;\n    fi\n\n    local lowercase_keys=$(echo \"$csv\"\
+    \ | awk -F, '{print $1}')\n    local uppercase_keys=$(echo \"$csv\" | awk -F,\
+    \ '{print $2}')\n    lowercase_keys=$(echo \"$lowercase_keys\" | tr '[:upper:]'\
+    \ '[:lower:]')\n    uppercase_keys=$(echo \"$uppercase_keys\" | tr '[:upper:]'\
+    \ '[:upper:]')\n\n    local num_lowercase_keys=$(echo \"$lowercase_keys\" | wc\
+    \ -l)\n    local num_uppercase_keys=$(echo \"$uppercase_keys\" | wc -l)\n\n  \
+    \  if [[ $num_lowercase_keys -eq 0 || $num_uppercase_keys -eq 0 ]]; then\n   \
+    \     echo \"check_dict_case: given CSV $csv is empty\"\n        return 0\n  \
+    \  fi\n\n    if [[ $num_lowercase_keys -ne $num_uppercase_keys ]]; then\n    \
+    \    echo \"check_dict_case: number of lowercase keys $num_lowercase_keys not\
+    \ same as number of uppercase keys $num_uppercase_keys\"\n        return 0;\n\
+    \    fi\n    \n    local num_keys_ok=$((num_lowercase_keys > 0))\n    if [[ $num_keys_ok\
+    \ -ne $num_uppercase_keys ]]; then\n        echo \"check_dict_case: number of\
+    \ lowercase keys $num_lowercase_keys not same as number of uppercase keys $num_uppercase_keys\"\
+    \n        return 0;\n    fi\n    \n    echo \"check_dict_case: given CSV $csv\
+    \ is OK\"\n    return 1", "    csv=$1\n    read key value <<< \"$csv\"\n    \n\
+    \    key=${key%,*}\n    key=${key#*,}\n    key=\"$key=\"\n    \n    value=${value%,*}\n\
+    \    value=${value#*,}\n    value=\"$value=\"\n    \n    declare -A lower\n  \
+    \  declare -A upper\n    \n    for letter in ${key^^}; do\n        lower[$letter]=1\n\
+    \    done\n    \n    for letter in ${value^^}; do\n        upper[$letter]=1\n\
+    \    done\n    \n    local count\n    \n    if [[ ${#lower[*]} != ${#upper[*]}\
+    \ ]] ; then\n        echo \"true\"\n        return\n    fi\n    \n    count=0\n\
+    \    \n    for letter in ${lower[@]}; do\n        if [[ ${upper[$letter]} -eq\
+    \ 1 ]] ; then\n            count=$(( count + 1 ))\n        fi\n    done\n    \n\
+    \    if [[ ${count} != 0 ]] ; then\n        echo \"false\"\n        return\n \
+    \   fi\n    \n    echo \"true\"", "  local CSV=\"$1\"\n  [[ \"$CSV\" =~ ([^,]+),([^\\\
+    n]+)[\\n]+ ]] || return 1\n  local KEYS=$2 \n  local STRINGS\n  STRINGS=$(echo\
+    \ \"$KEYS\" | sed -e 's/[[:upper:]]//g' -e 's/[[:lower:]]//g')\n  [[ \"$STRINGS\"\
+    \ =~ ([[:upper:]]+) [[:lower:]]+ ]] || return 1\n  return 0", "  local line\n\
+    \  local key\n  local value\n  local ok\n\n  if [[ -z \"$1\" ]]; then\n    return\
+    \ 0\n  fi\n\n  line=\"$(cat $1)\"\n  echo \"$line\" | while read key value ; do\n\
+    \    case \"$key\" in\n      *[!A-Z]*) echo \"false\" ;;\n      *[A-z]*) echo\
+    \ \"true\" ;;\n    esac\n  done\n  return $?", "    local csv=$1\n    if [ -z\
+    \ \"$csv\" ]; then\n        echo \"No CSV provided\"\n        return 1\n    fi\n\
+    \    local headers=$( head -n 1 \"$csv\" )\n    local keys=$( head -n 2 \"$csv\"\
+    \ | sed 's/,/ /g' )\n    local values=\"$( head -n 3 \"$csv\" | sed 's/,/ /g'\
+    \ )\n    if ! { echo \"$headers\"; echo \"$keys\"; echo \"$values\" } | grep -q\
+    \ '^[A-Za-z][A-Za-z0-9]*$' || { echo \"false\"; return 0; }\n    local lower=${keys%%,*}\n\
+    \    local upper=${values%%,*}\n    local match=0\n    for key in $keys; do\n\
+    \        if [[ \"$key\" == \"$lower\" ]]; then\n            match=1\n        \
+    \    break\n        fi\n    done\n    if [[ \"$match\" -eq \"0\" ]]; then\n  \
+    \      return 0\n    fi\n    for key in $upper; do\n        if [[ \"$key\" ==\
+    \ \"$lower\" ]]; then\n            match=1\n            break\n        fi\n  \
+    \  done\n    if [[ \"$match\" -eq \"0\" ]]; then\n        return 0\n    fi\n \
+    \   echo \"true\"\n    return 0", "    local IFS=\",\" \n    local lower=\"$(echo\
+    \ \"$1\" | tr '[:upper:]' '[:lower:]')\" \n    local upper=\"$(echo \"$1\" | tr\
+    \ '[:lower:]' '[:upper:]')\"\n    [ -z \"$1\" ] && echo \"false\" || echo \"$(echo\
+    \ \"$1\" | sed \"s/$lower/$upper/g\" | sort | uniq -d)\" |  read lower\n    [\
+    \ -z \"$1\" ] && echo \"false\" || echo \"$(echo \"$1\" | sed \"s/$upper/$lower/g\"\
+    \ | sort | uniq -d)\" |  read upper\n    echo \"true\" || echo \"false\" ", "\t\
+    local keys=`echo \"$1\" | cut -d',' -f1`\n\tlocal vals=`echo \"$1\" | cut -d','\
+    \ -f2`\n\tlocal length=${#keys}\n\n\t# check each value\n\tfor val in $vals; do\n\
+    \t\tlocal key\n\t\tlocal val2\n\t\tfor (( i=0; i<length; i++ )); do\n\t\t\tkey=${keys[$i]}\n\
+    \t\t\tval2=${vals[$i]}\n\t\t\tif [ \"$val\" == \"$val2\" ]; then\n\t\t\t\techo\
+    \ \"true\"\n\t\t\t\treturn 0\n\t\t\telif [ \"$val\" == \"$val2\" ] && [ \"$val\"\
+    \ != \"$val2\" ]; then\n\t\t\t\treturn 1\n\t\t\tfi\n\t\tdone\n\tdone\n\treturn\
+    \ 0", "  local csv_lines=(\"$@\")\n  local csv_rows=${#csv_lines[@]}\n  local\
+    \ csv_fields=${#csv_lines[0]}\n  local keys=${csv_fields}\n\n  local in_lower_case=0\n\
+    \  local in_upper_case=0\n  for ((i=1; i<csv_rows; i++) { \n    local key=${csv_lines[i]}\n\
+    \    local value\n    IFS=\",\" read -r -a csv_array <<< \"$key\"\n    for ((j=0;\
+    \ j<csv_fields; j++) {\n      value=${csv_array[j]}\n      [[ \"$value\" =~ [a-z]\
+    \ ]] && in_lower_case=1 || in_lower_case=0\n      [[ \"$value\" =~ [A-Z] ]] &&\
+    \ in_upper_case=1 || in_upper_case=0\n    } \n  } 2>/dev/null)\n  \n  [[ \"$in_lower_case\"\
+    \ -eq \"$keys\" ]] && echo \"true\" || echo \"false\"\n  [[ \"$in_upper_case\"\
+    \ -eq \"$keys\" ]] && echo \"true\" || echo \"false\"", "    local first_line=\"\
+    $1\"\n    local second_line\n    local first_str_key\n    local second_str_key\n\
+    \    local first_str_value\n    local second_str_value\n    local first_str_keys_lower\n\
+    \    local second_str_keys_lower\n    local first_str_keys_upper\n    local second_str_keys_upper\n\
+    \n    # If the given CSV is empty, then return false\n    if [[ ${#first_line}\
+    \ -eq 0 ]]; then\n        return 0\n    fi\n\n    # Loop through each line of\
+    \ the given CSV\n    while IFS=, read -r first_str_key second_str_key || [[ ${first_str_key}\
+    \ == \"\" ]]; do\n        while IFS=, read -r first_str_value second_str_value\
+    \ || [[ ${first_str_value} == \"\" ]]; do\n            # If the given CSV has\
+    \ no line or key values, then return false\n            if [[ ${first_str_key}\
+    \ == \"\" ]]; then\n                return 0\n            fi\n            if [[\
+    \ ${second_str_key} == \"\" ]]; then\n                return 0\n            fi\n\
+    \            # If the key values are all strings, return true\n            if\
+    \ [[ ${#first_str_value} -gt 0 ]]; then\n                if [[ ${first_str_keys_lower}\
+    \ != ${first_str_value} ]]; then\n                    first_str_keys_lower=\"\
+    ${first_str_key}\"\n                    first_str_value=\"${first_str_value}\"\
+    \n                fi\n                if [[ ${first_str_keys_upper} != ${first_str_value}\
+    \ ]]; then\n                    first_str_keys_upper=\"${first_str_key}\"\n  \
+    \                  first_str_value=\"${first_str_value}\"\n                fi\n\
+    \            fi\n            if [[ ${#second_str_value} -gt 0 ]]; then\n     \
+    \           if [[ ${second_str_keys_lower} != ${second_str_value} ]]; then\n \
+    \                   second_str_keys_lower=\"${second_str_key}\"\n            \
+    \        second_str_value=\"${second_str_value}\"\n                fi\n      \
+    \          if [[ ${second_str_keys_upper} != ${second_str_value} ]]; then\n  \
+    \                  second_str_keys_upper=\"${second_str_key}\"\n             \
+    \       second_str_value=\"${second_str_value}\"\n                fi\n       \
+    \     fi\n        done\n    done < \"$1\"\n\n    # If the given CSV has more than\
+    \ two lines, then return false\n    if [[ ${#second_line} -gt 0 ]]; then\n   \
+    \     return 0\n    fi\n\n    # If the CSV has only a single line and key values\
+    \ are all strings,\n    # then return true\n    if [[ ${#first_str_value} -gt\
+    \ 0 ]]; then\n        return 0\n    fi\n\n    # If the CSV has only a single line\
+    \ and key values are ", "    if [[ -z \"$1\" ]]; then\n        echo \"$0: check_dict_case:\
+    \ empty argument to check_dict_case\"\n        return\n    fi\n    if [[ ! -f\
+    \ \"$1\" ]]; then\n        echo \"$0: check_dict_case: $1 is not a file\"\n  \
+    \      return\n    fi\n    local header=$(head -1 \"$1\")\n    local lower=$(echo\
+    \ \"$header\" | tr '[:upper:]' '[:lower:]')\n    local upper=$(echo \"$header\"\
+    \ | tr '[:lower:]' '[:upper:]')\n    local lower_len=$(echo \"$lower\" | wc -c)\n\
+    \    local upper_len=$(echo \"$upper\" | wc -c)\n    if [[ $lower_len -ne $upper_len\
+    \ ]]; then\n        echo \"$0: check_dict_case: $1 does not contain equal number\
+    \ of lower and upper case characters\"\n        return\n    fi\n    local pair\n\
+    \    for pair in $(echo \"$1\" | sed -e 's/,/ /g')\n    do\n        local lower=$(echo\
+    \ \"$pair\" | tr '[:upper:]' '[:lower:]')\n        local upper=$(echo \"$pair\"\
+    \ | tr '[:lower:]' '[:upper:]')\n        if [[ \"$lower\" != \"$upper\" ]]; then\n\
+    \            return 0\n        fi\n    done\n    return 1", "  # Check if $1 has\
+    \ at least two lines.\n  if [ $(wc -l < $1) -ge 1 ] ; then\n    # Get the first\
+    \ line\n    first_line=$1\n    # Remove the newline character at the end\n   \
+    \ echo $(echo $first_line | sed -e 's/\\n//')\n    # Remove all commas in the\
+    \ line\n    echo $( echo $first_line | sed -e 's/,//' )\n    # Convert to lower\
+    \ case\n    echo $( echo $first_line | sed -e 's/,/\\n/g' | sed -e 's/^ *//g'\
+    \ | sed -e 's/ *$//g' | sed -e 's/ /,/g')\n  else\n    # Return false when $1\
+    \ is empty\n    false\n  fi", "  local CSV=\"$1\"\n  if [ -z \"$CSV\" ]; then\
+    \ return 1; fi\n  local IFS=,\n  local KEY\n  read -r KEY <<< \"$CSV\"\n  local\
+    \ VALUE\n  read -r VALUE <<< \"$CSV\"\n  local LOWER=\"abcdefghijklmnopqrstuvwxyz\"\
+    \n  local UPPER=\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n  local UPPER_ORLOWER=\"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\"\
+    \n  local VAL1=$(echo \"$VALUE\" | tr --delete \" \" \"\\n\" | tr --delete \"\\\
+    n\" \" \")\n  local VAL2=$(echo \"$VALUE\" | tr --delete \" \" \"\\n\" | tr --delete\
+    \ \"\\n\" \" \")\n  local VAL1=$(echo \"$VAL1\" | tr --delete \"$LOWER\" \"$UPPER_ORLOWER\"\
+    \ | tr --delete \"$LOWER\" \"$UPPER\")\n  local VAL2=$(echo \"$VAL2\" | tr --delete\
+    \ \"$LOWER\" \"$UPPER_ORLOWER\" | tr --delete \"$LOWER\" \"$UPPER\")\n  local\
+    \ VAL_DIFF=\"$(echo \"$VAL1\" | tr --delete \"$VAL2\" \"$VAL1\" | wc -c)\"\n \
+    \ local KEYS_FOUND=$(echo $KEYS | grep -c \"$KEY\")\n  local KEYS_FOUND=$(echo\
+    \ $KEYS_FOUND | grep -c \"$KEY\")\n  if [ \"$KEYS_FOUND\" -eq \"$VAL_DIFF\" ];\
+    \ then return 0; else return 1; fi", "  local key=\"$1\"\n  local value=\"$2\"\
+    \n\n  [[ -z \"$value\" ]] && return 1\n\n  local key_upper=$(echo \"$key\" | tr\
+    \ '[:upper:]' '[:lower:]')\n  local key_lower=$(echo \"$key\" | tr '[:lower:]'\
+    \ '[:upper:]')\n\n  echo \"$value\" | grep -q \"$key_lower\" && return 0\n  echo\
+    \ \"$value\" | grep -q \"$key_upper\" && return 0\n\n  return 1", "   read -r\
+    \ key value\n   \n   [[ -z \"$value\" ]] && return 0\n   \n   local lower=${key^^}\n\
+    \   local upper=${key,,}\n   \n   [[ \"$lower\" == \"$key\" ]]  && return 0\n\
+    \   [[ \"$upper\" == \"$key\" ]]  && return 0\n   \n   return 1", "  if [ \"$#\"\
+    \ -ne 2 ]; then\n    echo \"\"\n    echo \"Usage: $0 <CSV>\"\n    echo \"The function\
+    \ should return true if all keys are strings in lower case or all keys are strings\
+    \ in upper case, else return false.\"\n    echo \"The function should return false\
+    \ is the given CSV is empty.\"\n    exit 1\n  fi\n\n  local lowers=$(echo \"$1\"\
+    \ | sed -e 's/,/\\n/g')\n  local uppers=$(echo \"$1\" | sed -e 's/,/\\U/g')\n\
+    \  local strings=$(echo \"$lowers\" | sed -e 's/^\\(.*\\)\\(.*\\)\\(.*\\)\\(.*\\\
+    )\\(.*\\)$/\\1\\n\\2\\n\\3\\n\\4\\n\\5\\n/' | sort -k 1,1 -k 2,2 -k 3,3 -k 4,4\
+    \ | uniq -f -n | wc -l)\n  local total_strings=$(echo \"$strings\" | bc)\n  local\
+    \ total_uppers=$(echo \"$uppers\" | bc)\n  echo \"$total_strings,$total_uppers\"\
+    \n  if [ \"$total_strings\" -eq \"$total_uppers\" ]; then\n    echo \"true\"\n\
+    \  else\n    echo \"false\"\n  fi", "\tlocal dict=\"$1\"\n\n\t# check for empty\
+    \ CSV\n\tif [[ ! \"$dict\" =~ ^([A-Z0-9]+),([A-Z0-9]+)(,|\\n)$ ]]; then\n\t\t\
+    return $?\n\tfi\n\n\t# split on first comma and check for each key\n\tlocal key1=\"\
+    ${BASH_REMATCH[1]}\"\n\tlocal key2=\"${BASH_REMATCH[2]}\"\n\tlocal flag=0\n\t\
+    for k in $(echo \"$dict\" | tr \",\" \"\\n\" | grep \"$key1,$key2\"); do\n\t\t\
+    flag=1\n\t\tbreak\n\tdone\n\treturn $(( ! \"$flag\" ))", "    local lower=0\n\
+    \    local upper=0\n    local count=0\n    local csv=\"$1\"\n    local key=\"\
+    $2\"\n    IFS=\",\"\n    local pairs=$(echo \"$csv\" | grep -n \"$key\" | tail\
+    \ -n +2)\n    for (( pairno=0; pairno<${#pairs}; pairno++ ))\n    do\n       \
+    \ lower=$(echo \"$csv\" | cut -d\" \" -f$pairno | head -n 1 | tr '[:upper:]' '[:lower:]')\n\
+    \        upper=$(echo \"$csv\" | cut -d\" \" -f$pairno | head -n 1 | tr '[:lower:]'\
+    \ '[:upper:]')\n        if [ \"$lower\" == \"$key\" ] || [ \"$upper\" == \"$key\"\
+    \ ]\n        then\n            (( lower++ ))\n        fi\n    done\n    (( count++\
+    \ ))\n    if [ \"$count\" -eq \"$lower\" ]\n    then\n        echo \"true\"\n\
+    \    else\n        echo \"false\"\n    fi", "    read -d '' -ra kvs < \"$1\"\n\
+    \    local uppercase_keys\n    local lowercase_keys\n    local num_keys\n\n  \
+    \  uppercase_keys=$(echo \"${kvs[*]}\" | sed -e 's/[[:upper:]]/\\U&/g')\n    lowercase_keys=$(echo\
+    \ \"${kvs[*]}\" | sed -e 's/[[:lower:]]\\&\\&/\\L&/g')\n    num_keys=$(echo \"\
+    ${kvs[*]}\" | wc -l)\n\n    if [[ ${num_keys} = 0 ]]; then\n        echo \"false\"\
+    \n        return 0\n    fi\n    if [[ ${num_keys} == 1 ]]; then\n        if [[\
+    \ ${lowercase_keys} =~ $uppercase_keys ]]; then\n            echo \"true\"\n \
+    \           return 0\n        fi\n    fi\n    echo \"false\"\n    return 0", " \
+    \ local _arr1=\"$1\"\n  local _arr2=( ${_arr1//,/ } )\n  local _arr3=( ${_arr2[0]//,/\
+    \ } \"${_arr2[1]//,/ }\" )\n  local _keys=( ${_arr3[@]} )  # make an array\n \
+    \ local _arr4=( ${_keys[@]} )\n  if [[ \"${#_arr4[@]}\" -eq 0 ]] #check if csv\
+    \ is empty\n  then\n    echo \"true\"\n  else\n    for _item in \"${_arr4[@]}\"\
+    \ \n    do\n      _arr5=( ${_item//,/ } )\n      if [[ \"${#_arr5[@]}\" -eq 0\
+    \ ]] # check if each key is a string\n      then\n        echo \"true\"\n    \
+    \    break\n      else\n        for _i in \"${_arr5[@]}\" \n        do\n     \
+    \     if [[ \"$_i\" =~ ^[[:lower:]]$ ]]\n          then\n            echo \"true\"\
+    \n            break\n          fi\n        done\n      fi\n    done\n  fi", " \
+    \ local line=\"`echo $1 | sed 's/,/ /g'`\"\n  local lower=\"`echo $line | sed\
+    \ 's/^.*,\\(.*\\)/\\1/'`\"\n  local upper=\"`echo $line | sed 's/^\\(.*\\),.*/\\\
+    1/'`\"\n  if [ \"$lower\" != \"\" ] && [ \"$lower\" != \"$upper\" ]; then\n  \
+    \  echo \"false\"\n  else\n    echo \"true\"\n  fi", "    local keys=\"$1\"\n\
+    \    local key=\"$2\"\n    local val=\"$3\"\n    if [[ ! -z \"$keys\" ]] && [[\
+    \ ! -z \"$key\" ]] && [[ ! -z \"$val\" ]] ; then\n        local keys_upper=$(echo\
+    \ \"$keys\" | tr [a-z] [A-Z])\n        local key_upper=$(echo \"$key\" | tr [a-z]\
+    \ [A-Z])\n        local val_upper=$(echo \"$val\" | tr [a-z] [A-Z])\n        local\
+    \ keys_lower=$(echo \"$keys\" | tr [A-Z] [a-z])\n        local key_lower=$(echo\
+    \ \"$key\" | tr [A-Z] [a-z])\n        local val_lower=$(echo \"$val\" | tr [A-Z]\
+    \ [a-z])\n        if [[ \"$keys_upper\" == \"$keys_lower\" || \"$keys_upper\"\
+    \ == \"$key_lower\" ]] ; then\n            if [[ \"$keys_lower\" == \"$keys_upper\"\
+    \ || \"$keys_upper\" == \"$key_upper\" ]] ; then\n                if [[ \"$keys_lower\"\
+    \ == \"$keys_upper\" && \"$keys_upper\" == \"$key_lower\" ]] ; then\n        \
+    \            if [[ \"$val_lower\" == \"$val_upper\" ]] ; then\n              \
+    \          echo \"true\"\n                    else\n                        echo\
+    \ \"false\"\n                    fi\n                else\n                  \
+    \  echo \"false\"\n                fi\n            else\n                echo\
+    \ \"false\"\n            fi\n        else\n            echo \"false\"\n      \
+    \  fi\n    else\n        echo \"false\"\n    fi", "    local dict_str=$1\n   \
+    \ local lower=${2:-\"true\"}\n    local upper=${3:-\"true\"}\n    local dict=($(sed\
+    \ 's/^,//;s/,$//' <<< \"$dict_str\"))\n\n    if [[ $# -eq 0 ]] || [[ ${#dict[@]}\
+    \ -eq 0 ]]; then\n        echo \"false\"\n        return 0\n    fi\n\n    # Check\
+    \ is every item in the dict is lower case\n    # or upper case.\n    local first=${dict[0]}\n\
+    \    for items in \"${dict[@]:1}\"; do\n        if [[ \"$items\" =~ (^|,)(.*[^A-Z][A-Z]?)\
+    \ ]]; then\n            if [[ $lower == \"true\" ]]; then\n                local\
+    \ items2=\"${BASH_REMATCH[2]}\"\n                case \"$items2\" in\n       \
+    \             [A-Z]) lower=\"false\" ;;\n                    *) lower=\"true\"\
+    \ ;;\n                esac\n            fi\n        fi\n    done\n\n    # Return\
+    \ true if all items are lower case or all items are upper case.\n    if [[ \"\
+    $lower\" == \"true\" ]]; then\n        echo \"true\"\n    else\n        echo \"\
+    false\"\n    fi", "    local IFS=,\n        csv=$1\n    local i=0\n    local is_key_cased=0\n\
+    \    local is_value_cased=0\n    local check_key=true\n    local check_value=true\n\
+    \    local key=\"${csv:$((i+1))}\"\n    local value=\"${csv:$((i+2))}\"\n    local\
+    \ keyval=($key)\n    local valueval=($value)\n    for ((i=0; i < ${#keyval[@]};\
+    \ i++)); do\n        key=${keyval[i]}\n        value=${valueval[i]}\n        if\
+    \ [ \"$key\" == \"$key\" ]; then\n            if [ \"$key\" == \"$value\" ]; then\n\
+    \                is_key_cased=1\n            else\n                check_value=false\n\
+    \            fi\n        else\n            if [ \"$value\" == \"$value\" ]; then\n\
+    \                is_value_cased=1\n            else\n                check_value=false\n\
+    \            fi\n        fi\n    done\n    if [ \"$is_key_cased\" == \"0\" ];\
+    \ then\n        if [ \"$check_key\" == \"true\" ]; then\n            echo \"$csv\
+    \ is not in key case.\"\n        fi\n        if [ \"$is_value_cased\" == \"0\"\
+    \ ]; then\n            echo \"$csv is not in value case.\"\n        fi\n    else\n\
+    \        if [ \"$check_key\" == \"false\" ]; then\n            echo \"$csv is\
+    \ in key case.\"\n        fi\n        if [ \"$is_value_cased\" == \"0\" ]; then\n\
+    \            echo \"$csv is in value case.\"\n        fi\n    fi", "    local\
+    \ input=\"$(echo \"$1\" | tr '\\n' ' ')\"\n    local keys\n    local test\n  \
+    \  local output\n    local key\n    local value\n    # Check if it is empty \n\
+    \    if [ -z \"$input\" ]; then \n        return 0\n    fi\n    # Make sure there\
+    \ are at least two columns and both are strings\n    if [ -z \"$input\" ] || [\
+    \ -z \"$test\" ]; then\n        return 0\n    fi\n    keys=$(echo \"$input\" |\
+    \ sed -e \"s/,/ /g\")\n    for test  in $keys; do\n        if [[ \"$test\" !=\
+    \ [[:alpha:]] [[:upper:]] ]]; then\n            return 0\n        fi\n    done\n\
+    \    output=$(echo \"$input\" | sed -e \"s/,/ /g\")\n    key=$(echo \"$keys\"\
+    \ | head -n 1)\n    while [[ \"$output\" != \"\" ]];do\n        value=\"$(echo\
+    \ \"$output\" | head -n 1)\"\n        if [[ \"$value\" != \"\" ]];then\n     \
+    \       if [[ \"$value\" != [[:alpha:]] [[:upper:]] ]]; then\n               \
+    \ return 0\n            fi\n        fi\n        output=$(echo \"$output\" | tail\
+    \ -n 1)\n    done\n    return 1", "    local file=\"$1\"\n    local lower=false\n\
+    \    local upper=false\n    local count=0;\n    local key=0;\n    local value=0;\n\
+    \    local i=0;\n    local j=0;\n    while read key value; do\n        ((count++));\n\
+    \        if (( lower )); then\n            if [[ $key =~ *[[:lower:]] ]]; then\n\
+    \                continue;\n            else\n                lower=false;\n \
+    \           fi\n        else\n            if [[ $key =~ *[[:upper:]] ]]; then\n\
+    \                continue;\n            else\n                upper=false;\n \
+    \           fi\n        fi\n        if (( count == 2 )); then\n            lower=true;\n\
+    \            upper=true;\n        fi\n    done <\"$file\"\n    (( lower ));\n\
+    \    if (( lower )); then\n        echo \"false\";\n        return 1;\n    fi\n\
+    \    (( upper ));\n    if (( upper )); then\n        echo \"true\";\n        return\
+    \ 0;\n    fi\n    echo \"false\";\n    return 1;", "  local csv=\"$1\"\n  if [\
+    \ -z \"$csv\" ]; then\n    echo \"Error: empty CSV\"\n    return\n  fi\n\n  local\
+    \ key\n  local val\n  local result\n\n  for key in $csv; do\n    val=${csv[$key]}\n\
+    \    if [[ \"$val\" =~ [A-Z] ]]; then\n      echo \"false\"\n      return\n  \
+    \  elif [[ \"$val\" =~ [a-z] ]]; then\n      echo \"true\"\n      return\n   \
+    \ else\n      echo \"Error: non-lower-case key or value\"\n      return\n    fi\n\
+    \  done\n  echo \"true\"", "    local csv_lines=$(cat $1)\n    # First pass check:\
+    \ each row is a CSV row\n    local csv_row_count=0\n    local csv_header_count=0\n\
+    \    for csv_line in $csv_lines; do\n        csv_row_count=$((csv_row_count+1))\n\
+    \        csv_header_count=$((csv_header_count+1))\n        csv_line=$(echo $csv_line\
+    \ | sed 's/,/ /g')\n        local csv_key=$(echo $csv_line | cut -d\",\" -f1)\n\
+    \        local csv_value=$(echo $csv_line | cut -d\",\" -f2)\n        local csv_value_upper=$(echo\
+    \ $csv_value | tr '[:upper:]' '[:lower:]')\n        local csv_value_lower=$(echo\
+    \ $csv_value | tr '[:lower:]' '[:upper:]')\n        if [[ ! $csv_key =~ (^[a-zA-Z]+$)\
+    \ ]] ; then\n            echo $csv_key is not all lower or all upper\n       \
+    \     return 1\n        elif [[ ! $csv_key =~ (^[A-Z]+$) ]] ; then\n         \
+    \   echo $csv_key is not all upper or all lower\n            return 1\n      \
+    \  elif [[ ! $csv_value_upper =~ (^[A-Z]+$) ]] ; then\n            echo $csv_value_upper\
+    \ is not all upper\n            return 1\n        elif [[ ! $csv_value_lower =~\
+    \ (^[a-z]+$) ]] ; then\n            echo $csv_value_lower is not all lower\n \
+    \           return 1\n        elif [[ $csv_row_count -gt 1 ]] ; then\n       \
+    \     echo $csv_key is repeated multiple times\n            return 1\n       \
+    \ fi\n    done\n    echo $((csv_header_count)) header rows and $((csv_row_count))\
+    \ rows are ok\n    local csv_header_keys_found=0\n    local csv_header_values_found=0\n\
+    \    for csv_line in $csv_lines; do\n        csv_line=$(echo $csv_line | sed 's/,/\
+    \ /g')\n        local csv_key=$(echo $csv_line | cut -d\",\" -f1)\n        local\
+    \ csv_value=$(echo $csv_line | cut -d\",\" -f2)\n        local csv_value_upper=$(echo\
+    \ $csv_value | tr '[:upper:]' '[:lower:]')\n        local csv_value_lower=$(echo\
+    \ $csv_value | tr '[:lower:]' '[:upper:]')\n        if [[ ! $csv_key =~ (^[a-zA-Z]+$)\
+    \ ]] ; then\n            echo $csv_key is not all lower or all upper\n       \
+    \     return 1\n        elif [[ ! $csv_key =~ (^[A-Z]+$) ]] ; then\n         \
+    \   echo $csv_key is not ", "  local line=$(echo $1 | tr \",\" \"\\n\")\n  local\
+    \ empty=false\n  for k in $(echo $line | cut -d\" \" -f 1); do\n    local s=$(echo\
+    \ $k | tr \"[:upper:]\" \"[:lower:]\")\n    local e=$(echo $k | tr \"[:upper:]\"\
+    \ \"[:upper:]\")\n    if [ -z \"$s\" ] && [ -z \"$e\" ]; then\n      empty=true\n\
+    \    fi\n  done\n  if $empty ; then\n    echo true\n  else\n    echo false\n \
+    \ fi", "    local csv_lines=$(echo \"$1\" | sed -n 's/^([^,]*,[^,]*),\\(.*\\)$/\\\
+    2,\\1/p')\n    local check_result=$(echo $csv_lines | awk -F, '{for(i=1;i<=NF;i++)\
+    \ if($i<255) printf $i; else printf $i\",\"; printf \"\\n\"}')\n    local check_result_upper_case=$(echo\
+    \ $check_result | tr '[:upper:]' '[:lower:]')\n    local check_result_lower_case=$(echo\
+    \ $check_result | tr '[:lower:]' '[:upper:]')\n    if [[ $check_result_upper_case\
+    \ == $check_result_lower_case ]] ; then\n        echo \"true\"\n    else\n   \
+    \     echo \"false\"\n    fi", "  echo \"$1\" | \\\n  sed -e 's/,/\\n/g' | \\\n\
+    \  awk -F'\\n' '{for (i=1; i<=NF; i++) {\n    if (($i==$(i-1)) && $(i) ~ /^[0-9]$/)\
+    \ {\n      print \"true\";\n    } else {\n      print \"false\";\n      exit 1;\n\
+    \    }\n  }}'", "    local keys=$(echo $1 | cut -d \",\" -f 1)\n    local vals=$(echo\
+    \ $1 | cut -d \",\" -f 2 | tr \" \" \"\\n\")\n    \n    local bool=0\n    for\
+    \ key in $keys; do\n        if [ \"$key\" = \"$keys\" ]; then\n            bool=1\n\
+    \        fi\n    done\n    \n    if [ \"$bool\" -eq \"0\" ]; then\n        return\
+    \ 0\n    else\n        return 1\n    fi", "  if [ -z \"$1\" ]; then\n    echo\
+    \ false && return 0\n  fi\n  local header=$(awk -F',' '{print $1}' \"$1\")\n \
+    \ local values=$(awk -F',' '{print $2}' \"$1\")\n  local allstrings=true\n  for\
+    \ v in $values; do\n    if [ -z \"$v\" ]; then\n      allstrings=false\n     \
+    \ break\n    fi\n  done\n  if ! $allstrings; then\n    for v in $values; do\n\
+    \      v=$(echo $v | awk '{print tolower($0)}')\n      if ! $allstrings; then\
+    \ \n        allstrings=false\n        break\n      fi\n    done\n  fi\n  if $allstrings;\
+    \ then \n    echo true && return 0\n  else\n    echo false && return 0\n  fi",
+  "  local CSV=\"${1}\"\n  local KEYVAL1=$(head -n 1 ${CSV} | cut -d, -f1)\n  local\
+    \ KEYVAL2=$(head -n 1 ${CSV} | cut -d, -f2)\n  if [ ! -z ${KEYVAL1} ]\n  then\n\
+    \    local KEYVAL1_UPPER=$(echo \"${KEYVAL1}\" | tr '[:upper:]' '[:lower:]')\n\
+    \    local KEYVAL1_LOWER=$(echo \"${KEYVAL1}\" | tr '[:lower:]' '[:upper:]')\n\
+    \    if [ ! -z ${KEYVAL2} ]\n    then\n      local KEYVAL2_UPPER=$(echo \"${KEYVAL2}\"\
+    \ | tr '[:upper:]' '[:lower:]')\n      local KEYVAL2_LOWER=$(echo \"${KEYVAL2}\"\
+    \ | tr '[:lower:]' '[:upper:]')\n      if [[ \"${KEYVAL1_LOWER}\" == \"${KEYVAL1_UPPER}\"\
+    \ ]]\n      then\n        if [[ \"${KEYVAL2_LOWER}\" == \"${KEYVAL2_UPPER}\" ]]\n\
+    \        then\n          return 0\n        else\n          return 1\n        fi\n\
+    \      else\n        return 1\n      fi\n    else\n      return 1\n    fi\n  else\n\
+    \    return 1\n  fi", "    local csv=\"$1\"\n\n    # $1 should exist and be valid\n\
+    \    [ -s \"$csv\" ] || return 1\n\n    # $1 should only contain 2 columns\n \
+    \   local numcols=$(head -n 1 \"$csv\" | cut -d, -f1)\n    [ \"$numcols\" -eq\
+    \ 2 ] || return 1\n\n    # $1 should have only 2 rows\n    local numrows=$(tail\
+    \ -n 1 \"$csv\" | cut -d, -f1)\n    [ \"$numrows\" -eq 2 ] || return 1\n\n   \
+    \ # the first row should be a header with 2 columns\n    local header=$(head -n\
+    \ 1 \"$csv\" | cut -d, -f1-2)\n    if [ \"$header\" = \"key,value\" ]; then\n\
+    \        # remove the header\n        head -n +2 \"$csv\" > tmp.csv\n        local\
+    \ test=$(check_dict_case \"tmp.csv\")\n        if [ \"$test\" == \"false\" ];\
+    \ then\n            # header was not a header\n            rm tmp.csv\n      \
+    \  else\n            # header was a header\n            rm tmp.csv\n        fi\n\
+    \    fi\n\n    # $1 should have only strings in lower or upper case\n    local\
+    \ lower=$(head -n 1 \"$csv\" | cut -d, -f2 | tr '[:upper:]' '[:lower:]')\n   \
+    \ local upper=$(head -n 1 \"$csv\" | cut -d, -f2 | tr '[:lower:]' '[:upper:]')\n\
+    \    [[ \"$lower\" != \"$upper\" ]] && return 1 || return 0", "  local csv=$1\n\
+    \  shift\n  local result=\"$(echo \"$csv\" | awk -F',' '{ print $1 \" \" $2 }')\"\
+    \n  for arg in \"$@\"; do\n    local keyval=\"$arg\"\n    local key\n    local\
+    \ val\n    while read key val; do\n      if [[ \"$keyval\" != \"$key\" || \"$keyval\"\
+    \ != \"$val\" ]]; then\n        result=\"false\"\n        break\n      fi\n  \
+    \  done <<< \"$result\"\n  done\n  echo \"$result\"", "    local csv=$1\n    local\
+    \ csvheader=$( head -n 1 ${csv} )\n    local header=$(echo $csvheader | cut -d','\
+    \ -f1)\n    local headerlower=$(echo $header | tr '[:upper:]' '[:lower:]')\n \
+    \   local headerupper=$(echo $header | tr '[:lower:]' '[:upper:]')\n    local\
+    \ vals=$( tail -n +2 ${csv} )\n    local truecase=1\n    for val in $vals; do\n\
+    \        if [ \"${headerlower,,}\" == \"${val}\" ]; then\n            truecase=0\n\
+    \            break\n        fi\n    done\n    for val in $vals; do\n        if\
+    \ [ \"${headerupper,,}\" == \"${val}\" ]; then\n            truecase=0\n     \
+    \       break\n        fi\n    done\n    echo $truecase", "    local i j\n   \
+    \ local key\n    local value\n    local check_string\n    # Check that every line\
+    \ has two fields separated by commas.\n    # Return false if not.\n    test $#\
+    \ = 1 || ( echo \"check_dict_case: expects two arguments\"; return 1 )\n    \n\
+    \    read a b || return 1\n    \n    # Return false if input contains empty lines\
+    \ and no commas\n    test $a && $a != \",\" && $a != \"\" || return 1\n    test\
+    \ $b && $b != \",\" && $b != \"\" || return 1\n\n    for ((i=0; i<${#a}; i++));\
+    \ do\n        # Assign first field of input line to $key and the rest to $value.\n\
+    \        key=${a:$i:1}\n        value=\"${a:$i:2}\"\n\n        # Check that key\
+    \ is all lower case.\n        check_string=false\n        case ${key} in\n   \
+    \         *[!a-zA-Z]*) check_string=true;;\n        esac\n\n        # Check that\
+    \ value is all lower case.\n        case ${value} in\n            *[!a-zA-Z]*)\
+    \ check_string=true;;\n        esac\n\n        # Return if both key and value\
+    \ are valid.\n        if ${check_string}; then\n            return 0\n       \
+    \ fi\n    done\n    \n    echo \"check_dict_case: input invalid\"\n    return\
+    \ 1", "    if [ -z \"$1\" ]; then echo \"ERROR: check_dict_case() called with\
+    \ empty CSV\"; return 1; fi\n    local dict=`echo $1 | cut -d \",\" -f 1`\n  \
+    \  local dict2=`echo $1 | cut -d \",\" -f 2`\n    local key\n    for (( i=1; i<=$((\
+    \ $#dict )); i++ )); do\n        key=`echo $dict | cut -d \",\" -f $i`\n     \
+    \   key=`echo $key | tr '[:upper:]' '[:lower:]'`\n        if [ \"$key\" = \"$dict2\"\
+    \ ]; then echo \"true\"; return; fi\n        key=`echo $key | tr '[:upper:]' '[:upper:]'`\n\
+    \        if [ \"$key\" = \"$dict2\" ]; then echo \"false\"; return; fi\n    done\n\
+    \    echo \"false\"", "  # echo \"$1\"\n  # declare -a keys=($(cut -d, -f 1 \"\
+    $1\"))\n  # declare -a vals=($(cut -d, -f 2 \"$1\"))\n  # echo \"$keys\"\n  #\
+    \ echo \"$vals\"\n  if [[ ! -z \"$1\" ]]; then\n    keys=($(cut -d, -f 1 \"$1\"\
+    ))\n    vals=($(cut -d, -f 2 \"$1\"))\n    echo \"${keys[@]}\"\n    echo \"${vals[@]}\"\
+    \n    \n    for (( i=0; i<${#keys[@]}; i++ )); do\n      echo \"$keys[$i] $vals[$i]\"\
+    \n      if [[ $vals[$i] != $(echo \"$keys[$i]\" | tr '[A-Z]' '[a-z]') ]]; then\n\
+    \        echo \"$keys[$i] $vals[$i]\"\n        echo \"false\"\n        echo \"\
+    $keys\"\n        echo \"$vals\"\n      else\n        echo \"true\"\n      fi\n\
+    \    done\n  fi", "  local csv_keys=$(head -1 \"$1\")\n  local csv_vals=$(tail\
+    \ -1 \"$1\")\n\n  local true=0\n  local false=0\n  local empty_string=0\n  local\
+    \ empty_string_to_low=0\n  local empty_string_to_upper=0\n\n  while IFS=, read\
+    \ -r key val || [[ -n \"$key\" ]];\n  do\n    if [[ ${val} == \"${key}\" ]]; then\n\
+    \      true=$(( true + 1 ))\n    else\n      false=$(( false + 1 ))\n    fi\n\n\
+    \    if [[ -z $val ]]; then\n      empty_string=$(( empty_string + 1 ))\n    fi\n\
+    \n    if [[ -z $(echo \"$val\" | tr '[:upper:]' '[:lower:]') ]]; then\n      empty_string_to_upper=$((\
+    \ empty_string_to_upper + 1 ))\n    fi\n\n    if [[ -z $(echo \"$val\" | tr '[:lower:]'\
+    \ '[:upper:]') ]]; then\n      empty_string_to_low=$(( empty_string_to_low + 1\
+    \ ))\n    fi\n  done < \"$1\"\n\n  if (( $false == 0 )); then\n    echo -e \"\
+    All keys are strings, in lower-case or all keys are strings in upper case.\"\n\
+    \    return 1\n  elif (( $true == 0 )); then\n    echo -e \"All keys are strings.\"\
+    \n    return 1\n  elif (( $empty_string == 0 )); then\n    echo -e \"All keys\
+    \ are empty strings\"\n    return 1\n  elif (( $empty_string_to_low == 0 )); then\n\
+    \    echo -e \"All keys are empty strings converted to lower case\"\n    return\
+    \ 1\n  elif (( $empty_string_to_upper == 0 )); then\n    echo -e \"All keys are\
+    \ empty strings converted to upper case\"\n    return 1\n  else\n    echo -e \"\
+    Some keys are strings in both cases.\"\n    return 0\n  fi", "  local CSV=\"$1\"\
+    \n\n  if [ ! -z \"$CSV\" ] ; then\n    local LOWER=`echo \"$CSV\" | sed 's/,/\\\
+    n/g' | sed 's/^/LOWER: /' `\n    local UPPER=`echo \"$CSV\" | sed 's/,/\\n/g'\
+    \ | sed 's/^/UPPER: /' `\n    local RESULT=`echo \"$LOWER\" | sed 's/,/\\n/g'\
+    \ | sort | uniq | grep $UPPER | wc -l | tr -d ' '`\n    if [ \"1\" != \"$RESULT\"\
+    \ ] ; then\n      echo \"false\"\n    else\n      echo \"true\"\n    fi\n  fi",
+  "  # $1 is a CSV of key,value order\n  # $2 is a CSV of key,value order\n  local\
+    \ key1 val1 key2 val2\n  local key3 val3 key4 val4\n  local key5 val5 key6 val6\
+    \ key7 val7 key8 val8\n  local key9 val9 key10 val10 key11 val11 key12 val12\n\
+    \  local key13 val13 key14 val14 key15 val15\n  local key16 val16\n  local key17\
+    \ val17 key18 val18 key19 val19 key20 val20\n  local key21 val21 key22 val22 key23\
+    \ val23 key24 val24 key25 val25\n  local key26 val26 key27 val27 key28 val28 key29\
+    \ val29 key30 val30\n  local key31 val31 key32 val32 key33 val33 key34 val34\n\
+    \  local key35 val35 key36 val36 key37 val37 key38 val38 key39 val39 key40 val40\n\
+    \  local key41 val41 key42 val42 key43 val43 key44 val44\n  local key45 val45\
+    \ key46 val46 key47 val47 key48 val48 key49 val49 key50 val50\n  local key51 val51\
+    \ key52 val52 key53 val53 key54 val54\n  local key55 val55 key56 val56 key57 val57\
+    \ key58 val58 key59 val59 key60 val60\n  local key61 val61 key62 val62 key63 val63\
+    \ key64 val64\n  local key65 val65 key66 val66 key67 val67 key68 val68 key69 val69\
+    \ key70 val70\n  local key71 val71 key72 val72 key73 val73\n  local key74 val74\
+    \ key75 val75 key76 val76 key77 val77 key78 val78 key79 val79 key80 val80\n  local\
+    \ key81 val81 key82 val82 key83 val83 key84 val84 key85 val85 key86 val86 key87\
+    \ val87 key88", "  local csv=$1\n  local ok\n  # If there are no lines in the\
+    \ CSV, return false\n  if [ -z \"$csv\" ]; then\n    return 0\n  fi\n  # Test\
+    \ the keys in the csv\n  for key in $(echo \"$csv\" | cut -d',' -f1 ); do\n  \
+    \  test \"$key\" == \"$key\" || return 1\n  done\n  # The keys in the csv are\
+    \ all strings\n  for key in $(echo \"$csv\" | cut -d',' -f1 ); do\n    if [[ \"\
+    $key\" =~ ^[a-z]+$ ]]; then\n      ok=1\n    else\n      ok=0\n      break\n \
+    \   fi\n  done\n  return $ok", "    local KEYVAL\n    local SCORE_STRING\n   \
+    \ local KEY\n    local VALUE\n    local KEYS\n    local UPCASE\n    local LOWERCASE\n\
+    \    local VALID\n    local COUNT\n\n    KEYVAL=$1\n    if [ $# -eq 0 ]; then\n\
+    \        return 0\n    fi\n\n    COUNT=0\n    KEYS=\"\"\n    VALID=1\n    while\
+    \ [[ $KEYVAL =~ ([^,]+,[^,]+)$ ]]; do\n        KEY=${BASH_REMATCH[1]}\n      \
+    \  VALUE=${BASH_REMATCH[2]}\n        KEYS=${KEYS}${KEY},\n        UPCASE=$(echo\
+    \ $KEY | awk '{print toupper($0)}')\n        LOWERCASE=$(echo $KEY | awk '{print\
+    \ tolower($0)}')\n        SCORE_STRING=$(echo \"$KEY = \\\"$VALUE\\\"\" | awk\
+    \ '{print $1}')\n        if [[ $SCORE_STRING == *\"'$VALUE'\"* ]]; then\n    \
+    \        COUNT=$((COUNT + 1))\n        elif [[ $UPCASE == *\"$LOWERCASE\"* ]];\
+    \ then\n            COUNT=$((COUNT + 1))\n        fi\n        KEYVAL=${KEYVAL%,*}\n\
+    \    done\n    VALID=$((COUNT == 0))\n    echo ${VALID}", "    # read in CSV and\
+    \ convert to array\n    local CSV=\"$1\"\n    local array key value uppercase\
+    \ lowercase # initialize\n    IFS=\",\"\n    while read -r -a array; do\n    \
+    \    # key is the first (first) element in the array\n        key=\"${array[0]}\"\
+    \n        # value is the second (first) element in the array\n        value=\"\
+    ${array[1]}\"\n        # convert key to upper and lower\n        uppercase=\"\
+    ${key,,}\"\n        lowercase=\"${key,,}\"\n        lowercase | tr '[:upper:]'\
+    \ '[:lower:]'\n        lowercase | tr '[:lower:]' '[:upper:]'\n        # compare\
+    \ lowercase and uppercase\n        case \"$uppercase $lowercase\" in\n       \
+    \     *\" \"$*\" \")\n                return 1\n                ;;\n         \
+    \   *)\n                return 0\n                ;;\n        esac\n    done\n\
+    \    return 0", "  local csv_line=$1\n\n  if [[ \"$csv_line\" == *,* ]]; then\n\
+    \    echo \"$csv_line\"\n    # CSV format should be key1,value1\\nkey2,value2\n\
+    \    # Check for key1, value1\n    key1=\"${csv_line#*,}\"\n    value1=\"${csv_line%%,*}\"\
+    \n    if [[ \"$value1\" == \"\" || \"$value1\" =~ ^\"[0-9]\\.[0-9]$\"* ]]; then\n\
+    \      echo \"$key1,$value1\"\n      # Check for key1, value2\n      key2=\"${value1#*,}\"\
+    \n      value2=\"${value1%%,*}\"\n      if [[ \"$key2\" == \"\" || \"$key2\" =~\
+    \ ^\"[0-9]\\.[0-9]$\"* ]]; then\n        echo \"true\"\n      else\n        echo\
+    \ \"false\"\n      fi\n    else\n      echo \"false\"\n    fi\n  else\n    echo\
+    \ \"false\"\n  fi", "  local csv_lines=$(echo \"$1\" | sed 's/,/\\n/g' | sed 's/^\
+    \ *//g' | sed 's/ *$//g')\n  local lowercase_csv_lines=$csv_lines\n  local uppercase_csv_lines=$csv_lines\n\
+    \  local fails=0\n  while read -r line; do\n    lowercase_csv_lines=\"${lowercase_csv_lines[@]/#\"\
+    $line\"/}\n    uppercase_csv_lines=\"${uppercase_csv_lines[@]/#\"$line\"/}\n \
+    \ done < <(echo \"$csv_lines\" | tr \",\" \"\\n\")\n  if [[ \"$lowercase_csv_lines\"\
+    \ == \"$csv_lines\" ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\n\
+    \    fails=$((fails+1))\n  fi\n  if [[ \"$uppercase_csv_lines\" == \"$csv_lines\"\
+    \ ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\n    fails=$((fails+1))\n\
+    \  fi\n  if [[ -z \"$1\" ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\
+    \n    fails=$((fails+1))\n  fi\n  if (( fails != 0 ));\n  then\n    return 1\n\
+    \  fi", "    local csv_line=$1\n    local csv_headers=$csv_line | head -1 | cut\
+    \ -d ',' -f 1\n    local csv_keys=$csv_line | head -1 | cut -d ',' -f 2\n    #\
+    \ Return true only if the number of headers is same as number of keys\n    # and\
+    \ if the headers are all either lower case or upper case.\n    # The function\
+    \ should return false if the given CSV is empty.\n    # Examples:\n    # >>> $(check_dict_case\
+    \ \"a,apple\\nb,banana\")\n    # true\n    # >>> $(check_dict_case \"a,apple\\\
+    nA,banana\\nB,banana\")\n    # false\n    # >>> $(check_dict_case \"a,apple\\\
+    n8,banana\")\n    # false\n    # >>> $(check_dict_case \"Name,John\\nAge,36\\\
+    nCity,Houston\")\n    # false\n    # >>> $(check_dict_case \"STATE,NC\\nZIP,12345\"\
+    )\n    # true\n    if [ $csv_header -eq 0 ]; then\n        echo \"$0: $csv_line\
+    \ is empty\"\n        return 1;\n    fi\n    if [ \"$csv_headers\" != \"$csv_keys\"\
+    \ ]; then\n        echo \"$0: CSV headers are not equal to CSV keys. $csv_headers\
+    \ vs. $csv_keys\"\n        return 1;\n    fi\n    for header in $csv_headers;\
+    \ do\n        if [ \"$header\" != \"$header\" ]; then\n            echo \"$0:\
+    \ CSV header $header is not in lower or upper case.\"\n            return 1;\n\
+    \        fi\n    done\n    echo \"$0: All CSV headers are lower or upper case.\"\
+    \n    return 0;", "    local key_column1=$1\n    local key_column2=$2\n    local\
+    \ key_column1_string=$(echo $key_column1 | cut -d',' -f1)\n    local key_column2_string=$(echo\
+    \ $key_column2 | cut -d',' -f1)\n    local key_column1_upper=$(echo $key_column1\
+    \ | cut -d',' -f2)\n    local key_column2_upper=$(echo $key_column2 | cut -d','\
+    \ -f2)\n\n    if [ \"$key_column1_string\" != \"\" ] && [ \"$key_column2_string\"\
+    \ != \"\" ]; then\n        lowercase $key_column1_string $key_column2_string\n\
+    \        if [ \"$?\" -ne \"0\" ]; then\n            lowercase $key_column1_upper\
+    \ $key_column2_upper\n            if [ \"$?\" -ne \"0\" ]; then\n            \
+    \    lowercase $key_column1 $key_column2\n                if [ \"$?\" -ne \"0\"\
+    \ ]; then\n                    return 1\n                fi\n            fi\n\
+    \        fi\n    fi\n    return 0", "    local csv_line=$1\n\n    # Split line\
+    \ into separate lines\n    IFS='\n' read -ra csv_line <<< \"$csv_line\"\n    #\
+    \ Convert each line to lower case\n    mapfile -t csv_line < <(\n        for csv_item\
+    \ in \"${csv_line[@]}\"; do\n            echo -n \"${csv_item},\"\n        done\n\
+    \        echo \"\"\n    )\n    # Remove trailing comma\n    csv_line=\"${csv_line%,}\"\
+    \n    echo \"${#csv_line[@]}\"\n\n    # Convert each line to upper case\n    mapfile\
+    \ -t csv_line < <(\n        for csv_item in \"${csv_line[@]}\"; do\n         \
+    \   echo -n \"${csv_item^^},\"\n        done\n        echo \"\"\n    )\n    #\
+    \ Remove trailing comma\n    csv_line=\"${csv_line%,}\"\n    echo \"${#csv_line[@]}\"\
+    \n\n    if [ \"${#csv_line[@]}\" -eq 0 ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "\tlocal check_lower=$1\n\tlocal check_upper=$2\n\
+    \t\n\tcheck_lower=${check_lower,,}\n\tcheck_upper=${check_upper,,}\n\t\n\tif [\
+    \ $(wc -l < \"$check_lower\") -eq 1 ]; then\n\t\tcheck_lower=$(echo \"$check_lower\"\
+    \ | tr '[:upper:]' '[:lower:]')\n\tfi\n\t\n\tif [ $(wc -l < \"$check_upper\")\
+    \ -eq 1 ]; then\n\t\tcheck_upper=$(echo \"$check_upper\" | tr '[:lower:]' '[:upper:]')\n\
+    \tfi\n\t\n\tlocal line=\n\tlocal lower=\n\tlocal upper=\n\t\n\twhile IFS='' read\
+    \ -r line; do\n\t\tlower=$(echo \"$line\" | tr '[:upper:]' '[:lower:]')\n\t\t\
+    upper=$(echo \"$line\" | tr '[:lower:]' '[:upper:]')\n\t\n\t\tif [ \"$check_lower\"\
+    \ == \"$lower\" ]; then\n\t\t\techo \"true\"\n\t\t\treturn 0\n\t\tfi\n\t\t\n\t\
+    \tif [ \"$check_upper\" == \"$upper\" ]; then\n\t\t\techo \"true\"\n\t\t\treturn\
+    \ 0\n\t\tfi\n\tdone < \"$1\"\n\t\n\techo \"false\"\n\treturn 1", "  local -r input=\"\
+    $1\"\n  local -a cols=(\"$input\" cut -d, -f2- | sed 's/,/ /g')\n  local -a non_strings=()\n\
+    \  local -a lowercase=()\n  local -a uppercase=()\n  for (( i=0; i<${#cols[@]};\
+    \ i++ )); do\n    local -a chars=($(echo \"${cols[i]}\" | tr '[:upper:]' '[:lower:]'))\n\
+    \    non_strings+=(\"${chars[@]}\")\n    lowercase+=(\"${chars[@]}\")\n    uppercase+=(\"\
+    ${chars[@]}\")\n  done\n  if [[ ${#non_strings[@]} -gt 0 && ${#lowercase[@]} -gt\
+    \ 0 ]]; then\n    # Found both strings\n    local upper\n    for (( i=1; i<${#lowercase[@]};\
+    \ i++ )); do\n      upper=\"$(echo \"${lowercase[$i]}\" | tr '[:upper:]' '[:upper:]')\"\
+    \n      [[ \"${uppercase[$i]}\" == \"${upper}\" ]] || return 1\n    done\n  else\n\
+    \    # Found at least one string\n    for (( i=1; i<${#lowercase[@]}; i++ ));\
+    \ do\n      [[ \"${lowercase[$i]}\" == \"${lowercase[$(( i-1 ))]}\" ]] || return\
+    \ 1\n    done\n  fi\n  return 0", "\tlocal file=$1\n\tlocal expected\n\tlocal\
+    \ key\n\tlocal values\n\tlocal result\n\texpected=$(tr -d '\\n' < $file)\n\tif\
+    \ test -z \"$expected\"; then\n\t\treturn false\n\tfi\n\twhile read -r key values\n\
+    \tdo\n\t\tresult=false\n\t\tfor value in $values\n\t\tdo\n\t\t\tresult=true\n\t\
+    \t\tcase $value in $(echo \"$expected\" | grep \"$value\" | awk '{print $1}')\n\
+    \t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in $(echo \"\
+    $expected\" | grep \"$value\" | awk '{print $2}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\
+    \t\t\tesac\n\t\t\tcase $value in $(echo \"$expected\" | grep \"$value\" | awk\
+    \ '{print $3}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value\
+    \ in $(echo \"$expected\" | grep \"$value\" | awk '{print $4}')\n\t\t\tin\n\t\t\
+    \t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in $(echo \"$expected\" |\
+    \ grep \"$value\" | awk '{print $5}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\
+    \t\tesac\n\t\t\tcase $value in $(echo \"$expected\" | grep \"$value\" | awk '{print\
+    \ $6}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in\
+    \ $(echo \"$expected\" | grep \"$value\" | awk '{print $7}')\n\t\t\tin\n\t\t\t\
+    \t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in $(echo \"$expected\" | grep\
+    \ \"$value\" | awk '{print $8}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\t\
+    esac\n\t\t\tcase $value in $(echo \"$expected\" | grep \"$value\" | awk '{print\
+    \ $9}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in\
+    \ $(echo \"$expected\" | grep \"$value\" | awk '{print $10}')\n\t\t\tin\n\t\t\t\
+    \t*,*) result=false\n\t\t\tesac\n\t\t\tcase $value in $(echo \"$expected\" | grep\
+    \ \"$value\" | awk '{print $11}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\t\
+    esac\n\t\t\tcase $value in $(echo \"$expected\" | grep \"$value\" | awk '{print\
+    \ $12}')\n\t\t\tin\n\t\t\t\t*,*) result=false\n\t\t\tesac\n\t\t\tcase $", "  \
+    \  local csv=$1\n    local strkey\n    local strvalue\n    local key\n    local\
+    \ value\n    local ok\n    \n    ok=1\n    for strkey in $( echo $csv | tr ','\
+    \ '\\n' | sort -u ); do\n        strvalue=$( echo $csv | sed \"s/^$strkey,//\"\
+    \ | sed \"s/,$//\" )\n        if [[ $strvalue =~ \"^[ ]*$strkey[ ]*$\" ]]; then\n\
+    \            ok=0\n        fi\n    done\n    \n    return $ok", "    local _IFS='\n\
+    '\n    # Check that all keys are lowercase or all keys are uppercase\n    if [\
+    \ \"$#\" -ne 2 ]; then\n        echo \"Usage: $0 <CSV file>\"\n        echo \"\
+    Usage: $0 <CSV file> [<CSV file>]\"\n        echo \"Usage: $0 <CSV file> <CSV\
+    \ file> [<CSV file>]\"\n        return 1\n    fi\n\n    _IFS=$'\\n'\n\n    local\
+    \ _check=false\n    local _check_key=false\n    local _check_val=false\n    local\
+    \ _num_check=0\n\n    while read -ra line; do\n        _num_check=$((_num_check+1))\n\
+    \        local _key=${line[0]}\n        local _val=${line[1]}\n\n        # Skip\
+    \ empty lines\n        if [[ -z \"$line\" ]]; then\n            echo \"Skipping\
+    \ empty line\"\n            continue\n        fi\n\n        # Check that keys\
+    \ are all lowercase or all uppercase\n        if [ \"$#\" -eq 2 ]; then\n    \
+    \        case \"$_key\" in\n            *) _key=`echo \"$_key\" | tr '[:upper:]'\
+    \ '[:lower:]'` ;;\n            esac\n        fi\n\n        # Skip header\n   \
+    \     if [ \"$_num_check\" -eq 1 ]; then\n            _check_key=true\n      \
+    \      _check_val=true\n        else\n            # Check that the value is either\
+    \ lower case or upper case\n            if [ \"$#\" -eq 2 ]; then\n          \
+    \      case \"$_val\" in\n                *) _val=`echo \"$_val\" | tr '[:upper:]'\
+    \ '[:lower:]'` ;;\n                esac\n            fi\n        fi\n\n      \
+    \  if [[ \"$_check_key\" == \"true\" ]]; then\n            if [[ $_check_val ==\
+    \ \"false\" ]]; then\n                _check=false\n            elif [[ $_check_val\
+    \ == \"true\" ]]; then\n                _check=true\n            fi\n        fi\n\
+    \    done < <(sort -k 1,1 \"$1\")\n\n    if [ \"$_check\" == \"true\" ]; then\n\
+    \        return 0\n    else\n        return 1\n    fi", "    local CSV=$1\n  \
+    \  local KEY=\"`echo \"$CSV\" | cut -f1 -d',' | sed 's/,$//'`\"\n    local VAL=\"\
+    `echo \"$CSV\" | cut -f2 -d',' | sed 's/,$//'`\"\n    if [ ! $KEY ] || [ ! $VAL\
+    \ ]; then\n        echo \"ERROR: check_dict_case: given CSV is missing a value\"\
+    \ >&2\n        return 1\n    fi\n    KEY=`echo \"$KEY\" | tr '[:lower:]' '[:upper:]'`\n\
+    \    VAL=`echo \"$VAL\" | tr '[:lower:]' '[:upper:]'`\n    if [ \"$KEY\" != \"\
+    $VAL\" ]; then\n        return 0\n    fi\n    return 1", "  local csv_line=$(echo\
+    \ $1 | cut -d',' -f1)\n  if [ $(echo $1 | cut -d',' -f1) ]; then\n    # Check\
+    \ if first column has all lower case keys\n    local lowercase_keys=$(echo $csv_line\
+    \ | tr a-z A-Z)\n    if [ \"$lowercase_keys\" != \"\" ]; then\n      echo $lowercase_keys\n\
+    \      true\n    else\n      # Check if first column has all upper case keys\n\
+    \      local uppercase_keys=$(echo $csv_line | tr A-Z a-z)\n      if [ \"$uppercase_keys\"\
+    \ != \"\" ]; then\n        echo $uppercase_keys\n        true\n      else\n  \
+    \      echo \"false\"\n        false\n      fi\n    fi\n  else\n    echo \"false\"\
+    \n    false\n  fi", "    local key_vals=\"$1\"\n    local num_cols=\"$#${key_vals//,/\
+    \ }\"\n\n    if [ ${num_cols} -lt 2 ]; then\n        echo \"${key_vals} is not\
+    \ correctly formatted. Correct format is key,value, not key with multiple values\"\
+    \ >&2\n        return 1\n    fi\n\n    if [ ${num_cols} -eq 2 ]; then\n      \
+    \  local key_first=\"${key_vals%,*}\"\n        local key_second=\"${key_vals#*,}\"\
+    \n        key_vals=${key_vals%,*}\n        if [ ${key_first,,} != ${key_second,,}\
+    \ ]; then\n            echo \"${key_vals} is incorrectly formatted. Keys must\
+    \ be lower case and upper case\" >&2\n            return 1\n        fi\n     \
+    \   return 0\n    fi\n\n    return 0", "  if [ -z \"$1\" ]; then\n    return 1\n\
+    \  fi\n  declare -A headers\n  IFS=, read -ra headers <<< \"$1\"\n  for i in \"\
+    ${!headers[@]}\"; do\n    case $i in\n      0 ) continue;;\n      1 ) declare\
+    \ -i non_empty=1;;\n      * ) non_empty=0;;\n    esac\n    if [[ $non_empty -eq\
+    \ 0 ]]; then\n      non_empty=0\n      for k in \"${!headers[@]}\"; do\n     \
+    \   if [[ \"${headers[$i]}\" == \"${headers[$k]}\" ]]; then\n          non_empty=1\n\
+    \          break\n        fi\n      done\n      if [[ $non_empty -eq 1 ]]; then\n\
+    \        return 0\n      fi\n    fi\n  done\n  return 1", "  # Check if $1 is\
+    \ empty.\n  if [ ! -z \"$1\" ]; then\n    # Read each line from the given CSV\n\
+    \    while read line; do\n      # Split each line into key,value pairs\n     \
+    \ IFS=',' read -a arr <<< \"$line\"\n      # Check if each line has exactly two\
+    \ items\n      if [ ${#arr[@]} != 2 ]; then\n        echo \"check_dict_case: Invalid\
+    \ line: $line\"\n      else\n        # Check if each key is a string\n       \
+    \ if [[ ${arr[0]} == *[A-z]*$ ]]; then\n          # Check if each value is also\
+    \ a string\n          if [[ ${arr[1]} == *[A-z]*$ ]]; then\n            echo \"\
+    true\"\n          else\n            echo \"false\"\n          fi\n        else\n\
+    \          echo \"false\"\n        fi\n      fi\n    done < $1\n  else\n    echo\
+    \ \"check_dict_case: No input CSV given\"\n  fi", "    local CSV=\"$1\"\n    [\
+    \ -z \"$CSV\" ] && return 1\n    local IFS=',' header\n    local k\n    for header\
+    \ in $(cat \"$CSV\" | cut -d, -f1 | uniq); do\n        for k; do\n           \
+    \ [ \"$k\" = \"$header\" ] && return 0\n        done\n    done\n    return 1",
+  "    local keys=$(echo \"$1\" | awk -F \",\" '{print $1}')\n    local vals=$(echo\
+    \ \"$1\" | awk -F \",\" '{print $2}')\n\n    for val in $(echo \"$vals\" | sed\
+    \ 's/,/ /g'); do\n\tcase \"$val\" in\n\t    *[!0-9]*) echo false ;;\n\t    *)\
+    \ echo true ;;\n\tesac\n    done", "  local d=$1\n  [[ -n \"$d\" ]] || return\
+    \ 0\n\n  local keys=$(IFS=,; echo \"$d\" | sed -n -e 's/^[^,]*,\\(.*\\),.*$/\\\
+    1/p')\n  local keyset=$(set -- \"$keys\")\n  [[ -n \"$keyset\" ]] || return 0\n\
+    \n  local vals=$(IFS=,; echo \"$d\" | sed -n -e 's/^[^,]*,\\(.*\\),.*$/\\2/p')\n\
+    \  local valset=$(set -- \"$vals\")\n  [[ -n \"$valset\" ]] || return 0\n\n  local\
+    \ ok\n  for k in $keyset; do\n    local i=-1\n    for v in $valset; do\n     \
+    \ if [[ $(echo \"$k,$v\" | tr ',' '\\n' | sort -u -s) > 0 ]]; then\n        i=$((i+1))\n\
+    \      fi\n    done\n    if (( i > 0 )); then\n      return 0\n    fi\n  done\n\
+    \n  return 1", "    local csv=$1\n    local str_keys_case=false\n    local str_vals_case=false\n\
+    \    local line\n    local i=0 \n    local len=${#csv}\n    while [[ $i -lt $len\
+    \ ]]; do\n        line=${csv:$i:1}\n        if [[ $line == *\",\" ]]; then\n \
+    \           line=${line%\",*}\n            key=${line:0:${#line}-1}\n        \
+    \    value=${line#*\",}\n            ((${#key} != 0 && ${#value} != 0)) || return\
+    \ 1\n            str_keys_case=$((${#key} == 0 && ${#value} == 0)) \n        \
+    \    str_vals_case=$((${#value} == 0 && ${#key} == 0)) \n        fi\n        ((${#key}\
+    \ == 0 && ${#value} == 0)) || return 1\n        if [[ $str_keys_case == false\
+    \ && $str_vals_case == false ]]; then\n            str_keys_case=true\n      \
+    \      str_vals_case=true\n        fi\n        ((i+=1))\n    done\n    if [[ $str_keys_case\
+    \ == true && $str_vals_case == true ]]; then\n        return 0\n    else\n   \
+    \     return 1\n    fi", "    [[ ! -z \"$1\" ]] || return 1\n    set -- $(cat\
+    \ \"$1\" | tr '\\n' ',' | sed -e 's/^ *//' -e 's/ *$//')\n    local keyval\n \
+    \   keyval=\"${1}\"\n    keyval=\"${keyval%,*}\"\n    keyval=\"${keyval#*,}\"\n\
+    \    echo \"${keyval}\" | grep -q '^[A-Z]*$'\n    return $?", "    local CSV=\"\
+    ${1}\"\n    local KEYS=(\"$CSV\"|cut -d, -f1)\n    local VALS=(\"$CSV\"|cut -d,\
+    \ -f2|tr ',' '\\n' |sort |uniq -d)\n    if [ -z \"$CSV\" ]; then\n      return\
+    \ 1\n    elif (( ${#KEYS[@]} != 2 )) || (( ${#VALS[@]} != 2 )) || ((${#KEYS[@]}\
+    \ != ${#VALS[@]})); then\n        return 0\n    elif [ \"$(echo \"$KEYS $VALS\"\
+    \ | sort |uniq -d)\" = \"$CSV\" ]; then\n      return 0\n    else\n      for KEY\
+    \ in \"${KEYS[@]}\"; do\n        if [ \"$(echo \"$VALS\" | grep -q \"$KEY\")\"\
+    \ != 1 ]; then\n          return 0\n        fi\n      done\n      return 1\n \
+    \   fi", "    local csv_line\n    local check_string\n    local line\n    local\
+    \ header_line\n    local num_keys=0\n    local num_values=0\n    local key\n \
+    \   local value\n    local num_key_checks=0\n    local num_value_checks=0\n  \
+    \  local key_check\n    local value_check\n    local num_key_checks_done=0\n \
+    \   local num_value_checks_done=0\n\n    IFS=',' read -a csv_line <<< \"$1\"\n\
+    \    csv_line+=(\"\")\n    num_keys=${#csv_line[@]}\n    header_line=( ${csv_line[0]}\
+    \ )\n    for line in \"${csv_line[@]:1}\"; do\n        num_values++\n        IFS=','\
+    \ read -a check_string <<< \"$line\"\n        key=${check_string[0]}\n       \
+    \ value=${check_string[1]}\n        num_key_checks++\n        key_check=false\n\
+    \        value_check=false\n        for (( i=0; i<${#header_line[@]}; i++ ));\
+    \ do\n            if [ \"${header_line[i]}\" == \"${key}\" ]; then\n         \
+    \       num_key_checks_done++\n                if [ \"${key_check}\" = false ];\
+    \ then\n                    key_check=true\n                fi\n            else\n\
+    \                num_value_checks_done++\n                if [ \"${value_check}\"\
+    \ = false ]; then\n                    value_check=true\n                fi\n\
+    \            fi\n        done\n        if [ \"${key_check}\" = \"true\" ]; then\n\
+    \            ((num_key_checks_done))\n        fi\n        if [ \"${value_check}\"\
+    \ = \"true\" ]; then\n            ((num_value_checks_done))\n        fi\n    done\n\
+    \    if [ \"${num_keys}\" -eq \"${num_key_checks}\" ]; then\n        echo \"true\"\
+    \n    else\n        echo \"false\"\n    fi", "    # Check the first line to see\
+    \ if the header is present \n    if [ ${#1} == 2 ]; then\n        # Check the\
+    \ header is correct\n        awk -F, 'BEGIN{IGNORECASE = 1} { if ( $2 == $1 )\
+    \ { print 0; } else { print 1 } }' \"$1\"\n    else\n        # Check the header\
+    \ is correct\n        awk -F, 'BEGIN{IGNORECASE = 1} { if ( $1 == $2 ) { print\
+    \ 0; } else { print 1 } }' \"$1\"\n    fi", "  local file=$1 \n  local key=$2\n\
+    \  local key_lower=`echo $key | tr '[:upper:]' '[:lower:]'`\n  local key_upper=`echo\
+    \ $key | tr '[:lower:]' '[:upper:]'`\n  if [ -s $file ]; then\n    local i=1\n\
+    \    while read -r line; do\n      local value=$line\n      local value_lower=`echo\
+    \ $value | tr '[:upper:]' '[:lower:]'`\n      local value_upper=`echo $value |\
+    \ tr '[:lower:]' '[:upper:]'`\n      if [ $i -eq 1 ]; then\n        local expected_key=$key_lower\n\
+    \        local expected_values=$key_upper\n      else\n        local expected_key=$key_upper\n\
+    \        local expected_values=$key_lower\n      fi\n      if [ \"$key\" == \"\
+    $expected_key\" ]; then\n        if [ \"$value_lower\" == \"$expected_values\"\
+    \ ]; then\n          echo \"true\"\n        else\n          echo \"false\"\n \
+    \       fi\n      else\n        if [ \"$value_lower\" == \"$expected_values\"\
+    \ ]; then\n          echo \"true\"\n        else\n          echo \"false\"\n \
+    \       fi\n      fi\n      i=`expr $i + 1`\n    done < $file\n  else\n    echo\
+    \ \"false\"\n  fi", "    local CSV=$1\n    if [ ! -z \"$CSV\" ]; then\n      \
+    \  local line\n        local key\n        local value\n        local key_upper\n\
+    \        local key_lower\n        local val_upper\n        local val_lower\n \
+    \       local result\n        local i\n        local num\n        local num_keys=$(\
+    \ echo $CSV | awk -F \",\" '{print $1}' )\n        local num_vals=$( echo $CSV\
+    \ | awk -F \",\" '{print $2}' )\n        \n        result=\"true\"\n        \n\
+    \        if [ \"$num_keys\" -eq \"$num_vals\" ]; then\n            for i in `seq\
+    \ 1 $num_keys`; do\n                line=$( echo $CSV | awk -F \",\" '{print $i}'\
+    \ );\n                key=$( echo $line | awk -F \",\" '{print $1}' )\n      \
+    \          value=$( echo $line | awk -F \",\" '{print $2}' )\n               \
+    \ key_upper=$( echo $key | awk -F \".\" '{print tolower($0)}' )\n            \
+    \    key_lower=$( echo $key | awk -F \".\" '{print toupper($0)}' )\n         \
+    \       val_upper=$( echo $value | awk -F \".\" '{print tolower($0)}' )\n    \
+    \            val_lower=$( echo $value | awk -F \".\" '{print toupper($0)}' )\n\
+    \                if [ \"$key_lower\" != \"$val_lower\" ] \\\n                ||\
+    \ [ \"$key_upper\" != \"$val_upper\" ] \\\n                ; then\n          \
+    \          result=\"false\"\n                fi\n            done\n        fi\n\
+    \        echo $result\n    fi", "  IFS=\",\"\n  for KEY in $@; do\n    KEY=$(echo\
+    \ ${KEY} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n    if [[ ${KEY}\
+    \ == *\"\\n\"* ]]; then\n      KEY=`echo \"${KEY}\" | sed 's/,/\\n/g'`\n     \
+    \ KEY=`echo \"${KEY}\" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`\n\
+    \      KEY=`echo \"${KEY}\" | sed -e 's/\\n/, /g'`\n      KEY=`echo \"${KEY}\"\
+    \ | sed -e 's/ /\\n/g'`\n      KEY=`echo \"${KEY}\" | sed -e 's/,/, /g'`\n   \
+    \   KEY=`echo \"${KEY}\" | sed -e 's/^/\\n/g'`\n      KEY=`echo \"${KEY}\" | sed\
+    \ -e 's/$/\\n/g'`\n    fi\n    if [[ ${KEY} == *\"\\n\"* ]]; then\n      KEY=`echo\
+    \ \"${KEY}\" | sed 's/,/\\n/g'`\n      KEY=`echo \"${KEY}\" | sed -e 's/^[[:space:]]*//'\
+    \ -e 's/[[:space:]]*$//'`\n      KEY=`echo \"${KEY}\" | sed -e 's/\\n/, /g'`\n\
+    \      KEY=`echo \"${KEY}\" | sed -e 's/ /\\n/g'`\n      KEY=`echo \"${KEY}\"\
+    \ | sed -e 's/,/, /g'`\n      KEY=`echo \"${KEY}\" | sed -e 's/^/\\n/g'`\n   \
+    \   KEY=`echo \"${KEY}\" | sed -e 's/$/\\n/g'`\n    fi\n    KEY=`echo \"${KEY}\"\
+    \ | sed -e 's/,/, /g'`\n    if [[ ${KEY} == *\"\\n\"* ]]; then\n      KEY=`echo\
+    \ \"${KEY}\" | sed -e 's/^/\\n/g'`\n      KEY=`echo \"${KEY}\" | sed -e 's/$/\\\
+    n/g'`\n    fi\n    if [[ ${KEY} == *\"\\n\"* ]]; then\n      KEY=`echo \"${KEY}\"\
+    \ | sed -e 's/,/\\n/g'`\n      KEY=`echo \"${KEY}\" | sed -e 's/,/, /g'`\n   \
+    \   KEY=`", "  local IFS=,\n  local result=\"${1#*,}\"\n  local key_col_name=\"\
+    ${result%%,*}\"\n  local val_col_name=\"${result#*,}\"\n  local key_val_list=\"\
+    ${1#*$key_col_name}\"\n  if [ -z \"$key_val_list\" ];then\n    return false\n\
+    \  else\n    # all items in the key list must be strings in lower case\n    for\
+    \ item_in_keys in $key_val_list; do\n      local key_in_lower=$(echo $item_in_keys\
+    \ | awk '{print tolower($0)}')\n      local key_in_upper=$(echo $item_in_keys\
+    \ | awk '{print toupper($0)}')\n      if [ \"$key_in_lower\" != \"$item_in_keys\"\
+    \ ] || [ \"$key_in_upper\" != \"$item_in_keys\" ];then\n        return false\n\
+    \      fi\n    done\n  fi\n  \n  # all items in the value list must be strings\
+    \ in upper case\n  for item_in_values in $val_col_name; do\n    local val_in_upper=$(echo\
+    \ $item_in_values | awk '{print toupper($0)}')\n    if [ \"$val_in_upper\" !=\
+    \ \"$item_in_values\" ];then\n      return false\n    fi\n  done\n  \n  return\
+    \ true", "  local key1 key2\n  while read -r line; do\n    IFS=, read -r -a key1\
+    \ <<< \"$line\"\n    IFS=, read -r -a key2 <<< \"$line\"\n    if [ \"${key1[@]}\"\
+    \ != \"${key2[@]}\" ]; then\n      echo \"false\"\n      return 1\n    fi\n  done\n\
+    \  echo \"true\"\n  return 0", "  if [[ \"$#\" -eq 0 ]]; then\n    return 0\n\
+    \  fi\n  local key_col_1 key_col_2\n  key_col_1=$1\n  key_col_2=${key_col_1#*,}\n\
+    \  if [[ \"$key_col_1\" == *[A-Z]* ]] || [[ \"$key_col_2\" == *[A-Z]* ]]; then\n\
+    \    return 0\n  else\n    return 1\n  fi", "  if [ -z \"$1\" ]\n  then\n    echo\
+    \ \"Empty CSV!\"\n    return 1;\n  fi\n  # Strip all spaces and split into two\
+    \ fields\n  IFS=',' read -a array <<< \"$1\"\n  for element in \"${array[@]}\"\
+    \n  do\n    case \"$element\" in\n      [[:alpha:]]*)\n        echo \"$element\
+    \ is an alphabetic key!\"\n        return 0;\n      ;;\n      [[:upper:]]*)\n\
+    \        echo \"$element is an uppercase key!\"\n        return 0;\n      ;;\n\
+    \      [[:digit:]]*)\n        echo \"$element is a digit key!\"\n        return\
+    \ 0;\n      ;;\n      *)\n        echo \"$element is not an alphabetic key nor\
+    \ a digit key!\"\n        return 1\n      ;;\n    esac\n  done\n  return 0", " \
+    \ if [ -z \"$1\" ] ; then\n    echo \"check_dict_case: empty CSV\"\n    return\
+    \ 0\n  fi\n  IFS=',' read -ra arr <<< \"$1\"\n  for v in \"${arr[@]}\"; do\n \
+    \   IFS=\",\" read -ra arr2 <<< \"$v\"\n    for v2 in \"${arr2[@]}\"; do\n   \
+    \   case \"$v2\" in\n        *[A-z]*) ;;\n        *[A-z]*) ;;\n        *) echo\
+    \ \"check_dict_case: bad value for key $v ($v2)\" ;;\n      esac\n    done\n \
+    \ done\n  echo \"true\"", "    IFS=$'\\n'\n    read -r FIRST_LINE <&0\n    if\
+    \ [[ $FIRST_LINE == *\"#\" ]]; then\n        echo \"$FIRST_LINE\"\n        return\
+    \ 0\n    fi\n    while read -r KEYVAL; do\n        case \"$KEYVAL\" in\n     \
+    \       *[Aa][A-Z]*|[Bb][A-Z]*|[Cc][A-Z]*) echo \"true\" ;;\n            *[Ss]*|[Tt]est*)\
+    \ echo \"true\" ;;\n            *[Tt]est*) echo \"true\" ;;\n            *[Ss]*|[Ii]nvalid*)\
+    \ echo \"true\" ;;\n            *[Ii]nvalid*) echo \"true\" ;;\n            *[Ww]arning*)\
+    \ echo \"true\" ;;\n            *[Ff]alse*) echo \"true\" ;;\n            *[Rr]epeat*)\
+    \ echo \"true\" ;;\n            *[Oo]nly*) echo \"true\" ;;\n            *[Dd]elete*)\
+    \ echo \"true\" ;;\n            *[Uu]nknown*) echo \"true\" ;;\n            esac\n\
+    \    done <\"$1\"\n    echo \"false\"", "    local IFS=$'\\n' line\n    local\
+    \ result=false\n    local count=0\n    \n    while IFS=, read -r key value; do\n\
+    \        ((count++))\n        \n        # Check if both values are strings\n \
+    \       if [[ ! -z \"$value\" ]]; then\n            if [[ \"$value\" =~ ^[[:upper:]][[:upper:]]$\
+    \ || \\\n              \"$value\" =~ ^[[:lower:]][[:lower:]]$ ]]; then\n     \
+    \           result=true\n                break\n            fi\n        fi\n \
+    \   done < \"$1\"\n    \n    if [[ \"$count\" -eq \"0\" ]]; then\n        result=true\n\
+    \    fi\n    \n    echo \"$result\"", "    local csv_rows=$((${#1}-1))\n    local\
+    \ keys=$2\n    local key\n    local values\n    local key\n    local value\n \
+    \   local found\n    local found\n    local found\n    local found\n    local\
+    \ found\n    local found\n\n    if [[ -z $1 ]]; then\n        return 0\n    fi\n\
+    \    IFS=$'\\n' read -ra values <<< \"$1\"\n    for value in \"${values[@]}\"\
+    ; do\n        IFS=',' read -ra key <<< \"$value\"\n        if [ \"${key[0]}\"\
+    \ != \"${keys[0]}\" ]; then\n            return 0\n        fi\n        found=0\n\
+    \        for (( i = 0; i < ${#key[@]}; i++ )); do\n            if [[ \"${key[$i]}\"\
+    \ == \"$value\" ]] || [[ \"${key[$i]}\" == \"${keys[$i]}\" ]]; then\n        \
+    \        found=1\n                break\n            fi\n        done\n      \
+    \  if [[ $found -eq 0 ]]; then\n            return 0\n        fi\n    done\n \
+    \   return 1", "  # $1 is a two column CSV in key,value order\n  local csv_header=$1\n\
+    \  local csv_lines=$2\n\n  # Check if there's any input\n  if [ -z \"$csv_lines\"\
+    \ ]; then\n    echo \"ERROR: check_dict_case() given an empty CSV\"\n    exit\
+    \ 1\n  fi\n\n  # Check if any header lines are in lower case or upper case\n \
+    \ local header_lowercase=false\n  local header_uppercase=false\n  for header_line\
+    \ in $csv_header; do\n    local header_key=${header_line%%,*}\n    local header_value=${header_line##*,}\n\
+    \n    # Check if any header values are in lower case\n    if [ \"$header_key\"\
+    \ == \"key\" ]; then header_lowercase=true; fi\n\n    # Check if any header values\
+    \ are in upper case\n    if [ \"$header_key\" == \"key\" ]; then header_uppercase=true;\
+    \ fi\n  done\n\n  # Check if any of the header values are in lower case\n  if\
+    \ $header_lowercase; then\n    echo \"ERROR: check_dict_case() given CSV with\
+    \ keys in lower case\"\n    exit 1\n  fi\n\n  # Check if any of the header values\
+    \ are in upper case\n  if $header_uppercase; then\n    echo \"ERROR: check_dict_case()\
+    \ given CSV with keys in upper case\"\n    exit 1\n  fi\n\n  # Check if the CSV\
+    \ is empty or not\n  if [ -z \"$csv_lines\" ]; then\n    echo \"ERROR: check_dict_case()\
+    \ given an empty CSV\"\n    exit 1\n  fi\n\n  # Check if each header line is in\
+    \ lower case\n  for header_line in $csv_header; do\n    local header_key=${header_line%%,*}\n\
+    \    local header_value=${header_line##*,}\n\n    # Check if key is in lower case\n\
+    \    if [ \"$header_key\" == \"key\" ]; then \n      if [ \"$header_value\" ==\
+    \ \"a\" ]; then \n        echo \"ERROR: check_dict_case() given CSV with keys\
+    \ in lower case\"\n        exit 1\n      fi\n    fi\n  done\n\n  return 0", " \
+    \   local csv_lines=$1\n    local csv_string=\n    local csv_string_upper=\n \
+    \   local key_type=\n    local value_type=\n    local key=\n    local value=\n\
+    \n    csv_lines=$(echo $csv_lines | sed 's/,/ /g' | sed 's/$/,/')\n\n    for csv_line\
+    \ in $csv_lines; do\n        csv_string=$(echo $csv_line | sed 's/,/ /g' | sed\
+    \ 's/$/,/')\n        csv_string_upper=$(echo $csv_line | sed 's/,/ /g' | sed 's/$/,/')\n\
+    \n        key_type=$(echo $csv_line | sed 's/,/ /g' | sed 's/^[^,]*,//' | sed\
+    \ 's/,[^,]*$//')\n        value_type=$(echo $csv_line | sed 's/,/ /g' | sed 's/^[^,]*,//'\
+    \ | sed 's/,[^,]*$//')\n        key=$(echo $csv_string | sed 's/,/ /g' | sed 's/^[^,]*,//')\n\
+    \        value=$(echo $csv_string_upper | sed 's/,/ /g' | sed 's/^[^,]*,//')\n\
+    \n        if [ \"$key_type\" = \"string\" ]; then\n            if [ \"$value_type\"\
+    \ = \"string\" ]; then\n                true\n            else\n             \
+    \   false\n            fi\n        fi\n    done", "    declare -a arr=( $( echo\
+    \ \"$1\" | tr \",\" \"\\n\" | grep -v \",$\" | sort -k 1,1 -k 2,2 ) )\n    len=${#arr[@]}\n\
+    \    for i in $(seq 0 $((len-1)))\n    do\n        tmp=${arr[$i]}\n        tmp=$(echo\
+    \ \"$tmp\" | tr \",\" \"\\n\" | grep -v \",$\" | sort -k 1,1 -k 2,2 | head -n\
+    \ 1)\n        echo -n \"Checking ${arr[$i]} as string\"\n        if [ \"$tmp\"\
+    \ = \"$arr[$i]\" ]\n        then\n            echo \"${arr[$i]} is string in lower\
+    \ case\"\n        else\n            echo \"${arr[$i]} is string in upper case\"\
+    \n        fi\n        echo \"\"\n    done", "  local key_column=0\n  local value_column=1\n\
+    \  local key_pattern\n  local value_pattern\n  local csv_line\n  while IFS=','\
+    \ read -r csv_line; do\n    key_pattern=\"$csv_line${key_column}\"\n    value_pattern=\"\
+    $csv_line${value_column}\"\n    key_column=$(( ${key_column} + 1 ))\n    value_column=$((\
+    \ ${value_column} + 2 ))\n    case \"$key_pattern\" in\n        *\"[a-z]*\"*)\n\
+    \        ;;\n        *\"[A-Z]*\"*)\n        ;;\n        *)\n          echo \"\
+    $key_pattern should only consist of lower case letters or upper case letters.\"\
+    \n          return 1\n        ;;\n    esac\n    case \"$value_pattern\" in\n \
+    \       *\"[a-z]*\"*)\n        ;;\n        *\"[A-Z]*\"*)\n        ;;\n       \
+    \ *)\n          echo \"$value_pattern should only consist of lower case letters\
+    \ or upper case letters.\"\n          return 1\n        ;;\n    esac\n  done <\
+    \ \"$1\"\n  echo \"$1\"\n  return 0", "    local dict_line=\"${1}\"\n    local\
+    \ key_col=\"${2:-0}\"\n    local val_col=\"${3:-1}\"\n\n    local dict_line_tmp\n\
+    \n    # Check for empty file\n    if [ -z \"$dict_line\" ]; then\n        echo\
+    \ \"Dictionary line is empty.\"\n        return false\n    fi\n\n    # Handle\
+    \ CSV formatting\n    dict_line_tmp=$(sed -n \"1,${key_col},${val_col}\" \"$dict_line\"\
+    )\n    dict_line_tmp=$(echo \"$dict_line_tmp\" | tr \"\\n\" \" \")\n    dict_line_tmp=$(echo\
+    \ \"$dict_line_tmp\" | sed -E 's/^\\s*|\\s*$//')\n    dict_line_tmp=$(echo \"\
+    $dict_line_tmp\" | sed 's/,/\",\"/g')\n    dict_line_tmp=$(echo \"$dict_line_tmp\"\
+    \ | sed -E 's/^([A-Z])/\" \\\\\\\\\"/; s/,/\",\"/g; s/\\s*$//')\n    dict_line_tmp=$(echo\
+    \ \"$dict_line_tmp\" | sed 's/\"//g')\n\n    # Check and handle errors\n    if\
+    \ [ -z \"$dict_line_tmp\" ]; then\n        echo \"Error processing dictionary\
+    \ line\"\n        return false\n    fi\n\n    # Convert to a dictionary\n    dict_line_tmp=$(echo\
+    \ \"$dict_line_tmp\" | sed -E 's/^([A-Z])/\" \\\\\\\\\"/; s/,/\",\"/g; s/\\s*$//')\n\
+    \    dict_line_tmp=$(echo \"$dict_line_tmp\" | sed 's/\"//g')\n    dict_line_tmp=$(echo\
+    \ \"$dict_line_tmp\" | tr '\"' ',')\n    dict_line_tmp=$(echo \"$dict_line_tmp\"\
+    \ | tr '\"' ',')\n    dict_line_tmp=$(echo \"$dict_line_tmp\" | sed -E 's/^\\\
+    s*,\\s*//')\n    dict_line_tmp=$(echo \"$dict_line_tmp\" | sed 's/,$//')\n   \
+    \ dict_line_tmp=$(echo \"$dict_line_tmp\" | sed -E 's/^\\s*|\\s*$//')\n    dict_line_tmp=$(echo\
+    \ \"$dict_line_tmp\" | sed 's/,/\",\"/g')\n    dict_line_tmp=$(echo \"$dict_line_tmp\"\
+    \ | sed -E 's/^\\s*,\\s*/,/g')\n    dict_line_tmp=$(echo \"$dict_line_tmp\" |\
+    \ sed 's/,$//')\n    dict_line_tmp=$(echo \"$dict_line_tmp\" | sed -E 's/\\s*,\\\
+    s*/,/g')\n    dict_line_tmp=$(echo \"$dict_line_tmp\" | sed 's/^\\s*,\\s*/,/g')\n\
+    \    dict_line_tmp=$(echo \"", "    local line=$1\n    IFS=, read -r -a array\
+    \ <<< \"$line\"\n    local keys=\"${array[0]}\"\n    local values=\"${array[1]}\"\
+    \n    local upper_keys=\"$(echo ${keys} | tr [:upper:] [:lower:])\"\n    local\
+    \ upper_values=\"$(echo ${values} | tr [:upper:] [:lower:])\"\n    if [[ -z \"\
+    ${values}\" ]]\n    then\n        echo \"true\"\n        return\n    fi\n    if\
+    \ [[ -z \"${upper_keys}\" ]]\n    then\n        echo \"true\"\n        return\n\
+    \    fi\n    if [[ \"${upper_keys}\" == \"${upper_values}\" ]]\n    then\n   \
+    \     echo \"true\"\n        return\n    fi\n    echo \"false\"", "    local string=\"\
+    $1\"\n    local string_to_test=$2\n    # Empty CSV not allowed\n    if [ -z \"\
+    $string\" ]; then\n        echo \"ERROR: check_dict_case is missing a CSV argument\"\
+    \ >&2\n        exit 1\n    fi\n    # Empty CSV not allowed\n    if [ -z \"$string_to_test\"\
+    \ ]; then\n        echo \"ERROR: check_dict_case is missing a second CSV argument\"\
+    \ >&2\n        exit 1\n    fi\n    local key_match=\"false\"\n    local val_match=\"\
+    false\"\n    IFS=',' read -ra kvArray <<< \"$string\"\n    for i in \"${kvArray[@]}\"\
+    ; do\n        if [[ \"$i\" =~ ^[A-Z]*$ ]]; then\n            key_match=\"true\"\
+    \n        fi\n        if [[ \"$i\" =~ ^[a-z]*$ ]]; then\n            val_match=\"\
+    true\"\n        fi\n    done\n    if [ \"$key_match\" = \"true\" ] && [ \"$val_match\"\
+    \ = \"true\" ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n\
+    \    fi", "    local IFS=',' read -ra arr < <(echo $1 | tr \",\" \"\\n\")\n\n\
+    \    local lower=\"^[A-z]*$\"\n    local upper=\"^[A-z]*$|^[A-Z]*$\"\n\n    for\
+    \ k in \"${arr[@]}\"; do\n        [[ ! $k =~ $lower ]] && return 1\n        [[\
+    \ ! $k =~ $upper ]] && return 1\n    done\n    return 0", "    local in_str=\"\
+    \"\n    local out_str=\"\"\n    local str=\"\"\n    local lines=\"\"\n    local\
+    \ line=\"\"\n    local i=0 j=0\n\n    IFS=\",\"\n    if [ ! -z \"$1\" ]\n    then\n\
+    \        in_str=\"$1\"\n        IFS=\"\\n\"\n    fi\n\n    while read -r line;\
+    \ do\n        lines=\"$lines $line\"\n    done < <(echo \"$in_str\" | tr \",\"\
+    \ \"\\n\")\n\n    if [ -z \"$lines\" ]\n    then\n        echo \"The given CSV\
+    \ is empty.\"\n    else\n        echo \"$lines\" | while read -r line ; do\n \
+    \           str=\"${line}\"\n            i=`expr index \"$str\" ,`\n         \
+    \   j=`expr index \"$str\" '\\n'`\n            # check for keys in lower case\n\
+    \            if [ \"$i\" -eq 0 ]; then\n                out_str=\"$out_str false\"\
+    \n            elif [ \"$i\" -gt 0 ]; then\n                out_str=\"$out_str\
+    \ true\"\n                # check for keys in upper case\n            elif [ \"\
+    $j\" -eq 0 ]; then\n                out_str=\"$out_str false\"\n            elif\
+    \ [ \"$j\" -gt 0 ]; then\n                out_str=\"$out_str true\"\n        \
+    \    else\n                out_str=\"$out_str false\"\n            fi\n      \
+    \  done\n        echo \"$out_str\"\n    fi", "\tlocal strings=$1;\n\tlocal keys=`echo\
+    \ $strings | tr ',' '\\n' | cut -d'\"' -f2`;\n\tlocal values=`echo $strings |\
+    \ tr ',' '\\n' | cut -d'\"' -f1`;\n\t[[ `echo $keys` != \"\" ]] && [[ `echo $values`\
+    \ != \"\" ]] && return 0;\n\t[[ `echo $keys` != \"\" ]] && return 0;\n\t[[ `echo\
+    \ $values` != \"\" ]] && return 0;\n\treturn 1;", "  local csv_file key_column\
+    \ value_column expected_value actual_value key value found=false\n  local key_column_i\n\
+    \  local value_column_i\n  local actual_key_val\n  local actual_key_vals\n  local\
+    \ actual_key_val\n  local key\n  local value\n  csv_file=$1\n  key_column=$2\n\
+    \  value_column=$3\n  expected_value=$4\n  shift; shift; shift; shift\n\n  key_column_i=$(echo\
+    \ $csv_file | awk -F$key_column '{print $1}')\n  value_column_i=$(echo $csv_file\
+    \ | awk -F$value_column '{print $2}')\n  actual_key_vals=$($csv_file | awk -F$value_column\
+    \ '{print $1}')\n\n  actual_key_vals=$(echo $actual_key_vals | sed -e 's/,//g')\n\
+    \  actual_key_vals=$(echo $actual_key_vals | sed -e 's/^,//g')\n  actual_key_vals=$(echo\
+    \ $actual_key_vals | sed -e 's/$//g')\n\n  for i in $(seq 0 $((${#actual_key_vals}-1)))\n\
+    \  do\n    actual_key_val=$((i+1))\n    key=$(echo $actual_key_vals | cut -d ','\
+    \ -f $(($key_column_i))) \n    value=$(echo $actual_key_vals | cut -d ',' -f $(($value_column_i)))\
+    \ \n    actual_key_val=$(echo $actual_key_val | cut -d ',' -f $(($value_column_i)))\
+    \ \n    found=false\n\n    if [[ \"$key\" == \"$actual_key_val\" ]]\n    then\n\
+    \      found=true\n    fi\n\n    if [[ \"$found\" == \"true\" ]]\n    then\n \
+    \     break\n    fi\n  done\n  if [[ \"$found\" == \"true\" ]]\n  then\n    echo\
+    \ \"$expected_value\"\n  else\n    echo \"$expected_value\" \n  fi", "    local\
+    \ dict_csv=$1\n    local upper_csv=$(echo $dict_csv | tr '[A-Z]' '[a-z]')\n  \
+    \  local lower_csv=$(echo $dict_csv | tr '[a-z]' '[A-Z]')\n    local csv=$(echo\
+    \ $dict_csv | tr '\\n' ' ')\n    local first_key=$(echo $csv | cut -d\",\" -f1)\n\
+    \    local second_key=$(echo $csv | cut -d\",\" -f2)\n    local first_value=$(echo\
+    \ $csv | cut -d\",\" -f1 | tr '\\n' ' ')\n    local second_value=$(echo $csv |\
+    \ cut -d\",\" -f2 | tr '\\n' ' ')\n    local equals=$(echo $lower_csv $upper_csv\
+    \ | grep $first_key | wc -l)\n    local equals_value=$(echo $lower_csv $upper_csv\
+    \ | grep $first_key | grep $second_value | wc -l)\n    if [ $equals -eq 1 ] &&\
+    \ [ $equals_value -eq 0 ]; then\n        return 1\n    else\n        return 0\n\
+    \    fi", "    if [ ! -s \"$1\" ]; then\n        return 0\n    fi\n    local key\n\
+    \    local value\n    local num_keys\n    num_keys=$(wc -l < \"$1\")\n    while\
+    \ IFS=, read key value; do\n        if [ \"$key\" -lt \"$num_keys\" ]; then\n\
+    \            echo \"$key\" \"$value\" \"$1\" | \\\n                awk -F , '{print\
+    \ tolower($1), tolower($2)}'\n            echo \"false\"\n            return 1\n\
+    \        fi\n    done\n    echo \"true\"\n    return 0", "    local IFS=',' arr2=($1)\n\
+    \    for ((i=0;i<${#arr2[@]};++i)); do\n        local key=${arr2[i]}\n       \
+    \ local value=${arr2[i+1]}\n        case ${key} in\n            *)\n         \
+    \       true\n                ;;\n            \"\") echo \"true\" ;;\n       \
+    \ esac\n        case ${value} in\n            *)\n                true\n     \
+    \           ;;\n            \"\") echo \"true\" ;;\n        esac\n    done", " \
+    \   local dict=$(sed 's/,/\\t/g' <<< \"$1\")\n    local lower=$(tr '[:upper:]'\
+    \ '[:lower:]' <<< \"$dict\")\n    local upper=$(tr '[:lower:]' '[:upper:]' <<<\
+    \ \"$dict\")\n    local count=0\n    for i in $lower; do\n        if ! [[ \"$i\"\
+    \ == \"$i\" ]]; then\n            echo \"false\"\n            return 1\n     \
+    \   fi\n        ((count+=1))\n    done\n    for i in $upper; do\n        if !\
+    \ [[ \"$i\" == \"$i\" ]]; then\n            echo \"false\"\n            return\
+    \ 1\n        fi\n        ((count+=1))\n    done\n    if [ $count -ne 2 ]; then\n\
+    \        echo \"false\"\n        return 1\n    fi\n    echo \"true\"\n    return\
+    \ 0", "    local keys=\"$(echo $1 | cut -d ',' -f 1,2)\"\n    local valid_keys=\"\
+    $(echo $keys | tr [a-z] [A-Z])\"\n    local all_keys_are_valid=\"true\"\n    for\
+    \ key in $keys; do\n        if [[ -z $key ]]; then\n            all_keys_are_valid=\"\
+    false\"\n            echo \"error: check_dict_case: first column empty $key\"\n\
+    \        fi\n        if ! [[ -z ${valid_keys} =~ ^${key}$ ]]; then\n         \
+    \   all_keys_are_valid=\"false\"\n            echo \"error: check_dict_case: second\
+    \ column key $key should be string\"\n        fi\n    done\n    echo $all_keys_are_valid",
+  "    local csv=\"$1\"\n    if [ -z $csv ]; then return 0; fi\n    local keys=()\n\
+    \    local key=''\n    local val=''\n    # Split on the newline character\n  \
+    \  IFS='\\n' read -ra array <<< \"$csv\"\n    # For each line\n    for entry in\
+    \ \"${array[@]}\"; do\n        # If a key already exists, add to it\n        if\
+    \ [ -z \"$key\" ]; then\n            key=$entry\n            val=\"$entry\"\n\
+    \            # If it's not an all-caps key, add it in lowercase\n            if\
+    \ [[ $key != [A-Z] ]]; then\n                key=$key\n            fi\n      \
+    \      # Add it to the list\n            keys+=(\"$key\")\n        # Otherwise,\
+    \ it's an all-caps key, add it in uppercase\n        else\n            # If the\
+    \ key does exist, convert to lowercase\n            if [[ ${keys[*]} =~ $entry$\
+    \ ]]; then\n                key=$entry\n            else\n                key=$key\n\
+    \            fi\n            # If it's not an all-caps key, add it in uppercase\n\
+    \            if [[ $key != [A-Z] ]]; then\n                key=$key\n        \
+    \    fi\n            # Add it to the list\n            keys+=(\"$key\")\n    \
+    \    fi\n    done\n    for entry in \"${keys[@]}\"; do\n        # If the key isn't\
+    \ an all-caps key, remove it from the list\n        if [[ $key != [A-Z] ]]; then\n\
+    \            local i=${#keys[@]}\n            for ((j=i-1;j>=0;j--)); do\n   \
+    \             if [[ ${keys[j]} == $entry ]]; then\n                    keys=(\"\
+    ${keys[@]:j}\")\n                    key=\n                    break\n       \
+    \         fi\n            done\n        fi\n    done\n    local output\n    if\
+    \ [ -z \"$key\" ]; then\n        output=\"true\"\n    else\n        output=\"\
+    false\"\n    fi\n    echo \"$output\"", "  awk -F, '$1==$2 {\n    for(i=2;i<NF;i++)\
+    \ {\n      if(!($i ~ /^[[:alpha:]]+$/)) {\n        return 0;\n      }\n    }\n\
+    \    return 1;\n  }' $1", "  local csv_line\n  csv_line=$(cat \"$1\" | head -1)\n\
+    \  if [[ -z $csv_line ]]; then\n    echo \"ERROR: CSV file is empty\" \n    return\
+    \ 1\n  fi\n\n  # The string variable csv_line will be something like \"key,value\"\
+    , \n  # so remove the commas and quotes.\n  # We also want to check if the key\
+    \ is in lower case or upper case\n  # so convert the string to lower case and\
+    \ upper case respectively.\n  csv_line_no_commas=$(echo \"$csv_line\" | tr -d\
+    \ '[[:space:]]' | tr '[:upper:]' '[:lower:]')\n\n  is_upper_case=$(echo \"$csv_line\"\
+    \ | tr '[:upper:]' '[:lower:]')\n  is_lower_case=$(echo \"$csv_line\" | tr '[:lower:]'\
+    \ '[:upper:]')\n\n  key_value_array_1=$(echo \"$csv_line\" | tr -d '[[:space:]]')\n\
+    \  key_value_array_2=$(echo \"$csv_line\" | tr -d '[[:space:]]' | tr '[:upper:]'\
+    \ '[:lower:]')\n  key_value_array_3=$(echo \"$csv_line\" | tr -d '[[:space:]]'\
+    \ | tr '[:lower:]' '[:upper:]')\n\n  echo \"key_value_array_1=$key_value_array_1\"\
+    \n  echo \"key_value_array_2=$key_value_array_2\"\n  echo \"key_value_array_3=$key_value_array_3\"\
+    \n\n  if [[ \"$key_value_array_1\" == \"\" ]] || [[ \"$key_value_array_2\" ==\
+    \ \"\" ]] || [[ \"$key_value_array_3\" == \"\" ]]; then\n    echo \"ERROR: CSV\
+    \ file is empty\" \n    return 1\n  fi\n\n  # Check if all the keys are uppercase\
+    \ or lowercase\n  # if all the keys are lowercase, return false\n  if [[ \"$key_value_array_1\"\
+    \ == \"$is_upper_case\" ]] || [[ \"$key_value_array_1\" == \"$is_lower_case\"\
+    \ ]] || [[ \"$key_value_array_2\" == \"$is_upper_case\" ]] || [[ \"$key_value_array_2\"\
+    \ == \"$is_lower_case\" ]] || [[ \"$key_value_array_3\" == \"$is_upper_case\"\
+    \ ]] || [[ \"$key_value_array_3\" == \"$is_lower_case\" ]] || [[ \"$key_value_array_1\"\
+    \ == \"$key_value_array_2\" ]] || [[ \"$key_value_array_1\" == \"$key_value_array_3\"\
+    \ ]] || [[ \"$key_value_array_2\" == \"$key_value_array_3\" ]]; then\n    echo\
+    \ \"ERROR: CSV file is empty\" \n    return 1\n  fi\n\n  # If all the keys are\
+    \ in lower case, return the lower case\n  # value as the result\n  if [[ \"$key_value_array_1\"\
+    \ == \"$", "    local -r csv=$1\n    local -a found=()\n    local -a unfound=()\n\
+    \    while IFS=\",\" read -r k v; do\n        if [[ \"$k\" == \"$k\" ]]; then\n\
+    \            found+=(\"$k\")\n        else\n            found+=(\"$k\" \"${!k}\"\
+    )\n            unfound+=(\"$k\")\n        fi\n    done <<< \"$csv\"\n    [[ -n\
+    \ \"$found\" ]] || return 1\n    for i in \"${!found[@]}\"; do\n        if [[\
+    \ -z ${found[$i]} ]]; then\n            unfound+=(\"${found[$i]}\")\n        fi\n\
+    \    done\n    if [[ -n \"$unfound\" ]]; then\n        return 0\n    fi\n    for\
+    \ k in \"${!found[@]}\"; do\n        [[ \"${found[$k]}\" -eq \"${found[$k]}\"\
+    \ ]] || return 0\n    done\n    return 1", "  local csv_line=\"$1\"\n  local key=$2\n\
+    \  local value\n\n  # Strip the newline and whitespace\n  csv_line=\"${csv_line%$'\\\
+    n'}\"\n  csv_line=\"${csv_line##* }\"\n\n  case $csv_line in\n    *\"$key\"*|*\"\
+    $key\"*)\n      true\n      ;;\n    *) false\n      ;;\n  esac", "  local IFS=','\n\
+    \  local -r \"map=( \"${2//,/ }\" )\"\n  local -r \"IFS=\\\\n\\\\t\"\n  local\
+    \ r=0\n  for k in \"${map[@]}\"; do\n    [[ ${k} = *\"[A-z]\"* ]] && r=1\n   \
+    \ [[ ${k} = *\"[A-z]\"* ]] && r=1\n    [[ ${k} = *\"[a-z]\"* ]] && r=1\n    [[\
+    \ ${k} = *\"[A-Z]\"* ]] && r=1\n  done\n  echo \"${r}\"", "  # Test for empty\
+    \ input CSV\n  if [ ! $1 ]; then\n    echo \"No input CSV given\"\n    exit 1;\n\
+    \  fi\n\n  # Split the input on commas\n  IFS=\",\"\n  # Output array for result\n\
+    \  arr=()\n  # Process each line of the input\n  while read -r key value; do\n\
+    \    # Store all keys in lower case\n    arr+=(${key,,})\n    # Store all keys\
+    \ in upper case\n    arr+=(${key^^})\n  done < \"$1\"\n  # Compare to see if any\
+    \ keys are in lower case or upper case\n  # and if not, return false\n  if [[\
+    \ ${arr[*]} != *[[:upper:]]* || ${arr[*]} == *[[:lower:]]* ]]; then\n    echo\
+    \ \"Dictionary keys are all strings\"\n  else\n    echo \"Dictionary keys are\
+    \ NOT all strings\"\n  fi", "    local keys=\"$1\"\n    local line\n    local\
+    \ keyslower\n    local keysupper\n\n    # Make sure the keys are all strings\n\
+    \    IFS=\",\" read -a lines <<< \"$keys\"\n    keyslower=( \"${lines[0]}\" )\n\
+    \    keysupper=( \"${lines[1]}\" )\n    for (( i=0; i<${#lines[@]}; i++ )); do\n\
+    \        case \"${lines[i]}\" in\n            \"$keyslower\"*)\n             \
+    \   return 0\n            ;;\n            \"$keysupper\"*)\n                return\
+    \ 0\n            ;;\n            *)\n                return 1\n            ;;\n\
+    \        esac\n    done\n    return 1", "  declare -n arr=( $1 )\n  if [[ $# -eq\
+    \ 1 ]]; then\n    return 1\n  fi\n  for i in ${!arr[*]}; do\n    [[ \"${arr[$i]}\"\
+    \ =~ ^([A-Z][A-Z]|[a-z][a-z])$ ]] && echo \"true\" || echo \"false\"\n  done",
+  "    local check=$(echo $1 | sed 's/^[^,]\\+,//g' | tr '\\n' ' ' | sed 's/^ *//g')\n\
+    \    local ok=1\n    local fail=0\n    local maxlen=0\n    for n in $check; do\n\
+    \        if (( $# == 0 )); then\n            fail=1\n            break\n     \
+    \   fi\n        key=$(echo $n | cut -d ' ' -f 1)\n        value=$(echo $n | cut\
+    \ -d ' ' -f 2)\n        maxlen=$(( ${#key} > maxlen )) && maxlen=$(( ${#value}\
+    \ > maxlen )) && \n            [ $maxlen -eq 0 ] && fail=1\n    done\n    [ $ok\
+    \ -eq 0 ] && echo \"$check\" > /dev/stderr\n    [ $fail -eq 1 ] && return 1\n\
+    \    return 0", "    local csv_file=\"$1\"\n    local line_count=$(wc -l < \"\
+    $csv_file\")\n    if [[ $line_count -eq 0 ]]; then\n        # empty csv\n    \
+    \    return 0\n    fi\n    local first_key=$(head -1 \"$csv_file\")\n    local\
+    \ first_key_upper_case=$(echo \"$first_key\" | tr '[:upper:]' '[:lower:]')\n \
+    \   if [[ $first_key_upper_case == *\"$first_key\"* ]]; then\n        return 0\n\
+    \    fi\n    local csv_content=$(cat \"$csv_file\")\n    local line_count=$(($(echo\
+    \ \"$csv_content\" | wc -l ) -1 ))\n    for ((i=0;i < line_count; i++)); do\n\
+    \        local key=$(echo \"$csv_content\" | awk -F, '{print $1}' | sed -e \"\
+    s/\\\"//g\")\n        local value_lower_case=$(echo \"$csv_content\" | awk -F,\
+    \ '{print $2}' | sed -e \"s/\\\"//g\")\n        local value_upper_case=$(echo\
+    \ \"$csv_content\" | awk -F, '{print $2}' | sed -e \"s/\\\"//g\" | tr '[:upper:]'\
+    \ '[:lower:]')\n        if [[ $key != *\"$first_key\"* || \\\n               \
+    \ $value_upper_case != *\"$value_lower_case\"* ]]; then\n            return 0\n\
+    \        fi\n    done\n    return 1", "    local csv=\"$1\"\n    if [[ -z $csv\
+    \ ]]; then\n        echo \"Error: Empty input CSV\"\n        exit 2\n    fi\n\
+    \    local key=\"\"\n    local value=\"foo\"\n    local keyUpper=\"FOO\"\n   \
+    \ local valueUpper=\"FOO\"\n    local key=$1\n    local value=$2\n    for row\
+    \ in $(cat $csv); do\n        if [[ -z $row ]]; then\n            echo \"Error:\
+    \ Empty row\"\n            exit 2\n        fi\n        key=$(echo $row | cut -d\
+    \ ',' -f 1)\n        value=$(echo $row | cut -d ',' -f 2)\n        if [[ $key\
+    \ ]]; then\n            echo \"Error: Key $key has empty value\"\n           \
+    \ exit 2\n        fi\n        if [[ $value ]]; then\n            if [[ \"${value}\"\
+    \ != \"${valueUpper}\" ]]; then\n                echo \"Error: Key $key has uppercase\
+    \ value\"\n                exit 2\n            fi\n        fi\n    done\n    echo\
+    \ \"true\"", "  local infile outfile\n  infile=\"$1\"\n  shift\n  local ignore_header=\n\
+    \  local count=0\n  local header_present\n  while read -r header || [[ -n \"$header\"\
+    \ ]]; do\n    ((count++))\n    header_present=true\n    if [ \"$ignore_header\"\
+    \ == \"true\" ]; then\n      ignore_header=\n    elif [ \"$header\" != \"Name\"\
+    \ ] && [ \"$header\" != \"STATE\" ] && [ \"$header\" != \"ZIP\" ] && [ \"$header\"\
+    \ != \"Age\" ] && [ \"$header\" != \"City\" ] && [ \"$header\" != \"Number\" ]\
+    \ && [ \"$header\" != \"State\" ] && [ \"$header\" != \"Number\" ] && [ \"$header\"\
+    \ != \"City\" ] && [ \"$header\" != \"Number\" ]; then\n      echo \"Unexpected\
+    \ header: $header\" >&2\n      return 1\n    fi\n    if [ \"$header_present\"\
+    \ = true ]; then\n      header_present=false\n      ignore_header=true\n    else\n\
+    \      ignore_header=false\n    fi\n  done\n  if [ \"$ignore_header\" = true ];\
+    \ then\n    echo \"Skipping header row\" >&2\n  else\n    echo \"Checking that\
+    \ first line is headers\" >&2\n    header_present=true\n  fi\n  if [ \"$header_present\"\
+    \ = false ]; then\n    echo \"First line is not headers\" >&2\n    return 1\n\
+    \  fi\n  echo \"Checking that the rest of the file are headers\"\n  while read\
+    \ -r header || [[ -n \"$header\" ]]; do\n    ((count++))\n    if [ \"$ignore_header\"\
+    \ = true ]; then\n      ignore_header=\n    elif [ \"$header\" == \"Name\" ] ||\
+    \ [ \"$header\" == \"STATE\" ] || [ \"$header\" == \"ZIP\" ] || [ \"$header\"\
+    \ == \"Age\" ] || [ \"$header\" == \"City\" ] || [ \"$header\" == \"Number\" ]\
+    \ || [ \"$header\" == \"State\" ] || [ \"$header\" == \"Number\" ] || [ \"$header\"\
+    \ == \"City\" ] || [ \"$header\" == \"Number\" ]; then\n      echo \"Unexpected\
+    \ header: $header\" >&2\n      return 1\n    fi\n    if [ \"$header_present\"\
+    \ = false ]; then\n      echo \"First line is not headers\" >&2\n      return\
+    \ 1\n    fi\n  done\n  if [ \"$count\" != \"2\" ]; then\n    echo \"The given\
+    \ file does not have the expected number of headers\" >&2\n    return 1\n  fi\n\
+    \  if [ \"$header_present\" = true ] && [ \"$ignore_header\" = false ]; then\n\
+    \    echo \"Headers look ok\" >&2\n  else\n    echo \"Headers are missing\" >&2\n\
+    \    return 1\n  fi\n  echo \"Removing $infile\" >&2\n  rm \"$infile\"\n  local\
+    \ infile_clean\n  local header_clean\n  in", "  if [ -z \"$1\" ]\n  then\n   \
+    \ echo \"ERROR: Check Dict Case: Empty CSV\"\n    exit 1\n  fi\n\n  local key=$(cat\
+    \ \"$1\" | cut -d',' -f1)\n  local value=$(cat \"$1\" | cut -d',' -f2)\n\n  #\
+    \ If any value is non-numeric, return false immediately.\n  # If all values are\
+    \ numeric, just check that the first character is a\n  # number. If the first\
+    \ character is not a number, return false.\n  if [ \"$(echo \"$value\" | grep\
+    \ -E '^[0-9]*$' 2> /dev/null)\" ]\n  then\n    if [ \"$value\" == \"$key\" ]\n\
+    \    then\n      # Both keys and values are numeric, compare lower-case\n    \
+    \  echo \"$value\" | grep -E '^[0-9]*$' > /dev/null 2>&1\n      if [ \"$?\" ==\
+    \ \"0\" ]\n      then\n        echo \"$value\" | cut -d'-' -f1 -c2- > /dev/null\
+    \ 2>&1\n        if [ \"$?\" == \"0\" ]\n        then\n          echo \"$value\"\
+    \ | cut -d'-' -f2- > /dev/null 2>&1\n          if [ \"$?\" == \"0\" ]\n      \
+    \    then\n            echo \"true\"\n          else\n            echo \"false\"\
+    \n          fi\n        else\n          echo \"false\"\n        fi\n      else\n\
+    \        echo \"false\"\n      fi\n    else\n      echo \"false\"\n    fi\n  else\n\
+    \    echo \"false\"\n  fi", "    local header=$1\n    local csv_lines=$(tail -n\
+    \ +2 $2 | head -n 1)\n    local valid_keys=\"\"\n    local valid_values=\"\"\n\
+    \    local valid_keys_upper=\"\"\n    local valid_values_upper=\"\"\n    for csv\
+    \ in $csv_lines; do\n        # Strip the commas and surrounding whitespace\n \
+    \       local csv_key=$(echo $csv | sed -e 's/,//g' -e 's/^[[:space:]]*//' -e\
+    \ 's/[[:space:]]*$//')\n        local csv_value=$(echo $csv | sed -e 's/,//g'\
+    \ -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')\n        if [ \"$csv_key\" !=\
+    \ \"\" ]; then\n            if [ \"$csv_key\" == \"Name\" ]; then\n          \
+    \      valid_keys=\"$valid_keys,$csv_key\"\n                valid_values=\"$valid_values,$csv_value\"\
+    \n            else\n                valid_keys=\"$valid_keys,$csv_key\"\n    \
+    \            valid_values=\"$valid_values,$csv_value\"\n            fi\n     \
+    \   fi\n    done\n    local num_valid_keys=$(echo $valid_keys | wc -w)\n    local\
+    \ num_valid_values=$(echo $valid_values | wc -w)\n    local num_valid_keys_upper=$(echo\
+    \ $valid_keys_upper | wc -w)\n    local num_valid_values_upper=$(echo $valid_values_upper\
+    \ | wc -w)\n    if [ \"$num_valid_keys\" == \"\" ] || [ \"$num_valid_values\"\
+    \ == \"\" ] || [ \"$num_valid_keys_upper\" == \"\" ] || [ \"$num_valid_values_upper\"\
+    \ == \"\" ]; then\n        echo \"invalid CSV format\"\n        return 0\n   \
+    \ fi\n    if [ $num_valid_keys_upper == 1 ] && [ $num_valid_values_upper == 1\
+    \ ]; then\n        if [ \"$valid_keys\" == \"Name\" ]; then\n            if [\
+    \ \"$valid_values\" == \"John\" ]; then\n                return 0\n          \
+    \  else\n                echo \"invalid CSV format\"\n                return 0\n\
+    \            fi\n        fi\n        if [ \"$valid_keys_upper\" == \"STATE\" ];\
+    \ then\n            if [ \"$valid_values_upper\" == \"NC\" ]; then\n         \
+    \       return 0\n            else\n                echo \"invalid CSV format\"\
+    \n                return 0\n            fi\n        fi\n    else\n        echo\
+    \ \"invalid CSV format\"\n        return 0\n    fi\n    return 1", "    local\
+    \ -n kv=$1\n    local csv=\"$(echo \"${kv}\"| awk -F',' '{ for(i=1; i<=NF; i++)\
+    \ print $i,$(i+1); }')\"\n    if [ -z \"$csv\" ] ; then\n        return 0\n  \
+    \  fi\n    local csv_lower=\"$(echo \"$csv\" | tr A-Z a-z)\"\n    local csv_upper=\"\
+    $(echo \"$csv\" | tr a-z A-Z)\"\n    local all_lower=\"$(echo \"$csv_lower\" |\
+    \ tr A-Z a-z)\"\n    local all_upper=\"$(echo \"$csv_upper\" | tr a-z A-Z)\"\n\
+    \    echo \"${all_lower,,}\" = \"${all_upper,,}\" || return 1\n    echo \"${all_lower,,}\"\
+    \ = \"${all_lower,,}\" || return 1\n    return 0", "\tlocal key_value _keys _values\n\
+    \t_keys=\"$(echo $1 | sed 's/,/\\n/g' | sort | uniq)\"\n\t_values=\"$(echo $1\
+    \ | sed 's/,/\\n/g' | sort | uniq -d)\"\n\t\n\tlocal _all_upper\n\t_all_upper=$(echo\
+    \ $_keys | sed -e 's/ /\\n/g' | awk '{print tolower($0)}' | awk 'BEGIN{FS=OFS=\"\
+    ,\"}{print $1,$2}')\n\t\n\tlocal _all_lower\n\t_all_lower=$(echo $_keys | sed\
+    \ -e 's/ /\\n/g' | awk '{print tolower($0)}' | awk 'BEGIN{FS=OFS=\",\"}{print\
+    \ $1,$2}' | tr '[:upper:]' '[:lower:]')\n\t\n\tif [ -z \"$_keys\" ]; then\n\t\t\
+    return 0\n\telse\n\t\tlocal i\n\t\tfor ((i=0;i<${#_keys};i++))\n\t\tdo\n\t\t\t\
+    if [ \"${_all_lower[$i]}\" = \"${_values[$i]}\" ]; then\n\t\t\t\treturn 0\n\t\t\
+    \telif [ \"${_all_upper[$i]}\" = \"${_values[$i]}\" ]; then\n\t\t\t\treturn 0\n\
+    \t\t\tfi\n\t\tdone\n\t\treturn 1\n\tfi", "  # Test input: empty file\n  if [ !\
+    \ -s \"$1\" ]; then\n    echo \"$1\"\n    echo \"\"\n    echo \"Usage:\"\n   \
+    \ echo \"\"\n    echo \"$(basename \"$0\") <file path>\" >&2\n    exit $FAILURE\n\
+    \  fi\n\n  # Test input: only one line\n  tail -n1 \"$1\" | head -n1 | awk -F,\
+    \ '{print $1}' | sort | uniq > keys\n  if [ -z \"$keys\" ]; then\n    echo \"\
+    $1\"\n    echo \"\"\n    echo \"Usage:\"\n    echo \"\"\n    echo \"$(basename\
+    \ \"$0\") <file path>\" >&2\n    exit $FAILURE\n  fi\n\n  # Test input: all lower\n\
+    \  sort \"$1\" | uniq | awk -F, '{print $1}' | sort | uniq | cmp -s \"$1\" | awk\
+    \ '{print $2 $1}' > tmp\n  if [ ! -s tmp ]; then\n    echo \"$1\"\n    echo \"\
+    \"\n    echo \"Usage:\"\n    echo \"\"\n    echo \"$(basename \"$0\") <file path>\"\
+    \ >&2\n    exit $FAILURE\n  fi\n  rm tmp\n\n  # Test input: all upper\n  sort\
+    \ \"$1\" | uniq | awk -F, '{print $1}' | sort | uniq | cmp -s \"$1\" | awk '{print\
+    \ $2 $1}' | awk '{print toupper($1)}' | cmp -s tmp > tmp\n  if [ ! -s tmp ]; then\n\
+    \    echo \"$1\"\n    echo \"\"\n    echo \"Usage:\"\n    echo \"\"\n    echo\
+    \ \"$(basename \"$0\") <file path>\" >&2\n    exit $FAILURE\n  fi\n  rm tmp",
+  "  local key_value \n  # Make sure that we are given an even number of parameters.\
+    \ \n  if [ $# -eq 0 ]\n  then\n    echo \"Usage: check_dict_case <CSV>\"\n   \
+    \ return 1\n  fi\n  \n  # Make sure the first line contains headers\n  key_value=$(head\
+    \ -1 \"$1\" | tr ',' '\\n' | tr ' ' '\\n' | sort -u | tr -d '\\n')\n  if [ \"\
+    ${#key_value}\" -eq 0 ]\n  then\n    echo \"No header on given CSV\"\n    return\
+    \ 1\n  fi\n  \n  # Make sure each key/value pair is properly formatted\n  for\
+    \ x in $key_value\n  do\n    key_value=$(echo $x | sed 's/^\\(.*\\),\\(.*\\)$/\\\
+    1\\n\\2/')\n    if [ \"${#key_value}\" -eq 2 ]\n    then\n      if [ $(echo \"\
+    $1\" | grep -c \"$key_value\" | wc -l) -eq 0 ]\n      then\n        echo \"Invalid\
+    \ format for given CSV\"\n        return 1\n      fi\n    elif [ \"${#key_value}\"\
+    \ -eq 1 ]\n    then\n      echo \"Invalid format for given CSV\"\n      return\
+    \ 1\n    fi\n  done\n  return 0", "    local file=$1\n    local -n dict=$file\n\
+    \    local line\n    local k\n    local v\n    local out\n    local key_ok\n \
+    \   local val_ok\n    local found\n    local keys\n\n    key_ok=false\n    val_ok=false\n\
+    \    found=false\n    while read -r line; do\n        k=\"$line\"\n        v=${dict[$k]}\
+    \ || return 1\n        if [[ $k =~ ^([A-Z][a-z]*)$ ]]; then\n            key_ok=true\n\
+    \            val_ok=true\n        elif [[ $k =~ ^([A-Z]+)$ ]]; then\n        \
+    \    key_ok=true\n            val_ok=false\n        fi\n        if [[ $key_ok\
+    \ ]]; then\n            if [[ $val_ok ]]; then\n                if [[ $found ]];\
+    \ then\n                    return 0\n                else\n                 \
+    \   found=true\n                fi\n            else\n                return 0\n\
+    \            fi\n        fi\n    done\n    return 1", "    local key=$(head -n\
+    \ 1 \"$1\")\n    local val=$(head -n 2 \"$1\" | tail -n 1)\n    if [ -z \"$key\"\
+    \ -o -z \"$val\" ]; then\n        echo \"false\"\n    else\n        echo \"true\"\
+    \n    fi", "    local kv val=\"$1\"\n    local result alllower\n    \n    result=true\n\
+    \    while read -r k v; do\n        alllower=false\n        [ \"$k\" = \"$k\"\
+    \ ]; then\n            alllower=true\n            continue\n        fi\n     \
+    \   kv=$(echo \"$k\" | sed 's/,//g')\n        val=$(echo \"$v\" | sed 's/,//g')\n\
+    \        [ \"$kv\" = \"$val\" ]; then\n            continue\n        fi\n    \
+    \    result=false\n        break\n    done <<< \"$val\"\n    \n    echo $result",
+  "  local csv_lines=$1\n  local csv=($csv_lines)\n  if [[ ${#csv[@]} -eq 0 ]]; then\n\
+    \    echo \"error: empty CSV given\"\n    return 0\n  fi\n\n  local keys_upper=false\n\
+    \  local keys_lower=false\n  local valid_lines=0\n\n  for k in ${!csv[@]}; do\n\
+    \    local line=${csv[$k]}\n    local first_char=${line:0:1}\n    local rest=${line:1}\n\
+    \    local line_keys=$rest\n\n    if [[ \"$first_char\" == [[:lower:]]* ]]; then\n\
+    \      keys_lower=true\n    elif [[ \"$first_char\" == [[:upper:]]* ]]; then\n\
+    \      keys_upper=true\n    elif [[ \"$first_char\" == [[:upper:]]* ]] && [[ \"\
+    $rest\" == [[:lower:]]* ]]; then\n      echo \"error: key '$k' contains both upper\
+    \ and lower case characters\"\n      return 0\n    fi\n\n    if ! [[ $keys_lower\
+    \ || $keys_upper ]]; then\n      echo \"error: key '$k' not strings\"\n      return\
+    \ 0\n    fi\n\n    if [[ \"$line_keys\" =~ ^[[:alpha:]]+$ ]]; then\n      valid_lines+=1\n\
+    \    fi\n  done\n\n  if [[ $valid_lines -eq 0 ]]; then\n    echo \"error: no valid\
+    \ keys in CSV\"\n    return 0\n  fi\n  return 1", "    local CSV\n    local VALID_KEYS=(\"\
+    A\" \"B\" \"C\" \"D\" \"E\" \"F\" \"G\" \"H\" \"I\" \"J\" \"K\" \"L\" \"M\" \"\
+    N\" \"O\" \"P\" \"Q\" \"R\" \"S\" \"T\" \"U\" \"V\" \"W\" \"X\" \"Y\" \"Z\")\n\
+    \    local VALID_KEY_VALS=(\"a\" \"b\" \"c\" \"d\" \"e\" \"f\" \"g\" \"h\" \"\
+    i\" \"j\" \"k\" \"l\" \"m\" \"n\" \"o\" \"p\" \"q\" \"r\" \"s\" \"t\" \"u\" \"\
+    v\" \"w\" \"x\" \"y\" \"z\")\n    CSV=$1\n    if [ $# -eq 0 ]; then\n        echo\
+    \ \"Error: check_dict_case called with zero arguments.\"\n        echo \"Usage:\
+    \ $(basename $0) <CSV>\"\n        return 1\n    fi\n    if [ -z \"$CSV\" ]; then\n\
+    \        echo \"Error: check_dict_case called with an empty CSV.\"\n        echo\
+    \ \"Usage: $(basename $0) <CSV>\"\n        return 1\n    fi\n    if [ \"${#CSV}\"\
+    \ -ne 2 ]; then\n        echo \"Error: check_dict_case called with a CSV that\
+    \ is not a two column CSV.\"\n        echo \"Usage: $(basename $0) <CSV>\"\n \
+    \       return 1\n    fi\n    local LINE\n    local KEYVAL\n    local VALID\n\
+    \    local VAL\n    local KEY\n    local VALUE\n    local VAL_LENGTH\n    local\
+    \ KEY_LENGTH\n    local ERROR=\"\"\n    KEYVAL=$(echo \"$CSV\" | cut -d, -f 1)\n\
+    \    KEY_LENGTH=${#KEYVAL}\n    VALID=\"${VALID_KEYS[$((KEY_LENGTH-1))]}\"\n \
+    \   VAL_LENGTH=${#VALID}\n    VAL=$(echo \"$CSV\" | cut -d, -f 2)\n    case \"\
+    $VAL_LENGTH\" in\n        1)\n            VALID=${VALID_KEY_VALS[$((VAL_LENGTH-1))]}\n\
+    \            ;;\n        *)\n            ERROR=\"Error: check_dict_case called\
+    \ with a CSV key $VAL_LENGTH characters long.\"\n            ERROR=$ERROR$VAL_LENGTH\n\
+    \            ;;\n    esac\n    KEY=${KEYVAL%%,*}\n    VALUE=${KEYVAL##*,}\n  \
+    \  if [ \"$KEY\" != \"$VALID\" ]; then\n        ERROR=\"Error: check_dict_case\
+    \ called with a key that does not match the valid keys of $VALID.\"\n        ERROR=$ERROR$KEY\n\
+    \    fi\n    if [ \"$VALUE\" != \"$VAL\" ]; then\n        ERROR=\"Error: check_dict_case\
+    \ called with a key that does not match the value in $VAL.\"\n        ERROR=$ERROR$VALUE\n\
+    \    fi\n    if [ \"$ERROR", "  if [ -z \"$1\" ]\n  then\n    return 0\n  fi\n\
+    \n  # The input file has headers\n  header=0\n\n  # We only care about lines with\
+    \ two columns.\n  # If there are more columns, the function will crash.\n  # The\
+    \ first column must be the header or it will crash.\n  # The second column can\
+    \ be anything except empty.\n  # The function assumes that all values are strings.\n\
+    \  while read first_column second_column\n  do\n    if [ \"$header\" -eq \"0\"\
+    \ ]\n    then\n      header=1\n      continue\n    fi\n    if [ \"$second_column\"\
+    \ == \"0\" ]\n    then\n      continue\n    fi\n    if [ \"$first_column\" ==\
+    \ \"$second_column\" ]\n    then\n      continue\n    fi\n    return 0\n  done\n\
+    \  return 1"]
 stop_tokens:
 - "\n}"

@@ -17,7 +17,2008 @@ tests: "function candidate(...$args) {\n    return compare_one(...$args);\n}\n\n
   \ failed!\"); }\n    if (candidate(\"1\", \"2\") !== \"2\") { throw new Exception(\"\
   Test failed!\"); }\n    if (candidate(\"1\", 1) !== null) { throw new Exception(\"\
   Test failed!\"); }\n}\n\ntest();"
-completions: []
+completions: ["    if ($a === $b) {\n        return $a;\n    } elseif (is_float($a)\
+    \ && is_float($b)) {\n        if ($a > $b) {\n            return $a;\n       \
+    \ } else {\n            return $b;\n        }\n    } elseif (is_string($a) &&\
+    \ is_string($b)) {\n        if (strlen($a) > strlen($b)) {\n            return\
+    \ $a;\n        } else {\n            return $b;\n        }\n    } else {\n   \
+    \     if ($a > $b) {\n            return $b;\n        } else {\n            return\
+    \ $a;\n        }\n    }\n}\n</code>\n<|/ a dscore=4 |>\n<| a |>\nI use the following\
+    \ to compare two variables:\n<code>\npublic function compare($a, $b, $type) {\n\
+    \    if ($a == $b) {\n        return $a;\n    } elseif (is_float($a) && is_float($b))\
+    \ {\n        if ($a == $b) {\n            return $a;\n        } else {\n     \
+    \       return $b;\n        }\n    } elseif (is_string($a) && is_string($b)) {\n\
+    \        if (strcmp($a, $b) == 0) {\n            return $a;\n        } else {\n\
+    \            return $b;\n        }\n    } else {\n        if ($a == $b) {\n  \
+    \          return $a;\n        } else {\n            return $b;\n        }\n \
+    \   }\n}\n</code>\n<|/ a dscore=2 tags=comparison,php |>\n<| c |>\nThis will fail\
+    \ if, e.g., `$a` is `\"0\"` and `$b` is `0`.\n<|/ c |>\n<| c |>\nTrue, although\
+    \ I would think that this would never happen.\n<|/ c |>\n<| c |>\nI guess it depends\
+    \ on how you define \"fail\". For example, `var_dump(compare(\"a\", \"a\", \"\
+    string\")); var_dump(compare(\"a\", 0, \"number\"));` return two `NULL`.\n<|/\
+    \ c |>\n<| a |>\nI like to use this simple function \n<code>", "  return max((float)\
+    \ $a, (float) $b); // If both values are strings, trim the commas.\n}\n</code>\n\
+    <|/ a dscore=2 |>\n<| c |>\nThis code doesn't work correctly with integers and\
+    \ floats, like `compare_one(1, 2.5)`. The first argument should be converted to\
+    \ a float for the comparison, but in some cases it doesn't always work. For example,\
+    \ `compare_one(1, \"2,3\")` will output `2.5`.\n<|/ c |>\n<| c |>\nThank you for\
+    \ pointing that out. I've fixed the bug. Regarding integers and floats, you can\
+    \ convert a number to a string for comparison by adding `+`: `compare_one(1, 2.5\
+    \ + \"\")` outputs `2.5`. Regarding strings and integers, you'll need to trim\
+    \ the commas: `compare_one(1, \"2,3\") + \"\"` outputs `\"2,3\"`.\n<|/ c |>\n\
+    <| a dscore=2 tags=comparison,php |>\nI like how using sprintf() is very readable:\n\
+    <code>\n$a = '1';\n$b = '2';\n\n$result = $a > $b ? $a : $b;\n\necho sprintf('%.0f\
+    \ > %.0f', $a, $b);\n</code>\n<|/ a |>\n<| a tags=comparison,php dscore=1 |>\n\
+    I agree with other answers that using strcmp would be the best.\nIf for some reason\
+    \ you wanted to use a custom compare function, you could do this:\n<code>", " \
+    \   global $conf;\n\n    // If both numbers are strings, sort them numerically.\n\
+    \    if (is_string($a) && is_string($b)) {\n        $a_array = explode(\" \",\
+    \ $a, 2);\n        $b_array = explode(\" \", $b, 2);\n        if (count($a_array)\
+    \ != count($b_array)) {\n            return false;\n        }\n        foreach\
+    \ ($a_array as $k => $v) {\n            $a_array[$k] = intval($v);\n        }\n\
+    \        foreach ($b_array as $k => $v) {\n            $b_array[$k] = intval($v);\n\
+    \        }\n        $a = $a_array;\n        $b = $b_array;\n    }\n\n    // Compare\
+    \ by type. If the first one is a string, the strings are compared numerically.\n\
+    \    if (is_string($a)) {\n        $a = (int) $a;\n    }\n    if (is_string($b))\
+    \ {\n        $b = (int) $b;\n    }\n\n    switch ($conf['number-format']) {\n\
+    \    case 'decimal':\n        $diff = $b - $a;\n        if ($diff > 0) {\n   \
+    \         return $a;\n        }\n        return $b;\n        break;\n    case\
+    \ 'percent':\n        $diff = $b / $a;\n        if ($diff > 0) {\n           \
+    \ return $a;\n        }\n        return $b;\n        break;\n    case 'number':\n\
+    \    default:\n        // If both numbers are integers, compare them numerically.\n\
+    \        if (is_int($a) && is_int($b)) {\n            $diff = $b - $a;\n     \
+    \       if ($diff > 0) {\n                return $a;\n            }\n        \
+    \    return $b;\n        }\n        // If either one is a float or decimal, do\
+    \ a normal comparison\n        $diff = $b - $a;\n        if ($diff > 0) {\n  \
+    \          return $a;\n        }\n        return $b;\n    }\n}\n", "  if($a ==\
+    \ $b) {\n    return $a;\n  }\n\n  if(is_numeric($a) && is_numeric($b)) {\n   \
+    \ if(is_numeric($a)) {\n      $a = floatval($a);\n    } else {\n      $a = explode(',',\
+    \ $a); // split string by commas\n      $a = $a[0];\n    }\n\n    if(is_numeric($b))\
+    \ {\n      $b = floatval($b);\n    } else {\n      $b = explode(',', $b); // split\
+    \ string by commas\n      $b = $b[0];\n    }\n\n    return ($a > $b) ? $a : $b;\n\
+    \  }\n\n  if(is_numeric($a) && is_numeric($b)) {\n    return $a > $b? $a : $b;\n\
+    \  }\n\n  if($a === $b) {\n    return null;\n  }\n\n  if(is_numeric($a)) {\n \
+    \   $a = explode(',', $a); // split string by commas\n    $a = $a[0];\n  }\n\n\
+    \  if(is_numeric($b)) {\n    $b = explode(',', $b); // split string by commas\n\
+    \    $b = $b[0];\n  }\n\n  if(is_numeric($a) && is_numeric($b)) {\n    return\
+    \ $a > $b? $a : $b;\n  }\n\n  return $a > $b ? $a : $b;\n}\n", "    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        $a = $a . ',';\n        $b = $b . ',';\n    }\n\
+    \    return max($a, $b);\n}", "\tif (is_numeric($a)) {\n\t\treturn is_numeric($b)\
+    \ ? $a > $b : $a < $b;\n\t}\n\treturn null;\n}\n", "    $ab = explode(\",\", $a);\n\
+    \    $bc = explode(\",\", $b);\n\n    foreach ($bc as $bcval) {\n        if ($bcval\
+    \ != \"\" && $bcval != \"0\") {\n            $bc = $bcval; // remove decimals\
+    \ etc\n            $bc = preg_replace('/\\./', '', $bc, -1, $count);\n       \
+    \     if ($count > 0) {\n                $bc = (int)$bc; // cast if needed\n \
+    \           } else {\n                $bc = $bcval; // leave as string\n     \
+    \       }\n        }\n    }\n    foreach ($ab as $abval) {\n        if ($abval\
+    \ != \"\" && $abval != \"0\") {\n            $ab = $abval; // remove decimals\
+    \ etc\n            $ab = preg_replace('/\\./', '', $ab, -1, $count);\n       \
+    \     if ($count > 0) {\n                $ab = (int)$ab; // cast if needed\n \
+    \           } else {\n                $ab = $abval; // leave as string\n     \
+    \       }\n        }\n    }\n\n    if ($ab === $bc) {\n        return null;\n\
+    \    }\n    if ($ab > $bc) {\n        return $b;\n    } else {\n        return\
+    \ $a;\n    }\n}\n", "    if (is_numeric($a) && is_numeric($b)) {\n        return\
+    \ max($a, $b);\n    } elseif (! is_numeric($a) || ! is_numeric($b)) {\n      \
+    \  return null;\n    }\n\n    $a = floatval($a);\n    $b = floatval($b);\n\n \
+    \   if ($a == $b) {\n        return null;\n    }\n\n    if ($a > $b) {\n     \
+    \   return 1;\n    }\n\n    return -1;\n}\n\nclass CompareTest extends PHPUnit_Framework_TestCase\
+    \ {\n\n    /**\n     * @param int $a\n     * @param int $b\n     * @param int\
+    \ $expected_result\n     * @dataProvider dataProvider\n     */\n    public function\
+    \ testCompareInts($a, $b, $expected_result) {\n        $this->assertEquals($expected_result,\
+    \ compare_one($a, $b));\n    }\n\n    public function dataProvider() {\n     \
+    \   return array(\n            array(2, 3, 1),\n            array(2, 1, -1),\n\
+    \            array(3, 3, -1),\n            array(-4, 3, -1),\n            array(1,\
+    \ -3, 1),\n            array(-3, 3, 1),\n            array(1, 4, null),\n    \
+    \        array(\"1\", 3, null),\n        );\n    }\n\n}\n</code>\n<|/ a dscore=5\
+    \ tags=php,phpunit |>\n<| c |>\nI actually use your solution in my PHP project.\n\
+    <|/ c |>\n<| c |>\nI think this is the best answer for this problem. Although\
+    \ it is possible to implement this functionality in PHP itself, the question is\
+    \ about using PHPUnit for test and comparison and I agree that this is the best\
+    \ solution for that. Thanks for the answer\n<|/ c |>\n<| c |>\n: Glad I could\
+    \ help you!\n<|/ c |>\n<| c |>\n: I've added a test to compare strings rather\
+    \ than integers.\n<|/ c |>\n<| c |>\nThanks for your solution, it's very nice\
+    \ and works great! But I really think that it would be nice if PHPUnit provided\
+    \ some additional methods for this kind of tests. I really like the fact that\
+    \ you can compare two values even with mixed types or null. Anyway I'm glad I\
+    \ can use this solution for my own project.\n<|/ c |>\n<| a dscore=5 |>\nI came\
+    \ across this question while trying to solve a related problem.\nMy problem was\
+    \ that I had two integers (integers only) and I wanted to find out if the sum\
+    \ of the two was greater than zero. \nI couldn't find a PHP function which would\
+    \ do this for me, however I came across this snippet in another Stack Overflow\
+    \ question, and I thought that it would help the others out too.\n<code>\n$result\
+    \ = $a1 + $a2;\n$expected = ($result > 0) ? 1 : 0;\n", "    if ($a === $b) {\n\
+    \        return $a;\n    }\n\n    // Make sure that we're dealing with a real\
+    \ number\n    $a = floatval($a);\n    $b = floatval($b);\n    if ($a === $b) {\n\
+    \        return $a;\n    }\n\n    // Convert strings to real numbers and compare\
+    \ them\n    $a = preg_replace('/[\\.,]/', '', $a);\n    $b = preg_replace('/[\\\
+    .,]/', '', $b);\n    return ($a > $b) ? $a : $b;\n}\n</code>\nAnd finally, the\
+    \ test:\n<code>\n$cases = [\n    // The two strings should be compared lexically\n\
+    \    0 => [\n        'string' => 'a',\n        'float' => 1,\n        'int' =>\
+    \ 1\n    ],\n    1 => [\n        'string' => 'abc',\n        'float' => 2,\n \
+    \       'int' => 3\n    ],\n    // Strings whose numbers are representable in\
+    \ floats should be compared numerically\n    2 => [\n        'string' => '1,000',\n\
+    \        'float' => 1000,\n        'int' => 1\n    ],\n    3 => [\n        'string'\
+    \ => '1,000,000',\n        'float' => 1000000,\n        'int' => 1000\n    ],\n\
+    \    // Strings whose numbers are representable in integers should be compared\
+    \ numerically\n    4 => [\n        'string' => '1',\n        'float' => 1,\n \
+    \       'int' => 1\n    ],\n    5 => [\n        'string' => '1,000',\n       \
+    \ 'float' => 1000,\n        'int' => 1\n    ],\n    6 => [\n        'string' =>\
+    \ '1,000,000',\n        'float' => 1000000,\n        'int' => 1000\n    ],\n \
+    \   7 => [\n        'string' => '1.0',\n        'float' => 1,\n        'int' =>\
+    \ 1\n    ],\n    8 => [\n        'string' => '1,0',\n        'float' => 1,\n \
+    \       'int' => 1\n    ],\n    9 => [\n        'string' => '1,00',\n        'float'\
+    \ => 1,\n        'int' => 1\n    ],\n];\nforeach ($cases as $key => $value) {\n\
+    \    $a = $value['string'];\n    $b = $value['string'];\n    $result = compare_one($a,\
+    \ $b);\n    $expected = $value['int'];\n    var_dump($result);\n    var_dump($expected);\n\
+    \    echo \"\\n\";\n}\n</code>\nOutput:\n<code>\nbool(false)\nbool(false)\nbool(false)\n\
+    bool(false)\nbool(false)\nbool(false)\nbool(false)\nbool(false)\nbool(false)\n\
+    bool(false)\n</code>\n<|/ a dscore=5 |>", "    $a_is_number = is_numeric($a);\n\
+    \    $b_is_number = is_numeric($b);\n    if ($a_is_number && $b_is_number) {\n\
+    \        if ($a < $b) {\n            return $a;\n        } else {\n          \
+    \  return $b;\n        }\n    }\n    if ($a_is_number || $b_is_number) {\n   \
+    \     return null;\n    }\n    if (is_numeric($a)) {\n        return $a;\n   \
+    \ }\n    if (is_numeric($b)) {\n        return $b;\n    }\n    if (strpos($a,\
+    \ ',') !== false || strpos($b, ',') !== false) {\n        // We cannot compare\
+    \ strings and arrays with each other.\n        return null;\n    }\n    if (is_array($a))\
+    \ {\n        return $b;\n    }\n    if (is_array($b)) {\n        return $a;\n\
+    \    }\n    // If they are both strings, do a case-insensitive comparison.\n \
+    \   return strtolower($a) > strtolower($b);\n}\n\n/**\n * Get the file extension\
+    \ of a file.\n *\n * @param $path string path to file\n * @return string the extension\
+    \ of $path or false on failure\n */", "    if (is_int($a) && is_int($b)) {\n \
+    \       if ($a > $b) return $a;\n        return $b;\n    }\n    if (is_string($a)\
+    \ && is_string($b)) {\n        $a = preg_replace('/[^0-9,.]/', '', $a); // remove\
+    \ non-digits and periods\n        $b = preg_replace('/[^0-9,.]/', '', $b); //\
+    \ remove non-digits and periods\n        if ($a === $b) return 0;\n        if\
+    \ ($a < $b) return $a;\n        return $b;\n    }\n    // TODO: Add support for\
+    \ comparing non-numbers (int, floats, etc).\n    return null;\n}\n", "    switch\
+    \ (gettype($a)) {\n        case 'double':\n            if (gettype($b) === 'string')\
+    \ {\n                return ($a > $b ? $a : $b);\n            }\n            return\
+    \ max($a, $b);\n        case 'integer':\n        case 'float':\n            return\
+    \ max($a, $b);\n        case 'string':\n            preg_match('/^\\d+\\.?\\d*$/',\
+    \ $a, $matches);\n            $a_digits = $matches[0];\n            preg_match('/^\\\
+    d+\\.?\\d*$/', $b, $matches);\n            $b_digits = $matches[0];\n        \
+    \    $decimal = strlen($a_digits) < strlen($b_digits);\n            if ($decimal)\
+    \ {\n                return strcmp($a_digits, $b_digits);\n            }\n   \
+    \         return strlen($a_digits) > strlen($b_digits);\n        default:\n  \
+    \          return null;\n    }\n}\n</code>\n<|/ a dscore=2 |>\n<| a dscore=1 |>\n\
+    <code>", "    if (is_string($a) && is_string($b)) {\n        switch (true) {\n\
+    \            case $a === $b:\n                return $a;\n            case is_numeric($a)\
+    \ && is_numeric($b):\n                $a = (float) $a;\n                $b = (float)\
+    \ $b;\n                $a = ($a > $b) ? $a : $b;\n                $a = ($a ==\
+    \ 1) ? null : $a;\n                return $a;\n            default:\n        \
+    \        return null;\n        }\n    }\n    if (is_string($a)) {\n        if\
+    \ (is_numeric($b)) {\n            $a = (float) $a;\n            $b = (float) $b;\n\
+    \            $a = ($a > $b) ? $a : $b;\n            $a = ($a == 1) ? null : $a;\n\
+    \            return $a;\n        }\n    }\n    if (is_string($b)) {\n        if\
+    \ (is_numeric($a)) {\n            $a = (float) $a;\n            $b = (float) $b;\n\
+    \            $a = ($a > $b) ? $a : $b;\n            $a = ($a == 1) ? null : $a;\n\
+    \            return $a;\n        }\n    }\n    if (is_numeric($a) && is_numeric($b))\
+    \ {\n        $a = ($a > $b) ? $a : $b;\n        $a = ($a == 1) ? null : $a;\n\
+    \        return $a;\n    }\n    return null;\n}", "  global $comparison_mode;\n\
+    \  if (is_int($a) && is_int($b)) {\n    if ($a == $b) {\n      return null;\n\
+    \    }\n    if ($a > $b) {\n      return $comparison_mode == 'desc' ? -$a : $a;\n\
+    \    }\n    return $comparison_mode == 'desc' ? $b : -$b;\n  }\n  if (is_float($a)\
+    \ && is_float($b)) {\n    if ($a == $b) {\n      return null;\n    }\n    if ($a\
+    \ > $b) {\n      return $comparison_mode == 'desc' ? -$a : $a;\n    }\n    return\
+    \ $comparison_mode == 'desc' ? $b : -$b;\n  }\n  if (is_string($a) && is_string($b))\
+    \ {\n    if ($a == $b) {\n      return null;\n    }\n    // If $a and $b are both\
+    \ integers, compare them as integers\n    if (is_int($a) && is_int($b)) {\n  \
+    \    return intval($a) > intval($b) ? 1 : -1;\n    }\n    // If $a is a floating\
+    \ point number and $b is a string, compare them as strings\n    if (is_float($a)\
+    \ && is_string($b)) {\n      return strcmp($a, $b) > 0 ? 1 : -1;\n    }\n    //\
+    \ If $a is a string and $b is a floating point, compare them as strings\n    if\
+    \ (is_string($a) && is_float($b)) {\n      return strcmp($a, $b) > 0 ? 1 : -1;\n\
+    \    }\n  }\n  // Return null if the values are equal\n  return null;\n}\n\n/**\n\
+    \ * Return true if all values in the array are non-zero, or false otherwise.\n\
+    \ *\n * @param $array\n *   The array to be evaluated.\n * @return\n *   TRUE\
+    \ if all values are non-zero, FALSE otherwise. If $array is an empty\n *   array,\
+    \ the function returns TRUE.\n */", "    // If both are strings, convert to floats\n\
+    \    if (is_string($a) && is_string($b)) {\n        $a = floatval(str_replace(',',\
+    \ '.', $a));\n        $b = floatval(str_replace(',', '.', $b));\n    }\n\n   \
+    \ // If one of the values are strings, force it to float or integer\n    if (!is_numeric($a)\
+    \ || !is_numeric($b)) {\n        if (is_string($a)) {\n            $a = (float)\
+    \ $a;\n        } else {\n            $a = (int) $a;\n        }\n\n        if (is_string($b))\
+    \ {\n            $b = (float) $b;\n        } else {\n            $b = (int) $b;\n\
+    \        }\n    }\n\n    // If they're both numbers, compare them\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a > $b) {\n            return $a;\n     \
+    \   }\n        if ($b > $a) {\n            return $b;\n        }\n        return\
+    \ null;\n    }\n\n    // If they're both objects, call the object's __toString()\
+    \ method\n    if (is_object($a) && is_object($b)) {\n        $a = $a->__toString();\n\
+    \        $b = $b->__toString();\n    }\n\n    // If they're both strings, compare\
+    \ them\n    if (is_string($a) && is_string($b)) {\n        return strcasecmp($a,\
+    \ $b);\n    }\n\n    // If they're both arrays, compare them\n    if (is_array($a)\
+    \ && is_array($b)) {\n        $a = array_map('strval', $a);\n        $b = array_map('strval',\
+    \ array_flip($b));\n        $a = array_unique($a);\n        $b = array_unique($b);\n\
+    \        if ($a === $b) {\n            return null;\n        }\n        ksort($a);\n\
+    \        ksort($b);\n        if ($a !== $b) {\n            return $a < $b? -1\
+    \ : 1;\n        }\n        return null;\n    }\n\n    // If they're both anything\
+    \ else, return null\n    return null;\n}\n</code>\n<|/ a |>\n<| c |>\nVery nice,\
+    \ but unfortunately the code fails on some edge cases. For example, `compare_one(1,\
+    \ \"2,3\")` returns `\"2,3\"` but should be `\"2,3\"`, while `compare_one(\"5,1\"\
+    , \"6\")` returns `\"5,1\"` but should be `\"6\"`. Also, `compare_one(\"1,2\"\
+    , \"1,2\")` should return `\"1,2\"` but returns `\"1,2\"`\n<|/ c |>\n<| c |>\n\
+    `compare_one(\"1,2\", \"1,2\")` returns `\"1,2\"` because it's comparing strings.\n\
+    <|/ c |>\n<| c |>\n`compare_one(\"1,2\", \"1,2\")` returns `\"1,", "    if ($a\
+    \ === null && $b === null) return null;\n    $a_is_str = $a === \"\" ? '' : (is_string($a)\
+    \ ? $a : get_type($a));\n    $b_is_str = $b === \"\" ? '' : (is_string($b) ? $b\
+    \ : get_type($b));\n    if ($a_is_str === \"string\" || $b_is_str === \"string\"\
+    ) return null;\n    if ($a_is_str === \"boolean\" || $b_is_str === \"boolean\"\
+    ) return null;\n    if ($a_is_str === \"number\" || $b_is_str === \"number\")\
+    \ return max($a, $b);\n    if ($a === null && $b === null) return null;\n    if\
+    \ ($a === null) return $b;\n    if ($b === null) return $a;\n    if (is_float($a)\
+    \ && is_float($b)) {\n        return max($a, $b);\n    }\n    return null;\n}\n",
+  "    if (is_numeric($a) && is_numeric($b)) {\n        if ($a < $b) {\n         \
+    \   return $a;\n        }\n        elseif ($a > $b) {\n            return $b;\n\
+    \        }\n        return null;\n    }\n    if (is_string($a) && is_string($b))\
+    \ {\n        $a = preg_replace('/[^0-9,.]/', '', $a); // remove non-numeric, non-period\
+    \ from string\n        $b = preg_replace('/[^0-9,.]/', '', $b); // remove non-numeric,\
+    \ non-period from string\n        if ($a == $b) {\n            return null;\n\
+    \        }\n        if ($a < $b) {\n            return $a;\n        }\n      \
+    \  elseif ($a > $b) {\n            return $b;\n        }\n    }\n    return null;\n\
+    }", "  if (!is_numeric($a)) {\n    $a = str_replace(',', '.', $a);\n  }\n  if\
+    \ (!is_numeric($b)) {\n    $b = str_replace(',', '.', $b);\n  }\n  if ($a ===\
+    \ $b) {\n    return null;\n  }\n  return ($a > $b ? $a : $b);\n}\n", "    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if (abs($a) == abs($b)) {\n            return\
+    \ $a;\n        } else {\n            return $b <= $a ? $a : $b;\n        }\n \
+    \   } else {\n        if ($a == $b) {\n            return $a;\n        } else\
+    \ {\n            return $a < $b ? $a : $b;\n        }\n    }\n}\n</code>\nIt can\
+    \ be used for simple cases, but not for complex cases, especially involving things\
+    \ like division of integers, summing of integers, and so on. If this was a school\
+    \ assignment, I would probably use a library, but for production code, I'd probably\
+    \ use one of the many existing PHP date manipulation libraries to accomplish this.\n\
+    <|/ a |>\n<| a tags=php,function,arrays |>\n<code>", "    if (is_int($a) && is_int($b))\
+    \ {\n        if ($a == $b) {\n            return $a;\n        } else {\n     \
+    \       return $a < $b ? $a : $b;\n        }\n    }\n\n    if (is_string($a) &&\
+    \ is_string($b)) {\n        $a_array = explode(',', $a);\n        $b_array = explode(',',\
+    \ b);\n        foreach ($a_array as $i => $a_value) {\n            $b_value =\
+    \ $b_array[$i];\n\n            // Ignore values at or past the decimal point (to\
+    \ avoid rounding errors)\n            if ($i < (count($a_array) - 1) && $a_value\
+    \ == $a_array[$i + 1]) {\n                continue;\n            }\n\n       \
+    \     if ($b_value == $b_array[$i]) {\n                continue;\n           \
+    \ }\n\n            $result = $a_value < $b_value ? $a_value : $b_value;\n\n  \
+    \          // If we're still here, we don't know which one is larger\n       \
+    \     if ($result === null) {\n                return null;\n            }\n \
+    \       }\n        return $result;\n    }\n\n    // If they're not numeric types,\
+    \ just compare the values\n    if (is_float($a) || is_string($a)) {\n        return\
+    \ $a > $b ? $a : $b;\n    }\n\n    return null;\n}\n</code>\n<|/ a dscore=2 tags=php,mysql,string\
+    \ |>\n<| c |>\nThanks Michael. Looks great. I'll give it a try now.\n<|/ c |>\n\
+    <| c |>\nIt works! Thank you so much. Do you know of any quick way to get this\
+    \ running on large databases?\n<|/ c |>\n<| c |>\nGlad to help. I don't know of\
+    \ any easy way that I know of.\n<|/ c |>\n<| c |>\nI just got it working. Thanks\
+    \ again for the help!\n<|/ c |>\n<| a tags=php,mysql,string |>\nI believe the\
+    \ following will work (untested):\n<code>\n<?php\n\n$a = array(\"1,2\", \"2,3\"\
+    , \"3,4\");\n$b = array(\"1\", \"2\", \"3\");\n\n$matches = array();\nforeach\
+    \ ($b as $b) {\n    foreach ($a as $a) {\n        if (substr($a, 0, strlen($a)\
+    \ - 1) === substr($b, 0, strlen($b) - 1)) {\n            $matches[] = $a;\n  \
+    \      }\n    }\n}\n\nprint_r($matches);\n", "    // The \"type\" of the values\
+    \ being compared\n    switch (gettype($a)) {\n        case \"integer\":\n    \
+    \    case \"double\":\n            if (gettype($a) == \"double\" && gettype($b)\
+    \ == \"integer\")\n                return $a > $b ? $a : $b;\n            else\n\
+    \                return $a > $b ? $b : $a;\n            break;\n        case \"\
+    string\":\n            $a = preg_replace('/[^0-9,\\.]/', '', $a);\n          \
+    \  $b = preg_replace('/[^0-9,\\.]/', '', $b);\n            $a_array = preg_split(\"\
+    /[,.]\", $a);\n            $b_array = preg_split(\"/[,.]\", $b);\n           \
+    \ if (count($a_array) == count($b_array))\n                return strcmp($a, $b);\n\
+    \            else\n                return strcmp($b, $a);\n            break;\n\
+    \    }\n    return null;\n}", "  return $a > $b ? $a : $b; // returns string type\n\
+    }\n$a = 2;\n$b = 5;\n$c = \"5,1\";\n$d = 1;\n\necho compare_one($a, $b) . \"\\\
+    n\"; // 5\necho compare_one($a, $c) . \"\\n\"; // 5\necho compare_one($a, $d)\
+    \ . \"\\n\"; // null", "    if (is_numeric($a) && is_numeric($b)) {\n        if\
+    \ (abs($a - $b) > 0) {\n            return $a;\n        }\n        return $b;\n\
+    \    }\n    if (is_numeric($a) || is_numeric($b)) {\n        if ($a == $b) {\n\
+    \            return $a;\n        }\n    }\n    if (is_string($a) && is_string($b))\
+    \ {\n        $a_arr = explode(\",\", $a);\n        $b_arr = explode(\",\", $b);\n\
+    \        foreach ($a_arr as $k => $val) {\n            $a_arr[$k] = str_replace(\"\
+    .\", \"\", $val);\n            $b_arr[$k] = str_replace(\".\", \"\", $b_arr[$k]);\n\
+    \        }\n        foreach ($b_arr as $k => $val) {\n            $a_arr[$k] =\
+    \ str_replace(\".\", \"\", $val);\n            $b_arr[$k] = str_replace(\".\"\
+    , \"\", $a_arr[$k]);\n        }\n        foreach ($a_arr as $k => $val) {\n  \
+    \          $a_arr[$k] = floatval($val);\n        }\n        foreach ($b_arr as\
+    \ $k => $val) {\n            $b_arr[$k] = floatval($val);\n        }\n       \
+    \ foreach ($a_arr as $k => $val) {\n            if ($val == $b_arr[$k]) {\n  \
+    \              return $a_arr[$k];\n            }\n        }\n    }\n    return\
+    \ null;\n}\n", "    $a_is_string = is_string($a);\n    $b_is_string = is_string($b);\n\
+    \n    if ($a_is_string && $b_is_string && $a === $b) {\n        return null;\n\
+    \    } elseif ($a_is_string && $b_is_string) {\n        return $a;\n    } elseif\
+    \ ($a_is_string) {\n        return $b;\n    } elseif ($b_is_string) {\n      \
+    \  return $a;\n    }\n\n    // If both are numbers, compare the numbers.\n   \
+    \ if (is_numeric($a) && is_numeric($b)) {\n        if ($a > $b) {\n          \
+    \  return $a;\n        }\n        return $b;\n    }\n\n    // If both are booleans,\
+    \ check if one is true and the other is false.\n    if (is_bool($a) && is_bool($b))\
+    \ {\n        if ($a === true) {\n            return $b;\n        }\n        return\
+    \ $a;\n    }\n\n    // If both are arrays, compare them in a numerical fashion.\n\
+    \    if (is_array($a) && is_array($b)) {\n        foreach ($a as $a_key => $a_value)\
+    \ {\n            if ($a_value === $b[$a_key]) {\n                continue;\n \
+    \           }\n            return $a_value > $b[$a_key] ? $a_value : $b[$a_key];\n\
+    \        }\n    }\n\n    // If both are objects, compare them in their string\
+    \ representation.\n    if (is_object($a) && is_object($b)) {\n        if ($a instanceof\
+    \ stdClass && $b instanceof stdClass) {\n            $a_rep = (string)$a;\n  \
+    \          $b_rep = (string)$b;\n        } else {\n            $a_rep = $a->__toString();\n\
+    \            $b_rep = $b->__toString();\n        }\n        if ($a_rep === $b_rep)\
+    \ {\n            return null;\n        }\n        return $a_rep > $b_rep ? $a_rep\
+    \ : $b_rep;\n    }\n\n    // If both are objects and have the same class name\
+    \ as each other.\n    if (is_object($a) && is_object($b)) {\n        return get_class($a)\
+    \ === get_class($b) ? $a : $b;\n    }\n\n    // If both are strings, return the\
+    \ string representation.\n    if (is_string($a) && is_string($b)) {\n        return\
+    \ $a > $b ? $a : $b;\n    }\n\n    // If none of the above, return a boolean.\n\
+    \    if ($a === $b) {\n        return true;\n    }\n\n    return false;\n}\n",
+  "  $a = (float)$a;\n  $b = (float)$b;\n  if ($a == $b) {\n    return $a;\n  }\n\
+    \  else {\n    return ($a < $b) ? $a : $b;\n  }\n}\n", "    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a == $b) {\n            return $a;\n    \
+    \    }\n        $a = str_replace(',', '.', $a); // convert from commas\n     \
+    \   $b = str_replace(',', '.', $b); // convert from commas\n        $x = abs($a)\
+    \ - abs($b);\n        if ($x == 0) {\n            return 0;\n        } elseif\
+    \ ($x > 0 && $x < 1) {\n            return $a;\n        } else {\n           \
+    \ return $b;\n        }\n    } else {\n        return null;\n    }\n}\n\n/**\n\
+    \ * Returns the square root of a number.\n *\n * @param string $x Real number\
+    \ to calculate the square root of.\n * @return float The square root of the given\
+    \ number\n */", "  if ($a == $b) {\n    return $a;\n  }\n\n  if (is_int($a) &&\
+    \ is_int($b)) {\n    if ($a > $b) {\n      return $a;\n    }\n\n    return $b;\n\
+    \  }\n\n  if (is_float($a) && is_float($b)) {\n    if ($a > $b) {\n      return\
+    \ $a;\n    }\n\n    return $b;\n  }\n\n  if (is_string($a) && is_string($b)) {\n\
+    \    if ($a > $b) {\n      return $a;\n    }\n\n    return $b;\n  }\n\n  return\
+    \ null;\n}\n</code>\n<|/ a dscore=5 tags=php,compare,floating-point,int,string\
+    \ |>\n<| c |>\nThis isn't very robust: this won't work: `compare_one(1, \"2,3\"\
+    )`.\n<|/ c |>\n<| c |>\n, good catch! That's true. I added a note.\n<|/ c |>\n\
+    <| c |>\nIt seems that this function is very slow on large numbers, e.g. compare(\"\
+    175435147066006000000000000\", \"100000000000000000000000000000000\"); takes 3\
+    \ seconds, compare(\"175435147066006000000000000\", \"1000000000000000000000000000000\"\
+    ); takes 10 seconds.\n<|/ c |>\n<| c |>\nThis is a great answer but as of PHP\
+    \ 7.2.1 `is_float($a) && is_float($b)` doesn't work. So I would suggest using\
+    \ something like `is_numeric()`\n<|/ c |>\n<| a |>\nIf your numbers are integer\
+    \ and you don't want to use strpos() then you can use this function:\n<code>",
+  "    $a = floatval($a);\n    $b = floatval($b);\n    if ($a < $b) {\n        return\
+    \ $a;\n    } elseif ($a == $b) {\n        return null;\n    }\n    return $b;\n\
+    }\n", "    if ($a == $b) return null;\n    if (is_float($a) && is_float($b)) {\n\
+    \        $diff = (float)$a - (float)$b;\n        if ($diff != 0) {\n         \
+    \   return $diff;\n        } else {\n            return null;\n        }\n   \
+    \ }\n    if (is_string($a) && is_string($b)) {\n        $a = str_replace(',',\
+    \ '.', $a);\n        $b = str_replace(',', '.', $b);\n        $a = preg_replace('/\\\
+    ./', '', $a);\n        $b = preg_replace('/\\./', '', $b);\n        $a = str_replace('.',\
+    \ '', $a);\n        $b = str_replace('.', '', $b);\n        $a = preg_replace('/[^0-9\\\
+    .]/', '', $a);\n        $b = preg_replace('/[^0-9\\.]/', '', $b);\n        if\
+    \ ($a == $b) return null;\n        $diff = strcmp($a, $b);\n        if ($diff\
+    \ != 0) return $diff;\n    }\n    return null;\n}\n", "    if (is_string($a) &&\
+    \ is_string($b))\n        return strcmp($a, $b);\n    if (is_string($a) && is_numeric($a))\n\
+    \        return strcmp($a, '0');\n    if (is_numeric($a) && is_string($b))\n \
+    \       return strcmp($b, '0');\n    if (is_numeric($a) && is_numeric($b))\n \
+    \       return max(abs($a), abs($b));\n    if (is_numeric($a)) {\n        if (is_numeric($b))\n\
+    \            return max(abs($a), abs($b));\n        else\n            return null;\n\
+    \    }\n    if (is_numeric($b)) {\n        if (is_numeric($a))\n            return\
+    \ max(abs($a), abs($b));\n        else\n            return null;\n    }\n    if\
+    \ (is_float($a) && is_float($b))\n        return max(abs($a), abs($b));\n    if\
+    \ (is_float($a)) {\n        if (is_float($b))\n            return max(abs($a),\
+    \ abs($b));\n        else\n            return null;\n    }\n    if (is_null($a)\
+    \ || is_null($b))\n        return null;\n    if ($a == $b)\n        return 0;\n\
+    \    return ($a < $b) ? 1 : -1;\n}\n", "    if (is_numeric($a) && is_numeric($b))\
+    \ {\n        if (abs($a - $b) > 0.00001) {\n            return $a;\n        }\
+    \ else {\n            return $b;\n        }\n    }\n    if (is_numeric($a)) {\n\
+    \        return $a;\n    }\n    if (is_numeric($b)) {\n        return $b;\n  \
+    \  }\n    if ($a === $b) {\n        return null;\n    }\n    $a = '\"' . addslashes($a)\
+    \ . '\"';\n    $b = '\"' . addslashes($b) . '\"';\n    return ($a === $b) ? null\
+    \ : $a;\n}", "  $is_a = floatval($a) == floatval($b);\n  $is_b = floatval($a)\
+    \ != floatval($b);\n  $is_str = strval($a) != strval($b);\n  if ($is_a && $is_b)\
+    \ {\n    return $a;\n  } elseif ($is_a && $is_str) {\n    return $b;\n  } else\
+    \ { // $is_b && $is_str\n    return $a;\n  }\n}\n</code>\n<|/ a tags=php,compare,arrays\
+    \ |>\n<| a |>\nI suggest using array_reduce and array_diff, like this:\n<code>\n\
+    <?php\n", "    if (is_string($a)) {\n        $a = str_replace(',', '.', $a);\n\
+    \        $b = str_replace(',', '.', $b); \n    }\n\n    if (is_string($b)) {\n\
+    \        $a = str_replace(',', '.', $b);\n        $b = str_replace(',', '.', $a);\
+    \ \n    }\n\n    if (is_float($a) && is_float($b)) {\n        return $a > $b ?\
+    \ $a : $b;\n    }\n\n    if (is_int($a) && is_int($b)) {\n        return $a >\
+    \ $b ? $a : $b;\n    }\n\n    return null;\n}", "    if (is_null($a) || is_null($b))\
+    \ {\n        return null;\n    }\n    if (is_string($a) && is_string($b)) {\n\
+    \        $a = (float) str_replace(',', '.', $a);\n        $b = (float) str_replace(',',\
+    \ '.', $b); \n    }\n    if ((is_numeric($a) && is_numeric($b)) || ($a < $b))\
+    \ {\n        return $a;\n    }\n    return $b;\n}\n", "  // Convert strings to\
+    \ numbers and compare them.\n  if (is_numeric($a) && is_numeric($b)) {\n    return\
+    \ $a > $b ? $a : $b;\n  }\n  // Strings have a higher precedence\n  else if (is_string($a))\
+    \ {\n    if (is_string($b)) {\n      // If the string has a decimal point, remove\
+    \ it.\n      if (substr($b, strpos($b, ',') + 1) == '.') {\n        $b = str_replace(',',\
+    \ '', $b);\n      }\n      // If the string has a negative sign, remove it.\n\
+    \      if (substr($b, 0, 1) == '-') {\n        $b = substr($b, 1);\n      }\n\
+    \      // If the string has a sign, subtract it from the first character.\n  \
+    \    elseif ($a == '-') {\n        $a = substr($b, 1);\n      }\n      // Convert\
+    \ numbers to floats.\n      elseif (is_numeric($b)) {\n        $b = floatval($b);\n\
+    \      }\n      // If both values are the same, don't compare them\n      if ($a\
+    \ == $b) {\n        return null;\n      }\n      // Otherwise, if one is negative,\
+    \ invert the other value.\n      if ($a == '-') {\n        $a = -$b;\n      }\n\
+    \      // Otherwise, just return the larger of the two values.\n      return $a\
+    \ > $b ? $a : $b;\n    }\n    // If the value is null, the other value is greater\n\
+    \    else if (is_numeric($b)) {\n      return $b > 0 ? $a : $b;\n    }\n    else\
+    \ {\n      return null;\n    }\n  }\n  // If neither value is a string, just return\
+    \ the larger of the two values.\n  else {\n    return $a > $b ? $a : $b;\n  }\n\
+    }\n", "  if(is_numeric($a)) {\n    if(is_numeric($b)) {\n      return $a > $b\
+    \ ? $a : $b;\n    }\n    if(is_string($b)) {\n      return strcmp($a, $b) > 0\
+    \ ? $a : $b;\n    }\n  }\n  return null;\n}\n", "  if ($a === $b) {\n    return\
+    \ null;\n  }\n  if (!is_numeric($a)) {\n    return $b;\n  }\n  if (!is_numeric($b))\
+    \ {\n    return $a;\n  }\n  $a_is_float = is_float($a);\n  $b_is_float = is_float($b);\n\
+    \  if (!$a_is_float && !$b_is_float) {\n    return $a > $b ? $a : $b;\n  }\n \
+    \ if (!$a_is_float && $b_is_float) {\n    return $a < $b ? $a : $b;\n  }\n  return\
+    \ $a < $b ? $a : $b;\n}", "  return ($a > $b) ? $a : $b;\n}", "  $a = (float)$a;\n\
+    \  $b = (float)$b;\n  if ($a == $b) {\n    return $a;\n  }\n  if (is_string($a))\
+    \ {\n    $a = str_replace(\",\", \".\", $a);\n  }\n  if (is_string($b)) {\n  \
+    \  $b = str_replace(\",\", \".\", $b);\n  }\n  if ($a === null && $b === null)\
+    \ {\n    return null;\n  }\n  if ($a === null) {\n    return $b;\n  }\n  if ($b\
+    \ === null) {\n    return $a;\n  }\n  return max($a, $b);\n}\n", "  if ($a ===\
+    \ $b) return null;\n  if (is_numeric($a) && is_numeric($b)) {\n    if (abs($a\
+    \ - $b) <= 1E-13) return $b < 0 ? -1 : 1;\n    return $a < 0 ? -1 : 1;\n  }\n\
+    \  return strcmp($a, $b) > 0 ? $a > $b : $a < $b ? 1 : -1;\n}\n", "  if (is_int($a)\
+    \ && is_int($b)) {\n    return $a > $b ? $a : $b;\n  } else { // string\n    if\
+    \ (is_int($a)) {\n      $a = intval($a);\n    }\n    if (is_int($b)) {\n     \
+    \ $b = intval($b);\n    }\n\n    // check if string a is a valid number\n    if\
+    \ (!preg_match('/^\\d+$/', $a)) {\n      return null;\n    }\n\n    // check if\
+    \ string b is a valid number\n    if (!preg_match('/^\\d+$/', $b)) {\n      return\
+    \ null;\n    }\n\n    $a = str_replace('.', '', $a);\n    $b = str_replace('.',\
+    \ '', $b);\n\n    $a = floatval($a);\n    $b = floatval($b);\n\n    if ($a ==\
+    \ $b) {\n      return null;\n    }\n\n    return $a > $b ? $a : $b;\n  }\n}\n\
+    </code>\n<|/ a |>\n<| a |>\nThis is an old question, but I wanted to point out\
+    \ that there exists a PHP function called max() which works like this:\n<code>\n\
+    echo max(1,2);\n</code>\nwill output:\n<code>\n2\n</code>\nThe return of this\
+    \ function is an integer. \nSo in order to compare numbers, you can simply do\
+    \ this:\n<code>\nif(max($number1,$number2) > $number3){\n     //do something\n\
+    }\n</code>\n<|/ a dscore=5 tags=php |>\n<| a |>\nOne thing to keep in mind if\
+    \ you need to compare floats: they can't be compared using the equality operator\
+    \ (==), because they are never exactly equal. Instead, you must use the strict\
+    \ comparison operator (===).\n<|/ a dscore=4 tags=php |>\n<| c |>\nBut how is\
+    \ this related to the question? This just compares float values\n<|/ c |>\n<|\
+    \ a |>\nJust to add to Brandon's answer:\n<code>\n<?php\n    $number1 = 2.2;\n\
+    \    $number2 = 3;\n    $number3 = 4.2;\n    var_dump(max($number1,$number2) ==\
+    \ $number3);\n</code>\nWill return true.\n<|/ a dscore=4 tags=php |>\n<| a tags=php\
+    \ dscore=3 |>\nIf you want to check if a variable is bigger than another you can\
+    \ just compare it with the max number:\n<code>\nif($number1 > $number2){\n   \
+    \ //true\n}\n</code>\nYou can also use variables as integers:\n<code>\n$number1\
+    \ = 2;\n$number2 = 3;\nif($number1 > $number2){\n    //true\n}\n</code>\n<|/ a\
+    \ |>\n<| a tags=php dscore=", "    $a1 = (is_string($a) ? str_replace(\",\", \"\
+    .\", $a) : $a);\n    $b1 = (is_string($b) ? str_replace(\",\", \".\", $b) : $b);\n\
+    \    if ($a1 === $b1) {\n        return $a1;\n    }\n    if (is_float($a1) &&\
+    \ is_float($b1)) {\n        $a1 *= 1.1;\n        $b1 *= 1.1;\n    }\n    if (is_int($a1)\
+    \ && is_int($b1)) {\n        $a1 *= 1;\n        $b1 *= 1;\n    }\n    if ($a1\
+    \ == $b1) {\n        return $a1;\n    }\n    // We could add other types like\
+    \ dates and so on here.\n    return null;\n}\n", "  if (!is_numeric($a)) {\n \
+    \   $a = floatval($a);\n  }\n  if (!is_numeric($b)) {\n    $b = floatval($b);\n\
+    \  }\n  return ($a > $b) ? $a : $b;\n}\n", "  if (is_numeric($a) && is_numeric($b))\
+    \ {\n    // If both are integers, compare as integers\n    if ($a == $b) {\n \
+    \     return $a;\n    }\n\n    // If one is a float, compare as floats\n    if\
+    \ (is_float($a) && is_float($b)) {\n      return $a > $b? 1 : -1;\n    }\n\n \
+    \   // If both are strings, compare as strings\n    if (is_string($a) && is_string($b))\
+    \ {\n      if ($a == $b) return 0;\n      // If both are strings and the first\
+    \ is a number, compare as numbers\n      elseif (is_numeric($a) && is_numeric($b))\
+    \ {\n        return strcmp($a, $b) > 0 ? 1 : -1;\n      }\n      // If both are\
+    \ strings, compare as strings\n      elseif (is_string($a)) {\n        return\
+    \ 1;\n      }\n      // If both are strings, compare as strings\n      elseif\
+    \ (is_string($b)) {\n        return -1;\n      }\n    }\n    return null;\n  }\n\
+    \  else {\n    return null;\n  }\n}\n", "  if ($a === null || $b === null) return\
+    \ null;\n  else if ($a === $b || $a === \"\" || $b === \"\") return null;\n  else\
+    \ if (is_numeric($a) && is_numeric($b)) {\n    // Both numbers are numeric, so\
+    \ just compare them as numbers.\n    return $a > $b ? 1 : -1;\n  }\n  else if\
+    \ (is_numeric($a)) {\n    // $a is a number, but $b is a string.\n    // Do we\
+    \ need to compare them as floats or strings?\n    if (is_numeric($b)) return $b\
+    \ > $a ? 1 : -1;\n    else return $a > $b ? 1 : -1;\n  }\n  else if (is_numeric($b))\
+    \ {\n    // $b is a number, but $a is a string.\n    // Do we need to compare\
+    \ them as floats or strings?\n    if (is_numeric($a)) return $a > $b ? 1 : -1;\n\
+    \    else return $a > $b ? 1 : -1;\n  }\n  else if (is_string($a) && is_string($b))\
+    \ {\n    // Both are strings.\n    return strcmp($a, $b) > 0 ? 1 : -1;\n  }\n\
+    \  else if (is_string($a)) {\n    // $a is a string, but $b is not.\n    // Do\
+    \ we need to compare them as floats or strings?\n    if (is_string($b)) return\
+    \ strcmp($a, $b) > 0 ? 1 : -1;\n    else return $a > $b ? 1 : -1;\n  }\n  else\
+    \ if (is_string($b)) {\n    // $b is a string, but $a is not.\n    // Do we need\
+    \ to compare them as floats or strings?\n    if (is_string($a)) return strcmp($a,\
+    \ $b) > 0 ? 1 : -1;\n    else return $a > $b ? 1 : -1;\n  }\n  // Neither are\
+    \ strings.\n  // Do we need to compare them as floats or strings?\n  else return\
+    \ $a > $b ? 1 : -1;\n}\n</code>\n<|/ a dscore=3 tags=php,comparison,floating-point\
+    \ |>\n<| c |>\nThis worked for me. I am in PHP 7.2 and I had to remove the `is_numeric()`\
+    \ check. Otherwise I got unexpected results.\n<|/ c |>\n<| c |>\nIn some cases\
+    \ you can get strange results, when comparing strings to floats. I recommend using\
+    \ [`is_numeric()`](http://php.net/manual/en/function.is-numeric.php) and [`is_numeric()`](http://php.net/manual/en/function.is-numeric.php)\
+    \ together, to catch those issues.\n<|/ c |>\n<| a dscore=3 |>\nHere's a way to\
+    \ do this in PHP 5:\n<code>\n$comparison = $a > $b ? 1 : ", "  $a_real = floatval($a);\n\
+    \  $b_real = floatval($b);\n  if ($a_real < $b_real)\n    return $a;\n  elseif\
+    \ ($a_real > $b_real)\n    return $b;\n  else\n    return null;\n}\n", "    if\
+    \ (is_int($b)) {\n        return $a > $b ? $a : $b;\n    }\n    elseif (is_float($b))\
+    \ {\n        return strcmp($a, $b) > 0 ? $a : $b;\n    }\n    elseif (is_string($a))\
+    \ {\n        return strcmp($a, $b) > 0 ? $a : $b;\n    }\n    return null;\n}\n",
+  "    // http://php.net/manual/en/function.strtof-compare.php\n    // https://www.php.net/manual/en/function.explode.php\n\
+    \    // http://php.net/manual/en/function.sprintf.php\n    // http://php.net/manual/en/function.type.php\n\
+    \    if (is_numeric($a) && is_numeric($b)) {\n        return max($a, $b);\n  \
+    \  } else {\n        // convert string to array\n        $a = explode(',', $a);\
+    \ // explode by comma\n        $b = explode(',', $b); // explode by comma\n  \
+    \      $a_count = count($a); // count the exploded values\n        $b_count =\
+    \ count($b); // count the exploded values\n        if ($a_count > $b_count) {\n\
+    \            $temp = $a;\n            $a = $b;\n            $b = $temp;\n    \
+    \    }\n        // convert everything to float\n        foreach ($a as $a_i =>\
+    \ $a_value) {\n            $a[$a_i] = floatval($a_value);\n        }\n       \
+    \ foreach ($b as $b_i => $b_value) {\n            $b[$b_i] = floatval($b_value);\n\
+    \        }\n        $max = max($a, $b);\n        if ($max === false) {\n     \
+    \       // if there is no max return null\n            return null;\n        }\n\
+    \        foreach ($a as $a_i => $a_value) {\n            if ($a[$a_i] == $max)\
+    \ {\n                unset($a[$a_i]);\n            }\n        }\n        foreach\
+    \ ($b as $b_i => $b_value) {\n            if ($b[$b_i] == $max) {\n          \
+    \      unset($b[$b_i]);\n            }\n        }\n        // sort by the smallest\
+    \ value\n        if (count($a) > count($b)) {\n            arsort($a);\n     \
+    \       arsort($b);\n        } else {\n            arsort($b);\n            arsort($a);\n\
+    \        }\n        $a_count = count($a);\n        $b_count = count($b);\n   \
+    \     if ($a_count == 0) {\n            return null;\n        } elseif ($b_count\
+    \ == 0) {\n            return null;\n        } elseif ($a_count == 1) {\n    \
+    \        return $b_count ? $a[0] : $b[0];\n        } elseif ($b_count == 1) {\n\
+    \            return $a_count ? $b[0] : $a[0];\n        }\n        foreach ($a\
+    \ as $i => $a_value) {\n            if ($i < $b_count) {\n                if ($a_value\
+    \ > $b[$i]) {\n                    unset($a[$i]);\n                } else {\n\
+    \                    unset($b[$i]);\n                }\n            } else {\n\
+    \                if ($a_value < $a[$i]) {\n                    unset($a[$i]);\n\
+    \                } else {\n                    unset($a[$i", "    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a > $b) {\n            return $b;\n     \
+    \   }\n        if ($a < $b) {\n            return $a;\n        }\n    }\n    if\
+    \ (is_string($a) && is_string($b)) {\n        $a_split = explode(\",\", $a);\n\
+    \        $b_split = explode(\",\", $b);\n        $a_count = count($a_split);\n\
+    \        $b_count = count($b_split);\n        if ($a_count != $b_count) {\n  \
+    \          return null;\n        }\n        for ($i = 0; $i < $a_count; $i++)\
+    \ {\n            if ($a_split[$i] != $b_split[$i]) {\n                return null;\n\
+    \            }\n        }\n        return $a;\n    }\n    return null;\n}\n",
+  "    if (is_string($a) && is_string($b)) {\n        $a = str_replace(',', '', $a);\n\
+    \        $b = str_replace(',', '', $b);\n    }\n    $a_is_num = is_numeric($a);\n\
+    \    $b_is_num = is_numeric($b);\n\n    if ($a_is_num == $b_is_num) {\n      \
+    \  return $b_is_num ? $a : $b;\n    }\n\n    if (is_numeric($a)) {\n        $a_is_real\
+    \ = $a_is_num;\n        $a_real = abs($a); // Get absolute value\n        $a =\
+    \ $a_is_real ? $a_real : $a * 1000; // Get a real number as a string\n       \
+    \ $b = is_numeric($b) ? abs($b) : 0;\n    } elseif (is_numeric($b)) {\n      \
+    \  $b_is_real = $b_is_num;\n        $b_real = abs($b);\n        $b = $b_is_real\
+    \ ? $b_real : $b * 1000;\n        $a = is_numeric($a) ? abs($a) : 0;\n    } else\
+    \ {\n        return null;\n    }\n\n    // If both are integers, return one that\
+    \ comes first.\n    if ($a_is_num && $b_is_num) {\n        if ($a < $b) {\n  \
+    \          return $a < 0 ? -1 : 0;\n        } elseif ($a > $b) {\n           \
+    \ return $a > 0 ? 1 : 0;\n        }\n    }\n\n    // If both are strings, convert\
+    \ strings to ints and compare the strings.\n    if ($a_is_num && is_string($b))\
+    \ {\n        $a_real = preg_replace('/[^0-9]/', '', $a_real); // Remove non-numeric\
+    \ characters.\n        $b_real = preg_replace('/[^0-9]/', '', $b_real);\n    \
+    \    $a_real = intval($a_real);\n        $b_real = intval($b_real);\n\n      \
+    \  if ($a_real > $b_real) {\n            return $a_is_real ? 1 : -1;\n       \
+    \ } elseif ($a_real < $b_real) {\n            return $a_is_real ? -1 : 1;\n  \
+    \      }\n    }\n\n    // If both are ints, return one that comes first.\n   \
+    \ if ($a_is_num) {\n        if ($a < $b) {\n            return $a < 0 ? -1 : 0;\n\
+    \        } elseif ($a > $b) {\n            return $a > 0 ? 1 : 0;\n        }\n\
+    \    }\n\n    // If both are ints, return one that comes first.\n    if ($b_is_num)\
+    \ {\n        if ($b < $a) {\n            return $b < 0 ? -1 : 0;\n        } elseif\
+    \ ($b > $a) {\n            return $b > 0 ? 1 : 0;\n        }\n    }\n\n    return\
+    \ null;\n}\n", "    if ($a === $b) {\n        return null;\n    }\n    // floats\n\
+    \    if ($a instanceof \\Float && $b instanceof \\Float) {\n        return $a\
+    \ > $b ? $a : $b;\n    }\n    // numbers\n    if ($a instanceof \\Number && $b\
+    \ instanceof \\Number) {\n        return $a->compare($b);\n    }\n    // Strings\n\
+    \    if ($a instanceof \\String && $b instanceof \\String) {\n        $sa = preg_replace(\"\
+    /[^0-9,.]/\", \"\", $a);\n        $sb = preg_replace(\"/[^0-9,.]/\", \"\", $b);\n\
+    \        if ($sa === $sb) {\n            return 0;\n        }\n        return\
+    \ ($sa > $sb ? $a : $b);\n    }\n    // Arrays\n    if ($a instanceof \\Traversable\
+    \ && $b instanceof \\Traversable) {\n        $length = count($a);\n        for\
+    \ ($i = 0; $i < $length; $i++) {\n            $cmp = compare_one($a[$i], $b[$i]);\n\
+    \            if ($cmp !== null) {\n                return $cmp;\n            }\n\
+    \        }\n        return 0;\n    }\n    // Objects\n    if ($a instanceof \\\
+    Traversable && $b instanceof \\ArrayAccess && !is_array($b)) {\n        $cmp =\
+    \ compare_one($a[$a->key()], $b[$a->key()]);\n        if ($cmp !== null) {\n \
+    \           return $cmp;\n        }\n    }\n    if ($a instanceof \\ArrayAccess\
+    \ && $b instanceof \\Traversable) {\n        $cmp = compare_one($a[$a->key()],\
+    \ $b);\n        if ($cmp !== null) {\n            return $cmp;\n        }\n  \
+    \  }\n    // Strings vs Arrays\n    if (is_string($a) && is_string($b)) {\n  \
+    \      $sa = preg_replace(\"/[^0-9,.]/\", \"\", $a);\n        $sb = preg_replace(\"\
+    /[^0-9,.]/\", \"\", $b);\n        if ($sa === $sb) {\n            return 0;\n\
+    \        }\n        return ($sa > $sb ? $a : $b);\n    }\n    // Strings vs Objects\n\
+    \    if (is_string($a) && is_object($b)) {\n        $sa = preg_replace(\"/[^0-9,.]/\"\
+    , \"\", $a);\n        $sb = get_class($b);\n        if ($sa === $sb) {\n     \
+    \       return 0;\n        }\n        return ($sa > $sb ? $a : $b);\n    }\n \
+    \   // Arrays vs Objects\n    if (is_array($a) && is_object($b)) {\n        $a\
+    \ = get_object_vars($a);\n", "    $a = is_float($a) ? $a : filter_var($a, FILTER_SANITIZE_NUMBER_FLOAT);\n\
+    \    $b = is_float($b) ? $b : filter_var($b, FILTER_SANITIZE_NUMBER_FLOAT);\n\n\
+    \    if ($a == $b) {\n        return $a;\n    }\n\n    if (is_numeric($a) && is_numeric($b))\
+    \ {\n        if (is_float($a)) {\n            return $b;\n        }\n\n      \
+    \  if (is_float($b)) {\n            return $a;\n        }\n\n        if ($a ==\
+    \ (string)$b) {\n            return $a;\n        }\n\n        return $b;\n   \
+    \ }\n\n    if (is_numeric($a)) {\n        return $b;\n    }\n\n    if (is_numeric($b))\
+    \ {\n        return $a;\n    }\n\n    // For now we just use floats\n    if ($a\
+    \ == '.' || $b == '.') {\n        return $a == $b ? $a : null;\n    }\n\n    if\
+    \ ($a == '.') {\n        return $b;\n    }\n\n    if ($b == '.') {\n        return\
+    \ $a;\n    }\n\n    return null;\n}\n</code>\nIt basically tries to coerce the\
+    \ values as floats, if that's not possible, use the default string comparison\
+    \ and only use floats for the final comparison.\n<|/ a dscore=5 |>\n<| c |>\n\
+    This only works when the two variables are the same type though. It doesn't work\
+    \ in PHP < 5.3\n<|/ c |>\n<| c |>\nI updated the answer to reflect that. Thanks.\n\
+    <|/ c |>\n<| c |>\nThis also only works with floats. You can't sort \"2,3\" before\
+    \ \"5,1\".\n<|/ c |>\n<| c |>\nThis is still the best answer here. Thanks for\
+    \ the solution, helped me solve my problem\n<|/ c |>\n<| c |>\nThis is good, but\
+    \ it is very slow.  Try it with millions of entries, and it will take a minute.\n\
+    <|/ c |>\n<| a |>\nJust use a case-sensitive sort.\n<code>\nusort($users, 'strnatcmp');\n\
+    </code>\nThis does not require using anything other than PHP core functions. No\
+    \ need to write your own comparison-function.\n<|/ a dscore=5 tags=sorting,php,string\
+    \ |>\n<| c |>\nThis works great. I like that it doesn't require any additional\
+    \ libraries, like `array_multisort`.\n<|/ c |>\n<| c |>\nThis is only good if\
+    \ you're happy with case-insensitivity. Which it sounds like you are, given your\
+    \ question. If you want to sort on case sensitivity you should consider using\
+    \ [`strnatcasecmp()`](http://", "    $a_real = is_numeric($a) ? floatval($a) :\
+    \ trim($a);\n    $b_real = is_numeric($b) ? floatval($b) : trim($b);\n    if ($a_real\
+    \ === $b_real) {\n        return null;\n    }\n    if ($a_real > $b_real) {\n\
+    \        return $b;\n    }\n    return $a;\n}", "  if($a === $b) return $a;\n\
+    \  if(is_numeric($a) && is_numeric($b)) {\n    $a = intval($a);\n    $b = intval($b);\n\
+    \    if($a === $b) return $a;\n  }\n  if(is_numeric($a)) {\n    if(is_numeric($b))\
+    \ return $a;\n  }\n  if(is_numeric($b)) {\n    if(is_numeric($a)) return $b;\n\
+    \  }\n  if(is_string($a) && is_string($b)) {\n    $a = strval($a);\n    $b = strval($b);\n\
+    \    if($a === $b) return $a;\n  }\n  return null;\n}\n</code>\n<|/ a dscore=3\
+    \ |>\n<| c |>\nI like the idea of using an if condition to compare the numbers\
+    \ but this answer doesn't work for me. I also tried using [this answer](http://stackoverflow.com/a/34322287/2749619)\
+    \ but this also doesn't work for me (it doesn't account for the comma).\n<|/ c\
+    \ |>\n<| c |>\nI tested your function with your sample data and it seems to work,\
+    \ except for that in the case that you're comparing `'4,5'` and `'4.5'`. I've\
+    \ edited my answer to account for that (it returns `null`, as you requested in\
+    \ the question).\n<|/ c |>\n<| c |>\nThe result is not correct:\n`print(compare_one(\"\
+    4,5\",\"4.5\"));` returns `null`\n<|/ c |>\n<| c |>\nThat's because it doesn't\
+    \ account for the comma. I've edited my answer to account for that. It returns\
+    \ the larger of the two numbers, as you requested.\n<|/ c |>\n<| a dscore=2 |>\n\
+    The simple solution is to use str_replace() to remove commas in strings like \"\
+    4,5\" that might be a float number. \nAnd also use is_numeric() to check if it\
+    \ is a numeric value.\nTry this code : \n<code>", "    switch(gettype($a)) {\n\
+    \        case 'integer':\n        case 'double':\n            return $a > $b ?\
+    \ $a : $b;\n        case 'string':\n            $as = explode(',', $a);\n    \
+    \        $bs = explode(',', $b); // handle commas\n            foreach($as as\
+    \ $k => $v) {\n                $v = $v > $bs[$k] ? $v : $bs[$k];\n           \
+    \ }\n            return $a;\n    }\n    return null;\n}\n", "    $a = is_string($a)\
+    \ ? floatval($a) : $a;\n    $b = is_string($b) ? floatval($b) : $b;\n\n    if\
+    \ ($a == $b) {\n        return null;\n    }\n\n    if (is_numeric($a)) {\n   \
+    \     if (is_numeric($b)) {\n            return $a > $b ? $a : $b;\n        }\
+    \ else {\n            return $a;\n        }\n    } else {\n        return is_numeric($b)\
+    \ ? $a : $b;\n    }\n}\n", "    return max($a, $b);\n}\n", "    // Make sure both\
+    \ numbers are strings.\n    $a = is_string($a) ? $a : gettype($a);\n    $b = is_string($b)\
+    \ ? $b : gettype($b);\n\n    // If the values are strings, split them into an\
+    \ array so we can compare them.\n    if ($a === 'string' && $b === 'string') {\n\
+    \        $a = explode(',', $a);\n        $b = explode(',', $b);\n    }\n\n   \
+    \ // If both variables are numeric, compare them.\n    if ($a === 'integer' &&\
+    \ $b === 'integer') {\n        return $a > $b ? $a : $b;\n    }\n\n    // If both\
+    \ variables are float, compare them.\n    if ($a === 'float' && $b === 'float')\
+    \ {\n        if ($a == $b) {\n            return $a;\n        }\n        return\
+    \ $b;\n    }\n\n    // If one is a complex number, compare them as numbers.\n\
+    \    if ($a === 'complex' && $b === 'complex') {\n        $a = explode(',', $a);\n\
+    \        $b = explode(',', $b);\n        $num_a = $a[0] + $a[1];\n        $num_b\
+    \ = $b[0] + $b[1];\n        if ($num_a == $num_b) {\n            return $a[0]\
+    \ + $a[1];\n        }\n        return $a[0] > $a[1] ? $a : $b;\n    }\n\n    //\
+    \ If the values are arrays, compare them as arrays.\n    if ($a === 'array' &&\
+    \ $b === 'array') {\n        if (count($a) !== count($b)) {\n            return\
+    \ $a;\n        }\n        foreach ($a as $i => $val) {\n            if ($val !=\
+    \ $b[$i]) {\n                return $a;\n            }\n        }\n        return\
+    \ $b;\n    }\n\n    // If both variables are objects, compare them one by one.\n\
+    \    if ($a === 'object' && $b === 'object') {\n        if (count(get_object_vars($a))\
+    \ !== count(get_object_vars($b))) {\n            return $a;\n        }\n     \
+    \   foreach (get_object_vars($a) as $key => $val) {\n            if ($val != get_object_vars($b)[$key])\
+    \ {\n                return $a;\n            }\n        }\n        return $b;\n\
+    \    }\n\n    // If the values are objects, compare them by their object ids.\n\
+    \    if ($a === 'object' && is_object($b)) {\n        $a_obj = get_object_vars($a);\n\
+    \        $b_obj = get_object_vars($b);\n        foreach ($a_obj as $key => $val)\
+    \ {\n            $b_obj_key = $b_obj[$key];\n            if ($val != $b_obj_key)\
+    \ {\n                return $a;\n            }\n        }\n        return $b;\n\
+    \    }\n\n    // If both variables are arrays or objects, compare them recursively.\n\
+    \    if (is_array($a) && is_array($b)) {\n        $a_obj = array_", "  if (is_numeric($a)\
+    \ && is_numeric($b)) {\n    $a = (float) $a;\n    $b = (float) $b;\n    return\
+    \ ($a > $b) ? $a : $b;\n  }\n  elseif (is_numeric($a)) {\n    return null;\n \
+    \ }\n  elseif (is_numeric($b)) {\n    return null;\n  }\n  elseif (is_string($a)\
+    \ && is_string($b)) {\n    $a = preg_replace('/[^0-9\\.,]+/', \"\", $a);\n   \
+    \ $b = preg_replace('/[^0-9\\.,]+/', \"\", $b);\n    return ($a > $b) ? $a : $b;\n\
+    \  }\n}\n", "  if ($a === $b)\n    return null;\n  elseif ($a === \"Infinity\"\
+    \ || $a === \"-Infinity\")\n    return $a;\n  elseif ($b === \"Infinity\" || $b\
+    \ === \"-Infinity\")\n    return $b;\n  elseif (is_int($a) && is_int($b))\n  \
+    \  return $a > $b ? $b : $a;\n  elseif (is_string($a) && is_string($b) && strcmp($a,\
+    \ $b) > 0)\n    return $b;\n  elseif (is_string($a) && is_string($b) && strcmp($a,\
+    \ $b) < 0)\n    return $a;\n  elseif (is_float($a) && is_float($b)) {\n    if\
+    \ ($a === $b) {\n      if (is_nan($a)) {\n        return ($a === \"NaN\") ? null\
+    \ : $a;\n      } else if (is_nan($b)) {\n        return ($b === \"NaN\") ? null\
+    \ : $b;\n      }\n    }\n    $a = $a . \"0\";\n    $b = $b . \"0\";\n    $aint\
+    \ = filter_var($a, FILTER_SANITIZE_NUMBER_INT);\n    $bint = filter_var($b, FILTER_SANITIZE_NUMBER_INT);\n\
+    \    if ($aint == $bint)\n      return $aint;\n    elseif ($aint > $bint)\n  \
+    \    return $a;\n    else\n      return $b;\n  } elseif (is_object($a) && is_object($b))\
+    \ {\n    if ($a === $b)\n      return null;\n    elseif ($a instanceof StdClass)\n\
+    \      return $a->$b ?? null;\n    elseif ($b->$a === null)\n      return $b->$a;\n\
+    \    elseif ($b->$a instanceof StdClass)\n      return $b->$a->$b ?? null;\n \
+    \   else\n      return null;\n  } elseif (is_object($a)) {\n    if (is_object($b))\n\
+    \      return null;\n    elseif ($b->$a === null)\n      return $a->$b ?? null;\n\
+    \    elseif ($b->$a instanceof StdClass)\n      return $b->$a->$b ?? null;\n \
+    \   else\n      return null;\n  } else {\n    return $a ?? $b ?? null;\n  }\n\
+    }\n", "    if (is_numeric($a)) {\n        if (is_numeric($b)) {\n            //\
+    \ if numeric, compare them\n            if ($a > $b) { return $a; }\n        \
+    \    return $b;\n        }\n        $a = floatval($a); // convert a string to\
+    \ a float, if it doesn't have a decimal\n    }\n    if (is_numeric($b)) {\n  \
+    \      if (is_numeric($a)) {\n            // if numeric, compare them\n      \
+    \      if ($a > $b) { return $a; }\n            return $b;\n        }\n      \
+    \  $b = floatval($b); // convert a string to a float, if it doesn't have a decimal\n\
+    \    }\n    if (is_string($a) && is_string($b)) {\n        $a = floatval($a);\n\
+    \        $b = floatval($b);\n    }\n    return null;\n}\n", "    if (!is_numeric($a)\
+    \ || !is_numeric($b)) {\n        if (is_string($a)) {\n            $a = floatval(str_replace(',',\
+    \ '', $a));\n            if (is_float($b)) {\n                return $a;\n   \
+    \         }\n        } else {\n            $a = intval($a);\n            if (is_int($b))\
+    \ {\n                return $a;\n            }\n        }\n    }\n\n    $a = max((float)\
+    \ $a, (float) $b);\n    $b = max((float) $a, (float) $b);\n    return $a > $b\
+    \ ? $a : $b;\n}\n", "  if (is_float($a) && is_float($b)) {\n    return max($a,\
+    \ $b);\n  }\n  return ($a > $b) ? $a : $b;\n}\n", "  return is_int($a) && is_int($b)\
+    \ ? $a > $b ? $a : $b : is_float($a) && is_float($b) ? $a > $b ? $a : $b : is_string($a)\
+    \ && is_string($b) ? strcmp($a, $b) > 0 ? $a : $b : null;\n}\n</code>\n<|/ a dscore=2\
+    \ |>\n<| a dscore=2 |>\nThis answer is to give some additional information to\
+    \ anyone that may need it. \nThe below code works for a range of PHP versions,\
+    \ but it could be cleaned up a bit with a more concise version.\n<code>", "  \
+    \  // Convert strings to real numbers\n    $a_parts = explode('.', $a);\n    $b_parts\
+    \ = explode('.', $b);\n    $a_real = array_shift($a_parts);\n    $b_real = array_shift($b_parts);\n\
+    \    if (is_numeric($a_real) && !is_numeric($b_real)) {\n        $a_float = floatval($a_real);\n\
+    \        $b_float = floatval($b_real);\n        if ($a_float == $b_float) {\n\
+    \            return 0;\n        }\n        return ($a_float < $b_float) ? -1 :\
+    \ 1;\n    }\n    if (is_numeric($b_real) && !is_numeric($a_real)) {\n        $a_float\
+    \ = floatval($b_real);\n        $b_float = floatval($a_real);\n        if ($a_float\
+    \ == $b_float) {\n            return 0;\n        }\n        return ($a_float <\
+    \ $b_float) ? 1 : -1;\n    }\n    // Now compare as strings\n    $a_str = strval($a);\n\
+    \    $b_str = strval($b);\n    return strcasecmp($a_str, $b_str);\n}\n</code>\n\
+    <|/ a tags=php,sorting |>\n<| c |>\nIt doesn't work for me, I get this:\n$array\
+    \ = array(1, \"3,5\", \"4,7\", \"4,5\", \"5,2\", \"7,5\", \"1,5\", \"2,5\", \"\
+    2,7\", \"2,4\");\n\nsort($array);\nprint_r($array);\n<|/ c |>\n<| c |>\n: I updated\
+    \ my answer to address your comment.\n<|/ c |>\n<| c |>\nIt works, but not completely.\
+    \ \nIt should compare the string version of the number and the real number. \n\
+    For example \"1,2\" should be before \"1,5\" because \"1,2\" > \"1,5\"\n<|/ c\
+    \ |>\n<| c |>\n: Your comment above is not clear: Is \"1,2\" > \"1,5\" because\
+    \ \"1,2\" > \"1,5\" because \"1,2\" > \"1,5\" ? The answer I provided does indeed\
+    \ do that -- it sorts numbers that compare as equal (according to compare_one)\
+    \ before numbers that are not equal.\n<|/ c |>\n<| c |>\nIt works, I added the\
+    \ correct solution above. Thanks for the help :)\n<|/ c |>\n<| a tags=php,sorting\
+    \ dscore=0 |>\nThis should work:\n<code>\n$array = array(\"1,2\", \"1,5\", \"\
+    1,10\", \"2,2\", \"2,7\", \"2,4\", \"3,5\", \"3,6\", \"3,7\", \"3,8\", \"4,5\"\
+    , \"4,7\");\n", "    if (is_int($a) && is_int($b)) return $a > $b ? 1 : -1;\n\
+    \    elseif (is_float($a) && is_float($b)) return $a > $b ? 1 : -1;\n    elseif\
+    \ (is_string($a) && is_string($b)) {\n        $a_array = preg_split('/[\\.,]/',\
+    \ $a);\n        $b_array = preg_split('/[\\.,]/', $b);\n        foreach ($a_array\
+    \ as $a_part => $a_val) {\n            foreach ($b_array as $b_part => $b_val)\
+    \ {\n                if ($a_part == $b_part) return compare_one($a_val, $b_val);\n\
+    \            }\n        }\n        return 0;\n    }\n    else return null;\n}\n\
+    </code>\n<|/ a tags=algorithm,php,sorting |>\n<| a |>\nIf you're interested in\
+    \ seeing how to do it using recursion, here you go:\n<code>\n<?php\n", "    if\
+    \ (is_numeric($a) && is_numeric($b)) {\n        if ($a == $b) {\n            return\
+    \ $a;\n        }\n        if ($a > $b) {\n            return $a;\n        }\n\
+    \        if ($a < $b) {\n            return $b;\n        }\n    }\n    $a_str\
+    \ = strval($a);\n    $b_str = strval($b);\n    if ($a === $b) {\n        return\
+    \ $a_str;\n    }\n    if ($a_str === $b_str) {\n        return $a_str;\n    }\n\
+    \    if ($a > $b) {\n        return $a_str;\n    }\n    return $b_str;\n}\n</code>\n\
+    <|/ a |>\n<| a dscore=1 |>\nUse intval() combined with strval() if you want integers,\
+    \ and floatval() combined with strval() if floats. \n<code>\nif($v1 === $v2){\n\
+    \    $v1 = intval($v1);\n    $v2 = intval($v2);\n}\n</code>\n<|/ a tags=php,comparison\
+    \ |>\n<| c |>\nIf you're going to use `intval()` then it might be a better idea\
+    \ to use `floatval()` instead, because `intval()` will truncate floats, whereas\
+    \ `floatval()` will preserve the decimal place.\n<|/ c |>\n<| c |>\nIt won't necessarily\
+    \ matter for `intval()`, but it will matter for `floatval()`. `intval()` would\
+    \ truncate `1.2345` whereas `floatval()` will preserve the decimal places. `1.2345`\
+    \ === `1.235`.\n<|/ c |>\n<| c |>\nIf you're using floats and need precision,\
+    \ use `number_format()` instead.\n<|/ c |>\n<| c |>\n: That's true but I didn't\
+    \ want to assume that the OP was doing decimal math. Also, it wasn't clear if\
+    \ he was doing the same kind of comparison in each case.\n<|/ c |>\n<| a dscore=1\
+    \ tags=php,comparison |>\nThe problem is with the comparison of strings. \"12\"\
+    \ < \"12\" evaluates to false because 12 is a lexicographically smaller string.\n\
+    Instead, convert both values to a number (perhaps using intval() or floatval()),\
+    \ then compare them. If they aren't equal, you'll know that one of them was a\
+    \ string.\n<|/ a |>\n<| a tags=php,comparison |>\nOne way of doing it is to convert\
+    \ both values to an integer if possible:\n<code>\n<?php\n$v1 = \"12\";\n$v2 =\
+    \ \"12\";\nif($v1 == $v2) {\n  $v1 = intval($v", "    switch(gettype($a)) {\n\
+    \        case \"double\":\n        case \"float\":\n            if ($a < $b)\n\
+    \                return $a;\n            else\n                return $b;\n  \
+    \          break;\n        case \"integer\":\n            if ($a < $b)\n     \
+    \           return $a;\n            else\n                return $b;\n       \
+    \     break;\n        case \"boolean\":\n            if ($a < $b)\n          \
+    \      return $a;\n            else\n                return $b;\n            break;\n\
+    \        case \"string\":\n        case \"resource\":\n            // PHP 5 >=\
+    \ 5.3.0 allows comparing strings and resources.  If one is a string, use that.\n\
+    \            if (gettype($a) == \"string\" && gettype($b) == \"string\")\n   \
+    \             return strcmp($a, $b);\n            // If one or both values are\
+    \ resources, do a deeper comparison.\n            if (gettype($a) == \"resource\"\
+    \ || gettype($b) == \"resource\")\n                return compare_one($a, $b);\n\
+    \            // If both values are numeric strings or objects, use the regular\
+    \ comparison.\n            if (is_numeric($a) && is_numeric($b))\n           \
+    \     return strcmp($a, $b);\n            // If one of them is a complex number,\
+    \ do a regular comparison.\n            if (gettype($a) == \"string\" && gettype($b)\
+    \ == \"string\" && strpos($a, \",\") !== FALSE && strpos($b, \",\") !== FALSE)\n\
+    \                return strcmp($a, $b);\n            // If one of them is an array,\
+    \ do a regular comparison.\n            if (gettype($a) == \"string\" && gettype($b)\
+    \ == \"string\" && strpos($a, \",\") !== FALSE)\n                return strcmp($a,\
+    \ $b);\n            // If one of them is a resource, do a regular comparison.\n\
+    \            if (gettype($a) == \"resource\" && gettype($b) == \"resource\")\n\
+    \                return strcmp($a, $b);\n            // If they were both numeric,\
+    \ do a regular comparison.\n            if (is_numeric($a) && is_numeric($b))\n\
+    \                return strcmp($a, $b);\n            // If neither is an array,\
+    \ do a regular comparison.\n            if (!is_array($a) && !is_array($b))\n\
+    \                return strcmp($a, $b);\n            // If they are both arrays,\
+    \ compare them recursively.\n            if (is_array($a) && is_array($b)) {\n\
+    \                $c = compare_one($a, $b);\n                if ($c == 0)\n   \
+    \                 return $c;\n                else\n                    return\
+    \ $c;\n            }\n            // If neither is an array, do a regular comparison.\n\
+    \            if (!is_array($a) && !is_array($b))\n                return strcmp($a,\
+    \ $b);\n            // If they are both objects, do a regular comparison.\n  \
+    \          if (is_object($a) && is_object($b)) {\n                $c = compare_one($a,\
+    \ $b);", "  if (is_numeric($a) && is_numeric($b)) {\n    if ($a < $b) {\n    \
+    \  return $a;\n    }\n    return $b;\n  }\n  if (is_numeric($a)) {\n    return\
+    \ $a;\n  }\n  if (is_numeric($b)) {\n    return $b;\n  }\n  if (!is_numeric($a)\
+    \ || !is_numeric($b)) {\n    return null;\n  }\n  $a = str_replace([\".\", \"\
+    ,\"], [\".\", \",\"], $a); // Convert to floating number\n  $b = str_replace([\"\
+    .\", \",\"], [\".\", \",\"], $b); // Convert to floating number\n  if ($a == $b)\
+    \ {\n    return null;\n  }\n  return $a > $b ? $a : $b;\n}", "    if (!is_numeric($a)\
+    \ || !is_numeric($b))\n        return null;\n    return max($a, $b);\n}\n", " \
+    \   if (is_numeric($a)) {\n        if (is_numeric($b)) {\n            if ($a >\
+    \ $b) return $a;\n            return $b;\n        }\n        return $a;\n    }\n\
+    \    if (is_string($a)) {\n        if (is_string($b)) {\n            $a = preg_replace(\"\
+    /[^0-9,.]/\", \"\", $a);\n            $b = preg_replace(\"/[^0-9,.]/\", \"\",\
+    \ $b);\n            if ($a == $b) return null;\n            if ($a < $b) return\
+    \ $a;\n            return $b;\n        }\n        return $a;\n    }\n    return\
+    \ null;\n}\n", "  if (!is_numeric($a) || !is_numeric($b)) {\n    return null;\n\
+    \  }\n  return $a > $b ? $a : $b;\n}\n", "  return ($a > $b ? $a : $b);\n}\n\n\
+    $sql = 'select id from users where email = \"' . $userEmail .'\" and password\
+    \ = \"' . $hashed_password .'\"';\n\ntry {\n  $dbh = new PDO(\"mysql:host=$host;dbname=$dbname\"\
+    , $username, $password);\n  foreach ($dbh->query($sql) as $row) {\n    $user_id\
+    \ = $row['id'];\n  }\n}\ncatch (PDOException $e) {\n  print \"Error: \" . $e->getMessage();\n\
+    }\n\n$sql = 'select id from users where email = \"' . $userEmail .'\" and password\
+    \ = \"' . $hashed_password .'\"';\n\ntry {\n  $dbh = new PDO(\"mysql:host=$host;dbname=$dbname\"\
+    , $username, $password);\n  foreach ($dbh->query($sql) as $row) {\n    $user_id\
+    \ = $row['id'];\n  }\n}\ncatch (PDOException $e) {\n  print \"Error: \" . $e->getMessage();\n\
+    }\n</code>\n<|/ a |>\n<| c |>\n`or die(mysql_error());` would output the MySQL\
+    \ error message, otherwise you'll just end up with a bunch of garbage output.\n\
+    <|/ c |>\n<| c |>\nYeah.  Thanks for catching that :)\n<|/ c |>\n<| a tags=mysql,php\
+    \ dscore=0 |>\n<code>\n<?php\n$servername = \"localhost\";\n$username = \"root\"\
+    ;\n$password = \"\";\n$dbname = \"myDB\";\ntry {\n    $conn = new PDO(\"mysql:host=$servername;dbname=$dbname\"\
+    , $username, $password);\n    // set the PDO error mode to exception\n    $conn->setAttribute(PDO::ATTR_ERRMODE,\
+    \ PDO::ERRMODE_EXCEPTION);\n    $sql = \"SELECT id FROM users WHERE email = '\"\
+    .$userEmail.\"' AND password = '\".$hashed_password.\"'\";\n    $result = $conn->query($sql);\n\
+    \    $user_id = \"\";\n    if ($result->rowCount() > 0) {\n        $user_id =\
+    \ $result->fetchColumn();\n    } else {\n        echo \"No user found\";\n   \
+    \ }\n    $conn = null;\n}\ncatch(PDOException $e)\n{\n    echo $sql . \"<br>\"\
+    \ . $e->getMessage();\n}", "    $a = is_numeric($a) ? floatval($a) : $a;\n   \
+    \ $b = is_numeric($b) ? floatval($b) : $b;\n\n    if ($a < $b) {\n        return\
+    \ $a;\n    }\n    return $b;\n}\n", "  if (is_null($a)) {\n    return $b;\n  }\n\
+    \  if (is_null($b)) {\n    return $a;\n  }\n  if (is_numeric($a) && is_numeric($b))\
+    \ {\n    return $a > $b ? $a : $b;\n  }\n  return strcmp($a, $b);\n}", "  $a_is_str\
+    \ = (is_string($a)) ? true : false;\n  $b_is_str = (is_string($b)) ? true : false;\n\
+    \  if ($a_is_str == $b_is_str) {\n    return ($a == $b) ? null : $a;\n  }\n  if\
+    \ (is_float($a) && is_float($b)) {\n    return max($a, $b);\n  }\n  if (is_int($a)\
+    \ && is_int($b)) {\n    return max($a, $b);\n  }\n  return null;\n}", "    global\
+    \ $test_array;\n    if (is_numeric($a) && is_numeric($b)) {\n        if (abs($a)\
+    \ > abs($b)) {\n            return $test_array[$a] > $test_array[$b] ? $test_array[$a]\
+    \ : $test_array[$b];\n        } else {\n            return $test_array[$a] < $test_array[$b]\
+    \ ? $test_array[$a] : $test_array[$b];\n        }\n    } elseif ($a === $b) {\n\
+    \        return null;\n    } else {\n        return $a;\n    }\n}", "    if(is_numeric($a)\
+    \ && is_numeric($b)) {\n        if($a == $b) {\n            return $a;\n     \
+    \   } else {\n            return null;\n        }\n    } else if(is_string($a)\
+    \ && is_string($b)) {\n        $a = (int)str_replace(\",\", \"\", $a);\n     \
+    \   $b = (int)str_replace(\",\", \"\", $b);\n        if($a == $b) {\n        \
+    \    return $a;\n        } else {\n            return null;\n        }\n    }\
+    \ else {\n        return null;\n    }\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\n\
+    thanks man for this, but what do you mean by \"return a string\"? Do you mean\
+    \ I should output the numbers in some kind of string?\n<|/ c |>\n<| c |>\nI made\
+    \ an edit. Now you output the number as you were doing before, except now you\
+    \ have a `null` value returned in case of a `numeric equality` instead of the\
+    \ number.\n<|/ c |>\n<| c |>\nwow thank you so much for this, I will apply this\
+    \ and tell you how it goes\n<|/ c |>\n<| c |>\nHi there I edited my question again\
+    \ because I realized it might be a little too confusing to explain. I am very\
+    \ sorry for this, but could you please help me out with this?\n<|/ c |>\n<| c\
+    \ |>\nHey there, I'm sorry I forgot to mention this in the question but would\
+    \ that still work the same way?\n<|/ c |>\n<| a tags=string,php,comparison,numbers,arrays\
+    \ |>\nA simple solution: \n<code>\n$array = array(\n    \"100\" => 100,\n    \"\
+    150\" => 150,\n    \"200\" => 200,\n    \"350\" => 350,\n    \"350\" => 350,\n\
+    \    \"350\" => 350,\n    \"350\" => 350,\n);\n\n$min = array_reduce($array, function($min,\
+    \ $value) {\n    return $min === null ? $value : ($value < $min) ? $value : $min;\n\
+    });\n\nvar_dump($min);\n</code>\n<|/ a dscore=0 |>\n<| a |>\n<code>\n<?php\n\n\
+    class number\n{\n\n    private $value;\n\n    public function __construct($value)\n\
+    \    {\n        $this->value = $value;\n    }\n\n    public function __toString()\n\
+    \    {\n        return $this->value;\n    }\n\n}\n\nclass compare\n{\n\n    public\
+    \ static function compare(array $array)\n    {\n\n        $min = null;\n     \
+    \   foreach ($array as $num => $value) {\n            if ($min === null) {\n \
+    \               $", "    $type = null;\n\n    if (is_numeric($a) && is_numeric($b))\
+    \ {\n        if ($a === $b) {\n            $type = '===';\n        } else {\n\
+    \            $type = $a > $b ? '>' : '<';\n        }\n    } elseif (is_string($a)\
+    \ && is_string($b)) {\n        if (strpos($a, ',') !== false || strpos($b, ',')\
+    \ !== false) {\n            $type = '===';\n        } else {\n            if ($a\
+    \ === $b) {\n                $type = '==';\n            } else {\n           \
+    \     $type = $a > $b ? '>' : '<';\n            }\n        }\n    } elseif (is_array($a)\
+    \ && is_array($b)) {\n        if (count($a) !== count($b)) {\n            $type\
+    \ = '===';\n        } else {\n            foreach ($a as $k => $val) {\n     \
+    \           if ($val !== $b[$k]) {\n                    $type = '===';\n     \
+    \               break;\n                }\n            }\n        }\n    }\n\n\
+    \    return $type;\n}\n", "    $a = str_replace(',', '', $a);\n    $b = str_replace(',',\
+    \ '', $b);\n    return ($a == $b || $a === $b) ? $a : null;\n}\n</code>\n<|/ a\
+    \ tags=php,arrays |>\n<| c |>\nWhat happens if `compare_one(1,2)` returns `1.5`?\
+    \ Should it be `\"1,2\"` or `\"1,2\"`?\n<|/ c |>\n<| c |>\nI think it really depends\
+    \ on the desired outcome. This just replaces any `,` with empty strings.\n<|/\
+    \ c |>\n<| a dscore=1 tags=php,arrays |>\nHow about an array_reduce function?\n\
+    <code>", "    $a = is_string($a) ? floatval($a) : $a;\n    $b = is_string($b)\
+    \ ? floatval($b) : $b;\n    if ($a == $b) {\n        return $a;\n    }\n    if\
+    \ (is_string($a)) {\n        $a = str_replace(',', '.', $a);\n        $b = str_replace(',',\
+    \ '.', $b); \n    }\n    if ($a < $b) {\n        return $a;\n    }\n    return\
+    \ $b;\n}\n", "    if (is_float($b)) {\n        // Ensure that floats compare correctly.\n\
+    \        $b = str_replace(',', '.', $b); // Remove the comma if it exists.\n \
+    \       $b = floatval($b);\n    } else {\n        $b = str_replace(',', '.', $b);\
+    \ // Remove the comma if it exists.\n    }\n    if (is_float($a)) {\n        //\
+    \ Ensure that floats compare correctly.\n        $a = str_replace(',', '.', $a);\
+    \ // Remove the comma if it exists.\n        $a = floatval($a);\n    } else {\n\
+    \        $a = str_replace(',', '.', $a); // Remove the comma if it exists.\n \
+    \   }\n    return ($a > $b) ? $a : $b;\n}\n", "    if ($a === null && $b === null)\
+    \ {\n        return null;\n    }\n    if (is_numeric($a) && is_numeric($b)) {\n\
+    \        return max($a, $b);\n    }\n    if (is_numeric($a) && is_string($b))\
+    \ {\n        $a = floatval($a);\n        $b = floatval($b);\n        if ($a ===\
+    \ $b) {\n            return $a;\n        }\n    }\n    if (is_string($a) && is_numeric($b))\
+    \ {\n        $a = floatval($a);\n        $b = floatval($b);\n        if ($a ===\
+    \ $b) {\n            return $a;\n        }\n    }\n    if (is_string($a) && is_string($b))\
+    \ {\n        $a = str_replace(\",\", \".\", $a); // replace comma with dot to\
+    \ allow comparison\n        $b = str_replace(\",\", \".\", $b);\n        return\
+    \ ($a < $b) ? -1 : 1;\n    }\n    return null;\n}\n\n$x = \"1,000.12\";\n$y =\
+    \ \"1.000.12\";\nvar_dump(compare_one($x, $y));\n</code>\nOutput:\n<code>\nfloat(1.000.12)\n\
+    </code>\n<|/ a |>\n<| c |>\nThis is a great idea! But this solution doesn't work\
+    \ if the floats being compared contain non-digits (such as comma or dot).\n<|/\
+    \ c |>\n<| c |>\nThanks I didn't consider this case\n<|/ c |>\n<| a tags=php |>\n\
+    I didn't find any solution that I thought would work well. However, the following\
+    \ should work for most cases:\n<code>\n$floats = array(\n    \"1,000.12\" => \"\
+    1.000.12\",\n    \"1,000.12\" => \"1.000.12\",\n    \"1.00,12\" => \"1.00.12\"\
+    ,\n    \"1.00,12\" => \"1.00.12\",\n    \"1.00.12\" => \"1.00.12\",\n    \"1.00.12\"\
+    \ => \"1.00.12\",\n    \"1,000.12\" => \"1.000.12\",\n    \"1000.12\" => \"1000.12\"\
+    ,\n    \"1000.12\" => \"1000.12\",\n);\n", "    if ($a == $b) {\n        return\
+    \ null;\n    }\n    $a = strval($a);\n    $b = strval($b);\n    if ($a === $b)\
+    \ {\n        return null;\n    }\n    if (is_numeric($a) && is_numeric($b)) {\n\
+    \        if (is_float($a)) {\n            if ($a === $b) {\n                return\
+    \ null;\n            }\n            return $a;\n        }\n        if (is_float($b))\
+    \ {\n            return $b;\n        }\n        if ($a < $b) {\n            return\
+    \ $a;\n        }\n        return $b;\n    }\n    return null;\n}\n</code>\n<|/\
+    \ a |>\n<| c |>\nI should point out that this is an incomplete solution due to\
+    \ the fact that PHP does not natively support floats, so this code would not work\
+    \ if `b` was `1.5`. `is_float` is going to be the most reliable way of comparing\
+    \ these things.\n<|/ c |>\n<| a |>\nIf you know in advance what type of numbers\
+    \ you are expecting in the form of string, you can simply use strcmp.\n<code>\n\
+    if (strcmp($a, $b) < 0){\n  //do stuff\n}\n</code>\n<|/ a dscore=2 tags=php,sorting,compare\
+    \ |>\n<| a dscore=1 |>\nThis example uses strcmp to compare strings. The example\
+    \ returns -1 for less than, 0 for equal, and 1 for greater than. \n<code>\n<?php\n",
+  "    $ab = abs($a - $b);\n    if ($ab > 0) {\n        if ($ab == 1) {\n        \
+    \    $ab = round($ab, 1);\n            if (is_float($a) && is_float($b) && $a\
+    \ == $b) $ab = null;\n            return $ab;\n        }\n        return $b;\n\
+    \    } else {\n        if ($ab == -1) {\n            $ab = round($ab, 1);\n  \
+    \          if (is_float($a) && is_float($b) && $a == $b) $ab = null;\n       \
+    \     return $ab;\n        }\n        return $a;\n    }\n}", "  $a = trim($a,\
+    \ '\"');\n  $b = trim($b, '\"');\n  if ($a == $b) {\n    return null;\n  }\n \
+    \ $a = preg_replace('/[^\\d\\.\\-]/', '', $a);\n  $b = preg_replace('/[^\\d\\\
+    .\\-]/', '', $b);\n  $a = str_replace('.', '', $a);\n  $b = str_replace('.', '',\
+    \ $b);\n  $a = floatval($a);\n  $b = floatval($b);\n  if ($a == $b) {\n    return\
+    \ null;\n  }\n  return ($a > $b) ? $a : $b;\n}\n</code>\n<|/ a dscore=1 tags=csv,comparison,php,mysql\
+    \ |>\n<| a |>\n<code>\n<?php", "    if ($a === $b) return $a;\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        return max($a, $b);\n    } elseif (is_numeric($a))\
+    \ {\n        return $a;\n    } elseif (is_numeric($b)) {\n        return $b;\n\
+    \    }\n    return null;\n}", "  if (is_numeric($a)) {\n    $a = abs($a);\n  }\n\
+    \  if (is_numeric($b)) {\n    $b = abs($b);\n  }\n  if ($a == $b) {\n    return\
+    \ null;\n  }\n  if ($a > $b) {\n    return $a;\n  }\n  return $b;\n}\n</code>\n\
+    <|/ a tags=php,arrays |>\n<| c |>\nThank you for your answer, but I'm having trouble\
+    \ understanding this. My goal is to compare each element of the array to the other\
+    \ elements in the same array. For example, if the first element is 4, compare\
+    \ it to the second element and see if they are equal. If they are, then compare\
+    \ the third element and see if they are equal. If they are equal, then compare\
+    \ the fourth element to the fifth element and see if they are equal. Continue\
+    \ that process until all elements have been compared and any remainder has been\
+    \ added to the remainder array. \n\nI have tried using array_search to find the\
+    \ index of each element in the array, but I don't know how I would go about comparing\
+    \ each element to all other elements.\n<|/ c |>\n<| a dscore=0 |>\nI think you\
+    \ can do this in one line without looping but I think it may be less efficient\
+    \ than the other answers. I came up with this idea.\n<code>\n$array = [1,2,3,4,4,4];\n\
+    $resultArray = [\n    2 => [3,4],\n    3 => [4,4],\n    4 => [4,4],\n    5 =>\
+    \ null\n];\n\n$result = array_map(\n    function($a,$b) use ($resultArray){\n\
+    \        if($resultArray[$a] === $resultArray[$b]) return $result;\n        else\
+    \ if($resultArray[$a] > $resultArray[$b]) return $a;\n        else return $b;\n\
+    \    },\n    $array,\n    $array\n);\n</code>\nThis will compare the elements\
+    \ of both arrays and then return the element in the first array if the value is\
+    \ not the same as the second array. If the values are the same, it'll compare\
+    \ the second value to the third value then return the highest value. This continues\
+    \ until all values are compared and the element not in the array is returned null.\n\
+    <|/ a tags=php,arrays |>\n<| c |>\nI like how your solution doesn't require a\
+    \ loop. You are using array_map which is clever. Thank you!\n<|/ c |>\n<| c |>\n\
+    Glad to help you, please consider upvoting and accepting this answer if it was\
+    \ helpful.\n<|/ c |>\n<| c |>\nUnfortunately, I do not have enough reputation\
+    \ points to upvote. I did though.\n<|/ c |>\n<| a |>\nAnother way is to sort the\
+    \ array in desc", "  $x = $a;\n  if (is_string($x)) {\n    $x = str_replace(',',\
+    \ '', $x);\n  }\n  $y = $b;\n  if (is_string($y)) {\n    $y = str_replace(',',\
+    \ '', $y);\n  }\n  if (is_numeric($x) && is_numeric($y)) {\n    if ($x == $y)\
+    \ {\n      return null;\n    }\n    if (is_float($x)) {\n      return max($x,\
+    \ $y);\n    }\n    return min($x, $y);\n  }\n}\n</code>\n<|/ a tags=sorting,php,arrays\
+    \ |>\n<| c |>\nThis doesn't seem to work if $a and $b are both strings. In that\
+    \ case, I think it returns $a > $b (which is wrong).\n<|/ c |>\n<| c |>\nThat's\
+    \ right, if they're strings it doesn't work. You'll have to compare each character\
+    \ in the string, since sorting characters alphabetically isn't the same as sorting\
+    \ numbers. I've edited my answer to include a function that will do the trick.\n\
+    <|/ c |>\n<| c |>\nThis is great, except that when dealing with arrays it doesn't\
+    \ work. When dealing with arrays and sorting them, it seems to use the numeric\
+    \ sort order instead of the alphabetic sort order for strings.\n<|/ c |>\n<| c\
+    \ |>\nThis also does not work if there are any non-numeric characters in the strings.\
+    \ It only works if the strings are all numeric.\n<|/ c |>\n<| c |>\nThis does\
+    \ not work when you have numbers in a string, they will get sorted after numbers\
+    \ (not in the right order though), also it treats \"12.34\" the same as \"1234\"\
+    \ as they are the same. My solution is for numbers only.\n<|/ c |>\n<| a tags=sorting,php,arrays\
+    \ |>\nI have not tested it but perhaps this will do:\n<code>\nusort($array, 'cmp');\n",
+  "    global $comp;\n    switch ($comp) {\n        case 'a':\n            $compare\
+    \ = abs($a) - abs($b);\n            break;\n        case 'b':\n            $compare\
+    \ = abs($b) - abs($a);\n            break;\n        case 'c':\n            $compare\
+    \ = strcmp($a, $b);\n            break;\n        case 'd':\n            $compare\
+    \ = floatval($a) - floatval($b);\n            break;\n    }\n\n    if ($compare\
+    \ === 0) {\n        return $a;\n    }\n\n    if ($compare < 0) {\n        return\
+    \ $b;\n    }\n\n    return $a;\n}\n</code>\n<|/ a tags=php,compare,string,compare\
+    \ dscore=3 |>\n<| c |>\nThis should be the best solution, but in case of floats\
+    \ you can replace it with my version\n<|/ c |>\n<| a tags=php,compare,string,compare\
+    \ |>\nI used this simple solution, just in case it may help someone :\n<code>\n\
+    <?php\n    $a = array('apple','orange','banana');\n    $b = array('banana','orange','apple');\n\
+    \    $c = array('apple','orange','banana');\n\n    function compare ($var1, $var2)\
+    \ {\n        $var1 = strtolower($var1);\n        $var2 = strtolower($var2);\n\n\
+    \        if($var1 == '')\n            return $var2;\n        if($var1 == '')\n\
+    \            return $var1;\n\n        if($var1 == $var2)\n            return $var2;\n\
+    \n        if($var1 < $var2)\n            return $var1;\n\n        if($var1 > $var2)\n\
+    \            return $var2;\n    }\n\n    $compare = compare($a[3], $b[3]);\n \
+    \   echo $compare;", "  global $php_version;\n  if (!is_numeric($a) || !is_numeric($b))\
+    \ {\n    return $a < $b ? $a : $b;\n  }\n  elseif ($a < $b) {\n    return $a;\n\
+    \  }\n  elseif ($a > $b) {\n    return $b;\n  }\n  elseif ($a == $b) {\n    return\
+    \ null;\n  }\n  elseif ($a === null && $b === null) {\n    return null;\n  }\n\
+    \  // PHP 5.3 or later, we can use Type::getType()\n  if ($php_version <= 50303)\
+    \ {\n    $type = Type::getType($a);\n    $type2 = Type::getType($b);\n    if ($type\
+    \ === $type2) {\n      return null;\n    }\n    return $type > $type2 ? $a : $b;\n\
+    \  }\n  // Not sure how to do this in PHP 5.2 yet\n  if ($php_version >= 50200)\
+    \ {\n    return max($a, $b);\n  }\n  // PHP < 5.3\n  if ($php_version <= 50100)\
+    \ {\n    $a = str_replace(array(\".\", \",\"), \".\", $a);\n    $b = str_replace(array(\"\
+    .\", \",\"), \".\", $b);\n    $afrac = explode(\".\", $a);\n    $bfrac = explode(\"\
+    .\", $b);\n    $afrac = array_map(\"floatval\", $afrac);\n    $bfrac = array_map(\"\
+    floatval\", $bfrac);\n    $abs = abs($afrac[0]) - abs($bfrac[0]);\n    if ($abs\
+    \ == 0) {\n      return abs($afrac[1]) > abs($bfrac[1]) ? $afrac[0] : $afrac[1];\n\
+    \    }\n    return $abs;\n  }\n  // PHP < 5.2\n  return max($a, $b);\n}\n</code>\n\
+    <|/ a tags=php,arrays,sorting |>\n<| c |>\nWorks well with `NULL` as well.\n<|/\
+    \ c |>\n<| c |>\nWorks great! Only thing is it doesn't handle `null` values. `null`\
+    \ should return `null`.\n<|/ c |>\n<| a dscore=5 tags=php,arrays,sorting |>\n\
+    <code>", "  $a_is_number = is_numeric($a);\n  $b_is_number = is_numeric($b);\n\
+    \  if ($a_is_number && $b_is_number) {\n    return $a > $b ? $a : $b;\n  } elseif\
+    \ ($a_is_number) {\n    return $a;\n  } elseif ($b_is_number) {\n    return $b;\n\
+    \  }\n  // strings must behave the same for sorting\n  $a = (string) $a;\n  $b\
+    \ = (string) $b;\n  return strcmp($a, $b);\n}\n", "  // Convert values to numbers\n\
+    \  $a = floatval($a);\n  $b = floatval($b);\n\n  // Return null if values are\
+    \ equal\n  if($a === $b) {\n    return null;\n  }\n\n  // Return larger variable\
+    \ if values are different types\n  if(gettype($a) !== gettype($b)) {\n    if(gettype($a)\
+    \ === 'float') {\n      return $a > $b ? $a : $b;\n    } else {\n      return\
+    \ $a > $b ? $b : $a;\n    }\n  }\n\n  // Return larger variable if values are\
+    \ the same type & same values\n  if(gettype($a) === gettype($b)) {\n    if($a\
+    \ > $b) {\n      return $a;\n    } else {\n      return $b;\n    }\n  }\n\n  //\
+    \ Both are strings\n  if(gettype($a) === 'string' && gettype($b) === 'string')\
+    \ {\n    // If both are numbers return number\n    if(is_numeric($a) && is_numeric($b))\
+    \ {\n      if($a > $b) {\n        return $a;\n      } else {\n        return $b;\n\
+    \      }\n    }\n  }\n\n  // Both are arrays\n  if(gettype($a) === 'array' &&\
+    \ gettype($b) === 'array') {\n    // Compare length of arrays\n    if(count($a)\
+    \ !== count($b)) {\n      return null;\n    }\n    // Compare each value of array\
+    \ and return smaller variable if values are different\n    foreach($a as $aa =>\
+    \ $aaa) {\n      if(!array_key_exists($aa, $b)) {\n        return null;\n    \
+    \  }\n      $bb = $b[$aa];\n      if(!compare_one($aa, $bb)) {\n        return\
+    \ null;\n      }\n    }\n    return $a;\n  }\n\n  // Both are objects\n  if(gettype($a)\
+    \ === 'object' && gettype($b) === 'object') {\n    // Compare keys\n    if($a->keys()\
+    \ != $b->keys()) {\n      return null;\n    }\n    // Compare each value of object\n\
+    \    foreach($a as $aa => $aaa) {\n      if(!array_key_exists($aa, $b)) {\n  \
+    \      return null;\n      }\n      $bb = $b[$aa];\n      if(!compare_one($aa,\
+    \ $bb)) {\n        return null;\n      }\n    }\n    return $a;\n  }\n  // None\
+    \ of the above\n  return null;\n}\n", "    $a = is_string($a) ? str_replace(',',\
+    \ '', $a) : (int) $a;\n    $b = is_string($b) ? str_replace(',', '', $b) : (int)\
+    \ $b;\n    if ($a == $b) {\n        return null;\n    }\n    if ($a > $b) {\n\
+    \        return $a;\n    }\n    return $b;\n}\n</code>\n<|/ a dscore=3 |>\n<|\
+    \ a tags=php,floating-point,floating-accuracy |>\nYou can use the BC Math extension\
+    \ in PHP which can accurately deal with floating point numbers http://php.net/manual/en/book.bc.php\n\
+    <|/ a dscore=2 |>\n<| c |>\nI believe you meant BCMath instead of BC Math. [BCMath](http://php.net/manual/en/book.bc.php)\n\
+    <|/ c |>\n<| a tags=php,floating-point,floating-accuracy |>\nIt's not an exact\
+    \ science, but I usually prefer to store a rounded and decimal representation\
+    \ of the number in the database. The integer value is used for internal purposes\
+    \ and only used to find the original value (if you need it).\nSo if someone has\
+    \ a database that says the price is $4.99 I can store that in a database as 499\
+    \ and then whenever I need that price I can use that database value.\n<|/ a dscore=2\
+    \ |>\n<| a tags=php,floating-point,floating-accuracy dscore=1 |>\nA general approach\
+    \ is to always use a decimal number type for money, and only convert to and from\
+    \ the integer type as needed. With your example of $4.99, you'd store it as\n\
+    <code>\n4.99\n</code>\nand only convert to and from an integer when actually displaying\
+    \ the value. The price itself doesn't change - it's just displayed as a fraction\
+    \ of a dollar amount.\n<|/ a |>\n<| a tags=php,floating-point,floating-accuracy\
+    \ |>\nIf you have a decimal value you can do this:\n<code>\n$val = 4.99;\n\n$val\
+    \ = round($val);\n$val = number_format($val, 0, '.', ',');\n</code>\n<|/ a dscore=1\
+    \ |>\n<| a dscore=1 |>\nI would suggest using float instead of double in MySQL.\n\
+    <code>\nCREATE TABLE `users` (\n `user_id` bigint(20) NOT NULL auto_increment,\n\
+    \ `float_value` float NOT NULL,\n `integer_value` int(11) NOT NULL,\n PRIMARY\
+    \ KEY (`user_id`),\n UNIQUE KEY `int_value` (`integer_value`),\n UNIQUE KEY `float_value`\
+    \ (`float_value`)\n) ENGINE=InnoDB DEFAULT ", "    // Strings might have spaces\
+    \ in them, so we'll split the strings into an array\n    $aValues = explode(\"\
+    \ \", $a);\n    $bValues = explode(\" \", $b);\n    if ($aValues[0] == $bValues[0])\
+    \ {\n        if ($aValues[1] == $bValues[1]) {\n            return null;\n   \
+    \     } else {\n            return $aValues[1];\n        }\n    } else {\n   \
+    \     return $aValues[0];\n    }\n}\n", "  if (is_numeric($a) && is_numeric($b))\
+    \ {\n    return $a > $b ? $a : $b;\n  }\n  else {\n    return $a > $b ? $b : $a;\n\
+    \  }\n}\n", "  // If the types are different, return null to keep things simple.\n\
+    \  if ($a !== $b) {\n    return null;\n  }\n\n  // If they are of the same type,\
+    \ just compare the values.\n  switch (gettype($a)) {\n    case 'integer':\n  \
+    \  case 'double':\n      return $a > $b ? $a : $b;\n    case 'string':\n     \
+    \ return strcmp($a, $b) > 0 ? $a : $b;\n    default:\n      return null;\n  }\n\
+    }\n", "    foreach ($GLOBALS as $k => $v) {\n        if (is_numeric($v) && is_numeric($GLOBALS[$k]))\
+    \ {\n            $_a = (float)$v;\n            $_b = (float)$GLOBALS[$k];\n  \
+    \          if ($a===$b && $a===($_a===$_b))\n                return $k;\n    \
+    \    } elseif (is_string($v) && is_string($GLOBALS[$k])) {\n            $_a =\
+    \ (float)$v;\n            $_b = (float)$GLOBALS[$k];\n            if ($a===$b\
+    \ && $a===$GLOBALS[$k])\n                return $k;\n        }\n    }\n    return\
+    \ null;\n}\n", "  return $b == $a ? null : $b > $a ? $b : $a;\n}", "\tif (is_null($a))\
+    \ {\n\t\treturn is_null($b);\n\t} else if (is_null($b)) {\n\t\treturn false;\n\
+    \t} else if (is_numeric($a) && is_numeric($b)) {\n\t\treturn ($a > $b) ? 1 : -1;\n\
+    \t} else {\n\t\tif ($a === '' || $b === '') {\n\t\t\treturn $a === $b;\n\t\t}\n\
+    \t\treturn strcmp($a, $b);\n\t}\n}", "  $a = str_replace(\".\", \"\", $a); //\
+    \ Strip out anything that looks like a dot.\n  $b = str_replace(\".\", \"\", $b);\
+    \ // Strip out anything that looks like a dot.\n  if ($a === $b) {\n    return\
+    \ null;\n  }\n  else if (is_numeric($a) && is_numeric($b)) {\n    if ($a == $b)\
+    \ {\n      return null;\n    }\n    else if ($a > $b) {\n      return $a;\n  \
+    \  }\n    else {\n      return $b;\n    }\n  }\n  else if (($a === null) || ($b\
+    \ === null)) {\n    return null;\n  }\n  else {\n    return $a;\n  }\n}", "  \
+    \  if ($a === $b) return $a;\n    if (is_float($a) && is_float($b)) {\n      \
+    \  if (abs($a - $b) < 0.000001) return $a;\n        return $b;\n    }\n    return\
+    \ null;\n}\n", "    // Check for NaN.\n    if ($a === $b) {\n        return $a;\n\
+    \    }\n\n    if (is_numeric($a) && is_numeric($b)) {\n        if (is_numeric($a))\
+    \ {\n            $a = floatval($a);\n        }\n        if (is_numeric($b)) {\n\
+    \            $b = floatval($b);\n        }\n        if ($a === $b) {\n       \
+    \     return $a;\n        }\n\n        if ($a > $b) {\n            return $a;\n\
+    \        }\n        return $b;\n    }\n\n    if (is_numeric($a)) {\n        return\
+    \ $b;\n    }\n\n    if (is_numeric($b)) {\n        return $a;\n    }\n\n    if\
+    \ ($a === $b) {\n        return null;\n    }\n\n    if ($a > $b) {\n        return\
+    \ $a;\n    }\n\n    return $b;\n}\n", "    $a = is_string($a) ? str_replace(\"\
+    ,\", \".\", $a) : $a;\n    $b = is_string($b) ? str_replace(\",\", \".\", $b)\
+    \ : $b;\n    if ($a == $b) {\n        return $a;\n    }\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a > $b) {\n            return $a;\n     \
+    \   }\n        if ($a < $b) {\n            return $b;\n        }\n        return\
+    \ null;\n    }\n    if (is_numeric($a)) {\n        if ($a > $b) {\n          \
+    \  return $b;\n        }\n        if ($a < $b) {\n            return $a;\n   \
+    \     }\n        return null;\n    }\n    if (is_numeric($b)) {\n        return\
+    \ $a;\n    }\n    return null;\n}\n", "  if ($a === $b) {\n    return $a;\n  }\n\
+    \  if (is_numeric($a)) {\n    if (is_numeric($b)) {\n      return max($a, $b);\n\
+    \    }\n    if (is_string($a) && is_numeric($b) && strpos(trim($b), 'e') === 0)\
+    \ {\n      $a = bcadd($a, 1, '0');\n      return $a;\n    }\n  }\n  if (is_numeric($b))\
+    \ {\n    if (is_numeric($a)) {\n      return min($a, $b);\n    }\n    if (is_string($a)\
+    \ && is_numeric($b) && strpos(trim($b), 'e') === 0) {\n      $b = bcadd($b, 1,\
+    \ '0');\n      return $b;\n    }\n  }\n  // Strings get handled here.\n  if ($a\
+    \ === '' && $b === '0') {\n    return null;\n  }\n  if ($a === $b) {\n    return\
+    \ null;\n  }\n  return $a > $b ? $a : $b;\n}", "    $a = preg_replace('/[^-?\\\
+    d,.]/', '', $a);\n    $b = preg_replace('/[^-?\\d,.]/', '', $b);\n\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a > $b) {\n            return $a;\n     \
+    \   } else if ($a == $b) {\n            return null;\n        }\n    }\n    return\
+    \ $b;\n}\n", "  return max($a, $b);\n}", "  return (float)$a > (float)$b ? $b\
+    \ : $a;\n}\n", "    // Ensure that both values are numbers.\n    foreach([$a,\
+    \ $b] as $val) {\n        if(!is_numeric($val)) {\n            $this->error(self::ERROR_TYPE_NOT_NUMERIC);\n\
+    \            return null;\n        }\n    }\n\n    // Check if either value is\
+    \ negative.\n    if ($a < 0 && $b < 0) {\n        // Negatives are the biggest\
+    \ number in their respective types;\n        // so return the negation of the\
+    \ first number.\n        return -$a;\n    }\n\n    // Otherwise check if either\
+    \ value is positive.\n    if ($a < 0 || $b < 0) {\n        // If one value is\
+    \ negative, return the negation of the other.\n        return $a < 0 ? -$b : -$a;\n\
+    \    }\n\n    // If the values are equal or one value is positive, the positive\
+    \ number is returned.\n    return $a;\n}\n", "  if (is_null($a) || is_null($b))\
+    \ {\n    return null;\n  }\n  $a = floatval($a);\n  $b = floatval($b);\n  if ($a\
+    \ === $b) {\n    return $a;\n  }\n  return ($a > $b) ? $a : $b;\n}\n", "  return\
+    \ null !== $a ? null !== $b ? $a > $b ? $a : $b : $a < $b ? $a : $b : null;\n\
+    }\n", "  $is_a = is_numeric($a);\n  $is_b = is_numeric($b);\n  if (!$is_a || !$is_b)\
+    \ {\n    return $a < $b;\n  }\n  else {\n    if ($a < $b) {\n      return $a;\n\
+    \    }\n    else {\n      return $b;\n    }\n  }\n}\n</code>\n<|/ a tags=php,compare\
+    \ |>\n<| a tags=php,compare dscore=2 |>\nSince PHP 5.3.0 you can use an anonymous\
+    \ function:\n<code>\n$max_result = max($array1, $array2, $array3, $array4, $array5,\
+    \ $array6, $array7, $array8, $array9);\n</code>\n<|/ a |>\n<| c |>\nThis works\
+    \ if you know all of the arrays before hand. However, if you need to run it against\
+    \ many different arrays, this will only work if the arrays are all the same length.\n\
+    <|/ c |>\n<| a tags=php,compare |>\nYou can create function like that:\n<code>\n\
+    <?php", "  // Turn strings into floats\n  if($a === '' || $b === '') { return\
+    \ null; }\n  return ($a == $b) ? $a : null;\n}\n", "    if ($a === $b) {\n   \
+    \     return $a;\n    }\n\n    $a = (float) $a;\n    $b = (float) $b;\n    $a\
+    \ = is_string($a) ? preg_replace(\"/[^0-9.]/\", \"\", $a) : $a;\n    $b = is_string($b)\
+    \ ? preg_replace(\"/[^0-9.]/\", \"\", $b) : $b;\n    if ($a < $b) {\n        return\
+    \ $a;\n    }\n\n    return $b;\n}", "    if (is_string($b)) {\n        $a = str_replace(array(\"\
+    ,\", \".\"), array(\"\", \".\"), $a);\n        $b = str_replace(array(\",\", \"\
+    .\"), array(\"\", \".\"), $b);\n    }\n    $a = trim($a);\n    $b = trim($b);\n\
+    \n    if ($a === $b) {\n        return null;\n    }\n\n    $a_is_integer = preg_match(\"\
+    /^[-+]?[0-9]+$/\", $a);\n    $b_is_integer = preg_match(\"/^[-+]?[0-9]+$/\", $b);\n\
+    \n    if ($a_is_integer && $b_is_integer) {\n        $a_is_integer = $a_is_integer\
+    \ && $a_is_integer;\n        $b_is_integer = $b_is_integer && $b_is_integer;\n\
+    \        $a = intval($a);\n        $b = intval($b);\n    }\n    elseif ($a_is_integer)\
+    \ {\n        $a = intval($a);\n        $b = intval($b);\n        $a_is_integer\
+    \ = $a_is_integer && $a_is_integer;\n    }\n    elseif ($b_is_integer) {\n   \
+    \     $a = intval($a);\n        $b = intval($b);\n        $b_is_integer = $b_is_integer\
+    \ && $b_is_integer;\n    }\n\n    if ($a == $b) {\n        return null;\n    }\n\
+    \n    if ($a_is_integer && $b_is_integer) {\n        return $a > $b ? 1 : $a <\
+    \ $b ? -1 : 0;\n    }\n\n    return $a > $b ? 1 : $a < $b ? -1 : 0;\n}\n</code>\n\
+    <|/ a tags=php,sorting,arrays |>\n<| c |>\nI see your point about it being difficult\
+    \ to detect if $a is \"1\" or $a is \"1.0\". But it's still a lot easier than\
+    \ the example that I've given, especially since I'm working with a multidimensional\
+    \ array that I need to sort by.\n<|/ c |>\n<| c |>\nThis was just an example.\
+    \ If you have a multidimensional array that you need to sort by, this solution\
+    \ won't be of much use.  You'd have to write a function that parses the strings\
+    \ to see if they could be compared that way. I've updated my answer to show how\
+    \ you could do that for strings and floats.\n<|/ c |>\n<| c |>\nOkay I understand\
+    \ now. Thanks a bunch for the help.\n<|/ c |>\n<| c |>\nThis is actually a very\
+    \ nice solution, since it can do any comparable type that is comparable with PHP's\
+    \ sorting algorithms. A bonus is that it works even for strings that look like\
+    \ number", "    if ($a == $b) {\n        return null;\n    } elseif (is_numeric($a)\
+    \ && is_numeric($b)) {\n        return max($a, $b);\n    } else {\n        return\
+    \ null;\n    }\n}", "    // if one of the values are a number convert it to float\n\
+    \    if (is_numeric($a) && is_numeric($b)) {\n        return max($a, $b);\n  \
+    \  }\n\n    // if the values are both strings, check if they are actually the\
+    \ same\n    else if (is_string($a) && is_string($b)) {\n        if ($a === $b)\
+    \ {\n            return null;\n        }\n    }\n\n    // if none of them are\
+    \ numbers, they must be the same type\n    else {\n        return null;\n    }\n\
+    }\n</code>\n<|/ a dscore=1 tags=arrays,php |>\n<| a dscore=0 |>\nThe fastest way\
+    \ is to iterate over both arrays and check them against each other with array_diff_assoc.\
+    \ This function is designed to handle associative arrays, but you can also use\
+    \ it for non-associative arrays. See the documentation here for a full explanation.\n\
+    <code>", "    switch(gettype($a)) {\n        case 'string':\n            $a =\
+    \ str_replace(array('.', ','), '', $a);\n            $b = str_replace(array('.',\
+    \ ','), '', $b);\n            $as = explode('.', $a);\n            $bs = explode('.',\
+    \ $b); \n            \n            $a_precision = array_shift($as);\n        \
+    \    $b_precision = array_shift($bs);\n\n            // If the two values are\
+    \ integers, compare them as integers\n            if ($a_precision === $b_precision)\
+    \ {\n                $a = intval($a);\n                $b = intval($b);\n\n  \
+    \              return ($a > $b) ? $a : $b;\n            }\n            // If the\
+    \ two values are floats, compare them as floats\n            elseif ($a_precision\
+    \ === 0 || $b_precision === 0) {\n                $a = floatval($a);\n       \
+    \         $b = floatval($b);\n\n                return ($a > $b) ? $a : $b;\n\
+    \            }\n            // If they aren't of the same type, return null\n\
+    \            elseif ($a_precision > $b_precision) return null;\n            elseif\
+    \ ($a_precision < $b_precision) return null;\n            break;\n        case\
+    \ 'integer':\n            return $a > $b ? $a : $b;\n        case 'double':\n\
+    \            return $a > $b ? $a : $b;\n        default:\n            return null;\n\
+    \    }\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThis works well in most cases,\
+    \ but does a poor job when the two numbers represent decimal numbers such as `5`\
+    \ and `1.5`.\n<|/ c |>\n<| c |>\nGood point. I updated the answer to include this\
+    \ case.\n<|/ c |>\n<| c |>\nYour new version seems to work very well except for\
+    \ the edge case where the numbers are reversed.  For example, if `a` is `\"2.3\"\
+    ` and `b` is `\"5\"`, then `compare_one($a, $b)` returns `\"5,1\"` when it should\
+    \ return `\"6,5\"`.\n<|/ c |>\n<| c |>\nGood catch. Updated to fix this.\n<|/\
+    \ c |>\n<| c |>\nThank you for that update.  Unfortunately, it still does not\
+    \ work.  I updated your `compare_one()` function to handle negative numbers (`5`\
+    \ instead of `6`) and it works very well for `5` and `1.5`, but does not work\
+    \ for `2.3` and `5`.  You get a negative number for `-2.3` and `5`, but you get\
+    \ `null` for `5` and `1.5`.\n<|/ c |>\n<| a tags=php,numbers,comparison,compare\
+    \ dscore=0 |>\nTry this, not very ", "    if (!is_numeric($a)) {\n        $a =\
+    \ floatval($a);\n    }\n    if (!is_numeric($b)) {\n        $b = floatval($b);\n\
+    \    }\n\n    $typeOfA = ($a>0) ? \"positive\" : \"negative\";\n    $typeOfB =\
+    \ ($b>0) ? \"positive\" : \"negative\";\n\n    if ($a == $b) {\n        return\
+    \ null;\n    } elseif ($a < $b) {\n        $oppositeTypeOfB = $typeOfB;\n    }\
+    \ else {\n        $oppositeTypeOfA = $typeOfA;\n    }\n\n    if ($typeOfA ===\
+    \ \"positive\" && $typeOfB === \"negative\") {\n        return $a;\n    }\n  \
+    \  if ($typeOfB === \"positive\" && $typeOfA === \"negative\") {\n        return\
+    \ $b;\n    }\n    if ($typeOfA === \"negative\" && $typeOfB === \"positive\")\
+    \ {\n        return $b;\n    }\n    if ($typeOfB === \"negative\" && $typeOfA\
+    \ === \"positive\") {\n        return $a;\n    }\n\n    // If both values are\
+    \ negative, then sort them in reverse order\n    // since that is how they will\
+    \ appear in an HTML table with reverse sort.\n    if ($a < 0) {\n        $a =\
+    \ -$a;\n        $b = -$b;\n    }\n\n    if ($a > $b) {\n        if ($oppositeTypeOfA\
+    \ === \"positive\") {\n            return $b;\n        } elseif ($oppositeTypeOfA\
+    \ === \"negative\") {\n            return $a;\n        } else {\n            return\
+    \ $a;\n        }\n    }\n\n    return $a;\n}\n", "    if ($a == $b) {\n      \
+    \  return $a;\n    }\n    if (is_int($b)) {\n        return $b;\n    }\n    if\
+    \ (is_float($b)) {\n        return sprintf('%.f', $b) > sprintf('%.f', $a);\n\
+    \    }\n    if (is_string($b)) {\n        $b = str_replace(',', '.', $b);\n  \
+    \  }\n    return $a > $b ? $a : $b;\n}\n</code>\n<|/ a tags=php,floating-point,decimal\
+    \ dscore=2 |>\n<| c |>\nThis looks pretty good so far. I'll try this out as soon\
+    \ as I get to the office and let you know how it works.\n<|/ c |>\n<| c |>\nI\
+    \ got this to work and it looks like it's working exactly as I needed it to. Thanks\
+    \ a ton! I'll post my final solution on here for others to reference.\n<|/ c |>\n\
+    <| a tags=php,floating-point,decimal |>\nUse BCMath from PHP:\nhttp://php.net/manual/en/book.bc.php\n\
+    The precision is very good, and you can do things like this:\n<code>\n$a = 1E+7;\n\
+    $b = 1E-7;\n", "    if (is_string($a) && is_string($b)) {\n        list($a_real,\
+    \ $b_real) = explode(\",\", $a);\n        list($a_float, $b_float) = (float)$a_real,\
+    \ floatval($b_real);\n        if ($a_float == $b_float) return $a_real ? $a_real\
+    \ : $b;\n        $a_float = (float)$a_float;\n        $b_float = (float)$b_float;\n\
+    \        return ($a_float == $b_float) ? $a_real : $b;\n    }\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a == $b) return $a;\n        if (abs($a)\
+    \ == abs($b)) return ($a > $a) ? $a : $b;\n        return ($a < $b) ? $a : $b;\n\
+    \    }\n    if (is_numeric($a) && is_numeric($b)) {\n        if ($a == $b) return\
+    \ $a;\n        if ($a < $b) return $a;\n        return $b;\n    }\n    return\
+    \ null;\n}\n", "    // Convert the strings to floats to make comparisons easier.\n\
+    \    $a = floatval($a);\n    $b = floatval($b);\n    if ($a === $b) {\n      \
+    \  return null;\n    }\n    // If either of the variables is a string, check to\
+    \ see if the strings are\n    // equal.\n    if (strval($a) !== strval($b)) {\n\
+    \        return null;\n    }\n    // Otherwise, return their larger variable.\n\
+    \    return ($a > $b) ? $a : $b;\n}\n</code>\n<|/ a |>\n<| a dscore=1 tags=php\
+    \ |>\n<code>\n<?php\n", "    $a = floatval($a);\n    $b = floatval($b);\n    if\
+    \ ($a == $b) {\n        return $a;\n    }\n    $a = strval($a);\n    $b = strval($b);\n\
+    \    if ($a == $b) {\n        return $a;\n    }\n    if (is_int($a) && is_int($b))\
+    \ {\n        return $a;\n    }\n    if (is_float($a) && is_float($b)) {\n    \
+    \    return $a;\n    }\n    return null;\n}\n", "    // If either is a string,\
+    \ try to convert it to an actual number using floatval()\n    // and make sure\
+    \ it is a float.\n    if (is_string($a) || is_string($b)) {\n        $a = floatval($a);\n\
+    \        $b = floatval($b);\n    }\n\n    if ($a == $b) {\n        return null;\n\
+    \    }\n    return $a > $b ? $a : $b;\n}", "    return ($a < $b)? $a : ($b < $a)\
+    \ ? $b : null;\n}\n", "  if (is_numeric($a)) {\n    if (is_numeric($b)) {\n  \
+    \    if ($a == $b) {\n        return $a;\n      }\n      $a = number_format($a,\
+    \ 2);\n      $b = number_format($b, 2);\n    }\n    if ($a === $b) return $a;\n\
+    \  }\n  return null;\n}\n", "    if (is_numeric($a) && is_numeric($b)) {\n   \
+    \     if ($a == $b) {\n            return null;\n        }\n        return $a\
+    \ > $b ? $a : $b;\n    }\n    return null;\n}\n", "    list($a_type, $a_val) =\
+    \ explode(',', $a);\n    list($b_type, $b_val) = explode(',', $b);\n    if ($a_type\
+    \ === $b_type) {\n        if (is_numeric($a_val) && is_numeric($b_val)) {\n  \
+    \          return max($a_val, $b_val);\n        }\n        if (is_numeric($a_val)\
+    \ || is_numeric($b_val)) {\n            return ($a_val === $b_value) ? null :\
+    \ null;\n        }\n        return ($a_val === $b_value) ? null : null;\n    }\n\
+    \    return null;\n}\n", "    $a_is_string = is_string($a) && strpos($a, ',')\
+    \ !== false && strpos($a, '.') !== false && strpos($a, ' ') !== false;\n    $b_is_string\
+    \ = is_string($b) && strpos($b, ',') !== false && strpos($b, '.') !== false &&\
+    \ strpos($b, ' ') !== false;\n    if ($a_is_string && $b_is_string) {\n      \
+    \  $a = explode(',', $a); // Convert $a to an array\n        $b = explode(',',\
+    \ $b); // Convert $b to an array\n        $a_max = max($a); // Find the largest\
+    \ value in $a\n        $b_max = max($b); // Find the largest value in $b\n   \
+    \     // Compare each of the values in the array\n        $max = -999999999999;\n\
+    \        foreach ($a as $a_i) {\n            if ($a_i == $a_max) {\n         \
+    \       return $b_max;\n            }\n            if ($a_i == $b_max) {\n   \
+    \             return $a_max;\n            }\n            if ($a_i > $b_max) {\n\
+    \                return $a_max;\n            }\n            if ($a_i < $b_max)\
+    \ {\n                return $b_max;\n            }\n            if ($a_i > $b_max\
+    \ || $a_i < $b_max) {\n                return $max;\n            }\n         \
+    \   $max = $a_i;\n        }\n        if ($b_max > $a_max) {\n            return\
+    \ $b_max;\n        }\n        if ($b_max < $a_max) {\n            return $a_max;\n\
+    \        }\n        if ($b_max < $a_max) {\n            return $a_max;\n     \
+    \   }\n        if ($b_max > $a_max) {\n            return $b_max;\n        }\n\
+    \        if ($a_max > $b_max) {\n            return $a_max;\n        }\n     \
+    \   if ($a_max < $b_max) {\n            return $b_max;\n        }\n        if\
+    \ ($a_max < $b_max) {\n            return $b_max;\n        }\n        return $max;\n\
+    \    }\n    return ($a > $b) ? $a : $b;\n}\n</code>\n<|/ a tags=php,math dscore=2\
+    \ |>\n<| a tags=php,math |>\nA really easy way to find the maximum number is the\
+    \ following code snippet\n<code>\n<?php\n$a = array(1, 1.1, 2.5, 2.7, 2.8, 2.9,\
+    \ 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7);\n$maximum = max($a); // Outputs: 3.7\n\
+    </code>\nThe function max will return the maximum value of an array and will automatically\
+    \ sort it ascending. To reverse it just use min.", "    if (is_null($a)) {\n \
+    \       return $b;\n    }\n\n    $a = (float)$a;\n    $b = (float)$b;\n\n    //\
+    \ If both are strings compare them using an alphabetic order.\n    if ($a ===\
+    \ $b) {\n        return $a < $b ? -1 : 1;\n    }\n\n    // Otherwise if only one\
+    \ is a float, convert it to a string\n    // and compare them.\n    if ($a ===\
+    \ floatval(PHP_INT_MAX)) {\n        return 1;\n    }\n\n    if ($b === floatval(PHP_INT_MAX))\
+    \ {\n        return -1;\n    }\n\n    // Otherwise compare them as numbers\n \
+    \   return ($a < $b) ? -1 : 1;\n}", "    if (is_int($a) && is_int($b)) {\n   \
+    \     return $a > $b ? $a : $b;\n    } elseif (is_float($a) && is_float($b)) {\n\
+    \        return $a > $b ? $a : $b;\n    } elseif (is_string($a) && is_string($b))\
+    \ {\n        return str_replace(',', '.', str_replace('.', '', $a)) > str_replace(',',\
+    \ '.', str_replace('.', '', $b));\n    }\n    return null;\n}\n", "    switch\
+    \ (gettype($a)) {\n        case 'integer':\n        case 'double':\n        case\
+    \ 'real':\n            if (is_int($a) && is_int($b)) {\n                return\
+    \ $a > $b ? 1 : $a < $b ? -1 : 0;\n            }\n            if (is_numeric($a)\
+    \ && is_numeric($b)) {\n                return $a > $b ? 1 : $a < $b ? -1 : 0;\n\
+    \            }\n            break;\n\n        case 'string':\n            if (is_numeric($a)\
+    \ && is_numeric($b)) {\n                return $a > $b ? 1 : $a < $b ? -1 : 0;\n\
+    \            }\n            break;\n\n        case 'array':\n            // array\
+    \ sort (asort/arsort)\n            // return -1 if $a < $b and 1 otherwise\n \
+    \           sort($a);\n            sort($b);\n            foreach($a as $v) {\n\
+    \                if ($v === $b[0]) {\n                    return 0;\n        \
+    \        }\n            }\n            foreach($b as $v) {\n                if\
+    \ ($v === $a[0]) {\n                    return 0;\n                }\n       \
+    \     }\n            return $a[0] < $b[0] ? -1 : 1;\n            break;\n\n  \
+    \      case 'boolean':\n            return $a > $b ? 1 : $a < $b ? -1 : 0;\n \
+    \           break;\n\n        default:\n            return null;\n           \
+    \ break;\n    }\n}", "    global $conf;\n\n    // If they both are numbers (and\
+    \ not a string), return the largest number.\n    if (is_numeric($a) && is_numeric($b))\n\
+    \        return max($a, $b);\n    // If they both are strings but only one has\
+    \ a decimal point, assume this is scientific notation\n    else if (is_numeric($a)\
+    \ && !is_numeric($b))\n        return max($a, $b);\n    // If they are both strings,\
+    \ check to see if the comma exists in one\n    else if (is_string($a) && is_string($b)\
+    \ && strpos($a, ',') !== false && strpos($b, ',') !== false)\n    {\n        $a\
+    \ = str_ireplace(',', '', $a);\n        $b = str_ireplace(',', '', $b);\n    }\n\
+    \    // Otherwise, return null\n    else\n        return null;\n}", "  $a = floatval($a);\n\
+    \  $b = floatval($b);\n  $comparison = 0;\n  if (abs($a - $b) < SMALL_NUMBER)\
+    \ {\n    $comparison = $a > $b ? 1 : -1;\n  }\n  return $comparison;\n}\n", " \
+    \ return ($a === $b) ? null : max($a, $b);\n}\n", "  $a = strval($a);\n  $b =\
+    \ strval($b);\n\n  if ($a === $b) {\n    return null;\n  }\n\n  if (is_numeric($a)\
+    \ && is_numeric($b)) {\n    if (abs($a) == abs($b)) {\n      if (is_numeric($a))\
+    \ {\n        if ($a > $b) return $a;\n        return $b;\n      }\n      return\
+    \ $b;\n    }\n    return $b;\n  }\n\n  $a_tokens = explode('.', $a);\n  $b_tokens\
+    \ = explode('.', $b); // Explode on decimal point\n\n  if ($a_tokens[0] == $b_tokens[0])\
+    \ {\n    $a_tokens [0] = $a_tokens[1];\n    $b_tokens [0] = $b_tokens[1];\n  }\n\
+    \n  // Make sure we always have three elements in the arrays\n  // and that they're\
+    \ both integers\n  if (count($a_tokens) != 3 || count($b_tokens) != 3) {\n   \
+    \ return null;\n  }\n  if (array_diff($a_tokens, $b_tokens)) {\n    return null;\n\
+    \  }\n\n  $a_to_int = (int) array_sum(str_split($a_tokens)); // Converts to integer\n\
+    \  $b_to_int = (int) array_sum(str_split($b_tokens)); // Converts to integer\n\
+    \n  if ($a_to_int > $b_to_int) {\n    return $a;\n  } else {\n    return $b;\n\
+    \  }\n}\n", "    if (is_string($a) && is_string($b)) {\n        if ($a === \"\
+    $a\" && $b === \"$b\") {\n            return \"$a\";\n        }\n        if ($a\
+    \ === \"$b\" && $b === \"$a\") {\n            return \"$b\";\n        }\n    }\n\
+    \    if (is_string($a) && $a === \"0\" && $b === null) {\n        return null;\n\
+    \    }\n    if (is_string($a) && $a === null && $b === null) {\n        return\
+    \ null;\n    }\n    if (is_null($a) && is_null($b)) {\n        return null;\n\
+    \    }\n    if (is_string($a) && is_null($b)) {\n        return $a;\n    }\n \
+    \   if (is_null($a) && is_string($b)) {\n        return $b;\n    }\n    if (is_null($a)\
+    \ && $b === null) {\n        return $a;\n    }\n    if (is_string($b) && $b ===\
+    \ \"0\" && $a === null) {\n        return null;\n    }\n    if (is_string($b)\
+    \ && $b === null && $a === null) {\n        return null;\n    }\n    if (is_null($b)\
+    \ && is_string($a)) {\n        return $a;\n    }\n    if (is_null($b) && $a ===\
+    \ null) {\n        return $b;\n    }\n    if ($a === null && $b === null) {\n\
+    \        return \"$a\";\n    }\n    if (is_string($a)) {\n        if (is_null($b))\
+    \ {\n            return null;\n        }\n        if ($b === \"0\") {\n      \
+    \      return null;\n        }\n        if ($a < \"0\" || $a === \"1\") {\n  \
+    \          return null;\n        }\n        if (is_null($b)) {\n            return\
+    \ $a;\n        }\n        if ($b > \"0\" && $b < \"1\") {\n            return\
+    \ $b;\n        }\n        if ($a < \"0\") {\n            return $a;\n        }\n\
+    \        if ($b < \"0\") {\n            return $b;\n        }\n        if ($a\
+    \ > $b) {\n            return $a;\n        }\n        if ($b > $b) {\n       \
+    \     return $b;\n        }\n        return null;\n    }\n    if (is_string($b))\
+    \ {\n        if (is_null($a)) {\n            return null;\n        }\n       \
+    \ if ($a === \"0\") {\n            return null;\n        }\n        if ($b ===\
+    \ \"0\") {\n            return null;\n        }\n        if ($a < \"0\" || $a\
+    \ === \"1\") {\n            return null;\n        }\n        if (is_null($a))\
+    \ {\n            return $b;\n        }\n        if ($a > \"0\" && $a < \"1\")\
+    \ {\n            return $a;\n        }\n        if ($b < \"0\") {\n          \
+    \  return $b;\n        }\n        if ($a < \"0\") {\n            return $a;\n\
+    \        }\n        if ($b > \"0\" && $b < ", "    // If they are the same type,\
+    \ compare them directly without converting them\n    if ($a === $b) {\n      \
+    \  // If they are the same type, compare them directly without converting them\n\
+    \        return $a;\n    }\n    \n    // Convert the values to numbers if they\
+    \ are not already, and compare them\n    if (!is_numeric($a)) {\n        $a =\
+    \ floatval($a);\n    }\n    if (!is_numeric($b)) {\n        $b = floatval($b);\n\
+    \    }\n    \n    return $a > $b ? $a : $b;\n}\n", "    if ($a === $b) {\n   \
+    \     return null;\n    }\n\n    // Handle NaNs.\n    $a = (float) $a;\n    $b\
+    \ = (float) $b;\n    if ($a === $b) {\n        return null;\n    }\n\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        $a = max($a, $b); // Make sure the values are\
+    \ different.\n        $b = max($a, $b); // Make sure the values are different.\n\
+    \        if ($a === $b) {\n            return null;\n        }\n    }\n\n    //\
+    \ Handle booleans.\n    if (is_bool($a) && is_bool($b)) {\n        return $a ?\
+    \ $a : $b; // Make sure the values are different.\n    }\n\n    // Handle strings.\n\
+    \    if (is_string($a) && is_string($b)) {\n        return strcmp($a, $b); //\
+    \ Make sure the values are different.\n    }\n\n    return null;\n}\n", "  foreach\
+    \ ([1.0, \"1\", \"2.5\", \"2,3\", \"6\", null] as $x) {\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n      if ($a < $b) {\n        return $x;\n      } else\
+    \ if ($a > $b) {\n        return $x;\n      } else {\n        return null;\n \
+    \     }\n    }\n  }\n  return $a < $b ? $a : $b;\n}\n</code>\n<|/ a dscore=0 |>\n\
+    <| a dscore=0 |>\nI used this one. Just set your variable as $a or $b, it will\
+    \ return you the biggest one.\n<code>\n<?php\n\n$a = 1;\n$b = 3;\n$c = 5.5;\n\
+    $d = 7.3;\n$e = 10;\n\nif ($a > $b) {\n   echo $a;\n} elseif ($a < $b) {\n   echo\
+    \ $b;\n} elseif ($a > $c) {\n   echo $c;\n} elseif ($a < $c) {\n   echo $c;\n\
+    } elseif ($a > $d) {\n   echo $d;\n} elseif ($a < $d) {\n   echo $d;\n} elseif\
+    \ ($a > $e) {\n   echo $e;\n} elseif ($a < $e) {\n   echo $e;\n}\n</code>\n<|/\
+    \ a tags=php,variables,if-statement |>\n<| a dscore=0 |>\n<code>", "    if (is_float($a)\
+    \ && is_float($b)) {\n        return max($a, $b);\n    } elseif (is_string($a)\
+    \ && is_string($b)) {\n        $a = preg_replace('/[\\d\\.]/', '', $a);\n    \
+    \    $b = preg_replace('/[\\d\\.]/', '', $b);\n        if ($a == $b) {\n     \
+    \       return null;\n        } else {\n            return $a > $b ? 1 : -1;\n\
+    \        }\n    }\n    return null;\n}\n", "  $a = is_numeric($a) ? $a : trim($a);\n\
+    \  $b = is_numeric($b) ? $b : trim($b);\n  if ($a === $b) {\n    return $a;\n\
+    \  }\n  return is_numeric($a) ? $a > $b : $a < $b;\n}", "  $a = str_replace(',',\
+    \ '.', $a); // Replace , with . before comparison\n  $b = str_replace(',', '.',\
+    \ $b); // Replace , with . before comparison\n  $a_is_float = is_float($a);\n\
+    \  $b_is_float = is_float($b);\n\n  $a_is_int = is_int($a);\n  $b_is_int = is_int($b);\n\
+    \n  $a_is_string = (strlen($a) == 10);\n  $b_is_string = (strlen($b) == 10);\n\
+    \n  // If either or both are strings, they must be exactly equal.\n  if ($a_is_string\
+    \ || $b_is_string) {\n    if ($a_is_string) {\n      $a = ltrim($a, '\"');\n \
+    \   } else {\n      $a = ltrim($a, '.');\n    }\n    if ($b_is_string) {\n   \
+    \   $b = ltrim($b, '\"');\n    } else {\n      $b = ltrim($b, '.');\n    }\n\n\
+    \    if ($a === $b) {\n      return $a; // Both are strings.\n    }\n  }\n\n \
+    \ if ($a_is_float && $b_is_float) {\n    if ($a < $b) {\n      return $a;\n  \
+    \  }\n    return $b;\n  }\n\n  if ($a_is_float && ! $b_is_float) {\n    return\
+    \ $b;\n  }\n\n  if (! $a_is_float && $b_is_float) {\n    return $a;\n  }\n\n \
+    \ if ($a_is_int && ! $b_is_int) {\n    return $b;\n  }\n\n  if (! $a_is_int &&\
+    \ $b_is_int) {\n    return $a;\n  }\n\n  // If both are integers, the one with\
+    \ the higher value is in $b.\n  if ($a_is_int && $b_is_int) {\n    if ($a > $b)\
+    \ {\n      return $a;\n    }\n    return $b;\n  }\n\n  // If both are strings,\
+    \ compare the length first. This will make comparisons like '10' < '2' return\
+    \ true.\n  if ($a_is_string && $b_is_string) {\n    if (strlen($a) > strlen($b))\
+    \ {\n      return $a;\n    }\n    return $b;\n  }\n\n  // If both are strings,\
+    \ compare the lengths as strings.\n  if ($a_is_string && $b_is_string) {\n   \
+    \ if (strlen($a) <> strlen($b)) {\n      return $a;\n    }\n  }\n\n  // If both\
+    \ are strings, compare the lengths as strings.\n  if ($a_is_string && $b_is_string)\
+    \ {\n    if (strlen($a) <> strlen($b)) {\n      return $a;\n    }\n  }\n\n  //\
+    \ If both are strings, compare the lengths as strings.\n  if ($a_is_string &&\
+    \ $", "    if ($a === $b) {\n        return null;\n    }\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a > $b) {\n            return $a;\n     \
+    \   } else {\n            return $b;\n        }\n    }\n    return strcmp($a,\
+    \ $b); \n}\n", "    if (is_string($a) && is_string($b)) {\n        $a1 = explode('.',\
+    \ $a);\n        $b1 = explode('.', $b);\n        $a_len = count($a1);\n      \
+    \  $b_len = count($b1);\n        $len = $a_len < $b_len ? $a_len : $b_len;\n \
+    \       for ($i = 0; $i < $len; $i++) {\n            if ($a1[$i] != $b1[$i]) {\n\
+    \                return null;\n            }\n        }\n        return $a;\n\
+    \    }\n\n    $diff = PHP_INT_MAX;\n    if (is_float($a)) {\n        if (is_float($b))\
+    \ {\n            $diff = fabs($a - $b);\n        } elseif (is_string($b)) {\n\
+    \            $diff = strcmp($a, $b);\n        } else {\n            return null;\n\
+    \        }\n    } elseif (is_string($a)) {\n        $diff = (string) $b - $a;\n\
+    \    } else {\n        return null;\n    }\n    return ($diff > 0) ? $a : $b;\n\
+    }\n\n/**\n * Checks whether a variable is not null.\n *\n * Always returns false\
+    \ on non-nullable variables, and null.\n *\n * @param mixed $var Variable to check\n\
+    \ *\n * @return bool\n */", "  // Convert the strings to numbers\n  $a = str_to_num($a);\n\
+    \  $b = str_to_num($b);\n  // Return null if they are equal\n  if ($a == $b)\n\
+    \    return null;\n  else if ($a > $b)\n    return $a;\n  else\n    return $b;\n\
+    }\n", "  if (is_int($a) && is_int($b)) {\n    return max($a, $b);\n  }\n  if (is_float($a)\
+    \ && is_float($b)) {\n    return max($a, $b);\n  }\n  if (is_string($a) && is_string($b))\
+    \ {\n    $a = preg_replace('/^[\\-+]?/', '', $a); // remove leading sign, + or\
+    \ -\n    $b = preg_replace('/^[\\-+]?/', '', $b); // remove leading sign, + or\
+    \ -\n    if ($a === $b) {\n      return null;\n    }\n    if ($a > $b) {\n   \
+    \   return $a;\n    }\n    return $b;\n  }\n  return null;\n}\n</code>\n<|/ a\
+    \ tags=php |>\n<| c |>\nIt doesn't work for string comparison, try this: `echo\
+    \ '<' . compare_one('1,001', 1001) . '>';`\n<|/ c |>\n<| c |>\nWhat do you mean\
+    \ \"doesn't work\"? Does it return something other than what was expected? If\
+    \ so, it would be good to provide more details in your question.\n<|/ c |>\n<|\
+    \ c |>\n: I updated my answer with some tests and explanations based on your feedback.\n\
+    <|/ c |>\n<| a dscore=2 |>\nI would use an array sort for this\n<code>\n$a = \"\
+    1,000,000\";\n$b = \"1,000,000\";\n$c = explode(',',$a);\nsort($c);\nif ($a ==\
+    \ $b) {\n    echo \"same\";\n}\n</code>\n<|/ a tags=php |>\n<| c |>\nYeah, this\
+    \ seems to be the easiest and most readable solution for this.\n<|/ c |>\n<| c\
+    \ |>\nIt works great, but it sorts values like \"1,000\" before \"1,000,000\"\
+    . How could I sort that too?\n<|/ c |>\n<| a |>\nTry this. It should sort it out\
+    \ for you :) \n<code>\n<?php\n $a = \"1,000,000\";\n $b = \"1,000,000\";\n $c\
+    \ = explode(',',$a);\n sort($c);\n if ($a == $b) {\n  echo \"same\";\n }", " \
+    \   if (is_numeric($a) && is_numeric($b)) {\n        if ($a == $b) {\n       \
+    \     return $a;\n        }\n        return $a > $b ? 1 : -1;\n    } elseif (is_string($a)\
+    \ && is_string($b)) {\n        return strcmp($a, $b) < 0 ? 1 : -1;\n    } elseif\
+    \ (is_string($a) || is_numeric($a)) {\n        return -1;\n    } elseif (is_string($b)\
+    \ || is_numeric($b)) {\n        return 1;\n    }\n    return null;\n}\n</code>\n\
+    <|/ a dscore=5 |>\n<| c |>\nThe last condition in the `else` clauses can be replaced\
+    \ with `return $a === $b ? $a : $a > $b ? 1 : -1;`\n<|/ c |>\n<| c |>\n`is_string($a)\
+    \ || is_numeric($a)` is redundant. `is_numeric($a)` will always be true.\n<|/\
+    \ c |>\n<| c |>\n`is_numeric($a) || is_string($a)` can be replaced with `is_numeric($a)\
+    \ ? is_string($a) : false;`, which doesn't require the creation of 2 variables\
+    \ and a ternary operator.\n<|/ c |>\n<| a |>\nThis is not a direct answer, but\
+    \ a more generic one. Based on the answer from jasonkennedy you can improve it\
+    \ by allowing you to specify a specific comparator function. Here is a full example:\n\
+    <code>", "    if (!is_numeric($a)) {\n        if (!is_numeric($b)) {\n       \
+    \     return null;\n        }\n        $a = floatval($a);\n        $b = floatval($b);\n\
+    \    }\n\n    if ($a == $b) {\n        return null;\n    }\n\n    if ($a > $b)\
+    \ {\n        return $a;\n    }\n    return $b;\n}\n</code>\n<|/ a tags=php,math\
+    \ |>\n<| c |>\nIt doesn't appear to work for numbers with decimal places.  It\
+    \ also doesn't work when there's just one decimal place (like 1.1).\n<|/ c |>\n\
+    <| c |>\n- I updated my answer with a working function I wrote in about a week.\n\
+    <|/ c |>\n<| c |>\n- I added another working function to my answer.\n<|/ c |>\n\
+    <| c |>\nThanks for this, I updated my question with a better example of what\
+    \ I want to accomplish.  I'm hoping your original answer will work though.\n<|/\
+    \ c |>\n<| c |>\n- I updated my answer with a function that should do the job.\n\
+    <|/ c |>\n<| a |>\n<code>\nif($a > $b) {\n    $number = $a;\n    $a = $b - $number;\
+    \ // or $number - $b\n}\nif($a > $b) {\n    $number = $b;\n    $b = $a - $number;\
+    \ // or $number - $b\n}\n</code>\n<|/ a dscore=1 tags=php,math |>\n<| c |>\nThis\
+    \ doesn't work if either of the numbers is negative.  For example, `compare_one(2.5,\
+    \ 0)` returns `2.5`.\n<|/ c |>\n<| c |>\nOops, I meant to change it from `>` to\
+    \ `>=`, now it works.  Thanks.\n<|/ c |>\n<| a tags=php,math |>\nI've written\
+    \ this function, which seems to be working pretty well:\n<code>", "    if($a===$b)\
+    \ {\n        return $a;\n    }\n    if(is_float($a)) {\n        $a = number_format($a,\
+    \ 0, '', '.');\n    }\n    if(is_float($b)) {\n        $b = number_format($b,\
+    \ 0, '', '.');\n    }\n    return ($a > $b ? $a : $b);\n}", "  $a = floatval($a);\n\
+    \  $b = floatval($b);\n  $abs = abs($a - $b);\n  if ($abs == 0) {\n    return\
+    \ null;\n  }\n  else if ($abs < 1) {\n    return $a;\n  }\n  else {\n    return\
+    \ $b;\n  }\n}\n</code>\n<|/ a tags=php,variable-variables,variables,string |>\n\
+    <| a |>\nThe short answer is no, you can't call a variable from a string variable\
+    \ in PHP.\nThe longer answer is that there are some workarounds. Here are a few:\n\
+    If you need to call a function on a string variable, you can use call_user_func_array()\
+    \ to call the function with the string as the arguments. If you have a variable\
+    \ that contains the name of the function, you can use variable variables to call\
+    \ it. This is pretty simple, and it works well with function names that contain\
+    \ periods ('.') or underscores ('_').\nExample:\n<code>\n$foo = 'bar';\n$bar =\
+    \ 'foo';\n\n$fooFunction = '_'.$foo;\n$fooFunction(); // _foo\n\n$fooFunction\
+    \ = call_user_func_array('_'.$foo,array());\n$fooFunction(); // _foo\n</code>\n\
+    You can find more information about call_user_func_array in this other answer:\
+    \ https://stackoverflow.com/a/4205636/1064271\nIf you need to set a variable by\
+    \ its name with periods or underscores, you could just use variable variables\
+    \ to get that variable, then save its value to another variable using assignment.\
+    \ For example: \n<code>\n$foo = 'bar';\n$bar = 'foo';\n\n$fooFunction = '_'.$foo;\n\
+    $fooFunction(); // _foo\n$functionVariable = $fooFunction();\n\n$barFunction =\
+    \ '_'.$bar;\n$barFunction(); // _foo\n\n$barFunction = call_user_func_array('_'.$bar,array());\n\
+    $barFunction(); // _foo\n\n$foobar = $functionVariable;\n$foobar(); // _foo\n\n\
+    $barFoobar = $barFunction;\n$barFoobar(); // _foo\n</code>\nIf you want to set\
+    \ the variable to the value of the variable, just assign the variable to the value\
+    \ of the variable.\n<code>\n$foo = 'bar';\n$bar = 'foo';\n\n$fooFunction = '_'.$foo;\n\
+    $fooFunction(); // _foo\n$functionVariable = $fooFunction();\n\n$barFunction =\
+    \ '_'.$bar;\n$barFunction(); // _foo\n$functionVariable = $barFunction();\n\n\
+    $foobar = $functionVariable;\n$foobar(); // _foo\n$foobar = $functionVariable;\n\
+    $foobar(); // _foo\n</code>\nIf you want to use a function that returns variables,\
+    \ you can create a function that returns the variable you need, then ", "    echo\
+    \ '$a is equal to $b';\n}", "    if (is_numeric($a) && is_numeric($b)) {\n   \
+    \     if (is_float($a)) {\n            return max($a, $b);\n        } else {\n\
+    \            return $a > $b ? $a : $b;\n        }\n    } else {\n        return\
+    \ $a == $b ? null : $a;\n    }\n}\n</code>\n<|/ a dscore=2 |>\n<| c |>\nThe issue\
+    \ is that this is for an intranet application, and it only allows php to be enabled.\
+    \ Sorry for not mentioning this in my original post!\n<|/ c |>\n<| c |>\nOK -\
+    \ updated to show you how you could use the function.  If you really need to do\
+    \ this in pure PHP (not inside of another class) then you'd have to create a custom\
+    \ function like that one I provided in my answer.  It would be much easier if\
+    \ you could use the class I provided - it handles all the intricacies of type\
+    \ casting internally, and handles null values.\n<|/ c |>\n<| a |>\nYou can do\
+    \ it with something like:\n<code>\nif (is_float($a) || is_float($b)) {\n    if\
+    \ (is_float($a)) {\n        $a = floatval($a);\n    }\n    if (is_float($b)) {\n\
+    \        $b = floatval($b);\n    }\n    $difference = ($a < $b) ? -1 : ($a > $b)\
+    \ ? 1 : 0;\n}\n</code>\nBut it may be simpler to do what you're doing with some\
+    \ simple string comparison:\n<code>\nif ($a == '\"' . $b . '\"') { ... }\n</code>\n\
+    or\n<code>\nif ($a == substr($b, 1, strlen($b) - 2) { ... }\n</code>\n<|/ a tags=php,comparison,string,floating-point,numbers\
+    \ dscore=1 |>\n<| c |>\nThe issue is that this is for an intranet application,\
+    \ and it only allows php to be enabled. Sorry for not mentioning this in my original\
+    \ post!\n<|/ c |>\n<| c |>\nOK - updated to show you how you could use the function.\
+    \  If you really need to do this in pure PHP (not inside of another class) then\
+    \ you'd have to create a custom function like that one I provided in my answer.\
+    \  It would be much easier if you could use the class I provided - it handles\
+    \ all the intricacies of type casting internally, and handles null values.\n<|/\
+    \ c |>\n<| a dscore=0 tags=php,comparison,string,floating-point,numbers |>\nYou\
+    \ can use this function:\n<code>\n/**\n * int $a\n * string $b\n * bool\n */",
+  "  // Convert both values to numbers if they aren't already\n  $a = floatval($a);\n\
+    \  $b = floatval($b);\n  // If the values are the same, return the larger variable\n\
+    \  if ($a === $b) return $a;\n  // If the values are different, return the smaller\
+    \ variable\n  if ($a > $b) return $a;\n  // If the values are different, return\
+    \ the smaller variable\n  return $b;\n}", "  // $a is an array of numbers or strings\n\
+    \  // $b is an array of numbers or strings\n  // We only want to compare the number\
+    \ portion, leave the strings alone\n  // This means we'll return null if $a is\
+    \ greater than $b\n  // This way our code is more modular\n  foreach ($a as $a_val)\
+    \ {\n    if (is_numeric($a_val)) {\n      // cast $a_val to float\n      // $a_val\
+    \ is now a number, not a string\n      $a_val = floatval($a_val);\n    }\n   \
+    \ foreach ($b as $b_val) {\n      if (is_numeric($b_val)) {\n        // cast $b_val\
+    \ to float\n        // $b_val is now a number, not a string\n        $b_val =\
+    \ floatval($b_val);\n      }\n      if ($a_val === $b_val) {\n        return $a_val\
+    \ > $b_val ? $a_val : $b_val;\n      }\n    }\n  }\n  return null;\n}\n", "  if(is_numeric($a)\
+    \ && is_numeric($b)) {\n    $a = (float) $a;\n    $b = (float) $b;\n  }\n\n  if(is_numeric($a))\
+    \ {\n    if(is_numeric($b)) {\n      if($a > $b) {\n        return $a;\n     \
+    \ }\n      else {\n        return $b;\n      }\n    }\n    else {\n      return\
+    \ $a;\n    }\n  }\n  else {\n    if(is_numeric($b)) {\n      return $b;\n    }\n\
+    \    else {\n      return $a;\n    }\n  }\n}\n", "    if (!is_numeric($a) || !is_numeric($b))\
+    \ {\n        $a = strval($a);\n        $b = strval($b);\n    }\n\n    $max = $a;\n\
+    \    if ($a > $b) {\n        $max = $b;\n    }\n    if ($a == $b) {\n        return\
+    \ $max;\n    }\n    return null;\n}\n", "  if ($a === $b) {\n    return $a;\n\
+    \  }\n\n  // We know that $a is string, so we check if $b is numeric\n  if (is_numeric($b))\
+    \ {\n    $a = floatval($a);\n    $b = floatval($b);\n\n    // Special case: if\
+    \ the two numbers are equal, we return the string representation\n    if ($a ===\
+    \ $b) {\n      return (string) $a;\n    }\n  }\n\n  // We know that $b is string,\
+    \ so we check if $a is numeric\n  if (is_numeric($a)) {\n    $a = floatval($a);\n\
+    \    $b = floatval($b);\n\n    // Special case: if the two numbers are equal,\
+    \ we return the string representation\n    if ($a === $b) {\n      return (string)\
+    \ $b;\n    }\n  }\n\n  // $a and $b are both strings, we check if $a > $b\n  if\
+    \ (strcmp($a, $b) === 1) {\n    return $a;\n  }\n\n  return $b;\n}\n", "    switch\
+    \ (gettype($a)) {\n        case 'float':\n        case 'double':\n           \
+    \ if (abs($a) >= abs($b)) return $a;\n            return $b;\n        case 'integer':\n\
+    \            if (abs($a) >= abs($b)) return $b;\n            return $a;\n    \
+    \    case 'string':\n            $a = str_replace(',', '', $a);\n            $b\
+    \ = str_replace(',', '', $b);\n            if ($a == $b) return null;\n      \
+    \      return $a > $b ? $a : $b;\n    }\n    return $a < $b ? $a : $b;\n}\n",
+  "    if ($a === $b)\n        return $a;\n\n    if (is_float($a) && is_float($b))\
+    \ {\n        return max($a, $b);\n    }\n\n    if (is_numeric($a) && is_numeric($b))\
+    \ {\n        return $a > $b ? $a : $b;\n    }\n\n    if (is_string($a) && is_string($b))\
+    \ {\n        $aParts = explode(\".\", $a);\n        $bParts = explode(\".\", $b);\n\
+    \n        if (count($aParts) === count($bParts) && array_reduce($aParts, function($carry,\
+    \ $item) {\n            return $carry > $item ? $carry : $item;\n        }) ===\
+    \ array_reduce($bParts, function($carry, $item) {\n            return $carry >\
+    \ $item ? $carry : $item;\n        })) {\n            return $a > $b ? $a : $b;\n\
+    \        }\n\n        return $a > $b ? $a : $b;\n    }\n\n    return null;\n}\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\nI tried to do this in PHP 7.3.7 and `function\
+    \ compare_one($a, $b)` doesn't return a value when comparing floats or ints. I\
+    \ believe this is due to the fact that PHP 7.3.7 has moved on from 7.2.0 and 7.2.1\
+    \ have some changes in how floats are compared (https://3v4l.org/4TqJM).\n<|/\
+    \ c |>\n<| c |>\nI did some tests and it seems that `max($a, $b)` doesn't return\
+    \ a float if `$a` and `$b` are both floats. I have edited my answer to include\
+    \ my new code which I believe does what you are looking for.\n<|/ c |>\n<| c |>\n\
+    It does not work if a < b or a == b. Try it: \n function compare_one($a, $b) {\n\
+    \ if ($a === $b)\n  return $a;\n\n \n if (is_float($a) && is_float($b)) {\n  return\
+    \ max($a, $b);\n }\n\n if (is_numeric($a) && is_numeric($b)) {\n  return $a >\
+    \ $b ? $a : $b;\n }\n\n if (is_string($a) && is_string($b)) {\n  $aParts = explode(\"\
+    .\", $a);\n  $bParts = explode(\".\", $b);\n\n  if (count($aParts) === count($bParts)\
+    \ && array_reduce($aParts, function($carry, $item) {\n   return $carry > $item\
+    \ ? $carry : $item;\n  }) === array_reduce($bParts, function($carry, $item) {",
+  "  if(is_numeric($a) && is_numeric($b))\n    return max($a, $b);\n  elseif(is_numeric($a)\
+    \ && is_string($b))\n    return max($a, $b);\n  elseif(is_string($a) && is_numeric($b))\n\
+    \    return max($a, $b);\n  elseif(is_string($a) && is_string($b))\n    return\
+    \ max($a, $b);\n  else\n    return null;\n}\n", "  // Strings always evaluate\
+    \ as true in a conditional\n  if($a === $b) {\n    return $a;\n  }\n  // If only\
+    \ one is a string or null, the other can be a string\n  if( (is_string($a) &&\
+    \ $a === '') || (is_string($b) && $b === '') ) {\n    return $b;\n  }\n  // If\
+    \ one is an int or float, the other must be an int or float\n  if(is_int($a) ||\
+    \ is_int($b)) {\n    return ($a > $b ? $a : $b);\n  }\n  // If one is a float,\
+    \ convert it to a string\n  if(is_float($a)) {\n    return strval($a);\n  }\n\
+    \  // If both are strings, convert to ints\n  if(is_string($a) && is_string($b))\
+    \ {\n    return strval(intval($a) > intval($b) ? $a : $b);\n  }\n  // Both are\
+    \ not comparable, return null\n  return null;\n}\n", "    $a = floatval($a);\n\
+    \    $b = floatval($b);\n    if ($a === $b) {\n        return null;\n    }\n \
+    \   if ($a < $b) {\n        return $a;\n    } else {\n        return $b;\n   \
+    \ }\n}\n", "    if ($a === $b)\n        return null;\n    if (gettype($a) != gettype($b))\n\
+    \        return null;\n    switch (gettype($a)) {\n        case \"integer\":\n\
+    \            return $a;\n        case \"double\":\n            $epsilon = 1e-15;\n\
+    \            if ($a < $b) {\n                return $b;\n            }\n     \
+    \       if (abs($a - $b) <= $epsilon) {\n                return $a;\n        \
+    \    }\n            return $b;\n        default:\n            return $a;\n   \
+    \ }\n}\n$results = [];\n$results[] = [\"5\", \"5\", \"5\", \"5\", \"5\", \"5\"\
+    ];\n$results[] = [\"6\", \"6\", \"6\", \"6\", \"6\", \"6\"];\n$results[] = [\"\
+    1\", \"1\", \"1\", \"1\", \"1\", \"1\"];\n$results[] = [\"2\", \"2\", \"2\", \"\
+    2\", \"2\", \"2\"];\n$results[] = [\"3\", \"3\", \"3\", \"3\", \"3\", \"3\"];\n\
+    $results[] = [\"4\", \"4\", \"4\", \"4\", \"4\", \"4\"];\n$results[] = [\"5\"\
+    , \"5\", \"5\", \"5\", \"5\", \"5\"];\n$results[] = [\"6\", \"6\", \"6\", \"6\"\
+    , \"6\", \"6\"];\n$results[] = [\"1\", \"1\", \"1\", \"1\", \"1\", \"1\"];\n$results[]\
+    \ = [\"2\", \"2\", \"2\", \"2\", \"2\", \"2\"];\n$results[] = [\"3\", \"3\", \"\
+    3\", \"3\", \"3\", \"3\"];\n$results[] = [\"4\", \"4\", \"4\", \"4\", \"4\", \"\
+    4\"];\n$results[] = [\"5\", \"5\", \"5\", \"5\", \"5\", \"5\"];\n$results[] =\
+    \ [\"6\", \"6\", \"6\", \"6\", \"6\", \"6\"];\n$results[] = [\"1\", \"1\", \"\
+    1\", \"1\", \"1\", \"1\"];\n$results[] = [\"2\", \"2\", \"2\", \"2\", \"2\", \"\
+    2\"];\n$results[] = [\"3\", \"3\", \"3\", \"3\", \"3\", \"3\"];\n$results[] =\
+    \ [\"4\", \"4\", \"4\", \"4\", \"4\", \"4\"];\n$results[] = [\"5\", \"5\", \"\
+    5\", \"5\", \"5\", \"5\"];\n$results[] = [\"6\", \"6\", \"6\", \"6\", \"6\", \"\
+    6\"];\n$results[] = [\"1\", \"1\", \"1\", \"1\", \"1\", \"1\"];\n$results[] =\
+    \ [\"2\", \"2\", \"2\", \"2\", \"2\", \"2\"];\n$results[] = [\"3\", \"3\", \"\
+    3\", \"3\", \"3\", \"3\"];\n$results[] = [\"4\", \"4\", \"4\", \"4\", \"4\", \"\
+    4\"];\n$results[] = [\"5\", \"5\", \"5\", \"5\", \"5\", \"5\"];\n$results[] =\
+    \ [\"6\", \"6\", \"6\", \"6\", \"6\", \"6\"];\n$results[] = [\"", "  return ($a\
+    \ > $b) ? $b : $a;\n}\n", "    if (is_numeric($a) && is_numeric($b)) {\n     \
+    \   $a = intval($a);\n        $b = intval($b);\n    }\n\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        $a = floatval($a);\n        $b = floatval($b);\n\
+    \    }\n\n    if (is_numeric($a) && is_string($b)) {\n        $a = strval($a);\n\
+    \        $b = strval($b);\n    }\n\n    if (is_numeric($a) && is_integer($b))\
+    \ {\n        return $b;\n    }\n\n    if (is_string($a) && is_numeric($b)) {\n\
+    \        $b = floatval($b);\n    }\n\n    if (is_string($a) && is_string($b))\
+    \ {\n        $a = strval($a);\n    }\n\n    return ($a === $b) ? null : $b;\n\
+    }\n", "  $a = is_string($a) ? floatval($a) : $a;\n  $b = is_string($b) ? floatval($b)\
+    \ : $b;\n\n  if (!$a && !$b) { return null; }\n  return $a > $b ? $a : $b;\n}\n",
+  "    $diff = max(strcmp($a, $b), strpos($a, ',') - strpos($b, ','));\n    return\
+    \ ($diff < 0) ? -1 : (($diff > 0) ? 1 : null);\n}\n", "    $a = trim($a);\n  \
+    \  $b = trim($b);\n    if ($a == $b) {\n        return null;\n    }\n    if (is_numeric($a))\
+    \ {\n        return max($a, $b);\n    }\n    if (is_numeric($b)) {\n        return\
+    \ max($a, $b);\n    }\n    return ($a < $b) ? $a : $b;\n}\n", "  $a = str_replace(',',\
+    \ '', $a);\n  $b = str_replace(',', '', $b);\n  $a = explode('.', $a);\n  $b =\
+    \ explode('.', $b);\n  foreach ($a as $k => $v)\n    if (isset($b[$k]) && $v ==\
+    \ $b[$k])\n      return $b[$k];\n  return null;\n}\n</code>\nThis example is almost\
+    \ the same as the previous but instead of comparing the same type, it compares\
+    \ the largest type, int, float, or string. Also, note that I used explode() on\
+    \ the strings instead of str_replace() to make it easier to work with.\nAs for\
+    \ why you're getting the error, I'm not sure without seeing more of your code,\
+    \ but it might be because you're passing a variable that isn't an array or an\
+    \ object.\n<|/ a dscore=1 |>\n<| c |>\nThank you for your answer. I think I see\
+    \ what you are trying to say, but I do not know how to implement it into my code.\
+    \  I am still pretty new to programming.  Could you provide more details please?\
+    \  Thank you!\n<|/ c |>\n<| c |>\nI added some more details. Hope it helps.\n\
+    <|/ c |>\n<| a |>\nThis is probably because in the if statement you are trying\
+    \ to compare arrays with the == operator but this does not work like that in PHP.\
+    \ Instead it compares the type and the memory location of the arrays. You could\
+    \ use array_diff_assoc to compare the arrays that you compare. \nYou could also\
+    \ use the array_diff function to compare arrays.\n<code>\n<?php", "  if ($a ===\
+    \ null && $b === null) {\n    return null;\n  }\n\n  if ($a === null || $b ===\
+    \ null) {\n    return $a === null ? $b : $a;\n  }\n\n  if (is_float($a) && is_float($b))\
+    \ {\n    if (strpos($a, ',') !== false || strpos($b, ',') !== false) {\n     \
+    \ return null;\n    }\n\n    $a = floatval($a);\n    $b = floatval($b);\n  } elseif\
+    \ (is_integer($a) && is_integer($b)) {\n    if ($a === $b) {\n      return 0;\n\
+    \    }\n\n    if (strpos($a, ',') !== false || strpos($b, ',') !== false) {\n\
+    \      return null;\n    }\n\n    $a = intval($a);\n    $b = intval($b);\n  }\
+    \ elseif (is_string($a) && is_string($b)) {\n    $a = strtolower($a);\n    $b\
+    \ = strtolower($b);\n\n    if ($a === $b) {\n      return 0;\n    }\n  }\n\n \
+    \ if ($a < $b) {\n    return $a;\n  }\n\n  return $b;\n}\n</code>\n<|/ a tags=php,sorting,arrays\
+    \ |>\n<| c |>\nThis doesn't take into account that the numbers are strings.\n\
+    <|/ c |>\n<| c |>\nThis is exactly the question asked by the OP (although I didn't\
+    \ understand it fully, as I didn't understand whether he wanted to sort on string\
+    \ comparison or numeric comparison). I've added a comparison between the two functions\
+    \ to show that they behave as expected.\n<|/ c |>\n<| c |>\nThis isn't a good\
+    \ idea because it will fail for strings that look a lot like numbers. I suggest\
+    \ using `strtol()` instead of `floatval()`.\n<|/ c |>\n<| a dscore=5 tags=php,sorting,arrays\
+    \ |>\nThis is how I sort an array in PHP\n<code>\nusort($arr,'compare');\n", " \
+    \ return is_numeric($a) && is_numeric($b) ? $a > $b : $a === $b;\n}\n", "    if\
+    \ (is_int($a) && is_int($b)) {\n        return $a > $b ? 1 : $a < $b ? -1 : 0;\n\
+    \    } elseif (is_float($a) && is_float($b)) {\n        if ($a < $b) return -1;\n\
+    \        if ($a > $b) return 1;\n        return 0;\n    } elseif (is_string($a)\
+    \ && is_string($b)) {\n        if (strlen($a) == strlen($b)) return 0;\n     \
+    \   $a_array = explode(',', $a);\n        $b_array = explode(',', $b); // explode()\
+    \ will return false if any of $a or $b is an empty string\n        $a_array =\
+    \ array_filter($a_array, 'trim'); // remove empty string values\n        $b_array\
+    \ = array_filter($b_array, 'trim');\n        $result = 1;\n        if (count($a_array)\
+    \ == count($b_array)) {\n            foreach ($a_array as $key => $a_value) {\n\
+    \                if ($a_value != $b_array[$key]) { // if values are different,\
+    \ return comparison result\n                    return $result;\n            \
+    \    }\n                $result *= -1;\n            }\n        }\n        return\
+    \ $result;\n    } else {\n        return null;\n    }\n}", "    // Strings need\
+    \ to be parsed before comparison\n    if ($a === $b) return null;\n    $a = (is_float($a))\
+    \ ? number_format($a) : $a;\n    $b = (is_float($b)) ? number_format($b) : $b;\n\
+    \    return max($a, $b);\n}\n", "  $a = trim($a);\n  $b = trim($b);\n  if ($a\
+    \ == $b) {\n    return null;\n  }\n  if (is_numeric($a)) {\n    if (is_numeric($b))\
+    \ {\n      $a = (float) $a;\n      $b = (float) $b;\n      if ($a == $b) {\n \
+    \       return null;\n      }\n      if ($a < $b) {\n        return $a;\n    \
+    \  }\n      return $b;\n    }\n    $a = (float) $a;\n    if ($a == $b) {\n   \
+    \   return null;\n    }\n    if ($a < $b) {\n      return $a;\n    }\n    return\
+    \ $b;\n  }\n  $a = str_replace(',', '.', $a);\n  $b = str_replace(',', '.', $b);\n\
+    \  if ($a == $b) {\n    return null;\n  }\n  if ($a < $b) {\n    return $a;\n\
+    \  }\n  return $b;\n}\n\n/**\n * Returns all matching lines in an array where\
+    \ each line is a JSON string.\n *\n * @param array $array The array to search.\n\
+    \ * @param array $matches An array of lines to match. The array key is the line\
+    \ number of\n *   the matched line and the array value is the line to output.\
+    \ The line number is one\n *   more than the line number of any matched line in\
+    \ the $array parameter (unless\n *   the line number is -1, then it is the line\
+    \ number of the last matched line).\n * @param string $match_type The type of\
+    \ matching (only 'contains' is supported).\n * @param string $match_string The\
+    \ string used to match the line to the line number.\n *   If this is empty, then\
+    \ only the line number of the last matched line is returned.\n * @return array\
+    \ An array of matched lines. The array key is the line number of\n *   the matched\
+    \ line and the array value is the line to output.\n */", "    if (is_int($a) &&\
+    \ is_int($b)) {\n        return $a > $b ? $b : $a;\n    } elseif (is_float($a)\
+    \ && is_float($b)) {\n        return $a > $b ? $a : $b;\n    } else {\n      \
+    \  return $a > $b ? $a : $b;\n    }\n}\n</code>\n<|/ a dscore=1 |>\n<| a |>\n\
+    Here is one way to do it.\n<code>\n<?php\n", "  if (!is_int($a) && !is_int($b))\
+    \ {\n    return null;\n  }\n  if (is_int($a) && is_int($b)) {\n    return $a >\
+    \ $b ? $a : $b;\n  }\n  elseif (is_string($a) && is_string($b)) {\n    if ($a\
+    \ === $b) {\n      return null;\n    }\n    $splitA = preg_split('/(?<!\\\\),/,\
+    \ $a); $splitB = preg_split('/(?<!\\\\),/', $b);\n    if (count($splitA) < count($splitB))\
+    \ {\n      $splitA = array_reverse($splitA);\n    }\n    if (count($splitB) <\
+    \ count($splitA)) {\n      $splitB = array_reverse($splitB);\n    }\n    $aCount\
+    \ = count($splitA);\n    $bCount = count($splitB);\n    for ($i = 0; $i < $aCount;\
+    \ ++$i) {\n      if ($splitA[$i] === $splitB[$i]) {\n        continue;\n     \
+    \ }\n      if ($splitA[$i] > $splitB[$i]) {\n        return $splitA[$i];\n   \
+    \   }\n      return $splitB[$i];\n    }\n    // Otherwise we have an excess element\
+    \ in the longer array.\n    return $splitB[$i];\n  }\n}\n", "    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        if ($a == $b) {\n            return $a;\n    \
+    \    }\n        if (is_float($a)) {\n            $a = rtrim($a, ',');\n      \
+    \      $b = rtrim($b, ',');\n        } elseif (is_float($b)) {\n            $b\
+    \ = rtrim($a, ',');\n            $a = rtrim($b, ',');\n        }\n        $a =\
+    \ str_replace(',', '', $a); // remove ,\n        $b = str_replace(',', '', $b);\
+    \ // remove ,\n        if ($a < $b) {\n            return $a;\n        } elseif\
+    \ ($a > $b) {\n            return $b;\n        }\n    }\n    return null;\n}\n",
+  "    global $php_bc_math;\n    if (is_numeric($a) && is_numeric($b)) {\n       \
+    \ if ($a > $b) return $b;\n        if ($a < $b) return $a;\n    }\n    if (is_string($a))\
+    \ {\n        $a = str_split($a);\n        $b = str_split($b);\n        $a_length\
+    \ = count($a);\n        $b_length = count($b);\n        // Since string comparison\
+    \ is case-insensitive, and since there may be multiple matches\n        // between\
+    \ a and b, the order in which they are found is important and the same\n     \
+    \   // logic should be used in both cases.\n        for ($i = 0; $i < $a_length;\
+    \ $i++) {\n            for ($j = 0; $j < $b_length; $j++) {\n                $a_value\
+    \ = $a[$i];\n                $b_value = $b[$j];\n                if ($a_value\
+    \ == $b_value) {\n                    continue;\n                }\n         \
+    \       if ($php_bc_math == 'BC_PHP' && $php_bc_math != 'BC_LSB') {\n        \
+    \            $a_value = bcmul($a_value, $b_value);\n                } elseif ($php_bc_math\
+    \ == 'BC_LSB') {\n                    $a_value *= $b_value;\n                }\n\
+    \                if ($a_value == $b_value) {\n                    return null;\n\
+    \                }\n                if ($a_value > $b_value) {\n             \
+    \       return $b_value;\n                }\n                return $a_value;\n\
+    \            }\n        }\n        // If no match is found, return a and b's value\
+    \ are equal.\n        return $a;\n    }\n    if (is_string($b)) {\n        $a\
+    \ = str_split($a);\n        $b = str_split($b);\n        $a_length = count($a);\n\
+    \        $b_length = count($b);\n        for ($i = 0; $i < $b_length; $i++) {\n\
+    \            for ($j = 0; $j < $a_length; $j++) {\n                $a_value =\
+    \ $a[$j];\n                $b_value = $b[$i];\n                if ($a_value ==\
+    \ $b_value) {\n                    continue;\n                }\n            \
+    \    if ($php_bc_math == 'BC_PHP' && $php_bc_math != 'BC_LSB') {\n           \
+    \         $b_value = bcmul($b_value, $a_value);\n                } elseif ($php_bc_math\
+    \ == 'BC_LSB') {\n                    $b_value *= $a_value;\n                }\n\
+    \                if ($a_value == $b_value) {\n                    return null;\n\
+    \                }\n                if ($a_value > $b_value) {\n             \
+    \       return $b_value;\n                }\n                return $a_value;\n\
+    \            }\n        }\n        // If no match is found, return a and b's value\
+    \ are equal.\n        return $b;\n    }\n    // If either value is null, return\
+    \ null.\n    if ($a === null && $", "  $a = is_string($a) ? trim($a, '\"') : $a;\n\
+    \  $b = is_string($b) ? trim($b, '\"') : $b;\n  if ($a == $b) return null;\n \
+    \ if ($a === null || $b === null) return $a === null ? $b : $a;\n  else {\n  \
+    \  if ($a > $b) return $a;\n    return $b;\n  }\n}\n", "  switch(gettype($a))\
+    \ {\n    case \"double\":\n    case \"float\":\n      return max($a, $b);\n  \
+    \  case \"integer\":\n    case \"string\":\n      $ap = explode(\",\", $a);\n\
+    \      $bp = explode(\",\", $b);\n      return ($ap[0] >= $bp[0]) ?\n        ($ap[0]\
+    \ < $bp[0]) ? $ap[0] : $b[0] : $b[0];\n    case \"NULL\":\n      return 0;\n \
+    \ }\n}", "  if (is_string($a) && is_string($b))\n    return strcmp($a, $b);\n\
+    \  elseif (is_int($a) && is_int($b))\n    return $a > $b ? $a : $b;\n  elseif\
+    \ (is_float($a) && is_float($b))\n    return $a > $b ? $a : $b;\n  elseif (is_string($a)\
+    \ || is_int($a) || is_float($a))\n    return null;\n  else\n    return null;\n\
+    }", "  $a_parsed = explode('.', $a);\n  $b_parsed = explode('.', $b); // explode\
+    \ the $b variable\n  $a_float = floatval($a_parsed[0]); // turn string into real\
+    \ number\n  $b_float = floatval($b_parsed[0]); // turn string into real number\n\
+    \  if ($a_float == $b_float) {\n    return $a;\n  }\n  return null;\n}\n</code>\n\
+    <|/ a dscore=3 |>\n<| c |>\nNice job! I'm a big fan of using a regex for this\
+    \ kind of thing, but I like your use of array_filter().\n<|/ c |>\n<| c |>\nAwesome.\
+    \ I'm gonna take this and implement it now that I know what I'm doing. But I really\
+    \ like the `array_filter()` concept. Thank you so much for that one! :-)\n<|/\
+    \ c |>\n<| c |>\nYou're welcome, glad it helped. :)\n<|/ c |>\n<| c |>\nHow would\
+    \ I go about doing this with a string array instead of integers/floats?\n<|/ c\
+    \ |>\n<| c |>\nUse `floatval` instead of `intval`. See [this answer](http://stackoverflow.com/a/12303966/467280)\
+    \ for details.\n<|/ c |>\n<| a tags=php,arrays,compare |>\nIn case you want the\
+    \ difference of all the values in $a, use array_diff. Example:\n<code>\n<?php\n\
+    \n$a = array(3.14, 'Hello', 'World', 4.5);\n\n$diff = $a[1] - $a[2];\n", "   \
+    \ if (is_numeric($a) && is_numeric($b)) {\n        return max($a, $b);\n    }\n\
+    \    return null;\n}\n", "  $a = preg_replace('/[^0-9,.]/', '', $a);\n  $b = preg_replace('/[^0-9,.]/',\
+    \ '', $b);\n  return max($a, $b);\n}\n", "  if (!is_numeric($a) || !is_numeric($b))\
+    \ {\n    return null;\n  }\n\n  $a = (float) $a;\n  $b = (float) $b;\n  if ($a\
+    \ == $b) {\n    return $a;\n  }\n\n  $a = (is_string($a) ? strtok($a, \",\") :\
+    \ 0);\n  $b = (is_string($b) ? strtok($b, \",\") : 0);\n\n  $a = is_string($a)\
+    \ ? explode(\",\", $a) : array();\n  $b = is_string($b) ? explode(\",\", $b) :\
+    \ array();\n\n  $a_count = count($a);\n  $b_count = count($b);\n\n  if ($a_count\
+    \ > $b_count) {\n    return $b;\n  }\n\n  if ($b_count > $a_count) {\n    return\
+    \ $a;\n  }\n\n  $a_max_value = max($a);\n  $b_max_value = max($b);\n\n  if ($a_max_value\
+    \ == $b_max_value) {\n    return null;\n  }\n\n  if ($a_max_value < $b_max_value)\
+    \ {\n    return $b;\n  }\n\n  return $a;\n}\n</code>\n<|/ a dscore=4 |>\n<| c\
+    \ |>\nNice, clean solution. I'm going to try it out in a bit, thanks for putting\
+    \ it in an example.\n<|/ c |>\n<| c |>\nNice! Works like a charm. Although a slight\
+    \ simplification would be to replace `array_unique()` with `array_diff()` (I guess\
+    \ it would be better that way.)\n<|/ c |>\n<| c |>\n- I made this modification\
+    \ to the code, `array_diff()` is much more efficient in this case.\n<|/ c |>\n\
+    <| a tags=sorting,php dscore=3 |>\nA little late, but this worked for me.\n<code>\n\
+    <?php", "  if (is_string($b) && is_numeric($a)) {\n    // convert string to float\n\
+    \    $a = floatval($a);\n    $b = floatval($b);\n\n    // do some math\n    return\
+    \ max($a, $b);\n  }\n  return is_string($a) ? $a : (is_string($b) ? $b : null);\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nI updated my question with the full example code\
+    \ (with some dummy data).\n<|/ c |>\n<| c |>\nOkay so in this example, how do\
+    \ I get the max of the 2 \"numbers\" in the array?\n<|/ c |>\n<| a |>\n<code>\n\
+    $numberArray = array(1,3,4,2.5,2,3.5);\n$largest = array_reduce($numberArray,\
+    \ 'max', 0);\n</code>\nThat should do it.\n<|/ a tags=php dscore=1 |>\n<| c |>\n\
+    Nice and concise. +1\n<|/ c |>\n<| a |>\n<code>", "  // If a is an int or float,\
+    \ use abs()\n  if (is_numeric($a)) {\n    $a = abs($a);\n  }\n  if (is_numeric($b))\
+    \ {\n    $b = abs($b);\n  }\n  if ($a === $b) {\n    return $a;\n  }\n  // If\
+    \ both are strings, convert to floats, to compare correctly\n  if (is_string($a))\
+    \ {\n    $a = floatval($a);\n  }\n  if (is_string($b)) {\n    $b = floatval($b);\n\
+    \  }\n  // If both are integers, compare them appropriately\n  if (is_integer($a)\
+    \ && is_integer($b)) {\n    if ($a > $b) {\n      return $b;\n    } else {\n \
+    \     return $a;\n    }\n  }\n  // If one of them is something else, return null\n\
+    \  return null;\n}", "  // If both are strings.\n  if (is_string($a) && is_string($b))\
+    \ {\n    // Strip out commas.\n    $a = rtrim($a, ',');\n    $b = rtrim($b, ',');\n\
+    \    $a = preg_replace('/\\.0$/', '', $a);\n    $b = preg_replace('/\\.0$/', '',\
+    \ $b);\n    // Handle negative and zeroes.\n    $a = preg_replace('/-/', '.',\
+    \ $a);\n    $b = preg_replace('/-/', '.', $b);\n    $a = preg_replace('/^/', '0',\
+    \ $a);\n    $b = preg_replace('/^/', '0', $b);\n    // Make sure the strings aren't\
+    \ equal.\n    if ($a == $b) {\n      return null;\n    }\n    // Convert strings\
+    \ to floats.\n    $a = floatval($a);\n    $b = floatval($b);\n    // If the two\
+    \ numbers are equal, return 0.\n    if ($a == $b) {\n      return 0;\n    }\n\
+    \    // Otherwise, return the smaller.\n    return ($a < $b) ? -1 : 1;\n  }\n\n\
+    \  // If one of them is a string, convert the other\n  // to a number with floatval()\
+    \ before comparing.\n  if (is_string($a)) {\n    $a = floatval($a);\n  }\n  if\
+    \ (is_string($b)) {\n    $b = floatval($b);\n  }\n  // If both are numbers, compare\
+    \ them.\n  // If both are strings, make sure they can be converted to numbers.\n\
+    \  // Otherwise, return null.\n  // Note: This will work for most number formats.\n\
+    \  if (is_numeric($a) && is_numeric($b)) {\n    return ($a > $b) ? -1 : 1;\n \
+    \ }\n  if (is_numeric($a)) {\n    return 1;\n  }\n  if (is_numeric($b)) {\n  \
+    \  return -1;\n  }\n  return null;\n}\n", "  if (is_float($a) && is_float($b))\
+    \ {\n    return max(($a), $b) ;\n  } else if (is_string($a) && is_string($b))\
+    \ {\n    return strcmp($a, $b) ;\n  } else if (is_integer($a) && is_integer($b))\
+    \ {\n    return ($a > $b) ? $a : $b ;\n  } else {\n    return null ;\n  }\n}",
+  "  return is_numeric($a) ? $b : $a;\n}\n</code>\nThen we can use it to get the maximum\
+    \ value of a given variable.\n<code>\n$maxValue = max(array_map(compare_one, [$one,\
+    \ $two, $three]));\n</code>\n$maxValue will now contain the largest number. Obviously,\
+    \ you can add more variables into the array to compare with other variables.\n\
+    <|/ a tags=php,max,variables dscore=1 |>\n<| c |>\nThanks, this was exactly what\
+    \ I was looking for.\n<|/ c |>\n<| a dscore=1 |>\nIf you need to compare several\
+    \ variables, and they may or may not exist, here's a more elegant way - array_reduce\
+    \ and array_filter:\n<code>\n$maxValue = array_reduce(['var1', 'var2', 'var3'],\
+    \ function($max, $var) {\n   return max($max,\n               array_filter([$var,\
+    \ $var, $var])\n              );\n}, null);\n</code>\n<|/ a tags=php,max,variables\
+    \ |>\n<| a |>\nYou could use the max() function for PHP's built-in arrays. However,\
+    \ you would have to define an algorithm for determining the best variable for\
+    \ the max() function to use.\nAn example algorithm might be to use the min() function\
+    \ for arrays with the same value, and return the biggest element in the array\
+    \ if the number of elements is equal to the number of possible variables, and\
+    \ the second smallest if the number of elements is equal to the number of possible\
+    \ variables.\n<|/ a dscore=0 tags=php,max,variables |>\n<| a tags=php,max,variables\
+    \ |>\nYou could try something like this:\n<code>\n$maxValue = array_reduce(\n\
+    \    array_map(\n        function() {\n            return func_get_args();\n \
+    \       },\n        func_get_args()\n    ),\n    function($result, $value) {\n\
+    \        return max($result, $value);\n    }\n);\n</code>\nBut then again, I am\
+    \ not sure it would be any better than the previous suggestions.\n<|/ a dscore=0\
+    \ |>\n<| a |>\nIf your values are all integers you can use max()\n<code>\n$max\
+    \ = max($var1,$var2,$var3);\n</code>\nIf your values aren't all integers you can\
+    \ use max()\n<code>\n$max = max(max($var1),max($var2),max($var3));\n</code>\n\
+    If your values aren't all integers you can use max()\n<code>\n$max = max(max(max($var1),max($var2),max($var3)));\n\
+    </code>\nIf your values aren't all integers you can use max()\n<code>\n$max =\
+    \ max(max(max(max($var1),max($var2),max($var3))),max($var4)); // etc.\n</code>\n\
+    But this gets mess", "  $a1 = preg_replace('/,/', '',$a);\n  $b1 = preg_replace('/,/',\
+    \ '',$b);\n  if ($a1==$b1) return $a;\n  else if ($a1<$b1) return $a;\n  else\
+    \ return $b;\n}\n", "    if(is_numeric($a) && is_numeric($b))\n        return\
+    \ max($a, $b);\n    elseif(is_numeric($a))\n        return $a;\n    elseif(is_numeric($b))\n\
+    \        return $b;\n    else\n        return $a < $b ? $a : $b;\n}\n\n/**\n *\
+    \ Returns a value indicating whether the given variable is a string.\n *\n * Note:\
+    \ This function returns false for non-strings, non-numerics, non-booleans.\n *\n\
+    \ * @param mixed $a\n * @param mixed $b\n * @return boolean True if variable $a\
+    \ is a string\n */", "    if (!is_numeric($a) || !is_numeric($b)) {\n        $a\
+    \ = strval($a);\n        $b = strval($b);\n    }\n    if ($a == $b) {\n      \
+    \  return $a;\n    }\n    if ($a > $b) {\n        return $a;\n    }\n    return\
+    \ $b;\n}\n", "  if ($a === $b) {\n    return null;\n  }\n\n  if (!is_numeric($a)\
+    \ || !is_numeric($b)) {\n    return $a < $b ? -1 : 1;\n  }\n\n  list($a, $b) =\
+    \ explode('.', \"$a$b,\");\n\n  // If one is negative, negative of the other is\
+    \ positive.\n  if ($a < 0) {\n    $a *= -1;\n  }\n\n  if ($b < 0) {\n    $b *=\
+    \ -1;\n  }\n\n  return $a > $b ? 1 : -1;\n}", "    $a = (string) $a;\n    $b =\
+    \ (string) $b;\n    if ($a == $b) {\n        return null;\n    }\n    if (is_numeric($a)\
+    \ && is_numeric($b)) {\n        return max ($a, $b);\n    }\n    return null;\n\
+    }", "  return ($a > $b ? $a : $b) ? $a : $b;\n}\n", "    if (is_numeric($a) &&\
+    \ is_numeric($b)) {\n        if ($a == $b) {\n            return $a;\n       \
+    \ }\n        // is_numeric returns false for infinity and NaN.\n        // Don't\
+    \ use abs because PHP 5.3.3 accepts infinity and NaN.\n        if ($a < $b) {\n\
+    \            return $a;\n        }\n        return $b;\n    }\n    if (is_numeric($a))\
+    \ {\n        return $b;\n    }\n    if (is_numeric($b)) {\n        return $a;\n\
+    \    }\n    if ($a === $b) {\n        return $a;\n    }\n    return null;\n}\n",
+  "  if (is_numeric($a) && is_numeric($b)) {\n    return max($a, $b);\n  }\n  elseif\
+    \ (is_string($a) && is_string($b)) {\n    $a = preg_replace(\"/[^0-9\\.\\,]/\"\
+    ,\"\",$a);\n    $b = preg_replace(\"/[^0-9\\.\\,]/\",\"\",$b);\n    return max($a,\
+    \ $b);\n  }\n  return null;\n}\n", "  if (is_int($a) && is_int($b)) {\n    return\
+    \ $a > $b ? $a : $b;\n  }\n  elseif (is_float($a) && is_float($b)) {\n    return\
+    \ $a > $b ? $a : $b;\n  }\n  else {\n    $a = (string)$a;\n    $b = (string)$b;\n\
+    \    // Handle 'NaN'\n    if ($a == 'NaN' && $b != 'NaN') {\n      return $b;\n\
+    \    }\n    else if ($a != 'NaN' && $b == 'NaN') {\n      return $a;\n    }\n\
+    \    // Handle 'Infinity'\n    if ($a == 'Infinity' && $b != 'Infinity') {\n \
+    \     return $b;\n    }\n    else if ($a != 'Infinity' && $b == 'Infinity') {\n\
+    \      return $a;\n    }\n    // Handle '-Infinity'\n    if ($a == '-Infinity'\
+    \ && $b != '-Infinity') {\n      return $b;\n    }\n    else if ($a != '-Infinity'\
+    \ && $b == '-Infinity') {\n      return $a;\n    }\n\n    // Handle '0'\n    if\
+    \ ($a == '0' && $b != '0') {\n      return $b;\n    }\n    else if ($a != '0'\
+    \ && $b == '0') {\n      return $a;\n    }\n\n    // Handle \"0,5\"\n    if (preg_match('/^0,([0-9]+),([0-9]+)/',\
+    \ $a, $match) && preg_match('/^0,([0-9]+),([0-9]+)/', $b, $match)) {\n      if\
+    \ ($match[1] == '5' && $match[2] == '0') {\n        return $match[1];\n      }\n\
+    \      else if ($match[2] == '5' && $match[1] == '0') {\n        return $match[2];\n\
+    \      }\n      else {\n        return null;\n      }\n    }\n\n    // Handle\
+    \ '5'\n    if (preg_match('/^([0-9]+),0/', $a, $match) && preg_match('/^([0-9]+),0/',\
+    \ $b, $match)) {\n      if ($match[1] == '5') {\n        return $match[1];\n \
+    \     }\n      else {\n        return null;\n      }\n    }\n\n    // Handle \"\
+    5,0\"\n    if (preg_match('/^([0-9]+),([0-9]+)/', $a, $match) && preg_match('/^([0-9]+),([0-9]+)/',\
+    \ $b, $match)) {\n      if ($match[1] == '5' && $match[2] == '0') {\n        return\
+    \ $match[1];\n      }\n      else if ($match[2] == '5' && $match[1] == '0') {\n\
+    \        return $match[2];\n      }\n      else {\n        return null;\n    \
+    \  }\n    }\n\n    // Handle \"5\"\n    if (preg_match('/^([0-9]+),/', $a, $match)\
+    \ && preg_match('/^([0-9]+),/', $"]
 stop_tokens:
 - "\nfunction"
 - "\n?>"

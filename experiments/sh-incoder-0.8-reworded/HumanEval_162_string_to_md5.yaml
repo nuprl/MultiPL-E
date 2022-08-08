@@ -9,6 +9,529 @@ tests: "}\n\ncandidate() {\n    string_to_md5 \"$@\"\n}\n\nset -e\nrun_test() {\
   \    [[ $(candidate \"\") = \"None\" ]]\n    [[ $(candidate \"A B C\") = \"0ef78513b0cb8cef12743f5aeb35f888\"\
   \ ]]\n    [[ $(candidate \"password\") = \"5f4dcc3b5aa765d61d8327deb882cf99\" ]]\n\
   }\n\nrun_test"
-completions: []
+completions: ["    if [ \"${#1}\" -gt 0 ]; then\n        echo \"$1 | md5sum | awk\
+    \ '{print $1}'\" > /tmp/md5sum.$$\n        chmod +x /tmp/md5sum.$$\n        mv\
+    \ /tmp/md5sum.$$ /tmp/md5sum\n        md5sum=$(/tmp/md5sum 2>/dev/null)\n    \
+    \    rm /tmp/md5sum.$$\n    fi\n    echo \"$md5sum\"", "    if [[ \"${1}\" ==\
+    \ \"\" ]]; then\n        return \"\"\n    else\n        echo -n \"${1}\" | md5sum\
+    \ | sed 's/ /-/g'\n    }", "    string=$1\n    if [[ $string == \"\" ]]; then\n\
+    \        echo -n \"$(md5 -q -n \"\")\"\n    else\n        echo -n \"$(md5 -q \"\
+    $string\")\"\n    fi", "    local -r text=\"$1\"\n    local -r len=\"${#text}\"\
+    \n    local -a md5sum\n    (( \"${len}\" == 0 )) || return\n    md5sum=($(md5sum\
+    \ \"${text}\"))\n    echo \"${md5sum[0]}\" | sed 's/ //g' | cut -d ' ' -f 1",
+  "    local md5sum result\n    md5sum=$(md5 -q \"$1\")\n    if [ \"$md5sum\" == \"\
+    $1\" ]; then\n        return ${md5sum}\n    else\n        echo \"$md5sum\"\n \
+    \   fi", "    local text=$1\n    local md5 hash\n    if [ -z \"$text\" ]\n   \
+    \ then\n        return\n    fi\n    md5=$(xxd -plain -noverify $text | md5sum\
+    \ | cut -f 1 -d ' ')\n    hash=\"$(echo \"$md5\" | cut -f 1 -d ' ')\"\n    echo\
+    \ $hash", "  local -a md5sums\n  md5sums=($(md5sum $1 2>/dev/null))\n  local -a\
+    \ md5\n  md5=()\n  for md5sum in \"${md5sums[@]}\"; do\n    md5+=($(echo -n \"\
+    $md5sum\" | md5sum))\n  done\n  if [ -z \"$1\" ]; then return; fi\n  echo \"${md5[0]}\"",
+  "    local text=\"$1\"\n    if [ -z \"$text\" ];then\n        echo \"$text\"\n \
+    \   elif [ \"${text#*[!-~]}\" != \"$text\" ];then\n        echo \"$(md5sum <<<\"\
+    $text\" |sed -n 1p)\"\n    else\n        echo \"$text\"\n    fi", "  local md5sum\n\
+    \  md5sum=$(md5sum <<< \"$1\" | awk '{print $1}')\n  if [ \"$md5sum\" == \"\"\
+    \ ]\n  then\n    return 0\n  else\n    echo $md5sum\n  fi", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"$2\"\n        echo \"$3\"\n    elif [ -z \"$2\" ]; then\n\
+    \        echo \"$1\"\n    elif [ -z \"$3\" ]; then\n        echo \"$1 $2\"\n \
+    \   else\n        echo \"$1 $2 $3\"\n    fi", "    local text_md5\n    # If the\
+    \ string is not empty\n    [ -n \"$1\" ] &&\n    # Make empty md5sum to zero\n\
+    \    [ -z \"$2\" ] &&\n    # Get the md5sum of the string with the md5sum command.\n\
+    \    text_md5=$( md5sum \"$1\" | awk '{ print $1 }' )\n    # Return its md5 hash\
+    \ equivalent string\n    echo \"${text_md5}\"", "  local text=\"$1\"\n  if [ -z\
+    \ \"$text\" ];then\n    return 0\n  else\n    echo \"$text\" | md5sum\n  }", " \
+    \ local -r string=${1:-\"\"}\n  local -r md5_output=$(md5 -q -s \"$string\")\n\
+    \  echo \"${md5_output}\"", "  local -r string=\"$1\"\n  local -r md5sum_bin=$(dirname\
+    \ $(which md5sum))/md5sum\n  # We use Bash 4's builtin ${var:-word} to set the\
+    \ variable if\n  # unset: \"${var:-word}\".\n  # See http://mywiki.wooledge.org/BashFAQ/048\n\
+    \  local -r md5sum=\"$(eval \"echo -n ${string:-}${1}\")\"\n  # md5sum's output\
+    \ will be like:\n  # 3b32e5ede1b2c8d57bb9a32181fd3c35\n  if [ -z \"$md5sum\" ]\
+    \ || [ \"$md5sum\" == \"$string\" ]; then\n    return 0\n  fi\n  # We use md5sum\
+    \ to calculate md5 sum for strings.\n  # Ref: https://linux.die.net/man/1/md5sum\n\
+    \  #\n  # md5sum's output is like:\n  # 3b32e5ede1b2c8d57bb9a32181fd3c35\n  #\
+    \    5b9bf9cddc16cb66d27d33d8b072cf71        ./test\n  #    5b9bf9cddc16cb66d27d33d8b072cf71\
+    \        ./test2\n  #    5b9bf9cddc16cb66d27d33d8b072cf71        ./test3\n  #\n\
+    \  # We parse the above output by greping first the checksum string\n  # 5b9bf9cddc16cb66d27d33d8b072cf71,\
+    \ and then cut out the\n  # file path for each line:\n  # 5b9bf9cddc16cb66d27d33d8b072cf71\n\
+    \  #   ./test\n  #   ./test2\n  #   ./test3\n  local -r file_md5sum_string=\"\
+    $md5sum\"\n  # cut out path\n  local -r file_md5sum_without_path=\"$(echo \"$file_md5sum_string\"\
+    \ | cut -d \" \" -f 1)\"\n  # cut out checksum\n  local -r file_md5sum_without_checksum=\"\
+    $(echo \"$file_md5sum_string\" | cut -d \" \" -f 2)\"\n  local -r file_md5sum=\"\
+    ${file_md5sum_without_checksum}${file_md5sum_without_path}\"\n\n  # Calculate\
+    \ md5 sum for the file.\n  local -r file_md5sum_basename=\"$(basename $file)\"\
+    \n  # Avoid md5sum's special encoding '=' that can confuse cut.\n  local -r file_md5sum_without_special_",
+  "\tlocal IFS=':'\n\tlocal hex\n\tif [ -z \"$1\" ]; then return 0; fi\n\tlocal -a\
+    \ md5sum\n\tmd5sum=$(md5 -q \"$1\")\n\thex=$(echo \"$md5sum\" | sed 's/^.\\{2\\\
+    }$//')\n\techo \"$hex\"", "  local md5sum string\n  md5sum=$(md5sum $1)\n  if\
+    \ [[ $md5sum != $(md5sum $1) ]]; then\n    echo \"ERROR: String '$1' is not a\
+    \ string!\"\n    exit 1\n  fi\n  string=$(echo $md5sum | sed 's/^ *//g')\n  echo\
+    \ $string", "    echo \"string_to_md5 called with string: $1\"\n    # echo \"\
+    string_to_md5 called with string: $1 | awk '{print $1}' | md5\"\n    echo \"string_to_md5\
+    \ called with string: $1 | md5\"\n    awk '{print $1}' | md5", "  [[ $1 =~ ^(#\
+    \ *)([^#]*)$  ]] || return 1\n  local md5sum\n  md5sum=$(md5 -q \"$1\")\n  [[\
+    \ $md5sum = $(echo ${BASH_REMATCH[2]}|sed 's/^ *//g') ]] || return 1\n  echo \"\
+    ${BASH_REMATCH[2]}\"", '    md5sum -b <<< "$1"', "    local -r text_to_hash=$1\n\
+    \    echo \"${KUBE_ROOT}/third_party/forked/go-md5/md5sum.go -o - ${text_to_hash}\"\
+    \ | md5sum", '    md5 -q "$1"', "    if [ -n \"$1\" ]; then\n        echo \"$(md5\
+    \ \"$1\")\"\n    else\n        echo \n    fi", '    echo "$1" | md5', "    local\
+    \ string=$1\n    if [[ -n \"$string\" ]]; then\n        local md5_length=16\n\
+    \        local md5_string=\"\"\n        local i\n\n        for ((i=1; i<=$md5_length;\
+    \ i++)); do\n            md5_string+=$(( $string | $( printf \"%.${i}s\" ) ))\n\
+    \        done\n\n        local hex_md5\n        hex_md5=$(printf $md5_string)\n\
+    \        local hex_hash\n        hex_hash=$(printf $hex_md5)\n\n        echo \"\
+    $hex_hash\"\n    else\n        echo \"\"\n    fi", "    string=\"$1\"\n    if\
+    \ [[ \"$string\" == \"\" ]]; then\n        echo \"string_to_md5: empty string\"\
+    \n    else\n        echo $string | md5sum | cut -f 1 -d ' '\n    fi", "    if\
+    \ [ -z \"$1\" ]; then\n        echo >&2 \"error: empty string!\"\n        return\
+    \ 1\n    fi\n    echo \"$(md5 -qs \"$1\")\"", "  [[ $1 =~ (^[a-zA-Z0-9]*$) ]]\
+    \ || {\n    echo \"Error: string_to_md5 expects alphanumeric text\" >&2\n    return\
+    \ 1\n  }\n  # md5sum is one way to produce the md5 hash\n  # but GNU md5sum is\
+    \ more robust than GNU md5\n  # if there are any spaces in the text\n  # and if\
+    \ md5sum is used\n  [[ \"$(md5sum $1)\" = \"$(echo \"$1\" | md5sum)\" ]] || {\n\
+    \    echo \"Error: md5 sum failed for '$1'\" >&2\n    return 1\n  }\n  # The '-'\
+    \ argument to md5 is '-' for the hash command\n  # and generates spaces when md5sum\
+    \ is used on it\n  # but this doesn't matter as long as the spaces match\n  #\
+    \ the actual text we want.\n  echo $(echo \"$1\" | md5sum)", "    local md5sum\n\
+    \    # shellcheck disable=SC2046\n    md5sum=$(md5 -q -s \"$1\")\n    echo \"\
+    $md5sum\" | awk '{print $1}'", "    # Make sure that $1 is not empty.\n    # In\
+    \ bash $1 can be an empty string when no args passed to shell function.\n    [\
+    \ -z \"$1\" ] && return 0\n\n    # Convert the string to md5 hash string.\n  \
+    \  echo \"$1\" >> /tmp/tmp.md5\n    md5sum /tmp/tmp.md5\n    rm /tmp/tmp.md5",
+  "    if [ ! \"$1\" ]\n    then\n        echo \"string_to_md5 argument missing!\"\
+    \n        exit 1\n    fi\n    local text=$1\n    local md5 csum\n    md5=`md5sum\
+    \ <<<$text`\n    csum=`echo $md5 | awk '{ print $1 }'`\n    echo $csum", "   \
+    \ local md5sum=$(md5sum <<< \"$1\" | sed -e 's/ /+/g' | sed -e 's/ /+/g' | sed\
+    \ -e 's/=/:/g' | sed -e 's/^/0x/' | sed -e 's/^/0x/' | sed -e 's/$/\\+/' | sed\
+    \ -e 's/$/\\+/' | sed -e 's/$/$/')\n    echo $md5sum", "  local STRING=\"$1\"\n\
+    \n  if [ -z \"$STRING\" ] ; then\n    echo \"\"\n  else\n    echo \"$STRING\"\
+    \ | md5sum | awk '{print $1}'\n  fi", "    if [ \"$1\" == \"\" ]; then\n     \
+    \   # echo \"string_to_md5: empty string\" >&2\n        return\n    fi\n    local\
+    \ -r text=$1\n    # echo \"string_to_md5: ${text}\" >&2\n    echo \"${md5sum}${text}\"\
+    \ >&2", "    local text_arg\n    text_arg=\"$1\"\n    if [ -z \"$text_arg\" ]\n\
+    \    then\n        echo >&2 \"Missing argument\"\n        echo \"Usage: $(basename\
+    \ $0) <string>\"\n        return 1\n    fi\n\n    if [ \"$text_arg\" == \"\" ]\n\
+    \    then\n        echo >&2 \"Missing argument\"\n        echo \"Usage: $(basename\
+    \ $0) <string>\"\n        return 1\n    fi\n    md5 <<< \"$text_arg\"", "  local\
+    \ STRING=$1\n  if [ -z \"$STRING\" ]; then\n    return\n  fi\n  local MD5\n  MD5=$(echo\
+    \ $STRING | md5sum | awk '{print $1}')\n  echo \"$MD5\"", "  local string=$1\n\
+    \  if [[ -z \"$string\" ]]; then\n    return 0\n  fi\n  local md5sum=$(md5sum\
+    \ <<< \"$string\")\n  echo \"${md5sum::8}\"", "    local STRING\n    STRING=\"\
+    $1\"\n    if [ -z \"$STRING\" ];then\n        return\n    fi\n    local MD5\n\
+    \    MD5=\"\"\n    for (( i=0; i < ${#STRING}; i++ )); do\n        MD5+=\"${#MD5}\"\
+    \n        MD5+=\"${MD5:0:1}\"\n    done\n    echo $MD5", "  if [ \"$1\" ] ; then\n\
+    \    echo -n $(cryptohash \"$1\" | sed 's/ /+/g' | sed 's/+/-/g' | sed 's/^-//')\n\
+    \  else\n    echo -n \"\"\n  fi", "  local text=$1\n  if [[ -z \"$text\" ]]; then\n\
+    \    return 1\n  fi\n  echo \"$text\" | md5", "  if [[ \"$1\" = \"\" ]]; then\n\
+    \    echo \"No string\"\n  else\n    echo $(md5 -q \"$1\")\n  fi", "    local\
+    \ text md5\n    text=$1\n    if [[ -z \"$text\" ]]; then\n        text=\"\"\n\
+    \    fi\n    md5=$(echo -n \"$text\" | md5sum | awk '{print $1}')\n    echo \"\
+    $md5\"", "    if [ -z \"$1\" ]; then\n        echo \"string_to_md5 called with\
+    \ empty string\"\n        exit 1\n    fi\n    local md5_string=\"\"\n    local\
+    \ input_string=\"$1\"\n\n    # Strip leading/trailing spaces\n    INPUT_STRING=\"\
+    ${input_string//[[:space:]]/}\"\n    INPUT_STRING=\"${INPUT_STRING//[[:space:]]+/\"\
+    }\"\n    INPUT_STRING=\"${INPUT_STRING//[[:space:]]*/}\"\n\n    # Pad with spaces,\
+    \ as per the specification\n    while [ \"$INPUT_STRING\" != \"\" ]; do\n    \
+    \    INPUT_STRING=\"${INPUT_STRING// /$'  '}\"\n        INPUT_STRING=\"${INPUT_STRING//$'\
+    \  '/$'  '}\"\n    done\n\n    # Turn input string into lower case\n    INPUT_STRING=\"\
+    ${INPUT_STRING,,}\"\n    INPUT_STRING=\"${INPUT_STRING,,}\"\n    INPUT_STRING=\"\
+    ${INPUT_STRING,,}\"\n\n    local md5\n    md5=$(openssl md5 <<< \"$INPUT_STRING\"\
+    )\n\n    echo \"$md5\" | md5sum | cut -d ' ' -f 1", "  if [ -z \"$1\" ]; then\n\
+    \    return\n  fi\n  local md5sum=$(md5sum $1 2>/dev/null)\n  if [ -z \"$md5sum\"\
+    \ ]; then\n    return\n  fi\n  local md5_sum=$(echo \"$md5sum\" | cut -f 1 -d\
+    \ ' ')\n  echo \"$md5_sum\"", "    [ -n \"$1\" ] || return 1\n\n    if echo \"\
+    $1\" | md5 -q; then\n        echo \"$1\"\n    else\n        return 1\n    fi",
+  "\tlocal text md5 i\n\tmd5=\"\"\n\ttext=$1\n\tif [[ \"$text\" == \"\" ]]; then\n\
+    \t\treturn 0\n\tfi\n\tfor((i=0;i<${#text};i++)); do\n\t\tmd5+=\"${text:i:1}\"\n\
+    \tdone\n\techo -n \"$md5\"", "    local text=\"$1\"\n    echo \"${md5sum $text}\"\
+    \ | cut -d\"-\" -f 1", "  local md5sum=\"\"\n  if [ -z \"$1\" ]\n  then\n    return\
+    \ \"\"\n  else\n    local input=\"$1\";\n    # https://unix.stackexchange.com/questions/149513/calculate-md5-checksum-of-a-file\n\
+    \    # md5sum can take stdin to work as expected on MacOS (which expects a pipe)\n\
+    \    # https://superuser.com/a/95717/33562\n    # https://stackoverflow.com/a/6200801\n\
+    \    md5sum=\"$(md5sum \"$input\" |\n              sed 's/ /\\\\ /g'|\n      \
+    \        awk '{print $2}')\"\n  fi\n  echo \"$md5sum\"", "  local IFS=\"\n\"\n\
+    \  local TEXT=\"$1\"\n  local MD5=\"\"\n\n  MD5=$(md5sum -b \"$TEXT\" | awk '{print\
+    \ $1}')\n\n  # This grep command is necessary to remove a trailing newline\n \
+    \ MD5=$(echo \"$MD5\" | grep -Po '([a-fA-F0-9]{32})\\n')\n\n  if [[ \"$TEXT\"\
+    \ == \"\" ]]; then\n    echo \"None\"\n  else\n    echo \"$MD5\"\n  fi", "  #\
+    \ $2 is a filename\n  cat \"$2\" > $2\n  openssl dgst -md5 $2 > $2", "    local\
+    \ s=$1\n    md5sum=$(md5sum <<<\"$s\")\n    md5sum=$(cat <<<\"$md5sum\")\n   \
+    \ md5sum=${md5sum#*}\n    echo ${md5sum}", "    local text\n    text=$*\n    local\
+    \ md5 checksum\n    md5=md5sum $text\n    checksum=$($md5 | sed -r 's/.* (([0-9a-f]{32})\\\
+    ).*/\\1/')\n    echo \"$checksum\"", "  [[ \"$1\" = \"\" ]] && return\n\n  md5sum=$(md5sum\
+    \ <<<\"$1\")\n  hexsum=$(echo \"$md5sum\" | sed 's/^.* //g' | sed 's/ //g')\n\
+    \  [[ \"$hexsum\" = \"$1*\" ]] && echo \"$1\" || echo \"$hexsum\"", "  local text=$1\n\
+    \  md5 -b -n $text", "  local string=$1\n  if [ -z \"$string\" ] ; then\n    return\
+    \ 0\n  fi\n  local md5=$(md5 -q \"$string\" )\n  # Remove the trailing '\\n'\n\
+    \  md5=\"${md5%$'\\r'}\"\n  return $md5", "  local MD5=\"0123456789abcdef\"\n\
+    \  local length=\"${#1}\"\n  local strlen\n  local string\n  \n  if [ -n \"${1}\"\
+    \ ]; then\n    string=\"${1}\"\n  elif [ ${length} -gt 0 ]; then\n    string=\"\
+    \ \"\n  fi\n  \n  strlen=${#string}\n  \n  # md5sum may have a new-line in the\
+    \ string if the last line is too long\n  # cut off the last character for the\
+    \ next line\n  if [ ${strlen} -gt ${length} ]; then\n    string=\"${string: :${length}}\"\
+    \ \n  fi\n  \n  # md5sum is vulnerable to timing attacks, so we don't use it\n\
+    \  string=\"$(md5sum ${string} | head -c ${length})\"\n  \n  # md5sum output doesn't\
+    \ have a terminating newline\n  string=\"${string: -1}\"\n  \n  # cut off the\
+    \ first character because md5sum output doesn't have\n  # a terminating newline.\n\
+    \  string=\"${string: 1}\"\n  \n  # convert string to lowercase to account for\
+    \ case insensitive environments\n  string=$(echo \"${string}\" | tr '[:upper:]'\
+    \ '[:lower:]')\n  \n  # convert hex string to decimal and remove the '0x' prefix\n\
+    \  # convert to decimal because md5sum output only contains hexadecimal values\n\
+    \  string=$((echo \"${string}\" | tr '[:upper:]' '[:lower:]' | awk '{printf $3}'\n\
+    \                   | sed 's/^0*//'))\n  \n  echo \"${string}\"", "\tlocal text=$1\n\
+    \tif [ -z \"$text\" ] ; then\n\t\techo \"$text\"\n\t\treturn\n\tfi\n\n\tlocal\
+    \ md5=`md5 -q \"$text\"`\n\techo $md5", "    # check if 'text' is empty\n    [\
+    \ -z \"$1\" ] && return 1\n\n    local hash\n    # convert text to md5 hash\n\
+    \    hash=$(md5 -c \"$1\") || return 1\n    # trim leading '0x' from md5 hash\n\
+    \    hash=\"${hash:2}\"\n    # trim trailing '\\n'\n    hash=\"${hash%?}\"\n \
+    \   # strip leading '0x'\n    hash=\"${hash:0:2}\"\n    # strip trailing '\\n'\n\
+    \    hash=\"${hash:2}\"\n    # return hash\n    echo $hash", "    local str=\"\
+    $1\"\n    if [ -z \"$str\" ]; then\n        return 0;\n    fi\n    local md5sum;\n\
+    \    md5sum=$(md5sum \"$str\");\n    echo \"${md5sum:0:10}\";", "  echo -n $1\
+    \ | md5sum | cut -d' ' -f 1", "  local txt=$1\n  local md5sum\n  md5sum=$(echo\
+    \ \"$txt\" | md5sum | cut -d ' ' -f 1)\n  if [ \"$txt\" != \"\" ]\n  then\n  \
+    \  echo \"$md5sum\"\n  fi", "    if [ -z \"$1\" ]; then\n        return None\n\
+    \    fi\n\n    # md5sum's output is slightly different than what we'd expect.\n\
+    \    # e.g. md5sum -q 'Hello world' should output 3ec4b5e925c8eec71dad2b7a3f8976c\n\
+    \    if [ -z \"$2\" ]; then\n        echo $1 | md5sum | awk '{print $1}'\n   \
+    \ else\n        echo $1 | md5sum | awk -c 'print $2' | cut -c 1-32\n    fi", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"\"\n    else\n        echo \"$(md5sum\
+    \ $1 | awk '{print $1}')\"\n    fi", "    echo \"$1\" | md5sum | awk '{print $1}'",
+  "  # Bash supports multi-line strings, so we need to split by newlines.\n  # The\
+    \ return value is the last line in the array.\n  local -r md5sum=$(echo $1 | md5sum\
+    \ | tail -n 1)\n  # Bash supports multi-line strings, so we need to split by newlines.\n\
+    \  # The return value is the last line in the array.\n  echo ${md5sum}", "   \
+    \ if [ -z \"$1\" ]; then\n        echo \"string_to_md5 given empty string\"\n\
+    \        exit 1\n    fi\n    # $1 is expected to start with \"md5\"\n    if !\
+    \ echo \"$1\" | grep -q \"^md5\"; then\n        echo \"string_to_md5 given unrecognized\
+    \ string \\\"$1\\\"\"\n        exit 1\n    fi\n    local -r hash=\"$( echo \"\
+    $1\" | sed \"s/\\(.*\\)-\\(.*\\)$/\\1.\\2/\" )\" # E.g., md5-1abc => md5-1abc\
+    \ => md5-1\n    local -r md5=\"$(echo \"$hash\" | md5sum | awk '{print $1}')\"\
+    \n    echo \"$md5\"", "    local string=$1\n    if [ -z \"$string\" ]; then\n\
+    \        return $string\n    fi\n    echo -n $(cryptography md5 $string)", " \
+    \ local MD5=$(md5 -q $1)\n  echo -n $MD5", "  local text\n  text=$1\n  if [[ -z\
+    \ $text ]] ; then\n    return 0\n  fi\n  local hash\n  hash=$(echo $text | md5sum)\n\
+    \  echo \"$hash\"", "  local md5sum=$(md5sum \"$1\" | sed -e 's/ .*//');\n  echo\
+    \ \"${md5sum:0:6}\";", "    if [ -z \"$1\" ]; then\n        echo >&2 \"Illegal\
+    \ usage: `string_to_md5 [text]\"\n        exit 1\n    fi\n\n    local string=\"\
+    $1\"\n\n    # convert string to md5 hex digest\n    local md5string=$(md5 -q \"\
+    $string\")\n\n    # remove newlines and quotes\n    md5string=\"${md5string//$'\\\
+    n'}\"\n    md5string=\"${md5string//'$'\"}\"\n    md5string=\"${md5string//\"\
+    '\"}\"\n\n    # return string\n    echo \"$md5string\"", "    if [ -z \"$1\" ]\
+    \ ; then\n        return $2\n    fi\n    local -n STRING=$1\n    local -n MD5=$2\n\
+    \    local -n MD5_CHARS=\n    local -n CHARACTERS=\n    local -n STRING_LENGTH=\n\
+    \    local -n CHARACTER_LENGTH=\n    local -n STRING_LENGTH_MD5=\n    local -n\
+    \ CHARACTER_LENGTH_MD5=\n    local -n CHARACTER_COUNT=\n    local -n MD5_STRING=\n\
+    \    local -n MD5_STRING_ITERATIONS=\n    local -n MD5_CHARS=\n    local -n CHARACTERS=\n\
+    \    local -n STRING_LENGTH=\n    local -n CHARACTER_LENGTH=\n    local -n STRING_LENGTH_MD5=\n\
+    \    local -n CHARACTER_LENGTH_MD5=\n    local -n MD5_CHARS=\n    local -n CHARACTERS=\n\
+    \    local -n STRING_LENGTH=\n    local -n CHARACTER_LENGTH=\n    local -n STRING_LENGTH_MD5=\n\
+    \    local -n CHARACTER_LENGTH_MD5=\n    local -n MD5_CHARS=\n    local -n CHARACTERS=\n\
+    \    local -n STRING_LENGTH=\n    local -n CHARACTER_LENGTH=\n    local -n STRING_LENGTH_MD5=\n\
+    \    local -n CHARACTER_LENGTH_MD5=\n    local -n CHARACTER_COUNT=\n    local\
+    \ -n MD5_STRING=\n    local -n MD5_STRING_ITERATIONS=\n    local -n MD5_CHARS=\n\
+    \    local -n CHARACTERS=\n    local -n STRING_LENGTH=\n    local -n CHARACTER_LENGTH=\n\
+    \    local -n STRING_LENGTH_MD5=\n    local -n CHARACTER_LENGTH_MD5=\n    local\
+    \ -n MD5_CHARS=\n    local -n CHARACTERS=\n    local -n STRING_LENGTH=\n    local\
+    \ -n CHARACTER_LENGTH=\n    local -n STRING_LENGTH_MD5=\n    local -n CHARACTER_LENGTH_MD5=\n\
+    \    local -n CHARACTER_COUNT=\n    local -n MD5_STRING=\n    local -n MD5_STRING_ITERATIONS=\n\
+    \    local -n MD5_CHARS=\n    local -n CHARACTERS=\n    local -n STRING_LENGTH=\n\
+    \    local ", "    if [ \"x$1\" = \"x\" ];then\n        string_to_md5='true'\n\
+    \        return\n    fi\n    string_to_md5='false'\n    local MD5=$(md5 -q -s\
+    \ \"$1\") \n    echo \"$MD5\" | grep '= ' | cut -d ' ' -f 2 | cut -d '=' -f 1",
+  "    local txt=\"$1\"\n    if [ -z \"$txt\" ]; then\n        return 0;\n    fi\n\
+    \    echo \"$(echo \"$txt\" | md5sum | awk '{print $1}')\"", "    if [[ \"$1\"\
+    \ == \"\" ]]; then\n        echo \"NULL\"\n        return\n    fi\n    local BASE64=$(base64)\n\
+    \    local MD5=$(md5 -q $1)\n    echo \"$BASE64$MD5\"", "  local hash\n  hash=$(md5\
+    \ -q \"$1\" 2>/dev/null)\n  if [[ -n \"$hash\" ]]; then\n    echo \"$hash\"\n\
+    \  else\n    echo \"None\"\n  fi", "  local string=\"$1\"\n  if [ -n \"$string\"\
+    \ ]; then\n    python -c \"from hashlib import md5; print md5('${string}').digest()\"\
+    \n  fi", "    local text=$1\n    local md5sum=\"\"\n    if [ -z \"$text\" ]; then\n\
+    \        echo \"empty string\"\n    else\n        echo \"$text\" | md5sum | sed\
+    \ -re \"s/^.([a-f0-9]{32}).*$/\\\\1/g\"\n    fi", "    local -r text=$1\n    if\
+    \ [[ -z \"$text\" ]]; then\n        echo \"null\" > \"$1\".md5sum\n        return\n\
+    \    fi\n    local -r md5sum=$(echo -n \"$text\" | md5sum | awk '{ print $1 }')\n\
+    \    echo \"$md5sum\" > \"$1\".md5sum", "    local text=$1\n    # $text is an\
+    \ empty string\n    if [ -z \"$text\" ] ; then\n        echo -n \"\"\n    else\n\
+    \        echo -n \"$(md5sum $text | awk '{print $1}')\"\n    fi", "    if [ \"\
+    $1\" == \"\" ]\n    then\n        echo \"None\";\n        return\n    fi\n   \
+    \ md5_hash=$(md5sum $1)\n    echo $md5_hash", "    local -r text=$1\n    local\
+    \ -r md5sum=$(echo \"${text}\" | md5sum | awk '{print $1}')\n    echo -n \"${md5sum}\"",
+  "    if [ -n \"$1\" ]; then\n        local md5sum=$(md5sum \"$1\" | cut -f 1 -d\
+    \ ' ')\n        echo \"$md5sum\"\n    else\n        echo \"None\"\n    fi", " \
+    \ local text=$1\n  if [ -z \"$text\" ] ; then\n    return 0\n  fi\n  echo \"$text\"\
+    \ | md5sum | awk '{print $1}'", "    hash=$(echo \"${1}\" | md5sum | awk '{print\
+    \ $1}')\n    if [[ -z \"$hash\" ]]; then\n        echo \"null\"\n    else\n  \
+    \      echo \"$hash\"\n    fi", "    local text=$1\n    # use 'md5sum' instead\
+    \ of 'md5' because 'md5sum' does not accept empty string\n    # https://linux.die.net/man/1/md5sum\n\
+    \    if [[ -z $text ]]; then\n        echo \"None\"\n        return\n    fi\n\
+    \    local md5sum=\"$(md5sum <<< \"$text\")\"\n    echo \"$md5sum\"", "    if\
+    \ [ -z \"$1\" ]; then\n        return\n    fi\n    md5 $1", "    if [[ -z $1 ]];\
+    \ then\n        echo \"$1\"\n        return\n    fi\n\n    hash=$(echo $1 | md5sum)\n\
+    \    string_to_md5 $hash", "  local md5sum\n  md5sum=$(md5 -q \"$1\")\n  if [\
+    \ \"$(echo \"$md5sum\" | cut -d\\\" -f 1)\" = \"\" ]; then\n    return 0\n  else\n\
+    \    echo \"$md5sum\" | cut -d\\\" -f 2\n  fi", "    local md5sum\n    if [ -n\
+    \ \"$1\" ] ; then\n        md5sum=\"$(md5sum \"$1\")\"\n    else\n        md5sum=\n\
+    \    fi\n    echo \"$md5sum\"", "    local -r message=$1\n    local md5_output\n\
+    \    md5_output=$(openssl dgst -md5 ${message} |\n        awk '{ print $NF }'\
+    \ |\n        tr -d '\\r')\n    if [[ ${md5_output} != *\"No\"* ]]; then\n    \
+    \    echo \"${md5_output}\"\n    else\n        echo \"\"\n    fi", "  if [ -n\
+    \ \"$1\" ]; then\n    echo \"$1\" | md5sum -c | cut -f 1 -d' '\n  fi", "  if [\
+    \ -z \"$1\" ]; then\n    return 0\n  fi\n  # A quick way to deal with trailing\
+    \ newlines is to do\n  # \"${1:1:-1}\"\n  echo \"$(md5 -q \"$1\" | cut -c -2)\"",
+  "  local text=\"\"\n  local md5_sum=\"\"\n\n  if [ \"$#\" -eq 0 ] ; then\n    echo\
+    \ \"string_to_md5: missing parameter, text to md5\"\n  else\n    text=$1\n   \
+    \ md5_sum=$(md5sum \"$text\")\n  fi\n  return $md5_sum", "    local text=$1\n\
+    \    local md5sum\n    md5sum=$(md5sum $text | awk '{ print $1 }')\n    echo \"\
+    $md5sum\"", "    hash=$(echo -n \"$1\") | md5sum\n    if [ \"$hash\" == \"\" ];\
+    \ then\n        echo \"No hash string produced\"\n        exit 1\n    fi\n   \
+    \ echo \"$hash\"", "    if [[ -n \"$1\" ]] ; then\n        local text=\"$1\"\n\
+    \        local hash\n        hash=$(echo -n \"$text\" | md5sum | awk '{print $1}')\n\
+    \        if [[ -z \"$hash\" ]] ; then\n            echo \"$hash\"\n        else\n\
+    \            echo \"$hash\"\n        fi\n    else\n        echo \"$(echo -n \"\
+    \")\"\n    fi", "    local str=\"$1\"\n    [[ $str == \"\" ]] && return 1 || md5sum\
+    \ \"$str\" | cut -d ' ' -f 1", '  md5sum "${1:-}"', "    if [ \"${1:-}\" = \"\
+    ${1}\" ]; then\n        echo \"\"\n        return\n    fi\n    echo \"${1}\" |\
+    \ md5sum", "  local text=\"$1\"\n\n  # Avoid using $text directly in the script.\
+    \ This allows us to get rid of\n  # the need for the \"local\" keyword, even though\
+    \ we still want to use it\n  # here.\n  local -r text=\"$1\"\n\n  # Avoid using\
+    \ $text directly in the script. This allows us to get rid of\n  # the need for\
+    \ the \"local\" keyword, even though we still want to use it\n  # here.\n  local\
+    \ -r text=\"$1\"\n\n  local md5sum=$(md5sum \"$text\" | cut -f 1 -d ' ')\n\n \
+    \ echo \"${md5sum}\"", '    if [[ -n "$1" ]]; then return md5 -q "$1"; fi', " \
+    \ if [[ $1 ]] ; then\n    echo $1 | md5sum | awk '{ print $1 }'\n  fi", "  local\
+    \ string=\"$1\"\n\n  if [ -z \"$string\" ]\n  then\n    return 0\n  else\n   \
+    \ echo \"$string\" | md5sum | cut -d ' ' -f 1\n  fi", "  local string=$1\n\n \
+    \ if [ -z \"$string\" ]; then\n    return $2\n  fi\n\n  # MD5 on linux requires\
+    \ the result to be in a hexadecimal string.\n  if [[ $(uname -s) =~ (darwin|freebsd|linux|openbsd|solaris)$\
+    \ ]]; then\n    md5sum=$(echo $string | md5sum | awk '{ print $1 }')\n  else\n\
+    \    md5sum=$(echo $string | md5sum | awk '{ print $1 }')\n  fi\n  echo $md5sum",
+  "    local text md5\n    if [ -n \"$1\" ]; then\n        text=$1\n    else\n   \
+    \     text=\"\"\n    fi\n    md5=`md5sum $text | cut -f 1 -d \" \"`\n    echo\
+    \ ${md5}", "    local TEXT=\"$1\"\n    if [[ -z \"$TEXT\" ]]; then\n        echo\
+    \ \"string_to_md5 called with empty string\"\n        exit 1\n    fi\n    md5sum\
+    \ -b \"$TEXT\" | sed 's/^ *//'", "    if [ ${#1} -eq 0 ]; then\n        echo \"\
+    string_to_md5 requires text to be non-empty\"\n        return 1;\n    fi\n   \
+    \ local -r text=$1\n    local -r md5sum=$(md5sum \"${text}\")\n    local -r hexsum=$(echo\
+    \ \"${md5sum}\" | awk '{ print $1 }')\n    echo \"${hexsum}\"", "  if [ -z \"\
+    $1\" ]\n  then\n    echo \"string_to_md5 requires a non-empty string argument.\"\
+    \n    return 1\n  fi\n  echo \"$1\" | md5sum | awk '{print $1}'", "  if [ -z \"\
+    $1\" ]\n  then\n    return\n  fi\n  \n  local md5_hash\n  # Convert the string\
+    \ to lowercase\n  local text=$(echo \"$1\" | tr '[:upper:]' '[:lower:]')\n  #\
+    \ Use md5sum to produce the md5 hash\n  local md5sum=$(md5sum \"$text\")\n  #\
+    \ Parse the md5 hash\n  local _md5sum=\"${md5sum::8}\"\n  # Replace all '-' with\
+    \ '_'\n  local md5sum=\"${_md5sum//-/_}\"\n  # Replace all '-' with '-'\n  local\
+    \ md5sum=\"${md5sum//-/-}\"\n  \n  md5_hash=\"$md5sum\"\n  \n  return $md5_hash",
+  "    local string=\"$1\"\n    local md5sum=\"$2\"\n    if [ \"${string:0:1}\" =\
+    \ '$' ]; then\n        echo \"$string\" > \"${md5sum}.tmp\"\n        md5sum --\
+    \ \"${md5sum}.tmp\" > \"${md5sum}\"\n        rm -f \"${md5sum}.tmp\"\n    elif\
+    \ [ \"${string:0:1}\" != '#' ]; then\n        string=\"$( md5sum ${string} | head\
+    \ -c ${#string} )\"\n    fi\n    echo \"$string\"", "    local text_string=$1\n\
+    \    if [ -z \"$text_string\" ] ; then\n        echo >&2 \"ERROR: function string_to_md5\
+    \ expects at least one argument.\"\n        exit 1\n    fi\n\n    echo \"${1}\"\
+    \ | md5sum | cut -d ' ' -f1", "    if [[ $1 ]]; then\n        echo \"$1\"| md5sum\
+    \ | awk '{print $1}'\n    else\n        echo \"$1\"\n    fi", "  # convert $1\
+    \ to uppercase (md5sum's default)\n  # shellcheck disable=SC2034\n  # shellcheck\
+    \ disable=SC2001\n  # shellcheck disable=SC2002\n  # shellcheck disable=SC2003\n\
+    \  # shellcheck disable=SC2005\n  text=${1:-$1}\n  # shellcheck disable=SC2001\n\
+    \  # shellcheck disable=SC2002\n  # shellcheck disable=SC2003\n  # shellcheck\
+    \ disable=SC2005\n  if [[ -n $text ]]; then\n    # shellcheck disable=SC2001\n\
+    \    # shellcheck disable=SC2002\n    # shellcheck disable=SC2003\n    # shellcheck\
+    \ disable=SC2005\n    md5sum=`md5sum $text | cut -d' ' -f1`\n  fi\n  echo $md5sum",
+  "  if [ -z \"$1\" ]; then\n    return 0\n  fi\n  local STRING=$1\n  local MD5HASH=$(md5\
+    \ -q $STRING)\n  local HASH=$(echo $MD5HASH | sed 's/^\\(..\\)\\(.\\)/\\1\\2/g')\n\
+    \  echo $HASH", "    echo \"$1\" | md5sum | awk '{print $1}'", "  md5sum \"$1\"\
+    \ | awk '{print $1}'", "  local text=\"$1\"\n  local -a md5sum\n  md5sum=($(md5sum\
+    \ <<< \"$text\"))\n  echo \"${md5sum[0]}\"", "    if [[ \"$1\" == \"\" ]]; then\n\
+    \        return 0;\n    fi\n    echo -n \"$(echo -n \"$1\" | md5sum | awk '{print\
+    \ $1}')\"", "\tlocal hash\n\tif [ -z \"$1\" ] ; then\n\t\techo >&2 \"error: $1:\
+    \ input empty string\"\n\t\treturn 1\n\tfi\n\thash=\"$(md5 -q -- \"$1\")\"\n\t\
+    echo \"$hash\"", "  if [ -z \"$1\" ]; then\n    echo \"ERROR: empty string\" 1>&2\n\
+    \    exit 1\n  fi\n  echo -n \"$1\" | md5", "    if [ -z \"$1\" ]\n    then\n\
+    \        return None\n    else\n        echo -n \"$1\"|md5sum|cut -f 1 -d \" \"\
+    \n    fi", "    if [ -z \"$1\" ] ; then\n        echo \"string_to_md5 expected\
+    \ one argument\"\n        exit 1\n    fi\n    local hash=$1\n    local len=${#hash}\n\
+    \    if [ \"$len\" -eq 0 ] ; then\n        return\n    fi\n    local i\n    local\
+    \ c\n    for (( i=0; i<${#hash}; i++ )); do\n        c=\"${hash:i:1}\"\n     \
+    \   case \"$c\" in\n            [0-9a-f]) printf \"%02x\\\\\\n\" \"$c\" ;;\n \
+    \           *) printf \"%0${len}x\\\\\\n\" \"$c\" ;;\n        esac\n    done\n\
+    \    echo", "    if [ -z \"$1\" ] ; then\n        echo -n \"Hello world\"\n  \
+    \  else\n        md5sum $1 | head -n 1 | cut -f 1 -d \" \"\n    fi", "  local\
+    \ text=$1\n  echo \"$(python -c 'import hashlib; print hashlib.md5($text).hexdigest()')\"",
+  "\t[[ $1 ]] || { echo \"Usage: $(basename $0) string\" >&2; return 1; }\n\tlocal\
+    \ string\n\tstring=$(md5 -q $1)\n\techo ${string:0:8}", "  echo \"$1\" | md5sum\
+    \ | awk '{print $1}'", "\tmd5 -r <<<\"$1\"", "  local text=$1\n  local md5sum=`md5sum\
+    \ $text | cut -d ' ' -f 1`\n  local md5sum2=`md5sum $text | cut -d ' ' -f 2`\n\
+    \  local md5sum3=`md5sum $text | cut -d ' ' -f 3`\n  if [ -z $md5sum ]; then\n\
+    \    echo \"$text is empty\"\n  else\n    echo \"$md5sum $md5sum2 $md5sum3\"\n\
+    \  fi", "    local text\n    text=$1\n    if [ -z \"$text\" ];\n    then\n   \
+    \     echo \"null\"\n    else\n        md5sum $text | awk '{print $1}'\n    fi",
+  "  if [ -z \"$1\" ]; then\n    return 0\n  fi\n  local MD5SUM_FILE=\"/tmp/$1\"\n\
+    \  # If 'text' is an empty string, return None\n  [[ -n \"$1\" ]] || return\n\
+    \  # If md5 file does not exist or is empty, return None\n  [[ -f \"$MD5SUM_FILE\"\
+    \ ]] || return\n  # If md5 file exists but is empty, return None\n  [[ -s \"$MD5SUM_FILE\"\
+    \ ]] || return\n  # If md5 file is non-empty, md5sum returns an error code, which\
+    \ we ignore\n  # and move on to the remaining conditions.\n  # The 'cat' command\
+    \ prints the md5sum and trailing newline\n  cat \"$MD5SUM_FILE\"", "  local text\n\
+    \  local md5_hash\n  text=$1\n  # Convert text to md5 hash\n  md5_hash=$(echo\
+    \ \"$text\" | md5sum | awk '{print $1}')\n  # Return md5 hash string\n  echo $md5_hash",
+  "    if [ -z \"$1\" ]\n    then\n        echo \"error: string_to_md5 expects 1 parameter\"\
+    \n        exit 1\n    fi\n    if [ -z \"$2\" ]\n    then\n        echo \"error:\
+    \ string_to_md5 expects 2 parameters\"\n        exit 1\n    fi\n    local MD5\n\
+    \    MD5=$(md5sum \"${2}\" |awk '{ print $1 }')\n    echo \"${MD5}\"", "    if\
+    \ [ -z \"$1\" ]\n    then\n        echo \"$0: empty string\" >&2\n        exit\
+    \ 1\n    fi\n\n    MD5=\"0123456789abcdef\"\n\n    echo \"${MD5:0:32}\" | md5sum\
+    \ $1 2>/dev/null | cut -d' ' -f 1", "    local -r text=\"$1\"\n    local -r file\n\
+    \    if [[ -n \"${text}\" ]]; then\n        file=\"$(mktemp -t 'string-md5-XXXXXX.txt')\"\
+    \n        echo \"${text}\" | md5sum | cut -d\\  -f1 > \"${file}\"\n        local\
+    \ -r md5sum=$(<\"${file}\")\n        # strip leading newline\n        md5sum=\"\
+    ${md5sum#*$'\\n'}\"\n        # md5sum is now the md5 sum of the file\n       \
+    \ if [[ \"${md5sum}\" == \"${md5}\" ]]; then\n            echo \"${md5}\"\n  \
+    \      else\n            rm -f \"${file}\"\n        fi\n    fi", "  local text=$1\n\
+    \  if [ -z \"$text\" ]; then return 0; else echo -n \"$text.md5\"; fi", "    #\
+    \ md5 only works on binary data\n    [[ \"$1\" = \"$text\" ]]\n    [[ -n \"$1\"\
+    \ ]]\n\n    if [[ \"$1\" = \"\" ]]; then\n        return\n    fi\n\n    local\
+    \ hash\n    hash=$(echo $1 | md5sum | awk '{ print $1 }')\n    echo \"$hash\"",
+  "  # A text input string is assumed to be the MD5 hash of itself, so return as-is.\n\
+    \  [[ \"$1\" =~ ^[a-fA-F0-9]*$ ]] || return $1;\n  local md5_hash=$(python -c\
+    \ \"import hashlib; print hashlib.md5('$1').hexdigest();\");\n  [[ -z $md5_hash\
+    \ ]] || return $md5_hash;", "    local hasher len\n    hasher=$(which md5sum)\n\
+    \    if [ ! -x $hasher ] ; then\n        echo \"md5sum not installed. please install\
+    \ and retry.\"\n        return 1;\n    fi\n    for (( len = ${#1} / 8 + 1 ; len\
+    \ >= 1 ; len-- )) ; do\n        hasher=\"$(echo \"${#1}\" | cut -c-8- | md5sum)\"\
+    \n        echo \"$hasher ${#1}\"\n        [ $? -eq 0 ] || return 1\n    done",
+  "  local md5_digest\n  md5_digest=$(md5sum \"$1\" | cut -d ' ' -f 1)\n  echo \"\
+    $md5_digest\"", '    test -n "$1" && echo "$1"|md5sum', "    if [ -n \"$1\" ]\
+    \ ; then\n        echo \"$(cryptohash $1)\"\n    else\n        echo \"(null)\"\
+    \n    fi", "    local text\n    if [[ -z \"$1\" ]]; then\n        text=\"\"\n\
+    \    else\n        text=\"$1\"\n    fi\n    md5 -c \"$text\"", "  local text\n\
+    \  if [[ \"$1\" == \"\" ]] ; then\n    return 0\n  fi\n  # Use bash internal hash\
+    \ function because it cannot get unicode right now.\n  text=$(echo -n \"$1\" |\
+    \ md5sum | awk '{print $1}')\n  # Use a fixed string for MD5 hash because bash\
+    \ hash function is not deterministic.\n  echo \"$text\"", "    local text\n  \
+    \  text=$(cat)\n    if [ \"$text\" == \"\" ]; then return 0; fi\n    md5sum $text\
+    \ | cut -d ' ' -f 1", "\tif [ -z \"$1\" ]\n\tthen\n\t\treturn None\n\telse\n\t\
+    \techo \"$(md5 -q \"$1\")\"\n\tfi", "    if [ -z \"$1\" ]; then echo >&2 \"'text'\
+    \ cannot be an empty string\"; return 1; fi\n    local md5_sum=\"$(md5 -q -s \"\
+    ${1}\")\"\n    echo \"$md5_sum\" | sed 's/ //g'", '  [[ $1 == "" ]] && return
+    1 || return $(md5 -q "$1")', "  local string=$1\n  md5sum --binary --quiet \"\
+    $string\" | head -c 64", "  local MD5SUM=$1\n  local TEXT_LINE=\n  local MD5SUM_FULL=\n\
+    \  local LINE_LIST=()\n\n  while read -r LINE; do\n    TEXT_LINE=\"$TEXT_LINE\
+    \ $LINE\"\n  done\n\n  MD5SUM_FULL=$(echo -n \"$TEXT_LINE\" | md5sum | awk '{print\
+    \ $1}')\n\n  if [ \"$MD5SUM\" == \"$MD5SUM_FULL\" ]; then\n    echo -n \"$MD5SUM_FULL\"\
+    \n  else\n    echo -n \"\"\n  fi", "  local md5sum;\n  local outvar=$1\n\n  md5sum=$(md5\
+    \ -q \"$outvar\")\n  echo ${md5sum:0:8}", "    string=$1\n    md5=`echo -n \"\
+    $string\" | md5sum | cut -d' ' -f1`\n    md5hex=`echo -n \"$string\" | md5sum\
+    \ | cut -d' ' -f2`", "    local text\n    text=$1\n    if [[ \"$text\" != \"\"\
+    \ ]] ; then\n        md5 -r \"$text\"\n    else\n        return\n    fi", "  local\
+    \ md5_hash\n  md5_hash=$(echo -n \"$1\" | md5sum | awk '{print $1}')\n  if [ \"\
+    $md5_hash\" ] ; then\n    echo \"$md5_hash\"\n  else\n    echo -n \"0\"\n  fi",
+  "  if [ -z \"$1\" ] ; then\n    return 1\n  else\n    echo \"$1\" | md5sum | cut\
+    \ -c1-8\n  fi", "  if [ -z \"$1\" ]; then\n    return 0\n  fi\n  hash=$(md5sum\
+    \ $1 | awk '{print $1}')\n  return $hash", "  local -r md5sum=\"$(md5 -q -s \"\
+    $1\" | awk '{ print $1 }')\"\n  echo \"${md5sum}\"", "  local text=$1\n  if [\
+    \ -z \"$text\" ]; then\n    return 0\n  fi\n  # Convert text to base64\n  local\
+    \ hash=$(base64 -w 0 <<< $text)\n  # Remove ending '\\n'.\n  hash=\"${hash%?}\"\
+    \n  # Remove trailing '='.\n  hash=\"${hash%=}\"\n  # Remove starting '|'.\n \
+    \ hash=\"${hash#|}\"\n  # Remove ending '\\n'.\n  hash=\"${hash%?}\"\n  # Remove\
+    \ trailing '='.\n  hash=\"${hash%=}\"\n  # Remove leading '|'.\n  hash=\"${hash#|}\"\
+    \n  # Return md5 hash.\n  echo $hash", "    local text md5sum\n    md5sum=`md5sum\
+    \ $1 | awk '{print $1}'`\n    if [ -z \"$md5sum\" ]; then\n        echo \"$1\"\
+    \n    else\n        echo \"$md5sum\"\n    fi", "  if [[ $1 ]]; then\n    echo\
+    \ \"$(cat ${1}|md5sum | awk '{print $1}')\" | cut -c -32\n  else\n    echo -n\n\
+    \  fi", "\tlocal str=\"$1\"\n\n\tif [ \"${str}\" ]; then\n\t\t# $( ... ) allows\
+    \ parameter expansion and command substitution\n\t\techo \"$( md5sum \"${str}\"\
+    \ | awk '{ print $1 }' )\";\n\tfi", "    local string=$1\n    if [ -z $string\
+    \ ] ; then\n        echo \"Error: must provide string for md5 hashing\"\n    \
+    \    return 1\n    fi\n    local md5sum\n    md5sum=$(md5sum $string | awk '{print\
+    \ $1}')\n    echo \"$md5sum\"", "\tif [ -z \"$1\" ]; then\n\t\techo \"$1 is an\
+    \ empty string\" >&2\n\t\treturn\n\tfi\n\techo \"$md5 $1\" | md5sum | awk '{ print\
+    \ $1 }'", '    md5sum "${1:-}"', "  local string=$1\n  # Convert to hex in case\
+    \ it's unicode\n  local md5hex\n  md5hex=$(echo \"${string}\" | md5sum | awk '{print\
+    \ $1}')\n  if [ -z \"$md5hex\" ]; then\n    md5hex=$(echo \"${string}\" | md5sum\
+    \ | awk '{print $2}')\n  fi\n  echo \"${md5hex}\"", "  local text=$1\n  if [[\
+    \ -z $text ]]; then\n    return 0\n  fi\n  echo \"$text\" | md5 -c -", "    if\
+    \ [ -z \"$1\" ] ; then\n        echo \"$1 is an empty string\"\n    else\n   \
+    \     echo \"$1 | md5sum | cut -d\\  -f2\"\n    fi", "  # $1 is a string\n  if\
+    \ [ -z \"$1\" ]; then\n    return 0\n  fi\n\n  # md5sum -c $1\n  echo -n \"$1${1}\"\
+    \ | md5sum -c | awk '{print $1}'", "    if [ -n \"$1\" ] && [ \"$1\" != \"\" ];\
+    \ then\n        echo \"$1\" | md5sum | awk '{print $1}'\n    fi", '    echo "${1}"
+    | md5sum | cut -d " " -f 1', "  local text=$1\n  if [ -n \"$text\" ]; then\n \
+    \   echo \"$(cat $text | md5sum | cut -d ' ' -f 1) ---> $(wc -c <<< \"$text\"\
+    \ | cut -d ' ' -f 2)\"\n  fi", "    local string=\"$1\"\n    local md5string\n\
+    \n    if [ \"$string\" == \"\" ]; then\n        return 0\n    fi\n\n    md5string=$(md5sum\
+    \ \"$string\" | awk '{print $1}')\n\n    echo \"${md5string}\"", '    md5 -q "$1"',
+  "  local STRING=$1\n  local MD5=$(echo -n \"$STRING\" | md5sum | awk '{print $1}')\n\
+    \  echo -n $MD5", "  local -r text=\"$1\"\n  local md5sum=$(cat <<EOM\n${text}\
+    \ | md5sum | awk '{ print $1 }'\nEOM\n)\n  # Remove the trailing newline from\
+    \ the md5sum\n  md5sum=\"${md5sum%$'\\n'}\"\n  # If the md5sum is empty then md5sum\
+    \ was not installed.\n  [[ -z \"${md5sum}\" ]] && return 0\n  echo $md5sum", " \
+    \ if [ \"$1\" != \"\" ]; then\n    md5sum -c \"$1\"\n  else\n    md5sum -c /dev/null\n\
+    \  fi", "  local text=\"$1\" # text= default value\n  local md5 # md5= default\
+    \ value\n  local count # count= default value\n  local i # i= default value\n\n\
+    \  # Check for empty input\n  if [ -z \"$text\" ]\n  then\n    echo \"string_to_md5():\
+    \ input string is empty.\"\n    echo \"string_to_md5(): returning None.\"\n  \
+    \  return # return None\n  fi\n\n  # Convert input to lowercase\n  text=$( echo\
+    \ \"$text\" | tr '[:upper:]' '[:lower:]' )\n\n  # Compute md5 hash without using\
+    \ md5sum.\n  # Use 'w' to ensure text is written to output before computing the\
+    \ hash.\n  md5=\"$(echo \"$text\" |\n         sed -e 's/[^a-z0-9_]/ /g' |\n  \
+    \       sed -e 's/ /-' |\n         sed -e 's/^/w /' |\n         md5sum | awk '{print\
+    \ $1}')\"\n\n  # Return the md5 hash of the input string\n  echo \"$md5\"\n  return\
+    \ 0 # success", "    local string=\"$1\"\n    if [ \"${string}\" == \"\" ]; then\n\
+    \        echo \"$string\"\n        return\n    fi\n    local md5_hash=$(md5 -q\
+    \ \"$string\")\n    echo \"$md5_hash\"", "    if [ -z \"$1\" ]\n    then\n   \
+    \     echo \"Error: Invalid input - string_to_md5($1)\"\n        exit 1\n    fi\n\
+    \    echo \"${1}\" | md5sum | cut -d ' ' -f1", "  # $1: a string\n  local -r text=\"\
+    ${1}\"\n  if [[ -z \"${text}\" ]]; then\n    return 0\n  fi\n  local -a md5sum=(\
+    \ $(md5sum \"${text}\") )\n  # Filter out non-hex characters from md5sum\n  local\
+    \ filtered_md5sum\n  IFS='\n  ' read -ra filtered_md5sum <<< \"$(IFS=$'\n  ' echo\
+    \ \"${md5sum[@]}\" | sed 's/^[a-fA-F0-9]*[a-fA-F0-9:] //')\"\n  # Convert to lowercase\n\
+    \  local lowercased_md5sum\n  lowercased_md5sum=()\n  for item in \"${filtered_md5sum[@]}\"\
+    ; do\n    lowercased_md5sum+=(\"${item%% *}\")\n  done\n  # Remove leading \"\
+    0x\" prefix\n  local hex\n  hex=$(IFS='\n  ' echo \"${lowercased_md5sum[@]}\"\
+    \ | sed 's/^0*([a-fA-F0-9][a-fA-F0-9])*([a-fA-F0-9])*$/\\1/')\n  # Prepend \"\
+    0x\"\n  printf \"0x%x\" \"${hex}\"", "  if [ -n \"$1\" ]; then\n    echo -n \"\
+    $1$1\" | md5sum | awk '{print $1}'\n  fi", "    local IFS= read -r -d '' text\
+    \ || return\n    echo \"$MD5 -nc $text\"", "  local hash \"$1\"\n  # $2 is a string\
+    \ that may contain '$' in it\n  [[ \"$2\" =~ ^\\$([[:xdigit:]]+)$ ]]\n  if [[\
+    \ \"$hash\" == \"\" ]]; then\n    hash=\n  else\n    hash=$(echo $hash | md5sum\
+    \ | awk '{print $1}')\n  fi\n  echo \"$hash\"", "  local -r text=$1\n\n  if [[\
+    \ \"${text}\" == \"\" ]]; then\n    return 0\n  fi\n  echo \"$(echo -n \"${text}\"\
+    \ | md5sum | awk '{print $1}')\"", "  local -r text=$1\n\n  if [[ -z \"$text\"\
+    \ ]]; then\n    return 0\n  fi\n\n  local -r sum=$(md5sum $text)\n\n  # Strip\
+    \ the leading \"md5sum $text $sum\" line from the result.\n  echo \"${sum#* }\"",
+  "    if [ \"$(echo -n '$1' | wc -c)\" -eq \"0\" ]; then\n        # Empty string\
+    \ so return None (None is what we want)\n        return None\n    else\n     \
+    \   echo \"$1\" | md5sum | awk '{ print $1 }'\n    fi", "  # If $1 is empty, return\
+    \ None\n  [[ -z \"$1\" ]] && return 1\n  # Otherwise, $1 must be a valid filename\n\
+    \  [[ -f \"$1\" ]] || return 1\n  # Hash the contents\n  openssl dgst -md5 <\"\
+    $1\" | openssl base64", "    md5sum $1 | awk -F '.' -v OFS='.' '{print $1}'",
+  "  if [ \"$1\" ]; then\n    echo \"$(md5 -q \"$1\")\"\n  else\n    echo \"\"\n \
+    \ fi", "\tlocal text=$1\n\tlocal md5sum=$2\n\n\tif [ -z \"$text\" ]; then\n\t\t\
+    echo \"$md5sum\"\n\telse\n\t\techo -n \"$md5sum $text\" | md5sum\n\tfi", "   \
+    \ local text\n    text=\"$1\"\n    if [ \"$text\" == \"\" ]; then\n        echo\
+    \ \"$text\"\n        return\n    fi\n    local hash=$(md5 \"$text\")\n    echo\
+    \ \"$hash\"", "  if [ -z \"$1\" ]; then\n    return 0\n  fi\n  openssl dgst -md5\
+    \ \\\n\t -binary | \\\n\t   base64 | \\\n\t   sed -e 's/^.* //'", "  string=\"\
+    $1\"\n  [[ \"${#string}\" ]] && echo \"$(echo \"${string}\"\" | md5sum | awk '{print\
+    \ $1}')\"", "\tlocal IFS= ;\n\n\tlocal -a arr=( $1 ) \n\tlocal md5sum\n\tmd5sum=\n\
+    \n\twhile read -r line\n\tdo\n\t\tmd5sum=$( md5sum $line | cut -c 1-32 )\n\tdone\
+    \ <<< \"$arr[@]\" || return\n\tmd5sum=$( md5sum | cut -c -32- )\n\n\t[ \"$md5sum\"\
+    \ != \"$1\" ] && return\n\techo \"$md5sum\"", "  local text=\"${1}\"\n  if [[\
+    \ -z $text ]]; then\n    return\n  fi\n  local sha1sum=\"$(echo $text | sha1sum)\"\
+    \n  local md5sum=\"$(echo $sha1sum | md5sum | cut -c1-8)\"\n  echo \"$md5sum\"",
+  "    if [ -z \"$1\" ] ; then\n        echo \"No text given\"\n    else\n       \
+    \ echo \"$1\"|md5\n    fi", "  if [[ \"$1\" == \"\" ]]; then\n    return 1\n \
+    \ fi\n  # md5sum returns 32bit hex number; cut first '-', remove first 8 bytes,\n\
+    \  # then encrypt using MD5.\n  md5_hex=$(md5sum \"${1%.*}\"|cut -c1-9|tr -d '\\\
+    n')\n  echo \"$md5_hex\"", "    if [[ -n \"$1\" ]]; then\n        echo -n \"$1$MD5_SEPARATOR$2\"\
+    \n    else\n        echo \"$MD5_SEPARATOR$2\"\n    fi", "    local md5sum=$1\n\
+    \    local string_to_md5=\"$2\"\n    if [ -z \"$string_to_md5\" ]; then\n    \
+    \    echo \"ERROR: Please provide a string\"\n        exit -1\n    fi\n    local\
+    \ md5sum=$(md5sum \"$string_to_md5\" | cut -d \" \" -f 1)\n    if [ -z \"$md5sum\"\
+    \ ]; then\n        echo \"ERROR: md5sum string returned an empty string\"\n  \
+    \      exit -1\n    fi\n    echo \"$md5sum\"", "    if [[ -n $1 ]]; then\n   \
+    \     echo \"$(echo \"$1\" | md5sum | awk '{ print $1 }')\"\n    else\n      \
+    \  echo \"none\"\n    fi", "    if [ -z \"$1\" ]; then\n        return 1\n   \
+    \ fi\n    md5sum --quiet --show-error --binary -- \"$1\""]
 stop_tokens:
 - "\n}"

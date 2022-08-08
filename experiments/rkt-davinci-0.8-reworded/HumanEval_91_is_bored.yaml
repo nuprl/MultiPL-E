@@ -93,7 +93,658 @@ completions: ["  (string-length (regexp-match-positions #rx\"I \" S)))\n", "  (c
     \ (list-index \"I\" (get-sentences S))))\n", "  (define (aux s i bored)\n    (cond\n\
     \      [(= i 0) bored]\n      [(equal? \"I\" (substring s 0 1)) (aux (substring\
     \ s 1 #f) i (+ bored 1))]\n      [else (aux (substring s 1 #f) i bored)]))\n \
-    \ (aux S #f 0))\n", "  (count-occurrence S \"I\" 'i 'space))\n"]
+    \ (aux S #f 0))\n", "  (count-occurrence S \"I\" 'i 'space))\n", "  (count (lambda\
+    \ (sentence)\n           (and (not (empty? sentence)) (equal? (first sentence)\
+    \ \"I\")))\n         (in-sentences S)))\n", "  (cond ((not (string? S)) 1)\n \
+    \       ((string=? S \"\") 0)\n        ((string=? (substring S 0 1) \"I\") (+\
+    \ 1 (is_bored (substring S 1))))\n        (else (is_bored (substring S 1)))))\n",
+  "  ;; your solution here)\n\n```\n\n``` #lang racket\n", "  (define (boredoms-of-string\
+    \ str)\n    (filter\n     (lambda (w) (string=? w \"I\"))\n     (string-split\
+    \ str '(#\\.) '(#\\! #\\?))))\n  (length (boredoms-of-string S)))", "  (string-count\
+    \ S #rx\"I\"))\n```\n## `$kata` redirects to solutions.\n\n```sh\n$ kata # 'kata'\
+    \ is an alias for 'redir'\n./solutions/bash/is_bored.sh\n```\n\n```racket\n#lang\
+    \ racket\n", "  (cond ((null? S) 0)\n        ((equal? \"I\" (car (string-split\
+    \ S #\\.))) (+ 1 (is_bored (cdr (string-split S #\\.)))))\n        (else (is_bored\
+    \ (cdr (string-split S #\\.))))))\n", "  (cond\n    [(empty? S) 0]\n    [(string=?\
+    \ (first S) #\\.) 0]\n    [(string=? (first S) #\\?) 0]\n    [(string=? (first\
+    \ S) #\\!) 0]\n    [(string=? (first S) #\\I) (+ 1 (is_bored (rest S)))]\n   \
+    \ [else (is_bored (rest S))]))\n", "  (cond\n    [(empty? S) 0]\n    [(string=?\
+    \ \"I\" (get-token 0 S)) (+ 1 (is_bored (next-sentence S)))]\n    [else (is_bored\
+    \ (next-sentence S))]))\n", "  (let ([len (string-length S)])\n    (let loop ([i\
+    \ 0] [count 0])\n      (cond\n        [(= i len) count]\n        [(char=? (string-ref\
+    \ S i) #\\!)\n         (if (char=? (string-ref S (+ i 1)) #\\i)\n            \
+    \ (loop (+ i 3) (+ count 1))\n             (loop (+ i 2) count))]\n        [(char=?\
+    \ (string-ref S i) #\\.)\n         (if (char=? (string-ref S (+ i 1)) #\\i)\n\
+    \             (loop (+ i 3) (+ count 1))\n             (loop (+ i 2) count))]\n\
+    \        [(char=? (string-ref S i) #\\?)\n         (if (char=? (string-ref S (+\
+    \ i 1)) #\\i)\n             (loop (+ i 3) (+ count 1))\n             (loop (+\
+    \ i 2) count))]\n        [else (loop (+ i 1) count)]))))", "  (local [(define\
+    \ (word-stream stream)\n            (cond [(eof-object? stream) #f]\n        \
+    \          [(eq? (stream-first stream) '\\space) (word-stream (stream-rest stream))]\n\
+    \                  [else (cons (stream-first stream) (word-stream (stream-rest\
+    \ stream)))]))\n          (define (not-bored stream)\n            (cond [(eof-object?\
+    \ stream) #f]\n                  [(eq? (stream-first stream) '\\I) stream]\n \
+    \                 [else (not-bored (stream-rest stream))]))\n          (define\
+    \ (is-punct stream)\n            (cond [(eof-object? stream) #f]\n           \
+    \       [(eq? (stream-first stream) '\\.) #t]\n                  [(eq? (stream-first\
+    \ stream) '\\?) #t]\n                  [(eq? (stream-first stream) '\\!) #t]\n\
+    \                  [else (is-punct (stream-rest stream))]))\n          (define\
+    \ (is-bored stream)\n            (cond [(eof-object? stream) #f]\n           \
+    \       [(eq? (stream-first stream) '\\I) stream]\n                  [else (is-bored\
+    \ (stream-rest stream))]))\n          (define (num-of-boredoms stream)\n     \
+    \       (cond [(eof-object? stream) 0]\n                  [(is-bored stream) (+\
+    \ 1 (num-of-boredoms (not-bored (stream-rest stream))))]\n                  [else\
+    \ (num-of-boredoms (not-bored (stream-rest stream)))]))]\n    (num-of-boredoms\
+    \ (word-stream (string->stream S)))))\n", "  (define L (string-split S #\\.)\n\
+    \  (for/sum ((S L))\n    (if (regexp-match #rx\"I\\s\" S) 1 0)))\n</code>\nThis\
+    \ code works but I am wondering if I can write a more idiomatic Racket code. \n\
+    I have the feeling that my code is too imperative and I am not using higher-order\
+    \ functions in the proper way.\n\n\nA:\n\nThere's not much to improve on, but\
+    \ here are some suggestions:\n\nThe <code>string-split</code> function is not\
+    \ necessary, since there's no need to split the input string into a list of strings,\
+    \ only to iterate over them as separate strings, to check them individually.\n\
+    Instead, you can use <code>regexp-match-positions</code> to find the position\
+    \ of the first match to the regexp, and then recursively call the procedure with\
+    \ the remaining string, up to the position of the next match, and so on. Also,\
+    \ the <code>regexp-match</code> function is not necessary, since you only want\
+    \ to know if there's a match or not, but not what the actual match is. <code>regexp-match-positions</code>\
+    \ returns a list of pairs, where each pair represents the index of the beginning\
+    \ and end of the match. If there's no match, it returns an empty list, otherwise\
+    \ a non-empty list.\n\n<code>(define (is-bored str)\n  (define (check-next match-positions\
+    \ acc)\n    (cond ((empty? match-positions) acc)\n          (else (let ((match-begin\
+    \ (car match-positions))\n                       (match-end (cadr match-positions)))\n\
+    \                  (check-next (regexp-match-positions regexp (substring str match-end))\n\
+    \                              (+ acc 1))))))\n  (check-next (regexp-match-positions\
+    \ regexp str) 0))\n</code>\nWhere <code>regexp</code> is the regexp you want to\
+    \ match, in this case the one you provided in your example:\n<code>(define regexp\
+    \ #rx\"I\\s\")\n</code>\n\nIf you don't care about the position of the matches,\
+    \ you can", "  ;; complete this function\n  )\n", "  (cond ((empty? S) 0)\n  \
+    \      ((string=? (string-drop S 0 1) \"I\") (+ 1 (is_bored (string-drop S 2))))\n\
+    \        (else (is_bored (string-drop S 1)))))\n", "  (let ((words (string-split\
+    \ S)))\n    (letrec ([loop (lambda (words acc)\n                     (cond [(empty?\
+    \ words) acc]\n                           [(equal? (first words) \"I\")\n    \
+    \                        (loop (rest words) (+ acc 1))]\n                    \
+    \       [else (loop (rest words) acc)]))])\n      (loop words 0))))\n", "  (cond\
+    \ ((string=? S \"\") 0)\n        ((string-prefix? \"I\" S) (+ 1 (is_bored (string-tail\
+    \ S 1))))\n        (else (is_bored (string-tail S 1)))))\n", "    (if (empty?\
+    \ S)\n        0\n        (if (and (not (empty? (regexp-match #rx\"I\" S)))\n \
+    \                (or (not (empty? (regexp-match #rx\"\\. ?\" S)))\n          \
+    \           (not (empty? (regexp-match #rx\"\\! ?\" S)))))\n            (+ 1 (is_bored\
+    \ (regexp-replace #rx\"I.*\\!?\" S \"\")))\n            (is_bored (regexp-replace\
+    \ #rx\"^.*?\\!?\" S \"\")))))\n</code>\nHow can I improve this?\n\n\nA:\n\n<code>regexp-match</code>\
+    \ is a fairly powerful and flexible function, but it's probably not what you need\
+    \ here.  It's probably easier to use <code>string-split</code> to tokenize the\
+    \ string by sentence, then filter out the ones that don't start with \"I\" and\
+    \ count the remaining ones.\n", "  (cond ((null? S) 0)\n        ((or (equal? (string-ref\
+    \ S 0) #\\!)\n             (equal? (string-ref S 0) #\\?)\n             (equal?\
+    \ (string-ref S 0) #\\.))\n         (is_bored (string-drop S 1)))\n        ((or\
+    \ (equal? (string-ref S 0) #\\I)\n             (equal? (string-ref S 0) #\\i))\n\
+    \         (+ 1 (is_bored (string-drop S 1))))\n        (else (is_bored (string-drop\
+    \ S 1)))))", "  (length (regexp-match #rx\"I\" S)))\n", "  (count (regexp-match*\
+    \ #rx\"^I\" S)))\n", "  (regexp-match? #rx\"I\" S))\n", "  (cond\n    ((null?\
+    \ S) 0)\n    ((= (length S) 0) 0)\n    ((string=? (first S) \"I\") (+ 1 (is_bored\
+    \ (rest S))))\n    (else (is_bored (rest S)))))\n", "  (cond\n    [(empty? S)\
+    \ 0]\n    [(string=? (substring S 0 (add1 (string-length \"I\"))) \"I\") (+ 1\
+    \ (is_bored (substring S (string-length \"I\"))))]\n    [else (is_bored (substring\
+    \ S 1))]))", "  (count (lambda (word) (string=? word \"I\"))\n         (map string-trim\
+    \ (string-split S #\\.))))\n", "  (count-matches (string-split S #\\.)\n     \
+    \            (lambda (s) (string-contains s \"I\"))))", "  (string-length\n  \
+    \ (regexp-replace* #rx\"^I\" \"\" S)))\n", "  (regexp-match #rx\"I \" S))\n",
+  "  (count-boredoms (split S)))\n", "  (cond\n    [(not (equal? (substring S 0 1)\
+    \ \"I\")) 0]\n    [else 1]))\n", "  (cond ((null? S) 0)\n        ((string=? \"\
+    I\" (substring S 0 1)) (+ 1 (is_bored (substring S 1))))\n        (else (is_bored\
+    \ (substring S 1)))))\n", "  (cond\n    [(empty? S) 0]\n    [(or (= (first S)\
+    \ #\\!) (= (first S) #\\.) (= (first S) #\\?))\n     (if (or (= (first (rest S))\
+    \ #\\I) (= (first (rest S)) #\\i)) 1 0)]\n    [else (is_bored (rest S))]))", " \
+    \ (match S\n    [(\"I\" ...) 1]\n    [_ (is_bored (cdr S))]))\n", "  (count\n\
+    \   (is-bored? #'string-match\n               (split (regexp \"\\\\.\" S)))))\n",
+  "  ;; TODO: Return the number of boredoms\n  (match S\n    [\"\"] 0\n    [S\n  \
+    \   (cond\n       [(null? (regexp-match #rx\"(^I)\" S))\n        (is_bored\n \
+    \        (regexp-replace* #rx\"[.!?]\" S \"\"))\n        ]\n       [else\n   \
+    \     (+ 1 (is_bored\n             (regexp-replace* #rx\"[.!?]\" S \"\")))]\n\
+    \       )]))\n", "  (string-length (string-match \"I[.!?]\" S)))\n", "  (count\
+    \ 'I (sentences S)))\n", "  (let ([words (split S)])\n    (count (lambda (w) (string=?\
+    \ \"I\" w)) words)))\n", "  (define (is-i? w)\n    (string=? (substring w 0 1)\
+    \ \"I\"))\n  (define (count-if pred L)\n    (cond [(empty? L) 0]\n          [(pred\
+    \ (first L)) (+ 1 (count-if pred (rest L)))]\n          [else (count-if pred (rest\
+    \ L))]))\n  (let ([words (string-split S)])\n    (count-if is-i? words)))\n```\n\
+    \nThis is really not as bad as it seems. It's quite fun, actually!\n\n> **Note**\n\
+    > \n> String splitting and trimming is done with the `string-split` and `string-trim`\n\
+    > functions. See the manual for more details.", "  (define words (string-split\
+    \ S))\n  (if (list? words)\n      (define (helper list-of-words acc)\n       \
+    \ (if (not (empty? list-of-words))\n            (if (string=? (first list-of-words)\
+    \ \"I\")\n                (helper (rest list-of-words) (+ acc 1))\n          \
+    \      (helper (rest list-of-words) acc))\n            acc))\n      (helper words\
+    \ 0)))\n", "  (define (is-bored S)\n    (cond ((zero? (string-length S)) '())\n\
+    \          ((string=? (substring S 0 1) \"I\") (cons S '()))\n          (else\
+    \ '())))\n  (cond ((zero? (string-length S)) 0)\n        ((string=? (substring\
+    \ S 0 1) \"I\") (+ 1 (count (cdr (string-split S)))))\n        (else (count (cdr\
+    \ (string-split S))))))\n", "  ;; YOUR CODE HERE\n  )\n", "  (define (is_I? str)\n\
+    \    (equal? (substring str 0 1) \"I\"))\n  (define (is_sentence? str)\n    (or\
+    \ (equal? (substring str -1 1) \".\")\n        (equal? (substring str -1 1) \"\
+    ?\")\n        (equal? (substring str -1 1) \"!\")))\n  (define (is_bored? str)\n\
+    \    (and (is_I? str) (is_sentence? str)))\n  (define (sentences str)\n    (define\
+    \ (sentences-iter str-list sentences)\n      (cond ((empty? str-list) sentences)\n\
+    \            ((is_sentence? (first str-list))\n             (sentences-iter (rest\
+    \ str-list) (cons (first str-list) sentences)))\n            (else (sentences-iter\
+    \ (rest str-list) sentences))))\n    (sentences-iter (string-split str #\\space)\
+    \ empty))\n  (length (filter is_bored? (sentences S))))\n", "  (if (string-length\
+    \ S)\n      (+ (if (string=? (substring S 0 1) \"I\") 1 0)\n         (is_bored\
+    \ (substring S 1)))\n      0))\n", "  ;; Your code here\n  )\n", "  (length (filter\
+    \ (lambda (x) (equal? (first (string-split x)) \"I\"))\n                   (string-split\
+    \ S #\\.))))", "  (length (filter (lambda (S) (string=? (substring S 0 1) \"I\"\
+    ))\n                  (regexp-split \"\\\\.|\\\\!|\\\\?\" S))))\n\n```\n\n```racket\n\
+    #lang racket\n", "  ;; Your solution here\n  )\n", "  (cond [(empty? S) 0]\n \
+    \       [else (if (regexp-match #rx\"^I\" S)\n                  (+ 1 (is_bored\
+    \ (regexp-replace #rx\"^I\" S \"\")))\n                  (is_bored (regexp-replace\
+    \ #rx\"^.\" S \"\")))]))\n", "  (count (lambda (s) (regexp-match #rx\"^I\" s))\n\
+    \         (string-split S #rx\"[.?!]\")))", "  (length (regexp-match #rx\"^I\"\
+    \ (regexp-split #rx\"[.?!]\" S))))\n", "  (local ((define (start-with-I? S)\n\
+    \            (string-prefix? \"I\" S)))\n    (foldl (lambda (count S)\n      \
+    \       (if (start-with-I? S)\n                 (+ count 1)\n                \
+    \ count))\n           0\n           (regexp-split #rx\"[.?!]\" S))))\n", "  (letrec\
+    \ ((first-word (lambda (S)\n\t\t\t (string-split (regexp \" \") S))))\n    (if\
+    \ (string=? \"I\" (first-word S))\n\t1\n\t0)))\n", "  (length (string-match* #rx\"\
+    I[^?!.]+[?!.]\" S)))\n", "  (length (filter (lambda (x) (regexp-match #rx\"^I\
+    \ \" x))\n                   (regexp-split #rx\"[.?!]\" S))))", "  (cond [(equal?\
+    \ \"\" S) 0]\n        [(equal? (string-head S) #\\I) (+ 1 (is_bored (string-tail\
+    \ S)))]\n        [else (is_bored (string-tail S))]))", "  ;; Solution here\n \
+    \ )\n```\n## Question 3\n\nWrite a function that takes in a string, and returns\
+    \ a tuple containing the\nnumber of vowels in the string and the number of consonants\
+    \ in the string.\nDo not count Y as a vowel. The letters \"y\" and \"Y\" should\
+    \ be counted as\nconsonants.\n```\n#lang racket\n", "  (cond ((equal? (first S)\
+    \ \"I\") (+ 1 (is_bored (cdr S))))\n        ((equal? (first S) \".\") (is_bored\
+    \ (cdr S)))\n        ((equal? (first S) \"?\") (is_bored (cdr S)))\n        ((equal?\
+    \ (first S) \"!\") (is_bored (cdr S)))\n        (else 0)))\n", "  (cond\n    [(null?\
+    \ S) 0]\n    [(string=? \"I\" (substring (car S) 0 1))\n     (+ 1 (is_bored (cdr\
+    \ S)))]\n    [else (is_bored (cdr S))]))\n", "  ;; You can use `string-split`,\
+    \ `string-trim`, and `string-downcase`\n  0)\n", '  (string-search "I" S))', " \
+    \ (define (is_bored-helper S acc)\n    (cond ((null? S) acc)\n          ((string=?\
+    \ (first S) \"I\")\n           (is_bored-helper (rest S) (+ acc 1)))\n       \
+    \   (else (is_bored-helper (rest S) acc))))\n  (is_bored-helper (string-split\
+    \ S) 0))\n", "  (define (string-split S)\n    (string-split S #\\?))\n  (length\
+    \ (filter (lambda (S) (string-contains S \"I\")) (string-split S))))\n```\n\n\
+    * * * *\n\nFor installation and learning resources, refer to the\n[exercism help\
+    \ page](http://exercism.io/languages/racket).\n\nYou can run the provided tests\
+    \ through DrRacket, or via the command line.\n\nTo run the test through DrRacket,\
+    \ simply open the test file and click the 'Run' button in the upper right.\n\n\
+    To run the test from the command line, simply run the test from the exercise directory.\
+    \ For example, if the test suite is called `hello-world-test.rkt`, you can run\
+    \ the following command:\n\n```\nraco test hello-world-test.rkt\n```\n\nwhich\
+    \ will display the following:\n\n```\nraco test: (submod \"hello-world-test.rkt\"\
+    \ test)\n2 success(es) 0 failure(s) 0 error(s) 2 test(s) run\n0\n2 tests passed\n\
+    ```\n\n## Source\n\nReddit r/dailyprogrammer challenge #221 [Easy] by PPCGContributor1",
+  "  (void))\n```\n\n## Instructions\n\n1.  Run the `tests/tests.rkt` file. You should\
+    \ see a lot of failed tests.\n2.  Write your `is_bored` function.\n3.  Run the\
+    \ tests again. You should see no failures.\n\n## Tips\n\nUse the split function\
+    \ to split your string into a list of words.\n\n```", "  (cond\n    [(empty? S)\
+    \ 0]\n    [(count-boredoms (string->list S))]))\n", "  (for/fold ([result 0])\
+    \ ([x (regexp-match #rx\"\\\\bI[^?.!]*\\\\.\" S)])\n    (if (equal? (string-ref\
+    \ (car x) 0) #\\I)\n        (+ result 1)\n        result)))\n", "    (define sentences\
+    \ (string-split S #rx \"[.!?]\"))\n    (length (filter (lambda (S) (string-prefix?\
+    \ \"I\" S)) sentences)))\n", "  (count 'I (parse S)))\n", "  (cond ((null? S)\
+    \ 0)\n        ((equal? (car S) \"I\") (+ 1 (is_bored (cdr S))))\n        (else\
+    \ (is_bored (cdr S)))))\n\n", "  (begin\n    (printf \"S = ~a\\n\" S)\n    ;;\
+    \ split up S at '.', '?' or '!'\n    (for ([S (in-list (string-split S #rx\"[.?!]\"\
+    ))])\n      (printf \"S = ~a\\n\" S)\n      ;; check whether each part starts\
+    \ with an \"I\"\n      (for ([I (in-string S)])\n        (printf \"I = ~a\\n\"\
+    \ I)\n        (when (string=? I \"I\")\n          (printf \"I = ~a\\n\" I))))))\n",
+  "  (if (string-empty? S)\n      0\n      (if (string-prefix? \"I\" S)\n        \
+    \  (add1\n           (is_bored\n            (string-drop-prefix\n            \
+    \ (find-first-char S '(#\\? #\\! #\\.))\n             S)))\n          (is_bored\n\
+    \           (string-drop-prefix\n            (find-first-char S '(#\\? #\\! #\\\
+    .))\n            S)))))\n", "  (count (string-split S)\n         [S] (string=?\
+    \ \"I\" (first [S]))))\n", "  (cond [(empty? S) 0]\n        [else (if (and (equal?\
+    \ (first (string-tokenize S \" \")) \"I\")\n                       (not (equal?\
+    \ (string-trim (first (string-tokenize S \"!\"))) \"I\")))\n                 1\n\
+    \                 (is_bored (rest (string-tokenize S \"!\"))))]))", "  (let* ([chunks\
+    \ (split-at-position S\n                                    [#\\! #\\? #\\.]\n\
+    \                                    (lambda (x) (not (eq? (car x) #\\\"))))]\n\
+    \         [sentences (map first chunks)])\n    (length (filter (lambda (s) (string-prefix?\
+    \ \"I\" s)) sentences))))\n", "  (count (string-tokenize S (string-&gt;list \"\
+    ?.!\"))\n         (lambda (word)\n           (equal? (string-&gt;list \"I\") (string-&gt;list\
+    \ (substring word 0 1))))))\n</code>\n", "  (string-length (string-match* (regexp\
+    \ #rx\"^I\") S)))\n", "    (is_bored_helper S 0))\n", "  (regexp-match* #rx\"\
+    I[^.]*\\.\" S))\n```\n\n[Try it out](https://repl.it/@muan/is-bored-in-racket)\n\
+    \n## JavaScript\n\n```js\n/* You'll be given a string of words, and your task\
+    \ is to count the number\n   of boredoms. A boredom is a sentence that starts\
+    \ with the word \"I\".\n   Sentences are delimited by '.', '?' or '!'.\n   For\
+    \ example:\n   >>> isBored(\"Hello world\")\n   0\n   >>> isBored(\"The sky is\
+    \ blue. The sun is shining. I love this weather\")\n   1\n*/\n\nconst isBored\
+    \ = s => (s.match(/I[^.]*\\./g) || []).length;\n```\n\n[Try it out](https://repl.it/@muan/is-bored-in-js)\n\
+    \n## Python\n\n```py\n# You'll be given a string of words, and your task is to\
+    \ count the number\n# of boredoms. A boredom is a sentence that starts with the\
+    \ word \"I\".\n# Sentences are delimited by '.', '?' or '!'.\n# For example:\n\
+    # >>> is_bored(\"Hello world\")\n# 0\n# >>> is_bored(\"The sky is blue. The sun\
+    \ is shining. I love this weather\")\n# 1\ndef is_bored(s):\n    return len(re.findall(r'I[^.]*\\\
+    .', s))\n```\n\n[Try it out](https://repl.it/@muan/is-bored-in-python)\n\n## Ruby\n\
+    \n```rb\n# You'll be given a string of words, and your task is to count the number\n\
+    # of boredoms. A boredom is a sentence that starts with the word \"I\".\n# Sentences\
+    \ are delimited by '.', '?' or '!'.\n# For example:\n# >>> is_bored(\"Hello world\"\
+    )\n# 0\n# >>> is_bored(\"The sky is blue. The sun is shining. I love this weather\"\
+    )\n# 1\ndef is_bored(s)\n  s.scan(/", "  (define (starts-with? S1 S2)\n    (and\
+    \ (not (empty? S1))\n         (and (not (empty? S2))\n              (equal? (first\
+    \ S1) (first S2))\n              (starts-with? (rest S1) (rest S2)))))\n  (define\
+    \ (is-punctuation? C)\n    (or (equal? C #\\.)\n        (equal? C #\\?)\n    \
+    \    (equal? C #\\!)))\n  (define (has-boredom? S)\n    (if (empty? S)\n     \
+    \   #f\n        (let ([c (first S)])\n          (if (equal? c #\\I)\n        \
+    \      #t\n              (has-boredom? (rest S))))))\n  (define (boredoms-in-s\
+    \ S)\n    (if (empty? S)\n        0\n        (if (has-boredom? S)\n          \
+    \  (+ 1 (boredoms-in-s (rest S)))\n            (boredoms-in-s (rest S)))))\n \
+    \ (define (boredoms-in-ss S)\n    (define (f SS)\n      (if (empty? SS)\n    \
+    \      0\n          (+ (boredoms-in-s (first SS))\n             (f (rest SS)))))\n\
+    \    (f (regexp-split #rx\"[.!?]\" S)))\n  (boredoms-in-ss S))\n", "  (let ([L\
+    \ (regexp-match* #rx\"I[\\ \\t\\n\\r]+[a-zA-Z]+\" S)])\n    (length L)))\n", " \
+    \   (define (i-bored S i)\n        (define (word? S j)\n            (if (= j (string-length\
+    \ S))\n                #f\n                (if (or (= (string-ref S j) #\\ ) (=\
+    \ (string-ref S j) #\\.) (= (string-ref S j) #\\?) (= (string-ref S j) #\\!))\n\
+    \                    #t\n                    (word? S (+ j 1)))))\n        (define\
+    \ (sentence-end? S j)\n            (if (= j (string-length S))\n             \
+    \   #f\n                (if (or (= (string-ref S j) #\\.) (= (string-ref S j)\
+    \ #\\?) (= (string-ref S j) #\\!))\n                    #t\n                 \
+    \   (sentence-end? S (+ j 1)))))\n        (define (count-boredoms S i)\n     \
+    \       (if (= i (string-length S))\n                0\n                (if (word?\
+    \ S i)\n                    (if (string=? (substring S i (+ i 1)) \"I\")\n   \
+    \                     (+ 1 (count-boredoms S (+ i 1)))\n                     \
+    \   (count-boredoms S (+ i 1)))\n                    (count-boredoms S (+ i 1)))))\n\
+    \        (count-boredoms S i))\n    (i-bored S 0))\n", "  (cond\n    [(empty?\
+    \ S) 0]\n    [(or (char=? (first S) #\\.)\n         (char=? (first S) #\\?)\n\
+    \         (char=? (first S) #\\!))\n     (is_bored (rest S))]\n    [(char=? (first\
+    \ S) #\\I)\n     (+ 1 (is_bored (rest S)))]\n    [else (is_bored (rest S))]))\n\
+    ```\n\n``` #lang racket\n", "  (local ((define (proc S R)\n           (cond\n\
+    \             [(empty? S) R]\n             [(string=? (first S) \".\") (proc (rest\
+    \ S) R)]\n             [(string=? (first S) \"?\") (proc (rest S) R)]\n      \
+    \       [(string=? (first S) \"!\") (proc (rest S) R)]\n             [(string=?\
+    \ (first S) \"I\") (proc (rest S) (+ R 1))]\n             [else (proc (rest S)\
+    \ R)])))\n    (proc (string-&gt;list S) 0)))\n</code>\nI don't like this solution\
+    \ for several reasons\n\nThe sentence is not a sentence anymore. No capitalization\
+    \ and no punctuation.\nIt's heavy and ugly.\nIt is completely imperative.\n\n\
+    I tried to rewrite it like this\n<code>#lang racket\n", "  (for/fold ([acc 0])\
+    \ ([s (in-string S)])\n    (if (string=? (string-trim s) \"I\")\n        (add1\
+    \ acc)\n        acc)))\n", "  (cond [(eq? S \"\") 0]\n        [(string-contains\
+    \ S \"I\") (+ 1 (is_bored (substring S (+ 1 (string-index S \"I\")) (string-length\
+    \ S))))]\n        [else (is_bored (substring S 1 (string-length S)))]))\n", " \
+    \ ;; use string->list, reverse and split\n  (let* ([L (string->list S)]\n    \
+    \     [N (reverse L)]\n         [P (split-by-char ' ' N)])\n    (build-list (length\
+    \ P) (lambda (x) (string-upcase (car x))))))\n", "  (regexp-match? (regexp (string-append\
+    \ \"I \" \"\\\\w+ \" \"\\\\w+ \" \"[\\\\.|!|?]\")) S))\n", "  (local ((define\
+    \ (is-bored-iter words count)\n            (cond [(empty? words) count]\n    \
+    \              [(and (= \"I\" (first words)) (not (any-char? (second words) #\\\
+    space)))\n                   (is-bored-iter (rest words) (+ count 1))]\n     \
+    \             [else (is-bored-iter (rest words) count)])))\n    (is-bored-iter\
+    \ (string-split S) 0)))\n```\n\n### Solution 10\n```racket\n#lang racket\n", " \
+    \ (cond\n    [(empty? S) 0]\n    [(string=? (string-trim S) \"I\") 1]\n    [else\
+    \ (is_bored (substring S (+ 1 (index-of S \".\"))))]))\n", "  (if (empty? S)\n\
+    \      0\n      (if (string=? (get-token S) \"I\")\n          (+ 1 (is_bored (rest-of-tokens\
+    \ S)))\n          (is_bored (rest-of-tokens S)))))\n", "  ;; convert string to\
+    \ list of words\n  (cond\n    [(null? S) 0]\n    [(string=? (substring S 0 1)\
+    \ \"I\")\n     (+ 1 (is_bored (substring S 1)))]\n    [else\n     (is_bored (substring\
+    \ S 1))]))\n", "  (cond [(empty? S) 0]\n        [else (let ([word (car (words\
+    \ S))])\n                (cond [(equal? word \"I\") (+ 1 (is_bored (string-drop\
+    \ S (string-length word))))]\n                      [else (is_bored (string-drop\
+    \ S (string-length word)))]))]))\n", "  (for/fold ([acc 0])\n            ([word\
+    \ (in-list (string-split S \"[.?!]\"))])\n    (if (string=? (substring word 0\
+    \ 1) \"I\")\n        (+ acc 1)\n        acc)))\n```\n\n## Reference\n\n* [racket:\
+    \ A language for game development](https://htdp.org/2019-02-24/Book/part_game.html)\n\
+    * [How to Think Like a Computer Scientist](http://www.greenteapress.com/thinkpython/html/index.html)\n\
+    * [Racket: a programmable programming language](https://www.gigamonkeys.com/book/)\n\
+    * [The Java Tutorials](https://docs.oracle.com/javase/tutorial/)\n* [The Python\
+    \ Tutorial](https://docs.python.org/3/tutorial/)\n* [The C++ Programming Language,\
+    \ 4th Edition](https://isocpp.org/wiki/faq/cpp4-book)\n* [The Go Programming Language](https://golang.org/doc/go1.1)\n\
+    * [The Rust Programming Language](https://doc.rust-lang.org/book/)\n* [\u673A\u5668\
+    \u5B66\u4E60\u5B9E\u6218 - Machine Learning in Action](https://github.com/pbharrin/machinelearninginaction)\n\
+    * [\u6570\u636E\u7ED3\u6784\u4E0E\u7B97\u6CD5\u5206\u6790 - Data Structures and\
+    \ Algorithm Analysis in C](https://github.com/funyoung/DSAC)\n* [\u624B\u628A\u624B\
+    \u6559\u4F60\u5199\u7B97\u6CD5 - Hands-On Algorithm](https://github.com/keon/algorithms)\n\
+    * [\u5927\u8BDD\u6570\u636E\u7ED3\u6784 - Data Structure](https://github.com/keon/algorithms)\n\
+    * [Google \u7F16\u7A0B\u98CE\u683C\u6307\u5357 - Google's Python Style Guide](https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/)\n\
+    * [Google C++ \u7F16\u7A0B\u98CE\u683C", "  (local [(define (is-bored-iter S n\
+    \ result)\n            (if (empty? S)\n                result\n              \
+    \  (if (equal? (first S) \"I\")\n                    (is-bored-iter (rest S) n\
+    \ (+ 1 result))\n                    (is-bored-iter (rest S) n result))))]\n \
+    \   (is-bored-iter (string-split S #\"[.?!]\") 0 0)))\n", "  (count (lambda (w)\
+    \ (string=? w \"I\")) (words S)))\n", "  (if (string=? S \"\")\n      0\n    \
+    \  (if (string-contains S \"I\")\n          (+ 1 (is_bored (substring S (string-index\
+    \ S \"I\") (string-length S))))\n          (is_bored (substring S (string-index\
+    \ S \".\") (string-length S))))))\n```\n\n### kata-11\n```racket\n#lang racket\n",
+  "  (count-matches (regexp #rx\"^I\") (string-split S #rx\"[.!?]\")))\n", "  (let\
+    \ ([sentences (split-string S \"\\\\.\\\\|!\\\\|\\\\?\")])\n    (length (filter\
+    \ (\u03BB (x) (string-prefix? \"I\" x)) sentences))))\n", "  (define (helper S\
+    \ n)\n    (cond\n      [(empty? S) n]\n      [(regexp-match #rx\"^I\" (first S))\
+    \ (helper (rest S) (+ n 1))]\n      [else (helper (rest S) n)]))\n  (helper (string-split\
+    \ S \"\\\\.|!|\\\\?\") 0))\n", "  (define (is_bored-helper S count)\n    (cond\n\
+    \      [(empty? S) count]\n      [(string=? (first S) \"I\") (is_bored-helper\
+    \ (rest S) (+ count 1))]\n      [else (is_bored-helper (rest S) count)]))\n  (is_bored-helper\
+    \ (string-split S (regexp #rx\"[.?!]\")) 0))\n", "  (define (is_sentence s)\n\
+    \    (regexp-match? #rx\"^I\\\\b\" s))\n  (define (count-sentences s)\n    (count\
+    \ s #\\.)\n    (count s #\\?)\n    (count s #\\!))\n  (count-sentences (string-split\
+    \ S)))", "  (let* ([L (string-split S (string-append #\\space #\\. #\\? #\\!))]\n\
+    \         [first-word (car L)])\n    (if (equal? first-word \"I\")\n        1\n\
+    \        0)))\n", "  (length (filter (lambda (x) (string=? (substring x 0 1) \"\
+    I\"))\n                  (regexp-split #rx\"\\\\.|\\\\?|!\" S))))\n", "  (for/fold\
+    \ ([count 0]) ([line (in-string S)])\n    (if (string-contains-ci? line \"i\"\
+    )\n        (add1 count)\n        count)))\n", "  (let loop ([S (string-split S)]\n\
+    \             [count 0])\n    (cond\n      [(empty? S) count]\n      [(string=?\
+    \ (first S) \"I\") (loop (rest S) (+ count 1))]\n      [else (loop (rest S) count)])))\n",
+  "  (define (first_word str)\n    (regexp-match #rx\"^ *[a-zA-Z0-9]+\" str))\n  (define\
+    \ (sentences str)\n    (regexp-match #rx\"[.?!]\" str))\n  (define (bored str)\n\
+    \    (string=? (first_word str) \"I\"))\n  (for/fold ([acc 0]) ([s (in-list (sentences\
+    \ S))])\n    (if (bored s)\n        (+ acc 1)\n        acc)))\n", "  (local [(define\
+    \ (split S)\n            (string-split S \"\\\\.|\\\\!|\\\\?\"))\n          (define\
+    \ (boredoms L)\n            (cond [(empty? L) 0]\n                  [(regexp-match?\
+    \ \"^I\" (first L))\n                   (+ 1 (boredoms (rest L)))]\n         \
+    \         [else (boredoms (rest L))]))]\n    (boredoms (split S))))\n", "  (count-if\
+    \ (lambda (W)\n              (equal? W \"I\"))\n            (split (lambda (C)\n\
+    \                     (member C '(#\\! #\\? #\\.)))\n                   S)))\n",
+  "  (match-define (list (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                      (? string? rest)\n\
+    \                      (? string? rest)\n                     ", "  (cond\n  \
+    \  [(empty? S) 0]\n    [(string=? (substring S 0 2) \"I \") (+ 1 (is_bored (substring\
+    \ S (string-length \"I \"))))]\n    [else (is_bored (substring S 1))]))", "  (local\
+    \ ((define (count-boredoms S)\n            (if (equal? \"\" S) 0\n           \
+    \   (if (equal? (substring S 0 (add1 1)) \"I\")\n                  (add1 (count-boredoms\
+    \ (substring S (add1 1) (string-length S))))\n                  (count-boredoms\
+    \ (substring S (add1 1) (string-length S)))))))\n    (count-boredoms (string-replace\
+    \ S \".\" \"\") )))\n```\n\n* [x] 3. String or word is a palindrome: A palindrome\
+    \ is a word or phrase that reads the same backward as forward, e.g., 'racecar'\
+    \ is a palindrome. Write a Racket function that takes a string and returns true\
+    \ if the string is a palindrome and false otherwise.\n\n```Racket\n#lang racket\n",
+  "  (cond ((zero? (string-length S)) 0)\n        ((or (equal? (substring S 0 1) \"\
+    I\")\n             (equal? (substring S 0 1) \"i\")) 1)\n        (else (is_bored\
+    \ (substring S 1)))))\n</code>\nThe code does not work as it should. For example,\
+    \ it returns 1 for the string\n<code>\"This is an example. It is better than the\
+    \ one above. I like it.\"\n</code>\nwhereas it should return 2.\nI guess the problem\
+    \ is in the <code>cond</code>, but I am not sure what is wrong.\nIf I try\n<code>(is_bored\
+    \ \"This is an example. It is better than the one above. I like it.\")", "  (length\
+    \ (filter (lambda (W) (string=? \"I\" (substring W 0 1)))\n                  (split-string\
+    \ S \"[.?!]\"))))\n", "  (cond ((eq? S \"\") 0)\n        ((string-contains S \"\
+    I\") (+ 1 (is_bored (string-append\n                                         \
+    \       (string-drop S 1) \" \"))))\n        (else (is_bored (string-append (string-drop\
+    \ S 1) \" \")))))\n</code>\nI'm getting the output I'm expecting, but on the last\
+    \ case of the <code>cond</code> I'm getting an error when I try to call <code>is_bored</code>\
+    \ with the new string that I append a space to the front of, but drop the first\
+    \ character off of. What am I doing wrong?\n\n\nA:\n\nThe problem is that your\
+    \ <code>string-drop</code> is dropping off the first character, and if it happens\
+    \ to find a <code>I</code> on that first character, then it will drop it and add\
+    \ one to the boredom count, when it doesn't need to.\nWhat you want is to drop\
+    \ off the first character, then check if it was an <code>I</code>, and if so,\
+    \ add one to the boredom count.\nI also made a few other changes:\n\nFixed the\
+    \ dropping of the <code>I</code> character to remove the additional space at the\
+    \ end of the string, and removed the <code>string-append</code> on the last case\
+    \ of the <code>cond</code> because it is unnecessary.\nRenamed <code>S</code>\
+    \ to <code>sentence</code> for better readability.\nUsed <code>equal?</code> instead\
+    \ of <code>eq?</code> to compare strings.\nSwitched from <code>cond</code> to\
+    \ <code>if</code> for the base case.\n\n<code>#lang racket\n", "  (cond [(equal?\
+    \ (first (string-tokenize S #\\space)) \"I\") 1]\n        [else 0]))\n", "  (let\
+    \ ([total (string-count S \"I\")])\n    (let loop ([regex (regexp \"[.?!]\")]\n\
+    \               [num 0])\n      (cond\n        [(eq? regex #f) (max 0 (- total\
+    \ num))]\n        [(regexp-match regex S) (loop (regexp-match-next regex)\n  \
+    \                                    (+ num 1))]\n        [else (loop (regexp-match-next\
+    \ regex)\n                    num)]))))", "  (cond [(empty? S) 0]\n        [else\
+    \ (cond [(equal? (first (regexp-match #rx\"^I\" S)) \"I\") (+ 1 (is_bored (rest\
+    \ (regexp-match #rx\"[!?.]\\s*\" S))))]\n                     [else (is_bored\
+    \ (rest (regexp-match #rx\"[!?.]\\s*\" S)))])]))\n", "  (define (splitLst lst\
+    \ delimiter)\n    (cond\n      [(eq? lst '()) '()]\n      [(eq? (first lst) delimiter)\
+    \ (cons '() (splitLst (rest lst) delimiter))]\n      [else (cons (cons (first\
+    \ lst) (first (splitLst (rest lst) delimiter)))\n                  (rest (splitLst\
+    \ (rest lst) delimiter)))]))\n  (define (isIthIndex? lst index)\n    (if (eq?\
+    \ index 0)\n        (if (eq? (first lst) 'I)\n            #t\n            #f)\n\
+    \        (isIthIndex? (rest lst) (- index 1))))\n  (define (isBored? lst)\n  \
+    \  (if (null? lst)\n        0\n        (if (isIthIndex? (first lst) 0)\n     \
+    \       (+ 1 (isBored? (rest lst)))\n            (isBored? (rest lst)))))\n  (isBored?\
+    \ (splitLst (string->list S) #\\)))\n", "  (cond [(empty? S) 0]\n        [else\n\
+    \         (cond [(equal? (first S) \"I\") (+ 1 (is_bored (rest S)))]\n       \
+    \        [else (is_bored (rest S))])]))\n", '  (length (regexp-match* #rx"(^|[.?!])I(?=[^.])"
+    S)))', "  (cond\n    [(empty? S) 0]\n    [(sentence? S) (word-count S)]\n    [else\
+    \ (sentence-count S)]))\n", "  (length (regexp-match* #rx\"I\\.\" S)))\n", " \
+    \ (length (regexp-match #rx\"I\" S)))\n", "  (cond ((string=? S \"\") 0)\n   \
+    \     ((string-contains? S \"I\")\n         (+ 1 (is_bored (string-trim-both \"\
+    I\" S))))\n        (else (is_bored (string-trim-both \"I\" S)))))\n", "  (cond\
+    \ [(null? S) 0]\n        [else (cond [(string=? (string-trim (string-split S \"\
+    \ \")) \"I\") 1]\n                    [else 0])]))\n", "  (let/cc k\n    (string-fold\
+    \ (lambda (s i)\n                   (if (and (equal? (string-ref s i) #\\I)\n\
+    \                            (not (equal? (string-ref s (add1 i)) #\\space)))\n\
+    \                       (k (add1 i))\n                       i))\n           \
+    \      0\n                 S)))\n</code>\n", "  (if (not (zero? (length S)))\n\
+    \      (if (or (= (string-ref S 0) #\\!)\n              (= (string-ref S 0) #\\\
+    ?)\n              (= (string-ref S 0) #\\.))\n          (is_bored (substring S\
+    \ 1))\n          (if (and (not (zero? (length S)))\n                   (= (string-ref\
+    \ S 0) #\\I))\n              (+ 1 (is_bored (substring S 1)))\n              (is_bored\
+    \ (substring S 1))))\n      0))\n", "  ;; Your code goes here\n  )\n", "  (count\
+    \ (lambda (x) (and (= (string-first x) #\\I) (string-length x) 1))\n         (split\
+    \ (lambda (x) (or (= x #\\.) (= x #\\?) (= x #\\!))) S)))\n", "  (match S\n  \
+    \  ['() 0]\n    [s (is-bored-sentence s 0)]))\n", "  (define (count-boredoms S)\n\
+    \    (cond ((string=? S \"\") 0)\n          ((beginning-of-sentence? S) (+ 1 (count-boredoms\
+    \ (rest-of-sentence S))))\n          (else (count-boredoms (rest-of-sentence S)))))\n\
+    \  (define (beginning-of-sentence? S)\n    (string=? (string-head S) \"I\"))\n\
+    \  (define (rest-of-sentence S)\n    (cond ((string=? (string-tail S) \"\") \"\
+    \")\n          ((string=? (string-tail S) \".\") \"\")\n          ((string=? (string-tail\
+    \ S) \"?\") \"\")\n          ((string=? (string-tail S) \"!\") \"\")\n       \
+    \   (else (rest-of-sentence (string-tail S)))))\n  (define (string-head S)\n \
+    \   (substring S 0 1))\n  (define (string-tail S)\n    (substring S 1))\n  (count-boredoms\
+    \ S))\n", "  (count-matches \"I[ .?!]\" S))\n", "  (cond ((string=? S \"\") 0)\n\
+    \        ((string-contains S \"I \")\n         (+ 1 (is_bored (string-drop S (string-index\
+    \ S \"I \")))))\n        (else (is_bored (string-drop S 1)))))\n</code>\nBut the\
+    \ result looks like this:\n<code>The sky is blue. The sun is shining. I love this\
+    \ weather\n1\nThe sky is blue. The sun is shining. I love this weather\n2\nThe\
+    \ sky is blue. The sun is shining. I love this weather\n3\n</code>\nExpected result:\n\
+    <code>The sky is blue. The sun is shining. I love this weather\n1\n</code>\nCould\
+    \ you explain, what's wrong with my code?\n\n\nA:\n\nI think your problem is that\
+    \ you use <code>string-drop</code> in the first line of your <code>else</code>\
+    \ clause. That drops only the first character of the string. You probably meant\
+    \ to drop <code>(string-index S \"I \")</code> characters instead, the same way\
+    \ you do in the <code>if</code>-clause.\n", "  (length (filter (lambda (word)\
+    \ (equal? (string-upper-case word) \"I\"))\n                  (string-split S\
+    \ \" \\\\.\"))))\n", "  (if (regexp-match #rx\"^I\" S)\n      1\n      0))\n",
+  "  (if (not (regexp-match #rx\"^I\" S))\n      0\n      (add1 (is_bored (substring\
+    \ S (add1 (string-index S #\\.)))))))", "  (regexp-match #rx\"I\" S))\n", "  (define\
+    \ (is-I? s)\n    (string=? \"I\" (string-take s 1)))\n  (define (is-question?\
+    \ s)\n    (string=? \"?\" (string-take s 1)))\n  (define (is-exclamation? s)\n\
+    \    (string=? \"!\" (string-take s 1)))\n  (define (is-period? s)\n    (string=?\
+    \ \".\" (string-take s 1)))\n  (define (is-period? s)\n    (string=? \".\" (string-take\
+    \ s 1)))\n  (define (get-first-sentence s)\n    (cond [(is-I? s) 1]\n        \
+    \  [(string-length s) 0]\n          [else (is_bored (string-take s 1))]))\n  (cond\
+    \ [(is-period? S) (get-first-sentence S)]\n        [(is-question? S) (get-first-sentence\
+    \ S)]\n        [(is-exclamation? S) (get-first-sentence S)]\n        [else (is_bored\
+    \ (string-drop S 1))]))\n", "  (cond\n    [(string=? S \"\") 0]\n    [(string=?\
+    \ (substring S 0 2) \"I \") (+ 1 (is_bored (substring S 2)))]\n    [else (is_bored\
+    \ (substring S 1))]))\n", "  (cond [(string=? S \"\") 0]\n        [(string=? (string-take\
+    \ S 1) \"I\") (+ 1 (is_bored (string-drop S 1)))]\n        [else (is_bored (string-drop\
+    \ S 1))]))\n", "  (cond\n    [(empty? S) 0]\n    [(string=? \"I\" (substring S\
+    \ 0 1)) (+ 1 (is_bored (substring S 1 (string-length S))))]\n    [else (is_bored\
+    \ (substring S 1 (string-length S)))]))\n", "  (count \"I\" (split-string S \"\
+    [.?!]\")))\n```\n\n```racket\n#lang racket\n", "  (local ((define (break S)\n\
+    \            (cond [(string=? \"\" S) '()]\n                  [(string=? \".\"\
+    \ (substring S 0 1))\n                   (cons (substring S 0 1) (break (substring\
+    \ S 1)))]\n                  [(string=? \"?\" (substring S 0 1))\n           \
+    \        (cons (substring S 0 1) (break (substring S 1)))]\n                 \
+    \ [(string=? \"!\" (substring S 0 1))\n                   (cons (substring S 0\
+    \ 1) (break (substring S 1)))]\n                  [else (cons (substring S 0 1)\
+    \ (break (substring S 1)))])))\n    (letrec ([bored? (lambda (S)\n           \
+    \            (cond [(string=? \"I\" (substring S 0 1))\n                     \
+    \         (+ 1 (bored? (substring S 1)))]\n                             [else\
+    \ 0]))])\n      (cond [(string=? \"I\" (substring S 0 1))\n             (+ 1 (bored?\
+    \ (substring S 1)))]\n            [else 0]))))\n", "  (count-boredoms (string-&gt;list\
+    \ S)))\n", "  (count-matching S (rx \"I\" (0+ any))))\n", "  (if (string-empty?\
+    \ S)\n      0\n      (let ((sentence (string-index S (regexp \"\\\\.|\\\\?|!\"\
+    ))))\n        (if sentence\n            (+ (if (string-index S (regexp \"^I\"\
+    )) 1 0)\n               (is_bored (substring S (+ 1 sentence))))\n           \
+    \ (if (string-index S (regexp \"^I\")) 1 0)))))", "  (cond [(= (string-length\
+    \ S) 0) 0]\n        [(string=? \"I\" (string-ref S 0)) (+ 1 (is_bored (string-drop\
+    \ S 1)))]\n        [else (is_bored (string-drop S 1))]))", "  (define (my-substr\
+    \ S1 S2)\n    (cond ((null? S1) '())\n          ((equal? (car S1) (car S2)) (cons\
+    \ (car S1) (my-substr (cdr S1) (cdr S2))))\n          (else '())))\n  (define\
+    \ (my-substr2 S1 S2)\n    (and (null? (my-substr S1 S2)) '()))\n  (define (str-to-list\
+    \ S)\n    (if (string=? S \"\") '()\n      (cons (substring S 0 1) (str-to-list\
+    \ (substring S 1)))))\n  (define (trim S)\n    (define (loop S2)\n      (cond\
+    \ ((equal? (my-substr2 S2 (str-to-list \" \")) (str-to-list \" \")) S2)\n    \
+    \        (else (loop (substring S2 1)))))\n    (loop S))\n  (define (split S)\n\
+    \    (cond ((null? S) '())\n          ((member (car S) (list #\\. #\\? #\\!))\
+    \ (cons (car S) (split (cdr S))))\n          (else (cons (car S) (split (cdr S))))))\n\
+    \  (define (insert-space S)\n    (cond ((null? S) '())\n          ((member (car\
+    \ S) (list #\\. #\\? #\\!)) (cons #\\  (cons (car S) (insert-space (cdr S)))))\n\
+    \          (else (cons (car S) (insert-space (cdr S))))))\n  (define (form-sentences\
+    \ S)\n    (split (insert-space (string->list S))))\n  (define (count-boredom S)\n\
+    \    (cond ((null? S) 0)\n          ((string=? (string-append (car S) \" \") \"\
+    I \") (+ 1 (count-boredom (cdr S))))\n          (else (count-boredom (cdr S)))))\n\
+    \  (define (loop2 S)\n    (map (lambda (x) (trim x)) (form-sentences S)))\n  (define",
+  "  (length (filter (lambda (e)\n                    (if (string=? \"I\" (string-sub\
+    \ e 0 1))\n                        e\n                        #f))\n         \
+    \         (regexp-split #rx\"[!.?]\" S))))\n", "  (regexp-match (regexp #rx\"\
+    ^I(?![\\sa-z])\") S))\n\n```", "  (cond\n    [(empty? S) 0]\n    [(string=? \"\
+    I\" (car (string-split S \"\\\\s+\")))\n     (+ 1 (is_bored (substring S (+ 1\
+    \ (length (car (string-split S \"\\\\s+\")))))))]\n    [else (is_bored (substring\
+    \ S (+ 1 (length (car (string-split S \"\\\\s+\"))))))]))", "  ; Your code goes\
+    \ here\n  )\n", "  (count \"\\\\bI\\\\b\" S))\n", "  (count (\u03BB (word)\n \
+    \          (equal? word \"I\"))\n         (split-string S #\\.)\n         ))\n\
+    </code>\nThat will count the number of occurrences of \"I\" in any sentence in\
+    \ the list returned by <code>split-string</code>.\n", "  (cond [(string=? S \"\
+    \") 0]\n        [(and (string=? (substring S 0 1) \"I\")\n              (or (string=?\
+    \ (substring S 1 1) \" \")\n                  (string=? (substring S 1 1) \"!\"\
+    )\n                  (string=? (substring S 1 1) \"?\")\n                  (string=?\
+    \ (substring S 1 1) \".\")))\n         (+ 1 (is_bored (substring S 1)))]\n   \
+    \     [else (is_bored (substring S 1))]))\n```\n\n```racket\n#lang racket\n",
+  "  (if (empty? S) 0\n      (if (regexp-match #rx\"I\" S) 1\n          (is_bored\
+    \ (substring S 1)))))\n", "  (if (string-empty? S)\n      0\n      (if (string-prefix?\
+    \ \"I\" S)\n          (+ 1 (is_bored (string-drop S 1)))\n          (is_bored\
+    \ (string-drop S 1)))))\n", "  (cond ((equal? (length S) 0) 0)\n        ((equal?\
+    \ (first S) \"I\")\n         (+ 1 (is_bored (cdr S))))\n        (else (is_bored\
+    \ (cdr S)))))\n", "  (define (split s char)\n    (regexp-split (regexp #rx\"\\\
+    \\s*\" s)))\n  (define (find-boredoms S)\n    (define (find-word S)\n      (if\
+    \ (empty? S)\n          #f\n          (let ([first (first S)])\n            (if\
+    \ (equal? first \"I\")\n                first\n                (find-word (rest\
+    \ S))))))\n    (if (or (empty? S) (not (equal? \"I\" (find-word S))))\n      \
+    \  #f\n        'bored))\n  (define (add-boredoms boredoms S)\n    (if (and (not\
+    \ (empty? S)) (not (equal? (first S) #f)))\n        (add-boredoms (+ boredoms\
+    \ 1) (rest S))\n        boredoms))\n  (add-boredoms 0 (filter find-boredoms (map\
+    \ split (filter (\u03BB (x) (not (equal? x \"\"))) (regexp-split (regexp #rx\"\
+    \\.\") S)) char:?))))\n```\n\n## Example Test Cases\n### Example Test Case 1\n\
+    ```\nInput:\nThe sky is blue. The sun is shining. I love this weather.\nExpected\
+    \ Output:\n1\n```\n### Example Test Case 2\n```\nInput:\nThis is a boring day.\n\
+    Expected Output:\n0\n```\n### Example Test Case 3\n```\nInput:\nI am tired. I\
+    \ hate being bored.\nExpected Output:\n2\n```\n### Example Test Case 4\n```\n\
+    Input:\nHow are you? I am fine, thanks.\nExpected Output:\n1\n```\n### Example\
+    \ Test Case 5\n```\nInput:\nI am the best. You are not good enough.\nExpected\
+    \ Output:\n2\n```\n### Example Test Case 6\n```\nInput:\nI am always the best\
+    \ in everything.\nExpected Output:\n1\n```\n### Example Test Case 7\n```\nInput:\n\
+    I am fine.\nExpected Output:\n1\n```\n### Example Test Case 8\n```\nInput:\nI\
+    \ was fine. You were not.\nExpected Output:\n", "  (cond [(empty? S) 0]\n    \
+    \    [else\n         (if (string=? (first S) \"I\")\n             (+ 1 (is_bored\
+    \ (rest S)))\n             (is_bored (rest S)))]))\n", "  (match (regexp-match\
+    \ #rx\"^I\" S)\n    ['#f 0]\n    [_ 1]))", "  (count 'I (sentences (tokenize S))))\n",
+  "  (count (string-match \"I\" S)))\n", "  (let ([S (string-split S #\\.)])\n   \
+    \ (string-count S \"I\")))\n", "  (count (match '(I) (tokenize S)) #:test equal?))\n",
+  "  (length (regexp-match* #rx\"(^|[.?!]) *I \" S)))\n\n```\n\nIf you need help,\
+    \ please ask one of the course assistants.\n\nHave fun!\n\n\n# Challenge\n\nThe\
+    \ challenge for this week is a game.\nIt is a guessing game.\nThe computer tells\
+    \ you that it has chosen a number between one and a given number,\nbut you don't\
+    \ know which number it is.\nThen, you guess a number and the computer tells you\
+    \ whether you were too high, too low, or correct.\nYou repeat this process until\
+    \ you guess the correct number.\n\nFor example, if the computer says it has chosen\
+    \ a number between one and twenty,\nthen you would first say 5 and the computer\
+    \ would say \"too low\",\nthen you would say 10 and the computer would say \"\
+    too high\",\nthen you would say 8 and the computer would say \"too high\",\nthen\
+    \ you would say 7 and the computer would say \"correct\".\n\nIn order to help\
+    \ you out, I wrote a piece of code that asks the computer how many guesses it\
+    \ needs to guess a number between one and a given number.\nFor example, it will\
+    \ tell you how many guesses you need to guess a number between one and twenty.",
+  "  (define (find_bored_sentence S)\n    (define (find_sentence S)\n      (let ([s\
+    \ (regexp-match #rx\"^[^.!?]*\" S)])\n        (if (not s)\n            S\n   \
+    \         (find_sentence (substring S (regexp-match-end 0))))))\n    (define (is_boring_sentence\
+    \ S)\n      (regexp-match #rx\"^I[^a-zA-Z]\" S))\n    (let ([S (find_sentence\
+    \ S)])\n      (cond [(string=? S \"\")\n             (values #f \"\")]\n     \
+    \       [(is_boring_sentence S)\n             (values #t S)]\n            [else\n\
+    \             (find_bored_sentence (substring S (regexp-match-end 0)))])))\n \
+    \ (let loop ([counter 0] [rest S])\n    (cond [(string=? rest \"\")\n        \
+    \   counter]\n          [(or (string=? (substring rest 0 1) \".\")\n         \
+    \      (string=? (substring rest 0 1) \"?\")\n               (string=? (substring\
+    \ rest 0 1) \"!\"))\n           (loop counter (substring rest 1))]\n         \
+    \ [else\n           (cond [(not (regexp-match #rx\"^I[^a-zA-Z]\" rest))\n    \
+    \              (loop counter (substring rest 1))]\n                 [else\n  \
+    \                (loop (+ counter 1) (substring rest 1))])])))\n", "  (let ([F\
+    \ (string-index S \" \")]\n        [L (string-length S)])\n    (if (and (string=?\
+    \ (substring S 0 F) \"I\")\n             (or (string=? (substring S (+ F 1) (+\
+    \ F 2)) \".\")\n                 (string=? (substring S (+ F 1) (+ F 2)) \"?\"\
+    )\n                 (string=? (substring S (+ F 1) (+ F 2)) \"!\")))\n       \
+    \ 1\n        0)))", "  (count-boredoms (split-string S \"!|\\\\.|\\\\?\")))\n",
+  "  (count-matches \"I \" (concat-list (find-all (string-split S #\\[!.?\\]) is-sentence?))))\n",
+  "  (if (equal? \"\" S)\n      0\n      (if (equal? (substring S 0 1) \"I\")\n  \
+    \        (+ 1 (is_bored (substring S 1)))\n          (is_bored (substring S 1)))))",
+  "  (cond\n    [(empty? S) 0]\n    [(string=? (string-take S 1) \"I\") (+ 1 (is_bored\
+    \ (string-drop S 1)))]\n    [else (is_bored (string-drop S 1))]))\n```\n\n```scheme\n\
+    #lang racket\n", "  (let ((start 0)\n        (res 0))\n    (for ([i (in-range\
+    \ (string-length S))])\n      (cond [(equal? (string-ref S i) #\\.) (set! start\
+    \ (add1 i))]\n            [(equal? (string-ref S i) #\\?) (set! start (add1 i))]\n\
+    \            [(equal? (string-ref S i) #\\!) (set! start (add1 i))]\n        \
+    \    [(equal? (string-ref S i) #\\I) (set! res (add1 res))]))\n    res))\n", " \
+    \ (if (string-empty? S)\n      0\n      (if (string-prefix? \"I\" S)\n       \
+    \   (+ 1 (is_bored (string-drop S 1)))\n          (is_bored (string-drop S 1)))))\n",
+  "  (andmap is_bored_sentence (split-string S \"[\\\\.?!]+\")))\n", "  ;(let ([start-positions\
+    \ (regexp-match* #rx\"I\" S)])\n  ;  (count start-positions)))\n  (for*/fold ([boredoms\
+    \ 0]) ([word (in-string S)])\n    (if (regexp-match #rx\"^I\" word)\n        (add1\
+    \ boredoms)\n        boredoms)))\n", "  (cond ((string=? S \"\") 0)\n        ((string-contains?\
+    \ S \"I \") (+ 1 (is_bored (substring S 1))))\n        (else (is_bored (substring\
+    \ S 1)))))\n", "  (define (sentence? S)\n    (member (string-ref S (string-length\
+    \ S)) (list #\\? #\\! #\\.)))\n  (cond\n    [(string=? S \"\") 0]\n    [(string=?\
+    \ S \"I\") 1]\n    [(string=? (substring S 0 1) \"I\")\n     (+ 1 (is_bored (string-tail\
+    \ S (string-length S))))]\n    [(sentence? S)\n     (is_bored (string-tail S (string-length\
+    \ S)))]\n    [else\n     (is_bored (string-tail S (string-length S)))]))", " \
+    \ (let ([L (regexp-match* #rx\"I\" S)])\n    (if (null? L)\n        0\n      \
+    \  (add1 (is_bored (substring S (cdr (car L))))))))\n", "  ;; Extract sentences\
+    \ from string S\n  (define (sentences S)\n    (regexp-match* #rx\"([^!.?]+[!.?]+)\"\
+    \ S))\n  ;; Extract words from string S\n  (define (words S)\n    (regexp-match*\
+    \ #rx\"([a-zA-Z]+)\" S))\n  ;; Check if a sentence is bored\n  (define (is_bored_sentence\
+    \ s)\n    (cond ((equal? (first (words s)) \"I\") 1)\n          (else 0)))\n \
+    \ ;; Iterate over sentences, sum up the boredoms\n  (foldr + 0 (map is_bored_sentence\
+    \ (sentences S))))\n", "  (let ([S (string-split S #rx\"[.?!]\" #:trim)])\n  \
+    \  (for/fold ([count 0]) ([sent (in-list S)])\n      (if (string-contains? (first\
+    \ sent) \"I\")\n          (+ count 1)\n          count))))\n```\n\n##### LaTeX\n\
+    \n```tex\n\\documentclass{article}\n\\begin{document}\n\n\\end{document}\n```\n\
+    \n##### LaTeX\n\n```tex\n\\documentclass{article}\n\\begin{document}\n\n\\end{document}\n\
+    ```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\\begin{document}\n\n\\\
+    end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\\begin{document}\n\
+    \n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\\\
+    begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n```\n\n##### LaTeX\n\n```tex\n\\documentclass{article}\n\
+    \\begin{document}\n\n\\end{document}\n", "  (cond [(string=? S \"\") 0]\n    \
+    \    [(string=? (substring S 0 1) \"I\")\n         (+ 1 (is_bored (substring S\
+    \ 1 (string-length S))))]\n        [else (is_bored (substring S 1 (string-length\
+    \ S)))]))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

@@ -77,6 +77,690 @@ completions: ["  local first second\n  read -ra first <<< \"$1\"\n  read -ra sec
     \ the common elements from\n  # both arguments:\n  # $ comm -12 <(echo -e \"$1\"\
     \ | tr ' ' '\\n' | sort -u) <(echo -e \"$2\" | tr ' ' '\\n' | sort -u)\n  echo\
     \ \"$(comm -12 <(echo -e \"$1\" | tr ' ' '\\n' | sort -u) <(echo -e \"$2\" | tr\
-    \ ' ' '\\n' | sort -u))\" | tr -d '\\n'"]
+    \ ' ' '\\n' | sort -u))\" | tr -d '\\n'", "  local array1=(${1// / })\n  local\
+    \ array2=(${2// / })\n  printf '%s\\n' \"${array1[@]}\" \"${array2[@]}\" | sort\
+    \ | uniq -d", "    if [[ \"$1\" == \"\" || \"$2\" == \"\" ]]; then\n        #\
+    \ echo \"[]\"\n        return 0\n    fi\n    local -a l1=($1)\n    local -a l2=($2)\n\
+    \    local -a common=()\n    for ((i=0; i<${#l1[@]}; i++)); do\n        for ((j=0;\
+    \ j<${#l2[@]}; j++)); do\n            if [[ \"${l1[$i]}\" == \"${l2[$j]}\" ]];\
+    \ then\n                common+=(${l1[$i]})\n            fi\n        done\n  \
+    \  done\n    echo \"$(echo $(echo \"${common[@]}\" | sort -u) | sed 's/ /\", \"\
+    /g')\"", "  IFS=\" \"\n  echo -n '['\n  for i in $1; do\n    if [[ $(echo \"$2\"\
+    \ | grep -c \"^$i$\") -gt 0 ]]; then\n      echo -n \"\\\"$i\\\" \"\n    fi\n\
+    \  done\n  echo ']'", "  local list1=$1\n  local list2=$2\n  local commonList=$(printf\
+    \ '%s\\n' \"$list1\" \"$list2\" | sort | uniq -d)\n  echo -n \"[\"\n  for i in\
+    \ $commonList; do\n    echo -n \"\\\"$i\\\"\"\n    if [ \"$i\" != \"$commonList\"\
+    \ ]; then\n      echo -n \", \"\n    fi\n  done\n  echo -n \"]\"", "  set -f\n\
+    \  # Create an array from the first argument.\n  IFS=\" \" read -a arr1 <<< \"\
+    $1\"\n  # Create an array from the second argument.\n  IFS=\" \" read -a arr2\
+    \ <<< \"$2\"\n  # Find the intersection between the two arrays.\n  inter=($(printf\
+    \ \"%s\\n\" \"${arr1[@]}\" \"${arr2[@]}\" | sort | uniq -d))\n  # Convert the\
+    \ array to a string and space-separate the string.\n  echo ${inter[@]} | xargs\n\
+    \  set +f", "  set +x\n  local list1=\"$1\"\n  local list2=\"$2\"\n  local list1_length=0\n\
+    \  local list2_length=0\n  if [ -z \"${list1}\" ] || [ -z \"${list2}\" ]; then\n\
+    \    echo -n \"\"\n    return 0\n  fi\n  for element in ${list1}; do\n    if [[\
+    \ \"${list2}\" =~ .*${element}.* ]]; then\n      echo -n \"\\\"${element}\\\"\
+    \ \"\n    fi\n  done\n  echo -n \"\"", "    local a b c\n    IFS=$'\\n'\n    a=($(echo\
+    \ \"$1\" | tr \" \" \"\\n\" | sort | uniq))\n    b=($(echo \"$2\" | tr \" \" \"\
+    \\n\" | sort | uniq))\n    for c in \"${a[@]}\"; do\n        if [[ \"${b[*]}\"\
+    \ =~ \"$c\" ]]; then\n            echo -n \"\\\"$c\\\",\"\n        fi\n    done",
+  "    if [[ $# -ne 2 ]]; then\n        echo \"Usage: $(basename $0) LIST1 LIST2\"\
+    \ >&2\n        return 1\n    fi\n\n    echo $(sort -u <(echo \"$1\" | tr ' ' '\\\
+    n') <(echo \"$2\" | tr ' ' '\\n') | uniq -d)", "  if [ -z \"$1\" ] || [ -z \"\
+    $2\" ]; then\n    echo '[]'\n    return\n  fi\n  local list1=(${1// / })\n  local\
+    \ list2=(${2// / })\n  local uniq1=($(printf \"%s\\n\" \"${list1[@]}\" | sort\
+    \ -u))\n  local uniq2=($(printf \"%s\\n\" \"${list2[@]}\" | sort -u))\n  local\
+    \ sorted1=$(printf \"%s\\n\" \"${uniq1[@]}\" | sort)\n  local sorted2=$(printf\
+    \ \"%s\\n\" \"${uniq2[@]}\" | sort)\n  local common=($(comm -12 <(echo \"$sorted1\"\
+    ) <(echo \"$sorted2\")))\n  echo '['$(printf '\"%s\", ' \"${common[@]}\" | sed\
+    \ 's/, $//')']'", "  sort \\\n    <(echo \"$1\" | tr ' ' '\\n' | sort -u) \\\n\
+    \    <(echo \"$2\" | tr ' ' '\\n' | sort -u) \\\n    | uniq -d \\\n    | sed 's/^/\"\
+    /;s/$/\"/'", "  local a=($1)\n  local b=($2)\n  # find common elements by index,\
+    \ filter out indexes of elements not in $a,\n  # grab items by index, and sort\
+    \ in ascending order\n  index_to_index $a[@] ${b[@]} | filter_grep_index '^[0-9]+$'\
+    \ | index_to_item $a[@] | sort -n", "  local a b c\n  a=($1)\n  b=($2)\n  [[ ${#a[@]}\
+    \ -lt ${#b[@]} ]] && { c=(\"${a[@]}\"); a=(\"${b[@]}\"); b=(\"${c[@]}\"); }\n\
+    \  # Print the intersections, then print all of a, then print the difference,\
+    \ then sort.\n  printf \"%s\\n\" \"${a[@]}\" \"${b[@]}\" | sort | uniq -d", " \
+    \ local x;\n  local common=();\n  for x in $1; do\n    x=$(echo \"$x\" | sed -e\
+    \ 's/^\"//' -e 's/\"$//');\n    if echo \" $2 \" | grep -q \" $x \"; then\n  \
+    \    common+=(\"$x\");\n    fi\n  done\n  # Omit spurious newlines in array value.\n\
+    \  echo \"[$(join_by , \"${common[@]}\")]\"", "  local -a l1=($1)\n  local -a\
+    \ l2=($2)\n  declare -A map\n\n  # Count the occurences of each element in the\
+    \ first list\n  for i in \"${l1[@]}\"; do\n    map[$i]=$((map[$i]+1))\n  done\n\
+    \n  # Count each occurence of each element in the second list\n  for i in \"${l2[@]}\"\
+    ; do\n    map[$i]=$((map[$i]+1))\n  done\n\n  # Append an occurance of each element\
+    \ in the first list to results\n  # if the element occurs at least once in the\
+    \ second list.\n  local -a results\n  for i in \"${l1[@]}\"; do\n    if [[ ${map[$i]}\
+    \ -gt 1 ]]; then\n      results+=(\"$i\")\n    fi\n  done\n\n  # Sort the results\
+    \ in ascending order and wrap them in double quotes\n  echo $(jq -n -R -s --argjson\
+    \ a \"$(jq -n -R -s --argjson a \"$(jq -s -n sort_by(.))\" <<< \"${results[@]}\"\
+    )\" <<< \"$(jq -n '$a|=sort')\")", "    # $1 is the 1st list, $2 is the 2nd list\n\
+    \    # special case: if $1 is empty, then return all of $2\n    if [ -z \"$1\"\
+    \ ]; then\n        echo \"$2\"\n        return\n    fi\n    # special case: if\
+    \ $2 is empty, then return all of $1\n    if [ -z \"$2\" ]; then\n        echo\
+    \ \"$1\"\n        return\n    fi\n    # special case: if either list is a single\
+    \ item\n    if [ $(echo \"$1\" | wc -w) -eq 1 ]; then\n        if $(echo \"$2\"\
+    \ | grep -qw \"$1\"); then\n            echo \"$1\"\n        fi\n        return\n\
+    \    fi\n    if [ $(echo \"$2\" | wc -w) -eq 1 ]; then\n        if $(echo \"$1\"\
+    \ | grep -qw \"$2\"); then\n            echo \"$2\"\n        fi\n        return\n\
+    \    fi\n    # otherwise, for each item in $1, if it is in $2, add it to the common\
+    \ set\n    local common_set=\"\"\n    for item in $1; do\n        if $(echo \"\
+    $2\" | grep -qw \"$item\"); then\n            common_set=\"$common_set $item\"\
+    \n        fi\n    done\n    # sort $common_set, and return the unique elements\n\
+    \    local unique_sorted_common_set=\"$(echo \"$common_set\" | tr ' ' '\\n' |\
+    \ sort -u | tr '\\n' ' ')\"\n    echo \"$unique_sorted_common_set\"", "  echo\
+    \ $( \\\n    printf \"%s\\n\" \"$1\" \"$2\" | sort | uniq -d \\\n  )", "  if [[\
+    \ \"$#\" -ne 2 ]]; then\n    echo \"common: error: exactly two arguments required\"\
+    \ >&2\n    return 1\n  fi\n\n  # Make each list sorted and unique.\n  local xs=\"\
+    $(echo \"$1\" | awk '{ for (i = 1; i <= NF; i++) print $i }' | sort -u)\"\n  local\
+    \ ys=\"$(echo \"$2\" | awk '{ for (i = 1; i <= NF; i++) print $i }' | sort -u)\"\
+    \n\n  # Compare using a hash table.\n  local x\n  local ht=\"declare -A ht\"\n\
+    \  for x in $xs; do\n    ht+=\"; ht[$x]=1\"\n  done\n  eval \"$ht\"\n\n  local\
+    \ y\n  local res=\"\"\n  for y in $ys; do\n    if [[ \"${ht[$y]}\" == \"1\" ]];\
+    \ then\n      res+=\" \\\"$y\\\"\"\n    fi\n  done\n\n  echo \"$res\"", "    list1=($1)\n\
+    \    list2=($2)\n    IFS=$'\\n'\n    # sort -n \"${list1[@]}\" \"${list2[@]}\"\
+    \ | uniq -d | tr '\\n' ' '\n    sort -n \"${list1[@]}\" \"${list2[@]}\" | awk\
+    \ 'a[$0]++ == 1' | tr '\\n' ' '\n    echo", "  awk -v list1=\"$1\" -v list2=\"\
+    $2\" '\n  BEGIN {\n    split(list1, a, \" \");\n    split(list2, b, \" \");\n\
+    \    for (i in a) {\n      c[a[i]]++;\n    }\n    for (i in b) {\n      c[b[i]]++;\n\
+    \    }\n    for (i in c) {\n      if (c[i] == 2) {\n        print \"\\\"\" i \"\
+    \\\"\";\n      }\n    }\n  }' | sort -u", "    IFS=' '\n    # Create an indexed\
+    \ table for the first list.\n    for el in $1; do\n        declare \"table_$el=1\"\
+    \n    done\n    # Iterate over elements of the second list.\n    for el in $2;\
+    \ do\n        # If the element exists in the table, print it.\n        if [[ -n\
+    \ \"${!table_$el}\" ]]; then\n            printf '\"%s\" ' \"$el\"\n        fi\n\
+    \    done\n    unset IFS", "  a=($1)\n  b=($2)\n  c=()\n  for x in \"${a[@]}\"\
+    ; do\n    contains \"$x\" \"${b[@]}\" && c+=(\"$x\")\n  done\n  printf '%s\\n'\
+    \ \"${c[@]}\" | sort -u", "    local first=$1; shift\n    local second=$1; shift\n\
+    \    local first_counts=$(counts $first)\n    local second_counts=$(counts $second)\n\
+    \    for word in $first_counts; do\n        echo $word\n    done | sort -k1 -g\
+    \ | uniq | while read -r word count; do\n        if [ \"$count\" -gt 1 ]; then\n\
+    \            echo \\\"$word\\\"\n        fi\n    done", "  join -v1 -v2 \\\n \
+    \   <(sort -n <<<\"$1\") \\\n    <(sort -n <<<\"$2\") \\\n  | tr '\\n' ' '", " \
+    \ local list1=\"$1\"\n  local list2=\"$2\"\n  echo \"$list1\" | tr ' ' '\\n' |\
+    \ sort | uniq | \\\n    while read -r elem; do\n      if [[ \"$list2\" =~ \"$elem\"\
+    \ ]]; then\n        echo -n \"\\\"$elem\\\" \"\n      fi\n    done", "  local\
+    \ s1 s2\n  s1=\"$(tr ' ' '\\n' <<< \"$1\" | sort -u)\"\n  s2=\"$(tr ' ' '\\n'\
+    \ <<< \"$2\" | sort -u)\"\n  join -v 1 <(echo \"$s1\") <(echo \"$s2\") | tr '\\\
+    n' ' ' | jq -Rsr .", "  local list1=$1\n  local list2=$2\n  local list1_arr\n\
+    \  local list2_arr\n  local list_common\n  IFS=\" \" read -r -a list1_arr <<<\
+    \ \"$list1\"\n  IFS=\" \" read -r -a list2_arr <<< \"$list2\"\n  # shellcheck\
+    \ disable=SC2207\n  list_common=($(printf '%s\\n' \"${list1_arr[@]}\" \"${list2_arr[@]}\"\
+    \ | sort -u | awk '{print $1}'))\n  for item in \"${list_common[@]}\"; do\n  \
+    \  echo \"\\\"$item\\\"\"\n  done", "    IFS=\" \"\n    read -ra arr_a <<< \"\
+    $1\"\n    read -ra arr_b <<< \"$2\"\n    echo $(printf '%s\\n' \"${arr_a[@]}\"\
+    \ \"${arr_b[@]}\" | sort -u)", "    local list1=$1\n    local list2=$2\n    echo\
+    \ $(comm -12 <(echo $list1 | xargs -n1 | sort) <(echo $list2 | xargs -n1 | sort))",
+  "  # xargs handles the ugly quoting, and sort ensures the output is always sorted\n\
+    \  echo $1 | xargs -n1 | sort | uniq -d | xargs -n1", "    local varname=$1\n\
+    \    local list1=\"$2\"\n    local list2=\"$3\"\n    declare -p $varname | grep\
+    \ -q '^declare -a' || { echo \"$FUNCNAME: '$varname' is not an array variable\"\
+    \ >&2; return 1; }\n    declare -a $varname\n    local -A dupes\n    local i=0\n\
+    \    local x\n    while read x; do\n        local isdupe=0\n        for j in \"\
+    ${!dupes[@]}\"; do\n            [[ \"$x\" == \"${dupes[$j]}\" ]] && isdupe=1 &&\
+    \ break\n        done\n        if [[ $isdupe == 0 ]]; then\n            dupes[$i]=\"\
+    $x\"\n            let i++\n        fi\n    done < <(sort <(echo \"$list1\" | sed\
+    \ 's/[[:space:]]\\+/\\n/g') <(echo \"$list2\" | sed 's/[[:space:]]\\+/\\n/g')\
+    \ | uniq -d)\n    $varname=(\"${dupes[@]}\")", "  local -n _1=\"$1\" _2=\"$2\"\
+    \n  echo \"[$(comm -12 <(sort -u <<< \"${_1[*]}\") <(sort -u <<< \"${_2[*]}\"\
+    ))]\"", '  comm -12 <(sort <<< $1) <(sort <<< $2)', "  echo \"${1}\" | tr ' '\
+    \ '\\n' | sort | uniq | grep -Fx -f - <(echo \"${2}\" | tr ' ' '\\n' | sort |\
+    \ uniq) | sort | uniq | tr '\\n' ' ' | sed 's/^ *//g' | sed 's/ *$//g' | sed \"\
+    s/ /', '/g\" | sed \"s/^/[\\'/g\" | sed \"s/$/\\'\\]/g\"", '    echo $(intersect
+    "$1" "$2" | sort -u)', "    # NB: don't forget the -l flag!\n    comm -12 <(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | uniq) <(echo \"$2\" | tr ' ' '\\n' | sort\
+    \ -n | uniq)", '  _sort $(unique $1) $(unique $2)', "    echo $1 \\\n        |\
+    \ tr \" \" \"\\n\" \\\n        | sort \\\n        | uniq \\\n        | while read\
+    \ i\n    do\n        echo $2 \\\n            | tr \" \" \"\\n\" \\\n         \
+    \   | sort \\\n            | uniq \\\n            | grep -q $i\n        if [ $?\
+    \ -eq 0 ]\n        then\n            echo $i\n        fi\n    done \\\n      \
+    \  | tr \"\\n\" \" \" \\\n        | sed -e 's/\"/\\\\\"/g' \\\n        | awk '{printf\
+    \ \"[\"$0\"]\"}'", "  echo \"$1\" | tr ' ' '\\n' | sort | uniq | grep -Fxf <(echo\
+    \ \"$2\" | tr ' ' '\\n' | sort | uniq) | xargs printf '\"%s\" '", "  for x in\
+    \ $1; do\n    for y in $2; do\n      if [ \"$x\" = \"$y\" ]; then\n        echo\
+    \ $x\n      fi\n    done\n  done | sort -u", "    local -A hash1\n    local -A\
+    \ hash2\n    for i in $1; do\n        ((hash1[$i]++))\n    done\n    for i in\
+    \ $2; do\n        ((hash2[$i]++))\n    done\n    for i in \"${!hash1[@]}\"; do\n\
+    \        if ((hash2[$i] != 0)); then\n            echo \"$i\"\n        fi\n  \
+    \  done | sort -n", "    local first=$1\n    local second=$2\n    local local_list\n\
+    \    local common_list\n    local line\n    local index\n    IFS=' ' read -a first_list\
+    \ <<< \"$first\"\n    IFS=' ' read -a second_list <<< \"$second\"\n    for line\
+    \ in \"${first_list[@]}\"; do\n        local_list=\"$local_list $line\"\n    done\n\
+    \    for line in \"${second_list[@]}\"; do\n        local_list=\"$local_list $line\"\
+    \n    done\n    while IFS= read -r line; do\n        common_list=\"$common_list\
+    \ $(get_nth_index \"$line\" \" \" \"$((${#line} - 1))\")\"\n    done <<< \"$(sort\
+    \ -u <<< \"$local_list\")\"\n    local output\n    for line in $common_list; do\n\
+    \        if [ \"${line,,}\" == \"${first,,}\" ] || [ \"${line,,}\" == \"${second,,}\"\
+    \ ]; then\n            output=\"$output $line\"\n        fi\n    done\n    echo\
+    \ $output", "    echo $(comm -12 <(echo \"$1\" | tr ' ' '\\n' | sort -n) <(echo\
+    \ \"$2\" | tr ' ' '\\n' | sort -n))", "  local -a ary1\n  ary1=(${1// / })\n \
+    \ local -a ary2\n  ary2=(${2// / })\n  declare -p ary1 ary2\n  local -a temp\n\
+    \  temp=($(comm -12 <(printf \"%s\\n\" \"${ary1[@]}\" | sort) <(printf \"%s\\\
+    n\" \"${ary2[@]}\" | sort)))\n  echo ${temp[@]}", "  if [ $# -ne 2 ]; then\n \
+    \   echo \"${FUNCNAME[0]} usage: ${FUNCNAME[0]} <list1> <list2>\"\n    return\
+    \ 1\n  fi\n  comm -12 <(echo \"$1\" | tr ' ' '\\n' | sort -u) <(echo \"$2\" |\
+    \ tr ' ' '\\n' | sort -u)", "  a=(\"$@\")\n  [ ${#a[@]} -gt 2 ] && a=($(echo \"\
+    ${a[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' '))\n  b=(\"${a[@]:1}\")\n  a=(\"\
+    ${a[0]}\")\n  for e in \"${a[@]}\"; do\n    for f in \"${b[@]}\"; do\n      if\
+    \ [ \"$e\" = \"$f\" ]; then\n        echo \"\\\"$e\\\"\"\n        break\n    \
+    \  fi\n    done\n  done | sort -u", "    local a1 a2\n    IFS=$'\\n' read -d ''\
+    \ -ra a1 < <(tr ' ' '\\n' <<< \"$1\" | sort -u)\n    IFS=$'\\n' read -d '' -ra\
+    \ a2 < <(tr ' ' '\\n' <<< \"$2\" | sort -u)\n    for e in \"${a1[@]}\"; do\n \
+    \       for e2 in \"${a2[@]}\"; do\n            [[ \"$e\" == \"$e2\" ]] && printf\
+    \ '\"%s\" ' \"$e\"\n        done\n    done", "    local array1\n    local array2\n\
+    \    local str\n    array1=($1)\n    array2=($2)\n    str=$(\n        for item\
+    \ in \"${array1[@]}\"; do\n            for item2 in \"${array2[@]}\"; do\n   \
+    \             if [[ \"$item\" == \"$item2\" ]]; then\n                    echo\
+    \ \"$item\"\n                fi\n            done\n        done |\n          \
+    \  sort -u\n    )\n    echo \"$str\"", "  local -a a\n  local -a b\n  IFS=' '\
+    \ read -a a <<< \"$1\"\n  IFS=' ' read -a b <<< \"$2\"\n  IFS=$'\\n'\n  local\
+    \ c\n  c=($(comm -12 <(printf \"%s\\n\" \"${a[@]}\" | sort) <(printf \"%s\\n\"\
+    \ \"${b[@]}\" | sort)))\n  printf '%s\\n' \"${c[@]}\"", "    echo \"$1\" \\\n\
+    \        | tr ' ' '\\n' \\\n        | sort \\\n        | uniq \\\n        | awk\
+    \ -v OFS=',' '$1=$1' \\\n        | awk -v ORS=' ' '{printf \"[%s]\", $0}'", " \
+    \ set -o pipefail\n  _common \"$1\" \"$2\" | sort -u | tr '\\n' ' ' | sed 's/^\\\
+    s*//g' | sed 's/\\s*$//g'", "    local one=($1)\n    local two=($2)\n    local\
+    \ all=(\"${one[@]}\" \"${two[@]}\")\n    local values=$(uniq \"${all[@]}\")\n\
+    \    # Sort the sorted uniq array.\n    # Array must be converted to double-quoted\
+    \ string.\n    # Otherwise, all elements are concatenated to one.\n    echo $(echo\
+    \ \"${values[@]}\" | sort)", "  local comma=\",\"\n  local space=\" \"\n  local\
+    \ list_one=${1:-}\n  local list_two=${2:-}\n  local delim=${3:-$space}\n  local\
+    \ out=$(echo \"$list_one\" | tr \"$space\" \"$comma\" | perl -pe \"s/,/\\\\\\\\\
+    $comma/g\")\n  out=$(echo \"$out,$(echo \"$list_two\" | tr \"$space\" \"$comma\"\
+    \ | perl -pe \"s/,/\\\\\\\\$comma/g\")\" | \\\n    tr \"$comma\" \"$space\" |\
+    \ sort | uniq -c | grep -E \"^\\s+2\")\n  echo \"[$(echo \"$out\" | awk '{print\
+    \ $2}' | tr \"\\n\" \"$comma\" | perl -pe \"s/,$//\")]\" | tr \"$comma\" \"$delim\"",
+  "  list1=( $1 )\n  list2=( $2 )\n  IFSAVE=$IFS\n  IFS=$'\\n'\n  set -- $(echo \"\
+    ${list1[*]}\" \"${list2[*]}\" | sort -n | uniq -c | sort -k 1,1nr | awk '$1 ==\
+    \ 2 {print $2}')\n  IFS=$IFSAVE\n  echo \"[\\\"$*\\\"]\"", "    local -a list1=(\
+    \ $1 )\n    local -a list2=( $2 )\n    echo $(echo \"${list1[@]}\" \"${list2[@]}\"\
+    \ | tr ' ' '\\n' | sort | uniq -d)", "  local result\n\n  read -ra a1 <<<\"$1\"\
+    \n  read -ra a2 <<<\"$2\"\n\n  for i in \"${a1[@]}\"; do\n    for j in \"${a2[@]}\"\
+    ; do\n      if [[ \"$i\" == \"$j\" ]]; then\n        result+=\"${result:+ }\\\"\
+    $i\\\"\"\n      fi\n    done\n  done\n\n  echo \"[$result]\"", "    # Order of\
+    \ arguments is important\n    $(diff $1 $2 | cut -d \" \" -f 2 | xargs -I {} echo\
+    \ -n \\'\"{}\"\\' | paste -sd \" \")", "    echo \"$1\" | tr ' ' '\\n' | sort\
+    \ | uniq | grep -x \"$(echo \"$2\" | tr ' ' '\\n' | sort | uniq)\" | paste -sd\
+    \ ',' -", "    printf '[\"%s\"]\\n' $(tr ' ' '\\n' <<< $1 | sort | uniq | comm\
+    \ -12 - <(sort <<< $2))", "  # Python-like list comprehension over a bash array\n\
+    \  # https://stackoverflow.com/a/8782319/129877\n  local -a L1=($1)\n  local -a\
+    \ L2=($2)\n  local -a L3\n  local -i i\n\n  for i in ${!L1[@]}; do\n    for j\
+    \ in ${!L2[@]}; do\n      [[ ${L1[$i]} == ${L2[$j]} ]] && L3+=(${L1[$i]})\n  \
+    \  done\n  done\n\n  # dedupe\n  mapfile -t L3 < <(printf '%s\\n' \"${L3[@]}\"\
+    \ | sort -u)\n\n  # python list-like representation\n  printf '[\"%s\"]' \"${L3[@]}\"",
+  "  local c=$(comm -12 <(echo \"$1\" | tr ' ' '\\n' | sort) <(echo \"$2\" | tr '\
+    \ ' '\\n' | sort))\n  if [ -z \"$c\" ]; then\n    echo \"[]\"\n  else\n    echo\
+    \ \"[$(echo \"$c\" | tr '\\n' ',' | sed 's/,$//')]\"\n  fi", "    awk -v csv=$(echo\
+    \ \"$2\" | tr \" \" \",\") 'BEGIN {\n        n = split(csv, A, \",\")\n      \
+    \  for (i=1; i<=n; i++) {\n            C[A[i]]++\n        }\n    } {\n       \
+    \ if (C[$1]) {\n            print \"\\\"\"$1\"\\\"\"\n        }\n    }' <<< $(echo\
+    \ \"$1\" | tr \" \" \"\\n\" | sort -u)", '  echo "$1" | tr " " "\n" | sort | uniq
+    | comm -12 - <(echo "$2" | tr " " "\n" | sort | uniq)', "    local a=\"$1\"\n\
+    \    local b=\"$2\"\n    [ -z \"${a}\" ] && echo \"${b}\" && return\n    [ -z\
+    \ \"${b}\" ] && echo \"${a}\" && return\n    echo \"${a}\" | tr ' ' '\\n' | sort\
+    \ | uniq | comm -12 <(echo \"${b}\" | tr ' ' '\\n' | sort | uniq) | tr '\\n' '\
+    \ '", "    # Trim whitespace and eliminate duplicates\n    local a=($(echo $1\
+    \ | tr -s ' ' | tr ' ' '\\n' | sort -u))\n    local b=($(echo $2 | tr -s ' ' |\
+    \ tr ' ' '\\n' | sort -u))\n    # Get elements in a that are also in b\n    local\
+    \ list=()\n    for i in \"${a[@]}\"; do\n        if [[ \" ${b[*]} \" == *\" $i\
+    \ \"* ]]; then\n            list+=($i)\n        fi\n    done\n    # Sort and return\
+    \ with quotes\n    echo \"[$(printf '\"%s\" ' \"${list[@]}\" | sort -u)]\"", " \
+    \ local -a array1=($1)\n  local -a array2=($2)\n  local -a result=()\n  local\
+    \ -a remaining=()\n  local -a intersection=()\n  local -a tmp=()\n  local IFS=$'\\\
+    n'\n  while [[ ${#array1[@]} -gt 0 ]]; do\n    tmp=($(echo \"${array1[*]}\" |\
+    \ sort | uniq -d))\n    intersection=(\"${intersection[@]}\" \"${tmp[@]}\")\n\
+    \    tmp=($(echo \"${array1[*]}\" | sort | uniq -u))\n    remaining=(\"${remaining[@]}\"\
+    \ \"${tmp[@]}\")\n    array1=(\"${remaining[@]}\")\n    remaining=()\n  done\n\
+    \  while [[ ${#array2[@]} -gt 0 ]]; do\n    tmp=($(echo \"${array2[*]}\" | sort\
+    \ | uniq -d))\n    intersection=(\"${intersection[@]}\" \"${tmp[@]}\")\n    tmp=($(echo\
+    \ \"${array2[*]}\" | sort | uniq -u))\n    remaining=(\"${remaining[@]}\" \"${tmp[@]}\"\
+    )\n    array2=(\"${remaining[@]}\")\n    remaining=()\n  done\n  intersection=($(echo\
+    \ \"${intersection[*]}\" | sort | uniq))\n  result=(\"${intersection[@]}\")\n\
+    \  echo \"[$(echo \"${result[*]}\" | sed 's/ /\", \"/g')]\"", "  # Sort second\
+    \ list alphabetically, then use uniq -d to return only\n  # duplicates, then sort\
+    \ the entire list, then convert to json\n  echo \"$2\" | xargs -n1 | sort | uniq\
+    \ -d | sort | to_json", "  declare -a list1=($1)\n  declare -a list2=($2)\n  declare\
+    \ -a result=()\n  local e1=\n  local e2=\n  for e1 in \"${list1[@]}\"; do\n  \
+    \  for e2 in \"${list2[@]}\"; do\n      if [[ \"$e1\" == \"$e2\" ]]; then\n  \
+    \      result+=(\"$e1\")\n      fi\n    done\n  done\n  echo \"$(dedup \"${result[@]}\"\
+    )\"", '  printf "%s\n" $1 $2 | sort | uniq -d', "  echo \"$1\" \"$2\" | tr ' '\
+    \ '\\n' | sort | uniq -c | awk '$1 > 1' | cut -d' ' -f2", "    local -a one=(\
+    \ $1 )\n    local -a two=( $2 )\n    local -a x=( )\n    for i in \"${one[@]}\"\
+    ; do\n        for j in \"${two[@]}\"; do\n            if [[ \"$i\" == \"$j\" ]];\
+    \ then\n                x+=(\"$i\")\n            fi\n        done\n    done\n\
+    \    printf '%s\\n' \"${x[@]}\" | sort -u | sed 's/^/\"/;s/$/\"/'", "    local\
+    \ list1=\"$1\"\n    local list2=\"$2\"\n    echo $(toset \"$list1\" | comm -12\
+    \ <(toset \"$list2\") -)", "    # This is potentially dangerous.\n    # Convert\
+    \ list1 to an array in BASH\n    local IFS=$' '\n    local LIST1=($1)\n    local\
+    \ LIST2=($2)\n    local ARR=()\n    local i=0\n    for item in ${LIST1[@]}; do\n\
+    \        for element in ${LIST2[@]}; do\n            if [ \"$item\" == \"$element\"\
+    \ ]; then\n                # Element in LIST1 is also in LIST2.\n            \
+    \    # Make sure it is not already in the ARR array.\n                ARR_LEN=${#ARR[@]}\n\
+    \                if [ $ARR_LEN -eq 0 ]; then\n                    ARR[$i]=$item\n\
+    \                    ((i++))\n                else\n                    for j\
+    \ in ${ARR[@]}; do\n                        if [ \"$j\" == \"$item\" ]; then\n\
+    \                            # Already in array.\n                           \
+    \ continue 2\n                        fi\n                    done\n         \
+    \           ARR[$i]=$item\n                    ((i++))\n                fi\n \
+    \           fi\n        done\n    done\n    echo ${ARR[@]}", "    echo \"$1\"\
+    \ \"$2\" | tr ' ' '\\n' | sort | uniq -d | tr '\\n' ' '", "    local list1=(${1})\n\
+    \    local list2=(${2})\n    local list3=()\n    for i in \"${list1[@]}\"; do\n\
+    \        if [[ \" ${list2[*]} \" == *\" ${i} \"* ]]; then\n            list3+=(${i})\n\
+    \        fi\n    done\n    IFS=$'\\n' sorted=($(sort <<<\"${list3[*]}\"))\n  \
+    \  unset IFS\n    echo \"${sorted[*]}\"", "    echo \"$1\" | tr \" \" \"\\n\"\
+    \ | sort | uniq | grep -Fxw -f <(echo \"$2\" | tr \" \" \"\\n\" | sort | uniq)\
+    \ | tr \"\\n\" \" \" | sed 's/\\(.*\\)/[\"\\1\"]/'", "    local list1=\"$1\"\n\
+    \    local list2=\"$2\"\n    local list1_len=$(echo \"$list1\" | wc -w)\n    local\
+    \ list2_len=$(echo \"$list2\" | wc -w)\n    local max_len=$(( $list1_len > $list2_len\
+    \ ? $list1_len : $list2_len ))\n    local list1_new=\n    local list2_new=\n \
+    \   local i=0\n    local j=0\n    for i in $list1; do\n        for j in $list2;\
+    \ do\n            if [ \"$i\" == \"$j\" ]; then\n                list1_new=\"\
+    $list1_new $i\"\n                list2_new=\"$list2_new $j\"\n            fi\n\
+    \        done\n    done\n    echo \"$list1_new\" | sort -u\n    echo \"$list2_new\"\
+    \ | sort -u", "    echo '$('\"${1}\"') $('\"${2}\"')' \\\n        | awk '{for(i=1;i<=NF;i++)\
+    \ a[$i]++} END {for(i in a) if(a[i]>1) print \"\\\"\"i\"\\\"\"}' \\\n        |\
+    \ sort", "    # Use arrays and printf to list output\n    local -a first=($1)\n\
+    \    local -a second=($2)\n    for ((i=0; i<${#first[@]}; i++)); do\n        for\
+    \ ((j=0; j<${#second[@]}; j++)); do\n            if [[ \"${first[$i]}\" == \"\
+    ${second[$j]}\" ]]; then\n                printf '\"%s\" ' \"${first[$i]}\"\n\
+    \            fi\n        done\n    done", "  local -A h\n  for i in $1; do h[$i]=1;\
+    \ done\n  for i in $2; do [ ${h[$i]+_} ] && echo -n \"\\\"$i\\\" \"; done", " \
+    \ local first_list=${1// /$'\\n'}\n  local second_list=${2// /$'\\n'}\n  echo\
+    \ $first_list | sort | uniq | comm -12 - <(echo $second_list | sort | uniq)",
+  "    local -r _list1=$1\n    local -r _list2=$2\n    local _count1=0\n    local\
+    \ _count2=0\n    local _count=0\n    local _index=0\n    local _c=''\n    local\
+    \ _common1=''\n    local _common2=''\n    local _ret=''\n\n    # Get unique elements\n\
+    \    _list1=$(echo \"${_list1}\" | tr ' ' '\\n' | sort -u)\n    _list2=$(echo\
+    \ \"${_list2}\" | tr ' ' '\\n' | sort -u)\n\n    _count1=$(echo \"${_list1}\"\
+    \ | wc -l)\n    _count2=$(echo \"${_list2}\" | wc -l)\n\n    # Make the longest\
+    \ list first\n    if [ \"${_count1}\" -lt \"${_count2}\" ]; then\n        _count=${_count1}\n\
+    \        _count1=${_count2}\n        _count2=${_count}\n        _list1=$(echo\
+    \ \"${_list2}\" | tr '\\n' ' ')\n        _list2=$(echo \"${_list1}\" | tr '\\\
+    n' ' ')\n    fi\n\n    # Find common elements\n    while [ \"${_index}\" -lt \"\
+    ${_count1}\" ]; do\n        _c=$(echo \"${_list1}\" | cut -d ' ' -f $((++_index)))\n\
+    \        _common1=$(echo \"${_common1} ${_c}\")\n        if [ ! -z \"$(echo \"\
+    ${_list2}\" | grep \" ${_c} \")\" ]; then\n            _common2=$(echo \"${_common2}\
+    \ ${_c}\")\n        fi\n    done\n\n    # Sort by strlen, shortest first\n   \
+    \ if [ ! -z \"${_common2}\" ]; then\n        _ret=$(echo \"${_common2}\" | tr\
+    \ ' ' '\\n' | sort -u |\n            awk '\n                BEGIN {\n        \
+    \            cur=0;\n                }\n                {\n                  \
+    \  if (length($0) != cur) {\n                        printf(\"\\n%s\", $0);\n\
+    \                        cur=", "    local a=(\"$@\")\n    local list\n    for\
+    \ list in \"${a[@]}\"; do\n        for element in $list; do\n            echo\
+    \ $element\n        done\n    done | sort | uniq -d", "    _l1=\"$1\"\n    _l2=\"\
+    $2\"\n    jq -n --arg _l1 \"$_l1\" --arg _l2 \"$_l2\" '($_l1 | split(\" \")) as\
+    \ $l1 | ($_l2 | split(\" \")) as $l2 | ($l1 | unique) as $u1 | ($l2 | unique)\
+    \ as $u2 | [$u1[], $u2[]] | unique | sort | if length == 2 then (.[0] & .[1])\
+    \ else empty end'", "  local IFS=$'\\n'\n  read -r -d '' -a list1 <<< \"$(echo\
+    \ \"$1\" | sed -e 's/ /\\n/g' | sort | uniq)\"\n  read -r -d '' -a list2 <<< \"\
+    $(echo \"$2\" | sed -e 's/ /\\n/g' | sort | uniq)\"\n  local commonList\n  for\
+    \ i in \"${list1[@]}\"; do\n    for j in \"${list2[@]}\"; do\n      if [[ \"$i\"\
+    \ == \"$j\" ]]; then\n        commonList+=(\"$i\")\n      fi\n    done\n  done\n\
+    \  printf \"%s\\n\" \"${commonList[@]}\" | sort | uniq", "    sorted=$(printf\
+    \ \"%s\\n\" $1 $2 | sort -n | uniq -c | awk '$1==2 {print $2}')\n    printf \"\
+    [%s]\" $(echo $sorted | sed 's/ /\", \"/g')", "  local -a a\n  local -a b\n  local\
+    \ -A s\n  local i\n  IFS=' ' read -a a <<< \"$1\"\n  IFS=' ' read -a b <<< \"\
+    $2\"\n  for i in \"${a[@]}\"; do\n    ((s[$i]++))\n  done\n  for i in \"${b[@]}\"\
+    ; do\n    ((s[$i]++))\n  done\n  for i in \"${!s[@]}\"; do\n    if ((s[$i] ==\
+    \ 2)); then\n      printf '\"%s\" ' \"$i\"\n    fi\n  done", "    if [[ -z \"\
+    $1\" || -z \"$2\" ]]; then\n        exit 1\n    fi\n    # shellcheck disable=SC2207\n\
+    \    local list1=($1)\n    # shellcheck disable=SC2207\n    local list2=($2)\n\
+    \    # shellcheck disable=SC2207\n    local intersect=($(comm -12 <(printf '%s\\\
+    n' \"${list1[@]}\" | sort) <(printf '%s\\n' \"${list2[@]}\" | sort)))\n    for\
+    \ item in \"${intersect[@]}\"; do\n        echo \"\\\"$item\\\"\"\n    done",
+  "    # expand lists to arrays\n    declare -a x=(${1// / })\n    declare -a y=(${2//\
+    \ / })\n    # create sorted lists of unique elements\n    # by removing duplicates\
+    \ (`sort -u`)\n    # and sorting in numerical order (`-n`)\n    IFS=$'\\n' x=($(sort\
+    \ -n -u <<<\"${x[*]}\"))\n    IFS=$'\\n' y=($(sort -n -u <<<\"${y[*]}\"))\n  \
+    \  # create associative array based on `x` elements\n    # for fast lookup and\
+    \ easier processing\n    declare -A i=()\n    for e in \"${x[@]}\"; do\n     \
+    \   i[$e]=1\n    done\n    # iterate `y` elements, if found in `i`\n    # print\
+    \ it as an entry in JSON array\n    IFS=, array=()\n    for e in \"${y[@]}\";\
+    \ do\n        if [[ ${i[$e]} ]]; then\n            array+=(\"\\\"$e\\\"\")\n \
+    \       fi\n    done\n    echo \"[${array[*]}]\"", "    declare -a a1\n    declare\
+    \ -a a2\n    declare -a a3\n    declare -a a4\n    a1=($1)\n    a2=($2)\n    for\
+    \ i in \"${a1[@]}\"; do\n        for j in \"${a2[@]}\"; do\n            if [[\
+    \ \"$i\" == \"$j\" ]]; then\n                a3+=(\"$i\")\n            fi\n  \
+    \      done\n    done\n    a4=($(echo \"${a3[@]}\" | sed 's/ /\\n/g' | sort -u))\n\
+    \    echo \"${a4[@]}\"", "  local a=\"$1\"\n  local b=\"$2\"\n  echo \"$a\" |\
+    \ while read i; do\n    echo \"$b\" | while read j; do\n      if [ \"$i\" = \"\
+    $j\" ]; then\n        echo \"$i\"\n      fi\n    done\n  done | uniq | sort",
+  "    local A=\"$1\"\n    local B=\"$2\"\n    local C=\"\"\n    local INTER=\"\"\n\
+    \    A=\"$(tr ' ' '\\n' <<< \"$A\" | sort -u | tr '\\n' ' ')\"\n    B=\"$(tr '\
+    \ ' '\\n' <<< \"$B\" | sort -u | tr '\\n' ' ')\"\n    INTER=\"$(comm -12 <(echo\
+    \ \"$A\") <(echo \"$B\"))\"\n    C=\"$(sed 's/[ \\t]\\+/ /g' <<< \"$INTER\")\"\
+    \n    echo \"[${C// /, }]\"", "  local list1=$1\n  local list2=$2\n  printf '%s\\\
+    n' $list1 $list2 | tr ' ' '\\n' | sort | uniq -d | sed -e 's/^/\"/' -e 's/$/\"\
+    /'", "    local result i\n    local -a arr1=($1)\n    local -a arr2=($2)\n   \
+    \ for i in \"${arr1[@]}\"; do\n        for j in \"${arr2[@]}\"; do\n         \
+    \   if [[ \"$i\" == \"$j\" ]]; then\n                result+=($i)\n          \
+    \  fi\n        done\n    done\n    unique \"${result[@]}\"", "  local -a l1\n\
+    \  l1=($1)\n  local -a l2\n  l2=($2)\n  local -a res=()\n  for ((i=0; i<${#l1[@]};\
+    \ i++)); do\n    for ((j=0; j<${#l2[@]}; j++)); do\n      if [[ \"${l1[$i]}\"\
+    \ = \"${l2[$j]}\" ]]; then\n        res=(\"${res[@]}\" \"${l1[$i]}\")\n      \
+    \  break\n      fi\n    done\n  done\n  printf \"%s\\n\" \"${res[@]}\" | sort\
+    \ -V", "  l1=\"$1\"\n  l2=\"$2\"\n  l1=(${l1// / })\n  l2=(${l2// / })\n  printf\
+    \ '[%s]\\n' \"${l1[@]}\"\n  printf '[%s]\\n' \"${l2[@]}\"\n  out=($(comm -12 <(echo\
+    \ \"${l1[*]}\" | tr ' ' '\\n' | sort) <(echo \"${l2[*]}\" | tr ' ' '\\n' | sort)))\n\
+    \  printf '%s\\n' \"${out[@]}\"", "  # Requires GNU coreutils.\n  echo $(sort\
+    \ $1 | uniq | grep -F -x -f <(sort $2 | uniq))", "  local a=\"$1\"\n  local b=\"\
+    $2\"\n  IFS=\" \" read -a a <<< \"$a\"\n  IFS=\" \" read -a b <<< \"$b\"\n  echo\
+    \ $(comm -12 <(echo \"${a[*]}\" | tr \" \" \"\\n\" | sort -n) <(echo \"${b[*]}\"\
+    \ | tr \" \" \"\\n\" | sort -n))", "  local list1 list2\n  list1=$(echo \"$1\"\
+    \ | tr ' ' '\\n' | sort -u)\n  list2=$(echo \"$2\" | tr ' ' '\\n' | sort -u)\n\
+    \  join <(echo \"$list1\") <(echo \"$list2\")", "    read -a a1 <<< \"$1\"\n \
+    \   read -a a2 <<< \"$2\"\n    read -a uniq <<< $(unique \"(${a1[*]} ${a2[*]})\"\
+    )\n    read -a sorted <<< $(sort \"${uniq[@]}\")\n    for n in \"${sorted[@]}\"\
+    ; do\n        # Compare the number of times each number appears.\n        if [[\
+    \ $(count \"$n\" \"${a1[*]}\") -eq $(count \"$n\" \"${a2[*]}\") ]]; then\n   \
+    \         echo -n \"$n \"\n        fi\n    done", "  local a=($1)\n  local b=($2)\n\
+    \  echo \"${a[@]}\" \"${b[@]}\" | tr ' ' '\\n' | sort | uniq -d | sed 's/^/\"\
+    /;s/$/\"/'", "    l1=(${1// / })\n    l2=(${2// / })\n    for i in \"${l1[@]}\"\
+    ; do\n        for j in \"${l2[@]}\"; do\n            [[ \"$i\" == \"$j\" ]] &&\
+    \ echo \"$i\"\n        done\n    done | sort -u", "    local IFS=$' '\n    declare\
+    \ -a x=($1)\n    declare -a y=($2)\n    result=()\n    for ((i=0; i<${#x[@]};\
+    \ i++)); do\n        for ((j=0; j<${#y[@]}; j++)); do\n            if [[ \"${x[$i]}\"\
+    \ == \"${y[$j]}\" ]]; then\n                result+=(\"${x[$i]}\")\n         \
+    \   fi\n        done\n    done\n    printf \"[%s]\" \"$(printf \"\\\"%s\\\", \"\
+    \ \"${result[@]}\")\"", "    local list1=\"$1\"\n    local list2=\"$2\"\n    IFS=$'\
+    \ '\n    list1=\"$(echo $list1 | tr '[:upper:]' '[:lower:]')\"\n    list2=\"$(echo\
+    \ $list2 | tr '[:upper:]' '[:lower:]')\"\n    list1=\"$(echo $list1 | tr '[:space:]'\
+    \ '\\n' | sort -u)\"\n    list2=\"$(echo $list2 | tr '[:space:]' '\\n' | sort\
+    \ -u)\"\n    printf '%s\\n' $list1 | grep -Fxf- <(printf '%s\\n' $list2)", " \
+    \ s=$(printf \"%s\" \"$1\" | sort -u)\n  t=$(printf \"%s\" \"$2\" | sort -u)\n\
+    \  printf \"%s\\n\" \"$s\" | while read -r x; do\n    printf \"%s\\n\" \"$t\"\
+    \ | grep -q \"^$x$\" && printf '\"%s\"\\n' \"$x\"\n  done", "    echo \"\n   \
+    \ a=($1)\n    b=($2)\n    for x in ${a[@]}; do\n        for y in ${b[@]}; do\n\
+    \            if [ \\\"\\$x\\\" = \\\"\\$y\\\" ]; then\n                c+=(\\\"\
+    \\$x\\\")\n            fi\n        done\n    done\n    echo \\\"\\$(echo \\\"\\\
+    ${c[@]}\\\" | tr ' ' '\\n' | sort -u | tr '\\n' ' ')\\\"\n    \" | /bin/bash |\
+    \ sed -e 's/^\"//' -e 's/\"$//'", "    local a=\"$1\"\n    local b=\"$2\"\n  \
+    \  local ret=()\n    for i in $a; do\n        if list_contains \"$b\" \"$i\";\
+    \ then\n            ret+=(\"$i\")\n        fi\n    done\n    echo $(uniq_sort\
+    \ \"${ret[@]}\")", "  echo $(\n    printf \"%s\\n\" \"$1\" \"$2\" |\n    tr '\
+    \ ' '\\n' |\n    sort |\n    uniq -c |\n    grep ' 2 ' |\n    cut -d ' ' -f 2\n\
+    \  )", "  IFS=' ' read -r -a a <<< \"$1\"\n  IFS=' ' read -r -a b <<< \"$2\"\n\
+    \  mapfile -t c < <(printf '%s\\n' \"${a[@]}\" \"${b[@]}\" | sort -u)\n  # read\
+    \ < <(comm -12 <(printf '%s\\n' \"${a[@]}\" | sort) <(printf '%s\\n' \"${b[@]}\"\
+    \ | sort))\n  read -r -a a <<< \"${c[@]}\"\n  printf '%s\\n' \"${a[@]}\"", " \
+    \ # shellcheck disable=SC2207\n  local items=$(echo \"$1\" \"$2\" | tr ' ' '\\\
+    n' | sort | uniq -c | grep -E '^\\s*2\\s' | cut -d' ' -f2)\n  echo \"[$(echo \"\
+    $items\" | tr '\\n' ',' | sed 's/,$//')]\"", "    local left=\"$1\"\n    local\
+    \ right=\"$2\"\n    local left_arr=($left)\n    local right_arr=($right)\n   \
+    \ local unique=\"\"\n    local common=\"\"\n    for i in \"${left_arr[@]}\"; do\n\
+    \        for j in \"${right_arr[@]}\"; do\n            if [[ \"$i\" == \"$j\"\
+    \ ]]; then\n                unique=\"$unique $i\"\n            fi\n        done\n\
+    \    done\n    # Sort and remove duplicates.\n    IFS=$'\\n' common=($(sort <<<\"\
+    $unique\" | uniq))\n    printf '[\"%s\"]' \"${common[@]}\"", "  list_a=(${1//\
+    \ / })\n  list_b=(${2// / })\n  python -c \"import sys; print('\\n'.join(sorted(set(sys.argv[1:]).intersection(sys.argv[3:]))))\"\
+    \ \"${list_a[@]}\" \"${list_b[@]}\"", "  # comparing strings with spaces in them\
+    \ doesn't work well\n  # so using a delimiter character that's unlikely to be\
+    \ in the input\n  local delimiter=\"\u2229\"\n  # use awk to convert the list\
+    \ to this format\n  # id \u2229 value\n  # where id is the index from 1 to n\n\
+    \  # and value is the actual value\n  # this allows us to sort by value and keep\
+    \ the indices in sync\n  local list1=$(echo \"$1\" | awk -v delimiter=\"$delimiter\"\
+    \ '{print NR delimiter $0}')\n  local list2=$(echo \"$2\" | awk -v delimiter=\"\
+    $delimiter\" '{print NR delimiter $0}')\n  # sort by value, then by id\n  local\
+    \ sorted1=$(echo \"$list1\" | sort -t \"$delimiter\" -k 2,2 -k 1,1)\n  local sorted2=$(echo\
+    \ \"$list2\" | sort -t \"$delimiter\" -k 2,2 -k 1,1)\n  # join sorted lists by\
+    \ value, then awk to only print unique matches\n  local joined=$(echo \"$sorted1\"\
+    \ | join -t \"$delimiter\" - \"$sorted2\" -a 1 -a 2 | \\\n    awk -v delimiter=\"\
+    $delimiter\" '{print $1\"\u2229\"$2}' | uniq -w 2)\n  # cut off the index that\
+    \ we used for sorting\n  echo $joined | awk -v delimiter=\"$delimiter\" '{split($1,\
+    \ a, delimiter); print a[2]}'", "  declare -a ary1=(${1// / })\n  declare -a ary2=(${2//\
+    \ / })\n  declare -A unique_ary\n\n  for i in \"${ary1[@]}\"; do\n    unique_ary[$i]=1\n\
+    \  done\n\n  for i in \"${ary2[@]}\"; do\n    if [[ ${unique_ary[$i]} ]]; then\n\
+    \      unique_ary[$i]=2\n    fi\n  done\n\n  common_list=()\n  for i in \"${!unique_ary[@]}\"\
+    ; do\n    if [[ ${unique_ary[$i]} == 2 ]]; then\n      common_list=(\"${common_list[@]}\"\
+    \ \"$i\")\n    fi\n  done\n\n  echo \"[$(printf \"\\\"%s\\\", \" \"${common_list[@]}\"\
+    )]\"", "    tr ' ' '\\n' <<<\"$1\" | sort | uniq | comm -12 \\\n        <(tr '\
+    \ ' '\\n' <<<\"$2\" | sort | uniq) - | tr '\\n' ' '", "  local list1=$1\n  local\
+    \ list2=$2\n  python -c '\nimport sys\nprint list(set(sys.argv[1].split()) & set(sys.argv[2].split()))'\
+    \ \\\n    \"$list1\" \"$list2\"", "    a=(\"$@\")\n    b=(\"${a[@]:1}\")\n   \
+    \ j=$((${#b[@]}-1))\n    echo '['$(printf '\"%s\" ' $( IFS=$'\\n'; echo \"${a[0]}\"\
+    \ | grep -Fx -f <(printf '%s\\n' \"${b[*]}\") | sort -u ))']'", "  local list1=($1)\n\
+    \  local list2=($2)\n  local common_values=($(printf '%s\\n' \"${list1[@]}\" \"\
+    ${list2[@]}\" | sort | uniq -d))\n  printf '%s\\n' \"${common_values[@]}\"", " \
+    \ # Modified version of a command taken from \"StackOverflow:\n  # bash get the\
+    \ common elements of two arrays\"\n  # (http://stackoverflow.com/questions/16989598/bash-comparing-two-arrays)\n\
+    \  #\n  # An alternative solution that does not require sorting and uses for\n\
+    \  # rather than while would be the following:\n  #\n  #   for a in $1; do\n \
+    \ #     for b in $2; do\n  #       [[ $a == $b ]] && echo $a\n  #     done\n \
+    \ #   done\n  #\n  # This method has not been used here because it is not able\
+    \ to handle\n  # strings containing spaces.\n\n  # Convert arguments to arrays\n\
+    \  a=($1)\n  b=($2)\n\n  # Sort\n  # Note: Sorting requires GNU sort.\n  IFS=$'\\\
+    n'\n  a=($(sort <<<\"${a[*]}\"))\n  b=($(sort <<<\"${b[*]}\"))\n  unset IFS\n\n\
+    \  # Find common elements\n  IFS=\n  c=()\n  while (( ${#a[@]} > 0 && ${#b[@]}\
+    \ > 0 ))\n  do\n    a_value=${a[0]}\n    b_value=${b[0]}\n    if [[ $a_value <\
+    \ $b_value ]]; then\n      a=(\"${a[@]:1}\")\n    elif [[ $a_value > $b_value\
+    \ ]]; then\n      b=(\"${b[@]:1}\")\n    else\n      c+=(\"$a_value\")\n     \
+    \ a=(\"${a[@]:1}\")\n      b=(\"${b[@]:1}\")\n    fi\n  done\n  IFS=$'\\n'\n \
+    \ echo \"[$(printf '\"%s\", ' \"${c[@]}\")]\"", "    (\n        IFS=\" \" read\
+    \ -r -a a1 <<< \"$1\"\n        IFS=\" \" read -r -a a2 <<< \"$2\"\n        sort\
+    \ <(printf '%s\\n' \"${a1[@]}\" | sort -u) <(printf '%s\\n' \"${a2[@]}\" | sort\
+    \ -u) | uniq -d\n    )", "  comm -12 <(echo \"$1\" | tr ' ' '\\n' | sort -u) <(echo\
+    \ \"$2\" | tr ' ' '\\n' | sort -u)", "    local a=($1)\n    local b=($2)\n   \
+    \ local c\n    local d\n\n    # Find the length of the longer array.\n    if [\
+    \ ${#a[@]} -gt ${#b[@]} ]; then\n        c=${#a[@]}\n    else\n        c=${#b[@]}\n\
+    \    fi\n\n    for ((i=0; i<c; i++)); do\n        for ((j=0; j<c; j++)); do\n\
+    \            if [ \"${a[$i]}\" = \"${b[$j]}\" ]; then\n                d+=(${a[$i]})\n\
+    \            fi\n        done\n    done\n\n    echo $(echo -n ${d[@]} | tr \"\
+    \ \" \"\\n\" | sort -u)", "    # Using `sort` instead of `uniq` to trim duplicates\
+    \ from each list,\n    # because `uniq` doesn't support trimming duplicates from\
+    \ each list\n    # separately.\n    local -a a=($(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -u))\n    local -a b=($(echo \"$2\" | tr ' ' '\\n' | sort -u))\n    echo\
+    \ \"${a[@]}\" \"${b[@]}\" | tr ' ' '\\n' | sort | uniq -d", "  declare -a A=${1//\
+    \ / }\n  declare -a B=${2// / }\n  declare -a C=()\n  for a in \"${A[@]}\"; do\n\
+    \    for b in \"${B[@]}\"; do\n      if [[ \"$a\" == \"$b\" ]]; then\n       \
+    \ C+=(\"$a\")\n      fi\n    done\n  done\n  IFS=$'\\n' sorted=($(sort <<<\"${C[*]}\"\
+    ))\n  IFS=$'\\n' unique=($(uniq <<<\"${sorted[*]}\"))\n  printf \"[%s]\" \"${unique[*]}\"",
+  "    local A=($1)\n    local B=($2)\n    local C=()\n    local i\n    local j\n\
+    \    local found\n    for ((i=0; i<${#A[@]}; i++)); do\n        found=0\n    \
+    \    for ((j=0; j<${#B[@]}; j++)); do\n            if [ \"${A[$i]}\" = \"${B[$j]}\"\
+    \ ]; then\n                found=1\n                break\n            fi\n  \
+    \      done\n        if [ $found -eq 1 ]; then\n            C+=(${A[$i]})\n  \
+    \      fi\n    done\n    if [ \"${#C[@]}\" -gt 0 ]; then\n        echo \"$(echo\
+    \ \"${C[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' ' ')\"\n    fi", "  local comma=\"\
+    \"\n  for word in $1; do\n    for target in $2; do\n      if [[ \"$word\" == \"\
+    $target\" ]]; then\n        echo -n \"$comma'$word'\"\n        comma=\", \"\n\
+    \      fi\n    done\n  done", "  local a=( $(echo \"$1\" | tr ' ' '\\n' | sort\
+    \ -u) )\n  local b=( $(echo \"$2\" | tr ' ' '\\n' | sort -u) )\n  local i=\n\n\
+    \  for i in \"${a[@]}\"; do\n    if [[ $(printf \"%s\\n\" \"${b[@]}\" | grep -c\
+    \ \"^$i$\") -gt 0 ]]; then\n      echo \"$i\"\n    fi\n  done | sort -u", "  set\
+    \ -o pipefail\n  local -r list1=\"$1\"\n  local -r list2=\"$2\"\n  set -f\n  comm\
+    \ -12 <(\n    printf '%s\\n' $list1 | sort -g | tr ' ' '\\n' | sort -u\n  ) <(\n\
+    \    printf '%s\\n' $list2 | sort -g | tr ' ' '\\n' | sort -u\n  ) | tr '\\n'\
+    \ ' ' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'\n  set +f", "  # Make\
+    \ sure lists are sorted before comparing them:\n  list1=\"$(echo \"$1\" | sort\
+    \ -n | tr '\\n' ' ')\"\n  list2=\"$(echo \"$2\" | sort -n | tr '\\n' ' ')\"\n\
+    \  echo $list1 | while read -d ' ' num; do\n    echo $list2 | grep -w $num > /dev/null\
+    \ && echo -n '\"'$num'\" '\n  done", "  local i val= ret=\n  for i in $(tr ' '\
+    \ '\\n' <<<\"$1\" | sort | uniq); do\n    [[ $i =~ ^[0-9]+$ ]] && val+=\" $i\"\
+    \ || val+=\" \\\"$i\\\"\"\n  done\n  for i in $(tr ' ' '\\n' <<<\"$2\" | sort\
+    \ | uniq); do\n    [[ $i =~ ^[0-9]+$ ]] && val+=\" $i\" || val+=\" \\\"$i\\\"\"\
+    \n  done\n  for i in $(tr ' ' '\\n' <<<\"$val\" | sort | uniq -c | awk '$1>1 {print\
+    \ $2}'); do\n    [[ $i =~ ^[0-9]+$ ]] && ret+=\" $i\" || ret+=\" \\\"$i\\\"\"\n\
+    \  done\n  echo \"$ret\"", '    echo $(echo $1 | tr " " "\n" | sort | uniq | comm
+    -12 - <(echo $2 | tr " " "\n" | sort | uniq))', "    local -a elements a b\n \
+    \   a=($1)\n    b=($2)\n    elements=(\"${a[@]}\" \"${b[@]}\")\n    # https://unix.stackexchange.com/a/121158\n\
+    \    # https://unix.stackexchange.com/a/87350\n    # https://stackoverflow.com/a/8351489\n\
+    \    # https://stackoverflow.com/a/8737017\n    # https://stackoverflow.com/a/25679326\n\
+    \    # https://stackoverflow.com/a/15958053\n    # https://stackoverflow.com/a/677212\n\
+    \    for i in \"${!elements[@]}\"; do\n        for j in \"${!elements[@]}\"; do\n\
+    \            if [[ $i != $j ]] && [[ \"${elements[$i]}\" == \"${elements[$j]}\"\
+    \ ]]; then\n                unset \"elements[$j]\"\n            fi\n        done\n\
+    \    done\n    mapfile -t a < <(printf '%s\\n' \"${elements[@]}\" | sort -n)\n\
+    \    for i in \"${a[@]}\"; do\n        echo \"\\\"$i\\\"\"\n    done", "  echo\
+    \ \"$(comm -12 <(echo \"$1\" | tr ' ' '\\n' | sort) <(echo \"$2\" | tr ' ' '\\\
+    n' | sort))\"", "    local -a first=( $1 )\n    local -a second=( $2 )\n    printf\
+    \ \"%s\\n\" \"${first[@]}\" \"${second[@]}\" | sort | uniq -d", "  local line\n\
+    \  line=$(printf \"%s\\n\" $1 $2 | sort | uniq -d)\n  echo -n \"[\"\n  for i in\
+    \ $line; do\n    echo -n '\"'\n    echo -n $i\n    echo -n '\"'\n    echo -n \"\
+    , \"\n  done\n  echo -n \"]\"", "    local a=$1\n    local b=$2\n    [ $# -eq\
+    \ 2 ] || { echo \"common() needs two lists!\"; return 1; }\n    local c=()\n \
+    \   while read -r x; do\n        while read -r y; do\n            [ \"$x\" = \"\
+    $y\" ] && c+=( \"$x\" )\n        done <<< \"$(echo \"$b\" | tr ' ' '\\n' | sort\
+    \ -u)\"\n    done <<< \"$(echo \"$a\" | tr ' ' '\\n' | sort -u)\"\n    echo ${c[@]}",
+  "    for item in \"$1\"; do\n        for item2 in \"$2\"; do\n            if [[\
+    \ \"$item\" == \"$item2\" ]]; then\n                echo \"$item\"\n         \
+    \   fi\n        done\n    done | sort -n | uniq", "    declare -a list1=($1)\n\
+    \    declare -a list2=($2)\n    echo $(printf \"\\\"%s\\\"\\n\" \"${list1[@]}\"\
+    \ \"${list2[@]}\" | sort | uniq -d)", "  echo \"${@:1:1}\" \"${@:2:1}\" | awk\
+    \ '{for(i=1;i<=NF;i++) {if ($i in a) a[$i]++; else a[$i]=1}} END {for (x in a)\
+    \ if (a[x]>1) print x}'", "  $(setdiff \"$1\" \"$2\") $(setdiff \"$2\" \"$1\"\
+    ) | sort -u |\n  while read -r line; do echo -n '\"'$line'\"' ; done", "  local\
+    \ f\n  f=\"$(mktemp)\"\n  echo \"$1\" > $f\n  echo \"$2\" >> $f\n  local a\n \
+    \ local b\n  a=\"$(cat $f | sort | uniq)\"\n  b=\"$(cat $f | sort | uniq -d)\"\
+    \n  f=\"$(mktemp)\"\n  echo \"$a\" > $f\n  echo \"$b\" >> $f\n  # Sorting will\
+    \ output a single column with no newlines.\n  echo \"[$(sort $f | uniq | sed 's/^/\\\
+    \"/;s/$/\\\"/')]\"\n  rm $f", "  local common=$(comm -12 <(echo \"$1\" | sort\
+    \ -n | uniq) <(echo \"$2\" | sort -n | uniq))\n  echo \"$common\" | sed 's/ /\"\
+    , \"/g' | sed 's/^/\"/' | sed 's/$/\"/'", "    local c; for c in $1; do\n    \
+    \    if [ $(echo $2 | grep -c -w $c) -gt 0 ]; then\n            echo \"$c\"\n\
+    \        fi\n    done | sort -u", "    local -a arr1=($1)\n    local -a arr2=($2)\n\
+    \    for ((i=0; i<${#arr1[@]}; i++)); do\n        for ((j=0; j<${#arr2[@]}; j++));\
+    \ do\n            if [[ \"${arr1[$i]}\" == \"${arr2[$j]}\" ]]; then\n        \
+    \        echo \"\\\"${arr1[$i]}\\\"\"\n                break\n            fi\n\
+    \        done\n    done | sort -u", "  [ \"$#\" -eq 2 ] || return 1\n\n  # If\
+    \ we're running on OS X, default to the BSD `sort`\n  # command, which doesn't\
+    \ support the `-V` flag (which\n  # is a GNU extension).\n  if [[ \"$(uname)\"\
+    \ == \"Darwin\" ]]; then\n    COMMON_SORT_OPTS=\"\"\n  else\n    COMMON_SORT_OPTS=\"\
+    -V\"\n  fi\n\n  local a=($1)\n  local b=($2)\n  local a_sorted=($(sort $COMMON_SORT_OPTS\
+    \ <<< \"${a[*]}\"))\n  local b_sorted=($(sort $COMMON_SORT_OPTS <<< \"${b[*]}\"\
+    ))\n  local common=()\n  local i=0\n\n  while [[ $i -lt ${#a_sorted[@]} ]]; do\n\
+    \    if [[ $i -eq ${#b_sorted[@]} ]]; then\n      break\n    fi\n\n    local a_val=${a_sorted[$i]}\n\
+    \    local b_val=${b_sorted[$i]}\n\n    if [[ $a_val == $b_val ]]; then\n    \
+    \  common+=($a_val)\n      (( i++ ))\n    elif [[ $a_val < $b_val ]]; then\n \
+    \     (( i++ ))\n    else\n      (( i++ ))\n    fi\n  done\n\n  echo \"${common[@]}\"",
+  "    (IFS=\" \"\n    for i in $1; do\n        for j in $2; do\n            [[ \"\
+    $i\" == \"$j\" ]] && printf \"%s \" \"$i\"\n        done\n    done\n    ) | sort\
+    \ -u", "  list1=$1\n  list2=$2\n  echo $1 | tr \" \" \"\\n\" | sort | uniq | grep\
+    \ -f <(echo $2 | tr \" \" \"\\n\" | sort | uniq) | \\\n    tr \"\\n\" \" \" |\
+    \ sed -e 's/^/[/' -e 's/$/]/' | \\\n    sed -e 's/ /\", \"/g'", "  if [ \"$#\"\
+    \ -ne 2 ]; then\n    echo \"'common' requires two string arguments\" >&2\n   \
+    \ exit 1\n  fi\n  echo \"${1}\" | tr \" \" \"\\n\" | sort | uniq | grep -Fxf -\
+    \ \"${2}\" | sort | uniq", "  local common_list=\"$(comm -12 <(echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -u) <(echo \"$2\" | tr ' ' '\\n' | sort -u))\"\n  local common_result=\"\
+    [\"\n  while read -r line; do\n    common_result=\"${common_result}\\\"${line}\\\
+    \",\"\n  done <<< \"$common_list\"\n  common_result=\"${common_result::-1}]\"\n\
+    \  echo \"$common_result\"", "  local a\n  local b\n  a=($1)\n  b=($2)\n  echo\
+    \ -n \"[\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    for ((j=0; j<${#b[@]}; j++));\
+    \ do\n      if [ \"${a[$i]}\" = \"${b[$j]}\" ]; then\n        if [ $i -gt 0 ];\
+    \ then\n          echo -n \", \"\n        fi\n        echo -n \"\\\"${a[$i]}\\\
+    \"\"\n      fi\n    done\n  done\n  echo -n \"]\"", "    if [ -z \"$1\" ] || [\
+    \ -z \"$2\" ]; then\n        return\n    fi\n    while read -r item; do\n    \
+    \    if [[ $2 =~ \" $item \" ]]; then\n            echo \"\\\"$item\\\"\"\n  \
+    \      fi\n    done <<< \"$1\" | tr \" \" \"\\n\" | sort -u", "  awk 'BEGIN{\n\
+    \    PROCINFO[\"sorted_in\"]=\"@val_num_asc\"\n  }\n  ARGIND==1{\n    a[$1]\n\
+    \  }\n  ARGIND==2{\n    c[$1]\n  }\n  END{\n    for(i in a){\n      if(i in c){\n\
+    \        print(i)\n      }\n    }\n  }' <(echo \"$1\") <(echo \"$2\")", "  local\
+    \ a=${1}\n  local b=${2}\n  local -a arr=()\n  for ((i=0; i<=${#a}; i++)); do\n\
+    \    for ((j=0; j<=${#b}; j++)); do\n      if [[ ${a:i:1} == ${b:j:1} ]]; then\n\
+    \        arr+=(${a:i:1})\n      fi\n    done\n  done\n  echo \"$(sort \"${arr[@]}\"\
+    \ | uniq)\"", "    # http://stackoverflow.com/a/14366367/895245\n    # sort both\
+    \ lists, one item per line\n    printf \"%s\\n\" $1 | sort >/tmp/common1\n   \
+    \ printf \"%s\\n\" $2 | sort >/tmp/common2\n    # use comm to find common lines\
+    \ between both lists\n    comm -12 /tmp/common1 /tmp/common2 | awk '{printf \"\
+    %s \", $0}'\n    echo", "  local IFS=\" \"\n  eval \"\n    set -f;\n    {\n  \
+    \    echo $(\n        for e in $(compact \"$1\" | sort -u); do\n          if [[\
+    \ \\\"\\$(compact \\\"$2\\\")\\\" =~ (^|[[:space:]])\\\"\\$e\\\"([[:space:]]|$)\
+    \ ]]; then\n            echo \"\\\"\\$e\\\"\"\n          fi\n        done\n  \
+    \    )\n    } | sort -u\n  \"", "  declare -a result\n\n  # Split $1 into array\n\
+    \  read -ra array1 <<< \"$1\"\n\n  # Split $2 into array\n  read -ra array2 <<<\
+    \ \"$2\"\n\n  # Return unique common elements\n  for i in \"${array1[@]}\"; do\n\
+    \    for y in \"${array2[@]}\"; do\n      if [[ \"$i\" == \"$y\" ]]; then\n  \
+    \      if [[ ! \" ${result[@]} \" =~ \" ${i} \" ]]; then\n          result=(\"\
+    ${result[@]}\" \"$i\")\n        fi\n      fi\n    done\n  done\n\n  sort <<< \"\
+    ${result[*]}\"", "  local a=\"${1// /$'\\n'}\"\n  local b=\"${2// /$'\\n'}\"\n\
+    \  sort <(echo \"$a\") <(echo \"$b\") | uniq -d | tr '\\n' ' ' | sed -e 's/^[\
+    \ \\t]*//' -e 's/[ \\t]*$//'", "  tr ' ' '\\n' <<< \"$1\" | sort | uniq | grep\
+    \ -Fxf <(tr ' ' '\\n' <<< \"$2\" | sort | uniq) | sed 's/^/\"/;s/$/\"/' | paste\
+    \ -s -d ','", "  set -f; IFS='\n'\n  lines1=($1)\n  lines2=($2)\n  for line in\
+    \ \"${lines1[@]}\"; do\n    if in_array \"$line\" \"${lines2[@]}\"; then\n   \
+    \   echo \"$line\"\n    fi\n  done | sort -u | fold_quotes", "  # Split strings\
+    \ into arrays delimited by space\n  read -ra arr1 <<< \"$1\"\n  read -ra arr2\
+    \ <<< \"$2\"\n\n  # Find common elements\n  common=()\n  for e in \"${arr1[@]}\"\
+    ; do\n    for f in \"${arr2[@]}\"; do\n      if [[ \"$e\" == \"$f\" ]]; then\n\
+    \        common+=(\"$e\")\n      fi\n    done\n  done\n\n  # Remove duplicates\n\
+    \  unique_common=$(echo \"${common[@]}\" | tr ' ' '\\n' | sort -u | tr '\\n' '\
+    \ ')\n\n  # Output in format ready for python list\n  echo \"[\"$(printf '\"%s\"\
+    , ' ${unique_common[@]} | sed 's/, $//')\"]\"", "    # The following is twice\
+    \ as fast as:\n    #   > echo $(sort -u <<< \"$1\")\n    #   > echo $(sort -u\
+    \ <<< \"$2\")\n    #   > comm -12 <(echo \"$1\") <(echo \"$2\")\n    declare -a\
+    \ a1=()\n    declare -a a2=()\n    while IFS= read -r x; do\n        a1+=( \"\
+    $x\" )\n    done < <(sort -u <<< \"$1\")\n    while IFS= read -r x; do\n     \
+    \   a2+=( \"$x\" )\n    done < <(sort -u <<< \"$2\")\n    for e in \"${a1[@]}\"\
+    ; do\n        for e2 in \"${a2[@]}\"; do\n            if [[ \"$e\" == \"$e2\"\
+    \ ]]; then\n                echo \"\\\"$e\\\"\"\n                break\n     \
+    \       fi\n        done\n    done", "    local a\n    local b\n    local list1\n\
+    \    local list2\n    local list\n\n    a=($1)\n    b=($2)\n    list1=$(printf\
+    \ '%s\\n' \"${a[@]}\" | sort | uniq)\n    list2=$(printf '%s\\n' \"${b[@]}\" |\
+    \ sort | uniq)\n    list=$(comm -12 <(echo \"$list1\") <(echo \"$list2\"))\n \
+    \   echo \"[$(tr '\\n' ',' <<< \"$list\" | sed 's/,$//')]\"", "    list1=(${1//\
+    \ / })\n    list2=(${2// / })\n    for i in \"${list1[@]}\"; do\n        for j\
+    \ in \"${list2[@]}\"; do\n            if [[ \"$i\" == \"$j\" ]]; then\n      \
+    \          printf '\"%s\" ' \"$i\"\n            fi\n        done\n    done", " \
+    \   local x=$1 y=$2\n    # Convert input into a sorted array.\n    local x_a=$(echo\
+    \ \"$x\" | tr ' ' '\\n' | sort -u)\n    local y_a=$(echo \"$y\" | tr ' ' '\\n'\
+    \ | sort -u)\n    # Find common elements\n    local common=$(comm -12 <(echo \"\
+    $x_a\") <(echo \"$y_a\"))\n    # Format output.\n    echo \"$common\" | sed 's/^/\"\
+    /;s/$/\"/' | tr '\\n' ' '", "    local LIST1=\"$1\"\n    local LIST2=\"$2\"\n\
+    \    jq -n --arg list1 \"$LIST1\" --arg list2 \"$LIST2\" '\n      split($list1)\
+    \ as $a\n      | split($list2) as $b\n      | $a | map(select(. as $x | $b | contains($x)))\n\
+    \      | sort\n      | unique\n      | @sh \"jq -R .\"\n    '", "  printf \"\\\
+    \"%s\\\"\" $(tr ' ' '\\n' <<< \"$1\" | sort | uniq | grep -Fx $(tr ' ' '\\n' <<<\
+    \ \"$2\" | sort | uniq))", "  local sep=\" \"\n  local common\n  common=$(printf\
+    \ \"%s\\n\" \"$1\" \"$2\" | sort | uniq -d)\n  echo -n \"[\"\n  for x in $common;\
+    \ do\n    echo -n \"\\\"$x\\\"$sep\"\n  done\n  echo -n \"]\"", "    local items\n\
+    \    items=\"$(perl -le '@A=split(/ /, shift); @B=split(/ /, shift);\n       \
+    \ foreach $a (@A) { $hash{$a}++ }\n        foreach $b (@B) { $hash{$b}++ }\n \
+    \       @unique=();\n        foreach $key (keys %hash) {\n            if ($hash{$key}\
+    \ == 2) {\n                push @unique, $key;\n            }\n        }\n   \
+    \     print join(\" \", @unique);\n    ' \"$1\" \"$2\")\"\n    echo \"[$(printf\
+    \ '\"%s\", ' $items)]\"", "    echo \"$1\" \"$2\" | tr ' ' '\\n' | sort | uniq\
+    \ -c | awk '$1>1 {print $2}' | tr '\\n' ' ' | jq -Rs .", "  local v\n  echo \"\
+    $1\" \"$2\" | tr ' ' '\\n' | sort | uniq -d | while read v; do\n    echo \"\\\"\
+    $v\\\"\"\n  done", "    perl -e '\n    my @a = split \" \", $ARGV[0];\n    my\
+    \ @b = split \" \", $ARGV[1];\n    my %h;\n    foreach my $x (@a) {\n        $h{$x}\
+    \ = 1;\n    }\n    my @r;\n    foreach my $x (@b) {\n        if (defined $h{$x})\
+    \ {\n            push @r, $x;\n        }\n    }\n    print join(\" \", sort {$a\
+    \ <=> $b} @r);\n    ' \"$1\" \"$2\"", "  local -a a1\n  a1=($1)\n  local -a a2\n\
+    \  a2=($2)\n  if [[ ${#a1[@]} -eq 0 || ${#a2[@]} -eq 0 ]]; then\n    return\n\
+    \  fi\n  local -a c\n  c=($(comm -12 <(echo \"${a1[*]}\" | tr ' ' '\\n' | sort\
+    \ -u) <(echo \"${a2[*]}\" | tr ' ' '\\n' | sort -u)))\n  if [[ ${#c[@]} -eq 0\
+    \ ]]; then\n    return\n  fi\n  # shellcheck disable=SC2068\n  echo \"${c[@]}\"\
+    \ | xargs | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'", "  local a b i\n  a=($1)\n\
+    \  b=($2)\n  echo -n \"[\"\n  for ((i=0; i<${#a[@]}; i++)); do\n    if [[ \"${a[$i]}\"\
+    \ == \"${b[$i]}\" ]]; then\n      if [[ \"$i\" -gt 0 ]]; then\n        echo -n\
+    \ \", \"\n      fi\n      echo -n \"\\\"${a[$i]}\\\"\"\n    fi\n  done\n  echo\
+    \ \"]\"", "    # sort, uniq, comm, cut and tr\n    _common_sort \"$1\" | _common_uniq\
+    \ | _common_comm \"$2\" | _common_cut | _common_tr", "    local a1\n    local\
+    \ a2\n    local e\n    a1=( $1 )\n    a2=( $2 )\n    echo -n \"[\"\n    for e\
+    \ in \"${a1[@]}\"; do\n        if __contains \"${a2[@]}\" \"$e\"; then\n     \
+    \       echo -n \"\\\"$e\\\", \"\n        fi\n    done\n    echo -n \"]\"", " \
+    \   # Create a new array composed of the strings in the two given arrays\n   \
+    \ # that are shared\n    local -a shared\n    if [[ -n \"$1\" && -n \"$2\" ]];\
+    \ then\n        mapfile -t shared < <(comm -12 <(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort) <(echo \"$2\" | tr ' ' '\\n' | sort))\n    fi\n\n    # Loop through the\
+    \ array and append to string\n    local str_shared=\"\"\n    for s in \"${shared[@]}\"\
+    ; do\n        # Escape double quotes\n        str_shared+=\"\\\"$s\\\",\"\n  \
+    \  done\n\n    # Remove trailing comma, if any\n    str_shared=\"${str_shared%,}\"\
+    \n\n    # Echo sorted, unique values\n    echo \"[$str_shared]\"", "    a=($1)\n\
+    \    b=($2)\n    echo -n '['\n    local prefix=\n    for e in \"${a[@]}\"; do\n\
+    \        [[ \" ${b[*]} \" == *\" $e \"* ]] && printf '%s\"%s\"' \"$prefix\" \"\
+    $e\" && prefix=', '\n    done\n    echo ']'", "    local a i\n    a=($1)\n   \
+    \ for i in $2; do\n        if [[ \" ${a[*]} \" == *\" $i \"* ]]; then\n      \
+    \      echo -n '\"'$i'\" '\n        fi\n    done", "  local a=\"$1\"\n  local\
+    \ b=\"$2\"\n  local -A a_map\n  local -A b_map\n  for i in $a; do\n    a_map[$i]=1\n\
+    \  done\n  for i in $b; do\n    b_map[$i]=1\n  done\n  local result=\"\"\n  for\
+    \ i in \"${!a_map[@]}\"; do\n    if [[ -n \"${b_map[$i]}\" ]]; then\n      result=\"\
+    $result \\\"$i\\\"\"\n    fi\n  done\n  echo \"${result}\"", "    local -a a=()\
+    \ b=()\n\n    read -a a <<< \"$1\"\n    read -a b <<< \"$2\"\n\n    local -a join=($(join_common\
+    \ <<< \"$1 $2\"))\n    local -a sort=($(printf \"%s\\n\" \"${join[@]}\" | sort\
+    \ -n | uniq))\n\n    local -a res=()\n    for v in \"${sort[@]}\"; do\n      \
+    \  res=(\"${res[@]}\" \"\\\"$v\\\"\")\n    done\n\n    echo ${res[@]}", "  local\
+    \ list1=$1\n  local list2=$2\n  echo $(array_unique \"$(echo $list1 $list2 | tr\
+    \ ' ' '\\n' | sort | uniq -d)\")"]
 stop_tokens:
 - "\n}"

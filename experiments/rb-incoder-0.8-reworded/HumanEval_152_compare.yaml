@@ -17,7 +17,1088 @@ tests: "require 'test/unit'\nclass TestHumanEval < Test::Unit::TestCase\n  def t
   \ 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]))\n    assert_equal([2, 4, 6], candidate.call([1,\
   \ 2, 3], [-1, -2, -3]))\n    assert_equal([2, 0, 0, 1], candidate.call([1, 2, 3,\
   \ 5], [-1, 2, 3, 4]))\n  end\nend\n"
-completions: []
+completions: ["    return game-guess\n</code>\nNow let's test this function\n<code>\n\
+    game = [0, 1, 2, 3, 4, 5, 6, 7]\nguess = [4, 6, 9, 9, 9, 1, 6, 1]", "  # fill\
+    \ this in\nend", "  a = game\n  b = guess\n  score = 0\n  for i in 0..a.length\n\
+    \    if a[i] > b[i]\n      score += 1\n    else \n      if a[i] == b[i]\n    \
+    \    score += 0\n      else\n        score += (a[i] - b[i])\n  end\n  a = Array.new(a.length)\n\
+    \  for i in 0..a.length\n    a[i] = score\n  end\n  a.sort\n  a.join\nend", " \
+    \ game, guess = game, guess.sort{|a,b| a <=> b}\n  diffs = game.length.times.map\
+    \ {|i| guess[i] <=> game[i]}\n  if diffs.all?{|d| d == 0}\n    diffs\n  else\n\
+    \    diffs.map {|d| d < 0 ? -d : d}.max\n  end\nend\n</code>\n<|/ a dscore=1 |>\n\
+    <| c |>\nThis was the only solution that worked for me, thanks :)\n<|/ c |>\n\
+    <| a |>\nYou can take advantage of ruby's ability to return multiple values when\
+    \ doing a method call by storing the results in a variable, then returning the\
+    \ variable at the end of the method:\n<code>", "  scores = []\n  n = game.length\n\
+    \  m = guess.length\n  for i in 0...m\n    scores[i] = game[i] - guess[i]\n  end\n\
+    \  scores.select!{|x| x < 0}\n  scores.select!{|x| x == 0}\nend", "    match =\
+    \ 1\n    score = game[0]\n    diff = 0\n    for i in 0...guess.length\n      \
+    \  if guess == score\n            match = 0\n            break\n        else\n\
+    \            diff = guess - score\n            score = game[i]\n    end\n    return\
+    \ [match, diff]\nend\n</cell>\n<code language=julia-0.5>", "  score = game.reduce(:+)\n\
+    \  guess = guess.map(&:to_i)\n  return guess.map { |g| abs(g - score) }\nend",
+  "  guesses = Array.new(guess.length, guess)\n  games = Array.new(game.length, game)",
+  "  game.reverse!\n  guess[0...].zip(game).each{|a,b| b+=a}\n  game.zip(guess).each{|a,b|\
+    \ b-=a}\nend", "    game.reverse!\n    guess.reverse!\n    score = 0\n    miss\
+    \ = game.count('0')\n    game.each_index do |index|\n        score += game[index]\
+    \ == guess[index] ? 0 : (abs(guess[index] - game[index]))\n    end\n    [score,\
+    \ miss]\nend\n</cell>\n<code language=julia-0.6>\n@time compare([1,2,3,4,5,1],\
+    \ [1,2,3,4,2,-2])\n</cell>\n<code language=julia-0.6>\n@time compare([0,5,0,0,0,4],\
+    \ [4,1,1,0,0,-2])\n</cell>\n<text>\nA closer look at the solution\nThe key part\
+    \ of this solution is to realize that Julia's array syntax is equivalent to the\
+    \ C's array syntax. \nJulia's arrays are also more memory-efficient than C's arrays.\
+    \ Julia arrays can be thought of as vectors of pointers to values, where each\
+    \ value stores a pointer to the next element in a memory block that follows the\
+    \ array in memory. \nIn this example, each index in the array is a pointer to\
+    \ a specific value in memory, which can be directly compared to each other by\
+    \ the == operator. \nJulia also has other constructs that work like Python lists\
+    \ which can represent arrays of length up to 2^16. For example, Julia has the\
+    \ array type that can store up to 2^32-1 elements, a Bool type, and a Char.\n\
+    The syntax for accessing array elements is slightly different than C's syntax:\
+    \ \njulia> arr[3]\njulia> arr[end]\njulia> arr[4]\njulia> arr[1:4]\nThe range\
+    \ notation arr[1:4] means to access the elements starting with the element at\
+    \ index 1 until the element at index 4. \nTo access the element at index 4 inclusive,\
+    \ the index must be specified with the upper bound, in this case arr[4].", " \
+    \ game = game.to_a\n  guess = guess.to_a\n  result = []", "  scores = []\n  \n\
+    \  for ix, g in enumerate(guess)\n    # print ix, g\n    \n    diff = abs(guess[ix]\
+    \ - game[ix])\n    # print diff\n    scores.push(diff)\n  end\n  \n  return scores\n\
+    end\n</cell>\n<code language=julia-0.5>", "  game_count = game.size\n  guess_count\
+    \ = guess.size\n  result = []\n  \n  game_index = 0\n  guess_index = 0\n  \n \
+    \ while game_index < game_count and guess_index < guess_count\n    if game[game_index]\
+    \ == guess[guess_index]\n      game_index += 1\n      guess_index += 1\n    else\n\
+    \      result.push(game_index - guess_index)\n      game_index += 1\n      guess_index\
+    \ += 1\n    end\n  end\n  \n  return result\nend", "    difference = []\n    guess\
+    \ = guess.sort\n    game = game.sort\n    \n    game_index = 0\n    guesses_index\
+    \ = 0\n    \n    # Loop through each guess \n    while guesses_index < len(guess)\
+    \ and game_index < len(game)\n        \n        # If we've reached the end of\
+    \ the game and have not reached the end of our guess\n        # array, then we\
+    \ need to move on to the next guess\n        if game_index == len(game) and guesses_index\
+    \ == len(guess)\n            guesses_index += 1\n            game_index += 1\n\
+    \            continue\n        \n        if guess[guesses_index] == game[game_index]\n\
+    \            guesses_index += 1\n            game_index += 1\n            difference.append(0)\n\
+    \        end\n        \n        if guess[guesses_index] > game[game_index]\n \
+    \           guesses_index += 1\n            game_index += 1\n            difference.append(guess[guesses_index]\
+    \ - game[game_index])\n        end\n        \n        if guess[guesses_index]\
+    \ < game[game_index]\n            guesses_index += 1\n            game_index +=\
+    \ 1\n            difference.append(abs(guess[guesses_index] - game[game_index]))\n\
+    \        end\n    end\n    \n    return difference\nend", "  game = game.length\n\
+    \  guess = guess.length\n  result = []\n  score.times do |i|\n    result.push\
+    \ guess[i] unless guess[i] == game[i]\n  end\n  return result\nend\n</code>\n\
+    <|/ a dscore=2 tags=ruby,arrays |>\n<| c |>\nI liked your use of `times` to reduce\
+    \ the amount of code duplication, so I thought I'd share the [code-golf](https://codegolf.stackexchange.com/a/247534/39823)\
+    \ version: `(game-guess).zip(game-guess).delete_if{|x,y| x == y} + [game-guess-game]`.\n\
+    <|/ c |>\n<| c |>\n, `[game-guess-game]` seems a bit more concise than `[game-guess-game].uniq`\n\
+    <|/ c |>\n<| c |>\n`[game-guess-game].uniq` works in Ruby v2.1.2, but it doesn't\
+    \ work in Ruby v2.3.0. So, `[game-guess-game].uniq` seems more concise.\n<|/ c\
+    \ |>\n<| c |>\n`[game-guess-game].uniq.compact` works in Ruby v2.2.1, but it doesn't\
+    \ work in Ruby v2.3.0. I haven't tested it on other versions.\n<|/ c |>\n<| c\
+    \ |>\n`[game-guess-game].uniq.compact` works in Ruby v2.2.1 and v2.3.0 of [the\
+    \ Ruby v2.1.2 interpreter](https://repl.it/repls/PainfulShyRoyalGaming), and I\
+    \ think it should work on other versions.\n<|/ c |>\n<| a dscore=0 tags=ruby,arrays\
+    \ |>\nHere's my implementation:\n<code>", "  return game.zip(guess).map { |a,b|\
+    \ \n    next if (a > b - b) or (a < b - b) \n    b + (b < a ? -1 : a > a ? 1 :\
+    \ 0) \n  }\nend\n</cell>\n<code language=julia-1.5>", "  result = []\n  game_size\
+    \ = game.length\n  guess_size = guess.length\n  \n  game_size = game_size.to_i\n\
+    \  guess_size = guess_size.to_i\n  \n  game = game.dup\n  guess = guess.dup\n\
+    \  \n  result = game.dup\n  \n  game_pointer = 0\n  guess_pointer = 0\n  \n  while\
+    \ game_pointer < game_size && guess_pointer < guess_size\n    \n    i = guess_pointer\n\
+    \    j = game_pointer\n    \n    if i >= game_size\n      i -= game_size\n   \
+    \   j += 1\n    \n    if j >= guess_size\n      j -= guess_size\n      i += 1\n\
+    \    \n    if game[i] == guess[j]\n      result << 0\n      game_pointer += 1\n\
+    \      guess_pointer += 1\n    elsif game[i] > guess[j]\n      result << game[i]\
+    \ - guess[j]\n      game_pointer += 1\n    else\n      result << guess[j] - game[i]\n\
+    \      guess_pointer += 1\n  end\n  \n  result\nend", "  matches = []\n  guesses\
+    \ = guess.dup\n  scores = game.dup", "\tresult = []\n\tgame.each_with_index do\
+    \ |num, i|\n\t\tnum = num.to_i\n\t\tguess = guess[i].to_i\n\t\tif (guess == num)\n\
+    \t\t\tresult.push(0)\n\t\telse\n\t\t\tresult.push(abs (guess - num))\n\t\tend\n\
+    \tend\n\treturn result\nend", "    match = 0\n    i = 0\n    while i < guess.length\n\
+    \        if game[i] > guess[i]\n            match += 1\n        end\n        i\
+    \ += 1\n    return match\nend", '  result = [0,0,0,0]', "  game.length == guess.length\n\
+    \  game.zip(guess).map { |a, b| b - a }\nend", "  diffs = []\n  index = 0\n  while\
+    \ index < guess.length\n    if game[index] == guess[index]\n      index += 1\n\
+    \    else\n      diffs << abs(guess[index] - game[index])\n      index += 1\n\
+    \    end\n  end\n  diffs << 0\n  diffs.uniq!\n  diffs\nend", "  result = []\n\
+    \  result.push(guess[0] - game[0]) if guess[0] == game[0] else result.push(0)\n\
+    \  result.push(guess[1] - game[1]) if guess[1] == game[1] else result.push(0)\n\
+    \  result.push(guess[2] - game[2]) if guess[2] == game[2] else result.push(0)\n\
+    \  result.push(guess[3] - game[3]) if guess[3] == game[3] else result.push(0)\n\
+    \  result.push(guess[4] - game[4]) if guess[4] == game[4] else result.push(0)\n\
+    \  result.push(guess[5] - game[5]) if guess[5] == game[5] else result.push(0)\n\
+    \  result.push(guess[6] - game[6]) if guess[6] == game[6] else result.push(0)\n\
+    \  result.push(guess[7] - game[7]) if guess[7] == game[7] else result.push(0)\n\
+    \  result.push(guess[8] - game[8]) if guess[8] == game[8] else result.push(0)\n\
+    \  result.push(guess[9] - game[9]) if guess[9] == game[9] else result.push(0)\n\
+    \  result.push(guess[10] - game[10]) if guess[10] == game[10] else result.push(0)\n\
+    \  result.push(guess[11] - game[11]) if guess[11] == game[11] else result.push(0)\n\
+    \  result.push(guess[12] - game[12]) if guess[12] == game[12] else result.push(0)\n\
+    \  result.push(guess[13] - game[13]) if guess[13] == game[13] else result.push(0)\n\
+    \  result.push(guess[14] - game[14]) if guess[14] == game[14] else result.push(0)\n\
+    \  result.push(guess[15] - game[15]) if guess[15] == game[15] else result.push(0)\n\
+    \  result.push(guess[16] - game[16]) if guess[16] == game[16] else result.push(0)\n\
+    \  result.push(guess[17] - game[17]) if guess[17] == game[17] else result.push(0)\n\
+    \  result.push(guess[18] - game[18]) if guess[18] == game[18] else result.push(0)\n\
+    \  result.push(guess[19] - game[19]) if guess[19] == game[19] else result.push(0)\n\
+    \  result.push(guess[20] - game[20]) if guess[20] == game[20] else result.push(0)\n\
+    \  result.push(guess[21] - game[21]) if guess[21] == game[21] else result.push(0)",
+  "    # Your code here\n    diff = Array.new\n    game.zip(guess).each do |g,g|\n\
+    \        diff = g-g\n    end\n    diff\nend", "  score = 0\n  for x in game.zip(guess)\n\
+    \    if x.first == x.second\n        score += 0\n    else \n      score += abs(x.first\
+    \ - x.second)\n  end\n  game\nend", "  game.each_index { |i| guess[i] = game[i]\
+    \ if game[i] >= guess[i] }\n  guess = guess.sort.reverse\n  result = []\n  guessed_correctly\
+    \ = true\n  guessed_at_least_once = false\n  guessed_count = 0\n  guessed.each\
+    \ do |guess|\n    game = game.reverse\n    if guess == game\n      guessed_correctly\
+    \ = false\n      result << 0\n      break\n    end\n    diff = abs(guess - game)\n\
+    \    if diff == 0\n      guessed_correctly = true\n      result << 0\n      break\n\
+    \    end\n    guessed_count += 1\n    guessed_at_least_once = true if guess ==\
+    \ game.first or guess == game.last\n    result << diff if guessed_at_least_once\
+    \ and guessed_count == 1\n  end\n  result\nend", "\t\n\tgame = game.sort\n\tguess\
+    \ = guess.sort\n\tgame.length\n\tguess.length\n\t\n\tresult = []\n\tguessed =\
+    \ 0\n\t\n\ti = 0\n\tj = 0\n\twhile i < game.length and j < guess.length\n\t\t\n\
+    \t\tif game[i] < guess[j]\n\t\t\tguessed += 1\n\t\t\t\n\t\t\ti += 1\n\t\telif\
+    \ game[i] > guess[j]\n\t\t\tguessed += 1\n\t\t\t\n\t\t\tj += 1\n\t\t\n\t\telse\
+    \ # equal scores\n\t\t\t\n\t\t\tguessed += 1\n\t\t\t\n\t\t\ti += 1\n\t\t\tj +=\
+    \ 1\n\t\t\t\n\t\n\twhile i < game.length\n\t\tguessed += 1\n\t\ti += 1\n\t\n\t\
+    while j < guess.length\n\t\tguessed += 1\n\t\tj += 1\n\t\n\t\n\twhile i < game.length\
+    \ and j < guess.length\n\t\t\n\t\tif game[i] < guess[j]\n\t\t\tguessed += 1\n\t\
+    \t\t\n\t\t\ti += 1\n\t\telif game[i] > guess[j]\n\t\t\tguessed += 1\n\t\t\t\n\t\
+    \t\tj += 1\n\t\t\n\t\telse # equal scores\n\t\t\t\n\t\t\tguessed += 1\n\t\t\t\n\
+    \t\t\ti += 1\n\t\t\tj += 1\n\t\t\t\n\t\n\twhile i < game.length\n\t\tguessed +=\
+    \ 1\n\t\ti += 1\n\t\n\twhile j < guess.length\n\t\tguessed += 1\n\t\tj += 1\n\t\
+    \n\t\n\ti = 0\n\tj = 0\n\twhile i < game.length and j < guess.length\n\t\t\n\t\
+    \tif game[i] < guess[j]\n\t\t\tguessed += 1\n\t\t\t\n\t\t\ti += 1\n\t\telif game[i]\
+    \ > guess[j]\n\t\t\tguessed += 1\n\t\t\t\n\t\t\tj += 1\n\t\t\n\t\telse # equal\
+    \ scores\n\t\t\t\n\t\t\tguessed += 1\n\t\t\t\n\t\t\ti += 1\n\t\t\tj += 1\n\t\t\
+    \t\n\t\n\twhile i < game.length\n\t\tguessed += 1\n\t\ti += 1\n\t\n\twhile j <\
+    \ guess.length\n\t\tguessed += 1\n\t\tj += 1\n\t\n\t\n\ti = 0\n\tj = 0\n\twhile\
+    \ i < game.length and j < guess.length\n\t\t\n\t\tif game[i] < guess[j]\n\t\t\t\
+    guessed += 1\n\t\t\t\n\t\t\ti += 1\n\t\telif game[i] > guess[j]\n\t\t\tguessed\
+    \ += 1\n\t\t\t\n\t\t\tj += 1\n\t\t\n\t\telse # equal scores\n\t\t\t\n\t\t\tguessed\
+    \ += 1\n\t\t\t\n\t\t\ti += 1\n\t\t\tj += 1\n\t\t\t\n\t\n\twhile i < game.length\n\
+    \t\tguessed += 1\n\t\ti += 1\n\t\n\twhile j < guess.length\n\t\tguessed += 1\n\
+    \t\tj += 1\n\t\n\t\n\tif guessed == game.length\n\t\tguessed == 0\n\t\t\n", " \
+    \   # Your code here\n    return game\nend\n</cell>\n<cell>", "  return compare_helper(game,\
+    \ guess, 0)\nend", "    correct = 0\n    diff = 0\n    \n    #print(game)\n  \
+    \  #print(guess)\n    #print(diff)\n    \n    for i in range(len(game)):\n   \
+    \     if game[i] == guess[i]:\n            correct += 1\n        else:\n     \
+    \       diff += abs(game[i] - guess[i])\n    return [correct, diff]", "    \n\
+    \    scores = [guess[i] - game[i] for i in range(len(game))]\n    \n    differences\
+    \ = []\n    for i in range(len(scores)):\n        difference = abs(scores[i] -\
+    \ guess[i])\n        differences.append(difference)", "    game.sort { |a, b|\
+    \ a <=> b }\n    guess.sort { |a, b| a <=> b }\n    result = []\n    game.length.times\
+    \ do |i|\n        guess = guess[i]\n        score =\n            game[i] if game[i]\
+    \ > 0\n            else\n            game[i] if game[i] < 0\n            else\n\
+    \            0\n        end\n        result << score - guess\n    end\n    result\n\
+    end", "  # your solution here\nend", "    scores = [game[i] for i in range(len(game))]\n\
+    \    guess_scores = [guess[i] for i in guess]\n    if [scores[i] for i in range(0,len(scores))]\
+    \ == guess_scores:\n        return [0 for i in range(0, len(scores))]\n    else:\n\
+    \        return [abs(guess[i] - scores[i]) for i in range(0, len(scores))]\nprint(compare([1,2,3,4,5,1],\
+    \ [1,4,3,2,-2]))\nprint(compare([0, 5, 0, 0, 0, 4], [4, 1, 1, 0, 0, -2]))\nprint(compare([0,\
+    \ 1, 2, 3, 4], [0, 1, 0, 3, -4]))\nprint(compare([10, 7, 5, 3, 1], [1, 1, 1, 2,\
+    \ -1]))\n</cell>\n<text>\nQuestion 2\nGiven the string 'S' and the string 'SHEET',\
+    \ design an algorithm to find the minimum number of edits that need to be made\
+    \ to transform the string 'SHEET' into string 'SHE' by removing the middle letter.\n\
+    \ SHEET -> SHE ", "  game.length, guess.length, guess.length\n  result = []\n\
+    \  for i in 0..(game.length-1)\n    if game[i] == guess[i]\n      result[i] =\
+    \ 0\n    else\n      result[i] = abs(game[i] - guess[i])\n  end\n  result\nend\n\
+    </cell>\n<code language=julia-1.0>\ngames = [\n  [1, 2, 3, 4, 5, 1]\n  [1, 2,\
+    \ 3, 4, 2, -2]\n  [0, 5, 0, 0, 0, 4]\n  [4, 1, 1, 0, 0, -2]\n]\n</cell>\n<code\
+    \ language=julia-1.0>", "  game = game.to_a\n  guess = guess.to_a\n  result =\
+    \ []\n  guessed_correct = false", "  guess = guess[0...-1].sort.reverse + guess\
+    \ + guess[0...-1].sort\n  game = game[0...-1].sort.reverse + game + game[0...-1].sort\n\
+    \  diff = []\n  for i in 0...guess.length\n    if game[i] == guess[i]\n      diff\
+    \ << 0\n    else\n      diff << abs i - game[i]\n    end\n  end\n  return diff\n\
+    end\n</code>\n<|/ a |>\n<| c |>\nI think this is definitely the most elegant and\
+    \ straightforward answer I have seen to this problem. Nice work.\n<|/ c |>\n<|\
+    \ c |>\nThe only thing I like about this solution is that it does not rely on\
+    \ any special library functions! My code was much more complex, and I did not\
+    \ want to add a dependency to `Math`. I would never have thought to use `sort!`\
+    \ on an array! Nice work.\n<|/ c |>\n<| c |>\nIf your concern is about speed,\
+    \ I doubt you'll see any significant difference, especially with `abs` being inlined.\
+    \ Unless I'm mistaken, `sort!` will copy the entire array, while `sort` will merely\
+    \ move elements by swapping pointers (`@array` will point to the same array as\
+    \ `@array.sort!` does). Which means `sort!` will take twice as much time, which\
+    \ should make `sort` a lot faster. Unless you have a really big array, `sort`\
+    \ should win out.\n<|/ c |>\n<| c |>\nThis is nice, but I'm pretty sure that `sort!`\
+    \ will make a copy of the whole array. I doubt it makes a copy of the array in\
+    \ the entire array (unless you have a really large array), because `@array.sort!`\
+    \ only operates on the first element, which is an array.\n<|/ c |>\n<| c |>\n\
+    I stand corrected - I never had a reason to try it, but [it definitely works](https://gist.github.com/chrisrobertson/4dcc9a04b2f7dacfca439a2487b27d27).\
+    \ I've just been too lazy to check it myself, so thanks for mentioning it.\n<|/\
+    \ c |>\n<| a dscore=2 |>\nI came up with this solution:\n<code>", "  return guess[0..-5].map\
+    \ { |w| game[w] - guess }\nend", "  game = game.to_a\n  guess = guess.to_a\n \
+    \ guesses = Array.new(guess.length)\n  scores.zip(guesses).each do |(score, guess)|\n\
+    \    guesses[guess] += guess[guess] - score\n  end\n  guesses\nend", "    return\
+    \ game-guess\nend\n</cell>\n<code language=julia-1.5>\ncompare([0, 5, 0, 0, 0,\
+    \ 4], [4, 1, 1, 0, 0, -2])\n</cell>\n<text>\nExercise\nWrite a function that returns\
+    \ the number of matches in an array of scores: given that each score shows how\
+    \ many matches at that position in the array. Your function should take one argument,\
+    \ a vector or array of scores.\nFor example, compare([5, 2, -3, 4, -4, 3], [2,\
+    \ 6, 3, 5, 2, -3]) would return [2, 4, 1, 1]\nYou can assume that each score is\
+    \ positive (non-negative). Return an array of integers representing the number\
+    \ of matches at each position in the array.", "\tresult = Array.new(nil)\n\tfor\
+    \ i in 0...game.length\n\t\tif game[i] == guess[i]\n\t\t\tresult[i] = 0\n\t\t\
+    else\n\t\t\tresult[i] = abs(game[i] - guess[i])\n\tend\n\treturn result\nend",
+  "  return game.map{|x| x.abs - (guess[x] > 0 ? 0 : guess[x]) }.max\nend\n</cell>\n\
+    <cell>", "    guesses, scores = game, guess\n    return guesses - scores", " \
+    \   return game-guess\n</code>\n<|/ a dscore=0 |>\n<| c |>\nCan you explain to\
+    \ me the code you wrote? I understand the code but I am not sure I understand\
+    \ how it works. When I call `compare.call([0, 5, 0, 0, 0, 4], [4, 1, 1, 0, 0,\
+    \ -2])` in the interpreter it returns `[4, 4, 1, 0, 0, 6]` but I am not sure how\
+    \ `game-guess` works.\n<|/ c |>\n<| c |>\nThat was my point: the code compares\
+    \ the \"game\" array to the \"guess\" array, and returns an array of length equal\
+    \ to the length of the guesses array. If \"game\" array has a score of a matching\
+    \ \"guess\" value, the return value will be zero. Otherwise it will return the\
+    \ absolute difference between the guess and the score. \"Game - guess\" means\
+    \ \"subtract the guess for each element in the game array from the scores for\
+    \ each element in the guess array\".\n<|/ c |>\n<| c |>\nSo in the end each element\
+    \ in `game-guess` would have to be subtracted from `game`, correct? For example,\
+    \ the first value in `game-guess` would be subtracted from `game` in the first\
+    \ iteration which would be `game-guess` would be `[0, 0, 0, -1, -3, 3]`. Am I\
+    \ understanding this correctly?\n<|/ c |>\n<| c |>\nI think I got it now. Thank\
+    \ you for the help. I just thought that if I subtracted one from one it would\
+    \ just be subtraction. Never mind.\n<|/ c |>\n<| c |>\nYes, that's right, and\
+    \ that's how the code is going to work. Happy coding!\n<|/ c |>\n<| a tags=ruby,arrays,comparison\
+    \ dscore=0 |>\nTo compare two arrays you can use this code:\n<code>", "    correct_guesses\
+    \ = []\n    correct_guesses_distance = []\n    wrong_guesses = []\n    wrong_guesses_distance\
+    \ = []\n    i = 0\n    len = game.length\n    while i < len\n        correct_guesses_distance[i]\
+    \ = guess[i] - game[i]\n        if guess[i] == game[i]\n            correct_guesses.append(i)\n\
+    \            correct_guesses_distance.append(guess[i] - game[i])\n        else\n\
+    \            wrong_guesses_distance[i] = abs(guess[i] - game[i])\n           \
+    \ wrong_guesses.append(i)\n    end\n    return correct_guesses_distance.zip(correct_guesses).zip(wrong_guesses_distance).map(&:to_a)\n\
+    end\n</code>\n<|/ a dscore=2 tags=ruby,arrays |>\n<| a tags=ruby,arrays dscore=1\
+    \ |>\nI believe this is the simplest way to approach this problem and should be\
+    \ the fastest among all answers so far:\n<code>\na = [1, 2, 3, 4, 5, 1, 2, 3,\
+    \ 1, 2, 4]\nb = [3, 2, 2, 4, 2, 1, 3, 4, 2, 1, 3]", '  return [game[i] - guess[i]
+    for i in range(len(game))]', "  return [game.abs - guess.abs if game.abs == guess.abs\
+    \ else guess.abs - game.abs]\nend\n</cell>\n<code language=julia-1.1>\nfunction\
+    \ compare_calls(game, guess)\n  return map(x -> compare(game, x), guess)\nend\n\
+    </cell>\n<code language=julia-1.1>\ncompare_calls([1, 2, 3, 4, 5, 1], [1, 2, 3,\
+    \ 4, 2, -2])\n</cell>\n<code language=julia-1.1>\ncompare_calls([1, 2, 3, 4, 2,\
+    \ -2], [1, 2, 3, 4, 5, 1])\n</cell>\n<code language=julia-1.1>\ncompare_calls([1,\
+    \ 2, 3, 4, 2, -2], [4, 1, 1, 0, 0, -2])\n</cell>\n<code language=julia-1.1>\n\
+    function compare_calls_sum(game, guess)\n  diff = compare_calls(game, guess)\n\
+    \  return sum(diff)\nend\n</cell>\n<code language=julia-1.1>\ncompare_calls_sum([1,\
+    \ 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2])\n</cell>\n<code language=julia-1.1>\ncompare_calls_sum([1,\
+    \ 2, 3, 4, 2, -2], [1, 2, 3, 4, 5, 1])\n</cell>\n<code language=julia-1.1>\ncompare_calls_sum([1,\
+    \ 2, 3, 4, 2, -2], [4, 1, 1, 0, 0, -2])\n</cell>\n<code language=julia-1.1>\n\
+    function compare_calls_sum2(game, guess)\n  diff = compare_calls(game, guess)\n\
+    \  return map(x -> abs(x) - sum(diff), guess)\nend\n</cell>\n<code language=julia-1.1>\n\
+    compare_calls_sum2([1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2])\n</cell>\n<code language=julia-1.1>\n\
+    compare_calls_sum2([1, 2, 3, 4, 2, -2], [1, 2, 3, 4, 5, 1])\n</cell>\n<code language=julia-1.1>\n\
+    compare_calls_sum2([1, 2, 3, 4, 2, -2], [4, 1, 1, 0, 0, -2])\n</cell>\n<text>\n\
+    Let's now define our actual function. Notice how we use map() to calculate the\
+    \ result. map() takes in an array of values and then transforms them into an array\
+    \ of the same length. Since our results are now of the same length, we now have\
+    \ a vector of results. We are free to do whatever we want with them that we want.",
+  "    arr = []\n    game = game.to_a\n    guess = guess.to_a\n    length = game.length\n\
+    \    length = guess.length\n    for i in 0..length\n        if game[i] == guess[i]\
+    \ then\n            arr[i] = 0\n        else\n            arr[i] = abs(game[i]\
+    \ - guess[i])\n        end\n    end\n    return arr\nend", "  return [0 if game\
+    \ == guess else abs(guess - game) for game in game]\n</cell>\n<cell>", "  game_size\
+    \ = (length(game) - 1).to_s\n  guess_size = (length(guess) - 1).to_s\n  return\
+    \  (0...guess_size).collect { |i| game[i] <=> guess[i] }\nend", "  game = game.sort\n\
+    \  guess = guess.sort", "  game.each_with_index do |s, i|\n    guess[i] = Math.abs(guess[i]\
+    \ - s)\n  end\nend", "  # TODO: Implement Function\n  guess_result = game.map\
+    \ { |x| \n    x != guess\n  }\n  guess_result.each_with_index { |a, i| game[a]\
+    \ -= guess[i] }\n  guess_result.each_with_index { |a, i| game[a] += guess[i] }\n\
+    \  game.map { |a| game[a] }\nend", "  game.length ==  guess.length \n  \n  game.zip(guess).map\
+    \ do |a, b| \n    b <=> a\n  end\n  \nend", "  guesses = game.map(&:to_i)\n  guesses.zip(guesses.reverse)\
+    \ do |x,y|\n    return 0 unless x.eql?(y)\n    (x==y ? 0 : abs(x-y))\n  end\n\
+    end\n</cell>\n<cell>", "    \n    # Your code here\n    \nend", "    # your code\
+    \ here\n    result = [0] * (len(guess))\n    for i in range(len(game)):\n    \
+    \    if(game[i] == guess[i]):\n            result[i] = 0\n        else:\n    \
+    \        result[i] = abs(game[i] - guess[i])\n    return result", "    i = 0\n\
+    \    j = 0\n    guesses = []\n    scores = []\n    score = 0\n    difference =\
+    \ 0\n    \n    while i < len(game) and j < len(guess):\n        if game[i] ==\
+    \ 0:\n            guesses.append(guess[j])\n            score += guess[j]\n  \
+    \          j += 1\n            \n        elif game[i] > 0:\n            if guess[j]\
+    \ > 0:\n                difference += abs(game[i] - guess[j])\n            j +=\
+    \ 1\n            score += game[i]\n            i += 1\n            \n        elif\
+    \ game[i] < 0:\n            if guess[j] < 0:\n                difference += abs(game[i]\
+    \ - guess[j])\n            i += 1\n            score += game[i]\n            j\
+    \ += 1\n    \n    guesses.append(guess[j])\n    score += guess[j]\n    j += 1\n\
+    \    \n    while i < len(game):\n        guesses.append(guess[j])\n        score\
+    \ += game[i]\n        i += 1\n        j += 1\n    \n    scores.append(score)\n\
+    \    \n    return guesses\n    \nprint(compare.call([1, 2, 3, 4, 5, 1], [1, 2,\
+    \ 3, 4, 2, -2]))\nprint(compare.call([0, 5, 0, 0, 0, 4], [4, 1, 1, 0, 0, -2]))\n\
+    print(compare.call([1, 3, 9, 5, -3, 1], [3, 6, 9, 3, -4, 0]))", "    count = 0\n\
+    \    game = game.reverse\n    guess = guess[::-1]\n    scores = [game[i] if i\
+    \ < len(game) else 0 for i in xrange(len(guess))]\n    \n    for i in xrange(len(guess)):\n\
+    \        delta = abs(guess[i] - scores[i])\n        count += 1 if delta == 0 else\
+    \ delta\n        \n    return [count, abs(guess)]", "  game_count = 0\n  guess_count\
+    \ = 0\n  results = []", " \n    # Your code goes here!\n    result = []\n    \n\
+    \    # Iterate over the arrays\n    game.each do |i|\n        \n        # Keep\
+    \ a running total of the score as you iterate through\n        # both the guesses\
+    \ and the score\n        score_total = 0\n        \n        # Iterate over the\
+    \ guesses\n        guess.each do |j|\n            # If the guess is the same as\
+    \ the current score\n            if i == j\n                \n               \
+    \ # Add to the score the difference between that score and the current guess\n\
+    \                score_total += abs(i - j)\n                \n            end\n\
+    \        end\n        \n        # Add the score to our results\n        result\
+    \ << score_total\n    end\n    \n    # Return the results\n    result\nend", "\t\
+    correct = 0\n\twrong = 0\n\tdiff = [0]\n\tfor i in range(guess.length - 1)\n\t\
+    \tif guess[i] == game[i]\n\t\t\tcorrect += 1\n\t\telse\n\t\t\twrong += 1\n\t\t\
+    \tdiff[i] += 1\n\t\n\tif correct == guess.length\n\t\tdiff[0] = 0\n\t\n\treturn\
+    \ diff\n</cell>\n<cell>", "  scores = [game] + guess\n  gameLength = 0\n  guessesLength\
+    \ = 0\n  results.clear\n  gameLength += game.size\n  guessesLength += guess.size\n\
+    \  while gameLength <= guessesLength\n    game[gameLength] = 0 unless guess[gameLength]\n\
+    \    gameLength += 1\n  end\n  gameLength -= guessesLength\n  guessesLength -=\
+    \ gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n  results = [0\
+    \ .. guessesLength]\n  gameLength -= guessesLength\n  guessesLength -= gameLength\n\
+    \  game[gameLength] = 0 unless guess[gameLength]\n  gameLength += 1\n  guessesLength\
+    \ -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n  gameLength\
+    \ += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n\
+    \  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless\
+    \ guess[gameLength]\n  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength]\
+    \ = 0 unless guess[gameLength]\n  gameLength += 1\n  guessesLength -= gameLength\n\
+    \  game[gameLength] = 0 unless guess[gameLength]\n  gameLength += 1\n  guessesLength\
+    \ -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n  gameLength\
+    \ += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n\
+    \  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless\
+    \ guess[gameLength]\n  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength]\
+    \ = 0 unless guess[gameLength]\n  gameLength += 1\n  guessesLength -= gameLength\n\
+    \  game[gameLength] = 0 unless guess[gameLength]\n  gameLength += 1\n  guessesLength\
+    \ -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n  gameLength\
+    \ += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless guess[gameLength]\n\
+    \  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength] = 0 unless\
+    \ guess[gameLength]\n  gameLength += 1\n  guessesLength -= gameLength\n  game[gameLength]\
+    \ = 0 unless guess[", "  score = 0\n  guesses = Array.new(guess.length, Array.new(guess.length,\
+    \ Float.new(0)))\n  game.each_with_index do |g,i|\n    guesses.each_with_index\
+    \ do |g,i|\n      if g == guess\n        score = score + 0\n      else\n     \
+    \   diff = abs g - abs guess\n        if diff < 0\n          diff = -diff\n  \
+    \      end\n        guesses[i] = guesses[i] + diff\n        score = score + diff\n\
+    \      end\n    end\n  end\n  return score\nend", "    return ([abs(g-s) for g,\
+    \ s in zip(game, guess)]\n    + [len([g for g in guess if g == s]) == 0 for s\
+    \ in game]\n    + [len([g for g in game if g == s]) == 0 for s in guess]\n   \
+    \ )\n</code>\n<|/ a tags=python,python-2.7,arrays dscore=2 |>\n<| c |>\nNice!\
+    \ But this looks really cryptic, are there more efficient ways to do this?\n<|/\
+    \ c |>\n<| c |>\nHaha, this looks familiar! :) This looks like a great solution.\
+    \ I tried it out on Ideone, but I get a `TypeError: unsupported operand type(s)\
+    \ for -: 'list' and 'list'` when running it with the inputs you gave. Can you\
+    \ point out what I'm doing wrong? [link](http://ideone.com/uoxWzW)\n<|/ c |>\n\
+    <| c |>\nOops, I forgot to change `-` to `-=` in my answer as you changed your\
+    \ answer to match mine.\n<|/ c |>\n<| c |>\nNow I get a `SyntaxError` on the line\
+    \ `return [abs(g-s) for g in game for s in guess] +`\n<|/ c |>\n<| c |>\nOops,\
+    \ you must have copied it wrong. I'll edit it.\n<|/ c |>\n<| a tags=python,python-2.7,arrays\
+    \ dscore=0 |>\n<code>", "    # Your code here\n    scores = [game[i] for i in\
+    \ range(len(game))]\n    guesses = [guess[i] for i in range(len(guess))]\n   \
+    \ diff = [abs(guess[i] - scores[i]) for i in range(len(scores))]\n    count =\
+    \ [0 for i in range(len(scores))]\n    for i in range(len(diff)):\n        if\
+    \ diff[i] < 0:\n            diff[i] = 0\n        elif diff[i] == 0:\n        \
+    \    count[i] += 0\n        elif diff[i] > 0:\n            count[i] += 1 \n  \
+    \  return [count[i] for i in range(len(scores))] + [diff[i] for i in range(len(scores))]",
+  "  game_size = len(game)\n  guess_size = len(guess)\n  scores = []", "    return\
+    \ game.length if guess == game else game.abs - guess.abs\nend", "    game = game.dup\n\
+    \    guess = guess.dup\n    match = Array.new(guess.size, \"0\")\n    guesses_found\
+    \ = 0\n    matches = 0", "    result = []\n    length = game.length\n    \n  \
+    \  for index, score in enumerate(game):\n        difference = guess[index] - score\n\
+    \        \n        if (difference < 0):\n            difference = abs(difference)\n\
+    \            \n        if (difference == 0):\n            result.append(0)\n \
+    \       else:\n            result.append(difference)\n            \n    return\
+    \ result ", "  diff = []\n  game.each_with_index do |val, i|\n    diff = val if\
+    \ val < guess[i]\n  end\n  diff.nil? ? nil : [diff.abs, val]\nend", "  game =\
+    \ [game]\n  guess = [guess]\n  # Create two lists of ints representing the scores\
+    \ and guesses\n  score_list = []\n  guess_list = []\n  # Use a for loop to go\
+    \ through every index of both the scores and guesses\n  # lists and append the\
+    \ value at that index to their respective lists\n  for i in 0...game.length\n\
+    \    score_list << game[i]\n    guess_list << guess[i]\n  # Create a counter for\
+    \ each possible answer\n  correct_count = 0\n  # Create a new list to store the\
+    \ scores based off of score_list\n  scores = []\n  # Create a new list to store\
+    \ the guesses based off of guess_list\n  guesses = []\n  # Loop through each index\
+    \ in the score list\n  for index in 0...score_list.length\n    \n    # If the\
+    \ correct answer is found at that index\n    if score_list[index] == guess_list[index]\n\
+    \      correct_count += 1\n    # If the score is greater than the guess, add it\
+    \ to the scores list\n    elif score_list[index] > guess_list[index]\n      scores\
+    \ << score_list[index] - guess_list[index];\n    # If guess is greater than the\
+    \ score, add it to the guesses list\n    else\n      guesses << guess_list[index]\
+    \ - score_list[index];\n  end\n  # Return the results array\n  result = [correct_count,\
+    \ abs(scores.min), abs(scores.max), abs(guesses.min), abs(guesses.max)];\n  result\n\
+    end\n</cell>\n<code language=julia-0.5>", "  size = guess.size\n  scores = [game[i]-guess[i]\
+    \ for i in range(size)]\n  return [abs(score) for score in scores]\nend", "  result\
+    \ = []\n  guess = guess.sort\n  scores = game.sort\n  \n  guessed_wrong = {}\n\
+    \  \n  i = 0\n  while i < guess.length\n    score = scores[i]\n    guess = guess[i]\n\
+    \    \n    if guess == score\n      result[i] = 0\n      \n    elsif guessed(guess,\
+    \ guessed_wrong, guessed_wrong, guessed_wrong, guessed_wrong, guessed_wrong, guessed_wrong)\n\
+    \      result[i] = 0\n    else\n      result[i] = abs(guess - score)\n    end\n\
+    \    \n    i = i + 1\n  end\n  \n  result\nend\n</cell>\n<code language=julia-1.0>\n\
+    @assert [0, 0, 0, 3, 3] == compare([1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 2, -2])\n\
+    @assert [4, 4, 1, 0, 0, 6] == compare([0, 5, 0, 0, 0, 4], [4, 1, 1, 0, 0, -2])\n\
+    </cell>\n<text>\nSum Difference (Sum of Differences)\nYou and your friends worked\
+    \ on some math problem and decided to play a trick game between yourself and your\
+    \ friend. The game consists of a series of rounds, and each round consists of\
+    \ a number of questions. You try to guess the score of each question in each round.\
+    \ You are given the scores and guesses for each question in each round. You have\
+    \ to determine if a person who guesses correctly in the first round is right and\
+    \ in the second, and so on.\nThis game is very similar to that of number guessing\
+    \ games such as the one you and your friends are playing against the computer,\
+    \ except for the following things:", "  game, guess = to_array(game), to_array(guess)\n\
+    \  diff = []\n  game.each_with_index { |x, i| diff.push(abs(x - guess[i])) }\n\
+    end", "    arr = game.clone\n    arr2 = guess.clone\n    result = arr.clone\n\
+    \    i = 0\n    diff = 0\n    while(i < guess.length)\n        if arr2[i] == arr[i]\
+    \ \n            diff = arr2[i] - arr[i]\n        else\n            diff = (arr2[i]\
+    \ - arr[i]).abs\n        end\n        result[i] = diff\n        i += 1\n    end\n\
+    \    return result\nend", '    return [-abs(game[i] - guess[i]) for i in range(len(game))]',
+  "  game.zip(guess).map { |score, guess| [score - guess, guess] }.uniq.sort\nend",
+  "  scores = []\n  guesses = []\n  game.length.times do |i|\n    scores << game[i]\n\
+    \    guesses << guess[i]\n  end\n  return guesses.map { |g| scores.index(g) rescue\
+    \ scores.index(-g) }\nend", "  game = game.sort\n  guess = guess.sort\n  game.length\
+    \ == guess.length and game.zip(guess).map do |game, guess|\n    guess == game\
+    \ ? 0 : abs(guess - game)\n  end\nend", "    answer = guess[1..-2]\n    score\
+    \ = game[1..-2]\n    guesses = guess[1..-1]\n    return game.zip(guesses).map\
+    \ { |i, g| abs(g - score[i]) }\nend", "  game = Array.wrap(game)\n  guess = Array.wrap(guess)\n\
+    \  len = guess.length\n  match = Array.new(len, 0)\n  \n  game.each do |i|\n \
+    \   j = -1\n    len.times do |j|\n      j += 1 if game[j] == i\n    end\n    match[j]\
+    \ = abs(guess[j] - game[j])\n  end\n  match\nend", "    game = game.to_a\n   \
+    \ guess = guess.to_a\n    differences = []\n    game_size = game.length\n    guess_size\
+    \ = guess.length\n    i = 0\n    while i < game_size\n        difference = abs(guess[i]-game[i])\n\
+    \        differences.push(difference)\n        i = i + 1\n    end\n    differences\n\
+    end\n</cell>\n<code language=julia-1.0>", "    # Fill this in!\n    return game\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\nThank you for your help. But I don't think\
+    \ this is what I needed. I need to use the same comparison method that I already\
+    \ have, so I can compare the two lists and return a list showing how far off each\
+    \ of the guesses was. My professor gave us the method he gave us so I didn't have\
+    \ to write a new one.\n<|/ c |>\n<| c |>\nYour professor gave you a very bad piece\
+    \ of code - it's poorly named, it's not OOP, and it uses an awful lot of global\
+    \ variables. You need to start with a good code and then work on your problem\
+    \ by solving a single problem, then working on that single problem by solving\
+    \ the next, and so on. You have no idea how well your code will work for any real\
+    \ world situation where you need to compare lists. You need to understand the\
+    \ fundamentals first.\n<|/ c |>\n<| c |>\nAlso, your professor made a bad choice.\
+    \ You need to do things yourself, don't ask others to do them for you. I won't\
+    \ help you learn how to use Python if you don't learn how to use it yourself.\
+    \ This is basic stuff, I'm sure you have a textbook to help you with that.\n<|/\
+    \ c |>\n<| c |>\nIt's been a while since I've done any python and this is my first\
+    \ time using this website. The code I have is not poorly named, it is what we\
+    \ were given and we were told to copy it. Also I agree that I need to understand\
+    \ the fundamentals first, but I do not know how to use it myself (this is my first\
+    \ time using python). That being said, I think I have a better understanding of\
+    \ python and I appreciate the help.\n<|/ c |>\n<| c |>\nThe code I gave you is\
+    \ poorly named because it has too many global variables (which makes it difficult\
+    \ to understand), it uses a lot of globals, and it uses a lot of global variables.\
+    \ All of those are bad. You need to learn the fundamentals and practices of OOP\
+    \ and Python, then learn how to do it yourself. You can't learn how to do everything\
+    \ by asking others to do it for you.\n<|/ c |>\n<| a tags=python,list |>\nThis\
+    \ was a fun challenge.  Here is my solution which uses a generator function to\
+    \ generate all the possible permutations of the list of scores using the itertools.permutations()\
+    \ function.\nThe generator function is as follows:\n<code>", "    guess = guess.sort!\n\
+    \    guess = guess.each_with_index.to_a\n    result = Array.new(guess.length)\n\
+    \    \n    game.reverse_each.with_index do |score,index|\n        if index ==\
+    \ 0\n            result[index] = 0\n        else\n            result[index] =\
+    \ game.sort.index(guess[index-1]) - guess[index-1]\n        end\n    end\n   \
+    \ \n    result\nend\n</cell>\n<code language=julia-1.5>", "    i = 0\n    diff\
+    \ = []\n    while i != len(game)\n        if game[i] != guess[i]\n           \
+    \ diff << abs(game[i] - guess[i])\n        i += 1\n    return diff\n</code>\n\
+    The main difference with your code is that you were assigning the return value\
+    \ of compare.call to a variable named \"diff\" rather than appending the return\
+    \ value to the array \"diff\". The main difference is that you were not appending\
+    \ to the array; you were assigning the return value of the call to the variable\
+    \ named \"diff\" rather than appending the return value to the array \"diff\"\
+    .\n<|/ a dscore=0 tags=ruby |>\n<| a dscore=0 |>\nFor those who are interested,\
+    \ I wanted to put up something I wrote in ruby that might be of use.\n<code>",
+  "  result = []\n  index = 0\n  while index < guess.length\n    if game[index] ==\
+    \ guess[index]\n      index += 1\n    else \n      result << Math.abs (game[index]\
+    \ - guess[index])\n    end\n  end\n  result\nend", "    game_size = length(game)\n\
+    \    guess_size = length(guess)\n    correct_guesses = guess_size - game.each_with_index.inject(0)\
+    \ {|sum, (score, index)| sum + 1 if score == guess[index] }\n    return [correct_guesses]\
+    \ if correct_guesses == game_size then 0 else (guess[correct_guesses]-game[correct_guesses])\n\
+    end\n</cell>\n<text>\nAnd now the solution", "    matches = 0\n    match = 0\n\
+    \    arr = []\n    arr2 = []\n    game = game.map{|e| e.to_i}\n    guess = guess.map{|e|\
+    \ e.to_i}\n    guessed.each do |g|\n        arr2.push(g - game[0])\n    end\n\
+    \    guessed.each do |g|\n        arr2.push(g - guess[0])\n    end\n    arr2.each\
+    \ do |g|\n        arr << (g == 0) ? 0 : Math.sqrt(g * 100)\n    end\n    return\
+    \ arr\nend", "    # Your code here\n    score = [0,]\n    \n    for i in range(len(game)):\n\
+    \        score[i+1] = abs(guess[i]-game[i])", "  \n  # YOUR CODE HERE\n  game\
+    \ = game.to_a\n  guess = guess.to_a\n  score = []\n  for i in game\n    if game[i]==guess[i]\n\
+    \      score.push(0)\n    else\n      score.push(abs(game[i] - guess[i]))\n  \
+    \  end\n  end\n  return score\nend", "  puts \"\\nComparing #{game} with #{guess}\"\
+    \n  difference = []\n  guesses = guess.dup\n  game.each do |score|\n    index\
+    \ = guesses.index(0)\n    puts \"\\n#{'-' * 10} SCORE: #{score}\"\n    puts \"\
+    #{'-' * 10} GUESS: #{ guesses.join(', ')}\"\n    puts \"#{'-' * 10} DIFF: #{guesses.zip(game).map\
+    \ { |e| e - score }.join(', ')}\"\n    puts \"#{'-' * 10} DIFF: #{guesses.zip(game).map\
+    \ { |e| e - score }.max}\"\n    difference[index] = abs(guesses[index] - score)\n\
+    \    guesses.delete_at(index)\n  end\n  difference\nend", "  game.length == guess.length\n\
+    \  \n  result = [0] * guess.length", "    i = 0\n    result = []\n    while i\
+    \ < len(game) and i < len(guess):\n        if game[i] == guess[i]:\n         \
+    \   result.append(0)\n        else:\n            result.append(abs(guess[i] -\
+    \ game[i]))\n        i += 1\n    return result\n</cell>\n<text>\nLet's check your\
+    \ solution against the built in function all:", "  \n  # your code here\n  game\
+    \ = game.sort!\n  guess = guess.sort!\n  result = game\n  guesses = []\n  guesses.length(guess.length).times\
+    \ do |i|\n    guesses.push guess[i] - result[i]\n  end\n  guesses.each_index do\
+    \ |i|\n    result[i] != guess[i] and result[i] = guesses[i]\n  end\n  result\n\
+    end", "    game_size = length(game)\n    guess_size = length(guess)\n    correct_guesses\
+    \ = find_matches(game, guess)\n    return correct_guesses.map {|i| abs(game[i]\
+    \ - guess[i])}\nend", "  if game.length != guess.length\n    throw :invalid, :size\n\
+    \  \n  result = []\n  for i in 0...game.length\n    if game[i] == guess[i]\n \
+    \     result.push 0\n    else\n      result.push Math.abs guess[i] - game[i]\n\
+    \    end\n  end\n  result\nend\n</cell>\n<text>\nQ9\nGiven two arrays scores of\
+    \ positive integers and a threshold T, determine the maximum score that could\
+    \ be obtained if the person guessed the correct number of matches.", "  game =\
+    \ game.length\n  guess = guess.length\n  result = []\n  \n  for i in 0..game\n\
+    \    diff = guess[i] - game[i]\n    if diff == 0\n      result.push(0)\n    else\n\
+    \      result.push(abs(diff))\n  end\n  \n  return result\nend", "  guesses =\
+    \ guess.map(&:to_i)\n  scores = game.map(&:to_i)\n  correct_guesses = guesses.zip(scores).select\
+    \ { |(g,s)| (g==s).to_i}\n  return correct_guesses.map { |(g,s)| (abs(g-s)) }\n\
+    end", "    score = [0 for _ in game]\n    for i in guess: score[i] = game[i]\n\
+    \    \n    for i in score: guess[i] = guess[i] - score[i]\n    \n    return guess",
+  "  # initialize our scores array to a size of guess\n  scores = [0 for _ in guess]\n\
+    \  # now start comparing scores and guesses\n  # if our guess is greater, we add\
+    \ 1 to the score at that index\n  # if it's lesser, we subtract 1 from that index\n\
+    \  # we can do this with some simple comprehension magic\n  scores = [guess[i]\
+    \ - game[i] for i in range(len(guess))]\n  # now check if our scores are all 0\n\
+    \  # if they are all 0, then the person didn't guess correctly\n  return [0 if\
+    \ scores.count(0) == 1 else scores[i] for i in range(len(scores))]", "    game\
+    \ = game.map { |g| g.to_i }\n    guess = guess.map { |g| g.to_i }\n    length\
+    \ = game.length\n    diff = Array.new(length)\n    guess.zip(game).each do |g,g|\n\
+    \      diff[g-1] = abs(g - g)\n    end\n    diff.map { |d| d.abs }\nend", "  \
+    \  # Make sure the length of the guess is equal to the length of the game\n  \
+    \  if guess.length != game.length\n        return [-1]\n    \n    # Initialize\
+    \ an array to hold the comparison scores\n    compScores = Array.new\n    \n \
+    \   # Initialize a counter to keep track of how many games we have played\n  \
+    \  count = 0\n    \n    # Iterate over the guess array\n    for i in 0...guess.length\n\
+    \        # Keep track of how many games we've played\n        count += game.length\n\
+    \        \n        # Create a string with the current game\n        currGame =\
+    \ game.map{|a| a == i ? '*' : a.to_s}.join('')\n        \n        # Compare the\
+    \ current game with the guess\n        compScores[i] = getScore(currGame, guess[i])\n\
+    \    end\n    \n    return compScores\nend\n</cell>\n<code language=julia-0.6>",
+  "  guess_sum = sum(guess)\n  score_sum = sum(game)", "\tguess = guess.sort_by {\
+    \ |x| x }\n\tgame = game.sort_by { |x| x }\n\tguesses = 0\n\tscores = 0\n\tguess.each\
+    \ do |i|\n\t\tif guess[i] != game[i]\n\t\t\tguesses +=1\n\t\t\tscores -= abs(guess[i]\
+    \ - game[i])\n\t\telse\n\t\t\tscores +=1\n\t\tend\n\tend\n\t[scores, guesses]\n\
+    end", "  if game == guess: return [0]\n  if game.length != guess.length: return\
+    \ game.length - guess.length\n  \n  game, guess = game.dup, guess.dup\n  difference\
+    \ = 0\n  \n  game.each_index do |i|\n    difference += guess[i] - game[i]\n  end",
+  "  # The function should return an array of the same length as the number of guesses.\n\
+    \  return []\n</cell>\n<cell>", "  game = game.dup\n  guess = guess.dup", "  raise\
+    \ \"not implemented\"\nend", "\tgame, guess = [int(i) for i in game], [int(i)\
+    \ for i in guess]\n\tlen1, len2 = len(game), len(guess)\n\tarr = [0 for i in range(len1)]\n\
+    \tfor i in range(len1):\n\t\tarr[i] = abs(game[i] - guess[i])\n\treturn arr\n\
+    </cell>\n<cell>", "  guess = guess.dup\n  score = [0, 0, 0]", "  game.length,\
+    \ guess.length == 0 ? return game.length : return 0\n  game.zip!\n  guess.zip!\n\
+    \  guess = guess.sort!\n  game = game.sort!\n  result = [0] * game.length\n  scores\
+    \ = [game[i].abs <- game ]\n  guesses = [guess[i].abs <- guess ]\n  i = guess.length\
+    \ - 1\n  j = game.length - 1\n  while i >= 0 and j >= 0\n    if game[i] == guess[j]\
+    \ \n      result[j] += 1\n      i -= 1\n      j -= 1\n    elsif game[i] > guess[j]\n\
+    \      j += 1\n    else i -= 1\n  end\n  i = 1\n  j = 1\n  while i < guess.length\
+    \ and j < game.length\n    if game[i] == guess[j]\n      result[j] += 1\n    \
+    \  i += 1\n      j += 1\n    elsif game[i] > guess[j]\n      j += 1\n    else\
+    \ i += 1\n  end\n  i = 1\n  j = 1\n  while i < guess.length and j < game.length\n\
+    \    if game[i] == guess[j]\n      result[j] += 1\n      i += 1\n      j += 1\n\
+    \    elsif game[i] < guess[j]\n      j += 1\n    else i += 1\n  end\n  result\n\
+    end\n</cell>\n<cell>\ncompare([4, 2, 2, 5, 2], [1, 2, 1, 2, 3])\n</cell>\n<cell>\n\
+    compare([1, 3, 2, 2, 2], [1, 2, 3, 4, 1])\n</cell>\n<cell>\ncompare([4, 1, 2,\
+    \ 5, 2], [1, 2, 3, 4, 5])\n</cell>\n<cell>\ncompare([1, 3, 2, 2, 2], [1, 3, 2,\
+    \ 4, 5])\n</cell>\n<cell>\ncompare([5, 1, 2, 3, 4], [1, 2, 3, 4, 5])\n</cell>\n\
+    <cell>\ncompare([5, 1, 2, 3, 4], [1, 2, 1, 2, 5])\n</cell>\n<cell>\ncompare([4,\
+    \ 2, 2, 5, 2], [1, 2, 1, 2, 2])\n</cell>\n<cell>\ncompare([4, 2, 2, 5, 2], [1,\
+    \ 2, 3, 4, 5, 5])\n</cell>\n<cell>\ncompare([4, 2, 2, 5, 2], [1, 2, 3, 2, 5])\n\
+    </cell>\n<cell>\ncompare([1, 3, 2, 2, 2], [1, 2, 3, 4, 2, 2])\n</cell>\n<cell>\n\
+    compare([1, 3, 2, 2, 2], [1, 2, 3, 4, 5, 5])\n</cell>\n<cell>\ncompare([1, 3,\
+    \ 2, 2, 2], [1, 2, 3, 2, 5, 5])\n</cell>\n<cell>\ncompare([4, 2, 2, 5, 2], [1,\
+    \ 2, 3, 4, 2, 5])\n</cell>\n<cell>\ncompare([1, 3, 2, 2, 2], [1, 2, 3, 4, 2, 4])\n\
+    </cell>\n<cell>\ncompare([1, 3, 2, 2, ", "  game = [game, guess].flatten\n  game.each_with_index\
+    \ do |score, index|\n    return 0 unless game.include?(guess[index])\n    return\
+    \ score if game.include?(guess[index])\n    game.delete(guess[index])\n  end\n\
+    \  game.count\nend\n</cell>\n<cell>", '  win = guess.length == game.length', " \
+    \ # Your code here\nend", "    # Your code here!\n    i = 0\n    guesses = guess\n\
+    \    score = game\n    guesses.each do |g|\n        score = score - g\n      \
+    \  guesses.slice!(i)\n        guesses.shift\n        i+=1\n    end\n    guesses.each_with_index\
+    \ do |g, i|\n        if g != score\n            guesses.slice!(i)\n          \
+    \  guesses.shift\n        end\n    end\n    guesses\nend\n</code>\n<|/ a |>\n\
+    <| c |>\nI have tried this, but it doesn't return any value when the guesses are\
+    \ correct. The program prints out the scores when they are correct though.\n<|/\
+    \ c |>\n<| c |>\nYou have to replace `guesses` with whatever array you pass into\
+    \ the function. It's in the comment `# Your code here!`\n<|/ c |>\n<| c |>\nOh\
+    \ wow I feel like an idiot! I changed it so that instead of returning a string,\
+    \ it returns the scores and works perfectly. Thank you!\n<|/ c |>\n<| c |>\nYou're\
+    \ welcome! Yes, I see you're a beginner so it's a good idea to think about how\
+    \ your code works and what your variable names should be. It can take a bit to\
+    \ get used to but it's a great skill to develop as you go along.\n<|/ c |>\n<|\
+    \ a |>\n<code>", "    correct_score = 0\n    wrong_score = 0\n    \n    game_size\
+    \ = game.length\n    guesses_size = guess.length\n    \n    guessed_right = {}\n\
+    \    \n    correct_count = 0\n    \n    game_index = 0\n    guesses_index = 0\n\
+    \    \n    # Initialize correct_score and wrong_score\n    correct_score = game[game_index]\n\
+    \    wrong_score = 0", "    scores = [game[i] for i in game.keys() if game[i]\
+    \ != 0]\n    guesses = [guess[i] for i in guess.keys() if guess[i] != 0]\n   \
+    \ diffs = [abs(a-b) for a, b in zip(guesses, scores) if a != 0]\n    return [min(diffs),\
+    \ max(diffs)]\n</cell>\n<cell>", "    return game-guess\nend", "  diff = game.inject(0)\n\
+    \  guess.each_index do |i|\n    diff[i] = game[i] - guess[i]\n  end\n  return\
+    \ diff\nend", "  raise NotImplementedError\nend", "  result = []\n  \n  for index\
+    \ in 0...game.length\n    if game[index] == guess[index]\n      result.push(0)\n\
+    \    else\n      result.push(game[index] - guess[index])\n  end\n  \n  result\n\
+    end\n</cell>\n<code language=julia-1.4>\nusing JLD2\n</cell>\n<code language=julia-1.4>\n\
+    @save \"data/compare.jld2\" compare game, guess\n</cell>\n<code language=julia-1.4>\n\
+    game, guess = load(JLD2.File(\"data/compare.jld2\"));\n</cell>\n<code language=julia-1.4>",
+  "  # Fill in the code below.\n  correct = 0\n  wrong = 0\n  for i in range(0, len(game)):\n\
+    \    if game[i] == guess[i]:\n      correct += 1\n    else:\n      wrong += 1\n\
+    \  \n  for i in range(0, len(game)):\n    if game[i] != guess[i]:\n      diff\
+    \ = abs(game[i] - guess[i])\n      return diff\n  \n  return 0\n  \n  ", "  a\
+    \ = Array.new(game.length, -1)\n  b = Array.new(game.length, -1)\n  a[0] = 0\n\
+    \  b[0] = 0", "    guesses = 0\n    scores = 0\n    game_size = length(game)\n\
+    \    guess_size = length(guess)\n    \n    if guess_size != game_size\n      \
+    \  raise ArgumentError \"The two arrays of scores and guesses are not the same\
+    \ size\"\n        \n    diff = Array.new(guess_size){0}\n    \n    game.each do\
+    \ |i|\n        if guess == i\n            scores += 1\n        else\n        \
+    \    diff[i] = Math.abs guess - i\n            guesses += 1\n        end\n   \
+    \ end\n    \n    Array.new(guess_size){guesses}\n    \n    diff.each_index do\
+    \ |i|\n        if diff[i] == 0\n            diff[i] = guesses - 1\n        end\n\
+    \    end\n    \n    diff\nend\n</code>\n<|/ a dscore=0 tags=ruby,arrays |>\n<|\
+    \ a dscore=0 tags=ruby,arrays |>\nI wrote a function in Ruby that does what you\
+    \ want, and I think it's pretty short. I'll just post it here and hope that's\
+    \ helpful.\n<code>", "  result = []\n  i = game.size\n  guess = guess.sort\n \
+    \ guess.length == game.size\n  while i > 0\n    j = i - 1\n    while j > 0\n \
+    \     if game[j] > game[i]\n        j += 1\n      elsif game[j] < game[i]\n  \
+    \      i -= 1\n      else\n        result.push(guess[j] - game[i])\n        break\n\
+    \    end\n  end\n  result\nend\n</cell>\n<code language=julia-1.0>\ncompare([-1,\
+    \ 1, -4, -4], [1, 1, -4, -4])\n</cell>\n<code language=julia-1.0>\ncompare([2,\
+    \ 1, 2, -2, 3], [3, 2, 1, 3, 0])\n</cell>\n<code language=julia-1.0>", "  # Your\
+    \ code here\n  result = []\n  index = 0\n  while index < game.length\n    if game[index]\
+    \ == guess[index]\n      result[index] = 0\n    else \n      result[index] = abs(game[index]\
+    \ - guess[index])\n    index += 1\n  return result", "  a = game.to_a\n  b = guess.to_a\n\
+    \  length = a.size\n  scores = []\n  for i in 0..(length-1)\n    # here we compare\
+    \ the guesses to each score and add to scores if they match\n    # then we append\
+    \ the score to the end of the array and break\n    if a[i] == a[i+1]\n      scores.append(a[i])\n\
+    \    end\n  end\n  \n  if scores == nil\n    return guess[0] == guess[-1] ? [0]\
+    \ : [guess[-1]]\n  end\n  \n  \n  \n  # now we compare the scores to each guess\
+    \ and add them to the scores array if they match\n  for i in 0..(length-1)\n \
+    \   if a[i] == b[i]\n      scores.append(a[i])\n    end\n  end\n  \n  \n  # Now\
+    \ we have the correct number of guesses. Now we need to add them up\n  score =\
+    \ 0\n  for i in 0..(length-1)\n    if guess[i] == score\n      score += a[i+1]\n\
+    \    end\n  end\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n\
+    \  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n", "  return game.map{|s| s.nil?\
+    \ ? 0 : s.abs } - guess.map{|s| s.nil? ? 0 : s.abs }\nend\n</cell>\n<cell>\ncompare([1,2,3,4,5,1],[1,2,3,4,2,-2])\n\
+    </cell>\n<cell>\ncompare([0,5,0,0,0],[4,1,1,0,0])\n</cell>\n<text>\nSolution\n\
+    We'll just define our own compare function and return the difference between the\
+    \ scores array and the guesses array.", "    guess = Array.new(guess.length)\n\
+    \    score = 0\n    game = Array.new(game.length)\n    \n    if game.length !=\
+    \ guess.length\n        raise \"Arrays must have the same length\"\n    \n   \
+    \ guess = Array.new(game.length)\n    \n    guess[0..guess.length-1] = guess[0..guess.length-1].sort.reverse\n\
+    \    game[0..game.length-1] = game[0..game.length-1].sort\n    \n    guess[0..guess.length-1].each_with_index\
+    \ do |value, index|\n        score = score if value > 0\n        guess[index]\
+    \ = value\n    end\n    \n    score = score if game.last.positive?\n    \n   \
+    \ guess[0..guess.length-1].each_with_index do |value, index|\n        guess[index]\
+    \ = game[index] - value if value > 0\n    end\n    \n    guess[0..guess.length-1].each_with_index\
+    \ do |value, index|\n        guess[index] = abs(value - guess[index])\n    end\n\
+    \    \n    guess = guess[0..guess.length-1]\n    \n    score\nend", "\tguess=game.guess(guess)\n\
+    \tres=Array.new\n\tsum=Array.new\n\tsum.each do |s|\n\t\tsum.push(s+guess[0])\n\
+    \tend\n\tsum.each do |s|\n\t\tres[s]=s.abs-guess[0]\n\tend\n\tres\nend", "\tresults\
+    \ = []\n\tgame = game.sort{|a, b| a <=> b }\n\tguess = guess.sort{|a, b| a <=>\
+    \ b }\n\tgame.each do |x|\n\t\tguesses = 0\n\t\tguess.each do |y|\n\t\t\tbreak\
+    \ unless x == y\n\t\t\tguesses +=1\n\t\tend\n\t\tresults.push(guesses)\n\tend\n\
+    \tresults.map {|e| e == guess.length ? 0 : e - guess.length }\nend", "  game.each\
+    \ do |score|\n    index = guess\n    while index < score.length do\n      guess[index]\
+    \ == score[index] ? (guess[index] = 0) : guess[index] = score[index] - guess[index]\
+    \ if guess[index] > score[index]\n      index += 1\n    end\n  end\n  guess\n\
+    end\n</code>\nIt doesn't really matter how you do the comparison as long as you\
+    \ always use <= rather than <.\n<|/ a |>\n<| c |>\nOh my god, I have been trying\
+    \ to figure out why this doesn't work for a while now and I finally figure it\
+    \ out. Thank you so much for your explanation. This is the best way I have figured\
+    \ out to do it. I knew there was a better way and your answer worked perfectly.\n\
+    <|/ c |>\n<| a dscore=0 |>\n<code>", "    return (0..guess.length).inject(0) do\
+    \ |memo, (i, _)|\n        # we know that the length of the two lists is equal.\n\
+    \        # however, we know that the indexes are not in order.\n        memo +\n\
+    \            (guess[i] == game[i] ? 0 :\n                abs(guess[i] - game[i]))\n\
+    \    end\nend", "  guess = guess.sort!\n  score = 0\n  game = game.sort!", " \
+    \   score = 0\n    diff = 0\n    \n    # Your code here\n    \n    return diff\n\
+    \    ", "  game = game.sort!\n  guess = guess.sort!\n  diff = 0\n  diff = game.size\
+    \ - guess.size if game.size > guess.size \n  game, guess = game.each_index.sort,\
+    \ guess.each_index.sort\n  game.zip(guess).inject(:+){ |s, p| s = s + abs(s[p]\
+    \ - s[p-1]) }\nend", "  guess_size = guess.length\n  score_size = game.length\n\
+    \  new_guess = [0 for i in range(guess_size)]\n  new_score = [0 for i in range(score_size)]\n\
+    \  # A loop to go through the guess and scores arrays and compare guess to score\n\
+    \  for index in range(0, guess_size):\n    if game[index] == guess[index]:\n \
+    \     new_guess[index] = new_score[index]\n      new_guess[index] = 0\n    else:\n\
+    \      new_guess[index] = abs(guess[index] - game[index])\n  # new_guess[index]\
+    \ = abs(guess[index] - game[index])\n  return new_guess\nend", "  # Your code\
+    \ here!\nend", "    # first initialize a result array\n    result = [0] * len(guess)\n\
+    \    # now iterate over the guesses and update result\n    guesses = 0 # number\
+    \ of guesses made\n    for i in range(0, len(guess)):\n        # if the guess\
+    \ is wrong, update the result\n        if guess[i] != game[i]:\n            result[i]\
+    \ = abs(guess[i] - game[i])\n            guesses += 1\n    # return the result\
+    \ with guesses made\n    return result", "  game, guess = game.reverse.sort, guess.reverse.sort\n\
+    \  result = []\n  i = 0\n  while i < game.length && i < guess.length\n    if game[i]\
+    \ != guess[i]\n      result << game[i] - guess[i]\n      i -= 1\n    else\n  \
+    \    i += 1\n  end\n  result << game.length - guess.length if game.length < guess.length\n\
+    \  result << guess.length - game.length if guess.length < game.length\n  return\
+    \ result\nend", "  guesses.map!{|i| i.to_i}\n  return game.length - guesses.map!{|i|\
+    \ game[i.to_i] - guess[i]}\nend\n</code>\n<|/ a |>\n<| a dscore=0 |>\nHere's my\
+    \ solution I got from some previous posts.\n<code>", "  guess = guess.to_a\n \
+    \ results = []\n  i = 0\n  while i < guess.length\n    if game[i] == guess[i]\n\
+    \      results[i] = 0\n      i += 1\n      while i < guess.length and game[i]\
+    \ == guess[i]\n        i += 1\n      end\n      while i < guess.length and game[i]\
+    \ != guess[i]\n        results[i] = abs(game[i] - guess[i])\n        i += 1\n\
+    \      end\n      i += 1\n    else\n      results[i] = abs(game[i] - guess[i])\n\
+    \    end\n  end\n  return results\nend", "    # Write your code here\n    result\
+    \ = []\n    for i in range(len(game)):\n        if game[i] != guess[i]:\n    \
+    \        result.append(abs(game[i] - guess[i]))\n        else:\n            result.append(0)",
+  "  game = game.to_a\n  guess = guess.to_a\n  guesses = guess.product(game).map {\
+    \ |x, y| x - y }.compact\n  guesses.empty? ? [] : [guesses.reduce(:+)]\nend\n\
+    </code>\n<|/ a dscore=1 |>\n<| c |>\nThanks for the suggestion. I think I understood\
+    \ the concept, but I'm not sure about the implementation. How do I iterate over\
+    \ `guesses` and check if it is correct (==0)? I'm sorry, I'm a newbie.\n<|/ c\
+    \ |>\n<| c |>\nI've edited the answer to include an implementation.\n<|/ c |>\n\
+    <| a dscore=1 |>\nThis should work for you\n<code>", "  game.reduce(guess)\n \
+    \ guess = guess.reduce(game)\n  return game-guess\nend", "  guess = Array(guess)\n\
+    \  game = Array(game)\n  result = Array.new()\n  \n  (0...game.size).each do |i|\n\
+    \    result += [abs(guess[i] - game[i])]\n  end", "    \n    # your code here",
+  "  game.length, guess.length.times do |i|\n    if game[i] != guess[i] and game[i]\
+    \ > guess[i]\n      game[i] = 0\n    elsif game[i] != guess[i] and game[i] < guess[i]\n\
+    \      game[i] = game[i] - guess[i]\n    end\n  end\n  game\nend\n</cell>\n<cell>",
+  " \n    # This is the important part of this solution. First we need to determine\
+    \ how many matches there are.\n    # This is fairly straightforward: we just use\
+    \ the .count method. If the number of matches is the same\n    # in the game and\
+    \ the guess, then the game is a winner and the count is 1, and so on. \n    num_game\
+    \ = game.count\n    num_guess = guess.count\n \n    # Now, we use the .permutations\
+    \ method to determine how many possible matches are there. \n    # If the number\
+    \ of possible matches is greater than the total possible matches, then the game\
+    \ is a win.\n    permutation_game = game.permutations\n    permutation_guess =\
+    \ guess.permutations\n \n    possible = permutation_game * permutation_guess\n\
+    \ \n    # If the game has more possible matches than the number of possible guesses\
+    \ then it is definitely a winner.\n    if permutation_game > permutation_guess\n\
+    \      return Array.new\n    end\n \n    # Otherwise, we want to return the array\
+    \ of possible scores. \n    # To determine how far apart each possible score was,\
+    \ we have to compare each possible guess and game score.\n    possible_scores\
+    \ = Array.new\n \n    # If the number of games possible matches the number of\
+    \ possible guesses, then we can assume that all guesses won.\n    if permutation_game\
+    \ == permutation_guess\n      possible_scores = [guess.size]\n      break\n  \
+    \  end\n \n    # If the number of games possible matches is not equal to the number\
+    \ of possible guesses, then \n    # we want to count how many of the guesses won\
+    \ and divide that by the number of games possible.\n    # To do that, we know\
+    \ that some guesses won if the number of games possible is even, so we must\n\
+    \    # divide the number of games possible by two. \n    # If the number of games\
+    \ possible is odd, then we will have already compared the number of games possible\
+    \ games\n    # to how many games possible guesses, but the number of games possible\
+    \ guesses has already decreased.\n    # Thus, if the number of games possible\
+    \ is odd, we will divide by two.\n \n    # So let's look at some examples:\n \
+    \   #\n    #   permutation_game = 4, permutation_guess = 4\n    #   permutation_game\
+    \ = 4, permutation_guess = 2\n    #   permutation_game = 4, permutation_guess\
+    \ = 1\n    #   permutation_game = 4, permutation_guess = 0\n    #\n    # These\
+    \ all have 4 games and 4 guesses, so there are 4 possible matches.\n    # Now,\
+    \ look at the following set of cases:\n \n    #   permutation_game = 4, permutation_guess\
+    \ = 3\n    #   permutation_game = 3, permutation_guess = 2\n    #   permutation_game\
+    \ = 2, permutation_guess = 2\n    #   permutation_", "  # TODO: Your code here\n\
+    \  return guess[0...game.length]\nend", "    # Fill this in.\nend", "  # Write\
+    \ your solution here\n  score = game.length\n  guess = guess.sort\n  result =\
+    \ []\n  for i in 0...game.count\n    if game[i] == guess[i]\n      result[i] =\
+    \ 0\n    else \n      result[i] = abs(game[i] - guess[i])\n  end\n  result\nend",
+  "    # Implement this\n    correct_guesses = 0\n    correct_guesses += game.include?\
+    \ guess[0]\n    correct_guesses += game.include? guess[1]\n    correct_guesses\
+    \ += game.include? guess[2]\n    correct_guesses += game.include? guess[3]\n \
+    \   correct_guesses += game.include? guess[4]\n    correct_guesses += game.include?\
+    \ guess[5]\n    return guess[correct_guesses]\nend\n</cell>\n<code language=julia-1.5>",
+  "    leng = len(game)\n    return [ abs(guess - game[i]) for i in range(leng) ]\n\
+    </cell>\n<text>\nExercise: Write a function that prints the winning player out\
+    \ to the console as part of a tic-tac-toe game.", "    # Your code here\n    return\
+    \ game, guess, 0", "  guess_copy = guess.dup\n  result = Array.new(game.length,\
+    \ 0, \"int\")\n  for i in 0...game.length\n    if guess_copy[i] != game[i]\n \
+    \     result[i] = game[i] - guess_copy[i]\n    else\n      result[i] = 0\n   \
+    \ end\n  end\n  return result\nend\n</cell>\n<code language=julia-0.6>\n@time\
+    \ for p in [rand(1:10), rand(1:10), rand(1:10), rand(1:10)]\n    guess = Array.rand(1:10^4)\n\
+    \    game = compare.call(guess, p)\n    println(\"$p vs $guess => \", game)\n\
+    end\n</cell>\n<text>\nSide Note\nI wonder if some people would call this a \"\
+    tight game\", because it's only as good as the number of correct guesses we have.\n\
+    As you might expect from reading the code, a tight game isn't just an average\
+    \ score of zero, it's an average score of one less.\nThis could be done by adding\
+    \ one to the average score each time we correct a wrong guess, but that just moves\
+    \ the problem elsewhere.\nThe actual point is to make the guess array as short\
+    \ as possible.\nThe obvious way to do that would be to keep only good guesses\
+    \ and remove bad guesses.\nWe can do that in our own code by looking at the number\
+    \ of correct guesses in the loop, and only updating our guesses array if we have\
+    \ fewer than that many guesses.\nIt would be better to do that in the compare\
+    \ function itself, by finding the mean of only good guesses.", "    game = game.sort.sort!\n\
+    \    guess = guess.sort.sort!\n    diff = []\n    i = 0\n    j.each do |j|\n \
+    \       i += 1\n        diff << (guess[j] - game[i]).abs\n    end\n    diff.sort!\n\
+    end\n</code>\n<|/ a tags=arrays,ruby dscore=0 |>\n<| c |>\nThe OP already has\
+    \ the game and guess arrays sorted (sort.sort!), so `compare` can be simplified\
+    \ to `guess.zip(game).map { |x, y| y - x }`.\n<|/ c |>\n<| c |>\nGood point, thanks,\
+    \ I didn't realize that `.zip` was available.\n<|/ c |>\n<| a dscore=0 tags=arrays,ruby\
+    \ |>\nThe method I came up with is as follows:\n<code>", "  guesses = guess[0..game.size\
+    \ - 1]\n  scores = game[0..game.size - 1]\n  for i in 0..game.size - 1\n    guesses.each_with_index\
+    \ { |g,i| scores[i] += abs(g - guess[i]) }\n  guesses\nend\n</pre>", "    \n \
+    \   # This is an if statement with two possible outcomes:\n    # The guess was\
+    \ right or it wasn't right\n    # In each case, the else statement is run\n  \
+    \  # This is the \"else\" statement. It runs if the guess wasn't correct\n   \
+    \ if guess == game.last or guess < game.last or guess > game.last\n        return\
+    \ guess\n    else\n        score = game.score - game.guess[game.last.downcase]\n\
+    \        \n        # This is an if statement with two possible outcomes:\n   \
+    \     # The guess was right or it wasn't right\n        # In each case, the else\
+    \ statement is run\n        # This is the \"else\" statement. It runs if the guess\
+    \ wasn't correct\n        if guess == game.last or guess < game.last or guess\
+    \ > game.last\n            return guess\n        else\n            score += game.guess[game.last.downcase]\n\
+    \            \n            return score\n    end\nend", "  game = game.dup\n \
+    \ guess = guess.dup\n  \n  # Check for any non-matching values.\n  match = (0\
+    \ - (game.product(guess)).sum) % 2\n  \n  # Check for matching values.\n  while\
+    \ match != 0\n    \n    # Check for every single value.\n    game[game.index(match)]\n\
+    \    guess[guess.index(match)]\n    \n    # Check for every single value.\n  \
+    \  game[guess.index(match)].abs \n    guess[game.index(match)].abs \n    \n  \
+    \  match = match - (game.product(guess)[game.index(match)].abs.sum) % 2\n    \n\
+    \  return game.dup if match != 0 \nend\n</cell>\n<code language=julia-1.6>", " \
+    \   game, guess = game, guess.sort{|a,b| a <=> b }\n    result = game.length.times.inject([]){|a,\
+    \ i| a.push(game[i]) if game[i] != guess[i]}\n    result.each_with_index{|e, i|\
+    \ result[i] = (result[i]==0 ? 0 : abs(result[i]-guess[i])) }\n    result.sort{|a,b|\
+    \ a <=> b }\nend\n</code>\n<|/ a dscore=1 |>\n<| c |>\nSorry I was just reviewing\
+    \ your solution, I think it could be simplified to just using `zip(game, guess)`.\n\
+    <|/ c |>\n<| c |>\nThe zip solution would be nice too, I didn't know that one.\
+    \ :) Although the OP did ask for the return value to be an array. I'll see if\
+    \ I can make that work.\n<|/ c |>\n<| c |>\nThanks for the answer, I've implemented\
+    \ it and it works. However, the problem I have is that I can't pass the array\
+    \ back to the main function without getting the following error: `TypeError: comparison\
+    \ of Fixnum with 1 failed`.\n<|/ c |>\n<| c |>\nThat is probably a problem with\
+    \ the way you are using the function. What are you passing in for `game` and `guess`?\n\
+    <|/ c |>\n<| c |>\n`game` is an array of numbers and `guess` is an array of letters.\
+    \ So it would be something like `game = [4, 5, 3, 0, 1, 2]` and `guess = ['P',\
+    \ 'G', 'G', 'L', 'A', 'M']`.\n<|/ c |>\n<| a dscore=1 |>\nA different approach:\
+    \ use Enumerable#map to transform each element of game and guess to a 2-element\
+    \ array: one for the score and one for the guess. The following will sort the\
+    \ 2-element arrays using the first element of each array:\n<code>\ngame.zip(guess).map{\
+    \ |a,b| (a <=> b) }\n</code>\nThe result is a sorted array of integers which are\
+    \ the result of the comparison. For example, the first element would be a 1 if\
+    \ the first element of game and guess were equal. The second element would be\
+    \ 0 if the first element of game was larger than the second element, and 1 if\
+    \ the first element of game was smaller than the second element. For example:\n\
+    <code>\ngame = [4, 2, 0, 9, 2, 1]\nguess = ['M', 'A', 'L', 'P', 'N', 'P']\ngame.zip(guess).map{\
+    \ |a,b| (a <=> b) }.sort.map{ |x| x <=> 0 }", "    game.reset\n    guess = guess[1..-1]\n\
+    \    game = game.send(guess[0])\n    diff = guess[0] - game\n    return guess\
+    \ - diff\nend\n</code>\n<|/ a |>\n<| c |>\nThis is very elegantly done. I'd not\
+    \ known this before using send, though. Thanks for sharing!\n<|/ c |>\n<| a dscore=1\
+    \ tags=ruby,compare |>\nI think you mean something like this:\n<code>", "    game,\
+    \ guess = game_check(game, guess)\n    return game.zip(guess).map{ |x,y| y !=\
+    \ x ? y - x : x }\nend", "  # Your code goes here!\nend\n</cell>\n<code language=julia-0.5>",
+  "  return game.zip(guess).map{|a,b| a - b}\nend", "  guess = guess.flatten.sort\n\
+    \  return guess[-game.size].zip(game).inject(0) { |total, (_, score)| total +\
+    \ (guess == score ? 0 : abs(score - guess[_])) }\nend\n</pre>\n</div>\n</div>\n\
+    </div>\n</div>\n  \n<div class=\"cell border-box-sizing text_cell rendered\"><div\
+    \ class=\"prompt input_prompt\">\n</div><div class=\"inner_cell\">\n<div class=\"\
+    text_cell_render border-box-sizing rendered_html\">\n<ul>\n<li>\n<p>A game is\
+    \ represented as an array of ints. The length of the array is the number of guesses\
+    \ that have been made.</p>", "    # Write your code here\n    match = 0\n    diff\
+    \ = 0\n    for i in game\n        match += i if guess == game[i] else 0\n    \
+    \    diff += abs(guess[i] - game[i])\n    end\n    return [match, diff]\nend",
+  "  a = [ game[i] - guess[i] for i in range( len ( game ) ) ]\n  a.each_index{ |i|\
+    \ a[i] <= 0 ? a[i] = 0 : a[i] = a[i] }\n  a\nend", "  # TODO: Write code here\n\
+    \  return guess", "  (0...game.length).map {|i| guess[i] != game[i] ? guess[i]\
+    \ - game[i] : 0}\nend", "  differences = []\n  correct = 0\n  for i in range(len(game))\n\
+    \    if game[i] == guess[i]\n      correct+=1\n    end\n  differences[0] = 0\n\
+    \  differences[1] = 0\n  differences[2] = 0\n  differences[3] = 0\n  differences[4]\
+    \ = 0\n  differences[5] = 0\n  differences[6] = 0\n  differences[7] = 0\n  if\
+    \ correct > 1\n    differences[7] = guess[7] - game[7]\n    differences[6] = guess[6]\
+    \ - game[6]\n    differences[5] = guess[5] - game[5]\n    differences[4] = guess[4]\
+    \ - game[4]\n    differences[3] = guess[3] - game[3]\n    differences[2] = guess[2]\
+    \ - game[2]\n    differences[1] = guess[1] - game[1]\n    differences[0] = guess[0]\
+    \ - game[0]\n  end\n  return differences\nend\n</cell>\n<code language=julia-1.5>",
+  "  result = Array.new(guess.length)\n  game_size = game.length\n  guess_size = guess.length\n\
+    \  \n  guessed_indexes = []\n  \n  i = 0\n  while i < game_size do\n    index\
+    \ = i\n    while index < game_size do\n      if game[index] == guess[i] then\n\
+    \        guessed_indexes << index\n      end\n      index += 1\n    end\n    i\
+    \ += 1\n  end\n  \n  i = 0\n  while i < guess_size do\n    index = i\n    while\
+    \ index < guess_size do\n      if guess[index] == game[i] then\n        result[index]\
+    \ = game[i] - guess[i]\n      end\n      index += 1\n    end\n    i += 1\n  end\n\
+    \  \n  i = 0\n  while i < guess_size do\n    index = i\n    while index < guess_size\
+    \ do\n      if guess[index] == game[i] and guess[i] != 0 then\n        result[index]\
+    \ = game[i] - guess[i]\n      end\n      index += 1\n    end\n    i += 1\n  end\n\
+    \  \n  i = 0\n  while i < game_size do\n    index = i\n    while index < game_size\
+    \ do\n      if guess[index] == game[i] and guess[i] != 0 then\n        result[index]\
+    \ = guess[i] - game[i]\n      end\n      index += 1\n    end\n    i += 1\n  end\n\
+    \  \n  return result\nend", "  # Your code goes here.\n  scores = []\n  for i\
+    \ in range(len(game)):\n    scores.append(game[i] - guess[i])\n  return  scores",
+  "  max_score = -(Float::INFINITY)\n  max_guess = Float::INFINITY\n  guesses = 0\n\
+    \  scores = 0 \n  game.each do |i|\n    scores.push 1 if game[i] > max_score\n\
+    \    max_score = game[i] if game[i] > max_score\n  end\n  guesses.push 0 \n  guess.each\
+    \ do |i|\n    guesses.push 1 if guess > max_guess\n    max_guess = guess if guess\
+    \ > max_guess\n  end\n  guesses.each do |i|\n    game[i] -= max_score\n    guess[i]\
+    \ -= max_guess\n  end\n  return game\nend", "    game = game.dup\n    guess =\
+    \ guess.dup\n    guesses = []\n    guesses_sorted = []\n    game_sorted = game.sort\n\
+    \    guesses_sorted = guess.sort\n    game_length = game.size\n    guesses_length\
+    \ = guess.size\n    compare = []\n    i = 0\n    j = game_length-1\n    while\
+    \ i < game_length and j >= 0\n        if game[i] < guess[j]\n            guesses_sorted[j+1]\
+    \ = guesses_sorted[j]\n            guesses_sorted[j] = game[i]\n            guesses_length\
+    \ -= 1\n            game += 1\n            guesses -= 1\n            i = 0\n \
+    \           j -= 1\n        else\n            guesses_sorted[j+1] = guesses_sorted[j]\n\
+    \            guesses_sorted[j] = game[i]\n            guesses_length += 1\n  \
+    \          guesses -= 1\n            i += 1\n            j += 1\n    end\n   \
+    \ while i < game_length\n        guesses_sorted[j+1] = guesses_sorted[j]\n   \
+    \     guesses_sorted[j] = game[i]\n        guesses_length -= 1\n        game +=\
+    \ 1\n        guesses -= 1\n        i += 1\n        j += 1\n    end\n    while\
+    \ j >= 0\n        guesses_sorted[j+1] = guesses_sorted[j]\n        guesses_sorted[j]\
+    \ = game[i]\n        guesses_length -= 1\n        guesses -= 1\n        i += 1\n\
+    \        j -= 1\n    end\n    return guesses_sorted\nend", "    \n    \n    #\
+    \ Write your code here!\n    \n    \n    \n    return 0", "    difference = []\n\
+    \    \n    for i in 0...length(guess)\n        difference = difference + [abs(game[i]\
+    \ - guess[i])]\n    end\n    \n    return difference\nend", "  game = [game[i]\
+    \ for i in range(len(game))]\n  guess = [guess[i] for i in range(len(guess))]\n\
+    \  result = [0 for i in range(len(guess))]", "    # implement here\n    game =\
+    \ game.to_a\n    guess = guess.to_a\n    score = Array.new(game.length, 0)\n \
+    \   max = game.length\n    min = game.length\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min..max).to_a\n\
+    \    guess = guess + Array(min..max).to_a\n    guess = guess + Array(min", " \
+    \ correct_count = 0\n  wrong_guesses = []\n  for i in 0..game.length\n    if game[i]\
+    \ == guess[i]\n      correct_count += 1\n    else\n      wrong_guesses << guess[i]\n\
+    \  return wrong_guesses\nend", "  game = game.dup\n  guess = guess.dup\n  length\
+    \ = game.length\n  while true\n    if game.length == 0\n      return []\n    guess\
+    \ = guess.shift.dup\n    \n    difference = guess - game.shift\n    if difference\
+    \ < 0\n      difference *= -1\n    end\n    if game.first == guess.first && game.last\
+    \ == guess.last\n      if game.length == 1 && guess.length == 1 && guess == game[0]\n\
+    \        return 0\n      end\n    end\n    game = game.dup\n    guess = guess.dup\n\
+    \    length = length - 1\n  end\nend\n</code>\nEDIT 2: A solution that doesn't\
+    \ rely on Ruby's built in Array#shift method\n<code>", "  if game.empty? or guess.empty?\n\
+    \    return []\n  end\n  \n  # We assume that the first element in the game array\
+    \ is the correct one, and \n  # subtract it from all the rest of the guesses.\n\
+    \  \n  # Iterate over the first element of the guesses array\n  \n  score = 0\n\
+    \  correct_guess = 0\n  guesses.each { |g| score += g[0]; correct_guess += g[0]\
+    \ - guess[0] }\n  \n  # Iterate over the rest of the guesses array\n  guesses.each\
+    \ { |g| score += g[1]; correct_guess += g[1] - guess[1] }\n  \n  # If both are\
+    \ correct\n  if correct_guess == game.size\n    return [0]\n  end\n  \n  # Otherwise\
+    \ if both are wrong\n  if correct_guess != game.size\n    return [score - correct_guess]\n\
+    \  end\nend\n</cell>\n<cell>", "    matches = nil\n    scores.each do |score|\n\
+    \        if guess[game] == score\n            matches ||= []\n            matches\
+    \ << 0\n        else\n            score - guess[game]\n            matches ||=\
+    \ []\n            matches.push score\n        end\n    end\n    return matches\n\
+    end", "  # TODO: Write your comparison function here\n  guesses = guess.sort_by{|x|\
+    \ x}.reverse\n  games = game.sort_by{|x| x}.reverse\n  games.zip(guesses).map\
+    \ do |a, e|\n    if e == 0\n      a\n    else\n      (e - a)\n    end\n  end\n\
+    end\n</cell>\n<cell>", "  game = game.to_a\n  guess = guess.to_a\n  scores = [game[i]\
+    \ for i in 0...guess.length]\n  guesses = [guess[i] for i in 0...guess.length]\n\
+    \  scores -= guesses\n  return [scores.zip(guesses).map { |score, guess| score\
+    \ - guess }]\nend\n</cell>\n<text>\nNow let's see it in action!", '    correct
+    = Array.new(game.size, 0) #this array will hold our result', "  n = length(game)\n\
+    \  m = length(guess)\n  game = Array.new(m){ Array.new(m, 0) }\n  guess = Array.new(m){\
+    \ Array.new(m, 0) }\n  puts \"#{game}\"\n  puts \"#{guess}\"\n  (0...m).each do\
+    \ |i|\n    (0...n).each do |j|\n      game[i][j] = game[i][j] + game[i][j+n] if\
+    \ (game[i][j] == 0 || game[i][j+n] == 0)\n      guess[i][j] = guess[i][j] + guess[i][j+n]\
+    \ if (guess[i][j] == 0 || guess[i][j+n] == 0)\n    end\n  end\n  (0...m).each\
+    \ do |i|\n    (0...n).each do |j|\n      if guess[i][j] > game[i][j]\n       \
+    \ game[i][j] = game[i][j] - guess[i][j]\n      elsif guess[i][j] == game[i][j]\n\
+    \        game[i][j] = game[i][j] - guess[i][j]\n      elsif guess[i][j] < game[i][j]\n\
+    \        guess[i][j] = guess[i][j] - game[i][j]\n      end\n    end\n  end\n \
+    \ (0...m).each do |i|\n    (0...n).each do |j|\n      game[i][j] = game[i][j]\
+    \ / 2 if (game[i][j] == 0 && guess[i][j] == 0) || (game[i][j] == 0 && guess[i][j]\
+    \ == 1)\n    end\n  end\n  (0...m).each do |i|\n    (0...n).each do |j|\n    \
+    \  guess[i][j] = guess[i][j] / 2 if (guess[i][j] == 0 && game[i][j] == 0) || (guess[i][j]\
+    \ == 0 && game[i][j] == 1)\n    end\n  end\n  (0...m).each do |i|\n    (0...n).each\
+    \ do |j|\n      game[i][j] = game[i][j] / guess[i][j] if (game[i][j] == 0 && guess[i][j]\
+    \ == 0) || (game[i][j] == 0 && guess[i][j] == 1)\n    end\n  end\n  (0...m).each\
+    \ do |i|\n    (0...n).each do |j|\n      guess[i][j] = guess[i][j] / guess[i][j]\
+    \ if (game[i][j] == 0 && guess[i][j] == 0) || (game[i][j] == 0 && guess[i][j]\
+    \ == 1)\n    end\n  end\n  (0...m).each do |i|\n    (0...n).each do |j|\n    \
+    \  if game[i][j] == 0\n        game[i][j] = guess\n      else\n        game[i][j]\
+    \ = guess\n      end\n    end\n  end\n  (0...m).each do |i|\n    (0...n).each\
+    \ do |j|\n      gues", "    guess = Array.new(guess, 0)\n    score = Array.new(game,\
+    \ 0)\n    game_size = (game.size * game.size).to_f\n    guesses = 0\n    corrected_guesses\
+    \ = 0\n    total = 0\n    game_score = 0\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = guess[i] + game_size\n\
+    \            \n            total += guess[i]\n        end\n        \n        score\
+    \ += guess[i]\n        i += 1\n    end\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = guess[i] + game_size\n\
+    \            \n            total += guess[i]\n        end\n        \n        score\
+    \ += guess[i]\n        i += 1\n    end\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = guess[i] + game_size\n\
+    \            \n            total += guess[i]\n        end\n        \n        score\
+    \ += guess[i]\n        i += 1\n    end\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = guess[i] + game_size\n\
+    \            \n            total += guess[i]\n        end\n        \n        score\
+    \ += guess[i]\n        i += 1\n    end\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = guess[i] + game_size\n\
+    \            \n            total += guess[i]\n        end\n        \n        score\
+    \ += guess[i]\n        i += 1\n    end\n    \n    i = 0\n    while(i<guess.length)\n\
+    \        if(guess[i] == 0)\n            guesses += 1\n        else\n         \
+    \   guess[i] = Math.abs(guess[i]-game[i])\n            total += 1\n          \
+    \  \n            if(guess[i] < 0)\n                guess[i] = ", "    guesses_index\
+    \ = []\n    score_index = []\n    guesses_index.append(0)\n    score_index.append(0)\n\
+    \    count = 1\n    for i in (0..(game.length - 1)):\n        if (game[i] == guess[i]):\n\
+    \            guesses_index[count] = i\n            score_index[count] = 0\n  \
+    \          count += 1\n        else:\n            guesses_index[count] = i\n \
+    \           score_index[count] = abs(game[i] - guess[i])\n            count +=\
+    \ 1\n    count = count - 1\n    for i in (0..(guess.length - 1)):\n        if\
+    \ (guess[i] == game[i]):\n            guesses_index[count] = i\n            score_index[count]\
+    \ = 0\n            count += 1\n        else:\n            guesses_index[count]\
+    \ = i\n            score_index[count] = abs(game[i] - guess[i])\n            count\
+    \ += 1\n    count = count - 1\n    for i in (0..(guess.length - 1)):\n       \
+    \ guesses_index[count] = i\n        score_index[count] = abs(game[i] - guess[i])\n\
+    \        count += 1\n    return score_index\nend\n</cell>\n<code language=julia-1.5>",
+  "  result = Array.new(guess.length).fill(0)\n  game.each_with_index do |score, index|\n\
+    \    result[index] = (guess[index] == score)\n  end\n  result\nend", "  game =\
+    \ Array(game)\n  guess = Array(guess)\n  result = []\n  n = game.length\n  m =\
+    \ guess.length\n  score.call(game,guess)\n  score.call(guess, game)\n  for i in\
+    \ 0...m\n    if game[i] != guess[i]\n      diff = abs(game[i] - guess[i])\n  \
+    \    if diff < result[i]\n        result[i] = diff\n      end\n    end\n  end\n\
+    \  result\nend", "    size = game.size\n    guess = Array(size, guess)\n    \n\
+    \    guesses = Array.new(size, 0)\n    \n    score = 0\n    \n    i = 0\n    \n\
+    \    while(i < size)\n        guess[i] = game[i]\n        guesses[i] = guess[i]\n\
+    \        i += 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n      \
+    \  guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i\
+    \ < size)\n        guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n \
+    \   \n    while(i < size)\n        guess[i] = 0\n        i += 1\n    end\n   \
+    \ \n    i = -1\n    \n    while(i < size)\n        guess[i] = 0\n        i +=\
+    \ 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n        guess[i] =\
+    \ 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n  \
+    \      guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i\
+    \ < size)\n        guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n \
+    \   \n    while(i < size)\n        guess[i] = 0\n        i += 1\n    end\n   \
+    \ \n    i = -1\n    \n    while(i < size)\n        guess[i] = 0\n        i +=\
+    \ 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n        guess[i] =\
+    \ 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n  \
+    \      guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i\
+    \ < size)\n        guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n \
+    \   \n    while(i < size)\n        guess[i] = 0\n        i += 1\n    end\n   \
+    \ \n    i = -1\n    \n    while(i < size)\n        guess[i] = 0\n        i +=\
+    \ 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n        guess[i] =\
+    \ 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n  \
+    \      guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n    \n    while(i\
+    \ < size)\n        guess[i] = 0\n        i += 1\n    end\n    \n    i = -1\n \
+    \   \n    while(i < size)\n        guess[i] = 0\n        i += 1\n    end\n   \
+    \ \n    i = -1\n    \n    while(i < size)\n        guess[i] = 0\n        i +=\
+    \ 1\n    end\n    \n    i = -1\n    \n    while(i < size)\n        gues", "  i\
+    \ = 0\n  guesses = 0\n  game = game.length\n  guess = guess.length\n  while i\
+    \ < game and guesses < guess\n    i += 1\n    guesses += (game[i] != guess[i])\n\
+    \  end\n  if i < game\n    game[i..game.length].uniq.map {|s| [s, 0]}\n  else\n\
+    \    []\n  end\nend\n</code>\nThe code is pretty self explanatory but here it\
+    \ is in a more verbose format for you to understand:\n<code>", "  n = game.length\n\
+    \  c = guess.length\n  \n  # Okay, now it's time to figure out the return array.\
+    \ We can start off by just initializing\n  # the return array, and populating\
+    \ it with zeroes at the start. \n  \n  res = []\n  \n  # For each element in game,\
+    \ we can find its index in the return array as follows:\n  \n  for i in 0...n\
+    \ do\n    index = game.index(i)\n    res.push(guess[index])\n  end", "  game =\
+    \ game.map {|i| i.to_i}\n  guess = guess.map {|i| i.to_i}\n  max_diff = [0] *\
+    \ guess.length\n  game.each_index do |i|\n    diff = []\n    guess.length.times\
+    \ do |j|\n      diff << (game[i] - guess[j])\n    end\n    max_diff[i] = Math.max(diff)\n\
+    \  end\n  max_diff\nend", "    return game-guess\nend", "  # Write your code here\n\
+    \  game = game.to_a\n  guess = guess.to_a\n  game.length == guess.length\n  diff\
+    \ = [0 for i in  0 .. guess.length]\n  for i in 0 .. game.length\n    diff[i]\
+    \ += (game[i] - guess[i]).abs\n  diff\nend", "    correct = 0\n    wrong = 0\n\
+    \    for i in range(len(game)):\n        if game[i] == guess[i]:\n           \
+    \ correct += 1\n        else:\n            wrong += 1\n    return [wrong, correct]"]
 stop_tokens:
 - "\nclass"
 - "\ndef"

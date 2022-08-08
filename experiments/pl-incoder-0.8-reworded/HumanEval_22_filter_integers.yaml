@@ -9,7 +9,562 @@ tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&filter_
   \ \"adasd\"]),[4, 9])) {\n        print \"ok!\" }else{\n        exit 1;\n      \
   \  }\n        if(eq_deeply($candidate->([3, \"c\", 3, 3, \"a\", \"b\"]),[3, 3, 3]))\
   \ {\n        print \"ok!\" }else{\n        exit 1;\n        }\n}\n\ntesthumaneval();"
-completions: []
+completions: ["    my @out = ();\n    my $i = 0;\n    foreach my $value ( @$values\
+    \ ) {\n        if( not defined $value or ! defined $value or !$value =~ /^\\d+$/\
+    \ ) {\n            push @out, $value;\n        }\n        $i++;\n    }\n    return\
+    \ @out;\n}\n</code>\n<|/ a tags=perl,arrays |>\n<| c |>\n`grep {$_ =~ /^\\d+$/\
+    \ }` is the equivalent of  `map {/^\\d+$/ ? $_ : ()} @$values`.  Your solution\
+    \ doesn't handle the case where `@values` contains strings and `@out` contains\
+    \ numbers.\n<|/ c |>\n<| a |>\nHere is a way without regular expressions:\n<code>\n\
+    use strict;\nuse warnings;", "    my $filtered = ();\n    for (my $i = 0; $i <\
+    \ @$values; $i++) {\n        my $value = $values->[$i];\n        $filtered->[$i]\
+    \ = if (ref($value) eq 'CODE') { $value->() } else { $value };\n    }\n    return\
+    \ @$filtered;\n}", "    my @values;\n    foreach my $value (@$values) {\n    \
+    \    if (not defined($value)) {\n            next;\n        }\n        if ($value\
+    \ ~~ /^\\d+$/ or $value ~~ /^-?\\d+$/ or $value ~~ /^\\d+\\.\\d+$/ or $value ~~\
+    \ /^\\.\\d+$/ or $value ~~ /^\\d+\\.\\d$/) {\n            push @values, $value;\n\
+    \        }\n    }\n    return @values;\n}", '    my @integers;', "    $values\
+    \ =~ s/^\\s+|\\s+$//g;\n    $values =~ s/\\s+/ /g;\n    return grep {\n      \
+    \  $_ =~ /^\\d+$/ ? $_ : ();\n    };\n}\n</code>\nIt uses grep to filter the values\
+    \ out, so it only keeps the ones that are integers. It also trims white space\
+    \ from the begining and end of the string. I added a few other improvements:",
+  "    return grep { ref($_) ? $_->isa(\"Math::BigInt\") : !$_->isa(\"Math::BigInt\"\
+    ) } $values;\n}", "    my $new_values = ();\n    foreach my $value (@$values)\
+    \ {\n        if(ref($value) eq \"ARRAY\") {\n            push(@$new_values, filter_integers($value));\n\
+    \            next;\n        }\n        elsif(defined($value)) {\n            if($value\
+    \ =~ /^-?\\d+$/) {\n                push(@$new_values, $value);\n            }\n\
+    \        }\n    }\n    return $new_values;\n}", "    my @result = ();\n    my\
+    \ $count = 0;\n    foreach my $value ( @$values ) {\n        ++$count if $value\
+    \ ~~ qr/^\\d+$/;\n        push (@result, $value) if ($count > 0);\n    }\n   \
+    \ wantarray ? @result : $result[0];\n}", "    $values\n        = grep { defined\
+    \ && $_ !~ /^[-+]?\\d+$/ } @$values;\n}", "    my @output;\n    foreach my $value\
+    \ (@$values) {\n        if (not $value =~ /^\\d+$/) {\n            push @output,\
+    \ $value;\n        }\n    }\n    return @output;\n}", "    my @filtered = ();\n\
+    \    foreach my $value (values %$values) {\n        push(@filtered, $value) if\
+    \ !defined $value || $value !~ /^-?\\d+$/;\n    }\n    return @filtered if @filtered;\n\
+    \    return;\n}", "    my (@values) = ();\n    foreach my $value (@$values) {\n\
+    \        if( (ref($value) eq \"HASH\") || (ref($value) eq \"ARRAY\") ) {\n   \
+    \         foreach my $key (keys(%$value)) {\n                if($key->[0] =~ /^[0-9]+$/\
+    \ && (!defined $key->[1])) {\n                    push(@values, $value->{$key});\n\
+    \                }\n            }\n        } elsif(ref($value) eq \"SCALAR\")\
+    \ {\n            if($value->[0] =~ /^[0-9]+$/ && (!defined $value->[1])) {\n \
+    \               push(@values, $value);\n            }\n        } else {\n    \
+    \        push(@values, $value);\n        }\n    }\n    return @values;\n}", " \
+    \   my(@filtered);\n    foreach my $value ($values) {\n        next if !defined($value)\
+    \ && $value !~ /^\\d+$/;\n        push(@filtered, $value);\n    }\n    return\
+    \ @filtered;\n}", "    my @out = ();\n    foreach (@$values) {\n        if (ref($_))\
+    \ {\n            $_ = [$_]\n        }\n        if (! defined($_) || ! _int($_))\
+    \ {\n            push(@out, $_);\n        }\n    }\n    return @out;\n}", '    my
+    @result;', "    grep {\n\t!defined $_ or\n\t(defined $_ and\n\t !$_ eq \"0\"\n\
+    \t and\n\t !$_ eq \"1\")\n    } @$values;\n}", "    my(@filtered_values);\n  \
+    \  my($value);\n    my(@valid_ints);\n    foreach $value (values @$values) {\n\
+    \        if (!ref($value)) {\n            $valid_ints[$value]++;\n        }\n\
+    \    }\n    foreach $value (@valid_ints) {\n        push @filtered_values, $value\
+    \ if $value <= 1;\n    }\n    return @filtered_values;\n}", "    my @out = ();\n\
+    \    for(@$values) {\n        push @out, $_ unless /^-?\\d+$/ or $_ =~ /^\\d+$/;\n\
+    \    }\n    return @out;\n}", "    $values =~ s/^\\s*([\\-]?\\d+)\\s*$/$1/;\n\
+    \    return grep { $_ !~ /^[-+]?\\d+$/ };\n}", "    my @result;\n    my $max =\
+    \ -1;\n    foreach my $value ( @$values ) {\n        push(@result, $value) if\
+    \ ( $value =~ /^-?\\d+$/ );\n        $max = $value if $value > $max;\n    }\n\
+    \    $max = 0 unless defined $max;\n    return @result if $max > 0;\n    return;\n\
+    }", '    return if @$values < 1;', "    return grep {\n        return !($_ % 1)\
+    \ or $_ >= 0 ? ($_) : (0);\n    } @$values;\n}\n</code>\n<|/ a tags=perl,arrays\
+    \ |>\n<| c |>\nThis would not work in some cases, e.g. `filter_integers([\"a\"\
+    , 3.14, 5])`.\n<|/ c |>\n<| c |>\nThat's why you call it filter instead of filter.\n\
+    <|/ c |>\n<| c |>\nI know, but your word is unfortunately incorrect. I never said\
+    \ you shouldn't call it filter. I said that your naming could be better. The name\
+    \ `filter` tells no thing about the type of objects being filtered.\n<|/ c |>\n\
+    <| c |>\nYou are free to edit the answer if you think there is a better way to\
+    \ achieve the goal. My point was that the OP should have a better understanding\
+    \ of what kind of objects he's dealing with.\n<|/ c |>\n<| a |>\nThe simplest\
+    \ way would be:\n<code>\nmy = grep {$_ % 1 == 0}, 0..$#array;\n</code>\nThis would\
+    \ return all the elements of array that are not divisible by 1.\n<|/ a tags=perl,arrays\
+    \ dscore=2 |>\n<| c |>\nThis is pretty close to what I was looking for but it\
+    \ was returning the values on their own instead of the numbers in the array. I\
+    \ also noticed that I could use $_ instead of $array[$_] so i modified your solution\
+    \ to reflect this.\n<|/ c |>\n<| a tags=perl,arrays |>\n<code>", "    my(@filtered_values)\
+    \ = ();\n    my($value) =;", "    my @values_to_keep = ();\n    foreach my $value\
+    \ (values $values) {\n        push (@values_to_keep, $value) if (is_integer($value));\n\
+    \    }\n    return @values_to_keep;\n}", "    my($filtered);\n    \n    foreach\
+    \ my $value (@$values) {\n        if ($value =~ /^\\d+$/ || $value =~ /^\\d+\\\
+    .\\d+$/) {\n            push(@$filtered, $value);\n        }\n    }\n    return\
+    \ @$filtered;\n}\n</code>\nTo handle your original code you would do the following:\n\
+    <code>", "    my $index = 0;\n    my @filtered = ();\n    foreach (@$values) {\n\
+    \        my $val = $_;\n        if (! is_numeric($val)) {\n            $filtered[$index++]\
+    \ = $val;\n        }\n    }\n    return wantarray ? @filtered : $filtered[0];\n\
+    }", "    foreach my $value (@$values) {\n        return $value if is_integer($value);\n\
+    \    }\n    return;\n}", "    return grep { is_numeric($_) } @$values;\n}", " \
+    \   my @filtered;\n    for my $val (@$values) {\n        if (not (ref($val)))\
+    \ {\n            if ($val =~ /^[+-]?\\d+$/) {\n                push(@filtered,\
+    \ $val);\n            }\n        }\n    }\n    return @filtered;\n}", "    my\
+    \ (@values) = grep { !is_number($_) } @$values;\n    return @values;\n}\n</code>\n\
+    <|/ a tags=perl,arrays |>\n<| c |>\nYour second example is misleading. The input\
+    \ array is converted to a reference (because `@$values`) and then dereferenced,\
+    \ but the `$values` variable is unchanged. See [perlreftut](https://perldoc.perl.org/perlreftut.html#Dereferencing-and-Dereferencing-References)\
+    \ for more information about dereferencing in Perl.\n<|/ c |>\n<| c |>\nYeah,\
+    \ I wasn't sure how Perl would handle it. I thought that would be more appropriate\
+    \ in many other languages.\n<|/ c |>\n<| a dscore=3 tags=perl,arrays |>\nHere\
+    \ is a solution that uses grep, map and an anonymous subroutine. grep, map and\
+    \ an anonymous subroutine are functional programming tools. I find this approach\
+    \ the most elegant and readable. I think this approach is much faster than using\
+    \ filter_integers, although it might not be much faster since it avoids the call\
+    \ to grep.\n<code>\nuse strict;\nuse warnings;", "    my @filtered_values;\n \
+    \   my $i = 0;\n    $values = grep { defined } @$values;\n    foreach my $value\
+    \ ( @$values ) {\n        push @filtered_values, $value if $value =~ /^\\d+$/;\n\
+    \    }\n    return @filtered_values;\n}", "    return @$values unless @$values\
+    \ > 0; # Don't want to be called with an empty array\n    $values =~ s/^\\s*//;\n\
+    \    $values =~ s/\\s*$//g;\n    return grep { defined $_ = int $_ }\n}", "  \
+    \  my $max;\n    my $out;\n    for my $v (@$values) {\n        if ($v =~ /^-?\\\
+    d+$/ && $v > $max) {\n            $max = $v;\n            $out = $v;\n       \
+    \ }\n    }\n    return $out;\n}", "    my($filtered_list) = [];\n    $_->() if\
+    \ $values->[$_] !~ /^\\d+$/;\n    $filtered_list += @$values;\n    return $filtered_list;\n\
+    }", "    my @integers = ();\n    foreach my $value (@$values) {\n        if (ref($value)\
+    \ eq \"HASH\") {\n            push @integers, $value->{id} if $value->{id};\n\
+    \        } elsif (ref $value eq \"ARRAY\") {\n            push @integers, @$value;\n\
+    \        } else {\n            push @integers, int($value);\n        }\n    }\n\
+    \    return @integers;\n}", "    grep { !ref $_ } $values;\n}", "    $values =~\
+    \ s/[^\\d\\s]//g;\n    return grep { !/^\\-?\\d+$/ }\n}", "    my $result = [];\n\
+    \    foreach my $value (@$values) {\n        push(@$result, $value) if $value\
+    \ =~ /^\\d+$/;\n    }\n    @$result;\n}", "    foreach my $value (@$values) {\n\
+    \        return undef unless defined($value) && $value =~ /^-?\\d+$/;\n    }\n\
+    \    return @$values;\n}", "    my @results;\n    \n    foreach my $value (@$values)\
+    \ {\n        if ($value =~ /^-?\\d+$/) {\n            push(@results, $value);\n\
+    \        }\n    }\n    \n    return @results;\n}", "    \n    my @values_with_int;\n\
+    \    for my $value (@$values) {\n        if ($value !~ /^-?\\d+$/) {\n       \
+    \     push(@values_with_int, $value);\n        }\n    }\n    \n    return @values_with_int;\n\
+    }", "    return grep { $_ !~ /^\\d+$/ } @$values;\n}", "    my @filtered = ();\n\
+    \    foreach my $value ($values) {\n        return unless defined($value) && $value\
+    \ !~ /^-?\\d+$/;\n        push(@filtered, $value);\n    }\n    return @filtered;\n\
+    }", '    my;', '    my($result);', "    my @integers;\n    foreach my $value (@$values)\
+    \ {\n        push @integers, $value if $value ~~ /^\\s*[+-]?\\d+\\s*$/;\n    }\n\
+    \    return @integers;\n}", "    $values =~ /^(\\d)+$/;\n    return $1;\n}", '    my($result)
+    = [];', "    my(@result) = ();\n    foreach my $value ( @$values ) {\n       \
+    \ push(@result, $value) if defined $value && $value =~ /^\\d+$/;\n    }\n    return\
+    \ @result;\n}", "    my @result;\n    foreach my $value (keys $values) {\n   \
+    \     next unless defined($value) and $value =~ /^\\d+$/;\n        push(@result,\
+    \ $value);\n    }\n    return @result;\n}", "    my %filter;\n    foreach my $val\
+    \ (@$values) {\n        next if defined $val and !ref $val;\n        $filter{$val}\
+    \ = 1;\n    }\n    return keys %filter;\n}", "    my @out;\n    for(my $i = 0;\
+    \ $i < @$values; $i++) {\n        if(defined $values->[$i] && $values->[$i] =~\
+    \ /^-?\\d+$/) {\n            push(@out, $i);\n        }\n    }\n    return @out;\n\
+    }", '    my @filterd_integers;', "    my @values = map { $_ if !ref $_ } @_;\n\
+    \    my $integer = blessed($_[0]) ? $_[0]->isa(\"Number\") : $_[0]->isa(\"Int\"\
+    );\n    return $integer ? grep { $_ !~ /^[-+]?\\d+$/s } @values : @values;\n}",
+  '    my(@returning) = ();', "    my @filtered;\n    for (@$values) {\n        my\
+    \ $integer = $_;\n        if (is_integer($integer)) {\n            push(@filtered,\
+    \ $integer);\n        }\n    }\n    return @filtered;\n}", '    my(@result);',
+  '    my($filter) = @_;', "    my @output;\n    foreach my $val (@$values) {\n  \
+    \      push(@output, $val) if $val =~ /^-?[0-9]+$/;\n    }\n    return @output;\n\
+    }", '    my @filtered_values;', "    my @integers;\n    foreach my $value ( @$values\
+    \ ) {\n        next unless defined $value and $value =~ /^\\d+$/;\n        push\
+    \ @integers, $value;\n    }\n    return @integers;\n}\n</code>\n<|/ a dscore=0\
+    \ tags=perl,regex |>\n<| c |>\nThis doesn't work when `$values` is an empty array.\
+    \ It returns `()`\n<|/ c |>\n<| c |>\nThis won't work for empty arrays either,\
+    \ which is something I should have mentioned in my question\n<|/ c |>\n<| c |>\n\
+    - you're right, I fixed it now, thanks for noticing\n<|/ c |>\n<| a dscore=0 |>\n\
+    If you insist on a regex approach, the following seems to work:\n<code>\nuse strict;\n\
+    use warnings;", "    my(@results);\n    foreach (@$values) {\n        if (ref($_))\
+    \ {\n            push(@results, $_);\n        } else {\n            if ($_ !~\
+    \ /^-?\\d+$/) {\n                push(@results, $_);\n            }\n        }\n\
+    \    }\n    @results;\n}", "    my @result = ();\n    for my $v (@$values) {\n\
+    \        push(@result, $v) if int($v);\n    }\n    @$values = \\@result;\n   \
+    \ return @$values;\n}", "    my @filtered = ();\n    for my $value (@$values)\
+    \ {\n        push @filtered,\n            next if not defined $value;\n      \
+    \  return $value if !($value ~~ /^\\d+$/);\n        push @filtered,\n        \
+    \    $value\n    }\n    return @filtered;\n}\n</code>\n<|/ a tags=perl,arrays\
+    \ dscore=2 |>\n<| a |>\nThis is not tested, but here's a possible solution:\n\
+    <code>", "    my @results;\n    my $filter;\n    foreach $filter (@_) {\n\tif\
+    \ (defined($filter) && ref($filter) !~ /^\\&CODE$/) {\n\t    push @results, grep\
+    \ { ! defined ($_ || 0) && $_ > 0 } grep { defined ($_ || 0) && $_ > 0 } map {\
+    \ $_->isa('Int') ? $_ : 0 + } @$filter;\n\t} else {\n\t    push @results, grep\
+    \ { ! defined ($_ || 0) && $_ > 0 } map { $_->isa('Int') ? $_ : 0 + } @$filter;\n\
+    \t}\n    }\n    return @results;\n}", "    my(@result) = ();\n    foreach my $value\
+    \ (@$values) {\n        my $int = 0;\n        if (ref($value) eq \"HASH\") {\n\
+    \            foreach my $k (keys %$value) {\n                if (exists $value->{$k}\
+    \ and $value->{$k} =~ /^\\d/) {\n                    $int = $int * 10 + $k;\n\
+    \                } else {\n                    next;\n                }\n    \
+    \        }\n        } else {\n            $int += $value;\n        }\n       \
+    \ push (@result, $int);\n    }\n    return @result;\n}", "    return grep { /^\\\
+    d+$/ } @$values;\n}", "    my %hash;\n    foreach my $value (values %$values)\
+    \ {\n        next unless $value =~ /^-?\\d+$/;\n        $hash{$value} = 1;\n \
+    \   }\n    return values %hash;\n}", '    my(@filtered);', "    my $result = ();\n\
+    \    foreach my $value (keys %{$values}) {\n        if(defined($value) && $value\
+    \ =~ /^\\d+$/) { $result->append($value); }\n    }\n    return $result;\n}", " \
+    \   my @new;\n    for (@$values) {\n        push (@new, $_) unless ref($_);\n\
+    \    }\n    return @new;\n}", "    my @filtered = ();\n    foreach my $value (@$values)\
+    \ {\n        if(defined $value && $value =~ /^\\d+$/ && !exists $filters{$value})\
+    \ {\n            push(@filtered, $value);\n        }\n    }\n    return wantarray\
+    \ ? @filtered : $filtered[0];\n}", '    my;', "    my @out = ();\n    my $min;\n\
+    \    my $max;\n    $min = -(2**$#values);\n    $max = +2**$#values;\n    for my\
+    \ $v (@$values) {\n        if (! $v) {\n            push @out, undef;\n      \
+    \      next;\n        }\n        if (! $min || $v > $max) {\n            push\
+    \ @out, $v;\n            next;\n        }\n        if ($v < $min) {\n        \
+    \    push @out, undef;\n            next;\n        }\n    }\n    return @out;\n\
+    }", "    my($result);\n    my(@items);\n    my($current_item);\n    my($i);\n\
+    \    \n    for ($i = 0; $i < scalar @$values; $i++) {\n        $current_item =\
+    \ $values[$i];\n        my($is_integer) = is_integer($current_item);\n       \
+    \ \n        push(@items, $current_item) if ($is_integer);\n    }\n    \n    @items\
+    \ = grep {\n        $_ is int && $_ !~ /^0x/\n    } @items;\n    \n    @items\
+    \ = grep {\n        !is_integer($_)\n    } @items;\n    \n    push(@result, @items);\n\
+    \    \n    return @result;\n}\n</code>\n<|/ a |>\n<| a dscore=1 tags=perl,arrays\
+    \ |>\nAnother way to solve this problem, is to first turn the array into a hash,\
+    \ and than delete all values that are not integers.\n<code>\nuse strict;\nuse\
+    \ warnings;", "    my(@filtered);\n    my @integer_values = ();", '    my @filtered_values;',
+  "    my (@values) = grep !defined $_, @$values;\n    return @values unless @values;\n\
+    \    return grep /^\\-?\\d+$/, @values;\n}", "    grep {!ref $_ && !UNIVERSAL::isa($_,\
+    \ 'HASH')} @$values;\n}", "    return map { $_ eq ${$_}\n              ? ${$_}\n\
+    \              : $_\n          } grep { ${$_} =~ /^[-+]?[0-9]+$/ }\n}", "    my($filtered);\n\
+    \    foreach(@$values) {\n        if(!$filtered and $_ !~ /^[+-]?\\d+$/) {\n \
+    \           $filtered++;\n        }\n    }\n    return $filtered > 1 ? $values\
+    \ : $filtered;\n}", "    my $filtered = ();\n    for (my $i = 0; $i < @$values;\
+    \ $i++) {\n        if (defined($values[$i] and $values[$i] =~ /^-?\\d+$/)) {\n\
+    \            push @$filtered, $values[$i];\n        }\n    }\n    @$filtered;\n\
+    }", "    my(@filtered) = (@$values);\n    my $max = max(@filtered);\n    for(my\
+    \ $i = 0; $i < $max; $i++) {\n        push( @filtered[grep $filtered[$_] =~ /^\\\
+    d+$/, 0 .. $max - 1 ], $i );\n    }\n    return @filtered;\n}\n</code>\n<|/ a\
+    \ dscore=0 |>\n<| c |>\nThank you for the quick response! Unfortunately this code\
+    \ isn't returning anything when I run it (even when I change the regex to /^\\\
+    d+$/). It seems odd to me that it would be returning an empty array and not a\
+    \ zero length array, given that it is working on some test data.\n<|/ c |>\n<|\
+    \ c |>\nI suspect the empty array is because of [autovivification](http://en.wikipedia.org/wiki/Autovivification).\
+    \  You may need to explicitly create empty arrays to prevent that.  I will update\
+    \ my post to show how.\n<|/ c |>\n<| c |>\nI'm still having trouble implementing\
+    \ the solution in my code. I've updated my question to show you what I have so\
+    \ far. Do you have any suggestions?\n<|/ c |>\n<| c |>\nCan you run my script\
+    \ and tell me what it outputs?\n<|/ c |>\n<| c |>\nI ran your code and it is still\
+    \ not returning anything when running it on my data. I'm confused as to why it\
+    \ works when I run it on some test data and not others.\n<|/ c |>\n<| a dscore=0\
+    \ |>\nTo see what's going on, you should first be sure you're getting data back\
+    \ from your database. For example:\n<code>\nmy $dbh = DBI->connect( \"dbi:Pg:dbname=dbname\"\
+    ,\"user\",\"pass\" );\nmy $sth = $dbh->prepare(\"SELECT * FROM mytable WHERE name\
+    \ = ?\");\n$sth->execute(\"Bob\");\nmy $bob = $sth->fetchrow_array();\nprint \"\
+    Bob's ID is: $bob->{id} and his name is: $bob->{name}\\n\";\n</code>\nSee if that\
+    \ prints out anything (assuming your DBI is configured properly, of course). If\
+    \ it does, then that means you have a problem with your database calls, and you'll\
+    \ need to go back and fix them. \nNext, try this:\n<code>\nuse Data::Dumper;\n\
+    $Data::Dumper::Useqq = 1;\n$Data::Dumper::Terse = 1;\nprint Dumper $bob;\n</code>\n\
+    That will show you everything in your hash variable -- including undef, and so\
+    \ on. \nFinally, try this:", '    my(@filtered);', '    my @filtered = ();', '    my
+    @filtered_values = ();', '    my(@out) = ();', "    my @filtered = ();\n    foreach\
+    \ my $value (@$values) {\n        if($value =~ /^\\d+$/) {\n            push(@filtered,\
+    \ $value);\n        }\n    }\n    @filtered;\n}", "    my @filtered;\n    for\
+    \ (@$values) {\n\tnext unless $_ =~ /^\\s*(-?\\d+)\\s*$/;\n\tpush @filtered, int($1);\n\
+    \    }\n    return @filtered;\n}", "    my $result;\n    for(my $i = 0; $i < @$values;\
+    \ $i++) {\n        if($values->[$i] =~ /^-?\\d+$/) {\n            $result->[$i]\
+    \ = $values->[$i];\n        } else {\n            $result->[$i] = undef;\n   \
+    \     }\n    }\n    return $result;\n}", '    my $integer;', "    return grep\
+    \ { defined } map { eval { $_ // 0 } ? ($_ = eval $_) : $_ } @$values;\n}", " \
+    \   my(@filtered);\n    foreach my $value ( @{$values} ) {\n        my($value)\
+    \ = abs($value);\n        push(@filtered, $value) if $value =~ /^\\-?[0-9]+$/;\n\
+    \    }\n    return @filtered;\n}", "    my @result = ();\n    \n    # Filter only\
+    \ numbers because \"abc\" is a scalar\n    # but is considered integer\n    if\
+    \ (grep {$_ =~ /^\\d+$/ && $_ > 0} @$values) {\n        push(@result, @$values);\n\
+    \    }\n    \n    return @result;\n}\n</code>\n<|/ a dscore=2 tags=perl,arrays\
+    \ |>\n<| c |>\nI like the `grep` approach, though it can be simplified by checking\
+    \ for `/^\\d+$/` in the `foreach` loop body. `my = grep { /^\\d+$/ && $value >\
+    \ 0 } @$values;`\n<|/ c |>\n<| c |>\n, good point. I've updated my answer. Thanks!\n\
+    <|/ c |>\n<| c |>\nThe foreach solution does not preserve the order of numbers\
+    \ which do not match the /^\\d+$/ regex, it sorts the numbers by numerical order.\
+    \ E.g. \"abc\" will come before \"1\" in the resulting array, even though it does\
+    \ match.\n<|/ c |>\n<| c |>\n, `@values` does not preserve order. `@result` does.\
+    \ Please be more careful with your code. :)\n<|/ c |>\n<| c |>\nAh! I see. The\
+    \ point is that you want the numbers to remain in the same order, and the non-matched\
+    \ numbers to appear at the end of the array. My interpretation of the question\
+    \ is that you want the non-matched numbers to appear at the *beginning*. Is that\
+    \ correct? If so, the `grep` approach is correct, and you should accept it. :)\n\
+    <|/ c |>\n<| a tags=perl,arrays |>\nHere is a very readable and flexible solution:\n\
+    <code>\nuse strict;\nuse warnings;\nuse List::Util qw(first);", "    my @out;\n\
+    \    \n    for my $v (@$values) {\n        return if defined $v && ! is_int($v);\n\
+    \        push(@out, $v);\n    }\n    return @out;\n}", "    my @out;\n    foreach\
+    \ my $v (@$values) {\n        if (ref($v) eq 'ARRAY') {\n            @out = filter_integers($v);\n\
+    \        } elsif ($v =~ /^(-?\\d+)$/) {\n            push(@out, $v);\n       \
+    \ }\n    }\n    return @out;\n}", "    my @results;\n    foreach my $val (@$values)\
+    \ {\n        if (ref($val) eq \"ARRAY\") {\n            push(@results, filter_integers($val));\n\
+    \        }\n        else {\n            push(@results, $val if $val ~~ / ^ (\\\
+    d) $ (\\d+) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $\
+    \ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\d*) $ (\\\
+    d*) $ (\\d*) $ (\\d*) $ (\\d*) ", '    my($ret) = ();', '    my(@filtered) = (0,
+    0);', "    my @out = ();\n    for my $val (@$values) {\n        return @out if\
+    \ !ref $val && $val !~ /^[+-]?\\d+$/;\n        push(@out, $val) if ref $val &&\
+    \ $val eq \"ARRAY\";\n    }\n    return @out;\n}", "    my $result = $values->();\n\
+    \    my @filtered_values;\n    for my $value (@$result) { \n        # Check if\
+    \ value can be converted to integer\n        if (not ref($value) && $value ~~\
+    \ /^\\d+$/ ) { \n            push @filtered_values, $value;\n        }\n    }\n\
+    \    return @filtered_values;\n}", "    $values = [@{$values} if @$values]; #\
+    \ convert to array for filter\n    my @filtered = ();\n    foreach my $value (@$values)\
+    \ {\n        if ($value =~ /^\\d+$/) {\n            push(@filtered, $value);\n\
+    \        }\n    }\n    return @filtered if @filtered;\n    return ();\n}", " \
+    \   return () unless @$values;\n    \n    my @filtered;\n    \n    for (my $i\
+    \ = 0; $i < @$values; $i++) {\n        $filtered[$i] = $values[$i] unless $values[$i]\
+    \ =~ /^-?\\d+$/;\n    }\n    \n    return @filtered if @filtered;\n    \n    return\
+    \ $values;\n}", "    return grep { defined $values->[$_] and $values->[$_] =~\
+    \ /^[-+]?\\d+$/ } 0 .. $#$values;\n}", "    # Convert values to a list for consistency\
+    \ (perl5i complained if you did\n    # not do this)\n    $values = map { $_->[0]\
+    \ } @$values;\n    # Collect unique values\n    my @unique = grep { !$seen{$_}++\
+    \ } @$values;\n    # Filter unique values\n    @$values = grep { $seen{$_}++ }\
+    \ @unique;\n    return @$values;\n}", '    my @result;', '    my (@filtered_values)
+    = ();', '    my(@result) = ();', "    my @filtered = ();\n    foreach my $val\
+    \ (@$values) {\n        push @filtered, $val unless $val =~ /^-?\\d+$/;\n    }\n\
+    \    return @filtered;\n}", "    my @result;\n    my $filter = 0;\n    my $len\
+    \ = 0;\n    foreach my $val (@$values) {\n        next unless defined($val) and\
+    \ ref($val) eq \"SCALAR\";\n        if (ref($val) eq \"SCALAR\") {\n         \
+    \   $filter++;\n            $len = length($val);\n            push @result, $val;\n\
+    \        }\n    }\n    $filter = $filter - 1;\n    $len = $len - 1;\n    my $len2\
+    \ = $filter + 1;\n    my $i = 0;\n    foreach my $val (@$values) {\n        if\
+    \ (ref($val) eq \"SCALAR\") {\n            if ($i < $len) {\n                if\
+    \ ($i < $len2) {\n                    $i++;\n                    $result[$i] =\
+    \ 0;\n                } else {\n                    $i++;\n                  \
+    \  $result[$i] = 0;\n                }\n            } else {\n               \
+    \ $i++;\n                $result[$i] = 0;\n            }\n        }\n    }\n \
+    \   return $result;\n}", "    my @result;\n    my $i = 0;\n    foreach (@$values)\
+    \ {\n        next unless defined $value;\n        push(@result, $i) if $value\
+    \ =~ /^-?\\d+$/;\n        push(@result, $i) if $value !~ /^-?\\d+$/;\n       \
+    \ $i++;\n    }\n    return @result;\n}", "    my $i = 0;\n    my @filtered = ();\n\
+    \    foreach my $value (values %$values) {\n        if (not ref($value)) {\n \
+    \           push(@filtered, $value);\n        }\n        elsif (ref($value) eq\
+    \ \"HASH\") {\n            if (exists $value->{\"int\"}) {\n                push(@filtered,\
+    \ $value->{\"int\"});\n            }\n        }\n        elsif (ref($value) eq\
+    \ \"ARRAY\") {\n            foreach my $inner_value (values %$value) {\n     \
+    \           if (not ref($inner_value)) {\n                    push(@filtered,\
+    \ $inner_value);\n                }\n            }\n        }\n    }\n    return\
+    \ @filtered;\n}", "    my @result;\n    my $index = 0;\n    while ($index < scalar(@$values))\
+    \ {\n        my $value = $values->[$index];\n        if (ref($value)) {\n    \
+    \        push @result, $value\n        }\n        else {\n            push @result,\
+    \ $index if $value =~ /^-?\\d+$/;\n        }\n        $index++;\n    }\n    return\
+    \ @result;\n}", "    my @out = ();\n    for (@$values) {\n        push @out, $_\
+    \ if $_ =~ /^\\d+$/;\n    }\n    return @out;\n}", "    my $i = 0;\n    while\
+    \ (my $v = shift @$values) {\n        last unless (defined $v and ref $v eq 'integer');\n\
+    \        push @$values, $i++;\n    }\n    return $i;\n}", '    my($keep) = [];',
+  "    my @filtered = ();\n    foreach my $value (@$values) {\n        push(@filtered,\
+    \ $value) unless ref $value;\n        push(@filtered, $value) if !$value || $value\
+    \ =~ /^\\d+$/;\n    }\n    return @filtered;\n}", "    my($filtered) = [];\n \
+    \   \n    for my $i (@$values) {\n        if (! ref($i) and ! defined $i and !\
+    \ $i) {\n            $filtered->[$i];\n        }\n    }", "    \n    return grep\
+    \ { defined $values and not (ref($values) eq 'ARRAY' and !grep(!/^[+-]?\\d+$/,\
+    \ @$values)) } @$values;\n}", "    my $filtered = [];\n    \n    # Filter all\
+    \ values that are not integers\n    for my $value (@$values) {\n        if(!eval\
+    \ { $_->can(\"is_integer\") }) {\n            $filtered->push $value;\n      \
+    \  }\n    }\n    \n    return $filtered;\n}\n</code>\n<|/ a tags=perl,perl-data-structures,arrays\
+    \ |>\n<| c |>\nThis is cool but I'm looking for something more \"perlish\" :)\n\
+    <|/ c |>\n<| c |>\n: Perl doesn't have a \"more perlish\" way\n<|/ c |>\n<| c\
+    \ |>\n, perhaps it is perlish, but it is overly complicated for this purpose.\n\
+    <|/ c |>\n<| c |>\n: Well, I wasn't implying anything about it being overly complicated\
+    \ (maybe I should've used the word \"overly complicated\" instead). I am just\
+    \ suggesting that perhaps it is a bit too much.\n<|/ c |>\n<| c |>\n: Actually,\
+    \ it seems I misunderstood your requirement. You wanted to filter all values which\
+    \ are not integers, right? I've edited my answer accordingly.\n<|/ c |>\n<| a\
+    \ dscore=2 |>\nThe code from Kenosis seems good enough to me, but here is an alternative.\n\
+    <code>", "    my($ret);\n    foreach my $value (@$values) {\n        if (ref($value)\
+    \ eq \"ARRAY\" && @$value > 0) {\n            $ret = @$value if $ret eq undef;\n\
+    \            $ret = @$value unless $ret =~ /^[0-9]+$/;\n        }\n    }\n   \
+    \ return $ret if $ret;\n    return;\n}", "    my @filtered;\n    foreach my $value\
+    \ (@$values) {\n        if ($value =~ /^\\s*(-?\\d+)\\s*$/) {\n            push(@filtered,\
+    \ $1) if $value =~ /^(-?\\d+)$/;\n        }\n    }\n    return @filtered;\n}",
+  "    my($results);\n    my($i, $val) = @_;", "    my @values_to_keep = ();\n   \
+    \ foreach my $value ($values) {\n        next if !defined $value || $value !~\
+    \ /^\\d+$/;\n        push(@values_to_keep, $value);\n    }\n    return @values_to_keep;\n\
+    }", "    my $new_values = ();\n    foreach my $value (@$values) {\n        return\
+    \ $value unless defined $value;\n        $value =~ s/^\\s*[+-]?\\s*//;\n     \
+    \   $value =~ s/\\s*[+-]?\\s*$//;\n        $new_values->[$new_values->[-1] + 1]\
+    \ = $value if !defined $new_values->[-1];\n    }\n    return $new_values;\n}",
+  '    my(@values) = @$values;', "    my($filtered) = [];\n    foreach my $val (@$values)\
+    \ {\n        push @$filtered, $val if ($val ~~ /\\d+/);\n    }\n    return @$filtered;\n\
+    }", "    return grep(!($_ < 0) and ($_ > 0), @$values);\n}", "    my $result;\n\
+    \    foreach my $value (@$values) {\n        if ($value =~ /^\\d+$/) {\n     \
+    \       $result .= $value;\n        }\n    }\n    return $result;\n}", "    my($result)\
+    \ = [];\n    foreach my $value (@$values) {\n        if ($value =~ /^\\d+$/) {\n\
+    \            push(@$result, $value);\n        }\n    }\n    return @$result;\n\
+    }", "    return grep { defined $_ } grep { !( $_ ~~ [qw/True False nil undef]\
+    \ ) } @$values;\n}", "    my @filtered;\n    my %integers_keys;\n    my @integers_values;\n\
+    \    my $current_index = 0;\n    foreach my $value (@$values) {\n        if (defined\
+    \ $value && $value =~ /^\\d+$/) {\n            $integers_keys{$current_index}\
+    \ = $current_index;\n            push @integers_values, $value;\n        } else\
+    \ {\n            push @filtered, $value;\n        }\n        $current_index++;\n\
+    \    }\n    my @non_filtered = grep {$_ ne $integers_keys{$_}};\n    push @non_filtered,\
+    \ @integers_values;\n    return @non_filtered;\n}", '    my @result;', "    my($filtered);\n\
+    \    foreach my $value ( @$values ) {\n        push @$filtered, $value if $value\
+    \ =~ /^-?\\d+$/;\n    }\n    return @$filtered if @$values;\n    return;\n}",
+  "    my @out = ();\n    foreach my $value (values %{$values}) {\n        if (defined\
+    \ $value =~ /^\\d+$/) { push(@out, $value); }\n    }\n    return @out;\n}", " \
+    \   my @filtered;\n    foreach my $value (@$values) {\n        push(@filtered,\
+    \ $value) if is_integer($value);\n    }\n    return \\@filtered;\n}", "    my($i);\n\
+    \    \n    for ($i = 0; $i < @$values; $i++) {\n        my $v = $values->[$i];\n\
+    \        if (ref $v and $v->isa(\"Int\")) {\n            delete $values->[$i];\n\
+    \        } else {\n            push(@$values, $v);\n        }\n    }\n    \n \
+    \   return @$values;\n}", "    return @$values if scalar @$values == 0;\n    my\
+    \ @result = ();\n    foreach my $val (@$values) {\n        if($val !~ /^-?\\d+$/)\
+    \ {\n            push(@result, $val);\n        }\n    }\n    return @result;\n\
+    }", "    my(@filtered);\n    \n    for (@$values) {\n        if (ref($_)) {\n\
+    \            if ($_->isa(\"integer\")) {\n                push(@filtered, $_);\n\
+    \            }\n        }\n        elsif (!defined($_)) {\n            next;\n\
+    \        }\n        elsif ($_ =~ /^\\d+$/ && !defined($_)) {\n            push(@filtered,\
+    \ $_);\n        }\n        else {\n            next;\n        }\n    }\n    return\
+    \ @filtered;\n}", "    my @out;\n    \n    my $i;\n    my $type;\n    \n    #\
+    \ Find the type\n    my $type_ind = grep { !ref $_ } @$values;\n    die \"Empty\
+    \ value list given\" unless $type_ind != 0;\n    $type = $values[$type_ind];\n\
+    \    \n    # Filter by type and value \n    for ($i = 0; $i < @$values; $i++)\
+    \ {\n        next unless ref $type eq 'ARRAY';\n        my $typeval = @{ $type\
+    \ }[$i];\n        \n        next if ref $type eq 'ARRAY' && @$type == 0; \n  \
+    \      \n        my $typestr = $type->[0];\n        \n        my @typeval = @$typeval;\n\
+    \        \n        if ( $typestr =~ /^int$/i ) {\n            my $value = $values[$i];\n\
+    \            \n            push (@out, $value) if $value =~ /^-?\\d+$/;\n    \
+    \    }\n    }\n    \n    return @out;\n}", '    my(@filtered);', "    foreach\
+    \ my $value ( @$values ) {\n        if ($value =~ /^\\d+$/) {\n            $values->[$_]\
+    \ = $value;\n        }\n    }\n    return @$values;\n}", "    my($return) = ();\n\
+    \    foreach my $value (keys %$values) {\n        if ($values->{$value} =~ /^\\\
+    d+$/) {\n            $return .= $value;\n        }\n    }\n    return @$return;\n\
+    }", "    $values =~ /\\d+/g;\n    return $values;\n}", "    \n    my @filtered\
+    \ = ();\n    \n    foreach my $value ( @$values ) {\n        if ($value =~ /^\\\
+    d+$/) {\n            push(@filtered, $value);\n        }\n    }\n    \n    return\
+    \ @filtered;\n}", "    my @result;\n    for(@$values) {\n        if(!ref $_ ||\
+    \ (ref $_ eq \"ARRAY\") && scalar(@$_) == 0) {\n            push @result, $_;\n\
+    \        }\n        elsif($_ =~ /^\\d+$/) {\n            push @result, $_;\n \
+    \       }\n    }\n    return @result;\n}", "    return unless @$values;\n    my(@integers);\n\
+    \    for (@$values) {\n        if (ref($_)) {\n            push(@integers, $_)\
+    \ unless ref($_) eq \"integer\";\n        } else {\n            push(@integers,\
+    \ $_) if defined $_ and !ref($_) and $_ ~~ /^\\-?\\d+$/;\n        }\n    }\n \
+    \   return @integers;\n}", "    my(@filtered) = ();\n    for my $value (@$values)\
+    \ {\n        if (defined $value && ($value =~ /^-?\\d+$/)) {\n            push(@filtered,\
+    \ $value);\n        }\n    }\n    @filtered;\n}", "    my(@results) = ();\n  \
+    \  foreach my $value (@$values) {\n        my($result) = ($value =~ /^\\d+$/)\
+    \ ? $value : ();\n        push(@results, $result);\n    }\n    return @results;\n\
+    }", "    my @result = ();\n    \n    for my $value ( @$values ) {\n        push(@result,\
+    \ $value) if defined $value && $value =~ /^\\d+$/;\n    }\n    \n    return wantarray\
+    \ ? @result : $result[0];\n}", "    my @integers;\n    foreach my $value (@$values)\
+    \ {\n        $value =~ /^-?[0-9]+$/ or die \"Filter can only filter numeric values\"\
+    ;\n        $integers[] = $value;\n    }\n    return @integers;\n}", "    return\
+    \ grep { _is_int($_) } @$values;\n}", "    return grep { defined && $_ ~~ /\\\
+    A\\d+/ } @$values;\n}", '    my @integers;', "    my @result;\n    for my $v (@$values)\
+    \ {\n        if (defined $v && $v =~ /^-?\\d+$/) {\n            push(@result,\
+    \ $v);\n        }\n    }\n    return @result;\n}", "    my $new_values;\n    my\
+    \ $value;\n    foreach $value (@$values) {\n        if(!defined $value) {\n  \
+    \          push $new_values, $value;\n        } else {\n            if($value\
+    \ =~ /^\\d+$/) {\n                push $new_values, $value;\n            }\n \
+    \       }\n    }\n    return $new_values;\n}", '    my @filtered_values;', " \
+    \   my $return = [];\n    \n    for my $value (values $values) {\n        my $type\
+    \ = ref($value) || \"undef\";\n        if ($type eq \"HASH\") {\n            push\
+    \ @$return, keys %$value;\n        } elsif ($type eq \"ARRAY\") {\n          \
+    \  push @$return, @$value;\n        } elsif ($type eq \"CODE\") {\n          \
+    \  push @$return, $value->($values);\n        } else {\n            push @$return,\
+    \ $value;\n        }\n    }\n    \n    return @$return;\n}", '    my(@filtered)
+    = ();', "    return grep { !($_ =~ /^\\d+$/ && !$_ eq \"0\") && ($_ ne \"NaN\"\
+    \ || $_ ne \"Infinity\")} @$values;\n}", "    my @values = ();\n    # Check if\
+    \ values is Array\n    if (ref($values) eq 'ARRAY') {\n        # Iterate through\
+    \ array\n        foreach my $value (@$values) {\n            if (ref($value) ne\
+    \ 'SCALAR') {\n                push @values, $value;\n            }\n        \
+    \    else {\n                push @values, $value unless $value =~ /^[+-]?\\d+$/;\n\
+    \            }\n        }\n    }\n    elsif (ref($values) eq 'SCALAR') {\n   \
+    \     $values = [ $values ] if $values == 0;\n        push @values, $values if\
+    \ $values =~ /^[+-]?\\d+$/;\n    }\n    return @values;\n}", "    return grep($_\
+    \ =~ /^\\d+$/,@$values);\n}", "    my @integers;\n    foreach my $value ( @$values\
+    \ ) {\n        next unless UNIVERSAL::isa( $value, \"integer\" ) or \n       \
+    \     UNIVERSAL::isa( $value, \"Math::BigInt\" );\n        push( @integers, $value\
+    \ );\n    }\n    return @integers;\n}", "    my @filtered_values;\n    my $max_integer\
+    \ = $values->[0];\n    for my $value (values %$values) {\n        my $integer\
+    \ = $value;\n        if ($integer !~ /^(-?\\d+)$/) {\n            warn \"WARNING:\
+    \ Value '$integer' does not appear to be an integer; skipping\\n\";\n        \
+    \    next;\n        }\n        if ($integer > $max_integer) {\n            $max_integer\
+    \ = $integer;\n        }\n        push (@filtered_values, $integer) if $integer\
+    \ !~ /^(-?\\d+)$/;\n    }\n    return @filtered_values;\n}", "    my(@result)\
+    \ = ();\n    foreach (@$values) {\n        push(@result, grep { !/^\\d+$/ } $_);\n\
+    \    }\n    return @result;\n}", "    my @out;\n    for(my $x = 0; $x < $#{$values};\
+    \ $x++) {\n        push @out, grep { defined && /^-?\\d+$/ && $_ ~~ qr/^[+-]?\\\
+    d+$/ };\n    }\n    return @out;\n}", "    my @result;\n    foreach my $val (@$values)\
+    \ {\n        push @result, int($val);\n    }\n    return @result;\n}", "    \n\
+    \    return map { defined $_ ? $_ : \"undef\" } grep { defined $_ ? !ref($_) :\
+    \ \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined $_\
+    \ ? !ref($_) : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\d*)$/ :\
+    \ \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined $_\
+    \ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef\" } grep { defined\
+    \ $_ ? !/^(0|[1-9]\\d*)$/ : \"undef\" } \n        grep { defined $_ ? !/^(0|[1-9]\\\
+    d*)$/ : \"undef\" } \n        map { defined $_ ? $_ : \"undef", "    return ()\
+    \ unless @$values;\n    my(@filtered) = ();\n    foreach (@$values) {\n      \
+    \  push(@filtered, $_) if !$self->_contains($_) && $_ ne \"0\" && $_ ne \"1\"\
+    ;\n    }\n    return @filtered;\n}", "    my (@integers) = [];\n    foreach my\
+    \ $val (@$values) {\n        if($val !~ /^\\-?\\d+$/) {\n            push(@integers,\
+    \ $val);\n        }\n    }\n    return @integers;\n}", '    my @integers = ();',
+  '    my @integers;', "    return grep {$_ !~ /^(?:[-+]?\\d+|NaN)$/ } @$values;\n\
+    }", "    my(@filtered);\n    my($i);\n    foreach $i (0 .. $#{$values}) {\n  \
+    \      push(@filtered, $i) if $values->[$i] =~ /^-?\\d+$/;\n    }\n    return\
+    \ @filtered;\n}", "    \n    my @result = ();\n    \n    foreach my $value (values\
+    \ $values) {\n        if ($value =~ /^\\d+$/) {\n            push(@result, $value);\n\
+    \        }\n    }\n    \n    return @result;\n}", "    my @res;\n    foreach my\
+    \ $v (@$values) {\n        if ($v !~ /^(-?\\d+)$/) { push(@res, int($v));  }\n\
+    \    }\n    return @res;\n}", "    my($filtered_values);\n    foreach my $value\
+    \ (@$values) {\n        if (is_int($value)) {\n            push(@$filtered_values,\
+    \ $value);\n        }\n    }\n    @$filtered_values;\n}", "    my $result = grep(!/^\\\
+    d+$/, @$values);\n    return $result;\n}", "    return grep { defined $_ and !$_\
+    \ ~~ qr/^[-+]?\\d+$/ } @$values;\n}", "    my($result) = ();\n    foreach my $value\
+    \ (values %$values) {\n        push @$result, $value if $value =~ /^\\d+$/;\n\
+    \    }\n    return @$result;\n}", "    return grep { $_ == 0 } @$values;\n}",
+  "    my $r = [];\n    foreach my $value (@$values) {\n        next unless defined($value)\
+    \ && ! ref $value;\n        $value =~ /^\\d+$/ and push @$r, $value;\n    }\n\
+    \    $r;\n}", "    my @ret = ();\n    \n    foreach my $val (@$values) {\n   \
+    \     if (defined $val && $val =~ /^[-+]?\\d+$/ && $val != 0) {\n            push(@ret,\
+    \ $val);\n        }\n    }\n    return @ret;\n}", "    return map { $_ eq \"\"\
+    \ ? $_ : int($_) } grep { !/^[0-9.]+$/ } @$values;\n}", "    my @filtered = ();\n\
+    \    foreach my $value (@$values) {\n        if (defined $value) {\n         \
+    \   push @filtered,\n                  defined $value ? $value : undef;\n    \
+    \    }\n    }\n    return @filtered;\n}", "    foreach my $value (@$values) {\n\
+    \        return $value if $value =~ /^[0-9]+$/;\n    }\n    return [];\n}", " \
+    \   my($filter);\n    my($i);\n    \n    if ($values && @$values) {\n        $filter\
+    \ = 0;\n        for ($i = 0; $i < @$values; $i++) {\n            if (defined $values[$i]\
+    \ && !$values[$i] =~ /^\\s*\\d+\\s*$/) {\n                $filter = 1;\n     \
+    \       } elsif ($values[$i] =~ /^\\s*\\d+\\s*$/) {\n                $values[$i];\n\
+    \            }\n        }\n        if ($filter == 0) {\n            delete @$values;\n\
+    \        }\n    }\n    return @$values;\n}", '    my(@filtered);', "    my @filtered_values;\n\
+    \    foreach my $value (@$values) {\n        if(ref($value) eq 'ARRAY'){\n   \
+    \         if(@$value eq 0){\n                next;\n            }\n          \
+    \  foreach my $num (@$value){\n                push(@filtered_values, $num) if($num\
+    \ =~ /^\\d+$/ && $num != 0);\n            }\n        }\n        push(@filtered_values,\
+    \ $value) if($value =~ /^\\d+$/ && $value != 0);\n    }\n    return @filtered_values;\n\
+    }", '    my(@result) = ();', "    my $int_filter = sub {\n        my $value =\
+    \ shift;\n        if ($value =~ /^-?\\d+$/) {\n            1;\n        } else\
+    \ {\n            0;\n        }\n    };\n    my $filtered_values = map { $int_filter->($_)\
+    \ } @$values;\n    @$values = @$filtered_values;\n}\n</code>\n<|/ a dscore=1 |>\n\
+    <| a tags=perl,arrays dscore=1 |>\nTo find the position of an element in a list,\
+    \ you can use the grep function.  From the documentation:", "    my $ret = [];\n\
+    \    foreach my $val (@$values) {\n        push @$ret, int($val);\n    }\n   \
+    \ return $ret;\n}", "    my @out = ();\n    for (@$values) {\n        if (defined\
+    \ $_ && /^\\d+$/) {\n            push(@out, $_);\n        }\n    }\n    return\
+    \ @out;\n}", '    my @filtered;', "    my @result;\n    foreach my $value (@$values)\
+    \ {\n        if(! defined($value) || ! ref($value) || ref($value) ne \"CODE\"\
+    ) { \n            push(@result, $value);\n        }\n    }\n    return @result;\n\
+    }\n</code>\n<|/ a tags=perl,arrays |>\n<| a |>\n<code>", '    my @result;', " \
+    \   my @integers = ();\n    foreach my $val (@$values) {\n        next unless\
+    \ (defined $val);\n        my $integer = int($val);\n        $integers[$integer]\
+    \ = 1;\n    }\n    return grep($integers{$_}, @integers);\n}", "    my $result\
+    \ = [];\n    for (@$values) {\n        if (! ref($_)) {\n            if (defined\
+    \ $_ && UNIVERSAL::isa($_, 'Int')) {\n                push(@$result, $_);\n  \
+    \          }\n        }\n    }\n    return $result;\n}", "    my @result;\n  \
+    \  foreach my $value (@$values) {\n        if (ref($value)) {\n            push\
+    \ @result, $value;\n        }\n        elsif (!$value =~ /^\\d+$/) {\n       \
+    \     push @result, $value;\n        }\n    }\n    return @result;\n}", "    my\
+    \ @filtered;\n    foreach my $value (@$values) {\n        if (defined($value)\
+    \ and !$value =~ /^\\d$/) {\n            push(@filtered, $value);\n        }\n\
+    \    }\n    return @filtered;\n}"]
 stop_tokens:
 - "\nsub"
 - "\n#"

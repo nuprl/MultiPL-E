@@ -177,7 +177,1078 @@ completions: ["  (define positives (filter positive? lst))\n  (define negatives 
     \ (car lst)))\n     (cond\n       [(positive? (cadr lst)) (list (car lst) (cadr\
     \ lst))]\n       [else (list (car lst) #f)])]\n    [(not (negative? (car lst)))\n\
     \     (cond\n       [(negative? (cadr lst)) (list (cadr lst) (car lst))]\n   \
-    \    [else (list #f (car lst))])]))\n"]
+    \    [else (list #f (car lst))])]))\n", "  (for/fold ([largest #f] [smallest #f])\
+    \ ([e lst])\n    (if (and (integer? e) (negative? e))\n        (set! largest (max\
+    \ e largest))\n        (if (and (integer? e) (positive? e))\n            (set!\
+    \ smallest (min e smallest))))\n    (list largest smallest)))\n", "  (list\n \
+    \  (let loop ((lst lst) (neg_max #f))\n     (cond\n       [(null? lst) neg_max]\n\
+    \       [(and (< (car lst) 0) (or (not (integer? neg_max)) (< (car lst) neg_max)))\n\
+    \        (loop (cdr lst) (car lst))]\n       [else (loop (cdr lst) neg_max)]))\n\
+    \   (let loop ((lst lst) (pos_min #f))\n     (cond\n       [(null? lst) pos_min]\n\
+    \       [(and (> (car lst) 0) (or (not (integer? pos_min)) (> (car lst) pos_min)))\n\
+    \        (loop (cdr lst) (car lst))]\n       [else (loop (cdr lst) pos_min)]))))",
+  "  (define only-integers (filter integer? lst))\n  (cond [(empty? only-integers)\
+    \ (list #f #f)]\n        [(empty? (filter positive? only-integers)) (list (apply\
+    \ max only-integers) #f)]\n        [(empty? (filter negative? only-integers))\
+    \ (list #f (apply min only-integers))]\n        [else (list (apply max (filter\
+    \ negative? only-integers))\n                    (apply min (filter positive?\
+    \ only-integers)))]))", "  (list (largest_negative_integer lst)\n        (smallest_positive_integer\
+    \ lst)))\n", "  (cond\n    ((null? lst) (list #f #f))\n    ((not (integer? (car\
+    \ lst))) (largest_smallest_integers (cdr lst)))\n    ((< (car lst) 0) (list (car\
+    \ lst) (cadr lst)))\n    ((> (car lst) 0) (list (cadr lst) (car lst)))\n    (else\
+    \ (list #f #f))))", "  (cond ((null? lst) (list #f #f))\n        ((list? lst)\n\
+    \         (largest_smallest_integers\n          (first lst)\n          (rest lst)\n\
+    \          #f #f))\n        (else (error \"largest_smallest_integers: not a list:\
+    \ \" lst))))\n", "  (let ([negs (filter (\u03BB (n) (negative? n)) lst)]\n   \
+    \     [pos  (filter (\u03BB (n) (positive? n)) lst)])\n    (if (null? negs)\n\
+    \        (if (null? pos)\n            (list #f #f)\n            (list #f (min\
+    \ pos)))\n        (if (null? pos)\n            (list (max negs) #f)\n        \
+    \    (list (max negs) (min pos))))))\n", "  (list (list-max-negative lst) (list-min-positive\
+    \ lst)))\n", "  (define positive?\n    (lambda (x)\n      (if (> x 0) x 0)))\n\
+    \  (define negative?\n    (lambda (x)\n      (if (< x 0) x 0)))\n  (define (result\
+    \ x y)\n    (if (or (eq? x 0) (eq? y 0))\n        (list #f #f)\n        (list\
+    \ x y)))\n  (result (apply max (map negative? lst))\n          (apply min (map\
+    \ positive? lst))))\n", "  (cond\n    [(empty? lst) (list #f #f)]\n    [(and (zero?\
+    \ (car lst)) (zero? (cadr lst))) (list #f #f)]\n    [(negative? (car lst)) (largest_smallest_integers\
+    \ (cdr lst))]\n    [(negative? (cadr lst)) (largest_smallest_integers (cdr lst))]\n\
+    \    [(negative? (car lst)) (list (car lst) (cadr lst))]\n    [(negative? (cadr\
+    \ lst)) (list (cadr lst) (car lst))]\n    [else (largest_smallest_integers (cdr\
+    \ lst))]))\n", "  (define (find_larg_neg lst current)\n    (cond ((null? lst)\
+    \ current)\n          ((negative? (car lst)) (find_larg_neg (cdr lst) (car lst)))\n\
+    \          (else (find_larg_neg (cdr lst) current))))\n  (define (find_smal_pos\
+    \ lst current)\n    (cond ((null? lst) current)\n          ((positive? (car lst))\
+    \ (find_smal_pos (cdr lst) (car lst)))\n          (else (find_smal_pos (cdr lst)\
+    \ current))))\n  (define (largest_smallest_integers lst)\n    (list (find_larg_neg\
+    \ lst #f) (find_smal_pos lst #f)))\n  (largest_smallest_integers lst))\n</code>\n\
+    At the moment I'm stuck at the point where I have to define the largest negative,\
+    \ this is the error message I get when I try to run the code:\n<code>Racket Evaluation:\
+    \ largest_smallest_integers\n\n #&lt;function:largest_smallest_integers&gt; is\
+    \ not defined\n</code>\nI guess I'm stuck in an infinite loop and I don't know\
+    \ why. I've tried to separate the functions that are supposed to give me back\
+    \ the largest negative and the smallest positive and it seems to work, but when\
+    \ I put them together, it doesn't.\nCan anyone give me some advice?\n\n\nA:\n\n\
+    You are defining a function within another function definition. That's not how\
+    \ you do it in Racket, read the tutorial to learn more. I think this is what you're\
+    \ looking for:\n<code>(define (largest_smallest_integers lst)\n  (define (find-larg-neg\
+    \ lst current)\n    (cond ((null? lst) current)\n          ((negative? (car lst))\
+    \ (find-larg-neg (cdr lst) (car lst)))\n          (else (find-larg-neg (cdr lst)\
+    \ current))))\n  (define (find-smal-pos lst current)\n    (cond ((null? lst) current)\n\
+    \          ((positive? (car lst)) (find-sm", "    (cond\n        [(empty? lst)\n\
+    \            (list #f #f)]\n        [(and (negative? (first lst)) (positive? (first\
+    \ lst)))\n            (list #f #f)]\n        [(negative? (first lst))\n      \
+    \      (list\n                (first lst)\n                (call-with-current-continuation\
+    \ (lambda (k)\n                    (for/fold ((best #f))\n                   \
+    \     ((i (in-list (rest lst))))\n                        (if (positive? i)\n\
+    \                            (if (or (not best) (&lt; i best))\n             \
+    \                   (begin\n                                    (k i)\n      \
+    \                              i)\n                                best)\n   \
+    \                         best)))))\n            )]\n        [(positive? (first\
+    \ lst))\n            (list\n                (call-with-current-continuation (lambda\
+    \ (k)\n                    (for/fold ((best #f))\n                        ((i\
+    \ (in-list (rest lst))))\n                        (if (negative? i)\n        \
+    \                    (if (or (not best) (&gt; i best))\n                     \
+    \           (begin\n                                    (k i)\n              \
+    \                      i)\n                                best)\n           \
+    \                 best)))))\n                (first lst))]\n        [else\n  \
+    \          (largest_smallest_integers (rest lst))]))\n", "  (let* ([largest-negative-int\
+    \ (filter (lambda (x) (and (negative? x) (integer? x))) lst)]\n         [largest-negative-int\
+    \ (if (null? largest-negative-int) (list #f) largest-negative-int)]\n        \
+    \ [largest-negative-int (apply max largest-negative-int)]\n         [smallest-positive-int\
+    \ (filter (lambda (x) (and (positive? x) (integer? x))) lst)]\n         [smallest-positive-int\
+    \ (if (null? smallest-positive-int) (list #f) smallest-positive-int)]\n      \
+    \   [smallest-positive-int (apply min smallest-positive-int)])\n    (list largest-negative-int\
+    \ smallest-positive-int)))\n", "  (define (largest_negative acc lst)\n    (cond\n\
+    \      [(empty? lst) acc]\n      [(and (negative? (first lst))\n            (or\
+    \ (number? acc)\n                (> (first lst) acc)))\n       (largest_negative\
+    \ (first lst) (rest lst))]\n      [else (largest_negative acc (rest lst))]))\n\
+    \  (define (smallest_positive acc lst)\n    (cond\n      [(empty? lst) acc]\n\
+    \      [(and (positive? (first lst))\n            (or (number? acc)\n        \
+    \        (< (first lst) acc)))\n       (smallest_positive (first lst) (rest lst))]\n\
+    \      [else (smallest_positive acc (rest lst))]))\n  (list (largest_negative\
+    \ #f lst)\n        (smallest_positive #f lst)))", "  (let ([nums (filter (\u03BB\
+    \ (x) (and (integer? x) (not (= x 0)))) lst)])\n    (if (empty? nums)\n      \
+    \  (list #f #f)\n        (let ([negs (filter negative? nums)]\n              [pos\
+    \ (filter positive? nums)])\n          (list (if (empty? negs) #f (apply max negs))\n\
+    \                (if (empty? pos) #f (apply min pos)))))))\n", "  (list (apply\
+    \ max lst) (apply min lst)))\n", "  (define (check n)\n    (cond ((not (integer?\
+    \ n)) (list #f #f))\n          ((zero? n) (list #f #f))\n          ((< n 0) (list\
+    \ n #f))\n          ((> n 0) (list #f n))))\n  (match lst\n    ('() (list #f #f))\n\
+    \    ((cons first rest)\n     (let ((result (check first)))\n       (define (collect\
+    \ lst)\n         (match lst\n           ('() result)\n           ((cons first\
+    \ rest)\n            (let ((result (check first)))\n              (cond ((not\
+    \ (car result)) (collect rest))\n                    ((car result) (collect rest))\n\
+    \                    ((cadr result) (collect rest))\n                    (else\
+    \ (list (max (car result) (car result))\n                                (min\
+    \ (cadr result) (cadr result))))))))\n       (collect rest)))))\n", "  (let ((negs\
+    \ (filter negative? lst))\n        (pos (filter positive? lst)))\n    (list (if\
+    \ negs (apply max negs) #f)\n          (if pos (apply min pos) #f))))\n", "  (cons\n\
+    \   (find (lambda (x) (and (integer? x) (&lt; x 0))) lst #f)\n   (find (lambda\
+    \ (x) (and (integer? x) (&gt; x 0))) lst #f)))\n</code>\nHow do I use the <code>find</code>\
+    \ function to return only the first occurence of the predicate and not all of\
+    \ them?\nWhen I run this code with \n<code>(largest_smallest_integers (list 2\
+    \ 4 1 3 5 7))\n</code>\nI get\n<code>(list #f 1 2 3 4 5 6 7)\n</code>\nwhich is\
+    \ wrong.\n\n\nA:\n\n<code>find</code> will not stop after finding the first match\
+    \ because it doesn't know if other matching items will be found that are more\
+    \ interesting.\nYou could write a <code>find-first</code> function which stops\
+    \ searching after finding the first match.\n<code>(define (find-first pred lst)\n\
+    \  (cond ((null? lst) #f)\n        ((pred (car lst)) (car lst))\n        (else\
+    \ (find-first pred (cdr lst)))))\n</code>\nThen use it like:\n<code>(define (largest_smallest_integers\
+    \ lst)\n  (cons\n   (find-first (lambda (x) (and (integer? x) (&lt; x 0))) lst)\n\
+    \   (find-first (lambda (x) (and (integer? x) (&gt; x 0))) lst)))\n</code>\n",
+  "  (cond\n    [(empty? lst) (list #f #f)]\n    [(empty? (filter negative? lst))\
+    \ (list #f (apply min (filter positive? lst)))]\n    [(empty? (filter positive?\
+    \ lst)) (list (apply max (filter negative? lst)) #f)]\n    [else (list (apply\
+    \ max (filter negative? lst)) (apply min (filter positive? lst)))]))\n", "   \
+    \ (define (largest l)\n        (cond ((null? l) #f)\n              ((> (car l)\
+    \ (car (cdr l)))\n               (cond ((null? (cdr l)) (car l))\n           \
+    \          (else (largest (cdr l)))))\n              (else (largest (cdr l)))))\n\
+    \    (define (smallest l)\n        (cond ((null? l) #f)\n              ((< (car\
+    \ l) (car (cdr l)))\n               (cond ((null? (cdr l)) (car l))\n        \
+    \             (else (smallest (cdr l)))))\n              (else (smallest (cdr\
+    \ l)))))\n    (list (largest lst) (smallest lst)))\n", "  (define (largest-negative\
+    \ lst)\n    (cond\n      [(empty? lst) (void)]\n      [(and (number? (first lst))\n\
+    \            (negative? (first lst)))\n       (max (first lst) (largest-negative\
+    \ (rest lst)))]\n      [else (largest-negative (rest lst))]))\n  (define (smallest-positive\
+    \ lst)\n    (cond\n      [(empty? lst) (void)]\n      [(and (number? (first lst))\n\
+    \            (positive? (first lst)))\n       (min (first lst) (smallest-positive\
+    \ (rest lst)))]\n      [else (smallest-positive (rest lst))]))\n  (list (largest-negative\
+    \ lst) (smallest-positive lst)))\n", "  (define (largest-negative ls)\n    (if\
+    \ (null? ls) #f\n        (let ((n (car ls)))\n          (if (< n 0) (max n (largest-negative\
+    \ (cdr ls)))\n              (largest-negative (cdr ls))))))\n  (define (smallest-positive\
+    \ ls)\n    (if (null? ls) #f\n        (let ((n (car ls)))\n          (if (> n\
+    \ 0) (min n (smallest-positive (cdr ls)))\n              (smallest-positive (cdr\
+    \ ls))))))\n  (list (largest-negative lst) (smallest-positive lst)))\n", "  (let\
+    \ ((maxs (max_in_list lst))\n        (mins (min_in_list lst)))\n    (if (and maxs\
+    \ mins)\n        (list maxs mins)\n        (list #f #f))))\n", "  (define (largest_negative\
+    \ lst)\n    (cond ((empty? lst) #f)\n          ((and (number? (first lst)) (<\
+    \ (first lst) 0))\n           (if (> (first lst) (largest_negative (rest lst)))\n\
+    \               (first lst)\n               (largest_negative (rest lst))))\n\
+    \          (else (largest_negative (rest lst)))))\n  (define (smallest_positive\
+    \ lst)\n    (cond ((empty? lst) #f)\n          ((and (number? (first lst)) (>\
+    \ (first lst) 0))\n           (if (< (first lst) (smallest_positive (rest lst)))\n\
+    \               (first lst)\n               (smallest_positive (rest lst))))\n\
+    \          (else (smallest_positive (rest lst)))))\n  (list (largest_negative\
+    \ lst) (smallest_positive lst)))\n", "  (cond\n    [(null? lst) (list #f #f)]\n\
+    \    [(list? lst) (list\n                   (if (negative-int? (first lst))\n\
+    \                       (largest-negative-int lst)\n                       #f)\n\
+    \                   (if (positive-int? (first lst))\n                       (smallest-positive-int\
+    \ lst)\n                       #f))]\n    [(not (list? lst)) (error \"Input must\
+    \ be a list\")]))\n", "  (filter (lambda (num) (integer? num)) lst))\n</code>\n\
+    I'm getting an error that says \"application: not a procedure;\n expected a procedure\
+    \ that can be applied to arguments\"\nWhat's going on? Why isn't this working?\n\
+    Thanks.\n\n\nA:\n\nYou're on the right track, but you're missing the second function\
+    \ that <code>filter</code> is expecting. You've only provided one function. Compare\
+    \ your code with the <code>filter</code> documentation.\nThis is probably closer\
+    \ to what you want:\n<code>(define (largest_smallest_integers lst)\n  (filter\
+    \ integer? lst))\n</code>\nIf <code>filter</code> doesn't work, you can always\
+    \ create your own:\n<code>(define (filter pred lst)\n  (cond ((null? lst) '())\n\
+    \        ((pred (car lst)) (cons (car lst) (filter pred (cdr lst))))\n       \
+    \ (else (filter pred (cdr lst)))))\n</code>\n", "  (define (helper lst acc)\n\
+    \    (cond\n      [(empty? lst) acc]\n      [(negative? (first lst)) (helper (rest\
+    \ lst) (cons (first lst) acc))]\n      [(positive? (first lst)) (helper (rest\
+    \ lst) (cons (first lst) acc))]\n      [else (helper (rest lst) acc)]))\n  (let\
+    \ ([lst-numbers (helper lst '())]\n        [positive-numbers (filter positive?\
+    \ lst-numbers)]\n        [negative-numbers (filter negative? lst-numbers)])\n\
+    \    (cond\n      [(empty? positive-numbers) (list (max negative-numbers) #f)]\n\
+    \      [(empty? negative-numbers) (list #f (min positive-numbers))]\n      [else\
+    \ (list (max negative-numbers) (min positive-numbers))])))", "  (define (positive?\
+    \ x)\n    (> x 0))\n  (define (negative? x)\n    (< x 0))\n  (define (largest_negative\
+    \ lst)\n    (cond\n      [(empty? lst) #f]\n      [(negative? (first lst)) (max\
+    \ (first lst) (largest_negative (rest lst)))]\n      [else (largest_negative (rest\
+    \ lst))]))\n  (define (smallest_positive lst)\n    (cond\n      [(empty? lst)\
+    \ #f]\n      [(positive? (first lst)) (min (first lst) (smallest_positive (rest\
+    \ lst)))]\n      [else (smallest_positive (rest lst))]))\n  (list (largest_negative\
+    \ lst) (smallest_positive lst)))", "  (let ((largest_negative (apply max (filter\
+    \ (lambda (n) (< n 0)) lst)))\n        (smallest_positive (apply min (filter (lambda\
+    \ (n) (> n 0)) lst))))\n    (if (and (not (number? largest_negative))\n      \
+    \       (not (number? smallest_positive)))\n        (list #f #f)\n        (list\
+    \ largest_negative smallest_positive))))\n", "  (cond\n    [(empty? lst) (list\
+    \ #f #f)]\n    [(and (positive? (first lst)) (negative? (first lst))) (list #f\
+    \ #f)]\n    [(and (positive? (first lst)) (not (negative? (first lst)))) (list\
+    \ (list (list (list (list #f #f)))))\n    [ else (list #f #f)]))\n", "  (let ((negative-largest\
+    \ 0)\n        (positive-smallest 0))\n    (for ([elt lst])\n      (cond\n    \
+    \    [(negative? elt) (and (or (< negative-largest elt)\n                    \
+    \              (zero? negative-largest))\n                              (set!\
+    \ negative-largest elt))]\n        [(positive? elt) (and (or (> positive-smallest\
+    \ elt)\n                                  (zero? positive-smallest))\n       \
+    \                       (set! positive-smallest elt))]))\n    (list negative-largest\
+    \ positive-smallest)))\n", '  (list #f #f))', "  (define (helper lst largest smallest)\n\
+    \    (cond\n      [(null? lst) (list largest smallest)]\n      [(and (positive?\
+    \ (car lst)) (or (negative? largest) (&lt; (car lst) largest))) (helper (cdr lst)\
+    \ (car lst) smallest)]\n      [(and (negative? (car lst)) (or (positive? smallest)\
+    \ (&gt; (car lst) smallest))) (helper (cdr lst) largest (car lst))]\n      [else\
+    \ (helper (cdr lst) largest smallest)]))\n  (helper lst #f #f))\n", "  (list (largest_negative_integer\
+    \ lst)\n        (smallest_positive_integer lst)))\n", "  (cond\n    [(empty? lst)\
+    \ (list #f #f)]\n    [(empty? (rest lst)) (list #f #f)]\n    [else\n     (define\
+    \ ls (filter positive? lst))\n     (define ln (filter negative? lst))\n     (cond\n\
+    \       [(and (empty? ls) (empty? ln)) (list #f #f)]\n       [(and (empty? ls)\
+    \ (not (empty? ln))) (list (list-ref ln 0) #f)]\n       [(and (not (empty? ls))\
+    \ (empty? ln)) (list #f (list-ref ls 0))]\n       [else (list (list-ref ln 0)\
+    \ (list-ref ls 0))])]))\n", "  (define (loop-lst max_neg min_pos acc)\n    (cond\
+    \ ((null? lst) acc)\n          ((and (integer? (car lst)) (> (car lst) 0))\n \
+    \          (loop-lst max_neg (min (car lst) min_pos) acc))\n          ((and (integer?\
+    \ (car lst)) (< (car lst) 0))\n           (loop-lst (max (car lst) max_neg) min_pos\
+    \ acc))\n          (else (loop-lst max_neg min_pos acc))))\n  (loop-lst 0 #f (list\
+    \ #f #f)))\n", "  (let ((a (or (apply max (filter negative? lst)) #f))\n     \
+    \   (b (or (apply min (filter positive? lst)) #f)))\n    (list a b)))\n```\n\n\
+    ```racket\n#lang racket\n", "  (let ([pos-nums (filter (lambda (x) (&gt; x 0))\
+    \ lst)]\n        [neg-nums (filter (lambda (x) (&lt; x 0)) lst)])\n    (cond [(and\
+    \ (empty? pos-nums) (empty? neg-nums))\n           (list #f #f)]\n          [(empty?\
+    \ pos-nums)\n           (list (apply max neg-nums) #f)]\n          [(empty? neg-nums)\n\
+    \           (list #f (apply min pos-nums))]\n          [else\n           (list\
+    \ (apply max neg-nums) (apply min pos-nums))])))\n</code>\nIs there a better way\
+    \ to do this? Is this idiomatic?\n\n\nA:\n\nThis looks pretty good, but it's not\
+    \ idiomatic and there's definitely a cleaner way to do it. The idiomatic way is\
+    \ to use <code>cond</code> as a selector, and you'll achieve that by using a different\
+    \ predicate, I think. Currently you're using <code>cond</code> just to select\
+    \ the argument to the output, which is not the way you normally use it.\nThe other\
+    \ thing I would say is that I don't like those <code>empty?</code> tests. Since\
+    \ you're using <code>filter</code>, it should be trivial to determine if there's\
+    \ anything left at all, since it removes things it doesn't want, rather than keeping\
+    \ everything you're asking for.\nI can't say what the cleanest way is off the\
+    \ top of my head, but I think it's going to involve handling your cases in a slightly\
+    \ different way. Sorry I can't be of more help!\n", "  (cond\n    [(empty? lst)\
+    \ (list #f #f)]\n    [(empty? (filter real? lst)) (list #f #f)]\n    [else (list\
+    \ (apply max (filter negative? lst))\n                (apply min (filter positive?\
+    \ lst)))]))", "  (cond ((null? lst) (list #f #f))\n        ((null? (filter positive?\
+    \ lst)) (list (apply max (filter negative? lst)) #f))\n        ((null? (filter\
+    \ negative? lst)) (list #f (apply min (filter positive? lst))))\n        (else\
+    \ (list (apply max (filter negative? lst)) (apply min (filter positive? lst))))))\n",
+  "  (define (negative_largest lst)\n    (cond ((null? lst) #f)\n          ((and (list?\
+    \ lst)\n                (number? (car lst))\n                (negative? (car lst)))\n\
+    \           (if (number? (negative_largest (cdr lst)))\n               (max (car\
+    \ lst) (negative_largest (cdr lst)))\n               (car lst)))\n          (else\
+    \ (negative_largest (cdr lst)))))\n  (define (positive_smallest lst)\n    (cond\
+    \ ((null? lst) #f)\n          ((and (list? lst)\n                (number? (car\
+    \ lst))\n                (positive? (car lst)))\n           (if (number? (positive_smallest\
+    \ (cdr lst)))\n               (min (car lst) (positive_smallest (cdr lst)))\n\
+    \               (car lst)))\n          (else (positive_smallest (cdr lst)))))\n\
+    \  (list (negative_largest lst) (positive_smallest lst)))\n", "  (let ([largest-negative\
+    \ (largest-negative-integer lst)]\n        [smallest-positive (smallest-positive-integer\
+    \ lst)])\n    (if (and largest-negative smallest-positive)\n        (list largest-negative\
+    \ smallest-positive)\n        (list #f #f))))\n", "  (if (empty? lst)\n      (list\
+    \ #f #f)\n      (let* ([a (first lst)]\n             [b (first lst)]\n       \
+    \      [temp a])\n        (for ([x (in-list (rest lst))])\n          (if (and\
+    \ (positive? x) (&lt; b x))\n              (set! b x))\n          (if (and (negative?\
+    \ x) (&gt; a x))\n              (set! a x))\n          )\n        (list a b)\n\
+    \        )\n      )\n  )\n", "  (cond\n    [(empty? lst) (list #f #f)]\n    [(number?\
+    \ (first lst))\n     (let* ([integers (filter number? lst)]\n            [positives\
+    \ (filter positive? integers)]\n            [negatives (filter negative? integers)])\n\
+    \       (cond\n         [(empty? positives) (list (apply max negatives) #f)]\n\
+    \         [(empty? negatives) (list #f (apply min positives))]\n         [else\
+    \ (list (apply max negatives) (apply min positives))]))]\n    [else (largest_smallest_integers\
+    \ (rest lst))]))\n", "  (cond\n    [(null? lst) (list #f #f)]\n    [(zero? (car\
+    \ lst)) (largest_smallest_integers (cdr lst))]\n    [(and (positive? (car lst))\
+    \ (positive? (cadr lst)))\n     (cons (car lst) (largest_smallest_integers (cdr\
+    \ lst)))]\n    [(and (positive? (car lst)) (negative? (cadr lst)))\n     (cons\
+    \ (car lst) (largest_smallest_integers (cdr lst)))]\n    [(and (negative? (car\
+    \ lst)) (positive? (cadr lst)))\n     (cons (car lst) (largest_smallest_integers\
+    \ (cdr lst)))]\n    [(and (negative? (car lst)) (negative? (cadr lst)))\n    \
+    \ (cons (car lst) (largest_smallest_integers (cdr lst)))]\n    [else (list #f\
+    \ #f)]))\n", "  (cond ((null? lst) (list #f #f))\n        ((>= 0 (car lst)) (largest_smallest_integers\
+    \ (cdr lst)))\n        ((not (number? (car lst))) (largest_smallest_integers (cdr\
+    \ lst)))\n        (else (list (define negative_list (list (car lst)))\n      \
+    \              (define positive_list (list (car lst)))))))", "  (cond [(andmap\
+    \ integer? lst)\n         (list (apply max (filter negative? lst))\n         \
+    \      (apply min (filter positive? lst)))]\n        [else (list #f #f)]))\n",
+  "  (let ((negatives (filter (\u03BB (x) (and (integer? x) (< x 0))) lst))\n    \
+    \    (positives (filter (\u03BB (x) (and (integer? x) (> x 0))) lst)))\n    (if\
+    \ (and (empty? negatives) (empty? positives))\n        (list #f #f)\n        (list\
+    \ (if (empty? negatives) #f (apply max negatives))\n              (if (empty?\
+    \ positives) #f (apply min positives))))))\n```\n\n```scheme\n#lang racket\n",
+  "  (cond ((null? lst) '(#f #f))\n        ((null? (cdr lst)) '(#f #f))\n        (else\
+    \ (let* ([all-positive? (andmap positive? lst)]\n                     [all-negative?\
+    \ (andmap negative? lst)])\n                (cond (all-positive?\n           \
+    \            (list #f (apply min lst)))\n                      (all-negative?\n\
+    \                       (list (apply max lst) #f))\n                      (else\
+    \ (list (apply max (filter negative? lst))\n                                 \
+    \ (apply min (filter positive? lst)))))))))\n", "  (define (largest lst largest)\n\
+    \    (cond\n      [(null? lst) largest]\n      [(and (number? (car lst)) (< (car\
+    \ lst) 0))\n       (largest (cdr lst) (car lst))]\n      [else (largest (cdr lst)\
+    \ largest)]))\n  (define (smallest lst smallest)\n    (cond\n      [(null? lst)\
+    \ smallest]\n      [(and (number? (car lst)) (> (car lst) 0))\n       (smallest\
+    \ (cdr lst) (car lst))]\n      [else (smallest (cdr lst) smallest)]))\n  (list\
+    \ (largest lst #f) (smallest lst #f)))\n", "  (cond [(null? lst) (list #f #f)]\n\
+    \        [(empty? lst) (list #f #f)]\n        [else (list (apply max (filter negative?\
+    \ lst))\n                    (apply min (filter positive? lst)))]))\n", "  (define\
+    \ (reduction pred lst1 lst2)\n    (cond ((null? lst1) lst2)\n          ((pred\
+    \ (car lst1)) (reduction pred (cdr lst1) (cons (car lst1) lst2)))\n          (else\
+    \ (reduction pred (cdr lst1) lst2))))\n  (define (positives lst)\n    (reduction\
+    \ positive? lst null))\n  (define (negatives lst)\n    (reduction negative? lst\
+    \ null))\n  (list (cond ((null? (negatives lst)) #f)\n              (else (apply\
+    \ max (negatives lst))))\n        (cond ((null? (positives lst)) #f)\n       \
+    \       (else (apply min (positives lst))))))", "  (let ((max #f)\n        (min\
+    \ #f))\n    (for ([i lst])\n      (cond\n        [(and (> i 0) (not min)) (set!\
+    \ min i)]\n        [(and (> i 0) (< i min)) (set! min i)]\n        [(and (< i\
+    \ 0) (not max)) (set! max i)]\n        [(and (< i 0) (> i max)) (set! max i)]))\n\
+    \    (list max min)))\n", "  (if (empty? lst)\n      (list #f #f)\n      (list\
+    \ (foldr max #f (filter negative? lst))\n            (foldr min #f (filter positive?\
+    \ lst)))))\n", "  (define (helper lst larg sm)\n    (cond\n      [(empty? lst)\
+    \ (list larg sm)]\n      [(< (first lst) 0) (helper (rest lst) (first lst) sm)]\n\
+    \      [(> (first lst) 0) (helper (rest lst) larg (first lst))]\n      [else (helper\
+    \ (rest lst) larg sm)]))\n  (helper lst #f #f))\n```\n\n```racket\n#lang racket\n",
+  "  (let ((pos #f) (neg #f))\n    (for ([n lst])\n      (cond ((< n 0) (if (>= n\
+    \ neg) (set! neg n)))\n            ((> n 0) (if (<= n pos) (set! pos n)))))\n\
+    \    (list neg pos)))\n", "  (cond [(null? lst) (list #f #f)]\n        [(< (car\
+    \ lst) 0) (list (car lst) (smallest_positive_integer (cdr lst)))]\n        [(>\
+    \ (car lst) 0) (list (largest_negative_integer (cdr lst)) (car lst))]\n      \
+    \  [else (largest_smallest_integers (cdr lst))]))\n", "  (cond ((null? lst) (list\
+    \ #f #f))\n        ((not (number? (car lst))) (largest_smallest_integers (cdr\
+    \ lst)))\n        ((< (car lst) 0) (list (car lst) (car lst)))\n        ((> (car\
+    \ lst) 0) (list #f (car lst)))\n        ((= (car lst) 0) (list #f #f))))", " \
+    \ (cond\n    [(null? lst) (list #f #f)]\n    [(and (negative? (car lst)) (null?\
+    \ (cdr lst))) (list (car lst) #f)]\n    [(and (positive? (car lst)) (null? (cdr\
+    \ lst))) (list #f (car lst))]\n    [(and (positive? (car lst)) (negative? (cadr\
+    \ lst))) (list (cadr lst) (car lst))]\n    [(and (negative? (car lst)) (positive?\
+    \ (cadr lst))) (list (car lst) (cadr lst))]\n    [else (largest_smallest_integers\
+    \ (cdr lst))]))\n", "  (define (largest_negative ls)\n    (foldl (lambda (el acc)\n\
+    \             (if (and (negative? el)\n                      (or (not acc) (&lt;\
+    \ el acc)))\n                 el\n                 acc))\n           #f\n    \
+    \       ls))\n  (define (smallest_positive ls)\n    (foldl (lambda (el acc)\n\
+    \             (if (and (positive? el)\n                      (or (not acc) (&lt;\
+    \ acc el)))\n                 el\n                 acc))\n           #f\n    \
+    \       ls))\n  (list (largest_negative lst) (smallest_positive lst)))\n", " \
+    \ (define (split lst accNeg accPos)\n    (cond ((empty? lst) (list accNeg accPos))\n\
+    \          ((positive? (first lst)) (split (rest lst) accNeg (append accPos (list\
+    \ (first lst)))))\n          ((negative? (first lst)) (split (rest lst) (append\
+    \ accNeg (list (first lst))) accPos))\n          (else (split (rest lst) accNeg\
+    \ accPos))))\n  (define (min lst)\n    (if (rest lst)\n        (min (cons (min\
+    \ (first lst) (first (rest lst))) (rest (rest lst))))\n        (first lst)))\n\
+    \  (define (max lst)\n    (if (rest lst)\n        (max (cons (max (first lst)\
+    \ (first (rest lst))) (rest (rest lst))))\n        (first lst)))\n  (if (empty?\
+    \ lst)\n      (list #f #f)\n      (let ((splitted (split lst (list) (list))))\n\
+    \        (if (positive? (first (rest splitted)))\n            (list (max (first\
+    \ splitted)) (min (first (rest splitted))))\n            (list (max (first splitted))\
+    \ #f)))))", "  (let\n    ;; filter_negatives\n    ([fl (filter (lambda (n) (and\
+    \ (integer? n) (< n 0))) lst)])\n    (let\n      ;; filter_positives\n      ([fh\
+    \ (filter (lambda (n) (and (integer? n) (> n 0))) lst)])\n      (if (or (null?\
+    \ fl) (null? fh))\n        (list #f #f)\n        (list (apply max fl) (apply min\
+    \ fh))))))", "  (cond ((empty? lst) (list #f #f))\n        ((not (number? (car\
+    \ lst))) (largest_smallest_integers (cdr lst)))\n        ((< (car lst) 0) (list\
+    \ (list-max lst) (list-min lst)))\n        ((> (car lst) 0) (list #f (list-min\
+    \ lst)))\n        (else (list #f #f))))\n", "  (let* ([pos (filter (\u03BB (x)\
+    \ (> x 0)) lst)]\n         [neg (filter (\u03BB (x) (< x 0)) lst)])\n    (list\
+    \ (cond [(empty? neg) #f]\n                [else (max-list neg)])\n          (cond\
+    \ [(empty? pos) #f]\n                [else (min-list pos)]))))\n", "  (cond\n\
+    \    [(empty? lst) (list #f #f)]\n    [(zero? (first lst)) (largest_smallest_integers\
+    \ (rest lst))]\n    [(not (number? (first lst))) (largest_smallest_integers (rest\
+    \ lst))]\n    [else\n     (let* ([negative (largest_smallest_integers_helper lst\
+    \ #f (first lst) #f)]\n            [positive (largest_smallest_integers_helper\
+    \ lst (first lst) #f #f)])\n       (list negative positive))]))\n", "  (cond\n\
+    \    [(empty? lst) (list #f #f)]\n    [(and\n      (positive? (car lst))\n   \
+    \   (positive? (cadr lst)))\n     (largest_smallest_integers (cdr lst))]\n   \
+    \ [(and\n      (positive? (car lst))\n      (negative? (cadr lst)))\n     (list\
+    \ (cadr lst) (car lst))]\n    [(and\n      (negative? (car lst))\n      (positive?\
+    \ (cadr lst)))\n     (largest_smallest_integers (cdr lst))]\n    [(and\n     \
+    \ (negative? (car lst))\n      (negative? (cadr lst)))\n     (list (car lst) (cadr\
+    \ lst))]))\n", "  (define (iter n r l)\n    (if (empty? l)\n        (values n\
+    \ r)\n        (if (and (number? (first l)) (not (zero? (first l))))\n        \
+    \    (if (or (not r) (< (first l) r))\n                (iter n (first l) (rest\
+    \ l))\n                (iter n r (rest l)))\n            (if (and (number? (first\
+    \ l)) (zero? (first l)))\n                (iter n r (rest l))\n              \
+    \  (if (or (not n) (> (first l) n))\n                    (iter (first l) r (rest\
+    \ l))\n                    (iter n r (rest l)))))))\n  (let ((a (iter #f #f lst))\n\
+    \        (b (iter #f #f (reverse lst))))\n    (list (first a) (second b))))\n",
+  "  (cond\n    [(null? lst) (list #f #f)]\n    [(> (car lst) 0) (list (list-ref lst\
+    \ 1) (car lst))]\n    [(and (< (car lst) 0) (list-ref lst 1) (> (list-ref lst\
+    \ 1) 0)) (list (car lst) (list-ref lst 1))]\n    [(and (< (car lst) 0) (not (list-ref\
+    \ lst 1))) (list (car lst) #f)]\n    [(and (< (car lst) 0) (list-ref lst 1) (<\
+    \ (list-ref lst 1) 0)) (list (car lst) (list-ref lst 1))]\n    [else (largest_smallest_integers\
+    \ (cdr lst))]))\n", "  (define (helper lst largest smallest)\n    (cond\n    \
+    \  [(empty? lst) (list largest smallest)]\n      [(positive? (first lst))\n  \
+    \     (cond\n         [(or (not smallest) (&lt; (first lst) smallest))\n     \
+    \     (helper (rest lst) largest (first lst))]\n         [else (helper (rest lst)\
+    \ largest smallest)])]\n      [(negative? (first lst))\n       (cond\n       \
+    \  [(or (not largest) (&gt; (first lst) largest))\n          (helper (rest lst)\
+    \ (first lst) smallest)]\n         [else (helper (rest lst) largest smallest)])]\n\
+    \      [else (helper (rest lst) largest smallest)]))\n  (helper lst #f #f))\n",
+  "  (let ([s (sort lst <)])\n    (define (pos? n)\n      (cond [(= n 0) #f]\n   \
+    \         [(> n 0) #t]\n            [else #f]))\n    (define (neg? n)\n      (cond\
+    \ [(= n 0) #f]\n            [(< n 0) #t]\n            [else #f]))\n    (define\
+    \ (iter lst pos neg)\n      (cond [(null? lst) (list neg pos)]\n            [(pos?\
+    \ (car lst)) (iter (cdr lst) (car lst) neg)]\n            [(neg? (car lst)) (iter\
+    \ (cdr lst) pos (car lst))]\n            [else (iter (cdr lst) pos neg)]))\n \
+    \   (iter s #f #f)))\n", "  (define max-negative #f)\n  (define min-positive #f)\n\
+    \  (for ((i lst))\n    (cond\n      [(and (number? i) (&lt; i 0))\n       (if\
+    \ (not max-negative)\n           (set! max-negative i)\n           (if (&gt; i\
+    \ max-negative)\n               (set! max-negative i)))]\n      [(and (number?\
+    \ i) (&gt; i 0))\n       (if (not min-positive)\n           (set! min-positive\
+    \ i)\n           (if (&lt; i min-positive)\n               (set! min-positive\
+    \ i)))]))\n  (list max-negative min-positive))\n</code>\nIs it correct? What could\
+    \ be done better?\n\n\nA:\n\nStyle\nRacket is usually written with indentation\
+    \ and alignment, like this:\n<code>(define (largest_smallest_integers lst)\n \
+    \ (define max-negative #f)\n  (define min-positive #f)\n  (for ((i lst))\n   \
+    \ (cond\n      [(and (number? i) (&lt; i 0))\n       (if (not max-negative)\n\
+    \           (set! max-negative i)\n           (if (&gt; i max-negative)\n    \
+    \           (set! max-negative i)))]\n      [(and (number? i) (&gt; i 0))\n  \
+    \     (if (not min-positive)\n           (set! min-positive i)\n           (if\
+    \ (&lt; i min-positive)\n               (set! min-positive i)))]))\n  (list max-negative\
+    \ min-positive))\n</code>\nI recommend reading the Style Guide.\nSince your question\
+    \ is about correctness, I am not going to focus on style.\nCorrectness\nThe behavior\
+    \ is correct for your examples, but there are some more edge cases:\n\nWhat happens\
+    \ if the list contains a <code>#f</code>?\nWhat happens if the list contains a\
+    \ non-number?\nWhat happens if the list contains a <code>#inf.0</code>?\nWhat\
+    \ happens if the list contains <code>-inf.0</code>?\n\nSome are also undefined\
+    \ behavior. For example, if the list contains <code>+inf.", "  (cond\n    [(empty?\
+    \ lst) (list #f #f)]\n    [(number? (first lst))\n     (let ([ls (largest_smallest_integers\
+    \ (rest lst))])\n       (cond\n         [(and (negative? (first lst)) (not (first\
+    \ ls)))\n          (list (first lst) (second ls))]\n         [(and (positive?\
+    \ (first lst)) (not (second ls)))\n          (list (first ls) (first lst))]\n\
+    \         [(and (negative? (first lst)) (< (first lst) (first ls)))\n        \
+    \  (list (first lst) (second ls))]\n         [(and (positive? (first lst)) (>\
+    \ (first lst) (second ls)))\n          (list (first ls) (first lst))]\n      \
+    \   [else ls]))]\n    [else (largest_smallest_integers (rest lst))]))", "  (let\
+    \ ([negatives (find-all-negative-numbers lst)]\n        [positives (find-all-positive-numbers\
+    \ lst)])\n    (list (find-largest-negative-number negatives)\n          (find-smallest-positive-number\
+    \ positives))))\n", "  (define (loop lst maximum minimum)\n    (cond ((null? lst)\n\
+    \t   (list maximum minimum))\n\t  ((and (integer? (car lst))\n\t\t(> (car lst)\
+    \ 0))\n\t   (loop (cdr lst) maximum (min (car lst) minimum)))\n\t  ((and (integer?\
+    \ (car lst))\n\t\t(< (car lst) 0))\n\t   (loop (cdr lst) (max (car lst) maximum)\
+    \ minimum))\n\t  (else (loop (cdr lst) maximum minimum))))\n  (loop lst (list\
+    \ -99999999) (list 99999999)))\n", "  (define (loop lst acc)\n    (cond\n    \
+    \  [(empty? lst) acc]\n      [(integer? (first lst))\n       (cond\n         [(<\
+    \ (first lst) 0)\n          (loop (rest lst) (if (first acc)\n               \
+    \                (max (first lst) (first acc))\n                             \
+    \  (first lst)))\n          ]\n         [(> (first lst) 0)\n          (loop (rest\
+    \ lst) (if (second acc)\n                               (min (first lst) (second\
+    \ acc))\n                               (first lst)))\n          ]\n         [else\
+    \ (loop (rest lst) acc)]\n         )]\n      [else (loop (rest lst) acc)]\n  \
+    \    ))\n  (loop lst (list #f #f)))\n", "  (let ((pos-min #f)\n        (neg-max\
+    \ #f))\n    (for ([e lst])\n      (cond\n        [(and (not (integer? e)) (= (positive?\
+    \ e) #f))\n         #t]\n        [(and (not (integer? e)) (= (positive? e) 1))\n\
+    \         (if (= pos-min #f)\n             (set! pos-min e)\n             (if\
+    \ (< e pos-min)\n                 (set! pos-min e)))]\n        [(and (not (integer?\
+    \ e)) (= (positive? e) -1))\n         (if (= neg-max #f)\n             (set! neg-max\
+    \ e)\n             (if (> e neg-max)\n                 (set! neg-max e)))]))\n\
+    \    (list neg-max pos-min)))\n", "  (define (is-negative? n)\n    (not (= n 0)))\n\
+    \  (define (is-positive? n)\n    (> n 0))\n  (if (empty? lst)\n      (list #f\
+    \ #f)\n      (let ((negs (filter is-negative? lst))\n            (pos (filter\
+    \ is-positive? lst)))\n        (if (empty? negs)\n            (list #f (min pos))\n\
+    \            (if (empty? pos)\n                (list (max negs) #f)\n        \
+    \        (list (max negs) (min pos)))))))", "  (define positive-numbers (filter\
+    \ positive? lst))\n  (define negative-numbers (filter negative? lst))\n  (if (empty?\
+    \ positive-numbers)\n      (list #f #f)\n      (list (apply max negative-numbers)\
+    \ (apply min positive-numbers))))", "  (let \n      ([neg (-filter (lambda (x)\
+    \ (not (positive? x))) lst)]\n       [pos (-filter (lambda (x) (positive? x))\
+    \ lst)])\n    (if (empty? neg)\n        (list #f (min pos))\n        (list (max\
+    \ neg) (if (empty? pos) #f (min pos))))))\n", "  (define (is-positive? n)\n  \
+    \  (> n 0))\n  (define (is-negative? n)\n    (< n 0))\n  (cond\n    [(empty? lst)\
+    \ (list #f #f)]\n    [(and (is-positive? (first lst)) (is-negative? (first lst)))\
+    \ (list #f #f)]\n    [(is-positive? (first lst)) (list (apply max (filter is-negative?\
+    \ lst)) (first lst))]\n    [(is-negative? (first lst)) (list (first lst) (apply\
+    \ min (filter is-positive? lst)))]\n    [else (list #f #f)]))\n", "  (cond\n \
+    \   [(empty? lst) (list #f #f)]\n    [(negative? (first lst)) (list (first lst)\
+    \ #f)]\n    [(positive? (first lst)) (list #f (first lst))]\n    [else (largest_smallest_integers\
+    \ (rest lst))]))\n", "  (let ((positive-extremum 0)\n        (negative-extremum\
+    \ 0))\n    (for ([i lst])\n      (when (positive? i)\n        (set! positive-extremum\
+    \ (min positive-extremum i)))\n      (when (negative? i)\n        (set! negative-extremum\
+    \ (max negative-extremum i))))\n    (list negative-extremum positive-extremum)))\n",
+  "  (match lst\n    ['() (list #f #f)]\n    [list (list (if (&lt; (car lst) 0) (car\
+    \ lst) #f)\n               (if (&gt; (car lst) 0) (car lst) #f))]))\n</code>\n\
+    It works on the first example, but not the second:\n<code>Welcome to DrRacket,\
+    \ version 6.3 [3m].\nLanguage: racket; memory limit: 128 MB.\n&gt; (largest_smallest_integers\
+    \ (list 2 4 1 3 5 7))", "  (let ((a (apply max (filter negative? lst)))\n    \
+    \    (b (apply min (filter positive? lst))))\n    (if (and (equal? a -inf.0) (equal?\
+    \ b inf.0))\n        (list #f #f)\n        (list a b))))\n", "  (list\n   (apply\
+    \ max (filter negative? lst))\n   (apply min (filter positive? lst))))\n", " \
+    \ (define (find-negatives lst)\n    (if (null? lst)\n        '()\n        (if\
+    \ (< (car lst) 0)\n            (cons (car lst) (find-negatives (cdr lst)))\n \
+    \           (find-negatives (cdr lst)))))\n  (define (find-positives lst)\n  \
+    \  (if (null? lst)\n        '()\n        (if (> (car lst) 0)\n            (cons\
+    \ (car lst) (find-positives (cdr lst)))\n            (find-positives (cdr lst)))))\n\
+    \  (define (smallest-positive lst)\n    (if (null? lst)\n        #f\n        (let\
+    \ ([smallest (car lst)])\n          (for ([i (cdr lst)])\n            (when (<\
+    \ (car i) smallest)\n              (set! smallest (car i))))\n          smallest)))\n\
+    \  (define (largest-negative lst)\n    (if (null? lst)\n        #f\n        (let\
+    \ ([largest (car lst)])\n          (for ([i (cdr lst)])\n            (when (>\
+    \ (car i) largest)\n              (set! largest (car i))))\n          largest)))\n\
+    \  (list (largest-negative (find-negatives lst))\n        (smallest-positive (find-positives\
+    \ lst))))\n", "  (if (null? lst)\n      (list #f #f)\n      (list (for/first ([x\
+    \ lst]\n                        #:when (and (integer? x)\n                   \
+    \                 (< x 0)))\n              x)\n            (for/first ([x lst]\n\
+    \                        #:when (and (integer? x)\n                          \
+    \          (> x 0)))\n              x))))\n", "  (cond\n    [(empty? lst) #f]\n\
+    \    [(list? lst) (list (list-ref lst (list-length lst) ) (list-ref lst 0))]\n\
+    \    [(zero? lst) #f]\n    [(< 0 lst) (list #f lst)]\n    [(> 0 lst) (list lst\
+    \ #f)]))\n", "  (if (empty? lst)\n      (list #f #f)\n      (let* ([positive (keep\
+    \ positive? lst)]\n             [negative (keep negative? lst)])\n        (list\
+    \ (car (sort > negative))\n              (car (sort < positive))))))\n```\n\n\
+    ### 4. Remove all consecutive duplicates from a list.\n\n```#lang racket\n", " \
+    \ (if (null? lst)\n      (list #f #f)\n      (let* ((is-negative? (lambda (x)\
+    \ (< x 0)))\n             (is-positive? (lambda (x) (> x 0)))\n             (is-number?\
+    \ (lambda (x) (number? x)))\n             (is-not-zero? (lambda (x) (not (= x\
+    \ 0))))\n             (negatives (filter is-negative? lst))\n             (positives\
+    \ (filter is-positive? lst))\n             (number-filter (lambda (f) (filter\
+    \ f lst)))\n             (max-neg (apply max (number-filter is-negative?)))\n\
+    \             (min-pos (apply min (number-filter is-positive?))))\n        (list\
+    \ (if (null? negatives) #f max-neg)\n              (if (null? positives) #f min-pos)))))\n",
+  "  (define (largest_smallest_integers_helper lst largest smallest)\n    (if (and\
+    \ (and (null? lst) (not (null? largest))) (not (null? smallest)))\n        (list\
+    \ largest smallest)\n        (if (and (and (null? lst) (null? largest)) (null?\
+    \ smallest))\n            (list #f #f)\n            (if (not (null? lst))\n  \
+    \              (if (not (number? (car lst)))\n                    (largest_smallest_integers_helper\
+    \ (cdr lst) largest smallest)\n                    (if (positive? (car lst))\n\
+    \                        (if (null? smallest)\n                            (largest_smallest_integers_helper\
+    \ (cdr lst) largest (car lst))\n                            (if (< (car lst) smallest)\n\
+    \                                (largest_smallest_integers_helper (cdr lst) largest\
+    \ (car lst))\n                                (largest_smallest_integers_helper\
+    \ (cdr lst) largest smallest)))\n                        (if (null? largest)\n\
+    \                            (largest_smallest_integers_helper (cdr lst) (car\
+    \ lst) smallest)\n                            (if (> (car lst) largest)\n    \
+    \                            (largest_smallest_integers_helper (cdr lst) (car\
+    \ lst) smallest)\n                                (largest_smallest_integers_helper\
+    \ (cdr lst) largest smallest))))\n                    (largest_smallest_integers_helper\
+    \ (cdr lst) largest smallest)))))\n  (largest_smallest_integers_helper lst #f\
+    \ #f))\n", "  (define (is_positive? lst)\n    (if (null? lst)\n        #f\n  \
+    \      (if (or (= (car lst) 0) (> (car lst) 0))\n            #t\n            (is_positive?\
+    \ (cdr lst)))))\n  (define (get_smallest_positive_integer lst smallest)\n    (if\
+    \ (null? lst)\n        smallest\n        (if (and (> (car lst) 0)\n          \
+    \       (or (= smallest 0)\n                     (> (car lst) smallest)))\n  \
+    \          (get_smallest_positive_integer (cdr lst) (car lst))\n            (get_smallest_positive_integer\
+    \ (cdr lst) smallest))))\n  (define (is_negative? lst)\n    (if (null? lst)\n\
+    \        #f\n        (if (< (car lst) 0)\n            #t\n            (is_negative?\
+    \ (cdr lst)))))\n  (define (get_largest_negative_integer lst largest)\n    (if\
+    \ (null? lst)\n        largest\n        (if (< (car lst) 0)\n            (get_largest_negative_integer\
+    \ (cdr lst) (car lst))\n            (get_largest_negative_integer (cdr lst) largest))))\n\
+    \  (define (get_largest_negative_integer_helper lst)\n    (get_largest_negative_integer\
+    \ lst 0))\n  (define (get_smallest_positive_integer_helper lst)\n    (get_smallest_positive_integer\
+    \ lst 0))\n  (if (is_positive? lst)\n      (if (is_negative? lst)\n          (list\
+    \ (get_largest_negative_integer_helper lst)\n                (get_smallest_positive_integer_helper\
+    \ lst))\n          (list #f (get_smallest_positive_integer_helper lst)))\n   \
+    \   (if (is_negative? lst)\n          (list (get_largest_negative_integer_helper\
+    \ lst) #f)\n          (list #f #f))))\n", "  (let ([largest_neg  (apply max (filter\
+    \ negative? lst))]\n        [smallest_pos (apply min (filter positive? lst))])\n\
+    \    (list (if (or (not (number? largest_neg)) (= largest_neg -inf.0))\n     \
+    \         #f\n              largest_neg)\n          (if (or (not (number? smallest_pos))\
+    \ (= smallest_pos inf.0))\n              #f\n              smallest_pos))))\n\
+    ```\n\n```\n#lang racket\n", "  (let* ([lst (filter number? lst)]\n         [lst\
+    \ (filter (\u03BB (x) (> x 0)) lst)]\n         [lst (filter (\u03BB (x) (< x 0))\
+    \ lst)])\n    (list (cond [(empty? lst) #f]\n                [else (apply max\
+    \ lst)])\n          (cond [(empty? lst) #f]\n                [else (apply min\
+    \ lst)]))))\n", "  (cond ((null? lst) (list #f #f))\n        ((zero? (car lst))\
+    \ (largest_smallest_integers (cdr lst)))\n        ((positive? (car lst)) (list\
+    \ (cdr lst) (car lst)))\n        ((negative? (car lst)) (list (car lst) (cdr lst)))\n\
+    \        ))\n", "  (match lst\n    (() (list #f #f))\n    ([a] (list (if (negative?\
+    \ a) a #f) (if (positive? a) a #f)))\n    ([a b ...] (cond\n                 [(negative?\
+    \ a) (list (if (negative? b) (max a b) a)\n                                  \
+    \    (if (positive? b) b #f))]\n                 [(positive? a) (list (if (negative?\
+    \ b) b #f)\n                                      (if (positive? b) (min a b)\
+    \ a))]\n                 [else (list #f #f)]))))\n", "  (define (helper lst (positive\
+    \ #f) (negative #f))\n    (if (null? lst)\n        (list negative positive)\n\
+    \        (cond ((and (positive? (car lst)) (or (not positive?) (> (car lst) positive)))\n\
+    \               (helper (cdr lst) (car lst) negative))\n              ((and (negative?\
+    \ (car lst)) (or (not negative?) (< (car lst) negative)))\n               (helper\
+    \ (cdr lst) positive (car lst)))\n              (else (helper (cdr lst) positive\
+    \ negative)))))\n  (helper lst))\n", "  (cond\n    [(null? lst) (list #f #f)]\n\
+    \    [(or (positive? (car lst)) (negative? (car lst)))\n     (if (> (length lst)\
+    \ 1)\n         (let ((ls (largest_smallest_integers (cdr lst))))\n           (if\
+    \ (positive? (car lst))\n               (if (and (positive? (first ls))\n    \
+    \                    (> (car lst) (first ls)))\n                   (list (first\
+    \ ls) (second ls))\n                   (list (car lst) (second ls)))\n       \
+    \        (if (and (negative? (first ls))\n                        (< (car lst)\
+    \ (first ls)))\n                   (list (first ls) (second ls))\n           \
+    \        (list (car lst) (second ls)))))\n         (list (car lst) (car lst)))]\n\
+    \    [else (largest_smallest_integers (cdr lst))]))\n```\n\n```racket\n#lang racket\n",
+  "  (define negs (filter negative? lst))\n  (define pos (filter positive? lst))\n\
+    \  (if (empty? negs)\n      (if (empty? pos)\n          (list #f #f)\n       \
+    \   (list #f (min pos)))\n      (if (empty? pos)\n          (list (max negs) #f)\n\
+    \          (list (max negs) (min pos)))))\n", "  (define (find_largest_negative\
+    \ lst largest_negative)\n    (cond ((empty? lst) largest_negative)\n         \
+    \ ((and (< (first lst) 0)\n                (or (negative? largest_negative)\n\
+    \                    (< (first lst) largest_negative)))\n           (find_largest_negative\
+    \ (rest lst) (first lst)))\n          (else (find_largest_negative (rest lst)\
+    \ largest_negative))))\n  (define (find_smallest_positive lst smallest_positive)\n\
+    \    (cond ((empty? lst) smallest_positive)\n          ((and (> (first lst) 0)\n\
+    \                (or (positive? smallest_positive)\n                    (> (first\
+    \ lst) smallest_positive)))\n           (find_smallest_positive (rest lst) (first\
+    \ lst)))\n          (else (find_smallest_positive (rest lst) smallest_positive))))\n\
+    \  (list (find_largest_negative lst #f)\n        (find_smallest_positive lst #f)))\n",
+  "  (letrec ([negative-integers\n            (filter (lambda (x)\n              \
+    \        (and (integer? x)\n                           (negative? x)))\n     \
+    \               lst)]\n           [positive-integers\n            (filter (lambda\
+    \ (x)\n                      (and (integer? x)\n                           (positive?\
+    \ x)))\n                    lst)])\n    (if (or (zero? (length negative-integers))\n\
+    \            (zero? (length positive-integers)))\n        (list #f #f)\n     \
+    \   (list (apply max negative-integers)\n              (apply min positive-integers)))))\n",
+  "  (define (largestNegative xs)\n    (cond\n      [(null? xs) #f]\n      [(and (not\
+    \ (null? xs)) (null? (cdr xs))) (car xs)]\n      [(and (not (null? xs)) (null?\
+    \ (cdr xs)) (and (not (positive? (car xs))) (not (negative? (car xs))))) #f]\n\
+    \      [(and (not (null? xs)) (null? (cdr xs)) (positive? (car xs))) #f]\n   \
+    \   [(and (not (null? xs)) (null? (cdr xs)) (negative? (car xs))) (car xs)]\n\
+    \      [(and (not (null? xs)) (not (null? (cdr xs))) (negative? (car xs)) (not\
+    \ (negative? (cadr xs)))) (car xs)]\n      [(and (not (null? xs)) (not (null?\
+    \ (cdr xs))) (not (negative? (car xs))) (negative? (cadr xs))) (cadr xs)]\n  \
+    \    [(and (not (null? xs)) (not (null? (cdr xs))) (and (negative? (car xs)) (negative?\
+    \ (cadr xs)))) (max (car xs) (cadr xs))]\n      [(and (not (null? xs)) (not (null?\
+    \ (cdr xs))) (and (not (negative? (car xs))) (not (negative? (cadr xs))))) (max\
+    \ (car xs) (cadr xs))]))\n  (define (smallestPositive xs)\n    (cond\n      [(null?\
+    \ xs) #f]\n      [(and (not (null? xs)) (null? (cdr xs))) (car xs)]\n      [(and\
+    \ (not (null? xs)) (null? (cdr xs)) (and (not (positive? (car xs))) (not (negative?\
+    \ (car xs))))) #f]\n      [(and (not (null? xs)) (null? (cdr xs)) (negative? (car\
+    \ xs))) #f]\n     ", "  (let loop ([pos-lst (filter positive? lst)]\n        \
+    \     [neg-lst (filter negative? lst)])\n    (list (cond\n           [(null? neg-lst)\
+    \ #f]\n           [else (apply max neg-lst)])\n          (cond\n           [(null?\
+    \ pos-lst) #f]\n           [else (apply min pos-lst)]))))\n", "  (define (largest_smallest_integers_aux\
+    \ lst acum_list)\n    (cond ((null? lst) acum_list)\n          ((not (number?\
+    \ (car lst))) (largest_smallest_integers_aux (cdr lst) acum_list))\n         \
+    \ ((and (not (null? (cdr lst))) (not (integer? (car lst)))) (largest_smallest_integers_aux\
+    \ (cdr lst) acum_list))\n          ((and (not (null? (cdr lst))) (not (integer?\
+    \ (cadr lst)))) (largest_smallest_integers_aux (cdr lst) acum_list))\n       \
+    \   ((and (not (null? (cdr lst))) (positive? (car lst)) (positive? (cadr lst)))\
+    \ (largest_smallest_integers_aux (cdr lst) (cons (car lst) acum_list)))\n    \
+    \      ((and (not (null? (cdr lst))) (negative? (car lst)) (negative? (cadr lst)))\
+    \ (largest_smallest_integers_aux (cdr lst) (cons (car lst) acum_list)))\n    \
+    \      ((not (null? (cdr lst))) (largest_smallest_integers_aux (cdr lst) (cons\
+    \ (car lst) acum_list)))\n          (else (largest_smallest_integers_aux (cdr\
+    \ lst) (cons (car lst) acum_list)))))\n  (define (reverse_list lst acum_list)\n\
+    \    (cond ((null? lst) acum_list)\n          (else (reverse_list (cdr lst) (cons\
+    \ (car lst) acum_list)))))\n  (let ((reverse_lst (reverse_list lst '())))\n  \
+    \  (define (accum_largest accu_list)\n      (cond ((null? accu_list) '())\n  \
+    \          ((null? (cdr accu_list)) (list (car accu_list) '()))\n            ((null?\
+    \ (cdr (cdr accu_list))) (list (car accu_list) (cadr", "  (define (helper result\
+    \ lst)\n    (cond [(null? lst) result]\n          [(and (integer? (car lst)) (negative?\
+    \ (car lst)))\n           (helper (if (car result)\n                       (if\
+    \ (> (car result) (car lst))\n                           result\n            \
+    \               (list (car lst) (cadr result)))\n                       (list\
+    \ (car lst) (cadr result)))\n                  (cdr lst))]\n          [(and (integer?\
+    \ (car lst)) (positive? (car lst)))\n           (helper (if (cadr result)\n  \
+    \                     (if (< (cadr result) (car lst))\n                      \
+    \     result\n                           (list (car result) (car lst)))\n    \
+    \                   (list (car result) (car lst)))\n                  (cdr lst))]\n\
+    \          [else (helper result (cdr lst))]))\n  (helper (list #f #f) lst))\n",
+  "  (cond [(empty? lst) (list #f #f)]\n        [(and\n          (andmap negative?\
+    \ lst)\n          (andmap positive? lst))\n         (list (apply max (filter negative?\
+    \ lst))\n               (apply min (filter positive? lst)))]\n        [(andmap\
+    \ negative? lst)\n         (list (apply max (filter negative? lst))\n        \
+    \       #f)]\n        [(andmap positive? lst)\n         (list #f\n           \
+    \    (apply min (filter positive? lst)))]\n        [else (list #f #f)]))\n", " \
+    \ (cond [(empty? lst)\n         (list #f #f)]\n        [(integer? (first lst))\n\
+    \         (largest_smallest_helper lst (first lst) (first lst))]\n        [else\n\
+    \         (largest_smallest_integers (rest lst))]))\n", "  (define (min-positive\
+    \ x y)\n    (if (> x 0)\n        (if (> y 0)\n            (if (< x y) x y)\n \
+    \           x)\n        (if (> y 0) y x)))\n  (define (max-negative x y)\n   \
+    \ (if (< x 0)\n        (if (< y 0)\n            (if (> x y) x y)\n           \
+    \ x)\n        (if (< y 0) y x)))\n  (let ((max #f)\n        (min #f))\n    (for\
+    \ ([x lst])\n      (set! max (max-negative x max))\n      (set! min (min-positive\
+    \ x min)))\n    (list max min)))\n```\n\n```", "  (let* ([negs (filter negative?\
+    \ lst)]\n         [poss (filter positive? lst)])\n    (if (and negs poss)\n  \
+    \      (list (apply max negs) (apply min poss))\n        (list #f #f))))\n```\n\
+    \n```scheme\n#lang racket\n", "  (define (is-negative? n) (and (integer? n) (<\
+    \ n 0)))\n  (define (is-positive? n) (and (integer? n) (> n 0)))\n  (define (filter-negatives\
+    \ lst) (filter is-negative? lst))\n  (define (filter-positives lst) (filter is-positive?\
+    \ lst))\n  (define (safe-car lst) (if (not (empty? lst)) (car lst) #f))\n  (define\
+    \ (safe-last lst) (if (not (empty? lst)) (last lst) #f))\n  (list (safe-last (sort\
+    \ filter-negatives >))\n        (safe-car (sort filter-positives <))))\n", " \
+    \ (let ((smallest_positive #f)\n        (largest_negative #f))\n    (define (process-positive\
+    \ x)\n      (cond\n        [(and (not smallest_positive) (positive? x))\n    \
+    \     (set! smallest_positive x)]\n        [(and smallest_positive (positive?\
+    \ x))\n         (set! smallest_positive (min smallest_positive x))]))\n    (define\
+    \ (process-negative x)\n      (cond\n        [(and (not largest_negative) (negative?\
+    \ x))\n         (set! largest_negative x)]\n        [(and largest_negative (negative?\
+    \ x))\n         (set! largest_negative (max largest_negative x))]))\n    (for-each\
+    \ process-positive lst)\n    (for-each process-negative lst)\n    (list largest_negative\
+    \ smallest_positive)))\n", "  (cond\n    [(empty? lst) (list #f #f)]\n    [(and\
+    \ (zero? (car lst)) (zero? (cadr lst))) (largest_smallest_integers (cdr lst))]\n\
+    \    [(zero? (car lst)) (list #f (car lst))]\n    [(> (car lst) 0) (list (car\
+    \ lst) (car lst))]\n    [(list #f (car lst))]))\n", "  (if (empty? lst)\n    \
+    \  (list #f #f)\n      (let* ([negatives (filter negative? lst)]\n           \
+    \  [positives (filter positive? lst)])\n        (list (if (empty? negatives)\n\
+    \                  #f\n                  (apply max negatives))\n            \
+    \  (if (empty? positives)\n                  #f\n                  (apply min\
+    \ positives))))))\n```\n\n```\n#lang racket\n", "  (let ((nums (filter number?\
+    \ lst)))\n    (if (null? nums)\n        (list #f #f)\n        (list (apply max\
+    \ (filter negative? nums))\n              (apply min (filter positive? nums))))))\n",
+  "    (let ((a #f) (b #f))\n        (for-each (lambda (x) (if (< x 0) (if (< a x)\
+    \ (set! a x)))) lst)\n        (for-each (lambda (x) (if (> x 0) (if (or (> b x)\
+    \ (> b 0)) (set! b x)))) lst)\n        (list a b)))\n```\n\n```Racket\n#lang racket\n",
+  "  (let\n      ((neg (first (filter (lambda (x) (if (negative? x) x #f)) lst)))\n\
+    \       (pos (first (filter (lambda (x) (if (positive? x) x #f)) lst))))\n   \
+    \ (list (if (exists? lst neg) (apply max (filter (lambda (x) (if (negative? x)\
+    \ x #f)) lst)) #f)\n          (if (exists? lst pos) (apply min (filter (lambda\
+    \ (x) (if (positive? x) x #f)) lst)) #f))))\n", "  (cond\n    [(empty? lst) (list\
+    \ #f #f)]\n    [(< (first lst) 0)\n     (let* ([max_negatives (filter integer?\
+    \ (filter (\u03BB (x) (< x 0)) lst))]\n            [min_positives (filter integer?\
+    \ (filter (\u03BB (x) (> x 0)) lst))])\n       (list (cond\n               [(empty?\
+    \ max_negatives) #f]\n               [else (apply max max_negatives)])\n     \
+    \        (cond\n               [(empty? min_positives) #f]\n               [else\
+    \ (apply min min_positives)])))]\n    [else (largest_smallest_integers (rest lst))]))\n\
+    ```\n\n#### Lambda expressions\n\n```racket\n#lang racket\n", "  (let ([negs (keep-indexed\
+    \ (lambda (i elem)\n                              (if (negative? elem)\n     \
+    \                             (list i elem)))\n                            lst)]\n\
+    \        [poss (keep-indexed (lambda (i elem)\n                              (if\
+    \ (positive? elem)\n                                  (list i elem)))\n      \
+    \                      lst)])\n    (if (empty? negs)\n        (list #f (apply\
+    \ min (map cadr poss)))\n        (list (apply max (map cadr negs))\n         \
+    \     (if (empty? poss)\n                  #f\n                  (apply min (map\
+    \ cadr poss)))))))\n", "  (match lst\n    [(list) (list #f #f)]\n    [(list x)\
+    \ (if (negative? x)\n                  (list x #f)\n                  (list #f\
+    \ x))]\n    [(list x xs ...)\n     (let ([(list a b) (largest_smallest_integers\
+    \ xs)])\n       (cond\n         [(and (negative? x) (or (negative? a) (zero? a)))\
+    \ (list x b)]\n         [(and (positive? x) (or (positive? b) (zero? b))) (list\
+    \ a x)]\n         [else (list a b)]))]))\n", "  (define (recur lst acc (neg-lst\
+    \ '()) (pos-lst '()))\n    (if (null? lst)\n        (list (if (null? neg-lst)\n\
+    \                  #f\n                  (apply max neg-lst))\n              (if\
+    \ (null? pos-lst)\n                  #f\n                  (apply min pos-lst)))\n\
+    \        (if (> (car lst) 0)\n            (recur (cdr lst) (cons (car lst) pos-lst)\
+    \ neg-lst pos-lst)\n            (recur (cdr lst) neg-lst (cons (car lst) neg-lst)\
+    \ pos-lst))))\n  (recur lst '() '() '()))\n", "  (let* ([negatives (filter-map\
+    \ (lambda (x) (and (negative? x) x)) lst)]\n         [positives (filter-map (lambda\
+    \ (x) (and (positive? x) x)) lst)])\n    (list (or (apply max negatives) #f)\n\
+    \          (or (apply min positives) #f))))\n", "  (define (largest_negative_number\
+    \ lst)\n    (cond ((null? lst) #f)\n          ((< (car lst) 0) (begin\n      \
+    \                       (define cur_max (car lst))\n                         \
+    \    (define (loop lst)\n                               (cond ((null? lst) cur_max)\n\
+    \                                     ((< (car lst) 0) (if (> (car lst) cur_max)\n\
+    \                                                          (begin\n          \
+    \                                                  (set! cur_max (car lst))\n\
+    \                                                            (loop (cdr lst)))\n\
+    \                                                          (loop (cdr lst))))\n\
+    \                                     (else (loop (cdr lst)))))\n            \
+    \                 (loop (cdr lst))))\n          (else (largest_negative_number\
+    \ (cdr lst)))))\n  (define (smallest_positive_number lst)\n    (cond ((null? lst)\
+    \ #f)\n          ((> (car lst) 0) (begin\n                             (define\
+    \ cur_min (car lst))\n                             (define (loop lst)\n      \
+    \                         (cond ((null? lst) cur_min)\n                      \
+    \               ((> (car lst) 0) (if (< (car lst) cur_min)\n                 \
+    \                                         (begin\n                           \
+    \                                 (set! cur_min (car lst))\n                 \
+    \                                           (loop (cdr lst)))\n              \
+    \                                            (loop (cdr lst))))\n            \
+    \                         (else (loop (cdr lst)))))\n                        \
+    \     (loop (cdr lst))))\n          (else (smallest_positive_number (cdr lst)))))\n\
+    \  (list (largest_negative_number lst) (smallest_positive_number lst)))\n", " \
+    \ (cond\n    ((null? lst) '())\n    ((< 0 (car lst)) (cons (first (largest_smallest_integers\
+    \ (cdr lst))) (car lst)))\n    ((> 0 (car lst)) (cons (car lst) (first (largest_smallest_integers\
+    \ (cdr lst)))))\n    (else (largest_smallest_integers (cdr lst)))))\n", "  (cond\
+    \ [(empty? lst) (list #f #f)]\n        [(null? (filter integer? lst)) (list #f\
+    \ #f)]\n        [else (list (apply max (filter negative? lst))\n             \
+    \       (apply min (filter positive? lst)))]))\n```\n\n## Define a function that\
+    \ returns non-positives\n\n``` #lang racket\n", "  (cond ((empty? lst) (list #f\
+    \ #f))\n        ((zero? (car lst)) (largest_smallest_integers (cdr lst)))\n  \
+    \      ((negative? (car lst)) (cons (car lst) (largest_smallest_integers (cdr\
+    \ lst))))\n        ((positive? (car lst)) (cons #f (car lst)))))\n", "  (let ([negs\
+    \ (filter (\u03BB (n) (negative? n)) lst)]\n        [pos (filter (\u03BB (n) (positive?\
+    \ n)) lst)])\n    (list (apply max negs) (apply min pos))))\n", "  (if (null?\
+    \ lst)\n      (list #f #f)\n      (let* ([negatives (filter (lambda (x) (< x 0))\
+    \ lst)]\n             [positives (filter (lambda (x) (> x 0)) lst)])\n       \
+    \ (list (if (null? negatives)\n                  #f\n                  (apply\
+    \ max negatives))\n              (if (null? positives)\n                  #f\n\
+    \                  (apply min positives))))))\n", "  (let ([ls (filter\n     \
+    \        (lambda (x)\n               (not (zero? x)))\n             lst)])\n \
+    \   (list (if ls\n              (reduce\n               (lambda (x y)\n      \
+    \           (if (> x y)\n                     x\n                     y))\n  \
+    \             ls)\n              #f)\n          (if ls\n              (reduce\n\
+    \               (lambda (x y)\n                 (if (< x y)\n                \
+    \     x\n                     y))\n               ls)\n              #f))))\n",
+  "  (define (not-empty? lst)\n    (not (null? lst)))\n  (define (zeros? lst)\n  \
+    \  (every (lambda (x) (= x 0)) lst))\n  (define (negative? x)\n    (< x 0))\n\
+    \  (define (positive? x)\n    (> x 0))\n  (define (generate-largest-smallest-integers-lists\
+    \ lst)\n    (list (filter negative? lst) (filter positive? lst)))\n  (define (largest-smallest-integers-from-lists\
+    \ lst)\n    (if (or (null? (car lst)) (null? (cadr lst)))\n        (list #f #f)\n\
+    \        (list (apply max (car lst)) (apply min (cadr lst)))))\n  (largest-smallest-integers-from-lists\
+    \ (generate-largest-smallest-integers-lists lst)))\n", "  (let* ([negative-numbers\
+    \ (filter negative? lst)]\n         [positive-numbers (filter positive? lst)])\n\
+    \    (if (and negative-numbers positive-numbers)\n        (list (apply max negative-numbers)\n\
+    \              (apply min positive-numbers))\n        (list #f #f))))", "  (define\
+    \ (helper a b lst acc)\n    (cond ((null? lst) (list (list-ref acc 0) (list-ref\
+    \ acc 1)))\n          ((and (positive? (car lst)) (not (pair? (car lst)))) (helper\
+    \ a (car lst) (cdr lst) (cons (car lst) acc)))\n          ((and (negative? (car\
+    \ lst)) (not (pair? (car lst)))) (helper (car lst) b (cdr lst) (cons (car lst)\
+    \ acc)))\n          (else (helper a b (cdr lst) acc))))\n  (helper #f #f lst (list\
+    \ #f #f)))", "  (cond ((null? lst) (list #f #f))\n        ((not (number? (car\
+    \ lst))) (largest_smallest_integers (cdr lst)))\n        ((and (negative? (car\
+    \ lst)) (or (null? (cdr lst)) (not (number? (cadr lst))))) (list (car lst) #f))\n\
+    \        ((and (positive? (car lst)) (or (null? (cdr lst)) (not (number? (cadr\
+    \ lst))))) (list #f (car lst)))\n        ((< (car lst) (cadr lst)) (largest_smallest_integers\
+    \ (cdr lst)))\n        ((> (car lst) (cadr lst)) (largest_smallest_integers (cons\
+    \ (cadr lst) (cddr lst))))\n        (else (cons (car lst) (cdr lst)))))\n", " \
+    \ (let ((neg '())\n        (pos '()))\n    (for ([x lst])\n      (cond\n     \
+    \   [(positive? x) (set! pos (cons x pos))]\n        [(negative? x) (set! neg\
+    \ (cons x neg))]))\n    (list (if (null? neg) #f (apply max neg))\n          (if\
+    \ (null? pos) #f (apply min pos)))))\n", "    (if (null? lst)\n        (list #f\
+    \ #f)\n        (define (largest_smallest_integers-aux lst a b)\n            (if\
+    \ (null? lst)\n                (list a b)\n                (let* ([curr-num (car\
+    \ lst)]\n                       [a (if (and (number? curr-num) (< curr-num 0))\n\
+    \                              (if (< curr-num a) curr-num a)\n              \
+    \                a)])\n                    (largest_smallest_integers-aux (cdr\
+    \ lst) a b))))\n        (largest_smallest_integers-aux lst 10000 -10000)))\n",
+  "  (define (positive? n)\n    (if (negative? n)\n        #f\n        #t))\n  (cond\
+    \ ((empty? lst)\n         (list #f #f))\n        ((positive? (first lst))\n  \
+    \       (let ((tuple (largest_smallest_integers (rest lst))))\n           (cond\
+    \ ((= (first tuple) #f)\n                  (list #f (first lst)))\n          \
+    \       ((< (first lst) (first tuple))\n                  (list #f (first tuple)))\n\
+    \                 (else\n                  (list #f (first lst))))))\n       \
+    \ ((negative? (first lst))\n         (let ((tuple (largest_smallest_integers (rest\
+    \ lst))))\n           (cond ((= (first tuple) #f)\n                  (list (first\
+    \ lst) #f))\n                 ((> (first lst) (first tuple))\n               \
+    \   (list (first lst) (second tuple)))\n                 (else\n             \
+    \     (list (first tuple) (second tuple))))))\n        (else\n         (largest_smallest_integers\
+    \ (rest lst)))))\n", "  (let loop ((iter lst)\n             (neg-max #f)\n   \
+    \          (pos-min #f))\n    (if (empty? iter)\n        (list neg-max pos-min)\n\
+    \        (let ((val (car iter)))\n          (if (and (negative? val) (not (boolean?\
+    \ neg-max)))\n              (loop (cdr iter) val pos-min)\n              (if (and\
+    \ (negative? val) (> val neg-max))\n                  (loop (cdr iter) val pos-min)\n\
+    \                  (if (and (positive? val) (not (boolean? pos-min)))\n      \
+    \                (loop (cdr iter) neg-max val)\n                      (if (and\
+    \ (positive? val) (< val pos-min))\n                          (loop (cdr iter)\
+    \ neg-max val)\n                          (loop (cdr iter) neg-max pos-min))))))))))\n\
+    ```\n\n## Chapter 2: Number types and arithmetic\n\n``` #lang racket\n", "  (if\
+    \ (null? lst)\n      (list #f #f)\n      (let* ((pos-lst (filter positive? lst))\n\
+    \             (neg-lst (filter negative? lst)))\n        (list (if (null? neg-lst)\n\
+    \                  #f\n                  (apply max neg-lst))\n              (if\
+    \ (null? pos-lst)\n                  #f\n                  (apply min pos-lst))))))\n\
+    </code>\nI looked at a similar SO question, but it did not answer my question.\n\
+    My reason for asking is to see if the code I wrote is idiomatic racket, and whether\
+    \ it can be improved.\n\n\nA:\n\nYour code is well organized and has a good clarity,\
+    \ but there's a little room for improvement:\n\nThe <code>#f</code> values are\
+    \ there to indicate that there are no negative/positive numbers in the list. Instead\
+    \ of using <code>#f</code> for both cases (when there are no numbers in the list\
+    \ and when there are only positive/negative numbers), I suggest using <code>#f</code>\
+    \ only for the first case and the <code>min</code> and <code>max</code> functions\
+    \ will do the job for the second. This way it's more natural to use the <code>apply</code>\
+    \ function without having to create lists.\nA <code>let*</code> expression is\
+    \ not necessary here, we can directly use <code>let</code> because we're using\
+    \ the local variable <code>pos-lst</code> directly after <code>neg-lst</code>.\n\
+    \nHere's the improved version:\n<code>(define (largest_smallest_integers lst)\n\
+    \  (if (null? lst)\n      (list #f #f)\n      (let ((pos-lst (filter positive?\
+    \ lst))\n            (neg-lst (filter negative? lst)))\n        (list (if (null?\
+    \ neg-lst)\n                  #f\n                  (apply max neg-lst))\n   \
+    \           (if (null? pos-lst)\n                  #f\n                  (apply\
+    \ min pos-lst))))))\n</code>\n", "  (define (find-largest-smallest lst neg pos)\n\
+    \    (cond [(null? lst) (list neg pos)]\n          [(and (negative? (car lst))\
+    \ (or (not neg) (&lt; (car lst) neg)))\n           (find-largest-smallest (cdr\
+    \ lst) (car lst) pos)]\n          [(and (positive? (car lst)) (or (not pos) (&gt;\
+    \ (car lst) pos)))\n           (find-largest-smallest (cdr lst) neg (car lst))]\n\
+    \          [else (find-largest-smallest (cdr lst) neg pos)]))\n  (find-largest-smallest\
+    \ lst #f #f))\n", "  (match lst\n    [(cons h t)\n     (largest_smallest_integers_r\
+    \ t h h (first t) #f #f)]\n    [(list)\n     (list #f #f)]))\n", "  (if (null?\
+    \ lst)\n      (list #f #f)\n      (let* ([positive (filter positive? lst)]\n \
+    \            [negative (filter negative? lst)])\n        (list (if (null? negative)\n\
+    \                  #f\n                  (apply max negative))\n             \
+    \ (if (null? positive)\n                  #f\n                  (apply min positive))))))\n",
+  "  (letrec ((loop (lambda (lst)\n                   (cond\n                    \
+    \ [(empty? lst) (values #f #f)]\n                     [(not (number? (car lst)))\
+    \ (loop (cdr lst))]\n                     [(> (car lst) 0) (let ((y (loop (cdr\
+    \ lst))))\n                                       (values (car y) (car lst)))]\n\
+    \                     [(< (car lst) 0) (let ((y (loop (cdr lst))))\n         \
+    \                              (values (car lst) (cadr y)))]\n               \
+    \      [else (loop (cdr lst))]))))\n    (loop lst)))\n", "  (let loop ((lst lst)\n\
+    \             (largest (list #f))\n             (smallest (list #f)))\n    (cond\
+    \ ((null? lst) (list (car largest) (car smallest)))\n          ((positive? (car\
+    \ lst))\n           (if (or (not (positive? (car smallest)))\n               \
+    \    (< (car lst) (car smallest)))\n               (loop (cdr lst) largest (list\
+    \ (car lst)))\n               (loop (cdr lst) largest smallest)))\n          ((negative?\
+    \ (car lst))\n           (if (or (not (negative? (car largest)))\n           \
+    \        (> (car lst) (car largest)))\n               (loop (cdr lst) (list (car\
+    \ lst)) smallest)\n               (loop (cdr lst) largest smallest))))))\n", " \
+    \ (cond\n    [(null? lst) (list #f #f)]\n    [(and (positive? (car lst)) (not\
+    \ (negative? (car lst))))\n     (list (car lst) (car lst))]\n    [(positive? (car\
+    \ lst))\n     (define first-positive-element (car lst))\n     (define rest-positive-elements\n\
+    \       (filter positive? (cdr lst)))\n     (define rest-negative-elements\n \
+    \      (filter negative? (cdr lst)))\n     (list (if (null? rest-negative-elements)\n\
+    \               #f\n               (foldl max (car rest-negative-elements)\n \
+    \                rest-negative-elements))\n           (if (null? rest-positive-elements)\n\
+    \               first-positive-element\n               (foldl min first-positive-element\n\
+    \                 rest-positive-elements)))]\n    [(and (negative? (car lst))\
+    \ (not (positive? (car lst))))\n     (list (car lst) (car lst))]\n    [(negative?\
+    \ (car lst))\n     (define first-negative-element (car lst))\n     (define rest-negative-elements\n\
+    \       (filter negative? (cdr lst)))\n     (define rest-positive-elements\n \
+    \      (filter positive? (cdr lst)))\n     (list (if (null? rest-negative-elements)\n\
+    \               first-negative-element\n               (foldl max first-negative-element\n\
+    \                 rest-negative-elements))\n           (if (null? rest-positive-elements)\n\
+    \               #f\n               (foldl min (car rest-positive-elements)\n \
+    \                rest-positive-elements)))]\n    [else (list #f #f)]))\n", " \
+    \ (list (if (list? (filter integer? (filter < 0 lst))) (apply max (filter integer?\
+    \ (filter < 0 lst))) #f)\n        (if (list? (filter integer? (filter > 0 lst)))\
+    \ (apply min (filter integer? (filter > 0 lst))) #f)))\n", "  (cond\n    [(null?\
+    \ lst) (list #f #f)]\n    [(and (negative? (car lst)) (null? (cdr lst))) (list\
+    \ (car lst) #f)]\n    [(and (positive? (car lst)) (null? (cdr lst))) (list #f\
+    \ (car lst))]\n    [(and (negative? (car lst)) (positive? (cadr lst))) (list (car\
+    \ lst) (cadr lst))]\n    [(and (positive? (car lst)) (negative? (cadr lst))) (list\
+    \ (cadr lst) (car lst))]\n    [else (largest_smallest_integers (cdr lst))]))\n",
+  "  (define (largest-neg lst)\n    (cond\n      [(empty? lst) #f]\n      [(number?\
+    \ (first lst))\n       (if (and (< (first lst) 0)\n                (> (first lst)\
+    \ (largest-neg (rest lst))))\n           (first lst)\n           (largest-neg\
+    \ (rest lst)))]\n      [else (largest-neg (rest lst))]))\n  (define (smallest-pos\
+    \ lst)\n    (cond\n      [(empty? lst) #f]\n      [(number? (first lst))\n   \
+    \    (if (and (> (first lst) 0)\n                (< (first lst) (smallest-pos\
+    \ (rest lst))))\n           (first lst)\n           (smallest-pos (rest lst)))]\n\
+    \      [else (smallest-pos (rest lst))]))\n  (list (largest-neg lst) (smallest-pos\
+    \ lst)))\n", "  (cond\n    ((null? lst) (list #f #f))\n    ((null? (filter (lambda\
+    \ (x) (negative? x)) lst))\n     (list #f (apply min (filter (lambda (x) (not\
+    \ (negative? x))) lst))))\n    ((null? (filter (lambda (x) (not (negative? x)))\
+    \ lst))\n     (list (apply max (filter (lambda (x) (negative? x)) lst)) #f))\n\
+    \    (else (list (apply max (filter (lambda (x) (negative? x)) lst))\n       \
+    \         (apply min (filter (lambda (x) (not (negative? x))) lst))))))\n", " \
+    \ (list\n   (car (quicksort (filter (lambda (n) (and (number? n) (not (positive?\
+    \ n)))) lst)\n                    <))\n   (car (quicksort (filter (lambda (n)\
+    \ (and (number? n) (positive? n))) lst)\n                    >))))\n", "  (list\
+    \ (apply max (filter negative? lst))\n        (apply min (filter positive? lst))))\n",
+  "  (cond\n    ((null? lst) (list #f #f))\n    ((null? (cdr lst)) (list #f #f))\n\
+    \    (else\n     (let (\n           (max-negative #f)\n           (min-positive\
+    \ #f)\n           )\n       (for-each\n        (lambda (i)\n          (cond\n\
+    \            ((and (negative? i) (not (negative? max-negative)))\n           \
+    \  (set! max-negative i))\n            ((and (positive? i) (not (positive? min-positive)))\n\
+    \             (set! min-positive i))\n            )\n          )\n        lst\n\
+    \        )\n       (list max-negative min-positive)\n       )\n     )\n    )\n\
+    \  )\n", "  (list (large_neg lst) (small_pos lst)))\n", "  (if (empty? lst)\n\
+    \      (list #f #f)\n      (let ((a (first lst))\n            (as (rest lst)))\n\
+    \        (list (cond ((= a 0) (largest_smallest_integers as))\n              \
+    \      ((> a 0) (max a (largest_smallest_integers as)))\n                    ((<\
+    \ a 0) (min a (largest_smallest_integers as))))\n              (cond ((= a 0)\
+    \ (largest_smallest_integers as))\n                    ((> a 0) (min a (largest_smallest_integers\
+    \ as)))\n                    ((< a 0) (max a (largest_smallest_integers as))))))))\n\
+    ```\n\n```racket\n#lang racket\n", "  (cond [(and (empty? lst)\n             \
+    \ (null? (positive-integers lst)))\n         (list #f #f)]\n        [(and (empty?\
+    \ lst)\n              (null? (negative-integers lst)))\n         (list #f (min\
+    \ (positive-integers lst)))]\n        [(and (null? (positive-integers lst))\n\
+    \              (null? (negative-integers lst)))\n         (list #f #f)]\n    \
+    \    [(and (null? (positive-integers lst))\n              (not (null? (negative-integers\
+    \ lst))))\n         (list (max (negative-integers lst)) #f)]\n        [(and (not\
+    \ (null? (positive-integers lst))\n              (null? (negative-integers lst))))\n\
+    \         (list #f (min (positive-integers lst)))]\n        [else\n         (list\
+    \ (max (negative-integers lst))\n               (min (positive-integers lst)))]))\n",
+  "  (let* ([negative_integers (filter negative? lst)]\n         [positive_integers\
+    \ (filter positive? lst)])\n    (if (null? negative_integers)\n        (if (null?\
+    \ positive_integers)\n            (list #f #f)\n            (list #f (apply min\
+    \ positive_integers)))\n        (if (null? positive_integers)\n            (list\
+    \ (apply max negative_integers) #f)\n            (list (apply max negative_integers)\
+    \ (apply min positive_integers))))))\n", "  (if (empty? lst)\n      (list #f #f)\n\
+    \      (list (list-max lst) (list-min lst))))\n", "  (define (helper lst current_largest\
+    \ current_smallest)\n    (cond ((null? lst)\n           (list current_largest\
+    \ current_smallest))\n          ((not (integer? (car lst)))\n           (helper\
+    \ (cdr lst) current_largest current_smallest))\n          ((and (integer? (car\
+    \ lst)) (not (positive? (car lst))))\n           (helper (cdr lst) (car lst) current_smallest))\n\
+    \          ((and (integer? (car lst)) (positive? (car lst)))\n           (helper\
+    \ (cdr lst) current_largest (car lst)))))\n  (helper lst #f #f))\n", "  (cond\
+    \ [(null? lst) (list #f #f)]\n        [(zero? (car lst)) (largest_smallest_integers\
+    \ (cdr lst))]\n        [(and (< (car lst) 0) (zero? (cadr lst))) (list (car lst)\
+    \ #f)]\n        [(and (< (car lst) 0) (< (car lst) (cadr lst))) (list (car lst)\
+    \ #f)]\n        [(and (< (car lst) 0) (> (car lst) (cadr lst))) (largest_smallest_integers\
+    \ (cdr lst))]\n        [(and (> (car lst) 0) (zero? (cadr lst))) (list #f (car\
+    \ lst))]\n        [(and (> (car lst) 0) (> (car lst) (cadr lst))) (list #f (car\
+    \ lst))]\n        [(and (> (car lst) 0) (< (car lst) (cadr lst))) (largest_smallest_integers\
+    \ (cdr lst))]))\n", "  (define (largest_negative lst)\n    (foldl max -32768 lst))\n\
+    \  (define (smallest_positive lst)\n    (foldl min 32768 lst))\n  (list (largest_negative\
+    \ lst) (smallest_positive lst)))\n", "  (if (null? lst)\n      (list #f #f)\n\
+    \      (cons (reduce max (filter integer? (filter negative? lst)))\n         \
+    \   (reduce min (filter integer? (filter positive? lst))))))\n", "  (local [(define\
+    \ (max_neg lst)\n            (if (null? lst)\n                #f\n           \
+    \     (if (< (car lst) 0)\n                    (if (null? (cdr lst))\n       \
+    \                 (car lst)\n                        (if (< (car lst) (max_neg\
+    \ (cdr lst)))\n                            (max_neg (cdr lst))\n             \
+    \               (car lst)))\n                    (max_neg (cdr lst)))))\n    \
+    \      (define (min_pos lst)\n            (if (null? lst)\n                #f\n\
+    \                (if (> (car lst) 0)\n                    (if (null? (cdr lst))\n\
+    \                        (car lst)\n                        (if (> (car lst) (min_pos\
+    \ (cdr lst)))\n                            (min_pos (cdr lst))\n             \
+    \               (car lst)))\n                    (min_pos (cdr lst)))))\n    \
+    \      ]\n    (list (max_neg lst) (min_pos lst))))\n", "  (define (largest_negative_integer\
+    \ lst)\n    (if (null? lst)\n        #f\n        (if (and (not (null? (filter\
+    \ number? lst)))\n                 (not (null? (filter negative? lst))))\n   \
+    \         (apply max (filter negative? lst))\n            #f)))\n  (define (smallest_positive_integer\
+    \ lst)\n    (if (null? lst)\n        #f\n        (if (and (not (null? (filter\
+    \ number? lst)))\n                 (not (null? (filter positive? lst))))\n   \
+    \         (apply min (filter positive? lst))\n            #f)))\n  (list (largest_negative_integer\
+    \ lst)\n        (smallest_positive_integer lst)))\n", "  (let ([positive-integers\
+    \ (filter (lambda (e) (and (integer? e) (positive? e))) lst)]\n        [negative-integers\
+    \ (filter (lambda (e) (and (integer? e) (negative? e))) lst)])\n    (if (empty?\
+    \ positive-integers)\n        (list #f #f)\n        (list (apply max negative-integers)\
+    \ (apply min positive-integers)))))\n", '  (cons #f #f))', "  (define positives\
+    \ (filter (lambda (x) (> x 0)) lst))\n  (define negatives (filter (lambda (x)\
+    \ (< x 0)) lst))\n  (if (null? positives)\n      (list (cond\n             ((null?\
+    \ negatives) #f)\n             (else (apply max negatives)))\n            #f)\n\
+    \      (list (cond\n             ((null? negatives) #f)\n             (else (apply\
+    \ max negatives)))\n            (apply min positives))))\n", "  (cond [(empty?\
+    \ lst) (list #f #f)]\n        [(and (member #f lst) (member #t lst))\n       \
+    \  (list (max (filter (lambda (x) (not x)) lst))\n               (min (filter\
+    \ (lambda (x) x) lst)))]\n        [(member #f lst) (list #f (min lst))]\n    \
+    \    [(member #t lst) (list (max lst) #f)]\n        [else (list (max lst) (min\
+    \ lst))]))\n", "  (list\n   (for/first ((element lst)\n               #:when (negative?\
+    \ element))\n     element)\n   (for/first ((element lst)\n               #:when\
+    \ (positive? element))\n     element)))\n", "  (let ([negs (filter negative? lst)]\n\
+    \        [pos (filter positive? lst)])\n    (list (if (null? negs) #f (max negs))\n\
+    \          (if (null? pos) #f (min pos)))))\n", "  (if (empty? lst)\n      (list\
+    \ #f #f)\n      (cond\n        ((and (positive? (first lst)) (negative? (second\
+    \ lst)))\n         (list (second lst) (first lst)))\n        ((and (positive?\
+    \ (first lst)) (positive? (second lst)))\n         (list #f (first lst)))\n  \
+    \      ((and (negative? (first lst)) (negative? (second lst)))\n         (list\
+    \ (first lst) #f))\n        ((and (negative? (first lst)) (positive? (second lst)))\n\
+    \         (list (first lst) (second lst)))\n        (else\n         (list #f #f)))))\n",
+  "  (cond\n    [(empty? lst) (list #f #f)]\n    [(and (andmap number? lst)\n    \
+    \      (andmap positive? lst))\n     (list #f (apply min lst))]\n    [(and (andmap\
+    \ number? lst)\n          (andmap negative? lst))\n     (list (apply max lst)\
+    \ #f)]\n    [else (list (apply max (filter negative? lst))\n                (apply\
+    \ min (filter positive? lst)))]))\n", "  (define (calc-largest-smallest-integers\
+    \ lst result)\n    (cond\n      [(null? lst) result]\n      [(and (and (negative?\
+    \ (car lst)) (not (eq? (car (cdr result)) #f)))\n\t    (> (car lst) (car (cdr\
+    \ result))))\n       (calc-largest-smallest-integers (cdr lst) (list (list (car\
+    \ lst) (car (cdr result))) (cdr (cdr result))))]\n      [(and (and (negative?\
+    \ (car lst)) (eq? (car (cdr result)) #f))\n\t    (positive? (car (cdr (cdr result)))))\n\
+    \       (calc-largest-smallest-integers (cdr lst) (list (list (car lst) (car (cdr\
+    \ (cdr result)))) (cdr (cdr (cdr result)))))\n       ]\n      [(and (negative?\
+    \ (car lst)) (eq? (car (cdr result)) #f))\n       (calc-largest-smallest-integers\
+    \ (cdr lst) (list (list (car lst) #f) (cdr (cdr result))))]\n      [(and (and\
+    \ (positive? (car lst)) (not (eq? (car (cdr (cdr result))) #f)))\n\t    (< (car\
+    \ lst) (car (cdr (cdr result)))))\n       (calc-largest-smallest-integers (cdr\
+    \ lst) (list (car result) (list (car lst) (car (cdr (cdr result))))))]\n     \
+    \ [(and (positive? (car lst)) (eq? (car (cdr (cdr result))) #f))\n       (calc-largest-smallest-integers\
+    \ (cdr lst) (list (car result) (list (car lst) #f)))]\n      [else (calc-largest-smallest-integers\
+    \ (cdr lst) result)]))\n  (calc-largest-smallest-integers lst (list #f #f)))",
+  "  (define (filter-integers lst filtered-list)\n    (cond\n      [(null? lst) (reverse\
+    \ filtered-list)]\n      [(integer? (car lst)) (filter-integers (cdr lst) (cons\
+    \ (car lst) filtered-list))]\n      [else (filter-integers (cdr lst) filtered-list)]))\n\
+    \  (define (filter-positive lst filtered-list)\n    (cond\n      [(null? lst)\
+    \ (reverse filtered-list)]\n      [(and (integer? (car lst)) (< (car lst) 0))\
+    \ (filter-positive (cdr lst) filtered-list)]\n      [else (filter-positive (cdr\
+    \ lst) (cons (car lst) filtered-list))]))\n  (define (filter-negative lst filtered-list)\n\
+    \    (cond\n      [(null? lst) (reverse filtered-list)]\n      [(and (integer?\
+    \ (car lst)) (> (car lst) 0)) (filter-negative (cdr lst) filtered-list)]\n   \
+    \   [else (filter-negative (cdr lst) (cons (car lst) filtered-list))]))\n  (define\
+    \ (return-results lst1 lst2)\n    (cond\n      [(and (null? lst1) (null? lst2))\
+    \ (list #f #f)]\n      [(null? lst1) (list #f (min lst2))]\n      [(null? lst2)\
+    \ (list (max lst1) #f)]\n      [else (list (max lst1) (min lst2))]))\n  (return-results\
+    \ (filter-negative (filter-integers lst (list)) (list))\n                  (filter-positive\
+    \ (filter-integers lst (list)) (list))))\n", "  (define (is_negative n)\n    (<\
+    \ n 0))\n  (define (is_positive n)\n    (> n 0))\n  (define (positive_integers\
+    \ lst)\n    (cond\n      [(null? lst) lst]\n      [(is_positive (car lst)) (cons\
+    \ (car lst) (positive_integers (cdr lst)))]\n      [else (positive_integers (cdr\
+    \ lst))]))\n  (define (negative_integers lst)\n    (cond\n      [(null? lst) lst]\n\
+    \      [(is_negative (car lst)) (cons (car lst) (negative_integers (cdr lst)))]\n\
+    \      [else (negative_integers (cdr lst))]))\n  (define (largest_negative lst)\n\
+    \    (cond\n      [(null? lst) #f]\n      [(null? (cdr lst)) (car lst)]\n    \
+    \  [else (max (car lst) (largest_negative (cdr lst)))]))\n  (define (smallest_positive\
+    \ lst)\n    (cond\n      [(null? lst) #f]\n      [(null? (cdr lst)) (car lst)]\n\
+    \      [else (min (car lst) (smallest_positive (cdr lst)))]))\n  (list (largest_negative\
+    \ (negative_integers lst))\n        (smallest_positive (positive_integers lst))))",
+  "  (let ([a (apply max (filter negative? lst))]\n        [b (apply min (filter positive?\
+    \ lst))])\n    (list a b)))\n```\n\n```\n#lang racket\n", "  (let* ([lst (filter\
+    \ (lambda (num)\n                        (and (number? num)\n                \
+    \             (not (zero? num))))\n                      lst)]\n         [min\
+    \ (apply min lst)]\n         [max (apply max lst)])\n    (cond [(null? lst) (list\
+    \ #f #f)]\n          [(negative? min) (list #f min)]\n          [(positive? max)\
+    \ (list max #f)]\n          [else (list #f #f)])))", "  (define (largest_negative\
+    \ list)\n    (cond\n      ((null? list) #f)\n      ((and (integer? (car list))\
+    \ (< (car list) 0)) (max (car list) (largest_negative (cdr list))))\n      (else\
+    \ (largest_negative (cdr list)))))\n  (define (smallest_positive list)\n    (cond\n\
+    \      ((null? list) #f)\n      ((and (integer? (car list)) (> (car list) 0))\
+    \ (min (car list) (smallest_positive (cdr list))))\n      (else (smallest_positive\
+    \ (cdr list)))))\n  (list (largest_negative lst) (smallest_positive lst)))\n",
+  "  (list (largest_neg lst) (smallest_pos lst)))\n", "  (define (get-largest-neg\
+    \ vals)\n    (let* ([neg-vals (filter (lambda (val) (< val 0)) vals)]\n      \
+    \     [max (if (empty? neg-vals) #f (apply max neg-vals))])\n      max))\n  (define\
+    \ (get-smallest-pos vals)\n    (let* ([pos-vals (filter (lambda (val) (> val 0))\
+    \ vals)]\n           [min (if (empty? pos-vals) #f (apply min pos-vals))])\n \
+    \     min))\n  (list (get-largest-neg lst) (get-smallest-pos lst)))\n", "  (if\
+    \ (null? lst)\n      (list #f #f)\n      (begin\n        (let ([negative-integers\
+    \ (filter (lambda (n) (< n 0)) lst)]\n              [positive-integers (filter\
+    \ (lambda (n) (> n 0)) lst)])\n          (list (if (null? negative-integers)\n\
+    \                    #f\n                    (apply max negative-integers))\n\
+    \                (if (null? positive-integers)\n                    #f\n     \
+    \               (apply min positive-integers)))))))\n", "  (let* ([negatives (filter\
+    \ negative? lst)]\n         [positives (filter positive? lst)])\n    (if (and\
+    \ (&gt; (length negatives) 0) (&gt; (length positives) 0))\n        (list (reduce\
+    \ max negatives) (reduce min positives))\n        (list #f #f))))\n"]
 stop_tokens:
 - "\n(define "
 - "\n#|"

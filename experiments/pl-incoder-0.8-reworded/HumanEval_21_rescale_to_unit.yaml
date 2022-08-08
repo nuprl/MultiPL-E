@@ -14,7 +14,801 @@ tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&rescale
   \ 0.75])) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->([12.0,\
   \ 11.0, 15.0, 13.0, 14.0]),[0.25, 0.0, 1.0, 0.5, 0.75])) {\n        print \"ok!\"\
   \ }else{\n        exit 1;\n        }\n}\n\ntesthumaneval();"
-completions: []
+completions: ["    return @$numbers if scalar(@$numbers) == 1;\n    my($min, $max)\
+    \ = @$numbers[0..1];\n    if ($max < $min) {\n        croak(\"Input array contains\
+    \ numbers not in order or are zero, max cannot be less than min\");\n    }\n \
+    \   return map { $_ / $max - $min } @$numbers;\n}", "    my(@result) = (0);\n\
+    \    foreach my $number (@$numbers) {\n        my $rescaled = ($number / $numbers[-1])\
+    \ * ($numbers[-1] + 1);\n        $result[$#result] =  $rescaled;\n    }\n    return\
+    \ \\@result;\n}", "    my $min = min($numbers);\n    my $max = max($numbers);",
+  "    my($min) = $numbers[0];\n    my($max) = $numbers[0];", "    $numbers[0] = $numbers[0]\
+    \ / $numbers[1] if @$numbers == 2;\n    return @$numbers;\n}", "    my ($sum,\
+    \ $avg);\n    # Find minimum and maximum\n    $sum = @$numbers[0];\n    $avg =\
+    \ @$numbers[0];\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n    for\
+    \ my $number (@$numbers) {\n        $sum += $number;\n        $avg += $number;\n\
+    \        $min = $number if $min > $number;\n        $max = $number if $max < $number;\n\
+    \    }\n    $sum = $sum / scalar @$numbers;\n    $avg = sqrt($avg / scalar @$numbers);\n\
+    \    $min = $min / $sum;\n    $max = $max / $sum;\n    # Apply linear scale\n\
+    \    my @scale;\n    push @scale, 0;\n    my $pow = 1;\n    for my $number (@$numbers)\
+    \ {\n        push @scale, $min + $number * $scale[-1] / $sum;\n        $scale[-1]\
+    \ = $number * $pow / $sum;\n        $pow += 1;\n    }\n    push @scale, 1;\n \
+    \   return @scale;\n}", "    my(@results);\n    @results = map { $_ / $scale;\
+    \ };\n    @results = map { $_ * $scale; };\n    @results;\n}\n</code>\n<|/ a tags=arrays,perl\
+    \ |>\n<| c |>\nI see what you mean, but wouldn't this solution only work for an\
+    \ array of two values?\n<|/ c |>\n<| c |>\n: Yes, it would only work for an array\
+    \ of two values, because the scale is set by dividing by the minimum value and\
+    \ the maximum value.  But that's easily fixed.  I did it by refactoring the code\
+    \ so that it handles any number of values, by passing in a scale factor.  I updated\
+    \ the answer to include that.\n<|/ c |>\n<| c |>\nThanks, I like your solution.\n\
+    <|/ c |>\n<| c |>\n: It probably is slower than the other answers, but for an\
+    \ array of more than two values (like the OP wants), it is actually more general\
+    \ and less prone to error.\n<|/ c |>\n<| c |>\nYes, it is slower than the others.\
+    \ I guess it depends on the number of elements you are working with, but for me\
+    \ a solution like this seems to be the most readable. I like it.\n<|/ c |>\n<|\
+    \ a |>\nI think it's an overkill, but I wrote a little snippet in pure Perl just\
+    \ for this purpose and I thought I would share it here:\n<code>", "    my $scale;\n\
+    \    my $min = min($numbers);\n    my $max = max($numbers);\n    my $diff = 1\
+    \ - $min + $max;\n    if ($diff < 1e-10) {\n        $scale = 0;\n    } else {\n\
+    \        $scale = 1 / ($diff + 1e-10);\n    }\n    my $result = [];\n    my $i\
+    \ = 0;\n    my $tmp;\n    foreach my $number (@$numbers) {\n        $tmp = $number\
+    \ + $scale;\n        if ($tmp < $min) {\n            $tmp += 1 - $min;\n     \
+    \   }\n        elsif ($tmp > $max) {\n            $tmp -= $max;\n        }\n \
+    \       $result[$i] = $tmp;\n        $i++;\n    }\n    return $result;\n}\n</code>\n\
+    <|/ a dscore=1 tags=algorithm,arrays,perl,max |>\n<| c |>\nI think there's something\
+    \ wrong in rescaling function: the numbers don't seem to fall inside the range\
+    \ `0...1`. Please test your code with `rescale_to_unit([1.0, 10.0, 100.0])` and\
+    \ compare it to the output of `rescale_to_unit([1.0])`.\n<|/ c |>\n<| c |>\nI\
+    \ have also added a line in the code, that seems to work for me: `$tmp -= $max;`,\
+    \ maybe that was a typo somewhere?\n<|/ c |>\n<| c |>\nThanks for your answer!\
+    \ As I mentioned in my comment on the question - my aim was to find an algorithm\
+    \ to find maximum and minimum from two arrays quickly and with minimum number\
+    \ of steps as possible.\n<|/ c |>\n<| c |>\nThis is wrong. `max(0,1)` should be\
+    \ `1`, and `min(0,1)` should be `0`, but `max(-1,1)` is `1` and `min(-1,1)` is\
+    \ `-1`.\n<|/ c |>\n<| a tags=algorithm,arrays,perl,max |>\nThis sounds like homework,\
+    \ so I'll try to give you a push in the right direction.\nI'm assuming you have\
+    \ a function that can determine whether or not the two numbers are equal.  It\
+    \ should return true or false (or some value that's equivalent to false)\nThen\
+    \ you need to create a function that loops through the two arrays, and compares\
+    \ each element to the current maximum.  If the element is not less than the maximum,\
+    \ update it.  If the element is not greater than the maximum, update it.  When\
+    \ you're done, return true if you hit the max and false if you hit the min.\n\
+    <|/ a dscore=0 |>\n<| a dscore=0 |>\nTo find the maximum, you need to keep track\
+    \ of the maximum in an array $max. If you find a new maximum ($x > $max[i]), ",
+  "    my($min) = $numbers[0] || 0;\n    my($max) = $numbers[-1] || 1;\n    \n   \
+    \ my @scales = map { $_ * $max } @$numbers;\n    \n    my $scale = $_ for @scales;\n\
+    \    \n    my $min = min $min, @scales;\n    my $max = max $max, @scales;\n  \
+    \  \n    my @scaled_numbers = map { ($_ - $min)/($max - $min) } @$numbers;\n \
+    \   \n    my $result = @$numbers;\n    $result = @$numbers if @$numbers < @$scales;\n\
+    \    \n    $result = $result unless @$numbers == @$scales;\n    \n    @$result\
+    \ = map { $scale * $_ } @scaled_numbers;\n    \n    return @$result;\n}", "  \
+    \  my @unit = ();\n    my $min = undef;\n    my $max = undef;\n    my @scales\
+    \ = ();\n    for my $n (@$numbers) {\n        if (defined $min) {\n          \
+    \  push @scales, $max - $min;\n        }\n        $min = defined $min ? $min :\
+    \ $n;\n        $max = defined $max ? $max : $n;\n        push @unit, $n;\n   \
+    \ }\n    my $len = scalar(@$numbers);\n    my $scale = @scales ? $scales[$len-1]\
+    \ / $max : 0;\n    for (my $i = 0; $i < $len; $i++) {\n        $unit[$i] = $scales[$i]\
+    \ * $unit[$i] + $min;\n    }\n    return @unit;\n}", '    return @$numbers if
+    scalar($numbers);', "    $numbers[-1] = 1.0 if $numbers[-1] == 0;\n    return\
+    \ map { $numbers[-1] / $_ } (@$numbers[1..@$numbers-1]);\n}", "    my @units_used;\n\
+    \    my $min_element = $numbers[0];\n    my $max_element = $numbers[0];\n    my\
+    \ $scale;\n    for (@$numbers) {\n        if ($min_element > $number) {\n    \
+    \        $min_element = $number;\n        }\n        if ($max_element < $number)\
+    \ {\n            $max_element = $number;\n        }\n        if ($min_element\
+    \ > $max_element) {\n            $min_element = $max_element;\n        }\n   \
+    \     push @units_used, $min_element;\n        $min_element--;\n    }\n    $scale\
+    \ = $min_element - $max_element;\n    for (@$numbers) {\n        $number *= $scale;\n\
+    \    }\n    return $numbers;\n}", "    return map { my $n = ($numbers - min($numbers))\
+    \ / (max($numbers) - min($numbers)) }\n}", "    if (scalar(@$numbers) <= 1) {\
+    \ return $numbers[0]; } else { return (1.0 / (@$numbers - 1)) * $numbers[-1];\
+    \ }\n}", "    my @results;\n    $numbers[0] = 1.0 / $numbers[0];\n    for my $number\
+    \ (@$numbers) {\n        push @results, $number / $numbers[0];\n    }\n    return\
+    \ @results;\n}", "    my(@result);\n    foreach my $number (@$numbers) {\n   \
+    \     my $min = $number;\n        my $max = $number;\n        $min -= $min % 1;\n\
+    \        $max += 1 - $max % 1;\n        $min = 0;\n        $max = 1;\n       \
+    \ my $result = $min + ($max - $min) * $number;\n        push(@result, $result);\n\
+    \    }\n    return wantarray ? @result : $result[0];\n}", "    my @result;\n \
+    \   my $min = scalar(@$numbers) ? min($numbers) : 0.0;\n    my $max = scalar(@$numbers)\
+    \ ? max($numbers) : 1.0;\n    \n    for my $number (@$numbers) {\n        $number\
+    \ = $number - $min;\n        $number /= $max - $min;\n        $number += $min;\n\
+    \        push @result, $number;\n    }\n    \n    return @result;\n}", "    my\
+    \ @rescaled_numbers = ();\n    my $min_val = ${$numbers[0]};\n    my $max_val\
+    \ = ${$numbers[0]};\n    foreach my $num (@$numbers) {\n        $min_val = min($min_val,\
+    \ $num);\n        $max_val = max($max_val, $num);\n    }\n    my $rescaling_factor\
+    \ = $max_val - $min_val;\n    foreach my $num (@$numbers) {\n        $num = $min_val\
+    \ + int(($num - $min_val) / $rescaling_factor * $rescaling_factor - 0.5);\n  \
+    \      push(@rescaled_numbers, $num);\n    }\n    @$numbers = \\@rescaled_numbers;\n\
+    \    return;\n}", "    if (scalar @$numbers > 0) {\n        my($smallest) = $numbers[0];\n\
+    \        for my $n (1..scalar @$numbers) {\n            $smallest = 1 if $smallest;\n\
+    \            $numbers[$n] -= $smallest if $numbers[$n] < $smallest and $smallest\
+    \ != 0;\n        }\n    }\n    return @$numbers;\n}", "    # Find minimum and\
+    \ maximum numbers in the array\n    my ($min, $max) = (undef, undef);\n    for\
+    \ my $number (@$numbers) {\n        if (not defined $min or $min > $number) {\n\
+    \            $min = $number;\n        }\n        if (not defined $max or $max\
+    \ < $number) {\n            $max = $number;\n        }\n    }\n    return [ 0,\
+    \ 1 ] if $min == $max;\n    # Find how many numbers we need to scale between\n\
+    \    my $scale = ($max - $min) / (@$numbers - 1);\n    for my $i (0..$@$numbers\
+    \ - 1) {\n        my $number = $numbers[$i];\n        $numbers[$i] = $min + $scale\
+    \ * $i;\n    }\n    return @$numbers;\n}", "    my $max = reduce { $a > $b ? $a\
+    \ : $b } @$numbers;\n    my $min = reduce { $a < $b ? $a : $b } @$numbers;\n \
+    \   my $range = $max - $min;\n    @$numbers = map { $_ / $range } @$numbers;\n\
+    }", "    my $min = scalar(@$numbers);\n    $min = 0 if $min == 0;\n    my $max\
+    \ = scalar(@$numbers);\n    $max = 1 if $max == 1;", "    my @rescaled = ();\n\
+    \    my $min = $numbers[0];\n    my $max = $numbers[0];\n    foreach my $x (@$numbers)\
+    \ {\n        if ($x < $min) {\n            $min = $x;\n        } elsif ($x > $max)\
+    \ {\n            $max = $x;\n        }\n        push @rescaled, $min + ($x - $min)\
+    \ * 1.0 / ($max - $min);\n    }\n    return @rescaled;\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nI haven't tested your function, but it seems to me that this function\
+    \ will produce incorrect results, if you have negative numbers. For example, try\
+    \ running it with [-1.2,-2.0,-3.0,-4.0,-5.0]\n<|/ c |>\n<| c |>\n: Thank you for\
+    \ pointing this out, I didn't realise this at first. I edited my answer.\n<|/\
+    \ c |>\n<| c |>\nOoh, I like your solution better. I guess it's a matter of taste.\n\
+    <|/ c |>\n<| c |>\nI see that the `max` function is redundant because I already\
+    \ have access to the `min` value. I don't know if I like that style better myself,\
+    \ though.\n<|/ c |>\n<| c |>\nThanks for the comment. I don't know what the right\
+    \ way is - I guess this is a matter of taste, too. I personally think it makes\
+    \ it easier to read.\n<|/ c |>\n<| a dscore=4 |>\nJust to add my two cents, as\
+    \ noted in the comments, there is a way to do this without using an intermediate\
+    \ list by using the map function combined with the min and max functions. This\
+    \ would also work in Perl 5.8.\n<code>\nuse strict;\nuse warnings;", "    # Find\
+    \ the min/max values\n    my $min_val = min(@{$numbers});\n    my $max_val = max(@{$numbers});",
+  "    my($max) = $numbers->[-1];\n    my($min) = $numbers->[0];\n    my($new_values)\
+    \ = [];", "    my @nums = @$numbers;\n    my $min = scalar @nums ? $nums[0] :\
+    \ 0;\n    my $max = scalar @nums ? $nums[$#nums] : 1;\n    my $range = @nums -\
+    \ 1;", '    my(@results);', "    my $min = @$numbers < 2 ? 0 : $numbers[0];\n\
+    \    my $max = @$numbers > 2 ? $numbers[1] : 1;\n    my $diff = $max - $min;\n\
+    \    my @out = ();\n    my $n = @$numbers;\n    my $scale;\n    my $i;\n    for($i\
+    \ = 0; $i < @$numbers; $i++) {\n        if($i < $n-1) {\n            $scale =\
+    \ ($max - $min + 1) / ($numbers[$i] - $numbers[$i - 1]);\n            $out[$i]\
+    \ = $numbers[$i] * $scale + $min;\n        } else {\n            $scale = ($max\
+    \ - $min + 1) / ($numbers[$i] - $numbers[$i - 1]);\n            $out[$i] = $numbers[$i]\
+    \ * $scale;\n        }\n    }\n    return @out;\n}", '    my(@new_numbers);',
+  "    return map { $numbers[0] = ($numbers[0] - min($numbers)) / max($numbers) };\n\
+    }", "    my @transformed = ();\n    foreach my $n (@$numbers) {\n        if ($n\
+    \ != 0) {\n            push @transformed, (1.0 / $n);\n        } else {\n    \
+    \        push @transformed, 0;\n        }\n    }\n    return @transformed;\n}",
+  "    my @result = ();\n    my $min_value = $numbers[0]; # initialize with first\
+    \ number\n    my $max_value = $numbers[0];\n    my $min_value_magnitude;\n   \
+    \ my $max_value_magnitude;", "    my $min = @$numbers < 2 ? $numbers[0] : $numbers[0];\n\
+    \    my $max = @$numbers < 2 ? $numbers[1] : $numbers[1];\n    for (my $i = 0;\
+    \ $i < @$numbers; $i++) {\n        $numbers[$i] = ($numbers[$i] - $min) / ($max\
+    \ - $min);\n    }\n    return @$numbers;\n}", "    my($largest);\n    my($smallest);",
+  "    my $max = $numbers[0];\n    for my $number (@$numbers) {\n        $max = $number\
+    \ if $number > $max;\n    }\n    return map { $_ / $max } @$numbers;\n}", "  \
+    \  my $max = @$numbers > 1 ? $numbers[-1] : 1;\n    my $min = @$numbers > 0 ?\
+    \ $numbers[0] : 0;\n    my $len = @$numbers;\n    my @unit;\n    for (my $i =\
+    \ 0; $i < $len; $i++) {\n        if ($numbers[$i] < $min) {\n            $unit[$i]\
+    \ = 0.0;\n        } elsif ($numbers[$i] > $max) {\n            $unit[$i] = 1.0;\n\
+    \        } else {\n            $unit[$i] = ($numbers[$i] - $min) / ($max - $min);\n\
+    \        }\n    }\n    return \\@unit;\n}", '    my($min, $max) = (0, 1);', '    my(@scales)
+    = @_;', "    my($min) = @$numbers[0];\n    my($max) = @$numbers[0];", "    my\
+    \ @units = map { $_ / 2.0 } @$numbers;\n    my $max = $units[-1];\n    my $min\
+    \ = $units[0];\n    my @rescaled = map { ($_ - $min) / ($max - $min) } @$numbers;\n\
+    \    return @rescaled;\n}\n</code>\n<|/ a tags=perl,linear-regression,machine-learning,regression\
+    \ |>\n<| c |>\nI agree with your solution, but I don't agree with your second\
+    \ solution. If you multiply the numbers by their sum, you get something that looks\
+    \ like a weighted average, except the values are scaled by the sum of the squares\
+    \ of the weights (which is 1/N).\n<|/ c |>\n<| c |>\n: I agree with you completely.\
+    \ My first solution had a bug in it. Thanks for pointing that out.\n<|/ c |>\n\
+    <| c |>\nIt should be `return map { $_ / $sum / $units };` instead. It scales\
+    \ by the square root of the sum, not the sum of the squares of the weights.\n\
+    <|/ c |>\n<| c |>\n: Fixed it. Thanks. :-)\n<|/ c |>\n<| c |>\nI think there's\
+    \ still a bug in your code because `perldoc -f sqrt` is actually `sqrt ($_)` and\
+    \ the square root of a negative number is not defined. You probably meant `map\
+    \ { $_ / sqrt($_) }`\n<|/ c |>\n<| a dscore=5 |>\nIf you're open to using a third-party\
+    \ module, Math::DSpline is a good solution for this kind of problem. \n<code>\n\
+    use strict;\nuse warnings;\nuse Math::DSpline;", "    my @rescaled = ();\n   \
+    \ my $min = $numbers[0];\n    my $max = $numbers[0];", "    my @result = ();\n\
+    \    if (scalar @$numbers < 2) {\n        return $numbers;\n    }\n    my $max_number\
+    \ = $numbers[0];\n    my $min_number = $numbers[0];\n    foreach my $number (@$numbers)\
+    \ {\n        if ($number > $max_number) {\n            $max_number = $number;\n\
+    \        }\n        if ($number < $min_number) {\n            $min_number = $number;\n\
+    \        }\n    }\n    foreach my $number (@$numbers) {\n        my $new_number\
+    \ = $number - $min_number;\n        $new_number *= 1.0 / ($max_number - $min_number);\n\
+    \        push (@result, $new_number);\n    }\n    return @result;\n}", "    my\
+    \ $smallest = $numbers[0];\n    my $largest  = $numbers[-1];\n    my $scale =\
+    \ 1 / ($largest - $smallest);", '    my @numbers_to_reduce = ();', "    return\
+    \ map { $_ / 100 } @$numbers;\n}", "    my @new_numbers = ();\n    my $min = $numbers[0];\n\
+    \    my $max = $numbers[0];\n    for my $num (@$numbers) {\n        if ( $num\
+    \ > $max ) {\n            $max = $num;\n        } elsif ( $num < $min ) {\n  \
+    \          $min = $num;\n        }\n    }", "    my $num_length = $numbers->[0];\n\
+    \    if (@$numbers == 1) {\n        return $numbers[0];\n    }\n    my $min =\
+    \ $numbers[0];\n    my $max = $numbers[0];\n    for my $i (1..$num_length) {\n\
+    \        $min = $min > $numbers[$i] ? $numbers[$i] : $min;\n        $max = $max\
+    \ < $numbers[$i] ? $numbers[$i] : $max;\n    }\n    return $min + ($max - $min)\
+    \ / ($num_length - 1);\n}", "    if(@$numbers < 2) {\n        return $numbers;\n\
+    \    }\n    my $min = min(@$numbers);\n    my $max = max(@$numbers);", "    my\
+    \ $min = $numbers[0];\n    my $max = $numbers[0];\n    foreach my $num (@$numbers)\
+    \ {\n        if ($min > $num) {\n            $min = $num;\n        }\n       \
+    \ if ($max < $num) {\n            $max = $num;\n        }\n    }\n    return map\
+    \ { ($num - $min) / ($max - $min) } @$numbers;\n}", "    my @ranges = ();\n  \
+    \  my $min;\n    my $max;\n    my $max2;\n    my $min2;\n    my $min3;\n    my\
+    \ $max3;\n    my $xmin;\n    my $xmax;\n    my $i;", "    my @new_numbers = ();\n\
+    \    my $min = ${$numbers[0]};\n    my $max = ${$numbers[0]};\n    my $scale =\
+    \ 1;\n    foreach my $number (@$numbers) {\n        if ($number > $max) {\n  \
+    \          $max = $number;\n        } elsif ($number < $min) {\n            $min\
+    \ = $number;\n        }\n        my $new_number = $min + ($number - $min) * $scale;\n\
+    \        $new_numbers[$new_number] = $number;\n    }\n    return \\@new_numbers;\n\
+    }", "    my(@results);\n    my @result_numbers;", "    my @numbers_copy = @$numbers;\n\
+    \    @numbers_copy -= [min @$numbers]; # Get rid of smallest number\n    @numbers_copy\
+    \ /= [max @$numbers]; # Get rid of biggest number\n    my $sum = reduce { $a +\
+    \ $b } @numbers_copy;\n    my $average = shift;\n    return map { $_ / $sum }\
+    \ map { $average + $_ } @$numbers;\n}", '    my(@results) = ();', "    my $min\
+    \ = min($numbers);\n    my $max = max($numbers);\n    my $len = @$numbers;\n \
+    \   for (my $i = 0; $i < $len; $i++) {\n        $numbers[$i] = ($numbers[$i] -\
+    \ $min) / ($max - $min);\n    }\n    return @$numbers;\n}", '    return if (@$numbers
+    < 2);', "    my $scale = $numbers[0];\n    my $max = $numbers[0];\n    my $min_value\
+    \ = $numbers[0];\n    my $max_value = $numbers[0];", "    my $min = min($numbers);\n\
+    \    my $max = max($numbers);\n    return map { ($_ - $min) / ($max - $min) }\
+    \ @$numbers;\n}", "    my @rescaled = map { $_ / $total_number } @$numbers;\n\
+    \    return @rescaled;\n}", "    my $min = min @$numbers;\n    my $max = max @$numbers;\n\
+    \    my @zeros;\n    my @ones;\n    my $range = $max - $min;\n    for(my $i =\
+    \ 0; $i < @$numbers; $i++) {\n        if($numbers[$i] < $min) {\n            $zeros[$i]\
+    \ = $min + ($range/2 - $numbers[$i]);\n        }\n        elsif($numbers[$i] >\
+    \ $max) {\n            $ones[$i] = $numbers[$i] - $max;\n        }\n        else\
+    \ {\n            $ones[$i] = $numbers[$i];\n        }\n    }\n    return \\@zeros\
+    \ + \\@ones;\n}", "    my @results;\n    my $min = scalar(@$numbers);\n    my\
+    \ $max = 0;\n    for (my $i = 0; $i < scalar(@$numbers); $i++) {\n        $max\
+    \ = max($max, $numbers[$i]);\n    }\n    for (my $i = 0; $i < scalar(@$numbers);\
+    \ $i++) {\n        $numbers[$i] = $numbers[$i] / $max if $numbers[$i] > ($min\
+    \ * .25);\n        $numbers[$i] = $numbers[$i] - ($numbers[$i] * .25) if $numbers[$i]\
+    \ < ($min * .75);\n        $results[$i] = $numbers[$i];\n    }\n    @results =\
+    \ sort { $a <=> $b } @results;\n    return @results;\n}\n</code>\n<|/ a tags=perl,normalization\
+    \ |>\n<| c |>\nI like the fact that you have done the looping explicitly. But\
+    \ I am wondering whether you do any looping in the sub routines. I thought looping\
+    \ was the main purpose of subroutines.\n<|/ c |>\n<| c |>\nNo, subroutines are\
+    \ basically just loops that you call without using the looping constructs directly.\
+    \ Perl's list operators help you with looping as well, they can do arbitrary looping\
+    \ over sequences, such as `grep` and `map`. [See `perldoc perlop`](http://perldoc.perl.org/perlop.html)\n\
+    <|/ c |>\n<| a dscore=3 |>\n<code>\nuse strict;\nuse warnings;", "    my @new_numbers\
+    \ = ();\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n    foreach my\
+    \ $num (@$numbers) {\n        my $new_number = ($num - $min) / ($max - $min);\n\
+    \        push(@new_numbers, $new_number);\n        $min = $num if $new_number\
+    \ < $min;\n        $max = $num if $new_number > $max;\n    }\n    return @new_numbers;\n\
+    }", "    if(@$numbers < 2) {\n        return $numbers;\n    }\n    my($sum) =\
+    \ 0.0;\n    my($min_max) = (undef, undef);\n    for(my $i = 0; $i < @$numbers;\
+    \ $i++) {\n        if($min_max->[0] < $numbers[$i]) {\n            $min_max->[0]\
+    \ = $numbers[$i];\n        }\n        if($min_max->[1] > $numbers[$i]) {\n   \
+    \         $min_max->[1] = $numbers[$i];\n        }\n        $sum += $numbers[$i];\n\
+    \    }\n    $sum *= 1/$min_max->[1];\n    for(my $i = 0; $i < @$numbers; $i++)\
+    \ {\n        $numbers[$i] = $numbers[$i]*$sum;\n    }\n    return @$numbers;\n\
+    }", "    my($min, $max) = @{ $numbers->[0] };\n    my($scale, $offset) = ( $max\
+    \ > $min ? $max / $min : 1/$min );\n    $scale = $scale == $offset ? 1 : $scale;\n\
+    \    my @rescaled = ();\n    my $i = 0;\n    my $last_value = 0;\n    foreach\
+    \ my $number (@$numbers) {\n        $rescaled[$i] = $last_value + $last_value\
+    \ / $scale;\n        $last_value = $number;\n        $i++;\n    }\n    return\
+    \ @rescaled;\n}", '    my(@results);', "    my $min = $numbers[0];\n    my $max\
+    \ = $numbers[0];\n    foreach my $number (@$numbers) {\n        if ($min > $number)\
+    \ {\n            $min = $number;\n        }\n        if ($max < $number) {\n \
+    \           $max = $number;\n        }\n    }", "    my($min, $max) = (0, 1);\n\
+    \    \n    my($scale, $offset);\n    \n    foreach my $number (@$numbers) {\n\
+    \        $scale = $min + $max - $number;\n        $scale = $scale < 0 ? 0 : $scale;\n\
+    \        $scale = (1/$scale);\n        $offset = -$scale;\n        $offset = $offset\
+    \ < 0 ? 0 : $offset;\n    }\n    \n    return @$numbers;\n}\n</code>\n<|/ a dscore=0\
+    \ |>\n<| c |>\nWhat does the `return @$numbers` do? Does it make the array a scalar\
+    \ array?\n<|/ c |>\n<| c |>\nNot quite. `@_` returns all the elements of the array.\
+    \ So `$numbers` becomes a reference to an array with all elements returned by\
+    \ `@$numbers`. When you assign `@$numbers = $rescaled_numbers` this means you\
+    \ assigned a reference to an array to a scalar variable `@$numbers`.\n<|/ c |>\n\
+    <| a dscore=0 |>\n<code>", "    return @$numbers if (@$numbers == 1);\n    my\
+    \ $minimum = $numbers[0];\n    my $maximum = @$numbers > 1 ? $numbers[1] : 1;\n\
+    \    my @new_numbers = ();\n    for (my $i = 0; $i < @$numbers; $i++) {\n    \
+    \    $new_numbers[$i] = (($numbers[$i] - $minimum) / ($maximum - $minimum)) if\
+    \ ($numbers[$i] > $maximum);\n        $new_numbers[$i] = 0 if ($numbers[$i] <\
+    \ $minimum);\n    }\n    return @new_numbers;\n}", "    my ($min, $max) = @$numbers[0,\
+    \ 1];\n    my $scale = ($max - $min);\n    my $offset = $min * $scale;\n    @$numbers\
+    \ = map { $_ / $scale} @$numbers;\n    return @$numbers;\n}", "    my @rescale_to;\n\
+    \    my $min;\n    my $max;\n    for my $number(@$numbers) {\n        if ($min\
+    \ == undef) {\n            $min = $number;\n            $max = $number;\n    \
+    \    } elsif ($number < $min) {\n            $min = $number;\n        } elsif\
+    \ ($number > $max) {\n            $max = $number;\n        }\n    }\n    my $length\
+    \ = $#numbers + 1;\n    if ($length == 1) {\n        $numbers[0] = 0;\n    }\n\
+    \    my $sum = 0;\n    my $sum_squares = 0;\n    for my $number(@$numbers) {\n\
+    \        $sum += $number;\n        $sum_squares += $number * $number;\n    }\n\
+    \    my $scale;\n    if ($sum_squares <= 0) {\n        $scale = 1;\n    } else\
+    \ {\n        $scale = $sum / $sum_squares;\n    }\n    my $rescale_factor = $scale\
+    \ * ($max - $min) + $min;\n    my @new_numbers;\n    for my $number(@$numbers)\
+    \ {\n        $new_numbers[$#new_numbers + 1] = $number * $rescale_factor + $min;\n\
+    \    }\n    return @new_numbers;\n}", "    my $min = $numbers->[0];\n    my $max\
+    \ = $numbers->[0];\n    foreach my $i (1..$#$numbers) {\n        $min = $i if\
+    \ $min > $numbers->[$i];\n        $max = $i if $max < $numbers->[$i];\n    }\n\
+    \    return $min * ones($#$numbers, 1);\n}", "    my(@results);\n    my($smallest,\
+    \ $largest);", "    my $min = min $numbers;\n    my $max = max $numbers;\n   \
+    \ if ($min == $max) {\n        return [1.0];\n    }\n    return [$min / ($max\
+    \ - $min)];\n}", "    $numbers[0] /= $numbers[1];\n    $numbers[0] += ($numbers[1]\
+    \ > 0) ? $numbers[1] : 0;\n    $numbers[0] /= $numbers[1];\n    return @$numbers;\n\
+    }", "    $numbers[0] = 0 unless ($numbers[0] > 0);\n    $numbers[1] = 1 unless\
+    \ ($numbers[1] > 0);\n    my(@output) = ();\n    my $min = min($numbers);\n  \
+    \  my $max = max($numbers);\n    foreach my $number (@$numbers) {\n        $number\
+    \ * 1.0 / $max if ($number > $max);\n        $number * 1.0 / $min if ($number\
+    \ < $min);\n        push(@output, $number);\n    }\n    return @output;\n}", " \
+    \   my(@results);\n    if ($numbers[0] >= $numbers[1]) {\n        push(@results,\
+    \ 0);\n        push(@results, 1);\n    }\n    else {\n        push(@results, 1);\n\
+    \        push(@results, 0);\n    }\n    for (my $i = 1; $i < $#numbers; $i++)\
+    \ {\n        my $scale = (($numbers[$i] - $numbers[$i - 1])\n            / ($numbers[$i]\
+    \ + $numbers[$i - 1]));\n        push(@results, $scale * $results[-1]);\n    }\n\
+    \    return @results;\n}", "    $numbers[-1] =~ s/^-?(\\d+)$/-$1/;\n    my $num_min\
+    \ = 1;\n    my $num_max = @$numbers - 1;\n    my $min = $num_max;\n    my $max\
+    \ = 0;\n    foreach my $number (@$numbers) {\n        if ($number < $num_min)\
+    \ {\n            $min = $number;\n        } elsif ($number > $num_max) {\n   \
+    \         $max = $number;\n        }\n    }", "    my @new_numbers = ();\n   \
+    \ my $min = $numbers->[0];\n    my $max = $numbers->[0];", "    return map { $_\
+    \ / $#numbers - 1.0 } @$numbers;\n}", "    my @out;\n    my $min;\n    my $max;\n\
+    \    my $min_num;\n    my $max_num;\n    foreach my $num (@$numbers) {\n     \
+    \   $min = $min || $num;\n        $max = $max || $num;\n        $min_num = $min\
+    \ + $min;\n        $max_num = $max + $max;\n        $out[$_] = $num/$max_num if\
+    \ $num/$max_num > 1;\n        $out[$_] = $num/$min_num if $num/$min_num < 0;\n\
+    \    }\n    return @out;\n}", "    my($min, $max) = @{$numbers};\n    if($min\
+    \ == 0) {\n        $min = $max;\n    }\n    if($max == 0) {\n        $max = $min;\n\
+    \    }\n    my $scale = 1.0 / ($max - $min);\n    return map {$_ * $scale} @$numbers;\n\
+    }", "    my @unit = [];\n    my @new = [];\n    my $min;\n    my $max;\n    $min\
+    \ = min @$numbers;\n    $max = max @$numbers;\n    while (my($num) = each @$numbers)\
+    \ {\n        if ($num >= $min) {\n            $new[$_] = ($num - $min) / ($max\
+    \ - $min);\n        }\n        else {\n            $new[$_] = 0;\n        }\n\
+    \    }\n    return \\@new;\n}", "    my($min, $max) = @{$numbers};\n    my $diff\
+    \ = $max - $min;\n    my $scale = ($diff == 0) ? 1.0 : (1.0 / $diff);\n    foreach\
+    \ my $x (@{$numbers}) {\n        $x *= $scale;\n    }\n    return $min, $max;\n\
+    }", '    my(@results);', "    my $min = min $numbers;\n    my $max = max $numbers;\n\
+    \    my $len  = scalar @$numbers;\n    my @res = map { $_ - $min / $len, $_ }\
+    \ @$numbers;\n    return @res;\n}", "    my $length = @$numbers;\n    \n    #\
+    \ check whether there is at least two elements before we can use it\n    unless\
+    \ ($length > 1) {\n        Carp::confess(\"Cannot rescale to unit array if there\
+    \ are less than two elements\");\n    }\n    \n    # convert all elements to double\n\
+    \    for (my $i = 0; $i < $length; ++$i) {\n        $numbers[$i] = $numbers[$i]\
+    \ unless $numbers[$i] =~ /^[+-]?\\d+$/;\n    }\n    \n    # get the minimum and\
+    \ maximum elements\n    my $min_number = $numbers[0];\n    my $max_number = $numbers[0];\n\
+    \    for (my $i = 1; $i < $length; ++$i) {\n        $min_number = $numbers[$i]\
+    \ if $numbers[$i] < $min_number;\n        $max_number = $numbers[$i] if $numbers[$i]\
+    \ > $max_number;\n    }\n    \n    # rescale the numbers to unit interval [0,1]\n\
+    \    for (my $i = 0; $i < $length; ++$i) {\n        $numbers[$i] = $numbers[$i]\
+    \ / $max_number if $max_number != 0;\n    }\n    \n    return @$numbers;\n}",
+  "    my $min = min $numbers;\n    my $max = max $numbers;\n    my @unit;\n    for\
+    \ my $num (@$numbers) {\n        my $unit = ($num - $min) / ($max - $min);\n \
+    \       push @unit, $unit;\n    }\n    return @unit;\n}", "    my($max_value)\
+    \ = $numbers[-1];\n    my($min_value) = $numbers[0];\n    if(@$numbers > 1) {\n\
+    \        my $n = scalar @$numbers;\n        my $scale = 1.0;\n        my $diff\
+    \ = $numbers[-1] - $numbers[0];\n        for(my $i = 1; $i < $n; $i++) {\n   \
+    \         my $n = $numbers[$i];\n            my $new_val = sprintf(\"%f\", $n\
+    \ * $scale);\n            $numbers[$i] = $new_val if $new_val > $max_value;\n\
+    \            $numbers[$i] = $new_val if $new_val < $min_value;\n            $scale\
+    \ *= $diff/$n;\n        }\n    }\n    return @$numbers;\n}", "    $numbers[-1]\
+    \ = 1 - $numbers[-1];\n    $numbers[-1] = $numbers[-1] if @$numbers > 1;\n   \
+    \ return map { $_ / @$numbers } @$numbers;\n}", '    return $numbers[0] if scalar
+    @$numbers < 1;', "    my(@results);\n    my $min_value = @$numbers < 2 ? 0 : ($numbers[0]\
+    \ + $numbers[1]) / 2;\n    my $max_value = @$numbers < 2 ? 1 : ($numbers[0] +\
+    \ $numbers[1]);\n    my $max_unit_value = @$numbers < 2 ? 1 : 1/$max_value;\n\
+    \    for (@$numbers) {\n        $numbers[0] += $min_value if $min_value <= 0;\n\
+    \        $numbers[1] += $max_unit_value if $max_unit_value >= 1;\n        push(@results,\
+    \ $numbers[0] / $numbers[1]);\n    }\n    @results;\n}", "    my(@new_numbers);\n\
+    \    my ($max_number) = $numbers[0];\n    my $scale = $max_number / @$numbers;\n\
+    \    for my $number (@$numbers) {\n        my $new_number = $number * $scale;\n\
+    \        push(@new_numbers, $new_number);\n        $scale = 1;\n    }\n    return\
+    \ @new_numbers;\n}", "    my @result = [];\n    foreach my $num (@$numbers) {\n\
+    \        if ($num != 0) {\n            push(@result, $num / min($numbers));\n\
+    \        } else {\n            push(@result, 0);\n        }\n    }\n    return\
+    \ \\@result;\n}\n</code>\n<|/ a |>\n<| c |>\nThank you for taking the time to\
+    \ provide an answer that is both correct and complete and well thought out. I've\
+    \ been working through this problem and will post what I came up with after I've\
+    \ looked at it.\n<|/ c |>\n<| c |>\n: I've added a simplified version to the answer.\
+    \ If this works for you, can you please mark it as the accepted answer?\n<|/ c\
+    \ |>\n<| c |>\n: Thanks for the heads up on the `log` part. I didn't notice that.\n\
+    <|/ c |>\n<| c |>\nThis code has a bug. It calculates the minimum value instead\
+    \ of using $numbers[0] which means the minimum could be anything and thus not\
+    \ correct.\n<|/ c |>\n<| c |>\nThe correct solution is to replace min(@$numbers)\
+    \ with $numbers[0], which will correctly calculate the minimum. Otherwise it just\
+    \ uses the first element as that is the smallest in the entire set. Thanks for\
+    \ the heads up!\n<|/ c |>\n<| a tags=perl,algorithm,arrays |>\nThis answer assumes\
+    \ that you don't want to return duplicate elements and that you always want to\
+    \ return the least common multiple between all the elements in the array. This\
+    \ also assumes that all elements of are nonnegative. The function below handles\
+    \ the corner case where all numbers are zero. In the case that all the numbers\
+    \ are zero it will return one and be the least common multiple if all are zero.\n\
+    <code>", "    my(@scale) = @_;\n    if(@scale == 0) {\n        return undef;\n\
+    \    }\n    my $min = min @$numbers;\n    my $max = max @$numbers;\n    my $range\
+    \ = 1 - $min / $max;\n    $scale[$_] = $range/$_ for;\n    my $out = [];\n   \
+    \ my $i = 0;\n    foreach(@$numbers) {\n        push @$out, $numbers[$i] * $scale[$i];\n\
+    \        $i++;\n    }\n    return @$out;\n}", '    my(@scaled) = (0);', "    my\
+    \ $min = min @$numbers;\n    my $max = max @$numbers;\n    return map { $_ - $min\
+    \ } map { $_ / $max - $min } @$numbers;\n}", "    if (scalar @$numbers < 2) {\n\
+    \        return;\n    }\n    my $min = scalar @$numbers < 3 ? $numbers[0] : $numbers[1];\n\
+    \    my $max = scalar @$numbers < 3 ? $numbers[2] : $numbers[2];\n    my $scale\
+    \ = 1 / ($max - $min);", "    my($smallest_num) = min($numbers);\n    my($largest_num)\
+    \ = max($numbers);\n    return map { ($smallest_num - $_) / ($largest_num - $smallest_num)\
+    \ } @$numbers;\n}", "    my ($min_, $max_) = @{ $self->{_min_max_of_arrays} };\n\
+    \    my @scales = (0) x $#{$numbers}; # make sure we have a zero for the smallest\
+    \ number\n    my ($i, $j);\n    # find the smallest number\n    for ($i = 0; $i\
+    \ < $#{$numbers}; $i++) {\n        if ($numbers[$i] < $min_) {\n            $scales[$i]\
+    \ = 0.0;\n        } elsif ($numbers[$i] > $max_) {\n            $scales[$i] =\
+    \ 1.0;\n        } else {\n            $scales[$i] = (float) ($numbers[$i] - $min_)\
+    \ / $max_;\n        }\n    }\n    # find the largest number\n    for ($i = 0;\
+    \ $i < $#{$numbers}; $i++) {\n        if ($numbers[$i] > $max_) {\n          \
+    \  $scales[$i] = 1.0;\n        } elsif ($numbers[$i] < $min_) {\n            $scales[$i]\
+    \ = 0.0;\n        } else {\n            $scales[$i] = (float) ($max_ - $numbers[$i])\
+    \ / $max_;\n        }\n    }\n    return @scales;\n}", "    my($max) = 0.0;\n\
+    \    my($min) = 0.0;\n    foreach my $n (@$numbers) {\n        my($n) = map $self->_to_scale($_),\n\
+    \          (0) x scalar(@$numbers);\n        my($rmax) = scalar(@$numbers);\n\
+    \        my($rmin) = scalar(@$numbers);\n        $rmax -= 1;\n        $rmin -=\
+    \ 1;\n        my($r) = map $self->_to_scale($_),\n          (0) x scalar(@$numbers);\n\
+    \        my ($rminmax);\n        if ($rmax < $rmin) {\n            ($rmin, $rmax,\
+    \ $rminmax) = @$numbers;\n        } else {\n            ($rmin, $rmax) = @$numbers;\n\
+    \        }\n        for ($i = 0; $i < $rmax; $i++) {\n            $n[$i] /= $rmax;\n\
+    \        }\n        for ($i = 0; $i < $rmin; $i++) {\n            $n[$i] -= $n[$i]\
+    \ / $rmin;\n        }\n        foreach my $i (@$numbers) {\n            $n[$i]\
+    \ /= $rminmax;\n        }\n        $max += $n[0];\n        $min -= $n[0];\n  \
+    \  }\n    $min = min $min, $max;\n    my($min) = 0;\n    my($max) = 1;\n    foreach\
+    \ my $n (@$numbers) {\n        my($n) = map $self->_to_scale($_),\n          (0)\
+    \ x scalar(@$numbers);\n        my($rmax) = scalar(@$numbers);\n        my($rmin)\
+    \ = scalar(@$numbers);\n        $rmax -= 1;\n        $rmin -= 1;\n        my($r)\
+    \ = map $self->_to_scale($_),\n          (0) x scalar(@$numbers);\n        my\
+    \ ($rminmax);\n        if ($rmax < $rmin) {\n            ($rmin, $rmax, $rminmax)\
+    \ = @$numbers;\n        } else {\n            ($rmin, $rmax) = @$numbers;\n  \
+    \      }\n        for ($i = 0; $i < $rmax; $i++) {\n            $n[$i] /= $rmax;\n\
+    \        }\n        for ($i = 0; $i < $rmin; $i++) {\n            $n[$i] -= $n[$i]\
+    \ / $rmin;\n        }\n        foreach my $i (@$numbers) {\n            $n[$i]\
+    \ /= $rminmax;\n        }\n        $min += ", "    my $result = $numbers[0];\n\
+    \    for (my $i = 1; $i < @$numbers; $i++) {\n        $result += (1.0 / $i) *\
+    \ $numbers[$i];\n    }\n    return $result;\n}", "    my @scaled_numbers = ();\n\
+    \    my $max_value = $numbers[0];\n    my $min_value = $numbers[0];\n    foreach\
+    \ my $number (@$numbers) {\n        if ($number > $max_value) {\n            $max_value\
+    \ = $number;\n        }\n        if ($number < $min_value) {\n            $min_value\
+    \ = $number;\n        }\n    }\n    my $scale = ($max_value - $min_value) / @$numbers;\n\
+    \    foreach my $number (@$numbers) {\n        $number *= $scale;\n        $scaled_numbers->[$_]\
+    \ = $number;\n    }\n    return @$scaled_numbers;\n}", "    my(@results);\n  \
+    \  if (scalar @$numbers <= 1) {\n        @results = $numbers;\n    }\n    else\
+    \ {\n        my $min = min @$numbers;\n        my $max = max @$numbers;\n    \
+    \    @results = map { ($max - $_) / $max } @$numbers;\n    }\n    return @results;\n\
+    }", '    my @rescaled;', "    my @minmax_numbers;\n    foreach my $number (@$numbers)\
+    \ {\n        if ($number > $minmax_numbers[-1]) {\n            $minmax_numbers[-1]\
+    \ = $number;\n        } elsif ($number < $minmax_numbers[-1]) {\n            $minmax_numbers[-1]\
+    \ = $minmax_numbers[-1];\n        } else {\n            $minmax_numbers[-1] =\
+    \ scalar(@minmax_numbers) + 1;\n        }\n    }\n    foreach my $number (@minmax_numbers)\
+    \ {\n        my $factor = (1.0 - $number) / $minmax_numbers[-1];\n        push(@$numbers,\
+    \ $factor * $number);\n    }\n    return @$numbers;\n}", "    return @$numbers\
+    \ if @$numbers < 2;\n    $numbers -= 1;\n    my $sum = $numbers[0];\n    my $index\
+    \ = 0;\n    my @new_numbers = ();\n    while($index < @$numbers) {\n        $sum\
+    \ += $numbers[$index];\n        push @new_numbers, $sum;\n        $index++;\n\
+    \    }\n    my $min = -($sum / $index + 1);\n    my $max = (1 - ($sum / $index\
+    \ + 1));\n    my $new_sum = 0;\n    foreach my $number (@new_numbers) {\n    \
+    \    $new_sum += $number;\n        my $percentage = $number / $sum;\n        $new_sum\
+    \ += $min * $percentage;\n        $new_sum += $max * (1-$percentage);\n    }\n\
+    \    return @new_numbers;\n}", "    if (@$numbers == 0) {\n        return $numbers;\n\
+    \    }", "    my @results;\n    my $max = $numbers[0];\n    my $min = $numbers[0];\n\
+    \    foreach my $number (@$numbers) {\n        my $temp_min = $min;\n        my\
+    \ $temp_max = $max;\n        if ($number > $temp_max) {\n            $temp_max\
+    \ = $number;\n        }\n        if ($number < $temp_min) {\n            $temp_min\
+    \ = $number;\n        }\n        if ($temp_max != $temp_min) {\n            my\
+    \ $diff = 1 - $temp_max / $temp_min;\n            foreach my $index (0..$#$numbers)\
+    \ {\n                $results[$index] = $diff * ($numbers[$index] - $temp_min);\n\
+    \            }\n        }\n        else {\n            $results[$#$results] =\
+    \ $number;\n        }\n        $max = $temp_max;\n        $min = $temp_min;\n\
+    \    }\n    return @results;\n}", "    my($smallest_number) = sort {$a <=> $b}\
+    \ @$numbers;\n    my($max_number) = reverse sort {$b <=> $a} @$numbers;\n    my\
+    \ $offset = $max_number - $smallest_number;\n    return map { $_ + $offset / ($max_number\
+    \ - $smallest_number) } @$numbers;\n}", "    my @output = [];\n    my ($min, @output)\
+    \ = @$numbers;\n    @output = (0 .. $#numbers) * $numbers[0] / $#numbers;\n  \
+    \  my $i = 0;\n    for (@$numbers) {\n        $output[$i] = $output[$i] * $min\
+    \ / $#numbers;\n        $i++;\n    }\n    bless \\@output, 'ArrayRef';\n}", " \
+    \   my @result;\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n    for(my\
+    \ $i = 1; $i < @$numbers; $i++) {\n        my $num = $numbers[$i];\n        if($num\
+    \ < $min) {\n            $min = $num;\n        }\n        if($num > $max) {\n\
+    \            $max = $num;\n        }\n    }\n    for(my $i = 0; $i < @$numbers;\
+    \ $i++) {\n        my $num = $numbers[$i];\n        if($num == 0.0) {\n      \
+    \      $numbers[$i] = $min;\n        } elsif(abs($num) == 1.0) {\n           \
+    \ $numbers[$i] = $max;\n        }\n    }\n    for(my $i = 0; $i < @$numbers; $i++)\
+    \ {\n        $numbers[$i] = $numbers[$i] / $max;\n    }\n    push(@result, @$numbers);\n\
+    \    return @result;\n}", "    my @output;\n    my $min = $numbers->[0];\n   \
+    \ my $max = $numbers->[0];\n    for (my $i = 1; $i <; $i++) {\n        $min =\
+    \ $min > $numbers->[$i] ? $numbers->[$i] : $min;\n        $max = $max < $numbers->[$i]\
+    \ ? $numbers->[$i] : $max;\n    }\n    my $mid = $min;\n    for (my $i = 0; $i\
+    \ < @$numbers; $i++) {\n        $mid += $numbers->[$i] / $i;\n        $mid = $mid\
+    \ * ($max - $min) + $min;\n    }\n    return $mid / (@$numbers - 1);\n}", "  \
+    \  my($min) = $numbers[0]; my($max) = $numbers[0];\n    for my $num (@$numbers)\
+    \ {\n        if($num < $min) { $min = $num; }\n        if($num > $max) { $max\
+    \ = $num; }\n    }\n    my $range = 2 - $min;\n    my $length = @$numbers;\n \
+    \   return ($range / $length) * @$numbers;\n}", "    # Make sure we have a two-element\
+    \ array\n    die \"expecting two elements in @_\" if scalar @$numbers != 2;",
+  "    if(scalar @$numbers < 2) {\n        return;\n    }\n    my $min = min @$numbers;\n\
+    \    my $max = max @$numbers;\n    if($max < $min) {\n        $numbers[$min] =\
+    \ $numbers[0];\n        $numbers[0] = 0;\n        $numbers[$max] = 1;\n    }\n\
+    \    my $len = @$numbers;\n    my $scale = $max / $len;\n    @$numbers = map {\
+    \ $_ / $scale } @$numbers;\n    return;\n}", "    my @result;\n    foreach my\
+    \ $value (@$numbers) {\n        push(@result, $value / $scale);\n    }\n    return\
+    \ @result;\n}", "    return $numbers[0] if $numbers[0] == 0 && @$numbers == 1;\n\
+    \    my($lowest_number) = @$numbers;\n    my($highest_number) = $numbers[0];\n\
+    \    for my $number (@$numbers) {\n        next if $lowest_number > $number;\n\
+    \        $highest_number = $number;\n    }\n    return map { $_ / $highest_number\
+    \ } @$numbers;\n}", "    my @new_numbers = ();\n    foreach my $number (@$numbers)\
+    \ {\n        push @new_numbers, $number / $number;\n    }\n    return @new_numbers;\n\
+    }", "    my @results;\n    my $min = $numbers[0];\n    my $max = $numbers[0];",
+  "    my @unitless;\n    for my $number (@$numbers) {\n        $number = $number\
+    \ / $max_number->(@$numbers) if $max_number ne 0;\n        push @unitless, $number;\n\
+    \    }\n    return @unitless;\n}\n</code>\n<|/ a tags=perl,statistics,statistical-test,unit-testing,algorithm\
+    \ |>\n<| c |>\nThank you for your answer. I tried it out, but I can't find a way\
+    \ to calculate the standard deviation of the numbers. When I use the standard\
+    \ deviation function I only get the standard deviation of the same number from\
+    \ the array.\n<|/ c |>\n<| c |>\nMy apologies, I meant a standard deviation of\
+    \ all the numbers from the array but divide it by the number of elements.\n<|/\
+    \ c |>\n<| c |>\n- I updated my answer with a solution that should work for you.\
+    \  It doesn't require the standard deviation function, just an easy way to find\
+    \ the mean and the variance.  I hope this helps!\n<|/ c |>\n<| a |>\nTo be blunt,\
+    \ the answer you posted as your answer seems good; I wouldn't worry about making\
+    \ such a large assumption that things should \"just work\". However, I think I\
+    \ would use Math::Paris, which is a library for statistical distributions written\
+    \ in Perl. You can use it like this:\n<code>\nuse Math::Paris;", "    my($min,\
+    \ $max) = @$numbers;\n    my $diff = abs($max - $min);\n    if ($diff == 0) {\n\
+    \        $numbers[0] = $min + 0.5;\n    } else {\n        $numbers[0] = 0.5 *\
+    \ $min + 0.5 * ($max - $min);\n    }\n    for my $i (1..scalar(@$numbers - 1))\
+    \ {\n        $numbers[$i] = 0.5 * ($numbers[$i - 1] + $numbers[$i]);\n    }\n}",
+  "    my @numbers_scaled = ();\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n\
+    \    for my $num (@$numbers) {\n        ($num > $min) && ($min = $num);\n    \
+    \    ($num < $max) && ($max = $num);\n        push (@numbers_scaled, ($num - $min)\
+    \ / ($max - $min));\n    }\n    return @numbers_scaled;\n}", "    if (scalar(@$numbers)\
+    \ < 2) {\n        return $numbers;\n    }", "    my($min, $max) = (0, 0);\n  \
+    \  my($sum, $diff) = (0, 0);", '    return @$numbers if @$numbers < 2;', "   \
+    \ return map { $_ / $#numbers } @$numbers;\n}", "    my @rescaled;\n    my $min\
+    \ = $numbers[0];\n    my $max = $numbers[0];\n    my $size = @$numbers;\n    for\
+    \ (my $i = 1; $i < $size; $i++) {\n        $min = $numbers[$i] < $min ? $numbers[$i]\
+    \ : $min;\n        $max = $numbers[$i] > $max ? $numbers[$i] : $max;\n    }\n\
+    \    for (my $i = 0; $i < $size; $i++) {\n        $rescaled[$i] = $numbers[$i]\
+    \ / $max - $min;\n    }\n    return \\@rescaled;\n}", "    my @unit = @$numbers;\n\
+    \    @unit = (0) x @$numbers;\n    my ($min, $max) = @$numbers;\n    $min -= 0.5;\n\
+    \    $max += 0.5;\n    $min /= 2.0;\n    $max /= 2.0;\n    for (@$numbers) {\n\
+    \        $_ -= $_ * $min;\n    }\n    return @$unit;\n}", "    return if (scalar(@$numbers)\
+    \ < 2);\n    my $min = shift(@$numbers);\n    my $max = shift(@$numbers);\n  \
+    \  my $range = $max - $min;\n    my $num_scales = scalar @$numbers;\n    for my\
+    \ $i (0..$num_scales-1) {\n        if ($range/$($numbers[$i])*$min == 0) {\n \
+    \           $numbers[$i] = 0;\n        }\n        else {\n            $numbers[$i]\
+    \ = $range/$($numbers[$i])*$min;\n        }\n    }\n    return @$numbers;\n}",
+  "    my @rescaled_numbers = ();\n    my $minimum = @$numbers > 0 ? @$numbers[0]\
+    \ : 0;\n    my $maximum = @$numbers > 0 ? @$numbers[0] : 1;\n    my $diff = $maximum\
+    \ - $minimum;\n    my $scale = $diff > 0 ? 1.0 / $diff : 1;", "    my @result\
+    \ = ();\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n    my $scale\
+    \ = 1;\n    foreach my $number (@$numbers) {\n        if ($number > $max) {\n\
+    \            $max = $number;\n        } elsif ($number < $min) {\n           \
+    \ $min = $number;\n        } else {\n            $scale *= (1 + $number / $max);\n\
+    \            $scale = ($scale > 1) ? $scale : 1;\n        }\n    }\n    foreach\
+    \ my $number (@$numbers) {\n        $number = $min + ($number * $scale);\n   \
+    \     push(@result, $number);\n    }\n    return @result;\n}", "    my @new_numbers;\n\
+    \    my $max = $numbers[0];\n    my $min = $numbers[0];\n    foreach my $number\
+    \ (@$numbers) {\n        $min = $number if $number < $min;\n        $max = $number\
+    \ if $number > $max;\n    }\n    my $range = 1 - $min / $max;\n    @new_numbers\
+    \ = map { $_ * $range } @$numbers;\n    return @new_numbers;\n}", '    my(@rescaled_numbers);',
+  "    if(scalar(@$numbers) <= 1) {\n        die(\"Cannot rescale less than two numbers\"\
+    );\n    }\n    my($min, $max) = @$numbers;\n    $min -= $min/1000;\n    $max +=\
+    \ $min/1000;\n    my @range = ($min, $max);\n    return map { $_ / $range[-1]\
+    \ };\n}", "    my @rescaled_numbers;\n    my $min;\n    my $max;", "    my $smallest\
+    \ = @$numbers < 2 ? 0 : @$numbers;\n    my $largest  = @$numbers > 2 ? @$numbers\
+    \ : 2;\n    my $factor    = 1.0 / ($largest - $smallest);\n    my = @$numbers;\n\
+    \    for (my $i = @$numbers; $i > 1; $i--) {\n        $scale[$i] = $scale[$i -\
+    \ 1] * $factor;\n    }\n    return @$numbers;\n}", "    my @new_numbers = ();\n\
+    \    for (@$numbers) {\n        my($val) = int($_);\n        my($min_val) = min($val);\n\
+    \        my($max_val) = max($val);\n        $min_val = 0 if $min_val < 0;\n  \
+    \      $max_val = 1  if $max_val > 1;\n        my $delta = $max_val - $min_val;\n\
+    \        my($delta_fraction) = $delta / $max_val;\n        my($new_val = $val\
+    \ * $delta_fraction + $min_val);\n        push(@new_numbers, $new_val);\n    }\n\
+    \    return @new_numbers;\n}\n</code>\n<|/ a dscore=5 |>\n<| c |>\nThanks so much,\
+    \ I was trying to use perl to apply a linear transformation to an array which\
+    \ was in a json file and your answer helped me to accomplish this.\n<|/ c |>\n\
+    <| c |>\nI appreciate the answer, but your solution does not seem to work when\
+    \ `@numbers` has negative numbers.\n<|/ c |>\n<| c |>\nThe question was about\
+    \ an input array, not an array of numbers. I did not implement a solution to handle\
+    \ negative numbers explicitly. I merely pointed out that it was possible - and\
+    \ in particular that the question was asking about negative numbers. My point\
+    \ was, if this is what the question was about, then it could be easily modified\
+    \ to handle them.\n<|/ c |>\n<| a tags=math,statistics,perl |>\nIf your input\
+    \ data are in a text file, then you can use Math::Statistics::Normal module\n\
+    <code>\nuse strict;\nuse warnings;\nuse Math::Statistics::Normal;", "    my $min\
+    \ = min($numbers);\n    my $max = max($numbers);\n    my $diff = $max - $min;\n\
+    \    my $scale = (1.0 / $diff);\n    return map { $min + ( $numbers - $_ * $scale\
+    \ ) };\n}", "    my $min_number = shift @$numbers;\n    my $max_number = shift\
+    \ @$numbers;", "    my @zeroes = ();\n    my @ones = ();\n    my $length = scalar(@$numbers);\n\
+    \    for (my $i = 0; $i < $length; $i++) {\n        if ($numbers[$i] < 0) {\n\
+    \            push(@ones, $numbers[$i] / $length);\n        } else {\n        \
+    \    push(@zeroes, $numbers[$i] / $length);\n        }\n    }\n    return (@zeroes,\
+    \ @ones);\n}", "    my $num_min = $numbers[0]; # smallest number in array\n  \
+    \  my $num_max = $numbers[-1]; # largest number in array", "    my @numbers_to_be_zero\
+    \ = (min @$numbers);\n    my @numbers_to_be_one = (max @$numbers);\n    my $first_element\
+    \ = @$numbers_to_be_zero == 1 ? $numbers_to_be_zero[0] : 0;\n    return map {\
+    \ ($_ - $first_element) * $numbers_to_be_one[0] + $first_element }\n         \
+    \   @$numbers;\n}", "    my @values = map { $numbers[0]/$_ }@$numbers;\n    return\
+    \ @values;\n}", "    my($min, $max) = @$numbers;\n    my($min_in_bounds, $max_in_bounds)\
+    \ = (0, 1);\n    my $range_min = $min - 1;\n    my $range_max = $max - 1;\n  \
+    \  if ($min < $max) {\n        my $diff_min = $range_min / $max;\n        my $diff_max\
+    \ = $range_max / $min;\n        if ($diff_max > $diff_min) {\n            # rescale\
+    \ from 0 to 1\n            $min_in_bounds = 0 - ($diff_min);\n            $max_in_bounds\
+    \ = 1 - ($diff_max);\n        }\n    }\n    my @scale_values = map { $_ * $min_in_bounds\
+    \ + (1 - $max_in_bounds) } @$numbers;\n    return @scale_values;\n}", "    my($min,\
+    \ $max) = @{$numbers};\n    $min += 0.5;\n    $max -= 0.5;\n    my @numbers_scaled\
+    \ = ();\n    foreach my $number (@$numbers) {\n        $numbers_scaled[$_] = $number\
+    \ * $min + 0.5 * ($max + $min);\n    }\n    return \\@numbers_scaled;\n}", " \
+    \   my @rescaled;\n    my $min = $numbers[0];\n    my $max = $numbers[0];\n  \
+    \  for my $n (@$numbers) {\n        if ($n < $min) { $min = $n; }\n        elsif\
+    \ ($n > $max) { $max = $n; }\n    }\n    for (my $i = 0; $i < @$numbers; $i++)\
+    \ {\n        $rescaled[$i] =\n            (1 - (($numbers[$i] - $min) / ($max\
+    \ - $min))) * ($max - $min) + $min;\n    }\n    return \\@rescaled;\n}", "   \
+    \ $numbers[0] = ($numbers[0] - $numbers[0] % 1.0) / $numbers[0] % 1.0; # rescale\
+    \ minimum number to 0\n    $numbers[-1] = ($numbers[-1] - $numbers[-1] % 1.0)\
+    \ / $numbers[-1] % 1.0; # rescale maximum number to 1\n    return @$numbers;\n\
+    }", "    my $min = @$numbers < 2 ? 0 : @$numbers;\n    my $max = @$numbers < 2\
+    \ ? 1 : @$numbers - 1;\n    my $length = (@$numbers - 1) * 1.0 / $max;", "   \
+    \ my $min = $numbers[0];\n    my $max = $numbers[0];\n    my $n = @$numbers;\n\
+    \    for(my $i = 1; $i < $n; ++$i) {\n        my $n = $numbers[$i];\n        if($n\
+    \ < $min) { $min = $n; }\n        if($n > $max) { $max = $n; }\n    }\n    my\
+    \ @rescaled;\n    for(my $i = 0; $i < $n; ++$i) {\n        my $n = $numbers[$i];\n\
+    \        my $scale = (($max - $min) / ($n - 1));\n        $rescaled[$i] = $n *\
+    \ $scale;\n    }\n    @$numbers = @rescaled;\n    return $numbers;\n}", "    return\
+    \ ($numbers[0] / $numbers[-1]) if @$numbers > 1;\n    return $numbers[0];\n}",
+  "    my($smallest) = $numbers[0] < $numbers[1] ? $numbers[0] : $numbers[1];\n  \
+    \  my($largest) = $numbers[0] > $numbers[1] ? $numbers[0] : $numbers[1];\n   \
+    \ my($range) = $largest - $smallest;\n    my $scaled = $range / $numbers[0];\n\
+    \    my($new_smallest) = $smallest - $scaled;\n    my($new_largest) = $smallest\
+    \ + $scaled;\n    my($scaled_numbers) = [ $new_smallest, $new_largest ];\n   \
+    \ return @$scaled_numbers;\n}", "    if (scalar(@$numbers) < 2) {\n        warn(\"\
+    Array must contain at least 2 elements\");\n        return;\n    }\n    my $min\
+    \ = min($numbers);\n    my $max = max($numbers);", '    return @$numbers if scalar
+    @$numbers < 2;', "    my $min = $numbers[0];\n    my $max = $numbers[0];\n   \
+    \ foreach my $number (@$numbers) {\n        if ($number < $min) {\n          \
+    \  $min = $number;\n        } elsif ($number > $max) {\n            $max = $number;\n\
+    \        }\n    }\n    my $scale = $max / $min;\n    foreach my $number (@$numbers)\
+    \ {\n        $number *= $scale;\n    }\n    return $numbers;\n}", "    my(@results);\n\
+    \    foreach my $number (@$numbers) {\n        $number -= min($number) if $number\
+    \ > 0;\n        $number /= max($number);\n        push(@results, $number);\n \
+    \   }\n    return @results;\n}\n</code>\nThe first thing that's different is that\
+    \ I use min and max instead of min and $number[0] (which would probably work).\n\
+    The next thing that's different is that the $number -= min line makes all numbers\
+    \ in the array positive, while the last line makes them non-negative.  min will\
+    \ return the minimum value of the array (which would be the smallest positive\
+    \ number), while -min would return the negative of the minimum value (which would\
+    \ be the smallest negative number).\nFinally, the $number /= max line is what's\
+    \ important.  The min and max functions will return either the minimum value of\
+    \ the array (which would be the smallest negative number) or the maximum value\
+    \ of the array (which would be the largest positive number).  In other words,\
+    \ min and max are used a lot in this program, so I always make sure that they\
+    \ work by reducing them by their minimum and maximum values.  Because I'm subtracting\
+    \ $number from the minimum, all negative numbers will become zero, and the maximum\
+    \ will stay that way - no matter what the other numbers in the array are.\nI hope\
+    \ this helps you out a bit.\n<|/ a |>\n<| c |>\nThank you very much! The explanation\
+    \ in the code made it much easier to understand.\n<|/ c |>\n<| a dscore=1 tags=perl,arrays,max\
+    \ |>\nThis works for me:\n<code>\nmy = qw/ 1 2 3 4 5 /;\nmy = qw/ 1 2 3 4 5 /;",
+  "    $numbers[-1] = $numbers[-1] / @$numbers;\n    @$numbers = map { $_ * $self->{MIN}\
+    \ / ($self->{MAX} - $self->{MIN}) } @$numbers;\n    return $numbers;\n}", "  \
+    \  my @range;\n    foreach my $number (@$numbers) {\n        push(@range, $number\
+    \ - $range[-1]);\n    }\n    my $range_size = @range;\n    my $new_range_size\
+    \ = @$numbers;", "    my(@scales) = @_;\n    my(@output);", "    my @result =\
+    \ ();\n    for my $number (@$numbers) {\n        push(@result, min(1.0, max(0.0,\
+    \ $number)));\n    }\n    return @result;\n}", "    $numbers[-1] = 1 while $numbers[-1]\
+    \ < 1;\n    $numbers[0] = 0 while $numbers[0] > 0;\n    return map { $_ / $numbers[-1]\
+    \ } @$numbers;\n}", '    my @rescaled = ();', "    my $min = -1;\n    my $max\
+    \ = 1;\n    foreach my $x (@$numbers) {\n        $min = $min > $x ? $min : $x;\n\
+    \        $max = $max < $x ? $max : $x;\n    }\n    return ($min != -1) ? map {\
+    \ $min + ($x - $min) / ($max - $min) * ($max - $min) } @$numbers : ();\n}", " \
+    \   if (@$numbers == 0) {\n        return ();\n    }\n    # rescale so that largest\
+    \ is 1\n    $numbers[$#numbers] = 1. / $numbers[$#numbers];\n    my $min = min\
+    \ @$numbers;\n    my $max = max @$numbers;\n    my @result;\n    for (my $i=0;\
+    \ $i<@$numbers; $i++) {\n        $result[$i] = $numbers[$i]*$min+0.5/($max-$min);\n\
+    \    }\n    return @result;\n}", "    my @result = ();\n    my $length = @$numbers;\n\
+    \    for (my $i = 0; $i < $length; $i++) {\n        push @result, $numbers[$i]\
+    \ / $length if $numbers[$i];\n    }\n    return @result;\n}", "    my($min, $max)\
+    \ = @$numbers[0,1];\n    for my $n (@$numbers) {\n        my $min = ($min > $n)\
+    \ ? $min : $n;\n        my $max = ($max < $n) ? $max : $n;\n    }\n    my @rescaled;\n\
+    \    for my $n (@$numbers) {\n        push (@rescaled, $min + ($n - $min) * ($max\
+    \ - $min) / $max);\n    }\n    return @rescaled;\n}", "    my($min_number, $max_number)\
+    \ = (0, 1);\n    foreach my $number(@$numbers) {\n        my $number_normalized\
+    \ = $number / $min_number;\n        my($new_min_number, $new_max_number) = (0,\
+    \ 1);\n        while ($number_normalized >= 1) {\n            $new_min_number\
+    \ += 1;\n            $number_normalized -= 1;\n        }\n        $new_max_number\
+    \ -= 1;\n        $min_number = $new_min_number;\n        $max_number = $new_max_number;\n\
+    \    }\n    return @$numbers;\n}", "    my ($min, $max) = @$numbers;\n    my $x_range\
+    \ = $max - $min;\n    my $new_max = $x_range * 1.1;\n    my $new_min = $x_range\
+    \ / 1.1;\n    if ($new_max > $x_range) {\n        $new_max = $x_range;\n    }\n\
+    \    if ($new_min < $x_range) {\n        $new_min = $x_range;\n    }\n    my @new_numbers\
+    \ = ();\n    foreach my $number (@$numbers) {\n        push @new_numbers, $number\
+    \ * $new_max / $x_range;\n    }\n    push @new_numbers, $new_min;\n    return\
+    \ @new_numbers;\n}", "    my $min = shift @$numbers;\n    my $max = shift @$numbers;",
+  "    my @rescaled = ();\n    my @sorted_numbers = sort_by_key(@$numbers);\n    my\
+    \ $smallest_number = $sorted_numbers[0];\n    my $biggest_number = $sorted_numbers[-1];",
+  "    my $length = scalar @$numbers;\n    my @min_max = map {\n        my $val =\
+    \ shift(@$numbers);\n        my ($min, $max) = @{$_}{qw/min max/};\n        ($min\
+    \ <= $val) ? $min : undef;\n        ($max > $val) ? $max : undef;\n    } @$numbers;",
+  '    my(@new_numbers);', "    my @output;\n    my $min = $numbers[0];\n    my $max\
+    \ = $numbers[0];", "    my $min_number = $numbers[0];\n    my $max_number = $numbers[0];\n\
+    \    for my $x (@$numbers) {\n        if($x < $min_number) { $min_number = $x;\
+    \ }\n        elsif($x > $max_number) { $max_number = $x; }\n    }\n    my @scale\
+    \ = ($min_number, $max_number);\n    my ($factor, $min_factor, $max_factor) =\
+    \ linear_range_finder(@scale);\n    my $result = [];\n    for my $x (@$numbers)\
+    \ {\n        my $new_x = $x;\n        $new_x -= $min_factor * ($new_x - $min_number);\n\
+    \        $new_x += $factor * ($max_number - $max_factor * $new_x);\n        $result->[$_]\
+    \ = $new_x;\n    }\n    return @$result;\n}", '    my @scaled_numbers;', "   \
+    \ my($num_max, $min_num) = @{$numbers};\n    if (scalar @$numbers == 0) {\n  \
+    \      return [0];\n    }\n    $num_max = $num_max || $numbers[-1];\n    $num_max\
+    \ == 1 || die \"Array $numbers has only one number\";\n    if ($min_num < $num_max)\
+    \ {\n        return ($num_max - $min_num) * $numbers + $min_num;\n    }\n    $min_num\
+    \ == $num_max || die \"Minimum number $min_num must be larger than maximum number\
+    \ $num_max\";\n    return map { $_ / $num_max } @$numbers;\n}", "    my @results;\n\
+    \    my $max = max(@$numbers);\n    my $min = min(@$numbers);\n    # Scaling factor\
+    \ for smallest number\n    my $min_factor = ($min == 0.0) ? 1.0 : $min / $max;\n\
+    \    # Scaling factor for largest number\n    my $max_factor = ($max == 0.0) ?\
+    \ 1.0 : $max / $min;", "    if (@$numbers == 0) {\n        return [];\n    }\n\
+    \    return map {\n        $_ / ($numbers[0]+$numbers[1])/$numbers[2];\n    }\
+    \ @$numbers;\n}", "    my $min = min @$numbers;\n    my $max = max @$numbers;",
+  "    my($smallest, $largest) = $numbers[0, @$numbers-1];\n    my $factor = $smallest\
+    \ / $largest;\n    @$numbers = map { $_ * $factor } @$numbers;\n    return @$numbers;\n\
+    }", "    return $numbers[0] if scalar @$numbers == 1;\n    $numbers[0] = $numbers[0]/@$numbers;\n\
+    \    foreach my $n (@$numbers) {\n        $n /= @$numbers;\n    }\n    return\
+    \ @$numbers;\n}", "    my $min = min($numbers);\n    my $max = max($numbers);",
+  "    my $minimum = min @$numbers;\n    my $maximum = max @$numbers;\n    my @units;\n\
+    \    foreach my $number (@$numbers) {\n        $number += $minimum;\n        $number\
+    \ /= ($maximum - $minimum);\n        $units->[$_] = $number\n            if $number\
+    \ != 0;\n    }\n    return @units;\n}", "    # Make sure that there is at least\
+    \ one number in $numbers\n    if (scalar @$numbers == 0) {\n        return $numbers;\n\
+    \    }\n    # Return array of length $numbers with all values set to 1 minus the\
+    \ lowest number\n    my(@rescaled_numbers) = (0, 1);\n    my $min_number = shift\
+    \ @$numbers;\n    foreach my $number (@$numbers) {\n        $rescaled_numbers[$number]\
+    \ += ($number - $min_number) / (scalar @$numbers - 1);\n    }\n    return @rescaled_numbers;\n\
+    }", "    my @rescaled_numbers;\n    my $min = min($numbers);\n    my $max = max($numbers);",
+  "    my $max = @$numbers < 2 ? 0 : $numbers[0];\n    $max += 1 / @$numbers;\n  \
+    \  my @transformed = map { $_ * $max } @$numbers;\n    return @transformed;\n}",
+  "    my($min, $max) = @$numbers;\n    $min += 0.5;\n    $max -= 0.5;\n    return\
+    \ @$numbers;\n}", "    # Make sure there's at least two elements.\n    if ($#{$numbers}\
+    \ == 1) {\n\t$numbers[$#{$numbers}] = $numbers[0];\n    }\n    return map { $_\
+    \ / $numbers[$#{$numbers}] };\n}", "    my $min_value = shift @$numbers;\n   \
+    \ my $max_value = shift @$numbers;\n    my $total_value = $max_value - $min_value;\n\
+    \    $total_value /= @$numbers;\n    my @normalized = map { ($total_value * $_)\
+    \ + $min_value } @$numbers;\n    return wantarray ? @normalized : \\@normalized;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThanks, but I'm looking for a general solution\
+    \ that doesn't require knowing the input range and output range.\n<|/ c |>\n<|\
+    \ c |>\nI see. Well I think you can solve this using some type of regression.\
+    \ You'll probably have to solve for x. For example, let's say your input range\
+    \ is 0 to 10, and your output is 0 to 100, you can easily fit a line that passes\
+    \ through 0 to 100. Your x value will be your output, so you'll get the value\
+    \ you're looking for. For example, in this case:\nhttps://stackoverflow.com/a/1669033/205550\n\
+    <|/ c |>\n<| c |>\nThat's exactly what I'm looking for, except that I don't know\
+    \ the range of the input or the output. I just want to apply a transformation\
+    \ to any array of the same size.\n<|/ c |>\n<| c |>\nAh. That's a tricky one.\
+    \ I'll leave my answer for others who have a similar question.\n<|/ c |>\n<| a\
+    \ dscore=0 |>\nIf your input and output are both non-negative, I would approach\
+    \ this by applying a linear transformation to the input array (from 0 to 1) and\
+    \ then applying the inverse transform to the output array (from 1 to 0). I would\
+    \ do it in two passes:", '    my(@rescaled);', "    my($min) = $numbers->[0];\n\
+    \    my($max) = $numbers->[1];\n    my($scaled_numbers);\n    foreach my $number\
+    \ (@$numbers) {\n        # this should be an int since we're using floor() and\
+    \ $number should be an int\n        # but we're using floats anyway so we'll cast\
+    \ it to an int anyway here\n        my $int_number = int(($number - $min)/($max\
+    \ - $min));\n        $scaled_numbers->[$int_number] += 1;\n    }\n    return @$scaled_numbers;\n\
+    }", "    my($min, $max) = ($numbers[0], $numbers[0]);\n    for (my $i = 1; $i\
+    \ < scalar(@$numbers); $i++) {\n        $min = $numbers[$i] if $numbers[$i] <\
+    \ $min;\n        $max = $numbers[$i] if $numbers[$i] > $max;\n    }\n    my($middle)\
+    \ = ($min + $max) / 2;\n    for (my $i = 0; $i < scalar(@$numbers); $i++) {\n\
+    \        $numbers[$i] = $middle - ($numbers[$i] - $min) / ($max - $min);\n   \
+    \ }\n    return $numbers;\n}", "    my @unit_numbers = ();\n    my $min = $numbers[0];\n\
+    \    my $max = $numbers[0];\n    foreach my $number (@$numbers) {\n        my\
+    \ $new_value = $number / $max;\n        $min = min $min, $new_value;\n       \
+    \ $max = max $max, $new_value;\n        push @unit_numbers, $new_value;\n    }\n\
+    \    return @unit_numbers;\n}", "    my $length = @$numbers;\n    my $new_max\
+    \ = 1/(1 / $numbers[$length - 1]);\n    my @new_numbers = ();\n    for(my $i =\
+    \ 0; $i <= $length - 1; $i++) {\n        $new_numbers[$i] = $new_max * ($numbers[$i]\
+    \ - $numbers[$i - 1]);\n    }\n    return @new_numbers;\n}", "    return if @$numbers\
+    \ == 0;\n    my $min = min($numbers);\n    my $max = max($numbers);\n    my $range\
+    \ = 1 - $min + $max;\n    my($scale, $shift) = find_scale_factor($min, $max, $range);\n\
+    \    my @rescaled_numbers = ();\n    for my $num (@$numbers) {\n        $num =\
+    \ $num + $shift;\n        push(@rescaled_numbers, $num / $scale);\n    }\n   \
+    \ return @rescaled_numbers;\n}", "    if(scalar @$numbers < 2) {\n        return\
+    \ $numbers;\n    }\n    # rescale the smallest and largest number\n    my $min\
+    \ = $numbers[0];\n    my $max = $numbers[-1];\n    for(my $i = 1; $i < scalar\
+    \ @$numbers; $i++) {\n        $min += $numbers[$i-1];\n        $max += $numbers[$i];\n\
+    \    }\n    my $scale = $min < $max ? $max / $min : 1;\n    return map { $_ *\
+    \ $scale };\n}", "    my($smallest, $largest) = @$numbers;\n    if ($smallest\
+    \ == 0) {\n        $smallest = 1;\n    }\n    if ($largest == 0) {\n        $largest\
+    \ = 1;\n    }\n    foreach my $value (@$numbers) {\n        # scale number between\
+    \ 0.0 and 1.0\n        $value /= $largest;\n        # adjust value to be within\
+    \ 0.0 and 1.0\n        $value *= $smallest;\n    }\n    return @$numbers;\n}",
+  "    my $min_num = ${$numbers->[0]};\n    my $max_num = ${$numbers->[1]};", "  \
+    \  return $numbers[0] if @$numbers == 0;\n    $numbers[0] = 1 / $numbers[0];\n\
+    \    $numbers[-1] = 1 / $numbers[-1];\n    return @$numbers;\n}", "    # Sort\
+    \ the numbers to ensure that we preserve the original order of elements\n    my\
+    \ @sorted_numbers = sort {$a <=> $b};\n    # Return an array of ones\n    @numbers\
+    \ = map { $numbers[$_] } 0 .. @sorted_numbers;\n    my $min_max_diff = @sorted_numbers[-2]\
+    \ - @sorted_numbers[-1];\n    return map { ($numbers[$_] + $min_max_diff / 2)\
+    \ / $min_max_diff } 0 .. @sorted_numbers - 1;\n}"]
 stop_tokens:
 - "\nsub"
 - "\n#"
