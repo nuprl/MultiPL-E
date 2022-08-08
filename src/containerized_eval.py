@@ -49,7 +49,7 @@ EVALUATORS = {
     "r": (eval_r.eval_script, ".r"),
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
     "jl": (eval_julia.eval_script, ".jl"),
-    "go": (eval_go.eval_script, ".go")
+    "go_test.go": (eval_go.eval_script, ".go")
 }
 
 def eval_script(problem, index):
