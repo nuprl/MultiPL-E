@@ -51,6 +51,8 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
             test_results = yaml.safe_load(f)
+            if test_results is None: #TODO (molly): this should not be here for final as we should never be in this situation
+                continue 
             print(problem_yaml_path)
             #TODO (molly): these need to factor out "OtherError" for different types for error analysis stage
             counts = {"OK": 0, "OtherError": 0, "Exception": 0}
