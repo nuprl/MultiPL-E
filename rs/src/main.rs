@@ -4,7 +4,9 @@ use std::path::Path;
 use duct::cmd;
 use clap::Parser;
 
-static TEMPS: &'static [&str; 1] = &[ "0.2" ]; // skip 0.8 for now
+// Do not change these constants! If you want to filter out files, do it the
+// "right way". Making a change here affects all functions.
+static TEMPS: &'static [&str; 2] = &[ "0.2", "0.8" ];
 static VARIATIONS: &'static [&str; 4] = &[ "reworded", "keep", "transform", "remove" ];
 static LANGS: &'static [&str; 19]  = &[ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
           "go", "lua", "pl", "php", "rb",  "scala", "swift", "rkt" ];
@@ -42,6 +44,7 @@ enum Command {
     CheckResultCompleteness,
     CountDuplicatePrograms,
     SummarizeCompleteness,
+    BuildJobList,
 }
 
 fn is_completions_yaml(p: &DirEntry) -> bool {
@@ -54,6 +57,110 @@ fn does_result_file_exist(entry: &DirEntry) -> bool {
     let results_path = path.replace(".yaml", ".results.yaml");
 
     Path::new(&results_path).exists()
+}
+
+fn extract_name(entry: std::fs::DirEntry) -> Option<String> {
+    return Some(entry.file_name().to_str()?.splitn(2, ".").next()?.to_string());
+}
+
+fn get_problem_names() -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let original_problem_files = std::fs::read_dir("../datasets/originals")?;
+
+    return Ok(original_problem_files.filter_map(|entry| entry.ok()).filter_map(extract_name).collect());
+}
+
+fn build_job_for_problem_and_lang(problem: &str, lang: &str) -> Result<Option<(usize, Vec<String>)>, Box<dyn std::error::Error>> {
+    let mut job_files = vec![];
+    let mut count = 0;
+
+    for m in MODELS {
+        for t in TEMPS {
+            for v in VARIATIONS {
+                let problem_path_str = format!("../experiments/{}-{}-{}-{}/{}.yaml", lang, m, t, v, problem);
+                let problem_path = Path::new(&problem_path_str);
+                
+                if !problem_path.exists() {
+                    continue;
+                }
+
+                let problem_file = std::fs::read_to_string(problem_path)?;
+                
+                match serde_yaml::from_str::<ProblemFile>(&problem_file) {
+                    Err(_) => {
+                    }
+                    Ok(problem_file) => {
+                        // Same as problem_path_str, but with .results.yaml
+                        let results_path_str = problem_path_str.replace(".yaml", ".results.yaml");
+                        let results_path = Path::new(&results_path_str);
+                        if !results_path.exists() {
+                            count += problem_file.completions.len();
+                            job_files.push(problem_path_str);
+                            continue;
+                        }
+
+                        let results_file = std::fs::read_to_string(results_path)?;
+                        match serde_yaml::from_str::<ResultsFile>(&results_file) {
+                            Err(_) => {
+                            }
+                            Ok(results_file) => {
+                                // Underflow possible!
+                                let results_required = problem_file.completions.len() - results_file.results.len();
+                                if results_required == 0 {
+                                    continue;
+                                }
+                                count += results_required;
+                                job_files.push(problem_path_str);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if count == 0 {
+        return Ok(None);
+    }
+
+    return Ok(Some((count, job_files)));
+}
+
+/// Assume that job_list.len() > max_len. Move the trailing items in job_list to
+/// earlier positions in the list so that the result is at most max_len.
+///
+/// Made up this algorithm. Seems like doing this evenly is likely hard.
+fn compress_job_list(job_list: &mut Vec<(usize, Vec<String>)>, max_len: usize) {
+  job_list.sort_by_key(|&(count, _)| count);
+  let removed = job_list.drain(max_len..).collect::<Vec<_>>();
+  let mut i = 0;
+  for (count,  files) in removed.into_iter() {
+    job_list[i].1.extend(files);
+    job_list[i].0 += count;
+    i = (i + 1) % max_len;
+  }    
+}
+
+fn build_job_list() -> Result<(), Box<dyn std::error::Error>> {
+    let problem_names = get_problem_names()?;
+    let mut jobs = vec![];
+    for problem in problem_names.into_iter() {
+        for lang in LANGS {
+            if *lang != "go" && *lang != "sh" {
+                if let Some(x) = build_job_for_problem_and_lang(&problem, lang)? {
+                    jobs.push(x);
+                }
+            }
+        }
+    }
+
+    if jobs.len() > 1000 {
+        compress_job_list(&mut jobs, 1000);
+    }
+    for (count, jobs) in jobs.into_iter() {
+        println!("{} LABEL {}", count, jobs.join(" "));
+    }
+
+    return Ok(());
 }
 
 fn count_duplicate_programs() {
@@ -97,8 +204,6 @@ fn check_result_completeness() {
         if results_file.results.len() < problem_file.completions.len() {
             println!("{}", entry.path().display());
         }
-
-
     }
  
 }
@@ -124,6 +229,10 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
     for temp in TEMPS {
         for variation in VARIATIONS {
             for lang in LANGS {
+                if *temp == "0.8" && *variation != "reworded" {
+                    continue;
+                }
+
                 let experiment_dir = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
                 match std::fs::read_dir(&experiment_dir) {
                     Err(_) => {
@@ -243,7 +352,7 @@ fn summarize_completeness() {
 }
 
 
-fn main() {
+fn main() -> () {
     let matches = Command::parse();
     match matches {
         Command::RunCompletion(run_completion) => {
@@ -257,5 +366,6 @@ fn main() {
         }
         Command::CountDuplicatePrograms => count_duplicate_programs(),
         Command::SummarizeCompleteness => summarize_completeness(),
+        Command::BuildJobList => build_job_list().expect("Failed to build job list"),
     }
 }
