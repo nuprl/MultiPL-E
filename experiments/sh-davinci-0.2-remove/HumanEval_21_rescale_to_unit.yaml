@@ -10,6 +10,940 @@ tests: "}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() 
   \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5\
   \ 0.75\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' |\
+    \ sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    if [ $(echo\
+    \ \"$range == 0\" | bc) -eq 1 ]; then\n        echo \"$list\"\n    else\n    \
+    \    echo \"$list\" | tr ' ' '\\n' | awk -v min=$min -v range=$range '{print ($1\
+    \ - min) / range}' | tr '\\n' ' '\n    fi", "    local min=`echo \"$1\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -n | tail -n 1`\n    local range=`echo \"$max - $min\" | bc`\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"scale=10; ($x - $min)\
+    \ / $range\" | bc\n    done", "    local min=`echo \"$1\" | tr ' ' '\\n' | sort\
+    \ -n | head -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1`\n    local range=`echo \"$max - $min\" | bc`\n    echo \"$1\" | tr ' '\
+    \ '\\n' | awk -v min=$min -v range=$range '{print ($1 - min) / range}'", "   \
+    \ local -a numbers=($1)\n    local -i n=${#numbers[@]}\n    local -i i\n    local\
+    \ -i min=${numbers[0]}\n    local -i max=${numbers[0]}\n    local -i val\n   \
+    \ local -i range\n\n    for ((i=1; i<n; i++)); do\n        val=${numbers[i]}\n\
+    \        if ((val < min)); then\n            min=$val\n        fi\n        if\
+    \ ((val > max)); then\n            max=$val\n        fi\n    done\n\n    range=$((max\
+    \ - min))\n    for ((i=0; i<n; i++)); do\n        val=${numbers[i]}\n        if\
+    \ ((range == 0)); then\n            echo 0\n        else\n            echo $(((val\
+    \ - min) * 1000 / range))\n        fi\n    done", "    local input=$1\n    local\
+    \ min=$(echo \"$input\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$input\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"\
+    $max - $min\" | bc)\n    echo \"$input\" | tr ' ' '\\n' | while read x; do\n \
+    \       echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list;\
+    \ do\n        local rescaled=$(echo \"($x - $min) / $range\" | bc -l)\n      \
+    \  result=\"$result $rescaled\"\n    done\n    echo \"$result\"", "    local list=$1\n\
+    \    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for i in $list; do\n     \
+    \   local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local list=($1)\n    local\
+    \ min=${list[0]}\n    local max=${list[0]}\n    for i in ${list[@]}; do\n    \
+    \    if [[ $i -lt $min ]]; then\n            min=$i\n        fi\n        if [[\
+    \ $i -gt $max ]]; then\n            max=$i\n        fi\n    done\n    for i in\
+    \ ${list[@]}; do\n        echo $(( (i - min) * 100 / (max - min) ))\n    done",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr\
+    \ ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo \"$list\" |\
+    \ tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' '\
+    \ '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local result=\"\"\n    for n in $list; do\n        local scaled=$(echo \"\
+    ($n - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | awk '{print $1}')\n    local max=$(echo \"$list\" | awk '{print $NF}')\n \
+    \   local range=$(echo \"$max - $min\" | bc -l)\n    echo \"$list\" | awk -v min=\"\
+    $min\" -v range=\"$range\" '{print ($1 - min) / range}'", "    local -a arr=(\"\
+    $@\")\n    local min=${arr[0]}\n    local max=${arr[0]}\n    local i\n    for\
+    \ i in \"${arr[@]}\"; do\n        if (( i < min )); then\n            min=$i\n\
+    \        fi\n        if (( i > max )); then\n            max=$i\n        fi\n\
+    \    done\n    local diff=$(( max - min ))\n    for i in \"${arr[@]}\"; do\n \
+    \       echo $(( (i - min) * 100 / diff ))\n    done", "    local list=\"$1\"\n\
+    \    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local rescaled_list=\"\"\n    for num in $list; do\n\
+    \        local rescaled_num=$(echo \"($num - $min) / $range\" | bc -l)\n     \
+    \   rescaled_list=\"$rescaled_list $rescaled_num\"\n    done\n    echo \"$rescaled_list\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for\
+    \ x in $list; do\n        local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n\
+    \        result=\"$result $scaled\"\n    done\n    echo \"$result\"", "    local\
+    \ -a arr=(\"$@\")\n    local min=${arr[0]}\n    local max=${arr[0]}\n    local\
+    \ i\n    for i in \"${arr[@]}\"; do\n        if (( i < min )); then\n        \
+    \    min=$i\n        fi\n        if (( i > max )); then\n            max=$i\n\
+    \        fi\n    done\n    local range=$(( max - min ))\n    if (( range == 0\
+    \ )); then\n        range=1\n    fi\n    for i in \"${arr[@]}\"; do\n        local\
+    \ scaled=$(( (i - min) * 1000 / range ))\n        echo -n \"$scaled \"\n    done\n\
+    \    echo", "    local input=$1\n    local min=$(echo \"$input\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$input\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local output=\"\
+    \"\n    for i in $input; do\n        local scaled=$(echo \"($i - $min) / $range\"\
+    \ | bc -l)\n        output=\"$output $scaled\"\n    done\n    echo \"$output\"",
+  "    local list=\"$1\"\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | tail -n 1)\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n\
+    \    for x in $list; do\n        local x_scaled=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $x_scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\"\
+    \ | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "  local list=\"$1\"\n  local min=$(echo \"$list\" |\
+    \ sort -n | head -n 1)\n  local max=$(echo \"$list\" | sort -n | tail -n 1)\n\
+    \  local range=$(echo \"$max - $min\" | bc)\n  local new_list=\"\"\n  for n in\
+    \ $list; do\n    local new_n=$(echo \"($n - $min) / $range\" | bc -l)\n    new_list=\"\
+    $new_list $new_n\"\n  done\n  echo \"$new_list\"", "    local min=$(echo \"$1\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' '\
+    \ '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x\
+    \ - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local scale=$(echo \"scale=10;\
+    \ 1 / ($max - $min)\" | bc)\n    local offset=$(echo \"scale=10; -$min * $scale\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $x * $scale + $offset\" | bc\n    done", "    local -a arr\n    local -i i\n \
+    \   local -i n\n    local -i min\n    local -i max\n    local -i range\n    local\
+    \ -i val\n    local -i new_val\n    local -i new_min\n    local -i new_max\n \
+    \   local -i new_range\n    local -i new_val\n\n    # Split the list into an array\n\
+    \    IFS=' ' read -r -a arr <<< \"$1\"\n\n    # Find the minimum and maximum values\n\
+    \    min=${arr[0]}\n    max=${arr[0]}\n    for ((i=1; i<${#arr[@]}; i++)); do\n\
+    \        val=${arr[i]}\n        if ((val < min)); then\n            min=$val\n\
+    \        fi\n        if ((val > max)); then\n            max=$val\n        fi\n\
+    \    done\n\n    # Calculate the range\n    range=$((max - min))\n\n    # Calculate\
+    \ the new minimum and maximum values\n    new_min=0\n    new_max=1\n\n    # Calculate\
+    \ the new range\n    new_range=$((new_max - new_min))\n\n    # Apply the linear\
+    \ transform to each value\n    for ((i=0; i<${#arr[@]}; i++)); do\n        val=${arr[i]}\n\
+    \        new_val=$((new_min + ((val - min) * new_range) / range))\n        arr[i]=$new_val\n\
+    \    done\n\n    # Print the array\n    printf '%s\\n' \"${arr[@]}\"", "    local\
+    \ input=$1\n    local min=$(echo \"$input\" | tr ' ' '\\n' | sort -n | head -n\
+    \ 1)\n    local max=$(echo \"$input\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$input\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for i in $list; do\n        local scaled=$(echo \"($i - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    if [ \"$range\" == \"0\" ];\
+    \ then\n        echo \"$list\"\n    else\n        echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n            echo \"$(echo \"($x - $min) / $range\" | bc\
+    \ -l)\"\n        done | tr '\\n' ' '\n    fi", "    local min=$(echo \"$1\" |\
+    \ tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo \"\
+    $list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local result=\"\"\n    for x in $list; do\n        local scaled=$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read i; do\n        echo \"$(echo \"\
+    ($i - $min) / $range\" | bc -l)\"\n    done", "    local min=`echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1`\n    local range=`echo \"$max - $min\" | bc`\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"scale=4; ($x - $min)\
+    \ / $range\" | bc\n    done", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort\
+    \ -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$1\" | tr '\
+    \ ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" |\
+    \ bc -l)\"\n    done", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n |\
+    \ head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\n'\
+    \ | awk -v min=\"$min\" -v range=\"$range\" '{print ($1 - min) / range}'", " \
+    \   local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read i; do\n        echo \"$(echo \"($i - $min) / $range\" | bc -l)\"\
+    \n    done", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\n' | while read\
+    \ x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done",
+  "    local -a numbers=($1)\n    local min=${numbers[0]}\n    local max=${numbers[0]}\n\
+    \    local i=0\n    local n=${#numbers[@]}\n    local result=\"\"\n    for ((i=0;\
+    \ i<n; i++)); do\n        if (( ${numbers[$i]} < $min )); then\n            min=${numbers[$i]}\n\
+    \        fi\n        if (( ${numbers[$i]} > $max )); then\n            max=${numbers[$i]}\n\
+    \        fi\n    done\n    for ((i=0; i<n; i++)); do\n        local scaled=$(echo\
+    \ \"scale=2; (${numbers[$i]} - $min) / ($max - $min)\" | bc)\n        result=\"\
+    $result $scaled\"\n    done\n    echo $result", "    local list=$1\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local res=\"\"\n    for n in $list; do\n        local scaled=$(echo\
+    \ \"($n - $min) / $range\" | bc -l)\n        res=\"$res $scaled\"\n    done\n\
+    \    echo \"$res\"", "    local -a arr=(\"$@\")\n    local min=${arr[0]}\n   \
+    \ local max=${arr[0]}\n    local i\n    for i in \"${arr[@]}\"; do\n        if\
+    \ (( i < min )); then\n            min=$i\n        fi\n        if (( i > max ));\
+    \ then\n            max=$i\n        fi\n    done\n    local range=$(( max - min\
+    \ ))\n    for i in \"${arr[@]}\"; do\n        echo $(( (i - min) * 1000 / range\
+    \ ))\n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ result=\"\"\n    for i in $list; do\n        local scaled=$(echo \"($i - $min)\
+    \ / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo\
+    \ \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n\
+    \    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for num in $list; do\n   \
+    \     local scaled=$(echo \"($num - $min) / $range\" | bc -l)\n        result=\"\
+    $result $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n \
+    \   local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list; do\n     \
+    \   local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "\tlocal list=\"$1\"\n\tlocal min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\tlocal max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n\tlocal range=$(echo \"$max - $min\"\
+    \ | bc)\n\tlocal result=\"\"\n\tfor n in $list; do\n\t\tlocal scaled=$(echo \"\
+    ($n - $min) / $range\" | bc -l)\n\t\tresult=\"$result $scaled\"\n\tdone\n\techo\
+    \ \"$result\"", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local rescaled=\"\
+    \"\n    for x in $list; do\n        local rescaled_x=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n        rescaled=\"$rescaled $rescaled_x\"\n    done\n    echo \"\
+    $rescaled\"", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for i in $list; do\n        local scaled=$(echo \"($i - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\n' | while read x; do\n        echo\
+    \ \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "\tlocal list=\"$1\"\
+    \n\tlocal min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\tlocal\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\tlocal range=$(echo\
+    \ \"$max - $min\" | bc)\n\tlocal result=\"\"\n\tfor i in $list; do\n\t\tlocal\
+    \ scaled=$(echo \"($i - $min) / $range\" | bc -l)\n\t\tresult=\"$result $scaled\"\
+    \n\tdone\n\techo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"\
+    $list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=($1)\n\
+    \    local min=${list[0]}\n    local max=${list[0]}\n    for i in ${list[@]};\
+    \ do\n        if [[ $i -lt $min ]]; then\n            min=$i\n        fi\n   \
+    \     if [[ $i -gt $max ]]; then\n            max=$i\n        fi\n    done\n \
+    \   for i in ${list[@]}; do\n        echo $(( ($i - $min) * 100 / ($max - $min)\
+    \ ))\n    done", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\"\
+    \ | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "    local input=$1\n    local min=$(echo \"$input\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$input\" | tr\
+    \ ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$input\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n   \
+    \ local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for num in $list; do\n   \
+    \     local scaled=$(echo \"($num - $min) / $range\" | bc -l)\n        result=\"\
+    $result $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n \
+    \   local min=$(echo \"$list\" | sort -n | head -n 1)\n    local max=$(echo \"\
+    $list\" | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local res=\"\"\n    for num in $list; do\n        local scaled=$(echo\
+    \ \"($num - $min) / $range\" | bc -l)\n        res=\"$res $scaled\"\n    done\n\
+    \    echo \"$res\"", "    local list=$1\n    local min=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ new_list=\"\"\n    for i in $list; do\n        local new_i=$(echo \"($i - $min)\
+    \ / $range\" | bc -l)\n        new_list=\"$new_list $new_i\"\n    done\n    echo\
+    \ \"$new_list\"", "    local list=$1\n    local min=$(echo \"$list\" | tr ' '\
+    \ '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local -a numbers=($1)\n    local -i min=${numbers[0]}\n\
+    \    local -i max=${numbers[0]}\n    local -i i\n    for i in \"${numbers[@]}\"\
+    ; do\n        (( i < min )) && min=$i\n        (( i > max )) && max=$i\n    done\n\
+    \    local -i range=$(( max - min ))\n    for i in \"${numbers[@]}\"; do\n   \
+    \     echo $(( (i - min) * 100 / range ))\n    done", "  local list=$1\n  local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n  local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n  local range=$(echo \"$max\
+    \ - $min\" | bc)\n  echo \"$list\" | tr ' ' '\\n' | while read x; do\n    echo\
+    \ \"$(echo \"($x - $min) / $range\" | bc -l)\"\n  done", "    local list=$1\n\
+    \    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list;\
+    \ do\n        local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"\
+    $result $scaled\"\n    done\n    echo \"$result\"", "    local list=$1\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n     \
+    \   echo \"$x - $min\" | bc | awk -v range=\"$range\" '{printf \"%f\\n\", $1 /\
+    \ range}'\n    done", "    local -a list=($1)\n    local -a scaled\n    local\
+    \ min=${list[0]}\n    local max=${list[0]}\n    local i\n    local j\n    local\
+    \ n=${#list[@]}\n    local scale\n\n    for ((i=0; i<n; i++)); do\n        if\
+    \ ((list[i] < min)); then\n            min=${list[i]}\n        fi\n        if\
+    \ ((list[i] > max)); then\n            max=${list[i]}\n        fi\n    done\n\n\
+    \    scale=$(bc -l <<< \"scale=10; 1 / ($max - $min)\")\n\n    for ((i=0; i<n;\
+    \ i++)); do\n        scaled[i]=$(bc -l <<< \"scale=10; (${list[i]} - $min) * $scale\"\
+    )\n    done\n\n    echo ${scaled[@]}", "    local -a numbers=($1)\n    local min=${numbers[0]}\n\
+    \    local max=${numbers[0]}\n    local i\n    for i in \"${numbers[@]}\"; do\n\
+    \        if (( i < min )); then\n            min=$i\n        fi\n        if ((\
+    \ i > max )); then\n            max=$i\n        fi\n    done\n    local range=$((max\
+    \ - min))\n    for i in \"${numbers[@]}\"; do\n        if (( range == 0 )); then\n\
+    \            echo 0\n        else\n            echo $(((i - min) * 1000 / range))\n\
+    \        fi\n    done", "    local list=$1\n    local min=$(echo \"$list\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local list=($1)\n    local min=${list[0]}\n\
+    \    local max=${list[0]}\n    for i in ${list[@]}; do\n        if (( $(echo \"\
+    $i < $min\" | bc -l) )); then\n            min=$i\n        fi\n        if (( $(echo\
+    \ \"$i > $max\" | bc -l) )); then\n            max=$i\n        fi\n    done\n\
+    \    local range=$(echo \"$max - $min\" | bc -l)\n    for i in ${list[@]}; do\n\
+    \        echo $(echo \"($i - $min) / $range\" | bc -l)\n    done", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | awk -v min=\"$min\" -v range=\"$range\" '{print ($1 - min) / range}'", " \
+    \   local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | awk -v min=$min -v range=$range '{print ($1 - min) / range}'", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local res=\"\
+    \"\n    for x in $list; do\n        local scaled=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n        res=\"$res $scaled\"\n    done\n    echo \"$res\"", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read num; do\n        local scaled=$(echo \"($num - $min) / $range\"\
+    \ | bc -l)\n        echo \"$scaled\"\n    done", "    local input=($1)\n    local\
+    \ min=${input[0]}\n    local max=${input[0]}\n    local i\n    for i in \"${input[@]}\"\
+    ; do\n        if (( $(echo \"$i < $min\" | bc -l) )); then\n            min=$i\n\
+    \        fi\n        if (( $(echo \"$i > $max\" | bc -l) )); then\n          \
+    \  max=$i\n        fi\n    done\n    local range=$(echo \"$max - $min\" | bc -l)\n\
+    \    for i in \"${input[@]}\"; do\n        echo $(echo \"($i - $min) / $range\"\
+    \ | bc -l)\n    done", "    local -a arr=(\"$@\")\n    local min=${arr[0]}\n \
+    \   local max=${arr[0]}\n    local i\n    for i in \"${arr[@]}\"; do\n       \
+    \ if (( $(echo \"$i < $min\" | bc -l) )); then\n            min=$i\n        fi\n\
+    \        if (( $(echo \"$i > $max\" | bc -l) )); then\n            max=$i\n  \
+    \      fi\n    done\n    local range=$(echo \"$max - $min\" | bc -l)\n    for\
+    \ i in \"${arr[@]}\"; do\n        echo $(echo \"($i - $min) / $range\" | bc -l)\n\
+    \    done", "    local -a numbers=($1)\n    local min=${numbers[0]}\n    local\
+    \ max=${numbers[0]}\n    local i\n    for i in ${numbers[@]}; do\n        if ((\
+    \ i < min )); then\n            min=$i\n        fi\n        if (( i > max ));\
+    \ then\n            max=$i\n        fi\n    done\n    for i in ${numbers[@]};\
+    \ do\n        echo $(( (i - min) * 100 / (max - min) ))\n    done", "    local\
+    \ min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local res=$(echo \"$1\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done | tr '\\\
+    n' ' ')\n    echo \"$res\"", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n     \
+    \   echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=\"\
+    $1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n \
+    \   local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while\
+    \ read num; do\n        echo \"$num - $min\" | bc | awk -v range=\"$range\" '{print\
+    \ $1 / range}'\n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$x - $min\"\
+    \ | bc | awk -v range=\"$range\" '{printf \"%.3f\\n\", $1 / range}'\n    done",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(bc <<< \"$max - $min\")\n    local result=\"\"\n  \
+    \  for x in $list; do\n        local scaled=$(bc <<< \"($x - $min) / $range\"\
+    )\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"", "    local\
+    \ input=\"$1\"\n    local max=$(echo \"$input\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local min=$(echo \"$input\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$input\" | tr ' ' '\\\
+    n' | awk -v max=\"$max\" -v min=\"$min\" -v range=\"$range\" '{print ($1 - min)\
+    \ / range}'", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' '\
+    \ '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read num; do\n        echo\
+    \ \"$(echo \"($num - $min) / $range\" | bc -l)\"\n    done", "    local list=\"\
+    $1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n \
+    \   local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list;\
+    \ do\n        local y=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"\
+    $result $y\"\n    done\n    echo \"$result\"", "    local min=`echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1`\n    local range=`echo \"$max - $min\" | bc`\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"scale=10; ($x - $min)\
+    \ / $range\" | bc\n    done", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    if [ \"$range\" == \"0\" ]; then\n        echo \"$list\"\n    else\n    \
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n            echo \"$x -\
+    \ $min\" | bc | awk -v range=\"$range\" '{print $1 / range}'\n        done | tr\
+    \ '\\n' ' '\n    fi", "    local min=`echo \"$1\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1`\n  \
+    \  local range=`echo \"$max - $min\" | bc`\n    echo \"$1\" | tr ' ' '\\n' | while\
+    \ read x; do\n        echo \"scale=3; ($x - $min) / $range\" | bc\n    done",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local res=$(echo \"\
+    $list\" | tr ' ' '\\n' | while read x; do\n        echo \"$x - $min\" | bc\n \
+    \   done | while read x; do\n        echo \"$x / $range\" | bc\n    done | tr\
+    \ '\\n' ' ')\n    echo \"$res\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local new_list=\"\"\n    for num in $list; do\n        local new_num=$(echo\
+    \ \"($num - $min) / $range\" | bc -l)\n        new_list=\"$new_list $new_num\"\
+    \n    done\n    echo \"$new_list\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local scale=$(echo \"scale=10; 1\
+    \ / ($max - $min)\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$x $min $scale\" | awk '{printf \"%.10f\\n\", ($1 - $2) * $3}'\n\
+    \    done", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local rescaled=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | while read x; do echo \"$x - $min\" | bc; done)\n\
+    \    local rescaled_unit=$(echo \"$rescaled\" | tr ' ' '\\n' | while read x; do\
+    \ echo \"$x / $range\" | bc; done)\n    echo \"$rescaled_unit\"", "    local min=`echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | head -n 1`\n    local max=`echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | tail -n 1`\n    local range=`echo \"$max - $min\" | bc`\n\
+    \    echo \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"scale=10; ($x\
+    \ - $min) / $range\" | bc\n    done", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | awk '{print $1}')\n    local max=$(echo \"$list\" | awk '{print\
+    \ $NF}')\n    local range=$(echo \"$max - $min\" | bc -l)\n    local scale=$(echo\
+    \ \"1 / $range\" | bc -l)\n    echo \"$list\" | awk -v min=\"$min\" -v scale=\"\
+    $scale\" '{printf \"%f \", ($1 - min) * scale}'", "    local input=$1\n    local\
+    \ min=$(echo \"$input\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$input\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"\
+    $max - $min\" | bc)\n    local output=$(echo \"$input\" | tr ' ' '\\n' | while\
+    \ read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done\
+    \ | tr '\\n' ' ')\n    echo \"$output\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local res=\"\"\n    for x in $list; do\n        local scaled=$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\n        res=\"$res $scaled\"\n    done\n\
+    \    echo \"$res\"", "    local input=\"$1\"\n    local min=$(echo \"$input\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$input\" | tr\
+    \ ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local output=\"\"\n    for i in $input; do\n        local scaled=$(echo \"\
+    ($i - $min) / $range\" | bc -l)\n        output=\"$output $scaled\"\n    done\n\
+    \    echo \"$output\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local min=$(echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ res=\"\"\n    for n in $1; do\n        local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n        res=\"$res $scaled\"\n    done\n    echo \"$res\"", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local res=\"\"\n    for i in\
+    \ $list; do\n        local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n \
+    \       res=\"$res $scaled\"\n    done\n    echo \"$res\"", "  local list=$1\n\
+    \  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n  local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n  local range=$(echo \"$max\
+    \ - $min\" | bc)\n  local res=\n  for i in $list; do\n    local scaled=$(echo\
+    \ \"($i - $min) / $range\" | bc -l)\n    res=\"$res $scaled\"\n  done\n  echo\
+    \ \"$res\"", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for num in $list; do\n        local scaled=$(echo \"($num - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | awk '{print $1}')\n    local\
+    \ max=$(echo \"$list\" | awk '{print $NF}')\n    local range=$(echo \"$max - $min\"\
+    \ | bc -l)\n    echo \"$list\" | awk -v min=$min -v range=$range '{print ($1 -\
+    \ min) / range}'", "    local input=$1\n    local min=$(echo \"$input\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$input\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ output=\"\"\n    for n in $input; do\n        local scaled=$(echo \"($n - $min)\
+    \ / $range\" | bc -l)\n        output=\"$output $scaled\"\n    done\n    echo\
+    \ \"$output\"", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n\
+    \ 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for num in $1;\
+    \ do\n        local rescaled=$(echo \"($num - $min) / $range\" | bc -l)\n    \
+    \    result=\"$result $rescaled\"\n    done\n    echo \"$result\"", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for\
+    \ x in $list; do\n        local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n\
+    \        result=\"$result $scaled\"\n    done\n    echo \"$result\"", "    local\
+    \ list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local new_list=$(echo \"$list\" | tr\
+    \ ' ' '\\n' | while read x; do echo \"$(echo \"($x - $min) / $range\" | bc)\"\
+    ; done)\n    echo \"$new_list\"", "    local -a list=($1)\n    local min=${list[0]}\n\
+    \    local max=${list[0]}\n    local i\n    for i in \"${list[@]}\"; do\n    \
+    \    if (( i < min )); then\n            min=$i\n        fi\n        if (( i >\
+    \ max )); then\n            max=$i\n        fi\n    done\n    local range=$((\
+    \ max - min ))\n    for i in \"${list[@]}\"; do\n        echo $(( (i - min) *\
+    \ 1000 / range ))\n    done", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local min=$(echo \"$1\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo \"\
+    $list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n  \
+    \  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list; do\n     \
+    \   local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local result=\"\"\n    for num in $list; do\n        local scaled=$(echo\
+    \ \"($num - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n  \
+    \  done\n    echo \"$result\"", "    local min=$(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n |\
+    \ tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$1\" |\
+    \ tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "  local list=$1\n  local min=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n  local max=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | tail -n 1)\n  local range=$(echo \"$max - $min\" | bc)\n  local\
+    \ result=\"\"\n  for n in $list; do\n    local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n    result=\"$result $scaled\"\n  done\n  echo \"$result\"", "   \
+    \ local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | awk -v min=$min -v range=$range '{print ($1 - min) / range}'", "    local\
+    \ list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for num in $list;\
+    \ do\n        local scaled=$(echo \"($num - $min) / $range\" | bc -l)\n      \
+    \  result=\"$result $scaled\"\n    done\n    echo \"$result\"", "    local input=($1)\n\
+    \    local min=${input[0]}\n    local max=${input[0]}\n    local i\n    for i\
+    \ in \"${input[@]}\"; do\n        if [[ $i -lt $min ]]; then\n            min=$i\n\
+    \        fi\n        if [[ $i -gt $max ]]; then\n            max=$i\n        fi\n\
+    \    done\n    local range=$((max - min))\n    local output=()\n    for i in \"\
+    ${input[@]}\"; do\n        output+=($(((i - min) * 1000 / range)))\n    done\n\
+    \    echo \"${output[@]}\"", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local result=\"\"\n    for i in $list; do\n        local scaled=$(echo \"\
+    ($i - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local diff=$(echo \"$max - $min\"\
+    \ | bc -l)\n    local result=$(echo \"$list\" | tr ' ' '\\n' | while read x; do\
+    \ echo \"$x - $min\" | bc -l; done | while read x; do echo \"$x / $diff\" | bc\
+    \ -l; done | tr '\\n' ' ')\n    echo \"$result\"", "    local list=$1\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n     \
+    \   echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local min=$(echo\
+    \ \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" |\
+    \ tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$1\" | tr ' ' '\\n' | while read i; do\n        echo \"$(echo\
+    \ \"($i - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n   \
+    \ local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$x - $min\" | bc | awk -v range=\"$range\" '{printf \"%.3f\\n\"\
+    , $1 / range}'\n    done", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    for n in $list; do\n        local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n        echo \"$scaled\"\n    done", "    local input=\"$1\"\n   \
+    \ local max=$(echo \"$input\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ min=$(echo \"$input\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    echo \"$input\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for x in $list; do\n        local scaled=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local new_list=\"\"\
+    \n    for num in $list; do\n        local new_num=$(echo \"($num - $min) / $range\"\
+    \ | bc -l)\n        new_list=\"$new_list $new_num\"\n    done\n    echo \"$new_list\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\"\
+    \ | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "    local list=$1\n    local min=`echo $list | tr '\
+    \ ' '\\n' | sort -n | head -n 1`\n    local max=`echo $list | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1`\n    local range=$(echo \"$max - $min\" | bc)\n    echo $list\
+    \ | tr ' ' '\\n' | while read x; do\n        echo $(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local scaled=$(echo \"$list\" | tr ' ' '\\n' | while read\
+    \ x; do echo \"$x - $min\"; done | bc)\n    echo \"$scaled\" | tr ' ' '\\n' |\
+    \ while read x; do echo \"$x / $range\"; done | bc", "    local list=\"$1\"\n\
+    \    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for num in $list; do\n   \
+    \     local scaled=$(echo \"($num - $min) / $range\" | bc -l)\n        result=\"\
+    $result $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n \
+    \   local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local scale=$(echo\
+    \ \"scale=10; 1 / ($max - $min)\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while\
+    \ read x; do\n        echo \"$x $min $scale\" | awk '{printf \"%.10f\\n\", ($1\
+    \ - $2) * $3}'\n    done", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local -a arr=(\"$@\")\n    local min=${arr[0]}\n    local max=${arr[0]}\n\
+    \    local i\n    for i in \"${arr[@]}\"; do\n        if (( i < min )); then\n\
+    \            min=$i\n        fi\n        if (( i > max )); then\n            max=$i\n\
+    \        fi\n    done\n    local range=$(( max - min ))\n    for i in \"${arr[@]}\"\
+    ; do\n        echo $(( (i - min) * 1000 / range ))\n    done", "    local list=\"\
+    $1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n \
+    \   local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while\
+    \ read x; do\n        echo \"$x - $min\" | bc | awk -v range=\"$range\" '{printf\
+    \ \"%.3f\\n\", $1 / range}'\n    done", "    local input=$1\n    local min=$(echo\
+    \ \"$input\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$input\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local output=\"\"\n    for x in $input; do\n        local scaled=$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\n        output=\"$output $scaled\"\n    done\n\
+    \    echo \"$output\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"scale=10; $max\
+    \ - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n     \
+    \   echo \"scale=10; ($x - $min) / $range\" | bc\n    done", "    local input_list=$1\n\
+    \    local min=$(echo \"$input_list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$input_list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local output_list=\"\"\n  \
+    \  for number in $input_list; do\n        local rescaled=$(echo \"($number - $min)\
+    \ / $range\" | bc -l)\n        output_list=\"$output_list $rescaled\"\n    done\n\
+    \    echo \"$output_list\"", "  local list=$1\n  local min=$(echo \"$list\" |\
+    \ tr ' ' '\\n' | sort -n | head -n 1)\n  local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n  local range=$(echo \"$max - $min\" | bc)\n  local\
+    \ result=\"\"\n  for x in $list; do\n    local scaled=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n    result=\"$result $scaled\"\n  done\n  echo \"$result\"", "   \
+    \ local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n |\
+    \ head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n\
+    \ 1)\n    local range=$(echo \"$max - $min\" | bc)\n    if [ \"$range\" == \"\
+    0\" ]; then\n        echo \"$list\"\n    else\n        echo \"$list\" | tr ' '\
+    \ '\\n' | while read n; do\n            echo \"$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\"\n        done | tr '\\n' ' '\n    fi", "    local list=($1)\n   \
+    \ local min=${list[0]}\n    local max=${list[0]}\n    for i in \"${list[@]}\"\
+    ; do\n        if [[ $i -lt $min ]]; then\n            min=$i\n        fi\n   \
+    \     if [[ $i -gt $max ]]; then\n            max=$i\n        fi\n    done\n \
+    \   local range=$((max - min))\n    for i in \"${list[@]}\"; do\n        echo\
+    \ $(((i - min) * 100 / range))\n    done", "    local -a list=($1)\n    local\
+    \ -a sorted=($(printf \"%s\\n\" \"${list[@]}\" | sort -n))\n    local min=${sorted[0]}\n\
+    \    local max=${sorted[-1]}\n    local range=$(echo \"$max - $min\" | bc)\n \
+    \   for i in \"${!list[@]}\"; do\n        local val=${list[$i]}\n        local\
+    \ scaled=$(echo \"($val - $min) / $range\" | bc -l)\n        list[$i]=$scaled\n\
+    \    done\n    echo \"${list[@]}\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local result=\"\"\n    for num in $list; do\n        local scaled=$(echo\
+    \ \"($num - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n  \
+    \  done\n    echo \"$result\"", "  local min=$(echo \"$1\" | tr ' ' '\\n' | sort\
+    \ -n | head -n 1)\n  local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n\
+    \ 1)\n  local range=$(echo \"$max - $min\" | bc)\n  echo \"$1\" | tr ' ' '\\n'\
+    \ | while read x; do\n    echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n\
+    \  done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for num in $list; do\n        local scaled=$(echo \"($num - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local rescaled=\"\"\n    for\
+    \ number in $list; do\n        local rescaled_number=$(echo \"($number - $min)\
+    \ / $range\" | bc -l)\n        rescaled=\"$rescaled $rescaled_number\"\n    done\n\
+    \    echo \"$rescaled\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local diff=$(echo \"$max - $min\" | bc)\n\
+    \    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo \"\
+    ($x - $min) / $diff\" | bc -l)\"\n    done", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local scaled_list=$(echo \"$list\" | tr ' ' '\\n' | while\
+    \ read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done)\n\
+    \    echo \"$scaled_list\"", "    local list=$1\n    local min=`echo \"$list\"\
+    \ | tr \" \" \"\\n\" | sort -n | head -n 1`\n    local max=`echo \"$list\" | tr\
+    \ \" \" \"\\n\" | sort -n | tail -n 1`\n    local range=`echo \"$max - $min\"\
+    \ | bc`\n    echo \"$list\" | tr \" \" \"\\n\" | while read x; do\n        echo\
+    \ \"scale=4; ($x - $min) / $range\" | bc\n    done", "    local list=$1\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    if [[ $range == 0 ]]; then\n        echo \"$list\"\n   \
+    \ else\n        echo \"$list\" | tr ' ' '\\n' | while read x; do\n           \
+    \ echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n        done | tr '\\n' '\
+    \ '\n    fi", "    local min=`echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1`\n\
+    \    local max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1`\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\n' | while read x; do\n \
+    \       echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | sort -n | tail -n 1)\n    local range=$(echo \"$max -\
+    \ $min\" | bc)\n    local result=\"\"\n    for num in $list; do\n        local\
+    \ scaled=$(echo \"($num - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local -a list=($1)\n    local\
+    \ min=${list[0]}\n    local max=${list[0]}\n    local i\n    for i in \"${list[@]}\"\
+    ; do\n        if (( i < min )); then\n            min=$i\n        fi\n       \
+    \ if (( i > max )); then\n            max=$i\n        fi\n    done\n    local\
+    \ range=$(( max - min ))\n    if (( range == 0 )); then\n        echo \"${list[@]}\"\
+    \n    else\n        for i in \"${list[@]}\"; do\n            echo $(( (i - min)\
+    \ * 1000 / range ))\n        done\n    fi", "    local -a list=($1)\n    local\
+    \ min=${list[0]}\n    local max=${list[0]}\n    local i\n    for i in \"${list[@]}\"\
+    ; do\n        if (( i < min )); then\n            min=$i\n        fi\n       \
+    \ if (( i > max )); then\n            max=$i\n        fi\n    done\n    local\
+    \ range=$(( max - min ))\n    for i in \"${list[@]}\"; do\n        echo $(( (i\
+    \ - min) * 100 / range ))\n    done", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n  \
+    \  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list; do\n     \
+    \   local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local res=\"\"\n    for i in $list; do\n        local scaled=$(echo\
+    \ \"($i - $min) / $range\" | bc -l)\n        res=\"$res $scaled\"\n    done\n\
+    \    echo \"$res\"", "    local list=$1\n    local min=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo\
+    \ \"$list\" | tr ' ' '\\n' | while read i; do\n        echo \"$(echo \"($i - $min)\
+    \ / $range\" | bc -l)\"\n    done", "    local min=$(echo \"$1\" | tr ' ' '\\\
+    n' | sort -n | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n\
+    \ | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local res=\"\
+    \"\n    for n in $1; do\n        local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n        res=\"$res $scaled\"\n    done\n    echo \"$res\"", "    #\
+    \ find the minimum and maximum values\n    min=$(echo \"$1\" | tr ' ' '\\n' |\
+    \ sort -n | head -n 1)\n    max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    # apply the linear transform\n    echo \"$1\" | tr ' ' '\\n' | awk\
+    \ -v min=$min -v max=$max '{print ($1-min)/(max-min)}'", "    local list=\"$1\"\
+    \n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n\
+    \        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local\
+    \ list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"scale=2; ($x - $min) / $range\" | bc\n \
+    \   done", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local res=\"\"\n    for i in $1; do\n\
+    \        local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        res=\"\
+    $res $scaled\"\n    done\n    echo \"$res\"", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local result=\"\"\n    for i in $list; do\n        local\
+    \ scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\
+    \n    done\n    echo \"$result\"", "    local -a list=($1)\n    local min=${list[0]}\n\
+    \    local max=${list[0]}\n    local i\n    for i in ${list[@]}; do\n        if\
+    \ (( i < min )); then\n            min=$i\n        fi\n        if (( i > max ));\
+    \ then\n            max=$i\n        fi\n    done\n    local range=$(( max - min\
+    \ ))\n    for i in ${list[@]}; do\n        echo $(( (i - min) * 1000 / range ))\n\
+    \    done", "    local list=\"$1\"\n    local min=`echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | head -n 1`\n    local max=`echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1`\n    local range=`echo \"$max - $min\" | bc`\n    local result=\"\
+    \"\n    for i in $list; do\n        local scaled=`echo \"($i - $min) / $range\"\
+    \ | bc -l`\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local -a nums=($1)\n    local min=${nums[0]}\n    local max=${nums[0]}\n  \
+    \  for num in ${nums[@]}; do\n        if (( num < min )); then\n            min=$num\n\
+    \        fi\n        if (( num > max )); then\n            max=$num\n        fi\n\
+    \    done\n    for num in ${nums[@]}; do\n        echo $(( (num - min) * 100 /\
+    \ (max - min) ))\n    done", "    local list=$1\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local result=\"\"\n    for i in $list; do\n        local scaled=$(echo \"\
+    ($i - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=$1\n    local min=$(echo \"$list\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ rescaled=\"\"\n    for num in $list; do\n        local rescaled_num=$(echo \"\
+    ($num - $min) / $range\" | bc -l)\n        rescaled=\"$rescaled $rescaled_num\"\
+    \n    done\n    echo \"$rescaled\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n  \
+    \  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list; do\n     \
+    \   local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read n; do\n        echo \"\
+    $(echo \"($n - $min) / $range\" | bc -l)\"\n    done", "    local list=$1\n  \
+    \  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for i in $list; do\n     \
+    \   local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local -a numbers=($1)\n   \
+    \ local min=${numbers[0]}\n    local max=${numbers[0]}\n    local i\n    for i\
+    \ in ${numbers[@]}; do\n        if (( $(echo \"$i < $min\" | bc -l) )); then\n\
+    \            min=$i\n        fi\n        if (( $(echo \"$i > $max\" | bc -l) ));\
+    \ then\n            max=$i\n        fi\n    done\n    local range=$(echo \"$max\
+    \ - $min\" | bc -l)\n    for i in ${numbers[@]}; do\n        echo $(echo \"($i\
+    \ - $min) / $range\" | bc -l)\n    done", "  local list=\"$1\"\n  local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n  local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n  local range=$(echo \"$max - $min\"\
+    \ | bc)\n  for i in $list; do\n    echo \"$(echo \"($i - $min) / $range\" | bc\
+    \ -l)\"\n  done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr\
+    \ ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\\
+    n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local\
+    \ res=$(echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\"\n    done | tr '\\n' ' ')\n    echo \"$res\"",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n\
+    \    for n in $list; do\n        local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | awk '{print $1}')\n    local\
+    \ max=$(echo \"$list\" | awk '{print $NF}')\n    local range=$(echo \"$max - $min\"\
+    \ | bc -l)\n    echo \"$list\" | awk -v min=$min -v range=$range '{print ($1 -\
+    \ min) / range}'", "    local -a arr=($1)\n    local min=${arr[0]}\n    local\
+    \ max=${arr[0]}\n    local i\n    for i in \"${arr[@]}\"; do\n        if (( i\
+    \ < min )); then\n            min=$i\n        fi\n        if (( i > max )); then\n\
+    \            max=$i\n        fi\n    done\n    local range=$((max - min))\n  \
+    \  for i in \"${arr[@]}\"; do\n        echo $(((i - min) * 100 / range))\n   \
+    \ done", "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for n in $list; do\n        local scaled=$(echo \"($n - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for\
+    \ i in $list; do\n        local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n\
+    \        result=\"$result $scaled\"\n    done\n    echo \"$result\"", "  local\
+    \ list=\"$1\"\n  local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n\
+    \ 1)\n  local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n  local\
+    \ range=$(echo \"$max - $min\" | bc)\n  echo \"$list\" | tr ' ' '\\n' | while\
+    \ read x; do\n    echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\n  done",
+  "    local numbers=\"$1\"\n    local min=$(echo \"$numbers\" | tr ' ' '\\n' | sort\
+    \ -n | head -n 1)\n    local max=$(echo \"$numbers\" | tr ' ' '\\n' | sort -n\
+    \ | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$numbers\"\
+    \ | tr ' ' '\\n' | while read number; do\n        echo \"$number - $min\" | bc\
+    \ | awk -v range=\"$range\" '{printf \"%.3f\\n\", $1 / range}'\n    done", " \
+    \   local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$list\" | tr\
+    \ ' ' '\\n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\"\n    done", "    local min=`echo \"$1\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1`\n    local max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n\
+    \ 1`\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n  \
+    \  for i in $1; do\n        local scaled=$(echo \"($i - $min) / $range\" | bc\
+    \ -l)\n        result=\"$result $scaled\"\n    done\n    echo $result", "    local\
+    \ list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n\
+    \    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local\
+    \ range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n    for x in $list;\
+    \ do\n        local scaled=$(echo \"($x - $min) / $range\" | bc -l)\n        result=\"\
+    $result $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n \
+    \   local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local\
+    \ max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo\
+    \ \"$max - $min\" | bc)\n    local result=\"\"\n    for i in $list; do\n     \
+    \   local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        result=\"$result\
+    \ $scaled\"\n    done\n    echo \"$result\"", "    local list=\"$1\"\n    local\
+    \ min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max\
+    \ - $min\" | bc)\n    local result=\"\"\n    for n in $list; do\n        local\
+    \ scaled=$(echo \"($n - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\
+    \n    done\n    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local result=\"\"\n    for n in $list; do\n        local scaled=$(echo\
+    \ \"($n - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local min=$(echo \"$1\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n\
+    \ 1)\n    local range=$(echo \"$max - $min\" | bc)\n    echo \"$1\" | tr ' ' '\\\
+    n' | while read x; do\n        echo \"$(echo \"($x - $min) / $range\" | bc -l)\"\
+    \n    done", "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n'\
+    \ | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort\
+    \ -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\
+    \"\n    for x in $list; do\n        local scaled=$(echo \"($x - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $scaled\"\n    done\n    echo \"$result\"",
+  "    local list=\"$1\"\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n    local result=\"\"\n\
+    \    for num in $list; do\n        local rescaled=$(echo \"($num - $min) / $range\"\
+    \ | bc -l)\n        result=\"$result $rescaled\"\n    done\n    echo \"$result\"",
+  "    local list=$1\n    local min=$(echo \"$list\" | tr ' ' '\\n' | sort -n | head\
+    \ -n 1)\n    local max=$(echo \"$list\" | tr ' ' '\\n' | sort -n | tail -n 1)\n\
+    \    local range=$(echo \"$max - $min\" | bc)\n    local res=\n    for i in $list;\
+    \ do\n        local scaled=$(echo \"($i - $min) / $range\" | bc -l)\n        res=\"\
+    $res $scaled\"\n    done\n    echo \"$res\"", "    local list=$1\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    local result=\"\"\n    for x in $list; do\n        local scaled=$(echo\
+    \ \"($x - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local result=\"\"\n    for n in $list; do\n        local scaled=$(echo \"\
+    ($n - $min) / $range\" | bc -l)\n        result=\"$result $scaled\"\n    done\n\
+    \    echo \"$result\"", "    local list=\"$1\"\n    local min=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\" | tr '\
+    \ ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\" | bc)\n\
+    \    local rescaled=\"\"\n    for num in $list; do\n        local rescaled_num=$(echo\
+    \ \"($num - $min) / $range\" | bc -l)\n        rescaled=\"$rescaled $rescaled_num\"\
+    \n    done\n    echo \"$rescaled\"", "    local list=\"$1\"\n    local min=$(echo\
+    \ \"$list\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local max=$(echo \"$list\"\
+    \ | tr ' ' '\\n' | sort -n | tail -n 1)\n    local range=$(echo \"$max - $min\"\
+    \ | bc)\n    echo \"$list\" | tr ' ' '\\n' | while read x; do\n        echo \"\
+    $(echo \"($x - $min) / $range\" | bc -l)\"\n    done"]
 stop_tokens:
 - "\n}"

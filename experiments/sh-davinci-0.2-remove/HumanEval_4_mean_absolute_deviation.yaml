@@ -9,6 +9,967 @@ tests: "}\n\ncandidate() {\n    mean_absolute_deviation \"$@\"\n}\n\nset -e\nrun
   \ {\n    [[ $(candidate \"1.0 2.0\") = \"0.5\" ]]\n    [[ $(candidate \"1.0 2.0\
   \ 3.0 4.0\") = \"1.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"1.2\"\
   \ ]]\n}\n\nrun_test"
-completions: []
+completions: ["  local sum=0\n  local mean=$(echo $1 | awk '{sum=0; for (i=1; i<=NF;\
+    \ i++) sum+=$i; print sum/NF}')\n  for i in $1; do\n    sum=$(echo \"$sum + abs($i\
+    \ - $mean)\" | bc)\n  done\n  echo $(echo \"$sum / $#\" | bc)", "  local list=$1\n\
+    \  local mean=$(mean $list)\n  local sum=0\n  for i in $list; do\n    sum=$(echo\
+    \ \"$sum + abs($i - $mean)\" | bc -l)\n  done\n  echo $(echo \"$sum / $#\" | bc\
+    \ -l)", "    local list=\"$1\"\n    local mean=$(mean \"$list\")\n    local abs_deviations=$(echo\
+    \ \"$list\" | awk -v mean=\"$mean\" '{ print abs($1 - mean) }')\n    mean \"$abs_deviations\"",
+  "    local -a list\n    local -i i\n    local -i n\n    local -i sum\n    local\
+    \ -i mean\n    local -i mad\n    local -i abs_diff\n\n    list=($1)\n    n=${#list[@]}\n\
+    \    sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + list[i]))\n  \
+    \  done\n    mean=$((sum / n))\n    mad=0\n    for ((i=0; i<n; i++)); do\n   \
+    \     abs_diff=$((list[i] - mean))\n        if ((abs_diff < 0)); then\n      \
+    \      abs_diff=$((-abs_diff))\n        fi\n        mad=$((mad + abs_diff))\n\
+    \    done\n    mad=$((mad / n))\n    echo $mad", "    local input_list=$1\n  \
+    \  local sum=0\n    local count=0\n    local mean=0\n    local abs_dev=0\n   \
+    \ local abs_dev_sum=0\n    local abs_dev_mean=0\n\n    for i in $input_list; do\n\
+    \        sum=$(echo \"$sum + $i\" | bc)\n        count=$(echo \"$count + 1\" |\
+    \ bc)\n    done\n    mean=$(echo \"scale=2; $sum / $count\" | bc)\n\n    for i\
+    \ in $input_list; do\n        abs_dev=$(echo \"scale=2; $i - $mean\" | bc)\n \
+    \       abs_dev=$(echo \"scale=2; $abs_dev < 0 ? -$abs_dev : $abs_dev\" | bc)\n\
+    \        abs_dev_sum=$(echo \"scale=2; $abs_dev_sum + $abs_dev\" | bc)\n    done\n\
+    \    abs_dev_mean=$(echo \"scale=2; $abs_dev_sum / $count\" | bc)\n\n    echo\
+    \ $abs_dev_mean", "    local -a arr=($1)\n    local sum=0\n    local mean=0\n\
+    \    local abs_diff=0\n    local abs_diff_sum=0\n    local abs_diff_mean=0\n \
+    \   local num_elements=${#arr[@]}\n\n    for i in ${arr[@]}; do\n        sum=$(echo\
+    \ \"$sum + $i\" | bc)\n    done\n    mean=$(echo \"scale=2; $sum / $num_elements\"\
+    \ | bc)\n\n    for i in ${arr[@]}; do\n        abs_diff=$(echo \"scale=2; $i -\
+    \ $mean\" | bc)\n        abs_diff_sum=$(echo \"$abs_diff_sum + $abs_diff\" | bc)\n\
+    \    done\n    abs_diff_mean=$(echo \"scale=2; $abs_diff_sum / $num_elements\"\
+    \ | bc)\n\n    echo $abs_diff_mean", "    local list=\"$1\"\n    local mean=$(mean\
+    \ \"$list\")\n    local sum=0\n    for x in $list; do\n        sum=$(echo \"$sum\
+    \ + abs($x - $mean)\" | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l", " \
+    \ local -a input=($1)\n  local -a abs_diff\n  local -i i\n  local -i n=${#input[@]}\n\
+    \  local -i sum=0\n  local -i mean\n  local -i abs_diff_sum=0\n  local -i mad\n\
+    \n  for ((i=0; i<n; i++)); do\n    sum=$((sum + input[i]))\n  done\n  mean=$((sum\
+    \ / n))\n\n  for ((i=0; i<n; i++)); do\n    abs_diff[i]=$((input[i] - mean))\n\
+    \    if ((abs_diff[i] < 0)); then\n      abs_diff[i]=$((-abs_diff[i]))\n    fi\n\
+    \    abs_diff_sum=$((abs_diff_sum + abs_diff[i]))\n  done\n\n  mad=$((abs_diff_sum\
+    \ / n))\n  echo $mad", "    local mean=$(mean $1)\n    local sum=0\n    for i\
+    \ in $1; do\n        sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n    done\n\
+    \    echo \"$sum / $#\" | bc -l", "    local -a input_array\n    local -i i\n\
+    \    local -i n\n    local -i sum\n    local -i mean\n    local -i mad\n    local\
+    \ -i abs_diff\n    input_array=($1)\n    n=${#input_array[@]}\n    sum=0\n   \
+    \ for ((i=0; i<n; i++)); do\n        sum=$((sum + input_array[i]))\n    done\n\
+    \    mean=$((sum / n))\n    sum=0\n    for ((i=0; i<n; i++)); do\n        abs_diff=$((input_array[i]\
+    \ - mean))\n        if ((abs_diff < 0)); then\n            abs_diff=$((-abs_diff))\n\
+    \        fi\n        sum=$((sum + abs_diff))\n    done\n    mad=$((sum / n))\n\
+    \    echo $mad", "  local list=\"$1\"\n  local mean=$(echo \"$list\" | awk '{sum+=$1}\
+    \ END {print sum/NR}')\n  local abs_deviations=$(echo \"$list\" | awk -v mean=$mean\
+    \ '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n  local sum_abs_deviations=$(echo\
+    \ \"$abs_deviations\" | awk '{sum+=$1} END {print sum}')\n  local mad=$(echo \"\
+    $sum_abs_deviations $list\" | awk '{print $1/NR}')\n  echo \"$mad\"", "    local\
+    \ -a data=($1)\n    local -i n=${#data[@]}\n    local -i i=0\n    local -i sum=0\n\
+    \    local -i mean=0\n    local -i mad=0\n    local -i diff=0\n\n    for ((i=0;\
+    \ i<n; i++)); do\n        sum=$((sum + data[i]))\n    done\n    mean=$((sum /\
+    \ n))\n\n    for ((i=0; i<n; i++)); do\n        diff=$((data[i] - mean))\n   \
+    \     if ((diff < 0)); then\n            diff=$((-diff))\n        fi\n       \
+    \ mad=$((mad + diff))\n    done\n    mad=$((mad / n))\n\n    echo $mad", "   \
+    \ local list=\"$1\"\n    local mean=$(echo \"$list\" | awk '{sum+=$1} END {print\
+    \ sum/NR}')\n    local sum=0\n    for i in $list; do\n        sum=$(echo \"$sum\
+    \ + abs($i - $mean)\" | bc)\n    done\n    echo \"$sum / $#\" | bc -l", "    local\
+    \ list=\"$1\"\n    local mean=$(echo \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n\
+    \    local abs_deviations=$(echo \"$list\" | awk -v mean=$mean '{print $1-mean}'\
+    \ | awk '{print $1<0?-$1:$1}')\n    local sum_abs_deviations=$(echo \"$abs_deviations\"\
+    \ | awk '{sum+=$1} END {print sum}')\n    local n=$(echo \"$list\" | wc -w)\n\
+    \    echo \"$sum_abs_deviations / $n\" | bc -l", "    local list=\"$1\"\n    local\
+    \ mean=$(mean \"$list\")\n    local abs_diff_sum=0\n    local abs_diff=0\n   \
+    \ local count=0\n    for x in $list; do\n        abs_diff=$(echo \"$x - $mean\"\
+    \ | bc -l | awk '{printf \"%f\", $0}')\n        abs_diff_sum=$(echo \"$abs_diff_sum\
+    \ + $abs_diff\" | bc -l | awk '{printf \"%f\", $0}')\n        count=$((count +\
+    \ 1))\n    done\n    echo \"$abs_diff_sum / $count\" | bc -l | awk '{printf \"\
+    %f\", $0}'", "    local -a numbers\n    numbers=($1)\n    local mean\n    mean=$(mean\
+    \ ${numbers[@]})\n    local -a deviations\n    for ((i=0; i<${#numbers[@]}; i++));\
+    \ do\n        deviations[i]=$(echo \"${numbers[i]} - $mean\" | bc -l)\n    done\n\
+    \    local -a abs_deviations\n    for ((i=0; i<${#deviations[@]}; i++)); do\n\
+    \        abs_deviations[i]=$(echo \"if (${deviations[i]} < 0) ${deviations[i]}\
+    \ * -1 else ${deviations[i]}\" | bc -l)\n    done\n    mean ${abs_deviations[@]}",
+  "  local -a input=($1)\n  local -i n=${#input[@]}\n  local -i i\n  local -i sum=0\n\
+    \  local -i mean\n  local -i abs_deviation\n  local -i sum_abs_deviation=0\n \
+    \ local -i mad\n\n  for ((i=0; i<n; i++)); do\n    sum=$((sum + input[i]))\n \
+    \ done\n  mean=$((sum / n))\n\n  for ((i=0; i<n; i++)); do\n    abs_deviation=$((input[i]\
+    \ - mean))\n    if ((abs_deviation < 0)); then\n      abs_deviation=$((-abs_deviation))\n\
+    \    fi\n    sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n  done\n\
+    \  mad=$((sum_abs_deviation / n))\n\n  echo $mad", "  local list=$1\n  local mean=$(echo\
+    \ \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n  local abs_diff=$(echo \"\
+    $list\" | awk -v mean=$mean '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n \
+    \ local abs_diff_sum=$(echo \"$abs_diff\" | awk '{sum+=$1} END {print sum}')\n\
+    \  local mad=$(echo \"$abs_diff_sum / NR\" | bc -l)\n  echo $mad", "    local\
+    \ -a arr=(\"$@\")\n    local mean=$(mean \"${arr[@]}\")\n    local sum=0\n   \
+    \ for i in \"${arr[@]}\"; do\n        sum=$(echo \"$sum + abs($i - $mean)\" |\
+    \ bc -l)\n    done\n    echo \"$sum / ${#arr[@]}\" | bc -l", "    local -a numbers\n\
+    \    local -i i\n    local -i n\n    local -i sum\n    local -i mean\n    local\
+    \ -i abs_deviation\n    local -i sum_abs_deviation\n    local -i mad\n\n    #\
+    \ Convert the space-separated list into an array\n    numbers=( $1 )\n    n=${#numbers[@]}\n\
+    \n    # Calculate the mean\n    sum=0\n    for (( i=0; i<n; i++ )); do\n     \
+    \   sum=$(( sum + numbers[i] ))\n    done\n    mean=$(( sum / n ))\n\n    # Calculate\
+    \ the sum of the absolute deviations\n    sum_abs_deviation=0\n    for (( i=0;\
+    \ i<n; i++ )); do\n        abs_deviation=$(( numbers[i] - mean ))\n        abs_deviation=$((\
+    \ abs_deviation < 0 ? -abs_deviation : abs_deviation ))\n        sum_abs_deviation=$((\
+    \ sum_abs_deviation + abs_deviation ))\n    done\n\n    # Calculate the mean absolute\
+    \ deviation\n    mad=$(( sum_abs_deviation / n ))\n\n    echo $mad", "    local\
+    \ mean=$(mean \"$1\")\n    local sum=0\n    for x in $1; do\n        sum=$(bc\
+    \ <<< \"$sum + abs($x - $mean)\")\n    done\n    bc <<< \"$sum / $#\"", "    local\
+    \ mean=$(mean \"$1\")\n    local sum=0\n    for i in $1; do\n        sum=$(echo\
+    \ \"$sum + abs($i - $mean)\" | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l",
+  "    local mean=$(mean \"$1\")\n    local sum=0\n    for i in $1; do\n        local\
+    \ diff=$(echo \"$i - $mean\" | bc)\n        local abs_diff=$(echo \"if ($diff\
+    \ < 0) $diff * -1 else $diff\" | bc)\n        sum=$(echo \"$sum + $abs_diff\"\
+    \ | bc)\n    done\n    echo \"$sum / $#\" | bc -l", "    local -a numbers=($1)\n\
+    \    local -i n=${#numbers[@]}\n    local -i i\n    local -i sum=0\n    local\
+    \ -i mean\n    local -i abs_dev\n    local -i abs_dev_sum=0\n    local -i mad\n\
+    \n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n    done\n\
+    \    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        abs_dev=$((numbers[i]\
+    \ - mean))\n        abs_dev_sum=$((abs_dev_sum + abs_dev))\n    done\n    mad=$((abs_dev_sum\
+    \ / n))\n\n    echo $mad", "  local mean=$(mean \"$1\")\n  local sum=0\n  for\
+    \ i in $1; do\n    sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n  done\n  echo\
+    \ \"$sum / $#\" | bc -l", "    local mean=$(mean \"$1\")\n    local sum=0\n  \
+    \  for x in $1; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n \
+    \   done\n    echo \"$sum / $#\" | bc -l", "  local list=$1\n  local mean=$(echo\
+    \ \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n  local sum=0\n  for x in $list;\
+    \ do\n    sum=$(echo \"$sum + abs($x - $mean)\" | bc)\n  done\n  echo \"$sum /\
+    \ $#\" | bc -l", "    local -a data\n    local -i i\n    local -i n\n    local\
+    \ -i sum\n    local -i mean\n    local -i abs_dev\n    local -i abs_dev_sum\n\
+    \    local -i mad\n\n    data=($1)\n    n=${#data[@]}\n    sum=0\n    for ((i=0;\
+    \ i<n; i++)); do\n        sum=$((sum + data[i]))\n    done\n    mean=$((sum /\
+    \ n))\n    abs_dev_sum=0\n    for ((i=0; i<n; i++)); do\n        abs_dev=$((data[i]\
+    \ - mean))\n        abs_dev_sum=$((abs_dev_sum + abs_dev))\n    done\n    mad=$((abs_dev_sum\
+    \ / n))\n    echo $mad", "    local list=$1\n    local mean=$(mean $list)\n  \
+    \  local sum=0\n    for i in $list; do\n        sum=$(echo \"$sum + abs($i - $mean)\"\
+    \ | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l", "    local input=$1\n \
+    \   local mean=$(echo \"$input\" | awk '{sum+=$1} END {print sum/NR}')\n    local\
+    \ abs_deviation=$(echo \"$input\" | awk -v mean=$mean '{print $1-mean}' | awk\
+    \ '{print $1<0?-$1:$1}')\n    local sum_abs_deviation=$(echo \"$abs_deviation\"\
+    \ | awk '{sum+=$1} END {print sum}')\n    local mad=$(echo \"$sum_abs_deviation\
+    \ / NR\" | bc -l)\n    echo $mad", "    local -a numbers=($1)\n    local -a abs_deviations\n\
+    \    local -i i\n    local -i len=${#numbers[@]}\n    local -i sum=0\n    local\
+    \ -i mean=0\n    local -i abs_deviation=0\n    local -i abs_deviation_sum=0\n\
+    \    local -i mad=0\n\n    # Calculate mean\n    for ((i=0; i<len; i++)); do\n\
+    \        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum / len))\n\n    #\
+    \ Calculate absolute deviations\n    for ((i=0; i<len; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        abs_deviations[i]=$((abs_deviation < 0 ? -abs_deviation :\
+    \ abs_deviation))\n    done\n\n    # Calculate sum of absolute deviations\n  \
+    \  for ((i=0; i<len; i++)); do\n        abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviations[i]))\n    done\n\n    # Calculate mean absolute deviation\n\
+    \    mad=$((abs_deviation_sum / len))\n\n    echo $mad", "    local -a numbers=($1)\n\
+    \    local -i n=${#numbers[@]}\n    local -i i\n    local -i sum=0\n    local\
+    \ -i mean\n    local -i abs_deviation\n    local -i abs_deviation_sum=0\n    local\
+    \ -i mad\n\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n\
+    \    done\n    mad=$((abs_deviation_sum / n))\n\n    echo $mad", "    local -a\
+    \ numbers\n    local -i i\n    local -i n\n    local -i sum\n    local -i mean\n\
+    \    local -i dev\n    local -i abs_dev\n    local -i abs_dev_sum\n    local -i\
+    \ mad\n\n    numbers=($1)\n    n=${#numbers[@]}\n    sum=0\n    for ((i=0; i<n;\
+    \ i++)); do\n        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum / n))\n\
+    \    abs_dev_sum=0\n    for ((i=0; i<n; i++)); do\n        dev=$((numbers[i] -\
+    \ mean))\n        abs_dev=$((dev < 0 ? -dev : dev))\n        abs_dev_sum=$((abs_dev_sum\
+    \ + abs_dev))\n    done\n    mad=$((abs_dev_sum / n))\n    echo $mad", "    local\
+    \ list=\"$1\"\n    local mean=$(mean \"$list\")\n    local sum=0\n    for x in\
+    \ $list; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n    done\n\
+    \    echo \"$sum / $#\" | bc -l", "    local input_list=$1\n    local mean=$(mean\
+    \ $input_list)\n    local abs_deviations=$(echo $input_list | awk '{for (i=1;\
+    \ i<=NF; i++) print $i - '$mean'}' | awk '{for (i=1; i<=NF; i++) if ($i < 0) print\
+    \ -$i; else print $i}')\n    mean $abs_deviations", "    local mean\n    local\
+    \ sum=0\n    local count=0\n    local x\n    for x in $1; do\n        sum=$(echo\
+    \ \"$sum + $x\" | bc)\n        count=$(echo \"$count + 1\" | bc)\n    done\n \
+    \   mean=$(echo \"$sum / $count\" | bc)\n    sum=0\n    for x in $1; do\n    \
+    \    sum=$(echo \"$sum + abs($x - $mean)\" | bc)\n    done\n    echo \"$sum /\
+    \ $count\" | bc", "  local mean=$(mean \"$1\")\n  local sum=0\n  for x in $1;\
+    \ do\n    sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n  done\n  echo \"$sum\
+    \ / $#\" | bc -l", "\tlocal list=$1\n\tlocal mean=$(mean $list)\n\tlocal abs_deviations=$(echo\
+    \ $list | tr ' ' '\\n' | awk -v mean=$mean '{print abs($1 - mean)}')\n\tmean $abs_deviations",
+  "  local -a vals\n  local -i i\n  local -i n\n  local -i sum\n  local -i mean\n\
+    \  local -i abs_diff\n  local -i abs_diff_sum\n  local -i abs_diff_mean\n\n  #\
+    \ Convert input string to array of integers\n  vals=($1)\n\n  # Calculate mean\n\
+    \  n=${#vals[@]}\n  sum=0\n  for ((i=0; i<n; i++)); do\n    sum=$((sum + vals[i]))\n\
+    \  done\n  mean=$((sum / n))\n\n  # Calculate mean absolute deviation\n  abs_diff_sum=0\n\
+    \  for ((i=0; i<n; i++)); do\n    abs_diff=$((vals[i] - mean))\n    abs_diff=$((abs_diff\
+    \ < 0 ? -abs_diff : abs_diff))\n    abs_diff_sum=$((abs_diff_sum + abs_diff))\n\
+    \  done\n  abs_diff_mean=$((abs_diff_sum / n))\n\n  echo $abs_diff_mean", "  \
+    \  local -a numbers=($1)\n    local -i n=${#numbers[@]}\n    local -i i\n    local\
+    \ -i sum=0\n    local -i mean\n    local -i abs_deviation\n    local -i sum_abs_deviation=0\n\
+    \    local -i mad\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        if ((abs_deviation < 0)); then\n            abs_deviation=$((-abs_deviation))\n\
+    \        fi\n        sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n\
+    \    done\n    mad=$((sum_abs_deviation / n))\n    echo $mad", "    local mean=$(mean\
+    \ \"$1\")\n    local sum=0\n    for i in $1; do\n        sum=$(echo \"$sum + abs($i\
+    \ - $mean)\" | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l", "  local -a\
+    \ numbers=($1)\n  local sum=0\n  local mean=0\n  local abs_dev=0\n  local mad=0\n\
+    \  local i=0\n\n  for ((i=0; i<${#numbers[@]}; i++)); do\n    sum=$(echo \"$sum\
+    \ + ${numbers[$i]}\" | bc)\n  done\n  mean=$(echo \"scale=2; $sum / ${#numbers[@]}\"\
+    \ | bc)\n\n  for ((i=0; i<${#numbers[@]}; i++)); do\n    abs_dev=$(echo \"scale=2;\
+    \ ${numbers[$i]} - $mean\" | bc)\n    abs_dev=$(echo \"scale=2; $abs_dev < 0 ?\
+    \ -$abs_dev : $abs_dev\" | bc)\n    mad=$(echo \"scale=2; $mad + $abs_dev\" |\
+    \ bc)\n  done\n  mad=$(echo \"scale=2; $mad / ${#numbers[@]}\" | bc)\n\n  echo\
+    \ $mad", "    local -a x\n    local -i i\n    local -i n\n    local -i sum\n \
+    \   local -i mean\n    local -i abs_dev\n    local -i abs_dev_sum\n    local -i\
+    \ mad\n\n    x=($1)\n    n=${#x[@]}\n    sum=0\n    for ((i=0; i<n; i++)); do\n\
+    \        sum=$((sum + x[i]))\n    done\n    mean=$((sum / n))\n    abs_dev_sum=0\n\
+    \    for ((i=0; i<n; i++)); do\n        abs_dev=$((x[i] - mean))\n        abs_dev_sum=$((abs_dev_sum\
+    \ + abs_dev))\n    done\n    mad=$((abs_dev_sum / n))\n    echo \"$mad\"", " \
+    \   local -a numbers=($1)\n    local sum=0\n    local count=${#numbers[@]}\n \
+    \   local mean=0\n    local mad=0\n    local abs_diff=0\n\n    for i in ${numbers[@]};\
+    \ do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n    mean=$(echo \"scale=2;\
+    \ $sum / $count\" | bc)\n\n    for i in ${numbers[@]}; do\n        abs_diff=$(echo\
+    \ \"scale=2; $i - $mean\" | bc)\n        abs_diff=$(echo \"scale=2; $abs_diff\
+    \ < 0 ? -$abs_diff : $abs_diff\" | bc)\n        mad=$(echo \"scale=2; $mad + $abs_diff\"\
+    \ | bc)\n    done\n    mad=$(echo \"scale=2; $mad / $count\" | bc)\n\n    echo\
+    \ $mad", "    local -a x\n    local -i i\n    local -i n\n    local -i sum\n \
+    \   local -i mean\n    local -i abs_dev\n    local -i abs_dev_sum\n    local -i\
+    \ mad\n\n    # Convert input string to array\n    x=($1)\n    n=${#x[@]}\n\n \
+    \   # Calculate mean\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + x[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    # Calculate sum of absolute deviations\n\
+    \    for ((i=0; i<n; i++)); do\n        abs_dev=$((x[i] - mean))\n        abs_dev_sum=$((abs_dev_sum\
+    \ + abs_dev))\n    done\n\n    # Calculate MAD\n    mad=$((abs_dev_sum / n))\n\
+    \n    echo $mad", "    local mean=$(mean $1)\n    local sum=0\n    for i in $1;\
+    \ do\n        sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n    done\n    echo\
+    \ \"scale=2; $sum / $#\" | bc -l", "    local -a input=($1)\n    local -i i\n\
+    \    local -i len=${#input[@]}\n    local -i sum=0\n    local -i mean=0\n    local\
+    \ -i abs_dev=0\n    local -i abs_dev_sum=0\n    local -i mad=0\n\n    for ((i=0;\
+    \ i<len; i++)); do\n        sum=$((sum + input[i]))\n    done\n    mean=$((sum\
+    \ / len))\n\n    for ((i=0; i<len; i++)); do\n        abs_dev=$((input[i] - mean))\n\
+    \        abs_dev_sum=$((abs_dev_sum + abs_dev))\n    done\n    mad=$((abs_dev_sum\
+    \ / len))\n\n    echo $mad", "    local -a nums=($1)\n    local sum=0\n    local\
+    \ mean=0\n    local abs_dev=0\n    local abs_dev_sum=0\n    local mad=0\n\n  \
+    \  for num in ${nums[@]}; do\n        sum=$(echo \"$sum + $num\" | bc)\n    done\n\
+    \    mean=$(echo \"scale=2; $sum / ${#nums[@]}\" | bc)\n\n    for num in ${nums[@]};\
+    \ do\n        abs_dev=$(echo \"scale=2; $num - $mean\" | bc)\n        abs_dev_sum=$(echo\
+    \ \"$abs_dev_sum + $abs_dev\" | bc)\n    done\n    mad=$(echo \"scale=2; $abs_dev_sum\
+    \ / ${#nums[@]}\" | bc)\n\n    echo $mad", "    local mean=$(mean \"$1\")\n  \
+    \  local abs_deviations=$(echo \"$1\" | awk -v mean=$mean '{print abs($1 - mean)}')\n\
+    \    mean \"$abs_deviations\"", "    local mean=$(mean $1)\n    local abs_deviation=$(echo\
+    \ $1 | awk '{for (i=1; i<=NF; i++) printf(\"%s \", (sqrt($i*$i) - sqrt('$mean'*'$mean')))}')\n\
+    \    echo $abs_deviation", "    local -a arr=()\n    local -i i\n    local -i\
+    \ len\n    local -i sum\n    local -i mean\n    local -i abs_dev\n    local -i\
+    \ abs_dev_sum\n\n    # Convert input string to array\n    IFS=' ' read -r -a arr\
+    \ <<< \"$1\"\n\n    # Calculate mean\n    len=${#arr[@]}\n    for ((i=0; i<len;\
+    \ i++)); do\n        sum=$((sum + arr[i]))\n    done\n    mean=$((sum / len))\n\
+    \n    # Calculate MAD\n    abs_dev_sum=0\n    for ((i=0; i<len; i++)); do\n  \
+    \      abs_dev=$((arr[i] - mean))\n        abs_dev_sum=$((abs_dev_sum + abs_dev))\n\
+    \    done\n    echo $((abs_dev_sum / len))", "    local sum=0\n    local mean=0\n\
+    \    local count=0\n    local abs_dev=0\n    local abs_dev_sum=0\n    local abs_dev_mean=0\n\
+    \    local input_list=$1\n    for i in $input_list; do\n        sum=$(echo \"\
+    $sum + $i\" | bc)\n        count=$(echo \"$count + 1\" | bc)\n    done\n    mean=$(echo\
+    \ \"scale=2; $sum / $count\" | bc)\n    for i in $input_list; do\n        abs_dev=$(echo\
+    \ \"scale=2; $i - $mean\" | bc)\n        abs_dev=$(echo \"scale=2; $abs_dev <\
+    \ 0 ? -$abs_dev : $abs_dev\" | bc)\n        abs_dev_sum=$(echo \"scale=2; $abs_dev_sum\
+    \ + $abs_dev\" | bc)\n    done\n    abs_dev_mean=$(echo \"scale=2; $abs_dev_sum\
+    \ / $count\" | bc)\n    echo $abs_dev_mean", "  local mean=$(mean $1)\n  local\
+    \ abs_deviation=$(echo $1 | awk '{for (i=1; i<=NF; i++) {print $i - '$mean'}}'\
+    \ | awk '{for (i=1; i<=NF; i++) {print ($i < 0) ? -$i : $i}}')\n  mean $abs_deviation",
+  "    local -a nums\n    local sum=0\n    local mean=0\n    local abs_deviation=0\n\
+    \    local abs_deviation_sum=0\n    local mad=0\n\n    nums=($1)\n    for num\
+    \ in \"${nums[@]}\"; do\n        sum=$((sum + num))\n    done\n    mean=$((sum\
+    \ / ${#nums[@]}))\n\n    for num in \"${nums[@]}\"; do\n        abs_deviation=$((num\
+    \ - mean))\n        abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n\
+    \    done\n    mad=$((abs_deviation_sum / ${#nums[@]}))\n\n    echo \"$mad\"",
+  "    local list=\"$1\"\n    local mean=$(mean \"$list\")\n    local sum=0\n    for\
+    \ x in $list; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n   \
+    \ done\n    echo \"$sum / $#\" | bc -l", "    local input_list=$1\n    local mean=$(echo\
+    \ \"$input_list\" | awk '{sum+=$1} END {print sum/NR}')\n    local abs_deviations=$(echo\
+    \ \"$input_list\" | awk -v mean=$mean '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n\
+    \    local mean_abs_deviation=$(echo \"$abs_deviations\" | awk '{sum+=$1} END\
+    \ {print sum/NR}')\n    echo $mean_abs_deviation", "    local -a numbers=($1)\n\
+    \    local -a abs_deviations\n    local sum=0\n    local mean\n    local abs_deviation\n\
+    \    local i\n    local n\n\n    # Calculate mean\n    for i in \"${numbers[@]}\"\
+    ; do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n    mean=$(echo \"scale=2;\
+    \ $sum / ${#numbers[@]}\" | bc)\n\n    # Calculate absolute deviations\n    for\
+    \ i in \"${numbers[@]}\"; do\n        abs_deviation=$(echo \"scale=2; $i - $mean\"\
+    \ | bc)\n        abs_deviations+=($(echo \"scale=2; $abs_deviation < 0 ? -$abs_deviation\
+    \ : $abs_deviation\" | bc))\n    done\n\n    # Calculate mean absolute deviation\n\
+    \    sum=0\n    for i in \"${abs_deviations[@]}\"; do\n        sum=$(echo \"$sum\
+    \ + $i\" | bc)\n    done\n    echo \"scale=2; $sum / ${#abs_deviations[@]}\" |\
+    \ bc", "    local -a numbers=($1)\n    local mean=$(echo \"${numbers[@]}\" | awk\
+    \ '{sum=0; for(i=1;i<=NF;i++) sum+=$i; print sum/NF}')\n    local sum=0\n    for\
+    \ number in \"${numbers[@]}\"; do\n        sum=$(echo \"$sum + abs($number - $mean)\"\
+    \ | bc)\n    done\n    local mad=$(echo \"$sum / ${#numbers[@]}\" | bc)\n    echo\
+    \ $mad", "  local x_mean=$(echo \"$1\" | awk '{sum+=$1} END {print sum/NR}')\n\
+    \  echo \"$1\" | awk -v x_mean=$x_mean '{sum+=($1-x_mean>0?$1-x_mean:-($1-x_mean))}\
+    \ END {print sum/NR}'", "    local -a input=($1)\n    local -i n=${#input[@]}\n\
+    \    local -i i\n    local -i sum=0\n    local -i mean\n    local -i abs_deviation\n\
+    \    local -i abs_deviation_sum=0\n    local -i mad\n\n    for ((i=0; i<n; i++));\
+    \ do\n        sum=$((sum + input[i]))\n    done\n    mean=$((sum / n))\n\n   \
+    \ for ((i=0; i<n; i++)); do\n        abs_deviation=$((input[i] - mean))\n    \
+    \    abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n    done\n    mad=$((abs_deviation_sum\
+    \ / n))\n\n    echo $mad", "  local -a arr\n  local -i i\n  local -i len\n  local\
+    \ -i sum\n  local -i mean\n  local -i mad\n  local -i diff\n\n  arr=($1)\n  len=${#arr[@]}\n\
+    \  sum=0\n  for ((i=0; i<len; i++)); do\n    sum=$((sum + arr[i]))\n  done\n \
+    \ mean=$((sum / len))\n  mad=0\n  for ((i=0; i<len; i++)); do\n    diff=$((arr[i]\
+    \ - mean))\n    if ((diff < 0)); then\n      diff=$((-diff))\n    fi\n    mad=$((mad\
+    \ + diff))\n  done\n  echo $((mad / len))", "  local mean=$(mean \"$1\")\n  local\
+    \ sum=0\n  for i in $1; do\n    sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n\
+    \  done\n  echo \"$sum / $#\" | bc -l", "    local -a arr=($1)\n    local sum=0\n\
+    \    local mean=0\n    local mad=0\n    local i=0\n    local n=${#arr[@]}\n\n\
+    \    for i in ${arr[@]}; do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n\
+    \    mean=$(echo \"scale=3; $sum / $n\" | bc)\n\n    for i in ${arr[@]}; do\n\
+    \        mad=$(echo \"$mad + abs($i - $mean)\" | bc)\n    done\n    mad=$(echo\
+    \ \"scale=3; $mad / $n\" | bc)\n\n    echo $mad", "  local list=\"$1\"\n  local\
+    \ mean=$(mean \"$list\")\n  local sum=0\n  for i in $list; do\n    sum=$(echo\
+    \ \"$sum + abs($i - $mean)\" | bc -l)\n  done\n  echo \"$sum / $#\" | bc -l",
+  "    local -a numbers\n    local -i i\n    local -i n\n    local -i sum\n    local\
+    \ -i mean\n    local -i diff\n    local -i abs_diff\n    local -i abs_diff_sum\n\
+    \    local -i mad\n\n    numbers=($1)\n    n=${#numbers[@]}\n    sum=0\n    for\
+    \ ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum\
+    \ / n))\n    abs_diff_sum=0\n    for ((i=0; i<n; i++)); do\n        diff=$((numbers[i]\
+    \ - mean))\n        abs_diff=$((diff < 0 ? -diff : diff))\n        abs_diff_sum=$((abs_diff_sum\
+    \ + abs_diff))\n    done\n    mad=$((abs_diff_sum / n))\n    echo $mad", "   \
+    \ local mean=$(mean \"$1\")\n    local sum=0\n    for x in $1; do\n        local\
+    \ diff=$(echo \"$x - $mean\" | bc -l)\n        local abs_diff=$(echo \"if ($diff\
+    \ < 0) $diff * -1 else $diff\" | bc -l)\n        sum=$(echo \"$sum + $abs_diff\"\
+    \ | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l", "    local -a list=($1)\n\
+    \    local mean=$(mean \"${list[@]}\")\n    local -a diffs=()\n    for i in \"\
+    ${list[@]}\"; do\n        diffs+=($(echo \"$i - $mean\" | bc -l))\n    done\n\
+    \    local -a abs_diffs=()\n    for i in \"${diffs[@]}\"; do\n        abs_diffs+=($(echo\
+    \ \"if ($i < 0) $i * -1 else $i\" | bc -l))\n    done\n    local sum=$(sum \"\
+    ${abs_diffs[@]}\")\n    local len=${#list[@]}\n    echo \"$sum / $len\" | bc -l",
+  "    local list=\"$1\"\n    local mean=$(mean \"$list\")\n    local sum=0\n    for\
+    \ x in $list; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n   \
+    \ done\n    echo \"$sum / $#\" | bc -l", "    local -a arr=(\"$@\")\n    local\
+    \ sum=0\n    local mean=0\n    local abs_dev=0\n    local mad=0\n    local i=0\n\
+    \n    for ((i=0; i<${#arr[@]}; i++)); do\n        sum=$((sum + arr[i]))\n    done\n\
+    \    mean=$((sum / ${#arr[@]}))\n\n    for ((i=0; i<${#arr[@]}; i++)); do\n  \
+    \      abs_dev=$((abs_dev + abs(arr[i] - mean)))\n    done\n    mad=$((abs_dev\
+    \ / ${#arr[@]}))\n\n    echo $mad", "    # Calculate mean\n    local mean=$(echo\
+    \ \"$1\" | awk '{s+=$1} END {print s/NR}')\n    # Calculate absolute difference\
+    \ between each element and mean\n    local abs_diff=$(echo \"$1\" | awk -v mean=$mean\
+    \ '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n    # Calculate average of absolute\
+    \ difference\n    echo \"$abs_diff\" | awk '{s+=$1} END {print s/NR}'", "    local\
+    \ -a x\n    local -i n\n    local -i i\n    local -i sum\n    local -i mean\n\
+    \    local -i abs_deviation\n    local -i sum_abs_deviation\n    local -i mad\n\
+    \n    # Convert input string to array\n    x=($1)\n    n=${#x[@]}\n\n    # Calculate\
+    \ mean\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + x[i]))\n    done\n\
+    \    mean=$((sum / n))\n\n    # Calculate absolute deviation\n    for ((i=0; i<n;\
+    \ i++)); do\n        abs_deviation=$((x[i] - mean))\n        abs_deviation=${abs_deviation#-}\n\
+    \        sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n    done\n\n\
+    \    # Calculate MAD\n    mad=$((sum_abs_deviation / n))\n\n    echo $mad", " \
+    \   local -a arr\n    local -i i\n    local -i n\n    local -i sum\n    local\
+    \ -i mean\n    local -i mad\n    local -i diff\n    local -i abs_diff\n\n    #\
+    \ Convert input string to array\n    arr=($1)\n    n=${#arr[@]}\n\n    # Calculate\
+    \ mean\n    sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + arr[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    # Calculate MAD\n    mad=0\n    for ((i=0;\
+    \ i<n; i++)); do\n        diff=$((arr[i] - mean))\n        abs_diff=$((diff <\
+    \ 0 ? -diff : diff))\n        mad=$((mad + abs_diff))\n    done\n    mad=$((mad\
+    \ / n))\n\n    echo $mad", "    local -a numbers=($1)\n    local -i n=${#numbers[@]}\n\
+    \    local -i i=0\n    local -i sum=0\n    local -i mean=0\n    local -i mad=0\n\
+    \    local -i diff=0\n\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        diff=$((numbers[i]\
+    \ - mean))\n        mad=$((mad + abs(diff)))\n    done\n    mad=$((mad / n))\n\
+    \n    echo $mad", "    local -a data=($1)\n    local sum=0\n    local count=${#data[@]}\n\
+    \    local mean=0\n    local deviation=0\n    local abs_deviation=0\n    local\
+    \ abs_deviations=()\n    local abs_deviations_sum=0\n    local abs_deviations_mean=0\n\
+    \n    for ((i=0; i<count; i++)); do\n        sum=$((sum + data[i]))\n    done\n\
+    \    mean=$((sum / count))\n\n    for ((i=0; i<count; i++)); do\n        deviation=$((data[i]\
+    \ - mean))\n        abs_deviation=$((deviation < 0 ? -deviation : deviation))\n\
+    \        abs_deviations[i]=$abs_deviation\n        abs_deviations_sum=$((abs_deviations_sum\
+    \ + abs_deviation))\n    done\n    abs_deviations_mean=$((abs_deviations_sum /\
+    \ count))\n\n    echo $abs_deviations_mean", "    local -a x\n    local -i i\n\
+    \    local -i n\n    local -i sum\n    local -i mean\n    local -i mad\n    local\
+    \ -i x_i\n    local -i x_mean\n    local -i x_diff\n    local -i x_diff_abs\n\n\
+    \    # Convert input string to array\n    x=($1)\n    # Get number of elements\
+    \ in array\n    n=${#x[@]}\n    # Calculate sum of all elements\n    for ((i=0;\
+    \ i<n; i++)); do\n        sum=$((sum + x[i]))\n    done\n    # Calculate mean\n\
+    \    mean=$((sum / n))\n    # Calculate MAD\n    for ((i=0; i<n; i++)); do\n \
+    \       x_i=${x[i]}\n        x_mean=$mean\n        x_diff=$((x_i - x_mean))\n\
+    \        x_diff_abs=$((x_diff < 0 ? -x_diff : x_diff))\n        mad=$((mad + x_diff_abs))\n\
+    \    done\n    mad=$((mad / n))\n    echo $mad", "    local -a values=($1)\n \
+    \   local mean=$(mean \"${values[@]}\")\n    local -a deviations=()\n    for value\
+    \ in \"${values[@]}\"; do\n        local deviation=$(echo \"$value - $mean\" |\
+    \ bc)\n        local abs_deviation=$(echo \"if ($deviation < 0) $deviation * -1\
+    \ else $deviation\" | bc)\n        deviations+=($abs_deviation)\n    done\n  \
+    \  mean \"${deviations[@]}\"", "    local list=\"$1\"\n    local mean=$(echo \"\
+    $list\" | awk '{sum+=$1} END {print sum/NR}')\n    local abs_deviations=$(echo\
+    \ \"$list\" | awk -v mean=$mean '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n\
+    \    echo \"$abs_deviations\" | awk '{sum+=$1} END {print sum/NR}'", "    local\
+    \ mean=$(echo \"$1\" | awk '{sum=0; for(i=1;i<=NF;i++) sum+=$i; print sum/NF}')\n\
+    \    local sum=0\n    for i in $1; do\n        sum=$(echo \"$sum + abs($i - $mean)\"\
+    \ | bc)\n    done\n    echo \"$sum / $#\" | bc -l", "    local -a arr\n    local\
+    \ -i i\n    local -i sum\n    local -i mean\n    local -i mad\n    local -i len\n\
+    \    local -i diff\n    arr=($1)\n    len=${#arr[@]}\n    for ((i=0; i<len; i++));\
+    \ do\n        sum=$((sum + arr[i]))\n    done\n    mean=$((sum / len))\n    for\
+    \ ((i=0; i<len; i++)); do\n        diff=$((arr[i] - mean))\n        if ((diff\
+    \ < 0)); then\n            diff=$((-diff))\n        fi\n        mad=$((mad + diff))\n\
+    \    done\n    mad=$((mad / len))\n    echo $mad", "    local -a numbers=($1)\n\
+    \    local mean=$(mean \"${numbers[@]}\")\n    local -a abs_diffs=()\n    for\
+    \ number in \"${numbers[@]}\"; do\n        abs_diffs+=($(echo \"$number - $mean\"\
+    \ | bc -l | awk '{printf \"%f\", $0}'))\n    done\n    echo \"${abs_diffs[@]}\"",
+  "  local list=$1\n  local mean=$(echo \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n\
+    \  local abs_deviation=$(echo \"$list\" | awk -v mean=$mean '{print $1-mean}'\
+    \ | awk '{print $1<0?-$1:$1}')\n  local sum_abs_deviation=$(echo \"$abs_deviation\"\
+    \ | awk '{sum+=$1} END {print sum}')\n  local mad=$(echo \"$sum_abs_deviation\
+    \ $abs_deviation\" | awk '{print $1/NR}')\n  echo $mad", "  local input=$1\n \
+    \ local mean=$(mean $input)\n  local abs_deviations=$(echo $input | awk '{for\
+    \ (i=1; i<=NF; i++) {print $i - '$mean'}}' | awk '{print $1 > 0 ? $1 : -$1}')\n\
+    \  local abs_deviations_sum=$(echo $abs_deviations | awk '{sum=0; for (i=1; i<=NF;\
+    \ i++) {sum+=$i}; print sum}')\n  echo $(echo $abs_deviations_sum $input | awk\
+    \ '{print $1 / $2}')", "  local -a numbers\n  local -i i\n  local -i n\n  local\
+    \ -i sum\n  local -i mean\n  local -i mad\n  local -i abs_diff\n  numbers=($1)\n\
+    \  n=${#numbers[@]}\n  sum=0\n  for ((i=0; i<n; i++)); do\n    sum=$((sum + numbers[i]))\n\
+    \  done\n  mean=$((sum / n))\n  mad=0\n  for ((i=0; i<n; i++)); do\n    abs_diff=$((numbers[i]\
+    \ - mean))\n    if ((abs_diff < 0)); then\n      abs_diff=$((-abs_diff))\n   \
+    \ fi\n    mad=$((mad + abs_diff))\n  done\n  mad=$((mad / n))\n  echo $mad", " \
+    \   local list=$1\n    local mean=$(mean $list)\n    local sum=0\n    for i in\
+    \ $list; do\n        sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n    done\n\
+    \    echo $(echo \"$sum / $#\" | bc -l)", "  local -a numbers=($1)\n  local sum=0\n\
+    \  local mean=0\n  local abs_deviation=0\n  local mean_abs_deviation=0\n  local\
+    \ n=${#numbers[@]}\n\n  # Calculate mean\n  for i in \"${numbers[@]}\"; do\n \
+    \   sum=$(echo \"$sum + $i\" | bc)\n  done\n  mean=$(echo \"scale=2; $sum / $n\"\
+    \ | bc)\n\n  # Calculate mean absolute deviation\n  for i in \"${numbers[@]}\"\
+    ; do\n    abs_deviation=$(echo \"scale=2; $i - $mean\" | bc)\n    abs_deviation=$(echo\
+    \ \"scale=2; $abs_deviation < 0 ? -$abs_deviation : $abs_deviation\" | bc)\n \
+    \   mean_abs_deviation=$(echo \"scale=2; $mean_abs_deviation + $abs_deviation\"\
+    \ | bc)\n  done\n  mean_abs_deviation=$(echo \"scale=2; $mean_abs_deviation /\
+    \ $n\" | bc)\n\n  echo $mean_abs_deviation", "  local -a x\n  read -a x <<< \"\
+    $1\"\n  local n=${#x[@]}\n  local sum=0\n  local mean=0\n  local abs_dev=0\n \
+    \ local abs_dev_sum=0\n  local mad=0\n\n  for ((i=0; i<n; i++)); do\n    sum=$((sum\
+    \ + x[i]))\n  done\n  mean=$((sum / n))\n\n  for ((i=0; i<n; i++)); do\n    abs_dev=$((x[i]\
+    \ - mean))\n    abs_dev_sum=$((abs_dev_sum + abs_dev))\n  done\n  mad=$((abs_dev_sum\
+    \ / n))\n\n  echo $mad", "  local list=$1\n  local mean=$(echo $list | awk '{sum=0;\
+    \ for(i=1; i<=NF; i++) sum+=$i; print sum/NF}')\n  local abs_deviations=$(echo\
+    \ $list | awk -v mean=$mean '{for(i=1; i<=NF; i++) printf(\"%s \", $i-mean); print\
+    \ \"\"}')\n  local abs_deviations=$(echo $abs_deviations | awk '{for(i=1; i<=NF;\
+    \ i++) if($i<0) $i=-$i; print $0}')\n  local mean_abs_deviation=$(echo $abs_deviations\
+    \ | awk '{sum=0; for(i=1; i<=NF; i++) sum+=$i; print sum/NF}')\n  echo $mean_abs_deviation",
+  "  local -r input=\"$1\"\n  local -r mean=$(echo \"$input\" | awk '{sum+=$1} END\
+    \ {print sum/NR}')\n  local -r abs_deviations=$(echo \"$input\" | awk -v mean=\"\
+    $mean\" '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n  echo \"$abs_deviations\"\
+    \ | awk '{sum+=$1} END {print sum/NR}'", "    local -a numbers=($1)\n    local\
+    \ -i n=${#numbers[@]}\n    local -i i\n    local -i sum=0\n    local -i mean\n\
+    \    local -i diff\n    local -i abs_diff\n    local -i abs_diff_sum=0\n    local\
+    \ -i mad\n\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        diff=$((numbers[i]\
+    \ - mean))\n        abs_diff=$((diff < 0 ? -diff : diff))\n        abs_diff_sum=$((abs_diff_sum\
+    \ + abs_diff))\n    done\n    mad=$((abs_diff_sum / n))\n\n    echo $mad", " \
+    \   local x_mean=`echo $1 | awk '{sum=0; for (i=1; i<=NF; i++) sum+=$i; print\
+    \ sum/NF}'`\n    local abs_deviations=`echo $1 | awk -v x_mean=$x_mean '{sum=0;\
+    \ for (i=1; i<=NF; i++) sum+=fabs($i-x_mean); print sum/NF}'`\n    echo $abs_deviations",
+  "    local input_list=$1\n    local mean=$(echo \"$input_list\" | awk '{sum+=$1}\
+    \ END {print sum/NR}')\n    local abs_deviations=$(echo \"$input_list\" | awk\
+    \ -v mean=$mean '{print abs($1-mean)}')\n    local mad=$(echo \"$abs_deviations\"\
+    \ | awk '{sum+=$1} END {print sum/NR}')\n    echo $mad", "    local mean=$(mean\
+    \ $1)\n    local sum_absolute_deviations=0\n    for x in $1; do\n        sum_absolute_deviations=$(echo\
+    \ \"$sum_absolute_deviations + ${x//[^0-9.]/} - $mean\" | bc)\n    done\n    echo\
+    \ \"$sum_absolute_deviations / $#\" | bc -l", "    local input_list=\"$1\"\n \
+    \   local mean=$(mean \"$input_list\")\n    local abs_diff_list=$(absolute_difference\
+    \ \"$input_list\" \"$mean\")\n    mean \"$abs_diff_list\"", "  local list=\"$1\"\
+    \n  local mean=$(echo \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n  local\
+    \ abs_deviations=$(echo \"$list\" | awk -v mean=$mean '{print $1-mean}' | awk\
+    \ '{print $1>0?$1:-$1}')\n  echo \"$abs_deviations\" | awk '{sum+=$1} END {print\
+    \ sum/NR}'", "  local input=\"$1\"\n  local mean=$(mean \"$input\")\n  local sum=0\n\
+    \  for i in $input; do\n    sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n \
+    \ done\n  echo \"$sum / $#\" | bc -l", "    local -a array=($1)\n    local -i\
+    \ n=${#array[@]}\n    local -i i\n    local -i sum=0\n    local -i mean\n    local\
+    \ -i abs_deviation\n    local -i abs_deviation_sum=0\n    local -i abs_deviation_mean\n\
+    \n    for i in ${array[@]}; do\n        sum=$((sum + i))\n    done\n    mean=$((sum\
+    \ / n))\n\n    for i in ${array[@]}; do\n        abs_deviation=$((i - mean))\n\
+    \        abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n    done\n\
+    \    abs_deviation_mean=$((abs_deviation_sum / n))\n\n    echo $abs_deviation_mean",
+  "  local -a numbers=($1)\n  local sum=0\n  local count=0\n  local mean=0\n  local\
+    \ abs_dev=0\n  local abs_dev_sum=0\n  local abs_dev_mean=0\n\n  for number in\
+    \ ${numbers[@]}; do\n    sum=$(echo \"$sum + $number\" | bc)\n    count=$(echo\
+    \ \"$count + 1\" | bc)\n  done\n\n  mean=$(echo \"scale=2; $sum / $count\" | bc)\n\
+    \n  for number in ${numbers[@]}; do\n    abs_dev=$(echo \"scale=2; $number - $mean\"\
+    \ | bc)\n    abs_dev_sum=$(echo \"scale=2; $abs_dev_sum + $abs_dev\" | bc)\n \
+    \ done\n\n  abs_dev_mean=$(echo \"scale=2; $abs_dev_sum / $count\" | bc)\n\n \
+    \ echo $abs_dev_mean", "    local x_mean=$(mean \"$1\")\n    local x_deviations=$(echo\
+    \ \"$1\" | awk -v mean=$x_mean '{print $1 - mean}')\n    local x_absolute_deviations=$(echo\
+    \ \"$x_deviations\" | awk '{print $1 < 0 ? -$1 : $1}')\n    local x_absolute_deviations_sum=$(echo\
+    \ \"$x_absolute_deviations\" | awk '{sum += $1} END {print sum}')\n    local x_absolute_deviations_count=$(echo\
+    \ \"$x_absolute_deviations\" | wc -w)\n    local x_absolute_deviations_mean=$(echo\
+    \ \"$x_absolute_deviations_sum / $x_absolute_deviations_count\" | bc -l)\n   \
+    \ echo \"$x_absolute_deviations_mean\"", "    local list=$1\n    local mean=$(echo\
+    \ \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n    local abs_deviations=$(echo\
+    \ \"$list\" | awk -v mean=$mean '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n\
+    \    local sum_abs_deviations=$(echo \"$abs_deviations\" | awk '{sum+=$1} END\
+    \ {print sum}')\n    local n=$(echo \"$list\" | wc -w)\n    echo \"$sum_abs_deviations\
+    \ / $n\" | bc -l", "    local -a numbers\n    local -i i\n    local -i n\n   \
+    \ local -i sum\n    local -i mean\n    local -i abs_deviation\n    local -i abs_deviation_sum\n\
+    \    local -i abs_deviation_mean\n\n    numbers=($1)\n    n=${#numbers[@]}\n \
+    \   sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    abs_deviation_sum=0\n    for ((i=0; i<n;\
+    \ i++)); do\n        abs_deviation=$((numbers[i] - mean))\n        abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviation))\n    done\n    abs_deviation_mean=$((abs_deviation_sum / n))\n\
+    \n    echo $abs_deviation_mean", "    local list=\"$1\"\n    local mean=$(mean\
+    \ \"$list\")\n    local sum=0\n    for i in $list; do\n        local diff=$(echo\
+    \ \"$i - $mean\" | bc)\n        local abs=$(echo \"if ($diff < 0) $diff * -1 else\
+    \ $diff\" | bc)\n        sum=$(echo \"$sum + $abs\" | bc)\n    done\n    local\
+    \ count=$(echo \"$list\" | wc -w)\n    echo \"$sum / $count\" | bc", "  local\
+    \ -a numbers=($1)\n  local sum=0\n  local mean=0\n  local mad=0\n  local abs_diff=0\n\
+    \  local i=0\n\n  for ((i=0; i<${#numbers[@]}; i++)); do\n    sum=$(echo \"$sum\
+    \ + ${numbers[$i]}\" | bc)\n  done\n  mean=$(echo \"scale=2; $sum / ${#numbers[@]}\"\
+    \ | bc)\n\n  for ((i=0; i<${#numbers[@]}; i++)); do\n    abs_diff=$(echo \"scale=2;\
+    \ ${numbers[$i]} - $mean\" | bc)\n    abs_diff=$(echo \"scale=2; ${abs_diff#-}\
+    \ / 1\" | bc)\n    mad=$(echo \"scale=2; $mad + $abs_diff\" | bc)\n  done\n  mad=$(echo\
+    \ \"scale=2; $mad / ${#numbers[@]}\" | bc)\n\n  echo $mad", "    local list=\"\
+    $1\"\n    local mean=$(echo \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n\
+    \    local abs_deviations=$(echo \"$list\" | awk -v mean=$mean '{print abs($1-mean)}')\n\
+    \    echo \"$abs_deviations\" | awk '{sum+=$1} END {print sum/NR}'", "    local\
+    \ list=\"$1\"\n    local mean=$(mean \"$list\")\n    local sum=0\n    for x in\
+    \ $list; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n    done\n\
+    \    echo \"$sum / $#\" | bc -l", "  local list=\"$1\"\n  local mean=$(echo \"\
+    $list\" | awk '{sum+=$1} END {print sum/NR}')\n  local abs_deviations=$(echo \"\
+    $list\" | awk -v mean=$mean '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n \
+    \ local sum_abs_deviations=$(echo \"$abs_deviations\" | awk '{sum+=$1} END {print\
+    \ sum}')\n  local num_elements=$(echo \"$list\" | wc -w)\n  echo \"$sum_abs_deviations\
+    \ / $num_elements\" | bc -l", "    local -a numbers=($1)\n    local mean=$(mean\
+    \ ${numbers[@]})\n    local -a diffs\n    for num in ${numbers[@]}; do\n     \
+    \   diffs+=($(echo \"$num - $mean\" | bc -l))\n    done\n    local -a abs_diffs\n\
+    \    for diff in ${diffs[@]}; do\n        abs_diffs+=($(echo \"if ($diff < 0)\
+    \ $diff * -1 else $diff\" | bc -l))\n    done\n    echo $(mean ${abs_diffs[@]})",
+  "  local -a numbers=($1)\n  local -i num_numbers=${#numbers[@]}\n  local -i i\n\
+    \  local -i sum=0\n  local -i mean\n  local -i abs_deviation\n  local -i abs_deviation_sum=0\n\
+    \  local -i abs_deviation_mean\n\n  for ((i=0; i<num_numbers; i++)); do\n    sum=$((sum\
+    \ + numbers[i]))\n  done\n  mean=$((sum / num_numbers))\n\n  for ((i=0; i<num_numbers;\
+    \ i++)); do\n    abs_deviation=$((numbers[i] - mean))\n    abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviation))\n  done\n  abs_deviation_mean=$((abs_deviation_sum / num_numbers))\n\
+    \n  echo $abs_deviation_mean", "  local mean=$(mean \"$1\")\n  local abs_deviations=$(echo\
+    \ \"$1\" | awk -v mean=\"$mean\" '{print abs($1 - mean)}')\n  mean \"$abs_deviations\"",
+  "    local -a numbers=($1)\n    local sum=0\n    local mean=0\n    local mad=0\n\
+    \    local i=0\n    local n=${#numbers[@]}\n\n    for ((i=0; i<n; i++)); do\n\
+    \        sum=$(echo \"$sum + ${numbers[$i]}\" | bc)\n    done\n    mean=$(echo\
+    \ \"scale=2; $sum / $n\" | bc)\n\n    for ((i=0; i<n; i++)); do\n        mad=$(echo\
+    \ \"$mad + ${numbers[$i]} - $mean\" | bc)\n    done\n    mad=$(echo \"scale=2;\
+    \ $mad / $n\" | bc)\n\n    echo $mad", "  # Calculate mean\n  local mean=$(echo\
+    \ \"$1\" | awk '{sum+=$1} END {print sum/NR}')\n  # Calculate absolute difference\
+    \ between each element and mean\n  local absolute_differences=$(echo \"$1\" |\
+    \ awk -v mean=$mean '{print abs($1-mean)}')\n  # Calculate mean of absolute differences\n\
+    \  echo \"$absolute_differences\" | awk '{sum+=$1} END {print sum/NR}'", "   \
+    \ local mean=$(mean $1)\n    local abs_deviations=$(echo $1 | awk '{for (i=1;\
+    \ i<=NF; i++) {print $i - '$mean'}}' | awk '{for (i=1; i<=NF; i++) {print $i <\
+    \ 0 ? -$i : $i}}')\n    mean $abs_deviations", "    local -a numbers=($1)\n  \
+    \  local mean=$(mean \"${numbers[@]}\")\n    local -a deviations=()\n    for number\
+    \ in \"${numbers[@]}\"; do\n        deviations+=($(echo \"$number - $mean\" |\
+    \ bc -l))\n    done\n    echo \"$(mean \"${deviations[@]}\")\"", "    local mean=$(mean\
+    \ \"$1\")\n    local sum=0\n    local count=0\n    for x in $1; do\n        sum=$(echo\
+    \ \"$sum + abs($x - $mean)\" | bc -l)\n        count=$((count + 1))\n    done\n\
+    \    echo \"$sum / $count\" | bc -l", "    local mean=$(mean \"$1\")\n    local\
+    \ sum=0\n    for x in $1; do\n        sum=$(echo \"$sum + abs($x - $mean)\" |\
+    \ bc -l)\n    done\n    echo \"$sum / $#\" | bc -l", "    local -a x\n    x=($1)\n\
+    \    local n=${#x[@]}\n    local sum=0\n    local mean=0\n    local abs_deviation=0\n\
+    \    local total_abs_deviation=0\n    local mean_absolute_deviation=0\n\n    for\
+    \ (( i=0; i<${n}; i++ )); do\n        sum=$(echo \"$sum + ${x[$i]}\" | bc)\n \
+    \   done\n    mean=$(echo \"scale=2; $sum / $n\" | bc)\n\n    for (( i=0; i<${n};\
+    \ i++ )); do\n        abs_deviation=$(echo \"scale=2; ${x[$i]} - $mean\" | bc)\n\
+    \        abs_deviation=$(echo \"scale=2; $abs_deviation < 0 ? -$abs_deviation\
+    \ : $abs_deviation\" | bc)\n        total_abs_deviation=$(echo \"scale=2; $total_abs_deviation\
+    \ + $abs_deviation\" | bc)\n    done\n    mean_absolute_deviation=$(echo \"scale=2;\
+    \ $total_abs_deviation / $n\" | bc)\n    echo $mean_absolute_deviation", "   \
+    \ local -a data=($1)\n    local mean=$(mean \"${data[@]}\")\n    local sum=0\n\
+    \    for i in \"${data[@]}\"; do\n        sum=$(echo \"$sum + abs($i - $mean)\"\
+    \ | bc -l)\n    done\n    echo \"$sum / ${#data[@]}\" | bc -l", "    local -a\
+    \ arr\n    local sum=0\n    local mean\n    local i\n    local diff\n    local\
+    \ abs_diff\n    local abs_diff_sum=0\n    local mad\n    IFS=' ' read -r -a arr\
+    \ <<< \"$1\"\n    for i in \"${arr[@]}\"; do\n        sum=$((sum + i))\n    done\n\
+    \    mean=$((sum / ${#arr[@]}))\n    for i in \"${arr[@]}\"; do\n        diff=$((i\
+    \ - mean))\n        abs_diff=$((diff < 0 ? -diff : diff))\n        abs_diff_sum=$((abs_diff_sum\
+    \ + abs_diff))\n    done\n    mad=$((abs_diff_sum / ${#arr[@]}))\n    echo \"\
+    $mad\"", "  local mean=$(mean \"$1\")\n  local abs_deviations=$(echo \"$1\" |\
+    \ awk -v mean=\"$mean\" '{print abs($1 - mean)}')\n  echo \"$abs_deviations\"\
+    \ | mean", "    local -a input_array\n    IFS=' ' read -r -a input_array <<< \"\
+    $1\"\n    local -i input_array_length=${#input_array[@]}\n    local -i i\n   \
+    \ local -i sum=0\n    local -i mean\n    local -i abs_deviation\n    local -i\
+    \ sum_abs_deviation=0\n    local -i mad\n    for ((i=0; i<input_array_length;\
+    \ i++)); do\n        sum=$((sum + input_array[i]))\n    done\n    mean=$((sum\
+    \ / input_array_length))\n    for ((i=0; i<input_array_length; i++)); do\n   \
+    \     abs_deviation=$((input_array[i] - mean))\n        if ((abs_deviation < 0));\
+    \ then\n            abs_deviation=$((-abs_deviation))\n        fi\n        sum_abs_deviation=$((sum_abs_deviation\
+    \ + abs_deviation))\n    done\n    mad=$((sum_abs_deviation / input_array_length))\n\
+    \    echo $mad", "  local -a arr=($1)\n  local -i len=${#arr[@]}\n  local -i i\n\
+    \  local -i sum=0\n  local -i mean\n  local -i abs_diff\n  local -i abs_diff_sum=0\n\
+    \n  for i in ${arr[@]}; do\n    sum=$((sum + i))\n  done\n  mean=$((sum / len))\n\
+    \n  for i in ${arr[@]}; do\n    abs_diff=$((i - mean))\n    abs_diff_sum=$((abs_diff_sum\
+    \ + abs_diff))\n  done\n  echo $((abs_diff_sum / len))", "    local -a numbers=($1)\n\
+    \    local sum=0\n    local mean=0\n    local mad=0\n    local abs_diff=0\n  \
+    \  local abs_diff_sum=0\n    local abs_diff_mean=0\n\n    # Calculate mean\n \
+    \   for i in \"${numbers[@]}\"; do\n        sum=$(echo \"$sum + $i\" | bc)\n \
+    \   done\n    mean=$(echo \"scale=3; $sum / ${#numbers[@]}\" | bc)\n\n    # Calculate\
+    \ absolute differences\n    for i in \"${numbers[@]}\"; do\n        abs_diff=$(echo\
+    \ \"scale=3; $i - $mean\" | bc)\n        abs_diff_sum=$(echo \"$abs_diff_sum +\
+    \ $abs_diff\" | bc)\n    done\n\n    # Calculate mean absolute deviation\n   \
+    \ abs_diff_mean=$(echo \"scale=3; $abs_diff_sum / ${#numbers[@]}\" | bc)\n   \
+    \ mad=$(echo \"scale=3; $abs_diff_mean\" | bc)\n\n    echo $mad", "    local -a\
+    \ numbers=($1)\n    local mean=$(mean ${numbers[@]})\n    local -a abs_diffs=()\n\
+    \    for number in ${numbers[@]}; do\n        abs_diffs+=($(echo \"scale=2; ${number}\
+    \ - ${mean}\" | bc -l | awk '{printf \"%f\", $0}'))\n    done\n    echo $(mean\
+    \ ${abs_diffs[@]})", "  local -a numbers=($1)\n  local mean=$(mean ${numbers[@]})\n\
+    \  local sum=0\n  for i in ${numbers[@]}; do\n    local diff=$(echo \"$i - $mean\"\
+    \ | bc)\n    local abs_diff=$(echo \"if ($diff < 0) $diff * -1 else $diff\" |\
+    \ bc)\n    sum=$(echo \"$sum + $abs_diff\" | bc)\n  done\n  echo \"scale=2; $sum\
+    \ / ${#numbers[@]}\" | bc", "    local list=$1\n    local mean=$(echo \"$list\"\
+    \ | awk '{sum+=$1} END {print sum/NR}')\n    local abs_deviations=$(echo \"$list\"\
+    \ | awk -v mean=$mean '{print $1-mean}' | awk '{print $1>0?$1:-$1}')\n    local\
+    \ mad=$(echo \"$abs_deviations\" | awk '{sum+=$1} END {print sum/NR}')\n    echo\
+    \ $mad", "  local input=$1\n  local mean=$(echo \"$input\" | awk '{sum+=$1} END\
+    \ {print sum/NR}')\n  local abs_deviations=$(echo \"$input\" | awk -v mean=$mean\
+    \ '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n  echo \"$abs_deviations\" |\
+    \ awk '{sum+=$1} END {print sum/NR}'", "    local -a arr=(\"$@\")\n    local mean=$(mean\
+    \ \"${arr[@]}\")\n    local sum=0\n    for i in \"${arr[@]}\"; do\n        sum=$(echo\
+    \ \"$sum + abs($i - $mean)\" | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l",
+  "    local -a numbers=($1)\n    local mean=$(mean \"${numbers[@]}\")\n    local\
+    \ -a deviations=()\n    for number in \"${numbers[@]}\"; do\n        local deviation=$(echo\
+    \ \"$number - $mean\" | bc)\n        deviations+=($(echo \"abs($deviation)\" |\
+    \ bc))\n    done\n    mean \"${deviations[@]}\"", "    local mean=$(mean $1)\n\
+    \    local abs_diff_sum=0\n    for x in $1; do\n        abs_diff_sum=$(echo \"\
+    $abs_diff_sum + abs($x - $mean)\" | bc -l)\n    done\n    echo \"$abs_diff_sum\
+    \ / $#\" | bc -l", "    local -a input_array\n    local -i i\n    local -i n\n\
+    \    local -i sum\n    local -i mean\n    local -i mad\n    local -i abs_diff\n\
+    \n    input_array=($1)\n    n=${#input_array[@]}\n    sum=0\n    for ((i=0; i<n;\
+    \ i++)); do\n        sum=$((sum + input_array[i]))\n    done\n    mean=$((sum\
+    \ / n))\n    sum=0\n    for ((i=0; i<n; i++)); do\n        abs_diff=$((input_array[i]\
+    \ - mean))\n        if ((abs_diff < 0)); then\n            abs_diff=$((-abs_diff))\n\
+    \        fi\n        sum=$((sum + abs_diff))\n    done\n    mad=$((sum / n))\n\
+    \    echo $mad", "    local -a numbers\n    numbers=( $1 )\n    local mean\n \
+    \   mean=$(mean \"${numbers[@]}\")\n    local -a absolute_deviations\n    absolute_deviations=(\
+    \ $(absolute_deviations \"${numbers[@]}\" \"$mean\") )\n    local sum\n    sum=$(sum\
+    \ \"${absolute_deviations[@]}\")\n    local count\n    count=${#numbers[@]}\n\
+    \    echo \"scale=2; $sum / $count\" | bc", "  local input_list=$1\n  local mean=$(echo\
+    \ \"$input_list\" | awk '{sum+=$1} END {print sum/NR}')\n  local absolute_deviations=$(echo\
+    \ \"$input_list\" | awk -v mean=$mean '{print abs($1-mean)}')\n  local mad=$(echo\
+    \ \"$absolute_deviations\" | awk '{sum+=$1} END {print sum/NR}')\n  echo \"$mad\"",
+  "  local -a data=($1)\n  local -i n=${#data[@]}\n  local -i i\n  local -i sum=0\n\
+    \  local -i mean\n  local -i abs_deviation\n  local -i sum_abs_deviation=0\n \
+    \ local -i mad\n\n  for ((i=0; i<n; i++)); do\n    sum=$((sum + data[i]))\n  done\n\
+    \  mean=$((sum / n))\n\n  for ((i=0; i<n; i++)); do\n    abs_deviation=$((data[i]\
+    \ - mean))\n    abs_deviation=$((abs_deviation < 0 ? -abs_deviation : abs_deviation))\n\
+    \    sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n  done\n  mad=$((sum_abs_deviation\
+    \ / n))\n\n  echo $mad", "    local input_list=$1\n    local mean=$(mean \"$input_list\"\
+    )\n    local abs_deviation_list=$(echo \"$input_list\" | awk -v mean=\"$mean\"\
+    \ '{print $1-mean}' | awk '{print $1>0?$1:-$1}')\n    local mad=$(mean \"$abs_deviation_list\"\
+    )\n    echo \"$mad\"", "  local mean=$(mean \"$1\")\n  local sum=0\n  for x in\
+    \ $1; do\n    sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n  done\n  echo \"\
+    $sum / $#\" | bc -l", "  local -a data=($1)\n  local -i n=${#data[@]}\n  local\
+    \ -i i\n  local -i sum=0\n  local -i mean=0\n  local -i mad=0\n  for i in ${data[@]};\
+    \ do\n    sum=$((sum + i))\n  done\n  mean=$((sum / n))\n  for i in ${data[@]};\
+    \ do\n    mad=$((mad + abs(i - mean)))\n  done\n  echo $((mad / n))", "    local\
+    \ -a numbers\n    local -i i\n    local -i n\n    local -i sum\n    local -i mean\n\
+    \    local -i abs_deviation\n    local -i abs_deviation_sum\n    local -i mad\n\
+    \n    numbers=($1)\n    n=${#numbers[@]}\n    sum=0\n    for ((i=0; i<n; i++));\
+    \ do\n        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum / n))\n   \
+    \ abs_deviation_sum=0\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        if ((abs_deviation < 0)); then\n            abs_deviation=$((-abs_deviation))\n\
+    \        fi\n        abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n\
+    \    done\n    mad=$((abs_deviation_sum / n))\n    echo $mad", "    local list=\"\
+    $1\"\n    local mean=$(echo \"$list\" | awk '{sum+=$1} END {print sum/NR}')\n\
+    \    local abs_deviations=$(echo \"$list\" | awk -v mean=$mean '{print $1-mean}'\
+    \ | awk '{print $1<0?-$1:$1}')\n    echo \"$abs_deviations\" | awk '{sum+=$1}\
+    \ END {print sum/NR}'", "  local mean=$(mean \"$1\")\n  local abs_deviations=$(absolute_deviations\
+    \ \"$1\" \"$mean\")\n  mean \"$abs_deviations\"", "    local -a input=($1)\n \
+    \   local mean=$(mean ${input[@]})\n    local -a deviations=()\n    for i in ${input[@]};\
+    \ do\n        deviations+=($(abs $(($i - $mean))))\n    done\n    mean ${deviations[@]}",
+  "  local x_mean=$(mean $1)\n  local x_abs_dev=$(echo \"$1\" | awk '{for (i=1; i<=NF;\
+    \ i++) {print $i - '$x_mean'}}' | awk '{for (i=1; i<=NF; i++) {if ($i < 0) {print\
+    \ -$i} else {print $i}}}')\n  mean $x_abs_dev", "  local input_list=$1\n  local\
+    \ mean=$(mean \"$input_list\")\n  local abs_deviations=$(echo \"$input_list\"\
+    \ | awk -v mean=\"$mean\" '{print abs($1 - mean)}')\n  echo \"$abs_deviations\"\
+    \ | mean", "    local -a numbers=($1)\n    local -a abs_diff\n    local mean\n\
+    \    local abs_diff_sum\n    local abs_diff_mean\n    local i\n\n    mean=$(mean\
+    \ \"${numbers[@]}\")\n    for ((i=0; i<${#numbers[@]}; i++)); do\n        abs_diff[$i]=$(echo\
+    \ \"${numbers[$i]} - $mean\" | bc -l | awk '{printf \"%f\", $0}')\n        abs_diff[$i]=$(echo\
+    \ \"${abs_diff[$i]} < 0\" | bc -l | awk '{printf \"%f\", $0}')\n        abs_diff[$i]=$(echo\
+    \ \"${abs_diff[$i]} * -1\" | bc -l | awk '{printf \"%f\", $0}')\n    done\n  \
+    \  abs_diff_sum=$(sum \"${abs_diff[@]}\")\n    abs_diff_mean=$(echo \"$abs_diff_sum\
+    \ / ${#numbers[@]}\" | bc -l | awk '{printf \"%f\", $0}')\n    echo \"$abs_diff_mean\"",
+  "    local -a list=($1)\n    local -i n=${#list[@]}\n    local -i i\n    local -i\
+    \ sum=0\n    local -i mean\n    local -i deviation\n    local -i abs_deviation\n\
+    \    local -i abs_deviation_sum=0\n    local -i abs_deviation_mean\n\n    for\
+    \ ((i=0; i<n; i++)); do\n        sum=$((sum + list[i]))\n    done\n    mean=$((sum\
+    \ / n))\n\n    for ((i=0; i<n; i++)); do\n        deviation=$((list[i] - mean))\n\
+    \        abs_deviation=$((deviation < 0 ? -deviation : deviation))\n        abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviation))\n    done\n    abs_deviation_mean=$((abs_deviation_sum / n))\n\
+    \n    echo $abs_deviation_mean", "    local mean=$(mean \"$@\")\n    local sum=0\n\
+    \    for i in $@; do\n        sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n\
+    \    done\n    echo \"$sum / $#\" | bc -l", "    local -a arr\n    IFS=' ' read\
+    \ -r -a arr <<< \"$1\"\n    local mean=$(mean \"$1\")\n    local sum=0\n    for\
+    \ i in \"${arr[@]}\"; do\n        local diff=$(echo \"$i - $mean\" | bc)\n   \
+    \     local abs_diff=$(echo \"if ($diff < 0) $diff * -1 else $diff\" | bc)\n \
+    \       sum=$(echo \"$sum + $abs_diff\" | bc)\n    done\n    echo \"$sum / ${#arr[@]}\"\
+    \ | bc -l", "    local -a input=($1)\n    local mean=$(mean \"${input[@]}\")\n\
+    \    local -a deviations=()\n    for i in \"${input[@]}\"; do\n        local deviation=$(echo\
+    \ \"$i - $mean\" | bc)\n        local abs_deviation=$(echo \"if ($deviation <\
+    \ 0) $deviation * -1 else $deviation\" | bc)\n        deviations+=($abs_deviation)\n\
+    \    done\n    mean \"${deviations[@]}\"", "    # Calculate mean\n    local mean=$(echo\
+    \ \"$1\" | awk '{sum+=$1} END {print sum/NR}')\n    # Calculate absolute difference\
+    \ between each element and mean\n    local abs_diff=$(echo \"$1\" | awk -v mean=$mean\
+    \ '{print $1-mean}' | awk '{print $1>0?$1:-$1}')\n    # Calculate mean of absolute\
+    \ differences\n    local mad=$(echo \"$abs_diff\" | awk '{sum+=$1} END {print\
+    \ sum/NR}')\n    echo $mad", "  local -a numbers\n  local -i i\n  local -i count\n\
+    \  local -i sum\n  local -i mean\n  local -i abs_diff\n  local -i abs_diff_sum\n\
+    \  local -i mad\n\n  # Convert input string to array\n  numbers=($1)\n\n  # Calculate\
+    \ mean\n  count=${#numbers[@]}\n  for ((i=0; i<count; i++)); do\n    sum=$((sum\
+    \ + numbers[i]))\n  done\n  mean=$((sum / count))\n\n  # Calculate MAD\n  abs_diff_sum=0\n\
+    \  for ((i=0; i<count; i++)); do\n    abs_diff=$((numbers[i] - mean))\n    if\
+    \ ((abs_diff < 0)); then\n      abs_diff=$((-abs_diff))\n    fi\n    abs_diff_sum=$((abs_diff_sum\
+    \ + abs_diff))\n  done\n  mad=$((abs_diff_sum / count))\n\n  echo $mad", "   \
+    \ local -a arr=($1)\n    local sum=0\n    local mean=0\n    local abs_dev=0\n\
+    \    local abs_dev_sum=0\n    local mad=0\n\n    # Calculate mean\n    for i in\
+    \ \"${arr[@]}\"; do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n    mean=$(echo\
+    \ \"scale=2; $sum / ${#arr[@]}\" | bc)\n\n    # Calculate absolute deviation from\
+    \ mean\n    for i in \"${arr[@]}\"; do\n        abs_dev=$(echo \"scale=2; $i -\
+    \ $mean\" | bc)\n        abs_dev_sum=$(echo \"$abs_dev_sum + $abs_dev\" | bc)\n\
+    \    done\n\n    # Calculate Mean Absolute Deviation\n    mad=$(echo \"scale=2;\
+    \ $abs_dev_sum / ${#arr[@]}\" | bc)\n    echo $mad", "    local -a numbers\n \
+    \   local -i i\n    local -i n\n    local -i sum\n    local -i mean\n    local\
+    \ -i mad\n    local -i abs_diff\n    numbers=($1)\n    n=${#numbers[@]}\n    for\
+    \ ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum\
+    \ / n))\n    for ((i=0; i<n; i++)); do\n        abs_diff=$((numbers[i] - mean))\n\
+    \        if ((abs_diff < 0)); then\n            abs_diff=$((-abs_diff))\n    \
+    \    fi\n        mad=$((mad + abs_diff))\n    done\n    mad=$((mad / n))\n   \
+    \ echo $mad", "    local -a numbers=($1)\n    local sum=0\n    local mean=0\n\
+    \    local count=${#numbers[@]}\n    local i=0\n    local mad=0\n\n    for i in\
+    \ \"${numbers[@]}\"; do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n\n\
+    \    mean=$(echo \"scale=2; $sum / $count\" | bc)\n\n    for i in \"${numbers[@]}\"\
+    ; do\n        mad=$(echo \"$mad + abs($i - $mean)\" | bc)\n    done\n\n    echo\
+    \ \"scale=2; $mad / $count\" | bc", "    local -a numbers=($1)\n    local mean=$(average\
+    \ \"${numbers[@]}\")\n    local -a deviations\n    local deviation\n    for number\
+    \ in \"${numbers[@]}\"; do\n        deviation=$(echo \"$number - $mean\" | bc)\n\
+    \        deviation=${deviation#-}\n        deviations+=($deviation)\n    done\n\
+    \    average \"${deviations[@]}\"", "    local -a numbers\n    local -i i\n  \
+    \  local -i n\n    local -i sum\n    local -i mean\n    local -i abs_deviation\n\
+    \    local -i abs_deviation_sum\n    local -i mad\n\n    numbers=($1)\n    n=${#numbers[@]}\n\
+    \    sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    abs_deviation_sum=0\n    for ((i=0; i<n;\
+    \ i++)); do\n        abs_deviation=$((numbers[i] - mean))\n        if ((abs_deviation\
+    \ < 0)); then\n            abs_deviation=$((-abs_deviation))\n        fi\n   \
+    \     abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n    done\n   \
+    \ mad=$((abs_deviation_sum / n))\n    echo $mad", "  local mean=$(mean \"$1\"\
+    )\n  local abs_devs=$(echo \"$1\" | awk '{print $1-mean}' mean=$mean)\n  echo\
+    \ \"$abs_devs\" | awk '{sum+=$1} END {print sum/NR}'", "    local -a numbers=($1)\n\
+    \    local mean=$(mean \"${numbers[@]}\")\n    local -a abs_diffs=()\n    for\
+    \ number in \"${numbers[@]}\"; do\n        abs_diffs+=($(abs_diff $number $mean))\n\
+    \    done\n    mean \"${abs_diffs[@]}\"", "    local -a numbers\n    local -i\
+    \ i\n    local -i n\n    local -i sum\n    local -i mean\n    local -i mad\n \
+    \   local -i diff\n\n    numbers=($1)\n    n=${#numbers[@]}\n    sum=0\n    for\
+    \ ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n    done\n    mean=$((sum\
+    \ / n))\n    mad=0\n    for ((i=0; i<n; i++)); do\n        diff=$((numbers[i]\
+    \ - mean))\n        if ((diff < 0)); then\n            diff=$((-diff))\n     \
+    \   fi\n        mad=$((mad + diff))\n    done\n    mad=$((mad / n))\n    echo\
+    \ $mad", "    local -a numbers=($1)\n    local mean=$(average ${numbers[@]})\n\
+    \    local -a deviations=()\n    for number in ${numbers[@]}; do\n        local\
+    \ deviation=$(echo \"$number - $mean\" | bc)\n        local absolute_deviation=$(echo\
+    \ \"if ($deviation < 0) $deviation * -1 else $deviation\" | bc)\n        deviations+=($absolute_deviation)\n\
+    \    done\n    average ${deviations[@]}", "  local -a input_array\n  local -i\
+    \ i\n  local -i n\n  local -i sum\n  local -i mean\n  local -i abs_deviation\n\
+    \  local -i abs_deviation_sum\n  local -i abs_deviation_mean\n\n  # Convert input\
+    \ string to array\n  input_array=($1)\n\n  # Calculate mean\n  n=${#input_array[@]}\n\
+    \  sum=0\n  for ((i=0; i<n; i++)); do\n    sum=$((sum + input_array[i]))\n  done\n\
+    \  mean=$((sum / n))\n\n  # Calculate mean absolute deviation\n  abs_deviation_sum=0\n\
+    \  for ((i=0; i<n; i++)); do\n    abs_deviation=$((input_array[i] - mean))\n \
+    \   abs_deviation=${abs_deviation#-}\n    abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviation))\n  done\n  abs_deviation_mean=$((abs_deviation_sum / n))\n\
+    \n  echo $abs_deviation_mean", "    local list=\"$1\"\n    local mean=$(mean \"\
+    $list\")\n    local abs_diff_sum=0\n    for i in $list; do\n        local abs_diff=$(echo\
+    \ \"$i - $mean\" | bc -l | awk '{printf \"%f\", $0}')\n        abs_diff_sum=$(echo\
+    \ \"$abs_diff_sum + $abs_diff\" | bc -l)\n    done\n    echo \"$abs_diff_sum /\
+    \ $#\" | bc -l | awk '{printf \"%f\", $0}'", "    local -a arr=(\"$@\")\n    local\
+    \ sum=0\n    local mean=0\n    local abs_dev=0\n    local mad=0\n    local i=0\n\
+    \n    # Calculate mean\n    for i in \"${arr[@]}\"; do\n        sum=$((sum + i))\n\
+    \    done\n    mean=$((sum / ${#arr[@]}))\n\n    # Calculate absolute deviation\n\
+    \    for i in \"${arr[@]}\"; do\n        abs_dev=$((abs_dev + abs(i - mean)))\n\
+    \    done\n\n    # Calculate MAD\n    mad=$((abs_dev / ${#arr[@]}))\n\n    echo\
+    \ \"$mad\"", "    local -a array\n    local -i i\n    local -r mean=$(mean \"\
+    $1\")\n    local -r n=$(echo \"$1\" | wc -w)\n    local -i sum=0\n    local -i\
+    \ abs_diff\n\n    array=($1)\n    for ((i=0; i<n; i++)); do\n        abs_diff=$((array[i]\
+    \ - mean))\n        sum=$((sum + abs_diff))\n    done\n    echo $((sum / n))",
+  "    local -a numbers=($1)\n    local mean=$(mean \"${numbers[@]}\")\n    local\
+    \ -a deviations=()\n    for number in \"${numbers[@]}\"; do\n        local deviation=$(echo\
+    \ \"scale=2; ${number} - ${mean}\" | bc)\n        deviations+=($(echo \"scale=2;\
+    \ ${deviation} < 0 ? -${deviation} : ${deviation}\" | bc))\n    done\n    echo\
+    \ $(mean \"${deviations[@]}\")", "    local -a list\n    local -i i\n    local\
+    \ -r mean=$(mean \"$1\")\n    local -r len=$(echo \"$1\" | wc -w)\n    local -i\
+    \ sum=0\n    local -i abs_diff=0\n\n    # Convert input string to array\n    list=($1)\n\
+    \n    for ((i=0; i<len; i++)); do\n        abs_diff=$((list[i] - mean))\n    \
+    \    abs_diff=${abs_diff#-}\n        sum=$((sum + abs_diff))\n    done\n\n   \
+    \ echo $((sum / len))", "    local mean=$(mean \"$1\")\n    local sum=0\n    for\
+    \ x in $1; do\n        sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n    done\n\
+    \    echo \"$sum / $#\" | bc -l", "    local -a input=($1)\n    local -i n=${#input[@]}\n\
+    \    local -i i\n    local -i sum=0\n    local -i mean\n    local -i abs_deviation\n\
+    \    local -i abs_deviation_sum=0\n    local -i mad\n\n    for ((i=0; i<n; i++));\
+    \ do\n        sum=$((sum + input[i]))\n    done\n    mean=$((sum / n))\n\n   \
+    \ for ((i=0; i<n; i++)); do\n        abs_deviation=$((input[i] - mean))\n    \
+    \    abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n    done\n    mad=$((abs_deviation_sum\
+    \ / n))\n\n    echo $mad", "\tlocal x_mean=$(mean \"$1\")\n\tlocal x_abs_diff_sum=0\n\
+    \tlocal x_abs_diff\n\tfor x in $1; do\n\t\tx_abs_diff=$(echo \"$x - $x_mean\"\
+    \ | bc -l)\n\t\tx_abs_diff_sum=$(echo \"$x_abs_diff_sum + $x_abs_diff\" | bc -l)\n\
+    \tdone\n\techo \"$x_abs_diff_sum / $#\" | bc -l", "    local -a data=($1)\n  \
+    \  local -i n=${#data[@]}\n    local -i i\n    local -i sum=0\n    local -i mean\n\
+    \    local -i abs_deviation\n    local -i sum_abs_deviation=0\n\n    for ((i=0;\
+    \ i<n; i++)); do\n        sum=$((sum + data[i]))\n    done\n    mean=$((sum /\
+    \ n))\n\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((data[i] - mean))\n\
+    \        if ((abs_deviation < 0)); then\n            abs_deviation=$((-abs_deviation))\n\
+    \        fi\n        sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n\
+    \    done\n\n    echo $((sum_abs_deviation / n))", "    local -a nums=($1)\n \
+    \   local mean=$(mean \"${nums[@]}\")\n    local -a deviations=()\n    for num\
+    \ in \"${nums[@]}\"; do\n        deviations+=($(echo \"$num - $mean\" | bc -l))\n\
+    \    done\n    local -a abs_deviations=()\n    for dev in \"${deviations[@]}\"\
+    ; do\n        abs_deviations+=($(echo \"if ($dev < 0) $dev * -1 else $dev\" |\
+    \ bc -l))\n    done\n    echo $(mean \"${abs_deviations[@]}\")", "  local -a numbers=($1)\n\
+    \  local mean=$(mean \"${numbers[@]}\")\n  local -a abs_deviations=()\n  for number\
+    \ in \"${numbers[@]}\"; do\n    abs_deviations+=($(abs_diff \"$number\" \"$mean\"\
+    ))\n  done\n  mean \"${abs_deviations[@]}\"", "  local sum=0\n  local mean=$(mean\
+    \ \"$1\")\n  for x in $1; do\n    sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n\
+    \  done\n  echo \"$sum / $#\" | bc -l", "    local -a arr=(\"$@\")\n    local\
+    \ sum=0\n    local mean=0\n    local mad=0\n    local i=0\n    local n=${#arr[@]}\n\
+    \n    for i in \"${arr[@]}\"; do\n        sum=$(echo \"$sum + $i\" | bc)\n   \
+    \ done\n    mean=$(echo \"scale=2; $sum / $n\" | bc)\n\n    for i in \"${arr[@]}\"\
+    ; do\n        mad=$(echo \"$mad + abs($i - $mean)\" | bc)\n    done\n    mad=$(echo\
+    \ \"scale=2; $mad / $n\" | bc)\n\n    echo $mad", "    local -a arr=($1)\n   \
+    \ local mean=$(mean ${arr[@]})\n    local -a diffs\n    local -i i\n    for ((i=0;\
+    \ i<${#arr[@]}; i++)); do\n        diffs[i]=$(echo \"${arr[i]} - $mean\" | bc\
+    \ -l)\n    done\n    local -a abs_diffs\n    for ((i=0; i<${#diffs[@]}; i++));\
+    \ do\n        abs_diffs[i]=$(echo \"${diffs[i]} < 0 ? -${diffs[i]} : ${diffs[i]}\"\
+    \ | bc -l)\n    done\n    mean ${abs_diffs[@]}", "    local mean=$(mean \"$1\"\
+    )\n    local abs_deviations=$(echo \"$1\" | awk -v mean=$mean '{print abs($1 -\
+    \ mean)}')\n    local sum_abs_deviations=$(echo \"$abs_deviations\" | awk '{sum\
+    \ += $1} END {print sum}')\n    local n=$(echo \"$1\" | wc -w)\n    echo \"$sum_abs_deviations\
+    \ / $n\" | bc -l", "    local list=\"$1\"\n    local mean=$(echo \"$list\" | awk\
+    \ '{sum+=$1} END {print sum/NR}')\n    local mad=$(echo \"$list\" | awk -v mean=$mean\
+    \ '{print $1-mean}' | awk '{sum+=sqrt($1^2)} END {print sum/NR}')\n    echo $mad",
+  "    local -a numbers=($1)\n    local mean=$(mean \"${numbers[@]}\")\n    local\
+    \ sum=0\n    for number in \"${numbers[@]}\"; do\n        sum=$(echo \"$sum +\
+    \ abs($number - $mean)\" | bc)\n    done\n    echo \"scale=2; $sum / ${#numbers[@]}\"\
+    \ | bc", "    local mean=$(mean $1)\n    local abs_deviations=$(echo $1 | awk\
+    \ '{for (i=1; i<=NF; i++) print $i - '$mean'}' | awk '{print $1 < 0 ? -$1 : $1}')\n\
+    \    echo $abs_deviations | mean", "    local input_list=\"$1\"\n    local mean=$(mean\
+    \ \"$input_list\")\n    local absolute_deviations=$(echo \"$input_list\" | awk\
+    \ -v mean=\"$mean\" '{print abs($1 - mean)}')\n    echo \"$absolute_deviations\"\
+    \ | mean", "  local list=\"$1\"\n  local mean=$(mean \"$list\")\n  local sum=0\n\
+    \  for x in $list; do\n    sum=$(echo \"$sum + abs($x - $mean)\" | bc -l)\n  done\n\
+    \  echo \"$sum / $#\" | bc -l", "    local -a x\n    local x_mean\n    local n\n\
+    \    local sum\n    local i\n    local x_i\n    local abs_diff\n\n    x=($1)\n\
+    \    n=${#x[@]}\n    sum=0\n    for ((i=0; i<n; i++)); do\n        x_i=${x[$i]}\n\
+    \        sum=$(echo \"$sum + $x_i\" | bc)\n    done\n    x_mean=$(echo \"scale=4;\
+    \ $sum / $n\" | bc)\n\n    sum=0\n    for ((i=0; i<n; i++)); do\n        x_i=${x[$i]}\n\
+    \        abs_diff=$(echo \"scale=4; $x_i - $x_mean\" | bc)\n        abs_diff=$(echo\
+    \ \"scale=4; $abs_diff < 0 ? -$abs_diff : $abs_diff\" | bc)\n        sum=$(echo\
+    \ \"$sum + $abs_diff\" | bc)\n    done\n    echo \"scale=4; $sum / $n\" | bc",
+  "    local list=\"$1\"\n    local mean=$(mean \"$list\")\n    local sum=0\n    for\
+    \ i in $list; do\n        sum=$(echo \"$sum + abs($i - $mean)\" | bc -l)\n   \
+    \ done\n    echo \"$sum / $#\" | bc -l", "    local mean=$(mean $1)\n    local\
+    \ sum=0\n    for x in $1; do\n        sum=$(echo \"$sum + abs($x - $mean)\" |\
+    \ bc -l)\n    done\n    echo \"scale=2; $sum / $#\" | bc -l", "    local -a input\n\
+    \    local -i i\n    local -i n\n    local -i sum\n    local -i mean\n    local\
+    \ -i abs_deviation\n    local -i sum_abs_deviation\n    local -i mad\n\n    input=($1)\n\
+    \    n=${#input[@]}\n    sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum\
+    \ + input[i]))\n    done\n    mean=$((sum / n))\n    sum_abs_deviation=0\n   \
+    \ for ((i=0; i<n; i++)); do\n        abs_deviation=$((input[i] - mean))\n    \
+    \    if ((abs_deviation < 0)); then\n            abs_deviation=$((-abs_deviation))\n\
+    \        fi\n        sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n\
+    \    done\n    mad=$((sum_abs_deviation / n))\n    echo $mad", "    local x_mean=`echo\
+    \ $1 | awk '{sum=0; for (i=1; i<=NF; i++) sum+=$i; print sum/NF}'`\n    local\
+    \ x_abs_dev=`echo $1 | awk -v mean=$x_mean '{sum=0; for (i=1; i<=NF; i++) sum+=abs($i-mean);\
+    \ print sum/NF}'`\n    echo $x_abs_dev", "    local -a numbers=($1)\n    local\
+    \ count=${#numbers[@]}\n    local sum=0\n    local mean=0\n    local i=0\n   \
+    \ local abs_deviation=0\n    local abs_deviation_sum=0\n    local abs_deviation_mean=0\n\
+    \n    for i in \"${numbers[@]}\"; do\n        sum=$(echo \"$sum + $i\" | bc)\n\
+    \    done\n    mean=$(echo \"scale=4; $sum / $count\" | bc)\n\n    for i in \"\
+    ${numbers[@]}\"; do\n        abs_deviation=$(echo \"scale=4; $i - $mean\" | bc)\n\
+    \        abs_deviation=$(echo \"scale=4; $abs_deviation < 0 ? -$abs_deviation\
+    \ : $abs_deviation\" | bc)\n        abs_deviation_sum=$(echo \"scale=4; $abs_deviation_sum\
+    \ + $abs_deviation\" | bc)\n    done\n    abs_deviation_mean=$(echo \"scale=4;\
+    \ $abs_deviation_sum / $count\" | bc)\n\n    echo $abs_deviation_mean", "    local\
+    \ -a nums=($1)\n    local sum=0\n    local mean=0\n    local abs_diff=0\n    local\
+    \ abs_diff_sum=0\n    local mad=0\n\n    for num in ${nums[@]}; do\n        sum=$(echo\
+    \ \"$sum + $num\" | bc)\n    done\n    mean=$(echo \"scale=2; $sum / ${#nums[@]}\"\
+    \ | bc)\n\n    for num in ${nums[@]}; do\n        abs_diff=$(echo \"scale=2; $num\
+    \ - $mean\" | bc)\n        abs_diff_sum=$(echo \"$abs_diff_sum + $abs_diff\" |\
+    \ bc)\n    done\n    mad=$(echo \"scale=2; $abs_diff_sum / ${#nums[@]}\" | bc)\n\
+    \n    echo $mad", "    local -a input_array\n    local -i i\n    local -i n\n\
+    \    local -i sum\n    local -i mean\n    local -i abs_deviation\n    local -i\
+    \ abs_deviation_sum\n    local -i mad\n\n    # Convert input string to array\n\
+    \    input_array=($1)\n\n    # Calculate mean\n    n=${#input_array[@]}\n    sum=0\n\
+    \    for ((i=0; i<n; i++)); do\n        sum=$((sum + input_array[i]))\n    done\n\
+    \    mean=$((sum / n))\n\n    # Calculate MAD\n    abs_deviation_sum=0\n    for\
+    \ ((i=0; i<n; i++)); do\n        abs_deviation=$((input_array[i] - mean))\n  \
+    \      abs_deviation=${abs_deviation#-}\n        abs_deviation_sum=$((abs_deviation_sum\
+    \ + abs_deviation))\n    done\n    mad=$((abs_deviation_sum / n))\n\n    echo\
+    \ $mad", "  local -a numbers=($1)\n  local mean=$(mean \"${numbers[@]}\")\n  local\
+    \ -a deviations=()\n  local deviation\n  for number in \"${numbers[@]}\"; do\n\
+    \    deviation=$(echo \"$number - $mean\" | bc)\n    deviation=$(echo \"if ($deviation\
+    \ < 0) $deviation * -1 else $deviation\" | bc)\n    deviations+=($deviation)\n\
+    \  done\n  mean \"${deviations[@]}\"", "    local -a x\n    local x_mean\n   \
+    \ local x_dev\n    local x_dev_abs\n    local x_dev_abs_sum\n    local x_dev_abs_mean\n\
+    \    local x_dev_abs_mean_rounded\n    local x_dev_abs_mean_rounded_str\n    local\
+    \ x_dev_abs_mean_rounded_str_len\n    local x_dev_abs_mean_rounded_str_len_max\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str\n    local x_dev_abs_mean_rounded_str_len_max_str_len\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max\n    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len\n    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str\n  \
+    \  local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len_max\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len_max_str\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len_max_str_len\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len_max_str_len_max\n\
+    \    local x_dev_abs_mean_rounded_str_len_max_str_len_max_str_len_max_str_len",
+  "    local -a data\n    local -i i\n    local -i n\n    local -i sum\n    local\
+    \ -i mean\n    local -i abs_diff\n    local -i abs_diff_sum\n    local -i mad\n\
+    \n    # Convert input string to array\n    read -a data <<< \"$1\"\n\n    # Calculate\
+    \ mean\n    n=${#data[@]}\n    sum=0\n    for ((i=0; i<n; i++)); do\n        sum=$((sum\
+    \ + data[i]))\n    done\n    mean=$((sum / n))\n\n    # Calculate MAD\n    abs_diff_sum=0\n\
+    \    for ((i=0; i<n; i++)); do\n        abs_diff=$((data[i] - mean))\n       \
+    \ abs_diff_sum=$((abs_diff_sum + abs_diff))\n    done\n    mad=$((abs_diff_sum\
+    \ / n))\n\n    echo $mad", "  local list=$1\n  local mean=$(mean $list)\n  local\
+    \ sum=0\n  for i in $list; do\n    sum=$(echo \"$sum + abs($i - $mean)\" | bc\
+    \ -l)\n  done\n  echo \"$sum / $#\" | bc -l", "    local -a numbers=($1)\n   \
+    \ local mean=$(mean \"${numbers[@]}\")\n    local -a abs_differences=()\n    for\
+    \ number in \"${numbers[@]}\"; do\n        local abs_difference=$(abs_diff \"\
+    $number\" \"$mean\")\n        abs_differences+=(\"$abs_difference\")\n    done\n\
+    \    mean \"${abs_differences[@]}\"", "    local -a numbers=($1)\n    local -i\
+    \ n=${#numbers[@]}\n    local -i i\n    local -i sum=0\n    local -i mean\n  \
+    \  local -i abs_deviation\n    local -i abs_deviation_sum=0\n    local -i abs_deviation_mean\n\
+    \n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n    done\n\
+    \    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        abs_deviation_sum=$((abs_deviation_sum + abs_deviation))\n\
+    \    done\n    abs_deviation_mean=$((abs_deviation_sum / n))\n\n    echo $abs_deviation_mean",
+  "  local input_list=\"$1\"\n  local mean=$(echo \"$input_list\" | awk '{sum+=$1}\
+    \ END {print sum/NR}')\n  local abs_deviations=$(echo \"$input_list\" | awk -v\
+    \ mean=\"$mean\" '{print $1-mean}' | awk '{print $1<0?-$1:$1}')\n  local sum=$(echo\
+    \ \"$abs_deviations\" | awk '{sum+=$1} END {print sum}')\n  local count=$(echo\
+    \ \"$abs_deviations\" | wc -l)\n  echo \"$sum / $count\" | bc -l", "    local\
+    \ -a x\n    local x_mean\n    local x_mad\n    local x_abs\n    local x_sum\n\
+    \    local x_count\n    local x_i\n    local x_i_abs\n    local x_i_sum\n    local\
+    \ x_i_count\n    local x_i_mean\n    local x_i_mad\n    local x_i_abs_sum\n  \
+    \  local x_i_abs_count\n    local x_i_abs_mean\n    local x_i_abs_mad\n    local\
+    \ x_i_abs_i\n    local x_i_abs_i_abs\n    local x_i_abs_i_sum\n    local x_i_abs_i_count\n\
+    \    local x_i_abs_i_mean\n    local x_i_abs_i_mad\n    local x_i_abs_i_abs_sum\n\
+    \    local x_i_abs_i_abs_count\n    local x_i_abs_i_abs_mean\n    local x_i_abs_i_abs_mad\n\
+    \    local x_i_abs_i_abs_i\n    local x_i_abs_i_abs_i_abs\n    local x_i_abs_i_abs_i_sum\n\
+    \    local x_i_abs_i_abs_i_count\n    local x_i_abs_i_abs_i_mean\n    local x_i_abs_i_abs_i_mad\n\
+    \    local x_i_abs_i_abs_i_abs_sum\n    local x_i_abs_i_abs_i_abs_count\n    local\
+    \ x_i_abs_i_abs_i_abs_mean\n    local x_i_abs_i_abs_i_abs_mad\n    local x_i_abs_i_abs_i_abs_i\n\
+    \    local x_i_abs_i_abs_i_abs_i_abs\n    local x_i_abs_i_abs_i_abs_i_sum\n  \
+    \  local x_i_abs_i_abs_i_abs_i_count\n    local x_i_abs_i_abs_i_abs_i_mean", " \
+    \   local mean=$(mean $1)\n    local sum=0\n    for x in $1; do\n        sum=$(echo\
+    \ \"$sum + abs($x - $mean)\" | bc -l)\n    done\n    echo \"$sum / $#\" | bc -l",
+  "    local -a numbers=($1)\n    local -i n=${#numbers[@]}\n    local -i i\n    local\
+    \ -i sum=0\n    local -i mean\n    local -i abs_deviation\n    local -i sum_abs_deviation=0\n\
+    \    local -i mad\n\n    for ((i=0; i<n; i++)); do\n        sum=$((sum + numbers[i]))\n\
+    \    done\n    mean=$((sum / n))\n\n    for ((i=0; i<n; i++)); do\n        abs_deviation=$((numbers[i]\
+    \ - mean))\n        if ((abs_deviation < 0)); then\n            abs_deviation=$((-abs_deviation))\n\
+    \        fi\n        sum_abs_deviation=$((sum_abs_deviation + abs_deviation))\n\
+    \    done\n    mad=$((sum_abs_deviation / n))\n\n    echo $mad", "    local -a\
+    \ numbers=($1)\n    local sum=0\n    local mean=0\n    local abs_deviation=0\n\
+    \    local abs_deviation_sum=0\n    local mean_absolute_deviation=0\n\n    for\
+    \ i in ${numbers[@]}; do\n        sum=$(echo \"$sum + $i\" | bc)\n    done\n \
+    \   mean=$(echo \"scale=2; $sum / ${#numbers[@]}\" | bc)\n\n    for i in ${numbers[@]};\
+    \ do\n        abs_deviation=$(echo \"scale=2; $i - $mean\" | bc)\n        abs_deviation_sum=$(echo\
+    \ \"$abs_deviation_sum + $abs_deviation\" | bc)\n    done\n    mean_absolute_deviation=$(echo\
+    \ \"scale=2; $abs_deviation_sum / ${#numbers[@]}\" | bc)\n\n    echo $mean_absolute_deviation",
+  "  local -a array=($1)\n  local sum=0\n  local count=0\n  local mean=0\n  local\
+    \ abs_deviation=0\n  local mad=0\n\n  for i in \"${array[@]}\"; do\n    sum=$(echo\
+    \ \"$sum + $i\" | bc)\n    count=$(echo \"$count + 1\" | bc)\n  done\n\n  mean=$(echo\
+    \ \"scale=2; $sum / $count\" | bc)\n\n  for i in \"${array[@]}\"; do\n    abs_deviation=$(echo\
+    \ \"scale=2; $abs_deviation + abs($i - $mean)\" | bc)\n  done\n\n  mad=$(echo\
+    \ \"scale=2; $abs_deviation / $count\" | bc)\n\n  echo $mad", "    local mean=`echo\
+    \ $1 | awk '{sum=0; for (i=1; i<=NF; i++) sum+=$i; print sum/NF}'`\n    local\
+    \ sum=0\n    for i in $1; do\n        sum=`echo $sum + abs($i - $mean) | bc`\n\
+    \    done\n    echo `echo $sum / $# | bc -l`", "    local -a input=($1)\n    local\
+    \ mean=$(mean \"${input[@]}\")\n    local -a abs_differences=()\n    local abs_difference\n\
+    \    for i in \"${input[@]}\"; do\n        abs_difference=$(echo \"$i - $mean\"\
+    \ | bc -l)\n        abs_difference=$(echo \"if ($abs_difference < 0) $abs_difference\
+    \ * -1 else $abs_difference\" | bc -l)\n        abs_differences+=(\"$abs_difference\"\
+    )\n    done\n    mean \"${abs_differences[@]}\""]
 stop_tokens:
 - "\n}"

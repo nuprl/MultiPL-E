@@ -11,6 +11,1818 @@ tests: "}\n\ncandidate() {\n    check_dict_case \"$@\"\n}\n\nset -e\nrun_test() 
   nCity,Houston\") = \"false\" ]]\n    [[ $(candidate \"STATE,NC\\nZIP,12345\") =\
   \ \"true\" ]]\n    [[ $(candidate \"fruit,Orange\\ntaste,Sweet\") = \"true\" ]]\n\
   \    [[ $(candidate \"\") = \"false\" ]]\n}\n\nrun_test"
-completions: []
+completions: ["    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lower case\n    if [ \"$(cut -d, -f1 \"$1\"\
+    \ | tr '[:upper:]' '[:lower:]' | cmp -s - \"$1\")\" ]; then\n        # Check if\
+    \ all keys are upper case\n        if [ \"$(cut -d, -f1 \"$1\" | tr '[:lower:]'\
+    \ '[:upper:]' | cmp -s - \"$1\")\" ]; then\n            echo \"False\"\n     \
+    \       return\n        fi\n    fi\n    echo \"True\"", "    if [ -z \"$1\" ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    # Check if all keys\
+    \ are lower case\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr '[:upper:]' '[:lower:]'\
+    \ | tr -d '[:space:]' | wc -c)\" -eq \"$(echo \"$1\" | cut -d, -f1 | tr -d '[:space:]'\
+    \ | wc -c)\" ]; then\n        echo \"True\"\n        return\n    fi\n    # Check\
+    \ if all keys are upper case\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr '[:lower:]'\
+    \ '[:upper:]' | tr -d '[:space:]' | wc -c)\" -eq \"$(echo \"$1\" | cut -d, -f1\
+    \ | tr -d '[:space:]' | wc -c)\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    echo \"False\"", "    local dict=$1\n    local key\n    local value\n\
+    \    local lower_keys=0\n    local upper_keys=0\n    local total_keys=0\n    local\
+    \ lower_key_regex='^[a-z]+$'\n    local upper_key_regex='^[A-Z]+$'\n    while\
+    \ IFS=, read key value; do\n        if [[ $key =~ $lower_key_regex ]]; then\n\
+    \            ((lower_keys++))\n        elif [[ $key =~ $upper_key_regex ]]; then\n\
+    \            ((upper_keys++))\n        fi\n        ((total_keys++))\n    done\
+    \ < <(echo \"$dict\")\n    if [[ $total_keys -eq 0 ]]; then\n        echo \"False\"\
+    \n    elif [[ $lower_keys -eq $total_keys ]]; then\n        echo \"True\"\n  \
+    \  elif [[ $upper_keys -eq $total_keys ]]; then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    local dict=\"$1\"\n    local lower_keys=0\n\
+    \    local upper_keys=0\n    local key\n    local value\n    while IFS=, read\
+    \ -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_keys\" -gt 0 && \"$upper_keys\"\
+    \ -gt 0 ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n  \
+    \  fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    lower=0\n    upper=0\n    while IFS=, read -r key value; do\n   \
+    \     if [[ $key =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n      \
+    \  elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n       \
+    \ else\n            echo \"False\"\n            return\n        fi\n    done <\
+    \ <(echo \"$1\")\n    if [ $lower -eq 0 -o $upper -eq 0 ]; then\n        echo\
+    \ \"True\"\n    else\n        echo \"False\"\n    fi", "    local key\n    local\
+    \ value\n    local lower_keys=0\n    local upper_keys=0\n    local key_count=0\n\
+    \    local lower_case_regex='^[a-z]+$'\n    local upper_case_regex='^[A-Z]+$'\n\
+    \    while IFS=, read key value; do\n        if [[ $key =~ $lower_case_regex ]];\
+    \ then\n            lower_keys=$((lower_keys + 1))\n        elif [[ $key =~ $upper_case_regex\
+    \ ]]; then\n            upper_keys=$((upper_keys + 1))\n        fi\n        key_count=$((key_count\
+    \ + 1))\n    done < <(echo \"$1\")\n    if [[ $key_count -eq 0 ]]; then\n    \
+    \    echo \"False\"\n    elif [[ $lower_keys -eq $key_count ]]; then\n       \
+    \ echo \"True\"\n    elif [[ $upper_keys -eq $key_count ]]; then\n        echo\
+    \ \"True\"\n    else\n        echo \"False\"\n    fi", "    if [ $# -ne 1 ]; then\n\
+    \        echo \"Usage: $0 <csv_file>\"\n        exit 1\n    fi\n    csv_file=$1\n\
+    \    if [ ! -f $csv_file ]; then\n        echo \"File $csv_file does not exist\"\
+    \n        exit 1\n    fi\n    lower_keys=$(awk -F, '{print tolower($1)}' $csv_file)\n\
+    \    upper_keys=$(awk -F, '{print toupper($1)}' $csv_file)\n    if [ \"$lower_keys\"\
+    \ == \"$upper_keys\" ]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n      \
+    \  return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n    \
+    \    return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n  \
+    \      return\n    fi\n    # Check if all keys are lower case\n    if [ \"$(cut\
+    \ -d, -f1 \"$1\" | tr '[:upper:]' '[:lower:]' | cmp -s - \"$1\")\" ]; then\n \
+    \       echo \"True\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    if [ \"$(cut -d, -f1 \"$1\" | tr '[:lower:]' '[:upper:]' | cmp -s\
+    \ - \"$1\")\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ -z \"$(echo \"$1\" | grep -v '^[a-zA-Z],')\" ]; then\n     \
+    \   echo \"True\"\n    else\n        echo \"False\"\n    fi", "  if [ -z \"$1\"\
+    \ ]; then\n    echo \"False\"\n    return\n  fi\n  if [ ! -f \"$1\" ]; then\n\
+    \    echo \"False\"\n    return\n  fi\n  if [ $(wc -l < \"$1\") -eq 0 ]; then\n\
+    \    echo \"False\"\n    return\n  fi\n  if [ $(wc -l < \"$1\") -eq 1 ]; then\n\
+    \    echo \"True\"\n    return\n  fi\n  # If we have more than one line, we need\
+    \ to check the case of the keys.\n  # We can do this by checking the first character\
+    \ of the first line.\n  first_char=$(head -n 1 \"$1\" | cut -d, -f1 | cut -c1)\n\
+    \  if [ \"$first_char\" == \"${first_char^^}\" ]; then\n    # All uppercase\n\
+    \    echo \"True\"\n  elif [ \"$first_char\" == \"${first_char,,}\" ]; then\n\
+    \    # All lowercase\n    echo \"True\"\n  else\n    echo \"False\"\n  fi", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n \
+    \   # Check if all keys are lower case\n    if [ \"$(awk -F, '{print tolower($1)}'\
+    \ $1 | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    # Check if all keys are upper case\n    if [ \"$(awk -F, '{print\
+    \ toupper($1)}' $1 | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n\
+    \        return\n    fi\n    echo \"False\"", "    if [ ! -f \"$1\" ]; then\n\
+    \        echo \"ERROR: $1 is not a file\"\n        exit 1\n    fi\n    if [ !\
+    \ -s \"$1\" ]; then\n        echo \"ERROR: $1 is empty\"\n        exit 1\n   \
+    \ fi\n    # Check if all keys are upper case\n    if [ $(awk -F, '{print toupper($1)}'\
+    \ \"$1\" | cmp -s - \"$1\") ]; then\n        echo \"True\"\n    # Check if all\
+    \ keys are lower case\n    elif [ $(awk -F, '{print tolower($1)}' \"$1\" | cmp\
+    \ -s - \"$1\") ]; then\n        echo \"True\"\n    else\n        echo \"False\"\
+    \n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lower case\n    awk -F, '{print tolower($1)}'\
+    \ \"$1\" | sort -u | diff - \"$1\" > /dev/null\n    if [ $? -eq 0 ]; then\n  \
+    \      echo \"True\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    awk -F, '{print toupper($1)}' \"$1\" | sort -u | diff - \"$1\" > /dev/null\n\
+    \    if [ $? -eq 0 ]; then\n        echo \"True\"\n        return\n    fi\n  \
+    \  echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n    \
+    \    return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n  \
+    \      return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    local lower_count=0\n    local upper_count=0\n  \
+    \  while IFS=, read -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n\
+    \            lower_count=$((lower_count+1))\n        elif [[ \"$key\" =~ ^[A-Z]+$\
+    \ ]]; then\n            upper_count=$((upper_count+1))\n        else\n       \
+    \     echo \"False\"\n            return\n        fi\n    done < \"$1\"\n    if\
+    \ [ \"$lower_count\" -eq 0 ] && [ \"$upper_count\" -eq 0 ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ \"$lower_count\" -eq 0 ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    if [ \"$upper_count\" -eq\
+    \ 0 ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    # Check if all keys are lower case\n    if [ \"$(awk -F, '{print tolower($1)}'\
+    \ \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    # Check if all keys are upper case\n    if [ \"$(awk -F, '{print\
+    \ toupper($1)}' \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\
+    \n        return\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n \
+    \       echo \"False\"\n        return\n    fi\n    if [ -z \"$(grep -E '^\"[^\"\
+    ]+\",\"[^\"]+\"$' <<< \"$1\")\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ -z \"$(grep -E '^\"[^\"]+\",\"[^\"]+\"$' <<< \"$1\" | grep -E\
+    \ '^\"[^A-Z]+\",\"[^\"]+\"$')\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    if [ -z \"$(grep -E '^\"[^\"]+\",\"[^\"]+\"$' <<< \"$1\" | grep -E\
+    \ '^\"[^a-z]+\",\"[^\"]+\"$')\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    echo \"False\"", "    if [[ -z \"$1\" ]]; then\n        echo \"False\"\
+    \n        return\n    fi\n    local lower_keys=$(cut -d, -f1 \"$1\" | grep -v\
+    \ '[A-Z]')\n    local upper_keys=$(cut -d, -f1 \"$1\" | grep -v '[a-z]')\n   \
+    \ if [[ -z \"$lower_keys\" && -z \"$upper_keys\" ]]; then\n        echo \"True\"\
+    \n    else\n        echo \"False\"\n    fi", "    if [ -z \"$1\" ]; then\n   \
+    \     echo \"False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n \
+    \       echo \"False\"\n        return\n    fi\n    local lower_keys=$(cut -d,\
+    \ -f1 \"$1\" | grep -v '[A-Z]')\n    local upper_keys=$(cut -d, -f1 \"$1\" | grep\
+    \ -v '[a-z]')\n    if [ -z \"$lower_keys\" ] && [ -z \"$upper_keys\" ]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local\
+    \ dict=\"$1\"\n    local lower=0\n    local upper=0\n    local key\n    local\
+    \ value\n    local IFS=','\n    while read key value; do\n        if [[ \"$key\"\
+    \ =~ [a-z] ]]; then\n            lower=1\n        elif [[ \"$key\" =~ [A-Z] ]];\
+    \ then\n            upper=1\n        else\n            echo \"False\"\n      \
+    \      return\n        fi\n    done < <(echo \"$dict\")\n    if [[ $lower -eq\
+    \ 1 && $upper -eq 1 ]]; then\n        echo \"False\"\n    else\n        echo \"\
+    True\"\n    fi", "  local dict=\"$1\"\n  local lower_keys=$(cat \"$dict\" | cut\
+    \ -d, -f1 | grep -E '^[a-z]+$' | wc -l)\n  local upper_keys=$(cat \"$dict\" |\
+    \ cut -d, -f1 | grep -E '^[A-Z]+$' | wc -l)\n  local total_keys=$(cat \"$dict\"\
+    \ | wc -l)\n  if [[ \"$lower_keys\" -eq \"$total_keys\" ]] || [[ \"$upper_keys\"\
+    \ -eq \"$total_keys\" ]]; then\n    echo \"True\"\n  else\n    echo \"False\"\n\
+    \  fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lower case\n    all_lower=$(awk -F, '{print\
+    \ tolower($1)}' $1 | paste -d, - $1 | cmp $1 -)\n    if [ -z \"$all_lower\" ];\
+    \ then\n        echo \"True\"\n        return\n    fi\n    # Check if all keys\
+    \ are upper case\n    all_upper=$(awk -F, '{print toupper($1)}' $1 | paste -d,\
+    \ - $1 | cmp $1 -)\n    if [ -z \"$all_upper\" ]; then\n        echo \"True\"\n\
+    \        return\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n  \
+    \      echo \"False\"\n        return\n    fi\n    # Check if all keys are lower\
+    \ case\n    if [ \"$(cut -d, -f1 $1 | tr '[:upper:]' '[:lower:]' | tr '[:lower:]'\
+    \ '[:upper:]' | uniq -c | grep -v '^ *1 ')\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    # Check if all keys are upper case\n    if [ \"$(cut\
+    \ -d, -f1 $1 | tr '[:lower:]' '[:upper:]' | tr '[:upper:]' '[:lower:]' | uniq\
+    \ -c | grep -v '^ *1 ')\" ]; then\n        echo \"False\"\n        return\n  \
+    \  fi\n    echo \"True\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    # Check for all lower case\n    if [ \"$(awk -F,\
+    \ '{print tolower($1)}' \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    # Check for all upper case\n    if [ \"\
+    $(awk -F, '{print toupper($1)}' \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n  \
+    \      echo \"True\"\n        return\n    fi\n    echo \"False\"", "    if [ -z\
+    \ \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local dict=\"\
+    $1\"\n    local lower_case_keys=$(awk -F, '{print tolower($1)}' \"$dict\")\n \
+    \   local upper_case_keys=$(awk -F, '{print toupper($1)}' \"$dict\")\n    if [\
+    \ \"$lower_case_keys\" == \"$upper_case_keys\" ]; then\n        echo \"True\"\n\
+    \    else\n        echo \"False\"\n    fi", "    if [ -z \"$1\" ]; then\n    \
+    \    echo \"False\"\n        return\n    fi\n    lower_case_keys=$(awk -F, '{print\
+    \ tolower($1)}' $1)\n    upper_case_keys=$(awk -F, '{print toupper($1)}' $1)\n\
+    \    if [ \"$lower_case_keys\" == \"$upper_case_keys\" ]; then\n        echo \"\
+    False\"\n    else\n        echo \"True\"\n    fi", "  if [ -z \"$1\" ]; then\n\
+    \    echo \"False\"\n    return\n  fi\n  local dict=\"$1\"\n  local lower=0\n\
+    \  local upper=0\n  while IFS=, read -r key value; do\n    if [[ \"$key\" =~ ^[a-z]+$\
+    \ ]]; then\n      lower=$((lower+1))\n    elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n\
+    \      upper=$((upper+1))\n    else\n      echo \"False\"\n      return\n    fi\n\
+    \  done < <(echo \"$dict\")\n  if [ \"$lower\" -gt 0 ] && [ \"$upper\" -gt 0 ];\
+    \ then\n    echo \"False\"\n  else\n    echo \"True\"\n  fi", "    local dict=\"\
+    $1\"\n    local key\n    local value\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local empty_dict=0\n    local lower_case_regex='^[a-z]+$'\n    local upper_case_regex='^[A-Z]+$'\n\
+    \    while IFS=, read -r key value; do\n        if [[ -z \"$key\" ]]; then\n \
+    \           empty_dict=1\n            break\n        fi\n        if [[ \"$key\"\
+    \ =~ $lower_case_regex ]]; then\n            lower_keys=1\n        elif [[ \"\
+    $key\" =~ $upper_case_regex ]]; then\n            upper_keys=1\n        else\n\
+    \            break\n        fi\n    done < <(echo \"$dict\")\n    if [[ $empty_dict\
+    \ -eq 1 ]]; then\n        echo \"False\"\n    elif [[ $lower_keys -eq 1 && $upper_keys\
+    \ -eq 0 ]]; then\n        echo \"True\"\n    elif [[ $lower_keys -eq 0 && $upper_keys\
+    \ -eq 1 ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n  \
+    \  fi", "    local dict=\"$1\"\n    local dict_lower=`echo \"$dict\" | awk -F,\
+    \ '{print $1}' | tr '[:upper:]' '[:lower:]'`\n    local dict_upper=`echo \"$dict\"\
+    \ | awk -F, '{print $1}' | tr '[:lower:]' '[:upper:]'`\n    local dict_keys=`echo\
+    \ \"$dict\" | awk -F, '{print $1}'`\n    if [ \"$dict_lower\" == \"$dict_keys\"\
+    \ ] || [ \"$dict_upper\" == \"$dict_keys\" ]; then\n        echo \"True\"\n  \
+    \  else\n        echo \"False\"\n    fi", "    local dict=\"$1\"\n    local key\n\
+    \    local value\n    local lower_case=0\n    local upper_case=0\n    local mixed_case=0\n\
+    \    local empty_dict=0\n    local dict_size=0\n    local dict_size_lower=0\n\
+    \    local dict_size_upper=0\n    local dict_size_mixed=0\n    local dict_size_empty=0\n\
+    \    local dict_size_total=0\n    local dict_size_total_lower=0\n    local dict_size_total_upper=0\n\
+    \    local dict_size_total_mixed=0\n    local dict_size_total_empty=0\n    local\
+    \ dict_size_total_all=0\n    local dict_size_total_all_lower=0\n    local dict_size_total_all_upper=0\n\
+    \    local dict_size_total_all_mixed=0\n    local dict_size_total_all_empty=0\n\
+    \    local dict_size_total_all_mixed_lower=0\n    local dict_size_total_all_mixed_upper=0\n\
+    \    local dict_size_total_all_mixed_mixed=0\n    local dict_size_total_all_mixed_empty=0\n\
+    \    local dict_size_total_all_empty_lower=0\n    local dict_size_total_all_empty_upper=0\n\
+    \    local dict_size_total_all_empty_mixed=0\n    local dict_size_total_all_empty_empty=0\n\
+    \    local dict_size_total_all_lower_lower=0\n    local dict_size_total_all_lower_upper=0\n\
+    \    local dict_size_total_all_lower_mixed=0\n    local dict_size_total_all_lower_empty=0\n\
+    \    local dict_size_total_all_upper_lower=0\n    local dict_size_total_all_upper_upper=0\n\
+    \    local dict_size_total_all_upper_mixed=0\n    local dict_size_total_all_upper_empty=0\n\
+    \    local dict_size_total_all_mixed_lower_lower=0\n    local dict", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [\
+    \ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if\
+    \ [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    lower=0\n\
+    \    upper=0\n    while IFS=, read -r key value; do\n        if [[ $key =~ ^[a-z]+$\
+    \ ]]; then\n            lower=$((lower+1))\n        fi\n        if [[ $key =~\
+    \ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n        fi\n    done < \"\
+    $1\"\n    if [ $lower -eq 0 ] && [ $upper -eq 0 ]; then\n        echo \"False\"\
+    \n    else\n        echo \"True\"\n    fi", "    local input=$1\n    local key\n\
+    \    local value\n    local lower_count=0\n    local upper_count=0\n    local\
+    \ total_count=0\n    while IFS=, read -r key value; do\n        if [[ $key =~\
+    \ ^[a-z]+$ ]]; then\n            lower_count=$((lower_count + 1))\n        elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_count=$((upper_count + 1))\n\
+    \        fi\n        total_count=$((total_count + 1))\n    done < <(echo \"$input\"\
+    )\n    if [[ $total_count -eq 0 ]]; then\n        echo \"False\"\n    elif [[\
+    \ $lower_count -eq $total_count ]]; then\n        echo \"True\"\n    elif [[ $upper_count\
+    \ -eq $total_count ]]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n      \
+    \  return\n    fi\n    local key_case=$(head -n 1 $1 | cut -d, -f1 | tr '[:upper:]'\
+    \ '[:lower:]')\n    if [ \"$key_case\" == $(head -n 1 $1 | cut -d, -f1) ]; then\n\
+    \        local case_type=\"lower\"\n    else\n        local case_type=\"upper\"\
+    \n    fi\n    local all_keys_match=1\n    while read line; do\n        local key=$(echo\
+    \ $line | cut -d, -f1)\n        if [ \"$case_type\" == \"lower\" ]; then\n   \
+    \         if [ \"$key\" != \"$(echo $key | tr '[:upper:]' '[:lower:]')\" ]; then\n\
+    \                all_keys_match=0\n                break\n            fi\n   \
+    \     else\n            if [ \"$key\" != \"$(echo $key | tr '[:lower:]' '[:upper:]')\"\
+    \ ]; then\n                all_keys_match=0\n                break\n         \
+    \   fi\n        fi\n    done < $1\n    if [ $all_keys_match -eq 1 ]; then\n  \
+    \      echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local dict=\"\
+    $1\"\n    local lower_keys=0\n    local upper_keys=0\n    local key\n    local\
+    \ value\n    local IFS=,\n    while read key value; do\n        if [[ \"$key\"\
+    \ =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n        elif\
+    \ [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n\
+    \        else\n            echo \"False\"\n            return\n        fi\n  \
+    \  done < <(echo \"$dict\")\n    if [[ $lower_keys -gt 0 && $upper_keys -gt 0\
+    \ ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n    fi",
+  "    local dict=\"$1\"\n    local lower_keys=()\n    local upper_keys=()\n    local\
+    \ lower_values=()\n    local upper_values=()\n    local lower_count=0\n    local\
+    \ upper_count=0\n    local key\n    local value\n    local i\n    local j\n  \
+    \  local k\n    local l\n    local m\n    local n\n    local o\n    local p\n\
+    \    local q\n    local r\n    local s\n    local t\n    local u\n    local v\n\
+    \    local w\n    local x\n    local y\n    local z\n    local a\n    local b\n\
+    \    local c\n    local d\n    local e\n    local f\n    local g\n    local h\n\
+    \    local i\n    local j\n    local k\n    local l\n    local m\n    local n\n\
+    \    local o\n    local p\n    local q\n    local r\n    local s\n    local t\n\
+    \    local u\n    local v\n    local w\n    local x\n    local y\n    local z\n\
+    \    local a\n    local b\n    local c\n    local d\n    local e\n    local f\n\
+    \    local g\n    local h\n    local i\n    local j\n    local k\n    local l\n\
+    \    local m\n    local n\n    local o\n    local p\n    local q\n    local r\n\
+    \    local s\n    local t\n    local u\n    local v\n    local w\n    local x\n\
+    \    local y\n    local z\n    local a\n    local b\n    local c\n    local d\n\
+    \    local e\n    local f\n    local g\n    local h\n    local i\n    local j\n\
+    \    local k\n    local l\n    local m\n    local n\n    local o\n    local p\n\
+    \    local q\n    local r\n    local s\n    local t\n    local u\n    local v\n\
+    \    local w\n    local x\n    local y\n    local z\n    local a\n    local b\n\
+    \    local c\n    local d\n    local e\n    local f\n    local g\n    local h\n\
+    \    local i\n    local j\n    local k\n    local l\n    local m\n    local n\n\
+    \    local o\n    local p", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -lt 2 ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    # if all keys are\
+    \ lower case, then the first character of the first\n    # key will be lower case\
+    \ and the first character of the last key\n    # will be lower case.\n    if [\
+    \ $(head -1 \"$1\" | cut -d, -f1 | cut -c1 | tr '[:upper:]' '[:lower:]') == $(head\
+    \ -1 \"$1\" | cut -d, -f1 | cut -c1) ] && [ $(tail -1 \"$1\" | cut -d, -f1 | cut\
+    \ -c1 | tr '[:upper:]' '[:lower:]') == $(tail -1 \"$1\" | cut -d, -f1 | cut -c1)\
+    \ ]; then\n        echo \"True\"\n        return\n    fi\n    # if all keys are\
+    \ upper case, then the first character of the first\n    # key will be upper case\
+    \ and the first character of the last key\n    # will be upper case.\n    if [\
+    \ $(head -1 \"$1\" | cut -d, -f1 | cut -c1 | tr '[:lower:]' '[:upper:]') == $(head\
+    \ -1 \"$1\" | cut -d, -f1 | cut -c1) ] && [ $(tail -1 \"$1\" | cut -d, -f1 | cut\
+    \ -c1 | tr '[:lower:]' '[:upper:]') == $(tail -1 \"$1\" | cut -d, -f1 | cut -c1)\
+    \ ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ -z \"$(cat $1 | cut -d',' -f1 | grep -v '[a-z]')\" ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    if [ -z \"$(cat $1 | cut -d',' -f1 | grep\
+    \ -v '[A-Z]')\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    local dict=\"$1\"\n    local key\n    local value\n    local\
+    \ lower_count=0\n    local upper_count=0\n    while IFS=, read key value; do\n\
+    \        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_count=$((lower_count\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_count=$((upper_count\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ $lower_count -eq 0 || $upper_count\
+    \ -eq 0 ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n  \
+    \  fi", "    if [[ -z \"$1\" ]]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [[ -z \"$(echo \"$1\" | grep -v '^[a-z],')\" ]]; then\n      \
+    \  echo \"True\"\n        return\n    fi\n    if [[ -z \"$(echo \"$1\" | grep\
+    \ -v '^[A-Z],')\" ]]; then\n        echo \"True\"\n        return\n    fi\n  \
+    \  echo \"False\"", "    if [[ -z \"$1\" ]]; then\n        echo \"False\"\n  \
+    \      return\n    fi\n    if [[ -z \"$(grep -E '^[a-z]+,[a-z]+$' <<< \"$1\")\"\
+    \ ]]; then\n        if [[ -z \"$(grep -E '^[A-Z]+,[A-Z]+$' <<< \"$1\")\" ]]; then\n\
+    \            echo \"False\"\n            return\n        fi\n    fi\n    echo\
+    \ \"True\"", "    local dict=$1\n    local key\n    local value\n    local lower=0\n\
+    \    local upper=0\n    local total=0\n    while IFS=, read key value; do\n  \
+    \      if [[ $key =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n     \
+    \   elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n      \
+    \  fi\n        total=$((total+1))\n    done < <(echo \"$dict\")\n    if [[ $total\
+    \ -eq 0 ]]; then\n        echo False\n    elif [[ $lower -eq $total ]]; then\n\
+    \        echo True\n    elif [[ $upper -eq $total ]]; then\n        echo True\n\
+    \    else\n        echo False\n    fi", "  local dict=\"$1\"\n  local lower_case=0\n\
+    \  local upper_case=0\n  local key\n  local value\n  while IFS=, read -r key value;\
+    \ do\n    if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n      lower_case=$((lower_case\
+    \ + 1))\n    elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n      upper_case=$((upper_case\
+    \ + 1))\n    fi\n  done < <(echo \"$dict\")\n  if [[ \"$lower_case\" -gt 0 &&\
+    \ \"$upper_case\" -gt 0 ]]; then\n    echo \"False\"\n  else\n    echo \"True\"\
+    \n  fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lower case\n    if [ \"$(echo \"$1\" | cut\
+    \ -d, -f1 | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]'\
+    \ | tr -d '\\n' | wc -c)\" -eq \"$(echo \"$1\" | cut -d, -f1 | tr -d '[:space:]'\
+    \ | tr -d '\\n' | wc -c)\" ]; then\n        echo \"True\"\n        return\n  \
+    \  fi\n    # Check if all keys are upper case\n    if [ \"$(echo \"$1\" | cut\
+    \ -d, -f1 | tr '[:lower:]' '[:upper:]' | tr '[:lower:]' '[:upper:]' | tr -d '[:space:]'\
+    \ | tr -d '\\n' | wc -c)\" -eq \"$(echo \"$1\" | cut -d, -f1 | tr -d '[:space:]'\
+    \ | tr -d '\\n' | wc -c)\" ]; then\n        echo \"True\"\n        return\n  \
+    \  fi\n    echo \"False\"", "    # Check if the input file is empty\n    if [\
+    \ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\n    #\
+    \ Check if all keys are lower case\n    if [ $(awk -F, '{print tolower($1)}' \"\
+    $1\" | cmp -s - \"$1\") ]; then\n        echo \"True\"\n        return\n    fi\n\
+    \n    # Check if all keys are upper case\n    if [ $(awk -F, '{print toupper($1)}'\
+    \ \"$1\" | cmp -s - \"$1\") ]; then\n        echo \"True\"\n        return\n \
+    \   fi\n\n    # If we get here, the keys are mixed case\n    echo \"False\"",
+  "    local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n    local\
+    \ key\n    local value\n    while IFS=, read -r key value; do\n        if [[ $key\
+    \ =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n        elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n \
+    \       else\n            return 1\n        fi\n    done < <(echo \"$dict\")\n\
+    \    if [[ $lower_keys -eq 0 && $upper_keys -eq 0 ]]; then\n        return 1\n\
+    \    elif [[ $lower_keys -gt 0 && $upper_keys -gt 0 ]]; then\n        return 1\n\
+    \    else\n        return 0\n    fi", "    if [[ ! -f $1 ]]; then\n        echo\
+    \ \"File $1 does not exist\"\n        exit 1\n    fi\n    if [[ ! -s $1 ]]; then\n\
+    \        echo \"File $1 is empty\"\n        exit 1\n    fi\n    local lower_keys=$(awk\
+    \ -F, '{print $1}' $1 | grep -c '^[a-z]*$')\n    local upper_keys=$(awk -F, '{print\
+    \ $1}' $1 | grep -c '^[A-Z]*$')\n    local total_keys=$(awk -F, '{print $1}' $1\
+    \ | wc -l)\n    if [[ $lower_keys -eq $total_keys ]] || [[ $upper_keys -eq $total_keys\
+    \ ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ \"$(wc -l \"$1\" | awk '{print $1}')\" -eq 1 ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ \"$(head -n 1 \"$1\" | cut -d, -f1 |\
+    \ grep -E '^[[:upper:]]+$')\" ]; then\n        if [ \"$(tail -n +2 \"$1\" | cut\
+    \ -d, -f1 | grep -Ev '^[[:upper:]]+$')\" ]; then\n            echo \"False\"\n\
+    \            return\n        fi\n    elif [ \"$(head -n 1 \"$1\" | cut -d, -f1\
+    \ | grep -E '^[[:lower:]]+$')\" ]; then\n        if [ \"$(tail -n +2 \"$1\" |\
+    \ cut -d, -f1 | grep -Ev '^[[:lower:]]+$')\" ]; then\n            echo \"False\"\
+    \n            return\n        fi\n    else\n        echo \"False\"\n        return\n\
+    \    fi\n    echo \"True\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -eq 1 ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    if [ $(head -n 1 \"\
+    $1\" | awk -F, '{print $1}' | grep -c '[A-Z]') -gt 0 ]; then\n        if [ $(tail\
+    \ -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -gt 0 ]; then\n      \
+    \      echo \"False\"\n            return\n        fi\n    fi\n    if [ $(head\
+    \ -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -gt 0 ]; then\n      \
+    \  if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[A-Z]') -gt 0 ];\
+    \ then\n            echo \"False\"\n            return\n        fi\n    fi\n \
+    \   echo \"True\"", "    local dict=\"$1\"\n    local key\n    local value\n \
+    \   local lower_keys=0\n    local upper_keys=0\n    local lower_values=0\n   \
+    \ local upper_values=0\n    local total_keys=0\n    local total_values=0\n   \
+    \ local result=0\n    while IFS=, read -r key value; do\n        if [[ \"$key\"\
+    \ =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n        elif\
+    \ [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n\
+    \        fi\n        if [[ \"$value\" =~ ^[a-z]+$ ]]; then\n            lower_values=$((lower_values\
+    \ + 1))\n        elif [[ \"$value\" =~ ^[A-Z]+$ ]]; then\n            upper_values=$((upper_values\
+    \ + 1))\n        fi\n        total_keys=$((total_keys + 1))\n        total_values=$((total_values\
+    \ + 1))\n    done < <(echo \"$dict\")\n    if [[ $total_keys -eq 0 ]]; then\n\
+    \        result=1\n    elif [[ $lower_keys -eq $total_keys ]]; then\n        result=0\n\
+    \    elif [[ $upper_keys -eq $total_keys ]]; then\n        result=0\n    else\n\
+    \        result=1\n    fi\n    echo \"$result\"", "    local dict=\"$1\"\n   \
+    \ local key\n    local value\n    local lower_case_keys=0\n    local upper_case_keys=0\n\
+    \    local total_keys=0\n    while IFS=, read -r key value; do\n        if [[\
+    \ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_case_keys=$((lower_case_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_case_keys=$((upper_case_keys\
+    \ + 1))\n        fi\n        total_keys=$((total_keys + 1))\n    done < <(echo\
+    \ \"$dict\")\n    if [[ \"$total_keys\" -eq 0 ]]; then\n        echo \"False\"\
+    \n    elif [[ \"$lower_case_keys\" -eq \"$total_keys\" ]]; then\n        echo\
+    \ \"True\"\n    elif [[ \"$upper_case_keys\" -eq \"$total_keys\" ]]; then\n  \
+    \      echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local dict=\"\
+    $1\"\n    local key_list=$(cut -d, -f1 <<< \"$dict\")\n    local value_list=$(cut\
+    \ -d, -f2 <<< \"$dict\")\n    local key_list_lower=$(tr '[:upper:]' '[:lower:]'\
+    \ <<< \"$key_list\")\n    local key_list_upper=$(tr '[:lower:]' '[:upper:]' <<<\
+    \ \"$key_list\")\n    if [[ \"$key_list\" == \"$key_list_lower\" ]]; then\n  \
+    \      echo \"True\"\n    elif [[ \"$key_list\" == \"$key_list_upper\" ]]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    if [ $#\
+    \ -ne 1 ]; then\n        echo \"Usage: $0 <dict.csv>\"\n        exit 1\n    fi\n\
+    \    if [ ! -f $1 ]; then\n        echo \"File $1 does not exist\"\n        exit\
+    \ 1\n    fi\n    if [ ! -s $1 ]; then\n        echo \"File $1 is empty\"\n   \
+    \     exit 1\n    fi\n    # Get the keys\n    keys=$(cut -d, -f1 $1)\n    # Check\
+    \ if all keys are lower case\n    if [[ $keys =~ ^[a-z]+$ ]]; then\n        echo\
+    \ \"True\"\n    # Check if all keys are upper case\n    elif [[ $keys =~ ^[A-Z]+$\
+    \ ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    # Check for empty dictionary\n    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n\n    # Check for all lower case\n    if [ \"$(echo\
+    \ \"$1\" | awk -F, '{print tolower($1)}' | sort -u)\" == \"$(echo \"$1\" | awk\
+    \ -F, '{print $1}' | sort -u)\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n\n    # Check for all upper case\n    if [ \"$(echo \"$1\" | awk -F,\
+    \ '{print toupper($1)}' | sort -u)\" == \"$(echo \"$1\" | awk -F, '{print $1}'\
+    \ | sort -u)\" ]; then\n        echo \"True\"\n        return\n    fi\n\n    #\
+    \ If we get here, then the dictionary is mixed case\n    echo \"False\"", "  \
+    \  if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    # Check for all lower case\n    if [ \"$(cat $1 | awk -F, '{print tolower($1)}'\
+    \ | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    # Check for all upper case\n    if [ \"$(cat $1 | awk -F, '{print\
+    \ toupper($1)}' | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n  \
+    \      return\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n    \
+    \    echo \"False\"\n        return\n    fi\n    local lower_keys=$(awk -F, '{print\
+    \ $1}' $1 | grep -v '[A-Z]')\n    local upper_keys=$(awk -F, '{print $1}' $1 |\
+    \ grep -v '[a-z]')\n    if [ -z \"$lower_keys\" ] && [ -z \"$upper_keys\" ]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    if [ -z\
+    \ \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    # Check\
+    \ if all keys are lowercase\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr '[:upper:]'\
+    \ '[:lower:]' | sort | uniq -c | wc -l)\" -eq 1 ]; then\n        echo \"True\"\
+    \n        return\n    fi\n    # Check if all keys are uppercase\n    if [ \"$(echo\
+    \ \"$1\" | cut -d, -f1 | tr '[:lower:]' '[:upper:]' | sort | uniq -c | wc -l)\"\
+    \ -eq 1 ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ \"$(wc -l $1 | awk '{print $1}')\" -eq 1 ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ \"$(head -n 1 $1 | awk -F, '{print $1}' | grep\
+    \ -q '[A-Z]')\" ]; then\n        if [ \"$(tail -n +2 $1 | awk -F, '{print $1}'\
+    \ | grep -qv '[A-Z]')\" ]; then\n            echo \"False\"\n            return\n\
+    \        fi\n    else\n        if [ \"$(tail -n +2 $1 | awk -F, '{print $1}' |\
+    \ grep -qv '[a-z]')\" ]; then\n            echo \"False\"\n            return\n\
+    \        fi\n    fi\n    echo \"True\"", "    local -a keys\n    local -a values\n\
+    \    local -a lower_keys\n    local -a upper_keys\n    local -a lower_values\n\
+    \    local -a upper_values\n    local -a lower_keys_values\n    local -a upper_keys_values\n\
+    \    local -a lower_keys_values_sorted\n    local -a upper_keys_values_sorted\n\
+    \    local -a lower_keys_values_sorted_unique\n    local -a upper_keys_values_sorted_unique\n\
+    \    local -a lower_keys_values_sorted_unique_count\n    local -a upper_keys_values_sorted_unique_count\n\
+    \    local -a lower_keys_values_sorted_unique_count_sum\n    local -a upper_keys_values_sorted_unique_count_sum\n\
+    \    local -a lower_keys_values_sorted_unique_count_sum_sum\n    local -a upper_keys_values_sorted_unique_count_sum_sum\n\
+    \    local -a lower_keys_values_sorted_unique_count_sum_sum_sum\n    local -a\
+    \ upper_keys_values_sorted_unique_count_sum_sum_sum\n    local -a lower_keys_values_sorted_unique_count_sum_sum_sum_sum\n\
+    \    local -a upper_keys_values_sorted_unique_count_sum_sum_sum_sum\n    local\
+    \ -a lower_keys_values_sorted_unique_count_sum_sum_sum_sum_sum\n    local -a upper_keys_values_sorted_unique_count_sum_sum_sum_sum_sum\n\
+    \    local -a lower_keys_values_sorted_unique_count_sum_sum_sum_sum_sum_sum\n\
+    \    local -a upper_keys_values_sorted_unique_count_sum_sum_sum_sum_sum_sum\n\
+    \    local -a lower_keys_values_sorted_unique_count_sum_sum_sum_sum_sum_sum_sum\n\
+    \    local -a upper_keys_values_sorted_unique_count_sum_sum_sum_sum_sum_sum_sum\n\
+    \    local -a lower_keys", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    # Check if all keys are lower case\n    if [ $(echo\
+    \ \"$1\" | cut -d, -f1 | tr '[:upper:]' '[:lower:]' | tr -d '[:blank:]' | sort\
+    \ | uniq -c | wc -l) -eq 1 ]; then\n        echo \"True\"\n        return\n  \
+    \  fi\n    # Check if all keys are upper case\n    if [ $(echo \"$1\" | cut -d,\
+    \ -f1 | tr '[:lower:]' '[:upper:]' | tr -d '[:blank:]' | sort | uniq -c | wc -l)\
+    \ -eq 1 ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ -z \"$(cat $1 | cut -d, -f1 | grep -v '[a-z]')\" ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    if [ -z \"$(cat $1 | cut -d, -f1 | grep\
+    \ -v '[A-Z]')\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lower case\n    if [ \"$(awk -F, '{print\
+    \ tolower($1)}' \"$1\" | cmp -s - \"$1\")\" ]; then\n        echo \"True\"\n \
+    \       return\n    fi\n    # Check if all keys are upper case\n    if [ \"$(awk\
+    \ -F, '{print toupper($1)}' \"$1\" | cmp -s - \"$1\")\" ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    echo \"False\"", "    local dict=$1\n\
+    \    local key\n    local value\n    local lower=0\n    local upper=0\n    local\
+    \ empty=0\n    local total=0\n    while IFS=, read key value\n    do\n       \
+    \ if [[ -z $key ]]\n        then\n            empty=1\n        elif [[ $key =~\
+    \ ^[a-z]+$ ]]\n        then\n            lower=1\n        elif [[ $key =~ ^[A-Z]+$\
+    \ ]]\n        then\n            upper=1\n        else\n            echo \"False\"\
+    \n            return\n        fi\n        total=$((total+1))\n    done < <(echo\
+    \ \"$dict\")\n    if [[ $empty -eq 1 ]]\n    then\n        echo \"False\"\n  \
+    \  elif [[ $lower -eq 1 && $upper -eq 0 ]]\n    then\n        echo \"True\"\n\
+    \    elif [[ $lower -eq 0 && $upper -eq 1 ]]\n    then\n        echo \"True\"\n\
+    \    else\n        echo \"False\"\n    fi", "  if [ -z \"$1\" ]; then\n    echo\
+    \ \"False\"\n    return\n  fi\n  if [ ! -f \"$1\" ]; then\n    echo \"False\"\n\
+    \    return\n  fi\n  if [ ! -s \"$1\" ]; then\n    echo \"False\"\n    return\n\
+    \  fi\n  # Check if all keys are lower case\n  lower_case_keys=$(awk -F, '{print\
+    \ tolower($1)}' \"$1\")\n  if [ \"$lower_case_keys\" == \"$(cat \"$1\")\" ]; then\n\
+    \    echo \"True\"\n    return\n  fi\n  # Check if all keys are upper case\n \
+    \ upper_case_keys=$(awk -F, '{print toupper($1)}' \"$1\")\n  if [ \"$upper_case_keys\"\
+    \ == \"$(cat \"$1\")\" ]; then\n    echo \"True\"\n    return\n  fi\n  echo \"\
+    False\"", "    # Check if the dictionary is empty\n    if [ -z \"$1\" ]; then\n\
+    \        echo \"False\"\n        return\n    fi\n\n    # Check if all keys are\
+    \ strings in lower case\n    if [ \"$(echo \"$1\" | awk -F, '{print tolower($1)}'\
+    \ | uniq | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n   \
+    \ fi\n\n    # Check if all keys are strings in upper case\n    if [ \"$(echo \"\
+    $1\" | awk -F, '{print toupper($1)}' | uniq | wc -l)\" -eq 1 ]; then\n       \
+    \ echo \"True\"\n        return\n    fi\n\n    # If we get here, the dictionary\
+    \ is not all lower or upper case\n    echo \"False\"", "  local dict=\"$1\"\n\
+    \  local lower=0\n  local upper=0\n  local key\n  local value\n  while IFS=, read\
+    \ -r key value; do\n    if [[ $key =~ ^[a-z]+$ ]]; then\n      lower=1\n    elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n      upper=1\n    else\n      return 1\n    fi\n\
+    \  done < <(echo \"$dict\")\n  if [[ $lower -eq 1 && $upper -eq 1 ]]; then\n \
+    \   return 1\n  fi\n  return 0", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    # Check if all keys are lower case\n    if\
+    \ [ \"$(awk -F, '{print tolower($1)}' $1 | sort -u | wc -l)\" -eq 1 ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    if [ \"$(awk -F, '{print toupper($1)}' $1 | sort -u | wc -l)\" -eq\
+    \ 1 ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    local dict=\"$1\"\n    local lower=0\n    local upper=0\n    local key\n  \
+    \  local value\n    while IFS=, read key value; do\n        if [[ $key =~ [a-z]\
+    \ ]]; then\n            lower=1\n        elif [[ $key =~ [A-Z] ]]; then\n    \
+    \        upper=1\n        else\n            return 1\n        fi\n    done < <(echo\
+    \ \"$dict\")\n    if [[ $lower -eq 1 && $upper -eq 1 ]]; then\n        return\
+    \ 1\n    fi\n    return 0", "    local dict=\"$1\"\n    local lower_keys=0\n \
+    \   local upper_keys=0\n    local lower_keys_regex='^[a-z]+$'\n    local upper_keys_regex='^[A-Z]+$'\n\
+    \    local key\n    local value\n    local IFS=','\n    while read key value;\
+    \ do\n        if [[ $key =~ $lower_keys_regex ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ $key =~ $upper_keys_regex ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        fi\n    done < <(echo \"$dict\")\n    if [[ $lower_keys -eq 0\
+    \ && $upper_keys -eq 0 ]]; then\n        echo \"False\"\n    elif [[ $lower_keys\
+    \ -gt 0 && $upper_keys -gt 0 ]]; then\n        echo \"False\"\n    else\n    \
+    \    echo \"True\"\n    fi", "    local dict=\"$1\"\n    local dict_size=$(wc\
+    \ -l \"$dict\" | awk '{print $1}')\n    if [[ $dict_size -eq 0 ]]; then\n    \
+    \    echo \"False\"\n        return\n    fi\n    local lower_case_keys=$(awk -F,\
+    \ '{print tolower($1)}' \"$dict\" | sort -u)\n    local upper_case_keys=$(awk\
+    \ -F, '{print toupper($1)}' \"$dict\" | sort -u)\n    if [[ \"$lower_case_keys\"\
+    \ == \"$upper_case_keys\" ]]; then\n        echo \"True\"\n    else\n        echo\
+    \ \"False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n  \
+    \      return\n    fi\n    local key_case=$(awk -F, '{print $1}' $1 | head -1\
+    \ | tr '[:upper:]' '[:lower:]')\n    local keys=$(awk -F, '{print $1}' $1 | sort\
+    \ | uniq)\n    local values=$(awk -F, '{print $2}' $1 | sort | uniq)\n    local\
+    \ key_case_check=$(echo \"$keys\" | tr '[:upper:]' '[:lower:]')\n    if [ \"$keys\"\
+    \ == \"$key_case_check\" ]; then\n        echo \"True\"\n    else\n        echo\
+    \ \"False\"\n    fi", "    local dict=\"$1\"\n    local key\n    local value\n\
+    \    local lower_case_keys=0\n    local upper_case_keys=0\n    local lower_case_values=0\n\
+    \    local upper_case_values=0\n    local lower_case_keys_and_values=0\n    local\
+    \ upper_case_keys_and_values=0\n    local lower_case_keys_and_upper_case_values=0\n\
+    \    local upper_case_keys_and_lower_case_values=0\n    local lower_case_keys_and_mixed_case_values=0\n\
+    \    local upper_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_lower_case_values=0\n\
+    \    local mixed_case_keys_and_upper_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_values=0\n    local mixed_case_keys=0\n    local\
+    \ mixed_case_values=0\n    local mixed_case_keys_and_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_lower_case_values=0\n    local mixed_case_keys_and_upper_case_values=0\n\
+    \    local lower_case_keys_and_mixed_case_values=0\n    local upper_case_keys_and_mixed_case_values=0\n\
+    \    local lower_case_keys_and_upper_case_values=0\n    local lower_case_keys_and_lower_case_values=0\n\
+    \    local upper_case_keys_and_upper_case_values=0\n    local upper_case_keys_and_lower_case_values=0\n\
+    \    local lower_case_keys_and_values=0\n    local upper_case_keys_and_values=0\n\
+    \    local lower_case_values=0\n    local upper_case_values=0\n    local lower_case_keys=0\n\
+    \    local upper_case_keys=0\n    local lower_case_keys_and_values=0\n    local\
+    \ upper", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Get the first key\n    first_key=$(head -n 1 $1 | cut -d, -f1)\n\
+    \    # Check if the first key is lowercase\n    if [[ $first_key =~ ^[a-z]+$ ]];\
+    \ then\n        # Check if all keys are lowercase\n        if ! grep -v -e \"\
+    ^[a-z],.*\" $1 > /dev/null; then\n            echo \"True\"\n            return\n\
+    \        fi\n    # Check if the first key is uppercase\n    elif [[ $first_key\
+    \ =~ ^[A-Z]+$ ]]; then\n        # Check if all keys are uppercase\n        if\
+    \ ! grep -v -e \"^[A-Z],.*\" $1 > /dev/null; then\n            echo \"True\"\n\
+    \            return\n        fi\n    fi\n    echo \"False\"", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local lower=0\n\
+    \    local upper=0\n    while IFS=, read -r key value; do\n        if [[ $key\
+    \ =~ ^[a-z]+$ ]]; then\n            lower=1\n        elif [[ $key =~ ^[A-Z]+$\
+    \ ]]; then\n            upper=1\n        else\n            echo \"False\"\n  \
+    \          return\n        fi\n    done < <(echo \"$1\")\n    if [ $lower -eq\
+    \ 1 ] && [ $upper -eq 1 ]; then\n        echo \"False\"\n    else\n        echo\
+    \ \"True\"\n    fi", "  local dict=\"$1\"\n  local lower_keys=0\n  local upper_keys=0\n\
+    \  local key\n  local value\n  while IFS=, read -r key value; do\n    if [[ \"\
+    $key\" =~ ^[a-z]+$ ]]; then\n      (( lower_keys++ ))\n    elif [[ \"$key\" =~\
+    \ ^[A-Z]+$ ]]; then\n      (( upper_keys++ ))\n    else\n      return 1\n    fi\n\
+    \  done < <(echo \"$dict\")\n  if [[ \"$lower_keys\" -gt 0 && \"$upper_keys\"\
+    \ -gt 0 ]]; then\n    return 1\n  fi\n  return 0", "    if [ -z \"$1\" ]; then\n\
+    \        echo \"False\"\n        return\n    fi\n    if [ -z \"$(cat $1 | cut\
+    \ -d, -f1 | grep -v '[a-z]')\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    if [ -z \"$(cat $1 | cut -d, -f1 | grep -v '[A-Z]')\" ]; then\n \
+    \       echo \"True\"\n        return\n    fi\n    echo \"False\"", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [\
+    \ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local\
+    \ lower_keys=$(awk -F, '{print tolower($1)}' \"$1\" | sort -u)\n    local upper_keys=$(awk\
+    \ -F, '{print toupper($1)}' \"$1\" | sort -u)\n    if [ \"$lower_keys\" == \"\
+    $upper_keys\" ]; then\n        echo \"True\"\n    else\n        echo \"False\"\
+    \n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check that all keys are lower case\n    if [ \"$(cut -d, -f1 \"\
+    $1\" | tr '[:upper:]' '[:lower:]' | tr -d '\\n' | wc -c)\" -eq \"$(wc -c \"$1\"\
+    \ | cut -d' ' -f1)\" ]; then\n        echo \"True\"\n        return\n    fi\n\
+    \    # Check that all keys are upper case\n    if [ \"$(cut -d, -f1 \"$1\" | tr\
+    \ '[:lower:]' '[:upper:]' | tr -d '\\n' | wc -c)\" -eq \"$(wc -c \"$1\" | cut\
+    \ -d' ' -f1)\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    local dict=\"$1\"\n    local key\n    local value\n    local\
+    \ lower_keys=0\n    local upper_keys=0\n    local lower_values=0\n    local upper_values=0\n\
+    \    local lower_keys_values=0\n    local upper_keys_values=0\n    local mixed_keys=0\n\
+    \    local mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys_values_lower=0\n\
+    \    local mixed_keys_values_upper=0\n    local mixed_keys_values_mixed=0\n  \
+    \  local mixed_keys_values_lower_upper=0\n    local mixed_keys_values_upper_lower=0\n\
+    \    local mixed_keys_values_lower_mixed=0\n    local mixed_keys_values_upper_mixed=0\n\
+    \    local mixed_keys_values_mixed_lower=0\n    local mixed_keys_values_mixed_upper=0\n\
+    \    local mixed_keys_values_mixed_mixed=0\n    local mixed_keys_values_lower_upper_mixed=0\n\
+    \    local mixed_keys_values_upper_lower_mixed=0\n    local mixed_keys_values_lower_mixed_upper=0\n\
+    \    local mixed_keys_values_upper_mixed_lower=0\n    local mixed_keys_values_mixed_lower_upper=0\n\
+    \    local mixed_keys_values_mixed_upper_lower=0\n    local mixed_keys_values_mixed_lower_mixed=0\n\
+    \    local mixed_keys_values_mixed_upper_mixed=0\n    local mixed_keys_values_mixed_mixed_lower=0\n\
+    \    local mixed_keys_values_mixed_mixed_upper=0\n    local mixed_keys_values_mixed_mixed_mixed=0\n\
+    \    local mixed_keys_values_lower_upper_mixed_mixed=0\n    local mixed_keys_values_upper_lower_mixed_mixed=0\n\
+    \    local mixed_keys_values_lower_mixed_upper_mixed=0\n    local mixed_keys_values_upper_mixed_lower_mixed=0\n\
+    \    local mixed", "    local dict=$1\n    local key\n    local value\n    local\
+    \ lower_keys=0\n    local upper_keys=0\n    local total_keys=0\n    while IFS=,\
+    \ read key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n          \
+    \  lower_keys=$((lower_keys + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n\
+    \            upper_keys=$((upper_keys + 1))\n        fi\n        total_keys=$((total_keys\
+    \ + 1))\n    done < <(echo \"$dict\")\n    if [[ $total_keys -eq 0 ]]; then\n\
+    \        echo \"False\"\n    elif [[ $lower_keys -eq $total_keys ]]; then\n  \
+    \      echo \"True\"\n    elif [[ $upper_keys -eq $total_keys ]]; then\n     \
+    \   echo \"True\"\n    else\n        echo \"False\"\n    fi", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -f \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -s \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [ $(wc -l\
+    \ \"$1\" | awk '{print $1}') -eq 1 ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are upper case\n    if [ $(grep -v '[A-Z]' \"\
+    $1\" | wc -l | awk '{print $1}') -eq 0 ]; then\n        echo \"True\"\n      \
+    \  return\n    fi\n    # Check if all keys are lower case\n    if [ $(grep -v\
+    \ '[a-z]' \"$1\" | wc -l | awk '{print $1}') -eq 0 ]; then\n        echo \"True\"\
+    \n        return\n    fi\n    echo \"False\"", "    local dict=$1\n    local key\n\
+    \    local value\n    local lower_keys=0\n    local upper_keys=0\n    local lower_key_count=0\n\
+    \    local upper_key_count=0\n    local key_count=0\n    local lower_keys_found=0\n\
+    \    local upper_keys_found=0\n    local lower_keys_not_found=0\n    local upper_keys_not_found=0\n\
+    \    local lower_keys_found_count=0\n    local upper_keys_found_count=0\n    local\
+    \ lower_keys_not_found_count=0\n    local upper_keys_not_found_count=0\n    local\
+    \ lower_keys_found_list=\"\"\n    local upper_keys_found_list=\"\"\n    local\
+    \ lower_keys_not_found_list=\"\"\n    local upper_keys_not_found_list=\"\"\n \
+    \   local lower_keys_found_list_count=0\n    local upper_keys_found_list_count=0\n\
+    \    local lower_keys_not_found_list_count=0\n    local upper_keys_not_found_list_count=0\n\
+    \    local lower_keys_found_list_count_max=0\n    local upper_keys_found_list_count_max=0\n\
+    \    local lower_keys_not_found_list_count_max=0\n    local upper_keys_not_found_list_count_max=0\n\
+    \    local lower_keys_found_list_count_max_key=\"\"\n    local upper_keys_found_list_count_max_key=\"\
+    \"\n    local lower_keys_not_found_list_count_max_key=\"\"\n    local upper_keys_not_found_list_count_max_key=\"\
+    \"\n    local lower_keys_found_list_count_max_value=\"\"\n    local upper_keys_found_list_count_max_value=\"\
+    \"\n    local lower_keys_not_found_list_count_max_value=\"\"\n    local upper_keys_not_found_list_count_max_value=\"\
+    \"\n    local lower_keys_found_list_count_max_key_value=\"\"\n    local upper_keys_found_list_count_max_key_value=\"\
+    \"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n   \
+    \ fi\n    # Check if all keys are lower case\n    if [ \"$(echo \"$1\" | awk -F,\
+    \ '{print $1}' | tr '[:upper:]' '[:lower:]' | sort | uniq -c | awk '{print $1}')\"\
+    \ -eq \"$(echo \"$1\" | awk -F, '{print $1}' | wc -l)\" ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    # Check if all keys are upper case\n \
+    \   if [ \"$(echo \"$1\" | awk -F, '{print $1}' | tr '[:lower:]' '[:upper:]' |\
+    \ sort | uniq -c | awk '{print $1}')\" -eq \"$(echo \"$1\" | awk -F, '{print $1}'\
+    \ | wc -l)\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    local dict=$1\n    local key\n    local value\n    local lower_count=0\n\
+    \    local upper_count=0\n    local total_count=0\n    while IFS=, read key value;\
+    \ do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_count=$((lower_count\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_count=$((upper_count\
+    \ + 1))\n        fi\n        total_count=$((total_count + 1))\n    done < <(echo\
+    \ \"$dict\")\n    if [[ $total_count -eq 0 ]]; then\n        echo \"False\"\n\
+    \    elif [[ $lower_count -eq $total_count ]]; then\n        echo \"True\"\n \
+    \   elif [[ $upper_count -eq $total_count ]]; then\n        echo \"True\"\n  \
+    \  else\n        echo \"False\"\n    fi", "    local dict=\"$1\"\n    local lower_keys=0\n\
+    \    local upper_keys=0\n    local key\n    local value\n    while IFS=, read\
+    \ -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_keys\" -gt 0 && \"$upper_keys\"\
+    \ -gt 0 ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n  \
+    \  fi", "    local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local key\n    local value\n    while IFS=, read -r key value; do\n     \
+    \   if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_keys\" -eq 0 && \"$upper_keys\"\
+    \ -eq 0 ]]; then\n        echo \"False\"\n    elif [[ \"$lower_keys\" -gt 0 &&\
+    \ \"$upper_keys\" -gt 0 ]]; then\n        echo \"False\"\n    else\n        echo\
+    \ \"True\"\n    fi", "    local dict=\"$1\"\n    local key\n    local value\n\
+    \    local lower_keys=0\n    local upper_keys=0\n    local lower_values=0\n  \
+    \  local upper_values=0\n    local lower_keys_values=0\n    local upper_keys_values=0\n\
+    \    local lower_keys_upper_values=0\n    local upper_keys_lower_values=0\n  \
+    \  local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ lower_keys_mixed_values=0\n    local upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys_mixed_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local lower_keys_lower_values=0\n\
+    \    local lower_keys_upper_values=0\n    local lower_keys_mixed_values=0\n  \
+    \  local upper_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ upper_keys_mixed_values=0\n    local lower_keys_values=0\n    local upper_keys_values=0\n\
+    \    local lower_keys_upper_values=0\n    local upper_keys_lower_values=0\n  \
+    \  local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ lower_keys_mixed_values=0\n    local upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local lower_keys_values=0\n    local upper_keys_values=0\n    local lower_keys_upper_values=0\n\
+    \    local upper_keys_lower_values=0\n    local lower_keys_lower_values=", " \
+    \   local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n    local\
+    \ key\n    local value\n    while IFS=, read -r key value; do\n        if [[ \"\
+    $key\" =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n    \
+    \    elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ $lower_keys -gt 0 && $upper_keys\
+    \ -gt 0 ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n  \
+    \  fi", "    local dict=\"$1\"\n    local key\n    local value\n    local lower_case_keys=0\n\
+    \    local upper_case_keys=0\n    local lower_case_values=0\n    local upper_case_values=0\n\
+    \    local lower_case_keys_and_values=0\n    local upper_case_keys_and_values=0\n\
+    \    local lower_case_keys_and_upper_case_values=0\n    local upper_case_keys_and_lower_case_values=0\n\
+    \    local lower_case_keys_and_lower_case_values=0\n    local upper_case_keys_and_upper_case_values=0\n\
+    \    local lower_case_keys_and_mixed_case_values=0\n    local upper_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_lower_case_values=0\n    local mixed_case_keys_and_upper_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys_and_mixed_case_", "    # Check if the file is empty\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \n    # Check if all keys are lower case\n    if [ \"$(awk -F, '{print tolower($1)}'\
+    \ \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n\n    # Check if all keys are upper case\n    if [ \"$(awk -F, '{print\
+    \ toupper($1)}' \"$1\" | sort -u | wc -l)\" -eq 1 ]; then\n        echo \"True\"\
+    \n        return\n    fi\n\n    # If we get here, then the keys are mixed case\n\
+    \    echo \"False\"", "    local dict=\"$1\"\n    local lower_keys=0\n    local\
+    \ upper_keys=0\n    local key\n    local value\n    local IFS=','\n    while read\
+    \ key value; do\n        if [[ \"$key\" =~ [a-z] ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ [A-Z] ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_keys\" -gt\
+    \ 0 && \"$upper_keys\" -gt 0 ]]; then\n        echo \"False\"\n    else\n    \
+    \    echo \"True\"\n    fi", "    local dict=\"$1\"\n    local key\n    local\
+    \ value\n    local lower_count=0\n    local upper_count=0\n    local total_count=0\n\
+    \    local lower_keys\n    local upper_keys\n    local lower_values\n    local\
+    \ upper_values\n    local lower_key_values\n    local upper_key_values\n    local\
+    \ lower_value_keys\n    local upper_value_keys\n    local lower_value_key_values\n\
+    \    local upper_value_key_values\n    local lower_key_value_keys\n    local upper_key_value_keys\n\
+    \    local lower_key_value_key_values\n    local upper_key_value_key_values\n\
+    \    local lower_key_value_key_value_keys\n    local upper_key_value_key_value_keys\n\
+    \    local lower_key_value_key_value_key_values\n    local upper_key_value_key_value_key_values\n\
+    \    local lower_key_value_key_value_key_value_keys\n    local upper_key_value_key_value_key_value_keys\n\
+    \    local lower_key_value_key_value_key_value_key_values\n    local upper_key_value_key_value_key_value_key_values\n\
+    \    local lower_key_value_key_value_key_value_key_value_keys\n    local upper_key_value_key_value_key_value_key_value_keys\n\
+    \    local lower_key_value_key_value_key_value_key_value_key_values\n    local\
+    \ upper_key_value_key_value_key_value_key_value_key_values\n    local lower_key_value_key_value_key_value_key_value_key_value_keys\n\
+    \    local upper_key_value_key_value_key_value_key_value_key_value_keys\n    local\
+    \ lower_key_value_key_value_key_value_key_value_key_value_key_values\n    local\
+    \ upper_key_value_key_value_key_value_key_value_key_value_key_values\n    local\
+    \ lower_key_value_key_value_key_value", "    if [ -z \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    lower_count=$(awk -F, '{print tolower($1)}'\
+    \ \"$1\" | sort | uniq | wc -l)\n    upper_count=$(awk -F, '{print toupper($1)}'\
+    \ \"$1\" | sort | uniq | wc -l)\n    if [ \"$lower_count\" -eq \"$upper_count\"\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \   local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n    local\
+    \ key\n    local value\n    local IFS=','\n    while read key value; do\n    \
+    \    if [[ $key =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n\
+    \        elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$dict\")\n    if [[ $lower_keys -gt 0 && $upper_keys\
+    \ -gt 0 ]]; then\n        echo \"False\"\n    else\n        echo \"True\"\n  \
+    \  fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    local lower_keys=0\n    local upper_keys=0\n    while IFS=, read\
+    \ -r key value; do\n        if [[ $key =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        fi\n    done < <(echo \"$1\")\n    if [ $lower_keys -eq 0 ] ||\
+    \ [ $upper_keys -eq 0 ]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    local dict=\"$1\"\n    local key\n    local value\n   \
+    \ local lower=0\n    local upper=0\n    local empty=0\n    local total=0\n   \
+    \ while IFS=, read -r key value; do\n        if [[ -z \"$key\" ]]; then\n    \
+    \        empty=1\n            continue\n        fi\n        total=$((total + 1))\n\
+    \        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower=$((lower + 1))\n\
+    \        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper=$((upper + 1))\n\
+    \        else\n            return 1\n        fi\n    done < <(echo \"$dict\")\n\
+    \    if [[ \"$empty\" -eq 1 ]]; then\n        return 1\n    fi\n    if [[ \"$lower\"\
+    \ -eq \"$total\" ]] || [[ \"$upper\" -eq \"$total\" ]]; then\n        return 0\n\
+    \    fi\n    return 1", "    local dict=\"$1\"\n    local dict_size=$(wc -l \"\
+    $dict\" | awk '{print $1}')\n    if [[ $dict_size -eq 0 ]]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    local lower_case_keys=$(awk -F, '{print\
+    \ tolower($1)}' \"$dict\" | sort -u)\n    local upper_case_keys=$(awk -F, '{print\
+    \ toupper($1)}' \"$dict\" | sort -u)\n    local lower_case_keys_size=$(wc -l <(echo\
+    \ \"$lower_case_keys\"))\n    local upper_case_keys_size=$(wc -l <(echo \"$upper_case_keys\"\
+    ))\n    if [[ $lower_case_keys_size -eq $dict_size ]]; then\n        echo \"True\"\
+    \n    elif [[ $upper_case_keys_size -eq $dict_size ]]; then\n        echo \"True\"\
+    \n    else\n        echo \"False\"\n    fi", "    local dict=$1\n    local key\n\
+    \    local value\n    local lower_keys=0\n    local upper_keys=0\n    local key_count=0\n\
+    \    local lower_key_count=0\n    local upper_key_count=0\n    local lower_value_count=0\n\
+    \    local upper_value_count=0\n    local value_count=0\n    local lower_key_value_count=0\n\
+    \    local upper_key_value_count=0\n    local key_value_count=0\n    local lower_key_value_count_percent\n\
+    \    local upper_key_value_count_percent\n    local key_value_count_percent\n\
+    \    local lower_key_count_percent\n    local upper_key_count_percent\n    local\
+    \ key_count_percent\n    local lower_value_count_percent\n    local upper_value_count_percent\n\
+    \    local value_count_percent\n    local lower_key_value_count_percent_diff\n\
+    \    local upper_key_value_count_percent_diff\n    local key_value_count_percent_diff\n\
+    \    local lower_key_count_percent_diff\n    local upper_key_count_percent_diff\n\
+    \    local key_count_percent_diff\n    local lower_value_count_percent_diff\n\
+    \    local upper_value_count_percent_diff\n    local value_count_percent_diff\n\
+    \    local lower_key_value_count_percent_diff_abs\n    local upper_key_value_count_percent_diff_abs\n\
+    \    local key_value_count_percent_diff_abs\n    local lower_key_count_percent_diff_abs\n\
+    \    local upper_key_count_percent_diff_abs\n    local key_count_percent_diff_abs\n\
+    \    local lower_value_count_percent_diff_abs\n    local upper_value_count_percent_diff_abs\n\
+    \    local value_count_percent_diff_abs\n    local lower_key_value_count_percent_diff_abs_percent\n\
+    \    local upper_key_value_count_percent_diff_abs_percent\n    local key_value_count_percent_diff_abs_percent\n\
+    \    local lower_key_count_percent_diff_abs_percent", "    local dict=\"$1\"\n\
+    \    local key\n    local value\n    local lower_case=0\n    local upper_case=0\n\
+    \    local empty=0\n    local total=0\n    while IFS=, read -r key value; do\n\
+    \        if [[ -z \"$key\" ]]; then\n            continue\n        fi\n      \
+    \  if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_case=$((lower_case +\
+    \ 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_case=$((upper_case\
+    \ + 1))\n        fi\n        total=$((total + 1))\n    done < <(echo \"$dict\"\
+    )\n    if [[ $total -eq 0 ]]; then\n        empty=1\n    fi\n    if [[ $lower_case\
+    \ -eq $total ]]; then\n        echo \"True\"\n    elif [[ $upper_case -eq $total\
+    \ ]]; then\n        echo \"True\"\n    elif [[ $empty -eq 1 ]]; then\n       \
+    \ echo \"False\"\n    else\n        echo \"False\"\n    fi", "  local dict=\"\
+    $1\"\n  local lower_keys=$(awk -F, '{print tolower($1)}' \"$dict\" | sort | uniq)\n\
+    \  local upper_keys=$(awk -F, '{print toupper($1)}' \"$dict\" | sort | uniq)\n\
+    \  if [[ \"$lower_keys\" == \"$upper_keys\" ]]; then\n    echo \"True\"\n  else\n\
+    \    echo \"False\"\n  fi", "  local dict=\"$1\"\n  local lower_keys=0\n  local\
+    \ upper_keys=0\n  local total_keys=0\n  local key\n  local value\n  while IFS=,\
+    \ read -r key value; do\n    total_keys=$((total_keys + 1))\n    if [[ \"$key\"\
+    \ =~ ^[a-z]+$ ]]; then\n      lower_keys=$((lower_keys + 1))\n    elif [[ \"$key\"\
+    \ =~ ^[A-Z]+$ ]]; then\n      upper_keys=$((upper_keys + 1))\n    fi\n  done <\
+    \ <(echo \"$dict\")\n  if [[ \"$total_keys\" -eq 0 ]]; then\n    echo \"False\"\
+    \n  elif [[ \"$lower_keys\" -eq \"$total_keys\" ]]; then\n    echo \"True\"\n\
+    \  elif [[ \"$upper_keys\" -eq \"$total_keys\" ]]; then\n    echo \"True\"\n \
+    \ else\n    echo \"False\"\n  fi", "  local dict=\"$1\"\n  local key\n  local\
+    \ value\n  local lower_count=0\n  local upper_count=0\n  local total_count=0\n\
+    \  while IFS=, read -r key value; do\n    if [[ \"$key\" =~ [a-z] ]]; then\n \
+    \     ((lower_count++))\n    elif [[ \"$key\" =~ [A-Z] ]]; then\n      ((upper_count++))\n\
+    \    fi\n    ((total_count++))\n  done < <(echo \"$dict\")\n  if [[ $total_count\
+    \ -eq 0 ]]; then\n    echo \"False\"\n  elif [[ $lower_count -eq $total_count\
+    \ ]]; then\n    echo \"True\"\n  elif [[ $upper_count -eq $total_count ]]; then\n\
+    \    echo \"True\"\n  else\n    echo \"False\"\n  fi", "    if [ -z \"$1\" ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    if [ ! -f \"$1\" ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    # Check that all keys\
+    \ are lower case\n    if [ \"$(awk -F, '{print tolower($1)}' $1 | sort -u | wc\
+    \ -l)\" -eq \"$(wc -l $1 | awk '{print $1}')\" ]; then\n        echo \"True\"\n\
+    \        return\n    fi\n    # Check that all keys are upper case\n    if [ \"\
+    $(awk -F, '{print toupper($1)}' $1 | sort -u | wc -l)\" -eq \"$(wc -l $1 | awk\
+    \ '{print $1}')\" ]; then\n        echo \"True\"\n        return\n    fi\n   \
+    \ echo \"False\"", "    local dict=\"$1\"\n    local -a keys\n    local -a values\n\
+    \    local -a lower_keys\n    local -a upper_keys\n    local -a lower_values\n\
+    \    local -a upper_values\n    local -a lower_keys_values\n    local -a upper_keys_values\n\
+    \    local -a lower_keys_values_sorted\n    local -a upper_keys_values_sorted\n\
+    \    local -a lower_keys_values_sorted_unique\n    local -a upper_keys_values_sorted_unique\n\
+    \    local -a lower_keys_values_sorted_unique_joined\n    local -a upper_keys_values_sorted_unique_joined\n\
+    \    local lower_keys_values_sorted_unique_joined_string\n    local upper_keys_values_sorted_unique_joined_string\n\
+    \    local lower_keys_values_sorted_unique_joined_string_length\n    local upper_keys_values_sorted_unique_joined_string_length\n\
+    \    local lower_keys_values_sorted_unique_joined_string_length_difference\n \
+    \   local upper_keys_values_sorted_unique_joined_string_length_difference\n  \
+    \  local lower_keys_values_sorted_unique_joined_string_length_difference_abs\n\
+    \    local upper_keys_values_sorted_unique_joined_string_length_difference_abs\n\
+    \    local lower_keys_values_sorted_unique_joined_string_length_difference_abs_max\n\
+    \    local upper_keys_values_sorted_unique_joined_string_length_difference_abs_max\n\
+    \    local lower_keys_values_sorted_unique_joined_string_length_difference_abs_max_threshold\n\
+    \    local upper_keys_values_sorted_unique_joined_string_length_difference_abs_max_threshold\n\
+    \    local lower_keys_values_sorted_unique_joined_string_length_difference_abs_max_threshold_percent\n\
+    \    local upper_keys_values_sorted_unique_joined_string_length_difference_abs_max_threshold_percent\n\
+    \    local lower_keys_values_sorted_unique_", "    if [ -z \"$1\" ]; then\n  \
+    \      echo \"False\"\n        return\n    fi\n    local key\n    local value\n\
+    \    local lower_keys=0\n    local upper_keys=0\n    while IFS=, read key value;\
+    \ do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            echo \"False\"\n            return\n      \
+    \  fi\n    done < <(echo \"$1\")\n    if [ $lower_keys -eq 0 ] || [ $upper_keys\
+    \ -eq 0 ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n   \
+    \ fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n \
+    \   fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # check for all lower case\n    if [ \"$(cut -d, -f1 \"$1\" | tr\
+    \ '[:upper:]' '[:lower:]' | diff - \"$1\" | wc -l)\" -eq 0 ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    # check for all upper case\n    if [ \"\
+    $(cut -d, -f1 \"$1\" | tr '[:lower:]' '[:upper:]' | diff - \"$1\" | wc -l)\" -eq\
+    \ 0 ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    local key\n    local value\n    local lower_case=0\n    local upper_case=0\n\
+    \    while IFS=, read -r key value; do\n        if [[ \"$key\" =~ [a-z] ]]; then\n\
+    \            lower_case=$((lower_case + 1))\n        fi\n        if [[ \"$key\"\
+    \ =~ [A-Z] ]]; then\n            upper_case=$((upper_case + 1))\n        fi\n\
+    \    done < \"$1\"\n    if [ \"$lower_case\" -eq 0 ] || [ \"$upper_case\" -eq\
+    \ 0 ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    # Check for empty dictionary\n    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n\n    # Check for all lower case\n    if [ \"$(echo\
+    \ \"$1\" | tr '[:upper:]' '[:lower:]')\" == \"$1\" ]; then\n        echo \"True\"\
+    \n        return\n    fi\n\n    # Check for all upper case\n    if [ \"$(echo\
+    \ \"$1\" | tr '[:lower:]' '[:upper:]')\" == \"$1\" ]; then\n        echo \"True\"\
+    \n        return\n    fi\n\n    # If we get here, the dictionary is mixed case\n\
+    \    echo \"False\"", "    local csv=\"$1\"\n    local key\n    local value\n\
+    \    local lower_case_keys=0\n    local upper_case_keys=0\n    local lower_case_values=0\n\
+    \    local upper_case_values=0\n    local lower_case_keys_and_values=0\n    local\
+    \ upper_case_keys_and_values=0\n    local lower_case_keys_and_upper_case_values=0\n\
+    \    local upper_case_keys_and_lower_case_values=0\n    local lower_case_keys_and_mixed_case_values=0\n\
+    \    local upper_case_keys_and_mixed_case_values=0\n    local mixed_case_keys_and_lower_case_values=0\n\
+    \    local mixed_case_keys_and_upper_case_values=0\n    local mixed_case_keys_and_mixed_case_values=0\n\
+    \    local mixed_case_keys=0\n    local mixed_case_values=0\n    local mixed_case_keys_and_values=0\n\
+    \    local key_count=0\n    local value_count=0\n    local key_value_count=0\n\
+    \    local key_value_pair\n    local key_value_pairs\n    local key_value_pairs_count\n\
+    \    local key_value_pair_count=0\n    local key_value_pair_count_lower_case_keys=0\n\
+    \    local key_value_pair_count_upper_case_keys=0\n    local key_value_pair_count_lower_case_values=0\n\
+    \    local key_value_pair_count_upper_case_values=0\n    local key_value_pair_count_lower_case_keys_and_values=0\n\
+    \    local key_value_pair_count_upper_case_keys_and_values=0\n    local key_value_pair_count_lower_case_keys_and_upper_case_values=0\n\
+    \    local key_value_pair_count_upper_case_keys_and_lower_case_values=0\n    local\
+    \ key_value_pair_count_lower_case_keys_and_mixed_case_values=0\n    local", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n \
+    \   lower=0\n    upper=0\n    while IFS=, read -r key value; do\n        if [[\
+    \ $key =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n        elif [[ $key\
+    \ =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n        else\n       \
+    \     echo \"False\"\n            return\n        fi\n    done < <(echo \"$1\"\
+    )\n    if [ $lower -eq 0 -o $upper -eq 0 ]; then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    # Get the keys\n    keys=$(cut -d, -f1 $1)\n\
+    \    # Get the values\n    values=$(cut -d, -f2 $1)\n    # Check if all keys are\
+    \ lower case\n    if [ \"$(echo $keys | tr '[:upper:]' '[:lower:]')\" = \"$keys\"\
+    \ ]; then\n        echo \"True\"\n        return\n    fi\n    # Check if all keys\
+    \ are upper case\n    if [ \"$(echo $keys | tr '[:lower:]' '[:upper:]')\" = \"\
+    $keys\" ]; then\n        echo \"True\"\n        return\n    fi\n    # Check if\
+    \ all values are lower case\n    if [ \"$(echo $values | tr '[:upper:]' '[:lower:]')\"\
+    \ = \"$values\" ]; then\n        echo \"True\"\n        return\n    fi\n    #\
+    \ Check if all values are upper case\n    if [ \"$(echo $values | tr '[:lower:]'\
+    \ '[:upper:]')\" = \"$values\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    # Check if all keys are lower case\n    if [ \"\
+    $(echo \"$1\" | cut -d, -f1 | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]' | tr '[:upper:]' '[:lower:]'\
+    \ | tr '[:upper", "    local dict=\"$1\"\n    local key\n    local value\n   \
+    \ local lower_keys=0\n    local upper_keys=0\n    local lower_keys_count=0\n \
+    \   local upper_keys_count=0\n    local lower_values=0\n    local upper_values=0\n\
+    \    local lower_values_count=0\n    local upper_values_count=0\n    local lower_keys_values=0\n\
+    \    local upper_keys_values=0\n    local lower_keys_values_count=0\n    local\
+    \ upper_keys_values_count=0\n    local lower_values_keys=0\n    local upper_values_keys=0\n\
+    \    local lower_values_keys_count=0\n    local upper_values_keys_count=0\n  \
+    \  local lower_keys_values_count=0\n    local upper_keys_values_count=0\n    local\
+    \ lower_values_keys_count=0\n    local upper_values_keys_count=0\n    local lower_keys_values_count=0\n\
+    \    local upper_keys_values_count=0\n    local lower_values_keys_count=0\n  \
+    \  local upper_values_keys_count=0\n    local lower_keys_values_count=0\n    local\
+    \ upper_keys_values_count=0\n    local lower_values_keys_count=0\n    local upper_values_keys_count=0\n\
+    \    local lower_keys_values_count=0\n    local upper_keys_values_count=0\n  \
+    \  local lower_values_keys_count=0\n    local upper_values_keys_count=0\n    local\
+    \ lower_keys_values_count=0\n    local upper_keys_values_count=0\n    local lower_values_keys_count=0\n\
+    \    local upper_values_keys_count=0\n    local lower_keys_values_count=0\n  \
+    \  local upper_keys_values_count=0\n    local lower_values_keys_count=0\n    local\
+    \ upper_values_keys_count=0\n    local lower_keys_values_count=0\n    local upper_keys_values_count=0\n\
+    \    local lower_values_keys_count=0\n    local upper_values_keys_count=0", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n \
+    \   if [ -z \"$(echo \"$1\" | cut -d, -f1 | grep -v '[a-z]')\" ]; then\n     \
+    \   echo \"True\"\n        return\n    fi\n    if [ -z \"$(echo \"$1\" | cut -d,\
+    \ -f1 | grep -v '[A-Z]')\" ]; then\n        echo \"True\"\n        return\n  \
+    \  fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    # Check if all keys are lower case\n    if [ \"\
+    $(cat $1 | cut -d, -f1 | tr '[:upper:]' '[:lower:]' | cmp -s - $1)\" ]; then\n\
+    \        echo \"False\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    if [ \"$(cat $1 | cut -d, -f1 | tr '[:lower:]' '[:upper:]' | cmp -s\
+    \ - $1)\" ]; then\n        echo \"False\"\n        return\n    fi\n    echo \"\
+    True\"", "  local dict=\"$1\"\n  local lower_keys=0\n  local upper_keys=0\n  local\
+    \ key\n  local value\n  while IFS=, read -r key value; do\n    if [[ \"$key\"\
+    \ =~ [a-z] ]]; then\n      lower_keys=$((lower_keys + 1))\n    elif [[ \"$key\"\
+    \ =~ [A-Z] ]]; then\n      upper_keys=$((upper_keys + 1))\n    fi\n  done < <(echo\
+    \ \"$dict\")\n  if [[ \"$lower_keys\" -gt 0 && \"$upper_keys\" -gt 0 ]]; then\n\
+    \    echo \"False\"\n  else\n    echo \"True\"\n  fi", "    if [ $# -ne 1 ]; then\n\
+    \        echo \"Usage: $0 <csv_file>\"\n        return 1\n    fi\n    if [ ! -f\
+    \ $1 ]; then\n        echo \"File $1 does not exist\"\n        return 1\n    fi\n\
+    \    # Get the first key\n    key=$(head -n 1 $1 | cut -d, -f1)\n    # Check if\
+    \ it is lower case\n    if [[ $key =~ ^[a-z]+$ ]]; then\n        # It is lower\
+    \ case, check all keys are lower case\n        if grep -vq '^[a-z]*,.*' $1; then\n\
+    \            echo \"False\"\n            return 0\n        fi\n    else\n    \
+    \    # It is not lower case, check all keys are upper case\n        if grep -vq\
+    \ '^[A-Z]*,.*' $1; then\n            echo \"False\"\n            return 0\n  \
+    \      fi\n    fi\n    echo \"True\"\n    return 0", "    local dict=\"$1\"\n\
+    \    local lower_keys=$(awk -F, '{print $1}' \"$dict\" | grep -c '^[a-z]*$')\n\
+    \    local upper_keys=$(awk -F, '{print $1}' \"$dict\" | grep -c '^[A-Z]*$')\n\
+    \    local total_keys=$(awk -F, '{print $1}' \"$dict\" | wc -l)\n    if [ \"$total_keys\"\
+    \ -eq 0 ]; then\n        echo \"False\"\n    elif [ \"$lower_keys\" -eq \"$total_keys\"\
+    \ ]; then\n        echo \"True\"\n    elif [ \"$upper_keys\" -eq \"$total_keys\"\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \   local dict=$1\n    local dict_keys=$(echo $dict | cut -d, -f1)\n    local\
+    \ dict_values=$(echo $dict | cut -d, -f2)\n    local dict_keys_lower=$(echo $dict_keys\
+    \ | tr '[:upper:]' '[:lower:]')\n    local dict_keys_upper=$(echo $dict_keys |\
+    \ tr '[:lower:]' '[:upper:]')\n    if [[ $dict_keys == $dict_keys_lower ]]; then\n\
+    \        echo True\n    elif [[ $dict_keys == $dict_keys_upper ]]; then\n    \
+    \    echo True\n    else\n        echo False\n    fi", "    if [ -z \"$1\" ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    # Get the first key\
+    \ and check if it is upper or lower case\n    first_key=$(head -n 1 $1 | cut -d,\
+    \ -f1)\n    if [[ $first_key =~ ^[A-Z]+$ ]]; then\n        # First key is upper\
+    \ case, check if all keys are upper case\n        if grep -q -v '^[A-Z]*,.*' $1;\
+    \ then\n            echo \"False\"\n            return\n        fi\n    elif [[\
+    \ $first_key =~ ^[a-z]+$ ]]; then\n        # First key is lower case, check if\
+    \ all keys are lower case\n        if grep -q -v '^[a-z]*,.*' $1; then\n     \
+    \       echo \"False\"\n            return\n        fi\n    else\n        # First\
+    \ key is not upper or lower case\n        echo \"False\"\n        return\n   \
+    \ fi\n    echo \"True\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    # Get the keys\n    keys=$(cut -d, -f1 \"$1\")\n\
+    \    # Get the values\n    values=$(cut -d, -f2 \"$1\")\n    # Check if all keys\
+    \ are lower case\n    if [ \"$(echo \"$keys\" | tr '[:upper:]' '[:lower:]')\"\
+    \ == \"$keys\" ]; then\n        # Check if all values are lower case\n       \
+    \ if [ \"$(echo \"$values\" | tr '[:upper:]' '[:lower:]')\" == \"$values\" ];\
+    \ then\n            echo \"True\"\n            return\n        fi\n    fi\n  \
+    \  # Check if all keys are upper case\n    if [ \"$(echo \"$keys\" | tr '[:lower:]'\
+    \ '[:upper:]')\" == \"$keys\" ]; then\n        # Check if all values are upper\
+    \ case\n        if [ \"$(echo \"$values\" | tr '[:lower:]' '[:upper:]')\" == \"\
+    $values\" ]; then\n            echo \"True\"\n            return\n        fi\n\
+    \    fi\n    echo \"False\"", "    local csv=$1\n    local key\n    local value\n\
+    \    local lower_keys=0\n    local upper_keys=0\n    local lower_key\n    local\
+    \ upper_key\n    local lower_value\n    local upper_value\n    local lower_values=0\n\
+    \    local upper_values=0\n    local lower_count\n    local upper_count\n    local\
+    \ lower_total\n    local upper_total\n    local lower_percent\n    local upper_percent\n\
+    \    local lower_threshold=90\n    local upper_threshold=90\n    local lower_threshold_met=0\n\
+    \    local upper_threshold_met=0\n    local lower_threshold_met_msg\n    local\
+    \ upper_threshold_met_msg\n    local lower_threshold_not_met_msg\n    local upper_threshold_not_met_msg\n\
+    \    local lower_threshold_met_msg_color\n    local upper_threshold_met_msg_color\n\
+    \    local lower_threshold_not_met_msg_color\n    local upper_threshold_not_met_msg_color\n\
+    \    local lower_threshold_met_msg_color_code\n    local upper_threshold_met_msg_color_code\n\
+    \    local lower_threshold_not_met_msg_color_code\n    local upper_threshold_not_met_msg_color_code\n\
+    \    local lower_threshold_met_msg_color_code_default=32\n    local upper_threshold_met_msg_color_code_default=32\n\
+    \    local lower_threshold_not_met_msg_color_code_default=31\n    local upper_threshold_not_met_msg_color_code_default=31\n\
+    \    local lower_threshold_met_msg_color_code_default_msg\n    local upper_threshold_met_msg_color_code_default_msg\n\
+    \    local lower_threshold_not_met_msg_color_code_default_msg\n    local upper_threshold_not_met_msg_color_code_default_msg\n\
+    \    local lower_threshold_met_msg_color_code_msg\n    local upper_threshold_met_msg_color_code_msg\n\
+    \    local", "    if [[ -z $1 ]]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # Check if all keys are lowercase\n    if [[ $(awk -F, '{print tolower($1)}'\
+    \ $1) == $(awk -F, '{print $1}' $1) ]]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    # Check if all keys are uppercase\n    if [[ $(awk -F, '{print toupper($1)}'\
+    \ $1) == $(awk -F, '{print $1}' $1) ]]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    lower=0\n    upper=0\n    while IFS=, read -r key\
+    \ value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n\
+    \        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n\
+    \        else\n            echo \"False\"\n            return\n        fi\n  \
+    \  done < <(echo \"$1\")\n    if [ $lower -eq 0 ] || [ $upper -eq 0 ]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local\
+    \ dict=$1\n    local key\n    local value\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local lower_values=0\n    local upper_values=0\n    local lower_keys_values=0\n\
+    \    local upper_keys_values=0\n    local lower_keys_upper_values=0\n    local\
+    \ upper_keys_lower_values=0\n    local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n\
+    \    local lower_keys_mixed_values=0\n    local upper_keys_mixed_values=0\n  \
+    \  local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local\
+    \ mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys=0\n\
+    \    local mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys_lower_values=0\n    local\
+    \ mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n\
+    \    local mixed_keys=0\n    local mixed_values=0\n    local mixed_keys_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n  \
+    \  local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys=0\n\
+    \    local mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys_", "    if [[ -z $1 ]]; then\n\
+    \        echo \"False\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    if [[ $(cut -d, -f1 $1 | tr '[:upper:]' '[:lower:]' | grep -v '[a-z]')\
+    \ ]]; then\n        # Check if all keys are lower case\n        if [[ $(cut -d,\
+    \ -f1 $1 | tr '[:lower:]' '[:upper:]' | grep -v '[A-Z]') ]]; then\n          \
+    \  echo \"False\"\n        else\n            echo \"True\"\n        fi\n    else\n\
+    \        echo \"True\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ -z \"$(cat $1 | cut -d, -f1 | grep -v\
+    \ '[A-Z]')\" ]; then\n        echo \"True\"\n    elif [ -z \"$(cat $1 | cut -d,\
+    \ -f1 | grep -v '[a-z]')\" ]; then\n        echo \"True\"\n    else\n        echo\
+    \ \"False\"\n    fi", "    local dict=\"$1\"\n    local lower_keys=0\n    local\
+    \ upper_keys=0\n    local key\n    local value\n    local IFS=','\n    while read\
+    \ key value; do\n        if [[ \"$key\" =~ [a-z] ]]; then\n            lower_keys=$((lower_keys\
+    \ + 1))\n        elif [[ \"$key\" =~ [A-Z] ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_keys\" -gt\
+    \ 0 && \"$upper_keys\" -gt 0 ]]; then\n        echo \"False\"\n    else\n    \
+    \    echo \"True\"\n    fi", "    local dict=\"$1\"\n    local lower_keys=0\n\
+    \    local upper_keys=0\n    local total_keys=0\n    local key\n    local value\n\
+    \    while IFS=, read -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]];\
+    \ then\n            lower_keys=$((lower_keys + 1))\n        elif [[ \"$key\" =~\
+    \ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n        fi\n\
+    \        total_keys=$((total_keys + 1))\n    done < <(echo \"$dict\")\n    if\
+    \ [[ $total_keys -eq 0 ]]; then\n        echo \"False\"\n    elif [[ $lower_keys\
+    \ -eq $total_keys ]]; then\n        echo \"True\"\n    elif [[ $upper_keys -eq\
+    \ $total_keys ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\
+    \n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    # check if all keys are lower case\n    if [ \"$(cut -d, -f1 \"$1\"\
+    \ | tr '[:upper:]' '[:lower:]' | cmp -s - \"$1\")\" ]; then\n        echo \"True\"\
+    \n        return\n    fi\n    # check if all keys are upper case\n    if [ \"\
+    $(cut -d, -f1 \"$1\" | tr '[:lower:]' '[:upper:]' | cmp -s - \"$1\")\" ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    echo \"False\"", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    while\
+    \ IFS=, read -r key value; do\n        if [ -z \"$key\" ]; then\n            echo\
+    \ \"False\"\n            return\n        fi\n        if [[ \"$key\" =~ [A-Z] ]];\
+    \ then\n            if [[ \"$key\" =~ [a-z] ]]; then\n                echo \"\
+    False\"\n                return\n            fi\n        else\n            if\
+    \ [[ \"$key\" =~ [A-Z] ]]; then\n                echo \"False\"\n            \
+    \    return\n            fi\n        fi\n    done < \"$1\"\n    echo \"True\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  lower=0\n    upper=0\n    while IFS=, read -r key value; do\n        if [[\
+    \ $key =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n        elif [[ $key\
+    \ =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n        else\n       \
+    \     echo \"False\"\n            return\n        fi\n    done < \"$1\"\n    if\
+    \ [ $lower -eq 0 ] || [ $upper -eq 0 ]; then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    local dict=$1\n    local key\n    local\
+    \ value\n    local lower_count=0\n    local upper_count=0\n    local total_count=0\n\
+    \    local result=false\n    while IFS=, read key value; do\n        if [[ $key\
+    \ =~ ^[a-z]+$ ]]; then\n            lower_count=$((lower_count + 1))\n       \
+    \ elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_count=$((upper_count +\
+    \ 1))\n        fi\n        total_count=$((total_count + 1))\n    done < <(echo\
+    \ \"$dict\")\n    if [[ $total_count -gt 0 ]]; then\n        if [[ $lower_count\
+    \ -eq $total_count ]]; then\n            result=true\n        elif [[ $upper_count\
+    \ -eq $total_count ]]; then\n            result=true\n        fi\n    fi\n   \
+    \ echo $result", "  if [ -z \"$1\" ]; then\n    echo \"False\"\n    return\n \
+    \ fi\n  if [ ! -f \"$1\" ]; then\n    echo \"False\"\n    return\n  fi\n  if [\
+    \ ! -s \"$1\" ]; then\n    echo \"False\"\n    return\n  fi\n  if [ $(wc -l \"\
+    $1\" | awk '{print $1}') -eq 1 ]; then\n    echo \"False\"\n    return\n  fi\n\
+    \  if [ $(wc -l \"$1\" | awk '{print $1}') -eq 2 ]; then\n    echo \"True\"\n\
+    \    return\n  fi\n  if [ $(wc -l \"$1\" | awk '{print $1}') -gt 2 ]; then\n \
+    \   if [ $(head -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[A-Z]') -eq 0 ];\
+    \ then\n      if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[A-Z]')\
+    \ -eq 0 ]; then\n        echo \"True\"\n        return\n      fi\n    fi\n   \
+    \ if [ $(head -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -eq 0 ]; then\n\
+    \      if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -eq 0\
+    \ ]; then\n        echo \"True\"\n        return\n      fi\n    fi\n  fi\n  echo\
+    \ \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ -z \"$(cat $1 | cut -d ',' -f 1 | grep '[A-Z]')\" ]; then\n\
+    \        echo \"True\"\n    elif [ -z \"$(cat $1 | cut -d ',' -f 1 | grep '[a-z]')\"\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n \
+    \   if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    # Check if all keys are lower case\n    if [ \"$(cut -d, -f1 \"$1\" | tr\
+    \ '[:upper:]' '[:lower:]' | diff - \"$1\" | wc -l)\" -eq 0 ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n    # Check if all keys are upper case\n \
+    \   if [ \"$(cut -d, -f1 \"$1\" | tr '[:lower:]' '[:upper:]' | diff - \"$1\" |\
+    \ wc -l)\" -eq 0 ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "  local dict=$1\n  local key\n  local value\n  local lower_keys=0\n\
+    \  local upper_keys=0\n  local lower_values=0\n  local upper_values=0\n  local\
+    \ lower_keys_and_values=0\n  local upper_keys_and_values=0\n  local lower_keys_and_upper_values=0\n\
+    \  local upper_keys_and_lower_values=0\n  local mixed_keys=0\n  local mixed_values=0\n\
+    \  local mixed_keys_and_values=0\n  local mixed_keys_and_upper_values=0\n  local\
+    \ mixed_keys_and_lower_values=0\n  local mixed_keys_and_mixed_values=0\n  local\
+    \ mixed_keys_and_upper_values=0\n  local mixed_keys_and_lower_values=0\n  local\
+    \ mixed_keys_and_mixed_values=0\n  local mixed_keys_and_upper_values=0\n  local\
+    \ mixed_keys_and_lower_values=0\n  local mixed_keys_and_mixed_values=0\n  local\
+    \ mixed_keys_and_upper_values=0\n  local mixed_keys_and_lower_values=0\n  local\
+    \ mixed_keys_and_mixed_values=0\n  local mixed_keys_and_upper_values=0\n  local\
+    \ mixed_keys_and_lower_values=0\n  local mixed_keys_and_mixed_values=0\n  local\
+    \ mixed_keys_and_upper_values=0\n  local mixed_keys_and_lower_values=0\n  local\
+    \ mixed_keys_and_mixed_values=0\n  local mixed_keys_and_upper_values=0\n  local\
+    \ mixed_keys_and_lower_values=0\n  local mixed_keys_and_mixed_values=0\n  local\
+    \ mixed_keys_and_upper_values=0\n  local mixed_keys_and_lower_values=0\n  local\
+    \ mixed_keys_and_mixed_values=0\n  local mixed_keys_and_upper_values=0\n  local\
+    \ mixed_keys_and_lower_values=0\n  local mixed_keys_and_mixed_values=", "    local\
+    \ dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n    local key\n\
+    \    local value\n    while IFS=, read -r key value; do\n        if [[ $key =~\
+    \ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n        elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n \
+    \       else\n            return 1\n        fi\n    done < <(echo \"$dict\")\n\
+    \    if [[ $lower_keys -gt 0 && $upper_keys -gt 0 ]]; then\n        return 1\n\
+    \    fi\n    return 0", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    while IFS=, read -r key value; do\n        if [ -z\
+    \ \"$key\" ]; then\n            echo \"False\"\n            return\n        fi\n\
+    \        if [[ \"$key\" =~ [A-Z] ]]; then\n            if [[ \"$key\" =~ [a-z]\
+    \ ]]; then\n                echo \"False\"\n                return\n         \
+    \   fi\n        else\n            if [[ \"$key\" =~ [A-Z] ]]; then\n         \
+    \       echo \"False\"\n                return\n            fi\n        fi\n \
+    \   done < \"$1\"\n    echo \"True\"", "    local dict=\"$1\"\n    local key\n\
+    \    local value\n    local lowercase=0\n    local uppercase=0\n    local empty=0\n\
+    \    local retval=0\n    while IFS=, read key value; do\n        if [[ -z \"$key\"\
+    \ ]]; then\n            empty=1\n            break\n        fi\n        if [[\
+    \ \"$key\" =~ ^[a-z]+$ ]]; then\n            lowercase=1\n        elif [[ \"$key\"\
+    \ =~ ^[A-Z]+$ ]]; then\n            uppercase=1\n        else\n            retval=1\n\
+    \            break\n        fi\n    done < <(echo \"$dict\")\n    if [[ $empty\
+    \ -eq 1 ]]; then\n        retval=1\n    elif [[ $lowercase -eq 1 && $uppercase\
+    \ -eq 1 ]]; then\n        retval=1\n    fi\n    return $retval", "    if [ -z\
+    \ \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -f\
+    \ \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -s\
+    \ \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    # get the\
+    \ first key\n    key=$(head -n 1 \"$1\" | cut -d, -f1)\n    # get the first value\n\
+    \    value=$(head -n 1 \"$1\" | cut -d, -f2)\n    # check if key is all lower\
+    \ case\n    if [[ $key =~ ^[a-z]+$ ]]; then\n        # check if all keys are lower\
+    \ case\n        if [ $(grep -v \"^[a-z]*,.*$\" \"$1\" | wc -l) -eq 0 ]; then\n\
+    \            echo \"True\"\n            return\n        fi\n    fi\n    # check\
+    \ if key is all upper case\n    if [[ $key =~ ^[A-Z]+$ ]]; then\n        # check\
+    \ if all keys are upper case\n        if [ $(grep -v \"^[A-Z]*,.*$\" \"$1\" |\
+    \ wc -l) -eq 0 ]; then\n            echo \"True\"\n            return\n      \
+    \  fi\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -r \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -w \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -x \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -O \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -G \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -N \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -p \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -S \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -b \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -c \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -k \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -u \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -g \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -t \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -T \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -r \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -w \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -x \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ ! -O \"$1", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -f \"$1\"\
+    \ ]; then\n        echo \"False\"\n        return\n    fi\n    if [ ! -s \"$1\"\
+    \ ]; then\n        echo \"False\"\n        return\n    fi\n    # check if all\
+    \ keys are lower case\n    all_lower=$(awk -F, '{print tolower($1)}' \"$1\" |\
+    \ sort -u)\n    if [ \"$all_lower\" == \"$(awk -F, '{print $1}' \"$1\" | sort\
+    \ -u)\" ]; then\n        echo \"True\"\n        return\n    fi\n    # check if\
+    \ all keys are upper case\n    all_upper=$(awk -F, '{print toupper($1)}' \"$1\"\
+    \ | sort -u)\n    if [ \"$all_upper\" == \"$(awk -F, '{print $1}' \"$1\" | sort\
+    \ -u)\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  # Check if all keys are lower case\n    if [ \"$(echo \"$1\" | cut -d, -f1\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]' | uniq -c | wc -l)\"\
+    \ -eq 1 ]; then\n        echo \"True\"\n        return\n    fi\n    # Check if\
+    \ all keys are upper case\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr '[:lower:]'\
+    \ '[:upper:]' | tr '[:upper:]' '[:lower:]' | uniq -c | wc -l)\" -eq 1 ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    echo \"False\"", "  if [ -z\
+    \ \"$1\" ]; then\n    echo \"False\"\n    return\n  fi\n  local key_case\n  local\
+    \ value_case\n  while IFS=, read -r key value; do\n    if [ -z \"$key_case\" ];\
+    \ then\n      key_case=$(echo \"$key\" | tr '[:upper:]' '[:lower:]')\n      value_case=$(echo\
+    \ \"$value\" | tr '[:upper:]' '[:lower:]')\n    else\n      if [ \"$key_case\"\
+    \ != \"$(echo \"$key\" | tr '[:upper:]' '[:lower:]')\" ]; then\n        echo \"\
+    False\"\n        return\n      fi\n      if [ \"$value_case\" != \"$(echo \"$value\"\
+    \ | tr '[:upper:]' '[:lower:]')\" ]; then\n        echo \"False\"\n        return\n\
+    \      fi\n    fi\n  done < <(echo \"$1\")\n  echo \"True\"", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local lower=0\n\
+    \    local upper=0\n    while IFS=, read -r key value; do\n        if [[ $key\
+    \ =~ ^[a-z]+$ ]]; then\n            lower=1\n        elif [[ $key =~ ^[A-Z]+$\
+    \ ]]; then\n            upper=1\n        else\n            echo \"False\"\n  \
+    \          return\n        fi\n    done < <(echo \"$1\")\n    if [ $lower -eq\
+    \ 1 -a $upper -eq 1 ]; then\n        echo \"False\"\n    else\n        echo \"\
+    True\"\n    fi", "    if [[ -z $1 ]]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    local lower=0\n    local upper=0\n    while IFS=, read -r key value;\
+    \ do\n        if [[ $key =~ ^[a-z]+$ ]]; then\n            lower=1\n        elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n            upper=1\n        else\n          \
+    \  echo \"False\"\n            return\n        fi\n    done < <(echo \"$1\")\n\
+    \    if [[ $lower -eq 1 && $upper -eq 1 ]]; then\n        echo \"False\"\n   \
+    \ else\n        echo \"True\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    if [ -z \"$(cat $1 | grep '[A-Z]')\"\
+    \ ]; then\n        echo \"True\"\n    elif [ -z \"$(cat $1 | grep '[a-z]')\" ];\
+    \ then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", "  \
+    \  if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n  \
+    \  if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    if [ $(wc -l \"$1\" | awk '{print $1}') -lt 2 ]; then\n        echo \"False\"\
+    \n        return\n    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -gt 2 ];\
+    \ then\n        echo \"False\"\n        return\n    fi\n    if [ $(wc -l \"$1\"\
+    \ | awk '{print $1}') -eq 2 ]; then\n        if [ $(head -n 1 \"$1\" | awk -F,\
+    \ '{print $1}' | grep -c '[A-Z]') -eq 1 ]; then\n            if [ $(tail -n 1\
+    \ \"$1\" | awk -F, '{print $1}' | grep -c '[A-Z]') -eq 1 ]; then\n           \
+    \     echo \"True\"\n                return\n            fi\n        fi\n    \
+    \    if [ $(head -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -eq 1 ];\
+    \ then\n            if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]')\
+    \ -eq 1 ]; then\n                echo \"True\"\n                return\n     \
+    \       fi\n        fi\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n\
+    \        echo \"False\"\n        return\n    fi\n    # Check if all keys are lower\
+    \ case\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr '[:upper:]' '[:lower:]' |\
+    \ sort | uniq -c | wc -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    # Check if all keys are upper case\n    if [ \"$(echo \"$1\" | cut\
+    \ -d, -f1 | tr '[:lower:]' '[:upper:]' | sort | uniq -c | wc -l)\" -eq 1 ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    echo \"False\"", "    # Check\
+    \ if the dictionary is empty\n    if [ -z \"$1\" ]; then\n        echo \"False\"\
+    \n        return\n    fi\n\n    # Check if all keys are lower case\n    if [ \"\
+    $(echo \"$1\" | cut -d, -f1 | tr '[:upper:]' '[:lower:]' | sort | uniq -c | wc\
+    \ -l)\" -eq 1 ]; then\n        echo \"True\"\n        return\n    fi\n\n    #\
+    \ Check if all keys are upper case\n    if [ \"$(echo \"$1\" | cut -d, -f1 | tr\
+    \ '[:lower:]' '[:upper:]' | sort | uniq -c | wc -l)\" -eq 1 ]; then\n        echo\
+    \ \"True\"\n        return\n    fi\n\n    # If we get here, then the keys are\
+    \ mixed case\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    local key_case=$(awk -F, '{print $1}' $1\
+    \ | tr '[:upper:]' '[:lower:]' | tr '[:lower:]' '[:upper:]' | uniq -c | awk '{print\
+    \ $1}')\n    if [ \"$key_case\" -eq 1 ]; then\n        echo \"True\"\n    else\n\
+    \        echo \"False\"\n    fi", "    if [ $# -ne 1 ]; then\n        echo \"\
+    Usage: $0 <csv_file>\"\n        exit 1\n    fi\n    if [ ! -f $1 ]; then\n   \
+    \     echo \"File $1 not found\"\n        exit 1\n    fi\n    # Check if the file\
+    \ is empty\n    if [ ! -s $1 ]; then\n        echo \"False\"\n        exit 0\n\
+    \    fi\n    # Check if all keys are in lower case\n    if [ $(awk -F, '{print\
+    \ tolower($1)}' $1 | cmp -s $1 -) ]; then\n        echo \"True\"\n        exit\
+    \ 0\n    fi\n    # Check if all keys are in upper case\n    if [ $(awk -F, '{print\
+    \ toupper($1)}' $1 | cmp -s $1 -) ]; then\n        echo \"True\"\n        exit\
+    \ 0\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ \"$(head -n 1 \"$1\" | cut -d, -f1 |\
+    \ grep -E '^[a-z]+$')\" ]; then\n        if [ \"$(tail -n +2 \"$1\" | cut -d,\
+    \ -f1 | grep -E '^[A-Z]+$')\" ]; then\n            echo \"False\"\n          \
+    \  return\n        fi\n    elif [ \"$(head -n 1 \"$1\" | cut -d, -f1 | grep -E\
+    \ '^[A-Z]+$')\" ]; then\n        if [ \"$(tail -n +2 \"$1\" | cut -d, -f1 | grep\
+    \ -E '^[a-z]+$')\" ]; then\n            echo \"False\"\n            return\n \
+    \       fi\n    else\n        echo \"False\"\n        return\n    fi\n    echo\
+    \ \"True\"", "    if [ $# -ne 1 ]; then\n        echo \"Usage: $0 <csv file>\"\
+    \n        exit 1\n    fi\n    if [ ! -f $1 ]; then\n        echo \"File $1 does\
+    \ not exist\"\n        exit 1\n    fi\n    if [ ! -r $1 ]; then\n        echo\
+    \ \"File $1 is not readable\"\n        exit 1\n    fi\n    if [ ! -s $1 ]; then\n\
+    \        echo \"File $1 is empty\"\n        exit 1\n    fi\n    # Check if all\
+    \ keys are lower case\n    if [ $(awk -F, '{print tolower($1)}' $1 | cmp -s $1\
+    \ -) ]; then\n        echo \"True\"\n    # Check if all keys are upper case\n\
+    \    elif [ $(awk -F, '{print toupper($1)}' $1 | cmp -s $1 -) ]; then\n      \
+    \  echo \"True\"\n    else\n        echo \"False\"\n    fi", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"False\"\n        return\n    fi\n    lower_count=0\n\
+    \    upper_count=0\n    while IFS=, read -r key value; do\n        if [[ $key\
+    \ =~ [a-z] ]]; then\n            lower_count=$((lower_count+1))\n        elif\
+    \ [[ $key =~ [A-Z] ]]; then\n            upper_count=$((upper_count+1))\n    \
+    \    fi\n    done < <(echo \"$1\")\n    if [ $lower_count -eq 0 ] || [ $upper_count\
+    \ -eq 0 ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n   \
+    \ fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n \
+    \   fi\n    # Check if all keys are lowercase\n    if [ \"$(cut -d, -f1 $1 | tr\
+    \ '[:upper:]' '[:lower:]' | sort | uniq -c | wc -l)\" -eq \"1\" ]; then\n    \
+    \    echo \"True\"\n        return\n    fi\n    # Check if all keys are uppercase\n\
+    \    if [ \"$(cut -d, -f1 $1 | tr '[:lower:]' '[:upper:]' | sort | uniq -c | wc\
+    \ -l)\" -eq \"1\" ]; then\n        echo \"True\"\n        return\n    fi\n   \
+    \ echo \"False\"", "    local dict=\"$1\"\n    local lower_keys=()\n    local\
+    \ upper_keys=()\n    while IFS=, read -r key value; do\n        if [[ \"$key\"\
+    \ =~ [a-z] ]]; then\n            lower_keys+=(\"$key\")\n        elif [[ \"$key\"\
+    \ =~ [A-Z] ]]; then\n            upper_keys+=(\"$key\")\n        else\n      \
+    \      echo \"False\"\n            return\n        fi\n    done < <(echo \"$dict\"\
+    )\n    if [[ ${#lower_keys[@]} -eq 0 ]] || [[ ${#upper_keys[@]} -eq 0 ]]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "  local dict=\"\
+    $1\"\n  local lower_keys=()\n  local upper_keys=()\n  local lower_values=()\n\
+    \  local upper_values=()\n  local lower_count=0\n  local upper_count=0\n  local\
+    \ count=0\n  local key\n  local value\n  local i\n  local j\n  local k\n  local\
+    \ l\n  local m\n  local n\n  local o\n  local p\n  local q\n  local r\n  local\
+    \ s\n  local t\n  local u\n  local v\n  local w\n  local x\n  local y\n  local\
+    \ z\n  local a\n  local b\n  local c\n  local d\n  local e\n  local f\n  local\
+    \ g\n  local h\n  local i\n  local j\n  local k\n  local l\n  local m\n  local\
+    \ n\n  local o\n  local p\n  local q\n  local r\n  local s\n  local t\n  local\
+    \ u\n  local v\n  local w\n  local x\n  local y\n  local z\n  local a\n  local\
+    \ b\n  local c\n  local d\n  local e\n  local f\n  local g\n  local h\n  local\
+    \ i\n  local j\n  local k\n  local l\n  local m\n  local n\n  local o\n  local\
+    \ p\n  local q\n  local r\n  local s\n  local t\n  local u\n  local v\n  local\
+    \ w\n  local x\n  local y\n  local z\n  local a\n  local b\n  local c\n  local\
+    \ d\n  local e\n  local f\n  local g\n  local h\n  local i\n  local j\n  local\
+    \ k\n  local l\n  local m\n  local n\n  local o\n  local p\n  local q\n  local\
+    \ r\n  local s\n  local t\n  local u\n  local v\n  local w\n  local x\n  local\
+    \ y\n  local z\n  local a\n  local b\n  local c\n  local d\n  local e\n  local\
+    \ f\n  local g\n  local h\n  local i\n  local j\n  local k\n  local l\n  local\
+    \ m\n  local n\n ", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n    \
+    \    return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n  \
+    \      return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    # Check if all keys are lower case\n    if [ \"$(cut\
+    \ -d, -f1 \"$1\" | tr '[:upper:]' '[:lower:]' | cmp -s - \"$1\")\" ]; then\n \
+    \       echo \"True\"\n        return\n    fi\n    # Check if all keys are upper\
+    \ case\n    if [ \"$(cut -d, -f1 \"$1\" | tr '[:lower:]' '[:upper:]' | cmp -s\
+    \ - \"$1\")\" ]; then\n        echo \"True\"\n        return\n    fi\n    echo\
+    \ \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    lower_keys=$(cut -d, -f1 $1 | grep -v '[A-Z]')\n    upper_keys=$(cut\
+    \ -d, -f1 $1 | grep -v '[a-z]')\n    if [ -z \"$lower_keys\" ] && [ -z \"$upper_keys\"\
+    \ ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi", " \
+    \   if [ $# -ne 1 ]; then\n        echo \"Usage: $0 <csv_file>\"\n        exit\
+    \ 1\n    fi\n    if [ ! -f $1 ]; then\n        echo \"File $1 does not exist\"\
+    \n        exit 1\n    fi\n    if [ ! -r $1 ]; then\n        echo \"File $1 is\
+    \ not readable\"\n        exit 1\n    fi\n    if [ ! -s $1 ]; then\n        echo\
+    \ \"File $1 is empty\"\n        exit 1\n    fi\n    # If the file is not empty,\
+    \ then it must have at least one line\n    # with two fields separated by a comma.\n\
+    \    if [ $(wc -l $1 | awk '{print $1}') -eq 1 ]; then\n        echo \"File $1\
+    \ has only one line\"\n        exit 1\n    fi\n    if [ $(head -n 1 $1 | awk -F,\
+    \ '{print NF}') -ne 2 ]; then\n        echo \"File $1 does not have two fields\
+    \ in the first line\"\n        exit 1\n    fi\n    # Check if all keys are lower\
+    \ case\n    if [ $(awk -F, '{print tolower($1)}' $1 | sort | uniq -c | wc -l)\
+    \ -eq 1 ]; then\n        echo \"True\"\n        exit 0\n    fi\n    # Check if\
+    \ all keys are upper case\n    if [ $(awk -F, '{print toupper($1)}' $1 | sort\
+    \ | uniq -c | wc -l) -eq 1 ]; then\n        echo \"True\"\n        exit 0\n  \
+    \  fi\n    echo \"False\"\n    exit 0", "    if [ -z \"$1\" ]; then\n        echo\
+    \ \"False\"\n        return\n    fi\n    lower_count=0\n    upper_count=0\n  \
+    \  while IFS=, read -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n\
+    \            lower_count=$((lower_count+1))\n        elif [[ \"$key\" =~ ^[A-Z]+$\
+    \ ]]; then\n            upper_count=$((upper_count+1))\n        else\n       \
+    \     echo \"False\"\n            return\n        fi\n    done < <(echo \"$1\"\
+    )\n    if [ \"$lower_count\" -eq 0 ] || [ \"$upper_count\" -eq 0 ]; then\n   \
+    \     echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local dict=\"\
+    $1\"\n    local key\n    local value\n    local lower=0\n    local upper=0\n \
+    \   local empty=0\n    local total=0\n    while IFS=, read -r key value; do\n\
+    \        if [[ -z \"$key\" ]]; then\n            empty=1\n            continue\n\
+    \        fi\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower=1\n\
+    \        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper=1\n        else\n\
+    \            echo \"False\"\n            return\n        fi\n        total=$((total\
+    \ + 1))\n    done < <(echo \"$dict\")\n    if [[ $empty -eq 1 ]]; then\n     \
+    \   echo \"False\"\n        return\n    fi\n    if [[ $lower -eq 1 && $upper -eq\
+    \ 1 ]]; then\n        echo \"False\"\n        return\n    fi\n    if [[ $total\
+    \ -eq 0 ]]; then\n        echo \"False\"\n        return\n    fi\n    echo \"\
+    True\"", "    if [ $# -ne 1 ]; then\n        echo \"Usage: $0 <csv_file>\"\n \
+    \       exit 1\n    fi\n    if [ ! -f $1 ]; then\n        echo \"File $1 does\
+    \ not exist\"\n        exit 1\n    fi\n    # Check if the file is empty\n    if\
+    \ [ ! -s $1 ]; then\n        echo \"False\"\n        exit 0\n    fi\n    # Check\
+    \ if the file has only one line\n    if [ $(wc -l $1 | awk '{print $1}') -eq 1\
+    \ ]; then\n        echo \"True\"\n        exit 0\n    fi\n    # Check if the first\
+    \ line is lower case\n    if [ $(head -n 1 $1 | awk -F, '{print $1}' | tr '[:upper:]'\
+    \ '[:lower:]') = $(head -n 1 $1 | awk -F, '{print $1}') ]; then\n        # Check\
+    \ if all lines are lower case\n        if [ $(grep -v '^[a-z],.*' $1 | wc -l)\
+    \ -eq 0 ]; then\n            echo \"True\"\n            exit 0\n        fi\n \
+    \   fi\n    # Check if the first line is upper case\n    if [ $(head -n 1 $1 |\
+    \ awk -F, '{print $1}' | tr '[:lower:]' '[:upper:]') = $(head -n 1 $1 | awk -F,\
+    \ '{print $1}') ]; then\n        # Check if all lines are upper case\n       \
+    \ if [ $(grep -v '^[A-Z],.*' $1 | wc -l) -eq 0 ]; then\n            echo \"True\"\
+    \n            exit 0\n        fi\n    fi\n    echo \"False\"", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    lower=0\n  \
+    \  upper=0\n    while IFS=, read -r key value; do\n        if [[ $key =~ ^[a-z]+$\
+    \ ]]; then\n            lower=$((lower+1))\n        elif [[ $key =~ ^[A-Z]+$ ]];\
+    \ then\n            upper=$((upper+1))\n        else\n            echo \"False\"\
+    \n            return\n        fi\n    done < <(echo \"$1\")\n    if [ $lower -eq\
+    \ 0 -o $upper -eq 0 ]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n      \
+    \  return\n    fi\n    while IFS=, read -r key value; do\n        if [ -z \"$key\"\
+    \ ]; then\n            echo \"False\"\n            return\n        fi\n      \
+    \  if [ -z \"$value\" ]; then\n            echo \"False\"\n            return\n\
+    \        fi\n        if [ -z \"$lower\" ]; then\n            if [[ \"$key\" =~\
+    \ [A-Z] ]]; then\n                upper=\"$key\"\n            else\n         \
+    \       lower=\"$key\"\n            fi\n        else\n            if [[ \"$key\"\
+    \ =~ [A-Z] ]]; then\n                if [ -z \"$upper\" ]; then\n            \
+    \        echo \"False\"\n                    return\n                fi\n    \
+    \        else\n                if [ -z \"$lower\" ]; then\n                  \
+    \  echo \"False\"\n                    return\n                fi\n          \
+    \  fi\n        fi\n    done < <(echo \"$1\")\n    echo \"True\"", "    if [ $#\
+    \ -ne 1 ]; then\n        echo \"Usage: $0 <csv_file>\"\n        exit 1\n    fi\n\
+    \    if [ ! -f $1 ]; then\n        echo \"Error: $1 is not a file\"\n        exit\
+    \ 1\n    fi\n    if [ ! -r $1 ]; then\n        echo \"Error: $1 is not readable\"\
+    \n        exit 1\n    fi\n    if [ ! -s $1 ]; then\n        echo \"False\"\n \
+    \       exit 0\n    fi\n    # Get the first key\n    first_key=$(head -n 1 $1\
+    \ | cut -d ',' -f 1)\n    # Get the first key's case\n    first_key_case=$(echo\
+    \ $first_key | tr '[:upper:]' '[:lower:]')\n    # If the first key's case is the\
+    \ same as the first key, then\n    # the first key is lower case\n    if [ \"\
+    $first_key\" == \"$first_key_case\" ]; then\n        # Get the second key\n  \
+    \      second_key=$(tail -n +2 $1 | head -n 1 | cut -d ',' -f 1)\n        # Get\
+    \ the second key's case\n        second_key_case=$(echo $second_key | tr '[:upper:]'\
+    \ '[:lower:]')\n        # If the second key's case is the same as the second key,\
+    \ then\n        # the second key is lower case\n        if [ \"$second_key\" ==\
+    \ \"$second_key_case\" ]; then\n            # Get the third key\n            third_key=$(tail\
+    \ -n +3 $1 | head -n 1 | cut -d ',' -f 1)\n            # Get the third key's case\n\
+    \            third_key_case=$(echo $third_key | tr '[:upper:]' '[:lower:]')\n\
+    \            # If the third key's case is the same as the third key, then\n  \
+    \          # the third key is lower case\n            if [ \"$third_key\" == \"\
+    $third_key_case\" ]; then\n                # Get the fourth key\n            \
+    \    fourth_key=$(tail -n +4 $1 | head -n 1 | cut -d ',' -f 1)\n             \
+    \   # Get the fourth key's case\n                fourth_key_", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local key\n\
+    \    local value\n    local lower_case=0\n    local upper_case=0\n    while IFS=,\
+    \ read key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n          \
+    \  lower_case=1\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper_case=1\n\
+    \        else\n            echo \"False\"\n            return\n        fi\n  \
+    \  done < <(echo \"$1\")\n    if [ $lower_case -eq 1 -a $upper_case -eq 1 ]; then\n\
+    \        echo \"False\"\n    else\n        echo \"True\"\n    fi", "    local\
+    \ dict=\"$1\"\n    local key\n    local value\n    local lower_keys=0\n    local\
+    \ upper_keys=0\n    local lower_values=0\n    local upper_values=0\n    local\
+    \ lower_keys_values=0\n    local upper_keys_values=0\n    local lower_keys_upper_values=0\n\
+    \    local upper_keys_lower_values=0\n    local lower_keys_lower_values=0\n  \
+    \  local upper_keys_upper_values=0\n    local lower_keys_mixed_values=0\n    local\
+    \ upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n    local\
+    \ mixed_keys=0\n    local mixed_values=0\n    local mixed_keys_values=0\n    local\
+    \ mixed_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n  \
+    \  local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n  \
+    \  local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n    local\
+    \ mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n  \
+    \  local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper", "    local dict=\"$1\"\n    local key_col=\"$2\"\
+    \n    local val_col=\"$3\"\n    local key_col_num=$((key_col-1))\n    local val_col_num=$((val_col-1))\n\
+    \    local key_is_lower=0\n    local key_is_upper=0\n    local key_is_mixed=0\n\
+    \    local key_is_empty=0\n    local key_is_other=0\n    local key_is_num=0\n\
+    \    local key_is_str=0\n    local key_is_str_num=0\n    local key_is_str_other=0\n\
+    \    local key_is_str_lower=0\n    local key_is_str_upper=0\n    local key_is_str_mixed=0\n\
+    \    local key_is_str_empty=0\n    local key_is_str_num_other=0\n    local key_is_str_num_lower=0\n\
+    \    local key_is_str_num_upper=0\n    local key_is_str_num_mixed=0\n    local\
+    \ key_is_str_num_empty=0\n    local key_is_str_num_other=0\n    local key_is_str_num_lower=0\n\
+    \    local key_is_str_num_upper=0\n    local key_is_str_num_mixed=0\n    local\
+    \ key_is_str_num_empty=0\n    local key_is_str_num_other=0\n    local key_is_str_num_lower=0\n\
+    \    local key_is_str_num_upper=0\n    local key_is_str_num_mixed=0\n    local\
+    \ key_is_str_num_empty=0\n    local key_is_str_num_other=0\n    local key_is_str_num_lower=0\n\
+    \    local key_is_str_num_upper=0\n    local key_is_str_num_mixed=0\n    local\
+    \ key_is_str_num_empty=0\n    local key_is_str_num_other=0\n    local key_is_str_num",
+  "  local dict=\"$1\"\n  local key\n  local value\n  local lower_count=0\n  local\
+    \ upper_count=0\n  local total_count=0\n  while IFS=, read key value\n  do\n \
+    \   if [[ \"$key\" =~ ^[a-z]+$ ]]\n    then\n      lower_count=$((lower_count\
+    \ + 1))\n    elif [[ \"$key\" =~ ^[A-Z]+$ ]]\n    then\n      upper_count=$((upper_count\
+    \ + 1))\n    fi\n    total_count=$((total_count + 1))\n  done < <(echo \"$dict\"\
+    )\n  if [[ $total_count -eq 0 ]]\n  then\n    echo \"False\"\n  elif [[ $lower_count\
+    \ -eq $total_count ]]\n  then\n    echo \"True\"\n  elif [[ $upper_count -eq $total_count\
+    \ ]]\n  then\n    echo \"True\"\n  else\n    echo \"False\"\n  fi", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [\
+    \ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if\
+    \ [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if\
+    \ [ $(wc -l \"$1\" | awk '{print $1}') -eq 1 ]; then\n        echo \"False\"\n\
+    \        return\n    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -eq 2 ];\
+    \ then\n        echo \"True\"\n        return\n    fi\n    if [ $(wc -l \"$1\"\
+    \ | awk '{print $1}') -gt 2 ]; then\n        if [ $(head -n 1 \"$1\" | awk -F,\
+    \ '{print $1}' | grep -c '[A-Z]') -eq 1 ]; then\n            if [ $(tail -n 1\
+    \ \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -eq 1 ]; then\n           \
+    \     echo \"False\"\n                return\n            fi\n        fi\n   \
+    \     if [ $(head -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]') -eq 1\
+    \ ]; then\n            if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c\
+    \ '[A-Z]') -eq 1 ]; then\n                echo \"False\"\n                return\n\
+    \            fi\n        fi\n        echo \"True\"\n        return\n    fi", " \
+    \ local dict=$1\n  local dict_keys=$(echo \"$dict\" | cut -d, -f1)\n  local dict_values=$(echo\
+    \ \"$dict\" | cut -d, -f2)\n  local dict_keys_lower=$(echo \"$dict_keys\" | tr\
+    \ '[:upper:]' '[:lower:]')\n  local dict_keys_upper=$(echo \"$dict_keys\" | tr\
+    \ '[:lower:]' '[:upper:]')\n  if [[ \"$dict_keys\" == \"$dict_keys_lower\" ]];\
+    \ then\n    echo \"True\"\n  elif [[ \"$dict_keys\" == \"$dict_keys_upper\" ]];\
+    \ then\n    echo \"True\"\n  else\n    echo \"False\"\n  fi", "    if [ -z \"\
+    $1\" ]; then\n        echo \"False\"\n        return\n    fi\n    local key_case=$(awk\
+    \ -F, '{print $1}' $1 | head -1 | tr '[:upper:]' '[:lower:]')\n    local all_keys_lower=$(awk\
+    \ -F, '{print $1}' $1 | tr '[:upper:]' '[:lower:]' | sort | uniq -c | wc -l)\n\
+    \    local all_keys_upper=$(awk -F, '{print $1}' $1 | tr '[:lower:]' '[:upper:]'\
+    \ | sort | uniq -c | wc -l)\n    if [ $all_keys_lower -eq 1 ] && [ $key_case ==\
+    \ $(awk -F, '{print $1}' $1 | head -1) ]; then\n        echo \"True\"\n    elif\
+    \ [ $all_keys_upper -eq 1 ] && [ $key_case == $(awk -F, '{print $1}' $1 | head\
+    \ -1) ]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n    local\
+    \ key\n    local value\n    local line\n    local lines\n    local IFS=','\n \
+    \   local -a lower_keys_array\n    local -a upper_keys_array\n    local -a lower_values_array\n\
+    \    local -a upper_values_array\n    local -a lower_array\n    local -a upper_array\n\
+    \    local -a lower_array_sorted\n    local -a upper_array_sorted\n    local -a\
+    \ lower_array_sorted_uniq\n    local -a upper_array_sorted_uniq\n    local -a\
+    \ lower_array_sorted_uniq_joined\n    local -a upper_array_sorted_uniq_joined\n\
+    \    local lower_array_sorted_uniq_joined_string\n    local upper_array_sorted_uniq_joined_string\n\
+    \    local lower_array_sorted_uniq_joined_string_sorted\n    local upper_array_sorted_uniq_joined_string_sorted\n\
+    \    local lower_array_sorted_uniq_joined_string_sorted_uniq\n    local upper_array_sorted_uniq_joined_string_sorted_uniq\n\
+    \    local lower_array_sorted_uniq_joined_string_sorted_uniq_joined\n    local\
+    \ upper_array_sorted_uniq_joined_string_sorted_uniq_joined\n    local lower_array_sorted_uniq_joined_string_sorted_uniq_joined_sorted\n\
+    \    local upper_array_sorted_uniq_joined_string_sorted_uniq_joined_sorted\n \
+    \   local lower_array_sorted_uniq_joined_string_sorted_uniq_joined_sorted_uniq\n\
+    \    local upper_array_sorted_uniq_joined_string_sorted_uniq_joined_sorted_uniq\n\
+    \    local lower_array_sorted_uniq_joined_string_sorted_uniq_joined_sorted_uniq_joined\n\
+    \    local upper_array_sorted_uniq_joined_string_sorted", "    local dict=\"$1\"\
+    \n    local key\n    local value\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local lower_values=0\n    local upper_values=0\n    local lower_keys_values=0\n\
+    \    local upper_keys_values=0\n    local lower_keys_upper_values=0\n    local\
+    \ upper_keys_lower_values=0\n    local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n\
+    \    local mixed_keys=0\n    local mixed_values=0\n    local mixed_keys_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n  \
+    \  local mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n    local\
+    \ mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n  \
+    \  local mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0\n    local\
+    \ mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_lower_values=0\n  \
+    \  local mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_mixed_values=0", " \
+    \   local dict=$1\n    local key\n    local value\n    local lower_count=0\n \
+    \   local upper_count=0\n    local total_count=0\n    while IFS=, read key value;\
+    \ do\n        if [[ $key =~ ^[a-z]+$ ]]; then\n            lower_count=$((lower_count\
+    \ + 1))\n        elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_count=$((upper_count\
+    \ + 1))\n        fi\n        total_count=$((total_count + 1))\n    done < <(echo\
+    \ \"$dict\")\n    if [[ $total_count -eq 0 ]]; then\n        echo \"False\"\n\
+    \    elif [[ $lower_count -eq $total_count ]]; then\n        echo \"True\"\n \
+    \   elif [[ $upper_count -eq $total_count ]]; then\n        echo \"True\"\n  \
+    \  else\n        echo \"False\"\n    fi", "    # TODO: Implement this function\n\
+    \    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n  \
+    \  # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #     echo \"False\"\n    #     return\n\
+    \    # fi\n    # if [ -z \"$1\" ]; then\n    #    ", "    local dict=\"$1\"\n\
+    \    local lower=0\n    local upper=0\n    local key\n    local value\n    while\
+    \ IFS=, read -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n \
+    \           lower=1\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n         \
+    \   upper=1\n        else\n            return 1\n        fi\n    done < <(sed\
+    \ 's/^\"//;s/\"$//;s/\",\"/,/g' \"$dict\")\n    if [[ $lower -eq 1 && $upper -eq\
+    \ 1 ]]; then\n        return 1\n    fi\n    return 0", "    local dict=\"$1\"\n\
+    \    local key\n    local value\n    local lower_case=0\n    local upper_case=0\n\
+    \    while IFS=, read key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n\
+    \            lower_case=1\n        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n   \
+    \         upper_case=1\n        else\n            echo \"False\"\n           \
+    \ return\n        fi\n    done < <(echo \"$dict\")\n    if [[ \"$lower_case\"\
+    \ -eq 1 && \"$upper_case\" -eq 1 ]]; then\n        echo \"False\"\n    else\n\
+    \        echo \"True\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"\
+    False\"\n        return\n    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -eq\
+    \ 1 ]; then\n        echo \"False\"\n        return\n    fi\n    if [ $(wc -l\
+    \ \"$1\" | awk '{print $1}') -eq 2 ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n    if [ $(wc -l \"$1\" | awk '{print $1}') -gt 2 ]; then\n        if\
+    \ [ $(head -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[A-Z]') -eq 1 ]; then\n\
+    \            if [ $(tail -n 1 \"$1\" | awk -F, '{print $1}' | grep -c '[a-z]')\
+    \ -eq 1 ]; then\n                echo \"False\"\n                return\n    \
+    \        fi\n        fi\n        if [ $(head -n 1 \"$1\" | awk -F, '{print $1}'\
+    \ | grep -c '[a-z]') -eq 1 ]; then\n            if [ $(tail -n 1 \"$1\" | awk\
+    \ -F, '{print $1}' | grep -c '[A-Z]') -eq 1 ]; then\n                echo \"False\"\
+    \n                return\n            fi\n        fi\n        echo \"True\"\n\
+    \        return\n    fi", "  if [ -z \"$1\" ]; then\n    echo \"False\"\n    return\n\
+    \  fi\n  local lower_keys=$(echo \"$1\" | cut -d, -f1 | grep -v '[A-Z]' | wc -l)\n\
+    \  local upper_keys=$(echo \"$1\" | cut -d, -f1 | grep -v '[a-z]' | wc -l)\n \
+    \ if [ \"$lower_keys\" -eq \"$upper_keys\" ]; then\n    echo \"False\"\n  elif\
+    \ [ \"$lower_keys\" -eq \"$(echo \"$1\" | wc -l)\" ]; then\n    echo \"True\"\n\
+    \  elif [ \"$upper_keys\" -eq \"$(echo \"$1\" | wc -l)\" ]; then\n    echo \"\
+    True\"\n  else\n    echo \"False\"\n  fi", "    if [ -z \"$1\" ]; then\n     \
+    \   echo \"False\"\n        return\n    fi\n    if [ ! -f \"$1\" ]; then\n   \
+    \     echo \"False\"\n        return\n    fi\n    if [ ! -s \"$1\" ]; then\n \
+    \       echo \"False\"\n        return\n    fi\n    local lower_keys=$(cut -d,\
+    \ -f1 \"$1\" | grep -v '[A-Z]' | wc -l)\n    local upper_keys=$(cut -d, -f1 \"\
+    $1\" | grep -v '[a-z]' | wc -l)\n    local total_keys=$(wc -l \"$1\" | cut -d'\
+    \ ' -f1)\n    if [ \"$lower_keys\" -eq \"$total_keys\" ] || [ \"$upper_keys\"\
+    \ -eq \"$total_keys\" ]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    local dict=\"$1\"\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local key\n    local value\n    while IFS=, read -r key value; do\n     \
+    \   if [[ $key =~ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys + 1))\n\
+    \        elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys\
+    \ + 1))\n        else\n            return 1\n        fi\n    done < <(echo \"\
+    $dict\")\n    if [[ $lower_keys -gt 0 && $upper_keys -gt 0 ]]; then\n        return\
+    \ 1\n    fi\n    return 0", "    local dict=$1\n    local key\n    local value\n\
+    \    local lower_keys=0\n    local upper_keys=0\n    local lower_values=0\n  \
+    \  local upper_values=0\n    local lower_keys_values=0\n    local upper_keys_values=0\n\
+    \    local lower_keys_upper_values=0\n    local upper_keys_lower_values=0\n  \
+    \  local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ lower_keys_mixed_values=0\n    local upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys_mixed_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local lower_keys_lower_values=0\n\
+    \    local lower_keys_upper_values=0\n    local lower_keys_mixed_values=0\n  \
+    \  local upper_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ upper_keys_mixed_values=0\n    local lower_keys_values=0\n    local upper_keys_values=0\n\
+    \    local lower_keys_upper_values=0\n    local upper_keys_lower_values=0\n  \
+    \  local lower_keys_lower_values=0\n    local upper_keys_upper_values=0\n    local\
+    \ lower_keys_mixed_values=0\n    local upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local lower_keys_values=0\n    local upper_keys_values=0\n    local lower_keys_upper_values=0\n\
+    \    local upper_keys_lower_values=0\n    local lower_keys_lower_values=0\n",
+  "    # Check if the given dictionary is empty.\n    if [ -z \"$1\" ]; then\n   \
+    \     echo \"False\"\n        return\n    fi\n\n    # Check if all keys are strings\
+    \ in lower case.\n    if [ \"$(echo \"$1\" | awk -F, '{print tolower($1)}' | sort\
+    \ | uniq -c | awk '{print $1}')\" == \"$(echo \"$1\" | awk -F, '{print $1}' |\
+    \ wc -l)\" ]; then\n        echo \"True\"\n        return\n    fi\n\n    # Check\
+    \ if all keys are strings in upper case.\n    if [ \"$(echo \"$1\" | awk -F, '{print\
+    \ toupper($1)}' | sort | uniq -c | awk '{print $1}')\" == \"$(echo \"$1\" | awk\
+    \ -F, '{print $1}' | wc -l)\" ]; then\n        echo \"True\"\n        return\n\
+    \    fi\n\n    # If none of the above conditions are met, return False.\n    echo\
+    \ \"False\"", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n\
+    \    fi\n    lower=0\n    upper=0\n    while IFS=, read -r key value\n    do\n\
+    \        if [[ \"$key\" =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n\
+    \        elif [[ \"$key\" =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n\
+    \        else\n            echo \"False\"\n            return\n        fi\n  \
+    \  done < \"$1\"\n    if [ \"$lower\" -gt 0 ] && [ \"$upper\" -gt 0 ]; then\n\
+    \        echo \"False\"\n        return\n    fi\n    echo \"True\"", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if [\
+    \ ! -f \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    if\
+    \ [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n    #\
+    \ Get the first key\n    first_key=$(head -n 1 \"$1\" | cut -d, -f1)\n    # Get\
+    \ the first key's case\n    first_key_case=$(echo \"$first_key\" | tr '[:upper:]'\
+    \ '[:lower:]')\n    # If the first key's case is the same as the first key, then\
+    \ the\n    # first key is lower case.\n    if [ \"$first_key\" == \"$first_key_case\"\
+    \ ]; then\n        # All keys must be lower case\n        while read -r line;\
+    \ do\n            key=$(echo \"$line\" | cut -d, -f1)\n            key_case=$(echo\
+    \ \"$key\" | tr '[:upper:]' '[:lower:]')\n            if [ \"$key\" != \"$key_case\"\
+    \ ]; then\n                echo \"False\"\n                return\n          \
+    \  fi\n        done < \"$1\"\n    else\n        # All keys must be upper case\n\
+    \        while read -r line; do\n            key=$(echo \"$line\" | cut -d, -f1)\n\
+    \            key_case=$(echo \"$key\" | tr '[:lower:]' '[:upper:]')\n        \
+    \    if [ \"$key\" != \"$key_case\" ]; then\n                echo \"False\"\n\
+    \                return\n            fi\n        done < \"$1\"\n    fi\n    echo\
+    \ \"True\"", "    if [ $# -ne 1 ]; then\n        echo \"Usage: $0 <csv_file>\"\
+    \n        exit 1\n    fi\n    local csv_file=$1\n    local lower_keys=()\n   \
+    \ local upper_keys=()\n    local lower_count=0\n    local upper_count=0\n    local\
+    \ key\n    local value\n    while IFS=, read -r key value; do\n        if [[ $key\
+    \ =~ ^[a-z]+$ ]]; then\n            lower_keys+=(\"$key\")\n            lower_count=$((lower_count\
+    \ + 1))\n        elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys+=(\"\
+    $key\")\n            upper_count=$((upper_count + 1))\n        else\n        \
+    \    echo \"False\"\n            return\n        fi\n    done < \"$csv_file\"\n\
+    \    if [ $lower_count -eq $upper_count ]; then\n        echo \"False\"\n    \
+    \    return\n    fi\n    echo \"True\"", "    local -r dict=\"$1\"\n    local\
+    \ -r lower_case_keys=\"$(awk -F, '{print tolower($1)}' \"$dict\")\"\n    local\
+    \ -r upper_case_keys=\"$(awk -F, '{print toupper($1)}' \"$dict\")\"\n    local\
+    \ -r lower_case_keys_count=\"$(wc -l <<< \"$lower_case_keys\")\"\n    local -r\
+    \ upper_case_keys_count=\"$(wc -l <<< \"$upper_case_keys\")\"\n    local -r dict_count=\"\
+    $(wc -l <<< \"$dict\")\"\n    if [[ \"$dict_count\" -eq 0 ]]; then\n        echo\
+    \ \"False\"\n    elif [[ \"$lower_case_keys_count\" -eq \"$dict_count\" ]]; then\n\
+    \        echo \"True\"\n    elif [[ \"$upper_case_keys_count\" -eq \"$dict_count\"\
+    \ ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    local dict=\"$1\"\n    local key\n    local value\n    local lower_case_keys=0\n\
+    \    local upper_case_keys=0\n    local key_count=0\n    while IFS=, read key\
+    \ value; do\n        key_count=$((key_count + 1))\n        if [[ $key =~ ^[a-z]+$\
+    \ ]]; then\n            lower_case_keys=$((lower_case_keys + 1))\n        elif\
+    \ [[ $key =~ ^[A-Z]+$ ]]; then\n            upper_case_keys=$((upper_case_keys\
+    \ + 1))\n        fi\n    done < <(echo \"$dict\")\n    if [[ $key_count -eq 0\
+    \ ]]; then\n        echo \"False\"\n    elif [[ $lower_case_keys -eq $key_count\
+    \ ]]; then\n        echo \"True\"\n    elif [[ $upper_case_keys -eq $key_count\
+    \ ]]; then\n        echo \"True\"\n    else\n        echo \"False\"\n    fi",
+  "    if [ ! -f \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\n      \
+    \  exit 1\n    fi\n    if [ ! -s \"$1\" ]; then\n        echo \"ERROR: $1 is empty\"\
+    \n        exit 1\n    fi\n    if [ ! -r \"$1\" ]; then\n        echo \"ERROR:\
+    \ $1 is not readable\"\n        exit 1\n    fi\n    if [ ! -w \"$1\" ]; then\n\
+    \        echo \"ERROR: $1 is not writable\"\n        exit 1\n    fi\n    if [\
+    \ ! -x \"$1\" ]; then\n        echo \"ERROR: $1 is not executable\"\n        exit\
+    \ 1\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\
+    \n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR:\
+    \ $1 is not a file\"\n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n \
+    \       echo \"ERROR: $1 is not a file\"\n        exit 1\n    fi\n    if [ ! -f\
+    \ \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\n        exit 1\n \
+    \   fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\
+    \n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR:\
+    \ $1 is not a file\"\n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n \
+    \       echo \"ERROR: $1 is not a file\"\n        exit 1\n    fi\n    if [ ! -f\
+    \ \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\n        exit 1\n \
+    \   fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR: $1 is not a file\"\
+    \n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n        echo \"ERROR:\
+    \ $1 is not a file\"\n        exit 1\n    fi\n    if [ ! -f \"$1\" ]; then\n \
+    \       echo \"ERROR: $1 is not a file\"\n        exit 1\n    fi\n    if [", " \
+    \   if [ -z \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n \
+    \   # Check for lower case\n    if [ \"$(echo \"$1\" | awk -F, '{print tolower($1)}'\
+    \ | sort -u)\" == \"$(echo \"$1\" | awk -F, '{print $1}' | sort -u)\" ]; then\n\
+    \        echo \"True\"\n        return\n    fi\n    # Check for upper case\n \
+    \   if [ \"$(echo \"$1\" | awk -F, '{print toupper($1)}' | sort -u)\" == \"$(echo\
+    \ \"$1\" | awk -F, '{print $1}' | sort -u)\" ]; then\n        echo \"True\"\n\
+    \        return\n    fi\n    echo \"False\"", "    if [ -z \"$1\" ]; then\n  \
+    \      echo \"False\"\n        return\n    fi\n    local lower_keys=`cat $1 |\
+    \ cut -d, -f1 | grep -v '[A-Z]'`\n    local upper_keys=`cat $1 | cut -d, -f1 |\
+    \ grep -v '[a-z]'`\n    if [ -z \"$lower_keys\" ] || [ -z \"$upper_keys\" ]; then\n\
+    \        echo \"True\"\n    else\n        echo \"False\"\n    fi", "    local\
+    \ dict=\"$1\"\n    local key\n    local value\n    local lower_keys=0\n    local\
+    \ upper_keys=0\n    local lower_values=0\n    local upper_values=0\n    local\
+    \ lower_keys_values=0\n    local upper_keys_values=0\n    local lower_keys_upper_values=0\n\
+    \    local upper_keys_lower_values=0\n    local lower_keys_lower_values=0\n  \
+    \  local upper_keys_upper_values=0\n    local lower_keys_mixed_values=0\n    local\
+    \ upper_keys_mixed_values=0\n    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n\
+    \    local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n    local\
+    \ mixed_keys=0\n    local mixed_values=0\n    local mixed_keys_values=0\n    local\
+    \ mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_keys_lower_values=0\n    local\
+    \ mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n\
+    \    local mixed_keys=0\n    local mixed_values=0\n    local mixed_keys_values=0\n\
+    \    local mixed_keys_lower_values=0\n    local mixed_keys_upper_values=0\n  \
+    \  local mixed_keys_mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys=0\n\
+    \    local mixed_values=0\n    local mixed_keys_values=0\n    local mixed_keys_lower_values=0\n\
+    \    local mixed_keys_upper_values=0\n    local mixed_keys_mixed_values=0\n  \
+    \  local mixed_keys_values=0\n    local mixed_keys=0\n    local mixed_values=0\n\
+    \    local mixed_keys_values=0\n    local mixed_", "    local dict=\"$1\"\n  \
+    \  local lower_keys=0\n    local upper_keys=0\n    local key\n    local value\n\
+    \    while IFS=, read -r key value; do\n        if [[ \"$key\" =~ ^[a-z]+$ ]];\
+    \ then\n            lower_keys=$((lower_keys + 1))\n        elif [[ \"$key\" =~\
+    \ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys + 1))\n        else\n\
+    \            echo \"False\"\n            return\n        fi\n    done < <(echo\
+    \ \"$dict\")\n    if [[ \"$lower_keys\" -eq 0 && \"$upper_keys\" -eq 0 ]]; then\n\
+    \        echo \"False\"\n    elif [[ \"$lower_keys\" -eq 0 ]]; then\n        echo\
+    \ \"True\"\n    elif [[ \"$upper_keys\" -eq 0 ]]; then\n        echo \"True\"\n\
+    \    else\n        echo \"False\"\n    fi", "    if [ -z \"$1\" ]; then\n    \
+    \    echo \"False\"\n        return\n    fi\n    # Check for empty dictionary\n\
+    \    if [ ! -s \"$1\" ]; then\n        echo \"False\"\n        return\n    fi\n\
+    \    # Check for all lower case\n    if [ \"$(cat $1 | cut -d, -f1 | tr '[:upper:]'\
+    \ '[:lower:]' | sort | uniq -c | wc -l)\" -eq 1 ]; then\n        echo \"True\"\
+    \n        return\n    fi\n    # Check for all upper case\n    if [ \"$(cat $1\
+    \ | cut -d, -f1 | tr '[:lower:]' '[:upper:]' | sort | uniq -c | wc -l)\" -eq 1\
+    \ ]; then\n        echo \"True\"\n        return\n    fi\n    echo \"False\"",
+  "    if [ $# -ne 1 ]; then\n        echo \"Usage: $0 <csv_file>\"\n        exit\
+    \ 1\n    fi\n    if [ ! -f $1 ]; then\n        echo \"Error: $1 is not a file\"\
+    \n        exit 1\n    fi\n    if [ ! -r $1 ]; then\n        echo \"Error: $1 is\
+    \ not readable\"\n        exit 1\n    fi\n    if [ ! -s $1 ]; then\n        echo\
+    \ \"False\"\n        exit 0\n    fi\n    lower_keys=0\n    upper_keys=0\n    while\
+    \ read line; do\n        key=$(echo $line | cut -d, -f1)\n        if [[ $key =~\
+    \ ^[a-z]+$ ]]; then\n            lower_keys=$((lower_keys+1))\n        elif [[\
+    \ $key =~ ^[A-Z]+$ ]]; then\n            upper_keys=$((upper_keys+1))\n      \
+    \  else\n            echo \"False\"\n            exit 0\n        fi\n    done\
+    \ < $1\n    if [ $lower_keys -eq 0 ]; then\n        echo \"True\"\n    elif [\
+    \ $upper_keys -eq 0 ]; then\n        echo \"True\"\n    else\n        echo \"\
+    False\"\n    fi", "    if [ -z \"$1\" ]; then\n        echo \"False\"\n      \
+    \  return\n    fi\n    # Get the keys\n    keys=$(cut -d, -f1 $1)\n    # Get the\
+    \ values\n    values=$(cut -d, -f2 $1)\n    # Check if all keys are lowercase\n\
+    \    if [ \"$(echo $keys | tr '[:upper:]' '[:lower:]')\" = \"$keys\" ]; then\n\
+    \        # Check if all values are lowercase\n        if [ \"$(echo $values |\
+    \ tr '[:upper:]' '[:lower:]')\" = \"$values\" ]; then\n            echo \"True\"\
+    \n            return\n        fi\n    fi\n    # Check if all keys are uppercase\n\
+    \    if [ \"$(echo $keys | tr '[:lower:]' '[:upper:]')\" = \"$keys\" ]; then\n\
+    \        # Check if all values are uppercase\n        if [ \"$(echo $values |\
+    \ tr '[:lower:]' '[:upper:]')\" = \"$values\" ]; then\n            echo \"True\"\
+    \n            return\n        fi\n    fi\n    echo \"False\"", "    local dict=\"\
+    $1\"\n    local key\n    local value\n    local lower=0\n    local upper=0\n \
+    \   local total=0\n    local result=0\n    while IFS=, read key value; do\n  \
+    \      if [[ $key =~ ^[a-z]+$ ]]; then\n            lower=$((lower+1))\n     \
+    \   elif [[ $key =~ ^[A-Z]+$ ]]; then\n            upper=$((upper+1))\n      \
+    \  fi\n        total=$((total+1))\n    done < <(echo \"$dict\")\n    if [[ $total\
+    \ -eq 0 ]]; then\n        result=1\n    elif [[ $lower -eq $total ]]; then\n \
+    \       result=0\n    elif [[ $upper -eq $total ]]; then\n        result=0\n \
+    \   else\n        result=1\n    fi\n    echo $result", "    local dict=\"$1\"\n\
+    \    local key\n    local value\n    local lower_keys=0\n    local upper_keys=0\n\
+    \    local lower_key\n    local upper_key\n    local lower_value\n    local upper_value\n\
+    \    local lower_dict\n    local upper_dict\n    local lower_dict_keys\n    local\
+    \ upper_dict_keys\n    local lower_dict_values\n    local upper_dict_values\n\
+    \    local lower_dict_keys_values\n    local upper_dict_keys_values\n    local\
+    \ lower_dict_keys_values_count\n    local upper_dict_keys_values_count\n    local\
+    \ lower_dict_keys_values_count_expected\n    local upper_dict_keys_values_count_expected\n\
+    \    local lower_dict_keys_values_count_expected_lower\n    local upper_dict_keys_values_count_expected_upper\n\
+    \    local lower_dict_keys_values_count_expected_lower_upper\n    local upper_dict_keys_values_count_expected_upper_lower\n\
+    \    local lower_dict_keys_values_count_expected_lower_upper_lower\n    local\
+    \ upper_dict_keys_values_count_expected_upper_lower_upper\n    local lower_dict_keys_values_count_expected_lower_upper_lower_upper\n\
+    \    local upper_dict_keys_values_count_expected_upper_lower_upper_lower\n   \
+    \ local lower_dict_keys_values_count_expected_lower_upper_lower_upper_lower\n\
+    \    local upper_dict_keys_values_count_expected_upper_lower_upper_lower_upper\n\
+    \    local lower_dict_keys_values_count_expected_lower_upper_lower_upper_lower_upper\n\
+    \    local upper_dict_keys_values_count_expected_upper_lower_upper_lower_upper_lower\n\
+    \    local lower_dict_keys_values_count_expected_lower_upper_lower_upper_lower_upper_lower\n\
+    \    local upper_dict_keys_values_count_expected_upper_lower_upper_lower_upper_lower_upper\n\
+    \    local lower_dict_keys_values_count_expected_lower_upper_lower_upper_lower_upper_lower_upper\n\
+    \   "]
 stop_tokens:
 - "\n}"
