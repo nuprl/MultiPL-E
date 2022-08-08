@@ -30,9 +30,9 @@ def eval_script(path: Path):
     return {
             "status": status,
             "exit_code": returncode,
-            "stdout": str(output.stdout),
-            "stderr": str(output.stderr),
-                }
+            "stdout": output.stdout,
+            "stderr": output.stderr
+    }
 
 
 
