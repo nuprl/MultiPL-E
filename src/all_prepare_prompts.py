@@ -2,14 +2,11 @@ from pathlib import Path
 import subprocess
 
 # Loop over experiments in this order.
-TEMPS = [ "0.2", "0.8" ] # skip 0.8 for now
-VARIATION = [ "reworded", "keep", "transform"  ]
+TEMPS = [ "0.2", "0.8" ]
+VARIATION = [ "reworded", "keep", "transform", "remove"  ]
 LANGS = [ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
           "go", "lua", "pl", "php", "rb",  "scala", "swift", "rkt" ]
 MODELS = [ "davinci", "incoder" ]
-
-
-
 
 def doctests(variation):
     match variation:
@@ -51,7 +48,5 @@ if __name__ == "__main__":
         for model in MODELS:
           for variation in VARIATION:
             if temp == "0.8" and variation != "reworded":  
-              continue
-            if variation == "remove":
               continue
             prepare(lang, model, temp, variation)
