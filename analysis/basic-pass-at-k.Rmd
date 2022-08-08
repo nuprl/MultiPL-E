@@ -7,8 +7,7 @@ date: "2022-08-06"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
-library(ggplot2)
-library(dplyr)
+library(tidyverse)
 ```
 
 ## Basic Pass at K Calculation
@@ -18,23 +17,38 @@ and plot it according to language and to sublanguage. Exact plot types are
 not at all final, but the idea is to do a first pass at reading in the data.
 
 ```{r load-pass-1}
-all_pass_at_1_eval_run <- read_csv("~/polyglot-codegen-evaluation/model_results/all-pass-at-1-eval-run.csv",
-         col_names = FALSE, col_types = cols(X6 = col_integer(), 
-                             X7 = col_integer(), X8 = col_integer()))
-pass_at_1 <- tibble::as_tibble(all_pass_at_1_eval_run)
-pass_at_1  <- dplyr::rename(pass_at_1, PL = X1, MODEL=X2, TEMP=X3, DOCS=X4, TERMS=X5,
-              MIN_COMPLETE=X6, K=X7, MIN_PROBLEM=X8, RES=X9)
+frequency_map <- read_csv("frequency-map.csv", col_names = c('PL','FREQ'))
+cn<- c("PL","MODEL","TEMP","DOCS","TERMS","MIN_COMPLETE","K","MIN_PROBLEM","RES")
+pass_at_1 <- read_csv("../model_results/all-pass-at-1-eval-run.csv",col_names = cn)
+pass_at_1 <- pass_at_1 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
+pass_at_1 <- merge(pass_at_1,frequency_map)
 ```
-```{r load-at-10}
-all_pass_at_10_eval_run <- read_csv("~/polyglot-codegen-evaluation/model_results/all-pass-at-10-eval-run.csv",
-         col_names = FALSE, col_types = cols(X6 = col_integer(), 
-                             X7 = col_integer(), X8 = col_integer()))
-pass_at_10 <- tibble::as_tibble(all_pass_at_10_eval_run)
-pass_at_10  <- dplyr::rename(pass_at_10, PL = X1, MODEL=X2, TEMP=X3, DOCS=X4, TERMS=X5,
-              MIN_COMPLETE=X6, K=X7, MIN_PROBLEM=X8, RES10=X9)
 
-frequency_map <- read_csv("frequency-map.csv", col_names = FALSE) %>%
-                dplyr::rename(PL=X1, CATEGORY=X2)
+```{r load-pass-1}
+pass_at_10 <- read_csv("../model_results/all-pass-at-10-eval-run.csv",col_names = cn)
+pass_at_10 <- pass_at_10 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
+pass_at_10 <- merge(pass_at_10,frequency_map)
+
+pass_at_100 <- read_csv("../model_results/all-pass-at-100-eval-run.csv",col_names = cn)
+pass_at_100 <- pass_at_100 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
+pass_at_100 <- merge(pass_at_100,frequency_map)
+
+all_pass <- rbind(pass_at_1,rbind(pass_at_100,pass_at_10))
+```
+
+```{r}
+per_problem <- read_csv("../results/per_problem_pass.csv",col_names = c("PL","PROBLEM","MODEL","EXPT","rate1","rate10","rate100"))
+per_problem <- merge(per_problem,frequency_map)
+per_problem$rate1 <- as.numeric(per_problem$rate1)
+per_problem$rate10 <- as.numeric(per_problem$rate10)
+per_problem$rate100 <- as.numeric(per_problem$rate100)
+```
+
+```{r load-at-10}
+cn<- c("PL","MODEL","TEMP","DOCS","TERMS","MIN_COMPLETE","K","MIN_PROBLEM","RES10")
+pass_at_10 <- read_csv("~/polyglot-codegen-evaluation/model_results/all-pass-at-10-eval-run.csv", col_names = cn)
+
+
 
 #pass_results<- tibble::add_column(pass_at_1, pass_at_10$RES10)
 
@@ -72,6 +86,56 @@ ggplot(davinci_only, aes(x=DOCS, y=RES, col=factor(PL))) +
   geom_point() +
   facet_grid(~ TERMS, scales = 'free') +  theme_bw() + ylab("Pass@k") + xlab("Variation")
 ```
+
+Plot pass at 1 by model and experiment, Python-only
+
+```{r}
+ggplot(subset(pass_at_1,PL=="py"),aes(x=EXPT,y=RES,fill=MODEL)) + geom_col(position="dodge")
+```
+
+Plot pass at 1 by model, expt=KEEP KEEP, languages by frequency
+ 
+```{r}
+pl_labs <- c(`cpp` = "C++", `java` = "Java", `js` = "JavaScript", `py` = "Python",`pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
+pass_at_1$FREQ <- factor(pass_at_1$FREQ,levels = c("High","Medium","Low","Niche"))
+ggplot(subset(pass_at_1,EXPT=='transform_transform'),aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 4,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=16))
+ggsave("lang_freq_pass1_reworded.pdf")
+```
+
+Plot all passes, by model and language for all experiments
+
+```{r}
+all_pass$K <- factor(all_pass$K,levels = c("1","10","100"))
+all_pass <- all_pass %>% mutate(MODEL_K = paste0(MODEL,'_',K))
+all_pass$MODEL_K <- factor(all_pass$MODEL_K,levels = c("davinci_1","davinci_10","davinci_100","incoder_1","incoder_10","incoder_100"))
+ggplot(all_pass, aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~EXPT, nrow = 4) + scale_fill_manual(name = "Model", values=c("#DC267F", "#FE6100", "#FFB000","#000000","#0072B2","#56B4E9"),labels=c('Codex k=1', 'Codex k=10','Codex k=100','InCoder k=1', 'InCoder k=10','InCoder k=100')) + ylab("Average pass rate")+ theme(text=element_text(size=16))
+ggsave("all_models_temps.pdf")
+```
+
+Plot all passes, by model and language for TRANSFORM TRANSFORM
+
+```{r}
+ggplot(subset(all_pass,EXPT="transform_transform"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#DC267F", "#FE6100", "#FFB000","#000000","#0072B2","#56B4E9"),labels=c('Codex k=1', 'Codex k=10','Codex k=100','InCoder k=1', 'InCoder k=10','InCoder k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1))
+ggsave("all_models_temps_reworded.pdf",height=3,width=12)
+```
+
+Boxplots using per-problem k=1
+
+```{r}
+s <- subset(per_problem,EXPT=='reworded'&MODEL=='davinci')
+ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_boxplot(stat = "boxplot",outlier.fill = NULL, outlier.shape = 19, outlier.size = 1.5) 
+```
+
+```{r}
+s <- subset(per_problem,EXPT=='reworded'&MODEL=='davinci')
+ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_violin() + geom_jitter(height = 0, width = 0.1)
+```
+
+
+```{r}
+ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0, width = 0.1)
+```
+
 
 ## Do Some High Level Stats 
 
