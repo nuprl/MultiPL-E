@@ -13,7 +13,7 @@ from csv import reader
 LANG = ["py","ts", "js", "java", "d", "rs", "jl", "sh", "cs", \
           "go", "lua", "pl", "php", "rb",  "scala", "swift", "r", "rkt", 'cpp']
 MODEL = ["davinci", "incoder"]
-TEMP = [ "0.2"] # come back to this
+TEMP = [ "0.2", "0.8"] 
 
 ENDINGMAP = {'reworded': ['transform', 'transform'], 'keep': ['keep', 'keep'], \
                 'remove': ['remove', 'keep'], 'transform': ['transform', 'keep']}
