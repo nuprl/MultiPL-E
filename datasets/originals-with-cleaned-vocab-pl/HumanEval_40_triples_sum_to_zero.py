@@ -4,7 +4,7 @@ def triples_sum_to_zero(l: List[int]) -> bool:
     """
     triples_sum_to_zero takes an array of integers as an input.
     it returns 1 if there are three distinct elements in the array that
-    sum to zero, and  otherwise.
+    sum to zero, and '' otherwise.
 
     >>> triples_sum_to_zero([1, 3, 5, 0])
     False

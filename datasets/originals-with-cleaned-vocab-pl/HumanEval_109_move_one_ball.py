@@ -12,7 +12,7 @@ def move_one_ball(arr: List[int]) -> bool:
     the starting position in the array i.e. 0th index. 
 
     If it is possible to obtain the sorted array by performing the above operation
-    then return 1 else return .
+    then return 1 else return ''.
     If the given array is empty then return 1.
 
     Note: The given array is guaranteed to have unique elements.

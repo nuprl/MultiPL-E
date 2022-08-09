@@ -1,7 +1,7 @@
 
 def valid_date(date: str) -> bool:
     """You have to write a function which validates a given date string and
-    returns 1 if the date is valid otherwise .
+    returns 1 if the date is valid otherwise ''.
     The date is valid if all of the following rules are satisfied:
     1. The date string is not empty.
     2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.

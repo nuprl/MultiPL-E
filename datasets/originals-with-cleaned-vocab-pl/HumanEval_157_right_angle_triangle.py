@@ -2,7 +2,7 @@
 def right_angle_triangle(a: int, b: int, c: int) -> bool:
     """
     Given the lengths of the three sides of a triangle. Return 1 if the three
-    sides form a right-angled triangle,  otherwise.
+    sides form a right-angled triangle, '' otherwise.
     A right-angled triangle is a triangle in which one angle is right angle or 
     90 degree.
     Example:
