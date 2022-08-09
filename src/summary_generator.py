@@ -51,7 +51,7 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
     for problem_yaml_path in sorted(dir.glob("*.results.yaml")):
         with problem_yaml_path.open() as f:
             test_results = yaml.safe_load(f)
-            if test_results is None: #TODO (molly): this should not be here for final as we should never be in this situation
+            if test_results is None: 
                 continue 
             print(problem_yaml_path)
             #TODO (molly): these need to factor out "OtherError" for different types for error analysis stage
@@ -64,12 +64,8 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
                     counts['Exception'] += 1
                 else:
                     counts["OtherError"] += 1
-            #TODO (molly): turn on when doing final counts 
-            # if sum(counts.values()) != 200:
-            #         print(f'{testResults.name} only has {sum(counts.values())} completions - aborting.')
-            #         return False
             if printToShell:
-                print(f"For the 200 attempts at {test_results['name']}, we get the following results:")
+                print(f"For the attempts at {test_results['name']}, we get the following results:")
                 print(f"{counts['OK']} Success, {counts['OtherError']} OtherError, {counts['Exception']} Exception")
             if writeToFile:
                 with open(results_file, "a") as wrf:
