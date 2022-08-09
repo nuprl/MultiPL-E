@@ -9,6 +9,7 @@
 import os
 import signal
 import subprocess
+import traceback
 from pathlib import Path
 from generic_eval import main as gmain
 
@@ -18,7 +19,7 @@ LANG_EXT = ".sh"
 def eval_script(path: Path):
     # Capture output - will be generated regardless of success, fail, or syntax error
     p = subprocess.Popen(
-        ["bash", path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True, encoding="utf-8"
+        ["bash", path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True
     )
     try:
         outs, errs = p.communicate(timeout=5)
@@ -27,7 +28,7 @@ def eval_script(path: Path):
         if returncode == 0: # Assumes exit-code 0 is all okay
             status = "OK"
         else: # We have entered into a failure or a SyntaxError
-            if "syntax error" in errs:
+            if "syntax error" in str(errs):
                 status = "SyntaxError"
             else:
                 status = "Exception"
@@ -38,8 +39,9 @@ def eval_script(path: Path):
         status = "Timeout"
         output = exc
         returncode = -1
-    except:
+    except Exception as exc:
         print('Something very weird has happened in subprocess.run for bash, INVESTIGATE!')
+        print(f'Exception: {exc}')
 
     return {
         "status": status,
