@@ -16,13 +16,12 @@ def eval_script(path: Path):
     exit_code = None
     try:
         build = subprocess.run(["go", "test", path],
-                               encoding="utf-8",
                                timeout=15,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
 
-        stdout = build.stdout
-        stderr = build.stderr
+        stdout = build.stdout.decode("utf-8", errors="ignore")
+        stderr = build.stderr.decode("utf-8", errors="ignore")
         exit_code = build.returncode
         # write to stderr just so that we can redirect stdout to a csv
 
@@ -38,8 +37,8 @@ def eval_script(path: Path):
     return {
         "status": status,
         "exit_code": exit_code,
-        "stdout": str(stdout),
-        "stderr": str(stderr),
+        "stdout": stdout,
+        "stderr": stderr,
     }
 
 
