@@ -5,10 +5,10 @@ lines = []
 nums = []
 with open(os.path.join(sys.path[0], 'classification_signatures.txt'), 'r') as f:
     lines = f.readlines()
-with open(os.path.join(sys.path[0], 'annotation_classification.csv'), 'w') as f:
+with open(os.path.join(sys.path[0], 'type_classification.csv'), 'w') as f:
     f.write('PROB,List,Bool,Dictionary,Tuple\n')
     for line in lines:
-        prob_re = re.compile('(HumanEval_\d*)_')
+        prob_re = re.compile('HumanEval_\d*')
         result = re.match(prob_re, line).group()
         if result in nums:
             print('THERE ARE TWO OF THESE!', result)
