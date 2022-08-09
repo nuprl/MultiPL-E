@@ -2,7 +2,7 @@ from typing import List
 
 def will_it_fly(q: List[int], w: int) -> bool:
     """
-    Write a function that returns 1 if the object q will fly, and  otherwise.
+    Write a function that returns 1 if the object q will fly, and '' otherwise.
     The object q will fly if it's balanced (it is a palindromic array) and the sum of its elements is less than or equal the maximum possible weight w.
 
     Example:

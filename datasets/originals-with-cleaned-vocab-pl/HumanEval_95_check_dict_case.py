@@ -3,8 +3,8 @@ from typing import Dict
 def check_dict_case(dict: Dict[str, str]) -> bool:
     """
     Given a hash, return 1 if all keys are strings in lower 
-    case or all keys are strings in upper case, else return .
-    The function should return  is the given hash is empty.
+    case or all keys are strings in upper case, else return ''.
+    The function should return '' is the given hash is empty.
     Examples:
     >>> check_dict_case({"a":"apple", "b":"banana"})
     True

@@ -1,0 +1,467 @@
+language: sh
+name: HumanEval_21_rescale_to_unit
+results:
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    awk 'BEGIN {\n        min = +1e+10\n        max = -1e+10\n    }\n   \
+    \ {\n        min = min < $1 ? min : $1\n        max = max > $1 ? max : $1\n  \
+    \  }\n    END {\n        delta = max - min\n        for (i = 1; i <= NF; i++)\
+    \ {\n            printf(\"%f \", ($i - min) / delta)\n        }\n    }' $1\n}\n\
+    \ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n    [[\
+    \ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\"\
+    ) = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5\
+    \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0\
+    \ 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0\
+    \ 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'awk: cmd. line:3: fatal: cannot open file `2.0'' for reading (No such file
+    or directory)
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  awk -v \"lst=$1\" '\n    BEGIN {\n      split(lst, l, \" \");\n      min=l[1];\n\
+    \      max=l[1];\n      for (n in l) {\n        if (l[n] < min) {\n          min\
+    \ = l[n];\n        }\n        if (l[n] > max) {\n          max = l[n];\n     \
+    \   }\n      }\n      for (n in l) {\n        printf \"%f \", ((l[n] - min) /\
+    \ (max - min));\n      }\n      printf \"\\n\";\n    }\n  '\n}\n\ncandidate()\
+    \ {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\"\
+    \ ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\"\
+    \ ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  # Calculate min, max and scale factor\n  local min=\"$(echo \"$1\" | sort\
+    \ -n | head -n 1)\"\n  local max=\"$(echo \"$1\" | sort -n | tail -n 1)\"\n  local\
+    \ scale=\"$(bc -l <<< \"scale=8; (1.0-0.0)/($max-$min)\")\"\n\n  # Map to unit\n\
+    \  while read val; do\n    printf \"%.8f\\n\" \"$(bc -l <<< \"scale=8; ($val-$min)*$scale\"\
+    )\"\n  done <<< \"$1\"\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\n\
+    set -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[\
+    \ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0\
+    \ 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0\
+    \ 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0\
+    \ 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '(standard_in) 1: syntax error
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: syntax error
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local max min x\n    max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail\
+    \ -n 1`\n    min=`echo \"$1\" | tr ' ' '\\n' | sort -n | head -n 1`\n    echo\
+    \ \"$1\" | tr ' ' '\\n' | while read x; do\n        echo \"scale=3; ($x - $min)\
+    \ / ($max - $min)\" | bc\n    done\n}\n\ncandidate() {\n    rescale_to_unit \"\
+    $@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\"\
+    \ ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    echo \"${@}\" |\n    {\n        read -r -a vals\n        min=${vals[0]}\n\
+    \        max=${vals[0]}\n        num_vals=${#vals[@]}\n        for ((i=1; i<num_vals;\
+    \ i++)); do\n            val=${vals[i]}\n            if (( val < min )); then\n\
+    \                min=$val\n            fi\n            if (( val > max )); then\n\
+    \                max=$val\n            fi\n        done\n        # echo \"$min\
+    \ $max\"\n        max_sub_min=$((max - min))\n        if (( max_sub_min < 1 ));\
+    \ then\n            max_sub_min=1\n        fi\n        echo -n \"${vals[0]} \"\
+    \n        for ((i=1; i<num_vals; i++)); do\n            val=${vals[i]}\n     \
+    \       val_sub_min=$((val - min))\n            echo -n \"$(echo \"scale=4; $val_sub_min\
+    \ / $max_sub_min\" | bc -l) \"\n        done\n    }\n}\n\ncandidate() {\n    rescale_to_unit\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0\
+    \ 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp5p8dmjd4.sh: line 17: ((: 49.9: syntax error: invalid arithmetic
+    operator (error token is ".9")
+
+    /tmp/tmp5p8dmjd4.sh: line 20: ((: 49.9: syntax error: invalid arithmetic operator
+    (error token is ".9")
+
+    /tmp/tmp5p8dmjd4.sh: line 25: 2.0: syntax error: invalid arithmetic operator (error
+    token is ".0")
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    #### TODO:\n    # 1. Compute the minimum and maximum values of the input\
+    \ list\n    # 2. Compute the scaling factor\n    # 3. For each input value, multiply\
+    \ by the scaling factor, then subtract the minimum\n    #\n    #    (x - x_min)\
+    \ * s\n    # ---------------\n    #    x_max - x_min\n    #\n    # HINT: Use bc\
+    \ for floating point arithmetic\n    min=`echo \"$1\" | tr ' ' '\\n' | sort -n\
+    \ | head -n 1`\n    max=`echo \"$1\" | tr ' ' '\\n' | sort -n | tail -n 1`\n \
+    \   scale=`echo \"scale=2; 1/($max - $min)\" | bc`\n    result=`echo \"$1\" |\
+    \ tr ' ' '\\n' | while read line; do echo \"scale=2; ($line - $min) * $scale\"\
+    \ | bc; done`\n    echo \"$result\"\n}\n\ncandidate() {\n    rescale_to_unit \"\
+    $@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\"\
+    \ ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    # Get max and min\n    local max=${1%% *}\n    local min=${1%% *}\n \
+    \   for i in $1; do\n        [ \"$i\" -gt \"$max\" ] && max=$i\n        [ \"$i\"\
+    \ -lt \"$min\" ] && min=$i\n    done\n    # Rescale\n    for i in $1; do\n   \
+    \     echo $(echo \"scale=2; $i - $min\" | bc)/$(echo \"scale=2; $max - $min\"\
+    \ | bc)\n    done\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate\
+    \ \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\"\
+    ) = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\")\
+    \ = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\"\
+    ) = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmpfhp_87gk.sh: line 13: [: 2.0: integer expression expected
+
+    /tmp/tmpfhp_87gk.sh: line 14: [: 2.0: integer expression expected
+
+    /tmp/tmpfhp_87gk.sh: line 13: [: 49.9: integer expression expected
+
+    /tmp/tmpfhp_87gk.sh: line 14: [: 49.9: integer expression expected
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  local list=()\n  local min=0\n  local max=0\n  local n=0\n  local i=0\n\
+    \  local scaled=0\n  list=($1)\n  min=${list[0]}\n  max=${list[0]}\n  n=${#list[@]}\n\
+    \  for ((i=0; i<n; i++)); do\n    if [[ ${list[$i]} < $min ]]; then\n      min=${list[$i]}\n\
+    \    fi\n    if [[ ${list[$i]} > $max ]]; then\n      max=${list[$i]}\n    fi\n\
+    \  done\n  for ((i=0; i<n; i++)); do\n    scaled=$(echo \"scale=3;(${list[$i]}\
+    \ - $min) / ($max - $min)\" | bc)\n    printf \"%0.3f \" $scaled\n  done\n  echo\n\
+    }\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n  \
+    \  [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\"\
+    ) = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5\
+    \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0\
+    \ 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0\
+    \ 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 2
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  <%\n    arr = []\n    arr.push(1)\n    arr.push(2)\n    arr.push(3)\n \
+    \   arr.push(4)\n    arr.push(5)\n    # puts arr\n    # puts \"++++++++++++++\"\
+    \n    # puts arr.min\n    # puts arr.max\n    # puts \"++++++++++++++\"\n    #\
+    \ puts arr.map { |x| x.to_f / arr.max }\n    # puts \"++++++++++++++\"\n    #\
+    \ arr.map { |x| x.to_f / arr.max }\n  %>\n}\n\ncandidate() {\n    rescale_to_unit\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0\
+    \ 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmplet5c145.sh: line 11: syntax error near unexpected token `1''
+
+    /tmp/tmplet5c145.sh: line 11: `    arr.push(1)''
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local xs=( $1 )\n    local i\n    local x\n    local xmin=$(min \"${xs[@]}\"\
+    )\n    local xmax=$(max \"${xs[@]}\")\n    local xdiff=$(echo \"$xmax - $xmin\"\
+    \ | bc -l)\n    for i in ${!xs[@]}; do\n        x=${xs[$i]}\n        xs[$i]=$(echo\
+    \ \"(($x - $xmin) / $xdiff)\" | bc -l)\n    done\n    echo \"${xs[@]}\"\n}\n\n\
+    candidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\"\
+    \ ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\"\
+    \ ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp7qjutsgq.sh: line 12: min: command not found
+
+    /tmp/tmp7qjutsgq.sh: line 13: max: command not found
+
+    (standard_in) 2: syntax error
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: syntax error
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local numbers=\"$1\"\n    local max=0\n    local min=0\n    IFS=' ' read\
+    \ -r -a n < <(echo \"$numbers\")\n    for i in \"${n[@]}\"; do\n        if [[\
+    \ $i > $max ]]; then\n            max=$i\n        fi\n        if [[ $i < $min\
+    \ ]]; then\n            min=$i\n        fi\n    done\n    local diff=$( echo \"\
+    scale=20;$max - $min\" | bc )\n    local rescaled=\"\"\n    for i in \"${n[@]}\"\
+    ; do\n        local r=$( echo \"scale=20;($i - $min) / $diff\" | bc )\n      \
+    \  if [[ $r == *e* ]]; then\n            r=0\n        fi\n        rescaled=\"\
+    $rescaled $r\"\n    done\n    echo \"$rescaled\"\n}\n\ncandidate() {\n    rescale_to_unit\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0\
+    \ 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local input=$1\n    local rescaled_array\n    local i\n    local min\n\
+    \    local max\n    local result\n\n    rescaled_array=($input)\n    min=${rescaled_array[0]}\n\
+    \    max=${rescaled_array[0]}\n    for i in \"${rescaled_array[@]}\"; do\n   \
+    \     if (( $(echo \"$i < $min\" | bc -l) )); then\n            min=$i\n     \
+    \   fi\n        if (( $(echo \"$i > $max\" | bc -l) )); then\n            max=$i\n\
+    \        fi\n    done\n    result=()\n    for i in \"${rescaled_array[@]}\"; do\n\
+    \        result+=($(echo \"scale=10; ($i - $min) / ($max - $min)\" | bc -l))\n\
+    \    done\n    echo \"${result[@]}\"\n}\n\ncandidate() {\n    rescale_to_unit\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0\
+    \ 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate\
+    \ \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate\
+    \ \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate\
+    \ \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 0
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  local scale_to_unit=$(python3 -c \"\nimport sys\nimport numpy as np\nl\
+    \ = [float(x) for x in '$1'.split()]\nl = (l - np.min(l)) / (np.max(l) - np.min(l))\n\
+    print(' '.join([str(x) for x in l]))\n\")\n  echo $scale_to_unit\n}\n\ncandidate()\
+    \ {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\"\
+    \ ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\"\
+    \ ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n}\n\nrun_test"
+  status: OK
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020270
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  local array=($1)\n  local min=${array[0]}\n  local max=${array[0]}\n  for\
+    \ x in ${array[@]}; do\n    if (( $(echo \"$x < $min\" | bc -l) )); then\n   \
+    \   min=$x\n    fi\n    if (( $(echo \"$x > $max\" | bc -l) )); then\n      max=$x\n\
+    \    fi\n  done\n  local minmax_range=$(echo \"scale=5; $max - $min\" | bc -l)\n\
+    \  local norm_array=()\n  for x in ${array[@]}; do\n    norm_array+=($(echo \"\
+    scale=5; ($x - $min) / $minmax_range\" | bc -l))\n  done\n  echo ${norm_array[@]}\n\
+    }\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n  \
+    \  [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\"\
+    ) = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5\
+    \ 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0\
+    \ 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0\
+    \ 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  local t_oldest=`echo \"$1\" | awk '{print $1}'`\n  local t_newest=`echo\
+    \ \"$1\" | awk '{print $NF}'`\n  local t_delta=`echo \"$t_newest - $t_oldest\"\
+    \ | bc`\n  for i in $1; do\n    echo \"scale=4; ($i - $t_oldest) / $t_delta\"\
+    \ | bc\n  done\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate\
+    \ \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\"\
+    ) = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\")\
+    \ = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\"\
+    ) = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local -n arr=$1\n    local arr2=(\"${arr[@]}\")\n    local min=$(get_min\
+    \ \"${arr2[@]}\")\n    local max=$(get_max \"${arr2[@]}\")\n    local range=$(calc\
+    \ \"$max - $min\")\n    if [[ $range == 0 ]]; then\n        range=1\n    fi\n\
+    \    local i=0\n    while [[ $i -lt ${#arr[@]} ]]; do\n        local new_val=$(calc\
+    \ \"${arr[$i]} - $min\")\n        arr[$i]=$(calc \"$new_val / $range\")\n    \
+    \    ((i++))\n    done\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\n\
+    set -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[\
+    \ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0\
+    \ 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0\
+    \ 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0\
+    \ 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmprmk_s9aa.sh: line 9: local: `2.0 49.9'': invalid variable name
+    for name reference
+
+    /tmp/tmprmk_s9aa.sh: line 11: get_min: command not found
+
+    /tmp/tmprmk_s9aa.sh: line 12: get_max: command not found
+
+    /tmp/tmprmk_s9aa.sh: line 13: calc: command not found
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    # We create temporary file to be used by awk\n    awk -v numbers=\"$1\"\
+    \ 'BEGIN {\n        max = 0;\n        min = 9999999;\n        # Split out the\
+    \ numbers into an array\n        split(numbers, number_array, \" \");\n      \
+    \  # Find the max and min numbers\n        for (i in number_array) {\n       \
+    \     if (number_array[i] > max) {\n                max = number_array[i];\n \
+    \           }\n            if (number_array[i] < min) {\n                min =\
+    \ number_array[i];\n            }\n        }\n        # Apply the transform to\
+    \ each number and output the results\n        for (i in number_array) {\n    \
+    \        new_number = (number_array[i] - min) / (max - min);\n            # Print\
+    \ the number and add a comma to it\n            printf(\"%f,\", new_number);\n\
+    \        }\n    }'\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate\
+    \ \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\"\
+    ) = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\")\
+    \ = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\"\
+    ) = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local numbers=($1)\n    local number max_number min_number fresult\n\
+    \    max_number=${numbers[0]}\n    min_number=${numbers[0]}\n    for number in\
+    \ ${numbers[@]}; do\n        if [[ $number > $max_number ]]; then\n          \
+    \  max_number=$number\n        fi\n        if [[ $number < $min_number ]]; then\n\
+    \            min_number=$number\n        fi\n    done\n    for number in ${numbers[@]};\
+    \ do\n        fresult=$(echo \"scale=3; ($number - $min_number) / ($max_number\
+    \ - $min_number)\" | bc)\n        printf \"%0.3f\\n\" $fresult\n    done\n}\n\n\
+    candidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\"\
+    \ ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\"\
+    \ ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\"\
+    \ ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n  local -n list=$1\n  if [ \"$#\" -ne 1 ]; then\n    echo \"Illegal number\
+    \ of parameters\"\n    exit 1\n  fi\n  local min=${list[0]}\n  local max=${list[0]}\n\
+    \  local rescaled=()\n  for x in ${list[@]}; do\n    if (( $(echo \"$x < $min\"\
+    \ | bc -l) )); then\n      min=$x\n    fi\n    if (( $(echo \"$x > $max\" | bc\
+    \ -l) )); then\n      max=$x\n    fi\n  done\n  for x in ${list[@]}; do\n    rescaled+=($(echo\
+    \ \"scale=2;($x-$min)/($max-$min)\" | bc -l))\n  done\n  printf \"%s\\n\" \"${rescaled[@]}\"\
+    \n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\n}\n\nset -e\nrun_test() {\n\
+    \    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n    [[ $(candidate \"100.0\
+    \ 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0 2.0 3.0 4.0 5.0\") = \"0.0\
+    \ 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0 1.0 5.0 3.0 4.0\") = \"0.25\
+    \ 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0 11.0 15.0 13.0 14.0\") = \"\
+    0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmpm5xbn1dh.sh: line 9: local: `2.0 49.9'': invalid variable name
+    for name reference
+
+    '
+  stdout: ''
+  timestamp: 1660020269
+- exit_code: 1
+  program: "#!/bin/bash\n# Given list of numbers (of at least two elements), apply\
+    \ a linear transform to that list,\n# such that the smallest number will become\
+    \ 0 and the largest will become 1\n# >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0,\
+    \ 5.0])\n# [0.0, 0.25, 0.5, 0.75, 1.0]\n#\n# $1 is a space-separated list\nrescale_to_unit()\
+    \ {\n    local list\n    read -ra list <<< \"$1\"\n    local max_list=$(echo \"\
+    ${list[@]}\" | tr ' ' '\\n' | sort -n | tail -n 1)\n    local min_list=$(echo\
+    \ \"${list[@]}\" | tr ' ' '\\n' | sort -n | head -n 1)\n    local diff=$(echo\
+    \ \"$max_list - $min_list\" | bc -l)\n    for number in \"${list[@]}\"; do\n \
+    \       local scaled=$(echo \"($number - $min_list) / $diff\" | bc -l)\n     \
+    \   echo \"$scaled\"\n    done\n}\n\ncandidate() {\n    rescale_to_unit \"$@\"\
+    \n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"2.0 49.9\") = \"0.0 1.0\" ]]\n\
+    \    [[ $(candidate \"100.0 49.9\") = \"1.0 0.0\" ]]\n    [[ $(candidate \"1.0\
+    \ 2.0 3.0 4.0 5.0\") = \"0.0 0.25 0.5 0.75 1.0\" ]]\n    [[ $(candidate \"2.0\
+    \ 1.0 5.0 3.0 4.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n    [[ $(candidate \"12.0\
+    \ 11.0 15.0 13.0 14.0\") = \"0.25 0.0 1.0 0.5 0.75\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660020269

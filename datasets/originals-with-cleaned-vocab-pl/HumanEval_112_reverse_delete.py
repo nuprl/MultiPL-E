@@ -5,7 +5,7 @@ def reverse_delete(s: str,c: str) -> Tuple[str, bool]:
     We are given two strings s and c, you have to deleted all the characters in s that are equal to any character in c
     then check if the result string is palindrome.
     A string is called palindrome if it reads the same backward as forward.
-    You should return an array containing the result string and 1/ for the check.
+    You should return an array containing the result string and 1/'' for the check.
     Example
     >>> reverse_delete("abcde", "ae")
     ('bcd',False)

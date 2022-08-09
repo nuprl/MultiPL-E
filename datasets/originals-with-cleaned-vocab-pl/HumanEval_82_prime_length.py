@@ -1,7 +1,7 @@
 
 def prime_length(string: str) -> bool:
     """Write a function that takes a string and returns 1 if the string
-    length is a prime number or  otherwise
+    length is a prime number or '' otherwise
     Examples
     >>> prime_length('Hello')
     True
