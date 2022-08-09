@@ -47,12 +47,12 @@ def eval_script(path: Path):
             output = exc
         os.remove(basename)
     if output.stdout is not None:
-        output.stdout = output.stdout.decode("utf-8")
+        output.stdout = output.stdout.decode("utf-8", errors='ignore')
     else:
         output.stdout = "None"
 
     if output.stderr is not None:
-        output.stderr = output.stderr.decode("utf-8")
+        output.stderr = output.stderr.decode("utf-8", errors='ignore')
     else:
         output.stderr = "None"
     return {

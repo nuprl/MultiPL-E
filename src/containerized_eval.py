@@ -48,8 +48,7 @@ EVALUATORS = {
     "d": (eval_dlang.eval_script, ".d"),
     "r": (eval_r.eval_script, ".r"),
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
-    "jl": (eval_julia.eval_script, ".jl"),
-    "go_test.go": (eval_go.eval_script, ".go")
+    "jl": (eval_julia.eval_script, ".jl")
 }
 
 def eval_script(problem, index):
@@ -60,9 +59,9 @@ def eval_string_script(language, program):
     if language in EVALUATORS:
         (eval_script, file_ext) = EVALUATORS[language]
     else:
-        eval_module = __import__(f"eval_{language}")
+        eval_module = __import__(f"eval_{language}" if language != "go_test.go" else "eval_go")
         eval_script = eval_module.eval_script
-        file_ext = f".{language}"
+        file_ext = f".{language}" if language != "go_test.go" else "_test.go"
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
         f.write(program.encode("utf-8"))
         f.flush()
