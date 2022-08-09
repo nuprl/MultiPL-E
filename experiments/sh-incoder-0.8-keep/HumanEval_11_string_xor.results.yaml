@@ -1,0 +1,474 @@
+language: sh
+name: HumanEval_11_string_xor
+results:
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local a=${1:0:1}\n  local b=${1:1:1}\n  local result\n  result=$(\n\
+    \    (( $a ^ $b ))\n  ) | xxd -r -p | tr -d '\\n'\n  printf '%s' \"$result\"\n\
+    }\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"\
+    0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local string1 string2\n  string1=$1\n  string2=$2\n  local result\n\
+    \  result=$(echo $string2 | xxd -p | xargs)\n  echo $result\n}\n\ncandidate()\
+    \ {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\"\
+    \ \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n  \
+    \  [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\t# Convert input string to array\n\tlocal str=$1\n\tlocal str_arr=(${str//\\\
+    // })\n\tlocal str_arr_len=${#str_arr[@]}\n\n\tlocal second_str=$2\n\tlocal second_str_arr=(${second_str//\\\
+    // })\n\tlocal second_str_arr_len=${#second_str_arr[@]}\n\n\t# Convert both strings\
+    \ to arrays of booleans\n\t# True => 1, False => 0\n\tlocal arr=($(for ((i=0;i<${str_arr_len};i++));\
+    \ do echo -n \"${str_arr[$i]}\" ; done | sed -e 's/^ *//' -e 's/ *$//' -e 's/^\
+    \ *//'))\n\tlocal arr_len=${#arr[@]}\n\n\tlocal arr2=($(for ((i=0;i<${second_str_arr_len};i++));\
+    \ do echo -n \"${second_str_arr[$i]}\" ; done | sed -e 's/^ *//' -e 's/ *$//'\
+    \ -e 's/^ *//'))\n\tlocal arr2_len=${#arr2[@]}\n\n\t# Perform XOR operation on\
+    \ arrays\n\tlocal res\n\tlocal result_str\n\tfor ((i=0;i<${arr2_len};i++)); do\n\
+    \t\tlet \"res${i}=(${arr2[$i]}^${arr[$i]})\"\n\t\tprintf -v result_str \"%s%s\"\
+    \ ${res[$i]} ${result_str}\n\tdone\n\tprintf -v result_str \"%s\" ${res}\n\techo\
+    \ \"${result_str}\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[\
+    \ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") =\
+    \ \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n    local a b\n    a=${1:?Missing string for a}\n    b=${2:?Missing\
+    \ string for b}\n    local ret\n    local i\n    local j\n    local sum\n    local\
+    \ num\n\n    sum=$(echo $a | tr -dc '0123456789')\n    num=$(echo $b | tr -dc\
+    \ '0123456789')\n    for i in $(seq 0 $((${#a}-1)) )\n    do\n        j=$((i+1))\n\
+    \        (( j < ${#b} )) && {\n            sum=$((${sum}^${num}${b[j]}))\n   \
+    \         num=$((${num}^${a[j]}))\n        }\n    done\n\n    i=$((${#a}-${#b}))\n\
+    \    while [ $i -gt 0 ]\n    do\n        sum=$((${sum}^${a[i]}))\n        num=$(echo\
+    \ $num | cut -dc \"[:digit:]\")\n        (( i < ${#a} )) && {\n            ((\
+    \ num > 0 )) && {\n                sum=$((${sum}^${a[i]}))\n                num=$((${num}^${b[i]}))\n\
+    \            }\n            (( num == 0 )) && {\n                sum=$((${sum}^${b[i]}))\n\
+    \            }\n        }\n        (( i < ${#a} )) && {\n            (( num >\
+    \ 0 )) && {\n                sum=$((${sum}^${b[i]}))\n                num=$((${num}^${a[i]}))\n\
+    \            }\n            (( num == 0 )) && {\n                sum=$((${sum}^${a[i]}))\n\
+    \            }\n        }\n        i=$((i-1))\n    done\n    ret=$(echo $sum |\
+    \ tr -dc '0123456789')\n    return ${ret:?Missing result }\n}\n\ncandidate() {\n\
+    \    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\"\
+    \ \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n  \
+    \  [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpju8miu1m.sh: line 26: 101010^: syntax error: operand expected (error
+    token is "^")
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 2
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local string1=$1\n  local string2=$2\n  local xorstring\n  local\
+    \ index\n  # Convert the string to binary\n  xorstring=$( echo $string1 | tr \"\
+    [:lower:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\"\
+    \ \"[:lower:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\"\
+    \ )\n  xorstring=$( echo $xorstring | tr \"[:lower:]\" \"[:lower:]\" )\n  xorstring=$(\
+    \ echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring\
+    \ | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:lower:]\"\
+    \ \"[:lower:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\"\
+    \ )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$(\
+    \ echo $xorstring | tr \"[:lower:]\" \"[:lower:]\" )\n  xorstring=$( echo $xorstring\
+    \ | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\"\
+    \ \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:lower:]\" \"[:lower:]\"\
+    \ )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$(\
+    \ echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring\
+    \ | tr \"[:lower:]\" \"[:lower:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\"\
+    \ \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\"\
+    \ )\n  xorstring=$( echo $xorstring | tr \"[:lower:]\" \"[:lower:]\" )\n  xorstring=$(\
+    \ echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring\
+    \ | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$( echo $xorstring | tr \"[:lower:]\"\
+    \ \"[:lower:]\" )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\"\
+    \ )\n  xorstring=$( echo $xorstring | tr \"[:upper:]\" \"[:upper:]\" )\n  xorstring=$(\
+    \ echo $xorstring | tr \"[:lower:]\" \"[:lower:]\" )\n  xorstring=$( echo $xorstring\
+    \ | \n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n \
+    \   [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate\
+    \ \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n\
+    }\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpg97emsx2.sh: line 40: unexpected EOF while looking for matching
+    `)''
+
+    /tmp/tmpg97emsx2.sh: line 55: syntax error: unexpected end of file
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\tlocal a=$1\n\tlocal b=$2\n\tlocal c\n\tc=$(( ($a ^ $b) ))\n\t\
+    printf $c\n\texit $c\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[\
+    \ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") =\
+    \ \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local i\n  local sum\n  local b\n  local a\n  a=${1:0:${#1}}\n\
+    \  b=${2:0:${#2}}\n  for i in $(seq 0 $((${#a} - ${#b})))\n  do\n    sum=${sum}${a}${b}\n\
+    \  done\n  echo \"${sum}\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset\
+    \ -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n\
+    \    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\"\
+    ) = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\t# Initialize variables\n\tstring1=$1\n\tstring2=$2\n\txorString=\"\
+    \"\n\twhile [ $string1 -lt $string2 ]\n\tdo\n\t\txorString+=$(( $string1^$string2\
+    \ ))\n\t\tstring1=$(( string1 + 1 ))\n\t\tstring2=$(( string2 + 1 ))\n\tdone\n\
+    \techo $xorString\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate\
+    \ \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n\
+    }\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local a=\"$1\"\n  local b=\"$2\"\n  echo \"$a\" | sed -e \"\
+    s/.*/0&|1&|0&/$b|1|0|/\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset\
+    \ -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n\
+    \    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\"\
+    ) = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'sed: -e expression #1, char 21: unknown option to `s''
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n    local x\n    x=$(echo $1 | sed 's/./& &/g')\n    x=$(echo\
+    \ $2 | sed 's/./& &/g')\n    echo \"$(( $x | $x ))\"\n}\n\ncandidate() {\n   \
+    \ string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\"\
+    \ \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n  \
+    \  [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpaa5mb15d.sh: line 13: 1 10 01 10 01 10 0 | 1 10 01 10 01 10 0 :
+    syntax error in expression (error token is "10 01 10 01 10 0 | 1 10 01 10 01 10
+    0 ")
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local string1=$1\n  local string2=$2\n\n  local binary_string1=$(echo\
+    \ \"$string1\" | tr '[:upper:]' '[:lower:]')\n  local binary_string2=$(echo \"\
+    $string2\" | tr '[:upper:]' '[:lower:]')\n\n  echo $binary_string1 $binary_string2\n\
+    }\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"\
+    0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local a=$1 b=$2\n  local sum=${#a}\n  local a=${a0:$((sum-1))}\
+    \ b=${b0:$((sum-1))}\n\n  for (( i=1; i<=sum; i++ )); do\n    (( ${a[i]} ^= ${b[i]}\
+    \ ))\n  done\n  echo \"$a\" # return result\n}\n\ncandidate() {\n    string_xor\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\"\
+    ) = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate\
+    \ \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected
+    (error token is "^=  ")
+
+    /tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected (error
+    token is "^=  ")
+
+    /tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected (error
+    token is "^=  ")
+
+    /tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected (error
+    token is "^=  ")
+
+    /tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected (error
+    token is "^=  ")
+
+    /tmp/tmp_qttai41.sh: line 15: ((: ^=  : syntax error: operand expected (error
+    token is "^=  ")
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n    local a b\n    a=$1\n    b=$2\n    local result\n    result=0\n\
+    \    while (( $#a > 0 )) ; do\n        (( $#b > 0 )) && result=$(( $result ^ ${b%2}))\n\
+    \        (( $#a > 0 )) && result=$(( $result ^ ${a%2}))\n        a=${a#??}\n \
+    \       b=${b#??}\n    done\n    echo $result\n}\n\ncandidate() {\n    string_xor\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\"\
+    ) = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate\
+    \ \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmps4pw44zn.sh: line 15: ((: 2a: value too great for base (error token
+    is "2a")
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\tlocal a=\"${1}\"\n\tlocal b=\"${2}\"\n\n\tlocal res=\"\"\n\t\
+    local i\n\tfor ((i=0; i<${#a}; i++)); do\n\t\tlet \"res +=$((${a[i]} ^ ${b[i]}))\"\
+    \n\tdone\n\techo \"${res}\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\n\
+    set -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n\
+    \    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\"\
+    ) = \"0101\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpgzlqf9p1.sh: line 16: ^ : syntax error: operand expected (error
+    token is "^ ")
+
+    '
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local a b\n  a=${1:0:2}\n  b=${2:0:2}\n  [[ \"$a\" == \"$b\"\
+    * ]] || return 1\n  local c=0\n  for ((i=0; i < ${#a}; i++)); do\n    ((c+=$((${a[i]}\
+    \ ^ $b[i])))) &>/dev/null || return 1\n  done\n  printf '%b' \"$c\"\n}\n\ncandidate()\
+    \ {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\"\
+    \ \"101010\") = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n  \
+    \  [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local x\n  x=$1; shift\n  x=$2; shift\n  echo $x | gawk '{printf\
+    \ \"%c\", $1^$2;}'\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate\
+    \ \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n\
+    }\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\tlocal a b c\n\ta=${1%%$'\\n'*}\n\tb=${2%%$'\\n'*}\n\tc=\"\"\n\
+    \tfor (( i = 0; i < ${#a}; ++i )); do\n\t\tc=\"${c}${a[$i]}${b[$i]}\"\n\tdone\n\
+    \techo \"${c:0:${#c}}\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[\
+    \ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") =\
+    \ \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n    local STRING1=$1\n    local STRING2=$2\n    local RESULT=''\n\
+    \    for (( i=0; i < ${#STRING1}; i++ )); do\n        RESULT+=${STRING1}[$i]${STRING2}[$i]\n\
+    \    done\n    echo \"$RESULT\"\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\
+    \nset -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\"\
+    \ ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\"\
+    \ \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n  local a=${1:?'Missing input'}\n  local b=${2:?'Missing input'}\n\
+    \n  # Make sure that $a and $b are two binary strings\n  [[ $a =~ ^[01]+$ ]] ||\
+    \ { echo \"$a is not a valid binary string\"; exit 1; }\n  [[ $b =~ ^[01]+$ ]]\
+    \ || { echo \"$b is not a valid binary string\"; exit 1; }\n\n  # Convert both\
+    \ strings binary to integers\n  local aint=${a:0:${#a}-2}\n  local bint=${b:0:${#b}-2}\n\
+    \n  # Perform XOR on both strings\n  local xorresult=$(( aint ^= bint ))\n\n \
+    \ # Convert result back to binary string\n  local xorstring=`printf '%b' $xorresult`\n\
+    \  echo $xorstring\n}\n\ncandidate() {\n    string_xor \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"111000\" \"101010\") = \"010010\" ]]\n    [[ $(candidate\
+    \ \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate \"0101\" \"0000\") = \"0101\" ]]\n\
+    }\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054457
+- exit_code: 1
+  program: "#!/bin/bash\n# Input are two strings a and b consisting only of 1s and\
+    \ 0s.\n# Perform binary XOR on these inputs and return result also as a string.\n\
+    # >>> string_xor('010', '110')\n# '100'\n#\n# $1 is a string\n# $2 is a string\n\
+    string_xor() {\n\t# $1 is the string a\n\t# $2 is the string b\n\t# We assume\
+    \ that length of $1 must be same as length of $2.\n\tlength_of_string=`expr $2\
+    \ | wc -c`\n\t(( $length_of_string > $1 ))&1\n\tlength_of_string=$length_of_string\n\
+    \t(( $length_of_string > $2 ))&1\n\tlength_of_string=$length_of_string\n\tstrlen_a=${#1}\n\
+    \tstrlen_b=${#2}\n\tif (( $strlen_a != $strlen_b )); then\n\t\techo \"Error: length\
+    \ of string a and string b are not equal.\"\n\t\texit 1\n\tfi\n\toutput=\"\"\n\
+    \ti=1\n\twhile [[ $i -le $length_of_string ]]\n\tdo\n\t\ttemp=`echo \"$1\" | sed\
+    \ 's/./&$i/' | tr '[0-9]' '\\1'`\n\t\ttemp2=`echo \"$2\" | sed 's/./&$i/' | tr\
+    \ '[0-9]' '\\1'`\n\t\toutput=\"$output$(( `echo $temp $temp2 | bc -l ` ))\"\n\t\
+    \ti=`expr $i + 1`\n\tdone\n\techo \"$output\"\n}\n\ncandidate() {\n    string_xor\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"111000\" \"101010\"\
+    ) = \"010010\" ]]\n    [[ $(candidate \"1\" \"1\") = \"0\" ]]\n    [[ $(candidate\
+    \ \"0101\" \"0000\") = \"0101\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpe2boiyxo.sh: line 14: 1: command not found
+
+    /tmp/tmpe2boiyxo.sh: line 16: 1: command not found
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: syntax error
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: $
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal character: ^A
+
+    (standard_in) 1: illegal chara'
+  stdout: ''
+  timestamp: 1660054457
