@@ -1,3 +1,5 @@
+import os
+import signal
 import subprocess
 from typing import List
 import generic_eval
@@ -13,15 +15,16 @@ def run_without_exn(args: List[str]):
     zero. If that isn't enough, you may want to tweak the status based on the
     captured stderr and stdout.
     """
+    p = subprocess.Popen(
+        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True
+    )
     try: 
-        output = subprocess.run(args, capture_output=True, timeout=5)
-        stdout = output.stdout
-        stderr = output.stderr
-        exit_code = output.returncode
+        stdout, stderr = p.communicate(timeout=5)
+        exit_code = p.returncode
         status = "OK" if exit_code == 0 else "Exception"
     except subprocess.TimeoutExpired as exc:
-        stdout = exc.stdout
-        stderr = exc.stderr
+        stdout, stderr = p.stdout, p.stderr
+        os.killpg(os.getpgid(p.pid), signal.SIGTERM)
         exit_code = -1
         status = "Timeout"
 
