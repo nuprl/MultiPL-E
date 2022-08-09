@@ -13,7 +13,15 @@ LANG_EXT = ".rs"
 
 def eval_script(path: Path):
     basename = ".".join(str(path).split(".")[:-1])
-    build = subprocess.run(["rustc", path, "-o", basename], capture_output=True)
+    try:
+        build = subprocess.run(["rustc", path, "-o", basename], capture_output=True, timeout=15)
+    except subprocess.TimeoutExpired as exc:
+        return {
+            "status": "Timeout",
+            "exit_code": -1,
+            "stdout": "Compiler timeout",
+            "stderr": "Compiler timeout",
+        }
     status = None
     returncode = -1
     output = None
