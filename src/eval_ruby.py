@@ -13,7 +13,7 @@ def eval_script(path: Path):
         # Assumes exit-code 0 is all okay
         # Need check=True for Ruby to pass errors to CalledProcessError
         output = subprocess.run(
-            ["ruby", path], encoding='utf-8', check=True, capture_output=True, timeout=5
+            ["ruby", path], check=True, capture_output=True, timeout=5
         )
         if output.returncode == 0:
             status = "OK"
@@ -39,8 +39,8 @@ def eval_script(path: Path):
     return {
         "status": status,
         "exit_code": returncode,
-        "stdout": str(out),
-        "stderr": str(error),
+        "stdout": out,
+        "stderr": error,
     }
 
 if __name__ == "__main__":

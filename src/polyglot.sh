@@ -9,7 +9,7 @@
 source ~/.bashrc
 module load R
 conda activate polyglot
-PATH=/home/a.guha/scala/bin:$PATH
+PATH=/home/a.guha/scala/bin:/work/arjunguha-research-group/software/bin:$PATH
 
 LIST_FILES=files.txt
 
