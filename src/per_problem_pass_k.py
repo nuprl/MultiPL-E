@@ -17,6 +17,7 @@ def per_problem_pass_k(dir, lang, model, temp, variation,pdict):
         try:
             with open (result_path) as f:
                 results_yaml = yaml.safe_load(f)
+                print(results_yaml)
             problem = result_path.name.split(".")[0]
             n_results = len(results_yaml["results"])
             n_ok_results = len([c for c in results_yaml["results"] if c["status"] == "OK"])
