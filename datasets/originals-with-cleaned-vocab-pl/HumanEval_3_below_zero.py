@@ -4,7 +4,7 @@ from typing import List
 def below_zero(operations: List[int]) -> bool:
     """ You're given an array of deposit and withdrawal operations on a bank account that starts with
     zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
-    at that point function should return 1. Otherwise it should return .
+    at that point function should return 1. Otherwise it should return ''.
     >>> below_zero([1, 2, 3])
     False
     >>> below_zero([1, 2, -4, 5])

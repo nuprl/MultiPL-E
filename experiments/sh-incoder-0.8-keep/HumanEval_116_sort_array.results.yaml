@@ -1,0 +1,702 @@
+language: sh
+name: HumanEval_116_sort_array
+results:
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local i n a nO1\n    n=$1\n    a=$2\n    nO1=0\n    echo -n \"SORTING\
+    \ THE ARRAY...\"\n    for i in $(seq 0 $((n - 1)));\n    do\n        ((nO1 + $(a[$i]))\
+    \ == 0)\n    done\n    sort -n -k 1,1 -k 1,1 -k 2,2n $(a) -o $(a);\n    echo Done.\n\
+    }\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") =\
+    \ \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n\
+    \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3\
+    \ 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\"\
+    ) = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpmd0d40dq.sh: line 19: syntax error near unexpected token `==''
+
+    /tmp/tmpmd0d40dq.sh: line 19: `        ((nO1 + $(a[$i])) == 0)''
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local array=\"$1\"\n    local result\n    # If the array has only 1 element,\
+    \ it is already sorted\n    if [[ $# -eq 1 && \"${array[1]}\" == \"0\" ]]; then\n\
+    \        result=$array\n    else\n        local max_bits=0\n        # Search for\
+    \ the longest sequence of zeros up to the array length\n        # (without counting\
+    \ '0' in it twice) and save it into a variable\n        local temp\n        for\
+    \ (( i = 0; i < \"${#array[@]}\"; i++ )); do\n            local c\n          \
+    \  c=\"${array[i]}\"\n            # Count the number of 1 bits in it\n       \
+    \     if [[ $c -eq '1' ]]; then\n                # If this is the first time we\
+    \ see '1', the bit is set\n                if [[ ${max_bits} -eq 0 ]]; then\n\
+    \                    max_bits=$((${#array[@]}-1))\n                else\n    \
+    \                # Count how many '1' are after the last '0'\n               \
+    \     max_bits=$((${#array[@]}-2))\n                fi\n            else\n   \
+    \             # If this is not a '1', the bit is clear\n                if [[\
+    \ ${max_bits} -eq 0 ]]; then\n                    max_bits=$((${#array[@]}+1))\n\
+    \                else\n                    # If the number of '1' is larger than\
+    \ the previous, we found a new sequence\n                    max_bits=$((${#array[@]}+2))\n\
+    \                fi\n            fi\n        done\n        # Decrease the length\
+    \ of the array by the length of this sequence\n        array=(${array[@]:0:${max_bits}})\
+    \ # Keep only the max sequence\n        # Sort the array by increasing number\
+    \ of ones\n        local i\n        local j\n        # Loop through the array\n\
+    \        for (( i = 0; i < \"${#array[@]}\"; i++ )); do\n            # Set the\
+    \ variable j by counting the number of ones\n            j=0\n            for\
+    \ (( j = (${#array[@]} - $((i+1)) - 1); j >= 0; j-- )); do\n                local\
+    \ c\n                c=\"${array[j]}\"\n                if [[ $c -eq '1' ]]; then\n\
+    \                    # If the number of '1' is larger than the last '0' of the\
+    \ previous '1', increment the number of '1's\n                    array[$j]=$((${array[$j]}+1))\n\
+    \                    break\n                else\n                    # If the\
+    \ number of '1' is smaller than the last '0' of the previous '1', decrease the\
+    \ number of '1's\n                    array[$j]=$((${array[$j]}-1))\n        \
+    \        fi\n            done\n        # Print the sorted array\n        result=\"\
+    ${array[@]}\"\n    fi\n    echo -e \"$result\"\n}\n\ncandidate() {\n    sort_array\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2\
+    \ 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n\
+    \    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\"\
+    ) = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5\
+    \ 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmppgedh7j5.sh: line 67: syntax error near unexpected token `fi''
+
+    /tmp/tmppgedh7j5.sh: line 67: `    fi''
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local input=\"$1\"\n    local array=( $input )\n    local num=${#array[*]}\n\
+    \    local i=0\n    local max=0\n    local min=0\n    local output\n    local\
+    \ decimal\n    while [ \"$i\" -lt \"$num\" ]; do\n        decimal=$(bc -l <<<\
+    \ \"scale=2; ($array[*]&1)\")\n        if [ \"$decimal\" -gt \"$max\" ]; then\n\
+    \            max=$decimal\n        fi\n        if [ \"$decimal\" -lt \"$min\"\
+    \ ]; then\n            min=$decimal\n        fi\n        i=$(( $i + 1 ))\n   \
+    \ done\n    array=( $( for (( i=0; i<$num; i++ )); do printf \"%02d\" ${array[i]};\
+    \ done) )\n    max=$(printf \"%02d\" ${max})\n    min=$(printf \"%02d\" ${min})\n\
+    \    i=2\n    while [ \"$i\" -le \"$num\" ]; do\n        decimal=$(bc -l <<< \"\
+    scale=2; ($array[*]&1)\")\n        if [ \"$decimal\" -gt \"$max\" ]; then\n  \
+    \          max=$decimal\n        fi\n        if [ \"$decimal\" -lt \"$min\" ];\
+    \ then\n            min=$decimal\n        fi\n        i=$(( $i + 1 ))\n    done\n\
+    \    output=$( echo $(( max-min )) | bc )\n    array=( $output )\n    for (( i=0;\
+    \ i<$num; i++ )); do\n        array[i]=$(printf \"%02d\" ${array[i]})\n    done\n\
+    \    array=( \"${array[@]}\" )\n    return \"${array[@]}\"\n}\n\ncandidate() {\n\
+    \    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2\
+    \ 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2\
+    \ -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[\
+    \ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\")\
+    \ = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"\
+    32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '(standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 22: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 25: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 22: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 25: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 22: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 25: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 22: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 25: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 22: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 25: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 36: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 39: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 36: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 39: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 36: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 39: [: : integer expression expected
+
+    (standard_in) 1: syntax error
+
+    /tmp/tmphxxq1618.sh: line 36: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 39: [: : integer expression expected
+
+    /tmp/tmphxxq1618.sh: line 50: return: too many arguments
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local a=$1\n    local n=${#a}\n    local count\n    local sorted\n  \
+    \  local i\n    local -a imap\n\n    if [ ${#a} -gt 0 ]; then\n        sorted=()\n\
+    \        count=()\n        mapfile -t imap < <(\n            sort <<< \"$a\"\n\
+    \        )\n        for i in \"${!imap[@]}\"; do\n            count[$i]=${#imap[$i]}\n\
+    \        done\n\n        for i in \"${!imap[@]}\"; do\n            (( sorted[count[i]]=$i\
+    \ ))\n        done\n\n        (( ${#sorted[@]} > 0 ))\n        printf '%s\\n'\
+    \ \"${sorted[@]}\"\n    fi\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset\
+    \ -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n   \
+    \ [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate\
+    \ \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[\
+    \ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n  \
+    \  [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local IFS=$'\\n'\n    sort -n -t. -k 2,2 -k 3,3 -k 4,4 -k 5,5 -k 6,6\
+    \ -k 7,7 -k 8,8 -k 9,9 -k 10,10 -k 11,11 -k 12,12 -k 13,13 -k 14,14 -k 15,15 -k\
+    \ 16,16 -k 17,17 -k 18,18 -k 19,19 -k 20,20 -k 21,21 -k 22,22 -k 23,23 -k 24,24\
+    \ -k 25,25 -k 26,26 -k 27,27 -k 28,28 -k 29,29 -k 30,30 -k 31,31 -k 32,32 -k 33,33\
+    \ -k 34,34 -k 35,35 -k 36,36 -k 37,37 -k 38,38 -k 39,39 -k 40,40 -k 41,41 -k 42,42\
+    \ -k 43,43 -k 44,44 -k 45,45 -k 46,46 -k 47,47 -k 48,48 -k 49,49 -k 50,50 -k 51,51\
+    \ -k 52,52 -k 53,53 -k 54,54 -k 55,55 -k 56,56 -k 57,57 -k 58,58 -k 59,59 -k 60,60\
+    \ -k 61,61 -k 62,62 -k 63,63 -k 64,64 -k 65,65 -k 66,66 -k 67,67 -k 68,68 -k 69,69\
+    \ -k 70,70 -k 71,71 -k 72,72 -k 73,73 -k 74,74 -k 75,75 -k 76,76 -k 77,77 -k 78,78\
+    \ -k 79,79 -k 80,80 -k 81,81 -k 82,82 -k 83,83 -k 84,84 -k 85,85 -k 86,86 -k 87,87\
+    \ -k 88,88 -k 89,89 -k 90,90 -k 91,91 -k 92,92 -k 93,93 -k 94,94 -k 95,95 -k 96,96\
+    \ -k 97,97 -k 98,98 -k 99,99 -k 100,100 -k 101,101 -k 102,102 -k 103,103 -k 104,104\
+    \ -k 105,\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate\
+    \ \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\"\
+    ) = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"\
+    2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate\
+    \ \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\"\
+    ) = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: "sort: invalid number after ',': invalid count at start of \u2018\u2019\n"
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local arr=( $1 )\n    for i in $(seq 0 $((${#arr[@]} - 1)))\n    do\n\
+    \        arr[i]=$(( ${arr[i]}+1 ))\n    done\n    local tmp=( ${arr[@]} )\n  \
+    \  local new_arr=()\n    local cnt=0\n    for i in $(seq 0 $((${#arr[@]} - 1)))\n\
+    \    do\n        local val=${tmp[$i]}\n        if [ ${val} -eq 0 ]\n        then\n\
+    \            cnt=$((cnt+1))\n        fi\n        if [ $cnt -gt 2 ]\n        then\n\
+    \            new_arr[$i]=${tmp[$((${i}-1))]}\n            cnt=$((cnt - 1))\n \
+    \       fi\n    done\n    for i in $(seq 0 $((${#arr[@]} - 1)))\n    do\n    \
+    \    arr[$i]=${new_arr[$i]}\n    done\n    printf '%s\\n' \"${arr[@]}\"\n}\n\n\
+    candidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") =\
+    \ \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n\
+    \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3\
+    \ 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\"\
+    ) = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local input_arr=($1)\n\n    local output\n    for ((i = 0; i < ${#input_arr[@]};\
+    \ i++)); do\n        output=\"$output ${input_arr[$((i * 2 + 1))]}\"\n    done\n\
+    \n    sort -n \"${output}\" | sed \"s/ //\"\n}\n\ncandidate() {\n    sort_array\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2\
+    \ 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n\
+    \    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\"\
+    ) = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5\
+    \ 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'sort: cannot read: '' 5 3   '': No such file or directory
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local arr=$1\n    local sorted_arr=\n    for num in $arr; do\n      \
+    \  local ones=0\n        for (( bit = 64; bit > 0; bit >>= 1 )); do\n        \
+    \    if (( num & bit )); then\n                ones++\n            fi\n      \
+    \  done\n        local decimal=$(printf \"%b\" $ones)\n        sorted_arr+=($decimal)\n\
+    \    done\n    local i\n    for (( i = ${#sorted_arr[@]}-1; i > 0; i-- )); do\n\
+    \        local j\n        for (( j = i-1; j > 0; j-- )); do\n            if [[\
+    \ ${sorted_arr[$j]} > ${sorted_arr[$j-1]} ]]; then\n                local t=${sorted_arr[$j]}\n\
+    \                local sorted_arr[$j]=${sorted_arr[$j-1]}\n                local\
+    \ sorted_arr[$j-1]=t\n            fi\n        done\n    done\n    local result\n\
+    \    for (( i = 0; i <= ${#sorted_arr[@]}; i++ )); do\n        result=$result$sorted_arr[$i]\n\
+    \    done\n    echo \"$result\"\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\
+    \nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n\
+    \    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate\
+    \ \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[\
+    \ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n  \
+    \  [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    /tmp/tmpfl19anql.sh: line 18: ones++: command not found
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local unsorted=\"$1\"\n    local sorted=\"\"\n    local index\n\n   \
+    \ for index in \"${!unsorted}\"; do\n        local flag=0\n        local num=\"\
+    ${unsorted[index]}\"\n        # Iterate through all bits in current digit\n  \
+    \      for (( i = 1; i < ${#num}; i++ )); do\n            # Check if current digit\
+    \ is set\n            if [ \"${num:$i:1}\" == \"1\" ]; then\n                #\
+    \ If yes, add it to the sorted list\n                sorted=\"${sorted}${unsorted[index]}\"\
+    \n                flag=1\n                break\n            fi\n        done\n\
+    \        # Check if there were any changes in the current digit\n        if [\
+    \ $flag -eq 0 ]; then\n            # Add it to the sorted list\n            sorted=\"\
+    ${sorted}${unsorted[index]}\"\n        fi\n    done\n\n    echo \"$sorted\"\n\
+    }\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") =\
+    \ \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n\
+    \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3\
+    \ 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\"\
+    ) = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmpdbvcr6d5.sh: line 16: 1 5 2 3 4: invalid variable name
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n  local array=\"$1\"\n  local -a ordered=()\n  local -a order\n  local count\n\
+    \  for element in ${array[@]}; do\n    if [[ ${element} -eq 1 ]]; then\n     \
+    \ ordered+=(\"$element\")\n    elif [[ ${ordered[count]} -eq ${element} ]]; then\n\
+    \      ((count++))\n    else\n      ((count=0))\n      ordered+=(\"$element\"\
+    )\n    fi\n  done\n  unset element count\n  order=($(printf '%s\\n' \"${ordered[@]}\"\
+    \ | sort -n -k1,1n -k2,2n | tr -d '\\n'))\n  unset ordered\n  printf '%s\\n' \"\
+    ${order[@]}\"\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate\
+    \ \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\"\
+    ) = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"\
+    2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate\
+    \ \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\"\
+    ) = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local x=\"$1\"\n    local -a res=()\n    for i in $x; do\n        res+=(\
+    \ $(( $(echo $i | tr 1 0 | wc -m) | bc | sed 's/ //g' )) )\n    done\n    IFS=',\
+    \ ' 'printf '%d' \"${res[*]}\"\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\
+    \nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n\
+    \    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate\
+    \ \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[\
+    \ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n  \
+    \  [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp7h977xck.sh: line 17: unexpected EOF while looking for matching
+    `''''
+
+    /tmp/tmp7h977xck.sh: line 37: syntax error: unexpected end of file
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local array=\"$1\"\n    local temp\n    local count\n    local decimal\n\
+    \    local decimal2\n    local index\n    local result\n    local ones\n    local\
+    \ zero\n    local output\n    local countDecimal\n    local countBinary\n    local\
+    \ decimal2\n    local arrayLength\n    for index in \"${!array}\"; do\n      \
+    \  zero=\"${array[index]}\"\n        ones=0\n        decimal2=\"0.0\"\n      \
+    \  decimal=\"0.0\"\n        output=\"\"\n        countDecimal=0\n        countBinary=0\n\
+    \        while [ $(( $zero/2 )) -gt 0 ]; do\n            ones++\n            decimal=\"\
+    ${decimal}${decimal2}\"\n            decimal2=\"$(( ${decimal2} + 1 ))\"\n   \
+    \         countDecimal=$(( $countDecimal + 1 ))\n            countBinary=$(( $countBinary\
+    \ + ${ones}*2 ))\n            zero=\"${(( ${zero} % 2 ))}\"\n            output=\"\
+    ${output}0\"\n        done\n        if [ $(( $zero == 0 )) == 1 ]; then\n    \
+    \        countDecimal=0\n            countBinary=0\n        fi\n        countDecimal=$((\
+    \ $countDecimal + 1 ))\n        countBinary=$(( $countBinary + ${ones}*2 ))\n\
+    \        decimal2=\"0.0\"\n        while [ $(( $countBinary % 2 )) -gt 0 ]; do\n\
+    \            decimal2=\"$(( ${decimal2} + 1 ))\"\n            countBinary=$((\
+    \ $countBinary + 1 ))\n        done\n        if [ $countDecimal -gt 0 ]; then\n\
+    \            decimal2=\"$(( ${decimal2} + 1 ))\"\n            countDecimal=$((\
+    \ $countDecimal + 1 ))\n        fi\n        output=\"${output}${decimal}\"\n \
+    \       arrayLength=$(( $arrayLength + 1 ))\n        result[$index]=${output}\n\
+    \    done\n    echo \"$result\"\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\
+    \nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n\
+    \    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate\
+    \ \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[\
+    \ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n  \
+    \  [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmp5n68nt50.sh: line 26: 1 5 2 3 4: invalid variable name
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n  local IFS=' ' sorted=()\n  for number in $1;\n  do\n    local count=0\n\
+    \    # Find length of binary representation of current number\n    while (( $(python\
+    \ -c \"print(bin(${number})[2:])\" | wc -c) )) > 1;\n    # Iterate over all binary\
+    \ numbers of that length\n    for (( i = $(python -c \"print(bin(${number})[2:])\"\
+    \ | wc -c); i > 0; i-- ));\n    do\n      # If current digit is 1\n      if [\
+    \ $(python -c \"print(${number}%2)\" | bc -eq 1 );\n      then\n        # Increment\
+    \ counter\n        count=$(( $count + 1 ))\n      fi\n      # If current digit\
+    \ is 0\n      else\n        # Substract current digit from counter\n        count=$(expr\
+    \ $count - $(python -c \"print(${number}%2)\" | bc -eq 1))\n      fi\n      #\
+    \ Divide current number by base two using remainder of division\n      number=$(python\
+    \ -c \"print(${number}/2)\")\n    done\n    # Append the number with the count\n\
+    \    sorted+=(${number}${count})\n  done\n  # Return sorted list\n  echo $sorted\n\
+    }\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") =\
+    \ \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n\
+    \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3\
+    \ 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\"\
+    ) = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp614ddjp8.sh: line 28: syntax error near unexpected token `else''
+
+    /tmp/tmp614ddjp8.sh: line 28: `      else''
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n\tlocal array_a=\"$1\"\n\tarray_a=($array_a)\n\tlocal len=$#array_a\n\tlocal\
+    \ array_b array_c array_f\n\tlocal i j k l m n o\n\tlocal count\n\tlocal min_count\
+    \ max_count\n\tlocal count_diff\n\n\tarray_b=()\n\tarray_c=()\n\tarray_f=$array_a\n\
+    \n\tfor i in $(seq 0 $((len-1))); do\n\t\tcount=0\n\t\tfor j in $(seq 0 $((len-1)));\
+    \ do\n\t\t\tif [[ $((array_a[$j])) -eq ${array_f[$i]} ]]; then\n\t\t\t\tlet \"\
+    count += 1\"\n\t\t\tfi\n\t\tdone\n\t\tarray_b+=($count)\n\tdone\n\n\tlen=$len-1\n\
+    \n\tcount=0\n\tfor i in $(seq 0 $len); do\n\t\tcount=0\n\t\tfor j in $(seq 0 $len);\
+    \ do\n\t\t\tif [[ $((array_a[$j])) -eq ${array_f[$i]} ]]; then\n\t\t\t\tlet \"\
+    count += 1\"\n\t\t\tfi\n\t\tdone\n\t\tarray_c+=($count)\n\tdone\n\n\tfor i in\
+    \ $(seq 0 $len); do\n\t\tcount=0\n\t\tfor j in $(seq 0 $len); do\n\t\t\tif [[\
+    \ $((array_a[$j])) -eq ${array_f[$i]} ]]; then\n\t\t\t\tlet \"count += 1\"\n\t\
+    \t\tfi\n\t\tdone\n\tdone\n\n\tif ((len == 1)); then\n\t\treturn ${array_f[$i]}\n\
+    \tfi\n\n\tif ((count < array_b[len])); then\n\t\tk=$((len-1))\n\telse\n\t\tk=$len\n\
+    \tfi\n\n\tfor i in $(seq 0 $k); do\n\t\tcount=0\n\t\tfor j in $(seq 0 $k); do\n\
+    \t\t\tif [[ $((array_a[$j])) -eq ${array_f[$i]} ]]; then\n\t\t\t\tlet \"count\
+    \ += 1\"\n\t\t\tfi\n\t\tdone\n\t\tif ((count < array_b[len])); then\n\t\t\tl=$((len-1))\n\
+    \t\telse\n\t\t\tl=$k\n\t\tfi\n\t\tm=$((count+array_c[len])+array_b[l])\n\t\tn=$(echo\
+    \ \"$m\"*10\".\"$i\" | bc)\n\t\to=$(echo \"$n\"*10\".0\"| bc)\n\t\tarray_f[$i]=$o\n\
+    \tdone\n\n\tfor i in $(seq 0 $len); do\n\t\tcount=0\n\t\tfor j in $(seq 0 $len);\
+    \ do\n\t\t\tif [[ $((array_a[$j])) \n}\n\ncandidate() {\n    sort_array \"$@\"\
+    \n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\"\
+    \ ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate\
+    \ \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[\
+    \ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n  \
+    \  [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpa2gb0iem.sh: line 104: unexpected EOF while looking for matching
+    `"''
+
+    /tmp/tmpa2gb0iem.sh: line 108: syntax error: unexpected end of file
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local str=$1\n    local a\n    local s\n    local i\n    local b\n  \
+    \  local t\n    local len\n    local o\n    local count\n    local d\n    local\
+    \ l\n    local f\n    local sord\n    local dord\n    local c\n    local sort\n\
+    \    local osort\n    local k\n    local result\n\n    echo -n \"$str\" | tr -cd\
+    \ \"[:digit:]\" | \\\n        sort -k 2 -n -t : -k 2 -n -t . -k 2 -n -t , | \\\
+    \n        tr -cd \"[:digit:]\" > \"$1\" || exit 1\n\n    while read -r line; do\n\
+    \        a=$( echo \"$line\" | awk -F, '{ print $2 }' ) || exit 1\n        s=$(\
+    \ echo \"$line\" | awk -F, '{ print $1 }' ) || exit 1\n        echo \"$line $a\"\
+    \ > \"$s\"\n    done < \"$1\"\n\n    sort=\"sort -nr -t: '-s' \"\n    osort=\"\
+    sort -unr -t: '-s' \"\n    c=( $(echo $sort | $osort | head -n1) )\n    c=\"${#c[@]}\"\
+    \n    len=\"${#c}\"\n    for (( i=0 ; i < len ; i++ )); do\n        b=$( echo\
+    \ \"${c[$i]}\" | awk -F, '{ print $2 }' ) || exit 1\n        s=$( echo \"${c[$i]}\"\
+    \ | awk -F, '{ print $1 }' ) || exit 1\n        t=$( echo \"$s\" | awk -F, '{\
+    \ print $1 }' ) || exit 1\n        result=\"$result $t $b\" || exit 1\n    done\
+    \ | $sort | sed \"s/$/ $s/\" > \"$1\" || exit 1\n    i=$(( $i + 1 ))\n    len=$((\
+    \ $len - 1 ))\n    while [ \"$i\" -le \"$len\" ]; do\n        b=$( echo \"${c[$i]}\"\
+    \ | awk -F, '{ print $2 }' ) || exit 1\n        s=$( echo \"${c[$i]}\" | awk -F,\
+    \ '{ print $1 }' ) || exit 1\n        d=$( echo \"$s\" | awk -F, '{ print $1 }'\
+    \ ) || exit 1\n        l=$( echo \"$s\" | awk -F, '{ print $2 }' ) || exit 1\n\
+    \        result=\"$result $d $l $b\" || exit 1\n        i=$(( $i + 1 ))\n    \
+    \    len=$(( $len - 1 ))\n    done | $osort | sed \"s/$/ $s/\n}\n\ncandidate()\
+    \ {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1\
+    \ 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4\
+    \ -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n   \
+    \ [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\"\
+    ) = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"\
+    32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmp67hmxnmc.sh: line 79: unexpected EOF while looking for matching
+    `"''
+
+    /tmp/tmp67hmxnmc.sh: line 83: syntax error: unexpected end of file
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n  local str=\"$1\"\n  local -n nums=\"${str//[^0-9-]}\"\n  local -n ones=\"\
+    ${str//[0-9]}\"\n  local -n sortkey=\"${ones}${ones}${nums}\"\n  eval \"$sortkey\"\
+    \n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[\
+    \ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4\
+    \ -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1\
+    \ 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77\
+    \ 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6\
+    \ 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") =\
+    \ \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n\
+    }\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmp31r33p5c.sh: line 13: local: `15234'': invalid variable name for
+    name reference
+
+    /tmp/tmp31r33p5c.sh: line 14: local: `    '': invalid variable name for name reference
+
+    /tmp/tmp31r33p5c.sh: line 15: local: `'': not a valid identifier
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local arr=$1\n    local n\n    for n in \"${arr[@]}\"; do\n        local\
+    \ j=0\n        while (( j<n )); do\n            local k=0\n            local digits=0\n\
+    \            while (( k<n )); do\n                (( digits = digits<<1 ))\n \
+    \               (( digits = digits+ $(( $n % 2 != 0 ? 1 : 0 )) ))\n          \
+    \      (( k++ ))\n            done\n            arr[j]=$(( digits<<1 ))\n    \
+    \        j=$(( j + 1 ))\n        done\n    done\n}\n\ncandidate() {\n    sort_array\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2\
+    \ 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n\
+    \    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\"\
+    ) = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5\
+    \ 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmprqm47swm.sh: line 16: ((: 1 5 2 3 4: syntax error in expression
+    (error token is "5 2 3 4")
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n  local i\n  local -n arr=$1\n  local len=${#arr[@]}\n  local res\n  for\
+    \ ((i=0;i<len;i++)); do\n    res=0 # assume any number has at most 1 one\n   \
+    \ local j\n    for ((j=0;j<len-i;j++)); do\n      # check how many 1s are in arr[j]-arr[i]\n\
+    \      ((res+=${arr[j]}${arr[i]}))\n    done\n    arr[i]=${res}\n  done\n  echo\
+    \ \"${arr[@]}\"\n}\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate\
+    \ \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\"\
+    ) = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"\
+    2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate\
+    \ \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\"\
+    ) = \"2 4 8 16 32\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: '/tmp/tmpi78uphe0.sh: line 13: local: `1 5 2 3 4'': invalid variable name
+    for name reference
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 2
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n    local array=$1\n    local sortString=$2\n    local sortType=$3\n    if\
+    \ [[ \"$sortString\" == \"\" ]]; then\n        sortString=\" -s1\"\n    fi\n \
+    \   if [[ \"$sortType\" == \"\" ]]; then\n        sortType=\" -o\"\n    fi\n \
+    \   local sortStringEscaped=$(echo \"$sortString\" | sed -e 's/'\\'\\'/\\''\\\
+    '\\'\\'/g')\n    local sortTypeEscaped=$(echo \"$sortType\" | sed -e 's/'\\'\\\
+    '/\\''\\'\\'\\'/g')\n    local sortStringLength=$(echo \"$sortString\" | awk 'length($0)\
+    \ >= 1 { print length($0)}')\n    local sortTypeLength=$(echo \"$sortType\" |\
+    \ awk 'length($0) >= 1 { print length($0)}')\n    local sortedArray=($(echo \"\
+    ${array[@]}\" | sort -n \"$sortStringEscaped\" \"$sortTypeEscaped\"))\n    local\
+    \ sortedArrayLength=$((${#sortedArray[@]}-1))\n    local i=0\n    local maxOneCount=-1\n\
+    \    while (( $i < $sortedArrayLength )) ; do\n        if (( $sortedArray[${i}]\
+    \ == $maxOneCount )); then\n            (( maxOneCount += 1 ))\n        else\n\
+    \            (( maxOneCount = $sortedArray[${i}] ))\n        fi\n        i=$((\
+    \ i + 1 ))\n    done\n    return ${sortedArray[@]}\n}\n\ncandidate() {\n    sort_array\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"1 5 2 3 4\") = \"1 2\
+    \ 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") = \"-4 -2 -6 -5 -3\" ]]\n\
+    \    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n    [[ $(candidate \"\"\
+    ) = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3 4\") = \"2 2 4 4 3 3 5\
+    \ 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\") = \"32 3 5 6 12 44\" ]]\n\
+    \    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n    [[ $(candidate\
+    \ \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: '/tmp/tmpv4mrzjtb.sh: line 24: unexpected EOF while looking for matching
+    `''''
+
+    /tmp/tmpv4mrzjtb.sh: line 57: syntax error: unexpected end of file
+
+    '
+  stdout: ''
+  timestamp: 1660054592
+- exit_code: 1
+  program: "#!/bin/bash\n# In this Kata, you have to sort an array of non-negative\
+    \ integers according to\n# number of ones in their binary representation in ascending\
+    \ order.\n# For similar number of ones, sort based on decimal value.\n# It must\
+    \ be implemented like this:\n# >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 3, 4,\
+    \ 5]\n# >>> sort_array([-2, -3, -4, -5, -6]) == [-6, -5, -4, -3, -2]\n# >>> sort_array([1,\
+    \ 0, 2, 3, 4]) [0, 1, 2, 3, 4]\n#\n# $1 is a space-separated list\nsort_array()\
+    \ {\n  local array=$1\n  # sort array in ascending order by number of ones in\
+    \ their binary representation\n  local bin_array=()\n  local new_array=()\n  local\
+    \ count=0\n  for item in ${array[@]}; do\n    ((count += ${item} == \"1\"))\n\
+    \  done\n  echo \"$count\"\n  for i in ${array[@]}; do\n    ((count -= ${i} ==\
+    \ \"1\"))\n    bin_array+=(\"$i\")\n  done\n  echo \"$bin_array\"\n  for i in\
+    \ ${bin_array[@]}; do\n    new_array+=(\"$i\")\n  done\n  echo \"$new_array\"\n\
+    }\n\ncandidate() {\n    sort_array \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"1 5 2 3 4\") = \"1 2 4 3 5\" ]]\n    [[ $(candidate \"-2 -3 -4 -5 -6\") =\
+    \ \"-4 -2 -6 -5 -3\" ]]\n    [[ $(candidate \"1 0 2 3 4\") = \"0 1 2 4 3\" ]]\n\
+    \    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"2 5 77 4 5 3 5 7 2 3\
+    \ 4\") = \"2 2 4 4 3 3 5 5 5 7 77\" ]]\n    [[ $(candidate \"3 6 44 12 32 5\"\
+    ) = \"32 3 5 6 12 44\" ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\"\
+    \ ]]\n    [[ $(candidate \"2 4 8 16 32\") = \"2 4 8 16 32\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: ''
+  stdout: ''
+  timestamp: 1660054592
