@@ -1,48 +1,34 @@
-# Written by Yangtian Zi, based on lua execution code written by Arjun Guha
-
-# This script runs dlang-fied HumanEval programs in dlang 
-
 import os
 import subprocess
 from pathlib import Path
-
+from safe_subprocess import run
 import sys
 import re
 
-DIR = "d-keep-code_davinci_001_temp_0.2"
 ENABLE_SYNTAX_CHECK = False
 
 def eval_script(path: Path):
-    try:
-        # Assumes exit-code 0 is all okay
-        output = subprocess.run(["rdmd", "-unittest", str(path)], capture_output=True,timeout=5)
-        if output.returncode == 0:
-            status = "OK"
-        else:
-            if 'Error:' in (str(output.stderr)):
-                status = "SyntaxError"
-            else:
-                status = "Exception"
-        returncode = output.returncode
-    except subprocess.TimeoutExpired as exc:
-        returncode = -1
+    result = run(["rdmd", "-unittest", str(path)], timeout=15)
+    if result.exit_code != 0 and "might not be correctly installed" in result:
+        raise Exception("D is not correctly installed")
+    
+    if result.timeout:
         status = "Timeout"
-        output = exc
-    except subprocess.CalledProcessError as exc:
-        returncode = exc.returncode
-        if 'Error:' in (str(exc.stderr)):
-            status = "SyntaxError"
-        else:
-            status = "Exception"
-        output = exc
-
+    elif result.exit_code == 0:
+        status = "OK"
+    elif "Error:" in result.stderr:
+        status = "SyntaxError"
+    else:
+        status = "Exception"
+    
     return {
         "status": status,
-        "exit_code": returncode,
-        "stdout": str(output.stdout),
-        "stderr": str(output.stderr),
+        "exit_code": result.exit_code,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
     }
 
+DIR = "d-keep-code_davinci_001_temp_0.2"
 def main():
     directory = Path(Path(__file__).parent, "..", "datasets", DIR).resolve()
 

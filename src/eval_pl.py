@@ -1,13 +1,23 @@
 from pathlib import Path
-import libeval
+from safe_subprocess import run
 
 def eval_script(path: Path):
-    result = libeval.run_without_exn(["perl", path])
-    if "ERROR" in result["stdout"] or "ERROR" in result["stderr"] \
-        or "FAILURE" in result["stdout"] or "ERROR" in result["stderr"]:
-        result["status"] = "Exception"
-    return result
-
+    r = run(["perl", path])
+    
+    if r.timeout:
+        status = "Timeout"
+    elif r.exit_code != 0:
+        status = "Exception"
+    elif "ERROR" in r.stdout or "ERROR" in r.stderr:
+        status = "Exception"
+    else:
+        status = "OK"
+    return {
+        "status": status,
+        "exit_code": r.exit_code,
+        "stdout": r.stdout,
+        "stderr": r.stderr,
+    }
 
 if __name__ == "__main__":
     libeval.testing_mail(eval_script, "Perl", ".pl")
