@@ -1,8 +1,10 @@
-# Authored by Arjun Guha
+"""
+Evaluates a generated Racket program (.rkt).
+"""
 import os
-import subprocess
 from pathlib import Path
 from libeval import run_without_exn
+
 def eval_script(path: Path):
     output = run_without_exn(["racket", str(path)])
     # rackunit produces exit code 0 even if tests fail.
@@ -11,6 +13,12 @@ def eval_script(path: Path):
             output["status"] = "SyntaxError"
         else:
             output["status"] = "Exception"
+
+
+    if "standard-module-name-resolver: collection not found\n  for module path: rackunit" in output["stderr"]:
+        print(f"Failed to run evaluation for {path}: rackunit is not installed")
+        return None
+
     return output
 
 
