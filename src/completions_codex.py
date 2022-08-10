@@ -1,25 +1,28 @@
 """
-This script produces completions from Codex.
+This script produces completions from Codex, or any model that fudges the
+completions API. For an example of a fudge:
 
-To run this script:
+https://github.com/arjunguha/research_model_server
 
-1. Prepare a directory with YAML files using prepare_prompts_yaml.py.
+To run this script, create a file called model_keys.csv with the columns:
 
-2. Create a file called model_keys.csv with the columns:
-
-   Label,Key
-   Arjun,OPENAI_API_KEY1
-   Abhinav,OPENAI_API_KEY2
-   ...
-
-   Your OpenAI API key will only work if you are in the Codex beta.
+```
+Label,Model,Key
+My OpenAI Key,,sk-YOUR-OPENAI-KEY
+Luna's OpenAI Key,,sk-LUNAS-KEY
+Wellesley A6000,incoder,http://localhost:8080/v1/completions
+Steven Holtzen's A40,incoder,http://localhost:8080/v1/completions
+```
+   
+OpenAI API key will only work if you are in the Codex beta.
 
 Then run:
 
 python3 completions_codex.py --dir <TARGET_DIR> --max-samples=32
 
-The TARGET_DIR must be the same as the one used in prepare_prompts_yaml.py.
-
+The max_samples argument should be a reasonable number. Too small, and
+you won't be using your GPU very efficently. Too high, and you'll crash
+a naive implementation.
 """
 import csv
 import openai_multimodel_multikey
