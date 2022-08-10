@@ -145,7 +145,7 @@ fn build_job_list() -> Result<(), Box<dyn std::error::Error>> {
     let mut jobs = vec![];
     for problem in problem_names.into_iter() {
         for lang in LANGS {
-            if *lang != "go" && *lang != "sh" {
+            if *lang != "sh" {
                 if let Some(x) = build_job_for_problem_and_lang(&problem, lang)? {
                     jobs.push(x);
                 }
