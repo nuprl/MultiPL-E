@@ -8,7 +8,7 @@ Python     | py        | Conda
 JavaScript | js        | Conda
 TypeScript | ts        | Conda
 Java       | java      | Conda
-D          | d         | Conda
+D          | d         | Manual install
 C++        | cpp       | System (we have g++ 9.2.0)
 R          | r         | Manually install
 Julia      | jl        | Conda
@@ -27,4 +27,5 @@ Some notes:
 
 - Manually install Scala in the Conda environment, which includes
   its own JDK.
+- The DMD on conda-forge is presently broken. Spack works.
 
