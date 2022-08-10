@@ -14,7 +14,9 @@ static LANGS: &'static [&str; 19]  = &[ "py", "js", "ts", "java", "d", "cpp", "r
 static MODELS: &'static [&str; 2] = &[ "davinci", "incoder" ];
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-struct TestResult { }
+struct TestResult { 
+    status: String
+}
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ResultsFile {
@@ -46,6 +48,7 @@ enum Command {
     CountDuplicatePrograms,
     SummarizeCompleteness,
     BuildJobList,
+    PassKAggregates,
 }
 
 fn all_configurations() -> Vec<(&'static str, &'static str, &'static str, &'static str)> {
@@ -64,6 +67,63 @@ fn all_configurations() -> Vec<(&'static str, &'static str, &'static str, &'stat
     }
     result
 }
+
+fn estimate_pass_k(n: i32, c: i32, k: i32) -> f64 {
+  // In Python: 1.0 - np.prod(1.0 - k / np.arange(n - c + 1, n + 1))
+    let mut result = 1.0;
+    for i in (n - c + 1)..(n + 1) {
+        result *= 1.0 - (k as f64) / (i as f64);
+    }
+    return 1.0 - result;
+}
+
+fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<String>> {
+    let (lang, model, temp, variation) = config;
+    
+    let walker = WalkDir::new(format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation));
+
+    let mut num_files = 0;
+    let mut aggregate_pass_k1 = 0.0;
+    let mut aggregate_pass_k10 = 0.0;
+    let mut aggregate_pass_k100 = 0.0;
+    for entry in walker
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        if !entry.path().file_name()?.to_str()?.ends_with(".results.yaml") {
+            continue;
+        }
+        let results_file = std::fs::read_to_string(entry.path()).ok()?;
+        let results = serde_yaml::from_str::<ResultsFile>(&results_file).unwrap();
+        let n = results.results.len();
+        let c = results.results.iter().filter(|r| r.status == "OK").count();
+        aggregate_pass_k1 += estimate_pass_k(n as i32, c as i32, 1);
+        aggregate_pass_k10 += estimate_pass_k(n as i32, c as i32, 10);
+        aggregate_pass_k100 += estimate_pass_k(n as i32, c as i32, 100);
+        num_files += 1;
+    }
+
+    if temp == "0.2" {
+        return Some(vec![format!("{},{},{},{},1,{:2}", lang, model, temp, variation, aggregate_pass_k1 / (num_files as f64))]);
+    }
+    else if temp == "0.8" {
+        return Some(vec![format!("{},{},{},{},10,{:2}", lang, model, temp, variation, aggregate_pass_k10 / (num_files as f64)),
+                         format!("{},{},{},{},100,{:2}", lang, model, temp, variation, aggregate_pass_k100 / (num_files as f64))]);
+    }
+    else {
+        panic!("Unknown temp: {}", temp);
+    }
+}
+
+fn pass_k_aggregates() {
+    let results = all_configurations().into_par_iter().filter_map(estimate_pass_k_for_config).collect::<Vec<_>>();
+    for result in results {
+        for line in result {
+            println!("{}", line);
+        }
+    }
+}
+
 
 fn is_completions_yaml(p: &DirEntry) -> bool {
     let s = p.file_name().to_str().unwrap();
@@ -384,5 +444,6 @@ fn main() -> () {
         Command::CountDuplicatePrograms => count_duplicate_programs(),
         Command::SummarizeCompleteness => summarize_completeness(),
         Command::BuildJobList => build_job_list().expect("Failed to build job list"),
+        Command::PassKAggregates => pass_k_aggregates()
     }
 }
