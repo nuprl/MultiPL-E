@@ -29,7 +29,8 @@ def set_nonblocking(reader):
 
 
 def run(
-    args: List[str], timeout_seconds: int = 15, max_output_size: int = 2048
+    args: List[str], timeout_seconds: int = 15, max_output_size: int = 2048,
+    env = None,
 ) -> Result:
     """
     Runs the given program with arguments. After the timeout elapses, kills the process
@@ -38,6 +39,7 @@ def run(
     """
     p = subprocess.Popen(
         args,
+        env=env,
         stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
