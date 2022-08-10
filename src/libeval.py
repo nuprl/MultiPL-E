@@ -23,7 +23,7 @@ def run_without_exn(args: List[str]):
         exit_code = p.returncode
         status = "OK" if exit_code == 0 else "Exception"
     except subprocess.TimeoutExpired as exc:
-        stdout, stderr = p.stdout, p.stderr
+        stdout, stderr = p.stdout.read(), p.stderr.read()
         os.killpg(os.getpgid(p.pid), signal.SIGTERM)
         exit_code = -1
         status = "Timeout"
