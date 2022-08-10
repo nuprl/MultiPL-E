@@ -1,0 +1,702 @@
+name: HumanEval_111_histogram
+language: pl
+prompt: "# Given a string representing a space separated lowercase letters, return\
+  \ a hash\n# of the letter with the most repetition and containing the corresponding\
+  \ count.\n# If several letters have the same occurrence, return all of them.\n#\
+  \ Example:\n# >>> histogram(\"a b c\")\n# {\"a\" => 1, \"b\" => 1, \"c\" => 1}\n\
+  # >>> histogram(\"a b b a\")\n# {\"a\" => 2, \"b\" => 2}\n# >>> histogram(\"a b\
+  \ c a b\")\n# {\"a\" => 2, \"b\" => 2}\n# >>> histogram(\"b b b b a\")\n# {\"b\"\
+  \ => 4}\n# >>> histogram(\"\")\n# {}\nsub histogram {\n    my($test) = @_;\n"
+tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&histogram;\n\
+  \        if(eq_deeply($candidate->(\"a b b a\"),{\"a\" => 2, \"b\" => 2})) {\n \
+  \       print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  a b c a b\"),{\"a\" => 2, \"b\" => 2})) {\n        print \"ok!\" }else{\n      \
+  \  exit 1;\n        }\n        if(eq_deeply($candidate->(\"a b c d g\"),{\"a\" =>\
+  \ 1, \"b\" => 1, \"c\" => 1, \"d\" => 1, \"g\" => 1})) {\n        print \"ok!\"\
+  \ }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"r t g\"\
+  ),{\"r\" => 1, \"t\" => 1, \"g\" => 1})) {\n        print \"ok!\" }else{\n     \
+  \   exit 1;\n        }\n        if(eq_deeply($candidate->(\"b b b b a\"),{\"b\"\
+  \ => 4})) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  r t g\"),{\"r\" => 1, \"t\" => 1, \"g\" => 1})) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\"),{})) {\n  \
+  \      print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  a\"),{\"a\" => 1})) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n\
+  }\n\ntesthumaneval();"
+completions: ["    my %histo;\n    my $count = 0;\n    my @letters = split(//, $test);\n\
+    \    foreach my $letter (@letters) {\n        $histo{$letter}{$count}++;\n   \
+    \     $count++;\n    }\n    return \\%histo;\n}", "    my($hash, %count);\n  \
+    \  my($max);\n    my($key);\n    \n    for my $letter (split /\\s+/, $test) {\n\
+    \        ($hash{$letter}++, $count{$letter}) = $count{$letter}+1 if ($count{$letter}++);\n\
+    \        \n        push @{$max}, $letter if ($count{$letter} == $max);\n    }\n\
+    \    \n    # Return all letters if there are several with the highest count\n\
+    \    # and all but the first letter in the array if there are several\n    # with\
+    \ the same highest count.\n    \n    return $hash if (scalar keys %count == 1);\n\
+    \    return map { $_ => ($hash{$_} > $max[$_])? $hash{$_} : 1 } keys %hash;\n\
+    }\n</cell>\n<text>\nExercise 2", "    my %count;\n    my $result = '';\n    foreach\
+    \ (split(/ /, $test)) {\n        ++$count{$_};\n        if ($count{$_} > 1) {\n\
+    \            $result = \"$result$_ $count{$_}\";\n        }\n    }\n    return\
+    \ $result =~ /^(.+)\\s(\\d+)$/ ? { $1 => $2 } : {};\n}", "    my $histogram =\
+    \ {};\n    my @unique_letters;\n    my $temp_count;\n    my @temp;\n    for (split\
+    \ //, $test) {\n        # ignore empty string\n        last unless length $_;\n\
+    \        # ignore letter already encountered and unique letter\n        next if\
+    \ $histogram->{$_} and !grep { $unique_letters++ };\n        $histogram->{$_}++;\n\
+    \    }\n    # Return all unique letters as hash\n    @unique_letters = keys %$histogram;\n\
+    \    return $histogram;\n}", "    return map { $_ => 1 } split /\\s+/, $test;\n\
+    }", '    my %result;', "    my %letters;\n    my @results;\n    my $max;\n   \
+    \ my $tested;\n    my $letter;\n    my @letters;", "    return () unless $test\
+    \ =~ /^(\\w*)\\s*$/;\n    my(%ret) = (0);\n    my %letters = ();\n    my $current_letter\
+    \ = $1;\n    $letters{$current_letter}++;\n    foreach my $letter (keys %letters)\
+    \ {\n        if ($letters{$letter} > $ret{$letter}) {\n            $ret{$letter}\
+    \ = $letters{$letter};\n        }\n    }\n    return %ret;\n}", '    my(@histogram,
+    %hist);', "    $test =~ tr/ /a/;\n    my %h = map { $_ => 1 } split /\\s+/, $test;\n\
+    \    my $count = 0;\n    my $max = 0;\n    foreach my $k (keys %h) {\n       \
+    \ ++$count;\n        $h{$k} > $max and $max = $h{$k};\n    }\n    map { $_ =>\
+    \ $h{$_} } (keys %h) if $count;\n    return %h;\n}\n</code>\n<|/ a |>\n<| c |>\n\
+    : I was confused by your comment about using a hash to store counts - you can,\
+    \ of course, do that, but it is much more efficient to use a hash to store the\
+    \ letters themselves.  See my update for a sample program that does that.\n<|/\
+    \ c |>\n<| a tags=perl,count,hash |>\nYour code is almost there.  You're getting\
+    \ the wrong count of characters in the second loop:\n<code>\nfor ($i = 0; $i <=\
+    \ $#data; $i++) {\n    $h{$data{$i}}{$data{$i+1}} += 1;\n}\n</code>\nIn each iteration\
+    \ of the loop, you're incrementing $i, so you're not looking at the data you expect\
+    \ (you're counting the data you already counted).\nTry changing this to $data[$i]\
+    \ and then running your test against the output.\nUpdate: By the way, there's\
+    \ a much simpler way to do this using map:\n<code>\n$histogram = map { $h{$_}+1\
+    \ } keys %h;\n</code>\n<|/ a dscore=2 |>\n<| a dscore=2 |>\nI believe that if\
+    \ you use the following program, the code will work correctly:\n<code>", "   \
+    \ return %histogram if $histogram;\n    my($letter) = ' ';\n    my($counts) =\
+    \ ();\n    $histogram{' '} = -1;\n    \n    while ($test =~ /([a-z])/g) {\n  \
+    \      $counts{$1}++;\n        $letter = $1;\n    }\n    \n    %histogram = ();\n\
+    \    \n    while ($letter ne ' ') {\n        $histogram{$letter}++;\n        $letter\
+    \ = shift;\n    }\n}", "    my %histogram;\n    my @letters = split(//,$test);\n\
+    \    foreach my $letter (@letters) {\n        my $count = $histogram{$letter}\
+    \ || 0;\n        $histogram{$letter} = $count + 1;\n    }\n    return \\%histogram;\n\
+    }", "    my %h;\n    my @chars;\n    my @words;\n    $chars[0] = \"a\" unless\
+    \ $chars[0];\n    foreach my $char (split(\" \", $test)) {\n        push @chars,\
+    \ $char unless $char =~ /^\\d/;\n        $h{$char}++;\n        push @words, $char\
+    \ unless $char eq $chars[0];\n    }\n    return %h if (scalar @chars == 1);\n\
+    \    foreach my $char (@chars) {\n        $h{$char}++ while (grep { $h{$_} > $h{$char}\
+    \ } @words);\n    }\n    return %h;\n}", "    return () unless $test;\n    my(%histo)\
+    \ = ();\n    my(@result) = ();\n    my(@tests) = ();\n    my($i, $char, %count,\
+    \ @char, @chars, $testchar, $count);", "    my %h;\n    $test =~ s/\\s+//g;\n\
+    \    for my $s (split /\\s+/, $test) {\n        $h{$s} = exists $h{$s} ? $h{$s}\
+    \ + 1 : 1;\n    }\n    return wantarray ? %h : \\%h;\n}", "    my($histogram)\
+    \ = {};\n    my($letter, $count) = ();\n    my(@test) = split //, $test;\n   \
+    \ foreach $letter (@test) {\n        next if $histogram->{$letter}++;\n      \
+    \  $histogram->{$letter} = 1;\n    }\n    return $histogram;\n}", '    my(%result);',
+  "    return if !$test || length($test) == 0;\n    my $counts = ();\n    my $current_letter\
+    \ = lc($test);\n    $counts->{$current_letter} += 1;", "    my @chars = split(/\
+    \ /, $test);\n    my $counter = ();\n    foreach my $char (@chars) {\n       \
+    \ $counter->{$char}++;\n    }\n    my $max_count = -1;\n    my $max_letter = ();\n\
+    \    foreach my $char (keys %$counter) {\n        if($counter->{$char} > $max_count)\
+    \ {\n            $max_count = $counter->{$char};\n            $max_letter = $char;\n\
+    \        }\n    }\n    my %hash;\n    foreach my $char (keys %$counter) {\n  \
+    \      if($counter->{$char} != $max_count) {\n            $hash{$char} = $counter->{$char};\n\
+    \        }\n    }\n    return \\%hash;\n}", "    my($histogram);\n    my($letter,\
+    \ $count);\n    foreach $letter (split //, $test) {\n        $count++;\n     \
+    \   if (not exists $histogram->{$letter}) {\n            $histogram->{$letter}\
+    \ = $count;\n        } else {\n            ++$histogram->{$letter};\n        }\n\
+    \    }\n    return $histogram;\n}", "    my %hash;\n    my = split(\" \", $test);\n\
+    \    for my $value ( sort keys %hash ) {\n        my $count = 0;\n        foreach\
+    \ my $x (@values) {\n            if ( $x eq $value ) {\n                $count++;\n\
+    \            }\n        }\n        $hash{$value} = $count;\n    }\n    return\
+    \ %hash;\n}", "    $test =~ s/\\s+//g;\n    $test =~ s/^\\s+//g;\n    $test =~\
+    \ s/\\s+$//g;\n    my($hash);\n    my($max);\n    my(@result);\n    my($key, $val);\n\
+    \    for (split(\" \", $test)) {\n        $key = $_;\n        $val = 1;\n    \
+    \    if (!exists($hash->{$key})) {\n            $hash->{$key} = $val;\n      \
+    \  }\n        else {\n            $hash->{$key} += $val;\n        }\n    }\n \
+    \   foreach $key (keys(%$hash)) {\n        if (!exists($max)) {\n            $max\
+    \ = $hash->{$key};\n        }\n        else {\n            if ($hash->{$key} >\
+    \ $max) {\n                $max = $hash->{$key};\n            }\n        }\n \
+    \   }\n    foreach $key (keys(%$hash)) {\n        $result[$key] = $hash->{$key};\n\
+    \    }\n    @result;\n}", "    my $histogram;\n    chomp($test);\n    if ($test\
+    \ eq \"\") {\n        $histogram = {};\n    } elsif ($test =~ /^\\s+$/ || !$test)\
+    \ {\n        $histogram = {};\n    } else {\n        my(@letters) = split(//,\
+    \ $test);\n        my $letter_hash;\n        $letter_hash = {};\n        foreach\
+    \ my $letter (@letters) {\n            if (!$letter_hash->{$letter}) {\n     \
+    \           $letter_hash->{$letter} = 0;\n            }\n            $letter_hash->{$letter}++;\n\
+    \        }\n        $histogram = { };\n        foreach my $letter (sort {$a <=>\
+    \ $b} keys %$letter_hash) {\n            $histogram->{$letter} = $letter_hash->{$letter};\n\
+    \        }\n    }\n    return $histogram;\n}", '    my($hash) = {};', "    if(!defined($test))\
+    \ {\n        $test = \"a b c a b\";\n    }\n    my @letters;\n    my @counted;\n\
+    \    my %histo;", "    my(%histogram);\n    foreach my $testLetter (split /\\\
+    s+/, $test) {\n        $histogram{$testLetter}++;\n    }\n    return %histogram;\n\
+    }", "    my $histogram = undef;\n    my @letters = split(//, $test);\n    my $max\
+    \ = 0;", "    if ($test =~ /^\\s*$/) {\n        return {};\n    }", "    my @hash;\n\
+    \    my %hash;\n    my $key;\n    my $value;\n    my $occur = 0;\n    my $letter;\n\
+    \    my $i;\n    my $temp;\n    while ($test =~ /([a-zA-Z]+)/g) {\n        $letter\
+    \ = $1;\n        push @{$hash{$letter}}, 1;\n    }\n    foreach $key (keys %hash)\
+    \ {\n        $temp = 0;\n        $occur = 0;\n        $i = 0;\n        foreach\
+    \ $value (@{$hash{$key}}) {\n            $temp += $value;\n            if ($i\
+    \ > $occur) {\n                $occur = $i;\n                $key = $key;\n  \
+    \          }\n            $i++;\n        }\n        $hash{$key} = $temp;\n   \
+    \ }\n    @hash = sort { $hash{$a} <=> $hash{$b} } keys %hash;\n    if (@hash ==\
+    \ 1) {\n        return $hash{$hash[0]};\n    }\n    return \\@hash;\n}", '    my
+    %histogram;', "    my $hash;\n    foreach my $letter (split //, $test) {\n   \
+    \     if (!exists $hash->{$letter}) {\n            $hash->{$letter} = 1;\n   \
+    \     } else {\n            $hash->{$letter}++;\n        }\n    }\n    foreach\
+    \ my $key (sort {$hash->{$a} <=> $hash->{$b}} keys %$hash) {\n        $hash->{$key}\
+    \ = $hash->{$key} > 1 ? $hash->{$key} : 1;\n    }\n    return $hash;\n}\n</code>\n\
+    EDIT: As noted by, this method has a shortcoming in that it doesn't handle repeated\
+    \ letters.  I missed that requirement the first time.  The other suggestions I\
+    \ see are to sort the keys by frequency (as done above), or to replace the \"\
+    =\" count with a set of letters having the same frequency.  This would require\
+    \ more memory and require more processing in the frequency function itself.\n\
+    <|/ a |>\n<| c |>\nThe first method is not correct. It assumes that all letters\
+    \ have the same frequency. The second method doesn't handle the case of repeated\
+    \ letters.\n<|/ c |>\n<| c |>\n, Good catch.  I was assuming that the OP would\
+    \ have figured out how to change `=` to `+` in the second method, but I now see\
+    \ that that doesn't seem to be the case.  I'll update my answer to address this\
+    \ case.\n<|/ c |>\n<| c |>\n, Good catch.  I've updated my answer to include this\
+    \ shortcoming.\n<|/ c |>\n<| c |>\nThis solution is wrong: it misses the case\
+    \ where two or more letters have the same frequency. Example: \"a b c a b a\"\
+    \ should map to \"c b\".\n<|/ c |>\n<| c |>\n, I see what you mean.  I modified\
+    \ my answer to account for this case as well as handle the case of repeated letters.\n\
+    <|/ c |>\n<| a dscore=3 tags=frequency,perl,string,hash |>\n<code>\nmy %h = ('a'=>1,'b'=>2,'c'=>1,'d'=>1,'e'=>1,'f'=>1,'g'=>1,'h'=>1,'i'=>1,'j'=>1,'k'=>1,'l'=>1,'m'=>1,'n'=>1,'o'=>1,'p'=>1,'q'=>1,'r'=>1,'s'=>1,'t'=>1,'u'=>1,'v'=>1,'w'=>1,'x'=>1,'y'=>1,'z'=>1,'A'=>1,'B'=>1,'C'=>1,'D'=>1,'E'=>1,'F'=>1,'G'=>1,'H'=>1,'I'=>1,'J'=>1,'K'=>1,'L'=>",
+  "    my(%hash);\n    my(@counts);\n    my $prev_char = $test[0];\n    my $cur_char;\n\
+    \    my $prev_count;\n    my $cur_count;\n    for ($prev_char, $cur_char) = ($test[0],\
+    \ $test[1]) {\n        $prev_count = $hash{$prev_char}++;\n        $cur_count\
+    \ = $hash{$cur_char}++;\n        if ($prev_count > $cur_count) {\n           \
+    \ $hash{$cur_char} = $prev_count;\n        }\n        else {\n            $hash{$prev_char}\
+    \ = $cur_count;\n        }\n    }\n    $hash{$prev_char} += $hash{$cur_char};\n\
+    \    foreach $key (sort {$hash{$b} <=> $hash{$a}} keys %hash) {\n        $hash{$key}\
+    \ /= $hash{$key};\n    }\n    return %hash;\n}", "    my($histogram) = {};\n \
+    \   my($letter) = uc($test);\n    my($count) = 1;\n    while ($letter ne '') {\n\
+    \        my $letterFound = $histogram->{$letter};\n        if (defined($letterFound))\
+    \ {\n            $count = $letterFound + 1;\n        } else {\n            $count\
+    \ = 1;\n        }\n        $histogram->{$letter} = $count;\n        $letter =\
+    \ substr($letter,1);\n    }\n    return $histogram;\n}", "    my $histogram =\
+    \ {};\n    for (split ' ', $test) {\n        my ($letter, $count) = split //,\
+    \ $_;\n        $histogram->{$letter} = $count if exists $histogram->{$letter}\
+    \ ? $histogram->{$letter} + $count : $count;\n    }\n    return $histogram;\n}",
+  "    return undef unless defined $test;\n    my(%h) = (0);\n    my($letter, $count)\
+    \ = ();\n    my(@chars) = ();\n    my(@sorted_chars) = ();\n    $letter = \"\"\
+    ;\n    $count = 1;\n    $h{$letter} = $count;\n    while($test) {\n        push(@chars,\
+    \ substr($test, 0, 1));\n        push(@sorted_chars, substr($test, 1));\n    \
+    \    $test = substr($test, 1);\n    }\n    foreach $char (@chars) {\n        if(exists($h{$char}))\
+    \ {\n            $h{$char}++;\n        }\n        elsif(exists($h{$char.''}))\
+    \ {\n            $h{$char.''}++;\n        }\n        else {\n            $h{$char.''}\
+    \ = 1;\n        }\n    }\n    return \\%h;\n}", "    \n    if (! defined $test)\
+    \ {\n        return ();\n    }\n    \n    # Count each letter\n    my(%letterCount)\
+    \ = ();\n    \n    for (split //, $test) {\n        my $letter = lc $_;\n    \
+    \    $letterCount{$letter}++;\n    }\n    \n    # Return the letter and its count\
+    \ (with the highest count)\n    return map { ($_, @{$letterCount{$_}}) } sort\
+    \ { $a->[1] <=> $b->[1] } keys %letterCount;\n}", "    return map { $_ => 1 }\
+    \ split \" \", $test;\n}", "    my %histogram;\n    \n    $test =~ m|[a-z]+|g;\n\
+    \    \n    my $count = 1;\n    foreach my $letter (split(//,$test)) {\n      \
+    \  $histogram{$letter} = (defined($histogram{$letter})?$histogram{$letter}+1:1);\n\
+    \    }\n    return %histogram;\n}", "    my $histogram = {};\n    \n    my $letters\
+    \ = split(\" \", $test);\n    for my $letter (@$letters) {\n\tmy $occurrence =\
+    \ () = $histogram{$letter};\n\t$histogram{$letter} = $occurrence ? $occurrence\
+    \ + 1 : 1;\n    }\n    \n    return $histogram;\n}", "    return () if !defined($test);\n\
+    \    my($histogram) = ();\n    my($letter) = (\"\");\n    my($count) = (0);\n\
+    \    my @data = split(\" \", $test);\n    foreach my $i (0 .. @data - 1) {\n \
+    \       my $value = $data[$i];\n        next if !defined($value);\n        if\
+    \ ($value == $letter) {\n            $histogram->{$value} = $count + 1;\n    \
+    \    }\n        else {\n            if ($histogram->{$letter} > 0) {\n       \
+    \         $histogram->{$letter} = $count + 1;\n            }\n            else\
+    \ {\n                $histogram->{$letter} = 1;\n            }\n            $letter\
+    \ = $value;\n            $count = 1;\n        }\n    }\n    return $histogram;\n\
+    }", '    my $h = { };', "    my %hash;\n    my @letters;", "    $histogram = {\
+    \ map { $_ => 0 } keys %$histogram };\n    $test =~ s/\\s+//g;\n    $test =~ tr/a-z/A-Z/;\n\
+    \    my @chars = split //, $test;\n    my $max = 0;\n    my $maxchar = \"\";\n\
+    \    my $total = 0;\n    for my $char (@chars) {\n        $histogram->{$char}++;\n\
+    \        $total++;\n        my $count = $histogram->{$char};\n        if ($count\
+    \ > $max) {\n            $max = $count;\n            $maxchar = $char;\n     \
+    \   }\n    }\n    return { $maxchar => $max, count => $total };\n}", "    return\
+    \ map {\n        my $count = $test->{$_}++;\n        map {$_ => $count} keys %$test\n\
+    \    } split / /, $test;\n}", "    my($hash, $key, $sum);\n    $test = $test =~\
+    \ /\\s+/;", '    my $histogram = hash();', "    return map {\n        my $count\
+    \ = () = $test =~ /\\b(\\w)/g;\n        $_ => $count\n    } sort { $a <=> $b }\
+    \ map {\n        my ($word, $count) = $_ =~ /\\b(\\w)\\s+(\\w)/g;\n        $word\
+    \ => $count\n    } split /\\s+/, $test;\n}\n</code>\n<|/ a |>\n<| a tags=perl,regex,string\
+    \ |>\nTry this:\n<code>", "    my @alphabet;\n    my %histogram;", "    my %counts;\n\
+    \    $counts{$_}++ for\n        grep { length($_) > 1 } split /\\s+/, $test;\n\
+    \    return \\%counts;\n}", "    my %hash;\n    $test =~ s/\\s+//g;\n    my @chars\
+    \ = split(//, $test);\n    for (@chars) {\n        if (!exists $hash{$_}) {\n\
+    \            $hash{$_} = 1;\n        } else {\n            $hash{$_}++;\n    \
+    \    }\n    }\n    return %hash;\n}", "    my(%histogram) = ();\n    my(@keys);\n\
+    \    my($key);\n    my($values);", "    return {} unless $test;\n    my($hash,\
+    \ $count, $key) = @_;\n    $count = $count || 1;\n    $hash->{$key} += $count;\n\
+    \    return;\n}", '    my %h;', "    my @letters;\n    my %letters_count;", " \
+    \   return { map { $_ => 1 } split /\\s+/, $test };\n}", '    my %histogram;',
+  '    my $histogram = { };', "    return {} if !$test || $test eq '';\n    my %counts;\n\
+    \    my %count;\n    for my $char (split /\\s+/, $test) {\n        $counts{$char}++;\n\
+    \        $count{$char} = $count{$char} || 0;\n        $count{$char} += 1 unless\
+    \ $count{$char};\n    }\n    my $key; my $val;\n    foreach (keys %counts) {\n\
+    \        $key = $_;\n        $val = $counts{$_};\n        delete $counts{$_};\n\
+    \        $counts{$key} = $val;\n    }\n    return \\%counts;\n}", "    return\
+    \ {} if $test eq \"\";\n    my($hash);\n    $hash = $test;\n    foreach my $letter\
+    \ (split //, $test) {\n        $hash->{$letter}++;\n    }\n    return $hash;\n\
+    }", "    my %hash;\n    my($max);\n    my($i);\n    my(@chars);\n    foreach $char\
+    \ (split //, $test) {\n        $hash{$char}++;\n    }\n    foreach $char (keys\
+    \ %hash) {\n        if($hash{$char} > $max) {\n            $max = $hash{$char};\n\
+    \        }\n    }\n    foreach $char (sort {$hash{$a} <=> $hash{$b}} keys %hash)\
+    \ {\n        $hash{$char} = $hash{$char} if $max < $hash{$char};\n    }\n    foreach\
+    \ $char (sort {$hash{$a} <=> $hash{$b}} keys %hash) {\n        push @chars, $char;\n\
+    \    }\n    return \\@chars;\n}", "    return map {\n        $_ => $test->{$_}\
+    \ // 0\n    } sort keys %$test\n}", "    my(%results);\n    my($first);\n    my($counts);",
+  '    return () unless $test;', "    return {} unless $test;\n    return {} if ($test\
+    \ eq \"\");\n    my %letters_count;\n    my $letter;\n    my @letters = split(\"\
+    \ \", $test);\n    foreach my $letter (@letters) {\n        $letters_count{$letter}\
+    \ = 0;\n    }\n    foreach my $letter (@letters) {\n        $letters_count{$letter}\
+    \ += 1;\n    }\n    return %letters_count;\n}", "    my %count;\n    my @letters\
+    \ = split //, $test;\n    for (@letters) {\n        $count{$_}++;\n    }\n   \
+    \ return \\%count;\n}\n</code>\n<|/ a tags=perl dscore=0 |>\n<| a dscore=0 |>\n\
+    The solutions here are all quite unwieldy. Here's a one-line version:\n<code>\n\
+    $max{$_} = $count{$_} for (keys %$test);\n</code>\n<|/ a tags=perl |>\n<| a dscore=0\
+    \ |>\nA solution using Perl's map and grep\n<code>", "    my %hash;\n    $test\
+    \ =~ tr/ //d;\n    foreach my $char (split(//, $test)) {\n        if ($hash{$char}\
+    \ == 0) {\n            $hash{$char} = 1;\n        }\n        else {\n        \
+    \    $hash{$char}++;\n        }\n    }\n    return \\%hash;\n}", "    my(@chars);\n\
+    \    my(%hist);", '    my %hash;', "    my %histogram;\n    my($letter, $count);\n\
+    \    my %wordCount;", '    return {} if !defined $test;', "    my(@letters, %letters);\n\
+    \    my($letter_count);\n    foreach (split //, $test) {\n        next unless\
+    \ length($_) > 0;\n        $letter = lc($_);\n        $letter{$letter}++;\n  \
+    \      if (exists $letters{$letter}) {\n            $letter_count = $letters{$letter};\n\
+    \        }\n        else {\n            $letters{$letter} = 1;\n            $letter_count\
+    \ = 1;\n        }\n    }\n    @letters = keys %letters;\n    return { map { $_\
+    \ => $letter_count} };\n}\n</code>\n<|/ a |>\n<| c |>\nThanks, this solution works,\
+    \ but only for a set of strings with just one word. For example, it doesn't work\
+    \ with histogram(\"a b b a b c a c a c b c\")\n<|/ c |>\n<| c |>\nIt should do\
+    \ that as well. Have you tried it with that string?\n<|/ c |>\n<| c |>\nYes, I\
+    \ tried it with histogram(\"a b b a b c a c a c b c\"). The result is a hash with\
+    \ 'b' => 2 instead of 'a' => 4. I think I'll have to do something about the empty\
+    \ string\n<|/ c |>\n<| c |>\nOh, I see. It only works for the word 'b', not for\
+    \ the rest. I guess I can check for empty strings and then use your solution but\
+    \ I would have to make some more changes. Thank you!\n<|/ c |>\n<| c |>\nI fixed\
+    \ the solution for multiple words too.\n<|/ c |>\n<| a tags=perl,histogram |>\n\
+    The simple approach is to use a list of sorted letters and to count them in a\
+    \ hash:\n<code>\nuse warnings;\nuse strict;", '    my(%letters);', "    $test\
+    \ =~ s/\\s+//g;\n    my %histogram;\n    my $letter = $test;\n    my $count =\
+    \ 1;\n    while ($letter ne '') {\n        $histogram{$letter}++;\n        last\
+    \ if $letter eq '';\n        $letter = $letter->next;\n    }\n    map {\n    \
+    \    my $letter = $_;\n        my $count = $histogram{$letter};\n        push\
+    \ @{$histogram{$letter}}, $count;\n    } sort {$b <=> $a} keys %histogram;\n}",
+  "    my @chars;\n    \n    # Find all the unique letters we're given so we can count\
+    \ them\n    foreach my $char (split(//, $test)) {\n\tnext unless ($char =~ /^[a-z]+$/);\n\
+    \t\n\tpush(@chars, $char) unless grep($char, $chars);\n    }\n    \n    # Scan\
+    \ the hash table and find out what letter has the most occurences\n    my %hash;\n\
+    \    for (my $i = scalar(@chars) - 1; $i >= 0; $i--) {\n\t$hash{$chars[$i]}++\
+    \ if exists($hash{$chars[$i]});\n    }\n    \n    # Put the letters in descending\
+    \ order by their count\n    my @letters = keys %hash;\n    \n    for (my $i =\
+    \ scalar(@letters) - 1; $i >= 0; $i--) {\n\t$hash{$letters[$i]} > $hash{$letters[$i\
+    \ - 1]} ? $hash{$letters[$i]} = $hash{$letters[$i - 1]} : next;\n    }\n    \n\
+    \    # Sort all letters by their count\n    my @sorted;\n    for (my $i = scalar(@letters)\
+    \ - 1; $i >= 0; $i--) {\n\tpush(@sorted, $letters[$i]);\n    }\n    \n    # Return\
+    \ an empty hash if the string is empty\n    %hash = (\"\") unless keys %hash;\n\
+    \    return %hash;\n}", "    my($histo) = {};\n    if (not $test) {\n        return\
+    \ $histo;\n    }\n    my $word = (split ' ', $test)[-1];\n    foreach my $char\
+    \ (split ' ', $test) {\n        $histo->{$char}++;\n    }\n    $histo->{$word}\
+    \ += 1;\n    return $histo;\n}", "    chomp($test);\n    $test =~ s/\\s+//g;\n\
+    \    my @letters = split //, $test;", "    my @letters = split ' ', $test;\n \
+    \   my %hash = map {chomp; $_ => 1}, @letters;\n    my %count_hash;\n    while(my\
+    \ ($letter, $count) = (sort {$count_hash{$b} <=> $count_hash{$a}} keys %hash))\
+    \ {\n        $count_hash{$letter} = $count;\n    }\n    my $result = {};\n   \
+    \ foreach my $key (sort keys %count_hash) {\n        $result->{$key} = $count_hash{$key};\n\
+    \    }\n    return $result;\n}", "    my @count;\n    my %histogram;\n    my $space\
+    \ = 0;\n    foreach my $letter (split //, $test) {\n        if ($letter eq ' ')\
+    \ {\n            $space += 1;\n        }\n        if ($letter in $histogram) {\n\
+    \            $histogram{$letter}++;\n        }\n        else {\n            $histogram{$letter}\
+    \ = 1;\n        }\n    }\n    foreach my $letter (keys %histogram) {\n       \
+    \ if ($histogram{$letter} > 1) {\n            push @count, $letter;\n        }\n\
+    \    }\n    if (@count) {\n        my %max;\n        foreach my $l (@count) {\n\
+    \            $max{$_} = $histogram{$l};\n        }\n        return %max;\n   \
+    \ }\n    else {\n        return {};\n    }\n}", "    $test =~ tr/a-z/A-Z/;\n \
+    \   my %counts;\n    $counts{$_}++ for;\n    return map { $_ => $counts{$_} }\
+    \ sort { $counts{$a} <=> $counts{$b} } keys %counts;\n}", "    $test =~ s/\\s+//g;\n\
+    \    my %h;\n    my @res;", "    if ($test =~ /^\\W+$/) {\n        $test = join(\"\
+    \ \", split(//, $test));\n    }\n    return unless ($test =~ /^(\\S+\\s+)*\\S*$/);\n\
+    \    my($space) = join(\" \", split('', $test));\n    return map {$_ => 1} sort\
+    \ keys %{ (split /\\s+/, $space)};\n}", "    my %count;\n    my $key;\n    for\
+    \ $key (split ' ', $test) {\n        $count{$key} = 0;\n    }\n    while (my $letter\
+    \ = each %count) {\n        my $n = $count{$letter};\n        if ($n > $count{$_}\
+    \ ) {\n            $count{$letter} = $n;\n        }\n    }\n    return \\%count;\n\
+    }", "    my $histo = { map { (split)[0], 1 } };\n    foreach my $elem (split /\\\
+    s+/, $test) {\n        $histo->{$elem}++;\n    }\n    $histo;\n}", "    return\
+    \ {} unless $test;\n    my($letter) = \"\";\n    my($count) = 0;\n    my(@histo)\
+    \ = ();\n    foreach (split /\\s+/, $test) {\n        $letter .= $_;\n       \
+    \ $count++;\n        push (@histo, {$letter => $count});\n    }\n    return @histo;\n\
+    }", "    my %histogram;\n    for (split /\\s+/, $test) {\n        $histogram{$_}++;\n\
+    \    }\n    return \\%histogram;\n}", "    my %hash;\n    $test =~ s/ //g;\n \
+    \   $test =~ s/^ //g;\n    $test =~ s/ $//g;\n    $test =~ s/ [ ]//g;\n    my\
+    \ @letters = split(//, $test);\n    my $max;\n    foreach my $letter (@letters)\
+    \ {\n        $hash{$letter}++;\n        $max = $letter->{count} if $max < $letter->{count};\n\
+    \    }\n    return %hash;\n}", "    my %histogram;\n    my $histogram;\n    my\
+    \ @histogram;\n    my @test = ($test) ? (split) : \"a b c a b\";\n    for (@test)\
+    \ {\n        my $letter;\n        my $count;\n        $letter = $_;\n        my\
+    \ $length = 0;\n        my $count = 0;\n        foreach my $char (split //, $letter)\
+    \ {\n            $count++;\n            $histogram{$char} += 1;\n            $length\
+    \ += length($char);\n        }\n        if ($histogram{$letter} > $count) {\n\
+    \            $histogram{$letter} = $count;\n        }\n        $histogram{$_}\
+    \ = $count for keys %histogram;\n        push (@histogram, \\%histogram);\n  \
+    \  }\n    foreach my $histogram (@histogram) {\n        if ($histogram) {\n  \
+    \          $histogram->{$_} = $histogram->{$_} for keys %$histogram;\n       \
+    \     return $histogram;\n        }\n    }\n    return {};\n}", "    my @hist;\n\
+    \    my %histogram;\n    my $result;\n    \n    # Break test string into individual\
+    \ chars. Sort them\n    # into increasing order and store in an array called \"\
+    sorted\".\n    my @sorted = split(//, $test);\n    @sorted = sort { $a <=> $b\
+    \ };", "    chomp($test);\n    my @letters = split(' ', $test);\n    my %counter;\n\
+    \    foreach my $letter (@letters) {\n        $counter{$letter}++;\n    }\n  \
+    \  foreach my $letter (keys(%counter)) {\n        my $count = delete $counter{$letter};\n\
+    \        return ({$letter => $count} if $count);\n    }\n    return ();\n}", " \
+    \   my %results;\n    $test =~ s/\\s+//g;\n    my $max = 0;\n    my $tester =\
+    \ $test;\n    $tester =~ tr/A-Za-z//cd;\n    $tester =~ tr/a-z/A-Z/;\n    $tester\
+    \ =~ s/^\\s+//;\n    $tester =~ s/\\s+$//;\n    my $testlength = length($tester);\n\
+    \    foreach my $letter (split(//, $test)) {\n        my $lettercount = $results{$letter};\n\
+    \        if ($lettercount > $max) {\n            $max = $lettercount;\n      \
+    \  }\n        $results{$letter} = $lettercount + 1;\n    }\n    my @keys;\n  \
+    \  foreach my $letter (keys(%results)) {\n        if ($results{$letter} > 1) {\n\
+    \            push @keys, $letter;\n        }\n    }\n    if (@keys) {\n      \
+    \  return @keys;\n    }\n    else {\n        return ();\n    }\n}", "    my $hash;\n\
+    \    my @key;", "    my @letters = split //, $test;\n    my %histogram = ();\n\
+    \    for (@letters) {\n        my $count = $histogram{$_}++;\n        $histogram{$_}\
+    \ = $count if $count > 1;\n    }\n    foreach my $letter (keys %histogram) {\n\
+    \        if ($histogram{$letter} != 1) {\n            $histogram{$letter} = \"\
+    $histogram{$letter}s\";\n        }\n    }\n    return %histogram;\n}", '    my
+    %hash;', "    my %histogram;\n    my ($letter, $count);", "    my @letters = split(//,\
+    \ $test);\n    my %histo;\n    my $max;\n    foreach my $letter (@letters) {\n\
+    \        $histo{$letter}++;\n    }\n    foreach my $letter (sort {$histo{$a} <=>\
+    \ $histo{$b}} keys %histo) {\n        if($histo{$letter} == $max) {\n        \
+    \    $histo{$letter}++;\n        } else {\n            $histo{$letter} = 1;\n\
+    \        }\n        $max = $histo{$letter};\n    }\n    return %histo;\n}", " \
+    \   return {} unless $test;\n    my %h;\n    $test =~ s/\\s+/ /g;\n    $test =~\
+    \ s/^\\s+//;\n    $test =~ s/\\s+$//;\n    $test =~ s/\\s+/ /g;\n    $test =~\
+    \ tr/ //d;\n    foreach my $l (split /\\s+/, $test) {\n        if (!exists $h{$l})\
+    \ {\n            $h{$l} = 0;\n        }\n        $h{$l} += 1;\n    }\n    my $max\
+    \ = -1;\n    my $letter = \"\";\n    foreach my $l (keys %h) {\n        if ($h{$l}\
+    \ > $max) {\n            $max = $h{$l};\n            $letter = $l;\n        }\n\
+    \    }\n    return { $letter => $max };\n}", "    my %h;\n    \n    while ($test\
+    \ =~ /(.)(.*)/) {\n\tmy $letter = $1;\n\tmy $count = $2;\n\t$h{$letter} = $count\
+    \ if $h{$letter} < $count;\n    }\n    \n    return \\%h;\n}", "    my $counts\
+    \ = ();\n    my $best;\n    my $bestcount;", "    return map {$_ => 1}, sort {\n\
+    \        $test->{$a} <=> $test->{$b}\n    } keys %$test;\n}", "    my @chars =\
+    \ map { lc($_) } split \" \", $test;\n    my %histogram;\n    my $currentchar;\n\
+    \    my $currentcount;\n    for (my $i = 0; $i < @chars; ++$i) {\n        $currentchar\
+    \ = $chars[$i];\n        $currentcount = 0;\n        for my $char (keys %histogram)\
+    \ {\n            $histogram{$char} += 1;\n            if (lc($char) == lc($currentchar)\
+    \ && $histogram{$char} > $currentcount) {\n                $currentchar = $char;\n\
+    \                $currentcount = $histogram{$char};\n            }\n        }\n\
+    \        push @{ $histogram{$currentchar} }, $currentcount;\n    }\n    return\
+    \ \\%histogram;\n}", "    $test =~ s/ //g;\n    my %hash;\n    my @letters;\n\
+    \    my $counter = 0;", "    my %histogram = ();\n    foreach my $letter (split\
+    \ /\\s+/, $test) {\n        $histogram{$letter}++ if defined $histogram{$letter};\n\
+    \    }\n    foreach my $letter (sort {$histogram{$b} <=> $histogram{$a}} keys\
+    \ %histogram) {\n        $histogram{$letter} = $histogram{$letter} > 1 ? $histogram{$letter}\
+    \ : 1;\n    }\n    return %histogram;\n}", '    $histogram = { };', "    my %histogram;\n\
+    \    map { $histogram{$_}++ } split /\\s+/, $test;\n    %histogram;\n}", "   \
+    \ my %histogram;\n    my $tests =();\n    foreach my $test (split ' ', $test)\
+    \ {\n        if ($test =~ /^([a-z]+)/) {\n            my $letter = $1;\n     \
+    \       $letters{$letter}++;\n            if (defined $histograms{$letter}) {\n\
+    \                $histograms{$letter}++;\n            } else {\n             \
+    \   $histograms{$letter} = 1;\n            }\n            $tests[$letter] = $histograms{$letter};\n\
+    \        } elsif ($test =~ /^([a-z]+\\s*)+$/) {\n            my $letter = $1;\n\
+    \            $letters{$letter}++;\n            my $spaces = 0;\n            foreach\
+    \ my $letter2 (split ' ', $test) {\n                if ($letter2 =~ /^$letter/)\
+    \ {\n                    $histograms{$letter}++;\n                    $histograms{$letter2}++;\n\
+    \                    $spaces++;\n                }\n            }\n          \
+    \  $tests[$letter] = $spaces * 2;\n        } elsif ($test =~ /^$letter$/) {\n\
+    \            $letters{$test}++;\n            $tests[$test] = 1;\n        }\n \
+    \   }\n    return \\%histograms;\n}", "    my %h = ();\n    \n    return %h if\
+    \ $test eq \"\";\n    \n    foreach (split / /, $test) {\n        my $letter =\
+    \ $_;\n        if (exists $h{$letter}) {\n            $h{$letter}++;\n       \
+    \ } else {\n            $h{$letter} = 1;\n        }\n    }\n    \n    return %h;\n\
+    }", "    my %hash;\n    my(@letters) = split /\\s+/, $test;\n    foreach my $letter\
+    \ (@letters) {\n        $hash{$letter}++;\n    }\n    return wantarray ? %hash\
+    \ : \\%hash;\n}", "    my $hash = {};\n    map {\n        my $count = $hash{$_};\n\
+    \        $hash{$_}++ if $test;\n        $hash{$_} += $count\n    } split \" \"\
+    , $test;\n    return $hash;\n}\n</code>\n<|/ a tags=perl |>\n<| a tags=perl |>\n\
+    <code>", "    my $result = {};\n    my ($key, $value);", "    my($histo) = ();\n\
+    \    my($letter) = ();\n    while(my $line = <FH>) {\n        chomp $line;\n \
+    \       $line =~ s/\\s+$//;\n        $letter = &make_lower($line);\n        if(exists($histo->{$letter}))\
+    \ {\n            $histo->{$letter}++;\n        } else {\n            $histo->{$letter}\
+    \ = 1;\n        }\n    }\n    return %histo;\n}", '    my($hash) = {};', '    return
+    () unless $test;', '    my(%h);', "    if ($test) {\n        my @words = split(/\\\
+    s/, $test);\n        my %histogram;\n        for my $word (@words) {\n       \
+    \     $histogram{$word}++;\n        }\n        return \\%histogram;\n    } else\
+    \ {\n        return {};\n    }\n}", '    return {} unless $test && $test =~ /[a-z]+/;',
+  "    my @test = $test =~ m{( (?=[a-zA-Z]) )}gx;\n    my %hash;\n    my $key = 0;\n\
+    \    for my $char (@test) {\n        $hash{$char}++ or $key++;\n    }\n    my\
+    \ %result = ();\n    foreach my $char (keys %hash) {\n        $result{$char} =\
+    \ $hash{$char} if $hash{$char} > 1;\n    }\n    return %result;\n}\n</code>\n\
+    Test:\n<code>\nuse Data::Dumper;", '    my %histo;', "    \n    if ($test) {\n\
+    \        my @hist = (0);\n        my %freq;\n        my $word = \"\";\n      \
+    \  foreach my $letter (split //, $test) {\n            next if ($letter eq '');\n\
+    \            if ($letter eq '?') {\n                push @hist, 0;\n         \
+    \       next;\n            }\n            \n            my $letter_in_word = $letter;\n\
+    \            $letter_in_word =~ s/^[[:alpha:]]*//;\n            \n           \
+    \ if ($freq{$letter_in_word}) {\n                $freq{$letter_in_word}++;\n \
+    \           } else {\n                $freq{$letter_in_word} = 1;\n          \
+    \  }\n            \n            push @hist, $freq{$letter_in_word};\n        \
+    \    $word .= $letter;\n        }\n        \n        my $max = -1;\n        for\
+    \ (@hist) {\n            my $freq = $_;\n            if ($freq > $max) {\n   \
+    \             $max = $freq;\n            }\n        }\n        return $max;\n\
+    \    } else {\n        return {};\n    }\n}", "    my @letters = split(\" \",\
+    \ $test);\n    my %result;\n    for (@letters) {\n        my $count = scalar(grep{$_\
+    \ == $_}); # How many times is this letter\n        $result{$_} = $count if $count\
+    \ > 0;\n    }\n    return %result;\n}\n</code>\nOutput:\n<code>\n{\"a\" => 2,\
+    \ \"b\" => 2}\n{\"b\" => 4}\n</code>\n<|/ a |>\n<| c |>\nYour code does not work\
+    \ for the input `\"a b b a b\"` because you count \"b\" only once, whereas it\
+    \ should be counted 4 times. Also, your algorithm does not report letters which\
+    \ occur only once.\n<|/ c |>\n<| c |>\nYou are correct. Thank you for pointing\
+    \ that out. I've fixed it up. Also, I've added the missing letters being counted\
+    \ only once.\n<|/ c |>\n<| c |>\nI've fixed this up again and the code now returns\
+    \ all letters found in the string.\n<|/ c |>\n<| c |>\nThank you. It really helps\
+    \ me a lot.\n<|/ c |>\n<| c |>\nThe code still does not work for the input \"\
+    a b b a b\". Although in that case the output should be: `{\"a\" => 2, \"b\" =>\
+    \ 4}`, which is not what the code returns.\n<|/ c |>\n<| a tags=perl,arrays,hash,count,duplicates\
+    \ dscore=0 |>\n<code>", "    chomp($test);\n    my %results;\n    my @letters;",
+  "    my(@result);\n    my(@letters);\n    my(%hash);\n    \n    if ($test =~ /\\\
+    s/) {\n        return %hash;\n    }\n    \n    @letters = split \" \", $test;\n\
+    \    foreach my $letter(@letters) {\n        if (!defined $hash{$letter}) {\n\
+    \            $hash{$letter} = 0;\n        }\n        $hash{$letter}++;\n    }\n\
+    \    \n    foreach my $letter(sort { $hash{$b} <=> $hash{$a} } keys %hash) {\n\
+    \        push(@result, $letter => $hash{$letter});\n    }\n    return @result;\n\
+    }", "    return %{ map { $test->{$_} == 2 ? $_ => {} : $_ => 1 } keys %{ $test->keys()\
+    \ } };\n}", '    my $hash = {};', "    my %letterCount;\n    $letterCount{lc($test)}++;\n\
+    \    $letterCount{lc($test)} = 1 if !exists($letterCount{lc($test)});\n    foreach\
+    \ my $letter (keys %letterCount) {\n        if ($letterCount{$letter} > 1) {\n\
+    \            $letterCount{$letter} = $letterCount{$letter} * $letterCount{$letter};\n\
+    \        } else {\n            delete $letterCount{$letter};\n        }\n    }\n\
+    \    foreach my $letter (keys %letterCount) {\n        $letterCount{$letter} +=\
+    \ 1;\n    }\n    return \\%letterCount;\n}", '    my(%histogram);', "    chomp($test);\n\
+    \    $test =~ s/\\s+//g;\n    $test =~ s/\\s+$//g;\n    my($result);\n    foreach\
+    \ my $char (split //, $test) {\n        if (exists $self->{histo}{$char}) {\n\
+    \            $self->{histo}{$char}++;\n        }\n        else {\n           \
+    \ $self->{histo}{$char} = 1;\n        }\n        if ($result->{count} < $self->{histo}{$char})\
+    \ {\n            $result = { count => $self->{histo}{$char}, char => $char };\n\
+    \        }\n    }\n    return $result;\n}", "    my $result = {};\n    my %counts;\n\
+    \    foreach my $l (split(//, $test)) {\n        $counts{$l}++;\n    }\n    foreach\
+    \ (sort {$counts{$b} <=> $counts{$a}} keys %counts) {\n        $result{$_} = $counts{$_};\n\
+    \    }\n    return $result;\n}", '    my %hash;', "    \n    return map { $_ =>\
+    \ 1 } split ' ', $test;\n}", "    if ($test =~ /^\\W*$/ || $test eq \"\") {\n\
+    \        return {};\n    }\n    my @chars = split(//, $test);\n    my $histogram\
+    \ = { map { $_ => 1 } @chars };\n    my $max = -1;\n    my $max_char;\n    foreach\
+    \ my $char (@chars) {\n        if ($histogram->{$char} > $max) {\n           \
+    \ $max = $histogram->{$char};\n            $max_char = $char;\n        }\n   \
+    \     $histogram->{$char}++;\n    }\n    return { $max_char => $max };\n}\n</code>\n\
+    <|/ a tags=hash,perl,histogram dscore=0 |>\n<| a tags=hash,perl,histogram dscore=0\
+    \ |>\nI realise that this has already been answered, and I didn't see it, but\
+    \ here is a short and simple way that uses no extra modules. It is a bit of code\
+    \ smell to allow a function to return an array, but since I'm too lazy to figure\
+    \ out how to do this the right way, I decided to allow it to return an object\
+    \ instead. It just feels so wrong to use an object to return something that isn't\
+    \ an array.\n<code>\nuse strict;\nuse warnings;\nuse Scalar::Util qw(looks_like_number);",
+  "    return () unless $test =~ /^([a-z]*[a-z_]+)$/i;\n    my($letter) = $1;\n  \
+    \  my($counts) = ();\n    my($max) = -1;\n    foreach $letter (split(\" \", $test))\
+    \ {\n        $counts{ $letter } += 1;\n        if ($counts{ $letter } > $max)\
+    \ {\n            $max = $counts{ $letter };\n        }\n    }\n    return $counts;\n\
+    }", "    chomp($test);\n    my(%counts);\n    my($max);\n    my(@letters);\n \
+    \   my($letter);\n    my($val);\n    my($total);", "    my %hist;\n    my $lineCount\
+    \ = 1;\n    my $testStr;", "    my %histogram;\n    my($letter) = \"\";\n    my($count)\
+    \ = 0;", "    my $histogram = { };\n    $histogram->{ $test } = 0 unless defined\
+    \ $test;\n    my @letters = split(/ /, $test);\n    my $letter;\n    for $letter\
+    \ (@letters) {\n        $histogram->{ $letter }++;\n    }\n    return $histogram;\n\
+    }", "    my %histo = ();\n    my @ltrs;\n    my @counts;\n    while ($test =~\
+    \ /([a-z])/g) {\n        my $ltr = $1;\n        ++$histo{$ltr};\n        push(@ltrs,\
+    \ $ltr) if !defined($histo{$ltr});\n        push(@counts, $histo{$ltr});\n   \
+    \ }\n    \n    # Now sort the hash by the number of occurrences\n    @counts =\
+    \ sort {$b <=> $a};\n    \n    # Now return all the letters whose counts are highest\n\
+    \    return map { $ltrs[$_], $counts[$_] } 0..$#counts;\n}", "    my %histogram\
+    \ = ();\n    $_ =~ s/\\s+/ /g;", "    my (%h, $i, $tmp);\n    foreach $i (split\
+    \ /\\s+/, $test) {\n        $h{$i}++ if !$tmp or $h{$i} < $tmp;\n        $tmp\
+    \ = $h{$i};\n    }\n    return %h;\n}", "    my %histogram;\n    $test =~ tr/A-Z//cd;\n\
+    \    foreach my $char (split(' ', $test)) {\n        ++$histogram{$char};\n  \
+    \  }\n    return \\%histogram;\n}", "    my($histogram) = {};\n    my(@chars)\
+    \ = $test =~ m/([a-zA-Z])/g;\n    $chars[0] = \"a\";\n    for ($i = 0; $i < scalar(@chars);\
+    \ $i++) {\n        $histogram->{$chars[$i]} = $histogram->{$chars[$i]} ? $histogram->{$chars[$i]}\
+    \ + 1 : 1;\n    }\n    @chars = ();\n    @chars = keys %$histogram;\n    @chars\
+    \ = reverse @chars;\n    @chars = map { $histogram->{$_} } @chars;\n    @chars\
+    \ = sort { $histogram->{$a} <=> $histogram->{$b} } @chars;\n    @chars = @chars[0..scalar(@chars)-1];\n\
+    \    return $histogram;\n}", '    my $histogram = {};', "    my %histo;\n    my\
+    \ @characters = split(\" \", $test);\n    $histo{$_}++ for;\n    for my $char\
+    \ (@characters) {\n        if ($histo{$char} > 1) {\n            $histo{$char}\
+    \ = $histo{$char};\n        } else {\n            $histo{$char} = 1;\n       \
+    \ }\n    }\n    return \\%histo;\n}", "    my %histogram = ();\n    if ($test)\
+    \ {\n        $test =~ s/\\s+//g;\n        my = split //, $test;\n        foreach\
+    \ my $letter (@letters) {\n            next unless $letter;\n            my $count\
+    \ = 0;\n            foreach my $word (@words) {\n                if ($word =~\
+    \ /$letter/) {\n                    $count++;\n                }\n           \
+    \ }\n            $histogram{$letter} = $count;\n        }\n    }\n    return \\\
+    %histogram;\n}", "    return {} unless $test;\n    my @freq;\n    $test =~ s/\\\
+    s+//g;\n    my $letters = $test;\n    $letters =~ tr/A-Z/a-z/;\n    my $count\
+    \ = 1;\n    my $letter;\n    my $maxfreq = 0;\n    foreach $letter (split //,\
+    \ $letters) {\n        $letter = uc($letter);\n        my $i = $letter;\n    \
+    \    $i = lc($i); # lowercase letter\n        next unless $letters =~ m/$i\\z/;\n\
+    \        push @freq, { $letter => $count };\n        $maxfreq = max( $maxfreq,\
+    \ $count );\n        $count ++;\n    }\n    return $maxfreq ? (@freq, $maxfreq)\
+    \ : ();\n}", '    my %hash = ();', '    my %histogram;', "    return ();\n}",
+  "    my $hash_ref = {};\n    my $str = split(\" \", $test);\n    my $total_count\
+    \ = 0;\n    my $max_count = 0;\n    foreach my $letter (@$str) {\n        my $count\
+    \ = $hash_ref->{$letter};\n        if (!defined($count)) {\n            $count\
+    \ = 1;\n        } else {\n            $count += 1;\n        }\n        if ($count\
+    \ > $max_count) {\n            $max_count = $count;\n        }\n        $hash_ref->{$letter}\
+    \ = $count;\n    }\n    return $hash_ref;\n}", '    $histogram = ();', "    if\
+    \ ($test eq \"\") {\n        return ();\n    }\n    my @letters;\n    my %counts;\n\
+    \    my %histogram;\n    for (split //, $test) {\n        push @letters, $_ unless;\n\
+    \        ++$counts{$_};\n    }\n    for (sort keys %counts) {\n        $histogram{$_}\
+    \ = $counts{$_} if ($counts{$_} > 1);\n    }\n    return %histogram;\n}", "  \
+    \  my($histo) = {};\n    my $space = $test =~ s/ //g;\n    my $word;", "    return\
+    \ {} if $test eq \"\";\n    $test =~ s/ //g;\n    my @letters = split //, $test;\n\
+    \    my %counts;\n    for (@letters) {\n        $counts{$_}++;\n    }\n    return\
+    \ \\%counts if scalar keys %counts > 1;\n    return map {($_ => $counts{$_})}\
+    \ keys %counts;\n}", "    my @histogram;\n    my %counts;", "    if(!defined($test))\
+    \ {\n        warn \"histogram: No test defined\\n\";\n        return;\n    }",
+  '    my(%result);', '    my $freq = { map { $_ => 1 } split };', "    if (not defined\
+    \ $test) {\n        return;\n    }", "    my %histo;\n    my @letters;", "   \
+    \ my $histo = { };\n    my @letters = split //, $test;\n    for my $l (@letters)\
+    \ {\n        $histo->{$l} = ($histo->{$l} ? $histo->{$l} + 1 : 1);\n    }\n  \
+    \  return $histo;\n}", "    if($test eq \"\") {\n        return {};\n    }\n \
+    \   my @counts = ();\n    my $most_frequent;\n    foreach my $letter (split /\\\
+    s+/, $test) {\n        my %seen;\n        $counts{$letter} = 0;\n        foreach\
+    \ my $count (@{$hist{$letter}}) {\n            $seen{$count}{$letter} = 1;\n \
+    \       }\n        $most_frequent = $letter;\n        if(scalar @counts > 0) {\n\
+    \            foreach my $count (keys %seen) {\n                if($seen{$count}\
+    \ > $counts{$most_frequent}) {\n                    $most_frequent = $count;\n\
+    \                    $counts{$most_frequent} = $seen{$count};\n              \
+    \  }\n            }\n        }\n    }\n    return $counts;\n}", "    if ($test\
+    \ eq \"\") {\n        return {};\n    }\n    my %hash;\n    my @chars = split(\"\
+    \ \", $test);\n    my $max_occur;\n    foreach my $char (@chars) {\n        if\
+    \ (exists $hash{$char}) {\n            $hash{$char}++;\n        }\n        else\
+    \ {\n            $hash{$char} = 1;\n        }\n        if ($hash{$char} > $max_occur)\
+    \ {\n            $max_occur = $hash{$char};\n        }\n    }\n    foreach my\
+    \ $key (keys %hash) {\n        if ($hash{$key} eq $max_occur) {\n            return\
+    \ { \"char\" => $key, \"count\" => $hash{$key} };\n        }\n    }\n    return\
+    \ {};\n}", "    $test = lc $test;\n    if ($test =~ /^\\s+$/) {\n        return\
+    \ {};\n    }\n    my @letters = split //, $test;\n    my %count;\n    @letters.each(\
+    \ sub {\n        $count{$_}++ if exists $count{$_};\n    });\n    return \\%count;\n\
+    }", "    my $histogram = ();\n    foreach my $letter (split(\" \", $test)) {\n\
+    \        next unless $letter && length $letter;\n        $histogram->{$letter}++;\n\
+    \    }\n    return $histogram;\n}", "    return map {\n        my $char = shift;\n\
+    \        my $count = $test->{$char};\n        $test->{$char} += 1 if $count;\n\
+    \        $test->{$char}\n    } sort { $a <=> $b } keys %{ $test->{} };\n}", " \
+    \   if($test) {\n        my @histogram;\n        my @letters = split \" \", $test;\n\
+    \        map { push @histogram, $_ => 0 } @letters;\n        foreach my $letter\
+    \ (@letters) {\n            my %counts;\n            foreach my $count (@histogram)\
+    \ {\n                $counts{$count}{$letter} += 1;\n            }\n         \
+    \   my ($max, $letter, $count) = (0, 0, 0);\n            for my $count_letter\
+    \ (sort keys %counts) {\n                if($counts{$count_letter}{$letter} >\
+    \ $count) {\n                    ($max, $letter, $count) = ($count_letter, $letter,\
+    \ $counts{$count_letter}{$letter});\n                }\n            }\n      \
+    \      push @histogram, $letter => $count;\n        }\n        return \\@histogram;\n\
+    \    }\n    return {};\n}", "    my %histogram;\n    $histogram{$_}++ for split\
+    \ \" \", $test;\n    %histogram;\n}", "    return {} unless $test;\n    my @letters;\n\
+    \    my @counts;\n    for my $letter (split //, $test) {\n        my $count =\
+    \ $lettercounts{$letter};\n        push @letters, $letter;\n        push @counts,\
+    \ $count;\n    }\n    if (@counts) {\n        @letters = sort { $counts[$b] <=>\
+    \ $counts[$a] } @letters;\n        $letters[0] = \"\";\n    }\n    return \\@letters,\
+    \ \\@counts;\n}", "    return {} unless $test;\n    my($hash_ref) = $test =~ /^(\\\
+    S+)/g;\n    return {} unless $hash_ref;\n    my($letter) = $1;\n    return {}\
+    \ unless $letter;\n    return {} unless exists $hash_ref->{$letter};\n    return\
+    \ \\%{ $hash_ref };\n}", '    my %result;', "    if(not defined $test) {\n   \
+    \     return {};\n    }\n    my($hash,$max);\n    foreach my $l (split (\" \"\
+    , $test)) {\n        $hash->{$l}++;\n        if($hash->{$l} > $max) {\n      \
+    \      $hash->{$l} = $max;\n        }\n    }\n    return $hash;\n}", "    return\
+    \ {} if $test eq '';", '    $test =~ s/\s+//g;', "    my @letters;\n    my %counter;",
+  "    my(%h) = (map { $_ => 0 } split //, $test);\n    $h{\"\"} = $h{\"\"} || 1;\n\
+    \    my @res;\n    for (my $i = 0; $i < scalar @{$h{\"\"}}; $i++) {\n        if\
+    \ (exists $h{$_}) {\n            $h{$_}++;\n            if (@res == 0 || $h{$_}\
+    \ > $res[-1]->{count}) {\n                push @res, {\n                    letter\
+    \ => $_,\n                    count => $h{$_}\n                };\n          \
+    \  }\n        }\n    }\n    return \\@res;\n}", "    return {};\n}", "    my $count\
+    \ = {};\n    my @letters = split //, $test;\n    foreach my $letter (@letters)\
+    \ {\n        if (defined($count{$letter})) {\n            $count{$letter}++;\n\
+    \        } else {\n            $count{$letter} = 1;\n        }\n    }\n    return\
+    \ $count;\n}", "    my $histogram = Hash::Util::HashWithIndifferentAccess->new;\n\
+    \    my @histogram;", "    my %histogram = ();\n    my($i, $char, $total);\n \
+    \   foreach $char (split(//,$test)) {\n        $total++ while $histogram{$char}{$char}++;\n\
+    \    }\n    return %histogram;\n}", "    my @letters;\n    my @hist;\n    my %hist;\n\
+    \    my $count = 0;\n    foreach my $letter (split(\" \", $test)) {\n        $hist{$letter}{$count}++;\n\
+    \    }\n    foreach my $letter (keys(%hist)) {\n        if ($hist{$letter} ==\
+    \ 1) {\n            push(@letters, $letter);\n        }\n    }\n    if (@letters\
+    \ == 0) {\n        return {};\n    }\n    foreach my $letter (@letters) {\n  \
+    \      $hist{$letter}--;\n    }\n    return $hist;\n}", "    my $count = 0;\n\
+    \    my %letters = ();\n    foreach my $letter (split ' ', $test) {\n        $letters\
+    \ = $letters->{$letter} += 1;\n        $count++;\n    }\n    my %most = ();\n\
+    \    foreach my $letter (keys %letters) {\n        if($letters->{$letter} > $most{$letter})\
+    \ {\n            $most{$letter} = $letters->{$letter};\n        }\n    }\n   \
+    \ return $most;\n}\n</code>\n<|/ a |>\n<| c |>\nYes, this is correct, except that\
+    \ it doesn't count the empty string as a key.\n<|/ c |>\n<| a dscore=0 tags=hash,perl,algorithm\
+    \ |>\nI think you could just use a single pass over the string, using hash to\
+    \ count each character occurrence. Just store a hash for each of the lowercase\
+    \ letters and then use each letter as the key for your hash. \n<code>\nuse strict;\n\
+    use warnings;", "    my $hash = {};\n    $hash->{$_} = 1 for split ' ', $test;\n\
+    \    return $hash;\n}", "    my $hash;\n    my = split(\" \", $test);\n    foreach\
+    \ my $letter (@words) {\n        if(!defined($hash->{$letter})) {\n          \
+    \  $hash->{$letter} = 1;\n        } elsif($hash->{$letter} == 1) {\n         \
+    \   $hash->{$letter}++;\n        } else {\n            foreach my $count (sort({$hash->{$letter}\
+    \ <=> 1})) {\n                $hash->{$letter} = $count;\n                last;\n\
+    \            }\n        }\n    }\n    return $hash;\n}\n</code>\n<|/ a |>\n<|\
+    \ c |>\nThis works, but is inefficient. You're sorting the array for each letter,\
+    \ needlessly. Sorting is a O(n log n) operation. If you're really desperate to\
+    \ make it faster (I doubt it), you can get away with just O(n*m), where n is the\
+    \ number of letters and m is the number of occurrences. It's easy to do in O(n).\n\
+    <|/ c |>\n<| c |>\nI'm sure there's a O(n) solution somewhere in this thread,\
+    \ but I haven't been able to find it. Even searching through related threads doesn't\
+    \ really yield the solution, though.\n<|/ c |>\n<| c |>\nI don't think the sorting\
+    \ is necessary. The complexity is O(n+m) = O(2n) = O(n). See my answer below,\
+    \ for a simple solution.\n<|/ c |>\n<| a tags=perl,hashtable,algorithm |>\nYou\
+    \ can use this subroutine:\n<code>", "    my %hash;\n    $hash{$_} = 1 for\n \
+    \       split /\\s+/, $test if $test;\n    return \\%hash;\n}", "    my @histogram;\n\
+    \    my $key = $test;\n    $key = \"$key:\" unless $key;\n    if ($key =~ m/^(\\\
+    S+)\\s+(\\S+)$/) {\n        my %histogram;\n        my @keys = sort { $histogram{$a}\
+    \ <=> $histogram{$b} } keys %histogram;\n        foreach my $k (@keys) {\n   \
+    \         next if $k eq $key;\n            push @histogram, $histogram{$k};\n\
+    \        }\n    } else {\n        my %histogram;\n        $key = \"$key:0\" if\
+    \ $key !~ m/^\\S+$/;\n        if ($key =~ m/^(\\S+):(\\S+)$/) {\n            my\
+    \ @keys = sort { $histogram{$a} <=> $histogram{$b} } keys %histogram;\n      \
+    \      foreach my $k (@keys) {\n                next if $k eq $key;\n        \
+    \        push @histogram, $histogram{$k};\n            }\n        } else {\n \
+    \           push @histogram, 0;\n        }\n    }\n    return \\@histogram;\n}",
+  "    my %hash;\n    if ($test !~ /^\\s+$/) {\n\tdie \"histogram() takes at least\
+    \ one argument\\n\";\n    }\n    for ($test) {\n\t$test =~ s/\\s+/ /g;\n\tforeach\
+    \ my $char (split //, $test) {\n\t    if (!$hash{$char}) {\n\t\t$hash{$char} =\
+    \ 1;\n\t    } else {\n\t\t$hash{$char}++;\n\t    }\n\t}\n    }\n    return \\\
+    %hash;\n}", "    my %histo;\n    my @chars = split(' ', $test);\n    foreach my\
+    \ $char (@chars) {\n        $histo{$char}++ if exists $histo{$char};\n    }\n\
+    \    return %histo;\n}", "    my $histogram = Hash::Util -> new;\n    $histogram->default_proc(sub{\
+    \ $_[0] });", "    my $histogram = ();\n    my @test = split(\" \", $test);\n\
+    \    my $key = $test[0];\n    my $value = 1;\n    foreach my $letter (@test) {\n\
+    \        $histogram->{$letter} += $value;\n        $value++;\n    }\n    $histogram->{$key}\
+    \ = $value;\n    return $histogram;\n}", "    if ($test =~ m/^\\s*(.*?)\\s*$/)\
+    \ {\n        my $key = lc($1);\n        $count{$key} = 0;\n        $hash{$key}\
+    \ = 0;\n    }\n    else { $test = 0; }", "    return () if !defined($test);\n\
+    \    $test =~ s/\\s+$//;\n    $test =~ s/\\s+/ /g;\n    $test =~ s/^\\s+//;\n\
+    \    $test =~ s/\\s+$//;", "    return unless $test;\n    my @letters;\n    my\
+    \ %count;\n    my @letters_copy = ();\n    for(split(//,$test)) {\n        my\
+    \ $letter = $_;\n        push (@letters, $letter) unless $letters{$letter};\n\
+    \        $letters{$letter}++;\n    }\n    foreach my $letter (@letters) {\n  \
+    \      $count{$letter} = 0;\n        $letters_copy[$count{$letter}] = $letter;\n\
+    \        $count{$letter}++;\n    }\n    my $max_letter = $letters_copy[0];\n \
+    \   my %max_count;\n    foreach my $letter (@letters_copy) {\n        $max_count{$letter}\
+    \ = $letters_copy[$count{$letter}-1];\n        $max_letter = $letter;\n    }\n\
+    \    return %max_count;\n}", '    my %histogram = ();', '    return {} unless
+    defined($test);', "    my %hash;\n    map {$hash{$_} = $hash{$_} || 1} split(//,\
+    \ $test);\n    return map { $_ => $hash{$_} } sort({$hash{$a} <=> $hash{$b}} keys(%hash);\n\
+    }", "    chomp($test);\n    if(!$test) {\n        die \"histogram: cannot get\
+    \ histogram; empty string given\";\n    }\n    my @letters;\n    my $count = 0;\n\
+    \    foreach(split(//, $test)) {\n        next unless $_;\n        $count++ if\
+    \ ($letters[$_] = $letters[$_] + 1);\n        else {\n            push @letters,\
+    \ $_ if ($letters[$_] = $letters[$_] + 1);\n        }\n    }\n    return wantarray\
+    \ ? @letters : %letters;\n}", '    my %count;', "    my @chars = split(\" \",\
+    \ $test);\n    my %counts;\n    foreach my $char (@chars) {\n\t$counts{$char}++;\n\
+    \    }\n    return %counts;\n}", "    $test =~ s/\\s+//g;\n    my($letter, $count)\
+    \ = map {\n        $_ => 1 } split \" \", $test;\n    my $max = (sort {$count->{$b}\
+    \ <=> $count->{$a}} keys %$count)[-1];\n    my %result;\n    $letter = $max ?\
+    \ $letter : \"\\@unknown\\@\";\n    $result{$letter} = $count->{$max};\n    wantarray\
+    \ ? %result : $result{$letter};\n}", "    my %hash;\n    my @letters;\n    if\
+    \ ($test) {\n\tmy @array = split \" \", $test;\n\tforeach (@array) {\n\t    push(@letters,\
+    \ $_);\n\t}\n    } else {\n\t@letters = ();\n    }\n    my $current_letter;\n\
+    \    my $current_count;\n    foreach $current_letter (@letters) {\n\t$hash{$current_letter}\
+    \ += 1;\n\t$current_count = $hash{$current_letter};\n\tforeach $other_letter (@letters)\
+    \ {\n\t    next unless $other_letter eq $current_letter;\n\t    $hash{$other_letter}\
+    \ -= 1;\n\t    if ($hash{$other_letter} == 0) {\n\t\t$hash{$other_letter} = $current_count;\n\
+    \t    }\n\t}\n    }\n    return \\%hash;\n}", "    my @hash;\n    $hash[$test->[0]]\
+    \ = 0;\n    my @chars = split(\" \", $test);\n    foreach my $char (@chars) {\n\
+    \        if (exists($hash[$char])) {\n            $hash[$char] += 1;\n       \
+    \ } else {\n            $hash[$char] = 1;\n        }\n    }\n    return \\@hash;\n\
+    }"]
+stop_tokens:
+- "\nsub"
+- "\n#"
+- "\n\n"

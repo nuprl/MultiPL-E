@@ -5210,3 +5210,815 @@ results:
     '
   stdout: ''
   timestamp: 1660057025
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n\tlocal\
+    \ number=$1\n\tlocal base\n\tlocal closest_number\n\tlocal closest_base\n\tlocal\
+    \ difference\n\tlocal round_to\n\n\t# If the number is already an integer, just\
+    \ return the number.\n\tif [[ \"$number\" =~ ^[0-9]+$ ]]; then\n\t\techo \"$number\"\
+    \n\t\treturn\n\tfi\n\n\t# If the number is negative, multiply by -1 before rounding\n\
+    \t# away from zero. For example, -11.5 rounds to -12.5, and the\n\t# function\
+    \ should return -12.5 in this case.\n\tif [[ \"$number\" =~ ^-[0-9]+$ ]]; then\n\
+    \t\techo \"$(( ${number//-} ))\"\n\t\treturn\n\tfi\n\n\t# If there are no decimals,\
+    \ just return the number. For example,\n\t# \"100\" should return 100 and \"10\"\
+    \ should return 10.\n\tif [[ \"$number\" =~ ^[0-9]+\\.[0-9]+$ ]]; then\n\t\techo\
+    \ \"$number\"\n\t\treturn\n\tfi\n\n\t# If the last character of the number is\
+    \ \".\", remove it.\n\tif [[ \"$number\" =~ ^[0-9]+\\.$ ]]; then\n\t\techo \"\
+    $number\"\n\t\treturn\n\tfi\n\n\t# If the last character of the number is a \"\
+    e\", remove it.\n\tif [[ \"$number\" =~ ^[0-9]+[eE]$ ]]; then\n\t\techo \"$number\"\
+    \n\t\treturn\n\tfi\n\n\t# If the last character of the number is a \"+\", remove\
+    \ it.\n\tif [[ \"$number\" =~ ^[0-9]+\\+$ ]]; then\n\t\techo \"$number\"\n\t\t\
+    return\n\tfi\n\n\t# Split the number into its base and number parts, ignoring\
+    \ any\n\t# leading zeros.\n\tlocal number_parts=${number//+/ }\n\tlocal base_parts=\"\
+    $(echo \"$number_parts\" | cut -d. -f1-3)\"\n\n\t# If the base is 0, then just\
+    \ return the number as is.\n\tif [[ \"$base_parts\" =~ (^|0)$ ]]; then\n\t\techo\
+    \ \"$number_parts\"\n\t\treturn\n\tfi\n\n\t# If the base is a negative number,\
+    \ then multiply by -1 before rounding\n\t# away from zero. For example, -12.5\
+    \ rounds to -13.\n\tif [[ \"$base_parts\" =~ ^-[0-9]+$ ]]; then\n\t\techo \"$((\
+    \ ${base_parts//-} ))\"\n\t\treturn\n\tfi\n\n\t# If the base is 0, return it as\
+    \ the number itself if it's equidistant from\n\t# two integers. If it isn't, return\
+    \ it as the closest integer from zero.\n\tif [[ \"$base_parts\" =~ (^|0)$ ]];\
+    \ then\n\t\tif [[ $(echo \"$number_parts\" | \n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b"/tmp/tmpl_dnextn.sh: line 85: unexpected EOF while looking for matching
+    `)''\n/tmp/tmpl_dnextn.sh: line 102: unexpected token `\xff'' in conditional command\n/tmp/tmpl_dnextn.sh:
+    line 102: syntax error: unexpected end of file\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: -1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  # Set\
+    \ a default for $2, which we will assume is a value\n  # that can't be parsed\
+    \ by an integer\n  local STRING=\"invalid\"\n  local VALUE=\"$1\"\n  if ! [[ ${VALUE:0:1}\
+    \ = + ]]; then\n    STRING=\"no integer\"\n  fi\n  # If value is an integer, use\
+    \ it\n  if [[ $STRING != \"no integer\" && $VALUE =~ ^[+-]?\\d+$ ]]; then\n  \
+    \  VALUE=\"${VALUE}\"\n  fi\n  # Loop until we get an acceptable value\n  while\
+    \ [[ \"${VALUE}\" != ${STRING} ]]; do\n    # If it's negative, make it positive\n\
+    \    if [[ $VALUE =~ ^-$ ]]; then\n      VALUE=\"${VALUE}${VALUE}\"\n    fi\n\
+    \    # Try again to parse it as an integer\n    VALUE=$(echo ${VALUE} | awk -F.\
+    \ '{print $1*$2+$3*$4+$5*$6+$7}')\n    if [[ $VALUE =~ ^[+-]?\\d+$ ]]; then\n\
+    \      break\n    fi\n  done\n  echo \"${VALUE}\"\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: Timeout
+  stderr: <_io.BufferedReader name=21>
+  stdout: <_io.BufferedReader name=19>
+  timestamp: 1660078287
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n\tlocal\
+    \ input=$1\n\t# Make sure the input is a string.\n\t[ -z \"$input\" ] && return\
+    \ 1\n\t# Set up return value.\n\tlocal output=0\n\t# If there are less than two\
+    \ characters, return 0\n\t[ \"${#input}\" -le 2 ] && return 0\n\t# If the first\
+    \ character is a number, return that\n\t[[ $input =~ ^[0-9]+$ ]] && output=\"\
+    $input\" || return 0\n\t# If the first character is a letter, return it\n\t[[\
+    \ $input =~ ^[a-z]+$ ]] && output=\"$input\" || return 0\n\t# If the first character\
+    \ is a special char, return it\n\t[[ $input =~ ^[!,%,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^\n\
+    }\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n  \
+    \  [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n\
+    \    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"\
+    15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b"/tmp/tmpr6iacwo7.sh: line 30: syntax error in conditional expression:
+    unexpected token `&''\n/tmp/tmpr6iacwo7.sh: line 30: syntax error near `&,''\n/tmp/tmpr6iacwo7.sh:
+    line 30: `\t[[ $input =~ ^[!,%,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^,&,*,@,(,),-,.,/,~,^''\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ number=$1\n  local prev=$(( number - 1 ))\n  local diff=$(echo \"${number}-${prev}\"\
+    \ | bc)\n  local diff1=$(echo \"${prev}-${number}\" | bc)\n  local diff2=$(echo\
+    \ \"${number}-${prev}\" | bc)\n  local diff3=$(echo \"${prev}-${prev}\" | bc)\n\
+    \  echo \"${number}\"\n  if (( \"${diff}\" < \"${diff1}\" && \"${diff}\" < \"\
+    ${diff2}\" && \"${diff}\" < \"${diff3}\" )) ; then\n    echo \"${prev}\"\n  else\n\
+    \    echo \"${number}\"\n  fi\n}\n\ncandidate() {\n    closest_integer \"$@\"\n\
+    }\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate\
+    \ \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n\tlocal\
+    \ str=$1\n\tlocal num=$(( str - $str % 2 ))\n\t(( num > 0 )) && echo \"$str\"\n\
+    \t(( num < 0 )) && echo \"$(closest_integer \"$(-num)\")\"\n}\n\ncandidate() {\n\
+    \    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"\
+    10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b''/tmp/tmp0qzq06qd.sh: line 19: 14.5: syntax error: invalid arithmetic
+    operator (error token is ".5")\n'''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ val=$1\n  local integer\n  local round\n  integer=$(echo $val |tr \".\" \" \"\
+    )\n  round=$(echo $integer |awk '{ print $1 }')\n  if [ \"$integer\" == \"$round\"\
+    \ ]\n  then\n    echo 0\n  else\n    local diff=$(( $integer - $round ))\n   \
+    \ if [ \"$diff\" -eq \"0\" ]\n    then\n      echo $integer\n    else\n      echo\
+    \ $(( $integer - diff ))\n    fi\n  fi\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ val=$1\n  # First check if val is already an integer.\n  if [[ $val =~ ^[0-9]+$\
+    \ ]]; then\n    echo \"$val\"\n  fi\n  # If val is an empty string, return an\
+    \ empty string\n  if [ -z \"$val\" ]; then\n    return 0\n  fi\n  # If val is\
+    \ an empty string, return an empty string\n  if [ -z \"$val\" ]; then\n    return\
+    \ 0\n  fi\n  # Now check for a decimal number.\n  if [[ $val =~ ^[0-9]+\\.[0-9]+$\
+    \ ]]; then\n    echo \"$val\"\n  fi\n  # If val is not an integer, return an empty\
+    \ string\n  if [ -z \"$val\" ]; then\n    return 0\n  fi\n  # Now check for a\
+    \ decimal number.\n  if [[ $val =~ ^[0-9]+\\.[0-9]+$ ]]; then\n    echo \"$val\"\
+    \n  fi\n  # Now check for a hexadecimal number.\n  if [[ $val =~ ^0x[A-Fa-f0-9]+\\\
+    .[0-9]+$ ]]; then\n    echo \"$val\"\n  fi\n  # If val is not an integer, return\
+    \ an empty string\n  if [ -z \"$val\" ]; then\n    return 0\n  fi\n  # Now check\
+    \ for a octal number.\n  if [[ $val =~ ^0[0-7]+\\.[0-9]+$ ]]; then\n    echo \"\
+    $val\"\n  fi\n  # If val is not an integer, return an empty string\n  if [ -z\
+    \ \"$val\" ]; then\n    return 0\n  fi\n  # Now check for a binary/octal/hex number\n\
+    \  if [[ $val =~ ^[01]+\\.[0-9]+$ ]]; then\n    echo \"$val\"\n  fi\n  # If val\
+    \ is not an integer, return an empty string\n  if [ -z \"$val\" ]; then\n    return\
+    \ 0\n  fi\n  # Now check for a binary number\n  if [[ $val =~ ^[01]+$ ]]; then\n\
+    \    echo \"$val\"\n  fi\n  # If val is not an integer, return an empty string\n\
+    \  if [ -z \"$val\" ]; then\n    return 0\n  fi\n  # Now check for a decimal number.\n\
+    \  if [[ $val =~ ^[0-9]+$ ]]; then\n    echo \"$val\"\n  fi\n  # If val is not\
+    \ an integer, return an empty string\n  if [ -z \"$val\" ]; then\n    return 0\n\
+    \  fi\n  # Now check for a hexadecimal number.\n  if [[ $val =~ ^0x[A-Fa-f0-9]+$\
+    \ ]]; then\n    echo \"$val\"\n  fi\n  # If val is not an integer, return an empty\
+    \ string\n  if [ -z \"$val\" ]; then\n    return 0\n  fi\n  # Now check for a\
+    \ octal number.\n  if [[ $val =~ ^\n}\n\ncandidate() {\n    closest_integer \"\
+    $@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[\
+    \ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n\
+    \    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n\
+    }\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b"/tmp/tmpg0x0hqaw.sh: line 92: syntax error in conditional expression\n/tmp/tmpg0x0hqaw.sh:
+    line 93: syntax error near `}''\n/tmp/tmpg0x0hqaw.sh: line 93: `}''\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ STRING=\"$1\"\n  local EXPECTED_RESULT=\"$2\"\n  local EXPECTED_RESULT2=\"$3\"\
+    \n\n  # Strip any sign\n  local NUMBER=\"${STRING%%+([0-9])}\"\n\n  # Strip any\
+    \ decimal part\n  NUMBER=\"${NUMBER%.*}\"\n\n  # Strip any trailing zeros\n  NUMBER=\"\
+    ${NUMBER##*.}\"\n\n  local OPTARGS=(\"$@\")\n  local RESULT\n  RESULT=0\n\n  #\
+    \ If the string is an integer, simply return it\n  case \"$NUMBER\" in\n    \"\
+    $EXPECTED_RESULT\") return \"$NUMBER\";;\n    *) ;;\n  esac\n\n  local EXPECTED_LEN\n\
+    \  EXPECTED_LEN=\"${#EXPECTED_RESULT}\"\n\n  local NUM_DIFF\n  NUM_DIFF=0\n  local\
+    \ NUM_SKIP\n  NUM_SKIP=1\n  local NUM\n  NUM=\"$NUMBER\"\n  while [[ \"$NUM\"\
+    \ =~ \"[0-9]\" ]]; do\n    NUM_DIFF=$(( ${NUM_DIFF} + 1 ))\n    NUM=\"${NUM#?}\"\
+    \n  done\n  NUM=\"${NUM%%[^0-9]}\"\n  local NUM_LENGTH\n  NUM_LENGTH=\"${#NUM}\"\
+    \n\n  if (( NUM_LENGTH < EXPECTED_LEN )); then\n    NUM_SKIP=$(( NUM_LENGTH -\
+    \ EXPECTED_LEN ))\n    NUM=\"${NUM}$EXPECTED_RESULT2\"\n  fi\n\n  local NUM_SKIP_COUNT\n\
+    \  NUM_SKIP_COUNT=\"$(expr $NUM_SKIP + 1)\"\n  local NUM_SKIP_NUM\n  NUM_SKIP_NUM=\"\
+    $(expr $NUM_SKIP_COUNT \\* $NUM_DIFF)\"\n\n  if (( $NUM_SKIP_COUNT < $NUM_SKIP_NUM\
+    \ )); then\n    NUM_SKIP=$NUM_SKIP_COUNT\n  fi\n\n  # If not equidistant, find\
+    \ the closest value by dividing the number by 10^EXPECTED_LEN\n  while (( \"$NUM\"\
+    \ != \"$EXPECTED_RESULT\" )); do\n    (( RESULT = ( $RESULT + ( $NUMBER / 10 )\
+    \ ) ))\n    (( EXPECTED_RESULT = ( $EXPECTED_RESULT / 10 ) ))\n    (( NUM = ${NUM%%[^0-9]}\
+    \ ))\n    (( NUM_LENGTH = ${#NUM} ))\n    if (( NUM_LENGTH < EXPECTED_LEN ));\
+    \ then\n      (( NUM_SKIP ))\n      NUM=\"${NUM\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b''/tmp/tmpk69j492v.sh: line 93: unexpected EOF while looking for matching
+    `"\''\n/tmp/tmpk69j492v.sh: line 97: syntax error: unexpected end of file\n'''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ value\n  value=${1}\n\n  # Make sure we round down\n  if [ \"$value\" == \"\"\
+    \ ]; then\n    echo \"Value is empty\"\n    return 0\n  fi\n\n  # Scan the string\
+    \ to find the first integer and check if that is the closest\n  # to zero. If\
+    \ yes, then return that integer.\n  local int\n  local found\n  while (( \"$value\"\
+    \ > 0 )) ; do\n    int=$(( ${value%%.*} + 1 ))\n    found=false\n    for (( ;\
+    \ int > 0; int-=1 )); do\n      [[ \"$int\" -eq \"$value\" ]] && found=true\n\
+    \    done\n    if [ \"$found\" == true ]; then\n      break\n    fi\n    value=${value#*.}\n\
+    \  done\n\n  # Return the first value that we found\n  echo $int\n}\n\ncandidate()\
+    \ {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ number=$1\n  local decimal=$(( $(echo \"$number\" | bc | awk '{print $3}') -\
+    \ $(echo \"$number\" | bc | awk '{print $2}') ))\n  if [ $decimal -gt 0 ]\n  then\n\
+    \    decimal=$(( $decimal - $(( $decimal % 1 )) ))\n  fi\n  if [ $decimal -lt\
+    \ 0 ]\n  then\n    decimal=$(( $decimal + $(( $decimal % 1 )) ))\n  fi\n  echo\
+    \ \"$number\"\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"\
+    15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b''/tmp/tmptljs4ivt.sh: line 19: -  : syntax error: operand expected (error
+    token is "-  ")\n'''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ val=\"${1}\"\n    local d\n    local closest\n    local next\n    local prev\n\
+    \    local diff\n    local int_val\n    local diff\n    local min\n    local max\n\
+    \    local m\n    local ans\n\n    # first check whether val is a number\n   \
+    \ if [[ ! \"$val\" =~ ^[0-9]+\\.?[0-9]*$ ]]; then\n        echo \"Usage: $(basename\
+    \ \"$0\") <number>\"\n        exit 1\n    fi\n    int_val=$(( 10#$val ))\n\n \
+    \   if [[ \"$int_val\" < 2 ]]; then\n        echo \"ERROR: $(basename \"$0\")\
+    \ should take at least one integer argument\"\n        exit 1\n    fi\n\n    #\
+    \ check that val is a valid number\n    if [[ ! \"$val\" =~ ^[0-9]*\\.?[0-9]+$\
+    \ ]]; then\n        echo \"ERROR: $(basename \"$0\") should take at least one\
+    \ float argument\"\n        exit 1\n    fi\n    m=$(( 10#$val ))\n\n    if [[\
+    \ \"$m\" == 1 ]]; then\n        echo \"ERROR: $(basename \"$0\") should take at\
+    \ least one non-zero argument\"\n        exit 1\n    fi\n\n    # get the closest\
+    \ integer (round towards zero)\n    d=$(( 10#$int_val ))\n    closest=$(( $d +\
+    \ 1 ))\n\n    prev=$(( $int_val - $d ))\n    next=$(( $int_val + $d ))\n\n   \
+    \ # see which number has the smallest difference\n    min=$(( $int_val - $closest\
+    \ ))\n    max=$(( $int_val + $closest ))\n\n    if [ \"$min\" -ne \"$max\" ];\
+    \ then\n        # if the closest integer is equidistant from two integers,\n \
+    \       # round it to the smaller one\n        if [ \"$min\" -eq \"$int_val\"\
+    \ ]; then\n            closest=$min\n        else\n            closest=$max\n\
+    \        fi\n    fi\n\n    if [ \"$closest\" -ne \"$int_val\" ]; then\n      \
+    \  # if the closest integer is not equidistant from two integers,\n        # round\
+    \ it to the smaller one\n        if [ \"$int_val\" -eq \"$closest\" ]; then\n\
+    \            closest=$int_val\n        else\n            closest=$closest\n  \
+    \      fi\n    fi\n\n    # check whether closest is smaller than the number\n\
+    \    if [ \"$closest\" -lt \"$m\" ]; then\n        echo \"ERROR: $(basename \"\
+    $0\") should take at least one integer argument\"\n        exit 1\n    fi\n\n\
+    \    if [ \"$m\" -lt \"$closest\" ]; then\n        echo \"ERROR: $(basename \"\
+    $0\") should take at least one float argument\"\n        exit 1\n    fi\n\n  \
+    \  # check for equidistant integers\n\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n\tlocal\
+    \ number=\"$1\"\n\n\t# Convert non-integers to float\n\tlocal number_as_float=\"\
+    $number\"\n\tcase \"$number\" in\n\t\t*[!0-9]*) return 1;;\n\tesac\n\tlocal integer=\"\
+    $(\"$number_as_float\")\"\n\tlocal decimal=\"$(\"$number_as_float\" | sed 's/^.*\\\
+    .//')\"\n\n\t# The decimal part of the float must be between 0 and 15\n\tif [\
+    \ \"$decimal\" -lt 0 ] || [ \"$decimal\" -gt 15 ]\n\tthen\n\t\treturn 1;\n\tfi\n\
+    \n\tlocal rounded_integer=\"$(\"$integer\" | sed -e 's/^0*\\(\\.\\?\\)\\?0*$/1\\\
+    1/')\"\n\tlocal rounded_decimal=\"$(\"$decimal\" | sed -e 's/^0*\\(\\.\\?\\)\\\
+    ?0*$/1\\1/')\"\n\tlocal closest_integer=\"$(\"$rounded_integer\" | sed -e 's/\\\
+    ./\\,\\./' | sed -e 's/^0*\\(\\.\\?\\)\\?0*$/1\\1/')\"\n\tlocal closest_decimal=\"\
+    $(\"$rounded_decimal\" | sed -e 's/\\./\\,\\./' | sed -e 's/^0*\\(\\.\\?\\)\\\
+    ?0*$/1\\1/')\"\n\n\t# Check if decimal is closer\n\tif [ \"$closest_decimal\"\
+    \ = \"$decimal\" ]\n\tthen\n\t\treturn \"$closest_integer\"\n\tfi\n\n\t# Check\
+    \ if integer is closer\n\tif [ \"$closest_integer\" -lt \"$number\" ]\n\tthen\n\
+    \t\treturn \"$closest_decimal\"\n\tfi\n\n\t# Check if integer is closer\n\tif\
+    \ [ \"$closest_integer\" -gt \"$number\" ]\n\tthen\n\t\treturn \"$closest_integer\"\
+    \n\tfi\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"\
+    15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'b''/tmp/tmpyv15ewxs.sh: line 25: 10: command not found\n/tmp/tmpyv15ewxs.sh:
+    line 26: 10: command not found\n/tmp/tmpyv15ewxs.sh: line 29: [: : integer expression
+    expected\n/tmp/tmpyv15ewxs.sh: line 29: [: : integer expression expected\n/tmp/tmpyv15ewxs.sh:
+    line 34: : command not found\n/tmp/tmpyv15ewxs.sh: line 35: : command not found\n/tmp/tmpyv15ewxs.sh:
+    line 36: : command not found\n/tmp/tmpyv15ewxs.sh: line 37: : command not found\n/tmp/tmpyv15ewxs.sh:
+    line 42: return: : numeric argument required\n'''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ string=${1}\n  local number=$(echo $string | sed -e 's/,//g')\n  local closest=$(echo\
+    \ $number | sed -e 's/\\./,/g' -e 's/,//g' -e 's/^0//' -e 's/^-//' -e 's/^-//')\n\
+    \  local negative=$(echo $number | sed -e 's/^\\./,/g' -e 's/,//g' -e 's/^0//'\
+    \ -e 's/^-//' -e 's/^-//')\n  local positive=$(echo $number | sed -e 's/^\\./,/g'\
+    \ -e 's/,//g' -e 's/^-//' -e 's/^-//' -e 's/^0//')\n  local closestint=$(echo\
+    \ $number | sed -e 's/^\\./,/g' -e 's/,//g' -e 's/^-//' -e 's/^-//' -e 's/^0//')\n\
+    \  local closestintstr=$(echo $closestint | sed -e 's/^0//')\n\n  # if the number\
+    \ is negative\n  if [[ \"$negative\" == \"$number\" ]]; then\n    # if the number\
+    \ is equidistant from two positive numbers, round\n    # it to the closest positive\n\
+    \    if [[ \"$positive\" == \"$closest\" ]]; then\n      closest=$positive\n \
+    \     closestint=$positive\n      closestintstr=$positive\n    else\n      closestint=$positive\n\
+    \      closestintstr=$positive\n    fi\n  else\n    # if the number is equidistant\
+    \ from two negative numbers, round\n    # it to the closest negative\n    if [[\
+    \ \"$negative\" == \"$closest\" ]]; then\n      closest=$negative\n      closestint=$negative\n\
+    \      closestintstr=$negative\n    else\n      closestint=$negative\n      closestintstr=$negative\n\
+    \    fi\n  fi\n\n  echo \"$closest\"\n  echo \"$closestint\"\n  echo \"$closestintstr\"\
+    \n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n\
+    \    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\"\
+    \ ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  val=$(echo\
+    \ $1 | sed 's/ /-/g')\n  val1=$(echo $val | sed 's/-/ /g')\n  val2=$(echo $val\
+    \ | sed 's/ /+/g')\n  val3=$(echo $val | sed 's/+/ /g')\n  val4=$(echo $val |\
+    \ sed 's/-/-/g')\n  val5=$(echo $val | sed 's/+/\\+/g')\n  val6=$(echo $val |\
+    \ sed 's/ /\\+/g')\n  val7=$(echo $val | sed 's/\\+/-/g')\n\n  int_1=$(echo \"\
+    $val\" | sed 's/^\\(.\\)$/\\1/')\n  int_2=$(echo \"$val\" | sed 's/^\\(.\\)$/-\\\
+    1/')\n  int_3=$(echo \"$val\" | sed 's/^\\(.\\)$/\\+\\1/')\n  int_4=$(echo \"\
+    $val\" | sed 's/^\\(.\\)$/-\\+/')\n  int_5=$(echo \"$val\" | sed 's/^\\(.\\)$/\\\
+    +\\-\\+/')\n  int_6=$(echo \"$val\" | sed 's/^\\(.\\)$/\\+/+/')\n  int_7=$(echo\
+    \ \"$val\" | sed 's/^\\(.\\)$/-\\+/')\n\n  int_1_1=$(echo \"$val\" | sed 's/^.//')\n\
+    \  int_2_1=$(echo \"$val\" | sed 's/^\\(.\\)$/-\\1/')\n  int_3_1=$(echo \"$val\"\
+    \ | sed 's/^\\(.\\)$/\\+\\1/')\n  int_4_1=$(echo \"$val\" | sed 's/^\\(.\\)$/-\\\
+    +/')\n  int_5_1=$(echo \"$val\" | sed 's/^\\(.\\)$/\\+\\-\\+/')\n  int_6_1=$(echo\
+    \ \"$val\" | sed 's/^\\(.\\)$/\\+/+/')\n  int_7_1=$(echo \"$val\" | sed 's/^\\\
+    (.\\)$/-\\+/')\n\n  int_1_2=$(echo \"$val\" | sed 's/^.//')\n  int_2_2=$(echo\
+    \ \"$val\" | sed 's/^-\\(.\\)$/-\\1/')\n  int_3_2=$(echo \"$val\" | sed 's/^\\\
+    +\\(.\\)$/+\\1/')\n  int_4_2=$(echo \"$val\" | sed 's/^\\-\\(.\\)$/-\\+/')\n\n\
+    }\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n  \
+    \  [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n\
+    \    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"\
+    15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'b"sed: -e expression #1, char 14: unknown option to `s''\nsed: -e expression
+    #1, char 14: unknown option to `s''\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ number=$1\n    # Make sure that we're working with a number.\n    local is_num\n\
+    \    is_num=$( expr \"$number\" : '^[0-9]+([.][0-9]+)?$' )\n    if [[ -z $is_num\
+    \ ]]; then\n        echo \"Invalid number format: '$number'\"\n        return\
+    \ 1\n    fi\n    # Make sure that we're dealing with a positive number.\n    local\
+    \ is_pos\n    is_pos=$( expr \"$number\" : '^[0-9]+$' )\n    if [[ -z $is_pos\
+    \ ]]; then\n        echo \"Invalid positive number format: '$number'\"\n     \
+    \   return 1\n    fi\n    # Make sure that the number we're working with is less\
+    \ than 100.\n    local is_less\n    is_less=$( expr \"$number\" : '^[0-9]+([.][0-9]+)?$'\
+    \ )\n    if [[ -z $is_less ]]; then\n        echo \"Invalid number less than 100:\
+    \ '$number'\"\n        return 1\n    fi\n    local num\n    local diff\n    local\
+    \ abs\n    local newnum\n    local maxnum\n    if [ \"$is_num\" = \"true\" ];\
+    \ then\n        num=${number%.*}\n    else\n        echo \"Invalid number format:\
+    \ '$number'\"\n        return 1\n    fi\n    if [ \"$is_pos\" = \"true\" ]; then\n\
+    \        num=${num}\n    else\n        echo \"Invalid positive number format:\
+    \ '$number'\"\n        return 1\n    fi\n    maxnum=100\n    if [ \"$is_less\"\
+    \ = \"true\" ]; then\n        maxnum=100\n        num=$(expr ${num} - 1)\n   \
+    \ fi\n    diff=$(( ${num} - ${maxnum} ))\n    abs=$( expr \"$diff\" : \"^[0-9]+$\"\
+    \ )\n    if [[ -z $abs ]]; then\n        echo \"Invalid number less than 100:\
+    \ '$number'\"\n        return 1\n    fi\n    if [[ -z $diff ]]; then\n       \
+    \ return 0\n    fi\n    if [ $abs -lt $diff ]; then\n        newnum=$(expr ${num}\
+    \ + $diff)\n        if [ \"$is_num\" = \"true\" ]; then\n            echo \"$newnum\"\
+    \n        else\n            echo $newnum\n        fi\n    else\n        newnum=$(expr\
+    \ ${num} - $diff)\n        if [ \"$is_num\" = \"true\" ]; then\n            echo\
+    \ \"$newnum\"\n        else\n            echo $newnum\n        fi\n    fi\n}\n\
+    \ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n    [[\
+    \ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n\
+    \    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"\
+    15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ v=$1\n    local i\n    local n\n    local prev\n    local max\n    local min\n\
+    \    local diff\n    local closest\n    local diff\n\n    # Make sure the value\
+    \ is a string\n    echo \"$1\" | xargs cat\n    if [ \"$1\" == \"-nan\" ]\n  \
+    \  then\n        return 1\n    fi\n\n    if [ -z \"$v\" ]\n    then\n        return\
+    \ 1\n    fi\n    if [ \"$v\" = \"null\" ]\n    then\n        return 1\n    fi\n\
+    \    if [ \"$v\" = \"false\" ]\n    then\n        return 1\n    fi\n    if [ \"\
+    $v\" = \"true\" ]\n    then\n        return 1\n    fi\n\n    # Parse the string\
+    \ to extract an integer from the first non-whitespace\n    # character\n    i=\"\
+    ${v#*[^[:space:]]}\"\n    if [ \"$i\" == \"\" ]\n    then\n        return 1\n\
+    \    fi\n\n    # Make sure the number does not contain anything other than digits\n\
+    \    if ! echo \"$i\" | grep -Eq \"^[0-9]+$\" > /dev/null\n    then\n        return\
+    \ 1\n    fi\n\n    # If the number is negative and the negative sign is present,\
+    \ strip it\n    if [ \"${v%[![:space:]]}\" = \"-\" ]\n    then\n        v=\"${v#*-}\"\
+    \n    fi\n\n    # Strip whitespace from the string\n    v=\"${v%%[![:space:]]*}\"\
+    \n    v=\"${v##*[![:space:]]}\"\n\n    # If the number is zero, return it\n  \
+    \  if [ \"$v\" = \"0\" ]\n    then\n        echo \"0\"\n        return 0\n   \
+    \ fi\n\n    # Make sure the number is at least 1 digit\n    if [ \"${v:0:1}\"\
+    \ != \"-\" ]\n    then\n        v=\"0$v\"\n    fi\n\n    # Get the number as a\
+    \ string\n    n=\"$v\"\n\n    # If the number is positive, strip off the positive\
+    \ sign\n    if [ \"${v:0:1}\" != \"+\" ]\n    then\n        v=\"$v\"\n    fi\n\
+    \n    # Get the number as a string\n    n=\"$v\"\n\n    # Get the maximum number\
+    \ from the string\n    max=$(echo \"$n\" | awk '{print $NF}' | sed 's/^-\\([0-9][0-9]*\\\
+    )$/\\1/')\n\n    # Get the minimum number from the string\n    min=$(echo \"$n\"\
+    \ | awk '{print $NF}' | sed 's/^-\\([0-9][0-9]*\\)$/\\1/')\n\n    # Get the difference\
+    \ between the two\n    diff=$(echo \"$max\" - \"$min\")\n\n    # If the difference\
+    \ is zero, return it\n    if [ \"$diff\" == 0 ]\n    then\n        echo \"0\"\n\
+    \        return 0\n    fi\n\n    # If the number is equidistant, round \n}\n\n\
+    candidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'b''cat: 10: No such file or directory\n'''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  echo\
+    \ \"$1\" | awk -v OFS='' 'BEGIN{\n       while(diff<1){\n           diff=1;\n\
+    \           last=$1;\n           for(i=1;i<length($1);i++){\n             diff=diff*10+($(i)-$(i-1))\n\
+    \           }\n           if(diff==1 && $1!=$1){\n             diff=diff*10\n\
+    \           }\n           else if(diff<1){\n             diff=diff*10\n      \
+    \     }\n           if(diff>10){\n             diff=diff/10;\n             last=$1;\n\
+    \           }\n       }\n       return last;\n  }'\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: 'b"awk: cmd. line:19:        return last;\nawk: cmd. line:19:        ^ `return''
+    used outside function context\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ STRING=$1\n    local CLOSEST_TO_SEEN=\n\n    # Iterate over the given string,\
+    \ adding each character to a \"seen\"\n    # array. If the character is not in\
+    \ the array, add it.\n    for CHAR in $STRING; do\n        if ! [[ ${CLOSEST_TO_SEEN[$CHAR]}\
+    \ ]]; then \n            CLOSEST_TO_SEEN[$CHAR]=1\n        else\n            #\
+    \ Increment the value of the element in the seen array\n            ((CLOSEST_TO_SEEN[$CHAR]+=1))\n\
+    \        fi\n    done\n\n    # Iterate over the seen array, finding which element\
+    \ has the largest\n    # value and returning it (note that zero is not a possible\
+    \ value).\n    for KEY in ${!CLOSEST_TO_SEEN[@]}; do\n        if [[ ${CLOSEST_TO_SEEN[$KEY]}\
+    \ -eq ${#CLOSEST_TO_SEEN[@]} ]]; then\n            echo \"${KEY}\"\n        fi\n\
+    \    done\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"\
+    15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ NUMBER=\"$1\"\n    local NUMBER_MAX=\"$2\"\n    local NUMBER_MIN=\"$3\"\n\n\
+    \    local TOLERANCE=\"$4\"\n    local CLOSEST_INTEGER=\"$5\"\n\n    local NUMBER_FLOAT=\"\
+    $6\"\n    local NUMBER_STRING=\"$7\"\n\n    local INTEGER=\"$8\"\n    local NUMBER_SPACE=\"\
+    $9\"\n\n    local INTEGER_POINT=\"$10\"\n    local NUMBER_POINT=\"$11\"\n\n  \
+    \  local INTEGER_FRACTION=\"$12\"\n    local NUMBER_FRACTION=\"$13\"\n\n    local\
+    \ INTEGER_EXPONENT=\"$14\"\n    local NUMBER_EXPONENT=\"$15\"\n\n    local INTEGER_EXPONENTS=\"\
+    $16\"\n    local NUMBER_EXPONENTS=\"$17\"\n\n    local INTEGER_EXPONENT_AND_NUMBER=\"\
+    $18\"\n    local NUMBER_EXPONENT_AND_NUMBER=\"$19\"\n\n    local INTEGER_EXPONENT_AND_NUMBERS=\"\
+    $20\"\n    local NUMBER_EXPONENT_AND_NUMBERS=\"$21\"\n\n    local EXPONENT_AND_NUMBER=\"\
+    $22\"\n    local EXPONENT_AND_NUMBERS=\"$23\"\n\n    local EXPONENT_AND_NUMBERS_AND_INTEGER=\"\
+    $24\"\n    local EXPONENT_AND_NUMBERS_AND_INTEGER=\"$25\"\n\n    local EXPONENT_AND_NUMBERS_AND_CLOSURE=\"\
+    $26\"\n    local EXPONENT_AND_NUMBERS_AND_CLOSURE=\"$27\"\n\n    if [[ $NUMBER_MIN\
+    \ -eq 0 ]]; then\n        NUMBER_MIN=-$(( $NUMBER_MAX + 1 ))\n    fi\n    if [[\
+    \ $NUMBER_MAX -eq 0 ]]; then\n        NUMBER_MAX=$(( $NUMBER_MIN - 1 ))\n    fi\n\
+    \n    if [[ $NUMBER_MIN -eq $NUMBER_MAX ]]; then\n        return 0\n    fi\n\n\
+    \    if [[ $NUMBER -ne \"0\" ]]; then\n        if [[ $NUMBER_MIN -gt $NUMBER ]];\
+    \ then\n            if [[ $NUMBER_MIN -le $NUMBER ]]; then\n                return\
+    \ $CLOSEST_INTEGER\n            else\n                return $INTEGER\n      \
+    \      fi\n        elif [[ $NUMBER -ge $NUMBER_MAX ]]; then\n            if [[\
+    \ $NUMBER_MAX -le $NUMBER ]]; then\n                return $CLOSEST_INTEGER\n\
+    \            else\n                return $INTEGER\n            fi\n        else\n\
+    \            return 0\n        fi\n    fi\n\n    if [[ $NUMBER_MIN -eq 0 ]]; then\n\
+    \        INTEGER=\"$NUMBER\"\n        INTEGER_POINT=\"$NUMBER_POINT\"\n      \
+    \  INTEGER_FRACTION=\"$NUMBER_FRACTION\"\n        INTEGER_EXPONENT=\"$NUMBER_EXPONENT\"\
+    \n        INTEGER_EXP\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset\
+    \ -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate\
+    \ \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b"/tmp/tmpbcq01401.sh: line 93: syntax error near unexpected token `}''\n/tmp/tmpbcq01401.sh:
+    line 93: `}''\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ number=$1\n  # Check if number is numeric\n  [[ \"$number\" =~ ^-?[0-9]+([.][0-9]+)?$\
+    \ ]] || return 1\n  # Check if number is equidistant from two numbers\n  local\
+    \ diff\n  [[ \"$number\" =~ ^-?[0-9]+([.][0-9]+)$ ]] || return 1\n  diff=${number#$1}\n\
+    \  local diff2\n  [[ \"$number\" =~ ^-?[0-9]+([.][0-9]+)$ ]] || return 1\n  diff2=${number#$1}\n\
+    \  [[ \"$diff2\" == \"$diff\" ]] || return 1\n  # Check if number is close to\
+    \ zero\n  if [ \"$number\" -le 0 ] ; then return 0; fi\n  local d\n  if [ \"$diff\"\
+    \ -le \"10\" ] ; then d=2\n  elif [ \"$diff\" -lt \"-10\" ] ; then d=1\n  else\
+    \ return 1 ; fi\n  local i\n  local j\n  if [ \"$diff2\" -le \"10\" ] ; then i=2\n\
+    \  elif [ \"$diff2\" -lt \"-10\" ] ; then i=1\n  else return 1 ; fi\n  local n\n\
+    \  local p\n  if [ \"$diff2\" -le \"$diff\" ] ; then n=2\n  elif [ \"$diff2\"\
+    \ -lt \"$diff\" ] ; then n=1\n  else return 1 ; fi\n  if [ \"$d\" -eq \"2\" ]\
+    \ ; then p=$((i + j + 1))\n  elif [ \"$d\" -eq \"1\" ] ; then p=$((i * j))\n \
+    \ else return 1 ; fi\n  [[ \"$diff\" -le \"$p\" ]] || return 1\n  local q\n  if\
+    \ [ \"$diff2\" -le \"$diff\" ] ; then q=2\n  elif [ \"$diff2\" -lt \"$diff\" ]\
+    \ ; then q=1\n  else return 1 ; fi\n  if [ \"$q\" -eq \"2\" ] ; then return $((n\
+    \ - 1))\n  elif [ \"$q\" -eq \"1\" ] ; then return $((n * j - i))\n  else return\
+    \ 1 ; fi\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test()\
+    \ {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"\
+    15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n  local\
+    \ x=\"${1}\"\n  if [[ -z \"$x\" ]]; then\n    exit 1\n  fi\n  if [[ \"$x\" =~\
+    \ ^-?[0-9]*\\.?[0-9]*$ ]]; then\n    local xi=$(echo \"$x\" | cut -d. -f1)\n \
+    \   local xj=$(echo \"$x\" | cut -d. -f2)\n    local diff=$(( xj - xi ))\n   \
+    \ if [[ \"$diff\" -gt 0 ]]; then\n      x=\"$xi\"\n    else\n      x=\"$xj\"\n\
+    \    fi\n  fi\n  echo \"$x\"\n}\n\ncandidate() {\n    closest_integer \"$@\"\n\
+    }\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate\
+    \ \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    echo\
+    \ $((${1%%.*}+${1#*.}+${1%%.*}))\n}\n\ncandidate() {\n    closest_integer \"$@\"\
+    \n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate\
+    \ \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ input=\"$1\"\n    local integer=\"$2\"\n\n    if [[ $integer -eq 0 ]]; then\n\
+    \        echo \"0\"\n        return 0\n    fi\n    local x=\"$integer\"\n    local\
+    \ y=\"$integer\"\n\n    while (( x > y )); do\n        (( y -= 1 ))\n    done\n\
+    \n    # echo \"$integer - $y\" # uncomment this line to print the difference\n\
+    \    echo $(( x - y ))\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\n\
+    set -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate\
+    \ \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 2
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ IFS=`./get_decimal_separator $1`\n    local number=$1\n    local i=2\n    while\
+    \ [ $i -le $2 ]; do\n        local c=$(( $number - $number % $i ))\n        if\
+    \ [ $c -eq 0 ]; then\n            # Certain situations where $number == 0 are\
+    \ handled below.\n            return $number\n        fi\n        i=$(( $i + 1\
+    \ ))\n        if [ $i -eq 10 ]; then\n            # In most cases, we are only\
+    \ required to worry about integer\n            # numbers that end with 0, such\
+    \ as \"010\", \"100\", etc.\n            return $number\n        fi\n    done\n\
+    \n    # At this point, $number is not guaranteed to be an integer.\n    # It could\
+    \ be an integer, or it could have been a floating-point number\n    # that has\
+    \ a decimal component, or a string, or it could be \"0\".\n    # We can handle\
+    \ all of these, but the following cases cover\n    # a couple of other common\
+    \ cases as well.\n    if [ $number -eq 0 ]; then\n        # Handle cases such\
+    \ as \"$number\" being the string \"0\", or \"$number\"\n        # being \"0\"\
+    .\n        return 0\n    elif [ $number -eq \"0\" ]; then\n        # Handle case\
+    \ such as \"$number\" being the string \"0\".\n        return 0\n    elif [ $number\
+    \ == -0 ]; then\n        # Handle case such as \"$number\" being \"-0\".\n   \
+    \     return 0\n    else\n        # Handle cases where $number is neither \"0\"\
+    , nor \"-0\".\n        # This is because for integers, $number is only ever going\
+    \ to be\n        # something like \"10\", so it is safe to just return the value\
+    \ $number.\n        local IFS=`./get_decimal_separator $number`\n        echo\
+    \ $number\n    }\n}\n\ncandidate() {\n    closest_integer \"$@\"\n}\n\nset -e\n\
+    run_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\"\
+    ) = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"-16\" ]]\n    [[ $(candidate\
+    \ \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: SyntaxError
+  stderr: 'b"/tmp/tmp9n5m1ipw.sh: line 56: syntax error near unexpected token `}''\n/tmp/tmp9n5m1ipw.sh:
+    line 56: `    }''\n"'
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ string=${1}\n    local number\n    local closest\n    local sign\n    local\
+    \ i\n    local last\n\n    # First we try to read it as a floating point number\n\
+    \    number=\"${string%%.*}\"\n    # if the string contains a decimal point, we\
+    \ try to read it as a number\n    if [[ ${string#*.} != *. ]]; then\n        number=\"\
+    $(eval echo \"${string}\")\"\n    fi\n    # we check the string only if it contains\
+    \ any character\n    if [[ -z \"$string\" ]]; then\n        return\n    fi\n\n\
+    \    # Then we try to convert it to a number\n    if ! [[ $string =~ ^-?[0-9]+$\
+    \ ]]; then\n        return\n    fi\n\n    sign=${string:0:1}\n    string=${string:1}\n\
+    \n    if [[ ${sign} == \"-\" ]]; then\n        string=$(( ${string} + 1 ))\n \
+    \   fi\n\n    # If the number is bigger than 2147483647 we use the standard math\n\
+    \    # command to round it down using floor.\n    if [[ ${number} -gt 2147483647\
+    \ ]]; then\n        closest=$(( ${number} - 1 ))\n    else\n        closest=$((\
+    \ ${number} + 1 ))\n    fi\n\n    # if the closest was zero, we set it to the\
+    \ biggest integer and the\n    # sign to negative so that we never return zero\n\
+    \    if [[ ${closest} == 0 ]]; then\n        closest=$(( ${number} + 1 ))\n  \
+    \      sign=\"-\"\n    fi\n\n    # if the closest is bigger than the original\
+    \ (negative) number,\n    # we add one to the closest so that it becomes the new\
+    \ negative\n    # number\n    if [[ ${closest} -gt ${number} ]]; then\n      \
+    \  closest=$(( ${number} + 1 ))\n        sign=\"-\"\n    fi\n\n    last=\"${string}\"\
+    \n    # we loop on every number until we find the closest one\n    for (( i =\
+    \ closest; i >= 0; i-- )); do\n        if [[ ${last} -gt ${number} ]]; then\n\
+    \            closest=$(( ${number} + 1 ))\n            sign=\"-\"\n        fi\n\
+    \        number=$(( ${number} + 1 ))\n        last=\"${number}\"\n    done\n \
+    \   # and we check the sign if we have any\n    if [[ ${sign} == \"-\" ]]; then\n\
+    \        closest=$(( ${closest} - 1 ))\n    fi\n    # we return the integer closest\
+    \ to the given number\n    echo ${closest}\n}\n\ncandidate() {\n    closest_integer\
+    \ \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate \"10\") = \"10\" ]]\n\
+    \    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate \"-15.5\") = \"\
+    -16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate \"0\")\
+    \ = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282
+- exit_code: 1
+  program: "#!/bin/bash\n# Create a function that takes a value (string) representing\
+    \ a number\n# and returns the closest integer to it. If the number is equidistant\n\
+    # from two integers, round it away from zero.\n# Examples\n# >>> $(closest_integer\
+    \ \"10\")\n# \"10\"\n# >>> $(closest_integer \"15.3\")\n# \"15\"\n# Note:\n# Rounding\
+    \ away from zero means that if the given number is equidistant\n# from two integers,\
+    \ the one you should return is the one that is the\n# farthest from zero. For\
+    \ example closest_integer(\"14.5\") should\n# return 15 and closest_integer(\"\
+    -14.5\") should return -15.\n#\n# $1 is a string\nclosest_integer() {\n    local\
+    \ v=\"$1\"\n    local c\n\n    case \"$v\" in\n        *[!0-9]*)\n           \
+    \ echo \"$v\"\n            return 0;;\n        *)\n            c=${v##*[!0-9]}\n\
+    \            case \"$c\" in\n                0)\n                    echo \"0\"\
+    \n                    return 0;;\n                *)\n                    echo\
+    \ \"$c\"\n                    return $c;;\n            esac\n    esac\n}\n\ncandidate()\
+    \ {\n    closest_integer \"$@\"\n}\n\nset -e\nrun_test() {\n    [[ $(candidate\
+    \ \"10\") = \"10\" ]]\n    [[ $(candidate \"14.5\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"-15.5\") = \"-16\" ]]\n    [[ $(candidate \"15.3\") = \"15\" ]]\n    [[ $(candidate\
+    \ \"0\") = \"0\" ]]\n}\n\nrun_test"
+  status: Exception
+  stderr: b''
+  stdout: b''
+  timestamp: 1660078282

@@ -1,0 +1,1115 @@
+name: HumanEval_86_anti_shuffle
+language: pl
+prompt: "# Write a function that takes a string and returns an ordered version of\
+  \ it.\n# Ordered version of string, is a string where all words (separated by space)\n\
+  # are replaced by a new word where all the characters arranged in\n# ascending order\
+  \ based on ascii value.\n# Note: You should keep the order of words and blank spaces\
+  \ in the sentence.\n# For example:\n# >>> anti_shuffle(\"Hi\")\n# \"Hi\"\n# >>>\
+  \ anti_shuffle(\"hello\")\n# \"ehllo\"\n# >>> anti_shuffle(\"Hello World!!!\")\n\
+  # \"Hello !!!Wdlor\"\nsub anti_shuffle {\n    my($s) = @_;\n"
+tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&anti_shuffle;\n\
+  \        if(eq_deeply($candidate->(\"Hi\"),\"Hi\")) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->(\"hello\"),\"ehllo\"\
+  )) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  number\"),\"bemnru\")) {\n        print \"ok!\" }else{\n        exit 1;\n      \
+  \  }\n        if(eq_deeply($candidate->(\"abcd\"),\"abcd\")) {\n        print \"\
+  ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"Hello\
+  \ World!!!\"),\"Hello !!!Wdlor\")) {\n        print \"ok!\" }else{\n        exit\
+  \ 1;\n        }\n        if(eq_deeply($candidate->(\"\"),\"\")) {\n        print\
+  \ \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  Hi. My name is Mister Robot. How are you?\"),\".Hi My aemn is Meirst .Rboot How\
+  \ aer ?ouy\")) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n}\n\n\
+  testhumaneval();"
+completions: ["    $s =~ tr/!/\\@/g;\n    $s =~ s/\\s+/ /g;\n    return $s;\n}\n</code>\n\
+    <|/ a dscore=1 tags=perl |>\n<| c |>\nThis answer is incorrect. `anti_shuffle`\
+    \ should return a new string with characters rearranged from ASCII order, not\
+    \ lexicographic order. The example `anti_shuffle(\"Hello World!!!\")` returns\
+    \ `\"!!!Wdlor\"`\n<|/ c |>\n<| a tags=perl |>\nSince you're using Perl, why not\
+    \ use Perl's Algorithm::Combinatorics module?\n<code>\nuse strict;\nuse warnings;\n\
+    use Algorithm::Combinatorics qw(combinations);", "    $s =~ s/^\\s+|\\s+$//g;\n\
+    \    my @words = split /\\s+/, $s;\n    my @words_ordered;\n    foreach my $word\
+    \ (@words) {\n        my $new_word = \"\";\n        foreach my $char (split //,\
+    \ $word) {\n            my $ord = ord $char;\n            foreach my $i ($ord\
+    \ .. $ord) {\n                $new_word .= $char;\n            }\n        }\n\
+    \        push @words_ordered, $new_word;\n    }\n    $s =~ s/^\\s+|\\s+$//g;\n\
+    \    my $s = join \" \", @words_ordered;\n    return $s;\n}", "    $s =~ s/\\\
+    s+/+/g;\n    $s =~ s/^\\s+//;\n    $s =~ s/\\s+$//;\n    $s =~ s/(.)(\\1)/$1.$2/g;\n\
+    \    $s =~ s/(.)\\1+/$1./g;\n    $s =~ s/\\B([A-Z])/\\U$1/g;\n    return $s;\n\
+    }", "    $s =~ s/([A-Za-z0-9]+\\s+){2,}([A-Za-z0-9]+)/$1$3/ig;\n    return $s;\n\
+    }", "    my $t = $s;\n    my $l = 0;\n    my $i = 0;\n    my $n = length($s);\n\
+    \    while($i < $n) {\n        my $j = $i + 1;\n        while($j < $n) {\n   \
+    \         if(ord(substr($t, $i, 1)) > ord(substr($s, $j, 1))) {\n            \
+    \    substr($t, $i, 1, substr($s, $j, $n - $i));\n                $i = $j;\n \
+    \               last;\n            }\n            $j++;\n        }\n        $i++;\n\
+    \    }\n    return $t;\n}\n</code>\n<|/ a dscore=1 tags=perl,random |>\n<| c |>\n\
+    Thanks, it looks good at first glance, but there is a bug. It doesn't handle sentences\
+    \ longer than `k` chars. E.g. `anti_shuffle(\"Hi There!!\", 4)` returns `\"Hi\
+    \ There!!!!!\"` where it should return `\"Hi There!!\"`\n<|/ c |>\n<| c |>\nAh,\
+    \ yes, I thought that one would not be an issue for original post. Fixed the bug\
+    \ and added explanation\n<|/ c |>\n<| a tags=perl,random |>\nI made a program\
+    \ that uses the algorithm described by James McNearney in his answer to a related\
+    \ question that used the Fisher-Yates shuffle. It has a bug as described in James\
+    \ McNearney's answer and in his comment.\n<code>", "    return join(\" \",map\
+    \ {chr $a=ord $a } split(\" \",$s));\n}", "    my(@words) = split /\\s+/, $s;\n\
+    \    my($new_word);", "    $s =~ s/(\\s+)//g;\n    $s =~ s/(\\w)/ $1.lc($1).chr\
+    \ /eg;\n    $s =~ s/^\\s+|\\s+$//g;\n    $s =~ s/\\s+/ /g;\n    return $s;\n}",
+  "    $s =~ tr/A-Za-z/a-z_-/;\n    $s =~ tr/A-Za-z/a-z_-/;\n    $s =~ tr/A-Za-z/a-z_-/;\n\
+    \    $s =~ tr/ +/ -/;\n    return $s;\n}", "    my $s = join(\" \", map { chomp;\
+    \ \n                          $_ !~ /[^a-zA-Z0-9]/ ?\n                       \
+    \   \"$\" . \n                          (ord($_) <=> ord(\"z\")) . chr(ord(\"\
+    a\") - ord($_)) :\n                          $_;\n                      } split(/\\\
+    s+/, $s));\n    $s;\n}", "    $s =~ s/([A-Za-z])\\s(\\w*)/ $1 . $2 /gi;\n    $s\
+    \ =~ s/([A-Za-z])\\s(\\w*)/ $1 . $2 /gi;\n    $s =~ s/\\s(\\w*)\\s(\\w*)/ $1 .\
+    \ $2 /gi;\n    $s =~ s/\\s(\\w*)\\s(\\w*)/ $1 . $2 /gi;\n    return $s;\n}", " \
+    \   $s =~ s/(\\w+)\\s(\\w+)/g;\n    $s =~ s/(\\w+)\\s(\\w+)/ \"$2\\n$1\"/ge;\n\
+    \    return $s;\n}", "    my(@result) = ($s);\n    for my $i ( 0 .. length($s)\
+    \ - 1 ) {\n        my $x = ord(substr($s, $i, 1)) - 64;\n        if ($x < 0) {\n\
+    \            push (@result, substr($s, 0, $i));\n            $i = 0;\n       \
+    \ } else {\n            push (@result, chr(64 + $x));\n        }\n    }\n    push\
+    \ (@result, substr($s, 0, length($s) - 1));\n    return join '', @result;\n}\n\
+    </code>\n<|/ a tags=perl,shuffle,string |>\n<| a |>\nHere is an implementation\
+    \ using split and a hash.  \n<code>\nuse strict;\nuse warnings;\nuse feature 'say';",
+  "    $s =~ s/(^\\s*)|(\\s*$)//g;\n    my @a = split(/\\s/, $s);\n    my @b = @a;\n\
+    \    my $c;\n    foreach (@b) {\n        my $i = ord($_);\n        $i--;\n   \
+    \     if ($i == -1) {\n            push (@b, $_);\n        } else {\n        \
+    \    $c = $i;\n        }\n    }\n    my $l = scalar @a;\n    for (my $i=0; $i\
+    \ < $l; $i++) {\n        $a[$i] = $a[$c];\n    }\n    my $l2 = scalar @a;\n  \
+    \  my $i;\n    for ($i = 0; $i < $l2; $i++) {\n        if ($a[$i] eq ' ') {\n\
+    \            $a[$i] = '.';\n        }\n    }\n    $a = join(\" \", @a);\n    return\
+    \ $a;\n}", "    $s =~ s/ (\\w) (\\w*) /$1$2/g;\n    $s =~ s/ \\w+ /!/g;\n    $s\
+    \ =~ s/\\s(\\W)/!/g;\n    $s =~ s/ (\\W) (\\w*)/$1$2/g;\n    return $s;\n}\n</code>\n\
+    <|/ a dscore=0 |>\n<| c |>\nThe output is not as expected, I used the code you\
+    \ suggested but it doesn't return the same output.\n<|/ c |>\n<| c |>\nIt does,\
+    \ the output is exactly what you want. Not clear why you are expecting something\
+    \ else.\n<|/ c |>\n<| c |>\nOh my mistake it is working fine, thank you very much,\
+    \ can you tell me how did you manage to get the required output? I tried it using\
+    \ some online tools but I cant get it right.\n<|/ c |>\n<| c |>\nI used http://regexr.com/\
+    \ and I used the regular expressions for words separated by spaces to break apart\
+    \ the strings into words and spaces, followed by the other regular expressions\
+    \ to split words and spaces and reorder them, then I put the results back together\
+    \ again using concatenation.\n<|/ c |>\n<| c |>\nThanks for the explanation, It\
+    \ helped to get this working.\n<|/ c |>\n<| a |>\nYou can use below code to get\
+    \ your expected output:\n<code>\nuse strict;\nuse warnings;\nuse feature 'say';\n\
+    use Data::Dumper;", "    $s =~ tr/ /a/;\n    $s =~ tr/A-Z/a-z/;\n    $s =~ tr/a-z/A-Z/;\n\
+    \    return $s;\n}", "    my @c = split //, $s;\n    my $last = \"\";\n    my\
+    \ $lastChar = \"\";\n    my @res = ();\n    my $i = 0;\n    for my $c (@c) {\n\
+    \        if ($c =~ /^\\S$/) {\n            push(@res, $last);\n            $last\
+    \ = \"\";\n        }\n        if ($c eq \"/\") {\n            push(@res, $last);\n\
+    \            $last = \"\";\n        } else {\n            $last = $c;\n      \
+    \  }\n    }\n    for (@res) {\n        $c[$i] = ord($c[$i]) <=> ord($lastChar)\
+    \ <=> ord($c[$i+1]);\n        $i++;\n        $lastChar = $c[$i];\n    }\n    return\
+    \ join(\"\", @res);\n}\n</code>\n<|/ a dscore=0 tags=perl,replace,perl-data-structures,string\
+    \ |>\n<| a dscore=0 |>\n<code>\nuse strict;\nuse warnings;", "    my @words =\
+    \ ();\n    for my $word (split /\\s+/, $s) {\n        $word =~ tr/A-Za-z/N-ZA-Mn-za-m/;\n\
+    \        $word = (lc($word)) =~ tr/A-Za-z/N-ZA-Mn-za-m/;\n        push @words,\
+    \ $word;\n    }\n    return join ' ', sort @words;\n}", "    my(@o) = split(/\
+    \ /, $s);\n    my(@a);\n    my($new);\n    my($ch);\n    my($j);\n    my($k);\n\
+    \    my($l);\n    my($l);\n    my($i);\n    my($n);\n    my($u);\n    my($v);\n\
+    \    my($f);\n    my($y);\n    my($x);", "    return $s if $s eq '';\n    my($len)\
+    \ = length($s);\n    $s =~ s/\\s+/ /g;\n    my($new_string);\n    my $last_pos\
+    \ = 0;\n    my $new_word = \"\";\n    my $ord = ord('a');\n    for ($i=0; $i<$len;\
+    \ $i++) {\n        $ord++;\n        if ($ord > ord('z')) {\n            $ord =\
+    \ ord('A');\n        }\n        $new_word .= substr($s, $i, 1);\n        $new_string\
+    \ .= chr($ord) . $new_word;\n        $last_pos = $i;\n    }\n    $new_string .=\
+    \ substr($s, $last_pos);\n    return $new_string;\n}", "    # Add space at the\
+    \ beginning of the string\n    if ( $s =~ /^\\s/ ) {\n        $s = \" $s\";\n\
+    \    }\n    # Remove all blank spaces in the string\n    $s =~ s/^\\s+//;\n  \
+    \  # Remove all spaces at the end of the string\n    $s =~ s/\\s+$//;\n    # Replace\
+    \ all non alphabet characters with space\n    $s =~ s/\\W+/ /g;\n    # Remove\
+    \ all duplicated spaces\n    $s =~ s/ +/ /g;\n    # Add space at the end of the\
+    \ string\n    $s =~ s/\\s+/ /g;\n    return $s;\n}", "    $s =~ s/\\s+/ /g;\n\
+    \    my @chars = split //, $s;\n    foreach my $c (@chars) {\n        $chars[$chars{$c}]\
+    \ = $c;\n    }\n    my $re = join('', sort {$a <=> $b} keys %chars);\n    return\
+    \ $re;\n}", "    my($new);\n    $s =~ tr/ /A-Za-z/;\n    for (my $i = 0; $i <\
+    \ length($s); $i++) {\n        $new .= $s[$i];\n        for (my $j = i; $j >=\
+    \ 0; $j--) {\n            if (ord(substr($s,$i,1)) > ord(substr($s,$j,1))) {\n\
+    \                $new .= substr($s,$j,1);\n                substr($s,$j,1) = $s[$i];\n\
+    \                substr($s,$i,1) = $new;\n            }\n        }\n    }\n  \
+    \  $new;\n}", "    $s =~ s/^\\s+//;\n    $s =~ s/\\s+$//;\n    $s =~ s/\\S+/ join\
+    \ \" \", sort(map { uc($_) } split(\" \", $s)) /ge;\n    $s;\n}", "    my @words\
+    \ = split ' ', $s;\n    my $result = '';\n    foreach my $word (@words) {\n  \
+    \      my $count = 1;\n        $word =~ s/\\W//g;\n        $word =~ s/\\s+/ /g;\n\
+    \        $word =~ s/^\\s+//;\n        $word =~ s/\\s+$//;\n        foreach my\
+    \ $char (split //, $word) {\n            my $ord_char = ord($char);\n        \
+    \    $ord_char += $count * 64;\n            $ord_char = chr($ord_char % 256);\n\
+    \            $result .= $ord_char;\n            $count++;\n        }\n       \
+    \ $result .= $word;\n    }\n    return $result;\n}", "    $s =~ s/ / ( ord($&{ord})\
+    \ < 255 ? $&{ord} : ord(' ') ) /ge;\n    return $s;\n}", "    my(@new);\n    $s\
+    \ = lc($s);\n    foreach my $word (split /\\s+/, $s) {\n        foreach my $char\
+    \ (split //, $word) {\n            $char = ( $char <= 127 ? $char : chr($char-128)\
+    \ ) if $char !~ /\\w/;\n            $char .= $char <= 127 ? chr($char+128) : \"\
+    \";\n            push @new, $char;\n        }\n        push @new, $word;\n   \
+    \ }\n    return join \"\", @new;\n}", '    $s =~ s/ (\w+)|(\w+\W+\w+)|(\w+\W+\w+\W+)|(\w+\W+\w+\W+\W+)|(\W+\w+)|(\W+\w+\W+)|(\W+\w+\W+\W+)|(\W+\w+\W+\W+\W+)|(\w+\W+\W+\W+\w+)|(\w+\W+\W+\W+\w+\W+)|(\w+\W+\W+\W+\w+\W+\W+)|(\w+\W+\W+\W+\w+\W+\W+\W+)|(\w+\W+\W+\W+\w+\W+\W+\W+\W+\w+)|(\w+\W+\W+\W+\w+\W+\W+\W+\W+\w+\W+)|(\w+\W+\W+\W+\w+\W+\W+\W+\W+\w+\W+\W+\w+)|(\w+\W+\W+\W+\w+\W+\W+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\W+\w+\W+\W+\w+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+\W+\w+)|(\w+\W+\W+\',
+  "    my($ord) =  ();\n    my $space  = \" \";\n    my $break  = \".\";\n    my $blank\
+    \ = \"  \";\n    my $ordStr = '';\n    foreach my $i ( 0 .. length($s) - 1 ) {\n\
+    \        if ( $s[$i] == $blank ) {\n            $ordStr .= $blank;\n         \
+    \   $ord[$i] = -1;\n        }\n        elsif ( $s[$i] eq $break ) {\n        \
+    \    $ordStr .= $break;\n            $ord[$i] = -2;\n        }\n        else {\n\
+    \            my $ordVal = ord($s[$i]);\n            if ( $ordVal >= 0 ) {\n  \
+    \              my $ordInd = $ord[$i];\n                if ( $ordInd == -1 ) {\n\
+    \                    $ordStr .= $s[$i];\n                    $ord[$i] = $ordVal;\n\
+    \                }\n                elsif ( $ordInd == -2 ) {\n              \
+    \      $ordStr .= $ordStr;\n                    $ord[$i] = $ordVal;\n        \
+    \        }\n                else {\n                    while ( $ord[$i] > $ordInd\
+    \ ) {\n                        $ordStr .= $blank;\n                        $ord[$i]\
+    \ = $ord[$i] - 1;\n                    }\n                    $ordStr .= $s[$i];\n\
+    \                    $ord[$i] = $ordVal;\n                }\n            }\n \
+    \       }\n    }\n    return $ordStr;\n}", "    my @chars;\n    my $char;\n  \
+    \  foreach $char (split(/ /, $s)) {\n        push(@chars, $char) if ord($char)\
+    \ < 194;\n    }\n    my $new = join(\"\", sort {lc($a) cmp lc($b)} @chars);\n\
+    \    return $new;\n}", "    my @words = split /\\s+/, $s;\n    my @chars = map\
+    \ { chr } 0..256;\n    my $pos = 0;\n    $s = \"\";\n    my $last = \"\";\n  \
+    \  foreach (@words) {\n        my @new_word = map { $chars[$_] ? $chars[$_] :\
+    \ substr($chars[$pos],$_) } 0..$#chars;\n        my $new_s = join \" \", @new_word;\n\
+    \        $s .= $new_s;\n        $last = $new_s;\n    }\n    return $s;\n}", " \
+    \   $s =~ s/\\s+/-/g;\n    $s =~ tr/-/A-Z/;\n    $s =~ tr/\\-/-/;\n    return\
+    \ $s;\n}\n</code>\n<|/ a tags=perl,shuffle,arrays,regex |>\n<| a tags=perl,shuffle,arrays,regex\
+    \ dscore=0 |>\nHere is a simple version that uses hashes instead of arrays, only\
+    \ it uses the \"length\" of the word to determine where to put the characters:\n\
+    <code>\nuse warnings;\nuse strict;", "    $s =~ s/ /\\s*/ g unless $s =~ /^\\\
+    W$/s;\n    $s =~ s/\\s*/ /g;\n    $s =~ s/^/ /;\n    $s =~ s/$/  /;\n    $s =~\
+    \ s/\\s+/ /;\n    $s =~ s/\\s+/ /;\n    $s =~ s/\\s/ /;\n    $s =~ s/^\\s+//;\n\
+    \    $s =~ s/\\s+$//;\n    return $s;\n}", "    my @words = split(/\\s/,$s);\n\
+    \    my @sorted = sort { lc $a cmp lc $b } map {\n        lc($_.lc =~ s/\\s/_/g);\n\
+    \        $_;\n    } @words;\n    return join('',@sorted);\n}", "    my(@words);\n\
+    \    my(@new_words);\n    foreach my $word (split /\\s+/, $s) {\n        my(@chars);\n\
+    \        foreach my $char (split(//, $word)) {\n            push(@chars, $char);\n\
+    \        }\n        foreach my $i ( 0 .. $#chars ) {\n            my $j = rand(@chars);\n\
+    \            if ($j != $i) {\n                push (@chars, $chars[$j]);\n   \
+    \             push (@new_words, $chars[$i]);\n            }\n        }\n     \
+    \   push (@words, join(\"\", @new_words));\n    }\n    return join(\" \", @words);\n\
+    }", "    my @ord;\n    my $i = -1;\n    my $j;\n    while ($s) {\n        $ord[$i++]\
+    \ = ord(substr($s,$j,1));\n        $j++;\n    }\n    for(my $i = 0; $i < scalar(@ord);\
+    \ $i++) {\n        for(my $j = $i+1; $j < scalar(@ord); $j++) {\n            if($ord[$i]\
+    \ > $ord[$j]) { $ord[$i], $ord[$j] = $ord[$j], $ord[$i]; }\n        }\n    }\n\
+    \    return join('', @ord);\n}", '    my $result;', "    my @w = split(/\\s/,\
+    \ $s);\n    my @w2 = ();\n    my %w = map { $w[$_] => $_ } (0 .. $#w);\n    for\
+    \ (my $i = 0; $i < $#w; $i++) {\n        $w2[$i] .= $w[$i];\n    }\n    for (my\
+    \ $i = 0; $i < $#w2; $i++) {\n        $w2[$i] = $w2[$i] . ' ' . join(' ', grep(exists\
+    \ $w{$_} ? $w{$_} : \"\", split ' ', $w2[$i]));\n    }\n    $w2[$#w] = join('\
+    \ ', grep(exists $w{$_} ? $w{$_} : \"\", split ' ', $w2[$#w]));\n    return join('\
+    \ ', @w2);\n}\n</code>\n<|/ a tags=string,perl |>\n<| c |>\nThanks, that works\
+    \ great! Just one more question, if I may ask - how would you go about writing\
+    \ a sub that takes 2 strings and returns an ordered version of the first string\
+    \ with all the non-alphabetical characters replaced with an underscore (_)?\n\
+    <|/ c |>\n<| c |>\n, I have updated my answer. You can use the same code as in\
+    \ your question, but don't forget to update `$w2[$i]` with `@w[$i]` when `@w`\
+    \ contains more than one word.\n<|/ c |>\n<| c |>\n, I've posted another solution.\
+    \ Both are very similar to each other.\n<|/ c |>\n<| a tags=string,perl dscore=0\
+    \ |>\nMy solution replaces all characters that aren't letters and leaves alone\
+    \ blank spaces, and replaces all words with \"_\" and spaces with \"_\"\n<code>\n\
+    use strict;\nuse warnings;", "    my @a = split(' ', $s);\n    my @b = ();\n \
+    \   my $i = 0;\n    foreach my $word (@a) {\n        $b[$i] = $word;\n       \
+    \ $i++;\n    }\n    foreach my $word (@b) {\n        $i = $i - 1;\n        while\
+    \ (@a > 1) {\n            if ($a[0] <=> $a[1]) {\n                @a[$i, $a[0]]\
+    \ = @a[$a[0], $i];\n            } else {\n                @a[$i, $a[0]] = @a[$a[1],\
+    \ $i];\n            }\n            $i--;\n        }\n    }\n    return join('\
+    \ ', @a);\n}\n</code>\n<|/ a dscore=0 |>\n<| a tags=sorting,perl,string |>\nI\
+    \ used the below code to find out the solution and it worked\n<code>", "    $s\
+    \ =~ s/ /-/g;\n    $s =~ s/^-|-$//g;\n    my @words = split(/ /, $s);\n    my\
+    \ @sorted_words = ();\n    $sorted_words[0] = lc(\"A\",\"Z\",\"a\",\"z\");\n \
+    \   $sorted_words[1] = lc(\"a\",\"z\",\"B\",\"Z\");\n    $sorted_words[2] = lc(\"\
+    b\",\"z\",\"c\",\"Z\");\n    $sorted_words[3] = lc(\"c\",\"z\",\"d\",\"Z\");\n\
+    \    $sorted_words[4] = lc(\"d\",\"z\",\"e\",\"Z\");\n    $sorted_words[5] = lc(\"\
+    e\",\"z\",\"f\",\"Z\");\n    $sorted_words[6] = lc(\"f\",\"z\",\"G\",\"Z\");\n\
+    \    $sorted_words[7] = lc(\"g\",\"z\",\"h\",\"Z\");\n    $sorted_words[8] = lc(\"\
+    h\",\"z\",\"I\",\"Z\");\n    $sorted_words[9] = lc(\"I\",\"z\",\"j\",\"Z\");\n\
+    \    $sorted_words[10] = lc(\"j\",\"z\",\"k\",\"Z\");\n    $sorted_words[11] =\
+    \ lc(\"k\",\"z\",\"l\",\"Z\");\n    $sorted_words[12] = lc(\"l\",\"z\",\"m\",\"\
+    Z\");\n    $sorted_words[13] = lc(\"m\",\"z\",\"n\",\"Z\");\n    $sorted_words[14]\
+    \ = lc(\"n\",\"z\",\"o\",\"Z\");\n    $sorted_words[15] = lc(\"o\",\"z\",\"p\"\
+    ,\"Z\");\n    $sorted_words[16] = lc(\"p\",\"z\",\"Q\",\"Z\");\n    $sorted_words[17]\
+    \ = lc(\"q\",\"z\",\"R\",\"Z\");\n    $sorted_words[18] = lc(\"R\",\"z\",\"s\"\
+    ,\"Z\");\n    $sorted_words[19] = lc(\"s\",\"z\",\"t\",\"Z\");\n    $sorted_words[20]\
+    \ = lc(\"t\",\"z\",\"u\",\"Z\");\n    $sorted_words[21] = lc(\"u\",\"z\",\"v\"\
+    ,\"Z\");\n    $sorted_words[22] = lc(\"v\",\"z\",\"w\",\"Z\");\n    $sorted_words[23]\
+    \ = lc(\"w\",\"z\",\"x\",\"Z\");\n    $sorted_words[24] = lc(\"x\",\"z\",\"y\"\
+    ,\"Z\");\n    $sorted_words[25] = lc(\"y\",\"z\",\"z\");\n    return join(\" \"\
+    , @sorted_words);\n}", "    $s =~ s/[^A-Za-z0-9]/ /g;\n    $s =~ s/^\\s+|\\s+$//g;\n\
+    \    my @list = split(/ /, $s);\n    my @new_list = ();\n    my $i = 0;\n    my\
+    \ $j = 0;\n    for ($i = 0; $i < @list; $i++) {\n        my $k = substr($list[$i],\
+    \ 0, 1);\n        for ($j = 0; $j < @new_list; $j++) {\n            if ($new_list->[$j]\
+    \ eq $k) {\n                unshift @new_list, ($k + 65 + $j);\n             \
+    \   last;\n            }\n        }\n        push @new_list, $list[$i];\n    }\n\
+    \    $s =~ s/\\A[^A-Za-z0-9]+\\z// or return;\n    return join(\" \", sort(@new_list));\n\
+    }", "    return $s =~ tr/ !//d && $s =~ tr/a-z-A-Z//;\n}", "    $s =~ s/(^|\\\
+    s+)([A-Za-z0-9]+)($|\\s+)/$1.$3.$2/g;\n    return $s;\n}", "    $s =~ s/(\\w)(\\\
+    w*)/ $1 . \" \" . (ord($2[1]) >= ord($1[1]) ? \"!\" : \"\") . $2/g;\n    $s =~\
+    \ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1]) >= ord($1[1]) ? \"!\" : \"\") . $2/g;\n\
+    \    $s =~ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1]) >= ord($1[1]) ? \"!\" : \"\"\
+    ) . $2/g;\n    $s =~ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1]) >= ord($1[1]) ? \"\
+    !\" : \"\") . $2/g;\n    $s =~ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1]) >= ord($1[1])\
+    \ ? \"!\" : \"\") . $2/g;\n    $s =~ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1]) >=\
+    \ ord($1[1]) ? \"!\" : \"\") . $2/g;\n    $s =~ s/(\\w)(\\w*)/ $1 . \" \" . (ord($2[1])\
+    \ >= ord($1[1]) ? \"!\" : \"\") . $2/g;\n    $s =~ s/(\\w)(\\w*)/ $1 . \" \" .\
+    \ (ord($2[1]) >= ord($1[1]) ? \"!\" : \"\") . $2/g;\n    return $s;\n}", "   \
+    \ my(@a);\n    my($word);\n    my($tmp);\n    foreach $word (split(/ /, $s)) {\n\
+    \        foreach (split(//, $word)) {\n            push(@a, \"_\" . ord($_));\n\
+    \        }\n    }\n    foreach $tmp (@a) {\n        $tmp =~ s/\\./\\1_/g;\n  \
+    \  }\n    $s =~ s/(\\s+)/ /g;\n    $s =~ s/(\\W)/ /g;\n    $s =~ s/_/ /g;\n  \
+    \  $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n    $s =~ s/_/ /g;\n\
+    \    $s =~ s/_/ /g;\n", "    $s =~ s/ (.+?) (?=\\s)/ $1 /sg;\n    $s =~ s/ (?<=\\\
+    s)(.+?) /$1./g;\n    $s;\n}", "    my @chars = split(//, $s);\n    my $i = 0;\n\
+    \    my @new_chars = ();\n    foreach my $char (@chars) {\n        my $j = 0;\n\
+    \        my $new_char = $char;\n        while($j++ < length($char)) {\n      \
+    \      my $char2 = substr($char, $j);\n            my $char3 = substr($char, 0,\
+    \ $j);\n            my $char4 = substr($char, $j + 1);\n            next if $char2\
+    \ eq \"\";\n            my $char5 = substr($char2, 0, $j);\n            my $char6\
+    \ = substr($char2, 0, $j);\n            next if $char3 eq \"\";\n            my\
+    \ $char7 = substr($char3, 0, $j);\n            my $char8 = substr($char3, 0, $j);\n\
+    \            next if $char4 eq \"\";\n            my $char9 = substr($char4, 0,\
+    \ $j);\n            my $char10 = substr($char4, 0, $j);\n            next if $char5\
+    \ eq \"\";\n            my $char11 = substr($char5, 0, $j);\n            my $char12\
+    \ = substr($char5, 0, $j);\n            next if $char6 eq \"\";\n            my\
+    \ $char13 = substr($char6, 0, $j);\n            my $char14 = substr($char6, 0,\
+    \ $j);\n            next if $char7 eq \"\";\n            my $char15 = substr($char7,\
+    \ 0, $j);\n            my $char16 = substr($char7, 0, $j);\n            next if\
+    \ $char8 eq \"\";\n            my $char17 = substr($char8, 0, $j);\n         \
+    \   my $char18 = substr($char8, 0, $j);\n            next if $char9 eq \"\";\n\
+    \            my $char19 = substr($char9, 0, $j);\n            my $char20 = substr($char9,\
+    \ 0, $j);\n            next if $char10 eq \"\";\n            my $char21 = substr($char10,\
+    \ 0, $j);\n            my $char22 = substr($char10, 0, $j);\n            next\
+    \ if $char11 eq \"\";\n            my $char23 = substr($char11, 0, $j);\n    \
+    \        my $char24 = substr($char11, 0, $j);\n            next if $char12 eq\
+    \ \"\";\n            my $char25 = substr($char12, 0, $j);\n            my $char26\
+    \ = substr($char12, 0, $j);\n            next if $char13 eq \"\";\n          \
+    \  my $char27 = substr($char", "    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n\
+    \    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n\
+    \    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n\
+    \    $s =~ s/(^|\\s)(\\S+)(\\s|$)/$1$3$2$4/g;\n    return $s;\n}", "    my @a\
+    \ = split(\" \", $s);\n    my $out = join(\"\", map {chr $_ } sort {chr($a[0])\
+    \ cmp chr($b[0])} map {chr $_ } @a);\n    return $out;\n}", '    my(@words);',
+  "    my($alpha) = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',\
+    \ 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');\n    my(@words);\n\
+    \    my(@chars);\n    my(@tmp);\n    my($word);\n    my($ord);", "    my @words\
+    \ = split(/ /, $s);\n    my $new_word = \"\";", "    $s =~ s/(\\s)(\\w+)/$1 .\
+    \ chr(ord($2)+97)$3/ge;\n    return $s;\n}", "    $s =~ s/ (?=[A-Z]) /!/gi;\n\
+    \    $s =~ s/(?<=^) /!/gi;\n    $s =~ s/ /!/gi;\n    $s =~ s/(?<=[A-Z])/!/gi;\n\
+    \    return $s;\n}\n</code>\n<|/ a tags=algorithm,shuffle,perl,arrays dscore=0\
+    \ |>\n<| c |>\nThe second `s/` doesn't seem to be doing anything. Perl does a\
+    \ lot of implicit string substitution. Also, the `s///gi` modifier is unnecessary\
+    \ since there's no pattern after `s!`. Finally, you should avoid `$1` as it's\
+    \ only in special circumstances and in general it's dangerous (see http://perldoc.perl.org/perlvar.html#%241).\
+    \ Also, `sub anti_shuffle { my ($s) =;` **is** an anonymous subroutine (you just\
+    \ named it `anti_shuffle` without `my`). You could use `sub anti_shuffle { my($s)\
+    \ =;`\n<|/ c |>\n<| a dscore=0 |>\nFor anyone looking for an answer in Perl, I\
+    \ wrote this function that shuffles arrays and hashes and can handle empty elements:\n\
+    <code>", "    my @words = split /\\s+/, $s;\n    $s = \"\";\n    foreach my $word\
+    \ (@words) {\n        my $ord = ord $word;\n        my $c = $ord >= 65 ? $ord\
+    \ - 65 + 26 : $ord + 26;\n        $s .= $c;\n    }\n    return $s;\n}", "    return\
+    \ join('', sort { lc $a cmp lc $b } map { uc $a } split /\\s+/, $s);\n}", "  \
+    \  $s =~ s/(\\w+)\\s(\\w+)/$1.$2/g;\n    return $s;\n}", "    $s =~ s/\\s+/ /g;\n\
+    \    $s =~ s/\\b(\\S+)\\b/$1.reverse/eg;\n    $s =~ s/\\b(\\S+?)\\b/$1.reverse/eg;\n\
+    \    $s =~ s/\\b(\\S+)\\s+(\\S+)\\b/$1.reverse$2/g;\n    $s =~ s/\\b(\\S+?)\\\
+    s+(\\S+?)\\b/$1.reverse$2/g;\n    $s =~ s/\\b(\\S+)\\b\\s+(\\S+)\\b\\b/$1.reverse$2/g;\n\
+    \    $s =~ s/\\b(\\S+?)\\b\\s+(\\S+?)\\b\\b/$1.reverse$2/g;\n    return $s;\n\
+    }\n</code>\nThis script works fine for me.\n<|/ a tags=perl,string,algorithm |>\n\
+    <| a tags=perl,string,algorithm dscore=0 |>\nTry this code which uses perl to\
+    \ split the string into words, then sort and merge the words as shown in the below\
+    \ code.\n<code>", "    $s =~ s/^\\s*\\|\\s*\\|\\s*\\|\\s*/\\|/g;\n    $s =~ s/\\\
+    s*\\|\\s*\\|\\s*\\|\\s*$/|/g;\n    $s =~ s/\\s*\\|\\s*\\|\\s*/\\|/g;\n    $s =~\
+    \ s/\\s*\\|\\s*/\\|/g;\n    $s =~ s/\\|\\s*\\|\\s*\\|\\s*$/|/g;\n    $s =~ s/\\\
+    s*\\|\\s*\\|\\s*\\|/|/g;\n    $s =~ s/\\s*\\|\\s*\\|\\s*/\\|/g;\n    $s =~ s/\\\
+    s*\\|\\s*\\|/|/g;\n    $s =~ s/\\s*\\|/|/g;\n    return $s;\n}", "    my(@a) =\
+    \ split(/\\s/,$s);\n    my(@new_array);", "    my @words = split(/ /, $s);\n \
+    \   my @word;\n    my $last_letter = 0;\n    my $last_word = 0;\n    my @result;\n\
+    \    foreach my $word (@words) {\n        if ($word ne '') {\n            if ($last_word\
+    \ == 0) {\n                push @result, $word;\n                $last_letter\
+    \ = 1;\n            }\n            else {\n                my @letters = split(//,\
+    \ $word);\n                foreach my $letter (@letters) {\n                 \
+    \   if ($letter == $last_letter) {\n                        $letter .= $last_letter;\n\
+    \                    }\n                    else {\n                        $letter\
+    \ = $last_letter;\n                        $last_letter++;\n                 \
+    \   }\n                    push @word, $letter;\n                }\n         \
+    \       push @result, (@word, join(' ', @letters));\n                $last_letter\
+    \ = 1;\n                $last_word++;\n            }\n        }\n    }\n    my\
+    \ $i = 1;\n    foreach my $w (@result) {\n        $w = $i; # add counter\n   \
+    \     $i++; # increment counter\n    }\n    my $s = join(' ', @result);\n    $s\
+    \ =~ s/\\s/_/g;\n    return $s;\n}\n</code>\nThe output is as follows:\n<code>\n\
+    Hello !!!Wdlor\neHllo wD!!!\n</code>\n<|/ a tags=perl,algorithm |>\n<| c |>\n\
+    Thanks for your help but this code is still not working on input like \"Hello\
+    \ World!!!\". It gives \"eHllo wD!!!\"\n<|/ c |>\n<| c |>\nPlease post some sample\
+    \ input strings and the desired output strings you want.\n<|/ c |>\n<| c |>\n\
+    I am not going to give you the output string as you do not want to solve the puzzle\
+    \ for me but rather to give me hints to solve the puzzle. My input string is \"\
+    Hello World!!!\"\n<|/ c |>\n<| c |>\nSorry, I misread the question originally.\
+    \ I've updated my answer.\n<|/ c |>\n<| c |>\nThank you very much. I am new to\
+    \ perl and I was not able to figure out the problem I thought of asking my question\
+    \ here.\n<|/ c |>\n<| a |>\nA Perl solution:\n<code>\nuse strict;\nuse warnings;",
+  "    my @s = split /\\s+/, $s;\n    my $i = 0;\n    my @temp;\n    my @letters =\
+    \ ();\n    foreach my $letter (@s) {\n        if ($letter) {\n            $letters\
+    \ .= $letter;\n        }\n        else {\n            push @temp, split //, $letters[$i++];\n\
+    \            $letters[$i] = \"\";\n        }\n    }\n    my @result = ();\n  \
+    \  while (@temp) {\n        push @result, (pop @temp) x 2;\n    }\n    $temp =\
+    \ $letters;\n    my $last = scalar @temp - 1;\n    foreach my $i (0 .. $last)\
+    \ {\n        push @temp, (pop @temp) x 2;\n    }\n    foreach my $letter (@temp)\
+    \ {\n        if ($letter) {\n            push @result, $letter;\n        }\n \
+    \   }\n    return join \" \", @result;\n}", "    my @list = ();\n    for my $w\
+    \ (split /\\s+/, $s) {\n        my @new = ();\n        for my $i (0..$#w) {\n\
+    \            my $ord = ord($w[$i]);\n            push(@new, chr($ord) if $ord\
+    \ < 90);\n            push(@new, chr($ord + 32) if $ord > 122 && $ord < 193);\n\
+    \        }\n        push(@list, join(\" \", @new));\n    }\n    return join(\"\
+    \ \", @list);\n}", "    my $re = qr!\\p{IsWhitespace}+!;\n    $s =~ s{^\\s+}{};\
+    \ # remove leading whitespace\n    $s =~ s{\\s+$}{}; # remove trailing whitespace\n\
+    \    $s =~ s{\\s+}{-}g; # remove duplicate spaces\n    $s =~ s{($re){2,}}{-$1$1}g;\n\
+    \    $s =~ s{($re){2,}}{-$1}g;\n    $s =~ s{($re){3,}}{-$1$2$1}g;\n    $s =~ s{($re){4,}}{-$1$3$2$3$1}g;\n\
+    \    $s =~ s{($re){5,}}{-$1$4$2$3$3$2$1}g;\n    $s =~ s{($re){6,}}{-$1$5$2$3$4$2$3$1}g;\n\
+    \    $s =~ s{($re){7,}}{-$1$6$2$3$5$2$3$4$1}g;\n    $s =~ s{($re){8,}}{-$1$7$2$3$6$2$3$5$4$3$1}g;\n\
+    \    $s =~ s{($re){9,}}{-$1$8$2$3$7$2$3$6$4$5$3$2$1}g;\n    $s =~ s{($re){10,}}{-$1$9$2$3$8$2$3$7$4$5$6$3$3$2$1}g;\n\
+    \    $s =~ s{($re){11,}}{-$1$10$2$3$9$2$3$8$4$5$7$3$3$2$1}g;\n    $s =~ s{($re){12,}}{-$1$11$2$3$10$2$3$9$4$5$8$3$3$2$1}g;\n\
+    \    $s =~ s{($re){13,}}{-$1$12$2$3$11$2$3$10$4$5$9$3$3$2$1}g;\n    $s =~ s{($re){14,}}{-$1$13$2$3$12$2$3$11$4",
+  "    $s =~ s/ ([\\w']+)/ length($1) ? uc($1) : $1 /eg;\n    return $s;\n}", "  \
+    \  my @words = split /\\s+/, $s;\n    my(@new_words);\n    \n    foreach (@words)\
+    \ {\n        my $x = ord($_);\n        $new_words[] = $x if ($x != -1);\n    }",
+  "    my(@words) = split /\\s+/, $s;\n    my(@sorted);\n    foreach my $w (@words)\
+    \ {\n        my($i, $j, $word);\n        $i = 0;\n        $j = 0;\n        while($i\
+    \ < $#words) {\n            while($j < $#words && $words[$j] eq $words[$i]) {\n\
+    \                $j++;\n            }\n            $sorted[$i] = $words[$i];\n\
+    \            $i++;\n        }\n    }\n    $s =~ s/\\b(\\w+)\\b/\"@sorted@\"/ei;\
+    \ # Replace every word with its sorted version\n    return $s;\n}", "    my @words\
+    \ = split(/\\s/,$s);\n    my @chars = ();", "    my $chars = split(\" \", $s);\n\
+    \    my $i = 0;\n    my $chars_len = length $chars;\n    while ($i < $chars_len)\
+    \ {\n        my $j = 0;\n        my $new_char = $chars->[$i];\n        my $new_char\
+    \ = chr(ord($new_char) + 1);\n        my $j = 0;\n        while ($j < $chars_len)\
+    \ {\n            if (ord($chars->[$j]) >= ord($new_char)) {\n                $chars->[$j]\
+    \ = $new_char;\n            } else {\n                $j++;\n            }\n \
+    \       }\n        $i++;\n    }\n    return join(\" \", @$chars);\n}\n</code>\n\
+    <|/ a |>\n<| c |>\nYou don't need to make `$new_char` be the same as the original\
+    \ character - that's what the `if` is for. It would be better to use a character\
+    \ map for this - but that's a whole lot more work to do.\n<|/ c |>\n<| c |>\n\
+    Thank you for your comment and for pointing that out! I will make that change\
+    \ in my answer. And thank you again for pointing it out! It was a mistake from\
+    \ my side and I should have included that in my answer. Thanks again!\n<|/ c |>\n\
+    <| c |>\nSure, I agree - it's been fixed now, as well as the bug that I forgot\
+    \ to decrement `$i` after deleting a character. :-)\n<|/ c |>\n<| c |>\nBe careful\
+    \ when doing this, though: If the string is longer than 8 characters, you'll get\
+    \ `substr` out of bounds errors.\n<|/ c |>\n<| c |>\nGood point - I wasn't really\
+    \ thinking about it that way. But, if this was the only place we had to worry\
+    \ about it, it's unlikely the string would exceed 8 characters.\n<|/ c |>\n<|\
+    \ a tags=perl dscore=1 |>\n<code>", "    my @chars = split(//,$s);\n    my $new_chars;\n\
+    \    my %chars;\n    my $i = 0;\n    my $j = 0;\n    \n    foreach my $c (@chars)\
+    \ {\n        if ($chars{$c}) {\n            $new_chars .= $chars{$c};\n      \
+    \  } else {\n            $chars{$c} = $new_chars;\n            $new_chars = $chars{$c};\n\
+    \        }\n    }\n    \n    $j = 1;\n    $i = 0;\n    foreach my $c (@chars)\
+    \ {\n        if ($chars{$c}) {\n            $chars{$c} = $new_chars.$chars{$c};\n\
+    \        } else {\n            $chars{$c} = $new_chars;\n            $chars{$c}\
+    \ = $new_chars.$chars{$c};\n        }\n        if ($chars{$c} ne $new_chars) {\n\
+    \            $chars{$c} = $new_chars;\n        }\n    }\n    \n    return $chars{$_}\
+    \ foreach keys %chars;\n}\nprint \"@chars\\n\";\nprint \"$chars{o}\\n\";\nprint\
+    \ \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"\
+    $chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\\
+    n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\"\
+    ;\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\n\
+    print \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint\
+    \ \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"\
+    $chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\\
+    n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\"\
+    ;\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\n\
+    print \"$chars{o}\\n\";\nprint \"$chars{o}\\n\";\nprint \"$char", "    $s =~ s/(\\\
+    s)/$1\\//g;\n    my @s = split /\\s+/, $s;\n    my @new_s = ();\n    for my $word\
+    \ (@s) {\n        for my $char (split //, $word) {\n            $char = 'a' unless\
+    \ $char =~ /[a-z]/i;\n            my $char_value = $char =~ /[a-z]/i ? $char :\
+    \ sprintf \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\", ord\
+    \ $char;\n            $char_value = sprintf \"%02X\", ord $char;\n           \
+    \ $char_value = sprintf \"%02X\", ord $char;\n            $char_value = sprintf\
+    \ \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n\
+    \            $char_value = sprintf \"%02X\", ord $char;\n            $char_value\
+    \ = sprintf \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\",\
+    \ ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n       \
+    \     $char_value = sprintf \"%02X\", ord $char;\n            $char_value = sprintf\
+    \ \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n\
+    \            $char_value = sprintf \"%02X\", ord $char;\n            $char_value\
+    \ = sprintf \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\",\
+    \ ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n       \
+    \     $char_value = sprintf \"%02X\", ord $char;\n            $char_value = sprintf\
+    \ \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n\
+    \            $char_value = sprintf \"%02X\", ord $char;\n            $char_value\
+    \ = sprintf \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\",\
+    \ ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n       \
+    \     $char_value = sprintf \"%02X\", ord $char;\n            $char_value = sprintf\
+    \ \"%02X\", ord $char;\n            $char_value = sprintf \"%02X\", ord $char;\n\
+    \            $char_value = sprintf \"%02X\", ord $char;\n            $char_value\
+    \ = sprintf \"%02X\", ord $char;\n            $char_value = ", "    $s =~ s/(\\\
+    s)/ $1 /g;\n    my @words;\n    my @sorted = split(/\\s+/,$s);\n    foreach my\
+    \ $word(@sorted) {\n        push @words,$word;\n    }\n    my $l = scalar @words;\n\
+    \    for(my $i=0; $i<$l; $i++) {\n        my $min = $i;\n        for(my $j=$i+1;\
+    \ $j<$l; $j++) {\n            my $char = $words[$j];\n            next if($char\
+    \ eq ' ');\n            my $ord = ord($char);\n            next if($ord < ord($words[$min]));\n\
+    \            $min = min $j;\n        }\n        my $jchar = $words[$min];\n  \
+    \      $words[$i] = $jchar;\n    }\n    return join(' ',@words);\n}", "    $s\
+    \ =~ s/(\\s)/$1#/g;\n    $s =~ s/([^\\s]*)([^\\s])/$1 #$2/;\n    $s =~ s/([^\\\
+    s]*)($)/$1 #$2/;\n    $s =~ s/(\\s)([^\\s])/$1 #$2/;\n    $s =~ s/([^\\s]*)([^\\\
+    s])/$1 #$2/;\n    return $s;\n}", "    $s =~ s/\\S+/ {sort {chr($b) cmp chr($a)}\
+    \ split //} unless $s;\n    return $s;\n}", "    my @r = ();\n    for my $w (split\
+    \ / /, $s) {\n        push (@r, $w);\n        $w =~ s/^([a-zA-Z0-9_]+)$/ \"$1\"\
+    \ . chr(0x2064 + $& - ord($1))/seg;\n    }\n    return join \"\", @r;\n}", " \
+    \   my @words = split(/ /, $s);\n    my $new_word = \"\";\n    my $first_letter\
+    \ = \"\";\n    my @sorted_letters = ();\n    foreach my $word (@words) {\n   \
+    \     $word =~ s/\\s+//;\n        $new_word .= $word;\n        $first_letter .=\
+    \ $word[0];\n        foreach my $letter (split(//, $word)) {\n            foreach\
+    \ my $sorted_letter (@sorted_letters) {\n                last if ($sorted_letter\
+    \ = $letter) if ($sorted_letter eq $first_letter);\n            }\n          \
+    \  push @sorted_letters, $letter;\n        }\n    }\n    return $new_word;\n}",
+  "    my(@ord) = ();\n    my $ord;\n    foreach my $i (split(/ /, $s)) {\n      \
+    \  if ($i =~ /\\w/) {\n            $ord = $i;\n            push (@ord, ord($i));\n\
+    \        }\n    }\n    @ord = sort {$a <=> $b} @ord;\n    $s = join(\"\", map\
+    \ { $ord eq $_ ? $ord : $_ });\n    return $s;\n}\n</code>\n<|/ a dscore=1 |>\n\
+    <| a tags=perl,arrays |>\nI assume that there will be no repeated words in the\
+    \ array. So, I will use a hash of arrays. \n<code>", "    my $word = 0;\n    my\
+    \ $length = 0;\n    my @words = split(/\\s/,$s);\n    foreach my $word (@words)\
+    \ {\n        $word++;\n        $length++;\n    }\n    my $i=0;\n    my $j = 0;\n\
+    \    my $char_count=0;\n    my @char_counts;\n    my @result;\n    my $new_word\
+    \ = \"\";\n    foreach my $word (@words) {\n        $new_word = \"\";\n      \
+    \  $char_count = 0;\n        foreach my $letter (split(//, $word)) {\n       \
+    \     $i++;\n            $j=0;\n            while (1) {\n                $char_count++;\n\
+    \                $j++;\n                if ($i > $length) {\n                \
+    \    $i = 1;\n                    $j = 0;\n                    $char_count=0;\n\
+    \                    $word++;\n                    $length++;\n              \
+    \      next;\n                }\n                my $char = ($letter);\n     \
+    \           if ($char != ' ') {\n                    $char += ($new_word eq \"\
+    \") ? $char : $new_word;\n                    $new_word = $char;\n           \
+    \         $char_count++;\n                    $char += ($new_word eq \"\") ? $char\
+    \ : $new_word;\n                    $char_count++;\n                }\n      \
+    \          else {\n                    $char += ($new_word eq \"\") ? $char :\
+    \ $new_word;\n                    $new_word = \"\";\n                    $char_count=0;\n\
+    \                }\n            }\n        }\n        $result[$j] = $new_word;\n\
+    \        $j++;\n    }\n    return @result;\n}", "    my(@l);\n    foreach my $c\
+    \ (split //, $s) {\n      my $ord;\n      my $nord;\n      # Convert ascii to\
+    \ numerical value for characters.\n      if ($c =~ /\\w/) {\n          $ord =\
+    \ ord($c);\n      }\n      else {\n          $ord = ord($c);\n      }\n      if\
+    \ ($ord >= 65 && $ord <= 90) {\n          $nord = $ord + 97;\n      }\n      elsif\
+    \ ($ord >= 97 && $ord <= 122) {\n          $nord = $ord - 96;\n      }\n     \
+    \ else {\n          $nord = $ord;\n      }\n      push(@l, $nord);\n    }\n  \
+    \  foreach my $i (sort {$a <=> $b} @l) {\n      $s = $s.\" \" if($i == 0);\n \
+    \   }\n    return $s;\n}", "    \n    for (my $i = 1; $i <= length($s); $i++)\
+    \ {\n        my $c = substr($s, $i, 1);\n        if ($c eq ' ') {\n          \
+    \  substr($s, $i, 1, substr($s, $i - 1, 1) eq ' ' ? '!' : ' ');\n        } elsif\
+    \ ($c eq '!') {\n            substr($s, $i, 1, substr($s, $i - 1, 1) eq ' ' ?\
+    \ '!' : ' ');\n            substr($s, $i - 1, 1, '!');\n        } else {\n   \
+    \         substr($s, $i, 1, $c eq substr($s, $i - 1, 1) ? '!' : ' ');\n      \
+    \  }\n    }\n    return $s;\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\nThanks for\
+    \ the help guys. I found an alternative and I'm posting it above.\n<|/ c |>\n\
+    <| c |>\nOh I see your new solution is much better. You should mark this answer\
+    \ as accepted if your issue is solved.\n<|/ c |>\n<| a dscore=3 |>\nI ran into\
+    \ this issue recently and came up with a solution. I'm posting it here so people\
+    \ can get some ideas.\nThe idea is to create an array of the possible \"shuffles\"\
+    \ of the original string. Each element of this array is the result of a random\
+    \ shuffle of the characters present in the original string.\nA simple example\
+    \ would be:\n<code>\nmy $string = \"a b c d e f\";\nmy = map {substr($string,rand(length($string)),1)}\
+    \ 0..4;", "    my @t = split(/ /, $s);\n    my @o;\n    my $i = 0;\n    my $last_word_count\
+    \ = 0;\n    my $max_count = ($#t + 1) >> 1;\n    for (my $i = 0; $i < $max_count;\
+    \ $i++) {\n        if ($i < $#t) {\n            my $word = $t[$i];\n         \
+    \   my $char_count = 0;\n            my $new_word = \"\";\n            my $prev_char_count\
+    \ = 0;\n            for (my $j = 0; $j < length($word); $j++) {\n            \
+    \    if ($j > 0) {\n                    $char_count = length($word .\n       \
+    \                     substr($word, $j - 1, 1)) - $j;\n                }\n   \
+    \             if ($char_count > $prev_char_count) {\n                    $new_word\
+    \ .= substr($word, $j - 1, 1);\n                }\n                $prev_char_count\
+    \ = $char_count;\n            }\n            if ($last_word_count == 0) {\n  \
+    \              push @o, $new_word;\n            }\n            else {\n      \
+    \          push @o, join(' ', @o).\n                        join(' ', @{$o[$#o\
+    \ - 1]}) . ' ' . $new_word;\n            }\n            $last_word_count++;\n\
+    \        }\n        else {\n            push @o, join(' ', @o).\n            \
+    \        join(' ', @{$o[$#o - 1]}) . ' ' . $t[$i];\n        }\n    }\n    return\
+    \ join(' ', @o);\n}", "    $s =~ s/\\W//g;\n    my = split /\\s+/, $s;\n    my\
+    \ = sort {$a cmp $b} map {uc($a)} @chars;\n    return join \"\", @sorted;\n}\n\
+    </code>\n<|/ a |>\n<| a tags=perl dscore=1 |>\n<code>", "    $s =~ s/(\\s)/\\\\\
+    $1/g;\n    $s =~ s/(\\w)\\s(\\w)/$1$2/g;\n    $s =~ s/(\\w)\\s\\w/$1$2/g;\n  \
+    \  $s =~ s/(\\s)\\s(\\w)/$1$2/g;\n    $s =~ s/(\\s)\\s(\\w)\\s(\\w)/$1$2$3/g;\n\
+    \    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4/g;\n    $s =~ s/(\\s)\\s(\\\
+    w)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5/g;\n    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\\
+    s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6/g;\n    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\s(\\\
+    w)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6$7/g;\n    $s =~ s/(\\s)\\s(\\w)\\s(\\\
+    w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6$7$8/g;\n    $s =~ s/(\\\
+    s)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6$7$8$9/g;\n\
+    \    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\\
+    w)\\s(\\w)/$1$2$3$4$5$6$7$8$9$10/g;\n    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\s(\\w)\\\
+    s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6$7$8$9$10$11/g;\n\
+    \    $s =~ s/(\\s)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\w)\\s(\\\
+    w)\\s(\\w)\\s(\\w)/$1$2$3$4$5$6$7$8$9$10$11$12/g;\n    $s =~ s/(\\s)\\s(\\w)\\\
+    s(\\w)\\s(\\w)\\s(\\w)\\s(", "    return if $s eq '';\n    return map { chr $_\
+    \ } sort { $a cmp $b } split /\\s+/, $s;\n}\n</code>\n<|/ a |>\n<| a dscore=2\
+    \ tags=perl,algorithm |>\nThe following is my solution to the problem, with explanations\
+    \ at the end of the answer.\n<code>", "    my @words = split /\\s+/, $s;\n   \
+    \ my $new_str = \"\";\n    for (my $i=0; $i<@words; $i++) {\n        my $new_word\
+    \ = \"\";\n        for my $j (0 .. $#words) {\n            next unless $j == $i;\n\
+    \            my $c = ord(substr($words[$j], 0, 1));\n            $new_word .=\
+    \ chr( ($c + ord(substr($words[$i], 0, 1))) % 256 );\n        }\n        $new_str\
+    \ .= \" \" . $new_word;\n    }\n    $new_str;\n}", "    $s =~ s/\\s+/ /g;\n  \
+    \  my @s = split /\\s+/, $s;\n    my $i = 0;\n    my @a = (\"\");\n    foreach\
+    \ my $word (@s) {\n        $a[$i] = $word;\n        $i++;\n    }\n    my $b =\
+    \ \"\";\n    my $c = 1;\n    foreach my $word (@a) {\n        $b = $word . $b;\n\
+    \        if ($c > 25) {\n            $b = \"\";\n            $c = 0;\n       \
+    \ }\n        $c++;\n    }\n    return $b;\n}", "    my @words = split(/ /, $s);\n\
+    \    my $new_string = \"\";\n    my $index = 0;\n    foreach my $word (@words)\
+    \ {\n        if($index == 0) {\n            $new_string .= $word;\n          \
+    \  $index++;\n            next;\n        }", "    $s = join(\" \", map { chr((ord\
+    \ $a)<=>ord($b)) } split(' ', $s));\n    $s = join(' ', map { substr($a, 0, 1)\
+    \ } split(//, $s));\n    $s = join(' ', map { substr($b, 0, 1) } split(//, $s));\n\
+    \    return $s;\n}", "    $s =~ tr/A-Za-z/A-Za-z/;\n    return $s;\n}", "    $s\
+    \ =~ s/(\\w+|\\s+)\\K(?=\\S)([^\\S\\s]+)(?<=\\S)/ chr( ord $1) . $2 /ge;\n   \
+    \ $s =~ s/\\s+$//;\n    return $s;\n}", "    my @s = split /\\s+/, $s;\n    my\
+    \ @words;\n    foreach my $word (@s) {\n        my $len = length $word;\n    \
+    \    my $pos = 0;\n        my $len = length $word;\n        for(my $i=0; $i<$len;\
+    \ $i++) {\n            if($pos==0) {\n                push (@words, $word[$i]);\n\
+    \            } else {\n                if($word[$i] eq $word[$pos-1]) {\n    \
+    \                $pos++;\n                } else {\n                    push (@words,\
+    \ $word[$i]);\n                    $pos = 0;\n                }\n            }\n\
+    \        }\n    }\n    return join \" \", @words;\n}\n</code>\n<|/ a tags=algorithm,c++,python\
+    \ dscore=2 |>\n<| c |>\nThe C++ code looks more or less correct, except for the\
+    \ `return join` line. I believe you meant `return join(\" \", @words);`\n<|/ c\
+    \ |>\n<| c |>\nThanks for spotting it, I've corrected it now\n<|/ c |>\n<| a |>\n\
+    The solution above is O(n x n), where n is the number of characters in the word\
+    \ and n is the number of words.  To be more efficient, we can make the time complexity\
+    \ O(n log n).\nThe idea is to construct a map of characters that represent each\
+    \ word as you walk through the list of words.  This takes time O(n) and memory\
+    \ O(n).  This map is used to determine if a word is already in the result by checking\
+    \ if each character in each word is present.  If it is, then the word is repeated,\
+    \ otherwise the word is not repeated.\nOnce this map is constructed, it is easy\
+    \ to check for uniqueness.\nIn code:\n<code>\ndef anti_shuffle(words):\n    #\
+    \ Construct a map of characters that represent each word as you walk through the\
+    \ list of words.\n    word_map = {}\n    for word in words:\n        for letter\
+    \ in word:\n            if letter not in word_map:\n                word_map[letter]\
+    \ = set()\n            word_map[letter].add(word)", "    $s =~ s/ (\\S+) (?=(?:\
+    \ \\S+)*$)/${$1}[ord($2)];/g;\n    return $s;\n}", "    my @arr = split /\\s+/,\
+    \ $s;\n    my $new_string = $s[0];\n    for (my $i = 1; $i < @arr; $i++) {\n \
+    \       my $letter = $arr[$i];\n        my $index = ord($letter) - 97;\n     \
+    \   if ($index >= 0) {\n            $new_string .= $letter;\n            $new_string\
+    \ .= chr($index+240);\n        } else {\n            $new_string .= $letter;\n\
+    \            $new_string .= chr($index+122);\n        }\n    }\n    return $new_string;\n\
+    }", "    my @w = split(/\\s+/, $s);\n    my $j = 0;\n    my $s = '';\n    for\
+    \ my $w (@w) {\n        $s .= $w;\n        if ($j++ < $#w) {\n            $s .=\
+    \ ' ' . $w;\n        }\n    }\n    return $s;\n}", "    my @a;\n    foreach my\
+    \ $i ( 0..( length($s) - 1 ) ) {\n        push( @a, substr( $s, $i, 1 ) );\n \
+    \   }\n    foreach my $i ( 0..( length($s) - 1 ) ) {\n        my $j = rand( @a\
+    \ );\n        my $t = $a[ $j ];\n        $a[ $j ] = $a[ $i ];\n        $a[ $i\
+    \ ] = $t;\n    }\n    return join( \"\", @a );\n}", "    $s =~ s/(.)(?=[^ ])/$1#/g;\n\
+    \    $s =~ s/^[ ]*#//;\n    $s =~ s/[ ]+/#/g;\n    $s =~ s/#(.)/$1/g;\n    $s\
+    \ =~ s/#$/#/g;\n    $s =~ s/#/$&/;\n    return $s;\n}", "    $s =~ tr/ /A-Za-z/;\n\
+    \    my @s = split(' ', $s);\n    my $word = \"\";\n    my $last_char = \"\";\n\
+    \    my @s_ord = ();\n    for my $char (@s) {\n        my $ascii = ord($char);\n\
+    \        if ($ascii < 65) {\n            push(@s_ord, $ascii);\n        }\n  \
+    \      elsif ($ascii < 91) {\n            if ($last_char ne $char) {\n       \
+    \         push(@s_ord, ord($char));\n            }\n        }\n        else {\n\
+    \            my $ascii = 91 - $ascii;\n            my $tmp;\n            if ($ascii\
+    \ < 97) {\n                $tmp = chr(97 + $ascii);\n            }\n         \
+    \   elsif ($ascii < 122) {\n                $tmp = chr(121 + $ascii);\n      \
+    \      }\n            else {\n                $tmp = \"!\";\n            }\n \
+    \           $word .= $tmp;\n            push(@s_ord, $ascii);\n        }\n   \
+    \     $last_char = $char;\n    }\n    return join(' ', @s_ord) . $word;\n}", " \
+    \   $s =~ s/\\s+/\\s+/g;\n    my @chars = split //, $s;\n    my $new_chars = \"\
+    \";\n    my $cur_char = \"\";\n    foreach my $char (@chars) {\n        if ($char\
+    \ != $cur_char) {\n            $new_chars .= $cur_char;\n            $cur_char\
+    \ = $char;\n        }\n        $new_chars .= $char;\n    }\n    $new_chars .=\
+    \ $cur_char;\n    $new_chars =~ s/\\s+/ /g;\n    return $new_chars;\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nI appreciate the feedback, but I am not that advanced\
+    \ yet. I will do my best to learn it, but I want to get it to work before I attempt\
+    \ it. What do you mean by \"the order of words and blank spaces in the sentence\"\
+    ? I understand what the code is doing, but I cannot understand how it works. I\
+    \ am hoping to get an explanation for how it works before I attempt it. Thanks.\n\
+    <|/ c |>\n<| c |>\nI'm sure it's quite easy to understand what it's doing, but\
+    \ I added some comments to explain it a little more for you.\n<|/ c |>\n<| c |>\n\
+    I see now. Thank you for your help!\n<|/ c |>\n<| c |>\nIf this answer is correct\
+    \ please mark it as so. It'll help others who come across this question quickly\
+    \ know what the right answer is.\n<|/ c |>\n<| a tags=algorithm,arrays,perl dscore=1\
+    \ |>\nJust another Perl one liner\n<code>\nperl -wne 'print \"$F[0]$F[1]\\n\"\
+    \ while /(\\w)\\s(\\w+)/g'\n</code>\n<|/ a |>\n<| c |>\nThanks, that is a great\
+    \ solution too!\n<|/ c |>\n<| a dscore=1 |>\nThis uses Schwern's solution, but\
+    \ it also handles punctuation marks.\n<code>", "    \n    my @a;\n    my $l =\
+    \ length $s;\n    my $i = 0;\n    while ($i < $l) {\n        $a[$i] = $s[$i];\n\
+    \        next if ($s[$i] eq \" \");\n        $i++;\n    }\n    $i -= 1;\n    while\
+    \ ($i < $l) {\n        $s[$i] = $a[$i];\n        $i++;\n    }\n    return $s;\n\
+    }", "    $s = lc($s);\n    my(@chars, $i, $c, $new);", "    $s =~ s/\\W/ /g;\n\
+    \    $s =~ s/\\s+/ /g;\n    my $word = \"\";\n    my $ord = \"\";\n    my @sorted\
+    \ = split(\" \", $s);\n    my $i = 0;\n    for my $word (@sorted) {\n        $ord\
+    \ .= ord(substr($word, $i, 1)) . \" \";\n        $i += 1;\n    }\n    $ord .=\
+    \ ord(substr($word, $i, 1)) . \" \";\n    $ord .= ord(substr($word, 0, 1)) . \"\
+    \ \";\n    $ord .= ord(substr($word, $i, 1)) . \" \";\n    $ord .= ord(substr($word,\
+    \ 0, 1)) . \" \";\n    $ord .= ord(substr($word, 0, 1)) . \" \";\n    $ord .=\
+    \ ord(substr($word, $i, 1)) . \" \";\n    $ord .= ord(substr($word, 0, 1)) . \"\
+    \ \";\n    $ord .= ord(substr($word, $i, 1));\n    return $ord;\n}", "    $s =~\
+    \ s/(\\S+\\s+)/ $1 . uc($1) /eg;\n    $s =~ s/^\\s+|\\s+$//g;\n    $s =~ s/\\\
+    s+/ /g;\n    return $s;\n}\n</cell>\n<text>\n3.1.6 Permutations", "    my @words\
+    \ = split(/ /, $s);\n    my $new_s = \"\";\n    for(my $i = 0; $i < $#words; $i++)\
+    \ {\n        $new_s .= $words[$i];\n        for(my $j = 0; $j + $#words > $i;\
+    \ $j++) {\n            $new_s .= $words[$j] if ($words[$j] eq $words[$j + 1]);\n\
+    \        }\n        $new_s .= \" \" if ($i == $#words);\n    }\n    return $new_s;\n\
+    }", "    my(@ss) = $s =~ /\\w+/g;\n    my($i, $j);\n    my $last_word = $ss[0];\n\
+    \    my $last_char = $ss[-1];\n    $last_char =~ tr/a-zA-Z//cd;\n    $last_char\
+    \ =~ tr/A-Za-z//cd;\n    $last_char =~ tr/\\s+//cd;\n    $last_char =~ tr/-/ /cd;\n\
+    \    $last_char =~ tr/ / /cd;\n    $last_char =~ tr/-/ /cd;\n    $last_char =~\
+    \ tr/A-Za-z//cd;\n    $last_char =~ tr/\\s+//cd;\n    $last_char =~ tr/-/ /cd;\n\
+    \    $last_char =~ tr/ / /cd;\n    for ($i = 1; $i <= length($last_word); $i++)\
+    \ {\n        $j = 0;\n        $j++\n            if $last_char eq $ss[$i];\n  \
+    \      $ss[$i] = $ss[$i];\n        $ss[$i - 1] = $ss[$i - 1];\n        $ss[$j]\
+    \ = $ss[$i];\n        $j++\n            if $last_word eq $ss[$i];\n        $ss[$i]\
+    \ = $ss[$i];\n    }\n    return join(\"|\", @ss);\n}", "    $s =~ s/\\b(\\w+)\\\
+    s*\\b(?!=)/$1 =~ tr/A-Z/a-z/;\n    return $s;\n}", "    my @words;\n    my $word_length\
+    \ = 0;\n    my $word = '';\n    my $word_count = 0;\n    foreach my $i (split(/\
+    \ /, $s)) {\n\t$word .= $i;\n\tpush(@words, $word);\n\t$word_length += length($i);\n\
+    \t$word_count++;\n    }\n    my $new_word_length = $word_length;\n    my $new_word\
+    \ = '';\n    my $i = 0;\n    while(1) {\n\tif($i >= $word_count) {\n\t    $new_word\
+    \ .= $words[$i];\n\t    $new_word_length -= length($words[$i]);\n\t    $i++;\n\
+    \t    next;\n\t}\n\tmy $old_word = $words[$i];\n\t$new_word .= substr($word, $word_count,\
+    \ $word_length - ($word_count - $i));\n\tmy $letter = ord(substr($word, $word_count,\
+    \ $word_length - ($word_count - $i)));\n\tif($letter < $words[$i-1]) {\n\t   \
+    \ $new_word .= $words[$i-1];\n\t    $new_word_length -= length($words[$i-1]);\n\
+    \t    $i++;\n\t    next;\n\t}\n\t$new_word .= $words[$i];\n\t$new_word_length\
+    \ += length($words[$i]);\n\t$i++;\n    }\n    my $str = '';\n    $str .= $new_word;\n\
+    \    $str .= $new_word . \"\\0\";\n    $str .= $new_word . $words[$word_count-1];\n\
+    \    return $str;\n}", "    my @words = split(\" \", $s);\n    my $result = \"\
+    \";", "    $s =~ tr/A-Za-z/A-Za-z_/;\n    $s =~ tr/ /-/;\n    $s =~ tr/-/A-Z/;\n\
+    \    $s =~ tr/a-z/A-Z/;\n    return $s;\n}", "    $s =~ tr/A-Za-z/A-Z/;\n    $s\
+    \ =~ tr/ /-/;\n    $s =~ tr/-/A-Z/;\n    return $s;\n}", "    my $word = '';\n\
+    \    foreach my $i (0..(length $s-1)) {\n        if($i > 0) {\n            $word\
+    \ .= ' ';\n        }\n        if($s[$i] eq ' ') {\n            $word .= $s[$i];\n\
+    \        } elsif($s[$i] eq '.' || $s[$i] eq ' ' || $s[$i] eq '?' || $s[$i] eq\
+    \ '!') {\n            $word .= $s[$i];\n        } else {\n            while($s[$i]\
+    \ eq ' ') {\n                last;\n            }\n            $word .= $s[$i];\n\
+    \        }\n    }\n    return $word;\n}", "    my(@words) = split / /, $s;\n \
+    \   my(@ordered_words);\n    foreach $word(@words) {\n        my($ord_word) =\
+    \ ord($word);\n        my(@letters) = split //, $word;\n        my($new_letter);\n\
+    \        foreach $letter(@letters) {\n            my($ord_letter) = ord($letter);\n\
+    \            if ($ord_letter > $ord_word) {\n                $new_letter = $letter;\n\
+    \            } else {\n                $new_letter = $letter;\n            }\n\
+    \        }\n        push(@ordered_words, $new_letter);\n    }\n    return join(\"\
+    \ \", @ordered_words);\n}\n</code>\n<|/ a |>\n<| c |>\nI used this same sub to\
+    \ solve this problem.  Thanks!\n<|/ c |>\n<| c |>\nNice, very clever solution.\
+    \ How about using regex instead of split? It seems much more robust to me.\n<|/\
+    \ c |>\n<| c |>\nIt doesn't seem to take care of the special case of \"Hello\"\
+    , where it shuffles \"elllo\" into \"ehllo\".\n<|/ c |>\n<| c |>\nYou are right,\
+    \ I forgot to check the length. I fixed the code.\n<|/ c |>\n<| c |>\nNice! Although\
+    \ I wouldn't bother with the regex `split`, I just used the regex `split` instead.\
+    \ :-) I've found that `split` is very slow, though, so maybe I'll stick to it.\n\
+    <|/ c |>\n<| a tags=algorithm,string,perl,shuffle |>\nHere is an algorithm I wrote\
+    \ in C# that I believe will be efficient.  It also has the benefit of giving you\
+    \ the original string if an error is caught.  I wrote it before I had learned\
+    \ Python, so I apologize for my bad coding style.  \n<code>\npublic string ShuffleString(string\
+    \ inputString)\n{\n    string returnString = inputString;", "    my(@words) =\
+    \ split(/\\s/, $s);\n    my(@new_words);", "    $s =~ s/\\s+/ /;\n    $s =~ s/^/A/g;\n\
+    \    $s =~ s/$/!/g;\n    $s =~ s/A\\B/!B!/g;\n    $s =~ s/A/C/g;\n    $s =~ s/B/D/g;\n\
+    \    $s =~ s/C/F/g;\n    $s =~ s/D/G/g;\n    $s =~ s/E/H/g;\n    $s =~ s/F/I/g;\n\
+    \    $s =~ s/G/J/g;\n    $s =~ s/H/K/g;\n    $s =~ s/I/L/g;\n    $s =~ s/J/M/g;\n\
+    \    $s =~ s/K/N/g;\n    $s =~ s/L/O/g;\n    $s =~ s/M/P/g;\n    $s =~ s/N/Q/g;\n\
+    \    $s =~ s/O/R/g;\n    $s =~ s/P/S/g;\n    $s =~ s/Q/T/g;\n    $s =~ s/R/U/g;\n\
+    \    $s =~ s/S/V/g;\n    $s =~ s/T/W/g;\n    $s =~ s/U/X/g;\n    $s =~ s/V/Y/g;\n\
+    \    $s =~ s/W/Z/g;\n    $s =~ s/X/a/g;\n    $s =~ s/Y/b/g;\n    $s =~ s/Z/c/g;\n\
+    \    return $s;\n}", "    $s =~ tr/A-Z/a-z/;\n    $s =~ tr/a-z/A-Z/;\n    $s =~\
+    \ tr/0-9/A-Z/;\n    $s =~ tr/A-Z/A-Z/;\n    return $s;\n}", "    $s =~ s/( (?:\
+    \ (\\w+)( \\w+)*( \\w+ )*)? )/$1$2$3$4/;\n    return $s;\n}", "    my(@words)\
+    \ = split /\\s+/, $s;\n    my(@ans) = ();\n    my $word;\n    foreach $word (@words)\
+    \ {\n        my $length = length($word);\n        foreach $i (0..$length) {\n\
+    \            $ans[$i] .= substr($word, $i, 1);\n        }\n    }\n    return join('\
+    \ ', @ans);\n}", "    my %new_hash = map { $_ => 0 } split / /, $s;\n    foreach\
+    \ my $key (sort keys %new_hash) {\n        $new_hash{$key} = $new_hash{$key} -\
+    \ 1;\n    }\n    return join ' ', map { $new_hash{$_} == 0 ? $_ : \"$_\" }\n \
+    \                  sort { $a <=> $b } keys %new_hash;\n}\n</code>\n<|/ a tags=perl\
+    \ |>\n<| c |>\nThis is by far the best solution I have seen so far. Thank you\
+    \ very much!\n<|/ c |>\n<| c |>\nI thought about using `sort { length($a) <=>\
+    \ length($b) }` as a sorting predicate, but that seems less efficient.\n<|/ c\
+    \ |>\n<| a dscore=1 |>\nHere's another one:\n<code>", "    my @words = split(/\
+    \ /, $s);\n    my $result = join(\" \", map { ord($_) } @words);\n    my $i =\
+    \ 1;\n    $result = $result . \" $i\" if $i > 1;\n    return $result;\n}", " \
+    \   $s =~ s/\\s+/ /g;\n    $s =~ tr/a-zA-Z/n-za-mN-ZA-M@g;\n    $s =~ s/\\s+/\
+    \ /g;\n    $s =~ tr/n-za-mN-ZA-M@A-Z/a-zA-Z-@g;\n    $s =~ s/\\s+/ /g;\n    $s\
+    \ =~ tr/n-za-mN-ZA-M@A-Z/a-zA-Z-@g;\n    $s =~ s/\\s+/ /g;\n    $s =~ tr/n-za-mN-ZA-M@A-Z/a-zA-Z-@g;\n\
+    \    $s =~ s/\\s+/ /g;\n    return $s;\n}", "    chomp($s);\n    $s = uc($s) =~\
+    \ tr/A-Za-z/A-Z/;\n    my = split(/\\s/, $s);\n    my;\n    foreach my $word (@words)\
+    \ {\n        my $index = 0;\n        foreach my $char (split(' ', $word)) {\n\
+    \            $char = $char + $index if $char < ord $word[$index];\n          \
+    \  $index++;\n        }\n        push, $word;\n    }\n    join(' ', @words);\n\
+    }\n</code>\n<|/ a dscore=2 |>\n<| c |>\nAside from being a complete joke, this\
+    \ also fails for `\"foo-bar\"`. :)\n<|/ c |>\n<| c |>\n`perl` has `usort` which\
+    \ does the same thing, just for case insensitive order: `sub usort { uc $a cmp\
+    \ uc $b }`\n<|/ c |>\n<| a |>\nHere's my take (probably a lot shorter)\n<code>\n\
+    use 5.010;", "    my @words=();\n    $s=~s/([^\\s])(\\s)([^\\s])/$2 $1 $3/g;\n\
+    \    $s=~s/([^\\s])(\\s)([^\\s])/$3 $2 $1/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$2\
+    \ $3 $1/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$2 $1 $3/g;\n    $s=~s/([^\\s])(\\\
+    s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\\
+    s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n  \
+    \  $s=~s/([^\\s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1\
+    \ $3 $2/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\\
+    s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\\
+    s])(\\s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $2 $3/g;\n  \
+    \  $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1\
+    \ $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\s])(\\\
+    s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n    $s=~s/([^\\\
+    s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1 $3 $2/g;\n  \
+    \  $s=~s/([^\\s])(\\s)([^\\s])/$1 $2 $3/g;\n    $s=~s/([^\\s])(\\s)([^\\s])/$1\
+    \ $3 $2/g;\n    $s=~s/", "    return $s if $s eq '';\n    my(@words) = split /\\\
+    s+/, $s;\n    for (my $i = 0; $i <= $#words; $i++) {\n        my $j = $i + 1;\n\
+    \        my $k = $i;\n        for (; $j <= $#words; $j++) {\n            my $c\
+    \ = substr($words[$i], 0, 1);\n            my $c2 = substr($words[$j], 0, 1);\n\
+    \            if ($c2 > $c) {\n                substr($words[$i], 0, 1, substr($words[$j],\
+    \ 0, 1));\n            } else {\n                substr($words[$j], 0, 1, substr($words[$i],\
+    \ 0, 1));\n            }\n        }\n    }\n    return join(' ', @words);\n}",
+  "    my @words = map { chomp; split /\\s+/, $_, 2} if $s;\n    my @words;\n    \n\
+    \    my @words = map { m/^./; map { $_ = $_ - 64; $_ } ord($_), split //, $_ }\n\
+    \                map { length $_ ? $_ : \".\" }\n                map { $_ =~ s/^./../;\
+    \ $_ };", "    my(@words) = ();\n    my($i, $j, $char);\n    my($ord);\n    my($word);\n\
+    \    foreach $char (split(' ', $s)) {\n\t$ord = $char;\n\t$ord =~ tr/A-Za-z/A-Z/;\n\
+    \t$word = $ord . \" \";\n\tpush(@words, $word);\n    }\n    foreach $word (@words)\
+    \ {\n\t$i = $word =~ tr/A-Za-z/A-Z/;\n\t$j = $word =~ tr/A-Za-z/A-Z/;\n\t$word\
+    \ = $i . $j;\n\t$word = $word . \" \";\n\tpush(@words, $word);\n    }\n    return\
+    \ join(' ', @words);\n}", "    $s = join(\" \", map {\n        my $a = ord($_);\n\
+    \        return $a >= 128 ? $_ : \"\\\\x\" . sprintf(\"%04x\", $a & 0xFF);\n \
+    \   } split /\\s+/, $s);\n    return $s;\n}", "    my @a;\n    my $p = 0;\n  \
+    \  \n    # Split by spaces into array\n    # $a[0] => Hi\n    # $a[1] => hello\n\
+    \    # $a[2] => Hello World!!!\n    for (@a) {\n        my($word, $char) = ($_,\
+    \ '');\n        if ($char eq '') {\n            $p++;\n        } else {\n    \
+    \        $word .= $char;\n        }\n    }\n    $p += 1;", "    $s =~ s/ (?<=\\\
+    w) (\\w) (?=\\w)//g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/\
+    \ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n\
+    \    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\\
+    w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w)\
+    \ (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~\
+    \ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n\
+    \    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\\
+    w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w)\
+    \ (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~\
+    \ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n\
+    \    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\\
+    w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w)\
+    \ (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~\
+    \ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/$1$2/g;\n\
+    \    $s =~ s/ (?<=\\w) (\\w) (?=\\w)/", "    my(@new_word);\n    my($word, $ch);\n\
+    \    my($word_count, $word_count_last_word);", "    $s =~ s/(^| )([a-zA-Z]+)($|\
+    \ )/$2 . chr(ord($1)+ord($3)-32)\n            . $1/ego;\n    $s;\n}", "    $s\
+    \ =~ s/ ([^ ]+) /\n             {\n                 my $i = length($1) / 2;\n\
+    \                 substr($1, $i, 1) =~ tr/A-Za-z/a-z/;\n                 substr($1,\
+    \ $i, 1) =~ tr/A-Za-z/A-Z/;\n                 substr($1, $i, 1) =~ tr/a-z-A-Z/A-Za-z/;\n\
+    \                 substr($1, $i, 1) =~ tr/A-Za-z/A-Za-z/;\n             }xms;\n\
+    \    return $s;\n}", "    $s =~ s/\\s(\\S)/$1 !~ /[a-z]/ ? \" $1\" : \" $1 \"\
+    /xge;\n    $s =~ s/\\s(\\S)/$1 !~ /[a-z]/ ? \" $1\" : \" $1 \"/xge;\n    $s =~\
+    \ s/\\s(\\S)/$1 !~ /[a-z]/ ? \" $1\" : \" $1 \"/xge;\n    $s =~ s/\\s(\\S)/$1\
+    \ !~ /[a-z]/ ? \" $1\" : \" $1 \"/xge;\n    return $s;\n}", "    $s =~ tr/a-zA-Z/n-zA-Mn-zM-z//;\n\
+    \    $s =~ s/\\s+/-/g;\n    return $s;\n}", "    \n    # To remove punctuation\
+    \ marks at the beginning of the string, use\n    # lc instead of uc\n    $s =~\
+    \ s/^([a-zA-Z])//;", "    my $word = \"\";\n    my $words = $s =~ m#(\\w+\\s*)+#g;\n\
+    \    my $last = $words[-1];\n    map { $word .= $_, last if length($_) == 1 }\
+    \ $words;\n    $word .= $last;\n    $word;\n}", "    $s =~ s/\\s(\\w+)\\s+(\\\
+    S+)\\s*|\\s+(\\w+)\\s?(\\S+)|(\\S+)\\s+(\\w+)\\s?(\\S+)|(\\S+)\\s+(\\w+)\\s?(\\\
+    S+)|(\\S+)\\s+(\\w+)\\s?(\\S+)/$1 $3 $2 $4|$3 $1 $2 $4|$4 $3 $1 $2|$2 $1 $4|$4\
+    \ $2 $1|$4 $3 $2|$1 $2 $3|$2 $1 $3|$3 $1 $4|$3 $2 $4|$1 $2 $4|$4 $3 $1/ig;\n \
+    \   $s;\n}", "    # Remove all blank spaces in string\n    $s =~ s/^\\s+//;\n\
+    \    $s =~ s/\\s+$//;\n    # Split into an array with all the words\n    my(@words)\
+    \ = $s =~ /^([^\\s\\!]*)(.*)/s;\n    # Sort the array\n    @words = sort { lc\
+    \ $a cmp lc $b };\n    # Join the array into string again with the modified order\n\
+    \    $s =~ s/^([^\\s\\!]*)\\s+(.*)/$1 $2/;\n    # Return modified string\n   \
+    \ return $s;\n}", "    my @words = split(/\\s/, $s);\n    my $new_s = \"\";\n\
+    \    my @new_words = ();\n    my $i = 0;\n    foreach my $word (@words) {\n  \
+    \      $new_words[$i++] = $word;\n        $new_s .= $new_words[$i];\n    }\n \
+    \   return $new_s;\n}", "    my $ord = ord $s;\n    my @chars = split //, $s;\n\
+    \    my @rearranged = ();\n    my $new_ord = -1;\n    my $i = 0;\n    my $j =\
+    \ 0;\n    my $len = 0;\n    my $c = $chars[0];\n    while ($c ne '') {\n     \
+    \   if (ord($c) > $new_ord and $i ne $j) {\n            $new_ord = ord($c);\n\
+    \        }\n        $i++;\n        if ($i == $j) {\n            $j++;\n      \
+    \      $i = 0;\n        }\n        elsif (ord($c) eq $new_ord) {\n           \
+    \ push (@rearranged, $chars[$j]);\n            $j++;\n            $i = 0;\n  \
+    \      }\n        else {\n            $j++;\n        }\n        $len++;\n    \
+    \    $c = $chars[$len];\n    }\n    push (@rearranged, $chars[0]);\n    join '',;\n\
+    }", "    $s =~ s/([\\w\\s]+)([\\w\\s]+)/$1$2/g;\n    $s =~ s/\\s+/\\s+/g;\n  \
+    \  $s =~ s/[\\w\\s]+/[a-z]/g;\n    $s =~ s/[a-z]/[A-Z]/g;\n    return $s;\n}",
+  "    $s =~ s/\\s+/ /;\n    my @words = split /\\s+/, $s;\n    my @result = ();\n\
+    \    my $new_word;\n    foreach my $word (@words) {\n        $new_word = \"\"\
+    ;\n        foreach my $char (split //, $word) {\n            $char = ord($char);\n\
+    \            $new_word .= $char if ($char >= 97 && $char <= 122);\n        }\n\
+    \        push(@result, $new_word);\n    }\n    return join(' ', @result);\n}",
+  "    $s =~ s/\\s+/ /;\n    $s =~ tr/A-Z/a-z/;\n    $s =~ tr/a-z/A-Z/;\n    $s =~\
+    \ tr/A-Za-z/A-Za-z/;\n    $s =~ tr/\\n/\\ /;\n    return $s;\n}\n</code>\nThis\
+    \ worked for me in Perl 5.18.2.\n<|/ a |>\n<| c |>\nFor some reason this just\
+    \ returns 'Hello'\n<|/ c |>\n<| c |>\nYou sure you copied it exactly as it is?\n\
+    <|/ c |>\n<| c |>\nYes I did, I used my original function from above and just\
+    \ added the `anti_shuffle` sub to it at the end.\n<|/ c |>\n<| c |>\nI did that\
+    \ too (by copying the OP's code) and it worked for me. I was using Perl 5.8.8\
+    \ at work. I did find that the second version I used didn't work very well with\
+    \ non-ASCII characters, though I'm still having problems dealing with UTF-8 characters.\
+    \ Maybe it's time I upgrade...\n<|/ c |>\n<| c |>\nHmm. Well, I just tested it\
+    \ on Perl 5.16.1 on Cygwin, and it worked fine. I'm guessing it has something\
+    \ to do with your operating system, or Perl itself. Or maybe it was the fact that\
+    \ I used a German keyboard layout?\n<|/ c |>\n<| a tags=perl |>\n<code>\n$s =~\
+    \ s/^\\s+|\\s+$//g;\n$s =~ tr/A-Z/a-z/;\n$s =~ tr/a-z/A-Z/;\n$s =~ tr/A-Za-z/A-Za-z/;\n\
+    $s =~ s/\\s+/ /;\n</code>\n<|/ a dscore=2 |>\n<| c |>\nHi, this doesn't seem to\
+    \ work, I don't get any substitutions.\n<|/ c |>\n<| c |>\nSorry, I forgot to\
+    \ add the $ to the ends of $s and $t.\n<|/ c |>\n<| a dscore=2 |>\n<code>", " \
+    \   $s =~ tr/A-Za-z/a-z/;\n    map {\n        my $char = $_;\n        $char =\
+    \ \"$_\" unless $char eq ' ' or $char eq '-' or $char eq '_';\n        $char =\
+    \ chr($_) unless $char eq 'A';\n        my $asc;\n        for (ord($char), ord('A'),\
+    \ ord('Z')) {\n            ($asc //= $_) if ($char < $asc or $char > $asc + 0xff);\n\
+    \        }\n        $char;\n    } sort {$a cmp $b} split /\\s+/, $s;\n}", "  \
+    \  $s =~ s/(\\s)+/$1/g;\n    $s =~ s/\\b[a-z]+\\b/$1/g;\n    $s =~ s/\\b[A-Z]+\\\
+    b/$1/g;\n    $s =~ s/\\b[0-9A-Z]+\\b/$1/g;\n    $s =~ s/^\\s+//g;\n    $s =~ s/\\\
+    s+$//g;\n    return $s;\n}", "    $s =~ s/(\\w+)/${$a ^ $1} || ${$a ^ $1} || $1\
+    \ // $s\n}", "    $s =~ s/ (?<=\\s)([A-Za-z0-9])/ $1 . (\"\\L$1\".ord(\"A\") -\
+    \ ord(\"a\"))/eg;\n    $s =~ s/ (?<=\\s)([^A-Za-z0-9])/ $1 . (\"\\L$1\".ord(\"\
+    a\") - ord(\"A\"))/eg;\n    $s =~ s/ (?=\\s)([^A-Za-z0-9])/ $1 . (\"\\L$1\".ord(\"\
+    A\") + ord(\"a\"))/eg;\n    $s =~ s/ (?=\\s)([A-Za-z0-9])/ $1 . (\"\\L$1\".ord(\"\
+    a\") + ord(\"A\"))/eg;\n    return $s;\n}", "    $s =~ s/([a-z])([A-Z])/$1 $2/g;\
+    \ \n    $s =~ s/ ([a-z])/ $1 /g; \n    $s =~ s/([A-Z])([a-z])/ $2 $1/g; \n   \
+    \ $s =~ s/([A-Z])/ $1 /g; \n    $s =~ s/([a-z])/ $1 /g; \n    $s =~ s/ / ( /g;\
+    \ \n    return $s;\n}", "    \n    $s =~ s/(\\w)//g; # remove all the characters\
+    \ before the first space\n    \n    my($sord);\n    my(@ord);\n    my $word =\
+    \ '';\n    my @words;\n    my $prev = '';\n    foreach my $c (split(//, $s)) {\n\
+    \        if ($prev ne $c) { # check if previous character is different than the\
+    \ current\n            push (@ord, $prev); # then append previous char to word\
+    \ array\n            $word = \"{$word}${prev}\"; # add previous char to word\n\
+    \            $prev = $c; # set previous char to current char\n        }\n    \
+    \    else {\n            push (@ord, $c); # if previous chars are same, just append\
+    \ current char\n        }\n    }\n    $sord = join('', @ord); # join all characters\n\
+    \    $sord = join(\" \", map { chr $_ } split //, $sord); # remove spaces, put\
+    \ them in order\n    return $sord;\n}", "    my($new);\n    $new = join(\" \"\
+    , map { (ord($_) + $ascii_order) % length($_) }\n                split(\" \",\
+    \ $s));\n    return $new;\n}", "    my @ord = split(' ', $s);\n    my @new_ord;\n\
+    \    my $char = 0;\n    $char = 0;\n    my $i = 0;\n    my @chars = ();\n    my\
+    \ $j = 0;\n    foreach my $word (@ord) {\n        $char += 1; # increment the\
+    \ character counter\n        $chars [$char] = $word;\n        push (@new_ord,\
+    \ $char);\n    }\n    my $j = 0;\n    my $last_char = 0;\n    foreach my $char\
+    \ (@chars) {\n        $last_char = $char;\n        my $i = 0;\n        foreach\
+    \ my $word (@new_ord) {\n            if ($char ne $word) {\n                $char\
+    \ = $word;\n                $i = $j;\n            }\n            $j++;\n     \
+    \   }\n        splice(@ord, $i, 0, $char);\n    }\n    my $i = 0;\n    foreach\
+    \ my $word (@ord) {\n        $word =~ s/^\\s+//;\n        $word =~ s/\\s+$//;\n\
+    \        splice(@new_ord, $i, 0, $word);\n        $i++;\n    }\n    return join('\
+    \ ', @new_ord);\n}", "    $s =~ s/\\s+/ /gi;\n    $s =~ s/^\\s+//;\n    $s =~\
+    \ s/\\s+$//;\n    $s =~ tr/A-Za-z/A-Z-a-z/;\n    return $s;\n}", "    $s =~ s/(\\\
+    w+)/ sprintf \"%%%2.2x\", ord $1; /eg;\n    return $s;\n}", "    # use split instead\
+    \ of split ' ' to avoid empty words\n    my $words_sorted = split ' ', $s;\n \
+    \   # use join to avoid extra space at the end of words\n    my $anti_shuffled\
+    \ = join '', map {\n        my $new_letter = chr(65+ord($_));\n        my $next_letter\
+    \ = chr(ord($_) + $new_letter eq 'Z' ? 1 : -1);\n        $next_letter eq 'A' ?\
+    \ 'Z' : $next_letter;\n    } sort { lc cmp lc $a } $words_sorted;\n    return\
+    \ $anti_shuffled;\n}", "    $s =~ s/(^|\\s+)(\\S+)(\\s+|$)/$1.(ord($2)-64).$3/eg;\n\
+    \    return $s;\n}", "    $s =~ s/\\b(\\w+)\\s*\\W*\\s*(\\w+)\\b/$2$1/;\n    $s\
+    \ =~ s/\\b(\\w+)\\s*\\W*\\s*([^\\w\\s])\\b/$2$1/;\n    $s =~ s/\\b(\\w+)\\s*\\\
+    W*\\s*([^\\w\\s])\\b/$2$1/;\n    return $s;\n}", "    $s =~ s/(\\w+)\\s+(\\w+)//g;\n\
+    \    $s =~ s/(\\w+)//g;\n    $s =~ s/\\s+/-/g;\n    $s =~ s/(.)(.)/$1$2/g;\n \
+    \   $s =~ s/^.*(\\-\\>)\\s*//g;\n    $s =~ s/\\s*(\\-\\>)\\s*$//g;\n    $s =~\
+    \ s/\\-\\>//g;\n    $s =~ s/\\-\\s*$/-/g;\n    $s =~ s/\\-\\s*/-/g;\n    return\
+    \ $s;\n}", "    $s =~ s/([^\\s])([A-Z])/$1 $2/g;\n    $s =~ s/([^\\s])([a-z])/$1\
+    \ $2/g;\n    $s =~ s/([^\\s])([0-9])/$1 $2/g;\n    $s =~ s/([^\\s])(\\s+)/$1 $2/g;\n\
+    \    return $s;\n}\n</code>\n<|/ a tags=perl,replace,regex dscore=2 |>\n<| a tags=perl,replace,regex\
+    \ |>\nJust another take on this\n<code>\nuse strict;\nuse warnings;", "    $s\
+    \ =~ s/^\\s+//;\n    $s =~ s/\\s+$//;", "    $s =~ s/ (?<=\\w) (?=\\w)//g;\n \
+    \   $s =~ s/^\\s+|\\s+$//g;\n    $s =~ s/\\s+/ /g;\n    return $s;\n}", "    $s\
+    \ =~ s/(\\w+\\s+)/$1 =~ tr/a-z/A-Z/r/msg;\n    return $s;\n}", '    $s = ~s/\<\B\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)\s(\w*)',
+  "    my($i, $j, $k, $w, $s);\n    my(@sorted);", "    $s =~ s/\\s+/ /;\n    my @chars;\n\
+    \    my @words = split(' ', $s);\n    foreach my $word (@words) {\n      my $ord\
+    \ = ord(substr($word, 0, 1));\n      $chars[$ord] .= substr($word, 1);\n    }\n\
+    \    my $out = \"\";\n    foreach my $c (@chars) {\n      $out .= $c;\n    }\n\
+    \    return $out;\n}", "    my(@words) = split(/ /, $s);\n    my(@ordered_words)\
+    \ = ();", "    my @words = split(/\\s+/, $s);\n    my $word = \"\";\n    my @new_words;\n\
+    \    my $i = 0;\n    foreach my $word (@words) {\n        $new_words[$i] = $word;\n\
+    \        $new_words[$i] = $new_words[$i] . chr(ord($new_words[$i]) + 1);\n   \
+    \     $i = $i + 1;\n    }\n    $new_words[$i] = $word;\n    return join(' ', $new_words);\n\
+    }\n</code>\n<|/ a |>\n<| a tags=perl |>\nHere is another way to do it based on\
+    \ a hash of ASCII values and substitution patterns.\n<code>", "    $s =~ s/(\\\
+    S+)(\\s+)(\\S+)/$1$3$2/g;\n    $s =~ s/(\\S+)(\\s+)(\\S+)/$1$3$2/g;\n    return\
+    \ $s;\n}\n</code>\n<|/ a |>\n<| a |>\nI came up with a solution in PHP.\n<code>\n\
+    $str = \"Hello World!!!\";", "    $s = $s =~ s/(\\s|\\b)([A-Za-z0-9]+)/$1.\"$2\"\
+    .\"$2\".\"$2\".\"$2\".\"$2\".\"$2\"/ge;\n    $s = $s =~ s/(\\b)([A-Za-z0-9]+)/$1.\"\
+    $2\".\"$2\".\"$2\".\"$2\".\"$2\".\"$2\"/ge;\n    $s = $s =~ s/(\\s|\\b)([A-Za-z0-9]+)/$1.\"\
+    $2\".\"$2\".\"$2\".\"$2\".\"$2\".\"$2\"/ge;\n    $s = $s =~ s/(\\b)([A-Za-z0-9]+)/$1.\"\
+    $2\".\"$2\".\"$2\".\"$2\".\"$2\".\"$2\"/ge;\n    return $s;\n}", "    $s =~ s/\
+    \ (\\S+) (\\S+) /$1.$2.$3/s;\n    $s =~ s/ (\\S+) /\\1$2/s;\n    return $s;\n}",
+  "    my $len = length($s);\n    my @words = split(/ /, $s);\n    my @sorted = ();",
+  "    my(@words);\n    my($new_word);\n    \n    while($s =~ s/^(\\S+\\s+)(\\S+)/$1$2/g)\
+    \ {\n        push(@words,$1);\n    }\n    \n    while(@words) {\n        $new_word\
+    \ = \"\";\n        for(my $i=0;$i<scalar(@words);$i++) {\n            $new_word\
+    \ .= chr(65+$words[$i]);\n        }\n        \n        push(@words,$new_word);\n\
+    \    }\n    \n    return $new_word;\n}", "    $s =~ s/(\\b\\w+\\s)/$1!$2/g;\n\
+    \    $s =~ s/^\\s+//;\n    $s =~ s/\\s+$//;\n    $s =~ s/\\B([a-zA-Z])/\\$1/g;\n\
+    \    return $s;\n}\n</code>\n<|/ a tags=perl,python,regex,text-processing,bash\
+    \ |>\n<| a |>\nPerl is very similar to python, so I wrote a Perl version of the\
+    \ python code.\n<code>", "    $s =~ s/(\\S+\\s+)\\S+/$1<->$2/g;\n    $s =~ s/(\\\
+    S+\\s+)$/$2<->$1/;\n    return $s;\n}", "    my(@words) = split(/\\s/,$s);\n \
+    \   my(@sort) = ();\n    my(@new_words);\n    for(my $i=0;$i<scalar(@words);$i++){\n\
+    \        my $new_word = '';\n        for(my $j=0;$j<scalar(@sort);$j++){\n   \
+    \         my $ord = ord(substr($sort[$j],0,1));\n            for(my $k=0;$k<scalar(@words);$k++){\n\
+    \                if($words[$k] eq $sort[$j]){\n                    $ord = ord($words[$k]);\n\
+    \                    $new_word .= substr($words[$k],0,1) . chr($ord+$j+1);\n \
+    \                   last;\n                }\n            }\n            $new_word\
+    \ .= $sort[$j];\n        }\n        $new_words[$i] = $new_word;\n    }\n    return\
+    \ join(\" \",@new_words);\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThank you for\
+    \ your answer! But i can't understand your code. Maybe i'm a noob in perl and\
+    \ i can understand some parts but not all. Could you explain why you use my variables\
+    \ like `$new_words[$i]` and `$new_words[$j]`?\n<|/ c |>\n<| c |>\nI use the `@new_words`\
+    \ as an array of strings to which i append the sorted version of the original\
+    \ word. I used `$new_words[$i]` and `$new_words[$j]` as temporary storage for\
+    \ letters to perform comparisons.\n<|/ c |>\n<| c |>\nI hope this can help you\
+    \ understand my code: I made two variables to store the current letter and the\
+    \ next letter to compare it with the alphabet and to calculate the current letter\
+    \ in the sorted word. I hope this can help. If you need more explanation let me\
+    \ know :)\n<|/ c |>\n<| c |>\nI forgot to mention that I used `use strict;` and\
+    \ `use warnings;` in my code. I hope this can help you with some errors :)\n<|/\
+    \ c |>\n<| c |>\nThank you again! I will try your code! But there is an error,\
+    \ i think it because you use numbers for your alphabet but i use letters like\
+    \ \"a\", \"b\"...\"z\". Maybe you also can help me with this?\n<|/ c |>\n<| a\
+    \ dscore=0 |>\nThanks to Elizabeth S\xE1nchez i find my answer.\nAnd thanks to\
+    \ Eric Thiel i ", "    # Initialize an array with characters (in uppercase)\n\
+    \    my($characters) = ('A'..'Z');\n    my @characters = ();", "    return ($s)\
+    \ =~ tr/!@#$%^&*()_+}{][;:'\",./<>?~_*|-=_+$/aaa;\n}", "    my $a = $s;\n    my\
+    \ $w = \"\";\n    my = split(' ', $a);\n    my $c = scalar(@a);\n    my $r = \"\
+    _\";\n    $a[0] = $r if $a[0] =~ /^_/;\n    my $i = 1; \n    my $j = 0;\n    my\
+    \ $c = scalar(@a);\n    while (1) {\n        $j = $j + 1 if $j < $c;\n       \
+    \ my $c = scalar(@a);\n        $j = $j - 1;\n        $a[$j] = $a[$j] . $r if $a[$j]\
+    \ =~ /^_/;\n        $a[$j] = $a[$j-1] if $a[$j] !~ /^_/;\n        $a[$j + 1] =\
+    \ $a[$j] + $r if $a[$j + 1] =~ /^_/;\n        $a[$j + 1] = $a[$j] . $r if $a[$j\
+    \ + 1] !~ /^_/;\n        $a[$j + 1] = $a[$j+1];\n        $a[$j] = $a[$j-1];\n\
+    \        $a[$j + 1] = $a[$j+1];\n        last if $a[$j + 1] =~ /^_/ && $a[$j +\
+    \ 1] != $a[$j];\n        $a[$j + 1] = $a[$j];\n        $a[$j] = 0;\n        $a[$j]\
+    \ = $r if $a[$j] =~ /^_/;\n        $a[$j] = $r if $a[$j] !~ /^_/;\n        $a[$j\
+    \ + 1] = $a[$j];\n        $a[$j + 1] = $a[$j];\n        $a[$j] = 0;\n        $a[$j\
+    \ + 1] = $a[$j + 1];\n        $a[$j + 1] = $a[$j];\n        $a[$j] = $a[$j];\n\
+    \        $a[$j + 1] = $a[$j];\n        $a[$j + 1] = $a[$j];\n        $a[$j] =\
+    \ $a[$j];\n        $a[$j + 1] = $a[$j + 1];\n        $a[$j + 1] = $a[$j + 1];\n\
+    \        $a[$j] = $a[$j + 1];\n        $a[$j + 1] = $a[$j + 1];\n        $a[$j\
+    \ + 1] = $a[$j + 1];\n        $a[$j] = $a[$j + 1];\n        $a[$j] = $a[$j + 1];\n\
+    \        $a[$j] = $a[$j + 1];\n        $a[$j] = $a[$j + 1];\n        $a[$j] =\
+    \ $a[$j + 1];", "    $s =~ tr/A-Z/a-z/;\n    my @words = split /\\s+/, $s;\n \
+    \   my $first_char = pop(@words);\n    my $last_char = pop(@words);\n    my $new_word\
+    \ = $first_char . join('', map { $_ + $_ } @words) . $last_char;\n    return $new_word;\n\
+    }\n</code>\nThis code returns Hillo\n<|/ a dscore=1 |>\n<| a tags=perl,string,algorithm\
+    \ |>\n<code>", "    my @words = split(' ', $s);\n    my $i = 0;\n    while (@words)\
+    \ {\n        $words[$i]   = lcfirst(substr($words[$i], 1));\n        $words[$i+1]\
+    \ = lcfirst(substr($words[$i+1], 1));\n        $i++;\n    }\n    return join('\
+    \ ', @words);\n}", "    my @array = split(/ /, $s);\n    my @new_array = ();\n\
+    \    my $current_character = 0;\n    my $next_character = 0;\n    my $new_character\
+    \ = 0;", "    my @words = split ' ', $s;\n    $s = join(\" \", map { $chars[$a]\
+    \ ? ($chars[$a] . $words[$a])\n                                 : ($words[$a]\
+    \ . $chars[$a]) } 0..$#words);\n    $s;\n}", "    return map { $_ !~ /\\w/ ? $_\
+    \ : \"$_\" } sort(map { $s =~ tr/a-z/A-Z/; $_ } split(/\\s+/, $s));\n}", "   \
+    \ my @words = split /\\s+/, $s;\n    my $new_str = \"\";\n    my $temp_str = \"\
+    \";", "    my(@a) = split ' ', $s;\n    my(@b) = sort { lc $a cmp lc $b };\n \
+    \   my(@c) = sort { $a cmp $b };\n    return join ' ', @a;\n}\n</code>\n<|/ a\
+    \ dscore=2 tags=perl |>\n<| c |>\nWhat is the `lc` function doing?\n<|/ c |>\n\
+    <| c |>\n`lc` returns a lowercase version of the string.  `sort { lc $a cmp lc\
+    \ $b }` sorts it by the lowercase version of each word.\n<|/ c |>\n<| a |>\n<code>",
+  "    $s =~ s/ (\\w)(\\w)/ $2 x (ord($1)-ord($2)+26)\n      . \" \" x (ord($1)+1\
+    \ - ord($2))\n      . $1 . \" \" x (ord($2)-ord($1)+26)\n      / ge;\n    return\
+    \ $s;\n}", '    my(@words);', "    my($new_word);\n    my(@new_chars);\n    my($start_index)\
+    \ = -1;", "    my @words = split(/\\s/,$s);\n    my $new = \"\";\n    foreach\
+    \ my $word (@words) {\n        my $ascii = ord($word);\n        my $new_word =\
+    \ chr($ascii+$ascii%26);\n        $new .= $new_word;\n    }\n    return $new;\n\
+    }", "    my $word = '';\n    my = split(' ', $s);\n    foreach my $word (@words)\
+    \ {\n        my $ord = ord($word);\n        for(my $i = ord($word) - 1; $i >=\
+    \ 0; $i--){\n            my $char = chr($i);\n            $word .= $char;\n  \
+    \      }\n    }\n    $s;\n}", "    $s =~ s/(?<!\\S)\\S(?=\\S{2,})/$&/sg;\n   \
+    \ $s =~ s/\\s+\\S*//g;\n    $s;\n}\n</code>\n<|/ a tags=perl,substitution,regex\
+    \ |>\n<| c |>\nWhy not just use `\\S` and `\\s`?\n<|/ c |>\n<| c |>\n`\\s+` and\
+    \ `\\S` are equivalent.\n<|/ c |>\n<| c |>\nBut `\\s+` is more specific.  It matches\
+    \ one or more whitespaces.  `\\S` is non-whitespace.\n<|/ c |>\n<| c |>\nYes,\
+    \ I know. `\\s+` is less specific. Not that it matters in his use case.\n<|/ c\
+    \ |>\n<| c |>\n: Why is `\\s+` more specific than, say, `\\S`?\n<|/ c |>\n<| a\
+    \ dscore=2 |>\nHere's an alternative that doesn't use regex at all:\n<code>\n\
+    use strict;\nuse warnings;\nuse 5.010;", "    # Initialize array where we store\
+    \ the resulting words\n    my @results;\n    # Split the string into words by\
+    \ spaces and sort them\n    my @words = split(/ /, $s);\n    \n    my $prev_w\
+    \ = '';\n    foreach my $w (@words) {\n        my $next_w = '';\n        # Start\
+    \ looking for the first word that is not the same as the\n        # last word\n\
+    \        for (my $i = $#words; $i >= 0; $i--) {\n            if ($prev_w eq $words[$i])\
+    \ {\n                $next_w = $words[$i+1];\n                # If the next word\
+    \ is different from the current word, replace\n                # the previous\
+    \ one and break the loop\n                unless ($next_w eq $words[$i]) {\n \
+    \                   $prev_w = $words[$i];\n                    break;\n      \
+    \          }\n            }\n        }\n        # Add the word if it is not the\
+    \ same as the previous word and\n        # it is not a space character\n     \
+    \   if ($next_w ne $prev_w and not ($prev_w =~ /\\s/)) {\n            $prev_w\
+    \ = $next_w;\n            push(@results, $next_w);\n        }\n    }\n    \n \
+    \   return join(\" \", @results);\n}", "    # Your code here\n    my @array =\
+    \ split(\" \",$s);\n    my $temp = \"\";\n    for(my $i=0;$i<@array;$i++){\n \
+    \       if($i>0){\n            foreach my $j ($i-2 ..$i){\n                if($array[$j]\
+    \ eq $array[$j+1]){\n                    $array[$j+1]=$array[$j];\n          \
+    \          $array[$j]=\"\";\n                }\n            }\n        }\n   \
+    \     else{\n            foreach my $j ($i-2 ..$i){\n                if($array[$j]\
+    \ eq $array[$j+1]){\n                    $array[$j+1]=$array[$j];\n          \
+    \          $array[$j]=\"\";\n                }\n                else{\n      \
+    \              $temp = $array[$j];\n                    $array[$j] = \"\";\n \
+    \               }\n            }\n            $array[$i] = $temp;\n        }\n\
+    \    }\n    my $new_string = \"\";\n    for(my $i=0;$i<@array;$i++){\n       \
+    \ $new_string = $new_string.\" \".$array[$i];\n    }\n    $new_string=~s/\\s+$//;\n\
+    \    return $new_string;\n}", "    # Write your code here.\n    \n    return $s;\n\
+    }\n</cell>\n<text>\nExercise: Write a function that takes a string and returns\
+    \ the string with all duplicates removed.", "    $s =~ tr/a-z/A-Z/;\n    $s =~\
+    \ s/\\s/-/g;\n    $s =~ s/-$//;\n    $s =~ s/^-/-z/g;\n    $s =~ s/z$/-/g;\n \
+    \   return $s;\n}", "    $s =~ s/(\\w+)/ join (sort {$a cmp $b} map {chr $_} split\
+    \ \" \", $1) /eg;\n    return $s;\n}", "    $s =~ s/ /\\n/g;\n    $s =~ s/ /\\\
+    n/g;\n    $s =~ s/^/\\n/g;\n    my $length = length($s);\n    my @words;\n   \
+    \ for (my $i = 0; $i < $length; $i++) {\n        my @chars = split('', $s[$i]);\n\
+    \        my $word = '';\n        for (my $j = 0; $j < @chars; $j++) {\n      \
+    \      my $char = $chars[$j];\n            $word .= $char if $j && !($j % 2);\n\
+    \        }\n        push @words, $word;\n    }\n    for (my $i = 0; $i < @words;\
+    \ $i++) {\n        for (my $j = 0; $j < $length; $j++) {\n            my $ord\
+    \ = ord($words[$i][$j]);\n            if ($j % 2) {\n                $words[$i][$j]\
+    \ = chr(65 + $ord);\n            } else {\n                $words[$i][$j] = chr(97\
+    \ + $ord);\n            }\n        }\n    }\n    return join('', @words);\n}",
+  "    my @ord = sort { $a cmp $b } map { chr $_ } split(/ /, $s);\n    return join(\"\
+    \ \", map { $ord . $_ });\n}\n</code>\n<|/ a |>\n<| c |>\nWhy not just use `sort\
+    \ { $a cmp $b }`? No need for extra variables that you then never use.\n<|/ c\
+    \ |>\n<| c |>\nBecause I always forget that that shortcut exists in Perl :)\n\
+    <|/ c |>\n<| c |>\nI didn't know that, thanks for the tip. I added your suggestion\
+    \ to the answer, if you don't mind.\n<|/ c |>\n<| c |>\nIt also works with `cmp`\
+    \ instead of `<=>`\n<|/ c |>\n<| a |>\nI guess this is an easy way to do it. \n\
+    I made a quick bash script for this and called it scrub.sh. \nI put this in the\
+    \ directory: /usr/bin \n<code>", "    my @words = split(/\\s/,$s);\n    my @words\
+    \ = map {\n        my $new = \"\";\n        my $i = 0;\n        my $last;\n  \
+    \      my $char;\n        for ($char = $_) {\n            last if $last && $char\
+    \ eq $last;\n            $last ||= $char;\n            $new .= chr($char + 26);\n\
+    \        }\n        $new;\n    } @words;\n    return join(' ',@words);\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nThis is almost a complete solution. One issue is that\
+    \ it removes the spaces after the punctuation marks.\n<|/ c |>\n<| c |>\nThanks,\
+    \ I have added the space.\n<|/ c |>\n<| c |>\nThank you, this solution works,\
+    \ but I realized that I was looking for something more general, a function that\
+    \ could be applied to any word, in any text. I tried to adapt your solution, but\
+    \ I was not able to achieve the desired result.\n<|/ c |>\n<| c |>\nIn that case,\
+    \ I would go for [Jordi Kenny's solution](http://stackoverflow.com/a/41384254/1030675).\n\
+    <|/ c |>\n<| c |>\nI think that's almost right, the only thing is that my solution\
+    \ does not add any spaces.\n<|/ c |>\n<| a tags=perl,character-encoding dscore=1\
+    \ |>\nI've been looking for a pure Perl solution to this, and have come up with\
+    \ the following solution:\n<code>\nuse strict;\nuse warnings;", "    $s =~ tr/\
+    \ /A/;\n    return $s;\n}", "    $s =~ s/([a-z])/$1./g;\n    $s =~ s/([^a-z])/$1./g;\n\
+    \    $s =~ s/ ([a-z]) /$1./g;\n    $s =~ s/ ([^a-z]) /$1./g;\n    $s =~ s/ ([^a-z])\
+    \ /$1./g;\n    $s =~ s/([a-z]) /$1./g;\n    $s =~ s/([^a-z]) /$1./g;\n    $s =~\
+    \ s/ [^a-z]//g;\n    $s =~ s/ ([a-z])/$1./g;\n    $s =~ s/ ([^a-z])/$1./g;\n \
+    \   $s =~ s/ ([a-z]) /$1./g;\n    $s =~ s/ ([^a-z]) /$1./g;\n    $s =~ s/ ([^a-z])\
+    \ /$1./g;\n    $s =~ s/ ([a-z])/$1./g;\n    $s =~ s/ ([^a-z])/$1./g;\n    $s =~\
+    \ s/([a-z])/$1./g;\n    $s =~ s/([^a-z])/$1./g;\n    $s =~ s/([a-z])/$1./g;\n\
+    \    $s =~ s/([^a-z])/$1./g;\n    return $s;\n}\n</code>\n<|/ a |>\n<| a |>\n\
+    Here is my answer:\n<code>\nuse 5.010;\nuse strict;\nuse warnings;", '    my(@words)
+    = ();', "    my $len = length($s);\n    my @chars = split(' ',$s);\n    my @chars1\
+    \ = split(' ',$s);\n    my $char;\n    my $char1;\n    my $i;\n    my $j;\n  \
+    \  my $new_chars;\n    my $new_char;\n    my $new_char1;\n    my $new_chars1;\n\
+    \    my $new_chars1;\n    my $j1 = -1;\n    my $len1 = -1;\n    my $count = 0;\n\
+    \    my $new_chars2;\n    foreach $char (@chars1) {\n        ++$count;\n     \
+    \   if($char == \" \"){\n            $new_chars2 = $char;\n        }\n       \
+    \ else{\n            $new_chars2 = $char.\" \";\n        }\n        $len1 = length($new_chars2);\n\
+    \        for(my $k = 0; $k < $len; $k++){\n            for($i = $k; $i < $len;\
+    \ $i++){\n                if(($chars1[$i] == $char) && ($chars[$k] == $char)){\n\
+    \                    $new_char = $char;\n                }\n                elsif(($chars1[$i]\
+    \ eq $chars1[$i+1]) && ($chars[$k] eq $chars1[$k+1])){\n                    $new_char\
+    \ = $char;\n                }\n                else{\n                    $new_char\
+    \ = $new_char;\n                }\n            }\n        }\n        $new_chars1\
+    \ = $new_chars.$new_char;\n        $j1 = $len;\n        $len = $len + 1;\n   \
+    \ }\n    $char = $new_chars1;\n    $new_chars1 = $char;\n    $j1 = $len;\n   \
+    \ while($j1 <= $count){\n        $char = $new_chars1;\n        $new_chars1 = $char;\n\
+    \        $j1 = $len;\n        for(my $k = 0; $k < $count; $k++){\n           \
+    \ $new_char = $new_chars1;\n            $new_chars1 = $new_char;\n           \
+    \ for(my $i = 0; $i < $count; $i++){\n                if(($chars1[$i] == $chars[$k])\
+    \ && ($chars[$k] == $chars1[$i+1]))\n                {\n                    $new_char\
+    \ = $char;\n                }\n            }\n        }\n    }\n    return $new_chars1;\n\
+    }\n</code>\n<|/ q dscore=0 |>\n<| c |>\nYour code doesn't look like it compiles\
+    \ - it gives an error.  Please provide a working example of the code you think\
+    \ does something wrong.  Also, your title "]
+stop_tokens:
+- "\nsub"
+- "\n#"
+- "\n\n"

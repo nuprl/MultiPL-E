@@ -22,7 +22,7 @@ LANG_EXT = ".cpp"
 
 def eval_script(path: Path):
     basename = ".".join(str(path).split(".")[:-1])
-    build = subprocess.run(["g++", path, "-o", basename], capture_output=True)
+    build = subprocess.run(["g++", path, "-o", basename, "-std=c++17"], capture_output=True)
     status = None
     returncode = -1
     output = None
@@ -47,14 +47,18 @@ def eval_script(path: Path):
             output = exc
         os.remove(basename)
     if output.stdout is not None:
-        output.stdout = output.stdout.decode("utf-8")
+        output.stdout = output.stdout[:2048].decode("utf-8", errors='ignore')
     else:
         output.stdout = "None"
 
     if output.stderr is not None:
-        output.stderr = output.stderr.decode("utf-8")
+        output.stderr = output.stderr[:2048].decode("utf-8", errors='ignore')
     else:
         output.stderr = "None"
+    if "In file included from /shared/centos7/gcc/9.2.0-skylake/" in output.stderr:
+      raise Exception("Skylake bug encountered")
+    if "/4.8.2" in output.stderr:
+      raise Exception("Ancient compiler encountered")
     return {
         "status": status,
         "exit_code": returncode,

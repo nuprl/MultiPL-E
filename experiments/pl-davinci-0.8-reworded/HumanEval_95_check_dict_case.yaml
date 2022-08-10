@@ -1,0 +1,1038 @@
+name: HumanEval_95_check_dict_case
+language: pl
+prompt: "# Given a hash, return 1 if all keys are strings in lower \n# case or all\
+  \ keys are strings in upper case, else return ''.\n# The function should return\
+  \ '' is the given hash is empty.\n# Examples:\n# >>> check_dict_case({\"a\" => \"\
+  apple\", \"b\" => \"banana\"})\n# 1\n# >>> check_dict_case({\"a\" => \"apple\",\
+  \ \"A\" => \"banana\", \"B\" => \"banana\"})\n# \"\"\n# >>> check_dict_case({\"\
+  a\" => \"apple\", 8 => \"banana\", \"a\" => \"apple\"})\n# \"\"\n# >>> check_dict_case({\"\
+  Name\" => \"John\", \"Age\" => \"36\", \"City\" => \"Houston\"})\n# \"\"\n# >>>\
+  \ check_dict_case({\"STATE\" => \"NC\", \"ZIP\" => \"12345\"})\n# 1\nsub check_dict_case\
+  \ {\n    my($dict) = @_;\n"
+tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&check_dict_case;\n\
+  \        if(eq_deeply($candidate->({\"p\" => \"pineapple\", \"b\" => \"banana\"\
+  }),1)) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->({\"\
+  p\" => \"pineapple\", \"A\" => \"banana\", \"B\" => \"banana\"}),\"\")) {\n    \
+  \    print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->({\"\
+  p\" => \"pineapple\", \"5\" => \"banana\", \"a\" => \"apple\"}),\"\")) {\n     \
+  \   print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->({\"\
+  Name\" => \"John\", \"Age\" => \"36\", \"City\" => \"Houston\"}),\"\")) {\n    \
+  \    print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->({\"\
+  STATE\" => \"NC\", \"ZIP\" => \"12345\"}),1)) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->({\"fruit\" => \"\
+  Orange\", \"taste\" => \"Sweet\"}),1)) {\n        print \"ok!\" }else{\n       \
+  \ exit 1;\n        }\n        if(eq_deeply($candidate->({}),\"\")) {\n        print\
+  \ \"ok!\" }else{\n        exit 1;\n        }\n}\n\ntesthumaneval();"
+completions: ["    my $ans = 1;\n    my $case = \"\";\n    foreach my $key (keys(%$dict))\
+    \ {\n        if ($case eq \"\") {\n            $case = is_upper($key) ? \"upper\"\
+    \ : \"lower\";\n        }\n        if ($case eq \"upper\" && !is_upper($key))\
+    \ {\n            $ans = \"\";\n            last;\n        }\n        if ($case\
+    \ eq \"lower\" && !is_lower($key)) {\n            $ans = \"\";\n            last;\n\
+    \        }\n    }\n    return $ans;\n}", "    my $all_lower = 1;\n    my $all_upper\
+    \ = 1;\n    foreach my $key (keys %$dict) {\n        $all_lower = 0 if($key !~\
+    \ /^[a-z]+$/);\n        $all_upper = 0 if($key !~ /^[A-Z]+$/);\n    }\n    return\
+    \ ($all_lower || $all_upper) ? 1 : '';\n}", "    my $status = -1; #assume its\
+    \ good\n    foreach my $k (keys %$dict) {\n        if ($status == -1) {\n    \
+    \        $status = ($k =~ /^[a-z]+$/) ? 0 : 1;\n        }\n        else {\n  \
+    \          my $kstatus = ($k =~ /^[a-z]+$/) ? 0 : 1;\n            if ($kstatus\
+    \ != $status) {\n                return '';\n            }\n        }\n    }\n\
+    \    return $status;\n}", "    my($t, $c);\n    foreach $k (keys %$dict) {\n \
+    \       if ($t eq '') {\n            $t = ($k =~ /[a-z]/) ? 1 : 0;\n        }\n\
+    \        if ($t) {\n            if ($k !~ /[a-z]/) {\n                return '';\n\
+    \            }\n        } else {\n            if ($k !~ /[A-Z]/) {\n         \
+    \       return '';\n            }\n        }\n    }\n    return $t || '';\n}",
+  "    my @keys = keys %$dict;\n    my $lower = 1;\n    my $upper = 1;\n    my $result\
+    \ = 1;\n    my $key;\n    foreach $key (@keys) {\n        # print \"key: $key\\\
+    n\";\n        if (!($key =~ /^[a-z]$/)) {\n            $lower = 0;\n        }\n\
+    \        if (!($key =~ /^[A-Z]$/)) {\n            $upper = 0;\n        }\n   \
+    \ }\n    if (!($lower || $upper)) {\n        $result = '';\n    }\n    return\
+    \ $result;\n}", "    my(@keys, $key);\n    @keys = keys %$dict;\n    return ''\
+    \ if ($#keys < 0);", "    my(@keys) = keys %$dict;\n    return '' if $#keys <\
+    \ 0;\n    my($case) = $keys[0] =~ /^[a-z]+$/ ? 'lower' : $keys[0] =~ /^[A-Z]+$/\
+    \ ? 'upper' : '';\n    return '' if $case eq '';\n    foreach my $key (@keys)\
+    \ {\n        return '' if ($case eq 'lower' && $key !~ /^[a-z]+$/) ||\n      \
+    \               ($case eq 'upper' && $key !~ /^[A-Z]+$/);\n    }\n    return 1;\n\
+    }", "    my $result = 0;\n    my $case;\n    my $key;\n    my $value;\n    while\
+    \ (($key, $value) = each %$dict) {\n        $case = ($key =~ /[a-z]/) ? 1 : 2;\n\
+    \        $result = ($result == 0) ? $case : ($result != $case) ? 0 : $result;\n\
+    \    }\n    return $result ? 1 : '';\n}", "    my($one) = '1';\n    my($none)\
+    \ = '';\n    return $none unless ref($dict) eq 'HASH';\n    my($lc) = 1;\n   \
+    \ my($uc) = 1;\n    foreach my $key (keys %$dict) {\n        unless (is_string($key))\
+    \ {\n            $lc = 0;\n            $uc = 0;\n            last;\n        }\n\
+    \        my($s) = $key;\n        $lc = 0 unless $s eq lc($s);\n        $uc = 0\
+    \ unless $s eq uc($s);\n    }\n    return $one if $lc;\n    return $one if $uc;\n\
+    \    return $none;\n}", "    my $is_lower = 1;\n    my $is_upper = 1;\n    foreach\
+    \ my $key (keys(%$dict)) {\n        if (not defined($key)) { next; }\n       \
+    \ if ($key =~ /[A-Z]/) { $is_lower = 0; }\n        if ($key =~ /[a-z]/) { $is_upper\
+    \ = 0; }\n    }\n    return(($is_lower || $is_upper) ? 1 : '');\n}", "    my $result\
+    \ = 1;\n    my $all_lower = 1;\n    my $all_upper = 1;\n    foreach my $key (keys\
+    \ %$dict) {\n        if ($key =~ /[[:upper:]]/) {\n            $all_lower = 0;\n\
+    \        }\n        if ($key =~ /[[:lower:]]/) {\n            $all_upper = 0;\n\
+    \        }\n    }\n    if ($all_lower == 0 && $all_upper == 0) {\n        $result\
+    \ = '';\n    }\n    return $result;\n}", "    if (ref($dict) ne 'HASH') {\n  \
+    \      return '';\n    }", "    my $result = 1;\n    my $flag;\n    return ''\
+    \ if %$dict == 0;\n    foreach(keys %$dict) {\n        if($flag == undef) {\n\
+    \            $flag = !/^[a-z]+$/;\n        }\n        if($flag != !/^[a-z]+$/)\
+    \ {\n            $result = '';\n            last;\n        }\n    }\n    return\
+    \ $result;\n}", "    my $keys = keys %$dict;\n    if ($keys == 0) {\n        return\
+    \ '';\n    }\n    my @keys = keys %$dict;\n    my @lc_keys = map { lc $_ } @keys;\n\
+    \    my @uc_keys = map { uc $_ } @keys;\n    if (scalar(uniq @keys) == scalar(uniq\
+    \ @lc_keys)) {\n        return 1;\n    }\n    if (scalar(uniq @keys) == scalar(uniq\
+    \ @uc_keys)) {\n        return 1;\n    }\n    return '';\n}", "    my($key, $val);\n\
+    \    my($upper, $lower) = (0, 0);\n    foreach $key (keys %$dict) {\n        if(isupper($key))\
+    \ {\n            $upper++;\n        }\n        else {\n            $lower++;\n\
+    \        }\n    }\n    if($upper != 0 && $lower != 0) {\n        return '';\n\
+    \    }\n    else {\n        return 1;\n    }\n}", "    # >>>>>>>>>>>>>>>>>>>>>>>>>>\
+    \ YOUR CODE HERE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n    my @key_list = keys %$dict;\n\
+    \    my $result = 1;\n    my $upper_count = 0;\n    my $lower_count = 0;\n   \
+    \ foreach my $key(@key_list){\n        if($key =~ /^[A-Z_]+$/){\n            $upper_count\
+    \ += 1;\n        }\n        if($key =~ /^[a-z_]+$/){\n            $lower_count\
+    \ += 1;\n        }\n    }\n    if($upper_count != 0 && $lower_count != 0){\n \
+    \       $result = '';\n    }\n    return $result;\n    # >>>>>>>>>>>>>>>>>>>>>>>>>>\
+    \ END OF YOUR CODE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n}", "    return \"\" if scalar\
+    \ keys $dict == 0;\n    my $flag = 1;\n    foreach my $key (keys $dict) {\n  \
+    \      if ($key =~ /^[A-Z]+$/) {\n            if ($flag == -1) { return \"\";\
+    \ }\n            $flag = 1;\n        } elsif ($key =~ /^[a-z]+$/) {\n        \
+    \    if ($flag == 1) { return \"\"; }\n            $flag = -1;\n        } else\
+    \ {\n            return \"\";\n        }\n    }\n    return $flag;\n}", "    my\
+    \ $flag = 1;\n    my $lcase = 1;\n    my $ucase = 1;\n    foreach my $key (keys(%$dict))\
+    \ {\n        if ($lcase && $key =~ /[a-z]/) {\n            $ucase = 0;\n     \
+    \   }\n        if ($ucase && $key =~ /[A-Z]/) {\n            $lcase = 0;\n   \
+    \     }\n        if (!$lcase && !$ucase) {\n            $flag = '';\n        \
+    \    last;\n        }\n    }\n    return $flag;\n}", "    my $dict_case;\n   \
+    \ my $key;\n    my $val;\n    my $pass;\n    if (keys %$dict == 0) {\n       \
+    \ return '';\n    }\n    while (($key, $val) = each %$dict) {\n        if ($key\
+    \ =~ /^[a-z]+$/) {\n            $dict_case = 'lower';\n        } elsif ($key =~\
+    \ /^[A-Z]+$/) {\n            $dict_case = 'upper';\n        } else {\n       \
+    \     return '';\n        }\n        $pass = 1;\n        while (($key, $val) =\
+    \ each %$dict) {\n            if ($dict_case eq 'lower' && $key !~ /^[a-z]+$/)\
+    \ {\n                $pass = 0;\n                last;\n            } elsif ($dict_case\
+    \ eq 'upper' && $key !~ /^[A-Z]+$/) {\n                $pass = 0;\n          \
+    \      last;\n            }\n        }\n        last if $pass;\n    }\n    return\
+    \ $pass ? 1 : '';\n}", "    my $is_upper = '\\p{Lu}';\n    my $is_lower = '\\\
+    p{Ll}';\n    my $dict_size = scalar(keys %$dict);\n    # print \"dict_size is:\
+    \ $dict_size\\n\";\n    if ($dict_size > 0) {\n        my $flag = 0;\n       \
+    \ foreach my $k (keys %$dict) {\n            # print \"k is: $k\\n\";\n      \
+    \      if ($k =~ /$is_upper/) {\n                if ($flag == 0) {\n         \
+    \           $flag = 1;\n                }\n                elsif ($flag == 2)\
+    \ {\n                    $flag = -1;\n                    last;\n            \
+    \    }\n            }\n            elsif ($k =~ /$is_lower/) {\n             \
+    \   if ($flag == 0) {\n                    $flag = 2;\n                }\n   \
+    \             elsif ($flag == 1) {\n                    $flag = -1;\n        \
+    \            last;\n                }\n            }\n            else {\n   \
+    \             $flag = -1;\n                last;\n            }\n        }\n \
+    \       if ($flag == 1) {\n            return 1;\n        }\n        elsif ($flag\
+    \ == 2) {\n            return 1;\n        }\n        else {\n            return\
+    \ '';\n        }\n    }\n    else {\n        return '';\n    }\n}", "    my $key;\n\
+    \    my $value;\n    my $case_flag;\n    # TODO: Test if all keys are lower case\
+    \ and set $case_flag to 0.\n    #       Test if all keys are upper case and set\
+    \ $case_flag to 1.\n    #       Test if the dictionary is empty and return ''.\n\
+    \    while (($key, $value) = each %$dict) {\n        # TODO: Test if the key is\
+    \ a string and set $case_flag to 2.\n        #       (Return '' if $case_flag\
+    \ is not 1 or 0.)\n        if ($case_flag == 0) {\n            # TODO: Test if\
+    \ the key is all lower case.\n            #       (Return '' if the key is not\
+    \ all lower case.)\n        }\n        if ($case_flag == 1) {\n            # TODO:\
+    \ Test if the key is all upper case.\n            #       (Return '' if the key\
+    \ is not all upper case.)\n        }\n    }\n    return $case_flag;\n}", "   \
+    \ my @k = keys %$dict;\n    my $l = 1;\n    my $u = 1;\n    foreach my $k (@k)\
+    \ {\n        unless($k =~ /^[a-z]+$/) {\n            $l = 0;\n        }\n    \
+    \    unless($k =~ /^[A-Z]+$/) {\n            $u = 0;\n        }\n    }\n    if\
+    \ ($l == 1 or $u == 1) {\n        return 1;\n    } else {\n        return '';\n\
+    \    }\n}", "    my @lower_keys = grep { /^[a-z]+$/ } keys %$dict;\n    my @upper_keys\
+    \ = grep { /^[A-Z]+$/ } keys %$dict;\n    my $lower_len = scalar @lower_keys;\n\
+    \    my $upper_len = scalar @upper_keys;\n    if ($lower_len == 0 || $upper_len\
+    \ == 0) {\n        return 1;\n    }\n    else {\n        return '';\n    }\n}",
+  "    return \"\" if !defined($dict) || ref($dict) ne \"HASH\" || !%$dict;\n    my(@keys)\
+    \ = keys %$dict;\n    my($upper) = all_upper_or_lower(@keys);\n    return \"\"\
+    \ if $upper < 0;\n    if ($upper) {\n        @keys = grep {$_ ne uc($_)} @keys;\n\
+    \    } else {\n        @keys = grep {$_ ne lc($_)} @keys;\n    }\n    return 1\
+    \ if scalar(@keys) == 0;\n    return \"\";\n}", "    my $r = 1;\n    my $lower\
+    \ = 0;\n    my $upper = 0;\n    foreach my $k (keys %$dict) {\n        if ($k\
+    \ =~ /^[a-z]+$/) {\n            $lower = 1;\n        }\n        elsif ($k =~ /^[A-Z]+$/)\
+    \ {\n            $upper = 1;\n        }\n        else {\n            $r = '';\n\
+    \            last;\n        }\n    }\n    if ($lower == 1 && $upper == 1) {\n\
+    \        $r = '';\n    }\n    return $r;\n}", "    my $ret;\n    # Your code goes\
+    \ here\n    return $ret;\n}", "    return '' if (ref($dict) ne 'HASH' || keys(%$dict)\
+    \ == 0);\n    my $first_key = (keys(%$dict))[0];\n    my $is_lower = $first_key\
+    \ =~ /^[a-z]+$/;\n    my $is_upper = $first_key =~ /^[A-Z]+$/;\n    for my $key\
+    \ (keys(%$dict)) {\n        if ($is_lower) {\n            return '' if ($key !~\
+    \ /^[a-z]+$/);\n        }\n        if ($is_upper) {\n            return '' if\
+    \ ($key !~ /^[A-Z]+$/);\n        }\n    }\n    return 1;\n}", "    my $key_list\
+    \ = keys %$dict;\n    my $key_list_len = @$key_list;\n    my $flag = -1;\n   \
+    \ foreach my $key(@$key_list) {\n        if ($flag eq -1) {\n            if (lc($key)\
+    \ eq $key) {\n                $flag = 0;\n            }\n            else {\n\
+    \                $flag = 1;\n            }\n        }\n        elsif ($flag eq\
+    \ 0) {\n            if (lc($key) ne $key) {\n                return '';\n    \
+    \        }\n        }\n        elsif ($flag eq 1) {\n            if (uc($key)\
+    \ ne $key) {\n                return '';\n            }\n        }\n    }\n  \
+    \  return 1;\n}", "    my $key = %$dict{'a'};\n    if($key ne \"\") {\n      \
+    \  my $key = \"%$dict\";\n        my $upper_case = uc($key);\n        if($key\
+    \ eq $upper_case) {\n            return 1;\n        } else {\n            return\
+    \ \"\";\n        }\n    } else {\n        return \"\";\n    }\n}", "    my @k\
+    \ = keys %$dict;\n    my @l = grep {$_ eq lc $_} @k;\n    my @u = grep {$_ eq\
+    \ uc $_} @k;\n    return 1 if (@l or @u) and !(@l and @u);\n    return '';\n}",
+  '    # TODO - Add code here', "    my $lc_flag = 0;\n    my $uc_flag = 0;\n    foreach\
+    \ my $key (keys %$dict) {\n        if ($key =~ /^[a-z]+$/) {\n            $lc_flag\
+    \ = 1;\n        }\n        elsif ($key =~ /^[A-Z]+$/) {\n            $uc_flag\
+    \ = 1;\n        }\n        else {\n            return '';\n        }\n    }\n\
+    \    if (($lc_flag == 1) && ($uc_flag == 1)) {\n        return '';\n    }\n  \
+    \  else {\n        return 1;\n    }\n}", "    my $lower = \"\";\n    my $upper\
+    \ = \"\";\n    my $code = \"\";\n    foreach my $k (keys %$dict) {\n        if\
+    \ (lc($k) eq $k) {\n            $lower = 1;\n        }\n        if (uc($k) eq\
+    \ $k) {\n            $upper = 1;\n        }\n    }\n    if ($lower && $upper)\
+    \ {\n        $code = \"\";\n    }\n    elsif ($lower || $upper) {\n        $code\
+    \ = 1;\n    }\n    return $code;\n}", "    if ($dict->{case} eq \"upper\") {\n\
+    \        return 1;\n    } elsif ($dict->{case} eq \"lower\") {\n        return\
+    \ 1;\n    } else {\n        return \"\";\n    }\n}", "    my($cur) = 1;\n    if\
+    \ (!(%$dict)) {\n        return '';\n    }\n    my($is_lower) = 0;\n    my($is_upper)\
+    \ = 0;\n    my($first_lower) = 0;\n    my($first_upper) = 0;\n    foreach my $k\
+    \ (keys %$dict) {\n        if ($cur && ($k =~ /^[a-z]+$/)) {\n            $is_lower\
+    \ = 1;\n            $first_lower = 1;\n        } elsif ($cur && ($k =~ /^[A-Z]+$/))\
+    \ {\n            $is_upper = 1;\n            $first_upper = 1;\n        } elsif\
+    \ ($first_lower && ($k =~ /^[A-Z]+$/)) {\n            $cur = 0;\n        } elsif\
+    \ ($first_upper && ($k =~ /^[a-z]+$/)) {\n            $cur = 0;\n        }\n \
+    \   }\n    if ($cur) {\n        return 1;\n    } else {\n        return '';\n\
+    \    }\n}", "    return '' if ref($dict) ne 'HASH';\n    return '' if keys %$dict\
+    \ == 0;\n    my $case = 0;\n    for my $key (keys %$dict) {\n        if (ref($key)\
+    \ eq 'SCALAR') {\n            return '';\n        }\n        if ($case == 0) {\n\
+    \            $case = 1 if $key =~ /^[a-z]+$/;\n            $case = 2 if $key =~\
+    \ /^[A-Z]+$/;\n        }\n        return '' if ($case == 1 and $key =~ /^[A-Z]+$/)\
+    \ or\n            ($case == 2 and $key =~ /^[a-z]+$/);\n    }\n    return 1;\n\
+    }", "    my @keys = keys %$dict;\n    my $key_type = check_string_case($keys[0]);\n\
+    \    foreach my $key (@keys) {\n        return '' if (check_string_case($key)\
+    \ != $key_type);\n    }\n    return $key_type;\n}", "    if (scalar(keys(%$dict))\
+    \ == 0) {\n        return '';\n    }\n    my $key = (keys(%$dict))[0];\n    my\
+    \ $key_case = $key =~ /[a-z]/ ? 1 : 0;\n    foreach my $key (keys(%$dict)) {\n\
+    \        if ($key_case != ($key =~ /[a-z]/ ? 1 : 0)) {\n            return '';\n\
+    \        }\n    }\n    return 1;\n}", "    return '' if !%$dict;\n    my $keys\
+    \ = scalar(keys %$dict);\n    my $uppers = grep { lc($_) ne $_ } keys %$dict;\n\
+    \    my $lowers = grep { uc($_) ne $_ } keys %$dict;\n    return 1 if $uppers\
+    \ == 0 || $lowers == 0;\n    return '';\n}", "    my $result = 1;\n    my $is_upper\
+    \ = 1;\n    my $is_lower = 1;\n    foreach my $key (keys %$dict) {\n        if\
+    \ ( $key =~ /^[a-z]+$/ ) {\n            $is_upper = 0;\n        }\n        elsif\
+    \ ( $key =~ /^[A-Z]+$/ ) {\n            $is_lower = 0;\n        }\n        else\
+    \ {\n            $result = '';\n            last;\n        }\n    }\n    if (\
+    \ $is_upper || $is_lower ) {\n        $result = 1;\n    }\n    return $result;\n\
+    }", "    my $lower_flag = 1;\n    my $upper_flag = 1;\n    foreach my $k (keys\
+    \ %$dict) {\n        if (ref($k) eq \"\") {\n            if ($k ne lc($k)) {\n\
+    \                $lower_flag = 0;\n            }\n            if ($k ne uc($k))\
+    \ {\n                $upper_flag = 0;\n            }\n        }\n    }\n    if\
+    \ ($lower_flag || $upper_flag) {\n        return 1;\n    }\n    return \"\";\n\
+    }", "    my @keys = keys(%$dict);\n    if (scalar(@keys) == 0) {\n        return\
+    \ '';\n    }", "    if (!%$dict) {\n        return '';\n    }\n    my @keys =\
+    \ keys %$dict;\n    my $first_key = $keys[0];\n    my $regex = $first_key =~ /^[a-z]+$/\
+    \ ? qr/^[a-z]+$/ : qr/^[A-Z]+$/;\n    for my $key (@keys) {\n        if ($key\
+    \ !~ $regex) {\n            return '';\n        }\n    }\n    return 1;\n}", " \
+    \   my @keys = keys %$dict;\n    my $len = @keys;\n    if(!$len) {\n        return\
+    \ '';\n    }\n    my $first = $keys[0];\n    if(is_upper($first)) {\n        foreach\
+    \ my $key (@keys) {\n            if(!is_upper($key)) {\n                return\
+    \ '';\n            }\n        }\n    }\n    else {\n        foreach my $key (@keys)\
+    \ {\n            if(!is_lower($key)) {\n                return '';\n         \
+    \   }\n        }\n    }\n    return 1;\n}", "    # valid dictionary only if it\
+    \ has keys\n    if ( keys %$dict ) {\n        my $low;\n        my $up;\n    \
+    \    foreach my $key ( keys %$dict ) {\n            # check if the key is a valid\
+    \ string\n            unless ( defined $key && ref($key) eq '' ) {\n         \
+    \       return '';\n            }\n            if ( $key =~ /^[a-z]*$/ ) {\n \
+    \               $low = 1;\n            }\n            elsif ( $key =~ /^[A-Z]*$/\
+    \ ) {\n                $up = 1;\n            }\n            else {\n         \
+    \       return '';\n            }\n        }\n        if ( $low && $up ) {\n \
+    \           return '';\n        }\n        else {\n            return 1;\n   \
+    \     }\n    }\n    else {\n        return '';\n    }\n}", "    my $key;\n   \
+    \ my $val;\n    my $found_lower = 0;\n    my $found_upper = 0;\n    my $found_other\
+    \ = 0;\n    while (($key, $val) = each %$dict) {\n        if ($key =~ /^[a-z]+$/)\
+    \ {\n            $found_lower = 1;\n        } elsif ($key =~ /^[A-Z]+$/) {\n \
+    \           $found_upper = 1;\n        } else {\n            $found_other = 1;\n\
+    \        }\n    }\n    if ($found_lower && $found_upper) {\n        return '';\n\
+    \    }\n    if ($found_other) {\n        return '';\n    }\n    return 1;\n}",
+  "    my @keys = keys(%$dict);\n    my $flag = 0;\n    return \"\" if scalar(@keys)\
+    \ == 0;\n    for my $key(@keys) {\n        if ($key =~ /^[a-z]+$/) {\n       \
+    \     $flag = 1;\n        } elsif ($key =~ /^[A-Z]+$/) {\n            $flag =\
+    \ 2;\n        } else {\n            return \"\";\n        }\n    }\n    return\
+    \ 1 if $flag == 1;\n    return 1 if $flag == 2;\n}", "    my $ret = 1;\n    my\
+    \ %dict = %$dict;\n    foreach my $key (keys %dict) {\n        if (ref($key) ne\
+    \ \"\") {\n            return \"\";\n        }\n        if ($key =~ /[A-Z]/) {\n\
+    \            $ret = 1;\n            last;\n        } else {\n            $ret\
+    \ = 0;\n        }\n    }\n    if ($ret == 1) {\n        foreach my $key (keys\
+    \ %dict) {\n            if (uc($key) ne $key) {\n                return \"\";\n\
+    \            }\n        }\n    } else {\n        foreach my $key (keys %dict)\
+    \ {\n            if (lc($key) ne $key) {\n                return \"\";\n     \
+    \       }\n        }\n    }\n    return 1;\n}", "    #Returning 1 because empty\
+    \ hash or valid cases return 1\n    return 1 if(keys %$dict == 0);\n    my @keys\
+    \ = keys %$dict;\n    my $case = 0;\n    #Checking if all keys are strings in\
+    \ lower case or all keys are strings in upper case\n    #If they are, return 1,\
+    \ else return ''\n    if(!grep {/[a-z]/} @keys) {\n        $case = 1;\n    }elsif(!grep\
+    \ {/[A-Z]/} @keys) {\n        $case = 1;\n    }\n    return $case;\n}", "    my($key,\
+    \ $val);\n    my($all_upper, $all_lower) = (1, 1);\n    if(scalar(keys(%$dict))\
+    \ == 0) {\n        return '';\n    }\n    while(($key, $val) = each(%$dict)) {\n\
+    \        if($key !~ /[a-z]/) {\n            $all_lower = 0;\n        }\n     \
+    \   if($key !~ /[A-Z]/) {\n            $all_upper = 0;\n        }\n    }\n   \
+    \ if($all_lower || $all_upper) {\n        return 1;\n    }\n    return '';\n}",
+  "    my $result = 1;\n    my $case_type = undef;\n    foreach my $key (keys %$dict)\
+    \ {\n        if ($case_type eq undef) {\n            $case_type = $key =~ /[a-z]/\
+    \ ? 'lower' : 'upper';\n        } elsif ($case_type eq 'lower' && $key =~ /[A-Z]/)\
+    \ {\n            $result = '';\n            last;\n        } elsif ($case_type\
+    \ eq 'upper' && $key =~ /[a-z]/) {\n            $result = '';\n            last;\n\
+    \        }\n    }\n    return $result;\n}", "    my $all_upper = 1;\n    my $all_lower\
+    \ = 1;\n    foreach my $key (keys %$dict) {\n        if($key =~ /^[a-z]+$/) {\n\
+    \            $all_upper = 0;\n        }\n        elsif($key =~ /^[A-Z]+$/) {\n\
+    \            $all_lower = 0;\n        }\n        else {\n            return '';\n\
+    \        }\n    }\n    if($all_upper) {\n        return 1;\n    }\n    elsif($all_lower)\
+    \ {\n        return 1;\n    }\n    else {\n        return '';\n    }\n}", "  \
+    \  my($key);\n    my($all_lower, $all_upper);\n    $all_lower = $all_upper = 1;\n\
+    \    for $key (keys %$dict) {\n        if ($key =~ /[a-z]/) {\n            $all_upper\
+    \ = 0;\n        }\n        elsif ($key =~ /[A-Z]/) {\n            $all_lower =\
+    \ 0;\n        }\n        else {\n            return '';\n        }\n    }\n  \
+    \  if ($all_lower) {\n        return 1;\n    }\n    elsif ($all_upper) {\n   \
+    \     return 1;\n    }\n    else {\n        return '';\n    }\n}", "    my $result\
+    \ = 1;\n    my %uppers;\n    my %lowers;\n    foreach (keys %$dict) {\n      \
+    \  if (/[[:upper:]]/) {\n            $uppers{$_} = 1;\n        } else {\n    \
+    \        $lowers{$_} = 1;\n        }\n    }\n    if (keys %uppers && keys %lowers)\
+    \ {\n        $result = '';\n    }\n    return $result;\n}", "    my($key, $value);\n\
+    \    foreach $key (keys %$dict) {\n        $value = $$dict{$key};\n        if\
+    \ ($key !~ /^[a-z]+$/ && $key !~ /^[A-Z]+$/) {\n            return \"\";\n   \
+    \     }\n    }\n    return 1;\n}", "    my @keys = keys %$dict;\n    my $result\
+    \ = 1;\n    foreach my $k (@keys) {\n        unless ($k =~ /^[a-z]+$/ || $k =~\
+    \ /^[A-Z]+$/) {\n            $result = '';\n            last;\n        }\n   \
+    \ }\n    return $result;\n}", "    my($key, $val);\n    if (not ref($dict) eq\
+    \ 'HASH') {\n        return \"\";\n    }\n    elsif (scalar(keys %$dict) == 0)\
+    \ {\n        return \"\";\n    }\n    else {\n        my($key_lc, $key_uc) = (0,\
+    \ 0);\n        foreach $key (keys %$dict) {\n            $val = $dict->{$key};\n\
+    \            if ($key =~ /^[a-z]+$/) {\n                $key_lc = 1;\n       \
+    \     }\n            elsif ($key =~ /^[A-Z]+$/) {\n                $key_uc = 1;\n\
+    \            }\n            else {\n                return \"\";\n           \
+    \ }\n        }\n        if ($key_lc == 1 and $key_uc == 1) {\n            return\
+    \ \"\";\n        }\n        else {\n            return 1;\n        }\n    }\n}",
+  "    my @keys = keys %$dict;\n    return '' if ($#keys < 0);\n    my $foundLower\
+    \ = 0;\n    my $foundUpper = 0;\n    for my $k (@keys) {\n        return '' if\
+    \ ($k =~ /\\d/);\n        $foundLower = 1 if ($k =~ /[a-z]/);\n        $foundUpper\
+    \ = 1 if ($k =~ /[A-Z]/);\n    }\n    return '' if ($foundLower && $foundUpper);\n\
+    \    return 1;\n}", "    return unless keys %$dict;\n    my $c = keys %$dict;\n\
+    \    # print \"0: $c\\n\";\n    return unless $c;\n    my $k;\n    my $lc = 0;\n\
+    \    my $uc = 0;\n    while (($k, undef) = each %$dict) {\n        if ($k =~ /^[a-z]+$/)\
+    \ {\n            $lc++;\n        } elsif ($k =~ /^[A-Z]+$/) {\n            $uc++;\n\
+    \        } else {\n            return '';\n        }\n    }\n    # print \"1:\
+    \ $c $lc $uc\\n\";\n    return 1 if $c == $lc || $c == $uc;\n    return '';\n}",
+  "    my $upper = 0;\n    my $lower = 0;\n    foreach my $key (keys %$dict) {\n \
+    \       if ($key eq uc($key)) {\n            $upper++;\n        } elsif ($key\
+    \ eq lc($key)) {\n            $lower++;\n        }\n    }\n    if ($upper == 0\
+    \ && $lower == 0) {\n        return 1;\n    } else {\n        return '';\n   \
+    \ }\n}", "    my $ret = 1;\n    my $upper = 0;\n    my $lower = 0;\n    my $both\
+    \ = 0;\n    foreach my $k (keys %$dict) {\n        if ($k =~ /^[A-Z]+$/) {\n \
+    \           $upper = 1;\n        } elsif ($k =~ /^[a-z]+$/) {\n            $lower\
+    \ = 1;\n        } else {\n            $both = 1;\n        }\n    }\n    if ($upper\
+    \ && $lower || $both) {\n        $ret = '';\n    }\n    return $ret;\n}", "  \
+    \  my @keys = keys %$dict;\n    # Empty hash is False\n    return '' unless scalar\
+    \ @keys;\n    my $key_case;\n    for my $key (@keys) {\n        if ( $key =~ /^[a-z]*$/\
+    \ ) {\n            $key_case = 'lower';\n        } elsif ( $key =~ /^[A-Z]*$/\
+    \ ) {\n            $key_case = 'upper';\n        } else {\n            # Mixed\
+    \ case means False\n            return '';\n        }\n    }\n    # Everything\
+    \ is upper or lower case\n    return 1;\n}", "    my @keys = keys(%$dict);\n \
+    \   if ($#keys < 0) {\n        return \"\";\n    }\n    my $check = $keys[0];\n\
+    \    if ($check =~ /^[a-z]+$/) {\n        foreach my $k (@keys) {\n          \
+    \  if ($k !~ /^[a-z]+$/) {\n                return \"\";\n            }\n    \
+    \    }\n    }\n    elsif ($check =~ /^[A-Z]+$/) {\n        foreach my $k (@keys)\
+    \ {\n            if ($k !~ /^[A-Z]+$/) {\n                return \"\";\n     \
+    \       }\n        }\n    }\n    else {\n        return \"\";\n    }\n    return\
+    \ 1;\n}", "    my @keys = keys %$dict;\n    if (not @keys) {\n        return '';\n\
+    \    }\n    my $regex;\n    my $first = $keys[0];\n    if ($first =~ /^[a-z]/)\
+    \ {\n        $regex = qr/^[a-z]+$/;\n    }\n    elsif ($first =~ /^[A-Z]/) {\n\
+    \        $regex = qr/^[A-Z]+$/;\n    }\n    else {\n        return '';\n    }\n\
+    \    for my $key (@keys) {\n        if ($key !~ $regex) {\n            return\
+    \ '';\n        }\n    }\n    return 1;\n}", "    my $all_lower_keys = '';\n  \
+    \  my $all_upper_keys = '';\n    foreach my $key (keys %$dict) {\n        if (lc($key)\
+    \ eq $key) {\n            $all_lower_keys = 1;\n        } else {\n           \
+    \ $all_lower_keys = '';\n        }\n        if (uc($key) eq $key) {\n        \
+    \    $all_upper_keys = 1;\n        } else {\n            $all_upper_keys = '';\n\
+    \        }\n    }\n    return $all_lower_keys || $all_upper_keys;\n}", "    my\
+    \ $lower_case = 1;\n    my $upper_case = 1;\n    for my $key (keys(%$dict)) {\n\
+    \        if ($key =~ /[[:upper:]]/) {\n            $lower_case = 0;\n        }\n\
+    \        if ($key =~ /[[:lower:]]/) {\n            $upper_case = 0;\n        }\n\
+    \    }\n    return ($lower_case || $upper_case) ? 1 : '';\n}", "    my @keys =\
+    \ keys %$dict;\n    return '' if (scalar @keys == 0);\n    my @lower = grep {\
+    \ /^[a-z]+$/ } @keys;\n    my @upper = grep { /^[A-Z]+$/ } @keys;\n    my $retval\
+    \ = '';\n    if (scalar @lower == scalar @keys) {\n        $retval = 1;\n    }\
+    \ elsif (scalar @upper == scalar @keys) {\n        $retval = 1;\n    } else {\n\
+    \        $retval = '';\n    }\n    return $retval;\n}", "    my(@list) = keys\
+    \ %$dict;\n    my($count_upper) = 0;\n    my($count_lower) = 0;\n    foreach my\
+    \ $key (@list) {\n        if ($key =~ /^[A-Z]+$/) {\n            $count_upper\
+    \ += 1;\n        } elsif ($key =~ /^[a-z]+$/) {\n            $count_lower += 1;\n\
+    \        }\n    }\n    if ($count_upper == 0 || $count_lower == 0) {\n       \
+    \ return 1;\n    } else {\n        return '';\n    }\n}", "    my @keys = keys(%$dict);\n\
+    \    my $type = \"unknown\";\n    for my $k (@keys) {\n        if ($type eq \"\
+    unknown\") {\n            if ($k =~ /^[a-z]+$/) {\n                $type = \"\
+    lower\";\n            } elsif ($k =~ /^[A-Z]+$/) {\n                $type = \"\
+    upper\";\n            } else {\n                $type = \"mixed\";\n         \
+    \   }\n        } elsif ($type eq \"lower\") {\n            if ($k =~ /^[A-Z]+$/)\
+    \ {\n                $type = \"mixed\";\n            }\n        } elsif ($type\
+    \ eq \"upper\") {\n            if ($k =~ /^[a-z]+$/) {\n                $type\
+    \ = \"mixed\";\n            }\n        }\n    }\n    return ($type eq \"lower\"\
+    \ || $type eq \"upper\") ? 1 : \"\";\n}", "    my $is_upper_case = 0;\n    my\
+    \ $is_lower_case = 0;\n    foreach my $key (keys %$dict) {\n        if (uc($key)\
+    \ eq $key) {\n            $is_upper_case = 1;\n        }\n        if (lc($key)\
+    \ eq $key) {\n            $is_lower_case = 1;\n        }\n    }\n    if ($is_upper_case\
+    \ && $is_lower_case) {\n        return '';\n    }\n    return 1;\n}", "    return\
+    \ '' if $dict eq '';\n    my $res = '';\n    my $case = 0;\n    foreach my $key\
+    \ (keys %$dict) {\n        if ($key =~ /[[:upper:]]/) {\n            $case = $case\
+    \ + 1;\n        } else {\n            $case = $case - 1;\n        }\n    }\n \
+    \   $res = 1 if $case == 0 || $case == 1;\n    return $res;\n}", "    my $result\
+    \ = 1;\n    my $sub = \"check_dict_case\";\n    my $pending = scalar keys %$dict;\n\
+    \    my $num_calls = 0;\n    foreach my $key (keys %$dict) {\n        my $value\
+    \ = $dict->{$key};\n        $num_calls += 2;\n        return '' if (not is_string($key));\n\
+    \        $num_calls += 1;\n        $result = '' if (is_upper($key) and is_lower($key));\n\
+    \        $num_calls += 1;\n        $pending -= 1;\n        return '' if $pending\
+    \ == 0 and $result eq '';\n    }\n    return $result;\n}", "    my @hashkeys =\
+    \ keys %$dict;\n    my $testkey = $hashkeys[0];\n    return '' if $testkey eq\
+    \ ''; #edge case of empty hash\n    if (lc($testkey) eq $testkey) {\n        for\
+    \ my $key (@hashkeys) {\n            return '' if (uc($key) ne $key);\n      \
+    \  }\n    }\n    elsif (uc($testkey) eq $testkey) {\n        for my $key (@hashkeys)\
+    \ {\n            return '' if (lc($key) ne $key);\n        }\n    }\n    else\
+    \ {\n        return '';\n    }\n    return 1;\n}", "    if (! scalar keys %$dict)\
+    \ {\n        return '';\n    }\n    my $key;\n    foreach $key (keys %$dict) {\n\
+    \        if (int($key) == $key) {\n            return '';\n        }\n    }\n\
+    \    foreach $key (keys %$dict) {\n        if (uc($key) ne $key) {\n         \
+    \   return '';\n        }\n    }\n    return 1;\n}", "    my $lc_cnt = 0;\n  \
+    \  my $uc_cnt = 0;\n    for my $key (keys %$dict) {\n        if ($key =~ /^[a-z]+$/)\
+    \ {\n            $lc_cnt++;\n        } elsif ($key =~ /^[A-Z]+$/) {\n        \
+    \    $uc_cnt++;\n        } else {\n            return '';\n        }\n    }\n\
+    \    return $lc_cnt > 0 && $uc_cnt == 0 ? 1 : '';\n}", "    my $all_lower = 1;\n\
+    \    my $all_upper = 1;\n    my $result = 1;\n    foreach my $key (keys(%$dict))\
+    \ {\n        if ($key =~ /[[:upper:]]/) {\n            $all_lower = 0;\n     \
+    \   }\n        if ($key =~ /[[:lower:]]/) {\n            $all_upper = 0;\n   \
+    \     }\n    }\n    if ($all_lower == 0 && $all_upper == 0) {\n        $result\
+    \ = '';\n    }\n    return $result;\n}", "    my @keys = keys %$dict;\n    return\
+    \ \"\" if scalar @keys == 0;\n    my $count = 0;\n    for my $key (@keys) {\n\
+    \        next if $key !~ /\\w+/;\n        my $lc = lc $key;\n        my $uc =\
+    \ uc $key;\n        if ($key ne $lc && $key ne $uc) {\n            return \"\"\
+    ;\n        }\n        if ($key eq $lc) {\n            $count++;\n        }\n \
+    \   }\n    if ($count == scalar @keys) {\n        return 1;\n    }\n    return\
+    \ \"\";\n}", "    my($value,$flag);\n    my(@keys) = keys %$dict;\n    my(@values)\
+    \ = values %$dict;\n    for(my $i=0;$i<scalar(@keys);$i++) {\n        $value =\
+    \ $keys[$i];\n        if($value =~ /[a-z]/) {\n            $flag = \"lower\";\n\
+    \        }\n        elsif($value =~ /[A-Z]/) {\n            $flag = \"upper\"\
+    ;\n        }\n        else {\n            return \"\";\n        }\n    }\n   \
+    \ for(my $i=0;$i<scalar(@keys);$i++) {\n        $value = $keys[$i];\n        if($flag\
+    \ eq \"lower\") {\n            if($value !~ /[a-z]/) {\n                return\
+    \ \"\";\n            }\n        }\n        elsif($flag eq \"upper\") {\n     \
+    \       if($value !~ /[A-Z]/) {\n                return \"\";\n            }\n\
+    \        }\n    }\n    return 1;\n}", "    my($are_lower, $are_upper);\n    my($key);\n\
+    \    foreach $key (keys %$dict) {\n        $are_lower = $key =~ /^[a-z]+$/;\n\
+    \        $are_upper = $key =~ /^[A-Z]+$/;\n        return '' if $are_lower !=\
+    \ $are_upper;\n    }\n    return 1;\n}", "    my $ret = 1;\n    if (%$dict) {\n\
+    \        my ($any_lower, $any_upper) = 0;\n        foreach my $key (keys %$dict)\
+    \ {\n            if ($key =~ /^[a-z]+$/) {\n                $any_lower = 1;\n\
+    \            }\n            elsif ($key =~ /^[A-Z]+$/) {\n                $any_upper\
+    \ = 1;\n            }\n            else {\n                return \"\";\n    \
+    \        }\n        }\n        $ret = 0 if ($any_lower and $any_upper);\n    }\n\
+    \    return $ret;\n}", "    # your code here\n    if (scalar keys %$dict > 0)\
+    \ {\n        my $is_upper = 0;\n        my $is_lower = 0;\n        foreach my\
+    \ $key (keys %$dict) {\n            if (uc($key) eq $key) {\n                $is_upper\
+    \ = 1;\n            }\n            elsif (lc($key) eq $key) {\n              \
+    \  $is_lower = 1;\n            }\n            else {\n                return '';\n\
+    \            }\n        }\n        if ($is_upper == 1 && $is_lower == 1) {\n \
+    \           return '';\n        }\n        else {\n            return 1;\n   \
+    \     }\n    }\n    else {\n        return '';\n    }\n}", "    my $all_lower\
+    \ = 0;\n    my $all_upper = 0;\n    foreach my $key (keys %$dict) {\n        if\
+    \ ($key =~ /[A-Z]/) {\n            $all_lower = 0;\n            $all_upper = 1;\n\
+    \        }\n        elsif ($key =~ /[a-z]/) {\n            $all_lower = 1;\n \
+    \           $all_upper = 0;\n        }\n        else {\n            return '';\n\
+    \        }\n    }\n    return 1 if ($all_lower || $all_upper);\n    return '';\n\
+    }", "    return 1 if !%$dict; # empty\n    my $keys = [sort keys %$dict];\n  \
+    \  return '' if lc($keys->[0]) ne $keys->[0]\n            and uc($keys->[0]) ne\
+    \ $keys->[0];\n    my $keycase = lc($keys->[0]) eq $keys->[0] ? 'l' : 'u';\n \
+    \   foreach my $key (@$keys) {\n        return '' if $keycase eq 'l' and lc($key)\
+    \ ne $key;\n        return '' if $keycase eq 'u' and uc($key) ne $key;\n    }\n\
+    \    return 1;\n}", "    my($lower, $upper) = (0, 0);\n    foreach my $key (keys\
+    \ %$dict) {\n        if ($key =~ /[a-z]/) {\n            $lower++;\n        }\
+    \ elsif ($key =~ /[A-Z]/) {\n            $upper++;\n        }\n    }\n    return\
+    \ ($lower && $upper) ? '' : 1;\n}", "    return '' if !%$dict;\n    my @keys =\
+    \ keys %$dict;\n    if($keys[0] =~ /[a-z]/) {\n        foreach my $key (@keys)\
+    \ {\n            return '' if $key !~ /[a-z]/;\n        }\n    } else {\n    \
+    \    foreach my $key (@keys) {\n            return '' if $key !~ /[A-Z]/;\n  \
+    \      }\n    }\n    return 1;\n}", "    my $result = 1;\n    return '' if scalar\
+    \ keys %$dict == 0;\n    my $first_key = (keys %$dict)[0];\n    if ($first_key\
+    \ =~ /[A-Z]/) {\n        # keys should be upper case\n        foreach my $key\
+    \ (keys %$dict) {\n            if ($key !~ /[A-Z]/) {\n                $result\
+    \ = '';\n                last;\n            }\n        }\n    } else {\n     \
+    \   # keys should be lower case\n        foreach my $key (keys %$dict) {\n   \
+    \         if ($key !~ /[a-z]/) {\n                $result = '';\n            \
+    \    last;\n            }\n        }\n    }\n    return $result;\n}", "    my\
+    \ $upper = 1;\n    my $lower = 1;\n    foreach my $key (keys %$dict) {\n     \
+    \   if ($key =~ /[A-Z]/) {\n            $lower = 0;\n        }\n        if ($key\
+    \ =~ /[a-z]/) {\n            $upper = 0;\n        }\n    }\n    if ($upper) {\n\
+    \        return 1;\n    }\n    if ($lower) {\n        return 1;\n    }\n    return\
+    \ '';\n}", "    my $result = 1;\n    my $upper_case_dict = {};\n    my $lower_case_dict\
+    \ = {};\n    foreach my $key (keys %$dict) {\n        $upper_case_dict->{uc($key)}\
+    \ = 1;\n        $lower_case_dict->{lc($key)} = 1;\n    }\n    if (scalar(keys\
+    \ %$upper_case_dict) > 1 && scalar(keys %$lower_case_dict) > 1) {\n        $result\
+    \ = '';\n    }\n    return $result;\n}", "    my $lc_found = 0;\n    my $uc_found\
+    \ = 0;\n    foreach my $key (keys %$dict) {\n        if ($key =~ /^[a-z]+$/) {\n\
+    \            $lc_found = 1;\n        }\n        elsif ($key =~ /^[A-Z]+$/) {\n\
+    \            $uc_found = 1;\n        }\n        else {\n            return '';\n\
+    \        }\n    }\n    return '' if $lc_found && $uc_found;\n    return 1;\n}",
+  "    my $result = 1;\n    my $mixed_case = 0;\n    foreach my $key (sort keys %$dict)\
+    \ {\n        if (isupper($key)) {\n            unless ($mixed_case == 0) {\n \
+    \               $result = '';\n                last;\n            }\n        \
+    \    $mixed_case = 1;\n        }\n        elsif (islower($key)) {\n          \
+    \  unless ($mixed_case == 0) {\n                $result = '';\n              \
+    \  last;\n            }\n            $mixed_case = 2;\n        }\n        else\
+    \ {\n            $result = '';\n            last;\n        }\n    }\n    return\
+    \ $result;\n}", "    my @keys = keys %$dict;\n    my $is_lower = 0;\n    my $is_upper\
+    \ = 0;\n    if (scalar @keys > 0) {\n        $is_lower = 1 if $keys[0] =~ /^[a-z]+$/;\n\
+    \        $is_upper = 1 if $keys[0] =~ /^[A-Z]+$/;\n    }\n    for my $k (@keys)\
+    \ {\n        $is_lower = 0 if $k !~ /^[a-z]+$/;\n        $is_upper = 0 if $k !~\
+    \ /^[A-Z]+$/;\n    }\n    if ($is_lower) {\n        return 1;\n    }\n    if ($is_upper)\
+    \ {\n        return 1;\n    }\n    return '';\n}", "    if(scalar keys %$dict\
+    \ == 0) { return '' }\n    my $keys_are_lower_case = check_keys_are_lower_case($dict);\n\
+    \    my $keys_are_upper_case = check_keys_are_upper_case($dict);\n    return ($keys_are_lower_case\
+    \ == 1 || $keys_are_upper_case == 1) ? 1 : '';\n}", "    return \"\" if keys %$dict\
+    \ == 0;\n    my $idx = 0;\n    my $first_lowercase = lc(keys %$dict)[$idx];\n\
+    \    my $first_uppercase = uc(keys %$dict)[$idx];\n    for my $key (keys %$dict)\
+    \ {\n        return \"\" if $key ne $first_lowercase && $key ne $first_uppercase;\n\
+    \    }\n    return 1;\n}", "    my(@keys) = keys %$dict;\n    my(@lower) = grep\
+    \ /^[[:lower:]]+$/, @keys;\n    my(@upper) = grep /^[[:upper:]]+$/, @keys;\n \
+    \   return \"\" if @lower == 0 && @upper == 0;\n    return 1 if @lower == @keys\
+    \ || @upper == @keys;\n    return \"\";\n}", "    return 1 if !defined $dict;\n\
+    \    my $keys = [keys %$dict];\n    if (scalar @$keys == 0) {\n        return\
+    \ \"\";\n    }\n    my $lower = is_lower($keys->[0]);\n    my $upper = is_upper($keys->[0]);\n\
+    \    return 1 if $lower || $upper;\n    for (my $i = 1; $i < scalar @$keys; $i++)\
+    \ {\n        my $ret = is_lower($keys->[$i]);\n        return \"\" if ($ret !=\
+    \ $lower);\n        $ret = is_upper($keys->[$i]);\n        return \"\" if ($ret\
+    \ != $upper);\n    }\n    return 1;\n}", "    my $check_char = 0;\n    my $check_int\
+    \ = 0;\n    foreach my $key (keys %$dict) {\n        if ($key =~ /[a-z]/) {\n\
+    \            $check_char++;\n        }\n        elsif ($key =~ /[0-9]/) {\n  \
+    \          $check_int++;\n        }\n    }\n    if ($check_char == scalar(keys\
+    \ %$dict)) {\n        return 1;\n    }\n    elsif ($check_int == scalar(keys %$dict))\
+    \ {\n        return 1;\n    }\n    else {\n        return '';\n    }\n}", "  \
+    \  return 1 if ( scalar( keys %$dict ) == 0 );\n    return check_dict_values_match(\n\
+    \        $dict, \n        sub {\n            my($key) = @_;\n            return\
+    \ 1 if $key =~ /^[a-z]+$/;\n            return 1 if $key =~ /^[A-Z]+$/;\n    \
+    \        return 0;\n        }\n    );\n}", "    my $key;\n    my $state = 1;",
+  "    my $return_value = 1;\n    my @keys = keys %$dict;\n    my $i = 0;\n    while\
+    \ ($i < scalar @keys) {\n        unless ($keys[$i] =~ /[a-z]/) {\n           \
+    \ $return_value = '';\n            last;\n        }\n        $i++;\n    }\n  \
+    \  if ($return_value) {\n        # all keys were lower case, now see if any were\
+    \ upper case\n        $i = 0;\n        while ($i < scalar @keys) {\n         \
+    \   if ($keys[$i] =~ /[A-Z]/) {\n                $return_value = '';\n       \
+    \         last;\n            }\n            $i++;\n        }\n    }\n    return\
+    \ $return_value;\n}\n1;", "    my $result = \"\";\n    my $is_all_lower_case =\
+    \ 1;\n    my $is_all_upper_case = 1;\n    my $key;\n    my $upper_key;\n    my\
+    \ $lower_key;\n    my $value;\n    my $element;\n    my $is_dict_empty = 1;\n\
+    \    foreach $element (keys %$dict) {\n        $is_dict_empty = 0;\n        $key\
+    \ = $element;\n        $value = $dict->{$key};\n        $upper_key = uc($key);\n\
+    \        $lower_key = lc($key);\n        if ($key ne $upper_key) {\n         \
+    \   $is_all_upper_case = 0;\n        }\n        if ($key ne $lower_key) {\n  \
+    \          $is_all_lower_case = 0;\n        }\n    }\n    if ($is_dict_empty)\
+    \ {\n        $result = \"\";\n    } elsif ($is_all_lower_case || $is_all_upper_case)\
+    \ {\n        $result = 1;\n    } else {\n        $result = \"\";\n    }\n    return\
+    \ $result;\n}", "    my($key, $val);\n    my($case) = -1;\n    foreach $key (keys\
+    \ %$dict) {\n        if($case == -1) {\n            if($key =~ /[a-z]/) {\n  \
+    \              $case = 0;\n            } elsif($key =~ /[A-Z]/) {\n          \
+    \      $case = 1;\n            } else {\n                return \"\";\n      \
+    \      }\n        } else {\n            if($case == 0 && $key =~ /[A-Z]/) {\n\
+    \                return \"\";\n            } elsif($case == 1 && $key =~ /[a-z]/)\
+    \ {\n                return \"\";\n            }\n        }\n    }\n    return\
+    \ 1;\n}", "    my $result = 1;\n    my $rc;\n    foreach my $key (keys %$dict)\
+    \ {\n        $rc = $key =~ /[A-Z]/;\n        if (defined($rc)) {\n           \
+    \ if ($rc == 0) {\n                $result = '';\n                last;\n    \
+    \        }\n        }\n    }\n    return $result;\n}", "    my $flag = 1;\n  \
+    \  my $case_cnt = 0;\n    foreach my $key (keys %$dict) {\n        if ($key =~\
+    \ /[A-Z]/) {\n            $case_cnt++;\n        }\n    }\n    if ($case_cnt !=\
+    \ 0 && $case_cnt != keys %$dict) {\n        $flag = \"\";\n    }\n    return $flag;\n\
+    }", "    my @keys = keys %$dict;\n    return '' if @keys == 0;\n    my $first\
+    \ = $keys[0];\n    return '' if $first !~ /^[a-z]+$/ && $first !~ /^[A-Z]+$/;\n\
+    \    my $mode = $first =~ /^[a-z]+$/ ? 'lower' : 'upper';\n    my $i = 0;\n  \
+    \  while ($i < @keys) {\n        if ($mode eq 'lower' && $keys[$i] !~ /^[a-z]+$/)\
+    \ {\n            return '';\n        }\n        if ($mode eq 'upper' && $keys[$i]\
+    \ !~ /^[A-Z]+$/) {\n            return '';\n        }\n        $i++;\n    }\n\
+    \    return 1;\n}", "    my $isLower;\n    my $isUpper;\n    foreach my $key (keys(%$dict))\
+    \ {\n        if ($key =~ /^[a-z]+$/) {\n            $isLower = 1;\n        }\n\
+    \        elsif ($key =~ /^[A-Z]+$/) {\n            $isUpper = 1;\n        }\n\
+    \        else {\n            return '';\n        }\n    }\n    return ($isLower\
+    \ and not $isUpper) ? 1 : ($isUpper and not $isLower) ? 1 : '';\n}", "    my $all_lower\
+    \ = 1;\n    my $all_upper = 1;\n    foreach my $key (keys %$dict) {\n        if\
+    \ (! $key =~ /^[a-z]+$/) {\n            $all_lower = 0;\n        }\n        if\
+    \ (! $key =~ /^[A-Z]+$/) {\n            $all_upper = 0;\n        }\n    }\n  \
+    \  return $all_lower || $all_upper;\n}", "    return '' if (!defined($dict) ||\
+    \ scalar(keys(%$dict)) == 0);\n    my $case = 'mixed';\n    foreach my $key (keys(%$dict))\
+    \ {\n        my $key_case = get_case($key);\n        if ($key_case ne 'mixed')\
+    \ {\n            if ($case eq 'mixed') {\n                $case = $key_case;\n\
+    \            } elsif ($case ne $key_case) {\n                return '';\n    \
+    \        }\n        }\n    }\n    return 1;\n}", "    # TODO - Add your code here\n\
+    \    #use Data::Dumper;\n    #print Dumper $dict;\n    my $result = 1;\n    my\
+    \ $keys;\n    if ($$dict{'a'}) {\n        $keys = lc keys %$dict;\n    } elsif\
+    \ ($$dict{'A'}) {\n        $keys = uc keys %$dict;\n    } else {\n        $result\
+    \ = '';\n    }\n    foreach my $key (keys %$dict) {\n        if ($keys !~ m/$key/)\
+    \ {\n            $result = '';\n        }\n    }\n    return $result;\n}", " \
+    \   if(!defined($dict) || scalar(keys %$dict) == 0) {\n        return '';\n  \
+    \  }\n    my $upper = 0;\n    my $lower = 0;\n    for my $key (keys %$dict) {\n\
+    \        if($key =~ /^[A-Z]+$/) {\n            $upper = 1;\n        }\n      \
+    \  if($key =~ /^[a-z]+$/) {\n            $lower = 1;\n        }\n    }\n    if($upper\
+    \ && $lower) {\n        return '';\n    }\n    return 1;\n}", "    my $is_lower\
+    \ = 1;\n    my $is_upper = 1;\n    foreach my $key (keys %$dict) {\n        if\
+    \ ($key =~ /[a-z]/) {\n            $is_upper = 0;\n        }\n        if ($key\
+    \ =~ /[A-Z]/) {\n            $is_lower = 0;\n        }\n    }\n    if ($is_lower\
+    \ || $is_upper) {\n        return 1;\n    }\n    return '';\n}", "    my $ret_val\
+    \ = 1;\n    my $str_check_key;\n    my $str_check_val;\n    my $key;\n    my $val;\n\
+    \    foreach $key (keys %$dict) {\n        $val = $dict->{$key};\n        if (length($key)\
+    \ > 0) {\n            $str_check_key = $key;\n            last;\n        }\n \
+    \   }\n    if (length($str_check_key) > 0) {\n        if ($str_check_key =~ /^[a-z]+$/)\
+    \ {\n            foreach $key (keys %$dict) {\n                $val = $dict->{$key};\n\
+    \                if ($key !~ /^[a-z]+$/) {\n                    $ret_val = \"\"\
+    ;\n                    last;\n                }\n            }\n        } elsif\
+    \ ($str_check_key =~ /^[A-Z]+$/) {\n            foreach $key (keys %$dict) {\n\
+    \                $val = $dict->{$key};\n                if ($key !~ /^[A-Z]+$/)\
+    \ {\n                    $ret_val = \"\";\n                    last;\n       \
+    \         }\n            }\n        } else {\n            $ret_val = \"\";\n \
+    \       }\n    }\n    return $ret_val;\n}", "    my $ret;\n    foreach my $key\
+    \ ( keys %$dict ) {\n        if (defined($ret)) {\n            if ($ret && $key\
+    \ !~ /^[a-z]+$/) {\n                $ret = '';\n            } elsif (!$ret &&\
+    \ $key !~ /^[A-Z]+$/) {\n                $ret = '';\n            }\n        }\
+    \ else {\n            if ($key =~ /^[a-z]+$/) {\n                $ret = 1;\n \
+    \           } elsif ($key =~ /^[A-Z]+$/) {\n                $ret = '';\n     \
+    \       } else {\n                $ret = '';\n            }\n        }\n    }\n\
+    \    return $ret;\n}", "    return '' if(!$dict);\n    my $match = '';\n    for\
+    \ my $k (keys %$dict) {\n        return '' if(!$match && $k =~ /^[a-z]+$/);\n\
+    \        return '' if($match && $k =~ /^[A-Z]+$/);\n        $match = 1 if(!$match\
+    \ && $k =~ /^[A-Z]+$/);\n    }\n    return $match;\n}", "    # if the dict is\
+    \ empty, return ''\n    # else if all keys are strings in lower case, return 1\n\
+    \    # else if all keys are strings in upper case, return 1\n    # else return\
+    \ ''\n    my($is_all_lower, $is_all_upper) = (1, 1);\n    foreach my $key (keys\
+    \ %$dict) {\n        $is_all_lower = 0 if ($key =~ /[A-Z]/);\n        $is_all_upper\
+    \ = 0 if ($key =~ /[a-z]/);\n    }\n    return '' if (scalar(keys %$dict) == 0);\n\
+    \    return $is_all_lower ? 1 : ($is_all_upper ? 1 : '');\n}", "    if (keys(%$dict)\
+    \ == 0) {\n        return '';\n    }\n    my($first_key, $first_val);\n    foreach\
+    \ my $key (keys(%$dict)) {\n        $first_key = $key;\n        $first_val = $dict->{$key};\n\
+    \        last;\n    }\n    my($first_key_check) = $first_key eq lc($first_key)\
+    \ ? 1 : 0;\n    foreach my $key (keys(%$dict)) {\n        if ($first_key_check)\
+    \ {\n            if ($key ne lc($key)) {\n                return '';\n       \
+    \     }\n        } else {\n            if ($key ne uc($key)) {\n             \
+    \   return '';\n            }\n        }\n    }\n    return 1;\n}", "    my @arr\
+    \ = keys $dict;\n    my $flag = \"1\";\n    foreach my $key (@arr) {\n       \
+    \ if ($key =~ /[a-z]/) {\n            if ($key =~ /[A-Z]/) {\n               \
+    \ $flag = \"\";\n                last;\n            }\n        }\n        else\
+    \ {\n            if ($key =~ /[a-z]/) {\n                $flag = \"\";\n     \
+    \           last;\n            }\n        }\n    }\n    return $flag;\n}", " \
+    \   my $retval = '';\n    my @key_set = ();\n    if ( scalar keys %$dict == 0\
+    \ ) {\n        return '';\n    }\n    else {\n        @key_set = keys %$dict;\n\
+    \        foreach my $key ( @key_set ) {\n            if ( $key =~ /^[a-z]+$/ )\
+    \ {\n                $retval = 1;\n            }\n            else {\n       \
+    \         return '';\n            }\n        }\n    }\n    return $retval;\n}",
+  "    my $flag = 1;\n    my $case;\n    foreach my $key (keys %$dict) {\n       \
+    \ if (!($key =~ /^[a-z]+$/)) {\n            if (!($key =~ /^[A-Z]+$/)) {\n   \
+    \             $flag = 0;\n                last;\n            }\n            if\
+    \ (defined $case && $case ne 'upper') {\n                $flag = 0;\n        \
+    \        last;\n            }\n            $case = 'upper';\n        }\n     \
+    \   if (defined $case && $case ne 'lower') {\n            $flag = 0;\n       \
+    \     last;\n        }\n        $case = 'lower';\n    }\n    if (!$flag) {\n \
+    \       return '';\n    }\n    return 1;\n}", "    my $count = 0;\n    my $first_key;\n\
+    \    my $first_key_case;\n    foreach my $key (keys(%$dict)) {\n        if (!$first_key)\
+    \ {\n            $first_key = $key;\n            $first_key_case = ($key =~ /[A-Z]/)\
+    \ ? 'upper' : 'lower';\n        } else {\n            if ($first_key_case eq 'upper'\
+    \ && $key =~ /[a-z]/) {\n                return '';\n            } elsif ($first_key_case\
+    \ eq 'lower' && $key =~ /[A-Z]/) {\n                return '';\n            }\n\
+    \        }\n        $count++;\n    }\n    return ($count == 0) ? '' : 1;\n}",
+  "    my(@keys) = keys %$dict;\n    my($key, $value);\n    my($i, $j);\n    my($low);\n\
+    \    my($n) = scalar(@keys);\n    if($n == 0) {\n        return \"\";\n    }\n\
+    \    for($i = 0; $i < $n; $i++) {\n        $key = $keys[$i];\n        if($key\
+    \ !~ /^\\w+$/) {\n            return \"\";\n        }\n        for($j = $i + 1;\
+    \ $j < $n; $j++) {\n            if($key eq $keys[$j]) {\n                return\
+    \ \"\";\n            }\n        }\n    }\n    $key = $keys[0];\n    if($key =~\
+    \ /^[a-z]+$/) {\n        $low = 1;\n    }\n    elsif($key =~ /^[A-Z]+$/) {\n \
+    \       $low = 0;\n    }\n    else {\n        return \"\";\n    }\n    for($i\
+    \ = 1; $i < $n; $i++) {\n        $key = $keys[$i];\n        if($low) {\n     \
+    \       if($key !~ /^[a-z]+$/) {\n                return \"\";\n            }\n\
+    \        }\n        else {\n            if($key !~ /^[A-Z]+$/) {\n           \
+    \     return \"\";\n            }\n        }\n    }\n    return 1;\n}", "    my($key);\n\
+    \    my($upper) = 1;\n    my($lower) = 1;\n    foreach $key (keys %$dict) {\n\
+    \        if($key =~ /[A-Z]/) {\n            $lower = 0;\n        }\n        if($key\
+    \ =~ /[a-z]/) {\n            $upper = 0;\n        }\n    }\n    return $upper\
+    \ || $lower;\n}", "    if( scalar keys %$dict == 0 ) {\n        return '';\n \
+    \   }\n    my $return_val = 1;\n    my $upper_keys = 0;\n    my $lower_keys =\
+    \ 0;\n    foreach my $key (keys %$dict) {\n        if($key =~ /[a-z]/) {\n   \
+    \         $lower_keys++;\n        }\n        elsif($key =~ /[A-Z]/) {\n      \
+    \      $upper_keys++;\n        }\n        else {\n            $return_val = '';\n\
+    \        }\n    }\n    if($lower_keys == scalar keys %$dict || $upper_keys ==\
+    \ scalar keys %$dict) {\n        return $return_val;\n    }\n    else {\n    \
+    \    return '';\n    }\n}", "    my $key;\n    my $val;\n    my $upper = 1;\n\
+    \    my $lower = 1;\n    foreach $key (keys %$dict) {\n\t$val = $$dict{$key};\n\
+    \tif ($key =~ /^[A-Z]+$/) {\n\t    $lower = 0;\n\t} elsif ($key =~ /^[a-z]+$/)\
+    \ {\n\t    $upper = 0;\n\t} else {\n\t    return '';\n\t}\n    }\n    if ($upper)\
+    \ {\n\treturn 1;\n    } elsif ($lower) {\n\treturn 1;\n    } else {\n\treturn\
+    \ '';\n    }\n}", "    my $flag = 1;\n    my $upper_flag = 1;\n    my $lower_flag\
+    \ = 1;\n    foreach my $key (keys %$dict) {\n        $upper_flag = 0 if ($key\
+    \ !~ /[A-Z]/);\n        $lower_flag = 0 if ($key !~ /[a-z]/);\n    }\n    return\
+    \ \"\" if (! $upper_flag and ! $lower_flag);\n    return 1;\n}", "    my($k, $v);\n\
+    \    my($is_lk) = 1;\n    my($is_uk) = 1;\n    while(($k, $v) = each %$dict) {\n\
+    \        if ($k =~ /[A-Z]/) {\n            $is_lk = 0;\n        }\n        if\
+    \ ($k =~ /[a-z]/) {\n            $is_uk = 0;\n        }\n    }\n    if ($is_lk\
+    \ || $is_uk) {\n        return 1;\n    }\n    return '';\n}", "    # Your code\
+    \ goes here\n    my $key_case;\n    foreach my $key (keys %$dict) {\n        if\
+    \ (uc($key) eq $key && $key_case ne 'up') {\n            $key_case = 'up';\n \
+    \       }\n        elsif (lc($key) eq $key && $key_case ne 'low') {\n        \
+    \    $key_case = 'low';\n        }\n        else {\n            return '';\n \
+    \       }\n    }\n    return 1;\n}", "    my $case = '';\n    my $prev_key = '';\n\
+    \    foreach my $key (keys %$dict) {\n        if ( $key =~ /^[a-z]+$/ ) {\n  \
+    \          if ( $case eq '' ) {\n                $case = 'lower';\n          \
+    \  } elsif ( $case eq 'upper' ) {\n                return '';\n            }\n\
+    \        } elsif ( $key =~ /^[A-Z]+$/ ) {\n            if ( $case eq '' ) {\n\
+    \                $case = 'upper';\n            } elsif ( $case eq 'lower' ) {\n\
+    \                return '';\n            }\n        } else {\n            return\
+    \ '';\n        }\n        if ( $prev_key eq $key ) {\n            return '';\n\
+    \        }\n        $prev_key = $key;\n    }\n    return $case;\n}", "    if (keys(%$dict)\
+    \ == 0) {\n        return '';\n    }\n    my @keys = keys(%$dict);\n    if (!all_upper(@keys)\
+    \ && !all_lower(@keys)) {\n        return '';\n    }\n    return 1;\n}", "   \
+    \ my $key;\n    my $val;\n    my $dict_size = scalar keys %$dict;\n    if ($dict_size\
+    \ == 0) {\n        return '';\n    }\n    foreach $key (keys %$dict) {\n     \
+    \   $val = $dict->{$key};\n        if (uc($key) eq $key) {\n            foreach\
+    \ $key (keys %$dict) {\n                if (lc($key) eq $key) {\n            \
+    \        return '';\n                }\n            }\n            return 1;\n\
+    \        }\n        if (lc($key) eq $key) {\n            foreach $key (keys %$dict)\
+    \ {\n                if (uc($key) eq $key) {\n                    return '';\n\
+    \                }\n            }\n            return 1;\n        }\n    }\n \
+    \   return '';\n}", "    my @keys = keys %$dict;\n    my $lower = 1;\n    my $upper\
+    \ = 1;\n    for (@keys) {\n        $lower = 0 if ($_ ne lc $_);\n        $upper\
+    \ = 0 if ($_ ne uc $_);\n    }\n    return 1 if ($lower || $upper);\n    return\
+    \ '';\n}", "    my $flag = 1;\n    return '' if !%$dict;\n    my $key_type = (keys\
+    \ %$dict)[0];\n    my $key_regex = ($key_type eq uc($key_type)) ? '^[A-Z]+$' :\
+    \ '^[a-z]+$';\n    for my $key (keys %$dict) {\n        if ($key !~ $key_regex)\
+    \ {\n            $flag = '';\n            last;\n        }\n    }\n    return\
+    \ $flag;\n}", "    # your code here\n}", "    my $return;\n    foreach my $key\
+    \ (keys %$dict) {\n        my $value = $dict->{$key};\n        if ($key =~ /^[a-z]+$/)\
+    \ {\n            if ($value =~ /^[A-Z]+$/) {\n                return $return =\
+    \ '';\n            }\n        }\n        elsif ($key =~ /^[A-Z]+$/) {\n      \
+    \      if ($value =~ /^[a-z]+$/) {\n                return $return = '';\n   \
+    \         }\n        }\n        else {\n            return $return = '';\n   \
+    \     }\n    }\n    return $return = 1;\n}", "    my $case = 'lower';\n    for\
+    \ my $key (sort keys %$dict) {\n        if($key =~ /[A-Z]/) {\n            $case\
+    \ = 'upper';\n            last;\n        }\n    }\n    for my $key (sort keys\
+    \ %$dict) {\n        if($case eq 'lower' && $key =~ /[A-Z]/) {\n            return\
+    \ '';\n        }\n        if($case eq 'upper' && $key =~ /[a-z]/) {\n        \
+    \    return '';\n        }\n    }\n    return 1;\n}", "    my $keys = keys(%$dict);\n\
+    \    my $count;\n    my $value;\n    my $key;\n    if ($keys == 0) {\n       \
+    \ return \"\";\n    }\n    for $key (keys %$dict) {\n        $value = $dict->{$key};\n\
+    \        if ( (uc($key) eq $key) or (lc($key) eq $key) ) {\n            ++$count;\n\
+    \        }\n    }\n    if ($count == $keys) {\n        return 1;\n    }\n    else\
+    \ {\n        return \"\";\n    }\n}", "    my @keys = keys %$dict;\n    return\
+    \ '' if scalar @keys == 0;\n    my $match = $keys[0] =~ /^[a-z]+$/;\n    my $match2\
+    \ = $keys[0] =~ /^[A-Z]+$/;\n    return '' if $match == 0 && $match2 == 0;\n \
+    \   foreach my $k (@keys) {\n        if ($match) {\n            return '' if $k\
+    \ !~ /^[a-z]+$/;\n        }\n        else {\n            return '' if $k !~ /^[A-Z]+$/;\n\
+    \        }\n    }\n    return 1;\n}", "    my($result) = 1;\n    foreach my $key\
+    \ (keys %$dict) {\n        if($key !~ /^[a-z]+$/ and $key !~ /^[A-Z]+$/) {\n \
+    \           $result = '';\n            last;\n        }\n    }\n    return $result;\n\
+    }", "    return '' if !scalar(keys(%$dict));\n    my @keys = keys(%$dict);\n \
+    \   if (check_case($keys[0])) {\n        for my $k (@keys) {\n            return\
+    \ '' if !check_case($k);\n        }\n        return 1;\n    }\n    return '';\n\
+    }", "    my @keys = keys %$dict;\n    return '' if !@keys;\n    return 1 if  @keys\
+    \ == grep { /^[a-z]+$/ } @keys;\n    return 1 if  @keys == grep { /^[A-Z]+$/ }\
+    \ @keys;\n    return '';\n}", "    return 1 if (scalar(keys %$dict) == 0);\n \
+    \   my $ret = 1;\n    my $dict_count = scalar(keys %$dict);\n    my $check_count\
+    \ = 0;\n    my $key_type = '';\n    while (my($key, $value) = each %$dict) {\n\
+    \        if ($key_type eq '') {\n            $key_type = get_key_type($key);\n\
+    \        }\n        if (get_key_type($key) eq $key_type) {\n            $check_count++;\n\
+    \        }\n    }\n    $ret = '' if ($check_count != $dict_count);\n    return\
+    \ $ret;\n}", "    my(@keys) = keys %$dict;\n    my($first_key) = @keys[0];\n \
+    \   my($key_is_lower) = $first_key =~ /^[a-z]+$/;\n    my($key_is_upper) = $first_key\
+    \ =~ /^[A-Z]+$/;\n    my($value) = $dict->{$first_key};\n    my($i);\n    if (!@keys)\
+    \ { return \"\"; }\n    for($i = 1; $i < @keys; $i += 1) {\n        if ($keys[$i]\
+    \ =~ /^[a-z]+$/) {\n            if ($key_is_upper) { return \"\"; }\n        \
+    \    $key_is_lower = 1;\n        }\n        if ($keys[$i] =~ /^[A-Z]+$/) {\n \
+    \           if ($key_is_lower) { return \"\"; }\n            $key_is_upper = 1;\n\
+    \        }\n    }\n    return 1;\n}", "    return \"\" if (scalar(keys %$dict)\
+    \ == 0);\n    my $first_key = lc(keys %$dict)[0];\n    return \"\" if (not exists\
+    \ $dict->{$first_key});\n    if ($first_key eq uc($first_key)) {\n        foreach\
+    \ my $key (keys %$dict) {\n            return \"\" if ($key ne uc($key));\n  \
+    \      }\n    } else {\n        foreach my $key (keys %$dict) {\n            return\
+    \ \"\" if ($key ne lc($key));\n        }\n    }\n    return 1;\n}", "    my $letter\
+    \ = \"\";\n    my $lower = \"\";\n    my $upper = \"\";\n    foreach my $key (keys\
+    \ %$dict) {\n\tif ($letter eq \"\") {\n\t    $letter = lc($key);\n\t}\n\telsif\
+    \ ($letter ne lc($key)) {\n\t    $lower = \"\";\n\t    last;\n\t}\n\telse {\n\t\
+    \    $lower = 1;\n\t}\n    }\n    if ($lower eq \"\") {\n\tforeach my $key (keys\
+    \ %$dict) {\n\t    if ($letter eq \"\") {\n\t\t$letter = uc($key);\n\t    }\n\t\
+    \    elsif ($letter ne uc($key)) {\n\t\t$upper = \"\";\n\t\tlast;\n\t    }\n\t\
+    \    else {\n\t\t$upper = 1;\n\t    }\n\t}\n    }\n    if ($lower eq \"\" && $upper\
+    \ eq \"\") {\n\treturn \"\";\n    }\n    else {\n\treturn $lower == 1 ? $lower\
+    \ : $upper;\n    }\n}", "    my $res = 1;\n    my $flag = 1;\n    if (!%$dict)\
+    \ {\n        return '';\n    }\n    for my $key (keys %$dict) {\n        if ($flag)\
+    \ {\n            $flag = 0;\n            $res = $key =~ m/^[a-z]+$/ ? 1 : 0;\n\
+    \        }\n        if ($res) {\n            if ($key !~ m/^[a-z]+$/) {\n    \
+    \            return '';\n            }\n        } else {\n            if ($key\
+    \ !~ m/^[A-Z]+$/) {\n                return '';\n            }\n        }\n  \
+    \  }\n    return $res;\n}", "    my $res = 1;\n    my $keys = $dict->{keys};\n\
+    \    foreach my $key (@$keys) {\n        unless ($key =~ /[a-z]/ || $key =~ /[A-Z]/)\
+    \ {\n            $res = \"\";\n            last;\n        }\n    }\n    return\
+    \ $res;\n}", "    my $type = 'n';\n    for my $key (keys %$dict) {\n        my\
+    \ $tmp = $key;\n        $tmp =~ s/[a-z]//g;\n        $tmp =~ s/[A-Z]//g;\n   \
+    \     next if $tmp eq '';\n        return '';\n    }\n    for my $key (keys %$dict)\
+    \ {\n        if ($type eq 'n') {\n            if ($key =~ /[a-z]/) {\n       \
+    \         $type = 'l';\n            }\n            else {\n                $type\
+    \ = 'u';\n            }\n        }\n        else {\n            if ($type eq 'l'\
+    \ && $key =~ /[A-Z]/) {\n                return '';\n            }\n         \
+    \   elsif ($type eq 'u' && $key =~ /[a-z]/) {\n                return '';\n  \
+    \          }\n        }\n    }\n    return 1;\n}", "    my $retval = 1;\n    if\
+    \ (%$dict) {\n        if (keys %$dict > 1) {\n            my $type = ' ';\n  \
+    \          foreach my $k (keys %$dict) {\n                if ($type eq ' ') {\n\
+    \                    if ($k =~ /^[a-z]+$/) {\n                        $type =\
+    \ 'lower';\n                    } elsif ($k =~ /^[A-Z]+$/) {\n               \
+    \         $type = 'upper';\n                    } else {\n                   \
+    \     return '';\n                    }\n                } else {\n          \
+    \          if (($type eq 'lower' && $k =~ /^[A-Z]+$/) ||\n                   \
+    \     ($type eq 'upper' && $k =~ /^[a-z]+$/)) {\n                        return\
+    \ '';\n                    }\n                }\n            }\n        }\n  \
+    \  } else {\n        return '';\n    }\n    return $retval;\n}", "    my $tmp\
+    \ = 0;\n    foreach (keys %$dict) {\n        if ($_ =~ /^[a-z]+$/) {\n       \
+    \     $tmp = 1;\n        } elsif ($_ =~ /^[A-Z]+$/) {\n            $tmp = 2;\n\
+    \        } else {\n            return '';\n        }\n    }\n    if ($tmp == 1)\
+    \ {\n        return 1;\n    } elsif ($tmp == 2) {\n        return 1;\n    } else\
+    \ {\n        return '';\n    }\n}", "    my($is_lower_case) = 1;\n    my($is_upper_case)\
+    \ = 1;\n    my($key);\n    foreach $key (keys %$dict) {\n        if ($key =~ /[A-Z]/)\
+    \ {\n            $is_lower_case = 0;\n        }\n        if ($key =~ /[a-z]/)\
+    \ {\n            $is_upper_case = 0;\n        }\n    }\n    return ($is_lower_case\
+    \ || $is_upper_case) ? 1 : '';\n}", "    my($upper_case, $lower_case);\n    foreach\
+    \ my $key (keys %$dict) {\n        if ($key =~ /^[A-Z]+$/) {\n            $upper_case\
+    \ = 1;\n        }\n        elsif ($key =~ /^[a-z]+$/) {\n            $lower_case\
+    \ = 1;\n        }\n        else {\n            return '';\n        }\n    }\n\
+    \    if ($upper_case && $lower_case) {\n        return '';\n    }\n    else {\n\
+    \        return 1;\n    }\n}", "    my(@keys) = keys %$dict;\n    return '' if\
+    \ $#keys == -1;\n    my($case) = check_case($keys[0]);\n    return '' if $case\
+    \ == -1;\n    foreach (@keys) {\n        my($c) = check_case($_);\n        return\
+    \ '' if $c != $case;\n    }\n    return 1;\n}", "    return '' if !$dict || !%$dict;\n\
+    \    my $keys = join('', keys %$dict);\n    my $lower_keys = lc($keys);\n    my\
+    \ $upper_keys = uc($keys);\n    return $keys eq $lower_keys || $keys eq $upper_keys\
+    \ ? 1 : '';\n}", "    my $lower = 1;\n    my $upper = 1;\n    foreach my $key\
+    \ (keys %$dict) {\n        my $case = check_case($key);\n        $lower = $lower\
+    \ && ($case eq 'lower');\n        $upper = $upper && ($case eq 'upper');\n   \
+    \ }\n    if ($lower || $upper) {\n        return 1;\n    } else {\n        return\
+    \ '';\n    }\n}", "    return 1 if(!defined($dict) || !%$dict);\n    foreach my\
+    \ $key (keys %$dict) {\n        return \"\" if($key =~ /[a-z]/ && $key =~ /[A-Z]/);\n\
+    \    }\n    return 1;\n}", "    my($all_lower) = 1;\n    my($all_upper) = 1;\n\
+    \    foreach my $key (keys %$dict) {\n        if ($key =~ /[A-Z]/) {\n       \
+    \     $all_lower = 0;\n        }\n        else {\n            $all_upper = 0;\n\
+    \        }\n    }\n    if ($all_lower or $all_upper) {\n        return 1;\n  \
+    \  }\n    else {\n        return '';\n    }\n}", "    my @array = %$dict;\n  \
+    \  my $size = @array;\n    if($size eq 0) {\n        return \"\";\n    }\n   \
+    \ my $state = 1;\n    for (my $i = 0; $i < $size; $i += 2) {\n        if ($array[$i]\
+    \ =~ /[A-Z]/) {\n            if ($state eq 0) {\n                return \"\";\n\
+    \            }\n            $state = 2;\n        }\n        elsif ($array[$i]\
+    \ =~ /[a-z]/) {\n            if ($state eq 2) {\n                return \"\";\n\
+    \            }\n            $state = 0;\n        }\n        else {\n         \
+    \   return \"\";\n        }\n    }\n    return 1;\n}", "    return '' if(!defined($dict)\
+    \ || ref($dict) ne 'HASH' || !%$dict);\n    my $flag = -1;\n    foreach my $key\
+    \ (keys %$dict) {\n        return '' if(ref($key) || $key =~ /\\d/);\n       \
+    \ if($flag == -1) {\n            $flag = ($key =~ /[a-z]/) ? 0 : 1;\n        }\n\
+    \        elsif($flag == 0 && $key =~ /[A-Z]/) {\n            return '';\n    \
+    \    }\n        elsif($flag == 1 && $key =~ /[a-z]/) {\n            return '';\n\
+    \        }\n    }\n    return 1;\n}", "    my($is_all_lower, $is_all_upper);\n\
+    \    if (ref($dict) ne 'HASH') {\n        return '';\n    }\n    for my $key (keys\
+    \ %$dict) {\n        if ($key =~ /^[a-z]+$/) {\n            $is_all_lower = 1;\n\
+    \        }\n        elsif ($key =~ /^[A-Z]+$/) {\n            $is_all_upper =\
+    \ 1;\n        }\n        else {\n            return '';\n        }\n    }\n  \
+    \  if ($is_all_lower && $is_all_upper) {\n        return '';\n    }\n    elsif\
+    \ ($is_all_lower) {\n        return 1;\n    }\n    elsif ($is_all_upper) {\n \
+    \       return 1;\n    }\n    else {\n        return '';\n    }\n}", "    my $result\
+    \ = '';\n    my @keys = keys %$dict;\n    my $upper_keys = grep { /[A-Z]/ } @keys;\n\
+    \    my $lower_keys = grep { /[a-z]/ } @keys;\n    if ($upper_keys && $lower_keys)\
+    \ {\n        $result = '';\n    } elsif (!$upper_keys && !$lower_keys) {\n   \
+    \     $result = '';\n    } elsif ($upper_keys) {\n        $result = 1;\n    }\
+    \ elsif ($lower_keys) {\n        $result = 1;\n    }\n    return $result;\n}",
+  "    my $result = 1;\n    # for each key in dict\n    foreach my $key (keys %$dict)\
+    \ {\n        # if $key is not upper case\n        unless($key =~ /^[A-Z]+$/) {\n\
+    \            # $result is 0\n            $result = 0;\n        }\n    }\n    #\
+    \ for each key in dict\n    foreach my $key (keys %$dict) {\n        # if $key\
+    \ is not lower case\n        unless($key =~ /^[a-z]+$/) {\n            # $result\
+    \ is 0\n            $result = 0;\n        }\n    }\n    # return $result\n   \
+    \ return $result;\n}", "    my(@lower_case, @upper_case);\n    foreach my $key\
+    \ (keys %$dict) {\n        if ($key =~ /^[a-z]+$/) {\n            push @lower_case,\
+    \ $key;\n        }\n        elsif ($key =~ /^[A-Z]+$/) {\n            push @upper_case,\
+    \ $key;\n        }\n        else {\n            return '';\n        }\n    }\n\
+    \    if (scalar(@lower_case) == scalar(keys %$dict) || scalar(@upper_case) ==\
+    \ scalar(keys %$dict)) {\n        return 1;\n    }\n    else {\n        return\
+    \ '';\n    }\n}", "    return '' if keys %$dict == 0;\n    my $lc_key = 0;\n \
+    \   my $uc_key = 0;\n    for my $key (keys %$dict) {\n        if ($key =~ /^[a-z]+$/)\
+    \ {\n            $lc_key = 1;\n        }\n        if ($key =~ /^[A-Z]+$/) {\n\
+    \            $uc_key = 1;\n        }\n    }\n    return $lc_key + $uc_key == 1\
+    \ ? 1 : '';\n}", "    my @keys = keys %$dict;\n    return 0 if @keys == 0;\n \
+    \   my @a_keys = grep {$_ =~ /^[a-z]+$/} @keys;\n    my @A_keys = grep {$_ =~\
+    \ /^[A-Z]+$/} @keys;\n    return 1 if scalar(@a_keys) == scalar(@keys) || scalar(@A_keys)\
+    \ == scalar(@keys);\n    return 0;\n}", "    my @keys = keys(%$dict);\n    return\
+    \ '' if @keys == 0;\n    my $result = \"1\";\n    my $sample = $keys[0];\n   \
+    \ if ($sample =~ /[A-Z]/) {\n        foreach (@keys) {\n            if ($_ !~\
+    \ /[A-Z]/) {\n                $result = '';\n                last;\n         \
+    \   }\n        }\n    } else {\n        foreach (@keys) {\n            if ($_\
+    \ !~ /[a-z]/) {\n                $result = '';\n                last;\n      \
+    \      }\n        }\n    }\n    return $result;\n}", "    my $upper_keys = 0;\n\
+    \    my $lower_keys = 0;\n    foreach my $key (keys %$dict) {\n        $upper_keys++\
+    \ if $key =~ /[A-Z]/;\n        $lower_keys++ if $key =~ /[a-z]/;\n    }\n    return\
+    \ ($upper_keys == keys %$dict || $lower_keys == keys %$dict) ? 1 : '';\n}", " \
+    \   my $flag = 1;\n    foreach my $key (keys %$dict) {\n        $flag = &is_lower_case($key);\n\
+    \        last if $flag == -1;\n    }\n    return ($flag == 1) ? 1 : '';\n}", " \
+    \   return if ref($dict) ne 'HASH';\n    return '' if scalar(keys(%$dict)) ==\
+    \ 0;\n    my $num_key = 0;\n    my $key;\n    foreach $key (keys(%$dict)) {\n\
+    \        my $v = $dict->{$key};\n        return '' if !defined($v);\n        return\
+    \ '' if $key !~ /^[a-z]+$/ && $key !~ /^[A-Z]+$/;\n        $num_key++;\n    }\n\
+    \    return 1 if $num_key > 0;\n    return '';\n}", "    my $output = 1;\n   \
+    \ my @keys = keys(%$dict);\n    if(scalar(@keys)==0){\n\treturn \"\";\n    }",
+  "    return '' if scalar(keys %$dict) == 0;\n    my $lower = lc(keys %$dict)[0];\n\
+    \    my $upper = uc(keys %$dict)[0];\n    my @dict = keys %$dict;\n    my $is_all_upper\
+    \ = 1;\n    my $is_all_lower = 1;\n    for(@dict) {\n        if ($_ ne $upper)\
+    \ {\n            $is_all_upper = 0;\n        }\n        if ($_ ne $lower) {\n\
+    \            $is_all_lower = 0;\n        }\n    }\n    return $is_all_upper ||\
+    \ $is_all_lower;\n}", "    my $result = 1;\n    my $upper = 'true';\n    my $lower\
+    \ = 'true';\n    if (scalar keys %$dict == 0) {\n        return '';\n    }\n \
+    \   foreach my $key (keys %$dict) {\n        if ($key =~ /^[a-z]+$/) {\n     \
+    \       $upper = 'false';\n        }\n        if ($key =~ /^[A-Z]+$/) {\n    \
+    \        $lower = 'false';\n        }\n    }\n    if ($upper eq 'false' && $lower\
+    \ eq 'false') {\n        $result = '';\n    }\n    return $result;\n}", "    my($key,\
+    \ $val);\n    my($case) = \"\";\n    if (!%$dict) {\n        return \"\";\n  \
+    \  }\n    while (($key, $val) = each %$dict) {\n        if ($case eq \"\") {\n\
+    \            if ($key =~ /[a-z]/) {\n                $case = \"lower\";\n    \
+    \        }\n            elsif ($key =~ /[A-Z]/) {\n                $case = \"\
+    upper\";\n            }\n            else {\n                return \"\";\n  \
+    \          }\n        }\n        elsif ($case eq \"lower\") {\n            if\
+    \ ($key !~ /[a-z]/) {\n                return \"\";\n            }\n        }\n\
+    \        elsif ($case eq \"upper\") {\n            if ($key !~ /[A-Z]/) {\n  \
+    \              return \"\";\n            }\n        }\n    }\n    return 1;\n}",
+  "    my $n = scalar(keys %$dict);\n    return '' if($n == 0);\n    my @keys = keys\
+    \ %$dict;\n    my $check = -1;\n    my $str = '';\n    for(my $i = 0; $i < $n;\
+    \ $i++) {\n        $str = $keys[$i];\n        $check = ($str eq lc($str))?0:1;\n\
+    \        last if($check == 1);\n    }\n    for(my $i = 0; $i < $n; $i++) {\n \
+    \       $str = $keys[$i];\n        if($check == 0) {\n            return '' if($str\
+    \ ne lc($str));\n        }\n        else {\n            return '' if($str ne uc($str));\n\
+    \        }\n    }\n    return 1;\n}", "    my $all_strings = 1;\n    my $all_lower\
+    \ = 1;\n    my $all_upper = 1;\n    foreach my $key (keys %$dict) {\n        $all_strings\
+    \ = $all_strings && !ref($key);\n        $all_lower = $all_lower && !ref($key)\
+    \ && ($key eq lc($key));\n        $all_upper = $all_upper && !ref($key) && ($key\
+    \ eq uc($key));\n    }\n    return ($all_strings && $all_lower) ? 1 : ($all_strings\
+    \ && $all_upper) ? 1 : '';\n}", "    my(@keys) = keys %$dict;\n    my(@lkeys)\
+    \ = map {lc($_)} @keys;\n    my(@ukeys) = map {uc($_)} @keys;\n    if ((@keys\
+    \ eq @lkeys) or (@keys eq @ukeys)) {\n        return 1;\n    } else {\n      \
+    \  return '';\n    }\n}", "    if (!keys %$dict) { return ''; }\n    my($v,$k,$i);\n\
+    \    for ($i=0; $i<@$dict{keys %$dict}; $i++) {\n        if ($k = uc(keys %$dict)[$i])\
+    \ {\n            if ($v = lc(keys %$dict)[$i]) { return ''; }\n        }\n   \
+    \ }\n    return 1;\n}", "    my $lc = 0;\n    my $uc = 0;\n    my $num = 0;\n\
+    \    my $space = 0;\n    my $res = 1;\n    my $key;\n    my $val;\n    if(%$dict){\n\
+    \        while(($key, $val) = each %$dict){\n            if($key =~ /^[a-z]+$/){\n\
+    \                $lc = 1;\n            }\n            elsif($key =~ /^[A-Z]+$/){\n\
+    \                $uc = 1;\n            }\n            elsif($key =~ /^[0-9]+$/){\n\
+    \                $num = 1;\n            }\n            elsif($key =~ /^[\\s]+$/){\n\
+    \                $space = 1;\n            }\n        }\n        if($lc){\n   \
+    \         if($uc || $num || $space){\n                $res = '';\n           \
+    \ }\n        }\n        elsif($uc){\n            if($lc || $num || $space){\n\
+    \                $res = '';\n            }\n        }\n        elsif($num){\n\
+    \            if($lc || $uc || $space){\n                $res = '';\n         \
+    \   }\n        }\n        elsif($space){\n            if($lc || $uc || $num){\n\
+    \                $res = '';\n            }\n        }\n    }\n    else{\n    \
+    \    $res = '';\n    }\n    return $res;\n}", "    my($key);\n    my($key_case)\
+    \ = \"\";\n    foreach $key (keys %$dict) {\n        if(is_string($key)) {\n \
+    \           if($key_case eq \"\") {\n                $key_case = get_string_case($key);\n\
+    \            }\n            else {\n                if($key_case ne get_string_case($key))\
+    \ {\n                    return \"\";\n                }\n            }\n    \
+    \    }\n        else {\n            return \"\";\n        }\n    }\n    return\
+    \ 1;\n}", "    my @keys = keys %$dict;\n    return '' if @keys == 0;\n    my @upper_keys\
+    \ = grep { $_ eq uc $_ } @keys;\n    my @lower_keys = grep { $_ eq lc $_ } @keys;\n\
+    \    return @upper_keys == @keys ? 1 : @lower_keys == @keys ? 1 : '';\n}", " \
+    \   my $rv = 1;\n    my $keys = keys %$dict;\n    my $lc = 0;\n    my $uc = 0;\n\
+    \    foreach my $key (keys %$dict) {\n        if (defined $key) {\n          \
+    \  if ($key =~ /[a-z]/) {\n                $lc++;\n            }\n           \
+    \ elsif ($key =~ /[A-Z]/) {\n                $uc++;\n            }\n        }\n\
+    \    }\n    if ($lc > 0 && $uc > 0) {\n        $rv = '';\n    }\n    return $rv;\n\
+    }", "    if (! %$dict) {\n        return '';\n    }\n    my($low_case) = 1;\n\
+    \    my($upp_case) = 1;\n    foreach my $key (keys %$dict) {\n        if ($key\
+    \ =~ /[a-z]/) {\n            $upp_case = 0;\n        }\n        if ($key =~ /[A-Z]/)\
+    \ {\n            $low_case = 0;\n        }\n    }\n    if ($low_case || $upp_case)\
+    \ {\n        return 1;\n    }\n    return '';\n}", "    # your code here\n   \
+    \ my $retval = 1;\n    foreach my $key (keys %$dict) {\n        if (not $key =~\
+    \ /^[a-z]+$/) {\n            $retval = '';\n            last;\n        }\n   \
+    \ }\n    if ($retval eq 1) {\n        return $retval;\n    } else {\n        $retval\
+    \ = 1;\n        foreach my $key (keys %$dict) {\n            if (not $key =~ /^[A-Z]+$/)\
+    \ {\n                $retval = '';\n                last;\n            }\n   \
+    \     }\n        return $retval;\n    }\n}", "    if (scalar keys %$dict == 0)\
+    \ {\n        return '';\n    }", "    my $state = 0;\n    my @keys = keys %$dict;\n\
+    \    if (@keys == 0) {\n        return \"\";\n    }\n    foreach my $key (@keys)\
+    \ {\n        if ($state == 0) {\n            if ($key =~ /^[a-z]+$/) {\n     \
+    \           $state = 1;\n            }\n            elsif ($key =~ /^[A-Z]+$/)\
+    \ {\n                $state = 2;\n            }\n            else {\n        \
+    \        return \"\";\n            }\n        }\n        elsif ($state == 1) {\n\
+    \            if ($key !~ /^[a-z]+$/) {\n                return \"\";\n       \
+    \     }\n        }\n        elsif ($state == 2) {\n            if ($key !~ /^[A-Z]+$/)\
+    \ {\n                return \"\";\n            }\n        }\n    }\n    return\
+    \ 1;\n}", "    my $rc = 1;\n    my $count_upper = 0;\n    my $count_lower = 0;\n\
+    \    foreach my $key (keys %$dict) {\n        if ($key =~ /[A-Z]/) {\n       \
+    \     $count_upper++;\n        }\n        if ($key =~ /[a-z]/) {\n           \
+    \ $count_lower++;\n        }\n    }\n    if ($count_upper && $count_lower) {\n\
+    \        $rc = '';\n    }\n    return $rc;\n}", "    my($case) = '';\n    my($result)\
+    \ = 1;\n    foreach my $key (keys %$dict) {\n        if (defined $case) {\n  \
+    \          if ($case eq 'lower') {\n                if (uc($key) eq $key) {\n\
+    \                    $result = '';\n                    last;\n              \
+    \  }\n            }\n            else {\n                if (lc($key) eq $key)\
+    \ {\n                    $result = '';\n                    last;\n          \
+    \      }\n            }\n        }\n        else {\n            if (uc($key) eq\
+    \ $key) {\n                $case = 'upper';\n            }\n            else {\n\
+    \                $case = 'lower';\n            }\n        }\n    }\n    return\
+    \ $result;\n}", "    my @keys = keys %$dict;\n    my $lowercase = 1;\n    my $uppercase\
+    \ = 1;\n    for my $key (@keys) {\n        if (lc($key) ne $key) {\n         \
+    \   $lowercase = 0;\n        }\n        if (uc($key) ne $key) {\n            $uppercase\
+    \ = 0;\n        }\n    }\n    if ($lowercase or $uppercase) {\n        return\
+    \ 1;\n    } else {\n        return '';\n    }\n}", "    return '' if !defined\
+    \ $dict || ref $dict ne 'HASH' || !keys %$dict;\n    my $lower = 0;\n    my $upper\
+    \ = 0;\n    foreach my $key (keys %$dict) {\n        $lower = 1 if $key =~ /^[a-z]+$/;\n\
+    \        $upper = 1 if $key =~ /^[A-Z]+$/;\n    }\n    return '' if $lower + $upper\
+    \ != 1;\n    return 1;\n}", "    my $values = values %$dict;\n    my $first_value\
+    \ = shift @$values;\n    my $lower = lc($first_value);\n    my $upper = uc($first_value);\n\
+    \    foreach my $value (values %$dict) {\n        if ($value ne $lower and $value\
+    \ ne $upper) {\n            return '';\n        }\n    }\n    return 1;\n}", " \
+    \   my $v = values %$dict;\n    if (!defined $v) { return ''; }\n    my @k = keys\
+    \ %$dict;\n    if (@k == 0) { return ''; }\n    my $l = $k[0];\n    if ($l =~\
+    \ /[A-Z]/) {\n        return ' ';\n    }\n    foreach $l (@k) {\n        if ($l\
+    \ !~ /[a-z]/) {\n            return '';\n        }\n    }\n    return 1;\n}",
+  "    my $count_lower = 0;\n    my $count_upper = 0;\n    my $count_other = 0;\n\
+    \    for my $key (keys %$dict) {\n        if ($key =~ /[a-z]/) {\n           \
+    \ $count_lower++;\n        } elsif ($key =~ /[A-Z]/) {\n            $count_upper++;\n\
+    \        } else {\n            $count_other++;\n        }\n    }\n    if ($count_lower\
+    \ == scalar(keys %$dict)) {\n        return 1;\n    } elsif ($count_upper == scalar(keys\
+    \ %$dict)) {\n        return 1;\n    } else {\n        return '';\n    }\n}",
+  "    # if hash is empty, return \"\"\n    if (!scalar(keys %$dict)) { return \"\"\
+    ; }\n    # check lower case: if all keys are strings in lower case, return 1\n\
+    \    my $dict_lower = { map { lc($_) => $dict->{$_} } keys %$dict };\n    if ($dict_lower\
+    \ eq $dict) { return 1; }\n    # check upper case: if all keys are strings in\
+    \ upper case, return 1\n    my $dict_upper = { map { uc($_) => $dict->{$_} } keys\
+    \ %$dict };\n    if ($dict_upper eq $dict) { return 1; }\n    # otherwise, return\
+    \ \"\"\n    return \"\";\n}", "    my $result = 1;\n    my @keys = keys %$dict;\n\
+    \    foreach my $key (@keys) {\n        if ($key =~ /[a-z]/) {\n            if\
+    \ ($key =~ /[A-Z]/) {\n                $result = '';\n                last;\n\
+    \            }\n        }\n        else {\n            if ($key =~ /[a-z]/) {\n\
+    \                $result = '';\n                last;\n            }\n       \
+    \ }\n    }\n    return $result;\n}\n1;", "    my $ret;\n    foreach my $key (keys\
+    \ %$dict) {\n        if ($key =~ /[A-Z]/) {\n            $ret = \"\";\n      \
+    \      last;\n        }\n        else {\n            $ret = 1;\n        }\n  \
+    \  }\n    return $ret;\n}", "    my $check = 0;\n    my $check2 = 0;\n    my $result\
+    \ = 1;\n    foreach my $key (keys %$dict) {\n        if ($key =~ /[A-Z]/) {\n\
+    \            $check++;\n        }\n        if ($key =~ /[a-z]/) {\n          \
+    \  $check2++;\n        }\n    }\n    if ($check == 0 && $check2 == 0) {\n    \
+    \    $result = '';\n    }\n    elsif ($check > 0 && $check2 > 0) {\n        $result\
+    \ = '';\n    }\n    return $result;\n}", "    my $result = 1;\n    foreach my\
+    \ $key (keys %$dict) {\n        unless(check_var_case($key)) {\n            $result\
+    \ = '';\n            last;\n        }\n    }\n    return $result;\n}", "    my\
+    \ $flag = 1;\n    my $flag_upper = 1;\n    my $flag_lower = 1;\n    if(keys %$dict\
+    \ == 0) {\n        return \"\";\n    }\n    for my $key (keys %$dict) {\n    \
+    \    if(uc($key) ne $key) {\n            $flag_upper = 0;\n        }\n       \
+    \ if(lc($key) ne $key) {\n            $flag_lower = 0;\n        }\n    }\n   \
+    \ if($flag_upper == 1 || $flag_lower == 1) {\n        return 1;\n    } else {\n\
+    \        return \"\";\n    }\n}", "    my $result = 1;\n    my $lower = lc(keys\
+    \ %$dict);\n    my $upper = uc(keys %$dict);\n    if ($lower ne $upper) {\n  \
+    \      $result = '';\n    }\n    return $result;\n}", "    my @low_keys = grep\
+    \ { $_ !~ /[[:upper:]]/} keys %$dict;\n    my @up_keys = grep { $_ !~ /[[:lower:]]/}\
+    \ keys %$dict;\n    return @low_keys == keys %$dict ? 1 : '' if @low_keys;\n \
+    \   return @up_keys == keys %$dict ? 1 : '' if @up_keys;\n    return '';\n}",
+  "    my @keys = keys %$dict;\n    return '' if (!@keys);\n    my $re = '^[A-Z]+$';\n\
+    \    if ($keys[0] =~ m/$re/) {\n        foreach my $key (@keys) {\n          \
+    \  return '' if ($key !~ m/$re/);\n        }\n    } else {\n        $re = '^[a-z]+$';\n\
+    \        foreach my $key (@keys) {\n            return '' if ($key !~ m/$re/);\n\
+    \        }\n    }\n    return 1;\n}", "    return \"\" if(!defined($dict) || ref($dict)\
+    \ ne \"HASH\" || scalar(keys(%{$dict})) == 0);\n    my $regex = \"^[A-Z]\\$\"\
+    ;\n    foreach my $key (keys(%{$dict})) {\n        return \"\" if($key !~ /$regex/);\n\
+    \    }\n    return 1;\n}"]
+stop_tokens:
+- "\nsub"
+- "\n#"
+- "\n\n"

@@ -1,0 +1,870 @@
+name: HumanEval_10_make_palindrome
+language: pl
+prompt: "# Find the shortest palindrome that begins with a supplied string.\n# Algorithm\
+  \ idea is simple:\n# - Find the longest postfix of supplied string that is a palindrome.\n\
+  # - Append to the end of the string reverse of a string prefix that comes before\
+  \ the palindromic suffix.\n# >>> make_palindrome(\"\")\n# \"\"\n# >>> make_palindrome(\"\
+  cat\")\n# \"catac\"\n# >>> make_palindrome(\"cata\")\n# \"catac\"\nsub make_palindrome\
+  \ {\n    my($string) = @_;\n"
+tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&make_palindrome;\n\
+  \        if(eq_deeply($candidate->(\"\"),\"\")) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->(\"x\"),\"x\")) {\n\
+  \        print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->(\"\
+  xyz\"),\"xyzyx\")) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n\
+  \        if(eq_deeply($candidate->(\"xyx\"),\"xyx\")) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->(\"jerry\"),\"jerryrrej\"\
+  )) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n}\n\ntesthumaneval();"
+completions: ["    my $rev = reverse $string;\n    my $i = 1;\n    while (substr($string,\
+    \ $i) ne substr($rev, 0, -$i)) {\n        $i++;\n    }\n    $string .= substr($rev,\
+    \ -$i);\n    return $string;\n}", "    my $L = length($string);\n    my $p = \"\
+    \";\n    my $q = \"\";\n    my $s = 0;\n    my $i = 1;\n    my $l = 0;\n    my\
+    \ $rev = reverse($string);\n    for ($i = 1; $i < $L; $i++) {\n        $p = substr($string,\
+    \ 0, $i);\n        $q = substr($string, $i);\n        if ($p eq $rev) {\n    \
+    \        $s = $i;\n            $l = $L - $i;\n            last;\n        }\n \
+    \   }\n    return $string . reverse(substr($string, 0, $l));\n}", "    my($reversed_prefix,\
+    \ $reversed_string, $suffix);\n    $reversed_string = reverse($string);\n    $suffix\
+    \ = '';\n    do {\n        $suffix = $string . reverse($suffix);\n        $reversed_prefix\
+    \ = join('', ($reversed_string =~ /(.*)$suffix$/));\n    } until ($reversed_prefix\
+    \ eq reverse($reversed_prefix));\n    return $string . $reversed_prefix;\n}",
+  "    my $rev = reverse($string);\n    my $len = length($string);\n    my $i = 0;\n\
+    \    while($i < $len && substr($string, $i) ne substr($rev, 0, $len - $i)) {\n\
+    \        $i++;\n    }\n    return $string . substr($rev, $len - $i);\n}", "  \
+    \  my $pal_suffix = longest_palindrome_suffix($string);\n    my $size = length($string);\n\
+    \    my $suffix_size = length($pal_suffix);\n    my $prefix = substr($string,\
+    \ 0, $size - $suffix_size);\n    return $string . reverse($prefix);\n}", "   \
+    \ my($max_len) = 0;\n    my($max_pos) = 0;\n    my($pos) = 0;\n    my($len) =\
+    \ 0;\n    my($len_max) = 0;\n    my($len_max_pos) = 0;\n    my($len_max_len) =\
+    \ 0;\n    my($len_max_prev) = 0;\n    my($len_prev) = 0;\n    my($rev) = reverse($string);\n\
+    \    while ($pos < length($string)) {\n        $len = ($rev =~ /(?=((.*)$string))/gs)[1];\n\
+    \        $len_prev = $len_max;\n        $len_max = $len_max > $len ? $len_max\
+    \ : $len;\n        if ($len_max_len < $len_max) {\n            $len_max_len =\
+    \ $len_max;\n            $len_max_pos = $pos;\n            $len_max_prev = $len_prev;\n\
+    \        }\n        $pos++;\n    }\n    return $string . substr(reverse(substr($string,\
+    \ 0, $len_max_pos - $len_max_prev)), 0, $len_max_pos - $len_max_len);\n}", " \
+    \   my($suffix_start) = longest_palindrome_suffix($string);\n    return $string\
+    \ . reverse(substr($string, 0, $suffix_start));\n}", "    my $result = $string;\n\
+    \    my $prefix = reverse($string);\n    my $max_suffix_idx = length($string);\n\
+    \    while ($max_suffix_idx > 0 && !is_palindrome(substr($string, 0, $max_suffix_idx)))\
+    \ {\n        $max_suffix_idx--;\n    }\n    $result .= substr($prefix, $max_suffix_idx);\n\
+    \    return $result;\n}", "    my $reversed = reverse $string;\n    my $max_length\
+    \ = length $string;\n    my $index;\n    while ($max_length >= 0) {\n        if\
+    \ (substr($string, $max_length) eq substr($reversed, 0, length($string) - $max_length))\
+    \ {\n            $index = $max_length;\n            last;\n        }\n       \
+    \ $max_length--;\n    }\n    return $string . substr($reversed, length($string)\
+    \ - $index);\n}", "    if ($string eq \"\") {\n        return \"\";\n    }\n \
+    \   my($prefix) = longest_palindrome_prefix($string);\n    my($suffix) = longest_palindrome_suffix($string);\n\
+    \    if ($suffix eq $string) {\n        return $string;\n    }\n    return $string\
+    \ . substr(reverse($prefix), length($suffix));\n}", "    my $max_palindrome_length\
+    \ = longest_palindrome_length($string);\n    my $palindrome_end = substr($string,\
+    \ $max_palindrome_length);\n    return $string . reverse($palindrome_end);\n}",
+  "    my $reverse = reverse $string;\n    my $longest_postfix = '';\n    foreach\
+    \ my $i (1 .. length $string) {\n        my $suffix = substr $string, -$i;\n \
+    \       my $prefix = substr $reverse, 0, $i;\n        if ($suffix eq $prefix)\
+    \ {\n            $longest_postfix = $suffix;\n        }\n    }\n    my $palindrome\
+    \ = $string . reverse substr $string, 0, length $string - length $longest_postfix;\n\
+    \    return $palindrome;\n}", "    return $string if length($string) <= 1;\n \
+    \   my @string = split '', $string;\n    for my $i (0 .. $#string) {\n       \
+    \ my $pref_i = $i + 1;\n        my $pref = substr $string, 0, $pref_i;\n     \
+    \   my $suff_i = $#string - $i;\n        my $suff = substr $string, $suff_i;\n\
+    \        if ($pref eq $suff) {\n            my $rem = substr $string, $pref_i,\
+    \ $suff_i - $pref_i;\n            return join '', $string, reverse $rem;\n   \
+    \     }\n    }\n    return join '', $string, reverse $string;\n}", "    my $l\
+    \ = length($string);\n    for( my $i = $l; $i > 0; $i-- ) {\n        return $string\
+    \ . (reverse(substr($string, 0, $l - $i))) if is_palindrome(substr($string, $i\
+    \ - 1, $l - $i + 1));\n    }\n    return $string;\n}", '    return $string unless
+    $string;', "    my $rev = reverse $string;\n    my $i = index($string, $rev);\n\
+    \    if ($i >= 0) {\n        return $string . substr($rev, $i + length($rev) -\
+    \ $i);\n    }\n    else {\n        return $string . $rev;\n    }\n}", "    my\
+    \ $p_string = reverse $string;\n    return $string . $p_string if $string eq $p_string;\n\
+    \    my($longest_suffix) = longest_palindrome_substring($string);\n    return\
+    \ $string . $p_string if length($longest_suffix) == length($string);\n    return\
+    \ $string . reverse(substr($string, 0, length($string) - length($longest_suffix)))\
+    \ . $longest_suffix;\n}", "    my $string_length = length($string);\n    if ($string_length\
+    \ == 0) {\n        return \"\";\n    }", "    return $string if length($string)\
+    \ <= 1;\n    my $longest_palindrome = longest_palindrome($string);\n    my $string_prefix\
+    \ = substr($string, 0, length($string) - length($longest_palindrome));\n    my\
+    \ $palindrome = $string . reverse($string_prefix);\n    return $palindrome;\n}",
+  "    return $string if is_palindrome($string);\n    my $postfix = _longest_palindromic_postfix($string);\n\
+    \    return $string . substr(reverse($string), -length($postfix));\n}", "    return\
+    \ $string if (length($string) == 0);\n    return $string if (length($string) ==\
+    \ 1);\n    return $string . reverse($string) if (length($string) == 2);\n    #\
+    \ Find the longest palindromic suffix.\n    my $suffix = \"\";\n    foreach my\
+    \ $i (0 .. length($string) - 1) {\n        my $prefix = substr($string, 0, $i);\n\
+    \        $suffix = $prefix if (is_palindrome($prefix));\n    }\n    return $string\
+    \ . reverse(substr($string, 0, length($string) - length($suffix)));\n}", "   \
+    \ return $string if length($string) < 2;\n    my $rev = reverse $string;\n   \
+    \ if ($string eq $rev) {\n        return $string;\n    }\n    my $prefix_length\
+    \ = length($string) - longest_palindrome_length($string);\n    my $prefix = substr($string,\
+    \ 0, $prefix_length);\n    return $string . reverse $prefix;\n}", "    my($length)\
+    \ = length($string);\n    my($reverse) = reverse $string;\n    my($match_length)\
+    \ = 0;\n    for (my($i) = 0; $i < $length; $i++) {\n        if (substr($string,\
+    \ $i) eq substr($reverse, 0, $length - $i)) {\n            $match_length = $length\
+    \ - $i;\n            last;\n        }\n    }\n    return $string . reverse substr($string,\
+    \ 0, $length - $match_length);\n}", "    my $rev = reverse($string);\n    my $postfix_length\
+    \ = postfix_length($string, $rev);\n    my $prepend = substr($string, 0, length($string)\
+    \ - $postfix_length);\n    my $append = reverse($prepend);\n    return $string\
+    \ . $append;\n}", "    # Find the longest postfix of supplied string that is a\
+    \ palindrome.\n    my($longest_palindrome) = 0;\n    # For example, if we want\
+    \ to find a longest palindrome for a string \"catac\", we\n    # will go from\
+    \ the longest window down to the shortest. For length 4 we will have 3\n    #\
+    \ windows that we need to test:\n    # - \"taca\"\n    # - \"atac\"\n    # - \"\
+    catac\"\n    # And so on.\n    for (my($window_length) = length($string); $window_length\
+    \ > 0; $window_length--) {\n        for (my($window_start) = 0; $window_start\
+    \ <= length($string) - $window_length; $window_start++) {\n            if (is_palindrome(substr($string,\
+    \ $window_start, $window_length))) {\n                $longest_palindrome = $window_length;\n\
+    \                last;\n            }\n        }\n        last if $longest_palindrome;\n\
+    \    }\n    my($palindrome) = \"\";\n    $palindrome .= substr($string, 0, length($string)\
+    \ - $longest_palindrome);\n    $palindrome .= reverse substr($string, 0, length($string)\
+    \ - $longest_palindrome);\n    $palindrome .= substr($string, length($string)\
+    \ - $longest_palindrome);\n    return $palindrome;\n}", "    my $last_occurrence\
+    \ = _find_last_char_occurrence($string);\n    my $best_suffix = _find_best_suffix($string,\
+    \ $last_occurrence);\n    my $prefix = reverse(substr($string, 0, length($string)\
+    \ - length($best_suffix)));\n    return $string . $prefix;\n}", "    my($prefix,\
+    \ $postfix) = split_palindrome($string);\n    return $string . reverse($prefix);\n\
+    }", "    return $string if is_palindrome($string);\n    my $longest_palindrome\
+    \ = reverse(find_longest_palindrome($string));\n    return $string . $longest_palindrome;\n\
+    }", "    my($string_len) = length($string);\n    my($start, $len) = 0;\n    #\
+    \ Find the longest palindromic substring ending at the end of the string.\n  \
+    \  for(my($i) = $string_len; $i > 0; $i--) {\n        if(substr($string, $i -\
+    \ 1, 1) eq substr($string, $string_len - 1, 1)) {\n            if(is_palindrome(substr($string,\
+    \ $i - 1, $string_len - $i + 1))) {\n                $start = $i - 1;\n      \
+    \          $len = $string_len - $i + 1;\n                last;\n            }\n\
+    \        }\n    }\n    my($prefix) = substr($string, 0, $start);\n    my($result)\
+    \ = $string . reverse($prefix);\n    return $result;\n}", "    my $max_length_suffix\
+    \ = max_length_palindromic_suffix($string);\n    my $reverse_string = substr($string,\
+    \ 0, length($string) - $max_length_suffix);\n    $reverse_string = reverse($reverse_string);\n\
+    \    return $string . $reverse_string;\n}", "    return $string if $string eq\
+    \ '';", '    return $string if length($string) <= 1;', "    my($max_len) = 0;\n\
+    \    my($max_len_i) = -1;\n    for (my($i) = 0; $i < length($string); $i++) {\n\
+    \        if (is_palindrome($string, $i)) {\n            if ($i > $max_len) {\n\
+    \                $max_len = $i;\n                $max_len_i = $i;\n          \
+    \  }\n        }\n    }\n    return $string . substr(reverse($string), 0, length($string)\
+    \ - $max_len_i);\n}", "    my $rev_string = reverse $string;\n    return $string\
+    \ . substr $rev_string, length($string);\n}", "    my($length) = length($string);\n\
+    \    my($i);\n    for ($i = $length; $i >= 0; $i--) {\n        if (is_palindrome($string,\
+    \ $i, $length - 1)) {\n            return $string . reverse(substr($string, 0,\
+    \ $i));\n        }\n    }\n    return $string;\n}", "    return $string unless\
+    \ $string =~ /\\w/;\n    my $longest_palindrome = longest_palindrome($string);\n\
+    \    my $prefix = substr($string, 0, -length($longest_palindrome));\n    return\
+    \ $string . reverse($prefix);\n}", "    my $len = length($string);\n    for (my\
+    \ $i = $len; $i >= 0; $i--) {\n        if (is_palindrome(substr($string, $i)))\
+    \ {\n            return $string . reverse substr($string, 0, $len - $i);\n   \
+    \     }\n    }\n}", "    my $palindrome_suffix = \"\";\n    my $suffix_length\
+    \ = length($string);\n    while ($suffix_length > 0) {\n        my $suffix = substr($string,\
+    \ -$suffix_length);\n        return $string . substr(reverse($string), 0, length($string)\
+    \ - $suffix_length) if is_palindrome($suffix);\n        $suffix_length--;\n  \
+    \  }\n    return \"\";\n}", "    return $string if length($string) <= 1;\n   \
+    \ my $longest_palindrome = longest_palindrome($string);\n    return $string .\
+    \ scalar reverse(substr($string, 0, length($string) - length($longest_palindrome)));\n\
+    }", "    my $index = max_index($string);\n    return $string.$index.reverse(substr($string,\
+    \ 0, $index));\n}", "    return $string if is_palindrome($string);\n    my $string_length\
+    \ = length($string);\n    for (my $i = $string_length; $i > 0; $i--) {\n     \
+    \   my $suffix = substr($string, $string_length - $i);\n        if (is_palindrome($suffix))\
+    \ {\n            my $prefix = substr($string, 0, $string_length - $i);\n     \
+    \       return $string . scalar reverse $prefix;\n        }\n    }\n}", "    if\
+    \ (length($string) < 2) {\n        return $string;\n    }", "    my $reversed\
+    \ = reverse $string;\n    my $index = index($string, $reversed);\n    return $string.$reversed\
+    \ if $index == 0;\n    my $prefix = substr($string, 0, $index);\n    return $string.reverse\
+    \ $prefix;\n}", "    my $length = length($string);\n    # Check whether the string\
+    \ itself is a palindrome\n    if ($length == 0 || _is_palindrome($string)) {\n\
+    \        return $string;\n    }\n    # Find the longest suffix that is a palindrome\n\
+    \    my $longest_suffix = \"\";\n    for my $suffix_length (1 .. $length) {\n\
+    \        my $suffix = substr($string, $length - $suffix_length);\n        if (_is_palindrome($suffix))\
+    \ {\n            $longest_suffix = $suffix;\n        }\n    }\n    # Reverse the\
+    \ prefix and append it to the end of the string\n    my $prefix = reverse(substr($string,\
+    \ 0, $length - length($longest_suffix)));\n    return $string . $prefix;\n}",
+  "    my $len = length($string);\n    my $rev = substr($string, 0, $len);\n    $rev\
+    \ = reverse($rev);\n    my $len_rev = length($rev);\n    if ($len_rev == 0) {\n\
+    \        return $string;\n    }\n    my $new_string = $string;\n    my $found\
+    \ = 0;\n    my $i = 0;\n    my $suffix_len = 0;\n    my $prefix_len = 0;\n   \
+    \ for ($i = 0; $i < $len_rev; $i++) {\n        if (substr($string, $i, 1) eq substr($rev,\
+    \ 0, 1)) {\n            my $suffix = substr($string, $i, $len - $i);\n       \
+    \     $suffix_len = length($suffix);\n            my $prefix = substr($rev, 0,\
+    \ $len_rev - $i);\n            $prefix_len = length($prefix);\n            if\
+    \ ($suffix eq $prefix) {\n                $found = 1;\n                last;\n\
+    \            }\n        }\n    }\n    if ($found) {\n        my $suffix = substr($string,\
+    \ $i, $len - $i);\n        my $prefix = substr($rev, 0, $len_rev - $i);\n    \
+    \    $new_string = $string . $prefix;\n    }\n    return $new_string;\n}", " \
+    \   my $len = length($string);\n    if ($len < 2) {\n        return $string;\n\
+    \    }\n    my $suffix = substr($string, -($len >> 1));\n    my $suffix_len =\
+    \ length($suffix);\n    my $palindrome = substr($string, 0, $len - $suffix_len);\n\
+    \    my $palindrome_len = length($palindrome);\n    my $i = $suffix_len;\n   \
+    \ while ($i > 0) {\n        $i--;\n        if (substr($suffix, $i) eq substr($palindrome,\
+    \ 0, $suffix_len - $i)) {\n            last;\n        }\n    }\n    return substr($string,\
+    \ 0, $palindrome_len + $i) . reverse(substr($palindrome, 0, $palindrome_len -\
+    \ $i));\n}", "    return $string if is_palindrome($string);\n    my $postfix =\
+    \ find_longest_palindromic_postfix($string);\n    my $new_string = substr($string,\
+    \ 0, 0 - length($postfix));\n    return reverse($new_string) . $string;\n}", " \
+    \   my $reversed = reverse($string);\n    return length($string) >= 2 ? substr($string,\
+    \ 0, -find_max_common_suffix_length($string, $reversed)) . $reversed : $string;\n\
+    }", "    my $n = length($string);\n    if($n == 0) {\n        return \"\";\n \
+    \   }\n    my @p = longest_palindromic_suffix($string);\n    my $palindrome =\
+    \ $string;\n    for(my $i = 0; $i < $n - $p[$n]; $i++) {\n        $palindrome\
+    \ .= substr($string, $i, 1);\n    }\n    return $palindrome;\n}", "    return\
+    \ $string if $string eq \"\";\n    my($max, $prefix) = _palindrome_length($string);\n\
+    \    my($suffix) = reverse(substr($string, 0, $prefix));\n    return $string .\
+    \ $suffix;\n}", "    my $palindrome = \"\";\n    my $suffix = longest_palindrome_suffix($string);\n\
+    \    my $prefix = substr($string, 0, length($string) - length($suffix));\n   \
+    \ $palindrome = \"$string$prefix\";\n    return reverse($palindrome);\n}", " \
+    \   if( $string eq \"\" ) {\n        return \"\";\n    }\n    my $longest_palindrome_suffix\
+    \ = longest_palindrome_suffix($string);\n    my $shortest_palindrome = substr($string,\
+    \ 0, length($string) - length($longest_palindrome_suffix)) . reverse_string($longest_palindrome_suffix)\
+    \ . $longest_palindrome_suffix;\n    return $shortest_palindrome;\n}", "    my\
+    \ $suffix = '';\n    my $length = length($string);\n    my $prefix = $string;\n\
+    \    while (1) {\n        if (is_palindrome($prefix)) {\n            last;\n \
+    \       }\n        $suffix = substr($prefix, 0, 1, '') . $suffix;\n    }\n   \
+    \ return $string . $suffix;\n}", "    my $palindrome_suffix = find_longest_palindrome_suffix($string);\n\
+    \    my $palindrome_prefix = substr($string, 0, length($string) - length($palindrome_suffix));\n\
+    \    return $string . reverse $palindrome_prefix;\n}", "    if ($string eq \"\"\
+    ) {\n        return \"\";\n    }\n    my($longest_postfix) = find_longest_palindromic_postfix($string);\n\
+    \    return $string . reverse(substr($string, 0, length($string) - length($longest_postfix)));\n\
+    }", "    my($suffix) = longest_palindrome_suffix($string);\n    return $string.$suffix.reverse(substr($string,\
+    \ 0, length($string) - length($suffix)));\n}", '    return $string if $string
+    eq "";', "    my $len = length($string);\n    my $longest_palindrome_suffix =\
+    \ find_longest_palindrome_suffix($string);\n    my $prefix = substr($string, 0,\
+    \ $len - $longest_palindrome_suffix);\n    my $suffix = substr($string, $len -\
+    \ $longest_palindrome_suffix);\n    return reverse($prefix) . $string . $suffix;\n\
+    }", "    my $rev_string = reverse $string;\n    my $pal_suf_len = find_palindrome_suffix_len($string);\n\
+    \    my $len = length($string);\n    my $rev_pref = substr($rev_string, $len -\
+    \ $pal_suf_len);\n    return $string . $rev_pref;\n}", "    return $string if($string\
+    \ eq '');", "    my($postfix_offset) = find_longest_palindrome_postfix_offset($string);\n\
+    \    my($prefix) = substr($string, 0, (length($string) - $postfix_offset));\n\
+    \    return $string . reverse($prefix);\n}", "    my @chars = split //, $string;\n\
+    \    my $last_index = @chars - 1;\n    my $begin_index = 1;\n    my $end_index\
+    \ = $last_index;\n    my $palindrome_found = 0;\n    while(!$palindrome_found\
+    \ && $begin_index <= $end_index) {\n        if($chars[$begin_index] eq $chars[$end_index])\
+    \ {\n            $begin_index++;\n            $end_index--;\n        } else {\n\
+    \            $begin_index = 1;\n            $end_index--;\n        }\n       \
+    \ if($begin_index > $end_index) {\n            $palindrome_found = 1;\n      \
+    \  }\n    }\n    my $index = @chars - $end_index - 1;\n    return $string . join('',\
+    \ reverse(@chars[0..$index-1]));\n}", "    my $length = length($string);\n   \
+    \ my $new_string = $string;\n    my $flipped = $string;\n    my $flipped_length\
+    \ = $length;\n    my $pos = $length;\n    while ($flipped_length > 0) {\n    \
+    \    $flipped = substr($flipped, 1);\n        $flipped_length = length($flipped);\n\
+    \        if ($flipped eq substr($string, $length - $flipped_length)) {\n     \
+    \       last;\n        }\n    }\n    $flipped = substr($string, 0, $length - $flipped_length);\n\
+    \    $flipped = reverse($flipped);\n    $new_string .= $flipped;\n    return $new_string;\n\
+    }", "    return $string if $string eq '';\n    my @rev = reverse( split(//, $string)\
+    \ );\n    my $rev = join('', @rev);\n    my $l   = length($string);\n    my $i\
+    \   = $l - 1;\n    while ($i >= 0) {\n        my $prefix = substr($string, 0,\
+    \ $i);\n        my $suffix = substr($string, $l - $i);\n        if ($suffix eq\
+    \ $prefix) {\n            return $string . $rev;\n        }\n        $i--;\n \
+    \   }\n    return $string . $rev;\n}", "    # Find the longest palindromic suffix.\n\
+    \    my $index = 1;\n    while(index($string, substr($string, 0, $index), 1) !=\
+    \ -1) {\n        $index += 1;\n    }\n    my $prefix = substr($string, 0, $index\
+    \ - 1);\n    my $suffix = substr($string, $index - 1);\n    my $palindrome = $string\
+    \ . reverse($prefix);\n    return $palindrome;\n}", "    # Find the longest palindromic\
+    \ postfix.\n    my $postfix = get_palindromic_postfix($string);\n    # Find the\
+    \ length of substring that comes before palindromic postfix.\n    my $prefix_length\
+    \ = length($string) - length($postfix);\n    # Append the reverse of prefix to\
+    \ the end of the string.\n    return $string . reverse(substr($string, 0, $prefix_length));\n\
+    }", "    if (!defined($string)) {\n        return '';\n    }\n    my $n = length($string);\n\
+    \    # Find the longest palindromic substring that ends at index i.\n    my @len\
+    \ = (0) x $n;\n    my $i = 0;\n    while ($i < $n) {\n        my $j = 0;\n   \
+    \     while ($i - $j >= 0 && $i + $j < $n && substr($string, $i - $j, 1) eq substr($string,\
+    \ $i + $j, 1)) {\n            $len[$i] = $j + 1;\n            $j++;\n        }\n\
+    \        $i++;\n    }\n    my $palindrome_length = 0;\n    $i = 0;\n    while\
+    \ ($i < $n) {\n        if ($len[$i] > $palindrome_length) {\n            $palindrome_length\
+    \ = $len[$i];\n        }\n        $i++;\n    }\n    my $prefix = substr($string,\
+    \ 0, $n - $palindrome_length);\n    return $string . reverse($prefix);\n}", '    return
+    $string if($string eq "");', "    return $string if(length($string) <= 1);\n \
+    \   return $string.$string if($string eq reverse($string));\n    my $pali_suffix\
+    \ = longest_pali_suffix($string);\n    return $string.reverse(substr($string,\
+    \ 0, length($string) - length($pali_suffix)));\n}", "    my $n = length($string);\n\
+    \    my @arr = split('', $string);\n    my $i;\n    my $mid = $n/2;\n    my $left\
+    \ = $mid - 1;\n    my $right = $n % 2 == 0 ? $mid : $mid + 1;\n    while($left\
+    \ >= 0 and $right < $n and $arr[$left] eq $arr[$right]) {\n        $left--;\n\
+    \        $right++;\n    }\n    if($left < 0) {\n        return $string;\n    }\n\
+    \    my $palindrome = $string;\n    my $remaining = substr($string, $left + 1,\
+    \ $right - $left - 1);\n    $palindrome .= reverse($remaining);\n    $palindrome\
+    \ .= substr($string, $right);\n    return $palindrome;\n}", "    my $length =\
+    \ length($string);\n    my $suffix_length = find_longest_palindrome_suffix($string);\n\
+    \    return $string . reverse(substr($string, 0, $length - $suffix_length));\n\
+    }", "    my($max_len, $max_p) = find_longest_palindrome_postfix($string);\n  \
+    \  my($prefix) = substr($string, 0, length($string) - $max_len);\n    return $string\
+    \ . (reverse $prefix);\n}", "    my $reverse = reverse $string;\n    my $postfix\
+    \ = '';\n    my $found_match = 0;\n    my $i = 0;\n    my $n = length $string;\n\
+    \    while ($i < $n && !$found_match) {\n        $postfix = substr $string, $i,\
+    \ 1;\n        my $j = 1;\n        while ($j <= $i && !$found_match) {\n      \
+    \      if (substr($string, $i - $j, $j) eq substr($reverse, $n - $i + $j - 1,\
+    \ $j)) {\n                $postfix = substr $string, $i - $j + 1, $j;\n      \
+    \          $found_match = 1;\n            }\n            $j++;\n        }\n  \
+    \      $i++;\n    }\n    return $string . reverse substr $string, 0, length $string\
+    \ - length $postfix;\n}", "    return $string if $string eq \"\";\n    my $reversed\
+    \ = reverse $string;\n    my($max_pali_length, $max_pali_index) = (0, 0);\n  \
+    \  for my $i (0 .. length($string) - 1) {\n        my $substring = substr($string,\
+    \ $i);\n        for my $j (0 .. length($substring) - 1) {\n            my $subsubstring\
+    \ = substr($substring, 0, $j);\n            if ($subsubstring eq substr($reversed,\
+    \ -1 * (length($subsubstring) + $i))) {\n                if (length($subsubstring)\
+    \ > $max_pali_length) {\n                    $max_pali_length = length($subsubstring);\n\
+    \                    $max_pali_index = $i;\n                }\n            }\n\
+    \        }\n    }\n    return $string . reverse(substr($string, 0, $max_pali_index));\n\
+    }", "    my($palindrome_suffix) = '';\n    my($prefix_substr) = substr($string,\
+    \ 0, length($string) - length($palindrome_suffix));\n    # search for a palindromic\
+    \ suffix to prepend to the prefix\n    for(my $i = length($string) - 1; $i >=\
+    \ 0; $i--) {\n        #if($palindrome_suffix eq '') {\n        #    $palindrome_suffix\
+    \ = substr($string, $i, 1);\n        #} else {\n        #    $palindrome_suffix\
+    \ = substr($string, $i, 1) . $palindrome_suffix;\n        #}\n        $palindrome_suffix\
+    \ = substr($string, $i, 1) . $palindrome_suffix;\n        # check if current palindrome\
+    \ suffix is a palindrome\n        if(is_palindrome($palindrome_suffix)) {\n  \
+    \          # append the reverse of prefix substring to the end of palindrome suffix\n\
+    \            $palindrome_suffix .= reverse($prefix_substr);\n            last;\n\
+    \        }\n    }\n    return $palindrome_suffix;\n}", "    $string = lc($string);\n\
+    \    my($prefix) = substr($string, 0, length($string) - postfix_palindrome_length($string));\n\
+    \    return $string . reverse($prefix);\n}", "    my $len = length($string);\n\
+    \    my $longest_palindrome_end = 0;\n    my $longest_palindrome_len = 0;\n  \
+    \  my $palindrome_end = 0;\n    my $palindrome_len = 0;\n    my $end;\n    my\
+    \ $i;\n    my $c;\n    # Find the longest postfix that is a palindrome.\n    for\
+    \ ($end = 1; $end <= $len; $end++) {\n        $i = $end;\n        $c = substr($string,\
+    \ $end - 1, 1);\n        $palindrome_end = $end;\n        $palindrome_len = 0;\n\
+    \        while ($i <= $len) {\n            if (substr($string, $i - 1, 1) eq $c)\
+    \ {\n                $palindrome_len++;\n                $i++;\n            }\
+    \ else {\n                if ($palindrome_len > $longest_palindrome_len) {\n \
+    \                   $longest_palindrome_end = $palindrome_end;\n             \
+    \       $longest_palindrome_len = $palindrome_len;\n                }\n      \
+    \          last;\n            }\n        }\n        if ($palindrome_len > $longest_palindrome_len)\
+    \ {\n            $longest_palindrome_end = $palindrome_end;\n            $longest_palindrome_len\
+    \ = $palindrome_len;\n        }\n    }\n    if ($longest_palindrome_len == 0)\
+    \ {\n        # String is a palindrome, so just return it.\n        return $string;\n\
+    \    } else {\n        # Found the longest palindromic suffix.\n        return\
+    \ substr($string, 0, $longest_palindrome_end - $longest_palindrome_len) . reverse(substr($string,\
+    \ 0, $longest_palindrome_end - $longest_palindrome_len)) . substr($string, $longest_palindrome_end\
+    \ - $longest_palindrome_len);\n    }\n}", "    my $half_len = length($string)\
+    \ / 2;\n    for my $i (0 .. $half_len) {\n        my $suffix = substr($string,\
+    \ -$i - 1);\n        my $suffix_rev = reverse $suffix;\n        my $prefix = substr($string,\
+    \ 0, length($string) - $i - 1);\n        if ($suffix eq $suffix_rev) {\n     \
+    \       return $string . $suffix_rev;\n        }\n    }\n    die \"Could not find\
+    \ palindrome suffix for string '$string'\";\n}", "    if (length($string) <= 1)\
+    \ {\n        return $string;\n    }\n    my $rev = reverse $string;\n    for (my\
+    \ $i = 0; $i < length($string); $i++) {\n        if (substr($string, 0, length($string)\
+    \ - $i) eq substr($rev, $i)) {\n            return $string . substr($rev, 0, $i);\n\
+    \        }\n    }\n}", "    my $lps = lps($string);\n    my $reverse_prefix =\
+    \ reverse substr($string, 0, length($string) - length($lps));\n    return $string\
+    \ . $reverse_prefix;\n}", "    my($l) = length($string);\n    return $string if\
+    \ ($l == 0);", "    my $len = length($string);\n    if ($len == 0) {\n       \
+    \ return \"\";\n    }\n    my $prefix = substr($string, 0, $len - 1);\n    my\
+    \ $suffix = substr($string, -$len + 1);\n    my $longest_palindrome = find_longest_palindrome($suffix);\n\
+    \    return $string . reverse($prefix) . $longest_palindrome;\n}", '    return
+    $string if length($string) <= 1;', '    return $string if $string eq "";', " \
+    \   my $prefix = '^';\n    my $suffix = $string;\n    my $max_palindrome_length\
+    \ = length($string);\n    my $min_length = 0;\n    if ($string eq '') {\n    \
+    \    return '';\n    }\n    # Loop until the longest palindrome is found.\n  \
+    \  while ($max_palindrome_length > $min_length) {\n        if (is_palindrome($prefix,\
+    \ $suffix)) {\n            last;\n        }\n        $prefix .= substr($suffix,\
+    \ 0, 1);\n        $suffix = substr($suffix, 1);\n        $max_palindrome_length--;\n\
+    \    }\n    return $string . reverse_string($prefix);\n}", "    my $len = length($string);\n\
+    \    my $i = 0;\n    my $j = $len - 1;\n    my $longest_palindrome_length = 0;\n\
+    \    while ($i < $j) {\n        # Find the longest palindrome suffix.\n      \
+    \  # Let $i point to the last character that is part of the palindrome.\n    \
+    \    # $j will point to the first character of the palindrome.\n        if (substr($string,\
+    \ $i, 1) eq substr($string, $j, 1)) {\n            $longest_palindrome_length++;\n\
+    \            $i++;\n            $j--;\n        } else {\n            $longest_palindrome_length\
+    \ = 0;\n            $i = 0;\n            $j--;\n        }\n    }\n    return $string\
+    \ . reverse(substr($string, 0, $len - $longest_palindrome_length));\n}", "   \
+    \ return $string if is_palindrome($string);\n    my $len = length($string);\n\
+    \    # Try all possible suffixes\n    for (my $i = $len; $i > 0; $i--) {\n   \
+    \     my $suffix = substr($string, $len - $i);\n        my $prefix = substr($string,\
+    \ 0, $len - $i);\n        my $rev_prefix = scalar reverse $prefix;\n        return\
+    \ $string . $rev_prefix if is_palindrome($suffix);\n    }\n}", "    # return $string\
+    \ if it is a palindrome already\n    return $string if ($string eq reverse $string);\n\
+    \    # find the longest postfix of $string that is a palindrome\n    my $palindrome_suffix\
+    \ = '';\n    for (my $i = length($string); $i > 0; $i--) {\n        $palindrome_suffix\
+    \ = substr($string, $i - 1, 1) . $palindrome_suffix;\n        $palindrome_suffix\
+    \ = reverse $palindrome_suffix;\n        if ($palindrome_suffix eq substr($string,\
+    \ $i - 1)) {\n            # found the suffix\n            return substr($string,\
+    \ 0, $i - 1) . make_palindrome(reverse substr($string, 0, $i - 1)) . $palindrome_suffix;\n\
+    \        }\n    }\n}", "    my $len = length($string);\n    my $pos = $len - 1;\n\
+    \    while ($pos >= 0 && substr($string, $pos, 1) ne substr($string, 0, 1)) {\n\
+    \        $pos--;\n    }\n    return $string if $pos == 0;\n    if ($pos < 0) {\n\
+    \        return substr($string, 0, 1) . make_palindrome(substr($string, 1)) .\
+    \ substr($string, 0, 1);\n    }\n    my $tmp = substr($string, 0, $pos);\n   \
+    \ return substr($string, 0, 1) . make_palindrome(substr($string, 1, $pos)) . $tmp;\n\
+    }", "    my $len = length($string);\n    return $string if $len == 0;\n    my\
+    \ $i = $len;\n    my $palindrome = $string;\n    while ($i > 0) {\n        my\
+    \ $prefix = substr($string, 0, $i);\n        my $suffix = substr($string, $len\
+    \ - $i);\n        if ($prefix eq $suffix) {\n            $palindrome .= reverse($prefix);\n\
+    \            last;\n        }\n        $i--;\n    }\n    return $palindrome;\n\
+    }", "    my $prefix = find_longest_palindrome_prefix($string);\n    return $string.$prefix;\n\
+    }", "    my $pal_suffix = &palindromic_suffix($string);\n    my $prefix_begin\
+    \ = $string->pos(-$pal_suffix->length);\n    my $prefix = $string->substr($prefix_begin,\
+    \ $pal_suffix->length);\n    return $string . $prefix->reverse;\n}", "    return\
+    \ $string if $string eq '';\n    my($suffix) = find_longest_palindrome_suffix($string);\n\
+    \    if ($suffix == 0) {\n        return $string . reverse_string($string);\n\
+    \    } else {\n        return $string . reverse_string(substr($string, 0, $suffix));\n\
+    \    }\n}", '    return $string if $string eq reverse $string;', "    $string\
+    \ .= reverse(substr($string, 0, length($string) - longest_suffix_palindrome($string)));\n\
+    \    return $string;\n}", "    my $len = length($string);\n    my $suf_len = longest_palindromic_suffix($string);\n\
+    \    return $string . reverse(substr($string, 0, $len - $suf_len));\n}", "   \
+    \ my($i, $max_palindrome_len, $max_palindrome_suffix_index);\n    my($prefix_len,\
+    \ $j);\n    $max_palindrome_len = 0;\n    $max_palindrome_suffix_index = 0;\n\
+    \    for($i = 0; $i < length($string); $i++) {\n        my($substr_len) = 2 *\
+    \ length($string) - $i;\n        if($substr_len <= $max_palindrome_len) {\n  \
+    \          last;\n        }\n        my($substr) = substr($string, $i, $substr_len);\n\
+    \        if(is_palindrome($substr)) {\n            $max_palindrome_len = $substr_len;\n\
+    \            $max_palindrome_suffix_index = $i;\n        }\n    }\n    $prefix_len\
+    \ = length($string) - $max_palindrome_len;\n    $j = $prefix_len - 1;\n    while($j\
+    \ >= 0) {\n        $string .= substr($string, $j, 1);\n        $j--;\n    }\n\
+    \    return $string;\n}", "    if (length($string) == 0) {\n        return $string;\n\
+    \    }\n    my $rev_string = reverse $string;\n    my($suffix) = ($string =~ /(.*)($rev_string)$/);\n\
+    \    return $string . substr(reverse $suffix, 0, length($string) - length($suffix));\n\
+    }", "    return $string if is_palindrome($string);\n    return \"\" if $string\
+    \ eq \"\";\n    my($longest_palindrome) = \"\";\n    my($longest_palindrome_length)\
+    \ = 0;\n    my($current_string);\n    for(my($i) = 0; $i < length($string); $i++)\
+    \ {\n        $current_string = substr($string, $i);\n        if(is_palindrome($current_string))\
+    \ {\n            if(length($current_string) > $longest_palindrome_length) {\n\
+    \                $longest_palindrome = $current_string;\n                $longest_palindrome_length\
+    \ = length($current_string);\n            }\n        }\n    }\n    return $string\
+    \ . reverse(substr($string, 0, length($string) - length($longest_palindrome)));\n\
+    }", "    my $length = length($string);\n    my @array = split //, $string;\n \
+    \   my $i = $length - 1;\n    my $j = 0;\n    my $m = ($length - 1) / 2;\n   \
+    \ my $l;\n    while ($i > $m) {\n        $l = 0;\n        for ($j = 0; $j <= $m;\
+    \ $j++) {\n            if ($array[$i - $j] eq $array[$i + $j]) {\n           \
+    \     $l++;\n            } else {\n                last;\n            }\n    \
+    \    }\n        if ($l > $m) {\n            return $string . reverse(substr($string,\
+    \ 0, $length - $l));\n        }\n        $l = 0;\n        for ($j = 0; $j <= $m;\
+    \ $j++) {\n            if ($array[$i - $j] eq $array[$i + $j + 1]) {\n       \
+    \         $l++;\n            } else {\n                last;\n            }\n\
+    \        }\n        if ($l > $m) {\n            return $string . reverse(substr($string,\
+    \ 0, $length - $l));\n        }\n        $i--;\n    }\n    return $string . reverse($string);\n\
+    }", "    return $string if $string eq reverse $string;\n    my $rev = reverse\
+    \ $string;\n    my $length = length $string;\n    my $substr_len = 1;\n    while\
+    \ ($substr_len < $length) {\n        my $substr = substr $string, 0, $substr_len;\n\
+    \        return $string . substr $rev, $substr_len if $substr eq substr $rev,\
+    \ $length - $substr_len;\n        $substr_len++;\n    }\n    return \"\";\n}",
+  "    my($reverse_string) = reverse($string);\n    my($palindrome) = \"$string$reverse_string\"\
+    ;\n    my($shortest_palindrome) = \"\";\n    my($matched_prefix_length) = 0;\n\
+    \    my($string_length) = length($string);\n    my($i);\n    for ($i = $string_length;\
+    \ $i > 0; $i--) {\n        my($prefix) = substr($string, 0, $i);\n        my($suffix)\
+    \ = substr($reverse_string, 0, $i);\n        if ($prefix eq $suffix) {\n     \
+    \       $matched_prefix_length = $i;\n            last;\n        }\n    }\n  \
+    \  my($prefix) = substr($string, 0, $matched_prefix_length);\n    my($suffix)\
+    \ = substr($reverse_string, $matched_prefix_length);\n    $shortest_palindrome\
+    \ = \"$prefix$suffix\";\n    return $shortest_palindrome;\n}", "    my $pal_len\
+    \ = longest_palindrome_suffix_length($string);\n    return $string . reverse substr($string,\
+    \ 0, length($string) - $pal_len);\n}", "    my $len = length($string);\n    my\
+    \ $i;\n    my $pal_length = 0;\n    my $remaining_chars;\n    my $res;", "   \
+    \ my $suffix = longest_suffix_palindrome($string);\n    return $string.$suffix.reverse_string(substr($string,\
+    \ 0, length($string) - length($suffix)));\n}", "    my $len = length($string);\n\
+    \    my $prefix_len = palindrome_length($string);\n    return $string . reverse(substr($string,\
+    \ 0, $len - $prefix_len));\n}", "    my $s = \"\";\n    my $p = \"\";\n    for\
+    \ (my $i = 0; $i < length($string); $i++) {\n        my $s_p = substr($string,\
+    \ 0, $i+1);\n        if (is_palindrome($s_p)) {\n            $s = $s_p;\n    \
+    \    }\n    }\n    if ($s ne \"\") {\n        $p = $s . reverse(substr($string,\
+    \ 0, length($string) - length($s)));\n    }\n    return $p;\n}", "    return($string)\
+    \ if($string eq '');\n    my $prefix = $string;\n    my $suffix = \"\";\n    #\
+    \ Search for a postfix that is a palindrome\n    while(1) {\n        if(is_palindrome($prefix))\
+    \ {\n            last;\n        }\n        else {\n            $suffix = substr($prefix,0,1)\
+    \ . $suffix;\n            $prefix = substr($prefix,1);\n        }\n    }\n   \
+    \ return($prefix . $suffix);\n}", "    my $palindrome = _find_palindrome($string);\n\
+    \    my $prefix = substr($string, 0, length($string) - length($palindrome));\n\
+    \    return $string . reverse($prefix);\n}", "    my $reverse = scalar reverse\
+    \ $string;\n    my $postfix = longest_palindrome_postfix($string);\n    return\
+    \ $string . substr($reverse, length($string) - length($postfix));\n}", "    my\
+    \ $len = length($string);\n    my $i = $len;\n    while ($i > 0 && $string ne\
+    \ reverse($string)) {\n        $i--;\n        if ($string eq reverse(substr($string,\
+    \ 0, $i))) {\n            last;\n        }\n    }\n    return $string . reverse(substr($string,\
+    \ 0, $len - $i));\n}", "    return $string if is_palindrome($string);\n    my\
+    \ $suf = find_longest_palindromic_suffix($string);\n    $string .= reverse substr($string,\
+    \ 0, length($string) - length($suf));\n    return $string;\n}", "    return $string\
+    \ if length($string) <= 1;\n    my $length = length($string);\n    my $palindrome\
+    \ = $string;\n    # Find the longest palindromic suffix by searching for the\n\
+    \    # start of the smallest suffix that is a palindrome.\n    while (!is_palindrome($palindrome))\
+    \ {\n        chop $palindrome;\n    }\n    # The prefix of the string that goes\
+    \ before the palindromic suffix.\n    my $prefix = substr($string, 0, $length\
+    \ - length($palindrome));\n    # Add it to the end of the string in reverse order.\n\
+    \    $palindrome .= reverse($prefix);\n    return $palindrome;\n}", '    return
+    $string if $string eq "";', "    my $suffix = get_longest_palindrome_postfix($string);\n\
+    \    my $prefix = substr($string, 0, length($string) - length($suffix));\n   \
+    \ return $string . reverse($prefix);\n}", "    my @reverse = reverse split //,\
+    \ $string;\n    my $reverse = join '', @reverse;\n    # suffix is the longest\
+    \ substring that is a palindrome\n    my $suffix = '';\n    for my $len (1 ..\
+    \ length $string) {\n        # is $string[-1] . ... . $string[-len] a palindrome?\n\
+    \        if (substr($string, -$len) eq substr($reverse, 0, $len)) {\n        \
+    \    $suffix = substr($string, -$len);\n        }\n    }\n    return $string .\
+    \ substr($reverse, length $suffix);\n}", "    # Find longest palindromic suffix.\n\
+    \    # This is the same as finding the longest palindromic prefix of the reverse\
+    \ of the string.\n    my $palindromic_suffix = longest_palindromic_prefix(scalar\
+    \ reverse $string);\n    return $string . scalar reverse $palindromic_suffix;\n\
+    }", '    return $string if length($string) <= 1;', "    my $length = length($string);\n\
+    \    for (my $i = $length; $i >= 0; $i--) {\n        if (substr($string, 0, $i)\
+    \ eq reverse(substr($string, $i))) {\n            my $prefix = substr($string,\
+    \ 0, $i);\n            return $string . reverse($prefix);\n        }\n    }\n}",
+  "    return \"\" if $string eq \"\";\n    return $string.$string if length($string)\
+    \ == 1;\n    my($max_palindrome_length) = &length_of_max_palindrome_suffix($string);\n\
+    \    my($result) = substr($string, 0, length($string) - $max_palindrome_length);\n\
+    \    $result = reverse($result);\n    return $string.$result;\n}", "    my($prefix)\
+    \ = \"\";\n    my($postfix) = \"\";\n    my($reverse) = \"\";\n    for(my($i)\
+    \ = 0; $i < length($string); $i++) {\n        if(length($postfix) && !is_palindrome(substr($string,\
+    \ 0, $i + 1))) {\n            chop($postfix);\n            last;\n        }\n\
+    \        $postfix .= substr($string, $i, 1);\n    }\n    $prefix = substr($string,\
+    \ 0, length($string) - length($postfix));\n    $reverse = reverse($prefix);\n\
+    \    return $string . $reverse;\n}", "    my($suffix) = find_palindrome_suffix($string);\n\
+    \    my($prefix) = substr($string, 0, length($string) - length($suffix));\n  \
+    \  my($palindrome) = join '', ($string, reverse($prefix));\n    return $palindrome;\n\
+    }", "    my $length = length($string);\n    my $palindrome_length = find_longest_palindrome_length($string);\n\
+    \    my $reverse_prefix = reverse(substr($string, 0, $length - $palindrome_length));\n\
+    \    return $string . $reverse_prefix;\n}", "    my $length = length($string);\n\
+    \    my $palindrome = $string;\n    for (my $j = $length - 1; $j >= 0; $j--) {\n\
+    \        my $suffix = substr($string, $j);\n        my $prefix = substr($string,\
+    \ 0, $j);\n        if (is_palindrome($suffix)) {\n            $palindrome .= reverse\
+    \ $prefix;\n            last;\n        }\n    }\n    return $palindrome;\n}",
+  "    return $string if $string eq \"\";\n    my $longest_suffix = get_longest_suffix($string);\n\
+    \    return $string . reverse(substr($string, 0, length($string) - length($longest_suffix)));\n\
+    }", "    my $len = length($string);\n    my $lps = longest_palindromic_substring($string);\n\
+    \    my $lps_len = length($lps);\n    my $rev_prefix = \"\";\n    if ($lps_len\
+    \ < $len) {\n        $rev_prefix = reverse(substr($string, 0, $len - $lps_len));\n\
+    \    }\n    return $string . $rev_prefix;\n}", "    my $left = substr($string,\
+    \ 0, int(length($string) / 2));\n    my $right = substr($string, int(length($string)\
+    \ / 2));\n    my $reversed_left = reverse($left);\n    my $reversed_right = reverse($right);\n\
+    \    for (my $i = length($left); $i >= 0; $i--) {\n        my $left_postfix =\
+    \ substr($left, $i);\n        my $left_prefix = substr($left, 0, $i);\n      \
+    \  if ($left_postfix eq $reversed_right) {\n            return $string . $reversed_left;\n\
+    \        }\n        if ($left_prefix eq $reversed_right) {\n            return\
+    \ $string . $reversed_left;\n        }\n    }\n    return \"\";\n}", "    my($lps)\
+    \ = find_longest_palindromic_suffix($string);\n    my($prefix) = substr($string,\
+    \ 0, length($string) - length($lps));\n    return $string . reverse($prefix);\n\
+    }", "    return \"\" if $string eq \"\";\n    # Find the longest postfix that\
+    \ is a palindrome.\n    my $postfix = longest_palindrome_postfix($string);\n \
+    \   my $prefix = reverse(substr($string, 0, length($string) - length($postfix)));\n\
+    \    return $string . $prefix;\n}", "    my $reversed = reverse $string;\n   \
+    \ return $string if $string eq $reversed;\n    my $len = length $string;\n   \
+    \ my $i = 0;\n    while ($i <= $len/2) {\n        if (substr($string, $i) eq substr($reversed,\
+    \ 0, $len-$i)) {\n            return $string.$reversed;\n        }\n        $i++;\n\
+    \    }\n}", "    return $string if $string eq '';", "    # A string of length\
+    \ 0 or 1 is palindrome.\n    # Then add the reversed version of the string.\n\
+    \    return $string.$string if (length($string) < 2);\n    # Find the longest\
+    \ suffix that is palindrome.\n    my $suffix = find_longest_suffix_palindrome($string);\n\
+    \    # Append the reversed prefix to the end of the string.\n    return $string.$suffix;\n\
+    }", "    my $result;\n    # Find the longest postfix of supplied string that is\
+    \ a palindrome.\n    for (my $i = 0; $i < length($string); $i++) {\n        my\
+    \ $postfix = substr($string, $i);\n        if ($postfix eq reverse($postfix))\
+    \ {\n            $result = $string . reverse(substr($string, 0, $i));\n      \
+    \      last;\n        }\n    }\n    return $result;\n}", "    my $reversed = reverse\
+    \ $string;\n    my $postfix = \"\";\n    my $prefix = $string;\n    for (1..length($string))\
+    \ {\n        if (substr($string, -$_) eq substr($reversed, 0, $_)) {\n       \
+    \     $postfix = substr($string, -$_);\n            $prefix = substr($string,\
+    \ 0, -$_);\n        }\n    }\n    return $string . reverse $prefix;\n}", "   \
+    \ my $length = length($string);\n    my $palin_length = 0;\n    for(my $i = $length;\
+    \ $i > 0; $i--) {\n        if(substr($string, 0, $i) eq substr($string, $length\
+    \ - $i, $i)) {\n            $palin_length = $i;\n            last;\n        }\n\
+    \    }\n    return $string . reverse(substr($string, 0, $length - $palin_length));\n\
+    }", "    my $result = find_suffix_palindrome($string) . reverse substr($string,\
+    \ 0, length($string) - length($result));\n    return $result;\n}", "    my $str_length\
+    \ = length($string);\n    my $suffix_position = $str_length;\n    my $suffix_length\
+    \ = 0;\n    my $best_suffix_length = 0;\n    my $rev_prefix;\n    my $rev_suffix;\n\
+    \    # Find palindromic suffix.\n    while ($suffix_position) {\n        # Check\
+    \ if there is a prefix equal to a suffix.\n        $rev_suffix = reverse(substr($string,\
+    \ $suffix_position - 1, $suffix_length + 1));\n        $rev_prefix = reverse(substr($string,\
+    \ 0, $str_length - $suffix_length - 1));\n        if ($rev_suffix eq $rev_prefix)\
+    \ {\n            $best_suffix_length = $suffix_length + 1;\n        }\n      \
+    \  $suffix_position--;\n        $suffix_length++;\n    }\n    # Append the prefix\
+    \ that is a reverse of palindromic suffix.\n    return $string . reverse(substr($string,\
+    \ 0, $str_length - $best_suffix_length));\n}", "    my $palindrome_candidate =\
+    \ _longest_suffix_palindrome($string);\n    my $reverse_prefix = reverse(substr($string,\
+    \ 0, length($string) - length($palindrome_candidate)));\n    return $string .\
+    \ $reverse_prefix;\n}", "    # Find the longest postfix that is a palindrome.\n\
+    \    my $i = length($string);\n    while ($i--) {\n        my $substr = substr($string,\
+    \ $i);\n        if (is_palindrome($substr)) {\n            # Append the reverse\
+    \ of the remaining string.\n            my $rev = reverse(substr($string, 0, $i));\n\
+    \            return $string . $rev;\n        }\n    }\n    # If we haven't returned\
+    \ so far, the whole string is a palindrome.\n    return $string;\n}", "    my\
+    \ $n = length($string);\n    my @suffix = (0) x $n;\n    my $i = 1;\n    my $j\
+    \ = 0;\n    while ($i < $n) {\n        if ($string->[$i] == $string->[$j]) {\n\
+    \            $suffix[$i] = $j + 1;\n            $i++;\n            $j++;\n   \
+    \     } elsif ($j == 0) {\n            $i++;\n        } else {\n            $j\
+    \ = $suffix[$j - 1];\n        }\n    }\n    my $rev = reverse(@$string);\n   \
+    \ my $rev_suffix = [ (0) x $n ];\n    $i = 1;\n    $j = 0;\n    while ($i < $n)\
+    \ {\n        if ($rev->[$i] == $rev->[$j]) {\n            $rev_suffix->[$i] =\
+    \ $j + 1;\n            $i++;\n            $j++;\n        } elsif ($j == 0) {\n\
+    \            $i++;\n        } else {\n            $j = $rev_suffix->[$j - 1];\n\
+    \        }\n    }\n    $i = 0;\n    while ($i < $n - 1) {\n        if ($rev_suffix->[$i]\
+    \ == $suffix[$n - 1 - $i]) {\n            return $string . join('', reverse(@$string[0\
+    \ .. $i - 1]));\n        }\n        $i++;\n    }\n    return $string . join('',\
+    \ reverse(@$string));\n}", "    my $new_string = $string;\n    if (is_palindrome($string))\
+    \ {\n        return $string;\n    } else {\n        my $palindrome_postfix = find_longest_palindrome_postfix($string);\n\
+    \        if (length($palindrome_postfix) == length($string)) {\n            #\
+    \ Palindrome postfix is the same as the supplied string.\n            return $string.$string;\n\
+    \        } else {\n            my $new_string_prefix = substr($string, 0, -length($palindrome_postfix));\n\
+    \            $new_string = $string.$new_string_prefix;\n            # reverse($new_string_prefix);\n\
+    \            $new_string = $new_string.reverse($new_string_prefix);\n        \
+    \    return $new_string;\n        }\n    }\n}", "    my($prefix) = reverse substr($string,\
+    \ 0, (length($string) - length(longest_palindrome_suffix($string))));\n    return\
+    \ $string . $prefix;\n}", "    return $string if ($string eq \"\");\n    my($suffix_length)\
+    \ = _find_palindrome_length($string);\n    return $string . reverse(substr($string,\
+    \ 0, length($string) - $suffix_length));\n}", "    my($palindrome_suffix_length)\
+    \ = palindrome_suffix_length($string);\n    return $string . reverse substr($string,\
+    \ 0, length($string) - $palindrome_suffix_length);\n}", "    my($longest_postfix_p)\
+    \ = longest_palindromic_postfix($string);\n    my($longest_postfix_l) = length\
+    \ $longest_postfix_p;\n    my($prefix) = substr($string, 0, length($string) -\
+    \ $longest_postfix_l);\n    return join('', $string, reverse $prefix);\n}", " \
+    \   $string = make_palindrome_1($string);\n    #print \"string $string\\n\";\n\
+    \    my($palindrome) = $string;\n    while (1) {\n        my($suffix) = get_longest_palindrome_postfix($palindrome);\n\
+    \        if ($suffix ne \"\") {\n            my($prefix) = substr($palindrome,\
+    \ 0, length($palindrome) - length($suffix));\n            $palindrome = $prefix\
+    \ . reverse($prefix) . $suffix;\n            last;\n        }\n        $palindrome\
+    \ = substr($palindrome, 0, length($palindrome) - 1);\n    }\n    return $palindrome;\n\
+    }", "    return $string if length($string) < 2;\n    my($index) = length($string)\
+    \ - 1;\n    my($letter) = substr($string, $index, 1);\n    my($suffix) = $letter;\n\
+    \    $index--;\n    while ($index >= 0) {\n        my($next_letter) = substr($string,\
+    \ $index, 1);\n        $suffix = $next_letter . $suffix;\n        my($reverse_prefix)\
+    \ = reverse($suffix);\n        last if substr($string, 0, length($reverse_prefix))\
+    \ eq $reverse_prefix;\n        $index--;\n    }\n    if ($index >= 0) {\n    \
+    \    my($prefix) = substr($string, 0, $index + 1);\n        return $prefix . $suffix\
+    \ . $prefix;\n    }\n    return $string . reverse($string);\n}", "    my($longest_suffix_palindrome_length)\
+    \ = _longest_palindrome_suffix_length($string);\n    my($prefix) = substr($string,\
+    \ 0, length($string) - $longest_suffix_palindrome_length);\n    my($prefix_reversed)\
+    \ = reverse($prefix);\n    return $string . $prefix_reversed;\n}", "    my $len\
+    \ = length($string);\n    my $max_suffix_len = 0;\n    for (my $i = 0; $i < $len\
+    \ - 1; $i++) {\n        if (is_palindrome(substr($string, $i))) {\n          \
+    \  $max_suffix_len = $len - $i;\n        }\n    }\n    if ($max_suffix_len ==\
+    \ 0) {\n        return $string;\n    }\n    my $left = reverse(substr($string,\
+    \ 0, $len - $max_suffix_len));\n    return $string . $left;\n}", "    return $string\
+    \ if $string eq \"\";\n    my $reverse = reverse $string;\n    my $index = index\
+    \ $string, $reverse;\n    return $string if $index == 0;\n    $string .= substr\
+    \ $reverse, $index;\n    return $string;\n}", "    my($reversed) = reverse $string;\n\
+    \    my($i);\n    for($i = 0; $i < length($string); $i++) {\n        if(substr($string,\
+    \ $i) eq substr($reversed, 0, length($string) - $i)) {\n            return $string\
+    \ . substr($reversed, length($string) - $i);\n        }\n    }\n    return $string;\n\
+    }", "    if ($string eq '') {\n        return $string;\n    }\n    my($m, $n)\
+    \ = (length($string), -1);\n    for my $i (0 .. $m) {\n        if (is_palindrome(substr($string,\
+    \ $i))) {\n            $n = $i;\n            last;\n        }\n    }\n    return\
+    \ $string . scalar reverse(substr($string, 0, $n));\n}", "    my $rev_prefix =\
+    \ \"\";\n    my $suffix = \"\";\n    my $len = length($string);\n    if ($len\
+    \ > 0) {\n        # Find the longest suffix that is a palindrome\n        for\
+    \ (my $i = $len; $i > 0; $i--) {\n            my $s = substr($string, $i - 1,\
+    \ $len - $i + 1);\n            if (is_palindrome($s)) {\n                $suffix\
+    \ = $s;\n                last;\n            }\n        }\n        # Reverse of\
+    \ string that comes before the palindromic suffix\n        $rev_prefix = reverse(substr($string,\
+    \ 0, $len - length($suffix)));\n    }\n    return $string . $rev_prefix;\n}",
+  "    my $i = 0;\n    my $j = length($string);\n    while ($i < $j) {\n        if\
+    \ (substr($string, $i, 1) eq substr($string, $j - 1, 1)) {\n            $i++;\n\
+    \            $j--;\n        } else {\n            last;\n        }\n    }\n  \
+    \  my $last_pos = $j;\n    my $middle_pos = ($i + $j) / 2;\n    my $left_pos =\
+    \ $i;\n    my $right_pos = $j;\n    my $result = $string;\n    while ($left_pos\
+    \ < $middle_pos) {\n        $result .= substr($string, $last_pos - 1, 1);\n  \
+    \      $last_pos--;\n        $left_pos++;\n    }\n    return $result;\n}", " \
+    \   my($palindrome);\n    if (length($string) == 0) {\n        $palindrome = $string;\n\
+    \    } else {\n        my($palindrome_length) = length($string) - 1;\n       \
+    \ my($string_end) = length($string) - 1;\n        my($ok) = 0;\n        while\
+    \ (!$ok) {\n            my($palindrome_begin) = $string_end - $palindrome_length;\n\
+    \            my($palindrome_substring) = substr($string, $palindrome_begin, $palindrome_length\
+    \ + 1);\n            my($reversed_substring) = reverse($palindrome_substring);\n\
+    \            if ($palindrome_substring eq $reversed_substring) {\n           \
+    \     my($append_substring) = substr($string, 0, $palindrome_begin);\n       \
+    \         $palindrome = $string . reverse($append_substring);\n              \
+    \  $ok = 1;\n            } else {\n                $palindrome_length--;\n   \
+    \         }\n        }\n    }\n    return $palindrome;\n}", "    $string = str_reverse($string);\n\
+    \    $string .= substr($string, 1) if length($string) > 1;\n    return $string;\n\
+    }", "    my $len = length($string);\n    my $max = 0;\n    my $k = 0;\n    my\
+    \ $i = 0;\n    my $j = 0;\n    my $expanded = 0;\n    my $left = 0;\n    my $right\
+    \ = 0;\n    my $offset = 0;\n    my $palindrome = \"\";\n    my $prefix = \"\"\
+    ;\n    my $postfix = \"\";\n    # We only examine postfixes of length at least\
+    \ 1.\n    for $i (1 .. $len) {\n        # Take postfix of length $i.\n       \
+    \ $k = $len - $i;\n        $left = $k;\n        $right = $k + $i - 1;\n      \
+    \  # Try to expand boundaries as much as possible.\n        while (($left >= 0)\
+    \ && ($right < $len) && (substr($string, $left, 1) eq substr($string, $right,\
+    \ 1))) {\n            $left--;\n            $right++;\n        }\n        # Compute\
+    \ the length of expanded palindrome.\n        $expanded = $right - $left - 1;\n\
+    \        # If new palindrome has a bigger length we have a new winner.\n     \
+    \   if ($expanded > $max) {\n            $max = $expanded;\n            $offset\
+    \ = $k;\n        }\n    }\n    # Check if supplied string is already a palindrome.\n\
+    \    if ($max == $len) {\n        $palindrome = $string;\n    } else {\n     \
+    \   # If not, append reversed string prefix that comes before the palindromic\
+    \ suffix.\n        $prefix = substr($string, 0, $offset);\n        $postfix =\
+    \ substr($string, $offset, $max);\n        $palindrome = $postfix . $prefix;\n\
+    \        $palindrome = reverse($palindrome);\n        $palindrome .= $postfix;\n\
+    \    }\n    return $palindrome;\n}", "    return $string if(length($string) <=\
+    \ 1);\n    my($suffix) = longest_palindromic_suffix($string);\n    my($palindrome)\
+    \ = $string . substr(reverse($string), 0, length($string) - length($suffix));\n\
+    \    return $palindrome;\n}", "    my $rev_string = reverse $string;\n    my $string_length\
+    \ = length $string;\n    my $possible_palindrome_start = -1;\n    my $palindrome_length\
+    \ = 0;\n    # This loop could be greatly improved.\n    while($possible_palindrome_start\
+    \ + 1 < $string_length) {\n        $possible_palindrome_start++;\n        my $front_index\
+    \ = $possible_palindrome_start;\n        my $back_index = $string_length - 1;\n\
+    \        my $possible_palindrome_length = 0;\n        # This loop could be greatly\
+    \ improved.\n        while($front_index < $back_index) {\n            if(substr($string,\
+    \ $front_index, 1) eq substr($rev_string, $back_index, 1)) {\n               \
+    \ $possible_palindrome_length++;\n                $front_index++;\n          \
+    \      $back_index--;\n            } else {\n                last;\n         \
+    \   }\n        }\n        if($front_index >= $back_index) {\n            $palindrome_length\
+    \ = $possible_palindrome_length;\n        }\n    }\n    return $string . substr($rev_string,\
+    \ 0, $string_length - $palindrome_length);\n}", "    my $length = length($string);\n\
+    \    my $pl = longest_palindrome_length($string);\n    my $complement = substr($string,\
+    \ 0, $length - $pl);\n    my $palindrome = $string . reverse($complement);\n \
+    \   return $palindrome;\n}", "    my $len = length($string);\n    my $i;\n   \
+    \ my $j;\n    my $k;\n    my $palindrome_len = 1;", "    return $string if ($string\
+    \ eq \"\");\n    # find the longest palindromic suffix\n    my $suffix = rev($string);\n\
+    \    my $len_suffix = length($suffix);\n    my $len_prefix = -1;\n    for(my $i\
+    \ = 0; $i < $len_suffix; $i++) {\n        my $compare = substr($suffix, $i);\n\
+    \        my $index = index($string, $compare);\n        # $index is the position\
+    \ of the first character in the prefix\n        if ($index == 0) {\n         \
+    \   $len_prefix = $i;\n            last;\n        }\n    }\n    my $prefix = rev(substr($suffix,\
+    \ 0, $len_prefix));\n    return $string . $prefix;\n}", "    my($i, $j, $n, $suffix_len,\
+    \ $suffix_palin_len, $middle_suffix_len);\n    $n = length($string);\n    $suffix_len\
+    \ = 0;\n    $suffix_palin_len = 0;\n    while ($suffix_len < $n) {\n        $middle_suffix_len\
+    \ = $n - $suffix_len;\n        $i = 0;\n        $j = $suffix_len;\n        while\
+    \ ($i < $middle_suffix_len && substr($string, $i, 1) eq substr($string, $j, 1))\
+    \ {\n            $i++;\n            $j++;\n        }\n        if ($i == $middle_suffix_len)\
+    \ {\n            $suffix_palin_len = $middle_suffix_len;\n        }\n        $suffix_len++;\n\
+    \    }\n    return substr($string, 0, $n - $suffix_palin_len) . reverse_string(substr($string,\
+    \ 0, $n - $suffix_palin_len)) . substr($string, $n - $suffix_palin_len);\n}",
+  "    my($max_index) = length($string) - 1;\n    my($index) = $max_index;\n    while(\
+    \ $index >= 0) {\n        if( is_palindrome(substr($string, $index, $max_index\
+    \ + 1 - $index)) ) {\n            my($prefix) = substr($string, 0, $index);\n\
+    \            my($palindrome) = $string . reverse($prefix);\n            return\
+    \ $palindrome;\n        }\n        $index -= 1;\n    }\n    return \"\";\n}",
+  "    if (length($string) == 0) {\n        return \"\";\n    }\n    my($longest_palindrome_suffix)\
+    \ = find_longest_palindrome_suffix($string);\n    if (length($longest_palindrome_suffix)\
+    \ == length($string)) {\n        return $string;\n    }\n    else {\n        my($string_to_return)\
+    \ = $string . reverse(substr($string, 0, length($string) - length($longest_palindrome_suffix)));\n\
+    \        return $string_to_return;\n    }\n}", "    my $s = \"\";\n    if ($string\
+    \ =~ /^(.+)(.*)\\2$/) {\n        $s = $1;\n    }\n    $s =~ s/(.)./$1/g;\n   \
+    \ return $string . reverse($s);\n}", "    if (length($string) < 2) {\n       \
+    \ return $string;\n    }\n    my $mirror = mirror($string);\n    my $prefix =\
+    \ common_prefix($string, $mirror);\n    my $suffix = common_suffix($string, $mirror);\n\
+    \    if ($suffix eq $string) {\n        return $string;\n    }\n    return $string\
+    \ . substr($mirror, length($prefix));\n}", "    my $reverse = reverse($string);\n\
+    \    return $string . $reverse;\n}", "    my $palindrome = $string;\n    my $prefix\
+    \ = \"\";\n    my $postfix = \"\";\n    my $reverse_prefix = \"\";\n    for (my\
+    \ $i = length($string) - 1; $i >= 0; $i--) {\n        $postfix = substr($string,\
+    \ $i);\n        $prefix = substr($string, 0, $i);\n        $reverse_prefix = reverse($prefix);\n\
+    \        if ($postfix eq $reverse_prefix) {\n            $palindrome .= $reverse_prefix;\n\
+    \            last;\n        }\n    }\n    return $palindrome;\n}", "    return\
+    \ \"\" if $string eq \"\";\n    my $suffix = longest_palindromic_suffix($string);\n\
+    \    my $prefix = reverse substr($string, 0, length($string) - length($suffix));\n\
+    \    return $string . $prefix;\n}", "    return $string if(length($string) < 2);\n\
+    \    my($palindrome) = longest_postfix_palindrome($string);\n    if(length($palindrome)\
+    \ == length($string)) {\n        return $string;\n    } else {\n        return\
+    \ $string . reverse(substr($string, 0, length($string) - length($palindrome)));\n\
+    \    }\n}", "    # palindrome can be empty string\n    return $string if $string\
+    \ eq '';\n    # palindrome can be itself\n    return $string if is_palindrome($string);\n\
+    \    # edge cases\n    return 'a' if length($string) == 1;\n    return 'aa' if\
+    \ $string eq 'a';\n    return 'aba' if $string eq 'b';\n    # find a longest palindromic\
+    \ suffix using Manacher's algorithm\n    my $suffix = _longest_palindromic_suffix($string);\n\
+    \    # make a palindrome by appending a reverse of a prefix before the suffix\n\
+    \    my $pre = substr($string, 0, length($string) - length($suffix));\n    return\
+    \ $string . substr(reverse($pre), 0, length($pre));\n}", "    my($palindrome_size)\
+    \ = palindrome_size($string);\n    my($palindrome_prefix) = substr($string, 0,\
+    \ length($string) - $palindrome_size);\n    return $string . reverse($palindrome_prefix);\n\
+    }", "    return $string if $string eq reverse $string;\n    my $len = length $string;\n\
+    \    my $max = $len;\n    while (--$max >= 0) {\n        next unless substr($string,\
+    \ $max, $len - $max) eq reverse substr($string, $max, $len - $max);\n        last;\n\
+    \    }\n    return substr($string, 0, $max + 1) . reverse substr($string, 0, $max\
+    \ + 1);\n}", "    return $string if (is_palindrome($string));\n    my $i = 0;\n\
+    \    while ($i < length($string)) {\n        my $potential_palindrome = $string\
+    \ . substr($string, 0, $i);\n        my $potential_palindrome_reversed = reverse($potential_palindrome);\n\
+    \        if (is_palindrome($potential_palindrome . $potential_palindrome_reversed))\
+    \ {\n            return $potential_palindrome . $potential_palindrome_reversed;\n\
+    \        }\n        $i++;\n    }\n}", "    my $longest_palindrome = longest_palindrome($string);\n\
+    \    my $complement = reverse(substr($string, 0, length($string) - length($longest_palindrome)));\n\
+    \    return $string . $complement;\n}", '    return $string if $string eq reverse
+    $string;', "    return $string if $string eq \"\";\n    return $string.$string\
+    \ if length($string) == 1;\n    my $length = length($string);\n    my $midpoint\
+    \ = int($length/2);\n    my $max_index = $length-1;\n    for my $index (reverse(0..$midpoint))\
+    \ {\n        # Find the longest palindromic suffix\n        # by checking the\
+    \ characters at the\n        # two ends of a reverse of the prefix\n        #\
+    \ of the string that comes before it.\n        my $start = $index;\n        my\
+    \ $end = $max_index-$index;\n        last if $end-$start < 2;\n        last if\
+    \ substr($string, $start, 1) ne substr($string, $end, 1);\n    }\n    my $prefix\
+    \ = substr($string, 0, $start);\n    my $suffix = substr($string, $start);\n \
+    \   return $suffix.make_palindrome($prefix);\n}", "    return $string if is_palindrome($string);\n\
+    \    my $longest_palindrome = \"\";\n    my $suffix_start = 0;\n    my $string_length\
+    \ = length($string);\n    while ($suffix_start < $string_length) {\n        my\
+    \ $suffix = substr($string, $suffix_start);\n        if (is_palindrome($suffix))\
+    \ {\n            my $palindrome_start = $string_length - $suffix_start;\n    \
+    \        my $palindrome_prefix = substr($string, 0, $palindrome_start);\n    \
+    \        my $palindrome_suffix = reverse($palindrome_prefix);\n            $longest_palindrome\
+    \ = $palindrome_prefix . $suffix . $palindrome_suffix;\n            last;\n  \
+    \      }\n        $suffix_start++;\n    }\n    return $longest_palindrome;\n}",
+  "    my $palindrome_suffix = longest_palindrome_suffix($string);\n    my $prefix\
+    \ = substr($string, 0, length($string) - length($palindrome_suffix));\n    return\
+    \ $string . reverse($prefix);\n}", "    my $substring = longest_palindrome_suffix($string);\n\
+    \    return $string . reverse(substr($string, 0, length($string) - length($substring)));\n\
+    }", "    return $string if(length($string) < 2);\n    my $suffix = longest_palindrome_substring($string);\n\
+    \    my $prefix = substr($string, 0, length($string) - length($suffix));\n   \
+    \ return $string . scalar reverse $prefix;\n}", "    my $result = $string;\n \
+    \   my $i = 0;\n    while ($i < length($string)) {\n        if (is_palindrome(substr($string,\
+    \ $i))) {\n            $result = substr($string, 0, $i) . reverse(substr($string,\
+    \ 0, $i));\n            last;\n        }\n        $i++;\n    }\n    return $result;\n\
+    }", "    return \"\" if !$string;\n    my $longest_suffix = longest_palindromic_suffix($string);\n\
+    \    return $string if length($longest_suffix) == length($string);\n    my $prefix\
+    \ = substr($string, 0, length($string) - length($longest_suffix));\n    return\
+    \ $string . reverse($prefix);\n}", "    my $strlen = length($string);\n    my\
+    \ $max_pos = $strlen - 1;\n    my $max_pal_len = 0;\n    my $max_pal_pos = 0;\n\
+    \    for (my $pos = $max_pos; $pos >= 0; $pos--) {\n        my $pal_len = 0;\n\
+    \        for (my $cpos = $pos; $cpos >= 0; $cpos--) {\n            if (substr($string,\
+    \ $cpos, 1) eq substr($string, $pos - $cpos, 1)) {\n                $pal_len++;\n\
+    \            } else {\n                last;\n            }\n        }\n     \
+    \   if ($pal_len > $max_pal_len) {\n            $max_pal_len = $pal_len;\n   \
+    \         $max_pal_pos = $pos;\n        }\n    }\n    my $prefix = substr($string,\
+    \ 0, $max_pal_pos - $max_pal_len + 1);\n    return $string . scalar reverse $prefix;\n\
+    }", "    $string = lc($string);\n    if(is_palindrome($string)) {\n        return\
+    \ $string;\n    }\n    my($length) = length($string);\n    for(my($i) = $length;\
+    \ $i > 0; $i--) {\n        my($postfix) = substr($string, $length - $i);\n   \
+    \     if(is_palindrome($postfix)) {\n            my($prefix) = substr($string,\
+    \ 0, $length - $i);\n            return \"$prefix\" . reverse($prefix) . \"$postfix\"\
+    ;\n        }\n    }\n}", "    my $len = length($string);\n    my $i = 0;\n   \
+    \ while ($i < $len) {\n        if (is_palindrome(substr($string, $i, $len - $i)))\
+    \ {\n            return $string . reverse(substr($string, 0, $i));\n        }\n\
+    \        $i++;\n    }\n    die \"Unreachable\";\n}", "    return '' if $string\
+    \ eq '';\n    my $prefix_length = index_of_longest_palindrome_suffix($string);\n\
+    \    my $palindrome = $string . reverse(substr($string, 0, $prefix_length));\n\
+    \    return $palindrome;\n}", "    my @reverse_string = reverse split //, $string;\n\
+    \    my $len = length($string);\n    my $i = 1;\n    while ($i <= $len) {\n  \
+    \      my $j = 0;\n        while ($j < $len - $i + 1) {\n            if ($string\
+    \ eq substr($string, $j, $i)) {\n                my $s = substr($string, 0, $j);\n\
+    \                my $suffix = $string . join('', @reverse_string[@reverse_string\
+    \ - $j .. @reverse_string - 1]);\n                return $suffix;\n          \
+    \  }\n            $j++;\n        }\n        $i++;\n    }\n    return $string;\n\
+    }", "    my $pos = length($string);\n    while ($pos > 0) {\n        my $rev =\
+    \ reverse(substr($string, 0, $pos));\n        if (substr($string, $pos) eq $rev)\
+    \ {\n            return $string . substr($rev, 1);\n        }\n        $pos -=\
+    \ 1;\n    }\n    return $string;\n}", "    my $len = length($string);\n    my\
+    \ $pos = 0;\n    while ($pos <= $len) {\n        my $suffix = substr($string,\
+    \ $pos);\n        if (is_palindrome($suffix)) {\n            my $prefix = substr($string,\
+    \ 0, $pos);\n            return $string . reverse($prefix);\n        }\n     \
+    \   $pos++;\n    }\n}", "    my $string_reversed = reverse $string;\n    my($max_reversed_prefix_length)\
+    \ = 0;\n    while (index($string, $string_reversed, $max_reversed_prefix_length)\
+    \ != -1) {\n        $max_reversed_prefix_length++;\n    }\n    $max_reversed_prefix_length--;\n\
+    \    my $suffix = substr($string, 0, $max_reversed_prefix_length);\n    my $prefix\
+    \ = substr($string, $max_reversed_prefix_length);\n    my $result = $string .\
+    \ reverse $prefix;\n    return $result;\n}", "    my($rev, $postfix, $postfix_len);\n\
+    \    if ($string eq \"\") {\n        return \"\";\n    }\n    $rev = reverse $string;\n\
+    \    for ($postfix_len = length($string); $postfix_len > 0; $postfix_len--) {\n\
+    \        $postfix = substr($string, -$postfix_len);\n        if ($postfix eq substr($rev,\
+    \ 0, $postfix_len)) {\n            last;\n        }\n    }\n    return $string\
+    \ . substr($rev, $postfix_len);\n}", "    my $len = length($string);\n    my $prefix_len\
+    \ = 0;\n    my $pre_len = 0;\n    for (my $i = $len; $i > 0; $i--) {\n       \
+    \ my $substr = substr($string, 0, $i);\n        if (is_palindrome($substr)) {\n\
+    \            $prefix_len = $i;\n            last;\n        }\n    }\n    my $pre_str\
+    \ = substr($string, 0, $prefix_len);\n    return $string . reverse($pre_str);\n\
+    }", "    if ($string eq \"\") {\n        return \"\";\n    }\n    my $prefix_len\
+    \ = find_longest_prefix_palindrome($string);\n    my $prefix = substr($string,\
+    \ 0, $prefix_len);\n    my $palindrome = $string . reverse $prefix;\n    return\
+    \ $palindrome;\n}", "    return $string if is_palindrome($string);\n    my $suffix\
+    \ = longest_palindrome_suffix($string);\n    return substr($string, 0, length($string)\
+    \ - length($suffix)) . reverse($suffix) . $suffix;\n}", "    if(length($string)\
+    \ == 0) {\n        return \"\";\n    }\n    my $suffix = longest_palindromic_suffix($string);\n\
+    \    return $string . reverse(substr($string, 0, length($string) - length($suffix)));\n\
+    }", "    my $max_len = length($string);\n    my $is_palindrome = sub {\n     \
+    \   my($l, $r) = @_;\n        while ($l < $r) {\n            return 0 if substr($string,\
+    \ $l, 1) ne substr($string, $r, 1);\n            $l++;\n            $r--;\n  \
+    \      }\n        return 1;\n    };\n    my $longest_len = 0;\n    for (my $i\
+    \ = $max_len - 1; $i >= 0; $i--) {\n        if ($is_palindrome->($i, $max_len\
+    \ - 1)) {\n            $longest_len = $max_len - $i;\n            last;\n    \
+    \    }\n    }\n    my $palindrome = $string . reverse(substr($string, 0, $max_len\
+    \ - $longest_len));\n    return $palindrome;\n}", "    my $palindrome_suffix =\
+    \ find_palindrome_suffix($string);\n    if ($palindrome_suffix) {\n        return\
+    \ $string . reverse substr($string, 0, $palindrome_suffix);\n    } else {\n  \
+    \      return $string . reverse $string;\n    }\n}", "    return $string if is_palindrome($string);\n\
+    \    # find the longest postfix of supplied string that is a palindrome\n    my($longest_postfix)\
+    \ = $string;\n    while ($longest_postfix) {\n        my($postfix) = substr($longest_postfix,\
+    \ 1);\n        last if is_palindrome($postfix);\n        $longest_postfix = $postfix;\n\
+    \    }\n    # substring before the palindromic suffix\n    my($prefix) = substr($string,\
+    \ 0, length($string) - length($longest_postfix));\n    # append to the end of\
+    \ the string reverse of a string prefix that comes before the palindromic suffix\n\
+    \    return $string . reverse $prefix;\n}"]
+stop_tokens:
+- "\nsub"
+- "\n#"
+- "\n\n"

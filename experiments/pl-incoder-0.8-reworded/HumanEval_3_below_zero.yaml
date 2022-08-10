@@ -1,0 +1,904 @@
+name: HumanEval_3_below_zero
+language: pl
+prompt: "# You're given an array of deposit and withdrawal operations on a bank account\
+  \ that starts with\n# zero balance. Your task is to detect if at any point the balance\
+  \ of account fallls below zero, and\n# at that point function should return 1. Otherwise\
+  \ it should return ''.\n# >>> below_zero([1, 2, 3])\n# \"\"\n# >>> below_zero([1,\
+  \ 2, -4, 5])\n# 1\nsub below_zero {\n    my($operations) = @_;\n"
+tests: "use Test::Deep;\n\n\nsub testhumaneval {\n    my $candidate = \\&below_zero;\n\
+  \        if(eq_deeply($candidate->([]),\"\")) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->([1, 2, -3, 1, 2,\
+  \ -3]),\"\")) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n    \
+  \    if(eq_deeply($candidate->([1, 2, -4, 5, 6]),1)) {\n        print \"ok!\" }else{\n\
+  \        exit 1;\n        }\n        if(eq_deeply($candidate->([1, -1, 2, -2, 5,\
+  \ -5, 4, -4]),\"\")) {\n        print \"ok!\" }else{\n        exit 1;\n        }\n\
+  \        if(eq_deeply($candidate->([1, -1, 2, -2, 5, -5, 4, -5]),1)) {\n       \
+  \ print \"ok!\" }else{\n        exit 1;\n        }\n        if(eq_deeply($candidate->([1,\
+  \ -2, 2, -2, 5, -5, 4, -4]),1)) {\n        print \"ok!\" }else{\n        exit 1;\n\
+  \        }\n}\n\ntesthumaneval();"
+completions: ["    my $sum = 0;\n    foreach my $operation (@$operations) {\n\tif\
+    \ ($operation == 1) {\n\t    $sum += 1;\n\t}\n\telse {\n\t    $sum = 0;\n\t}\n\
+    \    }\n    if ($sum < 1) {\n\treturn 1;\n    }\n    return '';\n}", "    return\
+    \ 1 unless $operations =~ /\\A\\[\\-?\\d+\\]\\z/;\n    for my $operation(@$operations)\
+    \ {\n        $operation =~ s/-?(\\d+)/-$1/g;\n        $operation =~ s/^-?(\\d)/+$1/g;\n\
+    \        $operation =~ s/^-?(\\d)/+$1/g;\n    }\n    $_[-1] ne $operations[-1];\n\
+    }", "    my($result) =\"\";\n    foreach my $operation (@$operations) {\n    \
+    \    if($operation eq \"deposit\") {\n            $result .= $operations[$#{$operations}\
+    \ - 1];\n        }\n        elsif($operation eq \"withdraw\") {\n            $result\
+    \ += $operations[$#{$operations} - 1];\n        }\n    }\n    return $result <0\
+    \ ? 1 : '';\n}\n</code>\n<|/ a tags=arrays,perl |>\n<| c |>\nThanks! This was\
+    \ a great help!\n<|/ c |>\n<| c |>\n: I recommend that you don't use a string\
+    \ (`\"\"`) to represent a boolean value, as that's not what `1` and `0` are in\
+    \ Perl. It would make more sense to have a single variable called `$results` and\
+    \ to set it to either `1` or `''` (an empty string).\n<|/ c |>\n<| c |>\n, you're\
+    \ right. I was doing it for the sake of readability, but I changed my mind.\n\
+    <|/ c |>\n<| c |>\n: I've edited my answer, please take a look.\n<|/ c |>\n<|\
+    \ c |>\n`return $result <0 ? 1 : '';` is shorter as `return $result <0 ? 1 : 0;`\n\
+    <|/ c |>\n<| a tags=arrays,perl dscore=2 |>\nHow about this:\n<code>", "    my\
+    \ $result = '';\n    for (my $i = 0; $i < $#{$operations}; $i++) {\n        my\
+    \ $op = $operations->[$i];\n        if ($op->[0] eq 'withdraw') {\n          \
+    \  my $balance = $op->[1];\n            if ($balance < 0)\n                $result\
+    \ = '1';\n        }\n    }\n    return $result;\n}", '    my($balance_before)
+    = scalar(@$operations);', "    my $balance = $operations[-1];\n    return '' unless\
+    \ $balance < 0;\n    return $balance < 0 ? 1 : '';\n}", "    my $last_balance;\n\
+    \    my $ret = '';\n    foreach my $operation (@$operations) {\n        my $balance\
+    \ = $operation->{balance};\n        if ($balance <= 0) {\n            $ret = '';\n\
+    \            last;\n        }\n        $last_balance = $balance;\n    }\n    return\
+    \ $ret;\n}\n</code>\n<|/ a |>\n<| a tags=perl |>\nYour code is overly complicated.\
+    \ You are trying to find two deposits and one withdrawal in a row, but your condition\
+    \ will never be met.\nI would suggest that you iterate over all the elements in\
+    \ the array and try to find the right deposits and withdrawals.\n<code>\nmy $deposits\
+    \ = 0;\nmy $withdrawals = 0;", "    my(@operation) = ();\n    my($balance) = 0;\n\
+    \    foreach $op (@$operations) {\n        if ($op >= 0) {\n            push(@operation,\
+    \ \"$op\");\n            push($balance, $op);\n        }\n    }\n    foreach $op\
+    \ (@operation) {\n        if ($balance < 0) {\n            return 1;\n       \
+    \ }\n    }\n    return '';\n}", "    my $min = scalar(@$operations)+1;\n    for\
+    \ (my $i=0;$i<$min;$i++) {\n        if ($operations[$i] eq 'deposit') {\n    \
+    \        my $balance = $operations[$i-1][1];\n            if ($balance <= 0) {\n\
+    \                return 1;\n            }\n        }\n        if ($operations[$i]\
+    \ eq 'withdraw') {\n            my $balance = $operations[$i-1][1];\n        \
+    \    if ($balance < 0) {\n                return 1;\n            }\n        }\n\
+    \    }\n    return '';\n}", "    my($sum) = 0;\n    foreach (@$operations) {\n\
+    \        if ($sum + $_ > 0) {\n            return \"1\";\n        }\n        $sum\
+    \ += $_;\n    }\n    return \"0\";\n}", "    my $sum = 0;\n    my $balance = 0;\n\
+    \    for (@$operations) {\n        $sum = $sum + $_;\n        $balance = $balance\
+    \ + $_;\n    }\n    return $balance < 0 ? 1 : 0;\n}", "    my($sum) = 0;\n   \
+    \ foreach my $operation (@$operations) {\n        my $amount = $operation->{'amount'};\n\
+    \        my $type = $operation->{'type'};\n        my $operation = $operation->{'operation'};\n\
+    \        if ($type == \"deposit\") {\n            my $new_balance = $sum + $amount;\n\
+    \            if ($new_balance < 0) {\n                return 1;\n            }\n\
+    \            $sum = $new_balance;\n        } elsif ($type == \"withdraw\") {\n\
+    \            if ($sum >= $amount) {\n                return 1;\n            }\n\
+    \            $sum -= $amount;\n        }\n    }\n    return \"\";\n}", "    my(@balance)\
+    \ = (0, 0);\n    foreach my $operation (@$operations) {\n        if ($operation\
+    \ eq 'deposit') {\n            $balance[0] += $operation->[1];\n        }\n  \
+    \      if ($operation eq 'withdraw') {\n            $balance[1] -= $operation->[1];\n\
+    \        }\n    }\n    return 1 unless $balance[0] > 0;\n    return '' unless\
+    \ $balance[1] > 0;\n    return '';\n}\n</code>\nAnd here is the solution using\
+    \ map instead of foreach and reduce:\n<code>", "    my $balance = 0;\n    foreach\
+    \ my $operation (@$operations) {\n        if ($operation =~ m/deposit/i) {\n \
+    \           $balance += $1;\n        } elsif ($operation =~ m/withdraw/i) {\n\
+    \            $balance -= $1;\n        } else {\n            return '';\n     \
+    \   }\n    }\n    if ($balance <= 0) {\n        return 1;\n    } else {\n    \
+    \    return '';\n    }\n}", "    my $sum = 0;\n    for (@$operations) {\n    \
+    \    $sum += $_;\n    }\n    if ($sum <= 0) {\n        return 1;\n    } else {\n\
+    \        return '';\n    }\n}", '    my $i;', "    my($sum);\n    my($i);\n  \
+    \  \n    $sum = 0;\n    $i = 0;\n    \n    for (@$operations) {\n        if ($sum\
+    \ == 0) {\n            $sum = $_;\n        }\n        elsif ($_ < 0) {\n     \
+    \       if ($sum == 0) {\n                return 1;\n            }\n         \
+    \   else {\n                return '';\n            }\n        }\n        else\
+    \ {\n            $sum = $sum + $_;\n        }\n    }\n    \n    if ($sum < 0)\
+    \ {\n        return 1;\n    }\n    else {\n        return '';\n    }\n}", "  \
+    \  return 1 if $operations[0] == 0; # Checking first if there are any deposits\n\
+    \    my $balance = $operations[0]; # Getting the balance\n    my $operation =\
+    \ $operations[1]; # Getting the operation\n    my $operation_type = $operation;\
+    \ # Getting the operation type\n    if ($operation_type == 0) { # Checking if\
+    \ it's the deposit\n        $balance += $operation; # Adding the deposit\n   \
+    \ } elsif ($operation_type == 1) { # Checking if it's the withdrawal\n       \
+    \ $balance -= $operation; # Subtracting the withdrawal\n    } elsif ($operation_type\
+    \ == 2) { # Checking if it's the balance change\n        $balance -= $operation;\
+    \ # Subtracting the balance change\n        $balance += $operation; # Adding the\
+    \ balance change\n    } elsif ($operation_type == 3) { # Checking if it's the\
+    \ account change\n        $balance += $operation; # Adding the account change\n\
+    \    }\n    return '' if $balance < 0; # Checking the balance for negative values\n\
+    \    return 1;\n}\n</code>\n<|/ a dscore=0 |>\n<| c |>\nThanks for the solution\
+    \ but i still have a doubt as i'm new at perl.\n<|/ c |>\n<| c |>\nI understand\
+    \ that the problem is solved but can you explain me how this works?\n<|/ c |>\n\
+    <| c |>\nIt means when $operations[0] is zero we return 1, but if we are not in\
+    \ the first iteration of the loop, we return ''.\n<|/ c |>\n<| c |>\nThanks, Now\
+    \ I understand\n<|/ c |>\n<| a |>\nI made a little update to your code:\n<code>",
+  '    my $balance = 0;', "    my $balance = 0;\n    my $sum = 0;\n    foreach my\
+    \ $operation (@$operations) {\n        $sum += $operation->{amount};\n       \
+    \ $balance += $operation->{amount};\n    }\n    if ($balance < 0) {\n        my\
+    \ $flag = '';\n        for my $operation (@$operations) {\n            if ($operation->{amount}\
+    \ < 0) {\n                $flag = 1;\n                last;\n            }\n \
+    \       }\n        return $flag;\n    } else {\n        return '';\n    }\n}",
+  "    my $sum = $operations[@$operations - 1];\n    my $balance = $operations[@$operations\
+    \ - 2];\n    return 1 if $balance < 0;\n    return '';\n}", "    my $result =\
+    \ 1;\n    my $i = 0;\n    while ($i < @$operations) {\n        my $operation =\
+    \ $$operations[$i];\n        next unless defined $operation;\n        my ($deposit,\
+    \ $withdrawal) = @$operation;\n        my $balance = $$accounts[$i];\n       \
+    \ last unless $balance >= $deposit + $withdrawal;\n        ++$i;\n    }\n    return\
+    \ $result ? 1 : '';\n}", "    my $balance = shift(@$operations);\n    for(my $i\
+    \ = 1, $#{$operations} + 2 ; $i < $#{$operations} ; $i++) {\n        $balance\
+    \ += $operations->[$i]->[0];\n    }\n    return $balance <= 0 ? '' : $balance;\n\
+    }\n</code>\n<|/ a |>\n<| c |>\nThis is probably the only sensible answer to the\
+    \ problem.  It requires no extra storage and should be faster than the other methods.\
+    \  (Also, it's more compact!)\n<|/ c |>\n<| c |>\nThis won't work correctly for\
+    \ the initial `[[1]]` array - it'll return \"0\", when it should be \"\".\n<|/\
+    \ c |>\n<| c |>\nYes, I noticed that after, just after I posted the answer. I'll\
+    \ delete it now and edit it later when I revise my answer.\n<|/ c |>\n<| a dscore=1\
+    \ |>\nIf you're using Perl 5.10 or higher, you can use List::Util to do the job:\n\
+    <code>", "    my $balance = shift;\n    for (my $i = 0; $i < @$operations; $i++)\
+    \ {\n        my $operation = $$operations[$i];\n        if ($operation->{type}\
+    \ eq 'deposit') {\n            $balance += $$operation->{amount};\n        }\n\
+    \        elsif ($operation->{type} eq 'withdraw') {\n            $balance -= $$operation->{amount};\n\
+    \        }\n    }\n    if ($balance <= 0) {\n        1;\n    }\n    else {\n \
+    \       '';\n    }\n}", "    my $sum = 0;\n    foreach my $operation (@$operations)\
+    \ {\n        if($operation =~ /^(deposit|withdrawal)$/) {\n            $sum +=\
+    \ $1 if $operation eq 'deposit';\n            $sum -= $1 if $operation eq 'withdrawal';\n\
+    \        }\n    }\n    return $sum < 0 ? 1 : 0;\n}", "    my @operations = @$operations;\n\
+    \    my $i = 0;\n    foreach my $op (@operations) {\n        $i++;\n        if\
+    \ ($op->[0] eq \"deposit\") {\n            my $balance = shift @$op;\n       \
+    \     return '' unless $balance > 0;\n        } elsif ($op->[0] eq \"withdraw\"\
+    ) {\n            my $balance = shift @$op;\n            return '' unless $balance\
+    \ > 0;\n        } elsif ($op->[0] eq \"balance\") {\n            my $balance =\
+    \ shift @$op;\n            return '' unless $balance > 0;\n        } else {\n\
+    \            die \"Unknown operation '$op->[0]'\";\n        }\n    }\n    return\
+    \ 1 unless $i > 0;\n    return '';\n}\n</cell>\n<cell>", "    my $balance = shift(@$operations);\n\
+    \    foreach my $operation(@$operations) {\n        my $new_balance = $balance\
+    \ - $operation->{value};\n        return 1 if ($new_balance < 0);\n        $balance\
+    \ = $new_balance;\n    }\n    return ''\n}", '    my($below_zero) = 0;', "   \
+    \ my $b = 0;\n    foreach my $op (@$operations) {\n        if ($op > 0) {\n  \
+    \          $b =~ s/$op/$op-1/g;\n        }\n        if ($b <= 0) {\n         \
+    \   return 1;\n        }\n    }\n    return '';\n}", "    my $sum = 0;\n    foreach\
+    \ my $op (@$operations) {\n        if ($op->{type} eq 'deposit') {\n         \
+    \   $sum = $op->{balance} + $sum;\n        }\n        elsif ($op->{type} eq 'withdrawal')\
+    \ {\n            $sum -= $op->{balance};\n        }\n    }\n    if ($sum <= 0)\
+    \ {\n        return 1;\n    }\n    return '';\n}", "    my $withdrawal = shift(@$operations);\n\
+    \    my $deposit = shift(@$operations);\n    return '' if $deposit < 0 || $deposit\
+    \ > $withdrawal;\n    return '' if $withdrawal < 0 || $withdrawal > $deposit;\n\
+    \    return 1;\n}", "    my ($balance, $i, $sum);\n    my (@operations, @operations_done);\n\
+    \    # Initialize variables\n    $sum = 0;\n    $balance = 0;\n    $operations_done\
+    \ = 0;", "    my $acc = 0;\n    my $num_operations = 0;\n    while (@$operations\
+    \ > $num_operations) {\n        my $op = shift @$operations;\n        if ($op\
+    \ eq 'deposit') {\n            $acc += shift @$operations;\n        }\n      \
+    \  elsif ($op eq 'withdraw') {\n            $acc -= shift @$operations;\n    \
+    \    }\n        $num_operations += 1;\n    }\n    return $acc < 0;\n}", "    my(@stack,\
+    \ $balance) = ();\n    foreach $operation (@$operations) {\n        if ($operation\
+    \ eq 'withdraw') {\n            $stack[-1] += $operation->{amount};\n        }\n\
+    \        if ($operation eq 'deposit') {\n            $stack[-1] += $operation->{amount};\n\
+    \        }\n        elsif ($operation eq 'check') {\n            if ($stack[-1]\
+    \ < 0) {\n                return 1;\n            }\n        }\n        elsif ($operation\
+    \ eq 'drop') {\n            pop(@stack);\n        }\n        else {\n        \
+    \    push(@stack, $operation->{amount});\n        }\n    }\n    if (@stack > 0)\
+    \ {\n        return '';\n    }\n}", "    my($below_zero);\n    my $below_zero\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        my $amount = $operation->{'amount'};\n\
+    \        if ($amount < 0) {\n            $below_zero = 1;\n            last;\n\
+    \        }\n        $balance -= $amount;\n    }\n    return $below_zero ? 1 :\
+    \ '';\n}", '    my@operations;', '    my($first_operation) = shift(@$operations);',
+  "    \n    my $min = 0;\n    my $max = 0;\n    my $balance = 0;", "    my $balance\
+    \ = 0;\n    while (my($op, $deposit, $withdrawal) = each @$operations) {\n   \
+    \     my $newBalance = $balance + $deposit + $withdrawal;\n        if ($newBalance\
+    \ < 0) {\n            $balance = $newBalance;\n            return \"\";\n    \
+    \    }\n        $balance = $newBalance;\n    }\n    return 1;\n}", "    my $balance\
+    \ = 0;\n    foreach my $op (@$operations) {\n        if (($op->{operation} ==\
+    \ 1 && $op->{amount} == 0) ||\n           ($op->{operation} == -1 && $op->{amount}\
+    \ == 0)) {\n            return '';\n        }\n        $balance = $op->{amount}\
+    \ + $balance;\n    }\n    return 1;\n}", "    my $balance = shift;\n    if ($balance\
+    \ < 0.0) {\n        return 1;\n    }\n    my $ans = \"\";\n    foreach my $op\
+    \ (@$operations) {\n        my $res = $op->($balance);\n        $ans = $res if\
+    \ $res ne '';\n    }\n    return $ans;\n}", "    my $balance = 0;\n    foreach\
+    \ my $operation (@$operations) {\n        $balance += $operation if $operation\
+    \ > 0;\n    }\n    return $balance <= 0 ? 1 : 0;\n}", "    my(@operations) = @$operations;\n\
+    \    my($balance) = @operations[2] || 0;\n    my($balance) = $balance - @operations[3]\
+    \ || 0;\n    return 1 if($balance < 0);\n    return;\n}", "    my $sum = 0;\n\
+    \    foreach my $op (@$operations) {\n        if($op->{type} eq \"deposit\") {\n\
+    \            $sum -= $op->{amount};\n        }\n        else {\n            $sum\
+    \ += $op->{amount};\n        }\n    }\n    return if($sum < 0);\n    return 1;\n\
+    }", "    my $balance = $operations[-1];\n    return $balance < 0 ? '' : 1;\n}",
+  "    my $sum = 0;\n    foreach my $op (@$operations) {\n        $sum += $op->{amount};\n\
+    \    }\n    if ($sum <= 0) {\n        return 1;\n    }\n    return '';\n}", " \
+    \   my $balance = shift;\n    my $sum = 0;\n    foreach my $op (@$operations)\
+    \ {\n        if ($op < 0 && $op > 0) {\n            return 1;\n        }\n   \
+    \     $sum += $op;\n    }\n    return $sum < $balance ? '' : $sum;\n}", "    my\
+    \ $balance = $operations[-1];\n    my ($deposit, $withdrawal) = $balance =~ /(\\\
+    d+) (\\d+)/);\n    $deposit - $withdrawal;\n}\n</code>\n<|/ a |>\n<| c |>\nThanks\
+    \ for the effort but I really want to know how this can be done using only one\
+    \ sub call. I am not allowed to use any global variables, I am not allowed to\
+    \ create any functions or use any loops, only subs.\n<|/ c |>\n<| c |>\n- Why\
+    \ are you not allowed to use loops?\n<|/ c |>\n<| c |>\nIf your assignment is\
+    \ for one sub, you are going to have to make one somehow.  You are going to have\
+    \ to parse the input and return that output.  If you really cannot use any loops,\
+    \ you will need to return an array with each successive value of the balance on\
+    \ the end of the list.  You will then need to use the result array to compare\
+    \ to the negative of the second value in the array.\n<|/ c |>\n<| c |>\nI was\
+    \ given this example with one function and one sub call (which means I can't use\
+    \ loops or global variables) and asked to detect if balance falls below zero using\
+    \ only one sub call. Also, I have been asked to do it using only one sub call\
+    \ without using any global variables and no functions.\n<|/ c |>\n<| c |>\n- You\
+    \ can create another sub that returns the balance.  Have the main sub return the\
+    \ balance array if `$balance < 0`, else return empty string.  Call both subs,\
+    \ store the results in a new array and compare the resulting two arrays.  If `balance1\
+    \ < 0`, `balance2 < 0`, then `$balance < 0`.\n<|/ c |>\n<| a tags=perl,arrays\
+    \ |>\n<code>", "    $operations[-1] = 0;\n    for (my $i = 0; $i < @$operations;\
+    \ $i++) {\n        my $op = $operations[$i];\n        if ($op < 0) {\n       \
+    \     if ($i > 0) {\n                $operations[$i - 1] += $op;\n           \
+    \ } else {\n                return 1;\n            }\n        } elsif ($op > 0)\
+    \ {\n            if ($i > 0) {\n                $operations[$i - 1] -= $op;\n\
+    \            } else {\n                return 1;\n            }\n        }\n \
+    \   }\n    return '';\n}", '    my %seen;', '    my ($num, $balance) = @$operations;',
+  "    my $i = 0;\n    while($i < @$operations) {\n        if($operations[$i] eq '-')\
+    \ {\n            my $balance = shift(@$operations);\n            my $withdraw\
+    \ = shift(@$operations);\n            $withdraw += $balance;\n            push\
+    \ (@$operations, $withdraw);\n        }\n        elsif($operations[$i] eq '+')\
+    \ {\n            my $balance = shift(@$operations);\n            my $deposit =\
+    \ shift(@$operations);\n            $deposit -= $balance;\n            push (@$operations,\
+    \ $deposit);\n        }\n        elsif($operations[$i] eq '0') {\n           \
+    \ my $balance = shift(@$operations);\n            if($balance < 1) {\n       \
+    \         return 1;\n            }\n        }\n        $i += 1;\n    }\n    return\
+    \ '';\n}\n</code>\n<|/ a dscore=1 |>\n<| a dscore=0 |>\nThis is a non-recursive\
+    \ solution that will run faster than other recursive solutions.  It basically\
+    \ runs a loop over the input array, and for each array element, checks to see\
+    \ if it is \"deposit\", \"withdraw\", \"check\" or \"0\", if so does whatever\
+    \ it is supposed to do with that array element.\n<code>", "    my $balance = 0;\n\
+    \    foreach my $operation (@$operations) {\n        if ($operation < 0 && $balance\
+    \ < 0) {\n            return '1';\n        } elsif ($operation > 0 && $balance\
+    \ > 0) {\n            return '';\n        }\n        $balance += $operation;\n\
+    \    }\n    return '';\n}", "    $operations[-1] =~ s/^(\\+|\\-)/$1/g;\n    my\
+    \ $total = $operations[-1];\n    if ($total <= 0) {\n        return 1;\n    }\n\
+    \    elsif ($total < 0) {\n        return '';\n    }\n    return '';\n}", "  \
+    \  my $i = 0;\n    my $check = 0;", "    my $balance;\n    foreach my $op (@$operations)\
+    \ {\n        if($op->[0] eq 'deposit') {\n            $balance += $op->[1];\n\
+    \        } else if($op->[0] eq 'withdraw') {\n            $balance -= $op->[1];\n\
+    \        }\n    }\n    return $balance <= 0 ? 1 :'';\n}", "    my $count = 0;\n\
+    \    \n    for my $op (@$operations) {\n        $op =~ s/^\\s*//;\n        $op\
+    \ =~ s/\\s*$//;\n        if ($op =~ /^(deposit|withdraw)\\s*$/ && $count < 1)\
+    \ {\n            $count++;\n        } elsif ($op =~ /^(balance)\\s*$/) {\n   \
+    \         $count += $1;\n        }\n    }\n    return $count < 1 ? 1 : 0;\n}",
+  "    $operations == 0 or return 1;\n    my $deposit;\n    my $withdraw;\n    foreach\
+    \ my $op (@$operations) {\n        if ($op =~ /^(deposit|withdraw)($|\\n)/) {\n\
+    \            $deposit = $1 if $op =~ /^deposit($|\\n)/;\n            $withdraw\
+    \ = $1 if $op =~ /^withdraw($|\\n)/;\n        }\n        elsif ($op =~ /^balance($|\\\
+    n)/) {\n            $deposit = 0;\n            $withdraw = 0;\n        }\n   \
+    \     else {\n            return '';\n        }\n    }\n    my $diff = ($deposit\
+    \ < 0) ? $deposit : -$deposit;\n    my $balance_diff = $diff + $withdraw;\n  \
+    \  $balance_diff == 0 or return '';\n    return ($balance_diff < 0) ? 1 : 0;\n\
+    }\n</cell>\n<text>\nExercise 3\nWrite a function that takes in two lists as arguments\
+    \ (each with some arbitrary content) and prints\nthe two lists side by side to\
+    \ separate each other. For example, given two lists with values [3, 2, 5]\nand\
+    \ [4, 5, 8], the function should print\n\\begin{equation}\n  \\begin{bmatrix}\n\
+    \    3 & 4 & 5 \\\n    2 & 5 & 8\n  \\end{bmatrix}\n\\end{equation}", "    my\
+    \ $result = '';\n    my $balance = 0;\n    my $first = 1;\n    for my $operation\
+    \ (@$operations) {\n        my ($deposit, $withdrawal) = @$operation;\n      \
+    \  if ($deposit < 0) {\n            $result = '1';\n            return ($result,\
+    \ 1);\n        }\n        if ($withdrawal < 0) {\n            $result = '';\n\
+    \            return ($result, 1);\n        }\n        $balance += $deposit + $withdrawal;\n\
+    \        $first = 0;\n    }\n    if ($balance < 0) {\n        $result = '1';\n\
+    \        return ($result, 1);\n    }\n    $result = '';\n    return ($result,\
+    \ 0);\n}", "    my $balance = 0;\n    foreach my $operation (@$operations) {\n\
+    \        if ($operation eq 'deposit') {\n            $balance += $operation->{amount};\n\
+    \        } elsif ($operation eq 'withdraw') {\n            $balance -= $operation->{amount};\n\
+    \        }\n    }\n    return $balance < 0 ? \"1\" : '';\n}", "    my $count =\
+    \ 0;\n    my $total = $operations[0];\n    my $prev = $total;\n    for my $operation\
+    \ (@$operations) {\n        if ($operation < 0) {\n            return \"\";\n\
+    \        }\n        $total += $operation;\n        if ($total <= 0) {\n      \
+    \      $count++;\n        }\n    }\n    return $count > 0 ? \"1\" : \"\";\n}",
+  "    my $max_balance = $operations->[0]->[0];\n    for (my $i = 1; $i <= @{$operations};\
+    \ $i++) {\n        my $deposit_amount = $operations->[$i]->[0];\n        my $withdrawal_amount\
+    \ = $operations->[$i]->[1];", "    my $balance = shift(@$operations);\n    my\
+    \ $index = 0;\n    foreach my $operation(@$operations) {\n        if (($operation\
+    \ < 0 && $balance < 0) || ($operation > 0 && $balance > 0)) {\n            return\
+    \ $index;\n        }\n        $index++;\n    }\n    return '';\n}\n</code>\n<|/\
+    \ a |>\n<| a tags=perl,arrays |>\nThis would be my approach:\n<code>", "    my\
+    \ @result = ();\n    for my $operation (@$operations) {\n        my($deposit,\
+    \ $withdrawal) = @$operation;\n        if ($deposit < 0 ||\n            $withdrawal\
+    \ < 0) {\n            $result[-1] ||= $operation;\n        }\n        else {\n\
+    \            $result[-1] =~ s/^[^-]//;\n            $result[-1] = $deposit - $withdrawal;\n\
+    \        }\n    }\n    $result[-1] ||= $operation;\n    my $result = 1;\n    if\
+    \ ($result[-1] < 0) {\n        $result = 0;\n    }\n    return $result;\n}", " \
+    \   foreach my $operation (@$operations) {\n\tif ( $operation->[0] eq 'Withdrawal'\
+    \ ) {\n\t    my $withdrawal = $operation->[1];\n\t    if ( $withdrawal < 0 ) {\n\
+    \t\treturn \"1\";\n\t    }\n\t}\n    }\n    return \"\";\n}\n</code>\n<|/ a |>\n\
+    <| c |>\nThe OP wants to do this with only a single function that checks for both\
+    \ cases.  Your code only checks whether the withdrawal is negative.\n<|/ c |>\n\
+    <| c |>\nYeah i forgot to add that check in the first version of the solution,\
+    \ my bad. Anyways thanks for pointing out :)\n<|/ c |>\n<| c |>\nThe `return`\
+    \ should be moved outside the loop.  You return on the first successful check.\n\
+    <|/ c |>\n<| c |>\nThanks for the reminder, i edited my answer to fix the return\
+    \ problem.\n<|/ c |>\n<| a |>\nYou could use a regular expression to match the\
+    \ strings:\n<code>\n/Withdrawal(.*)|Deposit(.*)/g\n</code>\nAnd check your string\
+    \ with preg_match:\n<code>\nif (preg_match('/Withdrawal(.*)|Deposit(.*)/g', $withdrawal,\
+    \ $match)) {\n    $withdrawal = $match[1];\n    if ($withdrawal < 0) {\n     \
+    \   return \"1\";\n    }\n}\n</code>\n<|/ a dscore=1 tags=perl,return,subroutine\
+    \ |>\n<| a |>\nYou could also just do this:\n<code>", "    my $balance = $operations[-1]{deposit}\
+    \ - $operations[0]{withdrawal};\n    return '' unless $balance < 0;\n    return\
+    \ 1;\n}\n</code>\nThe code below also works but it's more complicated and less\
+    \ clear than the one above:\n<code>", "    my $balance = 0;\n    my $max_operation\
+    \ = -1;\n    foreach my $op (@$operations) {\n\tif ($op == 1) {\n\t    $balance\
+    \ += $op->{value};\n\t}\n\telsif ($op->{type} eq 'deposit') {\n\t    $balance\
+    \ -= $op->{value};\n\t}\n\telsif ($op->{type} eq 'withdraw') {\n\t    $balance\
+    \ += $op->{value};\n\t}\n\telse {\n\t    die \"Unrecognised operation \" . $op->{type};\n\
+    \t}\n\tif ($balance < 0) {\n\t    $max_operation = $op->{type};\n\t}\n    }\n\
+    \    if ($balance < 0) {\n\treturn \"1\";\n    }\n    return $max_operation;\n\
+    }", "    my($result,$op);\n    foreach $op(@$operations) {\n        if($op->{type}\
+    \ eq 'deposit') {\n            if( $op->{value} < 0 ) {\n                $result\
+    \ = 1;\n            }\n        }\n        if($op->{type} eq 'withdraw') {\n  \
+    \          if( $op->{value} < 0 ) {\n                $result = 1;\n          \
+    \  }\n        }\n    }\n    return $result;\n}", "    my $check = 0;\n    my $balance\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        $check++;\n      \
+    \  if ($operation eq 'deposit') {\n            $balance += $operation->{amount};\n\
+    \        }\n        elsif ($operation eq 'withdraw') {\n            if ($balance\
+    \ < $operation->{amount}) {\n                $balance = 0;\n            }\n  \
+    \          else {\n                $balance -= $operation->{amount};\n       \
+    \     }\n        }\n    }\n    return $balance < 0 ? 1 : 0;\n}", "    my ($i,\
+    \ $j, $balance) = @$operations;\n    my $result = '';", '    my ($i, $count, $deposit,
+    $withdrawal) = @$operations;', "    my $balance = shift;\n    return 1 if $balance\
+    \ < 0;\n    return '' if $balance == 0;\n    return $balance < 0 ? 1 : 0;\n}",
+  '    my;', '    my $balance = shift;', "    my($min) = @_;\n    my($result) = 0;\n\
+    \    for (my $i=0;$i<$#operations;$i++) {\n        if ($operations[$i] eq 'deposit')\
+    \ {\n            $result += $min;\n        } elsif ($operations[$i] eq 'withdraw')\
+    \ {\n            if ($result < 0) {\n                return 1;\n            }\n\
+    \        }\n    }\n    return '';\n}", "    foreach my $i (0 .. $#{$operations})\
+    \ {\n        if ($operations[$i] < 0) {\n            return 1;\n        }\n  \
+    \  }\n    return \"\";\n}", "    my($below_zero) = 1;\n    my $i = 0;\n    while\
+    \ ($i < @$operations) {\n        if ($operations[$i] eq '+') {\n            $below_zero\
+    \ += $operations[$i+1];\n        } elsif ($operations[$i] eq '-') {\n        \
+    \    $below_zero -= $operations[$i+1];\n        } else {\n            last;\n\
+    \        }\n        $i += 2;\n    }\n    return $below_zero;\n}\n</code>\n<|/\
+    \ a |>\n<| c |>\n`while (my $op = shift @$operations) {` can be written `for my\
+    \ $op (@$operations) {`\n<|/ c |>\n<| a |>\nHere's an alternate solution using\
+    \ regexes that doesn't require changing the input\n<code>", "    my $balance_zero\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        if ($operation eq\
+    \ 'withdraw') {\n            $balance_zero -= $operation->{amount};\n        }\n\
+    \        else {\n            $balance_zero += $operation->{amount};\n        }\n\
+    \        return $balance_zero < 0;\n    }\n    return '';\n}", "    my $balance\
+    \ = shift;\n    foreach my $operation (@$operations) {\n        if ($operation\
+    \ eq '+') {\n            $balance += $balance;\n        } elsif ($operation eq\
+    \ '-') {\n            $balance -= $balance;\n        } elsif ($operation eq '*')\
+    \ {\n            $balance *= $balance;\n        } else {\n            die \"Illegal\
+    \ operation in operations.\\n\";\n        }\n    }\n    return '' unless $balance\
+    \ < 0;\n    return 1;\n}", "    my $total = 0;\n    \n    for my $op (@$operations)\
+    \ {\n        next unless defined $op;\n        \n        $total += $op->{amount};\n\
+    \    }\n    \n    return 1 unless $total < 0;\n    return '';\n}", "    my ($i,\
+    \ $deposit, $withdraw);\n    for (my $i = 0; $i <= $#operations;) {\n        if\
+    \ ($operations[$i] == 0) {\n            ++$i;\n            $deposit = $operations[$i];\n\
+    \            $withdraw = $operations[$i];\n        } elsif ($operations[$i] ==\
+    \ 1) {\n            ++$i;\n            $operations[$i] = $operations[$i] + $operations[$i+1];\n\
+    \            --$i;\n        } elsif ($operations[$i] == 2) {\n            ++$i;\n\
+    \            $operations[$i] = $operations[$i] + $operations[$i+1];\n        \
+    \    --$i;\n            ++$i;\n        } elsif ($operations[$i] == 3) {\n    \
+    \        ++$i;\n            $operations[$i] = $operations[$i] + $operations[$i+1];\n\
+    \            --$i;\n            --$i;\n        } elsif ($operations[$i] == 4)\
+    \ {\n            ++$i;\n            $operations[$i] = $operations[$i] + $operations[$i+1];\n\
+    \            --$i;\n            --$i;\n            --$i;\n        } elsif ($operations[$i]\
+    \ == 5) {\n            ++$i;\n            $operations[$i] = $operations[$i] +\
+    \ $operations[$i+1];\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$i;\n            --$i;\n            --$i;\n\
+    \            --$i;\n            --$", "    my $count = 0;\n    my $i = 0;\n  \
+    \  foreach my $op (@$operations) {\n        next if $i < $#operations;\n     \
+    \   my $balance = $operations[$i]->[0];\n        my $result = $operations[$i]->[1];\n\
+    \        if ($balance < 0 && $balance > $result) {\n            return $result;\n\
+    \        } elsif ($balance == 0) {\n            $i++;\n        }\n        else\
+    \ {\n            $count++;\n            $i++;\n        }\n    }\n    return $count;\n\
+    }", '    my($current_balance);', "    my $count = 0;\n    for my $operation (@$operations)\
+    \ {\n        my $balance = shift;\n        if ($balance < 0) {\n            $count++;\n\
+    \            $balance *= -1;\n        }\n        $balance += $count;\n    }\n\
+    \    return $count < 2 ? 1 : '';\n}", "    my $balance = shift(@$operations);\n\
+    \    if ($balance < 0) {\n        return 1;\n    }\n    return '';\n}", '    my($sum,
+    @sums) = @_;', "    my($index) = 0;\n    my $result = '';\n    while (++$index\
+    \ < @$operations) {\n        my $operation = $$operations[$index];\n        my\
+    \ $balance = +($operation->{balance});\n        if ($balance < 0) {\n        \
+    \    $result .= 1;\n            last;\n        }\n    }\n    $result;\n}", " \
+    \   my($sum) = 0;\n    foreach my $operation (@$operations) {\n        $sum +=\
+    \ $operation->{value};\n    }\n    return $sum < 0 ? 1 : 0;\n}", "    my $sum\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        $sum += $operation->{operation};\n\
+    \    }\n    my $result = ($sum < 0) ? 1 : 0;\n    return $result;\n}", "    my($account)\
+    \ = 0;\n    my(@transaction) = ();\n    for my $i (0 .. $#{$operations}) {\n \
+    \       push @transaction, $operations[$i];\n        if ($operations[$i] eq '+')\
+    \ {\n            $account += $transaction[$i];\n        }\n        elsif ($operations[$i]\
+    \ eq '-') {\n            $account -= $transaction[$i];\n        }\n        elsif\
+    \ ($operations[$i] eq '=') {\n            $account = $transaction[$i];\n     \
+    \   }\n    }\n    return $account < 0 ? \"1\" : \"\";\n}", "    my $balance =\
+    \ shift(@$operations);\n    my $i = 0;\n    my $result = \"\";\n    my $operation\
+    \ = $operations[$i];\n    my $balance_in_loop = 0;", "    for (my $i = 0; $i <\
+    \ @$operations; $i += 2) {\n        my $deposit  = $operations[$i];\n        my\
+    \ $withdraw = $operations[$i + 1];\n        my $balance  = 0;\n        if (($deposit\
+    \ < 0) && ($withdraw < 0)) {\n            $balance += $deposit;\n            $balance\
+    \ -= $withdraw;\n        }\n        if ($balance < 0) {\n            return 1;\n\
+    \        }\n    }\n    return '';\n}\n</code>\n<|/ a dscore=1 |>\n<| c |>\nThanks!\
+    \ I was able to modify it slightly to make it work as intended. I had to make\
+    \ a few changes. I've added the code to the original question to show what I did.\n\
+    <|/ c |>\n<| a tags=arrays,perl,if-statement,for-loop |>\nOne way to solve this\
+    \ problem is by using the modulus operator %.\nFor example, let's say we have\
+    \ the following array:\n<code>\nmy = (1,2,3,4,5);\n</code>\nWe could loop through\
+    \ it like this:\n<code>\nmy $i = 0;\nforeach my $number (@array) {\n    if($number\
+    \ == 1) {\n        if($i % 2 == 0) {\n            print \"even\\n\";\n       \
+    \ }\n        else {\n            print \"odd\\n\";\n        }\n    }\n    else\
+    \ {\n        print \"not even\\n\";\n    }\n    $i++;\n}\n</code>\nAs you see,\
+    \ we could keep track of the current index in the for loop and check if the current\
+    \ number is even or odd. If it is even, then we print out \"even\", otherwise\
+    \ we print out \"odd\".\n<|/ a dscore=0 |>\n<| a |>\n<code>\nuse strict;\nuse\
+    \ warnings;", "    my $first_value = 0;\n    my $last_value = 0;", "    my $index\
+    \ = 0;\n    my $total = 0;\n    for(my $i=0; $i < @$operations;$i++) {\n     \
+    \   my $op = $$operations[$i];\n        my $num = $$op[0];\n        if($num <\
+    \ 0) {\n            $index += $num;\n            $total += $num;\n        } else\
+    \ {\n            $total -= $num;\n            if($total < 0) {\n             \
+    \   return \"1\";\n            }\n        }\n    }\n    if($total < 0) {\n   \
+    \     return \"1\";\n    } else {\n        return \"\";\n    }\n}\n</code>\n<|/\
+    \ a dscore=2 tags=perl,function,arrays,algorithm |>\n<| c |>\nThis is one of the\
+    \ best answers.  It is very straight forward.  I really wish I could accept more\
+    \ than one answer as you guys both provided different perspectives of the problem.\n\
+    <|/ c |>\n<| a tags=perl,function,arrays,algorithm |>\nIf I'm reading your problem\
+    \ right, it's just as easy as checking for negative numbers and then returning\
+    \ 1 or 0 depending on the result of the check.  No need to do anything fancy.\n\
+    <code>", "    my($index, $balance);\n    foreach $operation (@$operations) {\n\
+    \        ++$index;\n        $balance += $operation if $operation == 1;\n     \
+    \   $balance -= $operation if $operation == -1;\n    }\n    return '' if $balance\
+    \ < 0;\n    return 1;\n}", "    my $balance = $operations[-1];\n    for my $operation\
+    \ (reverse @$operations) {\n        $balance -= $operation if $operation < 0;\n\
+    \    }\n    return $balance < 0 ? '' : 1;\n}", '    my $balance = 0;', "    \n\
+    \    my $count = 0;\n    \n    foreach my $op (@$operations) {\n        if ($op->{deposit}\
+    \ <= 0) {\n            $count++;\n        }\n    }\n    \n    if ($count == 0)\
+    \ {\n        return 1;\n    } else {\n        return '';\n    }\n}", "    my($current_balance);\n\
+    \    foreach my $operation (@$operations) {\n        if ($current_balance >= 0)\
+    \ {\n            return 1;\n        } else {\n            $current_balance = $current_balance\
+    \ - $operation;\n        }\n    }\n    return '';\n}", "    return 1 if ($operations[0]\
+    \ > $operations[2] || $operations[0] == 0);\n    return '';\n}", "    my $balance\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        if ($operation =~\
+    \ /^[deposit|withdraw]/ && $balance < 0) {\n            return 1;\n        }\n\
+    \        $balance += $operation eq 'deposit' ? 1 : -1;\n    }\n    return '';\n\
+    }", "    my(@deposit_withdraw) = $operations =~ /(\\d+)\\s*(\\w+)\\s*(\\w+)\\\
+    s*\\((\\w*)\\)/g;\n    my(@deposit_withdraw) = $operations =~ /(\\d+)\\s*(\\w+)\\\
+    s*(\\w+)\\s*\\((\\w*)\\)/g;\n    my(@deposit_withdraw) = $operations =~ /(\\d+)\\\
+    s*(\\w+)\\s*(\\w+)\\s*\\((\\w*)\\)/g;", "    my $balance = @$operations[0];\n\
+    \    foreach my $operation (@$operations) {\n        if ($operation->{type} eq\
+    \ 'deposit') {\n            $balance -= $operation->{amount};\n        }\n   \
+    \     if ($operation->{type} eq 'withdraw') {\n            $balance += $operation->{amount};\n\
+    \        }\n    }\n    if ($balance < 0) {\n        return 1;\n    }\n    return\
+    \ '';\n}\n</code>\nI tried to break down the code as much as possible, but there\
+    \ are two things to note:", "    my $balance = @$operations[1];\n    if ($balance\
+    \ < 0) {\n        return 1;\n    }\n    return '';\n}", "    my($sum) = 0;\n \
+    \   my($i) = 0;\n    my($current_sum) = 0;\n    my($max_sum) = 0;\n    my($min_sum)\
+    \ = 0;", "    my $max = 0;\n    foreach my $index (0..$#operations) {\n      \
+    \  my $operation = $operations[$index];\n        if ($operation =~ /^\\+/ || $operation\
+    \ =~ /^\\-/ || $operation =~ /^\\*/ || $operation =~ /^\\%/) {\n            $max\
+    \ += $operation;\n        }\n        elsif ($operation =~ /^\\+/) {\n        \
+    \    $max -= $operation;\n        }\n        elsif ($operation =~ /^\\-/) {\n\
+    \            $max *= -1;\n        }\n        elsif ($operation =~ /^\\*/) {\n\
+    \            $max *= $operation;\n        }\n        elsif ($operation =~ /^\\\
+    %/) {\n            $max /= $operation;\n        }\n    }\n    if ($max < 0) {\n\
+    \        return 1;\n    }\n    return '';\n}", "    my($deposit, $withdrawal)\
+    \ = @$operations;\n    my($total_withdrawal, $total_deposit);\n    \n    my $balance\
+    \ = scalar($deposit + $withdrawal);\n    $total_withdrawal = $balance + $total_withdrawal;\n\
+    \    $total_deposit = $balance + $total_deposit;\n    return 1 if ($total_deposit\
+    \ < 0 || $total_withdrawal < 0);\n    return '';\n}", "    my $num_operations\
+    \ = @$operations;\n    my $max_balance = 0;\n    my $withdraw_flag = 0;\n    my\
+    \ $deposit_flag = 0;", "    my $bal_before = 0;\n    for my $operation (@$operations)\
+    \ {\n        if ($operation == 1) {\n            if ($operation == -1) {\n   \
+    \             if ($bal_before == 0) {\n                    return \"1\";\n   \
+    \             }\n            }\n        }\n        if ($operation < 0) {\n   \
+    \         $bal_before = $bal_before * -1;\n        }\n    }\n    if ($bal_before\
+    \ < 0) {\n        return \"1\";\n    }\n    return \"\";\n}", "    my $count =\
+    \ 0;\n    my $bal = $operations[0];\n    my $flag = 0;\n    for my $idx (1 ..\
+    \ $#operations) {\n        my $op = $operations[$idx];\n        if (($op > 0)\
+    \ xor $flag) {\n            $flag = 1;\n            $bal -= $op;\n        }\n\
+    \        else {\n            $flag = 0;\n            $bal += $op;\n        }\n\
+    \        if ($bal < 0) {\n            $flag = 0;\n            $bal += $op;\n \
+    \       }\n        if ($count != $idx+1) {\n            $count = $idx+1;\n   \
+    \         $bal = $operations[$idx];\n        }\n    }\n    return $flag ? 1 :\
+    \ 0;\n}\n</code>\n<|/ a tags=algorithm,ruby,perl |>\n<| a tags=algorithm,ruby,perl\
+    \ |>\nThe best solution I have come up with is O(N), but I still think there must\
+    \ be a better one.\nThe algorithm is simple, if we have enough money we can just\
+    \ subtract the total of the transactions and add them up. If we don't, we can\
+    \ loop through every transaction and see if we should subtract or add the amount\
+    \ to the total if the balance is more than or less than zero.\n<code>\ndef check_balance(transactions)\n\
+    \    transactions.inject(0) do |sum, transaction|\n        case transaction\n\
+    \        when 'deposit'\n            sum -= transaction[:amount]\n        when\
+    \ 'withdraw'\n            sum += transaction[:amount]\n        end\n        sum\n\
+    \    end\nend", "    my($sum) = 0;\n    for my $i (0..@$operations-1) {\n    \
+    \    if ($operations[$i] eq 'deposit') {\n            $sum += $operations[$i+1];\n\
+    \        }\n        if ($operations[$i] eq 'withdraw') {\n            $sum -=\
+    \ $operations[$i+1];\n        }\n    }\n    if ($sum < 0) {\n        return 1;\n\
+    \    }\n    return '';\n}\n</code>\n<|/ a dscore=3 |>\n<| c |>\nThank you for\
+    \ the detailed explanation\n<|/ c |>\n<| a tags=perl |>\nThis is what I came up\
+    \ with:\n<code>", '    my($acc) = 0;', "    my $sum = 0;\n    foreach my $operation\
+    \ (@$operations) {\n        my $type = $operation =~ /[a-z]/i ? 'deposit' : 'withdrawal';\n\
+    \        my $val = $operation =~ /[a-z]/i ? $operation : $operation =~ /[0-9]/i\
+    \ ? $operation - $sum : $operation + $sum;\n        $sum = $sum + $val if $type\
+    \ eq 'deposit';\n        $sum = $sum - $val if $type eq 'withdrawal';\n    }\n\
+    \    return 1 if ($sum < 0);\n    return '';\n}", "    my $current_bal = 0;\n\
+    \    foreach my $i (@$operations) {\n        if ($i < 0) {\n            return\
+    \ '1';\n        } elsif ($i >= 0) {\n            $current_bal += $i;\n       \
+    \ } else {\n            $current_bal -= $i;\n        }\n    }\n    if ($current_bal\
+    \ < 0) {\n        return '';\n    } else {\n        return '1';\n    }\n}\n</code>\n\
+    <|/ a dscore=1 |>\n<| c |>\nYes, this was the solution I came up with. I did it\
+    \ in a slightly different way, see my answer\n<|/ c |>\n<| c |>\nAh, I see. I\
+    \ was thinking that you wanted to detect negative balance as an error condition\
+    \ and return 1 when you see that, but it was a logical error to think that negative\
+    \ balance would also indicate a positive result. Glad you got it working though.\n\
+    <|/ c |>\n<| c |>\nI should add that for negative balance, the `while` loop ends\
+    \ immediately and the function returns an empty string. That is probably not what\
+    \ you want, so you need to add some code that catches that.\n<|/ c |>\n<| a dscore=1\
+    \ |>\nThis was my solution, inspired by the answer from and by reading a few other\
+    \ related posts on SO I came up with\n<code>", "    my($sum, $index, $result,)\
+    \ = ('', '', '',);\n    $index = 0;\n    for ($index; $index <= ($#operations-1);\
+    \ $index++){\n        if ($operations[$index] eq 'deposit'){\n            $sum\
+    \ += $operations[$index+1];\n        } elsif ($operations[$index] eq 'withdraw'){\n\
+    \            $sum -= $operations[$index+1];\n        }\n    }\n    return $sum\
+    \ < 0 ? 1 : 0;\n}\n</code>\nThe function takes a list of operations on the bank\
+    \ account, and it returns 1 if the balance falls below zero and \"\" otherwise.\
+    \ \n<code>", "    my $balance = $operations[0] || 0;\n    my $i;\n    for ($i\
+    \ = 1; $i < $#operations; $i++) {\n        if ($balance <= 0) {\n            return\
+    \ 1;\n        }\n        $balance -= $operations[$i];\n    }\n    return '';\n\
+    }", "    return '' if $operations == 0 || $operations < 0;\n    my $balance =\
+    \ shift(@$operations);\n    return 1 if ($balance <= 0);\n}", "    my $balance\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        if ($operation =~\
+    \ /^(deposit|withdrawal)$/) {\n            $balance += $1;\n        } else {\n\
+    \            $balance = 0;\n        }\n    }\n    return '' if $balance < 0;\n\
+    \    return $balance < 1 ? '' : '1';\n}\n</code>\n<|/ a |>\n<| a dscore=0 |>\n\
+    My own implementation was this:\n<code>", '    my $sum = 0;', '    my(@balance)
+    = @_;', "    my $sum = 0;\n    foreach my $op (@$operations) {\n        if($op\
+    \ eq 'deposit') {\n            $sum = $sum + $op->{value};\n        } elsif($op\
+    \ eq 'withdraw') {\n            $sum = $sum - $op->{value};\n        } elsif($op\
+    \ eq 'balance') {\n            if($sum < 0) {\n                return 1;\n   \
+    \         }\n        }\n    }\n    return '';\n}", '    my(@account) = @_;', " \
+    \   my $count = 0;\n    my $sum = 0;\n    foreach my $operation (@$operations)\
+    \ {\n        $sum += $operation;\n        if ($sum < 0) {\n            $sum =\
+    \ 0;\n        }\n        elsif ($sum == 0) {\n            $count++;\n        }\n\
+    \    }\n    return 1 if ($count == 0);\n    return '';\n}\n</code>\n<|/ a tags=perl,arrays,sum\
+    \ dscore=0 |>\n<| c |>\nWhy are you testing `@$operations` for `$count`? If `$count`\
+    \ is `0`, then `$operations` contains no elements, and `@$operations` evaluates\
+    \ to `undef`\n<|/ c |>\n<| c |>\n, Good catch. You're right. I didn't think about\
+    \ it that way. Fixed now. Thank you.\n<|/ c |>\n<| c |>\nThis solution fails if\
+    \ given no operations. I believe you meant `@$operations` instead of `@op`.\n\
+    <|/ c |>\n<| c |>\n, Ah, yes! Sorry about that. Should have been `@$operations`.\
+    \ Fixed now.\n<|/ c |>\n<| a dscore=0 tags=perl,arrays,sum |>\nHere is an approach\
+    \ using recursion. No hashes, no ifs and no loops.\n<code>", "    my $balance\
+    \ = $operations[$#{$operations} - 1];\n    my $result = $balance < 0 ? 1 : 0;\n\
+    \    my $message = '';\n    return $message\n\tif $balance < 0 && $balance !=\
+    \ $result;\n    return $message\n\tif $balance > 0 && $balance != $result;\n \
+    \   return $message\n\tif $balance == $result;\n}", "    my $first_deposit = 0;\n\
+    \    my $first_withdrawal = 0;\n    my $balance = 0;\n    my $operationsCount\
+    \ = scalar(@$operations);\n    my $sum = 0;\n    my $flag = 1;\n    for (my $i\
+    \ = 0; $i < $operationsCount; $i++) {\n        my ($deposit_amount, $withdrawal_amount)\
+    \ = @{$operations[$i]};\n        $first_deposit = $first_deposit || $deposit_amount\
+    \ || 0;\n        $first_withdrawal = $first_withdrawal || $withdrawal_amount ||\
+    \ 0;\n        $balance = $balance + $deposit_amount + $withdrawal_amount;\n  \
+    \      $sum += $deposit_amount + $withdrawal_amount;\n        $flag = 1 if($balance\
+    \ < 0);\n    }\n    return $flag ? $sum : '';\n}", '    my $index = 0;', "   \
+    \ my $balance = 0;\n    foreach my $operation (@$operations) {\n\tmy $op = $operation->{op};\n\
+    \tmy $val = $operation->{val};\n\tmy $op_name = $op eq '+' || $op eq '-' ? 'Add\
+    \ or Subtract' : 'Add';", "    my $balance = $operations[-1];\n    return 1 if\
+    \ ($balance < 0);\n    return;\n}", "    if ($operations < 1) {\n        return\
+    \ '';\n    }\n    my $balance = $operations[-1];\n    my $operation = $operations[$#{$operations}];\n\
+    \    my $newBalance = $balance - $operation;\n    if ($newBalance < 0) {\n   \
+    \     return 1;\n    }\n    else {\n        return '';\n    }\n}\n</code>\n<|/\
+    \ a |>\n<| c |>\nHi Sir, Thanks for the reply. I tried the code, it works perfectly\
+    \ but there is one issue. The input values are in the form of arrays, where I\
+    \ have mentioned the array name and its value, and I am unable to do that. Is\
+    \ there any way to solve this issue?\n<|/ c |>\n<| c |>\nHi, I updated the answer\
+    \ with how to deal with the array issue.\n<|/ c |>\n<| c |>\nThanks Sir, it worked\
+    \ perfectly.\n<|/ c |>\n<| a dscore=1 |>\nPerl solution\n<code>", "    my($min_balance);\n\
+    \    foreach my $operation (@$operations) {\n        if ($operation eq 'deposit')\
+    \ {\n            $min_balance += $operation->{amount};\n        } else {\n   \
+    \         $min_balance -= $operation->{amount};\n        }\n        if ($min_balance\
+    \ < 0) {\n            return '1';\n        }\n    }\n    return '';\n}", "   \
+    \ my($result,$deposit,$withdrawal);\n    foreach $operations(@$operations){\n\
+    \        $deposit += $_ if $_ > 0;\n        $withdrawal -= $_ if $_ < 0;\n   \
+    \ }\n    $result = 1 if ($deposit + $withdrawal < 0);\n    return $result if $result;\n\
+    \    return '';\n}", '    my $balance = 0;', "    my(@balance) = ();\n    for\
+    \ my $i (0..$#{$operations}) {\n        push(@balance, $operations[$i]->{balance});\n\
+    \    }\n    my($index, $max) = @_;\n    my $i = 0;\n    while ($i < $#balance)\
+    \ {\n        $balance[$i] += $operations[$i]->{amount};\n        $i++;\n    }\n\
+    \    if ($balance[$index] < 0) {\n        return 1;\n    }\n    else {\n     \
+    \   return '';\n    }\n}\n</cell>\n<cell>", "    my(@result) = (@$operations[0]);\n\
+    \    my $count = 0;\n    foreach my $operation (@$operations) {\n        $count\
+    \ += $operation < 0 ? 1 : 0;\n        if ($count != 0) {\n            push @result,\
+    \ $operation;\n        }\n    }\n    $count > 0 ? @result : '';\n}", '    my $sum
+    = 0;', "    my $balance = 0;\n    for (@$operations) {\n\t$balance += $_;\n  \
+    \  }\n    return $balance < 0 ? '' : $balance < 0 ? 1 : 0;\n}", "    my $accum_val\
+    \ = 0;\n    foreach my $op (@$operations) {\n        if($op > 0) {\n         \
+    \   $accum_val += $op;\n        }\n        else {\n            if($accum_val ==\
+    \ 0) {\n                return 1;\n            }\n            else {\n       \
+    \         return '';\n            }\n        }\n    }\n}\n</code>\n<|/ a tags=loops,perl,arrays\
+    \ |>\n<| a tags=loops,perl,arrays |>\nYou could use the following code:\n<code>",
+  "    my $balance = 0;\n    foreach my $operation(@$operations) {\n        my $operation_type\
+    \ = $operation -> [0];\n        my $amount = $operation -> [1];", "    \n    my\
+    \ $i = 0;\n    \n    while ($i < @$operations) {\n        my $op = $$operations[$i];\n\
+    \        \n        if ($op->[0] eq 'deposit') {\n            $op->[1] += $$accounts[$op->[2]];\
+    \ # increment deposit by amount deposited\n        } elsif ($op->[0] eq 'withdraw')\
+    \ {\n            $$accounts[$op->[2]] -= $op->[1]; # decrement withdraw by amount\
+    \ withdrawn\n        } elsif ($op->[0] eq 'check') {\n            $$accounts[$op->[2]]\
+    \ += $op->[1]; # add check amount with balance of account\n        }\n       \
+    \ \n        my $new_balance = 0;\n        \n        if ($op->[0] eq 'deposit')\
+    \ {\n            $new_balance = @$operations - $i;\n        } elsif ($op->[0]\
+    \ eq 'withdraw') {\n            $new_balance = ($i && $$accounts[$op->[2] - 1])\
+    \ ? $$accounts[$op->[2] - 1] : 0;\n        } elsif ($op->[0] eq 'check') {\n \
+    \           $new_balance = $op->[1];\n        }\n        \n        return $new_balance\
+    \ < 0 ? 1 : '';\n        \n        ++$i;\n    }\n}", "    my $first;\n    my $first_balance\
+    \ = 0;\n    foreach my $i (@$operations) {\n        if ($first_balance > 0 &&\
+    \ $first_balance < $i) {\n            return '';\n        }\n        $first_balance\
+    \ = $i;\n        $first = $i;\n    }\n    return $first;\n}", "    if ($operations[0]\
+    \ <= 0) { return 1; }\n    else { return ''; }\n}", "    my $withdrawal = $operations[-1];\n\
+    \    my $deposit = $operations[0];\n    return '' if ($deposit < 0);\n    return\
+    \ 1 if ($deposit > 0);\n    return ''\n\tif ($withdrawal < 0 && $deposit > 0);\n\
+    \    return '' if ($withdrawal > 0);\n    return 1;\n}", "    if ($operations[$#{$operations}]\
+    \ < 0) {\n        return 1;\n    }\n    return;\n}", '    my($results);', "  \
+    \  my $balance = shift(@$operations);\n    my $index = 0;\n    for (my $count\
+    \ = 0; $count < scalar(@$operations); $count++){\n        if ($balance < 0){\n\
+    \            $index = $count;\n            last;\n        }\n        $balance\
+    \ = $balance - $operations[$count];\n    }\n    if ($balance < 0){\n        return\
+    \ 1;\n    }else{\n        return '';\n    }\n}", "    return '' unless @$operations\
+    \ > 0;\n    my $below_zero = shift;\n    my $balance = 0;\n    for my $op (@$operations)\
+    \ {\n        if ($op =~ /^withdraw$/) {\n            $balance -= $below_zero;\n\
+    \        }\n        elsif ($op =~ /^deposit$/) {\n            $balance += $below_zero;\n\
+    \        }\n    }\n    return $balance < 0 ? 1 : 0;\n}\n</code>\n<|/ a dscore=2\
+    \ |>\n<| c |>\nHow is this different from my solution? I see no difference except\
+    \ for the use of regular expressions...\n<|/ c |>\n<| c |>\n: I added the perl\
+    \ code, as requested.\n<|/ c |>\n<| c |>\nNice, thanks! I upvoted this solution\
+    \ too :)\n<|/ c |>\n<| a dscore=1 |>\nI would do something like this:\n<code>",
+  "    my($deposit) = $operations[0];\n    my($withdrawal) = @{$operations[1..$#$operations]};\n\
+    \    if($deposit < 0 && $withdrawal < 0) {\n        return 1;\n    }\n    return\
+    \ '';\n}", "    my $last_balance = shift(@$operations);\n    foreach my $operation\
+    \ (@$operations) {\n        $last_balance = $last_balance - $operation->{amount}\
+    \ if $operation->{type} eq 'deposit';\n        $last_balance = $last_balance +\
+    \ $operation->{amount} if $operation->{type} eq 'withdrawal';\n    }\n    return\
+    \ $last_balance < 0 ? 1 : '' unless $last_balance;\n    return '';\n}", "    my\
+    \ $balance = $operations[0]->[0];\n    \n    foreach my $operation (@$operations)\
+    \ {\n        my $type = $operation->[1];\n        my $amount = $operation->[0];\n\
+    \        \n        my $new_balance = $balance - $amount;\n        \n        if\
+    \ ($new_balance < 0) {\n            $balance = 1;\n        } elsif ($new_balance\
+    \ > 0) {\n            $balance = $new_balance;\n        }\n    }\n    \n    return\
+    \ $balance < 0 ? 1 : '';\n}", "    my $balance = 0;\n    foreach my $operation\
+    \ (@$operations) {\n        if ($operation < 0) {\n            $balance -= $operation;\n\
+    \        } elsif ($operation > 0) {\n            $balance += $operation;\n   \
+    \     } else {\n            return '' if $balance < 0;\n        }\n    }\n   \
+    \ return 1 unless $balance == 0;\n}", "    my(@balance);\n    foreach (@$operations)\
+    \ {\n        my $val = $_;\n        push (@balance, $val) if ($val > 0);\n   \
+    \ }\n    return 1 if @balance < 0;\n    return '';\n}", "    my $result = '';\n\
+    \    \n    foreach my $op (@$operations) {\n        foreach my $i (0..$#$op) {\n\
+    \            if ($op[$i] eq 'deposit') {\n                if ($op[$i+1] < 0) {\n\
+    \                    $result = $result ? '' : 1;\n                    last;\n\
+    \                }\n            } else {\n                if ($op[$i] < 0) {\n\
+    \                    $result = $result ? '' : 1;\n                    last;\n\
+    \                }\n            }\n        }\n    }\n    return $result;\n}",
+  "    my($balance) = 0;\n    foreach $operation (@$operations) {\n        if($operation\
+    \ =~ /^(deposit|withdrawal|withdraw|deposits)/) {\n            $balance += $2\
+    \ || 0;\n        } elsif($operation =~ /^(deposit)/) {\n            $balance +=\
+    \ $1 || 0;\n        } elsif($operation =~ /^(withdrawal)/) {\n            $balance\
+    \ -= $1 || 0;\n        }\n    }\n    if($balance < 0) {\n        return 1;\n \
+    \   } else {\n        return '';\n    }\n}\n</code>\n<|/ a dscore=0 tags=regex,perl\
+    \ |>\n<| a dscore=0 tags=regex,perl |>\nPerhaps I should try the following.\n\
+    <code>\nuse strict;\nuse warnings;", "    my @operations_reverse = reverse @$operations;\n\
+    \    my ($withdrawal, $deposit) =;\n    my $withdrawal_balance = $withdrawal->{balance};\n\
+    \    my $deposit_balance = $deposit->{balance};\n    \n    my $sum = 0;\n    for\
+    \ (my $i = $#operations_reverse; $i >= 0; $i--) {\n        my $operation = $operations_reverse->[$i];\n\
+    \        my $balance = $operation->{balance};\n        if ($balance < 0) {\n \
+    \           if ($balance > $withdrawal_balance) {\n                return 1;\n\
+    \            }\n            if ($balance < $deposit_balance) {\n             \
+    \   return \"\";\n            }\n        }\n        \n        my $operation_type\
+    \ = $operation->{type};\n        if ($operation_type == 2) {\n            my $amount\
+    \ = $operation->{amount};\n            if ($withdrawal_balance > $amount) {\n\
+    \                $withdrawal_balance -= $amount;\n                push @$operations_reverse,\
+    \ { type => $operation_type,\n                                          amount\
+    \ => $amount };\n            }\n        }\n        if ($operation_type == 3) {\n\
+    \            my $amount = $operation->{amount};\n            if ($deposit_balance\
+    \ < $amount) {\n                $deposit_balance += $amount;\n               \
+    \ push @$operations_reverse, { type => $operation_type,\n                    \
+    \                      amount => $amount };\n            }\n        }\n      \
+    \  \n        $sum += $balance;\n    }\n    \n    return $sum == 0;\n}", "    my($sum)\
+    \ = 0;\n    my($i) = 0;\n    for ($i = 0; $i < scalar(@$operations); $i++) {\n\
+    \        my($deposit, $withdraw, $bal) = $operations[$i];\n        $sum += $bal;\n\
+    \        $sum += $deposit;\n        $sum += $withdraw;\n    }\n    return $sum\
+    \ < 0 ? $sum : '';\n}", "    foreach my $op (@$operations) {\n        my $balance\
+    \ = $op->{balance};\n        return $balance < 0 ? 1 : 0;\n    }\n    return 1;\n\
+    }", "    my $sum = 0;\n    foreach my $operation (@$operations) {\n        my\
+    \ $type = $operation >> 3;\n        my $amount = $operation & 0x7;", "    my($deposit);\n\
+    \    my($withdrawal);\n    for(my $i = 0; $i < @$operations; $i++){\n        if($operations[$i]\
+    \ eq 'd'){\n            $deposit = $operations[$i+1];\n        }\n        elsif($operations[$i]\
+    \ eq 'w'){\n            $withdrawal = $operations[$i+1];\n        }\n    }\n \
+    \   if($deposit < 0 || $withdrawal < 0){\n        return 0;\n    }\n    if($deposit\
+    \ > $withdrawal){\n        return 1;\n    }\n    return '';\n}", "    my $result\
+    \ = $operations[0];\n    my $j = 1;\n    while($j < @$operations) {\n        if($operations[$j]\
+    \ > 0){\n            my $new_balance = $operations[$j];\n            $new_balance\
+    \ = $operations[$j] + $result;\n            $operations[$j] = $new_balance;\n\
+    \            $result = $operations[$j];\n        }\n        $j++;\n    }\n   \
+    \ return $result < 0;\n}", "    my($total, $balance) = @_;\n    my($result) =\
+    \ '';", "    if (@$operations < 0) {\n        return '';\n    }\n    my $max_balance\
+    \ = 0;\n    for my $operation (@$operations) {\n        if ($operation->{type}\
+    \ eq 'deposit') {\n            $max_balance += $operation->{amount};\n       \
+    \ }\n        if ($operation->{type} eq 'withdraw') {\n            $max_balance\
+    \ -= $operation->{amount};\n        }\n    }\n    if ($max_balance < 0) {\n  \
+    \      return 1;\n    }\n    return '';\n}", '    my $num_operations = scalar
+    @$operations;', "    \n    my $balance_before = $bank->balance($account);\n  \
+    \  \n    my $result;\n    for (@$operations) {\n        my($deposit, $withdrawal)\
+    \ = @_;\n        if ($deposit > 0) {\n            $bank->deposit($account, $deposit);\n\
+    \            $balance_before -= $deposit;\n        } elsif ($withdrawal > 0) {\n\
+    \            $bank->withdraw($account, $withdrawal);\n            $balance_before\
+    \ += $withdrawal;\n        } else {\n            if ($balance_before > 0) {\n\
+    \                $result = 1;\n            } else {\n                $result =\
+    \ '';\n            }\n        }\n    }\n    \n    return $result;\n}", "    my($deposit)\
+    \ = $operations->[0];\n    my($withdrawal) = $operations->[1];", "    my $deposit\
+    \ = $operations[0];\n    my $withdraw = $operations[1];\n    my $balance = $withdraw\
+    \ + $deposit;\n    if ($balance < 1) {\n        return 1;\n    } else {\n    \
+    \    return '';\n    }\n}", "    my $i = 0;\n    my $balance = 0;\n    my $result\
+    \ = 1;\n    while ($i < @$operations) {\n        $balance += $operations->[$i]->{amount};\n\
+    \        $i++;\n        if ($balance < 0) {\n            $result = '';\n     \
+    \   }\n    }\n    return $result;\n}", '    $operations =~ s/^\s*//;', "    my\
+    \ $balance = 0;\n    my $result;\n    foreach my $operation (@$operations) {\n\
+    \        if ($operation eq 'deposit') {\n            $balance += $_;\n       \
+    \ }\n        if ($operation eq 'withdrawal') {\n            $balance -= $_;\n\
+    \        }\n    }\n    if ($balance < 0) {\n        $result = '1';\n    } else\
+    \ {\n        $result = '';\n    }\n    return $result;\n}", "    my $result;\n\
+    \    $result .= $operations->[0]->[1] if $operations->[0]->[1] < 0;\n    $result\
+    \ .= $operations->[0]->[2] if $operations->[0]->[2] < 0;\n    $result;\n}\n</code>\n\
+    <|/ a tags=perl,arrays,string |>\n<| a dscore=1 |>\nI realize this is a slightly\
+    \ different approach from the ones already posted - but I think I prefer this\
+    \ one...\n<code>", "    my $balance = shift(@$operations);\n    foreach my $op\
+    \ (@$operations) {\n        $balance -= $op;\n        if ($balance < 0) {\n  \
+    \          return 1;\n        }\n    }\n    return '';\n}", "    my ($balance)\
+    \ = 0;\n    my $i;\n    for($i = 0; $i < @$operations; $i++) {\n        my $op\
+    \ = $operations[$i];\n        if($op =~ m/deposit/i) {\n            $balance +=\
+    \ $op->{value};\n        } elsif($op =~ m/withdrawal/i) {\n            $balance\
+    \ -= $op->{value};\n        } else {\n            return '';\n        }\n    }\n\
+    \    return 1 if ($balance <= 0);\n    return;\n}", "    my $balance = 0;\n  \
+    \  foreach my $operation (@$operations) {\n        next if $operation eq 'deposit';\n\
+    \        $balance += $operation eq 'withdraw' ? $operation : -$operation;\n  \
+    \  }\n    return 1 unless $balance <= 0;\n    return '';\n}", "    foreach my\
+    \ $operation (@$operations) {\n        if ($operation =~ /^(deposit|withdrawal)$/)\
+    \ {\n            my $balance = $operation;\n            if ($balance < 0) {\n\
+    \                return 1;\n            }\n        }\n    }\n    return 0;\n}",
+  "    my(@balances) = ();\n    my $deposit_withdrawal_balance = 0;\n    foreach my\
+    \ $operation (@$operations) {\n        switch($operation) {\n            case\
+    \ \"deposit\" :\n                push(@balances, 0);\n                push(@balances,\
+    \ $deposit_withdrawal_balance);\n                $deposit_withdrawal_balance =\
+    \ 0;\n                last;\n            case \"withdrawal\" :\n             \
+    \   $deposit_withdrawal_balance = $balances[-1];\n                last;\n    \
+    \        case \"withdrawal\" :\n                $deposit_withdrawal_balance =\
+    \ $balances[-1];\n                last;\n        }\n    }\n    return 1 if ($deposit_withdrawal_balance\
+    \ < 0);\n    return '';\n}\n</cell>\n<cell>", "    my $prev_op = $operations[0];\n\
+    \    my $prev_amount = $prev_op->{amount};\n    my $balance = 0;\n    foreach\
+    \ my $op (@$operations) {\n        my $cur_amount = $op->{amount};\n        if\
+    \ ($cur_amount < 0) {\n            return 1 unless $balance < 0;\n           \
+    \ return '';\n        }\n        my $new_balance = $balance + $cur_amount;\n \
+    \       $balance = $new_balance;\n    }\n    return '';\n}", "    my $sum = 0;\n\
+    \    for my $op (@$operations) {\n        $sum = $sum + $op;\n        if ($sum\
+    \ < 0) {\n            return 1;\n        }\n    }\n    return '';\n}\n</cell>\n\
+    <cell>", "    foreach my $i (0..$#$operations) {\n        my $op = $operations[$i];\n\
+    \        if($op->[0] eq \"deposit\") {\n            $op->[1] -= $op->[2];\n  \
+    \      } elsif($op->[0] eq \"withdrawal\") {\n            $op->[1] += $op->[2];\n\
+    \        } else {\n            die \"Unknown operation $op->[0]\";\n        }\n\
+    \    }\n    if($operations[0]->[0] eq \"deposit\") {\n        if($operations[0]->[1]\
+    \ < 0) {\n            return 1;\n        } else {\n            return '';\n  \
+    \      }\n    } elsif($operations[0]->[0] eq \"withdrawal\") {\n        if($operations[0]->[1]\
+    \ < 0) {\n            return '';\n        } else {\n            return 1;\n  \
+    \      }\n    } else {\n        die \"Unknown operation $operations[0]->[0]\"\
+    ;\n    }\n}", "    my $balance;\n    my $count = 0;\n    foreach my $op (@$operations)\
+    \ {\n        if ($op->{op} == Deposit) {\n            $balance += $op->{amount};\n\
+    \        } elsif ($op->{op} == Withdrawal) {\n            $balance -= $op->{amount};\n\
+    \        } else {\n            die \"Unknown op for below_zero\";\n        }\n\
+    \        if ($balance <= 0) {\n            $count++;\n            $balance = 0;\n\
+    \        }\n    }\n    return $count ? 1 : 0;\n}", '    my($balance) = 0;', " \
+    \   my($balance) = shift;\n    for (my $i = 0; $i < @$operations; $i++) {\n  \
+    \      my($deposit, $withdrawal) = @{$operations[$i]};\n        if ($balance <\
+    \ $deposit) {\n            return '1';\n        }\n        if ($balance < $withdrawal)\
+    \ {\n            return '1';\n        }\n        $balance = $balance - $deposit\
+    \ - $withdrawal;\n    }\n    return '';\n}", "    my(@account) = @_;\n    $account[0]\
+    \ = 0;\n    foreach my $operation (@$operations) {\n        my $change = $operation->{change};\n\
+    \        my $type = $operation->{type};\n        foreach my $i (0 .. $#account)\
+    \ {\n            my $sum = $account[$i] + $change;\n            if ($sum < 0)\
+    \ {\n                $account[$i] = $sum;\n                last;\n           \
+    \ }\n        }\n    }\n    for (my $i = $#account; $i >= 0; $i--) {\n        if\
+    \ ($account[$i] < 0) {\n            return 1;\n        }\n    }\n    return '';\n\
+    }", "    my $balance = 0;\n    my $index = 0;\n    while($index < @$operations)\
+    \ {\n        if($operations->[$index] eq 'withdraw') {\n            $balance =\
+    \ $balance - $operations->[$index + 1];\n        } elsif($operations->[$index]\
+    \ eq 'deposit') {\n            $balance = $balance + $operations->[$index + 1];\n\
+    \        }\n        $index++;\n    }\n    if($balance < 0) {\n        return 1;\n\
+    \    } else {\n        return '';\n    }\n}", "    my $count = 0;\n    my $last_balance\
+    \ = 0;\n    for my $operation (@$operations) {\n        if ($operation >= 0) {\n\
+    \            $last_balance = $last_balance + $operation;\n        }\n        if\
+    \ ($last_balance < 0) {\n            $count++;\n            $last_balance = 0;\n\
+    \        }\n    }\n    if ($count > 0 && $count != @$operations) {\n        return\
+    \ 1;\n    }\n    return '';\n}", "    my $index = 0;\n    my $balance = shift(@$operations);\n\
+    \    while (@$operations > $index) {\n        my $op = shift(@$operations);\n\
+    \        last if ($op == -1);\n        next if ($op == -5);\n        if ($balance\
+    \ < 0) {\n            $index++;\n            last;\n        }\n        $balance\
+    \ -= $op;\n    }\n    return $balance < 0 ? 1 : 0;\n}\n</cell>\n<cell>", "   \
+    \ return 1 if ($operations == 0 || $operations == -1);\n    return '';\n}", " \
+    \   my $i = 0;\n    $i ++ while $operations[$i] < 0;\n    return 1 unless $i &&\
+    \ $operations[$i] == 0;\n    return '';\n}\n</code>\n<|/ a |>\n<| c |>\nI don't\
+    \ understand the reason why you did that `return 0 unless $i && $operations[$i]\
+    \ == 0;` instead of `return 1 unless $i && $operations[$i] < 0;`. Seems like it's\
+    \ just an opinion based solution. I also wouldn't use global variables but pass\
+    \ them as a reference as in `sub below_zero (@operations) { my ($operations) =\
+    \ @_; my $i = 1 while $operations[$i] < 0; }`\n<|/ c |>\n<| c |>\nHe probably\
+    \ wanted to use `$operations[$i]` later in the function.\n<|/ c |>\n<| c |>\n\
+    - it depends on how you use the function. If you call it like: `print below_zero([1,\
+    \ 2, 3]);` it makes no sense to return anything but a number. If you call it like:\
+    \ `print below_zero([-10, -20]);` then it makes sense to return something in that\
+    \ case like `1` or `0`.\n<|/ c |>\n<| a tags=algorithm,perl,return-value,subroutine\
+    \ dscore=1 |>\nAs others have stated, you should read about the return statement.\
+    \ But I think it's important to explain what happens when you return in a subroutine\
+    \ and the subroutine returns.\nPerl doesn't have a return statement. It has return\
+    \ in scalar context and return in list context.\nSo return in scalar context returns\
+    \ to the caller. return in list context returns to the last enclosing function.\
+    \ So when you write:\n<code>", "    my $first_operation = shift(@$operations);\n\
+    \    my $balance = $first_operation->{value};\n    my $next_operation = shift(@$operations);\n\
+    \    my $next_balance = $next_operation->{value};\n    if ($balance < 0) {\n \
+    \       return 1;\n    }\n    elsif ($balance == 0) {\n        return \"\";\n\
+    \    }\n    elsif ($balance > $next_balance) {\n        return below_zero($operations);\n\
+    \    }\n}", '    my($balance) = shift(@$operations);', "    my $bal;\n    for(0..$#operations){\n\
+    \        if($operations[$_] < 0) {\n            $bal = $operations[$_];\n    \
+    \        last;\n        } else {\n            $bal = $bal + $operations[$_];\n\
+    \        }\n    }\n    if($bal < 0) {\n        return 0;\n    } else {\n     \
+    \   return 1;\n    }\n}", "    my $balance = $operations[0];\n    my $pos = 0;\n\
+    \    my $operation;\n    while ($balance != 0) {\n        $operation = $operations[$pos];\n\
+    \        ++$pos;\n        if ($operation == 1) {\n            $balance -= $operation;\n\
+    \        }\n        else {\n            $balance += $operation;\n        }\n \
+    \   }\n    ++$pos;\n    return 1 if ($pos == @$operations);\n    return '';\n\
+    }\n</code>\nA few things about this implementation:", "    my $balance = 0;\n\
+    \    foreach my $operation (@$operations) {\n        if ($operation eq 'deposit')\
+    \ {\n            $balance += $operations[1];\n        } elsif ($operation eq 'withdraw')\
+    \ {\n            $balance -= $operations[1];\n        } else {\n            die\
+    \ \"Unknown operation\";\n        }\n    }\n    return 1 unless ($balance < 0);\n\
+    \    return '';\n}\n</code>\n<|/ a |>\n<| c |>\nI wish I could give this a +2\
+    \ for the use of the `return` keyword and the unnamed subroutines\n<|/ c |>\n\
+    <| c |>\nI would suggest that the `return '' unless $balance < 0;` be `return\
+    \ '' unless $balance < 0;` otherwise the function returns `1` when it should return\
+    \ an empty string\n<|/ c |>\n<| a |>\nA function that is only called once or twice\
+    \ can be coded as follows.\n<code>", "    my($i, $j) = (1, scalar @$operations\
+    \ - 1);\n    while($i >= 0) {\n        while($j >= 0) {\n            if(($operations[$i][$j]\
+    \ eq 'deposit') && ($operations[$i][$j + 1] eq 'withdrawal')) {\n            \
+    \    if(!($operations[$i][$j + 2] eq 'balance')) {\n                    return\
+    \ 1;\n                } else {\n                    return '';\n             \
+    \   }\n            } else if(($operations[$i][$j] eq 'balance') && ($operations[$i][$j\
+    \ + 1] eq 'withdrawal')) {\n                return '';\n            } else if(($operations[$i][$j]\
+    \ eq 'balance') && ($operations[$i][$j + 1] eq 'deposit')) {\n               \
+    \ return 1;\n            }\n            $j -= 1;\n        }\n        $i -= 1;\n\
+    \        $j += 3;\n    }\n    return '';\n}", "    my $operation = $operations[0];\n\
+    \    my $i = 1;\n    my $balance;\n    my $result;\n    while (defined($operations[$i]))\
+    \ {\n        $operation = $operations[$i++];\n        $balance = $operation->{balance};\n\
+    \        if ($balance < 0){\n            $result = '';\n        } else {\n   \
+    \         $result = $balance < 0 ? 1 : 0;\n        }\n    }\n    return $result;\n\
+    }", "    my($result) = '';", "    my($num_operations) = @$operations;\n    my\
+    \ $balance = 0;\n    for ($num_operations; $num_operations >= 0; $num_operations\
+    \ -= 1) {\n        my $operation = $$operations[$num_operations];\n        $balance\
+    \ += $operation->{deposit} - $operation->{withdrawal};\n    }\n    return $balance\
+    \ < 0 ? 1 : 0;\n}", "    return '' if $operations[0] <= 0;\n    my $balance =\
+    \ $operations[$#{$operations} + 1];\n    return $balance if $balance < 0;\n  \
+    \  my $result = $operations[0] == 1 and $balance < 0;\n    return $result ? '1'\
+    \ : '' or '';\n}", "    my $len = @$operations;\n    my $i = 0;\n    my $first\
+    \ = 0;\n    my $last = $len-1;\n    my $result = '';\n    while($i < $len) {\n\
+    \        my $op = $$operations[$i];\n        my $new_len = $len-$i;\n        $new_len\
+    \ = $new_len > 0 ? $new_len : 0;\n        $result .= $op == 1 ? '1' : '0';\n \
+    \       $i += $new_len;\n    }\n    return $result if $result ne '';\n    return\
+    \ 1;\n}\n</code>\n<|/ a dscore=1 |>\n<| a |>\nHere's a solution that takes advantage\
+    \ of Perl's ability to return a value from a subroutine in the list context when\
+    \ no explicit return value is given:\n<code>", "    my $balance = shift(@$operations);\n\
+    \    $balance >= 0 || die \"balance cannot be negative\";\n    return $balance\
+    \ < 0 ? \"1\" : \"\";\n}", "    my($balance) = shift(@$operations);\n    $balance\
+    \ = 0 unless defined($balance);", "    my(@balances) = ();\n    foreach my $operation\
+    \ (@$operations) {\n        my $balance = $operation->{balance};\n        if ($balance\
+    \ < 0) {\n            return '1';\n        }\n        push(@balances, $balance);\n\
+    \    }\n    my $average = Math::Average(@balances);\n    foreach my $balance (@balances)\
+    \ {\n        if ($balance < $average) {\n            return '1';\n        }\n\
+    \    }\n    return '';\n}"]
+stop_tokens:
+- "\nsub"
+- "\n#"
+- "\n\n"
