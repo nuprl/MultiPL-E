@@ -1,70 +1,41 @@
-# Authored by Abhinav Jangda based on eval_rust.py
-# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
-#
-# This script runs the C++ Translated HumanEval programs in datasets/cpp-*
-import os
-import subprocess
 from pathlib import Path
-
-import os
-import subprocess
-import tempfile
-from pathlib import Path
+from safe_subprocess import run
 from generic_eval import main
 
 LANG_NAME = "C++"
 LANG_EXT = ".cpp"
 
-#Following files have problems:
-#137, 
-#22: Any
-#148: Elipsis
 
 def eval_script(path: Path):
     basename = ".".join(str(path).split(".")[:-1])
-    build = subprocess.run(["g++", path, "-o", basename, "-std=c++17"], capture_output=True)
-    status = None
-    returncode = -1
-    output = None
-    if build.returncode != 0:
-        # Well, it's a compile error. May be a type error or
-        # something. But, why break the set convention
-        status = "SyntaxError"
-        returncode = build.returncode
-        output = build
-    else:
-        try:
-            # Assumes exit-code 0 is all okay
-            output = subprocess.run([basename], capture_output=True, timeout=5)
-            returncode = output.returncode
-            if output.returncode == 0:
-                status = "OK"
-            else:
-                # Well, it's a panic
-                status = "Exception"
-        except subprocess.TimeoutExpired as exc:
-            status = "Timeout"
-            output = exc
-        os.remove(basename)
-    if output.stdout is not None:
-        output.stdout = output.stdout[:2048].decode("utf-8", errors='ignore')
-    else:
-        output.stdout = "None"
+    build_result = run(["g++", path, "-o", basename, "-std=c++17"])
+    if build_result.exit_code != 0:
+        return {
+            "status": "SyntaxError",
+            "exit_code": build_result.exit_code,
+            "stdout": build_result.stdout,
+            "stderr": build_result.stderr,
+        }
 
-    if output.stderr is not None:
-        output.stderr = output.stderr[:2048].decode("utf-8", errors='ignore')
+    run_result = run([basename])
+    # Northeastern Discovery cluster is amazing. Except when it is a pain.
+    if "In file included from /shared/centos7/gcc/9.2.0-skylake/" in run_result.stderr:
+        raise Exception("Skylake bug encountered")
+    if "/4.8.2" in run_result.stderr:
+        raise Exception("Ancient compiler encountered")
+    if run_result.timeout:
+        status = "Timeout"
+    elif run_result.exit_code != 0:
+        status = "Exception"
     else:
-        output.stderr = "None"
-    if "In file included from /shared/centos7/gcc/9.2.0-skylake/" in output.stderr:
-      raise Exception("Skylake bug encountered")
-    if "/4.8.2" in output.stderr:
-      raise Exception("Ancient compiler encountered")
+        status = "OK"
     return {
         "status": status,
-        "exit_code": returncode,
-        "stdout": output.stdout,
-        "stderr": output.stderr,
+        "exit_code": run_result.exit_code,
+        "stdout": run_result.stdout,
+        "stderr": run_result.stderr,
     }
+
 
 if __name__ == "__main__":
     main(eval_script, LANG_NAME, LANG_EXT)
