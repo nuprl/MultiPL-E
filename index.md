@@ -23,9 +23,7 @@ other models.
     conda activate multipl-env
     ```
 
-3. You will need an OpenAI API key and access to the Codex beta. If you have
-   several API keys (e.g., ask your friends!), you'll be able to run this
-   tutorial faster!
+3. You will need an OpenAI API key and access to the Codex beta.
 
 First, check out the repository in a terminal:
 
@@ -65,13 +63,7 @@ this:
 ```
 Label,Model,Key
 My OpenAI Key,,YOUR_OPENAI_KEY
-My lab member's OpenAI Key,,THEIR_OPENAI_KEY
-My professor's OpenAI Key,,THEIR_OPENAI_KEY_2
-OpenAI key of the guy across the hall,,THEIR_OPENAI_KEY_3
 ```
-
-You certainly need an OpenAI key. But, as this suggestions, having more will
-make this go faster.
 
 With this file in place, we can now generate completions:
 
@@ -79,9 +71,9 @@ With this file in place, we can now generate completions:
 python3 gather_completions.py --dir ../tutorial --max-samples 20 --model davinci --temperature 0.2 --limit-completions 20 
 ```
 
-With six API keys, this will take less than 5 minutes. If you just have one,
-you should grab lunch. You will almost certainly see some warnings about
-being rate-limited. These are innocuous. The script is careful to back off.
+The more calls to the API you can at once, the faster this will execute. You will almost 
+certainly see some warnings about being rate-limited. These are innocuous. 
+The script is careful to back off.
 
 Once the script completes, you can evaluate the completions using the tests
 cases. If you have a *2N* core machine, we recommend using *N* workers:
