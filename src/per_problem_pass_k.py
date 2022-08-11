@@ -16,7 +16,7 @@ def per_problem_pass_k(dir, lang, model, temp, variation,pdict):
     for result_path in dir.glob("*.results.yaml"):
         try:
             with open (result_path) as f:
-                results_yaml = yaml.safe_load(f)
+                results_yaml = yaml.load(f, yaml.CSafeLoader)
             if results_yaml == None:
                 return pdict
             problem = result_path.name.split(".")[0]
