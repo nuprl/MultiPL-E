@@ -97,7 +97,7 @@ rate is close to what you'll get with more samples in a full-fledged experiment.
 Excellent! One of the goals of this work is to ensure that the benchmark set is 
 extensible. In trying out the completions above, you may have noticed a number 
 of files with prefixes `humaneval_to_` and `eval_` in `src/`. These are the 
-only two files required for adding a new language to the benchmark! 
+only two files required for adding a new language to the benchmark. 
 
 Most of the work (recursive substitution, actually generating the strings, 
 etc.) takes place in the `generic_evaluator.py` script. This should work for 
