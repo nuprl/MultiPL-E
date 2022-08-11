@@ -48,7 +48,7 @@ def main():
         help="What to do with doctests: keep, remove, or transform",
     )
 
-    args.add_argument("--originals", type=str, required=True)
+    args.add_argument("--originals", type=str, default="../datasets/originals")
 
     args = args.parse_args()
 
