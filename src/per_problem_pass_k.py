@@ -17,33 +17,35 @@ def per_problem_pass_k(dir, lang, model, temp, variation,pdict):
         try:
             with open (result_path) as f:
                 results_yaml = yaml.safe_load(f)
-                print(results_yaml)
+            if results_yaml == None:
+                return pdict
             problem = result_path.name.split(".")[0]
             n_results = len(results_yaml["results"])
             n_ok_results = len([c for c in results_yaml["results"] if c["status"] == "OK"])
             if (temp == "0.2"):
                 p1 = estimator(n_results, n_ok_results, 1)
+                res = (p1,n_results)
                 if problem in pdict:
-                    pdict[problem]['pass_k1'] = p1
+                    pdict[problem]['pass_k1'] = res
                 else:
-                    pdict[problem] = {'pass_k1':p1}
+                    pdict[problem] = {'pass_k1': res}
             else:
                 pass_k10 = estimator(n_results, n_ok_results, 10)
                 pass_k100 = estimator(n_results, n_ok_results, 100)
                 #print(f"{problem},{lang},{model},{temp},{variation},1,{pass_k10}")
                 #print(f"{problem},{lang},{model},{temp},{variation},1,{pass_k100}")
                 if problem in pdict:
-                    pdict[problem]['pass_k10'] = pass_k10
-                    pdict[problem]['pass_k100'] = pass_k100
+                    pdict[problem]['pass_k10'] = (pass_k10,n_results)
+                    pdict[problem]['pass_k100'] = (pass_k100,n_results)
                 else:
-                    pdict[problem] = {'pass_k10':pass_k10,'pass_k100':pass_k100}
+                    pdict[problem] = {'pass_k10':(pass_k10,n_results),'pass_k100':(pass_k100,n_results)}
         except yaml.YAMLError as exc:
             continue
     return pdict
 
 
 if __name__ == "__main__":
-    print("lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
+    print("lang,problem,model,experiment,pass@1,n(t=0.2),pass@10,n(t=0.8),pass@100")
     for lang in LANGS:
         for model in MODELS:
             for variation in VARIATION:
@@ -56,4 +58,4 @@ if __name__ == "__main__":
                     p1 = pdict[problem]['pass_k1'] if 'pass_k1' in pdict[problem] else 'NA'
                     p10 = pdict[problem]['pass_k10'] if 'pass_k10' in pdict[problem] else 'NA'
                     p100 = pdict[problem]['pass_k100'] if 'pass_k100' in pdict[problem] else 'NA'
-                    print(f"{lang},{problem},{model},{variation},{p1},{p10},{p100}")
+                    print(f"{lang},{problem},{model},{variation},{p1[0]},{p1[1]},{p10[0]},{p10[1]},{p100[0]}")
