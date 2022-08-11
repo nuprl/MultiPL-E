@@ -139,13 +139,14 @@ fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String
     println!("lang,problem,model,temp,variation,pass@1,n(t=0.2),pass@10,n(t=0.8),pass@100");
     for ((lang, problem, model, variation), mut values) in aggregates.into_iter() {
         values.sort_by_key(|&(k, _, _)| k);
+        let temp = if values.len() == 1 { "0.2" } else { "0.8" };
         let pass_k_str = if values.len() == 1 {
-            format!("{:.2},{},NA,NA,NA,NA", values[0].1, values[0].2)
+            format!("{:.2},{},NA,NA,NA", values[0].1, values[0].2)
         }
         else {
             format!("{:.2},{},{:.2},{},{:.2}", values[0].1, values[0].2, values[1].1, values[1].2, values[2].1)
         };
-        println!("{},{},{},{},{}", lang, problem, model, variation, pass_k_str);
+        println!("{},{},{},{},{},{}", lang, problem, model, temp, variation, pass_k_str);
     }
 }    
 

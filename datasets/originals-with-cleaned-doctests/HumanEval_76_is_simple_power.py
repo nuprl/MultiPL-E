@@ -5,17 +5,17 @@ def is_simple_power(x: int, n: int) -> bool:
     x is a simple power of n if n**int=x
     For example:
     >>> is_simple_power(1, 4)
-    true
+    True
     >>> is_simple_power(2, 2)
-    true
+    True
     >>> is_simple_power(8, 2)
-    true
+    True
     >>> is_simple_power(3, 2)
-    false
+    False
     >>> is_simple_power(3, 1)
-    false
+    False
     >>> is_simple_power(5, 3)
-    false
+    False
     """
     ### Canonical solution below ###
     if (n == 1): 
