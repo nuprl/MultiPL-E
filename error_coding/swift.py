@@ -31,8 +31,12 @@ def f_not(f):
         return not f(*args, **kwargs)
     return the_not
 
+
 def ok_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return exit_code == 0 and status == 'OK'
+
+def timeout_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return exit_code != 0 and status == 'Timeout'
 
 def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return exit_code != 0 and status == 'SyntaxError'
@@ -74,19 +78,110 @@ def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str) -> bo
     return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4
 
 
+def linker_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return "error: link command failed with exit code 1" in stderr
+
+def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    bad_syntax_markers = [
+        "error: expected expression after operator",
+        "error: expected '{' to start the body of for-each loop",
+        "error: expected expression in 'switch' statement",
+        "error: '[' is not allowed in operator names"
+    ]
+    return any(m in stderr for m in bad_syntax_markers)
+
+def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr
+
+
 NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
 def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return NONEXISTENT_METHOD_RE.search(stderr) is not None
 
-def timeout_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
-    return exit_code != 0 and status == 'Timeout'
+NONEXISTENT_VAR_RE = re.compile(r"error: cannot find .* in scope")
+def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return NONEXISTENT_VAR_RE.search(stderr) is not None
 
+SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE = re.compile(r"error: value of optional type .* must be unwrapped to a value of type .*")
+def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None
+
+RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert return expression of type .* to return type .*")
+def return_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return RETURN_TYPE_ERROR_RE.search(stderr) is not None
+
+ARGUMENT_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
+def argument_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return ARGUMENT_TYPE_ERROR_RE.search(stderr) is not None
+
+CLOSURE_RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
+def closure_result_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return CLOSURE_RETURN_TYPE_ERROR_RE.search(stderr) is not None
+
+def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return "error: result values in '? :' expression have mismatching types" in stderr
+
+ 
 CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str], bool]]] = OrderedDict([
+    ('CompileError', ('Any compilation error occurred', 
+        compile_error_category
+    )),
+    ('CompileError-LinkerError', ('A weird linker error. Investigate?', 
+        f_and(compile_error_category, linker_error)
+    )),
+    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion', 
+        f_and(compile_error_category, invalid_syntax)
+    )),
+    ('CompileError-SubscriptStringWithInt', ('Swift does not allow you to subscript a string using an Int', 
+        f_and(compile_error_category, subscript_string_with_int)
+    )),
+    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method', 
+        f_and(compile_error_category, nonexistent_method)
+    )),
+    ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function', 
+        f_and(compile_error_category, nonexistent_var)
+    )),
+    ('CompileError-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
+        f_and(compile_error_category, should_have_unwrapped_optional)
+    )),
+    ('CompileError-ReturnTypeError', ('The type of the return value does not match the declared return type of the function.', 
+        f_and(compile_error_category, return_type_error)
+    )),
+    ('CompileError-ArgumentTypeError', ('The type of an argument to a function does not match the expected type.', 
+        f_and(compile_error_category, argument_type_error)
+    )),
+    ('CompileError-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure', 
+        f_and(compile_error_category, closure_result_type_error)
+    )),
+    ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
+        f_and(compile_error_category, branch_type_error)
+    )),
+    ('CompileError-Else', ('Other compilation errors', 
+        f_and(
+            compile_error_category, 
+            f_not(f_or(
+                linker_error,
+                invalid_syntax,
+                subscript_string_with_int,
+                nonexistent_method,
+                nonexistent_var,
+                should_have_unwrapped_optional,
+                return_type_error,
+                argument_type_error,
+                closure_result_type_error,
+                branch_type_error
+            ))
+        )
+    )),
+
     ('OK', ('OK', 
         ok_category
     )),
     ('Timeout', ('Is this runtime or compiler or both?', 
         timeout_category
+    )),
+    ('Exception', ('Any runtime exception occurred', 
+        exception_category
     )),
     ('Exception-AssertionFail', ('An assertion failed', 
         f_and(exception_category, assertion_fail)
@@ -139,18 +234,6 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
     #         ))
     #     )
     # )),
-
-    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method', 
-        f_and(compile_error_category, nonexistent_method)
-    )),
-    ('CompileError-Else', ('Other compilation errors', 
-        f_and(
-            compile_error_category, 
-            f_not(f_or(
-                nonexistent_method,
-            ))
-        )
-    )),
 ])
 
 
@@ -197,9 +280,10 @@ def main():
             for cat_name, (_, cat_fn) in CATEGORY_DEFINITIONS.items():
                 if cat_fn(comp.exit_code, comp.status, comp.stderr, comp.stdout):
                     if did_find_cat and not args.allow_multimatch:
-                        raise Exception(f'prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories.')
+                        raise Exception(f'prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories. stderr = {comp.stderr}')
                     elif did_find_cat:
-                        print(f'Warning: prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories.')
+                        pass
+                        # print(f'Warning: prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories.')
                     did_find_cat = True
                     category_results[cat_name].append((prob.name, comp_idx))
             
