@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use walkdir::{DirEntry, WalkDir};
 use std::path::Path;
+use std::collections::HashMap;
 use duct::cmd;
 use clap::Parser;
 use rayon::prelude::*;
@@ -49,6 +50,7 @@ enum Command {
     SummarizeCompleteness,
     BuildJobList,
     PassKAggregates,
+    PerProblemPassK,
 }
 
 fn all_configurations() -> Vec<(&'static str, &'static str, &'static str, &'static str)> {
@@ -76,6 +78,67 @@ fn estimate_pass_k(n: i32, c: i32, k: i32) -> f64 {
     }
     return 1.0 - result;
 }
+
+// print("lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
+// (Lang, Problem, Model, Variation)
+fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<(String, String, String, String, usize, f64)>> {
+    let (lang, model, temp, variation) = config;
+    
+    let walker = WalkDir::new(format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation));
+
+    let mut result = vec![];
+
+    let temp_02 = temp == "0.2";
+
+    for entry in walker
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        if !entry.path().file_name()?.to_str()?.ends_with(".results.yaml") {
+            continue;
+        }
+        let results_file = std::fs::read_to_string(entry.path()).ok()?;
+        let results = serde_yaml::from_str::<ResultsFile>(&results_file).unwrap();
+        let n = results.results.len();
+        let c = results.results.iter().filter(|r| r.status == "OK").count();
+        // filename without extension
+        let file_stem = entry.path().file_stem()?.to_str()?;
+        let stem_len = file_stem.len(); 
+        let problem = file_stem[..stem_len - 8].to_string();
+        if temp_02 {
+            result.push((lang.to_string(), problem.to_string(), model.to_string(), variation.to_string(), 1, estimate_pass_k(n as i32, c as i32, 1)));
+        }
+        else {
+            result.push((lang.to_string(), problem.to_string(), model.to_string(), variation.to_string(), 10, estimate_pass_k(n as i32, c as i32, 10)));
+            // Same for 100
+            result.push((lang.to_string(), problem, model.to_string(), variation.to_string(), 100, estimate_pass_k(n as i32, c as i32, 100)));
+        }
+    }
+
+    return Some(result);
+}
+
+fn all_per_problem_pass_k() {
+    let mut aggregates = HashMap::new();
+    let results = all_configurations().into_par_iter().filter_map(per_problem_pass_k).collect::<Vec<_>>();
+    for result in results.into_iter() {
+        for (lang, problem, model, variation, k, pass_k) in result.into_iter() {
+            aggregates.entry((lang, problem, model, variation)).or_insert(vec![]).push((k, pass_k));
+        }
+    }
+    println!("lang,problem,model,experiment,pass@1,pass@10,pass@100");
+    for ((lang, problem, model, variation), mut values) in aggregates.into_iter() {
+        values.sort_by_key(|&(k, _)| k);
+        let pass_k_str = if values.len() == 1 {
+            format!("{:.2},NA,NA", values[0].1)
+        }
+        else {
+            format!("{:.2},{:.2},{:.2}", values[0].1, values[1].1, values[2].1)
+        };
+        println!("{},{},{},{},{}", lang, problem, model, variation, pass_k_str);
+    }
+}
+
 
 fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<String>> {
     let (lang, model, temp, variation) = config;
@@ -443,6 +506,7 @@ fn main() -> () {
         Command::CountDuplicatePrograms => count_duplicate_programs(),
         Command::SummarizeCompleteness => summarize_completeness(),
         Command::BuildJobList => build_job_list().expect("Failed to build job list"),
-        Command::PassKAggregates => pass_k_aggregates()
+        Command::PassKAggregates => pass_k_aggregates(),
+        Command::PerProblemPassK => all_per_problem_pass_k(),
     }
 }
