@@ -67,7 +67,7 @@ assert(sort_even(l: [5, 8, -12, 4, 23, 2, 3, 11, 12, -10]) == [-12, 8, 3, 4, 5, 
 
 
 
-// ----------- problem HumanEval_37_sort_even, completion 50 ------------
+// ----------- problem HumanEval_37_sort_even, completion 47 ------------
 // status = Exception
 // exit_code = -4
 /* stderr = 
@@ -127,7 +127,7 @@ assert(sort_even(l: [5, 8, -12, 4, 23, 2, 3, 11, 12, -10]) == [-12, 8, 3, 4, 5, 
 
 
 
-// ----------- problem HumanEval_37_sort_even, completion 47 ------------
+// ----------- problem HumanEval_37_sort_even, completion 50 ------------
 // status = Exception
 // exit_code = -4
 /* stderr = 
