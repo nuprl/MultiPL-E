@@ -6,6 +6,7 @@ import shutil
 import os
 import csv
 from random import shuffle
+import re
 from typing import Callable, Dict, List, Tuple
 import yaml
 try:
@@ -33,7 +34,7 @@ def f_not(f):
 def ok_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return exit_code == 0 and status == 'OK'
 
-def syntax_error_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return exit_code != 0 and status == 'SyntaxError'
 
 def exception_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
@@ -72,6 +73,11 @@ def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str) 
 def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4
 
+
+NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
+def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return NONEXISTENT_METHOD_RE.search(stderr) is not None
+
 def timeout_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return exit_code != 0 and status == 'Timeout'
 
@@ -79,8 +85,8 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
     ('OK', ('OK', 
         ok_category
     )),
-    ('SyntaxError', ('Compilation error', 
-        syntax_error_category
+    ('Timeout', ('Is this runtime or compiler or both?', 
+        timeout_category
     )),
     ('Exception-AssertionFail', ('An assertion failed', 
         f_and(exception_category, assertion_fail)
@@ -133,9 +139,18 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
     #         ))
     #     )
     # )),
-    ('Timeout', ('Is this runtime or compiler or both?', 
-        timeout_category
-    ))
+
+    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method', 
+        f_and(compile_error_category, nonexistent_method)
+    )),
+    ('CompileError-Else', ('Other compilation errors', 
+        f_and(
+            compile_error_category, 
+            f_not(f_or(
+                nonexistent_method,
+            ))
+        )
+    )),
 ])
 
 
