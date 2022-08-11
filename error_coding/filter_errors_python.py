@@ -1,6 +1,7 @@
 from __future__ import annotations
 import argparse
 from collections import OrderedDict, defaultdict
+from distutils.log import error
 from pathlib import Path
 import shutil
 import os
@@ -58,6 +59,7 @@ def main(Problem):
         for error_name in Problem.error_categories.keys():
           # print(error_name)
           # print (error_categories[error_name])
+          print (error_name)
           completion = Problem.error_categories[error_name]["completions"][0]
           count = Problem.error_categories[error_name]["count"]
           csv_writer.writerow([error_name, "", count, ""])
@@ -94,23 +96,23 @@ class ProblemCompletion(object):
 class PythonProblem(object):
     def __init__(self) -> None:
       self.error_categories = {
-        'IndexError' : {"desc": "", "count": 0, "completions": []},
-        'NameError' : {"desc": "", "count": 0, "completions": []},
-        'TypeError' : {"desc": "", "count": 0, "completions": []},
-        'ValueError' : {"desc": "", "count": 0, "completions": []},
-        'NotImplementedError' : {"desc": "", "count": 0, "completions": []},
-        'IndentationError' : {"desc": "", "count": 0, "completions": []},
-        'KeyError' : {"desc": "", "count": 0, "completions": []},
-        'UnboundLocalError' : {"desc": "", "count": 0, "completions": []},
-        'AttributeError' : {"desc": "", "count": 0, "completions": []},
-        'RecursionError' : {"desc": "", "count": 0, "completions": []},
-        'ZeroDivisionError' : {"desc": "", "count": 0, "completions": []},
-        'EOFError' : {"desc": "", "count": 0, "completions": []},
-        'SyntaxError: BracketNeverClose' : {"desc": "", "count": 0, "completions": []},
-        'SyntaxError: Invalid Syntax' : {"desc": "", "count": 0, "completions": []},
-        'SyntaxError: UnterminatedStringLiteral' : {"desc": "", "count": 0, "completions": []},
-        "SyntaxError: Expected 'else' after 'if'" : {"desc": "", "count": 0, "completions": []},
-        "SyntaxError: Expected ':'" : {"desc": "", "count": 0, "completions": []},
+        'IndexError' : {"regex": "IndexError", "desc": "", "count": 0, "completions": []},
+        'NameError' : {"regex": "NameError", "desc": "", "count": 0, "completions": []},
+        'TypeError' : {"regex": "TypeError", "desc": "", "count": 0, "completions": []},
+        'ValueError' : {"regex": "ValueError", "desc": "", "count": 0, "completions": []},
+        'NotImplementedError' : {"regex": "NotImplementedError", "desc": "", "count": 0, "completions": []},
+        'IndentationError' : {"regex": "IndentationError", "desc": "", "count": 0, "completions": []},
+        'KeyError' : {"regex": "KeyError", "desc": "", "count": 0, "completions": []},
+        'UnboundLocalError' : {"regex": "UnboundLocalError", "desc": "", "count": 0, "completions": []},
+        'AttributeError' : {"regex": "AttributeError", "desc": "", "count": 0, "completions": []},
+        'RecursionError' : {"regex": "RecursionError", "desc": "", "count": 0, "completions": []},
+        'ZeroDivisionError' : {"regex": "ZeroDivisionError", "desc": "", "count": 0, "completions": []},
+        'EOFError' : {"regex": "EOFError", "desc": "", "count": 0, "completions": []},
+        'SyntaxError: BracketNeverClose' : {"regex": "was never close", "desc": "", "count": 0, "completions": []},
+        'SyntaxError: Invalid Syntax' : {"regex": "invalid syntax", "desc": "", "count": 0, "completions": []},
+        'SyntaxError: UnterminatedStringLiteral' : {"regex": "unterminated string literal", "desc": "", "count": 0, "completions": []},
+        "SyntaxError: Expected 'else' after 'if'" : {"regex": "expected 'else' after 'if' expression", "desc": "", "count": 0, "completions": []},
+        "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "", "count": 0, "completions": []},
       }
 
     def program_for_completion(self, completion_idx: int) -> str:
@@ -130,51 +132,17 @@ class PythonProblem(object):
     def record_error_types(self, error, completion):
       if error == None or str(error) == "None":
         return
-      if 'IndexError' in error:
-        self.increment_error_code('IndexError', completion)
-      elif 'NameError' in error:
-        self.increment_error_code('NameError', completion)
-      elif 'TypeError' in error:
-        self.increment_error_code('TypeError', completion)
-      elif 'ValueError' in error:
-        self.increment_error_code('ValueError', completion)
-      elif 'NotImplementedError' in error:
-        self.increment_error_code('NotImplementedError', completion)
-      elif 'ValueError' in error:
-        self.increment_error_code('ValueError', completion)
-      elif 'IndentationError' in error:
-        self.increment_error_code('IndentationError', completion)
-      elif 'KeyError' in error:
-        self.increment_error_code('KeyError', completion)
-      elif 'UnboundLocalError' in error:
-        self.increment_error_code('UnboundLocalError', completion)
-      elif 'AttributeError' in error:
-        self.increment_error_code('AttributeError', completion)
-      elif 'RecursionError' in error:
-        self.increment_error_code('RecursionError', completion)
-      elif 'ZeroDivisionError' in error:
-        self.increment_error_code('ZeroDivisionError', completion)
-      elif 'EOFError' in error:
-        self.increment_error_code('EOFError', completion)
-      elif 'SyntaxError' in error:
-        if 'was never close' in error:
-          self.increment_error_code('SyntaxError: BracketNeverClose', completion)
-        elif 'invalid syntax' in error:
-          self.increment_error_code('SyntaxError: Invalid Syntax', completion)
-        elif "expected ':'" in error:
-          self.increment_error_code("SyntaxError: Expected ':'", completion)
-        elif "unterminated string literal" in error:
-          self.increment_error_code('SyntaxError: UnterminatedStringLiteral', completion)
-        elif "expected 'else' after 'if' expression":
-          self.increment_error_code("SyntaxError: Expected 'else' after 'if'", completion)
-        else:
-          print(error)
-          raise Exception("sd")
-      elif '/tmp/tmp125ptmgu.py' in error or '/tmp/tmp0x72crx8.py' in error or '/tmp/tmp4uvuxbt9.py' in error or '/tmp/tmpev48bzdh.py' in error:
-        pass
-      else:
-        print (error)
-        raise Exception("Error not found")
+
+      for error_name in self.error_categories.keys():
+        if self.error_categories[error_name]["regex"] in error:
+          self.increment_error_code(error_name, completion)
+          return
+      print(error)
+      if '/tmp/tmp125ptmgu.py' in error or '/tmp/tmp0x72crx8.py' in error or '/tmp/tmp4uvuxbt9.py' in error or '/tmp/tmpev48bzdh.py' in error:
+        return
+      
+      print (error)
+      raise Exception("Error not found")
 
 
     def from_yaml_files(self, lang:str, yaml_path: Path, results_yaml_path: Path) -> Problem:
