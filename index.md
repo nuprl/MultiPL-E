@@ -116,7 +116,7 @@ any language that you throw at it, although your mileage may vary.
 Let's say we had not included Perl in the set of benchmark languages and 
 you want to add it. In a new file `humaneval_to_perl.py` you will need to 
 define a class called `Translator`. `Translator` contains numerous methods -
-the interface for a generic `Translator` class is provided in `need_to_make_it.py`. 
+the interface for a generic `Translator` class is provided in `base_language_translator.py `. 
 
 There are three types of methods for `Translator`: (1) methods that handle 
 translating the prompt, (2) methods that handle translating the unit tests, and
