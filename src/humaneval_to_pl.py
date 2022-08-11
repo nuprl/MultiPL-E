@@ -17,6 +17,10 @@ class Translator:
 
     stop = [ "\nsub", "\n#", "\n\n" ]
 
+    def __init__(self):
+        # See translate_pl_without_argnames.py which overrides this.
+        self.name_arguments = True
+
     def file_ext(self):
         return "pl"
 
@@ -26,7 +30,7 @@ class Translator:
         arg_names = ["$"+arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
         array_list = []
-        return f"{perl_description}sub {name} "+"{\n    " + f"my({arg_list}) = @_;\n"
+        return f"{perl_description}sub {name} "+"{\n    " + (f"my({arg_list}) = @_;\n" if self.name_arguments else "")
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
