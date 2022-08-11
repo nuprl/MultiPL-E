@@ -5,7 +5,7 @@ In this tutorial, we will run a small experiment to evaluate the performance of
 OpenAI Codex on C++ with the HumanEval benchmarks. So that you can run it
 quickly it quickly on a single machine, we will only fetch 20 completions per
 problem. We suggest C++ because you probably already have a C++ compiler on
-your machine. But, you can substiute it with any language that we support.
+your machine. But, you can substitute it with any language that we support.
 Later, we'll show you how to add support for other languages and evaluate
 other models.
 
@@ -58,7 +58,7 @@ Python to C++. But, these tests will not be shown the model.
 
 The next step is to *generate completions* using the model. In our paper, we
 generate 200 completions for each prompt, which can take some time. To speed
-up the tutorial, we recommend only generating 20 comppletions for each prompt.
+up the tutorial, we recommend only generating 20 completions for each prompt.
 Create a file called `model_keys.csv` in the `src` directory that looks like
 this:
 
