@@ -9,7 +9,6 @@ from glob import glob
 import re
 from pathlib import Path
 import argparse
-from models import MODELS
 from base_language_translator import LanguageTranslator
 from typing import List
 
