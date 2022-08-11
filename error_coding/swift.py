@@ -32,56 +32,56 @@ def f_not(f):
     return the_not
 
 
-def ok_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def ok_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return exit_code == 0 and status == 'OK'
 
-def timeout_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def timeout_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return exit_code != 0 and status == 'Timeout'
 
-def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return exit_code != 0 and status == 'SyntaxError'
 
-def exception_category(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def exception_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return exit_code != 0 and status == 'Exception'
 
-def assertion_fail(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def assertion_fail(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Assertion failed\nCurrent stack trace:" in stderr
 
-def unwrap_nil(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def unwrap_nil(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Unexpectedly found nil while unwrapping an Optional value\nCurrent stack trace:" in stderr
 
-def index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Index out of range\nCurrent stack trace:" in stderr
 
-def string_index_out_of_bounds(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def string_index_out_of_bounds(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: String index is out of bounds\nCurrent stack trace:" in stderr
 
-def array_index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def array_index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Array index is out of range\nCurrent stack trace:" in stderr
 
-def invalid_range_creation(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def invalid_range_creation(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Range requires lowerBound <= upperBound\nCurrent stack trace:" in stderr
 
-def cant_remove_last_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def cant_remove_last_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Can't remove last element from an empty collection\nCurrent stack trace:" in stderr
 
-def cant_remove_first_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def cant_remove_first_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Can't remove first element from an empty collection\nCurrent stack trace:" in stderr
 
-def div_by_zero_remainder(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def div_by_zero_remainder(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Division by zero in remainder operation\nCurrent stack trace:" in stderr
 
-def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ": Fatal error: Negative Array index is out of range\nCurrent stack trace:" in stderr
 
-def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4
 
 
-def linker_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def linker_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: link command failed with exit code 1" in stderr
 
-def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     bad_syntax_markers = [
         "error: expected expression after operator",
         "error: expected '{' to start the body of for-each loop",
@@ -90,60 +90,64 @@ def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str) -> boo
     ]
     return any(m in stderr for m in bad_syntax_markers)
 
-def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     unavailable_markers = [
         "error: 'characters' is unavailable: Please use String directly"
     ]
 
     return any(m in stderr for m in unavailable_markers)
 
-def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: '%' is unavailable: For floating point numbers use truncatingRemainder instead" in stderr
 
 
-def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr
 
 MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
-def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None
 
 REDECLARED_VAR_RE = re.compile(r"error: invalid redeclaration of .*")
-def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return REDECLARED_VAR_RE.search(stderr) is not None
 
 NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
-def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return NONEXISTENT_METHOD_RE.search(stderr) is not None
 
 NONEXISTENT_VAR_RE = re.compile(r"error: cannot find .* in scope")
-def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return NONEXISTENT_VAR_RE.search(stderr) is not None
 
 SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE = re.compile(r"error: value of optional type .* must be unwrapped to a value of type .*")
-def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None
 
 RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert return expression of type .* to return type .*")
-def return_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def return_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return RETURN_TYPE_ERROR_RE.search(stderr) is not None
 
 ARGUMENT_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
-def argument_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def argument_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return ARGUMENT_TYPE_ERROR_RE.search(stderr) is not None
 
 CLOSURE_RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
-def closure_result_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def closure_result_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return CLOSURE_RETURN_TYPE_ERROR_RE.search(stderr) is not None
 
-def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: no exact matches in call to" in stderr
 
-def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: result values in '? :' expression have mismatching types" in stderr
 
+RAN_OUT_VAR_RE = re.compile(r"(var|let) \S+$")
+def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return RAN_OUT_VAR_RE.search(completion) is not None
+
  
-CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str], bool]]] = OrderedDict([
+CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], bool]]] = OrderedDict([
     ('CompileError', ('Any compilation error occurred', 
         compile_error_category
     )),
@@ -192,6 +196,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
+    ('CompileError-RanOutOfTokens', ('Ran out of tokens. This category may only be an approximation, hard to tell in general.', 
+        f_and(compile_error_category, ran_out_of_tokens)
+    )),
     ('CompileError-Else', ('Other compilation errors', 
         f_and(
             compile_error_category, 
@@ -211,6 +218,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
                 closure_result_type_error,
                 unknown_type_error_in_call,
                 branch_type_error,
+                ran_out_of_tokens,
             ))
         )
     )),
@@ -319,7 +327,7 @@ def main():
             comp = prob.completions[comp_idx]
             did_find_cat = False
             for cat_name, (_, cat_fn) in CATEGORY_DEFINITIONS.items():
-                if cat_fn(comp.exit_code, comp.status, comp.stderr, comp.stdout):
+                if cat_fn(comp.exit_code, comp.status, comp.stderr, comp.stdout, comp.completion):
                     if did_find_cat and not args.allow_multimatch:
                         raise Exception(f'prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories. stderr = {comp.stderr}')
                     elif did_find_cat:

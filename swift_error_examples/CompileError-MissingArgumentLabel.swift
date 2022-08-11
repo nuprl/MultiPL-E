@@ -1,4 +1,338 @@
-// ----------- problem HumanEval_83_starts_one_ends, completion 74 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 68 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpdo0ikmyl.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpdo0ikmyl.swift:8:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 13 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                                        ^~~~~~~~~~~~~
+/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 117 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp6vsxg79f.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmp6vsxg79f.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    } else if n == 2 {
+        return 3
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 73 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp3b4pf_zo.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmp3b4pf_zo.swift:8:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 30 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_33_sort_third, completion 188 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                  ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                 !
+/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i] = l[i].min(l[i - 1])
+                 ^
+/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
+        l[i] = l[i].min(l[i - 1])
+                        ^
+                        by: 
+/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
+        l[i] = l[i].min(l[i - 1])
+                         ^
+/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                      ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                     !
+/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i - 1] = l[i].max(l[i - 1])
+                     ^
+/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
+        l[i - 1] = l[i].max(l[i - 1])
+                    
+*/
+/* stdout = 
+
+*/
+
+
+/// This function takes an array l and returns an array l' such that
+/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+/// to the values of the corresponding indicies of l, but sorted.
+/// >>> sort_third(l: [1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
+/// [2, 6, 3, 4, 8, 9, 5]
+func sort_third(l: [Int]) -> [Int] {
+    var l = l
+    for i in stride(from: 2, to: l.count, by: 3) {
+        l[i] = l[i].min(l[i - 1])
+        l[i - 1] = l[i].max(l[i - 1])
+    }
+    return l
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 146 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -102,7 +436,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 129 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 133 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -154,7 +488,471 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_66_digitSum, completion 89 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 178 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 23 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 0 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 152 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 104 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 64 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpgcz5oenj.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * (n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * (n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 155 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 98 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpa73jy09q.swift:14:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpa73jy09q.swift:14:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    if n == 3 {
+        return 10
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 174 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 171 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -216,7 +1014,55 @@ assert(digitSum(s: "You arE Very Smart") == 327)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 51 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 36 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpodd8xdmk.swift:8:42: error: cannot find 'pow' in scope
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+                                         ^~~
+/tmp/tmpodd8xdmk.swift:8:33: error: missing argument label 'n:' in call
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+                                ^
+                                n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 194 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -245,6 +1091,528 @@ func starts_one_ends(n: Int) -> Int {
         return 4
     }
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 175 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                                        ^~~~~~~~~~~~~
+/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 120 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpodd8xdmk.swift:8:42: error: cannot find 'pow' in scope
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+                                         ^~~
+/tmp/tmpodd8xdmk.swift:8:33: error: missing argument label 'n:' in call
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+                                ^
+                                n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_33_sort_third, completion 97 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpn6byxstf.swift:12:31: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                              ^
+/tmp/tmpn6byxstf.swift:12:31: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                              ^
+                                               ?? <#default value#>
+/tmp/tmpn6byxstf.swift:12:31: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                              ^
+                                              !
+/tmp/tmpn6byxstf.swift:12:28: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                           ^
+/tmp/tmpn6byxstf.swift:12:35: error: missing argument label 'by:' in call
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                                  ^
+                                  by: 
+/tmp/tmpn6byxstf.swift:12:41: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+                                        ^
+/tmp/tmpn6byxstf.swift:13:35: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
+                                  ^
+/tmp/tmpn6byxstf.swift:13:35: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
+                                  ^
+                                                 ?? <#default value#>
+/tmp/tmpn6byxstf.swift:13:35: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
+                                  ^
+                                                !
+/tmp/tmpn6byxstf.swift:13:31: error: can
+*/
+/* stdout = 
+
+*/
+
+
+/// This function takes an array l and returns an array l' such that
+/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+/// to the values of the corresponding indicies of l, but sorted.
+/// >>> sort_third(l: [1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
+/// [2, 6, 3, 4, 8, 9, 5]
+func sort_third(l: [Int]) -> [Int] {
+    var l_copy = l
+    for i in stride(from: 2, to: l.count, by: 3) {
+        l_copy[i] = l_copy[i].min(l_copy[i-1])
+        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
+    }
+    return l_copy
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+
+
+
+// ----------- problem HumanEval_33_sort_third, completion 74 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpm61uomjd.swift:13:27: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l_prime[i] = l[i].min(l[i-1])
+                          ^
+/tmp/tmpm61uomjd.swift:13:27: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l_prime[i] = l[i].min(l[i-1])
+                          ^
+                                      ?? <#default value#>
+/tmp/tmpm61uomjd.swift:13:27: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l_prime[i] = l[i].min(l[i-1])
+                          ^
+                                     !
+/tmp/tmpm61uomjd.swift:13:24: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l_prime[i] = l[i].min(l[i-1])
+                       ^
+/tmp/tmpm61uomjd.swift:13:31: error: missing argument label 'by:' in call
+        l_prime[i] = l[i].min(l[i-1])
+                              ^
+                              by: 
+/tmp/tmpm61uomjd.swift:13:32: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
+        l_prime[i] = l[i].min(l[i-1])
+                               ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// This function takes an array l and returns an array l' such that
+/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+/// to the values of the corresponding indicies of l, but sorted.
+/// >>> sort_third(l: [1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
+/// [2, 6, 3, 4, 8, 9, 5]
+func sort_third(l: [Int]) -> [Int] {
+    var l_prime = l
+    var i = 2
+    while i < l.count {
+        l_prime[i] = l[i].min(l[i-1])
+        i += 3
+    }
+    return l_prime
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 132 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 53 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    } else if n == 2 {
+        return 4
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 31 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 183 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) {
+                                  ^
+                                   into: 
+/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) {
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) {
+        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 78 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpq51wgeaq.swift:8:41: error: cannot find 'count_n_digit_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
+                                        ^~~~~~~~~~~~~~~~~~~~~
+/tmp/tmpq51wgeaq.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
 }
 
 
@@ -354,15 +1722,63 @@ assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 73 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 47 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmp3b4pf_zo.swift:8:28: error: missing argument label 'n:' in call
+/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 127 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                            ^
                            n: 
-/tmp/tmp3b4pf_zo.swift:8:53: error: missing argument label 'n:' in call
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                                                     ^
                                                     n: 
@@ -378,6 +1794,9 @@ assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
 func starts_one_ends(n: Int) -> Int {
     if n == 1 {
         return 2
+    }
+    if n == 2 {
+        return 4
     }
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
@@ -403,7 +1822,143 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 54 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 159 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_33_sort_third, completion 92 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                  ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                 !
+/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i] = l[i].min(l[i - 1])
+                 ^
+/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
+        l[i] = l[i].min(l[i - 1])
+                        ^
+                        by: 
+/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
+        l[i] = l[i].min(l[i - 1])
+                         ^
+/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                      ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                     !
+/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i - 1] = l[i].max(l[i - 1])
+                     ^
+/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
+        l[i - 1] = l[i].max(l[i - 1])
+                    
+*/
+/* stdout = 
+
+*/
+
+
+/// This function takes an array l and returns an array l' such that
+/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+/// to the values of the corresponding indicies of l, but sorted.
+/// >>> sort_third(l: [1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
+/// [2, 6, 3, 4, 8, 9, 5]
+func sort_third(l: [Int]) -> [Int] {
+    var l = l
+    for i in stride(from: 2, to: l.count, by: 3) {
+        l[i] = l[i].min(l[i - 1])
+        l[i - 1] = l[i].max(l[i - 1])
+    }
+    return l
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 179 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -507,7 +2062,313 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 143 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 50 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 168 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 160 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 100 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                                        ^~~~~~~~~~~~~
+/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 118 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                                        ^~~~~~~~~~~~~
+/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 89 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 93 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -559,7 +2420,359 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 82 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 33 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpch5qjzzp.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpch5qjzzp.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 3
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 77 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 43 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 49 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 87 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 19 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpch5qjzzp.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpch5qjzzp.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 3
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 108 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 11 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -666,228 +2879,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 80 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 171 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 68 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpdo0ikmyl.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpdo0ikmyl.swift:8:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 167 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 178 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 52 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -939,71 +2931,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_66_digitSum, completion 53 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) {
-                                  ^
-                                   into: 
-/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) {
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) {
-        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 150 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 41 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -1055,7 +2983,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 118 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 109 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -1080,6 +3008,110 @@ func starts_one_ends(n: Int) -> Int {
         return 2
     }
     return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 37 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 184 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
 
 
@@ -1165,17 +3197,18 @@ assert(digitSum(s: "You arE Very Smart") == 327)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 168 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 148 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
+/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
 
 */
 /* stdout = 
@@ -1187,9 +3220,12 @@ assert(digitSum(s: "You arE Very Smart") == 327)
 /// positive integers that start or end with 1.
 func starts_one_ends(n: Int) -> Int {
     if n == 1 {
-        return 1
+        return 2
+    } else if n == 2 {
+        return 4
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
     }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
 }
 
 
@@ -1213,7 +3249,205 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 179 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 191 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    } else if n == 2 {
+        return 4
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_33_sort_third, completion 85 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                  ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i] = l[i].min(l[i - 1])
+                    ^
+                                 !
+/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i] = l[i].min(l[i - 1])
+                 ^
+/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
+        l[i] = l[i].min(l[i - 1])
+                        ^
+                        by: 
+/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
+        l[i] = l[i].min(l[i - 1])
+                         ^
+/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                      ?? <#default value#>
+/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
+        l[i - 1] = l[i].max(l[i - 1])
+                        ^
+                                     !
+/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
+        l[i - 1] = l[i].max(l[i - 1])
+                     ^
+/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
+        l[i - 1] = l[i].max(l[i - 1])
+                    
+*/
+/* stdout = 
+
+*/
+
+
+/// This function takes an array l and returns an array l' such that
+/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+/// to the values of the corresponding indicies of l, but sorted.
+/// >>> sort_third(l: [1, 2, 3])
+/// [1, 2, 3]
+/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
+/// [2, 6, 3, 4, 8, 9, 5]
+func sort_third(l: [Int]) -> [Int] {
+    var l = l
+    for i in stride(from: 2, to: l.count, by: 3) {
+        l[i] = l[i].min(l[i - 1])
+        l[i - 1] = l[i].max(l[i - 1])
+    }
+    return l
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
+assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
+assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
+assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 167 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 102 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -1265,67 +3499,15 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 33 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 12 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpch5qjzzp.swift:11:28: error: missing argument label 'n:' in call
+/tmp/tmp4u4mvmw2.swift:14:28: error: missing argument label 'n:' in call
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                            ^
                            n: 
-/tmp/tmpch5qjzzp.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 3
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 133 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+/tmp/tmp4u4mvmw2.swift:14:53: error: missing argument label 'n:' in call
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                                                     ^
                                                     n: 
@@ -1345,57 +3527,8 @@ func starts_one_ends(n: Int) -> Int {
     if n == 2 {
         return 4
     }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 0 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
+    if n == 3 {
+        return 8
     }
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
@@ -1421,111 +3554,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 35 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 58 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 136 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 83 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -1603,54 +3632,6 @@ func starts_one_ends(n: Int) -> Int {
         return 1
     }
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 108 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
 }
 
 
@@ -1759,7 +3740,227 @@ assert(file_name_check(file_name: "s.") == "No")
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 130 ------------
+// ----------- problem HumanEval_66_digitSum, completion 176 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) {
+                                  ^
+                                   into: 
+/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) {
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) {
+        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 82 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 131 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 69 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 25 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -1811,17 +4012,17 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_66_digitSum, completion 31 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 15 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
 
 */
 /* stdout = 
@@ -1829,24 +4030,13 @@ assert(starts_one_ends(n: 5) == 18000)
 */
 
 
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
 }
 
 
@@ -1862,14 +4052,11 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
 
 
 
@@ -1921,69 +4108,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_66_digitSum, completion 81 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 30 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 136 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -2035,665 +4160,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 18 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 183 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 4
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 149 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 155 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 19 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpch5qjzzp.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpch5qjzzp.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 3
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 98 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpa73jy09q.swift:14:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpa73jy09q.swift:14:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    if n == 3 {
-        return 10
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 160 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 122 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_33_sort_third, completion 85 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                  ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                 !
-/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i] = l[i].min(l[i - 1])
-                 ^
-/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
-        l[i] = l[i].min(l[i - 1])
-                        ^
-                        by: 
-/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
-        l[i] = l[i].min(l[i - 1])
-                         ^
-/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                      ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                     !
-/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i - 1] = l[i].max(l[i - 1])
-                     ^
-/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
-        l[i - 1] = l[i].max(l[i - 1])
-                    
-*/
-/* stdout = 
-
-*/
-
-
-/// This function takes an array l and returns an array l' such that
-/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-/// to the values of the corresponding indicies of l, but sorted.
-/// >>> sort_third(l: [1, 2, 3])
-/// [1, 2, 3]
-/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
-/// [2, 6, 3, 4, 8, 9, 5]
-func sort_third(l: [Int]) -> [Int] {
-    var l = l
-    for i in stride(from: 2, to: l.count, by: 3) {
-        l[i] = l[i].min(l[i - 1])
-        l[i - 1] = l[i].max(l[i - 1])
-    }
-    return l
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
-assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
-assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 36 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpodd8xdmk.swift:8:42: error: cannot find 'pow' in scope
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-                                         ^~~
-/tmp/tmpodd8xdmk.swift:8:33: error: missing argument label 'n:' in call
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-                                ^
-                                n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 103 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpa9p8ueqy.swift:14:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n-1) + starts_one_ends(n-2)
-                           ^
-                           n: 
-/tmp/tmpa9p8ueqy.swift:14:51: error: missing argument label 'n:' in call
-    return starts_one_ends(n-1) + starts_one_ends(n-2)
-                                                  ^
-                                                  n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    if n == 3 {
-        return 7
-    }
-    return starts_one_ends(n-1) + starts_one_ends(n-2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 127 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 37 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 124 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -2814,7 +4281,7 @@ assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 43 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 18 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -2866,1425 +4333,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 47 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 1 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 41 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 53 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 4
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 194 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 11 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_5_intersperse, completion 51 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp590thxll.swift:13:50: error: missing argument label 'numbers:' in call
-        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
-                                                 ^
-                                                  numbers: 
-/tmp/tmp590thxll.swift:13:51: error: cannot convert value of type 'ArraySlice<Int>' to expected argument type '[Int]'
-        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
-                                                  ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
-/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
-/// [] as [Int]
-/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
-/// [1, 4, 2, 4, 3]
-func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
-    if numbers.isEmpty {
-        return []
-    } else {
-        let head = numbers[0]
-        let tail = numbers[1..<numbers.count]
-        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
-assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
-assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 68 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-                                  ^
-                                   into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 12 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp4u4mvmw2.swift:14:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmp4u4mvmw2.swift:14:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    if n == 3 {
-        return 8
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 104 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 137 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpa73jy09q.swift:14:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpa73jy09q.swift:14:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    if n == 3 {
-        return 10
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 120 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpodd8xdmk.swift:8:42: error: cannot find 'pow' in scope
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-                                         ^~~
-/tmp/tmpodd8xdmk.swift:8:33: error: missing argument label 'n:' in call
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-                                ^
-                                n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return 10 * starts_one_ends(n - 1) + pow(10, n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 191 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 4
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 152 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 22 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 174 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 77 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 159 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 49 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 83 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 184 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 50 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp7ihzvlhh.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmp7ihzvlhh.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 52 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 87 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 148 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 4
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 180 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) {
-                                  ^
-                                   into: 
-/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) {
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) {
-        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 13 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                                        ^~~~~~~~~~~~~
-/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 26 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 149 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -4388,17 +4437,18 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 95 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 129 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpq4pp25je.swift:8:41: error: cannot find 'count_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                                        ^~~~~~~~~~~~~
-/tmp/tmpq4pp25je.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                            ^
                            n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
 
 */
 /* stdout = 
@@ -4410,54 +4460,12 @@ assert(starts_one_ends(n: 5) == 18000)
 /// positive integers that start or end with 1.
 func starts_one_ends(n: Int) -> Int {
     if n == 1 {
-        return 1
+        return 2
     }
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
+    if n == 2 {
+        return 4
     }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 64 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpgcz5oenj.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * (n - 1)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + 9 * (n - 1)
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
 
 
@@ -4533,7 +4541,55 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_66_digitSum, completion 183 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 80 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                                        ^~~
+/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 180 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -4597,17 +4653,18 @@ assert(digitSum(s: "You arE Very Smart") == 327)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 15 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 172 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpkae9s68b.swift:8:41: error: cannot find 'pow' in scope
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                                        ^~~
-/tmp/tmpkae9s68b.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
-                           ^
-                           n: 
+/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
 
 */
 /* stdout = 
@@ -4620,8 +4677,11 @@ assert(digitSum(s: "You arE Very Smart") == 327)
 func starts_one_ends(n: Int) -> Int {
     if n == 1 {
         return 2
+    } else if n == 2 {
+        return 4
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
     }
-    return starts_one_ends(n - 1) + 9 * pow(10, n - 2)
 }
 
 
@@ -4645,7 +4705,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 146 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 58 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -4697,69 +4757,17 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 132 ------------
+// ----------- problem HumanEval_66_digitSum, completion 53 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 161 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) {
                                   ^
                                    into: 
-/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) {
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
 
 */
 /* stdout = 
@@ -4784,7 +4792,9 @@ assert(starts_one_ends(n: 5) == 18000)
 /// >>> digitSum(s: "aAaaaXa")
 /// 153
 func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+    return s.unicodeScalars.reduce(0) {
+        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
+    }
 }
 
 
@@ -4808,6 +4818,110 @@ assert(digitSum(s: "woArBld") == 131)
 assert(digitSum(s: "aAaaaXa") == 153)
 assert(digitSum(s: " How are yOu?") == 151)
 assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 122 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 150 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
 
 
 
@@ -4944,17 +5058,18 @@ assert(file_name_check(file_name: "s.") == "No")
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 175 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 22 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                                        ^~~~~~~~~~~~~
-/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
                            ^
                            n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
 
 */
 /* stdout = 
@@ -4968,7 +5083,618 @@ func starts_one_ends(n: Int) -> Int {
     if n == 1 {
         return 2
     }
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 103 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpa9p8ueqy.swift:14:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n-1) + starts_one_ends(n-2)
+                           ^
+                           n: 
+/tmp/tmpa9p8ueqy.swift:14:51: error: missing argument label 'n:' in call
+    return starts_one_ends(n-1) + starts_one_ends(n-2)
+                                                  ^
+                                                  n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    if n == 3 {
+        return 7
+    }
+    return starts_one_ends(n-1) + starts_one_ends(n-2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 35 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 161 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 173 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 68 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_5_intersperse, completion 51 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp590thxll.swift:13:50: error: missing argument label 'numbers:' in call
+        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
+                                                 ^
+                                                  numbers: 
+/tmp/tmp590thxll.swift:13:51: error: cannot convert value of type 'ArraySlice<Int>' to expected argument type '[Int]'
+        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
+                                                  ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
+/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
+/// [] as [Int]
+/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
+/// [1, 4, 2, 4, 3]
+func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
+    if numbers.isEmpty {
+        return []
+    } else {
+        let head = numbers[0]
+        let tail = numbers[1..<numbers.count]
+        return [head] + [delimeter] + intersperse(tail, delimeter: delimeter)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
+assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
+assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 81 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 137 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpa73jy09q.swift:14:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpa73jy09q.swift:14:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    if n == 3 {
+        return 10
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 74 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 51 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 26 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
 
 
@@ -5047,91 +5773,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_33_sort_third, completion 188 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                  ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                 !
-/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i] = l[i].min(l[i - 1])
-                 ^
-/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
-        l[i] = l[i].min(l[i - 1])
-                        ^
-                        by: 
-/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
-        l[i] = l[i].min(l[i - 1])
-                         ^
-/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                      ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                     !
-/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i - 1] = l[i].max(l[i - 1])
-                     ^
-/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
-        l[i - 1] = l[i].max(l[i - 1])
-                    
-*/
-/* stdout = 
-
-*/
-
-
-/// This function takes an array l and returns an array l' such that
-/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-/// to the values of the corresponding indicies of l, but sorted.
-/// >>> sort_third(l: [1, 2, 3])
-/// [1, 2, 3]
-/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
-/// [2, 6, 3, 4, 8, 9, 5]
-func sort_third(l: [Int]) -> [Int] {
-    var l = l
-    for i in stride(from: 2, to: l.count, by: 3) {
-        l[i] = l[i].min(l[i - 1])
-        l[i - 1] = l[i].max(l[i - 1])
-    }
-    return l
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
-assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
-assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 25 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 130 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -5160,726 +5802,6 @@ func starts_one_ends(n: Int) -> Int {
         return 3
     }
     return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_66_digitSum, completion 176 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1fhnpamk.swift:19:35: error: missing argument label 'into:' in call
-    return s.unicodeScalars.reduce(0) {
-                                  ^
-                                   into: 
-/tmp/tmp1fhnpamk.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
-    return s.unicodeScalars.reduce(0) {
-           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Task
-/// Write a function that takes a string as input and returns the sum of the upper characters only'
-/// ASCII codes.
-/// Examples:
-/// >>> digitSum(s: "")
-/// 0
-/// >>> digitSum(s: "abAB")
-/// 131
-/// >>> digitSum(s: "abcCd")
-/// 67
-/// >>> digitSum(s: "helloE")
-/// 69
-/// >>> digitSum(s: "woArBld")
-/// 131
-/// >>> digitSum(s: "aAaaaXa")
-/// 153
-func digitSum(s: String) -> Int {
-    return s.unicodeScalars.reduce(0) {
-        $0 + ($1.isASCII && $1.isUppercase ? Int($1.value) : 0)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(digitSum(s: "") == 0)
-assert(digitSum(s: "abAB") == 131)
-assert(digitSum(s: "abcCd") == 67)
-assert(digitSum(s: "helloE") == 69)
-assert(digitSum(s: "woArBld") == 131)
-assert(digitSum(s: "aAaaaXa") == 153)
-assert(digitSum(s: " How are yOu?") == 151)
-assert(digitSum(s: "You arE Very Smart") == 327)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 124 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 78 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpq51wgeaq.swift:8:41: error: cannot find 'count_n_digit_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
-                                        ^~~~~~~~~~~~~~~~~~~~~
-/tmp/tmpq51wgeaq.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 1
-    }
-    return starts_one_ends(n - 1) + 9 * count_n_digit_numbers(n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 69 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 109 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                                        ^~~~~~~~~~~~~
-/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 173 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 23 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 131 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_33_sort_third, completion 74 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpm61uomjd.swift:13:27: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l_prime[i] = l[i].min(l[i-1])
-                          ^
-/tmp/tmpm61uomjd.swift:13:27: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l_prime[i] = l[i].min(l[i-1])
-                          ^
-                                      ?? <#default value#>
-/tmp/tmpm61uomjd.swift:13:27: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l_prime[i] = l[i].min(l[i-1])
-                          ^
-                                     !
-/tmp/tmpm61uomjd.swift:13:24: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l_prime[i] = l[i].min(l[i-1])
-                       ^
-/tmp/tmpm61uomjd.swift:13:31: error: missing argument label 'by:' in call
-        l_prime[i] = l[i].min(l[i-1])
-                              ^
-                              by: 
-/tmp/tmpm61uomjd.swift:13:32: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
-        l_prime[i] = l[i].min(l[i-1])
-                               ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// This function takes an array l and returns an array l' such that
-/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-/// to the values of the corresponding indicies of l, but sorted.
-/// >>> sort_third(l: [1, 2, 3])
-/// [1, 2, 3]
-/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
-/// [2, 6, 3, 4, 8, 9, 5]
-func sort_third(l: [Int]) -> [Int] {
-    var l_prime = l
-    var i = 2
-    while i < l.count {
-        l_prime[i] = l[i].min(l[i-1])
-        i += 3
-    }
-    return l_prime
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
-assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
-assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
-
-
-
-// ----------- problem HumanEval_33_sort_third, completion 97 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpn6byxstf.swift:12:31: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                              ^
-/tmp/tmpn6byxstf.swift:12:31: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                              ^
-                                               ?? <#default value#>
-/tmp/tmpn6byxstf.swift:12:31: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                              ^
-                                              !
-/tmp/tmpn6byxstf.swift:12:28: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                           ^
-/tmp/tmpn6byxstf.swift:12:35: error: missing argument label 'by:' in call
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                                  ^
-                                  by: 
-/tmp/tmpn6byxstf.swift:12:41: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-                                        ^
-/tmp/tmpn6byxstf.swift:13:35: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
-                                  ^
-/tmp/tmpn6byxstf.swift:13:35: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
-                                  ^
-                                                 ?? <#default value#>
-/tmp/tmpn6byxstf.swift:13:35: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
-                                  ^
-                                                !
-/tmp/tmpn6byxstf.swift:13:31: error: can
-*/
-/* stdout = 
-
-*/
-
-
-/// This function takes an array l and returns an array l' such that
-/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-/// to the values of the corresponding indicies of l, but sorted.
-/// >>> sort_third(l: [1, 2, 3])
-/// [1, 2, 3]
-/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
-/// [2, 6, 3, 4, 8, 9, 5]
-func sort_third(l: [Int]) -> [Int] {
-    var l_copy = l
-    for i in stride(from: 2, to: l.count, by: 3) {
-        l_copy[i] = l_copy[i].min(l_copy[i-1])
-        l_copy[i-1] = l_copy[i-1].max(l_copy[i])
-    }
-    return l_copy
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
-assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
-assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 45 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                           ^
-                           n: 
-/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                    ^
-                                                    n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 100 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1rmag13i.swift:8:41: error: cannot find 'count_numbers' in scope
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                                        ^~~~~~~~~~~~~
-/tmp/tmp1rmag13i.swift:8:28: error: missing argument label 'n:' in call
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-                           ^
-                           n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 172 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 4
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
 }
 
 
@@ -5955,7 +5877,107 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 102 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 183 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpec_a3qsd.swift:10:32: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                               ^
+                               n: 
+/tmp/tmpec_a3qsd.swift:10:57: error: missing argument label 'n:' in call
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                        ^
+                                                        n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    } else if n == 2 {
+        return 4
+    } else {
+        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 95 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpq4pp25je.swift:8:41: error: cannot find 'count_numbers' in scope
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                                        ^~~~~~~~~~~~~
+/tmp/tmpq4pp25je.swift:8:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+                           ^
+                           n: 
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 1
+    }
+    return starts_one_ends(n - 1) + 9 * count_numbers(n - 1)
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 54 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -6007,59 +6029,7 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_83_starts_one_ends, completion 117 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp6vsxg79f.swift:10:32: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                               ^
-                               n: 
-/tmp/tmp6vsxg79f.swift:10:57: error: missing argument label 'n:' in call
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-                                                        ^
-                                                        n: 
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    } else if n == 2 {
-        return 3
-    } else {
-        return starts_one_ends(n - 1) + starts_one_ends(n - 2)
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
-// ----------- problem HumanEval_83_starts_one_ends, completion 93 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 143 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -6111,68 +6081,35 @@ assert(starts_one_ends(n: 5) == 18000)
 
 
 
-// ----------- problem HumanEval_33_sort_third, completion 92 ------------
+// ----------- problem HumanEval_83_starts_one_ends, completion 45 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpqg8ylgq3.swift:12:21: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-/tmp/tmpqg8ylgq3.swift:12:21: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                  ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:12:21: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i] = l[i].min(l[i - 1])
-                    ^
-                                 !
-/tmp/tmpqg8ylgq3.swift:12:18: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i] = l[i].min(l[i - 1])
-                 ^
-/tmp/tmpqg8ylgq3.swift:12:25: error: missing argument label 'by:' in call
-        l[i] = l[i].min(l[i - 1])
-                        ^
-                        by: 
-/tmp/tmpqg8ylgq3.swift:12:26: error: cannot convert value of type 'Int' to expected argument type '(Int, Int) throws -> Bool'
-        l[i] = l[i].min(l[i - 1])
-                         ^
-/tmp/tmpqg8ylgq3.swift:13:25: error: value of optional type 'Int?' must be unwrapped to a value of type 'Int'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-/tmp/tmpqg8ylgq3.swift:13:25: note: coalesce using '??' to provide a default when the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                      ?? <#default value#>
-/tmp/tmpqg8ylgq3.swift:13:25: note: force-unwrap using '!' to abort execution if the optional value contains 'nil'
-        l[i - 1] = l[i].max(l[i - 1])
-                        ^
-                                     !
-/tmp/tmpqg8ylgq3.swift:13:22: error: cannot convert value of type 'Int' to expected argument type 'Range<Int>'
-        l[i - 1] = l[i].max(l[i - 1])
-                     ^
-/tmp/tmpqg8ylgq3.swift:13:29: error: missing argument label 'by:' in call
-        l[i - 1] = l[i].max(l[i - 1])
-                    
+/tmp/tmpbun7pek6.swift:11:28: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                           ^
+                           n: 
+/tmp/tmpbun7pek6.swift:11:53: error: missing argument label 'n:' in call
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
+                                                    ^
+                                                    n: 
+
 */
 /* stdout = 
 
 */
 
 
-/// This function takes an array l and returns an array l' such that
-/// l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-/// to the values of the corresponding indicies of l, but sorted.
-/// >>> sort_third(l: [1, 2, 3])
-/// [1, 2, 3]
-/// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
-/// [2, 6, 3, 4, 8, 9, 5]
-func sort_third(l: [Int]) -> [Int] {
-    var l = l
-    for i in stride(from: 2, to: l.count, by: 3) {
-        l[i] = l[i].min(l[i - 1])
-        l[i - 1] = l[i].max(l[i - 1])
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
     }
-    return l
+    if n == 2 {
+        return 4
+    }
+    return starts_one_ends(n - 1) + starts_one_ends(n - 2)
 }
 
 
@@ -6188,10 +6125,73 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5])
-assert(sort_third(l: [5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5])
-assert(sort_third(l: [5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5])
-assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_66_digitSum, completion 1 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfotxq4_v.swift:19:35: error: missing argument label 'into:' in call
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+                                  ^
+                                   into: 
+/tmp/tmpfotxq4_v.swift:19:29: error: cannot convert return expression of type '(Int, _) -> Int' to return type 'Int'
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+           ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Task
+/// Write a function that takes a string as input and returns the sum of the upper characters only'
+/// ASCII codes.
+/// Examples:
+/// >>> digitSum(s: "")
+/// 0
+/// >>> digitSum(s: "abAB")
+/// 131
+/// >>> digitSum(s: "abcCd")
+/// 67
+/// >>> digitSum(s: "helloE")
+/// 69
+/// >>> digitSum(s: "woArBld")
+/// 131
+/// >>> digitSum(s: "aAaaaXa")
+/// 153
+func digitSum(s: String) -> Int {
+    return s.unicodeScalars.reduce(0) { $0 + ($1.isASCII && $1.isUppercase ? $1.value : 0) }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(digitSum(s: "") == 0)
+assert(digitSum(s: "abAB") == 131)
+assert(digitSum(s: "abcCd") == 67)
+assert(digitSum(s: "helloE") == 69)
+assert(digitSum(s: "woArBld") == 131)
+assert(digitSum(s: "aAaaaXa") == 153)
+assert(digitSum(s: " How are yOu?") == 151)
+assert(digitSum(s: "You arE Very Smart") == 327)
 
 
 
