@@ -188,9 +188,82 @@ There are also smaller elements to `Translator` (stop tokens, file_ext, etc.)
 that you will need to populate accordingly. 
 
 If you've successfully gotten to this point: great, you're done and can move 
-on to `eval_foo` and testing. If you wanted to add a statically typed benchmark, 
-also you still have some work to do - Read on!
+on to `eval_foo` and testing. If you wanted to add a statically typed 
+benchmark - Read on!
 
-#### Dealing with static typing!
+#### What about statically typed languages?
+
+Statically typed translations are notably more challenging to implement than the 
+Perl example above. Rather than walk you through the steps directly, we provide a 
+well-documented version of `humaneval_to_ts.py` for TypeScript as an example. Feel free
+to also consult translations for other languages in the benchmark, although your 
+mileage may vary. 
 
 ### Creating eval_foo
+
+Now that you're done converting Python to your language of choice, we need 
+to define how to evaluate the generated programs. As a reminder, one of the 
+contributions of this benchmark suite is the ability to evalute the generated
+code and classify it as working or not working. Let's continue with 
+the idea that we are adding Perl as a new language to our dataset.
+
+In `eval_pl.py` we are going to define a function, `eval_script`, with the 
+following signature and imports:
+```
+from pathlib import Path
+from safe_subprocess import run
+
+def eval_script(path: Path):
+```
+
+In the body of `eval_script` you are going to want to call `run` with the 
+requisite arguments (see it's documentation and your architecture). For our 
+example, we have the following call to `run` for Perl:
+```
+r = run(["perl", path])
+```
+
+You then want to determine how to handle what gets assigned to `r`. If you 
+look around the eval scripts we provide, there are multiple different ways to
+handle program success or failure. Notably, many of the statically typed errors
+handle compilation and runtime errors differently. We recommend, at minimum,
+handling success (typically exit code 0), timeouts, syntax errors, 
+and exceptions as four subclasses of results. We do this for Perl as follows:
+
+```
+if r.timeout:
+        status = "Timeout"
+    elif r.exit_code != 0:
+        status = "Exception"
+    elif "ERROR" in r.stdout or "ERROR" in r.stderr:
+        status = "Exception"
+    else:
+        status = "OK"
+```
+
+The last step is to return a dictionary of the form below - the scripts above 
+use this format to calculate pass@$k$ metrics, so we recommend not deviating 
+from this format:
+
+```
+return {
+        "status": status,
+        "exit_code": r.exit_code,
+        "stdout": r.stdout,
+        "stderr": r.stderr,
+    }
+```
+
+There is one final step to do if you want to now run the completion
+tutorial above for your brand new language. Open `containerized_eval.py` and 
+add links to your new language in two places:
+
+1. Add your `eval_pl` script to `containerized_eval.py` as an import statement
+in the preamble
+2. Add your language as a key in the `EVALUATORS` dictionary. There are many 
+examples available for you to look at, but the key should (likely) be the 
+file extension (i.e. `pl`) and the value should be a tuple of the form
+(eval_script function, file extension).
+
+That's it, you're done! Enjoy learning about how NL2Code models work on your 
+language of choice and we hope you found this tutorial helpful.
