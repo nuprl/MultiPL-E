@@ -323,12 +323,10 @@ class Translator:
     
     def gen_optional_type(self, types):
         '''Generate C++ std::optional<T>'''
-        print(types)
         return self.optional_type + "<%s>"%types
 
     def gen_optional(self, types, elem):
         '''Generate C++ std::option<T>()'''
-        print(295, types)
         return self.gen_optional_type(types) + "(" + elem + ")"
 
     def gen_tuple(self, t: List[Tuple[str, ast.Expr]]) -> Tuple[str, ast.Tuple]:
