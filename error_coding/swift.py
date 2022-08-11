@@ -90,9 +90,24 @@ def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str) -> boo
     ]
     return any(m in stderr for m in bad_syntax_markers)
 
+def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    unavailable_markers = [
+        "error: 'characters' is unavailable: Please use String directly"
+    ]
+
+    return any(m in stderr for m in unavailable_markers)
+
+
 def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
     return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr
 
+MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
+def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None
+
+REDECLARED_VAR_RE = re.compile(r"error: invalid redeclaration of .*")
+def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
+    return REDECLARED_VAR_RE.search(stderr) is not None
 
 NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
 def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str) -> bool:
@@ -132,14 +147,23 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
     ('CompileError-InvalidSyntax', ('Invalid syntax in the completion', 
         f_and(compile_error_category, invalid_syntax)
     )),
+    ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift.', 
+        f_and(compile_error_category, use_of_deprecated_unavailable_things)
+    )),
     ('CompileError-SubscriptStringWithInt', ('Swift does not allow you to subscript a string using an Int', 
         f_and(compile_error_category, subscript_string_with_int)
+    )),
+    ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
+        f_and(compile_error_category, missing_argument_label)
     )),
     ('CompileError-NonExistentMethod', ('An call was made to a non-existent method', 
         f_and(compile_error_category, nonexistent_method)
     )),
     ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function', 
         f_and(compile_error_category, nonexistent_var)
+    )),
+    ('CompileError-RedeclarationOfVariable', ('A variable was re-declared', 
+        f_and(compile_error_category, redeclared_var)
     )),
     ('CompileError-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
         f_and(compile_error_category, should_have_unwrapped_optional)
@@ -162,14 +186,17 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str],
             f_not(f_or(
                 linker_error,
                 invalid_syntax,
+                use_of_deprecated_unavailable_things,
                 subscript_string_with_int,
+                missing_argument_label,
                 nonexistent_method,
                 nonexistent_var,
+                redeclared_var,
                 should_have_unwrapped_optional,
                 return_type_error,
                 argument_type_error,
                 closure_result_type_error,
-                branch_type_error
+                branch_type_error,
             ))
         )
     )),
