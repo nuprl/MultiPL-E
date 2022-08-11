@@ -109,7 +109,7 @@ only two files required for adding a new language to the benchmark!
 
 Most of the work (recursive substitution, actually generating the strings, 
 etc.) takes place in the `generic_evaluator.py` script. This should work for 
-any language that you throw at it. 
+any language that you throw at it, although your mileage may vary.
 
 ### Creating humaneval_to_
 
@@ -118,13 +118,13 @@ you want to add it. In a new file `humaneval_to_perl.py` you will need to
 define a class called `Translator`. `Translator` contains numerous methods -
 the interface for a generic `Translator` class is provided in `need_to_make_it.py`. 
 
-There are three types of methods in `Translator`: (1) methods that handle 
+There are three types of methods for `Translator`: (1) methods that handle 
 translating the prompt, (2) methods that handle translating the unit tests, and
 (3) methods that handle the value-to-value translation. 
 
 First, let's handle converting the Python prompt to a Perl prompt. This is 
 done by the `translate_prompt` method. `translate_prompt` needs to return 
-a string (we suggest a formatted Python string for ease of formatting) that 
+a string (we definitely suggest using a formatted Python string here) that 
 contains the Perl prompt and then the Perl function signature. We suggest 
 accumulating the prompt into one string as follows: 
 ```
@@ -132,18 +132,20 @@ perl_description = "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.str
 ```
 where `"#"` are Perl single-line comments. `DOCSTRING_LINESTART_RE` identifies the 
 first line in the prompt using a regex and then `description` is a string representing 
-the rest of the prompt. You should only really need to connect them together with 
-the comment structure of choice.
+the rest of the prompt. This process should be pretty simple - just connect them together with 
+your comment structure of choice.
 
 The argument `name` to `translate_prompt` takes care of the function name, you 
 just need to format the function arguments (argument `args`) and delimiters to complete 
 the prompt translation.
 
-Second, let's consider the three methods which help translate unit tests:
+Now let's consider the three methods which help translate unit tests:
 `test_suite_prefix_lines`, `test_suite_suffix_lines`, and `deep_equality`. 
 The prefix and suffix methods return a "wrapper" around the set of generated unit 
 tests. In most languages, as is the case in Perl, the prefix defines a function/class 
-for testing and the suffix calls that function. The wrapper in Perl we use is:
+for testing and the suffix calls that function. This may include calls to your testing library 
+of choice (please look at existing `humaneval_to` files for examples!). 
+The wrapper in Perl we use is:
 ```
 sub testhumaneval {
    my $candidate = entry_point;
@@ -154,7 +156,7 @@ testhumaneval();
 
 Note the argument `entry_point` to `test_suite_prefix_lines`: this is the name 
 of the function for each benchmark. In most languages, we either assign that to 
-a variable `candidate` (as done in the oriignal HumanEval benchmark) or call 
+a variable `candidate` (as done in the original HumanEval benchmark) or call 
 `entry_point` directly. 
 
 The final unit test function is `deep_equality`, which is where you define how 
@@ -167,25 +169,27 @@ Third, let's tackle the value-to-value translation methods. All of them take
 a Python value (or some representation of one) as an argument and return a string 
 representing that value's equivalent in Perl.
 
-For instance, `gen_dict` defines what dictionaries in Python should may to in
-Perl. Our implementation is below; the only main representation difference is 
-the use of `=>` instead of `:` to differentiate keys and values.
+For instance, `gen_dict` defines what dictionaries in Python should map to in
+Perl. Our implementation is below; the only work we need to do is use of `=>` i
+nstead of `:` to differentiate keys and values in Perl.
 
 ```
  def gen_dict(self, keys: List[str], values: List[str]) -> str:
         return "{" + ", ".join(f"{k} => {v}" for k, v in zip(keys, values)) + "}"
 ```
 
-This step should be quite straightforward for each of the methods - as we mention
-in the paper, the ease of value-to-value mapping is one of the key aspects of 
+This step should be quite straightforward for each value and its associated 
+method. When there is choice, we used our language knowledge or consulted 
+the style guides from the language communities (see the paper Appendix). As we 
+mention in the paper, the ease of value-to-value mapping is one of the key aspects of 
 this approach. 
 
 There are also smaller elements to `Translator` (stop tokens, file_ext, etc.)
 that you will need to populate accordingly. 
 
 If you've successfully gotten to this point: great, you're done and can move 
-on to `eval_foo` and testing. Alas, if you wanted to add a statically typed benchmark, 
-you still have some work to do.
+on to `eval_foo` and testing. If you wanted to add a statically typed benchmark, 
+also you still have some work to do - Read on!
 
 #### Dealing with static typing!
 
