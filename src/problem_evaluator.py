@@ -128,19 +128,21 @@ def evaluate_problems(target_dir: Path, max_workers: int):
 def main():
     args = argparse.ArgumentParser()
     args.add_argument(
+        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
+    )
+    args.add_argument(
         "--job-file", type=str, help="Where the files come from",
     )
     args.add_argument(
         "--job-file-line", type=int, help="The line on the file")
-    args.add_argument("--file", type=str, help="A single file to run on")
-    args.add_argument(
-        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
-    )
+    args.add_argument("--files", nargs="+", help="A list of files to run on")
+    
 
     args = args.parse_args()
 
-    if args.file:
-        evaluate_problem(Path(args.file), args.max_workers)
+    if args.files:
+        for file in tqdm(files):
+            evaluate_problem(Path(file), args.max_workers)
     elif args.job_file and args.job_file_line is not None:
         with open(args.job_file) as f:
             # Skip the first two space, separated columns, which identify the language
