@@ -41,6 +41,20 @@ struct CheckPromptCompleteness {
     min_prompts_per_problem: usize,
 }
 
+#[derive(clap::Args)]
+struct SinglePerProblemPassK {
+    #[clap(short, long)]
+    language: String,
+    #[clap(short, long)]
+    model: String,
+    #[clap(short, long)]
+    temperature: String,
+    #[clap(short, long)]
+    variation: String,
+    #[clap(short, long)]
+    directory: String
+}
+
 #[derive(clap::Parser)]
 enum Command {
     RunCompletion(RunCompletion),
@@ -50,6 +64,7 @@ enum Command {
     SummarizeCompleteness,
     BuildJobList,
     PassKAggregates,
+    SinglePerProblemPassK(SinglePerProblemPassK),
     PerProblemPassK,
 }
 
@@ -79,12 +94,8 @@ fn estimate_pass_k(n: i32, c: i32, k: i32) -> f64 {
     return 1.0 - result;
 }
 
-// print("lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
-// (Lang, Problem, Model, Variation)
-fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
-    let (lang, model, temp, variation) = config;
-    
-    let walker = WalkDir::new(format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation));
+fn per_problem_pass_k_with_dir(lang: &str, model: &str, temp: &str, variation: &str, path: &Path) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
+    let walker = WalkDir::new(path);
 
     let mut result = vec![];
 
@@ -118,9 +129,8 @@ fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'stati
     return Some(result);
 }
 
-fn all_per_problem_pass_k() {
-    let mut aggregates = HashMap::new();
-    let results = all_configurations().into_par_iter().filter_map(per_problem_pass_k).collect::<Vec<_>>();
+fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String, String, usize, f64, usize)>>) {
+    let mut aggregates = HashMap::new();    
     for result in results.into_iter() {
         for (lang, problem, model, variation, k, pass_k, n) in result.into_iter() {
             aggregates.entry((lang, problem, model, variation)).or_insert(vec![]).push((k, pass_k, n));
@@ -137,6 +147,28 @@ fn all_per_problem_pass_k() {
         };
         println!("{},{},{},{},{}", lang, problem, model, variation, pass_k_str);
     }
+}    
+
+fn single_per_problem_pass_k(args: SinglePerProblemPassK) {
+    let path = Path::new(&args.directory);
+    let results = vec![per_problem_pass_k_with_dir(&args.language, &args.model, &args.temperature, &args.variation, path).unwrap()];
+    aggregate_per_problem_pass_k_results(results);
+}
+
+
+// print("lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
+// (Lang, Problem, Model, Variation)
+fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
+    let (lang, model, temp, variation) = config;
+    let p = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
+    let dir = Path::new(&p);
+    return per_problem_pass_k_with_dir(lang, model, temp, variation, dir);
+}
+
+
+fn all_per_problem_pass_k() {
+    let results = all_configurations().into_par_iter().filter_map(per_problem_pass_k).collect::<Vec<_>>();
+    aggregate_per_problem_pass_k_results(results);
 }
 
 
@@ -508,5 +540,6 @@ fn main() -> () {
         Command::BuildJobList => build_job_list().expect("Failed to build job list"),
         Command::PassKAggregates => pass_k_aggregates(),
         Command::PerProblemPassK => all_per_problem_pass_k(),
+        Command::SinglePerProblemPassK(args) => single_per_problem_pass_k(args),
     }
 }
