@@ -151,10 +151,10 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError', ('Any compilation error occurred', 
         compile_error_category
     )),
-    ('CompileError-LinkerError', ('A weird linker error. Investigate?', 
+    ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?**', 
         f_and(compile_error_category, linker_error)
     )),
-    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion', 
+    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion. **A few cases could be caused by translation bug (reserved words in arguments)**', 
         f_and(compile_error_category, invalid_syntax)
     )),
     ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift.', 
@@ -169,10 +169,10 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
         f_and(compile_error_category, missing_argument_label)
     )),
-    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method', 
+    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method. **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
         f_and(compile_error_category, nonexistent_method)
     )),
-    ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function', 
+    ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function.  **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
         f_and(compile_error_category, nonexistent_var)
     )),
     ('CompileError-RedeclarationOfVariable', ('A variable was re-declared', 
