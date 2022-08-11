@@ -172,8 +172,8 @@ nstead of `:` to differentiate keys and values in Perl.
 
 This step should be quite straightforward for each value and its associated 
 method. When there is choice, we used our language knowledge or consulted 
-the style guides from the language communities (see the paper Appendix). As we 
-mention in the paper, the ease of value-to-value mapping is one of the key aspects of 
+the style guides from the language communities (see our paper's Appendix). As we 
+mention in our paper, the ease of value-to-value mapping is one of the key aspects of 
 this approach. 
 
 There are also smaller elements to `Translator` (stop tokens, file_ext, etc.)
@@ -193,10 +193,10 @@ mileage may vary.
 
 ### Creating eval_foo
 
-Now that you're done converting Python to your language of choice, we need 
+Now that you're done converting Python to your language of choice, you need 
 to define how to evaluate the generated programs. As a reminder, one of the 
 contributions of this benchmark suite is actually evaluating the generated
-code. Let's continue with the idea that we are adding Perl as a new language to our dataset.
+code. Let's continue with the idea that you are adding Perl as a new language to our dataset.
 
 In `eval_pl.py` you should define a function, `eval_script`, with the 
 following signature and imports:
