@@ -1,0 +1,110 @@
+name: HumanEval_129_minPath
+language: notypes.py
+prompt: "def minPath(grid, k):\n    \"\"\"\n    Given a grid with N rows and N columns\
+  \ (N >= 2) and a positive integer k, \n    each cell of the grid contains a value.\
+  \ Every integer in the range [1, N * N]\n    inclusive appears exactly once on the\
+  \ cells of the grid.\n\n    You have to find the minimum path of length k in the\
+  \ grid. You can start\n    from any cell, and in each step you can move to any of\
+  \ the neighbor cells,\n    in other words, you can go to cells which share an edge\
+  \ with you current\n    cell.\n    Please note that a path of length k means visiting\
+  \ exactly k cells (not\n    necessarily distinct).\n    You CANNOT go off the grid.\n\
+  \    A path A (of length k) is considered less than a path B (of length k) if\n\
+  \    after making the ordered lists of the values on the cells that A and B go\n\
+  \    through (let's call them lst_A and lst_B), lst_A is lexicographically less\n\
+  \    than lst_B, in other words, there exist an integer index i (1 <= i <= k)\n\
+  \    such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have\n    lst_A[j]\
+  \ = lst_B[j].\n    It is guaranteed that the answer is unique.\n    Return an ordered\
+  \ list of the values on the cells that the minimum path go through.\n\n    Examples:\
+  \    \n    >>> minPath([[1, 2, 3], [4, 5, 6], [7, 8, 9]], 3)\n    [1, 2, 1]\n\n\
+  \    >>> minPath([[5, 9, 3], [4, 1, 6], [7, 8, 2]], 1)\n    [1]\n    \"\"\"\n"
+tests: "def check(candidate):\n    assert candidate([[1, 2, 3], [4, 5, 6], [7, 8,\
+  \ 9]], 3) == [1, 2, 1]\n    assert candidate([[5, 9, 3], [4, 1, 6], [7, 8, 2]],\
+  \ 1) == [1]\n    assert candidate([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12],\
+  \ [13, 14, 15, 16]], 4) == [1, 2, 1, 2]\n    assert candidate([[6, 4, 13, 10], [5,\
+  \ 7, 12, 1], [3, 16, 11, 15], [8, 14, 9, 2]], 7) == [1, 10, 1, 10, 1, 10, 1]\n \
+  \   assert candidate([[8, 14, 9, 2], [6, 4, 13, 15], [5, 7, 1, 12], [3, 10, 11,\
+  \ 16]], 5) == [1, 7, 1, 7, 1]\n    assert candidate([[11, 8, 7, 2], [5, 16, 14,\
+  \ 4], [9, 3, 15, 6], [12, 13, 10, 1]], 9) == [1, 6, 1, 6, 1, 6, 1, 6, 1]\n    assert\
+  \ candidate([[12, 13, 10, 1], [9, 3, 15, 6], [5, 16, 14, 4], [11, 8, 7, 2]], 12)\
+  \ == [1, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 6]\n    assert candidate([[2, 7, 4], [3,\
+  \ 1, 5], [6, 8, 9]], 8) == [1, 3, 1, 3, 1, 3, 1, 3]\n    assert candidate([[6, 1,\
+  \ 5], [3, 8, 9], [2, 7, 4]], 8) == [1, 5, 1, 5, 1, 5, 1, 5]\n    assert candidate([[1,\
+  \ 2], [3, 4]], 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]\n    assert candidate([[1,\
+  \ 3], [3, 2]], 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3]\n\ndef test_check():\n    check(minPath)\n\
+  \ntest_check()\n"
+completions: ["    # The idea is to find the minimum path from each cell to every\
+    \ other cell\n    # and then find the minimum path of length k.\n    # The minimum\
+    \ path from cell (i, j) to cell (x, y) is the minimum path from\n    # cell (i,\
+    \ j) to cell (i, j + 1) + cell (i, j + 1) to cell (x, y).\n    # The minimum path\
+    \ from cell (i, j) to cell (i, j + 1) is the minimum of\n    # the minimum path\
+    \ from cell (i, j) to cell (i - 1, j) and the minimum path\n    # from cell (i,\
+    \ j) to cell (i, j - 1).\n    # We can use dynamic programming to solve this problem.\n\
+    \    # Let's define the minimum path from cell (i, j) to cell (x, y) as\n    #\
+    \ min_path[i][j][x][y].\n    # The base case is when x = i and y = j, in this\
+    \ case, min_path[i][j][i][j]\n    # is the value of cell (i, j).\n    # The recurrence\
+    \ relation is:\n    # min_path[i][j][x][y] = min(min_path[i][j][i][j + 1] + min_path[i][j\
+    \ + 1][x][y],\n    #                            min_path[i][j][i + 1][j] + min_path[i\
+    \ + 1][j][x][y])\n    # The time complexity is O(N^4).\n    # The space complexity\
+    \ is O(N^4).\n    n = len(grid)\n    min_path = [[[[0 for _ in range(n)] for _\
+    \ in range(n)] for _ in range(n)] for _ in range(n)]\n    for i in range(n):\n\
+    \        for j in range(n):\n            min_path[i][j][i][j] = grid[i][j]\n \
+    \   for i in range(n):\n        for j in range(n):\n            for x in range(i,\
+    \ n):\n                for y in range(j, n):\n                    if x == i and\
+    \ y == j:\n                        continue", "    n = len(grid)\n    if k ==\
+    \ 1:\n        return [min(min(grid))]\n    if k == n * n:\n        return [grid[i][j]\
+    \ for i in range(n) for j in range(n)]\n    if k < n:\n        return [grid[i][k\
+    \ - 1] for i in range(n)]\n    if k % n == 0:\n        return [grid[i][n - 1]\
+    \ for i in range(n)]\n    if k < 2 * n:\n        return [grid[i][k - i - 1] for\
+    \ i in range(k - n)]\n    if k % n == 1:\n        return [grid[i][0] for i in\
+    \ range(k - n, n)]\n    return [grid[i][k - i - 1] for i in range(k - n, n)]\n",
+  "    # TODO: Implement this function\n    pass\n", "    # TODO: Implement me\n \
+    \   return []\n\n", "    # TODO: implement this function\n    pass\n", "    #\
+    \ TODO: Implement me\n    return []\n", "    # Get the number of rows and columns\
+    \ in the grid.\n    n = len(grid)\n    # Create a 2D array to store the minimum\
+    \ path for each cell.\n    min_path = [[None for _ in range(n)] for _ in range(n)]\n\
+    \    # Create a 2D array to store the previous cell in the minimum path for each\
+    \ cell.\n    prev = [[None for _ in range(n)] for _ in range(n)]\n    # Create\
+    \ a 2D array to store the minimum path length for each cell.\n    min_path_len\
+    \ = [[None for _ in range(n)] for _ in range(n)]\n    # Create a 2D array to store\
+    \ the minimum path value for each cell.\n    min_path_val = [[None for _ in range(n)]\
+    \ for _ in range(n)]\n    # Create a 2D array to store the visited cells.\n  \
+    \  visited = [[False for _ in range(n)] for _ in range(n)]\n    # Create a priority\
+    \ queue to store the cells.\n    pq = PriorityQueue()\n    # Create a list to\
+    \ store the minimum path.\n    min_path_list = []\n    # Create a list to store\
+    \ the minimum path value.\n    min_path_val_list = []\n    # Create a list to\
+    \ store the minimum path length.\n    min_path_len_list = []\n    # Create a list\
+    \ to store the minimum path value.\n    min_path_val_list = []\n    # Create a\
+    \ list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path value.\n    min_path_val_list = []\n    # Create\
+    \ a list to store the minimum path", "    # TODO: Implement this function\n  \
+    \  pass\n\n", "    # TODO: Write your code here\n    pass\n\n", "    # TODO: Implement\
+    \ this function\n    pass\n\n", "    # TODO: implement this function\n    pass\n",
+  "    n = len(grid)\n    m = len(grid[0])\n    dp = [[[float('inf')] * (k + 1) for\
+    \ _ in range(m)] for _ in range(n)]\n    for i in range(n):\n        for j in\
+    \ range(m):\n            dp[i][j][1] = grid[i][j]\n    for l in range(2, k + 1):\n\
+    \        for i in range(n):\n            for j in range(m):\n                for\
+    \ x, y in [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]:\n                \
+    \    if 0 <= x < n and 0 <= y < m:\n                        dp[i][j][l] = min(dp[i][j][l],\
+    \ dp[x][y][l - 1])\n    res = float('inf')\n    for i in range(n):\n        for\
+    \ j in range(m):\n            res = min(res, dp[i][j][k])\n    return res\n\n",
+  "    # TODO: implement this function\n    pass\n", "    # BFS\n    # Time: O(n^2)\n\
+    \    # Space: O(n^2)\n    n = len(grid)\n    visited = [[False] * n for _ in range(n)]\n\
+    \    q = deque([(0, 0, [grid[0][0]])])\n    visited[0][0] = True\n    while q:\n\
+    \        i, j, path = q.popleft()\n        if len(path) == k:\n            return\
+    \ path\n        for x, y in [(i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)]:\n\
+    \            if 0 <= x < n and 0 <= y < n and not visited[x][y]:\n           \
+    \     visited[x][y] = True\n                q.append((x, y, path + [grid[x][y]]))\n\
+    \    return []\n\n", "    # Write your code here\n    pass\n\n", "    # TODO:\
+    \ Implement me\n    pass\n", "    pass\n", "    # TODO: Implement this function\n\
+    \    pass\n\n", "    # TODO: Implement me\n    return []\n", "    # TODO: Implement\
+    \ this function\n    pass\n"]
+stop_tokens:
+- "\ndef"
+- "\n#"
+- "\nif"
+- "\nclass"
