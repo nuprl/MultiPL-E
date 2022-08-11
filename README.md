@@ -3,7 +3,7 @@
 
 
 Language   | Extension | Requirements
------------+-----------+----------
+-----------+-----------+------------------------------------
 Python     | py        | Conda
 JavaScript | js        | Conda
 TypeScript | ts        | Conda
@@ -29,3 +29,19 @@ Some notes:
   its own JDK.
 - The DMD on conda-forge is presently broken. Spack works.
 
+
+# Fetching Completions
+
+```
+python3 gather_completions.py --dir WORK_DIR --temperature 0.2 --max-samples 28 --model davinci --limit-completions 20
+```
+
+# Running Test Cases
+
+
+```
+python3 problem_evaluator.py  --max-workers <N> --dir WORK_DIR
+```
+
+
+You probably 

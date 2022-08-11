@@ -128,19 +128,25 @@ def evaluate_problems(target_dir: Path, max_workers: int):
 def main():
     args = argparse.ArgumentParser()
     args.add_argument(
+        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
+    )
+    args.add_argument(
         "--job-file", type=str, help="Where the files come from",
     )
     args.add_argument(
         "--job-file-line", type=int, help="The line on the file")
-    args.add_argument("--file", type=str, help="A single file to run on")
-    args.add_argument(
-        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
-    )
+
+    args.add_argument("--file", type=str, help="The file to evaluate")
+    args.add_argument("--dir", type=str, help="The directory to evaluate")
 
     args = args.parse_args()
 
     if args.file:
         evaluate_problem(Path(args.file), args.max_workers)
+    elif args.dir:
+        files = [ p for p in Path(args.dir).glob("*.yaml") if not p.name.endswith(".results.yaml") ]
+        for file in tqdm(files):
+            evaluate_problem(file, args.max_workers)
     elif args.job_file and args.job_file_line is not None:
         with open(args.job_file) as f:
             # Skip the first two space, separated columns, which identify the language
@@ -150,7 +156,7 @@ def main():
             print(f"Processing {f}")
             evaluate_problem(Path(f), args.max_workers)    
     else:
-        print("Specify either --file or --job-file and --job-file-line")
+        print("Specify either --file, --dir, or both --job-file and --job-file-line")
         exit(1)
 
 

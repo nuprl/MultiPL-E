@@ -332,8 +332,7 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
                         if num_incomplete == 0 {
                             continue;
                         }
-                        // python3 completions_codex.py --dir ../experiments/{lang}-{model}-{temp}-{variation} --temperature {temp} --model={model} --max-samples 28"
-                        match cmd!("python3", "completions_codex.py", "--dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
+                        match cmd!("python3", "gather_completions.py", "--dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
                         .dir("../src").run() {
                             Ok(_) => {
                                 println!("Generated {} prompts for {}", num_incomplete, experiment_dir);

@@ -13,7 +13,7 @@ def estimator(n: int, c: int, k: int) -> float:
 
 def for_file(path):
     with open(path) as f:
-        data = yaml.load(f, Loader=yaml.Loader)
+        data = yaml.load(f, Loader=yaml.CLoader)
     n = len(data["results"])
     c = len([True for r in data["results"] if r["status"] == "OK" and r["exit_code"] == 0])
     return np.array([estimator(n, c, 1), estimator(n, c, 10), estimator(n, c, 100)])
