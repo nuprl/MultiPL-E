@@ -38,7 +38,7 @@ all_pass <- rbind(pass_at_1,rbind(pass_at_100,pass_at_10))
 ```
 
 ```{r}
-per_problem <- read_csv("../results/per_problem_pass.csv",col_names = c("PL","PROBLEM","MODEL","EXPT","rate1","n1","rate10","n10","rate100"))
+per_problem <- read_csv("../results/per_problem_all.csv",col_names = c("PL","PROBLEM","MODEL","EXPT","rate1","n1","rate10","n10","rate100"))
 per_problem <- merge(per_problem,frequency_map)
 per_problem$rate1 <- as.numeric(per_problem$rate1)
 per_problem$rate10 <- as.numeric(per_problem$rate10)
@@ -49,18 +49,12 @@ per_problem$PROB <- sub('([^_]*_[^_]*)_\\w+', '\\1', per_problem$PROBLEM)
 ```
 
 ```{r}
-problem_class <- read_csv("../analysis/problem_classification.csv")
-problem_class <- subset(problem_class,select=-c(Original,Notes))
+problem_class <- read_csv("../analysis/type_classification.csv")
+#problem_class <- subset(problem_class,select=-c(Original,Notes))
 ```
 
 ```{r}
 per_problem_new <- merge(per_problem,problem_class, all=TRUE)
-per_problem_new <- per_problem_new %>% mutate(class = ifelse(List+Array+Tuple+Dictionary+Bool>1,'multiple',
-                                                             ifelse(List==1|Array==1,"list",
-                                                                    ifelse(Tuple==1,"tuple",
-                                                                           ifelse(Dictionary==1,'dictionary',
-                                                                                  ifelse(Bool==1,"bool",
-                                                                                         'basic'))))))
 ```
 
 ```{r}
@@ -115,7 +109,6 @@ Plot pass at 1 by model and experiment, Python-only
 ```{r}
 ggplot(subset(pass_at_1,PL=="py"),aes(x=EXPT,y=RES,fill=MODEL)) + geom_col(position="dodge")
 ```
-
 
 
 Plot all passes, by model and language for all experiments
@@ -182,16 +175,26 @@ ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0
 ```{r}
 pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
 
+per_problem_new <- per_problem_new %>% mutate(None = ifelse(List+Bool+Tuple+Dictionary==0,1,0))
 per_problem_new$PL <- factor(per_problem_new$PL,levels = pl_order)
-class_labs <- c(`basic` = "None", `bool` = "Booleans", `dictionary` = "Dictionaries", `list` = "Lists or Arrays",`multiple` = "Multiple", `tuple` = "Tuples")
+class_labs <- c(`Bool` = "Booleans", `Dictionary` = "Dictionaries", `List` = "Lists",`Tuple` = "Tuples",`None` = "Basic Types Only")
+per_problem_new$PL <- factor(per_problem_new$PL,levels = pl_order)
+```
 
-mean.by.language.type <- per_problem_new %>%
-  group_by(PL,class) %>% 
-    summarize( meanRate1 = mean(rate1))
+```{r}
+f <- per_problem_new %>% mutate(None = ifelse(Bool+Tuple+Dictionary+List==0,1,0))
+by.feature.long <-  f %>% 
+  pivot_longer(List:None, names_repair = 'unique') 
 
-mean.by.language.type$PL <- factor(mean.by.language.type$PL,levels = pl_order)
+by.feature <- by.feature.long %>% filter(value==1) %>%
+  group_by(PL,name) %>% 
+  summarise(means = mean(rate1))
 
-ggplot(data=na.omit(mean.by.language.type), aes(x=PL,y=meanRate1,fill=class,color=PL=="py")) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~class, nrow = 6,labeller=as_labeller(class_labs)) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
+feature_order <- c("Bool", "Dictionary", "List", "Tuple","None")
+by.feature$name <- factor(by.feature$name,levels = feature_order)
+```
+```{r}
+ggplot(data=by.feature, aes(x=PL,y=means,color=PL=="py",fill=name)) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~name, nrow = 6,labeller=as_labeller(class_labs)) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
 ggsave("reworded_davinci_lang_features_pass1.pdf",height=3,width=12)
 ```
 
@@ -243,6 +246,15 @@ summary(codex.freq.model)
 
 ```{r}
 codex.freq.model <- glmer(rate1 ~ FREQ*TYPES + (1+FREQ*TYPES||PL) + (1+FREQ*TYPES||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codex.freq.model)
+```
+
+### Language features effects
+
+```{r}
+codex.freq.model <- glmer(rate1 ~ (List+Bool+Tuple+Dictionary)*FREQ*TYPES + (1+(List+Bool+Tuple+Dictionary)*FREQ*TYPES||PL) + (1+(List+Bool+Tuple+Dictionary)*FREQ*TYPES||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
 ```
 ```{r}
 summary(codex.freq.model)
