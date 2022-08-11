@@ -40,7 +40,7 @@ python3 gather_completions.py --dir WORK_DIR --temperature 0.2 --max-samples 28 
 
 
 ```
-python3 problem_evaluator.py  --max-workers <N> --files $(find WORK_DIR -name "*.yaml" -not -name "*.results.yaml"
+python3 problem_evaluator.py  --max-workers <N> --dir WORK_DIR
 ```
 
 
