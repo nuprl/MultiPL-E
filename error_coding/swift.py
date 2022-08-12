@@ -103,10 +103,6 @@ def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str,
 def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr
 
-MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
-def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None
-
 REDECLARED_VAR_RE = re.compile(r"error: invalid redeclaration of .*")
 def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return REDECLARED_VAR_RE.search(stderr) is not None
@@ -122,6 +118,9 @@ def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, compl
 SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE = re.compile(r"error: value of optional type .* must be unwrapped to a value of type .*")
 def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None
+
+def non_optional_unwrapped(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return "error: cannot force unwrap value of non-optional type" in stderr
 
 RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert return expression of type .* to return type .*")
 def return_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
@@ -148,6 +147,20 @@ def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, comp
     ]
     return any(m in stderr for m in markers)
 
+MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
+def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None
+
+EXTRANEOUS_ARGUMENT_LABEL_RES = [
+    re.compile(r"error: extraneous argument label .* in call"),
+    re.compile(r"error: extraneous argument labels .* in call")
+]
+def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return any(the_re.search(stderr) is not None for the_re in EXTRANEOUS_ARGUMENT_LABEL_RES)
+
+def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return "error: incorrect argument label in call" in stderr
+
 RAN_OUT_VAR_RE = re.compile(r"(var|let) \S+$")
 def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return RAN_OUT_VAR_RE.search(completion) is not None
@@ -156,6 +169,9 @@ def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, com
 CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], bool]]] = OrderedDict([
     ('CompileError', ('Any compilation error occurred', 
         compile_error_category
+    )),
+    ('CompileError-RanOutOfTokens', ('Ran out of tokens. This category may only be an approximation, hard to tell in general.', 
+        f_and(compile_error_category, ran_out_of_tokens)
     )),
     ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?**', 
         f_and(compile_error_category, linker_error)
@@ -172,9 +188,6 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-SubscriptStringWithInt', ('Swift does not allow you to subscript a string using an Int', 
         f_and(compile_error_category, subscript_string_with_int)
     )),
-    ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
-        f_and(compile_error_category, missing_argument_label)
-    )),
     ('CompileError-NonExistentMethod', ('An call was made to a non-existent method. **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
         f_and(compile_error_category, nonexistent_method)
     )),
@@ -186,6 +199,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     )),
     ('CompileError-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
         f_and(compile_error_category, should_have_unwrapped_optional)
+    )),
+    ('CompileError-UnwrappedNonOptional', ('A non-optional value was unwrapped.', 
+        f_and(compile_error_category, non_optional_unwrapped)
     )),
     ('CompileError-ReturnTypeError', ('The type of the return value does not match the declared return type of the function.', 
         f_and(compile_error_category, return_type_error)
@@ -205,30 +221,39 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
         f_and(compile_error_category, mutate_immutable)
     )),
-    ('CompileError-RanOutOfTokens', ('Ran out of tokens. This category may only be an approximation, hard to tell in general.', 
-        f_and(compile_error_category, ran_out_of_tokens)
+    ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
+        f_and(compile_error_category, missing_argument_label)
+    )),
+    ('CompileError-ExtraneousArgumentLabel', ('An unnecessary argument label(s) is in a function call (possibly caused due to breaking changes in the version of Swift)', 
+        f_and(compile_error_category, extraneous_argument_label)
+    )),
+    ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift)', 
+        f_and(compile_error_category, incorrect_argument_label)
     )),
     ('CompileError-Else', ('Other compilation errors', 
         f_and(
             compile_error_category, 
             f_not(f_or(
+                ran_out_of_tokens,
                 linker_error,
                 invalid_syntax,
                 use_of_deprecated_unavailable_things,
                 use_of_mod_with_float,
                 subscript_string_with_int,
-                missing_argument_label,
                 nonexistent_method,
                 nonexistent_var,
                 redeclared_var,
                 should_have_unwrapped_optional,
+                non_optional_unwrapped,
                 return_type_error,
                 argument_type_error,
                 closure_result_type_error,
                 unknown_type_error_in_call,
                 branch_type_error,
                 mutate_immutable,
-                ran_out_of_tokens,
+                missing_argument_label,
+                extraneous_argument_label,
+                incorrect_argument_label,
             ))
         )
     )),
