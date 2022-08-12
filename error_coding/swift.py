@@ -130,6 +130,10 @@ NONEXISTENT_VAR_RE = re.compile(r"error: cannot find .* in scope")
 def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return NONEXISTENT_VAR_RE.search(stderr) is not None, None
 
+USE_BEFORE_DECL_RE = re.compile(r"error: use of local variable .* before its declaration")
+def use_before_decl(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return USE_BEFORE_DECL_RE.search(stderr) is not None, None
+
 SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE = re.compile(r"error: value of optional type .* must be unwrapped to a value of type .*")
 def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None, None
@@ -143,6 +147,9 @@ closure_result_type_error = match_type_error_re(r"error: cannot convert value of
 branch_type_error = match_type_error_re(r"error: result values in '\? :' expression have mismatching types (.*) and (.*)")
 bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
 pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
+
+def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: cannot assign value of type '[Int]' to subscript of type 'ArraySlice<Int>'" in stderr, None
 
 def calling_non_function_type(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: cannot call value of non-function type" in stderr, None
@@ -214,6 +221,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function.  **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
         f_and(compile_error_category, nonexistent_var)
     )),
+    ('CompileError-UseBeforeDecl', ('A local variable is used before its declaration.', 
+        f_and(compile_error_category, use_before_decl)
+    )),
     ('CompileError-RedeclarationOfVariable', ('A variable was re-declared', 
         f_and(compile_error_category, redeclared_var)
     )),
@@ -240,6 +250,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     )),
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
+    )),
+    ('CompileError-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong.', 
+        f_and(compile_error_category, weird_subscript_type_error)
     )),
     ('CompileError-CallingNonFunctionType', ('The code calls a non-function type', 
         f_and(compile_error_category, calling_non_function_type)
@@ -271,6 +284,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 subscript_string_with_int,
                 nonexistent_method,
                 nonexistent_var,
+                use_before_decl,
                 redeclared_var,
                 should_have_unwrapped_optional,
                 non_optional_unwrapped,
@@ -280,6 +294,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 branch_type_error,
                 bin_op_type_error,
                 pattern_type_error,
+                weird_subscript_type_error,
                 calling_non_function_type,
                 unknown_type_error_in_call,
                 mutate_immutable,
