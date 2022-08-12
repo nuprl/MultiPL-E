@@ -117,6 +117,7 @@ class Translator:
     def __init__(self):
         self.num = 0
         self.entry_point = ""
+        self.skip_annotations = False
 
     def file_ext(self):
         return "sh"
@@ -125,8 +126,11 @@ class Translator:
         bash_description = (
             "#!/bin/bash\n# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
-        annotations = [type_to_comment(arg.annotation, i + 1) for i, arg in enumerate(args)]
-        annotations = "#\n" + "".join(annotations) if len(annotations) > 0 else ""
+        if self.skip_annotations == False:
+            annotations = [type_to_comment(arg.annotation, i + 1) for i, arg in enumerate(args)]
+            annotations = "#\n" + "".join(annotations) if len(annotations) > 0 else ""
+        else:
+            annotations = ""
         return f"{bash_description}{annotations}{name}() {{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
