@@ -27,7 +27,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    # "Racket": "??", # TODO(yt)
+    "Racket": ["list index too large"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -39,7 +39,7 @@ RUNTIME = [
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
-    # "Racket": [""] # TODO(yt)
+    "Racket": ["division by zero"]
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
@@ -86,12 +86,12 @@ STATIC = [
       "CompileError-TypeMismatch-StringIndices",
       "CompileError-TypeMismatch-StringsArentCharArrays"
     ],
-    # "Racket": [], # TODO(yt)
+    "Racket": [], # YT: Surprisingly it seems that there is no such cases for Racket.
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
-    "Racket": ["let"], 
+    "Racket": ["let: duplicate identifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
   }
 ]
@@ -139,13 +139,13 @@ LANGUAGE = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-    # "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char", # TODO(yt)
+    "Racket": ["Escape sequence error in Racket (\\w) ", "treat and as char #\\and"],
     "Python": ["EOFError"]
   },
   {
     "Theme": "Niche Language",
-    # "Racket": "if-else extra arguments" # TODO(yt)
-  },
+    "Racket": ["if-else extra arguments", "all unclassified errors"] 
+  }
 ]
 
 MODEL = [
@@ -153,7 +153,7 @@ MODEL = [
     "Theme": "OutOfTokens",
     "C#": ["SyntaxError"],
     "Python" : ["SyntaxError"],
-    # "Racket": ..., # TODO(yt)
+    "Racket": ["bracket or brace not matched", "double-quotes not matched"],
     "Swift": [
       "CompileError-RanOutOfTokens", 
       "CompileError-CompilerErrorCutoff",
@@ -169,7 +169,7 @@ MODEL = [
   },
   {
     "Theme": "GenerateAnotherLang",
-    # "Racket": ... #TODO(yt)
+    "Racket": [],
     "Swift": []
   }
 ]
