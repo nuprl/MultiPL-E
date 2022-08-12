@@ -31,6 +31,15 @@ def f_not(f):
         return not f(*args, **kwargs)[0], None
     return the_not
 
+def match_re(re_str: str) -> Callable[[int, str, str, str, str], Tuple[bool, Any]]:
+    the_re = re.compile(re_str)
+    def the_predicate(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+        m = the_re.search(stderr)
+        if m is None:
+            return False, None
+        else:
+            return True, None
+    return the_predicate
 
 def match_type_error_re(re_str: str) -> Callable[[int, str, str, str, str], Tuple[bool, Any]]:
     the_re = re.compile(re_str)
@@ -145,8 +154,12 @@ return_type_error = match_type_error_re(r"error: cannot convert return expressio
 argument_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
 closure_result_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to closure result type (.*)")
 branch_type_error = match_type_error_re(r"error: result values in '\? :' expression have mismatching types (.*) and (.*)")
-bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
+bin_op_type_error = f_or(
+    match_type_error_re(r"error: binary operator .* cannot be applied to operands of type (.*) and (.*)"), 
+    match_re(r"error: binary operator .* cannot be applied to two .* operands")
+)
 pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
+misc_type_error = match_re(r"error: type 'Int' cannot be used as a boolean")
 
 def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: cannot assign value of type '[Int]' to subscript of type 'ArraySlice<Int>'" in stderr, None
@@ -251,6 +264,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
     )),
+    ('CompileError-MiscTypeError', ('misc type error', 
+        f_and(compile_error_category, misc_type_error)
+    )),
     ('CompileError-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong.', 
         f_and(compile_error_category, weird_subscript_type_error)
     )),
@@ -294,6 +310,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 branch_type_error,
                 bin_op_type_error,
                 pattern_type_error,
+                misc_type_error,
                 weird_subscript_type_error,
                 calling_non_function_type,
                 unknown_type_error_in_call,
