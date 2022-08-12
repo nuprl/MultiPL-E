@@ -3,7 +3,8 @@
 # Let's make this a JSON file that maps different error categories in languages to a single category
 
 RUNTIME_ISH = [
-  { "Theme": "NullReference",
+  { 
+    "Theme": "NullReference",
     "Swift": [ "Exception-UnwrapNil"],
     "C#": ["NullReferenceException"],
     "Racket": [],
@@ -89,7 +90,7 @@ TYPE_ISH = [
     "Racket": ["contract violation"]
   },
   {
-    "Theme": "Language specific problems",
+    "Theme": "Language specific problems", # BUG(These aren't all type-ish)
     "C#": "invalid assignment",
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
