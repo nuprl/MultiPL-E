@@ -167,7 +167,9 @@ subscript_type_error = match_type_error_re(r"error: subscript .* requires the ty
 
 misc_type_error = f_or(
     match_re(r"error: type 'Int' cannot be used as a boolean"),
-    match_re(r"error: no 'subscript' candidates produce the expected contextual result type")
+    match_re(r"error: no 'subscript' candidates produce the expected contextual result type"),
+    match_re(r"error: protocol 'Sequence' requires that 'String.Index' conform to 'Strideable'"),
+    match_re(r"error: instance method .* requires that 'String.Index' conform to 'Collection'")
 )
 
 def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
@@ -200,6 +202,11 @@ def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: 
 
 def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: incorrect argument label in call" in stderr, None
+
+extra_argument_in_call = match_re(r"error: extra argument .* in call")
+
+def missing_return(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: missing return in global function expected to return" in stderr, None
 
 RAN_OUT_VAR_RES = [
     re.compile(r"(var|let) \S+$"),
@@ -378,6 +385,12 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift)', 
         f_and(compile_error_category, incorrect_argument_label)
     )),
+    ('CompileError-ExtraArgument', ('An extra argument is in a function call', 
+        f_and(compile_error_category, extra_argument_in_call)
+    )),
+    ('CompileError-MissingReturn', ('A return statement is missing', 
+        f_and(compile_error_category, missing_return)
+    )),
     ('CompileError-TypeMismatch-Numerics', ('Type mismatch between numeric types', 
         f_and(compile_error_category, type_mismatch_both_numeric)
     )),
@@ -424,6 +437,8 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 missing_argument_label,
                 extraneous_argument_label,
                 incorrect_argument_label,
+                extra_argument_in_call,
+                missing_return,
                 type_mismatch_both_numeric,
                 type_mismatch_collection_inner_type,
                 type_mismatch_string_indices,
