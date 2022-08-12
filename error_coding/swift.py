@@ -164,6 +164,7 @@ bin_op_type_error = f_or(
 )
 pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
 subscript_type_error = match_type_error_re(r"error: subscript .* requires the types (.*) and (.*) be equivalent")
+assignment_type_error = match_type_error_re(r"error: cannot assign value of type (.*) to type (.*)")
 
 misc_type_error = f_or(
     match_re(r"error: type 'Int' cannot be used as a boolean"),
@@ -358,8 +359,11 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
     )),
-    ('CompileError-PatternTypeError', ('Subscripting has a type error', 
+    ('CompileError-SubscriptingTypeError', ('Subscripting has a type error', 
         f_and(compile_error_category, subscript_type_error)
+    )),
+    ('CompileError-AssignmentTypeError', ('Assignment has a type error', 
+        f_and(compile_error_category, assignment_type_error)
     )),
     ('CompileError-MiscTypeError', ('misc type error', 
         f_and(compile_error_category, misc_type_error)
@@ -429,6 +433,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 bin_op_type_error,
                 pattern_type_error,
                 subscript_type_error,
+                assignment_type_error,
                 misc_type_error,
                 weird_subscript_type_error,
                 calling_non_function_type,
