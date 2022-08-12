@@ -34,7 +34,7 @@ RUNTIME_ISH = [
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
-    "Swift": [], # TODO(donald)
+    "Swift": ["Timeout"],
   }
 ]
 
@@ -49,7 +49,8 @@ STATIC_ISH = [
       "CompileError-NonExistentMethod", 
       "CompileError-CanNotFindInScope", 
       "CompileError-UseBeforeDecl", 
-      "CompileError-TypeCheck-CallingNonFunctionType"
+      "CompileError-TypeCheck-CallingNonFunctionType",
+      "CompileError-InvalidSyntax"
     ],
     "Racket": ["unbound identifier"]
   },
@@ -58,18 +59,22 @@ STATIC_ISH = [
     "Python": ["None"],
     "C#": ["no return in all branches "],
     "Racket": [""],
-    "Swift": [], # TODO(donald)
+    "Swift": [],
   },
   {
     "Theme": "IncorrectAPIMethodCall",
-    "Swift": [], # TODO(donald)
+    "Swift": [
+      "CompileError-SubscriptStringWithInt",
+      "CompileError-TypeMismatch-StringIndices",
+      "CompileError-TypeMismatch-StringsArentCharArrays"
+    ],
     "Racket": [], # TODO(yt)
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
     "Racket": ["let"], 
-    "Swift": [], # TODO(donald)
+    "Swift": ["CompileError-RedeclarationOfVariable"],
   }
 ]
 
@@ -81,8 +86,22 @@ TYPE_ISH = [
     "Swift": [
       "CompileError-TypeCheck-UnwrappedNonOptional", 
       "CompileError-TypeCheck-ShouldHaveUnwrappedOptional", 
-      "CompileError-UseOfModWithFloat"
-    ], # TODO(donald)
+      "CompileError-UseOfModWithFloat",
+      "CompileError-TypeCheck-ReturnTypeError",
+      "CompileError-TypeCheck-ArgumentTypeError",
+      "CompileError-TypeCheck-ClosureResultTypeError",
+      "CompileError-TypeCheck-BranchTypeMismatch",
+      "CompileError-TypeCheck-BinOpTypeError",
+      "CompileError-TypeCheck-PatternTypeError",
+      "CompileError-TypeCheck-SubscriptingTypeError",
+      "CompileError-TypeCheck-AssignmentTypeError",
+      "CompileError-TypeCheck-MiscTypeError",
+      "CompileError-TypeCheck-WeirdSubscriptTypeError",
+      "CompileError-TypeCheck-UnknownTypeErrorInCall",
+      "CompileError-TypeMismatch-Numerics",
+      "CompileError-TypeMismatch-CollectionAndInner",
+      "CompileError-TypeMismatch-Else"
+    ],
     "Racket": ["contract violation"]
   }
   
@@ -90,7 +109,7 @@ TYPE_ISH = [
 
 LANGUAGE_ISH = [
 {
-    "Theme": "Language specific problems", # BUG(These aren't all type-ish)
+    "Theme": "Language specific problems",
     "C#": "invalid assignment",
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
@@ -116,7 +135,11 @@ MODEL_ISH = [
     "Theme": "OutOfTokens",
     "C#": ["Brace not matched"],
     "Racket": ...,
-    "Swift": ["CompileError-RanOutOfTokens"]
+    "Swift": [
+      "CompileError-RanOutOfTokens", 
+      "CompileError-CompilerErrorCutoff",
+      "CompileError-MissingReturn"
+    ]
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
