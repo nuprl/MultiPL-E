@@ -140,6 +140,9 @@ branch_type_error = match_type_error_re(r"error: result values in '\? :' express
 bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
 pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
 
+def calling_non_function_type(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: cannot call value of non-function type" in stderr, None
+
 def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: no exact matches in call to" in stderr, None
 
@@ -165,9 +168,18 @@ def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: 
 def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: incorrect argument label in call" in stderr, None
 
-RAN_OUT_VAR_RE = re.compile(r"(var|let) \S+$")
+RAN_OUT_VAR_RES = [
+    re.compile(r"(var|let) \S+$"),
+    re.compile(r"(var|let)$"),
+]
 def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
-    return RAN_OUT_VAR_RE.search(completion) is not None, None
+    markers = [
+        "error: expected initial value after '='",
+        "error: expected member name or constructor call after type name",
+        "error: expected ']' in expression list",
+        "error: expected '}' at end of brace statement",
+    ]
+    return any(m in stderr for m in markers) or any(the_re.search(completion) is not None for the_re in RAN_OUT_VAR_RES), None
 
  
 CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], Tuple[bool, Any]]]] = OrderedDict([
@@ -225,6 +237,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
     )),
+    ('CompileError-CallingNonFunctionType', ('The code calls a non-function type', 
+        f_and(compile_error_category, calling_non_function_type)
+    )),
     ('CompileError-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
         f_and(compile_error_category, unknown_type_error_in_call)
     )),
@@ -261,6 +276,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 branch_type_error,
                 bin_op_type_error,
                 pattern_type_error,
+                calling_non_function_type,
                 unknown_type_error_in_call,
                 mutate_immutable,
                 missing_argument_label,
