@@ -230,10 +230,9 @@ def type_mismatch_builder(type_pred_fn):
                     return True, None
                 elif type_pred_fn(t2, t1):
                     return True, None
-        # if did_get_a_regex_match:
-        #     print(t1)
-        #     print(t2)
-        #     print()
+        if did_get_a_regex_match and type_pred_fn == type_mismatch_else_case_fn:
+            print(f"{t1} vs {t2}")
+            pass
         return False, None
     return the_pred
 
@@ -248,12 +247,44 @@ type_mismatch_both_numeric = type_mismatch_builder(type_mismatch_both_numeric_fn
 def type_mismatch_collection_inner_type_fn(t1: str, t2: str) -> bool:
     if t1 == "String.Element" and t2 == "String":
         return True
+    elif t1 == "Character" and t2 == "String":
+        return True
+    elif t1 == "[String]" and t2 == "String":
+        return True
+    elif t1 == "Array<Int>" and t2 == "Int":
+        return True
     return False
 type_mismatch_collection_inner_type = type_mismatch_builder(type_mismatch_collection_inner_type_fn)
 
+def type_mismatch_string_indices_fn(t1: str, t2: str) -> bool:
+    if t1 == "String.Index" and t2 == "Int":
+        return True
+    return False
+type_mismatch_string_indices = type_mismatch_builder(type_mismatch_string_indices_fn)
+
+def type_mismatch_strings_arent_char_arrays_fn(t1: str, t2: str) -> bool:
+    if t1 == "[String.Element]" and t2 == "String":
+        return True
+    elif t1 == "String.SubSequence" and t2 == "String":
+        return True
+    elif t1 == "String.UTF8View.Element" and t2 == "Int8":
+        return True
+    elif t1 == "[Character]" and t2 == "Substring":
+        return True
+    elif t1 == "UnicodeScalar" and t2 == "String.Element":
+        return True
+    elif t1 == "Character" and t2 == "Int":
+        return True
+    elif t1 == "String.Element" and t2 == "Int":
+        return True
+    return False
+type_mismatch_strings_arent_char_arrays = type_mismatch_builder(type_mismatch_strings_arent_char_arrays_fn)
+
 def type_mismatch_else_case_fn(t1: str, t2: str) -> bool:
     return type_mismatch_both_numeric_fn(t1, t2) or \
-        type_mismatch_collection_inner_type_fn(t1, t2)
+        type_mismatch_collection_inner_type_fn(t1, t2) or \
+            type_mismatch_string_indices_fn(t1, t2) or \
+                type_mismatch_strings_arent_char_arrays_fn(t1, t2)
 type_mismatch_else_case = type_mismatch_builder(type_mismatch_else_case_fn)
 
 
@@ -345,6 +376,12 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-TypeMismatch-CollectionAndInner', ('Type mismatch between the collection type and element type, e.g. [String] and String', 
         f_and(compile_error_category, type_mismatch_collection_inner_type)
     )),
+    ('CompileError-TypeMismatch-StringIndices', ('Type mismatch with string index problems.', 
+        f_and(compile_error_category, type_mismatch_string_indices)
+    )),
+    ('CompileError-TypeMismatch-StringsArentCharArrays', ('A string is not an array of characters', 
+        f_and(compile_error_category, type_mismatch_strings_arent_char_arrays)
+    )),
     ('CompileError-TypeMismatch-Else', ('Type mismatch else case', 
         f_and(compile_error_category, type_mismatch_else_case)
     )),
@@ -380,6 +417,8 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 incorrect_argument_label,
                 type_mismatch_both_numeric,
                 type_mismatch_collection_inner_type,
+                type_mismatch_string_indices,
+                type_mismatch_strings_arent_char_arrays,
                 type_mismatch_else_case
             ))
         )
