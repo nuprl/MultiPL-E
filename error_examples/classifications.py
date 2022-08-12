@@ -104,9 +104,8 @@ LANGUAGE_ISH = [
     ],
     "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char"
     "Python": "EOFError"
-  }
-
-    {
+  },
+  {
     "Theme": "Niche Language",
     "Racket": "if-else extra arguments" # TODO(yt)
   },
