@@ -242,13 +242,18 @@ def translate_prompt_and_tests(original_file, translator, doctests):
 
     prompt = "".join(prompt_buffer)
     translated_prompt = translate_prompt(translator, doctests, prompt, original_file.name)
+    # When doctests == "remove" and there are no doctests in prompt, we get None.
+    # If not, we could create a translated prompt that is identical to the
+    # doctests == "keep" case.
+    if translated_prompt is None:
+        return None
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
         translator, tests, entry_point, original_file.name
     )
 
-    if translated_prompt is None or translated_tests is None:
+    if translated_tests is None:
         return None
 
     return translated_prompt, translated_tests
