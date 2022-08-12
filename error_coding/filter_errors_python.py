@@ -10,6 +10,7 @@ import re
 from random import shuffle
 from typing import Callable, Dict, List, Tuple
 import yaml
+import classifications
 try:
     from yaml import CLoader as YAML_Loader
 except ImportError:
