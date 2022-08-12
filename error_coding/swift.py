@@ -140,6 +140,10 @@ def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout:
 def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: result values in '? :' expression have mismatching types" in stderr
 
+BIN_OP_TYPE_ERROR_RE = re.compile(r"error: binary operator '-' cannot be applied to operands of type 'Int' and 'Double'")
+def bin_op_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    return BIN_OP_TYPE_ERROR_RE.search(stderr) is not None
+
 MATCH_TYPE_ERROR_RE = re.compile(r"error: expression pattern of type .* cannot match values of type .*")
 def match_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return MATCH_TYPE_ERROR_RE.search(stderr) is not None
@@ -223,6 +227,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
+    ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
+        f_and(compile_error_category, bin_op_type_error)
+    )),
     ('CompileError-MatchTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, match_type_error)
     )),
@@ -258,6 +265,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 closure_result_type_error,
                 unknown_type_error_in_call,
                 branch_type_error,
+                bin_op_type_error,
                 match_type_error,
                 mutate_immutable,
                 missing_argument_label,
