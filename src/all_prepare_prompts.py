@@ -1,12 +1,9 @@
-from pathlib import Path
+"""
+Run this script to call prepare_prompts_yaml.py for every experiment combination
+in libexamples.
+"""
 import subprocess
-
-# Loop over experiments in this order.
-TEMPS = [ "0.2", "0.8" ]
-VARIATION = [ "reworded", "keep", "transform", "remove"  ]
-LANGS = [ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
-          "go", "lua", "pl", "php", "rb",  "scala", "swift", "rkt" ]
-MODELS = [ "davinci", "incoder" ]
+import libexperiments
 
 def doctests(variation):
     match variation:
@@ -30,23 +27,15 @@ def originals(lang, variation):
         case "reworded":
             return f"../datasets/originals-with-cleaned-vocab-{lang}"
     
-def prepare(lang, model, temp, variation):
-    d = doctests(variation)
-    o = originals(lang, variation)
-    target = f"../experiments/{lang}-{model}-{temp}-{variation}"
-    cmd = f"python3 prepare_prompts_yaml.py --lang humaneval_to_{lang}.py --doctests {d} --originals {o} --target-dir {target}"
+def prepare(experiment: libexperiments.Experiment):
+    d = doctests(experiment.variation)
+    o = originals(experiment.lang, experiment.variation)
+    cmd = f"python3 prepare_prompts_yaml.py --lang humaneval_to_{experiment.lang}.py --doctests {d} --originals {o} --target-dir {experiment.path()}"
     
-    result = subprocess.run(cmd, shell=True, capture_output=True, encoding="utf-8")
-    if len(result.stderr) > 0:
-        print("###################### " + cmd)
-        print(result.stderr[:1024])
-        print(result.stdout[:1024])
+    result = subprocess.run(cmd, shell=True,  encoding="utf-8")
+    if  result.returncode != 0:
+        exit(1)
 
 if __name__ == "__main__":
-    for temp in TEMPS:
-      for lang in LANGS:
-        for model in MODELS:
-          for variation in VARIATION:
-            if temp == "0.8" and variation != "reworded":  
-              continue
-            prepare(lang, model, temp, variation)
+    for experiment in libexperiments.all_experiments():
+        prepare(experiment)
