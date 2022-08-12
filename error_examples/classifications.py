@@ -1,5 +1,6 @@
 from typing import Dict, NamedTuple
 import swift_category_data
+import racket_category_data
 
 # Classifications in progress
 # These are four overall categories, but we aren't going to be stuck with that.
@@ -196,3 +197,6 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
   return dict((code, CategoryInfo(code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for code in codes)
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
+RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
+
+print(RACKET_CODES_DATA)
