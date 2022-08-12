@@ -136,15 +136,12 @@ def non_optional_unwrapped(exit_code: int, status: str, stderr: str, stdout: str
 return_type_error = match_type_error_re(r"error: cannot convert return expression of type (.*) to return type (.*)")
 argument_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
 closure_result_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to closure result type (.*)")
+branch_type_error = match_type_error_re(r"error: result values in '\? :' expression have mismatching types (.*) and (.*)")
+bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
+pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
 
 def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: no exact matches in call to" in stderr, None
-
-def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
-    return "error: result values in '? :' expression have mismatching types" in stderr, None # TODO
-
-bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
-pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
 
 def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     markers = [
@@ -219,9 +216,6 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure', 
         f_and(compile_error_category, closure_result_type_error)
     )),
-    ('CompileError-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
-        f_and(compile_error_category, unknown_type_error_in_call)
-    )),
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
@@ -230,6 +224,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     )),
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
+    )),
+    ('CompileError-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
+        f_and(compile_error_category, unknown_type_error_in_call)
     )),
     ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
         f_and(compile_error_category, mutate_immutable)
@@ -261,10 +258,10 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 return_type_error,
                 argument_type_error,
                 closure_result_type_error,
-                unknown_type_error_in_call,
                 branch_type_error,
                 bin_op_type_error,
                 pattern_type_error,
+                unknown_type_error_in_call,
                 mutate_immutable,
                 missing_argument_label,
                 extraneous_argument_label,
