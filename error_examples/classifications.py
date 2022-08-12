@@ -2,13 +2,13 @@
 # These are four overall categories, but we aren't going to be stuck with that.
 # Let's make this a JSON file that maps different error categories in languages to a single category
 
-RUNTIME_ISH = [
+RUNTIME = [
   { 
     "Theme": "NullReference",
     "Swift": [ "Exception-UnwrapNil"],
     "C#": ["NullReferenceException"],
     "Racket": [],
-    "Python": [""]
+    "Python": []
   },
   {
     "Theme": "InvalidDataStructureOperation",
@@ -21,12 +21,21 @@ RUNTIME_ISH = [
       "Exception-RemoveFirstFromEmptyCollection", 
       "Exception-NegativeArrayIndex"
     ],
-    "C#": ["IndexOutOfRange", "KeyNotFound", "ArgumentOutOfRange", "InvalidOperationException"],
+    "C#": [
+        "IndexOutOfRangeException", 
+        "KeyNotFoundException", 
+        "ArgumentOutOfRangeException", 
+        "InvalidOperationException"
+    ],
     "Racket": "??",
-    "Python": ["AttributeError", "KeyError", "IndexError"]
+    "Python": [
+      "AttributeError", 
+      "KeyError", 
+      "IndexError"
+    ]
   },
   {
-    "Theme": "DivisionOfZero",
+    "Theme": "DivisionByZero",
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
@@ -35,15 +44,24 @@ RUNTIME_ISH = [
   {
     "Theme": "TimeoutOrInfiniteRecursion",
     "Swift": ["Timeout"],
+    "Python": ["RecursionError"]
   }
 ]
 
 
-STATIC_ISH = [
+STATIC = [
   {
     "Theme": "UndefinedIdentifier",
-    "Python": ["AttributeError", "NameError", "UnboundLocalError"],
-    "C#": ["Name does not exist", "TypeNotFound", "Method not found"],
+    "Python": [
+      "AttributeError", 
+      "NameError", 
+      "UnboundLocalError"
+    ],
+    "C#": [
+      "Name does not exist", 
+      "TypeNotFound", 
+      "Method not found"
+    ],
     "Swift": [
       "CompileError-LinkerError", 
       "CompileError-NonExistentMethod", 
@@ -57,7 +75,7 @@ STATIC_ISH = [
   {
     "Theme": "MissingReturn",
     "Python": ["None"],
-    "C#": ["no return in all branches "],
+    "C#": ["no return in all branches"],
     "Racket": [""],
     "Swift": [],
   },
@@ -78,11 +96,11 @@ STATIC_ISH = [
   }
 ]
 
-TYPE_ISH = [ 
+TYPE = [ 
   {
     "Theme": "InvalidTypeConversion",
-    "C#": ["long to int", "long to Optional<long>"],
-    "Python": [""],
+    "C#": ["Type Conversion Error"],
+    "Python": [],
     "Swift": [
       "CompileError-TypeCheck-UnwrappedNonOptional", 
       "CompileError-TypeCheck-ShouldHaveUnwrappedOptional", 
@@ -107,10 +125,10 @@ TYPE_ISH = [
   
 ]
 
-LANGUAGE_ISH = [
-{
+LANGUAGE = [
+  {
     "Theme": "Language specific problems",
-    "C#": "invalid assignment",
+    "C#": ["Invalid Assignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
       "CompileError-UseOfDeprecatedUnavailableThings", 
@@ -121,8 +139,8 @@ LANGUAGE_ISH = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char"
-    "Python": "EOFError"
+    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char",
+    "Python": ["EOFError"]
   },
   {
     "Theme": "Niche Language",
@@ -130,10 +148,11 @@ LANGUAGE_ISH = [
   },
 ]
 
-MODEL_ISH = [
+MODEL = [
   {
     "Theme": "OutOfTokens",
-    "C#": ["Brace not matched"],
+    "C#": ["SyntaxError"],
+    "Python" : ["SyntaxError"]
     "Racket": ...,
     "Swift": [
       "CompileError-RanOutOfTokens", 
@@ -143,7 +162,8 @@ MODEL_ISH = [
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
-    "C#": "Not implemented" #TODO (abhinav isn't this Python?)
+    "C#": ["NotImplementedException"],
+    "Python": ["NotImplementedError"]
   },
   {
     "Theme": "GenerateAnotherLang",
