@@ -7,7 +7,7 @@ import os
 import csv
 from random import shuffle
 import re
-from typing import Callable, Dict, List, Tuple
+from typing import Any, Callable, Dict, List, Tuple
 import yaml
 try:
     from yaml import CLoader as YAML_Loader
@@ -18,164 +18,162 @@ except ImportError:
 
 def f_and(*funcs):
     def the_and(*args, **kwargs):
-        return all(f(*args, **kwargs) for f in funcs)
+        return all(f(*args, **kwargs)[0] for f in funcs), None
     return the_and
 
 def f_or(*funcs):
     def the_or(*args, **kwargs):
-        return any(f(*args, **kwargs) for f in funcs)
+        return any(f(*args, **kwargs)[0] for f in funcs), None
     return the_or
 
 def f_not(f):
     def the_not(*args, **kwargs):
-        return not f(*args, **kwargs)
+        return not f(*args, **kwargs)[0], None
     return the_not
 
 
-def ok_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return exit_code == 0 and status == 'OK'
-
-def timeout_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return exit_code != 0 and status == 'Timeout'
-
-def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return exit_code != 0 and status == 'SyntaxError'
-
-def exception_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return exit_code != 0 and status == 'Exception'
-
-def assertion_fail(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Assertion failed\nCurrent stack trace:" in stderr
-
-def unwrap_nil(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Unexpectedly found nil while unwrapping an Optional value\nCurrent stack trace:" in stderr
-
-def index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Index out of range\nCurrent stack trace:" in stderr
-
-def string_index_out_of_bounds(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: String index is out of bounds\nCurrent stack trace:" in stderr
-
-def array_index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Array index is out of range\nCurrent stack trace:" in stderr
-
-def invalid_range_creation(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Range requires lowerBound <= upperBound\nCurrent stack trace:" in stderr
-
-def cant_remove_last_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Can't remove last element from an empty collection\nCurrent stack trace:" in stderr
-
-def cant_remove_first_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Can't remove first element from an empty collection\nCurrent stack trace:" in stderr
-
-def div_by_zero_remainder(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Division by zero in remainder operation\nCurrent stack trace:" in stderr
-
-def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ": Fatal error: Negative Array index is out of range\nCurrent stack trace:" in stderr
-
-def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4
+def match_type_error_re(re_str: str) -> Callable[[int, str, str, str, str], Tuple[bool, Any]]:
+    the_re = re.compile(re_str)
+    def the_predicate(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+        m = the_re.search(stderr)
+        if m is None:
+            return False, None
+        else:
+            return True, (m.group(1), m.group(2))
+    return the_predicate
 
 
-def linker_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: link command failed with exit code 1" in stderr
+def ok_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return exit_code == 0 and status == 'OK', None
 
-def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+def timeout_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return exit_code != 0 and status == 'Timeout', None
+
+def compile_error_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return exit_code != 0 and status == 'SyntaxError', None
+
+def exception_category(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return exit_code != 0 and status == 'Exception', None
+
+def assertion_fail(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Assertion failed\nCurrent stack trace:" in stderr, None
+
+def unwrap_nil(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Unexpectedly found nil while unwrapping an Optional value\nCurrent stack trace:" in stderr, None
+
+def index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Index out of range\nCurrent stack trace:" in stderr, None
+
+def string_index_out_of_bounds(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: String index is out of bounds\nCurrent stack trace:" in stderr, None
+
+def array_index_out_of_range(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Array index is out of range\nCurrent stack trace:" in stderr, None
+
+def invalid_range_creation(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Range requires lowerBound <= upperBound\nCurrent stack trace:" in stderr, None
+
+def cant_remove_last_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Can't remove last element from an empty collection\nCurrent stack trace:" in stderr, None
+
+def cant_remove_first_elem_from_empty_collection(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Can't remove first element from an empty collection\nCurrent stack trace:" in stderr, None
+
+def div_by_zero_remainder(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Division by zero in remainder operation\nCurrent stack trace:" in stderr, None
+
+def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return ": Fatal error: Negative Array index is out of range\nCurrent stack trace:" in stderr, None
+
+def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4, None
+
+
+def linker_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: link command failed with exit code 1" in stderr, None
+
+def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     bad_syntax_markers = [
         "error: expected expression after operator",
         "error: expected '{' to start the body of for-each loop",
         "error: expected expression in 'switch' statement",
         "error: '[' is not allowed in operator names"
     ]
-    return any(m in stderr for m in bad_syntax_markers)
+    return any(m in stderr for m in bad_syntax_markers), None
 
-def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     unavailable_markers = [
         "error: 'characters' is unavailable: Please use String directly"
     ]
-    return any(m in stderr for m in unavailable_markers)
+    return any(m in stderr for m in unavailable_markers), None
 
-def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: '%' is unavailable: For floating point numbers use truncatingRemainder instead" in stderr
+def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: '%' is unavailable: For floating point numbers use truncatingRemainder instead" in stderr, None
 
 
-def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr
+def subscript_string_with_int(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: 'subscript(_:)' is unavailable: cannot subscript String with an Int, use a String.Index instead." in stderr, None
 
 REDECLARED_VAR_RE = re.compile(r"error: invalid redeclaration of .*")
-def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return REDECLARED_VAR_RE.search(stderr) is not None
+def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return REDECLARED_VAR_RE.search(stderr) is not None, None
 
 NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
-def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return NONEXISTENT_METHOD_RE.search(stderr) is not None
+def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return NONEXISTENT_METHOD_RE.search(stderr) is not None, None
 
 NONEXISTENT_VAR_RE = re.compile(r"error: cannot find .* in scope")
-def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return NONEXISTENT_VAR_RE.search(stderr) is not None
+def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return NONEXISTENT_VAR_RE.search(stderr) is not None, None
 
 SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE = re.compile(r"error: value of optional type .* must be unwrapped to a value of type .*")
-def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None
+def should_have_unwrapped_optional(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return SHOULD_HAVE_UNWRAPPED_OPTIONAL_RE.search(stderr) is not None, None
 
-def non_optional_unwrapped(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: cannot force unwrap value of non-optional type" in stderr
+def non_optional_unwrapped(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: cannot force unwrap value of non-optional type" in stderr, None
 
-RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert return expression of type .* to return type .*")
-def return_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return RETURN_TYPE_ERROR_RE.search(stderr) is not None
+return_type_error = match_type_error_re(r"error: cannot convert return expression of type (.*) to return type (.*)")
+argument_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
+closure_result_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
 
-ARGUMENT_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
-def argument_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return ARGUMENT_TYPE_ERROR_RE.search(stderr) is not None
+def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: no exact matches in call to" in stderr, None
 
-CLOSURE_RETURN_TYPE_ERROR_RE = re.compile(r"error: cannot convert value of type .* to expected argument type .*")
-def closure_result_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return CLOSURE_RETURN_TYPE_ERROR_RE.search(stderr) is not None
+def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: result values in '? :' expression have mismatching types" in stderr, None # TODO
 
-def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: no exact matches in call to" in stderr
+bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type ('Int') and ('Double')") # TODO
+pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)") # TODO
 
-def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: result values in '? :' expression have mismatching types" in stderr
-
-BIN_OP_TYPE_ERROR_RE = re.compile(r"error: binary operator '-' cannot be applied to operands of type 'Int' and 'Double'")
-def bin_op_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return BIN_OP_TYPE_ERROR_RE.search(stderr) is not None
-
-MATCH_TYPE_ERROR_RE = re.compile(r"error: expression pattern of type .* cannot match values of type .*")
-def match_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return MATCH_TYPE_ERROR_RE.search(stderr) is not None
-
-def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     markers = [
         "error: left side of mutating operator isn't mutable:",
         "error: cannot assign to value:",
         "error: cannot use mutating member on immutable value:"
     ]
-    return any(m in stderr for m in markers)
+    return any(m in stderr for m in markers), None
 
 MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
-def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None
+def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None, None
 
 EXTRANEOUS_ARGUMENT_LABEL_RES = [
     re.compile(r"error: extraneous argument label .* in call"),
     re.compile(r"error: extraneous argument labels .* in call")
 ]
-def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return any(the_re.search(stderr) is not None for the_re in EXTRANEOUS_ARGUMENT_LABEL_RES)
+def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return any(the_re.search(stderr) is not None for the_re in EXTRANEOUS_ARGUMENT_LABEL_RES), None
 
-def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return "error: incorrect argument label in call" in stderr
+def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error: incorrect argument label in call" in stderr, None
 
 RAN_OUT_VAR_RE = re.compile(r"(var|let) \S+$")
-def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
-    return RAN_OUT_VAR_RE.search(completion) is not None
+def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return RAN_OUT_VAR_RE.search(completion) is not None, None
 
  
-CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], bool]]] = OrderedDict([
+CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], Tuple[bool, Any]]]] = OrderedDict([
     ('CompileError', ('Any compilation error occurred', 
         compile_error_category
     )),
@@ -230,8 +228,8 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, bin_op_type_error)
     )),
-    ('CompileError-MatchTypeError', ('The expression in a switch statement has different type from the match pattern', 
-        f_and(compile_error_category, match_type_error)
+    ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
+        f_and(compile_error_category, pattern_type_error)
     )),
     ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
         f_and(compile_error_category, mutate_immutable)
@@ -266,7 +264,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 unknown_type_error_in_call,
                 branch_type_error,
                 bin_op_type_error,
-                match_type_error,
+                pattern_type_error,
                 mutate_immutable,
                 missing_argument_label,
                 extraneous_argument_label,
@@ -379,7 +377,7 @@ def main():
             comp = prob.completions[comp_idx]
             did_find_cat = False
             for cat_name, (_, cat_fn) in CATEGORY_DEFINITIONS.items():
-                if cat_fn(comp.exit_code, comp.status, comp.stderr, comp.stdout, comp.completion):
+                if cat_fn(comp.exit_code, comp.status, comp.stderr, comp.stdout, comp.completion)[0]:
                     if did_find_cat and not args.allow_multimatch:
                         raise Exception(f'prob = {prob.name}, comp_idx = {comp_idx} is in multiple categories. stderr = {comp.stderr}')
                     elif did_find_cat:
