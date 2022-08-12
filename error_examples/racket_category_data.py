@@ -11,6 +11,9 @@ with open('error_examples/racket_codes.csv', 'r') as csv_f:
     del CSV_DICT['code'] # kill the header row
 
 def get_description(code: str) -> str:
+    if code not in CSV_DICT:
+        print(f"Warning: didn't find code {code} in CSV")
+        return f"MISSING CODE: {code}"
     return CSV_DICT[code][1]
 
 def get_total_failures() -> int:
@@ -20,4 +23,7 @@ def get_total_failures() -> int:
     return 0 # TODO(yt)
 
 def get_code_count(code: str) -> int:
+    if code not in CSV_DICT:
+        print(f"Warning: didn't find code {code} in CSV")
+        return 99999999
     return int(CSV_DICT[code][2])

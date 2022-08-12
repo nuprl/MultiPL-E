@@ -31,7 +31,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["list index too large"],
+    "Racket": ["list_index_too_large"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -43,7 +43,7 @@ RUNTIME = [
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
-    "Racket": ["division by zero"]
+    "Racket": ["division_by_0"]
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
@@ -74,7 +74,7 @@ STATIC = [
       "CompileError-TypeCheck-CallingNonFunctionType",
       "CompileError-InvalidSyntax"
     ],
-    "Racket": ["unbound identifier"]
+    "Racket": ["unbound_identifier"]
   },
   {
     "Theme": "MissingReturn",
@@ -95,7 +95,7 @@ STATIC = [
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
-    "Racket": ["let: duplicate identifier"], 
+    "Racket": ["let_duplicate_identifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
   }
 ]
@@ -124,7 +124,7 @@ TYPE = [
       "CompileError-TypeMismatch-CollectionAndInner",
       "CompileError-TypeMismatch-Else"
     ],
-    "Racket": ["contract violation"]
+    "Racket": ["contract_violation"]
   }
   
 ]
@@ -198,5 +198,4 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-
-print(RACKET_CODES_DATA)
+# print(RACKET_CODES_DATA) 
