@@ -212,7 +212,9 @@ def extraneous_argument_label(exit_code: int, status: str, stderr: str, stdout: 
 def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: incorrect argument label in call" in stderr, None
 
-extra_argument_in_call = match_re(r"error: extra argument .* in call")
+extra_argument_in_call = match_re(r"error: extra arguments? .* in call")
+missing_argument_in_call = match_re(r"error: missing arguments? .* in call")
+
 
 def missing_return(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: missing return in global function expected to return" in stderr, None
@@ -227,6 +229,7 @@ def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, com
         "error: expected member name or constructor call after type name",
         "error: expected ']' in expression list",
         "error: expected '}' at end of brace statement",
+        "error: expected '{' after 'if' condition"
     ]
     return any(m in stderr for m in markers) or any(the_re.search(completion) is not None for the_re in RAN_OUT_VAR_RES), None
 
@@ -402,8 +405,11 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift)', 
         f_and(compile_error_category, incorrect_argument_label)
     )),
-    ('CompileError-ExtraArgument', ('An extra argument is in a function call', 
+    ('CompileError-ExtraArgument', ('An extra argument(s) is in a function call', 
         f_and(compile_error_category, extra_argument_in_call)
+    )),
+    ('CompileError-MissingArgument', ('A function call is missing some argument(s)', 
+        f_and(compile_error_category, missing_argument_in_call)
     )),
     ('CompileError-MissingReturn', ('A return statement is missing', 
         f_and(compile_error_category, missing_return)
@@ -457,6 +463,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 extraneous_argument_label,
                 incorrect_argument_label,
                 extra_argument_in_call,
+                missing_argument_in_call,
                 missing_return,
                 type_mismatch_both_numeric,
                 type_mismatch_collection_inner_type,
