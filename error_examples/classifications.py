@@ -149,18 +149,10 @@ LANGUAGE = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-<<<<<<< HEAD
-    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char"
-    "Python": "EOFError"
-  },
-
-    {
-=======
-    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char",
+    "Racket": ["Escape sequence error in Racket (\\w) ", "treat and as char #\\and"],
     "Python": ["EOFError"]
   },
   {
->>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
     "Theme": "Niche Language",
     "Racket": ["if-else extra arguments", "all unclassified errors"] 
   }
@@ -169,20 +161,13 @@ LANGUAGE = [
 MODEL = [
   {
     "Theme": "OutOfTokens",
-<<<<<<< HEAD
-    "C#": ["Brace not matched"],
-    "Racket": ["bracket or brace not matched", "double-quotes not matched"],
-    "Swift": ["CompileError-RanOutOfTokens"]
-=======
     "C#": ["SyntaxError"],
-    "Python" : ["SyntaxError"]
-    "Racket": ...,
+    "Racket": ["bracket or brace not matched", "double-quotes not matched"],
     "Swift": [
       "CompileError-RanOutOfTokens", 
       "CompileError-CompilerErrorCutoff",
       "CompileError-MissingReturn"
     ]
->>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
