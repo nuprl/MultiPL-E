@@ -27,7 +27,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": "??",
+    # "Racket": "??", # TODO(yt)
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -39,12 +39,12 @@ RUNTIME = [
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
-    "Racket": [""]
+    # "Racket": [""] # TODO(yt)
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
     "Swift": ["Timeout"],
-    "Python": ["RecursionError"]
+    "Python": ["RecursionError"],
   }
 ]
 
@@ -76,7 +76,7 @@ STATIC = [
     "Theme": "MissingReturn",
     "Python": ["None"],
     "C#": ["no return in all branches"],
-    "Racket": [""],
+    # "Racket": [""], # TODO(yt)
     "Swift": [],
   },
   {
@@ -86,7 +86,7 @@ STATIC = [
       "CompileError-TypeMismatch-StringIndices",
       "CompileError-TypeMismatch-StringsArentCharArrays"
     ],
-    "Racket": [], # TODO(yt)
+    # "Racket": [], # TODO(yt)
   },
   {
     "Theme": "Re-Declaration",
@@ -139,12 +139,12 @@ LANGUAGE = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char",
+    # "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char", # TODO(yt)
     "Python": ["EOFError"]
   },
   {
     "Theme": "Niche Language",
-    "Racket": "if-else extra arguments" # TODO(yt)
+    # "Racket": "if-else extra arguments" # TODO(yt)
   },
 ]
 
@@ -152,8 +152,8 @@ MODEL = [
   {
     "Theme": "OutOfTokens",
     "C#": ["SyntaxError"],
-    "Python" : ["SyntaxError"]
-    "Racket": ...,
+    "Python" : ["SyntaxError"],
+    # "Racket": ..., # TODO(yt)
     "Swift": [
       "CompileError-RanOutOfTokens", 
       "CompileError-CompilerErrorCutoff",
@@ -163,10 +163,13 @@ MODEL = [
   {
     "Theme": "ExceptionInGeneratedCode", 
     "C#": ["NotImplementedException"],
-    "Python": ["NotImplementedError"]
+    "Python": ["NotImplementedError"],
+    "Swift": [],
+    # "Racket": [] # TODO(yt)
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": ... #TODO(yt)
+    # "Racket": ... #TODO(yt)
+    "Swift": []
   }
 ]
