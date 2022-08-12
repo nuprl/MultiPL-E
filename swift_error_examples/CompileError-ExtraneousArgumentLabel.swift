@@ -1,3 +1,132 @@
+// ----------- problem HumanEval_5_intersperse, completion 1 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpq86ed49i.swift:11:30: error: extraneous argument label 'combine:' in call
+        return numbers.reduce([], combine: { (accumulator, element) in
+                             ^    ~~~~~~~~~
+                                  
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
+/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
+/// [] as [Int]
+/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
+/// [1, 4, 2, 4, 3]
+func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
+    if numbers.isEmpty {
+        return []
+    } else {
+        return numbers.reduce([], combine: { (accumulator, element) in
+            if accumulator.isEmpty {
+                return [element]
+            } else {
+                return accumulator + [delimeter] + [element]
+            }
+        })
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
+assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
+assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
+
+
+
+// ----------- problem HumanEval_141_file_name_check, completion 92 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpjt0jyqax.swift:17:32: error: extraneous argument label 'pattern:' in call
+    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
+                               ^~~~~~~~~~
+                                
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Create a function which takes a string representing a file's name, and returns
+/// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
+/// A file's name is considered to be valid if and only if all the following conditions 
+/// are met:
+/// - There should not be more than three digits ('0'-'9') in the file's name.
+/// - The file's name contains exactly one dot '.'
+/// - The substring before the dot should not be empty, and it starts with a letter from 
+/// the latin alphapet ('a'-'z' and 'A'-'Z').
+/// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+/// Examples:
+/// >>> file_name_check(file_name: "example.txt")
+/// "Yes"
+/// >>> file_name_check(file_name: "1example.dll")
+/// "No"
+func file_name_check(file_name: String) -> String {
+    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
+    return file_name_regex.test(input: file_name) ? "Yes" : "No"
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(file_name_check(file_name: "example.txt") == "Yes")
+assert(file_name_check(file_name: "1example.dll") == "No")
+assert(file_name_check(file_name: "s1sdf3.asd") == "No")
+assert(file_name_check(file_name: "K.dll") == "Yes")
+assert(file_name_check(file_name: "MY16FILE3.exe") == "Yes")
+assert(file_name_check(file_name: "His12FILE94.exe") == "No")
+assert(file_name_check(file_name: "_Y.txt") == "No")
+assert(file_name_check(file_name: "?aREYA.exe") == "No")
+assert(file_name_check(file_name: "/this_is_valid.dll") == "No")
+assert(file_name_check(file_name: "this_is_valid.wow") == "No")
+assert(file_name_check(file_name: "this_is_valid.txt") == "Yes")
+assert(file_name_check(file_name: "this_is_valid.txtexe") == "No")
+assert(file_name_check(file_name: "#this2_i4s_5valid.ten") == "No")
+assert(file_name_check(file_name: "@this1_is6_valid.exe") == "No")
+assert(file_name_check(file_name: "this_is_12valid.6exe4.txt") == "No")
+assert(file_name_check(file_name: "all.exe.txt") == "No")
+assert(file_name_check(file_name: "I563_No.exe") == "Yes")
+assert(file_name_check(file_name: "Is3youfault.txt") == "Yes")
+assert(file_name_check(file_name: "no_one#knows.dll") == "Yes")
+assert(file_name_check(file_name: "1I563_Yes3.exe") == "No")
+assert(file_name_check(file_name: "I563_Yes3.txtt") == "No")
+assert(file_name_check(file_name: "final..txt") == "No")
+assert(file_name_check(file_name: "final132") == "No")
+assert(file_name_check(file_name: "_f4indsartal132.") == "No")
+assert(file_name_check(file_name: ".txt") == "No")
+assert(file_name_check(file_name: "s.") == "No")
+
+
+
 // ----------- problem HumanEval_118_get_closest_vowel, completion 45 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -257,135 +386,6 @@ assert(file_name_check(file_name: "final132") == "No")
 assert(file_name_check(file_name: "_f4indsartal132.") == "No")
 assert(file_name_check(file_name: ".txt") == "No")
 assert(file_name_check(file_name: "s.") == "No")
-
-
-
-// ----------- problem HumanEval_141_file_name_check, completion 92 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpjt0jyqax.swift:17:32: error: extraneous argument label 'pattern:' in call
-    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
-                               ^~~~~~~~~~
-                                
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Create a function which takes a string representing a file's name, and returns
-/// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
-/// A file's name is considered to be valid if and only if all the following conditions 
-/// are met:
-/// - There should not be more than three digits ('0'-'9') in the file's name.
-/// - The file's name contains exactly one dot '.'
-/// - The substring before the dot should not be empty, and it starts with a letter from 
-/// the latin alphapet ('a'-'z' and 'A'-'Z').
-/// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
-/// Examples:
-/// >>> file_name_check(file_name: "example.txt")
-/// "Yes"
-/// >>> file_name_check(file_name: "1example.dll")
-/// "No"
-func file_name_check(file_name: String) -> String {
-    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
-    return file_name_regex.test(input: file_name) ? "Yes" : "No"
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(file_name_check(file_name: "example.txt") == "Yes")
-assert(file_name_check(file_name: "1example.dll") == "No")
-assert(file_name_check(file_name: "s1sdf3.asd") == "No")
-assert(file_name_check(file_name: "K.dll") == "Yes")
-assert(file_name_check(file_name: "MY16FILE3.exe") == "Yes")
-assert(file_name_check(file_name: "His12FILE94.exe") == "No")
-assert(file_name_check(file_name: "_Y.txt") == "No")
-assert(file_name_check(file_name: "?aREYA.exe") == "No")
-assert(file_name_check(file_name: "/this_is_valid.dll") == "No")
-assert(file_name_check(file_name: "this_is_valid.wow") == "No")
-assert(file_name_check(file_name: "this_is_valid.txt") == "Yes")
-assert(file_name_check(file_name: "this_is_valid.txtexe") == "No")
-assert(file_name_check(file_name: "#this2_i4s_5valid.ten") == "No")
-assert(file_name_check(file_name: "@this1_is6_valid.exe") == "No")
-assert(file_name_check(file_name: "this_is_12valid.6exe4.txt") == "No")
-assert(file_name_check(file_name: "all.exe.txt") == "No")
-assert(file_name_check(file_name: "I563_No.exe") == "Yes")
-assert(file_name_check(file_name: "Is3youfault.txt") == "Yes")
-assert(file_name_check(file_name: "no_one#knows.dll") == "Yes")
-assert(file_name_check(file_name: "1I563_Yes3.exe") == "No")
-assert(file_name_check(file_name: "I563_Yes3.txtt") == "No")
-assert(file_name_check(file_name: "final..txt") == "No")
-assert(file_name_check(file_name: "final132") == "No")
-assert(file_name_check(file_name: "_f4indsartal132.") == "No")
-assert(file_name_check(file_name: ".txt") == "No")
-assert(file_name_check(file_name: "s.") == "No")
-
-
-
-// ----------- problem HumanEval_5_intersperse, completion 1 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpq86ed49i.swift:11:30: error: extraneous argument label 'combine:' in call
-        return numbers.reduce([], combine: { (accumulator, element) in
-                             ^    ~~~~~~~~~
-                                  
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
-/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
-/// [] as [Int]
-/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
-/// [1, 4, 2, 4, 3]
-func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
-    if numbers.isEmpty {
-        return []
-    } else {
-        return numbers.reduce([], combine: { (accumulator, element) in
-            if accumulator.isEmpty {
-                return [element]
-            } else {
-                return accumulator + [delimeter] + [element]
-            }
-        })
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
-assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
-assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
 
 
 

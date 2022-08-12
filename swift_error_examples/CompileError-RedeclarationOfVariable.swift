@@ -1,628 +1,3 @@
-// ----------- problem HumanEval_154_cycpattern_check, completion 57 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwidmgiyw.swift:21:9: error: invalid redeclaration of 'b'
-    var b = b
-        ^
-/tmp/tmpwidmgiyw.swift:17:9: note: 'b' previously declared here
-    let b = b.lowercased()
-        ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-/// >>> cycpattern_check(a: "abcd", b: "abd")
-/// false
-/// >>> cycpattern_check(a: "hello", b: "ell")
-/// true
-/// >>> cycpattern_check(a: "whassup", b: "psus")
-/// false
-/// >>> cycpattern_check(a: "abab", b: "baa")
-/// true
-/// >>> cycpattern_check(a: "efef", b: "eeff")
-/// false
-/// >>> cycpattern_check(a: "himenss", b: "simen")
-/// true
-func cycpattern_check(a: String, b: String) -> Bool {
-    let a = a.lowercased()
-    let b = b.lowercased()
-    if a.contains(b) {
-        return true
-    }
-    var b = b
-    for _ in 0..<b.count {
-        b.append(b.removeFirst())
-        if a.contains(b) {
-            return true
-        }
-    }
-    return false
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(cycpattern_check(a: "xyzw", b: "xyw") == false)
-assert(cycpattern_check(a: "yello", b: "ell") == true)
-assert(cycpattern_check(a: "whattup", b: "ptut") == false)
-assert(cycpattern_check(a: "efef", b: "fee") == true)
-assert(cycpattern_check(a: "abab", b: "aabb") == false)
-assert(cycpattern_check(a: "winemtt", b: "tinem") == true)
-
-
-
-// ----------- problem HumanEval_67_fruit_distribution, completion 123 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp1f8fi6bi.swift:46:9: error: invalid redeclaration of 'j'
-    var j = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:21:9: note: 'j' previously declared here
-    var j = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:47:9: error: invalid redeclaration of 'k'
-    var k = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:22:9: note: 'k' previously declared here
-    var k = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:48:9: error: invalid redeclaration of 'l'
-    var l = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:23:9: note: 'l' previously declared here
-    var l = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:49:9: error: invalid redeclaration of 'm'
-    var m = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:24:9: note: 'm' previously declared here
-    var m = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:50:9: error: invalid redeclaration of 'n'
-    var n = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:25:9: note: 'n' previously declared here
-    var n = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:51:9: error: invalid redeclaration of 'o'
-    var o = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:26:9: note: 'o' previously declared here
-    var o = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:52:9: error: invalid redeclaration of 'p'
-    var p = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:27:9: note: 'p' previously declared here
-    var p = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:53:9: error: invalid redeclaration of 'q'
-    var q = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:28:9: note: 'q' previously declared here
-    var q = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:54:9: error: invalid redeclaration of 'r'
-    var r = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:29:9: note: 'r' previously declared here
-    var r = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:55:9: error: invalid redeclaration of 's'
-    var s = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:30:9: note: 's' previously declared here
-    var s = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:56:9: error: invalid redeclaration of 't'
-    var t = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:31:9: note: 't' previously declared here
-    var t = 0
-        ^
-/tmp/tmp1f8fi6bi.swift:57:9: error: invalid redeclaration of 'u'
-    var u = 0
-        ^
-/tmp/tmp1f8f
-*/
-/* stdout = 
-
-*/
-
-
-/// In this task, you will be given a string that represents a number of apples and oranges 
-/// that are distributed in a basket of fruit this basket contains 
-/// apples, oranges, and mango fruits. Given the string that represents the total number of 
-/// the oranges and apples and an integer that represent the total number of the fruits 
-/// in the basket return the number of the mango fruits in the basket.
-/// for examble:
-/// >>> fruit_distribution(s: "5 apples and 6 oranges", n: 19)
-/// 8
-/// >>> fruit_distribution(s: "0 apples and 1 oranges", n: 3)
-/// 2
-/// >>> fruit_distribution(s: "2 apples and 3 oranges", n: 100)
-/// 95
-/// >>> fruit_distribution(s: "100 apples and 1 oranges", n: 120)
-/// 19
-func fruit_distribution(s: String, n: Int) -> Int {
-    var mango = 0
-    var apple = 0
-    var orange = 0
-    var i = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-   
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(fruit_distribution(s: "5 apples and 6 oranges", n: 19) == 8)
-assert(fruit_distribution(s: "5 apples and 6 oranges", n: 21) == 10)
-assert(fruit_distribution(s: "0 apples and 1 oranges", n: 3) == 2)
-assert(fruit_distribution(s: "1 apples and 0 oranges", n: 3) == 2)
-assert(fruit_distribution(s: "2 apples and 3 oranges", n: 100) == 95)
-assert(fruit_distribution(s: "2 apples and 3 oranges", n: 5) == 0)
-assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
-
-
-
-// ----------- problem HumanEval_154_cycpattern_check, completion 126 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpegg7wuwr.swift:21:9: error: invalid redeclaration of 'b'
-    var b = b
-        ^
-/tmp/tmpegg7wuwr.swift:17:9: note: 'b' previously declared here
-    let b = b.lowercased()
-        ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-/// >>> cycpattern_check(a: "abcd", b: "abd")
-/// false
-/// >>> cycpattern_check(a: "hello", b: "ell")
-/// true
-/// >>> cycpattern_check(a: "whassup", b: "psus")
-/// false
-/// >>> cycpattern_check(a: "abab", b: "baa")
-/// true
-/// >>> cycpattern_check(a: "efef", b: "eeff")
-/// false
-/// >>> cycpattern_check(a: "himenss", b: "simen")
-/// true
-func cycpattern_check(a: String, b: String) -> Bool {
-    let a = a.lowercased()
-    let b = b.lowercased()
-    if a.count < b.count {
-        return false
-    }
-    var b = b
-    for _ in 0..<b.count {
-        if a.contains(b) {
-            return true
-        }
-        b = b.dropFirst() + b.prefix(1)
-    }
-    return false
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(cycpattern_check(a: "xyzw", b: "xyw") == false)
-assert(cycpattern_check(a: "yello", b: "ell") == true)
-assert(cycpattern_check(a: "whattup", b: "ptut") == false)
-assert(cycpattern_check(a: "efef", b: "fee") == true)
-assert(cycpattern_check(a: "abab", b: "aabb") == false)
-assert(cycpattern_check(a: "winemtt", b: "tinem") == true)
-
-
-
-// ----------- problem HumanEval_94_skjkasdkd, completion 52 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpfmf7x5i4.swift:20:12: error: cannot find 'isPrime' in scope
-        if isPrime(num) {
-           ^~~~~~~
-/tmp/tmpfmf7x5i4.swift:26:9: error: invalid redeclaration of 'largestPrime'
-    var largestPrime = largestPrime
-        ^
-/tmp/tmpfmf7x5i4.swift:24:9: note: 'largestPrime' previously declared here
-    let largestPrime = primes.max()!
-        ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given an array of integers.
-/// You need to find the largest prime value and return the sum of its digits.
-/// Examples:
-/// >>> skjkasdkd(lst: [0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3])
-/// 10
-/// >>> skjkasdkd(lst: [1, 0, 1, 8, 2, 4597, 2, 1, 3, 40, 1, 2, 1, 2, 4, 2, 5, 1])
-/// 25
-/// >>> skjkasdkd(lst: [1, 3, 1, 32, 5107, 34, 83278, 109, 163, 23, 2323, 32, 30, 1, 9, 3])
-/// 13
-/// >>> skjkasdkd(lst: [0, 724, 32, 71, 99, 32, 6, 0, 5, 91, 83, 0, 5, 6])
-/// 11
-/// >>> skjkasdkd(lst: [0, 81, 12, 3, 1, 21])
-/// 3
-/// >>> skjkasdkd(lst: [0, 8, 1, 2, 1, 7])
-/// 7
-func skjkasdkd(lst: [Int]) -> Int {
-    var primes = [Int]()
-    for num in lst {
-        if isPrime(num) {
-            primes.append(num)
-        }
-    }
-    let largestPrime = primes.max()!
-    var sum = 0
-    var largestPrime = largestPrime
-    while largestPrime > 0 {
-        sum += largestPrime % 10
-        largestPrime /= 10
-    }
-    return sum
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(skjkasdkd(lst: [0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3]) == 10)
-assert(skjkasdkd(lst: [1, 0, 1, 8, 2, 4597, 2, 1, 3, 40, 1, 2, 1, 2, 4, 2, 5, 1]) == 25)
-assert(skjkasdkd(lst: [1, 3, 1, 32, 5107, 34, 83278, 109, 163, 23, 2323, 32, 30, 1, 9, 3]) == 13)
-assert(skjkasdkd(lst: [0, 724, 32, 71, 99, 32, 6, 0, 5, 91, 83, 0, 5, 6]) == 11)
-assert(skjkasdkd(lst: [0, 81, 12, 3, 1, 21]) == 3)
-assert(skjkasdkd(lst: [0, 8, 1, 2, 1, 7]) == 7)
-assert(skjkasdkd(lst: [8191]) == 19)
-assert(skjkasdkd(lst: [8191, 123456, 127, 7]) == 19)
-assert(skjkasdkd(lst: [127, 97, 8192]) == 10)
-
-
-
-// ----------- problem HumanEval_67_fruit_distribution, completion 114 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwfqzi80p.swift:46:9: error: invalid redeclaration of 'j'
-    var j = 0
-        ^
-/tmp/tmpwfqzi80p.swift:21:9: note: 'j' previously declared here
-    var j = 0
-        ^
-/tmp/tmpwfqzi80p.swift:47:9: error: invalid redeclaration of 'k'
-    var k = 0
-        ^
-/tmp/tmpwfqzi80p.swift:22:9: note: 'k' previously declared here
-    var k = 0
-        ^
-/tmp/tmpwfqzi80p.swift:48:9: error: invalid redeclaration of 'l'
-    var l = 0
-        ^
-/tmp/tmpwfqzi80p.swift:23:9: note: 'l' previously declared here
-    var l = 0
-        ^
-/tmp/tmpwfqzi80p.swift:49:9: error: invalid redeclaration of 'm'
-    var m = 0
-        ^
-/tmp/tmpwfqzi80p.swift:24:9: note: 'm' previously declared here
-    var m = 0
-        ^
-/tmp/tmpwfqzi80p.swift:50:9: error: invalid redeclaration of 'n'
-    var n = 0
-        ^
-/tmp/tmpwfqzi80p.swift:25:9: note: 'n' previously declared here
-    var n = 0
-        ^
-/tmp/tmpwfqzi80p.swift:51:9: error: invalid redeclaration of 'o'
-    var o = 0
-        ^
-/tmp/tmpwfqzi80p.swift:26:9: note: 'o' previously declared here
-    var o = 0
-        ^
-/tmp/tmpwfqzi80p.swift:52:9: error: invalid redeclaration of 'p'
-    var p = 0
-        ^
-/tmp/tmpwfqzi80p.swift:27:9: note: 'p' previously declared here
-    var p = 0
-        ^
-/tmp/tmpwfqzi80p.swift:53:9: error: invalid redeclaration of 'q'
-    var q = 0
-        ^
-/tmp/tmpwfqzi80p.swift:28:9: note: 'q' previously declared here
-    var q = 0
-        ^
-/tmp/tmpwfqzi80p.swift:54:9: error: invalid redeclaration of 'r'
-    var r = 0
-        ^
-/tmp/tmpwfqzi80p.swift:29:9: note: 'r' previously declared here
-    var r = 0
-        ^
-/tmp/tmpwfqzi80p.swift:55:9: error: invalid redeclaration of 's'
-    var s = 0
-        ^
-/tmp/tmpwfqzi80p.swift:30:9: note: 's' previously declared here
-    var s = 0
-        ^
-/tmp/tmpwfqzi80p.swift:56:9: error: invalid redeclaration of 't'
-    var t = 0
-        ^
-/tmp/tmpwfqzi80p.swift:31:9: note: 't' previously declared here
-    var t = 0
-        ^
-/tmp/tmpwfqzi80p.swift:57:9: error: invalid redeclaration of 'u'
-    var u = 0
-        ^
-/tmp/tmpwfqz
-*/
-/* stdout = 
-
-*/
-
-
-/// In this task, you will be given a string that represents a number of apples and oranges 
-/// that are distributed in a basket of fruit this basket contains 
-/// apples, oranges, and mango fruits. Given the string that represents the total number of 
-/// the oranges and apples and an integer that represent the total number of the fruits 
-/// in the basket return the number of the mango fruits in the basket.
-/// for examble:
-/// >>> fruit_distribution(s: "5 apples and 6 oranges", n: 19)
-/// 8
-/// >>> fruit_distribution(s: "0 apples and 1 oranges", n: 3)
-/// 2
-/// >>> fruit_distribution(s: "2 apples and 3 oranges", n: 100)
-/// 95
-/// >>> fruit_distribution(s: "100 apples and 1 oranges", n: 120)
-/// 19
-func fruit_distribution(s: String, n: Int) -> Int {
-    var apples = 0
-    var oranges = 0
-    var mangoes = 0
-    var i = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var a = 0
-    var b = 0
-    var c = 0
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(fruit_distribution(s: "5 apples and 6 oranges", n: 19) == 8)
-assert(fruit_distribution(s: "5 apples and 6 oranges", n: 21) == 10)
-assert(fruit_distribution(s: "0 apples and 1 oranges", n: 3) == 2)
-assert(fruit_distribution(s: "1 apples and 0 oranges", n: 3) == 2)
-assert(fruit_distribution(s: "2 apples and 3 oranges", n: 100) == 95)
-assert(fruit_distribution(s: "2 apples and 3 oranges", n: 5) == 0)
-assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
-
-
-
 // ----------- problem HumanEval_10_make_palindrome, completion 91 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -703,6 +78,74 @@ assert(make_palindrome(string: "x") == "x")
 assert(make_palindrome(string: "xyz") == "xyzyx")
 assert(make_palindrome(string: "xyx") == "xyx")
 assert(make_palindrome(string: "jerry") == "jerryrrej")
+
+
+
+// ----------- problem HumanEval_154_cycpattern_check, completion 126 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpegg7wuwr.swift:21:9: error: invalid redeclaration of 'b'
+    var b = b
+        ^
+/tmp/tmpegg7wuwr.swift:17:9: note: 'b' previously declared here
+    let b = b.lowercased()
+        ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+/// >>> cycpattern_check(a: "abcd", b: "abd")
+/// false
+/// >>> cycpattern_check(a: "hello", b: "ell")
+/// true
+/// >>> cycpattern_check(a: "whassup", b: "psus")
+/// false
+/// >>> cycpattern_check(a: "abab", b: "baa")
+/// true
+/// >>> cycpattern_check(a: "efef", b: "eeff")
+/// false
+/// >>> cycpattern_check(a: "himenss", b: "simen")
+/// true
+func cycpattern_check(a: String, b: String) -> Bool {
+    let a = a.lowercased()
+    let b = b.lowercased()
+    if a.count < b.count {
+        return false
+    }
+    var b = b
+    for _ in 0..<b.count {
+        if a.contains(b) {
+            return true
+        }
+        b = b.dropFirst() + b.prefix(1)
+    }
+    return false
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(cycpattern_check(a: "xyzw", b: "xyw") == false)
+assert(cycpattern_check(a: "yello", b: "ell") == true)
+assert(cycpattern_check(a: "whattup", b: "ptut") == false)
+assert(cycpattern_check(a: "efef", b: "fee") == true)
+assert(cycpattern_check(a: "abab", b: "aabb") == false)
+assert(cycpattern_check(a: "winemtt", b: "tinem") == true)
 
 
 
@@ -912,69 +355,6 @@ assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
 
 
 
-// ----------- problem HumanEval_65_circular_shift, completion 173 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp4l5b9szc.swift:16:9: error: invalid redeclaration of 'shift_str'
-    let shift_str = String(x_str[shift_index...])
-        ^
-/tmp/tmp4l5b9szc.swift:11:9: note: 'shift_str' previously declared here
-    var shift_str = String(shift)
-        ^
-/tmp/tmp4l5b9szc.swift:17:9: error: invalid redeclaration of 'x_str'
-    let x_str = String(x_str[..<shift_index])
-        ^
-/tmp/tmp4l5b9szc.swift:10:9: note: 'x_str' previously declared here
-    var x_str = String(x)
-        ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Circular shift the digits of the integer x, shift the digits right by shift
-/// and return the result as a string.
-/// If shift > number of digits, return digits reversed.
-/// >>> circular_shift(x: 12, shift: 1)
-/// "21"
-/// >>> circular_shift(x: 12, shift: 2)
-/// "12"
-func circular_shift(x: Int, shift: Int) -> String {
-    var x_str = String(x)
-    var shift_str = String(shift)
-    if shift > x_str.count {
-        return String(x_str.reversed())
-    }
-    let shift_index = x_str.index(x_str.startIndex, offsetBy: shift)
-    let shift_str = String(x_str[shift_index...])
-    let x_str = String(x_str[..<shift_index])
-    return shift_str + x_str
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(circular_shift(x: 100, shift: 2) == "001")
-assert(circular_shift(x: 12, shift: 2) == "12")
-assert(circular_shift(x: 97, shift: 8) == "79")
-assert(circular_shift(x: 12, shift: 1) == "21")
-assert(circular_shift(x: 11, shift: 101) == "11")
-
-
-
 // ----------- problem HumanEval_129_minPath, completion 132 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -1074,6 +454,212 @@ assert(minPath(grid: [[2, 7, 4], [3, 1, 5], [6, 8, 9]], k: 8) == [1, 3, 1, 3, 1,
 assert(minPath(grid: [[6, 1, 5], [3, 8, 9], [2, 7, 4]], k: 8) == [1, 5, 1, 5, 1, 5, 1, 5])
 assert(minPath(grid: [[1, 2], [3, 4]], k: 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2])
 assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
+
+
+
+// ----------- problem HumanEval_67_fruit_distribution, completion 123 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp1f8fi6bi.swift:46:9: error: invalid redeclaration of 'j'
+    var j = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:21:9: note: 'j' previously declared here
+    var j = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:47:9: error: invalid redeclaration of 'k'
+    var k = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:22:9: note: 'k' previously declared here
+    var k = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:48:9: error: invalid redeclaration of 'l'
+    var l = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:23:9: note: 'l' previously declared here
+    var l = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:49:9: error: invalid redeclaration of 'm'
+    var m = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:24:9: note: 'm' previously declared here
+    var m = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:50:9: error: invalid redeclaration of 'n'
+    var n = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:25:9: note: 'n' previously declared here
+    var n = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:51:9: error: invalid redeclaration of 'o'
+    var o = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:26:9: note: 'o' previously declared here
+    var o = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:52:9: error: invalid redeclaration of 'p'
+    var p = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:27:9: note: 'p' previously declared here
+    var p = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:53:9: error: invalid redeclaration of 'q'
+    var q = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:28:9: note: 'q' previously declared here
+    var q = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:54:9: error: invalid redeclaration of 'r'
+    var r = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:29:9: note: 'r' previously declared here
+    var r = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:55:9: error: invalid redeclaration of 's'
+    var s = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:30:9: note: 's' previously declared here
+    var s = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:56:9: error: invalid redeclaration of 't'
+    var t = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:31:9: note: 't' previously declared here
+    var t = 0
+        ^
+/tmp/tmp1f8fi6bi.swift:57:9: error: invalid redeclaration of 'u'
+    var u = 0
+        ^
+/tmp/tmp1f8f
+*/
+/* stdout = 
+
+*/
+
+
+/// In this task, you will be given a string that represents a number of apples and oranges 
+/// that are distributed in a basket of fruit this basket contains 
+/// apples, oranges, and mango fruits. Given the string that represents the total number of 
+/// the oranges and apples and an integer that represent the total number of the fruits 
+/// in the basket return the number of the mango fruits in the basket.
+/// for examble:
+/// >>> fruit_distribution(s: "5 apples and 6 oranges", n: 19)
+/// 8
+/// >>> fruit_distribution(s: "0 apples and 1 oranges", n: 3)
+/// 2
+/// >>> fruit_distribution(s: "2 apples and 3 oranges", n: 100)
+/// 95
+/// >>> fruit_distribution(s: "100 apples and 1 oranges", n: 120)
+/// 19
+func fruit_distribution(s: String, n: Int) -> Int {
+    var mango = 0
+    var apple = 0
+    var orange = 0
+    var i = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+   
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(fruit_distribution(s: "5 apples and 6 oranges", n: 19) == 8)
+assert(fruit_distribution(s: "5 apples and 6 oranges", n: 21) == 10)
+assert(fruit_distribution(s: "0 apples and 1 oranges", n: 3) == 2)
+assert(fruit_distribution(s: "1 apples and 0 oranges", n: 3) == 2)
+assert(fruit_distribution(s: "2 apples and 3 oranges", n: 100) == 95)
+assert(fruit_distribution(s: "2 apples and 3 oranges", n: 5) == 0)
+assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
 
 
 
@@ -1283,6 +869,69 @@ assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
 
 
 
+// ----------- problem HumanEval_65_circular_shift, completion 173 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp4l5b9szc.swift:16:9: error: invalid redeclaration of 'shift_str'
+    let shift_str = String(x_str[shift_index...])
+        ^
+/tmp/tmp4l5b9szc.swift:11:9: note: 'shift_str' previously declared here
+    var shift_str = String(shift)
+        ^
+/tmp/tmp4l5b9szc.swift:17:9: error: invalid redeclaration of 'x_str'
+    let x_str = String(x_str[..<shift_index])
+        ^
+/tmp/tmp4l5b9szc.swift:10:9: note: 'x_str' previously declared here
+    var x_str = String(x)
+        ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Circular shift the digits of the integer x, shift the digits right by shift
+/// and return the result as a string.
+/// If shift > number of digits, return digits reversed.
+/// >>> circular_shift(x: 12, shift: 1)
+/// "21"
+/// >>> circular_shift(x: 12, shift: 2)
+/// "12"
+func circular_shift(x: Int, shift: Int) -> String {
+    var x_str = String(x)
+    var shift_str = String(shift)
+    if shift > x_str.count {
+        return String(x_str.reversed())
+    }
+    let shift_index = x_str.index(x_str.startIndex, offsetBy: shift)
+    let shift_str = String(x_str[shift_index...])
+    let x_str = String(x_str[..<shift_index])
+    return shift_str + x_str
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(circular_shift(x: 100, shift: 2) == "001")
+assert(circular_shift(x: 12, shift: 2) == "12")
+assert(circular_shift(x: 97, shift: 8) == "79")
+assert(circular_shift(x: 12, shift: 1) == "21")
+assert(circular_shift(x: 11, shift: 101) == "11")
+
+
+
 // ----------- problem HumanEval_129_minPath, completion 35 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -1455,6 +1104,357 @@ assert(minPath(grid: [[2, 7, 4], [3, 1, 5], [6, 8, 9]], k: 8) == [1, 3, 1, 3, 1,
 assert(minPath(grid: [[6, 1, 5], [3, 8, 9], [2, 7, 4]], k: 8) == [1, 5, 1, 5, 1, 5, 1, 5])
 assert(minPath(grid: [[1, 2], [3, 4]], k: 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2])
 assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
+
+
+
+// ----------- problem HumanEval_67_fruit_distribution, completion 114 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwfqzi80p.swift:46:9: error: invalid redeclaration of 'j'
+    var j = 0
+        ^
+/tmp/tmpwfqzi80p.swift:21:9: note: 'j' previously declared here
+    var j = 0
+        ^
+/tmp/tmpwfqzi80p.swift:47:9: error: invalid redeclaration of 'k'
+    var k = 0
+        ^
+/tmp/tmpwfqzi80p.swift:22:9: note: 'k' previously declared here
+    var k = 0
+        ^
+/tmp/tmpwfqzi80p.swift:48:9: error: invalid redeclaration of 'l'
+    var l = 0
+        ^
+/tmp/tmpwfqzi80p.swift:23:9: note: 'l' previously declared here
+    var l = 0
+        ^
+/tmp/tmpwfqzi80p.swift:49:9: error: invalid redeclaration of 'm'
+    var m = 0
+        ^
+/tmp/tmpwfqzi80p.swift:24:9: note: 'm' previously declared here
+    var m = 0
+        ^
+/tmp/tmpwfqzi80p.swift:50:9: error: invalid redeclaration of 'n'
+    var n = 0
+        ^
+/tmp/tmpwfqzi80p.swift:25:9: note: 'n' previously declared here
+    var n = 0
+        ^
+/tmp/tmpwfqzi80p.swift:51:9: error: invalid redeclaration of 'o'
+    var o = 0
+        ^
+/tmp/tmpwfqzi80p.swift:26:9: note: 'o' previously declared here
+    var o = 0
+        ^
+/tmp/tmpwfqzi80p.swift:52:9: error: invalid redeclaration of 'p'
+    var p = 0
+        ^
+/tmp/tmpwfqzi80p.swift:27:9: note: 'p' previously declared here
+    var p = 0
+        ^
+/tmp/tmpwfqzi80p.swift:53:9: error: invalid redeclaration of 'q'
+    var q = 0
+        ^
+/tmp/tmpwfqzi80p.swift:28:9: note: 'q' previously declared here
+    var q = 0
+        ^
+/tmp/tmpwfqzi80p.swift:54:9: error: invalid redeclaration of 'r'
+    var r = 0
+        ^
+/tmp/tmpwfqzi80p.swift:29:9: note: 'r' previously declared here
+    var r = 0
+        ^
+/tmp/tmpwfqzi80p.swift:55:9: error: invalid redeclaration of 's'
+    var s = 0
+        ^
+/tmp/tmpwfqzi80p.swift:30:9: note: 's' previously declared here
+    var s = 0
+        ^
+/tmp/tmpwfqzi80p.swift:56:9: error: invalid redeclaration of 't'
+    var t = 0
+        ^
+/tmp/tmpwfqzi80p.swift:31:9: note: 't' previously declared here
+    var t = 0
+        ^
+/tmp/tmpwfqzi80p.swift:57:9: error: invalid redeclaration of 'u'
+    var u = 0
+        ^
+/tmp/tmpwfqz
+*/
+/* stdout = 
+
+*/
+
+
+/// In this task, you will be given a string that represents a number of apples and oranges 
+/// that are distributed in a basket of fruit this basket contains 
+/// apples, oranges, and mango fruits. Given the string that represents the total number of 
+/// the oranges and apples and an integer that represent the total number of the fruits 
+/// in the basket return the number of the mango fruits in the basket.
+/// for examble:
+/// >>> fruit_distribution(s: "5 apples and 6 oranges", n: 19)
+/// 8
+/// >>> fruit_distribution(s: "0 apples and 1 oranges", n: 3)
+/// 2
+/// >>> fruit_distribution(s: "2 apples and 3 oranges", n: 100)
+/// 95
+/// >>> fruit_distribution(s: "100 apples and 1 oranges", n: 120)
+/// 19
+func fruit_distribution(s: String, n: Int) -> Int {
+    var apples = 0
+    var oranges = 0
+    var mangoes = 0
+    var i = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var a = 0
+    var b = 0
+    var c = 0
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(fruit_distribution(s: "5 apples and 6 oranges", n: 19) == 8)
+assert(fruit_distribution(s: "5 apples and 6 oranges", n: 21) == 10)
+assert(fruit_distribution(s: "0 apples and 1 oranges", n: 3) == 2)
+assert(fruit_distribution(s: "1 apples and 0 oranges", n: 3) == 2)
+assert(fruit_distribution(s: "2 apples and 3 oranges", n: 100) == 95)
+assert(fruit_distribution(s: "2 apples and 3 oranges", n: 5) == 0)
+assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
+
+
+
+// ----------- problem HumanEval_154_cycpattern_check, completion 57 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwidmgiyw.swift:21:9: error: invalid redeclaration of 'b'
+    var b = b
+        ^
+/tmp/tmpwidmgiyw.swift:17:9: note: 'b' previously declared here
+    let b = b.lowercased()
+        ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+/// >>> cycpattern_check(a: "abcd", b: "abd")
+/// false
+/// >>> cycpattern_check(a: "hello", b: "ell")
+/// true
+/// >>> cycpattern_check(a: "whassup", b: "psus")
+/// false
+/// >>> cycpattern_check(a: "abab", b: "baa")
+/// true
+/// >>> cycpattern_check(a: "efef", b: "eeff")
+/// false
+/// >>> cycpattern_check(a: "himenss", b: "simen")
+/// true
+func cycpattern_check(a: String, b: String) -> Bool {
+    let a = a.lowercased()
+    let b = b.lowercased()
+    if a.contains(b) {
+        return true
+    }
+    var b = b
+    for _ in 0..<b.count {
+        b.append(b.removeFirst())
+        if a.contains(b) {
+            return true
+        }
+    }
+    return false
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(cycpattern_check(a: "xyzw", b: "xyw") == false)
+assert(cycpattern_check(a: "yello", b: "ell") == true)
+assert(cycpattern_check(a: "whattup", b: "ptut") == false)
+assert(cycpattern_check(a: "efef", b: "fee") == true)
+assert(cycpattern_check(a: "abab", b: "aabb") == false)
+assert(cycpattern_check(a: "winemtt", b: "tinem") == true)
+
+
+
+// ----------- problem HumanEval_94_skjkasdkd, completion 52 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpfmf7x5i4.swift:20:12: error: cannot find 'isPrime' in scope
+        if isPrime(num) {
+           ^~~~~~~
+/tmp/tmpfmf7x5i4.swift:26:9: error: invalid redeclaration of 'largestPrime'
+    var largestPrime = largestPrime
+        ^
+/tmp/tmpfmf7x5i4.swift:24:9: note: 'largestPrime' previously declared here
+    let largestPrime = primes.max()!
+        ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given an array of integers.
+/// You need to find the largest prime value and return the sum of its digits.
+/// Examples:
+/// >>> skjkasdkd(lst: [0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3])
+/// 10
+/// >>> skjkasdkd(lst: [1, 0, 1, 8, 2, 4597, 2, 1, 3, 40, 1, 2, 1, 2, 4, 2, 5, 1])
+/// 25
+/// >>> skjkasdkd(lst: [1, 3, 1, 32, 5107, 34, 83278, 109, 163, 23, 2323, 32, 30, 1, 9, 3])
+/// 13
+/// >>> skjkasdkd(lst: [0, 724, 32, 71, 99, 32, 6, 0, 5, 91, 83, 0, 5, 6])
+/// 11
+/// >>> skjkasdkd(lst: [0, 81, 12, 3, 1, 21])
+/// 3
+/// >>> skjkasdkd(lst: [0, 8, 1, 2, 1, 7])
+/// 7
+func skjkasdkd(lst: [Int]) -> Int {
+    var primes = [Int]()
+    for num in lst {
+        if isPrime(num) {
+            primes.append(num)
+        }
+    }
+    let largestPrime = primes.max()!
+    var sum = 0
+    var largestPrime = largestPrime
+    while largestPrime > 0 {
+        sum += largestPrime % 10
+        largestPrime /= 10
+    }
+    return sum
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(skjkasdkd(lst: [0, 3, 2, 1, 3, 5, 7, 4, 5, 5, 5, 2, 181, 32, 4, 32, 3, 2, 32, 324, 4, 3]) == 10)
+assert(skjkasdkd(lst: [1, 0, 1, 8, 2, 4597, 2, 1, 3, 40, 1, 2, 1, 2, 4, 2, 5, 1]) == 25)
+assert(skjkasdkd(lst: [1, 3, 1, 32, 5107, 34, 83278, 109, 163, 23, 2323, 32, 30, 1, 9, 3]) == 13)
+assert(skjkasdkd(lst: [0, 724, 32, 71, 99, 32, 6, 0, 5, 91, 83, 0, 5, 6]) == 11)
+assert(skjkasdkd(lst: [0, 81, 12, 3, 1, 21]) == 3)
+assert(skjkasdkd(lst: [0, 8, 1, 2, 1, 7]) == 7)
+assert(skjkasdkd(lst: [8191]) == 19)
+assert(skjkasdkd(lst: [8191, 123456, 127, 7]) == 19)
+assert(skjkasdkd(lst: [127, 97, 8192]) == 10)
 
 
 

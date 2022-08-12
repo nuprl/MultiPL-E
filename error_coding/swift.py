@@ -210,7 +210,7 @@ def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, comp
 
 non_exclusive_mutation = match_re(r"error: overlapping accesses to .*, but modification requires exclusive access")
 
-MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
+MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument labels? .* in call")
 def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None, None
 
@@ -225,7 +225,10 @@ def incorrect_argument_label(exit_code: int, status: str, stderr: str, stdout: s
     return "error: incorrect argument label in call" in stderr, None
 
 extra_argument_in_call = match_re(r"error: extra arguments? .* in call")
-missing_argument_in_call = match_re(r"error: missing arguments? .* in call")
+# missing_argument_in_call = f_and(
+#     match_re(r"error: missing arguments? .* in call"),
+#     f_not(missing_argument_label)
+# )
 
 
 def missing_return(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
@@ -338,109 +341,106 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-CompilerErrorCutoff', ('Seems like the compiler crashed or for some reason its output got cutoff', 
         f_and(compile_error_category, compiler_error_cutoff)
     )),
-    ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?**', 
+    ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?** GOLD = problem HumanEval_99_closest_integer, completion 171', 
         f_and(compile_error_category, linker_error)
     )),
-    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion.', 
+    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion. GOLD = problem HumanEval_160_do_algebra, completion 196', 
         f_and(compile_error_category, invalid_syntax)
     )),
-    ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift.', 
+    ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift. GOLD = problem HumanEval_111_histogram, completion 19', 
         f_and(compile_error_category, use_of_deprecated_unavailable_things)
     )),
-    ('CompileError-UseOfModWithFloat', ('The completion uses % on a float / double.', 
+    ('CompileError-UseOfModWithFloat', ('The completion uses % on a float / double. GOLD = problem HumanEval_151_double_the_difference, completion 92', 
         f_and(compile_error_category, use_of_mod_with_float)
     )),
-    ('CompileError-SubscriptStringWithInt', ('Swift does not allow you to subscript a string using an Int', 
+    ('CompileError-SubscriptStringWithInt', ('Swift does not allow you to subscript a string using an Int. GOLD = problem HumanEval_119_match_parens, completion 53', 
         f_and(compile_error_category, subscript_string_with_int)
     )),
-    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method. **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
+    ('CompileError-NonExistentMethod', ('An call was made to a non-existent method. **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.** GOLD = problem HumanEval_144_simplify, completion 90 ; problem HumanEval_108_count_nums, completion 110', 
         f_and(compile_error_category, nonexistent_method)
     )),
-    ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function.  **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.**', 
+    ('CompileError-CanNotFindInScope', ('A reference to a non-existent variable / function.  **Some cases are caused by translation bug (didnt import Foundation). TODO: classify those cases.** GOLD = problem HumanEval_107_even_odd_palindrome, completion 89 ; problem HumanEval_71_triangle_area, completion 38', 
         f_and(compile_error_category, nonexistent_var)
     )),
-    ('CompileError-UseBeforeDecl', ('A local variable is used before its declaration.', 
+    ('CompileError-UseBeforeDecl', ('A local variable is used before its declaration. GOLD = problem HumanEval_99_closest_integer, completion 142', 
         f_and(compile_error_category, use_before_decl)
     )),
-    ('CompileError-RedeclarationOfVariable', ('A variable was re-declared', 
+    ('CompileError-RedeclarationOfVariable', ('A variable was re-declared. GOLD = problem HumanEval_154_cycpattern_check, completion 126', 
         f_and(compile_error_category, redeclared_var)
     )),
-    ('CompileError-TypeCheck-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
+    ('CompileError-TypeCheck-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked. GOLD = problem HumanEval_33_sort_third, completion 92', 
         f_and(compile_error_category, should_have_unwrapped_optional)
     )),
-    ('CompileError-TypeCheck-UnwrappedNonOptional', ('A non-optional value was unwrapped.', 
+    ('CompileError-TypeCheck-UnwrappedNonOptional', ('A non-optional value was unwrapped. GOLD = problem HumanEval_89_encrypt, completion 103', 
         f_and(compile_error_category, non_optional_unwrapped)
     )),
-    ('CompileError-TypeCheck-ReturnTypeError', ('The type of the return value does not match the declared return type of the function.', 
+    ('CompileError-TypeCheck-ReturnTypeError', ('The type of the return value does not match the declared return type of the function. GOLD = problem HumanEval_27_flip_case, completion 114', 
         f_and(compile_error_category, return_type_error)
     )),
-    ('CompileError-TypeCheck-ArgumentTypeError', ('The type of an argument to a function does not match the expected type.', 
+    ('CompileError-TypeCheck-ArgumentTypeError', ('The type of an argument to a function does not match the expected type. GOLD = problem HumanEval_93_encode, completion 128', 
         f_and(compile_error_category, argument_type_error)
     )),
-    ('CompileError-TypeCheck-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure', 
+    ('CompileError-TypeCheck-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure. GOLD = problem HumanEval_161_solve, completion 137', 
         f_and(compile_error_category, closure_result_type_error)
     )),
-    ('CompileError-TypeCheck-BranchTypeMismatch', ('The types of 2 branches do not match', 
+    ('CompileError-TypeCheck-BranchTypeMismatch', ('The types of 2 branches do not match. GOLD = problem HumanEval_66_digitSum, completion 26', 
         f_and(compile_error_category, branch_type_error)
     )),
-    ('CompileError-TypeCheck-BinOpTypeError', ('Type error when using a binary operator', 
+    ('CompileError-TypeCheck-BinOpTypeError', ('Type error when using a binary operator. GOLD = problem HumanEval_99_closest_integer, completion 38', 
         f_and(compile_error_category, bin_op_type_error)
     )),
-    ('CompileError-TypeCheck-PatternTypeError', ('The expression in a switch statement has different type from the match pattern (or an if pattern)', 
+    ('CompileError-TypeCheck-PatternTypeError', ('The expression in a switch statement has different type from the match pattern (or an if pattern). GOLD = problem HumanEval_17_parse_music, completion 95', 
         f_and(compile_error_category, pattern_type_error)
     )),
-    ('CompileError-TypeCheck-SubscriptingTypeError', ('Subscripting has a type error', 
+    ('CompileError-TypeCheck-SubscriptingTypeError', ('Subscripting has a type error. GOLD = problem HumanEval_10_make_palindrome, completion 77', 
         f_and(compile_error_category, subscript_type_error)
     )),
-    ('CompileError-TypeCheck-AssignmentTypeError', ('Assignment has a type error', 
+    ('CompileError-TypeCheck-AssignmentTypeError', ('Assignment has a type error. GOLD = problem HumanEval_140_fix_spaces, completion 143', 
         f_and(compile_error_category, assignment_type_error)
     )),
     ('CompileError-TypeCheck-MiscTypeError', ('misc type error', 
         f_and(compile_error_category, misc_type_error)
     )),
-    ('CompileError-TypeCheck-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong.', 
+    ('CompileError-TypeCheck-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong. GOLD = problem HumanEval_33_sort_third, completion 1', 
         f_and(compile_error_category, weird_subscript_type_error)
     )),
-    ('CompileError-TypeCheck-CallingNonFunctionType', ('The code calls a non-function type', 
+    ('CompileError-TypeCheck-CallingNonFunctionType', ('The code calls a non-function type. GOLD = problem HumanEval_9_rolling_max, completion 180', 
         f_and(compile_error_category, calling_non_function_type)
     )),
-    ('CompileError-TypeCheck-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
+    ('CompileError-TypeCheck-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript. GOLD = problem HumanEval_10_make_palindrome, completion 180', 
         f_and(compile_error_category, unknown_type_error_in_call)
     )),
-    ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
+    ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var). GOLD = problem HumanEval_59_largest_prime_factor, completion 144', 
         f_and(compile_error_category, mutate_immutable)
     )),
-    ('CompileError-NonExclusiveMutation', ('Attempted to simultaneously read and write, caught at type checking', 
+    ('CompileError-NonExclusiveMutation', ('Attempted to simultaneously read and write, caught at type checking. GOLD = problem HumanEval_33_sort_third, completion 105', 
         f_and(compile_error_category, non_exclusive_mutation)
     )),
-    ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
+    ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call. GOLD = problem HumanEval_83_starts_one_ends, completion 146',
         f_and(compile_error_category, missing_argument_label)
     )),
-    ('CompileError-ExtraneousArgumentLabel', ('An unnecessary argument label(s) is in a function call (possibly caused due to breaking changes in the version of Swift)', 
+    ('CompileError-ExtraneousArgumentLabel', ('An unnecessary argument label(s) is in a function call (possibly caused due to breaking changes in the version of Swift). GOLD = problem HumanEval_5_intersperse, completion 1', 
         f_and(compile_error_category, extraneous_argument_label)
     )),
-    ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift)', 
+    ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift). GOLD = problem HumanEval_93_encode, completion 161', 
         f_and(compile_error_category, incorrect_argument_label)
     )),
-    ('CompileError-ExtraArgument', ('An extra argument(s) is in a function call', 
+    ('CompileError-ExtraArgument', ('An extra argument(s) is in a function call. GOLD = problem HumanEval_18_how_many_times, completion 131', 
         f_and(compile_error_category, extra_argument_in_call)
     )),
-    ('CompileError-MissingArgument', ('A function call is missing some argument(s)', 
-        f_and(compile_error_category, missing_argument_in_call)
-    )),
-    ('CompileError-MissingReturn', ('A return statement is missing', 
+    ('CompileError-MissingReturn', ('A return statement is missing. GOLD = problem HumanEval_83_starts_one_ends, completion 171', 
         f_and(compile_error_category, missing_return)
     )),
-    ('CompileError-TypeMismatch-Numerics', ('Type mismatch between numeric types', 
+    ('CompileError-TypeMismatch-Numerics', ('Type mismatch between numeric types. GOLD = problem HumanEval_66_digitSum, completion 140', 
         f_and(compile_error_category, type_mismatch_both_numeric)
     )),
-    ('CompileError-TypeMismatch-CollectionAndInner', ('Type mismatch between the collection type and element type, e.g. [String] and String', 
+    ('CompileError-TypeMismatch-CollectionAndInner', ('Type mismatch between the collection type and element type, e.g. [String] and String. GOLD = problem HumanEval_27_flip_case, completion 2', 
         f_and(compile_error_category, type_mismatch_collection_inner_type)
     )),
-    ('CompileError-TypeMismatch-StringIndices', ('Type mismatch with string index problems.', 
+    ('CompileError-TypeMismatch-StringIndices', ('Type mismatch with string index problems. GOLD = problem HumanEval_89_encrypt, completion 84', 
         f_and(compile_error_category, type_mismatch_string_indices)
     )),
-    ('CompileError-TypeMismatch-StringsArentCharArrays', ('A string is not an array of characters', 
+    ('CompileError-TypeMismatch-StringsArentCharArrays', ('A string is not an array of characters. GOLD = problem HumanEval_161_solve, completion 3', 
         f_and(compile_error_category, type_mismatch_strings_arent_char_arrays)
     )),
     ('CompileError-TypeMismatch-Else', ('Type mismatch else case', 
@@ -481,7 +481,6 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     #             extraneous_argument_label,
     #             incorrect_argument_label,
     #             extra_argument_in_call,
-    #             missing_argument_in_call,
     #             missing_return,
     #             type_mismatch_both_numeric,
     #             type_mismatch_collection_inner_type,
@@ -501,37 +500,37 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('Exception', ('Any runtime exception occurred', 
         exception_category
     )),
-    ('Exception-AssertionFail', ('An assertion failed', 
+    ('Exception-AssertionFail', ('An assertion failed. GOLD = problem HumanEval_92_any_int, completion 5', 
         f_and(exception_category, assertion_fail)
     )),
-    ('Exception-UnwrapNil', ('Nil was unwrapped', 
+    ('Exception-UnwrapNil', ('Nil was unwrapped. GOLD = problem HumanEval_67_fruit_distribution, completion 119', 
         f_and(exception_category, unwrap_nil)
     )),
-    ('Exception-IndexOutOfRange', ('Index out of range', 
+    ('Exception-IndexOutOfRange', ('Index out of range. GOLD = problem HumanEval_9_rolling_max, completion 137', 
         f_and(exception_category, index_out_of_range)
     )),
-    ('Exception-StringIndexOutOfBounds', ('String index out of bounds', 
+    ('Exception-StringIndexOutOfBounds', ('String index out of bounds. GOLD = problem HumanEval_134_check_if_last_char_is_a_letter, completion 50', 
         f_and(exception_category, string_index_out_of_bounds)
     )),
-    ('Exception-ArrayIndexOutOfRange', ('Array index out of range', 
+    ('Exception-ArrayIndexOutOfRange', ('Array index out of range. GOLD = problem HumanEval_37_sort_even, completion 50', 
         f_and(exception_category, array_index_out_of_range)
     )),
-    ('Exception-InvalidRangeCreation', ('Invalid range creation', 
+    ('Exception-InvalidRangeCreation', ('Invalid range creation. GOLD = problem HumanEval_82_prime_length, completion 128', 
         f_and(exception_category, invalid_range_creation)
     )),
-    ('Exception-RemoveLastFromEmptyCollection', ('Attempted to remove last element from empty collection', 
+    ('Exception-RemoveLastFromEmptyCollection', ('Attempted to remove last element from empty collection. GOLD = problem HumanEval_5_intersperse, completion 132', 
         f_and(exception_category, cant_remove_last_elem_from_empty_collection)
     )),
-    ('Exception-RemoveFirstFromEmptyCollection', ('Attempted to remove first element from empty collection', 
+    ('Exception-RemoveFirstFromEmptyCollection', ('Attempted to remove first element from empty collection. GOLD = problem HumanEval_17_parse_music, completion 172', 
         f_and(exception_category, cant_remove_first_elem_from_empty_collection)
     )),
-    ('Exception-DivisionByZeroInRemainder', ('Division by zero when calculating remainder (mod)', 
+    ('Exception-DivisionByZeroInRemainder', ('Division by zero when calculating remainder (mod). GOLD = problem HumanEval_49_modp, completion 100', 
         f_and(exception_category, div_by_zero_remainder)
     )),
-    ('Exception-NegativeArrayIndex', ('Negative array index', 
+    ('Exception-NegativeArrayIndex', ('Negative array index. GOLD = problem HumanEval_10_make_palindrome, completion 193', 
         f_and(exception_category, negative_array_index)
     )),
-    ('Exception-OverflowUnderflowTrap', ('A Int / UInt overflow / underflow occurred. Note: there isnt anything in the error messages that indicates this but I verified for all 9 cases manually.', 
+    ('Exception-OverflowUnderflowTrap', ('A Int / UInt overflow / underflow occurred. Note: there isnt anything in the error messages that indicates this but I verified for all 9 cases manually. GOLD = problem HumanEval_76_is_simple_power, completion 40', 
         f_and(exception_category, over_under_flow)
     )),
     # ('Exception-Else', ('Other exceptions', 
