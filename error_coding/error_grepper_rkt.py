@@ -1,9 +1,13 @@
+from asyncore import write
 import re
 
 from matplotlib.pyplot import cla
-import error_coding.yamlize_errors as yamlize_errors 
+import yamlize_errors as yamlize_errors 
 import sys
 from pathlib import Path
+
+SRC_PATH=Path(Path(__file__).parent, "..", "experiments", "rkt-davinci-0.2-reworded")
+WRITE_PATH=Path(Path(__file__).parent, "..", "error_coding", "rkt-davinci-0.2-reworded")
 
 # Technically a Trie is more efficient, but oh well
 class Filters:
@@ -11,8 +15,11 @@ class Filters:
     # hack: since dir() sorts members alphabetically, we do this so this 
     # is the first to be checked.
     @staticmethod
-    def A01_html_tag_present_in_code(e):
-        return "<code>" in e.program or "</code>" in e.program
+    def A01_generating_webpage_or_markdown(e):
+        return "<code>" in e.program or \
+               "</code>" in e.program or \
+               "```racket" in e.program or \
+               'read-syntax: bad syntax `##`' in e.stderr # generating Markdown headers
 
     @staticmethod
     def bad_syntax(e):
@@ -86,6 +93,17 @@ class Filters:
     def timeout(e):
         return "Timeout" == e.status
 
+def print_program(result, name, f=sys.stdout):
+    program = result.program
+    status = result.status
+    stderr = result.stderr
+    print("==========================", file=f)
+    print(f"------- Program {name} --------", file=f)
+    print(program, file=f)
+    print(f"------- Status: {status} --------", file=f)
+    print("-------- stderr -------",file=f)
+    print(stderr, file=f)
+
 def find_errors(path):
     files = path.glob("*.results.yaml")
     errors = []
@@ -109,7 +127,7 @@ def find_errors(path):
 
     for filter in filters:
         print(filter[1], file=sys.stderr, end=",")  
-    print("")
+    print("", file=sys.stderr)
 
     classified = {name: [] for _, name in filters}
 
@@ -124,38 +142,45 @@ def find_errors(path):
             if func(err):
                 classified[name_filter].append(i)
                 current_classified = True
-                continue
+                break
         if not current_classified:
             unclassified.append(i)
 
     total = 0
-    for key in classified:
-        total += len(classified[key])
-        print(f"{key}: {len(classified[key])}")
-    
+    for error_cause in classified:
+        if len(classified[error_cause]) == 0:
+            continue
+        file_tally = {}
+        total += len(classified[error_cause])
+        print(f"{error_cause}: {len(classified[error_cause])}")
+
+        for result_i in classified[error_cause]:
+            name = errors[result_i][1]
+            if name in file_tally:
+                file_tally[name] += 1
+            else:
+                file_tally[name] = 1
+
+        with open(WRITE_PATH / f"{error_cause}.txt", "w") as write_file:
+            for source_file in file_tally:
+                print(f"{source_file}: {file_tally[source_file]}", file=write_file)
+            for result_i in classified[error_cause]:
+                result = errors[result_i]
+                print_program(result[0], result[1], f=write_file)
+            
+
+    with open(WRITE_PATH / "unclassified.txt", "w") as write_file:
+        for i in unclassified:
+            print_program(errors[i][0], errors[i][1], f=write_file)
+
     print("unclassified:", len(unclassified))
     total += len(unclassified)
 
     print("total:", total)
-
-    for i in unclassified:
-        e = errors[i]
-        program = e[0].program
-        status = e[0].status
-        stderr = e[0].stderr
-        print("==========================")
-        print(f"------- Program {e[1]} --------")
-        print(program)
-        print(f"------- Status: {status} --------")
-        print("-------- stderr -------")
-        print(stderr)
-            
-
-
+    print("should have:", len(errors))
 
 def main():
-    path = Path(Path(__file__).parent, "..", "experiments", "rkt-davinci-0.2-reworded")
-    print(find_errors(path))
+    find_errors(SRC_PATH)
     
 
 if __name__ == "__main__":
