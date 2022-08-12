@@ -1,0 +1,1415 @@
+name: HumanEval_111_histogram
+language: sh
+prompt: "#!/bin/bash\n# Given a string representing a space separated lowercase letters,\
+  \ return a dictionary\n# of the letter with the most repetition and containing the\
+  \ corresponding count.\n# If several letters have the same occurrence, return all\
+  \ of them.\n# Example:\n# >>> $(histogram \"a b c\")\n# {'\"a\"': '\"1\"', '\"b\"\
+  ': '\"1\"', '\"c\"': '\"1\"'}\n# >>> $(histogram \"a b b a\")\n# {'\"a\"': '\"2\"\
+  ', '\"b\"': '\"2\"'}\n# >>> $(histogram \"a b c a b\")\n# {'\"a\"': '\"2\"', '\"\
+  b\"': '\"2\"'}\n# >>> $(histogram \"b b b b a\")\n# {'\"b\"': '\"4\"'}\n# >>> $(histogram\
+  \ \"\")\n# {}\nhistogram() {\n"
+tests: "}\n\ncandidate() {\n    histogram \"$@\"\n}\n\nset -e\nrun_test() {\n    [[\
+  \ $(candidate \"a b b a\") = \"a,2\\nb,2\" ]]\n    [[ $(candidate \"a b c a b\"\
+  ) = \"a,2\\nb,2\" ]]\n    [[ $(candidate \"a b c d g\") = \"a,1\\nb,1\\nc,1\\nd,1\\\
+  ng,1\" ]]\n    [[ $(candidate \"r t g\") = \"r,1\\nt,1\\ng,1\" ]]\n    [[ $(candidate\
+  \ \"b b b b a\") = \"b,4\" ]]\n    [[ $(candidate \"r t g\") = \"r,1\\nt,1\\ng,1\"\
+  \ ]]\n    [[ $(candidate \"\") = \"\" ]]\n    [[ $(candidate \"a\") = \"a,1\" ]]\n\
+  }\n\nrun_test"
+completions: ["    local -A histogram\n    for word in $1; do\n        ((histogram[$word]++))\n\
+    \    done\n    local max=0\n    for key in \"${!histogram[@]}\"; do\n        if\
+    \ ((histogram[$key] > max)); then\n            max=${histogram[$key]}\n      \
+    \  fi\n    done\n    local result=\"\"\n    for key in \"${!histogram[@]}\"; do\n\
+    \        if ((histogram[$key] == max)); then\n            result=\"$result \\\"\
+    $key\\\": \\\"${histogram[$key]}\\\"\"\n        fi\n    done\n    echo \"{$result}\"",
+  "    local -A histogram\n    for letter in $1; do\n        histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n    done\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if [[ ${histogram[$letter]} -gt $max ]]; then\n            max=${histogram[$letter]}\n\
+    \        fi\n    done\n    local result=\"\"\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if [[ ${histogram[$letter]} -eq $max ]]; then\n            result=\"\
+    $result \\\"$letter\\\": \\\"${histogram[$letter]}\\\"\"\n        fi\n    done\n\
+    \    echo \"{\"$result\"}\"", "    local -A histogram\n    for word in $1; do\n\
+    \        histogram[$word]=$((histogram[$word] + 1))\n    done\n    local -A max_histogram\n\
+    \    local max_count=0\n    for word in \"${!histogram[@]}\"; do\n        if [[\
+    \ ${histogram[$word]} -gt $max_count ]]; then\n            max_count=${histogram[$word]}\n\
+    \            unset max_histogram\n            max_histogram[$word]=$max_count\n\
+    \        elif [[ ${histogram[$word]} -eq $max_count ]]; then\n            max_histogram[$word]=$max_count\n\
+    \        fi\n    done\n    echo -n \"{\"\n    for word in \"${!max_histogram[@]}\"\
+    ; do\n        echo -n \"\\\"$word\\\": \\\"${max_histogram[$word]}\\\"\"\n   \
+    \     if [[ $word != \"${!max_histogram[@]: -1}\" ]]; then\n            echo -n\
+    \ \", \"\n        fi\n    done\n    echo -n \"}\"", "  local -A histogram\n  for\
+    \ letter in $1; do\n    histogram[$letter]=$((histogram[$letter] + 1))\n  done\n\
+    \  local max=0\n  for count in ${histogram[@]}; do\n    if ((count > max)); then\n\
+    \      max=$count\n    fi\n  done\n  local -a result\n  for letter in ${!histogram[@]};\
+    \ do\n    if ((histogram[$letter] == max)); then\n      result+=(\"\\\"$letter\\\
+    \": \\\"$max\\\"\")\n    fi\n  done\n  echo \"{\"$(IFS=,; echo \"${result[*]}\"\
+    )\"}\"", "    local -A hist\n    for word in $1; do\n        hist[$word]=$((hist[$word]+1))\n\
+    \    done\n    local max=0\n    for word in \"${!hist[@]}\"; do\n        if ((hist[$word]\
+    \ > max)); then\n            max=${hist[$word]}\n        fi\n    done\n    local\
+    \ -a result\n    for word in \"${!hist[@]}\"; do\n        if ((hist[$word] ==\
+    \ max)); then\n            result+=(\"\\\"$word\\\": \\\"${hist[$word]}\\\"\"\
+    )\n        fi\n    done\n    echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"",
+  "    local -A dict\n    for i in $1; do\n        ((dict[$i]++))\n    done\n    local\
+    \ -a max\n    local max_count=0\n    for i in \"${!dict[@]}\"; do\n        if\
+    \ ((dict[$i] > max_count)); then\n            max_count=${dict[$i]}\n        \
+    \    max=(\"$i\")\n        elif ((dict[$i] == max_count)); then\n            max+=(\"\
+    $i\")\n        fi\n    done\n    echo -n \"{\"\n    for i in \"${max[@]}\"; do\n\
+    \        echo -n \"\\\"$i\\\": \\\"$max_count\\\"\"\n        if ((${#max[@]} >\
+    \ 1)); then\n            echo -n \", \"\n        fi\n    done\n    echo \"}\"",
+  "  local -A counts\n  for letter in $1; do\n    counts[$letter]=$((counts[$letter]\
+    \ + 1))\n  done\n  local -A maxes\n  for letter in \"${!counts[@]}\"; do\n   \
+    \ if [[ ${counts[$letter]} -gt ${maxes[count]} ]]; then\n      maxes[count]=${counts[$letter]}\n\
+    \      maxes[letters]=$letter\n    elif [[ ${counts[$letter]} -eq ${maxes[count]}\
+    \ ]]; then\n      maxes[letters]+=\" $letter\"\n    fi\n  done\n  local result=\"\
+    {\"\n  for letter in ${maxes[letters]}; do\n    result+=\"\\\"$letter\\\": \\\"\
+    ${maxes[count]}\\\", \"\n  done\n  echo \"${result%%, *}}\"", "    local -A dict\n\
+    \    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n  \
+    \  local max=0\n    for word in \"${!dict[@]}\"; do\n        if [[ ${dict[$word]}\
+    \ -gt $max ]]; then\n            max=${dict[$word]}\n        fi\n    done\n  \
+    \  local result=()\n    for word in \"${!dict[@]}\"; do\n        if [[ ${dict[$word]}\
+    \ -eq $max ]]; then\n            result+=(\"$word:${dict[$word]}\")\n        fi\n\
+    \    done\n    echo \"${result[@]}\"", "    local -A histogram\n    for word in\
+    \ $1; do\n        ((histogram[$word]++))\n    done\n    local -a max_count_words\n\
+    \    local max_count=0\n    for word in \"${!histogram[@]}\"; do\n        if ((histogram[$word]\
+    \ > max_count)); then\n            max_count_words=(\"$word\")\n            max_count=${histogram[$word]}\n\
+    \        elif ((histogram[$word] == max_count)); then\n            max_count_words+=(\"\
+    $word\")\n        fi\n    done\n    echo -n '{'\n    for word in \"${max_count_words[@]}\"\
+    ; do\n        echo -n \"\\\"$word\\\": \\\"$max_count\\\", \"\n    done\n    echo\
+    \ -n '}'", "    local -A histogram\n    local letter\n    for letter in $1; do\n\
+    \        ((histogram[$letter]++))\n    done\n    local max_count=0\n    local\
+    \ max_letter\n    for letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter]\
+    \ > max_count)); then\n            max_count=${histogram[$letter]}\n         \
+    \   max_letter=$letter\n        fi\n    done\n    local result=\"{\"\n    for\
+    \ letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter] == max_count));\
+    \ then\n            result+=\"\\\"$letter\\\": \\\"$max_count\\\", \"\n      \
+    \  fi\n    done\n    echo \"${result%??}}\"", "  local -A histogram\n  for letter\
+    \ in $1; do\n    ((histogram[$letter]++))\n  done\n  local max=0\n  for letter\
+    \ in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] > max)); then\n   \
+    \   max=${histogram[$letter]}\n    fi\n  done\n  local result=\"\"\n  for letter\
+    \ in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max)); then\n  \
+    \    result+=\"\\\"$letter\\\": \\\"$max\\\", \"\n    fi\n  done\n  echo \"{${result%,\
+    \ }}\"", "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n     \
+    \   if ((histogram[$letter] > max)); then\n            max=${histogram[$letter]}\n\
+    \        fi\n    done\n    local result=\"\"\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max)); then\n            result+=\"\\\
+    \"$letter\\\": \\\"$max\\\", \"\n        fi\n    done\n    echo \"{${result%,*}}\"",
+  "    local -A dict\n    local -a max_keys\n    local max_value\n    for word in\
+    \ $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n    for key in \"\
+    ${!dict[@]}\"; do\n        if [[ ${dict[$key]} -gt $max_value ]]; then\n     \
+    \       max_value=${dict[$key]}\n            max_keys=(\"$key\")\n        elif\
+    \ [[ ${dict[$key]} -eq $max_value ]]; then\n            max_keys+=(\"$key\")\n\
+    \        fi\n    done\n    echo -n '{'\n    for key in \"${max_keys[@]}\"; do\n\
+    \        echo -n '\"'$key'\": \"'${dict[$key]}'\", '\n    done\n    echo -n '}'",
+  "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local -a max_letters\n    local max_count=0\n    for letter in\
+    \ \"${!histogram[@]}\"; do\n        if ((histogram[$letter] > max_count)); then\n\
+    \            max_letters=(\"$letter\")\n            max_count=${histogram[$letter]}\n\
+    \        elif ((histogram[$letter] == max_count)); then\n            max_letters+=(\"\
+    $letter\")\n        fi\n    done\n    local -a result\n    for letter in \"${max_letters[@]}\"\
+    ; do\n        result+=(\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n \
+    \   done\n    echo \"{$(IFS=,; echo \"${result[*]}\")}\"", "    local -A histogram\n\
+    \    for word in $1; do\n        histogram[$word]=$((histogram[$word] + 1))\n\
+    \    done\n    local max=0\n    for key in \"${!histogram[@]}\"; do\n        if\
+    \ [[ ${histogram[$key]} -gt $max ]]; then\n            max=${histogram[$key]}\n\
+    \        fi\n    done\n    local result=()\n    for key in \"${!histogram[@]}\"\
+    ; do\n        if [[ ${histogram[$key]} -eq $max ]]; then\n            result+=(\"\
+    $key: ${histogram[$key]}\")\n        fi\n    done\n    echo ${result[@]}", " \
+    \ local -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n \
+    \ done\n  local -a max_letters\n  local max_count=0\n  for letter in \"${!histogram[@]}\"\
+    ; do\n    if [[ ${histogram[$letter]} -gt $max_count ]]; then\n      max_letters=(\"\
+    $letter\")\n      max_count=${histogram[$letter]}\n    elif [[ ${histogram[$letter]}\
+    \ -eq $max_count ]]; then\n      max_letters+=(\"$letter\")\n    fi\n  done\n\
+    \  local -a result\n  for letter in \"${max_letters[@]}\"; do\n    result+=(\"\
+    $letter: ${histogram[$letter]}\")\n  done\n  echo \"${result[@]}\"", "    local\
+    \ -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n \
+    \   done\n    local -a max_letters\n    local max_count=0\n    for letter in \"\
+    ${!histogram[@]}\"; do\n        if ((histogram[$letter] > max_count)); then\n\
+    \            max_letters=(\"$letter\")\n            max_count=${histogram[$letter]}\n\
+    \        elif ((histogram[$letter] == max_count)); then\n            max_letters+=(\"\
+    $letter\")\n        fi\n    done\n    local -a result\n    for letter in \"${max_letters[@]}\"\
+    ; do\n        result+=(\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n \
+    \   done\n    echo \"{$(IFS=,; echo \"${result[*]}\")}\"", "  local -A histogram\n\
+    \  for letter in $@; do\n    histogram[$letter]=$((histogram[$letter] + 1))\n\
+    \  done\n  local max=0\n  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]}\
+    \ -gt $max ]]; then\n      max=${histogram[$letter]}\n    fi\n  done\n  local\
+    \ result=()\n  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]}\
+    \ -eq $max ]]; then\n      result+=(\\\"$letter\\\": \\\"${histogram[$letter]}\\\
+    \")\n    fi\n  done\n  echo \"{${result[*]}}\"", "    local -A histogram\n   \
+    \ for letter in $1; do\n        histogram[$letter]=$((histogram[$letter] + 1))\n\
+    \    done\n    local -a max_letters\n    local max_count=0\n    for letter in\
+    \ \"${!histogram[@]}\"; do\n        local count=${histogram[$letter]}\n      \
+    \  if [[ $count -gt $max_count ]]; then\n            max_letters=(\"$letter\"\
+    )\n            max_count=$count\n        elif [[ $count -eq $max_count ]]; then\n\
+    \            max_letters+=(\"$letter\")\n        fi\n    done\n    local result=\"\
+    {\"\n    for letter in \"${max_letters[@]}\"; do\n        result+=\"\\\"$letter\\\
+    \": \\\"${histogram[$letter]}\\\",\"\n    done\n    result=${result%,}\n    result+=\"\
+    }\"\n    echo \"$result\"", "    local -A histogram\n    for word in $1; do\n\
+    \        histogram[$word]=$((histogram[$word] + 1))\n    done\n    local max=0\n\
+    \    for count in ${histogram[@]}; do\n        if [[ $count -gt $max ]]; then\n\
+    \            max=$count\n        fi\n    done\n    local result=\"{\"\n    local\
+    \ first=true\n    for word in ${!histogram[@]}; do\n        if [[ ${histogram[$word]}\
+    \ -eq $max ]]; then\n            if [[ $first == false ]]; then\n            \
+    \    result+=\", \"\n            fi\n            result+=\"\\\"$word\\\": \\\"\
+    ${histogram[$word]}\\\"\"\n            first=false\n        fi\n    done\n   \
+    \ result+=\"}\"\n    echo $result", "  local -A letters\n  local letter\n  for\
+    \ letter in $1; do\n    ((letters[$letter]++))\n  done\n  local -A counts\n  local\
+    \ count\n  for letter in \"${!letters[@]}\"; do\n    count=${letters[$letter]}\n\
+    \    counts[$count]=\"$counts[$count] $letter\"\n  done\n  local max_count=0\n\
+    \  for count in \"${!counts[@]}\"; do\n    if ((count > max_count)); then\n  \
+    \    max_count=$count\n    fi\n  done\n  local result=\"\"\n  for letter in ${counts[$max_count]};\
+    \ do\n    result=\"$result \\\"$letter\\\": \\\"$max_count\\\"\"\n  done\n  echo\
+    \ \"{$result}\"", "  local input=$1\n  local -A histogram\n  for letter in $input;\
+    \ do\n    histogram[$letter]=$((histogram[$letter] + 1))\n  done\n  local -A max_histogram\n\
+    \  local max_count=0\n  for letter in \"${!histogram[@]}\"; do\n    local count=${histogram[$letter]}\n\
+    \    if [[ $count -gt $max_count ]]; then\n      max_count=$count\n      max_histogram=()\n\
+    \    fi\n    if [[ $count -eq $max_count ]]; then\n      max_histogram[$letter]=$count\n\
+    \    fi\n  done\n  local output=\"{\"\n  for letter in \"${!max_histogram[@]}\"\
+    ; do\n    output+=\"\\\"$letter\\\": \\\"${max_histogram[$letter]}\\\",\"\n  done\n\
+    \  output=\"${output%,}\"\"}\"\n  echo $output", "  local -A histogram\n  for\
+    \ letter in $1; do\n    ((histogram[$letter]++))\n  done\n  local -a max_letters\n\
+    \  local max_count=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max_count)); then\n      max_letters=(\"$letter\")\n      max_count=${histogram[$letter]}\n\
+    \    elif ((histogram[$letter] == max_count)); then\n      max_letters+=(\"$letter\"\
+    )\n    fi\n  done\n  local result=\"{\"\n  for letter in \"${max_letters[@]}\"\
+    ; do\n    result+=\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\",\"\n  done\n\
+    \  result=\"${result%,}\"\"}\"\n  echo \"$result\"", "  local -A dict\n  for i\
+    \ in $1; do\n    dict[$i]=$((dict[$i]+1))\n  done\n  local max=0\n  for i in \"\
+    ${!dict[@]}\"; do\n    if [[ ${dict[$i]} -gt $max ]]; then\n      max=${dict[$i]}\n\
+    \    fi\n  done\n  local result=\"\"\n  for i in \"${!dict[@]}\"; do\n    if [[\
+    \ ${dict[$i]} -eq $max ]]; then\n      result+=\"$i: ${dict[$i]}, \"\n    fi\n\
+    \  done\n  echo \"{$result}\"", "    if [ -z \"$1\" ]; then\n        echo \"{}\"\
+    \n        return\n    fi\n    local -A counts\n    local max=0\n    for word in\
+    \ $1; do\n        counts[$word]=$((counts[$word] + 1))\n        if [ ${counts[$word]}\
+    \ -gt $max ]; then\n            max=${counts[$word]}\n        fi\n    done\n \
+    \   echo -n \"{\"\n    for word in ${!counts[@]}; do\n        if [ ${counts[$word]}\
+    \ -eq $max ]; then\n            echo -n \"\\\"$word\\\": \\\"${counts[$word]}\\\
+    \",\"\n        fi\n    done\n    echo -n \"}\"", "  local -A histogram\n  local\
+    \ -a max_keys\n  local max_value=0\n  for word in $@; do\n    ((histogram[$word]++))\n\
+    \    if ((histogram[$word] > max_value)); then\n      max_value=${histogram[$word]}\n\
+    \      max_keys=(\"$word\")\n    elif ((histogram[$word] == max_value)); then\n\
+    \      max_keys+=(\"$word\")\n    fi\n  done\n  local -a result\n  for key in\
+    \ \"${max_keys[@]}\"; do\n    result+=(\"\\\"$key\\\": \\\"${histogram[$key]}\\\
+    \"\")\n  done\n  echo \"{${result[*]}}\"", "  local -A histogram\n  local -A max_count\n\
+    \  local -A max_letters\n  local max_count=0\n  local letter\n  for letter in\
+    \ $@; do\n    ((histogram[$letter]++))\n    if ((histogram[$letter] > max_count));\
+    \ then\n      max_count=${histogram[$letter]}\n      max_letters=()\n    fi\n\
+    \    if ((histogram[$letter] == max_count)); then\n      max_letters[$letter]=$max_count\n\
+    \    fi\n  done\n  local -a result\n  for letter in \"${!max_letters[@]}\"; do\n\
+    \    result+=(\"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\"\")\n  done\n\
+    \  echo \"{${result[*]}}\"", "  local -A histogram\n  for letter in $1; do\n \
+    \   histogram[$letter]=$(( ${histogram[$letter]} + 1 ))\n  done\n  local max=0\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if (( ${histogram[$letter]} > max\
+    \ )); then\n      max=${histogram[$letter]}\n    fi\n  done\n  local -A max_letters\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if (( ${histogram[$letter]} ==\
+    \ max )); then\n      max_letters[$letter]=$max\n    fi\n  done\n  echo -n \"\
+    {\"\n  local first=true\n  for letter in \"${!max_letters[@]}\"; do\n    if $first;\
+    \ then\n      first=false\n    else\n      echo -n \", \"\n    fi\n    echo -n\
+    \ \"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\"\"\n  done\n  echo \"}\"",
+  "  local -A dict\n  for word in $1; do\n    dict[$word]=$((dict[$word]+1))\n  done\n\
+    \  local max=0\n  for key in \"${!dict[@]}\"; do\n    if [[ ${dict[$key]} -gt\
+    \ $max ]]; then\n      max=${dict[$key]}\n    fi\n  done\n  local result=\"\"\n\
+    \  for key in \"${!dict[@]}\"; do\n    if [[ ${dict[$key]} -eq $max ]]; then\n\
+    \      result+=\"\\\"$key\\\": \\\"${dict[$key]}\\\", \"\n    fi\n  done\n  echo\
+    \ \"{${result::-2}}\"", "    local -A histogram\n    for letter in $1; do\n  \
+    \      ((histogram[$letter]++))\n    done\n    local max_count=0\n    for letter\
+    \ in \"${!histogram[@]}\"; do\n        if ((histogram[$letter] > max_count));\
+    \ then\n            max_count=${histogram[$letter]}\n        fi\n    done\n  \
+    \  local result=\"\"\n    for letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter]\
+    \ == max_count)); then\n            result+=\"\\\"$letter\\\": \\\"$max_count\\\
+    \", \"\n        fi\n    done\n    echo \"{${result%, }}\"", "  local -A dict\n\
+    \  local -a keys\n  local -a values\n  local -a result\n  local key\n  local value\n\
+    \  local i\n  local j\n  local max\n  local max_count\n  local count\n  local\
+    \ -a max_keys\n  local -a max_values\n  local -a max_result\n  local -a max_result_keys\n\
+    \  local -a max_result_values\n  local -a max_result_result\n  local -a max_result_result_keys\n\
+    \  local -a max_result_result_values\n  local -a max_result_result_result\n  local\
+    \ -a max_result_result_result_keys\n  local -a max_result_result_result_values\n\
+    \  local -a max_result_result_result_result\n  local -a max_result_result_result_result_keys\n\
+    \  local -a max_result_result_result_result_values\n  local -a max_result_result_result_result_result\n\
+    \  local -a max_result_result_result_result_result_keys\n  local -a max_result_result_result_result_result_values\n\
+    \  local -a max_result_result_result_result_result_result\n  local -a max_result_result_result_result_result_result_keys\n\
+    \  local -a max_result_result_result_result_result_result_values\n  local -a max_result_result_result_result_result_result_result\n\
+    \  local -a max_result_result_result_result_result_result_result_keys\n  local\
+    \ -a max_result_result_result_result_result_result_result_values\n  local -a max_result_result_result_result_result_result_result_result\n\
+    \  local -a max_result_result_result_result_result_result_result_result_keys\n\
+    \  local -a max_result_result_result_result_result_result_result_result_values\n\
+    \  local -a max_result_result_result_result_result_result_result_result_result\n\
+    \  local -a max_result_result_result_result_result_result_result_result_result_keys",
+  "    # Write your code here\n    # Use echo to output the result\n    # Example:\n\
+    \    # echo \"Hello world\"\n    # echo \"a b c\"\n    # echo \"{'a': '1', 'b':\
+    \ '2'}\"\n    # echo \"{}\"\n    # echo \"{'a': '1', 'b': '2'}\"\n    # echo \"\
+    {'a': '1', 'b': '2'}\"\n    # echo \"{'b': '4'}\"\n    # echo \"{}\"\n    echo\
+    \ \"Hello world\"", "    local -A histogram\n    for letter in $1; do\n      \
+    \  histogram[$letter]=$((histogram[$letter] + 1))\n    done\n    local max=0\n\
+    \    for letter in \"${!histogram[@]}\"; do\n        if [[ ${histogram[$letter]}\
+    \ -gt $max ]]; then\n            max=${histogram[$letter]}\n        fi\n    done\n\
+    \    local -a result\n    for letter in \"${!histogram[@]}\"; do\n        if [[\
+    \ ${histogram[$letter]} -eq $max ]]; then\n            result+=(\"$letter\")\n\
+    \        fi\n    done\n    echo \"${result[@]}\"", "  local -A histogram\n  local\
+    \ -a max_keys\n  local max_value=0\n  for word in $@; do\n    histogram[$word]=$((histogram[$word]\
+    \ + 1))\n    if ((histogram[$word] > max_value)); then\n      max_value=${histogram[$word]}\n\
+    \      max_keys=(\"$word\")\n    elif ((histogram[$word] == max_value)); then\n\
+    \      max_keys+=(\"$word\")\n    fi\n  done\n  local -a result\n  for key in\
+    \ \"${max_keys[@]}\"; do\n    result+=(\"\\\"$key\\\": \\\"${histogram[$key]}\\\
+    \"\")\n  done\n  echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"", "  local -A\
+    \ dict\n  for word in $1; do\n    dict[$word]=$(( ${dict[$word]} + 1 ))\n  done\n\
+    \  local -a max_keys\n  local max_value=0\n  for key in \"${!dict[@]}\"; do\n\
+    \    if [[ ${dict[$key]} -gt $max_value ]]; then\n      max_value=${dict[$key]}\n\
+    \      max_keys=(\"$key\")\n    elif [[ ${dict[$key]} -eq $max_value ]]; then\n\
+    \      max_keys+=(\"$key\")\n    fi\n  done\n  local -a result\n  for key in \"\
+    ${max_keys[@]}\"; do\n    result+=(\"\\\"$key\\\": \\\"${dict[$key]}\\\"\")\n\
+    \  done\n  echo \"{${result[*]}}\"", "  local -A histogram\n  local max_count=0\n\
+    \  local max_letters=()\n  for letter in $@; do\n    histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n    if ((histogram[$letter] > max_count)); then\n      max_count=${histogram[$letter]}\n\
+    \      max_letters=(\"$letter\")\n    elif ((histogram[$letter] == max_count));\
+    \ then\n      max_letters+=(\"$letter\")\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${max_letters[@]}\"; do\n    result+=(\"\\\"$letter\\\": \\\
+    \"${histogram[$letter]}\\\"\")\n  done\n  echo \"{${result[*]}}\"", "    local\
+    \ -A dict\n    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n    done\n \
+    \   local -a keys\n    local -a values\n    for i in \"${!dict[@]}\"; do\n   \
+    \     keys+=(\"$i\")\n        values+=(\"${dict[$i]}\")\n    done\n    local -a\
+    \ max_values\n    local max_value=0\n    for i in \"${values[@]}\"; do\n     \
+    \   if ((i > max_value)); then\n            max_value=$i\n            max_values=(\"\
+    $i\")\n        elif ((i == max_value)); then\n            max_values+=(\"$i\"\
+    )\n        fi\n    done\n    local -a result\n    for i in \"${!values[@]}\";\
+    \ do\n        if [[ \"${values[$i]}\" == \"${max_values[0]}\" ]]; then\n     \
+    \       result+=(\"\\\"${keys[$i]}\\\": \\\"${values[$i]}\\\"\")\n        fi\n\
+    \    done\n    echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"", "    local -A\
+    \ counts\n    for letter in $1; do\n        counts[$letter]=$((counts[$letter]\
+    \ + 1))\n    done\n    local -A max_counts\n    local max_count=0\n    for letter\
+    \ in \"${!counts[@]}\"; do\n        if [[ ${counts[$letter]} -gt $max_count ]];\
+    \ then\n            max_count=${counts[$letter]}\n            unset max_counts\n\
+    \            max_counts[$letter]=$max_count\n        elif [[ ${counts[$letter]}\
+    \ -eq $max_count ]]; then\n            max_counts[$letter]=$max_count\n      \
+    \  fi\n    done\n    echo -n \"{\"\n    local first=true\n    for letter in \"\
+    ${!max_counts[@]}\"; do\n        if ! $first; then\n            echo -n \", \"\
+    \n        fi\n        echo -n \"\\\"$letter\\\": \\\"${max_counts[$letter]}\\\"\
+    \"\n        first=false\n    done\n    echo \"}\"", "    local -A dict\n    local\
+    \ -a max\n    local max_count=0\n    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n\
+    \        if [[ ${dict[$word]} -gt $max_count ]]; then\n            max_count=${dict[$word]}\n\
+    \            max=(\"$word\")\n        elif [[ ${dict[$word]} -eq $max_count ]];\
+    \ then\n            max+=(\"$word\")\n        fi\n    done\n    echo -n \"{\"\n\
+    \    for word in \"${max[@]}\"; do\n        echo -n \"\\\"$word\\\": \\\"${dict[$word]}\\\
+    \"\"\n        if [[ $word != \"${max[-1]}\" ]]; then\n            echo -n \",\
+    \ \"\n        fi\n    done\n    echo \"}\"", "    if [ -z \"$1\" ]; then\n   \
+    \     echo \"{}\"\n        return\n    fi\n    local -A dict\n    for word in\
+    \ $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n    local max=0\n\
+    \    for key in \"${!dict[@]}\"; do\n        if [ \"${dict[$key]}\" -gt \"$max\"\
+    \ ]; then\n            max=\"${dict[$key]}\"\n        fi\n    done\n    local\
+    \ -a keys\n    for key in \"${!dict[@]}\"; do\n        if [ \"${dict[$key]}\"\
+    \ -eq \"$max\" ]; then\n            keys+=(\"$key\")\n        fi\n    done\n \
+    \   echo \"{\"\n    for key in \"${keys[@]}\"; do\n        echo \"\\\"$key\\\"\
+    : \\\"${dict[$key]}\\\"\"\n    done\n    echo \"}\"", "    local -A hist\n   \
+    \ local -a max\n    local max_count=0\n    for word in $1; do\n        (( hist[$word]++\
+    \ ))\n        if (( hist[$word] > max_count )); then\n            max_count=${hist[$word]}\n\
+    \            max=($word)\n        elif (( hist[$word] == max_count )); then\n\
+    \            max+=($word)\n        fi\n    done\n    echo -n '{'\n    for word\
+    \ in \"${max[@]}\"; do\n        echo -n '\"'$word'\": \"'${hist[$word]}'\", '\n\
+    \    done\n    echo -n '}'", "  local -A dict\n  for letter in $1; do\n    dict[$letter]=$((dict[$letter]+1))\n\
+    \  done\n  local max=0\n  for letter in \"${!dict[@]}\"; do\n    if [[ ${dict[$letter]}\
+    \ -gt $max ]]; then\n      max=${dict[$letter]}\n    fi\n  done\n  local -a max_letters\n\
+    \  for letter in \"${!dict[@]}\"; do\n    if [[ ${dict[$letter]} -eq $max ]];\
+    \ then\n      max_letters+=(\"$letter\")\n    fi\n  done\n  echo -n \"{\"\n  for\
+    \ letter in \"${max_letters[@]}\"; do\n    echo -n \"\\\"$letter\\\": \\\"${dict[$letter]}\\\
+    \"\"\n    if [[ $letter != \"${max_letters[-1]}\" ]]; then\n      echo -n \",\
+    \ \"\n    fi\n  done\n  echo \"}\"", "    local -A dict\n    for word in $1; do\n\
+    \        dict[$word]=$((dict[$word]+1))\n    done\n    local max=0\n    for key\
+    \ in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]} -gt $max ]]; then\n    \
+    \        max=${dict[$key]}\n        fi\n    done\n    local -a keys\n    for key\
+    \ in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]} -eq $max ]]; then\n    \
+    \        keys+=(\"$key\")\n        fi\n    done\n    echo -n \"{\"\n    for key\
+    \ in \"${keys[@]}\"; do\n        echo -n \"\\\"$key\\\": \\\"${dict[$key]}\\\"\
+    \"\n        if [[ $key != \"${keys[-1]}\" ]]; then\n            echo -n \", \"\
+    \n        fi\n    done\n    echo \"}\"", "    local -A histogram\n    for word\
+    \ in $1; do\n        ((histogram[$word]++))\n    done\n    local max=0\n    for\
+    \ key in \"${!histogram[@]}\"; do\n        if ((histogram[$key] > max)); then\n\
+    \            max=${histogram[$key]}\n        fi\n    done\n    local result=\"\
+    \"\n    for key in \"${!histogram[@]}\"; do\n        if ((histogram[$key] == max));\
+    \ then\n            result+=\"$key:$max \"\n        fi\n    done\n    echo \"\
+    $result\"", "    local -A histo\n    for word in $1; do\n        ((histo[$word]++))\n\
+    \    done\n    local -A result\n    local max=0\n    for key in \"${!histo[@]}\"\
+    ; do\n        if ((histo[$key] > max)); then\n            max=${histo[$key]}\n\
+    \            unset result\n            result[$key]=$max\n        elif ((histo[$key]\
+    \ == max)); then\n            result[$key]=$max\n        fi\n    done\n    echo\
+    \ \"$(declare -p result)\"", "  local input=\"$1\"\n  local -A counts\n  local\
+    \ -a keys\n  local -a values\n  local -a result\n  local key\n  local value\n\
+    \  local max_count\n  local max_count_keys\n  local max_count_values\n  local\
+    \ i\n  local j\n  local k\n  local l\n  local m\n  local n\n  local o\n  local\
+    \ p\n  local q\n  local r\n  local s\n  local t\n  local u\n  local v\n  local\
+    \ w\n  local x\n  local y\n  local z\n  local a\n  local b\n  local c\n  local\
+    \ d\n  local e\n  local f\n  local g\n  local h\n  local i\n  local j\n  local\
+    \ k\n  local l\n  local m\n  local n\n  local o\n  local p\n  local q\n  local\
+    \ r\n  local s\n  local t\n  local u\n  local v\n  local w\n  local x\n  local\
+    \ y\n  local z\n  local a\n  local b\n  local c\n  local d\n  local e\n  local\
+    \ f\n  local g\n  local h\n  local i\n  local j\n  local k\n  local l\n  local\
+    \ m\n  local n\n  local o\n  local p\n  local q\n  local r\n  local s\n  local\
+    \ t\n  local u\n  local v\n  local w\n  local x\n  local y\n  local z\n  local\
+    \ a\n  local b\n  local c\n  local d\n  local e\n  local f\n  local g\n  local\
+    \ h\n  local i\n  local j\n  local k\n  local l\n  local m\n  local n\n  local\
+    \ o\n  local p\n  local q\n  local r\n  local s\n  local t\n  local u\n  local\
+    \ v\n  local w\n  local x\n  local y\n  local z\n  local a\n  local b\n  local\
+    \ c\n  local d\n  local e\n  local f\n  local g\n  local h\n  local i\n  local\
+    \ j\n  local k\n  local l\n  local m\n  local n\n  local o\n  local p\n ", " \
+    \ local -A histogram\n  for word in $1; do\n    histogram[$word]=$((histogram[$word]\
+    \ + 1))\n  done\n  local -a max_words\n  local max_count=0\n  for word in \"${!histogram[@]}\"\
+    ; do\n    if [[ ${histogram[$word]} -gt $max_count ]]; then\n      max_words=(\"\
+    $word\")\n      max_count=${histogram[$word]}\n    elif [[ ${histogram[$word]}\
+    \ -eq $max_count ]]; then\n      max_words+=(\"$word\")\n    fi\n  done\n  local\
+    \ -a result\n  for word in \"${max_words[@]}\"; do\n    result+=(\"\\\"$word\\\
+    \": \\\"${histogram[$word]}\\\"\")\n  done\n  echo \"{\"$(IFS=,; echo \"${result[*]}\"\
+    )\"}\"", "  local -A letters\n  for letter in $1; do\n    if [[ -v letters[$letter]\
+    \ ]]; then\n      ((letters[$letter]++))\n    else\n      letters[$letter]=1\n\
+    \    fi\n  done\n  local -A max_letters\n  local max_count=0\n  for letter in\
+    \ \"${!letters[@]}\"; do\n    if [[ ${letters[$letter]} -gt $max_count ]]; then\n\
+    \      max_count=${letters[$letter]}\n      unset max_letters\n      max_letters[$letter]=$max_count\n\
+    \    elif [[ ${letters[$letter]} -eq $max_count ]]; then\n      max_letters[$letter]=$max_count\n\
+    \    fi\n  done\n  local result=\"{\"\n  for letter in \"${!max_letters[@]}\"\
+    ; do\n    result+=\"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\",\"\n  done\n\
+    \  echo \"${result%?}}\"", "    local -A histogram\n    local -a max_keys\n  \
+    \  local max_count=0\n    for word in $1; do\n        histogram[$word]=$((histogram[$word]\
+    \ + 1))\n        if [[ ${histogram[$word]} -gt $max_count ]]; then\n         \
+    \   max_count=${histogram[$word]}\n            max_keys=(\"$word\")\n        elif\
+    \ [[ ${histogram[$word]} -eq $max_count ]]; then\n            max_keys+=(\"$word\"\
+    )\n        fi\n    done\n    echo -n \"{\"\n    for key in \"${max_keys[@]}\"\
+    ; do\n        echo -n '\"'$key'\": \"'${histogram[$key]}'\", '\n    done\n   \
+    \ echo -n \"}\"", "  local -A dict\n  local -a keys\n  local -a values\n  local\
+    \ -a max_keys\n  local max_value=0\n  for word in $@; do\n    if [[ -z ${dict[$word]}\
+    \ ]]; then\n      dict[$word]=1\n    else\n      dict[$word]=$((dict[$word]+1))\n\
+    \    fi\n  done\n  for key in \"${!dict[@]}\"; do\n    keys+=(\"\\\"$key\\\"\"\
+    )\n    values+=(\"\\\"${dict[$key]}\\\"\")\n    if [[ ${dict[$key]} -gt $max_value\
+    \ ]]; then\n      max_value=${dict[$key]}\n      max_keys=(\"\\\"$key\\\"\")\n\
+    \    elif [[ ${dict[$key]} -eq $max_value ]]; then\n      max_keys+=(\"\\\"$key\\\
+    \"\")\n    fi\n  done\n  echo \"{\"$(paste -d: -s <(printf \"%s\\n\" \"${keys[@]}\"\
+    ) <(printf \"%s\\n\" \"${values[@]}\"))\"}\"", "    local -A letters\n    for\
+    \ letter in $1; do\n        letters[$letter]=$((letters[$letter]+1))\n    done\n\
+    \    local max=0\n    for letter in \"${!letters[@]}\"; do\n        if [[ ${letters[$letter]}\
+    \ -gt $max ]]; then\n            max=${letters[$letter]}\n        fi\n    done\n\
+    \    local result=\"\"\n    for letter in \"${!letters[@]}\"; do\n        if [[\
+    \ ${letters[$letter]} -eq $max ]]; then\n            result+=\"\\\"$letter\\\"\
+    : \\\"${letters[$letter]}\\\", \"\n        fi\n    done\n    echo \"{${result%,\
+    \ }}\"", "    local string=\"$1\"\n    local -A dict\n    for char in $string;\
+    \ do\n        dict[$char]=$((dict[$char]+1))\n    done\n    local max=0\n    for\
+    \ key in \"${!dict[@]}\"; do\n        if ((dict[$key] > max)); then\n        \
+    \    max=${dict[$key]}\n        fi\n    done\n    local -A result\n    for key\
+    \ in \"${!dict[@]}\"; do\n        if ((dict[$key] == max)); then\n           \
+    \ result[$key]=$max\n        fi\n    done\n    echo \"$(declare -p result)\"",
+  "  local -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n  done\n\
+    \  local max=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max)); then\n      max=${histogram[$letter]}\n    fi\n  done\n  local result=\"\
+    \"\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max));\
+    \ then\n      result=\"$result, \\\"$letter\\\": \\\"$max\\\"\"\n    fi\n  done\n\
+    \  echo \"{${result:2}}\"", "    local input=$1\n    local -A dict\n    for i\
+    \ in $input; do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local -A max_dict\n\
+    \    local max_val=0\n    for i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]}\
+    \ -gt $max_val ]]; then\n            max_val=${dict[$i]}\n            unset max_dict\n\
+    \            max_dict[$i]=$max_val\n        elif [[ ${dict[$i]} -eq $max_val ]];\
+    \ then\n            max_dict[$i]=$max_val\n        fi\n    done\n    echo -n \"\
+    {\"\n    local first=true\n    for i in \"${!max_dict[@]}\"; do\n        if [[\
+    \ $first == false ]]; then\n            echo -n \", \"\n        fi\n        echo\
+    \ -n \"\\\"$i\\\": \\\"${max_dict[$i]}\\\"\"\n        first=false\n    done\n\
+    \    echo \"}\"", "    local -A histogram\n    local -a letters\n    local letter\n\
+    \    local max_count\n    local -a max_letters\n    local -a result\n    for letter\
+    \ in $1; do\n        ((histogram[$letter]++))\n    done\n    for letter in \"\
+    ${!histogram[@]}\"; do\n        letters+=(\"$letter\")\n        if [[ -z $max_count\
+    \ || ${histogram[$letter]} -gt $max_count ]]; then\n            max_count=${histogram[$letter]}\n\
+    \            max_letters=(\"$letter\")\n        elif [[ ${histogram[$letter]}\
+    \ -eq $max_count ]]; then\n            max_letters+=(\"$letter\")\n        fi\n\
+    \    done\n    for letter in \"${letters[@]}\"; do\n        if [[ ${histogram[$letter]}\
+    \ -eq $max_count ]]; then\n            result+=(\"$letter:$max_count\")\n    \
+    \    else\n            result+=(\"$letter:${histogram[$letter]}\")\n        fi\n\
+    \    done\n    echo \"${result[@]}\"", "    local -A histogram\n    local -a keys\n\
+    \    local -a values\n    local -a result\n    local key\n    local value\n  \
+    \  local max\n    local i\n    local j\n    local k\n    local l\n    local m\n\
+    \    local n\n    local o\n    local p\n    local q\n    local r\n    local s\n\
+    \    local t\n    local u\n    local v\n    local w\n    local x\n    local y\n\
+    \    local z\n    local a\n    local b\n    local c\n    local d\n    local e\n\
+    \    local f\n    local g\n    local h\n    local i\n    local j\n    local k\n\
+    \    local l\n    local m\n    local n\n    local o\n    local p\n    local q\n\
+    \    local r\n    local s\n    local t\n    local u\n    local v\n    local w\n\
+    \    local x\n    local y\n    local z\n    local a\n    local b\n    local c\n\
+    \    local d\n    local e\n    local f\n    local g\n    local h\n    local i\n\
+    \    local j\n    local k\n    local l\n    local m\n    local n\n    local o\n\
+    \    local p\n    local q\n    local r\n    local s\n    local t\n    local u\n\
+    \    local v\n    local w\n    local x\n    local y\n    local z\n    local a\n\
+    \    local b\n    local c\n    local d\n    local e\n    local f\n    local g\n\
+    \    local h\n    local i\n    local j\n    local k\n    local l\n    local m\n\
+    \    local n\n    local o\n    local p\n    local q\n    local r\n    local s\n\
+    \    local t\n    local u\n    local v\n    local w\n    local x\n    local y\n\
+    \    local z\n    local a\n    local b\n    local c\n    local d\n    local e\n\
+    \    local f\n    local g\n    local h\n    local i\n    local j\n    local k\n\
+    \    local l\n    local m\n    local n\n    local o\n    local p\n    local q\n\
+    \    local r\n    local s\n    local t\n    local u\n    local v\n    local",
+  "    local -A histogram\n    for word in $1; do\n        ((histogram[$word]++))\n\
+    \    done\n    local max=0\n    for word in \"${!histogram[@]}\"; do\n       \
+    \ if ((histogram[$word] > max)); then\n            max=${histogram[$word]}\n \
+    \       fi\n    done\n    local -a result\n    for word in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$word] == max)); then\n            result+=($word)\n\
+    \        fi\n    done\n    echo \"${result[@]}\"", "    local -A letters\n   \
+    \ local -a max_letters\n    local max=0\n    for letter in $1; do\n        ((letters[$letter]++))\n\
+    \        if ((letters[$letter] > max)); then\n            max=${letters[$letter]}\n\
+    \            max_letters=(\"$letter\")\n        elif ((letters[$letter] == max));\
+    \ then\n            max_letters+=(\"$letter\")\n        fi\n    done\n    local\
+    \ -a result\n    for letter in \"${max_letters[@]}\"; do\n        result+=(\"\\\
+    \"$letter\\\": \\\"${letters[$letter]}\\\"\")\n    done\n    echo \"{${result[*]}}\"",
+  "  local -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n  done\n\
+    \  local max=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max)); then\n      max=${histogram[$letter]}\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max));\
+    \ then\n      result+=(\"$letter: $max\")\n    fi\n  done\n  echo \"${result[@]}\"",
+  "  local -A dict\n  for letter in $1; do\n    ((dict[$letter]++))\n  done\n  local\
+    \ max=0\n  for letter in \"${!dict[@]}\"; do\n    if ((dict[$letter] > max));\
+    \ then\n      max=${dict[$letter]}\n    fi\n  done\n  local result=\"\"\n  for\
+    \ letter in \"${!dict[@]}\"; do\n    if ((dict[$letter] == max)); then\n     \
+    \ result+=\"\\\"$letter\\\": \\\"$max\\\",\"\n    fi\n  done\n  echo \"{\"${result%?}\"\
+    }\"", "    local -A dict\n    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n\
+    \    done\n    local max=0\n    for i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]}\
+    \ -gt $max ]]; then\n            max=${dict[$i]}\n        fi\n    done\n    for\
+    \ i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -eq $max ]]; then\n    \
+    \        echo -n \"{\\\"$i\\\": \\\"${dict[$i]}\\\"\"\n            if [[ $i !=\
+    \ ${!dict[@]: -1} ]]; then\n                echo -n \", \"\n            fi\n \
+    \       fi\n    done\n    echo \"}\"", "  local -A histogram\n  for ((i=0; i<${#1};\
+    \ i++)); do\n    local letter=\"${1:$i:1}\"\n    ((histogram[$letter]++))\n  done\n\
+    \  local max=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max)); then\n      max=${histogram[$letter]}\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max));\
+    \ then\n      result+=(\"\\\"$letter\\\": \\\"$max\\\"\")\n    fi\n  done\n  echo\
+    \ \"{\"\"${result[@]}\"\"},\"", "  local string=\"$1\"\n  local -A dict\n  for\
+    \ i in $string; do\n    dict[$i]=$((dict[$i]+1))\n  done\n  local max=0\n  for\
+    \ i in \"${!dict[@]}\"; do\n    if [[ ${dict[$i]} -gt $max ]]; then\n      max=${dict[$i]}\n\
+    \    fi\n  done\n  local result=\"\"\n  for i in \"${!dict[@]}\"; do\n    if [[\
+    \ ${dict[$i]} -eq $max ]]; then\n      result=\"$result,\\\"$i\\\":\\\"${dict[$i]}\\\
+    \"\"\n    fi\n  done\n  echo \"{\"${result#,}\"}\"", "    local -A dict\n    local\
+    \ -a keys\n    local -a values\n    local -a result\n    local -i i=0\n    local\
+    \ -i j=0\n    local -i k=0\n    local -i max=0\n    local -i count=0\n    local\
+    \ -i len=0\n    local -i len_keys=0\n    local -i len_values=0\n    local -i len_result=0\n\
+    \    local -i len_max=0\n    local -i len_count=0\n    local -i len_len=0\n  \
+    \  local -i len_len_keys=0\n    local -i len_len_values=0\n    local -i len_len_result=0\n\
+    \    local -i len_len_max=0\n    local -i len_len_count=0\n    local -i len_len_len=0\n\
+    \    local -i len_len_len_keys=0\n    local -i len_len_len_values=0\n    local\
+    \ -i len_len_len_result=0\n    local -i len_len_len_max=0\n    local -i len_len_len_count=0\n\
+    \    local -i len_len_len_len=0\n    local -i len_len_len_len_keys=0\n    local\
+    \ -i len_len_len_len_values=0\n    local -i len_len_len_len_result=0\n    local\
+    \ -i len_len_len_len_max=0\n    local -i len_len_len_len_count=0\n    local -i\
+    \ len_len_len_len_len=0\n    local -i len_len_len_len_len_keys=0\n    local -i\
+    \ len_len_len_len_len_values=0\n    local -i len_len_len_len_len_result=0\n  \
+    \  local -i len_len_len_len_len_max=0\n    local -i len_len_len_len_len_count=0\n\
+    \    local -i len_len_len_len_len_len=0\n    local -i len_len_len_len_len_len_keys=0",
+  "  echo -n \"{\"\n  for letter in $(echo \"$1\" | tr ' ' '\\n' | sort | uniq); do\n\
+    \    echo -n \"\\\"$letter\\\": \\\"$(echo \"$1\" | tr ' ' '\\n' | grep -c \"\
+    $letter\")\\\",\"\n  done\n  echo -n \"}\"", "    if [ $# -eq 0 ]; then\n    \
+    \    echo \"{}\"\n        return\n    fi\n    local -A dict\n    for i in $@;\
+    \ do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local max=0\n    for i in\
+    \ \"${!dict[@]}\"; do\n        if [ ${dict[$i]} -gt $max ]; then\n           \
+    \ max=${dict[$i]}\n        fi\n    done\n    local -a result\n    for i in \"\
+    ${!dict[@]}\"; do\n        if [ ${dict[$i]} -eq $max ]; then\n            result+=(\"\
+    $i:${dict[$i]}\")\n        fi\n    done\n    echo \"${result[@]}\"", "    local\
+    \ -A histogram\n    for word in $@; do\n        ((histogram[$word]++))\n    done\n\
+    \    local -a max_words\n    local max_count=0\n    for word in \"${!histogram[@]}\"\
+    ; do\n        local count=${histogram[$word]}\n        if ((count > max_count));\
+    \ then\n            max_words=(\"$word\")\n            max_count=$count\n    \
+    \    elif ((count == max_count)); then\n            max_words+=(\"$word\")\n \
+    \       fi\n    done\n    local -a result\n    for word in \"${max_words[@]}\"\
+    ; do\n        result+=(\"\\\"$word\\\": \\\"$max_count\\\"\")\n    done\n    echo\
+    \ \"{$(IFS=,; echo \"${result[*]}\")}\"", "    # TODO: implement this function\n\
+    \    echo \"{}\"", "    local -A histogram\n    for word in $1; do\n        ((histogram[$word]++))\n\
+    \    done\n    local -a max_keys\n    local max_value=0\n    for key in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$key] > max_value)); then\n            max_value=${histogram[$key]}\n\
+    \            max_keys=(\"$key\")\n        elif ((histogram[$key] == max_value));\
+    \ then\n            max_keys+=(\"$key\")\n        fi\n    done\n    local result=\"\
+    {\"\n    for key in \"${max_keys[@]}\"; do\n        result+=\"\\\"$key\\\": \\\
+    \"${histogram[$key]}\\\", \"\n    done\n    echo \"${result%%, }}\"", "    local\
+    \ -A histogram\n    for char in $1; do\n        ((histogram[$char]++))\n    done\n\
+    \    local -a max_chars\n    local max_count=0\n    for char in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$char] > max_count)); then\n            max_chars=(\"\
+    $char\")\n            max_count=${histogram[$char]}\n        elif ((histogram[$char]\
+    \ == max_count)); then\n            max_chars+=(\"$char\")\n        fi\n    done\n\
+    \    local -a result\n    for char in \"${max_chars[@]}\"; do\n        result+=(\"\
+    \\\"$char\\\": \\\"${histogram[$char]}\\\"\")\n    done\n    echo \"{${result[*]}}\"",
+  "    local -A histo\n    for i in $@; do\n        histo[$i]=$((histo[$i]+1))\n \
+    \   done\n    local max=0\n    for i in \"${!histo[@]}\"; do\n        if [[ ${histo[$i]}\
+    \ -gt $max ]]; then\n            max=${histo[$i]}\n        fi\n    done\n    for\
+    \ i in \"${!histo[@]}\"; do\n        if [[ ${histo[$i]} -eq $max ]]; then\n  \
+    \          echo -n \"\\\"$i\\\": \"\n            echo -n \"\\\"${histo[$i]}\\\"\
+    \"\n            echo -n \", \"\n        fi\n    done\n    echo", "    local -A\
+    \ dict\n    for letter in $1; do\n        dict[$letter]=$((dict[$letter]+1))\n\
+    \    done\n    local max=0\n    for letter in \"${!dict[@]}\"; do\n        if\
+    \ [[ ${dict[$letter]} -gt $max ]]; then\n            max=${dict[$letter]}\n  \
+    \      fi\n    done\n    local -a result\n    for letter in \"${!dict[@]}\"; do\n\
+    \        if [[ ${dict[$letter]} -eq $max ]]; then\n            result+=(\"\\\"\
+    $letter\\\": \\\"${dict[$letter]}\\\"\")\n        fi\n    done\n    echo \"{\"\
+    $(IFS=,; echo \"${result[*]}\")\"}\"", "    local -A histogram\n    for letter\
+    \ in $1; do\n        ((histogram[$letter]++))\n    done\n    local -a max_letters\n\
+    \    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n        if\
+    \ ((histogram[$letter] > max_count)); then\n            max_letters=(\"$letter\"\
+    )\n            max_count=${histogram[$letter]}\n        elif ((histogram[$letter]\
+    \ == max_count)); then\n            max_letters+=(\"$letter\")\n        fi\n \
+    \   done\n    echo -n '{'\n    for letter in \"${max_letters[@]}\"; do\n     \
+    \   echo -n \"\\\"$letter\\\": \\\"${histogram[$letter]}\\\"\"\n        if ((letter\
+    \ != \"${max_letters[-1]}\")); then\n            echo -n ', '\n        fi\n  \
+    \  done\n    echo '}'", "  local input=$1\n  local -A histogram\n  for letter\
+    \ in $input; do\n    ((histogram[$letter]++))\n  done\n  local max=0\n  for letter\
+    \ in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] > max)); then\n   \
+    \   max=${histogram[$letter]}\n    fi\n  done\n  local -a max_letters\n  for letter\
+    \ in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max)); then\n  \
+    \    max_letters+=(\"$letter\")\n    fi\n  done\n  local -a result\n  for letter\
+    \ in \"${max_letters[@]}\"; do\n    result+=(\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\
+    \"\")\n  done\n  echo \"{${result[*]}}\"", "    local -A dict\n    for c in $1;\
+    \ do\n        dict[$c]=$((dict[$c]+1))\n    done\n    local max=0\n    for c in\
+    \ \"${!dict[@]}\"; do\n        if ((dict[$c] > max)); then\n            max=${dict[$c]}\n\
+    \        fi\n    done\n    local result=\"{\"\n    for c in \"${!dict[@]}\"; do\n\
+    \        if ((dict[$c] == max)); then\n            result+=\"\\\"$c\\\": \\\"\
+    ${dict[$c]}\\\", \"\n        fi\n    done\n    echo \"${result%%, }\"", "    local\
+    \ -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n \
+    \   done\n    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if ((histogram[$letter] > max_count)); then\n            max_count=${histogram[$letter]}\n\
+    \        fi\n    done\n    local -a result=()\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max_count)); then\n            result+=(\"\
+    \\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n        fi\n    done\n    echo\
+    \ \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"", "  if [ $# -ne 1 ]; then\n    echo\
+    \ \"Usage: $0 <string>\"\n    return 1\n  fi\n  local str=\"$1\"\n  local -A dict\n\
+    \  for i in $str; do\n    if [ -z \"${dict[$i]}\" ]; then\n      dict[$i]=1\n\
+    \    else\n      dict[$i]=$((dict[$i]+1))\n    fi\n  done\n  local -A max_dict\n\
+    \  local max=0\n  for i in \"${!dict[@]}\"; do\n    if [ ${dict[$i]} -gt $max\
+    \ ]; then\n      max=${dict[$i]}\n      unset max_dict\n      max_dict[$i]=$max\n\
+    \    elif [ ${dict[$i]} -eq $max ]; then\n      max_dict[$i]=$max\n    fi\n  done\n\
+    \  local result=\"{\"\n  for i in \"${!max_dict[@]}\"; do\n    result=\"$result\\\
+    \"$i\\\": \\\"${max_dict[$i]}\\\",\"\n  done\n  result=\"${result%,}\"\"}\"\n\
+    \  echo \"$result\"", "  if [ -z \"$1\" ]; then\n    echo \"{}\"\n  else\n   \
+    \ echo \"{$(echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -r | awk '{print\
+    \ \"\\\"\"$2\"\\\": \\\"\"$1\"\\\"\"}' | tr '\\n' ',' | sed 's/,$//')}\"\n  fi",
+  "  local -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n  done\n\
+    \  local -a max_letters\n  local max_count=0\n  for letter in \"${!histogram[@]}\"\
+    ; do\n    if ((histogram[$letter] > max_count)); then\n      max_letters=(\"$letter\"\
+    )\n      max_count=${histogram[$letter]}\n    elif ((histogram[$letter] == max_count));\
+    \ then\n      max_letters+=(\"$letter\")\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${max_letters[@]}\"; do\n    result+=(\"\\\"$letter\\\": \\\
+    \"${histogram[$letter]}\\\"\")\n  done\n  echo \"{${result[*]}}\"", "    # your\
+    \ code here\n    echo \"{\"\n    echo \"}\"", "    local input=$1\n    local -A\
+    \ histogram\n    for letter in $input; do\n        histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n    done\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if [[ ${histogram[$letter]} -gt $max ]]; then\n            max=${histogram[$letter]}\n\
+    \        fi\n    done\n    local -A result\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if [[ ${histogram[$letter]} -eq $max ]]; then\n            result[$letter]=$max\n\
+    \        fi\n    done\n    echo ${result[@]}", "    local -A histogram\n    for\
+    \ letter in $1; do\n        ((histogram[$letter]++))\n    done\n    local max_count=0\n\
+    \    for letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter] >\
+    \ max_count)); then\n            max_count=${histogram[$letter]}\n        fi\n\
+    \    done\n    local result=\"\"\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if ((histogram[$letter] == max_count)); then\n            result+=\"\\\
+    \"$letter\\\": \\\"$max_count\\\", \"\n        fi\n    done\n    echo \"{${result%,\
+    \ }}\"", "  local -A dict\n  local -a arr\n  local -i i\n  local -i max\n  local\
+    \ -i count\n  local -i len\n  local -i j\n  local -i k\n  local -i l\n  local\
+    \ -i m\n  local -i n\n  local -i o\n  local -i p\n  local -i q\n  local -i r\n\
+    \  local -i s\n  local -i t\n  local -i u\n  local -i v\n  local -i w\n  local\
+    \ -i x\n  local -i y\n  local -i z\n  local -i a\n  local -i b\n  local -i c\n\
+    \  local -i d\n  local -i e\n  local -i f\n  local -i g\n  local -i h\n  local\
+    \ -i i\n  local -i j\n  local -i k\n  local -i l\n  local -i m\n  local -i n\n\
+    \  local -i o\n  local -i p\n  local -i q\n  local -i r\n  local -i s\n  local\
+    \ -i t\n  local -i u\n  local -i v\n  local -i w\n  local -i x\n  local -i y\n\
+    \  local -i z\n  local -i a\n  local -i b\n  local -i c\n  local -i d\n  local\
+    \ -i e\n  local -i f\n  local -i g\n  local -i h\n  local -i i\n  local -i j\n\
+    \  local -i k\n  local -i l\n  local -i m\n  local -i n\n  local -i o\n  local\
+    \ -i p\n  local -i q\n  local -i r\n  local -i s\n  local -i t\n  local -i u\n\
+    \  local -i v\n  local -i w\n  local -i x\n  local -i y\n  local -i z\n  local\
+    \ -i a\n  local -i b\n  local -i c\n  local -i d\n  local -i e\n  local -i f\n\
+    \  local -i g\n  local -i h\n  local -i i\n  local -i j\n ", "  local -A histogram\n\
+    \  for letter in $1; do\n    ((histogram[$letter]++))\n  done\n  local max_count=0\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] > max_count));\
+    \ then\n      max_count=${histogram[$letter]}\n    fi\n  done\n  local -a max_letters\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max_count));\
+    \ then\n      max_letters+=(\"$letter\")\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${max_letters[@]}\"; do\n    result+=(\"\\\"$letter\\\": \\\
+    \"${histogram[$letter]}\\\"\")\n  done\n  echo \"{$(IFS=,; echo \"${result[*]}\"\
+    )}\"", "  local -A counts\n  for word in $1; do\n    counts[$word]=$((counts[$word]\
+    \ + 1))\n  done\n  local max_count=0\n  for word in \"${!counts[@]}\"; do\n  \
+    \  if [[ ${counts[$word]} -gt $max_count ]]; then\n      max_count=${counts[$word]}\n\
+    \    fi\n  done\n  local -a max_words\n  for word in \"${!counts[@]}\"; do\n \
+    \   if [[ ${counts[$word]} -eq $max_count ]]; then\n      max_words+=($word)\n\
+    \    fi\n  done\n  echo -n \"{\"\n  for word in \"${max_words[@]}\"; do\n    echo\
+    \ -n \"\\\"$word\\\": \\\"$max_count\\\"\"\n    if [[ $word != ${max_words[-1]}\
+    \ ]]; then\n      echo -n \", \"\n    fi\n  done\n  echo \"}\"", "    local -A\
+    \ dict\n    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n\
+    \    local max=0\n    for key in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]}\
+    \ -gt $max ]]; then\n            max=${dict[$key]}\n        fi\n    done\n   \
+    \ local result=\"\"\n    for key in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]}\
+    \ -eq $max ]]; then\n            result+=\"\\\"$key\\\": \\\"${dict[$key]}\\\"\
+    , \"\n        fi\n    done\n    echo \"{${result%, }}\"", "  local -A dict\n \
+    \ local -a max_keys\n  local max_key\n  local max_value\n  for word in $1; do\n\
+    \    dict[$word]=$((dict[$word]+1))\n  done\n  for key in \"${!dict[@]}\"; do\n\
+    \    if [[ ${dict[$key]} -gt $max_value ]]; then\n      max_value=${dict[$key]}\n\
+    \      max_keys=(\"$key\")\n    elif [[ ${dict[$key]} -eq $max_value ]]; then\n\
+    \      max_keys+=(\"$key\")\n    fi\n  done\n  echo \"{\"\n  for key in \"${max_keys[@]}\"\
+    ; do\n    echo \"\\\"$key\\\": \\\"${dict[$key]}\\\"\"\n  done\n  echo \"}\"",
+  "  local -A letters\n  local letter\n  local max_count=0\n  local max_letters=()\n\
+    \  for letter in $1; do\n    (( letters[$letter]++ ))\n    if (( letters[$letter]\
+    \ > max_count )); then\n      max_count=${letters[$letter]}\n      max_letters=(\"\
+    $letter\")\n    elif (( letters[$letter] == max_count )); then\n      max_letters+=(\"\
+    $letter\")\n    fi\n  done\n  local result=\"{\"\n  for letter in \"${max_letters[@]}\"\
+    ; do\n    result+=\"\\\"$letter\\\": \\\"$max_count\\\", \"\n  done\n  echo \"\
+    ${result%, }}\"", "    local -A dict\n    for c in $1; do\n        ((dict[$c]++))\n\
+    \    done\n    local -a max_keys\n    local max_count=0\n    for k in \"${!dict[@]}\"\
+    ; do\n        if [[ ${dict[$k]} -gt $max_count ]]; then\n            max_count=${dict[$k]}\n\
+    \            max_keys=(\"$k\")\n        elif [[ ${dict[$k]} -eq $max_count ]];\
+    \ then\n            max_keys+=(\"$k\")\n        fi\n    done\n    local result=\n\
+    \    for k in \"${max_keys[@]}\"; do\n        result+=\"$k: ${dict[$k]}, \"\n\
+    \    done\n    echo \"${result::-2}\"", "    local -A counts\n    for word in\
+    \ $1; do\n        (( counts[$word]++ ))\n    done\n    local -A result\n    local\
+    \ max=0\n    for word in \"${!counts[@]}\"; do\n        if (( counts[$word] >\
+    \ max )); then\n            max=${counts[$word]}\n            unset result\n \
+    \           result[$word]=$max\n        elif (( counts[$word] == max )); then\n\
+    \            result[$word]=$max\n        fi\n    done\n    echo \"$(declare -p\
+    \ result)\"", "    local -A dict\n    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n\
+    \    done\n    local -a max_keys\n    local max_value=0\n    for key in \"${!dict[@]}\"\
+    ; do\n        if [[ ${dict[$key]} -gt $max_value ]]; then\n            max_value=${dict[$key]}\n\
+    \            max_keys=(\"$key\")\n        elif [[ ${dict[$key]} -eq $max_value\
+    \ ]]; then\n            max_keys+=(\"$key\")\n        fi\n    done\n    local\
+    \ result=\"{\"\n    for key in \"${max_keys[@]}\"; do\n        result+=\"\\\"\
+    $key\\\": \\\"${dict[$key]}\\\",\"\n    done\n    echo \"${result%,}\"\"}\"",
+  "    local -A histogram\n    for letter in $1; do\n        histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n    done\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if [[ ${histogram[$letter]} -gt $max ]]; then\n            max=${histogram[$letter]}\n\
+    \        fi\n    done\n    local result=\"\"\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if [[ ${histogram[$letter]} -eq $max ]]; then\n            result+=\"\
+    \\\"$letter\\\": \\\"${histogram[$letter]}\\\", \"\n        fi\n    done\n   \
+    \ echo \"{\"${result%\", \"}\"}\"", "    local -A dict\n    for i in $1; do\n\
+    \        dict[$i]=$((dict[$i]+1))\n    done\n    local -a max\n    local max_count=0\n\
+    \    for i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -gt $max_count ]];\
+    \ then\n            max_count=${dict[$i]}\n            max=(\"$i\")\n        elif\
+    \ [[ ${dict[$i]} -eq $max_count ]]; then\n            max+=(\"$i\")\n        fi\n\
+    \    done\n    local -a res\n    for i in \"${max[@]}\"; do\n        res+=(\"\\\
+    \"$i\\\": \\\"${dict[$i]}\\\"\")\n    done\n    echo \"{\"$(IFS=,; echo \"${res[*]}\"\
+    )\"}\"", "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local -a result\n    local max=0\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] > max)); then\n            max=${histogram[$letter]}\n\
+    \            result=(\"$letter\")\n        elif ((histogram[$letter] == max));\
+    \ then\n            result+=(\"$letter\")\n        fi\n    done\n    echo -n \"\
+    {\"\n    for letter in \"${result[@]}\"; do\n        echo -n \"\\\"$letter\\\"\
+    : \\\"$max\\\"\"\n        if ((letter != result[-1])); then\n            echo\
+    \ -n \", \"\n        fi\n    done\n    echo \"}\"", "  local input=$1\n  local\
+    \ result=\"\"\n  local count=0\n  local max_count=0\n  local letter=\"\"\n  local\
+    \ max_letter=\"\"\n  local max_letters=\"\"\n  local max_letters_count=0\n  for\
+    \ letter in $(echo $input | tr \" \" \"\\n\"); do\n    count=$(echo $input | tr\
+    \ \" \" \"\\n\" | grep -c $letter)\n    if [ $count -gt $max_count ]; then\n \
+    \     max_count=$count\n      max_letter=$letter\n      max_letters=$letter\n\
+    \      max_letters_count=1\n    elif [ $count -eq $max_count ]; then\n      max_letters=\"\
+    $max_letters $letter\"\n      max_letters_count=$((max_letters_count + 1))\n \
+    \   fi\n  done\n  if [ $max_letters_count -eq 1 ]; then\n    result=\"{\\\"$max_letter\\\
+    \": \\\"$max_count\\\"}\"\n  else\n    result=\"{\\\"$max_letters\\\": \\\"$max_count\\\
+    \"}\"\n  fi\n  echo $result", "    local -A hist\n    local -a max_keys\n    local\
+    \ max_val=0\n    local key\n    local val\n    for key in $1; do\n        ((hist[$key]++))\n\
+    \        val=${hist[$key]}\n        if ((val > max_val)); then\n            max_val=$val\n\
+    \            max_keys=(\"$key\")\n        elif ((val == max_val)); then\n    \
+    \        max_keys+=(\"$key\")\n        fi\n    done\n    local -a result\n   \
+    \ for key in \"${max_keys[@]}\"; do\n        result+=(\"\\\"$key\\\": \\\"${hist[$key]}\\\
+    \"\")\n    done\n    echo \"{${result[*]}}\"", "    local -A dict\n    local max=0\n\
+    \    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n        if ((dict[$i]\
+    \ > max)); then\n            max=${dict[$i]}\n        fi\n    done\n    echo -n\
+    \ '{'\n    for i in \"${!dict[@]}\"; do\n        if ((dict[$i] == max)); then\n\
+    \            echo -n '\"'$i'\": \"'${dict[$i]}'\", '\n        fi\n    done\n \
+    \   echo -n '}'", "  if [[ $# -eq 0 ]]; then\n    echo \"{}\"\n    return\n  fi\n\
+    \  local -A histogram\n  for word in $@; do\n    if [[ -z ${histogram[$word]}\
+    \ ]]; then\n      histogram[$word]=1\n    else\n      histogram[$word]=$((histogram[$word]+1))\n\
+    \    fi\n  done\n  local max=0\n  for word in ${!histogram[@]}; do\n    if [[\
+    \ ${histogram[$word]} -gt $max ]]; then\n      max=${histogram[$word]}\n    fi\n\
+    \  done\n  local result=\"{\"\n  for word in ${!histogram[@]}; do\n    if [[ ${histogram[$word]}\
+    \ -eq $max ]]; then\n      result=\"$result\\\"$word\\\": \\\"${histogram[$word]}\\\
+    \",\"\n    fi\n  done\n  echo \"${result%?}}\"", "    local -A histogram\n   \
+    \ for word in $1; do\n        histogram[$word]=$((histogram[$word] + 1))\n   \
+    \ done\n    local max=0\n    for word in \"${!histogram[@]}\"; do\n        if\
+    \ [[ ${histogram[$word]} -gt $max ]]; then\n            max=${histogram[$word]}\n\
+    \        fi\n    done\n    local result=\"\"\n    for word in \"${!histogram[@]}\"\
+    ; do\n        if [[ ${histogram[$word]} -eq $max ]]; then\n            result=\"\
+    $result \\\"$word\\\": \\\"${histogram[$word]}\\\"\"\n        fi\n    done\n \
+    \   echo \"{$result}\"", "  # Your code here\n  echo \"{}\"", "    # Write your\
+    \ code here\n    # To print results to the standard output you can use echo\n\
+    \    # Example:\n    # echo \"Hello world\"\n    echo \"{}\"", "    local -A dict\n\
+    \    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local max=0\n\
+    \    for i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -gt $max ]]; then\n\
+    \            max=${dict[$i]}\n        fi\n    done\n    local -A result\n    for\
+    \ i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -eq $max ]]; then\n    \
+    \        result[$i]=${dict[$i]}\n        fi\n    done\n    echo ${result[@]}",
+  "  # your code here\n  echo \"{\"\n  echo \"}\"", "  # TODO: Implement this function\n\
+    \  echo \"{}\"", "  # your code here\n  if [ -z \"$1\" ]; then\n    echo \"{}\"\
+    \n  else\n    echo \"{$(echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -nr\
+    \ | awk '{print \"\\\"\"$2\"\\\": \\\"\"$1\"\\\"\"}' | tr '\\n' ',' | sed 's/,$//')}\"\
+    \n  fi", "    local -A letters\n    for letter in $1; do\n        ((letters[$letter]++))\n\
+    \    done\n    local max=0\n    for letter in \"${!letters[@]}\"; do\n       \
+    \ if ((letters[$letter] > max)); then\n            max=${letters[$letter]}\n \
+    \       fi\n    done\n    local result=()\n    for letter in \"${!letters[@]}\"\
+    ; do\n        if ((letters[$letter] == max)); then\n            result+=(\"$letter:$max\"\
+    )\n        fi\n    done\n    echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"",
+  "    local -A dict\n    for i in $1; do\n        if [[ ${dict[$i]} ]]; then\n  \
+    \          dict[$i]=$((dict[$i]+1))\n        else\n            dict[$i]=1\n  \
+    \      fi\n    done\n    local max=0\n    for i in \"${!dict[@]}\"; do\n     \
+    \   if [[ ${dict[$i]} -gt $max ]]; then\n            max=${dict[$i]}\n       \
+    \ fi\n    done\n    local result=\"\"\n    for i in \"${!dict[@]}\"; do\n    \
+    \    if [[ ${dict[$i]} -eq $max ]]; then\n            result+=\"\\\"$i\\\": \\\
+    \"${dict[$i]}\\\", \"\n        fi\n    done\n    echo \"{${result%,*}}\"", " \
+    \ local str=\"$1\"\n  local -A dict\n  for c in $str; do\n    if [[ -z ${dict[$c]}\
+    \ ]]; then\n      dict[$c]=1\n    else\n      dict[$c]=$((dict[$c]+1))\n    fi\n\
+    \  done\n  local max=0\n  for c in \"${!dict[@]}\"; do\n    if [[ ${dict[$c]}\
+    \ -gt $max ]]; then\n      max=${dict[$c]}\n    fi\n  done\n  local -A result\n\
+    \  for c in \"${!dict[@]}\"; do\n    if [[ ${dict[$c]} -eq $max ]]; then\n   \
+    \   result[$c]=$max\n    fi\n  done\n  echo -n \"{\"\n  local first=true\n  for\
+    \ c in \"${!result[@]}\"; do\n    if [[ $first == false ]]; then\n      echo -n\
+    \ \", \"\n    fi\n    echo -n \"'\\\"$c\\\"': '\\\"${result[$c]}\\\"'\"\n    first=false\n\
+    \  done\n  echo \"}\"", "  local -A histogram\n  for letter in $1; do\n    histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n  done\n  local -a max_letters\n  local max_count=0\n  for letter in\
+    \ \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]} -gt $max_count ]];\
+    \ then\n      max_letters=(\"$letter\")\n      max_count=${histogram[$letter]}\n\
+    \    elif [[ ${histogram[$letter]} -eq $max_count ]]; then\n      max_letters+=(\"\
+    $letter\")\n    fi\n  done\n  local -a result\n  for letter in \"${max_letters[@]}\"\
+    ; do\n    result+=(\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n  done\n\
+    \  echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"", "  if [ -z \"$1\" ]; then\n\
+    \    echo \"{}\"\n  else\n    echo \"{$(echo \"$1\" | tr ' ' '\\n' | sort | uniq\
+    \ -c | sort -nr | awk '{print \"\\\"\"$2\"\\\": \\\"\"$1\"\\\"\"}' | tr '\\n'\
+    \ ',' | sed 's/,$//')}\"\n  fi", "  local -A histogram\n  local -a max_keys\n\
+    \  local max_value\n  local key\n  local value\n  for key in $@; do\n    if [[\
+    \ -z ${histogram[$key]} ]]; then\n      histogram[$key]=1\n    else\n      histogram[$key]=$((histogram[$key]\
+    \ + 1))\n    fi\n  done\n  for key in \"${!histogram[@]}\"; do\n    value=${histogram[$key]}\n\
+    \    if [[ -z $max_value ]]; then\n      max_value=$value\n      max_keys=(\"\
+    $key\")\n    elif [[ $value -eq $max_value ]]; then\n      max_keys+=(\"$key\"\
+    )\n    elif [[ $value -gt $max_value ]]; then\n      max_value=$value\n      max_keys=(\"\
+    $key\")\n    fi\n  done\n  for key in \"${max_keys[@]}\"; do\n    echo -n \"\\\
+    \"$key\\\": \\\"${histogram[$key]}\\\"\"\n    if [[ $key != \"${max_keys[-1]}\"\
+    \ ]]; then\n      echo -n \", \"\n    fi\n  done", "  local -A histogram\n  for\
+    \ word in $1; do\n    histogram[$word]=$((histogram[$word] + 1))\n  done\n  local\
+    \ -a max_keys\n  local max_value=0\n  for key in \"${!histogram[@]}\"; do\n  \
+    \  if [[ ${histogram[$key]} -gt $max_value ]]; then\n      max_value=${histogram[$key]}\n\
+    \      max_keys=(\"$key\")\n    elif [[ ${histogram[$key]} -eq $max_value ]];\
+    \ then\n      max_keys+=(\"$key\")\n    fi\n  done\n  local result=\"{\"\n  for\
+    \ key in \"${max_keys[@]}\"; do\n    result+=\"\\\"$key\\\": \\\"$max_value\\\"\
+    , \"\n  done\n  result=${result%??}\n  result+=\"}\"\n  echo $result", "    if\
+    \ [ $# -eq 0 ]; then\n        echo \"{}\"\n        return\n    fi\n    local max_count=0\n\
+    \    local max_letters=\"\"\n    local count=0\n    local letter=\"\"\n    local\
+    \ letters=\"\"\n    local result=\"\"\n    for letter in $@; do\n        count=0\n\
+    \        for letter2 in $@; do\n            if [ \"$letter\" = \"$letter2\" ];\
+    \ then\n                count=$((count + 1))\n            fi\n        done\n \
+    \       if [ $count -gt $max_count ]; then\n            max_count=$count\n   \
+    \         max_letters=$letter\n        elif [ $count -eq $max_count ]; then\n\
+    \            max_letters=\"$max_letters $letter\"\n        fi\n    done\n    for\
+    \ letter in $max_letters; do\n        if [ -z \"$result\" ]; then\n          \
+    \  result=\"{\\\"$letter\\\": \\\"$max_count\\\"}\"\n        else\n          \
+    \  result=\"$result, {\\\"$letter\\\": \\\"$max_count\\\"}\"\n        fi\n   \
+    \ done\n    echo \"$result\"", "    local string=$1\n    local -A dict\n    for\
+    \ i in $string; do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local max=0\n\
+    \    for i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -gt $max ]]; then\n\
+    \            max=${dict[$i]}\n        fi\n    done\n    local -A result\n    for\
+    \ i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -eq $max ]]; then\n    \
+    \        result[$i]=${dict[$i]}\n        fi\n    done\n    echo \"$(declare -p\
+    \ result)\"", "    local -A dict\n    local max=0\n    for i in $@; do\n     \
+    \   dict[$i]=$((dict[$i]+1))\n        if [[ ${dict[$i]} -gt $max ]]; then\n  \
+    \          max=${dict[$i]}\n        fi\n    done\n    for i in \"${!dict[@]}\"\
+    ; do\n        if [[ ${dict[$i]} -eq $max ]]; then\n            echo -n \"\\\"\
+    $i\\\": \\\"${dict[$i]}\\\"\"\n            echo -n \", \"\n        fi\n    done\n\
+    \    echo", "    local -A histogram\n    for word in $1; do\n        (( histogram[$word]++\
+    \ ))\n    done\n    local max=0\n    for word in \"${!histogram[@]}\"; do\n  \
+    \      if (( histogram[$word] > max )); then\n            max=${histogram[$word]}\n\
+    \        fi\n    done\n    local -a result\n    for word in \"${!histogram[@]}\"\
+    ; do\n        if (( histogram[$word] == max )); then\n            result+=(\\\"\
+    $word\\\": \\\"${histogram[$word]}\\\")\n        fi\n    done\n    echo \"{${result[*]}}\"",
+  "  local -A histogram\n  for word in $1; do\n    ((histogram[$word]++))\n  done\n\
+    \  local max=0\n  for word in \"${!histogram[@]}\"; do\n    if ((histogram[$word]\
+    \ > max)); then\n      max=${histogram[$word]}\n    fi\n  done\n  local result=\"\
+    \"\n  for word in \"${!histogram[@]}\"; do\n    if ((histogram[$word] == max));\
+    \ then\n      result=\"$result \\\"$word\\\": \\\"$max\\\"\"\n    fi\n  done\n\
+    \  echo \"{$result}\"", "    local -A histogram\n    for word in $1; do\n    \
+    \    ((histogram[$word]++))\n    done\n    local result=\"\"\n    local max=0\n\
+    \    for word in \"${!histogram[@]}\"; do\n        if ((histogram[$word] > max));\
+    \ then\n            max=${histogram[$word]}\n            result=\"$word\"\n  \
+    \      elif ((histogram[$word] == max)); then\n            result=\"$result $word\"\
+    \n        fi\n    done\n    echo \"{$(printf '\"%s\": \"%s\", ' $result | sed\
+    \ 's/, $//')}\"", "  local -A counts\n  for word in $1; do\n    counts[$word]=$((counts[$word]\
+    \ + 1))\n  done\n  local -a max_counts\n  local max_count=0\n  for word in \"\
+    ${!counts[@]}\"; do\n    if [[ ${counts[$word]} -gt $max_count ]]; then\n    \
+    \  max_counts=(\"$word\")\n      max_count=${counts[$word]}\n    elif [[ ${counts[$word]}\
+    \ -eq $max_count ]]; then\n      max_counts+=(\"$word\")\n    fi\n  done\n  local\
+    \ -a result\n  for word in \"${max_counts[@]}\"; do\n    result+=(\"\\\"$word\\\
+    \": \\\"${counts[$word]}\\\"\")\n  done\n  echo \"{$(IFS=,; echo \"${result[*]}\"\
+    )}\"", "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if ((histogram[$letter] > max_count)); then\n            max_count=${histogram[$letter]}\n\
+    \        fi\n    done\n    local -a max_letters\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max_count)); then\n            max_letters+=(\"\
+    $letter\")\n        fi\n    done\n    echo -n \"{\"\n    for letter in \"${max_letters[@]}\"\
+    ; do\n        echo -n \"\\\"$letter\\\": \\\"$max_count\\\"\"\n        if ((letter\
+    \ != \"${max_letters[-1]}\")); then\n            echo -n \", \"\n        fi\n\
+    \    done\n    echo \"}\"", "    local -A histogram\n    for letter in $1; do\n\
+    \        ((histogram[$letter]++))\n    done\n    local -a max_letters\n    local\
+    \ max_count=0\n    for letter in \"${!histogram[@]}\"; do\n        if [[ ${histogram[$letter]}\
+    \ -gt $max_count ]]; then\n            max_letters=(\"$letter\")\n           \
+    \ max_count=${histogram[$letter]}\n        elif [[ ${histogram[$letter]} -eq $max_count\
+    \ ]]; then\n            max_letters+=(\"$letter\")\n        fi\n    done\n   \
+    \ local -a result\n    for letter in \"${max_letters[@]}\"; do\n        result+=(\"\
+    \\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n    done\n    echo \"{$(IFS=,;\
+    \ echo \"${result[*]}\")}\"", "  local -A histogram\n  for letter in $1; do\n\
+    \    histogram[$letter]=$((histogram[$letter] + 1))\n  done\n  local max=0\n \
+    \ for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]} -gt\
+    \ $max ]]; then\n      max=${histogram[$letter]}\n    fi\n  done\n  local -a max_letters\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]} -eq\
+    \ $max ]]; then\n      max_letters+=($letter)\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${max_letters[@]}\"; do\n    result+=($(printf '\"%s\": \"\
+    %s\"' \"$letter\" \"${histogram[$letter]}\"))\n  done\n  echo \"{$(IFS=,; echo\
+    \ \"${result[*]}\")}\"", "  local -A counts\n  for word in $1; do\n    (( counts[$word]++\
+    \ ))\n  done\n  local max=0\n  for count in \"${counts[@]}\"; do\n    (( count\
+    \ > max )) && max=$count\n  done\n  local -a result\n  for word in \"${!counts[@]}\"\
+    ; do\n    (( counts[$word] == max )) && result+=(\"$word\")\n  done\n  echo \"\
+    {$(printf '\"%s\": \"%s\", ' \"${result[@]}\" \"$max\")}\"", "    if [ $# -eq\
+    \ 0 ]; then\n        echo \"{}\"\n        return 0\n    fi\n    local -A dict\n\
+    \    for letter in $@; do\n        if [ -z \"${dict[$letter]}\" ]; then\n    \
+    \        dict[$letter]=1\n        else\n            dict[$letter]=$((dict[$letter]+1))\n\
+    \        fi\n    done\n    local max=0\n    for key in \"${!dict[@]}\"; do\n \
+    \       if [ \"${dict[$key]}\" -gt \"$max\" ]; then\n            max=\"${dict[$key]}\"\
+    \n        fi\n    done\n    local -A result\n    for key in \"${!dict[@]}\"; do\n\
+    \        if [ \"${dict[$key]}\" -eq \"$max\" ]; then\n            result[$key]=$max\n\
+    \        fi\n    done\n    echo \"{\"$(printf '\"%s\": \"%s\", ' \"${!result[@]}\"\
+    \ \"${result[@]}\")\"}\"", "    local -A histogram\n    for word in $@; do\n \
+    \       histogram[$word]=$((histogram[$word] + 1))\n    done\n    local max=0\n\
+    \    for word in \"${!histogram[@]}\"; do\n        if ((histogram[$word] > max));\
+    \ then\n            max=${histogram[$word]}\n        fi\n    done\n    local result=\"\
+    \"\n    for word in \"${!histogram[@]}\"; do\n        if ((histogram[$word] ==\
+    \ max)); then\n            result+=\"{\\\"$word\\\": \\\"${histogram[$word]}\\\
+    \"}, \"\n        fi\n    done\n    echo \"{${result%, }}\"", "    if [ -z \"$1\"\
+    \ ]; then\n        echo \"{}\"\n        return\n    fi\n    local -A counts\n\
+    \    local max=0\n    for word in $1; do\n        counts[$word]=$((counts[$word]\
+    \ + 1))\n        if [ \"${counts[$word]}\" -gt \"$max\" ]; then\n            max=\"\
+    ${counts[$word]}\"\n        fi\n    done\n    local -a max_words\n    for word\
+    \ in \"${!counts[@]}\"; do\n        if [ \"${counts[$word]}\" -eq \"$max\" ];\
+    \ then\n            max_words+=(\"$word\")\n        fi\n    done\n    echo \"\
+    {\"\n    for word in \"${max_words[@]}\"; do\n        echo \"\\\"$word\\\": \\\
+    \"${counts[$word]}\\\"\"\n    done\n    echo \"}\"", "    local -A dict\n    for\
+    \ i in $1; do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local result=\"\
+    \"\n    for i in \"${!dict[@]}\"; do\n        if [ \"${dict[$i]}\" -eq \"$(echo\
+    \ \"${dict[*]}\" | tr ' ' '\\n' | sort -nr | head -n 1)\" ]; then\n          \
+    \  result+=\"$i:${dict[$i]},\"\n        fi\n    done\n    echo \"{\"$(echo \"\
+    $result\" | sed 's/,$//')\"}\"", "  if [ -z \"$1\" ]; then\n    echo \"{}\"\n\
+    \  else\n    echo \"{$(echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -nr\
+    \ | awk '{print \"\\\"\"$2\"\\\": \\\"\"$1\"\\\"\"}' | tr '\\n' ',' | sed 's/,$//')}\"\
+    \n  fi", "    local -A histogram\n    local -a max_keys\n    local max_value=0\n\
+    \    for word in $@; do\n        ((histogram[$word]++))\n        if ((histogram[$word]\
+    \ > max_value)); then\n            max_value=${histogram[$word]}\n           \
+    \ max_keys=(\"$word\")\n        elif ((histogram[$word] == max_value)); then\n\
+    \            max_keys+=(\"$word\")\n        fi\n    done\n    local -a result\n\
+    \    for key in \"${max_keys[@]}\"; do\n        result+=(\"\\\"$key\\\": \\\"\
+    ${histogram[$key]}\\\"\")\n    done\n    echo \"{${result[*]}}\"", "    # your\
+    \ code here\n    # hint: use the following command to get the count of a letter:\n\
+    \    # $ echo \"a b b a\" | tr \" \" \"\\n\" | grep -c \"a\"\n    # the output\
+    \ of the command is: 2\n    # hint: use the following command to sort a dictionary\
+    \ by value:\n    # $ echo '{\"a\": 1, \"b\": 2, \"c\": 3}' | python -m json.tool\
+    \ | grep -v \"^{\" | sort -k2 -t: -n\n    # the output of the command is:\n  \
+    \  # \"a\": 1\n    # \"b\": 2\n    # \"c\": 3\n    # hint: use the following command\
+    \ to sort a dictionary by key:\n    # $ echo '{\"a\": 1, \"b\": 2, \"c\": 3}'\
+    \ | python -m json.tool | grep -v \"^{\" | sort -k1 -t: -n\n    # the output of\
+    \ the command is:\n    # \"a\": 1\n    # \"b\": 2\n    # \"c\": 3\n    # hint:\
+    \ use the following command to get the first line of a file:\n    # $ echo \"\
+    a\\nb\\nc\" | head -n 1\n    # the output of the command is: a\n    # hint: use\
+    \ the following command to get the last line of a file:\n    # $ echo \"a\\nb\\\
+    nc\" | tail -n 1\n    # the output of the command is: c\n    # hint: use the following\
+    \ command to get the first character of a string:\n    # $ echo \"abc\" | cut\
+    \ -c 1\n    # the output of the command is: a\n    # hint: use the following command\
+    \ to get the last character of a string:\n    # $ echo \"abc\" | cut -c 3\n  \
+    \  # the output of the command is: c\n    # hint: use the following command to\
+    \ get the first n characters of a string:\n    # $ echo \"abc\" | cut -c 1-2\n\
+    \    # the output of the command is: ab\n    # hint: use the following command\
+    \ to get the last n characters of a string:\n    # $ echo \"abc\" | cut -c 2-3\n\
+    \    # the output of the command is: bc\n", "    local -A dict\n    local -a keys\n\
+    \    local -a values\n    local -a max_keys\n    local max_value\n    local key\n\
+    \    local value\n    local i\n    local j\n    for key in $@; do\n        if\
+    \ [[ -z \"${dict[$key]}\" ]]; then\n            dict[$key]=1\n        else\n \
+    \           ((dict[$key]++))\n        fi\n    done\n    for key in \"${!dict[@]}\"\
+    ; do\n        keys+=(\"$key\")\n        values+=(\"${dict[$key]}\")\n    done\n\
+    \    max_value=0\n    for ((i=0; i<${#values[@]}; i++)); do\n        if [[ ${values[$i]}\
+    \ -gt $max_value ]]; then\n            max_value=${values[$i]}\n            max_keys=(\"\
+    ${keys[$i]}\")\n        elif [[ ${values[$i]} -eq $max_value ]]; then\n      \
+    \      max_keys+=(\"${keys[$i]}\")\n        fi\n    done\n    echo -n \"{\"\n\
+    \    for ((i=0; i<${#max_keys[@]}; i++)); do\n        echo -n '\"'${max_keys[$i]}'\"\
+    : \"'$max_value'\"'\n        if [[ $i -lt $(( ${#max_keys[@]} - 1 )) ]]; then\n\
+    \            echo -n \", \"\n        fi\n    done\n    echo \"}\"", "  local -A\
+    \ counts\n  local max=0\n  for letter in $1; do\n    ((counts[$letter]++))\n \
+    \   ((counts[$letter] > max)) && max=${counts[$letter]}\n  done\n  for letter\
+    \ in \"${!counts[@]}\"; do\n    ((counts[$letter] == max)) && echo -n \"\\\"$letter\\\
+    \": \\\"${counts[$letter]}\\\", \"\n  done\n  echo", "  local -A histogram\n \
+    \ for letter in $1; do\n    ((histogram[$letter]++))\n  done\n  local max_count=0\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]} -gt\
+    \ $max_count ]]; then\n      max_count=${histogram[$letter]}\n    fi\n  done\n\
+    \  local result=\"\"\n  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]}\
+    \ -eq $max_count ]]; then\n      result+=\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\
+    \", \"\n    fi\n  done\n  echo \"{${result%, }}\"", "    if [ -z \"$1\" ]; then\n\
+    \        echo \"{}\"\n        return\n    fi\n    local -A dict\n    for word\
+    \ in $1; do\n        if [ -z \"${dict[$word]}\" ]; then\n            dict[$word]=1\n\
+    \        else\n            dict[$word]=$((dict[$word]+1))\n        fi\n    done\n\
+    \    local max=0\n    for value in \"${dict[@]}\"; do\n        if [ $value -gt\
+    \ $max ]; then\n            max=$value\n        fi\n    done\n    local result=\"\
+    {\"\n    local first=true\n    for key in \"${!dict[@]}\"; do\n        if [ ${dict[$key]}\
+    \ -eq $max ]; then\n            if [ $first = true ]; then\n                first=false\n\
+    \            else\n                result+=\", \"\n            fi\n          \
+    \  result+='\"'\n            result+=$key\n            result+='\": \"'\n    \
+    \        result+=$max\n            result+='\"'\n        fi\n    done\n    result+=\"\
+    }\"\n    echo $result", "    local -A dict\n    local max=0\n    for i in $1;\
+    \ do\n        ((dict[$i]++))\n        ((dict[$i] > max)) && max=${dict[$i]}\n\
+    \    done\n    local -a result\n    for i in \"${!dict[@]}\"; do\n        ((dict[$i]\
+    \ == max)) && result+=(\"$i\")\n    done\n    echo \"{$(printf '\"%s\": \"%s\"\
+    , ' \"${result[@]}\" \"$max\")%s}\"", "    # Write your code here\n    # To print\
+    \ results to the standard output you can use echo\n    # Example:\n    # echo\
+    \ \"Hello world\"\n    echo \"{}\"", "  local -A histogram\n  for letter in $1;\
+    \ do\n    ((histogram[$letter]++))\n  done\n  local -a max_letters\n  local max_count=0\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] > max_count));\
+    \ then\n      max_letters=(\"$letter\")\n      max_count=${histogram[$letter]}\n\
+    \    elif ((histogram[$letter] == max_count)); then\n      max_letters+=(\"$letter\"\
+    )\n    fi\n  done\n  local result=\"{\"\n  for letter in \"${max_letters[@]}\"\
+    ; do\n    result+=\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\",\"\n  done\n\
+    \  result=${result%,}\n  result+=\"}\"\n  echo \"$result\"", "    local -A dict\n\
+    \    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n  \
+    \  local max_count=0\n    for word in \"${!dict[@]}\"; do\n        if (( ${dict[$word]}\
+    \ > max_count )); then\n            max_count=${dict[$word]}\n        fi\n   \
+    \ done\n    local -a max_words\n    for word in \"${!dict[@]}\"; do\n        if\
+    \ (( ${dict[$word]} == max_count )); then\n            max_words+=($word)\n  \
+    \      fi\n    done\n    echo -n \"{\"\n    for word in \"${max_words[@]}\"; do\n\
+    \        echo -n \"\\\"$word\\\": \\\"${dict[$word]}\\\"\"\n        if (( ${#max_words[@]}\
+    \ > 1 )); then\n            echo -n \", \"\n        fi\n    done\n    echo \"\
+    }\"", "  local -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n\
+    \  done\n  local max=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max)); then\n      max=${histogram[$letter]}\n    fi\n  done\n  local result=()\n\
+    \  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter] == max));\
+    \ then\n      result+=(\"$letter\")\n    fi\n  done\n  echo \"{$(printf '\"%s\"\
+    : \"%s\", ' \"${result[@]}\" \"$max\")%}\"", "    local -A dict\n    for i in\
+    \ $1; do\n        dict[$i]=$((dict[$i]+1))\n    done\n    local max=0\n    for\
+    \ i in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -gt $max ]]; then\n    \
+    \        max=${dict[$i]}\n        fi\n    done\n    local res=\"\"\n    for i\
+    \ in \"${!dict[@]}\"; do\n        if [[ ${dict[$i]} -eq $max ]]; then\n      \
+    \      res+=\"\\\"$i\\\": \\\"${dict[$i]}\\\", \"\n        fi\n    done\n    echo\
+    \ \"{${res%, }}\"", "    local -A dict\n    for i in $1; do\n        dict[$i]=$((dict[$i]+1))\n\
+    \    done\n    local result=\"\"\n    for i in \"${!dict[@]}\"; do\n        if\
+    \ [[ \"${dict[$i]}\" -eq \"${dict[$max]}\" ]]; then\n            result=\"$result,\
+    \ \\\"$i\\\": \\\"${dict[$i]}\\\"\"\n        elif [[ \"${dict[$i]}\" -gt \"${dict[$max]}\"\
+    \ ]]; then\n            result=\"\\\"$i\\\": \\\"${dict[$i]}\\\"\"\n         \
+    \   max=$i\n        fi\n    done\n    echo \"{\"${result#, }\"}\"", "    if [\
+    \ -z \"$1\" ]; then\n        echo \"{}\"\n        return\n    fi\n    local -A\
+    \ histogram\n    for letter in $1; do\n        if [ -z \"${histogram[$letter]}\"\
+    \ ]; then\n            histogram[$letter]=1\n        else\n            histogram[$letter]=$((histogram[$letter]+1))\n\
+    \        fi\n    done\n    local -A max_count\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if [ -z \"${max_count[${histogram[$letter]}]}\" ]; then\n      \
+    \      max_count[${histogram[$letter]}]=\"$letter\"\n        else\n          \
+    \  max_count[${histogram[$letter]}]=\"${max_count[${histogram[$letter]}]} $letter\"\
+    \n        fi\n    done\n    local max_key\n    for key in \"${!max_count[@]}\"\
+    ; do\n        if [ -z \"$max_key\" ] || [ \"$key\" -gt \"$max_key\" ]; then\n\
+    \            max_key=\"$key\"\n        fi\n    done\n    local result=\"{\"\n\
+    \    for letter in ${max_count[$max_key]}; do\n        result=\"$result\\\"$letter\\\
+    \": \\\"$max_key\\\", \"\n    done\n    echo \"${result::-2}}\"", "    local -A\
+    \ histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n    done\n\
+    \    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n        if\
+    \ ((histogram[$letter] > max_count)); then\n            max_count=${histogram[$letter]}\n\
+    \        fi\n    done\n    local result=()\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max_count)); then\n            result+=(\"\
+    $letter: $max_count\")\n        fi\n    done\n    echo \"${result[@]}\"", "  if\
+    \ [[ -z \"$1\" ]]; then\n    echo \"{}\"\n  else\n    local -A dict\n    local\
+    \ -a max_keys\n    local max_value=0\n    for word in $1; do\n      if [[ -z \"\
+    ${dict[$word]}\" ]]; then\n        dict[$word]=1\n      else\n        dict[$word]=$((dict[$word]+1))\n\
+    \      fi\n      if [[ ${dict[$word]} -gt $max_value ]]; then\n        max_value=${dict[$word]}\n\
+    \        max_keys=(\"$word\")\n      elif [[ ${dict[$word]} -eq $max_value ]];\
+    \ then\n        max_keys+=(\"$word\")\n      fi\n    done\n    local -a result\n\
+    \    for key in \"${max_keys[@]}\"; do\n      result+=(\"\\\"$key\\\": \\\"${dict[$key]}\\\
+    \"\")\n    done\n    echo \"{\"$(IFS=,; echo \"${result[*]}\")\"}\"\n  fi", " \
+    \ local -A histogram\n  for letter in $1; do\n    histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n  done\n  local max=0\n  for letter in \"${!histogram[@]}\"; do\n   \
+    \ if [[ ${histogram[$letter]} -gt $max ]]; then\n      max=${histogram[$letter]}\n\
+    \    fi\n  done\n  local result=()\n  for letter in \"${!histogram[@]}\"; do\n\
+    \    if [[ ${histogram[$letter]} -eq $max ]]; then\n      result+=(\"$letter:\
+    \ ${histogram[$letter]}\")\n    fi\n  done\n  echo \"${result[@]}\"", "  local\
+    \ -A histogram\n  for letter in $1; do\n    ((histogram[$letter]++))\n  done\n\
+    \  local -a max_letters\n  local max_count=0\n  for letter in \"${!histogram[@]}\"\
+    ; do\n    if ((histogram[$letter] > max_count)); then\n      max_letters=(\"$letter\"\
+    )\n      max_count=${histogram[$letter]}\n    elif ((histogram[$letter] == max_count));\
+    \ then\n      max_letters+=(\"$letter\")\n    fi\n  done\n  local output=\"{\"\
+    \n  for letter in \"${max_letters[@]}\"; do\n    output+=\"\\\"$letter\\\": \\\
+    \"${histogram[$letter]}\\\",\"\n  done\n  echo \"${output%,}\"\"}\"", "  local\
+    \ -A histogram\n  for letter in $1; do\n    histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n  done\n  local max=0\n  for letter in \"${!histogram[@]}\"; do\n   \
+    \ if [[ ${histogram[$letter]} -gt $max ]]; then\n      max=${histogram[$letter]}\n\
+    \    fi\n  done\n  local result=\"\"\n  for letter in \"${!histogram[@]}\"; do\n\
+    \    if [[ ${histogram[$letter]} -eq $max ]]; then\n      result+=\"\\\"$letter\\\
+    \": \\\"${histogram[$letter]}\\\", \"\n    fi\n  done\n  echo \"{${result%%, }}\"",
+  "    if [ -z \"$1\" ]; then\n        echo \"{}\"\n        return\n    fi\n    local\
+    \ -A dict\n    for i in $1; do\n        if [ -z \"${dict[$i]}\" ]; then\n    \
+    \        dict[$i]=1\n        else\n            dict[$i]=$((dict[$i]+1))\n    \
+    \    fi\n    done\n    local max=0\n    for i in \"${!dict[@]}\"; do\n       \
+    \ if [ \"${dict[$i]}\" -gt \"$max\" ]; then\n            max=\"${dict[$i]}\"\n\
+    \        fi\n    done\n    local result=\"{\"\n    for i in \"${!dict[@]}\"; do\n\
+    \        if [ \"${dict[$i]}\" -eq \"$max\" ]; then\n            result+=\"\\\"\
+    $i\\\": \\\"${dict[$i]}\\\",\"\n        fi\n    done\n    result=\"${result::-1}}\"\
+    \n    echo \"$result\"", "    local -A histogram\n    local -a letters\n    local\
+    \ letter\n    local max_count\n    local count\n    local -a max_letters\n   \
+    \ local -a result\n    local -a output\n\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n\n    letters=(${!histogram[@]})\n    max_count=0\n    for letter in\
+    \ ${letters[@]}; do\n        count=${histogram[$letter]}\n        if [[ $count\
+    \ -gt $max_count ]]; then\n            max_count=$count\n            max_letters=(\"\
+    $letter\")\n        elif [[ $count -eq $max_count ]]; then\n            max_letters+=(\"\
+    $letter\")\n        fi\n    done\n\n    for letter in ${max_letters[@]}; do\n\
+    \        result+=(\"\\\"$letter\\\"\")\n        result+=(\"\\\"${histogram[$letter]}\\\
+    \"\")\n    done\n\n    output=$(printf \", %s\" \"${result[@]}\")\n    echo \"\
+    {${output:2}}\"", "    local -A dict\n    for word in $1; do\n        ((dict[$word]++))\n\
+    \    done\n    local -a max_keys\n    local max_value=0\n    for key in \"${!dict[@]}\"\
+    ; do\n        if ((dict[$key] > max_value)); then\n            max_value=${dict[$key]}\n\
+    \            max_keys=(\"$key\")\n        elif ((dict[$key] == max_value)); then\n\
+    \            max_keys+=(\"$key\")\n        fi\n    done\n    local -a result\n\
+    \    for key in \"${max_keys[@]}\"; do\n        result+=(\"\\\"$key\\\": \\\"\
+    ${dict[$key]}\\\"\")\n    done\n    echo \"{\"\"${result[@]}\"\"},\"", "    local\
+    \ -A dict\n    local -a keys\n    local -a values\n    local -a max_values\n \
+    \   local max_value\n    local max_count\n    local count\n    local key\n   \
+    \ local value\n    local i\n    local j\n    for word in $@; do\n        if [[\
+    \ -z \"${dict[$word]}\" ]]; then\n            dict[$word]=1\n        else\n  \
+    \          ((dict[$word]++))\n        fi\n    done\n    for key in \"${!dict[@]}\"\
+    ; do\n        value=\"${dict[$key]}\"\n        if [[ -z \"$max_value\" ]]; then\n\
+    \            max_value=\"$value\"\n            max_count=1\n        elif [[ \"\
+    $value\" -gt \"$max_value\" ]]; then\n            max_value=\"$value\"\n     \
+    \       max_count=1\n        elif [[ \"$value\" -eq \"$max_value\" ]]; then\n\
+    \            ((max_count++))\n        fi\n    done\n    for key in \"${!dict[@]}\"\
+    ; do\n        value=\"${dict[$key]}\"\n        if [[ \"$value\" -eq \"$max_value\"\
+    \ ]]; then\n            keys[$max_count]=\"$key\"\n            values[$max_count]=\"\
+    $value\"\n            ((max_count--))\n        fi\n    done\n    echo -n \"{\"\
+    \n    for ((i=${#keys[@]}; i>0; i--)); do\n        key=\"${keys[$i]}\"\n     \
+    \   value=\"${values[$i]}\"\n        echo -n \"\\\"$key\\\": \\\"$value\\\"\"\n\
+    \        if [[ $i -gt 1 ]]; then\n            echo -n \", \"\n        fi\n   \
+    \ done\n    echo \"}\"", "  local letters=\"$1\"\n  local letter_counts=$(echo\
+    \ \"$letters\" | tr ' ' '\\n' | sort | uniq -c | sort -nr)\n  local max_count=$(echo\
+    \ \"$letter_counts\" | head -n 1 | cut -d ' ' -f 1)\n  local max_letters=$(echo\
+    \ \"$letter_counts\" | grep \"^ *$max_count \" | cut -d ' ' -f 2)\n  local result=''\n\
+    \  for letter in $max_letters; do\n    result=\"$result, '\\\"$letter\\\"': '\\\
+    \"$max_count\\\"'\"\n  done\n  echo \"{$(echo \"$result\" | cut -c 3-)}\"", " \
+    \   local -A histogram\n    local -a keys\n    local -a values\n    local -a max_keys\n\
+    \    local max_value\n    local key\n    local value\n    local i\n    for key\
+    \ in $1; do\n        if [[ ${histogram[$key]} ]]; then\n            ((histogram[$key]++))\n\
+    \        else\n            histogram[$key]=1\n        fi\n    done\n    max_value=0\n\
+    \    for key in \"${!histogram[@]}\"; do\n        value=${histogram[$key]}\n \
+    \       if [[ $value -gt $max_value ]]; then\n            max_value=$value\n \
+    \           max_keys=(\"$key\")\n        elif [[ $value -eq $max_value ]]; then\n\
+    \            max_keys+=(\"$key\")\n        fi\n    done\n    for key in \"${max_keys[@]}\"\
+    ; do\n        keys+=(\"\\\"$key\\\"\")\n        values+=(\"\\\"${histogram[$key]}\\\
+    \"\")\n    done\n    echo \"{\"\n    for ((i=0; i<${#keys[@]}; i++)); do\n   \
+    \     echo \"  ${keys[$i]}: ${values[$i]}\"\n        if ((i < ${#keys[@]} - 1));\
+    \ then\n            echo \",\"\n        fi\n    done\n    echo \"}\"", "  local\
+    \ -A dict\n  local -a keys\n  local -a values\n  local -a max_keys\n  local max_value\n\
+    \  local key\n  local value\n  local i\n  for key in $@; do\n    ((dict[$key]++))\n\
+    \  done\n  for key in \"${!dict[@]}\"; do\n    keys+=(\"\\\"$key\\\"\")\n    values+=(\"\
+    \\\"${dict[$key]}\\\"\")\n  done\n  max_value=0\n  for ((i=0; i<${#values[@]};\
+    \ i++)); do\n    if ((${values[$i]} > max_value)); then\n      max_value=${values[$i]}\n\
+    \      max_keys=(\"${keys[$i]}\")\n    elif ((${values[$i]} == max_value)); then\n\
+    \      max_keys+=(\"${keys[$i]}\")\n    fi\n  done\n  echo \"{\"\n  for ((i=0;\
+    \ i<${#max_keys[@]}; i++)); do\n    echo \"  ${max_keys[$i]}: \\\"$max_value\\\
+    \"\"\n    if ((i < ${#max_keys[@]} - 1)); then\n      echo \",\"\n    fi\n  done\n\
+    \  echo \"}\"", "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n\
+    \        if ((histogram[$letter] > max_count)); then\n            max_count=${histogram[$letter]}\n\
+    \        fi\n    done\n    local -a max_letters\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max_count)); then\n            max_letters+=(\"\
+    $letter\")\n        fi\n    done\n    local -a result\n    for letter in \"${max_letters[@]}\"\
+    ; do\n        result+=(\"\\\"$letter\\\": \\\"${histogram[$letter]}\\\"\")\n \
+    \   done\n    echo \"{$(IFS=,; echo \"${result[*]}\")}\"", "    local -A histogram\n\
+    \    for letter in $1; do\n        ((histogram[$letter]++))\n    done\n    local\
+    \ result=\"\"\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n \
+    \       if [[ ${histogram[$letter]} -gt $max ]]; then\n            max=${histogram[$letter]}\n\
+    \            result=\"$letter\"\n        elif [[ ${histogram[$letter]} -eq $max\
+    \ ]]; then\n            result=\"$result $letter\"\n        fi\n    done\n   \
+    \ echo \"{$(printf '\"%s\": \"%s\", ' $result | sed 's/, $//')}\"", "    local\
+    \ -A counts\n    local -a letters\n    local letter\n    local count\n    local\
+    \ -a max_letters\n    local max_count\n    local -a output\n    local -a output_letters\n\
+    \    local output_count\n    local output_letter\n    local output_index\n   \
+    \ local output_length\n    local output_max_length\n    local output_max_index\n\
+    \    local output_max_count\n    local output_max_letter\n    local output_max_letters\n\
+    \    local output_max_letters_length\n    local output_max_letters_index\n   \
+    \ local output_max_letters_letter\n    local output_max_letters_count\n    local\
+    \ output_max_letters_count_index\n    local output_max_letters_count_count\n \
+    \   local output_max_letters_count_letter\n    local output_max_letters_count_letters\n\
+    \    local output_max_letters_count_letters_length\n    local output_max_letters_count_letters_index\n\
+    \    local output_max_letters_count_letters_letter\n    local output_max_letters_count_letters_count\n\
+    \    local output_max_letters_count_letters_count_index\n    local output_max_letters_count_letters_count_count\n\
+    \    local output_max_letters_count_letters_count_letter\n    local output_max_letters_count_letters_count_letters\n\
+    \    local output_max_letters_count_letters_count_letters_length\n    local output_max_letters_count_letters_count_letters_index\n\
+    \    local output_max_letters_count_letters_count_letters_letter\n    local output_max_letters_count_letters_count_letters_count\n\
+    \    local output_max_letters_count_letters_count_letters_count_index\n    local\
+    \ output_max_letters_count_letters_count_letters_count_count\n    local output_max_letters_count_letters_count_letters_count_letter\n\
+    \    local output_max_letters_count_letters_count_letters_count_letters\n    local\
+    \ output_max_letters_count_letters_count_letters_count_letters_length\n    local\
+    \ output_max_letters_count_letters_count_letters_count", "    local -A histogram\n\
+    \    for word in $1; do\n        ((histogram[$word]++))\n    done\n    local -a\
+    \ max\n    local max_count=0\n    for word in \"${!histogram[@]}\"; do\n     \
+    \   if ((histogram[$word] > max_count)); then\n            max_count=${histogram[$word]}\n\
+    \            max=(\"$word\")\n        elif ((histogram[$word] == max_count));\
+    \ then\n            max+=(\"$word\")\n        fi\n    done\n    local -a result\n\
+    \    for word in \"${max[@]}\"; do\n        result+=(\"\\\"$word\\\": \\\"${histogram[$word]}\\\
+    \"\")\n    done\n    echo \"{\"\"${result[@]}\"\"},\"", "    local -A histogram\n\
+    \    for word in $@; do\n        (( histogram[$word]++ ))\n    done\n    local\
+    \ max=0\n    for word in \"${!histogram[@]}\"; do\n        if (( histogram[$word]\
+    \ > max )); then\n            max=${histogram[$word]}\n        fi\n    done\n\
+    \    for word in \"${!histogram[@]}\"; do\n        if (( histogram[$word] == max\
+    \ )); then\n            echo -n \"\\\"$word\\\": \"\n            echo -n \"\\\"\
+    $max\\\"\"\n            echo -n \", \"\n        fi\n    done\n    echo -n \"}\"",
+  "  local -A histogram\n  for word in $1; do\n    histogram[$word]=$((histogram[$word]\
+    \ + 1))\n  done\n  local max_count=0\n  for word in \"${!histogram[@]}\"; do\n\
+    \    if [[ ${histogram[$word]} -gt $max_count ]]; then\n      max_count=${histogram[$word]}\n\
+    \    fi\n  done\n  local result=\"\"\n  for word in \"${!histogram[@]}\"; do\n\
+    \    if [[ ${histogram[$word]} -eq $max_count ]]; then\n      result=\"$result\
+    \ '\\\"$word\\\"': '\\\"$max_count\\\"',\"\n    fi\n  done\n  echo \"{${result%,}}\"",
+  "    # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example:\n    # echo \"Hello world\"\n    echo \"{}\"", "  \
+    \  # Write your code here\n    echo \"Not implemented\"", "    local -A dict\n\
+    \    local -a keys\n    local -a values\n    local -a result\n    local -i max\n\
+    \    local -i i\n    local -i j\n    local -i k\n    local -i l\n    local -i\
+    \ m\n    local -i n\n    local -i o\n    local -i p\n    local -i q\n    local\
+    \ -i r\n    local -i s\n    local -i t\n    local -i u\n    local -i v\n    local\
+    \ -i w\n    local -i x\n    local -i y\n    local -i z\n    local -i count\n \
+    \   local -i len\n    local -i len_keys\n    local -i len_values\n    local -i\
+    \ len_result\n    local -i len_result_keys\n    local -i len_result_values\n \
+    \   local -i len_result_result\n    local -i len_result_result_keys\n    local\
+    \ -i len_result_result_values\n    local -i len_result_result_result\n    local\
+    \ -i len_result_result_result_keys\n    local -i len_result_result_result_values\n\
+    \    local -i len_result_result_result_result\n    local -i len_result_result_result_result_keys\n\
+    \    local -i len_result_result_result_result_values\n    local -i len_result_result_result_result_result\n\
+    \    local -i len_result_result_result_result_result_keys\n    local -i len_result_result_result_result_result_values\n\
+    \    local -i len_result_result_result_result_result_result\n    local -i len_result_result_result_result_result_result_keys\n\
+    \    local -i len_result_result_result_result_result_result_values\n    local\
+    \ -i len_result_result_result_result_result_result_result\n    local -i len_result_result_result_result_result_result_result_keys\n\
+    \    local -i len_result_result_result_result_result_result_result_values\n  \
+    \  local -i len_result_result_result_result_result_result_result_result\n   ",
+  "    local -A dict\n    for letter in $1; do\n        dict[$letter]=$((dict[$letter]+1))\n\
+    \    done\n    local max_count=0\n    for count in ${dict[@]}; do\n        if\
+    \ ((count > max_count)); then\n            max_count=$count\n        fi\n    done\n\
+    \    local -a result\n    for letter in ${!dict[@]}; do\n        if ((dict[$letter]\
+    \ == max_count)); then\n            result+=(\"$letter\")\n        fi\n    done\n\
+    \    echo \"${result[@]}\"", "    local -A counts\n    for word in $@; do\n  \
+    \      (( counts[$word]++ ))\n    done\n    local -a max_counts\n    local max_count=0\n\
+    \    for word in \"${!counts[@]}\"; do\n        if (( counts[$word] > max_count\
+    \ )); then\n            max_counts=(\"$word\")\n            max_count=${counts[$word]}\n\
+    \        elif (( counts[$word] == max_count )); then\n            max_counts+=(\"\
+    $word\")\n        fi\n    done\n    echo -n \"{\"\n    for word in \"${max_counts[@]}\"\
+    ; do\n        echo -n \"\\\"$word\\\": \\\"$max_count\\\", \"\n    done\n    echo\
+    \ -n \"}\"", "    local -A dict\n    for letter in $1; do\n        if [[ -z ${dict[$letter]}\
+    \ ]]; then\n            dict[$letter]=1\n        else\n            dict[$letter]=$((dict[$letter]+1))\n\
+    \        fi\n    done\n    local -A max_dict\n    local max=0\n    for key in\
+    \ \"${!dict[@]}\"; do\n        if [[ ${dict[$key]} -gt $max ]]; then\n       \
+    \     max=${dict[$key]}\n            unset max_dict\n            max_dict[$key]=$max\n\
+    \        elif [[ ${dict[$key]} -eq $max ]]; then\n            max_dict[$key]=$max\n\
+    \        fi\n    done\n    local -a keys\n    for key in \"${!max_dict[@]}\";\
+    \ do\n        keys+=(\"$key\")\n    done\n    echo -n \"{\"\n    for i in \"${!keys[@]}\"\
+    ; do\n        echo -n \"\\\"${keys[$i]}\\\": \\\"${max_dict[${keys[$i]}]}\\\"\"\
+    \n        if [[ $i -lt $(( ${#keys[@]} - 1 )) ]]; then\n            echo -n \"\
+    , \"\n        fi\n    done\n    echo \"}\"", "  local -A histogram\n  for letter\
+    \ in $1; do\n    ((histogram[$letter]++))\n  done\n  local -a max_letters\n  local\
+    \ max_count=0\n  for letter in \"${!histogram[@]}\"; do\n    if ((histogram[$letter]\
+    \ > max_count)); then\n      max_letters=(\"$letter\")\n      max_count=${histogram[$letter]}\n\
+    \    elif ((histogram[$letter] == max_count)); then\n      max_letters+=(\"$letter\"\
+    )\n    fi\n  done\n  local -a max_letters_with_count\n  for letter in \"${max_letters[@]}\"\
+    ; do\n    max_letters_with_count+=(\"$letter\" \"\\\"${histogram[$letter]}\\\"\
+    \")\n  done\n  echo \"{\"${max_letters_with_count[@]}\"};\"", "    local -A dict\n\
+    \    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n    done\n  \
+    \  local -A max\n    local max_count=0\n    for key in \"${!dict[@]}\"; do\n \
+    \       if [[ ${dict[$key]} -gt $max_count ]]; then\n            max_count=${dict[$key]}\n\
+    \            unset max\n            max[$key]=$max_count\n        elif [[ ${dict[$key]}\
+    \ -eq $max_count ]]; then\n            max[$key]=$max_count\n        fi\n    done\n\
+    \    echo -n \"{\"\n    for key in \"${!max[@]}\"; do\n        echo -n \"\\\"\
+    $key\\\": \\\"${max[$key]}\\\"\"\n        if [[ $key != ${!max[@]:(-1)} ]]; then\n\
+    \            echo -n \", \"\n        fi\n    done\n    echo \"}\"", "    local\
+    \ -A dict\n    for word in $1; do\n        dict[$word]=$((dict[$word]+1))\n  \
+    \  done\n    local max=0\n    for key in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]}\
+    \ -gt $max ]]; then\n            max=${dict[$key]}\n        fi\n    done\n   \
+    \ local -a result\n    for key in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]}\
+    \ -eq $max ]]; then\n            result+=(\"$key: ${dict[$key]}\")\n        fi\n\
+    \    done\n    echo \"${result[@]}\"", "    local input=$1\n    local letters=$(echo\
+    \ $input | tr \" \" \"\\n\" | sort | uniq)\n    local result=\"\"\n    for letter\
+    \ in $letters; do\n        local count=$(echo $input | tr \" \" \"\\n\" | grep\
+    \ $letter | wc -l)\n        if [ \"$result\" == \"\" ]; then\n            result=\"\
+    {\\\"$letter\\\": \\\"$count\\\"}\"\n        else\n            result=\"$result,\
+    \ {\\\"$letter\\\": \\\"$count\\\"}\"\n        fi\n    done\n    echo $result",
+  "    local letters=\"$1\"\n    local letter\n    local count\n    local max_count=0\n\
+    \    local max_letters=()\n    local result=()\n    for letter in $letters; do\n\
+    \        count=$(echo \"$letters\" | grep -o \"$letter\" | wc -l)\n        if\
+    \ [[ $count -gt $max_count ]]; then\n            max_count=$count\n          \
+    \  max_letters=(\"$letter\")\n        elif [[ $count -eq $max_count ]]; then\n\
+    \            max_letters+=(\"$letter\")\n        fi\n    done\n    for letter\
+    \ in \"${max_letters[@]}\"; do\n        result+=(\"$letter\" \"$max_count\")\n\
+    \    done\n    echo \"${result[@]}\"", "    if [ $# -ne 1 ]; then\n        echo\
+    \ \"Usage: $0 <string>\"\n        return 1\n    fi\n    local string=\"$1\"\n\
+    \    local -A dict\n    for letter in $string; do\n        dict[$letter]=$((dict[$letter]+1))\n\
+    \    done\n    local max_count=0\n    for count in ${dict[@]}; do\n        if\
+    \ [ $count -gt $max_count ]; then\n            max_count=$count\n        fi\n\
+    \    done\n    local result=\"\"\n    for letter in ${!dict[@]}; do\n        if\
+    \ [ ${dict[$letter]} -eq $max_count ]; then\n            result=\"$result \\\"\
+    $letter\\\": \\\"${dict[$letter]}\\\"\"\n        fi\n    done\n    echo \"{$result}\"",
+  "  local -A dict\n  for i in $1; do\n    dict[$i]=$((dict[$i]+1))\n  done\n  local\
+    \ max=0\n  for i in \"${!dict[@]}\"; do\n    if [[ ${dict[$i]} -gt $max ]]; then\n\
+    \      max=${dict[$i]}\n    fi\n  done\n  local result=\"\"\n  for i in \"${!dict[@]}\"\
+    ; do\n    if [[ ${dict[$i]} -eq $max ]]; then\n      result+=\"\\\"$i\\\": \\\"\
+    ${dict[$i]}\\\", \"\n    fi\n  done\n  echo \"{${result%, }}\"", "  local -A histogram\n\
+    \  local letter\n  for letter in $1; do\n    histogram[$letter]=$((histogram[$letter]\
+    \ + 1))\n  done\n  local max=0\n  for letter in \"${!histogram[@]}\"; do\n   \
+    \ if [[ ${histogram[$letter]} -gt $max ]]; then\n      max=${histogram[$letter]}\n\
+    \    fi\n  done\n  local result=\"\"\n  for letter in \"${!histogram[@]}\"; do\n\
+    \    if [[ ${histogram[$letter]} -eq $max ]]; then\n      result+=\"\\\"$letter\\\
+    \": \\\"${histogram[$letter]}\\\", \"\n    fi\n  done\n  echo \"{${result%, }}\"",
+  "  local -A dict\n  for letter in $1; do\n    dict[$letter]=$((dict[$letter]+1))\n\
+    \  done\n  local max=0\n  for letter in \"${!dict[@]}\"; do\n    if [[ ${dict[$letter]}\
+    \ -gt $max ]]; then\n      max=${dict[$letter]}\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${!dict[@]}\"; do\n    if [[ ${dict[$letter]} -eq $max ]];\
+    \ then\n      result+=(\"$letter: ${dict[$letter]}\")\n    fi\n  done\n  echo\
+    \ \"${result[@]}\"", "    local -A hist\n    for word in $1; do\n        hist[$word]=$((hist[$word]+1))\n\
+    \    done\n    local max=0\n    for word in \"${!hist[@]}\"; do\n        if [[\
+    \ ${hist[$word]} -gt $max ]]; then\n            max=${hist[$word]}\n        fi\n\
+    \    done\n    local -a result\n    for word in \"${!hist[@]}\"; do\n        if\
+    \ [[ ${hist[$word]} -eq $max ]]; then\n            result+=(\"$word:${hist[$word]}\"\
+    )\n        fi\n    done\n    echo \"${result[@]}\"", "  local -A histogram\n \
+    \ for word in $1; do\n    ((histogram[$word]++))\n  done\n  echo -n \"{\"\n  for\
+    \ word in \"${!histogram[@]}\"; do\n    echo -n \"\\\"$word\\\": \\\"${histogram[$word]}\\\
+    \"\"\n    if [[ \"$word\" != \"${!histogram[-1]}\" ]]; then\n      echo -n \"\
+    , \"\n    fi\n  done\n  echo \"}\"", "    local -A dict\n    for word in $1; do\n\
+    \        dict[$word]=$((dict[$word]+1))\n    done\n    local -A max\n    local\
+    \ max_value=0\n    for key in \"${!dict[@]}\"; do\n        if [[ ${dict[$key]}\
+    \ -gt $max_value ]]; then\n            max_value=${dict[$key]}\n            unset\
+    \ max\n            max[$key]=$max_value\n        elif [[ ${dict[$key]} -eq $max_value\
+    \ ]]; then\n            max[$key]=$max_value\n        fi\n    done\n    echo -n\
+    \ \"{\"\n    for key in \"${!max[@]}\"; do\n        echo -n \"\\\"$key\\\": \\\
+    \"${max[$key]}\\\"\"\n        if [[ $key != ${!max[@]:(-1)} ]]; then\n       \
+    \     echo -n \", \"\n        fi\n    done\n    echo \"}\"", "    local -A histogram\n\
+    \    for letter in $1; do\n        ((histogram[$letter]++))\n    done\n    local\
+    \ max=0\n    for letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter]\
+    \ > max)); then\n            max=${histogram[$letter]}\n        fi\n    done\n\
+    \    local -a result\n    for letter in \"${!histogram[@]}\"; do\n        if ((histogram[$letter]\
+    \ == max)); then\n            result+=(\"$letter\")\n        fi\n    done\n  \
+    \  echo \"${result[@]}\"", "  local -A histogram\n  local -a max_keys\n  local\
+    \ max_value\n  for word in $@; do\n    ((histogram[$word]++))\n  done\n  for key\
+    \ in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$key]} -gt $max_value ]];\
+    \ then\n      max_value=${histogram[$key]}\n      max_keys=(\"$key\")\n    elif\
+    \ [[ ${histogram[$key]} -eq $max_value ]]; then\n      max_keys+=(\"$key\")\n\
+    \    fi\n  done\n  for key in \"${max_keys[@]}\"; do\n    echo -n \"\\\"$key\\\
+    \": \\\"$max_value\\\", \"\n  done\n  echo", "  local -A histogram\n  for letter\
+    \ in $1; do\n    histogram[$letter]=$((histogram[$letter] + 1))\n  done\n  local\
+    \ max=0\n  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]}\
+    \ -gt $max ]]; then\n      max=${histogram[$letter]}\n    fi\n  done\n  local\
+    \ result=\"\"\n  for letter in \"${!histogram[@]}\"; do\n    if [[ ${histogram[$letter]}\
+    \ -eq $max ]]; then\n      result=\"$result \\\"$letter\\\": \\\"${histogram[$letter]}\\\
+    \"\"\n    fi\n  done\n  echo \"{\"$result\"}\"", "  local -A counts\n  for word\
+    \ in $1; do\n    counts[$word]=$((counts[$word] + 1))\n  done\n  local max=0\n\
+    \  for count in \"${counts[@]}\"; do\n    if [[ $count -gt $max ]]; then\n   \
+    \   max=$count\n    fi\n  done\n  local -a result\n  for key in \"${!counts[@]}\"\
+    ; do\n    if [[ ${counts[$key]} -eq $max ]]; then\n      result+=(\"\\\"$key\\\
+    \": \\\"${counts[$key]}\\\"\")\n    fi\n  done\n  echo \"{\"$(IFS=,; echo \"${result[*]}\"\
+    )\"}\"", "    if [ -z \"$1\" ]; then\n        echo \"{}\"\n        return\n  \
+    \  fi\n    local -A dict\n    local max=0\n    for word in $1; do\n        if\
+    \ [ -z \"${dict[$word]}\" ]; then\n            dict[$word]=1\n        else\n \
+    \           dict[$word]=$((dict[$word]+1))\n        fi\n        if [ ${dict[$word]}\
+    \ -gt $max ]; then\n            max=${dict[$word]}\n        fi\n    done\n   \
+    \ local result=\"{\"\n    for key in \"${!dict[@]}\"; do\n        if [ ${dict[$key]}\
+    \ -eq $max ]; then\n            result+=\"\\\"$key\\\": \\\"${dict[$key]}\\\"\
+    ,\"\n        fi\n    done\n    echo ${result::-1}\"}\"", "  # your code here\n\
+    \  if [ -z \"$1\" ]; then\n    echo \"{}\"\n  else\n    echo \"$1\" | tr ' ' '\\\
+    n' | sort | uniq -c | sort -nr | awk '{print \"\\\"\"$2\"\\\": \\\"\"$1\"\\\"\"\
+    }' | awk '{if (NR == 1) {print \"{\"$0} else {print \", \"$0}}' | awk '{print\
+    \ $0\"}\"}'\n  fi", "  if [ -z \"$1\" ]; then\n    echo \"{}\"\n  else\n    echo\
+    \ \"{$(echo \"$1\" | tr ' ' '\\n' | sort | uniq -c | sort -nr | awk '{print \"\
+    \\\"\"$2\"\\\": \\\"\"$1\"\\\"\"}' | paste -sd ',' -)}\"\n  fi", "    local -A\
+    \ dict\n    for char in $1; do\n        dict[$char]=$((dict[$char]+1))\n    done\n\
+    \    local max=0\n    for key in \"${!dict[@]}\"; do\n        if ((dict[$key]\
+    \ > max)); then\n            max=${dict[$key]}\n        fi\n    done\n    local\
+    \ result=\"\"\n    for key in \"${!dict[@]}\"; do\n        if ((dict[$key] ==\
+    \ max)); then\n            result+=\"\\\"$key\\\": \\\"${dict[$key]}\\\", \"\n\
+    \        fi\n    done\n    echo \"{${result%%, *}}\"", "    local -A histo\n \
+    \   for letter in $1; do\n        histo[$letter]=$((histo[$letter] + 1))\n   \
+    \ done\n    local max=0\n    for count in ${histo[@]}; do\n        if ((count\
+    \ > max)); then\n            max=$count\n        fi\n    done\n    local result=\"\
+    \"\n    for letter in ${!histo[@]}; do\n        if ((histo[$letter] == max));\
+    \ then\n            result+=\"\\\"$letter\\\": \\\"$max\\\",\"\n        fi\n \
+    \   done\n    echo \"{\"${result%?}\"}\"", "    local -A letters\n    local letter\n\
+    \    for letter in $1; do\n        letters[$letter]=$(( ${letters[$letter]} +\
+    \ 1 ))\n    done\n    local -A max\n    local max_count=0\n    for letter in \"\
+    ${!letters[@]}\"; do\n        if [[ ${letters[$letter]} -gt $max_count ]]; then\n\
+    \            max_count=${letters[$letter]}\n            max=()\n        fi\n \
+    \       if [[ ${letters[$letter]} -eq $max_count ]]; then\n            max[$letter]=$max_count\n\
+    \        fi\n    done\n    local -a result\n    for letter in \"${!max[@]}\";\
+    \ do\n        result+=( \"$letter\" \"${max[$letter]}\" )\n    done\n    echo\
+    \ \"${result[@]}\"", "    local -A histogram\n    for letter in $1; do\n     \
+    \   histogram[$letter]=$((histogram[$letter] + 1))\n    done\n    local -A max\n\
+    \    local max_count=0\n    for letter in \"${!histogram[@]}\"; do\n        local\
+    \ count=${histogram[$letter]}\n        if ((count > max_count)); then\n      \
+    \      max_count=$count\n            unset max\n            max[$letter]=$count\n\
+    \        elif ((count == max_count)); then\n            max[$letter]=$count\n\
+    \        fi\n    done\n    echo -n \"{\"\n    local first=true\n    for letter\
+    \ in \"${!max[@]}\"; do\n        if ! $first; then\n            echo -n \", \"\
+    \n        fi\n        echo -n \"\\\"$letter\\\": \\\"${max[$letter]}\\\"\"\n \
+    \       first=false\n    done\n    echo \"}\"", "    local -A dict\n    for letter\
+    \ in $1; do\n        dict[$letter]=$(( ${dict[$letter]} + 1 ))\n    done\n   \
+    \ local max=0\n    for letter in \"${!dict[@]}\"; do\n        if [[ ${dict[$letter]}\
+    \ -gt $max ]]; then\n            max=${dict[$letter]}\n        fi\n    done\n\
+    \    local result=\"{\"\n    for letter in \"${!dict[@]}\"; do\n        if [[\
+    \ ${dict[$letter]} -eq $max ]]; then\n            result+=\"\\\"$letter\\\": \\\
+    \"${dict[$letter]}\\\", \"\n        fi\n    done\n    echo \"${result%%, }}\"",
+  "    local -A dict\n    local -a max_keys\n    local max_val=0\n    for word in\
+    \ $1; do\n        dict[$word]=$((dict[$word]+1))\n        if [[ ${dict[$word]}\
+    \ -gt $max_val ]]; then\n            max_val=${dict[$word]}\n            max_keys=(\"\
+    $word\")\n        elif [[ ${dict[$word]} -eq $max_val ]]; then\n            max_keys+=(\"\
+    $word\")\n        fi\n    done\n    echo -n \"{\"\n    for key in \"${max_keys[@]}\"\
+    ; do\n        echo -n \"\\\"$key\\\": \\\"$max_val\\\", \"\n    done\n    echo\
+    \ -n \"}\"", "  if [ -z \"$1\" ]; then\n    echo \"{}\"\n  else\n    local -A\
+    \ letters\n    local -A counts\n    local max_count=0\n    local max_letters=()\n\
+    \    for letter in $1; do\n      if [ -z \"${letters[$letter]}\" ]; then\n   \
+    \     letters[$letter]=1\n      else\n        letters[$letter]=$((letters[$letter]\
+    \ + 1))\n      fi\n      if [ \"${letters[$letter]}\" -gt \"$max_count\" ]; then\n\
+    \        max_count=\"${letters[$letter]}\"\n        max_letters=(\"$letter\")\n\
+    \      elif [ \"${letters[$letter]}\" -eq \"$max_count\" ]; then\n        max_letters+=(\"\
+    $letter\")\n      fi\n    done\n    local result=\"{\"\n    for letter in \"${max_letters[@]}\"\
+    ; do\n      result+=\"\\\"$letter\\\": \\\"${letters[$letter]}\\\",\"\n    done\n\
+    \    echo \"${result::-1}}\"\n  fi", "    if [ $# -eq 0 ]; then\n        echo\
+    \ \"{}\"\n        return\n    fi\n    local -A letters\n    for letter in $@;\
+    \ do\n        if [ -z \"${letters[$letter]}\" ]; then\n            letters[$letter]=1\n\
+    \        else\n            letters[$letter]=$((letters[$letter]+1))\n        fi\n\
+    \    done\n    local -A max_letters\n    local max_count=0\n    for letter in\
+    \ \"${!letters[@]}\"; do\n        if [ ${letters[$letter]} -gt $max_count ]; then\n\
+    \            max_count=${letters[$letter]}\n            max_letters=()\n     \
+    \       max_letters[$letter]=$max_count\n        elif [ ${letters[$letter]} -eq\
+    \ $max_count ]; then\n            max_letters[$letter]=$max_count\n        fi\n\
+    \    done\n    echo -n \"{\"\n    for letter in \"${!max_letters[@]}\"; do\n \
+    \       echo -n \"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\"\"\n       \
+    \ if [ $letter != \"${!max_letters[@]: -1}\" ]; then\n            echo -n \",\
+    \ \"\n        fi\n    done\n    echo \"}\"", "  local -A counts\n  for letter\
+    \ in $1; do\n    counts[$letter]=$((counts[$letter] + 1))\n  done\n  local -a\
+    \ max_counts\n  local max_count=0\n  for letter in \"${!counts[@]}\"; do\n   \
+    \ if [[ ${counts[$letter]} -gt $max_count ]]; then\n      max_counts=(\"$letter\"\
+    )\n      max_count=${counts[$letter]}\n    elif [[ ${counts[$letter]} -eq $max_count\
+    \ ]]; then\n      max_counts+=(\"$letter\")\n    fi\n  done\n  local -a result\n\
+    \  for letter in \"${max_counts[@]}\"; do\n    result+=(\"\\\"$letter\\\": \\\"\
+    ${counts[$letter]}\\\"\")\n  done\n  echo \"{$(IFS=,; echo \"${result[*]}\")}\"",
+  "  local -A letters\n  for letter in $1; do\n    ((letters[$letter]++))\n  done\n\
+    \  local -A max_letters\n  local max_count=0\n  for letter in \"${!letters[@]}\"\
+    ; do\n    local count=${letters[$letter]}\n    if ((count > max_count)); then\n\
+    \      max_count=$count\n      unset max_letters\n      max_letters[$letter]=$count\n\
+    \    elif ((count == max_count)); then\n      max_letters[$letter]=$count\n  \
+    \  fi\n  done\n  echo -n \"{\"\n  local first=true\n  for letter in \"${!max_letters[@]}\"\
+    ; do\n    if $first; then\n      first=false\n    else\n      echo -n \", \"\n\
+    \    fi\n    echo -n \"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\"\"\n  done\n\
+    \  echo \"}\"", "    local -A histogram\n    for letter in $1; do\n        ((histogram[$letter]++))\n\
+    \    done\n    local max=0\n    for letter in \"${!histogram[@]}\"; do\n     \
+    \   if ((histogram[$letter] > max)); then\n            max=${histogram[$letter]}\n\
+    \        fi\n    done\n    local -a result\n    for letter in \"${!histogram[@]}\"\
+    ; do\n        if ((histogram[$letter] == max)); then\n            result+=(\"\
+    $letter: $max\")\n        fi\n    done\n    echo \"${result[@]}\"", "  # your\
+    \ code here\n  echo \"{\"\n  for i in $1; do\n    echo \"\\\"$i\\\": \\\"$(echo\
+    \ $1 | tr ' ' '\\n' | grep -c $i)\\\",\"\n  done\n  echo \"}\"", "    local -A\
+    \ hist\n    for c in $1; do\n        hist[$c]=$((hist[$c]+1))\n    done\n    local\
+    \ max=0\n    for c in \"${!hist[@]}\"; do\n        if [[ ${hist[$c]} -gt $max\
+    \ ]]; then\n            max=${hist[$c]}\n        fi\n    done\n    local -a result\n\
+    \    for c in \"${!hist[@]}\"; do\n        if [[ ${hist[$c]} -eq $max ]]; then\n\
+    \            result+=(\"$c\" \"${hist[$c]}\")\n        fi\n    done\n    echo\
+    \ \"${result[@]}\"", "  local -A dict\n  for word in $1; do\n    dict[$word]=$((dict[$word]+1))\n\
+    \  done\n  local max=0\n  for key in \"${!dict[@]}\"; do\n    if [[ ${dict[$key]}\
+    \ -gt $max ]]; then\n      max=${dict[$key]}\n    fi\n  done\n  local result=\"\
+    \"\n  for key in \"${!dict[@]}\"; do\n    if [[ ${dict[$key]} -eq $max ]]; then\n\
+    \      result+=\"\\\"$key\\\": \\\"${dict[$key]}\\\", \"\n    fi\n  done\n  echo\
+    \ \"{${result%, }}\"", "    local -A letters\n    for letter in $1; do\n     \
+    \   letters[$letter]=$(( ${letters[$letter]} + 1 ))\n    done\n    local -A max_letters\n\
+    \    local max_count=0\n    for letter in \"${!letters[@]}\"; do\n        local\
+    \ count=${letters[$letter]}\n        if [[ $count -gt $max_count ]]; then\n  \
+    \          max_count=$count\n            max_letters=()\n        fi\n        if\
+    \ [[ $count -eq $max_count ]]; then\n            max_letters[$letter]=$count\n\
+    \        fi\n    done\n    echo -n '{'\n    local first=true\n    for letter in\
+    \ \"${!max_letters[@]}\"; do\n        if [[ $first == false ]]; then\n       \
+    \     echo -n ', '\n        fi\n        echo -n \"\\\"$letter\\\": \\\"${max_letters[$letter]}\\\
+    \"\"\n        first=false\n    done\n    echo '}'"]
+stop_tokens:
+- "\n}"

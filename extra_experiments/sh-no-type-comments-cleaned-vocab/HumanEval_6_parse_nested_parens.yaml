@@ -1,0 +1,1732 @@
+name: HumanEval_6_parse_nested_parens
+language: sh
+prompt: "#!/bin/bash\n# Input to this function is a string represented multiple groups\
+  \ for nested parentheses separated by spaces.\n# For each of the group, output the\
+  \ deepest level of nesting of parentheses.\n# E.g. (()()) has maximum two levels\
+  \ of nesting while ((())) has three.\n# >>> $(parse_nested_parens \"(()()) ((()))\
+  \ () ((())()())\")\n# ['\"2\"', '\"3\"', '\"1\"', '\"3\"']\nparse_nested_parens()\
+  \ {\n"
+tests: "}\n\ncandidate() {\n    parse_nested_parens \"$@\"\n}\n\nset -e\nrun_test()\
+  \ {\n    [[ $(candidate \"(()()) ((())) () ((())()())\") = \"2 3 1 3\" ]]\n    [[\
+  \ $(candidate \"() (()) ((())) (((())))\") = \"1 2 3 4\" ]]\n    [[ $(candidate\
+  \ \"(()(())((())))\") = \"4\" ]]\n}\n\nrun_test"
+completions: ["  local parens=$1\n  local max_nesting=0\n  local nesting=0\n  local\
+    \ max_nesting_list=()\n  local parens_list=($parens)\n  for paren in \"${parens_list[@]}\"\
+    ; do\n    for ((i=0; i<${#paren}; i++)); do\n      if [[ ${paren:$i:1} == \"(\"\
+    \ ]]; then\n        ((nesting++))\n        if [[ $nesting -gt $max_nesting ]];\
+    \ then\n          max_nesting=$nesting\n        fi\n      elif [[ ${paren:$i:1}\
+    \ == \")\" ]]; then\n        ((nesting--))\n      fi\n    done\n    max_nesting_list+=($max_nesting)\n\
+    \    max_nesting=0\n    nesting=0\n  done\n  echo \"${max_nesting_list[@]}\"",
+  "    local input=\"$1\"\n    local output=()\n    local max_depth=0\n    local depth=0\n\
+    \    local i\n    for ((i=0; i<${#input}; i++)); do\n        local ch=\"${input:$i:1}\"\
+    \n        if [[ \"$ch\" == \"(\" ]]; then\n            ((depth++))\n         \
+    \   if ((depth > max_depth)); then\n                max_depth=$depth\n       \
+    \     fi\n        elif [[ \"$ch\" == \")\" ]]; then\n            ((depth--))\n\
+    \        elif [[ \"$ch\" == \" \" ]]; then\n            output+=(\"$max_depth\"\
+    )\n            max_depth=0\n            depth=0\n        fi\n    done\n    output+=(\"\
+    $max_depth\")\n    echo \"${output[@]}\"", "  local input=\"$1\"\n  local output=()\n\
+    \  local max_nesting=0\n  local current_nesting=0\n  local i\n  for ((i=0; i<${#input};\
+    \ i++)); do\n    local c=\"${input:$i:1}\"\n    if [[ \"$c\" == \"(\" ]]; then\n\
+    \      ((current_nesting++))\n      ((max_nesting = current_nesting > max_nesting\
+    \ ? current_nesting : max_nesting))\n    elif [[ \"$c\" == \")\" ]]; then\n  \
+    \    ((current_nesting--))\n    elif [[ \"$c\" == \" \" ]]; then\n      output+=(\"\
+    $max_nesting\")\n      max_nesting=0\n      current_nesting=0\n    fi\n  done\n\
+    \  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"", "  local input=$1\n \
+    \ local output=()\n  local max_depth=0\n  local current_depth=0\n  local i=0\n\
+    \  local c=''\n  local len=${#input}\n  while [ $i -lt $len ]; do\n    c=${input:$i:1}\n\
+    \    if [ \"$c\" == \"(\" ]; then\n      current_depth=$((current_depth + 1))\n\
+    \      if [ $current_depth -gt $max_depth ]; then\n        max_depth=$current_depth\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      current_depth=$((current_depth\
+    \ - 1))\n    elif [ \"$c\" == \" \" ]; then\n      output+=(\"$max_depth\")\n\
+    \      max_depth=0\n      current_depth=0\n    fi\n    i=$((i + 1))\n  done\n\
+    \  output+=(\"$max_depth\")\n  echo \"${output[@]}\"", "    local parens=$1\n\
+    \    local paren_groups=($parens)\n    local paren_group\n    local paren_count\n\
+    \    local max_paren_count\n    local max_paren_counts=()\n    for paren_group\
+    \ in \"${paren_groups[@]}\"; do\n        paren_count=0\n        max_paren_count=0\n\
+    \        for ((i=0; i<${#paren_group}; i++)); do\n            if [[ ${paren_group:$i:1}\
+    \ == \"(\" ]]; then\n                ((paren_count++))\n                if ((paren_count\
+    \ > max_paren_count)); then\n                    max_paren_count=$paren_count\n\
+    \                fi\n            elif [[ ${paren_group:$i:1} == \")\" ]]; then\n\
+    \                ((paren_count--))\n            fi\n        done\n        max_paren_counts+=(\"\
+    $max_paren_count\")\n    done\n    echo \"${max_paren_counts[@]}\"", "  local\
+    \ str=\"$1\"\n  local paren_level=0\n  local max_paren_level=0\n  local max_paren_levels=()\n\
+    \  local i=0\n  local c=''\n  local len=${#str}\n  while [ $i -lt $len ]; do\n\
+    \    c=${str:$i:1}\n    if [ \"$c\" == \"(\" ]; then\n      ((paren_level++))\n\
+    \      if [ $paren_level -gt $max_paren_level ]; then\n        max_paren_level=$paren_level\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      ((paren_level--))\n     \
+    \ if [ $paren_level -eq 0 ]; then\n        max_paren_levels+=(\"$max_paren_level\"\
+    )\n        max_paren_level=0\n      fi\n    fi\n    ((i++))\n  done\n  echo \"\
+    ${max_paren_levels[@]}\"", "  local input=\"$1\"\n  local output=()\n  local max_level=0\n\
+    \  local level=0\n  local i=0\n  local c=''\n  local len=${#input}\n  while [\
+    \ $i -lt $len ]; do\n    c=${input:$i:1}\n    if [ \"$c\" == \"(\" ]; then\n \
+    \     ((level++))\n      if [ $level -gt $max_level ]; then\n        max_level=$level\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      ((level--))\n    elif [ \"\
+    $c\" == \" \" ]; then\n      output+=(\"\\\"$max_level\\\"\")\n      max_level=0\n\
+    \      level=0\n    fi\n    ((i++))\n  done\n  output+=(\"\\\"$max_level\\\"\"\
+    )\n  echo \"${output[@]}\"", "  local input=$1\n  local output=()\n  for group\
+    \ in ${input}; do\n    local max_level=0\n    local level=0\n    for ((i=0; i<${#group};\
+    \ i++)); do\n      local char=${group:$i:1}\n      if [[ \"${char}\" == \"(\"\
+    \ ]]; then\n        ((level++))\n        if ((level > max_level)); then\n    \
+    \      max_level=${level}\n        fi\n      elif [[ \"${char}\" == \")\" ]];\
+    \ then\n        ((level--))\n      fi\n    done\n    output+=(\"\\\"${max_level}\\\
+    \"\")\n  done\n  echo \"${output[@]}\"", "  local input=\"$1\"\n  local output=()\n\
+    \  local max_nesting=0\n  local current_nesting=0\n  for ((i=0; i<${#input}; i++));\
+    \ do\n    local c=\"${input:$i:1}\"\n    if [[ \"$c\" == \"(\" ]]; then\n    \
+    \  ((current_nesting++))\n      ((max_nesting = current_nesting > max_nesting\
+    \ ? current_nesting : max_nesting))\n    elif [[ \"$c\" == \")\" ]]; then\n  \
+    \    ((current_nesting--))\n    elif [[ \"$c\" == \" \" ]]; then\n      output+=(\"\
+    $max_nesting\")\n      max_nesting=0\n      current_nesting=0\n    fi\n  done\n\
+    \  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"", "  local input=$1\n \
+    \ local output=()\n  local max_nesting=0\n  local nesting=0\n  local char\n  for\
+    \ ((i=0; i<${#input}; i++)); do\n    char=${input:$i:1}\n    if [[ \"$char\" ==\
+    \ \"(\" ]]; then\n      ((nesting++))\n      if ((nesting > max_nesting)); then\n\
+    \        max_nesting=$nesting\n      fi\n    elif [[ \"$char\" == \")\" ]]; then\n\
+    \      ((nesting--))\n    elif [[ \"$char\" == \" \" ]]; then\n      output+=(\"\
+    $max_nesting\")\n      max_nesting=0\n      nesting=0\n    fi\n  done\n  output+=(\"\
+    $max_nesting\")\n  echo \"${output[@]}\"", "  local input=$1\n  local output=()\n\
+    \  local max_depth=0\n  local depth=0\n  local char\n  for (( i=0; i<${#input};\
+    \ i++ )); do\n    char=${input:$i:1}\n    if [[ $char == \"(\" ]]; then\n    \
+    \  (( depth++ ))\n      if (( depth > max_depth )); then\n        max_depth=$depth\n\
+    \      fi\n    elif [[ $char == \")\" ]]; then\n      (( depth-- ))\n    elif\
+    \ [[ $char == \" \" ]]; then\n      output+=(\"\\\"$max_depth\\\"\")\n      max_depth=0\n\
+    \      depth=0\n    fi\n  done\n  output+=(\"\\\"$max_depth\\\"\")\n  echo \"\
+    ${output[@]}\"", "  local parens=$1\n  local paren_groups=($parens)\n  local paren_group\n\
+    \  local paren_count\n  local paren_max\n  local paren_max_list=()\n  for paren_group\
+    \ in \"${paren_groups[@]}\"; do\n    paren_count=0\n    paren_max=0\n    for ((i=0;\
+    \ i<${#paren_group}; i++)); do\n      if [[ \"${paren_group:$i:1}\" == \"(\" ]];\
+    \ then\n        ((paren_count++))\n        if ((paren_count > paren_max)); then\n\
+    \          paren_max=$paren_count\n        fi\n      elif [[ \"${paren_group:$i:1}\"\
+    \ == \")\" ]]; then\n        ((paren_count--))\n      fi\n    done\n    paren_max_list+=(\"\
+    $paren_max\")\n  done\n  echo \"${paren_max_list[@]}\"", "    local input_str=\"\
+    $1\"\n    local output_str=\"\"\n    local max_nesting_level=0\n    local current_nesting_level=0\n\
+    \    local current_char=\"\"\n    local i=0\n    local len=${#input_str}\n   \
+    \ for ((i=0; i<len; i++)); do\n        current_char=\"${input_str:$i:1}\"\n  \
+    \      if [[ \"$current_char\" == \"(\" ]]; then\n            current_nesting_level=$((current_nesting_level\
+    \ + 1))\n            if [[ $current_nesting_level -gt $max_nesting_level ]]; then\n\
+    \                max_nesting_level=$current_nesting_level\n            fi\n  \
+    \      elif [[ \"$current_char\" == \")\" ]]; then\n            current_nesting_level=$((current_nesting_level\
+    \ - 1))\n        fi\n        if [[ \"$current_char\" == \" \" ]]; then\n     \
+    \       output_str=\"$output_str \\\"$max_nesting_level\\\"\"\n            max_nesting_level=0\n\
+    \            current_nesting_level=0\n        fi\n    done\n    output_str=\"\
+    $output_str \\\"$max_nesting_level\\\"\"\n    echo \"$output_str\"", "  local\
+    \ str=\"$1\"\n  local res=()\n  local max_level=0\n  local level=0\n  local i=0\n\
+    \  local len=${#str}\n  while [ $i -lt $len ]; do\n    local char=${str:$i:1}\n\
+    \    if [ \"$char\" == \"(\" ]; then\n      level=$((level + 1))\n      if [ $level\
+    \ -gt $max_level ]; then\n        max_level=$level\n      fi\n    elif [ \"$char\"\
+    \ == \")\" ]; then\n      level=$((level - 1))\n    elif [ \"$char\" == \" \"\
+    \ ]; then\n      res+=(\"\\\"$max_level\\\"\")\n      max_level=0\n      level=0\n\
+    \    fi\n    i=$((i + 1))\n  done\n  res+=(\"\\\"$max_level\\\"\")\n  echo \"\
+    ${res[@]}\"", "  local input=$1\n  local output=()\n  for group in $input; do\n\
+    \    local max_nesting=0\n    local curr_nesting=0\n    for ((i=0; i<${#group};\
+    \ i++)); do\n      local char=${group:$i:1}\n      if [[ $char == \"(\" ]]; then\n\
+    \        ((curr_nesting++))\n        if ((curr_nesting > max_nesting)); then\n\
+    \          max_nesting=$curr_nesting\n        fi\n      elif [[ $char == \")\"\
+    \ ]]; then\n        ((curr_nesting--))\n      fi\n    done\n    output+=(\"\\\"\
+    $max_nesting\\\"\")\n  done\n  echo \"[${output[*]}]\"", "  local input=$1\n \
+    \ local output=()\n  local max_nesting=0\n  local current_nesting=0\n  local i=0\n\
+    \  local c\n  while [ $i -lt ${#input} ]; do\n    c=${input:$i:1}\n    if [ \"\
+    $c\" == \"(\" ]; then\n      current_nesting=$((current_nesting + 1))\n      if\
+    \ [ $current_nesting -gt $max_nesting ]; then\n        max_nesting=$current_nesting\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      current_nesting=$((current_nesting\
+    \ - 1))\n    elif [ \"$c\" == \" \" ]; then\n      output+=(\"\\\"$max_nesting\\\
+    \"\")\n      max_nesting=0\n      current_nesting=0\n    fi\n    i=$((i + 1))\n\
+    \  done\n  output+=(\"\\\"$max_nesting\\\"\")\n  echo \"${output[@]}\"", "   \
+    \ local parens=$1\n    local max_nesting=0\n    local nesting=0\n    local output=()\n\
+    \    for ((i=0; i<${#parens}; i++)); do\n        if [[ ${parens:$i:1} == \"(\"\
+    \ ]]; then\n            ((nesting++))\n            if ((nesting > max_nesting));\
+    \ then\n                max_nesting=$nesting\n            fi\n        elif [[\
+    \ ${parens:$i:1} == \")\" ]]; then\n            ((nesting--))\n        elif [[\
+    \ ${parens:$i:1} == \" \" ]]; then\n            output+=(\"\\\"$max_nesting\\\"\
+    \")\n            max_nesting=0\n            nesting=0\n        fi\n    done\n\
+    \    output+=(\"\\\"$max_nesting\\\"\")\n    echo \"${output[@]}\"", "    local\
+    \ input=$1\n    local output=()\n    for group in $input; do\n        local max_nesting=0\n\
+    \        local current_nesting=0\n        for ((i=0; i<${#group}; i++)); do\n\
+    \            local char=${group:$i:1}\n            if [[ $char == \"(\" ]]; then\n\
+    \                ((current_nesting++))\n                if ((current_nesting >\
+    \ max_nesting)); then\n                    max_nesting=$current_nesting\n    \
+    \            fi\n            elif [[ $char == \")\" ]]; then\n               \
+    \ ((current_nesting--))\n            fi\n        done\n        output+=(\"\\\"\
+    $max_nesting\\\"\")\n    done\n    echo \"${output[@]}\"", "    local input=\"\
+    $1\"\n    local output=()\n    local max_nesting=0\n    local current_nesting=0\n\
+    \    local i=0\n    local c=''\n    local len=${#input}\n    while [ $i -lt $len\
+    \ ]; do\n        c=${input:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n     \
+    \       current_nesting=$((current_nesting + 1))\n            if [ $current_nesting\
+    \ -gt $max_nesting ]; then\n                max_nesting=$current_nesting\n   \
+    \         fi\n        elif [ \"$c\" == \")\" ]; then\n            current_nesting=$((current_nesting\
+    \ - 1))\n        elif [ \"$c\" == \" \" ]; then\n            output+=(\"$max_nesting\"\
+    )\n            max_nesting=0\n            current_nesting=0\n        fi\n    \
+    \    i=$((i + 1))\n    done\n    output+=(\"$max_nesting\")\n    echo \"${output[@]}\"",
+  "  local input=$1\n  local output=()\n  local max_nesting=0\n  local nesting=0\n\
+    \  local char\n  for (( i=0; i<${#input}; i++ )); do\n    char=${input:$i:1}\n\
+    \    if [[ \"$char\" == \"(\" ]]; then\n      (( nesting++ ))\n      if (( nesting\
+    \ > max_nesting )); then\n        max_nesting=$nesting\n      fi\n    elif [[\
+    \ \"$char\" == \")\" ]]; then\n      (( nesting-- ))\n    elif [[ \"$char\" ==\
+    \ \" \" ]]; then\n      output+=(\"$max_nesting\")\n      max_nesting=0\n    \
+    \  nesting=0\n    fi\n  done\n  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"",
+  "  local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_val\n  local parens_arr_val_len\n\
+    \  local parens_arr_val_idx\n  local parens_arr_val_char\n  local parens_arr_val_char_prev\n\
+    \  local parens_arr_val_char_prev_prev\n  local parens_arr_val_char_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev\n  local parens_arr_val_char_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev\n  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev\n  local\
+    \ parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_arr_val_char_prev_prev_prev_prev_prev_prev_prev_", "  local input=$1\n\
+    \  local output=()\n  local max_nesting=0\n  local current_nesting=0\n  local\
+    \ current_char=''\n  local current_group=''\n  for (( i=0; i<${#input}; i++ ));\
+    \ do\n    current_char=${input:$i:1}\n    if [[ $current_char == '(' ]]; then\n\
+    \      (( current_nesting++ ))\n      if (( current_nesting > max_nesting ));\
+    \ then\n        max_nesting=$current_nesting\n      fi\n    elif [[ $current_char\
+    \ == ')' ]]; then\n      (( current_nesting-- ))\n    elif [[ $current_char ==\
+    \ ' ' ]]; then\n      output+=(\"\\\"$max_nesting\\\"\")\n      max_nesting=0\n\
+    \      current_nesting=0\n    fi\n  done\n  output+=(\"\\\"$max_nesting\\\"\"\
+    )\n  echo \"${output[@]}\"", "  local parens=$1\n  local result=()\n  for paren\
+    \ in $parens; do\n    local max_level=0\n    local level=0\n    for ((i=0; i<${#paren};\
+    \ i++)); do\n      if [[ ${paren:$i:1} == \"(\" ]]; then\n        ((level++))\n\
+    \        if ((level > max_level)); then\n          max_level=$level\n        fi\n\
+    \      elif [[ ${paren:$i:1} == \")\" ]]; then\n        ((level--))\n      fi\n\
+    \    done\n    result+=(\"\\\"$max_level\\\"\")\n  done\n  echo \"[${result[@]}]\"",
+  "  local parens=$1\n  local max_levels=()\n  for paren in $parens; do\n    local\
+    \ level=0\n    local max_level=0\n    for ((i=0; i<${#paren}; i++)); do\n    \
+    \  if [[ ${paren:$i:1} == \"(\" ]]; then\n        ((level++))\n        if ((level\
+    \ > max_level)); then\n          max_level=$level\n        fi\n      elif [[ ${paren:$i:1}\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    max_levels+=(\"\
+    $max_level\")\n  done\n  echo \"${max_levels[@]}\"", "  local input_string=$1\n\
+    \  local output_string=\"\"\n  local paren_count=0\n  local max_paren_count=0\n\
+    \  for (( i=0; i<${#input_string}; i++ )); do\n    local char=${input_string:$i:1}\n\
+    \    if [[ \"$char\" == \"(\" ]]; then\n      ((paren_count++))\n      if ((paren_count\
+    \ > max_paren_count)); then\n        max_paren_count=$paren_count\n      fi\n\
+    \    elif [[ \"$char\" == \")\" ]]; then\n      ((paren_count--))\n    elif [[\
+    \ \"$char\" == \" \" ]]; then\n      output_string+=\"\\\"$max_paren_count\\\"\
+    \ \"\n      max_paren_count=0\n      paren_count=0\n    fi\n  done\n  output_string+=\"\
+    \\\"$max_paren_count\\\"\"\n  echo $output_string", "  local input_str=$1\n  local\
+    \ paren_groups=($input_str)\n  local paren_group\n  local max_nesting_level\n\
+    \  local paren_group_len\n  local paren_group_len_wo_parens\n  local paren_group_len_wo_parens_and_spaces\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars\n  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus\n  local\
+    \ paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks_and_curly_braces\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks_and_curly_braces_and_square_brackets\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks_and_curly_braces_and_square_brackets_and_backslashes\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks_and_curly_braces_and_square_brackets_and_backslashes_and_carets\n\
+    \  local paren_group_len_wo_parens_and_spaces_and_stars_and_dots_and_plus_and_question_marks_and_curly_braces_and_square_brackets_and_backslashes_and_carets_and_dollar_signs\n\
+    \  local paren_group_len_wo_parens_and_spaces", "  local input=\"$1\"\n  local\
+    \ output=()\n  for group in $input; do\n    local max_depth=0\n    local depth=0\n\
+    \    for ((i=0; i<${#group}; i++)); do\n      if [[ \"${group:$i:1}\" == \"(\"\
+    \ ]]; then\n        ((depth++))\n        if ((depth > max_depth)); then\n    \
+    \      max_depth=$depth\n        fi\n      elif [[ \"${group:$i:1}\" == \")\"\
+    \ ]]; then\n        ((depth--))\n      fi\n    done\n    output+=(\"\\\"$max_depth\\\
+    \"\")\n  done\n  echo \"[${output[*]}]\"", "    local parens=$1\n    local paren_groups=($parens)\n\
+    \    local paren_group\n    local paren_count\n    local paren_max\n    local\
+    \ paren_max_list=()\n    for paren_group in \"${paren_groups[@]}\"; do\n     \
+    \   paren_count=0\n        paren_max=0\n        for ((i=0; i<${#paren_group};\
+    \ i++)); do\n            if [[ ${paren_group:$i:1} == \"(\" ]]; then\n       \
+    \         ((paren_count++))\n                if ((paren_count > paren_max)); then\n\
+    \                    paren_max=$paren_count\n                fi\n            elif\
+    \ [[ ${paren_group:$i:1} == \")\" ]]; then\n                ((paren_count--))\n\
+    \            fi\n        done\n        paren_max_list+=($paren_max)\n    done\n\
+    \    echo ${paren_max_list[@]}", "  local parens=$1\n  local parens_arr=($parens)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_idx=0\n  local parens_arr_str=\"\
+    \"\n  local parens_arr_str_len=0\n  local parens_arr_str_idx=0\n  local parens_arr_str_chr=\"\
+    \"\n  local parens_arr_str_chr_idx=0\n  local parens_arr_str_chr_idx_max=0\n \
+    \ local parens_arr_str_chr_idx_max_arr=()\n  local parens_arr_str_chr_idx_max_arr_len=0\n\
+    \  local parens_arr_str_chr_idx_max_arr_idx=0\n  local parens_arr_str_chr_idx_max_arr_str=\"\
+    \"\n  local parens_arr_str_chr_idx_max_arr_str_len=0\n  local parens_arr_str_chr_idx_max_arr_str_idx=0\n\
+    \  local parens_arr_str_chr_idx_max_arr_str_chr=\"\"\n  local parens_arr_str_chr_idx_max_arr_str_chr_idx=0\n\
+    \  local parens_arr_str_chr_idx_max_arr_str_chr_idx_max=0\n  local parens_arr_str_chr_idx_max_arr_str_chr_idx_max_arr=()\n\
+    \  local parens_arr_str_chr_idx_max_arr_str_chr_idx_max_arr_len=0\n  local parens_arr_str_chr_idx_max_arr_str_chr_idx_max_arr_idx=0\n\
+    \  local parens_arr_str_chr_idx_max_arr_str_ch", "    local input=$1\n    local\
+    \ output=()\n    local max_nesting=0\n    local nesting=0\n    local i=0\n   \
+    \ local c=''\n    local len=${#input}\n    while [ $i -lt $len ]; do\n       \
+    \ c=${input:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n            nesting=$((nesting\
+    \ + 1))\n            if [ $nesting -gt $max_nesting ]; then\n                max_nesting=$nesting\n\
+    \            fi\n        elif [ \"$c\" == \")\" ]; then\n            nesting=$((nesting\
+    \ - 1))\n        fi\n        i=$((i + 1))\n    done\n    echo $max_nesting", " \
+    \   local str=$1\n    local groups=($str)\n    local result=()\n    for group\
+    \ in \"${groups[@]}\"; do\n        local max_nesting=0\n        local current_nesting=0\n\
+    \        for ((i=0; i<${#group}; i++)); do\n            if [[ ${group:$i:1} ==\
+    \ \"(\" ]]; then\n                ((current_nesting++))\n                if ((current_nesting\
+    \ > max_nesting)); then\n                    max_nesting=$current_nesting\n  \
+    \              fi\n            elif [[ ${group:$i:1} == \")\" ]]; then\n     \
+    \           ((current_nesting--))\n            fi\n        done\n        result+=(\"\
+    $max_nesting\")\n    done\n    echo \"${result[@]}\"", "  local parens_str=$1\n\
+    \  local parens_arr=()\n  local parens_arr_len=0\n  local parens_arr_idx=0\n \
+    \ local parens_str_len=0\n  local parens_str_idx=0\n  local parens_str_char=''\n\
+    \  local parens_str_char_prev=''\n  local parens_str_char_next=''\n  local parens_str_char_prev_prev=''\n\
+    \  local parens_str_char_next_next=''\n  local parens_str_char_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next=''\n  local\
+    \ parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=''\n ", " \
+    \   local input=$1\n    local output=()\n    for group in $input; do\n       \
+    \ local max_level=0\n        local level=0\n        for (( i=0; i<${#group}; i++\
+    \ )); do\n            if [[ ${group:$i:1} == \"(\" ]]; then\n                ((\
+    \ level++ ))\n                if (( level > max_level )); then\n             \
+    \       max_level=$level\n                fi\n            elif [[ ${group:$i:1}\
+    \ == \")\" ]]; then\n                (( level-- ))\n            fi\n        done\n\
+    \        output+=(\"\\\"$max_level\\\"\")\n    done\n    echo \"${output[@]}\"",
+  "  local parens=$1\n  local parens_array=($parens)\n  local parens_array_len=${#parens_array[@]}\n\
+    \  local max_nesting_level=0\n  local nesting_level=0\n  local parens_array_max_nesting_level=()\n\
+    \  for ((i=0; i<parens_array_len; i++)); do\n    local parens_str=${parens_array[$i]}\n\
+    \    local parens_str_len=${#parens_str}\n    for ((j=0; j<parens_str_len; j++));\
+    \ do\n      local parens_char=${parens_str:$j:1}\n      if [ \"$parens_char\"\
+    \ == \"(\" ]; then\n        nesting_level=$((nesting_level+1))\n      elif [ \"\
+    $parens_char\" == \")\" ]; then\n        nesting_level=$((nesting_level-1))\n\
+    \      fi\n      if [ \"$nesting_level\" -gt \"$max_nesting_level\" ]; then\n\
+    \        max_nesting_level=$nesting_level\n      fi\n    done\n    parens_array_max_nesting_level+=($max_nesting_level)\n\
+    \    max_nesting_level=0\n    nesting_level=0\n  done\n  echo \"${parens_array_max_nesting_level[@]}\"",
+  "  local input_str=$1\n  local output_str=\"\"\n  local max_level=0\n  local level=0\n\
+    \  local i=0\n  local len=${#input_str}\n  while [ $i -lt $len ]; do\n    local\
+    \ char=${input_str:$i:1}\n    if [ \"$char\" == \"(\" ]; then\n      level=$((level+1))\n\
+    \      if [ $level -gt $max_level ]; then\n        max_level=$level\n      fi\n\
+    \    elif [ \"$char\" == \")\" ]; then\n      level=$((level-1))\n    elif [ \"\
+    $char\" == \" \" ]; then\n      output_str=\"$output_str \\\"$max_level\\\"\"\n\
+    \      max_level=0\n      level=0\n    fi\n    i=$((i+1))\n  done\n  output_str=\"\
+    $output_str \\\"$max_level\\\"\"\n  echo $output_str", "    local input=$1\n \
+    \   local output=()\n    local max_level=0\n    local level=0\n    local i=0\n\
+    \    local c=''\n    for ((i=0; i<${#input}; i++)); do\n        c=${input:$i:1}\n\
+    \        if [[ $c == '(' ]]; then\n            ((level++))\n            if ((level\
+    \ > max_level)); then\n                max_level=$level\n            fi\n    \
+    \    elif [[ $c == ')' ]]; then\n            ((level--))\n        elif [[ $c ==\
+    \ ' ' ]]; then\n            output+=(\"\\\"$max_level\\\"\")\n            max_level=0\n\
+    \            level=0\n        fi\n    done\n    output+=(\"\\\"$max_level\\\"\"\
+    )\n    echo \"${output[@]}\"", "    local input=$1\n    local output=()\n    local\
+    \ max_depth=0\n    local curr_depth=0\n    for ((i=0; i<${#input}; i++)); do\n\
+    \        local char=${input:$i:1}\n        if [[ $char == \"(\" ]]; then\n   \
+    \         ((curr_depth++))\n            if ((curr_depth > max_depth)); then\n\
+    \                max_depth=$curr_depth\n            fi\n        elif [[ $char\
+    \ == \")\" ]]; then\n            ((curr_depth--))\n        elif [[ $char == \"\
+    \ \" ]]; then\n            output+=($max_depth)\n            max_depth=0\n   \
+    \         curr_depth=0\n        fi\n    done\n    output+=($max_depth)\n    echo\
+    \ \"${output[@]}\"", "    local parens_str=\"$1\"\n    local parens_arr=($parens_str)\n\
+    \    local parens_arr_len=${#parens_arr[@]}\n    local max_nesting_arr=()\n  \
+    \  for ((i=0; i<parens_arr_len; i++)); do\n        local parens_str=${parens_arr[$i]}\n\
+    \        local parens_str_len=${#parens_str}\n        local max_nesting=0\n  \
+    \      local nesting=0\n        for ((j=0; j<parens_str_len; j++)); do\n     \
+    \       local char=${parens_str:$j:1}\n            if [[ \"$char\" == \"(\" ]];\
+    \ then\n                nesting=$((nesting+1))\n                if [[ \"$nesting\"\
+    \ -gt \"$max_nesting\" ]]; then\n                    max_nesting=$nesting\n  \
+    \              fi\n            elif [[ \"$char\" == \")\" ]]; then\n         \
+    \       nesting=$((nesting-1))\n            fi\n        done\n        max_nesting_arr+=(\"\
+    $max_nesting\")\n    done\n    echo \"${max_nesting_arr[@]}\"", "  local input=\"\
+    $1\"\n  local output=()\n  local max_nesting=0\n  local nesting=0\n  local char\n\
+    \  for (( i=0; i<${#input}; i++ )); do\n    char=\"${input:$i:1}\"\n    if [[\
+    \ \"$char\" == \"(\" ]]; then\n      (( nesting++ ))\n      if (( nesting > max_nesting\
+    \ )); then\n        max_nesting=$nesting\n      fi\n    elif [[ \"$char\" == \"\
+    )\" ]]; then\n      (( nesting-- ))\n    elif [[ \"$char\" == \" \" ]]; then\n\
+    \      output+=(\"$max_nesting\")\n      max_nesting=0\n      nesting=0\n    fi\n\
+    \  done\n  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"", "  local parens_str=\"\
+    $1\"\n  local parens_arr=()\n  local parens_arr_idx=0\n  local parens_str_len=${#parens_str}\n\
+    \  local parens_str_idx=0\n  local parens_str_char\n  local parens_str_char_prev\n\
+    \  local parens_str_char_next\n  local parens_str_char_prev_prev\n  local parens_str_char_next_next\n\
+    \  local parens_str_char_prev_prev_prev\n  local parens_str_char_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n  local\
+    \ parens_str_char_next_next_next_next_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next\n \
+    \ local parens_str_char_prev_prev_prev", "  local parens=$1\n  local max_nesting=0\n\
+    \  local curr_nesting=0\n  local max_nesting_list=()\n  for (( i=0; i<${#parens};\
+    \ i++ )); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n      (( curr_nesting++\
+    \ ))\n      if (( curr_nesting > max_nesting )); then\n        max_nesting=$curr_nesting\n\
+    \      fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n      (( curr_nesting--\
+    \ ))\n      if (( curr_nesting == 0 )); then\n        max_nesting_list+=(\"$max_nesting\"\
+    )\n        max_nesting=0\n      fi\n    fi\n  done\n  echo \"${max_nesting_list[@]}\"",
+  "  local parens_str=$1\n  local parens_arr=()\n  local parens_arr_len=0\n  local\
+    \ parens_arr_idx=0\n  local parens_str_len=0\n  local parens_str_idx=0\n  local\
+    \ parens_str_char=''\n  local parens_str_char_prev=''\n  local parens_str_char_next=''\n\
+    \  local parens_str_char_next_next=''\n  local parens_str_char_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next=''\n  local parens_str_char_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next=''\n  local parens_str_char_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next=''\n  local parens_str_char_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next_next",
+  "    local input=$1\n    local output=()\n    for group in $input; do\n        local\
+    \ level=0\n        local max_level=0\n        for (( i=0; i<${#group}; i++ ));\
+    \ do\n            if [[ ${group:$i:1} == \"(\" ]]; then\n                (( level++\
+    \ ))\n                if (( level > max_level )); then\n                    max_level=$level\n\
+    \                fi\n            elif [[ ${group:$i:1} == \")\" ]]; then\n   \
+    \             (( level-- ))\n            fi\n        done\n        output+=(\"\
+    \\\"$max_level\\\"\")\n    done\n    echo \"[${output[@]}]\"", "    local input=$1\n\
+    \    local output=()\n    local max_nesting=0\n    local nesting=0\n    local\
+    \ i=0\n    local c\n    local len=${#input}\n    while [ $i -lt $len ]; do\n \
+    \       c=${input:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n            nesting=$((nesting\
+    \ + 1))\n            if [ $nesting -gt $max_nesting ]; then\n                max_nesting=$nesting\n\
+    \            fi\n        elif [ \"$c\" == \")\" ]; then\n            nesting=$((nesting\
+    \ - 1))\n        fi\n        i=$((i + 1))\n    done\n    echo $max_nesting", " \
+    \ local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n  local result_arr=()\n\
+    \  for parens in \"${parens_arr[@]}\"; do\n    local parens_len=${#parens}\n \
+    \   local max_nesting=0\n    local nesting=0\n    for ((i=0; i<parens_len; i++));\
+    \ do\n      local char=${parens:$i:1}\n      if [[ \"$char\" == \"(\" ]]; then\n\
+    \        nesting=$((nesting + 1))\n        if [[ \"$nesting\" -gt \"$max_nesting\"\
+    \ ]]; then\n          max_nesting=$nesting\n        fi\n      elif [[ \"$char\"\
+    \ == \")\" ]]; then\n        nesting=$((nesting - 1))\n      fi\n    done\n  \
+    \  result_arr+=(\"$max_nesting\")\n  done\n  echo \"${result_arr[@]}\"", "  local\
+    \ parens=$1\n  local parens_arr=($parens)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local max_nesting_level=0\n  local nesting_level=0\n  local output_arr=()\n\
+    \  for ((i=0; i<parens_arr_len; i++)); do\n    local parens_str=${parens_arr[$i]}\n\
+    \    local parens_str_len=${#parens_str}\n    for ((j=0; j<parens_str_len; j++));\
+    \ do\n      local parens_char=${parens_str:$j:1}\n      if [ \"$parens_char\"\
+    \ == \"(\" ]; then\n        nesting_level=$((nesting_level+1))\n      elif [ \"\
+    $parens_char\" == \")\" ]; then\n        nesting_level=$((nesting_level-1))\n\
+    \      fi\n      if [ \"$nesting_level\" -gt \"$max_nesting_level\" ]; then\n\
+    \        max_nesting_level=$nesting_level\n      fi\n    done\n    output_arr+=(\"\
+    $max_nesting_level\")\n    max_nesting_level=0\n    nesting_level=0\n  done\n\
+    \  echo \"${output_arr[@]}\"", "  local parens_str=$1\n  local parens_list=($parens_str)\n\
+    \  local parens_list_len=${#parens_list[@]}\n  local parens_list_idx=0\n  local\
+    \ parens_list_item\n  local parens_list_item_len\n  local parens_list_item_idx\n\
+    \  local parens_list_item_char\n  local parens_list_item_char_prev\n  local parens_list_item_char_next\n\
+    \  local parens_list_item_char_prev_prev\n  local parens_list_item_char_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev\n  local parens_list_item_char_next_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev_prev\n  local parens_list_item_char_next_next_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev_prev_prev\n  local parens_list_item_char_next_next_next_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev_prev_prev_prev\n  local parens_list_item_char_next_next_next_next_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev_prev_prev_prev_prev\n  local parens_list_item_char_next_next_next_next_next_next_next\n\
+    \  local parens_list_item_char_prev_prev_prev_prev_prev_prev_prev_prev\n  local\
+    \ parens_list_item_char_next_next_next_next_next_next_next_next\n  local parens_list_item_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_list_item_char_next_next_next_next_next_next_next_next_next\n\
+    \  local parens_list_item_", "  local input=$1\n  local output=()\n  local max_depth=0\n\
+    \  local depth=0\n  local i=0\n  local c=''\n  local len=${#input}\n  while [\
+    \ $i -lt $len ]; do\n    c=${input:$i:1}\n    if [ \"$c\" == \"(\" ]; then\n \
+    \     ((depth++))\n      if [ $depth -gt $max_depth ]; then\n        max_depth=$depth\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      ((depth--))\n    fi\n   \
+    \ ((i++))\n  done\n  output+=($max_depth)\n  echo ${output[@]}", "  local parens=$1\n\
+    \  local max_nesting=0\n  local nesting=0\n  local result=()\n  for (( i=0; i<${#parens};\
+    \ i++ )); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n      ((nesting++))\n\
+    \      if (( nesting > max_nesting )); then\n        max_nesting=$nesting\n  \
+    \    fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n      ((nesting--))\n \
+    \   elif [[ ${parens:$i:1} == \" \" ]]; then\n      result+=(\"\\\"$max_nesting\\\
+    \"\")\n      max_nesting=0\n      nesting=0\n    fi\n  done\n  result+=(\"\\\"\
+    $max_nesting\\\"\")\n  echo \"${result[@]}\"", "    local input=$1\n    local\
+    \ output=()\n    for group in $input; do\n        local max_level=0\n        local\
+    \ level=0\n        for (( i=0; i<${#group}; i++ )); do\n            local char=${group:$i:1}\n\
+    \            if [[ $char == \"(\" ]]; then\n                (( level++ ))\n  \
+    \              if (( level > max_level )); then\n                    max_level=$level\n\
+    \                fi\n            elif [[ $char == \")\" ]]; then\n           \
+    \     (( level-- ))\n            fi\n        done\n        output+=(\"\\\"$max_level\\\
+    \"\")\n    done\n    echo \"[${output[@]}]\"", "    local input_string=$1\n  \
+    \  local output_string=\"\"\n    local max_nesting=0\n    local nesting=0\n  \
+    \  local i=0\n    local c=\"\"\n    for ((i=0; i<${#input_string}; i++)); do\n\
+    \        c=${input_string:$i:1}\n        if [[ \"$c\" == \"(\" ]]; then\n    \
+    \        ((nesting++))\n            if [[ \"$nesting\" -gt \"$max_nesting\" ]];\
+    \ then\n                max_nesting=$nesting\n            fi\n        elif [[\
+    \ \"$c\" == \")\" ]]; then\n            ((nesting--))\n        fi\n    done\n\
+    \    echo $max_nesting", "  local parens=$1\n  local max_nesting=0\n  local nesting=0\n\
+    \  local max_nesting_list=()\n  local parens_list=($parens)\n  for paren in \"\
+    ${parens_list[@]}\"; do\n    for (( i=0; i<${#paren}; i++ )); do\n      if [[\
+    \ ${paren:$i:1} == \"(\" ]]; then\n        ((nesting++))\n        if (( nesting\
+    \ > max_nesting )); then\n          max_nesting=$nesting\n        fi\n      elif\
+    \ [[ ${paren:$i:1} == \")\" ]]; then\n        ((nesting--))\n      fi\n    done\n\
+    \    max_nesting_list+=($max_nesting)\n    max_nesting=0\n    nesting=0\n  done\n\
+    \  echo ${max_nesting_list[@]}", "  local parens_string=$1\n  local parens_array=($parens_string)\n\
+    \  local parens_array_len=${#parens_array[@]}\n  local parens_array_idx=0\n  local\
+    \ parens_array_max_idx=$((parens_array_len - 1))\n  local parens_array_item\n\
+    \  local parens_array_item_len\n  local parens_array_item_idx\n  local parens_array_item_max_idx\n\
+    \  local parens_array_item_char\n  local parens_array_item_char_idx\n  local parens_array_item_char_max_idx\n\
+    \  local parens_array_item_char_prev\n  local parens_array_item_char_prev_idx\n\
+    \  local parens_array_item_char_prev_max_idx\n  local parens_array_item_char_prev_prev\n\
+    \  local parens_array_item_char_prev_prev_idx\n  local parens_array_item_char_prev_prev_max_idx\n\
+    \  local parens_array_item_char_prev_prev_prev\n  local parens_array_item_char_prev_prev_prev_idx\n\
+    \  local parens_array_item_char_prev_prev_prev_max_idx\n  local parens_array_item_char_prev_prev_prev_prev\n\
+    \  local parens_array_item_char_prev_prev_prev_prev_idx\n  local parens_array_item_char_prev_prev_prev_prev_max_idx\n\
+    \  local parens_array_item_char_prev_prev_prev_prev_prev\n  local parens_array_item_char_prev_prev_prev_prev_prev_idx\n\
+    \  local parens_array_item_char_prev_prev_prev_prev_prev_max_idx\n  local parens_array_item_char_prev_prev_prev_prev_prev_prev\n\
+    \ ", "  local parens=$1\n  local paren_groups=($parens)\n  local result=()\n \
+    \ for paren_group in \"${paren_groups[@]}\"; do\n    local max_level=0\n    local\
+    \ level=0\n    for ((i=0; i<${#paren_group}; i++)); do\n      local char=${paren_group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((level++))\n        if ((level\
+    \ > max_level)); then\n          max_level=$level\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    result+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"[${result[*]}]\"", "  local parens=$1\n\
+    \  local paren_groups=($parens)\n  local paren_counts=()\n  for paren_group in\
+    \ \"${paren_groups[@]}\"; do\n    local paren_count=0\n    local max_paren_count=0\n\
+    \    for (( i=0; i<${#paren_group}; i++ )); do\n      if [[ ${paren_group:$i:1}\
+    \ == \"(\" ]]; then\n        ((paren_count++))\n      elif [[ ${paren_group:$i:1}\
+    \ == \")\" ]]; then\n        ((paren_count--))\n      fi\n      if [[ $paren_count\
+    \ -gt $max_paren_count ]]; then\n        max_paren_count=$paren_count\n      fi\n\
+    \    done\n    paren_counts+=(\"$max_paren_count\")\n  done\n  echo \"${paren_counts[@]}\"",
+  "    local input=$1\n    local output=()\n    local stack=()\n    local max_depth=0\n\
+    \    local depth=0\n    local char\n    for (( i=0; i<${#input}; i++ )); do\n\
+    \        char=${input:$i:1}\n        if [[ \"$char\" == \"(\" ]]; then\n     \
+    \       stack+=($char)\n            ((depth++))\n            ((max_depth = depth\
+    \ > max_depth ? depth : max_depth))\n        elif [[ \"$char\" == \")\" ]]; then\n\
+    \            stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\")\n            ((depth--))\n\
+    \        elif [[ \"$char\" == \" \" ]]; then\n            output+=($max_depth)\n\
+    \            max_depth=0\n            depth=0\n        fi\n    done\n    output+=($max_depth)\n\
+    \    echo ${output[@]}", "  local parens_str=$1\n  local parens_arr=($parens_str)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len\
+    \ - 1))\n  local parens_arr_idx_last=$parens_arr_idx_max\n  local parens_arr_idx_next=$((parens_arr_idx_last\
+    \ + 1))\n  local parens_arr_idx_prev=$((parens_arr_idx_last - 1))\n  local parens_arr_idx_curr=$parens_arr_idx_last\n\
+    \  local parens_arr_idx_tmp=0\n  local parens_arr_idx_tmp_max=0\n  local parens_arr_idx_tmp_last=0\n\
+    \  local parens_arr_idx_tmp_next=0\n  local parens_arr_idx_tmp_prev=0\n  local\
+    \ parens_arr_idx_tmp_curr=0\n  local parens_arr_idx_tmp_tmp=0\n  local parens_arr_idx_tmp_tmp_max=0\n\
+    \  local parens_arr_idx_tmp_tmp_last=0\n  local parens_arr_idx_tmp_tmp_next=0\n\
+    \  local parens_arr_idx_tmp_tmp_prev=0\n  local parens_arr_idx_tmp_tmp_curr=0\n\
+    \  local parens_arr_idx_tmp_tmp_tmp=0\n  local parens_arr_idx_tmp_tmp_tmp_max=0\n\
+    \  local parens_arr_idx_tmp_tmp_tmp_last=0\n  local parens_arr_idx_tmp_tmp_tmp_next=0\n\
+    \  local parens_arr_idx_tmp_tmp_tmp_prev=0\n  local parens_arr_idx_", "    local\
+    \ input=\"$1\"\n    local output=()\n    local max_depth=0\n    local depth=0\n\
+    \    local c\n    for ((i=0; i<${#input}; i++)); do\n        c=\"${input:$i:1}\"\
+    \n        if [[ \"$c\" == \"(\" ]]; then\n            ((depth++))\n          \
+    \  ((max_depth = depth > max_depth ? depth : max_depth))\n        elif [[ \"$c\"\
+    \ == \")\" ]]; then\n            ((depth--))\n        fi\n    done\n    echo \"\
+    [$(printf '\"%s\" ' \"${output[@]}\")]\"", "  local parens=$1\n  local result=()\n\
+    \  local max_nesting=0\n  local current_nesting=0\n  local current_char\n  for\
+    \ (( i=0; i<${#parens}; i++ )); do\n    current_char=${parens:$i:1}\n    if [[\
+    \ $current_char == \"(\" ]]; then\n      ((current_nesting++))\n      if (( current_nesting\
+    \ > max_nesting )); then\n        max_nesting=$current_nesting\n      fi\n   \
+    \ elif [[ $current_char == \")\" ]]; then\n      ((current_nesting--))\n    elif\
+    \ [[ $current_char == \" \" ]]; then\n      result+=(\"$max_nesting\")\n     \
+    \ max_nesting=0\n      current_nesting=0\n    fi\n  done\n  result+=(\"$max_nesting\"\
+    )\n  echo \"${result[@]}\"", "  local str=$1\n  local max_depth=0\n  local depth=0\n\
+    \  local result=\"\"\n  for (( i=0; i<${#str}; i++ )); do\n    if [[ ${str:$i:1}\
+    \ == \"(\" ]]; then\n      ((depth++))\n      if ((depth > max_depth)); then\n\
+    \        max_depth=$depth\n      fi\n    elif [[ ${str:$i:1} == \")\" ]]; then\n\
+    \      ((depth--))\n    elif [[ ${str:$i:1} == \" \" ]]; then\n      result=\"\
+    $result \\\"$max_depth\\\"\"\n      max_depth=0\n      depth=0\n    fi\n  done\n\
+    \  result=\"$result \\\"$max_depth\\\"\"\n  echo \"[$result]\"", "  local parens=$1\n\
+    \  local paren_groups=($parens)\n  local result=()\n  for paren_group in \"${paren_groups[@]}\"\
+    ; do\n    local paren_stack=()\n    local max_depth=0\n    local current_depth=0\n\
+    \    for ((i=0; i<${#paren_group}; i++)); do\n      local char=${paren_group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        current_depth=$((current_depth +\
+    \ 1))\n        if [[ $current_depth -gt $max_depth ]]; then\n          max_depth=$current_depth\n\
+    \        fi\n      elif [[ $char == \")\" ]]; then\n        current_depth=$((current_depth\
+    \ - 1))\n      fi\n    done\n    result+=($max_depth)\n  done\n  echo \"${result[@]}\"",
+  "  local parens_str=\"$1\"\n  local parens_str_arr=($parens_str)\n  local parens_str_arr_len=${#parens_str_arr[@]}\n\
+    \  local parens_str_arr_idx=0\n  local parens_str_arr_idx_max=$((parens_str_arr_len\
+    \ - 1))\n  local parens_str_arr_idx_max_str=$parens_str_arr_idx_max\n  local parens_str_arr_idx_max_str_len=${#parens_str_arr_idx_max_str}\n\
+    \  local parens_str_arr_idx_max_str_len_max=$((parens_str_arr_idx_max_str_len\
+    \ - 1))\n  local parens_str_arr_idx_max_str_len_max_str=$parens_str_arr_idx_max_str_len_max\n\
+    \  local parens_str_arr_idx_max_str_len_max_str_len=${#parens_str_arr_idx_max_str_len_max_str}\n\
+    \  local parens_str_arr_idx_max_str_len_max_str_len_max=$((parens_str_arr_idx_max_str_len_max_str_len\
+    \ - 1))\n  local parens_str_arr_idx_max_str_len_max_str_len_max_str=$parens_str_arr_idx_max_str_len_max_str_len_max\n\
+    \  local parens_str_arr_idx_max_str_len_max_str_len_max_str_len=${#parens_str_arr_idx_max_str_len_max_str_len_max_str}\n\
+    \  local parens_str_arr_idx_max_str_len_max_str_len_max_str_len_max=$((parens_str_arr_idx_max_str_len_max_str_",
+  "  local parens=$1\n  local parens_arr=($parens)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len - 1))\n\
+    \  local parens_arr_idx_max_str=$parens_arr_idx_max\n  local parens_arr_idx_max_str_len=${#parens_arr_idx_max_str}\n\
+    \  local parens_arr_idx_max_str_len_1=$((parens_arr_idx_max_str_len + 1))\n  local\
+    \ parens_arr_idx_max_str_len_1_str=$parens_arr_idx_max_str_len_1\n  local parens_arr_idx_max_str_len_1_str_len=${#parens_arr_idx_max_str_len_1_str}\n\
+    \  local parens_arr_idx_max_str_len_1_str_len_1=$((parens_arr_idx_max_str_len_1_str_len\
+    \ + 1))\n  local parens_arr_idx_max_str_len_1_str_len_1_str=$parens_arr_idx_max_str_len_1_str_len_1\n\
+    \  local parens_arr_idx_max_str_len_1_str_len_1_str_len=${#parens_arr_idx_max_str_len_1_str_len_1_str}\n\
+    \  local parens_arr_idx_max_str_len_1_str_len_1_str_len_1=$((parens_arr_idx_max_str_len_1_str_len_1_str_len\
+    \ + 1))\n  local parens_arr_idx_max_str_len_1_str_len_1_str_len_1_str=$parens_arr_idx_max_",
+  "  local parens=$1\n  local max_nesting=0\n  local curr_nesting=0\n  local output=()\n\
+    \  for ((i=0; i<${#parens}; i++)); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n\
+    \      ((curr_nesting++))\n      if ((curr_nesting > max_nesting)); then\n   \
+    \     max_nesting=$curr_nesting\n      fi\n    elif [[ ${parens:$i:1} == \")\"\
+    \ ]]; then\n      ((curr_nesting--))\n    elif [[ ${parens:$i:1} == \" \" ]];\
+    \ then\n      output+=(\"\\\"$max_nesting\\\"\")\n      max_nesting=0\n      curr_nesting=0\n\
+    \    fi\n  done\n  output+=(\"\\\"$max_nesting\\\"\")\n  echo \"${output[@]}\"",
+  "  local parens=$1\n  local max_nesting=0\n  local nesting=0\n  local result=()\n\
+    \  for ((i=0; i<${#parens}; i++)); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n\
+    \      ((nesting++))\n      if ((nesting > max_nesting)); then\n        max_nesting=$nesting\n\
+    \      fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n      ((nesting--))\n\
+    \    elif [[ ${parens:$i:1} == \" \" ]]; then\n      result+=(\"\\\"$max_nesting\\\
+    \"\")\n      max_nesting=0\n      nesting=0\n    fi\n  done\n  result+=(\"\\\"\
+    $max_nesting\\\"\")\n  echo \"${result[@]}\"", "  local str=$1\n  local groups=($str)\n\
+    \  local result=()\n  for group in \"${groups[@]}\"; do\n    local max_level=0\n\
+    \    local level=0\n    local len=${#group}\n    for (( i=0; i<len; i++ )); do\n\
+    \      local ch=${group:$i:1}\n      if [[ $ch == \"(\" ]]; then\n        (( level++\
+    \ ))\n        if (( level > max_level )); then\n          max_level=$level\n \
+    \       fi\n      elif [[ $ch == \")\" ]]; then\n        (( level-- ))\n     \
+    \ fi\n    done\n    result+=(\"$max_level\")\n  done\n  echo \"${result[@]}\"",
+  "  local input=$1\n  local output=()\n  for group in $input; do\n    local max_level=0\n\
+    \    local level=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((level++))\n        if ((level\
+    \ > max_level)); then\n          max_level=$level\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    output+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"[${output[@]}]\"", "    local input_str=$1\n\
+    \    local output_str=\"\"\n    local max_nesting_level=0\n    local current_nesting_level=0\n\
+    \    local i=0\n    local len=${#input_str}\n    while [ $i -lt $len ]; do\n \
+    \       local c=${input_str:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n    \
+    \        current_nesting_level=$((current_nesting_level + 1))\n            if\
+    \ [ $current_nesting_level -gt $max_nesting_level ]; then\n                max_nesting_level=$current_nesting_level\n\
+    \            fi\n        elif [ \"$c\" == \")\" ]; then\n            current_nesting_level=$((current_nesting_level\
+    \ - 1))\n        elif [ \"$c\" == \" \" ]; then\n            output_str=\"$output_str\
+    \ \\\"$max_nesting_level\\\"\"\n            max_nesting_level=0\n            current_nesting_level=0\n\
+    \        fi\n        i=$((i + 1))\n    done\n    if [ $current_nesting_level -gt\
+    \ 0 ]; then\n        output_str=\"$output_str \\\"$max_nesting_level\\\"\"\n \
+    \   fi\n    echo $output_str", "  local input_str=$1\n  local output_str=\"\"\n\
+    \  local paren_count=0\n  local max_paren_count=0\n  for (( i=0; i<${#input_str};\
+    \ i++ )); do\n    local ch=${input_str:$i:1}\n    if [[ \"$ch\" == \"(\" ]]; then\n\
+    \      (( paren_count++ ))\n      if (( paren_count > max_paren_count )); then\n\
+    \        max_paren_count=$paren_count\n      fi\n    elif [[ \"$ch\" == \")\"\
+    \ ]]; then\n      (( paren_count-- ))\n    elif [[ \"$ch\" == \" \" ]]; then\n\
+    \      output_str+=\"\\\"$max_paren_count\\\" \"\n      max_paren_count=0\n  \
+    \    paren_count=0\n    fi\n  done\n  if (( max_paren_count > 0 )); then\n   \
+    \ output_str+=\"\\\"$max_paren_count\\\"\"\n  fi\n  echo $output_str", "  local\
+    \ input=\"$1\"\n  local output=()\n  local max_nesting=0\n  local curr_nesting=0\n\
+    \  for (( i=0; i<${#input}; i++ )); do\n    local char=\"${input:$i:1}\"\n   \
+    \ if [[ \"$char\" == \"(\" ]]; then\n      (( curr_nesting++ ))\n      (( max_nesting\
+    \ = curr_nesting > max_nesting ? curr_nesting : max_nesting ))\n    elif [[ \"\
+    $char\" == \")\" ]]; then\n      (( curr_nesting-- ))\n    elif [[ \"$char\" ==\
+    \ \" \" ]]; then\n      output+=(\"$max_nesting\")\n      max_nesting=0\n    \
+    \  curr_nesting=0\n    fi\n  done\n  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"",
+  "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len - 1))\n\
+    \  local parens_arr_idx_str\n  local parens_arr_idx_str_len\n  local parens_arr_idx_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev\n  local parens_arr_idx_str_len_max_prev_str\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len\n  local parens_arr_idx_str_len_max_prev_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_prev\n  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len\n  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev\n \
+    \ local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max", "  local input=$1\n  local\
+    \ output=()\n  local max_depth=0\n  local curr_depth=0\n  local i=0\n  local c=''\n\
+    \  for ((i=0; i<${#input}; i++)); do\n    c=${input:$i:1}\n    if [[ $c == '('\
+    \ ]]; then\n      ((curr_depth++))\n      if ((curr_depth > max_depth)); then\n\
+    \        max_depth=$curr_depth\n      fi\n    elif [[ $c == ')' ]]; then\n   \
+    \   ((curr_depth--))\n    elif [[ $c == ' ' ]]; then\n      output+=(\"$max_depth\"\
+    )\n      max_depth=0\n      curr_depth=0\n    fi\n  done\n  output+=(\"$max_depth\"\
+    )\n  echo \"${output[@]}\"", "    local input=$1\n    local output=()\n    for\
+    \ group in ${input}; do\n        local count=0\n        local max_count=0\n  \
+    \      for ((i=0; i<${#group}; i++)); do\n            if [[ ${group:$i:1} == \"\
+    (\" ]]; then\n                count=$((count+1))\n                if [[ $count\
+    \ -gt $max_count ]]; then\n                    max_count=$count\n            \
+    \    fi\n            elif [[ ${group:$i:1} == \")\" ]]; then\n               \
+    \ count=$((count-1))\n            fi\n        done\n        output+=(\"\\\"$max_count\\\
+    \"\")\n    done\n    echo \"[${output[@]}]\"", "  local input_str=\"$1\"\n  local\
+    \ output_str=\"\"\n  local max_nesting_level=0\n  local current_nesting_level=0\n\
+    \  local current_char=\"\"\n  local i=0\n  local len=${#input_str}\n  for ((i=0;\
+    \ i<len; i++)); do\n    current_char=\"${input_str:$i:1}\"\n    if [[ \"$current_char\"\
+    \ == \"(\" ]]; then\n      current_nesting_level=$((current_nesting_level + 1))\n\
+    \      if [[ \"$current_nesting_level\" -gt \"$max_nesting_level\" ]]; then\n\
+    \        max_nesting_level=\"$current_nesting_level\"\n      fi\n    elif [[ \"\
+    $current_char\" == \")\" ]]; then\n      current_nesting_level=$((current_nesting_level\
+    \ - 1))\n    fi\n  done\n  echo \"$max_nesting_level\"", "  local groups=\"$1\"\
+    \n  local group_count=$(echo \"$groups\" | wc -w)\n  local group_index=0\n  local\
+    \ group_max_nesting_levels=()\n  while [ $group_index -lt $group_count ]; do\n\
+    \    local group=$(echo \"$groups\" | cut -d ' ' -f $((group_index + 1)))\n  \
+    \  local group_max_nesting_level=$(echo \"$group\" | sed -e 's/[^()]//g' -e 's/\\\
+    (/1/g' -e 's/)/0/g' | tr -d '\\n' | bc)\n    group_max_nesting_levels+=(\"$group_max_nesting_level\"\
+    )\n    group_index=$((group_index + 1))\n  done\n  echo \"${group_max_nesting_levels[@]}\"",
+  "  local -a parens_array\n  local -a result_array\n  local parens_string\n  local\
+    \ parens_count\n  local parens_max_count\n  local parens_max_count_index\n  local\
+    \ parens_max_count_string\n  local parens_max_count_string_index\n  local parens_max_count_string_index_end\n\
+    \  local parens_max_count_string_index_start\n  local parens_max_count_string_index_start_end\n\
+    \  local parens_max_count_string_index_start_start\n  local parens_max_count_string_index_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start\n  local parens_max_count_string_index_start_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start_start\n  local parens_max_count_string_index_start_start_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start_start_start\n  local\
+    \ parens_max_count_string_index_start_start_start_start_start_end\n  local parens_max_count_string_index_start_start_start_start_start_start\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_start\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_start_start\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_start_start_end\n\
+    \  local parens_max_count_string_index_start_start_start_start_start_start_start_start",
+  "    local parens=$1\n    local max_level=0\n    local cur_level=0\n    local result=\"\
+    \"\n    for (( i=0; i<${#parens}; i++ )); do\n        if [[ ${parens:$i:1} ==\
+    \ \"(\" ]]; then\n            ((cur_level++))\n            if ((cur_level > max_level));\
+    \ then\n                max_level=$cur_level\n            fi\n        elif [[\
+    \ ${parens:$i:1} == \")\" ]]; then\n            ((cur_level--))\n        elif\
+    \ [[ ${parens:$i:1} == \" \" ]]; then\n            result+=\"\\\"$max_level\\\"\
+    \ \"\n            max_level=0\n            cur_level=0\n        fi\n    done\n\
+    \    result+=\"\\\"$max_level\\\"\"\n    echo $result", "  local parens_str=\"\
+    $1\"\n  local parens_arr=($parens_str)\n  local max_nesting=0\n  local max_nesting_idx=0\n\
+    \  for ((i=0; i<${#parens_arr[@]}; i++)); do\n    local parens=${parens_arr[$i]}\n\
+    \    local nesting=0\n    for ((j=0; j<${#parens}; j++)); do\n      local char=${parens:$j:1}\n\
+    \      if [[ \"$char\" == \"(\" ]]; then\n        nesting=$((nesting+1))\n   \
+    \   elif [[ \"$char\" == \")\" ]]; then\n        nesting=$((nesting-1))\n    \
+    \  fi\n    done\n    if [[ \"$nesting\" -gt \"$max_nesting\" ]]; then\n      max_nesting=$nesting\n\
+    \      max_nesting_idx=$i\n    fi\n  done\n  echo \"$max_nesting_idx\"", "   \
+    \ local input=$1\n    local output=()\n    local max_level=0\n    local level=0\n\
+    \    local i=0\n    local len=${#input}\n    while [ $i -lt $len ]; do\n     \
+    \   local char=${input:$i:1}\n        if [ \"$char\" == \"(\" ]; then\n      \
+    \      level=$((level + 1))\n            if [ $level -gt $max_level ]; then\n\
+    \                max_level=$level\n            fi\n        elif [ \"$char\" ==\
+    \ \")\" ]; then\n            level=$((level - 1))\n        elif [ \"$char\" ==\
+    \ \" \" ]; then\n            output+=(\"$max_level\")\n            max_level=0\n\
+    \            level=0\n        fi\n        i=$((i + 1))\n    done\n    output+=(\"\
+    $max_level\")\n    echo \"${output[@]}\"", "  local input=$1\n  local output=()\n\
+    \  local parens_count=0\n  local max_parens_count=0\n  for (( i=0; i<${#input};\
+    \ i++ )); do\n    local char=${input:$i:1}\n    if [[ $char == \"(\" ]]; then\n\
+    \      ((parens_count++))\n      if ((parens_count > max_parens_count)); then\n\
+    \        max_parens_count=$parens_count\n      fi\n    elif [[ $char == \")\"\
+    \ ]]; then\n      ((parens_count--))\n    elif [[ $char == \" \" ]]; then\n  \
+    \    output+=(\"\\\"$max_parens_count\\\"\")\n      max_parens_count=0\n     \
+    \ parens_count=0\n    fi\n  done\n  output+=(\"\\\"$max_parens_count\\\"\")\n\
+    \  echo \"${output[@]}\"", "    local parens=$1\n    local result=()\n    for\
+    \ paren in $parens; do\n        local max_nesting=0\n        local nesting=0\n\
+    \        for ((i=0; i<${#paren}; i++)); do\n            if [[ ${paren:$i:1} ==\
+    \ \"(\" ]]; then\n                ((nesting++))\n                if ((nesting\
+    \ > max_nesting)); then\n                    max_nesting=$nesting\n          \
+    \      fi\n            elif [[ ${paren:$i:1} == \")\" ]]; then\n             \
+    \   ((nesting--))\n            fi\n        done\n        result+=(\"\\\"$max_nesting\\\
+    \"\")\n    done\n    echo \"[${result[@]}]\"", "  local input=$1\n  local output=()\n\
+    \  local max_depth=0\n  local depth=0\n  local char\n  local i\n  for ((i=0; i<${#input};\
+    \ i++)); do\n    char=${input:$i:1}\n    if [[ $char == \"(\" ]]; then\n     \
+    \ ((depth++))\n      if ((depth > max_depth)); then\n        max_depth=$depth\n\
+    \      fi\n    elif [[ $char == \")\" ]]; then\n      ((depth--))\n    elif [[\
+    \ $char == \" \" ]]; then\n      output+=(\"\\\"$max_depth\\\"\")\n      max_depth=0\n\
+    \      depth=0\n    fi\n  done\n  output+=(\"\\\"$max_depth\\\"\")\n  echo \"\
+    ${output[@]}\"", "  local parens_string=\"$1\"\n  local parens_array=($parens_string)\n\
+    \  local parens_array_len=${#parens_array[@]}\n  local parens_array_idx=0\n  local\
+    \ parens_array_max_idx=$((parens_array_len - 1))\n  local parens_array_item\n\
+    \  local parens_array_item_len\n  local parens_array_item_idx\n  local parens_array_item_max_idx\n\
+    \  local parens_array_item_char\n  local parens_array_item_char_idx\n  local parens_array_item_char_max_idx\n\
+    \  local parens_array_item_char_stack\n  local parens_array_item_char_stack_len\n\
+    \  local parens_array_item_char_stack_idx\n  local parens_array_item_char_stack_max_idx\n\
+    \  local parens_array_item_char_stack_char\n  local parens_array_item_char_stack_char_idx\n\
+    \  local parens_array_item_char_stack_char_max_idx\n  local parens_array_item_char_stack_char_stack\n\
+    \  local parens_array_item_char_stack_char_stack_len\n  local parens_array_item_char_stack_char_stack_idx\n\
+    \  local parens_array_item_char_stack_char_stack_max_idx\n  local parens_array_item_char_stack_char_stack_char\n\
+    \  local parens_array_item_char_stack_char_stack_char_idx\n  local parens_array_item_char_stack_char_stack_char_max_idx\n\
+    \  local parens_array_item_char_stack_char_stack_char_stack\n  local parens_array_item_char_stack_char_stack_char_stack_len\n\
+    \  local parens_array_item_char_stack_char", "  local parens_string=\"$1\"\n \
+    \ local parens_array=($parens_string)\n  local parens_array_len=${#parens_array[@]}\n\
+    \  local parens_array_index=0\n  local parens_array_index_max=$((parens_array_len\
+    \ - 1))\n  local parens_array_index_str\n  local parens_array_index_str_max\n\
+    \  local parens_array_index_str_len\n  local parens_array_index_str_len_max=0\n\
+    \  local parens_array_index_str_len_max_str\n  local parens_array_index_str_len_max_str_len\n\
+    \  local parens_array_index_str_len_max_str_len_max=0\n  local parens_array_index_str_len_max_str_len_max_str\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len\n  local parens_array_index_str_len_max_str_len_max_str_len_max=0\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len_max_str\n  local parens_array_index_str_len_max_str_len_max_str_len_max_str_len\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len_max_str_len_max=0\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len_max_str_len_max_str\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len_max_str_len_max_str_len\n\
+    \  local parens_array_index_str_len_max_str_len_max_str_len_max_str_len_max_str_len_max=0\n\
+    \  local parens_array_index_str_len_max", "  local input=$1\n  local groups=($input)\n\
+    \  local output=()\n  for group in \"${groups[@]}\"; do\n    local max_level=0\n\
+    \    local level=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((level++))\n        if ((level\
+    \ > max_level)); then\n          max_level=$level\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    output+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"[${output[*]}]\"", "    local input=$1\n\
+    \    local output=()\n    for group in $input; do\n        local max_level=0\n\
+    \        local level=0\n        for ((i=0; i<${#group}; i++)); do\n          \
+    \  if [[ ${group:$i:1} == \"(\" ]]; then\n                ((level++))\n      \
+    \          if [[ $level -gt $max_level ]]; then\n                    max_level=$level\n\
+    \                fi\n            elif [[ ${group:$i:1} == \")\" ]]; then\n   \
+    \             ((level--))\n            fi\n        done\n        output+=(\"\\\
+    \"$max_level\\\"\")\n    done\n    echo \"[${output[@]}]\"", "  local parens=$1\n\
+    \  local max_depth=0\n  local curr_depth=0\n  local result=\"\"\n  for ((i=0;\
+    \ i<${#parens}; i++)); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n      ((curr_depth++))\n\
+    \      if ((curr_depth > max_depth)); then\n        max_depth=$curr_depth\n  \
+    \    fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n      ((curr_depth--))\n\
+    \    elif [[ ${parens:$i:1} == \" \" ]]; then\n      result+=\"\\\"$max_depth\\\
+    \" \"\n      max_depth=0\n      curr_depth=0\n    fi\n  done\n  result+=\"\\\"\
+    $max_depth\\\"\"\n  echo $result", "  local parens=$1\n  local parens_arr=($parens)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_idx=0\n  local parens_arr_max_nesting=0\n\
+    \  local parens_arr_max_nesting_idx=0\n  local parens_arr_nesting=0\n  local parens_arr_nesting_idx=0\n\
+    \  local parens_arr_nesting_max=0\n  local parens_arr_nesting_max_idx=0\n  local\
+    \ parens_arr_nesting_max_idx_arr=()\n  local parens_arr_nesting_max_idx_arr_len=0\n\
+    \  local parens_arr_nesting_max_idx_arr_idx=0\n  local parens_arr_nesting_max_idx_arr_max_nesting=0\n\
+    \  local parens_arr_nesting_max_idx_arr_max_nesting_idx=0\n  local parens_arr_nesting_max_idx_arr_nesting=0\n\
+    \  local parens_arr_nesting_max_idx_arr_nesting_idx=0\n  local parens_arr_nesting_max_idx_arr_nesting_max=0\n\
+    \  local parens_arr_nesting_max_idx_arr_nesting_max_idx=0\n  local parens_arr_nesting_max_idx_arr_nesting_max_idx_arr=()\n\
+    \  local parens_arr_nesting_max_idx_arr_nesting_max_idx_arr_len=0\n  local parens_arr_nesting_max_idx_arr_nesting_max_idx_arr_idx=0\n\
+    \  local parens_arr_nesting_max_idx_arr_nesting_max_idx_arr_max_nesting=0\n  local\
+    \ parens_arr_nesting_max", "  local input=$1\n  local output=()\n  local max_nesting=0\n\
+    \  local curr_nesting=0\n  local curr_char=''\n  local curr_group=''\n  for ((\
+    \ i=0; i<${#input}; i++ )); do\n    curr_char=${input:$i:1}\n    if [[ $curr_char\
+    \ == '(' ]]; then\n      (( curr_nesting++ ))\n    elif [[ $curr_char == ')' ]];\
+    \ then\n      (( curr_nesting-- ))\n    elif [[ $curr_char == ' ' ]]; then\n \
+    \     if [[ $curr_nesting -gt $max_nesting ]]; then\n        max_nesting=$curr_nesting\n\
+    \      fi\n      output+=(\"\\\"$max_nesting\\\"\")\n      max_nesting=0\n   \
+    \   curr_nesting=0\n    fi\n  done\n  if [[ $curr_nesting -gt $max_nesting ]];\
+    \ then\n    max_nesting=$curr_nesting\n  fi\n  output+=(\"\\\"$max_nesting\\\"\
+    \")\n  echo \"${output[@]}\"", "    local parens=$1\n    local max_nesting=0\n\
+    \    local nesting=0\n    local max_nesting_list=()\n    for ((i=0; i<${#parens};\
+    \ i++)); do\n        local char=${parens:$i:1}\n        if [[ $char == \"(\" ]];\
+    \ then\n            ((nesting++))\n            if [[ $nesting -gt $max_nesting\
+    \ ]]; then\n                max_nesting=$nesting\n            fi\n        elif\
+    \ [[ $char == \")\" ]]; then\n            if [[ $nesting -gt 0 ]]; then\n    \
+    \            ((nesting--))\n            fi\n        elif [[ $char == \" \" ]];\
+    \ then\n            max_nesting_list+=($max_nesting)\n            max_nesting=0\n\
+    \            nesting=0\n        fi\n    done\n    max_nesting_list+=($max_nesting)\n\
+    \    echo ${max_nesting_list[@]}", "    local input_str=$1\n    local output_str=\"\
+    \"\n    local paren_count=0\n    local max_paren_count=0\n    local is_open_paren=0\n\
+    \    local is_close_paren=0\n    local is_space=0\n    local is_end=0\n    local\
+    \ i=0\n    local char=\"\"\n    local char_code=0\n    local len=${#input_str}\n\
+    \    while [ $i -lt $len ]; do\n        char=${input_str:$i:1}\n        char_code=$(printf\
+    \ '%d' \"'$char\")\n        is_open_paren=$((char_code == 40))\n        is_close_paren=$((char_code\
+    \ == 41))\n        is_space=$((char_code == 32))\n        is_end=$((i == len -\
+    \ 1))\n        if [ $is_open_paren -eq 1 ]; then\n            paren_count=$((paren_count\
+    \ + 1))\n            if [ $paren_count -gt $max_paren_count ]; then\n        \
+    \        max_paren_count=$paren_count\n            fi\n        elif [ $is_close_paren\
+    \ -eq 1 ]; then\n            paren_count=$((paren_count - 1))\n        elif [\
+    \ $is_space -eq 1 ] || [ $is_end -eq 1 ]; then\n            output_str=\"$output_str\
+    \ \\\"$max_paren_count\\\"\"\n            paren_count=0\n            max_paren_count=0\n\
+    \        fi\n        i=$((i + 1))\n    done\n    echo \"[$output_str]\"", "  local\
+    \ input=$1\n  local output=()\n  for group in $input; do\n    local max_level=0\n\
+    \    local level=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((level++))\n        if ((level\
+    \ > max_level)); then\n          max_level=$level\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    output+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"[${output[@]}]\"", "    local input=$1\n\
+    \    local output=()\n    local max_depth=0\n    local depth=0\n    local char\n\
+    \    for ((i=0; i<${#input}; i++)); do\n        char=${input:$i:1}\n        if\
+    \ [[ $char == \"(\" ]]; then\n            ((depth++))\n            if ((depth\
+    \ > max_depth)); then\n                max_depth=$depth\n            fi\n    \
+    \    elif [[ $char == \")\" ]]; then\n            ((depth--))\n        elif [[\
+    \ $char == \" \" ]]; then\n            output+=(\"\\\"$max_depth\\\"\")\n    \
+    \        max_depth=0\n            depth=0\n        fi\n    done\n    output+=(\"\
+    \\\"$max_depth\\\"\")\n    echo \"${output[@]}\"", "    local input=$1\n    local\
+    \ output=()\n    local max_level=0\n    local level=0\n    local i=0\n    local\
+    \ c=''\n    local len=${#input}\n    while [ $i -lt $len ]; do\n        c=${input:$i:1}\n\
+    \        if [ \"$c\" == \"(\" ]; then\n            level=$((level + 1))\n    \
+    \        if [ $level -gt $max_level ]; then\n                max_level=$level\n\
+    \            fi\n        elif [ \"$c\" == \")\" ]; then\n            level=$((level\
+    \ - 1))\n        elif [ \"$c\" == \" \" ]; then\n            output+=(\"$max_level\"\
+    )\n            max_level=0\n            level=0\n        fi\n        i=$((i +\
+    \ 1))\n    done\n    output+=(\"$max_level\")\n    echo \"${output[@]}\"", " \
+    \ local input_string=$1\n  local result=()\n  for group in $input_string; do\n\
+    \    local max_level=0\n    local current_level=0\n    for char in $(echo $group\
+    \ | sed 's/\\(.\\)/\\1 /g'); do\n      if [[ $char == \"(\" ]]; then\n       \
+    \ ((current_level++))\n        if [[ $current_level -gt $max_level ]]; then\n\
+    \          max_level=$current_level\n        fi\n      elif [[ $char == \")\"\
+    \ ]]; then\n        ((current_level--))\n      fi\n    done\n    result+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo ${result[@]}", "  local parens_str=\"$1\"\n\
+    \  local parens_arr=()\n  local parens_arr_len=0\n  local parens_str_len=0\n \
+    \ local parens_str_len_prev=0\n  local parens_str_len_diff=0\n  local parens_str_len_diff_prev=0\n\
+    \  local parens_str_len_diff_diff=0\n  local parens_str_len_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_diff_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff_diff_diff_diff_diff=0\n  local parens_str_len_diff_diff_diff_diff_diff_diff_diff_diff_prev=0\n\
+    \  local parens_str_len_diff_diff_diff_diff_diff_diff_diff_diff_diff=0\n  local\
+    \ parens_str_len_diff_diff_diff_diff_diff_diff_diff_diff_diff_prev=0\n  local\
+    \ parens_str_len_diff_diff_diff_diff_diff_diff_diff_diff_diff_diff=0\n  local\
+    \ parens", "    local input=$1\n    local output=()\n    for group in $input;\
+    \ do\n        local max_level=0\n        local level=0\n        for (( i=0; i<${#group};\
+    \ i++ )); do\n            local char=${group:$i:1}\n            if [[ $char ==\
+    \ \"(\" ]]; then\n                (( level++ ))\n                if (( level >\
+    \ max_level )); then\n                    max_level=$level\n                fi\n\
+    \            elif [[ $char == \")\" ]]; then\n                (( level-- ))\n\
+    \            fi\n        done\n        output+=(\"\\\"$max_level\\\"\")\n    done\n\
+    \    echo \"[${output[@]}]\"", "  local parens=$1\n  local parens_array=($parens)\n\
+    \  local result=()\n  for paren in \"${parens_array[@]}\"; do\n    local max_level=0\n\
+    \    local level=0\n    for ((i=0; i<${#paren}; i++)); do\n      if [[ \"${paren:$i:1}\"\
+    \ == \"(\" ]]; then\n        ((level++))\n        if [[ $level -gt $max_level\
+    \ ]]; then\n          max_level=$level\n        fi\n      elif [[ \"${paren:$i:1}\"\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    result+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"${result[@]}\"", "    local input=$1\n \
+    \   local result=()\n    local max_nesting=0\n    local current_nesting=0\n  \
+    \  local current_char\n    for ((i=0; i<${#input}; i++)); do\n        current_char=${input:$i:1}\n\
+    \        if [[ $current_char == \"(\" ]]; then\n            ((current_nesting++))\n\
+    \            if ((current_nesting > max_nesting)); then\n                max_nesting=$current_nesting\n\
+    \            fi\n        elif [[ $current_char == \")\" ]]; then\n           \
+    \ ((current_nesting--))\n        elif [[ $current_char == \" \" ]]; then\n   \
+    \         result+=(\"$max_nesting\")\n            max_nesting=0\n            current_nesting=0\n\
+    \        fi\n    done\n    result+=(\"$max_nesting\")\n    echo \"${result[@]}\"",
+  "  local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len - 1))\n\
+    \  local parens_arr_idx_str\n  local parens_arr_idx_str_len\n  local parens_arr_idx_str_idx\n\
+    \  local parens_arr_idx_str_idx_max\n  local parens_arr_idx_str_idx_max_prev\n\
+    \  local parens_arr_idx_str_idx_max_prev_str\n  local parens_arr_idx_str_idx_max_prev_str_len\n\
+    \  local parens_arr_idx_str_idx_max_prev_str_idx\n  local parens_arr_idx_str_idx_max_prev_str_idx_max\n\
+    \  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev\n  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str\n\
+    \  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str_len\n  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str_idx\n\
+    \  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str_idx_max\n  local\
+    \ parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str_idx_max_prev\n  local parens_arr_idx_str_idx_max_prev_str_idx_max_prev_str_idx_max_prev_str\n\
+    \  local parens_", "  local input=$1\n  local groups=($input)\n  local max_nesting_level=0\n\
+    \  local max_nesting_level_groups=()\n  for group in \"${groups[@]}\"; do\n  \
+    \  local nesting_level=0\n    for (( i=0; i<${#group}; i++ )); do\n      if [[\
+    \ \"${group:$i:1}\" == \"(\" ]]; then\n        nesting_level=$((nesting_level+1))\n\
+    \      elif [[ \"${group:$i:1}\" == \")\" ]]; then\n        nesting_level=$((nesting_level-1))\n\
+    \      fi\n    done\n    if [[ \"$nesting_level\" -gt \"$max_nesting_level\" ]];\
+    \ then\n      max_nesting_level=$nesting_level\n      max_nesting_level_groups=(\"\
+    $group\")\n    elif [[ \"$nesting_level\" -eq \"$max_nesting_level\" ]]; then\n\
+    \      max_nesting_level_groups+=(\"$group\")\n    fi\n  done\n  echo \"${max_nesting_level_groups[@]}\"",
+  "  local input=$1\n  local output=()\n  for group in $input; do\n    local max_nesting=0\n\
+    \    local current_nesting=0\n    for ((i=0; i<${#group}; i++)); do\n      local\
+    \ char=${group:$i:1}\n      if [[ $char == \"(\" ]]; then\n        ((current_nesting++))\n\
+    \        if ((current_nesting > max_nesting)); then\n          max_nesting=$current_nesting\n\
+    \        fi\n      elif [[ $char == \")\" ]]; then\n        ((current_nesting--))\n\
+    \      fi\n    done\n    output+=(\"\\\"$max_nesting\\\"\")\n  done\n  echo \"\
+    ${output[@]}\"", "    local parens_str=\"$1\"\n    local parens_arr=($parens_str)\n\
+    \    local parens_arr_len=${#parens_arr[@]}\n    local max_nesting_arr=()\n  \
+    \  for ((i=0; i<parens_arr_len; i++)); do\n        local parens=${parens_arr[$i]}\n\
+    \        local parens_len=${#parens}\n        local max_nesting=0\n        local\
+    \ nesting=0\n        for ((j=0; j<parens_len; j++)); do\n            local char=${parens:$j:1}\n\
+    \            if [[ \"$char\" == \"(\" ]]; then\n                nesting=$((nesting+1))\n\
+    \                if [[ \"$nesting\" -gt \"$max_nesting\" ]]; then\n          \
+    \          max_nesting=$nesting\n                fi\n            elif [[ \"$char\"\
+    \ == \")\" ]]; then\n                nesting=$((nesting-1))\n            fi\n\
+    \        done\n        max_nesting_arr+=($max_nesting)\n    done\n    echo \"\
+    ${max_nesting_arr[@]}\"", "  local parens=\"$1\"\n  local max_nesting=0\n  local\
+    \ max_nesting_parens=\"\"\n  for paren in $parens; do\n    local nesting=$(echo\
+    \ \"$paren\" | awk '{print gsub(/[()]/,\"&\")}')\n    if [[ $nesting -gt $max_nesting\
+    \ ]]; then\n      max_nesting=$nesting\n      max_nesting_parens=\"$paren\"\n\
+    \    fi\n  done\n  echo \"\\\"$max_nesting\\\"\"", "    local parens_str=$1\n\
+    \    local parens_arr=($parens_str)\n    local parens_arr_len=${#parens_arr[@]}\n\
+    \    local parens_arr_idx=0\n    local parens_arr_idx_max=$((parens_arr_len -\
+    \ 1))\n    local parens_arr_idx_max_parens_len=0\n    local parens_arr_idx_max_parens_len_idx=0\n\
+    \    local parens_arr_idx_parens_len=0\n    local parens_arr_idx_parens_len_idx=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len=0\n    local parens_arr_idx_parens_len_idx_parens_len_idx=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len=0\n    local\
+    \ parens_arr_idx_parens_len_idx_parens_len_idx_parens_len_idx=0\n    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len_idx=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len_idx_parens_len_idx=0\n\
+    \    local parens_arr_idx_parens_len_idx_parens_len_idx_parens_len", "  local\
+    \ parens_str=\"$1\"\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len - 1))\n\
+    \  local parens_arr_idx_str\n  local parens_arr_idx_str_len\n  local parens_arr_idx_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev\n  local parens_arr_idx_str_len_max_prev_str\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len\n  local parens_arr_idx_str_len_max_prev_str_len_max\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_str\n  local parens_arr_idx_str_len_max_prev_str_len_max_str_len\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_str_len_max\n  local parens_arr_idx_str_len_max_prev_str_len_max_str_len_max_str\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len_max_str_len_max_str_len\n  local\
+    \ parens_arr_idx_str_len_max_prev_str_len_max_str_len_max_str_len_max\n  local\
+    \ parens_arr_idx_str_len_max_prev_str_len_max_str_len_max_str_len_max_str\n  local\
+    \ parens_arr_idx_str_len_max_prev_str_len_max_str_len_max_str_len_max_str_len\n\
+    \  local parens_arr_idx_str_len_max_prev_str_len", "  local input=$1\n  local\
+    \ output=()\n  for group in $input; do\n    local max_nesting=0\n    local current_nesting=0\n\
+    \    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n     \
+    \ if [[ $char == \"(\" ]]; then\n        ((current_nesting++))\n        if ((current_nesting\
+    \ > max_nesting)); then\n          max_nesting=$current_nesting\n        fi\n\
+    \      elif [[ $char == \")\" ]]; then\n        ((current_nesting--))\n      fi\n\
+    \    done\n    output+=(\"\\\"$max_nesting\\\"\")\n  done\n  echo \"[${output[@]}]\"",
+  "  local input=\"$1\"\n  local output=()\n  local max_level=0\n  local level=0\n\
+    \  local i=0\n  local len=${#input}\n  while [ $i -lt $len ]; do\n    local c=${input:$i:1}\n\
+    \    if [ \"$c\" == \"(\" ]; then\n      ((level++))\n      if [ $level -gt $max_level\
+    \ ]; then\n        max_level=$level\n      fi\n    elif [ \"$c\" == \")\" ]; then\n\
+    \      ((level--))\n    fi\n    ((i++))\n  done\n  echo \"[\\\"$max_level\\\"\
+    ]\"", "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local result=()\n\
+    \  for parens in \"${parens_arr[@]}\"; do\n    local max_level=0\n    local level=0\n\
+    \    for ((i=0; i<${#parens}; i++)); do\n      local char=${parens:$i:1}\n   \
+    \   if [[ $char == \"(\" ]]; then\n        ((level++))\n        if [[ $level -gt\
+    \ $max_level ]]; then\n          max_level=$level\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    result+=(\"\\\
+    \"$max_level\\\"\")\n  done\n  echo \"[${result[*]}]\"", "  local str=$1\n  local\
+    \ parens_str\n  local parens_str_len\n  local parens_str_idx\n  local parens_str_char\n\
+    \  local parens_str_char_prev\n  local parens_str_char_next\n  local parens_str_char_prev_prev\n\
+    \  local parens_str_char_next_next\n  local parens_str_char_prev_prev_prev\n \
+    \ local parens_str_char_next_next_next\n  local parens_str_char_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next\n  local\
+    \ parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_", "  local parens=$1\n  local parens_array=($parens)\n\
+    \  local parens_array_len=${#parens_array[@]}\n  local parens_array_idx=0\n  local\
+    \ parens_array_idx_max=$((parens_array_len - 1))\n  local parens_array_idx_str\n\
+    \  local parens_array_idx_str_len\n  local parens_array_idx_str_len_max\n  local\
+    \ parens_array_idx_str_len_max_prev\n  local parens_array_idx_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len\n  local parens_array_idx_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev\n  local parens_array_idx_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len\n  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str", "  local parens=$1\n\
+    \  local max_nesting=0\n  local nesting=0\n  local max_nesting_list=()\n  local\
+    \ i=0\n  local len=${#parens}\n  while [ $i -lt $len ]; do\n    local char=${parens:$i:1}\n\
+    \    if [ \"$char\" == \"(\" ]; then\n      nesting=$((nesting + 1))\n      if\
+    \ [ $nesting -gt $max_nesting ]; then\n        max_nesting=$nesting\n      fi\n\
+    \    elif [ \"$char\" == \")\" ]; then\n      max_nesting_list+=($max_nesting)\n\
+    \      max_nesting=0\n      nesting=$((nesting - 1))\n    fi\n    i=$((i + 1))\n\
+    \  done\n  echo ${max_nesting_list[@]}", "  local input=\"$1\"\n  local output=()\n\
+    \  local max_depth=0\n  local current_depth=0\n  local current_char\n  for ((\
+    \ i=0; i<${#input}; i++ )); do\n    current_char=\"${input:$i:1}\"\n    if [[\
+    \ \"$current_char\" == \"(\" ]]; then\n      ((current_depth++))\n      ((max_depth=current_depth>max_depth?current_depth:max_depth))\n\
+    \    elif [[ \"$current_char\" == \")\" ]]; then\n      ((current_depth--))\n\
+    \    elif [[ \"$current_char\" == \" \" ]]; then\n      output+=(\"$max_depth\"\
+    )\n      max_depth=0\n      current_depth=0\n    fi\n  done\n  output+=(\"$max_depth\"\
+    )\n  echo \"${output[@]}\"", "  local str=$1\n  local max_nested_parens=0\n  local\
+    \ nested_parens=0\n  local result=()\n  for (( i=0; i<${#str}; i++ )); do\n  \
+    \  local char=${str:$i:1}\n    if [[ $char == \"(\" ]]; then\n      ((nested_parens++))\n\
+    \      if ((nested_parens > max_nested_parens)); then\n        max_nested_parens=$nested_parens\n\
+    \      fi\n    elif [[ $char == \")\" ]]; then\n      ((nested_parens--))\n  \
+    \  elif [[ $char == \" \" ]]; then\n      result+=(\"\\\"$max_nested_parens\\\"\
+    \")\n      max_nested_parens=0\n      nested_parens=0\n    fi\n  done\n  result+=(\"\
+    \\\"$max_nested_parens\\\"\")\n  echo \"${result[@]}\"", "  local parens=\"$1\"\
+    \n  local max_nesting=0\n  local curr_nesting=0\n  local output=()\n  for ((i=0;\
+    \ i<${#parens}; i++)); do\n    local curr_char=\"${parens:$i:1}\"\n    if [[ \"\
+    $curr_char\" == \"(\" ]]; then\n      ((curr_nesting++))\n      if ((curr_nesting\
+    \ > max_nesting)); then\n        max_nesting=$curr_nesting\n      fi\n    elif\
+    \ [[ \"$curr_char\" == \")\" ]]; then\n      ((curr_nesting--))\n    elif [[ \"\
+    $curr_char\" == \" \" ]]; then\n      output+=(\"$max_nesting\")\n      max_nesting=0\n\
+    \      curr_nesting=0\n    fi\n  done\n  output+=(\"$max_nesting\")\n  echo \"\
+    ${output[@]}\"", "    local input=$1\n    local output=()\n    local max_level=0\n\
+    \    local level=0\n    for (( i=0; i<${#input}; i++ )); do\n        local char=${input:$i:1}\n\
+    \        if [[ $char == \"(\" ]]; then\n            (( level++ ))\n          \
+    \  if (( level > max_level )); then\n                max_level=$level\n      \
+    \      fi\n        elif [[ $char == \")\" ]]; then\n            (( level-- ))\n\
+    \        elif [[ $char == \" \" ]]; then\n            output+=(\"\\\"$max_level\\\
+    \"\")\n            max_level=0\n            level=0\n        fi\n    done\n  \
+    \  output+=(\"\\\"$max_level\\\"\")\n    echo \"${output[@]}\"", "  local input=$1\n\
+    \  local result=()\n  for group in $input; do\n    local max_depth=0\n    local\
+    \ depth=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((depth++))\n        if ((depth\
+    \ > max_depth)); then\n          max_depth=$depth\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((depth--))\n      fi\n    done\n    result+=(\"\\\
+    \"$max_depth\\\"\")\n  done\n  echo \"[${result[@]}]\"", "    local parens_string=$1\n\
+    \    local parens_array=($parens_string)\n    local parens_array_len=${#parens_array[@]}\n\
+    \    local parens_array_idx=0\n    local parens_array_idx_max=$((parens_array_len\
+    \ - 1))\n    local parens_array_idx_last=$parens_array_idx_max\n    local parens_array_idx_first=0\n\
+    \    local parens_array_idx_mid=$((parens_array_idx_first + parens_array_idx_last))\n\
+    \    local parens_array_idx_mid_prev=$parens_array_idx_mid\n    local parens_array_idx_mid_next=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_prev_prev=$parens_array_idx_mid\n    local parens_array_idx_mid_next_next=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_prev_prev_prev=$parens_array_idx_mid\n    local\
+    \ parens_array_idx_mid_next_next_next=$parens_array_idx_mid\n    local parens_array_idx_mid_prev_prev_prev_prev=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_next_next_next_next=$parens_array_idx_mid\n  \
+    \  local parens_array_idx_mid_prev_prev_prev_prev_prev=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_next_next_next_next_next=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_prev_prev_prev_prev_prev_prev=$parens_array_idx_mid\n\
+    \    local parens_array_idx_mid_next_next_next_next_next_next=$parens_array_",
+  "    local input=$1\n    local output=()\n    local max_nesting=0\n    local nesting=0\n\
+    \    local i=0\n    local c\n    local len=${#input}\n    while [ $i -lt $len\
+    \ ]; do\n        c=${input:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n     \
+    \       nesting=$((nesting + 1))\n            if [ $nesting -gt $max_nesting ];\
+    \ then\n                max_nesting=$nesting\n            fi\n        elif [ \"\
+    $c\" == \")\" ]; then\n            nesting=$((nesting - 1))\n        fi\n    \
+    \    i=$((i + 1))\n    done\n    echo $max_nesting", "  local parens=$1\n  local\
+    \ max_nesting=0\n  local current_nesting=0\n  local output=()\n  for (( i=0; i<${#parens};\
+    \ i++ )); do\n    if [[ ${parens:$i:1} == \"(\" ]]; then\n      ((current_nesting++))\n\
+    \      if ((current_nesting > max_nesting)); then\n        max_nesting=$current_nesting\n\
+    \      fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n      ((current_nesting--))\n\
+    \    elif [[ ${parens:$i:1} == \" \" ]]; then\n      output+=(\"\\\"$max_nesting\\\
+    \"\")\n      max_nesting=0\n      current_nesting=0\n    fi\n  done\n  output+=(\"\
+    \\\"$max_nesting\\\"\")\n  echo \"${output[@]}\"", "    local parens_str=$1\n\
+    \    local parens_arr=($parens_str)\n    local parens_arr_len=${#parens_arr[@]}\n\
+    \    local parens_arr_idx=0\n    local parens_arr_idx_max=$((parens_arr_len -\
+    \ 1))\n    local parens_arr_idx_max_str=$parens_arr_idx_max\n    local parens_arr_idx_str\n\
+    \    local parens_arr_idx_str_len\n    local parens_arr_idx_str_len_max\n    local\
+    \ parens_arr_idx_str_len_max_str\n    local parens_arr_idx_str_len_max_str_len\n\
+    \    local parens_arr_idx_str_len_max_str_len_max\n    local parens_arr_idx_str_len_max_str_len_max_str\n\
+    \    local parens_arr_idx_str_len_max_str_len_max_str_len\n    local parens_arr_idx_str_len_max_str_len_max_str_len_max\n\
+    \    local parens_arr_idx_str_len_max_str_len_max_str_len_max_str\n    local parens_arr_idx_str_len_max_str_len_max_str_len_max_str_len\n\
+    \    local parens_arr_idx_str_len_max_str_len_max_str_len_max_str_len_max\n  \
+    \  local parens_arr_idx_str_len_max_str_len_max_str_len_max_str_len_max_str\n\
+    \    local parens_arr_idx_str_len_max_str_len_max_str_len_max_str_len_max_str_len\n\
+    \    local parens_arr_idx_str_len_max_str_len_max_str_len_max_str_len_max_str_len_max",
+  "  local input=$1\n  local output=()\n  local max_nesting=0\n  local current_nesting=0\n\
+    \  local current_char\n  local i\n\n  for ((i=0; i<${#input}; i++)); do\n    current_char=${input:$i:1}\n\
+    \    if [[ $current_char == \"(\" ]]; then\n      ((current_nesting++))\n    \
+    \  if ((current_nesting > max_nesting)); then\n        max_nesting=$current_nesting\n\
+    \      fi\n    elif [[ $current_char == \")\" ]]; then\n      ((current_nesting--))\n\
+    \    elif [[ $current_char == \" \" ]]; then\n      output+=(\"$max_nesting\"\
+    )\n      max_nesting=0\n      current_nesting=0\n    fi\n  done\n  output+=(\"\
+    $max_nesting\")\n  echo \"${output[@]}\"", "  local input=$1\n  local output=()\n\
+    \  local max_depth=0\n  local current_depth=0\n  for (( i=0; i<${#input}; i++\
+    \ )); do\n    if [[ ${input:$i:1} == \"(\" ]]; then\n      ((current_depth++))\n\
+    \      if ((current_depth > max_depth)); then\n        max_depth=$current_depth\n\
+    \      fi\n    elif [[ ${input:$i:1} == \")\" ]]; then\n      ((current_depth--))\n\
+    \    elif [[ ${input:$i:1} == \" \" ]]; then\n      output+=(\"\\\"$max_depth\\\
+    \"\")\n      max_depth=0\n      current_depth=0\n    fi\n  done\n  output+=(\"\
+    \\\"$max_depth\\\"\")\n  echo \"${output[@]}\"", "    local parens_str=$1\n  \
+    \  local parens_arr=()\n    local parens_arr_len=0\n    local parens_arr_idx=0\n\
+    \    local parens_str_len=0\n    local parens_str_idx=0\n    local parens_str_chr=''\n\
+    \    local parens_str_chr_prev=''\n    local parens_str_chr_next=''\n    local\
+    \ parens_str_chr_next_next=''\n    local parens_str_chr_next_next_next=''\n  \
+    \  local parens_str_chr_next_next_next_next=''\n    local parens_str_chr_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next=''\n    local parens_str_chr_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next_next_next=''\n    local\
+    \ parens_str_chr_next_next_next_next_next_next_next_next_next=''\n    local parens_str_chr_next_next_next_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_next_next_next_next_next_next_next_next_next=''\n\
+    \    local parens_str_chr_next_next_next_next_next_", "  local parens_str=\"$1\"\
+    \n  local parens_arr=()\n  local parens_arr_idx=0\n  local parens_str_len=${#parens_str}\n\
+    \  local parens_str_idx=0\n  local parens_str_char\n  local parens_str_char_prev\n\
+    \  local parens_str_char_next\n  local parens_str_char_prev_prev\n  local parens_str_char_next_next\n\
+    \  local parens_str_char_prev_prev_prev\n  local parens_str_char_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev\n  local parens_str_char_next_next_next_next_next_next_next_next\n\
+    \  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n  local\
+    \ parens_str_char_next_next_next_next_next_next_next_next_next\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next_next\n \
+    \ local parens_str_char_prev_prev_prev", "  local parens_str=$1\n  local parens_arr=($parens_str)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_idx=0\n  local parens_arr_idx_max=$((parens_arr_len\
+    \ - 1))\n  local parens_arr_idx_last=$parens_arr_idx_max\n  local parens_arr_idx_next=$((parens_arr_idx_last\
+    \ + 1))\n  local parens_arr_idx_prev=$((parens_arr_idx_last - 1))\n  local parens_arr_idx_last_parens=0\n\
+    \  local parens_arr_idx_last_parens_prev=0\n  local parens_arr_idx_last_parens_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev=0\n  local parens_arr_idx_last_parens_next_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev_prev=0\n  local parens_arr_idx_last_parens_next_next_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev_prev_prev=0\n  local parens_arr_idx_last_parens_next_next_next_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev_prev_prev_prev=0\n  local parens_arr_idx_last_parens_next_next_next_next_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev_prev_prev_prev_prev=0\n  local parens_arr_idx_last_parens_next_next_next_next_next_next=0\n\
+    \  local parens_arr_idx_last_parens_prev_prev_prev_prev_prev_prev_prev=0\n  local",
+  "  local input=\"$1\"\n  local result=()\n  local max_nesting=0\n  local current_nesting=0\n\
+    \  local i=0\n  local c=''\n  local len=${#input}\n  while [ $i -lt $len ]; do\n\
+    \    c=${input:$i:1}\n    if [ \"$c\" == \"(\" ]; then\n      ((current_nesting++))\n\
+    \      if [ $current_nesting -gt $max_nesting ]; then\n        max_nesting=$current_nesting\n\
+    \      fi\n    elif [ \"$c\" == \")\" ]; then\n      ((current_nesting--))\n \
+    \   elif [ \"$c\" == \" \" ]; then\n      result+=(\"$max_nesting\")\n      max_nesting=0\n\
+    \      current_nesting=0\n    fi\n    ((i++))\n  done\n  result+=(\"$max_nesting\"\
+    )\n  echo \"${result[@]}\"", "  local input=\"$1\"\n  local output=()\n  local\
+    \ paren_count=0\n  local max_paren_count=0\n  local current_word=\"\"\n  local\
+    \ current_char=\"\"\n  local i=0\n  local len=0\n  local word_count=0\n  local\
+    \ word_len=0\n  local is_paren=0\n  local is_space=0\n  local is_word=0\n  local\
+    \ is_end=0\n  local is_start=0\n  local is_first_word=0\n  local is_last_word=0\n\
+    \  local is_last_char=0\n  local is_first_char=0\n  local is_last_paren=0\n  local\
+    \ is_first_paren=0\n  local is_last_space=0\n  local is_first_space=0\n  local\
+    \ is_last_char_paren=0\n  local is_first_char_paren=0\n  local is_last_char_space=0\n\
+    \  local is_first_char_space=0\n  local is_last_char_word=0\n  local is_first_char_word=0\n\
+    \  local is_last_char_end=0\n  local is_first_char_start=0\n  local is_last_char_start=0\n\
+    \  local is_first_char_end=0\n  local is_last_char_end_paren=0\n  local is_first_char_start_paren=0\n\
+    \  local is_last_char_start_paren=0\n  local is_first_char_end_paren=0\n  local\
+    \ is_last_char_end_space=0\n  local is_first_char_start_space=0\n  local is_last_char_start_space=0\n\
+    \  local is_first_char_end_space=0\n  local is_last_char_end_word=0\n  local is_first_char_start_word=0\n\
+    \  local is_last_char_start_word=0\n  local is_first_char_end_word=0\n  local\
+    \ is_last_char_end_paren_space=0\n  local is_first_char_start_paren_", "    local\
+    \ input=$1\n    local output=()\n    local max_nesting=0\n    local current_nesting=0\n\
+    \    local i=0\n    local len=${#input}\n    local char=''\n    while [ $i -lt\
+    \ $len ]; do\n        char=${input:$i:1}\n        if [ \"$char\" == \"(\" ]; then\n\
+    \            current_nesting=$((current_nesting + 1))\n            if [ $current_nesting\
+    \ -gt $max_nesting ]; then\n                max_nesting=$current_nesting\n   \
+    \         fi\n        elif [ \"$char\" == \")\" ]; then\n            current_nesting=$((current_nesting\
+    \ - 1))\n        elif [ \"$char\" == \" \" ]; then\n            output+=(\"\\\"\
+    $max_nesting\\\"\")\n            max_nesting=0\n            current_nesting=0\n\
+    \        fi\n        i=$((i + 1))\n    done\n    output+=(\"\\\"$max_nesting\\\
+    \"\")\n    echo \"${output[@]}\"", "  local input=$1\n  local result=()\n  for\
+    \ group in $input; do\n    local max_depth=0\n    local depth=0\n    for ((i=0;\
+    \ i<${#group}; i++)); do\n      local char=${group:$i:1}\n      if [[ $char ==\
+    \ \"(\" ]]; then\n        ((depth++))\n        if ((depth > max_depth)); then\n\
+    \          max_depth=$depth\n        fi\n      elif [[ $char == \")\" ]]; then\n\
+    \        ((depth--))\n      fi\n    done\n    result+=(\"\\\"$max_depth\\\"\"\
+    )\n  done\n  echo \"[${result[@]}]\"", "  local input=$1\n  local output=()\n\
+    \  local max_level=0\n  local level=0\n  local char\n  for (( i=0; i<${#input};\
+    \ i++ )); do\n    char=${input:$i:1}\n    if [[ \"$char\" == \"(\" ]]; then\n\
+    \      (( level++ ))\n      (( max_level = level > max_level ? level : max_level\
+    \ ))\n    elif [[ \"$char\" == \")\" ]]; then\n      (( level-- ))\n    fi\n \
+    \   if [[ \"$char\" == \" \" ]]; then\n      output+=(\"$max_level\")\n      max_level=0\n\
+    \      level=0\n    fi\n  done\n  output+=(\"$max_level\")\n  echo \"${output[@]}\"",
+  "    local input=$1\n    local output=()\n    local max_depth=0\n    local depth=0\n\
+    \    local i=0\n    local c=''\n    local len=${#input}\n    while [ $i -lt $len\
+    \ ]; do\n        c=${input:$i:1}\n        if [ \"$c\" == \"(\" ]; then\n     \
+    \       depth=$((depth + 1))\n            if [ $depth -gt $max_depth ]; then\n\
+    \                max_depth=$depth\n            fi\n        elif [ \"$c\" == \"\
+    )\" ]; then\n            depth=$((depth - 1))\n        elif [ \"$c\" == \" \"\
+    \ ]; then\n            output+=(\"\\\"$max_depth\\\"\")\n            max_depth=0\n\
+    \            depth=0\n        fi\n        i=$((i + 1))\n    done\n    output+=(\"\
+    \\\"$max_depth\\\"\")\n    echo ${output[@]}", "    local input=$1\n    local\
+    \ output=()\n    local paren_count=0\n    local max_paren_count=0\n    local paren_start=0\n\
+    \    local paren_end=0\n    local paren_start_index=0\n    local paren_end_index=0\n\
+    \    local paren_start_index_prev=0\n    local paren_end_index_prev=0\n    local\
+    \ paren_start_index_prev_prev=0\n    local paren_end_index_prev_prev=0\n    local\
+    \ paren_start_index_prev_prev_prev=0\n    local paren_end_index_prev_prev_prev=0\n\
+    \    local paren_start_index_prev_prev_prev_prev=0\n    local paren_end_index_prev_prev_prev_prev=0\n\
+    \    local paren_start_index_prev_prev_prev_prev_prev=0\n    local paren_end_index_prev_prev_prev_prev_prev=0\n\
+    \    local paren_start_index_prev_prev_prev_prev_prev_prev=0\n    local paren_end_index_prev_prev_prev_prev_prev_prev=0\n\
+    \    local paren_start_index_prev_prev_prev_prev_prev_prev_prev=0\n    local paren_end_index_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local paren_start_index_prev_prev_prev_prev_prev_prev_prev_prev=0\n    local\
+    \ paren_end_index_prev_prev_prev_prev_prev_prev_prev_prev=0\n    local paren_start_index_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local paren_end_index_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n  \
+    \  local paren_start_index_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local paren_end_index_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n",
+  "    local input=\"$1\"\n    local output=()\n    local max_level=0\n    local level=0\n\
+    \    for ((i=0; i<${#input}; i++)); do\n        local char=\"${input:$i:1}\"\n\
+    \        if [[ \"$char\" == \"(\" ]]; then\n            ((level++))\n        \
+    \    if ((level > max_level)); then\n                max_level=$level\n      \
+    \      fi\n        elif [[ \"$char\" == \")\" ]]; then\n            ((level--))\n\
+    \        elif [[ \"$char\" == \" \" ]]; then\n            output+=(\"$max_level\"\
+    )\n            max_level=0\n            level=0\n        fi\n    done\n    output+=(\"\
+    $max_level\")\n    echo \"${output[@]}\"", "  local input_str=$1\n  local output_str=\"\
+    \"\n  local max_nesting_level=0\n  local current_nesting_level=0\n  local current_char=\"\
+    \"\n  local i=0\n  local len=${#input_str}\n  while [ $i -lt $len ]; do\n    current_char=${input_str:$i:1}\n\
+    \    if [ \"$current_char\" == \"(\" ]; then\n      current_nesting_level=$((current_nesting_level\
+    \ + 1))\n      if [ $current_nesting_level -gt $max_nesting_level ]; then\n  \
+    \      max_nesting_level=$current_nesting_level\n      fi\n    elif [ \"$current_char\"\
+    \ == \")\" ]; then\n      current_nesting_level=$((current_nesting_level - 1))\n\
+    \    fi\n    i=$((i + 1))\n  done\n  echo $max_nesting_level", "  local input=$1\n\
+    \  local output=()\n  local max_depth=0\n  local current_depth=0\n  local current_char\n\
+    \  for (( i=0; i<${#input}; i++ )); do\n    current_char=${input:$i:1}\n    if\
+    \ [[ \"$current_char\" == \"(\" ]]; then\n      ((current_depth++))\n      ((max_depth\
+    \ = current_depth > max_depth ? current_depth : max_depth))\n    elif [[ \"$current_char\"\
+    \ == \")\" ]]; then\n      ((current_depth--))\n    elif [[ \"$current_char\"\
+    \ == \" \" ]]; then\n      output+=(\"$max_depth\")\n      max_depth=0\n     \
+    \ current_depth=0\n    fi\n  done\n  echo \"${output[@]}\"", "  local parens_str=\"\
+    $1\"\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_elem\n  local parens_arr_elem_len\n\
+    \  local parens_arr_elem_idx\n  local parens_arr_elem_char\n  local parens_arr_elem_nest_level\n\
+    \  local parens_arr_elem_nest_level_max\n  local parens_arr_elem_nest_level_max_arr\n\
+    \  local parens_arr_elem_nest_level_max_arr_idx=0\n  local parens_arr_elem_nest_level_max_arr_len=0\n\
+    \  local parens_arr_elem_nest_level_max_arr_elem\n  local parens_arr_elem_nest_level_max_arr_elem_len\n\
+    \  local parens_arr_elem_nest_level_max_arr_elem_idx\n  local parens_arr_elem_nest_level_max_arr_elem_char\n\
+    \  local parens_arr_elem_nest_level_max_arr_elem_nest_level\n  local parens_arr_elem_nest_level_max_arr_elem_nest_level_max\n\
+    \  local parens_arr_elem_nest_level_max_arr_elem_nest_level_max_arr\n  local parens_arr_elem_nest_level_max_arr_elem_nest_level_max_arr_idx=0\n\
+    \  local parens_arr_elem_nest_level_max_arr_elem_nest_level_max_arr_len=0\n  local\
+    \ parens_arr_elem_nest_level_max_arr_elem_nest_level_max_arr_elem\n", "  local\
+    \ parens=$1\n  local max_nesting=0\n  local curr_nesting=0\n  local max_nesting_groups=()\n\
+    \  for (( i=0; i<${#parens}; i++ )); do\n    if [[ ${parens:$i:1} == \"(\" ]];\
+    \ then\n      ((curr_nesting++))\n      if ((curr_nesting > max_nesting)); then\n\
+    \        max_nesting=$curr_nesting\n        max_nesting_groups=()\n      fi\n\
+    \      if ((curr_nesting == max_nesting)); then\n        max_nesting_groups+=(\"\
+    $curr_nesting\")\n      fi\n    elif [[ ${parens:$i:1} == \")\" ]]; then\n   \
+    \   ((curr_nesting--))\n    fi\n  done\n  echo \"${max_nesting_groups[@]}\"",
+  "  local input=$1\n  local output=()\n  local max_level=0\n  local level=0\n  local\
+    \ i=0\n  local c\n  local len=${#input}\n  while [ $i -lt $len ]; do\n    c=${input:$i:1}\n\
+    \    if [ \"$c\" == \"(\" ]; then\n      (( level++ ))\n      if [ $level -gt\
+    \ $max_level ]; then\n        max_level=$level\n      fi\n    elif [ \"$c\" ==\
+    \ \")\" ]; then\n      (( level-- ))\n    fi\n    (( i++ ))\n  done\n  echo \"\
+    [$(printf '\"%s\" ' \"${output[@]}\")]\"", "  local parens_str=\"$1\"\n  local\
+    \ parens_arr=($parens_str)\n  local max_depth=0\n  local depth=0\n  local parens_depth_arr=()\n\
+    \  for parens in \"${parens_arr[@]}\"; do\n    for ((i=0; i<${#parens}; i++));\
+    \ do\n      if [[ \"${parens:$i:1}\" == \"(\" ]]; then\n        ((depth++))\n\
+    \        if ((depth > max_depth)); then\n          max_depth=$depth\n        fi\n\
+    \      elif [[ \"${parens:$i:1}\" == \")\" ]]; then\n        ((depth--))\n   \
+    \   fi\n    done\n    parens_depth_arr+=(\"$max_depth\")\n    max_depth=0\n  \
+    \  depth=0\n  done\n  echo \"${parens_depth_arr[@]}\"", "  local parens=$1\n \
+    \ local max_nesting_level=0\n  local nesting_level=0\n  local output=\"\"\n  for\
+    \ ((i=0; i<${#parens}; i++)); do\n    if [[ \"${parens:$i:1}\" == \"(\" ]]; then\n\
+    \      ((nesting_level++))\n      if ((nesting_level > max_nesting_level)); then\n\
+    \        max_nesting_level=$nesting_level\n      fi\n    elif [[ \"${parens:$i:1}\"\
+    \ == \")\" ]]; then\n      ((nesting_level--))\n    elif [[ \"${parens:$i:1}\"\
+    \ == \" \" ]]; then\n      output+=\"\\\"$max_nesting_level\\\" \"\n      max_nesting_level=0\n\
+    \      nesting_level=0\n    fi\n  done\n  output+=\"\\\"$max_nesting_level\\\"\
+    \"\n  echo $output", "    local parens_str=$1\n    local parens_arr=($parens_str)\n\
+    \    local parens_arr_len=${#parens_arr[@]}\n    local parens_arr_idx=0\n    local\
+    \ parens_arr_idx_max=$((parens_arr_len - 1))\n    local parens_str_len=0\n   \
+    \ local parens_str_idx=0\n    local parens_str_idx_max=0\n    local parens_str_idx_max_prev=0\n\
+    \    local parens_str_idx_max_prev_prev=0\n    local parens_str_idx_max_prev_prev_prev=0\n\
+    \    local parens_str_idx_max_prev_prev_prev_prev=0\n    local parens_str_idx_max_prev_prev_prev_prev_prev=0\n\
+    \    local parens_str_idx_max_prev_prev_prev_prev_prev_prev=0\n    local parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev=0\n    local\
+    \ parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n    local\
+    \ parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n   \
+    \ local parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_str_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_str_idx_max", "    local input=\"$1\"\n    local output=()\n\
+    \    local max_depth=0\n    local current_depth=0\n    for ((i=0; i<${#input};\
+    \ i++)); do\n        local char=\"${input:$i:1}\"\n        if [[ \"$char\" ==\
+    \ \"(\" ]]; then\n            ((current_depth++))\n            ((max_depth = current_depth\
+    \ > max_depth ? current_depth : max_depth))\n        elif [[ \"$char\" == \")\"\
+    \ ]]; then\n            ((current_depth--))\n        elif [[ \"$char\" == \" \"\
+    \ ]]; then\n            output+=(\"$max_depth\")\n            max_depth=0\n  \
+    \          current_depth=0\n        fi\n    done\n    output+=(\"$max_depth\"\
+    )\n    echo \"${output[@]}\"", "  local parens_string=$1\n  local parens_array=($parens_string)\n\
+    \  local parens_array_len=${#parens_array[@]}\n  local parens_array_idx=0\n  local\
+    \ parens_array_value\n  local parens_array_value_len\n  local parens_array_value_idx\n\
+    \  local parens_array_value_char\n  local parens_array_value_char_prev\n  local\
+    \ parens_array_value_char_next\n  local parens_array_value_char_prev_idx\n  local\
+    \ parens_array_value_char_next_idx\n  local parens_array_value_char_prev_char\n\
+    \  local parens_array_value_char_next_char\n  local parens_array_value_char_prev_char_prev\n\
+    \  local parens_array_value_char_next_char_next\n  local parens_array_value_char_prev_char_prev_idx\n\
+    \  local parens_array_value_char_next_char_next_idx\n  local parens_array_value_char_prev_char_prev_char\n\
+    \  local parens_array_value_char_next_char_next_char\n  local parens_array_value_char_prev_char_prev_char_prev\n\
+    \  local parens_array_value_char_next_char_next_char_next\n  local parens_array_value_char_prev_char_prev_char_prev_idx\n\
+    \  local parens_array_value_char_next_char_next_char_next_idx\n  local parens_array_value_char_prev_char_prev_char_prev_char\n\
+    \  local parens_array_value_char_next_char_next_char_next_char\n  local parens_array_value_char_prev_char_prev_char_prev_char_prev\n\
+    \  local parens_array_value_char_next_char_next_char_next_char_next\n", "  local\
+    \ parens=$1\n  local max_nesting=0\n  local curr_nesting=0\n  local parens_arr=($parens)\n\
+    \  for paren in \"${parens_arr[@]}\"; do\n    for ((i=0; i<${#paren}; i++)); do\n\
+    \      if [[ ${paren:$i:1} == \"(\" ]]; then\n        ((curr_nesting++))\n   \
+    \     if ((curr_nesting > max_nesting)); then\n          max_nesting=$curr_nesting\n\
+    \        fi\n      elif [[ ${paren:$i:1} == \")\" ]]; then\n        ((curr_nesting--))\n\
+    \      fi\n    done\n    echo \"\\\"$max_nesting\\\"\"\n    max_nesting=0\n  \
+    \  curr_nesting=0\n  done", "    local input_str=$1\n    local output_str=\"\"\
+    \n    local max_level=0\n    local cur_level=0\n    local cur_char=\"\"\n    local\
+    \ cur_group=\"\"\n    for (( i=0; i<${#input_str}; i++ )); do\n        cur_char=${input_str:$i:1}\n\
+    \        if [[ $cur_char == \"(\" ]]; then\n            (( cur_level++ ))\n  \
+    \          if (( cur_level > max_level )); then\n                max_level=$cur_level\n\
+    \            fi\n        elif [[ $cur_char == \")\" ]]; then\n            (( cur_level--\
+    \ ))\n        elif [[ $cur_char == \" \" ]]; then\n            output_str+=\"\\\
+    \"${max_level}\\\" \"\n            max_level=0\n            cur_level=0\n    \
+    \    fi\n    done\n    echo $output_str", "  local input=\"$1\"\n  local output=()\n\
+    \  local max_depth=0\n  local current_depth=0\n  local char\n  for (( i=0; i<${#input};\
+    \ i++ )); do\n    char=\"${input:$i:1}\"\n    if [[ \"$char\" == \"(\" ]]; then\n\
+    \      ((current_depth++))\n      ((max_depth = current_depth > max_depth ? current_depth\
+    \ : max_depth))\n    elif [[ \"$char\" == \")\" ]]; then\n      ((current_depth--))\n\
+    \    elif [[ \"$char\" == \" \" ]]; then\n      output+=(\"$max_depth\")\n   \
+    \   max_depth=0\n      current_depth=0\n    fi\n  done\n  output+=(\"$max_depth\"\
+    )\n  echo \"${output[@]}\"", "    local parens_str=$1\n    local parens_arr=($parens_str)\n\
+    \    local parens_arr_len=${#parens_arr[@]}\n    local parens_arr_idx=0\n    local\
+    \ parens_arr_idx_max=$((parens_arr_len - 1))\n    local parens_arr_idx_str\n \
+    \   local parens_arr_idx_str_len\n    local parens_arr_idx_str_idx\n    local\
+    \ parens_arr_idx_str_idx_max\n    local parens_arr_idx_str_idx_char\n    local\
+    \ parens_arr_idx_str_idx_char_prev\n    local parens_arr_idx_str_idx_char_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev\n    local parens_arr_idx_str_idx_char_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev\n    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev_prev\n  \
+    \  local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev\n\
+    \    local parens_arr_idx_str_idx_char_prev", "  local parens_str=\"$1\"\n  local\
+    \ parens_arr=()\n  local parens_arr_idx=0\n  local parens_stack=()\n  local parens_stack_idx=0\n\
+    \  local parens_max_depth=0\n  local parens_cur_depth=0\n  local parens_cur_char\n\
+    \  local parens_cur_char_idx\n  local parens_cur_char_idx_end=$((${#parens_str}\
+    \ - 1))\n  local parens_cur_char_idx_start=0\n  local parens_cur_char_idx_start_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev=0\n  local parens_cur_char_idx_start_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev=0\n  local parens_cur_char_idx_start_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev=0\n  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \  local parens_cur_char_idx_start_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \ ", "  local parens=$1\n  local parens_array=($parens)\n  local result=\"\"\n\
+    \  for paren in \"${parens_array[@]}\"; do\n    local max_level=0\n    local level=0\n\
+    \    for (( i=0; i<${#paren}; i++ )); do\n      if [[ \"${paren:$i:1}\" == \"\
+    (\" ]]; then\n        ((level++))\n        if ((level > max_level)); then\n  \
+    \        max_level=$level\n        fi\n      elif [[ \"${paren:$i:1}\" == \")\"\
+    \ ]]; then\n        ((level--))\n      fi\n    done\n    result=\"$result \\\"\
+    $max_level\\\"\"\n  done\n  echo \"[$result]\"", "  local parens=$1\n  local parens_arr=()\n\
+    \  local parens_arr_len=0\n  local i=0\n  local j=0\n  local k=0\n  local parens_len=0\n\
+    \  local parens_depth=0\n  local parens_depth_max=0\n  local parens_depth_max_str=\"\
+    \"\n  local parens_depth_max_arr=()\n  local parens_depth_max_arr_len=0\n  local\
+    \ parens_depth_max_arr_str=\"\"\n\n  # Split the input string into an array of\
+    \ strings separated by spaces.\n  IFS=' ' read -r -a parens_arr <<< \"$parens\"\
+    \n  parens_arr_len=${#parens_arr[@]}\n\n  # For each of the group, find the deepest\
+    \ level of nesting of parentheses.\n  for ((i=0; i<parens_arr_len; i++)); do\n\
+    \    parens_len=${#parens_arr[i]}\n    parens_depth=0\n    parens_depth_max=0\n\
+    \    parens_depth_max_str=\"\"\n    parens_depth_max_arr=()\n    parens_depth_max_arr_len=0\n\
+    \    parens_depth_max_arr_str=\"\"\n\n    for ((j=0; j<parens_len; j++)); do\n\
+    \      if [[ \"${parens_arr[i]:j:1}\" == \"(\" ]]; then\n        ((parens_depth++))\n\
+    \      elif [[ \"${parens_arr[i]:j:1}\" == \")\" ]]; then\n        ((parens_depth--))\n\
+    \      fi\n\n      if [[ $parens_depth -gt $parens_depth_max ]]; then\n      \
+    \  parens_depth_max=$parens_depth\n        parens_depth_max_str=\"$parens_depth_max\"\
+    \n      fi\n    done\n\n    # If the deepest level of nesting of parentheses is\
+    \ greater than 1,\n    # then split the string into an array of strings separated\
+    \ by commas.\n    if [[ $paren", "  local input=$1\n  local groups=($input)\n\
+    \  local output=()\n  for group in \"${groups[@]}\"; do\n    local max_nesting=0\n\
+    \    local nesting=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        nesting=$((nesting + 1))\n     \
+    \   if [[ $nesting -gt $max_nesting ]]; then\n          max_nesting=$nesting\n\
+    \        fi\n      elif [[ $char == \")\" ]]; then\n        nesting=$((nesting\
+    \ - 1))\n      fi\n    done\n    output+=(\"$max_nesting\")\n  done\n  echo \"\
+    ${output[@]}\"", "    local str=\"$1\"\n    local result=()\n    local max_depth=0\n\
+    \    local depth=0\n    local i=0\n    local c\n    for ((i=0; i<${#str}; i++));\
+    \ do\n        c=\"${str:$i:1}\"\n        if [[ \"$c\" == \"(\" ]]; then\n    \
+    \        ((depth++))\n            if ((depth > max_depth)); then\n           \
+    \     max_depth=$depth\n            fi\n        elif [[ \"$c\" == \")\" ]]; then\n\
+    \            ((depth--))\n        elif [[ \"$c\" == \" \" ]]; then\n         \
+    \   result+=(\"$max_depth\")\n            max_depth=0\n            depth=0\n \
+    \       fi\n    done\n    result+=(\"$max_depth\")\n    echo \"${result[@]}\"",
+  "  local input=$1\n  local output=()\n  for group in $input; do\n    local max_depth=0\n\
+    \    local depth=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((depth++))\n        if ((depth\
+    \ > max_depth)); then\n          max_depth=$depth\n        fi\n      elif [[ $char\
+    \ == \")\" ]]; then\n        ((depth--))\n      fi\n    done\n    output+=($max_depth)\n\
+    \  done\n  echo ${output[@]}", "    local parens_str=$1\n    local parens_arr=()\n\
+    \    local parens_arr_len=0\n    local parens_arr_idx=0\n    local parens_arr_idx_max=0\n\
+    \    local parens_arr_idx_max_prev=0\n    local parens_arr_idx_max_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev=0\n    local parens_arr_idx_max_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev=0\n    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev=0\n    local\
+    \ parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev=0\n    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=0\n\
+    \    local parens_arr_idx_max_prev_prev_prev_prev_prev_prev_prev_prev_prev_",
+  "  local input=$1\n  local output=()\n  local max_depth=0\n  local depth=0\n  local\
+    \ char\n  for (( i=0; i<${#input}; i++ )); do\n    char=${input:$i:1}\n    if\
+    \ [[ $char == \"(\" ]]; then\n      (( depth++ ))\n      if (( depth > max_depth\
+    \ )); then\n        max_depth=$depth\n      fi\n    elif [[ $char == \")\" ]];\
+    \ then\n      (( depth-- ))\n    elif [[ $char == \" \" ]]; then\n      output+=(\"\
+    $max_depth\")\n      max_depth=0\n      depth=0\n    fi\n  done\n  output+=(\"\
+    $max_depth\")\n  echo \"${output[@]}\"", "  local input=$1\n  local output=()\n\
+    \  local max_nesting_level=0\n  local current_nesting_level=0\n  for ((i=0; i<${#input};\
+    \ i++)); do\n    local char=${input:$i:1}\n    if [[ \"$char\" == \"(\" ]]; then\n\
+    \      ((current_nesting_level++))\n      if ((current_nesting_level > max_nesting_level));\
+    \ then\n        max_nesting_level=$current_nesting_level\n      fi\n    elif [[\
+    \ \"$char\" == \")\" ]]; then\n      ((current_nesting_level--))\n    elif [[\
+    \ \"$char\" == \" \" ]]; then\n      output+=(\"$max_nesting_level\")\n      max_nesting_level=0\n\
+    \      current_nesting_level=0\n    fi\n  done\n  output+=(\"$max_nesting_level\"\
+    )\n  echo \"${output[@]}\"", "  local input=\"$1\"\n  local output=()\n  local\
+    \ max_level=0\n  local level=0\n  local char\n  for (( i=0; i<${#input}; i++ ));\
+    \ do\n    char=\"${input:$i:1}\"\n    if [[ \"$char\" == \"(\" ]]; then\n    \
+    \  (( level++ ))\n      (( max_level = level > max_level ? level : max_level ))\n\
+    \    elif [[ \"$char\" == \")\" ]]; then\n      (( level-- ))\n    fi\n  done\n\
+    \  echo \"$max_level\"", "  local input=$1\n  local output=()\n  local max_depth=0\n\
+    \  local current_depth=0\n  for ((i=0; i<${#input}; i++)); do\n    local char=${input:$i:1}\n\
+    \    if [[ $char == \"(\" ]]; then\n      current_depth=$((current_depth + 1))\n\
+    \      if [[ $current_depth -gt $max_depth ]]; then\n        max_depth=$current_depth\n\
+    \      fi\n    elif [[ $char == \")\" ]]; then\n      current_depth=$((current_depth\
+    \ - 1))\n    elif [[ $char == \" \" ]]; then\n      output+=(\"\\\"$max_depth\\\
+    \"\")\n      max_depth=0\n      current_depth=0\n    fi\n  done\n  output+=(\"\
+    \\\"$max_depth\\\"\")\n  echo \"${output[@]}\"", "  local input=$1\n  local output=()\n\
+    \  for group in $input; do\n    local max_nesting=0\n    local nesting=0\n   \
+    \ for (( i=0; i<${#group}; i++ )); do\n      local char=${group:$i:1}\n      if\
+    \ [[ $char == \"(\" ]]; then\n        nesting=$((nesting+1))\n        if [[ $nesting\
+    \ -gt $max_nesting ]]; then\n          max_nesting=$nesting\n        fi\n    \
+    \  elif [[ $char == \")\" ]]; then\n        nesting=$((nesting-1))\n      fi\n\
+    \    done\n    output+=(\"\\\"$max_nesting\\\"\")\n  done\n  echo \"[${output[@]}]\"",
+  "    local input=$1\n    local output=\"\"\n    local max_nesting_level=0\n    local\
+    \ current_nesting_level=0\n    local i=0\n    local len=${#input}\n    local c=\"\
+    \"\n    local paren_count=0\n    local paren_count_array=()\n    local paren_count_array_index=0\n\
+    \    local paren_count_array_len=0\n    local paren_count_array_max_index=0\n\
+    \    local paren_count_array_max_value=0\n    local paren_count_array_max_index_array=()\n\
+    \    local paren_count_array_max_index_array_index=0\n    local paren_count_array_max_index_array_len=0\n\
+    \    local paren_count_array_max_index_array_max_index=0\n    local paren_count_array_max_index_array_max_value=0\n\
+    \    local paren_count_array_max_index_array_max_index_array=()\n    local paren_count_array_max_index_array_max_index_array_index=0\n\
+    \    local paren_count_array_max_index_array_max_index_array_len=0\n    local\
+    \ paren_count_array_max_index_array_max_index_array_max_index=0\n    local paren_count_array_max_index_array_max_index_array_max_value=0\n\
+    \    local paren_count_array_max_index_array_max_index_array_max_index_array=()\n\
+    \    local paren_count_array_max_index_array_max_index_array_max_index_array_index=0\n\
+    \    local paren_count_array_max_index_array_max_index_array_max_index_array_len=0\n\
+    \    local paren_count_array_max_index_array_max_index_array_max_index_array_max_index=0\n\
+    \    local paren_count_array_max_index_array_max_index_array_max_index_array_max_value=0\n\
+    \   ", "  local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_idx=0\n  local parens_arr_val\n  local parens_arr_val_len\n\
+    \  local parens_arr_val_idx\n  local parens_arr_val_char\n  local parens_arr_val_char_prev\n\
+    \  local parens_arr_val_char_next\n  local parens_arr_val_char_prev_parens_level\n\
+    \  local parens_arr_val_char_parens_level\n  local parens_arr_val_char_next_parens_level\n\
+    \  local parens_arr_val_char_parens_level_max\n  local parens_arr_val_char_parens_level_max_str\n\
+    \  local parens_arr_val_char_parens_level_max_str_arr\n  local parens_arr_val_char_parens_level_max_str_arr_len\n\
+    \  local parens_arr_val_char_parens_level_max_str_arr_idx\n  local parens_arr_val_char_parens_level_max_str_arr_val\n\
+    \  local parens_arr_val_char_parens_level_max_str_arr_val_len\n  local parens_arr_val_char_parens_level_max_str_arr_val_idx\n\
+    \  local parens_arr_val_char_parens_level_max_str_arr_val_char\n  local parens_arr_val_char_parens_level_max_str_arr_val_char_prev\n\
+    \  local parens_arr_val_char_parens_level_max_str_arr_val_char_next\n  local parens_arr_val_char_parens_level_max_str_arr_val_char_prev_parens_level\n\
+    \  local parens_arr_", "  local -a parens_array=()\n  local -a parens_stack=()\n\
+    \  local -a result_array=()\n  local -i max_depth=0\n  local -i depth=0\n  local\
+    \ -i i=0\n  local -i j=0\n  local -i k=0\n  local -i l=0\n  local -i m=0\n  local\
+    \ -i n=0\n  local -i p=0\n  local -i q=0\n  local -i r=0\n  local -i s=0\n  local\
+    \ -i t=0\n  local -i u=0\n  local -i v=0\n  local -i w=0\n  local -i x=0\n  local\
+    \ -i y=0\n  local -i z=0\n  local -i aa=0\n  local -i bb=0\n  local -i cc=0\n\
+    \  local -i dd=0\n  local -i ee=0\n  local -i ff=0\n  local -i gg=0\n  local -i\
+    \ hh=0\n  local -i ii=0\n  local -i jj=0\n  local -i kk=0\n  local -i ll=0\n \
+    \ local -i mm=0\n  local -i nn=0\n  local -i oo=0\n  local -i pp=0\n  local -i\
+    \ qq=0\n  local -i rr=0\n  local -i ss=0\n  local -i tt=0\n  local -i uu=0\n \
+    \ local -i vv=0\n  local -i ww=0\n  local -i xx=0\n  local -i yy=0\n  local -i\
+    \ zz=0\n  local -i aaa=0\n  local -i bbb=0\n  local -i ccc=0\n  local -i ddd=0\n\
+    \  local -i eee=0\n  local -i fff=0\n  local -i ggg=0\n  local -i hhh=0\n  local\
+    \ -i iii=0\n  local -i jjj=0\n  local -i kkk=0\n", "  local parens=$1\n  local\
+    \ parens_arr=($parens)\n  local result=()\n  for paren in \"${parens_arr[@]}\"\
+    ; do\n    local max_level=0\n    local level=0\n    for (( i=0; i<${#paren}; i++\
+    \ )); do\n      if [[ ${paren:$i:1} == \"(\" ]]; then\n        ((level++))\n \
+    \       if [[ $level -gt $max_level ]]; then\n          max_level=$level\n   \
+    \     fi\n      elif [[ ${paren:$i:1} == \")\" ]]; then\n        ((level--))\n\
+    \      fi\n    done\n    result+=(\"\\\"$max_level\\\"\")\n  done\n  echo \"${result[@]}\"",
+  "  local parens=$1\n  local parens_array=($parens)\n  local parens_array_len=${#parens_array[@]}\n\
+    \  local parens_array_idx=0\n  local parens_array_max_idx=$((parens_array_len\
+    \ - 1))\n  local parens_array_max_idx_str=$parens_array_max_idx\n  local parens_array_max_idx_str_len=${#parens_array_max_idx_str}\n\
+    \  local parens_array_max_idx_str_len_1=$((parens_array_max_idx_str_len - 1))\n\
+    \  local parens_array_max_idx_str_len_1_str=$parens_array_max_idx_str_len_1\n\
+    \  local parens_array_max_idx_str_len_1_str_len=${#parens_array_max_idx_str_len_1_str}\n\
+    \  local parens_array_max_idx_str_len_1_str_len_1=$((parens_array_max_idx_str_len_1_str_len\
+    \ - 1))\n  local parens_array_max_idx_str_len_1_str_len_1_str=$parens_array_max_idx_str_len_1_str_len_1\n\
+    \  local parens_array_max_idx_str_len_1_str_len_1_str_len=${#parens_array_max_idx_str_len_1_str_len_1_str}\n\
+    \  local parens_array_max_idx_str_len_1_str_len_1_str_len_1=$((parens_array_max_idx_str_len_1_str_len_1_str_len\
+    \ - 1))\n  local parens_array_max_idx_str_len_1_str_len_1_str_len_1_str=$parens_array_max_idx_",
+  "  local parens_str=\"$1\"\n  local parens_arr\n  IFS=' ' read -r -a parens_arr\
+    \ <<< \"$parens_str\"\n  local parens_arr_len=${#parens_arr[@]}\n  local max_nesting_arr=()\n\
+    \  for ((i=0; i<parens_arr_len; i++)); do\n    local parens_group=\"${parens_arr[$i]}\"\
+    \n    local parens_group_len=${#parens_group}\n    local max_nesting=0\n    local\
+    \ nesting=0\n    for ((j=0; j<parens_group_len; j++)); do\n      local char=\"\
+    ${parens_group:$j:1}\"\n      if [[ \"$char\" == \"(\" ]]; then\n        ((nesting++))\n\
+    \        if ((nesting > max_nesting)); then\n          max_nesting=$nesting\n\
+    \        fi\n      elif [[ \"$char\" == \")\" ]]; then\n        ((nesting--))\n\
+    \      fi\n    done\n    max_nesting_arr+=(\"$max_nesting\")\n  done\n  echo \"\
+    ${max_nesting_arr[@]}\"", "  local str=$1\n  local arr=()\n  local i=0\n  local\
+    \ max_depth=0\n  local depth=0\n  local c\n  for ((i=0; i<${#str}; i++)); do\n\
+    \    c=${str:$i:1}\n    if [[ $c == \"(\" ]]; then\n      ((depth++))\n      ((max_depth\
+    \ = depth > max_depth ? depth : max_depth))\n    elif [[ $c == \")\" ]]; then\n\
+    \      ((depth--))\n    elif [[ $c == \" \" ]]; then\n      arr+=(\"$max_depth\"\
+    )\n      max_depth=0\n    fi\n  done\n  arr+=(\"$max_depth\")\n  echo \"${arr[@]}\"",
+  "  local parens=$1\n  local max_nesting=0\n  local nesting=0\n  local output=()\n\
+    \  for ((i=0; i<${#parens}; i++)); do\n    local char=${parens:$i:1}\n    if [[\
+    \ $char == \"(\" ]]; then\n      ((nesting++))\n      if ((nesting > max_nesting));\
+    \ then\n        max_nesting=$nesting\n      fi\n    elif [[ $char == \")\" ]];\
+    \ then\n      ((nesting--))\n    elif [[ $char == \" \" ]]; then\n      output+=(\"\
+    \\\"$max_nesting\\\"\")\n      max_nesting=0\n      nesting=0\n    fi\n  done\n\
+    \  output+=(\"\\\"$max_nesting\\\"\")\n  echo \"${output[@]}\"", "  local parens_str=$1\n\
+    \  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local max_nesting_arr=()\n  for ((i=0; i<parens_arr_len; i++)); do\n    local\
+    \ parens=${parens_arr[$i]}\n    local parens_len=${#parens}\n    local max_nesting=0\n\
+    \    local nesting=0\n    for ((j=0; j<parens_len; j++)); do\n      local char=${parens:$j:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((nesting++))\n        if [[ $nesting\
+    \ -gt $max_nesting ]]; then\n          max_nesting=$nesting\n        fi\n    \
+    \  elif [[ $char == \")\" ]]; then\n        ((nesting--))\n      fi\n    done\n\
+    \    max_nesting_arr+=($max_nesting)\n  done\n  echo ${max_nesting_arr[@]}", " \
+    \ local input=$1\n  local result=()\n  local max_nesting=0\n  local current_nesting=0\n\
+    \  local char\n  for (( i=0; i<${#input}; i++ )); do\n    char=${input:$i:1}\n\
+    \    if [[ $char == \"(\" ]]; then\n      ((current_nesting++))\n      if ((current_nesting\
+    \ > max_nesting)); then\n        max_nesting=$current_nesting\n      fi\n    elif\
+    \ [[ $char == \")\" ]]; then\n      ((current_nesting--))\n    elif [[ $char ==\
+    \ \" \" ]]; then\n      result+=(\"$max_nesting\")\n      max_nesting=0\n    \
+    \  current_nesting=0\n    fi\n  done\n  result+=(\"$max_nesting\")\n  echo \"\
+    ${result[@]}\"", "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local\
+    \ max_nesting_arr=()\n  for parens in \"${parens_arr[@]}\"; do\n    local max_nesting=0\n\
+    \    local nesting=0\n    for ((i=0; i<${#parens}; i++)); do\n      local char=${parens:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((nesting++))\n        if [[ $nesting\
+    \ -gt $max_nesting ]]; then\n          max_nesting=$nesting\n        fi\n    \
+    \  elif [[ $char == \")\" ]]; then\n        ((nesting--))\n      fi\n    done\n\
+    \    max_nesting_arr+=(\"$max_nesting\")\n  done\n  echo \"${max_nesting_arr[@]}\"",
+  "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local max_nested_parens=()\n  for ((i=0; i<parens_arr_len; i++)); do\n    local\
+    \ parens=${parens_arr[$i]}\n    local parens_len=${#parens}\n    local stack=()\n\
+    \    local max_nested_parens_in_parens=0\n    for ((j=0; j<parens_len; j++));\
+    \ do\n      local char=${parens:$j:1}\n      if [[ $char == \"(\" ]]; then\n \
+    \       stack+=($char)\n      elif [[ $char == \")\" ]]; then\n        stack+=($char)\n\
+    \        local stack_len=${#stack[@]}\n        local stack_len_minus_one=$((stack_len\
+    \ - 1))\n        local last_char=${stack[$stack_len_minus_one]}\n        local\
+    \ second_last_char=${stack[$((stack_len_minus_one - 1))]}\n        if [[ $last_char\
+    \ == \")\" && $second_last_char == \"(\" ]]; then\n          unset stack[$stack_len_minus_one]\n\
+    \          unset stack[$((stack_len_minus_one - 1))]\n          local stack_len=${#stack[@]}\n\
+    \          if [[ $stack_len -gt $max_nested_parens_in_parens ]]; then\n      \
+    \      max_nested_parens_in_parens=$stack_len\n          fi\n        fi\n    \
+    \  fi\n    done\n    max_nested_parens+=($max_nested_parens_in_parens)\n  done\n\
+    \  echo ${max_nested_parens[@]}", "  local parens=\"$1\"\n  local max_depth=0\n\
+    \  local curr_depth=0\n  local output=()\n  for ((i=0; i<${#parens}; i++)); do\n\
+    \    local char=\"${parens:$i:1}\"\n    if [[ \"$char\" == \"(\" ]]; then\n  \
+    \    ((curr_depth++))\n      if ((curr_depth > max_depth)); then\n        max_depth=$curr_depth\n\
+    \      fi\n    elif [[ \"$char\" == \")\" ]]; then\n      ((curr_depth--))\n \
+    \   elif [[ \"$char\" == \" \" ]]; then\n      output+=(\"$max_depth\")\n    \
+    \  max_depth=0\n      curr_depth=0\n    fi\n  done\n  output+=(\"$max_depth\"\
+    )\n  echo \"${output[@]}\"", "  local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_max_len=0\n  local\
+    \ parens_arr_max_idx=0\n  local parens_arr_max_val=0\n  local parens_arr_max_val_str=0\n\
+    \  local parens_arr_max_val_str_len=0\n  local parens_arr_max_val_str_len_max=0\n\
+    \  local parens_arr_max_val_str_len_max_str=0\n  local parens_arr_max_val_str_len_max_str_len=0\n\
+    \  local parens_arr_max_val_str_len_max_str_len_max=0\n  local parens_arr_max_val_str_len_max_str_len_max_str=0\n\
+    \  local parens_arr_max_val_str_len_max_str_len_max_str_len=0\n  local parens_arr_max_val_str_len_max_str_len_max_str_len_max=0\n\
+    \  local parens_arr_max_val_str_len_max_str_len_max_str_len_max_str=0\n  local\
+    \ parens_arr_max_val_str_len_max_str_len_max_str_len_max_str_len=0\n  local parens_arr_max_val_str_len_max_str_len_max_str_len_max_str_len_max=0\n\
+    \  local parens_arr_max_val_str_len_max_str_len_max_str_len_max_str_len_max_str=0\n\
+    \  local parens_arr_max_val_str_len_max_str_len_max_str_len_max_str_len_max_str_len=0\n\
+    \  local parens_arr_max_val_str_len", "  local parens_str=\"$1\"\n  local parens_arr=($parens_str)\n\
+    \  local parens_arr_len=${#parens_arr[@]}\n  local parens_arr_str=\"\"\n  local\
+    \ max_nesting=0\n  local cur_nesting=0\n  local i=0\n  local j=0\n  local parens_arr_str_len=0\n\
+    \  local parens_arr_str_len_minus_one=0\n  local cur_char=\"\"\n  local prev_char=\"\
+    \"\n  local cur_parens_str=\"\"\n  local cur_parens_str_len=0\n  local cur_parens_str_len_minus_one=0\n\
+    \  local cur_parens_str_last_char=\"\"\n  local cur_parens_str_second_last_char=\"\
+    \"\n  local cur_parens_str_third_last_char=\"\"\n  local cur_parens_str_fourth_last_char=\"\
+    \"\n  local cur_parens_str_fifth_last_char=\"\"\n  local cur_parens_str_sixth_last_char=\"\
+    \"\n  local cur_parens_str_seventh_last_char=\"\"\n  local cur_parens_str_eighth_last_char=\"\
+    \"\n  local cur_parens_str_ninth_last_char=\"\"\n  local cur_parens_str_tenth_last_char=\"\
+    \"\n  local cur_parens_str_eleventh_last_char=\"\"\n  local cur_parens_str_twelfth_last_char=\"\
+    \"\n  local cur_parens_str_thirteenth_last_char=\"\"\n  local cur_parens_str_fourteenth_last_char=\"\
+    \"\n  local cur_parens_str_fifteenth_last_char=\"\"\n  local cur_parens_str_sixteenth_last_char=\"\
+    \"\n  local cur_parens_str_seventeenth_last_char=\"\"\n  local cur_parens_str_eighteenth_last_char=\"\
+    \"\n  local cur_parens_str_nineteenth_last_char=\"\"\n  local cur_parens_str_twentieth_last_char=\"\
+    \"\n ", "  local input_string=$1\n  local output_string=\"\"\n  local current_level=0\n\
+    \  local max_level=0\n  for (( i=0; i<${#input_string}; i++ )); do\n    local\
+    \ char=${input_string:$i:1}\n    if [ \"$char\" == \"(\" ]; then\n      ((current_level++))\n\
+    \      if [ $current_level -gt $max_level ]; then\n        max_level=$current_level\n\
+    \      fi\n    elif [ \"$char\" == \")\" ]; then\n      ((current_level--))\n\
+    \    fi\n  done\n  echo $max_level", "  local input=\"$1\"\n  local output=()\n\
+    \  for group in $input; do\n    local max_level=0\n    local level=0\n    for\
+    \ ((i=0; i<${#group}; i++)); do\n      if [[ \"${group:$i:1}\" == \"(\" ]]; then\n\
+    \        ((level++))\n        if ((level > max_level)); then\n          max_level=$level\n\
+    \        fi\n      elif [[ \"${group:$i:1}\" == \")\" ]]; then\n        ((level--))\n\
+    \      fi\n    done\n    output+=(\"\\\"$max_level\\\"\")\n  done\n  echo \"${output[@]}\"",
+  "  local input=$1\n  local output=()\n  local max_depth=0\n  local depth=0\n  local\
+    \ char\n  local i\n  for ((i=0; i<${#input}; i++)); do\n    char=${input:$i:1}\n\
+    \    if [[ \"$char\" == \"(\" ]]; then\n      ((depth++))\n      if ((depth >\
+    \ max_depth)); then\n        max_depth=$depth\n      fi\n    elif [[ \"$char\"\
+    \ == \")\" ]]; then\n      ((depth--))\n    fi\n    if [[ \"$char\" == \" \" ]];\
+    \ then\n      output+=(\"$max_depth\")\n      max_depth=0\n      depth=0\n   \
+    \ fi\n  done\n  output+=(\"$max_depth\")\n  echo \"${output[@]}\"", "  local parens_str=\"\
+    $1\"\n  local parens_arr=()\n  local parens_arr_idx=0\n  local parens_arr_len=0\n\
+    \  local parens_str_len=0\n  local parens_str_idx=0\n  local parens_str_char=''\n\
+    \  local parens_str_char_prev=''\n  local parens_str_char_next=''\n  local parens_str_char_prev_prev=''\n\
+    \  local parens_str_char_next_next=''\n  local parens_str_char_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next=''\n  local parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev=''\n\
+    \  local parens_str_char_next_next_next_next_next_next_next_next_next=''\n  local\
+    \ parens_str_char_prev_prev_prev_prev_prev_prev_prev_prev_prev_prev=''", "  local\
+    \ str=\"$1\"\n  local parens_str\n  local parens_level\n  local parens_levels\n\
+    \  local parens_max_level\n  local parens_max_levels\n  local parens_max_levels_str\n\
+    \  local parens_max_levels_str_json\n  local parens_max_levels_str_json_escaped\n\
+    \  local parens_max_levels_str_json_escaped_quoted\n  local parens_max_levels_str_json_escaped_quoted_comma_separated\n\
+    \  local parens_max_levels_str_json_escaped_quoted_comma_separated_bracketed\n\
+    \  local parens_max_levels_str_json_escaped_quoted_comma_separated_bracketed_escaped\n\
+    \n  # Split the input string into an array of strings, each representing a group\
+    \ of nested parentheses.\n  IFS=' ' read -r -a parens_str <<< \"$str\"\n\n  #\
+    \ For each of the group, compute the deepest level of nesting of parentheses.\n\
+    \  for parens_str in \"${parens_str[@]}\"; do\n    parens_level=0\n    parens_max_level=0\n\
+    \    for ((i=0; i<${#parens_str}; i++)); do\n      if [[ \"${parens_str:$i:1}\"\
+    \ == \"(\" ]]; then\n        ((parens_level++))\n        if ((parens_level > parens_max_level));\
+    \ then\n          parens_max_level=$parens_level\n        fi\n      elif [[ \"\
+    ${parens_str:$i:1}\" == \")\" ]]; then\n        ((parens_level--))\n      fi\n\
+    \    done\n    parens_max_levels+=($parens_max_level)\n  done\n\n  # Convert the\
+    \ array of integers to a string.\n  parens_max_levels_str=\"${parens_max_levels[@]}\"\
+    \n\n  # Convert the string to a JSON array.\n  parens_max_levels_str_json=\"[",
+  "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local parens_arr_max_len=0\n  local parens_arr_max_idx=0\n  local parens_arr_max_val=0\n\
+    \  local parens_arr_max_str=\"\"\n  local parens_arr_max_str_len=0\n  local parens_arr_max_str_idx=0\n\
+    \  local parens_arr_max_str_val=0\n  local parens_arr_max_str_val_len=0\n  local\
+    \ parens_arr_max_str_val_idx=0\n  local parens_arr_max_str_val_val=0\n  local\
+    \ parens_arr_max_str_val_val_len=0\n  local parens_arr_max_str_val_val_idx=0\n\
+    \  local parens_arr_max_str_val_val_val=0\n  local parens_arr_max_str_val_val_val_len=0\n\
+    \  local parens_arr_max_str_val_val_val_idx=0\n  local parens_arr_max_str_val_val_val_val=0\n\
+    \  local parens_arr_max_str_val_val_val_val_len=0\n  local parens_arr_max_str_val_val_val_val_idx=0\n\
+    \  local parens_arr_max_str_val_val_val_val_val=0\n  local parens_arr_max_str_val_val_val_val_val_len=0\n\
+    \  local parens_arr_max_str_val_val_val_val_val_idx=0\n  local parens_arr_max_str_val_val_val_val_val_val=0\n\
+    \  local parens_arr_max_str_val_val_val_val_val_val_len=", "  local parens_string=$1\n\
+    \  local parens_array=($parens_string)\n  local parens_array_len=${#parens_array[@]}\n\
+    \  local parens_array_idx=0\n  local parens_array_max_nesting=0\n  local parens_array_max_nesting_idx=0\n\
+    \  local parens_array_nesting=0\n  local parens_array_nesting_idx=0\n  local parens_array_nesting_max=0\n\
+    \  local parens_array_nesting_max_idx=0\n  local parens_array_nesting_max_idx_len=0\n\
+    \  local parens_array_nesting_max_idx_len_idx=0\n  local parens_array_nesting_max_idx_len_idx_len=0\n\
+    \  local parens_array_nesting_max_idx_len_idx_len_idx=0\n  local parens_array_nesting_max_idx_len_idx_len_idx_len=0\n\
+    \  local parens_array_nesting_max_idx_len_idx_len_idx_len_idx=0\n  local parens_array_nesting_max_idx_len_idx_len_idx_len_idx_len=0\n\
+    \  local parens_array_nesting_max_idx_len_idx_len_idx_len_idx_len_idx=0\n  local\
+    \ parens_array_nesting_max_idx_len_idx_len_idx_len_idx_len_idx_len=0\n  local\
+    \ parens_array_nesting_max_idx_len_idx_len_idx_len_idx_len_idx_len_idx=0\n  local\
+    \ parens_array_nesting_max_idx_len_idx_len_idx_len_idx_len_idx_len_idx_len=",
+  "    local input=$1\n    local output=()\n    for group in $input; do\n        local\
+    \ max_level=0\n        local level=0\n        for ((i=0; i<${#group}; i++)); do\n\
+    \            local char=${group:$i:1}\n            if [[ $char == \"(\" ]]; then\n\
+    \                level=$((level+1))\n            elif [[ $char == \")\" ]]; then\n\
+    \                level=$((level-1))\n            fi\n            if [[ $level\
+    \ -gt $max_level ]]; then\n                max_level=$level\n            fi\n\
+    \        done\n        output+=(\"\\\"$max_level\\\"\")\n    done\n    echo \"\
+    [${output[@]}]\"", "    local input=$1\n    local output=()\n    for group in\
+    \ $input; do\n        local max_level=0\n        local level=0\n        for ((i=0;\
+    \ i<${#group}; i++)); do\n            if [[ ${group:$i:1} == \"(\" ]]; then\n\
+    \                ((level++))\n                if ((level > max_level)); then\n\
+    \                    max_level=$level\n                fi\n            elif [[\
+    \ ${group:$i:1} == \")\" ]]; then\n                ((level--))\n            fi\n\
+    \        done\n        output+=(\"\\\"$max_level\\\"\")\n    done\n    echo \"\
+    [${output[@]}]\"", "  local input=$1\n  local output=()\n  local max_nesting=0\n\
+    \  local nesting=0\n  local i\n  for ((i=0; i<${#input}; i++)); do\n    local\
+    \ c=${input:$i:1}\n    if [[ $c == \"(\" ]]; then\n      ((nesting++))\n     \
+    \ ((max_nesting = max_nesting > nesting ? max_nesting : nesting))\n    elif [[\
+    \ $c == \")\" ]]; then\n      ((nesting--))\n    elif [[ $c == \" \" ]]; then\n\
+    \      output+=(\"\\\"$max_nesting\\\"\")\n      max_nesting=0\n      nesting=0\n\
+    \    fi\n  done\n  output+=(\"\\\"$max_nesting\\\"\")\n  echo \"${output[@]}\"",
+  "  local parens_str=$1\n  local parens_arr=()\n  local parens_arr_idx=0\n  local\
+    \ parens_arr_len=0\n  local parens_str_len=0\n  local parens_str_idx=0\n  local\
+    \ parens_str_char=\"\"\n  local parens_str_char_prev=\"\"\n  local parens_str_char_next=\"\
+    \"\n  local parens_str_char_next_next=\"\"\n  local parens_str_char_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next=\"\"\n  local parens_str_char_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next=\"\"\n  local parens_str_char_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next=\"\"\n  local\
+    \ parens_str_char_next_next_next_next_next_next_next_next_next=\"\"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_next_next_next_next_next_next_next_next_next_next_next_next_next_next=\"\
+    \"\n  local parens_str_char_next_", "  local input=\"$1\"\n  local output=()\n\
+    \  local max_nesting=0\n  local nesting=0\n  local i=0\n  local c=''\n  local\
+    \ len=${#input}\n  for ((i=0; i<len; i++)); do\n    c=${input:$i:1}\n    if [[\
+    \ \"$c\" == \"(\" ]]; then\n      ((nesting++))\n      if ((nesting > max_nesting));\
+    \ then\n        max_nesting=$nesting\n      fi\n    elif [[ \"$c\" == \")\" ]];\
+    \ then\n      ((nesting--))\n    fi\n    if [[ \"$c\" == \" \" ]]; then\n    \
+    \  output+=(\"$max_nesting\")\n      max_nesting=0\n      nesting=0\n    fi\n\
+    \  done\n  output+=(\"$max_nesting\")\n  echo \"${output[@]}\"", "  local parens=$1\n\
+    \  local result=()\n  for paren in $parens; do\n    local max_level=0\n    local\
+    \ level=0\n    for ((i=0; i<${#paren}; i++)); do\n      if [[ ${paren:$i:1} ==\
+    \ \"(\" ]]; then\n        ((level++))\n        if ((level > max_level)); then\n\
+    \          max_level=$level\n        fi\n      elif [[ ${paren:$i:1} == \")\"\
+    \ ]]; then\n        ((level--))\n      fi\n    done\n    result+=(\"\\\"$max_level\\\
+    \"\")\n  done\n  echo \"[${result[@]}]\"", "  local parens_str=\"$1\"\n  local\
+    \ parens_arr=()\n  local max_nesting=0\n  local nesting=0\n  local parens_str_len=${#parens_str}\n\
+    \  for ((i=0; i<parens_str_len; i++)); do\n    local c=${parens_str:i:1}\n   \
+    \ if [[ \"$c\" == \"(\" ]]; then\n      nesting=$((nesting + 1))\n      if [[\
+    \ \"$nesting\" -gt \"$max_nesting\" ]]; then\n        max_nesting=$nesting\n \
+    \     fi\n    elif [[ \"$c\" == \")\" ]]; then\n      nesting=$((nesting - 1))\n\
+    \    elif [[ \"$c\" == \" \" ]]; then\n      parens_arr+=(\"$max_nesting\")\n\
+    \      max_nesting=0\n      nesting=0\n    fi\n  done\n  parens_arr+=(\"$max_nesting\"\
+    )\n  echo \"${parens_arr[@]}\"", "  local input=$1\n  local output=()\n  local\
+    \ max_depth=0\n  local depth=0\n  local i=0\n  local c=''\n  local len=${#input}\n\
+    \  for ((i=0; i<len; i++)); do\n    c=${input:$i:1}\n    if [[ \"$c\" == \"(\"\
+    \ ]]; then\n      ((depth++))\n      if ((depth > max_depth)); then\n        max_depth=$depth\n\
+    \      fi\n    elif [[ \"$c\" == \")\" ]]; then\n      ((depth--))\n    elif [[\
+    \ \"$c\" == \" \" ]]; then\n      output+=(\"\\\"$max_depth\\\"\")\n      max_depth=0\n\
+    \      depth=0\n    fi\n  done\n  output+=(\"\\\"$max_depth\\\"\")\n  echo \"\
+    ${output[@]}\"", "  local input_str=$1\n  local output_str=\"\"\n  local max_depth=0\n\
+    \  local depth=0\n  local i=0\n  local len=${#input_str}\n  while [ $i -lt $len\
+    \ ]; do\n    local char=${input_str:$i:1}\n    if [ \"$char\" == \"(\" ]; then\n\
+    \      ((depth++))\n      if [ $depth -gt $max_depth ]; then\n        max_depth=$depth\n\
+    \      fi\n    elif [ \"$char\" == \")\" ]; then\n      ((depth--))\n    fi\n\
+    \    ((i++))\n  done\n  echo $max_depth", "  local input_str=$1\n  local output_str=\"\
+    \"\n  local max_nesting=0\n  local nesting=0\n  local i=0\n  local len=${#input_str}\n\
+    \  while [ $i -lt $len ]; do\n    local char=${input_str:$i:1}\n    if [ \"$char\"\
+    \ == \"(\" ]; then\n      nesting=$((nesting + 1))\n      if [ $nesting -gt $max_nesting\
+    \ ]; then\n        max_nesting=$nesting\n      fi\n    elif [ \"$char\" == \"\
+    )\" ]; then\n      nesting=$((nesting - 1))\n    fi\n    i=$((i + 1))\n  done\n\
+    \  echo \"$max_nesting\"", "  local parens=$1\n  local parens_array=($parens)\n\
+    \  local parens_array_len=${#parens_array[@]}\n  local parens_array_idx=0\n  local\
+    \ parens_array_idx_max=$((parens_array_len - 1))\n  local parens_array_idx_str\n\
+    \  local parens_array_idx_str_len\n  local parens_array_idx_str_len_max\n  local\
+    \ parens_array_idx_str_len_max_prev\n  local parens_array_idx_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len\n  local parens_array_idx_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev\n  local parens_array_idx_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len\n  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str_len_max_prev_str_len_max\n\
+    \  local parens_array_idx_str_len_max_prev_str_len_max_prev_str", "  local input_string=$1\n\
+    \  local output_array=()\n  local current_level=0\n  local max_level=0\n  for\
+    \ (( i=0; i<${#input_string}; i++ )); do\n    if [[ ${input_string:$i:1} == \"\
+    (\" ]]; then\n      ((current_level++))\n      if ((current_level > max_level));\
+    \ then\n        max_level=$current_level\n      fi\n    elif [[ ${input_string:$i:1}\
+    \ == \")\" ]]; then\n      ((current_level--))\n    fi\n  done\n  echo $max_level",
+  "  local input=$1\n  local output=()\n  for group in $input; do\n    local max_level=0\n\
+    \    local level=0\n    for ((i=0; i<${#group}; i++)); do\n      local char=${group:$i:1}\n\
+    \      if [[ $char == \"(\" ]]; then\n        ((level++))\n        if [[ $level\
+    \ -gt $max_level ]]; then\n          max_level=$level\n        fi\n      elif\
+    \ [[ $char == \")\" ]]; then\n        ((level--))\n      fi\n    done\n    output+=(\"\
+    \\\"$max_level\\\"\")\n  done\n  echo \"[${output[@]}]\"", "    local parens=$1\n\
+    \    local paren_groups=($parens)\n    local paren_group\n    local paren_group_len\n\
+    \    local paren_group_max_depth\n    local paren_group_depth\n    local paren_group_char\n\
+    \    local paren_group_char_idx\n    local paren_group_char_idx_max\n    local\
+    \ paren_group_char_idx_max_depth\n    local paren_group_char_idx_depth\n    local\
+    \ paren_group_char_idx_depth_stack\n    local paren_group_char_idx_depth_stack_len\n\
+    \    local paren_group_char_idx_depth_stack_top\n    local paren_group_char_idx_depth_stack_top_depth\n\
+    \    local paren_group_char_idx_depth_stack_top_idx\n    local paren_group_char_idx_depth_stack_top_idx_depth\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack\n    local paren_group_char_idx_depth_stack_top_idx_depth_stack_len\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top\n    local\
+    \ paren_group_char_idx_depth_stack_top_idx_depth_stack_top_depth\n    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top_idx\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top_idx_depth\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top_idx_depth_stack\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top_idx_depth_stack_len\n\
+    \    local paren_group_char_idx_depth_stack_top_idx_depth_stack_top_idx_depth_stack_",
+  "    local input=$1\n    local output=()\n    local max_nesting=0\n    local current_nesting=0\n\
+    \    local current_char\n    local current_group=\"\"\n    for (( i=0; i<${#input};\
+    \ i++ )); do\n        current_char=${input:$i:1}\n        if [[ \"$current_char\"\
+    \ == \"(\" ]]; then\n            ((current_nesting++))\n            if ((current_nesting\
+    \ > max_nesting)); then\n                max_nesting=$current_nesting\n      \
+    \      fi\n        elif [[ \"$current_char\" == \")\" ]]; then\n            ((current_nesting--))\n\
+    \        elif [[ \"$current_char\" == \" \" ]]; then\n            output+=(\"\
+    $max_nesting\")\n            max_nesting=0\n            current_nesting=0\n  \
+    \      fi\n    done\n    echo \"${output[@]}\"", "    local input=$1\n    local\
+    \ output=()\n    for group in $input; do\n        local max_depth=0\n        local\
+    \ depth=0\n        for (( i=0; i<${#group}; i++ )); do\n            local char=${group:$i:1}\n\
+    \            if [[ $char == \"(\" ]]; then\n                (( depth++ ))\n  \
+    \              if (( depth > max_depth )); then\n                    max_depth=$depth\n\
+    \                fi\n            elif [[ $char == \")\" ]]; then\n           \
+    \     (( depth-- ))\n            fi\n        done\n        output+=(\"\\\"$max_depth\\\
+    \"\")\n    done\n    echo \"[${output[@]}]\"", "    local input=$1\n    local\
+    \ output=()\n    for group in $input; do\n        local max_nesting=0\n      \
+    \  local curr_nesting=0\n        for ((i=0; i<${#group}; i++)); do\n         \
+    \   if [[ ${group:$i:1} == \"(\" ]]; then\n                ((curr_nesting++))\n\
+    \                if ((curr_nesting > max_nesting)); then\n                   \
+    \ max_nesting=$curr_nesting\n                fi\n            elif [[ ${group:$i:1}\
+    \ == \")\" ]]; then\n                ((curr_nesting--))\n            fi\n    \
+    \    done\n        output+=(\"\\\"$max_nesting\\\"\")\n    done\n    echo \"[${output[@]}]\"",
+  "  local parens_str=$1\n  local parens_arr=($parens_str)\n  local parens_arr_len=${#parens_arr[@]}\n\
+    \  local max_nesting_arr=()\n  for ((i=0; i<$parens_arr_len; i++)); do\n    local\
+    \ parens=${parens_arr[$i]}\n    local parens_len=${#parens}\n    local max_nesting=0\n\
+    \    local nesting=0\n    for ((j=0; j<$parens_len; j++)); do\n      local char=${parens:$j:1}\n\
+    \      if [ \"$char\" == \"(\" ]; then\n        nesting=$((nesting+1))\n     \
+    \   if [ \"$nesting\" -gt \"$max_nesting\" ]; then\n          max_nesting=$nesting\n\
+    \        fi\n      elif [ \"$char\" == \")\" ]; then\n        nesting=$((nesting-1))\n\
+    \      fi\n    done\n    max_nesting_arr+=($max_nesting)\n  done\n  echo ${max_nesting_arr[@]}"]
+stop_tokens:
+- "\n}"
