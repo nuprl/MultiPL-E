@@ -1,3 +1,7 @@
+from typing import Dict, NamedTuple
+import swift_category_data
+import racket_category_data
+
 # Classifications in progress
 # These are four overall categories, but we aren't going to be stuck with that.
 # Let's make this a JSON file that maps different error categories in languages to a single category
@@ -27,7 +31,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["list index too large"],
+    "Racket": ["list_index_too_large"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -39,12 +43,12 @@ RUNTIME = [
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
-    "Racket": ["division by zero"]
+    "Racket": ["division_by_0"]
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
     "Swift": ["Timeout"],
-    "Python": ["RecursionError"]
+    "Python": ["RecursionError"],
   }
 ]
 
@@ -70,7 +74,7 @@ STATIC = [
       "CompileError-TypeCheck-CallingNonFunctionType",
       "CompileError-InvalidSyntax"
     ],
-    "Racket": ["unbound identifier"]
+    "Racket": ["unbound_identifier"]
   },
   {
     "Theme": "MissingReturn",
@@ -91,7 +95,7 @@ STATIC = [
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
-    "Racket": ["let: duplicate identifier"], 
+    "Racket": ["let_duplicate_identifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
   }
 ]
@@ -120,7 +124,7 @@ TYPE = [
       "CompileError-TypeMismatch-CollectionAndInner",
       "CompileError-TypeMismatch-Else"
     ],
-    "Racket": ["contract violation"]
+    "Racket": ["contract_violation"]
   }
   
 ]
@@ -152,6 +156,7 @@ MODEL = [
   {
     "Theme": "OutOfTokens",
     "C#": ["SyntaxError"],
+    "Python" : ["SyntaxError"],
     "Racket": ["bracket or brace not matched", "double-quotes not matched"],
     "Swift": [
       "CompileError-RanOutOfTokens", 
@@ -162,10 +167,35 @@ MODEL = [
   {
     "Theme": "ExceptionInGeneratedCode", 
     "C#": ["NotImplementedException"],
-    "Python": ["NotImplementedError"]
+    "Python": ["NotImplementedError"],
+    "Swift": [],
+    # "Racket": [] # TODO(yt)
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": []
+    "Racket": [],
+    "Swift": []
   }
 ]
+
+
+
+
+class CategoryInfo(NamedTuple):
+  name: str
+  description: str
+  count: int
+  total_failures: int
+
+def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
+  codes: list[str] = [code for g in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL] 
+                           for theme in g 
+                           for code in (theme[lang_module.LANG_NAME] if lang_module.LANG_NAME in theme else [])]
+  # Verify each code appears only once
+  assert len(codes) == len(set(codes))
+
+  return dict((code, CategoryInfo(code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for code in codes)
+
+SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
+RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
+# print(RACKET_CODES_DATA) 
