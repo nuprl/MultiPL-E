@@ -135,7 +135,7 @@ def non_optional_unwrapped(exit_code: int, status: str, stderr: str, stdout: str
 
 return_type_error = match_type_error_re(r"error: cannot convert return expression of type (.*) to return type (.*)")
 argument_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
-closure_result_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to expected argument type (.*)")
+closure_result_type_error = match_type_error_re(r"error: cannot convert value of type (.*) to closure result type (.*)")
 
 def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: no exact matches in call to" in stderr, None
@@ -143,8 +143,8 @@ def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout:
 def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: result values in '? :' expression have mismatching types" in stderr, None # TODO
 
-bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type ('Int') and ('Double')") # TODO
-pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)") # TODO
+bin_op_type_error = match_type_error_re(r"error: binary operator '-' cannot be applied to operands of type (.*) and (.*)")
+pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
 
 def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     markers = [
@@ -225,7 +225,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
-    ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
+    ('CompileError-BinOpTypeError', ('Type error when using a binary operator', 
         f_and(compile_error_category, bin_op_type_error)
     )),
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
