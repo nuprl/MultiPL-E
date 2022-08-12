@@ -41,7 +41,11 @@ def match_re(re_str: str) -> Callable[[int, str, str, str, str], Tuple[bool, Any
             return True, None
     return the_predicate
 
+GATHERED_TYPE_ERROR_RES = set()
 def match_type_error_re(re_str: str) -> Callable[[int, str, str, str, str], Tuple[bool, Any]]:
+    global GATHERED_TYPE_ERROR_RES
+    GATHERED_TYPE_ERROR_RES.add(re_str)
+
     the_re = re.compile(re_str)
     def the_predicate(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
         m = the_re.search(stderr)
@@ -205,7 +209,54 @@ def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, com
     ]
     return any(m in stderr for m in markers) or any(the_re.search(completion) is not None for the_re in RAN_OUT_VAR_RES), None
 
- 
+
+AKA_RE = re.compile(r"\(aka .*\)")
+def type_mismatch_builder(type_pred_fn):
+    def the_pred(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+        did_get_a_regex_match = False
+        for the_re in GATHERED_TYPE_ERROR_RES:
+            did_match, maybe_t1_t2 = match_type_error_re(the_re)(exit_code, status, stderr, stdout, completion)
+            if did_match:
+                did_get_a_regex_match = True
+                t1: str = maybe_t1_t2[0]
+                t2: str = maybe_t1_t2[1]
+                t1 = t1.replace("'", "")
+                t2 = t2.replace("'", "")
+                t1 = AKA_RE.sub("", t1)
+                t2 = AKA_RE.sub("", t2)
+                t1 = t1.strip()
+                t2 = t2.strip()
+                if type_pred_fn(t1, t2):
+                    return True, None
+                elif type_pred_fn(t2, t1):
+                    return True, None
+        # if did_get_a_regex_match:
+        #     print(t1)
+        #     print(t2)
+        #     print()
+        return False, None
+    return the_pred
+
+
+def type_mismatch_both_numeric_fn(t1: str, t2: str) -> bool:
+    def is_numeric(t: str) -> bool:
+        return t in ['Int', 'UInt', 'Double', 'Float', 'Int64', 'Int32', 'Int16', 'Int8', 'UInt64', 'UInt32', 'UInt16', 'UInt8']
+    m = is_numeric(t1) and is_numeric(t2)
+    return m
+type_mismatch_both_numeric = type_mismatch_builder(type_mismatch_both_numeric_fn)
+
+def type_mismatch_collection_inner_type_fn(t1: str, t2: str) -> bool:
+    if t1 == "String.Element" and t2 == "String":
+        return True
+    return False
+type_mismatch_collection_inner_type = type_mismatch_builder(type_mismatch_collection_inner_type_fn)
+
+def type_mismatch_else_case_fn(t1: str, t2: str) -> bool:
+    return type_mismatch_both_numeric_fn(t1, t2) or \
+        type_mismatch_collection_inner_type_fn(t1, t2)
+type_mismatch_else_case = type_mismatch_builder(type_mismatch_else_case_fn)
+
+
 CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, str], Tuple[bool, Any]]]] = OrderedDict([
     ('CompileError', ('Any compilation error occurred', 
         compile_error_category
@@ -288,6 +339,15 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-IncorrectArgumentLabel', ('An incorrect argument label is in a function call (possibly caused due to breaking changes in the version of Swift)', 
         f_and(compile_error_category, incorrect_argument_label)
     )),
+    ('CompileError-TypeMismatch-Numerics', ('Type mismatch between numeric types', 
+        f_and(compile_error_category, type_mismatch_both_numeric)
+    )),
+    ('CompileError-TypeMismatch-CollectionAndInner', ('Type mismatch between the collection type and element type, e.g. [String] and String', 
+        f_and(compile_error_category, type_mismatch_collection_inner_type)
+    )),
+    ('CompileError-TypeMismatch-Else', ('Type mismatch else case', 
+        f_and(compile_error_category, type_mismatch_else_case)
+    )),
     ('CompileError-Else', ('Other compilation errors', 
         f_and(
             compile_error_category, 
@@ -318,6 +378,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 missing_argument_label,
                 extraneous_argument_label,
                 incorrect_argument_label,
+                type_mismatch_both_numeric,
+                type_mismatch_collection_inner_type,
+                type_mismatch_else_case
             ))
         )
     )),
@@ -382,6 +445,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     #         ))
     #     )
     # )),
+    
 ])
 
 
