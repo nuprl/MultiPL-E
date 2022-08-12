@@ -169,6 +169,7 @@ closure_result_type_error = match_type_error_re(r"error: cannot convert value of
 branch_type_error = match_type_error_re(r"error: result values in '\? :' expression have mismatching types (.*) and (.*)")
 bin_op_type_error = f_or(
     match_type_error_re(r"error: binary operator .* cannot be applied to operands of type (.*) and (.*)"), 
+    match_type_error_re(r"error: operator function .* requires the types (.*) and (.*) be equivalent"),
     match_re(r"error: binary operator .* cannot be applied to two .* operands")
 )
 pattern_type_error = f_or(
@@ -207,6 +208,8 @@ def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, comp
     ]
     return any(m in stderr for m in markers), None
 
+non_exclusive_mutation = match_re(r"error: overlapping accesses to .*, but modification requires exclusive access")
+
 MISSING_ARGUMENT_LABEL_RE = re.compile(r"error: missing argument label .* in call")
 def missing_argument_label(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return MISSING_ARGUMENT_LABEL_RE.search(stderr) is not None, None
@@ -239,7 +242,8 @@ def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, com
         "error: expected ']' in expression list",
         "error: expected '}' at end of brace statement",
         "error: expected '{' after 'if' condition",
-        "error: expected 'in' after for-each pattern"
+        "error: expected 'in' after for-each pattern",
+        "error: type annotation missing in pattern"
     ]
     return any(m in stderr for m in markers) or any(the_re.search(completion) is not None for the_re in RAN_OUT_VAR_RES), None
 
@@ -406,6 +410,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
         f_and(compile_error_category, mutate_immutable)
     )),
+    ('CompileError-NonExclusiveMutation', ('Attempted to simultaneously read and write, caught at type checking', 
+        f_and(compile_error_category, non_exclusive_mutation)
+    )),
     ('CompileError-MissingArgumentLabel', ('An argument label is missing in a function call',
         f_and(compile_error_category, missing_argument_label)
     )),
@@ -469,6 +476,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 calling_non_function_type,
                 unknown_type_error_in_call,
                 mutate_immutable,
+                non_exclusive_mutation,
                 missing_argument_label,
                 extraneous_argument_label,
                 incorrect_argument_label,
