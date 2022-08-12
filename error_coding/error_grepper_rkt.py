@@ -11,7 +11,7 @@ from pathlib import Path
 SOURCE="rkt-davinci-0.2-reworded"
 SRC_PATH=Path(Path(__file__).parent, "..", "experiments", SOURCE)
 WRITE_PATH_DIR=Path(Path(__file__).parent, "..", "error_examples", SOURCE)
-CSV_PATH=Path(Path(__file__).parent, "..", "error_examples", "racket-codes.csv")
+CSV_PATH=Path(Path(__file__).parent, "..", "error_examples", "racket_codes.csv")
 
 def count_braces_balance(program):
     count = 0
