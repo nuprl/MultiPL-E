@@ -76,7 +76,7 @@ STATIC = [
     "Theme": "MissingReturn",
     "Python": ["None"],
     "C#": ["no return in all branches"],
-    "Racket": [""],
+    "Racket": [],
     "Swift": [],
   },
   {
