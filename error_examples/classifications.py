@@ -1,3 +1,6 @@
+from typing import Dict, NamedTuple
+import swift_category_data
+
 # Classifications in progress
 # These are four overall categories, but we aren't going to be stuck with that.
 # Let's make this a JSON file that maps different error categories in languages to a single category
@@ -173,3 +176,23 @@ MODEL = [
     "Swift": []
   }
 ]
+
+
+
+
+class CategoryInfo(NamedTuple):
+  name: str
+  description: str
+  count: int
+  total_failures: int
+
+def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
+  codes: list[str] = [code for g in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL] 
+                           for theme in g 
+                           for code in (theme[lang_module.LANG_NAME] if lang_module.LANG_NAME in theme else [])]
+  # Verify each code appears only once
+  assert len(codes) == len(set(codes))
+
+  return dict((code, CategoryInfo(code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for code in codes)
+
+SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
