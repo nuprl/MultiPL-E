@@ -179,6 +179,7 @@ subscript_type_error = match_type_error_re(r"error: subscript .* requires the ty
 assignment_type_error = match_type_error_re(r"error: cannot assign value of type (.*) to type (.*)")
 
 misc_type_error = f_or(
+    match_type_error_re(r"error: referencing instance method .* on .* requires the types (.*) and (.*) be equivalent"),
     match_re(r"error: type 'Int' cannot be used as a boolean"),
     match_re(r"error: no 'subscript' candidates produce the expected contextual result type"),
     match_re(r"error: protocol 'Sequence' requires that 'String.Index' conform to 'Strideable'"),
@@ -237,7 +238,8 @@ def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, com
         "error: expected member name or constructor call after type name",
         "error: expected ']' in expression list",
         "error: expected '}' at end of brace statement",
-        "error: expected '{' after 'if' condition"
+        "error: expected '{' after 'if' condition",
+        "error: expected 'in' after for-each pattern"
     ]
     return any(m in stderr for m in markers) or any(the_re.search(completion) is not None for the_re in RAN_OUT_VAR_RES), None
 
