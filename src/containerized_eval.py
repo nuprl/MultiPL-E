@@ -32,6 +32,7 @@ EVALUATORS = {
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
     "py": (eval_python.eval_script, ".py"),
+    "notypes.py": (eval_python.eval_script, ".py"),
     "julia": (eval_julia.eval_script, ".jl"),
     "java" : (eval_java.eval_script, ".java"),
     "rust" : (eval_rust.eval_script, ".rs"),

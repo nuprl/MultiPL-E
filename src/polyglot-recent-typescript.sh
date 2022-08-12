@@ -9,7 +9,7 @@
 source ~/.bashrc
 module load nodejs
 
-PATH=../node_modules/typescript/bin:$PATH
+export PATH=../node_modules/typescript/bin:$PATH
 
 LIST_FILES=files.txt
 
@@ -17,6 +17,6 @@ if [ $# -eq 1 ]; then
   LIST_FILES=$1
 fi
 
-echo "$LIST_FILES[$SLURM_ARRAY_TASK_ID]"
+export NODE_PATH=../node_modules
 python3 problem_evaluator.py --job-file $LIST_FILES --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
 
