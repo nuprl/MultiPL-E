@@ -22,7 +22,6 @@ LUA_PATH="${PWD}/luaunit.lua"
 echo "$LIST_FILES[$SLURM_ARRAY_TASK_ID]"
 hostname
 lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p'
-g++ -o /tmp/arjun_a.out verification/skylake_error.cpp
 
 python3 problem_evaluator.py --job-file $LIST_FILES --job-file-line $SLURM_ARRAY_TASK_ID --max-workers 23
 
