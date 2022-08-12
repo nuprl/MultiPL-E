@@ -1,57 +1,4 @@
-// ----------- problem HumanEval_5_intersperse, completion 1 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpq86ed49i.swift:11:30: error: extraneous argument label 'combine:' in call
-        return numbers.reduce([], combine: { (accumulator, element) in
-                             ^    ~~~~~~~~~
-                                  
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
-/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
-/// [] as [Int]
-/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
-/// [1, 4, 2, 4, 3]
-func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
-    if numbers.isEmpty {
-        return []
-    } else {
-        return numbers.reduce([], combine: { (accumulator, element) in
-            if accumulator.isEmpty {
-                return [element]
-            } else {
-                return accumulator + [delimeter] + [element]
-            }
-        })
-    }
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
-assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
-assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
-
-
-
-// ----------- problem HumanEval_141_file_name_check, completion 92 ------------
+// ----------- problem HumanEval_141_file_name_check, completion 40 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -124,84 +71,6 @@ assert(file_name_check(file_name: "final132") == "No")
 assert(file_name_check(file_name: "_f4indsartal132.") == "No")
 assert(file_name_check(file_name: ".txt") == "No")
 assert(file_name_check(file_name: "s.") == "No")
-
-
-
-// ----------- problem HumanEval_118_get_closest_vowel, completion 45 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpu3a_0ynk.swift:22:78: error: extraneous argument label 'after:' in call
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                                                                             ^~~~~~~~
-                                                                              
-/tmp/tmpu3a_0ynk.swift:22:185: error: extraneous argument label 'after:' in call
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                                                                                                                                                                                        ^~~~~~~~
-                                                                                                                                                                                         
-
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given a word. Your task is to find the closest vowel that stands between 
-/// two consonants from the right side of the word (case sensitive).
-/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-/// find any vowel met the above condition. 
-/// You may assume that the given string contains English letter only.
-/// Example:
-/// >>> get_closest_vowel(word: "yogurt")
-/// "u"
-/// >>> get_closest_vowel(word: "FULL")
-/// "U"
-/// >>> get_closest_vowel(word: "quick")
-/// ""
-/// >>> get_closest_vowel(word: "ab")
-/// ""
-func get_closest_vowel(word: String) -> String {
-    let vowels = ["a", "e", "i", "o", "u"]
-    var closest_vowel = ""
-    for (index, letter) in word.enumerated() {
-        if vowels.contains(String(letter)) {
-            if index != 0 && index != word.count - 1 {
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                    closest_vowel = String(letter)
-                    break
-                }
-            }
-        }
-    }
-    return closest_vowel
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(get_closest_vowel(word: "yogurt") == "u")
-assert(get_closest_vowel(word: "full") == "u")
-assert(get_closest_vowel(word: "easy") == "")
-assert(get_closest_vowel(word: "eAsy") == "")
-assert(get_closest_vowel(word: "ali") == "")
-assert(get_closest_vowel(word: "bad") == "a")
-assert(get_closest_vowel(word: "most") == "o")
-assert(get_closest_vowel(word: "ab") == "")
-assert(get_closest_vowel(word: "ba") == "")
-assert(get_closest_vowel(word: "quick") == "")
-assert(get_closest_vowel(word: "anime") == "i")
-assert(get_closest_vowel(word: "Asia") == "")
-assert(get_closest_vowel(word: "Above") == "o")
 
 
 
@@ -313,7 +182,138 @@ assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
 
 
 
-// ----------- problem HumanEval_141_file_name_check, completion 40 ------------
+// ----------- problem HumanEval_5_intersperse, completion 1 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpq86ed49i.swift:11:30: error: extraneous argument label 'combine:' in call
+        return numbers.reduce([], combine: { (accumulator, element) in
+                             ^    ~~~~~~~~~
+                                  
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Insert a number 'delimeter' between every two consecutive elements of input array `numbers'
+/// >>> intersperse(numbers: [] as [Int], delimeter: 4)
+/// [] as [Int]
+/// >>> intersperse(numbers: [1, 2, 3], delimeter: 4)
+/// [1, 4, 2, 4, 3]
+func intersperse(numbers: [Int], delimeter: Int) -> [Int] {
+    if numbers.isEmpty {
+        return []
+    } else {
+        return numbers.reduce([], combine: { (accumulator, element) in
+            if accumulator.isEmpty {
+                return [element]
+            } else {
+                return accumulator + [delimeter] + [element]
+            }
+        })
+    }
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(intersperse(numbers: [] as [Int], delimeter: 7) == [] as [Int])
+assert(intersperse(numbers: [5, 6, 3, 2], delimeter: 8) == [5, 8, 6, 8, 3, 8, 2])
+assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
+
+
+
+// ----------- problem HumanEval_118_get_closest_vowel, completion 45 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpu3a_0ynk.swift:22:78: error: extraneous argument label 'after:' in call
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                                                                             ^~~~~~~~
+                                                                              
+/tmp/tmpu3a_0ynk.swift:22:185: error: extraneous argument label 'after:' in call
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                                                                                                                                                                                        ^~~~~~~~
+                                                                                                                                                                                         
+
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// >>> get_closest_vowel(word: "yogurt")
+/// "u"
+/// >>> get_closest_vowel(word: "FULL")
+/// "U"
+/// >>> get_closest_vowel(word: "quick")
+/// ""
+/// >>> get_closest_vowel(word: "ab")
+/// ""
+func get_closest_vowel(word: String) -> String {
+    let vowels = ["a", "e", "i", "o", "u"]
+    var closest_vowel = ""
+    for (index, letter) in word.enumerated() {
+        if vowels.contains(String(letter)) {
+            if index != 0 && index != word.count - 1 {
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                    closest_vowel = String(letter)
+                    break
+                }
+            }
+        }
+    }
+    return closest_vowel
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(get_closest_vowel(word: "yogurt") == "u")
+assert(get_closest_vowel(word: "full") == "u")
+assert(get_closest_vowel(word: "easy") == "")
+assert(get_closest_vowel(word: "eAsy") == "")
+assert(get_closest_vowel(word: "ali") == "")
+assert(get_closest_vowel(word: "bad") == "a")
+assert(get_closest_vowel(word: "most") == "o")
+assert(get_closest_vowel(word: "ab") == "")
+assert(get_closest_vowel(word: "ba") == "")
+assert(get_closest_vowel(word: "quick") == "")
+assert(get_closest_vowel(word: "anime") == "i")
+assert(get_closest_vowel(word: "Asia") == "")
+assert(get_closest_vowel(word: "Above") == "o")
+
+
+
+// ----------- problem HumanEval_141_file_name_check, completion 92 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 

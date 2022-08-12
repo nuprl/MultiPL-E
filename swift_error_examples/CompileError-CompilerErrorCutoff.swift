@@ -1,136 +1,3 @@
-// ----------- problem HumanEval_110_exchange, completion 57 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpu8rbvte_.swift:16:9: warning: variable 'lst1' was never mutated; consider changing to 'let' constant
-    var lst1 = lst1
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:17:9: warning: variable 'lst2' was never mutated; consider changing to 'let' constant
-    var lst2 = lst2
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:18:9: warning: variable 'lst1Even' was never mutated; consider changing to 'let' constant
-    var lst1Even = lst1.filter { $0 % 2 == 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:19:9: warning: variable 'lst2Even' was never mutated; consider changing to 'let' constant
-    var lst2Even = lst2.filter { $0 % 2 == 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:20:9: warning: variable 'lst1Odd' was never mutated; consider changing to 'let' constant
-    var lst1Odd = lst1.filter { $0 % 2 != 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:21:9: warning: variable 'lst2Odd' was never mutated; consider changing to 'let' constant
-    var lst2Odd = lst2.filter { $0 % 2 != 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:22:9: warning: initialization of variable 'lst1EvenCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst1EvenCount = lst1Even.count
-    ~~~~^~~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:23:9: warning: initialization of variable 'lst2EvenCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst2EvenCount = lst2Even.count
-    ~~~~^~~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:24:9: warning: initialization of variable 'lst1OddCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst1OddCount = lst1Odd.count
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:25:9: warning: initialization of variable 'lst2OddCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst2OddCount = lst2Odd.count
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:26:9: warning: initialization of variable 'lst1Count' was never used; consider replacing with assignment to '_' or removing it
-    var lst1Count = 
-*/
-/* stdout = 
-
-*/
-
-
-/// In this problem, you will implement a function that takes two arrays of numbers,
-/// and determines whether it is possible to perform an exchange of elements
-/// between them to make lst1 an array of only even numbers.
-/// There is no limit on the number of exchanged elements between lst1 and lst2.
-/// If it is possible to exchange elements between the lst1 and lst2 to make
-/// all the elements of lst1 to be even, return "YES".
-/// Otherwise, return "NO".
-/// For example:
-/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4])
-/// "YES"
-/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4])
-/// "NO"
-/// It is assumed that the input arrays will be non-empty.
-func exchange(lst1: [Int], lst2: [Int]) -> String {
-    var lst1 = lst1
-    var lst2 = lst2
-    var lst1Even = lst1.filter { $0 % 2 == 0 }
-    var lst2Even = lst2.filter { $0 % 2 == 0 }
-    var lst1Odd = lst1.filter { $0 % 2 != 0 }
-    var lst2Odd = lst2.filter { $0 % 2 != 0 }
-    var lst1EvenCount = lst1Even.count
-    var lst2EvenCount = lst2Even.count
-    var lst1OddCount = lst1Odd.count
-    var lst2OddCount = lst2Odd.count
-    var lst1Count = lst1.count
-    var lst2Count = lst2.count
-    var lst1EvenIndex = 0
-    var lst2EvenIndex = 0
-    var lst1OddIndex = 0
-    var lst2OddIndex = 0
-    var lst1Index = 0
-    var lst2Index = 0
-    var lst1EvenIndex2 = 0
-    var lst2EvenIndex2 = 0
-    var lst1OddIndex2 = 0
-    var lst2OddIndex2 = 0
-    var lst1Index2 = 0
-    var lst2Index2 = 0
-    var lst1EvenIndex3 = 0
-    var lst2EvenIndex3 = 0
-    var lst1OddIndex3 = 0
-    var lst2OddIndex3 = 0
-    var lst1Index3 = 0
-    var lst2Index3 = 0
-    var lst1EvenIndex4 = 0
-    var lst2EvenIndex4 = 0
-    var lst1OddIndex4 = 0
-    var lst2OddIndex4 = 0
-    var lst1Index4 = 0
-    var lst2Index4 = 0
-    var lst1EvenIndex5 = 0
-    var lst2EvenIndex5 = 0
-    var lst1OddIndex5 = 0
-    var lst2OddIndex5 = 0
-    var lst1Index5 = 0
-   
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4]) == "YES")
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4]) == "NO")
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [2, 1, 4, 3]) == "YES")
-assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 4]) == "YES")
-assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 3]) == "NO")
-assert(exchange(lst1: [3, 2, 6, 1, 8, 9], lst2: [3, 5, 5, 1, 1, 1]) == "NO")
-assert(exchange(lst1: [100, 200], lst2: [200, 200]) == "YES")
-
-
-
 // ----------- problem HumanEval_129_minPath, completion 198 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -266,553 +133,6 @@ assert(minPath(grid: [[2, 7, 4], [3, 1, 5], [6, 8, 9]], k: 8) == [1, 3, 1, 3, 1,
 assert(minPath(grid: [[6, 1, 5], [3, 8, 9], [2, 7, 4]], k: 8) == [1, 5, 1, 5, 1, 5, 1, 5])
 assert(minPath(grid: [[1, 2], [3, 4]], k: 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2])
 assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
-
-
-
-// ----------- problem HumanEval_10_make_palindrome, completion 120 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpxf95cwrv.swift:14:9: warning: initialization of immutable value 'string_length' was never used; consider replacing with assignment to '_' or removing it
-    let string_length = string.count
-    ~~~~^~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:15:9: warning: initialization of immutable value 'string_chars' was never used; consider replacing with assignment to '_' or removing it
-    let string_chars = Array(string)
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:16:9: warning: initialization of variable 'palindrome_suffix' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_suffix = ""
-    ~~~~^~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:17:9: warning: initialization of variable 'palindrome_prefix' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_prefix = ""
-    ~~~~^~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:18:9: warning: initialization of variable 'palindrome_suffix_length' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_suffix_length = 0
-    ~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:19:9: warning: initialization of variable 'palindrome_prefix_length' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_prefix_length = 0
-    ~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:20:9: warning: initialization of variable 'palindrome_suffix_start' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_suffix_start = 0
-    ~~~~^~~~~~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:21:9: warning: initialization of variable 'palindrome_prefix_start' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_prefix_start = 0
-    ~~~~^~~~~~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpxf95cwrv.swift:22:9: warning: initialization of variable 'palindrome_suffix_end' was never used; consider replacing with assignment to '_' or removing it
-    var palindrome_suffix_end = 0
-  
-*/
-/* stdout = 
-
-*/
-
-
-/// Find the shortest palindrome that begins with a supplied string.
-/// Algorithm idea is simple:
-/// - Find the longest postfix of supplied string that is a palindrome.
-/// - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
-/// >>> make_palindrome(string: "")
-/// ""
-/// >>> make_palindrome(string: "cat")
-/// "catac"
-/// >>> make_palindrome(string: "cata")
-/// "catac"
-func make_palindrome(string: String) -> String {
-    let string = string.lowercased()
-    let string_length = string.count
-    let string_chars = Array(string)
-    var palindrome_suffix = ""
-    var palindrome_prefix = ""
-    var palindrome_suffix_length = 0
-    var palindrome_prefix_length = 0
-    var palindrome_suffix_start = 0
-    var palindrome_prefix_start = 0
-    var palindrome_suffix_end = 0
-    var palindrome_prefix_end = 0
-    var palindrome_suffix_found = false
-    var palindrome_prefix_found = false
-    var palindrome_suffix_index = 0
-    var palindrome_prefix_index = 0
-    var palindrome_suffix_char = ""
-    var palindrome_prefix_char = ""
-    var palindrome_suffix_char_index = 0
-    var palindrome_prefix_char_index = 0
-    var palindrome_suffix_char_found = false
-    var palindrome_prefix_char_found = false
-    var palindrome_suffix_char_start = 0
-    var palindrome_prefix_char_start = 0
-    var palindrome_suffix_char_end = 0
-    var palindrome_prefix_char_end = 0
-    var palindrome_suffix_char_length = 0
-    var palindrome_prefix_char_length = 0
-    var palindrome_suffix_char_count = 0
-    var palindrome_prefix_char_count = 0
-    var palindrome_suffix_char_index_start = 0
-    var palindrome_prefix_char_index_start = 0
-    var palindrome_suffix_char_index_end = 0
-    var palindrome_prefix_char_index_end = 0
-    var palindrome_suffix_char_index_length = 0
-    var palindrome_prefix_char_index_length = 0
-    var palindrome_suffix_char_index_count = 0
-    var palindrome_prefix_char_index_count = 0
-   
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(make_palindrome(string: "") == "")
-assert(make_palindrome(string: "x") == "x")
-assert(make_palindrome(string: "xyz") == "xyzyx")
-assert(make_palindrome(string: "xyx") == "xyx")
-assert(make_palindrome(string: "jerry") == "jerryrrej")
-
-
-
-// ----------- problem HumanEval_75_is_multiply_prime, completion 25 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp8oes1znj.swift:10:9: warning: initialization of variable 'is_prime' was never used; consider replacing with assignment to '_' or removing it
-    var is_prime = true
-    ~~~~^~~~~~~~
-    _
-/tmp/tmp8oes1znj.swift:11:9: warning: initialization of variable 'is_multiply_prime' was never used; consider replacing with assignment to '_' or removing it
-    var is_multiply_prime = false
-    ~~~~^~~~~~~~~~~~~~~~~
-    _
-/tmp/tmp8oes1znj.swift:12:9: warning: initialization of variable 'i' was never used; consider replacing with assignment to '_' or removing it
-    var i = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:13:9: warning: initialization of variable 'j' was never used; consider replacing with assignment to '_' or removing it
-    var j = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:14:9: warning: initialization of variable 'k' was never used; consider replacing with assignment to '_' or removing it
-    var k = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:15:9: warning: initialization of variable 'l' was never used; consider replacing with assignment to '_' or removing it
-    var l = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:16:9: warning: initialization of variable 'm' was never used; consider replacing with assignment to '_' or removing it
-    var m = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:17:9: warning: initialization of variable 'n' was never used; consider replacing with assignment to '_' or removing it
-    var n = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:18:9: warning: initialization of variable 'o' was never used; consider replacing with assignment to '_' or removing it
-    var o = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:19:9: warning: initialization of variable 'p' was never used; consider replacing with assignment to '_' or removing it
-    var p = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:20:9: warning: initialization of variable 'q' was never used; consider replacing with assignment to '_' or removing it
-    var q = 2
-    ~~~~^
-    _
-/tmp/tmp8oes1znj.swift:21:9: warning: initialization of variable 'r' was never u
-*/
-/* stdout = 
-
-*/
-
-
-/// Write a function that returns true if the given number is the multiplication of 3 prime numbers
-/// and false otherwise.
-/// Knowing that (a) is less then 100. 
-/// Example:
-/// >>> is_multiply_prime(a: 30)
-/// true
-/// 30 = 2 * 3 * 5
-func is_multiply_prime(a: Int) -> Bool {
-    var is_prime = true
-    var is_multiply_prime = false
-    var i = 2
-    var j = 2
-    var k = 2
-    var l = 2
-    var m = 2
-    var n = 2
-    var o = 2
-    var p = 2
-    var q = 2
-    var r = 2
-    var s = 2
-    var t = 2
-    var u = 2
-    var v = 2
-    var w = 2
-    var x = 2
-    var y = 2
-    var z = 2
-    var aa = 2
-    var bb = 2
-    var cc = 2
-    var dd = 2
-    var ee = 2
-    var ff = 2
-    var gg = 2
-    var hh = 2
-    var ii = 2
-    var jj = 2
-    var kk = 2
-    var ll = 2
-    var mm = 2
-    var nn = 2
-    var oo = 2
-    var pp = 2
-    var qq = 2
-    var rr = 2
-    var ss = 2
-    var tt = 2
-    var uu = 2
-    var vv = 2
-    var ww = 2
-    var xx = 2
-    var yy = 2
-    var zz = 2
-    var aaa = 2
-    var bbb = 2
-    var ccc = 2
-    var ddd = 2
-    var eee = 2
-    var fff = 2
-    var ggg = 2
-    var hhh = 2
-    var iii = 2
-    var jjj = 2
-    var kkk = 2
-    var lll = 2
-    var mmm = 2
-    var nnn = 2
-    var ooo = 2
-    var ppp = 2
-    var qqq = 2
-    var rrr = 2
-    var sss = 2
-    var ttt = 2
-    var uuu = 2
-    var vvv = 2
-    var www = 2
-    var xxx = 2
-    var yyy = 2
-    var zzz = 2
-    var aaaa = 2
-    var bbbb = 2
-    var cccc = 2
-    var dddd = 2
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(is_multiply_prime(a: 5) == false)
-assert(is_multiply_prime(a: 30) == true)
-assert(is_multiply_prime(a: 8) == true)
-assert(is_multiply_prime(a: 10) == false)
-assert(is_multiply_prime(a: 125) == true)
-assert(is_multiply_prime(a: 105) == true)
-assert(is_multiply_prime(a: 126) == false)
-assert(is_multiply_prime(a: 729) == false)
-assert(is_multiply_prime(a: 891) == false)
-assert(is_multiply_prime(a: 1001) == true)
-
-
-
-// ----------- problem HumanEval_118_get_closest_vowel, completion 30 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp_m3k9fto.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
-    let vowels = ["a", "e", "i", "o", "u"]
-    ~~~~^~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
-    let consonants = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-    ~~~~^~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
-    var result = ""
-    ~~~~^~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:20:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_vowel = false
-    ~~~~^~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:21:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_consonant = false
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_vowel = false
-    ~~~~^~~~~~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_vowel = false
-    ~~~~^~~~~~~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmp_m3k9fto.swift:26:9: warning
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given a word. Your task is to find the closest vowel that stands between 
-/// two consonants from the right side of the word (case sensitive).
-/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-/// find any vowel met the above condition. 
-/// You may assume that the given string contains English letter only.
-/// Example:
-/// >>> get_closest_vowel(word: "yogurt")
-/// "u"
-/// >>> get_closest_vowel(word: "FULL")
-/// "U"
-/// >>> get_closest_vowel(word: "quick")
-/// ""
-/// >>> get_closest_vowel(word: "ab")
-/// ""
-func get_closest_vowel(word: String) -> String {
-    let vowels = ["a", "e", "i", "o", "u"]
-    let consonants = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-    var result = ""
-    var is_vowel = false
-    var is_consonant = false
-    var is_first_vowel = false
-    var is_first_consonant = false
-    var is_second_vowel = false
-    var is_second_consonant = false
-    var is_third_vowel = false
-    var is_third_consonant = false
-    var is_fourth_vowel = false
-    var is_fourth_consonant = false
-    var is_fifth_vowel = false
-    var is_fifth_consonant = false
-    var is_sixth_vowel = false
-    var is_sixth_consonant = false
-    var is_seventh_vowel = false
-    var is_seventh_consonant = false
-    var is_eighth_vowel = false
-    var is_eighth_consonant = false
-    var is_ninth_vowel = false
-    var is_ninth_consonant = false
-    var is_tenth_vowel = false
-    var is_tenth_consonant = false
-    var is_eleventh_vowel = false
-    var is_eleventh_consonant = false
-    var is_twelfth_vowel = false
-    var is_twelfth_consonant = false
-    var is_thirteenth_vowel = false
-    var is_thirteenth_consonant = false
-    var is_fourteenth_vowel = false
-    var is_fourteenth_consonant = false
-    var is_fifteenth_vowel = false
-    var is_fifteenth_consonant = false
-    var is_sixteenth_vowel = false
-
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(get_closest_vowel(word: "yogurt") == "u")
-assert(get_closest_vowel(word: "full") == "u")
-assert(get_closest_vowel(word: "easy") == "")
-assert(get_closest_vowel(word: "eAsy") == "")
-assert(get_closest_vowel(word: "ali") == "")
-assert(get_closest_vowel(word: "bad") == "a")
-assert(get_closest_vowel(word: "most") == "o")
-assert(get_closest_vowel(word: "ab") == "")
-assert(get_closest_vowel(word: "ba") == "")
-assert(get_closest_vowel(word: "quick") == "")
-assert(get_closest_vowel(word: "anime") == "i")
-assert(get_closest_vowel(word: "Asia") == "")
-assert(get_closest_vowel(word: "Above") == "o")
-
-
-
-// ----------- problem HumanEval_118_get_closest_vowel, completion 48 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpnp3yzp0c.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
-    let vowels = "aeiouAEIOU"
-    ~~~~^~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
-    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
-    ~~~~^~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
-    var result = ""
-    ~~~~^~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:20:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_consonant = false
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:21:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_vowel = false
-    ~~~~^~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_vowel = false
-    ~~~~^~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_vowel = false
-    ~~~~^~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:26:9: warning: initialization of variable 'is_third_vowel' was never used; consider rep
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given a word. Your task is to find the closest vowel that stands between 
-/// two consonants from the right side of the word (case sensitive).
-/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-/// find any vowel met the above condition. 
-/// You may assume that the given string contains English letter only.
-/// Example:
-/// >>> get_closest_vowel(word: "yogurt")
-/// "u"
-/// >>> get_closest_vowel(word: "FULL")
-/// "U"
-/// >>> get_closest_vowel(word: "quick")
-/// ""
-/// >>> get_closest_vowel(word: "ab")
-/// ""
-func get_closest_vowel(word: String) -> String {
-    let vowels = "aeiouAEIOU"
-    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
-    var result = ""
-    var is_consonant = false
-    var is_vowel = false
-    var is_first_vowel = false
-    var is_first_consonant = false
-    var is_second_vowel = false
-    var is_second_consonant = false
-    var is_third_vowel = false
-    var is_third_consonant = false
-    var is_fourth_vowel = false
-    var is_fourth_consonant = false
-    var is_fifth_vowel = false
-    var is_fifth_consonant = false
-    var is_sixth_vowel = false
-    var is_sixth_consonant = false
-    var is_seventh_vowel = false
-    var is_seventh_consonant = false
-    var is_eighth_vowel = false
-    var is_eighth_consonant = false
-    var is_ninth_vowel = false
-    var is_ninth_consonant = false
-    var is_tenth_vowel = false
-    var is_tenth_consonant = false
-    var is_eleventh_vowel = false
-    var is_eleventh_consonant = false
-    var is_twelfth_vowel = false
-    var is_twelfth_consonant = false
-    var is_thirteenth_vowel = false
-    var is_thirteenth_consonant = false
-    var is_fourteenth_vowel = false
-    var is_fourteenth_consonant = false
-    var is_fifteenth_vowel = false
-    var is_fifteenth_consonant = false
-    var is_sixteenth_vowel = false
-    var is_sixteenth_consonant = false
-    var is_seventeenth_vowel = false
-    var is_seventeenth_consonant = false
-
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(get_closest_vowel(word: "yogurt") == "u")
-assert(get_closest_vowel(word: "full") == "u")
-assert(get_closest_vowel(word: "easy") == "")
-assert(get_closest_vowel(word: "eAsy") == "")
-assert(get_closest_vowel(word: "ali") == "")
-assert(get_closest_vowel(word: "bad") == "a")
-assert(get_closest_vowel(word: "most") == "o")
-assert(get_closest_vowel(word: "ab") == "")
-assert(get_closest_vowel(word: "ba") == "")
-assert(get_closest_vowel(word: "quick") == "")
-assert(get_closest_vowel(word: "anime") == "i")
-assert(get_closest_vowel(word: "Asia") == "")
-assert(get_closest_vowel(word: "Above") == "o")
 
 
 
@@ -1161,6 +481,386 @@ assert(fruit_distribution(s: "1 apples and 100 oranges", n: 120) == 19)
 
 
 
+// ----------- problem HumanEval_118_get_closest_vowel, completion 30 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp_m3k9fto.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
+    let vowels = ["a", "e", "i", "o", "u"]
+    ~~~~^~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
+    let consonants = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
+    ~~~~^~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
+    var result = ""
+    ~~~~^~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:20:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_vowel = false
+    ~~~~^~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:21:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_consonant = false
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_vowel = false
+    ~~~~^~~~~~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_vowel = false
+    ~~~~^~~~~~~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmp_m3k9fto.swift:26:9: warning
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// >>> get_closest_vowel(word: "yogurt")
+/// "u"
+/// >>> get_closest_vowel(word: "FULL")
+/// "U"
+/// >>> get_closest_vowel(word: "quick")
+/// ""
+/// >>> get_closest_vowel(word: "ab")
+/// ""
+func get_closest_vowel(word: String) -> String {
+    let vowels = ["a", "e", "i", "o", "u"]
+    let consonants = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
+    var result = ""
+    var is_vowel = false
+    var is_consonant = false
+    var is_first_vowel = false
+    var is_first_consonant = false
+    var is_second_vowel = false
+    var is_second_consonant = false
+    var is_third_vowel = false
+    var is_third_consonant = false
+    var is_fourth_vowel = false
+    var is_fourth_consonant = false
+    var is_fifth_vowel = false
+    var is_fifth_consonant = false
+    var is_sixth_vowel = false
+    var is_sixth_consonant = false
+    var is_seventh_vowel = false
+    var is_seventh_consonant = false
+    var is_eighth_vowel = false
+    var is_eighth_consonant = false
+    var is_ninth_vowel = false
+    var is_ninth_consonant = false
+    var is_tenth_vowel = false
+    var is_tenth_consonant = false
+    var is_eleventh_vowel = false
+    var is_eleventh_consonant = false
+    var is_twelfth_vowel = false
+    var is_twelfth_consonant = false
+    var is_thirteenth_vowel = false
+    var is_thirteenth_consonant = false
+    var is_fourteenth_vowel = false
+    var is_fourteenth_consonant = false
+    var is_fifteenth_vowel = false
+    var is_fifteenth_consonant = false
+    var is_sixteenth_vowel = false
+
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(get_closest_vowel(word: "yogurt") == "u")
+assert(get_closest_vowel(word: "full") == "u")
+assert(get_closest_vowel(word: "easy") == "")
+assert(get_closest_vowel(word: "eAsy") == "")
+assert(get_closest_vowel(word: "ali") == "")
+assert(get_closest_vowel(word: "bad") == "a")
+assert(get_closest_vowel(word: "most") == "o")
+assert(get_closest_vowel(word: "ab") == "")
+assert(get_closest_vowel(word: "ba") == "")
+assert(get_closest_vowel(word: "quick") == "")
+assert(get_closest_vowel(word: "anime") == "i")
+assert(get_closest_vowel(word: "Asia") == "")
+assert(get_closest_vowel(word: "Above") == "o")
+
+
+
+// ----------- problem HumanEval_118_get_closest_vowel, completion 48 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpnp3yzp0c.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
+    let vowels = "aeiouAEIOU"
+    ~~~~^~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
+    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+    ~~~~^~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
+    var result = ""
+    ~~~~^~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:20:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_consonant = false
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:21:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_vowel = false
+    ~~~~^~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_vowel = false
+    ~~~~^~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_vowel = false
+    ~~~~^~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:26:9: warning: initialization of variable 'is_third_vowel' was never used; consider rep
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// >>> get_closest_vowel(word: "yogurt")
+/// "u"
+/// >>> get_closest_vowel(word: "FULL")
+/// "U"
+/// >>> get_closest_vowel(word: "quick")
+/// ""
+/// >>> get_closest_vowel(word: "ab")
+/// ""
+func get_closest_vowel(word: String) -> String {
+    let vowels = "aeiouAEIOU"
+    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+    var result = ""
+    var is_consonant = false
+    var is_vowel = false
+    var is_first_vowel = false
+    var is_first_consonant = false
+    var is_second_vowel = false
+    var is_second_consonant = false
+    var is_third_vowel = false
+    var is_third_consonant = false
+    var is_fourth_vowel = false
+    var is_fourth_consonant = false
+    var is_fifth_vowel = false
+    var is_fifth_consonant = false
+    var is_sixth_vowel = false
+    var is_sixth_consonant = false
+    var is_seventh_vowel = false
+    var is_seventh_consonant = false
+    var is_eighth_vowel = false
+    var is_eighth_consonant = false
+    var is_ninth_vowel = false
+    var is_ninth_consonant = false
+    var is_tenth_vowel = false
+    var is_tenth_consonant = false
+    var is_eleventh_vowel = false
+    var is_eleventh_consonant = false
+    var is_twelfth_vowel = false
+    var is_twelfth_consonant = false
+    var is_thirteenth_vowel = false
+    var is_thirteenth_consonant = false
+    var is_fourteenth_vowel = false
+    var is_fourteenth_consonant = false
+    var is_fifteenth_vowel = false
+    var is_fifteenth_consonant = false
+    var is_sixteenth_vowel = false
+    var is_sixteenth_consonant = false
+    var is_seventeenth_vowel = false
+    var is_seventeenth_consonant = false
+
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(get_closest_vowel(word: "yogurt") == "u")
+assert(get_closest_vowel(word: "full") == "u")
+assert(get_closest_vowel(word: "easy") == "")
+assert(get_closest_vowel(word: "eAsy") == "")
+assert(get_closest_vowel(word: "ali") == "")
+assert(get_closest_vowel(word: "bad") == "a")
+assert(get_closest_vowel(word: "most") == "o")
+assert(get_closest_vowel(word: "ab") == "")
+assert(get_closest_vowel(word: "ba") == "")
+assert(get_closest_vowel(word: "quick") == "")
+assert(get_closest_vowel(word: "anime") == "i")
+assert(get_closest_vowel(word: "Asia") == "")
+assert(get_closest_vowel(word: "Above") == "o")
+
+
+
+// ----------- problem HumanEval_10_make_palindrome, completion 120 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpxf95cwrv.swift:14:9: warning: initialization of immutable value 'string_length' was never used; consider replacing with assignment to '_' or removing it
+    let string_length = string.count
+    ~~~~^~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:15:9: warning: initialization of immutable value 'string_chars' was never used; consider replacing with assignment to '_' or removing it
+    let string_chars = Array(string)
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:16:9: warning: initialization of variable 'palindrome_suffix' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_suffix = ""
+    ~~~~^~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:17:9: warning: initialization of variable 'palindrome_prefix' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_prefix = ""
+    ~~~~^~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:18:9: warning: initialization of variable 'palindrome_suffix_length' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_suffix_length = 0
+    ~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:19:9: warning: initialization of variable 'palindrome_prefix_length' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_prefix_length = 0
+    ~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:20:9: warning: initialization of variable 'palindrome_suffix_start' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_suffix_start = 0
+    ~~~~^~~~~~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:21:9: warning: initialization of variable 'palindrome_prefix_start' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_prefix_start = 0
+    ~~~~^~~~~~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpxf95cwrv.swift:22:9: warning: initialization of variable 'palindrome_suffix_end' was never used; consider replacing with assignment to '_' or removing it
+    var palindrome_suffix_end = 0
+  
+*/
+/* stdout = 
+
+*/
+
+
+/// Find the shortest palindrome that begins with a supplied string.
+/// Algorithm idea is simple:
+/// - Find the longest postfix of supplied string that is a palindrome.
+/// - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+/// >>> make_palindrome(string: "")
+/// ""
+/// >>> make_palindrome(string: "cat")
+/// "catac"
+/// >>> make_palindrome(string: "cata")
+/// "catac"
+func make_palindrome(string: String) -> String {
+    let string = string.lowercased()
+    let string_length = string.count
+    let string_chars = Array(string)
+    var palindrome_suffix = ""
+    var palindrome_prefix = ""
+    var palindrome_suffix_length = 0
+    var palindrome_prefix_length = 0
+    var palindrome_suffix_start = 0
+    var palindrome_prefix_start = 0
+    var palindrome_suffix_end = 0
+    var palindrome_prefix_end = 0
+    var palindrome_suffix_found = false
+    var palindrome_prefix_found = false
+    var palindrome_suffix_index = 0
+    var palindrome_prefix_index = 0
+    var palindrome_suffix_char = ""
+    var palindrome_prefix_char = ""
+    var palindrome_suffix_char_index = 0
+    var palindrome_prefix_char_index = 0
+    var palindrome_suffix_char_found = false
+    var palindrome_prefix_char_found = false
+    var palindrome_suffix_char_start = 0
+    var palindrome_prefix_char_start = 0
+    var palindrome_suffix_char_end = 0
+    var palindrome_prefix_char_end = 0
+    var palindrome_suffix_char_length = 0
+    var palindrome_prefix_char_length = 0
+    var palindrome_suffix_char_count = 0
+    var palindrome_prefix_char_count = 0
+    var palindrome_suffix_char_index_start = 0
+    var palindrome_prefix_char_index_start = 0
+    var palindrome_suffix_char_index_end = 0
+    var palindrome_prefix_char_index_end = 0
+    var palindrome_suffix_char_index_length = 0
+    var palindrome_prefix_char_index_length = 0
+    var palindrome_suffix_char_index_count = 0
+    var palindrome_prefix_char_index_count = 0
+   
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(make_palindrome(string: "") == "")
+assert(make_palindrome(string: "x") == "x")
+assert(make_palindrome(string: "xyz") == "xyzyx")
+assert(make_palindrome(string: "xyx") == "xyx")
+assert(make_palindrome(string: "jerry") == "jerryrrej")
+
+
+
 // ----------- problem HumanEval_129_minPath, completion 10 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -1328,6 +1028,306 @@ assert(minPath(grid: [[2, 7, 4], [3, 1, 5], [6, 8, 9]], k: 8) == [1, 3, 1, 3, 1,
 assert(minPath(grid: [[6, 1, 5], [3, 8, 9], [2, 7, 4]], k: 8) == [1, 5, 1, 5, 1, 5, 1, 5])
 assert(minPath(grid: [[1, 2], [3, 4]], k: 10) == [1, 2, 1, 2, 1, 2, 1, 2, 1, 2])
 assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
+
+
+
+// ----------- problem HumanEval_110_exchange, completion 57 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpu8rbvte_.swift:16:9: warning: variable 'lst1' was never mutated; consider changing to 'let' constant
+    var lst1 = lst1
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:17:9: warning: variable 'lst2' was never mutated; consider changing to 'let' constant
+    var lst2 = lst2
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:18:9: warning: variable 'lst1Even' was never mutated; consider changing to 'let' constant
+    var lst1Even = lst1.filter { $0 % 2 == 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:19:9: warning: variable 'lst2Even' was never mutated; consider changing to 'let' constant
+    var lst2Even = lst2.filter { $0 % 2 == 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:20:9: warning: variable 'lst1Odd' was never mutated; consider changing to 'let' constant
+    var lst1Odd = lst1.filter { $0 % 2 != 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:21:9: warning: variable 'lst2Odd' was never mutated; consider changing to 'let' constant
+    var lst2Odd = lst2.filter { $0 % 2 != 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:22:9: warning: initialization of variable 'lst1EvenCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst1EvenCount = lst1Even.count
+    ~~~~^~~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:23:9: warning: initialization of variable 'lst2EvenCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst2EvenCount = lst2Even.count
+    ~~~~^~~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:24:9: warning: initialization of variable 'lst1OddCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst1OddCount = lst1Odd.count
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:25:9: warning: initialization of variable 'lst2OddCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst2OddCount = lst2Odd.count
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:26:9: warning: initialization of variable 'lst1Count' was never used; consider replacing with assignment to '_' or removing it
+    var lst1Count = 
+*/
+/* stdout = 
+
+*/
+
+
+/// In this problem, you will implement a function that takes two arrays of numbers,
+/// and determines whether it is possible to perform an exchange of elements
+/// between them to make lst1 an array of only even numbers.
+/// There is no limit on the number of exchanged elements between lst1 and lst2.
+/// If it is possible to exchange elements between the lst1 and lst2 to make
+/// all the elements of lst1 to be even, return "YES".
+/// Otherwise, return "NO".
+/// For example:
+/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4])
+/// "YES"
+/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4])
+/// "NO"
+/// It is assumed that the input arrays will be non-empty.
+func exchange(lst1: [Int], lst2: [Int]) -> String {
+    var lst1 = lst1
+    var lst2 = lst2
+    var lst1Even = lst1.filter { $0 % 2 == 0 }
+    var lst2Even = lst2.filter { $0 % 2 == 0 }
+    var lst1Odd = lst1.filter { $0 % 2 != 0 }
+    var lst2Odd = lst2.filter { $0 % 2 != 0 }
+    var lst1EvenCount = lst1Even.count
+    var lst2EvenCount = lst2Even.count
+    var lst1OddCount = lst1Odd.count
+    var lst2OddCount = lst2Odd.count
+    var lst1Count = lst1.count
+    var lst2Count = lst2.count
+    var lst1EvenIndex = 0
+    var lst2EvenIndex = 0
+    var lst1OddIndex = 0
+    var lst2OddIndex = 0
+    var lst1Index = 0
+    var lst2Index = 0
+    var lst1EvenIndex2 = 0
+    var lst2EvenIndex2 = 0
+    var lst1OddIndex2 = 0
+    var lst2OddIndex2 = 0
+    var lst1Index2 = 0
+    var lst2Index2 = 0
+    var lst1EvenIndex3 = 0
+    var lst2EvenIndex3 = 0
+    var lst1OddIndex3 = 0
+    var lst2OddIndex3 = 0
+    var lst1Index3 = 0
+    var lst2Index3 = 0
+    var lst1EvenIndex4 = 0
+    var lst2EvenIndex4 = 0
+    var lst1OddIndex4 = 0
+    var lst2OddIndex4 = 0
+    var lst1Index4 = 0
+    var lst2Index4 = 0
+    var lst1EvenIndex5 = 0
+    var lst2EvenIndex5 = 0
+    var lst1OddIndex5 = 0
+    var lst2OddIndex5 = 0
+    var lst1Index5 = 0
+   
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4]) == "YES")
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4]) == "NO")
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [2, 1, 4, 3]) == "YES")
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 4]) == "YES")
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 3]) == "NO")
+assert(exchange(lst1: [3, 2, 6, 1, 8, 9], lst2: [3, 5, 5, 1, 1, 1]) == "NO")
+assert(exchange(lst1: [100, 200], lst2: [200, 200]) == "YES")
+
+
+
+// ----------- problem HumanEval_75_is_multiply_prime, completion 25 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp8oes1znj.swift:10:9: warning: initialization of variable 'is_prime' was never used; consider replacing with assignment to '_' or removing it
+    var is_prime = true
+    ~~~~^~~~~~~~
+    _
+/tmp/tmp8oes1znj.swift:11:9: warning: initialization of variable 'is_multiply_prime' was never used; consider replacing with assignment to '_' or removing it
+    var is_multiply_prime = false
+    ~~~~^~~~~~~~~~~~~~~~~
+    _
+/tmp/tmp8oes1znj.swift:12:9: warning: initialization of variable 'i' was never used; consider replacing with assignment to '_' or removing it
+    var i = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:13:9: warning: initialization of variable 'j' was never used; consider replacing with assignment to '_' or removing it
+    var j = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:14:9: warning: initialization of variable 'k' was never used; consider replacing with assignment to '_' or removing it
+    var k = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:15:9: warning: initialization of variable 'l' was never used; consider replacing with assignment to '_' or removing it
+    var l = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:16:9: warning: initialization of variable 'm' was never used; consider replacing with assignment to '_' or removing it
+    var m = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:17:9: warning: initialization of variable 'n' was never used; consider replacing with assignment to '_' or removing it
+    var n = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:18:9: warning: initialization of variable 'o' was never used; consider replacing with assignment to '_' or removing it
+    var o = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:19:9: warning: initialization of variable 'p' was never used; consider replacing with assignment to '_' or removing it
+    var p = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:20:9: warning: initialization of variable 'q' was never used; consider replacing with assignment to '_' or removing it
+    var q = 2
+    ~~~~^
+    _
+/tmp/tmp8oes1znj.swift:21:9: warning: initialization of variable 'r' was never u
+*/
+/* stdout = 
+
+*/
+
+
+/// Write a function that returns true if the given number is the multiplication of 3 prime numbers
+/// and false otherwise.
+/// Knowing that (a) is less then 100. 
+/// Example:
+/// >>> is_multiply_prime(a: 30)
+/// true
+/// 30 = 2 * 3 * 5
+func is_multiply_prime(a: Int) -> Bool {
+    var is_prime = true
+    var is_multiply_prime = false
+    var i = 2
+    var j = 2
+    var k = 2
+    var l = 2
+    var m = 2
+    var n = 2
+    var o = 2
+    var p = 2
+    var q = 2
+    var r = 2
+    var s = 2
+    var t = 2
+    var u = 2
+    var v = 2
+    var w = 2
+    var x = 2
+    var y = 2
+    var z = 2
+    var aa = 2
+    var bb = 2
+    var cc = 2
+    var dd = 2
+    var ee = 2
+    var ff = 2
+    var gg = 2
+    var hh = 2
+    var ii = 2
+    var jj = 2
+    var kk = 2
+    var ll = 2
+    var mm = 2
+    var nn = 2
+    var oo = 2
+    var pp = 2
+    var qq = 2
+    var rr = 2
+    var ss = 2
+    var tt = 2
+    var uu = 2
+    var vv = 2
+    var ww = 2
+    var xx = 2
+    var yy = 2
+    var zz = 2
+    var aaa = 2
+    var bbb = 2
+    var ccc = 2
+    var ddd = 2
+    var eee = 2
+    var fff = 2
+    var ggg = 2
+    var hhh = 2
+    var iii = 2
+    var jjj = 2
+    var kkk = 2
+    var lll = 2
+    var mmm = 2
+    var nnn = 2
+    var ooo = 2
+    var ppp = 2
+    var qqq = 2
+    var rrr = 2
+    var sss = 2
+    var ttt = 2
+    var uuu = 2
+    var vvv = 2
+    var www = 2
+    var xxx = 2
+    var yyy = 2
+    var zzz = 2
+    var aaaa = 2
+    var bbbb = 2
+    var cccc = 2
+    var dddd = 2
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(is_multiply_prime(a: 5) == false)
+assert(is_multiply_prime(a: 30) == true)
+assert(is_multiply_prime(a: 8) == true)
+assert(is_multiply_prime(a: 10) == false)
+assert(is_multiply_prime(a: 125) == true)
+assert(is_multiply_prime(a: 105) == true)
+assert(is_multiply_prime(a: 126) == false)
+assert(is_multiply_prime(a: 729) == false)
+assert(is_multiply_prime(a: 891) == false)
+assert(is_multiply_prime(a: 1001) == true)
 
 
 
