@@ -6,6 +6,7 @@ from pathlib import Path
 import shutil
 import os
 import csv
+import re
 from random import shuffle
 from typing import Callable, Dict, List, Tuple
 import yaml
@@ -60,17 +61,16 @@ def main(Problem):
           # print(error_name)
           # print (error_categories[error_name])
           print (error_name)
-          completion = Problem.error_categories[error_name]["completions"][0]
           count = Problem.error_categories[error_name]["count"]
           csv_writer.writerow([error_name, "", count, ""])
-
-          example_f.write(f"// ----------- error {error_name} ------------\n")
-          example_f.write(f"{completion.completion}\n")
-          example_f.write(f"// status = {completion.status}\n")
-          example_f.write(f"// exit_code = {completion.exit_code}\n")
-          example_f.write(f"/* stderr = \n{completion.stderr}\n*/\n")
-          example_f.write(f"/* stdout = \n{completion.stdout}\n*/\n\n")
-          example_f.write("\n\n\n\n")
+          for completion in Problem.error_categories[error_name]["completions"]:
+            example_f.write(f"// ----------- error {error_name} ------------\n")
+            example_f.write(f"{completion.completion}\n")
+            example_f.write(f"// status = {completion.status}\n")
+            example_f.write(f"// exit_code = {completion.exit_code}\n")
+            example_f.write(f"/* stderr = \n{completion.stderr}\n*/\n")
+            example_f.write(f"/* stdout = \n{completion.stdout}\n*/\n\n")
+            example_f.write("\n\n\n\n")
 
 def load_problems(Problem, lang:str, in_dir: Path) -> Dict[str, Problem]:
     for entry in in_dir.iterdir():
@@ -108,11 +108,11 @@ class PythonProblem(object):
         'RecursionError' : {"regex": "RecursionError", "desc": "", "count": 0, "completions": []},
         'ZeroDivisionError' : {"regex": "ZeroDivisionError", "desc": "", "count": 0, "completions": []},
         'EOFError' : {"regex": "EOFError", "desc": "", "count": 0, "completions": []},
-        'SyntaxError: BracketNeverClose' : {"regex": "was never close", "desc": "", "count": 0, "completions": []},
+        'SyntaxError: BracketNeverClose' : {"regex": "was never close", "desc": "'[' never closed", "count": 0, "completions": []},
         'SyntaxError: Invalid Syntax' : {"regex": "invalid syntax", "desc": "", "count": 0, "completions": []},
-        'SyntaxError: UnterminatedStringLiteral' : {"regex": "unterminated string literal", "desc": "", "count": 0, "completions": []},
+        'SyntaxError: UnterminatedStringLiteral' : {"regex": "unterminated string literal", "desc": "string literal never closed", "count": 0, "completions": []},
         "SyntaxError: Expected 'else' after 'if'" : {"regex": "expected 'else' after 'if' expression", "desc": "", "count": 0, "completions": []},
-        "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "", "count": 0, "completions": []},
+        "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "Expected ':'", "count": 0, "completions": []},
       }
 
     def program_for_completion(self, completion_idx: int) -> str:
@@ -134,7 +134,7 @@ class PythonProblem(object):
         return
 
       for error_name in self.error_categories.keys():
-        if self.error_categories[error_name]["regex"] in error:
+        if re.findall(self.error_categories[error_name]["regex"], error, re.IGNORECASE) != []:
           self.increment_error_code(error_name, completion)
           return
       print(error)
