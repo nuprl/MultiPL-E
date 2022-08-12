@@ -101,6 +101,8 @@ def negative_array_index(exit_code: int, status: str, stderr: str, stdout: str, 
 def over_under_flow(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return stderr == "" and stdout == "" and status == 'Exception' and exit_code == -4, None
 
+def compiler_error_cutoff(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
+    return "error" not in stderr, None
 
 def linker_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: link command failed with exit code 1" in stderr, None
@@ -112,7 +114,8 @@ def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, comple
         "error: expected expression in 'switch' statement",
         "error: '[' is not allowed in operator names",
         "error: expected expression after '?' in ternary expression",
-        "error: keyword 'as' cannot be used as an identifier here"
+        "error: keyword 'as' cannot be used as an identifier here",
+        "error: unary operator cannot be separated from its operand"
     ]
     return any(m in stderr for m in bad_syntax_markers) and \
         "error: expected expression after operator\n}\n^" not in stderr and \
@@ -173,7 +176,8 @@ misc_type_error = f_or(
     match_re(r"error: protocol 'Sequence' requires that 'String.Index' conform to 'Strideable'"),
     match_re(r"error: .* requires that .* conform to .*"),
     match_re(r"error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"),
-    match_re(r"error: 'nil' cannot be assigned to type .*")
+    match_re(r"error: 'nil' cannot be assigned to type .*"),
+    match_re(r"error: .* is unavailable: cannot subscript String with an integer range, use a String.Index range instead")
 )
 
 def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
@@ -312,7 +316,10 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
         compile_error_category
     )),
     ('CompileError-RanOutOfTokens', ('Ran out of tokens. This category may only be an approximation, hard to tell in general.', 
-        f_and(compile_error_category, ran_out_of_tokens)
+        f_and(compile_error_category, f_or(ran_out_of_tokens, compiler_error_cutoff))
+    )),
+    ('CompileError-CompilerErrorCutoff', ('Seems like the compiler crashed or for some reason its output got cutoff', 
+        f_and(compile_error_category, compiler_error_cutoff)
     )),
     ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?**', 
         f_and(compile_error_category, linker_error)
@@ -421,6 +428,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
             compile_error_category, 
             f_not(f_or(
                 ran_out_of_tokens,
+                compiler_error_cutoff,
                 linker_error,
                 invalid_syntax,
                 use_of_deprecated_unavailable_things,
