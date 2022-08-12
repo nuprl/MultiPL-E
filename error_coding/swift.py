@@ -23,7 +23,11 @@ def f_and(*funcs):
 
 def f_or(*funcs):
     def the_or(*args, **kwargs):
-        return any(f(*args, **kwargs)[0] for f in funcs), None
+        for f in funcs:
+            a, b = f(*args, **kwargs)
+            if a:
+                return True, b
+        return False, None
     return the_or
 
 def f_not(f):
@@ -139,9 +143,10 @@ REDECLARED_VAR_RE = re.compile(r"error: invalid redeclaration of .*")
 def redeclared_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return REDECLARED_VAR_RE.search(stderr) is not None, None
 
-NONEXISTENT_METHOD_RE = re.compile(r"error: value of type .* has no member .*")
-def nonexistent_method(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
-    return NONEXISTENT_METHOD_RE.search(stderr) is not None, None
+nonexistent_method = f_or(
+    match_re(r"error: value of type .* has no member .*"),
+    match_re(r"error: value of tuple type .* has no member .*")
+)
 
 NONEXISTENT_VAR_RE = re.compile(r"error: cannot find .* in scope")
 def nonexistent_var(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
@@ -166,7 +171,10 @@ bin_op_type_error = f_or(
     match_type_error_re(r"error: binary operator .* cannot be applied to operands of type (.*) and (.*)"), 
     match_re(r"error: binary operator .* cannot be applied to two .* operands")
 )
-pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
+pattern_type_error = f_or(
+    match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)"),
+    match_type_error_re(r"error: initializer for conditional binding must have (Optional) type, not (.*)")
+)
 subscript_type_error = match_type_error_re(r"error: subscript .* requires the types (.*) and (.*) be equivalent")
 assignment_type_error = match_type_error_re(r"error: cannot assign value of type (.*) to type (.*)")
 
@@ -372,7 +380,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-BinOpTypeError', ('Type error when using a binary operator', 
         f_and(compile_error_category, bin_op_type_error)
     )),
-    ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
+    ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern (or an if pattern)', 
         f_and(compile_error_category, pattern_type_error)
     )),
     ('CompileError-SubscriptingTypeError', ('Subscripting has a type error', 
