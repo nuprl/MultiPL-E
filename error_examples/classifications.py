@@ -2,13 +2,13 @@
 # These are four overall categories, but we aren't going to be stuck with that.
 # Let's make this a JSON file that maps different error categories in languages to a single category
 
-RUNTIME_ISH = [
+RUNTIME = [
   { 
     "Theme": "NullReference",
     "Swift": [ "Exception-UnwrapNil"],
     "C#": ["NullReferenceException"],
     "Racket": [],
-    "Python": [""]
+    "Python": []
   },
   {
     "Theme": "InvalidDataStructureOperation",
@@ -21,12 +21,21 @@ RUNTIME_ISH = [
       "Exception-RemoveFirstFromEmptyCollection", 
       "Exception-NegativeArrayIndex"
     ],
-    "C#": ["IndexOutOfRange", "KeyNotFound", "ArgumentOutOfRange", "InvalidOperationException"],
+    "C#": [
+        "IndexOutOfRangeException", 
+        "KeyNotFoundException", 
+        "ArgumentOutOfRangeException", 
+        "InvalidOperationException"
+    ],
     "Racket": ["list index too large"],
-    "Python": ["AttributeError", "KeyError", "IndexError"]
+    "Python": [
+      "AttributeError", 
+      "KeyError", 
+      "IndexError"
+    ]
   },
   {
-    "Theme": "DivisionOfZero",
+    "Theme": "DivisionByZero",
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [""],
     "Python": ["ZeroDivisionError"],
@@ -34,64 +43,102 @@ RUNTIME_ISH = [
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
-    "Swift": [], # TODO(donald)
+    "Swift": ["Timeout"],
+    "Python": ["RecursionError"]
   }
 ]
 
 
-STATIC_ISH = [
+STATIC = [
   {
     "Theme": "UndefinedIdentifier",
-    "Python": ["AttributeError", "NameError", "UnboundLocalError"],
-    "C#": ["Name does not exist", "TypeNotFound", "Method not found"],
+    "Python": [
+      "AttributeError", 
+      "NameError", 
+      "UnboundLocalError"
+    ],
+    "C#": [
+      "Name does not exist", 
+      "TypeNotFound", 
+      "Method not found"
+    ],
     "Swift": [
       "CompileError-LinkerError", 
       "CompileError-NonExistentMethod", 
       "CompileError-CanNotFindInScope", 
       "CompileError-UseBeforeDecl", 
-      "CompileError-TypeCheck-CallingNonFunctionType"
+      "CompileError-TypeCheck-CallingNonFunctionType",
+      "CompileError-InvalidSyntax"
     ],
     "Racket": ["unbound identifier"]
   },
   {
     "Theme": "MissingReturn",
     "Python": ["None"],
-    "C#": ["no return in all branches "],
+    "C#": ["no return in all branches"],
     "Racket": [""],
-    "Swift": [], # TODO(donald)
+    "Swift": [],
   },
   {
     "Theme": "IncorrectAPIMethodCall",
+<<<<<<< HEAD
     "Swift": [], # TODO(donald)
     "Racket": [], # YT: Surprisingly it seems that there is no such cases for Racket.
+=======
+    "Swift": [
+      "CompileError-SubscriptStringWithInt",
+      "CompileError-TypeMismatch-StringIndices",
+      "CompileError-TypeMismatch-StringsArentCharArrays"
+    ],
+    "Racket": [], # TODO(yt)
+>>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
+<<<<<<< HEAD
     "Racket": ["let: duplicate identifier"], 
     "Swift": [], # TODO(donald)
+=======
+    "Racket": ["let"], 
+    "Swift": ["CompileError-RedeclarationOfVariable"],
+>>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
   }
 ]
 
-TYPE_ISH = [ 
+TYPE = [ 
   {
     "Theme": "InvalidTypeConversion",
-    "C#": ["long to int", "long to Optional<long>"],
-    "Python": [""],
+    "C#": ["Type Conversion Error"],
+    "Python": [],
     "Swift": [
-      "CompileError-UnwrappedNonOptional", 
-      "CompileError-ShouldHaveUnwrappedOptional", 
-      "CompileError-UseOfModWithFloat"
-    ], # TODO(donald)
+      "CompileError-TypeCheck-UnwrappedNonOptional", 
+      "CompileError-TypeCheck-ShouldHaveUnwrappedOptional", 
+      "CompileError-UseOfModWithFloat",
+      "CompileError-TypeCheck-ReturnTypeError",
+      "CompileError-TypeCheck-ArgumentTypeError",
+      "CompileError-TypeCheck-ClosureResultTypeError",
+      "CompileError-TypeCheck-BranchTypeMismatch",
+      "CompileError-TypeCheck-BinOpTypeError",
+      "CompileError-TypeCheck-PatternTypeError",
+      "CompileError-TypeCheck-SubscriptingTypeError",
+      "CompileError-TypeCheck-AssignmentTypeError",
+      "CompileError-TypeCheck-MiscTypeError",
+      "CompileError-TypeCheck-WeirdSubscriptTypeError",
+      "CompileError-TypeCheck-UnknownTypeErrorInCall",
+      "CompileError-TypeMismatch-Numerics",
+      "CompileError-TypeMismatch-CollectionAndInner",
+      "CompileError-TypeMismatch-Else"
+    ],
     "Racket": ["contract violation"]
   }
   
 ]
 
-LANGUAGE_ISH = [
-{
-    "Theme": "Language specific problems", # BUG(These aren't all type-ish)
-    "C#": "invalid assignment",
+LANGUAGE = [
+  {
+    "Theme": "Language specific problems",
+    "C#": ["Invalid Assignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
       "CompileError-UseOfDeprecatedUnavailableThings", 
@@ -102,26 +149,45 @@ LANGUAGE_ISH = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
+<<<<<<< HEAD
     "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char"
     "Python": "EOFError"
   },
 
     {
+=======
+    "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char",
+    "Python": ["EOFError"]
+  },
+  {
+>>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
     "Theme": "Niche Language",
     "Racket": ["if-else extra arguments", "all unclassified errors"] 
   }
 ]
 
-MODEL_ISH = [
+MODEL = [
   {
     "Theme": "OutOfTokens",
+<<<<<<< HEAD
     "C#": ["Brace not matched"],
     "Racket": ["bracket or brace not matched", "double-quotes not matched"],
     "Swift": ["CompileError-RanOutOfTokens"]
+=======
+    "C#": ["SyntaxError"],
+    "Python" : ["SyntaxError"]
+    "Racket": ...,
+    "Swift": [
+      "CompileError-RanOutOfTokens", 
+      "CompileError-CompilerErrorCutoff",
+      "CompileError-MissingReturn"
+    ]
+>>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
-    "C#": "Not implemented" #TODO (abhinav isn't this Python?)
+    "C#": ["NotImplementedException"],
+    "Python": ["NotImplementedError"]
   },
   {
     "Theme": "GenerateAnotherLang",

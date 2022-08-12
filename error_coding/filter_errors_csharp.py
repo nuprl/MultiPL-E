@@ -19,10 +19,10 @@ class CSharpProblem(PythonProblem):
         'Exception: Invalid beat:' : {"regex": "Exception: Invalid beat:", "desc": "Exception: Invalid beat:", "count": 0, "completions": []},
         
         "Type Conversion Error" : {"regex": r"cannot(.+)convert", "desc": "cannot convert from 'long' to 'int'", "count": 0, "completions": []},
-        'not all code paths return a value' : {"regex": "not all code paths return a value", "desc": "not all code paths return a value", "count": 0, "completions": []},
+        "no return in all branches" : {"regex": "not all code paths return a value", "desc": "not all code paths return a value", "count": 0, "completions": []},
         'Name does not exist' : {"regex": "does not exist in the current context", "desc": "The name does not exist in the current context", "count": 0, "completions": []},
         # 'Implicit Type Conversion' : {"regex": "Cannot implicitly convert type", "desc": "Cannot implicitly convert type", "count": 0, "completions": []},
-        "Syntax error" : {"regex": "(']')|(})|(;) expected", "desc": "Expected ], }, or ; but not present", "count": 0, "completions": []},
+        "SyntaxError" : {"regex": "(']')|(})|(;) expected", "desc": "Expected ], }, or ; but not present", "count": 0, "completions": []},
         # 'Syntax error: } expected' : {"regex": "} expected", "desc": "} expected", "count": 0, "completions": []},
         # 'Syntax error:  ; expected' : {"regex": "; expected", "desc": "; expected", "count": 0, "completions": []},
         'Declaration error' : {"regex": "cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter", "desc": "A local or parameter named 'i' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter", "count": 0, "completions": []},
