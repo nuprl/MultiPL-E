@@ -66,10 +66,6 @@ STATIC_ISH = [
     "Racket": [], # TODO(yt)
   },
   {
-    "Theme": "Niche Language",
-    "Racket": "if-else extra arguments" # TODO(yt)
-  },
-  {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
     "Racket": ["let"], 
@@ -88,8 +84,12 @@ TYPE_ISH = [
       "CompileError-UseOfModWithFloat"
     ], # TODO(donald)
     "Racket": ["contract violation"]
-  },
-  {
+  }
+  
+]
+
+LANGUAGE_ISH = [
+{
     "Theme": "Language specific problems", # BUG(These aren't all type-ish)
     "C#": "invalid assignment",
     "Swift": [
@@ -105,8 +105,12 @@ TYPE_ISH = [
     "Racket": "Escape sequence error in Racket (\\w) ", "treat and as char"
     "Python": "EOFError"
   }
-]
 
+    {
+    "Theme": "Niche Language",
+    "Racket": "if-else extra arguments" # TODO(yt)
+  },
+]
 
 MODEL_ISH = [
   {
@@ -116,11 +120,11 @@ MODEL_ISH = [
     "Swift": ["CompileError-RanOutOfTokens"]
   },
   {
-    "Theme": "ExceptionInGeneratedCode",
-    "C#": "Not implemented"
+    "Theme": "ExceptionInGeneratedCode", 
+    "C#": "Not implemented" #TODO (abhinav isn't this Python?)
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": ...
+    "Racket": ... #TODO(yt)
   }
 ]
