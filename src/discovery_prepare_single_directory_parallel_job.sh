@@ -20,6 +20,6 @@ done
 echo "Now run:"
 echo ""
 echo "    wc -l $OUTPUT_FILE_NAME"
-echo "    sbatch --array 0-N polyglot.sh $OUTPUT_FILE_NAME"
+echo "    sbatch --array 0-N discovery_array_job.sh $OUTPUT_FILE_NAME"
 echo ""
 echo "where N is the line count minus one."
