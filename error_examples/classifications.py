@@ -83,8 +83,8 @@ TYPE_ISH = [
     "C#": ["long to int", "long to Optional<long>"],
     "Python": [""],
     "Swift": [
-      "CompileError-UnwrappedNonOptional", 
-      "CompileError-ShouldHaveUnwrappedOptional", 
+      "CompileError-TypeCheck-UnwrappedNonOptional", 
+      "CompileError-TypeCheck-ShouldHaveUnwrappedOptional", 
       "CompileError-UseOfModWithFloat"
     ], # TODO(donald)
     "Racket": ["contract violation"]
