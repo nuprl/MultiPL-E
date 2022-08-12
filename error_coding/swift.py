@@ -112,6 +112,7 @@ def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, comple
         "error: expected expression in 'switch' statement",
         "error: '[' is not allowed in operator names",
         "error: expected expression after '?' in ternary expression",
+        "error: keyword 'as' cannot be used as an identifier here"
     ]
     return any(m in stderr for m in bad_syntax_markers) and \
         "error: expected expression after operator\n}\n^" not in stderr and \
@@ -170,7 +171,9 @@ misc_type_error = f_or(
     match_re(r"error: type 'Int' cannot be used as a boolean"),
     match_re(r"error: no 'subscript' candidates produce the expected contextual result type"),
     match_re(r"error: protocol 'Sequence' requires that 'String.Index' conform to 'Strideable'"),
-    match_re(r"error: instance method .* requires that 'String.Index' conform to 'Collection'")
+    match_re(r"error: .* requires that .* conform to .*"),
+    match_re(r"error: the compiler is unable to type-check this expression in reasonable time; try breaking up the expression into distinct sub-expressions"),
+    match_re(r"error: 'nil' cannot be assigned to type .*")
 )
 
 def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
@@ -186,7 +189,8 @@ def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, comp
     markers = [
         "error: left side of mutating operator isn't mutable:",
         "error: cannot assign to value:",
-        "error: cannot use mutating member on immutable value:"
+        "error: cannot use mutating member on immutable value:",
+        "error: cannot assign through subscript:"
     ]
     return any(m in stderr for m in markers), None
 
@@ -227,6 +231,8 @@ AKA_RE = re.compile(r"\(aka .*\)")
 def type_mismatch_builder(type_pred_fn):
     def the_pred(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
         did_get_a_regex_match = False
+        t1 = ""
+        t2 = ""
         for the_re in GATHERED_TYPE_ERROR_RES:
             did_match, maybe_t1_t2 = match_type_error_re(the_re)(exit_code, status, stderr, stdout, completion)
             if did_match:
@@ -311,7 +317,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-LinkerError', ('A weird linker error. **Could be caused by translation or evaluation bug?**', 
         f_and(compile_error_category, linker_error)
     )),
-    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion. **A few cases could be caused by translation bug (reserved words in arguments)**', 
+    ('CompileError-InvalidSyntax', ('Invalid syntax in the completion.', 
         f_and(compile_error_category, invalid_syntax)
     )),
     ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift.', 
