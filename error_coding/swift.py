@@ -94,7 +94,6 @@ def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: st
     unavailable_markers = [
         "error: 'characters' is unavailable: Please use String directly"
     ]
-
     return any(m in stderr for m in unavailable_markers)
 
 def use_of_mod_with_float(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
@@ -141,6 +140,13 @@ def unknown_type_error_in_call(exit_code: int, status: str, stderr: str, stdout:
 
 def branch_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
     return "error: result values in '? :' expression have mismatching types" in stderr
+
+def mutate_immutable(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
+    markers = [
+        "error: left side of mutating operator isn't mutable:",
+        "error: cannot assign to value:"
+    ]
+    return any(m in stderr for m in markers)
 
 RAN_OUT_VAR_RE = re.compile(r"(var|let) \S+$")
 def ran_out_of_tokens(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> bool:
@@ -196,6 +202,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
+    ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
+        f_and(compile_error_category, mutate_immutable)
+    )),
     ('CompileError-RanOutOfTokens', ('Ran out of tokens. This category may only be an approximation, hard to tell in general.', 
         f_and(compile_error_category, ran_out_of_tokens)
     )),
@@ -218,6 +227,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 closure_result_type_error,
                 unknown_type_error_in_call,
                 branch_type_error,
+                mutate_immutable,
                 ran_out_of_tokens,
             ))
         )
