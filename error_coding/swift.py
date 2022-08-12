@@ -163,7 +163,12 @@ bin_op_type_error = f_or(
     match_re(r"error: binary operator .* cannot be applied to two .* operands")
 )
 pattern_type_error = match_type_error_re(r"error: expression pattern of type (.*) cannot match values of type (.*)")
-misc_type_error = match_re(r"error: type 'Int' cannot be used as a boolean")
+subscript_type_error = match_type_error_re(r"error: subscript .* requires the types (.*) and (.*) be equivalent")
+
+misc_type_error = f_or(
+    match_re(r"error: type 'Int' cannot be used as a boolean"),
+    match_re(r"error: no 'subscript' candidates produce the expected contextual result type")
+)
 
 def weird_subscript_type_error(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     return "error: cannot assign value of type '[Int]' to subscript of type 'ArraySlice<Int>'" in stderr, None
@@ -346,6 +351,9 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern', 
         f_and(compile_error_category, pattern_type_error)
     )),
+    ('CompileError-PatternTypeError', ('Subscripting has a type error', 
+        f_and(compile_error_category, subscript_type_error)
+    )),
     ('CompileError-MiscTypeError', ('misc type error', 
         f_and(compile_error_category, misc_type_error)
     )),
@@ -407,6 +415,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
                 branch_type_error,
                 bin_op_type_error,
                 pattern_type_error,
+                subscript_type_error,
                 misc_type_error,
                 weird_subscript_type_error,
                 calling_non_function_type,
