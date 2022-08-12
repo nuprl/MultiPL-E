@@ -271,7 +271,7 @@ def type_mismatch_builder(type_pred_fn):
                 elif type_pred_fn(t2, t1):
                     return True, None
         if did_get_a_regex_match and type_pred_fn == type_mismatch_else_case_fn:
-            print(f"{t1} vs {t2}")
+            # print(f"{t1} vs {t2}")
             pass
         return False, None
     return the_pred
@@ -365,46 +365,46 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-RedeclarationOfVariable', ('A variable was re-declared', 
         f_and(compile_error_category, redeclared_var)
     )),
-    ('CompileError-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
+    ('CompileError-TypeCheck-ShouldHaveUnwrappedOptional', ('A value with Optional type should have been unwrapped / checked.', 
         f_and(compile_error_category, should_have_unwrapped_optional)
     )),
-    ('CompileError-UnwrappedNonOptional', ('A non-optional value was unwrapped.', 
+    ('CompileError-TypeCheck-UnwrappedNonOptional', ('A non-optional value was unwrapped.', 
         f_and(compile_error_category, non_optional_unwrapped)
     )),
-    ('CompileError-ReturnTypeError', ('The type of the return value does not match the declared return type of the function.', 
+    ('CompileError-TypeCheck-ReturnTypeError', ('The type of the return value does not match the declared return type of the function.', 
         f_and(compile_error_category, return_type_error)
     )),
-    ('CompileError-ArgumentTypeError', ('The type of an argument to a function does not match the expected type.', 
+    ('CompileError-TypeCheck-ArgumentTypeError', ('The type of an argument to a function does not match the expected type.', 
         f_and(compile_error_category, argument_type_error)
     )),
-    ('CompileError-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure', 
+    ('CompileError-TypeCheck-ClosureResultTypeError', ('The type of the return value in a closure does not match the (likely inferred) return type of the closure', 
         f_and(compile_error_category, closure_result_type_error)
     )),
-    ('CompileError-BranchTypeMismatch', ('The types of 2 branches do not match', 
+    ('CompileError-TypeCheck-BranchTypeMismatch', ('The types of 2 branches do not match', 
         f_and(compile_error_category, branch_type_error)
     )),
-    ('CompileError-BinOpTypeError', ('Type error when using a binary operator', 
+    ('CompileError-TypeCheck-BinOpTypeError', ('Type error when using a binary operator', 
         f_and(compile_error_category, bin_op_type_error)
     )),
-    ('CompileError-PatternTypeError', ('The expression in a switch statement has different type from the match pattern (or an if pattern)', 
+    ('CompileError-TypeCheck-PatternTypeError', ('The expression in a switch statement has different type from the match pattern (or an if pattern)', 
         f_and(compile_error_category, pattern_type_error)
     )),
-    ('CompileError-SubscriptingTypeError', ('Subscripting has a type error', 
+    ('CompileError-TypeCheck-SubscriptingTypeError', ('Subscripting has a type error', 
         f_and(compile_error_category, subscript_type_error)
     )),
-    ('CompileError-AssignmentTypeError', ('Assignment has a type error', 
+    ('CompileError-TypeCheck-AssignmentTypeError', ('Assignment has a type error', 
         f_and(compile_error_category, assignment_type_error)
     )),
-    ('CompileError-MiscTypeError', ('misc type error', 
+    ('CompileError-TypeCheck-MiscTypeError', ('misc type error', 
         f_and(compile_error_category, misc_type_error)
     )),
-    ('CompileError-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong.', 
+    ('CompileError-TypeCheck-WeirdSubscriptTypeError', ('Some type error with subscripts. Dont quite understand whats wrong.', 
         f_and(compile_error_category, weird_subscript_type_error)
     )),
-    ('CompileError-CallingNonFunctionType', ('The code calls a non-function type', 
+    ('CompileError-TypeCheck-CallingNonFunctionType', ('The code calls a non-function type', 
         f_and(compile_error_category, calling_non_function_type)
     )),
-    ('CompileError-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
+    ('CompileError-TypeCheck-UnknownTypeErrorInCall', ('Some misc. type error in a function call / initializer / subscript', 
         f_and(compile_error_category, unknown_type_error_in_call)
     )),
     ('CompileError-ImmutableViolation', ('Attempted to mutate something that is immutable (e.g. let vs. var)', 
@@ -446,51 +446,51 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, Callable[[int, str, str, str, 
     ('CompileError-TypeMismatch-Else', ('Type mismatch else case', 
         f_and(compile_error_category, type_mismatch_else_case)
     )),
-    ('CompileError-Else', ('Other compilation errors', 
-        f_and(
-            compile_error_category, 
-            f_not(f_or(
-                ran_out_of_tokens,
-                compiler_error_cutoff,
-                linker_error,
-                invalid_syntax,
-                use_of_deprecated_unavailable_things,
-                use_of_mod_with_float,
-                subscript_string_with_int,
-                nonexistent_method,
-                nonexistent_var,
-                use_before_decl,
-                redeclared_var,
-                should_have_unwrapped_optional,
-                non_optional_unwrapped,
-                return_type_error,
-                argument_type_error,
-                closure_result_type_error,
-                branch_type_error,
-                bin_op_type_error,
-                pattern_type_error,
-                subscript_type_error,
-                assignment_type_error,
-                misc_type_error,
-                weird_subscript_type_error,
-                calling_non_function_type,
-                unknown_type_error_in_call,
-                mutate_immutable,
-                non_exclusive_mutation,
-                missing_argument_label,
-                extraneous_argument_label,
-                incorrect_argument_label,
-                extra_argument_in_call,
-                missing_argument_in_call,
-                missing_return,
-                type_mismatch_both_numeric,
-                type_mismatch_collection_inner_type,
-                type_mismatch_string_indices,
-                type_mismatch_strings_arent_char_arrays,
-                type_mismatch_else_case
-            ))
-        )
-    )),
+    # ('CompileError-Else', ('Other compilation errors', 
+    #     f_and(
+    #         compile_error_category, 
+    #         f_not(f_or(
+    #             ran_out_of_tokens,
+    #             compiler_error_cutoff,
+    #             linker_error,
+    #             invalid_syntax,
+    #             use_of_deprecated_unavailable_things,
+    #             use_of_mod_with_float,
+    #             subscript_string_with_int,
+    #             nonexistent_method,
+    #             nonexistent_var,
+    #             use_before_decl,
+    #             redeclared_var,
+    #             should_have_unwrapped_optional,
+    #             non_optional_unwrapped,
+    #             return_type_error,
+    #             argument_type_error,
+    #             closure_result_type_error,
+    #             branch_type_error,
+    #             bin_op_type_error,
+    #             pattern_type_error,
+    #             subscript_type_error,
+    #             assignment_type_error,
+    #             misc_type_error,
+    #             weird_subscript_type_error,
+    #             calling_non_function_type,
+    #             unknown_type_error_in_call,
+    #             mutate_immutable,
+    #             non_exclusive_mutation,
+    #             missing_argument_label,
+    #             extraneous_argument_label,
+    #             incorrect_argument_label,
+    #             extra_argument_in_call,
+    #             missing_argument_in_call,
+    #             missing_return,
+    #             type_mismatch_both_numeric,
+    #             type_mismatch_collection_inner_type,
+    #             type_mismatch_string_indices,
+    #             type_mismatch_strings_arent_char_arrays,
+    #             type_mismatch_else_case
+    #         ))
+    #     )
+    # )),
 
     ('OK', ('OK', 
         ok_category
