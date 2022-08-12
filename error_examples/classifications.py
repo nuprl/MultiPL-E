@@ -81,28 +81,18 @@ STATIC = [
   },
   {
     "Theme": "IncorrectAPIMethodCall",
-<<<<<<< HEAD
-    "Swift": [], # TODO(donald)
-    "Racket": [], # YT: Surprisingly it seems that there is no such cases for Racket.
-=======
     "Swift": [
       "CompileError-SubscriptStringWithInt",
       "CompileError-TypeMismatch-StringIndices",
       "CompileError-TypeMismatch-StringsArentCharArrays"
     ],
-    "Racket": [], # TODO(yt)
->>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
+    "Racket": [], # YT: Surprisingly it seems that there is no such cases for Racket.
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Declaration error"],
-<<<<<<< HEAD
     "Racket": ["let: duplicate identifier"], 
-    "Swift": [], # TODO(donald)
-=======
-    "Racket": ["let"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
->>>>>>> 282718b2b0e5b41d62b50566f6564bebb604c365
   }
 ]
 
