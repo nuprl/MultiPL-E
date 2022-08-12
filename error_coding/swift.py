@@ -97,9 +97,10 @@ def invalid_syntax(exit_code: int, status: str, stderr: str, stdout: str, comple
         "error: expected expression after operator",
         "error: expected '{' to start the body of for-each loop",
         "error: expected expression in 'switch' statement",
-        "error: '[' is not allowed in operator names"
+        "error: '[' is not allowed in operator names",
+        "error: expected expression after '?' in ternary expression",
     ]
-    return any(m in stderr for m in bad_syntax_markers), None
+    return any(m in stderr for m in bad_syntax_markers) and "error: expected expression after operator\n}\n^" not in stderr and "error: expected pattern\n        for\n           ^" not in stderr, None
 
 def use_of_deprecated_unavailable_things(exit_code: int, status: str, stderr: str, stdout: str, completion: str) -> Tuple[bool, Any]:
     unavailable_markers = [
